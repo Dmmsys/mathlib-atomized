@@ -48,296 +48,242 @@ open Valuation
 
 open scoped NNReal
 
-variable (p : Nat) [hp : Fact (Nat.Prime p)]
+variable (p : ℕ) [hp : Fact (Nat.Prime p)]
 
-/--
-Definition of `PadicAlgCl` / `PadicAlgCl` 的定义
+/-- `PadicAlgCl p` is a fixed algebraic closure of `ℚ_[p]`. -/
+/-
+**PadicAlgCl** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：PadicAlgCl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PadicAlgCl
-  body: AlgebraicClosure Rat_[p]
-
-中文:
-缩写 PadicAlgCl
-  定义体: AlgebraicClosure Rat_[p]
-
-Depends on / 依赖: AlgebraicClosure, Rat_
+--- 原说明 ---
+`PadicAlgCl p` is a fixed algebraic closure of `ℚ_[p]`.
 -/
-abbrev PadicAlgCl := AlgebraicClosure Rat_[p]
+abbrev PadicAlgCl := AlgebraicClosure ℚ_[p]
 
 namespace PadicAlgCl
 
-/--
-Instance `isAlgebraic` / 实例 `isAlgebraic`
+/-- `PadicAlgCl p` is an algebraic extension of `ℚ_[p]`. -/
+/-
+**PadicAlgCl.isAlgebraic** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：isAlgebraic : Algebra.IsAlgebraic Rat_[p] (PadicAlgCl p)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance isAlgebraic
-  signature: : Algebra.IsAlgebraic Rat_[p] (PadicAlgCl p)
-  body: AlgebraicClosure.isAlgebraic _
-
-中文:
-实例 isAlgebraic
-  签名: : 代数.是代数 Rat_[p] (PadicAlgCl p)
-  定义体: AlgebraicClosure.isAlgebraic _
-
-Depends on / 依赖: AlgebraicClosure, AlgebraicClosure.isAlgebraic, isAlgebraic
+--- 原说明 ---
+`PadicAlgCl p` is an algebraic extension of `ℚ_[p]`.
 -/
-instance isAlgebraic : Algebra.IsAlgebraic Rat_[p] (PadicAlgCl p) := AlgebraicClosure.isAlgebraic _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe Rat_[p] (PadicAlgCl p)
-  body: ⟨algebraMap Rat_[p] (PadicAlgCl p)⟩
-
-中文:
-实例 :
-  签名: Coe Rat_[p] (PadicAlgCl p)
-  定义体: ⟨algebraMap Rat_[p] (PadicAlgCl p)⟩
-
-Depends on / 依赖: PadicAlgCl, Rat_, algebraMap
+instance isAlgebraic : Algebra.IsAlgebraic ℚ_[p] (PadicAlgCl p) := AlgebraicClosure.isAlgebraic _
+/-
+**PadicAlgCl.** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe Rat_[p] (PadicAlgCl p) := ⟨algebraMap Rat_[p] (PadicAlgCl p)⟩
-
-/--
-theorem `coe_eq` / 定理 `coe_eq`
-
-English:
-theorem coe_eq
-  statement: (Coe.coe : Rat_[p] -> PadicAlgCl p) = algebraMap Rat_[p] (PadicAlgCl p)
-  proof: rfl
-
-中文:
-定理 coe_eq
-  结论: (Coe.coe : Rat_[p] -> PadicAlgCl p) = algebraMap Rat_[p] (PadicAlgCl p)
-  证明: rfl
+instance : Coe ℚ_[p] (PadicAlgCl p) := ⟨algebraMap ℚ_[p] (PadicAlgCl p)⟩
+/-
+**PadicAlgCl.coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：coe_eq : (Coe.coe : Rat_[p] -> PadicAlgCl p) = algebraMap Rat_[p] (PadicAl
+gCl p)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_eq : (Coe.coe : Rat_[p] -> PadicAlgCl p) = algebraMap Rat_[p] (PadicAlgCl p) := rfl
+theorem coe_eq : (Coe.coe : ℚ_[p] → PadicAlgCl p) = algebraMap ℚ_[p] (PadicAlgCl p) := rfl
 
-/--
-Instance `normedField` / 实例 `normedField`
+/-- `PadicAlgCl p` is a normed field, where the norm is the `p`-adic norm, that is, the
+spectral norm induced by the `p`-adic norm on `ℚ_[p]`. -/
+/-
+**PadicAlgCl.normedField** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：normedField : NormedField (PadicAlgCl p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.instIsUltrametricDist`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], IsUl
+trametricDist ℚ_[p]
+· 使用定理 `Padic.instCompleteSpace`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CompleteSp
+ace ℚ_[p]
 
-English:
-instance normedField
-  signature: : NormedField (PadicAlgCl p)
-  body: spectralNorm.normedField Rat_[p] (PadicAlgCl p)
-
-中文:
-实例 normedField
-  签名: : 赋范域 (PadicAlgCl p)
-  定义体: spectralNorm.normedField Rat_[p] (PadicAlgCl p)
-
-Depends on / 依赖: PadicAlgCl, Rat_, normedField, spectralNorm, spectralNorm.normedField
+--- 原说明 ---
+`PadicAlgCl p` is a normed field, where the norm is the `p`-adic norm, that is, 
+the
+spectral norm induced by the `p`-adic norm on `ℚ_[p]`.
 -/
-instance normedField : NormedField (PadicAlgCl p) := spectralNorm.normedField Rat_[p] (PadicAlgCl p)
+instance normedField : NormedField (PadicAlgCl p) := spectralNorm.normedField ℚ_[p] (PadicAlgCl p)
 
-/--
-theorem `isNonarchimedean` / 定理 `isNonarchimedean`
+/-- The norm on `PadicAlgCl p` is nonarchimedean. -/
+/-
+**PadicAlgCl.isNonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：isNonarchimedean : IsNonarchimedean (norm : PadicAlgCl p -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isNonarchimedean_spectralNorm`：isNonarchimedean_spectralNorm : IsNonarch
+imedean (spectralNorm K L)
+· 使用定理 `Padic.instIsUltrametricDist`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], IsUl
+trametricDist ℚ_[p]
 
-English:
-theorem isNonarchimedean
-  statement: IsNonarchimedean (norm : PadicAlgCl p -> Real)
-  proof: isNonarchimedean_spectralNorm (K := Rat_[p]) (L := PadicAlgCl p)
-
-中文:
-定理 isNonarchimedean
-  结论: IsNonarchimedean (norm : PadicAlgCl p -> 实数)
-  证明: isNonarchimedean_spectralNorm (K := Rat_[p]) (L := PadicAlgCl p)
-
-Depends on / 依赖: PadicAlgCl, Rat_, isNonarchimedean_spectralNorm
+--- 原说明 ---
+The norm on `PadicAlgCl p` is nonarchimedean.
 -/
-theorem isNonarchimedean : IsNonarchimedean (norm : PadicAlgCl p -> Real) :=
-  isNonarchimedean_spectralNorm (K := Rat_[p]) (L := PadicAlgCl p)
+theorem isNonarchimedean : IsNonarchimedean (norm : PadicAlgCl p → ℝ) :=
+  isNonarchimedean_spectralNorm (K := ℚ_[p]) (L := PadicAlgCl p)
 
-/--
-Instance `normedAlgebra` / 实例 `normedAlgebra`
+/-- `PadicAlgCl p` is a normed algebra over `ℚ_[p]`. -/
+/-
+**PadicAlgCl.normedAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：normedAlgebra : NormedAlgebra Rat_[p] (PadicAlgCl p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.instIsUltrametricDist`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], IsUl
+trametricDist ℚ_[p]
+· 使用定理 `Padic.instCompleteSpace`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CompleteSp
+ace ℚ_[p]
 
-English:
-instance normedAlgebra
-  signature: : NormedAlgebra Rat_[p] (PadicAlgCl p)
-  body: spectralNorm.normedAlgebra _ _
-
-中文:
-实例 normedAlgebra
-  签名: : 赋范代数 Rat_[p] (PadicAlgCl p)
-  定义体: spectralNorm.normedAlgebra _ _
-
-Depends on / 依赖: normedAlgebra, spectralNorm, spectralNorm.normedAlgebra
+--- 原说明 ---
+`PadicAlgCl p` is a normed algebra over `ℚ_[p]`.
 -/
-instance normedAlgebra : NormedAlgebra Rat_[p] (PadicAlgCl p) := spectralNorm.normedAlgebra _ _
+instance normedAlgebra : NormedAlgebra ℚ_[p] (PadicAlgCl p) := spectralNorm.normedAlgebra _ _
 
 /-- The norm on `PadicAlgCl p` is the spectral norm induced by the `p`-adic norm on `ℚ_[p]`. -/
 @[simp]
-/--
-theorem `spectralNorm_eq` / 定理 `spectralNorm_eq`
+/-
+**PadicAlgCl.spectralNorm_eq** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：spectralNorm_eq (x : PadicAlgCl p) : spectralNorm Rat_[p] (PadicAlgCl p) x
+ = ‖x‖
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem spectralNorm_eq
-  given: (x : PadicAlgCl p)
-  statement: spectralNorm Rat_[p] (PadicAlgCl p) x = ‖x‖
-  proof: rfl
-
-中文:
-定理 spectralNorm_eq
-  条件: (x : PadicAlgCl p)
-  结论: spectralNorm Rat_[p] (PadicAlgCl p) x = ‖x‖
-  证明: rfl
+--- 原说明 ---
+The norm on `PadicAlgCl p` is the spectral norm induced by the `p`-adic norm on 
+`ℚ_[p]`.
 -/
-theorem spectralNorm_eq (x : PadicAlgCl p) : spectralNorm Rat_[p] (PadicAlgCl p) x = ‖x‖ := rfl
+theorem spectralNorm_eq (x : PadicAlgCl p) : spectralNorm ℚ_[p] (PadicAlgCl p) x = ‖x‖ := rfl
 
-/--
-theorem `norm_extends` / 定理 `norm_extends`
+/-- The norm on `PadicAlgCl p` extends the `p`-adic norm on `ℚ_[p]`. -/
+/-
+**PadicAlgCl.norm_extends** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：norm_extends (x : Rat_[p]) : ‖(x : PadicAlgCl p)‖ = ‖x‖
+参数：x : Rat_[p]。
+该定理/引理给出了一组等式。
+继承自：(x : Rat_[p]) : ‖(x : PadicAlgCl p)‖ = ‖x‖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem norm_extends
-  given: (x : Rat_[p])
-  statement: ‖(x : PadicAlgCl p)‖ = ‖x‖
-  proof: by
-  simp
-
-中文:
-定理 norm_extends
-  条件: (x : Rat_[p])
-  结论: ‖(x : PadicAlgCl p)‖ = ‖x‖
-  证明: by
-  simp
+--- 原说明 ---
+The norm on `PadicAlgCl p` extends the `p`-adic norm on `ℚ_[p]`.
 -/
-theorem norm_extends (x : Rat_[p]) : ‖(x : PadicAlgCl p)‖ = ‖x‖ := by
+theorem norm_extends (x : ℚ_[p]) : ‖(x : PadicAlgCl p)‖ = ‖x‖ := by
   simp
 
-/--
-Instance `isUltrametricDist` / 实例 `isUltrametricDist`
+/-- The underlying metric space of `PadicAlgCl p` is ultrametric. -/
+/-
+**PadicAlgCl.isUltrametricDist** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：isUltrametricDist : IsUltrametricDist (PadicAlgCl p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm`：∀ {S
+' : Type u_2} [inst : SeminormedAddGroup S'], (∀ (x y : S'), ‖x + y‖ ≤ max ‖x‖ ‖
+y‖) → IsUltrametricDist S'
+· 使用定理 `PadicAlgCl.isNonarchimedean`：isNonarchimedean : IsNonarchimedean (norm :
+ PadicAlgCl p -> Real)
 
-English:
-instance isUltrametricDist
-  signature: : IsUltrametricDist (PadicAlgCl p)
-  body: IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm (PadicAlgCl.isNonarchimedean p)
-
-中文:
-实例 isUltrametricDist
-  签名: : 是UltrametricDist (PadicAlgCl p)
-  定义体: IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm (PadicAlgCl.isNonarchimedean p)
-
-Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm, PadicAlgCl, PadicAlgCl.isNonarchimedean, isNonarchimedean, isUltrametricDist_of_forall_norm_add_le_max_norm
+--- 原说明 ---
+The underlying metric space of `PadicAlgCl p` is ultrametric.
 -/
 instance isUltrametricDist : IsUltrametricDist (PadicAlgCl p) :=
   IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm (PadicAlgCl.isNonarchimedean p)
 
-/--
-Instance `valued` / 实例 `valued`
+/-- `PadicAlgCl p` is a valued field, with the valuation corresponding to the `p`-adic norm. -/
+/-
+**PadicAlgCl.valued** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：valued : Valued (PadicAlgCl p) Real>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance valued
-  signature: : Valued (PadicAlgCl p) Real>=0
-  body: NormedField.toValued
-
-中文:
-实例 valued
-  签名: : 赋值 (PadicAlgCl p) 实数>=0
-  定义体: NormedField.toValued
-
-Depends on / 依赖: NormedField, NormedField.toValued, toValued
+--- 原说明 ---
+`PadicAlgCl p` is a valued field, with the valuation corresponding to the `p`-ad
+ic norm.
 -/
-instance valued : Valued (PadicAlgCl p) Real>=0 := NormedField.toValued
+instance valued : Valued (PadicAlgCl p) ℝ≥0 := NormedField.toValued
 
-/--
-theorem `valuation_def` / 定理 `valuation_def`
+/-- The valuation of `x : PadicAlgCl p` agrees with its `ℝ≥0`-valued norm. -/
+/-
+**PadicAlgCl.valuation_def** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：valuation_def (x : PadicAlgCl p) : Valued.v x = ‖x‖₊
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem valuation_def
-  given: (x : PadicAlgCl p)
-  statement: Valued.v x = ‖x‖₊
-  proof: rfl
-
-中文:
-定理 valuation_def
-  条件: (x : PadicAlgCl p)
-  结论: 赋值.v x = ‖x‖₊
-  证明: rfl
+--- 原说明 ---
+The valuation of `x : PadicAlgCl p` agrees with its `ℝ≥0`-valued norm.
 -/
 theorem valuation_def (x : PadicAlgCl p) : Valued.v x = ‖x‖₊ := rfl
 
-/--
-theorem `valuation_coe` / 定理 `valuation_coe`
+/-- The coercion of the valuation of `x : PadicAlgCl p` to `ℝ` agrees with its norm. -/
+/-
+**PadicAlgCl.valuation_coe** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：valuation_coe (x : PadicAlgCl p) : ((Valued.v x : Real>=0) : Real) = ‖x‖
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem valuation_coe
-  given: (x : PadicAlgCl p)
-  statement: ((Valued.v x : Real>=0) : Real) = ‖x‖
-  proof: rfl
-
-中文:
-定理 valuation_coe
-  条件: (x : PadicAlgCl p)
-  结论: ((赋值.v x : 实数>=0) : 实数) = ‖x‖
-  证明: rfl
+--- 原说明 ---
+The coercion of the valuation of `x : PadicAlgCl p` to `ℝ` agrees with its norm.
 -/
-theorem valuation_coe (x : PadicAlgCl p) : ((Valued.v x : Real>=0) : Real) = ‖x‖ := rfl
+theorem valuation_coe (x : PadicAlgCl p) : ((Valued.v x : ℝ≥0) : ℝ) = ‖x‖ := rfl
 
-/--
-theorem `valuation_p` / 定理 `valuation_p`
+/-- The valuation of `p : PadicAlgCl p` is `1/p`. -/
+/-
+**PadicAlgCl.valuation_p** 是 Mathlib 中的一个定理，位于命名空间 `PadicAlgCl`。
+形式化陈述：valuation_p (p : Nat) [Fact p.Prime] : Valued.v (p : PadicAlgCl p) = 1 / (
+p : Real>=0)
+参数：p : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `PadicAlgCl.valuation_coe`：valuation_coe (x : PadicAlgCl p) : ((Valued.v 
+x : Real>=0) : Real) = ‖x‖
+· 使用定理 `PadicAlgCl.norm_extends`：norm_extends (x : Rat_[p]) : ‖(x : PadicAlgCl p
+)‖ = ‖x‖
+· 使用定理 `Padic.norm_p`：norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `NNReal.coe_inv`：∀ (r : NNReal), ↑r⁻¹ = (↑r)⁻¹
+· 使用定理 `NNReal.coe_natCast`：∀ (n : ℕ), ↑↑n = ↑n
 
-English:
-theorem valuation_p
-  given: (p : Nat) [Fact p.Prime]
-  statement: Valued.v (p : PadicAlgCl p) = 1 / (p : Real>=0)
-  proof: by
-  rw [← map_natCast (algebraMap Rat_[p] (PadicAlgCl p))]
-  ext
-  rw [valuation_coe]; rw [norm_extends]; rw [Padic.norm_p]; rw [one_div]; rw [NNReal.coe_inv]; rw [NNReal.coe_natCast]
-
-中文:
-定理 valuation_p
-  条件: (p : 自然数) [Fact p.素]
-  结论: 赋值.v (p : PadicAlgCl p) = 1 / (p : 实数>=0)
-  证明: by
-  rw [← map_natCast (algebraMap Rat_[p] (PadicAlgCl p))]
-  ext
-  rw [valuation_coe]; rw [norm_extends]; rw [Padic.norm_p]; rw [one_div]; rw [NNReal.coe_inv]; rw [NNReal.coe_natCast]
-
-Depends on / 依赖: NNReal, NNReal.coe_inv, NNReal.coe_natCast, Padic.norm_p, PadicAlgCl, Rat_, algebraMap, coe_inv, coe_natCast, map_natCast, norm_extends, norm_p, one_div, valuation_coe
+--- 原说明 ---
+The valuation of `p : PadicAlgCl p` is `1/p`.
 -/
-theorem valuation_p (p : Nat) [Fact p.Prime] : Valued.v (p : PadicAlgCl p) = 1 / (p : Real>=0) := by
-  rw [← map_natCast (algebraMap Rat_[p] (PadicAlgCl p))]
+theorem valuation_p (p : ℕ) [Fact p.Prime] : Valued.v (p : PadicAlgCl p) = 1 / (p : ℝ≥0) := by
+  rw [← map_natCast (algebraMap ℚ_[p] (PadicAlgCl p))]
   ext
-  rw [valuation_coe]; rw [norm_extends]; rw [Padic.norm_p]; rw [one_div]; rw [NNReal.coe_inv]; rw [NNReal.coe_natCast]
+  rw [valuation_coe, norm_extends, Padic.norm_p, one_div, NNReal.coe_inv,
+    NNReal.coe_natCast]
 
 open MonoidWithZeroHom.ValueGroup₀
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The valuation on `PadicAlgCl p` has rank one. -/
+/-
+**PadicAlgCl.** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: RankOne (PadicAlgCl.valued p).v
-  body: embedding
-  strictMono' := embedding_strictMono
-  exists_val_nontrivial := by
-    use p
-    have hp : Nat.Prime p := hp.1
-    simp only [valuation_p, one_div, ne_eq, inv_eq_zero, Nat.cast_eq_zero, inv_eq_one,
-      Nat.cast_eq_one]
-    exact ⟨hp.ne_zero, hp.ne_one⟩
-
-中文:
-实例 :
-  签名: 秩一 (PadicAlgCl.valued p).v
-  定义体: embedding
-  strictMono' := embedding_strictMono
-  exists_val_nontrivial := by
-    use p
-    have hp : Nat.Prime p := hp.1
-    simp only [valuation_p, one_div, ne_eq, inv_eq_zero, Nat.cast_eq_zero, inv_eq_one,
-      Nat.cast_eq_one]
-    exact ⟨hp.ne_zero, hp.ne_one⟩
-
-Depends on / 依赖: embedding
+--- 原说明 ---
+The valuation on `PadicAlgCl p` has rank one.
 -/
 instance : RankOne (PadicAlgCl.valued p).v where
-  hom' := embedding
+  hom'        := embedding
   strictMono' := embedding_strictMono
   exists_val_nontrivial := by
     use p
@@ -345,269 +291,205 @@ instance : RankOne (PadicAlgCl.valued p).v where
     simp only [valuation_p, one_div, ne_eq, inv_eq_zero, Nat.cast_eq_zero, inv_eq_one,
       Nat.cast_eq_one]
     exact ⟨hp.ne_zero, hp.ne_one⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: UniformContinuousConstSMul Rat_[p] (PadicAlgCl p)
-  body: uniformContinuousConstSMul_of_continuousConstSMul Rat_[p] (PadicAlgCl p)
-
-中文:
-实例 :
-  签名: 一致连续常数标量乘法 Rat_[p] (PadicAlgCl p)
-  定义体: uniformContinuousConstSMul_of_continuousConstSMul Rat_[p] (PadicAlgCl p)
-
-Depends on / 依赖: PadicAlgCl, Rat_, uniformContinuousConstSMul_of_continuousConstSMul
+/-
+**PadicAlgCl.** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : UniformContinuousConstSMul Rat_[p] (PadicAlgCl p) :=
-  uniformContinuousConstSMul_of_continuousConstSMul Rat_[p] (PadicAlgCl p)
+instance : UniformContinuousConstSMul ℚ_[p] (PadicAlgCl p) :=
+  uniformContinuousConstSMul_of_continuousConstSMul ℚ_[p] (PadicAlgCl p)
 
-/--
-Instance `nontriviallyNormedField` / 实例 `nontriviallyNormedField`
+/-- The norm on `PadicAlgCl p` is nontrivial. -/
+/-
+**PadicAlgCl.nontriviallyNormedField** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：nontriviallyNormedField : NontriviallyNormedField (PadicAlgCl p) where non
+_trivial
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance nontriviallyNormedField
-  signature: : NontriviallyNormedField (PadicAlgCl p) where
-  body: by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
-    use x
-    rw [PadicAlgCl.norm_extends]
-    exact hx
-
-中文:
-实例 nontriviallyNormedField
-  签名: : NontriviallyNormedField (PadicAlgCl p) where
-  定义体: by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
-    use x
-    rw [PadicAlgCl.norm_extends]
-    exact hx
-
-Depends on / 依赖: NontriviallyNormedField, NontriviallyNormedField.non_trivial, PadicAlgCl, PadicAlgCl.norm_extends, Rat_, non_trivial, norm_extends
+--- 原说明 ---
+The norm on `PadicAlgCl p` is nontrivial.
 -/
 instance nontriviallyNormedField : NontriviallyNormedField (PadicAlgCl p) where
   non_trivial := by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
+    choose x hx using NontriviallyNormedField.non_trivial (α := ℚ_[p])
     use x
     rw [PadicAlgCl.norm_extends]
     exact hx
 
-/--
-Instance `charZero` / 实例 `charZero`
+/-- `PadicAlgCl p` has characteristic zero. -/
+/-
+**PadicAlgCl.charZero** 是 Mathlib 中的一个实例，位于命名空间 `PadicAlgCl`。
+形式化陈述：charZero : CharZero (PadicAlgCl p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `RingHom.charZero_iff`：charZero_iff {ϕ : R ->+* S} (hϕ : Injective ϕ) : C
+harZero R ↔ CharZero S
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 
-English:
-instance charZero
-  signature: : CharZero (PadicAlgCl p)
-  body: (RingHom.charZero_iff (algebraMap Rat_[p] (PadicAlgCl p)).injective).mp inferInstance
-
-中文:
-实例 charZero
-  签名: : 特征零 (PadicAlgCl p)
-  定义体: (RingHom.charZero_iff (algebraMap Rat_[p] (PadicAlgCl p)).injective).mp inferInstance
-
-Depends on / 依赖: PadicAlgCl, Rat_, RingHom, RingHom.charZero_iff, algebraMap, charZero_iff, injective
+--- 原说明 ---
+`PadicAlgCl p` has characteristic zero.
 -/
 instance charZero : CharZero (PadicAlgCl p) :=
-  (RingHom.charZero_iff (algebraMap Rat_[p] (PadicAlgCl p)).injective).mp inferInstance
+  (RingHom.charZero_iff (algebraMap ℚ_[p] (PadicAlgCl p)).injective).mp inferInstance
 
 end PadicAlgCl
 
-/--
-Definition of `PadicComplex` / `PadicComplex` 的定义
+/-- `ℂ_[p]` is the field of `p`-adic complex numbers, that is, the completion of `PadicAlgCl p` with
+respect to the `p`-adic norm. -/
+/-
+**PadicComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：PadicComplex
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PadicComplex
-  body: UniformSpace.Completion (PadicAlgCl p)
-
-中文:
-缩写 PadicComplex
-  定义体: UniformSpace.Completion (PadicAlgCl p)
-
-Depends on / 依赖: Completion, PadicAlgCl, UniformSpace, UniformSpace.Completion
+--- 原说明 ---
+`ℂ_[p]` is the field of `p`-adic complex numbers, that is, the completion of `Pa
+dicAlgCl p` with
+respect to the `p`-adic norm.
 -/
 abbrev PadicComplex := UniformSpace.Completion (PadicAlgCl p)
 
 /-- `ℂ_[p]` is the field of `p`-adic complex numbers. -/
-notation "Complex_[" p "]" => PadicComplex p
+notation "ℂ_[" p "]" => PadicComplex p
 
 namespace PadicComplex
 
-/--
-Instance `valued` / 实例 `valued`
+/-- `ℂ_[p]` is a valued field, where the valuation is the one extending that on `PadicAlgCl p`. -/
+/-
+**PadicComplex.valued** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：valued : Valued Complex_[p] Real>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance valued
-  signature: : Valued Complex_[p] Real>=0
-  body: Valued.valuedCompletion
-
-中文:
-实例 valued
-  签名: : 赋值 Complex_[p] 实数>=0
-  定义体: Valued.valuedCompletion
-
-Depends on / 依赖: Valued, Valued.valuedCompletion, valuedCompletion
+--- 原说明 ---
+`ℂ_[p]` is a valued field, where the valuation is the one extending that on `Pad
+icAlgCl p`.
 -/
-instance valued : Valued Complex_[p] Real>=0 := Valued.valuedCompletion
+instance valued : Valued ℂ_[p] ℝ≥0 := Valued.valuedCompletion
 
-/--
-theorem `valuation_extends` / 定理 `valuation_extends`
+/-- The valuation on `ℂ_[p]` extends the valuation on `PadicAlgCl p`. -/
+/-
+**PadicComplex.valuation_extends** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：valuation_extends (x : PadicAlgCl p) : Valued.v (x : Complex_[p]) = Valued
+.v x
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+继承自：(x : PadicAlgCl p) : Valued.v (x : Complex_[p]) = Valued.v x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Valued.extensionValuation_apply_coe`：extensionValuation_apply_coe (x : K
+) : Valued.extensionValuation (x : hat K) = v x
 
-English:
-theorem valuation_extends
-  given: (x : PadicAlgCl p)
-  statement: Valued.v (x : Complex_[p]) = Valued.v x
-  proof: Valued.extensionValuation_apply_coe _
-
-中文:
-定理 valuation_extends
-  条件: (x : PadicAlgCl p)
-  结论: 赋值.v (x : Complex_[p]) = 赋值.v x
-  证明: Valued.extensionValuation_apply_coe _
-
-Depends on / 依赖: Valued, Valued.extensionValuation_apply_coe, extensionValuation_apply_coe
+--- 原说明 ---
+The valuation on `ℂ_[p]` extends the valuation on `PadicAlgCl p`.
 -/
-theorem valuation_extends (x : PadicAlgCl p) : Valued.v (x : Complex_[p]) = Valued.v x :=
+theorem valuation_extends (x : PadicAlgCl p) : Valued.v (x : ℂ_[p]) = Valued.v x :=
   Valued.extensionValuation_apply_coe _
-
-/--
-theorem `coe_eq` / 定理 `coe_eq`
-
-English:
-theorem coe_eq
-  given: (x : PadicAlgCl p)
-  statement: (x : Complex_[p]) = algebraMap (PadicAlgCl p) Complex_[p] x
-  proof: rfl
-
-中文:
-定理 coe_eq
-  条件: (x : PadicAlgCl p)
-  结论: (x : Complex_[p]) = algebraMap (PadicAlgCl p) Complex_[p] x
-  证明: rfl
+/-
+**PadicComplex.coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：coe_eq (x : PadicAlgCl p) : (x : Complex_[p]) = algebraMap (PadicAlgCl p) 
+Complex_[p] x
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_eq (x : PadicAlgCl p) : (x : Complex_[p]) = algebraMap (PadicAlgCl p) Complex_[p] x := rfl
-
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ((0 : PadicAlgCl p) : Complex_[p]) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  结论: ((0 : PadicAlgCl p) : Complex_[p]) = 0
-  证明: rfl
+theorem coe_eq (x : PadicAlgCl p) : (x : ℂ_[p]) = algebraMap (PadicAlgCl p) ℂ_[p] x := rfl
+/-
+**PadicComplex.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], ↑0 = 0
+参数：p : ℕ；Nat.Prime p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_zero : ((0 : PadicAlgCl p) : Complex_[p]) = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Rat_[p] (PadicAlgCl p) Complex_[p]
-  body: IsScalarTower.of_algebraMap_eq (congrFun rfl)
+@[simp] theorem coe_zero : ((0 : PadicAlgCl p) : ℂ_[p]) = 0 := rfl
+/-
+**PadicComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : IsScalarTower ℚ_[p] (PadicAlgCl p) ℂ_[p] := IsScalarTower.of_algebraMap_eq (congrFun rfl)
 
 @[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 标量塔 Rat_[p] (PadicAlgCl p) Complex_[p]
-  定义体: IsScalarTower.of_algebraMap_eq (congrFun rfl)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
+/-
+**PadicComplex.coe_natCast** 是 Mathlib 中的一个引理，位于命名空间 `PadicComplex`。
+形式化陈述：coe_natCast (n : Nat) : ((n : PadicAlgCl p) : Complex_[p]) = (n : Complex_
+[p])
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `PadicComplex.coe_eq`：coe_eq (x : PadicAlgCl p) : (x : Complex_[p]) = alg
+ebraMap (PadicAlgCl p) Complex_[p] x
 -/
-instance : IsScalarTower Rat_[p] (PadicAlgCl p) Complex_[p] := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+lemma coe_natCast (n : ℕ) : ((n : PadicAlgCl p) : ℂ_[p]) = (n : ℂ_[p]) := by
+  rw [← map_natCast (algebraMap (PadicAlgCl p) ℂ_[p]) n, coe_eq]
 
-@[simp, norm_cast]
-/--
-lemma `coe_natCast` / 引理 `coe_natCast`
+/-- The valuation of `p : ℂ_[p]` is `1/p`. -/
+/-
+**PadicComplex.valuation_p** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：valuation_p : Valued.v (p : Complex_[p]) = 1 / (p : Real>=0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `PadicComplex.coe_eq`：coe_eq (x : PadicAlgCl p) : (x : Complex_[p]) = alg
+ebraMap (PadicAlgCl p) Complex_[p] x
+· 使用定理 `PadicComplex.valuation_extends`：valuation_extends (x : PadicAlgCl p) : V
+alued.v (x : Complex_[p]) = Valued.v x
+· 使用定理 `PadicAlgCl.valuation_p`：valuation_p (p : Nat) [Fact p.Prime] : Valued.v 
+(p : PadicAlgCl p) = 1 / (p : Real>=0)
 
-English:
-lemma coe_natCast
-  given: (n : Nat)
-  statement: ((n : PadicAlgCl p) : Complex_[p]) = (n : Complex_[p])
-  proof: by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]) n, coe_eq]
-
-中文:
-引理 coe_natCast
-  条件: (n : 自然数)
-  结论: ((n : PadicAlgCl p) : Complex_[p]) = (n : Complex_[p])
-  证明: by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]) n, coe_eq]
-
-Depends on / 依赖: Complex_, PadicAlgCl, algebraMap, coe_eq, map_natCast
+--- 原说明 ---
+The valuation of `p : ℂ_[p]` is `1/p`.
 -/
-lemma coe_natCast (n : Nat) : ((n : PadicAlgCl p) : Complex_[p]) = (n : Complex_[p]) := by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]) n, coe_eq]
-
-/--
-theorem `valuation_p` / 定理 `valuation_p`
-
-English:
-theorem valuation_p
-  statement: Valued.v (p : Complex_[p]) = 1 / (p : Real>=0)
-  proof: by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]), ← coe_eq, valuation_extends,
-    PadicAlgCl.valuation_p]
-
-中文:
-定理 valuation_p
-  结论: 赋值.v (p : Complex_[p]) = 1 / (p : 实数>=0)
-  证明: by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]), ← coe_eq, valuation_extends,
-    PadicAlgCl.valuation_p]
-
-Depends on / 依赖: Complex_, PadicAlgCl, PadicAlgCl.valuation_p, algebraMap, coe_eq, map_natCast, valuation_extends, valuation_p
--/
-theorem valuation_p : Valued.v (p : Complex_[p]) = 1 / (p : Real>=0) := by
-  rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]), ← coe_eq, valuation_extends,
+theorem valuation_p : Valued.v (p : ℂ_[p]) = 1 / (p : ℝ≥0) := by
+  rw [← map_natCast (algebraMap (PadicAlgCl p) ℂ_[p]), ← coe_eq, valuation_extends,
     PadicAlgCl.valuation_p]
 
 open MonoidWithZeroHom.ValueGroup₀
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The valuation on `ℂ_[p]` has rank one. -/
+/-
+**PadicComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: RankOne (PadicComplex.valued p).v
-  body: embedding
-  strictMono' := embedding_strictMono
-  exists_val_nontrivial := by
-    use p
-    have hp : Nat.Prime p := hp.1
-    simp only [valuation_p, one_div, ne_eq, inv_eq_zero, Nat.cast_eq_zero, inv_eq_one,
-      Nat.cast_eq_one]
-    exact ⟨hp.ne_zero, hp.ne_one⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 秩一 (PadicComplex.valued p).v
-  定义体: embedding
-  strictMono' := embedding_strictMono
-  exists_val_nontrivial := by
-    use p
-    have hp : Nat.Prime p := hp.1
-    simp only [valuation_p, one_div, ne_eq, inv_eq_zero, Nat.cast_eq_zero, inv_eq_one,
-      Nat.cast_eq_one]
-    exact ⟨hp.ne_zero, hp.ne_one⟩
-
-@[simp]
-
-Depends on / 依赖: embedding
+--- 原说明 ---
+The valuation on `ℂ_[p]` has rank one.
 -/
 instance : RankOne (PadicComplex.valued p).v where
-  hom' := embedding
+  hom'        := embedding
   strictMono' := embedding_strictMono
   exists_val_nontrivial := by
     use p
@@ -617,328 +499,389 @@ instance : RankOne (PadicComplex.valued p).v where
     exact ⟨hp.ne_zero, hp.ne_one⟩
 
 @[simp]
-/--
-theorem `RankOne.hom_eq_embedding` / 定理 `RankOne.hom_eq_embedding`
-
-English:
-theorem RankOne.hom_eq_embedding
-  statement: RankOne.hom (PadicComplex.valued p).v = embedding
-  proof: rfl
-
-中文:
-定理 秩一.hom_eq_embedding
-  结论: 秩一.hom (PadicComplex.valued p).v = embedding
-  证明: rfl
+/-
+**PadicComplex.RankOne.hom_eq_embedding** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex.
+RankOne`。
+形式化陈述：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Valuation.RankOne.hom Valued.v = Mono
+idWithZeroHom.ValueGroup₀.embedding
+参数：p : ℕ；Nat.Prime p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
 -/
 theorem RankOne.hom_eq_embedding : RankOne.hom (PadicComplex.valued p).v = embedding := rfl
 
-/--
-Instance `normedField` / 实例 `normedField`
+/-- `ℂ_[p]` is a normed field, where the norm extends from `PadicAlgCl` along completion. -/
+/-
+**PadicComplex.normedField** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：normedField : NormedField Complex_[p]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance normedField
-  signature: : NormedField Complex_[p]
-  body: inferInstance
-
-中文:
-实例 normedField
-  签名: : 赋范域 Complex_[p]
-  定义体: inferInstance
+--- 原说明 ---
+`ℂ_[p]` is a normed field, where the norm extends from `PadicAlgCl` along comple
+tion.
 -/
-instance normedField : NormedField Complex_[p] := inferInstance
+instance normedField : NormedField ℂ_[p] := inferInstance
 
 -- Ensure that the norm instance on `ℂ_[p]` is extended from `PadicAlgCl p`.
-example : (‖·‖ : Complex_[p] -> Real) = (UniformSpace.Completion.instNorm (PadicAlgCl p)).norm := by
+/-
+**PadicComplex.** 是 Mathlib 中的一个示例，位于命名空间 `PadicComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : (‖·‖ : ℂ_[p] → ℝ) = (UniformSpace.Completion.instNorm (PadicAlgCl p)).norm := by
   with_reducible_and_instances rfl
 
-/--
-theorem `norm_extends` / 定理 `norm_extends`
+/-- The norm on `ℂ_[p]` extends the norm on `PadicAlgCl p`. -/
+/-
+**PadicComplex.norm_extends** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：norm_extends (x : PadicAlgCl p) : ‖(x : Complex_[p])‖ = ‖x‖
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+继承自：(x : PadicAlgCl p) : ‖(x : Complex_[p])‖ = ‖x‖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.norm_coe`：norm_coe {E} [SeminormedAddCommGroup E
+] (x : E) : ‖(x : Completion E)‖ = ‖x‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem norm_extends
-  given: (x : PadicAlgCl p)
-  statement: ‖(x : Complex_[p])‖ = ‖x‖
-  proof: by
-  simp
-
-中文:
-定理 norm_extends
-  条件: (x : PadicAlgCl p)
-  结论: ‖(x : Complex_[p])‖ = ‖x‖
-  证明: by
-  simp
+--- 原说明 ---
+The norm on `ℂ_[p]` extends the norm on `PadicAlgCl p`.
 -/
-theorem norm_extends (x : PadicAlgCl p) : ‖(x : Complex_[p])‖ = ‖x‖ := by
+theorem norm_extends (x : PadicAlgCl p) : ‖(x : ℂ_[p])‖ = ‖x‖ := by
   simp
 
-/--
-theorem `norm_extends'` / 定理 `norm_extends'`
+/-- The norm on `ℂ_[p]` extends the norm on `ℚ_[p]`. -/
+/-
+**PadicComplex.norm_extends'** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：norm_extends' (x : Rat_[p]) : ‖(x : Complex_[p])‖ = ‖x‖
+参数：x : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.norm_coe`：norm_coe {E} [SeminormedAddCommGroup E
+] (x : E) : ‖(x : Completion E)‖ = ‖x‖
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem norm_extends'
-  given: (x : Rat_[p])
-  statement: ‖(x : Complex_[p])‖ = ‖x‖
-  proof: by
-  simp
-
-中文:
-定理 norm_extends'
-  条件: (x : Rat_[p])
-  结论: ‖(x : Complex_[p])‖ = ‖x‖
-  证明: by
-  simp
+--- 原说明 ---
+The norm on `ℂ_[p]` extends the norm on `ℚ_[p]`.
 -/
-theorem norm_extends' (x : Rat_[p]) : ‖(x : Complex_[p])‖ = ‖x‖ := by
+theorem norm_extends' (x : ℚ_[p]) : ‖(x : ℂ_[p])‖ = ‖x‖ := by
   simp
 
-/--
-Instance `isUltrametricDist` / 实例 `isUltrametricDist`
+/-- The underlying metric space of `ℂ_[p]` is ultrametric. -/
+/-
+**PadicComplex.isUltrametricDist** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：isUltrametricDist : IsUltrametricDist Complex_[p]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUltrametricDist.of_normedAlgebra`：IsUltrametricDist.of_normedAlgebra [
+NormedDivisionRing L] [NormedAlgebra K L] [h : IsUltrametricDist K] : IsUltramet
+ricDist L
+· 使用定理 `Padic.instIsUltrametricDist`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], IsUl
+trametricDist ℚ_[p]
 
-English:
-instance isUltrametricDist
-  signature: : IsUltrametricDist Complex_[p]
-  body: IsUltrametricDist.of_normedAlgebra Rat_[p]
-
-中文:
-实例 isUltrametricDist
-  签名: : 是UltrametricDist Complex_[p]
-  定义体: IsUltrametricDist.of_normedAlgebra Rat_[p]
-
-Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.of_normedAlgebra, Rat_, of_normedAlgebra
+--- 原说明 ---
+The underlying metric space of `ℂ_[p]` is ultrametric.
 -/
-instance isUltrametricDist : IsUltrametricDist Complex_[p] := IsUltrametricDist.of_normedAlgebra Rat_[p]
+instance isUltrametricDist : IsUltrametricDist ℂ_[p] := IsUltrametricDist.of_normedAlgebra ℚ_[p]
 
-/--
-theorem `isNonarchimedean` / 定理 `isNonarchimedean`
+/-- The norm on `ℂ_[p]` is nonarchimedean. -/
+/-
+**PadicComplex.isNonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：isNonarchimedean : IsNonarchimedean (Norm.norm : Complex_[p] -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUltrametricDist.norm_add_le_max`：∀ {S : Type u_1} [inst : SeminormedAd
+dGroup S] [IsUltrametricDist S] (x y : S), ‖x + y‖ ≤ max ‖x‖ ‖y‖
 
-English:
-theorem isNonarchimedean
-  statement: IsNonarchimedean (Norm.norm : Complex_[p] -> Real)
-  proof: IsUltrametricDist.norm_add_le_max
-
-中文:
-定理 isNonarchimedean
-  结论: IsNonarchimedean (范数.norm : Complex_[p] -> 实数)
-  证明: IsUltrametricDist.norm_add_le_max
-
-Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.norm_add_le_max, norm_add_le_max
+--- 原说明 ---
+The norm on `ℂ_[p]` is nonarchimedean.
 -/
-theorem isNonarchimedean : IsNonarchimedean (Norm.norm : Complex_[p] -> Real) :=
+theorem isNonarchimedean : IsNonarchimedean (Norm.norm : ℂ_[p] → ℝ) :=
   IsUltrametricDist.norm_add_le_max
 
-/--
-theorem `norm_eq_norm'` / 定理 `norm_eq_norm'`
+/-- The norm on `ℂ_[p]` is compatible with the valuation. -/
+/-
+**PadicComplex.norm_eq_norm'** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：norm_eq_norm' : (‖·‖ : Complex_[p] -> Real) = Valued.v.norm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Completion.extension_unique`：extension_unique (hf : Uniform
+Continuous f) {g : Completion α -> β} (hg : UniformContinuous g) (h : forall a :
+ α, f a = g (a : Completion α)…
+· 使用定理 `T3Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T3
+Space X], T0Space X
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `T5Space.toT4Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T5Space
+ X], T4Space X
+· 使用定理 `OrderTopology.t5Space`：∀ {X : Type u_1} [inst : LinearOrder X] [inst_1 :
+ TopologicalSpace X] [OrderTopology X], T5Space X
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.completable`：∀ {K : Type u_1} [inst : Field K] {Γ₀ : Type u_2} [i
+nst_1 : LinearOrderedCommGroupWithZero Γ₀] [hv : Valued K Γ₀],   CompletableTopF
+ield K
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `uniformContinuous_norm`：∀ {E : Type u_2} [inst : SeminormedAddGroup E], 
+UniformContinuous norm
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Valuation.norm_def`：norm_def {x : L} : v.norm x = hv.hom _ (v.restrict x
+)
+· 使用引理 `Valuation.embedding_restrict`：embedding_restrict (x : R) : embedding (v.
+restrict x) = v x
+· 使用定理 `PadicComplex.valuation_extends`：valuation_extends (x : PadicAlgCl p) : V
+alued.v (x : Complex_[p]) = Valued.v x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicAlgCl.valuation_coe`：valuation_coe (x : PadicAlgCl p) : ((Valued.v 
+x : Real>=0) : Real) = ‖x‖
 
-English:
-theorem norm_eq_norm'
-  statement: (‖·‖ : Complex_[p] -> Real) = Valued.v.norm
-  proof: by
-  apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
-  · exact uniformContinuous_norm
-  · let S := (Valued.toNormedField Complex_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
-    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup
-    exact @uniformContinuous_norm Complex_[p] this
-  · intro x
-    simp only [Valued.v.norm_def, RankOne.hom_eq_embedding]
-    rw [embedding_restrict (PadicComplex.valued p).v x]; rw [valuation_extends]; rw [← PadicAlgCl.valuation_coe]
-
-中文:
-定理 norm_eq_norm'
-  结论: (‖·‖ : Complex_[p] -> 实数) = 赋值.v.norm
-  证明: by
-  apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
-  · exact uniformContinuous_norm
-  · let S := (Valued.toNormedField Complex_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
-    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup
-    exact @uniformContinuous_norm Complex_[p] this
-  · intro x
-    simp only [Valued.v.norm_def, RankOne.hom_eq_embedding]
-    rw [embedding_restrict (PadicComplex.valued p).v x]; rw [valuation_extends]; rw [← PadicAlgCl.valuation_coe]
-
-Depends on / 依赖: Completion, Complex_, NNReal, PadicAlgCl, PadicComplex, PadicComplex.valued, RankOne, RankOne.hom_eq_embedding, S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup, UniformSpace, UniformSpace.Completion.extension_unique, Valued, Valued.toNormedField, Valued.v.norm, Valued.v.norm_def, embedding_restrict, extension_unique, hom_eq_embedding, norm_def, toNonUnitalSeminormedRing
+--- 原说明 ---
+The norm on `ℂ_[p]` is compatible with the valuation.
 -/
-theorem norm_eq_norm' : (‖·‖ : Complex_[p] -> Real) = Valued.v.norm := by
+theorem norm_eq_norm' : (‖·‖ : ℂ_[p] → ℝ) = Valued.v.norm := by
   apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
   · exact uniformContinuous_norm
-  · let S := (Valued.toNormedField Complex_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
+  · let S := (Valued.toNormedField ℂ_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
     let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup
-    exact @uniformContinuous_norm Complex_[p] this
+    exact @uniformContinuous_norm ℂ_[p] this
   · intro x
     simp only [Valued.v.norm_def, RankOne.hom_eq_embedding]
-    rw [embedding_restrict (PadicComplex.valued p).v x]; rw [valuation_extends]; rw [← PadicAlgCl.valuation_coe]
+    rw [embedding_restrict (PadicComplex.valued p).v x, valuation_extends,
+      ← PadicAlgCl.valuation_coe]
 
-/--
-theorem `norm_eq_norm` / 定理 `norm_eq_norm`
+/-- The norm on `ℂ_[p]` is compatible with the valuation. -/
+/-
+**PadicComplex.norm_eq_norm** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：norm_eq_norm (x : Complex_[p]) : ‖x‖ = Valued.v.norm x
+参数：x : Complex_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.completable`：∀ {K : Type u_1} [inst : Field K] {Γ₀ : Type u_2} [i
+nst_1 : LinearOrderedCommGroupWithZero Γ₀] [hv : Valued K Γ₀],   CompletableTopF
+ield K
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicComplex.norm_eq_norm'`：norm_eq_norm' : (‖·‖ : Complex_[p] -> Real) 
+= Valued.v.norm
 
-English:
-theorem norm_eq_norm
-  given: (x : Complex_[p])
-  statement: ‖x‖ = Valued.v.norm x
-  proof: by
+--- 原说明 ---
+The norm on `ℂ_[p]` is compatible with the valuation.
+-/
+theorem norm_eq_norm (x : ℂ_[p]) : ‖x‖ = Valued.v.norm x := by
   congr!
   exact norm_eq_norm' p
 
-中文:
-定理 norm_eq_norm
-  条件: (x : Complex_[p])
-  结论: ‖x‖ = 赋值.v.norm x
-  证明: by
-  congr!
-  exact norm_eq_norm' p
+/-- The `ℝ≥0`-valued norm on `ℂ_[p]` extends that on `PadicAlgCl p`. -/
+/-
+**PadicComplex.nnnorm_extends** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：nnnorm_extends (x : PadicAlgCl p) : ‖(x : Complex_[p])‖₊ = ‖x‖₊
+参数：x : PadicAlgCl p。
+该定理/引理给出了一组等式。
+继承自：(x : PadicAlgCl p) : ‖(x : Complex_[p])‖₊ = ‖x‖₊。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `PadicComplex.norm_extends`：norm_extends (x : PadicAlgCl p) : ‖(x : Compl
+ex_[p])‖ = ‖x‖
 
-Depends on / 依赖: norm_eq_norm
+--- 原说明 ---
+The `ℝ≥0`-valued norm on `ℂ_[p]` extends that on `PadicAlgCl p`.
 -/
-theorem norm_eq_norm (x : Complex_[p]) : ‖x‖ = Valued.v.norm x := by
-  congr!
-  exact norm_eq_norm' p
-
-/--
-theorem `nnnorm_extends` / 定理 `nnnorm_extends`
-
-English:
-theorem nnnorm_extends
-  given: (x : PadicAlgCl p)
-  statement: ‖(x : Complex_[p])‖₊ = ‖x‖₊
-  proof: by
+theorem nnnorm_extends (x : PadicAlgCl p) : ‖(x : ℂ_[p])‖₊ = ‖x‖₊ := by
   ext
   exact norm_extends p x
 
-中文:
-定理 nnnorm_extends
-  条件: (x : PadicAlgCl p)
-  结论: ‖(x : Complex_[p])‖₊ = ‖x‖₊
-  证明: by
-  ext
-  exact norm_extends p x
+/-- The `ℝ≥0`-valued norm on `ℂ_[p]` extends the norm on `ℚ_[p]`. -/
+/-
+**PadicComplex.nnnorm_extends'** 是 Mathlib 中的一个定理，位于命名空间 `PadicComplex`。
+形式化陈述：nnnorm_extends' (x : Rat_[p]) : ‖(x : Complex_[p])‖₊ = ‖x‖₊
+参数：x : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.nnnorm_coe`：nnnorm_coe {E} [SeminormedAddCommGro
+up E] (x : E) : ‖(x : Completion E)‖₊ = ‖x‖₊
+· 使用定理 `nnnorm_algebraMap'`：nnnorm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖alge
+braMap 𝕜 𝕜' x‖₊ = ‖x‖₊
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: norm_extends
+--- 原说明 ---
+The `ℝ≥0`-valued norm on `ℂ_[p]` extends the norm on `ℚ_[p]`.
 -/
-theorem nnnorm_extends (x : PadicAlgCl p) : ‖(x : Complex_[p])‖₊ = ‖x‖₊ := by
-  ext
-  exact norm_extends p x
-
-/--
-theorem `nnnorm_extends'` / 定理 `nnnorm_extends'`
-
-English:
-theorem nnnorm_extends'
-  given: (x : Rat_[p])
-  statement: ‖(x : Complex_[p])‖₊ = ‖x‖₊
-  proof: by
+theorem nnnorm_extends' (x : ℚ_[p]) : ‖(x : ℂ_[p])‖₊ = ‖x‖₊ := by
   ext
   simp
 
-中文:
-定理 nnnorm_extends'
-  条件: (x : Rat_[p])
-  结论: ‖(x : Complex_[p])‖₊ = ‖x‖₊
-  证明: by
-  ext
-  simp
+/-- The norm on `ℂ_[p]` is nontrivial. -/
+/-
+**PadicComplex.nontriviallyNormedField** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：nontriviallyNormedField : NontriviallyNormedField Complex_[p] where non_tr
+ivial
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The norm on `ℂ_[p]` is nontrivial.
 -/
-theorem nnnorm_extends' (x : Rat_[p]) : ‖(x : Complex_[p])‖₊ = ‖x‖₊ := by
-  ext
-  simp
-
-/--
-Instance `nontriviallyNormedField` / 实例 `nontriviallyNormedField`
-
-English:
-instance nontriviallyNormedField
-  signature: : NontriviallyNormedField Complex_[p] where
-  body: by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
-    use x
-    simpa only [norm_extends']
-
-中文:
-实例 nontriviallyNormedField
-  签名: : NontriviallyNormedField Complex_[p] where
-  定义体: by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
-    use x
-    simpa only [norm_extends']
-
-Depends on / 依赖: NontriviallyNormedField, NontriviallyNormedField.non_trivial, Rat_, non_trivial, norm_extends
--/
-instance nontriviallyNormedField : NontriviallyNormedField Complex_[p] where
+instance nontriviallyNormedField : NontriviallyNormedField ℂ_[p] where
   non_trivial := by
-    choose x hx using NontriviallyNormedField.non_trivial (α := Rat_[p])
+    choose x hx using NontriviallyNormedField.non_trivial (α := ℚ_[p])
     use x
     simpa only [norm_extends']
 
-/--
-Instance `charZero` / 实例 `charZero`
+/-- `ℂ_[p]` has characteristic zero. -/
+/-
+**PadicComplex.charZero** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：charZero : CharZero Complex_[p]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用引理 `RingHom.charZero_iff`：charZero_iff {ϕ : R ->+* S} (hϕ : Injective ϕ) : C
+harZero R ↔ CharZero S
+· 使用定理 `PadicAlgCl.instUniformContinuousConstSMulPadic`：∀ (p : ℕ) [hp : Fact (Na
+t.Prime p)], UniformContinuousConstSMul ℚ_[p] (PadicAlgCl p)
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Valued.completable`：∀ {K : Type u_1} [inst : Field K] {Γ₀ : Type u_2} [i
+nst_1 : LinearOrderedCommGroupWithZero Γ₀] [hv : Valued K Γ₀],   CompletableTopF
+ield K
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 
-English:
-instance charZero
-  signature: : CharZero Complex_[p]
-  body: (RingHom.charZero_iff (algebraMap Rat_[p] Complex_[p]).injective).mp inferInstance
-
-中文:
-实例 charZero
-  签名: : 特征零 Complex_[p]
-  定义体: (RingHom.charZero_iff (algebraMap Rat_[p] Complex_[p]).injective).mp inferInstance
-
-Depends on / 依赖: Complex_, Rat_, RingHom, RingHom.charZero_iff, algebraMap, charZero_iff, injective
+--- 原说明 ---
+`ℂ_[p]` has characteristic zero.
 -/
-instance charZero : CharZero Complex_[p] :=
-  (RingHom.charZero_iff (algebraMap Rat_[p] Complex_[p]).injective).mp inferInstance
+instance charZero : CharZero ℂ_[p] :=
+  (RingHom.charZero_iff (algebraMap ℚ_[p] ℂ_[p]).injective).mp inferInstance
 
-/--
-Instance `isAlgClosed` / 实例 `isAlgClosed`
+/-- `ℂ_[p]` is algebraically closed. -/
+/-
+**PadicComplex.isAlgClosed** 是 Mathlib 中的一个实例，位于命名空间 `PadicComplex`。
+形式化陈述：isAlgClosed : IsAlgClosed Complex_[p]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAlgClosed.of_denseRange`：IsAlgClosed.of_denseRange {K L : Type*} [Fiel
+d K] [NontriviallyNormedField L] [CompleteSpace L] [CharZero L] [IsUltrametricDi
+st L] [Algebra …
+· 使用定理 `UniformSpace.Completion.denseRange_coe`：denseRange_coe : DenseRange ((↑)
+ : α -> Completion α)
 
-English:
-instance isAlgClosed
-  signature: : IsAlgClosed Complex_[p]
-  body: IsAlgClosed.of_denseRange UniformSpace.Completion.denseRange_coe
-
-中文:
-实例 isAlgClosed
-  签名: : 是代数闭 Complex_[p]
-  定义体: IsAlgClosed.of_denseRange UniformSpace.Completion.denseRange_coe
-
-Depends on / 依赖: Completion, IsAlgClosed, IsAlgClosed.of_denseRange, UniformSpace, UniformSpace.Completion.denseRange_coe, denseRange_coe, of_denseRange
+--- 原说明 ---
+`ℂ_[p]` is algebraically closed.
 -/
-instance isAlgClosed : IsAlgClosed Complex_[p] :=
+instance isAlgClosed : IsAlgClosed ℂ_[p] :=
   IsAlgClosed.of_denseRange UniformSpace.Completion.denseRange_coe
 
 end PadicComplex
 
-/--
-Definition of `PadicComplexInt` / `PadicComplexInt` 的定义
+/-- We define `𝓞_ℂ_[p]` as the valuation subring of `ℂ_[p]`, consisting of those elements with
+  valuation `≤ 1`. -/
+/-
+**PadicComplexInt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PadicComplexInt : ValuationSubring Complex_[p]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PadicComplexInt
-  signature: : ValuationSubring Complex_[p]
-  body: (PadicComplex.valued p).v.valuationSubring
-
-中文:
-定义 PadicComplex整数
-  签名: : 赋值子环 Complex_[p]
-  定义体: (PadicComplex.valued p).v.valuationSubring
-
-Depends on / 依赖: PadicComplex, PadicComplex.valued, v.valuationSubring, valuationSubring, valued
+--- 原说明 ---
+We define `𝓞_ℂ_[p]` as the valuation subring of `ℂ_[p]`, consisting of those ele
+ments with
+  valuation `≤ 1`.
 -/
-def PadicComplexInt : ValuationSubring Complex_[p] := (PadicComplex.valued p).v.valuationSubring
+def PadicComplexInt : ValuationSubring ℂ_[p] := (PadicComplex.valued p).v.valuationSubring
 
 /-- We define `𝓞_ℂ_[p]` as the subring of elements of `ℂ_[p]` with valuation `≤ 1`. -/
-notation "𝓞_Complex_[" p "]" => PadicComplexInt p
+notation "𝓞_ℂ_[" p "]" => PadicComplexInt p
 
-/--
-theorem `PadicComplexInt.integers` / 定理 `PadicComplexInt.integers`
+/-- `𝓞_ℂ_[p]` is the ring of integers of `ℂ_[p]`. -/
+/-
+**PadicComplexInt.integers** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PadicComplexInt.integers : Valuation.Integers (PadicComplex.valued p).v 𝓞_
+Complex_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Valuation.integer.integers`：∀ {R : Type u} {Γ₀ : Type v} [inst : CommRin
+g R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀] (v : Valuation R Γ₀),   v.Inte
+gers ↥v.integer
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
 
-English:
-theorem PadicComplexInt.integers
-  statement: Valuation.Integers (PadicComplex.valued p).v 𝓞_Complex_[p]
-  proof: Valuation.integer.integers _
-
-中文:
-定理 PadicComplex整数.integers
-  结论: 赋值.整数egers (PadicComplex.valued p).v 𝓞_Complex_[p]
-  证明: Valuation.integer.integers _
-
-Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers
+--- 原说明 ---
+`𝓞_ℂ_[p]` is the ring of integers of `ℂ_[p]`.
 -/
-theorem PadicComplexInt.integers : Valuation.Integers (PadicComplex.valued p).v 𝓞_Complex_[p] :=
+theorem PadicComplexInt.integers : Valuation.Integers (PadicComplex.valued p).v 𝓞_ℂ_[p] :=
   Valuation.integer.integers _

@@ -49,53 +49,35 @@ universe v u
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Inductive type `WithTerminal` / 归纳类型 `WithTerminal`
+/-- Formally adjoin a terminal object to a category. -/
+/-
+**CategoryTheory.WithTerminal** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：WithTerminal : Type u | of : C -> WithTerminal | star : WithTerminal deriv
+ing Inhabited  attribute [local aesop safe cases (rule_sets
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WithTerminal
-  parameters: : Type u
-  constructors (2):
-    - of: C -> WithTerminal
-    - star: WithTerminal
-
-中文:
-归纳类型 WithTerminal
-  参数: : 类型u
-  构造子 (2 个):
-    - of: C -> WithTerminal
-    - star: WithTerminal
-
-Depends on / 依赖: CategoryTheory, WithTerminal
+--- 原说明 ---
+Formally adjoin a terminal object to a category.
 -/
 inductive WithTerminal : Type u
-  | of : C -> WithTerminal
+  | of : C → WithTerminal
   | star : WithTerminal
   deriving Inhabited
 
 attribute [local aesop safe cases (rule_sets := [CategoryTheory])] WithTerminal
 
-/--
-Inductive type `WithInitial` / 归纳类型 `WithInitial`
+/-- Formally adjoin an initial object to a category. -/
+/-
+**CategoryTheory.WithInitial** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：WithInitial : Type u | of : C -> WithInitial | star : WithInitial deriving
+ Inhabited  attribute [local aesop safe cases (rule_sets
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WithInitial
-  parameters: : Type u
-  constructors (2):
-    - of: C -> WithInitial
-    - star: WithInitial
-
-中文:
-归纳类型 WithInitial
-  参数: : 类型u
-  构造子 (2 个):
-    - of: C -> WithInitial
-    - star: WithInitial
-
-Depends on / 依赖: CategoryTheory, WithInitial
+--- 原说明 ---
+Formally adjoin an initial object to a category.
 -/
 inductive WithInitial : Type u
-  | of : C -> WithInitial
+  | of : C → WithInitial
   | star : WithInitial
   deriving Inhabited
 
@@ -107,18 +89,17 @@ variable {C}
 
 /-- Morphisms for `WithTerminal C`. -/
 @[simp]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.WithTerminal.Hom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Terminal`。
+形式化陈述：{C : Type u} →   [CategoryTheory.Category.{v, u} C] → CategoryTheory.WithT
+erminal C → CategoryTheory.WithTerminal C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: : WithTerminal C -> WithTerminal C -> Type v
-
-中文:
-定义 态射
-  签名: : WithTerminal C -> WithTerminal C -> 类型v
+--- 原说明 ---
+Morphisms for `WithTerminal C`.
 -/
-def Hom : WithTerminal C -> WithTerminal C -> Type v
+def Hom : WithTerminal C → WithTerminal C → Type v
   | of X, of Y => X ⟶ Y
   | star, of _ => PEmpty
   | _, star => PUnit
@@ -126,35 +107,34 @@ attribute [nolint simpNF] Hom.eq_3
 
 /-- Identity morphisms for `WithTerminal C`. -/
 @[simp]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.WithTerminal.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.WithT
+erminal`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (X : CategoryTh
+eory.WithTerminal C) → X.Hom X
+参数：X : CategoryTheory.WithTerminal C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : forall X : WithTerminal C, Hom X X
-
-中文:
-定义 id
-  签名: : 对任意 X : WithTerminal C, 态射 X X
+--- 原说明 ---
+Identity morphisms for `WithTerminal C`.
 -/
-def id : forall X : WithTerminal C, Hom X X
+def id : ∀ X : WithTerminal C, Hom X X
   | of _ => 𝟙 _
   | star => PUnit.unit
 
 /-- Composition of morphisms for `WithTerminal C`. -/
 @[simp]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.WithTerminal.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hTerminal`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → {X Y Z : Cate
+goryTheory.WithTerminal C} → X.Hom Y → Y.Hom Z → X.Hom Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: : forall {X Y Z : WithTerminal C}, Hom X Y -> Hom Y Z -> Hom X Z
-
-中文:
-定义 comp
-  签名: : 对任意 {X Y Z : WithTerminal C}, 态射 X Y -> 态射 Y Z -> 态射 X Z
+--- 原说明 ---
+Composition of morphisms for `WithTerminal C`.
 -/
-def comp : forall {X Y Z : WithTerminal C}, Hom X Y -> Hom Y Z -> Hom X Z
+def comp : ∀ {X Y Z : WithTerminal C}, Hom X Y → Hom Y Z → Hom X Z
   | of _X, of _Y, of _Z => fun f g => f ≫ g
   | of _X, _, star => fun _f _g => PUnit.unit
   | star, of _X, _ => fun f _g => PEmpty.elim f
@@ -165,42 +145,25 @@ Assistance investigating this would be appreciated. -/
 attribute [nolint simpNF] comp.eq_2 comp.eq_4
 
 @[aesop safe destruct (rule_sets := [CategoryTheory])]
-/--
-lemma `false_of_from_star'` / 引理 `false_of_from_star'`
+/-
+**CategoryTheory.WithTerminal.false_of_from_star'** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.WithTerminal`。
+形式化陈述：false_of_from_star' {X : C} (f : Hom star (of X)) : False
+参数：f : Hom star (of X)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma false_of_from_star'
-  given: {X : C} (f : Hom star (of X))
-  statement: False
-  proof: (f : PEmpty).elim
-
-中文:
-引理 false_of_from_star'
-  条件: {X : C} (f : 态射 star (of X))
-  结论: 假
-  证明: (f : PEmpty).elim
-
-Depends on / 依赖: PEmpty
+--- 原说明 ---
+As of nightly-2026-04-29, the simpNF linter is failing here.
+Assistance investigating this would be appreciated.
 -/
 lemma false_of_from_star' {X : C} (f : Hom star (of X)) : False := (f : PEmpty).elim
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{v} (WithTerminal C)
-  body: Hom X Y
-  id _ := id _
-  comp := comp
-
-中文:
-实例 :
-  签名: 范畴.{v} (WithTerminal C)
-  定义体: Hom X Y
-  id _ := id _
-  comp := comp
+/-
+**CategoryTheory.WithTerminal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithTer
+minal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{v} (WithTerminal C) where
   Hom X Y := Hom X Y
@@ -208,51 +171,46 @@ instance : Category.{v} (WithTerminal C) where
   comp := comp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `down` / `down` 的定义
+/-- Helper function for typechecking. -/
+/-
+**CategoryTheory.WithTerminal.down** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hTerminal`。
+形式化陈述：down {X Y : C} (f : of X ⟶ of Y) : X ⟶ Y
+参数：f : of X ⟶ of Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition down
-  signature: {X Y : C} (f : of X ⟶ of Y)
-  body: f
-
-中文:
-定义 down
-  签名: {X Y : C} (f : of X ⟶ of Y)
-  定义体: f
+--- 原说明 ---
+Helper function for typechecking.
 -/
 def down {X Y : C} (f : of X ⟶ of Y) : X ⟶ Y := f
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `down_id` / 引理 `down_id`
-
-English:
-lemma down_id
-  given: {X : C}
-  statement: down (𝟙 (of X)) = 𝟙 X
-  proof: rfl
-
-中文:
-引理 down_id
-  条件: {X : C}
-  结论: down (𝟙 (of X)) = 𝟙 X
-  证明: rfl
+/-
+**CategoryTheory.WithTerminal.down_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+WithTerminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X : C},   Catego
+ryTheory.WithTerminal.down (CategoryTheory.CategoryStruct.id (CategoryTheory.Wit
+hTerminal.of X)) =     CategoryTheory.CategoryStruct.id X
+参数：CategoryTheory.CategoryStruct.id (CategoryTheory.WithTerminal.of X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma down_id {X : C} : down (𝟙 (of X)) = 𝟙 X := rfl
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `down_comp` / 引理 `down_comp`
-
-English:
-lemma down_comp
-  given: {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z)
-  proof: rfl
-
-中文:
-引理 down_comp
-  条件: {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z)
-  证明: rfl
+/-
+**CategoryTheory.WithTerminal.down_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.WithTerminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C}   (f 
+: CategoryTheory.WithTerminal.of X ⟶ CategoryTheory.WithTerminal.of Y)   (g : Ca
+tegoryTheory.WithTerminal.of Y ⟶ CategoryTheory.WithTerminal.of Z),   CategoryTh
+eory.WithTerminal.down (CategoryTheory.CategoryStruct.comp f g) =     CategoryTh
+eory.CategoryStruct.comp (CategoryTheory.WithTerminal.down f) (CategoryTheory.Wi
+thTerminal.down g)
+参数：f : CategoryTheory.WithTerminal.of X ⟶ CategoryTheory.WithTerminal.of Y；g : C
+ategoryTheory.WithTerminal.of Y ⟶ CategoryTheory.WithTerminal.of Z；CategoryTheor
+y.CategoryStruct.comp f g；CategoryTheory.WithTerminal.down f；CategoryTheory.With
+Terminal.down g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma down_comp {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z) :
     down (f ≫ g) = down f ≫ down g :=
@@ -260,112 +218,68 @@ lemma down_comp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[aesop safe destruct (rule_sets := [CategoryTheory])]
-/--
-lemma `false_of_from_star` / 引理 `false_of_from_star`
-
-English:
-lemma false_of_from_star
-  given: {X : C} (f : star ⟶ of X)
-  statement: False
-  proof: (f : PEmpty).elim
-
-中文:
-引理 false_of_from_star
-  条件: {X : C} (f : star ⟶ of X)
-  结论: 假
-  证明: (f : PEmpty).elim
-
-Depends on / 依赖: PEmpty
+/-
+**CategoryTheory.WithTerminal.false_of_from_star** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.WithTerminal`。
+形式化陈述：false_of_from_star {X : C} (f : star ⟶ of X) : False
+参数：f : star ⟶ of X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma false_of_from_star {X : C} (f : star ⟶ of X) : False := (f : PEmpty).elim
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `incl` / `incl` 的定义
+/-- The inclusion from `C` into `WithTerminal C`. -/
+/-
+**CategoryTheory.WithTerminal.incl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hTerminal`。
+形式化陈述：incl : C ⥤ WithTerminal C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: : C ⥤ WithTerminal C where
-  body: of
-  map f := f
-
-中文:
-定义 incl
-  签名: : C ⥤ WithTerminal C where
-  定义体: of
-  map f := f
+--- 原说明 ---
+The inclusion from `C` into `WithTerminal C`.
 -/
 def incl : C ⥤ WithTerminal C where
   obj := of
   map f := f
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (incl : C ⥤ _).Full
-  body: ⟨f, rfl⟩
-
-中文:
-实例 :
-  签名: (incl : C ⥤ _).满
-  定义体: ⟨f, rfl⟩
+/-
+**CategoryTheory.WithTerminal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithTer
+minal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (incl : C ⥤ _).Full where
   map_surjective f := ⟨f, rfl⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (incl : C ⥤ _).Faithful
-
-中文:
-实例 :
-  签名: (incl : C ⥤ _).忠实
+/-
+**CategoryTheory.WithTerminal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithTer
+minal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (incl : C ⥤ _).Faithful where
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Map `WithTerminal` with respect to a functor `F : C ⥤ D`. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.WithTerminal.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Terminal`。
+形式化陈述：map {D : Type*} [Category* D] (F : C ⥤ D) : WithTerminal C ⥤ WithTerminal 
+D where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {D : Type*} [Category* D] (F : C ⥤ D)
-  body: match X with
-| of x => of F.obj x
-    | star => star
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | of _, star, _ => PUnit.unit
-    | star, star, _ => PUnit.unit
-
-中文:
-定义 map
-  签名: {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: match X with
-| of x => of F.obj x
-    | star => star
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | of _, star, _ => PUnit.unit
-    | star, star, _ => PUnit.unit
-
-Depends on / 依赖: F.map, F.obj, PUnit.unit
+--- 原说明 ---
+Map `WithTerminal` with respect to a functor `F : C ⥤ D`.
 -/
 def map {D : Type*} [Category* D] (F : C ⥤ D) : WithTerminal C ⥤ WithTerminal D where
   obj X :=
     match X with
-| of x => of F.obj x
+    | of x => of <| F.obj x
     | star => star
   map {X Y} f :=
     match X, Y, f with
@@ -377,24 +291,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- A natural isomorphism between the functor `map (𝟭 C)` and `𝟭 (WithTerminal C)`. -/
 @[simps!]
-/--
-Definition of `mapId` / `mapId` 的定义
+/-
+**CategoryTheory.WithTerminal.mapId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wi
+thTerminal`。
+形式化陈述：mapId (C : Type*) [Category* C] : map (𝟭 C) ≅ 𝟭 (WithTerminal C)
+参数：C : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId
-  signature: (C : Type*) [Category* C]
-  body: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-中文:
-定义 mapId
-  签名: (C : 类型) [范畴* C]
-  定义体: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+A natural isomorphism between the functor `map (𝟭 C)` and `𝟭 (WithTerminal C)`.
 -/
 def mapId (C : Type*) [Category* C] : map (𝟭 C) ≅ 𝟭 (WithTerminal C) :=
   NatIso.ofComponents (fun X => match X with
@@ -405,24 +311,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- A natural isomorphism between the functor `map (F ⋙ G) ` and `map F ⋙ map G `. -/
 @[simps!]
-/--
-Definition of `mapComp` / `mapComp` 的定义
+/-
+**CategoryTheory.WithTerminal.mapComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WithTerminal`。
+形式化陈述：mapComp {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E) 
+: map (F ⋙ G) ≅ map F ⋙ map G
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp
-  signature: {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E)
-  body: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-中文:
-定义 mapComp
-  签名: {D E : 类型} [范畴* D] [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
-  定义体: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+A natural isomorphism between the functor `map (F ⋙ G) ` and `map F ⋙ map G `.
 -/
 def mapComp {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E) :
     map (F ⋙ G) ≅ map F ⋙ map G :=
@@ -434,34 +333,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- From a natural transformation of functors `C ⥤ D`, the induced natural transformation
 of functors `WithTerminal C ⥤ WithTerminal D`. -/
 @[simps]
-/--
-Definition of `map₂` / `map₂` 的定义
+/-
+**CategoryTheory.WithTerminal.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Terminal`。
+形式化陈述：map {D : Type*} [Category* D] (F : C ⥤ D) : WithTerminal C ⥤ WithTerminal 
+D where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G)
-  body: fun X => match X with
-    | of x => η.app x
-    | star => 𝟙 star
-  naturality := by
-    intro X Y f
-    match X, Y, f with
-    | of x, of y, f => exact η.naturality f
-    | of x, star, _ => rfl
-    | star, star, _ => rfl
-
-中文:
-定义 map₂
-  签名: {D : 类型} [范畴* D] {F G : C ⥤ D} (η : F ⟶ G)
-  定义体: fun X => match X with
-    | of x => η.app x
-    | star => 𝟙 star
-  naturality := by
-    intro X Y f
-    match X, Y, f with
-    | of x, of y, f => exact η.naturality f
-    | of x, star, _ => rfl
-    | star, star, _ => rfl
+--- 原说明 ---
+From a natural transformation of functors `C ⥤ D`, the induced natural transform
+ation
+of functors `WithTerminal C ⥤ WithTerminal D`.
 -/
 def map₂ {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G) : map F ⟶ map G where
   app := fun X => match X with
@@ -478,40 +362,15 @@ def map₂ {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G) : map F ⟶ 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The prelax functor from `Cat` to `Cat` defined with `WithTerminal`. -/
 @[simps]
-/--
-Definition of `prelaxfunctor` / `prelaxfunctor` 的定义
+/-
+**CategoryTheory.WithTerminal.prelaxfunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.WithTerminal`。
+形式化陈述：prelaxfunctor : PrelaxFunctor Cat Cat where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prelaxfunctor
-  signature: : PrelaxFunctor Cat Cat where
-  body: Cat.of (WithTerminal C)
-  map F := (map F.toFunctor).toCatHom
-  map₂ f := (map₂ f.toNatTrans).toCatHom₂
-  map₂_id := by
-    intros
-    ext X
-    cases X <;> rfl
-  map₂_comp := by
-    intros
-    ext X
-    cases X <;> rfl
-
-中文:
-定义 prelaxfunctor
-  签名: : 预松弛函子 Cat Cat where
-  定义体: Cat.of (WithTerminal C)
-  map F := (map F.toFunctor).toCatHom
-  map₂ f := (map₂ f.toNatTrans).toCatHom₂
-  map₂_id := by
-    intros
-    ext X
-    cases X <;> rfl
-  map₂_comp := by
-    intros
-    ext X
-    cases X <;> rfl
-
-Depends on / 依赖: Cat.of, WithTerminal
+--- 原说明 ---
+The prelax functor from `Cat` to `Cat` defined with `WithTerminal`.
 -/
 def prelaxfunctor : PrelaxFunctor Cat Cat where
   obj C := Cat.of (WithTerminal C)
@@ -530,93 +389,20 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The pseudofunctor from `Cat` to `Cat` defined with `WithTerminal`. -/
 @[simps]
-/--
-Definition of `pseudofunctor` / `pseudofunctor` 的定义
+/-
+**CategoryTheory.WithTerminal.pseudofunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.WithTerminal`。
+形式化陈述：pseudofunctor : Pseudofunctor Cat Cat where toPrelaxFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pseudofunctor
-  signature: : Pseudofunctor Cat Cat where
-  body: prelaxfunctor
-  mapId C := Cat.Hom.isoMk (mapId C)
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
-  map₂_whisker_left := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_whisker_right := by
-    intros
-    ext X
-    cases X
-    · simp
-      rfl
-    · rfl
-  map₂_associator := by
-    intros
-    dsimp
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_left_unitor := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_right_unitor := by
-    intros
-    ext X
-    cases X
-    · simpa using! (refl _)
-    · rfl
-
-中文:
-定义 pseudofunctor
-  签名: : Pseudofunctor Cat Cat where
-  定义体: prelaxfunctor
-  mapId C := Cat.Hom.isoMk (mapId C)
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
-  map₂_whisker_left := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_whisker_right := by
-    intros
-    ext X
-    cases X
-    · simp
-      rfl
-    · rfl
-  map₂_associator := by
-    intros
-    dsimp
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_left_unitor := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_right_unitor := by
-    intros
-    ext X
-    cases X
-    · simpa using! (refl _)
-    · rfl
-
-Depends on / 依赖: prelaxfunctor
+--- 原说明 ---
+The pseudofunctor from `Cat` to `Cat` defined with `WithTerminal`.
 -/
 def pseudofunctor : Pseudofunctor Cat Cat where
   toPrelaxFunctor := prelaxfunctor
   mapId C := Cat.Hom.isoMk (mapId C)
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
+  mapComp _ _ := Cat.Hom.isoMk <| mapComp _ _
   map₂_whisker_left := by
     intros
     ext X
@@ -651,6 +437,11 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.WithTerminal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithTer
+minal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : WithTerminal C} : Unique (X ⟶ star) where
   default :=
     match X with
@@ -659,58 +450,42 @@ instance {X : WithTerminal C} : Unique (X ⟶ star) where
   uniq := by cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `starTerminal` / `starTerminal` 的定义
+/-- `WithTerminal.star` is terminal. -/
+/-
+**CategoryTheory.WithTerminal.starTerminal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithTerminal`。
+形式化陈述：starTerminal : Limits.IsTerminal (star : WithTerminal C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starTerminal
-  signature: : Limits.IsTerminal (star : WithTerminal C)
-  body: Limits.IsTerminal.ofUnique _
-
-中文:
-定义 starTerminal
-  签名: : Limits.是终止 (star : WithTerminal C)
-  定义体: Limits.IsTerminal.ofUnique _
-
-Depends on / 依赖: IsTerminal, Limits, Limits.IsTerminal.ofUnique, ofUnique
+--- 原说明 ---
+`WithTerminal.star` is terminal.
 -/
 def starTerminal : Limits.IsTerminal (star : WithTerminal C) :=
   Limits.IsTerminal.ofUnique _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.HasTerminal (WithTerminal C)
-  body: Limits.hasTerminal_of_unique star
-
-中文:
-实例 :
-  签名: Limits.有终止 (WithTerminal C)
-  定义体: Limits.hasTerminal_of_unique star
-
-Depends on / 依赖: Limits, Limits.hasTerminal_of_unique, hasTerminal_of_unique
+/-
+**CategoryTheory.WithTerminal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithTer
+minal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.HasTerminal (WithTerminal C) := Limits.hasTerminal_of_unique star
 
 /-- The isomorphism between star and an abstract terminal object of `WithTerminal C` -/
 @[simps!]
-/--
-Definition of `starIsoTerminal` / `starIsoTerminal` 的定义
+/-
+**CategoryTheory.WithTerminal.starIsoTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.WithTerminal`。
+形式化陈述：starIsoTerminal : star ≅ ⊤_ (WithTerminal C)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.WithTerminal.instHasTerminal`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C],   CategoryTheory.Limits.HasTerminal (CategoryTheo
+ry.WithTerminal C)
 
-English:
-definition starIsoTerminal
-  signature: : star ≅ ⊤_ (WithTerminal C)
-  body: starTerminal.uniqueUpToIso (Limits.terminalIsTerminal)
-
-中文:
-定义 starIsoTerminal
-  签名: : star ≅ ⊤_ (WithTerminal C)
-  定义体: starTerminal.uniqueUpToIso (Limits.terminalIsTerminal)
-
-Depends on / 依赖: Limits, Limits.terminalIsTerminal, starTerminal, starTerminal.uniqueUpToIso, terminalIsTerminal, uniqueUpToIso
+--- 原说明 ---
+The isomorphism between star and an abstract terminal object of `WithTerminal C`
 -/
 noncomputable def starIsoTerminal : star ≅ ⊤_ (WithTerminal C) :=
   starTerminal.uniqueUpToIso (Limits.terminalIsTerminal)
@@ -718,37 +493,22 @@ noncomputable def starIsoTerminal : star ≅ ⊤_ (WithTerminal C) :=
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Lift a functor `F : C ⥤ D` to `WithTerminal C ⥤ D`. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.WithTerminal.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hTerminal`。
+形式化陈述：lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.ob
+j x ⟶ Z) (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : WithTerminal
+ C ⥤ D where obj X
+参数：F : C ⥤ D；M : forall x : C, F.obj x ⟶ Z；hM : forall (x y : C) (f : x ⟶ y), F.
+map f ≫ M y = M x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-  body: match X with
-    | of x => F.obj x
-    | star => Z
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | of x, star, _ => M x
-    | star, star, _ => 𝟙 Z
-
-中文:
-定义 lift
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
-  定义体: match X with
-    | of x => F.obj x
-    | star => Z
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | of x, star, _ => M x
-    | star, star, _ => 𝟙 Z
-
-Depends on / 依赖: F.map, F.obj
+--- 原说明 ---
+Lift a functor `F : C ⥤ D` to `WithTerminal C ⥤ D`.
 -/
-def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-    (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : WithTerminal C ⥤ D where
+def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, F.obj x ⟶ Z)
+    (hM : ∀ (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : WithTerminal C ⥤ D where
   obj X :=
     match X with
     | of x => F.obj x
@@ -762,69 +522,72 @@ def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.ob
 set_option backward.isDefEq.respectTransparency false in
 /-- The isomorphism between `incl ⋙ lift F _ _` with `F`. -/
 @[simps!]
-/--
-Definition of `inclLift` / `inclLift` 的定义
+/-
+**CategoryTheory.WithTerminal.inclLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.WithTerminal`。
+形式化陈述：inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, 
+F.obj x ⟶ Z) (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : incl ⋙ l
+ift F M hM ≅ F where hom
+参数：F : C ⥤ D；M : forall x : C, F.obj x ⟶ Z；hM : forall (x y : C) (f : x ⟶ y), F.
+map f ≫ M y = M x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLift
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-  body: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
-
-中文:
-定义 inclLift
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
-  定义体: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
+--- 原说明 ---
+The isomorphism between `incl ⋙ lift F _ _` with `F`.
 -/
-def inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-    (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : incl ⋙ lift F M hM ≅ F where
+def inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, F.obj x ⟶ Z)
+    (hM : ∀ (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : incl ⋙ lift F M hM ≅ F where
   hom := { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The isomorphism between `(lift F _ _).obj WithTerminal.star` with `Z`. -/
 @[simps!]
-/--
-Definition of `liftStar` / `liftStar` 的定义
+/-
+**CategoryTheory.WithTerminal.liftStar** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.WithTerminal`。
+形式化陈述：liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, 
+F.obj x ⟶ Z) (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : (lift F 
+M hM).obj star ≅ Z
+参数：F : C ⥤ D；M : forall x : C, F.obj x ⟶ Z；hM : forall (x y : C) (f : x ⟶ y), F.
+map f ≫ M y = M x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftStar
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-  body: eqToIso rfl
-
-中文:
-定义 liftStar
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
-  定义体: eqToIso rfl
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The isomorphism between `(lift F _ _).obj WithTerminal.star` with `Z`.
 -/
-def liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-    (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : (lift F M hM).obj star ≅ Z :=
+def liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, F.obj x ⟶ Z)
+    (hM : ∀ (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) : (lift F M hM).obj star ≅ Z :=
   eqToIso rfl
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lift_map_liftStar` / 定理 `lift_map_liftStar`
-
-English:
-theorem lift_map_liftStar
-  statement: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-  proof: by
-  simp
-  rfl
-
-中文:
-定理 lift_map_liftStar
-  结论: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
-  证明: by
-  simp
-  rfl
+/-
+**CategoryTheory.WithTerminal.lift_map_liftStar** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.WithTerminal`。
+形式化陈述：lift_map_liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : foral
+l x : C, F.obj x ⟶ Z) (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) (
+x : C) : (lift F M hM).map (starTerminal.from (incl.obj x)) ≫ (liftStar F M hM).
+hom = (inclLift F M hM).hom.app x ≫ M x
+参数：F : C ⥤ D；M : forall x : C, F.obj x ⟶ Z；hM : forall (x y : C) (f : x ⟶ y), F.
+map f ≫ M y = M x；x : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
-theorem lift_map_liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-    (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) (x : C) :
+theorem lift_map_liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, F.obj x ⟶ Z)
+    (hM : ∀ (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) (x : C) :
     (lift F M hM).map (starTerminal.from (incl.obj x)) ≫ (liftStar F M hM).hom =
       (inclLift F M hM).hom.app x ≫ M x := by
   simp
@@ -833,52 +596,29 @@ theorem lift_map_liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : f
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The uniqueness of `lift`. -/
 @[simp]
-/--
-Definition of `liftUnique` / `liftUnique` 的定义
+/-
+**CategoryTheory.WithTerminal.liftUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.WithTerminal`。
+形式化陈述：liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C
+, F.obj x ⟶ Z) (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x) (G : Wit
+hTerminal C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star ≅ Z) (hh : forall x : C, G.
+map (starTerminal.from (incl.obj x)) ≫ hG.hom = h.hom.app x ≫ M x) : G ≅ lift F 
+M hM
+参数：F : C ⥤ D；M : forall x : C, F.obj x ⟶ Z；hM : forall (x y : C) (f : x ⟶ y), F.
+map f ≫ M y = M x；G : WithTerminal C ⥤ D；h : incl ⋙ G ≅ F；hG : G.obj star ≅ Z；hh
+ : forall x : C, G.map (starTerminal.from (incl.obj x)) ≫ hG.hom = h.hom.app x ≫
+ M x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftUnique
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-  body: NatIso.ofComponents
-    (fun X =>
-      match X with
-      | of x => h.app x
-      | star => hG)
-    (by
-      rintro (X | X) (Y | Y) f
-      · apply h.hom.naturality
-      · cases f
-        exact hh _
-      · cases f
-      · cases f
-        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
-        simp)
-
-中文:
-定义 liftUnique
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, F.obj x ⟶ Z)
-  定义体: NatIso.ofComponents
-    (fun X =>
-      match X with
-      | of x => h.app x
-      | star => hG)
-    (by
-      rintro (X | X) (Y | Y) f
-      · apply h.hom.naturality
-      · cases f
-        exact hh _
-      · cases f
-      · cases f
-        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
-        simp)
-
-Depends on / 依赖: G.map, NatIso, NatIso.ofComponents, h.app, h.hom.naturality, hG.hom, naturality, ofComponents
+--- 原说明 ---
+The uniqueness of `lift`.
 -/
-def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, F.obj x ⟶ Z)
-    (hM : forall (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x)
+def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, F.obj x ⟶ Z)
+    (hM : ∀ (x y : C) (f : x ⟶ y), F.map f ≫ M y = M x)
     (G : WithTerminal C ⥤ D) (h : incl ⋙ G ≅ F)
     (hG : G.obj star ≅ Z)
-    (hh : forall x : C, G.map (starTerminal.from (incl.obj x)) ≫ hG.hom = h.hom.app x ≫ M x) :
+    (hh : ∀ x : C, G.map (starTerminal.from (incl.obj x)) ≫ hG.hom = h.hom.app x ≫ M x) :
     G ≅ lift F M hM :=
   NatIso.ofComponents
     (fun X =>
@@ -898,20 +638,17 @@ def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `lift` with `Z` a terminal object. -/
 @[simps!]
-/--
-Definition of `liftToTerminal` / `liftToTerminal` 的定义
+/-
+**CategoryTheory.WithTerminal.liftToTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.WithTerminal`。
+形式化陈述：liftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.
+IsTerminal Z) : WithTerminal C ⥤ D
+参数：F : C ⥤ D；hZ : Limits.IsTerminal Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftToTerminal
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
-  body: lift F (fun _x => hZ.from _) fun _x _y _f => hZ.hom_ext _ _
-
-中文:
-定义 liftToTerminal
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
-  定义体: lift F (fun _x => hZ.from _) fun _x _y _f => hZ.hom_ext _ _
-
-Depends on / 依赖: hZ.from, hZ.hom_ext, hom_ext
+--- 原说明 ---
+A variant of `lift` with `Z` a terminal object.
 -/
 def liftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z) :
     WithTerminal C ⥤ D :=
@@ -920,20 +657,17 @@ def liftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `incl_lift` with `Z` a terminal object. -/
 @[simps!]
-/--
-Definition of `inclLiftToTerminal` / `inclLiftToTerminal` 的定义
+/-
+**CategoryTheory.WithTerminal.inclLiftToTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.WithTerminal`。
+形式化陈述：inclLiftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Lim
+its.IsTerminal Z) : incl ⋙ liftToTerminal F hZ ≅ F
+参数：F : C ⥤ D；hZ : Limits.IsTerminal Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLiftToTerminal
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
-  body: inclLift _ _ _
-
-中文:
-定义 inclLiftToTerminal
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
-  定义体: inclLift _ _ _
-
-Depends on / 依赖: inclLift
+--- 原说明 ---
+A variant of `incl_lift` with `Z` a terminal object.
 -/
 def inclLiftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z) :
     incl ⋙ liftToTerminal F hZ ≅ F :=
@@ -942,22 +676,19 @@ def inclLiftToTerminal {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Lim
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `lift_unique` with `Z` a terminal object. -/
 @[simps!]
-/--
-Definition of `liftToTerminalUnique` / `liftToTerminalUnique` 的定义
+/-
+**CategoryTheory.WithTerminal.liftToTerminalUnique** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.WithTerminal`。
+形式化陈述：liftToTerminalUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : L
+imits.IsTerminal Z) (G : WithTerminal C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star
+ ≅ Z) : G ≅ liftToTerminal F hZ
+参数：F : C ⥤ D；hZ : Limits.IsTerminal Z；G : WithTerminal C ⥤ D；h : incl ⋙ G ≅ F；hG
+ : G.obj star ≅ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftToTerminalUnique
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
-  body: liftUnique F (fun _z => hZ.from _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x =>
-    hZ.hom_ext _ _
-
-中文:
-定义 liftToTerminalUnique
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.是终止 Z)
-  定义体: liftUnique F (fun _z => hZ.from _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x =>
-    hZ.hom_ext _ _
-
-Depends on / 依赖: hZ.from, hZ.hom_ext, hom_ext, liftUnique
+--- 原说明 ---
+A variant of `lift_unique` with `Z` a terminal object.
 -/
 def liftToTerminalUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsTerminal Z)
     (G : WithTerminal C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star ≅ Z) : G ≅ liftToTerminal F hZ :=
@@ -967,43 +698,28 @@ def liftToTerminalUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : L
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructs a morphism to `star` from `of X`. -/
 @[simp]
-/--
-Definition of `homFrom` / `homFrom` 的定义
+/-
+**CategoryTheory.WithTerminal.homFrom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WithTerminal`。
+形式化陈述：homFrom (X : C) : incl.obj X ⟶ star
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homFrom
-  signature: (X : C)
-  body: starTerminal.from _
-
-中文:
-定义 homFrom
-  签名: (X : C)
-  定义体: starTerminal.from _
-
-Depends on / 依赖: starTerminal, starTerminal.from
+--- 原说明 ---
+Constructs a morphism to `star` from `of X`.
 -/
 def homFrom (X : C) : incl.obj X ⟶ star :=
   starTerminal.from _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isIso_of_from_star` / 实例 `isIso_of_from_star`
-
-English:
-instance isIso_of_from_star
-  signature: {X : WithTerminal C} (f : star ⟶ X)
-  body: match X with
-  | of _X => f.elim
-  | star => ⟨f, rfl, rfl⟩
-
-中文:
-实例 isIso_of_from_star
-  签名: {X : WithTerminal C} (f : star ⟶ X)
-  定义体: match X with
-  | of _X => f.elim
-  | star => ⟨f, rfl, rfl⟩
-
-Depends on / 依赖: f.elim
+/-
+**CategoryTheory.WithTerminal.isIso_of_from_star** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.WithTerminal`。
+形式化陈述：isIso_of_from_star {X : WithTerminal C} (f : star ⟶ X) : IsIso f
+参数：f : star ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_of_from_star {X : WithTerminal C} (f : star ⟶ X) : IsIso f :=
   match X with
@@ -1019,34 +735,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A functor `WithTerminal C ⥤ D` can be seen as an element of the comma category
 `Comma (𝟭 (C ⥤ D)) (const C)`. -/
 @[simps!]
-/--
-Definition of `mkCommaObject` / `mkCommaObject` 的定义
+/-
+**CategoryTheory.WithTerminal.mkCommaObject** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.WithTerminal`。
+形式化陈述：mkCommaObject (F : WithTerminal C ⥤ D) : Comma (𝟭 (C ⥤ D)) (Functor.const 
+C) where right
+参数：F : WithTerminal C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCommaObject
-  signature: (F : WithTerminal C ⥤ D)
-  body: F.obj .star
-  left := (incl ⋙ F)
-  hom :=
-    { app x := F.map (starTerminal.from (.of x))
-      naturality x y f := by
-        dsimp
-        rw [Category.comp_id]; rw [← F.map_comp]
-        congr 1 }
-
-中文:
-定义 mkCommaObject
-  签名: (F : WithTerminal C ⥤ D)
-  定义体: F.obj .star
-  left := (incl ⋙ F)
-  hom :=
-    { app x := F.map (starTerminal.from (.of x))
-      naturality x y f := by
-        dsimp
-        rw [Category.comp_id]; rw [← F.map_comp]
-        congr 1 }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A functor `WithTerminal C ⥤ D` can be seen as an element of the comma category
+`Comma (𝟭 (C ⥤ D)) (const C)`.
 -/
 def mkCommaObject (F : WithTerminal C ⥤ D) : Comma (𝟭 (C ⥤ D)) (Functor.const C) where
   right := F.obj .star
@@ -1055,7 +755,7 @@ def mkCommaObject (F : WithTerminal C ⥤ D) : Comma (𝟭 (C ⥤ D)) (Functor.c
     { app x := F.map (starTerminal.from (.of x))
       naturality x y f := by
         dsimp
-        rw [Category.comp_id]; rw [← F.map_comp]
+        rw [Category.comp_id, ← F.map_comp]
         congr 1 }
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -1063,20 +763,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A morphism of functors `WithTerminal C ⥤ D` gives a morphism between the associated comma
 objects. -/
 @[simps!]
-/--
-Definition of `mkCommaMorphism` / `mkCommaMorphism` 的定义
+/-
+**CategoryTheory.WithTerminal.mkCommaMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.WithTerminal`。
+形式化陈述：mkCommaMorphism {F G : WithTerminal C ⥤ D} (η : F ⟶ G) : mkCommaObject F ⟶
+ mkCommaObject G where right
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCommaMorphism
-  signature: {F G : WithTerminal C ⥤ D} (η : F ⟶ G)
-  body: η.app .star
-  left := Functor.whiskerLeft incl η
-
-中文:
-定义 mkCommaMorphism
-  签名: {F G : WithTerminal C ⥤ D} (η : F ⟶ G)
-  定义体: η.app .star
-  left := Functor.whiskerLeft incl η
+--- 原说明 ---
+A morphism of functors `WithTerminal C ⥤ D` gives a morphism between the associa
+ted comma
+objects.
 -/
 def mkCommaMorphism {F G : WithTerminal C ⥤ D} (η : F ⟶ G) : mkCommaObject F ⟶ mkCommaObject G where
   right := η.app .star
@@ -1087,57 +786,41 @@ set_option backward.isDefEq.respectTransparency false in
 /-- An element of the comma category `Comma (𝟭 (C ⥤ D)) (Functor.const C)` can be seen as a
 functor `WithTerminal C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `ofCommaObject` / `ofCommaObject` 的定义
+/-
+**CategoryTheory.WithTerminal.ofCommaObject** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.WithTerminal`。
+形式化陈述：ofCommaObject (c : Comma (𝟭 (C ⥤ D)) (Functor.const C)) : WithTerminal C ⥤
+ D
+参数：c : Comma (𝟭 (C ⥤ D)) (Functor.const C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCommaObject
-  signature: (c : Comma (𝟭 (C ⥤ D)) (Functor.const C))
-  body: lift (Z := c.right) c.left (fun x => c.hom.app x) (fun x y f => by simp)
-
-中文:
-定义 ofCommaObject
-  签名: (c : 交换a (𝟭 (C ⥤ D)) (函子.const C))
-  定义体: lift (Z := c.right) c.left (fun x => c.hom.app x) (fun x y f => by simp)
-
-Depends on / 依赖: c.hom.app, c.left, c.right
+--- 原说明 ---
+An element of the comma category `Comma (𝟭 (C ⥤ D)) (Functor.const C)` can be se
+en as a
+functor `WithTerminal C ⥤ D`.
 -/
 def ofCommaObject (c : Comma (𝟭 (C ⥤ D)) (Functor.const C)) : WithTerminal C ⥤ D :=
-  lift (Z := c.right) c.left (fun x => c.hom.app x) (fun x y f => by simp)
+  lift (Z := c.right) c.left (fun x ↦ c.hom.app x) (fun x y f ↦ by simp)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- A morphism in `Comma (𝟭 (C ⥤ D)) (Functor.const C)` gives a morphism between the associated
 functors `WithTerminal C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `ofCommaMorphism` / `ofCommaMorphism` 的定义
+/-
+**CategoryTheory.WithTerminal.ofCommaMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.WithTerminal`。
+形式化陈述：ofCommaMorphism {c c' : Comma (𝟭 (C ⥤ D)) (Functor.const C)} (φ : c ⟶ c') 
+: ofCommaObject c ⟶ ofCommaObject c' where app x
+参数：𝟭 (C ⥤ D)；Functor.const C；φ : c ⟶ c'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCommaMorphism
-  signature: {c c' : Comma (𝟭 (C ⥤ D)) (Functor.const C)} (φ : c ⟶ c')
-  body: match x with
-    | of x => φ.left.app x
-    | star => φ.right
-  naturality x y f :=
-    match x, y, f with
-    | of _, of _, f => by simp
-    | of a, star, _ => by simp; simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
-    | star, star, _ => by simp
-
-中文:
-定义 ofCommaMorphism
-  签名: {c c' : 交换a (𝟭 (C ⥤ D)) (函子.const C)} (φ : c ⟶ c')
-  定义体: match x with
-    | of x => φ.left.app x
-    | star => φ.right
-  naturality x y f :=
-    match x, y, f with
-    | of _, of _, f => by simp
-    | of a, star, _ => by simp; simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
-    | star, star, _ => by simp
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.w, f.app, left.app, naturality
+--- 原说明 ---
+A morphism in `Comma (𝟭 (C ⥤ D)) (Functor.const C)` gives a morphism between the
+ associated
+functors `WithTerminal C ⥤ D`.
 -/
 def ofCommaMorphism {c c' : Comma (𝟭 (C ⥤ D)) (Functor.const C)} (φ : c ⟶ c') :
     ofCommaObject c ⟶ ofCommaObject c' where
@@ -1148,7 +831,7 @@ def ofCommaMorphism {c c' : Comma (𝟭 (C ⥤ D)) (Functor.const C)} (φ : c �
   naturality x y f :=
     match x, y, f with
     | of _, of _, f => by simp
-    | of a, star, _ => by simp; simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
+    | of a, star, _ => by simp; simpa [-CommaMorphism.w] using (congrArg (fun f ↦ f.app a) φ.w).symm
     | star, star, _ => by simp
 
 set_option backward.defeqAttrib.useBackward true in
@@ -1156,66 +839,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The category of functors `WithTerminal C ⥤ D` is equivalent to the category
 `Comma (𝟭 (C ⥤ D)) (const C) `. -/
 @[simps!]
-/--
-Definition of `equivComma` / `equivComma` 的定义
+/-
+**CategoryTheory.WithTerminal.equivComma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.WithTerminal`。
+形式化陈述：equivComma : (WithTerminal C ⥤ D) ≌ Comma (𝟭 (C ⥤ D)) (Functor.const C) wh
+ere functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivComma
-  signature: : (WithTerminal C ⥤ D) ≌ Comma (𝟭 (C ⥤ D)) (Functor.const C) where
-  body: { obj := mkCommaObject
-      map := mkCommaMorphism }
-  inverse :=
-    { obj := ofCommaObject
-      map := ofCommaMorphism }
-  unitIso :=
-    NatIso.ofComponents
-      (fun F => liftUnique
-        (incl ⋙ F)
-        (fun x => F.map (starTerminal.from (of x)))
-        (fun x y f => by
-          simp only [Functor.comp_obj, Functor.comp_map]
-          rw [← F.map_comp]
-          congr 1)
-        F (Iso.refl _) (Iso.refl _)
-        (fun x => by
-          simp only [Iso.refl_hom, Category.id_comp, Functor.comp_obj,
-            NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
-  functor_unitIso_comp x := by
-    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, Category.comp_id]
-    ext <;> rfl
-
-中文:
-定义 equivComma
-  签名: : (WithTerminal C ⥤ D) ≌ 交换a (𝟭 (C ⥤ D)) (函子.const C) where
-  定义体: { obj := mkCommaObject
-      map := mkCommaMorphism }
-  inverse :=
-    { obj := ofCommaObject
-      map := ofCommaMorphism }
-  unitIso :=
-    NatIso.ofComponents
-      (fun F => liftUnique
-        (incl ⋙ F)
-        (fun x => F.map (starTerminal.from (of x)))
-        (fun x y f => by
-          simp only [Functor.comp_obj, Functor.comp_map]
-          rw [← F.map_comp]
-          congr 1)
-        F (Iso.refl _) (Iso.refl _)
-        (fun x => by
-          simp only [Iso.refl_hom, Category.id_comp, Functor.comp_obj,
-            NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
-  functor_unitIso_comp x := by
-    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, Category.comp_id]
-    ext <;> rfl
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.map, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, Iso.refl, Iso.refl_hom, NatIso, NatIso.ofComponents, NatTrans, NatTrans.id_app, comp_id, comp_map, comp_obj, id_app, id_comp, inverse
+--- 原说明 ---
+The category of functors `WithTerminal C ⥤ D` is equivalent to the category
+`Comma (𝟭 (C ⥤ D)) (const C) `.
 -/
 def equivComma : (WithTerminal C ⥤ D) ≌ Comma (𝟭 (C ⥤ D)) (Functor.const C) where
   functor :=
@@ -1226,19 +860,19 @@ def equivComma : (WithTerminal C ⥤ D) ≌ Comma (𝟭 (C ⥤ D)) (Functor.cons
       map := ofCommaMorphism }
   unitIso :=
     NatIso.ofComponents
-      (fun F => liftUnique
+      (fun F ↦ liftUnique
         (incl ⋙ F)
-        (fun x => F.map (starTerminal.from (of x)))
-        (fun x y f => by
+        (fun x ↦ F.map (starTerminal.from (of x)))
+        (fun x y f ↦ by
           simp only [Functor.comp_obj, Functor.comp_map]
           rw [← F.map_comp]
           congr 1)
         F (Iso.refl _) (Iso.refl _)
-        (fun x => by
+        (fun x ↦ by
           simp only [Iso.refl_hom, Category.id_comp, Functor.comp_obj,
             NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+      (fun {x y} f ↦ by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F ↦ Iso.refl _)
   functor_unitIso_comp x := by
     simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
       Iso.refl_hom, Category.comp_id]
@@ -1248,32 +882,14 @@ end
 
 open CategoryTheory.Limits CategoryTheory.Limits.WidePullbackShape
 
-/--
-Instance `subsingleton_hom` / 实例 `subsingleton_hom`
-
-English:
-instance subsingleton_hom
-  signature: {J : Type*}
-  body: fun _ _ => by
-  constructor
-  intro a b
-  casesm* WithTerminal _, (_ : WithTerminal _) ⟶ (_ : WithTerminal _)
-  · exact congr_arg (ULift.up ∘ PLift.up) rfl
-  · rfl
-  · rfl
-
-中文:
-实例 subsingleton_hom
-  签名: {J : 类型}
-  定义体: fun _ _ => by
-  constructor
-  intro a b
-  casesm* WithTerminal _, (_ : WithTerminal _) ⟶ (_ : WithTerminal _)
-  · exact congr_arg (ULift.up ∘ PLift.up) rfl
-  · rfl
-  · rfl
-
-Depends on / 依赖: PLift.up, ULift.up, WithTerminal, casesm, congr_arg
+/-
+**CategoryTheory.WithTerminal.subsingleton_hom** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.WithTerminal`。
+形式化陈述：subsingleton_hom {J : Type*} : Quiver.IsThin (WithTerminal (Discrete J))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance subsingleton_hom {J : Type*} : Quiver.IsThin (WithTerminal (Discrete J)) := fun _ _ => by
   constructor
@@ -1287,73 +903,34 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.privateInPublic true in
 /-- Implementation detail for `widePullbackShapeEquiv`. -/
 @[simps apply]
-/--
-Definition of `widePullbackShapeEquivObj` / `widePullbackShapeEquivObj` 的定义
+/-
+**CategoryTheory.WithTerminal.widePullbackShapeEquivObj** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.WithTerminal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition widePullbackShapeEquivObj
-  signature: {J : Type*}
-  body: by cases x <;> simp
-  right_inv x := by cases x <;> simp
-
-中文:
-定义 widePullbackShapeEquivObj
-  签名: {J : 类型}
-  定义体: by cases x <;> simp
-  right_inv x := by cases x <;> simp
+--- 原说明 ---
+Implementation detail for `widePullbackShapeEquiv`.
 -/
 private def widePullbackShapeEquivObj {J : Type*} :
     WidePullbackShape J ≃ WithTerminal (Discrete J) where
   toFun
-| .some x => .of .mk x
+  | .some x => .of <| .mk x
   | .none => .star
   invFun
-| .of x => .some Discrete.as x
+  | .of x => .some <| Discrete.as x
   | .star => .none
   left_inv x := by cases x <;> simp
   right_inv x := by cases x <;> simp
 
 set_option backward.privateInPublic true in
-/--
-Definition of `widePullbackShapeEquivMap` / `widePullbackShapeEquivMap` 的定义
+/-- Implementation detail for `widePullbackShapeEquiv`. -/
+/-
+**CategoryTheory.WithTerminal.widePullbackShapeEquivMap** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.WithTerminal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition widePullbackShapeEquivMap
-  signature: {J : Type*} (x y : WidePullbackShape J)
-  body: match x, y with
-  | some x, some y =>
-    cast (by
-        have eq : x = y := PLift.down (ULift.down (down f))
-        rw [eq]
-        rfl) (Hom.id (some y))
-  | none, some y => by cases f
-  | some x, none => .term x
-  | none, none => .id none
-  left_inv f := by apply Subsingleton.allEq
-  right_inv f := match x, y with
-  | some x, some y => Subsingleton.allEq _ _
-  | none, some y => by cases f
-  | some x, none
-  | none, none => rfl
-
-中文:
-定义 widePullbackShapeEquivMap
-  签名: {J : 类型} (x y : WidePullbackShape J)
-  定义体: match x, y with
-  | some x, some y =>
-    cast (by
-        have eq : x = y := PLift.down (ULift.down (down f))
-        rw [eq]
-        rfl) (Hom.id (some y))
-  | none, some y => by cases f
-  | some x, none => .term x
-  | none, none => .id none
-  left_inv f := by apply Subsingleton.allEq
-  right_inv f := match x, y with
-  | some x, some y => Subsingleton.allEq _ _
-  | none, some y => by cases f
-  | some x, none
-  | none, none => rfl
+--- 原说明 ---
+Implementation detail for `widePullbackShapeEquiv`.
 -/
 private def widePullbackShapeEquivMap {J : Type*} (x y : WidePullbackShape J) :
     (x ⟶ y) ≃ (widePullbackShapeEquivObj x ⟶ widePullbackShapeEquivObj y) where
@@ -1382,38 +959,29 @@ set_option backward.privateInPublic.warn false in
 
 TODO: Should we simply replace `WidePullbackShape J` with `WithTerminal (Discrete J)` everywhere? -/
 @[simps! functor_obj inverse_obj]
-/--
-Definition of `widePullbackShapeEquiv` / `widePullbackShapeEquiv` 的定义
+/-
+**CategoryTheory.WithTerminal.widePullbackShapeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.WithTerminal`。
+形式化陈述：widePullbackShapeEquiv {J : Type*} : WidePullbackShape J ≌ WithTerminal (D
+iscrete J) where functor.obj
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition widePullbackShapeEquiv
-  signature: {J : Type*}
-  body: widePullbackShapeEquivObj
-  functor.map := widePullbackShapeEquivMap _ _
-  inverse.obj := widePullbackShapeEquivObj.symm
-  inverse.map f := (widePullbackShapeEquivMap _ _).symm (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
-  unitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-  counitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
+--- 原说明 ---
+In the case of a discrete category, `WithTerminal` is the same category as `Wide
+PullbackShape`
 
-中文:
-定义 widePullbackShapeEquiv
-  签名: {J : 类型}
-  定义体: widePullbackShapeEquivObj
-  functor.map := widePullbackShapeEquivMap _ _
-  inverse.obj := widePullbackShapeEquivObj.symm
-  inverse.map f := (widePullbackShapeEquivMap _ _).symm (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
-  unitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-  counitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-
-Depends on / 依赖: widePullbackShapeEquivObj
+TODO: Should we simply replace `WidePullbackShape J` with `WithTerminal (Discret
+e J)` everywhere?
 -/
 def widePullbackShapeEquiv {J : Type*} : WidePullbackShape J ≌ WithTerminal (Discrete J) where
   functor.obj := widePullbackShapeEquivObj
   functor.map := widePullbackShapeEquivMap _ _
   inverse.obj := widePullbackShapeEquivObj.symm
   inverse.map f := (widePullbackShapeEquivMap _ _).symm (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
-  unitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-  counitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
+  unitIso := NatIso.ofComponents fun x ↦ eqToIso (by aesop)
+  counitIso := NatIso.ofComponents fun x ↦ eqToIso (by aesop)
 
 end WithTerminal
 
@@ -1423,18 +991,17 @@ variable {C}
 
 /-- Morphisms for `WithInitial C`. -/
 @[simp]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.WithInitial.Hom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.WithI
+nitial`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → CategoryTheory.WithIni
+tial C → CategoryTheory.WithInitial C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: : WithInitial C -> WithInitial C -> Type v
-
-中文:
-定义 态射
-  签名: : WithInitial C -> WithInitial C -> 类型v
+--- 原说明 ---
+Morphisms for `WithInitial C`.
 -/
-def Hom : WithInitial C -> WithInitial C -> Type v
+def Hom : WithInitial C → WithInitial C → Type v
   | of X, of Y => X ⟶ Y
   | of _, _ => PEmpty
   | star, _ => PUnit
@@ -1442,35 +1009,34 @@ attribute [nolint simpNF] Hom.eq_2
 
 /-- Identity morphisms for `WithInitial C`. -/
 @[simp]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.WithInitial.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.WithIn
+itial`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (X : CategoryTh
+eory.WithInitial C) → X.Hom X
+参数：X : CategoryTheory.WithInitial C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : forall X : WithInitial C, Hom X X
-
-中文:
-定义 id
-  签名: : 对任意 X : WithInitial C, 态射 X X
+--- 原说明 ---
+Identity morphisms for `WithInitial C`.
 -/
-def id : forall X : WithInitial C, Hom X X
+def id : ∀ X : WithInitial C, Hom X X
   | of _ => 𝟙 _
   | star => PUnit.unit
 
 /-- Composition of morphisms for `WithInitial C`. -/
 @[simp]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.WithInitial.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Initial`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → {X Y Z : Cate
+goryTheory.WithInitial C} → X.Hom Y → Y.Hom Z → X.Hom Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: : forall {X Y Z : WithInitial C}, Hom X Y -> Hom Y Z -> Hom X Z
-
-中文:
-定义 comp
-  签名: : 对任意 {X Y Z : WithInitial C}, 态射 X Y -> 态射 Y Z -> 态射 X Z
+--- 原说明 ---
+Composition of morphisms for `WithInitial C`.
 -/
-def comp : forall {X Y Z : WithInitial C}, Hom X Y -> Hom Y Z -> Hom X Z
+def comp : ∀ {X Y Z : WithInitial C}, Hom X Y → Hom Y Z → Hom X Z
   | of _X, of _Y, of _Z => fun f g => f ≫ g
   | star, _, of _X => fun _f _g => PUnit.unit
   | _, of _X, star => fun _f g => PEmpty.elim g
@@ -1479,42 +1045,21 @@ def comp : forall {X Y Z : WithInitial C}, Hom X Y -> Hom Y Z -> Hom X Z
 attribute [nolint simpNF] comp.eq_3
 
 @[aesop safe destruct (rule_sets := [CategoryTheory])]
-/--
-lemma `false_of_to_star'` / 引理 `false_of_to_star'`
-
-English:
-lemma false_of_to_star'
-  given: {X : C} (f : Hom (of X) star)
-  statement: False
-  proof: (f : PEmpty).elim
-
-中文:
-引理 false_of_to_star'
-  条件: {X : C} (f : 态射 (of X) star)
-  结论: 假
-  证明: (f : PEmpty).elim
-
-Depends on / 依赖: PEmpty
+/-
+**CategoryTheory.WithInitial.false_of_to_star'** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.WithInitial`。
+形式化陈述：false_of_to_star' {X : C} (f : Hom (of X) star) : False
+参数：f : Hom (of X) star。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma false_of_to_star' {X : C} (f : Hom (of X) star) : False := (f : PEmpty).elim
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{v} (WithInitial C)
-  body: Hom X Y
-  id X := id X
-  comp f g := comp f g
-
-中文:
-实例 :
-  签名: 范畴.{v} (WithInitial C)
-  定义体: Hom X Y
-  id X := id X
-  comp f g := comp f g
+/-
+**CategoryTheory.WithInitial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithInit
+ial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{v} (WithInitial C) where
   Hom X Y := Hom X Y
@@ -1522,51 +1067,46 @@ instance : Category.{v} (WithInitial C) where
   comp f g := comp f g
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `down` / `down` 的定义
+/-- Helper function for typechecking. -/
+/-
+**CategoryTheory.WithInitial.down** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Initial`。
+形式化陈述：down {X Y : C} (f : of X ⟶ of Y) : X ⟶ Y
+参数：f : of X ⟶ of Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition down
-  signature: {X Y : C} (f : of X ⟶ of Y)
-  body: f
-
-中文:
-定义 down
-  签名: {X Y : C} (f : of X ⟶ of Y)
-  定义体: f
+--- 原说明 ---
+Helper function for typechecking.
 -/
 def down {X Y : C} (f : of X ⟶ of Y) : X ⟶ Y := f
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `down_id` / 引理 `down_id`
-
-English:
-lemma down_id
-  given: {X : C}
-  statement: down (𝟙 (of X)) = 𝟙 X
-  proof: rfl
-
-中文:
-引理 down_id
-  条件: {X : C}
-  结论: down (𝟙 (of X)) = 𝟙 X
-  证明: rfl
+/-
+**CategoryTheory.WithInitial.down_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.W
+ithInitial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X : C},   Catego
+ryTheory.WithInitial.down (CategoryTheory.CategoryStruct.id (CategoryTheory.With
+Initial.of X)) =     CategoryTheory.CategoryStruct.id X
+参数：CategoryTheory.CategoryStruct.id (CategoryTheory.WithInitial.of X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma down_id {X : C} : down (𝟙 (of X)) = 𝟙 X := rfl
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `down_comp` / 引理 `down_comp`
-
-English:
-lemma down_comp
-  given: {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z)
-  proof: rfl
-
-中文:
-引理 down_comp
-  条件: {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z)
-  证明: rfl
+/-
+**CategoryTheory.WithInitial.down_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.WithInitial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C}   (f 
+: CategoryTheory.WithInitial.of X ⟶ CategoryTheory.WithInitial.of Y)   (g : Cate
+goryTheory.WithInitial.of Y ⟶ CategoryTheory.WithInitial.of Z),   CategoryTheory
+.WithInitial.down (CategoryTheory.CategoryStruct.comp f g) =     CategoryTheory.
+CategoryStruct.comp (CategoryTheory.WithInitial.down f) (CategoryTheory.WithInit
+ial.down g)
+参数：f : CategoryTheory.WithInitial.of X ⟶ CategoryTheory.WithInitial.of Y；g : Cat
+egoryTheory.WithInitial.of Y ⟶ CategoryTheory.WithInitial.of Z；CategoryTheory.Ca
+tegoryStruct.comp f g；CategoryTheory.WithInitial.down f；CategoryTheory.WithIniti
+al.down g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma down_comp {X Y Z : C} (f : of X ⟶ of Y) (g : of Y ⟶ of Z) :
     down (f ≫ g) = down f ≫ down g :=
@@ -1574,112 +1114,68 @@ lemma down_comp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[aesop safe destruct (rule_sets := [CategoryTheory])]
-/--
-lemma `false_of_to_star` / 引理 `false_of_to_star`
-
-English:
-lemma false_of_to_star
-  given: {X : C} (f : of X ⟶ star)
-  statement: False
-  proof: (f : PEmpty).elim
-
-中文:
-引理 false_of_to_star
-  条件: {X : C} (f : of X ⟶ star)
-  结论: 假
-  证明: (f : PEmpty).elim
-
-Depends on / 依赖: PEmpty
+/-
+**CategoryTheory.WithInitial.false_of_to_star** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.WithInitial`。
+形式化陈述：false_of_to_star {X : C} (f : of X ⟶ star) : False
+参数：f : of X ⟶ star。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma false_of_to_star {X : C} (f : of X ⟶ star) : False := (f : PEmpty).elim
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `incl` / `incl` 的定义
+/-- The inclusion of `C` into `WithInitial C`. -/
+/-
+**CategoryTheory.WithInitial.incl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Initial`。
+形式化陈述：incl : C ⥤ WithInitial C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: : C ⥤ WithInitial C where
-  body: of
-  map f := f
-
-中文:
-定义 incl
-  签名: : C ⥤ WithInitial C where
-  定义体: of
-  map f := f
+--- 原说明 ---
+The inclusion of `C` into `WithInitial C`.
 -/
 def incl : C ⥤ WithInitial C where
   obj := of
   map f := f
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (incl : C ⥤ _).Full
-  body: ⟨f, rfl⟩
-
-中文:
-实例 :
-  签名: (incl : C ⥤ _).满
-  定义体: ⟨f, rfl⟩
+/-
+**CategoryTheory.WithInitial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithInit
+ial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (incl : C ⥤ _).Full where
   map_surjective f := ⟨f, rfl⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (incl : C ⥤ _).Faithful
-
-中文:
-实例 :
-  签名: (incl : C ⥤ _).忠实
+/-
+**CategoryTheory.WithInitial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithInit
+ial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (incl : C ⥤ _).Faithful where
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Map `WithInitial` with respect to a functor `F : C ⥤ D`. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.WithInitial.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.WithI
+nitial`。
+形式化陈述：map {D : Type*} [Category* D] (F : C ⥤ D) : WithInitial C ⥤ WithInitial D 
+where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {D : Type*} [Category* D] (F : C ⥤ D)
-  body: match X with
-| of x => of F.obj x
-    | star => star
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | star, of _, _ => PUnit.unit
-    | star, star, _ => PUnit.unit
-
-中文:
-定义 map
-  签名: {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: match X with
-| of x => of F.obj x
-    | star => star
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | star, of _, _ => PUnit.unit
-    | star, star, _ => PUnit.unit
-
-Depends on / 依赖: F.map, F.obj, PUnit.unit
+--- 原说明 ---
+Map `WithInitial` with respect to a functor `F : C ⥤ D`.
 -/
 def map {D : Type*} [Category* D] (F : C ⥤ D) : WithInitial C ⥤ WithInitial D where
   obj X :=
     match X with
-| of x => of F.obj x
+    | of x => of <| F.obj x
     | star => star
   map {X Y} f :=
     match X, Y, f with
@@ -1691,24 +1187,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- A natural isomorphism between the functor `map (𝟭 C)` and `𝟭 (WithInitial C)`. -/
 @[simps!]
-/--
-Definition of `mapId` / `mapId` 的定义
+/-
+**CategoryTheory.WithInitial.mapId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hInitial`。
+形式化陈述：mapId (C : Type*) [Category* C] : map (𝟭 C) ≅ 𝟭 (WithInitial C)
+参数：C : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId
-  signature: (C : Type*) [Category* C]
-  body: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-中文:
-定义 mapId
-  签名: (C : 类型) [范畴* C]
-  定义体: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+A natural isomorphism between the functor `map (𝟭 C)` and `𝟭 (WithInitial C)`.
 -/
 def mapId (C : Type*) [Category* C] : map (𝟭 C) ≅ 𝟭 (WithInitial C) :=
   NatIso.ofComponents (fun X => match X with
@@ -1719,24 +1207,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- A natural isomorphism between the functor `map (F ⋙ G) ` and `map F ⋙ map G `. -/
 @[simps!]
-/--
-Definition of `mapComp` / `mapComp` 的定义
+/-
+**CategoryTheory.WithInitial.mapComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.W
+ithInitial`。
+形式化陈述：mapComp {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E) 
+: map (F ⋙ G) ≅ map F ⋙ map G
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp
-  signature: {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E)
-  body: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-中文:
-定义 mapComp
-  签名: {D E : 类型} [范畴* D] [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
-  定义体: NatIso.ofComponents (fun X => match X with
-    | of _ => Iso.refl _
-    | star => Iso.refl _) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+A natural isomorphism between the functor `map (F ⋙ G) ` and `map F ⋙ map G `.
 -/
 def mapComp {D E : Type*} [Category* D] [Category* E] (F : C ⥤ D) (G : D ⥤ E) :
     map (F ⋙ G) ≅ map F ⋙ map G :=
@@ -1748,34 +1229,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- From a natural transformation of functors `C ⥤ D`, the induced natural transformation
 of functors `WithInitial C ⥤ WithInitial D`. -/
 @[simps]
-/--
-Definition of `map₂` / `map₂` 的定义
+/-
+**CategoryTheory.WithInitial.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.WithI
+nitial`。
+形式化陈述：map {D : Type*} [Category* D] (F : C ⥤ D) : WithInitial C ⥤ WithInitial D 
+where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G)
-  body: fun X => match X with
-    | of x => η.app x
-    | star => 𝟙 star
-  naturality := by
-    intro X Y f
-    match X, Y, f with
-    | of x, of y, f => exact η.naturality f
-    | star, of x, _ => rfl
-    | star, star, _ => rfl
-
-中文:
-定义 map₂
-  签名: {D : 类型} [范畴* D] {F G : C ⥤ D} (η : F ⟶ G)
-  定义体: fun X => match X with
-    | of x => η.app x
-    | star => 𝟙 star
-  naturality := by
-    intro X Y f
-    match X, Y, f with
-    | of x, of y, f => exact η.naturality f
-    | star, of x, _ => rfl
-    | star, star, _ => rfl
+--- 原说明 ---
+From a natural transformation of functors `C ⥤ D`, the induced natural transform
+ation
+of functors `WithInitial C ⥤ WithInitial D`.
 -/
 def map₂ {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G) : map F ⟶ map G where
   app := fun X => match X with
@@ -1791,40 +1257,15 @@ def map₂ {D : Type*} [Category* D] {F G : C ⥤ D} (η : F ⟶ G) : map F ⟶ 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The prelax functor from `Cat` to `Cat` defined with `WithInitial`. -/
 @[simps]
-/--
-Definition of `prelaxfunctor` / `prelaxfunctor` 的定义
+/-
+**CategoryTheory.WithInitial.prelaxfunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithInitial`。
+形式化陈述：prelaxfunctor : PrelaxFunctor Cat Cat where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prelaxfunctor
-  signature: : PrelaxFunctor Cat Cat where
-  body: Cat.of (WithInitial C)
-  map F := (map F.toFunctor).toCatHom
-  map₂ f := (map₂ f.toNatTrans).toCatHom₂
-  map₂_id := by
-    intros
-    ext X
-    cases X <;> rfl
-  map₂_comp := by
-    intros
-    ext X
-    cases X <;> rfl
-
-中文:
-定义 prelaxfunctor
-  签名: : 预松弛函子 Cat Cat where
-  定义体: Cat.of (WithInitial C)
-  map F := (map F.toFunctor).toCatHom
-  map₂ f := (map₂ f.toNatTrans).toCatHom₂
-  map₂_id := by
-    intros
-    ext X
-    cases X <;> rfl
-  map₂_comp := by
-    intros
-    ext X
-    cases X <;> rfl
-
-Depends on / 依赖: Cat.of, WithInitial
+--- 原说明 ---
+The prelax functor from `Cat` to `Cat` defined with `WithInitial`.
 -/
 def prelaxfunctor : PrelaxFunctor Cat Cat where
   obj C := Cat.of (WithInitial C)
@@ -1843,91 +1284,20 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The pseudofunctor from `Cat` to `Cat` defined with `WithInitial`. -/
 @[simps]
-/--
-Definition of `pseudofunctor` / `pseudofunctor` 的定义
+/-
+**CategoryTheory.WithInitial.pseudofunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithInitial`。
+形式化陈述：pseudofunctor : Pseudofunctor Cat Cat where toPrelaxFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pseudofunctor
-  signature: : Pseudofunctor Cat Cat where
-  body: prelaxfunctor
-mapId C := Cat.Hom.isoMk mapId C
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
-  map₂_whisker_left := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_whisker_right := by
-    intros
-    ext X
-    cases X
-    · simp
-      rfl
-    · rfl
-  map₂_associator := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_left_unitor := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_right_unitor := by
-    intros
-    ext X
-    cases X
-    · simpa using! (refl _)
-    · rfl
-
-中文:
-定义 pseudofunctor
-  签名: : Pseudofunctor Cat Cat where
-  定义体: prelaxfunctor
-mapId C := Cat.Hom.isoMk mapId C
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
-  map₂_whisker_left := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_whisker_right := by
-    intros
-    ext X
-    cases X
-    · simp
-      rfl
-    · rfl
-  map₂_associator := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_left_unitor := by
-    intros
-    ext X
-    cases X
-    · simp
-    · rfl
-  map₂_right_unitor := by
-    intros
-    ext X
-    cases X
-    · simpa using! (refl _)
-    · rfl
-
-Depends on / 依赖: prelaxfunctor
+--- 原说明 ---
+The pseudofunctor from `Cat` to `Cat` defined with `WithInitial`.
 -/
 def pseudofunctor : Pseudofunctor Cat Cat where
   toPrelaxFunctor := prelaxfunctor
-mapId C := Cat.Hom.isoMk mapId C
-mapComp _ _ := Cat.Hom.isoMk mapComp _ _
+  mapId C := Cat.Hom.isoMk <| mapId C
+  mapComp _ _ := Cat.Hom.isoMk <| mapComp _ _
   map₂_whisker_left := by
     intros
     ext X
@@ -1961,6 +1331,11 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.WithInitial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithInit
+ial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : WithInitial C} : Unique (star ⟶ X) where
   default :=
     match X with
@@ -1969,58 +1344,42 @@ instance {X : WithInitial C} : Unique (star ⟶ X) where
   uniq := by cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `starInitial` / `starInitial` 的定义
+/-- `WithInitial.star` is initial. -/
+/-
+**CategoryTheory.WithInitial.starInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.WithInitial`。
+形式化陈述：starInitial : Limits.IsInitial (star : WithInitial C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starInitial
-  signature: : Limits.IsInitial (star : WithInitial C)
-  body: Limits.IsInitial.ofUnique _
-
-中文:
-定义 starInitial
-  签名: : Limits.IsInitial (star : WithInitial C)
-  定义体: Limits.IsInitial.ofUnique _
-
-Depends on / 依赖: IsInitial, Limits, Limits.IsInitial.ofUnique, ofUnique
+--- 原说明 ---
+`WithInitial.star` is initial.
 -/
 def starInitial : Limits.IsInitial (star : WithInitial C) :=
   Limits.IsInitial.ofUnique _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.HasInitial (WithInitial C)
-  body: Limits.hasInitial_of_unique star
-
-中文:
-实例 :
-  签名: Limits.HasInitial (WithInitial C)
-  定义体: Limits.hasInitial_of_unique star
-
-Depends on / 依赖: Limits, Limits.hasInitial_of_unique, hasInitial_of_unique
+/-
+**CategoryTheory.WithInitial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.WithInit
+ial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.HasInitial (WithInitial C) := Limits.hasInitial_of_unique star
 
 /-- The isomorphism between star and an abstract initial object of `WithInitial C` -/
 @[simps!]
-/--
-Definition of `starIsoInitial` / `starIsoInitial` 的定义
+/-
+**CategoryTheory.WithInitial.starIsoInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.WithInitial`。
+形式化陈述：starIsoInitial : star ≅ ⊥_ (WithInitial C)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.WithInitial.instHasInitial`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C],   CategoryTheory.Limits.HasInitial (CategoryTheory.
+WithInitial C)
 
-English:
-definition starIsoInitial
-  signature: : star ≅ ⊥_ (WithInitial C)
-  body: starInitial.uniqueUpToIso (Limits.initialIsInitial)
-
-中文:
-定义 starIsoInitial
-  签名: : star ≅ ⊥_ (WithInitial C)
-  定义体: starInitial.uniqueUpToIso (Limits.initialIsInitial)
-
-Depends on / 依赖: Limits, Limits.initialIsInitial, initialIsInitial, starInitial, starInitial.uniqueUpToIso, uniqueUpToIso
+--- 原说明 ---
+The isomorphism between star and an abstract initial object of `WithInitial C`
 -/
 noncomputable def starIsoInitial : star ≅ ⊥_ (WithInitial C) :=
   starInitial.uniqueUpToIso (Limits.initialIsInitial)
@@ -2028,37 +1387,22 @@ noncomputable def starIsoInitial : star ≅ ⊥_ (WithInitial C) :=
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Lift a functor `F : C ⥤ D` to `WithInitial C ⥤ D`. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.WithInitial.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.With
+Initial`。
+形式化陈述：lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ 
+F.obj x) (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : WithInitial 
+C ⥤ D where obj X
+参数：F : C ⥤ D；M : forall x : C, Z ⟶ F.obj x；hM : forall (x y : C) (f : x ⟶ y), M 
+x ≫ F.map f = M y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-  body: match X with
-    | of x => F.obj x
-    | star => Z
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | star, of _, _ => M _
-    | star, star, _ => 𝟙 _
-
-中文:
-定义 lift
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
-  定义体: match X with
-    | of x => F.obj x
-    | star => Z
-  map {X Y} f :=
-    match X, Y, f with
-    | of _, of _, f => F.map (down f)
-    | star, of _, _ => M _
-    | star, star, _ => 𝟙 _
-
-Depends on / 依赖: F.map, F.obj
+--- 原说明 ---
+Lift a functor `F : C ⥤ D` to `WithInitial C ⥤ D`.
 -/
-def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-    (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : WithInitial C ⥤ D where
+def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, Z ⟶ F.obj x)
+    (hM : ∀ (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : WithInitial C ⥤ D where
   obj X :=
     match X with
     | of x => F.obj x
@@ -2072,67 +1416,75 @@ def lift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z �
 set_option backward.isDefEq.respectTransparency false in
 /-- The isomorphism between `incl ⋙ lift F _ _` with `F`. -/
 @[simps!]
-/--
-Definition of `inclLift` / `inclLift` 的定义
+/-
+**CategoryTheory.WithInitial.inclLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WithInitial`。
+形式化陈述：inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, 
+Z ⟶ F.obj x) (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : incl ⋙ l
+ift F M hM ≅ F where hom
+参数：F : C ⥤ D；M : forall x : C, Z ⟶ F.obj x；hM : forall (x y : C) (f : x ⟶ y), M 
+x ≫ F.map f = M y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLift
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-  body: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
-
-中文:
-定义 inclLift
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
-  定义体: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
+--- 原说明 ---
+The isomorphism between `incl ⋙ lift F _ _` with `F`.
 -/
-def inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-    (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : incl ⋙ lift F M hM ≅ F where
+def inclLift {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, Z ⟶ F.obj x)
+    (hM : ∀ (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : incl ⋙ lift F M hM ≅ F where
   hom := { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The isomorphism between `(lift F _ _).obj WithInitial.star` with `Z`. -/
 @[simps!]
-/--
-Definition of `liftStar` / `liftStar` 的定义
+/-
+**CategoryTheory.WithInitial.liftStar** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WithInitial`。
+形式化陈述：liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, 
+Z ⟶ F.obj x) (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : (lift F 
+M hM).obj star ≅ Z
+参数：F : C ⥤ D；M : forall x : C, Z ⟶ F.obj x；hM : forall (x y : C) (f : x ⟶ y), M 
+x ≫ F.map f = M y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftStar
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-  body: eqToIso rfl
-
-中文:
-定义 liftStar
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
-  定义体: eqToIso rfl
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The isomorphism between `(lift F _ _).obj WithInitial.star` with `Z`.
 -/
-def liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-    (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : (lift F M hM).obj star ≅ Z :=
+def liftStar {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, Z ⟶ F.obj x)
+    (hM : ∀ (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) : (lift F M hM).obj star ≅ Z :=
   eqToIso rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `liftStar_lift_map` / 定理 `liftStar_lift_map`
-
-English:
-theorem liftStar_lift_map
-  statement: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-  proof: by
-  simp [incl]
-
-中文:
-定理 liftStar_lift_map
-  结论: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
-  证明: by
-  simp [incl]
+/-
+**CategoryTheory.WithInitial.liftStar_lift_map** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.WithInitial`。
+形式化陈述：liftStar_lift_map {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : foral
+l x : C, Z ⟶ F.obj x) (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) (
+x : C) : (liftStar F M hM).hom ≫ (lift F M hM).map (starInitial.to (incl.obj x))
+ = M x ≫ (inclLift F M hM).hom.app x
+参数：F : C ⥤ D；M : forall x : C, Z ⟶ F.obj x；hM : forall (x y : C) (f : x ⟶ y), M 
+x ≫ F.map f = M y；x : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem liftStar_lift_map {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-    (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) (x : C) :
+theorem liftStar_lift_map {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, Z ⟶ F.obj x)
+    (hM : ∀ (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) (x : C) :
     (liftStar F M hM).hom ≫ (lift F M hM).map (starInitial.to (incl.obj x)) =
       M x ≫ (inclLift F M hM).hom.app x := by
   simp [incl]
@@ -2140,58 +1492,29 @@ theorem liftStar_lift_map {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : f
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The uniqueness of `lift`. -/
 @[simp]
-/--
-Definition of `liftUnique` / `liftUnique` 的定义
+/-
+**CategoryTheory.WithInitial.liftUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.WithInitial`。
+形式化陈述：liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C
+, Z ⟶ F.obj x) (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y) (G : Wit
+hInitial C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star ≅ Z) (hh : forall x : C, hG.
+symm.hom ≫ G.map (starInitial.to (incl.obj x)) = M x ≫ h.symm.hom.app x) : G ≅ l
+ift F M hM
+参数：F : C ⥤ D；M : forall x : C, Z ⟶ F.obj x；hM : forall (x y : C) (f : x ⟶ y), M 
+x ≫ F.map f = M y；G : WithInitial C ⥤ D；h : incl ⋙ G ≅ F；hG : G.obj star ≅ Z；hh 
+: forall x : C, hG.symm.hom ≫ G.map (starInitial.to (incl.obj x)) = M x ≫ h.symm
+.hom.app x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftUnique
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-  body: NatIso.ofComponents
-    (fun X =>
-      match X with
-      | of x => h.app x
-      | star => hG)
-    (by
-      rintro (X | X) (Y | Y) f
-      · apply h.hom.naturality
-      · cases f
-      · cases f
-        change G.map _ ≫ h.hom.app _ = hG.hom ≫ _
-        symm
-        erw [← Iso.eq_inv_comp, ← Category.assoc, hh]
-        simp
-      · cases f
-        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
-        simp)
-
-中文:
-定义 liftUnique
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (M : 对任意 x : C, Z ⟶ F.obj x)
-  定义体: NatIso.ofComponents
-    (fun X =>
-      match X with
-      | of x => h.app x
-      | star => hG)
-    (by
-      rintro (X | X) (Y | Y) f
-      · apply h.hom.naturality
-      · cases f
-      · cases f
-        change G.map _ ≫ h.hom.app _ = hG.hom ≫ _
-        symm
-        erw [← Iso.eq_inv_comp, ← Category.assoc, hh]
-        simp
-      · cases f
-        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
-        simp)
-
-Depends on / 依赖: Category, Category.assoc, G.map, Iso.eq_inv_comp, NatIso, NatIso.ofComponents, eq_inv_comp, h.app, h.hom.app, h.hom.naturality, hG.hom, naturality, ofComponents
+--- 原说明 ---
+The uniqueness of `lift`.
 -/
-def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C, Z ⟶ F.obj x)
-    (hM : forall (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y)
+def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : ∀ x : C, Z ⟶ F.obj x)
+    (hM : ∀ (x y : C) (f : x ⟶ y), M x ≫ F.map f = M y)
     (G : WithInitial C ⥤ D) (h : incl ⋙ G ≅ F)
     (hG : G.obj star ≅ Z)
-    (hh : forall x : C, hG.symm.hom ≫ G.map (starInitial.to (incl.obj x)) = M x ≫ h.symm.hom.app x) :
+    (hh : ∀ x : C, hG.symm.hom ≫ G.map (starInitial.to (incl.obj x)) = M x ≫ h.symm.hom.app x) :
     G ≅ lift F M hM :=
   NatIso.ofComponents
     (fun X =>
@@ -2214,20 +1537,17 @@ def liftUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (M : forall x : C
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `lift` with `Z` an initial object. -/
 @[simps!]
-/--
-Definition of `liftToInitial` / `liftToInitial` 的定义
+/-
+**CategoryTheory.WithInitial.liftToInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithInitial`。
+形式化陈述：liftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.I
+sInitial Z) : WithInitial C ⥤ D
+参数：F : C ⥤ D；hZ : Limits.IsInitial Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftToInitial
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  body: lift F (fun _x => hZ.to _) fun _x _y _f => hZ.hom_ext _ _
-
-中文:
-定义 liftToInitial
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  定义体: lift F (fun _x => hZ.to _) fun _x _y _f => hZ.hom_ext _ _
-
-Depends on / 依赖: hZ.hom_ext, hZ.to, hom_ext
+--- 原说明 ---
+A variant of `lift` with `Z` an initial object.
 -/
 def liftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z) :
     WithInitial C ⥤ D :=
@@ -2236,20 +1556,17 @@ def liftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.I
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `incl_lift` with `Z` an initial object. -/
 @[simps!]
-/--
-Definition of `inclLiftToInitial` / `inclLiftToInitial` 的定义
+/-
+**CategoryTheory.WithInitial.inclLiftToInitial** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.WithInitial`。
+形式化陈述：inclLiftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limi
+ts.IsInitial Z) : incl ⋙ liftToInitial F hZ ≅ F
+参数：F : C ⥤ D；hZ : Limits.IsInitial Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLiftToInitial
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  body: inclLift _ _ _
-
-中文:
-定义 inclLiftToInitial
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  定义体: inclLift _ _ _
-
-Depends on / 依赖: inclLift
+--- 原说明 ---
+A variant of `incl_lift` with `Z` an initial object.
 -/
 def inclLiftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z) :
     incl ⋙ liftToInitial F hZ ≅ F :=
@@ -2258,20 +1575,19 @@ def inclLiftToInitial {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limi
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `lift_unique` with `Z` an initial object. -/
 @[simps!]
-/--
-Definition of `liftToInitialUnique` / `liftToInitialUnique` 的定义
+/-
+**CategoryTheory.WithInitial.liftToInitialUnique** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.WithInitial`。
+形式化陈述：liftToInitialUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Li
+mits.IsInitial Z) (G : WithInitial C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star ≅ 
+Z) : G ≅ liftToInitial F hZ
+参数：F : C ⥤ D；hZ : Limits.IsInitial Z；G : WithInitial C ⥤ D；h : incl ⋙ G ≅ F；hG :
+ G.obj star ≅ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftToInitialUnique
-  signature: {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  body: liftUnique F (fun _z => hZ.to _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x => hZ.hom_ext _ _
-
-中文:
-定义 liftToInitialUnique
-  签名: {D : 类型} [范畴* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
-  定义体: liftUnique F (fun _z => hZ.to _) (fun _x _y _f => hZ.hom_ext _ _) G h hG fun _x => hZ.hom_ext _ _
-
-Depends on / 依赖: hZ.hom_ext, hZ.to, hom_ext, liftUnique
+--- 原说明 ---
+A variant of `lift_unique` with `Z` an initial object.
 -/
 def liftToInitialUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Limits.IsInitial Z)
     (G : WithInitial C ⥤ D) (h : incl ⋙ G ≅ F) (hG : G.obj star ≅ Z) : G ≅ liftToInitial F hZ :=
@@ -2280,43 +1596,28 @@ def liftToInitialUnique {D : Type*} [Category* D] {Z : D} (F : C ⥤ D) (hZ : Li
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructs a morphism from `star` to `of X`. -/
 @[simp]
-/--
-Definition of `homTo` / `homTo` 的定义
+/-
+**CategoryTheory.WithInitial.homTo** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wit
+hInitial`。
+形式化陈述：homTo (X : C) : star ⟶ incl.obj X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homTo
-  signature: (X : C)
-  body: starInitial.to _
-
-中文:
-定义 homTo
-  签名: (X : C)
-  定义体: starInitial.to _
-
-Depends on / 依赖: starInitial, starInitial.to
+--- 原说明 ---
+Constructs a morphism from `star` to `of X`.
 -/
 def homTo (X : C) : star ⟶ incl.obj X :=
   starInitial.to _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isIso_of_to_star` / 实例 `isIso_of_to_star`
-
-English:
-instance isIso_of_to_star
-  signature: {X : WithInitial C} (f : X ⟶ star)
-  body: match X with
-  | of _ => f.elim
-  | star => ⟨f, rfl, rfl⟩
-
-中文:
-实例 isIso_of_to_star
-  签名: {X : WithInitial C} (f : X ⟶ star)
-  定义体: match X with
-  | of _ => f.elim
-  | star => ⟨f, rfl, rfl⟩
-
-Depends on / 依赖: f.elim
+/-
+**CategoryTheory.WithInitial.isIso_of_to_star** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.WithInitial`。
+形式化陈述：isIso_of_to_star {X : WithInitial C} (f : X ⟶ star) : IsIso f
+参数：f : X ⟶ star。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_of_to_star {X : WithInitial C} (f : X ⟶ star) : IsIso f :=
   match X with
@@ -2332,34 +1633,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A functor `WithInitial C ⥤ D` can be seen as an element of the comma category
 `Comma (const C) (𝟭 (C ⥤ D))`. -/
 @[simps!]
-/--
-Definition of `mkCommaObject` / `mkCommaObject` 的定义
+/-
+**CategoryTheory.WithInitial.mkCommaObject** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithInitial`。
+形式化陈述：mkCommaObject (F : WithInitial C ⥤ D) : Comma (Functor.const C) (𝟭 (C ⥤ D)
+) where left
+参数：F : WithInitial C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCommaObject
-  signature: (F : WithInitial C ⥤ D)
-  body: F.obj .star
-  right := (incl ⋙ F)
-  hom :=
-    { app x := F.map (starInitial.to (.of x))
-      naturality x y f := by
-        dsimp
-        rw [Category.id_comp]; rw [← F.map_comp]
-        congr 1 }
-
-中文:
-定义 mkCommaObject
-  签名: (F : WithInitial C ⥤ D)
-  定义体: F.obj .star
-  right := (incl ⋙ F)
-  hom :=
-    { app x := F.map (starInitial.to (.of x))
-      naturality x y f := by
-        dsimp
-        rw [Category.id_comp]; rw [← F.map_comp]
-        congr 1 }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A functor `WithInitial C ⥤ D` can be seen as an element of the comma category
+`Comma (const C) (𝟭 (C ⥤ D))`.
 -/
 def mkCommaObject (F : WithInitial C ⥤ D) : Comma (Functor.const C) (𝟭 (C ⥤ D)) where
   left := F.obj .star
@@ -2368,7 +1653,7 @@ def mkCommaObject (F : WithInitial C ⥤ D) : Comma (Functor.const C) (𝟭 (C �
     { app x := F.map (starInitial.to (.of x))
       naturality x y f := by
         dsimp
-        rw [Category.id_comp]; rw [← F.map_comp]
+        rw [Category.id_comp, ← F.map_comp]
         congr 1 }
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -2376,20 +1661,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A morphism of functors `WithInitial C ⥤ D` gives a morphism between the associated comma
 objects. -/
 @[simps!]
-/--
-Definition of `mkCommaMorphism` / `mkCommaMorphism` 的定义
+/-
+**CategoryTheory.WithInitial.mkCommaMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.WithInitial`。
+形式化陈述：mkCommaMorphism {F G : WithInitial C ⥤ D} (η : F ⟶ G) : mkCommaObject F ⟶ 
+mkCommaObject G where left
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCommaMorphism
-  signature: {F G : WithInitial C ⥤ D} (η : F ⟶ G)
-  body: η.app .star
-  right := Functor.whiskerLeft incl η
-
-中文:
-定义 mkCommaMorphism
-  签名: {F G : WithInitial C ⥤ D} (η : F ⟶ G)
-  定义体: η.app .star
-  right := Functor.whiskerLeft incl η
+--- 原说明 ---
+A morphism of functors `WithInitial C ⥤ D` gives a morphism between the associat
+ed comma
+objects.
 -/
 def mkCommaMorphism {F G : WithInitial C ⥤ D} (η : F ⟶ G) : mkCommaObject F ⟶ mkCommaObject G where
   left := η.app .star
@@ -2399,59 +1683,41 @@ set_option backward.defeqAttrib.useBackward true in
 /-- An element of the comma category `Comma (Functor.const C) (𝟭 (C ⥤ D))` can be seen as a
 functor `WithInitial C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `ofCommaObject` / `ofCommaObject` 的定义
+/-
+**CategoryTheory.WithInitial.ofCommaObject** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.WithInitial`。
+形式化陈述：ofCommaObject (c : Comma (Functor.const C) (𝟭 (C ⥤ D))) : WithInitial C ⥤ 
+D
+参数：c : Comma (Functor.const C) (𝟭 (C ⥤ D))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCommaObject
-  signature: (c : Comma (Functor.const C) (𝟭 (C ⥤ D)))
-  body: lift (Z := c.left) c.right (fun x => c.hom.app x)
-    (fun x y f => by simpa using (c.hom.naturality f).symm)
-
-中文:
-定义 ofCommaObject
-  签名: (c : 交换a (函子.const C) (𝟭 (C ⥤ D)))
-  定义体: lift (Z := c.left) c.right (fun x => c.hom.app x)
-    (fun x y f => by simpa using (c.hom.naturality f).symm)
-
-Depends on / 依赖: c.hom.app, c.hom.naturality, c.left, c.right, naturality
+--- 原说明 ---
+An element of the comma category `Comma (Functor.const C) (𝟭 (C ⥤ D))` can be se
+en as a
+functor `WithInitial C ⥤ D`.
 -/
 def ofCommaObject (c : Comma (Functor.const C) (𝟭 (C ⥤ D))) : WithInitial C ⥤ D :=
-  lift (Z := c.left) c.right (fun x => c.hom.app x)
-    (fun x y f => by simpa using (c.hom.naturality f).symm)
+  lift (Z := c.left) c.right (fun x ↦ c.hom.app x)
+    (fun x y f ↦ by simpa using (c.hom.naturality f).symm)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- A morphism in `Comma (Functor.const C) (𝟭 (C ⥤ D))` gives a morphism between the associated
 functors `WithInitial C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `ofCommaMorphism` / `ofCommaMorphism` 的定义
+/-
+**CategoryTheory.WithInitial.ofCommaMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.WithInitial`。
+形式化陈述：ofCommaMorphism {c c' : Comma (Functor.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c') 
+: ofCommaObject c ⟶ ofCommaObject c' where app x
+参数：Functor.const C；𝟭 (C ⥤ D)；φ : c ⟶ c'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCommaMorphism
-  signature: {c c' : Comma (Functor.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c')
-  body: match x with
-    | of x => φ.right.app x
-    | star => φ.left
-  naturality x y f :=
-    match x, y, f with
-    | of _, of _, f => by simp
-    | star, of a, _ => by simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
-    | star, star, _ => by simp
-
-中文:
-定义 ofCommaMorphism
-  签名: {c c' : 交换a (函子.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c')
-  定义体: match x with
-    | of x => φ.right.app x
-    | star => φ.left
-  naturality x y f :=
-    match x, y, f with
-    | of _, of _, f => by simp
-    | star, of a, _ => by simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
-    | star, star, _ => by simp
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.w, f.app, naturality, right.app
+--- 原说明 ---
+A morphism in `Comma (Functor.const C) (𝟭 (C ⥤ D))` gives a morphism between the
+ associated
+functors `WithInitial C ⥤ D`.
 -/
 def ofCommaMorphism {c c' : Comma (Functor.const C) (𝟭 (C ⥤ D))} (φ : c ⟶ c') :
     ofCommaObject c ⟶ ofCommaObject c' where
@@ -2462,7 +1728,7 @@ def ofCommaMorphism {c c' : Comma (Functor.const C) (𝟭 (C ⥤ D))} (φ : c �
   naturality x y f :=
     match x, y, f with
     | of _, of _, f => by simp
-    | star, of a, _ => by simpa [-CommaMorphism.w] using (congrArg (fun f => f.app a) φ.w).symm
+    | star, of a, _ => by simpa [-CommaMorphism.w] using (congrArg (fun f ↦ f.app a) φ.w).symm
     | star, star, _ => by simp
 
 set_option backward.defeqAttrib.useBackward true in
@@ -2470,66 +1736,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The category of functors `WithInitial C ⥤ D` is equivalent to the category
 `Comma (const C) (𝟭 (C ⥤ D))`. -/
 @[simps!]
-/--
-Definition of `equivComma` / `equivComma` 的定义
+/-
+**CategoryTheory.WithInitial.equivComma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.WithInitial`。
+形式化陈述：equivComma : (WithInitial C ⥤ D) ≌ Comma (Functor.const C) (𝟭 (C ⥤ D)) whe
+re functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivComma
-  signature: : (WithInitial C ⥤ D) ≌ Comma (Functor.const C) (𝟭 (C ⥤ D)) where
-  body: { obj := mkCommaObject
-      map := mkCommaMorphism }
-  inverse :=
-    { obj := ofCommaObject
-      map := ofCommaMorphism }
-  unitIso :=
-    NatIso.ofComponents
-      (fun F => liftUnique
-        (incl ⋙ F)
-        (fun x => F.map (starInitial.to (of x)))
-        (fun x y f => by
-          simp only [Functor.comp_obj, Functor.comp_map]
-          rw [← F.map_comp]
-          congr 1)
-        F (Iso.refl _) (Iso.refl _)
-        (fun x => by
-          simp only [Iso.refl_symm, Iso.refl_hom, Category.id_comp, Functor.comp_obj,
-            NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
-  functor_unitIso_comp x := by
-    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, Category.comp_id]
-    ext <;> rfl
-
-中文:
-定义 equivComma
-  签名: : (WithInitial C ⥤ D) ≌ 交换a (函子.const C) (𝟭 (C ⥤ D)) where
-  定义体: { obj := mkCommaObject
-      map := mkCommaMorphism }
-  inverse :=
-    { obj := ofCommaObject
-      map := ofCommaMorphism }
-  unitIso :=
-    NatIso.ofComponents
-      (fun F => liftUnique
-        (incl ⋙ F)
-        (fun x => F.map (starInitial.to (of x)))
-        (fun x y f => by
-          simp only [Functor.comp_obj, Functor.comp_map]
-          rw [← F.map_comp]
-          congr 1)
-        F (Iso.refl _) (Iso.refl _)
-        (fun x => by
-          simp only [Iso.refl_symm, Iso.refl_hom, Category.id_comp, Functor.comp_obj,
-            NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
-  functor_unitIso_comp x := by
-    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, Category.comp_id]
-    ext <;> rfl
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.map, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, Iso.refl, Iso.refl_hom, Iso.refl_symm, NatIso, NatIso.ofComponents, NatTrans, NatTrans.id_app, comp_id, comp_map, comp_obj, id_app, id_comp
+--- 原说明 ---
+The category of functors `WithInitial C ⥤ D` is equivalent to the category
+`Comma (const C) (𝟭 (C ⥤ D))`.
 -/
 def equivComma : (WithInitial C ⥤ D) ≌ Comma (Functor.const C) (𝟭 (C ⥤ D)) where
   functor :=
@@ -2540,19 +1757,19 @@ def equivComma : (WithInitial C ⥤ D) ≌ Comma (Functor.const C) (𝟭 (C ⥤ 
       map := ofCommaMorphism }
   unitIso :=
     NatIso.ofComponents
-      (fun F => liftUnique
+      (fun F ↦ liftUnique
         (incl ⋙ F)
-        (fun x => F.map (starInitial.to (of x)))
-        (fun x y f => by
+        (fun x ↦ F.map (starInitial.to (of x)))
+        (fun x y f ↦ by
           simp only [Functor.comp_obj, Functor.comp_map]
           rw [← F.map_comp]
           congr 1)
         F (Iso.refl _) (Iso.refl _)
-        (fun x => by
+        (fun x ↦ by
           simp only [Iso.refl_symm, Iso.refl_hom, Category.id_comp, Functor.comp_obj,
             NatTrans.id_app, Category.comp_id]; rfl))
-      (fun {x y} f => by ext t; cases t <;> simp [incl])
-  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+      (fun {x y} f ↦ by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F ↦ Iso.refl _)
   functor_unitIso_comp x := by
     simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
       Iso.refl_hom, Category.comp_id]
@@ -2566,160 +1783,45 @@ set_option backward.defeqAttrib.useBackward true in
 open Opposite in
 /-- The opposite category of `WithTerminal C` is equivalent to `WithInitial Cᵒᵖ`. -/
 @[simps!]
-/--
-Definition of `WithTerminal.opEquiv` / `WithTerminal.opEquiv` 的定义
+/-
+**CategoryTheory.WithTerminal.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WithTerminal`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] → (CategoryTheo
+ry.WithTerminal C)ᵒᵖ ≌ CategoryTheory.WithInitial Cᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithTerminal.opEquiv
-  signature: : (WithTerminal C)ᵒᵖ ≌ WithInitial Cᵒᵖ where
-  body: { obj := fun ⟨x⟩ => match x with
-| of x => .of op x
-      | star => .star
-      map := fun {x y} ⟨f⟩ =>
-        match x, y, f with
-        | op (of x), op (of y), f => (WithTerminal.down f).op
-        | op star, op (of _), _ => WithInitial.starInitial.to _
-        | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
-        match x, y, z, f, g with
-        | op (of x), op (of y), op (of z), f, g => rfl
-        | _, op (of y), op star, f, g => (g : PEmpty).elim
-        | op (of x), op star, _, f, _ => (f : PEmpty).elim
-        | op star, _, _, f, g => rfl }
-  inverse :=
-    { obj := fun x =>
-      match x with
-| .of x => op .of x.unop
-        | .star => op .star
-      map := fun {x y} f =>
-        match x, y, f with
-        | .of (op x), .of (op y), f => WithInitial.down f
-| .star, .of (op _), _ => op WithTerminal.starTerminal.from _
-        | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
-        match x, y, z, f, g with
-        | .of (op x), .of (op y), .of (op z), f, g => rfl
-        | _, .of (op y), .star, f, g => (g : PEmpty).elim
-        | .of (op x), .star, _, f, _ => (f : PEmpty).elim
-        | .star, _, _, f, g => by subsingleton }
-  unitIso :=
-    NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-      (fun {x y} ⟨f⟩ => match x, y, f with
-        | op (of x), op (of y), f => by
-            simp only [Functor.id_obj, Functor.comp_obj,
-              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
-            rfl
-        | op star, op (of _), _ => rfl
-        | op star, op star, _ => rfl)
-  counitIso :=
-    NatIso.ofComponents
-      (fun x => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
-    match x with
-    | .of x => by
-        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
-          Iso.refl_hom, Category.comp_id]
-        rfl
-    | .star => rfl
-
-中文:
-定义 WithTerminal.opEquiv
-  签名: : (WithTerminal C)ᵒᵖ ≌ WithInitial Cᵒᵖ where
-  定义体: { obj := fun ⟨x⟩ => match x with
-| of x => .of op x
-      | star => .star
-      map := fun {x y} ⟨f⟩ =>
-        match x, y, f with
-        | op (of x), op (of y), f => (WithTerminal.down f).op
-        | op star, op (of _), _ => WithInitial.starInitial.to _
-        | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
-        match x, y, z, f, g with
-        | op (of x), op (of y), op (of z), f, g => rfl
-        | _, op (of y), op star, f, g => (g : PEmpty).elim
-        | op (of x), op star, _, f, _ => (f : PEmpty).elim
-        | op star, _, _, f, g => rfl }
-  inverse :=
-    { obj := fun x =>
-      match x with
-| .of x => op .of x.unop
-        | .star => op .star
-      map := fun {x y} f =>
-        match x, y, f with
-        | .of (op x), .of (op y), f => WithInitial.down f
-| .star, .of (op _), _ => op WithTerminal.starTerminal.from _
-        | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
-        match x, y, z, f, g with
-        | .of (op x), .of (op y), .of (op z), f, g => rfl
-        | _, .of (op y), .star, f, g => (g : PEmpty).elim
-        | .of (op x), .star, _, f, _ => (f : PEmpty).elim
-        | .star, _, _, f, g => by subsingleton }
-  unitIso :=
-    NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-      (fun {x y} ⟨f⟩ => match x, y, f with
-        | op (of x), op (of y), f => by
-            simp only [Functor.id_obj, Functor.comp_obj,
-              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
-            rfl
-        | op star, op (of _), _ => rfl
-        | op star, op star, _ => rfl)
-  counitIso :=
-    NatIso.ofComponents
-      (fun x => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
-    match x with
-    | .of x => by
-        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
-          Iso.refl_hom, Category.comp_id]
-        rfl
-    | .star => rfl
-
-Depends on / 依赖: PEmpty, WithInitial, WithInitial.starInitial.to, WithTerminal, WithTerminal.down, map_comp, map_id, starInitial
+--- 原说明 ---
+The opposite category of `WithTerminal C` is equivalent to `WithInitial Cᵒᵖ`.
 -/
 def WithTerminal.opEquiv : (WithTerminal C)ᵒᵖ ≌ WithInitial Cᵒᵖ where
   functor :=
-    { obj := fun ⟨x⟩ => match x with
-| of x => .of op x
+    { obj := fun ⟨x⟩ ↦ match x with
+      | of x => .of <| op x
       | star => .star
-      map := fun {x y} ⟨f⟩ =>
+      map := fun {x y} ⟨f⟩ ↦
         match x, y, f with
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op star, op (of _), _ => WithInitial.starInitial.to _
         | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+      map_id := fun ⟨x⟩ ↦ by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ ↦
         match x, y, z, f, g with
         | op (of x), op (of y), op (of z), f, g => rfl
         | _, op (of y), op star, f, g => (g : PEmpty).elim
         | op (of x), op star, _, f, _ => (f : PEmpty).elim
         | op star, _, _, f, g => rfl }
   inverse :=
-    { obj := fun x =>
+    { obj := fun x ↦
       match x with
-| .of x => op .of x.unop
+        | .of x => op <| .of <| x.unop
         | .star => op .star
-      map := fun {x y} f =>
+      map := fun {x y} f ↦
         match x, y, f with
         | .of (op x), .of (op y), f => WithInitial.down f
-| .star, .of (op _), _ => op WithTerminal.starTerminal.from _
+        | .star, .of (op _), _ => op <| WithTerminal.starTerminal.from _
         | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
+      map_id := fun x ↦ by cases x <;> rfl
+      map_comp := fun {x y z} f g ↦
         match x, y, z, f, g with
         | .of (op x), .of (op y), .of (op z), f, g => rfl
         | _, .of (op y), .star, f, g => (g : PEmpty).elim
@@ -2727,10 +1829,10 @@ def WithTerminal.opEquiv : (WithTerminal C)ᵒᵖ ≌ WithInitial Cᵒᵖ where
         | .star, _, _, f, g => by subsingleton }
   unitIso :=
     NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
+      (fun ⟨x⟩ ↦ match x with
         | .of x => Iso.refl _
         | .star => Iso.refl _)
-      (fun {x y} ⟨f⟩ => match x, y, f with
+      (fun {x y} ⟨f⟩ ↦ match x, y, f with
         | op (of x), op (of y), f => by
             simp only [Functor.id_obj, Functor.comp_obj,
               Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
@@ -2739,10 +1841,10 @@ def WithTerminal.opEquiv : (WithTerminal C)ᵒᵖ ≌ WithInitial Cᵒᵖ where
         | op star, op star, _ => rfl)
   counitIso :=
     NatIso.ofComponents
-      (fun x => match x with
+      (fun x ↦ match x with
         | .of x => Iso.refl _
         | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
+  functor_unitIso_comp := fun ⟨x⟩ ↦
     match x with
     | .of x => by
         simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
@@ -2754,163 +1856,46 @@ set_option backward.defeqAttrib.useBackward true in
 open Opposite in
 /-- The opposite category of `WithInitial C` is equivalent to `WithTerminal Cᵒᵖ`. -/
 @[simps!]
-/--
-Definition of `WithInitial.opEquiv` / `WithInitial.opEquiv` 的定义
+/-
+**CategoryTheory.WithInitial.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.W
+ithInitial`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] → (CategoryTheo
+ry.WithInitial C)ᵒᵖ ≌ CategoryTheory.WithTerminal Cᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithInitial.opEquiv
-  signature: : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
-  body: { obj := fun ⟨x⟩ =>
-        match x with
-| of x => .of op x
-        | star => .star
-      map := fun {x y} ⟨f⟩ =>
-        match x, y, f with
-        | op (of x), op (of y), f => (WithTerminal.down f).op
-        | op (of _), op star, _ => WithTerminal.starTerminal.from _
-        | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
-        match x, y, z, f, g with
-        | op (of x), op (of y), op (of z), f, g => rfl
-        | _, op star, op (of y), f, g => (g : PEmpty).elim
-        | op star, op (of x), _, f, _ => (f : PEmpty).elim
-        | _, _, op star, f, g => by subsingleton }
-  inverse :=
-    { obj := fun x =>
-        match x with
-| .of x => op .of x.unop
-        | .star => op .star
-      map := fun {x y} f =>
-        match x, y, f with
-        | .of (op x), .of (op y), f => WithInitial.down f
-| .of (op _), .star, _ => op WithInitial.starInitial.to _
-        | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
-        match x, y, z, f, g with
-        | .of (op x), .of (op y), .of (op z), f, g => rfl
-        | _, .star, .of (op y), f, g => (g : PEmpty).elim
-        | .star, .of (op x), _, f, _ => (f : PEmpty).elim
-        | _, _, .star, f, g => by rfl }
-  unitIso :=
-    NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-      (fun {x y} f => match x, y, f with
-        | op (of x), op (of y), f => by
-            simp only [Functor.id_obj, Functor.comp_obj,
-              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
-            rfl
-        | op (of _), op star, _ => rfl
-        | _, op star, _ => rfl)
-  counitIso :=
-    NatIso.ofComponents
-      (fun x => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
-    match x with
-    | .of x => by
-        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
-          Iso.refl_hom, Category.comp_id]
-        rfl
-    | .star => rfl
-
-中文:
-定义 WithInitial.opEquiv
-  签名: : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
-  定义体: { obj := fun ⟨x⟩ =>
-        match x with
-| of x => .of op x
-        | star => .star
-      map := fun {x y} ⟨f⟩ =>
-        match x, y, f with
-        | op (of x), op (of y), f => (WithTerminal.down f).op
-        | op (of _), op star, _ => WithTerminal.starTerminal.from _
-        | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
-        match x, y, z, f, g with
-        | op (of x), op (of y), op (of z), f, g => rfl
-        | _, op star, op (of y), f, g => (g : PEmpty).elim
-        | op star, op (of x), _, f, _ => (f : PEmpty).elim
-        | _, _, op star, f, g => by subsingleton }
-  inverse :=
-    { obj := fun x =>
-        match x with
-| .of x => op .of x.unop
-        | .star => op .star
-      map := fun {x y} f =>
-        match x, y, f with
-        | .of (op x), .of (op y), f => WithInitial.down f
-| .of (op _), .star, _ => op WithInitial.starInitial.to _
-        | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
-        match x, y, z, f, g with
-        | .of (op x), .of (op y), .of (op z), f, g => rfl
-        | _, .star, .of (op y), f, g => (g : PEmpty).elim
-        | .star, .of (op x), _, f, _ => (f : PEmpty).elim
-        | _, _, .star, f, g => by rfl }
-  unitIso :=
-    NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-      (fun {x y} f => match x, y, f with
-        | op (of x), op (of y), f => by
-            simp only [Functor.id_obj, Functor.comp_obj,
-              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
-            rfl
-        | op (of _), op star, _ => rfl
-        | _, op star, _ => rfl)
-  counitIso :=
-    NatIso.ofComponents
-      (fun x => match x with
-        | .of x => Iso.refl _
-        | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
-    match x with
-    | .of x => by
-        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
-          Iso.refl_hom, Category.comp_id]
-        rfl
-    | .star => rfl
-
-Depends on / 依赖: PEmpty, WithTerminal, WithTerminal.down, WithTerminal.starTerminal.from, map_comp, map_id, starTerminal
+--- 原说明 ---
+The opposite category of `WithInitial C` is equivalent to `WithTerminal Cᵒᵖ`.
 -/
 def WithInitial.opEquiv : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
   functor :=
-    { obj := fun ⟨x⟩ =>
+    { obj := fun ⟨x⟩ ↦
         match x with
-| of x => .of op x
+        | of x => .of <| op x
         | star => .star
-      map := fun {x y} ⟨f⟩ =>
+      map := fun {x y} ⟨f⟩ ↦
         match x, y, f with
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op (of _), op star, _ => WithTerminal.starTerminal.from _
         | op star, op star, _ => 𝟙 _
-      map_id := fun ⟨x⟩ => by cases x <;> rfl
-      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+      map_id := fun ⟨x⟩ ↦ by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ ↦
         match x, y, z, f, g with
         | op (of x), op (of y), op (of z), f, g => rfl
         | _, op star, op (of y), f, g => (g : PEmpty).elim
         | op star, op (of x), _, f, _ => (f : PEmpty).elim
         | _, _, op star, f, g => by subsingleton }
   inverse :=
-    { obj := fun x =>
+    { obj := fun x ↦
         match x with
-| .of x => op .of x.unop
+        | .of x => op <| .of <| x.unop
         | .star => op .star
-      map := fun {x y} f =>
+      map := fun {x y} f ↦
         match x, y, f with
         | .of (op x), .of (op y), f => WithInitial.down f
-| .of (op _), .star, _ => op WithInitial.starInitial.to _
+        | .of (op _), .star, _ => op <| WithInitial.starInitial.to _
         | .star, .star, _ => 𝟙 _
-      map_id := fun x => by cases x <;> rfl
-      map_comp := fun {x y z} f g =>
+      map_id := fun x ↦ by cases x <;> rfl
+      map_comp := fun {x y z} f g ↦
         match x, y, z, f, g with
         | .of (op x), .of (op y), .of (op z), f, g => rfl
         | _, .star, .of (op y), f, g => (g : PEmpty).elim
@@ -2918,10 +1903,10 @@ def WithInitial.opEquiv : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
         | _, _, .star, f, g => by rfl }
   unitIso :=
     NatIso.ofComponents
-      (fun ⟨x⟩ => match x with
+      (fun ⟨x⟩ ↦ match x with
         | .of x => Iso.refl _
         | .star => Iso.refl _)
-      (fun {x y} f => match x, y, f with
+      (fun {x y} f ↦ match x, y, f with
         | op (of x), op (of y), f => by
             simp only [Functor.id_obj, Functor.comp_obj,
               Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
@@ -2930,10 +1915,10 @@ def WithInitial.opEquiv : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
         | _, op star, _ => rfl)
   counitIso :=
     NatIso.ofComponents
-      (fun x => match x with
+      (fun x ↦ match x with
         | .of x => Iso.refl _
         | .star => Iso.refl _)
-  functor_unitIso_comp := fun ⟨x⟩ =>
+  functor_unitIso_comp := fun ⟨x⟩ ↦
     match x with
     | .of x => by
         simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
@@ -2942,3 +1927,4 @@ def WithInitial.opEquiv : (WithInitial C)ᵒᵖ ≌ WithTerminal Cᵒᵖ where
     | .star => rfl
 
 end CategoryTheory
+

@@ -49,25 +49,26 @@ variable {R : Type u} {S : Type v} [NonUnitalNonAssocRing R]
 
 section NonUnitalSubringClass
 
-/--
-Definition of `NonUnitalSubringClass` / `NonUnitalSubringClass` 的定义
+/-- `NonUnitalSubringClass S R` states that `S` is a type of subsets `s ⊆ R` that
+are both a multiplicative submonoid and an additive subgroup. -/
+/-
+**NonUnitalSubringClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_1) → (R : Type u) → [NonUnitalNonAssocRing R] → [SetLike S R] 
+→ Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalSubringClass
-  parameters: (S : Type*) (R : Type u) [NonUnitalNonAssocRing R] [SetLike S R]
-  extends: NonUnitalSubsemiringClass S R, NegMemClass S R
-  (no additional axioms)
-
-中文:
-类 NonUnital子环类
-  参数: (S : 类型) (R : 类型u) [非幺非结合环 R] [集合状 S R]
-  继承: NonUnital子半环类 S R, NegMem类 S R
-  (无附加公理)
+--- 原说明 ---
+`NonUnitalSubringClass S R` states that `S` is a type of subsets `s ⊆ R` that
+are both a multiplicative submonoid and an additive subgroup.
 -/
 class NonUnitalSubringClass (S : Type*) (R : Type u) [NonUnitalNonAssocRing R] [SetLike S R] : Prop
   extends NonUnitalSubsemiringClass S R, NegMemClass S R where
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NonUnitalSubringClass.addSubgroupClass (S : Type*) (R : Type u)
     [SetLike S R] [NonUnitalNonAssocRing R] [h : NonUnitalSubringClass S R] :
     AddSubgroupClass S R :=
@@ -79,12 +80,26 @@ namespace NonUnitalSubringClass
 
 -- Prefer subclasses of `NonUnitalRing` over subclasses of `NonUnitalSubringClass`.
 /-- A non-unital subring of a non-unital ring inherits a non-unital ring structure -/
+/-
+**NonUnitalSubringClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubringClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A non-unital subring of a non-unital ring inherits a non-unital ring structure
+-/
 instance (priority := 75) toNonUnitalNonAssocRing : NonUnitalNonAssocRing s := fast_instance%
   Subtype.val_injective.nonUnitalNonAssocRing _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 -- Prefer subclasses of `NonUnitalRing` over subclasses of `NonUnitalSubringClass`.
 /-- A non-unital subring of a non-unital ring inherits a non-unital ring structure -/
+/-
+**NonUnitalSubringClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubringClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A non-unital subring of a non-unital ring inherits a non-unital ring structure
+-/
 instance (priority := 75) toNonUnitalRing {R : Type*} [NonUnitalRing R] [SetLike S R]
     [NonUnitalSubringClass S R] (s : S) : NonUnitalRing s := fast_instance%
   Subtype.val_injective.nonUnitalRing _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
@@ -92,6 +107,14 @@ instance (priority := 75) toNonUnitalRing {R : Type*} [NonUnitalRing R] [SetLike
 
 -- Prefer subclasses of `NonUnitalRing` over subclasses of `NonUnitalSubringClass`.
 /-- A non-unital subring of a `NonUnitalNonAssocCommRing` is a `NonUnitalNonAssocCommRing`. -/
+/-
+**NonUnitalSubringClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubringClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A non-unital subring of a `NonUnitalNonAssocCommRing` is a `NonUnitalNonAssocCom
+mRing`.
+-/
 instance (priority := 75) toNonUnitalNonAssocCommRing {R} [NonUnitalNonAssocCommRing R]
     [SetLike S R] [NonUnitalSubringClass S R] (s : S) :
     NonUnitalNonAssocCommRing s := fast_instance%
@@ -100,110 +123,95 @@ instance (priority := 75) toNonUnitalNonAssocCommRing {R} [NonUnitalNonAssocComm
 
 -- Prefer subclasses of `NonUnitalRing` over subclasses of `NonUnitalSubringClass`.
 /-- A non-unital subring of a `NonUnitalCommRing` is a `NonUnitalCommRing`. -/
+/-
+**NonUnitalSubringClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubringClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A non-unital subring of a `NonUnitalCommRing` is a `NonUnitalCommRing`.
+-/
 instance (priority := 75) toNonUnitalCommRing {R} [NonUnitalCommRing R] [SetLike S R]
     [NonUnitalSubringClass S R] : NonUnitalCommRing s := fast_instance%
   Subtype.val_injective.nonUnitalCommRing _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
-/--
-Definition of `subtype` / `subtype` 的定义
+/-- The natural non-unital ring hom from a non-unital subring of a non-unital ring `R` to `R`. -/
+/-
+**NonUnitalSubringClass.subtype** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalSubringClass
+`。
+形式化陈述：subtype (s : S) : s ->ₙ+* R
+参数：s : S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [i
+nst : SetLike S R] [inst_1 : NonUnitalNonAssocRing R] [h : NonUnitalSubringClass
+ S R],   AddSubgroupClass S …
 
-English:
-definition subtype
-  signature: (s : S)
-  body: { NonUnitalSubsemiringClass.subtype s,
-    AddSubgroupClass.subtype s with
-    toFun := Subtype.val }
-
-中文:
-定义 subtype
-  签名: (s : S)
-  定义体: { NonUnitalSubsemiringClass.subtype s,
-    AddSubgroupClass.subtype s with
-    toFun := Subtype.val }
-
-Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.subtype, NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.subtype, Subtype, Subtype.val, subtype
+--- 原说明 ---
+The natural non-unital ring hom from a non-unital subring of a non-unital ring `
+R` to `R`.
 -/
-def subtype (s : S) : s ->ₙ+* R :=
+def subtype (s : S) : s →ₙ+* R :=
   { NonUnitalSubsemiringClass.subtype s,
     AddSubgroupClass.subtype s with
     toFun := Subtype.val }
 
 variable {s} in
 @[simp]
-/--
-theorem `subtype_apply` / 定理 `subtype_apply`
-
-English:
-theorem subtype_apply
-  given: (x : s)
-  statement: subtype s x = x
-  proof: rfl
-
-中文:
-定理 subtype_apply
-  条件: (x : s)
-  结论: subtype s x = x
-  证明: rfl
+/-
+**NonUnitalSubringClass.subtype_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubrin
+gClass`。
+形式化陈述：subtype_apply (x : s) : subtype s x = x
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem subtype_apply (x : s) : subtype s x = x :=
   rfl
-
-/--
-theorem `subtype_injective` / 定理 `subtype_injective`
-
-English:
-theorem subtype_injective
-  statement: Function.Injective (subtype s)
-  proof: Subtype.coe_injective
-
-@[simp]
-
-中文:
-定理 subtype_injective
-  结论: 函数.单射 (subtype s)
-  证明: Subtype.coe_injective
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**NonUnitalSubringClass.subtype_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSu
+bringClass`。
+形式化陈述：subtype_injective : Function.Injective (subtype s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 theorem subtype_injective : Function.Injective (subtype s) :=
   Subtype.coe_injective
 
 @[simp]
-/--
-theorem `coe_subtype` / 定理 `coe_subtype`
-
-English:
-theorem coe_subtype
-  statement: (subtype s : s -> R) = Subtype.val
-  proof: rfl
-
-中文:
-定理 coe_subtype
-  结论: (subtype s : s -> R) = 子类型.val
-  证明: rfl
+/-
+**NonUnitalSubringClass.coe_subtype** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubringC
+lass`。
+形式化陈述：coe_subtype : (subtype s : s -> R) = Subtype.val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_subtype : (subtype s : s -> R) = Subtype.val :=
+theorem coe_subtype : (subtype s : s → R) = Subtype.val :=
   rfl
 
 end NonUnitalSubringClass
 
 end NonUnitalSubringClass
 
-/--
-Definition of `NonUnitalSubring` / `NonUnitalSubring` 的定义
+/-- `NonUnitalSubring R` is the type of non-unital subrings of `R`. A non-unital subring of `R`
+is a subset `s` that is a multiplicative subsemigroup and an additive subgroup. Note in particular
+that it shares the same 0 as R. -/
+/-
+**NonUnitalSubring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [NonUnitalNonAssocRing R] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NonUnitalSubring
-  parameters: (R : Type u) [NonUnitalNonAssocRing R]
-  (no additional axioms)
-
-中文:
-结构 NonUnital子环
-  参数: (R : 类型u) [非幺非结合环 R]
-  (无附加公理)
+--- 原说明 ---
+`NonUnitalSubring R` is the type of non-unital subrings of `R`. A non-unital sub
+ring of `R`
+is a subset `s` that is a multiplicative subsemigroup and an additive subgroup. 
+Note in particular
+that it shares the same 0 as R.
 -/
 structure NonUnitalSubring (R : Type u) [NonUnitalNonAssocRing R] extends
   NonUnitalSubsemiring R, AddSubgroup R
@@ -218,84 +226,44 @@ namespace NonUnitalSubring
 
 /-- The underlying submonoid of a `NonUnitalSubring`. -/
 @[reducible]
-/--
-Definition of `toSubsemigroup` / `toSubsemigroup` 的定义
+/-
+**NonUnitalSubring.toSubsemigroup** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalSubring`。
+形式化陈述：toSubsemigroup (s : NonUnitalSubring R) : Subsemigroup R
+参数：s : NonUnitalSubring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubsemigroup
-  signature: (s : NonUnitalSubring R)
-  body: { s.toNonUnitalSubsemiring.toSubsemigroup with carrier := s.carrier }
-
-中文:
-定义 toSubsemigroup
-  签名: (s : NonUnital子环 R)
-  定义体: { s.toNonUnitalSubsemiring.toSubsemigroup with carrier := s.carrier }
-
-Depends on / 依赖: carrier, s.carrier, s.toNonUnitalSubsemiring.toSubsemigroup, toNonUnitalSubsemiring, toSubsemigroup
+--- 原说明 ---
+The underlying submonoid of a `NonUnitalSubring`.
 -/
 def toSubsemigroup (s : NonUnitalSubring R) : Subsemigroup R :=
   { s.toNonUnitalSubsemiring.toSubsemigroup with carrier := s.carrier }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (NonUnitalSubring R) R
-  body: s.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
-
-中文:
-实例 :
-  签名: 集合状 (NonUnital子环 R) R
-  定义体: s.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**NonUnitalSubring.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (NonUnitalSubring R) R where
   coe s := s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (NonUnitalSubring R)
-  body: .ofSetLike (NonUnitalSubring R) R
-
-中文:
-实例 :
-  签名: 偏序 (NonUnital子环 R)
-  定义体: .ofSetLike (NonUnitalSubring R) R
-
-Depends on / 依赖: NonUnitalSubring, ofSetLike
+/-
+**NonUnitalSubring.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (NonUnitalSubring R) := .ofSetLike (NonUnitalSubring R) R
 
 /-- The actual `NonUnitalSubring` obtained from an element of a `NonUnitalSubringClass`. -/
 @[simps]
-/--
-Definition of `ofClass` / `ofClass` 的定义
+/-
+**NonUnitalSubring.ofClass** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalSubring`。
+形式化陈述：ofClass {S R : Type*} [NonUnitalNonAssocRing R] [SetLike S R] [NonUnitalSu
+bringClass S R] (s : S) : NonUnitalSubring R where carrier
+参数：s : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofClass
-  signature: {S R : Type*} [NonUnitalNonAssocRing R] [SetLike S R] [NonUnitalSubringClass S R]
-  body: s
-  add_mem' := add_mem
-  zero_mem' := zero_mem _
-  mul_mem' := mul_mem
-  neg_mem' := neg_mem
-
-中文:
-定义 ofClass
-  签名: {S R : 类型} [非幺非结合环 R] [集合状 S R] [NonUnital子环类 S R]
-  定义体: s
-  add_mem' := add_mem
-  zero_mem' := zero_mem _
-  mul_mem' := mul_mem
-  neg_mem' := neg_mem
+--- 原说明 ---
+The actual `NonUnitalSubring` obtained from an element of a `NonUnitalSubringCla
+ss`.
 -/
 def ofClass {S R : Type*} [NonUnitalNonAssocRing R] [SetLike S R] [NonUnitalSubringClass S R]
     (s : S) : NonUnitalSubring R where
@@ -304,10 +272,13 @@ def ofClass {S R : Type*} [NonUnitalNonAssocRing R] [SetLike S R] [NonUnitalSubr
   zero_mem' := zero_mem _
   mul_mem' := mul_mem
   neg_mem' := neg_mem
-
+/-
+**NonUnitalSubring.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : CanLift (Set R) (NonUnitalSubring R) (↑)
-    (fun s => 0 in s ∧ (forall {x y}, x in s -> y in s -> x + y in s) ∧
-      (forall {x y}, x in s -> y in s -> x * y in s) ∧ forall {x}, x in s -> -x in s) where
+    (fun s ↦ 0 ∈ s ∧ (∀ {x y}, x ∈ s → y ∈ s → x + y ∈ s) ∧
+      (∀ {x y}, x ∈ s → y ∈ s → x * y ∈ s) ∧ ∀ {x}, x ∈ s → -x ∈ s) where
   prf s h :=
     ⟨ { carrier := s
         zero_mem' := h.1
@@ -315,166 +286,96 @@ instance (priority := 100) : CanLift (Set R) (NonUnitalSubring R) (↑)
         mul_mem' := h.2.2.1
         neg_mem' := h.2.2.2 },
       rfl ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonUnitalSubringClass (NonUnitalSubring R) R
-  body: s.zero_mem'
-  add_mem {s} := s.add_mem'
-  mul_mem {s} := s.mul_mem'
-  neg_mem {s} := s.neg_mem'
-
-中文:
-实例 :
-  签名: NonUnital子环类 (NonUnital子环 R) R
-  定义体: s.zero_mem'
-  add_mem {s} := s.add_mem'
-  mul_mem {s} := s.mul_mem'
-  neg_mem {s} := s.neg_mem'
-
-Depends on / 依赖: s.zero_mem, zero_mem
+/-
+**NonUnitalSubring.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NonUnitalSubringClass (NonUnitalSubring R) R where
   zero_mem s := s.zero_mem'
   add_mem {s} := s.add_mem'
   mul_mem {s} := s.mul_mem'
   neg_mem {s} := s.neg_mem'
-
-/--
-theorem `mem_carrier` / 定理 `mem_carrier`
-
-English:
-theorem mem_carrier
-  given: {s : NonUnitalSubring R} {x : R}
-  statement: x in s.toNonUnitalSubsemiring ↔ x in s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_carrier
-  条件: {s : NonUnital子环 R} {x : R}
-  结论: x in s.toNonUnitalSubsemiring ↔ x in s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mem_carrier** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：mem_carrier {s : NonUnitalSubring R} {x : R} : x in s.toNonUnitalSubsemiri
+ng ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_carrier {s : NonUnitalSubring R} {x : R} : x in s.toNonUnitalSubsemiring ↔ x in s :=
+theorem mem_carrier {s : NonUnitalSubring R} {x : R} : x ∈ s.toNonUnitalSubsemiring ↔ x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {S : NonUnitalSubsemiring R} {x : R} (h)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_mk
-  条件: {S : NonUnital子半环 R} {x : R} (h)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：mem_mk {S : NonUnitalSubsemiring R} {x : R} (h) : x in (⟨S, h⟩ : NonUnital
+Subring R) ↔ x in S
+参数：h。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_mk {S : NonUnitalSubsemiring R} {x : R} (h) :
-    x in (⟨S, h⟩ : NonUnitalSubring R) ↔ x in S :=
+    x ∈ (⟨S, h⟩ : NonUnitalSubring R) ↔ x ∈ S :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_set_mk` / 定理 `coe_set_mk`
-
-English:
-theorem coe_set_mk
-  given: (S : NonUnitalSubsemiring R) (h)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_set_mk
-  条件: (S : NonUnital子半环 R) (h)
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalSubring.coe_set_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：coe_set_mk (S : NonUnitalSubsemiring R) (h) : ((⟨S, h⟩ : NonUnitalSubring 
+R) : Set R) = S
+参数：S : NonUnitalSubsemiring R；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_set_mk (S : NonUnitalSubsemiring R) (h) :
     ((⟨S, h⟩ : NonUnitalSubring R) : Set R) = S :=
   rfl
 
 @[simp]
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  given: {S S' : NonUnitalSubsemiring R} (h h')
-  proof: Iff.rfl
-
-中文:
-定理 mk_le_mk
-  条件: {S S' : NonUnital子半环 R} (h h')
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：mk_le_mk {S S' : NonUnitalSubsemiring R} (h h') : (⟨S, h⟩ : NonUnitalSubri
+ng R) <= (⟨S', h'⟩ : NonUnitalSubring R) ↔ S <= S'
+参数：h h'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mk_le_mk {S S' : NonUnitalSubsemiring R} (h h') :
-    (⟨S, h⟩ : NonUnitalSubring R) <= (⟨S', h'⟩ : NonUnitalSubring R) ↔ S <= S' :=
+    (⟨S, h⟩ : NonUnitalSubring R) ≤ (⟨S', h'⟩ : NonUnitalSubring R) ↔ S ≤ S' :=
   Iff.rfl
 
 /-- Two non-unital subrings are equal if they have the same elements. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**NonUnitalSubring.ext** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：ext {S T : NonUnitalSubring R} (h : forall x, x in S ↔ x in T) : S = T
+参数：h : forall x, x in S ↔ x in T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 
-English:
-theorem ext
-  given: {S T : NonUnitalSubring R} (h : forall x, x in S ↔ x in T)
-  statement: S = T
-  proof: SetLike.ext h
-
-中文:
-定理 ext
-  条件: {S T : NonUnital子环 R} (h : 对任意 x, x in S ↔ x in T)
-  结论: S = T
-  证明: SetLike.ext h
-
-Depends on / 依赖: SetLike, SetLike.ext
+--- 原说明 ---
+Two non-unital subrings are equal if they have the same elements.
 -/
-theorem ext {S T : NonUnitalSubring R} (h : forall x, x in S ↔ x in T) : S = T :=
+theorem ext {S T : NonUnitalSubring R} (h : ∀ x, x ∈ S ↔ x ∈ T) : S = T :=
   SetLike.ext h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a non-unital subring with a new `carrier` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**NonUnitalSubring.copy** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalSubring`。
+形式化陈述：{R : Type u} → [inst : NonUnitalNonAssocRing R] → (S : NonUnitalSubring R)
+ → (s : Set R) → s = ↑S → NonUnitalSubring R
+参数：S : NonUnitalSubring R；s : Set R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
-  body: { S.toNonUnitalSubsemiring.copy s hs with
-    carrier := s
-    neg_mem' := hs.symm ▸ S.neg_mem' }
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
-  定义体: { S.toNonUnitalSubsemiring.copy s hs with
-    carrier := s
-    neg_mem' := hs.symm ▸ S.neg_mem' }
-
-@[simp]
+--- 原说明 ---
+Copy of a non-unital subring with a new `carrier` equal to the old one. Useful t
+o fix
+definitional equalities.
 -/
 protected def copy (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : NonUnitalSubring R :=
   { S.toNonUnitalSubsemiring.copy s hs with
@@ -482,303 +383,246 @@ protected def copy (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : NonUni
     neg_mem' := hs.symm ▸ S.neg_mem' }
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
-  statement: (S.copy s hs : Set R) = s
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
-  结论: (S.copy s hs : 集合 R) = s
-  证明: rfl
+/-
+**NonUnitalSubring.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：coe_copy (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : (S.copy s hs
+ : Set R) = s
+参数：S : NonUnitalSubring R；s : Set R；hs : s = ↑S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_copy (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : (S.copy s hs : Set R) = s :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
-  statement: S.copy s hs = S
-  proof: SetLike.coe_injective hs
-
-中文:
-定理 copy_eq
-  条件: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
-  结论: S.copy s hs = S
-  证明: SetLike.coe_injective hs
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**NonUnitalSubring.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：copy_eq (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : S.copy s hs =
+ S
+参数：S : NonUnitalSubring R；s : Set R；hs : s = ↑S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem copy_eq (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : S.copy s hs = S :=
   SetLike.coe_injective hs
-
-/--
-theorem `toNonUnitalSubsemiring_injective` / 定理 `toNonUnitalSubsemiring_injective`
-
-English:
-theorem toNonUnitalSubsemiring_injective
-
-中文:
-定理 toNonUnitalSubsemiring_injective
+/-
+**NonUnitalSubring.toNonUnitalSubsemiring_injective** 是 Mathlib 中的一个定理，位于命名空间 `N
+onUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R], Function.Injective NonUni
+talSubring.toNonUnitalSubsemiring
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.ext`：ext {S T : NonUnitalSubring R} (h : forall x, x in
+ S ↔ x in T) : S = T
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
 -/
 theorem toNonUnitalSubsemiring_injective :
-    Function.Injective (toNonUnitalSubsemiring : NonUnitalSubring R -> NonUnitalSubsemiring R)
+    Function.Injective (toNonUnitalSubsemiring : NonUnitalSubring R → NonUnitalSubsemiring R)
   | _r, _s, h => ext (SetLike.ext_iff.mp h :)
 
 @[gcongr, mono]
-/--
-theorem `toNonUnitalSubsemiring_strictMono` / 定理 `toNonUnitalSubsemiring_strictMono`
-
-English:
-theorem toNonUnitalSubsemiring_strictMono
-  proof: fun _ _ =>
-  id
-
-@[gcongr, mono]
-
-中文:
-定理 toNonUnitalSubsemiring_strictMono
-  证明: fun _ _ =>
-  id
-
-@[gcongr, mono]
+/-
+**NonUnitalSubring.toNonUnitalSubsemiring_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `
+NonUnitalSubring`。
+形式化陈述：toNonUnitalSubsemiring_strictMono : StrictMono (toNonUnitalSubsemiring : N
+onUnitalSubring R -> NonUnitalSubsemiring R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toNonUnitalSubsemiring_strictMono :
-    StrictMono (toNonUnitalSubsemiring : NonUnitalSubring R -> NonUnitalSubsemiring R) := fun _ _ =>
+    StrictMono (toNonUnitalSubsemiring : NonUnitalSubring R → NonUnitalSubsemiring R) := fun _ _ =>
   id
 
 @[gcongr, mono]
-/--
-theorem `toNonUnitalSubsemiring_mono` / 定理 `toNonUnitalSubsemiring_mono`
-
-English:
-theorem toNonUnitalSubsemiring_mono
-  proof: toNonUnitalSubsemiring_strictMono.monotone
-
-中文:
-定理 toNonUnitalSubsemiring_mono
-  证明: toNonUnitalSubsemiring_strictMono.monotone
-
-Depends on / 依赖: monotone, toNonUnitalSubsemiring_strictMono, toNonUnitalSubsemiring_strictMono.monotone
+/-
+**NonUnitalSubring.toNonUnitalSubsemiring_mono** 是 Mathlib 中的一个定理，位于命名空间 `NonUni
+talSubring`。
+形式化陈述：toNonUnitalSubsemiring_mono : Monotone (toNonUnitalSubsemiring : NonUnital
+Subring R -> NonUnitalSubsemiring R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `NonUnitalSubring.toNonUnitalSubsemiring_strictMono`：toNonUnitalSubsemiri
+ng_strictMono : StrictMono (toNonUnitalSubsemiring : NonUnitalSubring R -> NonUn
+italSubsemiring R)
 -/
 theorem toNonUnitalSubsemiring_mono :
-    Monotone (toNonUnitalSubsemiring : NonUnitalSubring R -> NonUnitalSubsemiring R) :=
+    Monotone (toNonUnitalSubsemiring : NonUnitalSubring R → NonUnitalSubsemiring R) :=
   toNonUnitalSubsemiring_strictMono.monotone
-
-/--
-theorem `toAddSubgroup_injective` / 定理 `toAddSubgroup_injective`
-
-English:
-theorem toAddSubgroup_injective
-
-中文:
-定理 toAddSubgroup_injective
+/-
+**NonUnitalSubring.toAddSubgroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalS
+ubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R], Function.Injective NonUni
+talSubring.toAddSubgroup
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.ext`：ext {S T : NonUnitalSubring R} (h : forall x, x in
+ S ↔ x in T) : S = T
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
 -/
 theorem toAddSubgroup_injective :
-    Function.Injective (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R)
+    Function.Injective (toAddSubgroup : NonUnitalSubring R → AddSubgroup R)
   | _r, _s, h => ext (SetLike.ext_iff.mp h :)
 
 @[gcongr, mono]
-/--
-theorem `toAddSubgroup_strictMono` / 定理 `toAddSubgroup_strictMono`
-
-English:
-theorem toAddSubgroup_strictMono
-  proof: fun _ _ => id
-
-@[gcongr, mono]
-
-中文:
-定理 toAddSubgroup_strictMono
-  证明: fun _ _ => id
-
-@[gcongr, mono]
+/-
+**NonUnitalSubring.toAddSubgroup_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `NonUnital
+Subring`。
+形式化陈述：toAddSubgroup_strictMono : StrictMono (toAddSubgroup : NonUnitalSubring R 
+-> AddSubgroup R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAddSubgroup_strictMono :
-    StrictMono (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R) := fun _ _ => id
+    StrictMono (toAddSubgroup : NonUnitalSubring R → AddSubgroup R) := fun _ _ => id
 
 @[gcongr, mono]
-/--
-theorem `toAddSubgroup_mono` / 定理 `toAddSubgroup_mono`
-
-English:
-theorem toAddSubgroup_mono
-  statement: Monotone (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R)
-  proof: toAddSubgroup_strictMono.monotone
-
-中文:
-定理 toAddSubgroup_mono
-  结论: 递增 (toAddSubgroup : NonUnital子环 R -> 加法子群 R)
-  证明: toAddSubgroup_strictMono.monotone
-
-Depends on / 依赖: monotone, toAddSubgroup_strictMono, toAddSubgroup_strictMono.monotone
+/-
+**NonUnitalSubring.toAddSubgroup_mono** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubrin
+g`。
+形式化陈述：toAddSubgroup_mono : Monotone (toAddSubgroup : NonUnitalSubring R -> AddSu
+bgroup R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `NonUnitalSubring.toAddSubgroup_strictMono`：toAddSubgroup_strictMono : St
+rictMono (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R)
 -/
-theorem toAddSubgroup_mono : Monotone (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R) :=
+theorem toAddSubgroup_mono : Monotone (toAddSubgroup : NonUnitalSubring R → AddSubgroup R) :=
   toAddSubgroup_strictMono.monotone
-
-/--
-theorem `toSubsemigroup_injective` / 定理 `toSubsemigroup_injective`
-
-English:
-theorem toSubsemigroup_injective
-
-中文:
-定理 toSubsemigroup_injective
+/-
+**NonUnitalSubring.toSubsemigroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnital
+Subring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R], Function.Injective NonUni
+talSubring.toSubsemigroup
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.ext`：ext {S T : NonUnitalSubring R} (h : forall x, x in
+ S ↔ x in T) : S = T
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
 -/
 theorem toSubsemigroup_injective :
-    Function.Injective (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R)
+    Function.Injective (toSubsemigroup : NonUnitalSubring R → Subsemigroup R)
   | _r, _s, h => ext (SetLike.ext_iff.mp h :)
 
 @[gcongr, mono]
-/--
-theorem `toSubsemigroup_strictMono` / 定理 `toSubsemigroup_strictMono`
-
-English:
-theorem toSubsemigroup_strictMono
-  proof: fun _ _ => id
-
-@[gcongr, mono]
-
-中文:
-定理 toSubsemigroup_strictMono
-  证明: fun _ _ => id
-
-@[gcongr, mono]
+/-
+**NonUnitalSubring.toSubsemigroup_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `NonUnita
+lSubring`。
+形式化陈述：toSubsemigroup_strictMono : StrictMono (toSubsemigroup : NonUnitalSubring 
+R -> Subsemigroup R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubsemigroup_strictMono :
-    StrictMono (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R) := fun _ _ => id
+    StrictMono (toSubsemigroup : NonUnitalSubring R → Subsemigroup R) := fun _ _ => id
 
 @[gcongr, mono]
-/--
-theorem `toSubsemigroup_mono` / 定理 `toSubsemigroup_mono`
-
-English:
-theorem toSubsemigroup_mono
-  statement: Monotone (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R)
-  proof: toSubsemigroup_strictMono.monotone
-
-中文:
-定理 toSubsemigroup_mono
-  结论: 递增 (toSubsemigroup : NonUnital子环 R -> 子半群 R)
-  证明: toSubsemigroup_strictMono.monotone
-
-Depends on / 依赖: monotone, toSubsemigroup_strictMono, toSubsemigroup_strictMono.monotone
+/-
+**NonUnitalSubring.toSubsemigroup_mono** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubri
+ng`。
+形式化陈述：toSubsemigroup_mono : Monotone (toSubsemigroup : NonUnitalSubring R -> Sub
+semigroup R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `NonUnitalSubring.toSubsemigroup_strictMono`：toSubsemigroup_strictMono : 
+StrictMono (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R)
 -/
-theorem toSubsemigroup_mono : Monotone (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R) :=
+theorem toSubsemigroup_mono : Monotone (toSubsemigroup : NonUnitalSubring R → Subsemigroup R) :=
   toSubsemigroup_strictMono.monotone
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Construct a `NonUnitalSubring R` from a set `s`, a subsemigroup `sm`, and an additive
+subgroup `sa` such that `x ∈ s ↔ x ∈ sm ↔ x ∈ sa`. -/
+/-
+**NonUnitalSubring.mk'** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : 
+AddSubgroup R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s sm sa hm ha).toSubsemigr
+oup = sm
+参数：hm : ↑sm = s；ha : ↑sa = s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s)
-  body: { sm.copy s hm.symm, sa.copy s ha.symm with }
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: (s : 集合 R) (sm : 子半群 R) (sa : 加法子群 R) (hm : ↑sm = s)
-  定义体: { sm.copy s hm.symm, sa.copy s ha.symm with }
-
-@[simp]
+--- 原说明 ---
+Construct a `NonUnitalSubring R` from a set `s`, a subsemigroup `sm`, and an add
+itive
+subgroup `sa` such that `x ∈ s ↔ x ∈ sm ↔ x ∈ sa`.
 -/
 protected def mk' (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s)
     (ha : ↑sa = s) : NonUnitalSubring R :=
   { sm.copy s hm.symm, sa.copy s ha.symm with }
 
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  statement: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk'
-  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalSubring.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：coe_mk' {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup
+ R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s sm sa hm ha : Set R) = s
+参数：hm : ↑sm = s；ha : ↑sa = s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.mk'`：mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup 
+R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s 
+sm sa hm h…
 -/
 theorem coe_mk' {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
     (ha : ↑sa = s) : (NonUnitalSubring.mk' s sm sa hm ha : Set R) = s :=
   rfl
 
 @[simp]
-/--
-theorem `mem_mk'` / 定理 `mem_mk'`
-
-English:
-theorem mem_mk'
-  statement: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_mk'
-  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R} (ha : ↑sa = s)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mem_mk'** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：mem_mk' {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup
+ R} (ha : ↑sa = s) {x : R} : x in NonUnitalSubring.mk' s sm sa hm ha ↔ x in s
+参数：hm : ↑sm = s；ha : ↑sa = s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `NonUnitalSubring.mk'`：mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup 
+R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s 
+sm sa hm h…
 -/
 theorem mem_mk' {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s)
-    {x : R} : x in NonUnitalSubring.mk' s sm sa hm ha ↔ x in s :=
+    {x : R} : x ∈ NonUnitalSubring.mk' s sm sa hm ha ↔ x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mk'_toSubsemigroup` / 定理 `mk'_toSubsemigroup`
-
-English:
-theorem mk'_toSubsemigroup
-  statement: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
-  proof: SetLike.coe_injective hm.symm
-
-@[simp]
-
-中文:
-定理 mk'_toSubsemigroup
-  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
-  证明: SetLike.coe_injective hm.symm
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, hm.symm
+/-
+**NonUnitalSubring.mk'_toSubsemigroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubrin
+g`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] {s : Set R} {sm : Subsemig
+roup R} (hm : ↑sm = s) {sa : AddSubgroup R}   (ha : ↑sa = s), (NonUnitalSubring.
+mk' s sm sa hm ha).toSubsemigroup = sm
+参数：hm : ↑sm = s；ha : ↑sa = s；NonUnitalSubring.mk' s sm sa hm ha。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `NonUnitalSubring.mk'`：mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup 
+R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s 
+sm sa hm h…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
     (ha : ↑sa = s) : (NonUnitalSubring.mk' s sm sa hm ha).toSubsemigroup = sm :=
   SetLike.coe_injective hm.symm
 
 @[simp]
-/--
-theorem `mk'_toAddSubgroup` / 定理 `mk'_toAddSubgroup`
-
-English:
-theorem mk'_toAddSubgroup
-  statement: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
-  proof: SetLike.coe_injective ha.symm
-
-中文:
-定理 mk'_toAddSubgroup
-  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
-  证明: SetLike.coe_injective ha.symm
+/-
+**NonUnitalSubring.mk'_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring
+`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] {s : Set R} {sm : Subsemig
+roup R} (hm : ↑sm = s) {sa : AddSubgroup R}   (ha : ↑sa = s), (NonUnitalSubring.
+mk' s sm sa hm ha).toAddSubgroup = sa
+参数：hm : ↑sm = s；ha : ↑sa = s；NonUnitalSubring.mk' s sm sa hm ha。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `NonUnitalSubring.mk'`：mk'_toSubsemigroup {s : Set R} {sm : Subsemigroup 
+R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s) : (NonUnitalSubring.mk' s 
+sm sa hm h…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mk'_toAddSubgroup {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
     (ha : ↑sa = s) : (NonUnitalSubring.mk' s sm sa hm ha).toAddSubgroup = sa :=
@@ -790,389 +634,344 @@ namespace NonUnitalSubring
 
 variable (s : NonUnitalSubring R)
 
-/--
-theorem `zero_mem` / 定理 `zero_mem`
+/-- A non-unital subring contains the ring's 0. -/
+/-
+**NonUnitalSubring.zero_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R), 
+0 ∈ s
+参数：s : NonUnitalSubring R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `NonUnitalSubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : out
+Param (Type u)} {inst : NonUnitalNonAssocSemiring R} {inst_1 : SetLike S R}   [s
+elf : NonUnitalSubsemiringClass S R…
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-theorem zero_mem
-  statement: (0 : R) in s
-  proof: zero_mem _
-
-中文:
-定理 zero_mem
-  结论: (0 : R) in s
-  证明: zero_mem _
+--- 原说明 ---
+A non-unital subring contains the ring's 0.
 -/
-protected theorem zero_mem : (0 : R) in s :=
+protected theorem zero_mem : (0 : R) ∈ s :=
   zero_mem _
 
-/--
-theorem `mul_mem` / 定理 `mul_mem`
+/-- A non-unital subring is closed under multiplication. -/
+/-
+**NonUnitalSubring.mul_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R) {
+x y : R}, x ∈ s → y ∈ s → x * y ∈ s
+参数：s : NonUnitalSubring R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `NonUnitalSubsemiringClass.mulMemClass`：∀ (S : Type u_1) (R : Type u) [in
+st : NonUnitalNonAssocSemiring R] [inst_1 : SetLike S R]   [h : NonUnitalSubsemi
+ringClass S R], MulMemClass…
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-theorem mul_mem
-  given: {x y : R}
-  statement: x in s -> y in s -> x * y in s
-  proof: mul_mem
-
-中文:
-定理 mul_mem
-  条件: {x y : R}
-  结论: x in s -> y in s -> x * y in s
-  证明: mul_mem
+--- 原说明 ---
+A non-unital subring is closed under multiplication.
 -/
-protected theorem mul_mem {x y : R} : x in s -> y in s -> x * y in s :=
+protected theorem mul_mem {x y : R} : x ∈ s → y ∈ s → x * y ∈ s :=
   mul_mem
 
-/--
-theorem `add_mem` / 定理 `add_mem`
+/-- A non-unital subring is closed under addition. -/
+/-
+**NonUnitalSubring.add_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R) {
+x y : R}, x ∈ s → y ∈ s → x + y ∈ s
+参数：s : NonUnitalSubring R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `NonUnitalSubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : out
+Param (Type u)} {inst : NonUnitalNonAssocSemiring R} {inst_1 : SetLike S R}   [s
+elf : NonUnitalSubsemiringClass S R…
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-theorem add_mem
-  given: {x y : R}
-  statement: x in s -> y in s -> x + y in s
-  proof: add_mem
-
-中文:
-定理 add_mem
-  条件: {x y : R}
-  结论: x in s -> y in s -> x + y in s
-  证明: add_mem
+--- 原说明 ---
+A non-unital subring is closed under addition.
 -/
-protected theorem add_mem {x y : R} : x in s -> y in s -> x + y in s :=
+protected theorem add_mem {x y : R} : x ∈ s → y ∈ s → x + y ∈ s :=
   add_mem
 
-/--
-theorem `neg_mem` / 定理 `neg_mem`
+/-- A non-unital subring is closed under negation. -/
+/-
+**NonUnitalSubring.neg_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R) {
+x : R}, x ∈ s → -x ∈ s
+参数：s : NonUnitalSubring R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NegMemClass.neg_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Neg G} {inst_1 : SetLike S G} [self : NegMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ -x ∈ s
+· 使用定理 `NonUnitalSubringClass.toNegMemClass`：∀ {S : Type u_1} {R : Type u} {inst
+ : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUnitalSubringCla
+ss S R], NegMemClass S R
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-theorem neg_mem
-  given: {x : R}
-  statement: x in s -> -x in s
-  proof: neg_mem
-
-中文:
-定理 neg_mem
-  条件: {x : R}
-  结论: x in s -> -x in s
-  证明: neg_mem
+--- 原说明 ---
+A non-unital subring is closed under negation.
 -/
-protected theorem neg_mem {x : R} : x in s -> -x in s :=
+protected theorem neg_mem {x : R} : x ∈ s → -x ∈ s :=
   neg_mem
 
-/--
-theorem `sub_mem` / 定理 `sub_mem`
+/-- A non-unital subring is closed under subtraction -/
+/-
+**NonUnitalSubring.sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R) {
+x y : R}, x ∈ s → y ∈ s → x - y ∈ s
+参数：s : NonUnitalSubring R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : SubNegMonoid M] [inst_1
+ : SetLike S M] [hSM : AddSubgroupClass S M] {H : S}   {x y : M}, x ∈ H → y ∈…
+· 使用定理 `NonUnitalSubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [i
+nst : SetLike S R] [inst_1 : NonUnitalNonAssocRing R] [h : NonUnitalSubringClass
+ S R],   AddSubgroupClass S …
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-theorem sub_mem
-  given: {x y : R} (hx : x in s) (hy : y in s)
-  statement: x - y in s
-  proof: sub_mem hx hy
-
-中文:
-定理 sub_mem
-  条件: {x y : R} (hx : x in s) (hy : y in s)
-  结论: x - y in s
-  证明: sub_mem hx hy
+--- 原说明 ---
+A non-unital subring is closed under subtraction
 -/
-protected theorem sub_mem {x y : R} (hx : x in s) (hy : y in s) : x - y in s :=
+protected theorem sub_mem {x y : R} (hx : x ∈ s) (hy : y ∈ s) : x - y ∈ s :=
   sub_mem hx hy
 
-/--
-Instance `toNonUnitalRing` / 实例 `toNonUnitalRing`
+/-- A non-unital subring of a non-unital ring inherits a non-unital ring structure -/
+/-
+**NonUnitalSubring.toNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubring`。
+形式化陈述：toNonUnitalRing {R : Type*} [NonUnitalRing R] (s : NonUnitalSubring R) : N
+onUnitalRing s
+参数：s : NonUnitalSubring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toNonUnitalRing
-  signature: {R : Type*} [NonUnitalRing R] (s : NonUnitalSubring R)
-  body: NonUnitalSubringClass.toNonUnitalRing s
-
-中文:
-实例 toNonUnitalRing
-  签名: {R : 类型} [非幺环 R] (s : NonUnital子环 R)
-  定义体: NonUnitalSubringClass.toNonUnitalRing s
-
-Depends on / 依赖: NonUnitalSubringClass, NonUnitalSubringClass.toNonUnitalRing, toNonUnitalRing
+--- 原说明 ---
+A non-unital subring of a non-unital ring inherits a non-unital ring structure
 -/
 instance toNonUnitalRing {R : Type*} [NonUnitalRing R] (s : NonUnitalSubring R) :
     NonUnitalRing s :=
   NonUnitalSubringClass.toNonUnitalRing s
-
-/--
-theorem `zsmul_mem` / 定理 `zsmul_mem`
-
-English:
-theorem zsmul_mem
-  given: {x : R} (hx : x in s) (n : Int)
-  statement: n • x in s
-  proof: zsmul_mem hx n
-
-@[simp, norm_cast]
-
-中文:
-定理 zsmul_mem
-  条件: {x : R} (hx : x in s) (n : 整数)
-  结论: n • x in s
-  证明: zsmul_mem hx n
-
-@[simp, norm_cast]
+/-
+**NonUnitalSubring.zsmul_mem** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：∀ {R : Type u} [inst : NonUnitalNonAssocRing R] (s : NonUnitalSubring R) {
+x : R}, x ∈ s → ∀ (n : ℤ), n • x ∈ s
+参数：s : NonUnitalSubring R；n : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zsmul_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : SubNegMonoid M] [inst
+_1 : SetLike S M] [hSM : AddSubgroupClass S M] {K : S}   {x : M}, x ∈ K → ∀ (n …
+· 使用定理 `NonUnitalSubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [i
+nst : SetLike S R] [inst_1 : NonUnitalNonAssocRing R] [h : NonUnitalSubringClass
+ S R],   AddSubgroupClass S …
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 -/
-protected theorem zsmul_mem {x : R} (hx : x in s) (n : Int) : n • x in s :=
+protected theorem zsmul_mem {x : R} (hx : x ∈ s) (n : ℤ) : n • x ∈ s :=
   zsmul_mem hx n
 
 @[simp, norm_cast]
-/--
-theorem `val_add` / 定理 `val_add`
-
-English:
-theorem val_add
-  given: (x y : s)
-  statement: (↑(x + y) : R) = ↑x + ↑y
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 val_add
-  条件: (x y : s)
-  结论: (↑(x + y) : R) = ↑x + ↑y
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NonUnitalSubring.val_add** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：val_add (x y : s) : (↑(x + y) : R) = ↑x + ↑y
+参数：x y : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 -/
 theorem val_add (x y : s) : (↑(x + y) : R) = ↑x + ↑y :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `val_neg` / 定理 `val_neg`
-
-English:
-theorem val_neg
-  given: (x : s)
-  statement: (↑(-x) : R) = -↑x
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 val_neg
-  条件: (x : s)
-  结论: (↑(-x) : R) = -↑x
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NonUnitalSubring.val_neg** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：val_neg (x : s) : (↑(-x) : R) = -↑x
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubringClass.toNegMemClass`：∀ {S : Type u_1} {R : Type u} {inst
+ : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUnitalSubringCla
+ss S R], NegMemClass S R
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 -/
 theorem val_neg (x : s) : (↑(-x) : R) = -↑x :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `val_mul` / 定理 `val_mul`
-
-English:
-theorem val_mul
-  given: (x y : s)
-  statement: (↑(x * y) : R) = ↑x * ↑y
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 val_mul
-  条件: (x y : s)
-  结论: (↑(x * y) : R) = ↑x * ↑y
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NonUnitalSubring.val_mul** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：val_mul (x y : s) : (↑(x * y) : R) = ↑x * ↑y
+参数：x y : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 -/
 theorem val_mul (x y : s) : (↑(x * y) : R) = ↑x * ↑y :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `val_zero` / 定理 `val_zero`
-
-English:
-theorem val_zero
-  statement: ((0 : s) : R) = 0
-  proof: rfl
-
-中文:
-定理 val_zero
-  结论: ((0 : s) : R) = 0
-  证明: rfl
+/-
+**NonUnitalSubring.val_zero** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：val_zero : ((0 : s) : R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `NonUnitalSubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : out
+Param (Type u)} {inst : NonUnitalNonAssocSemiring R} {inst_1 : SetLike S R}   [s
+elf : NonUnitalSubsemiringClass S R…
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 -/
 theorem val_zero : ((0 : s) : R) = 0 :=
   rfl
-
-/--
-theorem `coe_eq_zero_iff` / 定理 `coe_eq_zero_iff`
-
-English:
-theorem coe_eq_zero_iff
-  given: {x : s}
-  statement: (x : R) = 0 ↔ x = 0
-  proof: by
-  simp
-
-中文:
-定理 coe_eq_zero_iff
-  条件: {x : s}
-  结论: (x : R) = 0 ↔ x = 0
-  证明: by
-  simp
+/-
+**NonUnitalSubring.coe_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring`。
+形式化陈述：coe_eq_zero_iff {x : s} : (x : R) = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `NonUnitalSubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : out
+Param (Type u)} {inst : NonUnitalNonAssocSemiring R} {inst_1 : SetLike S R}   [s
+elf : NonUnitalSubsemiringClass S R…
+· 使用定理 `NonUnitalSubringClass.toNonUnitalSubsemiringClass`：∀ {S : Type u_1} {R :
+ Type u} {inst : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUn
+italSubringClass S R], NonUnitalSubsemi…
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_eq_zero_iff {x : s} : (x : R) = 0 ↔ x = 0 := by
   simp
 
-/--
-Instance `toNonUnitalCommRing` / 实例 `toNonUnitalCommRing`
+/-- A non-unital subring of a `NonUnitalCommRing` is a `NonUnitalCommRing`. -/
+/-
+**NonUnitalSubring.toNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalSubri
+ng`。
+形式化陈述：toNonUnitalCommRing {R} [NonUnitalCommRing R] (s : NonUnitalSubring R) : N
+onUnitalCommRing s
+参数：s : NonUnitalSubring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toNonUnitalCommRing
-  signature: {R} [NonUnitalCommRing R] (s : NonUnitalSubring R)
-  body: NonUnitalSubringClass.toNonUnitalCommRing s
-
-中文:
-实例 toNonUnitalCommRing
-  签名: {R} [非幺交换环 R] (s : NonUnital子环 R)
-  定义体: NonUnitalSubringClass.toNonUnitalCommRing s
-
-Depends on / 依赖: NonUnitalSubringClass, NonUnitalSubringClass.toNonUnitalCommRing, toNonUnitalCommRing
+--- 原说明 ---
+A non-unital subring of a `NonUnitalCommRing` is a `NonUnitalCommRing`.
 -/
 instance toNonUnitalCommRing {R} [NonUnitalCommRing R] (s : NonUnitalSubring R) :
     NonUnitalCommRing s :=
   NonUnitalSubringClass.toNonUnitalCommRing s
 
+/-! ## Partial order -/
 
 
-/--
-theorem `mem_toSubsemigroup` / 定理 `mem_toSubsemigroup`
+/-
+**NonUnitalSubring.mem_toSubsemigroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubrin
+g`。
+形式化陈述：mem_toSubsemigroup {s : NonUnitalSubring R} {x : R} : x in s.toSubsemigrou
+p ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_toSubsemigroup
-  given: {s : NonUnitalSubring R} {x : R}
-  statement: x in s.toSubsemigroup ↔ x in s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_toSubsemigroup
-  条件: {s : NonUnital子环 R} {x : R}
-  结论: x in s.toSubsemigroup ↔ x in s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+## Partial order
 -/
-theorem mem_toSubsemigroup {s : NonUnitalSubring R} {x : R} : x in s.toSubsemigroup ↔ x in s :=
+theorem mem_toSubsemigroup {s : NonUnitalSubring R} {x : R} : x ∈ s.toSubsemigroup ↔ x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_toSubsemigroup` / 定理 `coe_toSubsemigroup`
-
-English:
-theorem coe_toSubsemigroup
-  given: (s : NonUnitalSubring R)
-  statement: (s.toSubsemigroup : Set R) = s
-  proof: rfl
-
-中文:
-定理 coe_toSubsemigroup
-  条件: (s : NonUnital子环 R)
-  结论: (s.toSubsemigroup : 集合 R) = s
-  证明: rfl
+/-
+**NonUnitalSubring.coe_toSubsemigroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubrin
+g`。
+形式化陈述：coe_toSubsemigroup (s : NonUnitalSubring R) : (s.toSubsemigroup : Set R) =
+ s
+参数：s : NonUnitalSubring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toSubsemigroup (s : NonUnitalSubring R) : (s.toSubsemigroup : Set R) = s :=
   rfl
-
-/--
-theorem `mem_toAddSubgroup` / 定理 `mem_toAddSubgroup`
-
-English:
-theorem mem_toAddSubgroup
-  given: {s : NonUnitalSubring R} {x : R}
-  statement: x in s.toAddSubgroup ↔ x in s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_toAddSubgroup
-  条件: {s : NonUnital子环 R} {x : R}
-  结论: x in s.toAddSubgroup ↔ x in s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mem_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring
+`。
+形式化陈述：mem_toAddSubgroup {s : NonUnitalSubring R} {x : R} : x in s.toAddSubgroup 
+↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toAddSubgroup {s : NonUnitalSubring R} {x : R} : x in s.toAddSubgroup ↔ x in s :=
+theorem mem_toAddSubgroup {s : NonUnitalSubring R} {x : R} : x ∈ s.toAddSubgroup ↔ x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_toAddSubgroup` / 定理 `coe_toAddSubgroup`
-
-English:
-theorem coe_toAddSubgroup
-  given: (s : NonUnitalSubring R)
-  statement: (s.toAddSubgroup : Set R) = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toAddSubgroup
-  条件: (s : NonUnital子环 R)
-  结论: (s.toAddSubgroup : 集合 R) = s
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalSubring.coe_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalSubring
+`。
+形式化陈述：coe_toAddSubgroup (s : NonUnitalSubring R) : (s.toAddSubgroup : Set R) = s
+参数：s : NonUnitalSubring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toAddSubgroup (s : NonUnitalSubring R) : (s.toAddSubgroup : Set R) = s :=
   rfl
 
 @[simp]
-/--
-theorem `mem_toNonUnitalSubsemiring` / 定理 `mem_toNonUnitalSubsemiring`
-
-English:
-theorem mem_toNonUnitalSubsemiring
-  given: {s : NonUnitalSubring R} {x : R}
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_toNonUnitalSubsemiring
-  条件: {s : NonUnital子环 R} {x : R}
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalSubring.mem_toNonUnitalSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `NonUnit
+alSubring`。
+形式化陈述：mem_toNonUnitalSubsemiring {s : NonUnitalSubring R} {x : R} : x in s.toNon
+UnitalSubsemiring ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_toNonUnitalSubsemiring {s : NonUnitalSubring R} {x : R} :
-    x in s.toNonUnitalSubsemiring ↔ x in s :=
+    x ∈ s.toNonUnitalSubsemiring ↔ x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_toNonUnitalSubsemiring` / 定理 `coe_toNonUnitalSubsemiring`
-
-English:
-theorem coe_toNonUnitalSubsemiring
-  given: (s : NonUnitalSubring R)
-  proof: rfl
-
-中文:
-定理 coe_toNonUnitalSubsemiring
-  条件: (s : NonUnital子环 R)
-  证明: rfl
+/-
+**NonUnitalSubring.coe_toNonUnitalSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `NonUnit
+alSubring`。
+形式化陈述：coe_toNonUnitalSubsemiring (s : NonUnitalSubring R) : (s.toNonUnitalSubsem
+iring : Set R) = s
+参数：s : NonUnitalSubring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toNonUnitalSubsemiring (s : NonUnitalSubring R) :
     (s.toNonUnitalSubsemiring : Set R) = s :=
@@ -1190,24 +989,23 @@ variable {R : Type u} [NonUnitalNonAssocRing R]
 
 open NonUnitalRingHom
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- The ring homomorphism associated to an inclusion of `NonUnitalSubring`s. -/
+/-
+**NonUnitalSubring.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalSubring`。
+形式化陈述：inclusion {S T : NonUnitalSubring R} (h : S <= T) : S ->ₙ+* T
+参数：h : S <= T。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSubring.instNonUnitalSubringClass`：∀ {R : Type u} [inst : NonUn
+italNonAssocRing R], NonUnitalSubringClass (NonUnitalSubring R) R
 
-English:
-definition inclusion
-  signature: {S T : NonUnitalSubring R} (h : S <= T)
-  body: NonUnitalRingHom.codRestrict (NonUnitalSubringClass.subtype S) _ fun x => h x.2
-
-中文:
-定义 inclusion
-  签名: {S T : NonUnital子环 R} (h : S <= T)
-  定义体: NonUnitalRingHom.codRestrict (NonUnitalSubringClass.subtype S) _ fun x => h x.2
-
-Depends on / 依赖: NonUnitalRingHom, NonUnitalRingHom.codRestrict, NonUnitalSubringClass, NonUnitalSubringClass.subtype, codRestrict, subtype
+--- 原说明 ---
+The ring homomorphism associated to an inclusion of `NonUnitalSubring`s.
 -/
-def inclusion {S T : NonUnitalSubring R} (h : S <= T) : S ->ₙ+* T :=
+def inclusion {S T : NonUnitalSubring R} (h : S ≤ T) : S →ₙ+* T :=
   NonUnitalRingHom.codRestrict (NonUnitalSubringClass.subtype S) _ fun x => h x.2
 
 end NonUnitalSubring
 
 end Hom
+

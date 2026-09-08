@@ -39,27 +39,25 @@ namespace CategoryTheory
 
 namespace SimplicialObject
 variable {C : Type u} [Category.{v} C]
-variable (X : SimplicialObject C) (n : Nat)
+variable (X : SimplicialObject C) (n : ℕ)
 
 namespace Truncated
 
 /-- The identity natural transformation exhibits a simplicial set as a right extension of its
 restriction along `(Truncated.inclusion n).op`. -/
 @[simps!]
-/--
-Definition of `rightExtensionInclusion` / `rightExtensionInclusion` 的定义
+/-
+**CategoryTheory.SimplicialObject.Truncated.rightExtensionInclusion** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.SimplicialObject.Truncated`。
+形式化陈述：rightExtensionInclusion : RightExtension (Truncated.inclusion n).op ((Trun
+cated.inclusion n).op ⋙ X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightExtensionInclusion
-  signature: :
-  body: RightExtension.mk _ (𝟙 _)
-
-中文:
-定义 rightExtensionInclusion
-  签名: :
-  定义体: RightExtension.mk _ (𝟙 _)
-
-Depends on / 依赖: RightExtension, RightExtension.mk
+--- 原说明 ---
+The identity natural transformation exhibits a simplicial set as a right extensi
+on of its
+restriction along `(Truncated.inclusion n).op`.
 -/
 def rightExtensionInclusion :
     RightExtension (Truncated.inclusion n).op
@@ -72,20 +70,17 @@ open Truncated
 /-- A simplicial object `X` is `n`-coskeletal when it is the right Kan extension of its restriction
 along `(Truncated.inclusion n).op` via the identity natural transformation. -/
 @[mk_iff]
-/--
-Definition of `IsCoskeletal` / `IsCoskeletal` 的定义
+/-
+**CategoryTheory.SimplicialObject.IsCoskeletal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.SimplicialObject`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+SimplicialObject C → ℕ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCoskeletal
-  parameters: : Prop where
-  axioms and operations (1):
-    - isRightKanExtension : IsRightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
-
-中文:
-类 是余skeletal
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isRightKanExtension : 是RightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
+--- 原说明 ---
+A simplicial object `X` is `n`-coskeletal when it is the right Kan extension of 
+its restriction
+along `(Truncated.inclusion n).op` via the identity natural transformation.
 -/
 class IsCoskeletal : Prop where
   isRightKanExtension : IsRightKanExtension X (𝟙 ((Truncated.inclusion n).op ⋙ X))
@@ -94,74 +89,64 @@ attribute [instance] IsCoskeletal.isRightKanExtension
 
 section
 
-variable [forall (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
+variable [∀ (F : (SimplexCategory.Truncated n)ᵒᵖ ⥤ C),
     (SimplexCategory.Truncated.inclusion n).op.HasRightKanExtension F]
 
-/--
-Definition of `IsCoskeletal.isUniversalOfIsRightKanExtension` / `IsCoskeletal.isUniversalOfIsRightKanExtension` 的定义
+/-- If `X` is `n`-coskeletal, then `Truncated.rightExtensionInclusion X n` is a terminal object in
+the category `RightExtension (Truncated.inclusion n).op (Truncated.inclusion.op ⋙ X)`. -/
+/-
+**CategoryTheory.SimplicialObject.IsCoskeletal.isUniversalOfIsRightKanExtension*
+* 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.SimplicialObject.IsCoskeletal`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     (X : Cate
+goryTheory.SimplicialObject C) →       (n : ℕ) →         [X.IsCoskeletal n] →   
+        CategoryTheory.CostructuredArrow.IsUniversal             (CategoryTheory
+.SimplicialObject.Truncated.rightExtensionInclusion X n)
+参数：X : CategoryTheory.SimplicialObject C；n : ℕ；CategoryTheory.SimplicialObject.T
+runcated.rightExtensionInclusion X n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SimplicialObject.IsCoskeletal.isRightKanExtension`：∀ {C :
+ Type u} {inst : CategoryTheory.Category.{v, u} C} {X : CategoryTheory.Simplicia
+lObject C} {n : ℕ}   [self : X.IsCoskeletal n],   Cate…
 
-English:
-definition IsCoskeletal.isUniversalOfIsRightKanExtension
-  signature: [X.IsCoskeletal n]
-  body: by
-  apply Functor.isUniversalOfIsRightKanExtension
-
-中文:
-定义 是余skeletal.isUniversalOfIsRightKanExtension
-  签名: [X.是余skeletal n]
-  定义体: by
-  apply Functor.isUniversalOfIsRightKanExtension
-
-Depends on / 依赖: Functor, Functor.isUniversalOfIsRightKanExtension, isUniversalOfIsRightKanExtension
+--- 原说明 ---
+If `X` is `n`-coskeletal, then `Truncated.rightExtensionInclusion X n` is a term
+inal object in
+the category `RightExtension (Truncated.inclusion n).op (Truncated.inclusion.op 
+⋙ X)`.
 -/
 noncomputable def IsCoskeletal.isUniversalOfIsRightKanExtension [X.IsCoskeletal n] :
     (rightExtensionInclusion X n).IsUniversal := by
   apply Functor.isUniversalOfIsRightKanExtension
-
-/--
-theorem `isCoskeletal_iff_isIso` / 定理 `isCoskeletal_iff_isIso`
-
-English:
-theorem isCoskeletal_iff_isIso
-  statement: X.IsCoskeletal n ↔ IsIso ((coskAdj n).unit.app X)
-  proof: by
-  rw [isCoskeletal_iff]
-  exact isRightKanExtension_iff_isIso ((coskAdj n).unit.app X)
-    ((coskAdj n).counit.app _) (𝟙 _) ((coskAdj n).left_triangle_components X)
-
-中文:
-定理 isCoskeletal_iff_isIso
-  结论: X.是余skeletal n ↔ 是同构 ((coskAdj n).unit.app X)
-  证明: by
-  rw [isCoskeletal_iff]
-  exact isRightKanExtension_iff_isIso ((coskAdj n).unit.app X)
-    ((coskAdj n).counit.app _) (𝟙 _) ((coskAdj n).left_triangle_components X)
-
-Depends on / 依赖: coskAdj, counit, counit.app, isCoskeletal_iff, isRightKanExtension_iff_isIso, left_triangle_components, unit.app
+/-
+**CategoryTheory.SimplicialObject.isCoskeletal_iff_isIso** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.SimplicialObject`。
+形式化陈述：isCoskeletal_iff_isIso : X.IsCoskeletal n ↔ IsIso ((coskAdj n).unit.app X)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SimplicialObject.isCoskeletal_iff`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] (X : CategoryTheory.SimplicialObject C) (n : 
+ℕ),   X.IsCoskeletal n ↔     CategoryT…
+· 使用引理 `CategoryTheory.Functor.isRightKanExtension_iff_isIso`：isRightKanExtensio
+n_iff_isIso {F' : D ⥤ H} {F'' : D ⥤ H} (φ : F'' ⟶ F') {L : C ⥤ D} {F : C ⥤ H} (α
+ : L ⋙ F' ⟶ F) (α' : L ⋙ F'' ⟶ F) (comm : …
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.SimplicialObject.instIsRightKanExtensionOppositeTruncated
+SimplexCategoryObjCoskAppTruncatedCounitCoskAdjTruncation`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] (X : CategoryTheory.SimplicialObject C) (n :
+ ℕ)   [inst_1 :     ∀ (F : CategoryTheo…
 -/
 theorem isCoskeletal_iff_isIso : X.IsCoskeletal n ↔ IsIso ((coskAdj n).unit.app X) := by
   rw [isCoskeletal_iff]
   exact isRightKanExtension_iff_isIso ((coskAdj n).unit.app X)
     ((coskAdj n).counit.app _) (𝟙 _) ((coskAdj n).left_triangle_components X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [X.IsCoskeletal
-  signature: n] : IsIso ((coskAdj n).unit.app X)
-  body: by
-  rw [← isCoskeletal_iff_isIso]
-  infer_instance
-
-中文:
-实例 [X.是余skeletal
-  签名: n] : 是同构 ((coskAdj n).unit.app X)
-  定义体: by
-  rw [← isCoskeletal_iff_isIso]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isCoskeletal_iff_isIso
+/-
+**CategoryTheory.SimplicialObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sim
+plicialObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [X.IsCoskeletal n] : IsIso ((coskAdj n).unit.app X) := by
   rw [← isCoskeletal_iff_isIso]
@@ -170,20 +155,20 @@ instance [X.IsCoskeletal n] : IsIso ((coskAdj n).unit.app X) := by
 /-- The canonical isomorphism `X ≅ (cosk n).obj X` defined when `X` is coskeletal and the
 `n`-coskeleton functor exists. -/
 @[simps! hom]
-/--
-Definition of `isoCoskOfIsCoskeletal` / `isoCoskOfIsCoskeletal` 的定义
+/-
+**CategoryTheory.SimplicialObject.isoCoskOfIsCoskeletal** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.SimplicialObject`。
+形式化陈述：isoCoskOfIsCoskeletal [X.IsCoskeletal n] : X ≅ (cosk n).obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SimplicialObject.instIsIsoAppUnitTruncatedCoskAdj`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] (X : CategoryTheory.Simplicia
+lObject C) (n : ℕ)   [inst_1 :     ∀ (F : CategoryTheo…
 
-English:
-definition isoCoskOfIsCoskeletal
-  signature: [X.IsCoskeletal n]
-  body: asIso ((coskAdj n).unit.app X)
-
-中文:
-定义 isoCoskOfIsCoskeletal
-  签名: [X.是余skeletal n]
-  定义体: asIso ((coskAdj n).unit.app X)
-
-Depends on / 依赖: coskAdj, unit.app
+--- 原说明 ---
+The canonical isomorphism `X ≅ (cosk n).obj X` defined when `X` is coskeletal an
+d the
+`n`-coskeleton functor exists.
 -/
 noncomputable def isoCoskOfIsCoskeletal [X.IsCoskeletal n] : X ≅ (cosk n).obj X :=
   asIso ((coskAdj n).unit.app X)
@@ -193,3 +178,4 @@ end
 end SimplicialObject
 
 end CategoryTheory
+

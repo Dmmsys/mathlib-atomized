@@ -15,7 +15,7 @@ import Mathlib.Analysis.MeanInequalitiesPow
 
 Given a (pseudo) (extended) metric space `X` and a number `0 < α ≤ 1`,
 one can consider the metric given by `d x y = (dist x y) ^ α`.
-The metric space determined by this new metric is said to be the `α`-snowflaking (or `α`-snowflake)
+The metric space determined by this new metric is said to be the `α`-snowflaking  (or `α`-snowflake)
 of `X`. In this file we define `Metric.Snowflaking X α hα₀ hα₁` to be a one-field structure wrapper
 around `X` with metric given by this formula.
 
@@ -61,47 +61,35 @@ namespace Metric
 
 This is defined as a one-field structure. -/
 @[ext]
-/--
-Definition of `Snowflaking` / `Snowflaking` 的定义
+/-
+**Metric.Snowflaking** 是 Mathlib 中的一个归纳类型，位于命名空间 `Metric`。
+形式化陈述：Type u_1 → (α : ℝ) → 0 < α → α ≤ 1 → Type u_1
+参数：α : ℝ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Snowflaking
-  parameters: (X : Type*) (α : Real) (hα₀ : 0 < α) (hα₁ : α <= 1)
-  axioms and operations (1):
-    - val : X
+--- 原说明 ---
+A copy of a type with metric given by `dist x y = (dist x.val y.val) ^ α`.
 
-中文:
-结构 Snowflaking
-  参数: (X : 类型) (α : 实数) (hα₀ : 0 < α) (hα₁ : α <= 1)
-  公理与运算 (1 个):
-    - val : X
+This is defined as a one-field structure.
 -/
-structure Snowflaking (X : Type*) (α : Real) (hα₀ : 0 < α) (hα₁ : α <= 1) where
+structure Snowflaking (X : Type*) (α : ℝ) (hα₀ : 0 < α) (hα₁ : α ≤ 1) where
   /-- The value wrapped in `x : Snowflaking X α hα₀ hα₁`. -/
   val : X
 
 namespace Snowflaking
 
-variable {X : Type*} {α : Real} {hα₀ : 0 < α} {hα₁ : α <= 1}
+variable {X : Type*} {α : ℝ} {hα₀ : 0 < α} {hα₁ : α ≤ 1}
 
-/--
-Definition of `ofSnowflaking` / `ofSnowflaking` 的定义
+/-- The natural equivalence between `Snowflaking X α hr₀ hr₁` and `X`. -/
+/-
+**Metric.Snowflaking.ofSnowflaking** 是 Mathlib 中的一个定义，位于命名空间 `Metric.Snowflaking
+`。
+形式化陈述：ofSnowflaking : Snowflaking X α hα₀ hα₁ ≃ X where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSnowflaking
-  signature: : Snowflaking X α hα₀ hα₁ ≃ X where
-  body: val
-  invFun := mk
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 ofSnowflaking
-  签名: : Snowflaking X α hα₀ hα₁ ≃ X where
-  定义体: val
-  invFun := mk
-  left_inv _ := rfl
-  right_inv _ := rfl
+--- 原说明 ---
+The natural equivalence between `Snowflaking X α hr₀ hr₁` and `X`.
 -/
 def ofSnowflaking : Snowflaking X α hα₀ hα₁ ≃ X where
   toFun := val
@@ -109,40 +97,28 @@ def ofSnowflaking : Snowflaking X α hα₀ hα₁ ≃ X where
   left_inv _ := rfl
   right_inv _ := rfl
 
-/--
-Definition of `toSnowflaking` / `toSnowflaking` 的定义
+/-- The natural equivalence between `X` and `Snowflaking X α hr₀ hr₁`. -/
+/-
+**Metric.Snowflaking.toSnowflaking** 是 Mathlib 中的一个定义，位于命名空间 `Metric.Snowflaking
+`。
+形式化陈述：toSnowflaking : X ≃ Snowflaking X α hα₀ hα₁
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition toSnowflaking
-  signature: : X ≃ Snowflaking X α hα₀ hα₁
-  body: ofSnowflaking.symm
-
-@[simp]
-
-中文:
-定义 toSnowflaking
-  签名: : X ≃ Snowflaking X α hα₀ hα₁
-  定义体: ofSnowflaking.symm
-
-@[simp]
-
-Depends on / 依赖: ofSnowflaking, ofSnowflaking.symm
+--- 原说明 ---
+The natural equivalence between `X` and `Snowflaking X α hr₀ hr₁`.
 -/
 def toSnowflaking : X ≃ Snowflaking X α hα₀ hα₁ := ofSnowflaking.symm
 
 @[simp]
-/--
-theorem `toSnowflaking.sizeOf_spec` / 定理 `toSnowflaking.sizeOf_spec`
-
-English:
-theorem toSnowflaking.sizeOf_spec
-  given: [SizeOf X] (x : X)
-  proof: rfl
-
-中文:
-定理 toSnowflaking.sizeOf_spec
-  条件: [SizeOf X] (x : X)
-  证明: rfl
+/-
+**Metric.Snowflaking.toSnowflaking.sizeOf_spec** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+.Snowflaking.toSnowflaking`。
+形式化陈述：∀ {X : Type u_1} {α : ℝ} {hα₀ : 0 < α} {hα₁ : α ≤ 1} [inst : SizeOf X] (x 
+: X),   sizeOf (Metric.Snowflaking.toSnowflaking x) = 1 + sizeOf x
+参数：x : X；Metric.Snowflaking.toSnowflaking x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSnowflaking.sizeOf_spec [SizeOf X] (x : X) :
     sizeOf (toSnowflaking x : Snowflaking X α hα₀ hα₁) = 1 + sizeOf x :=
@@ -152,271 +128,184 @@ attribute [nolint simpNF] mk.injEq
 
 /-- This definition makes `cases x` and `induction x` use `toSnowflaking` instead of `mk`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `casesOn_toSnowflaking` / `casesOn_toSnowflaking` 的定义
+/-
+**Metric.Snowflaking.casesOn_toSnowflaking** 是 Mathlib 中的一个定义，位于命名空间 `Metric.Sno
+wflaking`。
+形式化陈述：casesOn_toSnowflaking {motive : Snowflaking X α hα₀ hα₁ -> Sort*} (toSnowf
+laking : forall x, motive (Snowflaking.toSnowflaking x)) (x : Snowflaking X α hα
+₀ hα₁) : motive x
+参数：toSnowflaking : forall x, motive (Snowflaking.toSnowflaking x)；x : Snowflakin
+g X α hα₀ hα₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition casesOn_toSnowflaking
-  signature: {motive : Snowflaking X α hα₀ hα₁ -> Sort*}
-  body: toSnowflaking x.val
-
-@[simp]
-
-中文:
-定义 casesOn_toSnowflaking
-  签名: {motive : Snowflaking X α hα₀ hα₁ -> 类型层*}
-  定义体: toSnowflaking x.val
-
-@[simp]
-
-Depends on / 依赖: toSnowflaking, x.val
+--- 原说明 ---
+This definition makes `cases x` and `induction x` use `toSnowflaking` instead of
+ `mk`.
 -/
-def casesOn_toSnowflaking {motive : Snowflaking X α hα₀ hα₁ -> Sort*}
-    (toSnowflaking : forall x, motive (Snowflaking.toSnowflaking x)) (x : Snowflaking X α hα₀ hα₁) :
+def casesOn_toSnowflaking {motive : Snowflaking X α hα₀ hα₁ → Sort*}
+    (toSnowflaking : ∀ x, motive (Snowflaking.toSnowflaking x)) (x : Snowflaking X α hα₀ hα₁) :
     motive x :=
   toSnowflaking x.val
 
 @[simp]
-/--
-theorem `mk_eq_toSnowflaking` / 定理 `mk_eq_toSnowflaking`
-
-English:
-theorem mk_eq_toSnowflaking
-  statement: (mk : X -> Snowflaking X α hα₀ hα₁) = toSnowflaking
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_eq_toSnowflaking
-  结论: (mk : X -> Snowflaking X α hα₀ hα₁) = toSnowflaking
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.mk_eq_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.Snowf
+laking`。
+形式化陈述：mk_eq_toSnowflaking : (mk : X -> Snowflaking X α hα₀ hα₁) = toSnowflaking
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_eq_toSnowflaking : (mk : X -> Snowflaking X α hα₀ hα₁) = toSnowflaking := rfl
+theorem mk_eq_toSnowflaking : (mk : X → Snowflaking X α hα₀ hα₁) = toSnowflaking := rfl
 
 @[simp]
-/--
-theorem `val_eq_ofSnowflaking` / 定理 `val_eq_ofSnowflaking`
-
-English:
-theorem val_eq_ofSnowflaking
-  statement: (val : Snowflaking X α hα₀ hα₁ -> X) = ofSnowflaking
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 val_eq_ofSnowflaking
-  结论: (val : Snowflaking X α hα₀ hα₁ -> X) = ofSnowflaking
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.val_eq_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.Snow
+flaking`。
+形式化陈述：val_eq_ofSnowflaking : (val : Snowflaking X α hα₀ hα₁ -> X) = ofSnowflakin
+g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem val_eq_ofSnowflaking : (val : Snowflaking X α hα₀ hα₁ -> X) = ofSnowflaking := rfl
+theorem val_eq_ofSnowflaking : (val : Snowflaking X α hα₀ hα₁ → X) = ofSnowflaking := rfl
 
 @[simp]
-/--
-theorem `symm_toSnowflaking` / 定理 `symm_toSnowflaking`
-
-English:
-theorem symm_toSnowflaking
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toSnowflaking
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.symm_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.Snowfl
+aking`。
+形式化陈述：symm_toSnowflaking : (toSnowflaking : X ≃ Snowflaking X α hα₀ hα₁).symm = 
+ofSnowflaking
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_toSnowflaking :
     (toSnowflaking : X ≃ Snowflaking X α hα₀ hα₁).symm = ofSnowflaking :=
   rfl
 
 @[simp]
-/--
-theorem `symm_ofSnowflaking` / 定理 `symm_ofSnowflaking`
-
-English:
-theorem symm_ofSnowflaking
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_ofSnowflaking
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.symm_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.Snowfl
+aking`。
+形式化陈述：symm_ofSnowflaking : (ofSnowflaking : Snowflaking X α hα₀ hα₁ ≃ X).symm = 
+toSnowflaking
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_ofSnowflaking :
     (ofSnowflaking : Snowflaking X α hα₀ hα₁ ≃ X).symm = toSnowflaking :=
   rfl
 
 @[simp]
-/--
-theorem `toSnowflaking_ofSnowflaking` / 定理 `toSnowflaking_ofSnowflaking`
-
-English:
-theorem toSnowflaking_ofSnowflaking
-  given: (x : Snowflaking X α hα₀ hα₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toSnowflaking_ofSnowflaking
-  条件: (x : Snowflaking X α hα₀ hα₁)
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.toSnowflaking_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metr
+ic.Snowflaking`。
+形式化陈述：toSnowflaking_ofSnowflaking (x : Snowflaking X α hα₀ hα₁) : toSnowflaking 
+x.ofSnowflaking = x
+参数：x : Snowflaking X α hα₀ hα₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSnowflaking_ofSnowflaking (x : Snowflaking X α hα₀ hα₁) :
     toSnowflaking x.ofSnowflaking = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofSnowflaking_toSnowflaking` / 定理 `ofSnowflaking_toSnowflaking`
-
-English:
-theorem ofSnowflaking_toSnowflaking
-  given: (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofSnowflaking_toSnowflaking
-  条件: (x : X)
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.ofSnowflaking_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metr
+ic.Snowflaking`。
+形式化陈述：ofSnowflaking_toSnowflaking (x : X) : (toSnowflaking x : Snowflaking X α h
+α₀ hα₁).ofSnowflaking = x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofSnowflaking_toSnowflaking (x : X) :
     (toSnowflaking x : Snowflaking X α hα₀ hα₁).ofSnowflaking = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofSnowflaking_comp_toSnowflaking` / 定理 `ofSnowflaking_comp_toSnowflaking`
-
-English:
-theorem ofSnowflaking_comp_toSnowflaking
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofSnowflaking_comp_toSnowflaking
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.ofSnowflaking_comp_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric.Snowflaking`。
+形式化陈述：ofSnowflaking_comp_toSnowflaking : (ofSnowflaking : Snowflaking X α hα₀ hα
+₁ -> X) ∘ toSnowflaking = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofSnowflaking_comp_toSnowflaking :
-    (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X) ∘ toSnowflaking = id :=
+    (ofSnowflaking : Snowflaking X α hα₀ hα₁ → X) ∘ toSnowflaking = id :=
   rfl
 
 @[simp]
-/--
-theorem `toSnowflaking_comp_ofSnowflaking` / 定理 `toSnowflaking_comp_ofSnowflaking`
-
-English:
-theorem toSnowflaking_comp_ofSnowflaking
-  proof: rfl
-
-中文:
-定理 toSnowflaking_comp_ofSnowflaking
-  证明: rfl
+/-
+**Metric.Snowflaking.toSnowflaking_comp_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric.Snowflaking`。
+形式化陈述：toSnowflaking_comp_ofSnowflaking : (toSnowflaking : X -> Snowflaking X α h
+α₀ hα₁) ∘ ofSnowflaking = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSnowflaking_comp_ofSnowflaking :
-    (toSnowflaking : X -> Snowflaking X α hα₀ hα₁) ∘ ofSnowflaking = id :=
+    (toSnowflaking : X → Snowflaking X α hα₀ hα₁) ∘ ofSnowflaking = id :=
   rfl
-
-/--
-theorem `image_toSnowflaking_eq_preimage` / 定理 `image_toSnowflaking_eq_preimage`
-
-English:
-theorem image_toSnowflaking_eq_preimage
-  given: (s : Set X)
-  proof: toSnowflaking.image_eq_preimage_symm _
-
-中文:
-定理 image_toSnowflaking_eq_preimage
-  条件: (s : 集合 X)
-  证明: toSnowflaking.image_eq_preimage_symm _
-
-Depends on / 依赖: image_eq_preimage_symm, toSnowflaking, toSnowflaking.image_eq_preimage_symm
+/-
+**Metric.Snowflaking.image_toSnowflaking_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：image_toSnowflaking_eq_preimage (s : Set X) : (toSnowflaking '' s : Set (S
+nowflaking X α hα₀ hα₁)) = ofSnowflaking ⁻¹' s
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem image_toSnowflaking_eq_preimage (s : Set X) :
     (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) = ofSnowflaking ⁻¹' s :=
   toSnowflaking.image_eq_preimage_symm _
-
-/--
-theorem `image_ofSnowflaking_eq_preimage` / 定理 `image_ofSnowflaking_eq_preimage`
-
-English:
-theorem image_ofSnowflaking_eq_preimage
-  given: (s : Set (Snowflaking X α hα₀ hα₁))
-  proof: ofSnowflaking.image_eq_preimage_symm _
-
-@[simp]
-
-中文:
-定理 image_ofSnowflaking_eq_preimage
-  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
-  证明: ofSnowflaking.image_eq_preimage_symm _
-
-@[simp]
-
-Depends on / 依赖: image_eq_preimage_symm, ofSnowflaking, ofSnowflaking.image_eq_preimage_symm
+/-
+**Metric.Snowflaking.image_ofSnowflaking_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：image_ofSnowflaking_eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSn
+owflaking '' s = toSnowflaking ⁻¹' s
+参数：s : Set (Snowflaking X α hα₀ hα₁)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem image_ofSnowflaking_eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) :
     ofSnowflaking '' s = toSnowflaking ⁻¹' s :=
   ofSnowflaking.image_eq_preimage_symm _
 
 @[simp]
-/--
-theorem `image_toSnowflaking_image_ofSnowflaking` / 定理 `image_toSnowflaking_image_ofSnowflaking`
-
-English:
-theorem image_toSnowflaking_image_ofSnowflaking
-  given: (s : Set (Snowflaking X α hα₀ hα₁))
-  proof: ofSnowflaking.symm_image_image _
-
-@[simp]
-
-中文:
-定理 image_toSnowflaking_image_ofSnowflaking
-  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
-  证明: ofSnowflaking.symm_image_image _
-
-@[simp]
-
-Depends on / 依赖: ofSnowflaking, ofSnowflaking.symm_image_image, symm_image_image
+/-
+**Metric.Snowflaking.image_toSnowflaking_image_ofSnowflaking** 是 Mathlib 中的一个定理，
+位于命名空间 `Metric.Snowflaking`。
+形式化陈述：image_toSnowflaking_image_ofSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)
+) : toSnowflaking '' ofSnowflaking '' s = s
+参数：s : Set (Snowflaking X α hα₀ hα₁)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_image_image`：symm_image_image {α β} (e : α ≃ β) (s : Set α) :
+ e.symm '' e '' s = s
 -/
 theorem image_toSnowflaking_image_ofSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)) :
     toSnowflaking '' ofSnowflaking '' s = s :=
   ofSnowflaking.symm_image_image _
 
 @[simp]
-/--
-theorem `image_ofSnowflaking_image_toSnowflaking` / 定理 `image_ofSnowflaking_image_toSnowflaking`
-
-English:
-theorem image_ofSnowflaking_image_toSnowflaking
-  given: (s : Set X)
-  proof: ofSnowflaking.image_symm_image _
-
-中文:
-定理 image_ofSnowflaking_image_toSnowflaking
-  条件: (s : 集合 X)
-  证明: ofSnowflaking.image_symm_image _
-
-Depends on / 依赖: image_symm_image, ofSnowflaking, ofSnowflaking.image_symm_image
+/-
+**Metric.Snowflaking.image_ofSnowflaking_image_toSnowflaking** 是 Mathlib 中的一个定理，
+位于命名空间 `Metric.Snowflaking`。
+形式化陈述：image_ofSnowflaking_image_toSnowflaking (s : Set X) : ofSnowflaking '' (to
+Snowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) = s
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.image_symm_image`：image_symm_image {α β} (e : α ≃ β) (s : Set β) :
+ e '' e.symm '' s = s
 -/
 theorem image_ofSnowflaking_image_toSnowflaking (s : Set X) :
     ofSnowflaking '' (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) = s :=
@@ -432,143 +321,93 @@ section TopologicalSpace
 
 variable [TopologicalSpace X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The topological space structure on `Snowflaking X α _ _` is induced from the original space. -/
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: TopologicalSpace (Snowflaking X α hα₀ hα₁)
-  body: .induced Snowflaking.ofSnowflaking ‹_›
-
-@[fun_prop]
-
-中文:
-实例 :
-  签名: 拓扑空间 (Snowflaking X α hα₀ hα₁)
-  定义体: .induced Snowflaking.ofSnowflaking ‹_›
-
-@[fun_prop]
-
-Depends on / 依赖: Snowflaking, Snowflaking.ofSnowflaking, induced, ofSnowflaking
+--- 原说明 ---
+The topological space structure on `Snowflaking X α _ _` is induced from the ori
+ginal space.
 -/
 instance : TopologicalSpace (Snowflaking X α hα₀ hα₁) := .induced Snowflaking.ofSnowflaking ‹_›
 
 @[fun_prop]
-/--
-theorem `continuous_ofSnowflaking` / 定理 `continuous_ofSnowflaking`
-
-English:
-theorem continuous_ofSnowflaking
-  statement: Continuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X)
-  proof: continuous_induced_dom
-
-@[fun_prop]
-
-中文:
-定理 continuous_ofSnowflaking
-  结论: 连续 (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X)
-  证明: continuous_induced_dom
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_induced_dom
+/-
+**Metric.Snowflaking.continuous_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.
+Snowflaking`。
+形式化陈述：continuous_ofSnowflaking : Continuous (ofSnowflaking : Snowflaking X α hα₀
+ hα₁ -> X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
 -/
-theorem continuous_ofSnowflaking : Continuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X) :=
+theorem continuous_ofSnowflaking : Continuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ → X) :=
   continuous_induced_dom
 
 @[fun_prop]
-/--
-theorem `continuous_toSnowflaking` / 定理 `continuous_toSnowflaking`
-
-English:
-theorem continuous_toSnowflaking
-  statement: Continuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
-  proof: continuous_induced_rng.2 continuous_id
-
-中文:
-定理 continuous_toSnowflaking
-  结论: 连续 (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
-  证明: continuous_induced_rng.2 continuous_id
-
-Depends on / 依赖: continuous_id, continuous_induced_rng
+/-
+**Metric.Snowflaking.continuous_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric.
+Snowflaking`。
+形式化陈述：continuous_toSnowflaking : Continuous (toSnowflaking : X -> Snowflaking X 
+α hα₀ hα₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-theorem continuous_toSnowflaking : Continuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁) :=
+theorem continuous_toSnowflaking : Continuous (toSnowflaking : X → Snowflaking X α hα₀ hα₁) :=
   continuous_induced_rng.2 continuous_id
 
 /-- The natural homeomorphism between `Snowflaking X α hα₀ hα₁` and `X`. -/
 @[simps! -fullyApplied toEquiv apply symm_apply]
-/--
-Definition of `homeomorph` / `homeomorph` 的定义
+/-
+**Metric.Snowflaking.homeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Metric.Snowflaking`。
+形式化陈述：homeomorph : Snowflaking X α hα₀ hα₁ ≃ₜ X where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.Snowflaking.continuous_toSnowflaking`：continuous_toSnowflaking : 
+Continuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
 
-English:
-definition homeomorph
-  signature: : Snowflaking X α hα₀ hα₁ ≃ₜ X where
-  body: ofSnowflaking
-  continuous_invFun := continuous_toSnowflaking
-
-中文:
-定义 homeomorph
-  签名: : Snowflaking X α hα₀ hα₁ ≃ₜ X where
-  定义体: ofSnowflaking
-  continuous_invFun := continuous_toSnowflaking
-
-Depends on / 依赖: ofSnowflaking
+--- 原说明 ---
+The natural homeomorphism between `Snowflaking X α hα₀ hα₁` and `X`.
 -/
 def homeomorph : Snowflaking X α hα₀ hα₁ ≃ₜ X where
   toEquiv := ofSnowflaking
   continuous_invFun := continuous_toSnowflaking
 
+/-!
+We copy some instances from the underlying space `X` to `Snowflaking X α hα₀ hα₁`.
+In the future, we can add more of them, if needed,
+or even copy all the topology-related classes, if we get a tactic to do it automatically.
+-/
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [T0Space
-  signature: X] : T0Space (Snowflaking X α hα₀ hα₁)
-  body: homeomorph.symm.t0Space
-
-中文:
-实例 [T0空间
-  签名: X] : T0空间 (Snowflaking X α hα₀ hα₁)
-  定义体: homeomorph.symm.t0Space
-
-Depends on / 依赖: homeomorph, homeomorph.symm.t0Space, t0Space
+--- 原说明 ---
+We copy some instances from the underlying space `X` to `Snowflaking X α hα₀ hα₁
+`.
+In the future, we can add more of them, if needed,
+or even copy all the topology-related classes, if we get a tactic to do it autom
+atically.
 -/
 instance [T0Space X] : T0Space (Snowflaking X α hα₀ hα₁) :=
   homeomorph.symm.t0Space
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T2Space
-  signature: X] : T2Space (Snowflaking X α hα₀ hα₁)
-  body: homeomorph.symm.t2Space
-
-中文:
-实例 [T2空间
-  签名: X] : T2空间 (Snowflaking X α hα₀ hα₁)
-  定义体: homeomorph.symm.t2Space
-
-Depends on / 依赖: homeomorph, homeomorph.symm.t2Space, t2Space
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T2Space X] : T2Space (Snowflaking X α hα₀ hα₁) :=
   homeomorph.symm.t2Space
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SecondCountableTopology
-  signature: X] : SecondCountableTopology (Snowflaking X α hα₀ hα₁)
-  body: homeomorph.secondCountableTopology
-
-中文:
-实例 [第二可数拓扑
-  签名: X] : 第二可数拓扑 (Snowflaking X α hα₀ hα₁)
-  定义体: homeomorph.secondCountableTopology
-
-Depends on / 依赖: homeomorph, homeomorph.secondCountableTopology, secondCountableTopology
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SecondCountableTopology X] : SecondCountableTopology (Snowflaking X α hα₀ hα₁) :=
   homeomorph.secondCountableTopology
@@ -585,122 +424,101 @@ section Bornology
 
 variable [Bornology X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bornology (Snowflaking X α hα₀ hα₁)
-  body: .induced ofSnowflaking
-
-中文:
-实例 :
-  签名: 有界结构 (Snowflaking X α hα₀ hα₁)
-  定义体: .induced ofSnowflaking
-
-Depends on / 依赖: induced, ofSnowflaking
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bornology (Snowflaking X α hα₀ hα₁) := .induced ofSnowflaking
 
 open Bornology
 
 @[simp]
-/--
-theorem `isBounded_image_ofSnowflaking_iff` / 定理 `isBounded_image_ofSnowflaking_iff`
-
-English:
-theorem isBounded_image_ofSnowflaking_iff
-  given: {s : Set (Snowflaking X α hα₀ hα₁)}
-  proof: isBounded_induced.symm
-
-@[simp]
-
-中文:
-定理 isBounded_image_ofSnowflaking_iff
-  条件: {s : 集合 (Snowflaking X α hα₀ hα₁)}
-  证明: isBounded_induced.symm
-
-@[simp]
-
-Depends on / 依赖: isBounded_induced, isBounded_induced.symm
+/-
+**Metric.Snowflaking.isBounded_image_ofSnowflaking_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：isBounded_image_ofSnowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} : Is
+Bounded (ofSnowflaking '' s) ↔ IsBounded s
+参数：Snowflaking X α hα₀ hα₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Bornology.isBounded_induced`：isBounded_induced {α β : Type*} [Bornology 
+β] {f : α -> β} {s : Set α} : @IsBounded α (Bornology.induced f) s ↔ IsBounded (
+f '' s)
 -/
 theorem isBounded_image_ofSnowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} :
     IsBounded (ofSnowflaking '' s) ↔ IsBounded s :=
   isBounded_induced.symm
 
 @[simp]
-/--
-theorem `isBounded_preimage_toSnowflaking_iff` / 定理 `isBounded_preimage_toSnowflaking_iff`
-
-English:
-theorem isBounded_preimage_toSnowflaking_iff
-  given: {s : Set (Snowflaking X α hα₀ hα₁)}
-  proof: by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [isBounded_image_ofSnowflaking_iff]
-
-@[simp]
-
-中文:
-定理 isBounded_preimage_toSnowflaking_iff
-  条件: {s : 集合 (Snowflaking X α hα₀ hα₁)}
-  证明: by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [isBounded_image_ofSnowflaking_iff]
-
-@[simp]
-
-Depends on / 依赖: image_ofSnowflaking_eq_preimage, isBounded_image_ofSnowflaking_iff
+/-
+**Metric.Snowflaking.isBounded_preimage_toSnowflaking_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `Metric.Snowflaking`。
+形式化陈述：isBounded_preimage_toSnowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} :
+ IsBounded (toSnowflaking ⁻¹' s) ↔ IsBounded s
+参数：Snowflaking X α hα₀ hα₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.isBounded_image_ofSnowflaking_iff`：isBounded_image_of
+Snowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} : IsBounded (ofSnowflaking '
+' s) ↔ IsBounded s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isBounded_preimage_toSnowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} :
     IsBounded (toSnowflaking ⁻¹' s) ↔ IsBounded s := by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [isBounded_image_ofSnowflaking_iff]
+  rw [← image_ofSnowflaking_eq_preimage, isBounded_image_ofSnowflaking_iff]
 
 @[simp]
-/--
-theorem `isBounded_image_toSnowflaking_iff` / 定理 `isBounded_image_toSnowflaking_iff`
-
-English:
-theorem isBounded_image_toSnowflaking_iff
-  given: {s : Set X}
-  proof: by
-  rw [← isBounded_image_ofSnowflaking_iff]; rw [image_ofSnowflaking_image_toSnowflaking]
-
-@[simp]
-
-中文:
-定理 isBounded_image_toSnowflaking_iff
-  条件: {s : 集合 X}
-  证明: by
-  rw [← isBounded_image_ofSnowflaking_iff]; rw [image_ofSnowflaking_image_toSnowflaking]
-
-@[simp]
-
-Depends on / 依赖: image_ofSnowflaking_image_toSnowflaking, isBounded_image_ofSnowflaking_iff
+/-
+**Metric.Snowflaking.isBounded_image_toSnowflaking_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：isBounded_image_toSnowflaking_iff {s : Set X} : IsBounded (toSnowflaking '
+' s : Set (Snowflaking X α hα₀ hα₁)) ↔ IsBounded s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.Snowflaking.isBounded_image_ofSnowflaking_iff`：isBounded_image_of
+Snowflaking_iff {s : Set (Snowflaking X α hα₀ hα₁)} : IsBounded (ofSnowflaking '
+' s) ↔ IsBounded s
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_image_toSnowflaking`：image_ofSnow
+flaking_image_toSnowflaking (s : Set X) : ofSnowflaking '' (toSnowflaking '' s :
+ Set (Snowflaking X α hα₀ hα₁)) = s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isBounded_image_toSnowflaking_iff {s : Set X} :
     IsBounded (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) ↔ IsBounded s := by
-  rw [← isBounded_image_ofSnowflaking_iff]; rw [image_ofSnowflaking_image_toSnowflaking]
+  rw [← isBounded_image_ofSnowflaking_iff, image_ofSnowflaking_image_toSnowflaking]
 
 @[simp]
-/--
-theorem `isBounded_preimage_ofSnowflaking_iff` / 定理 `isBounded_preimage_ofSnowflaking_iff`
-
-English:
-theorem isBounded_preimage_ofSnowflaking_iff
-  given: {s : Set X}
-  proof: by
-  rw [← image_toSnowflaking_eq_preimage]; rw [isBounded_image_toSnowflaking_iff]
-
-中文:
-定理 isBounded_preimage_ofSnowflaking_iff
-  条件: {s : 集合 X}
-  证明: by
-  rw [← image_toSnowflaking_eq_preimage]; rw [isBounded_image_toSnowflaking_iff]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage, isBounded_image_toSnowflaking_iff
+/-
+**Metric.Snowflaking.isBounded_preimage_ofSnowflaking_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `Metric.Snowflaking`。
+形式化陈述：isBounded_preimage_ofSnowflaking_iff {s : Set X} : IsBounded (ofSnowflakin
+g ⁻¹' s : Set (Snowflaking X α hα₀ hα₁)) ↔ IsBounded s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.isBounded_image_toSnowflaking_iff`：isBounded_image_to
+Snowflaking_iff {s : Set X} : IsBounded (toSnowflaking '' s : Set (Snowflaking X
+ α hα₀ hα₁)) ↔ IsBounded s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isBounded_preimage_ofSnowflaking_iff {s : Set X} :
     IsBounded (ofSnowflaking ⁻¹' s : Set (Snowflaking X α hα₀ hα₁)) ↔ IsBounded s := by
-  rw [← image_toSnowflaking_eq_preimage]; rw [isBounded_image_toSnowflaking_iff]
+  rw [← image_toSnowflaking_eq_preimage, isBounded_image_toSnowflaking_iff]
 
 end Bornology
 
@@ -714,79 +532,58 @@ section UniformSpace
 
 variable [UniformSpace X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: UniformSpace (Snowflaking X α hα₀ hα₁)
-  body: UniformSpace.comap Snowflaking.ofSnowflaking ‹_›
-
-中文:
-实例 :
-  签名: 一致空间 (Snowflaking X α hα₀ hα₁)
-  定义体: UniformSpace.comap Snowflaking.ofSnowflaking ‹_›
-
-Depends on / 依赖: Snowflaking, Snowflaking.ofSnowflaking, UniformSpace, UniformSpace.comap, ofSnowflaking
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : UniformSpace (Snowflaking X α hα₀ hα₁) :=
   UniformSpace.comap Snowflaking.ofSnowflaking ‹_›
-
-/--
-theorem `uniformContinuous_ofSnowflaking` / 定理 `uniformContinuous_ofSnowflaking`
-
-English:
-theorem uniformContinuous_ofSnowflaking
-  proof: uniformContinuous_comap
-
-中文:
-定理 uniformContinuous_ofSnowflaking
-  证明: uniformContinuous_comap
-
-Depends on / 依赖: uniformContinuous_comap
+/-
+**Metric.Snowflaking.uniformContinuous_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：uniformContinuous_ofSnowflaking : UniformContinuous (ofSnowflaking : Snowf
+laking X α hα₀ hα₁ -> X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_comap`：uniformContinuous_comap {f : α -> β} [u : Unifo
+rmSpace β] : @UniformContinuous α β (UniformSpace.comap f u) u f
 -/
 theorem uniformContinuous_ofSnowflaking :
-    UniformContinuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X) :=
+    UniformContinuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ → X) :=
   uniformContinuous_comap
-
-/--
-theorem `uniformContinuous_toSnowflaking` / 定理 `uniformContinuous_toSnowflaking`
-
-English:
-theorem uniformContinuous_toSnowflaking
-  proof: uniformContinuous_comap' uniformContinuous_id
-
-中文:
-定理 uniformContinuous_toSnowflaking
-  证明: uniformContinuous_comap' uniformContinuous_id
-
-Depends on / 依赖: uniformContinuous_comap, uniformContinuous_id
+/-
+**Metric.Snowflaking.uniformContinuous_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：uniformContinuous_toSnowflaking : UniformContinuous (toSnowflaking : X -> 
+Snowflaking X α hα₀ hα₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_comap'`：uniformContinuous_comap' {f : γ -> β} {g : α -
+> γ} [v : UniformSpace β] [u : UniformSpace α] (h : UniformContinuous (f ∘ g)) :
+ @UniformConti…
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
 -/
 theorem uniformContinuous_toSnowflaking :
-    UniformContinuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁) :=
+    UniformContinuous (toSnowflaking : X → Snowflaking X α hα₀ hα₁) :=
   uniformContinuous_comap' uniformContinuous_id
 
 /-- The natural uniform space equivalence between `Snowflaking X α hα hα₁`
 and the underlying space. -/
 @[simps! toEquiv apply symm_apply]
-/--
-Definition of `uniformEquiv` / `uniformEquiv` 的定义
+/-
+**Metric.Snowflaking.uniformEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Metric.Snowflaking`
+。
+形式化陈述：uniformEquiv : Snowflaking X α hα₀ hα₁ ≃ᵤ X where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.Snowflaking.uniformContinuous_ofSnowflaking`：uniformContinuous_of
+Snowflaking : UniformContinuous (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X)
+· 使用定理 `Metric.Snowflaking.uniformContinuous_toSnowflaking`：uniformContinuous_to
+Snowflaking : UniformContinuous (toSnowflaking : X -> Snowflaking X α hα₀ hα₁)
 
-English:
-definition uniformEquiv
-  signature: : Snowflaking X α hα₀ hα₁ ≃ᵤ X where
-  body: ofSnowflaking
-  uniformContinuous_toFun := uniformContinuous_ofSnowflaking
-  uniformContinuous_invFun := uniformContinuous_toSnowflaking
-
-中文:
-定义 uniformEquiv
-  签名: : Snowflaking X α hα₀ hα₁ ≃ᵤ X where
-  定义体: ofSnowflaking
-  uniformContinuous_toFun := uniformContinuous_ofSnowflaking
-  uniformContinuous_invFun := uniformContinuous_toSnowflaking
-
-Depends on / 依赖: ofSnowflaking
+--- 原说明 ---
+The natural uniform space equivalence between `Snowflaking X α hα hα₁`
+and the underlying space.
 -/
 def uniformEquiv : Snowflaking X α hα₀ hα₁ ≃ᵤ X where
   toEquiv := ofSnowflaking
@@ -808,88 +605,58 @@ section EDist
 
 variable [EDist X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EDist (Snowflaking X α hα₀ hα₁)
-  body: edist x.ofSnowflaking y.ofSnowflaking ^ α
-
-中文:
-实例 :
-  签名: EDist (Snowflaking X α hα₀ hα₁)
-  定义体: edist x.ofSnowflaking y.ofSnowflaking ^ α
-
-Depends on / 依赖: ofSnowflaking, x.ofSnowflaking, y.ofSnowflaking
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EDist (Snowflaking X α hα₀ hα₁) where
   edist x y := edist x.ofSnowflaking y.ofSnowflaking ^ α
-
-/--
-theorem `edist_def` / 定理 `edist_def`
-
-English:
-theorem edist_def
-  given: (x y : Snowflaking X α hα₀ hα₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 edist_def
-  条件: (x y : Snowflaking X α hα₀ hα₁)
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.edist_def** 是 Mathlib 中的一个定理，位于命名空间 `Metric.Snowflaking`。
+形式化陈述：edist_def (x y : Snowflaking X α hα₀ hα₁) : edist x y = edist x.ofSnowflak
+ing y.ofSnowflaking ^ α
+参数：x y : Snowflaking X α hα₀ hα₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem edist_def (x y : Snowflaking X α hα₀ hα₁) :
     edist x y = edist x.ofSnowflaking y.ofSnowflaking ^ α :=
   rfl
 
 @[simp]
-/--
-theorem `edist_toSnowflaking_toSnowflaking` / 定理 `edist_toSnowflaking_toSnowflaking`
-
-English:
-theorem edist_toSnowflaking_toSnowflaking
-  given: (x y : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 edist_toSnowflaking_toSnowflaking
-  条件: (x y : X)
-  证明: rfl
-
-@[simp]
+/-
+**Metric.Snowflaking.edist_toSnowflaking_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：edist_toSnowflaking_toSnowflaking (x y : X) : edist (toSnowflaking x : Sno
+wflaking X α hα₀ hα₁) (toSnowflaking y) = edist x y ^ α
+参数：x y : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem edist_toSnowflaking_toSnowflaking (x y : X) :
     edist (toSnowflaking x : Snowflaking X α hα₀ hα₁) (toSnowflaking y) = edist x y ^ α :=
   rfl
 
 @[simp]
-/--
-theorem `edist_ofSnowflaking_ofSnowflaking` / 定理 `edist_ofSnowflaking_ofSnowflaking`
-
-English:
-theorem edist_ofSnowflaking_ofSnowflaking
-  given: (x y : Snowflaking X α hα₀ hα₁)
-  proof: by
-  rw [edist_def]; rw [ENNReal.rpow_rpow_inv hα₀.ne']
-
-中文:
-定理 edist_ofSnowflaking_ofSnowflaking
-  条件: (x y : Snowflaking X α hα₀ hα₁)
-  证明: by
-  rw [edist_def]; rw [ENNReal.rpow_rpow_inv hα₀.ne']
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_rpow_inv, edist_def, rpow_rpow_inv
+/-
+**Metric.Snowflaking.edist_ofSnowflaking_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：edist_ofSnowflaking_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) : edist 
+x.ofSnowflaking y.ofSnowflaking = edist x y ^ α⁻¹
+参数：x y : Snowflaking X α hα₀ hα₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.edist_def`：edist_def (x y : Snowflaking X α hα₀ hα₁) 
+: edist x y = edist x.ofSnowflaking y.ofSnowflaking ^ α
+· 使用定理 `ENNReal.rpow_rpow_inv`：∀ {y : ℝ}, y ≠ 0 → ∀ (x : ENNReal), (x ^ y) ^ y⁻¹
+ = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
 theorem edist_ofSnowflaking_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) :
     edist x.ofSnowflaking y.ofSnowflaking = edist x y ^ α⁻¹ := by
-  rw [edist_def]; rw [ENNReal.rpow_rpow_inv hα₀.ne']
+  rw [edist_def, ENNReal.rpow_rpow_inv hα₀.ne']
 
 end EDist
 
@@ -897,48 +664,9 @@ section PseudoEMetricSpace
 
 variable [PseudoEMetricSpace X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PseudoEMetricSpace (Snowflaking X α hα₀ hα₁)
-  body: by simp [edist_def, hα₀]
-  edist_comm x y := by rw [edist_def, edist_def, edist_comm]
-  edist_triangle x y z := by
-    simp only [edist_def]
-    grw [edist_triangle x.ofSnowflaking y.ofSnowflaking z.ofSnowflaking,
-      ENNReal.rpow_add_le_add_rpow _ _ hα₀.le hα₁]
-  toUniformSpace := inferInstance
-  uniformity_edist := by
-    have H : (𝓤 X).HasBasis (0 < ·) fun x => {p | edist p.1 p.2 < x ^ (α⁻¹)} := by
-      refine EMetric.mk_uniformity_basis (fun _ _ => by positivity) fun ε hε =>
-        ⟨ε ^ α, by positivity, ?_⟩
-      rw [ENNReal.rpow_rpow_inv hα₀.ne']
-    simp (disch := positivity) [uniformity_comap, H.eq_biInf, ENNReal.rpow_lt_rpow_iff]
-
-@[simp]
-
-中文:
-实例 :
-  签名: PseudoEMetric空间 (Snowflaking X α hα₀ hα₁)
-  定义体: by simp [edist_def, hα₀]
-  edist_comm x y := by rw [edist_def, edist_def, edist_comm]
-  edist_triangle x y z := by
-    simp only [edist_def]
-    grw [edist_triangle x.ofSnowflaking y.ofSnowflaking z.ofSnowflaking,
-      ENNReal.rpow_add_le_add_rpow _ _ hα₀.le hα₁]
-  toUniformSpace := inferInstance
-  uniformity_edist := by
-    have H : (𝓤 X).HasBasis (0 < ·) fun x => {p | edist p.1 p.2 < x ^ (α⁻¹)} := by
-      refine EMetric.mk_uniformity_basis (fun _ _ => by positivity) fun ε hε =>
-        ⟨ε ^ α, by positivity, ?_⟩
-      rw [ENNReal.rpow_rpow_inv hα₀.ne']
-    simp (disch := positivity) [uniformity_comap, H.eq_biInf, ENNReal.rpow_lt_rpow_iff]
-
-@[simp]
-
-Depends on / 依赖: EMetric, EMetric.mk_uniformity_basis, ENNReal, ENNReal.rpow_add_le_add_rpow, ENNReal.rpow_r, HasBasis, edist_comm, edist_def, edist_triangle, mk_uniformity_basis, ofSnowflaking, rpow_add_le_add_rpow, rpow_r, toUniformSpace, uniformity_edist, x.ofSnowflaking, y.ofSnowflaking, z.ofSnowflaking
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PseudoEMetricSpace (Snowflaking X α hα₀ hα₁) where
   edist_self x := by simp [edist_def, hα₀]
@@ -950,42 +678,31 @@ instance : PseudoEMetricSpace (Snowflaking X α hα₀ hα₁) where
   toUniformSpace := inferInstance
   uniformity_edist := by
     have H : (𝓤 X).HasBasis (0 < ·) fun x => {p | edist p.1 p.2 < x ^ (α⁻¹)} := by
-      refine EMetric.mk_uniformity_basis (fun _ _ => by positivity) fun ε hε =>
+      refine EMetric.mk_uniformity_basis (fun _ _ ↦ by positivity) fun ε hε ↦
         ⟨ε ^ α, by positivity, ?_⟩
       rw [ENNReal.rpow_rpow_inv hα₀.ne']
     simp (disch := positivity) [uniformity_comap, H.eq_biInf, ENNReal.rpow_lt_rpow_iff]
 
 @[simp]
-/--
-theorem `preimage_ofSnowflaking_eball` / 定理 `preimage_ofSnowflaking_eball`
-
-English:
-theorem preimage_ofSnowflaking_eball
-  given: (x : X) (r : Real>=0∞)
-  proof: by
-  ext ⟨y⟩
-  simp (disch := positivity) [ENNReal.rpow_lt_rpow_iff]
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_ofSnowflaking_emetricBall := preimage_ofSnowflaking_eball
-
-@[simp]
-
-中文:
-定理 preimage_ofSnowflaking_eball
-  条件: (x : X) (r : 实数>=0∞)
-  证明: by
-  ext ⟨y⟩
-  simp (disch := positivity) [ENNReal.rpow_lt_rpow_iff]
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_ofSnowflaking_emetricBall := preimage_ofSnowflaking_eball
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_lt_rpow_iff, rpow_lt_rpow_iff
+/-
+**Metric.Snowflaking.preimage_ofSnowflaking_eball** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric.Snowflaking`。
+形式化陈述：preimage_ofSnowflaking_eball (x : X) (r : Real>=0∞) : ofSnowflaking ⁻¹' Me
+tric.eball x r = Metric.eball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α
+)
+参数：x : X；r : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_ofSnowflaking_eball (x : X) (r : Real>=0∞) :
+theorem preimage_ofSnowflaking_eball (x : X) (r : ℝ≥0∞) :
     ofSnowflaking ⁻¹' Metric.eball x r =
       Metric.eball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
   ext ⟨y⟩
@@ -995,142 +712,106 @@ theorem preimage_ofSnowflaking_eball (x : X) (r : Real>=0∞) :
 alias preimage_ofSnowflaking_emetricBall := preimage_ofSnowflaking_eball
 
 @[simp]
-/--
-theorem `image_toSnowflaking_eball` / 定理 `image_toSnowflaking_eball`
-
-English:
-theorem image_toSnowflaking_eball
-  given: (x : X) (r : Real>=0∞)
-  proof: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_eball]
-
-@[deprecated (since := "2026-01-24")]
-alias image_toSnowflaking_emetricBall := image_toSnowflaking_eball
-
-@[simp]
-
-中文:
-定理 image_toSnowflaking_eball
-  条件: (x : X) (r : 实数>=0∞)
-  证明: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_eball]
-
-@[deprecated (since := "2026-01-24")]
-alias image_toSnowflaking_emetricBall := image_toSnowflaking_eball
-
-@[simp]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_eball
+/-
+**Metric.Snowflaking.image_toSnowflaking_eball** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+.Snowflaking`。
+形式化陈述：image_toSnowflaking_eball (x : X) (r : Real>=0∞) : toSnowflaking '' Metric
+.eball x r = Metric.eball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α)
+参数：x : X；r : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_ofSnowflaking_eball`：preimage_ofSnowflaking_
+eball (x : X) (r : Real>=0∞) : ofSnowflaking ⁻¹' Metric.eball x r = Metric.eball
+ (toSnowflaking x : Snowflaking X α h…
 -/
-theorem image_toSnowflaking_eball (x : X) (r : Real>=0∞) :
+theorem image_toSnowflaking_eball (x : X) (r : ℝ≥0∞) :
     toSnowflaking '' Metric.eball x r =
       Metric.eball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_eball]
+  rw [image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_eball]
 
 @[deprecated (since := "2026-01-24")]
 alias image_toSnowflaking_emetricBall := image_toSnowflaking_eball
 
 @[simp]
-/--
-theorem `preimage_toSnowflaking_eball` / 定理 `preimage_toSnowflaking_eball`
-
-English:
-theorem preimage_toSnowflaking_eball
-  given: (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞)
-  proof: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_eball]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_toSnowflaking_emetricBall := preimage_toSnowflaking_eball
-
-@[simp]
-
-中文:
-定理 preimage_toSnowflaking_eball
-  条件: (x : Snowflaking X α hα₀ hα₁) (d : 实数>=0∞)
-  证明: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_eball]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_toSnowflaking_emetricBall := preimage_toSnowflaking_eball
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_inv_rpow, image_toSnowflaking_eball, preimage_eq_iff_eq_image, rpow_inv_rpow, toSnowflaking, toSnowflaking.preimage_eq_iff_eq_image, toSnowflaking_ofSnowflaking
+/-
+**Metric.Snowflaking.preimage_toSnowflaking_eball** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric.Snowflaking`。
+形式化陈述：preimage_toSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) 
+: toSnowflaking ⁻¹' Metric.eball x d = Metric.eball x.ofSnowflaking (d ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；d : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.preimage_eq_iff_eq_image`：preimage_eq_iff_eq_image {α β} (e : α ≃ 
+β) (s t) : e ⁻¹' s = t ↔ s = e '' t
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eball`：image_toSnowflaking_eball 
+(x : X) (r : Real>=0∞) : toSnowflaking '' Metric.eball x r = Metric.eball (toSno
+wflaking x : Snowflaking X α hα₀ h…
+· 使用定理 `Metric.Snowflaking.toSnowflaking_ofSnowflaking`：toSnowflaking_ofSnowflak
+ing (x : Snowflaking X α hα₀ hα₁) : toSnowflaking x.ofSnowflaking = x
+· 使用定理 `ENNReal.rpow_inv_rpow`：∀ {y : ℝ}, y ≠ 0 → ∀ (x : ENNReal), (x ^ y⁻¹) ^ y
+ = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem preimage_toSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) :
+theorem preimage_toSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : ℝ≥0∞) :
     toSnowflaking ⁻¹' Metric.eball x d = Metric.eball x.ofSnowflaking (d ^ α⁻¹) := by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_eball]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
+  rw [toSnowflaking.preimage_eq_iff_eq_image, image_toSnowflaking_eball,
+    toSnowflaking_ofSnowflaking, ENNReal.rpow_inv_rpow hα₀.ne']
 
 @[deprecated (since := "2026-01-24")]
 alias preimage_toSnowflaking_emetricBall := preimage_toSnowflaking_eball
 
 @[simp]
-/--
-theorem `image_ofSnowflaking_eball` / 定理 `image_ofSnowflaking_eball`
-
-English:
-theorem image_ofSnowflaking_eball
-  given: (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞)
-  proof: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_eball]
-
-@[deprecated (since := "2026-01-24")]
-alias image_ofSnowflaking_emetricBall := image_ofSnowflaking_eball
-
-@[simp]
-
-中文:
-定理 image_ofSnowflaking_eball
-  条件: (x : Snowflaking X α hα₀ hα₁) (d : 实数>=0∞)
-  证明: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_eball]
-
-@[deprecated (since := "2026-01-24")]
-alias image_ofSnowflaking_emetricBall := image_ofSnowflaking_eball
-
-@[simp]
-
-Depends on / 依赖: image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_eball
+/-
+**Metric.Snowflaking.image_ofSnowflaking_eball** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+.Snowflaking`。
+形式化陈述：image_ofSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) : o
+fSnowflaking '' Metric.eball x d = Metric.eball x.ofSnowflaking (d ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；d : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_toSnowflaking_eball`：preimage_toSnowflaking_
+eball (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) : toSnowflaking ⁻¹' Metric.eb
+all x d = Metric.eball x.ofSnowflakin…
 -/
-theorem image_ofSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) :
+theorem image_ofSnowflaking_eball (x : Snowflaking X α hα₀ hα₁) (d : ℝ≥0∞) :
     ofSnowflaking '' Metric.eball x d = Metric.eball x.ofSnowflaking (d ^ α⁻¹) := by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_eball]
+  rw [image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_eball]
 
 @[deprecated (since := "2026-01-24")]
 alias image_ofSnowflaking_emetricBall := image_ofSnowflaking_eball
 
 @[simp]
-/--
-theorem `preimage_ofSnowflaking_closedEBall` / 定理 `preimage_ofSnowflaking_closedEBall`
-
-English:
-theorem preimage_ofSnowflaking_closedEBall
-  given: (x : X) (r : Real>=0∞)
-  proof: by
-  ext ⟨y⟩
-  simp (disch := positivity) [ENNReal.rpow_le_rpow_iff]
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_ofSnowflaking_emetricClosedBall := preimage_ofSnowflaking_closedEBall
-
-@[simp]
-
-中文:
-定理 preimage_ofSnowflaking_closedEBall
-  条件: (x : X) (r : 实数>=0∞)
-  证明: by
-  ext ⟨y⟩
-  simp (disch := positivity) [ENNReal.rpow_le_rpow_iff]
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_ofSnowflaking_emetricClosedBall := preimage_ofSnowflaking_closedEBall
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_le_rpow_iff, rpow_le_rpow_iff
+/-
+**Metric.Snowflaking.preimage_ofSnowflaking_closedEBall** 是 Mathlib 中的一个定理，位于命名空
+间 `Metric.Snowflaking`。
+形式化陈述：preimage_ofSnowflaking_closedEBall (x : X) (r : Real>=0∞) : ofSnowflaking 
+⁻¹' Metric.closedEBall x r = Metric.closedEBall (toSnowflaking x : Snowflaking X
+ α hα₀ hα₁) (r ^ α)
+参数：x : X；r : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_ofSnowflaking_closedEBall (x : X) (r : Real>=0∞) :
+theorem preimage_ofSnowflaking_closedEBall (x : X) (r : ℝ≥0∞) :
     ofSnowflaking ⁻¹' Metric.closedEBall x r =
       Metric.closedEBall (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
   ext ⟨y⟩
@@ -1140,213 +821,200 @@ theorem preimage_ofSnowflaking_closedEBall (x : X) (r : Real>=0∞) :
 alias preimage_ofSnowflaking_emetricClosedBall := preimage_ofSnowflaking_closedEBall
 
 @[simp]
-/--
-theorem `image_toSnowflaking_closedEBall` / 定理 `image_toSnowflaking_closedEBall`
-
-English:
-theorem image_toSnowflaking_closedEBall
-  given: (x : X) (r : Real>=0∞)
-  proof: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedEBall]
-
-@[deprecated (since := "2026-01-24")]
-alias image_toSnowflaking_emetricClosedBall := image_toSnowflaking_closedEBall
-
-@[simp]
-
-中文:
-定理 image_toSnowflaking_closedEBall
-  条件: (x : X) (r : 实数>=0∞)
-  证明: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedEBall]
-
-@[deprecated (since := "2026-01-24")]
-alias image_toSnowflaking_emetricClosedBall := image_toSnowflaking_closedEBall
-
-@[simp]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_closedEBall
+/-
+**Metric.Snowflaking.image_toSnowflaking_closedEBall** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：image_toSnowflaking_closedEBall (x : X) (r : Real>=0∞) : toSnowflaking '' 
+Metric.closedEBall x r = Metric.closedEBall (toSnowflaking x : Snowflaking X α h
+α₀ hα₁) (r ^ α)
+参数：x : X；r : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_ofSnowflaking_closedEBall`：preimage_ofSnowfl
+aking_closedEBall (x : X) (r : Real>=0∞) : ofSnowflaking ⁻¹' Metric.closedEBall 
+x r = Metric.closedEBall (toSnowflaking x :…
 -/
-theorem image_toSnowflaking_closedEBall (x : X) (r : Real>=0∞) :
+theorem image_toSnowflaking_closedEBall (x : X) (r : ℝ≥0∞) :
     toSnowflaking '' Metric.closedEBall x r =
       Metric.closedEBall (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedEBall]
+  rw [image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_closedEBall]
 
 @[deprecated (since := "2026-01-24")]
 alias image_toSnowflaking_emetricClosedBall := image_toSnowflaking_closedEBall
 
 @[simp]
-/--
-theorem `preimage_toSnowflaking_closedEBall` / 定理 `preimage_toSnowflaking_closedEBall`
-
-English:
-theorem preimage_toSnowflaking_closedEBall
-  given: (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞)
-  proof: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedEBall]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_toSnowflaking_emetricClosedBall := preimage_toSnowflaking_closedEBall
-
-@[simp]
-
-中文:
-定理 preimage_toSnowflaking_closedEBall
-  条件: (x : Snowflaking X α hα₀ hα₁) (d : 实数>=0∞)
-  证明: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedEBall]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
-
-@[deprecated (since := "2026-01-24")]
-alias preimage_toSnowflaking_emetricClosedBall := preimage_toSnowflaking_closedEBall
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_inv_rpow, image_toSnowflaking_closedEBall, preimage_eq_iff_eq_image, rpow_inv_rpow, toSnowflaking, toSnowflaking.preimage_eq_iff_eq_image, toSnowflaking_ofSnowflaking
+/-
+**Metric.Snowflaking.preimage_toSnowflaking_closedEBall** 是 Mathlib 中的一个定理，位于命名空
+间 `Metric.Snowflaking`。
+形式化陈述：preimage_toSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : Real
+>=0∞) : toSnowflaking ⁻¹' Metric.closedEBall x d = Metric.closedEBall x.ofSnowfl
+aking (d ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；d : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.preimage_eq_iff_eq_image`：preimage_eq_iff_eq_image {α β} (e : α ≃ 
+β) (s t) : e ⁻¹' s = t ↔ s = e '' t
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_closedEBall`：image_toSnowflaking_
+closedEBall (x : X) (r : Real>=0∞) : toSnowflaking '' Metric.closedEBall x r = M
+etric.closedEBall (toSnowflaking x : Sno…
+· 使用定理 `Metric.Snowflaking.toSnowflaking_ofSnowflaking`：toSnowflaking_ofSnowflak
+ing (x : Snowflaking X α hα₀ hα₁) : toSnowflaking x.ofSnowflaking = x
+· 使用定理 `ENNReal.rpow_inv_rpow`：∀ {y : ℝ}, y ≠ 0 → ∀ (x : ENNReal), (x ^ y⁻¹) ^ y
+ = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem preimage_toSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) :
+theorem preimage_toSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : ℝ≥0∞) :
     toSnowflaking ⁻¹' Metric.closedEBall x d = Metric.closedEBall x.ofSnowflaking (d ^ α⁻¹) := by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedEBall]; rw [toSnowflaking_ofSnowflaking]; rw [ENNReal.rpow_inv_rpow hα₀.ne']
+  rw [toSnowflaking.preimage_eq_iff_eq_image, image_toSnowflaking_closedEBall,
+    toSnowflaking_ofSnowflaking, ENNReal.rpow_inv_rpow hα₀.ne']
 
 @[deprecated (since := "2026-01-24")]
 alias preimage_toSnowflaking_emetricClosedBall := preimage_toSnowflaking_closedEBall
 
 @[simp]
-/--
-theorem `image_ofSnowflaking_closedEBall` / 定理 `image_ofSnowflaking_closedEBall`
-
-English:
-theorem image_ofSnowflaking_closedEBall
-  given: (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞)
-  proof: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedEBall]
-
-@[deprecated (since := "2026-01-24")]
-alias image_ofSnowflaking_emetricClosedBall := image_ofSnowflaking_closedEBall
-
-@[simp]
-
-中文:
-定理 image_ofSnowflaking_closedEBall
-  条件: (x : Snowflaking X α hα₀ hα₁) (d : 实数>=0∞)
-  证明: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedEBall]
-
-@[deprecated (since := "2026-01-24")]
-alias image_ofSnowflaking_emetricClosedBall := image_ofSnowflaking_closedEBall
-
-@[simp]
-
-Depends on / 依赖: image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_closedEBall
+/-
+**Metric.Snowflaking.image_ofSnowflaking_closedEBall** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric.Snowflaking`。
+形式化陈述：image_ofSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : Real>=0
+∞) : ofSnowflaking '' Metric.closedEBall x d = Metric.closedEBall x.ofSnowflakin
+g (d ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；d : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_toSnowflaking_closedEBall`：preimage_toSnowfl
+aking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) : toSnowflaking ⁻
+¹' Metric.closedEBall x d = Metric.closedEB…
 -/
-theorem image_ofSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : Real>=0∞) :
+theorem image_ofSnowflaking_closedEBall (x : Snowflaking X α hα₀ hα₁) (d : ℝ≥0∞) :
     ofSnowflaking '' Metric.closedEBall x d =
       Metric.closedEBall x.ofSnowflaking (d ^ α⁻¹) := by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedEBall]
+  rw [image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_closedEBall]
 
 @[deprecated (since := "2026-01-24")]
 alias image_ofSnowflaking_emetricClosedBall := image_ofSnowflaking_closedEBall
 
 @[simp]
-/--
-theorem `ediam_image_ofSnowflaking` / 定理 `ediam_image_ofSnowflaking`
-
-English:
-theorem ediam_image_ofSnowflaking
-  given: (s : Set (Snowflaking X α hα₀ hα₁))
-  proof: by
-  refine eq_of_forall_ge_iff fun c => ?_
-  simp only [ENNReal.rpow_inv_le_iff hα₀, ediam_le_iff, Set.forall_mem_image,
-    edist_ofSnowflaking_ofSnowflaking]
-
-@[simp]
-
-中文:
-定理 ediam_image_ofSnowflaking
-  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
-  证明: by
-  refine eq_of_forall_ge_iff fun c => ?_
-  simp only [ENNReal.rpow_inv_le_iff hα₀, ediam_le_iff, Set.forall_mem_image,
-    edist_ofSnowflaking_ofSnowflaking]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_inv_le_iff, Set.forall_mem_image, ediam_le_iff, edist_ofSnowflaking_ofSnowflaking, eq_of_forall_ge_iff, forall_mem_image, rpow_inv_le_iff
+/-
+**Metric.Snowflaking.ediam_image_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+.Snowflaking`。
+形式化陈述：ediam_image_ofSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)) : ediam (ofS
+nowflaking '' s) = ediam s ^ α⁻¹
+参数：s : Set (Snowflaking X α hα₀ hα₁)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Metric.Snowflaking.edist_ofSnowflaking_ofSnowflaking`：edist_ofSnowflakin
+g_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) : edist x.ofSnowflaking y.ofSnow
+flaking = edist x y ^ α⁻¹
+· 使用定理 `ENNReal.rpow_inv_le_iff`：rpow_inv_le_iff {x y : Real>=0∞} {z : Real} (hz
+ : 0 < z) : x ^ z⁻¹ <= y ↔ x <= y ^ z
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ediam_image_ofSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)) :
     ediam (ofSnowflaking '' s) = ediam s ^ α⁻¹ := by
-  refine eq_of_forall_ge_iff fun c => ?_
+  refine eq_of_forall_ge_iff fun c ↦ ?_
   simp only [ENNReal.rpow_inv_le_iff hα₀, ediam_le_iff, Set.forall_mem_image,
     edist_ofSnowflaking_ofSnowflaking]
 
 @[simp]
-/--
-theorem `ediam_preimage_toSnowflaking` / 定理 `ediam_preimage_toSnowflaking`
-
-English:
-theorem ediam_preimage_toSnowflaking
-  given: (s : Set (Snowflaking X α hα₀ hα₁))
-  proof: by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [ediam_image_ofSnowflaking]
-
-@[simp]
-
-中文:
-定理 ediam_preimage_toSnowflaking
-  条件: (s : 集合 (Snowflaking X α hα₀ hα₁))
-  证明: by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [ediam_image_ofSnowflaking]
-
-@[simp]
-
-Depends on / 依赖: ediam_image_ofSnowflaking, image_ofSnowflaking_eq_preimage
+/-
+**Metric.Snowflaking.ediam_preimage_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric.Snowflaking`。
+形式化陈述：ediam_preimage_toSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)) : ediam (
+toSnowflaking ⁻¹' s) = ediam s ^ α⁻¹
+参数：s : Set (Snowflaking X α hα₀ hα₁)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.ediam_image_ofSnowflaking`：ediam_image_ofSnowflaking 
+(s : Set (Snowflaking X α hα₀ hα₁)) : ediam (ofSnowflaking '' s) = ediam s ^ α⁻¹
 -/
 theorem ediam_preimage_toSnowflaking (s : Set (Snowflaking X α hα₀ hα₁)) :
     ediam (toSnowflaking ⁻¹' s) = ediam s ^ α⁻¹ := by
-  rw [← image_ofSnowflaking_eq_preimage]; rw [ediam_image_ofSnowflaking]
+  rw [← image_ofSnowflaking_eq_preimage, ediam_image_ofSnowflaking]
 
 @[simp]
-/--
-theorem `ediam_preimage_ofSnowflaking` / 定理 `ediam_preimage_ofSnowflaking`
-
-English:
-theorem ediam_preimage_ofSnowflaking
-  given: (s : Set X)
-  proof: by
-  rw [← ENNReal.rpow_inv_rpow hα₀.ne' (ediam _)]; rw [← ediam_preimage_toSnowflaking]; rw [← Set.preimage_comp]; rw [ofSnowflaking_comp_toSnowflaking]; rw [Set.preimage_id]
-
-@[simp]
-
-中文:
-定理 ediam_preimage_ofSnowflaking
-  条件: (s : 集合 X)
-  证明: by
-  rw [← ENNReal.rpow_inv_rpow hα₀.ne' (ediam _)]; rw [← ediam_preimage_toSnowflaking]; rw [← Set.preimage_comp]; rw [ofSnowflaking_comp_toSnowflaking]; rw [Set.preimage_id]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_inv_rpow, Set.preimage_comp, Set.preimage_id, ediam_preimage_toSnowflaking, ofSnowflaking_comp_toSnowflaking, preimage_comp, preimage_id, rpow_inv_rpow
+/-
+**Metric.Snowflaking.ediam_preimage_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric.Snowflaking`。
+形式化陈述：ediam_preimage_ofSnowflaking (s : Set X) : ediam (ofSnowflaking ⁻¹' s : Se
+t (Snowflaking X α hα₀ hα₁)) = ediam s ^ α
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.rpow_inv_rpow`：∀ {y : ℝ}, y ≠ 0 → ∀ (x : ENNReal), (x ^ y⁻¹) ^ y
+ = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Metric.Snowflaking.ediam_preimage_toSnowflaking`：ediam_preimage_toSnowfl
+aking (s : Set (Snowflaking X α hα₀ hα₁)) : ediam (toSnowflaking ⁻¹' s) = ediam 
+s ^ α⁻¹
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `Metric.Snowflaking.ofSnowflaking_comp_toSnowflaking`：ofSnowflaking_comp_
+toSnowflaking : (ofSnowflaking : Snowflaking X α hα₀ hα₁ -> X) ∘ toSnowflaking =
+ id
+· 使用定理 `Set.preimage_id`：preimage_id {s : Set α} : id ⁻¹' s = s
 -/
 theorem ediam_preimage_ofSnowflaking (s : Set X) :
     ediam (ofSnowflaking ⁻¹' s : Set (Snowflaking X α hα₀ hα₁)) = ediam s ^ α := by
-  rw [← ENNReal.rpow_inv_rpow hα₀.ne' (ediam _)]; rw [← ediam_preimage_toSnowflaking]; rw [← Set.preimage_comp]; rw [ofSnowflaking_comp_toSnowflaking]; rw [Set.preimage_id]
+  rw [← ENNReal.rpow_inv_rpow hα₀.ne' (ediam _), ← ediam_preimage_toSnowflaking,
+    ← Set.preimage_comp, ofSnowflaking_comp_toSnowflaking, Set.preimage_id]
 
 @[simp]
-/--
-theorem `ediam_image_toSnowflaking` / 定理 `ediam_image_toSnowflaking`
-
-English:
-theorem ediam_image_toSnowflaking
-  given: (s : Set X)
-  proof: by
-  simp [image_toSnowflaking_eq_preimage]
-
-中文:
-定理 ediam_image_toSnowflaking
-  条件: (s : 集合 X)
-  证明: by
-  simp [image_toSnowflaking_eq_preimage]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage
+/-
+**Metric.Snowflaking.ediam_image_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+.Snowflaking`。
+形式化陈述：ediam_image_toSnowflaking (s : Set X) : ediam (toSnowflaking '' s : Set (S
+nowflaking X α hα₀ hα₁)) = ediam s ^ α
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.ediam_preimage_ofSnowflaking`：ediam_preimage_ofSnowfl
+aking (s : Set X) : ediam (ofSnowflaking ⁻¹' s : Set (Snowflaking X α hα₀ hα₁)) 
+= ediam s ^ α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ediam_image_toSnowflaking (s : Set X) :
     ediam (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) = ediam s ^ α := by
@@ -1354,60 +1022,47 @@ theorem ediam_image_toSnowflaking (s : Set X) :
 
 end PseudoEMetricSpace
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [EMetricSpace
-  signature: X] : EMetricSpace (Snowflaking X α hα₀ hα₁)
-  body: .ofT0PseudoEMetricSpace _
-
-中文:
-实例 [广义度量空间
-  签名: X] : 广义度量空间 (Snowflaking X α hα₀ hα₁)
-  定义体: .ofT0PseudoEMetricSpace _
-
-Depends on / 依赖: ofT0PseudoEMetricSpace
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [EMetricSpace X] : EMetricSpace (Snowflaking X α hα₀ hα₁) :=
   .ofT0PseudoEMetricSpace _
 
+/-!
+### Distance and a (pseudo) metric space structure
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+Th extended distance on `Snowflaking X α hα₀ hα₁`
+is given by `dist x y = (dist x.ofSnowflaking y.ofSnowflaking) ^ α`.
 
-English:
-instance [Dist
-  signature: X] : Dist (Snowflaking X α hα₀ hα₁) where
-  body: dist x.ofSnowflaking y.ofSnowflaking ^ α
+If the original space is a (pseudo) metric space, then so is `Snowflaking X α hα₀ hα₁`.
+-/
 
-@[simp]
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 [Dist
-  签名: X] : Dist (Snowflaking X α hα₀ hα₁) where
-  定义体: dist x.ofSnowflaking y.ofSnowflaking ^ α
+--- 原说明 ---
+### Distance and a (pseudo) metric space structure
 
-@[simp]
+Th extended distance on `Snowflaking X α hα₀ hα₁`
+is given by `dist x y = (dist x.ofSnowflaking y.ofSnowflaking) ^ α`.
 
-Depends on / 依赖: ofSnowflaking, x.ofSnowflaking, y.ofSnowflaking
+If the original space is a (pseudo) metric space, then so is `Snowflaking X α hα
+₀ hα₁`.
 -/
 instance [Dist X] : Dist (Snowflaking X α hα₀ hα₁) where
   dist x y := dist x.ofSnowflaking y.ofSnowflaking ^ α
 
 @[simp]
-/--
-theorem `dist_toSnowflaking_toSnowflaking` / 定理 `dist_toSnowflaking_toSnowflaking`
-
-English:
-theorem dist_toSnowflaking_toSnowflaking
-  given: [Dist X] (x y : X)
-  proof: rfl
-
-中文:
-定理 dist_toSnowflaking_toSnowflaking
-  条件: [Dist X] (x y : X)
-  证明: rfl
+/-
+**Metric.Snowflaking.dist_toSnowflaking_toSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric.Snowflaking`。
+形式化陈述：dist_toSnowflaking_toSnowflaking [Dist X] (x y : X) : dist (toSnowflaking 
+x : Snowflaking X α hα₀ hα₁) (toSnowflaking y) = dist x y ^ α
+参数：x y : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dist_toSnowflaking_toSnowflaking [Dist X] (x y : X) :
     dist (toSnowflaking x : Snowflaking X α hα₀ hα₁) (toSnowflaking y) = dist x y ^ α :=
@@ -1417,52 +1072,9 @@ section PseudoMetricSpace
 
 variable [PseudoMetricSpace X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PseudoMetricSpace (Snowflaking X α hα₀ hα₁)
-  body: letI aux : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
-    PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist
-      (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
-      (by
-        intro x y; cases x; cases y
-        rw [edist_toSnowflaking_toSnowflaking]; rw [dist_toSnowflaking_toSnowflaking]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← edist_dist] <;> positivity)
-  aux.replaceBornology fun s => by
-    rw [← isBounded_preimage_toSnowflaking_iff]; rw [Metric.isBounded_iff]; rw [Metric.isBounded_iff]
-    constructor
-    · rintro ⟨C, hC⟩
-      use C ^ α
-      rintro ⟨x⟩ hx ⟨y⟩ hy
-      grw [mk_eq_toSnowflaking, dist_toSnowflaking_toSnowflaking, hC hx hy]
-    · rintro ⟨C, hC⟩
-      use C ^ α⁻¹
-      intro x hx y hy
-      grw [← hC hx hy, dist_toSnowflaking_toSnowflaking, Real.rpow_rpow_inv (by positivity) hα₀.ne']
-
-中文:
-实例 :
-  签名: 伪度量空间 (Snowflaking X α hα₀ hα₁)
-  定义体: letI aux : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
-    PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist
-      (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
-      (by
-        intro x y; cases x; cases y
-        rw [edist_toSnowflaking_toSnowflaking]; rw [dist_toSnowflaking_toSnowflaking]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← edist_dist] <;> positivity)
-  aux.replaceBornology fun s => by
-    rw [← isBounded_preimage_toSnowflaking_iff]; rw [Metric.isBounded_iff]; rw [Metric.isBounded_iff]
-    constructor
-    · rintro ⟨C, hC⟩
-      use C ^ α
-      rintro ⟨x⟩ hx ⟨y⟩ hy
-      grw [mk_eq_toSnowflaking, dist_toSnowflaking_toSnowflaking, hC hx hy]
-    · rintro ⟨C, hC⟩
-      use C ^ α⁻¹
-      intro x hx y hy
-      grw [← hC hx hy, dist_toSnowflaking_toSnowflaking, Real.rpow_rpow_inv (by positivity) hα₀.ne']
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_rpow_of_nonneg, Metric, Metric.isBounded, Metric.isBounded_iff, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, PseudoMetricSpace, Snowflaking, aux.replaceBornology, dist_toSnowflaking_toSnowflaking, edist_dist, edist_toSnowflaking_toSnowflaking, isBounded, isBounded_iff, isBounded_preimage_toSnowflaking_iff, ofReal_rpow_of_nonneg, replaceBornology, toPseudoMetricSpaceOfDist
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
   letI aux : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
@@ -1470,9 +1082,10 @@ instance : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
       (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
       (by
         intro x y; cases x; cases y
-        rw [edist_toSnowflaking_toSnowflaking]; rw [dist_toSnowflaking_toSnowflaking]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← edist_dist] <;> positivity)
-  aux.replaceBornology fun s => by
-    rw [← isBounded_preimage_toSnowflaking_iff]; rw [Metric.isBounded_iff]; rw [Metric.isBounded_iff]
+        rw [edist_toSnowflaking_toSnowflaking, dist_toSnowflaking_toSnowflaking,
+          ← ENNReal.ofReal_rpow_of_nonneg, ← edist_dist] <;> positivity)
+  aux.replaceBornology fun s ↦ by
+    rw [← isBounded_preimage_toSnowflaking_iff, Metric.isBounded_iff, Metric.isBounded_iff]
     constructor
     · rintro ⟨C, hC⟩
       use C ^ α
@@ -1486,28 +1099,23 @@ instance : PseudoMetricSpace (Snowflaking X α hα₀ hα₁) :=
 open Metric
 
 @[simp]
-/--
-theorem `dist_ofSnowflaking_ofSnowflaking` / 定理 `dist_ofSnowflaking_ofSnowflaking`
-
-English:
-theorem dist_ofSnowflaking_ofSnowflaking
-  given: (x y : Snowflaking X α hα₀ hα₁)
-  proof: by
-  cases x; cases y
-  simp [Real.rpow_rpow_inv dist_nonneg hα₀.ne']
-
-@[simp]
-
-中文:
-定理 dist_ofSnowflaking_ofSnowflaking
-  条件: (x y : Snowflaking X α hα₀ hα₁)
-  证明: by
-  cases x; cases y
-  simp [Real.rpow_rpow_inv dist_nonneg hα₀.ne']
-
-@[simp]
-
-Depends on / 依赖: Real.rpow_rpow_inv, dist_nonneg, rpow_rpow_inv
+/-
+**Metric.Snowflaking.dist_ofSnowflaking_ofSnowflaking** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric.Snowflaking`。
+形式化陈述：dist_ofSnowflaking_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) : dist x.
+ofSnowflaking y.ofSnowflaking = dist x y ^ α⁻¹
+参数：x y : Snowflaking X α hα₀ hα₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.rpow_rpow_inv`：∀ {x y : ℝ}, 0 ≤ x → y ≠ 0 → (x ^ y) ^ y⁻¹ = x
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem dist_ofSnowflaking_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) :
     dist x.ofSnowflaking y.ofSnowflaking = dist x y ^ α⁻¹ := by
@@ -1515,236 +1123,212 @@ theorem dist_ofSnowflaking_ofSnowflaking (x y : Snowflaking X α hα₀ hα₁) 
   simp [Real.rpow_rpow_inv dist_nonneg hα₀.ne']
 
 @[simp]
-/--
-theorem `preimage_ofSnowflaking_ball` / 定理 `preimage_ofSnowflaking_ball`
-
-English:
-theorem preimage_ofSnowflaking_ball
-  given: (x : X) {r : Real} (hr : 0 <= r)
-  proof: by
-  ext ⟨y⟩
-  simp (disch := positivity) [Real.rpow_lt_rpow_iff]
-
-@[simp]
-
-中文:
-定理 preimage_ofSnowflaking_ball
-  条件: (x : X) {r : 实数} (hr : 0 <= r)
-  证明: by
-  ext ⟨y⟩
-  simp (disch := positivity) [Real.rpow_lt_rpow_iff]
-
-@[simp]
-
-Depends on / 依赖: Real.rpow_lt_rpow_iff, rpow_lt_rpow_iff
+/-
+**Metric.Snowflaking.preimage_ofSnowflaking_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metr
+ic.Snowflaking`。
+形式化陈述：preimage_ofSnowflaking_ball (x : X) {r : Real} (hr : 0 <= r) : ofSnowflaki
+ng ⁻¹' ball x r = ball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α)
+参数：x : X；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_ofSnowflaking_ball (x : X) {r : Real} (hr : 0 <= r) :
+theorem preimage_ofSnowflaking_ball (x : X) {r : ℝ} (hr : 0 ≤ r) :
     ofSnowflaking ⁻¹' ball x r = ball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
   ext ⟨y⟩
   simp (disch := positivity) [Real.rpow_lt_rpow_iff]
 
 @[simp]
-/--
-theorem `image_toSnowflaking_ball` / 定理 `image_toSnowflaking_ball`
-
-English:
-theorem image_toSnowflaking_ball
-  given: (x : X) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_ball x hr]
-
-@[simp]
-
-中文:
-定理 image_toSnowflaking_ball
-  条件: (x : X) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_ball x hr]
-
-@[simp]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_ball
+/-
+**Metric.Snowflaking.image_toSnowflaking_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric.
+Snowflaking`。
+形式化陈述：image_toSnowflaking_ball (x : X) {r : Real} (hr : 0 <= r) : toSnowflaking 
+'' ball x r = ball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α)
+参数：x : X；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_ofSnowflaking_ball`：preimage_ofSnowflaking_b
+all (x : X) {r : Real} (hr : 0 <= r) : ofSnowflaking ⁻¹' ball x r = ball (toSnow
+flaking x : Snowflaking X α hα₀ hα₁)…
 -/
-theorem image_toSnowflaking_ball (x : X) {r : Real} (hr : 0 <= r) :
+theorem image_toSnowflaking_ball (x : X) {r : ℝ} (hr : 0 ≤ r) :
     toSnowflaking '' ball x r = ball (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_ball x hr]
+  rw [image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_ball x hr]
 
 @[simp]
-/--
-theorem `preimage_toSnowflaking_ball` / 定理 `preimage_toSnowflaking_ball`
-
-English:
-theorem preimage_toSnowflaking_ball
-  given: (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_ball _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
-
-@[simp]
-
-中文:
-定理 preimage_toSnowflaking_ball
-  条件: (x : Snowflaking X α hα₀ hα₁) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_ball _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
-
-@[simp]
-
-Depends on / 依赖: Real.rpow_inv_rpow, image_toSnowflaking_ball, preimage_eq_iff_eq_image, rpow_inv_rpow, toSnowflaking, toSnowflaking.preimage_eq_iff_eq_image, toSnowflaking_ofSnowflaking
+/-
+**Metric.Snowflaking.preimage_toSnowflaking_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metr
+ic.Snowflaking`。
+形式化陈述：preimage_toSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr :
+ 0 <= r) : toSnowflaking ⁻¹' ball x r = ball x.ofSnowflaking (r ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.preimage_eq_iff_eq_image`：preimage_eq_iff_eq_image {α β} (e : α ≃ 
+β) (s t) : e ⁻¹' s = t ↔ s = e '' t
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_ball`：image_toSnowflaking_ball (x
+ : X) {r : Real} (hr : 0 <= r) : toSnowflaking '' ball x r = ball (toSnowflaking
+ x : Snowflaking X α hα₀ hα₁) (r …
+· 使用定理 `Real.rpow_nonneg`：rpow_nonneg {x : Real} (hx : 0 <= x) (y : Real) : 0 <=
+ x ^ y
+· 使用定理 `Metric.Snowflaking.toSnowflaking_ofSnowflaking`：toSnowflaking_ofSnowflak
+ing (x : Snowflaking X α hα₀ hα₁) : toSnowflaking x.ofSnowflaking = x
+· 使用定理 `Real.rpow_inv_rpow`：∀ {x y : ℝ}, 0 ≤ x → y ≠ 0 → (x ^ y⁻¹) ^ y = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem preimage_toSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) :
+theorem preimage_toSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : ℝ} (hr : 0 ≤ r) :
     toSnowflaking ⁻¹' ball x r = ball x.ofSnowflaking (r ^ α⁻¹) := by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_ball _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
+  rw [toSnowflaking.preimage_eq_iff_eq_image, image_toSnowflaking_ball _ (by positivity),
+    toSnowflaking_ofSnowflaking, Real.rpow_inv_rpow hr hα₀.ne']
 
 @[simp]
-/--
-theorem `image_ofSnowflaking_ball` / 定理 `image_ofSnowflaking_ball`
-
-English:
-theorem image_ofSnowflaking_ball
-  given: (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_ball _ hr]
-
-@[simp]
-
-中文:
-定理 image_ofSnowflaking_ball
-  条件: (x : Snowflaking X α hα₀ hα₁) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_ball _ hr]
-
-@[simp]
-
-Depends on / 依赖: image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_ball
+/-
+**Metric.Snowflaking.image_ofSnowflaking_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric.
+Snowflaking`。
+形式化陈述：image_ofSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 
+<= r) : ofSnowflaking '' ball x r = ball x.ofSnowflaking (r ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_toSnowflaking_ball`：preimage_toSnowflaking_b
+all (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) : toSnowflaking ⁻¹' b
+all x r = ball x.ofSnowflaking (r ^ …
 -/
-theorem image_ofSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) :
+theorem image_ofSnowflaking_ball (x : Snowflaking X α hα₀ hα₁) {r : ℝ} (hr : 0 ≤ r) :
     ofSnowflaking '' ball x r = ball x.ofSnowflaking (r ^ α⁻¹) := by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_ball _ hr]
+  rw [image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_ball _ hr]
 
 @[simp]
-/--
-theorem `preimage_ofSnowflaking_closedBall` / 定理 `preimage_ofSnowflaking_closedBall`
-
-English:
-theorem preimage_ofSnowflaking_closedBall
-  given: (x : X) {r : Real} (hr : 0 <= r)
-  proof: by
-  ext ⟨y⟩
-  simp (disch := positivity) [Real.rpow_le_rpow_iff]
-
-@[simp]
-
-中文:
-定理 preimage_ofSnowflaking_closedBall
-  条件: (x : X) {r : 实数} (hr : 0 <= r)
-  证明: by
-  ext ⟨y⟩
-  simp (disch := positivity) [Real.rpow_le_rpow_iff]
-
-@[simp]
-
-Depends on / 依赖: Real.rpow_le_rpow_iff, rpow_le_rpow_iff
+/-
+**Metric.Snowflaking.preimage_ofSnowflaking_closedBall** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：preimage_ofSnowflaking_closedBall (x : X) {r : Real} (hr : 0 <= r) : ofSno
+wflaking ⁻¹' closedBall x r = closedBall (toSnowflaking x : Snowflaking X α hα₀ 
+hα₁) (r ^ α)
+参数：x : X；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_ofSnowflaking_closedBall (x : X) {r : Real} (hr : 0 <= r) :
+theorem preimage_ofSnowflaking_closedBall (x : X) {r : ℝ} (hr : 0 ≤ r) :
     ofSnowflaking ⁻¹' closedBall x r =
       closedBall (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
   ext ⟨y⟩
   simp (disch := positivity) [Real.rpow_le_rpow_iff]
 
 @[simp]
-/--
-theorem `image_toSnowflaking_closedBall` / 定理 `image_toSnowflaking_closedBall`
-
-English:
-theorem image_toSnowflaking_closedBall
-  given: (x : X) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedBall x hr]
-
-@[simp]
-
-中文:
-定理 image_toSnowflaking_closedBall
-  条件: (x : X) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedBall x hr]
-
-@[simp]
-
-Depends on / 依赖: image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_closedBall
+/-
+**Metric.Snowflaking.image_toSnowflaking_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `M
+etric.Snowflaking`。
+形式化陈述：image_toSnowflaking_closedBall (x : X) {r : Real} (hr : 0 <= r) : toSnowfl
+aking '' closedBall x r = closedBall (toSnowflaking x : Snowflaking X α hα₀ hα₁)
+ (r ^ α)
+参数：x : X；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_eq_preimage`：image_toSnowflaking_
+eq_preimage (s : Set X) : (toSnowflaking '' s : Set (Snowflaking X α hα₀ hα₁)) =
+ ofSnowflaking ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_ofSnowflaking_closedBall`：preimage_ofSnowfla
+king_closedBall (x : X) {r : Real} (hr : 0 <= r) : ofSnowflaking ⁻¹' closedBall 
+x r = closedBall (toSnowflaking x : Snowfl…
 -/
-theorem image_toSnowflaking_closedBall (x : X) {r : Real} (hr : 0 <= r) :
+theorem image_toSnowflaking_closedBall (x : X) {r : ℝ} (hr : 0 ≤ r) :
     toSnowflaking '' closedBall x r =
       closedBall (toSnowflaking x : Snowflaking X α hα₀ hα₁) (r ^ α) := by
-  rw [image_toSnowflaking_eq_preimage]; rw [preimage_ofSnowflaking_closedBall x hr]
+  rw [image_toSnowflaking_eq_preimage, preimage_ofSnowflaking_closedBall x hr]
 
 @[simp]
-/--
-theorem `preimage_toSnowflaking_closedBall` / 定理 `preimage_toSnowflaking_closedBall`
-
-English:
-theorem preimage_toSnowflaking_closedBall
-  given: (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedBall _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
-
-@[simp]
-
-中文:
-定理 preimage_toSnowflaking_closedBall
-  条件: (x : Snowflaking X α hα₀ hα₁) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedBall _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
-
-@[simp]
-
-Depends on / 依赖: Real.rpow_inv_rpow, image_toSnowflaking_closedBall, preimage_eq_iff_eq_image, rpow_inv_rpow, toSnowflaking, toSnowflaking.preimage_eq_iff_eq_image, toSnowflaking_ofSnowflaking
+/-
+**Metric.Snowflaking.preimage_toSnowflaking_closedBall** 是 Mathlib 中的一个定理，位于命名空间
+ `Metric.Snowflaking`。
+形式化陈述：preimage_toSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : Real}
+ (hr : 0 <= r) : toSnowflaking ⁻¹' closedBall x r = closedBall x.ofSnowflaking (
+r ^ α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.preimage_eq_iff_eq_image`：preimage_eq_iff_eq_image {α β} (e : α ≃ 
+β) (s t) : e ⁻¹' s = t ↔ s = e '' t
+· 使用定理 `Metric.Snowflaking.image_toSnowflaking_closedBall`：image_toSnowflaking_c
+losedBall (x : X) {r : Real} (hr : 0 <= r) : toSnowflaking '' closedBall x r = c
+losedBall (toSnowflaking x : Snowflakin…
+· 使用定理 `Real.rpow_nonneg`：rpow_nonneg {x : Real} (hx : 0 <= x) (y : Real) : 0 <=
+ x ^ y
+· 使用定理 `Metric.Snowflaking.toSnowflaking_ofSnowflaking`：toSnowflaking_ofSnowflak
+ing (x : Snowflaking X α hα₀ hα₁) : toSnowflaking x.ofSnowflaking = x
+· 使用定理 `Real.rpow_inv_rpow`：∀ {x y : ℝ}, 0 ≤ x → y ≠ 0 → (x ^ y⁻¹) ^ y = x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem preimage_toSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) :
+theorem preimage_toSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : ℝ} (hr : 0 ≤ r) :
     toSnowflaking ⁻¹' closedBall x r = closedBall x.ofSnowflaking (r ^ α⁻¹) := by
-  rw [toSnowflaking.preimage_eq_iff_eq_image]; rw [image_toSnowflaking_closedBall _ (by positivity)]; rw [toSnowflaking_ofSnowflaking]; rw [Real.rpow_inv_rpow hr hα₀.ne']
+  rw [toSnowflaking.preimage_eq_iff_eq_image, image_toSnowflaking_closedBall _ (by positivity),
+    toSnowflaking_ofSnowflaking, Real.rpow_inv_rpow hr hα₀.ne']
 
 @[simp]
-/--
-theorem `image_ofSnowflaking_closedBall` / 定理 `image_ofSnowflaking_closedBall`
-
-English:
-theorem image_ofSnowflaking_closedBall
-  given: (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r)
-  proof: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedBall _ hr]
-
-中文:
-定理 image_ofSnowflaking_closedBall
-  条件: (x : Snowflaking X α hα₀ hα₁) {r : 实数} (hr : 0 <= r)
-  证明: by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedBall _ hr]
-
-Depends on / 依赖: image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_closedBall
+/-
+**Metric.Snowflaking.image_ofSnowflaking_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `M
+etric.Snowflaking`。
+形式化陈述：image_ofSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : Real} (h
+r : 0 <= r) : ofSnowflaking '' closedBall x r = closedBall x.ofSnowflaking (r ^ 
+α⁻¹)
+参数：x : Snowflaking X α hα₀ hα₁；hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.Snowflaking.image_ofSnowflaking_eq_preimage`：image_ofSnowflaking_
+eq_preimage (s : Set (Snowflaking X α hα₀ hα₁)) : ofSnowflaking '' s = toSnowfla
+king ⁻¹' s
+· 使用定理 `Metric.Snowflaking.preimage_toSnowflaking_closedBall`：preimage_toSnowfla
+king_closedBall (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) : toSnowf
+laking ⁻¹' closedBall x r = closedBall x.o…
 -/
-theorem image_ofSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : Real} (hr : 0 <= r) :
+theorem image_ofSnowflaking_closedBall (x : Snowflaking X α hα₀ hα₁) {r : ℝ} (hr : 0 ≤ r) :
     ofSnowflaking '' closedBall x r = closedBall x.ofSnowflaking (r ^ α⁻¹) := by
-  rw [image_ofSnowflaking_eq_preimage]; rw [preimage_toSnowflaking_closedBall _ hr]
+  rw [image_ofSnowflaking_eq_preimage, preimage_toSnowflaking_closedBall _ hr]
 
 end PseudoMetricSpace
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MetricSpace
-  signature: X] : MetricSpace (Snowflaking X α hα₀ hα₁)
-  body: .ofT0PseudoMetricSpace _
-
-中文:
-实例 [度量空间
-  签名: X] : 度量空间 (Snowflaking X α hα₀ hα₁)
-  定义体: .ofT0PseudoMetricSpace _
-
-Depends on / 依赖: ofT0PseudoMetricSpace
+/-
+**Metric.Snowflaking.** 是 Mathlib 中的一个实例，位于命名空间 `Metric.Snowflaking`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MetricSpace X] : MetricSpace (Snowflaking X α hα₀ hα₁) :=
   .ofT0PseudoMetricSpace _
 
 end Snowflaking
 end Metric
+

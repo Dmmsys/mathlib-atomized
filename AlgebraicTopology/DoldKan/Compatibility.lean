@@ -59,20 +59,16 @@ variable {A A' B B' : Type*} [Category* A] [Category* A'] [Category* B] [Categor
 
 /-- A basic equivalence `A ≌ B'` obtained by composing `eA : A ≌ A'` and `e' : A' ≌ B'`. -/
 @[simps! functor inverse unitIso_hom_app]
-/--
-Definition of `equivalence₀` / `equivalence₀` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₀
-  signature: : A ≌ B'
-  body: eA.trans e'
-
-中文:
-定义 equivalence₀
-  签名: : A ≌ B'
-  定义体: eA.trans e'
-
-Depends on / 依赖: eA.trans
+--- 原说明 ---
+A basic equivalence `A ≌ B'` obtained by composing `eA : A ≌ A'` and `e' : A' ≌ 
+B'`.
 -/
 def equivalence₀ : A ≌ B' :=
   eA.trans e'
@@ -82,71 +78,39 @@ variable {eA} {e'}
 /-- An intermediate equivalence `A ≌ B'` whose functor is `F` and whose inverse is
 `e'.inverse ⋙ eA.inverse`. -/
 @[simps! functor]
-/--
-Definition of `equivalence₁` / `equivalence₁` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₁
-  signature: : A ≌ B'
-  body: (equivalence₀ eA e').changeFunctor hF
-
-中文:
-定义 equivalence₁
-  签名: : A ≌ B'
-  定义体: (equivalence₀ eA e').changeFunctor hF
-
-Depends on / 依赖: changeFunctor
+--- 原说明 ---
+An intermediate equivalence `A ≌ B'` whose functor is `F` and whose inverse is
+`e'.inverse ⋙ eA.inverse`.
 -/
 def equivalence₁ : A ≌ B' := (equivalence₀ eA e').changeFunctor hF
-
-/--
-theorem `equivalence₁_inverse` / 定理 `equivalence₁_inverse`
-
-English:
-theorem equivalence₁_inverse
-  statement: (equivalence₁ hF).inverse = e'.inverse ⋙ eA.inverse
-  proof: rfl
-
-中文:
-定理 equivalence₁_inverse
-  结论: (equivalence₁ hF).inverse = e'.inverse ⋙ eA.inverse
-  证明: rfl
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₁_inverse : (equivalence₁ hF).inverse = e'.inverse ⋙ eA.inverse :=
   rfl
 
 /-- The counit isomorphism of the equivalence `equivalence₁` between `A` and `B'`. -/
 @[simps!]
-/--
-Definition of `equivalence₁CounitIso` / `equivalence₁CounitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₁CounitIso
-  signature: : (e'.inverse ⋙ eA.inverse) ⋙ F ≅ 𝟭 B'
-  body: calc
-    (e'.inverse ⋙ eA.inverse) ⋙ F ≅ (e'.inverse ⋙ eA.inverse) ⋙ eA.functor ⋙ e'.functor :=
-      isoWhiskerLeft _ hF.symm
-    _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor ⋙ e'.functor) := associator _ _ _
-    _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor) ⋙ e'.functor :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ e'.inverse ⋙ 𝟭 _ ⋙ e'.functor := isoWhiskerLeft _ (isoWhiskerRight eA.counitIso _)
-    _ ≅ e'.inverse ⋙ e'.functor := isoWhiskerLeft _ (leftUnitor _)
-    _ ≅ 𝟭 B' := e'.counitIso
-
-中文:
-定义 equivalence₁CounitIso
-  签名: : (e'.inverse ⋙ eA.inverse) ⋙ F ≅ 𝟭 B'
-  定义体: calc
-    (e'.inverse ⋙ eA.inverse) ⋙ F ≅ (e'.inverse ⋙ eA.inverse) ⋙ eA.functor ⋙ e'.functor :=
-      isoWhiskerLeft _ hF.symm
-    _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor ⋙ e'.functor) := associator _ _ _
-    _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor) ⋙ e'.functor :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ e'.inverse ⋙ 𝟭 _ ⋙ e'.functor := isoWhiskerLeft _ (isoWhiskerRight eA.counitIso _)
-    _ ≅ e'.inverse ⋙ e'.functor := isoWhiskerLeft _ (leftUnitor _)
-    _ ≅ 𝟭 B' := e'.counitIso
-
-Depends on / 依赖: associator, counitIso, eA.counitIso, eA.functor, eA.inverse, functor, hF.symm, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+The counit isomorphism of the equivalence `equivalence₁` between `A` and `B'`.
 -/
 def equivalence₁CounitIso : (e'.inverse ⋙ eA.inverse) ⋙ F ≅ 𝟭 B' :=
   calc
@@ -161,22 +125,12 @@ def equivalence₁CounitIso : (e'.inverse ⋙ eA.inverse) ⋙ F ≅ 𝟭 B' :=
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `equivalence₁CounitIso_eq` / 定理 `equivalence₁CounitIso_eq`
-
-English:
-theorem equivalence₁CounitIso_eq
-  statement: (equivalence₁ hF).counitIso = equivalence₁CounitIso hF
-  proof: by
-  ext Y
-  simp [equivalence₁, equivalence₀]
-
-中文:
-定理 equivalence₁CounitIso_eq
-  结论: (equivalence₁ hF).counitIso = equivalence₁CounitIso hF
-  证明: by
-  ext Y
-  simp [equivalence₁, equivalence₀]
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₁CounitIso_eq : (equivalence₁ hF).counitIso = equivalence₁CounitIso hF := by
   ext Y
@@ -184,36 +138,15 @@ theorem equivalence₁CounitIso_eq : (equivalence₁ hF).counitIso = equivalence
 
 /-- The unit isomorphism of the equivalence `equivalence₁` between `A` and `B'`. -/
 @[simps!]
-/--
-Definition of `equivalence₁UnitIso` / `equivalence₁UnitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₁UnitIso
-  signature: : 𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse
-  body: calc
-    𝟭 A ≅ eA.functor ⋙ eA.inverse := eA.unitIso
-    _ ≅ eA.functor ⋙ 𝟭 A' ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight e'.unitIso _)
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.inverse) :=
-      isoWhiskerLeft _ (associator _ _ _)
-    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerRight hF _
-
-中文:
-定义 equivalence₁UnitIso
-  签名: : 𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse
-  定义体: calc
-    𝟭 A ≅ eA.functor ⋙ eA.inverse := eA.unitIso
-    _ ≅ eA.functor ⋙ 𝟭 A' ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight e'.unitIso _)
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.inverse) :=
-      isoWhiskerLeft _ (associator _ _ _)
-    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerRight hF _
-
-Depends on / 依赖: associator, eA.functor, eA.inverse, eA.unitIso, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
+--- 原说明 ---
+The unit isomorphism of the equivalence `equivalence₁` between `A` and `B'`.
 -/
 def equivalence₁UnitIso : 𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse :=
   calc
@@ -228,22 +161,12 @@ def equivalence₁UnitIso : 𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse :=
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `equivalence₁UnitIso_eq` / 定理 `equivalence₁UnitIso_eq`
-
-English:
-theorem equivalence₁UnitIso_eq
-  statement: (equivalence₁ hF).unitIso = equivalence₁UnitIso hF
-  proof: by
-  ext X
-  simp [equivalence₁]
-
-中文:
-定理 equivalence₁UnitIso_eq
-  结论: (equivalence₁ hF).unitIso = equivalence₁UnitIso hF
-  证明: by
-  ext X
-  simp [equivalence₁]
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₁UnitIso_eq : (equivalence₁ hF).unitIso = equivalence₁UnitIso hF := by
   ext X
@@ -252,34 +175,26 @@ theorem equivalence₁UnitIso_eq : (equivalence₁ hF).unitIso = equivalence₁U
 /-- An intermediate equivalence `A ≌ B` obtained as the composition of `equivalence₁` and
 the inverse of `eB : B ≌ B'`. -/
 @[simps! functor]
-/--
-Definition of `equivalence₂` / `equivalence₂` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₂
-  signature: : A ≌ B
-  body: (equivalence₁ hF).trans eB.symm
-
-中文:
-定义 equivalence₂
-  签名: : A ≌ B
-  定义体: (equivalence₁ hF).trans eB.symm
-
-Depends on / 依赖: eB.symm
+--- 原说明 ---
+An intermediate equivalence `A ≌ B` obtained as the composition of `equivalence₁
+` and
+the inverse of `eB : B ≌ B'`.
 -/
 def equivalence₂ : A ≌ B :=
   (equivalence₁ hF).trans eB.symm
-
-/--
-theorem `equivalence₂_inverse` / 定理 `equivalence₂_inverse`
-
-English:
-theorem equivalence₂_inverse
-  proof: rfl
-
-中文:
-定理 equivalence₂_inverse
-  证明: rfl
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₂_inverse :
     (equivalence₂ eB hF).inverse = eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
@@ -287,36 +202,15 @@ theorem equivalence₂_inverse :
 
 /-- The counit isomorphism of the equivalence `equivalence₂` between `A` and `B`. -/
 @[simps!]
-/--
-Definition of `equivalence₂CounitIso` / `equivalence₂CounitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₂CounitIso
-  signature: : (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse ≅ 𝟭 B
-  body: calc
-    (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse
-      ≅ eB.functor ⋙ (e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse := associator _ _ _
-    _ ≅ eB.functor ⋙ ((e'.inverse ⋙ eA.inverse) ⋙ F) ⋙ eB.inverse :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight (equivalence₁CounitIso hF) _)
-    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerLeft _ (leftUnitor _)
-    _ ≅ 𝟭 B := eB.unitIso.symm
-
-中文:
-定义 equivalence₂CounitIso
-  签名: : (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse ≅ 𝟭 B
-  定义体: calc
-    (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse
-      ≅ eB.functor ⋙ (e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse := associator _ _ _
-    _ ≅ eB.functor ⋙ ((e'.inverse ⋙ eA.inverse) ⋙ F) ⋙ eB.inverse :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight (equivalence₁CounitIso hF) _)
-    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerLeft _ (leftUnitor _)
-    _ ≅ 𝟭 B := eB.unitIso.symm
-
-Depends on / 依赖: associator, eA.inverse, eB.functor, eB.inverse, eB.unitIso.symm, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
+--- 原说明 ---
+The counit isomorphism of the equivalence `equivalence₂` between `A` and `B`.
 -/
 def equivalence₂CounitIso : (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse ≅ 𝟭 B :=
   calc
@@ -331,20 +225,12 @@ def equivalence₂CounitIso : (eB.functor ⋙ e'.inverse ⋙ eA.inverse) ⋙ F �
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `equivalence₂CounitIso_eq` / 定理 `equivalence₂CounitIso_eq`
-
-English:
-theorem equivalence₂CounitIso_eq
-  proof: by
-  ext Y'
-  simp [equivalence₂, equivalence₁CounitIso_eq]
-
-中文:
-定理 equivalence₂CounitIso_eq
-  证明: by
-  ext Y'
-  simp [equivalence₂, equivalence₁CounitIso_eq]
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₂CounitIso_eq :
     (equivalence₂ eB hF).counitIso = equivalence₂CounitIso eB hF := by
@@ -353,42 +239,15 @@ theorem equivalence₂CounitIso_eq :
 
 /-- The unit isomorphism of the equivalence `equivalence₂` between `A` and `B`. -/
 @[simps!]
-/--
-Definition of `equivalence₂UnitIso` / `equivalence₂UnitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence₂UnitIso
-  signature: : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse
-  body: calc
-    𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse := equivalence₁UnitIso hF
-    _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      (associator _ _ _).symm
-    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
-      associator _ _ _
-
-中文:
-定义 equivalence₂UnitIso
-  签名: : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse
-  定义体: calc
-    𝟭 A ≅ F ⋙ e'.inverse ⋙ eA.inverse := equivalence₁UnitIso hF
-    _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      (associator _ _ _).symm
-    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
-      associator _ _ _
-
-Depends on / 依赖: associator, counitIso, eA.inverse, eB.counitIso.symm, eB.functor, eB.inverse, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+The unit isomorphism of the equivalence `equivalence₂` between `A` and `B`.
 -/
 def equivalence₂UnitIso : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
   calc
@@ -406,22 +265,12 @@ def equivalence₂UnitIso : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `equivalence₂UnitIso_eq` / 定理 `equivalence₂UnitIso_eq`
-
-English:
-theorem equivalence₂UnitIso_eq
-  statement: (equivalence₂ eB hF).unitIso = equivalence₂UnitIso eB hF
-  proof: by
-  ext X
-  simp [equivalence₂, equivalence₁]
-
-中文:
-定理 equivalence₂UnitIso_eq
-  结论: (equivalence₂ eB hF).unitIso = equivalence₂UnitIso eB hF
-  证明: by
-  ext X
-  simp [equivalence₂, equivalence₁]
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence₂UnitIso_eq : (equivalence₂ eB hF).unitIso = equivalence₂UnitIso eB hF := by
   ext X
@@ -432,32 +281,16 @@ variable {eB}
 /-- The equivalence `A ≌ B` whose functor is `F ⋙ eB.inverse` and
 whose inverse functor is `G : B ⥤ A`. -/
 @[simps! inverse]
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence : A ≌ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence
-  signature: : A ≌ B
-  body: ((equivalence₂ eB hF).changeInverse
-    (calc eB.functor ⋙ e'.inverse ⋙ eA.inverse ≅
-        (eB.functor ⋙ e'.inverse) ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ (G ⋙ eA.functor) ⋙ eA.inverse := isoWhiskerRight hG _
-    _ ≅ G ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ G ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
-    _ ≅ G := G.rightUnitor))
-
-中文:
-定义 equivalence
-  签名: : A ≌ B
-  定义体: ((equivalence₂ eB hF).changeInverse
-    (calc eB.functor ⋙ e'.inverse ⋙ eA.inverse ≅
-        (eB.functor ⋙ e'.inverse) ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ (G ⋙ eA.functor) ⋙ eA.inverse := isoWhiskerRight hG _
-    _ ≅ G ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ G ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
-    _ ≅ G := G.rightUnitor))
-
-Depends on / 依赖: G.rightUnitor, associator, changeInverse, eA.functor, eA.inverse, eA.unitIso.symm, eB.functor, functor, inverse, isoWhiskerLeft, isoWhiskerRight, rightUnitor, unitIso
+--- 原说明 ---
+The equivalence `A ≌ B` whose functor is `F ⋙ eB.inverse` and
+whose inverse functor is `G : B ⥤ A`.
 -/
 def equivalence : A ≌ B :=
   ((equivalence₂ eB hF).changeInverse
@@ -467,19 +300,12 @@ def equivalence : A ≌ B :=
     _ ≅ G ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
     _ ≅ G ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
     _ ≅ G := G.rightUnitor))
-
-/--
-theorem `equivalence_functor` / 定理 `equivalence_functor`
-
-English:
-theorem equivalence_functor
-  statement: (equivalence hF hG).functor = F ⋙ eB.inverse
-  proof: rfl
-
-中文:
-定理 equivalence_functor
-  结论: (equivalence hF hG).functor = F ⋙ eB.inverse
-  证明: rfl
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalence_functor** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalence_functor : (equivalence hF hG).functor = F ⋙ eB.inverse
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalence_functor : (equivalence hF hG).functor = F ⋙ eB.inverse :=
   rfl
@@ -487,24 +313,14 @@ theorem equivalence_functor : (equivalence hF hG).functor = F ⋙ eB.inverse :=
 /-- The isomorphism `eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor` deduced
 from the counit isomorphism of `e'`. -/
 @[simps! hom_app]
-/--
-Definition of `τ₀` / `τ₀` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicT
+opology.DoldKan.Compatibility`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition τ₀
-  signature: : eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor
-  body: calc
-    eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor ⋙ 𝟭 _ := isoWhiskerLeft _ e'.counitIso
-    _ ≅ eB.functor := Functor.rightUnitor _
-
-中文:
-定义 τ₀
-  签名: : eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor
-  定义体: calc
-    eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor ⋙ 𝟭 _ := isoWhiskerLeft _ e'.counitIso
-    _ ≅ eB.functor := Functor.rightUnitor _
-
-Depends on / 依赖: Functor, Functor.rightUnitor, counitIso, eB.functor, functor, inverse, isoWhiskerLeft, rightUnitor
+--- 原说明 ---
+The isomorphism `eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor` deduced
+from the counit isomorphism of `e'`.
 -/
 def τ₀ : eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor :=
   calc
@@ -516,32 +332,16 @@ from the isomorphisms `hF : eA.functor ⋙ e'.functor ≅ F`,
 `hG : eB.functor ⋙ e'.inverse ≅ G ⋙ eA.functor` and the datum of
 an isomorphism `η : G ⋙ F ≅ eB.functor`. -/
 @[simps! hom_app]
-/--
-Definition of `τ₁` / `τ₁` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicT
+opology.DoldKan.Compatibility`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition τ₁
-  signature: (η : G ⋙ F ≅ eB.functor)
-  body: calc
-    eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ (eB.functor ⋙ e'.inverse) ⋙ e'.functor :=
-        (associator _ _ _).symm
-    _ ≅ (G ⋙ eA.functor) ⋙ e'.functor := isoWhiskerRight hG _
-    _ ≅ G ⋙ eA.functor ⋙ e'.functor := associator _ _ _
-    _ ≅ G ⋙ F := isoWhiskerLeft _ hF
-    _ ≅ eB.functor := η
-
-中文:
-定义 τ₁
-  签名: (η : G ⋙ F ≅ eB.functor)
-  定义体: calc
-    eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ (eB.functor ⋙ e'.inverse) ⋙ e'.functor :=
-        (associator _ _ _).symm
-    _ ≅ (G ⋙ eA.functor) ⋙ e'.functor := isoWhiskerRight hG _
-    _ ≅ G ⋙ eA.functor ⋙ e'.functor := associator _ _ _
-    _ ≅ G ⋙ F := isoWhiskerLeft _ hF
-    _ ≅ eB.functor := η
-
-Depends on / 依赖: associator, eA.functor, eB.functor, functor, inverse, isoWhiskerLeft, isoWhiskerRight
+--- 原说明 ---
+The isomorphism `eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor` deduced
+from the isomorphisms `hF : eA.functor ⋙ e'.functor ≅ F`,
+`hG : eB.functor ⋙ e'.inverse ≅ G ⋙ eA.functor` and the datum of
+an isomorphism `η : G ⋙ F ≅ eB.functor`.
 -/
 def τ₁ (η : G ⋙ F ≅ eB.functor) : eB.functor ⋙ e'.inverse ⋙ e'.functor ≅ eB.functor :=
   calc
@@ -556,26 +356,15 @@ variable (η : G ⋙ F ≅ eB.functor)
 
 /-- The counit isomorphism of `equivalence`. -/
 @[simps!]
-/--
-Definition of `equivalenceCounitIso` / `equivalenceCounitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalenceCounitIso** 是 Mathlib 中的一个定
+义，位于命名空间 `AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalenceCounitIso : G ⋙ F ⋙ eB.inverse ≅ 𝟭 B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceCounitIso
-  signature: : G ⋙ F ⋙ eB.inverse ≅ 𝟭 B
-  body: calc
-    G ⋙ F ⋙ eB.inverse ≅ (G ⋙ F) ⋙ eB.inverse := (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerRight η _
-    _ ≅ 𝟭 B := eB.unitIso.symm
-
-中文:
-定义 equivalenceCounitIso
-  签名: : G ⋙ F ⋙ eB.inverse ≅ 𝟭 B
-  定义体: calc
-    G ⋙ F ⋙ eB.inverse ≅ (G ⋙ F) ⋙ eB.inverse := (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerRight η _
-    _ ≅ 𝟭 B := eB.unitIso.symm
-
-Depends on / 依赖: associator, eB.functor, eB.inverse, eB.unitIso.symm, functor, inverse, isoWhiskerRight, unitIso
+--- 原说明 ---
+The counit isomorphism of `equivalence`.
 -/
 def equivalenceCounitIso : G ⋙ F ⋙ eB.inverse ≅ 𝟭 B :=
   calc
@@ -587,46 +376,77 @@ variable {η hF hG}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `equivalenceCounitIso_eq` / 定理 `equivalenceCounitIso_eq`
-
-English:
-theorem equivalenceCounitIso_eq
-  given: (hη : τ₀ = τ₁ hF hG η)
-  proof: by
-  ext1; apply NatTrans.ext; ext Y
-  dsimp [equivalence]
-  simp only [comp_id, id_comp, Functor.map_comp, equivalence₂CounitIso_eq,
-    equivalence₂CounitIso_hom_app, assoc, equivalenceCounitIso_hom_app]
-  simp only [equivalence₂_inverse, comp_obj, ← τ₀_hom_app, hη, τ₁_hom_app, ←
-    eB.inverse.map_comp_assoc]
-  rw [hF.inv.naturality_assoc]; rw [hF.inv.naturality_assoc]
-  congr 2
-  simp only [← e'.functor.map_comp_assoc]
-  simp only [Functor.comp_map, Equivalence.fun_inv_map, comp_obj, id_obj, map_comp, assoc]
-  simp only [← e'.functor.map_comp_assoc]
-  simp only [Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_obj, comp_id,
-    Equivalence.functor_unit_comp, map_id, id_comp]
-
-中文:
-定理 equivalenceCounitIso_eq
-  条件: (hη : τ₀ = τ₁ hF hG η)
-  证明: by
-  ext1; apply NatTrans.ext; ext Y
-  dsimp [equivalence]
-  simp only [comp_id, id_comp, Functor.map_comp, equivalence₂CounitIso_eq,
-    equivalence₂CounitIso_hom_app, assoc, equivalenceCounitIso_hom_app]
-  simp only [equivalence₂_inverse, comp_obj, ← τ₀_hom_app, hη, τ₁_hom_app, ←
-    eB.inverse.map_comp_assoc]
-  rw [hF.inv.naturality_assoc]; rw [hF.inv.naturality_assoc]
-  congr 2
-  simp only [← e'.functor.map_comp_assoc]
-  simp only [Functor.comp_map, Equivalence.fun_inv_map, comp_obj, id_obj, map_comp, assoc]
-  simp only [← e'.functor.map_comp_assoc]
-  simp only [Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_obj, comp_id,
-    Equivalence.functor_unit_comp, map_id, id_comp]
-
-Depends on / 依赖: Equivalence, Equivalence.fun_inv_map, Functor, Functor.comp_map, Functor.map_comp, NatTrans, NatTrans.ext, comp_id, comp_map, comp_obj, eB.inverse.map_comp_assoc, equivalence, equivalenceCounitIso_hom_app, fun_inv_map, functor, functor.map_comp_assoc, hF.inv.naturality_assoc, id_comp, id_obj, inverse
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalenceCounitIso_eq** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalenceCounitIso_eq (hη : τ₀ = τ₁ hF hG η) : (equivalence hF hG).couni
+tIso = equivalenceCounitIso η
+参数：hη : τ₀ = τ₁ hF hG η。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalence₂CounitIso_eq`：equiva
+lence₂CounitIso_eq : (equivalence₂ eB hF).counitIso = equivalence₂CounitIso eB h
+F
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalence₂CounitIso_hom_app`：∀
+ {A : Type u_1} {A' : Type u_2} {B : Type u_3} {B' : Type u_4} [inst : CategoryT
+heory.Category.{v_1, u_1} A]   [inst_1 : CategoryTheory.Cat…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalenceCounitIso_hom_app`：∀ 
+{A : Type u_1} {B : Type u_3} {B' : Type u_4} [inst : CategoryTheory.Category.{v
+_1, u_1} A]   [inst_1 : CategoryTheory.Category.{v_3, u_3}…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.τ₁_hom_app`：∀ {A : Type u_1} {A'
+ : Type u_2} {B : Type u_3} {B' : Type u_4} [inst : CategoryTheory.Category.{v_1
+, u_1} A]   [inst_1 : CategoryTheory.Cat…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Equivalence.fun_inv_map`：fun_inv_map (e : C ≌ D) (X Y : D
+) (f : X ⟶ Y) : e.functor.map (e.inverse.map f) = e.counit.app X ≫ f ≫ e.counitI
+nv.app Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Equivalence.functor_unit_comp`：functor_unit_comp (e : C ≌
+ D) (X : C) : dsimp% e.functor.map (e.unit.app X) ≫ e.counit.app (e.functor.obj 
+X) = 𝟙 (e.functor.obj X)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivalenceCounitIso_eq (hη : τ₀ = τ₁ hF hG η) :
     (equivalence hF hG).counitIso = equivalenceCounitIso η := by
@@ -636,7 +456,7 @@ theorem equivalenceCounitIso_eq (hη : τ₀ = τ₁ hF hG η) :
     equivalence₂CounitIso_hom_app, assoc, equivalenceCounitIso_hom_app]
   simp only [equivalence₂_inverse, comp_obj, ← τ₀_hom_app, hη, τ₁_hom_app, ←
     eB.inverse.map_comp_assoc]
-  rw [hF.inv.naturality_assoc]; rw [hF.inv.naturality_assoc]
+  rw [hF.inv.naturality_assoc, hF.inv.naturality_assoc]
   congr 2
   simp only [← e'.functor.map_comp_assoc]
   simp only [Functor.comp_map, Equivalence.fun_inv_map, comp_obj, id_obj, map_comp, assoc]
@@ -649,28 +469,14 @@ variable (hF)
 /-- The isomorphism `eA.functor ≅ F ⋙ e'.inverse` deduced from the
 unit isomorphism of `e'` and the isomorphism `hF : eA.functor ⋙ e'.functor ≅ F`. -/
 @[simps!]
-/--
-Definition of `υ` / `υ` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicT
+opology.DoldKan.Compatibility`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition υ
-  signature: : eA.functor ≅ F ⋙ e'.inverse
-  body: calc
-    eA.functor ≅ eA.functor ⋙ 𝟭 A' := (rightUnitor _).symm
-    _ ≅ eA.functor ⋙ e'.functor ⋙ e'.inverse := isoWhiskerLeft _ e'.unitIso
-    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse := (associator _ _ _).symm
-    _ ≅ F ⋙ e'.inverse := isoWhiskerRight hF _
-
-中文:
-定义 υ
-  签名: : eA.functor ≅ F ⋙ e'.inverse
-  定义体: calc
-    eA.functor ≅ eA.functor ⋙ 𝟭 A' := (rightUnitor _).symm
-    _ ≅ eA.functor ⋙ e'.functor ⋙ e'.inverse := isoWhiskerLeft _ e'.unitIso
-    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse := (associator _ _ _).symm
-    _ ≅ F ⋙ e'.inverse := isoWhiskerRight hF _
-
-Depends on / 依赖: associator, eA.functor, functor, inverse, isoWhiskerLeft, isoWhiskerRight, rightUnitor, unitIso
+--- 原说明 ---
+The isomorphism `eA.functor ≅ F ⋙ e'.inverse` deduced from the
+unit isomorphism of `e'` and the isomorphism `hF : eA.functor ⋙ e'.functor ≅ F`.
 -/
 def υ : eA.functor ≅ F ⋙ e'.inverse :=
   calc
@@ -683,60 +489,15 @@ variable (ε : eA.functor ≅ F ⋙ e'.inverse) (hG)
 
 /-- The unit isomorphism of `equivalence`. -/
 @[simps!]
-/--
-Definition of `equivalenceUnitIso` / `equivalenceUnitIso` 的定义
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalenceUnitIso** 是 Mathlib 中的一个定义，
+位于命名空间 `AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalenceUnitIso : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceUnitIso
-  signature: : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ G
-  body: calc
-    𝟭 A ≅ eA.functor ⋙ eA.inverse := eA.unitIso
-    _ ≅ (F ⋙ e'.inverse) ⋙ eA.inverse := isoWhiskerRight ε _
-    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
-    _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
-    _ ≅ (F ⋙ eB.inverse) ⋙ (eB.functor ⋙ e'.inverse) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ (F ⋙ eB.inverse) ⋙ (G ⋙ eA.functor) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight hG _)
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G ⋙ eA.functor) ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ (((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor) ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
-    _ ≅ (F ⋙ eB.inverse) ⋙ G := rightUnitor _
-
-中文:
-定义 equivalenceUnitIso
-  签名: : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ G
-  定义体: calc
-    𝟭 A ≅ eA.functor ⋙ eA.inverse := eA.unitIso
-    _ ≅ (F ⋙ e'.inverse) ⋙ eA.inverse := isoWhiskerRight ε _
-    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
-    _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
-    _ ≅ (F ⋙ eB.inverse) ⋙ (eB.functor ⋙ e'.inverse) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ (F ⋙ eB.inverse) ⋙ (G ⋙ eA.functor) ⋙ eA.inverse :=
-      isoWhiskerLeft _ (isoWhiskerRight hG _)
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G ⋙ eA.functor) ⋙ eA.inverse := (associator _ _ _).symm
-    _ ≅ (((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor) ⋙ eA.inverse :=
-      isoWhiskerRight (associator _ _ _).symm _
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
-    _ ≅ (F ⋙ eB.inverse) ⋙ G := rightUnitor _
-
-Depends on / 依赖: associator, counitIso, eA.functor, eA.inve, eA.inverse, eA.unitIso, eB.counitIso.symm, eB.functor, eB.inverse, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
+--- 原说明 ---
+The unit isomorphism of `equivalence`.
 -/
 def equivalenceUnitIso : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ G :=
   calc
@@ -764,30 +525,55 @@ def equivalenceUnitIso : 𝟭 A ≅ (F ⋙ eB.inverse) ⋙ G :=
 variable {ε hF hG}
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `equivalenceUnitIso_eq` / 定理 `equivalenceUnitIso_eq`
-
-English:
-theorem equivalenceUnitIso_eq
-  given: (hε : υ hF = ε)
-  proof: by
-  ext1; apply NatTrans.ext; ext X
-  dsimp [equivalence]
-  simp only [assoc, comp_id, equivalenceUnitIso_hom_app, equivalence₂_inverse, Functor.comp_obj,
-    id_comp, equivalence₂UnitIso_eq eB hF, equivalence₂UnitIso_hom_app,
-    ← eA.inverse.map_comp_assoc, assoc, ← hε, υ_hom_app]
-
-中文:
-定理 equivalenceUnitIso_eq
-  条件: (hε : υ hF = ε)
-  证明: by
-  ext1; apply NatTrans.ext; ext X
-  dsimp [equivalence]
-  simp only [assoc, comp_id, equivalenceUnitIso_hom_app, equivalence₂_inverse, Functor.comp_obj,
-    id_comp, equivalence₂UnitIso_eq eB hF, equivalence₂UnitIso_hom_app,
-    ← eA.inverse.map_comp_assoc, assoc, ← hε, υ_hom_app]
-
-Depends on / 依赖: Functor, Functor.comp_obj, NatTrans, NatTrans.ext, comp_id, comp_obj, eA.inverse.map_comp_assoc, equivalence, equivalenceUnitIso_hom_app, id_comp, inverse, map_comp_assoc
+/-
+**AlgebraicTopology.DoldKan.Compatibility.equivalenceUnitIso_eq** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicTopology.DoldKan.Compatibility`。
+形式化陈述：equivalenceUnitIso_eq (hε : υ hF = ε) : (equivalence hF hG).unitIso = equi
+valenceUnitIso hG ε
+参数：hε : υ hF = ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalence₂UnitIso_eq`：equivale
+nce₂UnitIso_eq : (equivalence₂ eB hF).unitIso = equivalence₂UnitIso eB hF
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalence₂UnitIso_hom_app`：∀ {
+A : Type u_1} {A' : Type u_2} {B : Type u_3} {B' : Type u_4} [inst : CategoryThe
+ory.Category.{v_1, u_1} A]   [inst_1 : CategoryTheory.Cat…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalenceUnitIso_hom_app`：∀ {A
+ : Type u_1} {A' : Type u_2} {B : Type u_3} {B' : Type u_4} [inst : CategoryTheo
+ry.Category.{v_1, u_1} A]   [inst_1 : CategoryTheory.Cat…
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.υ_hom_app`：∀ {A : Type u_1} {A' 
+: Type u_2} {B' : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} A]   [ins
+t_1 : CategoryTheory.Category.{v_2, u_2…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivalenceUnitIso_eq (hε : υ hF = ε) :
     (equivalence hF hG).unitIso = equivalenceUnitIso hG ε := by
@@ -802,3 +588,4 @@ end Compatibility
 end DoldKan
 
 end AlgebraicTopology
+

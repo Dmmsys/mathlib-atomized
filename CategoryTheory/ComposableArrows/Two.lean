@@ -32,40 +32,28 @@ variable {C : Type*} [Category* C]
   {i j k : C} (f : i ⟶ j) (g : j ⟶ k) (fg : i ⟶ k)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `twoδ₂Toδ₁` / `twoδ₂Toδ₁` 的定义
+/-- The morphism `mk₁ f ⟶ mk₁ fg` when `f ≫ g = fg` for some morphism `g`. -/
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition twoδ₂Toδ₁
-  signature: (h : f ≫ g = fg := by cat_disch)
-  body: homMk₁ (𝟙 _) g
-
-中文:
-定义 twoδ₂Toδ₁
-  签名: (h : f ≫ g = fg := by cat_disch)
-  定义体: homMk₁ (𝟙 _) g
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphism `mk₁ f ⟶ mk₁ fg` when `f ≫ g = fg` for some morphism `g`.
 -/
 def twoδ₂Toδ₁ (h : f ≫ g = fg := by cat_disch) :
     mk₁ f ⟶ mk₁ fg :=
   homMk₁ (𝟙 _) g
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `twoδ₁Toδ₀` / `twoδ₁Toδ₀` 的定义
+/-- The morphism `mk₁ fg ⟶ mk₁ g` when `f ≫ g = fg` for some morphism `f`. -/
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition twoδ₁Toδ₀
-  signature: (h : f ≫ g = fg := by cat_disch)
-  body: homMk₁ f (𝟙 _)
-
-中文:
-定义 twoδ₁Toδ₀
-  签名: (h : f ≫ g = fg := by cat_disch)
-  定义体: homMk₁ f (𝟙 _)
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphism `mk₁ fg ⟶ mk₁ g` when `f ≫ g = fg` for some morphism `f`.
 -/
 def twoδ₁Toδ₀ (h : f ≫ g = fg := by cat_disch) :
     mk₁ fg ⟶ mk₁ g :=
@@ -74,122 +62,56 @@ def twoδ₁Toδ₀ (h : f ≫ g = fg := by cat_disch) :
 variable (h : f ≫ g = fg)
 
 @[simp]
-/--
-lemma `twoδ₂Toδ₁_app_zero` / 引理 `twoδ₂Toδ₁_app_zero`
-
-English:
-lemma twoδ₂Toδ₁_app_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 twoδ₂Toδ₁_app_zero
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ReflectsLimits, ReflectsLimits.reflectsCofilteredLimits, reflectsCofilteredLimits
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma twoδ₂Toδ₁_app_zero :
     (twoδ₂Toδ₁ f g fg h).app 0 = 𝟙 _ := rfl
 
 @[simp]
-/--
-lemma `twoδ₂Toδ₁_app_one` / 引理 `twoδ₂Toδ₁_app_one`
-
-English:
-lemma twoδ₂Toδ₁_app_one
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 twoδ₂Toδ₁_app_one
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma twoδ₂Toδ₁_app_one :
     (twoδ₂Toδ₁ f g fg h).app 1 = g := rfl
 
 @[simp]
-/--
-lemma `twoδ₁Toδ₀_app_zero` / 引理 `twoδ₁Toδ₀_app_zero`
-
-English:
-lemma twoδ₁Toδ₀_app_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 twoδ₁Toδ₀_app_zero
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma twoδ₁Toδ₀_app_zero :
     (twoδ₁Toδ₀ f g fg h).app 0 = f := rfl
 
 @[simp]
-/--
-lemma `twoδ₁Toδ₀_app_one` / 引理 `twoδ₁Toδ₀_app_one`
-
-English:
-lemma twoδ₁Toδ₀_app_one
-  proof: rfl
-
-中文:
-引理 twoδ₁Toδ₀_app_one
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma twoδ₁Toδ₀_app_one :
     (twoδ₁Toδ₀ f g fg h).app 1 = 𝟙 _ := rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIso
-  signature: g] : IsIso (twoδ₂Toδ₁ f g fg h)
-  body: by
-  rw [isIso_iff₁]
-  constructor <;> dsimp <;> infer_instance
-
-中文:
-实例 [是同构
-  签名: g] : 是同构 (twoδ₂Toδ₁ f g fg h)
-  定义体: by
-  rw [isIso_iff₁]
-  constructor <;> dsimp <;> infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIso g] : IsIso (twoδ₂Toδ₁ f g fg h) := by
   rw [isIso_iff₁]
   constructor <;> dsimp <;> infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIso
-  signature: f] : IsIso (twoδ₁Toδ₀ f g fg h)
-  body: by
-  rw [isIso_iff₁]
-  constructor <;> dsimp <;> infer_instance
-
-中文:
-实例 [是同构
-  签名: f] : 是同构 (twoδ₁Toδ₀ f g fg h)
-  定义体: by
-  rw [isIso_iff₁]
-  constructor <;> dsimp <;> infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIso f] : IsIso (twoδ₁Toδ₀ f g fg h) := by
   rw [isIso_iff₁]
@@ -199,41 +121,29 @@ end
 
 section
 
-variable {ι : Type*} [Preorder ι] (i₀ i₁ i₂ : ι) (hi₀₁ : i₀ <= i₁) (hi₁₂ : i₁ <= i₂)
+variable {ι : Type*} [Preorder ι] (i₀ i₁ i₂ : ι) (hi₀₁ : i₀ ≤ i₁) (hi₁₂ : i₁ ≤ i₂)
 
-/--
-Definition of `twoδ₁Toδ₀'` / `twoδ₁Toδ₀'` 的定义
+/-- Variant of `twoδ₁Toδ₀` for preorders. -/
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation twoδ₁Toδ₀'
-  signature: :
-  body: twoδ₁Toδ₀ (homOfLE hi₀₁) _ _ rfl
-
-中文:
-缩写 twoδ₁Toδ₀'
-  签名: :
-  定义体: twoδ₁Toδ₀ (homOfLE hi₀₁) _ _ rfl
-
-Depends on / 依赖: homOfLE, preservesLimitsOfShapeOfPreservesFiniteLimits
+--- 原说明 ---
+Variant of `twoδ₁Toδ₀` for preorders.
 -/
 abbrev twoδ₁Toδ₀' :
     mk₁ (homOfLE (hi₀₁.trans hi₁₂)) ⟶ mk₁ (homOfLE hi₁₂) :=
   twoδ₁Toδ₀ (homOfLE hi₀₁) _ _ rfl
 
-/--
-Definition of `twoδ₂Toδ₁'` / `twoδ₂Toδ₁'` 的定义
+/-- Variant of `twoδ₂Toδ₁` for preorders. -/
+/-
+**CategoryTheory.ComposableArrows.two** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation twoδ₂Toδ₁'
-  signature: :
-  body: twoδ₂Toδ₁ _ (homOfLE hi₁₂) _ rfl
-
-中文:
-缩写 twoδ₂Toδ₁'
-  签名: :
-  定义体: twoδ₂Toδ₁ _ (homOfLE hi₁₂) _ rfl
-
-Depends on / 依赖: homOfLE
+--- 原说明 ---
+Variant of `twoδ₂Toδ₁` for preorders.
 -/
 abbrev twoδ₂Toδ₁' :
      mk₁ (homOfLE hi₀₁) ⟶ mk₁ (homOfLE (hi₀₁.trans hi₁₂)) :=
@@ -244,3 +154,4 @@ end
 end ComposableArrows
 
 end CategoryTheory
+

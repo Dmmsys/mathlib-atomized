@@ -38,22 +38,18 @@ See `SymmetricAlgebra` instead if you are looking for the symmetric algebra of a
 
 open Function
 
-/--
-Definition of `SymAlg` / `SymAlg` 的定义
+/-- The symmetrized algebra (denoted as `αˢʸᵐ`)
+has the same underlying space as the original algebra `α`. -/
+/-
+**SymAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SymAlg (α : Type*) : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SymAlg
-  signature: (α : Type*)
-  body: α
-
-@[inherit_doc] postfix:max "ˢʸᵐ" => SymAlg
-
-中文:
-定义 SymAlg
-  签名: (α : 类型)
-  定义体: α
-
-@[inherit_doc] postfix:max "ˢʸᵐ" => SymAlg
+--- 原说明 ---
+The symmetrized algebra (denoted as `αˢʸᵐ`)
+has the same underlying space as the original algebra `α`.
 -/
 def SymAlg (α : Type*) : Type _ :=
   α
@@ -66,20 +62,15 @@ variable {α : Type*}
 
 /-- The element of `SymAlg α` that represents `a : α`. -/
 @[match_pattern]
-/--
-Definition of `sym` / `sym` 的定义
+/-
+**SymAlg.sym** 是 Mathlib 中的一个定义，位于命名空间 `SymAlg`。
+形式化陈述：sym : α ≃ αˢʸᵐ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition sym
-  signature: : α ≃ αˢʸᵐ
-  body: Equiv.refl _
-
-中文:
-定义 sym
-  签名: : α ≃ αˢʸᵐ
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl, Scheme, Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion, Set.image_preimage_eq_inter_range.trans, X.basicOpen, X.basicOpen_res, X.presheaf.map, basicOpen, basicOpen_res, convert, fapply, hU.basicOpen, homOfLE, image_preimage_eq_inter_range, isAffineOpen_iff_of_isOpenImmersion, le_top, presheaf
+--- 原说明 ---
+The element of `SymAlg α` that represents `a : α`.
 -/
 def sym : α ≃ αˢʸᵐ :=
   Equiv.refl _
@@ -87,1305 +78,648 @@ def sym : α ≃ αˢʸᵐ :=
 /-- The element of `α` represented by `x : αˢʸᵐ`. -/
 -- We add `@[pp_nodot]` in case RFC https://github.com/leanprover/lean4/issues/6178 happens.
 @[pp_nodot]
-/--
-Definition of `unsym` / `unsym` 的定义
-
-English:
-definition unsym
-  signature: : αˢʸᵐ ≃ α
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 unsym
-  签名: : αˢʸᵐ ≃ α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+/-
+**SymAlg.unsym** 是 Mathlib 中的一个定义，位于命名空间 `SymAlg`。
+形式化陈述：unsym : αˢʸᵐ ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 def unsym : αˢʸᵐ ≃ α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `unsym_sym` / 定理 `unsym_sym`
-
-English:
-theorem unsym_sym
-  given: (a : α)
-  statement: unsym (sym a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_sym
-  条件: (a : α)
-  结论: unsym (sym a) = a
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_sym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_sym (a : α) : unsym (sym a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_sym (a : α) : unsym (sym a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `sym_unsym` / 定理 `sym_unsym`
-
-English:
-theorem sym_unsym
-  given: (a : α)
-  statement: sym (unsym a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_unsym
-  条件: (a : α)
-  结论: sym (unsym a) = a
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_unsym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_unsym (a : α) : sym (unsym a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_unsym (a : α) : sym (unsym a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `sym_comp_unsym` / 定理 `sym_comp_unsym`
-
-English:
-theorem sym_comp_unsym
-  statement: (sym : α -> αˢʸᵐ) ∘ unsym = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_comp_unsym
-  结论: (sym : α -> αˢʸᵐ) ∘ unsym = id
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_comp_unsym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_comp_unsym : (sym : α -> αˢʸᵐ) ∘ unsym = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sym_comp_unsym : (sym : α -> αˢʸᵐ) ∘ unsym = id :=
+theorem sym_comp_unsym : (sym : α → αˢʸᵐ) ∘ unsym = id :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_comp_sym` / 定理 `unsym_comp_sym`
-
-English:
-theorem unsym_comp_sym
-  statement: (unsym : αˢʸᵐ -> α) ∘ sym = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_comp_sym
-  结论: (unsym : αˢʸᵐ -> α) ∘ sym = id
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_comp_sym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_comp_sym : (unsym : αˢʸᵐ -> α) ∘ sym = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem unsym_comp_sym : (unsym : αˢʸᵐ -> α) ∘ sym = id :=
+theorem unsym_comp_sym : (unsym : αˢʸᵐ → α) ∘ sym = id :=
   rfl
 
 @[simp]
-/--
-theorem `sym_symm` / 定理 `sym_symm`
-
-English:
-theorem sym_symm
-  statement: (@sym α).symm = unsym
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_symm
-  结论: (@sym α).symm = unsym
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: IsAffine, IsAffineHom, isAffineHom_of_isAffine
+/-
+**SymAlg.sym_symm** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_symm : (@sym α).symm = unsym
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem sym_symm : (@sym α).symm = unsym :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_symm` / 定理 `unsym_symm`
-
-English:
-theorem unsym_symm
-  statement: (@unsym α).symm = sym
-  proof: rfl
-
-中文:
-定理 unsym_symm
-  结论: (@unsym α).symm = sym
-  证明: rfl
+/-
+**SymAlg.unsym_symm** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_symm : (@unsym α).symm = sym
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem unsym_symm : (@unsym α).symm = sym :=
   rfl
-
-/--
-theorem `sym_bijective` / 定理 `sym_bijective`
-
-English:
-theorem sym_bijective
-  statement: Bijective (sym : α -> αˢʸᵐ)
-  proof: sym.bijective
-
-中文:
-定理 sym_bijective
-  结论: 双射 (sym : α -> αˢʸᵐ)
-  证明: sym.bijective
-
-Depends on / 依赖: bijective, sym.bijective
+/-
+**SymAlg.sym_bijective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_bijective : Bijective (sym : α -> αˢʸᵐ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-theorem sym_bijective : Bijective (sym : α -> αˢʸᵐ) :=
+theorem sym_bijective : Bijective (sym : α → αˢʸᵐ) :=
   sym.bijective
-
-/--
-theorem `unsym_bijective` / 定理 `unsym_bijective`
-
-English:
-theorem unsym_bijective
-  statement: Bijective (unsym : αˢʸᵐ -> α)
-  proof: unsym.symm.bijective
-
-中文:
-定理 unsym_bijective
-  结论: 双射 (unsym : αˢʸᵐ -> α)
-  证明: unsym.symm.bijective
-
-Depends on / 依赖: IsAffineHom, MorphismProperty, MorphismProperty.pullback_snd, bijective, isAffine_of_isAffineHom, pullback, pullback.snd, pullback_snd, unsym.symm.bijective
+/-
+**SymAlg.unsym_bijective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_bijective : Bijective (unsym : αˢʸᵐ -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem unsym_bijective : Bijective (unsym : αˢʸᵐ -> α) :=
+theorem unsym_bijective : Bijective (unsym : αˢʸᵐ → α) :=
   unsym.symm.bijective
-
-/--
-theorem `sym_injective` / 定理 `sym_injective`
-
-English:
-theorem sym_injective
-  statement: Injective (sym : α -> αˢʸᵐ)
-  proof: sym.injective
-
-中文:
-定理 sym_injective
-  结论: 单射 (sym : α -> αˢʸᵐ)
-  证明: sym.injective
-
-Depends on / 依赖: IsAffineHom, MorphismProperty, MorphismProperty.pullback_fst, injective, isAffine_of_isAffineHom, pullback, pullback.fst, pullback_fst, sym.injective
+/-
+**SymAlg.sym_injective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_injective : Injective (sym : α -> αˢʸᵐ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-theorem sym_injective : Injective (sym : α -> αˢʸᵐ) :=
+theorem sym_injective : Injective (sym : α → αˢʸᵐ) :=
   sym.injective
-
-/--
-theorem `sym_surjective` / 定理 `sym_surjective`
-
-English:
-theorem sym_surjective
-  statement: Surjective (sym : α -> αˢʸᵐ)
-  proof: sym.surjective
-
-中文:
-定理 sym_surjective
-  结论: 满射 (sym : α -> αˢʸᵐ)
-  证明: sym.surjective
-
-Depends on / 依赖: surjective, sym.surjective
+/-
+**SymAlg.sym_surjective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_surjective : Surjective (sym : α -> αˢʸᵐ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
-theorem sym_surjective : Surjective (sym : α -> αˢʸᵐ) :=
+theorem sym_surjective : Surjective (sym : α → αˢʸᵐ) :=
   sym.surjective
-
-/--
-theorem `unsym_injective` / 定理 `unsym_injective`
-
-English:
-theorem unsym_injective
-  statement: Injective (unsym : αˢʸᵐ -> α)
-  proof: unsym.injective
-
-中文:
-定理 unsym_injective
-  结论: 单射 (unsym : αˢʸᵐ -> α)
-  证明: unsym.injective
-
-Depends on / 依赖: injective, unsym.injective
+/-
+**SymAlg.unsym_injective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-theorem unsym_injective : Injective (unsym : αˢʸᵐ -> α) :=
+theorem unsym_injective : Injective (unsym : αˢʸᵐ → α) :=
   unsym.injective
-
-/--
-theorem `unsym_surjective` / 定理 `unsym_surjective`
-
-English:
-theorem unsym_surjective
-  statement: Surjective (unsym : αˢʸᵐ -> α)
-  proof: unsym.surjective
-
-中文:
-定理 unsym_surjective
-  结论: 满射 (unsym : αˢʸᵐ -> α)
-  证明: unsym.surjective
-
-Depends on / 依赖: IsAffine, Scheme, Scheme.Hom.comp_apply, comp_apply, convert, coprod, coprod.map, coprodMk, hW.preimage, isAffineOpen_opensRange, le_antisymm, preimage, replace, surjective, toScheme, unsym.surjective
+/-
+**SymAlg.unsym_surjective** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_surjective : Surjective (unsym : αˢʸᵐ -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
-theorem unsym_surjective : Surjective (unsym : αˢʸᵐ -> α) :=
+theorem unsym_surjective : Surjective (unsym : αˢʸᵐ → α) :=
   unsym.surjective
-
-/--
-theorem `sym_inj` / 定理 `sym_inj`
-
-English:
-theorem sym_inj
-  given: {a b : α}
-  statement: sym a = sym b ↔ a = b
-  proof: sym_injective.eq_iff
-
-中文:
-定理 sym_inj
-  条件: {a b : α}
-  结论: sym a = sym b ↔ a = b
-  证明: sym_injective.eq_iff
-
-Depends on / 依赖: eq_iff, sym_injective, sym_injective.eq_iff
+/-
+**SymAlg.sym_inj** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_inj {a b : α} : sym a = sym b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `SymAlg.sym_injective`：sym_injective : Injective (sym : α -> αˢʸᵐ)
 -/
 theorem sym_inj {a b : α} : sym a = sym b ↔ a = b :=
   sym_injective.eq_iff
-
-/--
-theorem `unsym_inj` / 定理 `unsym_inj`
-
-English:
-theorem unsym_inj
-  given: {a b : αˢʸᵐ}
-  statement: unsym a = unsym b ↔ a = b
-  proof: unsym_injective.eq_iff
-
-中文:
-定理 unsym_inj
-  条件: {a b : αˢʸᵐ}
-  结论: unsym a = unsym b ↔ a = b
-  证明: unsym_injective.eq_iff
-
-Depends on / 依赖: eq_iff, unsym_injective, unsym_injective.eq_iff
+/-
+**SymAlg.unsym_inj** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_inj {a b : αˢʸᵐ} : unsym a = unsym b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `SymAlg.unsym_injective`：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
 -/
 theorem unsym_inj {a b : αˢʸᵐ} : unsym a = unsym b ↔ a = b :=
   unsym_injective.eq_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: α] : Nontrivial αˢʸᵐ
-  body: sym_injective.nontrivial
-
-中文:
-实例 [非平凡
-  签名: α] : 非平凡 αˢʸᵐ
-  定义体: sym_injective.nontrivial
-
-Depends on / 依赖: nontrivial, sym_injective, sym_injective.nontrivial
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial α] : Nontrivial αˢʸᵐ :=
   sym_injective.nontrivial
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited αˢʸᵐ
-  body: ⟨sym default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 αˢʸᵐ
-  定义体: ⟨sym default⟩
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited αˢʸᵐ :=
   ⟨sym default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Subsingleton αˢʸᵐ
-  body: unsym_injective.subsingleton
-
-中文:
-实例 [子单例
-  签名: α] : 子单例 αˢʸᵐ
-  定义体: unsym_injective.subsingleton
-
-Depends on / 依赖: subsingleton, unsym_injective, unsym_injective.subsingleton
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton α] : Subsingleton αˢʸᵐ :=
   unsym_injective.subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique αˢʸᵐ
-  body: Unique.mk' _
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 αˢʸᵐ
-  定义体: Unique.mk' _
-
-Depends on / 依赖: Unique, Unique.mk
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique αˢʸᵐ :=
   Unique.mk' _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : IsEmpty αˢʸᵐ
-  body: Function.isEmpty unsym
-
-@[to_additive]
-
-中文:
-实例 [是空
-  签名: α] : 是空 αˢʸᵐ
-  定义体: Function.isEmpty unsym
-
-@[to_additive]
-
-Depends on / 依赖: Function, Function.isEmpty, isEmpty
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : IsEmpty αˢʸᵐ :=
   Function.isEmpty unsym
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: α] : One αˢʸᵐ where one
-  body: sym 1
-
-中文:
-实例 [幺
-  签名: α] : 幺 αˢʸᵐ where one
-  定义体: sym 1
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One α] : One αˢʸᵐ where one := sym 1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] : Add αˢʸᵐ where add a b
-  body: sym (unsym a + unsym b)
-
-中文:
-实例 [加法
-  签名: α] : 加法 αˢʸᵐ where add a b
-  定义体: sym (unsym a + unsym b)
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add α] : Add αˢʸᵐ where add a b := sym (unsym a + unsym b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Sub
-  signature: α] : Sub αˢʸᵐ where sub a b
-  body: sym (unsym a - unsym b)
-
-中文:
-实例 [减法
-  签名: α] : 减法 αˢʸᵐ where sub a b
-  定义体: sym (unsym a - unsym b)
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Sub α] : Sub αˢʸᵐ where sub a b := sym (unsym a - unsym b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Neg
-  signature: α] : Neg αˢʸᵐ where neg a
-  body: sym (-unsym a)
-
-中文:
-实例 [取负
-  签名: α] : 取负 αˢʸᵐ where neg a
-  定义体: sym (-unsym a)
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Neg α] : Neg αˢʸᵐ where neg a := sym (-unsym a)
 
 -- Introduce the symmetrized multiplication
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] : Mul αˢʸᵐ where
-  body: sym (⅟2 * (unsym a * unsym b + unsym b * unsym a))
-
-@[to_additive existing]
-
-中文:
-实例 [加法
-  签名: α] [乘法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] : 乘法 αˢʸᵐ where
-  定义体: sym (⅟2 * (unsym a * unsym b + unsym b * unsym a))
-
-@[to_additive existing]
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] : Mul αˢʸᵐ where
   mul a b := sym (⅟2 * (unsym a * unsym b + unsym b * unsym a))
 
 @[to_additive existing]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inv
-  signature: α] : Inv αˢʸᵐ where inv a
-  body: sym (unsym a)⁻¹
-
-中文:
-实例 [取逆
-  签名: α] : 取逆 αˢʸᵐ where inv a
-  定义体: sym (unsym a)⁻¹
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Inv α] : Inv αˢʸᵐ where inv a := sym (unsym a)⁻¹
-
+instance [Inv α] : Inv αˢʸᵐ where inv a := sym <| (unsym a)⁻¹
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type*) [SMul R α] : SMul R αˢʸᵐ where smul r a := sym (r • unsym a)
 
 @[to_additive (attr := simp)]
-/--
-theorem `sym_one` / 定理 `sym_one`
-
-English:
-theorem sym_one
-  given: [One α]
-  statement: sym (1 : α) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 sym_one
-  条件: [幺 α]
-  结论: sym (1 : α) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SymAlg.sym_one** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_one [One α] : sym (1 : α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_one [One α] : sym (1 : α) = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `unsym_one` / 定理 `unsym_one`
-
-English:
-theorem unsym_one
-  given: [One α]
-  statement: unsym (1 : αˢʸᵐ) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_one
-  条件: [幺 α]
-  结论: unsym (1 : αˢʸᵐ) = 1
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_one** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_one [One α] : unsym (1 : αˢʸᵐ) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_one [One α] : unsym (1 : αˢʸᵐ) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `sym_add` / 定理 `sym_add`
-
-English:
-theorem sym_add
-  given: [Add α] (a b : α)
-  statement: sym (a + b) = sym a + sym b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_add
-  条件: [加法 α] (a b : α)
-  结论: sym (a + b) = sym a + sym b
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_add** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_add [Add α] (a b : α) : sym (a + b) = sym a + sym b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_add [Add α] (a b : α) : sym (a + b) = sym a + sym b :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_add` / 定理 `unsym_add`
-
-English:
-theorem unsym_add
-  given: [Add α] (a b : αˢʸᵐ)
-  statement: unsym (a + b) = unsym a + unsym b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_add
-  条件: [加法 α] (a b : αˢʸᵐ)
-  结论: unsym (a + b) = unsym a + unsym b
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_add** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_add [Add α] (a b : αˢʸᵐ) : unsym (a + b) = unsym a + unsym b
+参数：a b : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_add [Add α] (a b : αˢʸᵐ) : unsym (a + b) = unsym a + unsym b :=
   rfl
 
 @[simp]
-/--
-theorem `sym_sub` / 定理 `sym_sub`
-
-English:
-theorem sym_sub
-  given: [Sub α] (a b : α)
-  statement: sym (a - b) = sym a - sym b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_sub
-  条件: [减法 α] (a b : α)
-  结论: sym (a - b) = sym a - sym b
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_sub** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_sub [Sub α] (a b : α) : sym (a - b) = sym a - sym b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_sub [Sub α] (a b : α) : sym (a - b) = sym a - sym b :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_sub` / 定理 `unsym_sub`
-
-English:
-theorem unsym_sub
-  given: [Sub α] (a b : αˢʸᵐ)
-  statement: unsym (a - b) = unsym a - unsym b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_sub
-  条件: [减法 α] (a b : αˢʸᵐ)
-  结论: unsym (a - b) = unsym a - unsym b
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_sub** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_sub [Sub α] (a b : αˢʸᵐ) : unsym (a - b) = unsym a - unsym b
+参数：a b : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_sub [Sub α] (a b : αˢʸᵐ) : unsym (a - b) = unsym a - unsym b :=
   rfl
 
 @[simp]
-/--
-theorem `sym_neg` / 定理 `sym_neg`
-
-English:
-theorem sym_neg
-  given: [Neg α] (a : α)
-  statement: sym (-a) = -sym a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_neg
-  条件: [取负 α] (a : α)
-  结论: sym (-a) = -sym a
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_neg** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_neg [Neg α] (a : α) : sym (-a) = -sym a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_neg [Neg α] (a : α) : sym (-a) = -sym a :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_neg` / 定理 `unsym_neg`
-
-English:
-theorem unsym_neg
-  given: [Neg α] (a : αˢʸᵐ)
-  statement: unsym (-a) = -unsym a
-  proof: rfl
-
-中文:
-定理 unsym_neg
-  条件: [取负 α] (a : αˢʸᵐ)
-  结论: unsym (-a) = -unsym a
-  证明: rfl
+/-
+**SymAlg.unsym_neg** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_neg [Neg α] (a : αˢʸᵐ) : unsym (-a) = -unsym a
+参数：a : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_neg [Neg α] (a : αˢʸᵐ) : unsym (-a) = -unsym a :=
   rfl
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: [Add α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ)
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: [加法 α] [乘法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : αˢʸᵐ)
-  证明: rfl
+/-
+**SymAlg.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：mul_def [Add α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢ
+ʸᵐ) : a * b = sym (⅟2 * (unsym a * unsym b + unsym b * unsym a))
+参数：2 : α；a b : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def [Add α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ) :
     a * b = sym (⅟2 * (unsym a * unsym b + unsym b * unsym a)) := rfl
-
-/--
-theorem `unsym_mul` / 定理 `unsym_mul`
-
-English:
-theorem unsym_mul
-  given: [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ)
-  proof: rfl
-
-中文:
-定理 unsym_mul
-  条件: [乘法 α] [加法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : αˢʸᵐ)
-  证明: rfl
+/-
+**SymAlg.unsym_mul** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_mul [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : 
+αˢʸᵐ) : unsym (a * b) = ⅟2 * (unsym a * unsym b + unsym b * unsym a)
+参数：2 : α；a b : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_mul [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ) :
     unsym (a * b) = ⅟2 * (unsym a * unsym b + unsym b * unsym a) := rfl
-
-/--
-theorem `sym_mul_sym` / 定理 `sym_mul_sym`
-
-English:
-theorem sym_mul_sym
-  given: [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : α)
-  proof: rfl
-
-@[simp, to_additive existing]
-
-中文:
-定理 sym_mul_sym
-  条件: [乘法 α] [加法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : α)
-  证明: rfl
-
-@[simp, to_additive existing]
+/-
+**SymAlg.sym_mul_sym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_mul_sym [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b 
+: α) : sym a * sym b = sym (⅟2 * (a * b + b * a))
+参数：2 : α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_mul_sym [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : α) :
     sym a * sym b = sym (⅟2 * (a * b + b * a)) :=
   rfl
 
 @[simp, to_additive existing]
-/--
-theorem `sym_inv` / 定理 `sym_inv`
-
-English:
-theorem sym_inv
-  given: [Inv α] (a : α)
-  statement: sym a⁻¹ = (sym a)⁻¹
-  proof: rfl
-
-@[simp, to_additive existing]
-
-中文:
-定理 sym_inv
-  条件: [取逆 α] (a : α)
-  结论: sym a⁻¹ = (sym a)⁻¹
-  证明: rfl
-
-@[simp, to_additive existing]
+/-
+**SymAlg.sym_inv** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_inv [Inv α] (a : α) : sym a⁻¹ = (sym a)⁻¹
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_inv [Inv α] (a : α) : sym a⁻¹ = (sym a)⁻¹ :=
   rfl
 
 @[simp, to_additive existing]
-/--
-theorem `unsym_inv` / 定理 `unsym_inv`
-
-English:
-theorem unsym_inv
-  given: [Inv α] (a : αˢʸᵐ)
-  statement: unsym a⁻¹ = (unsym a)⁻¹
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unsym_inv
-  条件: [取逆 α] (a : αˢʸᵐ)
-  结论: unsym a⁻¹ = (unsym a)⁻¹
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.unsym_inv** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_inv [Inv α] (a : αˢʸᵐ) : unsym a⁻¹ = (unsym a)⁻¹
+参数：a : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_inv [Inv α] (a : αˢʸᵐ) : unsym a⁻¹ = (unsym a)⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `sym_smul` / 定理 `sym_smul`
-
-English:
-theorem sym_smul
-  given: {R : Type*} [SMul R α] (c : R) (a : α)
-  statement: sym (c • a) = c • sym a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sym_smul
-  条件: {R : 类型} [标量乘法 R α] (c : R) (a : α)
-  结论: sym (c • a) = c • sym a
-  证明: rfl
-
-@[simp]
+/-
+**SymAlg.sym_smul** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_smul {R : Type*} [SMul R α] (c : R) (a : α) : sym (c • a) = c • sym a
+参数：c : R；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sym_smul {R : Type*} [SMul R α] (c : R) (a : α) : sym (c • a) = c • sym a :=
   rfl
 
 @[simp]
-/--
-theorem `unsym_smul` / 定理 `unsym_smul`
-
-English:
-theorem unsym_smul
-  given: {R : Type*} [SMul R α] (c : R) (a : αˢʸᵐ)
-  statement: unsym (c • a) = c • unsym a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unsym_smul
-  条件: {R : 类型} [标量乘法 R α] (c : R) (a : αˢʸᵐ)
-  结论: unsym (c • a) = c • unsym a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SymAlg.unsym_smul** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_smul {R : Type*} [SMul R α] (c : R) (a : αˢʸᵐ) : unsym (c • a) = c •
+ unsym a
+参数：c : R；a : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unsym_smul {R : Type*} [SMul R α] (c : R) (a : αˢʸᵐ) : unsym (c • a) = c • unsym a :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `unsym_eq_one_iff` / 定理 `unsym_eq_one_iff`
-
-English:
-theorem unsym_eq_one_iff
-  given: [One α] (a : αˢʸᵐ)
-  statement: unsym a = 1 ↔ a = 1
-  proof: unsym_injective.eq_iff' rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unsym_eq_one_iff
-  条件: [幺 α] (a : αˢʸᵐ)
-  结论: unsym a = 1 ↔ a = 1
-  证明: unsym_injective.eq_iff' rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_iff, unsym_injective, unsym_injective.eq_iff
+/-
+**SymAlg.unsym_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_eq_one_iff [One α] (a : αˢʸᵐ) : unsym a = 1 ↔ a = 1
+参数：a : αˢʸᵐ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SymAlg.unsym_injective`：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
 -/
 theorem unsym_eq_one_iff [One α] (a : αˢʸᵐ) : unsym a = 1 ↔ a = 1 :=
   unsym_injective.eq_iff' rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `sym_eq_one_iff` / 定理 `sym_eq_one_iff`
-
-English:
-theorem sym_eq_one_iff
-  given: [One α] (a : α)
-  statement: sym a = 1 ↔ a = 1
-  proof: sym_injective.eq_iff' rfl
-
-@[to_additive]
-
-中文:
-定理 sym_eq_one_iff
-  条件: [幺 α] (a : α)
-  结论: sym a = 1 ↔ a = 1
-  证明: sym_injective.eq_iff' rfl
-
-@[to_additive]
-
-Depends on / 依赖: eq_iff, sym_injective, sym_injective.eq_iff
+/-
+**SymAlg.sym_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_eq_one_iff [One α] (a : α) : sym a = 1 ↔ a = 1
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SymAlg.sym_injective`：sym_injective : Injective (sym : α -> αˢʸᵐ)
 -/
 theorem sym_eq_one_iff [One α] (a : α) : sym a = 1 ↔ a = 1 :=
   sym_injective.eq_iff' rfl
 
 @[to_additive]
-/--
-theorem `unsym_ne_one_iff` / 定理 `unsym_ne_one_iff`
-
-English:
-theorem unsym_ne_one_iff
-  given: [One α] (a : αˢʸᵐ)
-  statement: unsym a != (1 : α) ↔ a != (1 : αˢʸᵐ)
-  proof: not_congr unsym_eq_one_iff a
-
-@[to_additive]
-
-中文:
-定理 unsym_ne_one_iff
-  条件: [幺 α] (a : αˢʸᵐ)
-  结论: unsym a != (1 : α) ↔ a != (1 : αˢʸᵐ)
-  证明: not_congr unsym_eq_one_iff a
-
-@[to_additive]
-
-Depends on / 依赖: not_congr, unsym_eq_one_iff
+/-
+**SymAlg.unsym_ne_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_ne_one_iff [One α] (a : αˢʸᵐ) : unsym a != (1 : α) ↔ a != (1 : αˢʸᵐ)
+参数：a : αˢʸᵐ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `SymAlg.unsym_eq_one_iff`：unsym_eq_one_iff [One α] (a : αˢʸᵐ) : unsym a =
+ 1 ↔ a = 1
 -/
-theorem unsym_ne_one_iff [One α] (a : αˢʸᵐ) : unsym a != (1 : α) ↔ a != (1 : αˢʸᵐ) :=
-not_congr unsym_eq_one_iff a
+theorem unsym_ne_one_iff [One α] (a : αˢʸᵐ) : unsym a ≠ (1 : α) ↔ a ≠ (1 : αˢʸᵐ) :=
+  not_congr <| unsym_eq_one_iff a
 
 @[to_additive]
-/--
-theorem `sym_ne_one_iff` / 定理 `sym_ne_one_iff`
-
-English:
-theorem sym_ne_one_iff
-  given: [One α] (a : α)
-  statement: sym a != (1 : αˢʸᵐ) ↔ a != (1 : α)
-  proof: not_congr sym_eq_one_iff a
-
-中文:
-定理 sym_ne_one_iff
-  条件: [幺 α] (a : α)
-  结论: sym a != (1 : αˢʸᵐ) ↔ a != (1 : α)
-  证明: not_congr sym_eq_one_iff a
-
-Depends on / 依赖: not_congr, sym_eq_one_iff
+/-
+**SymAlg.sym_ne_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_ne_one_iff [One α] (a : α) : sym a != (1 : αˢʸᵐ) ↔ a != (1 : α)
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `SymAlg.sym_eq_one_iff`：sym_eq_one_iff [One α] (a : α) : sym a = 1 ↔ a = 
+1
 -/
-theorem sym_ne_one_iff [One α] (a : α) : sym a != (1 : αˢʸᵐ) ↔ a != (1 : α) :=
-not_congr sym_eq_one_iff a
-
-/--
-Instance `addCommSemigroup` / 实例 `addCommSemigroup`
-
-English:
-instance addCommSemigroup
-  signature: [AddCommSemigroup α]
-  body: unsym_injective.addCommSemigroup _ unsym_add
-
-中文:
-实例 addCommSemigroup
-  签名: [加法交换半群 α]
-  定义体: unsym_injective.addCommSemigroup _ unsym_add
-
-Depends on / 依赖: addCommSemigroup, unsym_add, unsym_injective, unsym_injective.addCommSemigroup
+theorem sym_ne_one_iff [One α] (a : α) : sym a ≠ (1 : αˢʸᵐ) ↔ a ≠ (1 : α) :=
+  not_congr <| sym_eq_one_iff a
+/-
+**SymAlg.addCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：addCommSemigroup [AddCommSemigroup α] : AddCommSemigroup αˢʸᵐ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SymAlg.unsym_injective`：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
 -/
 instance addCommSemigroup [AddCommSemigroup α] : AddCommSemigroup αˢʸᵐ :=
   unsym_injective.addCommSemigroup _ unsym_add
-
-/--
-Instance `addMonoid` / 实例 `addMonoid`
-
-English:
-instance addMonoid
-  signature: [AddMonoid α]
-  body: unsym_injective.addMonoid _ unsym_zero unsym_add fun _ _ => rfl
-
-中文:
-实例 addMonoid
-  签名: [加法幺半群 α]
-  定义体: unsym_injective.addMonoid _ unsym_zero unsym_add fun _ _ => rfl
-
-Depends on / 依赖: addMonoid, unsym_add, unsym_injective, unsym_injective.addMonoid, unsym_zero
+/-
+**SymAlg.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：addMonoid [AddMonoid α] : AddMonoid αˢʸᵐ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SymAlg.unsym_injective`：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
 -/
 instance addMonoid [AddMonoid α] : AddMonoid αˢʸᵐ :=
   unsym_injective.addMonoid _ unsym_zero unsym_add fun _ _ => rfl
-
-/--
-Instance `addGroup` / 实例 `addGroup`
-
-English:
-instance addGroup
-  signature: [AddGroup α]
-  body: unsym_injective.addGroup _ unsym_zero unsym_add unsym_neg unsym_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-中文:
-实例 addGroup
-  签名: [加法群 α]
-  定义体: unsym_injective.addGroup _ unsym_zero unsym_add unsym_neg unsym_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-Depends on / 依赖: addGroup, unsym_add, unsym_injective, unsym_injective.addGroup, unsym_neg, unsym_sub, unsym_zero
+/-
+**SymAlg.addGroup** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：addGroup [AddGroup α] : AddGroup αˢʸᵐ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SymAlg.unsym_injective`：unsym_injective : Injective (unsym : αˢʸᵐ -> α)
 -/
 instance addGroup [AddGroup α] : AddGroup αˢʸᵐ :=
   unsym_injective.addGroup _ unsym_zero unsym_add unsym_neg unsym_sub (fun _ _ => rfl) fun _ _ =>
     rfl
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: [AddCommMonoid α]
-  body: { SymAlg.addCommSemigroup, SymAlg.addMonoid with }
-
-中文:
-实例 addCommMonoid
-  签名: [加法交换幺半群 α]
-  定义体: { SymAlg.addCommSemigroup, SymAlg.addMonoid with }
-
-Depends on / 依赖: SymAlg, SymAlg.addCommSemigroup, SymAlg.addMonoid, addCommSemigroup, addMonoid
+/-
+**SymAlg.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：addCommMonoid [AddCommMonoid α] : AddCommMonoid αˢʸᵐ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoid [AddCommMonoid α] : AddCommMonoid αˢʸᵐ :=
   { SymAlg.addCommSemigroup, SymAlg.addMonoid with }
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: [AddCommGroup α]
-  body: { SymAlg.addCommMonoid, SymAlg.addGroup with }
-
-中文:
-实例 addCommGroup
-  签名: [加法交换群 α]
-  定义体: { SymAlg.addCommMonoid, SymAlg.addGroup with }
-
-Depends on / 依赖: SymAlg, SymAlg.addCommMonoid, SymAlg.addGroup, addCommMonoid, addGroup
+/-
+**SymAlg.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：addCommGroup [AddCommGroup α] : AddCommGroup αˢʸᵐ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroup [AddCommGroup α] : AddCommGroup αˢʸᵐ :=
   { SymAlg.addCommMonoid, SymAlg.addGroup with }
-
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : Type*} [Semiring R] [AddCommMonoid α] [Module R α] : Module R αˢʸᵐ :=
   Function.Injective.module R ⟨⟨unsym, unsym_zero⟩, unsym_add⟩ unsym_injective unsym_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] [AddMonoidWithOne α] [Invertible (2 : α)] (a
-  body: sym (⅟a)
-  invOf_mul_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
-  mul_invOf_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
-
-@[simp]
-
-中文:
-实例 [乘法
-  签名: α] [加法带幺幺半群 α] [可逆 (2 : α)] (a
-  定义体: sym (⅟a)
-  invOf_mul_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
-  mul_invOf_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
-
-@[simp]
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a] :
     Invertible (sym a) where
   invOf := sym (⅟a)
   invOf_mul_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
+    rw [sym_mul_sym, mul_invOf_self, invOf_mul_self, one_add_one_eq_two, invOf_mul_self, sym_one]
   mul_invOf_self := by
-    rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
+    rw [sym_mul_sym, mul_invOf_self, invOf_mul_self, one_add_one_eq_two, invOf_mul_self, sym_one]
 
 @[simp]
-/--
-theorem `invOf_sym` / 定理 `invOf_sym`
-
-English:
-theorem invOf_sym
-  given: [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a]
-  proof: rfl
-
-中文:
-定理 invOf_sym
-  条件: [乘法 α] [加法带幺幺半群 α] [可逆 (2 : α)] (a : α) [可逆 a]
-  证明: rfl
+/-
+**SymAlg.invOf_sym** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：invOf_sym [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Inver
+tible a] : ⅟(sym a) = sym (⅟a)
+参数：2 : α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem invOf_sym [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a] :
     ⅟(sym a) = sym (⅟a) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `nonAssocSemiring` / 实例 `nonAssocSemiring`
-
-English:
-instance nonAssocSemiring
-  signature: [Semiring α] [Invertible (2 : α)]
-  body: { SymAlg.addCommMonoid with
-    zero_mul := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
-    mul_zero := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
-    mul_one := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
-    one_mul := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
-    left_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
-      congr 2
-      rw [mul_add]
-      abel
-    right_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
-      congr 2
-      rw [mul_add]
-      abel }
-
-中文:
-实例 nonAssocSemiring
-  签名: [半环 α] [可逆 (2 : α)]
-  定义体: { SymAlg.addCommMonoid with
-    zero_mul := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
-    mul_zero := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
-    mul_one := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
-    one_mul := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
-    left_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
-      congr 2
-      rw [mul_add]
-      abel
-    right_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
-      congr 2
-      rw [mul_add]
-      abel }
-
-Depends on / 依赖: SymAlg, SymAlg.addCommMonoid, addCommMonoid, add_zero, invOf_mul_cancel_left, mul_def, mul_one, mul_zero, one_mul, sym_unsym, sym_zero, two_mul, unsym_one, unsym_zero, zero_mul
+/-
+**SymAlg.nonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+形式化陈述：nonAssocSemiring [Semiring α] [Invertible (2 : α)] : NonAssocSemiring αˢʸᵐ
+参数：2 : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonAssocSemiring [Semiring α] [Invertible (2 : α)] : NonAssocSemiring αˢʸᵐ :=
   { SymAlg.addCommMonoid with
     zero_mul := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
+      rw [mul_def, unsym_zero, zero_mul, mul_zero, add_zero,
+        mul_zero, sym_zero]
     mul_zero := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
+      rw [mul_def, unsym_zero, zero_mul, mul_zero, add_zero,
+        mul_zero, sym_zero]
     mul_one := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+      rw [mul_def, unsym_one, mul_one, one_mul, ← two_mul, invOf_mul_cancel_left, sym_unsym]
     one_mul := fun _ => by
-      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+      rw [mul_def, unsym_one, mul_one, one_mul, ← two_mul, invOf_mul_cancel_left, sym_unsym]
     left_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      rw [mul_def, mul_def, mul_def, ← sym_add, ← mul_add, unsym_add, add_mul]
       congr 2
       rw [mul_add]
       abel
     right_distrib := fun a b c => by
-      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      rw [mul_def, mul_def, mul_def, ← sym_add, ← mul_add, unsym_add, add_mul]
       congr 2
       rw [mul_add]
       abel }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The symmetrization of a real (unital, associative) algebra is a non-associative ring. -/
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Ring
-  signature: α] [Invertible (2 : α)] : NonAssocRing αˢʸᵐ
-  body: { SymAlg.nonAssocSemiring, SymAlg.addCommGroup with }
-
-中文:
-实例 [环
-  签名: α] [可逆 (2 : α)] : 非结合环 αˢʸᵐ
-  定义体: { SymAlg.nonAssocSemiring, SymAlg.addCommGroup with }
-
-Depends on / 依赖: SymAlg, SymAlg.addCommGroup, SymAlg.nonAssocSemiring, addCommGroup, nonAssocSemiring
+--- 原说明 ---
+The symmetrization of a real (unital, associative) algebra is a non-associative 
+ring.
 -/
 instance [Ring α] [Invertible (2 : α)] : NonAssocRing αˢʸᵐ :=
   { SymAlg.nonAssocSemiring, SymAlg.addCommGroup with }
 
+/-! The squaring operation coincides for both multiplications -/
 
 
-/--
-theorem `unsym_mul_self` / 定理 `unsym_mul_self`
+/-
+**SymAlg.unsym_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：unsym_mul_self [Semiring α] [Invertible (2 : α)] (a : αˢʸᵐ) : unsym (a * a
+) = unsym a * unsym a
+参数：2 : α；a : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SymAlg.mul_def`：mul_def [Add α] [Mul α] [One α] [OfNat α 2] [Invertible 
+(2 : α)] (a b : αˢʸᵐ) : a * b = sym (⅟2 * (unsym a * unsym b + unsym b * unsym a
+))
+· 使用定理 `SymAlg.unsym_sym`：unsym_sym (a : α) : unsym (sym a) = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `invOf_mul_cancel_left`：invOf_mul_cancel_left [Invertible a] : ⅟a * (a * 
+b) = b
 
-English:
-theorem unsym_mul_self
-  given: [Semiring α] [Invertible (2 : α)] (a : αˢʸᵐ)
-  proof: by
-  rw [mul_def]; rw [unsym_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-中文:
-定理 unsym_mul_self
-  条件: [半环 α] [可逆 (2 : α)] (a : αˢʸᵐ)
-  证明: by
-  rw [mul_def]; rw [unsym_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-Depends on / 依赖: invOf_mul_cancel_left, mul_def, two_mul, unsym_sym
+--- 原说明 ---
+The squaring operation coincides for both multiplications
 -/
 theorem unsym_mul_self [Semiring α] [Invertible (2 : α)] (a : αˢʸᵐ) :
     unsym (a * a) = unsym a * unsym a := by
-  rw [mul_def]; rw [unsym_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-/--
-theorem `sym_mul_self` / 定理 `sym_mul_self`
-
-English:
-theorem sym_mul_self
-  given: [Semiring α] [Invertible (2 : α)] (a : α)
-  statement: sym (a * a) = sym a * sym a
-  proof: by
-  rw [sym_mul_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-中文:
-定理 sym_mul_self
-  条件: [半环 α] [可逆 (2 : α)] (a : α)
-  结论: sym (a * a) = sym a * sym a
-  证明: by
-  rw [sym_mul_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-Depends on / 依赖: invOf_mul_cancel_left, sym_mul_sym, two_mul
+  rw [mul_def, unsym_sym, ← two_mul, invOf_mul_cancel_left]
+/-
+**SymAlg.sym_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：sym_mul_self [Semiring α] [Invertible (2 : α)] (a : α) : sym (a * a) = sym
+ a * sym a
+参数：2 : α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SymAlg.sym_mul_sym`：sym_mul_sym [Mul α] [Add α] [One α] [OfNat α 2] [Inv
+ertible (2 : α)] (a b : α) : sym a * sym b = sym (⅟2 * (a * b + b * a))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `invOf_mul_cancel_left`：invOf_mul_cancel_left [Invertible a] : ⅟a * (a * 
+b) = b
 -/
 theorem sym_mul_self [Semiring α] [Invertible (2 : α)] (a : α) : sym (a * a) = sym a * sym a := by
-  rw [sym_mul_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
-
-/--
-theorem `mul_comm` / 定理 `mul_comm`
-
-English:
-theorem mul_comm
-  statement: [Mul α] [AddCommSemigroup α] [One α] [OfNat α 2] [Invertible (2 : α)]
-  proof: by rw [mul_def, mul_def, add_comm]
-
-中文:
-定理 mul_comm
-  结论: [乘法 α] [加法交换半群 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)]
-  证明: by rw [mul_def, mul_def, add_comm]
-
-Depends on / 依赖: add_comm, mul_def
+  rw [sym_mul_sym, ← two_mul, invOf_mul_cancel_left]
+/-
+**SymAlg.mul_comm** 是 Mathlib 中的一个定理，位于命名空间 `SymAlg`。
+形式化陈述：mul_comm [Mul α] [AddCommSemigroup α] [One α] [OfNat α 2] [Invertible (2 :
+ α)] (a b : αˢʸᵐ) : a * b = b * a
+参数：2 : α；a b : αˢʸᵐ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SymAlg.mul_def`：mul_def [Add α] [Mul α] [One α] [OfNat α 2] [Invertible 
+(2 : α)] (a b : αˢʸᵐ) : a * b = sym (⅟2 * (unsym a * unsym b + unsym b * unsym a
+))
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 theorem mul_comm [Mul α] [AddCommSemigroup α] [One α] [OfNat α 2] [Invertible (2 : α)]
     (a b : αˢʸᵐ) :
     a * b = b * a := by rw [mul_def, mul_def, add_comm]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: α] [Invertible (2 : α)] : CommMagma αˢʸᵐ where
-  body: SymAlg.mul_comm
-
-中文:
-实例 [环
-  签名: α] [可逆 (2 : α)] : 交换原群 αˢʸᵐ where
-  定义体: SymAlg.mul_comm
-
-Depends on / 依赖: SymAlg, SymAlg.mul_comm, mul_comm
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring α] [Invertible (2 : α)] : CommMagma αˢʸᵐ where
   mul_comm := SymAlg.mul_comm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: α] [Invertible (2 : α)] : IsCommJordan αˢʸᵐ where
-  body: by
-    have commute_half_left := fun a : α => by
-      have := (Commute.one_left a).add_left (Commute.one_left a)
-      rw [one_add_one_eq_two] at this
-      exact this.invOf_left.eq
-    calc a * b * (a * a)
-      _ = sym (⅟2 * ⅟2 * (unsym a * unsym b * unsym (a * a) +
-          unsym b * unsym a * unsym (a * a) +
-          unsym (a * a) * unsym a * unsym b +
-          unsym (a * a) * unsym b * unsym a)) := ?_
-      _ = sym (⅟2 * (unsym a *
-          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) +
-          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) * unsym a)) := ?_
-      _ = a * (b * (a * a)) := ?_
-    -- Rearrange LHS
-    · rw [mul_def, mul_def a b, unsym_sym, ← mul_assoc, ← commute_half_left (unsym (a * a)),
-        mul_assoc, mul_assoc, ← mul_add, ← mul_assoc, add_mul, mul_add (unsym (a * a)),
-        ← add_assoc, ← mul_assoc, ← mul_assoc]
-    · rw [unsym_sym, sym_inj, ← mul_assoc, ← commute_half_left (unsym a), mul_assoc (⅟2) (unsym a),
-        mul_assoc (⅟2) _ (unsym a), ← mul_add, ← mul_assoc]
-      conv_rhs => rw [mul_add (unsym a)]
-      rw [add_mul]; rw [← add_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
-      rw [unsym_mul_self]
-      rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← sub_eq_zero]; rw [← mul_sub]
-      convert! mul_zero (⅟(2 : α) * ⅟(2 : α))
-      rw [add_sub_add_right_eq_sub]; rw [add_assoc]; rw [add_assoc]; rw [add_sub_add_left_eq_sub]; rw [add_comm]; rw [add_sub_add_right_eq_sub]; rw [sub_eq_zero]
-    -- Rearrange RHS
-    · rw [← mul_def, ← mul_def]
-
-中文:
-实例 [环
-  签名: α] [可逆 (2 : α)] : 是交换Jordan αˢʸᵐ where
-  定义体: by
-    have commute_half_left := fun a : α => by
-      have := (Commute.one_left a).add_left (Commute.one_left a)
-      rw [one_add_one_eq_two] at this
-      exact this.invOf_left.eq
-    calc a * b * (a * a)
-      _ = sym (⅟2 * ⅟2 * (unsym a * unsym b * unsym (a * a) +
-          unsym b * unsym a * unsym (a * a) +
-          unsym (a * a) * unsym a * unsym b +
-          unsym (a * a) * unsym b * unsym a)) := ?_
-      _ = sym (⅟2 * (unsym a *
-          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) +
-          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) * unsym a)) := ?_
-      _ = a * (b * (a * a)) := ?_
-    -- Rearrange LHS
-    · rw [mul_def, mul_def a b, unsym_sym, ← mul_assoc, ← commute_half_left (unsym (a * a)),
-        mul_assoc, mul_assoc, ← mul_add, ← mul_assoc, add_mul, mul_add (unsym (a * a)),
-        ← add_assoc, ← mul_assoc, ← mul_assoc]
-    · rw [unsym_sym, sym_inj, ← mul_assoc, ← commute_half_left (unsym a), mul_assoc (⅟2) (unsym a),
-        mul_assoc (⅟2) _ (unsym a), ← mul_add, ← mul_assoc]
-      conv_rhs => rw [mul_add (unsym a)]
-      rw [add_mul]; rw [← add_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
-      rw [unsym_mul_self]
-      rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← sub_eq_zero]; rw [← mul_sub]
-      convert! mul_zero (⅟(2 : α) * ⅟(2 : α))
-      rw [add_sub_add_right_eq_sub]; rw [add_assoc]; rw [add_assoc]; rw [add_sub_add_left_eq_sub]; rw [add_comm]; rw [add_sub_add_right_eq_sub]; rw [sub_eq_zero]
-    -- Rearrange RHS
-    · rw [← mul_def, ← mul_def]
-
-Depends on / 依赖: Commute, Commute.one_left, add_left, commute_half_left, invOf_left, one_add_one_eq_two, one_left, this.invOf_left.eq
+/-
+**SymAlg.** 是 Mathlib 中的一个实例，位于命名空间 `SymAlg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring α] [Invertible (2 : α)] : IsCommJordan αˢʸᵐ where
   lmul_comm_rmul_rmul a b := by
@@ -1409,12 +743,14 @@ instance [Ring α] [Invertible (2 : α)] : IsCommJordan αˢʸᵐ where
     · rw [unsym_sym, sym_inj, ← mul_assoc, ← commute_half_left (unsym a), mul_assoc (⅟2) (unsym a),
         mul_assoc (⅟2) _ (unsym a), ← mul_add, ← mul_assoc]
       conv_rhs => rw [mul_add (unsym a)]
-      rw [add_mul]; rw [← add_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
+      rw [add_mul, ← add_assoc, ← mul_assoc, ← mul_assoc]
       rw [unsym_mul_self]
-      rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← sub_eq_zero]; rw [← mul_sub]
+      rw [← mul_assoc, ← mul_assoc, ← mul_assoc, ← mul_assoc, ← sub_eq_zero, ← mul_sub]
       convert! mul_zero (⅟(2 : α) * ⅟(2 : α))
-      rw [add_sub_add_right_eq_sub]; rw [add_assoc]; rw [add_assoc]; rw [add_sub_add_left_eq_sub]; rw [add_comm]; rw [add_sub_add_right_eq_sub]; rw [sub_eq_zero]
+      rw [add_sub_add_right_eq_sub, add_assoc, add_assoc, add_sub_add_left_eq_sub, add_comm,
+        add_sub_add_right_eq_sub, sub_eq_zero]
     -- Rearrange RHS
     · rw [← mul_def, ← mul_def]
 
 end SymAlg
+

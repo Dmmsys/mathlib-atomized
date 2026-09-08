@@ -42,844 +42,674 @@ section Prod
 
 variable {s s' : Finset α} {t t' : Finset β} {a : α} {b : β}
 
-/--
-Definition of `product` / `product` 的定义
+/-- `product s t` is the set of pairs `(a, b)` such that `a ∈ s` and `b ∈ t`. -/
+/-
+**Finset.product** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Finset α → Finset β → Finset (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition product
-  signature: (s : Finset α) (t : Finset β)
-  body: ⟨_, s.nodup.product t.nodup⟩
-
-中文:
-定义 product
-  签名: (s : 有限集 α) (t : 有限集 β)
-  定义体: ⟨_, s.nodup.product t.nodup⟩
+--- 原说明 ---
+`product s t` is the set of pairs `(a, b)` such that `a ∈ s` and `b ∈ t`.
 -/
 protected def product (s : Finset α) (t : Finset β) : Finset (α × β) :=
   ⟨_, s.nodup.product t.nodup⟩
-
-/--
-Instance `instSProd` / 实例 `instSProd`
-
-English:
-instance instSProd
-  signature: : SProd (Finset α) (Finset β) (Finset (α × β)) where
-  body: Finset.product
-
-@[simp]
-
-中文:
-实例 instSProd
-  签名: : SProd (有限集 α) (有限集 β) (有限集 (α × β)) where
-  定义体: Finset.product
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.product, product
+/-
+**Finset.instSProd** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instSProd : SProd (Finset α) (Finset β) (Finset (α × β)) where sprod
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSProd : SProd (Finset α) (Finset β) (Finset (α × β)) where
   sprod := Finset.product
 
 @[simp]
-/--
-theorem `product_eq_sprod` / 定理 `product_eq_sprod`
-
-English:
-theorem product_eq_sprod
-  statement: Finset.product s t = s ×ˢ t
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 product_eq_sprod
-  结论: 有限集.product s t = s ×ˢ t
-  证明: rfl
-
-@[simp]
+/-
+**Finset.product_eq_sprod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_eq_sprod : Finset.product s t = s ×ˢ t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_eq_sprod : Finset.product s t = s ×ˢ t :=
   rfl
 
 @[simp]
-/--
-theorem `product_val` / 定理 `product_val`
-
-English:
-theorem product_val
-  statement: (s ×ˢ t).1 = s.1 ×ˢ t.1
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 product_val
-  结论: (s ×ˢ t).1 = s.1 ×ˢ t.1
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finset.product_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_val : (s ×ˢ t).1 = s.1 ×ˢ t.1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_val : (s ×ˢ t).1 = s.1 ×ˢ t.1 :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mem_product` / 定理 `mem_product`
-
-English:
-theorem mem_product
-  given: {p : α × β}
-  statement: p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t
-  proof: Multiset.mem_product
-
-中文:
-定理 mem_product
-  条件: {p : α × β}
-  结论: p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t
-  证明: Multiset.mem_product
-
-Depends on / 依赖: Multiset, Multiset.mem_product, mem_product
+/-
+**Finset.mem_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_product`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} {t 
+: Multiset β} {p : α × β}, p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t
 -/
-theorem mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t :=
+theorem mem_product {p : α × β} : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t :=
   Multiset.mem_product
-
-/--
-theorem `mk_mem_product` / 定理 `mk_mem_product`
-
-English:
-theorem mk_mem_product
-  given: (ha : a in s) (hb : b in t)
-  statement: (a, b) in s ×ˢ t
-  proof: mem_product.2 ⟨ha, hb⟩
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_mem_product
-  条件: (ha : a in s) (hb : b in t)
-  结论: (a, b) in s ×ˢ t
-  证明: mem_product.2 ⟨ha, hb⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mem_product
+/-
+**Finset.mk_mem_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mk_mem_product (ha : a in s) (hb : b in t) : (a, b) in s ×ˢ t
+参数：ha : a in s；hb : b in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
-theorem mk_mem_product (ha : a in s) (hb : b in t) : (a, b) in s ×ˢ t :=
+theorem mk_mem_product (ha : a ∈ s) (hb : b ∈ t) : (a, b) ∈ s ×ˢ t :=
   mem_product.2 ⟨ha, hb⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_product` / 定理 `coe_product`
-
-English:
-theorem coe_product
-  given: (s : Finset α) (t : Finset β)
-  proof: Set.ext fun _ => Finset.mem_product
-
-中文:
-定理 coe_product
-  条件: (s : 有限集 α) (t : 有限集 β)
-  证明: Set.ext fun _ => Finset.mem_product
-
-Depends on / 依赖: Finset, Finset.mem_product, Set.ext, mem_product
+/-
+**Finset.coe_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ t) : Set (α × β)) = (s
+ : Set α) ×ˢ t
+参数：s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
 theorem coe_product (s : Finset α) (t : Finset β) :
     (↑(s ×ˢ t) : Set (α × β)) = (s : Set α) ×ˢ t :=
   Set.ext fun _ => Finset.mem_product
 
-/--
-Definition of `_root_.Equiv.Finset.prod` / `_root_.Equiv.Finset.prod` 的定义
+/-- The product `s ×ˢ t` of two finsets, viewed as a subtype, is equivalent to the product of the
+subtypes `s × t`. The `Finset` analogue of `Equiv.Set.prod`. -/
+/-
+**Finset._root_.Equiv.Finset.prod** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Equiv.Finset.prod
-  signature: (s : Finset α) (t : Finset β)
-  body: ⟨⟨x.1.1, (mem_product.mp x.2).1⟩, ⟨x.1.2, (mem_product.mp x.2).2⟩⟩
-  invFun x := ⟨⟨x.1.1, x.2.1⟩, mem_product.mpr ⟨x.1.2, x.2.2⟩⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 _root_.等价.有限集.乘积
-  签名: (s : 有限集 α) (t : 有限集 β)
-  定义体: ⟨⟨x.1.1, (mem_product.mp x.2).1⟩, ⟨x.1.2, (mem_product.mp x.2).2⟩⟩
-  invFun x := ⟨⟨x.1.1, x.2.1⟩, mem_product.mpr ⟨x.1.2, x.2.2⟩⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-Depends on / 依赖: CoeHTCT, mem_product, mem_product.mp, znumCoe
+--- 原说明 ---
+The product `s ×ˢ t` of two finsets, viewed as a subtype, is equivalent to the p
+roduct of the
+subtypes `s × t`. The `Finset` analogue of `Equiv.Set.prod`.
 -/
 def _root_.Equiv.Finset.prod (s : Finset α) (t : Finset β) : ↥(s ×ˢ t) ≃ s × t where
   toFun x := ⟨⟨x.1.1, (mem_product.mp x.2).1⟩, ⟨x.1.2, (mem_product.mp x.2).2⟩⟩
   invFun x := ⟨⟨x.1.1, x.2.1⟩, mem_product.mpr ⟨x.1.2, x.2.2⟩⟩
   left_inv _ := rfl
   right_inv _ := rfl
-
-/--
-theorem `subset_product_image_fst` / 定理 `subset_product_image_fst`
-
-English:
-theorem subset_product_image_fst
-  given: [DecidableEq α]
-  statement: (s ×ˢ t).image Prod.fst subseteq s
-  proof: fun i => by
-  simp +contextual [mem_image]
-
-中文:
-定理 subset_product_image_fst
-  条件: [DecidableEq α]
-  结论: (s ×ˢ t).像 积类型.fst subseteq s
-  证明: fun i => by
-  simp +contextual [mem_image]
-
-Depends on / 依赖: contextual, mem_image
+/-
+**Finset.subset_product_image_fst** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_product_image_fst [DecidableEq α] : (s ×ˢ t).image Prod.fst subsete
+q s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem subset_product_image_fst [DecidableEq α] : (s ×ˢ t).image Prod.fst subseteq s := fun i => by
+theorem subset_product_image_fst [DecidableEq α] : (s ×ˢ t).image Prod.fst ⊆ s := fun i => by
   simp +contextual [mem_image]
-
-/--
-theorem `subset_product_image_snd` / 定理 `subset_product_image_snd`
-
-English:
-theorem subset_product_image_snd
-  given: [DecidableEq β]
-  statement: (s ×ˢ t).image Prod.snd subseteq t
-  proof: fun i => by
-  simp +contextual [mem_image]
-
-中文:
-定理 subset_product_image_snd
-  条件: [DecidableEq β]
-  结论: (s ×ˢ t).像 积类型.snd subseteq t
-  证明: fun i => by
-  simp +contextual [mem_image]
-
-Depends on / 依赖: contextual, mem_image
+/-
+**Finset.subset_product_image_snd** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_product_image_snd [DecidableEq β] : (s ×ˢ t).image Prod.snd subsete
+q t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem subset_product_image_snd [DecidableEq β] : (s ×ˢ t).image Prod.snd subseteq t := fun i => by
+theorem subset_product_image_snd [DecidableEq β] : (s ×ˢ t).image Prod.snd ⊆ t := fun i => by
   simp +contextual [mem_image]
-
-/--
-theorem `product_image_fst` / 定理 `product_image_fst`
-
-English:
-theorem product_image_fst
-  given: [DecidableEq α] (ht : t.Nonempty)
-  statement: (s ×ˢ t).image Prod.fst = s
-  proof: by
-  ext i
-  simp [mem_image, ht.exists_mem]
-
-中文:
-定理 product_image_fst
-  条件: [DecidableEq α] (ht : t.非空)
-  结论: (s ×ˢ t).像 积类型.fst = s
-  证明: by
-  ext i
-  simp [mem_image, ht.exists_mem]
-
-Depends on / 依赖: exists_mem, ht.exists_mem, mem_image
+/-
+**Finset.product_image_fst** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_image_fst [DecidableEq α] (ht : t.Nonempty) : (s ×ˢ t).image Prod.
+fst = s
+参数：ht : t.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.Nonempty.exists_mem`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty 
+→ ∃ x, x ∈ s
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem product_image_fst [DecidableEq α] (ht : t.Nonempty) : (s ×ˢ t).image Prod.fst = s := by
   ext i
   simp [mem_image, ht.exists_mem]
-
-/--
-theorem `product_image_snd` / 定理 `product_image_snd`
-
-English:
-theorem product_image_snd
-  given: [DecidableEq β] (ht : s.Nonempty)
-  statement: (s ×ˢ t).image Prod.snd = t
-  proof: by
-  ext i
-  simp [mem_image, ht.exists_mem]
-
-中文:
-定理 product_image_snd
-  条件: [DecidableEq β] (ht : s.非空)
-  结论: (s ×ˢ t).像 积类型.snd = t
-  证明: by
-  ext i
-  simp [mem_image, ht.exists_mem]
-
-Depends on / 依赖: exists_mem, ht.exists_mem, mem_image
+/-
+**Finset.product_image_snd** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_image_snd [DecidableEq β] (ht : s.Nonempty) : (s ×ˢ t).image Prod.
+snd = t
+参数：ht : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.Nonempty.exists_mem`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty 
+→ ∃ x, x ∈ s
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem product_image_snd [DecidableEq β] (ht : s.Nonempty) : (s ×ˢ t).image Prod.snd = t := by
   ext i
   simp [mem_image, ht.exists_mem]
-
-/--
-theorem `subset_product` / 定理 `subset_product`
-
-English:
-theorem subset_product
-  given: [DecidableEq α] [DecidableEq β] {s : Finset (α × β)}
-  proof: by grind
-
-@[gcongr]
-
-中文:
-定理 subset_product
-  条件: [DecidableEq α] [DecidableEq β] {s : 有限集 (α × β)}
-  证明: by grind
-
-@[gcongr]
+/-
+**Finset.subset_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_product [DecidableEq α] [DecidableEq β] {s : Finset (α × β)} : s su
+bseteq s.image Prod.fst ×ˢ s.image Prod.snd
+参数：α × β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem subset_product [DecidableEq α] [DecidableEq β] {s : Finset (α × β)} :
-    s subseteq s.image Prod.fst ×ˢ s.image Prod.snd := by grind
+    s ⊆ s.image Prod.fst ×ˢ s.image Prod.snd := by grind
 
 @[gcongr]
-/--
-theorem `product_subset_product` / 定理 `product_subset_product`
-
-English:
-theorem product_subset_product
-  given: (hs : s subseteq s') (ht : t subseteq t')
-  statement: s ×ˢ t subseteq s' ×ˢ t'
-  proof: fun ⟨_, _⟩ h =>
-  mem_product.2 ⟨hs (mem_product.1 h).1, ht (mem_product.1 h).2⟩
-
-中文:
-定理 product_subset_product
-  条件: (hs : s subseteq s') (ht : t subseteq t')
-  结论: s ×ˢ t subseteq s' ×ˢ t'
-  证明: fun ⟨_, _⟩ h =>
-  mem_product.2 ⟨hs (mem_product.1 h).1, ht (mem_product.1 h).2⟩
+/-
+**Finset.product_subset_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_subset_product (hs : s subseteq s') (ht : t subseteq t') : s ×ˢ t 
+subseteq s' ×ˢ t'
+参数：hs : s subseteq s'；ht : t subseteq t'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem product_subset_product (hs : s subseteq s') (ht : t subseteq t') : s ×ˢ t subseteq s' ×ˢ t' := fun ⟨_, _⟩ h =>
+theorem product_subset_product (hs : s ⊆ s') (ht : t ⊆ t') : s ×ˢ t ⊆ s' ×ˢ t' := fun ⟨_, _⟩ h =>
   mem_product.2 ⟨hs (mem_product.1 h).1, ht (mem_product.1 h).2⟩
-
-/--
-theorem `product_subset_product_left` / 定理 `product_subset_product_left`
-
-English:
-theorem product_subset_product_left
-  given: (hs : s subseteq s')
-  statement: s ×ˢ t subseteq s' ×ˢ t
-  proof: product_subset_product hs (Subset.refl _)
-
-中文:
-定理 product_subset_product_left
-  条件: (hs : s subseteq s')
-  结论: s ×ˢ t subseteq s' ×ˢ t
-  证明: product_subset_product hs (Subset.refl _)
-
-Depends on / 依赖: Subset, Subset.refl, product_subset_product
+/-
+**Finset.product_subset_product_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_subset_product_left (hs : s subseteq s') : s ×ˢ t subseteq s' ×ˢ t
+参数：hs : s subseteq s'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.product_subset_product`：product_subset_product (hs : s subseteq s
+') (ht : t subseteq t') : s ×ˢ t subseteq s' ×ˢ t'
+· 使用定理 `Finset.Subset.refl`：∀ {α : Type u_1} (s : Finset α), s ⊆ s
 -/
-theorem product_subset_product_left (hs : s subseteq s') : s ×ˢ t subseteq s' ×ˢ t :=
+theorem product_subset_product_left (hs : s ⊆ s') : s ×ˢ t ⊆ s' ×ˢ t :=
   product_subset_product hs (Subset.refl _)
-
-/--
-theorem `product_subset_product_right` / 定理 `product_subset_product_right`
-
-English:
-theorem product_subset_product_right
-  given: (ht : t subseteq t')
-  statement: s ×ˢ t subseteq s ×ˢ t'
-  proof: product_subset_product (Subset.refl _) ht
-
-中文:
-定理 product_subset_product_right
-  条件: (ht : t subseteq t')
-  结论: s ×ˢ t subseteq s ×ˢ t'
-  证明: product_subset_product (Subset.refl _) ht
-
-Depends on / 依赖: Subset, Subset.refl, product_subset_product
+/-
+**Finset.product_subset_product_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_subset_product_right (ht : t subseteq t') : s ×ˢ t subseteq s ×ˢ t
+'
+参数：ht : t subseteq t'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.product_subset_product`：product_subset_product (hs : s subseteq s
+') (ht : t subseteq t') : s ×ˢ t subseteq s' ×ˢ t'
+· 使用定理 `Finset.Subset.refl`：∀ {α : Type u_1} (s : Finset α), s ⊆ s
 -/
-theorem product_subset_product_right (ht : t subseteq t') : s ×ˢ t subseteq s ×ˢ t' :=
+theorem product_subset_product_right (ht : t ⊆ t') : s ×ˢ t ⊆ s ×ˢ t' :=
   product_subset_product (Subset.refl _) ht
-
-/--
-theorem `prodMap_image_product` / 定理 `prodMap_image_product`
-
-English:
-theorem prodMap_image_product
-  statement: {δ : Type*} [DecidableEq β] [DecidableEq δ]
-  proof: mod_cast Set.prodMap_image_prod f g s t
-
-中文:
-定理 prodMap_image_product
-  结论: {δ : 类型} [DecidableEq β] [DecidableEq δ]
-  证明: mod_cast Set.prodMap_image_prod f g s t
-
-Depends on / 依赖: Set.prodMap_image_prod, mod_cast, prodMap_image_prod
+/-
+**Finset.prodMap_image_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prodMap_image_product {δ : Type*} [DecidableEq β] [DecidableEq δ] (f : α -
+> β) (g : γ -> δ) (s : Finset α) (t : Finset γ) : (s ×ˢ t).image (Prod.map f g) 
+= s.image f ×ˢ t.image g
+参数：f : α -> β；g : γ -> δ；s : Finset α；t : Finset γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.prodMap_image_prod`：prodMap_image_prod (f : α -> β) (g : γ -> δ) (s 
+: Set α) (t : Set γ) : (Prod.map f g) '' (s ×ˢ t) = (f '' s) ×ˢ (g '' t)
 -/
 theorem prodMap_image_product {δ : Type*} [DecidableEq β] [DecidableEq δ]
-    (f : α -> β) (g : γ -> δ) (s : Finset α) (t : Finset γ) :
+    (f : α → β) (g : γ → δ) (s : Finset α) (t : Finset γ) :
     (s ×ˢ t).image (Prod.map f g) = s.image f ×ˢ t.image g :=
   mod_cast Set.prodMap_image_prod f g s t
-
-/--
-theorem `prodMap_map_product` / 定理 `prodMap_map_product`
-
-English:
-theorem prodMap_map_product
-  given: {δ : Type*} (f : α ↪ β) (g : γ ↪ δ) (s : Finset α) (t : Finset γ)
-  proof: by
-  simpa [← coe_inj] using Set.prodMap_image_prod f g s t
-
-中文:
-定理 prodMap_map_product
-  条件: {δ : 类型} (f : α ↪ β) (g : γ ↪ δ) (s : 有限集 α) (t : 有限集 γ)
-  证明: by
-  simpa [← coe_inj] using Set.prodMap_image_prod f g s t
-
-Depends on / 依赖: Set.prodMap_image_prod, coe_inj, prodMap_image_prod
+/-
+**Finset.prodMap_map_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prodMap_map_product {δ : Type*} (f : α ↪ β) (g : γ ↪ δ) (s : Finset α) (t 
+: Finset γ) : (s ×ˢ t).map (f.prodMap g) = s.map f ×ˢ t.map g
+参数：f : α ↪ β；g : γ ↪ δ；s : Finset α；t : Finset γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_product`：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ 
+t) : Set (α × β)) = (s : Set α) ×ˢ t
+· 使用定理 `Set.prodMap_image_prod`：prodMap_image_prod (f : α -> β) (g : γ -> δ) (s 
+: Set α) (t : Set γ) : (Prod.map f g) '' (s ×ˢ t) = (f '' s) ×ˢ (g '' t)
 -/
 theorem prodMap_map_product {δ : Type*} (f : α ↪ β) (g : γ ↪ δ) (s : Finset α) (t : Finset γ) :
     (s ×ˢ t).map (f.prodMap g) = s.map f ×ˢ t.map g := by
   simpa [← coe_inj] using Set.prodMap_image_prod f g s t
-
-/--
-theorem `map_swap_product` / 定理 `map_swap_product`
-
-English:
-theorem map_swap_product
-  given: (s : Finset α) (t : Finset β)
-  proof: coe_injective by
-    push_cast
-    exact Set.image_swap_prod _ _
-
-@[simp]
-
-中文:
-定理 map_swap_product
-  条件: (s : 有限集 α) (t : 有限集 β)
-  证明: coe_injective by
-    push_cast
-    exact Set.image_swap_prod _ _
-
-@[simp]
-
-Depends on / 依赖: Set.image_swap_prod, coe_injective, image_swap_prod
+/-
+**Finset.map_swap_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：map_swap_product (s : Finset α) (t : Finset β) : (t ×ˢ s).map ⟨Prod.swap, 
+Prod.swap_injective⟩ = s ×ˢ t
+参数：s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `Prod.swap_injective`：swap_injective : Function.Injective (@swap α β)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_product`：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ 
+t) : Set (α × β)) = (s : Set α) ×ˢ t
+· 使用定理 `Set.image_swap_prod`：image_swap_prod (s : Set α) (t : Set β) : Prod.swap
+ '' s ×ˢ t = t ×ˢ s
 -/
 theorem map_swap_product (s : Finset α) (t : Finset β) :
     (t ×ˢ s).map ⟨Prod.swap, Prod.swap_injective⟩ = s ×ˢ t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact Set.image_swap_prod _ _
 
 @[simp]
-/--
-theorem `image_swap_product` / 定理 `image_swap_product`
-
-English:
-theorem image_swap_product
-  given: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
-  proof: coe_injective by
-    push_cast
-    exact Set.image_swap_prod _ _
-
-中文:
-定理 image_swap_product
-  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
-  证明: coe_injective by
-    push_cast
-    exact Set.image_swap_prod _ _
-
-Depends on / 依赖: Set.image_swap_prod, coe_injective, image_swap_prod
+/-
+**Finset.image_swap_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_swap_product [DecidableEq (α × β)] (s : Finset α) (t : Finset β) : (
+t ×ˢ s).image Prod.swap = s ×ˢ t
+参数：α × β；s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_product`：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ 
+t) : Set (α × β)) = (s : Set α) ×ˢ t
+· 使用定理 `Set.image_swap_prod`：image_swap_prod (s : Set α) (t : Set β) : Prod.swap
+ '' s ×ˢ t = t ×ˢ s
 -/
 theorem image_swap_product [DecidableEq (α × β)] (s : Finset α) (t : Finset β) :
     (t ×ˢ s).image Prod.swap = s ×ˢ t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact Set.image_swap_prod _ _
-
-/--
-theorem `product_eq_biUnion` / 定理 `product_eq_biUnion`
-
-English:
-theorem product_eq_biUnion
-  given: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
-  proof: by grind
-
-中文:
-定理 product_eq_biUnion
-  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
-  证明: by grind
+/-
+**Finset.product_eq_biUnion** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_eq_biUnion [DecidableEq (α × β)] (s : Finset α) (t : Finset β) : s
+ ×ˢ t = s.biUnion fun a => t.image fun b => (a, b)
+参数：α × β；s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_eq_biUnion [DecidableEq (α × β)] (s : Finset α) (t : Finset β) :
     s ×ˢ t = s.biUnion fun a => t.image fun b => (a, b) := by grind
-
-/--
-theorem `product_eq_biUnion_right` / 定理 `product_eq_biUnion_right`
-
-English:
-theorem product_eq_biUnion_right
-  given: [DecidableEq (α × β)] (s : Finset α) (t : Finset β)
-  proof: by grind
-
-中文:
-定理 product_eq_biUnion_right
-  条件: [DecidableEq (α × β)] (s : 有限集 α) (t : 有限集 β)
-  证明: by grind
+/-
+**Finset.product_eq_biUnion_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_eq_biUnion_right [DecidableEq (α × β)] (s : Finset α) (t : Finset 
+β) : s ×ˢ t = t.biUnion fun b => s.image fun a => (a, b)
+参数：α × β；s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_eq_biUnion_right [DecidableEq (α × β)] (s : Finset α) (t : Finset β) :
     s ×ˢ t = t.biUnion fun b => s.image fun a => (a, b) := by grind
 
 /-- See also `Finset.sup_product_left`. -/
 @[simp]
-/--
-theorem `product_biUnion` / 定理 `product_biUnion`
+/-
+**Finset.product_biUnion** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_biUnion [DecidableEq γ] (s : Finset α) (t : Finset β) (f : α × β -
+> Finset γ) : (s ×ˢ t).biUnion f = s.biUnion fun a => t.biUnion fun b => f (a, b
+)
+参数：s : Finset α；t : Finset β；f : α × β -> Finset γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem product_biUnion
-  given: [DecidableEq γ] (s : Finset α) (t : Finset β) (f : α × β -> Finset γ)
-  proof: by grind
-
-@[simp]
-
-中文:
-定理 product_biUnion
-  条件: [DecidableEq γ] (s : 有限集 α) (t : 有限集 β) (f : α × β -> 有限集 γ)
-  证明: by grind
-
-@[simp]
+--- 原说明 ---
+See also `Finset.sup_product_left`.
 -/
-theorem product_biUnion [DecidableEq γ] (s : Finset α) (t : Finset β) (f : α × β -> Finset γ) :
+theorem product_biUnion [DecidableEq γ] (s : Finset α) (t : Finset β) (f : α × β → Finset γ) :
     (s ×ˢ t).biUnion f = s.biUnion fun a => t.biUnion fun b => f (a, b) := by grind
 
 @[simp]
-/--
-theorem `card_product` / 定理 `card_product`
-
-English:
-theorem card_product
-  given: (s : Finset α) (t : Finset β)
-  statement: card (s ×ˢ t) = card s * card t
-  proof: Multiset.card_product _ _
-
-中文:
-定理 card_product
-  条件: (s : 有限集 α) (t : 有限集 β)
-  结论: card (s ×ˢ t) = card s * card t
-  证明: Multiset.card_product _ _
-
-Depends on / 依赖: Multiset, Multiset.card_product, card_product
+/-
+**Finset.card_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：card_product (s : Finset α) (t : Finset β) : card (s ×ˢ t) = card s * card
+ t
+参数：s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.card_product`：card_product : card (s ×ˢ t) = card s * card t
 -/
 theorem card_product (s : Finset α) (t : Finset β) : card (s ×ˢ t) = card s * card t :=
   Multiset.card_product _ _
 
-/--
-lemma `nontrivial_prod_iff` / 引理 `nontrivial_prod_iff`
+/-- The product of two Finsets is nontrivial iff both are nonempty
+  at least one of them is nontrivial. -/
+/-
+**Finset.nontrivial_prod_iff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：nontrivial_prod_iff : (s ×ˢ t).Nontrivial ↔ s.Nonempty ∧ t.Nonempty ∧ (s.N
+ontrivial ∨ t.Nontrivial)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.card_product`：card_product (s : Finset α) (t : Finset β) : card (
+s ×ˢ t) = card s * card t
+· 使用定理 `Nat.one_lt_mul_iff`：∀ {m n : ℕ}, 1 < m * n ↔ 0 < m ∧ 0 < n ∧ (1 < m ∨ 1 
+< n)
 
-English:
-lemma nontrivial_prod_iff
-  statement: (s ×ˢ t).Nontrivial ↔
-  proof: by
-  simp_rw [← card_pos, ← one_lt_card_iff_nontrivial, card_product]; apply Nat.one_lt_mul_iff
-
-中文:
-引理 nontrivial_prod_iff
-  结论: (s ×ˢ t).非平凡 ↔
-  证明: by
-  simp_rw [← card_pos, ← one_lt_card_iff_nontrivial, card_product]; apply Nat.one_lt_mul_iff
-
-Depends on / 依赖: Nat.one_lt_mul_iff, card_pos, card_product, one_lt_card_iff_nontrivial, one_lt_mul_iff, simp_rw
+--- 原说明 ---
+The product of two Finsets is nontrivial iff both are nonempty
+  at least one of them is nontrivial.
 -/
 lemma nontrivial_prod_iff : (s ×ˢ t).Nontrivial ↔
     s.Nonempty ∧ t.Nonempty ∧ (s.Nontrivial ∨ t.Nontrivial) := by
   simp_rw [← card_pos, ← one_lt_card_iff_nontrivial, card_product]; apply Nat.one_lt_mul_iff
-
-/--
-theorem `filter_product` / 定理 `filter_product`
-
-English:
-theorem filter_product
-  given: (p : α -> Prop) (q : β -> Prop) [DecidablePred p] [DecidablePred q]
-  proof: by grind
-
-中文:
-定理 filter_product
-  条件: (p : α -> 命题) (q : β -> 命题) [DecidablePred p] [DecidablePred q]
-  证明: by grind
+/-
+**Finset.filter_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：filter_product (p : α -> Prop) (q : β -> Prop) [DecidablePred p] [Decidabl
+ePred q] : ((s ×ˢ t).filter fun x : α × β => p x.1 ∧ q x.2) = s.filter p ×ˢ t.fi
+lter q
+参数：p : α -> Prop；q : β -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem filter_product (p : α -> Prop) (q : β -> Prop) [DecidablePred p] [DecidablePred q] :
+theorem filter_product (p : α → Prop) (q : β → Prop) [DecidablePred p] [DecidablePred q] :
     ((s ×ˢ t).filter fun x : α × β => p x.1 ∧ q x.2) = s.filter p ×ˢ t.filter q := by grind
-
-/--
-theorem `filter_product_left` / 定理 `filter_product_left`
-
-English:
-theorem filter_product_left
-  given: (p : α -> Prop) [DecidablePred p]
-  proof: by
-  simpa using filter_product p fun _ => true
-
-中文:
-定理 filter_product_left
-  条件: (p : α -> 命题) [DecidablePred p]
-  证明: by
-  simpa using filter_product p fun _ => true
-
-Depends on / 依赖: filter_product
+/-
+**Finset.filter_product_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：filter_product_left (p : α -> Prop) [DecidablePred p] : ((s ×ˢ t).filter f
+un x : α × β => p x.1) = s.filter p ×ˢ t
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Finset.filter_true`：∀ {α : Type u_1} {h : DecidablePred fun x => True} (
+s : Finset α), {x ∈ s | True} = s
+· 使用定理 `Finset.filter_product`：filter_product (p : α -> Prop) (q : β -> Prop) [D
+ecidablePred p] [DecidablePred q] : ((s ×ˢ t).filter fun x : α × β => p x.1 ∧ q 
+x.2) = s.fi…
 -/
-theorem filter_product_left (p : α -> Prop) [DecidablePred p] :
+theorem filter_product_left (p : α → Prop) [DecidablePred p] :
     ((s ×ˢ t).filter fun x : α × β => p x.1) = s.filter p ×ˢ t := by
   simpa using filter_product p fun _ => true
-
-/--
-theorem `filter_product_right` / 定理 `filter_product_right`
-
-English:
-theorem filter_product_right
-  given: (q : β -> Prop) [DecidablePred q]
-  proof: by
-  simpa using filter_product (fun _ : α => true) q
-
-中文:
-定理 filter_product_right
-  条件: (q : β -> 命题) [DecidablePred q]
-  证明: by
-  simpa using filter_product (fun _ : α => true) q
-
-Depends on / 依赖: filter_product
+/-
+**Finset.filter_product_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：filter_product_right (q : β -> Prop) [DecidablePred q] : ((s ×ˢ t).filter 
+fun x : α × β => q x.2) = s ×ˢ t.filter q
+参数：q : β -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Finset.filter_true`：∀ {α : Type u_1} {h : DecidablePred fun x => True} (
+s : Finset α), {x ∈ s | True} = s
+· 使用定理 `Finset.filter_product`：filter_product (p : α -> Prop) (q : β -> Prop) [D
+ecidablePred p] [DecidablePred q] : ((s ×ˢ t).filter fun x : α × β => p x.1 ∧ q 
+x.2) = s.fi…
 -/
-theorem filter_product_right (q : β -> Prop) [DecidablePred q] :
+theorem filter_product_right (q : β → Prop) [DecidablePred q] :
     ((s ×ˢ t).filter fun x : α × β => q x.2) = s ×ˢ t.filter q := by
   simpa using filter_product (fun _ : α => true) q
-
-/--
-theorem `filter_product_card` / 定理 `filter_product_card`
-
-English:
-theorem filter_product_card
-  statement: (s : Finset α) (t : Finset β) (p : α -> Prop) (q : β -> Prop)
-  proof: by
-  classical
-  rw [← card_product]; rw [← card_product]; rw [← filter_product]; rw [← filter_product]; rw [← card_union_of_disjoint]
-  · apply congr_arg
-    grind
-  · apply Finset.disjoint_filter_filter'
-    exact (disjoint_compl_right.inf_left _).inf_right _
-
-@[simp]
-
-中文:
-定理 filter_product_card
-  结论: (s : 有限集 α) (t : 有限集 β) (p : α -> 命题) (q : β -> 命题)
-  证明: by
-  classical
-  rw [← card_product]; rw [← card_product]; rw [← filter_product]; rw [← filter_product]; rw [← card_union_of_disjoint]
-  · apply congr_arg
-    grind
-  · apply Finset.disjoint_filter_filter'
-    exact (disjoint_compl_right.inf_left _).inf_right _
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.disjoint_filter_filter, card_product, card_union_of_disjoint, classical, congr_arg, disjoint_compl_right, disjoint_compl_right.inf_left, disjoint_filter_filter, filter_product, inf_left, inf_right
+/-
+**Finset.filter_product_card** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：filter_product_card (s : Finset α) (t : Finset β) (p : α -> Prop) (q : β -
+> Prop) [DecidablePred p] [DecidablePred q] : ((s ×ˢ t).filter fun x : α × β => 
+(p x.1) = (q x.2)).card = (s.filter p).card * (t.filter q).card + (s.filter (¬ p
+ ·)).card * (t.filter (¬ q ·)).card
+参数：s : Finset α；t : Finset β；p : α -> Prop；q : β -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_product`：card_product (s : Finset α) (t : Finset β) : card (
+s ×ˢ t) = card s * card t
+· 使用定理 `Finset.filter_product`：filter_product (p : α -> Prop) (q : β -> Prop) [D
+ecidablePred p] [DecidablePred q] : ((s ×ˢ t).filter fun x : α × β => p x.1 ∧ q 
+x.2) = s.fi…
+· 使用定理 `Finset.card_union_of_disjoint`：∀ {α : Type u_1} {s t : Finset α} [inst :
+ DecidableEq α], Disjoint s t → (s ∪ t).card = s.card + t.card
+· 使用定理 `Finset.disjoint_filter_filter'`：disjoint_filter_filter' (s t : Finset α)
+ {p q : α -> Prop} [DecidablePred p] [DecidablePred q] (h : Disjoint p q) : Disj
+oint (s.filter p) (t…
+· 使用定理 `Disjoint.inf_right`：Disjoint.inf_right (h : Disjoint a b) : Disjoint a (
+b ⊓ c)
+· 使用定理 `Disjoint.inf_left`：Disjoint.inf_left (h : Disjoint a b) : Disjoint (a ⊓ 
+c) b
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem filter_product_card (s : Finset α) (t : Finset β) (p : α -> Prop) (q : β -> Prop)
+theorem filter_product_card (s : Finset α) (t : Finset β) (p : α → Prop) (q : β → Prop)
     [DecidablePred p] [DecidablePred q] :
     ((s ×ˢ t).filter fun x : α × β => (p x.1) = (q x.2)).card =
       (s.filter p).card * (t.filter q).card +
         (s.filter (¬ p ·)).card * (t.filter (¬ q ·)).card := by
   classical
-  rw [← card_product]; rw [← card_product]; rw [← filter_product]; rw [← filter_product]; rw [← card_union_of_disjoint]
+  rw [← card_product, ← card_product, ← filter_product, ← filter_product, ← card_union_of_disjoint]
   · apply congr_arg
     grind
   · apply Finset.disjoint_filter_filter'
     exact (disjoint_compl_right.inf_left _).inf_right _
 
 @[simp]
-/--
-theorem `empty_product` / 定理 `empty_product`
-
-English:
-theorem empty_product
-  given: (t : Finset β)
-  statement: (∅ : Finset α) ×ˢ t = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 empty_product
-  条件: (t : 有限集 β)
-  结论: (∅ : 有限集 α) ×ˢ t = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Finset.empty_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_product (t : Finset β) : (∅ : Finset α) ×ˢ t = ∅
+参数：t : Finset β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem empty_product (t : Finset β) : (∅ : Finset α) ×ˢ t = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `product_empty` / 定理 `product_empty`
-
-English:
-theorem product_empty
-  given: (s : Finset α)
-  statement: s ×ˢ (∅ : Finset β) = ∅
-  proof: eq_empty_of_forall_notMem fun _ h => notMem_empty _ (Finset.mem_product.1 h).2
-
-@[aesop safe apply (rule_sets := [finsetNonempty])]
-
-中文:
-定理 product_empty
-  条件: (s : 有限集 α)
-  结论: s ×ˢ (∅ : 有限集 β) = ∅
-  证明: eq_empty_of_forall_notMem fun _ h => notMem_empty _ (Finset.mem_product.1 h).2
-
-@[aesop safe apply (rule_sets := [finsetNonempty])]
-
-Depends on / 依赖: Finset, Finset.mem_product, eq_empty_of_forall_notMem, mem_product, notMem_empty
+/-
+**Finset.product_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_empty (s : Finset α) : s ×ˢ (∅ : Finset β) = ∅
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem {s : Finset 
+α} (H : forall x, x ∉ s) : s = ∅
+· 使用定理 `Finset.notMem_empty`：notMem_empty (a : α) : a ∉ (∅ : Finset α)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
 theorem product_empty (s : Finset α) : s ×ˢ (∅ : Finset β) = ∅ :=
   eq_empty_of_forall_notMem fun _ h => notMem_empty _ (Finset.mem_product.1 h).2
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
-/--
-theorem `Nonempty.product` / 定理 `Nonempty.product`
-
-English:
-theorem Nonempty.product
-  given: (hs : s.Nonempty) (ht : t.Nonempty)
-  statement: (s ×ˢ t).Nonempty
-  proof: let ⟨x, hx⟩ := hs
-  let ⟨y, hy⟩ := ht
-  ⟨(x, y), mem_product.2 ⟨hx, hy⟩⟩
-
-中文:
-定理 非空.product
-  条件: (hs : s.非空) (ht : t.非空)
-  结论: (s ×ˢ t).非空
-  证明: let ⟨x, hx⟩ := hs
-  let ⟨y, hy⟩ := ht
-  ⟨(x, y), mem_product.2 ⟨hx, hy⟩⟩
-
-Depends on / 依赖: mem_product
+/-
+**Finset.Nonempty.product** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : Finset β}, s.Nonempty 
+→ t.Nonempty → (s ×ˢ t).Nonempty
+参数：s ×ˢ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
 theorem Nonempty.product (hs : s.Nonempty) (ht : t.Nonempty) : (s ×ˢ t).Nonempty :=
   let ⟨x, hx⟩ := hs
   let ⟨y, hy⟩ := ht
   ⟨(x, y), mem_product.2 ⟨hx, hy⟩⟩
-
-/--
-theorem `Nonempty.fst` / 定理 `Nonempty.fst`
-
-English:
-theorem Nonempty.fst
-  given: (h : (s ×ˢ t).Nonempty)
-  statement: s.Nonempty
-  proof: let ⟨xy, hxy⟩ := h
-  ⟨xy.1, (mem_product.1 hxy).1⟩
-
-中文:
-定理 非空.fst
-  条件: (h : (s ×ˢ t).非空)
-  结论: s.非空
-  证明: let ⟨xy, hxy⟩ := h
-  ⟨xy.1, (mem_product.1 hxy).1⟩
-
-Depends on / 依赖: mem_product
+/-
+**Finset.Nonempty.fst** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : Finset β}, (s ×ˢ t).No
+nempty → s.Nonempty
+参数：s ×ˢ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
 theorem Nonempty.fst (h : (s ×ˢ t).Nonempty) : s.Nonempty :=
   let ⟨xy, hxy⟩ := h
   ⟨xy.1, (mem_product.1 hxy).1⟩
-
-/--
-theorem `Nonempty.snd` / 定理 `Nonempty.snd`
-
-English:
-theorem Nonempty.snd
-  given: (h : (s ×ˢ t).Nonempty)
-  statement: t.Nonempty
-  proof: let ⟨xy, hxy⟩ := h
-  ⟨xy.2, (mem_product.1 hxy).2⟩
-
-@[simp]
-
-中文:
-定理 非空.snd
-  条件: (h : (s ×ˢ t).非空)
-  结论: t.非空
-  证明: let ⟨xy, hxy⟩ := h
-  ⟨xy.2, (mem_product.1 hxy).2⟩
-
-@[simp]
-
-Depends on / 依赖: mem_product
+/-
+**Finset.Nonempty.snd** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : Finset β}, (s ×ˢ t).No
+nempty → t.Nonempty
+参数：s ×ˢ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
 -/
 theorem Nonempty.snd (h : (s ×ˢ t).Nonempty) : t.Nonempty :=
   let ⟨xy, hxy⟩ := h
   ⟨xy.2, (mem_product.1 hxy).2⟩
 
 @[simp]
-/--
-theorem `nonempty_product` / 定理 `nonempty_product`
-
-English:
-theorem nonempty_product
-  statement: (s ×ˢ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
-  proof: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.1.product h.2⟩
-
-@[simp]
-
-中文:
-定理 nonempty_product
-  结论: (s ×ˢ t).非空 ↔ s.非空 ∧ t.非空
-  证明: ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.1.product h.2⟩
-
-@[simp]
-
-Depends on / 依赖: h.fst, h.snd, product
+/-
+**Finset.nonempty_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_product : (s ×ˢ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.fst`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t :
+ Finset β}, (s ×ˢ t).Nonempty → s.Nonempty
+· 使用定理 `Finset.Nonempty.snd`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t :
+ Finset β}, (s ×ˢ t).Nonempty → t.Nonempty
+· 使用定理 `Finset.Nonempty.product`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} 
+{t : Finset β}, s.Nonempty → t.Nonempty → (s ×ˢ t).Nonempty
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem nonempty_product : (s ×ˢ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty :=
   ⟨fun h => ⟨h.fst, h.snd⟩, fun h => h.1.product h.2⟩
 
 @[simp]
-/--
-theorem `product_eq_empty` / 定理 `product_eq_empty`
-
-English:
-theorem product_eq_empty
-  given: {s : Finset α} {t : Finset β}
-  statement: s ×ˢ t = ∅ ↔ s = ∅ ∨ t = ∅
-  proof: by
-  contrapose!; exact nonempty_product
-
-@[simp]
-
-中文:
-定理 product_eq_empty
-  条件: {s : 有限集 α} {t : 有限集 β}
-  结论: s ×ˢ t = ∅ ↔ s = ∅ ∨ t = ∅
-  证明: by
-  contrapose!; exact nonempty_product
-
-@[simp]
-
-Depends on / 依赖: contrapose, nonempty_product
+/-
+**Finset.product_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_eq_empty {s : Finset α} {t : Finset β} : s ×ˢ t = ∅ ↔ s = ∅ ∨ t = 
+∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.nonempty_product`：nonempty_product : (s ×ˢ t).Nonempty ↔ s.Nonemp
+ty ∧ t.Nonempty
 -/
 theorem product_eq_empty {s : Finset α} {t : Finset β} : s ×ˢ t = ∅ ↔ s = ∅ ∨ t = ∅ := by
   contrapose!; exact nonempty_product
 
 @[simp]
-/--
-theorem `singleton_product` / 定理 `singleton_product`
-
-English:
-theorem singleton_product
-  given: {a : α}
-  proof: by
-  ext ⟨x, y⟩
-  simp [and_left_comm, eq_comm]
-
-@[simp]
-
-中文:
-定理 singleton_product
-  条件: {a : α}
-  证明: by
-  ext ⟨x, y⟩
-  simp [and_left_comm, eq_comm]
-
-@[simp]
-
-Depends on / 依赖: and_left_comm, eq_comm
+/-
+**Finset.singleton_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：singleton_product {a : α} : ({a} : Finset α) ×ˢ t = t.map ⟨Prod.mk a, Prod
+.mk_right_injective _⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Prod.mk_right_injective`：mk_right_injective {α β : Type*} (a : α) : (mk 
+a : β -> α × β).Injective
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem singleton_product {a : α} :
     ({a} : Finset α) ×ˢ t = t.map ⟨Prod.mk a, Prod.mk_right_injective _⟩ := by
@@ -887,211 +717,159 @@ theorem singleton_product {a : α} :
   simp [and_left_comm, eq_comm]
 
 @[simp]
-/--
-lemma `product_singleton` / 引理 `product_singleton`
-
-English:
-lemma product_singleton
-  statement: s ×ˢ {b} = s.map ⟨fun i => (i, b), Prod.mk_left_injective _⟩
-  proof: by
-  ext ⟨x, y⟩
-  simp [and_left_comm, eq_comm]
-
-中文:
-引理 product_singleton
-  结论: s ×ˢ {b} = s.map ⟨fun i => (i, b), 积类型.mk_left_injective _⟩
-  证明: by
-  ext ⟨x, y⟩
-  simp [and_left_comm, eq_comm]
-
-Depends on / 依赖: and_left_comm, eq_comm
+/-
+**Finset.product_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：product_singleton : s ×ˢ {b} = s.map ⟨fun i => (i, b), Prod.mk_left_inject
+ive _⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Prod.mk_left_injective`：mk_left_injective {α β : Type*} (b : β) : (fun a
+ => mk a b : α -> α × β).Injective
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma product_singleton : s ×ˢ {b} = s.map ⟨fun i => (i, b), Prod.mk_left_injective _⟩ := by
   ext ⟨x, y⟩
   simp [and_left_comm, eq_comm]
-
-/--
-theorem `singleton_product_singleton` / 定理 `singleton_product_singleton`
-
-English:
-theorem singleton_product_singleton
-  given: {a : α} {b : β}
-  proof: by
-  simp only [product_singleton, Function.Embedding.coeFn_mk, map_singleton]
-
-@[simp]
-
-中文:
-定理 singleton_product_singleton
-  条件: {a : α} {b : β}
-  证明: by
-  simp only [product_singleton, Function.Embedding.coeFn_mk, map_singleton]
-
-@[simp]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, coeFn_mk, map_singleton, product_singleton
+/-
+**Finset.singleton_product_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：singleton_product_singleton {a : α} {b : β} : ({a} ×ˢ {b} : Finset _) = {(
+a, b)}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk_left_injective`：mk_left_injective {α β : Type*} (b : β) : (fun a
+ => mk a b : α -> α × β).Injective
+· 使用引理 `Finset.product_singleton`：product_singleton : s ×ˢ {b} = s.map ⟨fun i =>
+ (i, b), Prod.mk_left_injective _⟩
+· 使用定理 `Finset.map_singleton`：map_singleton (f : α ↪ β) (a : α) : map f {a} = {f
+ a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem singleton_product_singleton {a : α} {b : β} :
     ({a} ×ˢ {b} : Finset _) = {(a, b)} := by
   simp only [product_singleton, Function.Embedding.coeFn_mk, map_singleton]
 
 @[simp]
-/--
-theorem `union_product` / 定理 `union_product`
-
-English:
-theorem union_product
-  given: [DecidableEq α] [DecidableEq β]
-  statement: (s union s') ×ˢ t = s ×ˢ t union s' ×ˢ t
-  proof: by grind
+/-
+**Finset.union_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_product [DecidableEq α] [DecidableEq β] : (s union s') ×ˢ t = s ×ˢ t
+ union s' ×ˢ t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem union_product [DecidableEq α] [DecidableEq β] : (s ∪ s') ×ˢ t = s ×ˢ t ∪ s' ×ˢ t := by grind
 
 @[simp]
-
-中文:
-定理 union_product
-  条件: [DecidableEq α] [DecidableEq β]
-  结论: (s union s') ×ˢ t = s ×ˢ t union s' ×ˢ t
-  证明: by grind
-
-@[simp]
+/-
+**Finset.product_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_union [DecidableEq α] [DecidableEq β] : s ×ˢ (t union t') = s ×ˢ t
+ union s ×ˢ t'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem union_product [DecidableEq α] [DecidableEq β] : (s union s') ×ˢ t = s ×ˢ t union s' ×ˢ t := by grind
-
-@[simp]
-/--
-theorem `product_union` / 定理 `product_union`
-
-English:
-theorem product_union
-  given: [DecidableEq α] [DecidableEq β]
-  statement: s ×ˢ (t union t') = s ×ˢ t union s ×ˢ t'
-  proof: by grind
-
-中文:
-定理 product_union
-  条件: [DecidableEq α] [DecidableEq β]
-  结论: s ×ˢ (t union t') = s ×ˢ t union s ×ˢ t'
-  证明: by grind
+theorem product_union [DecidableEq α] [DecidableEq β] : s ×ˢ (t ∪ t') = s ×ˢ t ∪ s ×ˢ t' := by grind
+/-
+**Finset.inter_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_product [DecidableEq α] [DecidableEq β] : (s inter s') ×ˢ t = s ×ˢ t
+ inter s' ×ˢ t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem product_union [DecidableEq α] [DecidableEq β] : s ×ˢ (t union t') = s ×ˢ t union s ×ˢ t' := by grind
-
-/--
-theorem `inter_product` / 定理 `inter_product`
-
-English:
-theorem inter_product
-  given: [DecidableEq α] [DecidableEq β]
-  statement: (s inter s') ×ˢ t = s ×ˢ t inter s' ×ˢ t
-  proof: by grind
-
-中文:
-定理 inter_product
-  条件: [DecidableEq α] [DecidableEq β]
-  结论: (s inter s') ×ˢ t = s ×ˢ t inter s' ×ˢ t
-  证明: by grind
+theorem inter_product [DecidableEq α] [DecidableEq β] : (s ∩ s') ×ˢ t = s ×ˢ t ∩ s' ×ˢ t := by grind
+/-
+**Finset.product_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_inter [DecidableEq α] [DecidableEq β] : s ×ˢ (t inter t') = s ×ˢ t
+ inter s ×ˢ t'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inter_product [DecidableEq α] [DecidableEq β] : (s inter s') ×ˢ t = s ×ˢ t inter s' ×ˢ t := by grind
-
-/--
-theorem `product_inter` / 定理 `product_inter`
-
-English:
-theorem product_inter
-  given: [DecidableEq α] [DecidableEq β]
-  statement: s ×ˢ (t inter t') = s ×ˢ t inter s ×ˢ t'
-  proof: by grind
-
-中文:
-定理 product_inter
-  条件: [DecidableEq α] [DecidableEq β]
-  结论: s ×ˢ (t inter t') = s ×ˢ t inter s ×ˢ t'
-  证明: by grind
--/
-theorem product_inter [DecidableEq α] [DecidableEq β] : s ×ˢ (t inter t') = s ×ˢ t inter s ×ˢ t' := by grind
-
-/--
-theorem `product_inter_product` / 定理 `product_inter_product`
-
-English:
-theorem product_inter_product
-  given: [DecidableEq α] [DecidableEq β]
-  proof: by grind
-
-中文:
-定理 product_inter_product
-  条件: [DecidableEq α] [DecidableEq β]
-  证明: by grind
+theorem product_inter [DecidableEq α] [DecidableEq β] : s ×ˢ (t ∩ t') = s ×ˢ t ∩ s ×ˢ t' := by grind
+/-
+**Finset.product_inter_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_inter_product [DecidableEq α] [DecidableEq β] : s ×ˢ t inter s' ×ˢ
+ t' = (s inter s') ×ˢ (t inter t')
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_inter_product [DecidableEq α] [DecidableEq β] :
-    s ×ˢ t inter s' ×ˢ t' = (s inter s') ×ˢ (t inter t') := by grind
-
-/--
-theorem `disjoint_product` / 定理 `disjoint_product`
-
-English:
-theorem disjoint_product
-  statement: Disjoint (s ×ˢ t) (s' ×ˢ t') ↔ Disjoint s s' ∨ Disjoint t t'
-  proof: by
-  simp_rw [← disjoint_coe, coe_product, Set.disjoint_prod]
-
-@[simp]
-
-中文:
-定理 disjoint_product
-  结论: Disjoint (s ×ˢ t) (s' ×ˢ t') ↔ Disjoint s s' ∨ Disjoint t t'
-  证明: by
-  simp_rw [← disjoint_coe, coe_product, Set.disjoint_prod]
-
-@[simp]
-
-Depends on / 依赖: Set.disjoint_prod, coe_product, disjoint_coe, disjoint_prod, simp_rw
+    s ×ˢ t ∩ s' ×ˢ t' = (s ∩ s') ×ˢ (t ∩ t') := by grind
+/-
+**Finset.disjoint_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_product : Disjoint (s ×ˢ t) (s' ×ˢ t') ↔ Disjoint s s' ∨ Disjoint
+ t t'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_product`：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ 
+t) : Set (α × β)) = (s : Set α) ×ˢ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem disjoint_product : Disjoint (s ×ˢ t) (s' ×ˢ t') ↔ Disjoint s s' ∨ Disjoint t t' := by
   simp_rw [← disjoint_coe, coe_product, Set.disjoint_prod]
 
 @[simp]
-/--
-theorem `disjUnion_product` / 定理 `disjUnion_product`
-
-English:
-theorem disjUnion_product
-  given: (hs : Disjoint s s')
-  proof: eq_of_veq Multiset.add_product _ _ _
-
-@[simp]
-
-中文:
-定理 disjUnion_product
-  条件: (hs : Disjoint s s')
-  证明: eq_of_veq Multiset.add_product _ _ _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.add_product, add_product, eq_of_veq
+/-
+**Finset.disjUnion_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjUnion_product (hs : Disjoint s s') : s.disjUnion s' hs ×ˢ t = (s ×ˢ t)
+.disjUnion (s' ×ˢ t) (disjoint_product.mpr <| Or.inl hs)
+参数：hs : Disjoint s s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_product`：disjoint_product : Disjoint (s ×ˢ t) (s' ×ˢ t')
+ ↔ Disjoint s s' ∨ Disjoint t t'
+· 使用定理 `Multiset.add_product`：add_product (s t : Multiset α) (u : Multiset β) : 
+(s + t) ×ˢ u = s ×ˢ u + t ×ˢ u
 -/
 theorem disjUnion_product (hs : Disjoint s s') :
     s.disjUnion s' hs ×ˢ t = (s ×ˢ t).disjUnion (s' ×ˢ t) (disjoint_product.mpr <| Or.inl hs) :=
-eq_of_veq Multiset.add_product _ _ _
+  eq_of_veq <| Multiset.add_product _ _ _
 
 @[simp]
-/--
-theorem `product_disjUnion` / 定理 `product_disjUnion`
-
-English:
-theorem product_disjUnion
-  given: (ht : Disjoint t t')
-  proof: eq_of_veq Multiset.product_add _ _ _
-
-中文:
-定理 product_disjUnion
-  条件: (ht : Disjoint t t')
-  证明: eq_of_veq Multiset.product_add _ _ _
-
-Depends on / 依赖: Multiset, Multiset.product_add, eq_of_veq, product_add
+/-
+**Finset.product_disjUnion** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_disjUnion (ht : Disjoint t t') : s ×ˢ t.disjUnion t' ht = (s ×ˢ t)
+.disjUnion (s ×ˢ t') (disjoint_product.mpr <| Or.inr ht)
+参数：ht : Disjoint t t'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_product`：disjoint_product : Disjoint (s ×ˢ t) (s' ×ˢ t')
+ ↔ Disjoint s s' ∨ Disjoint t t'
+· 使用定理 `Multiset.product_add`：product_add (s : Multiset α) : forall t u : Multis
+et β, s ×ˢ (t + u) = s ×ˢ t + s ×ˢ u
 -/
 theorem product_disjUnion (ht : Disjoint t t') :
     s ×ˢ t.disjUnion t' ht = (s ×ˢ t).disjUnion (s ×ˢ t') (disjoint_product.mpr <| Or.inr ht) :=
-eq_of_veq Multiset.product_add _ _ _
+  eq_of_veq <| Multiset.product_add _ _ _
 
 end Prod
 
@@ -1099,159 +877,136 @@ section Diag
 
 variable (s t : Finset α)
 
-/--
-Definition of `diag` / `diag` 的定义
+/-- Given a finite set `s`, the diagonal, `s.diag` is the set of pairs of the form `(a, a)` for
+`a ∈ s`. -/
+/-
+**Finset.diag** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：diag : Finset (α × α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
 
-English:
-definition diag
-  signature: : Finset (α × α)
-  body: s.map ⟨Function.diag, Function.diag_injective⟩
-
-中文:
-定义 diag
-  签名: : 有限集 (α × α)
-  定义体: s.map ⟨Function.diag, Function.diag_injective⟩
-
-Depends on / 依赖: Function, Function.diag, Function.diag_injective, diag_injective, s.map
+--- 原说明 ---
+Given a finite set `s`, the diagonal, `s.diag` is the set of pairs of the form `
+(a, a)` for
+`a ∈ s`.
 -/
 def diag : Finset (α × α) := s.map ⟨Function.diag, Function.diag_injective⟩
 
 -- TODO: define `Multiset.offDiag`, provide basic API, use it here
-/--
-Definition of `offDiag` / `offDiag` 的定义
+/-- Given a finite set `s`, the off-diagonal, `s.offDiag` is the set of pairs `(a, b)` with `a ≠ b`
+for `a, b ∈ s`. -/
+/-
+**Finset.offDiag** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：offDiag : Finset (α × α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.offDiag`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₁.of
+fDiag.Perm l₂.offDiag
 
-English:
-definition offDiag
-  signature: : Finset (α × α)
-  body: .mk (Quotient.map List.offDiag (fun _ _ => List.Perm.offDiag) s.1) by
-    rcases s with ⟨⟨s⟩, hs⟩
-    exact hs.offDiag
-
-中文:
-定义 offDiag
-  签名: : 有限集 (α × α)
-  定义体: .mk (Quotient.map List.offDiag (fun _ _ => List.Perm.offDiag) s.1) by
-    rcases s with ⟨⟨s⟩, hs⟩
-    exact hs.offDiag
-
-Depends on / 依赖: List.Perm.offDiag, List.offDiag, Quotient, Quotient.map, hs.offDiag, offDiag
+--- 原说明 ---
+Given a finite set `s`, the off-diagonal, `s.offDiag` is the set of pairs `(a, b
+)` with `a ≠ b`
+for `a, b ∈ s`.
 -/
 def offDiag : Finset (α × α) :=
-.mk (Quotient.map List.offDiag (fun _ _ => List.Perm.offDiag) s.1) by
+  .mk (Quotient.map List.offDiag (fun _ _ ↦ List.Perm.offDiag) s.1) <| by
     rcases s with ⟨⟨s⟩, hs⟩
     exact hs.offDiag
 
 variable {s} {x : α × α}
 
 @[simp, grind =]
-/--
-theorem `mem_diag` / 定理 `mem_diag`
-
-English:
-theorem mem_diag
-  statement: x in s.diag ↔ x.1 in s ∧ x.1 = x.2
-  proof: by
-  aesop (add simp diag)
-
-@[simp, grind =]
-
-中文:
-定理 mem_diag
-  结论: x in s.diag ↔ x.1 in s ∧ x.1 = x.2
-  证明: by
-  aesop (add simp diag)
-
-@[simp, grind =]
+/-
+**Finset.mem_diag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_diag : x in s.diag ↔ x.1 in s ∧ x.1 = x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem mem_diag : x in s.diag ↔ x.1 in s ∧ x.1 = x.2 := by
+theorem mem_diag : x ∈ s.diag ↔ x.1 ∈ s ∧ x.1 = x.2 := by
   aesop (add simp diag)
 
 @[simp, grind =]
-/--
-theorem `mem_offDiag` / 定理 `mem_offDiag`
-
-English:
-theorem mem_offDiag
-  statement: x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
-  proof: by
-  rcases s with ⟨⟨s⟩, hs⟩
-  exact hs.mem_offDiag
-
-@[simp, grind =]
-
-中文:
-定理 mem_offDiag
-  结论: x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
-  证明: by
-  rcases s with ⟨⟨s⟩, hs⟩
-  exact hs.mem_offDiag
-
-@[simp, grind =]
-
-Depends on / 依赖: hs.mem_offDiag, mem_offDiag
+/-
+**Finset.mem_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_offDiag : x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Nodup.mem_offDiag`：∀ {α : Type u_1} {l : List α}, l.Nodup → ∀ {x : 
+α × α}, x ∈ l.offDiag ↔ x.1 ∈ l ∧ x.2 ∈ l ∧ x.1 ≠ x.2
 -/
-theorem mem_offDiag : x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2 := by
+theorem mem_offDiag : x ∈ s.offDiag ↔ x.1 ∈ s ∧ x.2 ∈ s ∧ x.1 ≠ x.2 := by
   rcases s with ⟨⟨s⟩, hs⟩
   exact hs.mem_offDiag
 
 @[simp, grind =]
-/--
-theorem `diag_nonempty` / 定理 `diag_nonempty`
-
-English:
-theorem diag_nonempty
-  statement: s.diag.Nonempty ↔ s.Nonempty
-  proof: by
-  simp [diag]
-
-@[simp, grind =]
-
-中文:
-定理 diag_nonempty
-  结论: s.diag.非空 ↔ s.非空
-  证明: by
-  simp [diag]
-
-@[simp, grind =]
+/-
+**Finset.diag_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_nonempty : s.diag.Nonempty ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem diag_nonempty : s.diag.Nonempty ↔ s.Nonempty := by
   simp [diag]
 
 @[simp, grind =]
-/--
-theorem `diag_eq_empty` / 定理 `diag_eq_empty`
-
-English:
-theorem diag_eq_empty
-  statement: s.diag = ∅ ↔ s = ∅
-  proof: by
-  simp [diag]
-
-中文:
-定理 diag_eq_empty
-  结论: s.diag = ∅ ↔ s = ∅
-  证明: by
-  simp [diag]
+/-
+**Finset.diag_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_eq_empty : s.diag = ∅ ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem diag_eq_empty : s.diag = ∅ ↔ s = ∅ := by
   simp [diag]
-
-/--
-theorem `diag_eq_filter` / 定理 `diag_eq_filter`
-
-English:
-theorem diag_eq_filter
-  given: [DecidableEq α]
-  proof: by
-  ext; simp +contextual
-
-中文:
-定理 diag_eq_filter
-  条件: [DecidableEq α]
-  证明: by
-  ext; simp +contextual
-
-Depends on / 依赖: contextual
+/-
+**Finset.diag_eq_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_eq_filter [DecidableEq α] : s.diag = (s ×ˢ s).filter fun a : α × α =>
+ a.fst = a.snd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem diag_eq_filter [DecidableEq α] :
     s.diag = (s ×ˢ s).filter fun a : α × α => a.fst = a.snd := by
@@ -1260,102 +1015,62 @@ theorem diag_eq_filter [DecidableEq α] :
 variable (s)
 
 @[simp]
-/--
-theorem `image_diag` / 定理 `image_diag`
-
-English:
-theorem image_diag
-  given: [DecidableEq β] (f : α × α -> β) (s : Finset α)
-  proof: by
-  grind
-
-@[simp, norm_cast]
-
-中文:
-定理 image_diag
-  条件: [DecidableEq β] (f : α × α -> β) (s : 有限集 α)
-  证明: by
-  grind
-
-@[simp, norm_cast]
+/-
+**Finset.image_diag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_diag [DecidableEq β] (f : α × α -> β) (s : Finset α) : s.diag.image 
+f = s.image fun x => f (x, x)
+参数：f : α × α -> β；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image_diag [DecidableEq β] (f : α × α -> β) (s : Finset α) :
-    s.diag.image f = s.image fun x => f (x, x) := by
+theorem image_diag [DecidableEq β] (f : α × α → β) (s : Finset α) :
+    s.diag.image f = s.image fun x ↦ f (x, x) := by
   grind
 
 @[simp, norm_cast]
-/--
-theorem `coe_offDiag` / 定理 `coe_offDiag`
-
-English:
-theorem coe_offDiag
-  statement: (s.offDiag : Set (α × α)) = (s : Set α).offDiag
-  proof: Set.ext fun _ => mem_offDiag
-
-@[simp]
-
-中文:
-定理 coe_offDiag
-  结论: (s.offDiag : 集合 (α × α)) = (s : 集合 α).offDiag
-  证明: Set.ext fun _ => mem_offDiag
-
-@[simp]
-
-Depends on / 依赖: Set.ext, mem_offDiag
+/-
+**Finset.coe_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_offDiag : (s.offDiag : Set (α × α)) = (s : Set α).offDiag
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Finset.mem_offDiag`：mem_offDiag : x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧
+ x.1 != x.2
 -/
 theorem coe_offDiag : (s.offDiag : Set (α × α)) = (s : Set α).offDiag :=
   Set.ext fun _ => mem_offDiag
 
 @[simp]
-/--
-theorem `diag_card` / 定理 `diag_card`
-
-English:
-theorem diag_card
-  statement: (diag s).card = s.card
-  proof: by
-  simp [diag]
-
-@[simp]
-
-中文:
-定理 diag_card
-  结论: (diag s).card = s.card
-  证明: by
-  simp [diag]
-
-@[simp]
-
-Depends on / 依赖: Num.ofNat
+/-
+**Finset.diag_card** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_card : (diag s).card = s.card
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem diag_card : (diag s).card = s.card := by
   simp [diag]
 
 @[simp]
-/--
-theorem `offDiag_card` / 定理 `offDiag_card`
-
-English:
-theorem offDiag_card
-  statement: (offDiag s).card = s.card * s.card - s.card
-  proof: by
-  rw [← sq]
-  rcases s with ⟨⟨s⟩, hs⟩
-  apply List.length_offDiag
-
-@[gcongr, mono]
-
-中文:
-定理 offDiag_card
-  结论: (offDiag s).card = s.card * s.card - s.card
-  证明: by
-  rw [← sq]
-  rcases s with ⟨⟨s⟩, hs⟩
-  apply List.length_offDiag
-
-@[gcongr, mono]
-
-Depends on / 依赖: List.length_offDiag, Nat.binaryRec_eq, binaryRec_eq, length_offDiag
+/-
+**Finset.offDiag_card** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_card : (offDiag s).card = s.card * s.card - s.card
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `List.length_offDiag`：length_offDiag (l : List α) : length l.offDiag = le
+ngth l ^ 2 - length l
 -/
 theorem offDiag_card : (offDiag s).card = s.card * s.card - s.card := by
   rw [← sq]
@@ -1363,396 +1078,271 @@ theorem offDiag_card : (offDiag s).card = s.card * s.card - s.card := by
   apply List.length_offDiag
 
 @[gcongr, mono]
-/--
-theorem `diag_mono` / 定理 `diag_mono`
-
-English:
-theorem diag_mono
-  statement: Monotone (diag : Finset α -> Finset (α × α))
-  proof: fun _ _ => by simp [diag]
-
-@[gcongr, mono]
-
-中文:
-定理 diag_mono
-  结论: 递增 (diag : 有限集 α -> 有限集 (α × α))
-  证明: fun _ _ => by simp [diag]
-
-@[gcongr, mono]
-
-Depends on / 依赖: Num.bit1, Num.ofNat
+/-
+**Finset.diag_mono** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_mono : Monotone (diag : Finset α -> Finset (α × α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Function.diag_injective`：diag_injective : Injective (α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem diag_mono : Monotone (diag : Finset α -> Finset (α × α)) := fun _ _ => by simp [diag]
+theorem diag_mono : Monotone (diag : Finset α → Finset (α × α)) := fun _ _ ↦ by simp [diag]
 
 @[gcongr, mono]
-/--
-theorem `offDiag_mono` / 定理 `offDiag_mono`
-
-English:
-theorem offDiag_mono
-  statement: Monotone (offDiag : Finset α -> Finset (α × α))
-  proof: fun _ _ h _ hx =>
-mem_offDiag.2 And.imp (@h _) (And.imp_left <| @h _) mem_offDiag.1 hx
-
-@[simp]
-
-中文:
-定理 offDiag_mono
-  结论: 递增 (offDiag : 有限集 α -> 有限集 (α × α))
-  证明: fun _ _ h _ hx =>
-mem_offDiag.2 And.imp (@h _) (And.imp_left <| @h _) mem_offDiag.1 hx
-
-@[simp]
-
-Depends on / 依赖: Nat.binaryRec, Nat.bit, _bit, add_one, binaryRec, bit0_of_bit0, bit1_of_bit1, bit1_succ, mul_add, n.bit, zero_add
+/-
+**Finset.offDiag_mono** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_mono : Monotone (offDiag : Finset α -> Finset (α × α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_offDiag`：mem_offDiag : x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧
+ x.1 != x.2
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `And.imp_left`：∀ {a b c : Prop}, (a → b) → a ∧ c → b ∧ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem offDiag_mono : Monotone (offDiag : Finset α -> Finset (α × α)) := fun _ _ h _ hx =>
-mem_offDiag.2 And.imp (@h _) (And.imp_left <| @h _) mem_offDiag.1 hx
+theorem offDiag_mono : Monotone (offDiag : Finset α → Finset (α × α)) := fun _ _ h _ hx =>
+  mem_offDiag.2 <| And.imp (@h _) (And.imp_left <| @h _) <| mem_offDiag.1 hx
 
 @[simp]
-/--
-theorem `diag_empty` / 定理 `diag_empty`
-
-English:
-theorem diag_empty
-  statement: (∅ : Finset α).diag = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 diag_empty
-  结论: (∅ : 有限集 α).diag = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Finset.diag_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_empty : (∅ : Finset α).diag = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem diag_empty : (∅ : Finset α).diag = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `offDiag_empty` / 定理 `offDiag_empty`
-
-English:
-theorem offDiag_empty
-  statement: (∅ : Finset α).offDiag = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 offDiag_empty
-  结论: (∅ : 有限集 α).offDiag = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Finset.offDiag_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_empty : (∅ : Finset α).offDiag = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem offDiag_empty : (∅ : Finset α).offDiag = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `diag_union_offDiag` / 定理 `diag_union_offDiag`
-
-English:
-theorem diag_union_offDiag
-  given: [DecidableEq α]
-  statement: s.diag union s.offDiag = s ×ˢ s
-  proof: by
-  grind
-
-@[simp]
-
-中文:
-定理 diag_union_offDiag
-  条件: [DecidableEq α]
-  结论: s.diag union s.offDiag = s ×ˢ s
-  证明: by
-  grind
-
-@[simp]
+/-
+**Finset.diag_union_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_union_offDiag [DecidableEq α] : s.diag union s.offDiag = s ×ˢ s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem diag_union_offDiag [DecidableEq α] : s.diag union s.offDiag = s ×ˢ s := by
+theorem diag_union_offDiag [DecidableEq α] : s.diag ∪ s.offDiag = s ×ˢ s := by
   grind
 
 @[simp]
-/--
-theorem `disjoint_diag_offDiag` / 定理 `disjoint_diag_offDiag`
-
-English:
-theorem disjoint_diag_offDiag
-  statement: Disjoint s.diag s.offDiag
-  proof: by simp [disjoint_left]
-
-中文:
-定理 disjoint_diag_offDiag
-  结论: Disjoint s.diag s.offDiag
-  证明: by simp [disjoint_left]
-
-Depends on / 依赖: disjoint_left
+/-
+**Finset.disjoint_diag_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_diag_offDiag : Disjoint s.diag s.offDiag
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem disjoint_diag_offDiag : Disjoint s.diag s.offDiag := by simp [disjoint_left]
-
-/--
-theorem `product_sdiff_diag` / 定理 `product_sdiff_diag`
-
-English:
-theorem product_sdiff_diag
-  given: [DecidableEq α]
-  statement: s ×ˢ s \ s.diag = s.offDiag
-  proof: by grind
-
-中文:
-定理 product_sdiff_diag
-  条件: [DecidableEq α]
-  结论: s ×ˢ s \ s.diag = s.offDiag
-  证明: by grind
+/-
+**Finset.product_sdiff_diag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_sdiff_diag [DecidableEq α] : s ×ˢ s \ s.diag = s.offDiag
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_sdiff_diag [DecidableEq α] : s ×ˢ s \ s.diag = s.offDiag := by grind
-
-/--
-theorem `product_sdiff_offDiag` / 定理 `product_sdiff_offDiag`
-
-English:
-theorem product_sdiff_offDiag
-  given: [DecidableEq α]
-  statement: s ×ˢ s \ s.offDiag = s.diag
-  proof: by grind
-
-中文:
-定理 product_sdiff_offDiag
-  条件: [DecidableEq α]
-  结论: s ×ˢ s \ s.offDiag = s.diag
-  证明: by grind
+/-
+**Finset.product_sdiff_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_sdiff_offDiag [DecidableEq α] : s ×ˢ s \ s.offDiag = s.diag
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem product_sdiff_offDiag [DecidableEq α] : s ×ˢ s \ s.offDiag = s.diag := by grind
-
-/--
-theorem `diag_inter` / 定理 `diag_inter`
-
-English:
-theorem diag_inter
-  given: [DecidableEq α]
-  statement: (s inter t).diag = s.diag inter t.diag
-  proof: by
-  grind
-
-中文:
-定理 diag_inter
-  条件: [DecidableEq α]
-  结论: (s inter t).diag = s.diag inter t.diag
-  证明: by
-  grind
+/-
+**Finset.diag_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_inter [DecidableEq α] : (s inter t).diag = s.diag inter t.diag
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem diag_inter [DecidableEq α] : (s inter t).diag = s.diag inter t.diag := by
+theorem diag_inter [DecidableEq α] : (s ∩ t).diag = s.diag ∩ t.diag := by
   grind
-
-/--
-theorem `offDiag_inter` / 定理 `offDiag_inter`
-
-English:
-theorem offDiag_inter
-  given: [DecidableEq α]
-  statement: (s inter t).offDiag = s.offDiag inter t.offDiag
-  proof: coe_injective by
+/-
+**Finset.offDiag_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_inter [DecidableEq α] : (s inter t).offDiag = s.offDiag inter t.of
+fDiag
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_offDiag`：coe_offDiag : (s.offDiag : Set (α × α)) = (s : Set α
+).offDiag
+· 使用定理 `Finset.coe_inter`：coe_inter (s₁ s₂ : Finset α) : ↑(s₁ inter s₂) = (s₁ in
+ter s₂ : Set α)
+· 使用定理 `Set.offDiag_inter`：offDiag_inter : (s inter t).offDiag = s.offDiag inter
+ t.offDiag
+-/
+theorem offDiag_inter [DecidableEq α] : (s ∩ t).offDiag = s.offDiag ∩ t.offDiag :=
+  coe_injective <| by
     push_cast
     exact Set.offDiag_inter _ _
-
-中文:
-定理 offDiag_inter
-  条件: [DecidableEq α]
-  结论: (s inter t).offDiag = s.offDiag inter t.offDiag
-  证明: coe_injective by
-    push_cast
-    exact Set.offDiag_inter _ _
-
-Depends on / 依赖: Set.offDiag_inter, coe_injective, offDiag_inter
+/-
+**Finset.diag_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_union [DecidableEq α] : (s union t).diag = s.diag union t.diag
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem offDiag_inter [DecidableEq α] : (s inter t).offDiag = s.offDiag inter t.offDiag :=
-coe_injective by
-    push_cast
-    exact Set.offDiag_inter _ _
-
-/--
-theorem `diag_union` / 定理 `diag_union`
-
-English:
-theorem diag_union
-  given: [DecidableEq α]
-  statement: (s union t).diag = s.diag union t.diag
-  proof: by
-  grind
-
-中文:
-定理 diag_union
-  条件: [DecidableEq α]
-  结论: (s union t).diag = s.diag union t.diag
-  证明: by
-  grind
--/
-theorem diag_union [DecidableEq α] : (s union t).diag = s.diag union t.diag := by
+theorem diag_union [DecidableEq α] : (s ∪ t).diag = s.diag ∪ t.diag := by
   grind
 
 variable {s t}
-
-/--
-theorem `offDiag_union` / 定理 `offDiag_union`
-
-English:
-theorem offDiag_union
-  given: [DecidableEq α] (h : Disjoint s t)
-  proof: coe_injective by
-    push_cast
-    exact Set.offDiag_union (disjoint_coe.2 h)
-
-@[simp]
-
-中文:
-定理 offDiag_union
-  条件: [DecidableEq α] (h : Disjoint s t)
-  证明: coe_injective by
-    push_cast
-    exact Set.offDiag_union (disjoint_coe.2 h)
-
-@[simp]
-
-Depends on / 依赖: Set.offDiag_union, coe_injective, disjoint_coe, offDiag_union
+/-
+**Finset.offDiag_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_union [DecidableEq α] (h : Disjoint s t) : (s union t).offDiag = s
+.offDiag union t.offDiag union s ×ˢ t union t ×ˢ s
+参数：h : Disjoint s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_offDiag`：coe_offDiag : (s.offDiag : Set (α × α)) = (s : Set α
+).offDiag
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `Finset.coe_product`：coe_product (s : Finset α) (t : Finset β) : (↑(s ×ˢ 
+t) : Set (α × β)) = (s : Set α) ×ˢ t
+· 使用定理 `Set.offDiag_union`：offDiag_union (h : Disjoint s t) : (s union t).offDia
+g = s.offDiag union t.offDiag union s ×ˢ t union t ×ˢ s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_coe`：disjoint_coe : Disjoint (s : Set α) t ↔ Disjoint s 
+t
 -/
 theorem offDiag_union [DecidableEq α] (h : Disjoint s t) :
-    (s union t).offDiag = s.offDiag union t.offDiag union s ×ˢ t union t ×ˢ s :=
-coe_injective by
+    (s ∪ t).offDiag = s.offDiag ∪ t.offDiag ∪ s ×ˢ t ∪ t ×ˢ s :=
+  coe_injective <| by
     push_cast
     exact Set.offDiag_union (disjoint_coe.2 h)
 
 @[simp]
-/--
-theorem `offDiag_singleton` / 定理 `offDiag_singleton`
-
-English:
-theorem offDiag_singleton
-  given: (a : α)
-  statement: ({a} : Finset α).offDiag = ∅
-  proof: by simp [← Finset.card_eq_zero]
-
-中文:
-定理 offDiag_singleton
-  条件: (a : α)
-  结论: ({a} : 有限集 α).offDiag = ∅
-  证明: by simp [← Finset.card_eq_zero]
-
-Depends on / 依赖: Finset, Finset.card_eq_zero, card_eq_zero
+/-
+**Finset.offDiag_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_singleton (a : α) : ({a} : Finset α).offDiag = ∅
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.offDiag_card`：offDiag_card : (offDiag s).card = s.card * s.card -
+ s.card
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.sub_self`：∀ (n : ℕ), n - n = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem offDiag_singleton (a : α) : ({a} : Finset α).offDiag = ∅ := by simp [← Finset.card_eq_zero]
-
-/--
-theorem `diag_singleton` / 定理 `diag_singleton`
-
-English:
-theorem diag_singleton
-  given: (a : α)
-  statement: ({a} : Finset α).diag = {(a, a)}
-  proof: by grind
-
-中文:
-定理 diag_singleton
-  条件: (a : α)
-  结论: ({a} : 有限集 α).diag = {(a, a)}
-  证明: by grind
+/-
+**Finset.diag_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_singleton (a : α) : ({a} : Finset α).diag = {(a, a)}
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem diag_singleton (a : α) : ({a} : Finset α).diag = {(a, a)} := by grind
-
-/--
-theorem `diag_insert` / 定理 `diag_insert`
-
-English:
-theorem diag_insert
-  given: [DecidableEq α] (a : α)
-  proof: by grind
-
-中文:
-定理 diag_insert
-  条件: [DecidableEq α] (a : α)
-  证明: by grind
+/-
+**Finset.diag_insert** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：diag_insert [DecidableEq α] (a : α) : (insert a s).diag = insert (a, a) s.
+diag
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem diag_insert [DecidableEq α] (a : α) :
     (insert a s).diag = insert (a, a) s.diag := by grind
-
-/--
-theorem `offDiag_insert` / 定理 `offDiag_insert`
-
-English:
-theorem offDiag_insert
-  given: [DecidableEq α] {a : α} (has : a ∉ s)
-  proof: by
-  grind
-
-中文:
-定理 offDiag_insert
-  条件: [DecidableEq α] {a : α} (has : a ∉ s)
-  证明: by
-  grind
+/-
+**Finset.offDiag_insert** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_insert [DecidableEq α] {a : α} (has : a ∉ s) : (insert a s).offDia
+g = s.offDiag union {a} ×ˢ s union s ×ˢ {a}
+参数：has : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem offDiag_insert [DecidableEq α] {a : α} (has : a ∉ s) :
-    (insert a s).offDiag = s.offDiag union {a} ×ˢ s union s ×ˢ {a} := by
+    (insert a s).offDiag = s.offDiag ∪ {a} ×ˢ s ∪ s ×ˢ {a} := by
   grind
-
-/--
-theorem `offDiag_filter_lt_eq_filter_le` / 定理 `offDiag_filter_lt_eq_filter_le`
-
-English:
-theorem offDiag_filter_lt_eq_filter_le
-  statement: {ι} [PartialOrder ι] [DecidableLE ι] [DecidableLT ι]
-  proof: by
-  ext
-  simpa using fun _ _ a => (Ne.le_iff_lt a).symm
-
-中文:
-定理 offDiag_filter_lt_eq_filter_le
-  结论: {ι} [偏序 ι] [DecidableLE ι] [DecidableLT ι]
-  证明: by
-  ext
-  simpa using fun _ _ a => (Ne.le_iff_lt a).symm
-
-Depends on / 依赖: Ne.le_iff_lt, le_iff_lt
+/-
+**Finset.offDiag_filter_lt_eq_filter_le** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：offDiag_filter_lt_eq_filter_le {ι} [PartialOrder ι] [DecidableLE ι] [Decid
+ableLT ι] (s : Finset ι) : s.offDiag.filter (fun i => i.1 < i.2) = s.offDiag.fil
+ter (fun i => i.1 <= i.2)
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Ne.le_iff_lt`：Ne.le_iff_lt (h : a != b) : a <= b ↔ a < b
 -/
 theorem offDiag_filter_lt_eq_filter_le {ι} [PartialOrder ι] [DecidableLE ι] [DecidableLT ι]
     (s : Finset ι) :
-    s.offDiag.filter (fun i => i.1 < i.2) = s.offDiag.filter (fun i => i.1 <= i.2) := by
+    s.offDiag.filter (fun i => i.1 < i.2) = s.offDiag.filter (fun i => i.1 ≤ i.2) := by
   ext
-  simpa using fun _ _ a => (Ne.le_iff_lt a).symm
+  simpa using fun _ _ a ↦ (Ne.le_iff_lt a).symm
 
-/--
-lemma `card_product_filter_lt` / 引理 `card_product_filter_lt`
+/-- The number of strictly ordered pairs `(a, b)` with `a, b ∈ s` is `(#s).choose 2`. -/
+/-
+**Finset.card_product_filter_lt** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：card_product_filter_lt [LinearOrder α] : #{x in s ×ˢ s | x.1 < x.2} = (#s)
+.choose 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.card_equiv`：card_equiv (e : α ≃ β) (hst : forall i, i in s ↔ e i 
+in t) : #s = #t
 
-English:
-lemma card_product_filter_lt
-  given: [LinearOrder α]
-  proof: by
-  set u : Finset (α × α) := {x in s ×ˢ s | x.1 < x.2}
-  set v : Finset (α × α) := {x in s ×ˢ s | x.2 < x.1}
-  have disj : Disjoint u v := by grind [disjoint_left]
-  have union : u.disjUnion v disj = s.offDiag := by grind
-  have swap : #u = #v := Finset.card_equiv (Equiv.prodComm α α) (by grind)
-  grind [Nat.mul_sub_one, offDiag_card, Nat.choose_two_right]
-
-中文:
-引理 card_product_filter_lt
-  条件: [线性序 α]
-  证明: by
-  set u : Finset (α × α) := {x in s ×ˢ s | x.1 < x.2}
-  set v : Finset (α × α) := {x in s ×ˢ s | x.2 < x.1}
-  have disj : Disjoint u v := by grind [disjoint_left]
-  have union : u.disjUnion v disj = s.offDiag := by grind
-  have swap : #u = #v := Finset.card_equiv (Equiv.prodComm α α) (by grind)
-  grind [Nat.mul_sub_one, offDiag_card, Nat.choose_two_right]
-
-Depends on / 依赖: Disjoint, Equiv.prodComm, Finset, Finset.card_equiv, Nat.choose_two_right, Nat.mul_sub_one, card_equiv, choose_two_right, disjUnion, disjoint_left, mul_sub_one, offDiag, offDiag_card, prodComm, s.offDiag, u.disjUnion
+--- 原说明 ---
+The number of strictly ordered pairs `(a, b)` with `a, b ∈ s` is `(#s).choose 2`
+.
 -/
 lemma card_product_filter_lt [LinearOrder α] :
-    #{x in s ×ˢ s | x.1 < x.2} = (#s).choose 2 := by
-  set u : Finset (α × α) := {x in s ×ˢ s | x.1 < x.2}
-  set v : Finset (α × α) := {x in s ×ˢ s | x.2 < x.1}
+    #{x ∈ s ×ˢ s | x.1 < x.2} = (#s).choose 2 := by
+  set u : Finset (α × α) := {x ∈ s ×ˢ s | x.1 < x.2}
+  set v : Finset (α × α) := {x ∈ s ×ˢ s | x.2 < x.1}
   have disj : Disjoint u v := by grind [disjoint_left]
   have union : u.disjUnion v disj = s.offDiag := by grind
   have swap : #u = #v := Finset.card_equiv (Equiv.prodComm α α) (by grind)
@@ -1761,3 +1351,4 @@ lemma card_product_filter_lt [LinearOrder α] :
 end Diag
 
 end Finset
+

@@ -31,52 +31,25 @@ open CategoryTheory Limits Functor
 namespace CategoryTheory.Cat
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isTerminalOfUniqueOfIsDiscrete` / `isTerminalOfUniqueOfIsDiscrete` 的定义
+/-- A discrete category with a unique object is terminal. -/
+/-
+**CategoryTheory.Cat.isTerminalOfUniqueOfIsDiscrete** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Cat`。
+形式化陈述：isTerminalOfUniqueOfIsDiscrete {T : Type u} [Category.{v} T] [Unique T] [I
+sDiscrete T] : IsTerminal (Cat.of T)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalOfUniqueOfIsDiscrete
-  signature: {T : Type u} [Category.{v} T] [Unique T] [IsDiscrete T]
-  body: IsTerminal.ofUniqueHom (fun X => ((const X).obj (default : T)).toCatHom)
-    (fun _ _ => Cat.Hom.ext <| Functor.ext (by simp [eq_iff_true_of_subsingleton]))
-
-中文:
-定义 isTerminalOfUniqueOfIsDiscrete
-  签名: {T : 类型u} [范畴.{v} T] [唯一 T] [是离散 T]
-  定义体: IsTerminal.ofUniqueHom (fun X => ((const X).obj (default : T)).toCatHom)
-    (fun _ _ => Cat.Hom.ext <| Functor.ext (by simp [eq_iff_true_of_subsingleton]))
-
-Depends on / 依赖: Cat.Hom.ext, Functor, Functor.ext, IsTerminal, IsTerminal.ofUniqueHom, eq_iff_true_of_subsingleton, ofUniqueHom, toCatHom
+--- 原说明 ---
+A discrete category with a unique object is terminal.
 -/
 def isTerminalOfUniqueOfIsDiscrete {T : Type u} [Category.{v} T] [Unique T] [IsDiscrete T] :
     IsTerminal (Cat.of T) :=
-  IsTerminal.ofUniqueHom (fun X => ((const X).obj (default : T)).toCatHom)
-    (fun _ _ => Cat.Hom.ext <| Functor.ext (by simp [eq_iff_true_of_subsingleton]))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasTerminal Cat.{v, u}
-  body: by
-  have : IsDiscrete (ShrinkHoms.{u} PUnit.{u + 1}) := {
-    subsingleton _ _ := { allEq _ _ := eq_of_comp_right_eq (congrFun rfl) }
-    eq_of_hom _ := rfl
-  }
-  exact IsTerminal.hasTerminal (X := Cat.of (ShrinkHoms PUnit)) isTerminalOfUniqueOfIsDiscrete
-
-中文:
-实例 :
-  签名: 有终止 Cat.{v, u}
-  定义体: by
-  have : IsDiscrete (ShrinkHoms.{u} PUnit.{u + 1}) := {
-    subsingleton _ _ := { allEq _ _ := eq_of_comp_right_eq (congrFun rfl) }
-    eq_of_hom _ := rfl
-  }
-  exact IsTerminal.hasTerminal (X := Cat.of (ShrinkHoms PUnit)) isTerminalOfUniqueOfIsDiscrete
-
-Depends on / 依赖: Cat.of, IsDiscrete, IsTerminal, IsTerminal.hasTerminal, ShrinkHoms, eq_of_comp_right_eq, eq_of_hom, hasTerminal, isTerminalOfUniqueOfIsDiscrete, subsingleton
+  IsTerminal.ofUniqueHom (fun X ↦ ((const X).obj (default : T)).toCatHom)
+    (fun _ _ ↦ Cat.Hom.ext <| Functor.ext (by simp [eq_iff_true_of_subsingleton]))
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasTerminal Cat.{v, u} := by
   have : IsDiscrete (ShrinkHoms.{u} PUnit.{u + 1}) := {
@@ -85,58 +58,57 @@ instance : HasTerminal Cat.{v, u} := by
   }
   exact IsTerminal.hasTerminal (X := Cat.of (ShrinkHoms PUnit)) isTerminalOfUniqueOfIsDiscrete
 
-/--
-Definition of `terminalIsoOfUniqueOfIsDiscrete` / `terminalIsoOfUniqueOfIsDiscrete` 的定义
+/-- Any `T : Cat.{u, u}` with a unique object and discrete homs is isomorphic to `⊤_ Cat.{u, u}.` -/
+/-
+**CategoryTheory.Cat.terminalIsoOfUniqueOfIsDiscrete** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Cat`。
+形式化陈述：terminalIsoOfUniqueOfIsDiscrete {T : Type u} [Category.{v} T] [Unique T] [
+IsDiscrete T] : ⊤_ Cat.{v, u} ≅ Cat.of T
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Cat.instHasTerminal`：CategoryTheory.Limits.HasTerminal Ca
+tegoryTheory.Cat
 
-English:
-definition terminalIsoOfUniqueOfIsDiscrete
-  body: terminalIsoIsTerminal isTerminalOfUniqueOfIsDiscrete
-
-中文:
-定义 terminalIsoOfUniqueOfIsDiscrete
-  定义体: terminalIsoIsTerminal isTerminalOfUniqueOfIsDiscrete
-
-Depends on / 依赖: isTerminalOfUniqueOfIsDiscrete, terminalIsoIsTerminal
+--- 原说明 ---
+Any `T : Cat.{u, u}` with a unique object and discrete homs is isomorphic to `⊤_
+ Cat.{u, u}.`
 -/
 noncomputable def terminalIsoOfUniqueOfIsDiscrete
     {T : Type u} [Category.{v} T] [Unique T] [IsDiscrete T] : ⊤_ Cat.{v, u} ≅ Cat.of T :=
   terminalIsoIsTerminal isTerminalOfUniqueOfIsDiscrete
 
-/--
-Definition of `isTerminalDiscretePUnit` / `isTerminalDiscretePUnit` 的定义
+/-- The discrete category on `PUnit` is terminal. -/
+/-
+**CategoryTheory.Cat.isTerminalDiscretePUnit** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Cat`。
+形式化陈述：isTerminalDiscretePUnit : IsTerminal (Cat.of (Discrete PUnit))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Discrete.isDiscrete`：∀ (C : Type u_1), CategoryTheory.IsD
+iscrete (CategoryTheory.Discrete C)
 
-English:
-definition isTerminalDiscretePUnit
-  signature: : IsTerminal (Cat.of (Discrete PUnit))
-  body: isTerminalOfUniqueOfIsDiscrete
-
-中文:
-定义 isTerminalDiscretePUnit
-  签名: : 是终止 (Cat.of (离散 命题单元))
-  定义体: isTerminalOfUniqueOfIsDiscrete
-
-Depends on / 依赖: isTerminalOfUniqueOfIsDiscrete
+--- 原说明 ---
+The discrete category on `PUnit` is terminal.
 -/
 def isTerminalDiscretePUnit : IsTerminal (Cat.of (Discrete PUnit)) :=
   isTerminalOfUniqueOfIsDiscrete
 
-/--
-Definition of `isoDiscretePUnitOfIsTerminal` / `isoDiscretePUnitOfIsTerminal` 的定义
+/-- Any terminal object `T : Cat.{u, u}` is isomorphic to `Cat.of (Discrete PUnit)`. -/
+/-
+**CategoryTheory.Cat.isoDiscretePUnitOfIsTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Cat`。
+形式化陈述：isoDiscretePUnitOfIsTerminal {T : Type u} [Category.{u} T] (hT : IsTermina
+l (Cat.of T)) : Cat.of T ≅ Cat.of (Discrete PUnit)
+参数：hT : IsTerminal (Cat.of T)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoDiscretePUnitOfIsTerminal
-  signature: {T : Type u} [Category.{u} T] (hT : IsTerminal (Cat.of T))
-  body: IsTerminal.uniqueUpToIso hT isTerminalDiscretePUnit
-
-中文:
-定义 isoDiscretePUnitOfIsTerminal
-  签名: {T : 类型u} [范畴.{u} T] (hT : 是终止 (Cat.of T))
-  定义体: IsTerminal.uniqueUpToIso hT isTerminalDiscretePUnit
-
-Depends on / 依赖: IsTerminal, IsTerminal.uniqueUpToIso, isTerminalDiscretePUnit, uniqueUpToIso
+--- 原说明 ---
+Any terminal object `T : Cat.{u, u}` is isomorphic to `Cat.of (Discrete PUnit)`.
 -/
 def isoDiscretePUnitOfIsTerminal {T : Type u} [Category.{u} T] (hT : IsTerminal (Cat.of T)) :
     Cat.of T ≅ Cat.of (Discrete PUnit) :=
   IsTerminal.uniqueUpToIso hT isTerminalDiscretePUnit
 
 end CategoryTheory.Cat
+

@@ -18,63 +18,32 @@ public section
 
 open Lean Meta Elab
 
-/--
-Definition of `isBlackListed` / `isBlackListed` 的定义
-
-English:
-definition isBlackListed
-  signature: (declName : Name)
-  body: do
-  if declName.toString.startsWith "Lean" then return true
-  let env ← getEnv
-pure declName.isInternalDetail
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName isMatcher declName
-
-中文:
-定义 isBlackListed
-  签名: (declName : Name)
-  定义体: do
-  if declName.toString.startsWith "Lean" then return true
-  let env ← getEnv
-pure declName.isInternalDetail
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName isMatcher declName
+/-
+**isBlackListed** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def isBlackListed (declName : Name) : CoreM Bool := do
   if declName.toString.startsWith "Lean" then return true
   let env ← getEnv
-pure declName.isInternalDetail
+  pure <| declName.isInternalDetail
    || isAuxRecursor env declName
    || isNoConfusion env declName
- isRec declName isMatcher declName
+  <||> isRec declName <||> isMatcher declName
 
 /--
-Definition of `allNames` / `allNames` 的定义
-
-English:
-definition allNames
-  signature: (p : Name -> Bool)
-  body: do
-  (← getEnv).constants.foldM (init := #[]) fun names n _ => do
-    if p n && !(← isBlackListed n) then
-      return names.push n
-    else
-      return names
-
-中文:
-定义 allNames
-  签名: (p : Name -> 布尔值)
-  定义体: do
-  (← getEnv).constants.foldM (init := #[]) fun names n _ => do
-    if p n && !(← isBlackListed n) then
-      return names.push n
-    else
-      return names
+Retrieve all names in the environment satisfying a predicate.
 -/
-def allNames (p : Name -> Bool) : CoreM (Array Name) := do
+/-
+**allNames** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：allNames (p : Name -> Bool) : CoreM (Array Name)
+参数：p : Name -> Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Retrieve all names in the environment satisfying a predicate.
+-/
+def allNames (p : Name → Bool) : CoreM (Array Name) := do
   (← getEnv).constants.foldM (init := #[]) fun names n _ => do
     if p n && !(← isBlackListed n) then
       return names.push n
@@ -82,37 +51,22 @@ def allNames (p : Name -> Bool) : CoreM (Array Name) := do
       return names
 
 /--
-Definition of `allNamesByModule` / `allNamesByModule` 的定义
-
-English:
-definition allNamesByModule
-  signature: (p : Name -> Bool)
-  body: do
-  (← getEnv).constants.foldM (init := ∅) fun names n _ => do
-    if p n && !(← isBlackListed n) then
-      let some m ← findModuleOf? n | return names
-      -- TODO use `modify` and/or `alter` when available
-      match names[m]? with
-      | some others => return names.insert m (others.push n)
-      | none => return names.insert m #[n]
-    else
-      return names
-
-中文:
-定义 allNamesByModule
-  签名: (p : Name -> 布尔值)
-  定义体: do
-  (← getEnv).constants.foldM (init := ∅) fun names n _ => do
-    if p n && !(← isBlackListed n) then
-      let some m ← findModuleOf? n | return names
-      -- TODO use `modify` and/or `alter` when available
-      match names[m]? with
-      | some others => return names.insert m (others.push n)
-      | none => return names.insert m #[n]
-    else
-      return names
+Retrieve all names in the environment satisfying a predicate,
+gathered together into a `HashMap` according to the module they are defined in.
 -/
-def allNamesByModule (p : Name -> Bool) : CoreM (Std.HashMap Name (Array Name)) := do
+/-
+**allNamesByModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：allNamesByModule (p : Name -> Bool) : CoreM (Std.HashMap Name (Array Name)
+)
+参数：p : Name -> Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Retrieve all names in the environment satisfying a predicate,
+gathered together into a `HashMap` according to the module they are defined in.
+-/
+def allNamesByModule (p : Name → Bool) : CoreM (Std.HashMap Name (Array Name)) := do
   (← getEnv).constants.foldM (init := ∅) fun names n _ => do
     if p n && !(← isBlackListed n) then
       let some m ← findModuleOf? n | return names
@@ -123,29 +77,21 @@ def allNamesByModule (p : Name -> Bool) : CoreM (Std.HashMap Name (Array Name)) 
     else
       return names
 
-/--
-Definition of `Lean.Name.decapitalize` / `Lean.Name.decapitalize` 的定义
+/-- Decapitalize the last component of a name. -/
+/-
+**Lean.Name.decapitalize** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.Name.decapitalize (n : Name) : Name
+参数：n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.Name.decapitalize
-  signature: (n : Name)
-  body: n.modifyBase fun
-    | .str p s => .str p s.decapitalize
-    | n => n
-
-中文:
-定义 Lean.Name.decapitalize
-  签名: (n : Name)
-  定义体: n.modifyBase fun
-    | .str p s => .str p s.decapitalize
-    | n => n
-
-Depends on / 依赖: decapitalize, modifyBase, n.modifyBase, s.decapitalize
+--- 原说明 ---
+Decapitalize the last component of a name.
 -/
 def Lean.Name.decapitalize (n : Name) : Name :=
   n.modifyBase fun
     | .str p s => .str p s.decapitalize
-    | n => n
+    | n       => n
 
 /--
 Determines if the pretty-printed version of the given name would parse as an
@@ -166,7 +112,7 @@ meta def Lean.Name.willRoundTrip (n : Name) : Bool :=
     && !n.isInaccessibleUserName -- names which satisfy `isInaccessibleUserName` may not roundtrip
     && go n
 where
-  go : Lean.Name -> Bool
+  go : Lean.Name → Bool
     | .str n s =>
         !s.contains (fun c =>
           /- names with newlines may not round trip; for convenience, we consider all names
@@ -187,3 +133,4 @@ where
       "#".isPrefixOf s || "?".isPrefixOf s
     else
       false
+

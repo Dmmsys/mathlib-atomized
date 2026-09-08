@@ -18,741 +18,548 @@ public import Mathlib.Tactic.Positivity.Core
 variable {F ι α β : Type*}
 
 namespace Rat
-variable {p q : Rat}
+variable {p q : ℚ}
 
 @[simp]
-/--
-theorem `castHom_rat` / 定理 `castHom_rat`
-
-English:
-theorem castHom_rat
-  statement: castHom Rat = RingHom.id Rat
-  proof: RingHom.ext cast_id
-
-中文:
-定理 castHom_rat
-  结论: castHom 有理数 = 环态射.id 有理数
-  证明: RingHom.ext cast_id
-
-Depends on / 依赖: RingHom, RingHom.ext, cast_id
+/-
+**Rat.castHom_rat** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：castHom_rat : castHom Rat = RingHom.id Rat
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `Rat.cast_id`：∀ (n : ℚ), ↑n = n
 -/
-theorem castHom_rat : castHom Rat = RingHom.id Rat :=
+theorem castHom_rat : castHom ℚ = RingHom.id ℚ :=
   RingHom.ext cast_id
 
 section LinearOrderedField
 
 variable {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
 
-/--
-theorem `cast_pos_of_pos` / 定理 `cast_pos_of_pos`
-
-English:
-theorem cast_pos_of_pos
-  given: (hq : 0 < q)
-  statement: (0 : K) < q
-  proof: by
-  rw [Rat.cast_def]
-  exact div_pos (Int.cast_pos.2 <| num_pos.2 hq) (Nat.cast_pos.2 q.pos)
-
-@[gcongr, mono]
-
-中文:
-定理 cast_pos_of_pos
-  条件: (hq : 0 < q)
-  结论: (0 : K) < q
-  证明: by
-  rw [Rat.cast_def]
-  exact div_pos (Int.cast_pos.2 <| num_pos.2 hq) (Nat.cast_pos.2 q.pos)
-
-@[gcongr, mono]
-
-Depends on / 依赖: Int.cast_pos, Nat.cast_pos, Rat.cast_def, cast_def, cast_pos, div_pos, num_pos, q.pos
+/-
+**Rat.cast_pos_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_pos_of_pos (hq : 0 < q) : (0 : K) < q
+参数：hq : 0 < q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.cast_pos`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : 
+PartialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {n : ℤ}, 0 < ↑n 
+↔ …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `Rat.num_pos`：∀ {a : ℚ}, 0 < a.num ↔ 0 < a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `Rat.pos`：pos (a : Rat) : 0 < a.den
 -/
 theorem cast_pos_of_pos (hq : 0 < q) : (0 : K) < q := by
   rw [Rat.cast_def]
   exact div_pos (Int.cast_pos.2 <| num_pos.2 hq) (Nat.cast_pos.2 q.pos)
 
 @[gcongr, mono]
-/--
-theorem `cast_strictMono` / 定理 `cast_strictMono`
-
-English:
-theorem cast_strictMono
-  statement: StrictMono ((↑) : Rat -> K)
-  proof: fun p q => by
-  simpa only [sub_pos, cast_sub] using cast_pos_of_pos (K := K) (q := q - p)
-
-@[gcongr, mono]
-
-中文:
-定理 cast_strictMono
-  结论: 严格递增 ((↑) : 有理数 -> K)
-  证明: fun p q => by
-  simpa only [sub_pos, cast_sub] using cast_pos_of_pos (K := K) (q := q - p)
-
-@[gcongr, mono]
-
-Depends on / 依赖: cast_pos_of_pos, cast_sub, sub_pos
+/-
+**Rat.cast_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_strictMono : StrictMono ((↑) : Rat -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_sub`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p - q) = ↑p - ↑q
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Rat.cast_pos_of_pos`：cast_pos_of_pos (hq : 0 < q) : (0 : K) < q
 -/
-theorem cast_strictMono : StrictMono ((↑) : Rat -> K) := fun p q => by
+theorem cast_strictMono : StrictMono ((↑) : ℚ → K) := fun p q => by
   simpa only [sub_pos, cast_sub] using cast_pos_of_pos (K := K) (q := q - p)
 
 @[gcongr, mono]
-/--
-theorem `cast_mono` / 定理 `cast_mono`
-
-English:
-theorem cast_mono
-  statement: Monotone ((↑) : Rat -> K)
-  proof: cast_strictMono.monotone
-
-中文:
-定理 cast_mono
-  结论: 递增 ((↑) : 有理数 -> K)
-  证明: cast_strictMono.monotone
-
-Depends on / 依赖: cast_strictMono, cast_strictMono.monotone, monotone
+/-
+**Rat.cast_mono** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_mono : Monotone ((↑) : Rat -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Rat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat -> K)
 -/
-theorem cast_mono : Monotone ((↑) : Rat -> K) :=
+theorem cast_mono : Monotone ((↑) : ℚ → K) :=
   cast_strictMono.monotone
 
 /-- Coercion from `ℚ` as an order embedding. -/
 @[simps!]
-/--
-Definition of `castOrderEmbedding` / `castOrderEmbedding` 的定义
+/-
+**Rat.castOrderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `Rat`。
+形式化陈述：castOrderEmbedding : Rat ↪o K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat -> K)
 
-English:
-definition castOrderEmbedding
-  signature: : Rat ↪o K
-  body: OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-中文:
-定义 castOrderEmbedding
-  签名: : 有理数 ↪o K
-  定义体: OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, cast_strictMono, ofStrictMono
+--- 原说明 ---
+Coercion from `ℚ` as an order embedding.
 -/
-def castOrderEmbedding : Rat ↪o K :=
+def castOrderEmbedding : ℚ ↪o K :=
   OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-/--
-lemma `cast_le` / 引理 `cast_le`
-
-English:
-lemma cast_le
-  statement: (p : K) <= q ↔ p <= q
-  proof: castOrderEmbedding.le_iff_le
-
-中文:
-引理 cast_le
-  结论: (p : K) <= q ↔ p <= q
-  证明: castOrderEmbedding.le_iff_le
+/-
+**Rat.cast_le** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsSt
+rictOrderedRing K], ↑p ≤ ↑q ↔ p ≤ q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.le_iff_le`：le_iff_le {a b} : f a <= f b ↔ a <= b
 -/
-@[simp, norm_cast] lemma cast_le : (p : K) <= q ↔ p <= q := castOrderEmbedding.le_iff_le
-
-/--
-lemma `cast_lt` / 引理 `cast_lt`
-
-English:
-lemma cast_lt
-  statement: (p : K) < q ↔ p < q
-  proof: cast_strictMono.lt_iff_lt
-
-中文:
-引理 cast_lt
-  结论: (p : K) < q ↔ p < q
-  证明: cast_strictMono.lt_iff_lt
+@[simp, norm_cast] lemma cast_le : (p : K) ≤ q ↔ p ≤ q := castOrderEmbedding.le_iff_le
+/-
+**Rat.cast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsSt
+rictOrderedRing K], ↑p < ↑q ↔ p < q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Rat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat -> K)
 -/
 @[simp, norm_cast] lemma cast_lt : (p : K) < q ↔ p < q := cast_strictMono.lt_iff_lt
-
-/--
-lemma `cast_nonneg` / 引理 `cast_nonneg`
-
-English:
-lemma cast_nonneg
-  statement: 0 <= (q : K) ↔ 0 <= q
-  proof: by norm_cast
-
-中文:
-引理 cast_nonneg
-  结论: 0 <= (q : K) ↔ 0 <= q
-  证明: by norm_cast
+/-
+**Rat.cast_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsStri
+ctOrderedRing K], 0 ≤ ↑q ↔ 0 ≤ q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma cast_nonneg : 0 <= (q : K) ↔ 0 <= q := by norm_cast
-
-/--
-lemma `cast_nonpos` / 引理 `cast_nonpos`
-
-English:
-lemma cast_nonpos
-  statement: (q : K) <= 0 ↔ q <= 0
-  proof: by norm_cast
-
-中文:
-引理 cast_nonpos
-  结论: (q : K) <= 0 ↔ q <= 0
-  证明: by norm_cast
+@[simp] lemma cast_nonneg : 0 ≤ (q : K) ↔ 0 ≤ q := by norm_cast
+/-
+**Rat.cast_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsStri
+ctOrderedRing K], ↑q ≤ 0 ↔ q ≤ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma cast_nonpos : (q : K) <= 0 ↔ q <= 0 := by norm_cast
-
-/--
-lemma `cast_pos` / 引理 `cast_pos`
-
-English:
-lemma cast_pos
-  statement: (0 : K) < q ↔ 0 < q
-  proof: by norm_cast
-
-中文:
-引理 cast_pos
-  结论: (0 : K) < q ↔ 0 < q
-  证明: by norm_cast
+@[simp] lemma cast_nonpos : (q : K) ≤ 0 ↔ q ≤ 0 := by norm_cast
+/-
+**Rat.cast_pos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsStri
+ctOrderedRing K], 0 < ↑q ↔ 0 < q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma cast_pos : (0 : K) < q ↔ 0 < q := by norm_cast
-
-/--
-lemma `cast_lt_zero` / 引理 `cast_lt_zero`
-
-English:
-lemma cast_lt_zero
-  statement: (q : K) < 0 ↔ q < 0
-  proof: by norm_cast
-
-@[simp, norm_cast]
-
-中文:
-引理 cast_lt_zero
-  结论: (q : K) < 0 ↔ q < 0
-  证明: by norm_cast
-
-@[simp, norm_cast]
+/-
+**Rat.cast_lt_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsStri
+ctOrderedRing K], ↑q < 0 ↔ q < 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma cast_lt_zero : (q : K) < 0 ↔ q < 0 := by norm_cast
 
 @[simp, norm_cast]
-/--
-theorem `cast_le_natCast` / 定理 `cast_le_natCast`
-
-English:
-theorem cast_le_natCast
-  given: {m : Rat} {n : Nat}
-  statement: (m : K) <= n ↔ m <= (n : Rat)
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_le_natCast
-  条件: {m : 有理数} {n : 自然数}
-  结论: (m : K) <= n ↔ m <= (n : 有理数)
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_le, cast_natCast
+/-
+**Rat.cast_le_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_le_natCast {m : Rat} {n : Nat} : (m : K) <= n ↔ m <= (n : Rat)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_le`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_le_natCast {m : Rat} {n : Nat} : (m : K) <= n ↔ m <= (n : Rat) := by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
+theorem cast_le_natCast {m : ℚ} {n : ℕ} : (m : K) ≤ n ↔ m ≤ (n : ℚ) := by
+  rw [← cast_le (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `natCast_le_cast` / 定理 `natCast_le_cast`
-
-English:
-theorem natCast_le_cast
-  given: {m : Nat} {n : Rat}
-  statement: (m : K) <= n ↔ (m : Rat) <= n
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 natCast_le_cast
-  条件: {m : 自然数} {n : 有理数}
-  结论: (m : K) <= n ↔ (m : 有理数) <= n
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_le, cast_natCast
+/-
+**Rat.natCast_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：natCast_le_cast {m : Nat} {n : Rat} : (m : K) <= n ↔ (m : Rat) <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_le`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem natCast_le_cast {m : Nat} {n : Rat} : (m : K) <= n ↔ (m : Rat) <= n := by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
+theorem natCast_le_cast {m : ℕ} {n : ℚ} : (m : K) ≤ n ↔ (m : ℚ) ≤ n := by
+  rw [← cast_le (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `cast_le_intCast` / 定理 `cast_le_intCast`
-
-English:
-theorem cast_le_intCast
-  given: {m : Rat} {n : Int}
-  statement: (m : K) <= n ↔ m <= (n : Rat)
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_le_intCast
-  条件: {m : 有理数} {n : 整数}
-  结论: (m : K) <= n ↔ m <= (n : 有理数)
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_intCast, cast_le
+/-
+**Rat.cast_le_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_le_intCast {m : Rat} {n : Int} : (m : K) <= n ↔ m <= (n : Rat)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_le`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_le_intCast {m : Rat} {n : Int} : (m : K) <= n ↔ m <= (n : Rat) := by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
+theorem cast_le_intCast {m : ℚ} {n : ℤ} : (m : K) ≤ n ↔ m ≤ (n : ℚ) := by
+  rw [← cast_le (K := K), cast_intCast]
 
 @[simp, norm_cast]
-/--
-theorem `intCast_le_cast` / 定理 `intCast_le_cast`
-
-English:
-theorem intCast_le_cast
-  given: {m : Int} {n : Rat}
-  statement: (m : K) <= n ↔ (m : Rat) <= n
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 intCast_le_cast
-  条件: {m : 整数} {n : 有理数}
-  结论: (m : K) <= n ↔ (m : 有理数) <= n
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_intCast, cast_le
+/-
+**Rat.intCast_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：intCast_le_cast {m : Int} {n : Rat} : (m : K) <= n ↔ (m : Rat) <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_le`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem intCast_le_cast {m : Int} {n : Rat} : (m : K) <= n ↔ (m : Rat) <= n := by
-  rw [← cast_le (K := K)]; rw [cast_intCast]
+theorem intCast_le_cast {m : ℤ} {n : ℚ} : (m : K) ≤ n ↔ (m : ℚ) ≤ n := by
+  rw [← cast_le (K := K), cast_intCast]
 
 @[simp, norm_cast]
-/--
-theorem `cast_lt_natCast` / 定理 `cast_lt_natCast`
-
-English:
-theorem cast_lt_natCast
-  given: {m : Rat} {n : Nat}
-  statement: (m : K) < n ↔ m < (n : Rat)
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt_natCast
-  条件: {m : 有理数} {n : 自然数}
-  结论: (m : K) < n ↔ m < (n : 有理数)
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_lt, cast_natCast
+/-
+**Rat.cast_lt_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_lt_natCast {m : Rat} {n : Nat} : (m : K) < n ↔ m < (n : Rat)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_lt_natCast {m : Rat} {n : Nat} : (m : K) < n ↔ m < (n : Rat) := by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
+theorem cast_lt_natCast {m : ℚ} {n : ℕ} : (m : K) < n ↔ m < (n : ℚ) := by
+  rw [← cast_lt (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `natCast_lt_cast` / 定理 `natCast_lt_cast`
-
-English:
-theorem natCast_lt_cast
-  given: {m : Nat} {n : Rat}
-  statement: (m : K) < n ↔ (m : Rat) < n
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 natCast_lt_cast
-  条件: {m : 自然数} {n : 有理数}
-  结论: (m : K) < n ↔ (m : 有理数) < n
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_lt, cast_natCast
+/-
+**Rat.natCast_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：natCast_lt_cast {m : Nat} {n : Rat} : (m : K) < n ↔ (m : Rat) < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem natCast_lt_cast {m : Nat} {n : Rat} : (m : K) < n ↔ (m : Rat) < n := by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
+theorem natCast_lt_cast {m : ℕ} {n : ℚ} : (m : K) < n ↔ (m : ℚ) < n := by
+  rw [← cast_lt (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `cast_lt_intCast` / 定理 `cast_lt_intCast`
-
-English:
-theorem cast_lt_intCast
-  given: {m : Rat} {n : Int}
-  statement: (m : K) < n ↔ m < (n : Rat)
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt_intCast
-  条件: {m : 有理数} {n : 整数}
-  结论: (m : K) < n ↔ m < (n : 有理数)
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_intCast, cast_lt
+/-
+**Rat.cast_lt_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_lt_intCast {m : Rat} {n : Int} : (m : K) < n ↔ m < (n : Rat)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_lt_intCast {m : Rat} {n : Int} : (m : K) < n ↔ m < (n : Rat) := by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
+theorem cast_lt_intCast {m : ℚ} {n : ℤ} : (m : K) < n ↔ m < (n : ℚ) := by
+  rw [← cast_lt (K := K), cast_intCast]
 
 @[simp, norm_cast]
-/--
-theorem `intCast_lt_cast` / 定理 `intCast_lt_cast`
-
-English:
-theorem intCast_lt_cast
-  given: {m : Int} {n : Rat}
-  statement: (m : K) < n ↔ (m : Rat) < n
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 intCast_lt_cast
-  条件: {m : 整数} {n : 有理数}
-  结论: (m : K) < n ↔ (m : 有理数) < n
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_intCast, cast_lt
+/-
+**Rat.intCast_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：intCast_lt_cast {m : Int} {n : Rat} : (m : K) < n ↔ (m : Rat) < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem intCast_lt_cast {m : Int} {n : Rat} : (m : K) < n ↔ (m : Rat) < n := by
-  rw [← cast_lt (K := K)]; rw [cast_intCast]
+theorem intCast_lt_cast {m : ℤ} {n : ℚ} : (m : K) < n ↔ (m : ℚ) < n := by
+  rw [← cast_lt (K := K), cast_intCast]
 
 @[simp, norm_cast]
-/--
-lemma `cast_min` / 引理 `cast_min`
-
-English:
-lemma cast_min
-  given: (p q : Rat)
-  statement: (↑(min p q) : K) = min (p : K) (q : K)
-  proof: (@cast_mono K _).map_min
-
-@[simp, norm_cast]
-
-中文:
-引理 cast_min
-  条件: (p q : 有理数)
-  结论: (↑(最小值 p q) : K) = 最小值 (p : K) (q : K)
-  证明: (@cast_mono K _).map_min
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_mono, map_min
+/-
+**Rat.cast_min** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_min (p q : Rat) : (↑(min p q) : K) = min (p : K) (q : K)
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `Rat.cast_mono`：cast_mono : Monotone ((↑) : Rat -> K)
 -/
-lemma cast_min (p q : Rat) : (↑(min p q) : K) = min (p : K) (q : K) := (@cast_mono K _).map_min
+lemma cast_min (p q : ℚ) : (↑(min p q) : K) = min (p : K) (q : K) := (@cast_mono K _).map_min
 
 @[simp, norm_cast]
-/--
-lemma `cast_max` / 引理 `cast_max`
-
-English:
-lemma cast_max
-  given: (p q : Rat)
-  statement: (↑(max p q) : K) = max (p : K) (q : K)
-  proof: (@cast_mono K _).map_max
-
-中文:
-引理 cast_max
-  条件: (p q : 有理数)
-  结论: (↑(最大值 p q) : K) = 最大值 (p : K) (q : K)
-  证明: (@cast_mono K _).map_max
-
-Depends on / 依赖: cast_mono, map_max
+/-
+**Rat.cast_max** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_max (p q : Rat) : (↑(max p q) : K) = max (p : K) (q : K)
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `Rat.cast_mono`：cast_mono : Monotone ((↑) : Rat -> K)
 -/
-lemma cast_max (p q : Rat) : (↑(max p q) : K) = max (p : K) (q : K) := (@cast_mono K _).map_max
-
-/--
-lemma `cast_abs` / 引理 `cast_abs`
-
-English:
-lemma cast_abs
-  given: (q : Rat)
-  statement: ((|q| : Rat) : K) = |(q : K)|
-  proof: by simp [abs_eq_max_neg]
-
-中文:
-引理 cast_abs
-  条件: (q : 有理数)
-  结论: ((|q| : 有理数) : K) = |(q : K)|
-  证明: by simp [abs_eq_max_neg]
+lemma cast_max (p q : ℚ) : (↑(max p q) : K) = max (p : K) (q : K) := (@cast_mono K _).map_max
+/-
+**Rat.cast_abs** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K] [IsStrictOrdere
+dRing K] (q : ℚ), ↑|q| = |↑q|
+参数：q : ℚ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_max`：cast_max (p q : Rat) : (↑(max p q) : K) = max (p : K) (q :
+ K)
+· 使用定理 `Rat.cast_neg`：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = 
+-↑q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp, norm_cast] lemma cast_abs (q : Rat) : ((|q| : Rat) : K) = |(q : K)| := by simp [abs_eq_max_neg]
+@[simp, norm_cast] lemma cast_abs (q : ℚ) : ((|q| : ℚ) : K) = |(q : K)| := by simp [abs_eq_max_neg]
 
 open Set
 
 @[simp]
-/--
-theorem `preimage_cast_Icc` / 定理 `preimage_cast_Icc`
-
-English:
-theorem preimage_cast_Icc
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' Icc (p : K) q = Icc p q
-  proof: castOrderEmbedding.preimage_Icc ..
-
-@[simp]
-
-中文:
-定理 preimage_cast_Icc
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' 闭区间 (p : K) q = 闭区间 p q
-  证明: castOrderEmbedding.preimage_Icc ..
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Icc, preimage_Icc
+/-
+**Rat.preimage_cast_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Icc (p q : Rat) : (↑) ⁻¹' Icc (p : K) q = Icc p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Icc`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Icc (e x) (e
+ y) = Set.Icc x y
 -/
-theorem preimage_cast_Icc (p q : Rat) : (↑) ⁻¹' Icc (p : K) q = Icc p q :=
+theorem preimage_cast_Icc (p q : ℚ) : (↑) ⁻¹' Icc (p : K) q = Icc p q :=
   castOrderEmbedding.preimage_Icc ..
 
 @[simp]
-/--
-theorem `preimage_cast_Ico` / 定理 `preimage_cast_Ico`
-
-English:
-theorem preimage_cast_Ico
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' Ico (p : K) q = Ico p q
-  proof: castOrderEmbedding.preimage_Ico ..
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ico
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' 左闭右开区间 (p : K) q = 左闭右开区间 p q
-  证明: castOrderEmbedding.preimage_Ico ..
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ico, preimage_Ico
+/-
+**Rat.preimage_cast_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Ico (p q : Rat) : (↑) ⁻¹' Ico (p : K) q = Ico p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ico`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ico (e x) (e
+ y) = Set.Ico x y
 -/
-theorem preimage_cast_Ico (p q : Rat) : (↑) ⁻¹' Ico (p : K) q = Ico p q :=
+theorem preimage_cast_Ico (p q : ℚ) : (↑) ⁻¹' Ico (p : K) q = Ico p q :=
   castOrderEmbedding.preimage_Ico ..
 
 @[simp]
-/--
-theorem `preimage_cast_Ioc` / 定理 `preimage_cast_Ioc`
-
-English:
-theorem preimage_cast_Ioc
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' Ioc (p : K) q = Ioc p q
-  proof: castOrderEmbedding.preimage_Ioc p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioc
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' 左开右闭区间 (p : K) q = 左开右闭区间 p q
-  证明: castOrderEmbedding.preimage_Ioc p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioc, preimage_Ioc
+/-
+**Rat.preimage_cast_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Ioc (p q : Rat) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioc`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ioc (e x) (e
+ y) = Set.Ioc x y
 -/
-theorem preimage_cast_Ioc (p q : Rat) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q :=
+theorem preimage_cast_Ioc (p q : ℚ) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q :=
   castOrderEmbedding.preimage_Ioc p q
 
 @[simp]
-/--
-theorem `preimage_cast_Ioo` / 定理 `preimage_cast_Ioo`
-
-English:
-theorem preimage_cast_Ioo
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' Ioo (p : K) q = Ioo p q
-  proof: castOrderEmbedding.preimage_Ioo p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioo
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' 开区间 (p : K) q = 开区间 p q
-  证明: castOrderEmbedding.preimage_Ioo p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioo, preimage_Ioo
+/-
+**Rat.preimage_cast_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Ioo (p q : Rat) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioo`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ioo (e x) (e
+ y) = Set.Ioo x y
 -/
-theorem preimage_cast_Ioo (p q : Rat) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q :=
+theorem preimage_cast_Ioo (p q : ℚ) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q :=
   castOrderEmbedding.preimage_Ioo p q
 
 @[simp]
-/--
-theorem `preimage_cast_Ici` / 定理 `preimage_cast_Ici`
-
-English:
-theorem preimage_cast_Ici
-  given: (q : Rat)
-  statement: (↑) ⁻¹' Ici (q : K) = Ici q
-  proof: castOrderEmbedding.preimage_Ici q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ici
-  条件: (q : 有理数)
-  结论: (↑) ⁻¹' 左闭右无界区间 (q : K) = 左闭右无界区间 q
-  证明: castOrderEmbedding.preimage_Ici q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ici, preimage_Ici
+/-
+**Rat.preimage_cast_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Ici (q : Rat) : (↑) ⁻¹' Ici (q : K) = Ici q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ici`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Ici (e x) = Se
+t.Ici x
 -/
-theorem preimage_cast_Ici (q : Rat) : (↑) ⁻¹' Ici (q : K) = Ici q :=
+theorem preimage_cast_Ici (q : ℚ) : (↑) ⁻¹' Ici (q : K) = Ici q :=
   castOrderEmbedding.preimage_Ici q
 
 @[simp]
-/--
-theorem `preimage_cast_Iic` / 定理 `preimage_cast_Iic`
-
-English:
-theorem preimage_cast_Iic
-  given: (q : Rat)
-  statement: (↑) ⁻¹' Iic (q : K) = Iic q
-  proof: castOrderEmbedding.preimage_Iic q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Iic
-  条件: (q : 有理数)
-  结论: (↑) ⁻¹' 左无界右闭区间 (q : K) = 左无界右闭区间 q
-  证明: castOrderEmbedding.preimage_Iic q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Iic, preimage_Iic
+/-
+**Rat.preimage_cast_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Iic (q : Rat) : (↑) ⁻¹' Iic (q : K) = Iic q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Iic`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Iic (e x) = Se
+t.Iic x
 -/
-theorem preimage_cast_Iic (q : Rat) : (↑) ⁻¹' Iic (q : K) = Iic q :=
+theorem preimage_cast_Iic (q : ℚ) : (↑) ⁻¹' Iic (q : K) = Iic q :=
   castOrderEmbedding.preimage_Iic q
 
 @[simp]
-/--
-theorem `preimage_cast_Ioi` / 定理 `preimage_cast_Ioi`
-
-English:
-theorem preimage_cast_Ioi
-  given: (q : Rat)
-  statement: (↑) ⁻¹' Ioi (q : K) = Ioi q
-  proof: castOrderEmbedding.preimage_Ioi q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioi
-  条件: (q : 有理数)
-  结论: (↑) ⁻¹' 左开右无界区间 (q : K) = 左开右无界区间 q
-  证明: castOrderEmbedding.preimage_Ioi q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioi, preimage_Ioi
+/-
+**Rat.preimage_cast_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Ioi (q : Rat) : (↑) ⁻¹' Ioi (q : K) = Ioi q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioi`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Ioi (e x) = Se
+t.Ioi x
 -/
-theorem preimage_cast_Ioi (q : Rat) : (↑) ⁻¹' Ioi (q : K) = Ioi q :=
+theorem preimage_cast_Ioi (q : ℚ) : (↑) ⁻¹' Ioi (q : K) = Ioi q :=
   castOrderEmbedding.preimage_Ioi q
 
 @[simp]
-/--
-theorem `preimage_cast_Iio` / 定理 `preimage_cast_Iio`
-
-English:
-theorem preimage_cast_Iio
-  given: (q : Rat)
-  statement: (↑) ⁻¹' Iio (q : K) = Iio q
-  proof: castOrderEmbedding.preimage_Iio q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Iio
-  条件: (q : 有理数)
-  结论: (↑) ⁻¹' 左无界右开区间 (q : K) = 左无界右开区间 q
-  证明: castOrderEmbedding.preimage_Iio q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Iio, preimage_Iio
+/-
+**Rat.preimage_cast_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_Iio (q : Rat) : (↑) ⁻¹' Iio (q : K) = Iio q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Iio`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Iio (e x) = Se
+t.Iio x
 -/
-theorem preimage_cast_Iio (q : Rat) : (↑) ⁻¹' Iio (q : K) = Iio q :=
+theorem preimage_cast_Iio (q : ℚ) : (↑) ⁻¹' Iio (q : K) = Iio q :=
   castOrderEmbedding.preimage_Iio q
 
 @[simp]
-/--
-theorem `preimage_cast_uIcc` / 定理 `preimage_cast_uIcc`
-
-English:
-theorem preimage_cast_uIcc
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
-  proof: (castOrderEmbedding (K := K)).preimage_uIcc p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_uIcc
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
-  证明: (castOrderEmbedding (K := K)).preimage_uIcc p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, preimage_uIcc
+/-
+**Rat.preimage_cast_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_uIcc (p q : Rat) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_uIcc`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : Lattice β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.uIcc (e x
+) (e y) = Set.uIcc…
 -/
-theorem preimage_cast_uIcc (p q : Rat) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q :=
+theorem preimage_cast_uIcc (p q : ℚ) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q :=
   (castOrderEmbedding (K := K)).preimage_uIcc p q
 
 @[simp]
-/--
-theorem `preimage_cast_uIoc` / 定理 `preimage_cast_uIoc`
-
-English:
-theorem preimage_cast_uIoc
-  given: (p q : Rat)
-  statement: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
-  proof: (castOrderEmbedding (K := K)).preimage_uIoc p q
-
-中文:
-定理 preimage_cast_uIoc
-  条件: (p q : 有理数)
-  结论: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
-  证明: (castOrderEmbedding (K := K)).preimage_uIoc p q
-
-Depends on / 依赖: castOrderEmbedding, preimage_uIoc
+/-
+**Rat.preimage_cast_uIoc** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：preimage_cast_uIoc (p q : Rat) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q
+参数：p q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_uIoc`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : LinearOrder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.uIoc 
+(e x) (e y) = Set.…
 -/
-theorem preimage_cast_uIoc (p q : Rat) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q :=
+theorem preimage_cast_uIoc (p q : ℚ) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q :=
   (castOrderEmbedding (K := K)).preimage_uIoc p q
 
 end LinearOrderedField
@@ -760,292 +567,321 @@ end Rat
 
 namespace NNRat
 
-variable {K} [Semifield K] [LinearOrder K] [IsStrictOrderedRing K] {p q : Rat>=0}
+variable {K} [Semifield K] [LinearOrder K] [IsStrictOrderedRing K] {p q : ℚ≥0}
 
-/--
-theorem `cast_strictMono` / 定理 `cast_strictMono`
-
-English:
-theorem cast_strictMono
-  statement: StrictMono ((↑) : Rat>=0 -> K)
-  proof: fun p q h => by
-  rwa [NNRat.cast_def, NNRat.cast_def, div_lt_div_iff₀, ← Nat.cast_mul, ← Nat.cast_mul,
-    Nat.cast_lt (α := K), ← NNRat.lt_def]
-  · simp
-  · simp
-
-@[gcongr, mono]
-
-中文:
-定理 cast_strictMono
-  结论: 严格递增 ((↑) : 有理数>=0 -> K)
-  证明: fun p q h => by
-  rwa [NNRat.cast_def, NNRat.cast_def, div_lt_div_iff₀, ← Nat.cast_mul, ← Nat.cast_mul,
-    Nat.cast_lt (α := K), ← NNRat.lt_def]
-  · simp
-  · simp
-
-@[gcongr, mono]
-
-Depends on / 依赖: NNRat.cast_def, NNRat.lt_def, Nat.cast_lt, Nat.cast_mul, cast_def, cast_lt, cast_mul, lt_def
+/-
+**NNRat.cast_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：cast_strictMono : StrictMono ((↑) : Rat>=0 -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用引理 `div_lt_div_iff₀`：div_lt_div_iff₀ (hb : 0 < b) (hd : 0 < d) : a / b < c /
+ d ↔ a * d < c * b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `NNRat.lt_def`：lt_def {p q : Rat>=0} : p < q ↔ p.num * q.den < q.num * p.
+den
 -/
-theorem cast_strictMono : StrictMono ((↑) : Rat>=0 -> K) := fun p q h => by
+theorem cast_strictMono : StrictMono ((↑) : ℚ≥0 → K) := fun p q h => by
   rwa [NNRat.cast_def, NNRat.cast_def, div_lt_div_iff₀, ← Nat.cast_mul, ← Nat.cast_mul,
     Nat.cast_lt (α := K), ← NNRat.lt_def]
   · simp
   · simp
 
 @[gcongr, mono]
-/--
-theorem `cast_mono` / 定理 `cast_mono`
-
-English:
-theorem cast_mono
-  statement: Monotone ((↑) : Rat>=0 -> K)
-  proof: cast_strictMono.monotone
-
-中文:
-定理 cast_mono
-  结论: 递增 ((↑) : 有理数>=0 -> K)
-  证明: cast_strictMono.monotone
-
-Depends on / 依赖: cast_strictMono, cast_strictMono.monotone, monotone
+/-
+**NNRat.cast_mono** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：cast_mono : Monotone ((↑) : Rat>=0 -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `NNRat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat>=0 -> K)
 -/
-theorem cast_mono : Monotone ((↑) : Rat>=0 -> K) :=
+theorem cast_mono : Monotone ((↑) : ℚ≥0 → K) :=
   cast_strictMono.monotone
 
 /-- Coercion from `ℚ` as an order embedding. -/
 @[simps!]
-/--
-Definition of `castOrderEmbedding` / `castOrderEmbedding` 的定义
+/-
+**NNRat.castOrderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：castOrderEmbedding : Rat>=0 ↪o K
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat>=0 -> K)
 
-English:
-definition castOrderEmbedding
-  signature: : Rat>=0 ↪o K
-  body: OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-中文:
-定义 castOrderEmbedding
-  签名: : 有理数>=0 ↪o K
-  定义体: OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, cast_strictMono, ofStrictMono
+--- 原说明 ---
+Coercion from `ℚ` as an order embedding.
 -/
-def castOrderEmbedding : Rat>=0 ↪o K :=
+def castOrderEmbedding : ℚ≥0 ↪o K :=
   OrderEmbedding.ofStrictMono (↑) cast_strictMono
-
-/--
-lemma `cast_le` / 引理 `cast_le`
-
-English:
-lemma cast_le
-  statement: (p : K) <= q ↔ p <= q
-  proof: castOrderEmbedding.le_iff_le
-
-中文:
-引理 cast_le
-  结论: (p : K) <= q ↔ p <= q
-  证明: castOrderEmbedding.le_iff_le
+/-
+**NNRat.cast_le** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p q : ℚ≥0}, ↑p ≤ ↑q ↔ p ≤ q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.le_iff_le`：le_iff_le {a b} : f a <= f b ↔ a <= b
 -/
-@[simp, norm_cast] lemma cast_le : (p : K) <= q ↔ p <= q := castOrderEmbedding.le_iff_le
-/--
-lemma `cast_lt` / 引理 `cast_lt`
-
-English:
-lemma cast_lt
-  statement: (p : K) < q ↔ p < q
-  proof: cast_strictMono.lt_iff_lt
-
-中文:
-引理 cast_lt
-  结论: (p : K) < q ↔ p < q
-  证明: cast_strictMono.lt_iff_lt
+@[simp, norm_cast] lemma cast_le : (p : K) ≤ q ↔ p ≤ q := castOrderEmbedding.le_iff_le
+/-
+**NNRat.cast_lt** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p q : ℚ≥0}, ↑p < ↑q ↔ p < q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `NNRat.cast_strictMono`：cast_strictMono : StrictMono ((↑) : Rat>=0 -> K)
 -/
 @[simp, norm_cast] lemma cast_lt : (p : K) < q ↔ p < q := cast_strictMono.lt_iff_lt
-/--
-lemma `cast_nonpos` / 引理 `cast_nonpos`
-
-English:
-lemma cast_nonpos
-  statement: (q : K) <= 0 ↔ q <= 0
-  proof: by norm_cast
-
-中文:
-引理 cast_nonpos
-  结论: (q : K) <= 0 ↔ q <= 0
-  证明: by norm_cast
+/-
+**NNRat.cast_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {q : ℚ≥0}, ↑q ≤ 0 ↔ q ≤ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_zero`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑0 = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma cast_nonpos : (q : K) <= 0 ↔ q <= 0 := by norm_cast
-/--
-lemma `cast_pos` / 引理 `cast_pos`
-
-English:
-lemma cast_pos
-  statement: (0 : K) < q ↔ 0 < q
-  proof: by norm_cast
-
-中文:
-引理 cast_pos
-  结论: (0 : K) < q ↔ 0 < q
-  证明: by norm_cast
+@[simp] lemma cast_nonpos : (q : K) ≤ 0 ↔ q ≤ 0 := by norm_cast
+/-
+**NNRat.cast_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {q : ℚ≥0}, 0 < ↑q ↔ 0 < q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `NNRat.cast_zero`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑0 = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma cast_pos : (0 : K) < q ↔ 0 < q := by norm_cast
-/--
-lemma `cast_lt_zero` / 引理 `cast_lt_zero`
-
-English:
-lemma cast_lt_zero
-  statement: (q : K) < 0 ↔ q < 0
-  proof: by norm_cast
-
-中文:
-引理 cast_lt_zero
-  结论: (q : K) < 0 ↔ q < 0
-  证明: by norm_cast
+/-
+**NNRat.cast_lt_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {q : ℚ≥0}, ↑q < 0 ↔ q < 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_zero`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑0 = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[norm_cast] lemma cast_lt_zero : (q : K) < 0 ↔ q < 0 := by norm_cast
-/--
-lemma `not_cast_lt_zero` / 引理 `not_cast_lt_zero`
-
-English:
-lemma not_cast_lt_zero
-  statement: ¬(q : K) < 0
-  proof: mod_cast not_lt_zero
-
-中文:
-引理 not_cast_lt_zero
-  结论: ¬(q : K) < 0
-  证明: mod_cast not_lt_zero
+/-
+**NNRat.not_cast_lt_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {q : ℚ≥0}, ¬↑q < 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `NNRat.cast_zero`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑0 = 0
+· 使用定理 `not_lt_zero`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], ¬a < 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
 @[simp] lemma not_cast_lt_zero : ¬(q : K) < 0 := mod_cast not_lt_zero
-/--
-lemma `cast_le_one` / 引理 `cast_le_one`
-
-English:
-lemma cast_le_one
-  statement: (p : K) <= 1 ↔ p <= 1
-  proof: by norm_cast
-
-中文:
-引理 cast_le_one
-  结论: (p : K) <= 1 ↔ p <= 1
-  证明: by norm_cast
+/-
+**NNRat.cast_le_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0}, ↑p ≤ 1 ↔ p ≤ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_one`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma cast_le_one : (p : K) <= 1 ↔ p <= 1 := by norm_cast
-/--
-lemma `one_le_cast` / 引理 `one_le_cast`
-
-English:
-lemma one_le_cast
-  statement: 1 <= (p : K) ↔ 1 <= p
-  proof: by norm_cast
-
-中文:
-引理 one_le_cast
-  结论: 1 <= (p : K) ↔ 1 <= p
-  证明: by norm_cast
+@[simp] lemma cast_le_one : (p : K) ≤ 1 ↔ p ≤ 1 := by norm_cast
+/-
+**NNRat.one_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0}, 1 ≤ ↑p ↔ 1 ≤ p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `NNRat.cast_one`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma one_le_cast : 1 <= (p : K) ↔ 1 <= p := by norm_cast
-/--
-lemma `cast_lt_one` / 引理 `cast_lt_one`
-
-English:
-lemma cast_lt_one
-  statement: (p : K) < 1 ↔ p < 1
-  proof: by norm_cast
-
-中文:
-引理 cast_lt_one
-  结论: (p : K) < 1 ↔ p < 1
-  证明: by norm_cast
+@[simp] lemma one_le_cast : 1 ≤ (p : K) ↔ 1 ≤ p := by norm_cast
+/-
+**NNRat.cast_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0}, ↑p < 1 ↔ p < 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_one`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma cast_lt_one : (p : K) < 1 ↔ p < 1 := by norm_cast
-/--
-lemma `one_lt_cast` / 引理 `one_lt_cast`
-
-English:
-lemma one_lt_cast
-  statement: 1 < (p : K) ↔ 1 < p
-  proof: by norm_cast
-
-中文:
-引理 one_lt_cast
-  结论: 1 < (p : K) ↔ 1 < p
-  证明: by norm_cast
+/-
+**NNRat.one_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0}, 1 < ↑p ↔ 1 < p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `NNRat.cast_one`：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma one_lt_cast : 1 < (p : K) ↔ 1 < p := by norm_cast
 
 section ofNat
-variable {n : Nat} [n.AtLeastTwo]
+variable {n : ℕ} [n.AtLeastTwo]
 
-/--
-lemma `cast_le_ofNat` / 引理 `cast_le_ofNat`
-
-English:
-lemma cast_le_ofNat
-  statement: (p : K) <= ofNat(n) ↔ p <= OfNat.ofNat n
-  proof: by
-  simp [← cast_le (K := K)]
-
-中文:
-引理 cast_le_of自然数
-  结论: (p : K) <= of自然数(n) ↔ p <= Of自然数.of自然数 n
-  证明: by
-  simp [← cast_le (K := K)]
+/-
+**NNRat.cast_le_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0} {n : ℕ}   [inst_3 : n.AtLeastTwo], ↑p ≤ OfNat.ofNat n ↔ p
+ ≤ OfNat.ofNat n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_le`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `NNRat.cast_ofNat`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ) [
+inst_1 : n.AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma cast_le_ofNat : (p : K) <= ofNat(n) ↔ p <= OfNat.ofNat n := by
+@[simp] lemma cast_le_ofNat : (p : K) ≤ ofNat(n) ↔ p ≤ OfNat.ofNat n := by
   simp [← cast_le (K := K)]
-
-/--
-lemma `ofNat_le_cast` / 引理 `ofNat_le_cast`
-
-English:
-lemma ofNat_le_cast
-  statement: ofNat(n) <= (p : K) ↔ OfNat.ofNat n <= p
-  proof: by
-  simp [← cast_le (K := K)]
-
-中文:
-引理 of自然数_le_cast
-  结论: of自然数(n) <= (p : K) ↔ Of自然数.of自然数 n <= p
-  证明: by
-  simp [← cast_le (K := K)]
+/-
+**NNRat.ofNat_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0} {n : ℕ}   [inst_3 : n.AtLeastTwo], OfNat.ofNat n ≤ ↑p ↔ O
+fNat.ofNat n ≤ p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_le`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_ofNat`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ) [
+inst_1 : n.AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma ofNat_le_cast : ofNat(n) <= (p : K) ↔ OfNat.ofNat n <= p := by
+@[simp] lemma ofNat_le_cast : ofNat(n) ≤ (p : K) ↔ OfNat.ofNat n ≤ p := by
   simp [← cast_le (K := K)]
-
-/--
-lemma `cast_lt_ofNat` / 引理 `cast_lt_ofNat`
-
-English:
-lemma cast_lt_ofNat
-  statement: (p : K) < ofNat(n) ↔ p < OfNat.ofNat n
-  proof: by
-  simp [← cast_lt (K := K)]
-
-中文:
-引理 cast_lt_of自然数
-  结论: (p : K) < of自然数(n) ↔ p < Of自然数.of自然数 n
-  证明: by
-  simp [← cast_lt (K := K)]
+/-
+**NNRat.cast_lt_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0} {n : ℕ}   [inst_3 : n.AtLeastTwo], ↑p < OfNat.ofNat n ↔ p
+ < OfNat.ofNat n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_lt`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p < ↑q ↔ p < q
+· 使用定理 `NNRat.cast_ofNat`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ) [
+inst_1 : n.AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma cast_lt_ofNat : (p : K) < ofNat(n) ↔ p < OfNat.ofNat n := by
   simp [← cast_lt (K := K)]
-
-/--
-lemma `ofNat_lt_cast` / 引理 `ofNat_lt_cast`
-
-English:
-lemma ofNat_lt_cast
-  statement: ofNat(n) < (p : K) ↔ OfNat.ofNat n < p
-  proof: by
-  simp [← cast_lt (K := K)]
-
-中文:
-引理 of自然数_lt_cast
-  结论: of自然数(n) < (p : K) ↔ Of自然数.of自然数 n < p
-  证明: by
-  simp [← cast_lt (K := K)]
+/-
+**NNRat.ofNat_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] {p : ℚ≥0} {n : ℕ}   [inst_3 : n.AtLeastTwo], OfNat.ofNat n < ↑p ↔ O
+fNat.ofNat n < p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_lt`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p < ↑q ↔ p < q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.cast_ofNat`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ) [
+inst_1 : n.AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma ofNat_lt_cast : ofNat(n) < (p : K) ↔ OfNat.ofNat n < p := by
   simp [← cast_lt (K := K)]
@@ -1053,391 +889,242 @@ lemma ofNat_lt_cast
 end ofNat
 
 @[simp, norm_cast]
-/--
-theorem `cast_le_natCast` / 定理 `cast_le_natCast`
-
-English:
-theorem cast_le_natCast
-  given: {m : Rat>=0} {n : Nat}
-  statement: (m : K) <= n ↔ m <= (n : Rat>=0)
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_le_natCast
-  条件: {m : 有理数>=0} {n : 自然数}
-  结论: (m : K) <= n ↔ m <= (n : 有理数>=0)
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_le, cast_natCast
+/-
+**NNRat.cast_le_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：cast_le_natCast {m : Rat>=0} {n : Nat} : (m : K) <= n ↔ m <= (n : Rat>=0)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_le`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_le_natCast {m : Rat>=0} {n : Nat} : (m : K) <= n ↔ m <= (n : Rat>=0) := by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
+theorem cast_le_natCast {m : ℚ≥0} {n : ℕ} : (m : K) ≤ n ↔ m ≤ (n : ℚ≥0) := by
+  rw [← cast_le (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `natCast_le_cast` / 定理 `natCast_le_cast`
-
-English:
-theorem natCast_le_cast
-  given: {m : Nat} {n : Rat>=0}
-  statement: (m : K) <= n ↔ (m : Rat>=0) <= n
-  proof: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 natCast_le_cast
-  条件: {m : 自然数} {n : 有理数>=0}
-  结论: (m : K) <= n ↔ (m : 有理数>=0) <= n
-  证明: by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_le, cast_natCast
+/-
+**NNRat.natCast_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：natCast_le_cast {m : Nat} {n : Rat>=0} : (m : K) <= n ↔ (m : Rat>=0) <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_le`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p ≤ ↑q ↔ p ≤ q
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem natCast_le_cast {m : Nat} {n : Rat>=0} : (m : K) <= n ↔ (m : Rat>=0) <= n := by
-  rw [← cast_le (K := K)]; rw [cast_natCast]
+theorem natCast_le_cast {m : ℕ} {n : ℚ≥0} : (m : K) ≤ n ↔ (m : ℚ≥0) ≤ n := by
+  rw [← cast_le (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `cast_lt_natCast` / 定理 `cast_lt_natCast`
-
-English:
-theorem cast_lt_natCast
-  given: {m : Rat>=0} {n : Nat}
-  statement: (m : K) < n ↔ m < (n : Rat>=0)
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt_natCast
-  条件: {m : 有理数>=0} {n : 自然数}
-  结论: (m : K) < n ↔ m < (n : 有理数>=0)
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_lt, cast_natCast
+/-
+**NNRat.cast_lt_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：cast_lt_natCast {m : Rat>=0} {n : Nat} : (m : K) < n ↔ m < (n : Rat>=0)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_lt`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p < ↑q ↔ p < q
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_lt_natCast {m : Rat>=0} {n : Nat} : (m : K) < n ↔ m < (n : Rat>=0) := by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
+theorem cast_lt_natCast {m : ℚ≥0} {n : ℕ} : (m : K) < n ↔ m < (n : ℚ≥0) := by
+  rw [← cast_lt (K := K), cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `natCast_lt_cast` / 定理 `natCast_lt_cast`
-
-English:
-theorem natCast_lt_cast
-  given: {m : Nat} {n : Rat>=0}
-  statement: (m : K) < n ↔ (m : Rat>=0) < n
-  proof: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-中文:
-定理 natCast_lt_cast
-  条件: {m : 自然数} {n : 有理数>=0}
-  结论: (m : K) < n ↔ (m : 有理数>=0) < n
-  证明: by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-Depends on / 依赖: cast_lt, cast_natCast
+/-
+**NNRat.natCast_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：natCast_lt_cast {m : Nat} {n : Rat>=0} : (m : K) < n ↔ (m : Rat>=0) < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.cast_lt`：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrd
+er K] [IsStrictOrderedRing K] {p q : ℚ≥0}, ↑p < ↑q ↔ p < q
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem natCast_lt_cast {m : Nat} {n : Rat>=0} : (m : K) < n ↔ (m : Rat>=0) < n := by
-  rw [← cast_lt (K := K)]; rw [cast_natCast]
-
-/--
-lemma `cast_min` / 引理 `cast_min`
-
-English:
-lemma cast_min
-  given: (p q : Rat>=0)
-  statement: (↑(min p q) : K) = min (p : K) (q : K)
-  proof: (@cast_mono K _).map_min
-
-中文:
-引理 cast_min
-  条件: (p q : 有理数>=0)
-  结论: (↑(最小值 p q) : K) = 最小值 (p : K) (q : K)
-  证明: (@cast_mono K _).map_min
+theorem natCast_lt_cast {m : ℕ} {n : ℚ≥0} : (m : K) < n ↔ (m : ℚ≥0) < n := by
+  rw [← cast_lt (K := K), cast_natCast]
+/-
+**NNRat.cast_min** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] (p q : ℚ≥0),   ↑(min p q) = min ↑p ↑q
+参数：p q : ℚ≥0；min p q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `NNRat.cast_mono`：cast_mono : Monotone ((↑) : Rat>=0 -> K)
 -/
-@[simp, norm_cast] lemma cast_min (p q : Rat>=0) : (↑(min p q) : K) = min (p : K) (q : K) :=
+@[simp, norm_cast] lemma cast_min (p q : ℚ≥0) : (↑(min p q) : K) = min (p : K) (q : K) :=
   (@cast_mono K _).map_min
-
-/--
-lemma `cast_max` / 引理 `cast_max`
-
-English:
-lemma cast_max
-  given: (p q : Rat>=0)
-  statement: (↑(max p q) : K) = max (p : K) (q : K)
-  proof: (@cast_mono K _).map_max
-
-中文:
-引理 cast_max
-  条件: (p q : 有理数>=0)
-  结论: (↑(最大值 p q) : K) = 最大值 (p : K) (q : K)
-  证明: (@cast_mono K _).map_max
+/-
+**NNRat.cast_max** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {K : Type u_5} [inst : Semifield K] [inst_1 : LinearOrder K] [IsStrictOr
+deredRing K] (p q : ℚ≥0),   ↑(max p q) = max ↑p ↑q
+参数：p q : ℚ≥0；max p q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `NNRat.cast_mono`：cast_mono : Monotone ((↑) : Rat>=0 -> K)
 -/
-@[simp, norm_cast] lemma cast_max (p q : Rat>=0) : (↑(max p q) : K) = max (p : K) (q : K) :=
+@[simp, norm_cast] lemma cast_max (p q : ℚ≥0) : (↑(max p q) : K) = max (p : K) (q : K) :=
   (@cast_mono K _).map_max
 
 open Set
 
 @[simp]
-/--
-theorem `preimage_cast_Icc` / 定理 `preimage_cast_Icc`
-
-English:
-theorem preimage_cast_Icc
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' Icc (p : K) q = Icc p q
-  proof: castOrderEmbedding.preimage_Icc ..
-
-@[simp]
-
-中文:
-定理 preimage_cast_Icc
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' 闭区间 (p : K) q = 闭区间 p q
-  证明: castOrderEmbedding.preimage_Icc ..
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Icc, preimage_Icc
+/-
+**NNRat.preimage_cast_Icc** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Icc (p q : Rat>=0) : (↑) ⁻¹' Icc (p : K) q = Icc p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Icc`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Icc (e x) (e
+ y) = Set.Icc x y
 -/
-theorem preimage_cast_Icc (p q : Rat>=0) : (↑) ⁻¹' Icc (p : K) q = Icc p q :=
+theorem preimage_cast_Icc (p q : ℚ≥0) : (↑) ⁻¹' Icc (p : K) q = Icc p q :=
   castOrderEmbedding.preimage_Icc ..
 
 @[simp]
-/--
-theorem `preimage_cast_Ico` / 定理 `preimage_cast_Ico`
-
-English:
-theorem preimage_cast_Ico
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' Ico (p : K) q = Ico p q
-  proof: castOrderEmbedding.preimage_Ico ..
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ico
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' 左闭右开区间 (p : K) q = 左闭右开区间 p q
-  证明: castOrderEmbedding.preimage_Ico ..
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ico, preimage_Ico
+/-
+**NNRat.preimage_cast_Ico** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Ico (p q : Rat>=0) : (↑) ⁻¹' Ico (p : K) q = Ico p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ico`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ico (e x) (e
+ y) = Set.Ico x y
 -/
-theorem preimage_cast_Ico (p q : Rat>=0) : (↑) ⁻¹' Ico (p : K) q = Ico p q :=
+theorem preimage_cast_Ico (p q : ℚ≥0) : (↑) ⁻¹' Ico (p : K) q = Ico p q :=
   castOrderEmbedding.preimage_Ico ..
 
 @[simp]
-/--
-theorem `preimage_cast_Ioc` / 定理 `preimage_cast_Ioc`
-
-English:
-theorem preimage_cast_Ioc
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' Ioc (p : K) q = Ioc p q
-  proof: castOrderEmbedding.preimage_Ioc p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioc
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' 左开右闭区间 (p : K) q = 左开右闭区间 p q
-  证明: castOrderEmbedding.preimage_Ioc p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioc, preimage_Ioc
+/-
+**NNRat.preimage_cast_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Ioc (p q : Rat>=0) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioc`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ioc (e x) (e
+ y) = Set.Ioc x y
 -/
-theorem preimage_cast_Ioc (p q : Rat>=0) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q :=
+theorem preimage_cast_Ioc (p q : ℚ≥0) : (↑) ⁻¹' Ioc (p : K) q = Ioc p q :=
   castOrderEmbedding.preimage_Ioc p q
 
 @[simp]
-/--
-theorem `preimage_cast_Ioo` / 定理 `preimage_cast_Ioo`
-
-English:
-theorem preimage_cast_Ioo
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' Ioo (p : K) q = Ioo p q
-  proof: castOrderEmbedding.preimage_Ioo p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioo
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' 开区间 (p : K) q = 开区间 p q
-  证明: castOrderEmbedding.preimage_Ioo p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioo, preimage_Ioo
+/-
+**NNRat.preimage_cast_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Ioo (p q : Rat>=0) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioo`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.Ioo (e x) (e
+ y) = Set.Ioo x y
 -/
-theorem preimage_cast_Ioo (p q : Rat>=0) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q :=
+theorem preimage_cast_Ioo (p q : ℚ≥0) : (↑) ⁻¹' Ioo (p : K) q = Ioo p q :=
   castOrderEmbedding.preimage_Ioo p q
 
 @[simp]
-/--
-theorem `preimage_cast_Ici` / 定理 `preimage_cast_Ici`
-
-English:
-theorem preimage_cast_Ici
-  given: (p : Rat>=0)
-  statement: (↑) ⁻¹' Ici (p : K) = Ici p
-  proof: castOrderEmbedding.preimage_Ici p
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ici
-  条件: (p : 有理数>=0)
-  结论: (↑) ⁻¹' 左闭右无界区间 (p : K) = 左闭右无界区间 p
-  证明: castOrderEmbedding.preimage_Ici p
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ici, preimage_Ici
+/-
+**NNRat.preimage_cast_Ici** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Ici (p : Rat>=0) : (↑) ⁻¹' Ici (p : K) = Ici p
+参数：p : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ici`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Ici (e x) = Se
+t.Ici x
 -/
-theorem preimage_cast_Ici (p : Rat>=0) : (↑) ⁻¹' Ici (p : K) = Ici p :=
+theorem preimage_cast_Ici (p : ℚ≥0) : (↑) ⁻¹' Ici (p : K) = Ici p :=
   castOrderEmbedding.preimage_Ici p
 
 @[simp]
-/--
-theorem `preimage_cast_Iic` / 定理 `preimage_cast_Iic`
-
-English:
-theorem preimage_cast_Iic
-  given: (p : Rat>=0)
-  statement: (↑) ⁻¹' Iic (p : K) = Iic p
-  proof: castOrderEmbedding.preimage_Iic p
-
-@[simp]
-
-中文:
-定理 preimage_cast_Iic
-  条件: (p : 有理数>=0)
-  结论: (↑) ⁻¹' 左无界右闭区间 (p : K) = 左无界右闭区间 p
-  证明: castOrderEmbedding.preimage_Iic p
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Iic, preimage_Iic
+/-
+**NNRat.preimage_cast_Iic** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Iic (p : Rat>=0) : (↑) ⁻¹' Iic (p : K) = Iic p
+参数：p : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Iic`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Iic (e x) = Se
+t.Iic x
 -/
-theorem preimage_cast_Iic (p : Rat>=0) : (↑) ⁻¹' Iic (p : K) = Iic p :=
+theorem preimage_cast_Iic (p : ℚ≥0) : (↑) ⁻¹' Iic (p : K) = Iic p :=
   castOrderEmbedding.preimage_Iic p
 
 @[simp]
-/--
-theorem `preimage_cast_Ioi` / 定理 `preimage_cast_Ioi`
-
-English:
-theorem preimage_cast_Ioi
-  given: (p : Rat>=0)
-  statement: (↑) ⁻¹' Ioi (p : K) = Ioi p
-  proof: castOrderEmbedding.preimage_Ioi p
-
-@[simp]
-
-中文:
-定理 preimage_cast_Ioi
-  条件: (p : 有理数>=0)
-  结论: (↑) ⁻¹' 左开右无界区间 (p : K) = 左开右无界区间 p
-  证明: castOrderEmbedding.preimage_Ioi p
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Ioi, preimage_Ioi
+/-
+**NNRat.preimage_cast_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Ioi (p : Rat>=0) : (↑) ⁻¹' Ioi (p : K) = Ioi p
+参数：p : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Ioi`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Ioi (e x) = Se
+t.Ioi x
 -/
-theorem preimage_cast_Ioi (p : Rat>=0) : (↑) ⁻¹' Ioi (p : K) = Ioi p :=
+theorem preimage_cast_Ioi (p : ℚ≥0) : (↑) ⁻¹' Ioi (p : K) = Ioi p :=
   castOrderEmbedding.preimage_Ioi p
 
 @[simp]
-/--
-theorem `preimage_cast_Iio` / 定理 `preimage_cast_Iio`
-
-English:
-theorem preimage_cast_Iio
-  given: (p : Rat>=0)
-  statement: (↑) ⁻¹' Iio (p : K) = Iio p
-  proof: castOrderEmbedding.preimage_Iio p
-
-@[simp]
-
-中文:
-定理 preimage_cast_Iio
-  条件: (p : 有理数>=0)
-  结论: (↑) ⁻¹' 左无界右开区间 (p : K) = 左无界右开区间 p
-  证明: castOrderEmbedding.preimage_Iio p
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, castOrderEmbedding.preimage_Iio, preimage_Iio
+/-
+**NNRat.preimage_cast_Iio** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_Iio (p : Rat>=0) : (↑) ⁻¹' Iio (p : K) = Iio p
+参数：p : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_Iio`：∀ {α : Type u_1} {β : Type u_2} [inst : Pre
+order α] [inst_1 : Preorder β] (e : α ↪o β) (x : α),   ⇑e ⁻¹' Set.Iio (e x) = Se
+t.Iio x
 -/
-theorem preimage_cast_Iio (p : Rat>=0) : (↑) ⁻¹' Iio (p : K) = Iio p :=
+theorem preimage_cast_Iio (p : ℚ≥0) : (↑) ⁻¹' Iio (p : K) = Iio p :=
   castOrderEmbedding.preimage_Iio p
 
 @[simp]
-/--
-theorem `preimage_cast_uIcc` / 定理 `preimage_cast_uIcc`
-
-English:
-theorem preimage_cast_uIcc
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
-  proof: (castOrderEmbedding (K := K)).preimage_uIcc p q
-
-@[simp]
-
-中文:
-定理 preimage_cast_uIcc
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
-  证明: (castOrderEmbedding (K := K)).preimage_uIcc p q
-
-@[simp]
-
-Depends on / 依赖: castOrderEmbedding, preimage_uIcc
+/-
+**NNRat.preimage_cast_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_uIcc (p q : Rat>=0) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_uIcc`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : Lattice β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.uIcc (e x
+) (e y) = Set.uIcc…
 -/
-theorem preimage_cast_uIcc (p q : Rat>=0) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q :=
+theorem preimage_cast_uIcc (p q : ℚ≥0) : (↑) ⁻¹' uIcc (p : K) q = uIcc p q :=
   (castOrderEmbedding (K := K)).preimage_uIcc p q
 
 @[simp]
-/--
-theorem `preimage_cast_uIoc` / 定理 `preimage_cast_uIoc`
-
-English:
-theorem preimage_cast_uIoc
-  given: (p q : Rat>=0)
-  statement: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
-  proof: (castOrderEmbedding (K := K)).preimage_uIoc p q
-
-中文:
-定理 preimage_cast_uIoc
-  条件: (p q : 有理数>=0)
-  结论: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
-  证明: (castOrderEmbedding (K := K)).preimage_uIoc p q
-
-Depends on / 依赖: castOrderEmbedding, preimage_uIoc
+/-
+**NNRat.preimage_cast_uIoc** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：preimage_cast_uIoc (p q : Rat>=0) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.preimage_uIoc`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : LinearOrder β] (e : α ↪o β) (x y : α),   ⇑e ⁻¹' Set.uIoc 
+(e x) (e y) = Set.…
 -/
-theorem preimage_cast_uIoc (p q : Rat>=0) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q :=
+theorem preimage_cast_uIoc (p q : ℚ≥0) : (↑) ⁻¹' uIoc (p : K) q = uIoc p q :=
   (castOrderEmbedding (K := K)).preimage_uIoc p q
 
 end NNRat
@@ -1448,9 +1135,9 @@ open Lean Meta Qq Function
 /-- Extension for Rat.cast. -/
 @[positivity Rat.cast _]
 meta def evalRatCast : PositivityExt where eval {u α} _zα pα? e := do
-  let ~q(@Rat.cast _ (_) ($a : Rat)) := e | throwError "not Rat.cast"
+  let ~q(@Rat.cast _ (_) ($a : ℚ)) := e | throwError "not Rat.cast"
   match ← core q(inferInstance) (some q(inferInstance)) a with
-| .positive pa => id
+  | .positive pa => id <|
     match pα? with
     | none => do
       let _oα ← synthInstanceQ q(DivisionRing $α)
@@ -1463,7 +1150,7 @@ meta def evalRatCast : PositivityExt where eval {u α} _zα pα? e := do
       let _oα ← synthInstanceQ q(IsStrictOrderedRing $α)
       assumeInstancesCommute
       return .positive q((Rat.cast_pos (K := $α)).mpr $pa)
-| .nonnegative pa => id
+  | .nonnegative pa => id <|
     match pα? with | none => pure .none | some _ => do
     let _oα ← synthInstanceQ q(Field $α)
     let _oα ← synthInstanceQ q(LinearOrder $α)
@@ -1481,7 +1168,7 @@ meta def evalRatCast : PositivityExt where eval {u α} _zα pα? e := do
 @[positivity NNRat.cast _]
 meta def evalNNRatCast : PositivityExt where eval {u α} _zα pα? e :=
   match pα? with | none => pure .none | some _ => do
-  let ~q(@NNRat.cast _ (_) ($a : Rat>=0)) := e | throwError "not NNRat.cast"
+  let ~q(@NNRat.cast _ (_) ($a : ℚ≥0)) := e | throwError "not NNRat.cast"
   match ← core q(inferInstance) (some q(inferInstance)) a with
   | .positive pa =>
     let _oα ← synthInstanceQ q(Semifield $α)
@@ -1497,3 +1184,4 @@ meta def evalNNRatCast : PositivityExt where eval {u α} _zα pα? e :=
     return .nonnegative q(NNRat.cast_nonneg _)
 
 end Mathlib.Meta.Positivity
+

@@ -27,96 +27,40 @@ open ENNReal Filter NNReal Uniformity Pointwise Topology
 
 namespace NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NNNorm Real>=0
-  body: x
-
-中文:
-实例 :
-  签名: NN范数 实数>=0
-  定义体: x
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NNNorm Real>=0 where
+instance : NNNorm ℝ≥0 where
   nnnorm x := x
-
-/--
-lemma `nnnorm_eq_self` / 引理 `nnnorm_eq_self`
-
-English:
-lemma nnnorm_eq_self
-  given: (x : Real>=0)
-  statement: ‖x‖₊ = x
-  proof: rfl
-
-中文:
-引理 nnnorm_eq_self
-  条件: (x : 实数>=0)
-  结论: ‖x‖₊ = x
-  证明: rfl
+/-
+**NNReal.nnnorm_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ (x : NNReal), ‖x‖₊ = x
+参数：x : NNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma nnnorm_eq_self (x : Real>=0) : ‖x‖₊ = x := rfl
+@[simp] lemma nnnorm_eq_self (x : ℝ≥0) : ‖x‖₊ = x := rfl
 
 end NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ENorm Real>=0∞
-  body: x
-
-中文:
-实例 :
-  签名: E范数 实数>=0∞
-  定义体: x
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ENorm Real>=0∞ where
+instance : ENorm ℝ≥0∞ where
   enorm x := x
-
-/--
-lemma `enorm_eq_self` / 引理 `enorm_eq_self`
-
-English:
-lemma enorm_eq_self
-  given: (x : Real>=0∞)
-  statement: ‖x‖ₑ = x
-  proof: rfl
-
-中文:
-引理 enorm_eq_self
-  条件: (x : 实数>=0∞)
-  结论: ‖x‖ₑ = x
-  证明: rfl
+/-
+**enorm_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (x : ENNReal), ‖x‖ₑ = x
+参数：x : ENNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma enorm_eq_self (x : Real>=0∞) : ‖x‖ₑ = x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ENormedAddCommMonoid Real>=0∞
-  body: continuous_id
-  enorm_zero := by simp
-  enorm_eq_zero := by simp
-  enorm_add_le := by simp
-
-中文:
-实例 :
-  签名: ENormedAddComm幺半群 实数>=0∞
-  定义体: continuous_id
-  enorm_zero := by simp
-  enorm_eq_zero := by simp
-  enorm_add_le := by simp
-
-Depends on / 依赖: continuous_id
+@[simp] lemma enorm_eq_self (x : ℝ≥0∞) : ‖x‖ₑ = x := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : ENormedAddCommMonoid Real>=0∞ where
+noncomputable instance : ENormedAddCommMonoid ℝ≥0∞ where
   continuous_enorm := continuous_id
   enorm_zero := by simp
   enorm_eq_zero := by simp
@@ -124,611 +68,456 @@ noncomputable instance : ENormedAddCommMonoid Real>=0∞ where
 
 namespace Real
 
-variable {r : Real}
+variable {r : ℝ}
 
-/--
-Instance `norm` / 实例 `norm`
-
-English:
-instance norm
-  signature: : Norm Real where
-  body: |r|
-
-@[simp]
-
-中文:
-实例 norm
-  签名: : 范数 实数 where
-  定义体: |r|
-
-@[simp]
+/-
+**Real.norm** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：norm : Norm Real where norm r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance norm : Norm Real where
+instance norm : Norm ℝ where
   norm r := |r|
 
 @[simp]
-/--
-theorem `norm_eq_abs` / 定理 `norm_eq_abs`
-
-English:
-theorem norm_eq_abs
-  given: (r : Real)
-  statement: ‖r‖ = |r|
-  proof: rfl
-
-中文:
-定理 norm_eq_abs
-  条件: (r : 实数)
-  结论: ‖r‖ = |r|
-  证明: rfl
+/-
+**Real.norm_eq_abs** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：norm_eq_abs (r : Real) : ‖r‖ = |r|
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_eq_abs (r : Real) : ‖r‖ = |r| :=
+theorem norm_eq_abs (r : ℝ) : ‖r‖ = |r| :=
   rfl
-
-/--
-Instance `normedAddCommGroup` / 实例 `normedAddCommGroup`
-
-English:
-instance normedAddCommGroup
-  signature: : NormedAddCommGroup Real
-  body: ⟨fun _r _y => by rw [Real.dist_eq, ← abs_neg, neg_sub, add_comm, sub_eq_add_neg, norm_eq_abs]⟩
-
-中文:
-实例 normedAddCommGroup
-  签名: : 赋范交换加群 实数
-  定义体: ⟨fun _r _y => by rw [Real.dist_eq, ← abs_neg, neg_sub, add_comm, sub_eq_add_neg, norm_eq_abs]⟩
-
-Depends on / 依赖: Real.dist_eq, abs_neg, add_comm, dist_eq, neg_sub, norm_eq_abs, sub_eq_add_neg
+/-
+**Real.normedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：normedAddCommGroup : NormedAddCommGroup Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance normedAddCommGroup : NormedAddCommGroup Real :=
+instance normedAddCommGroup : NormedAddCommGroup ℝ :=
   ⟨fun _r _y => by rw [Real.dist_eq, ← abs_neg, neg_sub, add_comm, sub_eq_add_neg, norm_eq_abs]⟩
-
-/--
-theorem `norm_of_nonneg` / 定理 `norm_of_nonneg`
-
-English:
-theorem norm_of_nonneg
-  given: (hr : 0 <= r)
-  statement: ‖r‖ = r
-  proof: abs_of_nonneg hr
-
-中文:
-定理 norm_of_nonneg
-  条件: (hr : 0 <= r)
-  结论: ‖r‖ = r
-  证明: abs_of_nonneg hr
-
-Depends on / 依赖: abs_of_nonneg
+/-
+**Real.norm_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
+参数：hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-theorem norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r :=
+theorem norm_of_nonneg (hr : 0 ≤ r) : ‖r‖ = r :=
   abs_of_nonneg hr
-
-/--
-theorem `norm_of_nonpos` / 定理 `norm_of_nonpos`
-
-English:
-theorem norm_of_nonpos
-  given: (hr : r <= 0)
-  statement: ‖r‖ = -r
-  proof: abs_of_nonpos hr
-
-中文:
-定理 norm_of_nonpos
-  条件: (hr : r <= 0)
-  结论: ‖r‖ = -r
-  证明: abs_of_nonpos hr
-
-Depends on / 依赖: abs_of_nonpos
+/-
+**Real.norm_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：norm_of_nonpos (hr : r <= 0) : ‖r‖ = -r
+参数：hr : r <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonpos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], a ≤ 0 → |a| = -a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-theorem norm_of_nonpos (hr : r <= 0) : ‖r‖ = -r :=
+theorem norm_of_nonpos (hr : r ≤ 0) : ‖r‖ = -r :=
   abs_of_nonpos hr
-
-/--
-theorem `le_norm_self` / 定理 `le_norm_self`
-
-English:
-theorem le_norm_self
-  given: (r : Real)
-  statement: r <= ‖r‖
-  proof: le_abs_self r
-
-中文:
-定理 le_norm_self
-  条件: (r : 实数)
-  结论: r <= ‖r‖
-  证明: le_abs_self r
-
-Depends on / 依赖: le_abs_self
+/-
+**Real.le_norm_self** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：le_norm_self (r : Real) : r <= ‖r‖
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_abs_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (
+a : α), a ≤ |a|
 -/
-theorem le_norm_self (r : Real) : r <= ‖r‖ :=
+theorem le_norm_self (r : ℝ) : r ≤ ‖r‖ :=
   le_abs_self r
-
-/--
-lemma `norm_natCast` / 引理 `norm_natCast`
-
-English:
-lemma norm_natCast
-  given: (n : Nat)
-  statement: ‖(n : Real)‖ = n
-  proof: abs_of_nonneg n.cast_nonneg
-
-中文:
-引理 norm_natCast
-  条件: (n : 自然数)
-  结论: ‖(n : 实数)‖ = n
-  证明: abs_of_nonneg n.cast_nonneg
-
-Depends on / 依赖: abs_of_nonneg, cast_nonneg, n.cast_nonneg
+/-
+**Real.norm_natCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：norm_natCast (n : Nat) : ‖(n : Real)‖ = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
 -/
-lemma norm_natCast (n : Nat) : ‖(n : Real)‖ = n := abs_of_nonneg n.cast_nonneg
-/--
-lemma `nnnorm_natCast` / 引理 `nnnorm_natCast`
-
-English:
-lemma nnnorm_natCast
-  given: (n : Nat)
-  statement: ‖(n : Real)‖₊ = n
-  proof: NNReal.eq norm_natCast _
-
-中文:
-引理 nnnorm_natCast
-  条件: (n : 自然数)
-  结论: ‖(n : 实数)‖₊ = n
-  证明: NNReal.eq norm_natCast _
+lemma norm_natCast (n : ℕ) : ‖(n : ℝ)‖ = n := abs_of_nonneg n.cast_nonneg
+/-
+**Real.nnnorm_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (n : ℕ), ‖↑n‖₊ = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `Real.norm_natCast`：norm_natCast (n : Nat) : ‖(n : Real)‖ = n
 -/
-@[simp 1100] lemma nnnorm_natCast (n : Nat) : ‖(n : Real)‖₊ = n := NNReal.eq norm_natCast _
-/--
-lemma `enorm_natCast` / 引理 `enorm_natCast`
-
-English:
-lemma enorm_natCast
-  given: (n : Nat)
-  statement: ‖(n : Real)‖ₑ = n
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_natCast
-  条件: (n : 自然数)
-  结论: ‖(n : 实数)‖ₑ = n
-  证明: by simp [enorm]
+@[simp 1100] lemma nnnorm_natCast (n : ℕ) : ‖(n : ℝ)‖₊ = n := NNReal.eq <| norm_natCast _
+/-
+**Real.enorm_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (n : ℕ), ‖↑n‖ₑ = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.nnnorm_natCast`：∀ (n : ℕ), ‖↑n‖₊ = ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp 1100] lemma enorm_natCast (n : Nat) : ‖(n : Real)‖ₑ = n := by simp [enorm]
-
-/--
-lemma `norm_ofNat` / 引理 `norm_ofNat`
-
-English:
-lemma norm_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: norm_natCast n
-
-中文:
-引理 norm_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: norm_natCast n
+@[simp 1100] lemma enorm_natCast (n : ℕ) : ‖(n : ℝ)‖ₑ = n := by simp [enorm]
+/-
+**Real.norm_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (n : ℕ) [inst : n.AtLeastTwo], ‖OfNat.ofNat n‖ = OfNat.ofNat n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.norm_natCast`：norm_natCast (n : Nat) : ‖(n : Real)‖ = n
 -/
-@[simp 1100] lemma norm_ofNat (n : Nat) [n.AtLeastTwo] :
-    ‖(ofNat(n) : Real)‖ = ofNat(n) := norm_natCast n
-
-/--
-lemma `nnnorm_ofNat` / 引理 `nnnorm_ofNat`
-
-English:
-lemma nnnorm_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: nnnorm_natCast n
-
-中文:
-引理 nnnorm_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: nnnorm_natCast n
+@[simp 1100] lemma norm_ofNat (n : ℕ) [n.AtLeastTwo] :
+    ‖(ofNat(n) : ℝ)‖ = ofNat(n) := norm_natCast n
+/-
+**Real.nnnorm_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (n : ℕ) [inst : n.AtLeastTwo], ‖OfNat.ofNat n‖₊ = OfNat.ofNat n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.nnnorm_natCast`：∀ (n : ℕ), ‖↑n‖₊ = ↑n
 -/
-@[simp 1100] lemma nnnorm_ofNat (n : Nat) [n.AtLeastTwo] :
-    ‖(ofNat(n) : Real)‖₊ = ofNat(n) := nnnorm_natCast n
-
-/--
-lemma `norm_two` / 引理 `norm_two`
-
-English:
-lemma norm_two
-  statement: ‖(2 : Real)‖ = 2
-  proof: abs_of_pos zero_lt_two
-
-中文:
-引理 norm_two
-  结论: ‖(2 : 实数)‖ = 2
-  证明: abs_of_pos zero_lt_two
-
-Depends on / 依赖: abs_of_pos, zero_lt_two
+@[simp 1100] lemma nnnorm_ofNat (n : ℕ) [n.AtLeastTwo] :
+    ‖(ofNat(n) : ℝ)‖₊ = ofNat(n) := nnnorm_natCast n
+/-
+**Real.norm_two** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：norm_two : ‖(2 : Real)‖ = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-lemma norm_two : ‖(2 : Real)‖ = 2 := abs_of_pos zero_lt_two
-/--
-lemma `nnnorm_two` / 引理 `nnnorm_two`
-
-English:
-lemma nnnorm_two
-  statement: ‖(2 : Real)‖₊ = 2
-  proof: NNReal.eq by simp
+lemma norm_two : ‖(2 : ℝ)‖ = 2 := abs_of_pos zero_lt_two
+/-
+**Real.nnnorm_two** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：nnnorm_two : ‖(2 : Real)‖₊ = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.nnnorm_ofNat`：∀ (n : ℕ) [inst : n.AtLeastTwo], ‖OfNat.ofNat n‖₊ = O
+fNat.ofNat n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma nnnorm_two : ‖(2 : ℝ)‖₊ = 2 := NNReal.eq <| by simp
 
 @[simp 1100, norm_cast]
-
-中文:
-引理 nnnorm_two
-  结论: ‖(2 : 实数)‖₊ = 2
-  证明: NNReal.eq by simp
-
-@[simp 1100, norm_cast]
-
-Depends on / 依赖: NNReal, NNReal.eq
+/-
+**Real.norm_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：norm_nnratCast (q : Rat>=0) : ‖(q : Real)‖ = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.norm_of_nonneg`：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
+· 使用引理 `NNRat.cast_nonneg`：NNRat.cast_nonneg (q : Rat>=0) : 0 <= (q : α)
 -/
-lemma nnnorm_two : ‖(2 : Real)‖₊ = 2 := NNReal.eq by simp
+lemma norm_nnratCast (q : ℚ≥0) : ‖(q : ℝ)‖ = q := norm_of_nonneg q.cast_nonneg
 
 @[simp 1100, norm_cast]
-/--
-lemma `norm_nnratCast` / 引理 `norm_nnratCast`
-
-English:
-lemma norm_nnratCast
-  given: (q : Rat>=0)
-  statement: ‖(q : Real)‖ = q
-  proof: norm_of_nonneg q.cast_nonneg
-
-@[simp 1100, norm_cast]
-
-中文:
-引理 norm_nnratCast
-  条件: (q : 有理数>=0)
-  结论: ‖(q : 实数)‖ = q
-  证明: norm_of_nonneg q.cast_nonneg
-
-@[simp 1100, norm_cast]
-
-Depends on / 依赖: cast_nonneg, norm_of_nonneg, q.cast_nonneg
+/-
+**Real.nnnorm_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：nnnorm_nnratCast (q : Rat>=0) : ‖(q : Real)‖₊ = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用引理 `Real.norm_nnratCast`：norm_nnratCast (q : Rat>=0) : ‖(q : Real)‖ = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
 -/
-lemma norm_nnratCast (q : Rat>=0) : ‖(q : Real)‖ = q := norm_of_nonneg q.cast_nonneg
-
-@[simp 1100, norm_cast]
-/--
-lemma `nnnorm_nnratCast` / 引理 `nnnorm_nnratCast`
-
-English:
-lemma nnnorm_nnratCast
-  given: (q : Rat>=0)
-  statement: ‖(q : Real)‖₊ = q
-  proof: by
+lemma nnnorm_nnratCast (q : ℚ≥0) : ‖(q : ℝ)‖₊ = q := by
   simp [nnnorm]
   rfl
-
-中文:
-引理 nnnorm_nnratCast
-  条件: (q : 有理数>=0)
-  结论: ‖(q : 实数)‖₊ = q
-  证明: by
-  simp [nnnorm]
-  rfl
-
-Depends on / 依赖: nnnorm
+/-
+**Real.nnnorm_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：nnnorm_of_nonneg (hr : 0 <= r) : ‖r‖₊ = .mk r hr
+参数：hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Real.norm_of_nonneg`：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
 -/
-lemma nnnorm_nnratCast (q : Rat>=0) : ‖(q : Real)‖₊ = q := by
-  simp [nnnorm]
-  rfl
-
-/--
-theorem `nnnorm_of_nonneg` / 定理 `nnnorm_of_nonneg`
-
-English:
-theorem nnnorm_of_nonneg
-  given: (hr : 0 <= r)
-  statement: ‖r‖₊ = .mk r hr
-  proof: NNReal.eq norm_of_nonneg hr
-
-中文:
-定理 nnnorm_of_nonneg
-  条件: (hr : 0 <= r)
-  结论: ‖r‖₊ = .mk r hr
-  证明: NNReal.eq norm_of_nonneg hr
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_of_nonneg
+theorem nnnorm_of_nonneg (hr : 0 ≤ r) : ‖r‖₊ = .mk r hr :=
+  NNReal.eq <| norm_of_nonneg hr
+/-
+**Real.enorm_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：enorm_of_nonneg (hr : 0 <= r) : ‖r‖ₑ = .ofReal r
+参数：hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.nnnorm_of_nonneg`：nnnorm_of_nonneg (hr : 0 <= r) : ‖r‖₊ = .mk r hr
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nnnorm_of_nonneg (hr : 0 <= r) : ‖r‖₊ = .mk r hr :=
-NNReal.eq norm_of_nonneg hr
-
-/--
-lemma `enorm_of_nonneg` / 引理 `enorm_of_nonneg`
-
-English:
-lemma enorm_of_nonneg
-  given: (hr : 0 <= r)
-  statement: ‖r‖ₑ = .ofReal r
-  proof: by
+lemma enorm_of_nonneg (hr : 0 ≤ r) : ‖r‖ₑ = .ofReal r := by
   simp [enorm, nnnorm_of_nonneg hr, ENNReal.ofReal, toNNReal, hr]
-
-中文:
-引理 enorm_of_nonneg
-  条件: (hr : 0 <= r)
-  结论: ‖r‖ₑ = .of实数 r
-  证明: by
-  simp [enorm, nnnorm_of_nonneg hr, ENNReal.ofReal, toNNReal, hr]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, nnnorm_of_nonneg, ofReal, toNNReal
+/-
+**Real.enorm_ofReal_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：enorm_ofReal_of_nonneg {a : Real} (ha : 0 <= a) : ‖ENNReal.ofReal a‖ₑ = ‖a
+‖ₑ
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Real.enorm_of_nonneg`：enorm_of_nonneg (hr : 0 <= r) : ‖r‖ₑ = .ofReal r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma enorm_of_nonneg (hr : 0 <= r) : ‖r‖ₑ = .ofReal r := by
-  simp [enorm, nnnorm_of_nonneg hr, ENNReal.ofReal, toNNReal, hr]
-
-/--
-lemma `enorm_ofReal_of_nonneg` / 引理 `enorm_ofReal_of_nonneg`
-
-English:
-lemma enorm_ofReal_of_nonneg
-  given: {a : Real} (ha : 0 <= a)
-  statement: ‖ENNReal.ofReal a‖ₑ = ‖a‖ₑ
-  proof: by
+lemma enorm_ofReal_of_nonneg {a : ℝ} (ha : 0 ≤ a) : ‖ENNReal.ofReal a‖ₑ = ‖a‖ₑ := by
   simp [Real.enorm_of_nonneg, ha]
-
-中文:
-引理 enorm_of实数_of_nonneg
-  条件: {a : 实数} (ha : 0 <= a)
-  结论: ‖广义非负实数.of实数 a‖ₑ = ‖a‖ₑ
-  证明: by
-  simp [Real.enorm_of_nonneg, ha]
-
-Depends on / 依赖: Real.enorm_of_nonneg, enorm_of_nonneg
+/-
+**Real.nnnorm_abs** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (r : ℝ), ‖|r|‖₊ = ‖r‖₊
+参数：r : ℝ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `abs_abs`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [AddL
+eftMono α] [AddRightMono α] (a : α), |(|a|)| = |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma enorm_ofReal_of_nonneg {a : Real} (ha : 0 <= a) : ‖ENNReal.ofReal a‖ₑ = ‖a‖ₑ := by
-  simp [Real.enorm_of_nonneg, ha]
-
-/--
-lemma `nnnorm_abs` / 引理 `nnnorm_abs`
-
-English:
-lemma nnnorm_abs
-  given: (r : Real)
-  statement: ‖|r|‖₊ = ‖r‖₊
-  proof: by simp [nnnorm]
-
-中文:
-引理 nnnorm_abs
-  条件: (r : 实数)
-  结论: ‖|r|‖₊ = ‖r‖₊
-  证明: by simp [nnnorm]
+@[simp] lemma nnnorm_abs (r : ℝ) : ‖|r|‖₊ = ‖r‖₊ := by simp [nnnorm]
+/-
+**Real.enorm_abs** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (r : ℝ), ‖|r|‖ₑ = ‖r‖ₑ
+参数：r : ℝ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.nnnorm_abs`：∀ (r : ℝ), ‖|r|‖₊ = ‖r‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma nnnorm_abs (r : Real) : ‖|r|‖₊ = ‖r‖₊ := by simp [nnnorm]
-/--
-lemma `enorm_abs` / 引理 `enorm_abs`
-
-English:
-lemma enorm_abs
-  given: (r : Real)
-  statement: ‖|r|‖ₑ = ‖r‖ₑ
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_abs
-  条件: (r : 实数)
-  结论: ‖|r|‖ₑ = ‖r‖ₑ
-  证明: by simp [enorm]
+@[simp] lemma enorm_abs (r : ℝ) : ‖|r|‖ₑ = ‖r‖ₑ := by simp [enorm]
+/-
+**Real.enorm_eq_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：enorm_eq_ofReal (hr : 0 <= r) : ‖r‖ₑ = .ofReal r
+参数：hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ofReal_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (x : E), ENN
+Real.ofReal ‖x‖ = ‖x‖ₑ
+· 使用定理 `Real.norm_of_nonneg`：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
 -/
-@[simp] lemma enorm_abs (r : Real) : ‖|r|‖ₑ = ‖r‖ₑ := by simp [enorm]
-
-/--
-theorem `enorm_eq_ofReal` / 定理 `enorm_eq_ofReal`
-
-English:
-theorem enorm_eq_ofReal
-  given: (hr : 0 <= r)
-  statement: ‖r‖ₑ = .ofReal r
-  proof: by
-  rw [← ofReal_norm]; rw [norm_of_nonneg hr]
-
-中文:
-定理 enorm_eq_of实数
-  条件: (hr : 0 <= r)
-  结论: ‖r‖ₑ = .of实数 r
-  证明: by
-  rw [← ofReal_norm]; rw [norm_of_nonneg hr]
-
-Depends on / 依赖: norm_of_nonneg, ofReal_norm
+theorem enorm_eq_ofReal (hr : 0 ≤ r) : ‖r‖ₑ = .ofReal r := by
+  rw [← ofReal_norm, norm_of_nonneg hr]
+/-
+**Real.enorm_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ {a : ENNReal}, a ≠ ⊤ → ‖a.toReal‖ₑ = a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.enorm_eq_ofReal`：enorm_eq_ofReal (hr : 0 <= r) : ‖r‖ₑ = .ofReal r
+· 使用定理 `ENNReal.ofReal_toReal`：ofReal_toReal {a : Real>=0∞} (h : a != ∞) : ENNRe
+al.ofReal a.toReal = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem enorm_eq_ofReal (hr : 0 <= r) : ‖r‖ₑ = .ofReal r := by
-  rw [← ofReal_norm]; rw [norm_of_nonneg hr]
-
-/--
-lemma `enorm_toReal` / 引理 `enorm_toReal`
-
-English:
-lemma enorm_toReal
-  given: {a : Real>=0∞} (ha : a != ∞)
-  statement: ‖a.toReal‖ₑ = a
-  proof: by
+@[simp] lemma enorm_toReal {a : ℝ≥0∞} (ha : a ≠ ∞) : ‖a.toReal‖ₑ = a := by
   simp [enorm_eq_ofReal, ha]
-
-中文:
-引理 enorm_to实数
-  条件: {a : 实数>=0∞} (ha : a != ∞)
-  结论: ‖a.to实数‖ₑ = a
-  证明: by
-  simp [enorm_eq_ofReal, ha]
+/-
+**Real.enorm_eq_ofReal_abs** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：enorm_eq_ofReal_abs (r : Real) : ‖r‖ₑ = ENNReal.ofReal |r|
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.enorm_eq_ofReal`：enorm_eq_ofReal (hr : 0 <= r) : ‖r‖ₑ = .ofReal r
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.enorm_abs`：∀ (r : ℝ), ‖|r|‖ₑ = ‖r‖ₑ
 -/
-@[simp] lemma enorm_toReal {a : Real>=0∞} (ha : a != ∞) : ‖a.toReal‖ₑ = a := by
-  simp [enorm_eq_ofReal, ha]
-
-/--
-theorem `enorm_eq_ofReal_abs` / 定理 `enorm_eq_ofReal_abs`
-
-English:
-theorem enorm_eq_ofReal_abs
-  given: (r : Real)
-  statement: ‖r‖ₑ = ENNReal.ofReal |r|
-  proof: by
-  rw [← enorm_eq_ofReal (abs_nonneg _)]; rw [enorm_abs]
-
-中文:
-定理 enorm_eq_of实数_abs
-  条件: (r : 实数)
-  结论: ‖r‖ₑ = 广义非负实数.of实数 |r|
-  证明: by
-  rw [← enorm_eq_ofReal (abs_nonneg _)]; rw [enorm_abs]
-
-Depends on / 依赖: abs_nonneg, enorm_abs, enorm_eq_ofReal
+theorem enorm_eq_ofReal_abs (r : ℝ) : ‖r‖ₑ = ENNReal.ofReal |r| := by
+  rw [← enorm_eq_ofReal (abs_nonneg _), enorm_abs]
+/-
+**Real.toNNReal_eq_nnnorm_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：toNNReal_eq_nnnorm_of_nonneg (hr : 0 <= r) : r.toNNReal = ‖r‖₊
+参数：hr : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_of_nonneg`：∀ {r : ℝ} (hr : 0 ≤ r), r.toNNReal = NNReal.mk 
+r hr
+· 使用定理 `Real.norm_eq_abs`：norm_eq_abs (r : Real) : ‖r‖ = |r|
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-theorem enorm_eq_ofReal_abs (r : Real) : ‖r‖ₑ = ENNReal.ofReal |r| := by
-  rw [← enorm_eq_ofReal (abs_nonneg _)]; rw [enorm_abs]
-
-/--
-theorem `toNNReal_eq_nnnorm_of_nonneg` / 定理 `toNNReal_eq_nnnorm_of_nonneg`
-
-English:
-theorem toNNReal_eq_nnnorm_of_nonneg
-  given: (hr : 0 <= r)
-  statement: r.toNNReal = ‖r‖₊
-  proof: by
+theorem toNNReal_eq_nnnorm_of_nonneg (hr : 0 ≤ r) : r.toNNReal = ‖r‖₊ := by
   rw [Real.toNNReal_of_nonneg hr]
   congr
-  rw [Real.norm_eq_abs r]; rw [abs_of_nonneg hr]
-
-中文:
-定理 toNN实数_eq_nnnorm_of_nonneg
-  条件: (hr : 0 <= r)
-  结论: r.toNN实数 = ‖r‖₊
-  证明: by
-  rw [Real.toNNReal_of_nonneg hr]
-  congr
-  rw [Real.norm_eq_abs r]; rw [abs_of_nonneg hr]
-
-Depends on / 依赖: Real.norm_eq_abs, Real.toNNReal_of_nonneg, abs_of_nonneg, norm_eq_abs, toNNReal_of_nonneg
+  rw [Real.norm_eq_abs r, abs_of_nonneg hr]
+/-
+**Real.ofReal_le_enorm** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofReal_le_enorm (r : Real) : ENNReal.ofReal r <= ‖r‖ₑ
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.enorm_eq_ofReal_abs`：enorm_eq_ofReal_abs (r : Real) : ‖r‖ₑ = ENNRea
+l.ofReal |r|
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
+· 使用定理 `le_abs_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (
+a : α), a ≤ |a|
 -/
-theorem toNNReal_eq_nnnorm_of_nonneg (hr : 0 <= r) : r.toNNReal = ‖r‖₊ := by
-  rw [Real.toNNReal_of_nonneg hr]
-  congr
-  rw [Real.norm_eq_abs r]; rw [abs_of_nonneg hr]
-
-/--
-theorem `ofReal_le_enorm` / 定理 `ofReal_le_enorm`
-
-English:
-theorem ofReal_le_enorm
-  given: (r : Real)
-  statement: ENNReal.ofReal r <= ‖r‖ₑ
-  proof: by
-  rw [enorm_eq_ofReal_abs]; gcongr; exact le_abs_self _
-
-中文:
-定理 of实数_le_enorm
-  条件: (r : 实数)
-  结论: 广义非负实数.of实数 r <= ‖r‖ₑ
-  证明: by
-  rw [enorm_eq_ofReal_abs]; gcongr; exact le_abs_self _
-
-Depends on / 依赖: enorm_eq_ofReal_abs, le_abs_self
--/
-theorem ofReal_le_enorm (r : Real) : ENNReal.ofReal r <= ‖r‖ₑ := by
+theorem ofReal_le_enorm (r : ℝ) : ENNReal.ofReal r ≤ ‖r‖ₑ := by
   rw [enorm_eq_ofReal_abs]; gcongr; exact le_abs_self _
 
 end Real
 
 section SeminormedCommGroup
 
-variable [SeminormedCommGroup E] [SeminormedCommGroup F] {a b : E} {r : Real}
+variable [SeminormedCommGroup E] [SeminormedCommGroup F] {a b : E} {r : ℝ}
 variable {ε : Type*} [TopologicalSpace ε] [ESeminormedCommMonoid ε]
 
 @[to_additive (attr := simp high) norm_norm] -- Higher priority as a shortcut lemma.
-/--
-lemma `norm_norm'` / 引理 `norm_norm'`
-
-English:
-lemma norm_norm'
-  given: (x : E)
-  statement: ‖‖x‖‖ = ‖x‖
-  proof: Real.norm_of_nonneg (norm_nonneg' _)
-
-@[to_additive (attr := simp) nnnorm_norm]
-
-中文:
-引理 norm_norm'
-  条件: (x : E)
-  结论: ‖‖x‖‖ = ‖x‖
-  证明: Real.norm_of_nonneg (norm_nonneg' _)
-
-@[to_additive (attr := simp) nnnorm_norm]
-
-Depends on / 依赖: Real.norm_of_nonneg, norm_nonneg, norm_of_nonneg
+/-
+**norm_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_norm' (x : E) : ‖‖x‖‖ = ‖x‖
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.norm_of_nonneg`：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
 lemma norm_norm' (x : E) : ‖‖x‖‖ = ‖x‖ := Real.norm_of_nonneg (norm_nonneg' _)
 
 @[to_additive (attr := simp) nnnorm_norm]
-/--
-lemma `nnnorm_norm'` / 引理 `nnnorm_norm'`
-
-English:
-lemma nnnorm_norm'
-  given: (x : E)
-  statement: ‖‖x‖‖₊ = ‖x‖₊
-  proof: by simp [nnnorm]
-
-@[to_additive (attr := simp) enorm_norm]
-
-中文:
-引理 nnnorm_norm'
-  条件: (x : E)
-  结论: ‖‖x‖‖₊ = ‖x‖₊
-  证明: by simp [nnnorm]
-
-@[to_additive (attr := simp) enorm_norm]
-
-Depends on / 依赖: nnnorm
+/-
+**nnnorm_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_norm' (x : E) : ‖‖x‖‖₊ = ‖x‖₊
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用引理 `norm_norm'`：norm_norm' (x : E) : ‖‖x‖‖ = ‖x‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma nnnorm_norm' (x : E) : ‖‖x‖‖₊ = ‖x‖₊ := by simp [nnnorm]
 
 @[to_additive (attr := simp) enorm_norm]
-/--
-lemma `enorm_norm'` / 引理 `enorm_norm'`
-
-English:
-lemma enorm_norm'
-  given: (x : E)
-  statement: ‖‖x‖‖ₑ = ‖x‖ₑ
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_norm'
-  条件: (x : E)
-  结论: ‖‖x‖‖ₑ = ‖x‖ₑ
-  证明: by simp [enorm]
+/-
+**enorm_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_norm' (x : E) : ‖‖x‖‖ₑ = ‖x‖ₑ
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nnnorm_norm'`：nnnorm_norm' (x : E) : ‖‖x‖‖₊ = ‖x‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma enorm_norm' (x : E) : ‖‖x‖‖ₑ = ‖x‖ₑ := by simp [enorm]
-
-/--
-lemma `enorm_enorm` / 引理 `enorm_enorm`
-
-English:
-lemma enorm_enorm
-  given: {ε : Type*} [ENorm ε] (x : ε)
-  statement: ‖‖x‖ₑ‖ₑ = ‖x‖ₑ
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_enorm
-  条件: {ε : 类型} [E范数 ε] (x : ε)
-  结论: ‖‖x‖ₑ‖ₑ = ‖x‖ₑ
-  证明: by simp [enorm]
+/-
+**enorm_enorm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_enorm {ε : Type*} [ENorm ε] (x : ε) : ‖‖x‖ₑ‖ₑ = ‖x‖ₑ
+参数：x : ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma enorm_enorm {ε : Type*} [ENorm ε] (x : ε) : ‖‖x‖ₑ‖ₑ = ‖x‖ₑ := by simp [enorm]
 
 end SeminormedCommGroup
 
-/--
-lemma `tendsto_norm_atTop_atTop` / 引理 `tendsto_norm_atTop_atTop`
-
-English:
-lemma tendsto_norm_atTop_atTop
-  statement: Tendsto (norm : Real -> Real) atTop atTop
-  proof: tendsto_abs_atTop_atTop
-
-中文:
-引理 tendsto_norm_atTop_atTop
-  结论: 收敛 (norm : 实数 -> 实数) atTop atTop
-  证明: tendsto_abs_atTop_atTop
-
-Depends on / 依赖: tendsto_abs_atTop_atTop
+/-
+**tendsto_norm_atTop_atTop** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tendsto_norm_atTop_atTop : Tendsto (norm : Real -> Real) atTop atTop
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_abs_atTop_atTop`：∀ {G : Type u_2} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G], Filter.Tendsto abs Filter.atTop Filter.atTop
 -/
-lemma tendsto_norm_atTop_atTop : Tendsto (norm : Real -> Real) atTop atTop := tendsto_abs_atTop_atTop
+lemma tendsto_norm_atTop_atTop : Tendsto (norm : ℝ → ℝ) atTop atTop := tendsto_abs_atTop_atTop

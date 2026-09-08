@@ -40,11 +40,11 @@ well-founded relation, well order, extension
 
 universe u
 
-variable {α : Type u} {r : α -> α -> Prop}
+variable {α : Type u} {r : α → α → Prop}
 
 namespace IsWellFounded
 
-variable {α : Type u} (r : α -> α -> Prop) [IsWellFounded α r]
+variable {α : Type u} (r : α → α → Prop) [IsWellFounded α r]
 
 /-- An arbitrary well order on `α` that extends `r`.
 
@@ -57,181 +57,139 @@ get a well-order that extend our original order `r`. Another way to view this is
 arbitrary well-order to serve as a tiebreak between two elements of same rank.
 -/
 @[instance_reducible]
-/--
-Definition of `wellOrderExtension` / `wellOrderExtension` 的定义
+/-
+**IsWellFounded.wellOrderExtension** 是 Mathlib 中的一个定义，位于命名空间 `IsWellFounded`。
+形式化陈述：wellOrderExtension : LinearOrder α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wellOrderExtension
-  signature: : LinearOrder α
-  body: @LinearOrder.lift' α (Ordinal ×ₗ Cardinal) _ (fun a : α => (rank r a, embeddingToCardinal a))
-fun _ _ h => embeddingToCardinal.injective congr_arg Prod.snd h
+--- 原说明 ---
+An arbitrary well order on `α` that extends `r`.
 
-中文:
-定义 wellOrderExtension
-  签名: : 线性序 α
-  定义体: @LinearOrder.lift' α (Ordinal ×ₗ Cardinal) _ (fun a : α => (rank r a, embeddingToCardinal a))
-fun _ _ h => embeddingToCardinal.injective congr_arg Prod.snd h
+The construction maps `r` into two well-orders: the first map is `IsWellFounded.
+rank`, which is not
+necessarily injective but respects the order `r`; the other map is the identity 
+(with an arbitrarily
+chosen well-order on `α`), which is injective but doesn't respect `r`.
 
-Depends on / 依赖: Cardinal, LinearOrder, LinearOrder.lift, Ordinal, Prod.snd, congr_arg, embeddingToCardinal, embeddingToCardinal.injective, injective
+By taking the lexicographic product of the two, we get both properties, so we ca
+n pull it back and
+get a well-order that extend our original order `r`. Another way to view this is
+ that we choose an
+arbitrary well-order to serve as a tiebreak between two elements of same rank.
 -/
 noncomputable def wellOrderExtension : LinearOrder α :=
   @LinearOrder.lift' α (Ordinal ×ₗ Cardinal) _ (fun a : α => (rank r a, embeddingToCardinal a))
-fun _ _ h => embeddingToCardinal.injective congr_arg Prod.snd h
-
-/--
-Instance `wellOrderExtension.isWellFounded_lt` / 实例 `wellOrderExtension.isWellFounded_lt`
-
-English:
-instance wellOrderExtension.isWellFounded_lt
-  signature: : IsWellFounded α (wellOrderExtension r).lt
-  body: ⟨InvImage.wf (fun a : α => (rank r a, embeddingToCardinal a))
-    Ordinal.lt_wf.prod_lex Cardinal.lt_wf⟩
-
-中文:
-实例 wellOrderExtension.isWellFounded_lt
-  签名: : 是良基 α (wellOrderExtension r).lt
-  定义体: ⟨InvImage.wf (fun a : α => (rank r a, embeddingToCardinal a))
-    Ordinal.lt_wf.prod_lex Cardinal.lt_wf⟩
-
-Depends on / 依赖: Cardinal, Cardinal.lt_wf, InvImage, InvImage.wf, Ordinal, Ordinal.lt_wf.prod_lex, embeddingToCardinal, lt_wf, prod_lex
+    fun _ _ h => embeddingToCardinal.injective <| congr_arg Prod.snd h
+/-
+**IsWellFounded.wellOrderExtension.isWellFounded_lt** 是 Mathlib 中的一个定理，位于命名空间 `I
+sWellFounded.wellOrderExtension`。
+形式化陈述：∀ {α : Type u} (r : α → α → Prop) [inst : IsWellFounded α r], IsWellFounde
+d α LT.lt
+参数：r : α → α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用引理 `WellFounded.prod_lex`：WellFounded.prod_lex {ra : α -> α -> Prop} {rb : β
+ -> β -> Prop} (ha : WellFounded ra) (hb : WellFounded rb) : WellFounded (Prod.L
+ex ra rb)
+· 使用定理 `Ordinal.lt_wf`：lt_wf : @WellFounded Ordinal (· < ·)
+· 使用定理 `Cardinal.lt_wf`：WellFounded fun x1 x2 => x1 < x2
 -/
 instance wellOrderExtension.isWellFounded_lt : IsWellFounded α (wellOrderExtension r).lt :=
-⟨InvImage.wf (fun a : α => (rank r a, embeddingToCardinal a))
+  ⟨InvImage.wf (fun a : α => (rank r a, embeddingToCardinal a)) <|
     Ordinal.lt_wf.prod_lex Cardinal.lt_wf⟩
-
-/--
-Instance `wellOrderExtension.isWellOrder_lt` / 实例 `wellOrderExtension.isWellOrder_lt`
-
-English:
-instance wellOrderExtension.isWellOrder_lt
-  signature: : IsWellOrder α (wellOrderExtension r).lt where
-
-中文:
-实例 wellOrderExtension.isWellOrder_lt
-  签名: : 是良序 α (wellOrderExtension r).lt where
+/-
+**IsWellFounded.wellOrderExtension.isWellOrder_lt** 是 Mathlib 中的一个定理，位于命名空间 `IsW
+ellFounded.wellOrderExtension`。
+形式化陈述：∀ {α : Type u} (r : α → α → Prop) [inst : IsWellFounded α r], IsWellOrder 
+α LT.lt
+参数：r : α → α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsWellFounded.wellOrderExtension.isWellFounded_lt`：∀ {α : Type u} (r : α
+ → α → Prop) [inst : IsWellFounded α r], IsWellFounded α LT.lt
 -/
 instance wellOrderExtension.isWellOrder_lt : IsWellOrder α (wellOrderExtension r).lt where
 
-/--
-theorem `exists_well_order_ge` / 定理 `exists_well_order_ge`
+/-- Any well-founded relation can be extended to a well-ordering on that type. -/
+/-
+**IsWellFounded.exists_well_order_ge** 是 Mathlib 中的一个定理，位于命名空间 `IsWellFounded`。
+形式化陈述：exists_well_order_ge : exists s, r <= s ∧ IsWellOrder α s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsWellFounded.rank_lt_of_rel`：rank_lt_of_rel (h : r a b) : rank r a < ra
+nk r b
+· 使用定理 `IsWellFounded.wellOrderExtension.isWellFounded_lt`：∀ {α : Type u} (r : α
+ → α → Prop) [inst : IsWellFounded α r], IsWellFounded α LT.lt
 
-English:
-theorem exists_well_order_ge
-  statement: exists s, r <= s ∧ IsWellOrder α s
-  proof: ⟨(wellOrderExtension r).lt, fun _ _ h => Prod.Lex.left _ _ (rank_lt_of_rel h), ⟨⟩⟩
-
-中文:
-定理 存在_well_order_ge
-  结论: 存在 s, r <= s ∧ 是良序 α s
-  证明: ⟨(wellOrderExtension r).lt, fun _ _ h => Prod.Lex.left _ _ (rank_lt_of_rel h), ⟨⟩⟩
-
-Depends on / 依赖: Prod.Lex.left, rank_lt_of_rel, wellOrderExtension
+--- 原说明 ---
+Any well-founded relation can be extended to a well-ordering on that type.
 -/
-theorem exists_well_order_ge : exists s, r <= s ∧ IsWellOrder α s :=
+theorem exists_well_order_ge : ∃ s, r ≤ s ∧ IsWellOrder α s :=
   ⟨(wellOrderExtension r).lt, fun _ _ h => Prod.Lex.left _ _ (rank_lt_of_rel h), ⟨⟩⟩
 
 end IsWellFounded
 
-/--
-Definition of `WellOrderExtension` / `WellOrderExtension` 的定义
+/-- A type alias for `α`, intended to extend a well-founded order on `α` to a well-order. -/
+/-
+**WellOrderExtension** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WellOrderExtension (α : Type*) : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WellOrderExtension
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 WellOrderExtension
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+A type alias for `α`, intended to extend a well-founded order on `α` to a well-o
+rder.
 -/
 def WellOrderExtension (α : Type*) : Type _ := α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (WellOrderExtension α)
-  body: ‹_›
-
-中文:
-实例 [可居
-  签名: α] : 可居 (WellOrderExtension α)
-  定义体: ‹_›
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (WellOrderExtension α) := ‹_›
 
-/--
-Definition of `toWellOrderExtension` / `toWellOrderExtension` 的定义
+/-- "Identity" equivalence between a well-founded order and its well-order extension. -/
+/-
+**toWellOrderExtension** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toWellOrderExtension : α ≃ WellOrderExtension α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toWellOrderExtension
-  signature: : α ≃ WellOrderExtension α
-  body: Equiv.refl _
-
-中文:
-定义 toWellOrderExtension
-  签名: : α ≃ WellOrderExtension α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+"Identity" equivalence between a well-founded order and its well-order extension
+.
 -/
 def toWellOrderExtension : α ≃ WellOrderExtension α :=
   Equiv.refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [h
-  body: fast_instance% h.wellOrderExtension
-
-中文:
-实例 [LT
-  签名: α] [h
-  定义体: fast_instance% h.wellOrderExtension
-
-Depends on / 依赖: fast_instance, h.wellOrderExtension, wellOrderExtension
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [LT α] [h : WellFoundedLT α] : LinearOrder (WellOrderExtension α) :=
   fast_instance% h.wellOrderExtension
-
-/--
-Instance `WellOrderExtension.wellFoundedLT` / 实例 `WellOrderExtension.wellFoundedLT`
-
-English:
-instance WellOrderExtension.wellFoundedLT
-  signature: [LT α] [WellFoundedLT α]
-  body: IsWellFounded.wellOrderExtension.isWellFounded_lt (α := α) (· < ·)
-
-中文:
-实例 WellOrderExtension.wellFoundedLT
-  签名: [LT α] [WellFoundedLT α]
-  定义体: IsWellFounded.wellOrderExtension.isWellFounded_lt (α := α) (· < ·)
-
-Depends on / 依赖: IsWellFounded, IsWellFounded.wellOrderExtension.isWellFounded_lt, isWellFounded_lt, wellOrderExtension
+/-
+**WellOrderExtension.wellFoundedLT** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：WellOrderExtension.wellFoundedLT [LT α] [WellFoundedLT α] : WellFoundedLT 
+(WellOrderExtension α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsWellFounded.wellOrderExtension.isWellFounded_lt`：∀ {α : Type u} (r : α
+ → α → Prop) [inst : IsWellFounded α r], IsWellFounded α LT.lt
 -/
 instance WellOrderExtension.wellFoundedLT [LT α] [WellFoundedLT α] :
     WellFoundedLT (WellOrderExtension α) :=
   IsWellFounded.wellOrderExtension.isWellFounded_lt (α := α) (· < ·)
-
-/--
-theorem `toWellOrderExtension_strictMono` / 定理 `toWellOrderExtension_strictMono`
-
-English:
-theorem toWellOrderExtension_strictMono
-  given: [Preorder α] [WellFoundedLT α]
-  proof: fun _ _ h =>
-Prod.Lex.left _ _ IsWellFounded.rank_lt_of_rel h
-
-中文:
-定理 toWellOrderExtension_strictMono
-  条件: [预序 α] [WellFoundedLT α]
-  证明: fun _ _ h =>
-Prod.Lex.left _ _ IsWellFounded.rank_lt_of_rel h
+/-
+**toWellOrderExtension_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toWellOrderExtension_strictMono [Preorder α] [WellFoundedLT α] : StrictMon
+o (toWellOrderExtension : α -> WellOrderExtension α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsWellFounded.rank_lt_of_rel`：rank_lt_of_rel (h : r a b) : rank r a < ra
+nk r b
 -/
 theorem toWellOrderExtension_strictMono [Preorder α] [WellFoundedLT α] :
-    StrictMono (toWellOrderExtension : α -> WellOrderExtension α) := fun _ _ h =>
-Prod.Lex.left _ _ IsWellFounded.rank_lt_of_rel h
+    StrictMono (toWellOrderExtension : α → WellOrderExtension α) := fun _ _ h =>
+  Prod.Lex.left _ _ <| IsWellFounded.rank_lt_of_rel h

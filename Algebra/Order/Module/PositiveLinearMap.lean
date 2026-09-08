@@ -27,30 +27,27 @@ the `Analysis/CStarAlgebra` folder.
 
 @[expose] public section
 
-/--
-Definition of `PositiveLinearMap` / `PositiveLinearMap` 的定义
+/-- A positive linear map is a linear map that is also an order homomorphism. -/
+/-
+**PositiveLinearMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (E₁ : Type u_2) →     (E₂ : Type u_3) →       [inst : S
+emiring R] →         [inst_1 : AddCommMonoid E₁] →           [PartialOrder E₁] →
+             [inst_3 : AddCommMonoid E₂] →               [PartialOrder E₂] → [_r
+oot_.Module R E₁] → [_root_.Module R E₂] → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PositiveLinearMap
-  parameters: (R E₁ E₂ : Type*) [Semiring R]
-  extends: E₁ ->ₗ[R] E₂, E₁ ->o E₂
-  (no additional axioms)
-
-中文:
-结构 PositiveLinear映射
-  参数: (R E₁ E₂ : 类型) [半环 R]
-  继承: E₁ ->ₗ[R] E₂, E₁ ->o E₂
-  (无附加公理)
+--- 原说明 ---
+A positive linear map is a linear map that is also an order homomorphism.
 -/
 structure PositiveLinearMap (R E₁ E₂ : Type*) [Semiring R]
     [AddCommMonoid E₁] [PartialOrder E₁] [AddCommMonoid E₂] [PartialOrder E₂]
-    [Module R E₁] [Module R E₂] extends E₁ ->ₗ[R] E₂, E₁ ->o E₂
+    [Module R E₁] [Module R E₂] extends E₁ →ₗ[R] E₂, E₁ →o E₂
 
 /-- The `OrderHom` underlying a `PositiveLinearMap`. -/
 add_decl_doc PositiveLinearMap.toOrderHom
 
 /-- Notation for a `PositiveLinearMap`. -/
-notation:25 E " ->ₚ[" R:25 "] " F:0 => PositiveLinearMap R E F
+notation:25 E " →ₚ[" R:25 "] " F:0 => PositiveLinearMap R E F
 
 section PositiveLinearMapClass
 
@@ -59,50 +56,53 @@ variable {F R E₁ E₂ : Type*} [Semiring R]
   [Module R E₁] [Module R E₂] [FunLike F E₁ E₂] [LinearMapClass F R E₁ E₂]
   [OrderHomClass F E₁ E₂]
 
-/--
-Definition of `PositiveLinearMap.ofClass` / `PositiveLinearMap.ofClass` 的定义
+/-- Reinterpret an element of a type of positive linear maps as a positive linear map. -/
+/-
+**PositiveLinearMap.ofClass** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PositiveLinearMap.ofClass (f : F) : E₁ ->ₚ[R] E₂
+参数：f : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PositiveLinearMap.ofClass
-  signature: (f : F)
-  body: { (f : E₁ ->ₗ[R] E₂), (f : E₁ ->o E₂) with }
-
-@[deprecated (since := "2026-06-10")]
-alias PositiveLinearMapClass.toPositiveLinearMap := PositiveLinearMap.ofClass
-
-中文:
-定义 PositiveLinear映射.ofClass
-  签名: (f : F)
-  定义体: { (f : E₁ ->ₗ[R] E₂), (f : E₁ ->o E₂) with }
-
-@[deprecated (since := "2026-06-10")]
-alias PositiveLinearMapClass.toPositiveLinearMap := PositiveLinearMap.ofClass
+--- 原说明 ---
+Reinterpret an element of a type of positive linear maps as a positive linear ma
+p.
 -/
-def PositiveLinearMap.ofClass (f : F) : E₁ ->ₚ[R] E₂ :=
-  { (f : E₁ ->ₗ[R] E₂), (f : E₁ ->o E₂) with }
+def PositiveLinearMap.ofClass (f : F) : E₁ →ₚ[R] E₂ :=
+  { (f : E₁ →ₗ[R] E₂), (f : E₁ →o E₂) with }
 
 @[deprecated (since := "2026-06-10")]
 alias PositiveLinearMapClass.toPositiveLinearMap := PositiveLinearMap.ofClass
 
-/--
-lemma `OrderHomClass.of_addMonoidHom` / 引理 `OrderHomClass.of_addMonoidHom`
+/-- A type of additive group homomorphisms that map nonnegative elements to nonnegative elements
+is also a type of order homomorphisms. -/
+/-
+**OrderHomClass.of_addMonoidHom** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：OrderHomClass.of_addMonoidHom {F' E₁' E₂' : Type*} [FunLike F' E₁' E₂'] [A
+ddGroup E₁'] [LE E₁'] [AddRightMono E₁'] [AddGroup E₂'] [LE E₂'] [AddRightMono E
+₂'] [AddMonoidHomClass F' E₁' E₂'] (h : forall f : F', forall x, 0 <= x -> 0 <= 
+f x) : OrderHomClass F' E₁' E₂' where map_rel f a b hab
+参数：h : forall f : F', forall x, 0 <= x -> 0 <= f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
 
-English:
-lemma OrderHomClass.of_addMonoidHom
-  statement: {F' E₁' E₂' : Type*} [FunLike F' E₁' E₂'] [AddGroup E₁']
-  proof: by simpa using h f (b - a) (sub_nonneg.mpr hab)
-
-中文:
-引理 序态射类.of_addMonoidHom
-  结论: {F' E₁' E₂' : 类型} [函数状 F' E₁' E₂'] [加法群 E₁']
-  证明: by simpa using h f (b - a) (sub_nonneg.mpr hab)
-
-Depends on / 依赖: sub_nonneg, sub_nonneg.mpr
+--- 原说明 ---
+A type of additive group homomorphisms that map nonnegative elements to nonnegat
+ive elements
+is also a type of order homomorphisms.
 -/
 lemma OrderHomClass.of_addMonoidHom {F' E₁' E₂' : Type*} [FunLike F' E₁' E₂'] [AddGroup E₁']
     [LE E₁'] [AddRightMono E₁'] [AddGroup E₂'] [LE E₂'] [AddRightMono E₂']
     [AddMonoidHomClass F' E₁' E₂']
-    (h : forall f : F', forall x, 0 <= x -> 0 <= f x) : OrderHomClass F' E₁' E₂' where
+    (h : ∀ f : F', ∀ x, 0 ≤ x → 0 ≤ f x) : OrderHomClass F' E₁' E₂' where
   map_rel f a b hab := by simpa using h f (b - a) (sub_nonneg.mpr hab)
 
 end PositiveLinearMapClass
@@ -117,42 +117,11 @@ variable {R E₁ E₂ E₃ : Type*} [Semiring R]
     [AddCommMonoid E₃] [PartialOrder E₃]
     [Module R E₁] [Module R E₂] [Module R E₃]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (E₁ ->ₚ[R] E₂) E₁ E₂
-  body: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-initialize_simps_projections PositiveLinearMap (toFun -> apply, as_prefix toLinearMap)
-
-@[ext]
-
-中文:
-实例 :
-  签名: 函数状 (E₁ ->ₚ[R] E₂) E₁ E₂
-  定义体: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-initialize_simps_projections PositiveLinearMap (toFun -> apply, as_prefix toLinearMap)
-
-@[ext]
-
-Depends on / 依赖: f.toFun
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (E₁ ->ₚ[R] E₂) E₁ E₂ where
+instance : FunLike (E₁ →ₚ[R] E₂) E₁ E₂ where
   coe f := f.toFun
   coe_injective f g h := by
     cases f
@@ -161,506 +130,304 @@ instance : FunLike (E₁ ->ₚ[R] E₂) E₁ E₂ where
     apply DFunLike.coe_injective
     exact h
 
-initialize_simps_projections PositiveLinearMap (toFun -> apply, as_prefix toLinearMap)
+initialize_simps_projections PositiveLinearMap (toFun → apply, as_prefix toLinearMap)
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {f g : E₁ ->ₚ[R] E₂} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-引理 ext
-  条件: {f g : E₁ ->ₚ[R] E₂} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**PositiveLinearMap.ext** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：ext {f g : E₁ ->ₚ[R] E₂} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-lemma ext {f g : E₁ ->ₚ[R] E₂} (h : forall x, f x = g x) : f = g :=
+lemma ext {f g : E₁ →ₚ[R] E₂} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext f g h
 
 variable (R E₁) in
-/--
-Definition of `id` / `id` 的定义
+/-- The identity as a positive linear map. -/
+/-
+**PositiveLinearMap.id** 是 Mathlib 中的一个定义，位于命名空间 `PositiveLinearMap`。
+形式化陈述：(R : Type u_1) →   (E₁ : Type u_2) →     [inst : Semiring R] →       [inst
+_1 : AddCommMonoid E₁] → [inst_2 : PartialOrder E₁] → [inst_3 : _root_.Module R 
+E₁] → E₁ →ₚ[R] E₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : E₁ ->ₚ[R] E₁ where
-  body: LinearMap.id
-  __ := OrderHom.id
-
-中文:
-定义 id
-  签名: : E₁ ->ₚ[R] E₁ where
-  定义体: LinearMap.id
-  __ := OrderHom.id
+--- 原说明 ---
+The identity as a positive linear map.
 -/
-@[simps! apply toLinearMap] protected def id : E₁ ->ₚ[R] E₁ where
+@[simps! apply toLinearMap] protected def id : E₁ →ₚ[R] E₁ where
   __ := LinearMap.id
   __ := OrderHom.id
-
-/--
-lemma `toOrderHom_id` / 引理 `toOrderHom_id`
-
-English:
-lemma toOrderHom_id
-  statement: (PositiveLinearMap.id R E₁).toOrderHom = .id
-  proof: rfl
-
-中文:
-引理 toOrderHom_id
-  结论: (PositiveLinear映射.id R E₁).toOrderHom = .id
-  证明: rfl
+/-
+**PositiveLinearMap.toOrderHom_id** 是 Mathlib 中的一个定理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：∀ {R : Type u_1} {E₁ : Type u_2} [inst : Semiring R] [inst_1 : AddCommMono
+id E₁] [inst_2 : PartialOrder E₁]   [inst_3 : _root_.Module R E₁], (PositiveLine
+arMap.id R E₁).toOrderHom = OrderHom.id
+参数：PositiveLinearMap.id R E₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toOrderHom_id : (PositiveLinearMap.id R E₁).toOrderHom = .id := rfl
 
 /-- The composition of positive linear maps is again a positive linear map. -/
 @[simps! apply toLinearMap]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**PositiveLinearMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `PositiveLinearMap`。
+形式化陈述：comp (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂) : E₁ ->ₚ[R] E₃ where toLinearMa
+p
+参数：g : E₂ ->ₚ[R] E₃；f : E₁ ->ₚ[R] E₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂)
-  body: g.toLinearMap.comp f.toLinearMap
-  monotone' := g.monotone'.comp f.monotone'
-
-中文:
-定义 comp
-  签名: (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂)
-  定义体: g.toLinearMap.comp f.toLinearMap
-  monotone' := g.monotone'.comp f.monotone'
-
-Depends on / 依赖: f.toLinearMap, g.toLinearMap.comp, toLinearMap
+--- 原说明 ---
+The composition of positive linear maps is again a positive linear map.
 -/
-def comp (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂) : E₁ ->ₚ[R] E₃ where
+def comp (g : E₂ →ₚ[R] E₃) (f : E₁ →ₚ[R] E₂) : E₁ →ₚ[R] E₃ where
   toLinearMap := g.toLinearMap.comp f.toLinearMap
   monotone' := g.monotone'.comp f.monotone'
-
-/--
-lemma `toOrderHom_comp` / 引理 `toOrderHom_comp`
-
-English:
-lemma toOrderHom_comp
-  given: (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂)
-  proof: rfl
-
-中文:
-引理 toOrderHom_comp
-  条件: (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂)
-  证明: rfl
+/-
+**PositiveLinearMap.toOrderHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `PositiveLinearMap
+`。
+形式化陈述：∀ {R : Type u_1} {E₁ : Type u_2} {E₂ : Type u_3} {E₃ : Type u_4} [inst : S
+emiring R] [inst_1 : AddCommMonoid E₁]   [inst_2 : PartialOrder E₁] [inst_3 : Ad
+dCommMonoid E₂] [inst_4 : PartialOrder E₂] [inst_5 : AddCommMonoid E₃]   [inst_6
+ : PartialOrder E₃] [inst_7 : _root_.Module R E₁] [inst_8 : _root_.Module R E₂] 
+[inst_9 : _root_.Module R E₃]   (g : E₂ →ₚ[R] E₃) (f : E₁ →ₚ[R] E₂), (g.comp f).
+toOrderHom = g.toOrderHom.comp f.toOrderHom
+参数：g : E₂ →ₚ[R] E₃；f : E₁ →ₚ[R] E₂；g.comp f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toOrderHom_comp (g : E₂ ->ₚ[R] E₃) (f : E₁ ->ₚ[R] E₂) :
+@[simp] lemma toOrderHom_comp (g : E₂ →ₚ[R] E₃) (f : E₁ →ₚ[R] E₂) :
     (g.comp f).toOrderHom = g.toOrderHom.comp f.toOrderHom :=
   rfl
-
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  given: (f : E₁ ->ₚ[R] E₂)
-  statement: f.comp (.id R E₁) = f
-  proof: rfl
-
-中文:
-引理 comp_id
-  条件: (f : E₁ ->ₚ[R] E₂)
-  结论: f.comp (.id R E₁) = f
-  证明: rfl
+/-
+**PositiveLinearMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：∀ {R : Type u_1} {E₁ : Type u_2} {E₂ : Type u_3} [inst : Semiring R] [inst
+_1 : AddCommMonoid E₁]   [inst_2 : PartialOrder E₁] [inst_3 : AddCommMonoid E₂] 
+[inst_4 : PartialOrder E₂] [inst_5 : _root_.Module R E₁]   [inst_6 : _root_.Modu
+le R E₂] (f : E₁ →ₚ[R] E₂), f.comp (PositiveLinearMap.id R E₁) = f
+参数：f : E₁ →ₚ[R] E₂；PositiveLinearMap.id R E₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma comp_id (f : E₁ ->ₚ[R] E₂) : f.comp (.id R E₁) = f := rfl
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  given: (f : E₁ ->ₚ[R] E₂)
-  statement: (PositiveLinearMap.id R E₂).comp f = f
-  proof: rfl
-
-中文:
-引理 id_comp
-  条件: (f : E₁ ->ₚ[R] E₂)
-  结论: (PositiveLinear映射.id R E₂).comp f = f
-  证明: rfl
+@[simp] lemma comp_id (f : E₁ →ₚ[R] E₂) : f.comp (.id R E₁) = f := rfl
+/-
+**PositiveLinearMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：∀ {R : Type u_1} {E₁ : Type u_2} {E₂ : Type u_3} [inst : Semiring R] [inst
+_1 : AddCommMonoid E₁]   [inst_2 : PartialOrder E₁] [inst_3 : AddCommMonoid E₂] 
+[inst_4 : PartialOrder E₂] [inst_5 : _root_.Module R E₁]   [inst_6 : _root_.Modu
+le R E₂] (f : E₁ →ₚ[R] E₂), (PositiveLinearMap.id R E₂).comp f = f
+参数：f : E₁ →ₚ[R] E₂；PositiveLinearMap.id R E₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma id_comp (f : E₁ ->ₚ[R] E₂) : (PositiveLinearMap.id R E₂).comp f = f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearMapClass (E₁ ->ₚ[R] E₂) R E₁ E₂
-  body: map_add f.toLinearMap
-  map_smulₛₗ f := f.toLinearMap.map_smul'
-
-中文:
-实例 :
-  签名: 线性映射类 (E₁ ->ₚ[R] E₂) R E₁ E₂
-  定义体: map_add f.toLinearMap
-  map_smulₛₗ f := f.toLinearMap.map_smul'
-
-Depends on / 依赖: f.toLinearMap, map_add, toLinearMap
+@[simp] lemma id_comp (f : E₁ →ₚ[R] E₂) : (PositiveLinearMap.id R E₂).comp f = f := rfl
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LinearMapClass (E₁ ->ₚ[R] E₂) R E₁ E₂ where
+instance : LinearMapClass (E₁ →ₚ[R] E₂) R E₁ E₂ where
   map_add f := map_add f.toLinearMap
   map_smulₛₗ f := f.toLinearMap.map_smul'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderHomClass (E₁ ->ₚ[R] E₂) E₁ E₂
-  body: fun {_ _} hab => f.monotone' hab
-
-@[simp]
-
-中文:
-实例 :
-  签名: 序态射类 (E₁ ->ₚ[R] E₂) E₁ E₂
-  定义体: fun {_ _} hab => f.monotone' hab
-
-@[simp]
-
-Depends on / 依赖: f.monotone, monotone
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : OrderHomClass (E₁ ->ₚ[R] E₂) E₁ E₂ where
+instance : OrderHomClass (E₁ →ₚ[R] E₂) E₁ E₂ where
   map_rel f := fun {_ _} hab => f.monotone' hab
 
 @[simp]
-/--
-lemma `map_smul_of_tower` / 引理 `map_smul_of_tower`
-
-English:
-lemma map_smul_of_tower
-  statement: {S : Type*} [SMul S E₁] [SMul S E₂]
-  proof: LinearMapClass.map_smul_of_tower f _ _
-
-中文:
-引理 map_smul_of_tower
-  结论: {S : 类型} [标量乘法 S E₁] [标量乘法 S E₂]
-  证明: LinearMapClass.map_smul_of_tower f _ _
-
-Depends on / 依赖: LinearMapClass, LinearMapClass.map_smul_of_tower, map_smul_of_tower
+/-
+**PositiveLinearMap.map_smul_of_tower** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearM
+ap`。
+形式化陈述：map_smul_of_tower {S : Type*} [SMul S E₁] [SMul S E₂] [LinearMap.Compatibl
+eSMul E₁ E₂ S R] (f : E₁ ->ₚ[R] E₂) (c : S) (x : E₁) : f (c • x) = c • f x
+参数：f : E₁ ->ₚ[R] E₂；c : S；x : E₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMapClass.map_smul_of_tower`：∀ {M : Type u_8} {M₂ : Type u_10} [ins
+t : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type u_15}
+   [inst_2 : Semiring …
+· 使用定理 `PositiveLinearMap.instLinearMapClass`：∀ {R : Type u_1} {E₁ : Type u_2} {
+E₂ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid E₁]   [inst_2 : Parti
+alOrder E₁] [inst_3 : AddC…
 -/
 lemma map_smul_of_tower {S : Type*} [SMul S E₁] [SMul S E₂]
-    [LinearMap.CompatibleSMul E₁ E₂ S R] (f : E₁ ->ₚ[R] E₂) (c : S) (x : E₁) :
+    [LinearMap.CompatibleSMul E₁ E₂ S R] (f : E₁ →ₚ[R] E₂) (c : S) (x : E₁) :
     f (c • x) = c • f x := LinearMapClass.map_smul_of_tower f _ _
 
 -- We add the more specific lemma here purely for the aesop tag.
 @[aesop safe apply (rule_sets := [CStarAlgebra])]
-/--
-lemma `map_nonneg` / 引理 `map_nonneg`
-
-English:
-lemma map_nonneg
-  given: (f : E₁ ->ₚ[R] E₂) {x : E₁} (hx : 0 <= x)
-  statement: 0 <= f x
-  proof: _root_.map_nonneg f hx
-
-@[simp]
-
-中文:
-引理 map_nonneg
-  条件: (f : E₁ ->ₚ[R] E₂) {x : E₁} (hx : 0 <= x)
-  结论: 0 <= f x
-  证明: _root_.map_nonneg f hx
-
-@[simp]
+/-
+**PositiveLinearMap.map_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：∀ {R : Type u_1} {E₁ : Type u_2} {E₂ : Type u_3} [inst : Semiring R] [inst
+_1 : AddCommMonoid E₁]   [inst_2 : PartialOrder E₁] [inst_3 : AddCommMonoid E₂] 
+[inst_4 : PartialOrder E₂] [inst_5 : _root_.Module R E₁]   [inst_6 : _root_.Modu
+le R E₂] (f : E₁ →ₚ[R] E₂) {x : E₁}, 0 ≤ x → 0 ≤ f x
+参数：f : E₁ →ₚ[R] E₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_nonneg`：map_nonneg (ha : 0 <= a) : 0 <= f a
+· 使用定理 `PositiveLinearMap.instOrderHomClass`：∀ {R : Type u_1} {E₁ : Type u_2} {E
+₂ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid E₁]   [inst_2 : Partia
+lOrder E₁] [inst_3 : AddC…
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `PositiveLinearMap.instLinearMapClass`：∀ {R : Type u_1} {E₁ : Type u_2} {
+E₂ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid E₁]   [inst_2 : Parti
+alOrder E₁] [inst_3 : AddC…
 -/
-protected lemma map_nonneg (f : E₁ ->ₚ[R] E₂) {x : E₁} (hx : 0 <= x) : 0 <= f x :=
+protected lemma map_nonneg (f : E₁ →ₚ[R] E₂) {x : E₁} (hx : 0 ≤ x) : 0 ≤ f x :=
   _root_.map_nonneg f hx
 
 @[simp]
-/--
-lemma `coe_toLinearMap` / 引理 `coe_toLinearMap`
-
-English:
-lemma coe_toLinearMap
-  given: (f : E₁ ->ₚ[R] E₂)
-  statement: (f.toLinearMap : E₁ -> E₂) = f
-  proof: rfl
-
-中文:
-引理 coe_toLinearMap
-  条件: (f : E₁ ->ₚ[R] E₂)
-  结论: (f.toLinearMap : E₁ -> E₂) = f
-  证明: rfl
+/-
+**PositiveLinearMap.coe_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap
+`。
+形式化陈述：coe_toLinearMap (f : E₁ ->ₚ[R] E₂) : (f.toLinearMap : E₁ -> E₂) = f
+参数：f : E₁ ->ₚ[R] E₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_toLinearMap (f : E₁ ->ₚ[R] E₂) : (f.toLinearMap : E₁ -> E₂) = f :=
+lemma coe_toLinearMap (f : E₁ →ₚ[R] E₂) : (f.toLinearMap : E₁ → E₂) = f :=
   rfl
-
-/--
-lemma `toLinearMap_injective` / 引理 `toLinearMap_injective`
-
-English:
-lemma toLinearMap_injective
-  statement: Function.Injective (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂))
-  proof: fun _ _ h => by ext x; congrm($h x)
-
-@[simp]
-
-中文:
-引理 toLinearMap_injective
-  结论: 函数.单射 (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂))
-  证明: fun _ _ h => by ext x; congrm($h x)
-
-@[simp]
-
-Depends on / 依赖: congrm
+/-
+**PositiveLinearMap.toLinearMap_injective** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLin
+earMap`。
+形式化陈述：toLinearMap_injective : Function.Injective (toLinearMap : (E₁ ->ₚ[R] E₂) -
+> (E₁ ->ₗ[R] E₂))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PositiveLinearMap.ext`：ext {f g : E₁ ->ₚ[R] E₂} (h : forall x, f x = g x
+) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma toLinearMap_injective : Function.Injective (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂)) :=
-  fun _ _ h => by ext x; congrm($h x)
+lemma toLinearMap_injective : Function.Injective (toLinearMap : (E₁ →ₚ[R] E₂) → (E₁ →ₗ[R] E₂)) :=
+  fun _ _ h ↦ by ext x; congrm($h x)
 
 @[simp]
-/--
-lemma `toLinearMap_inj` / 引理 `toLinearMap_inj`
-
-English:
-lemma toLinearMap_inj
-  given: {f g : E₁ ->ₚ[R] E₂}
-  statement: f.toLinearMap = g.toLinearMap ↔ f = g
-  proof: toLinearMap_injective.eq_iff
-
-中文:
-引理 toLinearMap_inj
-  条件: {f g : E₁ ->ₚ[R] E₂}
-  结论: f.toLinearMap = g.toLinearMap ↔ f = g
-  证明: toLinearMap_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toLinearMap_injective, toLinearMap_injective.eq_iff
+/-
+**PositiveLinearMap.toLinearMap_inj** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap
+`。
+形式化陈述：toLinearMap_inj {f g : E₁ ->ₚ[R] E₂} : f.toLinearMap = g.toLinearMap ↔ f =
+ g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `PositiveLinearMap.toLinearMap_injective`：toLinearMap_injective : Functio
+n.Injective (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂))
 -/
-lemma toLinearMap_inj {f g : E₁ ->ₚ[R] E₂} : f.toLinearMap = g.toLinearMap ↔ f = g :=
+lemma toLinearMap_inj {f g : E₁ →ₚ[R] E₂} : f.toLinearMap = g.toLinearMap ↔ f = g :=
   toLinearMap_injective.eq_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (E₁ ->ₚ[R] E₂)
-  body: .mk (0 : E₁ ->ₗ[R] E₂) fun _ => by simp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 零 (E₁ ->ₚ[R] E₂)
-  定义体: .mk (0 : E₁ ->ₗ[R] E₂) fun _ => by simp
-
-@[simp]
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Zero (E₁ ->ₚ[R] E₂) where
-  zero := .mk (0 : E₁ ->ₗ[R] E₂) fun _ => by simp
+instance : Zero (E₁ →ₚ[R] E₂) where
+  zero := .mk (0 : E₁ →ₗ[R] E₂) fun _ ↦ by simp
 
 @[simp]
-/--
-lemma `toLinearMap_zero` / 引理 `toLinearMap_zero`
-
-English:
-lemma toLinearMap_zero
-  statement: (0 : E₁ ->ₚ[R] E₂).toLinearMap = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_zero
-  结论: (0 : E₁ ->ₚ[R] E₂).toLinearMap = 0
-  证明: rfl
-
-@[simp]
+/-
+**PositiveLinearMap.toLinearMap_zero** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMa
+p`。
+形式化陈述：toLinearMap_zero : (0 : E₁ ->ₚ[R] E₂).toLinearMap = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_zero : (0 : E₁ ->ₚ[R] E₂).toLinearMap = 0 :=
+lemma toLinearMap_zero : (0 : E₁ →ₚ[R] E₂).toLinearMap = 0 :=
   rfl
 
 @[simp]
-/--
-lemma `zero_apply` / 引理 `zero_apply`
-
-English:
-lemma zero_apply
-  given: (x : E₁)
-  statement: (0 : E₁ ->ₚ[R] E₂) x = 0
-  proof: rfl
-
-中文:
-引理 zero_apply
-  条件: (x : E₁)
-  结论: (0 : E₁ ->ₚ[R] E₂) x = 0
-  证明: rfl
+/-
+**PositiveLinearMap.zero_apply** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：zero_apply (x : E₁) : (0 : E₁ ->ₚ[R] E₂) x = 0
+参数：x : E₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma zero_apply (x : E₁) : (0 : E₁ ->ₚ[R] E₂) x = 0 :=
+lemma zero_apply (x : E₁) : (0 : E₁ →ₚ[R] E₂) x = 0 :=
   rfl
 
 variable [IsOrderedAddMonoid E₂]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (E₁ ->ₚ[R] E₂)
-  body: .mk (f.toLinearMap + g.toLinearMap) fun _ _ h =>
-    add_le_add (OrderHomClass.mono f h) (OrderHomClass.mono g h)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法 (E₁ ->ₚ[R] E₂)
-  定义体: .mk (f.toLinearMap + g.toLinearMap) fun _ _ h =>
-    add_le_add (OrderHomClass.mono f h) (OrderHomClass.mono g h)
-
-@[simp]
-
-Depends on / 依赖: f.toLinearMap, g.toLinearMap, toLinearMap
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Add (E₁ ->ₚ[R] E₂) where
-  add f g := .mk (f.toLinearMap + g.toLinearMap) fun _ _ h =>
+instance : Add (E₁ →ₚ[R] E₂) where
+  add f g := .mk (f.toLinearMap + g.toLinearMap) fun _ _ h ↦
     add_le_add (OrderHomClass.mono f h) (OrderHomClass.mono g h)
 
 @[simp]
-/--
-lemma `toLinearMap_add` / 引理 `toLinearMap_add`
-
-English:
-lemma toLinearMap_add
-  given: (f g : E₁ ->ₚ[R] E₂)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_add
-  条件: (f g : E₁ ->ₚ[R] E₂)
-  证明: by
-  rfl
-
-@[simp]
+/-
+**PositiveLinearMap.toLinearMap_add** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap
+`。
+形式化陈述：toLinearMap_add (f g : E₁ ->ₚ[R] E₂) : (f + g).toLinearMap = f.toLinearMap
+ + g.toLinearMap
+参数：f g : E₁ ->ₚ[R] E₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_add (f g : E₁ ->ₚ[R] E₂) :
+lemma toLinearMap_add (f g : E₁ →ₚ[R] E₂) :
     (f + g).toLinearMap = f.toLinearMap + g.toLinearMap := by
   rfl
 
 @[simp]
-/--
-lemma `add_apply` / 引理 `add_apply`
-
-English:
-lemma add_apply
-  given: (f g : E₁ ->ₚ[R] E₂) (x : E₁)
-  proof: by
-  rfl
-
-中文:
-引理 add_apply
-  条件: (f g : E₁ ->ₚ[R] E₂) (x : E₁)
-  证明: by
-  rfl
+/-
+**PositiveLinearMap.add_apply** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：add_apply (f g : E₁ ->ₚ[R] E₂) (x : E₁) : (f + g) x = f x + g x
+参数：f g : E₁ ->ₚ[R] E₂；x : E₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma add_apply (f g : E₁ ->ₚ[R] E₂) (x : E₁) :
+lemma add_apply (f g : E₁ →ₚ[R] E₂) (x : E₁) :
     (f + g) x = f x + g x := by
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Nat (E₁ ->ₚ[R] E₂)
-  body: .mk (n • f.toLinearMap) fun x y h => by
-    induction n with
-    | zero => simp
-    | succ n ih => simpa [add_nsmul] using add_le_add ih (OrderHomClass.mono f h)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 标量乘法 自然数 (E₁ ->ₚ[R] E₂)
-  定义体: .mk (n • f.toLinearMap) fun x y h => by
-    induction n with
-    | zero => simp
-    | succ n ih => simpa [add_nsmul] using add_le_add ih (OrderHomClass.mono f h)
-
-@[simp]
-
-Depends on / 依赖: OrderHomClass, OrderHomClass.mono, add_le_add, add_nsmul, f.toLinearMap, toLinearMap
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Nat (E₁ ->ₚ[R] E₂) where
-  smul n f := .mk (n • f.toLinearMap) fun x y h => by
+instance : SMul ℕ (E₁ →ₚ[R] E₂) where
+  smul n f := .mk (n • f.toLinearMap) fun x y h ↦ by
     induction n with
     | zero => simp
     | succ n ih => simpa [add_nsmul] using add_le_add ih (OrderHomClass.mono f h)
 
 @[simp]
-/--
-lemma `toLinearMap_nsmul` / 引理 `toLinearMap_nsmul`
-
-English:
-lemma toLinearMap_nsmul
-  given: (f : E₁ ->ₚ[R] E₂) (n : Nat)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_nsmul
-  条件: (f : E₁ ->ₚ[R] E₂) (n : 自然数)
-  证明: rfl
-
-@[simp]
+/-
+**PositiveLinearMap.toLinearMap_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearM
+ap`。
+形式化陈述：toLinearMap_nsmul (f : E₁ ->ₚ[R] E₂) (n : Nat) : (n • f).toLinearMap = n •
+ f.toLinearMap
+参数：f : E₁ ->ₚ[R] E₂；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_nsmul (f : E₁ ->ₚ[R] E₂) (n : Nat) :
+lemma toLinearMap_nsmul (f : E₁ →ₚ[R] E₂) (n : ℕ) :
     (n • f).toLinearMap = n • f.toLinearMap :=
   rfl
 
 @[simp]
-/--
-lemma `nsmul_apply` / 引理 `nsmul_apply`
-
-English:
-lemma nsmul_apply
-  given: (f : E₁ ->ₚ[R] E₂) (n : Nat) (x : E₁)
-  proof: rfl
-
-中文:
-引理 nsmul_apply
-  条件: (f : E₁ ->ₚ[R] E₂) (n : 自然数) (x : E₁)
-  证明: rfl
+/-
+**PositiveLinearMap.nsmul_apply** 是 Mathlib 中的一个引理，位于命名空间 `PositiveLinearMap`。
+形式化陈述：nsmul_apply (f : E₁ ->ₚ[R] E₂) (n : Nat) (x : E₁) : (n • f) x = n • (f x)
+参数：f : E₁ ->ₚ[R] E₂；n : Nat；x : E₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nsmul_apply (f : E₁ ->ₚ[R] E₂) (n : Nat) (x : E₁) :
+lemma nsmul_apply (f : E₁ →ₚ[R] E₂) (n : ℕ) (x : E₁) :
     (n • f) x = n • (f x) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommMonoid (E₁ ->ₚ[R] E₂)
-  body: toLinearMap_injective.addCommMonoid _ toLinearMap_zero toLinearMap_add
-    toLinearMap_nsmul
-
-中文:
-实例 :
-  签名: 加法交换幺半群 (E₁ ->ₚ[R] E₂)
-  定义体: toLinearMap_injective.addCommMonoid _ toLinearMap_zero toLinearMap_add
-    toLinearMap_nsmul
-
-Depends on / 依赖: addCommMonoid, toLinearMap_add, toLinearMap_injective, toLinearMap_injective.addCommMonoid, toLinearMap_nsmul, toLinearMap_zero
+/-
+**PositiveLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `PositiveLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddCommMonoid (E₁ ->ₚ[R] E₂) :=
+instance : AddCommMonoid (E₁ →ₚ[R] E₂) :=
   toLinearMap_injective.addCommMonoid _ toLinearMap_zero toLinearMap_add
     toLinearMap_nsmul
 
@@ -673,39 +440,33 @@ variable {R E₁ E₂ : Type*} [Semiring R]
   [AddCommGroup E₂] [PartialOrder E₂] [IsOrderedAddMonoid E₂]
   [Module R E₁] [Module R E₂]
 
-/--
-Definition of `mk₀` / `mk₀` 的定义
+/-- Define a positive map from a linear map that maps nonnegative elements to nonnegative
+elements -/
+/-
+**PositiveLinearMap.mk** 是 Mathlib 中的一个ctor，位于命名空间 `PositiveLinearMap`。
+形式化陈述：{R : Type u_1} →   {E₁ : Type u_2} →     {E₂ : Type u_3} →       [inst : S
+emiring R] →         [inst_1 : AddCommMonoid E₁] →           [inst_2 : PartialOr
+der E₁] →             [inst_3 : AddCommMonoid E₂] →               [inst_4 : Part
+ialOrder E₂] →                 [inst_5 : _root_.Module R E₁] →                  
+ [inst_6 : _root_.Module R E₂] → (toLinearMap : E₁ →ₗ[R] E₂) → Monotone toLinear
+Map.toFun → E₁ →ₚ[R] E₂
+参数：toLinearMap : E₁ →ₗ[R] E₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk₀
-  signature: (f : E₁ ->ₗ[R] E₂) (hf : forall x, 0 <= x -> 0 <= f x)
-  body: { f with
-    monotone' := by
-      intro a b hab
-      rw [← sub_nonneg] at hab ⊢
-      have : 0 <= f (b - a) := hf _ hab
-      simpa using this }
-
-中文:
-定义 mk₀
-  签名: (f : E₁ ->ₗ[R] E₂) (hf : 对任意 x, 0 <= x -> 0 <= f x)
-  定义体: { f with
-    monotone' := by
-      intro a b hab
-      rw [← sub_nonneg] at hab ⊢
-      have : 0 <= f (b - a) := hf _ hab
-      simpa using this }
-
-Depends on / 依赖: monotone, sub_nonneg
+--- 原说明 ---
+Define a positive map from a linear map that maps nonnegative elements to nonneg
+ative
+elements
 -/
-def mk₀ (f : E₁ ->ₗ[R] E₂) (hf : forall x, 0 <= x -> 0 <= f x) : E₁ ->ₚ[R] E₂ :=
+def mk₀ (f : E₁ →ₗ[R] E₂) (hf : ∀ x, 0 ≤ x → 0 ≤ f x) : E₁ →ₚ[R] E₂ :=
   { f with
     monotone' := by
       intro a b hab
       rw [← sub_nonneg] at hab ⊢
-      have : 0 <= f (b - a) := hf _ hab
+      have : 0 ≤ f (b - a) := hf _ hab
       simpa using this }
 
 end addgroup
 
 end PositiveLinearMap
+

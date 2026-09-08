@@ -97,408 +97,253 @@ variable {α : Type*}
 
 section IndepMatroid
 
-/--
-Definition of `IndepMatroid` / `IndepMatroid` 的定义
+/-- A matroid as defined by a ground set and an independence predicate.
+This definition is an implementation detail whose purpose is to organize the multiple
+different versions of the independence axioms;
+usually, terms of type `IndepMatroid` should either be directly piped into `IndepMatroid.matroid`,
+or should be constructed as a private definition
+which is then converted into a matroid via `IndepMatroid.matroid`.
 
-English:
-structure IndepMatroid
-  parameters: (α : Type*)
-  axioms and operations (7):
-    - (E : Set α)
-    - (Indep : Set α -> Prop)
-    - (indep_empty : Indep ∅)
-    - (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    - (indep_aug : forall ⦃I B⦄, Indep I -> ¬ Maximal Indep I -> Maximal Indep B -> exists x in B \ I, Indep (insert x I))
-    - (indep_maximal : forall X, X subseteq E -> ExistsMaximalSubsetProperty Indep X)
-    - (subset_ground : forall I, Indep I -> I subseteq E)
+To define a `Matroid α` from a known independence predicate
+`MyIndep : Set α → Prop` and ground set `E : Set α`, one can either write
+```
+def myMatroid (…) : Matroid α :=
+  IndepMatroid.matroid <| IndepMatroid.ofFoo E MyIndep _ _ … _
+```
+or, slightly more indirectly,
+```
+private def myIndepMatroid (…) : IndepMatroid α := IndepMatroid.ofFoo E MyIndep _ _ … _
 
-中文:
-结构 独立拟阵
-  参数: (α : 类型)
-  公理与运算 (7 个):
-    - (E : 集合 α)
-    - (Indep : 集合 α -> 命题)
-    - (indep_empty : Indep ∅)
-    - (indep_subset : 对任意 ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    - (indep_aug : 对任意 ⦃I B⦄, Indep I -> ¬ 极大 Indep I -> 极大 Indep B -> 存在 x in B \ I, Indep (insert x I))
-    - (indep_maximal : 对任意 X, X subseteq E -> ExistsMaximalSubsetProperty Indep X)
-    - (subset_ground : 对任意 I, Indep I -> I subseteq E)
+def myMatroid (…) : Matroid α := (myIndepMatroid …).matroid
+```
+In both cases, `IndepMatroid.ofFoo` is either `IndepMatroid.mk`,
+or one of the several other available constructors for `IndepMatroid`,
+and the `_` represent the proofs that this constructor requires.
 
-Depends on / 依赖: Quot.lift.decidablePred, decidablePred
+After such a definition is made, the facts that `myMatroid.Indep = myIndep` and `myMatroid.E = E`
+are true by either `rfl` or `simp [myMatroid]`, and can be made directly into @[simp] lemmas.
+-/
+/-
+**IndepMatroid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_2 → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A matroid as defined by a ground set and an independence predicate.
+This definition is an implementation detail whose purpose is to organize the mul
+tiple
+different versions of the independence axioms;
+usually, terms of type `IndepMatroid` should either be directly piped into `Inde
+pMatroid.matroid`,
+or should be constructed as a private definition
+which is then converted into a matroid via `IndepMatroid.matroid`.
+
+To define a `Matroid α` from a known independence predicate
+`MyIndep : Set α → Prop` and ground set `E : Set α`, one can either write
+```
+def myMatroid (…) : Matroid α :=
+  IndepMatroid.matroid <| IndepMatroid.ofFoo E MyIndep _ _ … _
+```
+or, slightly more indirectly,
+```
+private def myIndepMatroid (…) : IndepMatroid α := IndepMatroid.ofFoo E MyIndep 
+_ _ … _
+
+def myMatroid (…) : Matroid α := (myIndepMatroid …).matroid
+```
+In both cases, `IndepMatroid.ofFoo` is either `IndepMatroid.mk`,
+or one of the several other available constructors for `IndepMatroid`,
+and the `_` represent the proofs that this constructor requires.
+
+After such a definition is made, the facts that `myMatroid.Indep = myIndep` and 
+`myMatroid.E = E`
+are true by either `rfl` or `simp [myMatroid]`, and can be made directly into @[
+simp] lemmas.
 -/
 structure IndepMatroid (α : Type*) where
   /-- The ground set -/
   (E : Set α)
   /-- The independence predicate -/
-  (Indep : Set α -> Prop)
+  (Indep : Set α → Prop)
   (indep_empty : Indep ∅)
-  (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-  (indep_aug : forall ⦃I B⦄, Indep I -> ¬ Maximal Indep I ->
-    Maximal Indep B -> exists x in B \ I, Indep (insert x I))
-  (indep_maximal : forall X, X subseteq E -> ExistsMaximalSubsetProperty Indep X)
-  (subset_ground : forall I, Indep I -> I subseteq E)
+  (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+  (indep_aug : ∀ ⦃I B⦄, Indep I → ¬ Maximal Indep I →
+    Maximal Indep B → ∃ x ∈ B \ I, Indep (insert x I))
+  (indep_maximal : ∀ X, X ⊆ E → ExistsMaximalSubsetProperty Indep X)
+  (subset_ground : ∀ I, Indep I → I ⊆ E)
 
 namespace IndepMatroid
 
-/--
-Definition of `matroid` / `matroid` 的定义
+/-- An `M : IndepMatroid α` gives a `Matroid α` whose bases are the maximal `M`-independent sets. -/
+/-
+**IndepMatroid.matroid** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} → IndepMatroid α → Matroid α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IndepMatroid.indep_maximal`：∀ {α : Type u_2} (self : IndepMatroid α), ∀ 
+X ⊆ self.E, Matroid.ExistsMaximalSubsetProperty self.Indep X
 
-English:
-definition matroid
-  signature: (M : IndepMatroid α)
-  body: M.E
-  IsBase := Maximal M.Indep
-  Indep := M.Indep
-  indep_iff' := by
-    refine fun I => ⟨fun h => ?_, fun ⟨B, ⟨h, _⟩, hIB'⟩ => M.indep_subset h hIB'⟩
-    obtain ⟨J, hIJ, hmax⟩ := M.indep_maximal M.E rfl.subset I h (M.subset_ground I h)
-    rw [maximal_and_iff_right_of_imp M.subset_ground] at hmax
-    exact ⟨J, hmax.1, hIJ⟩
-  exists_isBase := by
-obtain ⟨B, -, hB⟩ := M.indep_maximal M.E rfl.subset ∅ M.indep_empty empty_subset _
-    rw [maximal_and_iff_right_of_imp M.subset_ground] at hB
-    exact ⟨B, hB.1⟩
-  isBase_exchange B B' hB hB' e he := by
-    have hnotmax : ¬ Maximal M.Indep (B \ {e}) :=
-      fun h => h.not_prop_of_ssuperset (sdiff_singleton_ssubset.2 he.1) hB.prop
-    obtain ⟨f, hf, hfB⟩ := M.indep_aug (M.indep_subset hB.prop sdiff_subset) hnotmax hB'
-    replace hf := show f in B' \ B by simpa [show f != e by rintro rfl; exact he.2 hf.1] using hf
-    refine ⟨f, hf, by_contra fun hnot => ?_⟩
-    obtain ⟨x, hxB, hind⟩ := M.indep_aug hfB hnot hB
-    obtain ⟨-, rfl⟩ : _ ∧ x = e := by simpa [hxB.1] using hxB
-    refine hB.not_prop_of_ssuperset ?_ hind
-    rw [insert_comm]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem he.1]
-    exact ssubset_insert hf.2
-  maximality := M.indep_maximal
-  subset_ground B hB := M.subset_ground B hB.1
-
-中文:
-定义 matroid
-  签名: (M : 独立拟阵 α)
-  定义体: M.E
-  IsBase := Maximal M.Indep
-  Indep := M.Indep
-  indep_iff' := by
-    refine fun I => ⟨fun h => ?_, fun ⟨B, ⟨h, _⟩, hIB'⟩ => M.indep_subset h hIB'⟩
-    obtain ⟨J, hIJ, hmax⟩ := M.indep_maximal M.E rfl.subset I h (M.subset_ground I h)
-    rw [maximal_and_iff_right_of_imp M.subset_ground] at hmax
-    exact ⟨J, hmax.1, hIJ⟩
-  exists_isBase := by
-obtain ⟨B, -, hB⟩ := M.indep_maximal M.E rfl.subset ∅ M.indep_empty empty_subset _
-    rw [maximal_and_iff_right_of_imp M.subset_ground] at hB
-    exact ⟨B, hB.1⟩
-  isBase_exchange B B' hB hB' e he := by
-    have hnotmax : ¬ Maximal M.Indep (B \ {e}) :=
-      fun h => h.not_prop_of_ssuperset (sdiff_singleton_ssubset.2 he.1) hB.prop
-    obtain ⟨f, hf, hfB⟩ := M.indep_aug (M.indep_subset hB.prop sdiff_subset) hnotmax hB'
-    replace hf := show f in B' \ B by simpa [show f != e by rintro rfl; exact he.2 hf.1] using hf
-    refine ⟨f, hf, by_contra fun hnot => ?_⟩
-    obtain ⟨x, hxB, hind⟩ := M.indep_aug hfB hnot hB
-    obtain ⟨-, rfl⟩ : _ ∧ x = e := by simpa [hxB.1] using hxB
-    refine hB.not_prop_of_ssuperset ?_ hind
-    rw [insert_comm]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem he.1]
-    exact ssubset_insert hf.2
-  maximality := M.indep_maximal
-  subset_ground B hB := M.subset_ground B hB.1
-
-Depends on / 依赖: Quot.lift, decidablePred
+--- 原说明 ---
+An `M : IndepMatroid α` gives a `Matroid α` whose bases are the maximal `M`-inde
+pendent sets.
 -/
 @[simps] protected def matroid (M : IndepMatroid α) : Matroid α where
   E := M.E
   IsBase := Maximal M.Indep
   Indep := M.Indep
   indep_iff' := by
-    refine fun I => ⟨fun h => ?_, fun ⟨B, ⟨h, _⟩, hIB'⟩ => M.indep_subset h hIB'⟩
+    refine fun I ↦ ⟨fun h ↦ ?_, fun ⟨B, ⟨h, _⟩, hIB'⟩ ↦ M.indep_subset h hIB'⟩
     obtain ⟨J, hIJ, hmax⟩ := M.indep_maximal M.E rfl.subset I h (M.subset_ground I h)
     rw [maximal_and_iff_right_of_imp M.subset_ground] at hmax
     exact ⟨J, hmax.1, hIJ⟩
   exists_isBase := by
-obtain ⟨B, -, hB⟩ := M.indep_maximal M.E rfl.subset ∅ M.indep_empty empty_subset _
+    obtain ⟨B, -, hB⟩ := M.indep_maximal M.E rfl.subset ∅ M.indep_empty <| empty_subset _
     rw [maximal_and_iff_right_of_imp M.subset_ground] at hB
     exact ⟨B, hB.1⟩
   isBase_exchange B B' hB hB' e he := by
     have hnotmax : ¬ Maximal M.Indep (B \ {e}) :=
-      fun h => h.not_prop_of_ssuperset (sdiff_singleton_ssubset.2 he.1) hB.prop
+      fun h ↦ h.not_prop_of_ssuperset (sdiff_singleton_ssubset.2 he.1) hB.prop
     obtain ⟨f, hf, hfB⟩ := M.indep_aug (M.indep_subset hB.prop sdiff_subset) hnotmax hB'
-    replace hf := show f in B' \ B by simpa [show f != e by rintro rfl; exact he.2 hf.1] using hf
-    refine ⟨f, hf, by_contra fun hnot => ?_⟩
+    replace hf := show f ∈ B' \ B by simpa [show f ≠ e by rintro rfl; exact he.2 hf.1] using hf
+    refine ⟨f, hf, by_contra fun hnot ↦ ?_⟩
     obtain ⟨x, hxB, hind⟩ := M.indep_aug hfB hnot hB
     obtain ⟨-, rfl⟩ : _ ∧ x = e := by simpa [hxB.1] using hxB
     refine hB.not_prop_of_ssuperset ?_ hind
-    rw [insert_comm]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem he.1]
+    rw [insert_comm, insert_sdiff_singleton, insert_eq_of_mem he.1]
     exact ssubset_insert hf.2
   maximality := M.indep_maximal
   subset_ground B hB := M.subset_ground B hB.1
-
-/--
-theorem `matroid_indep_iff` / 定理 `matroid_indep_iff`
-
-English:
-theorem matroid_indep_iff
-  given: {M : IndepMatroid α} {I : Set α}
-  proof: Iff.rfl
-
-中文:
-定理 matroid_indep_iff
-  条件: {M : 独立拟阵 α} {I : 集合 α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**IndepMatroid.matroid_indep_iff** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：matroid_indep_iff {M : IndepMatroid α} {I : Set α} : M.matroid.Indep I ↔ M
+.Indep I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem matroid_indep_iff {M : IndepMatroid α} {I : Set α} :
     M.matroid.Indep I ↔ M.Indep I := Iff.rfl
 
-/--
-Definition of `ofFinitary` / `ofFinitary` 的定义
+/-- If `Indep` has the 'compactness' property that each set `I` satisfies `Indep I` if and only if
+`Indep J` for every finite subset `J` of `I`,
+then an `IndepMatroid` can be constructed without proving the maximality axiom.
+This needs choice, since it can be used to prove that every vector space has a basis. -/
+/-
+**IndepMatroid.ofFinitary** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (Indep : Set α → Prop) →       Indep 
+∅ →         (∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) →           (∀ ⦃I B : S
+et α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep (insert
+ x I)) →             (∀ (I : Set α), (∀ J ⊆ I, J.Finite → Indep J) → Indep I) → 
+(∀ (I : Set α), Indep I → I ⊆ E) → IndepMatroid α
+参数：E : Set α；Indep : Set α → Prop；∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I；∀ ⦃
+I B : Set α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep 
+(insert x I)；∀ (I : Set α), (∀ J ⊆ I, J.Finite → Indep J) → Indep I；∀ (I : Set α
+), Indep I → I ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFinitary
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: E
-  Indep := Indep
-  indep_empty := indep_empty
-  indep_subset := indep_subset
-  indep_aug := indep_aug
-  indep_maximal := by
-    refine fun X _ I hI hIX => zorn_subset_nonempty {Y | Indep Y ∧ Y subseteq X} ?_ I ⟨hI, hIX⟩
-    refine fun Is hIs hchain _ =>
-      ⟨⋃₀ Is, ⟨?_, sUnion_subset fun Y hY => (hIs hY).2⟩, fun _ => subset_sUnion_of_mem⟩
-    refine indep_compact _ fun J hJ hJfin => ?_
-have hchoose : forall e, e in J -> exists I, I in Is ∧ (e : α) in I := fun _ he => mem_sUnion.1 hJ he
-    choose! f hf using hchoose
-    refine J.eq_empty_or_nonempty.elim (fun hJ => hJ ▸ indep_empty) (fun hne => ?_)
-    obtain ⟨x, hxJ, hxmax⟩ := Finite.exists_maximalFor f _ hJfin hne
-    refine indep_subset (hIs (hf x hxJ).1).1 fun y hyJ => ?_
-    obtain (hle | hle) := hchain.total (hf _ hxJ).1 (hf _ hyJ).1
-· exact hxmax hyJ hle (hf _ hyJ).2
-    · exact hle (hf _ hyJ).2
-  subset_ground := subset_ground
-
-中文:
-定义 ofFinitary
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: E
-  Indep := Indep
-  indep_empty := indep_empty
-  indep_subset := indep_subset
-  indep_aug := indep_aug
-  indep_maximal := by
-    refine fun X _ I hI hIX => zorn_subset_nonempty {Y | Indep Y ∧ Y subseteq X} ?_ I ⟨hI, hIX⟩
-    refine fun Is hIs hchain _ =>
-      ⟨⋃₀ Is, ⟨?_, sUnion_subset fun Y hY => (hIs hY).2⟩, fun _ => subset_sUnion_of_mem⟩
-    refine indep_compact _ fun J hJ hJfin => ?_
-have hchoose : forall e, e in J -> exists I, I in Is ∧ (e : α) in I := fun _ he => mem_sUnion.1 hJ he
-    choose! f hf using hchoose
-    refine J.eq_empty_or_nonempty.elim (fun hJ => hJ ▸ indep_empty) (fun hne => ?_)
-    obtain ⟨x, hxJ, hxmax⟩ := Finite.exists_maximalFor f _ hJfin hne
-    refine indep_subset (hIs (hf x hxJ).1).1 fun y hyJ => ?_
-    obtain (hle | hle) := hchain.total (hf _ hxJ).1 (hf _ hyJ).1
-· exact hxmax hyJ hle (hf _ hyJ).2
-    · exact hle (hf _ hyJ).2
-  subset_ground := subset_ground
+--- 原说明 ---
+If `Indep` has the 'compactness' property that each set `I` satisfies `Indep I` 
+if and only if
+`Indep J` for every finite subset `J` of `I`,
+then an `IndepMatroid` can be constructed without proving the maximality axiom.
+This needs choice, since it can be used to prove that every vector space has a b
+asis.
 -/
-@[simps E] protected def ofFinitary (E : Set α) (Indep : Set α -> Prop)
+@[simps E] protected def ofFinitary (E : Set α) (Indep : Set α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    (indep_aug : forall ⦃I B⦄, Indep I -> ¬ Maximal Indep I -> Maximal Indep B ->
-      exists x in B \ I, Indep (insert x I))
-    (indep_compact : forall I, (forall J, J subseteq I -> J.Finite -> Indep J) -> Indep I)
-    (subset_ground : forall I, Indep I -> I subseteq E) : IndepMatroid α where
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+    (indep_aug : ∀ ⦃I B⦄, Indep I → ¬ Maximal Indep I → Maximal Indep B →
+      ∃ x ∈ B \ I, Indep (insert x I))
+    (indep_compact : ∀ I, (∀ J, J ⊆ I → J.Finite → Indep J) → Indep I)
+    (subset_ground : ∀ I, Indep I → I ⊆ E) : IndepMatroid α where
   E := E
   Indep := Indep
   indep_empty := indep_empty
   indep_subset := indep_subset
   indep_aug := indep_aug
   indep_maximal := by
-    refine fun X _ I hI hIX => zorn_subset_nonempty {Y | Indep Y ∧ Y subseteq X} ?_ I ⟨hI, hIX⟩
-    refine fun Is hIs hchain _ =>
-      ⟨⋃₀ Is, ⟨?_, sUnion_subset fun Y hY => (hIs hY).2⟩, fun _ => subset_sUnion_of_mem⟩
-    refine indep_compact _ fun J hJ hJfin => ?_
-have hchoose : forall e, e in J -> exists I, I in Is ∧ (e : α) in I := fun _ he => mem_sUnion.1 hJ he
+    refine fun X _ I hI hIX ↦ zorn_subset_nonempty {Y | Indep Y ∧ Y ⊆ X} ?_ I ⟨hI, hIX⟩
+    refine fun Is hIs hchain _ ↦
+      ⟨⋃₀ Is, ⟨?_, sUnion_subset fun Y hY ↦ (hIs hY).2⟩, fun _ ↦ subset_sUnion_of_mem⟩
+    refine indep_compact _ fun J hJ hJfin ↦ ?_
+    have hchoose : ∀ e, e ∈ J → ∃ I, I ∈ Is ∧ (e : α) ∈ I := fun _ he ↦ mem_sUnion.1 <| hJ he
     choose! f hf using hchoose
-    refine J.eq_empty_or_nonempty.elim (fun hJ => hJ ▸ indep_empty) (fun hne => ?_)
+    refine J.eq_empty_or_nonempty.elim (fun hJ ↦ hJ ▸ indep_empty) (fun hne ↦ ?_)
     obtain ⟨x, hxJ, hxmax⟩ := Finite.exists_maximalFor f _ hJfin hne
-    refine indep_subset (hIs (hf x hxJ).1).1 fun y hyJ => ?_
+    refine indep_subset (hIs (hf x hxJ).1).1 fun y hyJ ↦ ?_
     obtain (hle | hle) := hchain.total (hf _ hxJ).1 (hf _ hyJ).1
-· exact hxmax hyJ hle (hf _ hyJ).2
+    · exact hxmax hyJ hle <| (hf _ hyJ).2
     · exact hle (hf _ hyJ).2
   subset_ground := subset_ground
-
-/--
-theorem `ofFinitary_indep` / 定理 `ofFinitary_indep`
-
-English:
-theorem ofFinitary_indep
-  statement: (E : Set α) (Indep : Set α -> Prop)
-  proof: rfl
-
-中文:
-定理 ofFinitary_indep
-  结论: (E : 集合 α) (Indep : 集合 α -> 命题)
-  证明: rfl
+/-
+**IndepMatroid.ofFinitary_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (Indep : Set α → Prop) (indep_empty : Indep ∅
+)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I)   (indep_aug : ∀
+ ⦃I B : Set α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Inde
+p (insert x I))   (indep_compact : ∀ (I : Set α), (∀ J ⊆ I, J.Finite → Indep J) 
+→ Indep I)   (subset_ground : ∀ (I : Set α), Indep I → I ⊆ E),   (IndepMatroid.o
+fFinitary E Indep indep_empty indep_subset indep_aug indep_compact subset_ground
+).Indep = Indep
+参数：E : Set α；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J : 
+Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I B : Set α⦄, Indep I → ¬Maxima
+l Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep (insert x I)；indep_compact : ∀ 
+(I : Set α), (∀ J ⊆ I, J.Finite → Indep J) → Indep I；subset_ground : ∀ (I : Set 
+α), Indep I → I ⊆ E；IndepMatroid.ofFinitary E Indep indep_empty indep_subset ind
+ep_aug indep_compact subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem ofFinitary_indep (E : Set α) (Indep : Set α -> Prop)
+@[simp] theorem ofFinitary_indep (E : Set α) (Indep : Set α → Prop)
     indep_empty indep_subset indep_aug indep_compact subset_ground :
     (IndepMatroid.ofFinitary
       E Indep indep_empty indep_subset indep_aug indep_compact subset_ground).Indep = Indep := rfl
-
-/--
-Instance `ofFinitary_finitary` / 实例 `ofFinitary_finitary`
-
-English:
-instance ofFinitary_finitary
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: ⟨by simpa⟩
-
-中文:
-实例 ofFinitary_finitary
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: ⟨by simpa⟩
-
-Depends on / 依赖: Setoid, Setoid.refl
+/-
+**IndepMatroid.ofFinitary_finitary** 是 Mathlib 中的一个实例，位于命名空间 `IndepMatroid`。
+形式化陈述：ofFinitary_finitary (E : Set α) (Indep : Set α -> Prop) indep_empty indep_
+subset indep_aug indep_compact subset_ground : Finitary (IndepMatroid.ofFinitary
+ E Indep indep_empty indep_subset indep_aug indep_compact subset_ground).matroid
+参数：E : Set α；Indep : Set α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IndepMatroid.matroid_Indep`：∀ {α : Type u_1} (M : IndepMatroid α) (a : S
+et α), M.matroid.Indep a = M.Indep a
 -/
-instance ofFinitary_finitary (E : Set α) (Indep : Set α -> Prop)
+instance ofFinitary_finitary (E : Set α) (Indep : Set α → Prop)
     indep_empty indep_subset indep_aug indep_compact subset_ground : Finitary
     (IndepMatroid.ofFinitary
       E Indep indep_empty indep_subset indep_aug indep_compact subset_ground).matroid :=
   ⟨by simpa⟩
 
-/--
-Definition of `ofFinitaryCardAugment` / `ofFinitaryCardAugment` 的定义
+/-- An independence predicate satisfying the finite matroid axioms determines a matroid,
+provided independence is determined by its behaviour on finite sets. -/
+/-
+**IndepMatroid.ofFinitaryCardAugment** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (Indep : Set α → Prop) →       Indep 
+∅ →         (∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) →           (∀ ⦃I J : S
+et α⦄,               Indep I → I.Finite → Indep J → J.Finite → I.ncard < J.ncard
+ → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)) →             (∀ (I : Set α), (∀ J ⊆ I, 
+J.Finite → Indep J) → Indep I) → (∀ (I : Set α), Indep I → I ⊆ E) → IndepMatroid
+ α
+参数：E : Set α；Indep : Set α → Prop；∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I；∀ ⦃
+I J : Set α⦄,               Indep I → I.Finite → Indep J → J.Finite → I.ncard < 
+J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；∀ (I : Set α), (∀ J ⊆ I, J.Finite 
+→ Indep J) → Indep I；∀ (I : Set α), Indep I → I ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFinitaryCardAugment
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: IndepMatroid.ofFinitary
-    (E := E)
-    (Indep := Indep)
-    (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_compact := indep_compact)
-    (indep_aug := by
-      have htofin : forall I e, Indep I -> ¬ Indep (insert e I) ->
-        exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ ¬ Indep (insert e I₀) := by
-        by_contra! ⟨I, e, -, hIe, h⟩
-refine hIe indep_compact _ fun J hJss hJfin => ?_
-        exact indep_subset (h (J \ {e}) (by rwa [sdiff_subset_iff]) hJfin.sdiff) (by simp)
-      intro I B hI hImax hBmax
-      obtain ⟨e, heI, hins⟩ := exists_insert_of_not_maximal indep_subset hI hImax
-      by_cases heB : e in B
-      · exact ⟨e, ⟨heB, heI⟩, hins⟩
-      by_contra! hcon
-      have heBdep := hBmax.not_prop_of_ssuperset (ssubset_insert heB)
-      -- There is a finite subset `B₀` of `B` so that `B₀ + e` is dependent
-      obtain ⟨B₀, hB₀B, hB₀fin, hB₀e⟩ := htofin B e hBmax.1 heBdep
-      have hB₀ := indep_subset hBmax.1 hB₀B
-      -- `I` has a finite subset `I₀` that doesn't extend into `B₀`
-      have hexI₀ : exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ forall x, x in B₀ \ I₀ -> ¬Indep (insert x I₀) := by
-        have hch : forall (b : ↑(B₀ \ I)), exists Ib, Ib subseteq I ∧ Ib.Finite ∧ ¬Indep (insert (b : α) Ib) := by
-          rintro ⟨b, hb⟩; exact htofin I b hI (hcon b ⟨hB₀B hb.1, hb.2⟩)
-        choose! f hf using hch
-        have : Finite ↑(B₀ \ I) := hB₀fin.sdiff.to_subtype
-        refine ⟨iUnion f union (B₀ inter I),
-          union_subset (iUnion_subset (fun i => (hf i).1)) inter_subset_right,
-          (finite_iUnion fun i => (hf i).2.1).union (hB₀fin.subset inter_subset_left),
-          fun x ⟨hxB₀, hxn⟩ hi => ?_⟩
-have hxI : x ∉ I := fun hxI => hxn Or.inr ⟨hxB₀, hxI⟩
-        refine (hf ⟨x, ⟨hxB₀, hxI⟩⟩).2.2 (indep_subset hi <| insert_subset_insert ?_)
-        apply subset_union_of_subset_left
-        apply subset_iUnion
-      obtain ⟨I₀, hI₀I, hI₀fin, hI₀⟩ := hexI₀
-      set E₀ := insert e (I₀ union B₀)
-      have hE₀fin : E₀.Finite := (hI₀fin.union hB₀fin).insert e
-      -- Extend `B₀` to a maximal independent subset of `I₀ ∪ B₀ + e`
-      obtain ⟨J, ⟨hB₀J, hJ, hJss⟩, hJmax⟩ := Finite.exists_maximalFor (f := id)
-        (s := {J | B₀ subseteq J ∧ Indep J ∧ J subseteq E₀})
-        (hE₀fin.finite_subsets.subset (by simp))
-        ⟨B₀, Subset.rfl, hB₀, subset_union_right.trans (subset_insert _ _)⟩
-      have heI₀ : e ∉ I₀ := notMem_subset hI₀I heI
-      have heI₀i : Indep (insert e I₀) := indep_subset hins (insert_subset_insert hI₀I)
-      have heJ : e ∉ J := fun heJ => hB₀e (indep_subset hJ <| insert_subset heJ hB₀J)
-      have hJfin := hE₀fin.subset hJss
-      -- We have `|I₀ + e| ≤ |J|`, since otherwise we could extend the maximal set `J`
-      have hcard : (insert e I₀).ncard <= J.ncard := by
-        refine not_lt.1 fun hlt => ?_
-        obtain ⟨f, hfI, hfJ, hfi⟩ := indep_aug hJ hJfin heI₀i (hI₀fin.insert e) hlt
-        have hfE₀ : f in E₀ := mem_of_mem_of_subset hfI (insert_subset_insert subset_union_left)
-exact hfJ insert_eq_self.1 le_imp_eq_iff_le_imp_ge'.2 (hJmax
-⟨hB₀J.trans subset_insert _ _, hfi, insert_subset hfE₀ hJss⟩) (subset_insert _ _)
-      -- But this means `|I₀| < |J|`, and extending `I₀` into `J` gives a contradiction
-      rw [ncard_insert_of_notMem heI₀ hI₀fin]; rw [← Nat.lt_iff_add_one_le] at hcard
-      obtain ⟨f, hfJ, hfI₀, hfi⟩ := indep_aug (indep_subset hI hI₀I) hI₀fin hJ hJfin hcard
-      exact hI₀ f ⟨Or.elim (hJss hfJ) (fun hfe => (heJ <| hfe ▸ hfJ).elim) (by aesop), hfI₀⟩ hfi)
-  (subset_ground := subset_ground)
-
-中文:
-定义 ofFinitaryCardAugment
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: IndepMatroid.ofFinitary
-    (E := E)
-    (Indep := Indep)
-    (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_compact := indep_compact)
-    (indep_aug := by
-      have htofin : forall I e, Indep I -> ¬ Indep (insert e I) ->
-        exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ ¬ Indep (insert e I₀) := by
-        by_contra! ⟨I, e, -, hIe, h⟩
-refine hIe indep_compact _ fun J hJss hJfin => ?_
-        exact indep_subset (h (J \ {e}) (by rwa [sdiff_subset_iff]) hJfin.sdiff) (by simp)
-      intro I B hI hImax hBmax
-      obtain ⟨e, heI, hins⟩ := exists_insert_of_not_maximal indep_subset hI hImax
-      by_cases heB : e in B
-      · exact ⟨e, ⟨heB, heI⟩, hins⟩
-      by_contra! hcon
-      have heBdep := hBmax.not_prop_of_ssuperset (ssubset_insert heB)
-      -- There is a finite subset `B₀` of `B` so that `B₀ + e` is dependent
-      obtain ⟨B₀, hB₀B, hB₀fin, hB₀e⟩ := htofin B e hBmax.1 heBdep
-      have hB₀ := indep_subset hBmax.1 hB₀B
-      -- `I` has a finite subset `I₀` that doesn't extend into `B₀`
-      have hexI₀ : exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ forall x, x in B₀ \ I₀ -> ¬Indep (insert x I₀) := by
-        have hch : forall (b : ↑(B₀ \ I)), exists Ib, Ib subseteq I ∧ Ib.Finite ∧ ¬Indep (insert (b : α) Ib) := by
-          rintro ⟨b, hb⟩; exact htofin I b hI (hcon b ⟨hB₀B hb.1, hb.2⟩)
-        choose! f hf using hch
-        have : Finite ↑(B₀ \ I) := hB₀fin.sdiff.to_subtype
-        refine ⟨iUnion f union (B₀ inter I),
-          union_subset (iUnion_subset (fun i => (hf i).1)) inter_subset_right,
-          (finite_iUnion fun i => (hf i).2.1).union (hB₀fin.subset inter_subset_left),
-          fun x ⟨hxB₀, hxn⟩ hi => ?_⟩
-have hxI : x ∉ I := fun hxI => hxn Or.inr ⟨hxB₀, hxI⟩
-        refine (hf ⟨x, ⟨hxB₀, hxI⟩⟩).2.2 (indep_subset hi <| insert_subset_insert ?_)
-        apply subset_union_of_subset_left
-        apply subset_iUnion
-      obtain ⟨I₀, hI₀I, hI₀fin, hI₀⟩ := hexI₀
-      set E₀ := insert e (I₀ union B₀)
-      have hE₀fin : E₀.Finite := (hI₀fin.union hB₀fin).insert e
-      -- Extend `B₀` to a maximal independent subset of `I₀ ∪ B₀ + e`
-      obtain ⟨J, ⟨hB₀J, hJ, hJss⟩, hJmax⟩ := Finite.exists_maximalFor (f := id)
-        (s := {J | B₀ subseteq J ∧ Indep J ∧ J subseteq E₀})
-        (hE₀fin.finite_subsets.subset (by simp))
-        ⟨B₀, Subset.rfl, hB₀, subset_union_right.trans (subset_insert _ _)⟩
-      have heI₀ : e ∉ I₀ := notMem_subset hI₀I heI
-      have heI₀i : Indep (insert e I₀) := indep_subset hins (insert_subset_insert hI₀I)
-      have heJ : e ∉ J := fun heJ => hB₀e (indep_subset hJ <| insert_subset heJ hB₀J)
-      have hJfin := hE₀fin.subset hJss
-      -- We have `|I₀ + e| ≤ |J|`, since otherwise we could extend the maximal set `J`
-      have hcard : (insert e I₀).ncard <= J.ncard := by
-        refine not_lt.1 fun hlt => ?_
-        obtain ⟨f, hfI, hfJ, hfi⟩ := indep_aug hJ hJfin heI₀i (hI₀fin.insert e) hlt
-        have hfE₀ : f in E₀ := mem_of_mem_of_subset hfI (insert_subset_insert subset_union_left)
-exact hfJ insert_eq_self.1 le_imp_eq_iff_le_imp_ge'.2 (hJmax
-⟨hB₀J.trans subset_insert _ _, hfi, insert_subset hfE₀ hJss⟩) (subset_insert _ _)
-      -- But this means `|I₀| < |J|`, and extending `I₀` into `J` gives a contradiction
-      rw [ncard_insert_of_notMem heI₀ hI₀fin]; rw [← Nat.lt_iff_add_one_le] at hcard
-      obtain ⟨f, hfJ, hfI₀, hfi⟩ := indep_aug (indep_subset hI hI₀I) hI₀fin hJ hJfin hcard
-      exact hI₀ f ⟨Or.elim (hJss hfJ) (fun hfe => (heJ <| hfe ▸ hfJ).elim) (by aesop), hfI₀⟩ hfi)
-  (subset_ground := subset_ground)
+--- 原说明 ---
+An independence predicate satisfying the finite matroid axioms determines a matr
+oid,
+provided independence is determined by its behaviour on finite sets.
 -/
-@[simps! E] protected def ofFinitaryCardAugment (E : Set α) (Indep : Set α -> Prop)
+@[simps! E] protected def ofFinitaryCardAugment (E : Set α) (Indep : Set α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    (indep_aug : forall ⦃I J⦄, Indep I -> I.Finite -> Indep J -> J.Finite -> I.ncard < J.ncard ->
-      exists e in J, e ∉ I ∧ Indep (insert e I))
-    (indep_compact : forall I, (forall J, J subseteq I -> J.Finite -> Indep J) -> Indep I)
-    (subset_ground : forall I, Indep I -> I subseteq E) : IndepMatroid α :=
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+    (indep_aug : ∀ ⦃I J⦄, Indep I → I.Finite → Indep J → J.Finite → I.ncard < J.ncard →
+      ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))
+    (indep_compact : ∀ I, (∀ J, J ⊆ I → J.Finite → Indep J) → Indep I)
+    (subset_ground : ∀ I, Indep I → I ⊆ E) : IndepMatroid α :=
   IndepMatroid.ofFinitary
     (E := E)
     (Indep := Indep)
@@ -506,14 +351,14 @@ exact hfJ insert_eq_self.1 le_imp_eq_iff_le_imp_ge'.2 (hJmax
     (indep_subset := indep_subset)
     (indep_compact := indep_compact)
     (indep_aug := by
-      have htofin : forall I e, Indep I -> ¬ Indep (insert e I) ->
-        exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ ¬ Indep (insert e I₀) := by
+      have htofin : ∀ I e, Indep I → ¬ Indep (insert e I) →
+        ∃ I₀, I₀ ⊆ I ∧ I₀.Finite ∧ ¬ Indep (insert e I₀) := by
         by_contra! ⟨I, e, -, hIe, h⟩
-refine hIe indep_compact _ fun J hJss hJfin => ?_
+        refine hIe <| indep_compact _ fun J hJss hJfin ↦ ?_
         exact indep_subset (h (J \ {e}) (by rwa [sdiff_subset_iff]) hJfin.sdiff) (by simp)
       intro I B hI hImax hBmax
       obtain ⟨e, heI, hins⟩ := exists_insert_of_not_maximal indep_subset hI hImax
-      by_cases heB : e in B
+      by_cases heB : e ∈ B
       · exact ⟨e, ⟨heB, heI⟩, hins⟩
       by_contra! hcon
       have heBdep := hBmax.not_prop_of_ssuperset (ssubset_insert heB)
@@ -521,134 +366,106 @@ refine hIe indep_compact _ fun J hJss hJfin => ?_
       obtain ⟨B₀, hB₀B, hB₀fin, hB₀e⟩ := htofin B e hBmax.1 heBdep
       have hB₀ := indep_subset hBmax.1 hB₀B
       -- `I` has a finite subset `I₀` that doesn't extend into `B₀`
-      have hexI₀ : exists I₀, I₀ subseteq I ∧ I₀.Finite ∧ forall x, x in B₀ \ I₀ -> ¬Indep (insert x I₀) := by
-        have hch : forall (b : ↑(B₀ \ I)), exists Ib, Ib subseteq I ∧ Ib.Finite ∧ ¬Indep (insert (b : α) Ib) := by
+      have hexI₀ : ∃ I₀, I₀ ⊆ I ∧ I₀.Finite ∧ ∀ x, x ∈ B₀ \ I₀ → ¬Indep (insert x I₀) := by
+        have hch : ∀ (b : ↑(B₀ \ I)), ∃ Ib, Ib ⊆ I ∧ Ib.Finite ∧ ¬Indep (insert (b : α) Ib) := by
           rintro ⟨b, hb⟩; exact htofin I b hI (hcon b ⟨hB₀B hb.1, hb.2⟩)
         choose! f hf using hch
         have : Finite ↑(B₀ \ I) := hB₀fin.sdiff.to_subtype
-        refine ⟨iUnion f union (B₀ inter I),
-          union_subset (iUnion_subset (fun i => (hf i).1)) inter_subset_right,
-          (finite_iUnion fun i => (hf i).2.1).union (hB₀fin.subset inter_subset_left),
-          fun x ⟨hxB₀, hxn⟩ hi => ?_⟩
-have hxI : x ∉ I := fun hxI => hxn Or.inr ⟨hxB₀, hxI⟩
+        refine ⟨iUnion f ∪ (B₀ ∩ I),
+          union_subset (iUnion_subset (fun i ↦ (hf i).1)) inter_subset_right,
+          (finite_iUnion fun i ↦ (hf i).2.1).union (hB₀fin.subset inter_subset_left),
+          fun x ⟨hxB₀, hxn⟩ hi ↦ ?_⟩
+        have hxI : x ∉ I := fun hxI ↦ hxn <| Or.inr ⟨hxB₀, hxI⟩
         refine (hf ⟨x, ⟨hxB₀, hxI⟩⟩).2.2 (indep_subset hi <| insert_subset_insert ?_)
         apply subset_union_of_subset_left
         apply subset_iUnion
       obtain ⟨I₀, hI₀I, hI₀fin, hI₀⟩ := hexI₀
-      set E₀ := insert e (I₀ union B₀)
+      set E₀ := insert e (I₀ ∪ B₀)
       have hE₀fin : E₀.Finite := (hI₀fin.union hB₀fin).insert e
       -- Extend `B₀` to a maximal independent subset of `I₀ ∪ B₀ + e`
       obtain ⟨J, ⟨hB₀J, hJ, hJss⟩, hJmax⟩ := Finite.exists_maximalFor (f := id)
-        (s := {J | B₀ subseteq J ∧ Indep J ∧ J subseteq E₀})
+        (s := {J | B₀ ⊆ J ∧ Indep J ∧ J ⊆ E₀})
         (hE₀fin.finite_subsets.subset (by simp))
         ⟨B₀, Subset.rfl, hB₀, subset_union_right.trans (subset_insert _ _)⟩
       have heI₀ : e ∉ I₀ := notMem_subset hI₀I heI
       have heI₀i : Indep (insert e I₀) := indep_subset hins (insert_subset_insert hI₀I)
-      have heJ : e ∉ J := fun heJ => hB₀e (indep_subset hJ <| insert_subset heJ hB₀J)
+      have heJ : e ∉ J := fun heJ ↦ hB₀e (indep_subset hJ <| insert_subset heJ hB₀J)
       have hJfin := hE₀fin.subset hJss
       -- We have `|I₀ + e| ≤ |J|`, since otherwise we could extend the maximal set `J`
-      have hcard : (insert e I₀).ncard <= J.ncard := by
-        refine not_lt.1 fun hlt => ?_
+      have hcard : (insert e I₀).ncard ≤ J.ncard := by
+        refine not_lt.1 fun hlt ↦ ?_
         obtain ⟨f, hfI, hfJ, hfi⟩ := indep_aug hJ hJfin heI₀i (hI₀fin.insert e) hlt
-        have hfE₀ : f in E₀ := mem_of_mem_of_subset hfI (insert_subset_insert subset_union_left)
-exact hfJ insert_eq_self.1 le_imp_eq_iff_le_imp_ge'.2 (hJmax
-⟨hB₀J.trans subset_insert _ _, hfi, insert_subset hfE₀ hJss⟩) (subset_insert _ _)
+        have hfE₀ : f ∈ E₀ := mem_of_mem_of_subset hfI (insert_subset_insert subset_union_left)
+        exact hfJ <| insert_eq_self.1 <| le_imp_eq_iff_le_imp_ge'.2 (hJmax
+          ⟨hB₀J.trans <| subset_insert _ _, hfi, insert_subset hfE₀ hJss⟩) (subset_insert _ _)
       -- But this means `|I₀| < |J|`, and extending `I₀` into `J` gives a contradiction
-      rw [ncard_insert_of_notMem heI₀ hI₀fin]; rw [← Nat.lt_iff_add_one_le] at hcard
+      rw [ncard_insert_of_notMem heI₀ hI₀fin, ← Nat.lt_iff_add_one_le] at hcard
       obtain ⟨f, hfJ, hfI₀, hfi⟩ := indep_aug (indep_subset hI hI₀I) hI₀fin hJ hJfin hcard
-      exact hI₀ f ⟨Or.elim (hJss hfJ) (fun hfe => (heJ <| hfe ▸ hfJ).elim) (by aesop), hfI₀⟩ hfi)
+      exact hI₀ f ⟨Or.elim (hJss hfJ) (fun hfe ↦ (heJ <| hfe ▸ hfJ).elim) (by aesop), hfI₀⟩ hfi)
   (subset_ground := subset_ground)
-
-/--
-theorem `ofFinitaryCardAugment_indep` / 定理 `ofFinitaryCardAugment_indep`
-
-English:
-theorem ofFinitaryCardAugment_indep
-  statement: (E : Set α) (Indep : Set α -> Prop)
-  proof: rfl
-
-中文:
-定理 ofFinitaryCardAugment_indep
-  结论: (E : 集合 α) (Indep : 集合 α -> 命题)
-  证明: rfl
+/-
+**IndepMatroid.ofFinitaryCardAugment_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatro
+id`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (Indep : Set α → Prop) (indep_empty : Indep ∅
+)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I)   (indep_aug :  
+   ∀ ⦃I J : Set α⦄, Indep I → I.Finite → Indep J → J.Finite → I.ncard < J.ncard 
+→ ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))   (indep_compact : ∀ (I : Set α), (∀ J ⊆ 
+I, J.Finite → Indep J) → Indep I)   (subset_ground : ∀ (I : Set α), Indep I → I 
+⊆ E),   (IndepMatroid.ofFinitaryCardAugment E Indep indep_empty indep_subset ind
+ep_aug indep_compact subset_ground).Indep =     Indep
+参数：E : Set α；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J : 
+Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug :     ∀ ⦃I J : Set α⦄, Indep I → I.F
+inite → Indep J → J.Finite → I.ncard < J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert 
+e I)；indep_compact : ∀ (I : Set α), (∀ J ⊆ I, J.Finite → Indep J) → Indep I；subs
+et_ground : ∀ (I : Set α), Indep I → I ⊆ E；IndepMatroid.ofFinitaryCardAugment E 
+Indep indep_empty indep_subset indep_aug indep_compact subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem ofFinitaryCardAugment_indep (E : Set α) (Indep : Set α -> Prop)
+@[simp] theorem ofFinitaryCardAugment_indep (E : Set α) (Indep : Set α → Prop)
     indep_empty indep_subset indep_aug indep_compact subset_ground :
     (IndepMatroid.ofFinitaryCardAugment
       E Indep indep_empty indep_subset indep_aug indep_compact subset_ground).Indep = Indep := rfl
-
-/--
-Instance `ofFinitaryCardAugment_finitary` / 实例 `ofFinitaryCardAugment_finitary`
-
-English:
-instance ofFinitaryCardAugment_finitary
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: ⟨by simpa⟩
-
-中文:
-实例 ofFinitaryCardAugment_finitary
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: ⟨by simpa⟩
-
-Depends on / 依赖: Quot.lift.decidablePred, decidablePred
+/-
+**IndepMatroid.ofFinitaryCardAugment_finitary** 是 Mathlib 中的一个实例，位于命名空间 `IndepMa
+troid`。
+形式化陈述：ofFinitaryCardAugment_finitary (E : Set α) (Indep : Set α -> Prop) indep_e
+mpty indep_subset indep_aug indep_compact subset_ground : Finitary (IndepMatroid
+.ofFinitaryCardAugment E Indep indep_empty indep_subset indep_aug indep_compact 
+subset_ground).matroid
+参数：E : Set α；Indep : Set α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IndepMatroid.matroid_Indep`：∀ {α : Type u_1} (M : IndepMatroid α) (a : S
+et α), M.matroid.Indep a = M.Indep a
 -/
-instance ofFinitaryCardAugment_finitary (E : Set α) (Indep : Set α -> Prop)
+instance ofFinitaryCardAugment_finitary (E : Set α) (Indep : Set α → Prop)
     indep_empty indep_subset indep_aug indep_compact subset_ground : Finitary
     (IndepMatroid.ofFinitaryCardAugment
       E Indep indep_empty indep_subset indep_aug indep_compact subset_ground).matroid :=
   ⟨by simpa⟩
 
-/--
-theorem `_root_.Matroid.existsMaximalSubsetProperty_of_bdd` / 定理 `_root_.Matroid.existsMaximalSubsetProperty_of_bdd`
+/-- If there is an absolute upper bound on the size of a set satisfying `P`, then the
+  maximal subset property always holds. -/
+/-
+**IndepMatroid._root_.Matroid.existsMaximalSubsetProperty_of_bdd** 是 Mathlib 中的一
+个定理，位于命名空间 `IndepMatroid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Matroid.existsMaximalSubsetProperty_of_bdd
-  statement: {P : Set α -> Prop}
-  proof: by
-  obtain ⟨n, hP⟩ := hP
-  rintro I hI hIX
-  have hfin : Set.Finite (ncard '' {Y | P Y ∧ I subseteq Y ∧ Y subseteq X}) := by
-    rw [finite_iff_bddAbove]; rw [bddAbove_def]
-    simp_rw [ENat.le_natCast_iff] at hP
-    use n
-    rintro x ⟨Y, ⟨hY, -, -⟩, rfl⟩
-    obtain ⟨n₀, heq, hle⟩ := hP Y hY
-    rwa [ncard_def, heq, ENat.toNat_natCast]
-  obtain ⟨Y, ⟨hY, hIY, hYX⟩, hY'⟩ :=
-    Finite.exists_maximalFor' ncard _ hfin ⟨I, hI, rfl.subset, hIX⟩
-  refine ⟨Y, hIY, ⟨hY, hYX⟩, fun K ⟨hPK, hKX⟩ hYK => ?_⟩
-  have hKfin : K.Finite := finite_of_encard_le_coe (hP K hPK)
-  refine (eq_of_subset_of_ncard_le hYK ?_ hKfin).symm.subset
-  exact hY' ⟨hPK, hIY.trans hYK, hKX⟩ (ncard_le_ncard hYK hKfin)
-
-中文:
-定理 _root_.拟阵.存在MaximalSubsetProperty_of_bdd
-  结论: {P : 集合 α -> 命题}
-  证明: by
-  obtain ⟨n, hP⟩ := hP
-  rintro I hI hIX
-  have hfin : Set.Finite (ncard '' {Y | P Y ∧ I subseteq Y ∧ Y subseteq X}) := by
-    rw [finite_iff_bddAbove]; rw [bddAbove_def]
-    simp_rw [ENat.le_natCast_iff] at hP
-    use n
-    rintro x ⟨Y, ⟨hY, -, -⟩, rfl⟩
-    obtain ⟨n₀, heq, hle⟩ := hP Y hY
-    rwa [ncard_def, heq, ENat.toNat_natCast]
-  obtain ⟨Y, ⟨hY, hIY, hYX⟩, hY'⟩ :=
-    Finite.exists_maximalFor' ncard _ hfin ⟨I, hI, rfl.subset, hIX⟩
-  refine ⟨Y, hIY, ⟨hY, hYX⟩, fun K ⟨hPK, hKX⟩ hYK => ?_⟩
-  have hKfin : K.Finite := finite_of_encard_le_coe (hP K hPK)
-  refine (eq_of_subset_of_ncard_le hYK ?_ hKfin).symm.subset
-  exact hY' ⟨hPK, hIY.trans hYK, hKX⟩ (ncard_le_ncard hYK hKfin)
-
-Depends on / 依赖: ENat.le_natCast_iff, ENat.toNat_natCast, Finite, Finite.exists_maximalFor, K.Finite, Quotient, Quotient.recOnSubsingleton, Set.Finite, bddAbove_def, exists_maximalFor, finite_iff_bddAbove, finite_of_e, le_natCast_iff, ncard_def, rfl.subset, simp_rw, subset, subseteq, toNat_natCast
+--- 原说明 ---
+If there is an absolute upper bound on the size of a set satisfying `P`, then th
+e
+  maximal subset property always holds.
 -/
-theorem _root_.Matroid.existsMaximalSubsetProperty_of_bdd {P : Set α -> Prop}
-    (hP : exists (n : Nat), forall Y, P Y -> Y.encard <= n) (X : Set α) : ExistsMaximalSubsetProperty P X := by
+theorem _root_.Matroid.existsMaximalSubsetProperty_of_bdd {P : Set α → Prop}
+    (hP : ∃ (n : ℕ), ∀ Y, P Y → Y.encard ≤ n) (X : Set α) : ExistsMaximalSubsetProperty P X := by
   obtain ⟨n, hP⟩ := hP
   rintro I hI hIX
-  have hfin : Set.Finite (ncard '' {Y | P Y ∧ I subseteq Y ∧ Y subseteq X}) := by
-    rw [finite_iff_bddAbove]; rw [bddAbove_def]
+  have hfin : Set.Finite (ncard '' {Y | P Y ∧ I ⊆ Y ∧ Y ⊆ X}) := by
+    rw [finite_iff_bddAbove, bddAbove_def]
     simp_rw [ENat.le_natCast_iff] at hP
     use n
     rintro x ⟨Y, ⟨hY, -, -⟩, rfl⟩
@@ -656,45 +473,41 @@ theorem _root_.Matroid.existsMaximalSubsetProperty_of_bdd {P : Set α -> Prop}
     rwa [ncard_def, heq, ENat.toNat_natCast]
   obtain ⟨Y, ⟨hY, hIY, hYX⟩, hY'⟩ :=
     Finite.exists_maximalFor' ncard _ hfin ⟨I, hI, rfl.subset, hIX⟩
-  refine ⟨Y, hIY, ⟨hY, hYX⟩, fun K ⟨hPK, hKX⟩ hYK => ?_⟩
+  refine ⟨Y, hIY, ⟨hY, hYX⟩, fun K ⟨hPK, hKX⟩ hYK ↦ ?_⟩
   have hKfin : K.Finite := finite_of_encard_le_coe (hP K hPK)
   refine (eq_of_subset_of_ncard_le hYK ?_ hKfin).symm.subset
   exact hY' ⟨hPK, hIY.trans hYK, hKX⟩ (ncard_le_ncard hYK hKfin)
 
-/--
-Definition of `ofBdd` / `ofBdd` 的定义
+/-- If there is an absolute upper bound on the size of an independent set, then the maximality axiom
+  isn't needed to define a matroid by independent sets. -/
+/-
+**IndepMatroid.ofBdd** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (Indep : Set α → Prop) →       Indep 
+∅ →         (∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) →           (∀ ⦃I B : S
+et α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep (insert
+ x I)) →             (∀ (I : Set α), Indep I → I ⊆ E) → (∃ n, ∀ (I : Set α), Ind
+ep I → I.encard ≤ ↑n) → IndepMatroid α
+参数：E : Set α；Indep : Set α → Prop；∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I；∀ ⦃
+I B : Set α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep 
+(insert x I)；∀ (I : Set α), Indep I → I ⊆ E；∃ n, ∀ (I : Set α), Indep I → I.enca
+rd ≤ ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.existsMaximalSubsetProperty_of_bdd`：∀ {α : Type u_1} {P : Set α 
+→ Prop},   (∃ n, ∀ (Y : Set α), P Y → Y.encard ≤ ↑n) → ∀ (X : Set α), Matroid.Ex
+istsMaximalSubsetProperty P X
 
-English:
-definition ofBdd
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: E
-  Indep := Indep
-  indep_empty := indep_empty
-  indep_subset := indep_subset
-  indep_aug := indep_aug
-  indep_maximal X _ := Matroid.existsMaximalSubsetProperty_of_bdd indep_bdd X
-  subset_ground := subset_ground
-
-中文:
-定义 ofBdd
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: E
-  Indep := Indep
-  indep_empty := indep_empty
-  indep_subset := indep_subset
-  indep_aug := indep_aug
-  indep_maximal X _ := Matroid.existsMaximalSubsetProperty_of_bdd indep_bdd X
-  subset_ground := subset_ground
-
-Depends on / 依赖: Quotient, Quotient.lift.decidablePred, decidablePred
+--- 原说明 ---
+If there is an absolute upper bound on the size of an independent set, then the 
+maximality axiom
+  isn't needed to define a matroid by independent sets.
 -/
-@[simps E] protected def ofBdd (E : Set α) (Indep : Set α -> Prop)
+@[simps E] protected def ofBdd (E : Set α) (Indep : Set α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    (indep_aug : forall ⦃I B⦄, Indep I -> ¬ Maximal Indep I -> Maximal Indep B ->
-      exists x in B \ I, Indep (insert x I))
-    (subset_ground : forall I, Indep I -> I subseteq E)
-    (indep_bdd : exists (n : Nat), forall I, Indep I -> I.encard <= n) : IndepMatroid α where
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+    (indep_aug : ∀ ⦃I B⦄, Indep I → ¬ Maximal Indep I → Maximal Indep B →
+      ∃ x ∈ B \ I, Indep (insert x I))
+    (subset_ground : ∀ I, Indep I → I ⊆ E)
+    (indep_bdd : ∃ (n : ℕ), ∀ I, Indep I → I.encard ≤ n) : IndepMatroid α where
   E := E
   Indep := Indep
   indep_empty := indep_empty
@@ -702,89 +515,72 @@ Depends on / 依赖: Quotient, Quotient.lift.decidablePred, decidablePred
   indep_aug := indep_aug
   indep_maximal X _ := Matroid.existsMaximalSubsetProperty_of_bdd indep_bdd X
   subset_ground := subset_ground
-
-/--
-theorem `ofBdd_indep` / 定理 `ofBdd_indep`
-
-English:
-theorem ofBdd_indep
-  statement: (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: rfl
-
-中文:
-定理 ofBdd_indep
-  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: rfl
-
-Depends on / 依赖: Quotient, Quotient.lift, decidablePred
+/-
+**IndepMatroid.ofBdd_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (Indep : Set α → Prop) (indep_empty : Indep ∅
+)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I)   (indep_aug : ∀
+ ⦃I B : Set α⦄, Indep I → ¬Maximal Indep I → Maximal Indep B → ∃ x ∈ B \ I, Inde
+p (insert x I))   (subset_ground : ∀ (I : Set α), Indep I → I ⊆ E) (h_bdd : ∃ n,
+ ∀ (I : Set α), Indep I → I.encard ≤ ↑n),   (IndepMatroid.ofBdd E Indep indep_em
+pty indep_subset indep_aug subset_ground h_bdd).Indep = Indep
+参数：E : Set α；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J : 
+Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I B : Set α⦄, Indep I → ¬Maxima
+l Indep I → Maximal Indep B → ∃ x ∈ B \ I, Indep (insert x I)；subset_ground : ∀ 
+(I : Set α), Indep I → I ⊆ E；h_bdd : ∃ n, ∀ (I : Set α), Indep I → I.encard ≤ ↑n
+；IndepMatroid.ofBdd E Indep indep_empty indep_subset indep_aug subset_ground h_b
+dd。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofBdd_indep (E : Set α) Indep indep_empty indep_subset indep_aug
     subset_ground h_bdd : (IndepMatroid.ofBdd
       E Indep indep_empty indep_subset indep_aug subset_ground h_bdd).Indep = Indep := rfl
 
 /-- `IndepMatroid.ofBdd` constructs a `RankFinite` matroid. -/
-instance (E : Set α) (Indep : Set α -> Prop) indep_empty indep_subset indep_aug subset_ground h_bdd :
+/-
+**IndepMatroid.** 是 Mathlib 中的一个实例，位于命名空间 `IndepMatroid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`IndepMatroid.ofBdd` constructs a `RankFinite` matroid.
+-/
+instance (E : Set α) (Indep : Set α → Prop) indep_empty indep_subset indep_aug subset_ground h_bdd :
     RankFinite (IndepMatroid.ofBdd
       E Indep indep_empty indep_subset indep_aug subset_ground h_bdd).matroid := by
   obtain ⟨B, hB⟩ := (IndepMatroid.ofBdd E Indep _ _ _ _ _).matroid.exists_isBase
   refine hB.rankFinite_of_finite ?_
   obtain ⟨n, hn⟩ := h_bdd
-exact finite_of_encard_le_coe hn B (by simpa using hB.indep)
+  exact finite_of_encard_le_coe <| hn B (by simpa using hB.indep)
 
-/--
-Definition of `ofBddAugment` / `ofBddAugment` 的定义
+/-- If there is an absolute upper bound on the size of an independent set, then matroids
+  can be defined using an 'augmentation' axiom similar to the standard definition of
+  finite matroids for independent sets. -/
+/-
+**IndepMatroid.ofBddAugment** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (Indep : Set α → Prop) →       Indep 
+∅ →         (∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) →           (∀ ⦃I J : S
+et α⦄, Indep I → Indep J → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep (insert 
+e I)) →             (∃ n, ∀ (I : Set α), Indep I → I.encard ≤ ↑n) → (∀ (I : Set 
+α), Indep I → I ⊆ E) → IndepMatroid α
+参数：E : Set α；Indep : Set α → Prop；∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I；∀ ⦃
+I J : Set α⦄, Indep I → Indep J → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep (
+insert e I)；∃ n, ∀ (I : Set α), Indep I → I.encard ≤ ↑n；∀ (I : Set α), Indep I →
+ I ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBddAugment
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: IndepMatroid.ofBdd (E := E) (Indep := Indep)
-    (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_aug := by
-      rintro I B hI hImax hBmax
-      suffices hcard : I.encard < B.encard by
-        obtain ⟨e, heB, heI, hi⟩ := indep_aug hI hBmax.prop hcard
-        exact ⟨e, ⟨heB, heI⟩, hi⟩
-      refine lt_of_not_ge fun hle => ?_
-      obtain ⟨x, hxnot, hxI⟩ := exists_insert_of_not_maximal indep_subset hI hImax
-      have hlt : B.encard < (insert x I).encard := by
-        rwa [encard_insert_of_notMem hxnot, ← not_le, ENat.add_one_le_iff, not_lt]
-        rw [encard_ne_top_iff]
-        obtain ⟨n, hn⟩ := indep_bdd
-        exact finite_of_encard_le_coe (hn _ hI)
-      obtain ⟨y, -, hyB, hi⟩ := indep_aug hBmax.prop hxI hlt
-      exact hBmax.not_prop_of_ssuperset (ssubset_insert hyB) hi)
-    (indep_bdd := indep_bdd) (subset_ground := subset_ground)
-
-中文:
-定义 ofBddAugment
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: IndepMatroid.ofBdd (E := E) (Indep := Indep)
-    (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_aug := by
-      rintro I B hI hImax hBmax
-      suffices hcard : I.encard < B.encard by
-        obtain ⟨e, heB, heI, hi⟩ := indep_aug hI hBmax.prop hcard
-        exact ⟨e, ⟨heB, heI⟩, hi⟩
-      refine lt_of_not_ge fun hle => ?_
-      obtain ⟨x, hxnot, hxI⟩ := exists_insert_of_not_maximal indep_subset hI hImax
-      have hlt : B.encard < (insert x I).encard := by
-        rwa [encard_insert_of_notMem hxnot, ← not_le, ENat.add_one_le_iff, not_lt]
-        rw [encard_ne_top_iff]
-        obtain ⟨n, hn⟩ := indep_bdd
-        exact finite_of_encard_le_coe (hn _ hI)
-      obtain ⟨y, -, hyB, hi⟩ := indep_aug hBmax.prop hxI hlt
-      exact hBmax.not_prop_of_ssuperset (ssubset_insert hyB) hi)
-    (indep_bdd := indep_bdd) (subset_ground := subset_ground)
+--- 原说明 ---
+If there is an absolute upper bound on the size of an independent set, then matr
+oids
+  can be defined using an 'augmentation' axiom similar to the standard definitio
+n of
+  finite matroids for independent sets.
 -/
-protected def ofBddAugment (E : Set α) (Indep : Set α -> Prop)
+protected def ofBddAugment (E : Set α) (Indep : Set α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    (indep_aug : forall ⦃I J⦄, Indep I -> Indep J -> I.encard < J.encard ->
-      exists e in J, e ∉ I ∧ Indep (insert e I))
-    (indep_bdd : exists (n : Nat), forall I, Indep I -> I.encard <= n)
-    (subset_ground : forall I, Indep I -> I subseteq E) : IndepMatroid α :=
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+    (indep_aug : ∀ ⦃I J⦄, Indep I → Indep J → I.encard < J.encard →
+      ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))
+    (indep_bdd : ∃ (n : ℕ), ∀ I, Indep I → I.encard ≤ n)
+    (subset_ground : ∀ I, Indep I → I ⊆ E) : IndepMatroid α :=
   IndepMatroid.ofBdd (E := E) (Indep := Indep)
     (indep_empty := indep_empty)
     (indep_subset := indep_subset)
@@ -793,7 +589,7 @@ protected def ofBddAugment (E : Set α) (Indep : Set α -> Prop)
       suffices hcard : I.encard < B.encard by
         obtain ⟨e, heB, heI, hi⟩ := indep_aug hI hBmax.prop hcard
         exact ⟨e, ⟨heB, heI⟩, hi⟩
-      refine lt_of_not_ge fun hle => ?_
+      refine lt_of_not_ge fun hle ↦ ?_
       obtain ⟨x, hxnot, hxI⟩ := exists_insert_of_not_maximal indep_subset hI hImax
       have hlt : B.encard < (insert x I).encard := by
         rwa [encard_insert_of_notMem hxnot, ← not_le, ENat.add_one_le_iff, not_lt]
@@ -803,59 +599,60 @@ protected def ofBddAugment (E : Set α) (Indep : Set α -> Prop)
       obtain ⟨y, -, hyB, hi⟩ := indep_aug hBmax.prop hxI hlt
       exact hBmax.not_prop_of_ssuperset (ssubset_insert hyB) hi)
     (indep_bdd := indep_bdd) (subset_ground := subset_ground)
-
-/--
-theorem `ofBddAugment_E` / 定理 `ofBddAugment_E`
-
-English:
-theorem ofBddAugment_E
-  statement: (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: rfl
-
-中文:
-定理 ofBddAugment_E
-  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: rfl
+/-
+**IndepMatroid.ofBddAugment_E** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (Indep : Set α → Prop) (indep_empty : Indep ∅
+)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I)   (indep_aug : ∀
+ ⦃I J : Set α⦄, Indep I → Indep J → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep
+ (insert e I))   (indep_bdd : ∃ n, ∀ (I : Set α), Indep I → I.encard ≤ ↑n) (subs
+et_ground : ∀ (I : Set α), Indep I → I ⊆ E),   (IndepMatroid.ofBddAugment E Inde
+p indep_empty indep_subset indep_aug indep_bdd subset_ground).E = E
+参数：E : Set α；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J : 
+Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Indep J
+ → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；indep_bdd : ∃ n, ∀ 
+(I : Set α), Indep I → I.encard ≤ ↑n；subset_ground : ∀ (I : Set α), Indep I → I 
+⊆ E；IndepMatroid.ofBddAugment E Indep indep_empty indep_subset indep_aug indep_b
+dd subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofBddAugment_E (E : Set α) Indep indep_empty indep_subset indep_aug
     indep_bdd subset_ground : (IndepMatroid.ofBddAugment
       E Indep indep_empty indep_subset indep_aug indep_bdd subset_ground).E = E := rfl
-
-/--
-theorem `ofBddAugment_indep` / 定理 `ofBddAugment_indep`
-
-English:
-theorem ofBddAugment_indep
-  statement: (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: rfl
-
-中文:
-定理 ofBddAugment_indep
-  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: rfl
+/-
+**IndepMatroid.ofBddAugment_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (Indep : Set α → Prop) (indep_empty : Indep ∅
+)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I)   (indep_aug : ∀
+ ⦃I J : Set α⦄, Indep I → Indep J → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep
+ (insert e I))   (indep_bdd : ∃ n, ∀ (I : Set α), Indep I → I.encard ≤ ↑n) (subs
+et_ground : ∀ (I : Set α), Indep I → I ⊆ E),   (IndepMatroid.ofBddAugment E Inde
+p indep_empty indep_subset indep_aug indep_bdd subset_ground).Indep = Indep
+参数：E : Set α；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J : 
+Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Indep J
+ → I.encard < J.encard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；indep_bdd : ∃ n, ∀ 
+(I : Set α), Indep I → I.encard ≤ ↑n；subset_ground : ∀ (I : Set α), Indep I → I 
+⊆ E；IndepMatroid.ofBddAugment E Indep indep_empty indep_subset indep_aug indep_b
+dd subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofBddAugment_indep (E : Set α) Indep indep_empty indep_subset indep_aug
     indep_bdd subset_ground : (IndepMatroid.ofBddAugment
       E Indep indep_empty indep_subset indep_aug indep_bdd subset_ground).Indep = Indep := rfl
-
-/--
-Instance `ofBddAugment_rankFinite` / 实例 `ofBddAugment_rankFinite`
-
-English:
-instance ofBddAugment_rankFinite
-  signature: (E : Set α) Indep indep_empty indep_subset indep_aug
-  body: by
-  rw [IndepMatroid.ofBddAugment]
-  infer_instance
-
-中文:
-实例 ofBddAugment_rankFinite
-  签名: (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  定义体: by
-  rw [IndepMatroid.ofBddAugment]
-  infer_instance
-
-Depends on / 依赖: IndepMatroid, IndepMatroid.ofBddAugment, infer_instance, ofBddAugment
+/-
+**IndepMatroid.ofBddAugment_rankFinite** 是 Mathlib 中的一个实例，位于命名空间 `IndepMatroid`。
+形式化陈述：ofBddAugment_rankFinite (E : Set α) Indep indep_empty indep_subset indep_a
+ug indep_bdd subset_ground : RankFinite (IndepMatroid.ofBddAugment E Indep indep
+_empty indep_subset indep_aug indep_bdd subset_ground).matroid
+参数：E : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IndepMatroid.ofBddAugment.eq_1`：∀ {α : Type u_1} (E : Set α) (Indep : Se
+t α → Prop) (indep_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J →
+ I ⊆ J → Indep I)   …
+· 使用定理 `IndepMatroid.instRankFiniteMatroidOfBdd`：∀ {α : Type u_1} (E : Set α) (I
+ndep : Set α → Prop) (indep_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Set α⦄, 
+Indep J → I ⊆ J → Indep I)   …
 -/
 instance ofBddAugment_rankFinite (E : Set α) Indep indep_empty indep_subset indep_aug
     indep_bdd subset_ground : RankFinite (IndepMatroid.ofBddAugment
@@ -863,227 +660,190 @@ instance ofBddAugment_rankFinite (E : Set α) Indep indep_empty indep_subset ind
   rw [IndepMatroid.ofBddAugment]
   infer_instance
 
-/--
-Definition of `ofFinite` / `ofFinite` 的定义
+/-- If `E` is finite, then any collection of subsets of `E` satisfying
+  the usual independence axioms determines a matroid -/
+/-
+**IndepMatroid.ofFinite** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   {E : Set α} →     E.Finite →       (Indep : Set α → Pro
+p) →         Indep ∅ →           (∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) → 
+            (∀ ⦃I J : Set α⦄, Indep I → Indep J → I.ncard < J.ncard → ∃ e ∈ J, e
+ ∉ I ∧ Indep (insert e I)) →               (∀ ⦃I : Set α⦄, Indep I → I ⊆ E) → In
+depMatroid α
+参数：Indep : Set α → Prop；∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I；∀ ⦃I J : Set 
+α⦄, Indep I → Indep J → I.ncard < J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；
+∀ ⦃I : Set α⦄, Indep I → I ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFinite
-  signature: {E : Set α} (hE : E.Finite) (Indep : Set α -> Prop)
-  body: IndepMatroid.ofBddAugment (E := E) (Indep := Indep) (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_aug := by
-      refine fun {I J} hI hJ hIJ => indep_aug hI hJ ?_
-      rwa [← Nat.cast_lt (α := Nat∞), (hE.subset (subset_ground hJ)).cast_ncard_eq,
-        (hE.subset (subset_ground hI)).cast_ncard_eq])
-    (indep_bdd := ⟨E.ncard, fun I hI => by
-      rw [hE.cast_ncard_eq]
-exact encard_le_encard subset_ground hI ⟩)
-    (subset_ground := subset_ground)
-
-中文:
-定义 ofFinite
-  签名: {E : 集合 α} (hE : E.有限) (Indep : 集合 α -> 命题)
-  定义体: IndepMatroid.ofBddAugment (E := E) (Indep := Indep) (indep_empty := indep_empty)
-    (indep_subset := indep_subset)
-    (indep_aug := by
-      refine fun {I J} hI hJ hIJ => indep_aug hI hJ ?_
-      rwa [← Nat.cast_lt (α := Nat∞), (hE.subset (subset_ground hJ)).cast_ncard_eq,
-        (hE.subset (subset_ground hI)).cast_ncard_eq])
-    (indep_bdd := ⟨E.ncard, fun I hI => by
-      rw [hE.cast_ncard_eq]
-exact encard_le_encard subset_ground hI ⟩)
-    (subset_ground := subset_ground)
+--- 原说明 ---
+If `E` is finite, then any collection of subsets of `E` satisfying
+  the usual independence axioms determines a matroid
 -/
-protected def ofFinite {E : Set α} (hE : E.Finite) (Indep : Set α -> Prop)
+protected def ofFinite {E : Set α} (hE : E.Finite) (Indep : Set α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
     (indep_aug :
-      forall ⦃I J⦄, Indep I -> Indep J -> I.ncard < J.ncard -> exists e in J, e ∉ I ∧ Indep (insert e I))
-    (subset_ground : forall ⦃I⦄, Indep I -> I subseteq E) : IndepMatroid α :=
+      ∀ ⦃I J⦄, Indep I → Indep J → I.ncard < J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))
+    (subset_ground : ∀ ⦃I⦄, Indep I → I ⊆ E) : IndepMatroid α :=
   IndepMatroid.ofBddAugment (E := E) (Indep := Indep) (indep_empty := indep_empty)
     (indep_subset := indep_subset)
     (indep_aug := by
-      refine fun {I J} hI hJ hIJ => indep_aug hI hJ ?_
-      rwa [← Nat.cast_lt (α := Nat∞), (hE.subset (subset_ground hJ)).cast_ncard_eq,
+      refine fun {I J} hI hJ hIJ ↦ indep_aug hI hJ ?_
+      rwa [← Nat.cast_lt (α := ℕ∞), (hE.subset (subset_ground hJ)).cast_ncard_eq,
         (hE.subset (subset_ground hI)).cast_ncard_eq])
-    (indep_bdd := ⟨E.ncard, fun I hI => by
+    (indep_bdd := ⟨E.ncard, fun I hI ↦ by
       rw [hE.cast_ncard_eq]
-exact encard_le_encard subset_ground hI ⟩)
+      exact encard_le_encard <| subset_ground hI ⟩)
     (subset_ground := subset_ground)
-
-/--
-theorem `ofFinite_E` / 定理 `ofFinite_E`
-
-English:
-theorem ofFinite_E
-  given: {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground
-  proof: rfl
-
-中文:
-定理 ofFinite_E
-  条件: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug subset_ground
-  证明: rfl
+/-
+**IndepMatroid.ofFinite_E** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} {E : Set α} (hE : E.Finite) (Indep : Set α → Prop) (indep
+_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) 
+  (indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Indep J → I.ncard < J.ncard → ∃ e ∈ J,
+ e ∉ I ∧ Indep (insert e I))   (subset_ground : ∀ ⦃I : Set α⦄, Indep I → I ⊆ E),
+   (IndepMatroid.ofFinite hE Indep indep_empty indep_subset indep_aug subset_gro
+und).E = E
+参数：hE : E.Finite；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I 
+J : Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Ind
+ep J → I.ncard < J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；subset_ground : ∀
+ ⦃I : Set α⦄, Indep I → I ⊆ E；IndepMatroid.ofFinite hE Indep indep_empty indep_s
+ubset indep_aug subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofFinite_E {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground :
     (IndepMatroid.ofFinite
       (hE : E.Finite) Indep indep_empty indep_subset indep_aug subset_ground).E = E := rfl
-
-/--
-theorem `ofFinite_indep` / 定理 `ofFinite_indep`
-
-English:
-theorem ofFinite_indep
-  statement: {E : Set α} hE Indep indep_empty indep_subset indep_aug
-  proof: rfl
-
-中文:
-定理 ofFinite_indep
-  结论: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug
-  证明: rfl
+/-
+**IndepMatroid.ofFinite_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} {E : Set α} (hE : E.Finite) (Indep : Set α → Prop) (indep
+_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Set α⦄, Indep J → I ⊆ J → Indep I) 
+  (indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Indep J → I.ncard < J.ncard → ∃ e ∈ J,
+ e ∉ I ∧ Indep (insert e I))   (subset_ground : ∀ ⦃I : Set α⦄, Indep I → I ⊆ E),
+   (IndepMatroid.ofFinite hE Indep indep_empty indep_subset indep_aug subset_gro
+und).Indep = Indep
+参数：hE : E.Finite；Indep : Set α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I 
+J : Set α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Set α⦄, Indep I → Ind
+ep J → I.ncard < J.ncard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；subset_ground : ∀
+ ⦃I : Set α⦄, Indep I → I ⊆ E；IndepMatroid.ofFinite hE Indep indep_empty indep_s
+ubset indep_aug subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofFinite_indep {E : Set α} hE Indep indep_empty indep_subset indep_aug
     subset_ground : (IndepMatroid.ofFinite
       (hE : E.Finite) Indep indep_empty indep_subset indep_aug subset_ground).Indep = Indep := rfl
-
-/--
-Instance `ofFinite_finite` / 实例 `ofFinite_finite`
-
-English:
-instance ofFinite_finite
-  signature: {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground
-  body: ⟨hE⟩
-
-中文:
-实例 ofFinite_finite
-  签名: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug subset_ground
-  定义体: ⟨hE⟩
+/-
+**IndepMatroid.ofFinite_finite** 是 Mathlib 中的一个实例，位于命名空间 `IndepMatroid`。
+形式化陈述：ofFinite_finite {E : Set α} hE Indep indep_empty indep_subset indep_aug su
+bset_ground : (IndepMatroid.ofFinite (hE : E.Finite) Indep indep_empty indep_sub
+set indep_aug subset_ground).matroid.Finite
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ofFinite_finite {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground :
     (IndepMatroid.ofFinite
       (hE : E.Finite) Indep indep_empty indep_subset indep_aug subset_ground).matroid.Finite :=
   ⟨hE⟩
 
-/--
-Definition of `ofFinset` / `ofFinset` 的定义
+/-- An independence predicate on `Finset α` that obeys the finite matroid axioms determines a
+  finitary matroid on `α`. -/
+/-
+**IndepMatroid.ofFinset** 是 Mathlib 中的一个定义，位于命名空间 `IndepMatroid`。
+形式化陈述：{α : Type u_1} →   [inst : DecidableEq α] →     (E : Set α) →       (Indep
+ : Finset α → Prop) →         Indep ∅ →           (∀ ⦃I J : Finset α⦄, Indep J →
+ I ⊆ J → Indep I) →             (∀ ⦃I J : Finset α⦄, Indep I → Indep J → I.card 
+< J.card → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)) →               (∀ ⦃I : Finset α
+⦄, Indep I → ↑I ⊆ E) → IndepMatroid α
+参数：E : Set α；Indep : Finset α → Prop；∀ ⦃I J : Finset α⦄, Indep J → I ⊆ J → Indep
+ I；∀ ⦃I J : Finset α⦄, Indep I → Indep J → I.card < J.card → ∃ e ∈ J, e ∉ I ∧ In
+dep (insert e I)；∀ ⦃I : Finset α⦄, Indep I → ↑I ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFinset
-  signature: [DecidableEq α] (E : Set α) (Indep : Finset α -> Prop)
-  body: IndepMatroid.ofFinitaryCardAugment
-    (E := E)
-    (Indep := (fun I => (forall (J : Finset α), (J : Set α) subseteq I -> Indep J)))
-    (indep_empty := by simpa [subset_empty_iff])
-    (indep_subset := (fun _ _ hJ hIJ _ hKI => hJ _ (hKI.trans hIJ)))
-    (indep_aug := by
-      intro I J hI hIfin hJ hJfin hIJ
-      rw [ncard_eq_toFinset_card _ hIfin]; rw [ncard_eq_toFinset_card _ hJfin] at hIJ
-      have aug := indep_aug (hI _ (by simp)) (hJ _ (by simp)) hIJ
-      simp only [Finite.mem_toFinset] at aug
-      obtain ⟨e, heJ, heI, hi⟩ := aug
-exact ⟨e, heJ, heI, fun K hK => indep_subset hi Finset.coe_subset.1 (by simpa)⟩ )
-    (indep_compact := fun _ h J hJ => h _ hJ J.finite_toSet _ Subset.rfl)
-    (subset_ground := fun I hI x hxI => by simpa using subset_ground <| hI {x} (by simpa))
-
-中文:
-定义 ofFinset
-  签名: [DecidableEq α] (E : 集合 α) (Indep : 有限集 α -> 命题)
-  定义体: IndepMatroid.ofFinitaryCardAugment
-    (E := E)
-    (Indep := (fun I => (forall (J : Finset α), (J : Set α) subseteq I -> Indep J)))
-    (indep_empty := by simpa [subset_empty_iff])
-    (indep_subset := (fun _ _ hJ hIJ _ hKI => hJ _ (hKI.trans hIJ)))
-    (indep_aug := by
-      intro I J hI hIfin hJ hJfin hIJ
-      rw [ncard_eq_toFinset_card _ hIfin]; rw [ncard_eq_toFinset_card _ hJfin] at hIJ
-      have aug := indep_aug (hI _ (by simp)) (hJ _ (by simp)) hIJ
-      simp only [Finite.mem_toFinset] at aug
-      obtain ⟨e, heJ, heI, hi⟩ := aug
-exact ⟨e, heJ, heI, fun K hK => indep_subset hi Finset.coe_subset.1 (by simpa)⟩ )
-    (indep_compact := fun _ h J hJ => h _ hJ J.finite_toSet _ Subset.rfl)
-    (subset_ground := fun I hI x hxI => by simpa using subset_ground <| hI {x} (by simpa))
+--- 原说明 ---
+An independence predicate on `Finset α` that obeys the finite matroid axioms det
+ermines a
+  finitary matroid on `α`.
 -/
-protected def ofFinset [DecidableEq α] (E : Set α) (Indep : Finset α -> Prop)
+protected def ofFinset [DecidableEq α] (E : Set α) (Indep : Finset α → Prop)
     (indep_empty : Indep ∅)
-    (indep_subset : forall ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    (indep_aug : forall ⦃I J⦄, Indep I -> Indep J -> I.card < J.card -> exists e in J, e ∉ I ∧ Indep (insert e I))
-    (subset_ground : forall ⦃I⦄, Indep I -> (I : Set α) subseteq E) : IndepMatroid α :=
+    (indep_subset : ∀ ⦃I J⦄, Indep J → I ⊆ J → Indep I)
+    (indep_aug : ∀ ⦃I J⦄, Indep I → Indep J → I.card < J.card → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))
+    (subset_ground : ∀ ⦃I⦄, Indep I → (I : Set α) ⊆ E) : IndepMatroid α :=
   IndepMatroid.ofFinitaryCardAugment
     (E := E)
-    (Indep := (fun I => (forall (J : Finset α), (J : Set α) subseteq I -> Indep J)))
+    (Indep := (fun I ↦ (∀ (J : Finset α), (J : Set α) ⊆ I → Indep J)))
     (indep_empty := by simpa [subset_empty_iff])
-    (indep_subset := (fun _ _ hJ hIJ _ hKI => hJ _ (hKI.trans hIJ)))
+    (indep_subset := (fun _ _ hJ hIJ _ hKI ↦ hJ _ (hKI.trans hIJ)))
     (indep_aug := by
       intro I J hI hIfin hJ hJfin hIJ
-      rw [ncard_eq_toFinset_card _ hIfin]; rw [ncard_eq_toFinset_card _ hJfin] at hIJ
+      rw [ncard_eq_toFinset_card _ hIfin, ncard_eq_toFinset_card _ hJfin] at hIJ
       have aug := indep_aug (hI _ (by simp)) (hJ _ (by simp)) hIJ
       simp only [Finite.mem_toFinset] at aug
       obtain ⟨e, heJ, heI, hi⟩ := aug
-exact ⟨e, heJ, heI, fun K hK => indep_subset hi Finset.coe_subset.1 (by simpa)⟩ )
-    (indep_compact := fun _ h J hJ => h _ hJ J.finite_toSet _ Subset.rfl)
-    (subset_ground := fun I hI x hxI => by simpa using subset_ground <| hI {x} (by simpa))
-
-/--
-theorem `ofFinset_E` / 定理 `ofFinset_E`
-
-English:
-theorem ofFinset_E
-  statement: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: rfl
-
-中文:
-定理 ofFinset_E
-  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: rfl
+      exact ⟨e, heJ, heI, fun K hK ↦ indep_subset hi <| Finset.coe_subset.1 (by simpa)⟩ )
+    (indep_compact := fun _ h J hJ ↦ h _ hJ J.finite_toSet _ Subset.rfl)
+    (subset_ground := fun I hI x hxI ↦ by simpa using subset_ground <| hI {x} (by simpa))
+/-
+**IndepMatroid.ofFinset_E** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] (E : Set α) (Indep : Finset α → Pr
+op) (indep_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Finset α⦄, Indep J → I ⊆ 
+J → Indep I)   (indep_aug : ∀ ⦃I J : Finset α⦄, Indep I → Indep J → I.card < J.c
+ard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))   (subset_ground : ∀ ⦃I : Finset α⦄, 
+Indep I → ↑I ⊆ E),   (IndepMatroid.ofFinset E Indep indep_empty indep_subset ind
+ep_aug subset_ground).E = E
+参数：E : Set α；Indep : Finset α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J
+ : Finset α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Finset α⦄, Indep I 
+→ Indep J → I.card < J.card → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；subset_ground 
+: ∀ ⦃I : Finset α⦄, Indep I → ↑I ⊆ E；IndepMatroid.ofFinset E Indep indep_empty i
+ndep_subset indep_aug subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofFinset_E [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
     subset_ground : (IndepMatroid.ofFinset
       E Indep indep_empty indep_subset indep_aug subset_ground).E = E := rfl
-
-/--
-theorem `ofFinset_indep` / 定理 `ofFinset_indep`
-
-English:
-theorem ofFinset_indep
-  statement: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: by
-  simp only [IndepMatroid.ofFinset]
-  exact ⟨fun h => h _ Subset.rfl, fun h J hJI => indep_subset h hJI⟩
-
-中文:
-定理 ofFinset_indep
-  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: by
-  simp only [IndepMatroid.ofFinset]
-  exact ⟨fun h => h _ Subset.rfl, fun h J hJI => indep_subset h hJI⟩
+/-
+**IndepMatroid.ofFinset_indep** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] (E : Set α) (Indep : Finset α → Pr
+op) (indep_empty : Indep ∅)   (indep_subset : ∀ ⦃I J : Finset α⦄, Indep J → I ⊆ 
+J → Indep I)   (indep_aug : ∀ ⦃I J : Finset α⦄, Indep I → Indep J → I.card < J.c
+ard → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I))   (subset_ground : ∀ ⦃I : Finset α⦄, 
+Indep I → ↑I ⊆ E) {I : Finset α},   (IndepMatroid.ofFinset E Indep indep_empty i
+ndep_subset indep_aug subset_ground).Indep ↑I ↔ Indep I
+参数：E : Set α；Indep : Finset α → Prop；indep_empty : Indep ∅；indep_subset : ∀ ⦃I J
+ : Finset α⦄, Indep J → I ⊆ J → Indep I；indep_aug : ∀ ⦃I J : Finset α⦄, Indep I 
+→ Indep J → I.card < J.card → ∃ e ∈ J, e ∉ I ∧ Indep (insert e I)；subset_ground 
+: ∀ ⦃I : Finset α⦄, Indep I → ↑I ⊆ E；IndepMatroid.ofFinset E Indep indep_empty i
+ndep_subset indep_aug subset_ground。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 @[simp] theorem ofFinset_indep [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
     subset_ground {I : Finset α} : (IndepMatroid.ofFinset
       E Indep indep_empty indep_subset indep_aug subset_ground).Indep I ↔ Indep I := by
   simp only [IndepMatroid.ofFinset]
-  exact ⟨fun h => h _ Subset.rfl, fun h J hJI => indep_subset h hJI⟩
+  exact ⟨fun h ↦ h _ Subset.rfl, fun h J hJI ↦ indep_subset h hJI⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `ofFinset_indep'` / 定理 `ofFinset_indep'`
+/-- This can't be `@[simp]`, because it would cause the more useful
+  `Matroid.ofIndepFinset_apply` not to be in simp normal form. -/
+/-
+**IndepMatroid.ofFinset_indep'** 是 Mathlib 中的一个定理，位于命名空间 `IndepMatroid`。
+形式化陈述：ofFinset_indep' [DecidableEq α] (E : Set α) Indep indep_empty indep_subset
+ indep_aug subset_ground {I : Set α} : (IndepMatroid.ofFinset E Indep indep_empt
+y indep_subset indep_aug subset_ground).Indep I ↔ forall (J : Finset α), (J : Se
+t α) subseteq I -> Indep J
+参数：E : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem ofFinset_indep'
-  statement: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
-  proof: by
-  simp only [IndepMatroid.ofFinset, ofFinitaryCardAugment_indep]
-
-中文:
-定理 ofFinset_indep'
-  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
-  证明: by
-  simp only [IndepMatroid.ofFinset, ofFinitaryCardAugment_indep]
-
-Depends on / 依赖: IndepMatroid, IndepMatroid.ofFinset, ofFinitaryCardAugment_indep, ofFinset
+--- 原说明 ---
+This can't be `@[simp]`, because it would cause the more useful
+  `Matroid.ofIndepFinset_apply` not to be in simp normal form.
 -/
 theorem ofFinset_indep' [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
     subset_ground {I : Set α} : (IndepMatroid.ofFinset
       E Indep indep_empty indep_subset indep_aug subset_ground).Indep I ↔
-        forall (J : Finset α), (J : Set α) subseteq I -> Indep J := by
+        ∀ (J : Finset α), (J : Set α) ⊆ I → Indep J := by
   simp only [IndepMatroid.ofFinset, ofFinitaryCardAugment_indep]
 
 end IndepMatroid
@@ -1092,172 +852,120 @@ section IsBase
 
 namespace Matroid
 
-/--
-Definition of `ofExistsMatroid` / `ofExistsMatroid` 的定义
+/-- Construct an `Matroid` from an independence predicate that agrees with that of some matroid `M`.
+  This is computable even if `M` is only known existentially, or when `M` exists for different
+  reasons in different cases. This can also be used to change the independence predicate to a
+  more useful definitional form. -/
+/-
+**Matroid.ofExistsMatroid** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：{α : Type u_1} → (E : Set α) → (Indep : Set α → Prop) → (∃ M, E = M.E ∧ ∀ 
+(I : Set α), M.Indep I ↔ Indep I) → Matroid α
+参数：E : Set α；Indep : Set α → Prop；∃ M, E = M.E ∧ ∀ (I : Set α), M.Indep I ↔ Inde
+p I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExistsMatroid
-  signature: (E : Set α) (Indep : Set α -> Prop)
-  body: IndepMatroid.matroid
-  have hex : exists (M : Matroid α), E = M.E ∧ M.Indep = Indep := by
-    obtain ⟨M, rfl, h⟩ := hM; refine ⟨_, rfl, funext (by simp [h])⟩
-  IndepMatroid.mk (E := E) (Indep := Indep)
-  (indep_empty := by obtain ⟨M, -, rfl⟩ := hex; exact M.empty_indep)
-  (indep_subset := by obtain ⟨M, -, rfl⟩ := hex; exact fun I J hJ hIJ => hJ.subset hIJ)
-  (indep_aug := by obtain ⟨M, -, rfl⟩ := hex; exact Indep.exists_insert_of_not_maximal M)
-  (indep_maximal := by obtain ⟨M, rfl, rfl⟩ := hex; exact M.existsMaximalSubsetProperty_indep)
-  (subset_ground := by obtain ⟨M, rfl, rfl⟩ := hex; exact fun I => Indep.subset_ground)
-
-中文:
-定义 ofExistsMatroid
-  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
-  定义体: IndepMatroid.matroid
-  have hex : exists (M : Matroid α), E = M.E ∧ M.Indep = Indep := by
-    obtain ⟨M, rfl, h⟩ := hM; refine ⟨_, rfl, funext (by simp [h])⟩
-  IndepMatroid.mk (E := E) (Indep := Indep)
-  (indep_empty := by obtain ⟨M, -, rfl⟩ := hex; exact M.empty_indep)
-  (indep_subset := by obtain ⟨M, -, rfl⟩ := hex; exact fun I J hJ hIJ => hJ.subset hIJ)
-  (indep_aug := by obtain ⟨M, -, rfl⟩ := hex; exact Indep.exists_insert_of_not_maximal M)
-  (indep_maximal := by obtain ⟨M, rfl, rfl⟩ := hex; exact M.existsMaximalSubsetProperty_indep)
-  (subset_ground := by obtain ⟨M, rfl, rfl⟩ := hex; exact fun I => Indep.subset_ground)
+--- 原说明 ---
+Construct an `Matroid` from an independence predicate that agrees with that of s
+ome matroid `M`.
+  This is computable even if `M` is only known existentially, or when `M` exists
+ for different
+  reasons in different cases. This can also be used to change the independence p
+redicate to a
+  more useful definitional form.
 -/
-@[simps! E] protected def ofExistsMatroid (E : Set α) (Indep : Set α -> Prop)
-    (hM : exists (M : Matroid α), E = M.E ∧ forall I, M.Indep I ↔ Indep I) : Matroid α :=
-IndepMatroid.matroid
-  have hex : exists (M : Matroid α), E = M.E ∧ M.Indep = Indep := by
+@[simps! E] protected def ofExistsMatroid (E : Set α) (Indep : Set α → Prop)
+    (hM : ∃ (M : Matroid α), E = M.E ∧ ∀ I, M.Indep I ↔ Indep I) : Matroid α :=
+  IndepMatroid.matroid <|
+  have hex : ∃ (M : Matroid α), E = M.E ∧ M.Indep = Indep := by
     obtain ⟨M, rfl, h⟩ := hM; refine ⟨_, rfl, funext (by simp [h])⟩
   IndepMatroid.mk (E := E) (Indep := Indep)
   (indep_empty := by obtain ⟨M, -, rfl⟩ := hex; exact M.empty_indep)
-  (indep_subset := by obtain ⟨M, -, rfl⟩ := hex; exact fun I J hJ hIJ => hJ.subset hIJ)
+  (indep_subset := by obtain ⟨M, -, rfl⟩ := hex; exact fun I J hJ hIJ ↦ hJ.subset hIJ)
   (indep_aug := by obtain ⟨M, -, rfl⟩ := hex; exact Indep.exists_insert_of_not_maximal M)
   (indep_maximal := by obtain ⟨M, rfl, rfl⟩ := hex; exact M.existsMaximalSubsetProperty_indep)
-  (subset_ground := by obtain ⟨M, rfl, rfl⟩ := hex; exact fun I => Indep.subset_ground)
+  (subset_ground := by obtain ⟨M, rfl, rfl⟩ := hex; exact fun I ↦ Indep.subset_ground)
 
-/--
-Definition of `ofBase` / `ofBase` 的定义
+/-- A matroid defined purely in terms of its bases. -/
+/-
+**Matroid.ofBase** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (IsBase : Set α → Prop) →       (∃ B,
+ IsBase B) →         Matroid.ExchangeProperty IsBase →           (∀ X ⊆ E, Matro
+id.ExistsMaximalSubsetProperty (fun x => ∃ B, IsBase B ∧ x ⊆ B) X) →            
+ (∀ (B : Set α), IsBase B → B ⊆ E) → Matroid α
+参数：E : Set α；IsBase : Set α → Prop；∃ B, IsBase B；∀ X ⊆ E, Matroid.ExistsMaximalS
+ubsetProperty (fun x => ∃ B, IsBase B ∧ x ⊆ B) X；∀ (B : Set α), IsBase B → B ⊆ E
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBase
-  signature: (E : Set α) (IsBase : Set α -> Prop) (exists_isBase : exists B, IsBase B)
-  body: E
-  IsBase := IsBase
-  Indep I := (exists B, IsBase B ∧ I subseteq B)
-  indep_iff' _ := Iff.rfl
-  exists_isBase := exists_isBase
-  isBase_exchange := isBase_exchange
-  maximality := maximality
-  subset_ground := subset_ground
-
-中文:
-定义 ofBase
-  签名: (E : 集合 α) (IsBase : 集合 α -> 命题) (存在_isBase : 存在 B, IsBase B)
-  定义体: E
-  IsBase := IsBase
-  Indep I := (exists B, IsBase B ∧ I subseteq B)
-  indep_iff' _ := Iff.rfl
-  exists_isBase := exists_isBase
-  isBase_exchange := isBase_exchange
-  maximality := maximality
-  subset_ground := subset_ground
+--- 原说明 ---
+A matroid defined purely in terms of its bases.
 -/
-@[simps E] protected def ofBase (E : Set α) (IsBase : Set α -> Prop) (exists_isBase : exists B, IsBase B)
+@[simps E] protected def ofBase (E : Set α) (IsBase : Set α → Prop) (exists_isBase : ∃ B, IsBase B)
     (isBase_exchange : ExchangeProperty IsBase)
-    (maximality : forall X, X subseteq E -> Matroid.ExistsMaximalSubsetProperty (exists B, IsBase B ∧ · subseteq B) X)
-    (subset_ground : forall B, IsBase B -> B subseteq E) : Matroid α where
+    (maximality : ∀ X, X ⊆ E → Matroid.ExistsMaximalSubsetProperty (∃ B, IsBase B ∧ · ⊆ B) X)
+    (subset_ground : ∀ B, IsBase B → B ⊆ E) : Matroid α where
   E := E
   IsBase := IsBase
-  Indep I := (exists B, IsBase B ∧ I subseteq B)
+  Indep I := (∃ B, IsBase B ∧ I ⊆ B)
   indep_iff' _ := Iff.rfl
   exists_isBase := exists_isBase
   isBase_exchange := isBase_exchange
   maximality := maximality
   subset_ground := subset_ground
 
-/--
-Definition of `ofExistsFiniteIsBase` / `ofExistsFiniteIsBase` 的定义
+/-- A collection of bases with the exchange property and at least one finite member is a matroid -/
+/-
+**Matroid.ofExistsFiniteIsBase** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：{α : Type u_1} →   (E : Set α) →     (IsBase : Set α → Prop) →       (∃ B,
+ IsBase B ∧ B.Finite) → Matroid.ExchangeProperty IsBase → (∀ (B : Set α), IsBase
+ B → B ⊆ E) → Matroid α
+参数：E : Set α；IsBase : Set α → Prop；∃ B, IsBase B ∧ B.Finite；∀ (B : Set α), IsBas
+e B → B ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExistsFiniteIsBase
-  signature: (E : Set α) (IsBase : Set α -> Prop)
-  body: Matroid.ofBase
-  (E := E)
-  (IsBase := IsBase)
-  (exists_isBase := by obtain ⟨B, h⟩ := exists_finite_base; exact ⟨B, h.1⟩)
-  (isBase_exchange := isBase_exchange)
-  (maximality := by
-    obtain ⟨B, hB, hfin⟩ := exists_finite_base
-    refine fun X _ => Matroid.existsMaximalSubsetProperty_of_bdd
-      ⟨B.ncard, fun Y ⟨B', hB', hYB'⟩ => ?_⟩ X
-    rw [hfin.cast_ncard_eq]; rw [isBase_exchange.encard_isBase_eq hB hB']
-    exact encard_mono hYB')
-  (subset_ground := subset_ground)
-
-中文:
-定义 ofExistsFiniteIsBase
-  签名: (E : 集合 α) (IsBase : 集合 α -> 命题)
-  定义体: Matroid.ofBase
-  (E := E)
-  (IsBase := IsBase)
-  (exists_isBase := by obtain ⟨B, h⟩ := exists_finite_base; exact ⟨B, h.1⟩)
-  (isBase_exchange := isBase_exchange)
-  (maximality := by
-    obtain ⟨B, hB, hfin⟩ := exists_finite_base
-    refine fun X _ => Matroid.existsMaximalSubsetProperty_of_bdd
-      ⟨B.ncard, fun Y ⟨B', hB', hYB'⟩ => ?_⟩ X
-    rw [hfin.cast_ncard_eq]; rw [isBase_exchange.encard_isBase_eq hB hB']
-    exact encard_mono hYB')
-  (subset_ground := subset_ground)
+--- 原说明 ---
+A collection of bases with the exchange property and at least one finite member 
+is a matroid
 -/
-@[simps! E] protected def ofExistsFiniteIsBase (E : Set α) (IsBase : Set α -> Prop)
-    (exists_finite_base : exists B, IsBase B ∧ B.Finite) (isBase_exchange : ExchangeProperty IsBase)
-    (subset_ground : forall B, IsBase B -> B subseteq E) : Matroid α := Matroid.ofBase
+@[simps! E] protected def ofExistsFiniteIsBase (E : Set α) (IsBase : Set α → Prop)
+    (exists_finite_base : ∃ B, IsBase B ∧ B.Finite) (isBase_exchange : ExchangeProperty IsBase)
+    (subset_ground : ∀ B, IsBase B → B ⊆ E) : Matroid α := Matroid.ofBase
   (E := E)
   (IsBase := IsBase)
   (exists_isBase := by obtain ⟨B, h⟩ := exists_finite_base; exact ⟨B, h.1⟩)
   (isBase_exchange := isBase_exchange)
   (maximality := by
     obtain ⟨B, hB, hfin⟩ := exists_finite_base
-    refine fun X _ => Matroid.existsMaximalSubsetProperty_of_bdd
-      ⟨B.ncard, fun Y ⟨B', hB', hYB'⟩ => ?_⟩ X
-    rw [hfin.cast_ncard_eq]; rw [isBase_exchange.encard_isBase_eq hB hB']
+    refine fun X _ ↦ Matroid.existsMaximalSubsetProperty_of_bdd
+      ⟨B.ncard, fun Y ⟨B', hB', hYB'⟩ ↦ ?_⟩ X
+    rw [hfin.cast_ncard_eq, isBase_exchange.encard_isBase_eq hB hB']
     exact encard_mono hYB')
   (subset_ground := subset_ground)
-
-/--
-theorem `ofExistsFiniteIsBase_isBase` / 定理 `ofExistsFiniteIsBase_isBase`
-
-English:
-theorem ofExistsFiniteIsBase_isBase
-  statement: (E : Set α) IsBase exists_finite_base
-  proof: rfl
-
-中文:
-定理 ofExistsFiniteIsBase_isBase
-  结论: (E : 集合 α) IsBase 存在_finite_base
-  证明: rfl
+/-
+**Matroid.ofExistsFiniteIsBase_isBase** 是 Mathlib 中的一个定理，位于命名空间 `Matroid`。
+形式化陈述：∀ {α : Type u_1} (E : Set α) (IsBase : Set α → Prop) (exists_finite_base :
+ ∃ B, IsBase B ∧ B.Finite)   (isBase_exchange : Matroid.ExchangeProperty IsBase)
+ (subset_ground : ∀ (B : Set α), IsBase B → B ⊆ E),   (Matroid.ofExistsFiniteIsB
+ase E IsBase exists_finite_base isBase_exchange subset_ground).IsBase = IsBase
+参数：E : Set α；IsBase : Set α → Prop；exists_finite_base : ∃ B, IsBase B ∧ B.Finite
+；isBase_exchange : Matroid.ExchangeProperty IsBase；subset_ground : ∀ (B : Set α)
+, IsBase B → B ⊆ E；Matroid.ofExistsFiniteIsBase E IsBase exists_finite_base isBa
+se_exchange subset_ground。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofExistsFiniteIsBase_isBase (E : Set α) IsBase exists_finite_base
     isBase_exchange subset_ground : (Matroid.ofExistsFiniteIsBase
       E IsBase exists_finite_base isBase_exchange subset_ground).IsBase = IsBase := rfl
-
-/--
-Instance `ofExistsFiniteIsBase_rankFinite` / 实例 `ofExistsFiniteIsBase_rankFinite`
-
-English:
-instance ofExistsFiniteIsBase_rankFinite
-  signature: (E : Set α) IsBase exists_finite_base
-  body: by
-  obtain ⟨B, hB, hfin⟩ := exists_finite_base
-  exact Matroid.IsBase.rankFinite_of_finite (by simpa) hfin
-
-中文:
-实例 ofExistsFiniteIsBase_rankFinite
-  签名: (E : 集合 α) IsBase 存在_finite_base
-  定义体: by
-  obtain ⟨B, hB, hfin⟩ := exists_finite_base
-  exact Matroid.IsBase.rankFinite_of_finite (by simpa) hfin
-
-Depends on / 依赖: IsBase, Matroid, Matroid.IsBase.rankFinite_of_finite, exists_finite_base, rankFinite_of_finite
+/-
+**Matroid.ofExistsFiniteIsBase_rankFinite** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+形式化陈述：ofExistsFiniteIsBase_rankFinite (E : Set α) IsBase exists_finite_base isBa
+se_exchange subset_ground : RankFinite (Matroid.ofExistsFiniteIsBase E IsBase ex
+ists_finite_base isBase_exchange subset_ground)
+参数：E : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsBase.rankFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} {B
+ : Set α}, M.IsBase B → B.Finite → M.RankFinite
 -/
 instance ofExistsFiniteIsBase_rankFinite (E : Set α) IsBase exists_finite_base
     isBase_exchange subset_ground : RankFinite (Matroid.ofExistsFiniteIsBase
@@ -1265,85 +973,67 @@ instance ofExistsFiniteIsBase_rankFinite (E : Set α) IsBase exists_finite_base
   obtain ⟨B, hB, hfin⟩ := exists_finite_base
   exact Matroid.IsBase.rankFinite_of_finite (by simpa) hfin
 
-/--
-Definition of `ofIsBaseOfFinite` / `ofIsBaseOfFinite` 的定义
+/-- If `E` is finite, then any nonempty collection of its subsets
+  with the exchange property is the collection of bases of a matroid on `E`. -/
+/-
+**Matroid.ofIsBaseOfFinite** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：{α : Type u_1} →   {E : Set α} →     E.Finite →       (IsBase : Set α → Pr
+op) →         (∃ B, IsBase B) → Matroid.ExchangeProperty IsBase → (∀ (B : Set α)
+, IsBase B → B ⊆ E) → Matroid α
+参数：IsBase : Set α → Prop；∃ B, IsBase B；∀ (B : Set α), IsBase B → B ⊆ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsBaseOfFinite
-  signature: {E : Set α} (hE : E.Finite) (IsBase : Set α -> Prop)
-  body: Matroid.ofExistsFiniteIsBase (E := E) (IsBase := IsBase)
-    (exists_finite_base :=
-      let ⟨B, hB⟩ := exists_isBase
-      ⟨B, hB, hE.subset (subset_ground B hB)⟩)
-    (isBase_exchange := isBase_exchange)
-    (subset_ground := subset_ground)
-
-中文:
-定义 ofIsBaseOfFinite
-  签名: {E : 集合 α} (hE : E.有限) (IsBase : 集合 α -> 命题)
-  定义体: Matroid.ofExistsFiniteIsBase (E := E) (IsBase := IsBase)
-    (exists_finite_base :=
-      let ⟨B, hB⟩ := exists_isBase
-      ⟨B, hB, hE.subset (subset_ground B hB)⟩)
-    (isBase_exchange := isBase_exchange)
-    (subset_ground := subset_ground)
+--- 原说明 ---
+If `E` is finite, then any nonempty collection of its subsets
+  with the exchange property is the collection of bases of a matroid on `E`.
 -/
-protected def ofIsBaseOfFinite {E : Set α} (hE : E.Finite) (IsBase : Set α -> Prop)
-    (exists_isBase : exists B, IsBase B) (isBase_exchange : ExchangeProperty IsBase)
-    (subset_ground : forall B, IsBase B -> B subseteq E) : Matroid α :=
+protected def ofIsBaseOfFinite {E : Set α} (hE : E.Finite) (IsBase : Set α → Prop)
+    (exists_isBase : ∃ B, IsBase B) (isBase_exchange : ExchangeProperty IsBase)
+    (subset_ground : ∀ B, IsBase B → B ⊆ E) : Matroid α :=
   Matroid.ofExistsFiniteIsBase (E := E) (IsBase := IsBase)
     (exists_finite_base :=
       let ⟨B, hB⟩ := exists_isBase
       ⟨B, hB, hE.subset (subset_ground B hB)⟩)
     (isBase_exchange := isBase_exchange)
     (subset_ground := subset_ground)
-
-/--
-theorem `ofIsBaseOfFinite_E` / 定理 `ofIsBaseOfFinite_E`
-
-English:
-theorem ofIsBaseOfFinite_E
-  statement: {E : Set α} (hE : E.Finite) IsBase exists_isBase isBase_exchange
-  proof: rfl
-
-中文:
-定理 ofIsBaseOfFinite_E
-  结论: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase isBase_exchange
-  证明: rfl
+/-
+**Matroid.ofIsBaseOfFinite_E** 是 Mathlib 中的一个定理，位于命名空间 `Matroid`。
+形式化陈述：∀ {α : Type u_1} {E : Set α} (hE : E.Finite) (IsBase : Set α → Prop) (exis
+ts_isBase : ∃ B, IsBase B)   (isBase_exchange : Matroid.ExchangeProperty IsBase)
+ (subset_ground : ∀ (B : Set α), IsBase B → B ⊆ E),   (Matroid.ofIsBaseOfFinite 
+hE IsBase exists_isBase isBase_exchange subset_ground).E = E
+参数：hE : E.Finite；IsBase : Set α → Prop；exists_isBase : ∃ B, IsBase B；isBase_exch
+ange : Matroid.ExchangeProperty IsBase；subset_ground : ∀ (B : Set α), IsBase B →
+ B ⊆ E；Matroid.ofIsBaseOfFinite hE IsBase exists_isBase isBase_exchange subset_g
+round。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofIsBaseOfFinite_E {E : Set α} (hE : E.Finite) IsBase exists_isBase isBase_exchange
     subset_ground : (Matroid.ofIsBaseOfFinite
       hE IsBase exists_isBase isBase_exchange subset_ground).E = E := rfl
-
-/--
-theorem `ofIsBaseOfFinite_isBase` / 定理 `ofIsBaseOfFinite_isBase`
-
-English:
-theorem ofIsBaseOfFinite_isBase
-  statement: {E : Set α} (hE : E.Finite) IsBase exists_isBase
-  proof: rfl
-
-中文:
-定理 ofIsBaseOfFinite_isBase
-  结论: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase
-  证明: rfl
+/-
+**Matroid.ofIsBaseOfFinite_isBase** 是 Mathlib 中的一个定理，位于命名空间 `Matroid`。
+形式化陈述：∀ {α : Type u_1} {E : Set α} (hE : E.Finite) (IsBase : Set α → Prop) (exis
+ts_isBase : ∃ B, IsBase B)   (isBase_exchange : Matroid.ExchangeProperty IsBase)
+ (subset_ground : ∀ (B : Set α), IsBase B → B ⊆ E),   (Matroid.ofIsBaseOfFinite 
+hE IsBase exists_isBase isBase_exchange subset_ground).IsBase = IsBase
+参数：hE : E.Finite；IsBase : Set α → Prop；exists_isBase : ∃ B, IsBase B；isBase_exch
+ange : Matroid.ExchangeProperty IsBase；subset_ground : ∀ (B : Set α), IsBase B →
+ B ⊆ E；Matroid.ofIsBaseOfFinite hE IsBase exists_isBase isBase_exchange subset_g
+round。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofIsBaseOfFinite_isBase {E : Set α} (hE : E.Finite) IsBase exists_isBase
     isBase_exchange subset_ground : (Matroid.ofIsBaseOfFinite
       hE IsBase exists_isBase isBase_exchange subset_ground).IsBase = IsBase := rfl
-
-/--
-Instance `ofBaseOfFinite_finite` / 实例 `ofBaseOfFinite_finite`
-
-English:
-instance ofBaseOfFinite_finite
-  signature: {E : Set α} (hE : E.Finite) IsBase exists_isBase
-  body: ⟨hE⟩
-
-中文:
-实例 ofBaseOfFinite_finite
-  签名: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase
-  定义体: ⟨hE⟩
+/-
+**Matroid.ofBaseOfFinite_finite** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+形式化陈述：ofBaseOfFinite_finite {E : Set α} (hE : E.Finite) IsBase exists_isBase isB
+ase_exchange subset_ground : (Matroid.ofIsBaseOfFinite hE IsBase exists_isBase i
+sBase_exchange subset_ground).Finite
+参数：hE : E.Finite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ofBaseOfFinite_finite {E : Set α} (hE : E.Finite) IsBase exists_isBase
     isBase_exchange subset_ground : (Matroid.ofIsBaseOfFinite
@@ -1355,3 +1045,4 @@ end Matroid
 end IsBase
 
 end IndepMatroid
+

@@ -46,97 +46,82 @@ namespace SSet
 
 open CategoryTheory Simplicial
 
-/--
-Definition of `QCat` / `QCat` 的定义
+/-- `QCat` is the category of quasi-categories defined as the full subcategory of the category
+`SSet` of simplicial sets. -/
+/-
+**SSet.QCat** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：QCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation QCat
-  body: ObjectProperty.FullSubcategory Quasicategory
-
-中文:
-缩写 QCat
-  定义体: ObjectProperty.FullSubcategory Quasicategory
-
-Depends on / 依赖: FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory, Quasicategory
+--- 原说明 ---
+`QCat` is the category of quasi-categories defined as the full subcategory of th
+e category
+`SSet` of simplicial sets.
 -/
 abbrev QCat := ObjectProperty.FullSubcategory Quasicategory
 
-/--
-Instance `QCat.catEnrichedOrdinaryCategory` / 实例 `QCat.catEnrichedOrdinaryCategory`
+/-- `QCat` obtains a `Cat`-enriched ordinary category structure by applying `hoFunctor` to the
+hom objects in its `SSet`-enriched ordinary structure. -/
+/-
+**SSet.QCat.catEnrichedOrdinaryCategory** 是 Mathlib 中的一个定义，位于命名空间 `SSet.QCat`。
+形式化陈述：CategoryTheory.EnrichedOrdinaryCategory CategoryTheory.Cat SSet.QCat
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-instance QCat.catEnrichedOrdinaryCategory
-  signature: : EnrichedOrdinaryCategory Cat QCat
-  body: TransportEnrichment.enrichedOrdinaryCategory QCat hoFunctor.{u}
-    (hoFunctor.unitHomEquiv · |>.trans <| Functor.equivCatHom _ _)
-      (congrArg (Functor.toCatHom) <| hoFunctor.unitHomEquiv_eq · ·)
-
-中文:
-实例 QCat.catEnrichedOrdinaryCategory
-  签名: : EnrichedOrdinary范畴 Cat QCat
-  定义体: TransportEnrichment.enrichedOrdinaryCategory QCat hoFunctor.{u}
-    (hoFunctor.unitHomEquiv · |>.trans <| Functor.equivCatHom _ _)
-      (congrArg (Functor.toCatHom) <| hoFunctor.unitHomEquiv_eq · ·)
-
-Depends on / 依赖: Functor, Functor.equivCatHom, Functor.toCatHom, TransportEnrichment, TransportEnrichment.enrichedOrdinaryCategory, enrichedOrdinaryCategory, equivCatHom, hoFunctor, hoFunctor.unitHomEquiv, hoFunctor.unitHomEquiv_eq, toCatHom, unitHomEquiv, unitHomEquiv_eq
+--- 原说明 ---
+`QCat` obtains a `Cat`-enriched ordinary category structure by applying `hoFunct
+or` to the
+hom objects in its `SSet`-enriched ordinary structure.
 -/
 instance QCat.catEnrichedOrdinaryCategory : EnrichedOrdinaryCategory Cat QCat :=
   TransportEnrichment.enrichedOrdinaryCategory QCat hoFunctor.{u}
     (hoFunctor.unitHomEquiv · |>.trans <| Functor.equivCatHom _ _)
       (congrArg (Functor.toCatHom) <| hoFunctor.unitHomEquiv_eq · ·)
 
-/--
-Definition of `QCat.forgetEnrichment.equiv` / `QCat.forgetEnrichment.equiv` 的定义
+/-- The underlying category of the `Cat`-enriched ordinary category of quasicategories is
+equivalent to `QCat`. -/
+/-
+**SSet.QCat.forgetEnrichment.equiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.QCat.forgetEn
+richment`。
+形式化陈述：CategoryTheory.ForgetEnrichment CategoryTheory.Cat SSet.QCat ≌ SSet.QCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition QCat.forgetEnrichment.equiv
-  signature: :
-  body: ForgetEnrichment.equiv Cat
-
-中文:
-定义 QCat.forgetEnrichment.equiv
-  签名: :
-  定义体: ForgetEnrichment.equiv Cat
-
-Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.equiv
+--- 原说明 ---
+The underlying category of the `Cat`-enriched ordinary category of quasicategori
+es is
+equivalent to `QCat`.
 -/
 def QCat.forgetEnrichment.equiv :
     ForgetEnrichment Cat QCat ≌ QCat := ForgetEnrichment.equiv Cat
 
-/--
-Instance `QCat.bicategory` / 实例 `QCat.bicategory`
+/-- The bicategory of quasicategories extracted from `QCat.CatEnrichedOrdinaryCat`. -/
+/-
+**SSet.QCat.bicategory** 是 Mathlib 中的一个定义，位于命名空间 `SSet.QCat`。
+形式化陈述：CategoryTheory.Bicategory SSet.QCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance QCat.bicategory
-  signature: : Bicategory QCat
-  body: CatEnrichedOrdinary.instBicategory
-
-中文:
-实例 QCat.bicategory
-  签名: : 双范畴 QCat
-  定义体: CatEnrichedOrdinary.instBicategory
-
-Depends on / 依赖: CatEnrichedOrdinary, CatEnrichedOrdinary.instBicategory, instBicategory
+--- 原说明 ---
+The bicategory of quasicategories extracted from `QCat.CatEnrichedOrdinaryCat`.
 -/
 instance QCat.bicategory : Bicategory QCat :=
   CatEnrichedOrdinary.instBicategory
 
-/--
-Instance `QCat.strictBicategory` / 实例 `QCat.strictBicategory`
+/-- The strict bicategory of quasicategories extracted from `QCat.CatEnrichedOrdinaryCat`. -/
+/-
+**SSet.QCat.strictBicategory** 是 Mathlib 中的一个定理，位于命名空间 `SSet.QCat`。
+形式化陈述：CategoryTheory.Bicategory.Strict SSet.QCat
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CatEnrichedOrdinary.instStrict`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.EnrichedOrdinaryCateg
+ory CategoryTheory.Cat C],   Catego…
 
-English:
-instance QCat.strictBicategory
-  signature: : Bicategory.Strict QCat
-  body: CatEnrichedOrdinary.instStrict
-
-中文:
-实例 QCat.strictBicategory
-  签名: : 双范畴.Strict QCat
-  定义体: CatEnrichedOrdinary.instStrict
-
-Depends on / 依赖: CatEnrichedOrdinary, CatEnrichedOrdinary.instStrict, instStrict
+--- 原说明 ---
+The strict bicategory of quasicategories extracted from `QCat.CatEnrichedOrdinar
+yCat`.
 -/
 instance QCat.strictBicategory : Bicategory.Strict QCat :=
   CatEnrichedOrdinary.instStrict
 
 end SSet
+

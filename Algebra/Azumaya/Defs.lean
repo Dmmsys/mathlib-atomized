@@ -35,104 +35,79 @@ variable (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
 
 open TensorProduct MulOpposite
 
-/--
-Definition of `instModuleTensorProductMop` / `instModuleTensorProductMop` 的定义
+/-- `A` as a `A ⊗[R] Aᵐᵒᵖ`-module (or equivalently, an `A`-`A` bimodule). -/
+/-
+**instModuleTensorProductMop** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：instModuleTensorProductMop : Module (A otimes[R] Aᵐᵒᵖ) A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-abbreviation instModuleTensorProductMop
-  signature: : Module (A otimes[R] Aᵐᵒᵖ) A
-  body: TensorProduct.Algebra.module
-
-中文:
-缩写 instModuleTensorProductMop
-  签名: : 模 (A otimes[R] Aᵐᵒᵖ) A
-  定义体: TensorProduct.Algebra.module
-
-Depends on / 依赖: Algebra, TensorProduct, TensorProduct.Algebra.module, module
+--- 原说明 ---
+`A` as a `A ⊗[R] Aᵐᵒᵖ`-module (or equivalently, an `A`-`A` bimodule).
 -/
-abbrev instModuleTensorProductMop : Module (A otimes[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
+abbrev instModuleTensorProductMop : Module (A ⊗[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
 
-/--
-Definition of `AlgHom.mulLeftRight` / `AlgHom.mulLeftRight` 的定义
+/-- The canonical map from `A ⊗[R] Aᵐᵒᵖ` to `Module.End R A` where
+  `a ⊗ b` maps to `f : x ↦ a * x * b`. -/
+/-
+**AlgHom.mulLeftRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AlgHom.mulLeftRight : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] Module.End R A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-definition AlgHom.mulLeftRight
-  signature: : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] Module.End R A
-  body: letI : Module (A otimes[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
-  letI : IsScalarTower R (A otimes[R] Aᵐᵒᵖ) A := {
-    smul_assoc := fun r ab a => by
-      change TensorProduct.Algebra.moduleAux _ _ = _ • TensorProduct.Algebra.moduleAux _ _
-      simp }
-  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R A
-
-@[simp]
-
-中文:
-定义 代数态射.mulLeftRight
-  签名: : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] 模.End R A
-  定义体: letI : Module (A otimes[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
-  letI : IsScalarTower R (A otimes[R] Aᵐᵒᵖ) A := {
-    smul_assoc := fun r ab a => by
-      change TensorProduct.Algebra.moduleAux _ _ = _ • TensorProduct.Algebra.moduleAux _ _
-      simp }
-  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R A
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.lsmul, IsScalarTower, Module, TensorProduct, TensorProduct.Algebra.module, TensorProduct.Algebra.moduleAux, module, moduleAux, otimes, smul_assoc
+--- 原说明 ---
+The canonical map from `A ⊗[R] Aᵐᵒᵖ` to `Module.End R A` where
+  `a ⊗ b` maps to `f : x ↦ a * x * b`.
 -/
-def AlgHom.mulLeftRight : (A otimes[R] Aᵐᵒᵖ) ->ₐ[R] Module.End R A :=
-  letI : Module (A otimes[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
-  letI : IsScalarTower R (A otimes[R] Aᵐᵒᵖ) A := {
-    smul_assoc := fun r ab a => by
+def AlgHom.mulLeftRight : (A ⊗[R] Aᵐᵒᵖ) →ₐ[R] Module.End R A :=
+  letI : Module (A ⊗[R] Aᵐᵒᵖ) A := TensorProduct.Algebra.module
+  letI : IsScalarTower R (A ⊗[R] Aᵐᵒᵖ) A := {
+    smul_assoc := fun r ab a ↦ by
       change TensorProduct.Algebra.moduleAux _ _ = _ • TensorProduct.Algebra.moduleAux _ _
       simp }
-  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R A
+  Algebra.lsmul R (A := A ⊗[R] Aᵐᵒᵖ) R A
 
 @[simp]
-/--
-lemma `AlgHom.mulLeftRight_apply` / 引理 `AlgHom.mulLeftRight_apply`
-
-English:
-lemma AlgHom.mulLeftRight_apply
-  given: (a : A) (b : Aᵐᵒᵖ) (x : A)
-  proof: by
-  simp only [AlgHom.mulLeftRight, Algebra.lsmul_coe]
-  change TensorProduct.Algebra.moduleAux _ _ = _
-  simp [TensorProduct.Algebra.moduleAux, ← mul_assoc]
-
-中文:
-引理 代数态射.mulLeftRight_apply
-  条件: (a : A) (b : Aᵐᵒᵖ) (x : A)
-  证明: by
-  simp only [AlgHom.mulLeftRight, Algebra.lsmul_coe]
-  change TensorProduct.Algebra.moduleAux _ _ = _
-  simp [TensorProduct.Algebra.moduleAux, ← mul_assoc]
-
-Depends on / 依赖: AlgHom, AlgHom.mulLeftRight, Algebra, Algebra.lsmul_coe, TensorProduct, TensorProduct.Algebra.moduleAux, lsmul_coe, moduleAux, mulLeftRight, mul_assoc
+/-
+**AlgHom.mulLeftRight_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgHom.mulLeftRight_apply (a : A) (b : Aᵐᵒᵖ) (x : A) : AlgHom.mulLeftRight
+ R A (a otimesₜ b) x = a * x * b.unop
+参数：a : A；b : Aᵐᵒᵖ；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma AlgHom.mulLeftRight_apply (a : A) (b : Aᵐᵒᵖ) (x : A) :
-    AlgHom.mulLeftRight R A (a otimesₜ b) x = a * x * b.unop := by
+    AlgHom.mulLeftRight R A (a ⊗ₜ b) x = a * x * b.unop := by
   simp only [AlgHom.mulLeftRight, Algebra.lsmul_coe]
   change TensorProduct.Algebra.moduleAux _ _ = _
   simp [TensorProduct.Algebra.moduleAux, ← mul_assoc]
 
-/--
-Definition of `IsAzumaya` / `IsAzumaya` 的定义
+/-- An Azumaya algebra is a finitely generated, projective and faithful R-algebra where
+  `AlgHom.mulLeftRight R A : (A ⊗[R] Aᵐᵒᵖ) →ₐ[R] Module.End R A` is an isomorphism. -/
+/-
+**IsAzumaya** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → (A : Type u_2) → [inst : CommSemiring R] → [inst_1 : Semi
+ring A] → [Algebra R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsAzumaya
-  parameters: : Prop extends Module.Projective R A, FaithfulSMul R A, Module.Finite R A where
-  extends: Module.Projective R A, FaithfulSMul R A, Module.Finite R A
-  axioms and operations (1):
-    - bij : Function.Bijective AlgHom.mulLeftRight R A
-
-中文:
-类 是Azumaya
-  参数: : 命题 extends 模.投射 R A, 忠实标量乘法 R A, 模.有限 R A where
-  继承: 模.投射 R A, 忠实标量乘法 R A, 模.有限 R A
-  公理与运算 (1 个):
-    - bij : 函数.双射 代数态射.mulLeftRight R A
+--- 原说明 ---
+An Azumaya algebra is a finitely generated, projective and faithful R-algebra wh
+ere
+  `AlgHom.mulLeftRight R A : (A ⊗[R] Aᵐᵒᵖ) →ₐ[R] Module.End R A` is an isomorphi
+sm.
 -/
 class IsAzumaya : Prop extends Module.Projective R A, FaithfulSMul R A, Module.Finite R A where
-bij : Function.Bijective AlgHom.mulLeftRight R A
+    bij : Function.Bijective <| AlgHom.mulLeftRight R A

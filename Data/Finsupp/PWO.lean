@@ -26,21 +26,27 @@ Dickson, order, partial well order
 -/
 
 public section
-/--
-Instance `Finsupp.wellQuasiOrderedLE` / 实例 `Finsupp.wellQuasiOrderedLE`
+/-- A version of **Dickson's lemma**: `σ →₀ α` is well-quasi-ordered when `σ` is `Finite` and `α` is
+well-quasi-ordered.
+This version uses finsupps on a finite type as it is intended for use with `MVPowerSeries`.
+-/
+/-
+**Finsupp.wellQuasiOrderedLE** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Finsupp.wellQuasiOrderedLE {α σ : Type*} [Zero α] [Preorder α] [WellQuasiO
+rderedLE α] [Finite σ] : WellQuasiOrderedLE (σ ->₀ α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderIso.wellQuasiOrderedLE_iff`：OrderIso.wellQuasiOrderedLE_iff {α β} [
+LE α] [LE β] (f : α ≃o β) : WellQuasiOrderedLE α ↔ WellQuasiOrderedLE β
 
-English:
-instance Finsupp.wellQuasiOrderedLE
-  signature: {α σ : Type*} [Zero α] [Preorder α] [WellQuasiOrderedLE α]
-  body: orderIsoFunOnFinite.wellQuasiOrderedLE_iff.2 inferInstance
-
-中文:
-实例 有限支撑.wellQuasiOrderedLE
-  签名: {α σ : 类型} [零 α] [预序 α] [良拟序 α]
-  定义体: orderIsoFunOnFinite.wellQuasiOrderedLE_iff.2 inferInstance
-
-Depends on / 依赖: orderIsoFunOnFinite, orderIsoFunOnFinite.wellQuasiOrderedLE_iff, wellQuasiOrderedLE_iff
+--- 原说明 ---
+A version of **Dickson's lemma**: `σ →₀ α` is well-quasi-ordered when `σ` is `Fi
+nite` and `α` is
+well-quasi-ordered.
+This version uses finsupps on a finite type as it is intended for use with `MVPo
+werSeries`.
 -/
 instance Finsupp.wellQuasiOrderedLE {α σ : Type*} [Zero α] [Preorder α] [WellQuasiOrderedLE α]
-    [Finite σ] : WellQuasiOrderedLE (σ ->₀ α) :=
+    [Finite σ] : WellQuasiOrderedLE (σ →₀ α) :=
   orderIsoFunOnFinite.wellQuasiOrderedLE_iff.2 inferInstance

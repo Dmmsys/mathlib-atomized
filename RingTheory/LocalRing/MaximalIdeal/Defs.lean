@@ -26,25 +26,19 @@ namespace IsLocalRing
 
 variable (R : Type*) [CommSemiring R] [IsLocalRing R]
 
-/--
-Definition of `maximalIdeal` / `maximalIdeal` 的定义
+/-- The ideal of elements that are not units. -/
+/-
+**IsLocalRing.maximalIdeal** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing`。
+形式化陈述：maximalIdeal : Ideal R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition maximalIdeal
-  signature: : Ideal R where
-  body: nonunitsAddSubmonoid R
-  smul_mem' _ _ := mul_mem_nonunits_right
-
-中文:
-定义 maximalIdeal
-  签名: : 理想 R where
-  定义体: nonunitsAddSubmonoid R
-  smul_mem' _ _ := mul_mem_nonunits_right
-
-Depends on / 依赖: nonunitsAddSubmonoid
+--- 原说明 ---
+The ideal of elements that are not units.
 -/
 def maximalIdeal : Ideal R where
   __ := nonunitsAddSubmonoid R
   smul_mem' _ _ := mul_mem_nonunits_right
 
 end IsLocalRing
+

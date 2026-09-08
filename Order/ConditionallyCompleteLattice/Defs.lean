@@ -34,74 +34,88 @@ open Set
 
 variable {α β γ : Type*} {ι : Sort*}
 
-/--
-Definition of `ConditionallyCompleteLattice` / `ConditionallyCompleteLattice` 的定义
+/-- A conditionally complete lattice is a lattice in which
+every nonempty subset which is bounded above has a supremum, and
+every nonempty subset which is bounded below has an infimum.
+Typical examples are real numbers or natural numbers.
 
-English:
-class ConditionallyCompleteLattice
-  parameters: (α : Type*)
-  extends: Lattice α, SupSet α, InfSet α
-  axioms and operations (2):
-    - isLUB_csSup : forall s : Set α, s.Nonempty -> BddAbove s -> IsLUB s (sSup s)
-    - isGLB_csInf : forall s : Set α, s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
+To differentiate the statements from the corresponding statements in (unconditional)
+complete lattices, we prefix `sInf` and `sSup` by a `c` everywhere. The same statements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness. -/
+/-
+**ConditionallyCompleteLattice** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：ConditionallyCompleteLattice (α : Type*) extends Lattice α, SupSet α, InfS
+et α where /-- Every nonempty subset which is bounded above has a least upper bo
+und. -/ isLUB_csSup : forall s : Set α, s.Nonempty -> BddAbove s -> IsLUB s (sSu
+p s) /-- Every nonempty subset which is bounded below has a greatest lower bound
+. -/ isGLB_csInf : forall s : Set α, s.Nonempty -> BddBelow s -> IsGLB s (sInf s
+)  attribute [to_dual self (reorder
+参数：α : Type*。
+继承自：Lattice α, SupSet α, InfSet α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 条件完备格
-  参数: (α : 类型)
-  继承: 格 α, 上确界集 α, 下确界集 α
-  公理与运算 (2 个):
-    - isLUB_csSup : 对任意 s : 集合 α, s.非空 -> BddAbove s -> IsLUB s (sSup s)
-    - isGLB_csInf : 对任意 s : 集合 α, s.非空 -> BddBelow s -> IsGLB s (sInf s)
+--- 原说明 ---
+A conditionally complete lattice is a lattice in which
+every nonempty subset which is bounded above has a supremum, and
+every nonempty subset which is bounded below has an infimum.
+Typical examples are real numbers or natural numbers.
 
-Depends on / 依赖: ConditionallyCompleteLattice, ConditionallyCompleteLattice.mk
+To differentiate the statements from the corresponding statements in (unconditio
+nal)
+complete lattices, we prefix `sInf` and `sSup` by a `c` everywhere. The same sta
+tements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness.
 -/
 class ConditionallyCompleteLattice (α : Type*) extends Lattice α, SupSet α, InfSet α where
   /-- Every nonempty subset which is bounded above has a least upper bound. -/
-  isLUB_csSup : forall s : Set α, s.Nonempty -> BddAbove s -> IsLUB s (sSup s)
+  isLUB_csSup : ∀ s : Set α, s.Nonempty → BddAbove s → IsLUB s (sSup s)
   /-- Every nonempty subset which is bounded below has a greatest lower bound. -/
-  isGLB_csInf : forall s : Set α, s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
+  isGLB_csInf : ∀ s : Set α, s.Nonempty → BddBelow s → IsGLB s (sInf s)
 
 attribute [to_dual self (reorder := 3 4, 5 6)] ConditionallyCompleteLattice.mk
 attribute [to_dual existing] ConditionallyCompleteLattice.toSupSet
 attribute [to_dual existing] ConditionallyCompleteLattice.isLUB_csSup
 
-/--
-Definition of `ConditionallyCompleteLinearOrder` / `ConditionallyCompleteLinearOrder` 的定义
+/-- A conditionally complete linear order is a linear order in which
+every nonempty subset which is bounded above has a supremum, and
+every nonempty subset which is bounded below has an infimum.
+Typical examples are real numbers or natural numbers.
 
-English:
-class ConditionallyCompleteLinearOrder
-  parameters: (α : Type*)
-  extends: ConditionallyCompleteLattice α, Ord α
-  axioms and operations (8):
-    - le_total((a b : α)) : a <= b ∨ b <= a
-    - toDecidableLE : DecidableLE α
-    - toDecidableEq : DecidableEq α  [default: @decidableEqOfDecidableLE _ _ toDecidableLE]
-    - toDecidableLT : DecidableLT α  [default: @decidableLTOfDecidableLE _ _ toDecidableLE]
-    - csSup_of_not_bddAbove : forall s, ¬BddAbove s -> sSup s = sSup (∅ : Set α)
-    - csInf_of_not_bddBelow : forall s, ¬BddBelow s -> sInf s = sInf (∅ : Set α)
-    - compare(a b) : = compareOfLessAndEq a b
-    - compare_eq_compareOfLessAndEq : forall a b, compare a b = compareOfLessAndEq a b  [default: by compareOfLessAndEq_rfl]
+To differentiate the statements from the corresponding statements in (unconditional)
+complete linear orders, we prefix `sInf` and `sSup` by a `c` everywhere. The same statements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness. -/
+/-
+**ConditionallyCompleteLinearOrder** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：ConditionallyCompleteLinearOrder (α : Type*) extends ConditionallyComplete
+Lattice α, Ord α where /-- A `ConditionallyCompleteLinearOrder` is total. -/ le_
+total (a b : α) : a <= b ∨ b <= a /-- In a `ConditionallyCompleteLinearOrder`, w
+e assume the order relations are all decidable. -/ toDecidableLE : DecidableLE α
+ /-- In a `ConditionallyCompleteLinearOrder`, we assume the order relations are 
+all decidable. -/ toDecidableEq : DecidableEq α
+参数：α : Type*；a b : α。
+继承自：ConditionallyCompleteLattice α, Ord α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 条件完备线性序
-  参数: (α : 类型)
-  继承: 条件完备格 α, 序 α
-  公理与运算 (8 个):
-    - le_total((a b : α)) : a <= b ∨ b <= a
-    - toDecidableLE : DecidableLE α
-    - toDecidableEq : DecidableEq α  [默认: @decidableEqOfDecidableLE _ _ toDecidableLE]
-    - toDecidableLT : DecidableLT α  [默认: @decidableLTOfDecidableLE _ _ toDecidableLE]
-    - csSup_of_not_bddAbove : 对任意 s, ¬BddAbove s -> sSup s = sSup (∅ : 集合 α)
-    - csInf_of_not_bddBelow : 对任意 s, ¬BddBelow s -> sInf s = sInf (∅ : 集合 α)
-    - compare(a b) : = compareOfLessAndEq a b
-    - compare_eq_compareOfLessAndEq : 对任意 a b, compare a b = compareOfLessAndEq a b  [默认: by compareOfLessAndEq_rfl]
+--- 原说明 ---
+A conditionally complete linear order is a linear order in which
+every nonempty subset which is bounded above has a supremum, and
+every nonempty subset which is bounded below has an infimum.
+Typical examples are real numbers or natural numbers.
 
-Depends on / 依赖: decidableEqOfDecidableLE, toDecidableLE
+To differentiate the statements from the corresponding statements in (unconditio
+nal)
+complete linear orders, we prefix `sInf` and `sSup` by a `c` everywhere. The sam
+e statements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness.
 -/
 class ConditionallyCompleteLinearOrder (α : Type*)
     extends ConditionallyCompleteLattice α, Ord α where
   /-- A `ConditionallyCompleteLinearOrder` is total. -/
-  le_total (a b : α) : a <= b ∨ b <= a
+  le_total (a b : α) : a ≤ b ∨ b ≤ a
   /-- In a `ConditionallyCompleteLinearOrder`, we assume the order relations are all decidable. -/
   toDecidableLE : DecidableLE α
   /-- In a `ConditionallyCompleteLinearOrder`, we assume the order relations are all decidable. -/
@@ -109,32 +123,42 @@ class ConditionallyCompleteLinearOrder (α : Type*)
   /-- In a `ConditionallyCompleteLinearOrder`, we assume the order relations are all decidable. -/
   toDecidableLT : DecidableLT α := @decidableLTOfDecidableLE _ _ toDecidableLE
   /-- If a set is not bounded above, its supremum is by convention `sSup ∅`. -/
-  csSup_of_not_bddAbove : forall s, ¬BddAbove s -> sSup s = sSup (∅ : Set α)
+  csSup_of_not_bddAbove : ∀ s, ¬BddAbove s → sSup s = sSup (∅ : Set α)
   /-- If a set is not bounded below, its infimum is by convention `sInf ∅`. -/
-  csInf_of_not_bddBelow : forall s, ¬BddBelow s -> sInf s = sInf (∅ : Set α)
+  csInf_of_not_bddBelow : ∀ s, ¬BddBelow s → sInf s = sInf (∅ : Set α)
   compare a b := compareOfLessAndEq a b
   /-- Comparison via `compare` is equal to the canonical comparison given decidable `<` and `=`. -/
-  compare_eq_compareOfLessAndEq : forall a b, compare a b = compareOfLessAndEq a b := by
+  compare_eq_compareOfLessAndEq : ∀ a b, compare a b = compareOfLessAndEq a b := by
     compareOfLessAndEq_rfl
 
 attribute [to_dual existing] ConditionallyCompleteLinearOrder.csSup_of_not_bddAbove
 
-/--
-Definition of `ConditionallyCompleteLinearOrderBot` / `ConditionallyCompleteLinearOrderBot` 的定义
+/-- A conditionally complete linear order with `Bot` is a linear order with least element, in which
+every nonempty subset which is bounded above has a supremum, and every nonempty subset (necessarily
+bounded below) has an infimum.  A typical example is the natural numbers.
 
-English:
-class ConditionallyCompleteLinearOrderBot
-  parameters: (α : Type*)
-  extends: ConditionallyCompleteLinearOrder α, 
-  axioms and operations (1):
-    - csSup_empty : sSup ∅ = ⊥
+To differentiate the statements from the corresponding statements in (unconditional)
+complete linear orders, we prefix `sInf` and `sSup` by a `c` everywhere. The same statements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness. -/
+/-
+**ConditionallyCompleteLinearOrderBot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_5 → Type u_5
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余nditionallyCompleteLinearOrderBot
-  参数: (α : 类型)
-  继承: 条件完备线性序 α, 
-  公理与运算 (1 个):
-    - csSup_empty : sSup ∅ = ⊥
+--- 原说明 ---
+A conditionally complete linear order with `Bot` is a linear order with least el
+ement, in which
+every nonempty subset which is bounded above has a supremum, and every nonempty 
+subset (necessarily
+bounded below) has an infimum.  A typical example is the natural numbers.
+
+To differentiate the statements from the corresponding statements in (unconditio
+nal)
+complete linear orders, we prefix `sInf` and `sSup` by a `c` everywhere. The sam
+e statements should
+hold in both worlds, sometimes with additional assumptions of nonemptiness or
+boundedness.
 -/
 class ConditionallyCompleteLinearOrderBot (α : Type*) extends ConditionallyCompleteLinearOrder α,
     OrderBot α where
@@ -146,7 +170,7 @@ attribute [instance 100] ConditionallyCompleteLinearOrderBot.toOrderBot
 
 /-- Create a `ConditionallyCompleteLattice` from a `PartialOrder` and `sup` function
 that returns the least upper bound of a nonempty set which is bounded above. Usually this
-constructor provides poor definitional equalities. If other fields are known explicitly, they
+constructor provides poor definitional equalities.  If other fields are known explicitly, they
 should be provided; for example, if `inf` is known explicitly, construct the
 `ConditionallyCompleteLattice` instance as
 ```
@@ -162,7 +186,7 @@ instance : ConditionallyCompleteLattice my_T where
 @[to_dual (attr := instance_reducible) (reorder := 4 5)
 /-- Create a `ConditionallyCompleteLattice` from a `PartialOrder` and `sInf` function
 that returns the greatest lower bound of a nonempty set which is bounded below. Usually this
-constructor provides poor definitional equalities. If other fields are known explicitly, they
+constructor provides poor definitional equalities.  If other fields are known explicitly, they
 should be provided; for example, if `inf` is known explicitly, construct the
 `ConditionallyCompleteLattice` instance as
 ```
@@ -175,43 +199,27 @@ instance : ConditionallyCompleteLattice my_T :=
   __ := conditionallyCompleteLatticeOfsInf my_T ...
 ```
 -/]
-/--
-Definition of `conditionallyCompleteLatticeOfsSup` / `conditionallyCompleteLatticeOfsSup` 的定义
-
-English:
-definition conditionallyCompleteLatticeOfsSup
-  signature: (α : Type*) [H1 : PartialOrder α] [H2 : SupSet α]
-  body: Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
-    (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
-    (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
-      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair a b))
-  __ := H2
-  sInf s := sSup (lowerBounds s)
-  isLUB_csSup _ hn hb := isLUB_sSup _ hb hn
-  isGLB_csInf _ hn hb := isLUB_lowerBounds.mp (isLUB_sSup _ hn.bddAbove_lowerBounds hb)
-
-中文:
-定义 conditionallyCompleteLatticeOfsSup
-  签名: (α : 类型) [H1 : 偏序 α] [H2 : 上确界集 α]
-  定义体: Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
-    (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
-    (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
-      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair a b))
-  __ := H2
-  sInf s := sSup (lowerBounds s)
-  isLUB_csSup _ hn hb := isLUB_sSup _ hb hn
-  isGLB_csInf _ hn hb := isLUB_lowerBounds.mp (isLUB_sSup _ hn.bddAbove_lowerBounds hb)
-
-Depends on / 依赖: Lattice, Lattice.ofIsLUBofIsGLB, lowerBounds, ofIsLUBofIsGLB
+/-
+**conditionallyCompleteLatticeOfsSup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conditionallyCompleteLatticeOfsSup (α : Type*) [H1 : PartialOrder α] [H2 :
+ SupSet α] (bddAbove_pair : forall a b : α, BddAbove ({a, b} : Set α)) (bddBelow
+_pair : forall a b : α, BddBelow ({a, b} : Set α)) (isLUB_sSup : forall s : Set 
+α, BddAbove s -> s.Nonempty -> IsLUB s (sSup s)) : ConditionallyCompleteLattice 
+α where __
+参数：α : Type*；bddAbove_pair : forall a b : α, BddAbove ({a, b} : Set α)；bddBelow_
+pair : forall a b : α, BddBelow ({a, b} : Set α)；isLUB_sSup : forall s : Set α, 
+BddAbove s -> s.Nonempty -> IsLUB s (sSup s)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def conditionallyCompleteLatticeOfsSup (α : Type*) [H1 : PartialOrder α] [H2 : SupSet α]
-    (bddAbove_pair : forall a b : α, BddAbove ({a, b} : Set α))
-    (bddBelow_pair : forall a b : α, BddBelow ({a, b} : Set α))
-    (isLUB_sSup : forall s : Set α, BddAbove s -> s.Nonempty -> IsLUB s (sSup s)) :
+    (bddAbove_pair : ∀ a b : α, BddAbove ({a, b} : Set α))
+    (bddBelow_pair : ∀ a b : α, BddBelow ({a, b} : Set α))
+    (isLUB_sSup : ∀ s : Set α, BddAbove s → s.Nonempty → IsLUB s (sSup s)) :
     ConditionallyCompleteLattice α where
-  __ := Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
-    (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
-    (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
+  __ := Lattice.ofIsLUBofIsGLB (fun a b ↦ sSup {a, b}) (fun a b ↦ sSup (lowerBounds {a, b}))
+    (fun a b ↦ isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
+    (fun a b ↦ isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
       (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair a b))
   __ := H2
   sInf s := sSup (lowerBounds s)
@@ -225,31 +233,24 @@ This should only be used when it is both hard and unnecessary to provide `sInf` 
 /-- A version of `conditionallyCompleteLatticeOfsInf` when we already know that `α` is a lattice.
 
 This should only be used when it is both hard and unnecessary to provide `sSup` explicitly. -/]
-/--
-Definition of `conditionallyCompleteLatticeOfLatticeOfsSup` / `conditionallyCompleteLatticeOfLatticeOfsSup` 的定义
-
-English:
-definition conditionallyCompleteLatticeOfLatticeOfsSup
-  signature: (α : Type*) [H1 : Lattice α] [SupSet α]
-  body: { H1,
-    conditionallyCompleteLatticeOfsSup α
-      (fun a b => ⟨a ⊔ b, forall_insert_of_forall (forall_eq.mpr le_sup_right) le_sup_left⟩)
-      (fun a b => ⟨a ⊓ b, forall_insert_of_forall (forall_eq.mpr inf_le_right) inf_le_left⟩)
-      isLUB_sSup with }
-
-中文:
-定义 conditionallyCompleteLatticeOfLatticeOfsSup
-  签名: (α : 类型) [H1 : 格 α] [上确界集 α]
-  定义体: { H1,
-    conditionallyCompleteLatticeOfsSup α
-      (fun a b => ⟨a ⊔ b, forall_insert_of_forall (forall_eq.mpr le_sup_right) le_sup_left⟩)
-      (fun a b => ⟨a ⊓ b, forall_insert_of_forall (forall_eq.mpr inf_le_right) inf_le_left⟩)
-      isLUB_sSup with }
-
-Depends on / 依赖: conditionallyCompleteLatticeOfsSup, forall_eq, forall_eq.mpr, forall_insert_of_forall, inf_le_left, inf_le_right, isLUB_sSup, le_sup_left, le_sup_right
+/-
+**conditionallyCompleteLatticeOfLatticeOfsSup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conditionallyCompleteLatticeOfLatticeOfsSup (α : Type*) [H1 : Lattice α] [
+SupSet α] (isLUB_sSup : forall s : Set α, BddAbove s -> s.Nonempty -> IsLUB s (s
+Sup s)) : ConditionallyCompleteLattice α
+参数：α : Type*；isLUB_sSup : forall s : Set α, BddAbove s -> s.Nonempty -> IsLUB s 
+(sSup s)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ConditionallyCompleteLattice.isLUB_csSup`：∀ {α : Type u_5} [self : Condi
+tionallyCompleteLattice α] (s : Set α), s.Nonempty → BddAbove s → IsLUB s (sSup 
+s)
+· 使用定理 `ConditionallyCompleteLattice.isGLB_csInf`：∀ {α : Type u_5} [self : Condi
+tionallyCompleteLattice α] (s : Set α), s.Nonempty → BddBelow s → IsGLB s (sInf 
+s)
 -/
 def conditionallyCompleteLatticeOfLatticeOfsSup (α : Type*) [H1 : Lattice α] [SupSet α]
-    (isLUB_sSup : forall s : Set α, BddAbove s -> s.Nonempty -> IsLUB s (sSup s)) :
+    (isLUB_sSup : ∀ s : Set α, BddAbove s → s.Nonempty → IsLUB s (sSup s)) :
     ConditionallyCompleteLattice α :=
   { H1,
     conditionallyCompleteLatticeOfsSup α
@@ -258,42 +259,35 @@ def conditionallyCompleteLatticeOfLatticeOfsSup (α : Type*) [H1 : Lattice α] [
       isLUB_sSup with }
 
 open scoped Classical in
-/--
-Definition of `WellFoundedLT.conditionallyCompleteLinearOrderBot` / `WellFoundedLT.conditionallyCompleteLinearOrderBot` 的定义
+/-- A well-founded linear order is conditionally complete, with a bottom element. -/
+/-
+**WellFoundedLT.conditionallyCompleteLinearOrderBot** 是 Mathlib 中的一个缩写定义，位于命名空间 
+``。
+形式化陈述：WellFoundedLT.conditionallyCompleteLinearOrderBot (α : Type*) [i₁ : Linear
+Order α] [i₂ : OrderBot α] [h : WellFoundedLT α] : ConditionallyCompleteLinearOr
+derBot α where __
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Lattice.inf_le_left`：∀ {α : Type u} [self : Lattice α] (a b : α), Lattic
+e.inf a b ≤ a
+· 使用定理 `Lattice.inf_le_right`：∀ {α : Type u} [self : Lattice α] (a b : α), Latti
+ce.inf a b ≤ b
+· 使用定理 `Lattice.le_inf`：∀ {α : Type u} [self : Lattice α] (a b c : α), a ≤ b → a
+ ≤ c → a ≤ Lattice.inf b c
+· 使用定理 `ConditionallyCompleteLattice.isLUB_csSup`：∀ {α : Type u_5} [self : Condi
+tionallyCompleteLattice α] (s : Set α), s.Nonempty → BddAbove s → IsLUB s (sSup 
+s)
+· 使用定理 `ConditionallyCompleteLattice.isGLB_csInf`：∀ {α : Type u_5} [self : Condi
+tionallyCompleteLattice α] (s : Set α), s.Nonempty → BddBelow s → IsGLB s (sInf 
+s)
+· 使用定理 `LinearOrder.le_total`：∀ {α : Type u_2} [self : LinearOrder α] (a b : α),
+ a ≤ b ∨ b ≤ a
+· 使用定理 `LinearOrder.compare_eq_compareOfLessAndEq`：∀ {α : Type u_2} [self : Line
+arOrder α] (a b : α), compare a b = compareOfLessAndEq a b
 
-English:
-abbreviation WellFoundedLT.conditionallyCompleteLinearOrderBot
-  signature: (α : Type*)
-  body: i₁
-  __ := i₂
-  __ := LinearOrder.toLattice
-  __ :=
-    letI : InfSet α := ⟨fun s => if hs : s.Nonempty then h.wf.min s hs else ⊥⟩
-    conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn => by
-      simp only [dif_pos hn]
-      exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx => h.wf.min_le hx⟩
-  csSup_empty := by simp [sSup, bot_unique (WellFounded.min_le _ (mem_univ _))]
-  csSup_of_not_bddAbove s H := by
-    rw [BddAbove] at H
-    simp [sSup, H, bot_unique (WellFounded.min_le _ (mem_univ _))]
-  csInf_of_not_bddBelow s H := (H (OrderBot.bddBelow s)).elim
-
-中文:
-缩写 WellFoundedLT.conditionallyCompleteLinearOrderBot
-  签名: (α : 类型)
-  定义体: i₁
-  __ := i₂
-  __ := LinearOrder.toLattice
-  __ :=
-    letI : InfSet α := ⟨fun s => if hs : s.Nonempty then h.wf.min s hs else ⊥⟩
-    conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn => by
-      simp only [dif_pos hn]
-      exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx => h.wf.min_le hx⟩
-  csSup_empty := by simp [sSup, bot_unique (WellFounded.min_le _ (mem_univ _))]
-  csSup_of_not_bddAbove s H := by
-    rw [BddAbove] at H
-    simp [sSup, H, bot_unique (WellFounded.min_le _ (mem_univ _))]
-  csInf_of_not_bddBelow s H := (H (OrderBot.bddBelow s)).elim
+--- 原说明 ---
+A well-founded linear order is conditionally complete, with a bottom element.
 -/
 noncomputable abbrev WellFoundedLT.conditionallyCompleteLinearOrderBot (α : Type*)
     [i₁ : LinearOrder α] [i₂ : OrderBot α] [h : WellFoundedLT α] :
@@ -303,9 +297,9 @@ noncomputable abbrev WellFoundedLT.conditionallyCompleteLinearOrderBot (α : Typ
   __ := LinearOrder.toLattice
   __ :=
     letI : InfSet α := ⟨fun s => if hs : s.Nonempty then h.wf.min s hs else ⊥⟩
-    conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn => by
+    conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn ↦ by
       simp only [dif_pos hn]
-      exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx => h.wf.min_le hx⟩
+      exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx ↦ h.wf.min_le hx⟩
   csSup_empty := by simp [sSup, bot_unique (WellFounded.min_le _ (mem_univ _))]
   csSup_of_not_bddAbove s H := by
     rw [BddAbove] at H

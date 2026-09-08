@@ -19,302 +19,219 @@ variable {M α : Type*} [Small.{v} α]
 
 namespace Shrink
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: α] : One (Shrink.{v} α)
-  body: (equivShrink α).symm.one
-
-中文:
-实例 [幺
-  签名: α] : 幺 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.one
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [One α] : One (Shrink.{v} α) := (equivShrink α).symm.one
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] : Mul (Shrink.{v} α)
-  body: (equivShrink α).symm.mul
-
-中文:
-实例 [乘法
-  签名: α] : 乘法 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.mul
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Mul α] : Mul (Shrink.{v} α) := (equivShrink α).symm.mul
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Div
-  signature: α] : Div (Shrink.{v} α)
-  body: (equivShrink α).symm.div
-
-中文:
-实例 [除法
-  签名: α] : 除法 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.div
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Div α] : Div (Shrink.{v} α) := (equivShrink α).symm.div
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inv
-  signature: α] : Inv (Shrink.{v} α)
-  body: (equivShrink α).symm.Inv
-
-中文:
-实例 [取逆
-  签名: α] : 取逆 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.Inv
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Inv α] : Inv (Shrink.{v} α) := (equivShrink α).symm.Inv
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Pow
-  signature: α M] : Pow (Shrink.{v} α) M
-  body: (equivShrink α).symm.pow M
-
-中文:
-实例 [幂
-  签名: α M] : 幂 (Shrink.{v} α) M
-  定义体: (equivShrink α).symm.pow M
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Pow α M] : Pow (Shrink.{v} α) M := (equivShrink α).symm.pow M
 
 end Shrink
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_symm_one` / 引理 `equivShrink_symm_one`
-
-English:
-lemma equivShrink_symm_one
-  given: [One α]
-  statement: (equivShrink α).symm 1 = 1
-  proof: (equivShrink α).symm_apply_apply 1
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_symm_one
-  条件: [幺 α]
-  结论: (equivShrink α).symm 1 = 1
-  证明: (equivShrink α).symm_apply_apply 1
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: equivShrink, symm_apply_apply
+/-
+**equivShrink_symm_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_symm_one [One α] : (equivShrink α).symm 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma equivShrink_symm_one [One α] : (equivShrink α).symm 1 = 1 :=
   (equivShrink α).symm_apply_apply 1
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_symm_mul` / 引理 `equivShrink_symm_mul`
-
-English:
-lemma equivShrink_symm_mul
-  given: [Mul α] (x y : Shrink α)
-  proof: by
-  simp [Equiv.mul_def]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_symm_mul
-  条件: [乘法 α] (x y : Shrink α)
-  证明: by
-  simp [Equiv.mul_def]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.mul_def, mul_def
+/-
+**equivShrink_symm_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_symm_mul [Mul α] (x y : Shrink α) : (equivShrink α).symm (x * 
+y) = (equivShrink α).symm x * (equivShrink α).symm y
+参数：x y : Shrink α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_symm_mul [Mul α] (x y : Shrink α) :
     (equivShrink α).symm (x * y) = (equivShrink α).symm x * (equivShrink α).symm y := by
   simp [Equiv.mul_def]
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_mul` / 引理 `equivShrink_mul`
-
-English:
-lemma equivShrink_mul
-  given: [Mul α] (x y : α)
-  proof: by
-  simp [Equiv.mul_def]
-
-@[simp]
-
-中文:
-引理 equivShrink_mul
-  条件: [乘法 α] (x y : α)
-  证明: by
-  simp [Equiv.mul_def]
-
-@[simp]
-
-Depends on / 依赖: Equiv.mul_def, mul_def
+/-
+**equivShrink_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_mul [Mul α] (x y : α) : equivShrink α (x * y) = equivShrink α 
+x * equivShrink α y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_mul [Mul α] (x y : α) :
     equivShrink α (x * y) = equivShrink α x * equivShrink α y := by
   simp [Equiv.mul_def]
 
 @[simp]
-/--
-lemma `equivShrink_symm_smul` / 引理 `equivShrink_symm_smul`
-
-English:
-lemma equivShrink_symm_smul
-  given: {M : Type*} [SMul M α] (m : M) (x : Shrink α)
-  proof: by
-  simp [Equiv.smul_def]
-
-@[simp]
-
-中文:
-引理 equivShrink_symm_smul
-  条件: {M : 类型} [标量乘法 M α] (m : M) (x : Shrink α)
-  证明: by
-  simp [Equiv.smul_def]
-
-@[simp]
-
-Depends on / 依赖: Equiv.smul_def, smul_def
+/-
+**equivShrink_symm_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_symm_smul {M : Type*} [SMul M α] (m : M) (x : Shrink α) : (equ
+ivShrink α).symm (m • x) = m • (equivShrink α).symm x
+参数：m : M；x : Shrink α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_symm_smul {M : Type*} [SMul M α] (m : M) (x : Shrink α) :
     (equivShrink α).symm (m • x) = m • (equivShrink α).symm x := by
   simp [Equiv.smul_def]
 
 @[simp]
-/--
-lemma `equivShrink_smul` / 引理 `equivShrink_smul`
-
-English:
-lemma equivShrink_smul
-  given: {M : Type*} [SMul M α] (m : M) (x : α)
-  proof: by
-  simp [Equiv.smul_def]
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_smul
-  条件: {M : 类型} [标量乘法 M α] (m : M) (x : α)
-  证明: by
-  simp [Equiv.smul_def]
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.smul_def, smul_def, to_additive
+/-
+**equivShrink_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_smul {M : Type*} [SMul M α] (m : M) (x : α) : equivShrink α (m
+ • x) = m • equivShrink α x
+参数：m : M；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_smul {M : Type*} [SMul M α] (m : M) (x : α) :
     equivShrink α (m • x) = m • equivShrink α x := by
   simp [Equiv.smul_def]
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_symm_div` / 引理 `equivShrink_symm_div`
-
-English:
-lemma equivShrink_symm_div
-  given: [Div α] (x y : Shrink α)
-  proof: by
-  simp [Equiv.div_def]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_symm_div
-  条件: [除法 α] (x y : Shrink α)
-  证明: by
-  simp [Equiv.div_def]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.div_def, div_def
+/-
+**equivShrink_symm_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_symm_div [Div α] (x y : Shrink α) : (equivShrink α).symm (x / 
+y) = (equivShrink α).symm x / (equivShrink α).symm y
+参数：x y : Shrink α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_symm_div [Div α] (x y : Shrink α) :
     (equivShrink α).symm (x / y) = (equivShrink α).symm x / (equivShrink α).symm y := by
   simp [Equiv.div_def]
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_div` / 引理 `equivShrink_div`
-
-English:
-lemma equivShrink_div
-  given: [Div α] (x y : α)
-  proof: by
-  simp [Equiv.div_def]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_div
-  条件: [除法 α] (x y : α)
-  证明: by
-  simp [Equiv.div_def]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.div_def, div_def
+/-
+**equivShrink_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_div [Div α] (x y : α) : equivShrink α (x / y) = equivShrink α 
+x / equivShrink α y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_div [Div α] (x y : α) :
     equivShrink α (x / y) = equivShrink α x / equivShrink α y := by
   simp [Equiv.div_def]
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_symm_inv` / 引理 `equivShrink_symm_inv`
-
-English:
-lemma equivShrink_symm_inv
-  given: [Inv α] (x : Shrink α)
-  proof: by
-  simp [Equiv.inv_def]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 equivShrink_symm_inv
-  条件: [取逆 α] (x : Shrink α)
-  证明: by
-  simp [Equiv.inv_def]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.inv_def, inv_def
+/-
+**equivShrink_symm_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_symm_inv [Inv α] (x : Shrink α) : (equivShrink α).symm x⁻¹ = (
+(equivShrink α).symm x)⁻¹
+参数：x : Shrink α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_symm_inv [Inv α] (x : Shrink α) :
     (equivShrink α).symm x⁻¹ = ((equivShrink α).symm x)⁻¹ := by
   simp [Equiv.inv_def]
 
 @[to_additive (attr := simp)]
-/--
-lemma `equivShrink_inv` / 引理 `equivShrink_inv`
-
-English:
-lemma equivShrink_inv
-  given: [Inv α] (x : α)
-  statement: equivShrink α x⁻¹ = (equivShrink α x)⁻¹
-  proof: by
-  simp [Equiv.inv_def]
-
-中文:
-引理 equivShrink_inv
-  条件: [取逆 α] (x : α)
-  结论: equivShrink α x⁻¹ = (equivShrink α x)⁻¹
-  证明: by
-  simp [Equiv.inv_def]
-
-Depends on / 依赖: Equiv.inv_def, inv_def
+/-
+**equivShrink_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：equivShrink_inv [Inv α] (x : α) : equivShrink α x⁻¹ = (equivShrink α x)⁻¹
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivShrink_inv [Inv α] (x : α) : equivShrink α x⁻¹ = (equivShrink α x)⁻¹ := by
   simp [Equiv.inv_def]
@@ -323,265 +240,96 @@ namespace Shrink
 
 /-- Shrink `α` to a smaller universe preserves multiplication. -/
 @[to_additive /-- Shrink `α` to a smaller universe preserves addition. -/]
-/--
-Definition of `mulEquiv` / `mulEquiv` 的定义
+/-
+**Shrink.mulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Shrink`。
+形式化陈述：mulEquiv [Mul α] : Shrink.{v} α ≃* α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mulEquiv
-  signature: [Mul α]
-  body: (equivShrink α).symm.mulEquiv
-
-@[to_additive]
-
-中文:
-定义 mulEquiv
-  签名: [乘法 α]
-  定义体: (equivShrink α).symm.mulEquiv
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, mulEquiv, symm.mulEquiv
+--- 原说明 ---
+Shrink `α` to a smaller universe preserves multiplication.
 -/
 def mulEquiv [Mul α] : Shrink.{v} α ≃* α := (equivShrink α).symm.mulEquiv
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semigroup
-  signature: α] : Semigroup (Shrink.{v} α)
-  body: (equivShrink α).symm.semigroup
-
-@[to_additive]
-
-中文:
-实例 [半群
-  签名: α] : 半群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.semigroup
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, semigroup, symm.semigroup
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semigroup α] : Semigroup (Shrink.{v} α) := (equivShrink α).symm.semigroup
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemigroup
-  signature: α] : CommSemigroup (Shrink.{v} α)
-  body: (equivShrink α).symm.commSemigroup
-
-@[to_additive]
-
-中文:
-实例 [交换半群
-  签名: α] : 交换半群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.commSemigroup
-
-@[to_additive]
-
-Depends on / 依赖: commSemigroup, equivShrink, symm.commSemigroup
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommSemigroup α] : CommSemigroup (Shrink.{v} α) := (equivShrink α).symm.commSemigroup
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] [IsLeftCancelMul α] : IsLeftCancelMul (Shrink.{v} α)
-  body: (equivShrink α).symm.isLeftCancelMul
-
-@[to_additive]
-
-中文:
-实例 [乘法
-  签名: α] [左乘消去 α] : 左乘消去 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.isLeftCancelMul
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, isLeftCancelMul, symm.isLeftCancelMul
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul α] [IsLeftCancelMul α] : IsLeftCancelMul (Shrink.{v} α) :=
   (equivShrink α).symm.isLeftCancelMul
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] [IsRightCancelMul α] : IsRightCancelMul (Shrink.{v} α)
-  body: (equivShrink α).symm.isRightCancelMul
-
-@[to_additive]
-
-中文:
-实例 [乘法
-  签名: α] [右乘消去 α] : 右乘消去 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.isRightCancelMul
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, isRightCancelMul, symm.isRightCancelMul
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul α] [IsRightCancelMul α] : IsRightCancelMul (Shrink.{v} α) :=
   (equivShrink α).symm.isRightCancelMul
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] [IsCancelMul α] : IsCancelMul (Shrink.{v} α)
-  body: (equivShrink α).symm.isCancelMul
-
-@[to_additive]
-
-中文:
-实例 [乘法
-  签名: α] [是消去乘法 α] : 是消去乘法 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.isCancelMul
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, isCancelMul, symm.isCancelMul
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul α] [IsCancelMul α] : IsCancelMul (Shrink.{v} α) := (equivShrink α).symm.isCancelMul
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulOneClass
-  signature: α] : MulOneClass (Shrink.{v} α)
-  body: (equivShrink α).symm.mulOneClass
-
-@[to_additive]
-
-中文:
-实例 [MulOne类
-  签名: α] : MulOne类 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.mulOneClass
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, mulOneClass, symm.mulOneClass
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulOneClass α] : MulOneClass (Shrink.{v} α) := (equivShrink α).symm.mulOneClass
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] : Monoid (Shrink.{v} α)
-  body: (equivShrink α).symm.monoid
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: α] : 幺半群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.monoid
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, monoid, symm.monoid
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] : Monoid (Shrink.{v} α) := (equivShrink α).symm.monoid
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommMonoid
-  signature: α] : CommMonoid (Shrink.{v} α)
-  body: (equivShrink α).symm.commMonoid
-
-@[to_additive]
-
-中文:
-实例 [交换幺半群
-  签名: α] : 交换幺半群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.commMonoid
-
-@[to_additive]
-
-Depends on / 依赖: commMonoid, equivShrink, symm.commMonoid
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommMonoid α] : CommMonoid (Shrink.{v} α) := (equivShrink α).symm.commMonoid
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: α] : Group (Shrink.{v} α)
-  body: (equivShrink α).symm.group
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: α] : 群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.group
-
-@[to_additive]
-
-Depends on / 依赖: equivShrink, symm.group
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group α] : Group (Shrink.{v} α) := (equivShrink α).symm.group
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommGroup
-  signature: α] : CommGroup (Shrink.{v} α)
-  body: (equivShrink α).symm.commGroup
-
-@[to_additive]
-
-中文:
-实例 [交换群
-  签名: α] : 交换群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.commGroup
-
-@[to_additive]
-
-Depends on / 依赖: commGroup, equivShrink, symm.commGroup
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommGroup α] : CommGroup (Shrink.{v} α) := (equivShrink α).symm.commGroup
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [MulAction M α] : MulAction M (Shrink.{v} α)
-  body: (equivShrink α).symm.mulAction M
-
-中文:
-实例 [幺半群
-  签名: M] [乘法作用 M α] : 乘法作用 M (Shrink.{v} α)
-  定义体: (equivShrink α).symm.mulAction M
-
-Depends on / 依赖: equivShrink, mulAction, symm.mulAction
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [MulAction M α] : MulAction M (Shrink.{v} α) := (equivShrink α).symm.mulAction M
 
 end Shrink
+

@@ -67,46 +67,19 @@ open WithZero
 
 -- TODO: fix non-terminal simp; acts on 8 goals, leaving one
 set_option linter.flexible false in
-/--
-Definition of `Rat.padicValuation` / `Rat.padicValuation` 的定义
+/-- The p-adic valuation on rationals, sending `p` to `(exp (-1) : ℤᵐ⁰)` -/
+/-
+**Rat.padicValuation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Rat.padicValuation (p : Nat) [Fact p.Prime] : Valuation Rat Intᵐ⁰ where to
+Fun x
+参数：p : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rat.padicValuation
-  signature: (p : Nat) [Fact p.Prime]
-  body: if x = 0 then 0 else exp (-padicValRat p x)
-  map_zero' := by simp
-  map_one' := by simp
-  map_mul' := by
-    intros
-    split_ifs <;>
-    simp_all [padicValRat.mul, exp_add, mul_comm]
-  map_add_le_max' := by
-    intros
-    split_ifs
-    any_goals simp_all [-exp_neg]
-    rw [← min_le_iff]
-    exact padicValRat.min_le_padicValRat_add ‹_›
-
-中文:
-定义 有理数.padicValuation
-  签名: (p : 自然数) [Fact p.素]
-  定义体: if x = 0 then 0 else exp (-padicValRat p x)
-  map_zero' := by simp
-  map_one' := by simp
-  map_mul' := by
-    intros
-    split_ifs <;>
-    simp_all [padicValRat.mul, exp_add, mul_comm]
-  map_add_le_max' := by
-    intros
-    split_ifs
-    any_goals simp_all [-exp_neg]
-    rw [← min_le_iff]
-    exact padicValRat.min_le_padicValRat_add ‹_›
-
-Depends on / 依赖: padicValRat
+--- 原说明 ---
+The p-adic valuation on rationals, sending `p` to `(exp (-1) : ℤᵐ⁰)`
 -/
-def Rat.padicValuation (p : Nat) [Fact p.Prime] : Valuation Rat Intᵐ⁰ where
+def Rat.padicValuation (p : ℕ) [Fact p.Prime] : Valuation ℚ ℤᵐ⁰ where
   toFun x := if x = 0 then 0 else exp (-padicValRat p x)
   map_zero' := by simp
   map_one' := by simp
@@ -121,238 +94,329 @@ def Rat.padicValuation (p : Nat) [Fact p.Prime] : Valuation Rat Intᵐ⁰ where
     rw [← min_le_iff]
     exact padicValRat.min_le_padicValRat_add ‹_›
 
-/--
-Definition of `Int.padicValuation` / `Int.padicValuation` 的定义
+/-- The p-adic valuation on integers, sending `p` to `(exp (-1) : ℤᵐ⁰)` -/
+/-
+**Int.padicValuation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Int.padicValuation (p : Nat) [Fact p.Prime] : Valuation Int Intᵐ⁰
+参数：p : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Int.padicValuation
-  signature: (p : Nat) [Fact p.Prime]
-  body: (Rat.padicValuation p).comap (Int.castRingHom Rat)
-
-中文:
-定义 整数.padicValuation
-  签名: (p : 自然数) [Fact p.素]
-  定义体: (Rat.padicValuation p).comap (Int.castRingHom Rat)
-
-Depends on / 依赖: Int.castRingHom, Rat.padicValuation, castRingHom, padicValuation
+--- 原说明 ---
+The p-adic valuation on integers, sending `p` to `(exp (-1) : ℤᵐ⁰)`
 -/
-def Int.padicValuation (p : Nat) [Fact p.Prime] : Valuation Int Intᵐ⁰ :=
-  (Rat.padicValuation p).comap (Int.castRingHom Rat)
-
-/--
-lemma `Rat.padicValuation_cast` / 引理 `Rat.padicValuation_cast`
-
-English:
-lemma Rat.padicValuation_cast
-  given: (p : Nat) [Fact p.Prime] (x : Int)
-  proof: rfl
-
-中文:
-引理 有理数.padicValuation_cast
-  条件: (p : 自然数) [Fact p.素] (x : 整数)
-  证明: rfl
+def Int.padicValuation (p : ℕ) [Fact p.Prime] : Valuation ℤ ℤᵐ⁰ :=
+  (Rat.padicValuation p).comap (Int.castRingHom ℚ)
+/-
+**Rat.padicValuation_cast** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Rat.padicValuation_cast (p : Nat) [Fact p.Prime] (x : Int) : Rat.padicValu
+ation p (Int.cast x) = Int.padicValuation p x
+参数：p : Nat；x : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
 -/
-lemma Rat.padicValuation_cast (p : Nat) [Fact p.Prime] (x : Int) :
+lemma Rat.padicValuation_cast (p : ℕ) [Fact p.Prime] (x : ℤ) :
     Rat.padicValuation p (Int.cast x) = Int.padicValuation p x :=
   rfl
-
-/--
-lemma `Rat.padicValuation_eq_zero_iff` / 引理 `Rat.padicValuation_eq_zero_iff`
-
-English:
-lemma Rat.padicValuation_eq_zero_iff
-  given: {p : Nat} [Fact p.Prime] {x : Rat}
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-引理 有理数.padicValuation_eq_zero_iff
-  条件: {p : 自然数} [Fact p.素] {x : 有理数}
-  证明: by
-  simp
-
-@[simp]
+/-
+**Rat.padicValuation_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Rat.padicValuation_eq_zero_iff {p : Nat} [Fact p.Prime] {x : Rat} : Rat.pa
+dicValuation p x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma Rat.padicValuation_eq_zero_iff {p : Nat} [Fact p.Prime] {x : Rat} :
+lemma Rat.padicValuation_eq_zero_iff {p : ℕ} [Fact p.Prime] {x : ℚ} :
     Rat.padicValuation p x = 0 ↔ x = 0 := by
   simp
 
 @[simp]
-/--
-lemma `Int.padicValuation_eq_zero_iff` / 引理 `Int.padicValuation_eq_zero_iff`
-
-English:
-lemma Int.padicValuation_eq_zero_iff
-  given: {p : Nat} [Fact p.Prime] {x : Int}
-  proof: by
-  simp [← Rat.padicValuation_cast]
-
-@[simp]
-
-中文:
-引理 整数.padicValuation_eq_zero_iff
-  条件: {p : 自然数} [Fact p.素] {x : 整数}
-  证明: by
-  simp [← Rat.padicValuation_cast]
-
-@[simp]
-
-Depends on / 依赖: Rat.padicValuation_cast, padicValuation_cast
+/-
+**Int.padicValuation_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.padicValuation_eq_zero_iff {p : Nat} [Fact p.Prime] {x : Int} : Int.pa
+dicValuation p x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma Int.padicValuation_eq_zero_iff {p : Nat} [Fact p.Prime] {x : Int} :
+lemma Int.padicValuation_eq_zero_iff {p : ℕ} [Fact p.Prime] {x : ℤ} :
     Int.padicValuation p x = 0 ↔ x = 0 := by
   simp [← Rat.padicValuation_cast]
 
 @[simp]
-/--
-lemma `Rat.padicValuation_self` / 引理 `Rat.padicValuation_self`
-
-English:
-lemma Rat.padicValuation_self
-  given: (p : Nat) [Fact p.Prime]
-  proof: by
-  simp [Rat.padicValuation, Nat.Prime.ne_zero Fact.out]
-
-@[simp]
-
-中文:
-引理 有理数.padicValuation_self
-  条件: (p : 自然数) [Fact p.素]
-  证明: by
-  simp [Rat.padicValuation, Nat.Prime.ne_zero Fact.out]
-
-@[simp]
-
-Depends on / 依赖: Fact.out, Nat.Prime.ne_zero, Rat.padicValuation, ne_zero, padicValuation
+/-
+**Rat.padicValuation_self** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Rat.padicValuation_self (p : Nat) [Fact p.Prime] : Rat.padicValuation p p 
+= exp (-1)
+参数：p : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `padicValRat.of_nat`：of_nat {n : Nat} : padicValRat p n = padicValNat p n
+· 使用定理 `padicValNat_self`：padicValNat_self [Fact p.Prime] : padicValNat p p = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Rat.padicValuation_self (p : Nat) [Fact p.Prime] :
+lemma Rat.padicValuation_self (p : ℕ) [Fact p.Prime] :
     Rat.padicValuation p p = exp (-1) := by
   simp [Rat.padicValuation, Nat.Prime.ne_zero Fact.out]
 
 @[simp]
-/--
-lemma `Int.padicValuation_self` / 引理 `Int.padicValuation_self`
-
-English:
-lemma Int.padicValuation_self
-  given: (p : Nat) [Fact p.Prime]
-  proof: by
-  simp [← Rat.padicValuation_cast]
-
-中文:
-引理 整数.padicValuation_self
-  条件: (p : 自然数) [Fact p.素]
-  证明: by
-  simp [← Rat.padicValuation_cast]
-
-Depends on / 依赖: Rat.padicValuation_cast, padicValuation_cast
+/-
+**Int.padicValuation_self** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.padicValuation_self (p : Nat) [Fact p.Prime] : Int.padicValuation p p 
+= exp (-1)
+参数：p : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `Rat.padicValuation_self`：Rat.padicValuation_self (p : Nat) [Fact p.Prime
+] : Rat.padicValuation p p = exp (-1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Int.padicValuation_self (p : Nat) [Fact p.Prime] :
+lemma Int.padicValuation_self (p : ℕ) [Fact p.Prime] :
     Int.padicValuation p p = exp (-1) := by
   simp [← Rat.padicValuation_cast]
-
-/--
-lemma `Int.padicValuation_le_one` / 引理 `Int.padicValuation_le_one`
-
-English:
-lemma Int.padicValuation_le_one
-  given: (p : Nat) [Fact p.Prime] (x : Int)
-  proof: by
+/-
+**Int.padicValuation_le_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.padicValuation_le_one (p : Nat) [Fact p.Prime] (x : Int) : Int.padicVa
+luation p x <= 1
+参数：p : Nat；x : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `padicValRat.of_int`：of_int {z : Int} : padicValRat p z = padicValInt p z
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `WithZero.instIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α], IsBotZeroCl
+ass (WithZero α)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `WithZero.le_log_iff_exp_le`：le_log_iff_exp_le (hx : x != 0) : a <= log x
+ ↔ exp a <= x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+-/
+lemma Int.padicValuation_le_one (p : ℕ) [Fact p.Prime] (x : ℤ) :
+    Int.padicValuation p x ≤ 1 := by
   simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
     MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
   split_ifs
   · simp
   · rw [← le_log_iff_exp_le] <;>
     simp_all
-
-中文:
-引理 整数.padicValuation_le_one
-  条件: (p : 自然数) [Fact p.素] (x : 整数)
-  证明: by
-  simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
-    MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
-  split_ifs
-  · simp
-  · rw [← le_log_iff_exp_le] <;>
-    simp_all
-
-Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, Rat.intCast_eq_zero_iff, Rat.padicValuation, Rat.padicValuation_cast, Valuation, Valuation.coe_mk, ZeroHom, ZeroHom.coe_mk, coe_mk, intCast_eq_zero_iff, le_log_iff_exp_le, of_int, padicValRat, padicValRat.of_int, padicValuation, padicValuation_cast, split_ifs
+/-
+**Int.padicValuation_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.padicValuation_eq_one_iff {p : Nat} [Fact p.Prime] {x : Int} : Int.pad
+icValuation p x = 1 ↔ ¬ (p : Int) ∣ x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `padicValRat.of_int`：of_int {z : Int} : padicValRat p z = padicValInt p z
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithZero.exp_zero`：∀ {M : Type u_4} [inst : AddMonoid M], WithZero.exp 0
+ = 1
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithZero.exp_injective`：exp_injective : Injective (exp : M -> Mᵐ⁰)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
-lemma Int.padicValuation_le_one (p : Nat) [Fact p.Prime] (x : Int) :
-    Int.padicValuation p x <= 1 := by
-  simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
-    MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
-  split_ifs
-  · simp
-  · rw [← le_log_iff_exp_le] <;>
-    simp_all
-
-/--
-lemma `Int.padicValuation_eq_one_iff` / 引理 `Int.padicValuation_eq_one_iff`
-
-English:
-lemma Int.padicValuation_eq_one_iff
-  given: {p : Nat} [Fact p.Prime] {x : Int}
-  proof: by
+lemma Int.padicValuation_eq_one_iff {p : ℕ} [Fact p.Prime] {x : ℤ} :
+    Int.padicValuation p x = 1 ↔ ¬ (p : ℤ) ∣ x := by
   simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
     MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
   split_ifs
   · simp_all
   · rw [← exp_zero, exp_injective.eq_iff]
     simp_all [Nat.Prime.ne_one Fact.out]
-
-中文:
-引理 整数.padicValuation_eq_one_iff
-  条件: {p : 自然数} [Fact p.素] {x : 整数}
-  证明: by
-  simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
-    MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
-  split_ifs
-  · simp_all
-  · rw [← exp_zero, exp_injective.eq_iff]
-    simp_all [Nat.Prime.ne_one Fact.out]
-
-Depends on / 依赖: Fact.out, MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, Nat.Prime.ne_one, Rat.intCast_eq_zero_iff, Rat.padicValuation, Rat.padicValuation_cast, Valuation, Valuation.coe_mk, ZeroHom, ZeroHom.coe_mk, coe_mk, eq_iff, exp_injective, exp_injective.eq_iff, exp_zero, intCast_eq_zero_iff, ne_one, of_int, padicValRat
+/-
+**Int.padicValuation_lt_one_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.padicValuation_lt_one_iff {p : Nat} [Fact p.Prime] {x : Int} : Int.pad
+icValuation p x < 1 ↔ (p : Int) ∣ x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma Int.padicValuation_eq_one_iff {p : Nat} [Fact p.Prime] {x : Int} :
-    Int.padicValuation p x = 1 ↔ ¬ (p : Int) ∣ x := by
-  simp only [← Rat.padicValuation_cast, Rat.padicValuation, Valuation.coe_mk,
-    MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Rat.intCast_eq_zero_iff, padicValRat.of_int]
-  split_ifs
-  · simp_all
-  · rw [← exp_zero, exp_injective.eq_iff]
-    simp_all [Nat.Prime.ne_one Fact.out]
-
-/--
-lemma `Int.padicValuation_lt_one_iff` / 引理 `Int.padicValuation_lt_one_iff`
-
-English:
-lemma Int.padicValuation_lt_one_iff
-  given: {p : Nat} [Fact p.Prime] {x : Int}
-  proof: by
+lemma Int.padicValuation_lt_one_iff {p : ℕ} [Fact p.Prime] {x : ℤ} :
+    Int.padicValuation p x < 1 ↔ (p : ℤ) ∣ x := by
   simp [lt_iff_le_and_ne, padicValuation_eq_one_iff, Int.padicValuation_le_one]
-
-中文:
-引理 整数.padicValuation_lt_one_iff
-  条件: {p : 自然数} [Fact p.素] {x : 整数}
-  证明: by
-  simp [lt_iff_le_and_ne, padicValuation_eq_one_iff, Int.padicValuation_le_one]
-
-Depends on / 依赖: Int.padicValuation_le_one, lt_iff_le_and_ne, padicValuation_eq_one_iff, padicValuation_le_one
+/-
+**Rat.padicValuation_le_one_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Rat.padicValuation_le_one_iff {p : Nat} [Fact p.Prime] {x : Rat} : Rat.pad
+icValuation p x <= 1 ↔ ¬ p ∣ x.den
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Rat.num_div_den`：num_div_den (r : Rat) : (r.num : Rat) / (r.den : Rat) =
+ r
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用引理 `Int.padicValuation_eq_one_iff`：Int.padicValuation_eq_one_iff {p : Nat} [
+Fact p.Prime] {x : Int} : Int.padicValuation p x = 1 ↔ ¬ (p : Int) ∣ x
+· 使用引理 `Rat.padicValuation_cast`：Rat.padicValuation_cast (p : Nat) [Fact p.Prime
+] (x : Int) : Rat.padicValuation p (Int.cast x) = Int.padicValuation p x
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `div_le_one₀`：div_le_one₀ (hb : 0 < b) : a / b <= 1 ↔ a <= b
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `instMulPosStrictMonoWithZeroOfMulRightStrictMono`：∀ {α : Type u_1} [inst
+ : Mul α] [inst_1 : Preorder α] [MulRightStrictMono α], MulPosStrictMono (WithZe
+ro α)
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `WithZero.instIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α], IsBotZeroCl
+ass (WithZero α)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用引理 `Int.padicValuation_le_one`：Int.padicValuation_le_one (p : Nat) [Fact p.P
+rime] (x : Int) : Int.padicValuation p x <= 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+（共 41 条，此处仅展示前 30 条）
 -/
-lemma Int.padicValuation_lt_one_iff {p : Nat} [Fact p.Prime] {x : Int} :
-    Int.padicValuation p x < 1 ↔ (p : Int) ∣ x := by
-  simp [lt_iff_le_and_ne, padicValuation_eq_one_iff, Int.padicValuation_le_one]
-
-/--
-lemma `Rat.padicValuation_le_one_iff` / 引理 `Rat.padicValuation_le_one_iff`
-
-English:
-lemma Rat.padicValuation_le_one_iff
-  given: {p : Nat} [Fact p.Prime] {x : Rat}
-  proof: by
+lemma Rat.padicValuation_le_one_iff {p : ℕ} [Fact p.Prime] {x : ℚ} :
+    Rat.padicValuation p x ≤ 1 ↔ ¬ p ∣ x.den := by
   nth_rw 1 [← x.num_div_den, map_div₀, ← Int.natCast_dvd_natCast, ← Int.padicValuation_eq_one_iff,
     Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
   · rcases (Int.padicValuation_le_one p x.den).eq_or_lt with h | h
@@ -366,81 +430,65 @@ lemma Rat.padicValuation_le_one_iff
         rw [Int.natCast_dvd] at h'
         exact Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt Fact.out) h h' x.reduced.symm
   · simp [zero_lt_iff]
-
-中文:
-引理 有理数.padicValuation_le_one_iff
-  条件: {p : 自然数} [Fact p.素] {x : 有理数}
-  证明: by
-  nth_rw 1 [← x.num_div_den, map_div₀, ← Int.natCast_dvd_natCast, ← Int.padicValuation_eq_one_iff,
-    Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
-  · rcases (Int.padicValuation_le_one p x.den).eq_or_lt with h | h
-    · simp [h, Int.padicValuation_le_one]
-    · simp only [h.ne, iff_false, not_le]
-      rcases (Int.padicValuation_le_one p x.num).eq_or_lt with h' | h'
-      · simp [h, h']
-      · rw [Int.padicValuation_lt_one_iff] at h h'
-        exfalso
-        rw [Int.natCast_dvd_natCast] at h
-        rw [Int.natCast_dvd] at h'
-        exact Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt Fact.out) h h' x.reduced.symm
-  · simp [zero_lt_iff]
-
-Depends on / 依赖: Int.cast_natCast, Int.n, Int.natCast_dvd_natCast, Int.padicValuation_eq_one_iff, Int.padicValuation_le_one, Int.padicValuation_lt_one_iff, Rat.padicValuation_cast, cast_natCast, eq_or_lt, h.ne, iff_false, natCast_dvd_natCast, not_le, nth_rw, num_div_den, padicValuation_cast, padicValuation_eq_one_iff, padicValuation_le_one, padicValuation_lt_one_iff, x.den
+/-
+**Rat.surjective_padicValuation** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Rat.surjective_padicValuation (p : Nat) [hp : Fact (p.Prime)] : Function.S
+urjective (Rat.padicValuation p)
+参数：p : Nat；p.Prime。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `padicValRat.inv`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ), padicValRa
+t p q⁻¹ = -padicValRat p q
+· 使用定理 `padicValRat.pow`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ) {k : ℕ}, pa
+dicValRat p (q ^ k) = ↑k * padicValRat p q
+· 使用定理 `Nat.cast_natAbs`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ℤ), ↑n
+.natAbs = ↑|n|
+· 使用引理 `Int.cast_abs`：cast_abs : (↑|a| : R) = |(a : R)|
+· 使用定理 `padicValRat.of_nat`：of_nat {n : Nat} : padicValRat p n = padicValNat p n
+· 使用定理 `padicValNat_self`：padicValNat_self [Fact p.Prime] : padicValNat p p = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+（共 35 条，此处仅展示前 30 条）
 -/
-lemma Rat.padicValuation_le_one_iff {p : Nat} [Fact p.Prime] {x : Rat} :
-    Rat.padicValuation p x <= 1 ↔ ¬ p ∣ x.den := by
-  nth_rw 1 [← x.num_div_den, map_div₀, ← Int.natCast_dvd_natCast, ← Int.padicValuation_eq_one_iff,
-    Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
-  · rcases (Int.padicValuation_le_one p x.den).eq_or_lt with h | h
-    · simp [h, Int.padicValuation_le_one]
-    · simp only [h.ne, iff_false, not_le]
-      rcases (Int.padicValuation_le_one p x.num).eq_or_lt with h' | h'
-      · simp [h, h']
-      · rw [Int.padicValuation_lt_one_iff] at h h'
-        exfalso
-        rw [Int.natCast_dvd_natCast] at h
-        rw [Int.natCast_dvd] at h'
-        exact Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt Fact.out) h h' x.reduced.symm
-  · simp [zero_lt_iff]
-
-/--
-theorem `Rat.surjective_padicValuation` / 定理 `Rat.surjective_padicValuation`
-
-English:
-theorem Rat.surjective_padicValuation
-  given: (p : Nat) [hp : Fact (p.Prime)]
-  proof: by
-  intro x
-  induction x with
-  | zero => simp
-  | coe x =>
-    induction x with | ofAdd x
-    simp_rw [Rat.padicValuation, WithZero.exp, Valuation.coe_mk, MonoidWithZeroHom.coe_mk]
-    rcases le_or_gt 0 x with (hx | hx)
-    · exact ⟨(p ^ x.natAbs)⁻¹, by simp [hp.out.ne_zero, hx]⟩
-    · exact ⟨p ^ x.natAbs, by simp [hp.out.ne_zero, padicValRat.pow, abs_eq_neg_self.2 hx.le]⟩
-
-noncomputable section
-
-中文:
-定理 有理数.surjective_padicValuation
-  条件: (p : 自然数) [hp : Fact (p.素)]
-  证明: by
-  intro x
-  induction x with
-  | zero => simp
-  | coe x =>
-    induction x with | ofAdd x
-    simp_rw [Rat.padicValuation, WithZero.exp, Valuation.coe_mk, MonoidWithZeroHom.coe_mk]
-    rcases le_or_gt 0 x with (hx | hx)
-    · exact ⟨(p ^ x.natAbs)⁻¹, by simp [hp.out.ne_zero, hx]⟩
-    · exact ⟨p ^ x.natAbs, by simp [hp.out.ne_zero, padicValRat.pow, abs_eq_neg_self.2 hx.le]⟩
-
-noncomputable section
-
-Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, Rat.padicValuation, Valuation, Valuation.coe_mk, WithZero, WithZero.exp, abs_eq_neg_self, coe_mk, hp.out.ne_zero, hx.le, le_or_gt, natAbs, ne_zero, padicValRat, padicValRat.pow, padicValuation, simp_rw, x.natAbs
--/
-theorem Rat.surjective_padicValuation (p : Nat) [hp : Fact (p.Prime)] :
+theorem Rat.surjective_padicValuation (p : ℕ) [hp : Fact (p.Prime)] :
     Function.Surjective (Rat.padicValuation p) := by
   intro x
   induction x with
@@ -456,193 +504,175 @@ noncomputable section
 
 open Nat padicNorm CauSeq CauSeq.Completion Metric
 
-/--
-Definition of `PadicSeq` / `PadicSeq` 的定义
+/-- The type of Cauchy sequences of rationals with respect to the `p`-adic norm. -/
+/-
+**PadicSeq** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：PadicSeq (p : Nat)
+参数：p : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PadicSeq
-  signature: (p : Nat)
-  body: CauSeq _ (padicNorm p)
-
-中文:
-缩写 PadicSeq
-  签名: (p : 自然数)
-  定义体: CauSeq _ (padicNorm p)
-
-Depends on / 依赖: CauSeq, padicNorm
+--- 原说明 ---
+The type of Cauchy sequences of rationals with respect to the `p`-adic norm.
 -/
-abbrev PadicSeq (p : Nat) :=
+abbrev PadicSeq (p : ℕ) :=
   CauSeq _ (padicNorm p)
 
 namespace PadicSeq
 
 section
 
-variable {p : Nat} [Fact p.Prime]
+variable {p : ℕ} [Fact p.Prime]
 
-/--
-theorem `stationary` / 定理 `stationary`
+/-- The `p`-adic norm of the entries of a nonzero Cauchy sequence of rationals is eventually
+constant. -/
+/-
+**PadicSeq.stationary** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：stationary {f : CauSeq Rat (padicNorm p)} (hf : ¬f ≈ 0) : exists N, forall
+ m n, N <= m -> N <= n -> padicNorm p (f n) = padicNorm p (f m)
+参数：padicNorm p；hf : ¬f ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `CauSeq.abv_pos_of_not_limZero`：abv_pos_of_not_limZero {f : CauSeq β abv}
+ (hf : ¬LimZero f) : exists K > 0, exists i, forall j >= i, K <= abv (f j)
+· 使用定理 `CauSeq.not_limZero_of_not_congr_zero`：not_limZero_of_not_congr_zero {f :
+ CauSeq _ abv} (hf : ¬f ≈ 0) : ¬LimZero f
+· 使用定理 `CauSeq.cauchy₂`：cauchy₂ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= i, abv (f j - f k) < ε
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `max_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, max a b ≤
+ c ↔ a ≤ c ∧ b ≤ c
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `lt_max_iff`：lt_max_iff : a < max b c ↔ a < b ∨ a < c
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `padicNorm.add_eq_max_of_ne`：add_eq_max_of_ne {q r : Rat} (hne : padicNor
+m p q != padicNorm p r) : padicNorm p (q + r) = max (padicNorm p q) (padicNorm p
+ r)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `padicNorm.neg`：∀ {p : ℕ} (q : ℚ), padicNorm p (-q) = padicNorm p q
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `max_comm`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), max a b = m
+ax b a
 
-English:
-theorem stationary
-  given: {f : CauSeq Rat (padicNorm p)} (hf : ¬f ≈ 0)
-  proof: have : exists ε > 0, exists N1, forall j >= N1, ε <= padicNorm p (f j) :=
-CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
-  let ⟨ε, hε, N1, hN1⟩ := this
-  let ⟨N2, hN2⟩ := CauSeq.cauchy₂ f hε
-  ⟨max N1 N2, fun n m hn hm => by
-    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff.1 hn).2 _ (max_le_iff.1 hm).2
-    have : padicNorm p (f n - f m) < padicNorm p (f n) :=
-lt_of_lt_of_le this hN1 _ (max_le_iff.1 hn).1
-    have : padicNorm p (f n - f m) < max (padicNorm p (f n)) (padicNorm p (f m)) :=
-      lt_max_iff.2 (Or.inl this)
-    by_contra hne
-    rw [← padicNorm.neg (f m)] at hne
-    have hnam := add_eq_max_of_ne hne
-    rw [padicNorm.neg]; rw [max_comm] at hnam
-    rw [← hnam]; rw [sub_eq_add_neg]; rw [add_comm] at this
-    apply _root_.lt_irrefl _ this⟩
-
-中文:
-定理 stationary
-  条件: {f : CauSeq 有理数 (padicNorm p)} (hf : ¬f ≈ 0)
-  证明: have : exists ε > 0, exists N1, forall j >= N1, ε <= padicNorm p (f j) :=
-CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
-  let ⟨ε, hε, N1, hN1⟩ := this
-  let ⟨N2, hN2⟩ := CauSeq.cauchy₂ f hε
-  ⟨max N1 N2, fun n m hn hm => by
-    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff.1 hn).2 _ (max_le_iff.1 hm).2
-    have : padicNorm p (f n - f m) < padicNorm p (f n) :=
-lt_of_lt_of_le this hN1 _ (max_le_iff.1 hn).1
-    have : padicNorm p (f n - f m) < max (padicNorm p (f n)) (padicNorm p (f m)) :=
-      lt_max_iff.2 (Or.inl this)
-    by_contra hne
-    rw [← padicNorm.neg (f m)] at hne
-    have hnam := add_eq_max_of_ne hne
-    rw [padicNorm.neg]; rw [max_comm] at hnam
-    rw [← hnam]; rw [sub_eq_add_neg]; rw [add_comm] at this
-    apply _root_.lt_irrefl _ this⟩
-
-Depends on / 依赖: CauSeq, CauSeq.abv_pos_of_not_limZero, CauSeq.cauchy, abv_pos_of_not_limZero, lt_of_lt_of_le, max_le_iff, not_limZero_of_not_congr_zero, padicNorm
+--- 原说明 ---
+The `p`-adic norm of the entries of a nonzero Cauchy sequence of rationals is ev
+entually
+constant.
 -/
-theorem stationary {f : CauSeq Rat (padicNorm p)} (hf : ¬f ≈ 0) :
-    exists N, forall m n, N <= m -> N <= n -> padicNorm p (f n) = padicNorm p (f m) :=
-  have : exists ε > 0, exists N1, forall j >= N1, ε <= padicNorm p (f j) :=
-CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
+theorem stationary {f : CauSeq ℚ (padicNorm p)} (hf : ¬f ≈ 0) :
+    ∃ N, ∀ m n, N ≤ m → N ≤ n → padicNorm p (f n) = padicNorm p (f m) :=
+  have : ∃ ε > 0, ∃ N1, ∀ j ≥ N1, ε ≤ padicNorm p (f j) :=
+    CauSeq.abv_pos_of_not_limZero <| not_limZero_of_not_congr_zero hf
   let ⟨ε, hε, N1, hN1⟩ := this
   let ⟨N2, hN2⟩ := CauSeq.cauchy₂ f hε
-  ⟨max N1 N2, fun n m hn hm => by
+  ⟨max N1 N2, fun n m hn hm ↦ by
     have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff.1 hn).2 _ (max_le_iff.1 hm).2
     have : padicNorm p (f n - f m) < padicNorm p (f n) :=
-lt_of_lt_of_le this hN1 _ (max_le_iff.1 hn).1
+      lt_of_lt_of_le this <| hN1 _ (max_le_iff.1 hn).1
     have : padicNorm p (f n - f m) < max (padicNorm p (f n)) (padicNorm p (f m)) :=
       lt_max_iff.2 (Or.inl this)
     by_contra hne
     rw [← padicNorm.neg (f m)] at hne
     have hnam := add_eq_max_of_ne hne
-    rw [padicNorm.neg]; rw [max_comm] at hnam
-    rw [← hnam]; rw [sub_eq_add_neg]; rw [add_comm] at this
+    rw [padicNorm.neg, max_comm] at hnam
+    rw [← hnam, sub_eq_add_neg, add_comm] at this
     apply _root_.lt_irrefl _ this⟩
 
-/--
-Definition of `stationaryPoint` / `stationaryPoint` 的定义
+/-- For all `n ≥ stationaryPoint f hf`, the `p`-adic norm of `f n` is the same. -/
+/-
+**PadicSeq.stationaryPoint** 是 Mathlib 中的一个定义，位于命名空间 `PadicSeq`。
+形式化陈述：stationaryPoint {f : PadicSeq p} (hf : ¬f ≈ 0) : Nat
+参数：hf : ¬f ≈ 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.stationary`：stationary {f : CauSeq Rat (padicNorm p)} (hf : ¬f 
+≈ 0) : exists N, forall m n, N <= m -> N <= n -> padicNorm p (f n) = padicNorm p
+ (f m)
 
-English:
-definition stationaryPoint
-  signature: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  body: Classical.choose stationary hf
-
-中文:
-定义 stationaryPoint
-  签名: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  定义体: Classical.choose stationary hf
-
-Depends on / 依赖: Classical, Classical.choose, stationary
+--- 原说明 ---
+For all `n ≥ stationaryPoint f hf`, the `p`-adic norm of `f n` is the same.
 -/
-def stationaryPoint {f : PadicSeq p} (hf : ¬f ≈ 0) : Nat :=
-Classical.choose stationary hf
-
-/--
-theorem `stationaryPoint_spec` / 定理 `stationaryPoint_spec`
-
-English:
-theorem stationaryPoint_spec
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  proof: @(Classical.choose_spec <| stationary hf)
-
-中文:
-定理 stationaryPoint_spec
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  证明: @(Classical.choose_spec <| stationary hf)
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, stationary
+def stationaryPoint {f : PadicSeq p} (hf : ¬f ≈ 0) : ℕ :=
+  Classical.choose <| stationary hf
+/-
+**PadicSeq.stationaryPoint_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：stationaryPoint_spec {f : PadicSeq p} (hf : ¬f ≈ 0) : forall {m n}, statio
+naryPoint hf <= m -> stationaryPoint hf <= n -> padicNorm p (f n) = padicNorm p 
+(f m)
+参数：hf : ¬f ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `PadicSeq.stationary`：stationary {f : CauSeq Rat (padicNorm p)} (hf : ¬f 
+≈ 0) : exists N, forall m n, N <= m -> N <= n -> padicNorm p (f n) = padicNorm p
+ (f m)
 -/
 theorem stationaryPoint_spec {f : PadicSeq p} (hf : ¬f ≈ 0) :
-    forall {m n},
-      stationaryPoint hf <= m -> stationaryPoint hf <= n -> padicNorm p (f n) = padicNorm p (f m) :=
+    ∀ {m n},
+      stationaryPoint hf ≤ m → stationaryPoint hf ≤ n → padicNorm p (f n) = padicNorm p (f m) :=
   @(Classical.choose_spec <| stationary hf)
 
 open scoped Classical in
-/--
-Definition of `norm` / `norm` 的定义
+/-- Since the norm of the entries of a Cauchy sequence is eventually stationary,
+we can lift the norm to sequences. -/
+/-
+**PadicSeq.norm** 是 Mathlib 中的一个定义，位于命名空间 `PadicSeq`。
+形式化陈述：norm (f : PadicSeq p) : Rat
+参数：f : PadicSeq p。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 
-English:
-definition norm
-  signature: (f : PadicSeq p)
-  body: if hf : f ≈ 0 then 0 else padicNorm p (f (stationaryPoint hf))
-
-中文:
-定义 norm
-  签名: (f : PadicSeq p)
-  定义体: if hf : f ≈ 0 then 0 else padicNorm p (f (stationaryPoint hf))
-
-Depends on / 依赖: padicNorm, stationaryPoint
+--- 原说明 ---
+Since the norm of the entries of a Cauchy sequence is eventually stationary,
+we can lift the norm to sequences.
 -/
-def norm (f : PadicSeq p) : Rat :=
+def norm (f : PadicSeq p) : ℚ :=
   if hf : f ≈ 0 then 0 else padicNorm p (f (stationaryPoint hf))
-
-/--
-theorem `norm_zero_iff` / 定理 `norm_zero_iff`
-
-English:
-theorem norm_zero_iff
-  given: (f : PadicSeq p)
-  statement: f.norm = 0 ↔ f ≈ 0
-  proof: by
-  constructor
-  · intro h
-    by_contra hf
-    unfold norm at h
-    split_ifs at h
-    apply hf
-    intro ε hε
-    exists stationaryPoint hf
-    intro j hj
-    have heq := stationaryPoint_spec hf le_rfl hj
-    simpa [h, heq]
-  · intro h
-    simp [norm, h]
-
-中文:
-定理 norm_zero_iff
-  条件: (f : PadicSeq p)
-  结论: f.norm = 0 ↔ f ≈ 0
-  证明: by
-  constructor
-  · intro h
-    by_contra hf
-    unfold norm at h
-    split_ifs at h
-    apply hf
-    intro ε hε
-    exists stationaryPoint hf
-    intro j hj
-    have heq := stationaryPoint_spec hf le_rfl hj
-    simpa [h, heq]
-  · intro h
-    simp [norm, h]
-
-Depends on / 依赖: le_rfl, split_ifs, stationaryPoint, stationaryPoint_spec
+/-
+**PadicSeq.norm_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_zero_iff (f : PadicSeq p) : f.norm = 0 ↔ f ≈ 0
+参数：f : PadicSeq p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_zero_iff (f : PadicSeq p) : f.norm = 0 ↔ f ≈ 0 := by
   constructor
@@ -665,194 +695,183 @@ section Embedding
 
 open CauSeq
 
-variable {p : Nat} [Fact p.Prime]
+variable {p : ℕ} [Fact p.Prime]
 
-/--
-theorem `equiv_zero_of_val_eq_of_equiv_zero` / 定理 `equiv_zero_of_val_eq_of_equiv_zero`
-
-English:
-theorem equiv_zero_of_val_eq_of_equiv_zero
-  statement: {f g : PadicSeq p}
-  proof: fun ε hε =>
-  let ⟨i, hi⟩ := hf _ hε
-  ⟨i, fun j hj => by simpa [h] using hi _ hj⟩
-
-中文:
-定理 equiv_zero_of_val_eq_of_equiv_zero
-  结论: {f g : PadicSeq p}
-  证明: fun ε hε =>
-  let ⟨i, hi⟩ := hf _ hε
-  ⟨i, fun j hj => by simpa [h] using hi _ hj⟩
+/-
+**PadicSeq.equiv_zero_of_val_eq_of_equiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSe
+q`。
+形式化陈述：equiv_zero_of_val_eq_of_equiv_zero {f g : PadicSeq p} (h : forall k, padic
+Norm p (f k) = padicNorm p (g k)) (hf : f ≈ 0) : g ≈ 0
+参数：h : forall k, padicNorm p (f k) = padicNorm p (g k)；hf : f ≈ 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem equiv_zero_of_val_eq_of_equiv_zero {f g : PadicSeq p}
-    (h : forall k, padicNorm p (f k) = padicNorm p (g k)) (hf : f ≈ 0) : g ≈ 0 := fun ε hε =>
+    (h : ∀ k, padicNorm p (f k) = padicNorm p (g k)) (hf : f ≈ 0) : g ≈ 0 := fun ε hε ↦
   let ⟨i, hi⟩ := hf _ hε
-  ⟨i, fun j hj => by simpa [h] using hi _ hj⟩
-
-/--
-theorem `norm_nonzero_of_not_equiv_zero` / 定理 `norm_nonzero_of_not_equiv_zero`
-
-English:
-theorem norm_nonzero_of_not_equiv_zero
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  statement: f.norm != 0
-  proof: hf ∘ f.norm_zero_iff.1
-
-中文:
-定理 norm_nonzero_of_not_equiv_zero
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  结论: f.norm != 0
-  证明: hf ∘ f.norm_zero_iff.1
-
-Depends on / 依赖: f.norm_zero_iff, norm_zero_iff
+  ⟨i, fun j hj ↦ by simpa [h] using hi _ hj⟩
+/-
+**PadicSeq.norm_nonzero_of_not_equiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_nonzero_of_not_equiv_zero {f : PadicSeq p} (hf : ¬f ≈ 0) : f.norm != 
+0
+参数：hf : ¬f ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PadicSeq.norm_zero_iff`：norm_zero_iff (f : PadicSeq p) : f.norm = 0 ↔ f 
+≈ 0
 -/
-theorem norm_nonzero_of_not_equiv_zero {f : PadicSeq p} (hf : ¬f ≈ 0) : f.norm != 0 :=
+theorem norm_nonzero_of_not_equiv_zero {f : PadicSeq p} (hf : ¬f ≈ 0) : f.norm ≠ 0 :=
   hf ∘ f.norm_zero_iff.1
-
-/--
-theorem `norm_eq_norm_app_of_nonzero` / 定理 `norm_eq_norm_app_of_nonzero`
-
-English:
-theorem norm_eq_norm_app_of_nonzero
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  proof: have heq : f.norm = padicNorm p (f <| stationaryPoint hf) := by simp [norm, hf]
-⟨f stationaryPoint hf, heq, fun h =>
-    norm_nonzero_of_not_equiv_zero hf (by simpa [h] using heq)⟩
-
-中文:
-定理 norm_eq_norm_app_of_nonzero
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  证明: have heq : f.norm = padicNorm p (f <| stationaryPoint hf) := by simp [norm, hf]
-⟨f stationaryPoint hf, heq, fun h =>
-    norm_nonzero_of_not_equiv_zero hf (by simpa [h] using heq)⟩
-
-Depends on / 依赖: f.norm, norm_nonzero_of_not_equiv_zero, padicNorm, stationaryPoint
+/-
+**PadicSeq.norm_eq_norm_app_of_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_eq_norm_app_of_nonzero {f : PadicSeq p} (hf : ¬f ≈ 0) : exists k, f.n
+orm = padicNorm p k ∧ k != 0
+参数：hf : ¬f ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PadicSeq.norm_nonzero_of_not_equiv_zero`：norm_nonzero_of_not_equiv_zero 
+{f : PadicSeq p} (hf : ¬f ≈ 0) : f.norm != 0
+· 使用定理 `padicNorm.zero`：∀ {p : ℕ}, padicNorm p 0 = 0
 -/
 theorem norm_eq_norm_app_of_nonzero {f : PadicSeq p} (hf : ¬f ≈ 0) :
-    exists k, f.norm = padicNorm p k ∧ k != 0 :=
+    ∃ k, f.norm = padicNorm p k ∧ k ≠ 0 :=
   have heq : f.norm = padicNorm p (f <| stationaryPoint hf) := by simp [norm, hf]
-⟨f stationaryPoint hf, heq, fun h =>
+  ⟨f <| stationaryPoint hf, heq, fun h ↦
     norm_nonzero_of_not_equiv_zero hf (by simpa [h] using heq)⟩
-
-/--
-theorem `not_limZero_const_of_nonzero` / 定理 `not_limZero_const_of_nonzero`
-
-English:
-theorem not_limZero_const_of_nonzero
-  given: {q : Rat} (hq : q != 0)
-  statement: ¬LimZero (const (padicNorm p) q)
-  proof: fun h' => hq const_limZero.1 h'
-
-中文:
-定理 not_limZero_const_of_nonzero
-  条件: {q : 有理数} (hq : q != 0)
-  结论: ¬LimZero (const (padicNorm p) q)
-  证明: fun h' => hq const_limZero.1 h'
-
-Depends on / 依赖: const_limZero
+/-
+**PadicSeq.not_limZero_const_of_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：not_limZero_const_of_nonzero {q : Rat} (hq : q != 0) : ¬LimZero (const (pa
+dicNorm p) q)
+参数：hq : q != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CauSeq.const_limZero`：const_limZero {x : β} : LimZero (const x) ↔ x = 0
 -/
-theorem not_limZero_const_of_nonzero {q : Rat} (hq : q != 0) : ¬LimZero (const (padicNorm p) q) :=
-fun h' => hq const_limZero.1 h'
-
-/--
-theorem `not_equiv_zero_const_of_nonzero` / 定理 `not_equiv_zero_const_of_nonzero`
-
-English:
-theorem not_equiv_zero_const_of_nonzero
-  given: {q : Rat} (hq : q != 0)
-  statement: ¬const (padicNorm p) q ≈ 0
-  proof: fun h : LimZero (const (padicNorm p) q - 0) =>
-not_limZero_const_of_nonzero (p := p) hq by simpa using h
-
-中文:
-定理 not_equiv_zero_const_of_nonzero
-  条件: {q : 有理数} (hq : q != 0)
-  结论: ¬const (padicNorm p) q ≈ 0
-  证明: fun h : LimZero (const (padicNorm p) q - 0) =>
-not_limZero_const_of_nonzero (p := p) hq by simpa using h
-
-Depends on / 依赖: LimZero, not_limZero_const_of_nonzero, padicNorm
+theorem not_limZero_const_of_nonzero {q : ℚ} (hq : q ≠ 0) : ¬LimZero (const (padicNorm p) q) :=
+  fun h' ↦ hq <| const_limZero.1 h'
+/-
+**PadicSeq.not_equiv_zero_const_of_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：not_equiv_zero_const_of_nonzero {q : Rat} (hq : q != 0) : ¬const (padicNor
+m p) q ≈ 0
+参数：hq : q != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.not_limZero_const_of_nonzero`：not_limZero_const_of_nonzero {q :
+ Rat} (hq : q != 0) : ¬LimZero (const (padicNorm p) q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
-theorem not_equiv_zero_const_of_nonzero {q : Rat} (hq : q != 0) : ¬const (padicNorm p) q ≈ 0 :=
-  fun h : LimZero (const (padicNorm p) q - 0) =>
-not_limZero_const_of_nonzero (p := p) hq by simpa using h
-
-/--
-theorem `norm_nonneg` / 定理 `norm_nonneg`
-
-English:
-theorem norm_nonneg
-  given: (f : PadicSeq p)
-  statement: 0 <= f.norm
-  proof: by
+theorem not_equiv_zero_const_of_nonzero {q : ℚ} (hq : q ≠ 0) : ¬const (padicNorm p) q ≈ 0 :=
+  fun h : LimZero (const (padicNorm p) q - 0) ↦
+    not_limZero_const_of_nonzero (p := p) hq <| by simpa using h
+/-
+**PadicSeq.norm_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_nonneg (f : PadicSeq p) : 0 <= f.norm
+参数：f : PadicSeq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+-/
+theorem norm_nonneg (f : PadicSeq p) : 0 ≤ f.norm := by
   classical exact if hf : f ≈ 0 then by simp [hf, norm] else by simp [norm, hf, padicNorm.nonneg]
 
-中文:
-定理 norm_nonneg
-  条件: (f : PadicSeq p)
-  结论: 0 <= f.norm
-  证明: by
-  classical exact if hf : f ≈ 0 then by simp [hf, norm] else by simp [norm, hf, padicNorm.nonneg]
+/-- An auxiliary lemma for manipulating sequence indices. -/
+/-
+**PadicSeq.lift_index_left_left** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：lift_index_left_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v2 v3 : Nat) : padicN
+orm p (f (stationaryPoint hf)) = padicNorm p (f (max (stationaryPoint hf) (max v
+2 v3)))
+参数：hf : ¬f ≈ 0；v2 v3 : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-Depends on / 依赖: classical, nonneg, padicNorm, padicNorm.nonneg
+--- 原说明 ---
+An auxiliary lemma for manipulating sequence indices.
 -/
-theorem norm_nonneg (f : PadicSeq p) : 0 <= f.norm := by
-  classical exact if hf : f ≈ 0 then by simp [hf, norm] else by simp [norm, hf, padicNorm.nonneg]
-
-/--
-theorem `lift_index_left_left` / 定理 `lift_index_left_left`
-
-English:
-theorem lift_index_left_left
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0) (v2 v3 : Nat)
-  proof: by
-  apply stationaryPoint_spec hf
-  · apply le_max_left
-  · exact le_rfl
-
-中文:
-定理 lift_index_left_left
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0) (v2 v3 : 自然数)
-  证明: by
-  apply stationaryPoint_spec hf
-  · apply le_max_left
-  · exact le_rfl
-
-Depends on / 依赖: le_max_left, le_rfl, stationaryPoint_spec
--/
-theorem lift_index_left_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v2 v3 : Nat) :
+theorem lift_index_left_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v2 v3 : ℕ) :
     padicNorm p (f (stationaryPoint hf)) =
     padicNorm p (f (max (stationaryPoint hf) (max v2 v3))) := by
   apply stationaryPoint_spec hf
   · apply le_max_left
   · exact le_rfl
 
-/--
-theorem `lift_index_left` / 定理 `lift_index_left`
+/-- An auxiliary lemma for manipulating sequence indices. -/
+/-
+**PadicSeq.lift_index_left** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : Nat) : padicNorm p
+ (f (stationaryPoint hf)) = padicNorm p (f (max v1 (max (stationaryPoint hf) v3)
+))
+参数：hf : ¬f ≈ 0；v1 v3 : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem lift_index_left
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : Nat)
-  proof: by
-  apply stationaryPoint_spec hf
-  · apply le_trans
-    · apply le_max_left _ v3
-    · apply le_max_right
-  · exact le_rfl
-
-中文:
-定理 lift_index_left
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : 自然数)
-  证明: by
-  apply stationaryPoint_spec hf
-  · apply le_trans
-    · apply le_max_left _ v3
-    · apply le_max_right
-  · exact le_rfl
-
-Depends on / 依赖: le_max_left, le_max_right, le_rfl, le_trans, stationaryPoint_spec
+--- 原说明 ---
+An auxiliary lemma for manipulating sequence indices.
 -/
-theorem lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : Nat) :
+theorem lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : ℕ) :
     padicNorm p (f (stationaryPoint hf)) =
     padicNorm p (f (max v1 (max (stationaryPoint hf) v3))) := by
   apply stationaryPoint_spec hf
@@ -861,32 +880,29 @@ theorem lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v3 : Nat) :
     · apply le_max_right
   · exact le_rfl
 
-/--
-theorem `lift_index_right` / 定理 `lift_index_right`
+/-- An auxiliary lemma for manipulating sequence indices. -/
+/-
+**PadicSeq.lift_index_right** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：lift_index_right {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v2 : Nat) : padicNorm 
+p (f (stationaryPoint hf)) = padicNorm p (f (max v1 (max v2 (stationaryPoint hf)
+)))
+参数：hf : ¬f ≈ 0；v1 v2 : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem lift_index_right
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v2 : Nat)
-  proof: by
-  apply stationaryPoint_spec hf
-  · apply le_trans
-    · apply le_max_right v2
-    · apply le_max_right
-  · exact le_rfl
-
-中文:
-定理 lift_index_right
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v2 : 自然数)
-  证明: by
-  apply stationaryPoint_spec hf
-  · apply le_trans
-    · apply le_max_right v2
-    · apply le_max_right
-  · exact le_rfl
-
-Depends on / 依赖: le_max_right, le_rfl, le_trans, stationaryPoint_spec
+--- 原说明 ---
+An auxiliary lemma for manipulating sequence indices.
 -/
-theorem lift_index_right {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v2 : Nat) :
+theorem lift_index_right {f : PadicSeq p} (hf : ¬f ≈ 0) (v1 v2 : ℕ) :
     padicNorm p (f (stationaryPoint hf)) =
     padicNorm p (f (max v1 (max v2 (stationaryPoint hf)))) := by
   apply stationaryPoint_spec hf
@@ -901,63 +917,66 @@ section Valuation
 
 open CauSeq
 
-variable {p : Nat} [Fact p.Prime]
+variable {p : ℕ} [Fact p.Prime]
 
 /-! ### Valuation on `PadicSeq` -/
 
 open scoped Classical in
-/--
-Definition of `valuation` / `valuation` 的定义
+/-- The `p`-adic valuation on `ℚ` lifts to `PadicSeq p`.
+`Valuation f` is defined to be the valuation of the (`ℚ`-valued) stationary point of `f`. -/
+/-
+**PadicSeq.valuation** 是 Mathlib 中的一个定义，位于命名空间 `PadicSeq`。
+形式化陈述：valuation (f : PadicSeq p) : Int
+参数：f : PadicSeq p。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 
-English:
-definition valuation
-  signature: (f : PadicSeq p)
-  body: if hf : f ≈ 0 then 0 else padicValRat p (f (stationaryPoint hf))
-
-中文:
-定义 valuation
-  签名: (f : PadicSeq p)
-  定义体: if hf : f ≈ 0 then 0 else padicValRat p (f (stationaryPoint hf))
-
-Depends on / 依赖: padicValRat, stationaryPoint
+--- 原说明 ---
+The `p`-adic valuation on `ℚ` lifts to `PadicSeq p`.
+`Valuation f` is defined to be the valuation of the (`ℚ`-valued) stationary poin
+t of `f`.
 -/
-def valuation (f : PadicSeq p) : Int :=
+def valuation (f : PadicSeq p) : ℤ :=
   if hf : f ≈ 0 then 0 else padicValRat p (f (stationaryPoint hf))
-
-/--
-theorem `norm_eq_zpow_neg_valuation` / 定理 `norm_eq_zpow_neg_valuation`
-
-English:
-theorem norm_eq_zpow_neg_valuation
-  given: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  proof: by
-  rw [norm]; rw [valuation]; rw [dif_neg hf]; rw [dif_neg hf]; rw [padicNorm]; rw [if_neg]
-  intro H
-  apply CauSeq.not_limZero_of_not_congr_zero hf
-  intro ε hε
-  use stationaryPoint hf
-  intro n hn
-  rw [stationaryPoint_spec hf le_rfl hn]
-  simpa [H] using hε
-
-中文:
-定理 norm_eq_zpow_neg_valuation
-  条件: {f : PadicSeq p} (hf : ¬f ≈ 0)
-  证明: by
-  rw [norm]; rw [valuation]; rw [dif_neg hf]; rw [dif_neg hf]; rw [padicNorm]; rw [if_neg]
-  intro H
-  apply CauSeq.not_limZero_of_not_congr_zero hf
-  intro ε hε
-  use stationaryPoint hf
-  intro n hn
-  rw [stationaryPoint_spec hf le_rfl hn]
-  simpa [H] using hε
-
-Depends on / 依赖: CauSeq, CauSeq.not_limZero_of_not_congr_zero, dif_neg, if_neg, le_rfl, not_limZero_of_not_congr_zero, padicNorm, stationaryPoint, stationaryPoint_spec, valuation
+/-
+**PadicSeq.norm_eq_zpow_neg_valuation** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_eq_zpow_neg_valuation {f : PadicSeq p} (hf : ¬f ≈ 0) : f.norm = (p : 
+Rat) ^ (-f.valuation : Int)
+参数：hf : ¬f ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicSeq.norm.eq_1`：∀ {p : ℕ} [inst : Fact (Nat.Prime p)] (f : PadicSeq 
+p),   f.norm = if hf : f ≈ 0 then 0 else padicNorm p (↑f (PadicSeq.stationaryPoi
+nt hf))
+· 使用定理 `PadicSeq.valuation.eq_1`：∀ {p : ℕ} [inst : Fact (Nat.Prime p)] (f : Padi
+cSeq p),   f.valuation = if hf : f ≈ 0 then 0 else padicValRat p (↑f (PadicSeq.s
+tationaryPoin…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `padicNorm.eq_1`：∀ (p : ℕ) (q : ℚ), padicNorm p q = if q = 0 then 0 else 
+↑p ^ (-padicValRat p q)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `CauSeq.not_limZero_of_not_congr_zero`：not_limZero_of_not_congr_zero {f :
+ CauSeq _ abv} (hf : ¬f ≈ 0) : ¬LimZero f
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `padicNorm.zero`：∀ {p : ℕ}, padicNorm p 0 = 0
 -/
 theorem norm_eq_zpow_neg_valuation {f : PadicSeq p} (hf : ¬f ≈ 0) :
-    f.norm = (p : Rat) ^ (-f.valuation : Int) := by
-  rw [norm]; rw [valuation]; rw [dif_neg hf]; rw [dif_neg hf]; rw [padicNorm]; rw [if_neg]
+    f.norm = (p : ℚ) ^ (-f.valuation : ℤ) := by
+  rw [norm, valuation, dif_neg hf, dif_neg hf, padicNorm, if_neg]
   intro H
   apply CauSeq.not_limZero_of_not_congr_zero hf
   intro ε hε
@@ -965,31 +984,42 @@ theorem norm_eq_zpow_neg_valuation {f : PadicSeq p} (hf : ¬f ≈ 0) :
   intro n hn
   rw [stationaryPoint_spec hf le_rfl hn]
   simpa [H] using hε
-
-/--
-theorem `val_eq_iff_norm_eq` / 定理 `val_eq_iff_norm_eq`
-
-English:
-theorem val_eq_iff_norm_eq
-  given: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0)
-  proof: by
-  rw [norm_eq_zpow_neg_valuation hf]; rw [norm_eq_zpow_neg_valuation hg]; rw [← neg_inj]; rw [zpow_right_inj₀]
-  · exact mod_cast (Fact.out : p.Prime).pos
-  · exact mod_cast (Fact.out : p.Prime).ne_one
-
-中文:
-定理 val_eq_iff_norm_eq
-  条件: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0)
-  证明: by
-  rw [norm_eq_zpow_neg_valuation hf]; rw [norm_eq_zpow_neg_valuation hg]; rw [← neg_inj]; rw [zpow_right_inj₀]
-  · exact mod_cast (Fact.out : p.Prime).pos
-  · exact mod_cast (Fact.out : p.Prime).ne_one
-
-Depends on / 依赖: Fact.out, mod_cast, ne_one, neg_inj, norm_eq_zpow_neg_valuation, p.Prime
+/-
+**PadicSeq.val_eq_iff_norm_eq** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：val_eq_iff_norm_eq {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) : f.valu
+ation = g.valuation ↔ f.norm = g.norm
+参数：hf : ¬f ≈ 0；hg : ¬g ≈ 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicSeq.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {f : Pad
+icSeq p} (hf : ¬f ≈ 0) : f.norm = (p : Rat) ^ (-f.valuation : Int)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_inj`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, -a = -b ↔ 
+a = b
+· 使用定理 `zpow_right_inj₀`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : L
+inearOrder G₀] {a : G₀} {m n : ℤ} [PosMulStrictMono G₀]   [ZeroLEOneClass G₀], 0
+ < a …
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem val_eq_iff_norm_eq {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) :
     f.valuation = g.valuation ↔ f.norm = g.norm := by
-  rw [norm_eq_zpow_neg_valuation hf]; rw [norm_eq_zpow_neg_valuation hg]; rw [← neg_inj]; rw [zpow_right_inj₀]
+  rw [norm_eq_zpow_neg_valuation hf, norm_eq_zpow_neg_valuation hg, ← neg_inj, zpow_right_inj₀]
   · exact mod_cast (Fact.out : p.Prime).pos
   · exact mod_cast (Fact.out : p.Prime).ne_one
 
@@ -1031,54 +1061,55 @@ section Embedding
 
 open CauSeq
 
-variable {p : Nat} [hp : Fact p.Prime]
+variable {p : ℕ} [hp : Fact p.Prime]
 
-/--
-theorem `norm_mul` / 定理 `norm_mul`
-
-English:
-theorem norm_mul
-  given: (f g : PadicSeq p)
-  statement: (f * g).norm = f.norm * g.norm
-  proof: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : f * g ≈ 0 := mul_equiv_zero' _ hf
-    simp only [hf, hg, norm, dif_pos, zero_mul]
-  else
-    if hg : g ≈ 0 then by
-      have hf : f * g ≈ 0 := mul_equiv_zero _ hg
-      simp only [hf, hg, norm, dif_pos, mul_zero]
-    else by
-      unfold norm
-      have hfg := mul_not_equiv_zero hf hg
-      simp only [hfg, hf, hg, dite_false]
-      -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-      rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
-      apply padicNorm.mul
-
-中文:
-定理 norm_mul
-  条件: (f g : PadicSeq p)
-  结论: (f * g).norm = f.norm * g.norm
-  证明: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : f * g ≈ 0 := mul_equiv_zero' _ hf
-    simp only [hf, hg, norm, dif_pos, zero_mul]
-  else
-    if hg : g ≈ 0 then by
-      have hf : f * g ≈ 0 := mul_equiv_zero _ hg
-      simp only [hf, hg, norm, dif_pos, mul_zero]
-    else by
-      unfold norm
-      have hfg := mul_not_equiv_zero hf hg
-      simp only [hfg, hf, hg, dite_false]
-      -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-      rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
-      apply padicNorm.mul
-
-Depends on / 依赖: classical, dif_pos, dite_false, mul_equiv_zero, mul_not_equiv_zero, mul_zero, zero_mul
+/-
+**PadicSeq.norm_mul** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_mul (f g : PadicSeq p) : (f * g).norm = f.norm * g.norm
+参数：f g : PadicSeq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `CauSeq.mul_equiv_zero'`：mul_equiv_zero' (g : CauSeq _ abv) {f : CauSeq _
+ abv} (hf : f ≈ 0) : f * g ≈ 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CauSeq.mul_equiv_zero`：mul_equiv_zero (g : CauSeq _ abv) {f : CauSeq _ a
+bv} (hf : f ≈ 0) : g * f ≈ 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `CauSeq.mul_not_equiv_zero`：mul_not_equiv_zero {f g : CauSeq _ abv} (hf :
+ ¬f ≈ 0) (hg : ¬g ≈ 0) : ¬f * g ≈ 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false`：¬False
+· 使用定理 `PadicSeq.lift_index_left_left`：lift_index_left_left {f : PadicSeq p} (hf
+ : ¬f ≈ 0) (v2 v3 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f
+ (max (stationaryPo…
+· 使用定理 `PadicSeq.lift_index_left`：lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0)
+ (v1 v3 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f (max v1 (
+max (stationar…
+· 使用定理 `PadicSeq.lift_index_right`：lift_index_right {f : PadicSeq p} (hf : ¬f ≈ 
+0) (v1 v2 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f (max v1
+ (max v2 (stati…
+· 使用定理 `padicNorm.mul`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q r : ℚ), padicNorm 
+p (q * r) = padicNorm p q * padicNorm p r
 -/
 theorem norm_mul (f g : PadicSeq p) : (f * g).norm = f.norm * g.norm := by
   classical
@@ -1094,220 +1125,152 @@ theorem norm_mul (f g : PadicSeq p) : (f * g).norm = f.norm * g.norm := by
       have hfg := mul_not_equiv_zero hf hg
       simp only [hfg, hf, hg, dite_false]
       -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-      rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
+      rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
       apply padicNorm.mul
-
-/--
-theorem `eq_zero_iff_equiv_zero` / 定理 `eq_zero_iff_equiv_zero`
-
-English:
-theorem eq_zero_iff_equiv_zero
-  given: (f : PadicSeq p)
-  statement: mk f = 0 ↔ f ≈ 0
-  proof: mk_eq
-
-中文:
-定理 eq_zero_iff_equiv_zero
-  条件: (f : PadicSeq p)
-  结论: mk f = 0 ↔ f ≈ 0
-  证明: mk_eq
-
-Depends on / 依赖: mk_eq
+/-
+**PadicSeq.eq_zero_iff_equiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：eq_zero_iff_equiv_zero (f : PadicSeq p) : mk f = 0 ↔ f ≈ 0
+参数：f : PadicSeq p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauSeq.Completion.mk_eq`：mk_eq {f g : CauSeq _ abv} : mk f = mk g ↔ LimZ
+ero (f - g)
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 -/
 theorem eq_zero_iff_equiv_zero (f : PadicSeq p) : mk f = 0 ↔ f ≈ 0 :=
   mk_eq
-
-/--
-theorem `ne_zero_iff_nequiv_zero` / 定理 `ne_zero_iff_nequiv_zero`
-
-English:
-theorem ne_zero_iff_nequiv_zero
-  given: (f : PadicSeq p)
-  statement: mk f != 0 ↔ ¬f ≈ 0
-  proof: .not eq_zero_iff_equiv_zero _
-
-中文:
-定理 ne_zero_iff_nequiv_zero
-  条件: (f : PadicSeq p)
-  结论: mk f != 0 ↔ ¬f ≈ 0
-  证明: .not eq_zero_iff_equiv_zero _
-
-Depends on / 依赖: eq_zero_iff_equiv_zero
+/-
+**PadicSeq.ne_zero_iff_nequiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：ne_zero_iff_nequiv_zero (f : PadicSeq p) : mk f != 0 ↔ ¬f ≈ 0
+参数：f : PadicSeq p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.eq_zero_iff_equiv_zero`：eq_zero_iff_equiv_zero (f : PadicSeq p)
+ : mk f = 0 ↔ f ≈ 0
 -/
-theorem ne_zero_iff_nequiv_zero (f : PadicSeq p) : mk f != 0 ↔ ¬f ≈ 0 :=
-.not eq_zero_iff_equiv_zero _
-
-/--
-theorem `norm_const` / 定理 `norm_const`
-
-English:
-theorem norm_const
-  given: (q : Rat)
-  statement: norm (const (padicNorm p) q) = padicNorm p q
-  proof: by
+theorem ne_zero_iff_nequiv_zero (f : PadicSeq p) : mk f ≠ 0 ↔ ¬f ≈ 0 :=
+  eq_zero_iff_equiv_zero _ |>.not
+/-
+**PadicSeq.norm_const** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_const (q : Rat) : norm (const (padicNorm p) q) = padicNorm p q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `padicNorm.zero`：∀ {p : ℕ}, padicNorm p 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `PadicSeq.not_equiv_zero_const_of_nonzero`：not_equiv_zero_const_of_nonzer
+o {q : Rat} (hq : q != 0) : ¬const (padicNorm p) q ≈ 0
+-/
+theorem norm_const (q : ℚ) : norm (const (padicNorm p) q) = padicNorm p q := by
   obtain rfl | hq := eq_or_ne q 0
   · simp [norm]
   · simp [norm, not_equiv_zero_const_of_nonzero hq]
-
-中文:
-定理 norm_const
-  条件: (q : 有理数)
-  结论: norm (const (padicNorm p) q) = padicNorm p q
-  证明: by
-  obtain rfl | hq := eq_or_ne q 0
-  · simp [norm]
-  · simp [norm, not_equiv_zero_const_of_nonzero hq]
-
-Depends on / 依赖: eq_or_ne, not_equiv_zero_const_of_nonzero
+/-
+**PadicSeq.norm_values_discrete** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_values_discrete (a : PadicSeq p) (ha : ¬a ≈ 0) : exists z : Int, a.no
+rm = (p : Rat) ^ (-z)
+参数：a : PadicSeq p；ha : ¬a ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.norm_eq_norm_app_of_nonzero`：norm_eq_norm_app_of_nonzero {f : P
+adicSeq p} (hf : ¬f ≈ 0) : exists k, f.norm = padicNorm p k ∧ k != 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `padicNorm.values_discrete`：∀ {p : ℕ} {q : ℚ}, q ≠ 0 → ∃ z, padicNorm p q
+ = ↑p ^ (-z)
 -/
-theorem norm_const (q : Rat) : norm (const (padicNorm p) q) = padicNorm p q := by
-  obtain rfl | hq := eq_or_ne q 0
-  · simp [norm]
-  · simp [norm, not_equiv_zero_const_of_nonzero hq]
-
-/--
-theorem `norm_values_discrete` / 定理 `norm_values_discrete`
-
-English:
-theorem norm_values_discrete
-  given: (a : PadicSeq p) (ha : ¬a ≈ 0)
-  statement: exists z : Int, a.norm = (p : Rat) ^ (-z)
-  proof: by
+theorem norm_values_discrete (a : PadicSeq p) (ha : ¬a ≈ 0) : ∃ z : ℤ, a.norm = (p : ℚ) ^ (-z) := by
   let ⟨k, hk, hk'⟩ := norm_eq_norm_app_of_nonzero ha
   simpa [hk] using padicNorm.values_discrete hk'
-
-中文:
-定理 norm_values_discrete
-  条件: (a : PadicSeq p) (ha : ¬a ≈ 0)
-  结论: 存在 z : 整数, a.norm = (p : 有理数) ^ (-z)
-  证明: by
-  let ⟨k, hk, hk'⟩ := norm_eq_norm_app_of_nonzero ha
-  simpa [hk] using padicNorm.values_discrete hk'
-
-Depends on / 依赖: norm_eq_norm_app_of_nonzero, padicNorm, padicNorm.values_discrete, values_discrete
--/
-theorem norm_values_discrete (a : PadicSeq p) (ha : ¬a ≈ 0) : exists z : Int, a.norm = (p : Rat) ^ (-z) := by
-  let ⟨k, hk, hk'⟩ := norm_eq_norm_app_of_nonzero ha
-  simpa [hk] using padicNorm.values_discrete hk'
-
-/--
-theorem `norm_one` / 定理 `norm_one`
-
-English:
-theorem norm_one
-  statement: norm (1 : PadicSeq p) = 1
-  proof: by
-  have h1 : ¬(1 : PadicSeq p) ≈ 0 := one_not_equiv_zero _
-  simp [h1, norm]
-
-中文:
-定理 norm_one
-  结论: norm (1 : PadicSeq p) = 1
-  证明: by
-  have h1 : ¬(1 : PadicSeq p) ≈ 0 := one_not_equiv_zero _
-  simp [h1, norm]
-
-Depends on / 依赖: PadicSeq, one_not_equiv_zero
+/-
+**PadicSeq.norm_one** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_one : norm (1 : PadicSeq p) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `CauSeq.one_not_equiv_zero`：one_not_equiv_zero : ¬const abv 1 ≈ const abv
+ 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `padicNorm.eq_zpow_of_nonzero`：∀ {p : ℕ} {q : ℚ}, q ≠ 0 → padicNorm p q =
+ ↑p ^ (-padicValRat p q)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `padicValRat.one`：∀ {p : ℕ}, padicValRat p 1 = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_one : norm (1 : PadicSeq p) = 1 := by
   have h1 : ¬(1 : PadicSeq p) ≈ 0 := one_not_equiv_zero _
   simp [h1, norm]
-
-/--
-theorem `norm_eq_of_equiv_aux` / 定理 `norm_eq_of_equiv_aux`
-
-English:
-theorem norm_eq_of_equiv_aux
-  statement: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
-  proof: by
-  have hpn : 0 < padicNorm p (f (stationaryPoint hf)) - padicNorm p (g (stationaryPoint hg)) :=
-    sub_pos_of_lt hlt
-  obtain ⟨N, hN⟩ := hfg _ hpn
-  let i := max N (max (stationaryPoint hf) (stationaryPoint hg))
-  have hi : N <= i := le_max_left _ _
-  have hN' := hN _ hi
-  -- Porting note: originally `padic_index_simp [N, hf, hg] at hN' h hlt`
-  rw [lift_index_left hf N (stationaryPoint hg)]; rw [lift_index_right hg N (stationaryPoint hf)]
-    at hN' h hlt
-  have hpne : padicNorm p (f i) != padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
-  rw [CauSeq.sub_apply]; rw [sub_eq_add_neg]; rw [add_eq_max_of_ne hpne]; rw [padicNorm.neg]; rw [max_eq_left_of_lt hlt]
-    at hN'
-  have : padicNorm p (f i) < padicNorm p (f i) := by
-    apply lt_of_lt_of_le hN'
-    apply sub_le_self
-    apply padicNorm.nonneg
-  exact lt_irrefl _ this
-
-中文:
-定理 norm_eq_of_equiv_aux
-  结论: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
-  证明: by
-  have hpn : 0 < padicNorm p (f (stationaryPoint hf)) - padicNorm p (g (stationaryPoint hg)) :=
-    sub_pos_of_lt hlt
-  obtain ⟨N, hN⟩ := hfg _ hpn
-  let i := max N (max (stationaryPoint hf) (stationaryPoint hg))
-  have hi : N <= i := le_max_left _ _
-  have hN' := hN _ hi
-  -- Porting note: originally `padic_index_simp [N, hf, hg] at hN' h hlt`
-  rw [lift_index_left hf N (stationaryPoint hg)]; rw [lift_index_right hg N (stationaryPoint hf)]
-    at hN' h hlt
-  have hpne : padicNorm p (f i) != padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
-  rw [CauSeq.sub_apply]; rw [sub_eq_add_neg]; rw [add_eq_max_of_ne hpne]; rw [padicNorm.neg]; rw [max_eq_left_of_lt hlt]
-    at hN'
-  have : padicNorm p (f i) < padicNorm p (f i) := by
-    apply lt_of_lt_of_le hN'
-    apply sub_le_self
-    apply padicNorm.nonneg
-  exact lt_irrefl _ this
+/-
+**PadicSeq.norm_eq_of_equiv_aux** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem norm_eq_of_equiv_aux {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
-    (h : padicNorm p (f (stationaryPoint hf)) != padicNorm p (g (stationaryPoint hg)))
+    (h : padicNorm p (f (stationaryPoint hf)) ≠ padicNorm p (g (stationaryPoint hg)))
     (hlt : padicNorm p (g (stationaryPoint hg)) < padicNorm p (f (stationaryPoint hf))) :
     False := by
   have hpn : 0 < padicNorm p (f (stationaryPoint hf)) - padicNorm p (g (stationaryPoint hg)) :=
     sub_pos_of_lt hlt
   obtain ⟨N, hN⟩ := hfg _ hpn
   let i := max N (max (stationaryPoint hf) (stationaryPoint hg))
-  have hi : N <= i := le_max_left _ _
+  have hi : N ≤ i := le_max_left _ _
   have hN' := hN _ hi
   -- Porting note: originally `padic_index_simp [N, hf, hg] at hN' h hlt`
-  rw [lift_index_left hf N (stationaryPoint hg)]; rw [lift_index_right hg N (stationaryPoint hf)]
+  rw [lift_index_left hf N (stationaryPoint hg), lift_index_right hg N (stationaryPoint hf)]
     at hN' h hlt
-  have hpne : padicNorm p (f i) != padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
-  rw [CauSeq.sub_apply]; rw [sub_eq_add_neg]; rw [add_eq_max_of_ne hpne]; rw [padicNorm.neg]; rw [max_eq_left_of_lt hlt]
+  have hpne : padicNorm p (f i) ≠ padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
+  rw [CauSeq.sub_apply, sub_eq_add_neg, add_eq_max_of_ne hpne, padicNorm.neg, max_eq_left_of_lt hlt]
     at hN'
   have : padicNorm p (f i) < padicNorm p (f i) := by
     apply lt_of_lt_of_le hN'
     apply sub_le_self
     apply padicNorm.nonneg
   exact lt_irrefl _ this
-
-/--
-theorem `norm_eq_of_equiv` / 定理 `norm_eq_of_equiv`
-
-English:
-theorem norm_eq_of_equiv
-  given: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
-  proof: by
-  by_contra h
-  cases lt_or_ge (padicNorm p (g (stationaryPoint hg))) (padicNorm p (f (stationaryPoint hf))) with
-  | inl hlt =>
-    exact norm_eq_of_equiv_aux hf hg hfg h hlt
-  | inr hle =>
-    apply norm_eq_of_equiv_aux hg hf (Setoid.symm hfg) (Ne.symm h)
-    exact lt_of_le_of_ne hle h
-
-中文:
-定理 norm_eq_of_equiv
-  条件: {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
-  证明: by
-  by_contra h
-  cases lt_or_ge (padicNorm p (g (stationaryPoint hg))) (padicNorm p (f (stationaryPoint hf))) with
-  | inl hlt =>
-    exact norm_eq_of_equiv_aux hf hg hfg h hlt
-  | inr hle =>
-    apply norm_eq_of_equiv_aux hg hf (Setoid.symm hfg) (Ne.symm h)
-    exact lt_of_le_of_ne hle h
+/-
+**PadicSeq.norm_eq_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem norm_eq_of_equiv {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g) :
     padicNorm p (f (stationaryPoint hf)) = padicNorm p (g (stationaryPoint hg)) := by
@@ -1318,37 +1281,32 @@ private theorem norm_eq_of_equiv {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g �
   | inr hle =>
     apply norm_eq_of_equiv_aux hg hf (Setoid.symm hfg) (Ne.symm h)
     exact lt_of_le_of_ne hle h
-
-/--
-theorem `norm_equiv` / 定理 `norm_equiv`
-
-English:
-theorem norm_equiv
-  given: {f g : PadicSeq p} (hfg : f ≈ g)
-  statement: f.norm = g.norm
-  proof: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : g ≈ 0 := Setoid.trans (Setoid.symm hfg) hf
-    simp [norm, hf, hg]
-  else by
-    have hg : ¬g ≈ 0 := hf ∘ Setoid.trans hfg
-    unfold norm; split_ifs; exact norm_eq_of_equiv hf hg hfg
-
-中文:
-定理 norm_equiv
-  条件: {f g : PadicSeq p} (hfg : f ≈ g)
-  结论: f.norm = g.norm
-  证明: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : g ≈ 0 := Setoid.trans (Setoid.symm hfg) hf
-    simp [norm, hf, hg]
-  else by
-    have hg : ¬g ≈ 0 := hf ∘ Setoid.trans hfg
-    unfold norm; split_ifs; exact norm_eq_of_equiv hf hg hfg
-
-Depends on / 依赖: Setoid, Setoid.symm, Setoid.trans, classical, norm_eq_of_equiv, split_ifs
+/-
+**PadicSeq.norm_equiv** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.norm = g.norm
+参数：hfg : f ≈ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Setoid.trans`：∀ {α : Sort u} [inst : Setoid α] {a b c : α}, a ≈ b → b ≈ 
+c → a ≈ c
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `_private.Mathlib.NumberTheory.Padics.PadicNumbers.0.PadicSeq.norm_eq_of_
+equiv`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg 
+: ¬g ≈ 0),   f ≈ g → padicNorm p (↑f (PadicSeq.stationaryPoint hf))…
 -/
 theorem norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.norm = g.norm := by
   classical
@@ -1358,102 +1316,59 @@ theorem norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.norm = g.norm := by
   else by
     have hg : ¬g ≈ 0 := hf ∘ Setoid.trans hfg
     unfold norm; split_ifs; exact norm_eq_of_equiv hf hg hfg
-
-/--
-theorem `norm_nonarchimedean_aux` / 定理 `norm_nonarchimedean_aux`
-
-English:
-theorem norm_nonarchimedean_aux
-  statement: {f g : PadicSeq p} (hfg : ¬f + g ≈ 0) (hf : ¬f ≈ 0)
-  proof: by
-  unfold norm; split_ifs
-  -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-  rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
-  apply padicNorm.nonarchimedean
-
-中文:
-定理 norm_nonarchimedean_aux
-  结论: {f g : PadicSeq p} (hfg : ¬f + g ≈ 0) (hf : ¬f ≈ 0)
-  证明: by
-  unfold norm; split_ifs
-  -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-  rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
-  apply padicNorm.nonarchimedean
+/-
+**PadicSeq.norm_nonarchimedean_aux** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem norm_nonarchimedean_aux {f g : PadicSeq p} (hfg : ¬f + g ≈ 0) (hf : ¬f ≈ 0)
-    (hg : ¬g ≈ 0) : (f + g).norm <= max f.norm g.norm := by
+    (hg : ¬g ≈ 0) : (f + g).norm ≤ max f.norm g.norm := by
   unfold norm; split_ifs
   -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
-  rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
+  rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
   apply padicNorm.nonarchimedean
-
-/--
-theorem `norm_nonarchimedean` / 定理 `norm_nonarchimedean`
-
-English:
-theorem norm_nonarchimedean
-  given: (f g : PadicSeq p)
-  statement: (f + g).norm <= max f.norm g.norm
-  proof: by
-  classical
-  exact if hfg : f + g ≈ 0 then by
-    have : 0 <= max f.norm g.norm := le_max_of_le_left (norm_nonneg _)
-    simpa only [hfg, norm]
-  else
-    if hf : f ≈ 0 then by
-      have hfg' : f + g ≈ g := by
-        change LimZero (f - 0) at hf
-        change LimZero (f + g - g); · simpa only [sub_zero, add_sub_cancel_right] using hf
-      have hcfg : (f + g).norm = g.norm := norm_equiv hfg'
-      have hcl : f.norm = 0 := (norm_zero_iff f).2 hf
-      have : max f.norm g.norm = g.norm := by rw [hcl]; exact max_eq_right (norm_nonneg _)
-      rw [this]; rw [hcfg]
-    else
-      if hg : g ≈ 0 then by
-        have hfg' : f + g ≈ f := by
-          change LimZero (g - 0) at hg
-          change LimZero (f + g - f); · simpa only [add_sub_cancel_left, sub_zero] using hg
-        have hcfg : (f + g).norm = f.norm := norm_equiv hfg'
-        have hcl : g.norm = 0 := (norm_zero_iff g).2 hg
-        have : max f.norm g.norm = f.norm := by rw [hcl]; exact max_eq_left (norm_nonneg _)
-        rw [this]; rw [hcfg]
-      else norm_nonarchimedean_aux hfg hf hg
-
-中文:
-定理 norm_nonarchimedean
-  条件: (f g : PadicSeq p)
-  结论: (f + g).norm <= 最大值 f.norm g.norm
-  证明: by
-  classical
-  exact if hfg : f + g ≈ 0 then by
-    have : 0 <= max f.norm g.norm := le_max_of_le_left (norm_nonneg _)
-    simpa only [hfg, norm]
-  else
-    if hf : f ≈ 0 then by
-      have hfg' : f + g ≈ g := by
-        change LimZero (f - 0) at hf
-        change LimZero (f + g - g); · simpa only [sub_zero, add_sub_cancel_right] using hf
-      have hcfg : (f + g).norm = g.norm := norm_equiv hfg'
-      have hcl : f.norm = 0 := (norm_zero_iff f).2 hf
-      have : max f.norm g.norm = g.norm := by rw [hcl]; exact max_eq_right (norm_nonneg _)
-      rw [this]; rw [hcfg]
-    else
-      if hg : g ≈ 0 then by
-        have hfg' : f + g ≈ f := by
-          change LimZero (g - 0) at hg
-          change LimZero (f + g - f); · simpa only [add_sub_cancel_left, sub_zero] using hg
-        have hcfg : (f + g).norm = f.norm := norm_equiv hfg'
-        have hcl : g.norm = 0 := (norm_zero_iff g).2 hg
-        have : max f.norm g.norm = f.norm := by rw [hcl]; exact max_eq_left (norm_nonneg _)
-        rw [this]; rw [hcfg]
-      else norm_nonarchimedean_aux hfg hf hg
-
-Depends on / 依赖: LimZero, add_sub_cancel_right, classical, f.norm, g.norm, le_max_of_le_left, max_eq_right, norm_equiv, norm_nonneg, norm_zero_iff, sub_zero
+/-
+**PadicSeq.norm_nonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_nonarchimedean (f g : PadicSeq p) : (f + g).norm <= max f.norm g.norm
+参数：f g : PadicSeq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `le_max_of_le_left`：le_max_of_le_left : a <= b -> a <= max b c
+· 使用定理 `PadicSeq.norm_nonneg`：norm_nonneg (f : PadicSeq p) : 0 <= f.norm
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PadicSeq.norm_zero_iff`：norm_zero_iff (f : PadicSeq p) : f.norm = 0 ↔ f 
+≈ 0
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `_private.Mathlib.NumberTheory.Padics.PadicNumbers.0.PadicSeq.norm_nonarc
+himedean_aux`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] {f g : PadicSeq p}, ¬f + g ≈ 0
+ → ¬f ≈ 0 → ¬g ≈ 0 → (f + g).norm ≤ max f.norm g.norm
 -/
-theorem norm_nonarchimedean (f g : PadicSeq p) : (f + g).norm <= max f.norm g.norm := by
+theorem norm_nonarchimedean (f g : PadicSeq p) : (f + g).norm ≤ max f.norm g.norm := by
   classical
   exact if hfg : f + g ≈ 0 then by
-    have : 0 <= max f.norm g.norm := le_max_of_le_left (norm_nonneg _)
+    have : 0 ≤ max f.norm g.norm := le_max_of_le_left (norm_nonneg _)
     simpa only [hfg, norm]
   else
     if hf : f ≈ 0 then by
@@ -1463,7 +1378,7 @@ theorem norm_nonarchimedean (f g : PadicSeq p) : (f + g).norm <= max f.norm g.no
       have hcfg : (f + g).norm = g.norm := norm_equiv hfg'
       have hcl : f.norm = 0 := (norm_zero_iff f).2 hf
       have : max f.norm g.norm = g.norm := by rw [hcl]; exact max_eq_right (norm_nonneg _)
-      rw [this]; rw [hcfg]
+      rw [this, hcfg]
     else
       if hg : g ≈ 0 then by
         have hfg' : f + g ≈ f := by
@@ -1472,69 +1387,58 @@ theorem norm_nonarchimedean (f g : PadicSeq p) : (f + g).norm <= max f.norm g.no
         have hcfg : (f + g).norm = f.norm := norm_equiv hfg'
         have hcl : g.norm = 0 := (norm_zero_iff g).2 hg
         have : max f.norm g.norm = f.norm := by rw [hcl]; exact max_eq_left (norm_nonneg _)
-        rw [this]; rw [hcfg]
+        rw [this, hcfg]
       else norm_nonarchimedean_aux hfg hf hg
-
-/--
-theorem `norm_eq` / 定理 `norm_eq`
-
-English:
-theorem norm_eq
-  given: {f g : PadicSeq p} (h : forall k, padicNorm p (f k) = padicNorm p (g k))
-  proof: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : g ≈ 0 := equiv_zero_of_val_eq_of_equiv_zero h hf
-    simp only [hf, hg, norm, dif_pos]
-  else by
-    have hg : ¬g ≈ 0 := fun hg =>
-hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
-    simp only [hg, hf, norm, dif_neg, not_false_iff]
-    let i := max (stationaryPoint hf) (stationaryPoint hg)
-    have hpf : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f i) := by
-      apply stationaryPoint_spec
-      · apply le_max_left
-      · exact le_rfl
-    have hpg : padicNorm p (g (stationaryPoint hg)) = padicNorm p (g i) := by
-      apply stationaryPoint_spec
-      · apply le_max_right
-      · exact le_rfl
-    rw [hpf]; rw [hpg]; rw [h]
-
-中文:
-定理 norm_eq
-  条件: {f g : PadicSeq p} (h : 对任意 k, padicNorm p (f k) = padicNorm p (g k))
-  证明: by
-  classical
-  exact if hf : f ≈ 0 then by
-    have hg : g ≈ 0 := equiv_zero_of_val_eq_of_equiv_zero h hf
-    simp only [hf, hg, norm, dif_pos]
-  else by
-    have hg : ¬g ≈ 0 := fun hg =>
-hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
-    simp only [hg, hf, norm, dif_neg, not_false_iff]
-    let i := max (stationaryPoint hf) (stationaryPoint hg)
-    have hpf : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f i) := by
-      apply stationaryPoint_spec
-      · apply le_max_left
-      · exact le_rfl
-    have hpg : padicNorm p (g (stationaryPoint hg)) = padicNorm p (g i) := by
-      apply stationaryPoint_spec
-      · apply le_max_right
-      · exact le_rfl
-    rw [hpf]; rw [hpg]; rw [h]
-
-Depends on / 依赖: classical, dif_neg, dif_pos, equiv_zero_of_val_eq_of_equiv_zero, forall_const, le_max_left, le_rfl, not_false_iff, padicNorm, stationaryPoint, stationaryPoint_spec
+/-
+**PadicSeq.norm_eq** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_eq {f g : PadicSeq p} (h : forall k, padicNorm p (f k) = padicNorm p 
+(g k)) : f.norm = g.norm
+参数：h : forall k, padicNorm p (f k) = padicNorm p (g k)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.equiv_zero_of_val_eq_of_equiv_zero`：equiv_zero_of_val_eq_of_equ
+iv_zero {f g : PadicSeq p} (h : forall k, padicNorm p (f k) = padicNorm p (g k))
+ (hf : f ≈ 0) : g ≈ 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem norm_eq {f g : PadicSeq p} (h : forall k, padicNorm p (f k) = padicNorm p (g k)) :
+theorem norm_eq {f g : PadicSeq p} (h : ∀ k, padicNorm p (f k) = padicNorm p (g k)) :
     f.norm = g.norm := by
   classical
   exact if hf : f ≈ 0 then by
     have hg : g ≈ 0 := equiv_zero_of_val_eq_of_equiv_zero h hf
     simp only [hf, hg, norm, dif_pos]
   else by
-    have hg : ¬g ≈ 0 := fun hg =>
-hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
+    have hg : ¬g ≈ 0 := fun hg ↦
+      hf <| equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
     simp only [hg, hf, norm, dif_neg, not_false_iff]
     let i := max (stationaryPoint hf) (stationaryPoint hg)
     have hpf : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f i) := by
@@ -1545,117 +1449,103 @@ hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
       apply stationaryPoint_spec
       · apply le_max_right
       · exact le_rfl
-    rw [hpf]; rw [hpg]; rw [h]
-
-/--
-theorem `norm_neg` / 定理 `norm_neg`
-
-English:
-theorem norm_neg
-  given: (a : PadicSeq p)
-  statement: (-a).norm = a.norm
-  proof: norm_eq by simp
-
-中文:
-定理 norm_neg
-  条件: (a : PadicSeq p)
-  结论: (-a).norm = a.norm
-  证明: norm_eq by simp
-
-Depends on / 依赖: norm_eq
+    rw [hpf, hpg, h]
+/-
+**PadicSeq.norm_neg** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_neg (a : PadicSeq p) : (-a).norm = a.norm
+参数：a : PadicSeq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicSeq.norm_eq`：norm_eq {f g : PadicSeq p} (h : forall k, padicNorm p 
+(f k) = padicNorm p (g k)) : f.norm = g.norm
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `padicNorm.neg`：∀ {p : ℕ} (q : ℚ), padicNorm p (-q) = padicNorm p q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem norm_neg (a : PadicSeq p) : (-a).norm = a.norm :=
-norm_eq by simp
-
-/--
-theorem `norm_eq_of_add_equiv_zero` / 定理 `norm_eq_of_add_equiv_zero`
-
-English:
-theorem norm_eq_of_add_equiv_zero
-  given: {f g : PadicSeq p} (h : f + g ≈ 0)
-  statement: f.norm = g.norm
-  proof: by
-  have : LimZero (f + g - 0) := h
-  have : f ≈ -g := show LimZero (f - -g) by simpa only [sub_zero, sub_neg_eq_add]
-  have : f.norm = (-g).norm := norm_equiv this
-  simpa only [norm_neg] using this
-
-中文:
-定理 norm_eq_of_add_equiv_zero
-  条件: {f g : PadicSeq p} (h : f + g ≈ 0)
-  结论: f.norm = g.norm
-  证明: by
-  have : LimZero (f + g - 0) := h
-  have : f ≈ -g := show LimZero (f - -g) by simpa only [sub_zero, sub_neg_eq_add]
-  have : f.norm = (-g).norm := norm_equiv this
-  simpa only [norm_neg] using this
-
-Depends on / 依赖: LimZero, f.norm, norm_equiv, norm_neg, sub_neg_eq_add, sub_zero
+  norm_eq <| by simp
+/-
+**PadicSeq.norm_eq_of_add_equiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：norm_eq_of_add_equiv_zero {f g : PadicSeq p} (h : f + g ≈ 0) : f.norm = g.
+norm
+参数：h : f + g ≈ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
+· 使用定理 `PadicSeq.norm_neg`：norm_neg (a : PadicSeq p) : (-a).norm = a.norm
 -/
 theorem norm_eq_of_add_equiv_zero {f g : PadicSeq p} (h : f + g ≈ 0) : f.norm = g.norm := by
   have : LimZero (f + g - 0) := h
   have : f ≈ -g := show LimZero (f - -g) by simpa only [sub_zero, sub_neg_eq_add]
   have : f.norm = (-g).norm := norm_equiv this
   simpa only [norm_neg] using this
-
-/--
-theorem `add_eq_max_of_ne` / 定理 `add_eq_max_of_ne`
-
-English:
-theorem add_eq_max_of_ne
-  given: {f g : PadicSeq p} (hfgne : f.norm != g.norm)
-  proof: by
-  classical
-  have hfg : ¬f + g ≈ 0 := mt norm_eq_of_add_equiv_zero hfgne
-  exact if hf : f ≈ 0 then by
-    have : LimZero (f - 0) := hf
-    have : f + g ≈ g := show LimZero (f + g - g) by simpa only [sub_zero, add_sub_cancel_right]
-    have h1 : (f + g).norm = g.norm := norm_equiv this
-    have h2 : f.norm = 0 := (norm_zero_iff _).2 hf
-    rw [h1]; rw [h2]; rw [max_eq_right (norm_nonneg _)]
-  else
-    if hg : g ≈ 0 then by
-      have : LimZero (g - 0) := hg
-      have : f + g ≈ f := show LimZero (f + g - f) by simpa only [add_sub_cancel_left, sub_zero]
-      have h1 : (f + g).norm = f.norm := norm_equiv this
-      have h2 : g.norm = 0 := (norm_zero_iff _).2 hg
-      rw [h1]; rw [h2]; rw [max_eq_left (norm_nonneg _)]
-    else by
-      unfold norm at hfgne ⊢; split_ifs at hfgne ⊢
-      -- Porting note: originally `padic_index_simp [hfg, hf, hg] at hfgne ⊢`
-      rw [lift_index_left hf]; rw [lift_index_right hg] at hfgne
-      · rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
-        exact padicNorm.add_eq_max_of_ne hfgne
-
-中文:
-定理 add_eq_max_of_ne
-  条件: {f g : PadicSeq p} (hfgne : f.norm != g.norm)
-  证明: by
-  classical
-  have hfg : ¬f + g ≈ 0 := mt norm_eq_of_add_equiv_zero hfgne
-  exact if hf : f ≈ 0 then by
-    have : LimZero (f - 0) := hf
-    have : f + g ≈ g := show LimZero (f + g - g) by simpa only [sub_zero, add_sub_cancel_right]
-    have h1 : (f + g).norm = g.norm := norm_equiv this
-    have h2 : f.norm = 0 := (norm_zero_iff _).2 hf
-    rw [h1]; rw [h2]; rw [max_eq_right (norm_nonneg _)]
-  else
-    if hg : g ≈ 0 then by
-      have : LimZero (g - 0) := hg
-      have : f + g ≈ f := show LimZero (f + g - f) by simpa only [add_sub_cancel_left, sub_zero]
-      have h1 : (f + g).norm = f.norm := norm_equiv this
-      have h2 : g.norm = 0 := (norm_zero_iff _).2 hg
-      rw [h1]; rw [h2]; rw [max_eq_left (norm_nonneg _)]
-    else by
-      unfold norm at hfgne ⊢; split_ifs at hfgne ⊢
-      -- Porting note: originally `padic_index_simp [hfg, hf, hg] at hfgne ⊢`
-      rw [lift_index_left hf]; rw [lift_index_right hg] at hfgne
-      · rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
-        exact padicNorm.add_eq_max_of_ne hfgne
-
-Depends on / 依赖: LimZero, add_sub_canc, add_sub_cancel_right, classical, f.norm, g.norm, max_eq_right, norm_eq_of_add_equiv_zero, norm_equiv, norm_nonneg, norm_zero_iff, sub_zero
+/-
+**PadicSeq.add_eq_max_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `PadicSeq`。
+形式化陈述：add_eq_max_of_ne {f g : PadicSeq p} (hfgne : f.norm != g.norm) : (f + g).n
+orm = max f.norm g.norm
+参数：hfgne : f.norm != g.norm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `PadicSeq.norm_eq_of_add_equiv_zero`：norm_eq_of_add_equiv_zero {f g : Pad
+icSeq p} (h : f + g ≈ 0) : f.norm = g.norm
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PadicSeq.norm_zero_iff`：norm_zero_iff (f : PadicSeq p) : f.norm = 0 ↔ f 
+≈ 0
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `PadicSeq.norm_nonneg`：norm_nonneg (f : PadicSeq p) : 0 <= f.norm
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `PadicSeq.lift_index_left_left`：lift_index_left_left {f : PadicSeq p} (hf
+ : ¬f ≈ 0) (v2 v3 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f
+ (max (stationaryPo…
+· 使用定理 `PadicSeq.lift_index_left`：lift_index_left {f : PadicSeq p} (hf : ¬f ≈ 0)
+ (v1 v3 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f (max v1 (
+max (stationar…
+· 使用定理 `PadicSeq.lift_index_right`：lift_index_right {f : PadicSeq p} (hf : ¬f ≈ 
+0) (v1 v2 : Nat) : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f (max v1
+ (max v2 (stati…
+· 使用定理 `padicNorm.add_eq_max_of_ne`：add_eq_max_of_ne {q r : Rat} (hne : padicNor
+m p q != padicNorm p r) : padicNorm p (q + r) = max (padicNorm p q) (padicNorm p
+ r)
 -/
-theorem add_eq_max_of_ne {f g : PadicSeq p} (hfgne : f.norm != g.norm) :
+theorem add_eq_max_of_ne {f g : PadicSeq p} (hfgne : f.norm ≠ g.norm) :
     (f + g).norm = max f.norm g.norm := by
   classical
   have hfg : ¬f + g ≈ 0 := mt norm_eq_of_add_equiv_zero hfgne
@@ -1664,18 +1554,18 @@ theorem add_eq_max_of_ne {f g : PadicSeq p} (hfgne : f.norm != g.norm) :
     have : f + g ≈ g := show LimZero (f + g - g) by simpa only [sub_zero, add_sub_cancel_right]
     have h1 : (f + g).norm = g.norm := norm_equiv this
     have h2 : f.norm = 0 := (norm_zero_iff _).2 hf
-    rw [h1]; rw [h2]; rw [max_eq_right (norm_nonneg _)]
+    rw [h1, h2, max_eq_right (norm_nonneg _)]
   else
     if hg : g ≈ 0 then by
       have : LimZero (g - 0) := hg
       have : f + g ≈ f := show LimZero (f + g - f) by simpa only [add_sub_cancel_left, sub_zero]
       have h1 : (f + g).norm = f.norm := norm_equiv this
       have h2 : g.norm = 0 := (norm_zero_iff _).2 hg
-      rw [h1]; rw [h2]; rw [max_eq_left (norm_nonneg _)]
+      rw [h1, h2, max_eq_left (norm_nonneg _)]
     else by
       unfold norm at hfgne ⊢; split_ifs at hfgne ⊢
       -- Porting note: originally `padic_index_simp [hfg, hf, hg] at hfgne ⊢`
-      rw [lift_index_left hf]; rw [lift_index_right hg] at hfgne
+      rw [lift_index_left hf, lift_index_right hg] at hfgne
       · rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
         exact padicNorm.add_eq_max_of_ne hfgne
 
@@ -1686,372 +1576,233 @@ end PadicSeq
 /-- The `p`-adic numbers `ℚ_[p]` are the Cauchy completion of `ℚ` with respect to the `p`-adic norm.
 -/
 @[wikidata Q311627]
-/--
-Definition of `Padic` / `Padic` 的定义
+/-
+**Padic** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Padic (p : Nat) [Fact p.Prime]
+参数：p : Nat。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 
-English:
-definition Padic
-  signature: (p : Nat) [Fact p.Prime]
-  body: CauSeq.Completion.Cauchy (padicNorm p)
-deriving Zero, One, Add, Neg, Sub, Mul, Div, AddCommGroup, Ring, CommRing, Field, Inhabited
-
-中文:
-定义 Padic
-  签名: (p : 自然数) [Fact p.素]
-  定义体: CauSeq.Completion.Cauchy (padicNorm p)
-deriving Zero, One, Add, Neg, Sub, Mul, Div, AddCommGroup, Ring, CommRing, Field, Inhabited
-
-Depends on / 依赖: CauSeq, CauSeq.Completion.Cauchy, Cauchy, Completion, padicNorm
+--- 原说明 ---
+The `p`-adic numbers `ℚ_[p]` are the Cauchy completion of `ℚ` with respect to th
+e `p`-adic norm.
 -/
-def Padic (p : Nat) [Fact p.Prime] :=
+def Padic (p : ℕ) [Fact p.Prime] :=
   CauSeq.Completion.Cauchy (padicNorm p)
 deriving Zero, One, Add, Neg, Sub, Mul, Div, AddCommGroup, Ring, CommRing, Field, Inhabited
 
 /-- notation for p-padic rationals -/
-notation "Rat_[" p "]" => Padic p
+notation "ℚ_[" p "]" => Padic p
 
 namespace Padic
 
 section Completion
 
-variable {p : Nat} [Fact p.Prime]
+variable {p : ℕ} [Fact p.Prime]
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Builds the equivalence class of a Cauchy sequence of rationals. -/
+/-
+**Padic.mk** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：mk : PadicSeq p -> Rat_[p]
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 
-English:
-definition mk
-  signature: : PadicSeq p -> Rat_[p]
-  body: Quotient.mk'
-
-中文:
-定义 mk
-  签名: : PadicSeq p -> Rat_[p]
-  定义体: Quotient.mk'
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+Builds the equivalence class of a Cauchy sequence of rationals.
 -/
-def mk : PadicSeq p -> Rat_[p] :=
+def mk : PadicSeq p → ℚ_[p] :=
   Quotient.mk'
 
 variable (p)
-
-/--
-theorem `zero_def` / 定理 `zero_def`
-
-English:
-theorem zero_def
-  statement: (0 : Rat_[p]) = ⟦0⟧
-  proof: rfl
-
-中文:
-定理 zero_def
-  结论: (0 : Rat_[p]) = ⟦0⟧
-  证明: rfl
+/-
+**Padic.zero_def** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：zero_def : (0 : Rat_[p]) = ⟦0⟧
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_def : (0 : Rat_[p]) = ⟦0⟧ := rfl
-
-/--
-theorem `mk_eq` / 定理 `mk_eq`
-
-English:
-theorem mk_eq
-  given: {f g : PadicSeq p}
-  statement: mk f = mk g ↔ f ≈ g
-  proof: Quotient.eq'
-
-中文:
-定理 mk_eq
-  条件: {f g : PadicSeq p}
-  结论: mk f = mk g ↔ f ≈ g
-  证明: Quotient.eq'
-
-Depends on / 依赖: Quotient, Quotient.eq
+theorem zero_def : (0 : ℚ_[p]) = ⟦0⟧ := rfl
+/-
+**Padic.mk_eq** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：mk_eq {f g : PadicSeq p} : mk f = mk g ↔ f ≈ g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq'`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a
+ = Quotient.mk' b ↔ s₁ a b
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 -/
 theorem mk_eq {f g : PadicSeq p} : mk f = mk g ↔ f ≈ g :=
   Quotient.eq'
-
-/--
-theorem `const_equiv` / 定理 `const_equiv`
-
-English:
-theorem const_equiv
-  given: {q r : Rat}
-  statement: const (padicNorm p) q ≈ const (padicNorm p) r ↔ q = r
-  proof: ⟨fun heq => eq_of_sub_eq_zero const_limZero.1 heq, fun heq => by
-    rw [heq]⟩
-
-@[norm_cast]
-
-中文:
-定理 const_equiv
-  条件: {q r : 有理数}
-  结论: const (padicNorm p) q ≈ const (padicNorm p) r ↔ q = r
-  证明: ⟨fun heq => eq_of_sub_eq_zero const_limZero.1 heq, fun heq => by
-    rw [heq]⟩
-
-@[norm_cast]
-
-Depends on / 依赖: const_limZero, eq_of_sub_eq_zero
+/-
+**Padic.const_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：const_equiv {q r : Rat} : const (padicNorm p) q ≈ const (padicNorm p) r ↔ 
+q = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `eq_of_sub_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a - b = 0 → a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CauSeq.const_limZero`：const_limZero {x : β} : LimZero (const x) ↔ x = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
 -/
-theorem const_equiv {q r : Rat} : const (padicNorm p) q ≈ const (padicNorm p) r ↔ q = r :=
-⟨fun heq => eq_of_sub_eq_zero const_limZero.1 heq, fun heq => by
+theorem const_equiv {q r : ℚ} : const (padicNorm p) q ≈ const (padicNorm p) r ↔ q = r :=
+  ⟨fun heq ↦ eq_of_sub_eq_zero <| const_limZero.1 heq, fun heq ↦ by
     rw [heq]⟩
 
 @[norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {q r : Rat}
-  statement: (↑q : Rat_[p]) = ↑r ↔ q = r
-  proof: ⟨(const_equiv p).1 ∘ Quotient.eq'.1, fun h => by rw [h]⟩
-
-中文:
-定理 coe_inj
-  条件: {q r : 有理数}
-  结论: (↑q : Rat_[p]) = ↑r ↔ q = r
-  证明: ⟨(const_equiv p).1 ∘ Quotient.eq'.1, fun h => by rw [h]⟩
-
-Depends on / 依赖: Quotient, Quotient.eq, const_equiv
+/-
+**Padic.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_inj {q r : Rat} : (↑q : Rat_[p]) = ↑r ↔ q = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Padic.const_equiv`：const_equiv {q r : Rat} : const (padicNorm p) q ≈ con
+st (padicNorm p) r ↔ q = r
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `Quotient.eq'`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a
+ = Quotient.mk' b ↔ s₁ a b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem coe_inj {q r : Rat} : (↑q : Rat_[p]) = ↑r ↔ q = r :=
-  ⟨(const_equiv p).1 ∘ Quotient.eq'.1, fun h => by rw [h]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CharZero Rat_[p]
-  body: ⟨fun m n => by
+theorem coe_inj {q r : ℚ} : (↑q : ℚ_[p]) = ↑r ↔ q = r :=
+  ⟨(const_equiv p).1 ∘ Quotient.eq'.1, fun h ↦ by rw [h]⟩
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : CharZero ℚ_[p] :=
+  ⟨fun m n ↦ by
     rw [← Rat.cast_natCast]
     norm_cast
     exact id⟩
 
 @[norm_cast]
-
-中文:
-实例 :
-  签名: 特征零 Rat_[p]
-  定义体: ⟨fun m n => by
-    rw [← Rat.cast_natCast]
-    norm_cast
-    exact id⟩
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_natCast, cast_natCast
+/-
+**Padic.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_add : forall {x y : Rat}, (↑(x + y) : Rat_[p]) = ↑x + ↑y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_add`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p + q) = ↑p + ↑q
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 -/
-instance : CharZero Rat_[p] :=
-  ⟨fun m n => by
-    rw [← Rat.cast_natCast]
-    norm_cast
-    exact id⟩
-
-@[norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  statement: forall {x y : Rat}, (↑(x + y) : Rat_[p]) = ↑x + ↑y
-  proof: Rat.cast_add _ _
-
-@[norm_cast]
-
-中文:
-定理 coe_add
-  结论: 对任意 {x y : 有理数}, (↑(x + y) : Rat_[p]) = ↑x + ↑y
-  证明: Rat.cast_add _ _
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_add, cast_add
--/
-theorem coe_add : forall {x y : Rat}, (↑(x + y) : Rat_[p]) = ↑x + ↑y :=
+theorem coe_add : ∀ {x y : ℚ}, (↑(x + y) : ℚ_[p]) = ↑x + ↑y :=
   Rat.cast_add _ _
 
 @[norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  statement: forall {x : Rat}, (↑(-x) : Rat_[p]) = -↑x
-  proof: Rat.cast_neg _
-
-@[norm_cast]
-
-中文:
-定理 coe_neg
-  结论: 对任意 {x : 有理数}, (↑(-x) : Rat_[p]) = -↑x
-  证明: Rat.cast_neg _
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_neg, cast_neg
+/-
+**Padic.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_neg : forall {x : Rat}, (↑(-x) : Rat_[p]) = -↑x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_neg`：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = 
+-↑q
 -/
-theorem coe_neg : forall {x : Rat}, (↑(-x) : Rat_[p]) = -↑x :=
+theorem coe_neg : ∀ {x : ℚ}, (↑(-x) : ℚ_[p]) = -↑x :=
   Rat.cast_neg _
 
 @[norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  statement: forall {x y : Rat}, (↑(x * y) : Rat_[p]) = ↑x * ↑y
-  proof: Rat.cast_mul _ _
-
-@[norm_cast]
-
-中文:
-定理 coe_mul
-  结论: 对任意 {x y : 有理数}, (↑(x * y) : Rat_[p]) = ↑x * ↑y
-  证明: Rat.cast_mul _ _
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_mul, cast_mul
+/-
+**Padic.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_mul : forall {x y : Rat}, (↑(x * y) : Rat_[p]) = ↑x * ↑y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_mul`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p * q) = ↑p * ↑q
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 -/
-theorem coe_mul : forall {x y : Rat}, (↑(x * y) : Rat_[p]) = ↑x * ↑y :=
+theorem coe_mul : ∀ {x y : ℚ}, (↑(x * y) : ℚ_[p]) = ↑x * ↑y :=
   Rat.cast_mul _ _
 
 @[norm_cast]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  statement: forall {x y : Rat}, (↑(x - y) : Rat_[p]) = ↑x - ↑y
-  proof: Rat.cast_sub _ _
-
-@[norm_cast]
-
-中文:
-定理 coe_sub
-  结论: 对任意 {x y : 有理数}, (↑(x - y) : Rat_[p]) = ↑x - ↑y
-  证明: Rat.cast_sub _ _
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_sub, cast_sub
+/-
+**Padic.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_sub : forall {x y : Rat}, (↑(x - y) : Rat_[p]) = ↑x - ↑y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_sub`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p - q) = ↑p - ↑q
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 -/
-theorem coe_sub : forall {x y : Rat}, (↑(x - y) : Rat_[p]) = ↑x - ↑y :=
+theorem coe_sub : ∀ {x y : ℚ}, (↑(x - y) : ℚ_[p]) = ↑x - ↑y :=
   Rat.cast_sub _ _
 
 @[norm_cast]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  statement: forall {x y : Rat}, (↑(x / y) : Rat_[p]) = ↑x / ↑y
-  proof: Rat.cast_div _ _
-
-@[norm_cast]
-
-中文:
-定理 coe_div
-  结论: 对任意 {x y : 有理数}, (↑(x / y) : Rat_[p]) = ↑x / ↑y
-  证明: Rat.cast_div _ _
-
-@[norm_cast]
-
-Depends on / 依赖: Rat.cast_div, cast_div
+/-
+**Padic.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_div : forall {x y : Rat}, (↑(x / y) : Rat_[p]) = ↑x / ↑y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.cast_div`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p / q) = ↑p / ↑q
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
 -/
-theorem coe_div : forall {x y : Rat}, (↑(x / y) : Rat_[p]) = ↑x / ↑y :=
+theorem coe_div : ∀ {x y : ℚ}, (↑(x / y) : ℚ_[p]) = ↑x / ↑y :=
   Rat.cast_div _ _
 
 @[norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: (↑(1 : Rat) : Rat_[p]) = 1
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_one
-  结论: (↑(1 : 有理数) : Rat_[p]) = 1
-  证明: rfl
-
-@[norm_cast]
+/-
+**Padic.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_one : (↑(1 : Rat) : Rat_[p]) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : (↑(1 : Rat) : Rat_[p]) = 1 := rfl
+theorem coe_one : (↑(1 : ℚ) : ℚ_[p]) = 1 := rfl
 
 @[norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: (↑(0 : Rat) : Rat_[p]) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  结论: (↑(0 : 有理数) : Rat_[p]) = 0
-  证明: rfl
+/-
+**Padic.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：coe_zero : (↑(0 : Rat) : Rat_[p]) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : (↑(0 : Rat) : Rat_[p]) = 0 := rfl
+theorem coe_zero : (↑(0 : ℚ) : ℚ_[p]) = 0 := rfl
 
 end Completion
 
 end Padic
 
-/--
-Definition of `padicNormE` / `padicNormE` 的定义
+/-- The rational-valued `p`-adic norm on `ℚ_[p]` is lifted from the norm on Cauchy sequences. The
+canonical form of this function is the normed space instance, with notation `‖ ‖`. -/
+/-
+**padicNormE** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：padicNormE {p : Nat} [hp : Fact p.Prime] : AbsoluteValue Rat_[p] Rat where
+ toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
 
-English:
-definition padicNormE
-  signature: {p : Nat} [hp : Fact p.Prime]
-  body: Quotient.lift PadicSeq.norm @PadicSeq.norm_equiv _ _
-map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
-nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
-  eq_zero' q := Quotient.inductionOn q fun r => by
-    rw [Padic.zero_def]; rw [Quotient.lift_mk]; rw [PadicSeq.norm_zero_iff r]
-    exact Quotient.eq.symm
-  add_le' q r := by
-    trans
-      max ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) q)
-        ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) r)
-    · induction q, r using Quotient.inductionOn₂; apply PadicSeq.norm_nonarchimedean
-    · apply max_le_add_of_nonneg
-      · induction q using Quotient.inductionOn; apply PadicSeq.norm_nonneg
-      · induction r using Quotient.inductionOn; apply PadicSeq.norm_nonneg
-
-中文:
-定义 padicNormE
-  签名: {p : 自然数} [hp : Fact p.素]
-  定义体: Quotient.lift PadicSeq.norm @PadicSeq.norm_equiv _ _
-map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
-nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
-  eq_zero' q := Quotient.inductionOn q fun r => by
-    rw [Padic.zero_def]; rw [Quotient.lift_mk]; rw [PadicSeq.norm_zero_iff r]
-    exact Quotient.eq.symm
-  add_le' q r := by
-    trans
-      max ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) q)
-        ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) r)
-    · induction q, r using Quotient.inductionOn₂; apply PadicSeq.norm_nonarchimedean
-    · apply max_le_add_of_nonneg
-      · induction q using Quotient.inductionOn; apply PadicSeq.norm_nonneg
-      · induction r using Quotient.inductionOn; apply PadicSeq.norm_nonneg
-
-Depends on / 依赖: PadicSeq, PadicSeq.norm, PadicSeq.norm_equiv, Quotient, Quotient.lift, norm_equiv
+--- 原说明 ---
+The rational-valued `p`-adic norm on `ℚ_[p]` is lifted from the norm on Cauchy s
+equences. The
+canonical form of this function is the normed space instance, with notation `‖ ‖
+`.
 -/
-def padicNormE {p : Nat} [hp : Fact p.Prime] : AbsoluteValue Rat_[p] Rat where
-toFun := Quotient.lift PadicSeq.norm @PadicSeq.norm_equiv _ _
-map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
-nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
-  eq_zero' q := Quotient.inductionOn q fun r => by
-    rw [Padic.zero_def]; rw [Quotient.lift_mk]; rw [PadicSeq.norm_zero_iff r]
+def padicNormE {p : ℕ} [hp : Fact p.Prime] : AbsoluteValue ℚ_[p] ℚ where
+  toFun := Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _
+  map_mul' q r := Quotient.inductionOn₂ q r <| PadicSeq.norm_mul
+  nonneg' q := Quotient.inductionOn q <| PadicSeq.norm_nonneg
+  eq_zero' q := Quotient.inductionOn q fun r ↦ by
+    rw [Padic.zero_def, Quotient.lift_mk, PadicSeq.norm_zero_iff r]
     exact Quotient.eq.symm
   add_le' q r := by
     trans
@@ -2068,23 +1819,64 @@ section Embedding
 
 open PadicSeq
 
-variable {p : Nat} [Fact p.Prime]
+variable {p : ℕ} [Fact p.Prime]
 
-/--
-theorem `defn` / 定理 `defn`
-
-English:
-theorem defn
-  given: (f : PadicSeq p) {ε : Rat} (hε : 0 < ε)
-  proof: by
+/-
+**padicNormE.defn** 是 Mathlib 中的一个定理，位于命名空间 `padicNormE`。
+形式化陈述：defn (f : PadicSeq p) {ε : Rat} (hε : 0 < ε) : exists N, forall i >= N, pa
+dicNormE (Padic.mk f - f i : Rat_[p]) < ε
+参数：f : PadicSeq p；hε : 0 < ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `CauSeq.cauchy₂`：cauchy₂ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= i, abv (f j - f k) < ε
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `PadicSeq.norm.eq_1`：∀ {p : ℕ} [inst : Fact (Nat.Prime p)] (f : PadicSeq 
+p),   f.norm = if hf : f ≈ 0 then 0 else padicNorm p (↑f (PadicSeq.stationaryPoi
+nt hf))
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
+· 使用定理 `forall_imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∀ (a : α), p a) → ∀ (a : α), q a
+-/
+theorem defn (f : PadicSeq p) {ε : ℚ} (hε : 0 < ε) :
+    ∃ N, ∀ i ≥ N, padicNormE (Padic.mk f - f i : ℚ_[p]) < ε := by
   dsimp [padicNormE]
   -- `change ∃ N, ∀ i ≥ N, (f - const _ (f i)).norm < ε` also works, but is very slow
-  suffices hyp : exists N, forall i >= N, (f - const _ (f i)).norm < ε by peel hyp with N; use N
+  suffices hyp : ∃ N, ∀ i ≥ N, (f - const _ (f i)).norm < ε by peel hyp with N; use N
   by_contra! h
   obtain ⟨N, hN⟩ := cauchy₂ f hε
   rcases h N with ⟨i, hi, hge⟩
-  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h => by
-    rw [PadicSeq.norm]; rw [dif_pos h] at hge
+  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h ↦ by
+    rw [PadicSeq.norm, dif_pos h] at hge
     exact not_lt_of_ge hge hε
   unfold PadicSeq.norm at hge; split_ifs at hge
   apply not_le_of_gt _ hge
@@ -2096,136 +1888,87 @@ theorem defn
     rw [← this]
     exact hN _ le_rfl _ hi
 
-中文:
-定理 defn
-  条件: (f : PadicSeq p) {ε : 有理数} (hε : 0 < ε)
-  证明: by
-  dsimp [padicNormE]
-  -- `change ∃ N, ∀ i ≥ N, (f - const _ (f i)).norm < ε` also works, but is very slow
-  suffices hyp : exists N, forall i >= N, (f - const _ (f i)).norm < ε by peel hyp with N; use N
-  by_contra! h
-  obtain ⟨N, hN⟩ := cauchy₂ f hε
-  rcases h N with ⟨i, hi, hge⟩
-  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h => by
-    rw [PadicSeq.norm]; rw [dif_pos h] at hge
-    exact not_lt_of_ge hge hε
-  unfold PadicSeq.norm at hge; split_ifs at hge
-  apply not_le_of_gt _ hge
-  cases _root_.le_total N (stationaryPoint hne) with
-  | inl hgen =>
-    exact hN _ hgen _ hi
-  | inr hngen =>
-    have := stationaryPoint_spec hne le_rfl hngen
-    rw [← this]
-    exact hN _ le_rfl _ hi
+/-- Theorems about `padicNormE` are named with a `'` so the names do not conflict with the
+equivalent theorems about `norm` (`‖ ‖`). -/
+/-
+**padicNormE.nonarchimedean'** 是 Mathlib 中的一个定理，位于命名空间 `padicNormE`。
+形式化陈述：nonarchimedean' (q r : Rat_[p]) : padicNormE (q + r : Rat_[p]) <= max (pad
+icNormE q) (padicNormE r)
+参数：q r : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.norm_nonarchimedean`：norm_nonarchimedean (f g : PadicSeq p) : (
+f + g).norm <= max f.norm g.norm
 
-Depends on / 依赖: padicNormE
+--- 原说明 ---
+Theorems about `padicNormE` are named with a `'` so the names do not conflict wi
+th the
+equivalent theorems about `norm` (`‖ ‖`).
 -/
-theorem defn (f : PadicSeq p) {ε : Rat} (hε : 0 < ε) :
-    exists N, forall i >= N, padicNormE (Padic.mk f - f i : Rat_[p]) < ε := by
-  dsimp [padicNormE]
-  -- `change ∃ N, ∀ i ≥ N, (f - const _ (f i)).norm < ε` also works, but is very slow
-  suffices hyp : exists N, forall i >= N, (f - const _ (f i)).norm < ε by peel hyp with N; use N
-  by_contra! h
-  obtain ⟨N, hN⟩ := cauchy₂ f hε
-  rcases h N with ⟨i, hi, hge⟩
-  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h => by
-    rw [PadicSeq.norm]; rw [dif_pos h] at hge
-    exact not_lt_of_ge hge hε
-  unfold PadicSeq.norm at hge; split_ifs at hge
-  apply not_le_of_gt _ hge
-  cases _root_.le_total N (stationaryPoint hne) with
-  | inl hgen =>
-    exact hN _ hgen _ hi
-  | inr hngen =>
-    have := stationaryPoint_spec hne le_rfl hngen
-    rw [← this]
-    exact hN _ le_rfl _ hi
+theorem nonarchimedean' (q r : ℚ_[p]) :
+    padicNormE (q + r : ℚ_[p]) ≤ max (padicNormE q) (padicNormE r) :=
+  Quotient.inductionOn₂ q r <| norm_nonarchimedean
 
-/--
-theorem `nonarchimedean'` / 定理 `nonarchimedean'`
+/-- Theorems about `padicNormE` are named with a `'` so the names do not conflict with the
+equivalent theorems about `norm` (`‖ ‖`). -/
+/-
+**padicNormE.add_eq_max_of_ne'** 是 Mathlib 中的一个定理，位于命名空间 `padicNormE`。
+形式化陈述：add_eq_max_of_ne' {q r : Rat_[p]} : padicNormE q != padicNormE r -> padicN
+ormE (q + r : Rat_[p]) = max (padicNormE q) (padicNormE r)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicSeq.add_eq_max_of_ne`：add_eq_max_of_ne {f g : PadicSeq p} (hfgne : 
+f.norm != g.norm) : (f + g).norm = max f.norm g.norm
 
-English:
-theorem nonarchimedean'
-  given: (q r : Rat_[p])
-  proof: Quotient.inductionOn₂ q r norm_nonarchimedean
-
-中文:
-定理 nonarchimedean'
-  条件: (q r : Rat_[p])
-  证明: Quotient.inductionOn₂ q r norm_nonarchimedean
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, norm_nonarchimedean
+--- 原说明 ---
+Theorems about `padicNormE` are named with a `'` so the names do not conflict wi
+th the
+equivalent theorems about `norm` (`‖ ‖`).
 -/
-theorem nonarchimedean' (q r : Rat_[p]) :
-    padicNormE (q + r : Rat_[p]) <= max (padicNormE q) (padicNormE r) :=
-Quotient.inductionOn₂ q r norm_nonarchimedean
-
-/--
-theorem `add_eq_max_of_ne'` / 定理 `add_eq_max_of_ne'`
-
-English:
-theorem add_eq_max_of_ne'
-  given: {q r : Rat_[p]}
-  proof: Quotient.inductionOn₂ q r fun _ _ => PadicSeq.add_eq_max_of_ne
+theorem add_eq_max_of_ne' {q r : ℚ_[p]} :
+    padicNormE q ≠ padicNormE r → padicNormE (q + r : ℚ_[p]) = max (padicNormE q) (padicNormE r) :=
+  Quotient.inductionOn₂ q r fun _ _ ↦ PadicSeq.add_eq_max_of_ne
 
 @[simp]
-
-中文:
-定理 add_eq_max_of_ne'
-  条件: {q r : Rat_[p]}
-  证明: Quotient.inductionOn₂ q r fun _ _ => PadicSeq.add_eq_max_of_ne
-
-@[simp]
-
-Depends on / 依赖: PadicSeq, PadicSeq.add_eq_max_of_ne, Quotient, Quotient.inductionOn, add_eq_max_of_ne
+/-
+**padicNormE.eq_padic_norm'** 是 Mathlib 中的一个定理，位于命名空间 `padicNormE`。
+形式化陈述：eq_padic_norm' (q : Rat) : padicNormE (q : Rat_[p]) = padicNorm p q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicSeq.norm_const`：norm_const (q : Rat) : norm (const (padicNorm p) q)
+ = padicNorm p q
 -/
-theorem add_eq_max_of_ne' {q r : Rat_[p]} :
-    padicNormE q != padicNormE r -> padicNormE (q + r : Rat_[p]) = max (padicNormE q) (padicNormE r) :=
-  Quotient.inductionOn₂ q r fun _ _ => PadicSeq.add_eq_max_of_ne
-
-@[simp]
-/--
-theorem `eq_padic_norm'` / 定理 `eq_padic_norm'`
-
-English:
-theorem eq_padic_norm'
-  given: (q : Rat)
-  statement: padicNormE (q : Rat_[p]) = padicNorm p q
-  proof: norm_const _
-
-中文:
-定理 eq_padic_norm'
-  条件: (q : 有理数)
-  结论: padicNormE (q : Rat_[p]) = padicNorm p q
-  证明: norm_const _
-
-Depends on / 依赖: norm_const
--/
-theorem eq_padic_norm' (q : Rat) : padicNormE (q : Rat_[p]) = padicNorm p q :=
+theorem eq_padic_norm' (q : ℚ) : padicNormE (q : ℚ_[p]) = padicNorm p q :=
   norm_const _
-
-/--
-theorem `image'` / 定理 `image'`
-
-English:
-theorem image'
-  given: {q : Rat_[p]}
-  statement: q != 0 -> exists n : Int, padicNormE q = (p : Rat) ^ (-n)
-  proof: Quotient.inductionOn q fun f hf =>
-    have : ¬f ≈ 0 := (ne_zero_iff_nequiv_zero f).1 hf
-    norm_values_discrete f this
-
-中文:
-定理 像'
-  条件: {q : Rat_[p]}
-  结论: q != 0 -> 存在 n : 整数, padicNormE q = (p : 有理数) ^ (-n)
-  证明: Quotient.inductionOn q fun f hf =>
-    have : ¬f ≈ 0 := (ne_zero_iff_nequiv_zero f).1 hf
-    norm_values_discrete f this
+/-
+**padicNormE.image'** 是 Mathlib 中的一个定理，位于命名空间 `padicNormE`。
+形式化陈述：∀ {p : ℕ} [inst : Fact (Nat.Prime p)] {q : ℚ_[p]}, q ≠ 0 → ∃ n, padicNormE
+ q = ↑p ^ (-n)
+参数：Nat.Prime p；-n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PadicSeq.ne_zero_iff_nequiv_zero`：ne_zero_iff_nequiv_zero (f : PadicSeq 
+p) : mk f != 0 ↔ ¬f ≈ 0
+· 使用定理 `PadicSeq.norm_values_discrete`：norm_values_discrete (a : PadicSeq p) (ha
+ : ¬a ≈ 0) : exists z : Int, a.norm = (p : Rat) ^ (-z)
 -/
-protected theorem image' {q : Rat_[p]} : q != 0 -> exists n : Int, padicNormE q = (p : Rat) ^ (-n) :=
-  Quotient.inductionOn q fun f hf =>
+protected theorem image' {q : ℚ_[p]} : q ≠ 0 → ∃ n : ℤ, padicNormE q = (p : ℚ) ^ (-n) :=
+  Quotient.inductionOn q fun f hf ↦
     have : ¬f ≈ 0 := (ne_zero_iff_nequiv_zero f).1 hf
     norm_values_discrete f this
 
@@ -2239,58 +1982,54 @@ section Complete
 
 open PadicSeq Padic
 
-variable {p : Nat} [Fact p.Prime] (f : CauSeq _ (@padicNormE p _))
+variable {p : ℕ} [Fact p.Prime] (f : CauSeq _ (@padicNormE p _))
 
-/--
-theorem `rat_dense'` / 定理 `rat_dense'`
-
-English:
-theorem rat_dense'
-  given: (q : Rat_[p]) {ε : Rat} (hε : 0 < ε)
-  statement: exists r : Rat, padicNormE (q - r : Rat_[p]) < ε
-  proof: Quotient.inductionOn q fun q' =>
-    have : exists N, forall m >= N, forall n >= N, padicNorm p (q' m - q' n) < ε := cauchy₂ _ hε
-    let ⟨N, hN⟩ := this
-    ⟨q' N, by
-      classical
-      dsimp [padicNormE]
-      convert_to! PadicSeq.norm (q' - const _ (q' N)) < ε -- `change` times out here.
-      rcases Decidable.em (q' - const (padicNorm p) (q' N) ≈ 0) with heq | hne'
-      · simpa only [heq, PadicSeq.norm, dif_pos]
-      · simp only [PadicSeq.norm, dif_neg hne']
-        change padicNorm p (q' _ - q' _) < ε
-        rcases Decidable.em (stationaryPoint hne' <= N) with hle | hle
-        · have := (stationaryPoint_spec hne' le_rfl hle).symm
-          simp only [const_apply, CauSeq.sub_apply, padicNorm.zero, sub_self] at this
-          simpa only [this]
-        · exact hN _ (lt_of_not_ge hle).le _ le_rfl⟩
-
-中文:
-定理 rat_dense'
-  条件: (q : Rat_[p]) {ε : 有理数} (hε : 0 < ε)
-  结论: 存在 r : 有理数, padicNormE (q - r : Rat_[p]) < ε
-  证明: Quotient.inductionOn q fun q' =>
-    have : exists N, forall m >= N, forall n >= N, padicNorm p (q' m - q' n) < ε := cauchy₂ _ hε
-    let ⟨N, hN⟩ := this
-    ⟨q' N, by
-      classical
-      dsimp [padicNormE]
-      convert_to! PadicSeq.norm (q' - const _ (q' N)) < ε -- `change` times out here.
-      rcases Decidable.em (q' - const (padicNorm p) (q' N) ≈ 0) with heq | hne'
-      · simpa only [heq, PadicSeq.norm, dif_pos]
-      · simp only [PadicSeq.norm, dif_neg hne']
-        change padicNorm p (q' _ - q' _) < ε
-        rcases Decidable.em (stationaryPoint hne' <= N) with hle | hle
-        · have := (stationaryPoint_spec hne' le_rfl hle).symm
-          simp only [const_apply, CauSeq.sub_apply, padicNorm.zero, sub_self] at this
-          simpa only [this]
-        · exact hN _ (lt_of_not_ge hle).le _ le_rfl⟩
-
-Depends on / 依赖: Decidable, Decidable.em, PadicSeq, PadicSeq.norm, Quotient, Quotient.inductionOn, classical, convert_to, dif_neg, dif_pos, inductionOn, padicNorm, padicNormE, stationaryPoint
+/-
+**Padic.rat_dense'** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：rat_dense' (q : Rat_[p]) {ε : Rat} (hε : 0 < ε) : exists r : Rat, padicNor
+mE (q - r : Rat_[p]) < ε
+参数：q : Rat_[p]；hε : 0 < ε。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `CauSeq.cauchy₂`：cauchy₂ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= i, abv (f j - f k) < ε
+· 使用定理 `PadicSeq.norm_equiv`：norm_equiv {f g : PadicSeq p} (hfg : f ≈ g) : f.nor
+m = g.norm
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Decidable.em`：∀ (p : Prop) [Decidable p], p ∨ ¬p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `PadicSeq.stationaryPoint_spec`：stationaryPoint_spec {f : PadicSeq p} (hf
+ : ¬f ≈ 0) : forall {m n}, stationaryPoint hf <= m -> stationaryPoint hf <= n ->
+ padicNorm p (f n) …
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `padicNorm.zero`：∀ {p : ℕ}, padicNorm p 0 = 0
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
 -/
-theorem rat_dense' (q : Rat_[p]) {ε : Rat} (hε : 0 < ε) : exists r : Rat, padicNormE (q - r : Rat_[p]) < ε :=
-  Quotient.inductionOn q fun q' =>
-    have : exists N, forall m >= N, forall n >= N, padicNorm p (q' m - q' n) < ε := cauchy₂ _ hε
+theorem rat_dense' (q : ℚ_[p]) {ε : ℚ} (hε : 0 < ε) : ∃ r : ℚ, padicNormE (q - r : ℚ_[p]) < ε :=
+  Quotient.inductionOn q fun q' ↦
+    have : ∃ N, ∀ m ≥ N, ∀ n ≥ N, padicNorm p (q' m - q' n) < ε := cauchy₂ _ hε
     let ⟨N, hN⟩ := this
     ⟨q' N, by
       classical
@@ -2300,85 +2039,96 @@ theorem rat_dense' (q : Rat_[p]) {ε : Rat} (hε : 0 < ε) : exists r : Rat, pad
       · simpa only [heq, PadicSeq.norm, dif_pos]
       · simp only [PadicSeq.norm, dif_neg hne']
         change padicNorm p (q' _ - q' _) < ε
-        rcases Decidable.em (stationaryPoint hne' <= N) with hle | hle
+        rcases Decidable.em (stationaryPoint hne' ≤ N) with hle | hle
         · have := (stationaryPoint_spec hne' le_rfl hle).symm
           simp only [const_apply, CauSeq.sub_apply, padicNorm.zero, sub_self] at this
           simpa only [this]
         · exact hN _ (lt_of_not_ge hle).le _ le_rfl⟩
 
 set_option backward.privateInPublic true in
-/--
-theorem `div_nat_pos` / 定理 `div_nat_pos`
-
-English:
-theorem div_nat_pos
-  given: (n : Nat)
-  statement: 0 < 1 / (n + 1 : Rat)
-  proof: div_pos zero_lt_one (mod_cast succ_pos _)
-
-中文:
-定理 div_nat_pos
-  条件: (n : 自然数)
-  结论: 0 < 1 / (n + 1 : 有理数)
-  证明: div_pos zero_lt_one (mod_cast succ_pos _)
+/-
+**Padic.div_nat_pos** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem div_nat_pos (n : Nat) : 0 < 1 / (n + 1 : Rat) :=
+private theorem div_nat_pos (n : ℕ) : 0 < 1 / (n + 1 : ℚ) :=
   div_pos zero_lt_one (mod_cast succ_pos _)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `limSeq` / `limSeq` 的定义
+/-- `limSeq f`, for `f` a Cauchy sequence of `p`-adic numbers, is a sequence of rationals with the
+same limit point as `f`. -/
+/-
+**Padic.limSeq** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：limSeq : Nat -> Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limSeq
-  signature: : Nat -> Rat
-  body: fun n => Classical.choose (rat_dense' (f n) (div_nat_pos n))
-
-中文:
-定义 limSeq
-  签名: : 自然数 -> 有理数
-  定义体: fun n => Classical.choose (rat_dense' (f n) (div_nat_pos n))
-
-Depends on / 依赖: Classical, Classical.choose, div_nat_pos, rat_dense
+--- 原说明 ---
+`limSeq f`, for `f` a Cauchy sequence of `p`-adic numbers, is a sequence of rati
+onals with the
+same limit point as `f`.
 -/
-def limSeq : Nat -> Rat :=
-  fun n => Classical.choose (rat_dense' (f n) (div_nat_pos n))
-
-/--
-theorem `exi_rat_seq_conv` / 定理 `exi_rat_seq_conv`
-
-English:
-theorem exi_rat_seq_conv
-  given: {ε : Rat} (hε : 0 < ε)
-  proof: by
-  refine (exists_nat_gt (1 / ε)).imp fun N hN i hi => ?_
-  have h := Classical.choose_spec (rat_dense' (f i) (div_nat_pos i))
-  refine lt_of_lt_of_le h ((div_le_iff₀' <| mod_cast succ_pos _).mpr ?_)
-  rw [right_distrib]
-  apply le_add_of_le_of_nonneg
-  · exact (div_le_iff₀ hε).mp (le_trans (le_of_lt hN) (mod_cast hi))
-  · apply le_of_lt
-    simpa
-
-中文:
-定理 exi_rat_seq_conv
-  条件: {ε : 有理数} (hε : 0 < ε)
-  证明: by
-  refine (exists_nat_gt (1 / ε)).imp fun N hN i hi => ?_
-  have h := Classical.choose_spec (rat_dense' (f i) (div_nat_pos i))
-  refine lt_of_lt_of_le h ((div_le_iff₀' <| mod_cast succ_pos _).mpr ?_)
-  rw [right_distrib]
-  apply le_add_of_le_of_nonneg
-  · exact (div_le_iff₀ hε).mp (le_trans (le_of_lt hN) (mod_cast hi))
-  · apply le_of_lt
-    simpa
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, div_nat_pos, exists_nat_gt, le_add_of_le_of_nonneg, le_of_lt, le_trans, lt_of_lt_of_le, mod_cast, rat_dense, right_distrib, succ_pos
+def limSeq : ℕ → ℚ :=
+  fun n ↦ Classical.choose (rat_dense' (f n) (div_nat_pos n))
+/-
+**Padic.exi_rat_seq_conv** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：exi_rat_seq_conv {ε : Rat} (hε : 0 < ε) : exists N, forall i >= N, padicNo
+rmE (f i - (limSeq f i : Rat_[p]) : Rat_[p]) < ε
+参数：hε : 0 < ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Padic.rat_dense'`：rat_dense' (q : Rat_[p]) {ε : Rat} (hε : 0 < ε) : exis
+ts r : Rat, padicNormE (q - r : Rat_[p]) < ε
+· 使用定理 `_private.Mathlib.NumberTheory.Padics.PadicNumbers.0.Padic.div_nat_pos`：∀
+ (n : ℕ), 0 < 1 / (↑n + 1)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `div_le_iff₀'`：div_le_iff₀' (hc : 0 < c) : b / c <= a ↔ b <= c * a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `le_add_of_le_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : Preorder α] [AddLeftMono α] {a b c : α}, b ≤ c → 0 ≤ a → b ≤ c + a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `div_le_iff₀`：div_le_iff₀ (hc : 0 < c) : b / c <= a ↔ b <= a * c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `exists_nat_gt`：exists_nat_gt (x : R) : exists n : Nat, x < n
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem exi_rat_seq_conv {ε : Rat} (hε : 0 < ε) :
-    exists N, forall i >= N, padicNormE (f i - (limSeq f i : Rat_[p]) : Rat_[p]) < ε := by
-  refine (exists_nat_gt (1 / ε)).imp fun N hN i hi => ?_
+theorem exi_rat_seq_conv {ε : ℚ} (hε : 0 < ε) :
+    ∃ N, ∀ i ≥ N, padicNormE (f i - (limSeq f i : ℚ_[p]) : ℚ_[p]) < ε := by
+  refine (exists_nat_gt (1 / ε)).imp fun N hN i hi ↦ ?_
   have h := Classical.choose_spec (rat_dense' (f i) (div_nat_pos i))
   refine lt_of_lt_of_le h ((div_le_iff₀' <| mod_cast succ_pos _).mpr ?_)
   rw [right_distrib]
@@ -2386,21 +2136,82 @@ theorem exi_rat_seq_conv {ε : Rat} (hε : 0 < ε) :
   · exact (div_le_iff₀ hε).mp (le_trans (le_of_lt hN) (mod_cast hi))
   · apply le_of_lt
     simpa
-
-/--
-theorem `exi_rat_seq_conv_cauchy` / 定理 `exi_rat_seq_conv_cauchy`
-
-English:
-theorem exi_rat_seq_conv_cauchy
-  statement: IsCauSeq (padicNorm p) (limSeq f)
-  proof: fun ε hε => by
+/-
+**Padic.exi_rat_seq_conv_cauchy** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：exi_rat_seq_conv_cauchy : IsCauSeq (padicNorm p) (limSeq f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Padic.exi_rat_seq_conv`：exi_rat_seq_conv {ε : Rat} (hε : 0 < ε) : exists
+ N, forall i >= N, padicNormE (f i - (limSeq f i : Rat_[p]) : Rat_[p]) < ε
+· 使用定理 `CauSeq.cauchy₂`：cauchy₂ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= i, abv (f j - f k) < ε
+· 使用定理 `AbsoluteValue.isAbsoluteValue`：∀ {S : Type u_5} [inst : Semiring S] [ins
+t_1 : PartialOrder S] {R : Type u_6} [inst_2 : Semiring R]   (abv : AbsoluteValu
+e R S), IsAbsoluteV…
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `AbsoluteValue.add_le`：∀ {R : Type u_5} {S : Type u_6} [inst : Semiring R
+] [inst_1 : Semiring S] [inst_2 : PartialOrder S]   (abv : AbsoluteValue R S) (x
+ y : R), a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_thirds`：add_thirds (a : α) : a / 3 + a / 3 + a / 3 = a
+· 使用定理 `add_lt_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftStrictMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c < d → a + c < 
+…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `AbsoluteValue.map_sub`：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing 
+S] [inst_1 : PartialOrder S] [IsOrderedRing S] [inst_3 : Ring R]   (abv : Absolu
+teValue R S…
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `le_of_max_le_left`：le_of_max_le_left {a b c : α} (h : max a b <= c) : a 
+<= c
+（共 65 条，此处仅展示前 30 条）
+-/
+theorem exi_rat_seq_conv_cauchy : IsCauSeq (padicNorm p) (limSeq f) := fun ε hε ↦ by
   have hε3 : 0 < ε / 3 := div_pos hε (by simp)
   let ⟨N, hN⟩ := exi_rat_seq_conv f hε3
   let ⟨N2, hN2⟩ := f.cauchy₂ hε3
   exists max N N2
   intro j hj
   suffices
-    padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : Rat_[p]) < ε by
+    padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : ℚ_[p]) < ε by
     ring_nf at this
     rw [← padicNormE.eq_padic_norm']
     exact mod_cast this
@@ -2408,7 +2219,7 @@ theorem exi_rat_seq_conv_cauchy
   · apply padicNormE.add_le
   · rw [← add_thirds ε]
     apply _root_.add_lt_add
-    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : Rat_[p]) < ε / 3 + ε / 3 by
+    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : ℚ_[p]) < ε / 3 + ε / 3 by
         simpa only [sub_add_sub_cancel]
       apply lt_of_le_of_lt
       · apply padicNormE.add_le
@@ -2419,174 +2230,119 @@ theorem exi_rat_seq_conv_cauchy
         · exact hN2 _ (le_of_max_le_right hj) _ (le_max_right _ _)
     · apply mod_cast hN (max N N2)
       apply le_max_left
-
-中文:
-定理 exi_rat_seq_conv_cauchy
-  结论: IsCauSeq (padicNorm p) (limSeq f)
-  证明: fun ε hε => by
-  have hε3 : 0 < ε / 3 := div_pos hε (by simp)
-  let ⟨N, hN⟩ := exi_rat_seq_conv f hε3
-  let ⟨N2, hN2⟩ := f.cauchy₂ hε3
-  exists max N N2
-  intro j hj
-  suffices
-    padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : Rat_[p]) < ε by
-    ring_nf at this
-    rw [← padicNormE.eq_padic_norm']
-    exact mod_cast this
-  apply lt_of_le_of_lt
-  · apply padicNormE.add_le
-  · rw [← add_thirds ε]
-    apply _root_.add_lt_add
-    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : Rat_[p]) < ε / 3 + ε / 3 by
-        simpa only [sub_add_sub_cancel]
-      apply lt_of_le_of_lt
-      · apply padicNormE.add_le
-      · apply _root_.add_lt_add
-        · rw [padicNormE.map_sub]
-          apply mod_cast hN j
-          exact le_of_max_le_left hj
-        · exact hN2 _ (le_of_max_le_right hj) _ (le_max_right _ _)
-    · apply mod_cast hN (max N N2)
-      apply le_max_left
-
-Depends on / 依赖: Rat_, _root_, _root_.add_lt_add, add_le, add_lt_add, add_thirds, div_pos, eq_padic_norm, exi_rat_seq_conv, f.cauchy, limSeq, lt_of_le_of_lt, mod_cast, padicNormE, padicNormE.add_le, padicNormE.eq_padic_norm, ring_nf
--/
-theorem exi_rat_seq_conv_cauchy : IsCauSeq (padicNorm p) (limSeq f) := fun ε hε => by
-  have hε3 : 0 < ε / 3 := div_pos hε (by simp)
-  let ⟨N, hN⟩ := exi_rat_seq_conv f hε3
-  let ⟨N2, hN2⟩ := f.cauchy₂ hε3
-  exists max N N2
-  intro j hj
-  suffices
-    padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : Rat_[p]) < ε by
-    ring_nf at this
-    rw [← padicNormE.eq_padic_norm']
-    exact mod_cast this
-  apply lt_of_le_of_lt
-  · apply padicNormE.add_le
-  · rw [← add_thirds ε]
-    apply _root_.add_lt_add
-    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : Rat_[p]) < ε / 3 + ε / 3 by
-        simpa only [sub_add_sub_cancel]
-      apply lt_of_le_of_lt
-      · apply padicNormE.add_le
-      · apply _root_.add_lt_add
-        · rw [padicNormE.map_sub]
-          apply mod_cast hN j
-          exact le_of_max_le_left hj
-        · exact hN2 _ (le_of_max_le_right hj) _ (le_max_right _ _)
-    · apply mod_cast hN (max N N2)
-      apply le_max_left
-
-/--
-Definition of `lim'` / `lim'` 的定义
-
-English:
-definition lim'
-  signature: : PadicSeq p
-  body: ⟨_, exi_rat_seq_conv_cauchy f⟩
-
-中文:
-定义 lim'
-  签名: : PadicSeq p
-  定义体: ⟨_, exi_rat_seq_conv_cauchy f⟩
+/-
+**Padic.lim'** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def lim' : PadicSeq p :=
   ⟨_, exi_rat_seq_conv_cauchy f⟩
-
-/--
-Definition of `lim` / `lim` 的定义
-
-English:
-definition lim
-  signature: : Rat_[p]
-  body: ⟦lim' f⟧
-
-中文:
-定义 lim
-  签名: : Rat_[p]
-  定义体: ⟦lim' f⟧
+/-
+**Padic.lim** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def lim : Rat_[p] :=
+private def lim : ℚ_[p] :=
   ⟦lim' f⟧
-
-/--
-theorem `complete'` / 定理 `complete'`
-
-English:
-theorem complete'
-  statement: exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, padicNormE (q - f i : Rat_[p]) < ε
-  proof: ⟨lim f, fun ε hε => by
-    obtain ⟨N, hN⟩ := exi_rat_seq_conv f (half_pos hε)
-    obtain ⟨N2, hN2⟩ := padicNormE.defn (lim' f) (half_pos hε)
-    refine ⟨max N N2, fun i hi => ?_⟩
-    rw [← sub_add_sub_cancel _ (lim' f i : Rat_[p]) _]
-    refine (padicNormE.add_le _ _).trans_lt ?_
-    rw [← add_halves ε]
-    apply _root_.add_lt_add
-    · apply hN2 _ (le_of_max_le_right hi)
-    · rw [padicNormE.map_sub]
-      exact hN _ (le_of_max_le_left hi)⟩
-
-中文:
-定理 complete'
-  结论: 存在 q : Rat_[p], 对任意 ε > 0, 存在 N, 对任意 i >= N, padicNormE (q - f i : Rat_[p]) < ε
-  证明: ⟨lim f, fun ε hε => by
-    obtain ⟨N, hN⟩ := exi_rat_seq_conv f (half_pos hε)
-    obtain ⟨N2, hN2⟩ := padicNormE.defn (lim' f) (half_pos hε)
-    refine ⟨max N N2, fun i hi => ?_⟩
-    rw [← sub_add_sub_cancel _ (lim' f i : Rat_[p]) _]
-    refine (padicNormE.add_le _ _).trans_lt ?_
-    rw [← add_halves ε]
-    apply _root_.add_lt_add
-    · apply hN2 _ (le_of_max_le_right hi)
-    · rw [padicNormE.map_sub]
-      exact hN _ (le_of_max_le_left hi)⟩
-
-Depends on / 依赖: Rat_, _root_, _root_.add_lt_add, add_halves, add_le, add_lt_add, exi_rat_seq_conv, half_pos, le_of_max_le_left, le_of_max_le_right, map_sub, padicNormE, padicNormE.add_le, padicNormE.defn, padicNormE.map_sub, sub_add_sub_cancel, trans_lt
+/-
+**Padic.complete'** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：complete' : exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, pad
+icNormE (q - f i : Rat_[p]) < ε
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Padic.exi_rat_seq_conv`：exi_rat_seq_conv {ε : Rat} (hε : 0 < ε) : exists
+ N, forall i >= N, padicNormE (f i - (limSeq f i : Rat_[p]) : Rat_[p]) < ε
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `padicNormE.defn`：defn (f : PadicSeq p) {ε : Rat} (hε : 0 < ε) : exists N
+, forall i >= N, padicNormE (Padic.mk f - f i : Rat_[p]) < ε
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_add_sub_cancel`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : G), a 
+- b + (b - c) = a - c
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `AbsoluteValue.add_le`：∀ {R : Type u_5} {S : Type u_6} [inst : Semiring R
+] [inst_1 : Semiring S] [inst_2 : PartialOrder S]   (abv : AbsoluteValue R S) (x
+ y : R), a…
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `add_lt_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftStrictMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c < d → a + c < 
+…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_of_max_le_right`：le_of_max_le_right {a b c : α} (h : max a b <= c) : 
+b <= c
+· 使用定理 `AbsoluteValue.map_sub`：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing 
+S] [inst_1 : PartialOrder S] [IsOrderedRing S] [inst_3 : Ring R]   (abv : Absolu
+teValue R S…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `le_of_max_le_left`：le_of_max_le_left {a b c : α} (h : max a b <= c) : a 
+<= c
 -/
-theorem complete' : exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, padicNormE (q - f i : Rat_[p]) < ε :=
-  ⟨lim f, fun ε hε => by
+theorem complete' : ∃ q : ℚ_[p], ∀ ε > 0, ∃ N, ∀ i ≥ N, padicNormE (q - f i : ℚ_[p]) < ε :=
+  ⟨lim f, fun ε hε ↦ by
     obtain ⟨N, hN⟩ := exi_rat_seq_conv f (half_pos hε)
     obtain ⟨N2, hN2⟩ := padicNormE.defn (lim' f) (half_pos hε)
-    refine ⟨max N N2, fun i hi => ?_⟩
-    rw [← sub_add_sub_cancel _ (lim' f i : Rat_[p]) _]
+    refine ⟨max N N2, fun i hi ↦ ?_⟩
+    rw [← sub_add_sub_cancel _ (lim' f i : ℚ_[p]) _]
     refine (padicNormE.add_le _ _).trans_lt ?_
     rw [← add_halves ε]
     apply _root_.add_lt_add
     · apply hN2 _ (le_of_max_le_right hi)
     · rw [padicNormE.map_sub]
       exact hN _ (le_of_max_le_left hi)⟩
-
-/--
-theorem `complete''` / 定理 `complete''`
-
-English:
-theorem complete''
-  statement: exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, padicNormE (f i - q : Rat_[p]) < ε
-  proof: by
-  obtain ⟨x, hx⟩ := complete' f
-  refine ⟨x, fun ε hε => ?_⟩
-  obtain ⟨N, hN⟩ := hx ε hε
-  refine ⟨N, fun i hi => ?_⟩
-  rw [padicNormE.map_sub]
-  exact hN i hi
-
-中文:
-定理 complete''
-  结论: 存在 q : Rat_[p], 对任意 ε > 0, 存在 N, 对任意 i >= N, padicNormE (f i - q : Rat_[p]) < ε
-  证明: by
-  obtain ⟨x, hx⟩ := complete' f
-  refine ⟨x, fun ε hε => ?_⟩
-  obtain ⟨N, hN⟩ := hx ε hε
-  refine ⟨N, fun i hi => ?_⟩
-  rw [padicNormE.map_sub]
-  exact hN i hi
-
-Depends on / 依赖: complete, map_sub, padicNormE, padicNormE.map_sub
+/-
+**Padic.complete''** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：complete'' : exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, pa
+dicNormE (f i - q : Rat_[p]) < ε
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.complete'`：complete' : exists q : Rat_[p], forall ε > 0, exists N,
+ forall i >= N, padicNormE (q - f i : Rat_[p]) < ε
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbsoluteValue.map_sub`：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing 
+S] [inst_1 : PartialOrder S] [IsOrderedRing S] [inst_3 : Ring R]   (abv : Absolu
+teValue R S…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
 -/
-theorem complete'' : exists q : Rat_[p], forall ε > 0, exists N, forall i >= N, padicNormE (f i - q : Rat_[p]) < ε := by
+theorem complete'' : ∃ q : ℚ_[p], ∀ ε > 0, ∃ N, ∀ i ≥ N, padicNormE (f i - q : ℚ_[p]) < ε := by
   obtain ⟨x, hx⟩ := complete' f
   refine ⟨x, fun ε hε => ?_⟩
   obtain ⟨N, hN⟩ := hx ε hε
@@ -2597,83 +2353,30 @@ end Complete
 
 section NormedSpace
 
-variable (p : Nat) [Fact p.Prime]
+variable (p : ℕ) [Fact p.Prime]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Dist Rat_[p]
-  body: ⟨fun x y => padicNormE (x - y : Rat_[p])⟩
-
-中文:
-实例 :
-  签名: Dist Rat_[p]
-  定义体: ⟨fun x y => padicNormE (x - y : Rat_[p])⟩
-
-Depends on / 依赖: Rat_, padicNormE
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Dist Rat_[p] :=
-  ⟨fun x y => padicNormE (x - y : Rat_[p])⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsUltrametricDist Rat_[p]
-  body: ⟨fun x y z => by simpa [dist] using padicNormE.nonarchimedean' (x - y) (y - z)⟩
-
-中文:
-实例 :
-  签名: 是UltrametricDist Rat_[p]
-  定义体: ⟨fun x y z => by simpa [dist] using padicNormE.nonarchimedean' (x - y) (y - z)⟩
-
-Depends on / 依赖: nonarchimedean, padicNormE, padicNormE.nonarchimedean
+instance : Dist ℚ_[p] :=
+  ⟨fun x y ↦ padicNormE (x - y : ℚ_[p])⟩
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsUltrametricDist Rat_[p] :=
-  ⟨fun x y z => by simpa [dist] using padicNormE.nonarchimedean' (x - y) (y - z)⟩
-
-/--
-Instance `metricSpace` / 实例 `metricSpace`
-
-English:
-instance metricSpace
-  signature: : MetricSpace Rat_[p] where
-  body: by simp [dist]
-  dist := dist
-  dist_comm x y := by simp [dist, ← padicNormE.map_neg (x - y : Rat_[p])]
-  dist_triangle x y z := by
-    dsimp [dist]
-    exact mod_cast padicNormE.sub_le x y z
-  eq_of_dist_eq_zero := by
-    dsimp [dist]; intro _ _ h
-    apply eq_of_sub_eq_zero
-    apply padicNormE.eq_zero.1
-    exact mod_cast h
-
-中文:
-实例 metricSpace
-  签名: : 度量空间 Rat_[p] where
-  定义体: by simp [dist]
-  dist := dist
-  dist_comm x y := by simp [dist, ← padicNormE.map_neg (x - y : Rat_[p])]
-  dist_triangle x y z := by
-    dsimp [dist]
-    exact mod_cast padicNormE.sub_le x y z
-  eq_of_dist_eq_zero := by
-    dsimp [dist]; intro _ _ h
-    apply eq_of_sub_eq_zero
-    apply padicNormE.eq_zero.1
-    exact mod_cast h
-
-Depends on / 依赖: Rat_, dist_comm, dist_triangle, eq_of_dist_eq_zero, eq_of_sub_eq_zero, eq_zero, map_neg, mod_cast, padicNormE, padicNormE.eq_zero, padicNormE.map_neg, padicNormE.sub_le, sub_le
+instance : IsUltrametricDist ℚ_[p] :=
+  ⟨fun x y z ↦ by simpa [dist] using padicNormE.nonarchimedean' (x - y) (y - z)⟩
+/-
+**Padic.metricSpace** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+形式化陈述：metricSpace : MetricSpace Rat_[p] where dist_self
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance metricSpace : MetricSpace Rat_[p] where
+instance metricSpace : MetricSpace ℚ_[p] where
   dist_self := by simp [dist]
   dist := dist
-  dist_comm x y := by simp [dist, ← padicNormE.map_neg (x - y : Rat_[p])]
+  dist_comm x y := by simp [dist, ← padicNormE.map_neg (x - y : ℚ_[p])]
   dist_triangle x y z := by
     dsimp [dist]
     exact mod_cast padicNormE.sub_le x y z
@@ -2682,139 +2385,92 @@ instance metricSpace : MetricSpace Rat_[p] where
     apply eq_of_sub_eq_zero
     apply padicNormE.eq_zero.1
     exact mod_cast h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Norm Rat_[p]
-  body: ⟨fun x => padicNormE x⟩
-
-中文:
-实例 :
-  签名: 范数 Rat_[p]
-  定义体: ⟨fun x => padicNormE x⟩
-
-Depends on / 依赖: padicNormE
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Norm Rat_[p] :=
-  ⟨fun x => padicNormE x⟩
-
-/--
-Instance `normedField` / 实例 `normedField`
-
-English:
-instance normedField
-  signature: : NormedField Rat_[p] where
-  body: by
-    rw [add_comm]; rw [← sub_eq_add_neg]
-    change ‖x - y‖ = ‖y - x‖
-    have : y - x = (-1) * (x - y) := by ring
-    simp only [this, Norm.norm, map_mul, map_neg_eq_map, AbsoluteValue.map_one, one_mul]
-  norm_mul := by simp [Norm.norm, map_mul]
-  norm := norm
-
-中文:
-实例 normedField
-  签名: : 赋范域 Rat_[p] where
-  定义体: by
-    rw [add_comm]; rw [← sub_eq_add_neg]
-    change ‖x - y‖ = ‖y - x‖
-    have : y - x = (-1) * (x - y) := by ring
-    simp only [this, Norm.norm, map_mul, map_neg_eq_map, AbsoluteValue.map_one, one_mul]
-  norm_mul := by simp [Norm.norm, map_mul]
-  norm := norm
-
-Depends on / 依赖: AbsoluteValue, AbsoluteValue.map_one, Norm.norm, add_comm, map_mul, map_neg_eq_map, map_one, norm_mul, one_mul, sub_eq_add_neg
+instance : Norm ℚ_[p] :=
+  ⟨fun x ↦ padicNormE x⟩
+/-
+**Padic.normedField** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+形式化陈述：normedField : NormedField Rat_[p] where dist_eq x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance normedField : NormedField Rat_[p] where
+instance normedField : NormedField ℚ_[p] where
   dist_eq x y := by
-    rw [add_comm]; rw [← sub_eq_add_neg]
+    rw [add_comm, ← sub_eq_add_neg]
     change ‖x - y‖ = ‖y - x‖
     have : y - x = (-1) * (x - y) := by ring
     simp only [this, Norm.norm, map_mul, map_neg_eq_map, AbsoluteValue.map_one, one_mul]
   norm_mul := by simp [Norm.norm, map_mul]
   norm := norm
-
-/--
-Instance `isAbsoluteValue` / 实例 `isAbsoluteValue`
-
-English:
-instance isAbsoluteValue
-  signature: : IsAbsoluteValue fun a : Rat_[p] => ‖a‖ where
-  body: norm_nonneg
-  abv_eq_zero' := norm_eq_zero
-  abv_add' := norm_add_le
-  abv_mul' := by simp [Norm.norm, map_mul]
-
-中文:
-实例 isAbsoluteValue
-  签名: : 是绝对值 fun a : Rat_[p] => ‖a‖ where
-  定义体: norm_nonneg
-  abv_eq_zero' := norm_eq_zero
-  abv_add' := norm_add_le
-  abv_mul' := by simp [Norm.norm, map_mul]
-
-Depends on / 依赖: norm_nonneg
+/-
+**Padic.isAbsoluteValue** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+形式化陈述：isAbsoluteValue : IsAbsoluteValue fun a : Rat_[p] => ‖a‖ where abv_nonneg'
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `norm_eq_zero`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a‖ = 
+0 ↔ a = 0
+· 使用定理 `norm_add_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), ‖
+a + b‖ ≤ ‖a‖ + ‖b‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `Rat.cast_mul`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p * q) = ↑p * ↑q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-instance isAbsoluteValue : IsAbsoluteValue fun a : Rat_[p] => ‖a‖ where
+instance isAbsoluteValue : IsAbsoluteValue fun a : ℚ_[p] ↦ ‖a‖ where
   abv_nonneg' := norm_nonneg
   abv_eq_zero' := norm_eq_zero
   abv_add' := norm_add_le
   abv_mul' := by simp [Norm.norm, map_mul]
-
-/--
-theorem `rat_dense` / 定理 `rat_dense`
-
-English:
-theorem rat_dense
-  given: (q : Rat_[p]) {ε : Real} (hε : 0 < ε)
-  statement: exists r : Rat, ‖q - r‖ < ε
-  proof: let ⟨ε', hε'l, hε'r⟩ := exists_rat_btwn hε
-  let ⟨r, hr⟩ := rat_dense' q (ε := ε') (by simpa using hε'l)
-  ⟨r, lt_trans (by simpa [Norm.norm] using hr) hε'r⟩
-
-中文:
-定理 rat_dense
-  条件: (q : Rat_[p]) {ε : 实数} (hε : 0 < ε)
-  结论: 存在 r : 有理数, ‖q - r‖ < ε
-  证明: let ⟨ε', hε'l, hε'r⟩ := exists_rat_btwn hε
-  let ⟨r, hr⟩ := rat_dense' q (ε := ε') (by simpa using hε'l)
-  ⟨r, lt_trans (by simpa [Norm.norm] using hr) hε'r⟩
-
-Depends on / 依赖: Norm.norm, exists_rat_btwn, lt_trans, rat_dense
+/-
+**Padic.rat_dense** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：rat_dense (q : Rat_[p]) {ε : Real} (hε : 0 < ε) : exists r : Rat, ‖q - r‖ 
+< ε
+参数：q : Rat_[p]；hε : 0 < ε。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_rat_btwn`：exists_rat_btwn {x y : K} (h : x < y) : exists q : Rat,
+ x < q ∧ q < y
+· 使用定理 `Padic.rat_dense'`：rat_dense' (q : Rat_[p]) {ε : Rat} (hε : 0 < ε) : exis
+ts r : Rat, padicNormE (q - r : Rat_[p]) < ε
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
 -/
-theorem rat_dense (q : Rat_[p]) {ε : Real} (hε : 0 < ε) : exists r : Rat, ‖q - r‖ < ε :=
+theorem rat_dense (q : ℚ_[p]) {ε : ℝ} (hε : 0 < ε) : ∃ r : ℚ, ‖q - r‖ < ε :=
   let ⟨ε', hε'l, hε'r⟩ := exists_rat_btwn hε
   let ⟨r, hr⟩ := rat_dense' q (ε := ε') (by simpa using hε'l)
   ⟨r, lt_trans (by simpa [Norm.norm] using hr) hε'r⟩
-
-/--
-lemma `denseRange_ratCast` / 引理 `denseRange_ratCast`
-
-English:
-lemma denseRange_ratCast
-  statement: DenseRange ((↑) : Rat -> Rat_[p])
-  proof: by
-  intro x
-  rw [Metric.mem_closure_range_iff]
-  exact fun _ => Padic.rat_dense _ x
-
-中文:
-引理 denseRange_ratCast
-  结论: DenseRange ((↑) : 有理数 -> Rat_[p])
-  证明: by
-  intro x
-  rw [Metric.mem_closure_range_iff]
-  exact fun _ => Padic.rat_dense _ x
-
-Depends on / 依赖: Metric, Metric.mem_closure_range_iff, Padic.rat_dense, mem_closure_range_iff, rat_dense
+/-
+**Padic.denseRange_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：denseRange_ratCast : DenseRange ((↑) : Rat -> Rat_[p])
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closure_range_iff`：mem_closure_range_iff {e : β -> α} {a : α}
+ : a in closure (range e) ↔ forall ε > 0, exists k : β, dist a (e k) < ε
+· 使用定理 `Padic.rat_dense`：rat_dense (q : Rat_[p]) {ε : Real} (hε : 0 < ε) : exist
+s r : Rat, ‖q - r‖ < ε
 -/
-lemma denseRange_ratCast : DenseRange ((↑) : Rat -> Rat_[p]) := by
+lemma denseRange_ratCast : DenseRange ((↑) : ℚ → ℚ_[p]) := by
   intro x
   rw [Metric.mem_closure_range_iff]
-  exact fun _ => Padic.rat_dense _ x
+  exact fun _ ↦ Padic.rat_dense _ x
 
 end NormedSpace
 
@@ -2822,821 +2478,714 @@ end Padic
 
 namespace Padic
 
-variable {p : Nat} [hp : Fact p.Prime]
+variable {p : ℕ} [hp : Fact p.Prime]
 
 section NormedSpace
 
-/--
-theorem `padicNormE.mul` / 定理 `padicNormE.mul`
-
-English:
-theorem padicNormE.mul
-  given: (q r : Rat_[p])
-  statement: ‖q * r‖ = ‖q‖ * ‖r‖
-  proof: by simp [Norm.norm, map_mul]
-
-中文:
-定理 padicNormE.mul
-  条件: (q r : Rat_[p])
-  结论: ‖q * r‖ = ‖q‖ * ‖r‖
-  证明: by simp [Norm.norm, map_mul]
+/-
+**Padic.padicNormE.mul** 是 Mathlib 中的一个定理，位于命名空间 `Padic.padicNormE`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q r : ℚ_[p]), ‖q * r‖ = ‖q‖ * ‖r‖
+参数：Nat.Prime p；q r : ℚ_[p]。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `Rat.cast_mul`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p * q) = ↑p * ↑q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem padicNormE.mul (q r : Rat_[p]) : ‖q * r‖ = ‖q‖ * ‖r‖ := by simp [Norm.norm, map_mul]
-
-/--
-theorem `padicNormE.is_norm` / 定理 `padicNormE.is_norm`
-
-English:
-theorem padicNormE.is_norm
-  given: (q : Rat_[p])
-  statement: ↑(padicNormE q) = ‖q‖
-  proof: rfl
-
-中文:
-定理 padicNormE.is_norm
-  条件: (q : Rat_[p])
-  结论: ↑(padicNormE q) = ‖q‖
-  证明: rfl
+protected theorem padicNormE.mul (q r : ℚ_[p]) : ‖q * r‖ = ‖q‖ * ‖r‖ := by simp [Norm.norm, map_mul]
+/-
+**Padic.padicNormE.is_norm** 是 Mathlib 中的一个定理，位于命名空间 `Padic.padicNormE`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ_[p]), ↑(padicNormE q) = ‖q‖
+参数：Nat.Prime p；q : ℚ_[p]；padicNormE q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem padicNormE.is_norm (q : Rat_[p]) : ↑(padicNormE q) = ‖q‖ := rfl
-
-/--
-theorem `nonarchimedean` / 定理 `nonarchimedean`
-
-English:
-theorem nonarchimedean
-  given: (q r : Rat_[p])
-  statement: ‖q + r‖ <= max ‖q‖ ‖r‖
-  proof: by
+protected theorem padicNormE.is_norm (q : ℚ_[p]) : ↑(padicNormE q) = ‖q‖ := rfl
+/-
+**Padic.nonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：nonarchimedean (q r : Rat_[p]) : ‖q + r‖ <= max ‖q‖ ‖r‖
+参数：q r : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `padicNormE.nonarchimedean'`：nonarchimedean' (q r : Rat_[p]) : padicNormE
+ (q + r : Rat_[p]) <= max (padicNormE q) (padicNormE r)
+-/
+theorem nonarchimedean (q r : ℚ_[p]) : ‖q + r‖ ≤ max ‖q‖ ‖r‖ := by
   dsimp [norm]
   exact mod_cast padicNormE.nonarchimedean' _ _
-
-中文:
-定理 nonarchimedean
-  条件: (q r : Rat_[p])
-  结论: ‖q + r‖ <= 最大值 ‖q‖ ‖r‖
-  证明: by
-  dsimp [norm]
-  exact mod_cast padicNormE.nonarchimedean' _ _
-
-Depends on / 依赖: mod_cast, nonarchimedean, padicNormE, padicNormE.nonarchimedean
+/-
+**Padic.add_eq_max_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：add_eq_max_of_ne {q r : Rat_[p]} (h : ‖q‖ != ‖r‖) : ‖q + r‖ = max ‖q‖ ‖r‖
+参数：h : ‖q‖ != ‖r‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `padicNormE.add_eq_max_of_ne'`：add_eq_max_of_ne' {q r : Rat_[p]} : padicN
+ormE q != padicNormE r -> padicNormE (q + r : Rat_[p]) = max (padicNormE q) (pad
+icNormE r)
 -/
-theorem nonarchimedean (q r : Rat_[p]) : ‖q + r‖ <= max ‖q‖ ‖r‖ := by
-  dsimp [norm]
-  exact mod_cast padicNormE.nonarchimedean' _ _
-
-/--
-theorem `add_eq_max_of_ne` / 定理 `add_eq_max_of_ne`
-
-English:
-theorem add_eq_max_of_ne
-  given: {q r : Rat_[p]} (h : ‖q‖ != ‖r‖)
-  statement: ‖q + r‖ = max ‖q‖ ‖r‖
-  proof: by
+theorem add_eq_max_of_ne {q r : ℚ_[p]} (h : ‖q‖ ≠ ‖r‖) : ‖q + r‖ = max ‖q‖ ‖r‖ := by
   dsimp [norm] at h ⊢
-  have : padicNormE q != padicNormE r := mod_cast h
+  have : padicNormE q ≠ padicNormE r := mod_cast h
   exact mod_cast padicNormE.add_eq_max_of_ne' this
 
 @[simp]
-
-中文:
-定理 add_eq_max_of_ne
-  条件: {q r : Rat_[p]} (h : ‖q‖ != ‖r‖)
-  结论: ‖q + r‖ = 最大值 ‖q‖ ‖r‖
-  证明: by
-  dsimp [norm] at h ⊢
-  have : padicNormE q != padicNormE r := mod_cast h
-  exact mod_cast padicNormE.add_eq_max_of_ne' this
-
-@[simp]
-
-Depends on / 依赖: add_eq_max_of_ne, mod_cast, padicNormE, padicNormE.add_eq_max_of_ne
+/-
+**Padic.eq_padicNorm** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm p q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `padicNormE.eq_padic_norm'`：eq_padic_norm' (q : Rat) : padicNormE (q : Ra
+t_[p]) = padicNorm p q
 -/
-theorem add_eq_max_of_ne {q r : Rat_[p]} (h : ‖q‖ != ‖r‖) : ‖q + r‖ = max ‖q‖ ‖r‖ := by
-  dsimp [norm] at h ⊢
-  have : padicNormE q != padicNormE r := mod_cast h
-  exact mod_cast padicNormE.add_eq_max_of_ne' this
-
-@[simp]
-/--
-theorem `eq_padicNorm` / 定理 `eq_padicNorm`
-
-English:
-theorem eq_padicNorm
-  given: (q : Rat)
-  statement: ‖(q : Rat_[p])‖ = padicNorm p q
-  proof: by
+theorem eq_padicNorm (q : ℚ) : ‖(q : ℚ_[p])‖ = padicNorm p q := by
   dsimp [norm]
   rw [← padicNormE.eq_padic_norm']
 
 @[simp]
-
-中文:
-定理 eq_padicNorm
-  条件: (q : 有理数)
-  结论: ‖(q : Rat_[p])‖ = padicNorm p q
-  证明: by
-  dsimp [norm]
-  rw [← padicNormE.eq_padic_norm']
-
-@[simp]
-
-Depends on / 依赖: eq_padic_norm, padicNormE, padicNormE.eq_padic_norm
+/-
+**Padic.norm_p** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `padicNormE.eq_padic_norm'`：eq_padic_norm' (q : Rat) : padicNormE (q : Ra
+t_[p]) = padicNorm p q
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `padicValNat_self`：padicValNat_self [Fact p.Prime] : padicValNat p p = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `padicValNat_one_right`：∀ (p : ℕ), padicValNat p 1 = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `Rat.cast_inv`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p :
+ ℚ), ↑p⁻¹ = (↑p)⁻¹
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm p q := by
-  dsimp [norm]
-  rw [← padicNormE.eq_padic_norm']
-
-@[simp]
-/--
-theorem `norm_p` / 定理 `norm_p`
-
-English:
-theorem norm_p
-  statement: ‖(p : Rat_[p])‖ = (p : Real)⁻¹
-  proof: by
-  rw [← @Rat.cast_natCast Real _ p]
-  rw [← @Rat.cast_natCast Rat_[p] _ p]
+theorem norm_p : ‖(p : ℚ_[p])‖ = (p : ℝ)⁻¹ := by
+  rw [← @Rat.cast_natCast ℝ _ p]
+  rw [← @Rat.cast_natCast ℚ_[p] _ p]
   simp [hp.1.ne_zero, norm, padicNorm, padicValRat, padicValInt, zpow_neg,
     -Rat.cast_natCast]
-
-中文:
-定理 norm_p
-  结论: ‖(p : Rat_[p])‖ = (p : 实数)⁻¹
-  证明: by
-  rw [← @Rat.cast_natCast Real _ p]
-  rw [← @Rat.cast_natCast Rat_[p] _ p]
-  simp [hp.1.ne_zero, norm, padicNorm, padicValRat, padicValInt, zpow_neg,
-    -Rat.cast_natCast]
-
-Depends on / 依赖: Rat.cast_natCast, Rat_, cast_natCast, ne_zero, padicNorm, padicValInt, padicValRat, zpow_neg
+/-
+**Padic.norm_p_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_p_lt_one : ‖(p : Rat_[p])‖ < 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.norm_p`：norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹
+· 使用引理 `inv_lt_one_of_one_lt₀`：inv_lt_one_of_one_lt₀ (ha : 1 < a) : a⁻¹ < 1
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
-theorem norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹ := by
-  rw [← @Rat.cast_natCast Real _ p]
-  rw [← @Rat.cast_natCast Rat_[p] _ p]
-  simp [hp.1.ne_zero, norm, padicNorm, padicValRat, padicValInt, zpow_neg,
-    -Rat.cast_natCast]
-
-/--
-theorem `norm_p_lt_one` / 定理 `norm_p_lt_one`
-
-English:
-theorem norm_p_lt_one
-  statement: ‖(p : Rat_[p])‖ < 1
-  proof: by
+theorem norm_p_lt_one : ‖(p : ℚ_[p])‖ < 1 := by
   rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
+  exact inv_lt_one_of_one_lt₀ <| mod_cast hp.1.one_lt
 
 @[simp high] -- Shortcut lemma with higher priority.
-
-中文:
-定理 norm_p_lt_one
-  结论: ‖(p : Rat_[p])‖ < 1
-  证明: by
-  rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
-
-@[simp high] -- Shortcut lemma with higher priority.
-
-Depends on / 依赖: mod_cast, norm_p, one_lt
+/-
+**Padic.norm_p_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_p_zpow (n : Int) : ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n)
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_zpow`：norm_zpow : forall (a : α) (n : Int), ‖a ^ n‖ = ‖a‖ ^ n
+· 使用定理 `Padic.norm_p`：norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `inv_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a⁻
+¹ ^ n = (a ^ n)⁻¹
 -/
-theorem norm_p_lt_one : ‖(p : Rat_[p])‖ < 1 := by
-  rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
+theorem norm_p_zpow (n : ℤ) : ‖(p : ℚ_[p]) ^ n‖ = (p : ℝ) ^ (-n) := by
+  rw [norm_zpow, norm_p, zpow_neg, inv_zpow]
 
 @[simp high] -- Shortcut lemma with higher priority.
-/--
-theorem `norm_p_zpow` / 定理 `norm_p_zpow`
-
-English:
-theorem norm_p_zpow
-  given: (n : Int)
-  statement: ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n)
-  proof: by
-  rw [norm_zpow]; rw [norm_p]; rw [zpow_neg]; rw [inv_zpow]
-
-@[simp high] -- Shortcut lemma with higher priority.
-
-中文:
-定理 norm_p_zpow
-  条件: (n : 整数)
-  结论: ‖(p : Rat_[p]) ^ n‖ = (p : 实数) ^ (-n)
-  证明: by
-  rw [norm_zpow]; rw [norm_p]; rw [zpow_neg]; rw [inv_zpow]
-
-@[simp high] -- Shortcut lemma with higher priority.
-
-Depends on / 依赖: inv_zpow, norm_p, norm_zpow, zpow_neg
+/-
+**Padic.norm_p_pow** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_p_pow (n : Nat) : ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n : Int)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Padic.norm_p_zpow`：norm_p_zpow (n : Int) : ‖(p : Rat_[p]) ^ n‖ = (p : Re
+al) ^ (-n)
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
 -/
-theorem norm_p_zpow (n : Int) : ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n) := by
-  rw [norm_zpow]; rw [norm_p]; rw [zpow_neg]; rw [inv_zpow]
-
-@[simp high] -- Shortcut lemma with higher priority.
-/--
-theorem `norm_p_pow` / 定理 `norm_p_pow`
-
-English:
-theorem norm_p_pow
-  given: (n : Nat)
-  statement: ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n : Int)
-  proof: by
-  rw [← norm_p_zpow]; rw [zpow_natCast]
-
-中文:
-定理 norm_p_pow
-  条件: (n : 自然数)
-  结论: ‖(p : Rat_[p]) ^ n‖ = (p : 实数) ^ (-n : 整数)
-  证明: by
-  rw [← norm_p_zpow]; rw [zpow_natCast]
-
-Depends on / 依赖: norm_p_zpow, zpow_natCast
+theorem norm_p_pow (n : ℕ) : ‖(p : ℚ_[p]) ^ n‖ = (p : ℝ) ^ (-n : ℤ) := by
+  rw [← norm_p_zpow, zpow_natCast]
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_p_pow (n : Nat) : ‖(p : Rat_[p]) ^ n‖ = (p : Real) ^ (-n : Int) := by
-  rw [← norm_p_zpow]; rw [zpow_natCast]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NontriviallyNormedField Rat_[p]
-  body: { Padic.normedField p with
-    non_trivial :=
-      ⟨p⁻¹, by
-        rw [norm_inv]; rw [norm_p]; rw [inv_inv]
-        exact mod_cast hp.1.one_lt⟩ }
-
-中文:
-实例 :
-  签名: NontriviallyNormedField Rat_[p]
-  定义体: { Padic.normedField p with
-    non_trivial :=
-      ⟨p⁻¹, by
-        rw [norm_inv]; rw [norm_p]; rw [inv_inv]
-        exact mod_cast hp.1.one_lt⟩ }
-
-Depends on / 依赖: Padic.normedField, inv_inv, mod_cast, non_trivial, norm_inv, norm_p, normedField, one_lt
--/
-instance : NontriviallyNormedField Rat_[p] :=
+instance : NontriviallyNormedField ℚ_[p] :=
   { Padic.normedField p with
     non_trivial :=
       ⟨p⁻¹, by
-        rw [norm_inv]; rw [norm_p]; rw [inv_inv]
+        rw [norm_inv, norm_p, inv_inv]
         exact mod_cast hp.1.one_lt⟩ }
-
-/--
-theorem `padicNormE.image` / 定理 `padicNormE.image`
-
-English:
-theorem padicNormE.image
-  given: {q : Rat_[p]}
-  statement: q != 0 -> exists n : Int, ‖q‖ = ↑((p : Rat) ^ (-n))
-  proof: Quotient.inductionOn q fun f hf =>
-    have : ¬f ≈ 0 := (PadicSeq.ne_zero_iff_nequiv_zero f).1 hf
-    let ⟨n, hn⟩ := PadicSeq.norm_values_discrete f this
-    ⟨n, by rw [← hn]; rfl⟩
-
-中文:
-定理 padicNormE.像
-  条件: {q : Rat_[p]}
-  结论: q != 0 -> 存在 n : 整数, ‖q‖ = ↑((p : 有理数) ^ (-n))
-  证明: Quotient.inductionOn q fun f hf =>
-    have : ¬f ≈ 0 := (PadicSeq.ne_zero_iff_nequiv_zero f).1 hf
-    let ⟨n, hn⟩ := PadicSeq.norm_values_discrete f this
-    ⟨n, by rw [← hn]; rfl⟩
+/-
+**Padic.padicNormE.image** 是 Mathlib 中的一个定理，位于命名空间 `Padic.padicNormE`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] {q : ℚ_[p]}, q ≠ 0 → ∃ n, ‖q‖ = ↑(↑p ^
+ (-n))
+参数：Nat.Prime p；↑p ^ (-n)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PadicSeq.ne_zero_iff_nequiv_zero`：ne_zero_iff_nequiv_zero (f : PadicSeq 
+p) : mk f != 0 ↔ ¬f ≈ 0
+· 使用定理 `PadicSeq.norm_values_discrete`：norm_values_discrete (a : PadicSeq p) (ha
+ : ¬a ≈ 0) : exists z : Int, a.norm = (p : Rat) ^ (-z)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem padicNormE.image {q : Rat_[p]} : q != 0 -> exists n : Int, ‖q‖ = ↑((p : Rat) ^ (-n)) :=
-  Quotient.inductionOn q fun f hf =>
+protected theorem padicNormE.image {q : ℚ_[p]} : q ≠ 0 → ∃ n : ℤ, ‖q‖ = ↑((p : ℚ) ^ (-n)) :=
+  Quotient.inductionOn q fun f hf ↦
     have : ¬f ≈ 0 := (PadicSeq.ne_zero_iff_nequiv_zero f).1 hf
     let ⟨n, hn⟩ := PadicSeq.norm_values_discrete f this
     ⟨n, by rw [← hn]; rfl⟩
-
-/--
-theorem `padicNormE.is_rat` / 定理 `padicNormE.is_rat`
-
-English:
-theorem padicNormE.is_rat
-  given: (q : Rat_[p])
-  statement: exists q' : Rat, ‖q‖ = q'
-  proof: by
+/-
+**Padic.padicNormE.is_rat** 是 Mathlib 中的一个定理，位于命名空间 `Padic.padicNormE`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ_[p]), ∃ q', ‖q‖ = ↑q'
+参数：Nat.Prime p；q : ℚ_[p]。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Padic.padicNormE.image`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] {q : ℚ_[p]},
+ q ≠ 0 → ∃ n, ‖q‖ = ↑(↑p ^ (-n))
+-/
+protected theorem padicNormE.is_rat (q : ℚ_[p]) : ∃ q' : ℚ, ‖q‖ = q' := by
   classical
   exact if h : q = 0 then ⟨0, by simp [h]⟩
   else
     let ⟨n, hn⟩ := padicNormE.image h
     ⟨_, hn⟩
 
-中文:
-定理 padicNormE.is_rat
-  条件: (q : Rat_[p])
-  结论: 存在 q' : 有理数, ‖q‖ = q'
-  证明: by
-  classical
-  exact if h : q = 0 then ⟨0, by simp [h]⟩
-  else
-    let ⟨n, hn⟩ := padicNormE.image h
-    ⟨_, hn⟩
+/-- `ratNorm q`, for a `p`-adic number `q` is the `p`-adic norm of `q`, as rational number.
+
+The lemma `padicNormE.eq_ratNorm` asserts `‖q‖ = ratNorm q`. -/
+/-
+**Padic.ratNorm** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：ratNorm (q : Rat_[p]) : Rat
+参数：q : Rat_[p]。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.padicNormE.is_rat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ_[p])
+, ∃ q', ‖q‖ = ↑q'
+
+--- 原说明 ---
+`ratNorm q`, for a `p`-adic number `q` is the `p`-adic norm of `q`, as rational 
+number.
+
+The lemma `padicNormE.eq_ratNorm` asserts `‖q‖ = ratNorm q`.
 -/
-protected theorem padicNormE.is_rat (q : Rat_[p]) : exists q' : Rat, ‖q‖ = q' := by
-  classical
-  exact if h : q = 0 then ⟨0, by simp [h]⟩
-  else
-    let ⟨n, hn⟩ := padicNormE.image h
-    ⟨_, hn⟩
-
-/--
-Definition of `ratNorm` / `ratNorm` 的定义
-
-English:
-definition ratNorm
-  signature: (q : Rat_[p])
-  body: Classical.choose (padicNormE.is_rat q)
-
-中文:
-定义 ratNorm
-  签名: (q : Rat_[p])
-  定义体: Classical.choose (padicNormE.is_rat q)
-
-Depends on / 依赖: Classical, Classical.choose, is_rat, padicNormE, padicNormE.is_rat
--/
-def ratNorm (q : Rat_[p]) : Rat :=
+def ratNorm (q : ℚ_[p]) : ℚ :=
   Classical.choose (padicNormE.is_rat q)
-
-/--
-theorem `eq_ratNorm` / 定理 `eq_ratNorm`
-
-English:
-theorem eq_ratNorm
-  given: (q : Rat_[p])
-  statement: ‖q‖ = ratNorm q
-  proof: Classical.choose_spec (padicNormE.is_rat q)
-
-中文:
-定理 eq_ratNorm
-  条件: (q : Rat_[p])
-  结论: ‖q‖ = ratNorm q
-  证明: Classical.choose_spec (padicNormE.is_rat q)
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, is_rat, padicNormE, padicNormE.is_rat
+/-
+**Padic.eq_ratNorm** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：eq_ratNorm (q : Rat_[p]) : ‖q‖ = ratNorm q
+参数：q : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Padic.padicNormE.is_rat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q : ℚ_[p])
+, ∃ q', ‖q‖ = ↑q'
 -/
-theorem eq_ratNorm (q : Rat_[p]) : ‖q‖ = ratNorm q :=
+theorem eq_ratNorm (q : ℚ_[p]) : ‖q‖ = ratNorm q :=
   Classical.choose_spec (padicNormE.is_rat q)
-
-/--
-theorem `norm_rat_le_one` / 定理 `norm_rat_le_one`
-
-English:
-theorem norm_rat_le_one
-  statement: forall {q : Rat} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1
-  proof: Rat.zero_iff_num_zero.mpr hnz
-      norm_num [this]
-    else by
-      have hnz' : (⟨n, d, hn, hd⟩ : Rat) != 0 := mt Rat.zero_iff_num_zero.1 hnz
-      rw [eq_padicNorm]
-      norm_cast
-      -- Porting note: `Nat.cast_zero` instead of another `norm_cast` call
-      rw [padicNorm.eq_zpow_of_nonzero hnz']; rw [padicValRat]; rw [neg_sub]; rw [padicValNat.eq_zero_of_not_dvd hq]; rw [Nat.cast_zero]; rw [zero_sub]; rw [zpow_neg]; rw [zpow_natCast]
-      apply inv_le_one_of_one_le₀
-      norm_cast
-      apply one_le_pow
-      exact hp.1.pos
-
-中文:
-定理 norm_rat_le_one
-  结论: 对任意 {q : 有理数} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1
-  证明: Rat.zero_iff_num_zero.mpr hnz
-      norm_num [this]
-    else by
-      have hnz' : (⟨n, d, hn, hd⟩ : Rat) != 0 := mt Rat.zero_iff_num_zero.1 hnz
-      rw [eq_padicNorm]
-      norm_cast
-      -- Porting note: `Nat.cast_zero` instead of another `norm_cast` call
-      rw [padicNorm.eq_zpow_of_nonzero hnz']; rw [padicValRat]; rw [neg_sub]; rw [padicValNat.eq_zero_of_not_dvd hq]; rw [Nat.cast_zero]; rw [zero_sub]; rw [zpow_neg]; rw [zpow_natCast]
-      apply inv_le_one_of_one_le₀
-      norm_cast
-      apply one_le_pow
-      exact hp.1.pos
-
-Depends on / 依赖: Rat.zero_iff_num_zero.mpr, zero_iff_num_zero
+/-
+**Padic.norm_rat_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_rat_le_one : forall {q : Rat} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1 
+| ⟨n, d, hn, hd⟩ => fun hq : ¬p ∣ d => if hnz : n = 0 then by have : (⟨n, d, hn,
+ hd⟩ : Rat) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.zero_iff_num_zero`：zero_iff_num_zero {q : Rat} : q = 0 ↔ q.num = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Padic.eq_padicNorm`：eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm
+ p q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `padicNorm.eq_zpow_of_nonzero`：∀ {p : ℕ} {q : ℚ}, q ≠ 0 → padicNorm p q =
+ ↑p ^ (-padicValRat p q)
+· 使用定理 `padicValRat.eq_1`：∀ (p : ℕ) (q : ℚ), padicValRat p q = ↑(padicValInt p q
+.num) - ↑(padicValNat p q.den)
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `padicValNat.eq_zero_of_not_dvd`：eq_zero_of_not_dvd {n : Nat} (h : ¬p ∣ n
+) : padicValNat p n = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用引理 `inv_le_one_of_one_le₀`：inv_le_one_of_one_le₀ (ha : 1 <= a) : a⁻¹ <= 1
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Nat.one_le_pow`：∀ (n m : ℕ), 0 < m → 1 ≤ m ^ n
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem norm_rat_le_one : forall {q : Rat} (_ : ¬p ∣ q.den), ‖(q : Rat_[p])‖ <= 1
-  | ⟨n, d, hn, hd⟩ => fun hq : ¬p ∣ d =>
+theorem norm_rat_le_one : ∀ {q : ℚ} (_ : ¬p ∣ q.den), ‖(q : ℚ_[p])‖ ≤ 1
+  | ⟨n, d, hn, hd⟩ => fun hq : ¬p ∣ d ↦
     if hnz : n = 0 then by
-      have : (⟨n, d, hn, hd⟩ : Rat) = 0 := Rat.zero_iff_num_zero.mpr hnz
+      have : (⟨n, d, hn, hd⟩ : ℚ) = 0 := Rat.zero_iff_num_zero.mpr hnz
       norm_num [this]
     else by
-      have hnz' : (⟨n, d, hn, hd⟩ : Rat) != 0 := mt Rat.zero_iff_num_zero.1 hnz
+      have hnz' : (⟨n, d, hn, hd⟩ : ℚ) ≠ 0 := mt Rat.zero_iff_num_zero.1 hnz
       rw [eq_padicNorm]
       norm_cast
       -- Porting note: `Nat.cast_zero` instead of another `norm_cast` call
-      rw [padicNorm.eq_zpow_of_nonzero hnz']; rw [padicValRat]; rw [neg_sub]; rw [padicValNat.eq_zero_of_not_dvd hq]; rw [Nat.cast_zero]; rw [zero_sub]; rw [zpow_neg]; rw [zpow_natCast]
+      rw [padicNorm.eq_zpow_of_nonzero hnz', padicValRat, neg_sub,
+        padicValNat.eq_zero_of_not_dvd hq, Nat.cast_zero, zero_sub, zpow_neg, zpow_natCast]
       apply inv_le_one_of_one_le₀
       norm_cast
       apply one_le_pow
       exact hp.1.pos
-
-/--
-theorem `norm_int_le_one` / 定理 `norm_int_le_one`
-
-English:
-theorem norm_int_le_one
-  given: (z : Int)
-  statement: ‖(z : Rat_[p])‖ <= 1
-  proof: suffices ‖((z : Rat) : Rat_[p])‖ <= 1 by simpa
-norm_rat_le_one by simp [hp.1.ne_one]
-
-@[simp]
-
-中文:
-定理 norm_int_le_one
-  条件: (z : 整数)
-  结论: ‖(z : Rat_[p])‖ <= 1
-  证明: suffices ‖((z : Rat) : Rat_[p])‖ <= 1 by simpa
-norm_rat_le_one by simp [hp.1.ne_one]
-
-@[simp]
-
-Depends on / 依赖: Rat_, ne_one, norm_rat_le_one
+/-
+**Padic.norm_int_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_int_le_one (z : Int) : ‖(z : Rat_[p])‖ <= 1
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.norm_rat_le_one`：norm_rat_le_one : forall {q : Rat} (_ : ¬p ∣ q.de
+n), ‖(q : Rat_[p])‖ <= 1 | ⟨n, d, hn, hd⟩ => fun hq : ¬p ∣ d => if hnz : n = 0 t
+hen by have…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
 -/
-theorem norm_int_le_one (z : Int) : ‖(z : Rat_[p])‖ <= 1 :=
-  suffices ‖((z : Rat) : Rat_[p])‖ <= 1 by simpa
-norm_rat_le_one by simp [hp.1.ne_one]
+theorem norm_int_le_one (z : ℤ) : ‖(z : ℚ_[p])‖ ≤ 1 :=
+  suffices ‖((z : ℚ) : ℚ_[p])‖ ≤ 1 by simpa
+  norm_rat_le_one <| by simp [hp.1.ne_one]
 
 @[simp]
-/--
-theorem `norm_intCast_lt_one_iff` / 定理 `norm_intCast_lt_one_iff`
-
-English:
-theorem norm_intCast_lt_one_iff
-  given: {k : Int}
-  statement: ‖(k : Rat_[p])‖ < 1 ↔ ↑p ∣ k
-  proof: by
+/-
+**Padic.norm_intCast_lt_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_intCast_lt_one_iff {k : Int} : ‖(k : Rat_[p])‖ < 1 ↔ ↑p ∣ k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Padic.eq_padicNorm`：eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm
+ p q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Rat.cast_one`：cast_one : ((1 : Rat) : α) = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `padicNorm.int_eq_one_iff`：int_eq_one_iff (m : Int) : padicNorm p m = 1 ↔
+ ¬(p : Int) ∣ m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Padic.padicNormE.mul`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (q r : ℚ_[p]),
+ ‖q * r‖ = ‖q‖ * ‖r‖
+· 使用定理 `mul_le_mul`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : 
+Preorder α] {a b c d : α} [PosMulMono α] [MulPosMono α],   a ≤ b → c ≤ d → 0 ≤ c
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Padic.norm_int_le_one`：norm_int_le_one (z : Int) : ‖(z : Rat_[p])‖ <= 1
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Padic.norm_p`：norm_p : ‖(p : Rat_[p])‖ = (p : Real)⁻¹
+· 使用引理 `inv_lt_one_of_one_lt₀`：inv_lt_one_of_one_lt₀ (ha : 1 < a) : a⁻¹ < 1
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+（共 33 条，此处仅展示前 30 条）
+-/
+theorem norm_intCast_lt_one_iff {k : ℤ} : ‖(k : ℚ_[p])‖ < 1 ↔ ↑p ∣ k := by
   constructor
   · intro h
     contrapose! h
     apply le_of_eq
     rw [eq_comm]
     calc
-      ‖(k : Rat_[p])‖ = ‖((k : Rat) : Rat_[p])‖ := by norm_cast
+      ‖(k : ℚ_[p])‖ = ‖((k : ℚ) : ℚ_[p])‖ := by norm_cast
       _ = padicNorm p k := eq_padicNorm _
       _ = 1 := mod_cast (int_eq_one_iff k).mpr h
   · rintro ⟨x, rfl⟩
     push_cast
     rw [padicNormE.mul]
     calc
-      _ <= ‖(p : Rat_[p])‖ * 1 :=
+      _ ≤ ‖(p : ℚ_[p])‖ * 1 :=
         mul_le_mul le_rfl (by simpa using norm_int_le_one _) (norm_nonneg _) (norm_nonneg _)
       _ < 1 := by
-        rw [mul_one]; rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
+        rw [mul_one, norm_p]
+        exact inv_lt_one_of_one_lt₀ <| mod_cast hp.1.one_lt
 
 @[simp]
-
-中文:
-定理 norm_intCast_lt_one_iff
-  条件: {k : 整数}
-  结论: ‖(k : Rat_[p])‖ < 1 ↔ ↑p ∣ k
-  证明: by
-  constructor
-  · intro h
-    contrapose! h
-    apply le_of_eq
-    rw [eq_comm]
-    calc
-      ‖(k : Rat_[p])‖ = ‖((k : Rat) : Rat_[p])‖ := by norm_cast
-      _ = padicNorm p k := eq_padicNorm _
-      _ = 1 := mod_cast (int_eq_one_iff k).mpr h
-  · rintro ⟨x, rfl⟩
-    push_cast
-    rw [padicNormE.mul]
-    calc
-      _ <= ‖(p : Rat_[p])‖ * 1 :=
-        mul_le_mul le_rfl (by simpa using norm_int_le_one _) (norm_nonneg _) (norm_nonneg _)
-      _ < 1 := by
-        rw [mul_one]; rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
-
-@[simp]
-
-Depends on / 依赖: Rat_, contrapose, eq_comm, eq_padicNorm, int_eq_one_iff, le_of_eq, le_rfl, mod_cast, mul_le_mul, mul_one, norm_int_le_one, norm_nonneg, norm_p, one_lt, padicNorm, padicNormE, padicNormE.mul
+/-
+**Padic.norm_natCast_lt_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：norm_natCast_lt_one_iff {n : Nat} : ‖(n : Rat_[p])‖ < 1 ↔ p ∣ n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Padic.norm_intCast_lt_one_iff`：norm_intCast_lt_one_iff {k : Int} : ‖(k :
+ Rat_[p])‖ < 1 ↔ ↑p ∣ k
 -/
-theorem norm_intCast_lt_one_iff {k : Int} : ‖(k : Rat_[p])‖ < 1 ↔ ↑p ∣ k := by
-  constructor
-  · intro h
-    contrapose! h
-    apply le_of_eq
-    rw [eq_comm]
-    calc
-      ‖(k : Rat_[p])‖ = ‖((k : Rat) : Rat_[p])‖ := by norm_cast
-      _ = padicNorm p k := eq_padicNorm _
-      _ = 1 := mod_cast (int_eq_one_iff k).mpr h
-  · rintro ⟨x, rfl⟩
-    push_cast
-    rw [padicNormE.mul]
-    calc
-      _ <= ‖(p : Rat_[p])‖ * 1 :=
-        mul_le_mul le_rfl (by simpa using norm_int_le_one _) (norm_nonneg _) (norm_nonneg _)
-      _ < 1 := by
-        rw [mul_one]; rw [norm_p]
-exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
-
-@[simp]
-/--
-lemma `norm_natCast_lt_one_iff` / 引理 `norm_natCast_lt_one_iff`
-
-English:
-lemma norm_natCast_lt_one_iff
-  given: {n : Nat}
-  proof: by
+lemma norm_natCast_lt_one_iff {n : ℕ} :
+    ‖(n : ℚ_[p])‖ < 1 ↔ p ∣ n := by
   simpa [Int.natCast_dvd_natCast] using norm_intCast_lt_one_iff (p := p) (k := n)
 
 @[simp]
-
-中文:
-引理 norm_natCast_lt_one_iff
-  条件: {n : 自然数}
-  证明: by
-  simpa [Int.natCast_dvd_natCast] using norm_intCast_lt_one_iff (p := p) (k := n)
-
-@[simp]
-
-Depends on / 依赖: Int.natCast_dvd_natCast, natCast_dvd_natCast, norm_intCast_lt_one_iff
+/-
+**Padic.norm_intCast_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：norm_intCast_eq_one_iff {z : Int} : ‖(z : Rat_[p])‖ = 1 ↔ IsCoprime z p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.Prime.dvd_iff_not_coprime`：∀ {p n : ℕ}, Nat.Prime p → (p ∣ n ↔ ¬p.Co
+prime n)
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `norm_natAbs`：norm_natAbs (z : Int) : ‖(z.natAbs : α)‖ = ‖(z : α)‖
 -/
-lemma norm_natCast_lt_one_iff {n : Nat} :
-    ‖(n : Rat_[p])‖ < 1 ↔ p ∣ n := by
-  simpa [Int.natCast_dvd_natCast] using norm_intCast_lt_one_iff (p := p) (k := n)
-
-@[simp]
-/--
-lemma `norm_intCast_eq_one_iff` / 引理 `norm_intCast_eq_one_iff`
-
-English:
-lemma norm_intCast_eq_one_iff
-  given: {z : Int}
-  proof: by
+lemma norm_intCast_eq_one_iff {z : ℤ} :
+    ‖(z : ℚ_[p])‖ = 1 ↔ IsCoprime z p := by
   rw [← not_iff_not]
   simp [Nat.coprime_comm, ← norm_natCast_lt_one_iff, -norm_intCast_lt_one_iff,
     Int.isCoprime_iff_gcd_eq_one, Nat.coprime_iff_gcd_eq_one, Int.gcd,
     ← hp.out.dvd_iff_not_coprime, norm_natAbs, -cast_natAbs, norm_int_le_one]
 
 @[simp]
-
-中文:
-引理 norm_intCast_eq_one_iff
-  条件: {z : 整数}
-  证明: by
-  rw [← not_iff_not]
-  simp [Nat.coprime_comm, ← norm_natCast_lt_one_iff, -norm_intCast_lt_one_iff,
-    Int.isCoprime_iff_gcd_eq_one, Nat.coprime_iff_gcd_eq_one, Int.gcd,
-    ← hp.out.dvd_iff_not_coprime, norm_natAbs, -cast_natAbs, norm_int_le_one]
-
-@[simp]
-
-Depends on / 依赖: Int.gcd, Int.isCoprime_iff_gcd_eq_one, Nat.coprime_comm, Nat.coprime_iff_gcd_eq_one, cast_natAbs, coprime_comm, coprime_iff_gcd_eq_one, dvd_iff_not_coprime, hp.out.dvd_iff_not_coprime, isCoprime_iff_gcd_eq_one, norm_intCast_lt_one_iff, norm_int_le_one, norm_natAbs, norm_natCast_lt_one_iff, not_iff_not
+/-
+**Padic.norm_natCast_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：norm_natCast_eq_one_iff {n : Nat} : ‖(n : Rat_[p])‖ = 1 ↔ p.Coprime n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.coprime_comm`：∀ {n m : ℕ}, n.Coprime m ↔ m.Coprime n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `Padic.norm_intCast_eq_one_iff`：norm_intCast_eq_one_iff {z : Int} : ‖(z :
+ Rat_[p])‖ = 1 ↔ IsCoprime z p
 -/
-lemma norm_intCast_eq_one_iff {z : Int} :
-    ‖(z : Rat_[p])‖ = 1 ↔ IsCoprime z p := by
-  rw [← not_iff_not]
-  simp [Nat.coprime_comm, ← norm_natCast_lt_one_iff, -norm_intCast_lt_one_iff,
-    Int.isCoprime_iff_gcd_eq_one, Nat.coprime_iff_gcd_eq_one, Int.gcd,
-    ← hp.out.dvd_iff_not_coprime, norm_natAbs, -cast_natAbs, norm_int_le_one]
-
-@[simp]
-/--
-lemma `norm_natCast_eq_one_iff` / 引理 `norm_natCast_eq_one_iff`
-
-English:
-lemma norm_natCast_eq_one_iff
-  given: {n : Nat}
-  proof: by
+lemma norm_natCast_eq_one_iff {n : ℕ} :
+    ‖(n : ℚ_[p])‖ = 1 ↔ p.Coprime n := by
   simpa [p.coprime_comm] using norm_intCast_eq_one_iff (p := p) (z := n)
-
-中文:
-引理 norm_natCast_eq_one_iff
-  条件: {n : 自然数}
-  证明: by
-  simpa [p.coprime_comm] using norm_intCast_eq_one_iff (p := p) (z := n)
-
-Depends on / 依赖: coprime_comm, norm_intCast_eq_one_iff, p.coprime_comm
+/-
+**Padic.norm_int_le_pow_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_int_le_pow_iff_dvd (k : Int) (n : Nat) : ‖(k : Rat_[p])‖ <= (p : Real
+) ^ (-n : Int) ↔ (p ^ n : Int) ∣ k
+参数：k : Int；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `Padic.eq_padicNorm`：eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm
+ p q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `padicNorm.dvd_iff_norm_le`：dvd_iff_norm_le {n : Nat} {z : Int} : ↑(p ^ n
+) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : Int)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma norm_natCast_eq_one_iff {n : Nat} :
-    ‖(n : Rat_[p])‖ = 1 ↔ p.Coprime n := by
-  simpa [p.coprime_comm] using norm_intCast_eq_one_iff (p := p) (z := n)
-
-/--
-theorem `norm_int_le_pow_iff_dvd` / 定理 `norm_int_le_pow_iff_dvd`
-
-English:
-theorem norm_int_le_pow_iff_dvd
-  given: (k : Int) (n : Nat)
-  proof: by
-  have : (p : Real) ^ (-n : Int) = (p : Rat) ^ (-n : Int) := by simp
-  rw [show (k : Rat_[p]) = ((k : Rat) : Rat_[p]) by norm_cast, eq_padicNorm, this]
+theorem norm_int_le_pow_iff_dvd (k : ℤ) (n : ℕ) :
+    ‖(k : ℚ_[p])‖ ≤ (p : ℝ) ^ (-n : ℤ) ↔ (p ^ n : ℤ) ∣ k := by
+  have : (p : ℝ) ^ (-n : ℤ) = (p : ℚ) ^ (-n : ℤ) := by simp
+  rw [show (k : ℚ_[p]) = ((k : ℚ) : ℚ_[p]) by norm_cast, eq_padicNorm, this]
   norm_cast
   rw [← padicNorm.dvd_iff_norm_le]
-
-中文:
-定理 norm_int_le_pow_iff_dvd
-  条件: (k : 整数) (n : 自然数)
-  证明: by
-  have : (p : Real) ^ (-n : Int) = (p : Rat) ^ (-n : Int) := by simp
-  rw [show (k : Rat_[p]) = ((k : Rat) : Rat_[p]) by norm_cast, eq_padicNorm, this]
-  norm_cast
-  rw [← padicNorm.dvd_iff_norm_le]
-
-Depends on / 依赖: Rat_, dvd_iff_norm_le, eq_padicNorm, padicNorm, padicNorm.dvd_iff_norm_le
+/-
+**Padic.norm_eq_of_norm_add_lt_right** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_of_norm_add_lt_right {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z2‖) : ‖z
+1‖ = ‖z2‖
+参数：h : ‖z1 + z2‖ < ‖z2‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.add_eq_max_of_ne`：add_eq_max_of_ne {q r : Rat_[p]} (h : ‖q‖ != ‖r‖
+) : ‖q + r‖ = max ‖q‖ ‖r‖
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem norm_int_le_pow_iff_dvd (k : Int) (n : Nat) :
-    ‖(k : Rat_[p])‖ <= (p : Real) ^ (-n : Int) ↔ (p ^ n : Int) ∣ k := by
-  have : (p : Real) ^ (-n : Int) = (p : Rat) ^ (-n : Int) := by simp
-  rw [show (k : Rat_[p]) = ((k : Rat) : Rat_[p]) by norm_cast, eq_padicNorm, this]
-  norm_cast
-  rw [← padicNorm.dvd_iff_norm_le]
-
-/--
-theorem `norm_eq_of_norm_add_lt_right` / 定理 `norm_eq_of_norm_add_lt_right`
-
-English:
-theorem norm_eq_of_norm_add_lt_right
-  given: {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z2‖)
-  statement: ‖z1‖ = ‖z2‖
-  proof: _root_.by_contradiction fun hne =>
+theorem norm_eq_of_norm_add_lt_right {z1 z2 : ℚ_[p]} (h : ‖z1 + z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖ :=
+  _root_.by_contradiction fun hne ↦
     not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_right) h
-
-中文:
-定理 norm_eq_of_norm_add_lt_right
-  条件: {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z2‖)
-  结论: ‖z1‖ = ‖z2‖
-  证明: _root_.by_contradiction fun hne =>
-    not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_right) h
-
-Depends on / 依赖: _root_, _root_.by_contradiction, add_eq_max_of_ne, by_contradiction, le_max_right, not_lt_of_ge
+/-
+**Padic.norm_eq_of_norm_add_lt_left** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_of_norm_add_lt_left {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z1‖) : ‖z1
+‖ = ‖z2‖
+参数：h : ‖z1 + z2‖ < ‖z1‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.add_eq_max_of_ne`：add_eq_max_of_ne {q r : Rat_[p]} (h : ‖q‖ != ‖r‖
+) : ‖q + r‖ = max ‖q‖ ‖r‖
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
-theorem norm_eq_of_norm_add_lt_right {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖ :=
-  _root_.by_contradiction fun hne =>
-    not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_right) h
-
-/--
-theorem `norm_eq_of_norm_add_lt_left` / 定理 `norm_eq_of_norm_add_lt_left`
-
-English:
-theorem norm_eq_of_norm_add_lt_left
-  given: {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z1‖)
-  statement: ‖z1‖ = ‖z2‖
-  proof: _root_.by_contradiction fun hne =>
+theorem norm_eq_of_norm_add_lt_left {z1 z2 : ℚ_[p]} (h : ‖z1 + z2‖ < ‖z1‖) : ‖z1‖ = ‖z2‖ :=
+  _root_.by_contradiction fun hne ↦
     not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_left) h
-
-中文:
-定理 norm_eq_of_norm_add_lt_left
-  条件: {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z1‖)
-  结论: ‖z1‖ = ‖z2‖
-  证明: _root_.by_contradiction fun hne =>
-    not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_left) h
-
-Depends on / 依赖: _root_, _root_.by_contradiction, add_eq_max_of_ne, by_contradiction, le_max_left, not_lt_of_ge
+/-
+**Padic.norm_eq_of_norm_sub_lt_right** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_of_norm_sub_lt_right {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖) : ‖z
+1‖ = ‖z2‖
+参数：h : ‖z1 - z2‖ < ‖z2‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `Padic.norm_eq_of_norm_add_lt_right`：norm_eq_of_norm_add_lt_right {z1 z2 
+: Rat_[p]} (h : ‖z1 + z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem norm_eq_of_norm_add_lt_left {z1 z2 : Rat_[p]} (h : ‖z1 + z2‖ < ‖z1‖) : ‖z1‖ = ‖z2‖ :=
-  _root_.by_contradiction fun hne =>
-    not_lt_of_ge (by rw [add_eq_max_of_ne hne]; apply le_max_left) h
-
-/--
-theorem `norm_eq_of_norm_sub_lt_right` / 定理 `norm_eq_of_norm_sub_lt_right`
-
-English:
-theorem norm_eq_of_norm_sub_lt_right
-  given: {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖)
-  statement: ‖z1‖ = ‖z2‖
-  proof: by
+theorem norm_eq_of_norm_sub_lt_right {z1 z2 : ℚ_[p]} (h : ‖z1 - z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖ := by
   rw [← norm_neg z2]
   apply norm_eq_of_norm_add_lt_right
   simp [← sub_eq_add_neg, h]
-
-中文:
-定理 norm_eq_of_norm_sub_lt_right
-  条件: {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖)
-  结论: ‖z1‖ = ‖z2‖
-  证明: by
-  rw [← norm_neg z2]
-  apply norm_eq_of_norm_add_lt_right
-  simp [← sub_eq_add_neg, h]
-
-Depends on / 依赖: norm_eq_of_norm_add_lt_right, norm_neg, sub_eq_add_neg
+/-
+**Padic.norm_eq_of_norm_sub_lt_left** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_of_norm_sub_lt_left {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z1‖) : ‖z1
+‖ = ‖z2‖
+参数：h : ‖z1 - z2‖ < ‖z1‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Padic.norm_eq_of_norm_sub_lt_right`：norm_eq_of_norm_sub_lt_right {z1 z2 
+: Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
-theorem norm_eq_of_norm_sub_lt_right {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖ := by
-  rw [← norm_neg z2]
-  apply norm_eq_of_norm_add_lt_right
-  simp [← sub_eq_add_neg, h]
-
-/--
-theorem `norm_eq_of_norm_sub_lt_left` / 定理 `norm_eq_of_norm_sub_lt_left`
-
-English:
-theorem norm_eq_of_norm_sub_lt_left
-  given: {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z1‖)
-  statement: ‖z1‖ = ‖z2‖
-  proof: by
+theorem norm_eq_of_norm_sub_lt_left {z1 z2 : ℚ_[p]} (h : ‖z1 - z2‖ < ‖z1‖) : ‖z1‖ = ‖z2‖ := by
   rw [eq_comm]
   apply norm_eq_of_norm_sub_lt_right
   simpa [← norm_neg (z1 - _)] using h
 
 @[simp]
-
-中文:
-定理 norm_eq_of_norm_sub_lt_left
-  条件: {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z1‖)
-  结论: ‖z1‖ = ‖z2‖
-  证明: by
-  rw [eq_comm]
-  apply norm_eq_of_norm_sub_lt_right
-  simpa [← norm_neg (z1 - _)] using h
-
-@[simp]
-
-Depends on / 依赖: eq_comm, norm_eq_of_norm_sub_lt_right, norm_neg
--/
-theorem norm_eq_of_norm_sub_lt_left {z1 z2 : Rat_[p]} (h : ‖z1 - z2‖ < ‖z1‖) : ‖z1‖ = ‖z2‖ := by
-  rw [eq_comm]
-  apply norm_eq_of_norm_sub_lt_right
-  simpa [← norm_neg (z1 - _)] using h
-
-@[simp]
-/--
-lemma `norm_natCast_p_sub_one` / 引理 `norm_natCast_p_sub_one`
-
-English:
-lemma norm_natCast_p_sub_one
-  proof: by
-  rw [norm_natCast_eq_one_iff]
-  exact (coprime_self_sub_right hp.out.one_le).mpr p.coprime_one_right
-
-中文:
-引理 norm_natCast_p_sub_one
-  证明: by
-  rw [norm_natCast_eq_one_iff]
-  exact (coprime_self_sub_right hp.out.one_le).mpr p.coprime_one_right
-
-Depends on / 依赖: coprime_one_right, coprime_self_sub_right, hp.out.one_le, norm_natCast_eq_one_iff, one_le, p.coprime_one_right
+/-
+**Padic.norm_natCast_p_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：norm_natCast_p_sub_one : ‖((p - 1 : Nat) : Rat_[p])‖ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Padic.norm_natCast_eq_one_iff`：norm_natCast_eq_one_iff {n : Nat} : ‖(n :
+ Rat_[p])‖ = 1 ↔ p.Coprime n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.coprime_self_sub_right`：coprime_self_sub_right {m n : Nat} (h : m <=
+ n) : Coprime n (n - m) ↔ Coprime n m
+· 使用定理 `Nat.Prime.one_le`：∀ {p : ℕ}, Nat.Prime p → 1 ≤ p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Nat.coprime_one_right`：∀ (n : ℕ), n.Coprime 1
 -/
 lemma norm_natCast_p_sub_one :
-    ‖((p - 1 : Nat) : Rat_[p])‖ = 1 := by
+    ‖((p - 1 : ℕ) : ℚ_[p])‖ = 1 := by
   rw [norm_natCast_eq_one_iff]
   exact (coprime_self_sub_right hp.out.one_le).mpr p.coprime_one_right
 
 end NormedSpace
 
-/--
-Instance `complete` / 实例 `complete`
-
-English:
-instance complete
-  signature: : CauSeq.IsComplete Rat_[p] norm where
-  body: by
-    have cau_seq_norm_e : IsCauSeq padicNormE f := fun ε hε => by
-      have h := isCauSeq f ε (mod_cast hε)
-      dsimp [norm] at h
-      exact mod_cast h
-    -- Porting note: Padic.complete' works with `f i - q`, but the goal needs `q - f i`,
-    -- using `rewrite [padicNormE.map_sub]` causes time out, so a separate lemma is created
-    obtain ⟨q, hq⟩ := Padic.complete'' ⟨f, cau_seq_norm_e⟩
-    exists q
-    intro ε hε
-    obtain ⟨ε', hε'⟩ := exists_rat_btwn hε
-    norm_cast at hε'
-    obtain ⟨N, hN⟩ := hq ε' hε'.1
-    exists N
-    intro i hi
-    have h := hN i hi
-    change norm (f i - q) < ε
-    refine lt_trans ?_ hε'.2
-    dsimp [norm]
-    exact mod_cast h
-
-中文:
-实例 complete
-  签名: : CauSeq.是完备 Rat_[p] norm where
-  定义体: by
-    have cau_seq_norm_e : IsCauSeq padicNormE f := fun ε hε => by
-      have h := isCauSeq f ε (mod_cast hε)
-      dsimp [norm] at h
-      exact mod_cast h
-    -- Porting note: Padic.complete' works with `f i - q`, but the goal needs `q - f i`,
-    -- using `rewrite [padicNormE.map_sub]` causes time out, so a separate lemma is created
-    obtain ⟨q, hq⟩ := Padic.complete'' ⟨f, cau_seq_norm_e⟩
-    exists q
-    intro ε hε
-    obtain ⟨ε', hε'⟩ := exists_rat_btwn hε
-    norm_cast at hε'
-    obtain ⟨N, hN⟩ := hq ε' hε'.1
-    exists N
-    intro i hi
-    have h := hN i hi
-    change norm (f i - q) < ε
-    refine lt_trans ?_ hε'.2
-    dsimp [norm]
-    exact mod_cast h
-
-Depends on / 依赖: IsCauSeq, cau_seq_norm_e, isCauSeq, mod_cast, padicNormE
+/-
+**Padic.complete** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+形式化陈述：complete : CauSeq.IsComplete Rat_[p] norm where isComplete f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauSeq.isCauSeq`：isCauSeq (f : CauSeq β abv) : IsCauSeq abv f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Padic.complete''`：complete'' : exists q : Rat_[p], forall ε > 0, exists 
+N, forall i >= N, padicNormE (f i - q : Rat_[p]) < ε
+· 使用定理 `exists_rat_btwn`：exists_rat_btwn {x y : K} (h : x < y) : exists q : Rat,
+ x < q ∧ q < y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-instance complete : CauSeq.IsComplete Rat_[p] norm where
+instance complete : CauSeq.IsComplete ℚ_[p] norm where
   isComplete f := by
     have cau_seq_norm_e : IsCauSeq padicNormE f := fun ε hε => by
       have h := isCauSeq f ε (mod_cast hε)
@@ -3657,156 +3206,125 @@ instance complete : CauSeq.IsComplete Rat_[p] norm where
     refine lt_trans ?_ hε'.2
     dsimp [norm]
     exact mod_cast h
-
-/--
-theorem `padicNormE_lim_le` / 定理 `padicNormE_lim_le`
-
-English:
-theorem padicNormE_lim_le
-  given: {f : CauSeq Rat_[p] norm} {a : Real} (ha : 0 < a) (hf : forall i, ‖f i‖ <= a)
-  proof: by
-  obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ ha
-  calc
-    ‖f.lim‖ = ‖f.lim - f N + f N‖ := by simp
-    _ <= max ‖f.lim - f N‖ ‖f N‖ := nonarchimedean _ _
-    _ <= a := max_le (le_of_lt (hN _ le_rfl)) (hf _)
-
-中文:
-定理 padicNormE_lim_le
-  条件: {f : CauSeq Rat_[p] norm} {a : 实数} (ha : 0 < a) (hf : 对任意 i, ‖f i‖ <= a)
-  证明: by
-  obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ ha
-  calc
-    ‖f.lim‖ = ‖f.lim - f N + f N‖ := by simp
-    _ <= max ‖f.lim - f N‖ ‖f N‖ := nonarchimedean _ _
-    _ <= a := max_le (le_of_lt (hN _ le_rfl)) (hf _)
-
-Depends on / 依赖: CauSeq, CauSeq.equiv_lim, Setoid, Setoid.symm, equiv_lim, f.lim, le_of_lt, le_rfl, max_le, nonarchimedean
+/-
+**Padic.padicNormE_lim_le** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：padicNormE_lim_le {f : CauSeq Rat_[p] norm} {a : Real} (ha : 0 < a) (hf : 
+forall i, ‖f i‖ <= a) : ‖f.lim‖ <= a
+参数：ha : 0 < a；hf : forall i, ‖f i‖ <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `CauSeq.equiv_lim`：equiv_lim (s : CauSeq β abv) : s ≈ const abv (lim s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Padic.nonarchimedean`：nonarchimedean (q r : Rat_[p]) : ‖q + r‖ <= max ‖q
+‖ ‖r‖
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem padicNormE_lim_le {f : CauSeq Rat_[p] norm} {a : Real} (ha : 0 < a) (hf : forall i, ‖f i‖ <= a) :
-    ‖f.lim‖ <= a := by
+theorem padicNormE_lim_le {f : CauSeq ℚ_[p] norm} {a : ℝ} (ha : 0 < a) (hf : ∀ i, ‖f i‖ ≤ a) :
+    ‖f.lim‖ ≤ a := by
   obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ ha
   calc
     ‖f.lim‖ = ‖f.lim - f N + f N‖ := by simp
-    _ <= max ‖f.lim - f N‖ ‖f N‖ := nonarchimedean _ _
-    _ <= a := max_le (le_of_lt (hN _ le_rfl)) (hf _)
+    _ ≤ max ‖f.lim - f N‖ ‖f N‖ := nonarchimedean _ _
+    _ ≤ a := max_le (le_of_lt (hN _ le_rfl)) (hf _)
 
 open Filter Set
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSpace Rat_[p]
-  body: by
-  apply complete_of_cauchySeq_tendsto
-  intro u hu
-  let c : CauSeq Rat_[p] norm := ⟨u, Metric.cauchySeq_iff'.mp hu⟩
-  refine ⟨c.lim, fun s h => ?_⟩
-  rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
-  have := c.equiv_lim ε ε0
-  simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (hN n hn)
-
-中文:
-实例 :
-  签名: 完备空间 Rat_[p]
-  定义体: by
-  apply complete_of_cauchySeq_tendsto
-  intro u hu
-  let c : CauSeq Rat_[p] norm := ⟨u, Metric.cauchySeq_iff'.mp hu⟩
-  refine ⟨c.lim, fun s h => ?_⟩
-  rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
-  have := c.equiv_lim ε ε0
-  simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (hN n hn)
-
-Depends on / 依赖: CauSeq, Metric, Metric.cauchySeq_iff, Metric.mem_nhds_iff, Rat_, c.equiv_lim, c.lim, cauchySeq_iff, complete_of_cauchySeq_tendsto, equiv_lim, mem_atTop_sets, mem_map, mem_nhds_iff, this.imp
+/-
+**Padic.** 是 Mathlib 中的一个实例，位于命名空间 `Padic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CompleteSpace Rat_[p] := by
+instance : CompleteSpace ℚ_[p] := by
   apply complete_of_cauchySeq_tendsto
   intro u hu
-  let c : CauSeq Rat_[p] norm := ⟨u, Metric.cauchySeq_iff'.mp hu⟩
-  refine ⟨c.lim, fun s h => ?_⟩
+  let c : CauSeq ℚ_[p] norm := ⟨u, Metric.cauchySeq_iff'.mp hu⟩
+  refine ⟨c.lim, fun s h ↦ ?_⟩
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
   simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (hN n hn)
+  exact this.imp fun N hN n hn ↦ hε (hN n hn)
 
 /-! ### Valuation on `ℚ_[p]` -/
 
 
-/--
-Definition of `valuation` / `valuation` 的定义
+/-- `Padic.valuation` lifts the `p`-adic valuation on rationals to `ℚ_[p]`. -/
+/-
+**Padic.valuation** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：valuation : Rat_[p] -> Int
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
 
-English:
-definition valuation
-  signature: : Rat_[p] -> Int
-  body: Quotient.lift (@PadicSeq.valuation p _) fun f g h => by
-    by_cases hf : f ≈ 0
-    · have hg : g ≈ 0 := Setoid.trans (Setoid.symm h) hf
-      simp [hf, hg, PadicSeq.valuation]
-    · have hg : ¬g ≈ 0 := fun hg => hf (Setoid.trans h hg)
-      rw [PadicSeq.val_eq_iff_norm_eq hf hg]
-      exact PadicSeq.norm_equiv h
-
-@[simp]
-
-中文:
-定义 valuation
-  签名: : Rat_[p] -> 整数
-  定义体: Quotient.lift (@PadicSeq.valuation p _) fun f g h => by
-    by_cases hf : f ≈ 0
-    · have hg : g ≈ 0 := Setoid.trans (Setoid.symm h) hf
-      simp [hf, hg, PadicSeq.valuation]
-    · have hg : ¬g ≈ 0 := fun hg => hf (Setoid.trans h hg)
-      rw [PadicSeq.val_eq_iff_norm_eq hf hg]
-      exact PadicSeq.norm_equiv h
-
-@[simp]
-
-Depends on / 依赖: PadicSeq, PadicSeq.norm_equiv, PadicSeq.val_eq_iff_norm_eq, PadicSeq.valuation, Quotient, Quotient.lift, Setoid, Setoid.symm, Setoid.trans, norm_equiv, val_eq_iff_norm_eq, valuation
+--- 原说明 ---
+`Padic.valuation` lifts the `p`-adic valuation on rationals to `ℚ_[p]`.
 -/
-def valuation : Rat_[p] -> Int :=
-  Quotient.lift (@PadicSeq.valuation p _) fun f g h => by
+def valuation : ℚ_[p] → ℤ :=
+  Quotient.lift (@PadicSeq.valuation p _) fun f g h ↦ by
     by_cases hf : f ≈ 0
     · have hg : g ≈ 0 := Setoid.trans (Setoid.symm h) hf
       simp [hf, hg, PadicSeq.valuation]
-    · have hg : ¬g ≈ 0 := fun hg => hf (Setoid.trans h hg)
+    · have hg : ¬g ≈ 0 := fun hg ↦ hf (Setoid.trans h hg)
       rw [PadicSeq.val_eq_iff_norm_eq hf hg]
       exact PadicSeq.norm_equiv h
 
 @[simp]
-/--
-theorem `valuation_zero` / 定理 `valuation_zero`
-
-English:
-theorem valuation_zero
-  statement: valuation (0 : Rat_[p]) = 0
-  proof: dif_pos ((const_equiv p).2 rfl)
-
-中文:
-定理 valuation_zero
-  结论: valuation (0 : Rat_[p]) = 0
-  证明: dif_pos ((const_equiv p).2 rfl)
-
-Depends on / 依赖: const_equiv, dif_pos
+/-
+**Padic.valuation_zero** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：valuation_zero : valuation (0 : Rat_[p]) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Padic.const_equiv`：const_equiv {q r : Rat} : const (padicNorm p) q ≈ con
+st (padicNorm p) r ↔ q = r
 -/
-theorem valuation_zero : valuation (0 : Rat_[p]) = 0 :=
+theorem valuation_zero : valuation (0 : ℚ_[p]) = 0 :=
   dif_pos ((const_equiv p).2 rfl)
-
-/--
-theorem `norm_eq_zpow_neg_valuation` / 定理 `norm_eq_zpow_neg_valuation`
-
-English:
-theorem norm_eq_zpow_neg_valuation
-  given: {x : Rat_[p]}
-  statement: x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
-  proof: by
+/-
+**Padic.norm_eq_zpow_neg_valuation** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_zpow_neg_valuation {x : Rat_[p]} : x != 0 -> ‖x‖ = (p : Real) ^ (-
+x.valuation)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicSeq.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {f : Pad
+icSeq p} (hf : ¬f ≈ 0) : f.norm = (p : Rat) ^ (-f.valuation : Int)
+· 使用定理 `CauSeq.not_limZero_of_not_congr_zero`：not_limZero_of_not_congr_zero {f :
+ CauSeq _ abv} (hf : ¬f ≈ 0) : ¬LimZero f
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用引理 `Rat.cast_zpow`：cast_zpow (p : Rat) (n : Int) : ↑(p ^ n) = (p ^ n : α)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+-/
+theorem norm_eq_zpow_neg_valuation {x : ℚ_[p]} : x ≠ 0 → ‖x‖ = (p : ℝ) ^ (-x.valuation) := by
   induction x using Quotient.inductionOn with | _ f
   intro hf
-  change (PadicSeq.norm _ : Real) = (p : Real) ^ (-PadicSeq.valuation _)
+  change (PadicSeq.norm _ : ℝ) = (p : ℝ) ^ (-PadicSeq.valuation _)
   rw [PadicSeq.norm_eq_zpow_neg_valuation]
   · rw [Rat.cast_zpow, Rat.cast_natCast]
   · apply CauSeq.not_limZero_of_not_congr_zero
@@ -3815,358 +3333,336 @@ theorem norm_eq_zpow_neg_valuation
     simpa using hf
 
 @[simp]
-
-中文:
-定理 norm_eq_zpow_neg_valuation
-  条件: {x : Rat_[p]}
-  结论: x != 0 -> ‖x‖ = (p : 实数) ^ (-x.valuation)
-  证明: by
-  induction x using Quotient.inductionOn with | _ f
-  intro hf
-  change (PadicSeq.norm _ : Real) = (p : Real) ^ (-PadicSeq.valuation _)
-  rw [PadicSeq.norm_eq_zpow_neg_valuation]
-  · rw [Rat.cast_zpow, Rat.cast_natCast]
-  · apply CauSeq.not_limZero_of_not_congr_zero
-    contrapose hf
-    apply Quotient.sound
-    simpa using hf
-
-@[simp]
-
-Depends on / 依赖: CauSeq, CauSeq.not_limZero_of_not_congr_zero, PadicSeq, PadicSeq.norm, PadicSeq.norm_eq_zpow_neg_valuation, PadicSeq.valuation, Quotient, Quotient.inductionOn, Quotient.sound, Rat.cast_natCast, Rat.cast_zpow, cast_natCast, cast_zpow, contrapose, inductionOn, norm_eq_zpow_neg_valuation, not_limZero_of_not_congr_zero, valuation
+/-
+**Padic.valuation_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_ratCast (q : Rat) : valuation (q : Rat_[p]) = padicValRat p q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Padic.valuation_zero`：valuation_zero : valuation (0 : Rat_[p]) = 0
+· 使用定理 `padicValRat.zero`：∀ {p : ℕ}, padicValRat p 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_injective`：∀ {G : Type u_3} [inst : InvolutiveNeg G], Function.Injec
+tive Neg.neg
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用引理 `zpow_right_strictMono₀`：zpow_right_strictMono₀ (ha : 1 < a) : StrictMono
+ fun n : Int => a ^ n
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `Padic.eq_padicNorm`：eq_padicNorm (q : Rat) : ‖(q : Rat_[p])‖ = padicNorm
+ p q
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用引理 `Rat.cast_zpow`：cast_zpow (p : Rat) (n : Int) : ↑(p ^ n) = (p ^ n : α)
+· 使用定理 `Rat.cast_inj`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] {p q
+ : ℚ}, ↑p = ↑q ↔ p = q
+· 使用定理 `padicNorm.eq_zpow_of_nonzero`：∀ {p : ℕ} {q : ℚ}, q ≠ 0 → padicNorm p q =
+ ↑p ^ (-padicValRat p q)
 -/
-theorem norm_eq_zpow_neg_valuation {x : Rat_[p]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation) := by
-  induction x using Quotient.inductionOn with | _ f
-  intro hf
-  change (PadicSeq.norm _ : Real) = (p : Real) ^ (-PadicSeq.valuation _)
-  rw [PadicSeq.norm_eq_zpow_neg_valuation]
-  · rw [Rat.cast_zpow, Rat.cast_natCast]
-  · apply CauSeq.not_limZero_of_not_congr_zero
-    contrapose hf
-    apply Quotient.sound
-    simpa using hf
-
-@[simp]
-/--
-lemma `valuation_ratCast` / 引理 `valuation_ratCast`
-
-English:
-lemma valuation_ratCast
-  given: (q : Rat)
-  statement: valuation (q : Rat_[p]) = padicValRat p q
-  proof: by
+lemma valuation_ratCast (q : ℚ) : valuation (q : ℚ_[p]) = padicValRat p q := by
   rcases eq_or_ne q 0 with rfl | hq
   · simp only [Rat.cast_zero, valuation_zero, padicValRat.zero]
   refine neg_injective ((zpow_right_strictMono₀ (mod_cast hp.out.one_lt)).injective
- (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
-  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Rat.cast_zpow]; rw [Rat.cast_inj]
+    <| (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
+  rw [eq_padicNorm, ← Rat.cast_natCast, ← Rat.cast_zpow, Rat.cast_inj]
   exact padicNorm.eq_zpow_of_nonzero hq
 
 @[simp]
-
-中文:
-引理 valuation_ratCast
-  条件: (q : 有理数)
-  结论: valuation (q : Rat_[p]) = padicValRat p q
-  证明: by
-  rcases eq_or_ne q 0 with rfl | hq
-  · simp only [Rat.cast_zero, valuation_zero, padicValRat.zero]
-  refine neg_injective ((zpow_right_strictMono₀ (mod_cast hp.out.one_lt)).injective
- (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
-  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Rat.cast_zpow]; rw [Rat.cast_inj]
-  exact padicNorm.eq_zpow_of_nonzero hq
-
-@[simp]
-
-Depends on / 依赖: Rat.cast_inj, Rat.cast_natCast, Rat.cast_zero, Rat.cast_zpow, cast_inj, cast_natCast, cast_zero, cast_zpow, eq_or_ne, eq_padicNorm, eq_zpow_of_nonzero, hasSum_one_poissonMeasure, hp.out.one_lt, injective, isProbabilityMeasure_sum_dirac, mod_cast, neg_injective, norm_eq_zpow_neg_valuation, one_lt, padicNorm
+/-
+**Padic.valuation_intCast** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_intCast (n : Int) : valuation (n : Rat_[p]) = padicValInt p n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用引理 `Padic.valuation_ratCast`：valuation_ratCast (q : Rat) : valuation (q : Ra
+t_[p]) = padicValRat p q
+· 使用定理 `padicValRat.of_int`：of_int {z : Int} : padicValRat p z = padicValInt p z
 -/
-lemma valuation_ratCast (q : Rat) : valuation (q : Rat_[p]) = padicValRat p q := by
-  rcases eq_or_ne q 0 with rfl | hq
-  · simp only [Rat.cast_zero, valuation_zero, padicValRat.zero]
-  refine neg_injective ((zpow_right_strictMono₀ (mod_cast hp.out.one_lt)).injective
- (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
-  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Rat.cast_zpow]; rw [Rat.cast_inj]
-  exact padicNorm.eq_zpow_of_nonzero hq
+lemma valuation_intCast (n : ℤ) : valuation (n : ℚ_[p]) = padicValInt p n := by
+  rw [← Rat.cast_intCast, valuation_ratCast, padicValRat.of_int]
 
 @[simp]
-/--
-lemma `valuation_intCast` / 引理 `valuation_intCast`
-
-English:
-lemma valuation_intCast
-  given: (n : Int)
-  statement: valuation (n : Rat_[p]) = padicValInt p n
-  proof: by
-  rw [← Rat.cast_intCast]; rw [valuation_ratCast]; rw [padicValRat.of_int]
-
-@[simp]
-
-中文:
-引理 valuation_intCast
-  条件: (n : 整数)
-  结论: valuation (n : Rat_[p]) = padicVal整数 p n
-  证明: by
-  rw [← Rat.cast_intCast]; rw [valuation_ratCast]; rw [padicValRat.of_int]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.isProbabilityMeasure_map, Rat.cast_intCast, cast_intCast, isProbabilityMeasure_map, of_discrete, of_int, padicValRat, padicValRat.of_int, valuation_ratCast
+/-
+**Padic.valuation_natCast** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_natCast (n : Nat) : valuation (n : Rat_[p]) = padicValNat p n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用引理 `Padic.valuation_ratCast`：valuation_ratCast (q : Rat) : valuation (q : Ra
+t_[p]) = padicValRat p q
+· 使用定理 `padicValRat.of_nat`：of_nat {n : Nat} : padicValRat p n = padicValNat p n
 -/
-lemma valuation_intCast (n : Int) : valuation (n : Rat_[p]) = padicValInt p n := by
-  rw [← Rat.cast_intCast]; rw [valuation_ratCast]; rw [padicValRat.of_int]
+lemma valuation_natCast (n : ℕ) : valuation (n : ℚ_[p]) = padicValNat p n := by
+  rw [← Rat.cast_natCast, valuation_ratCast, padicValRat.of_nat]
 
 @[simp]
-/--
-lemma `valuation_natCast` / 引理 `valuation_natCast`
-
-English:
-lemma valuation_natCast
-  given: (n : Nat)
-  statement: valuation (n : Rat_[p]) = padicValNat p n
-  proof: by
-  rw [← Rat.cast_natCast]; rw [valuation_ratCast]; rw [padicValRat.of_nat]
-
-@[simp]
-
-中文:
-引理 valuation_natCast
-  条件: (n : 自然数)
-  结论: valuation (n : Rat_[p]) = padicVal自然数 p n
-  证明: by
-  rw [← Rat.cast_natCast]; rw [valuation_ratCast]; rw [padicValRat.of_nat]
-
-@[simp]
-
-Depends on / 依赖: Rat.cast_natCast, cast_natCast, of_nat, padicValRat, padicValRat.of_nat, valuation_ratCast
+/-
+**Padic.valuation_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_ofNat (n : Nat) [n.AtLeastTwo] : valuation (ofNat(n) : Rat_[p]) 
+= padicValNat p n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Padic.valuation_natCast`：valuation_natCast (n : Nat) : valuation (n : Ra
+t_[p]) = padicValNat p n
 -/
-lemma valuation_natCast (n : Nat) : valuation (n : Rat_[p]) = padicValNat p n := by
-  rw [← Rat.cast_natCast]; rw [valuation_ratCast]; rw [padicValRat.of_nat]
-
-@[simp]
-/--
-lemma `valuation_ofNat` / 引理 `valuation_ofNat`
-
-English:
-lemma valuation_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: valuation_natCast n
-
-@[simp]
-
-中文:
-引理 valuation_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: valuation_natCast n
-
-@[simp]
-
-Depends on / 依赖: valuation_natCast
--/
-lemma valuation_ofNat (n : Nat) [n.AtLeastTwo] :
-    valuation (ofNat(n) : Rat_[p]) = padicValNat p n :=
+lemma valuation_ofNat (n : ℕ) [n.AtLeastTwo] :
+    valuation (ofNat(n) : ℚ_[p]) = padicValNat p n :=
   valuation_natCast n
 
 @[simp]
-/--
-lemma `valuation_one` / 引理 `valuation_one`
-
-English:
-lemma valuation_one
-  statement: valuation (1 : Rat_[p]) = 0
-  proof: by
-  rw [← Nat.cast_one]; rw [valuation_natCast]; rw [padicValNat_one_right]; rw [cast_zero]
-
-中文:
-引理 valuation_one
-  结论: valuation (1 : Rat_[p]) = 0
-  证明: by
-  rw [← Nat.cast_one]; rw [valuation_natCast]; rw [padicValNat_one_right]; rw [cast_zero]
-
-Depends on / 依赖: Nat.cast_one, cast_one, cast_zero, padicValNat_one_right, valuation_natCast
+/-
+**Padic.valuation_one** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_one : valuation (1 : Rat_[p]) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用引理 `Padic.valuation_natCast`：valuation_natCast (n : Nat) : valuation (n : Ra
+t_[p]) = padicValNat p n
+· 使用定理 `padicValNat_one_right`：∀ (p : ℕ), padicValNat p 1 = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-lemma valuation_one : valuation (1 : Rat_[p]) = 0 := by
-  rw [← Nat.cast_one]; rw [valuation_natCast]; rw [padicValNat_one_right]; rw [cast_zero]
+lemma valuation_one : valuation (1 : ℚ_[p]) = 0 := by
+  rw [← Nat.cast_one, valuation_natCast, padicValNat_one_right, cast_zero]
 
 -- not @[simp], since simp can prove it
-/--
-lemma `valuation_p` / 引理 `valuation_p`
-
-English:
-lemma valuation_p
-  statement: valuation (p : Rat_[p]) = 1
-  proof: by
-  rw [valuation_natCast]; rw [padicValNat_self]; rw [cast_one]
-
-中文:
-引理 valuation_p
-  结论: valuation (p : Rat_[p]) = 1
-  证明: by
-  rw [valuation_natCast]; rw [padicValNat_self]; rw [cast_one]
-
-Depends on / 依赖: cast_one, padicValNat_self, valuation_natCast
+/-
+**Padic.valuation_p** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_p : valuation (p : Rat_[p]) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Padic.valuation_natCast`：valuation_natCast (n : Nat) : valuation (n : Ra
+t_[p]) = padicValNat p n
+· 使用定理 `padicValNat_self`：padicValNat_self [Fact p.Prime] : padicValNat p p = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-lemma valuation_p : valuation (p : Rat_[p]) = 1 := by
-  rw [valuation_natCast]; rw [padicValNat_self]; rw [cast_one]
-
-/--
-theorem `le_valuation_add` / 定理 `le_valuation_add`
-
-English:
-theorem le_valuation_add
-  given: {x y : Rat_[p]} (hxy : x + y != 0)
-  proof: by
+lemma valuation_p : valuation (p : ℚ_[p]) = 1 := by
+  rw [valuation_natCast, padicValNat_self, cast_one]
+/-
+**Padic.le_valuation_add** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：le_valuation_add {x y : Rat_[p]} (hxy : x + y != 0) : min x.valuation y.va
+luation <= (x + y).valuation
+参数：hxy : x + y != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `min_le_right`：min_le_right (a b : α) : min a b <= b
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
+· 使用定理 `Padic.nonarchimedean`：nonarchimedean (q r : Rat_[p]) : ‖q + r‖ <= max ‖q
+‖ ‖r‖
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `zpow_le_zpow_iff_right₀`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [in
+st_1 : PartialOrder G₀] [PosMulReflectLT G₀] {a : G₀} [ZeroLEOneClass G₀]   {m n
+ : ℤ}, 1 < a …
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+-/
+theorem le_valuation_add {x y : ℚ_[p]} (hxy : x + y ≠ 0) :
+    min x.valuation y.valuation ≤ (x + y).valuation := by
   by_cases hx : x = 0
   · simpa only [hx, zero_add] using min_le_right _ _
   by_cases hy : y = 0
   · simpa only [hy, add_zero] using min_le_left _ _
-  have : ‖x + y‖ <= max ‖x‖ ‖y‖ := nonarchimedean x y
+  have : ‖x + y‖ ≤ max ‖x‖ ‖y‖ := nonarchimedean x y
   simpa only [norm_eq_zpow_neg_valuation hxy, norm_eq_zpow_neg_valuation hx,
     norm_eq_zpow_neg_valuation hy, le_max_iff,
-    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : Real)), neg_le_neg_iff, ← min_le_iff]
+    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : ℝ)), neg_le_neg_iff, ← min_le_iff]
 
 @[simp]
-
-中文:
-定理 le_valuation_add
-  条件: {x y : Rat_[p]} (hxy : x + y != 0)
-  证明: by
-  by_cases hx : x = 0
-  · simpa only [hx, zero_add] using min_le_right _ _
-  by_cases hy : y = 0
-  · simpa only [hy, add_zero] using min_le_left _ _
-  have : ‖x + y‖ <= max ‖x‖ ‖y‖ := nonarchimedean x y
-  simpa only [norm_eq_zpow_neg_valuation hxy, norm_eq_zpow_neg_valuation hx,
-    norm_eq_zpow_neg_valuation hy, le_max_iff,
-    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : Real)), neg_le_neg_iff, ← min_le_iff]
-
-@[simp]
-
-Depends on / 依赖: add_zero, hp.out.one_lt, le_max_iff, min_le_iff, min_le_left, min_le_right, mod_cast, neg_le_neg_iff, nonarchimedean, norm_eq_zpow_neg_valuation, one_lt, zero_add
+/-
+**Padic.valuation_mul** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_mul {x y : Rat_[p]} (hx : x != 0) (hy : y != 0) : (x * y).valuat
+ion = x.valuation + y.valuation
+参数：hx : x != 0；hy : y != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `neg_inj`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, -a = -b ↔ 
+a = b
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `zpow_right_inj₀`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : L
+inearOrder G₀] {a : G₀} {m n : ℤ} [PosMulStrictMono G₀]   [ZeroLEOneClass G₀], 0
+ < a …
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `zpow_add₀`：zpow_add₀ (ha : a != 0) (m n : Int) : a ^ (m + n) = a ^ m * a
+ ^ n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
 -/
-theorem le_valuation_add {x y : Rat_[p]} (hxy : x + y != 0) :
-    min x.valuation y.valuation <= (x + y).valuation := by
-  by_cases hx : x = 0
-  · simpa only [hx, zero_add] using min_le_right _ _
-  by_cases hy : y = 0
-  · simpa only [hy, add_zero] using min_le_left _ _
-  have : ‖x + y‖ <= max ‖x‖ ‖y‖ := nonarchimedean x y
-  simpa only [norm_eq_zpow_neg_valuation hxy, norm_eq_zpow_neg_valuation hx,
-    norm_eq_zpow_neg_valuation hy, le_max_iff,
-    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : Real)), neg_le_neg_iff, ← min_le_iff]
-
-@[simp]
-/--
-lemma `valuation_mul` / 引理 `valuation_mul`
-
-English:
-lemma valuation_mul
-  given: {x y : Rat_[p]} (hx : x != 0) (hy : y != 0)
-  proof: by
-  have h_norm : ‖x * y‖ = ‖x‖ * ‖y‖ := norm_mul x y
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation hy,
-    norm_eq_zpow_neg_valuation (mul_ne_zero hx hy), ← zpow_add₀ hp_pos.ne',
-    zpow_right_inj₀ hp_pos hp_ne_one, ← neg_add, neg_inj] at h_norm
-
-@[simp]
-
-中文:
-引理 valuation_mul
-  条件: {x y : Rat_[p]} (hx : x != 0) (hy : y != 0)
-  证明: by
-  have h_norm : ‖x * y‖ = ‖x‖ * ‖y‖ := norm_mul x y
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation hy,
-    norm_eq_zpow_neg_valuation (mul_ne_zero hx hy), ← zpow_add₀ hp_pos.ne',
-    zpow_right_inj₀ hp_pos hp_ne_one, ← neg_add, neg_inj] at h_norm
-
-@[simp]
-
-Depends on / 依赖: Fact.out, NeZero, NeZero.pos, h_norm, hp_ne_one, hp_pos, hp_pos.ne, mod_cast, mul_ne_zero, ne_one, neg_add, neg_inj, norm_eq_zpow_neg_valuation, norm_mul, p.Prime
--/
-lemma valuation_mul {x y : Rat_[p]} (hx : x != 0) (hy : y != 0) :
+lemma valuation_mul {x y : ℚ_[p]} (hx : x ≠ 0) (hy : y ≠ 0) :
     (x * y).valuation = x.valuation + y.valuation := by
   have h_norm : ‖x * y‖ = ‖x‖ * ‖y‖ := norm_mul x y
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
+  have hp_ne_one : (p : ℝ) ≠ 1 := mod_cast (Fact.out : p.Prime).ne_one
+  have hp_pos : (0 : ℝ) < p := mod_cast NeZero.pos _
   rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation hy,
     norm_eq_zpow_neg_valuation (mul_ne_zero hx hy), ← zpow_add₀ hp_pos.ne',
     zpow_right_inj₀ hp_pos hp_ne_one, ← neg_add, neg_inj] at h_norm
 
 @[simp]
-/--
-lemma `valuation_inv` / 引理 `valuation_inv`
-
-English:
-lemma valuation_inv
-  given: (x : Rat_[p])
-  statement: x⁻¹.valuation = -x.valuation
-  proof: by
-  obtain rfl | hx := eq_or_ne x 0
-  · simp
-  have h_norm : ‖x⁻¹‖ = ‖x‖⁻¹ := norm_inv x
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero hx,
-    ← zpow_neg, zpow_right_inj₀ hp_pos hp_ne_one, neg_inj] at h_norm
-
-@[simp]
-
-中文:
-引理 valuation_inv
-  条件: (x : Rat_[p])
-  结论: x⁻¹.valuation = -x.valuation
-  证明: by
-  obtain rfl | hx := eq_or_ne x 0
-  · simp
-  have h_norm : ‖x⁻¹‖ = ‖x‖⁻¹ := norm_inv x
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero hx,
-    ← zpow_neg, zpow_right_inj₀ hp_pos hp_ne_one, neg_inj] at h_norm
-
-@[simp]
-
-Depends on / 依赖: Fact.out, NeZero, NeZero.pos, eq_or_ne, h_norm, hp_ne_one, hp_pos, inv_ne_zero, mod_cast, ne_one, neg_inj, norm_eq_zpow_neg_valuation, norm_inv, p.Prime, zpow_neg
+/-
+**Padic.valuation_inv** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_inv (x : Rat_[p]) : x⁻¹.valuation = -x.valuation
+参数：x : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `Padic.valuation_zero`：valuation_zero : valuation (0 : Rat_[p]) = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_inv`：norm_inv (a : α) : ‖a⁻¹‖ = ‖a‖⁻¹
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `neg_inj`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, -a = -b ↔ 
+a = b
+· 使用定理 `zpow_right_inj₀`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : L
+inearOrder G₀] {a : G₀} {m n : ℤ} [PosMulStrictMono G₀]   [ZeroLEOneClass G₀], 0
+ < a …
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
 -/
-lemma valuation_inv (x : Rat_[p]) : x⁻¹.valuation = -x.valuation := by
+lemma valuation_inv (x : ℚ_[p]) : x⁻¹.valuation = -x.valuation := by
   obtain rfl | hx := eq_or_ne x 0
   · simp
   have h_norm : ‖x⁻¹‖ = ‖x‖⁻¹ := norm_inv x
-  have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
-  have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
+  have hp_ne_one : (p : ℝ) ≠ 1 := mod_cast (Fact.out : p.Prime).ne_one
+  have hp_pos : (0 : ℝ) < p := mod_cast NeZero.pos _
   rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero hx,
     ← zpow_neg, zpow_right_inj₀ hp_pos hp_ne_one, neg_inj] at h_norm
 
 @[simp]
-/--
-lemma `valuation_pow` / 引理 `valuation_pow`
-
-English:
-lemma valuation_pow
-  given: (x : Rat_[p])
-  statement: forall n : Nat, (x ^ n).valuation = n * x.valuation
-  proof: eq_or_ne x 0
-    · simp
-    · simp [pow_succ, hx, valuation_mul, valuation_pow, _root_.add_one_mul]
-
-@[simp]
-
-中文:
-引理 valuation_pow
-  条件: (x : Rat_[p])
-  结论: 对任意 n : 自然数, (x ^ n).valuation = n * x.valuation
-  证明: eq_or_ne x 0
-    · simp
-    · simp [pow_succ, hx, valuation_mul, valuation_pow, _root_.add_one_mul]
-
-@[simp]
-
-Depends on / 依赖: eq_or_ne
+/-
+**Padic.valuation_pow** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：valuation_pow (x : Rat_[p]) : forall n : Nat, (x ^ n).valuation = n * x.va
+luation | 0 => by simp | n + 1 => by obtain rfl | hx
+参数：x : Rat_[p]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma valuation_pow (x : Rat_[p]) : forall n : Nat, (x ^ n).valuation = n * x.valuation
+lemma valuation_pow (x : ℚ_[p]) : ∀ n : ℕ, (x ^ n).valuation = n * x.valuation
   | 0 => by simp
   | n + 1 => by
     obtain rfl | hx := eq_or_ne x 0
@@ -4174,99 +3670,124 @@ lemma valuation_pow (x : Rat_[p]) : forall n : Nat, (x ^ n).valuation = n * x.va
     · simp [pow_succ, hx, valuation_mul, valuation_pow, _root_.add_one_mul]
 
 @[simp]
-/--
-lemma `valuation_zpow` / 引理 `valuation_zpow`
-
-English:
-lemma valuation_zpow
-  given: (x : Rat_[p])
-  statement: forall n : Int, (x ^ n).valuation = n * x.valuation
-
-中文:
-引理 valuation_zpow
-  条件: (x : Rat_[p])
-  结论: 对任意 n : 整数, (x ^ n).valuation = n * x.valuation
+/-
+**Padic.valuation_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[p]) (n : ℤ), (x ^ n).valuation
+ = n * x.valuation
+参数：Nat.Prime p；x : ℚ_[p]；n : ℤ；x ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用引理 `Padic.valuation_pow`：valuation_pow (x : Rat_[p]) : forall n : Nat, (x ^ 
+n).valuation = n * x.valuation | 0 => by simp | n + 1 => by obtain rfl | hx
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用引理 `Padic.valuation_inv`：valuation_inv (x : Rat_[p]) : x⁻¹.valuation = -x.va
+luation
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `Int.instIsCancelMulZero`：IsCancelMulZero ℤ
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
-lemma valuation_zpow (x : Rat_[p]) : forall n : Int, (x ^ n).valuation = n * x.valuation
-  | (n : Nat) => by simp
+lemma valuation_zpow (x : ℚ_[p]) : ∀ n : ℤ, (x ^ n).valuation = n * x.valuation
+  | (n : ℕ) => by simp
   | .negSucc n => by simp [← neg_mul]; simp [Int.negSucc_eq]
 
 open scoped Classical in
-/--
-Definition of `addValuationDef` / `addValuationDef` 的定义
+/-- The additive `p`-adic valuation on `ℚ_[p]`, with values in `WithTop ℤ`. -/
+/-
+**Padic.addValuationDef** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：addValuationDef : Rat_[p] -> WithTop Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addValuationDef
-  signature: : Rat_[p] -> WithTop Int
-  body: fun x => if x = 0 then ⊤ else x.valuation
-
-@[simp]
-
-中文:
-定义 addValuationDef
-  签名: : Rat_[p] -> WithTop 整数
-  定义体: fun x => if x = 0 then ⊤ else x.valuation
-
-@[simp]
-
-Depends on / 依赖: valuation, x.valuation
+--- 原说明 ---
+The additive `p`-adic valuation on `ℚ_[p]`, with values in `WithTop ℤ`.
 -/
-def addValuationDef : Rat_[p] -> WithTop Int :=
-  fun x => if x = 0 then ⊤ else x.valuation
+def addValuationDef : ℚ_[p] → WithTop ℤ :=
+  fun x ↦ if x = 0 then ⊤ else x.valuation
 
 @[simp]
-/--
-theorem `AddValuation.map_zero` / 定理 `AddValuation.map_zero`
-
-English:
-theorem AddValuation.map_zero
-  statement: addValuationDef (0 : Rat_[p]) = ⊤
-  proof: by
-  rw [addValuationDef]; rw [if_pos rfl]
-
-@[simp]
-
-中文:
-定理 AddValuation.map_zero
-  结论: addValuationDef (0 : Rat_[p]) = ⊤
-  证明: by
-  rw [addValuationDef]; rw [if_pos rfl]
-
-@[simp]
-
-Depends on / 依赖: addValuationDef, if_pos
+/-
+**Padic.AddValuation.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Padic.AddValuation`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], Padic.addValuationDef 0 = ⊤
+参数：Nat.Prime p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.addValuationDef.eq_1`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[
+p]), x.addValuationDef = if x = 0 then ⊤ else ↑x.valuation
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem AddValuation.map_zero : addValuationDef (0 : Rat_[p]) = ⊤ := by
-  rw [addValuationDef]; rw [if_pos rfl]
+theorem AddValuation.map_zero : addValuationDef (0 : ℚ_[p]) = ⊤ := by
+  rw [addValuationDef, if_pos rfl]
 
 @[simp]
-/--
-theorem `AddValuation.map_one` / 定理 `AddValuation.map_one`
-
-English:
-theorem AddValuation.map_one
-  statement: addValuationDef (1 : Rat_[p]) = 0
-  proof: by
-  rw [addValuationDef]; rw [if_neg one_ne_zero]; rw [valuation_one]; rw [WithTop.coe_zero]
-
-中文:
-定理 AddValuation.map_one
-  结论: addValuationDef (1 : Rat_[p]) = 0
-  证明: by
-  rw [addValuationDef]; rw [if_neg one_ne_zero]; rw [valuation_one]; rw [WithTop.coe_zero]
-
-Depends on / 依赖: WithTop, WithTop.coe_zero, addValuationDef, coe_zero, if_neg, one_ne_zero, valuation_one
+/-
+**Padic.AddValuation.map_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic.AddValuation`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], Padic.addValuationDef 1 = 0
+参数：Nat.Prime p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.addValuationDef.eq_1`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[
+p]), x.addValuationDef = if x = 0 then ⊤ else ↑x.valuation
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用引理 `Padic.valuation_one`：valuation_one : valuation (1 : Rat_[p]) = 0
+· 使用定理 `WithTop.coe_zero`：∀ {α : Type u} [inst : Zero α], ↑0 = 0
 -/
-theorem AddValuation.map_one : addValuationDef (1 : Rat_[p]) = 0 := by
-  rw [addValuationDef]; rw [if_neg one_ne_zero]; rw [valuation_one]; rw [WithTop.coe_zero]
-
-/--
-theorem `AddValuation.map_mul` / 定理 `AddValuation.map_mul`
-
-English:
-theorem AddValuation.map_mul
-  given: (x y : Rat_[p])
-  proof: by
+theorem AddValuation.map_one : addValuationDef (1 : ℚ_[p]) = 0 := by
+  rw [addValuationDef, if_neg one_ne_zero, valuation_one, WithTop.coe_zero]
+/-
+**Padic.AddValuation.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `Padic.AddValuation`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x y : ℚ_[p]), (x * y).addValuationDef
+ = x.addValuationDef + y.addValuationDef
+参数：Nat.Prime p；x y : ℚ_[p]；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `WithTop.top_add`：∀ {α : Type u} [inst : Add α] (x : WithTop α), ⊤ + x = 
+⊤
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `WithTop.add_top`：∀ {α : Type u} [inst : Add α] (x : WithTop α), x + ⊤ = 
+⊤
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithTop.coe_add`：∀ {α : Type u} [inst : Add α] (a b : α), ↑(a + b) = ↑a 
++ ↑b
+· 使用定理 `WithTop.coe_eq_coe`：∀ {α : Type u_1} {a b : α}, ↑a = ↑b ↔ a = b
+· 使用引理 `Padic.valuation_mul`：valuation_mul {x y : Rat_[p]} (hx : x != 0) (hy : y
+ != 0) : (x * y).valuation = x.valuation + y.valuation
+-/
+theorem AddValuation.map_mul (x y : ℚ_[p]) :
+    addValuationDef (x * y : ℚ_[p]) = addValuationDef x + addValuationDef y := by
   simp only [addValuationDef]
   by_cases hx : x = 0
   · rw [hx, if_pos rfl, zero_mul, if_pos rfl, WithTop.top_add]
@@ -4274,72 +3795,34 @@ theorem AddValuation.map_mul
     · rw [hy, if_pos rfl, mul_zero, if_pos rfl, WithTop.add_top]
     · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq_coe,
         valuation_mul hx hy]
-
-中文:
-定理 AddValuation.map_mul
-  条件: (x y : Rat_[p])
-  证明: by
-  simp only [addValuationDef]
-  by_cases hx : x = 0
-  · rw [hx, if_pos rfl, zero_mul, if_pos rfl, WithTop.top_add]
-  · by_cases hy : y = 0
-    · rw [hy, if_pos rfl, mul_zero, if_pos rfl, WithTop.add_top]
-    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq_coe,
-        valuation_mul hx hy]
-
-Depends on / 依赖: WithTop, WithTop.add_top, WithTop.coe_add, WithTop.coe_eq_coe, WithTop.top_add, addValuationDef, add_top, coe_add, coe_eq_coe, if_neg, if_pos, mul_ne_zero, mul_zero, top_add, valuation_mul, zero_mul
+/-
+**Padic.AddValuation.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Padic.AddValuation`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x y : ℚ_[p]), min x.addValuationDef y
+.addValuationDef ≤ (x + y).addValuationDef
+参数：Nat.Prime p；x y : ℚ_[p]；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用引理 `min_eq_right`：min_eq_right (h : b <= a) : min a b = b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithTop.coe_min`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), ↑(mi
+n a b) = min ↑a ↑b
+· 使用定理 `WithTop.coe_le_coe`：∀ {α : Type u_1} {a b : α} [inst : LE α], ↑b ≤ ↑a ↔ 
+b ≤ a
+· 使用定理 `Padic.le_valuation_add`：le_valuation_add {x y : Rat_[p]} (hxy : x + y !=
+ 0) : min x.valuation y.valuation <= (x + y).valuation
 -/
-theorem AddValuation.map_mul (x y : Rat_[p]) :
-    addValuationDef (x * y : Rat_[p]) = addValuationDef x + addValuationDef y := by
-  simp only [addValuationDef]
-  by_cases hx : x = 0
-  · rw [hx, if_pos rfl, zero_mul, if_pos rfl, WithTop.top_add]
-  · by_cases hy : y = 0
-    · rw [hy, if_pos rfl, mul_zero, if_pos rfl, WithTop.add_top]
-    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq_coe,
-        valuation_mul hx hy]
-
-/--
-theorem `AddValuation.map_add` / 定理 `AddValuation.map_add`
-
-English:
-theorem AddValuation.map_add
-  given: (x y : Rat_[p])
-  proof: by
-  simp only [addValuationDef]
-  by_cases hxy : x + y = 0
-  · rw [hxy, if_pos rfl]
-    exact le_top
-  · by_cases hx : x = 0
-    · rw [hx, if_pos rfl, min_eq_right, zero_add]
-      exact le_top
-    · by_cases hy : y = 0
-      · rw [hy, if_pos rfl, min_eq_left, add_zero]
-        exact le_top
-      · rw [if_neg hx, if_neg hy, if_neg hxy, ← WithTop.coe_min, WithTop.coe_le_coe]
-        exact le_valuation_add hxy
-
-中文:
-定理 AddValuation.map_add
-  条件: (x y : Rat_[p])
-  证明: by
-  simp only [addValuationDef]
-  by_cases hxy : x + y = 0
-  · rw [hxy, if_pos rfl]
-    exact le_top
-  · by_cases hx : x = 0
-    · rw [hx, if_pos rfl, min_eq_right, zero_add]
-      exact le_top
-    · by_cases hy : y = 0
-      · rw [hy, if_pos rfl, min_eq_left, add_zero]
-        exact le_top
-      · rw [if_neg hx, if_neg hy, if_neg hxy, ← WithTop.coe_min, WithTop.coe_le_coe]
-        exact le_valuation_add hxy
-
-Depends on / 依赖: WithTop, WithTop.coe_le_coe, WithTop.coe_min, addValuationDef, add_zero, coe_le_coe, coe_min, if_neg, if_pos, le_top, le_valuation_add, min_eq_left, min_eq_right, zero_add
--/
-theorem AddValuation.map_add (x y : Rat_[p]) :
-    min (addValuationDef x) (addValuationDef y) <= addValuationDef (x + y : Rat_[p]) := by
+theorem AddValuation.map_add (x y : ℚ_[p]) :
+    min (addValuationDef x) (addValuationDef y) ≤ addValuationDef (x + y : ℚ_[p]) := by
   simp only [addValuationDef]
   by_cases hxy : x + y = 0
   · rw [hxy, if_pos rfl]
@@ -4358,36 +3841,16 @@ open WithZero
 open scoped Classical in
 /-- The `p`-adic valuation on `ℚ_[p]`, as a `Valuation`, bundled `Padic.valuation`. -/
 @[simps]
-/--
-Definition of `mulValuation` / `mulValuation` 的定义
+/-
+**Padic.mulValuation** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：mulValuation : Valuation Rat_[p] Intᵐ⁰ where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulValuation
-  signature: : Valuation Rat_[p] Intᵐ⁰ where
-  body: if x = 0 then 0 else exp (-x.valuation)
-  map_zero' := by simp
-  map_one' := by simp
-  map_mul' _ _ := by split_ifs <;> simp_all [add_comm]
-  map_add_le_max' _ _ := by
-    split_ifs
-    any_goals simp_all [inv_le_inv₀]
-    simpa using le_valuation_add ‹_›
-
-中文:
-定义 mulValuation
-  签名: : 赋值 Rat_[p] 整数ᵐ⁰ where
-  定义体: if x = 0 then 0 else exp (-x.valuation)
-  map_zero' := by simp
-  map_one' := by simp
-  map_mul' _ _ := by split_ifs <;> simp_all [add_comm]
-  map_add_le_max' _ _ := by
-    split_ifs
-    any_goals simp_all [inv_le_inv₀]
-    simpa using le_valuation_add ‹_›
-
-Depends on / 依赖: valuation, x.valuation
+--- 原说明 ---
+The `p`-adic valuation on `ℚ_[p]`, as a `Valuation`, bundled `Padic.valuation`.
 -/
-noncomputable def mulValuation : Valuation Rat_[p] Intᵐ⁰ where
+noncomputable def mulValuation : Valuation ℚ_[p] ℤᵐ⁰ where
   toFun x := if x = 0 then 0 else exp (-x.valuation)
   map_zero' := by simp
   map_one' := by simp
@@ -4396,214 +3859,289 @@ noncomputable def mulValuation : Valuation Rat_[p] Intᵐ⁰ where
     split_ifs
     any_goals simp_all [inv_le_inv₀]
     simpa using le_valuation_add ‹_›
-
-/--
-lemma `comap_mulValuation_eq_padicValuation` / 引理 `comap_mulValuation_eq_padicValuation`
-
-English:
-lemma comap_mulValuation_eq_padicValuation
-  proof: by
-  ext
-  simp [Rat.padicValuation]
-
-中文:
-引理 comap_mulValuation_eq_padicValuation
-  证明: by
-  ext
-  simp [Rat.padicValuation]
-
-Depends on / 依赖: Rat.castHom, Rat.padicValuation, castHom, padicValuation
+/-
+**Padic.comap_mulValuation_eq_padicValuation** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：comap_mulValuation_eq_padicValuation : (mulValuation (p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Valuation.ext`：ext {v₁ v₂ : Valuation R Γ₀} (h : forall r, v₁ r = v₂ r) 
+: v₁ = v₂
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_ratCast`：∀ {F : Type u_1} {α : Type u_3} [inst : DivisionRing α] [ins
+t_1 : FunLike F ℚ α] [RingHomClass F ℚ α] (f : F) (q : ℚ),   f q = ↑q
+· 使用定理 `Padic.mulValuation_toFun`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[p]
+), Padic.mulValuation x = if x = 0 then 0 else WithZero.exp (-x.valuation)
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用引理 `Padic.valuation_ratCast`：valuation_ratCast (q : Rat) : valuation (q : Ra
+t_[p]) = padicValRat p q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comap_mulValuation_eq_padicValuation :
     (mulValuation (p := p)).comap (Rat.castHom _) = Rat.padicValuation p := by
   ext
   simp [Rat.padicValuation]
-
-/--
-lemma `comap_mulValuation_eq_int_padicValuation` / 引理 `comap_mulValuation_eq_int_padicValuation`
-
-English:
-lemma comap_mulValuation_eq_int_padicValuation
-  proof: by
-  ext
-  simp [← Rat.padicValuation_cast, ← comap_mulValuation_eq_padicValuation]
-
-中文:
-引理 comap_mulValuation_eq_int_padicValuation
-  证明: by
-  ext
-  simp [← Rat.padicValuation_cast, ← comap_mulValuation_eq_padicValuation]
-
-Depends on / 依赖: Int.castRingHom, Int.padicValuation, Rat.padicValuation_cast, castRingHom, comap_mulValuation_eq_padicValuation, padicValuation, padicValuation_cast
+/-
+**Padic.comap_mulValuation_eq_int_padicValuation** 是 Mathlib 中的一个引理，位于命名空间 `Padi
+c`。
+形式化陈述：comap_mulValuation_eq_int_padicValuation : (mulValuation (p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Valuation.ext`：ext {v₁ v₂ : Valuation R Γ₀} (h : forall r, v₁ r = v₂ r) 
+: v₁ = v₂
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Padic.mulValuation_toFun`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[p]
+), Padic.mulValuation x = if x = 0 then 0 else WithZero.exp (-x.valuation)
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用引理 `Padic.valuation_intCast`：valuation_intCast (n : Int) : valuation (n : Ra
+t_[p]) = padicValInt p n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comap_mulValuation_eq_int_padicValuation :
     (mulValuation (p := p)).comap (Int.castRingHom _) = Int.padicValuation p := by
   ext
   simp [← Rat.padicValuation_cast, ← comap_mulValuation_eq_padicValuation]
-
-/--
-lemma `norm_eq_zpow_log_mulValuation` / 引理 `norm_eq_zpow_log_mulValuation`
-
-English:
-lemma norm_eq_zpow_log_mulValuation
-  given: {x : Rat_[p]} (hx : x != 0)
-  proof: by
-  simp [norm_eq_zpow_neg_valuation, hx]
-
-中文:
-引理 norm_eq_zpow_log_mulValuation
-  条件: {x : Rat_[p]} (hx : x != 0)
-  证明: by
-  simp [norm_eq_zpow_neg_valuation, hx]
-
-Depends on / 依赖: norm_eq_zpow_neg_valuation
+/-
+**Padic.norm_eq_zpow_log_mulValuation** 是 Mathlib 中的一个引理，位于命名空间 `Padic`。
+形式化陈述：norm_eq_zpow_log_mulValuation {x : Rat_[p]} (hx : x != 0) : ‖x‖ = (p : Rea
+l) ^ (log (mulValuation x))
+参数：hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Padic.mulValuation_toFun`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x : ℚ_[p]
+), Padic.mulValuation x = if x = 0 then 0 else WithZero.exp (-x.valuation)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `WithZero.log_inv`：∀ {G : Type u_5} [inst : AddGroup G] (x : WithZero (Mu
+ltiplicative G)), x⁻¹.log = -x.log
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma norm_eq_zpow_log_mulValuation {x : Rat_[p]} (hx : x != 0) :
-    ‖x‖ = (p : Real) ^ (log (mulValuation x)) := by
+lemma norm_eq_zpow_log_mulValuation {x : ℚ_[p]} (hx : x ≠ 0) :
+    ‖x‖ = (p : ℝ) ^ (log (mulValuation x)) := by
   simp [norm_eq_zpow_neg_valuation, hx]
 
-/--
-Definition of `addValuation` / `addValuation` 的定义
+/-- The additive `p`-adic valuation on `ℚ_[p]`, as an `addValuation`. -/
+/-
+**Padic.addValuation** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：addValuation : AddValuation Rat_[p] (WithTop Int)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Padic.AddValuation.map_zero`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], Padic.
+addValuationDef 0 = ⊤
+· 使用定理 `Padic.AddValuation.map_one`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], Padic.a
+ddValuationDef 1 = 0
+· 使用定理 `Padic.AddValuation.map_add`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x y : ℚ
+_[p]), min x.addValuationDef y.addValuationDef ≤ (x + y).addValuationDef
+· 使用定理 `Padic.AddValuation.map_mul`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (x y : ℚ
+_[p]), (x * y).addValuationDef = x.addValuationDef + y.addValuationDef
 
-English:
-definition addValuation
-  signature: : AddValuation Rat_[p] (WithTop Int)
-  body: AddValuation.of addValuationDef AddValuation.map_zero AddValuation.map_one AddValuation.map_add
-    AddValuation.map_mul
-
-@[simp]
-
-中文:
-定义 addValuation
-  签名: : AddValuation Rat_[p] (WithTop 整数)
-  定义体: AddValuation.of addValuationDef AddValuation.map_zero AddValuation.map_one AddValuation.map_add
-    AddValuation.map_mul
-
-@[simp]
-
-Depends on / 依赖: AddValuation, AddValuation.map_add, AddValuation.map_mul, AddValuation.map_one, AddValuation.map_zero, AddValuation.of, addValuationDef, map_add, map_mul, map_one, map_zero
+--- 原说明 ---
+The additive `p`-adic valuation on `ℚ_[p]`, as an `addValuation`.
 -/
-def addValuation : AddValuation Rat_[p] (WithTop Int) :=
+def addValuation : AddValuation ℚ_[p] (WithTop ℤ) :=
   AddValuation.of addValuationDef AddValuation.map_zero AddValuation.map_one AddValuation.map_add
     AddValuation.map_mul
 
 @[simp]
-/--
-theorem `addValuation.apply` / 定理 `addValuation.apply`
-
-English:
-theorem addValuation.apply
-  given: {x : Rat_[p]} (hx : x != 0)
-  proof: by
-  simp only [Padic.addValuation, AddValuation.of_apply, addValuationDef, if_neg hx]
-
-中文:
-定理 addValuation.apply
-  条件: {x : Rat_[p]} (hx : x != 0)
-  证明: by
-  simp only [Padic.addValuation, AddValuation.of_apply, addValuationDef, if_neg hx]
-
-Depends on / 依赖: AddValuation, AddValuation.of_apply, Padic.addValuation, addValuation, addValuationDef, if_neg, of_apply
+/-
+**Padic.addValuation.apply** 是 Mathlib 中的一个定理，位于命名空间 `Padic.addValuation`。
+形式化陈述：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] {x : ℚ_[p]}, x ≠ 0 → Padic.addValuatio
+n x = ↑x.valuation
+参数：Nat.Prime p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem addValuation.apply {x : Rat_[p]} (hx : x != 0) :
-    Padic.addValuation x = (x.valuation : WithTop Int) := by
+theorem addValuation.apply {x : ℚ_[p]} (hx : x ≠ 0) :
+    Padic.addValuation x = (x.valuation : WithTop ℤ) := by
   simp only [Padic.addValuation, AddValuation.of_apply, addValuationDef, if_neg hx]
 
 section NormLEIff
 
+/-! ### Various characterizations of open unit balls -/
 
 
-/--
-theorem `norm_le_pow_iff_norm_lt_pow_add_one` / 定理 `norm_le_pow_iff_norm_lt_pow_add_one`
+/-
+**Padic.norm_le_pow_iff_norm_lt_pow_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_le_pow_iff_norm_lt_pow_add_one (x : Rat_[p]) (n : Int) : ‖x‖ <= (p : 
+Real) ^ n ↔ ‖x‖ < (p : Real) ^ (n + 1)
+参数：x : Rat_[p]；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zpow_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialO
+rder G₀] [PosMulReflectLT G₀] {a : G₀}   [ZeroLEOneClass G₀], 0 < a → ∀ (n : ℤ…
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用引理 `zpow_right_strictMono₀`：zpow_right_strictMono₀ (ha : 1 < a) : StrictMono
+ fun n : Int => a ^ n
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Int.lt_add_one_iff`：∀ {a b : ℤ}, a < b + 1 ↔ a ≤ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem norm_le_pow_iff_norm_lt_pow_add_one
-  given: (x : Rat_[p]) (n : Int)
-  proof: by
-  have aux (n : Int) : 0 < ((p : Real) ^ n) := zpow_pos (mod_cast hp.1.pos) _
+--- 原说明 ---
+### Various characterizations of open unit balls
+-/
+theorem norm_le_pow_iff_norm_lt_pow_add_one (x : ℚ_[p]) (n : ℤ) :
+    ‖x‖ ≤ (p : ℝ) ^ n ↔ ‖x‖ < (p : ℝ) ^ (n + 1) := by
+  have aux (n : ℤ) : 0 < ((p : ℝ) ^ n) := zpow_pos (mod_cast hp.1.pos) _
   by_cases hx0 : x = 0
   · simp [hx0, norm_zero, aux, le_of_lt (aux _)]
   rw [norm_eq_zpow_neg_valuation hx0]
-  have h1p : 1 < (p : Real) := mod_cast hp.1.one_lt
+  have h1p : 1 < (p : ℝ) := mod_cast hp.1.one_lt
   have H := zpow_right_strictMono₀ h1p
-  rw [H.le_iff_le]; rw [H.lt_iff_lt]; rw [Int.lt_add_one_iff]
-
-中文:
-定理 norm_le_pow_iff_norm_lt_pow_add_one
-  条件: (x : Rat_[p]) (n : 整数)
-  证明: by
-  have aux (n : Int) : 0 < ((p : Real) ^ n) := zpow_pos (mod_cast hp.1.pos) _
-  by_cases hx0 : x = 0
-  · simp [hx0, norm_zero, aux, le_of_lt (aux _)]
-  rw [norm_eq_zpow_neg_valuation hx0]
-  have h1p : 1 < (p : Real) := mod_cast hp.1.one_lt
-  have H := zpow_right_strictMono₀ h1p
-  rw [H.le_iff_le]; rw [H.lt_iff_lt]; rw [Int.lt_add_one_iff]
-
-Depends on / 依赖: H.le_iff_le, H.lt_iff_lt, Int.lt_add_one_iff, le_iff_le, le_of_lt, lt_add_one_iff, lt_iff_lt, mod_cast, norm_eq_zpow_neg_valuation, norm_zero, one_lt, zpow_pos
+  rw [H.le_iff_le, H.lt_iff_lt, Int.lt_add_one_iff]
+/-
+**Padic.norm_lt_pow_iff_norm_le_pow_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_lt_pow_iff_norm_le_pow_sub_one (x : Rat_[p]) (n : Int) : ‖x‖ < (p : R
+eal) ^ n ↔ ‖x‖ <= (p : Real) ^ (n - 1)
+参数：x : Rat_[p]；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Padic.norm_le_pow_iff_norm_lt_pow_add_one`：norm_le_pow_iff_norm_lt_pow_a
+dd_one (x : Rat_[p]) (n : Int) : ‖x‖ <= (p : Real) ^ n ↔ ‖x‖ < (p : Real) ^ (n +
+ 1)
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem norm_le_pow_iff_norm_lt_pow_add_one (x : Rat_[p]) (n : Int) :
-    ‖x‖ <= (p : Real) ^ n ↔ ‖x‖ < (p : Real) ^ (n + 1) := by
-  have aux (n : Int) : 0 < ((p : Real) ^ n) := zpow_pos (mod_cast hp.1.pos) _
-  by_cases hx0 : x = 0
-  · simp [hx0, norm_zero, aux, le_of_lt (aux _)]
-  rw [norm_eq_zpow_neg_valuation hx0]
-  have h1p : 1 < (p : Real) := mod_cast hp.1.one_lt
-  have H := zpow_right_strictMono₀ h1p
-  rw [H.le_iff_le]; rw [H.lt_iff_lt]; rw [Int.lt_add_one_iff]
-
-/--
-theorem `norm_lt_pow_iff_norm_le_pow_sub_one` / 定理 `norm_lt_pow_iff_norm_le_pow_sub_one`
-
-English:
-theorem norm_lt_pow_iff_norm_le_pow_sub_one
-  given: (x : Rat_[p]) (n : Int)
-  proof: by
-  rw [norm_le_pow_iff_norm_lt_pow_add_one]; rw [sub_add_cancel]
-
-中文:
-定理 norm_lt_pow_iff_norm_le_pow_sub_one
-  条件: (x : Rat_[p]) (n : 整数)
-  证明: by
-  rw [norm_le_pow_iff_norm_lt_pow_add_one]; rw [sub_add_cancel]
-
-Depends on / 依赖: norm_le_pow_iff_norm_lt_pow_add_one, sub_add_cancel
+theorem norm_lt_pow_iff_norm_le_pow_sub_one (x : ℚ_[p]) (n : ℤ) :
+    ‖x‖ < (p : ℝ) ^ n ↔ ‖x‖ ≤ (p : ℝ) ^ (n - 1) := by
+  rw [norm_le_pow_iff_norm_lt_pow_add_one, sub_add_cancel]
+/-
+**Padic.norm_le_one_iff_val_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Padic`。
+形式化陈述：norm_le_one_iff_val_nonneg (x : Rat_[p]) : ‖x‖ <= 1 ↔ 0 <= x.valuation
+参数：x : Rat_[p]。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `Padic.valuation_zero`：valuation_zero : valuation (0 : Rat_[p]) = 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Padic.norm_eq_zpow_neg_valuation`：norm_eq_zpow_neg_valuation {x : Rat_[p
+]} : x != 0 -> ‖x‖ = (p : Real) ^ (-x.valuation)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用定理 `zpow_le_zpow_iff_right₀`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [in
+st_1 : PartialOrder G₀] [PosMulReflectLT G₀] {a : G₀} [ZeroLEOneClass G₀]   {m n
+ : ℤ}, 1 < a …
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.one_lt_cast`：one_lt_cast : 1 < (n : α) ↔ 1 < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `neg_nonpos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddLeftM
+ono α] {a : α}, -a ≤ 0 ↔ 0 ≤ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem norm_lt_pow_iff_norm_le_pow_sub_one (x : Rat_[p]) (n : Int) :
-    ‖x‖ < (p : Real) ^ n ↔ ‖x‖ <= (p : Real) ^ (n - 1) := by
-  rw [norm_le_pow_iff_norm_lt_pow_add_one]; rw [sub_add_cancel]
-
-/--
-theorem `norm_le_one_iff_val_nonneg` / 定理 `norm_le_one_iff_val_nonneg`
-
-English:
-theorem norm_le_one_iff_val_nonneg
-  given: (x : Rat_[p])
-  statement: ‖x‖ <= 1 ↔ 0 <= x.valuation
-  proof: by
+theorem norm_le_one_iff_val_nonneg (x : ℚ_[p]) : ‖x‖ ≤ 1 ↔ 0 ≤ x.valuation := by
   by_cases hx : x = 0
   · simp only [hx, norm_zero, valuation_zero, zero_le_one, le_refl]
-  · rw [norm_eq_zpow_neg_valuation hx, ← zpow_zero (p : Real), zpow_le_zpow_iff_right₀, neg_nonpos]
-    exact Nat.one_lt_cast.2 (Nat.Prime.one_lt' p).1
-
-中文:
-定理 norm_le_one_iff_val_nonneg
-  条件: (x : Rat_[p])
-  结论: ‖x‖ <= 1 ↔ 0 <= x.valuation
-  证明: by
-  by_cases hx : x = 0
-  · simp only [hx, norm_zero, valuation_zero, zero_le_one, le_refl]
-  · rw [norm_eq_zpow_neg_valuation hx, ← zpow_zero (p : Real), zpow_le_zpow_iff_right₀, neg_nonpos]
-    exact Nat.one_lt_cast.2 (Nat.Prime.one_lt' p).1
-
-Depends on / 依赖: Nat.Prime.one_lt, Nat.one_lt_cast, le_refl, neg_nonpos, norm_eq_zpow_neg_valuation, norm_zero, one_lt, one_lt_cast, valuation_zero, zero_le_one, zpow_zero
--/
-theorem norm_le_one_iff_val_nonneg (x : Rat_[p]) : ‖x‖ <= 1 ↔ 0 <= x.valuation := by
-  by_cases hx : x = 0
-  · simp only [hx, norm_zero, valuation_zero, zero_le_one, le_refl]
-  · rw [norm_eq_zpow_neg_valuation hx, ← zpow_zero (p : Real), zpow_le_zpow_iff_right₀, neg_nonpos]
+  · rw [norm_eq_zpow_neg_valuation hx, ← zpow_zero (p : ℝ), zpow_le_zpow_iff_right₀, neg_nonpos]
     exact Nat.one_lt_cast.2 (Nat.Prime.one_lt' p).1
 
 end NormLEIff
 
 end Padic
+

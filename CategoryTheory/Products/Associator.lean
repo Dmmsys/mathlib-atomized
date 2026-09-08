@@ -27,20 +27,15 @@ variable (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D]
 /-- The associator functor `(C × D) × E ⥤ C × (D × E)`.
 -/
 @[simps]
-/--
-Definition of `associator` / `associator` 的定义
+/-
+**CategoryTheory.prod.associator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.prod`
+。
+形式化陈述：associator : (C × D) × E ⥤ C × D × E where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: : (C × D) × E ⥤ C × D × E where
-  body: (X.1.1, (X.1.2, X.2))
-  map := @fun _ _ f => f.1.1 ×ₘ (f.1.2 ×ₘ f.2)
-
-中文:
-定义 associator
-  签名: : (C × D) × E ⥤ C × D × E where
-  定义体: (X.1.1, (X.1.2, X.2))
-  map := @fun _ _ f => f.1.1 ×ₘ (f.1.2 ×ₘ f.2)
+--- 原说明 ---
+The associator functor `(C × D) × E ⥤ C × (D × E)`.
 -/
 def associator : (C × D) × E ⥤ C × D × E where
   obj X := (X.1.1, (X.1.2, X.2))
@@ -49,20 +44,15 @@ def associator : (C × D) × E ⥤ C × D × E where
 /-- The inverse associator functor `C × (D × E) ⥤ (C × D) × E `.
 -/
 @[simps]
-/--
-Definition of `inverseAssociator` / `inverseAssociator` 的定义
+/-
+**CategoryTheory.prod.inverseAssociator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.prod`。
+形式化陈述：inverseAssociator : C × D × E ⥤ (C × D) × E where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverseAssociator
-  signature: : C × D × E ⥤ (C × D) × E where
-  body: ((X.1, X.2.1), X.2.2)
-  map := @fun _ _ f => (f.1 ×ₘ f.2.1) ×ₘ f.2.2
-
-中文:
-定义 inverseAssociator
-  签名: : C × D × E ⥤ (C × D) × E where
-  定义体: ((X.1, X.2.1), X.2.2)
-  map := @fun _ _ f => (f.1 ×ₘ f.2.1) ×ₘ f.2.2
+--- 原说明 ---
+The inverse associator functor `C × (D × E) ⥤ (C × D) × E `.
 -/
 def inverseAssociator : C × D × E ⥤ (C × D) × E where
   obj X := ((X.1, X.2.1), X.2.2)
@@ -72,65 +62,43 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence of categories expressing associativity of products of categories.
 -/
 @[simps]
-/--
-Definition of `associativity` / `associativity` 的定义
+/-
+**CategoryTheory.prod.associativity** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.pr
+od`。
+形式化陈述：associativity : (C × D) × E ≌ C × D × E where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associativity
-  signature: : (C × D) × E ≌ C × D × E where
-  body: associator C D E
-  inverse := inverseAssociator C D E
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 associativity
-  签名: : (C × D) × E ≌ C × D × E where
-  定义体: associator C D E
-  inverse := inverseAssociator C D E
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: associator
+--- 原说明 ---
+The equivalence of categories expressing associativity of products of categories
+.
 -/
 def associativity : (C × D) × E ≌ C × D × E where
   functor := associator C D E
   inverse := inverseAssociator C D E
   unitIso := Iso.refl _
   counitIso := Iso.refl _
-
-/--
-Instance `associatorIsEquivalence` / 实例 `associatorIsEquivalence`
-
-English:
-instance associatorIsEquivalence
-  signature: : (associator C D E).IsEquivalence
-  body: (by infer_instance : (associativity C D E).functor.IsEquivalence)
-
-中文:
-实例 associatorIsEquivalence
-  签名: : (associator C D E).是等价
-  定义体: (by infer_instance : (associativity C D E).functor.IsEquivalence)
-
-Depends on / 依赖: IsEquivalence, associativity, functor, functor.IsEquivalence, infer_instance
+/-
+**CategoryTheory.prod.associatorIsEquivalence** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.prod`。
+形式化陈述：associatorIsEquivalence : (associator C D E).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance associatorIsEquivalence : (associator C D E).IsEquivalence :=
   (by infer_instance : (associativity C D E).functor.IsEquivalence)
-
-/--
-Instance `inverseAssociatorIsEquivalence` / 实例 `inverseAssociatorIsEquivalence`
-
-English:
-instance inverseAssociatorIsEquivalence
-  signature: : (inverseAssociator C D E).IsEquivalence
-  body: (by infer_instance : (associativity C D E).inverse.IsEquivalence)
-
-中文:
-实例 inverseAssociatorIsEquivalence
-  签名: : (inverseAssociator C D E).是等价
-  定义体: (by infer_instance : (associativity C D E).inverse.IsEquivalence)
-
-Depends on / 依赖: IsEquivalence, associativity, infer_instance, inverse, inverse.IsEquivalence
+/-
+**CategoryTheory.prod.inverseAssociatorIsEquivalence** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.prod`。
+形式化陈述：inverseAssociatorIsEquivalence : (inverseAssociator C D E).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 instance inverseAssociatorIsEquivalence : (inverseAssociator C D E).IsEquivalence :=
   (by infer_instance : (associativity C D E).inverse.IsEquivalence)
@@ -141,20 +109,18 @@ variable (A : Type u₄) [Category.{v₄} A]
 
 /-- The associator isomorphism is compatible with `prodFunctorToFunctorProd`. -/
 @[simps!]
-/--
-Definition of `prodFunctorToFunctorProdAssociator` / `prodFunctorToFunctorProdAssociator` 的定义
+/-
+**CategoryTheory.prod.prodFunctorToFunctorProdAssociator** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.prod`。
+形式化陈述：prodFunctorToFunctorProdAssociator : (associativity _ _ _).functor ⋙ ((𝟭 _
+).prod (prodFunctorToFunctorProd A D E) ⋙ (prodFunctorToFunctorProd A C (D × E))
+) ≅ (prodFunctorToFunctorProd A C D).prod (𝟭 _) ⋙ (prodFunctorToFunctorProd A (C
+ × D) E) ⋙ (associativity C D E).congrRight.functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodFunctorToFunctorProdAssociator
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 prodFunctorToFunctorProdAssociator
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The associator isomorphism is compatible with `prodFunctorToFunctorProd`.
 -/
 def prodFunctorToFunctorProdAssociator :
     (associativity _ _ _).functor ⋙ ((𝟭 _).prod (prodFunctorToFunctorProd A D E) ⋙
@@ -165,24 +131,18 @@ def prodFunctorToFunctorProdAssociator :
 
 /-- The associator isomorphism is compatible with `functorProdToProdFunctor`. -/
 @[simps!]
-/--
-Definition of `functorProdToProdFunctorAssociator` / `functorProdToProdFunctorAssociator` 的定义
+/-
+**CategoryTheory.prod.functorProdToProdFunctorAssociator** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.prod`。
+形式化陈述：functorProdToProdFunctorAssociator : (associativity _ _ _).congrRight.func
+tor ⋙ functorProdToProdFunctor A C (D × E) ⋙ (𝟭 _).prod (functorProdToProdFuncto
+r A D E) ≅ functorProdToProdFunctor A (C × D) E ⋙ (functorProdToProdFunctor A C 
+D).prod (𝟭 _) ⋙ (associativity _ _ _).functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorProdToProdFunctorAssociator
-  signature: :
-  body: Iso.refl _
-
-#adaptation_note
-
-中文:
-定义 functorProdToProdFunctorAssociator
-  签名: :
-  定义体: Iso.refl _
-
-#adaptation_note
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The associator isomorphism is compatible with `functorProdToProdFunctor`.
 -/
 def functorProdToProdFunctorAssociator :
     (associativity _ _ _).congrRight.functor ⋙ functorProdToProdFunctor A C (D × E) ⋙
@@ -197,31 +157,20 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The equivalence swapping the second and third categories in `(A × C) × (D × E)`. This follows
 the definition of `MonoidalCategory.tensorμ`. -/
 @[simps!]
-/--
-Definition of `prodμ` / `prodμ` 的定义
+/-
+**CategoryTheory.prod.prod** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodμ
-  signature: : (A × C) × (D × E) ≌ (A × D) × (C × E)
-  body: (associativity ..).trans
-(Equivalence.refl.prod (associativity ..).symm).trans
-(Equivalence.refl.prod <| (Prod.braiding C D).prod (Equivalence.refl)).trans
-(Equivalence.refl.prod (associativity ..)).trans (associativity ..).symm
-
-中文:
-定义 prodμ
-  签名: : (A × C) × (D × E) ≌ (A × D) × (C × E)
-  定义体: (associativity ..).trans
-(Equivalence.refl.prod (associativity ..).symm).trans
-(Equivalence.refl.prod <| (Prod.braiding C D).prod (Equivalence.refl)).trans
-(Equivalence.refl.prod (associativity ..)).trans (associativity ..).symm
-
-Depends on / 依赖: Equivalence, Equivalence.refl, Equivalence.refl.prod, Prod.braiding, associativity, braiding
+--- 原说明 ---
+The equivalence swapping the second and third categories in `(A × C) × (D × E)`.
+ This follows
+the definition of `MonoidalCategory.tensorμ`.
 -/
 def prodμ : (A × C) × (D × E) ≌ (A × D) × (C × E) :=
-(associativity ..).trans
-(Equivalence.refl.prod (associativity ..).symm).trans
-(Equivalence.refl.prod <| (Prod.braiding C D).prod (Equivalence.refl)).trans
-(Equivalence.refl.prod (associativity ..)).trans (associativity ..).symm
+  (associativity ..).trans <|
+    (Equivalence.refl.prod (associativity ..).symm).trans <|
+      (Equivalence.refl.prod <| (Prod.braiding C D).prod (Equivalence.refl)).trans <|
+        (Equivalence.refl.prod (associativity ..)).trans <| (associativity ..).symm
 
 end CategoryTheory.prod
+

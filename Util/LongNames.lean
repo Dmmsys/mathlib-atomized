@@ -20,33 +20,21 @@ public meta section
 
 open Lean Meta Elab
 
-/--
-Definition of `printNameHashMap` / `printNameHashMap` 的定义
+/-- Helper function for `#long_names` and `#long_instances`. -/
+/-
+**printNameHashMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：printNameHashMap (h : Std.HashMap Name (Array Name)) : IO Unit
+参数：h : Std.HashMap Name (Array Name)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition printNameHashMap
-  signature: (h : Std.HashMap Name (Array Name))
-  body: for (m, names) in h.toList do
-    IO.println "----"
-IO.println m.toString ++ ":"
-    for n in names do
-      IO.println n
-
-中文:
-定义 printNameHashMap
-  签名: (h : Std.HashMap Name (数组 Name))
-  定义体: for (m, names) in h.toList do
-    IO.println "----"
-IO.println m.toString ++ ":"
-    for n in names do
-      IO.println n
-
-Depends on / 依赖: IO.println, h.toList, m.toString, println, toList, toString
+--- 原说明 ---
+Helper function for `#long_names` and `#long_instances`.
 -/
 def printNameHashMap (h : Std.HashMap Name (Array Name)) : IO Unit :=
   for (m, names) in h.toList do
     IO.println "----"
-IO.println m.toString ++ ":"
+    IO.println <| m.toString ++ ":"
     for n in names do
       IO.println n
 
@@ -56,7 +44,7 @@ Use as `#long_names` or `#long_names 100` to specify the length.
 -/
 elab "#long_names " N:(num)? : command =>
   Command.runTermElabM fun _ => do
-.getD 50 let N := N.map TSyntax.getNat
+    let N := N.map TSyntax.getNat |>.getD 50
     let namesByModule ← allNamesByModule (fun n => n.toString.length > N)
     let namesByModule := namesByModule.filter fun m _ => m.getRoot.toString = "Mathlib"
     printNameHashMap namesByModule
@@ -70,8 +58,9 @@ Use as `#long_names` or `#long_names 100` to specify the length.
 -/
 elab "#long_instances " N:(num)?: command =>
   Command.runTermElabM fun _ => do
-.getD 50 let N := N.map TSyntax.getNat
+    let N := N.map TSyntax.getNat |>.getD 50
     let namesByModule ← allNamesByModule
       (fun n => n.lastComponentAsString.startsWith "inst" && n.lastComponentAsString.length > N)
     let namesByModule := namesByModule.filter fun m _ => m.getRoot.toString = "Mathlib"
     printNameHashMap namesByModule
+

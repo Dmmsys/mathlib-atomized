@@ -49,83 +49,30 @@ open CategoryTheory.Functor
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `Adjunction.derived`. -/
 @[simps]
-/--
-Definition of `derived'` / `derived'` 的定义
+/-
+**CategoryTheory.Adjunction.derived'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.A
+djunction`。
+形式化陈述：derived' [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] (η
+ : 𝟭 D₁ ⟶ G' ⋙ F') (ε : F' ⋙ G' ⟶ 𝟭 D₂) (hη : forall (X₁ : C₁), η.app (L₁.obj X₁
+) ≫ F'.map (α.app X₁) = L₁.map (adj.unit.app X₁) ≫ β.app (G.obj X₁)
+参数：η : 𝟭 D₁ ⟶ G' ⋙ F'；ε : F' ⋙ G' ⟶ 𝟭 D₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derived'
-  signature: [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
-  body: η
-  counit := ε
-  left_triangle_components := by
-    suffices G'.leftUnitor.inv ≫ whiskerRight η G' ≫ (Functor.associator _ _ _).hom ≫
-        whiskerLeft G' ε ≫ G'.rightUnitor.hom = 𝟙 _ from
-      fun Y₁ => by simpa using congr_app this Y₁
-    apply G'.leftDerived_ext α W₁
-    ext X₁
-    have eq₁ := ε.naturality (α.app X₁)
-    have eq₂ := G'.congr_map (hη X₁)
-    have eq₃ := α.naturality (adj.unit.app X₁)
-    dsimp at eq₁ eq₂ eq₃ ⊢
-    simp only [Functor.map_comp] at eq₂
-    rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.id_comp]; rw [← eq₁]; rw [reassoc_of% eq₂]; rw [hε (G.obj X₁)]; rw [reassoc_of% eq₃]; rw [← L₂.map_comp]; rw [adj.left_triangle_components]; rw [Functor.map_id]; rw [Category.comp_id]
-  right_triangle_components := by
-    suffices F'.leftUnitor.inv ≫ whiskerLeft F' η ≫ (Functor.associator _ _ _).inv ≫
-      whiskerRight ε F' ≫ F'.rightUnitor.hom = 𝟙 _ from
-        fun Y₂ => by simpa using congr_app this Y₂
-    apply F'.rightDerived_ext β W₂
-    ext X₂
-    have eq₁ := η.naturality (β.app X₂)
-    have eq₂ := F'.congr_map (hε X₂)
-    have eq₃ := β.naturality (adj.counit.app X₂)
-    dsimp at eq₁ eq₂ eq₃ ⊢
-    simp only [Functor.map_comp] at eq₂
-    rw [Category.comp_id]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [reassoc_of% (hη (F.obj X₂))]; rw [← eq₃]; rw [← L₁.map_comp_assoc]; rw [adj.right_triangle_components]; rw [Functor.map_id]; rw [Category.id_comp]
-
-中文:
-定义 derived'
-  签名: [G'.是左导出函子 α W₁] [F'.是右导出函子 β W₂]
-  定义体: η
-  counit := ε
-  left_triangle_components := by
-    suffices G'.leftUnitor.inv ≫ whiskerRight η G' ≫ (Functor.associator _ _ _).hom ≫
-        whiskerLeft G' ε ≫ G'.rightUnitor.hom = 𝟙 _ from
-      fun Y₁ => by simpa using congr_app this Y₁
-    apply G'.leftDerived_ext α W₁
-    ext X₁
-    have eq₁ := ε.naturality (α.app X₁)
-    have eq₂ := G'.congr_map (hη X₁)
-    have eq₃ := α.naturality (adj.unit.app X₁)
-    dsimp at eq₁ eq₂ eq₃ ⊢
-    simp only [Functor.map_comp] at eq₂
-    rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.id_comp]; rw [← eq₁]; rw [reassoc_of% eq₂]; rw [hε (G.obj X₁)]; rw [reassoc_of% eq₃]; rw [← L₂.map_comp]; rw [adj.left_triangle_components]; rw [Functor.map_id]; rw [Category.comp_id]
-  right_triangle_components := by
-    suffices F'.leftUnitor.inv ≫ whiskerLeft F' η ≫ (Functor.associator _ _ _).inv ≫
-      whiskerRight ε F' ≫ F'.rightUnitor.hom = 𝟙 _ from
-        fun Y₂ => by simpa using congr_app this Y₂
-    apply F'.rightDerived_ext β W₂
-    ext X₂
-    have eq₁ := η.naturality (β.app X₂)
-    have eq₂ := F'.congr_map (hε X₂)
-    have eq₃ := β.naturality (adj.counit.app X₂)
-    dsimp at eq₁ eq₂ eq₃ ⊢
-    simp only [Functor.map_comp] at eq₂
-    rw [Category.comp_id]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [reassoc_of% (hη (F.obj X₂))]; rw [← eq₃]; rw [← L₁.map_comp_assoc]; rw [adj.right_triangle_components]; rw [Functor.map_id]; rw [Category.id_comp]
-
-Depends on / 依赖: F.obj, Functor, Functor.associator, adj.counit.app, associator, cat_disch, congr_app, congr_map, counit, leftDerived_ext, leftUnitor, leftUnitor.inv, left_triangle_components, naturality, rightUnitor, rightUnitor.hom, whiskerLeft, whiskerRight
+--- 原说明 ---
+Auxiliary definition for `Adjunction.derived`.
 -/
 def derived' [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
     (η : 𝟭 D₁ ⟶ G' ⋙ F') (ε : F' ⋙ G' ⟶ 𝟭 D₂)
-    (hη : forall (X₁ : C₁), η.app (L₁.obj X₁) ≫ F'.map (α.app X₁) =
+    (hη : ∀ (X₁ : C₁), η.app (L₁.obj X₁) ≫ F'.map (α.app X₁) =
       L₁.map (adj.unit.app X₁) ≫ β.app (G.obj X₁) := by cat_disch)
-    (hε : forall (X₂ : C₂), G'.map (β.app X₂) ≫ ε.app (L₂.obj X₂) =
+    (hε : ∀ (X₂ : C₂), G'.map (β.app X₂) ≫ ε.app (L₂.obj X₂) =
       α.app (F.obj X₂) ≫ L₂.map (adj.counit.app X₂) := by cat_disch) : G' ⊣ F' where
   unit := η
   counit := ε
   left_triangle_components := by
     suffices G'.leftUnitor.inv ≫ whiskerRight η G' ≫ (Functor.associator _ _ _).hom ≫
         whiskerLeft G' ε ≫ G'.rightUnitor.hom = 𝟙 _ from
-      fun Y₁ => by simpa using congr_app this Y₁
+      fun Y₁ ↦ by simpa using congr_app this Y₁
     apply G'.leftDerived_ext α W₁
     ext X₁
     have eq₁ := ε.naturality (α.app X₁)
@@ -133,11 +80,14 @@ def derived' [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂
     have eq₃ := α.naturality (adj.unit.app X₁)
     dsimp at eq₁ eq₂ eq₃ ⊢
     simp only [Functor.map_comp] at eq₂
-    rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.id_comp]; rw [← eq₁]; rw [reassoc_of% eq₂]; rw [hε (G.obj X₁)]; rw [reassoc_of% eq₃]; rw [← L₂.map_comp]; rw [adj.left_triangle_components]; rw [Functor.map_id]; rw [Category.comp_id]
+    rw [Category.assoc, Category.assoc, Category.assoc, Category.comp_id,
+      Category.id_comp, Category.id_comp, Category.id_comp, ← eq₁, reassoc_of% eq₂,
+      hε (G.obj X₁), reassoc_of% eq₃, ← L₂.map_comp, adj.left_triangle_components,
+      Functor.map_id, Category.comp_id]
   right_triangle_components := by
     suffices F'.leftUnitor.inv ≫ whiskerLeft F' η ≫ (Functor.associator _ _ _).inv ≫
       whiskerRight ε F' ≫ F'.rightUnitor.hom = 𝟙 _ from
-        fun Y₂ => by simpa using congr_app this Y₂
+        fun Y₂ ↦ by simpa using congr_app this Y₂
     apply F'.rightDerived_ext β W₂
     ext X₂
     have eq₁ := η.naturality (β.app X₂)
@@ -145,31 +95,30 @@ def derived' [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂
     have eq₃ := β.naturality (adj.counit.app X₂)
     dsimp at eq₁ eq₂ eq₃ ⊢
     simp only [Functor.map_comp] at eq₂
-    rw [Category.comp_id]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [reassoc_of% (hη (F.obj X₂))]; rw [← eq₃]; rw [← L₁.map_comp_assoc]; rw [adj.right_triangle_components]; rw [Functor.map_id]; rw [Category.id_comp]
+    rw [Category.comp_id, Category.comp_id, Category.id_comp, Category.id_comp,
+      reassoc_of% eq₁, eq₂, reassoc_of% (hη (F.obj X₂)), ← eq₃, ← L₁.map_comp_assoc,
+      adj.right_triangle_components, Functor.map_id, Category.id_comp]
 
 section
 
 variable [(G' ⋙ F').IsLeftDerivedFunctor
   ((Functor.associator _ _ _).inv ≫ whiskerRight α F') W₁]
 
-/--
-Definition of `derivedη` / `derivedη` 的定义
+/-- The unit of the derived adjunction, see `Adjunction.derived`. -/
+/-
+**CategoryTheory.Adjunction.derived** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ad
+junction`。
+形式化陈述：derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] [(G
+' ⋙ F').IsLeftDerivedFunctor ((Functor.associator _ _ _).inv ≫ whiskerRight α F'
+) W₁] [(F' ⋙ G').IsRightDerivedFunctor (whiskerRight β G' ≫ (Functor.associator 
+_ _ _).hom) W₂] : G' ⊣ F'
+参数：G' ⋙ F'；(Functor.associator _ _ _).inv ≫ whiskerRight α F'；F' ⋙ G'；whiskerRig
+ht β G' ≫ (Functor.associator _ _ _).hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derivedη
-  signature: : 𝟭 D₁ ⟶ G' ⋙ F'
-  body: (G' ⋙ F').leftDerivedLift ((Functor.associator _ _ _).inv ≫ whiskerRight α F') W₁ _
-    (L₁.rightUnitor.hom ≫ L₁.leftUnitor.inv ≫ whiskerRight adj.unit L₁ ≫
-      (Functor.associator _ _ _).hom ≫ whiskerLeft G β ≫ (Functor.associator _ _ _).inv)
-
-中文:
-定义 derivedη
-  签名: : 𝟭 D₁ ⟶ G' ⋙ F'
-  定义体: (G' ⋙ F').leftDerivedLift ((Functor.associator _ _ _).inv ≫ whiskerRight α F') W₁ _
-    (L₁.rightUnitor.hom ≫ L₁.leftUnitor.inv ≫ whiskerRight adj.unit L₁ ≫
-      (Functor.associator _ _ _).hom ≫ whiskerLeft G β ≫ (Functor.associator _ _ _).inv)
-
-Depends on / 依赖: Functor, Functor.associator, adj.unit, associator, leftDerivedLift, leftUnitor, leftUnitor.inv, rightUnitor, rightUnitor.hom, whiskerLeft, whiskerRight
+--- 原说明 ---
+The unit of the derived adjunction, see `Adjunction.derived`.
 -/
 noncomputable def derivedη : 𝟭 D₁ ⟶ G' ⋙ F' :=
   (G' ⋙ F').leftDerivedLift ((Functor.associator _ _ _).inv ≫ whiskerRight α F') W₁ _
@@ -178,26 +127,17 @@ noncomputable def derivedη : 𝟭 D₁ ⟶ G' ⋙ F' :=
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `derivedη_fac_app` / 引理 `derivedη_fac_app`
-
-English:
-lemma derivedη_fac_app
-  given: (X₁ : C₁)
-  proof: by
-  simpa using! ((G' ⋙ F').leftDerived_fac_app ((Functor.associator _ _ _).inv ≫
-    whiskerRight α F') W₁ _ (L₁.rightUnitor.hom ≫ L₁.leftUnitor.inv ≫ whiskerRight adj.unit L₁ ≫
-      (Functor.associator _ _ _).hom ≫ whiskerLeft G β ≫ (Functor.associator _ _ _).inv)) X₁
-
-中文:
-引理 derivedη_fac_app
-  条件: (X₁ : C₁)
-  证明: by
-  simpa using! ((G' ⋙ F').leftDerived_fac_app ((Functor.associator _ _ _).inv ≫
-    whiskerRight α F') W₁ _ (L₁.rightUnitor.hom ≫ L₁.leftUnitor.inv ≫ whiskerRight adj.unit L₁ ≫
-      (Functor.associator _ _ _).hom ≫ whiskerLeft G β ≫ (Functor.associator _ _ _).inv)) X₁
-
-Depends on / 依赖: Functor, Functor.associator, adj.unit, associator, leftDerived_fac_app, leftUnitor, leftUnitor.inv, rightUnitor, rightUnitor.hom, whiskerLeft, whiskerRight
+/-
+**CategoryTheory.Adjunction.derived** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ad
+junction`。
+形式化陈述：derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] [(G
+' ⋙ F').IsLeftDerivedFunctor ((Functor.associator _ _ _).inv ≫ whiskerRight α F'
+) W₁] [(F' ⋙ G').IsRightDerivedFunctor (whiskerRight β G' ≫ (Functor.associator 
+_ _ _).hom) W₂] : G' ⊣ F'
+参数：G' ⋙ F'；(Functor.associator _ _ _).inv ≫ whiskerRight α F'；F' ⋙ G'；whiskerRig
+ht β G' ≫ (Functor.associator _ _ _).hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma derivedη_fac_app (X₁ : C₁) :
     (adj.derivedη W₁ α β).app (L₁.obj X₁) ≫ F'.map (α.app X₁) =
@@ -213,24 +153,21 @@ section
 variable [(F' ⋙ G').IsRightDerivedFunctor
   (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂]
 
-/--
-Definition of `derivedε` / `derivedε` 的定义
+/-- The counit of the derived adjunction, see `Adjunction.derived`. -/
+/-
+**CategoryTheory.Adjunction.derived** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ad
+junction`。
+形式化陈述：derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] [(G
+' ⋙ F').IsLeftDerivedFunctor ((Functor.associator _ _ _).inv ≫ whiskerRight α F'
+) W₁] [(F' ⋙ G').IsRightDerivedFunctor (whiskerRight β G' ≫ (Functor.associator 
+_ _ _).hom) W₂] : G' ⊣ F'
+参数：G' ⋙ F'；(Functor.associator _ _ _).inv ≫ whiskerRight α F'；F' ⋙ G'；whiskerRig
+ht β G' ≫ (Functor.associator _ _ _).hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derivedε
-  signature: : F' ⋙ G' ⟶ 𝟭 D₂
-  body: (F' ⋙ G').rightDerivedDesc (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂ _
-    ((Functor.associator _ _ _).hom ≫ whiskerLeft F α ≫ (Functor.associator _ _ _).inv ≫
-        whiskerRight adj.counit _ ≫ L₂.leftUnitor.hom ≫ L₂.rightUnitor.inv)
-
-中文:
-定义 derivedε
-  签名: : F' ⋙ G' ⟶ 𝟭 D₂
-  定义体: (F' ⋙ G').rightDerivedDesc (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂ _
-    ((Functor.associator _ _ _).hom ≫ whiskerLeft F α ≫ (Functor.associator _ _ _).inv ≫
-        whiskerRight adj.counit _ ≫ L₂.leftUnitor.hom ≫ L₂.rightUnitor.inv)
-
-Depends on / 依赖: Functor, Functor.associator, adj.counit, associator, counit, leftUnitor, leftUnitor.hom, rightDerivedDesc, rightUnitor, rightUnitor.inv, whiskerLeft, whiskerRight
+--- 原说明 ---
+The counit of the derived adjunction, see `Adjunction.derived`.
 -/
 noncomputable def derivedε : F' ⋙ G' ⟶ 𝟭 D₂ :=
   (F' ⋙ G').rightDerivedDesc (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂ _
@@ -239,28 +176,17 @@ noncomputable def derivedε : F' ⋙ G' ⟶ 𝟭 D₂ :=
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `derivedε_fac_app` / 引理 `derivedε_fac_app`
-
-English:
-lemma derivedε_fac_app
-  given: (X₂ : C₂)
-  proof: by
-  simpa using! ((F' ⋙ G').rightDerived_fac_app
-    (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂ _
-    ((Functor.associator _ _ _).hom ≫ whiskerLeft F α ≫ (Functor.associator _ _ _).inv ≫
-      whiskerRight adj.counit _ ≫ L₂.leftUnitor.hom ≫ L₂.rightUnitor.inv)) X₂
-
-中文:
-引理 derivedε_fac_app
-  条件: (X₂ : C₂)
-  证明: by
-  simpa using! ((F' ⋙ G').rightDerived_fac_app
-    (whiskerRight β G' ≫ (Functor.associator _ _ _).hom) W₂ _
-    ((Functor.associator _ _ _).hom ≫ whiskerLeft F α ≫ (Functor.associator _ _ _).inv ≫
-      whiskerRight adj.counit _ ≫ L₂.leftUnitor.hom ≫ L₂.rightUnitor.inv)) X₂
-
-Depends on / 依赖: Functor, Functor.associator, adj.counit, associator, counit, leftUnitor, leftUnitor.hom, rightDerived_fac_app, rightUnitor, rightUnitor.inv, whiskerLeft, whiskerRight
+/-
+**CategoryTheory.Adjunction.derived** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ad
+junction`。
+形式化陈述：derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] [(G
+' ⋙ F').IsLeftDerivedFunctor ((Functor.associator _ _ _).inv ≫ whiskerRight α F'
+) W₁] [(F' ⋙ G').IsRightDerivedFunctor (whiskerRight β G' ≫ (Functor.associator 
+_ _ _).hom) W₂] : G' ⊣ F'
+参数：G' ⋙ F'；(Functor.associator _ _ _).inv ≫ whiskerRight α F'；F' ⋙ G'；whiskerRig
+ht β G' ≫ (Functor.associator _ _ _).hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma derivedε_fac_app (X₂ : C₂) :
     G'.map (β.app X₂) ≫ (adj.derivedε W₂ α β).app (L₂.obj X₂) =
@@ -281,20 +207,27 @@ after the post-composition with any functor.
 `G ⋙ L₂ ⋙ F'` and that `F' ⋙ G'` is the right derived functor of
 `F ⋙ L₁ ⋙ G'`). -/
 @[simps!]
-/--
-Definition of `derived` / `derived` 的定义
+/-
+**CategoryTheory.Adjunction.derived** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ad
+junction`。
+形式化陈述：derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂] [(G
+' ⋙ F').IsLeftDerivedFunctor ((Functor.associator _ _ _).inv ≫ whiskerRight α F'
+) W₁] [(F' ⋙ G').IsRightDerivedFunctor (whiskerRight β G' ≫ (Functor.associator 
+_ _ _).hom) W₂] : G' ⊣ F'
+参数：G' ⋙ F'；(Functor.associator _ _ _).inv ≫ whiskerRight α F'；F' ⋙ G'；whiskerRig
+ht β G' ≫ (Functor.associator _ _ _).hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derived
-  signature: [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
-  body: adj.derived' W₁ W₂ α β (adj.derivedη W₁ α β) (adj.derivedε W₂ α β)
+--- 原说明 ---
+An adjunction between functors induces an adjunction between the
+corresponding left/right derived functors, when these derived
+functors are *absolute*, i.e. they remain derived functors
+after the post-composition with any functor.
 
-中文:
-定义 derived
-  签名: [G'.是左导出函子 α W₁] [F'.是右导出函子 β W₂]
-  定义体: adj.derived' W₁ W₂ α β (adj.derivedη W₁ α β) (adj.derivedε W₂ α β)
-
-Depends on / 依赖: adj.derived, derived
+(One actually only needs that `G' ⋙ F'` is the left derived functor of
+`G ⋙ L₂ ⋙ F'` and that `F' ⋙ G'` is the right derived functor of
+`F ⋙ L₁ ⋙ G'`).
 -/
 noncomputable def derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFunctor β W₂]
     [(G' ⋙ F').IsLeftDerivedFunctor
@@ -306,3 +239,4 @@ noncomputable def derived [G'.IsLeftDerivedFunctor α W₁] [F'.IsRightDerivedFu
 end Adjunction
 
 end CategoryTheory
+

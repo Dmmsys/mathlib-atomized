@@ -32,130 +32,116 @@ namespace MonoidHom
 variable {α β : Type*} [Monoid α] [Preorder α] [Monoid β] [Preorder β]
 
 @[to_additive]
-/--
-lemma `inl_mono` / 引理 `inl_mono`
-
-English:
-lemma inl_mono
-  statement: Monotone (MonoidHom.inl α β)
-  proof: fun _ _ => by simp
-
-@[to_additive]
-
-中文:
-引理 inl_mono
-  结论: 递增 (幺半群态射.inl α β)
-  证明: fun _ _ => by simp
-
-@[to_additive]
+/-
+**MonoidHom.inl_mono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：inl_mono : Monotone (MonoidHom.inl α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 lemma inl_mono : Monotone (MonoidHom.inl α β) :=
-  fun _ _ => by simp
+  fun _ _ ↦ by simp
 
 @[to_additive]
-/--
-lemma `inl_strictMono` / 引理 `inl_strictMono`
-
-English:
-lemma inl_strictMono
-  statement: StrictMono (MonoidHom.inl α β)
-  proof: fun _ _ => by simp
-
-@[to_additive]
-
-中文:
-引理 inl_strictMono
-  结论: 严格递增 (幺半群态射.inl α β)
-  证明: fun _ _ => by simp
-
-@[to_additive]
+/-
+**MonoidHom.inl_strictMono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：inl_strictMono : StrictMono (MonoidHom.inl α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
 lemma inl_strictMono : StrictMono (MonoidHom.inl α β) :=
-  fun _ _ => by simp
+  fun _ _ ↦ by simp
 
 @[to_additive]
-/--
-lemma `inr_mono` / 引理 `inr_mono`
-
-English:
-lemma inr_mono
-  statement: Monotone (MonoidHom.inr α β)
-  proof: fun _ _ => by simp
-
-@[to_additive]
-
-中文:
-引理 inr_mono
-  结论: 递增 (幺半群态射.inr α β)
-  证明: fun _ _ => by simp
-
-@[to_additive]
+/-
+**MonoidHom.inr_mono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：inr_mono : Monotone (MonoidHom.inr α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 lemma inr_mono : Monotone (MonoidHom.inr α β) :=
-  fun _ _ => by simp
+  fun _ _ ↦ by simp
 
 @[to_additive]
-/--
-lemma `inr_strictMono` / 引理 `inr_strictMono`
-
-English:
-lemma inr_strictMono
-  statement: StrictMono (MonoidHom.inr α β)
-  proof: fun _ _ => by simp
-
-@[to_additive]
-
-中文:
-引理 inr_strictMono
-  结论: 严格递增 (幺半群态射.inr α β)
-  证明: fun _ _ => by simp
-
-@[to_additive]
+/-
+**MonoidHom.inr_strictMono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：inr_strictMono : StrictMono (MonoidHom.inr α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
 lemma inr_strictMono : StrictMono (MonoidHom.inr α β) :=
-  fun _ _ => by simp
+  fun _ _ ↦ by simp
 
 @[to_additive]
-/--
-lemma `fst_mono` / 引理 `fst_mono`
-
-English:
-lemma fst_mono
-  statement: Monotone (MonoidHom.fst α β)
-  proof: fun _ _ => by simp +contextual [Prod.le_def]
-
-@[to_additive]
-
-中文:
-引理 fst_mono
-  结论: 递增 (幺半群态射.fst α β)
-  证明: fun _ _ => by simp +contextual [Prod.le_def]
-
-@[to_additive]
-
-Depends on / 依赖: Prod.le_def, contextual, le_def
+/-
+**MonoidHom.fst_mono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：fst_mono : Monotone (MonoidHom.fst α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma fst_mono : Monotone (MonoidHom.fst α β) :=
-  fun _ _ => by simp +contextual [Prod.le_def]
+  fun _ _ ↦ by simp +contextual [Prod.le_def]
 
 @[to_additive]
-/--
-lemma `snd_mono` / 引理 `snd_mono`
-
-English:
-lemma snd_mono
-  statement: Monotone (MonoidHom.snd α β)
-  proof: fun _ _ => by simp +contextual [Prod.le_def]
-
-中文:
-引理 snd_mono
-  结论: 递增 (幺半群态射.snd α β)
-  证明: fun _ _ => by simp +contextual [Prod.le_def]
-
-Depends on / 依赖: Prod.le_def, contextual, le_def
+/-
+**MonoidHom.snd_mono** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：snd_mono : Monotone (MonoidHom.snd α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma snd_mono : Monotone (MonoidHom.snd α β) :=
-  fun _ _ => by simp +contextual [Prod.le_def]
+  fun _ _ ↦ by simp +contextual [Prod.le_def]
 
 end MonoidHom
 
@@ -166,96 +152,52 @@ variable (α β : Type*) [Monoid α] [PartialOrder α] [Monoid β] [Preorder β]
 /-- Given ordered monoids M, N, the natural inclusion ordered homomorphism from M to M × N. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural inclusion
 ordered homomorphism from M to M × N. -/]
-/--
-Definition of `inl` / `inl` 的定义
-
-English:
-definition inl
-  signature: : α ->*o α × β where
-  body: MonoidHom.inl _ _
-  monotone' := MonoidHom.inl_mono
-
-中文:
-定义 inl
-  签名: : α ->*o α × β where
-  定义体: MonoidHom.inl _ _
-  monotone' := MonoidHom.inl_mono
-
-Depends on / 依赖: MonoidHom, MonoidHom.inl
+/-
+**OrderMonoidHom.inl** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inl : α ->*o α × β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def inl : α ->*o α × β where
+def inl : α →*o α × β where
   __ := MonoidHom.inl _ _
   monotone' := MonoidHom.inl_mono
 
 /-- Given ordered monoids M, N, the natural inclusion ordered homomorphism from N to M × N. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural inclusion
 ordered homomorphism from N to M × N. -/]
-/--
-Definition of `inr` / `inr` 的定义
-
-English:
-definition inr
-  signature: : β ->*o α × β where
-  body: MonoidHom.inr _ _
-  monotone' := MonoidHom.inr_mono
-
-中文:
-定义 inr
-  签名: : β ->*o α × β where
-  定义体: MonoidHom.inr _ _
-  monotone' := MonoidHom.inr_mono
-
-Depends on / 依赖: MonoidHom, MonoidHom.inr
+/-
+**OrderMonoidHom.inr** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inr : β ->*o α × β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def inr : β ->*o α × β where
+def inr : β →*o α × β where
   __ := MonoidHom.inr _ _
   monotone' := MonoidHom.inr_mono
 
 /-- Given ordered monoids M, N, the natural projection ordered homomorphism from M × N to M. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural projection
 ordered homomorphism from M × N to M. -/]
-/--
-Definition of `fst` / `fst` 的定义
-
-English:
-definition fst
-  signature: : α × β ->*o α where
-  body: MonoidHom.fst _ _
-  monotone' := MonoidHom.fst_mono
-
-中文:
-定义 fst
-  签名: : α × β ->*o α where
-  定义体: MonoidHom.fst _ _
-  monotone' := MonoidHom.fst_mono
-
-Depends on / 依赖: MonoidHom, MonoidHom.fst
+/-
+**OrderMonoidHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：fst : α × β ->*o α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def fst : α × β ->*o α where
+def fst : α × β →*o α where
   __ := MonoidHom.fst _ _
   monotone' := MonoidHom.fst_mono
 
 /-- Given ordered monoids M, N, the natural projection ordered homomorphism from M × N to N. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural projection
 ordered homomorphism from M × N to N. -/]
-/--
-Definition of `snd` / `snd` 的定义
-
-English:
-definition snd
-  signature: : α × β ->*o β where
-  body: MonoidHom.snd _ _
-  monotone' := MonoidHom.snd_mono
-
-中文:
-定义 snd
-  签名: : α × β ->*o β where
-  定义体: MonoidHom.snd _ _
-  monotone' := MonoidHom.snd_mono
-
-Depends on / 依赖: MonoidHom, MonoidHom.snd
+/-
+**OrderMonoidHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：snd : α × β ->*o β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def snd : α × β ->*o β where
+def snd : α × β →*o β where
   __ := MonoidHom.snd _ _
   monotone' := MonoidHom.snd_mono
 
@@ -263,26 +205,13 @@ def snd : α × β ->*o β where
 lexicographic M ×ₗ N. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural inclusion
 ordered homomorphism from M to the lexicographic M ×ₗ N. -/]
-/--
-Definition of `inlₗ` / `inlₗ` 的定义
-
-English:
-definition inlₗ
-  signature: : α ->*o α ×ₗ β where
-  body: (Prod.Lex.toLexOrderHom).comp (inl α β)
-  map_one' := rfl
-  map_mul' := by simp [← toLex_mul]
-
-中文:
-定义 inlₗ
-  签名: : α ->*o α ×ₗ β where
-  定义体: (Prod.Lex.toLexOrderHom).comp (inl α β)
-  map_one' := rfl
-  map_mul' := by simp [← toLex_mul]
-
-Depends on / 依赖: Prod.Lex.toLexOrderHom, toLexOrderHom
+/-
+**OrderMonoidHom.inl** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inl : α ->*o α × β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def inlₗ : α ->*o α ×ₗ β where
+def inlₗ : α →*o α ×ₗ β where
   __ := (Prod.Lex.toLexOrderHom).comp (inl α β)
   map_one' := rfl
   map_mul' := by simp [← toLex_mul]
@@ -291,26 +220,13 @@ def inlₗ : α ->*o α ×ₗ β where
 lexicographic M ×ₗ N. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural inclusion
 ordered homomorphism from N to the lexicographic M ×ₗ N. -/]
-/--
-Definition of `inrₗ` / `inrₗ` 的定义
-
-English:
-definition inrₗ
-  signature: : β ->*o (α ×ₗ β) where
-  body: Prod.Lex.toLexOrderHom.comp (inr α β)
-  map_one' := rfl
-  map_mul' := by simp [← toLex_mul]
-
-中文:
-定义 inrₗ
-  签名: : β ->*o (α ×ₗ β) where
-  定义体: Prod.Lex.toLexOrderHom.comp (inr α β)
-  map_one' := rfl
-  map_mul' := by simp [← toLex_mul]
-
-Depends on / 依赖: Prod.Lex.toLexOrderHom.comp, toLexOrderHom
+/-
+**OrderMonoidHom.inr** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inr : β ->*o α × β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def inrₗ : β ->*o (α ×ₗ β) where
+def inrₗ : β →*o (α ×ₗ β) where
   __ := Prod.Lex.toLexOrderHom.comp (inr α β)
   map_one' := rfl
   map_mul' := by simp [← toLex_mul]
@@ -319,184 +235,102 @@ def inrₗ : β ->*o (α ×ₗ β) where
 lexicographic M ×ₗ N to M. -/
 @[to_additive (attr := simps!) /-- Given ordered additive monoids M, N, the natural projection
 ordered homomorphism from the lexicographic M ×ₗ N to M. -/]
-/--
-Definition of `fstₗ` / `fstₗ` 的定义
-
-English:
-definition fstₗ
-  signature: : (α ×ₗ β) ->*o α where
-  body: (ofLex p).fst
-  map_one' := rfl
-  map_mul' := by simp
-  monotone' := Prod.Lex.monotone_fst_ofLex
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 fstₗ
-  签名: : (α ×ₗ β) ->*o α where
-  定义体: (ofLex p).fst
-  map_one' := rfl
-  map_mul' := by simp
-  monotone' := Prod.Lex.monotone_fst_ofLex
-
-@[to_additive (attr := simp)]
+/-
+**OrderMonoidHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：fst : α × β ->*o α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def fstₗ : (α ×ₗ β) ->*o α where
+def fstₗ : (α ×ₗ β) →*o α where
   toFun p := (ofLex p).fst
   map_one' := rfl
   map_mul' := by simp
   monotone' := Prod.Lex.monotone_fst_ofLex
 
 @[to_additive (attr := simp)]
-/--
-theorem `fst_comp_inl` / 定理 `fst_comp_inl`
-
-English:
-theorem fst_comp_inl
-  statement: (fst α β).comp (inl α β) = .id α
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 fst_comp_inl
-  结论: (fst α β).comp (inl α β) = .id α
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OrderMonoidHom.fst_comp_inl** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：fst_comp_inl : (fst α β).comp (inl α β) = .id α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_comp_inl : (fst α β).comp (inl α β) = .id α :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `fstₗ_comp_inlₗ` / 定理 `fstₗ_comp_inlₗ`
-
-English:
-theorem fstₗ_comp_inlₗ
-  statement: (fstₗ α β).comp (inlₗ α β) = .id α
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 fstₗ_comp_inlₗ
-  结论: (fstₗ α β).comp (inlₗ α β) = .id α
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OrderMonoidHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：fst : α × β ->*o α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fstₗ_comp_inlₗ : (fstₗ α β).comp (inlₗ α β) = .id α :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `snd_comp_inl` / 定理 `snd_comp_inl`
-
-English:
-theorem snd_comp_inl
-  statement: (snd α β).comp (inl α β) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 snd_comp_inl
-  结论: (snd α β).comp (inl α β) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OrderMonoidHom.snd_comp_inl** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：snd_comp_inl : (snd α β).comp (inl α β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_comp_inl : (snd α β).comp (inl α β) = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `fst_comp_inr` / 定理 `fst_comp_inr`
-
-English:
-theorem fst_comp_inr
-  statement: (fst α β).comp (inr α β) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 fst_comp_inr
-  结论: (fst α β).comp (inr α β) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OrderMonoidHom.fst_comp_inr** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：fst_comp_inr : (fst α β).comp (inr α β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_comp_inr : (fst α β).comp (inr α β) = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `snd_comp_inr` / 定理 `snd_comp_inr`
-
-English:
-theorem snd_comp_inr
-  statement: (snd α β).comp (inr α β) = .id β
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 snd_comp_inr
-  结论: (snd α β).comp (inr α β) = .id β
-  证明: rfl
-
-@[to_additive]
+/-
+**OrderMonoidHom.snd_comp_inr** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：snd_comp_inr : (snd α β).comp (inr α β) = .id β
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_comp_inr : (snd α β).comp (inr α β) = .id β :=
   rfl
 
 @[to_additive]
-/--
-theorem `inl_mul_inr_eq_mk` / 定理 `inl_mul_inr_eq_mk`
-
-English:
-theorem inl_mul_inr_eq_mk
-  given: (m : α) (n : β)
-  statement: inl α β m * inr α β n = (m, n)
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-定理 inl_mul_inr_eq_mk
-  条件: (m : α) (n : β)
-  结论: inl α β m * inr α β n = (m, n)
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**OrderMonoidHom.inl_mul_inr_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inl_mul_inr_eq_mk (m : α) (n : β) : inl α β m * inr α β n = (m, n)
+参数：m : α；n : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OrderMonoidHom.inl_apply`：∀ (α : Type u_1) (β : Type u_2) [inst : Monoid
+ α] [inst_1 : PartialOrder α] [inst_2 : Monoid β] [inst_3 : Preorder β]   (x : α
+), (OrderMonoi…
+· 使用定理 `OrderMonoidHom.inr_apply`：∀ (α : Type u_1) (β : Type u_2) [inst : Monoid
+ α] [inst_1 : PartialOrder α] [inst_2 : Monoid β] [inst_3 : Preorder β]   (y : β
+), (OrderMonoi…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_mul_inr_eq_mk (m : α) (n : β) : inl α β m * inr α β n = (m, n) := by
   simp
 
 @[to_additive]
-/--
-theorem `inlₗ_mul_inrₗ_eq_toLex` / 定理 `inlₗ_mul_inrₗ_eq_toLex`
-
-English:
-theorem inlₗ_mul_inrₗ_eq_toLex
-  given: (m : α) (n : β)
-  statement: inlₗ α β m * inrₗ α β n = toLex (m, n)
-  proof: by
-  simp [← toLex_mul]
-
-中文:
-定理 inlₗ_mul_inrₗ_eq_toLex
-  条件: (m : α) (n : β)
-  结论: inlₗ α β m * inrₗ α β n = toLex (m, n)
-  证明: by
-  simp [← toLex_mul]
-
-Depends on / 依赖: toLex_mul
+/-
+**OrderMonoidHom.inl** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidHom`。
+形式化陈述：inl : α ->*o α × β where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inlₗ_mul_inrₗ_eq_toLex (m : α) (n : β) : inlₗ α β m * inrₗ α β n = toLex (m, n) := by
   simp [← toLex_mul]
@@ -504,49 +338,27 @@ theorem inlₗ_mul_inrₗ_eq_toLex (m : α) (n : β) : inlₗ α β m * inrₗ �
 variable {α β}
 
 @[to_additive]
-/--
-theorem `commute_inl_inr` / 定理 `commute_inl_inr`
-
-English:
-theorem commute_inl_inr
-  given: (m : α) (n : β)
-  statement: Commute (inl α β m) (inr α β n)
-  proof: Commute.prod (.one_right m) (.one_left n)
-
-@[to_additive]
-
-中文:
-定理 commute_inl_inr
-  条件: (m : α) (n : β)
-  结论: Commute (inl α β m) (inr α β n)
-  证明: Commute.prod (.one_right m) (.one_left n)
-
-@[to_additive]
-
-Depends on / 依赖: Commute, Commute.prod, one_left, one_right
+/-
+**OrderMonoidHom.commute_inl_inr** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+形式化陈述：commute_inl_inr (m : α) (n : β) : Commute (inl α β m) (inr α β n)
+参数：m : α；n : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.prod`：Commute.prod {x y : M × N} (hm : Commute x.1 y.1) (hn : Co
+mmute x.2 y.2) : Commute x y
+· 使用定理 `Commute.one_right`：one_right (a : M) : Commute a 1
+· 使用定理 `Commute.one_left`：one_left (a : M) : Commute 1 a
 -/
 theorem commute_inl_inr (m : α) (n : β) : Commute (inl α β m) (inr α β n) :=
   Commute.prod (.one_right m) (.one_left n)
 
 @[to_additive]
-/--
-theorem `commute_inlₗ_inrₗ` / 定理 `commute_inlₗ_inrₗ`
-
-English:
-theorem commute_inlₗ_inrₗ
-  given: (m : α) (n : β)
-  statement: Commute (inlₗ α β m) (inrₗ α β n)
-  proof: Commute.prod (.one_right m) (.one_left n)
-
-中文:
-定理 commute_inlₗ_inrₗ
-  条件: (m : α) (n : β)
-  结论: Commute (inlₗ α β m) (inrₗ α β n)
-  证明: Commute.prod (.one_right m) (.one_left n)
-
-Depends on / 依赖: Commute, Commute.prod, one_left, one_right
+/-
+**OrderMonoidHom.commute_inl** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem commute_inlₗ_inrₗ (m : α) (n : β) : Commute (inlₗ α β m) (inrₗ α β n) :=
   Commute.prod (.one_right m) (.one_left n)
 
 end OrderMonoidHom
+

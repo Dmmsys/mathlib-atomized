@@ -21,18 +21,24 @@ This is given for any type `A` so that we can have `WithConv (A →ₗ[R] B)`,
 
 @[expose] public section
 
-/--
-Definition of `WithConv` / `WithConv` 的定义
+/-- A type synonym for the convolutive product of linear maps and intrinsic star.
 
-English:
-structure WithConv
-  parameters: A
-  (no additional axioms)
+The instances for the convolutive product and intrinsic star are only available with this type.
 
-中文:
-结构 WithConv
-  参数: A
-  (无附加公理)
+Use `WithConv.linearEquiv` to coerce into this type. -/
+/-
+**WithConv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Sort u_1 → Sort (max 1 u_1)
+参数：max 1 u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A type synonym for the convolutive product of linear maps and intrinsic star.
+
+The instances for the convolutive product and intrinsic star are only available 
+with this type.
+
+Use `WithConv.linearEquiv` to coerce into this type.
 -/
 structure WithConv A where
   /-- Converts an element of `A` to `WithConv A`. -/ toConv ::
@@ -47,461 +53,230 @@ meta def delabToConv : Delab := delabApp
 
 variable {R A B C : Type*}
 
-/--
-lemma `ofConv_toConv` / 引理 `ofConv_toConv`
-
-English:
-lemma ofConv_toConv
-  given: (x : A)
-  statement: ofConv (toConv x) = x
-  proof: rfl
-
-中文:
-引理 ofConv_toConv
-  条件: (x : A)
-  结论: ofConv (toConv x) = x
-  证明: rfl
+/-
+**WithConv.ofConv_toConv** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：ofConv_toConv (x : A) : ofConv (toConv x) = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofConv_toConv (x : A) : ofConv (toConv x) = x := rfl
-/--
-lemma `toConv_ofConv` / 引理 `toConv_ofConv`
-
-English:
-lemma toConv_ofConv
-  given: (x : WithConv A)
-  statement: toConv (ofConv x) = x
-  proof: rfl
-
-中文:
-引理 toConv_ofConv
-  条件: (x : WithConv A)
-  结论: toConv (ofConv x) = x
-  证明: rfl
+/-
+**WithConv.toConv_ofConv** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} (x : WithConv A), WithConv.toConv x.ofConv = x
+参数：x : WithConv A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_ofConv (x : WithConv A) : toConv (ofConv x) = x := rfl
-
-/--
-lemma `ofConv_surjective` / 引理 `ofConv_surjective`
-
-English:
-lemma ofConv_surjective
-  statement: Function.Surjective (@ofConv A)
-  proof: Function.RightInverse.surjective ofConv_toConv
-
-中文:
-引理 ofConv_surjective
-  结论: 函数.满射 (@ofConv A)
-  证明: Function.RightInverse.surjective ofConv_toConv
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, ofConv_toConv, surjective
+/-
+**WithConv.ofConv_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：ofConv_surjective : Function.Surjective (@ofConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `WithConv.ofConv_toConv`：ofConv_toConv (x : A) : ofConv (toConv x) = x
 -/
 lemma ofConv_surjective : Function.Surjective (@ofConv A) :=
   Function.RightInverse.surjective ofConv_toConv
-
-/--
-lemma `toConv_surjective` / 引理 `toConv_surjective`
-
-English:
-lemma toConv_surjective
-  statement: Function.Surjective (@toConv A)
-  proof: Function.RightInverse.surjective toConv_ofConv
-
-中文:
-引理 toConv_surjective
-  结论: 函数.满射 (@toConv A)
-  证明: Function.RightInverse.surjective toConv_ofConv
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toConv_ofConv
+/-
+**WithConv.toConv_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：toConv_surjective : Function.Surjective (@toConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `WithConv.toConv_ofConv`：∀ {A : Type u_2} (x : WithConv A), WithConv.toCo
+nv x.ofConv = x
 -/
 lemma toConv_surjective : Function.Surjective (@toConv A) :=
   Function.RightInverse.surjective toConv_ofConv
-
-/--
-lemma `ofConv_injective` / 引理 `ofConv_injective`
-
-English:
-lemma ofConv_injective
-  statement: Function.Injective (@ofConv A)
-  proof: Function.LeftInverse.injective toConv_ofConv
-
-中文:
-引理 ofConv_injective
-  结论: 函数.单射 (@ofConv A)
-  证明: Function.LeftInverse.injective toConv_ofConv
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, toConv_ofConv
+/-
+**WithConv.ofConv_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：ofConv_injective : Function.Injective (@ofConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `WithConv.toConv_ofConv`：∀ {A : Type u_2} (x : WithConv A), WithConv.toCo
+nv x.ofConv = x
 -/
 lemma ofConv_injective : Function.Injective (@ofConv A) :=
   Function.LeftInverse.injective toConv_ofConv
-
-/--
-lemma `toConv_injective` / 引理 `toConv_injective`
-
-English:
-lemma toConv_injective
-  statement: Function.Injective (@toConv A)
-  proof: Function.LeftInverse.injective ofConv_toConv
-
-中文:
-引理 toConv_injective
-  结论: 函数.单射 (@toConv A)
-  证明: Function.LeftInverse.injective ofConv_toConv
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofConv_toConv
+/-
+**WithConv.toConv_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：toConv_injective : Function.Injective (@toConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `WithConv.ofConv_toConv`：ofConv_toConv (x : A) : ofConv (toConv x) = x
 -/
 lemma toConv_injective : Function.Injective (@toConv A) :=
   Function.LeftInverse.injective ofConv_toConv
-
-/--
-lemma `ofConv_bijective` / 引理 `ofConv_bijective`
-
-English:
-lemma ofConv_bijective
-  statement: Function.Bijective (@ofConv A)
-  proof: ⟨ofConv_injective, ofConv_surjective⟩
-
-中文:
-引理 ofConv_bijective
-  结论: 函数.双射 (@ofConv A)
-  证明: ⟨ofConv_injective, ofConv_surjective⟩
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine.mpr, iff_of_isAffine, ofConv_injective, ofConv_surjective
+/-
+**WithConv.ofConv_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：ofConv_bijective : Function.Bijective (@ofConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithConv.ofConv_injective`：ofConv_injective : Function.Injective (@ofCon
+v A)
+· 使用引理 `WithConv.ofConv_surjective`：ofConv_surjective : Function.Surjective (@of
+Conv A)
 -/
 lemma ofConv_bijective : Function.Bijective (@ofConv A) := ⟨ofConv_injective, ofConv_surjective⟩
-/--
-lemma `toConv_bijective` / 引理 `toConv_bijective`
-
-English:
-lemma toConv_bijective
-  statement: Function.Bijective (@toConv A)
-  proof: ⟨toConv_injective, toConv_surjective⟩
-
-中文:
-引理 toConv_bijective
-  结论: 函数.双射 (@toConv A)
-  证明: ⟨toConv_injective, toConv_surjective⟩
-
-Depends on / 依赖: toConv_injective, toConv_surjective
+/-
+**WithConv.toConv_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：toConv_bijective : Function.Bijective (@toConv A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithConv.toConv_injective`：toConv_injective : Function.Injective (@toCon
+v A)
+· 使用引理 `WithConv.toConv_surjective`：toConv_surjective : Function.Surjective (@to
+Conv A)
 -/
 lemma toConv_bijective : Function.Bijective (@toConv A) := ⟨toConv_injective, toConv_surjective⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CoeFun
-  signature: A (fun _ => B -> C)] : CoeFun (WithConv A) (fun _ => B -> C) where coe f
-  body: ⇑f.ofConv
-
-中文:
-实例 [CoeFun
-  签名: A (fun _ => B -> C)] : CoeFun (WithConv A) (fun _ => B -> C) where coe f
-  定义体: ⇑f.ofConv
-
-Depends on / 依赖: f.ofConv, ofConv
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CoeFun A (fun _ => B -> C)] : CoeFun (WithConv A) (fun _ => B -> C) where coe f := ⇑f.ofConv
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {x y : WithConv A}
-  proof: ofConv_injective h
-
-中文:
-定理 ext
-  结论: {x y : WithConv A}
-  证明: ofConv_injective h
+instance [CoeFun A (fun _ ↦ B → C)] : CoeFun (WithConv A) (fun _ ↦ B → C) where coe f := ⇑f.ofConv
+/-
+**WithConv.ext** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} {x y : WithConv A}, x.ofConv = y.ofConv → x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithConv.ofConv_injective`：ofConv_injective : Function.Injective (@ofCon
+v A)
 -/
 @[ext] protected theorem ext {x y : WithConv A}
     (h : x.ofConv = y.ofConv) : x = y := ofConv_injective h
 
 variable (A) in
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- `WithConv.ofConv` and `WithConv.toConv` as an equivalence. -/
+/-
+**WithConv.equiv** 是 Mathlib 中的一个定义，位于命名空间 `WithConv`。
+形式化陈述：(A : Type u_2) → WithConv A ≃ A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: : WithConv A ≃ A where
-  body: ofConv
-  invFun := toConv
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 equiv
-  签名: : WithConv A ≃ A where
-  定义体: ofConv
-  invFun := toConv
-  left_inv _ := rfl
-  right_inv _ := rfl
+--- 原说明 ---
+`WithConv.ofConv` and `WithConv.toConv` as an equivalence.
 -/
 protected def equiv : WithConv A ≃ A where
   toFun := ofConv
   invFun := toConv
   left_inv _ := rfl
   right_inv _ := rfl
-
-/--
-lemma `equiv_apply` / 引理 `equiv_apply`
-
-English:
-lemma equiv_apply
-  given: (x : WithConv A)
-  statement: WithConv.equiv A x = x.ofConv
-  proof: rfl
-
-中文:
-引理 equiv_apply
-  条件: (x : WithConv A)
-  结论: WithConv.equiv A x = x.ofConv
-  证明: rfl
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
+/-
+**WithConv.equiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} (x : WithConv A), (WithConv.equiv A) x = x.ofConv
+参数：x : WithConv A；WithConv.equiv A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma equiv_apply (x : WithConv A) : WithConv.equiv A x = x.ofConv := rfl
-/--
-lemma `symm_equiv_apply` / 引理 `symm_equiv_apply`
-
-English:
-lemma symm_equiv_apply
-  given: (x : A)
-  statement: (WithConv.equiv A).symm x = toConv x
-  proof: rfl
-
-中文:
-引理 symm_equiv_apply
-  条件: (x : A)
-  结论: (WithConv.equiv A).symm x = toConv x
-  证明: rfl
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
+/-
+**WithConv.symm_equiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} (x : A), (WithConv.equiv A).symm x = WithConv.toConv x
+参数：x : A；WithConv.equiv A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma symm_equiv_apply (x : A) : (WithConv.equiv A).symm x = toConv x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: A] : Nontrivial (WithConv A)
-  body: (WithConv.equiv A).nontrivial
-
-中文:
-实例 [非平凡
-  签名: A] : 非平凡 (WithConv A)
-  定义体: (WithConv.equiv A).nontrivial
-
-Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, WithConv, WithConv.equiv, nontrivial, restrict
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial A] : Nontrivial (WithConv A) := (WithConv.equiv A).nontrivial
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: A] : Unique (WithConv A)
-  body: (WithConv.equiv A).unique
-
-中文:
-实例 [唯一
-  签名: A] : 唯一 (WithConv A)
-  定义体: (WithConv.equiv A).unique
-
-Depends on / 依赖: QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, WithConv, WithConv.equiv, compactSpace_of_compactSpace, pullback, pullback.snd, unique
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique A] : Unique (WithConv A) := (WithConv.equiv A).unique
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: A] : DecidableEq (WithConv A)
-  body: (WithConv.equiv A).decidableEq
-
-中文:
-实例 [DecidableEq
-  签名: A] : DecidableEq (WithConv A)
-  定义体: (WithConv.equiv A).decidableEq
-
-Depends on / 依赖: QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, WithConv, WithConv.equiv, compactSpace_of_compactSpace, decidableEq, pullback, pullback.fst
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq A] : DecidableEq (WithConv A) := (WithConv.equiv A).decidableEq
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: A] : AddMonoid (WithConv A)
-  body: (WithConv.equiv A).addMonoid
-
-中文:
-实例 [加法幺半群
-  签名: A] : 加法幺半群 (WithConv A)
-  定义体: (WithConv.equiv A).addMonoid
-
-Depends on / 依赖: WithConv, WithConv.equiv, addMonoid
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid A] : AddMonoid (WithConv A) := (WithConv.equiv A).addMonoid
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: A] : AddCommMonoid (WithConv A)
-  body: (WithConv.equiv A).addCommMonoid
-
-中文:
-实例 [加法交换幺半群
-  签名: A] : 加法交换幺半群 (WithConv A)
-  定义体: (WithConv.equiv A).addCommMonoid
-
-Depends on / 依赖: WithConv, WithConv.equiv, addCommMonoid
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid A] : AddCommMonoid (WithConv A) := (WithConv.equiv A).addCommMonoid
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroup
-  signature: A] : AddGroup (WithConv A)
-  body: (WithConv.equiv A).addGroup
-
-中文:
-实例 [加法群
-  签名: A] : 加法群 (WithConv A)
-  定义体: (WithConv.equiv A).addGroup
-
-Depends on / 依赖: WithConv, WithConv.equiv, addGroup
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddGroup A] : AddGroup (WithConv A) := (WithConv.equiv A).addGroup
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: A] : AddCommGroup (WithConv A)
-  body: (WithConv.equiv A).addCommGroup
-
-中文:
-实例 [加法交换群
-  签名: A] : 加法交换群 (WithConv A)
-  定义体: (WithConv.equiv A).addCommGroup
-
-Depends on / 依赖: WithConv, WithConv.equiv, addCommGroup
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup A] : AddCommGroup (WithConv A) := (WithConv.equiv A).addCommGroup
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: R] [MulAction R A] : MulAction R (WithConv A)
-  body: fast_instance% (WithConv.equiv A).mulAction R
-
-中文:
-实例 [幺半群
-  签名: R] [乘法作用 R A] : 乘法作用 R (WithConv A)
-  定义体: fast_instance% (WithConv.equiv A).mulAction R
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Monoid R] [MulAction R A] : MulAction R (WithConv A) :=
   fast_instance% (WithConv.equiv A).mulAction R
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: R] [AddCommMonoid A] [DistribMulAction R A] : DistribMulAction R (WithConv A)
-  body: fast_instance% (WithConv.equiv A).distribMulAction R
-
-中文:
-实例 [幺半群
-  签名: R] [加法交换幺半群 A] [分配乘法作用 R A] : 分配乘法作用 R (WithConv A)
-  定义体: fast_instance% (WithConv.equiv A).distribMulAction R
-
-Depends on / 依赖: WithConv, WithConv.equiv, distribMulAction, fast_instance
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid R] [AddCommMonoid A] [DistribMulAction R A] : DistribMulAction R (WithConv A) :=
   fast_instance% (WithConv.equiv A).distribMulAction R
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [AddCommMonoid A] [Module R A] : Module R (WithConv A)
-  body: fast_instance% (WithConv.equiv A).module R
-
-中文:
-实例 [半环
-  签名: R] [加法交换幺半群 A] [模 R A] : 模 R (WithConv A)
-  定义体: fast_instance% (WithConv.equiv A).module R
-
-Depends on / 依赖: WithConv, WithConv.equiv, fast_instance, module
+/-
+**WithConv.** 是 Mathlib 中的一个实例，位于命名空间 `WithConv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [AddCommMonoid A] [Module R A] : Module R (WithConv A) :=
   fast_instance% (WithConv.equiv A).module R
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- Lift an equivalence between `A` and `B` to `WithConv A` and `WithConv B`. -/
+/-
+**WithConv.congr** 是 Mathlib 中的一个定义，位于命名空间 `WithConv`。
+形式化陈述：{A : Type u_2} → {B : Type u_3} → A ≃ B → WithConv A ≃ WithConv B
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congr
-  signature: (f : A ≃ B)
-  body: (WithConv.equiv A).trans (f.trans (WithConv.equiv B).symm)
-
-中文:
-定义 congr
-  签名: (f : A ≃ B)
-  定义体: (WithConv.equiv A).trans (f.trans (WithConv.equiv B).symm)
+--- 原说明 ---
+Lift an equivalence between `A` and `B` to `WithConv A` and `WithConv B`.
 -/
 protected def congr (f : A ≃ B) : WithConv A ≃ WithConv B :=
   (WithConv.equiv A).trans (f.trans (WithConv.equiv B).symm)
-
-/--
-lemma `congr_apply` / 引理 `congr_apply`
-
-English:
-lemma congr_apply
-  given: (f : A ≃ B) (x : WithConv A)
-  proof: rfl
-
-中文:
-引理 congr_apply
-  条件: (f : A ≃ B) (x : WithConv A)
-  证明: rfl
+/-
+**WithConv.congr_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} {B : Type u_3} (f : A ≃ B) (x : WithConv A), (WithConv.co
+ngr f) x = WithConv.toConv (f x.ofConv)
+参数：f : A ≃ B；x : WithConv A；WithConv.congr f；f x.ofConv。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma congr_apply (f : A ≃ B) (x : WithConv A) :
     WithConv.congr f x = toConv (f x.ofConv) := rfl
-/--
-lemma `symm_congr` / 引理 `symm_congr`
-
-English:
-lemma symm_congr
-  given: (f : A ≃ B)
-  statement: (WithConv.congr f).symm = WithConv.congr f.symm
-  proof: rfl
-
-中文:
-引理 symm_congr
-  条件: (f : A ≃ B)
-  结论: (WithConv.congr f).symm = WithConv.congr f.symm
-  证明: rfl
+/-
+**WithConv.symm_congr** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} {B : Type u_3} (f : A ≃ B), (WithConv.congr f).symm = Wit
+hConv.congr f.symm
+参数：f : A ≃ B；WithConv.congr f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma symm_congr (f : A ≃ B) : (WithConv.congr f).symm = WithConv.congr f.symm := rfl
-/--
-lemma `symm_congr_apply` / 引理 `symm_congr_apply`
-
-English:
-lemma symm_congr_apply
-  given: (f : A ≃ B) (x : WithConv B)
-  proof: by simp
-
-中文:
-引理 symm_congr_apply
-  条件: (f : A ≃ B) (x : WithConv B)
-  证明: by simp
+/-
+**WithConv.symm_congr_apply** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：symm_congr_apply (f : A ≃ B) (x : WithConv B) : (WithConv.congr f).symm x 
+= toConv (f.symm x.ofConv)
+参数：f : A ≃ B；x : WithConv B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma symm_congr_apply (f : A ≃ B) (x : WithConv B) :
     (WithConv.congr f).symm x = toConv (f.symm x.ofConv) := by simp
@@ -509,106 +284,56 @@ lemma symm_congr_apply (f : A ≃ B) (x : WithConv B) :
 section AddGroup
 variable [AddGroup A]
 
-/--
-lemma `toConv_sub` / 引理 `toConv_sub`
-
-English:
-lemma toConv_sub
-  given: (x y : A)
-  statement: toConv (x - y) = toConv x - toConv y
-  proof: rfl
-
-中文:
-引理 toConv_sub
-  条件: (x y : A)
-  结论: toConv (x - y) = toConv x - toConv y
-  证明: rfl
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
+/-
+**WithConv.toConv_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (x y : A), WithConv.toConv (x - y) = 
+WithConv.toConv x - WithConv.toConv y
+参数：x y : A；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_sub (x y : A) : toConv (x - y) = toConv x - toConv y := rfl
-/--
-lemma `ofConv_sub` / 引理 `ofConv_sub`
-
-English:
-lemma ofConv_sub
-  given: (x y : WithConv A)
-  statement: ofConv (x - y) = ofConv x - ofConv y
-  proof: rfl
-
-中文:
-引理 ofConv_sub
-  条件: (x y : WithConv A)
-  结论: ofConv (x - y) = ofConv x - ofConv y
-  证明: rfl
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.eq_targetAffineLocally, HasRingHomProperty, HasRingHomProperty.eq_affineLocally, IsFinite, LocallyQuasiFinite, QuasiFinite, RingHom, RingHom.QuasiFinite.propertyIsLocal, eq_affineLocally, eq_targetAffineLocally, of_finite, propertyIsLocal, targetAffineLocally_affineAnd_eq_affineLocally, targetAffineLocally_affineAnd_le
+/-
+**WithConv.ofConv_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (x y : WithConv A), (x - y).ofConv = 
+x.ofConv - y.ofConv
+参数：x y : WithConv A；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConv_sub (x y : WithConv A) : ofConv (x - y) = ofConv x - ofConv y := rfl
-/--
-lemma `ofConv_neg` / 引理 `ofConv_neg`
-
-English:
-lemma ofConv_neg
-  given: (x : WithConv A)
-  statement: ofConv (-x) = -ofConv x
-  proof: rfl
-
-中文:
-引理 ofConv_neg
-  条件: (x : WithConv A)
-  结论: ofConv (-x) = -ofConv x
-  证明: rfl
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.of_isOpenImmersion, IsImmersion, LocallyQuasiFinite, QuasiFinite, RingHom, RingHom.QuasiFinite.holdsForLocalizationAway.containsIdentities, coborderRange, containsIdentities, f.coborderRange, f.liftCoborder_, holdsForLocalizationAway, infer_instance, of_isOpenImmersion
+/-
+**WithConv.ofConv_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (x : WithConv A), (-x).ofConv = -x.of
+Conv
+参数：x : WithConv A；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConv_neg (x : WithConv A) : ofConv (-x) = -ofConv x := rfl
-/--
-lemma `toConv_neg` / 引理 `toConv_neg`
-
-English:
-lemma toConv_neg
-  given: (x : A)
-  statement: toConv (-x) = -toConv x
-  proof: rfl
-
-中文:
-引理 toConv_neg
-  条件: (x : A)
-  结论: toConv (-x) = -toConv x
-  证明: rfl
+/-
+**WithConv.toConv_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (x : A), WithConv.toConv (-x) = -With
+Conv.toConv x
+参数：x : A；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_neg (x : A) : toConv (-x) = -toConv x := rfl
 
 end AddGroup
 
-/--
-lemma `ofConv_smul` / 引理 `ofConv_smul`
-
-English:
-lemma ofConv_smul
-  given: [Monoid R] [MulAction R A] (c : R) (x : WithConv A)
-  proof: rfl
-
-中文:
-引理 ofConv_smul
-  条件: [幺半群 R] [乘法作用 R A] (c : R) (x : WithConv A)
-  证明: rfl
+/-
+**WithConv.ofConv_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : Monoid R] [inst_1 : MulAction R A]
+ (c : R) (x : WithConv A),   (c • x).ofConv = c • x.ofConv
+参数：c : R；x : WithConv A；c • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConv_smul [Monoid R] [MulAction R A] (c : R) (x : WithConv A) :
     ofConv (c • x) = c • ofConv x := rfl
-/--
-lemma `toConv_smul` / 引理 `toConv_smul`
-
-English:
-lemma toConv_smul
-  given: [Monoid R] [MulAction R A] (c : R) (x : A)
-  proof: rfl
-
-中文:
-引理 toConv_smul
-  条件: [幺半群 R] [乘法作用 R A] (c : R) (x : A)
-  证明: rfl
+/-
+**WithConv.toConv_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : Monoid R] [inst_1 : MulAction R A]
+ (c : R) (x : A),   WithConv.toConv (c • x) = c • WithConv.toConv x
+参数：c : R；x : A；c • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_smul [Monoid R] [MulAction R A] (c : R) (x : A) :
     toConv (c • x) = c • toConv x := rfl
@@ -616,139 +341,76 @@ lemma toConv_smul
 section
 variable [AddMonoid A]
 
-/--
-lemma `ofConv_zero` / 引理 `ofConv_zero`
-
-English:
-lemma ofConv_zero
-  statement: ofConv (0 : WithConv A) = 0
-  proof: rfl
-
-中文:
-引理 ofConv_zero
-  结论: ofConv (0 : WithConv A) = 0
-  证明: rfl
+/-
+**WithConv.ofConv_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A], WithConv.ofConv 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConv_zero : ofConv (0 : WithConv A) = 0 := rfl
-/--
-lemma `toConv_zero` / 引理 `toConv_zero`
-
-English:
-lemma toConv_zero
-  statement: toConv (0 : A) = 0
-  proof: rfl
-
-中文:
-引理 toConv_zero
-  结论: toConv (0 : A) = 0
-  证明: rfl
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
+/-
+**WithConv.toConv_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A], WithConv.toConv 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_zero : toConv (0 : A) = 0 := rfl
-/--
-lemma `ofConv_add` / 引理 `ofConv_add`
-
-English:
-lemma ofConv_add
-  given: (x y : WithConv A)
-  statement: ofConv (x + y) = ofConv x + ofConv y
-  proof: rfl
-
-中文:
-引理 ofConv_add
-  条件: (x y : WithConv A)
-  结论: ofConv (x + y) = ofConv x + ofConv y
-  证明: rfl
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
+/-
+**WithConv.ofConv_add** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A] (x y : WithConv A), (x + y).ofConv =
+ x.ofConv + y.ofConv
+参数：x y : WithConv A；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConv_add (x y : WithConv A) : ofConv (x + y) = ofConv x + ofConv y := rfl
-/--
-lemma `toConv_add` / 引理 `toConv_add`
-
-English:
-lemma toConv_add
-  given: (x y : A)
-  statement: toConv (x + y) = toConv x + toConv y
-  proof: rfl
-
-中文:
-引理 toConv_add
-  条件: (x y : A)
-  结论: toConv (x + y) = toConv x + toConv y
-  证明: rfl
-
-Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, restrict
+/-
+**WithConv.toConv_add** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A] (x y : A), WithConv.toConv (x + y) =
+ WithConv.toConv x + WithConv.toConv y
+参数：x y : A；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConv_add (x y : A) : toConv (x + y) = toConv x + toConv y := rfl
-/--
-lemma `ofConv_eq_zero` / 引理 `ofConv_eq_zero`
-
-English:
-lemma ofConv_eq_zero
-  given: {x : WithConv A}
-  statement: ofConv x = 0 ↔ x = 0
-  proof: ofConv_injective.eq_iff
-
-中文:
-引理 ofConv_eq_zero
-  条件: {x : WithConv A}
-  结论: ofConv x = 0 ↔ x = 0
-  证明: ofConv_injective.eq_iff
-
-Depends on / 依赖: Scheme, Scheme.Hom.resLE, infer_instance
+/-
+**WithConv.ofConv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A] {x : WithConv A}, x.ofConv = 0 ↔ x =
+ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithConv.ofConv_injective`：ofConv_injective : Function.Injective (@ofCon
+v A)
 -/
 @[simp] lemma ofConv_eq_zero {x : WithConv A} : ofConv x = 0 ↔ x = 0 := ofConv_injective.eq_iff
-/--
-lemma `toConv_eq_zero` / 引理 `toConv_eq_zero`
-
-English:
-lemma toConv_eq_zero
-  given: {x : A}
-  statement: toConv x = 0 ↔ x = 0
-  proof: toConv_injective.eq_iff
-
-中文:
-引理 toConv_eq_zero
-  条件: {x : A}
-  结论: toConv x = 0 ↔ x = 0
-  证明: toConv_injective.eq_iff
+/-
+**WithConv.toConv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A] {x : A}, WithConv.toConv x = 0 ↔ x =
+ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithConv.toConv_injective`：toConv_injective : Function.Injective (@toCon
+v A)
 -/
 @[simp] lemma toConv_eq_zero {x : A} : toConv x = 0 ↔ x = 0 := toConv_injective.eq_iff
 
 variable (A) in
-/--
-Definition of `addEquiv` / `addEquiv` 的定义
+/-- The additive equivalence between `WithConv A` and `A`. -/
+/-
+**WithConv.addEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithConv`。
+形式化陈述：(A : Type u_2) → [inst : AddMonoid A] → WithConv A ≃+ A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addEquiv
-  signature: : WithConv A ≃+ A where
-  body: WithConv.equiv A
-  map_add' := by simp
-
-中文:
-定义 addEquiv
-  签名: : WithConv A ≃+ A where
-  定义体: WithConv.equiv A
-  map_add' := by simp
+--- 原说明 ---
+The additive equivalence between `WithConv A` and `A`.
 -/
 @[simps!] protected def addEquiv : WithConv A ≃+ A where
   __ := WithConv.equiv A
   map_add' := by simp
-
-/--
-theorem `toEquiv_addEquiv` / 定理 `toEquiv_addEquiv`
-
-English:
-theorem toEquiv_addEquiv
-  statement: (WithConv.addEquiv A : WithConv A ≃ A) = WithConv.equiv A
-  proof: rfl
-
-中文:
-定理 toEquiv_addEquiv
-  结论: (WithConv.addEquiv A : WithConv A ≃ A) = WithConv.equiv A
-  证明: rfl
+/-
+**WithConv.toEquiv_addEquiv** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddMonoid A], ↑(WithConv.addEquiv A) = WithConv.e
+quiv A
+参数：WithConv.addEquiv A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toEquiv_addEquiv : (WithConv.addEquiv A : WithConv A ≃ A) = WithConv.equiv A := rfl
 
@@ -757,164 +419,146 @@ end
 variable [AddCommMonoid A]
 
 variable (R A) in
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-- The linear equivalence between `WithConv A` and `A`. -/
+/-
+**WithConv.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithConv`。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) → [inst : AddCommMonoid A] → [inst_1 : S
+emiring R] → [inst_2 : _root_.Module R A] → WithConv A ≃ₗ[R] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquiv
-  signature: [Semiring R] [Module R A]
-  body: WithConv.addEquiv A
-  map_smul' := by simp
-
-中文:
-定义 linearEquiv
-  签名: [半环 R] [模 R A]
-  定义体: WithConv.addEquiv A
-  map_smul' := by simp
+--- 原说明 ---
+The linear equivalence between `WithConv A` and `A`.
 -/
 protected def linearEquiv [Semiring R] [Module R A] : WithConv A ≃ₗ[R] A where
   __ := WithConv.addEquiv A
   map_smul' := by simp
-
-/--
-lemma `linearEquiv_apply` / 引理 `linearEquiv_apply`
-
-English:
-lemma linearEquiv_apply
-  statement: [Semiring R] [Module R A]
-  proof: rfl
-
-中文:
-引理 linearEquiv_apply
-  结论: [半环 R] [模 R A]
-  证明: rfl
+/-
+**WithConv.linearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : AddCommMonoid A] [inst_1 : Semirin
+g R] [inst_2 : _root_.Module R A]   (a : WithConv A), (WithConv.linearEquiv R A)
+ a = a.ofConv
+参数：a : WithConv A；WithConv.linearEquiv R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma linearEquiv_apply [Semiring R] [Module R A]
     (a : WithConv A) : WithConv.linearEquiv R A a = ofConv a := rfl
-/--
-lemma `symm_linearEquiv_apply` / 引理 `symm_linearEquiv_apply`
-
-English:
-lemma symm_linearEquiv_apply
-  statement: [Semiring R] [Module R A]
-  proof: rfl
-
-中文:
-引理 symm_linearEquiv_apply
-  结论: [半环 R] [模 R A]
-  证明: rfl
+/-
+**WithConv.symm_linearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : AddCommMonoid A] [inst_1 : Semirin
+g R] [inst_2 : _root_.Module R A] (a : A),   (WithConv.linearEquiv R A).symm a =
+ WithConv.toConv a
+参数：a : A；WithConv.linearEquiv R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma symm_linearEquiv_apply [Semiring R] [Module R A]
     (a : A) : (WithConv.linearEquiv R A).symm a = toConv a := rfl
-/--
-lemma `toAddEquiv_linearEquiv` / 引理 `toAddEquiv_linearEquiv`
-
-English:
-lemma toAddEquiv_linearEquiv
-  given: [Semiring R] [Module R A]
-  proof: rfl
-
-中文:
-引理 toAddEquiv_linearEquiv
-  条件: [半环 R] [模 R A]
-  证明: rfl
+/-
+**WithConv.toAddEquiv_linearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : AddCommMonoid A] [inst_1 : Semirin
+g R] [inst_2 : _root_.Module R A],   (WithConv.linearEquiv R A).toAddEquiv = Wit
+hConv.addEquiv A
+参数：WithConv.linearEquiv R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAddEquiv_linearEquiv [Semiring R] [Module R A] :
     (WithConv.linearEquiv R A).toAddEquiv = WithConv.addEquiv A := rfl
-
-/--
-lemma `ofConv_sum` / 引理 `ofConv_sum`
-
-English:
-lemma ofConv_sum
-  given: {ι : Type*} (s : Finset ι) (f : ι -> WithConv A)
-  proof: map_sum (WithConv.addEquiv _) _ _
-
-中文:
-引理 ofConv_sum
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> WithConv A)
-  证明: map_sum (WithConv.addEquiv _) _ _
-
-Depends on / 依赖: of_locallyQuasiFinite, pullback, pullback.snd
+/-
+**WithConv.ofConv_sum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] {ι : Type u_5} (s : Finset ι) (f
+ : ι → WithConv A),   (∑ i ∈ s, f i).ofConv = ∑ i ∈ s, (f i).ofConv
+参数：s : Finset ι；f : ι → WithConv A；∑ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-@[simp] lemma ofConv_sum {ι : Type*} (s : Finset ι) (f : ι -> WithConv A) :
-    (∑ i in s, f i).ofConv = ∑ i in s, (f i).ofConv := map_sum (WithConv.addEquiv _) _ _
-/--
-lemma `toConv_sum` / 引理 `toConv_sum`
-
-English:
-lemma toConv_sum
-  given: {ι : Type*} (s : Finset ι) (f : ι -> A)
-  proof: map_sum (WithConv.addEquiv _).symm _ _
-
-中文:
-引理 toConv_sum
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> A)
-  证明: map_sum (WithConv.addEquiv _).symm _ _
+@[simp] lemma ofConv_sum {ι : Type*} (s : Finset ι) (f : ι → WithConv A) :
+    (∑ i ∈ s, f i).ofConv = ∑ i ∈ s, (f i).ofConv := map_sum (WithConv.addEquiv _) _ _
+/-
+**WithConv.toConv_sum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] {ι : Type u_5} (s : Finset ι) (f
+ : ι → A),   WithConv.toConv (∑ i ∈ s, f i) = ∑ i ∈ s, WithConv.toConv (f i)
+参数：s : Finset ι；f : ι → A；∑ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-@[simp] lemma toConv_sum {ι : Type*} (s : Finset ι) (f : ι -> A) :
-    toConv (∑ i in s, f i) = ∑ i in s, toConv (f i) := map_sum (WithConv.addEquiv _).symm _ _
-/--
-lemma `ofConv_listSum` / 引理 `ofConv_listSum`
-
-English:
-lemma ofConv_listSum
-  given: (l : List (WithConv A))
-  proof: map_list_sum (WithConv.addEquiv _) _
-
-中文:
-引理 ofConv_listSum
-  条件: (l : 列表 (WithConv A))
-  证明: map_list_sum (WithConv.addEquiv _) _
-
-Depends on / 依赖: IsClosedImmersion, IsPreimmersion, LocallyQuasiFinite, f.fiberToSpecResidueField, fiberToSpecResidueField, infer_instance, isClosed_discrete, of_fiberToSpecResidueField, of_isPreimmersion, pullback, pullback.snd
+@[simp] lemma toConv_sum {ι : Type*} (s : Finset ι) (f : ι → A) :
+    toConv (∑ i ∈ s, f i) = ∑ i ∈ s, toConv (f i) := map_sum (WithConv.addEquiv _).symm _ _
+/-
+**WithConv.ofConv_listSum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] (l : List (WithConv A)), l.sum.o
+fConv = (List.map WithConv.ofConv l).sum
+参数：l : List (WithConv A)；List.map WithConv.ofConv l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 @[simp] lemma ofConv_listSum (l : List (WithConv A)) :
     l.sum.ofConv = (l.map ofConv).sum := map_list_sum (WithConv.addEquiv _) _
-/--
-lemma `toConv_listSum` / 引理 `toConv_listSum`
-
-English:
-lemma toConv_listSum
-  given: (l : List A)
-  proof: map_list_sum (WithConv.addEquiv _).symm _
-
-中文:
-引理 toConv_listSum
-  条件: (l : 列表 A)
-  证明: map_list_sum (WithConv.addEquiv _).symm _
+/-
+**WithConv.toConv_listSum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] (l : List A), WithConv.toConv l.
+sum = (List.map WithConv.toConv l).sum
+参数：l : List A；List.map WithConv.toConv l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 @[simp] lemma toConv_listSum (l : List A) :
     toConv l.sum = (l.map toConv).sum := map_list_sum (WithConv.addEquiv _).symm _
-/--
-lemma `ofConv_multisetSum` / 引理 `ofConv_multisetSum`
-
-English:
-lemma ofConv_multisetSum
-  given: (s : Multiset (WithConv A))
-  proof: map_multiset_sum (WithConv.addEquiv _) _
-
-中文:
-引理 ofConv_multisetSum
-  条件: (s : Multiset (WithConv A))
-  证明: map_multiset_sum (WithConv.addEquiv _) _
+/-
+**WithConv.ofConv_multisetSum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] (s : Multiset (WithConv A)),   s
+.sum.ofConv = (Multiset.map WithConv.ofConv s).sum
+参数：s : Multiset (WithConv A)；Multiset.map WithConv.ofConv s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 @[simp] lemma ofConv_multisetSum (s : Multiset (WithConv A)) :
     s.sum.ofConv = (s.map ofConv).sum := map_multiset_sum (WithConv.addEquiv _) _
-/--
-lemma `toConv_multisetSum` / 引理 `toConv_multisetSum`
-
-English:
-lemma toConv_multisetSum
-  given: (s : Multiset A)
-  proof: map_multiset_sum (WithConv.addEquiv _).symm _
-
-中文:
-引理 toConv_multisetSum
-  条件: (s : Multiset A)
-  证明: map_multiset_sum (WithConv.addEquiv _).symm _
-
-Depends on / 依赖: LocallyOfFiniteType
+/-
+**WithConv.toConv_multisetSum** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {A : Type u_2} [inst : AddCommMonoid A] (s : Multiset A), WithConv.toCon
+v s.sum = (Multiset.map WithConv.toConv s).sum
+参数：s : Multiset A；Multiset.map WithConv.toConv s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 @[simp] lemma toConv_multisetSum (s : Multiset A) :
     toConv s.sum = (s.map toConv).sum := map_multiset_sum (WithConv.addEquiv _).symm _
@@ -922,83 +566,61 @@ Depends on / 依赖: LocallyOfFiniteType
 section
 variable [Semiring R] [Module R A] [AddCommMonoid B] [Module R B]
 
-/--
-Definition of `congrLinearEquiv` / `congrLinearEquiv` 的定义
+/-- Lift a linear equivalence between `A` and `B` to `WithConv A` and `WithConv B`. -/
+/-
+**WithConv.congrLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithConv`。
+形式化陈述：congrLinearEquiv (f : A ≃ₗ[R] B) : WithConv A ≃ₗ[R] WithConv B
+参数：f : A ≃ₗ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLinearEquiv
-  signature: (f : A ≃ₗ[R] B)
-  body: (WithConv.linearEquiv R A).trans (f.trans (WithConv.linearEquiv R B).symm)
-
-中文:
-定义 congrLinearEquiv
-  签名: (f : A ≃ₗ[R] B)
-  定义体: (WithConv.linearEquiv R A).trans (f.trans (WithConv.linearEquiv R B).symm)
-
-Depends on / 依赖: WithConv, WithConv.linearEquiv, f.trans, linearEquiv
+--- 原说明 ---
+Lift a linear equivalence between `A` and `B` to `WithConv A` and `WithConv B`.
 -/
 def congrLinearEquiv (f : A ≃ₗ[R] B) : WithConv A ≃ₗ[R] WithConv B :=
   (WithConv.linearEquiv R A).trans (f.trans (WithConv.linearEquiv R B).symm)
-
-/--
-lemma `congrLinearEquiv_apply` / 引理 `congrLinearEquiv_apply`
-
-English:
-lemma congrLinearEquiv_apply
-  given: (f : A ≃ₗ[R] B) (x : WithConv A)
-  proof: rfl
-
-中文:
-引理 congrLinearEquiv_apply
-  条件: (f : A ≃ₗ[R] B) (x : WithConv A)
-  证明: rfl
+/-
+**WithConv.congrLinearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : AddCommMonoid A] [i
+nst_1 : Semiring R]   [inst_2 : _root_.Module R A] [inst_3 : AddCommMonoid B] [i
+nst_4 : _root_.Module R B] (f : A ≃ₗ[R] B) (x : WithConv A),   (WithConv.congrLi
+nearEquiv f) x = WithConv.toConv (f x.ofConv)
+参数：f : A ≃ₗ[R] B；x : WithConv A；WithConv.congrLinearEquiv f；f x.ofConv。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma congrLinearEquiv_apply (f : A ≃ₗ[R] B) (x : WithConv A) :
     congrLinearEquiv f x = toConv (f x.ofConv) := rfl
-/--
-lemma `symm_congrLinearEquiv` / 引理 `symm_congrLinearEquiv`
-
-English:
-lemma symm_congrLinearEquiv
-  given: (f : A ≃ₗ[R] B)
-  proof: rfl
-
-中文:
-引理 symm_congrLinearEquiv
-  条件: (f : A ≃ₗ[R] B)
-  证明: rfl
+/-
+**WithConv.symm_congrLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : AddCommMonoid A] [i
+nst_1 : Semiring R]   [inst_2 : _root_.Module R A] [inst_3 : AddCommMonoid B] [i
+nst_4 : _root_.Module R B] (f : A ≃ₗ[R] B),   (WithConv.congrLinearEquiv f).symm
+ = WithConv.congrLinearEquiv f.symm
+参数：f : A ≃ₗ[R] B；WithConv.congrLinearEquiv f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma symm_congrLinearEquiv (f : A ≃ₗ[R] B) :
     (congrLinearEquiv f).symm = congrLinearEquiv f.symm := rfl
-/--
-lemma `symm_congrLinearEquiv_apply` / 引理 `symm_congrLinearEquiv_apply`
-
-English:
-lemma symm_congrLinearEquiv_apply
-  given: (f : A ≃ₗ[R] B) (x : WithConv B)
-  proof: by simp
-
-中文:
-引理 symm_congrLinearEquiv_apply
-  条件: (f : A ≃ₗ[R] B) (x : WithConv B)
-  证明: by simp
-
-Depends on / 依赖: WithConv, WithConv.congr, congrLinearEquiv, f.toEquiv, theorem, toEquiv, toEquiv_congrLinearEquiv
+/-
+**WithConv.symm_congrLinearEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `WithConv`。
+形式化陈述：symm_congrLinearEquiv_apply (f : A ≃ₗ[R] B) (x : WithConv B) : (congrLinea
+rEquiv f).symm x = toConv (f.symm x.ofConv)
+参数：f : A ≃ₗ[R] B；x : WithConv B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma symm_congrLinearEquiv_apply (f : A ≃ₗ[R] B) (x : WithConv B) :
     (congrLinearEquiv f).symm x = toConv (f.symm x.ofConv) := by simp
-/--
-theorem `toEquiv_congrLinearEquiv` / 定理 `toEquiv_congrLinearEquiv`
-
-English:
-theorem toEquiv_congrLinearEquiv
-  given: (f : A ≃ₗ[R] B)
-  proof: rfl
-
-中文:
-定理 toEquiv_congrLinearEquiv
-  条件: (f : A ≃ₗ[R] B)
-  证明: rfl
+/-
+**WithConv.toEquiv_congrLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `WithConv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : AddCommMonoid A] [i
+nst_1 : Semiring R]   [inst_2 : _root_.Module R A] [inst_3 : AddCommMonoid B] [i
+nst_4 : _root_.Module R B] (f : A ≃ₗ[R] B),   (WithConv.congrLinearEquiv f).toEq
+uiv = WithConv.congr f.toEquiv
+参数：f : A ≃ₗ[R] B；WithConv.congrLinearEquiv f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toEquiv_congrLinearEquiv (f : A ≃ₗ[R] B) :
     (congrLinearEquiv f).toEquiv = WithConv.congr f.toEquiv := rfl
@@ -1006,3 +628,4 @@ theorem toEquiv_congrLinearEquiv
 end
 
 end WithConv
+

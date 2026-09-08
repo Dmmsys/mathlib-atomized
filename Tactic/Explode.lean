@@ -24,207 +24,37 @@ open Lean
 
 namespace Mathlib.Explode
 
-variable (select : Expr -> MetaM Bool) (includeAllDeps : Bool) in
-/--
-Definition of `explodeCore` / `explodeCore` 的定义
+variable (select : Expr → MetaM Bool) (includeAllDeps : Bool) in
+/-- Core `explode` algorithm.
 
-English:
-definition explodeCore
-  signature: (e : Expr) (depth : Nat) (entries : Entries) (start : Bool := false)
-  body: do
-  trace[explode] "depth = {depth}, start = {start}, e = {e}"
-  let e := e.cleanupAnnotations
-  if let some entry := entries.find? e then
-    trace[explode] "already seen"
-    return (entry, entries)
-  if !(← select e) then
-    trace[explode] "filtered out"
-    return (none, entries)
-  match e with
-  | .lam .. => do
-    trace[explode] ".lam"
-    Meta.lambdaTelescope e fun args body => do
-      let mut entries' := entries
-      let mut rdeps := []
-      for arg in args, i in [0:args.size] do
-        let (argEntry, entries'') := entries'.add arg
-          { type := ← addMessageContext <| ← Meta.inferType arg
-            depth := depth
-            status :=
-              if start
-              then Status.sintro
-              else if i == 0 then Status.intro else Status.cintro
-thm := ← addMessageContext arg
-            deps := []
-            useAsDep := ← select arg }
-        entries' := entries''
-        rdeps := some argEntry.line! :: rdeps
-      let (bodyEntry?, entries) ←
-        explodeCore body (if start then depth else depth + 1) entries'
-      rdeps := consDep bodyEntry? rdeps
-      let (entry, entries) := entries.add e
-        { type := ← addMessageContext <| ← Meta.inferType e
-          depth := depth
-          status := Status.lam
-          thm := "forallI" -- TODO use "→I" if it's purely implications?
-          deps := rdeps.reverse
-          useAsDep := true }
-      return (entry, entries)
-  | .app .. => do
-    trace[explode] ".app"
+- `select` is a condition for which expressions to process
+- `includeAllDeps` is whether to include dependencies even if they were filtered out.
+  If `True`, then `none` is inserted for omitted dependencies
+- `e` is the expression to process
+- `depth` is the current abstraction depth
+- `entries` is the table so far
+- `start` is whether we are at the top-level of the expression, which
+  causes lambdas to use `Status.sintro` to prevent a layer of nesting.
+-/
+/-
+**Mathlib.Explode.explodeCore** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Explode`。
+形式化陈述：(Expr → MetaM Bool) →   Bool →     Expr →       ℕ → Mathlib.Explode.Entrie
+s → optParam Bool false → MetaM (Option Mathlib.Explode.Entry × Mathlib.Explode.
+Entries)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-    -- We want to represent entire applications as a single line in the table
-    let fn := e.getAppFn
-    let args := e.getAppArgs
+--- 原说明 ---
+Core `explode` algorithm.
 
-    -- If the function is a `const`, then it's not local so we do not need an
-    -- entry in the table for it. We store the theorem name in the `thm` field
-    -- below, giving access to the theorem's type on hover in the UI.
-    -- Whether to include the entry could be controlled by a configuration option.
-    let (fnEntry?, entries) ←
-      if fn.isConst then
-        pure (none, entries)
-      else
-        explodeCore fn depth entries
-    let deps := if fn.isConst then [] else consDep fnEntry? []
-
-    let mut entries' := entries
-    let mut rdeps := []
-    for arg in args do
-      let (appEntry?, entries'') ← explodeCore arg depth entries'
-      entries' := entries''
-      rdeps := consDep appEntry? rdeps
-    let deps := deps ++ rdeps.reverse
-
-    let (entry, entries) := entries'.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-thm := ← addMessageContext if fn.isConst then MessageData.ofConst fn else "forallE"
-        deps := deps
-        useAsDep := true }
-    return (entry, entries)
-  | .letE varName varType val body _ => do
-    trace[explode] ".letE"
-    let varType := varType.cleanupAnnotations
-    Meta.withLetDecl varName varType val fun var => do
-      let (valEntry?, entries) ← explodeCore val depth entries
-      -- Add a synonym so that the substituted fvars refer to `valEntry?`
-.getD entries let entries := valEntry?.map (entries.addSynonym var)
-      explodeCore (body.instantiate1 var) depth entries
-  | _ => do
-    -- Right now all of these are caught by this case:
-    -- Expr.lit, Expr.forallE, Expr.const, Expr.sort, Expr.mvar, Expr.fvar, Expr.bvar
-    -- (Note: Expr.mdata is stripped by cleanupAnnotations)
-    -- Might be good to handle them individually.
-    trace[explode] ".{e.ctorName} (default handler)"
-    let (entry, entries) := entries.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-        thm := ← addMessageContext e
-        deps := []
-        useAsDep := ← select e }
-    return (entry, entries)
-
-中文:
-定义 explodeCore
-  签名: (e : Expr) (depth : 自然数) (entries : Entries) (start : 布尔值 := false)
-  定义体: do
-  trace[explode] "depth = {depth}, start = {start}, e = {e}"
-  let e := e.cleanupAnnotations
-  if let some entry := entries.find? e then
-    trace[explode] "already seen"
-    return (entry, entries)
-  if !(← select e) then
-    trace[explode] "filtered out"
-    return (none, entries)
-  match e with
-  | .lam .. => do
-    trace[explode] ".lam"
-    Meta.lambdaTelescope e fun args body => do
-      let mut entries' := entries
-      let mut rdeps := []
-      for arg in args, i in [0:args.size] do
-        let (argEntry, entries'') := entries'.add arg
-          { type := ← addMessageContext <| ← Meta.inferType arg
-            depth := depth
-            status :=
-              if start
-              then Status.sintro
-              else if i == 0 then Status.intro else Status.cintro
-thm := ← addMessageContext arg
-            deps := []
-            useAsDep := ← select arg }
-        entries' := entries''
-        rdeps := some argEntry.line! :: rdeps
-      let (bodyEntry?, entries) ←
-        explodeCore body (if start then depth else depth + 1) entries'
-      rdeps := consDep bodyEntry? rdeps
-      let (entry, entries) := entries.add e
-        { type := ← addMessageContext <| ← Meta.inferType e
-          depth := depth
-          status := Status.lam
-          thm := "forallI" -- TODO use "→I" if it's purely implications?
-          deps := rdeps.reverse
-          useAsDep := true }
-      return (entry, entries)
-  | .app .. => do
-    trace[explode] ".app"
-
-    -- We want to represent entire applications as a single line in the table
-    let fn := e.getAppFn
-    let args := e.getAppArgs
-
-    -- If the function is a `const`, then it's not local so we do not need an
-    -- entry in the table for it. We store the theorem name in the `thm` field
-    -- below, giving access to the theorem's type on hover in the UI.
-    -- Whether to include the entry could be controlled by a configuration option.
-    let (fnEntry?, entries) ←
-      if fn.isConst then
-        pure (none, entries)
-      else
-        explodeCore fn depth entries
-    let deps := if fn.isConst then [] else consDep fnEntry? []
-
-    let mut entries' := entries
-    let mut rdeps := []
-    for arg in args do
-      let (appEntry?, entries'') ← explodeCore arg depth entries'
-      entries' := entries''
-      rdeps := consDep appEntry? rdeps
-    let deps := deps ++ rdeps.reverse
-
-    let (entry, entries) := entries'.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-thm := ← addMessageContext if fn.isConst then MessageData.ofConst fn else "forallE"
-        deps := deps
-        useAsDep := true }
-    return (entry, entries)
-  | .letE varName varType val body _ => do
-    trace[explode] ".letE"
-    let varType := varType.cleanupAnnotations
-    Meta.withLetDecl varName varType val fun var => do
-      let (valEntry?, entries) ← explodeCore val depth entries
-      -- Add a synonym so that the substituted fvars refer to `valEntry?`
-.getD entries let entries := valEntry?.map (entries.addSynonym var)
-      explodeCore (body.instantiate1 var) depth entries
-  | _ => do
-    -- Right now all of these are caught by this case:
-    -- Expr.lit, Expr.forallE, Expr.const, Expr.sort, Expr.mvar, Expr.fvar, Expr.bvar
-    -- (Note: Expr.mdata is stripped by cleanupAnnotations)
-    -- Might be good to handle them individually.
-    trace[explode] ".{e.ctorName} (default handler)"
-    let (entry, entries) := entries.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-        thm := ← addMessageContext e
-        deps := []
-        useAsDep := ← select e }
-    return (entry, entries)
+- `select` is a condition for which expressions to process
+- `includeAllDeps` is whether to include dependencies even if they were filtered
+ out.
+  If `True`, then `none` is inserted for omitted dependencies
+- `e` is the expression to process
+- `depth` is the current abstraction depth
+- `entries` is the table so far
+- `start` is whether we are at the top-level of the expression, which
+  causes lambdas to use `Status.sintro` to prevent a layer of nesting.
 -/
 partial def explodeCore (e : Expr) (depth : Nat) (entries : Entries) (start : Bool := false) :
     MetaM (Option Entry × Entries) := do
@@ -244,14 +74,14 @@ partial def explodeCore (e : Expr) (depth : Nat) (entries : Entries) (start : Bo
       let mut rdeps := []
       for arg in args, i in [0:args.size] do
         let (argEntry, entries'') := entries'.add arg
-          { type := ← addMessageContext <| ← Meta.inferType arg
-            depth := depth
-            status :=
+          { type     := ← addMessageContext <| ← Meta.inferType arg
+            depth    := depth
+            status   :=
               if start
               then Status.sintro
               else if i == 0 then Status.intro else Status.cintro
-thm := ← addMessageContext arg
-            deps := []
+            thm      := ← addMessageContext <| arg
+            deps     := []
             useAsDep := ← select arg }
         entries' := entries''
         rdeps := some argEntry.line! :: rdeps
@@ -259,11 +89,11 @@ thm := ← addMessageContext arg
         explodeCore body (if start then depth else depth + 1) entries'
       rdeps := consDep bodyEntry? rdeps
       let (entry, entries) := entries.add e
-        { type := ← addMessageContext <| ← Meta.inferType e
-          depth := depth
-          status := Status.lam
-          thm := "forallI" -- TODO use "→I" if it's purely implications?
-          deps := rdeps.reverse
+        { type     := ← addMessageContext <| ← Meta.inferType e
+          depth    := depth
+          status   := Status.lam
+          thm      := "∀I" -- TODO use "→I" if it's purely implications?
+          deps     := rdeps.reverse
           useAsDep := true }
       return (entry, entries)
   | .app .. => do
@@ -293,11 +123,11 @@ thm := ← addMessageContext arg
     let deps := deps ++ rdeps.reverse
 
     let (entry, entries) := entries'.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-thm := ← addMessageContext if fn.isConst then MessageData.ofConst fn else "forallE"
-        deps := deps
+      { type     := ← addMessageContext <| ← Meta.inferType e
+        depth    := depth
+        status   := Status.reg
+        thm      := ← addMessageContext <| if fn.isConst then MessageData.ofConst fn else "∀E"
+        deps     := deps
         useAsDep := true }
     return (entry, entries)
   | .letE varName varType val body _ => do
@@ -306,20 +136,20 @@ thm := ← addMessageContext if fn.isConst then MessageData.ofConst fn else "for
     Meta.withLetDecl varName varType val fun var => do
       let (valEntry?, entries) ← explodeCore val depth entries
       -- Add a synonym so that the substituted fvars refer to `valEntry?`
-.getD entries let entries := valEntry?.map (entries.addSynonym var)
+      let entries := valEntry?.map (entries.addSynonym var) |>.getD entries
       explodeCore (body.instantiate1 var) depth entries
   | _ => do
     -- Right now all of these are caught by this case:
-    -- Expr.lit, Expr.forallE, Expr.const, Expr.sort, Expr.mvar, Expr.fvar, Expr.bvar
-    -- (Note: Expr.mdata is stripped by cleanupAnnotations)
+    --   Expr.lit, Expr.forallE, Expr.const, Expr.sort, Expr.mvar, Expr.fvar, Expr.bvar
+    --   (Note: Expr.mdata is stripped by cleanupAnnotations)
     -- Might be good to handle them individually.
     trace[explode] ".{e.ctorName} (default handler)"
     let (entry, entries) := entries.add e
-      { type := ← addMessageContext <| ← Meta.inferType e
-        depth := depth
-        status := Status.reg
-        thm := ← addMessageContext e
-        deps := []
+      { type     := ← addMessageContext <| ← Meta.inferType e
+        depth    := depth
+        status   := Status.reg
+        thm      := ← addMessageContext e
+        deps     := []
         useAsDep := ← select e }
     return (entry, entries)
 where
@@ -331,28 +161,15 @@ where
     else
       deps
 
-/--
-Definition of `explode` / `explode` 的定义
+/-- Main definition behind `#explode` command. -/
+/-
+**Mathlib.Explode.explode** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode`。
+形式化陈述：explode (e : Expr) (filterProofs : Bool
+参数：e : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition explode
-  signature: (e : Expr) (filterProofs : Bool := true)
-  body: do
-  let filter (e : Expr) : MetaM Bool :=
-    if filterProofs then Meta.isProof e else return true
-  let (_, entries) ← explodeCore (start := true) filter false e 0 default
-  return entries
-
-中文:
-定义 explode
-  签名: (e : Expr) (filterProofs : 布尔值 := true)
-  定义体: do
-  let filter (e : Expr) : MetaM Bool :=
-    if filterProofs then Meta.isProof e else return true
-  let (_, entries) ← explodeCore (start := true) filter false e 0 default
-  return entries
-
-Depends on / 依赖: Entries
+--- 原说明 ---
+Main definition behind `#explode` command.
 -/
 def explode (e : Expr) (filterProofs : Bool := true) : MetaM Entries := do
   let filter (e : Expr) : MetaM Bool :=
@@ -376,16 +193,16 @@ produces:
 ```lean
 iff_of_true : ∀ {a b : Prop}, a → b → (a ↔ b)
 
-0│ │ a ├ Prop
-1│ │ b ├ Prop
-2│ │ ha ├ a
-3│ │ hb ├ b
-4│ │ x✝ │ ┌ a
-5│4,3 │ ∀I │ a → b
-6│ │ x✝ │ ┌ b
-7│6,2 │ ∀I │ b → a
-8│5,7 │ Iff.intro │ a ↔ b
-9│0,1,2,3,8│ ∀I │ ∀ {a b : Prop}, a → b → (a ↔ b)
+0│         │ a         ├ Prop
+1│         │ b         ├ Prop
+2│         │ ha        ├ a
+3│         │ hb        ├ b
+4│         │ x✝        │ ┌ a
+5│4,3      │ ∀I        │ a → b
+6│         │ x✝        │ ┌ b
+7│6,2      │ ∀I        │ b → a
+8│5,7      │ Iff.intro │ a ↔ b
+9│0,1,2,3,8│ ∀I        │ ∀ {a b : Prop}, a → b → (a ↔ b)
 ```
 
 ## Overview
@@ -398,27 +215,27 @@ These are the main constructor types:
 
   - Lambda expressions (`Expr.lam`). The expression `fun (h : p) => s` is displayed as
     ```lean
-     0│ │ h │ ┌ p
-     1│** │ ** │ │ q
-     2│1,2 │ ∀I │ ∀ (h : p), q
+     0│    │ h   │ ┌ p
+     1│**  │ **  │ │ q
+     2│1,2 │ ∀I  │ ∀ (h : p), q
     ```
     with `**` a wildcard, and there can be intervening steps between 0 and 1.
     Nested lambda expressions can be merged, and `∀I` can depend on a whole list of arguments.
 
   - Applications (`Expr.app`). The expression `f a b c` is displayed as
      ```lean
-     0│** │ f │ A → B → C → D
-     1│** │ a │ A
-     2│** │ b │ B
-     3│** │ c │ C
+     0│**      │ f  │ A → B → C → D
+     1│**      │ a  │ A
+     2│**      │ b  │ B
+     3│**      │ c  │ C
      1│0,1,2,3 │ ∀E │ D
      ```
      There can be intervening steps between each of these.
      As a special case, if `f` is a constant it can be omitted and the display instead looks like
      ```lean
-     0│** │ a │ A
-     1│** │ b │ B
-     2│** │ c │ C
+     0│**    │ a │ A
+     1│**    │ b │ B
+     2│**    │ c │ C
      3│1,2,3 │ f │ D
      ```
 
@@ -429,7 +246,7 @@ These are the main constructor types:
 
   - Everything else (constants, fvars, etc.) display `x : X` as
     ```lean
-    0│ │ x │ X
+    0│  │ x │ X
     ```
 
 ## In more detail
@@ -470,11 +287,11 @@ the proof will be introduced in a group and the indentation will stay fixed. (Th
 brackets are only needed in order to delimit the scope of assumptions, and these assumptions
 have global scope anyway so detailed tracking is not necessary.)
 -/
-elab "#explode " stx:term : command => withoutModifyingEnv Command.runTermElabM fun _ => do
+elab "#explode " stx:term : command => withoutModifyingEnv <| Command.runTermElabM fun _ => do
   let (heading, e) ← try
     -- Adapted from `#check` implementation
     let theoremName : Name ← realizeGlobalConstNoOverloadWithInfo stx
-addCompletionInfo .id stx theoremName (danglingDot := false) {} none
+    addCompletionInfo <| .id stx theoremName (danglingDot := false) {} none
     let decl ← getConstInfo theoremName
     let c : Expr := .const theoremName (decl.levelParams.map mkLevelParam)
     pure (m!"{MessageData.ofConst c} : {decl.type}", decl.value! (allowOpaque := true))
@@ -486,8 +303,9 @@ addCompletionInfo .id stx theoremName (danglingDot := false) {} none
   unless e.isSyntheticSorry do
     let entries ← explode e
     let fitchTable : MessageData ← entriesToMessageData entries
-logInfo ← addMessageContext m!"{heading}\n\n{fitchTable}\n"
+    logInfo <|← addMessageContext m!"{heading}\n\n{fitchTable}\n"
 
 end Explode
 
 end Mathlib
+

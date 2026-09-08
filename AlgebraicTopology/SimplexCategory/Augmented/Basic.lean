@@ -29,18 +29,17 @@ objects, and we provide a translation of the main constructions on augmented (co
 
 open CategoryTheory
 
-/--
-Definition of `AugmentedSimplexCategory` / `AugmentedSimplexCategory` 的定义
+/-- The `AugmentedSimplexCategory` is the category obtained from `SimplexCategory` by adjoining an
+initial object. -/
+/-
+**AugmentedSimplexCategory** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：AugmentedSimplexCategory
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AugmentedSimplexCategory
-  body: WithInitial SimplexCategory
-
-中文:
-缩写 AugmentedSimplexCategory
-  定义体: WithInitial SimplexCategory
-
-Depends on / 依赖: SimplexCategory, WithInitial
+--- 原说明 ---
+The `AugmentedSimplexCategory` is the category obtained from `SimplexCategory` b
+y adjoining an
+initial object.
 -/
 abbrev AugmentedSimplexCategory := WithInitial SimplexCategory
 
@@ -50,95 +49,51 @@ variable {C : Type*} [Category* C]
 
 /-- The canonical inclusion from `SimplexCategory` to `AugmentedSimplexCategory`. -/
 @[simps!]
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-
+**AugmentedSimplexCategory.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `AugmentedSimplex
+Category`。
+形式化陈述：inclusion : SimplexCategory ⥤ AugmentedSimplexCategory
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: : SimplexCategory ⥤ AugmentedSimplexCategory
-  body: WithInitial.incl
-
-中文:
-定义 inclusion
-  签名: : 单纯形范畴 ⥤ AugmentedSimplexCategory
-  定义体: WithInitial.incl
-
-Depends on / 依赖: WithInitial, WithInitial.incl
+--- 原说明 ---
+The canonical inclusion from `SimplexCategory` to `AugmentedSimplexCategory`.
 -/
 def inclusion : SimplexCategory ⥤ AugmentedSimplexCategory := WithInitial.incl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: inclusion.Full
-  body: inferInstanceAs WithInitial.incl.Full
-
-中文:
-实例 :
-  签名: inclusion.满
-  定义体: inferInstanceAs WithInitial.incl.Full
-
-Depends on / 依赖: WithInitial, WithInitial.incl.Full
+/-
+**AugmentedSimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `AugmentedSimplexCategory`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : inclusion.Full := inferInstanceAs WithInitial.incl.Full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: inclusion.Faithful
-  body: inferInstanceAs WithInitial.incl.Faithful
-
-中文:
-实例 :
-  签名: inclusion.忠实
-  定义体: inferInstanceAs WithInitial.incl.Faithful
-
-Depends on / 依赖: Faithful, WithInitial, WithInitial.incl.Faithful
+/-
+**AugmentedSimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `AugmentedSimplexCategory`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : inclusion.Faithful := inferInstanceAs WithInitial.incl.Faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.HasInitial AugmentedSimplexCategory
-  body: inferInstanceAs Limits.HasInitial WithInitial _
-
-中文:
-实例 :
-  签名: Limits.HasInitial AugmentedSimplexCategory
-  定义体: inferInstanceAs Limits.HasInitial WithInitial _
-
-Depends on / 依赖: HasInitial, Limits, Limits.HasInitial, WithInitial
+/-
+**AugmentedSimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `AugmentedSimplexCategory`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.HasInitial AugmentedSimplexCategory :=
-inferInstanceAs Limits.HasInitial WithInitial _
+  inferInstanceAs <| Limits.HasInitial <| WithInitial _
 
 /-- The equivalence between functors out of `AugmentedSimplexCategory` and augmented
 cosimplicial objects. -/
 @[simps!]
-/--
-Definition of `equivAugmentedCosimplicialObject` / `equivAugmentedCosimplicialObject` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedCosimplicialObject** 是 Mathlib 中的一个定义，位
+于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedCosimplicialObject : (AugmentedSimplexCategory ⥤ C) ≌ Cosimp
+licialObject.Augmented C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedCosimplicialObject
-  signature: :
-  body: WithInitial.equivComma
-
-#adaptation_note
-
-中文:
-定义 equivAugmentedCosimplicialObject
-  签名: :
-  定义体: WithInitial.equivComma
-
-#adaptation_note
-
-Depends on / 依赖: WithInitial, WithInitial.equivComma, equivComma
+--- 原说明 ---
+The equivalence between functors out of `AugmentedSimplexCategory` and augmented
+cosimplicial objects.
 -/
 def equivAugmentedCosimplicialObject :
     (AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Augmented C :=
@@ -151,22 +106,20 @@ set_option backward.isDefEq.respectTransparency.types false in
 dropping the augmentation corresponds to precomposition with
 `inclusion : SimplexCategory ⥤ AugmentedSimplexCategory`. -/
 @[simps!]
-/--
-Definition of `equivAugmentedCosimplicialObjectFunctorCompDropIso` / `equivAugmentedCosimplicialObjectFunctorCompDropIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedCosimplicialObjectFunctorCompDropIso** 
+是 Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedCosimplicialObjectFunctorCompDropIso : equivAugmentedCosimpl
+icialObject.functor ⋙ CosimplicialObject.Augmented.drop ≅ (Functor.whiskeringLef
+t _ _ C).obj inclusion
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedCosimplicialObjectFunctorCompDropIso
-  signature: :
-  body: .refl _
-
-#adaptation_note
-
-中文:
-定义 equivAugmentedCosimplicialObjectFunctorCompDropIso
-  签名: :
-  定义体: .refl _
-
-#adaptation_note
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Aug
+mented C`,
+dropping the augmentation corresponds to precomposition with
+`inclusion : SimplexCategory ⥤ AugmentedSimplexCategory`.
 -/
 def equivAugmentedCosimplicialObjectFunctorCompDropIso :
     equivAugmentedCosimplicialObject.functor ⋙ CosimplicialObject.Augmented.drop ≅
@@ -179,18 +132,20 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Augmented C`,
 taking the point of the augmentation corresponds to evaluation at the initial object. -/
 @[simps!]
-/--
-Definition of `equivAugmentedCosimplicialObjectFunctorCompPointIso` / `equivAugmentedCosimplicialObjectFunctorCompPointIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedCosimplicialObjectFunctorCompPointIso**
+ 是 Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedCosimplicialObjectFunctorCompPointIso : equivAugmentedCosimp
+licialObject.functor ⋙ CosimplicialObject.Augmented.point ≅ ((evaluation _ _).ob
+j .star : (AugmentedSimplexCategory ⥤ C) ⥤ C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedCosimplicialObjectFunctorCompPointIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 equivAugmentedCosimplicialObjectFunctorCompPointIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Aug
+mented C`,
+taking the point of the augmentation corresponds to evaluation at the initial ob
+ject.
 -/
 def equivAugmentedCosimplicialObjectFunctorCompPointIso :
     equivAugmentedCosimplicialObject.functor ⋙ CosimplicialObject.Augmented.point ≅
@@ -201,22 +156,21 @@ def equivAugmentedCosimplicialObjectFunctorCompPointIso :
 the arrow attached to the cosimplicial object is the one obtained by evaluation at the unique arrow
 `star ⟶ of [0]`. -/
 @[simps!]
-/--
-Definition of `equivAugmentedCosimplicialObjectFunctorCompToArrowIso` / `equivAugmentedCosimplicialObjectFunctorCompToArrowIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedCosimplicialObjectFunctorCompToArrowIso
+** 是 Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedCosimplicialObjectFunctorCompToArrowIso : equivAugmentedCosi
+mplicialObject.functor ⋙ CosimplicialObject.Augmented.toArrow ≅ Functor.mapArrow
+Functor _ C ⋙ (evaluation _ _ |>.obj <| .mk <| WithInitial.homTo <| .mk 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedCosimplicialObjectFunctorCompToArrowIso
-  signature: :
-  body: .refl _
-
-#adaptation_note
-
-中文:
-定义 equivAugmentedCosimplicialObjectFunctorCompToArrowIso
-  签名: :
-  定义体: .refl _
-
-#adaptation_note
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Aug
+mented C`,
+the arrow attached to the cosimplicial object is the one obtained by evaluation 
+at the unique arrow
+`star ⟶ of [0]`.
 -/
 def equivAugmentedCosimplicialObjectFunctorCompToArrowIso :
     equivAugmentedCosimplicialObject.functor ⋙ CosimplicialObject.Augmented.toArrow ≅
@@ -230,41 +184,41 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The equivalence between functors out of `AugmentedSimplexCategory` and augmented simplicial
 objects. -/
 @[simps!]
-/--
-Definition of `equivAugmentedSimplicialObject` / `equivAugmentedSimplicialObject` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedSimplicialObject** 是 Mathlib 中的一个定义，位于命
+名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedSimplicialObject : (AugmentedSimplexCategoryᵒᵖ ⥤ C) ≌ Simpli
+cialObject.Augmented C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedSimplicialObject
-  signature: :
-  body: .trans WithTerminal.equivComma .congrLeft WithInitial.opEquiv SimplexCategory
-
-中文:
-定义 equivAugmentedSimplicialObject
-  签名: :
-  定义体: .trans WithTerminal.equivComma .congrLeft WithInitial.opEquiv SimplexCategory
-
-Depends on / 依赖: SimplexCategory, WithInitial, WithInitial.opEquiv, WithTerminal, WithTerminal.equivComma, congrLeft, equivComma, opEquiv
+--- 原说明 ---
+The equivalence between functors out of `AugmentedSimplexCategory` and augmented
+ simplicial
+objects.
 -/
 def equivAugmentedSimplicialObject :
     (AugmentedSimplexCategoryᵒᵖ ⥤ C) ≌ SimplicialObject.Augmented C :=
-.trans WithTerminal.equivComma .congrLeft WithInitial.opEquiv SimplexCategory
+  WithInitial.opEquiv SimplexCategory |>.congrLeft |>.trans WithTerminal.equivComma
 
 /-- Through the equivalence `(AugmentedSimplexCategoryᵒᵖ ⥤ C) ≌ SimplicialObject.Augmented C`,
 dropping the augmentation corresponds to precomposition with
 `inclusionᵒᵖ : SimplexCategoryᵒᵖ ⥤ AugmentedSimplexCategoryᵒᵖ`. -/
 @[simps!]
-/--
-Definition of `equivAugmentedSimplicialObjectFunctorCompDropIso` / `equivAugmentedSimplicialObjectFunctorCompDropIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedSimplicialObjectFunctorCompDropIso** 是 
+Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedSimplicialObjectFunctorCompDropIso : equivAugmentedSimplicia
+lObject.functor ⋙ SimplicialObject.Augmented.drop ≅ (Functor.whiskeringLeft _ _ 
+C).obj inclusion.op
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedSimplicialObjectFunctorCompDropIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 equivAugmentedSimplicialObjectFunctorCompDropIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategoryᵒᵖ ⥤ C) ≌ SimplicialObject.Aug
+mented C`,
+dropping the augmentation corresponds to precomposition with
+`inclusionᵒᵖ : SimplexCategoryᵒᵖ ⥤ AugmentedSimplexCategoryᵒᵖ`.
 -/
 def equivAugmentedSimplicialObjectFunctorCompDropIso :
     equivAugmentedSimplicialObject.functor ⋙ SimplicialObject.Augmented.drop ≅
@@ -274,18 +228,20 @@ def equivAugmentedSimplicialObjectFunctorCompDropIso :
 /-- Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Augmented C`,
 taking the point of the augmentation corresponds to evaluation at the initial object. -/
 @[simps!]
-/--
-Definition of `equivAugmentedSimplicialObjectFunctorCompPointIso` / `equivAugmentedSimplicialObjectFunctorCompPointIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedSimplicialObjectFunctorCompPointIso** 是
+ Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedSimplicialObjectFunctorCompPointIso : equivAugmentedSimplici
+alObject.functor ⋙ SimplicialObject.Augmented.point ≅ (evaluation _ C).obj (.op 
+.star)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedSimplicialObjectFunctorCompPointIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 equivAugmentedSimplicialObjectFunctorCompPointIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Aug
+mented C`,
+taking the point of the augmentation corresponds to evaluation at the initial ob
+ject.
 -/
 def equivAugmentedSimplicialObjectFunctorCompPointIso :
     equivAugmentedSimplicialObject.functor ⋙ SimplicialObject.Augmented.point ≅
@@ -296,18 +252,21 @@ def equivAugmentedSimplicialObjectFunctorCompPointIso :
 the arrow attached to the cosimplicial object is the one obtained by evaluation at the unique arrow
 `star ⟶ of [0]`. -/
 @[simps!]
-/--
-Definition of `equivAugmentedSimplicialObjectFunctorCompToArrowIso` / `equivAugmentedSimplicialObjectFunctorCompToArrowIso` 的定义
+/-
+**AugmentedSimplexCategory.equivAugmentedSimplicialObjectFunctorCompToArrowIso**
+ 是 Mathlib 中的一个定义，位于命名空间 `AugmentedSimplexCategory`。
+形式化陈述：equivAugmentedSimplicialObjectFunctorCompToArrowIso : equivAugmentedSimpli
+cialObject.functor ⋙ SimplicialObject.Augmented.toArrow ≅ Functor.mapArrowFuncto
+r _ C ⋙ (evaluation _ _ |>.obj <| .mk <| .op <| WithInitial.homTo <| .mk 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivAugmentedSimplicialObjectFunctorCompToArrowIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 equivAugmentedSimplicialObjectFunctorCompToArrowIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+Through the equivalence `(AugmentedSimplexCategory ⥤ C) ≌ CosimplicialObject.Aug
+mented C`,
+the arrow attached to the cosimplicial object is the one obtained by evaluation 
+at the unique arrow
+`star ⟶ of [0]`.
 -/
 def equivAugmentedSimplicialObjectFunctorCompToArrowIso :
     equivAugmentedSimplicialObject.functor ⋙ SimplicialObject.Augmented.toArrow ≅
@@ -316,3 +275,4 @@ def equivAugmentedSimplicialObjectFunctorCompToArrowIso :
   .refl _
 
 end AugmentedSimplexCategory
+

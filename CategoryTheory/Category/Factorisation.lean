@@ -29,36 +29,29 @@ universe v u
 variable {C : Type u} [Category.{v} C]
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `Factorisation` / `Factorisation` 的定义
+/-- Factorisations of a morphism `f` as a structure, containing, one object, two morphisms,
+and the condition that their composition equals `f`. -/
+/-
+**CategoryTheory.Factorisation** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：Factorisation {X Y : C} (f : X ⟶ Y) where /-- The midpoint of the factoris
+ation. -/ mid : C /-- The morphism into the factorisation midpoint. -/ ι : X ⟶ m
+id /-- The morphism out of the factorisation midpoint. -/ π : mid ⟶ Y /-- The fa
+ctorisation condition. -/ ι_π : ι ≫ π = f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Factorisation
-  parameters: {X Y : C} (f : X ⟶ Y)
-  axioms and operations (4):
-    - mid : C
-    - ι : X ⟶ mid
-    - π : mid ⟶ Y
-    - ι_π : ι ≫ π = f  [default: by cat_disch]
-
-中文:
-结构 分解
-  参数: {X Y : C} (f : X ⟶ Y)
-  公理与运算 (4 个):
-    - mid : C
-    - ι : X ⟶ mid
-    - π : mid ⟶ Y
-    - ι_π : ι ≫ π = f  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Factorisations of a morphism `f` as a structure, containing, one object, two mor
+phisms,
+and the condition that their composition equals `f`.
 -/
 structure Factorisation {X Y : C} (f : X ⟶ Y) where
   /-- The midpoint of the factorisation. -/
   mid : C
   /-- The morphism into the factorisation midpoint. -/
-  ι : X ⟶ mid
+  ι   : X ⟶ mid
   /-- The morphism out of the factorisation midpoint. -/
-  π : mid ⟶ Y
+  π   : mid ⟶ Y
   /-- The factorisation condition. -/
   ι_π : ι ≫ π = f := by cat_disch
 
@@ -71,26 +64,19 @@ variable {X Y : C} {f : X ⟶ Y}
 /-- Morphisms of `Factorisation f` consist of morphism between their midpoints and the obvious
 commutativity conditions. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Factorisation.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.F
+actorisation`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → {f : X ⟶ Y} → CategoryTheory.Factorisation f → CategoryTheory.Factorisation f
+ → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (d e : Factorisation f)
-  axioms and operations (3):
-    - h : d.mid ⟶ e.mid
-    - ι_h : d.ι ≫ h = e.ι  [default: by cat_disch]
-    - h_π : h ≫ e.π = d.π  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (d e : 分解 f)
-  公理与运算 (3 个):
-    - h : d.mid ⟶ e.mid
-    - ι_h : d.ι ≫ h = e.ι  [默认: by cat_disch]
-    - h_π : h ≫ e.π = d.π  [默认: by cat_disch]
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.flip_map_app, Iso.app_hom, Iso.trans_hom, app_hom, colimitHomIsoLimitYoneda, coyonedaOpColimitIsoLimitCoyoneda, flip_map_app, trans_hom
+--- 原说明 ---
+Morphisms of `Factorisation f` consist of morphism between their midpoints and t
+he obvious
+commutativity conditions.
 -/
 protected structure Hom (d e : Factorisation f) : Type (max u v) where
   /-- The morphism between the midpoints of the factorizations. -/
@@ -101,44 +87,19 @@ protected structure Hom (d e : Factorisation f) : Type (max u v) where
   h_π : h ≫ e.π = d.π := by cat_disch
 
 attribute [reassoc (attr := simp)] Factorisation.Hom.ι_h Factorisation.Hom.h_π
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Quiver (Factorisation f)
-  body: Factorisation.Hom d e
-
-@[simps]
-
-中文:
-实例 :
-  签名: 箭图 (分解 f)
-  定义体: Factorisation.Hom d e
-
-@[simps]
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Factorisation, Factorisation.Hom, Iso.inv_hom_id, colimitHomIsoLimitYoneda, id_comp, inv_hom_id
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Quiver (Factorisation f) where
   Hom d e := Factorisation.Hom d e
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{max u v} (Factorisation f)
-  body: { h := 𝟙 _ }
-  comp f g := { h := f.h ≫ g.h }
-
-中文:
-实例 :
-  签名: 范畴.{最大值 u v} (分解 f)
-  定义体: { h := 𝟙 _ }
-  comp f g := { h := f.h ≫ g.h }
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{max u v} (Factorisation f) where
   id d := { h := 𝟙 _ }
@@ -150,22 +111,15 @@ variable (d : Factorisation f)
 
 /-- The initial object in `Factorisation f`, with the domain of `f` as its midpoint. -/
 @[simps]
-/--
-Definition of `initial` / `initial` 的定义
+/-
+**CategoryTheory.Factorisation.initial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Factorisation`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → {f 
+: X ⟶ Y} → CategoryTheory.Factorisation f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initial
-  signature: : Factorisation f where
-  body: X
-  ι := 𝟙 _
-  π := f
-
-中文:
-定义 initial
-  签名: : 分解 f where
-  定义体: X
-  ι := 𝟙 _
-  π := f
+--- 原说明 ---
+The initial object in `Factorisation f`, with the domain of `f` as its midpoint.
 -/
 protected def initial : Factorisation f where
   mid := X
@@ -175,18 +129,17 @@ protected def initial : Factorisation f where
 set_option backward.defeqAttrib.useBackward true in
 /-- The unique morphism out of `Factorisation.initial f`. -/
 @[simps]
-/--
-Definition of `initialHom` / `initialHom` 的定义
+/-
+**CategoryTheory.Factorisation.initialHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Factorisation`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → {f : X ⟶ Y} → (d : CategoryTheory.Factorisation f) → CategoryTheory.Factorisa
+tion.initial.Hom d
+参数：d : CategoryTheory.Factorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialHom
-  signature: (d : Factorisation f)
-  body: d.ι
-
-中文:
-定义 initialHom
-  签名: (d : 分解 f)
-  定义体: d.ι
+--- 原说明 ---
+The unique morphism out of `Factorisation.initial f`.
 -/
 protected def initialHom (d : Factorisation f) :
     Factorisation.Hom (Factorisation.initial : Factorisation f) d where
@@ -194,22 +147,10 @@ protected def initialHom (d : Factorisation f) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique ((Factorisation.initial : Factorisation f) ⟶ d)
-  body: Factorisation.initialHom d
-  uniq f := by apply Factorisation.Hom.ext; simp [← f.ι_h]
-
-中文:
-实例 :
-  签名: 唯一 ((分解.initial : 分解 f) ⟶ d)
-  定义体: Factorisation.initialHom d
-  uniq f := by apply Factorisation.Hom.ext; simp [← f.ι_h]
-
-Depends on / 依赖: Factorisation, Factorisation.initialHom, initialHom
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique ((Factorisation.initial : Factorisation f) ⟶ d) where
   default := Factorisation.initialHom d
@@ -217,22 +158,16 @@ instance : Unique ((Factorisation.initial : Factorisation f) ⟶ d) where
 
 /-- The terminal object in `Factorisation f`, with the codomain of `f` as its midpoint. -/
 @[simps]
-/--
-Definition of `terminal` / `terminal` 的定义
+/-
+**CategoryTheory.Factorisation.terminal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Factorisation`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → {f 
+: X ⟶ Y} → CategoryTheory.Factorisation f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition terminal
-  signature: : Factorisation f where
-  body: Y
-  ι := f
-  π := 𝟙 _
-
-中文:
-定义 terminal
-  签名: : 分解 f where
-  定义体: Y
-  ι := f
-  π := 𝟙 _
+--- 原说明 ---
+The terminal object in `Factorisation f`, with the codomain of `f` as its midpoi
+nt.
 -/
 protected def terminal : Factorisation f where
   mid := Y
@@ -242,18 +177,17 @@ protected def terminal : Factorisation f where
 set_option backward.defeqAttrib.useBackward true in
 /-- The unique morphism into `Factorisation.terminal f`. -/
 @[simps]
-/--
-Definition of `terminalHom` / `terminalHom` 的定义
+/-
+**CategoryTheory.Factorisation.terminalHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Factorisation`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → {f : X ⟶ Y} → (d : CategoryTheory.Factorisation f) → d.Hom CategoryTheory.Fac
+torisation.terminal
+参数：d : CategoryTheory.Factorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition terminalHom
-  signature: (d : Factorisation f)
-  body: d.π
-
-中文:
-定义 terminalHom
-  签名: (d : 分解 f)
-  定义体: d.π
+--- 原说明 ---
+The unique morphism into `Factorisation.terminal f`.
 -/
 protected def terminalHom (d : Factorisation f) :
     Factorisation.Hom d (Factorisation.terminal : Factorisation f) where
@@ -261,22 +195,10 @@ protected def terminalHom (d : Factorisation f) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique (d ⟶ (Factorisation.terminal : Factorisation f))
-  body: Factorisation.terminalHom d
-  uniq f := by apply Factorisation.Hom.ext; simp [← f.h_π]
-
-中文:
-实例 :
-  签名: 唯一 (d ⟶ (分解.terminal : 分解 f))
-  定义体: Factorisation.terminalHom d
-  uniq f := by apply Factorisation.Hom.ext; simp [← f.h_π]
-
-Depends on / 依赖: Factorisation, Factorisation.terminalHom, terminalHom
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique (d ⟶ (Factorisation.terminal : Factorisation f)) where
   default := Factorisation.terminalHom d
@@ -284,93 +206,57 @@ instance : Unique (d ⟶ (Factorisation.terminal : Factorisation f)) where
 
 open Limits
 
-/--
-Definition of `IsInitial_initial` / `IsInitial_initial` 的定义
+/-- The initial factorisation is an initial object -/
+/-
+**CategoryTheory.Factorisation.IsInitial_initial** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Factorisation`。
+形式化陈述：IsInitial_initial : IsInitial (Factorisation.initial : Factorisation f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial_initial
-  signature: : IsInitial (Factorisation.initial : Factorisation f)
-  body: IsInitial.ofUnique _
-
-中文:
-定义 IsInitial_initial
-  签名: : IsInitial (分解.initial : 分解 f)
-  定义体: IsInitial.ofUnique _
-
-Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
+--- 原说明 ---
+The initial factorisation is an initial object
 -/
 def IsInitial_initial : IsInitial (Factorisation.initial : Factorisation f) := IsInitial.ofUnique _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasInitial (Factorisation f)
-  body: Limits.hasInitial_of_unique Factorisation.initial
-
-中文:
-实例 :
-  签名: HasInitial (分解 f)
-  定义体: Limits.hasInitial_of_unique Factorisation.initial
-
-Depends on / 依赖: Factorisation, Factorisation.initial, Limits, Limits.hasInitial_of_unique, hasInitial_of_unique, initial
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasInitial (Factorisation f) := Limits.hasInitial_of_unique Factorisation.initial
 
-/--
-Definition of `IsTerminal_terminal` / `IsTerminal_terminal` 的定义
+/-- The terminal factorisation is a terminal object -/
+/-
+**CategoryTheory.Factorisation.IsTerminal_terminal** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Factorisation`。
+形式化陈述：IsTerminal_terminal : IsTerminal (Factorisation.terminal : Factorisation f
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal_terminal
-  signature: : IsTerminal (Factorisation.terminal : Factorisation f)
-  body: IsTerminal.ofUnique _
-
-中文:
-定义 IsTerminal_terminal
-  签名: : 是终止 (分解.terminal : 分解 f)
-  定义体: IsTerminal.ofUnique _
-
-Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.isoOfNatIso_hom_, IsTerminal, IsTerminal.ofUnique, Iso.trans_hom, colimitCoyonedaHomIsoLimit, colimitHomIsoLimitYoneda, coyonedaLemma, ofUnique, trans_hom, uliftFunctor
+--- 原说明 ---
+The terminal factorisation is a terminal object
 -/
 def IsTerminal_terminal : IsTerminal (Factorisation.terminal : Factorisation f) :=
 IsTerminal.ofUnique _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasTerminal (Factorisation f)
-  body: Limits.hasTerminal_of_unique Factorisation.terminal
-
-中文:
-实例 :
-  签名: 有终止 (分解 f)
-  定义体: Limits.hasTerminal_of_unique Factorisation.terminal
-
-Depends on / 依赖: Factorisation, Factorisation.terminal, Limits, Limits.hasTerminal_of_unique, hasTerminal_of_unique, terminal
+/-
+**CategoryTheory.Factorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Factor
+isation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasTerminal (Factorisation f) := Limits.hasTerminal_of_unique Factorisation.terminal
 
 /-- The forgetful functor from `Factorisation f` to the underlying category `C`. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.Factorisation.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Factorisation`。
+形式化陈述：forget : Factorisation f ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Factorisation f ⥤ C where
-  body: Factorisation.mid
-  map f := f.h
-
-中文:
-定义 forget
-  签名: : 分解 f ⥤ C where
-  定义体: Factorisation.mid
-  map f := f.h
-
-Depends on / 依赖: Factorisation, Factorisation.mid
+--- 原说明 ---
+The forgetful functor from `Factorisation f` to the underlying category `C`.
 -/
 def forget : Factorisation f ⥤ C where
   obj := Factorisation.mid
@@ -379,3 +265,4 @@ def forget : Factorisation f ⥤ C where
 end Factorisation
 
 end CategoryTheory
+

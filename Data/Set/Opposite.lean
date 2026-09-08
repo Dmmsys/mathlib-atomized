@@ -22,249 +22,137 @@ open Opposite
 
 namespace Set
 
-/--
-Definition of `op` / `op` 的定义
+/-- The opposite of a set `s` is the set obtained by taking the opposite of each member of `s`. -/
+/-
+**Set.op** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_1} → Set α → Set αᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (s : Set α)
-  body: unop ⁻¹' s
-
-中文:
-定义 op
-  签名: (s : 集合 α)
-  定义体: unop ⁻¹' s
+--- 原说明 ---
+The opposite of a set `s` is the set obtained by taking the opposite of each mem
+ber of `s`.
 -/
 protected def op (s : Set α) : Set αᵒᵖ :=
   unop ⁻¹' s
 
-/--
-Definition of `unop` / `unop` 的定义
+/-- The unop of a set `s` is the set obtained by taking the unop of each member of `s`. -/
+/-
+**Set.unop** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_1} → Set αᵒᵖ → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: (s : Set αᵒᵖ)
-  body: op ⁻¹' s
-
-@[simp]
-
-中文:
-定义 unop
-  签名: (s : 集合 αᵒᵖ)
-  定义体: op ⁻¹' s
-
-@[simp]
+--- 原说明 ---
+The unop of a set `s` is the set obtained by taking the unop of each member of `
+s`.
 -/
 protected def unop (s : Set αᵒᵖ) : Set α :=
   op ⁻¹' s
 
 @[simp]
-/--
-theorem `mem_op` / 定理 `mem_op`
-
-English:
-theorem mem_op
-  given: {s : Set α} {a : αᵒᵖ}
-  statement: a in s.op ↔ unop a in s
-  proof: Iff.rfl
-
-@[simp 1100]
-
-中文:
-定理 mem_op
-  条件: {s : 集合 α} {a : αᵒᵖ}
-  结论: a in s.op ↔ unop a in s
-  证明: Iff.rfl
-
-@[simp 1100]
-
-Depends on / 依赖: Iff.rfl, X.carrier.str, carrier
+/-
+**Set.mem_op** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_op {s : Set α} {a : αᵒᵖ} : a in s.op ↔ unop a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_op {s : Set α} {a : αᵒᵖ} : a in s.op ↔ unop a in s :=
+theorem mem_op {s : Set α} {a : αᵒᵖ} : a ∈ s.op ↔ unop a ∈ s :=
   Iff.rfl
 
 @[simp 1100]
-/--
-theorem `op_mem_op` / 定理 `op_mem_op`
-
-English:
-theorem op_mem_op
-  given: {s : Set α} {a : α}
-  statement: op a in s.op ↔ a in s
-  proof: by rfl
-
-@[simp]
-
-中文:
-定理 op_mem_op
-  条件: {s : 集合 α} {a : α}
-  结论: op a in s.op ↔ a in s
-  证明: by rfl
-
-@[simp]
+/-
+**Set.op_mem_op** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：op_mem_op {s : Set α} {a : α} : op a in s.op ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem op_mem_op {s : Set α} {a : α} : op a in s.op ↔ a in s := by rfl
+theorem op_mem_op {s : Set α} {a : α} : op a ∈ s.op ↔ a ∈ s := by rfl
 
 @[simp]
-/--
-theorem `mem_unop` / 定理 `mem_unop`
-
-English:
-theorem mem_unop
-  given: {s : Set αᵒᵖ} {a : α}
-  statement: a in s.unop ↔ op a in s
-  proof: Iff.rfl
-
-@[simp 1100]
-
-中文:
-定理 mem_unop
-  条件: {s : 集合 αᵒᵖ} {a : α}
-  结论: a in s.unop ↔ op a in s
-  证明: Iff.rfl
-
-@[simp 1100]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_unop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_unop {s : Set αᵒᵖ} {a : α} : a in s.unop ↔ op a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_unop {s : Set αᵒᵖ} {a : α} : a in s.unop ↔ op a in s :=
+theorem mem_unop {s : Set αᵒᵖ} {a : α} : a ∈ s.unop ↔ op a ∈ s :=
   Iff.rfl
 
 @[simp 1100]
-/--
-theorem `unop_mem_unop` / 定理 `unop_mem_unop`
-
-English:
-theorem unop_mem_unop
-  given: {s : Set αᵒᵖ} {a : αᵒᵖ}
-  statement: unop a in s.unop ↔ a in s
-  proof: by rfl
-
-@[simp]
-
-中文:
-定理 unop_mem_unop
-  条件: {s : 集合 αᵒᵖ} {a : αᵒᵖ}
-  结论: unop a in s.unop ↔ a in s
-  证明: by rfl
-
-@[simp]
-
-Depends on / 依赖: comp_id, whiskerRight_id
+/-
+**Set.unop_mem_unop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：unop_mem_unop {s : Set αᵒᵖ} {a : αᵒᵖ} : unop a in s.unop ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem unop_mem_unop {s : Set αᵒᵖ} {a : αᵒᵖ} : unop a in s.unop ↔ a in s := by rfl
+theorem unop_mem_unop {s : Set αᵒᵖ} {a : αᵒᵖ} : unop a ∈ s.unop ↔ a ∈ s := by rfl
 
 @[simp]
-/--
-theorem `op_unop` / 定理 `op_unop`
-
-English:
-theorem op_unop
-  given: (s : Set α)
-  statement: s.op.unop = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_unop
-  条件: (s : 集合 α)
-  结论: s.op.unop = s
-  证明: rfl
-
-@[simp]
+/-
+**Set.op_unop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：op_unop (s : Set α) : s.op.unop = s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_unop (s : Set α) : s.op.unop = s := rfl
 
 @[simp]
-/--
-theorem `unop_op` / 定理 `unop_op`
-
-English:
-theorem unop_op
-  given: (s : Set αᵒᵖ)
-  statement: s.unop.op = s
-  proof: rfl
-
-中文:
-定理 unop_op
-  条件: (s : 集合 αᵒᵖ)
-  结论: s.unop.op = s
-  证明: rfl
+/-
+**Set.unop_op** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：unop_op (s : Set αᵒᵖ) : s.unop.op = s
+参数：s : Set αᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_op (s : Set αᵒᵖ) : s.unop.op = s := rfl
 
 /-- The members of the opposite of a set are in bijection with the members of the set itself. -/
 @[simps]
-/--
-Definition of `opEquiv_self` / `opEquiv_self` 的定义
+/-
+**Set.opEquiv_self** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：opEquiv_self (s : Set α) : s.op ≃ s
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquiv_self
-  signature: (s : Set α)
-  body: ⟨fun x => ⟨unop x, x.2⟩, fun x => ⟨op x, x.2⟩, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 opEquiv_self
-  签名: (s : 集合 α)
-  定义体: ⟨fun x => ⟨unop x, x.2⟩, fun x => ⟨op x, x.2⟩, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+The members of the opposite of a set are in bijection with the members of the se
+t itself.
 -/
 def opEquiv_self (s : Set α) : s.op ≃ s :=
-  ⟨fun x => ⟨unop x, x.2⟩, fun x => ⟨op x, x.2⟩, fun _ => rfl, fun _ => rfl⟩
+  ⟨fun x ↦ ⟨unop x, x.2⟩, fun x ↦ ⟨op x, x.2⟩, fun _ ↦ rfl, fun _ ↦ rfl⟩
 
 /-- Taking opposites as an equivalence of powersets. -/
 @[simps]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**Set.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：opEquiv : Set α ≃ Set αᵒᵖ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.op_unop`：op_unop (s : Set α) : s.op.unop = s
+· 使用定理 `Set.unop_op`：unop_op (s : Set αᵒᵖ) : s.unop.op = s
 
-English:
-definition opEquiv
-  signature: : Set α ≃ Set αᵒᵖ
-  body: ⟨Set.op, Set.unop, op_unop, unop_op⟩
-
-@[simp]
-
-中文:
-定义 opEquiv
-  签名: : 集合 α ≃ 集合 αᵒᵖ
-  定义体: ⟨Set.op, Set.unop, op_unop, unop_op⟩
-
-@[simp]
-
-Depends on / 依赖: Set.op, Set.unop, op_unop, unop_op
+--- 原说明 ---
+Taking opposites as an equivalence of powersets.
 -/
 def opEquiv : Set α ≃ Set αᵒᵖ :=
   ⟨Set.op, Set.unop, op_unop, unop_op⟩
 
 @[simp]
-/--
-theorem `singleton_op` / 定理 `singleton_op`
-
-English:
-theorem singleton_op
-  given: (x : α)
-  statement: ({x} : Set α).op = {op x}
-  proof: by
-  ext
-  constructor
-  · apply unop_injective
-  · apply op_injective
-
-@[simp]
-
-中文:
-定理 singleton_op
-  条件: (x : α)
-  结论: ({x} : 集合 α).op = {op x}
-  证明: by
-  ext
-  constructor
-  · apply unop_injective
-  · apply op_injective
-
-@[simp]
-
-Depends on / 依赖: op_injective, unop_injective
+/-
+**Set.singleton_op** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：singleton_op (x : α) : ({x} : Set α).op = {op x}
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Opposite.unop_injective`：unop_injective : Function.Injective (unop : αᵒᵖ
+ -> α)
+· 使用定理 `Opposite.op_injective`：op_injective : Function.Injective (op : α -> αᵒᵖ)
 -/
 theorem singleton_op (x : α) : ({x} : Set α).op = {op x} := by
   ext
@@ -273,34 +161,16 @@ theorem singleton_op (x : α) : ({x} : Set α).op = {op x} := by
   · apply op_injective
 
 @[simp]
-/--
-theorem `singleton_unop` / 定理 `singleton_unop`
-
-English:
-theorem singleton_unop
-  given: (x : αᵒᵖ)
-  statement: ({x} : Set αᵒᵖ).unop = {unop x}
-  proof: by
-  ext
-  constructor
-  · apply op_injective
-  · apply unop_injective
-
-@[simp 1100]
-
-中文:
-定理 singleton_unop
-  条件: (x : αᵒᵖ)
-  结论: ({x} : 集合 αᵒᵖ).unop = {unop x}
-  证明: by
-  ext
-  constructor
-  · apply op_injective
-  · apply unop_injective
-
-@[simp 1100]
-
-Depends on / 依赖: op_injective, unop_injective
+/-
+**Set.singleton_unop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：singleton_unop (x : αᵒᵖ) : ({x} : Set αᵒᵖ).unop = {unop x}
+参数：x : αᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Opposite.op_injective`：op_injective : Function.Injective (op : α -> αᵒᵖ)
+· 使用定理 `Opposite.unop_injective`：unop_injective : Function.Injective (unop : αᵒᵖ
+ -> α)
 -/
 theorem singleton_unop (x : αᵒᵖ) : ({x} : Set αᵒᵖ).unop = {unop x} := by
   ext
@@ -309,34 +179,16 @@ theorem singleton_unop (x : αᵒᵖ) : ({x} : Set αᵒᵖ).unop = {unop x} := 
   · apply unop_injective
 
 @[simp 1100]
-/--
-theorem `singleton_op_unop` / 定理 `singleton_op_unop`
-
-English:
-theorem singleton_op_unop
-  given: (x : α)
-  statement: ({op x} : Set αᵒᵖ).unop = {x}
-  proof: by
-  ext
-  constructor
-  · apply op_injective
-  · apply unop_injective
-
-@[simp 1100]
-
-中文:
-定理 singleton_op_unop
-  条件: (x : α)
-  结论: ({op x} : 集合 αᵒᵖ).unop = {x}
-  证明: by
-  ext
-  constructor
-  · apply op_injective
-  · apply unop_injective
-
-@[simp 1100]
-
-Depends on / 依赖: op_injective, unop_injective
+/-
+**Set.singleton_op_unop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：singleton_op_unop (x : α) : ({op x} : Set αᵒᵖ).unop = {x}
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Opposite.op_injective`：op_injective : Function.Injective (op : α -> αᵒᵖ)
+· 使用定理 `Opposite.unop_injective`：unop_injective : Function.Injective (unop : αᵒᵖ
+ -> α)
 -/
 theorem singleton_op_unop (x : α) : ({op x} : Set αᵒᵖ).unop = {x} := by
   ext
@@ -345,30 +197,16 @@ theorem singleton_op_unop (x : α) : ({op x} : Set αᵒᵖ).unop = {x} := by
   · apply unop_injective
 
 @[simp 1100]
-/--
-theorem `singleton_unop_op` / 定理 `singleton_unop_op`
-
-English:
-theorem singleton_unop_op
-  given: (x : αᵒᵖ)
-  statement: ({unop x} : Set α).op = {x}
-  proof: by
-  ext
-  constructor
-  · apply unop_injective
-  · apply op_injective
-
-中文:
-定理 singleton_unop_op
-  条件: (x : αᵒᵖ)
-  结论: ({unop x} : 集合 α).op = {x}
-  证明: by
-  ext
-  constructor
-  · apply unop_injective
-  · apply op_injective
-
-Depends on / 依赖: op_injective, unop_injective
+/-
+**Set.singleton_unop_op** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：singleton_unop_op (x : αᵒᵖ) : ({unop x} : Set α).op = {x}
+参数：x : αᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Opposite.unop_injective`：unop_injective : Function.Injective (unop : αᵒᵖ
+ -> α)
+· 使用定理 `Opposite.op_injective`：op_injective : Function.Injective (op : α -> αᵒᵖ)
 -/
 theorem singleton_unop_op (x : αᵒᵖ) : ({unop x} : Set α).op = {x} := by
   ext
@@ -377,3 +215,4 @@ theorem singleton_unop_op (x : αᵒᵖ) : ({unop x} : Set α).op = {x} := by
   · apply op_injective
 
 end Set
+

@@ -37,220 +37,147 @@ variable [Module R M] [Module R₂ M₂]
 
 open Submodule
 
-variable {τ₁₂ : R ->+* R₂}
+variable {τ₁₂ : R →+* R₂}
 
 section
 
-/--
-Definition of `eqLocus` / `eqLocus` 的定义
+/-- A linear map version of `AddMonoidHom.eqLocusM` -/
+/-
+**LinearMap.eqLocus** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：eqLocus (f g : M ->ₛₗ[τ₁₂] M₂) : Submodule R M
+参数：f g : M ->ₛₗ[τ₁₂] M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eqLocus
-  signature: (f g : M ->ₛₗ[τ₁₂] M₂)
-  body: { (f : M ->+ M₂).eqLocusM g with
-    carrier := { x | f x = g x }
-    smul_mem' := fun {r} {x} (hx : _ = _) => show _ = _ by
-      -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) hx }
-
-@[simp]
-
-中文:
-定义 eqLocus
-  签名: (f g : M ->ₛₗ[τ₁₂] M₂)
-  定义体: { (f : M ->+ M₂).eqLocusM g with
-    carrier := { x | f x = g x }
-    smul_mem' := fun {r} {x} (hx : _ = _) => show _ = _ by
-      -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) hx }
-
-@[simp]
-
-Depends on / 依赖: carrier, eqLocusM, smul_mem
+--- 原说明 ---
+A linear map version of `AddMonoidHom.eqLocusM`
 -/
-def eqLocus (f g : M ->ₛₗ[τ₁₂] M₂) : Submodule R M :=
-  { (f : M ->+ M₂).eqLocusM g with
+def eqLocus (f g : M →ₛₗ[τ₁₂] M₂) : Submodule R M :=
+  { (f : M →+ M₂).eqLocusM g with
     carrier := { x | f x = g x }
     smul_mem' := fun {r} {x} (hx : _ = _) => show _ = _ by
       -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
       simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) hx }
 
 @[simp]
-/--
-theorem `mem_eqLocus` / 定理 `mem_eqLocus`
-
-English:
-theorem mem_eqLocus
-  given: {x : M} {f g : M ->ₛₗ[τ₁₂] M₂}
-  statement: x in eqLocus f g ↔ f x = g x
-  proof: Iff.rfl
-
-中文:
-定理 mem_eqLocus
-  条件: {x : M} {f g : M ->ₛₗ[τ₁₂] M₂}
-  结论: x in eqLocus f g ↔ f x = g x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LinearMap.mem_eqLocus** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：mem_eqLocus {x : M} {f g : M ->ₛₗ[τ₁₂] M₂} : x in eqLocus f g ↔ f x = g x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_eqLocus {x : M} {f g : M ->ₛₗ[τ₁₂] M₂} : x in eqLocus f g ↔ f x = g x :=
+theorem mem_eqLocus {x : M} {f g : M →ₛₗ[τ₁₂] M₂} : x ∈ eqLocus f g ↔ f x = g x :=
   Iff.rfl
-
-/--
-theorem `eqLocus_toAddSubmonoid` / 定理 `eqLocus_toAddSubmonoid`
-
-English:
-theorem eqLocus_toAddSubmonoid
-  given: (f g : M ->ₛₗ[τ₁₂] M₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 eqLocus_toAddSubmonoid
-  条件: (f g : M ->ₛₗ[τ₁₂] M₂)
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.eqLocus_toAddSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqLocus_toAddSubmonoid (f g : M ->ₛₗ[τ₁₂] M₂) : (eqLocus f g).toAddSubmono
+id = (f : M ->+ M₂).eqLocusM g
+参数：f g : M ->ₛₗ[τ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eqLocus_toAddSubmonoid (f g : M ->ₛₗ[τ₁₂] M₂) :
-    (eqLocus f g).toAddSubmonoid = (f : M ->+ M₂).eqLocusM g :=
+theorem eqLocus_toAddSubmonoid (f g : M →ₛₗ[τ₁₂] M₂) :
+    (eqLocus f g).toAddSubmonoid = (f : M →+ M₂).eqLocusM g :=
   rfl
 
 @[simp]
-/--
-theorem `eqLocus_eq_top` / 定理 `eqLocus_eq_top`
-
-English:
-theorem eqLocus_eq_top
-  given: {f g : M ->ₛₗ[τ₁₂] M₂}
-  statement: eqLocus f g = ⊤ ↔ f = g
-  proof: by
+/-
+**LinearMap.eqLocus_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqLocus_eq_top {f g : M ->ₛₗ[τ₁₂] M₂} : eqLocus f g = ⊤ ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem eqLocus_eq_top {f g : M →ₛₗ[τ₁₂] M₂} : eqLocus f g = ⊤ ↔ f = g := by
   simp [SetLike.ext_iff, DFunLike.ext_iff]
 
 @[simp]
-
-中文:
-定理 eqLocus_eq_top
-  条件: {f g : M ->ₛₗ[τ₁₂] M₂}
-  结论: eqLocus f g = ⊤ ↔ f = g
-  证明: by
-  simp [SetLike.ext_iff, DFunLike.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, SetLike, SetLike.ext_iff, ext_iff
+/-
+**LinearMap.eqLocus_same** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqLocus_same (f : M ->ₛₗ[τ₁₂] M₂) : eqLocus f f = ⊤
+参数：f : M ->ₛₗ[τ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.eqLocus_eq_top`：eqLocus_eq_top {f g : M ->ₛₗ[τ₁₂] M₂} : eqLocu
+s f g = ⊤ ↔ f = g
 -/
-theorem eqLocus_eq_top {f g : M ->ₛₗ[τ₁₂] M₂} : eqLocus f g = ⊤ ↔ f = g := by
-  simp [SetLike.ext_iff, DFunLike.ext_iff]
-
-@[simp]
-/--
-theorem `eqLocus_same` / 定理 `eqLocus_same`
-
-English:
-theorem eqLocus_same
-  given: (f : M ->ₛₗ[τ₁₂] M₂)
-  statement: eqLocus f f = ⊤
-  proof: eqLocus_eq_top.2 rfl
-
-中文:
-定理 eqLocus_same
-  条件: (f : M ->ₛₗ[τ₁₂] M₂)
-  结论: eqLocus f f = ⊤
-  证明: eqLocus_eq_top.2 rfl
-
-Depends on / 依赖: eqLocus_eq_top
+theorem eqLocus_same (f : M →ₛₗ[τ₁₂] M₂) : eqLocus f f = ⊤ := eqLocus_eq_top.2 rfl
+/-
+**LinearMap.le_eqLocus** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：le_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M} : S <= eqLocus f g ↔
+ Set.EqOn f g S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eqLocus_same (f : M ->ₛₗ[τ₁₂] M₂) : eqLocus f f = ⊤ := eqLocus_eq_top.2 rfl
-
-/--
-theorem `le_eqLocus` / 定理 `le_eqLocus`
-
-English:
-theorem le_eqLocus
-  given: {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M}
-  proof: Iff.rfl
-
-中文:
-定理 le_eqLocus
-  条件: {f g : M ->ₛₗ[τ₁₂] M₂} {S : 子模 R M}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem le_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R M} :
-    S <= eqLocus f g ↔ Set.EqOn f g S :=
+theorem le_eqLocus {f g : M →ₛₗ[τ₁₂] M₂} {S : Submodule R M} :
+    S ≤ eqLocus f g ↔ Set.EqOn f g S :=
   Iff.rfl
-
-/--
-theorem `eqOn_eqLocus` / 定理 `eqOn_eqLocus`
-
-English:
-theorem eqOn_eqLocus
-  given: {f g : M ->ₛₗ[τ₁₂] M₂}
-  proof: fun _ h => h
-
-中文:
-定理 eqOn_eqLocus
-  条件: {f g : M ->ₛₗ[τ₁₂] M₂}
-  证明: fun _ h => h
+/-
+**LinearMap.eqOn_eqLocus** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqOn_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} : Set.EqOn f g (eqLocus f g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eqOn_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} :
+theorem eqOn_eqLocus {f g : M →ₛₗ[τ₁₂] M₂} :
     Set.EqOn f g (eqLocus f g) :=
-  fun _ h => h
+  fun _ h ↦ h
 
 variable {F : Type*} [FunLike F M M₂] [SemilinearMapClass F τ₁₂ M M₂]
 
 include τ₁₂ in
-/--
-theorem `eqOn_sup` / 定理 `eqOn_sup`
-
-English:
-theorem eqOn_sup
-  statement: {f g : F} {S T : Submodule R M}
-  proof: by
-  rw [← LinearMap.coe_coe (f := f)]; rw [← LinearMap.coe_coe (f := g)]; rw [← le_eqLocus] at hS hT ⊢
-  exact sup_le hS hT
-
-include τ₁₂ in
-
-中文:
-定理 eqOn_sup
-  结论: {f g : F} {S T : 子模 R M}
-  证明: by
-  rw [← LinearMap.coe_coe (f := f)]; rw [← LinearMap.coe_coe (f := g)]; rw [← le_eqLocus] at hS hT ⊢
-  exact sup_le hS hT
-
-include τ₁₂ in
-
-Depends on / 依赖: LinearMap, LinearMap.coe_coe, coe_coe, le_eqLocus, sup_le
+/-
+**LinearMap.eqOn_sup** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqOn_sup {f g : F} {S T : Submodule R M} (hS : Set.EqOn f g S) (hT : Set.E
+qOn f g T) : Set.EqOn f g ↑(S ⊔ T)
+参数：hS : Set.EqOn f g S；hT : Set.EqOn f g T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearMap.coe_coe`：coe_coe {F : Type*} [FunLike F M M₃] [SemilinearMapCl
+ass F σ M M₃] {f : F} : ⇑(f : M ->ₛₗ[σ] M₃) = f
+· 使用定理 `LinearMap.le_eqLocus`：le_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R
+ M} : S <= eqLocus f g ↔ Set.EqOn f g S
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
 -/
 theorem eqOn_sup {f g : F} {S T : Submodule R M}
     (hS : Set.EqOn f g S) (hT : Set.EqOn f g T) :
     Set.EqOn f g ↑(S ⊔ T) := by
-  rw [← LinearMap.coe_coe (f := f)]; rw [← LinearMap.coe_coe (f := g)]; rw [← le_eqLocus] at hS hT ⊢
+  rw [← LinearMap.coe_coe (f := f), ← LinearMap.coe_coe (f := g), ← le_eqLocus] at hS hT ⊢
   exact sup_le hS hT
 
 include τ₁₂ in
-/--
-theorem `ext_on_codisjoint` / 定理 `ext_on_codisjoint`
-
-English:
-theorem ext_on_codisjoint
-  statement: {f g : F} {S T : Submodule R M} (hST : Codisjoint S T)
-  proof: DFunLike.ext _ _ fun _ => eqOn_sup hS hT hST.eq_top.symm ▸ trivial
-
-中文:
-定理 ext_on_codisjoint
-  结论: {f g : F} {S T : 子模 R M} (hST : Codisjoint S T)
-  证明: DFunLike.ext _ _ fun _ => eqOn_sup hS hT hST.eq_top.symm ▸ trivial
-
-Depends on / 依赖: DFunLike, DFunLike.ext, eqOn_sup, eq_top, hST.eq_top.symm
+/-
+**LinearMap.ext_on_codisjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ext_on_codisjoint {f g : F} {S T : Submodule R M} (hST : Codisjoint S T) (
+hS : Set.EqOn f g S) (hT : Set.EqOn f g T) : f = g
+参数：hST : Codisjoint S T；hS : Set.EqOn f g S；hT : Set.EqOn f g T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `LinearMap.eqOn_sup`：eqOn_sup {f g : F} {S T : Submodule R M} (hS : Set.E
+qOn f g S) (hT : Set.EqOn f g T) : Set.EqOn f g ↑(S ⊔ T)
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Codisjoint.eq_top`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : 
+OrderTop α] {a b : α}, Codisjoint a b → a ⊔ b = ⊤
 -/
 theorem ext_on_codisjoint {f g : F} {S T : Submodule R M} (hST : Codisjoint S T)
     (hS : Set.EqOn f g S) (hT : Set.EqOn f g T) : f = g :=
-DFunLike.ext _ _ fun _ => eqOn_sup hS hT hST.eq_top.symm ▸ trivial
+  DFunLike.ext _ _ fun _ ↦ eqOn_sup hS hT <| hST.eq_top.symm ▸ trivial
 
 end
 
@@ -261,30 +188,25 @@ section Ring
 variable [Ring R] [Ring R₂]
 variable [AddCommGroup M] [AddCommGroup M₂]
 variable [Module R M] [Module R₂ M₂]
-variable {τ₁₂ : R ->+* R₂}
+variable {τ₁₂ : R →+* R₂}
 
 open Submodule
 
-/--
-theorem `eqLocus_eq_ker_sub` / 定理 `eqLocus_eq_ker_sub`
-
-English:
-theorem eqLocus_eq_ker_sub
-  given: (f g : M ->ₛₗ[τ₁₂] M₂)
-  statement: eqLocus f g = ker (f - g)
-  proof: SetLike.ext fun _ => sub_eq_zero.symm
-
-中文:
-定理 eqLocus_eq_ker_sub
-  条件: (f g : M ->ₛₗ[τ₁₂] M₂)
-  结论: eqLocus f g = ker (f - g)
-  证明: SetLike.ext fun _ => sub_eq_zero.symm
-
-Depends on / 依赖: SetLike, SetLike.ext, sub_eq_zero, sub_eq_zero.symm
+/-
+**LinearMap.eqLocus_eq_ker_sub** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eqLocus_eq_ker_sub (f g : M ->ₛₗ[τ₁₂] M₂) : eqLocus f g = ker (f - g)
+参数：f g : M ->ₛₗ[τ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
 -/
-theorem eqLocus_eq_ker_sub (f g : M ->ₛₗ[τ₁₂] M₂) : eqLocus f g = ker (f - g) :=
+theorem eqLocus_eq_ker_sub (f g : M →ₛₗ[τ₁₂] M₂) : eqLocus f g = ker (f - g) :=
   SetLike.ext fun _ => sub_eq_zero.symm
 
 end Ring
 
 end LinearMap
+

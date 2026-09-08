@@ -58,506 +58,305 @@ variable [Semiring R] [PartialOrder R] [IsOrderedRing R]
 
 namespace Set.Icc
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: : Zero (Icc (0 : R) 1) where zero
-  body: ⟨0, left_mem_Icc.2 zero_le_one⟩
-
-中文:
-实例 instZero
-  签名: : 零 (闭区间 (0 : R) 1) where zero
-  定义体: ⟨0, left_mem_Icc.2 zero_le_one⟩
-
-Depends on / 依赖: left_mem_Icc, zero_le_one
+/-
+**Set.Icc.instZero** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instZero : Zero (Icc (0 : R) 1) where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero : Zero (Icc (0 : R) 1) where zero := ⟨0, left_mem_Icc.2 zero_le_one⟩
-
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: : One (Icc (0 : R) 1) where one
-  body: ⟨1, right_mem_Icc.2 zero_le_one⟩
-
-中文:
-实例 instOne
-  签名: : 幺 (闭区间 (0 : R) 1) where one
-  定义体: ⟨1, right_mem_Icc.2 zero_le_one⟩
-
-Depends on / 依赖: right_mem_Icc, zero_le_one
+/-
+**Set.Icc.instOne** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instOne : One (Icc (0 : R) 1) where one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOne : One (Icc (0 : R) 1) where one := ⟨1, right_mem_Icc.2 zero_le_one⟩
-
-/--
-Instance `instZeroLEOneClass` / 实例 `instZeroLEOneClass`
-
-English:
-instance instZeroLEOneClass
-  signature: : ZeroLEOneClass (Icc (0 : R) 1)
-  body: ⟨Subtype.coe_le_coe.mp zero_le_one⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instZeroLEOneClass
-  签名: : ZeroLEOne类 (闭区间 (0 : R) 1)
-  定义体: ⟨Subtype.coe_le_coe.mp zero_le_one⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, zero_le_one
+/-
+**Set.Icc.instZeroLEOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instZeroLEOneClass : ZeroLEOneClass (Icc (0 : R) 1)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
 -/
 instance instZeroLEOneClass : ZeroLEOneClass (Icc (0 : R) 1) := ⟨Subtype.coe_le_coe.mp zero_le_one⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ↑(0 : Icc (0 : R) 1) = (0 : R)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_zero
-  结论: ↑(0 : 闭区间 (0 : R) 1) = (0 : R)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Icc.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_zero : ↑(0 : Icc (0 : R) 1) = (0 : R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : ↑(0 : Icc (0 : R) 1) = (0 : R) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ↑(1 : Icc (0 : R) 1) = (1 : R)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 coe_one
-  结论: ↑(1 : 闭区间 (0 : R) 1) = (1 : R)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Set.Icc.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_one : ↑(1 : Icc (0 : R) 1) = (1 : R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ↑(1 : Icc (0 : R) 1) = (1 : R) :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  given: (h : (0 : R) in Icc (0 : R) 1)
-  statement: (⟨0, h⟩ : Icc (0 : R) 1) = 0
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 mk_zero
-  条件: (h : (0 : R) in 闭区间 (0 : R) 1)
-  结论: (⟨0, h⟩ : 闭区间 (0 : R) 1) = 0
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Set.Icc.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：mk_zero (h : (0 : R) in Icc (0 : R) 1) : (⟨0, h⟩ : Icc (0 : R) 1) = 0
+参数：h : (0 : R) in Icc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_zero (h : (0 : R) in Icc (0 : R) 1) : (⟨0, h⟩ : Icc (0 : R) 1) = 0 :=
+theorem mk_zero (h : (0 : R) ∈ Icc (0 : R) 1) : (⟨0, h⟩ : Icc (0 : R) 1) = 0 :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  given: (h : (1 : R) in Icc (0 : R) 1)
-  statement: (⟨1, h⟩ : Icc (0 : R) 1) = 1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_one
-  条件: (h : (1 : R) in 闭区间 (0 : R) 1)
-  结论: (⟨1, h⟩ : 闭区间 (0 : R) 1) = 1
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Icc.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：mk_one (h : (1 : R) in Icc (0 : R) 1) : (⟨1, h⟩ : Icc (0 : R) 1) = 1
+参数：h : (1 : R) in Icc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_one (h : (1 : R) in Icc (0 : R) 1) : (⟨1, h⟩ : Icc (0 : R) 1) = 1 :=
+theorem mk_one (h : (1 : R) ∈ Icc (0 : R) 1) : (⟨1, h⟩ : Icc (0 : R) 1) = 1 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  given: {x : Icc (0 : R) 1}
-  statement: (x : R) = 0 ↔ x = 0
-  proof: by
-  symm
-  exact Subtype.ext_iff
-
-中文:
-定理 coe_eq_zero
-  条件: {x : 闭区间 (0 : R) 1}
-  结论: (x : R) = 0 ↔ x = 0
-  证明: by
-  symm
-  exact Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Set.Icc.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_eq_zero {x : Icc (0 : R) 1} : (x : R) = 0 ↔ x = 0
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem coe_eq_zero {x : Icc (0 : R) 1} : (x : R) = 0 ↔ x = 0 := by
   symm
   exact Subtype.ext_iff
-
-/--
-theorem `coe_ne_zero` / 定理 `coe_ne_zero`
-
-English:
-theorem coe_ne_zero
-  given: {x : Icc (0 : R) 1}
-  statement: (x : R) != 0 ↔ x != 0
-  proof: not_iff_not.mpr coe_eq_zero
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_ne_zero
-  条件: {x : 闭区间 (0 : R) 1}
-  结论: (x : R) != 0 ↔ x != 0
-  证明: not_iff_not.mpr coe_eq_zero
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_eq_zero, not_iff_not, not_iff_not.mpr
+/-
+**Set.Icc.coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_ne_zero {x : Icc (0 : R) 1} : (x : R) != 0 ↔ x != 0
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Set.Icc.coe_eq_zero`：coe_eq_zero {x : Icc (0 : R) 1} : (x : R) = 0 ↔ x =
+ 0
 -/
-theorem coe_ne_zero {x : Icc (0 : R) 1} : (x : R) != 0 ↔ x != 0 :=
+theorem coe_ne_zero {x : Icc (0 : R) 1} : (x : R) ≠ 0 ↔ x ≠ 0 :=
   not_iff_not.mpr coe_eq_zero
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_one` / 定理 `coe_eq_one`
-
-English:
-theorem coe_eq_one
-  given: {x : Icc (0 : R) 1}
-  statement: (x : R) = 1 ↔ x = 1
-  proof: by
-  symm
-  exact Subtype.ext_iff
-
-中文:
-定理 coe_eq_one
-  条件: {x : 闭区间 (0 : R) 1}
-  结论: (x : R) = 1 ↔ x = 1
-  证明: by
-  symm
-  exact Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Set.Icc.coe_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_eq_one {x : Icc (0 : R) 1} : (x : R) = 1 ↔ x = 1
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem coe_eq_one {x : Icc (0 : R) 1} : (x : R) = 1 ↔ x = 1 := by
   symm
   exact Subtype.ext_iff
-
-/--
-theorem `coe_ne_one` / 定理 `coe_ne_one`
-
-English:
-theorem coe_ne_one
-  given: {x : Icc (0 : R) 1}
-  statement: (x : R) != 1 ↔ x != 1
-  proof: not_iff_not.mpr coe_eq_one
-
-omit [IsOrderedRing R] in
-
-中文:
-定理 coe_ne_one
-  条件: {x : 闭区间 (0 : R) 1}
-  结论: (x : R) != 1 ↔ x != 1
-  证明: not_iff_not.mpr coe_eq_one
-
-omit [IsOrderedRing R] in
-
-Depends on / 依赖: coe_eq_one, not_iff_not, not_iff_not.mpr
+/-
+**Set.Icc.coe_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_ne_one {x : Icc (0 : R) 1} : (x : R) != 1 ↔ x != 1
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Set.Icc.coe_eq_one`：coe_eq_one {x : Icc (0 : R) 1} : (x : R) = 1 ↔ x = 1
 -/
-theorem coe_ne_one {x : Icc (0 : R) 1} : (x : R) != 1 ↔ x != 1 :=
+theorem coe_ne_one {x : Icc (0 : R) 1} : (x : R) ≠ 1 ↔ x ≠ 1 :=
   not_iff_not.mpr coe_eq_one
 
 omit [IsOrderedRing R] in
-/--
-theorem `coe_nonneg` / 定理 `coe_nonneg`
-
-English:
-theorem coe_nonneg
-  given: (x : Icc (0 : R) 1)
-  statement: 0 <= (x : R)
-  proof: x.2.1
-
-omit [IsOrderedRing R] in
-
-中文:
-定理 coe_nonneg
-  条件: (x : 闭区间 (0 : R) 1)
-  结论: 0 <= (x : R)
-  证明: x.2.1
-
-omit [IsOrderedRing R] in
+/-
+**Set.Icc.coe_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_nonneg (x : Icc (0 : R) 1) : 0 <= (x : R)
+参数：x : Icc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_nonneg (x : Icc (0 : R) 1) : 0 <= (x : R) :=
+theorem coe_nonneg (x : Icc (0 : R) 1) : 0 ≤ (x : R) :=
   x.2.1
 
 omit [IsOrderedRing R] in
-/--
-theorem `coe_le_one` / 定理 `coe_le_one`
-
-English:
-theorem coe_le_one
-  given: (x : Icc (0 : R) 1)
-  statement: (x : R) <= 1
-  proof: x.2.2
-
-中文:
-定理 coe_le_one
-  条件: (x : 闭区间 (0 : R) 1)
-  结论: (x : R) <= 1
-  证明: x.2.2
+/-
+**Set.Icc.coe_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_le_one (x : Icc (0 : R) 1) : (x : R) <= 1
+参数：x : Icc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_le_one (x : Icc (0 : R) 1) : (x : R) <= 1 :=
+theorem coe_le_one (x : Icc (0 : R) 1) : (x : R) ≤ 1 :=
   x.2.2
 
-/--
-theorem `nonneg` / 定理 `nonneg`
+/-- like `coe_nonneg`, but with the inequality in `Icc (0:R) 1`. -/
+/-
+**Set.Icc.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：nonneg {t : Icc (0 : R) 1} : 0 <= t
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem nonneg
-  given: {t : Icc (0 : R) 1}
-  statement: 0 <= t
-  proof: t.2.1
-
-中文:
-定理 nonneg
-  条件: {t : 闭区间 (0 : R) 1}
-  结论: 0 <= t
-  证明: t.2.1
+--- 原说明 ---
+like `coe_nonneg`, but with the inequality in `Icc (0:R) 1`.
 -/
-theorem nonneg {t : Icc (0 : R) 1} : 0 <= t :=
+theorem nonneg {t : Icc (0 : R) 1} : 0 ≤ t :=
   t.2.1
 
-/--
-theorem `le_one` / 定理 `le_one`
+/-- like `coe_le_one`, but with the inequality in `Icc (0:R) 1`. -/
+/-
+**Set.Icc.le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：le_one {t : Icc (0 : R) 1} : t <= 1
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem le_one
-  given: {t : Icc (0 : R) 1}
-  statement: t <= 1
-  proof: t.2.2
-
-中文:
-定理 le_one
-  条件: {t : 闭区间 (0 : R) 1}
-  结论: t <= 1
-  证明: t.2.2
+--- 原说明 ---
+like `coe_le_one`, but with the inequality in `Icc (0:R) 1`.
 -/
-theorem le_one {t : Icc (0 : R) 1} : t <= 1 :=
+theorem le_one {t : Icc (0 : R) 1} : t ≤ 1 :=
   t.2.2
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (Icc (0 : R) 1) where
-  body: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_le_one₀ p.2.2 q.2.1 q.2.2⟩⟩
-
-中文:
-实例 instMul
-  签名: : 乘法 (闭区间 (0 : R) 1) where
-  定义体: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_le_one₀ p.2.2 q.2.1 q.2.2⟩⟩
-
-Depends on / 依赖: mul_nonneg
+/-
+**Set.Icc.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instMul : Mul (Icc (0 : R) 1) where mul p q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul : Mul (Icc (0 : R) 1) where
   mul p q := ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_le_one₀ p.2.2 q.2.1 q.2.2⟩⟩
-
-/--
-Instance `instPow` / 实例 `instPow`
-
-English:
-instance instPow
-  signature: : Pow (Icc (0 : R) 1) Nat where
-  body: ⟨p.1 ^ n, ⟨pow_nonneg p.2.1 n, pow_le_one₀ p.2.1 p.2.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instPow
-  签名: : 幂 (闭区间 (0 : R) 1) 自然数 where
-  定义体: ⟨p.1 ^ n, ⟨pow_nonneg p.2.1 n, pow_le_one₀ p.2.1 p.2.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: pow_nonneg
+/-
+**Set.Icc.instPow** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instPow : Pow (Icc (0 : R) 1) Nat where pow p n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPow : Pow (Icc (0 : R) 1) Nat where
+instance instPow : Pow (Icc (0 : R) 1) ℕ where
   pow p n := ⟨p.1 ^ n, ⟨pow_nonneg p.2.1 n, pow_le_one₀ p.2.1 p.2.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : Icc (0 : R) 1)
-  statement: ↑(x * y) = (x * y : R)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mul
-  条件: (x y : 闭区间 (0 : R) 1)
-  结论: ↑(x * y) = (x * y : R)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Icc.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_mul (x y : Icc (0 : R) 1) : ↑(x * y) = (x * y : R)
+参数：x y : Icc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : Icc (0 : R) 1) : ↑(x * y) = (x * y : R) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (x : Icc (0 : R) 1) (n : Nat)
-  statement: ↑(x ^ n) = ((x : R) ^ n)
-  proof: rfl
-
-中文:
-定理 coe_pow
-  条件: (x : 闭区间 (0 : R) 1) (n : 自然数)
-  结论: ↑(x ^ n) = ((x : R) ^ n)
-  证明: rfl
+/-
+**Set.Icc.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_pow (x : Icc (0 : R) 1) (n : Nat) : ↑(x ^ n) = ((x : R) ^ n)
+参数：x : Icc (0 : R) 1；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow (x : Icc (0 : R) 1) (n : Nat) : ↑(x ^ n) = ((x : R) ^ n) :=
+theorem coe_pow (x : Icc (0 : R) 1) (n : ℕ) : ↑(x ^ n) = ((x : R) ^ n) :=
   rfl
-
-/--
-theorem `mul_le_left` / 定理 `mul_le_left`
-
-English:
-theorem mul_le_left
-  given: {x y : Icc (0 : R) 1}
-  statement: x * y <= x
-  proof: (mul_le_mul_of_nonneg_left y.2.2 x.2.1).trans_eq (mul_one _)
-
-中文:
-定理 mul_le_left
-  条件: {x y : 闭区间 (0 : R) 1}
-  结论: x * y <= x
-  证明: (mul_le_mul_of_nonneg_left y.2.2 x.2.1).trans_eq (mul_one _)
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_one, trans_eq
+/-
+**Set.Icc.mul_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：mul_le_left {x y : Icc (0 : R) 1} : x * y <= x
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem mul_le_left {x y : Icc (0 : R) 1} : x * y <= x :=
+theorem mul_le_left {x y : Icc (0 : R) 1} : x * y ≤ x :=
   (mul_le_mul_of_nonneg_left y.2.2 x.2.1).trans_eq (mul_one _)
-
-/--
-theorem `mul_le_right` / 定理 `mul_le_right`
-
-English:
-theorem mul_le_right
-  given: {x y : Icc (0 : R) 1}
-  statement: x * y <= y
-  proof: (mul_le_mul_of_nonneg_right x.2.2 y.2.1).trans_eq (one_mul _)
-
-中文:
-定理 mul_le_right
-  条件: {x y : 闭区间 (0 : R) 1}
-  结论: x * y <= y
-  证明: (mul_le_mul_of_nonneg_right x.2.2 y.2.1).trans_eq (one_mul _)
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right, one_mul, trans_eq
+/-
+**Set.Icc.mul_le_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：mul_le_right {x y : Icc (0 : R) 1} : x * y <= y
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem mul_le_right {x y : Icc (0 : R) 1} : x * y <= y :=
+theorem mul_le_right {x y : Icc (0 : R) 1} : x * y ≤ y :=
   (mul_le_mul_of_nonneg_right x.2.2 y.2.1).trans_eq (one_mul _)
-
-/--
-Instance `instMonoidWithZero` / 实例 `instMonoidWithZero`
-
-English:
-instance instMonoidWithZero
-  signature: : MonoidWithZero (Icc (0 : R) 1)
-  body: fast_instance%
-  Subtype.coe_injective.monoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-中文:
-实例 instMonoidWithZero
-  签名: : 带零幺半群 (闭区间 (0 : R) 1)
-  定义体: fast_instance%
-  Subtype.coe_injective.monoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Icc.instMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instMonoidWithZero : MonoidWithZero (Icc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoidWithZero : MonoidWithZero (Icc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.monoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-/--
-Instance `instCommMonoidWithZero` / 实例 `instCommMonoidWithZero`
-
-English:
-instance instCommMonoidWithZero
-  signature: {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commMonoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-中文:
-实例 instCommMonoidWithZero
-  签名: {R : 类型} [交换半环 R] [偏序 R] [是Ordered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commMonoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Icc.instCommMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instCommMonoidWithZero {R : Type*} [CommSemiring R] [PartialOrder R] [IsOr
+deredRing R] : CommMonoidWithZero (Icc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoidWithZero {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrderedRing R] :
     CommMonoidWithZero (Icc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.commMonoidWithZero _ coe_zero coe_one coe_mul coe_pow
-
-/--
-Instance `instIsCancelMulZero` / 实例 `instIsCancelMulZero`
-
-English:
-instance instIsCancelMulZero
-  signature: {R : Type*} [Ring R] [PartialOrder R] [IsOrderedRing R]
-  body: @Function.Injective.isCancelMulZero _ R _ _ _ _ _ Subtype.coe_injective coe_zero coe_mul
-    NoZeroDivisors.toIsCancelMulZero
-
-中文:
-实例 instIsCancelMulZero
-  签名: {R : 类型} [环 R] [偏序 R] [是Ordered环 R]
-  定义体: @Function.Injective.isCancelMulZero _ R _ _ _ _ _ Subtype.coe_injective coe_zero coe_mul
-    NoZeroDivisors.toIsCancelMulZero
-
-Depends on / 依赖: Function, Function.Injective.isCancelMulZero, Injective, NoZeroDivisors, NoZeroDivisors.toIsCancelMulZero, Subtype, Subtype.coe_injective, coe_injective, coe_mul, coe_zero, isCancelMulZero, toIsCancelMulZero
+/-
+**Set.Icc.instIsCancelMulZero** 是 Mathlib 中的一个实例，位于命名空间 `Set.Icc`。
+形式化陈述：instIsCancelMulZero {R : Type*} [Ring R] [PartialOrder R] [IsOrderedRing R
+] [NoZeroDivisors R] : IsCancelMulZero (Icc (0 : R) 1)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isCancelMulZero`：∀ {M₀ : Type u_1} {M₀' : Type u_3} [
+inst : Mul M₀] [inst_1 : Zero M₀] [inst_2 : Mul M₀'] [inst_3 : Zero M₀']   (f : 
+M₀ → M₀'),   Function.In…
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `Set.Icc.coe_zero`：coe_zero : ↑(0 : Icc (0 : R) 1) = (0 : R)
+· 使用定理 `Set.Icc.coe_mul`：coe_mul (x y : Icc (0 : R) 1) : ↑(x * y) = (x * y : R)
+· 使用引理 `NoZeroDivisors.toIsCancelMulZero`：NoZeroDivisors.toIsCancelMulZero [NonU
+nitalNonAssocRing α] [NoZeroDivisors α] : IsCancelMulZero α where mul_left_cance
+l_of_ne_zero ha
 -/
 instance instIsCancelMulZero {R : Type*} [Ring R] [PartialOrder R] [IsOrderedRing R]
     [NoZeroDivisors R] :
@@ -567,111 +366,113 @@ instance instIsCancelMulZero {R : Type*} [Ring R] [PartialOrder R] [IsOrderedRin
 
 /-- The coercion from `Set.Icc 0 1` as a `MonoidWithZeroHom`. -/
 @[simps]
-/--
-Definition of `coeMonoidWithZeroHom` / `coeMonoidWithZeroHom` 的定义
+/-
+**Set.Icc.coeMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 `Set.Icc`。
+形式化陈述：coeMonoidWithZeroHom : (Icc (0 : R) 1) ->*₀ R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Icc.coe_mul`：coe_mul (x y : Icc (0 : R) 1) : ↑(x * y) = (x * y : R)
 
-English:
-definition coeMonoidWithZeroHom
-  signature: : (Icc (0 : R) 1) ->*₀ R where
-  body: (↑)
-  map_mul' := coe_mul
-  map_one' := rfl
-  map_zero' := rfl
-
-中文:
-定义 coeMonoidWithZeroHom
-  签名: : (闭区间 (0 : R) 1) ->*₀ R where
-  定义体: (↑)
-  map_mul' := coe_mul
-  map_one' := rfl
-  map_zero' := rfl
+--- 原说明 ---
+The coercion from `Set.Icc 0 1` as a `MonoidWithZeroHom`.
 -/
-def coeMonoidWithZeroHom : (Icc (0 : R) 1) ->*₀ R where
+def coeMonoidWithZeroHom : (Icc (0 : R) 1) →*₀ R where
   toFun := (↑)
   map_mul' := coe_mul
   map_one' := rfl
   map_zero' := rfl
 
 variable {β : Type*} [Ring β] [PartialOrder β] [IsOrderedRing β]
-
-/--
-theorem `one_sub_mem` / 定理 `one_sub_mem`
-
-English:
-theorem one_sub_mem
-  given: {t : β} (ht : t in Icc (0 : β) 1)
-  statement: 1 - t in Icc (0 : β) 1
-  proof: by
-  rw [mem_Icc] at *
-  exact ⟨sub_nonneg.2 ht.2, (sub_le_self_iff _).2 ht.1⟩
-
-中文:
-定理 one_sub_mem
-  条件: {t : β} (ht : t in 闭区间 (0 : β) 1)
-  结论: 1 - t in 闭区间 (0 : β) 1
-  证明: by
-  rw [mem_Icc] at *
-  exact ⟨sub_nonneg.2 ht.2, (sub_le_self_iff _).2 ht.1⟩
-
-Depends on / 依赖: mem_Icc, sub_le_self_iff, sub_nonneg
+/-
+**Set.Icc.one_sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：one_sub_mem {t : β} (ht : t in Icc (0 : β) 1) : 1 - t in Icc (0 : β) 1
+参数：ht : t in Icc (0 : β) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+cc a b ↔ a ≤ x ∧ x ≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `sub_le_self_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Add
+LeftMono α] (a : α) {b : α}, a - b ≤ a ↔ 0 ≤ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem one_sub_mem {t : β} (ht : t in Icc (0 : β) 1) : 1 - t in Icc (0 : β) 1 := by
+theorem one_sub_mem {t : β} (ht : t ∈ Icc (0 : β) 1) : 1 - t ∈ Icc (0 : β) 1 := by
   rw [mem_Icc] at *
   exact ⟨sub_nonneg.2 ht.2, (sub_le_self_iff _).2 ht.1⟩
-
-/--
-theorem `mem_iff_one_sub_mem` / 定理 `mem_iff_one_sub_mem`
-
-English:
-theorem mem_iff_one_sub_mem
-  given: {t : β}
-  statement: t in Icc (0 : β) 1 ↔ 1 - t in Icc (0 : β) 1
-  proof: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-中文:
-定理 mem_iff_one_sub_mem
-  条件: {t : β}
-  结论: t in 闭区间 (0 : β) 1 ↔ 1 - t in 闭区间 (0 : β) 1
-  证明: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-Depends on / 依赖: one_sub_mem, sub_sub_cancel
+/-
+**Set.Icc.mem_iff_one_sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：mem_iff_one_sub_mem {t : β} : t in Icc (0 : β) 1 ↔ 1 - t in Icc (0 : β) 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Icc.one_sub_mem`：one_sub_mem {t : β} (ht : t in Icc (0 : β) 1) : 1 -
+ t in Icc (0 : β) 1
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
 -/
-theorem mem_iff_one_sub_mem {t : β} : t in Icc (0 : β) 1 ↔ 1 - t in Icc (0 : β) 1 :=
+theorem mem_iff_one_sub_mem {t : β} : t ∈ Icc (0 : β) 1 ↔ 1 - t ∈ Icc (0 : β) 1 :=
   ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-/--
-theorem `one_sub_nonneg` / 定理 `one_sub_nonneg`
-
-English:
-theorem one_sub_nonneg
-  given: (x : Icc (0 : β) 1)
-  statement: 0 <= 1 - (x : β)
-  proof: by simpa using x.2.2
-
-中文:
-定理 one_sub_nonneg
-  条件: (x : 闭区间 (0 : β) 1)
-  结论: 0 <= 1 - (x : β)
-  证明: by simpa using x.2.2
+/-
+**Set.Icc.one_sub_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：one_sub_nonneg (x : Icc (0 : β) 1) : 0 <= 1 - (x : β)
+参数：x : Icc (0 : β) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem one_sub_nonneg (x : Icc (0 : β) 1) : 0 <= 1 - (x : β) := by simpa using x.2.2
-
-/--
-theorem `one_sub_le_one` / 定理 `one_sub_le_one`
-
-English:
-theorem one_sub_le_one
-  given: (x : Icc (0 : β) 1)
-  statement: 1 - (x : β) <= 1
-  proof: by simpa using x.2.1
-
-中文:
-定理 one_sub_le_one
-  条件: (x : 闭区间 (0 : β) 1)
-  结论: 1 - (x : β) <= 1
-  证明: by simpa using x.2.1
+theorem one_sub_nonneg (x : Icc (0 : β) 1) : 0 ≤ 1 - (x : β) := by simpa using x.2.2
+/-
+**Set.Icc.one_sub_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：one_sub_le_one (x : Icc (0 : β) 1) : 1 - (x : β) <= 1
+参数：x : Icc (0 : β) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem one_sub_le_one (x : Icc (0 : β) 1) : 1 - (x : β) <= 1 := by simpa using x.2.1
+theorem one_sub_le_one (x : Icc (0 : β) 1) : 1 - (x : β) ≤ 1 := by simpa using x.2.1
 
 end Set.Icc
 
@@ -680,259 +481,142 @@ end Set.Icc
 
 namespace Set.Ico
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: [Nontrivial R]
-  body: ⟨0, by simp⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instZero
-  签名: [非平凡 R]
-  定义体: ⟨0, by simp⟩
-
-@[simp, norm_cast]
+/-
+**Set.Ico.instZero** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ico`。
+形式化陈述：instZero [Nontrivial R] : Zero (Ico (0 : R) 1) where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero [Nontrivial R] : Zero (Ico (0 : R) 1) where zero := ⟨0, by simp⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  given: [Nontrivial R]
-  statement: ↑(0 : Ico (0 : R) 1) = (0 : R)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 coe_zero
-  条件: [非平凡 R]
-  结论: ↑(0 : 左闭右开区间 (0 : R) 1) = (0 : R)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Set.Ico.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_zero [Nontrivial R] : ↑(0 : Ico (0 : R) 1) = (0 : R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero [Nontrivial R] : ↑(0 : Ico (0 : R) 1) = (0 : R) :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  given: [Nontrivial R] (h : (0 : R) in Ico (0 : R) 1)
-  statement: (⟨0, h⟩ : Ico (0 : R) 1) = 0
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_zero
-  条件: [非平凡 R] (h : (0 : R) in 左闭右开区间 (0 : R) 1)
-  结论: (⟨0, h⟩ : 左闭右开区间 (0 : R) 1) = 0
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Ico.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：mk_zero [Nontrivial R] (h : (0 : R) in Ico (0 : R) 1) : (⟨0, h⟩ : Ico (0 :
+ R) 1) = 0
+参数：h : (0 : R) in Ico (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_zero [Nontrivial R] (h : (0 : R) in Ico (0 : R) 1) : (⟨0, h⟩ : Ico (0 : R) 1) = 0 :=
+theorem mk_zero [Nontrivial R] (h : (0 : R) ∈ Ico (0 : R) 1) : (⟨0, h⟩ : Ico (0 : R) 1) = 0 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  given: [Nontrivial R] {x : Ico (0 : R) 1}
-  statement: (x : R) = 0 ↔ x = 0
-  proof: by
-  symm
-  exact Subtype.ext_iff
-
-中文:
-定理 coe_eq_zero
-  条件: [非平凡 R] {x : 左闭右开区间 (0 : R) 1}
-  结论: (x : R) = 0 ↔ x = 0
-  证明: by
-  symm
-  exact Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Set.Ico.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_eq_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x : R) = 0 ↔ x = 0
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem coe_eq_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x : R) = 0 ↔ x = 0 := by
   symm
   exact Subtype.ext_iff
-
-/--
-theorem `coe_ne_zero` / 定理 `coe_ne_zero`
-
-English:
-theorem coe_ne_zero
-  given: [Nontrivial R] {x : Ico (0 : R) 1}
-  statement: (x : R) != 0 ↔ x != 0
-  proof: not_iff_not.mpr coe_eq_zero
-
-omit [IsOrderedRing R] in
-
-中文:
-定理 coe_ne_zero
-  条件: [非平凡 R] {x : 左闭右开区间 (0 : R) 1}
-  结论: (x : R) != 0 ↔ x != 0
-  证明: not_iff_not.mpr coe_eq_zero
-
-omit [IsOrderedRing R] in
-
-Depends on / 依赖: coe_eq_zero, not_iff_not, not_iff_not.mpr
+/-
+**Set.Ico.coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_ne_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x : R) != 0 ↔ x != 0
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Set.Ico.coe_eq_zero`：coe_eq_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x
+ : R) = 0 ↔ x = 0
 -/
-theorem coe_ne_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x : R) != 0 ↔ x != 0 :=
+theorem coe_ne_zero [Nontrivial R] {x : Ico (0 : R) 1} : (x : R) ≠ 0 ↔ x ≠ 0 :=
   not_iff_not.mpr coe_eq_zero
 
 omit [IsOrderedRing R] in
-/--
-theorem `coe_nonneg` / 定理 `coe_nonneg`
-
-English:
-theorem coe_nonneg
-  given: (x : Ico (0 : R) 1)
-  statement: 0 <= (x : R)
-  proof: x.2.1
-
-omit [IsOrderedRing R] in
-
-中文:
-定理 coe_nonneg
-  条件: (x : 左闭右开区间 (0 : R) 1)
-  结论: 0 <= (x : R)
-  证明: x.2.1
-
-omit [IsOrderedRing R] in
+/-
+**Set.Ico.coe_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_nonneg (x : Ico (0 : R) 1) : 0 <= (x : R)
+参数：x : Ico (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_nonneg (x : Ico (0 : R) 1) : 0 <= (x : R) :=
+theorem coe_nonneg (x : Ico (0 : R) 1) : 0 ≤ (x : R) :=
   x.2.1
 
 omit [IsOrderedRing R] in
-/--
-theorem `coe_lt_one` / 定理 `coe_lt_one`
-
-English:
-theorem coe_lt_one
-  given: (x : Ico (0 : R) 1)
-  statement: (x : R) < 1
-  proof: x.2.2
-
-中文:
-定理 coe_lt_one
-  条件: (x : 左闭右开区间 (0 : R) 1)
-  结论: (x : R) < 1
-  证明: x.2.2
+/-
+**Set.Ico.coe_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_lt_one (x : Ico (0 : R) 1) : (x : R) < 1
+参数：x : Ico (0 : R) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem coe_lt_one (x : Ico (0 : R) 1) : (x : R) < 1 :=
   x.2.2
 
-/--
-theorem `nonneg` / 定理 `nonneg`
+/-- like `coe_nonneg`, but with the inequality in `Ico (0:R) 1`. -/
+/-
+**Set.Ico.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：nonneg [Nontrivial R] {t : Ico (0 : R) 1} : 0 <= t
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem nonneg
-  given: [Nontrivial R] {t : Ico (0 : R) 1}
-  statement: 0 <= t
-  proof: t.2.1
-
-中文:
-定理 nonneg
-  条件: [非平凡 R] {t : 左闭右开区间 (0 : R) 1}
-  结论: 0 <= t
-  证明: t.2.1
+--- 原说明 ---
+like `coe_nonneg`, but with the inequality in `Ico (0:R) 1`.
 -/
-theorem nonneg [Nontrivial R] {t : Ico (0 : R) 1} : 0 <= t :=
+theorem nonneg [Nontrivial R] {t : Ico (0 : R) 1} : 0 ≤ t :=
   t.2.1
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (Ico (0 : R) 1) where
-  body: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1 q.2.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instMul
-  签名: : 乘法 (左闭右开区间 (0 : R) 1) where
-  定义体: ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1 q.2.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mul_lt_one_of_nonneg_of_lt_one_right, mul_nonneg
+/-
+**Set.Ico.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ico`。
+形式化陈述：instMul : Mul (Ico (0 : R) 1) where mul p q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul : Mul (Ico (0 : R) 1) where
   mul p q :=
     ⟨p * q, ⟨mul_nonneg p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1 q.2.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : Ico (0 : R) 1)
-  statement: ↑(x * y) = (x * y : R)
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (x y : 左闭右开区间 (0 : R) 1)
-  结论: ↑(x * y) = (x * y : R)
-  证明: rfl
+/-
+**Set.Ico.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：coe_mul (x y : Ico (0 : R) 1) : ↑(x * y) = (x * y : R)
+参数：x y : Ico (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : Ico (0 : R) 1) : ↑(x * y) = (x * y : R) :=
   rfl
-
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: : Semigroup (Ico (0 : R) 1)
-  body: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-中文:
-实例 instSemigroup
-  签名: : 半群 (左闭右开区间 (0 : R) 1)
-  定义体: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ico.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ico`。
+形式化陈述：instSemigroup : Semigroup (Ico (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroup : Semigroup (Ico (0 : R) 1) := fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
-
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-中文:
-实例 instCommSemigroup
-  签名: {R : 类型} [交换半环 R] [偏序 R] [是Ordered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ico.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ico`。
+形式化陈述：instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrdered
+Ring R] : CommSemigroup (Ico (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrderedRing R] :
     CommSemigroup (Ico (0 : R) 1) := fast_instance%
@@ -940,22 +624,17 @@ instance instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsOrde
 
 /-- The coercion from `Set.Ico 0 1` as a `MulHom`. -/
 @[simps]
-/--
-Definition of `coeMulHom` / `coeMulHom` 的定义
+/-
+**Set.Ico.coeMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Set.Ico`。
+形式化陈述：coeMulHom : (Ico (0 : R) 1) ->ₙ* R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ico.coe_mul`：coe_mul (x y : Ico (0 : R) 1) : ↑(x * y) = (x * y : R)
 
-English:
-definition coeMulHom
-  signature: : (Ico (0 : R) 1) ->ₙ* R where
-  body: (↑)
-  map_mul' := coe_mul
-
-中文:
-定义 coeMulHom
-  签名: : (左闭右开区间 (0 : R) 1) ->ₙ* R where
-  定义体: (↑)
-  map_mul' := coe_mul
+--- 原说明 ---
+The coercion from `Set.Ico 0 1` as a `MulHom`.
 -/
-def coeMulHom : (Ico (0 : R) 1) ->ₙ* R where
+def coeMulHom : (Ico (0 : R) 1) →ₙ* R where
   toFun := (↑)
   map_mul' := coe_mul
 
@@ -970,390 +649,200 @@ variable [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
 
 namespace Set.Ioc
 
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: : One (Ioc (0 : R) 1) where one
-  body: ⟨1, ⟨zero_lt_one, le_refl 1⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instOne
-  签名: : 幺 (左开右闭区间 (0 : R) 1) where one
-  定义体: ⟨1, ⟨zero_lt_one, le_refl 1⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_refl, zero_lt_one
+/-
+**Set.Ioc.instOne** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instOne : One (Ioc (0 : R) 1) where one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOne : One (Ioc (0 : R) 1) where one := ⟨1, ⟨zero_lt_one, le_refl 1⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ↑(1 : Ioc (0 : R) 1) = (1 : R)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 coe_one
-  结论: ↑(1 : 左开右闭区间 (0 : R) 1) = (1 : R)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Set.Ioc.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_one : ↑(1 : Ioc (0 : R) 1) = (1 : R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ↑(1 : Ioc (0 : R) 1) = (1 : R) :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  given: (h : (1 : R) in Ioc (0 : R) 1)
-  statement: (⟨1, h⟩ : Ioc (0 : R) 1) = 1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_one
-  条件: (h : (1 : R) in 左开右闭区间 (0 : R) 1)
-  结论: (⟨1, h⟩ : 左开右闭区间 (0 : R) 1) = 1
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Ioc.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：mk_one (h : (1 : R) in Ioc (0 : R) 1) : (⟨1, h⟩ : Ioc (0 : R) 1) = 1
+参数：h : (1 : R) in Ioc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_one (h : (1 : R) in Ioc (0 : R) 1) : (⟨1, h⟩ : Ioc (0 : R) 1) = 1 :=
+theorem mk_one (h : (1 : R) ∈ Ioc (0 : R) 1) : (⟨1, h⟩ : Ioc (0 : R) 1) = 1 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_one` / 定理 `coe_eq_one`
-
-English:
-theorem coe_eq_one
-  given: {x : Ioc (0 : R) 1}
-  statement: (x : R) = 1 ↔ x = 1
-  proof: by
-  symm
-  exact Subtype.ext_iff
-
-中文:
-定理 coe_eq_one
-  条件: {x : 左开右闭区间 (0 : R) 1}
-  结论: (x : R) = 1 ↔ x = 1
-  证明: by
-  symm
-  exact Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Set.Ioc.coe_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_eq_one {x : Ioc (0 : R) 1} : (x : R) = 1 ↔ x = 1
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem coe_eq_one {x : Ioc (0 : R) 1} : (x : R) = 1 ↔ x = 1 := by
   symm
   exact Subtype.ext_iff
-
-/--
-theorem `coe_ne_one` / 定理 `coe_ne_one`
-
-English:
-theorem coe_ne_one
-  given: {x : Ioc (0 : R) 1}
-  statement: (x : R) != 1 ↔ x != 1
-  proof: not_iff_not.mpr coe_eq_one
-
-omit [IsStrictOrderedRing R] in
-
-中文:
-定理 coe_ne_one
-  条件: {x : 左开右闭区间 (0 : R) 1}
-  结论: (x : R) != 1 ↔ x != 1
-  证明: not_iff_not.mpr coe_eq_one
-
-omit [IsStrictOrderedRing R] in
-
-Depends on / 依赖: coe_eq_one, not_iff_not, not_iff_not.mpr
+/-
+**Set.Ioc.coe_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_ne_one {x : Ioc (0 : R) 1} : (x : R) != 1 ↔ x != 1
+参数：0 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Set.Ioc.coe_eq_one`：coe_eq_one {x : Ioc (0 : R) 1} : (x : R) = 1 ↔ x = 1
 -/
-theorem coe_ne_one {x : Ioc (0 : R) 1} : (x : R) != 1 ↔ x != 1 :=
+theorem coe_ne_one {x : Ioc (0 : R) 1} : (x : R) ≠ 1 ↔ x ≠ 1 :=
   not_iff_not.mpr coe_eq_one
 
 omit [IsStrictOrderedRing R] in
-/--
-theorem `coe_pos` / 定理 `coe_pos`
-
-English:
-theorem coe_pos
-  given: (x : Ioc (0 : R) 1)
-  statement: 0 < (x : R)
-  proof: x.2.1
-
-omit [IsStrictOrderedRing R] in
-
-中文:
-定理 coe_pos
-  条件: (x : 左开右闭区间 (0 : R) 1)
-  结论: 0 < (x : R)
-  证明: x.2.1
-
-omit [IsStrictOrderedRing R] in
+/-
+**Set.Ioc.coe_pos** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_pos (x : Ioc (0 : R) 1) : 0 < (x : R)
+参数：x : Ioc (0 : R) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem coe_pos (x : Ioc (0 : R) 1) : 0 < (x : R) :=
   x.2.1
 
 omit [IsStrictOrderedRing R] in
-/--
-theorem `coe_le_one` / 定理 `coe_le_one`
-
-English:
-theorem coe_le_one
-  given: (x : Ioc (0 : R) 1)
-  statement: (x : R) <= 1
-  proof: x.2.2
-
-中文:
-定理 coe_le_one
-  条件: (x : 左开右闭区间 (0 : R) 1)
-  结论: (x : R) <= 1
-  证明: x.2.2
+/-
+**Set.Ioc.coe_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_le_one (x : Ioc (0 : R) 1) : (x : R) <= 1
+参数：x : Ioc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_le_one (x : Ioc (0 : R) 1) : (x : R) <= 1 :=
+theorem coe_le_one (x : Ioc (0 : R) 1) : (x : R) ≤ 1 :=
   x.2.2
 
-/--
-theorem `le_one` / 定理 `le_one`
+/-- like `coe_le_one`, but with the inequality in `Ioc (0:R) 1`. -/
+/-
+**Set.Ioc.le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：le_one {t : Ioc (0 : R) 1} : t <= 1
+参数：0 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem le_one
-  given: {t : Ioc (0 : R) 1}
-  statement: t <= 1
-  proof: t.2.2
-
-中文:
-定理 le_one
-  条件: {t : 左开右闭区间 (0 : R) 1}
-  结论: t <= 1
-  证明: t.2.2
+--- 原说明 ---
+like `coe_le_one`, but with the inequality in `Ioc (0:R) 1`.
 -/
-theorem le_one {t : Ioc (0 : R) 1} : t <= 1 :=
+theorem le_one {t : Ioc (0 : R) 1} : t ≤ 1 :=
   t.2.2
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (Ioc (0 : R) 1) where
-  body: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_le_one₀ p.2.2 (le_of_lt q.2.1) q.2.2⟩⟩
-
-中文:
-实例 instMul
-  签名: : 乘法 (左开右闭区间 (0 : R) 1) where
-  定义体: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_le_one₀ p.2.2 (le_of_lt q.2.1) q.2.2⟩⟩
-
-Depends on / 依赖: le_of_lt, mul_pos
+/-
+**Set.Ioc.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instMul : Mul (Ioc (0 : R) 1) where mul p q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul : Mul (Ioc (0 : R) 1) where
   mul p q := ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_le_one₀ p.2.2 (le_of_lt q.2.1) q.2.2⟩⟩
-
-/--
-Instance `instPow` / 实例 `instPow`
-
-English:
-instance instPow
-  signature: : Pow (Ioc (0 : R) 1) Nat where
-  body: ⟨p.1 ^ n, ⟨pow_pos p.2.1 n, pow_le_one₀ (le_of_lt p.2.1) p.2.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instPow
-  签名: : 幂 (左开右闭区间 (0 : R) 1) 自然数 where
-  定义体: ⟨p.1 ^ n, ⟨pow_pos p.2.1 n, pow_le_one₀ (le_of_lt p.2.1) p.2.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_of_lt, pow_pos
+/-
+**Set.Ioc.instPow** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instPow : Pow (Ioc (0 : R) 1) Nat where pow p n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPow : Pow (Ioc (0 : R) 1) Nat where
+instance instPow : Pow (Ioc (0 : R) 1) ℕ where
   pow p n := ⟨p.1 ^ n, ⟨pow_pos p.2.1 n, pow_le_one₀ (le_of_lt p.2.1) p.2.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : Ioc (0 : R) 1)
-  statement: ↑(x * y) = (x * y : R)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mul
-  条件: (x y : 左开右闭区间 (0 : R) 1)
-  结论: ↑(x * y) = (x * y : R)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Set.Ioc.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_mul (x y : Ioc (0 : R) 1) : ↑(x * y) = (x * y : R)
+参数：x y : Ioc (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : Ioc (0 : R) 1) : ↑(x * y) = (x * y : R) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (x : Ioc (0 : R) 1) (n : Nat)
-  statement: ↑(x ^ n) = ((x : R) ^ n)
-  proof: rfl
-
-中文:
-定理 coe_pow
-  条件: (x : 左开右闭区间 (0 : R) 1) (n : 自然数)
-  结论: ↑(x ^ n) = ((x : R) ^ n)
-  证明: rfl
+/-
+**Set.Ioc.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：coe_pow (x : Ioc (0 : R) 1) (n : Nat) : ↑(x ^ n) = ((x : R) ^ n)
+参数：x : Ioc (0 : R) 1；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow (x : Ioc (0 : R) 1) (n : Nat) : ↑(x ^ n) = ((x : R) ^ n) :=
+theorem coe_pow (x : Ioc (0 : R) 1) (n : ℕ) : ↑(x ^ n) = ((x : R) ^ n) :=
   rfl
-
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: : Semigroup (Ioc (0 : R) 1)
-  body: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-中文:
-实例 instSemigroup
-  签名: : 半群 (左开右闭区间 (0 : R) 1)
-  定义体: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioc.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instSemigroup : Semigroup (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroup : Semigroup (Ioc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
-
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: : Monoid (Ioc (0 : R) 1)
-  body: fast_instance%
-  Subtype.coe_injective.monoid _ coe_one coe_mul coe_pow
-
-中文:
-实例 instMonoid
-  签名: : 幺半群 (左开右闭区间 (0 : R) 1)
-  定义体: fast_instance%
-  Subtype.coe_injective.monoid _ coe_one coe_mul coe_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioc.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instMonoid : Monoid (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoid : Monoid (Ioc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.monoid _ coe_one coe_mul coe_pow
-
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-中文:
-实例 instCommSemigroup
-  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioc.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictO
+rderedRing R] : CommSemigroup (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] :
     CommSemigroup (Ioc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.commSemigroup _ coe_mul
-
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commMonoid _ coe_one coe_mul coe_pow
-
-中文:
-实例 instCommMonoid
-  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commMonoid _ coe_one coe_mul coe_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioc.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instCommMonoid {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrde
+redRing R] : CommMonoid (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoid {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] :
     CommMonoid (Ioc (0 : R) 1) := fast_instance%
   Subtype.coe_injective.commMonoid _ coe_one coe_mul coe_pow
-
-/--
-Instance `instCancelMonoid` / 实例 `instCancelMonoid`
-
-English:
-instance instCancelMonoid
-  signature: {R : Type*} [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: { Set.Ioc.instMonoid with
-    mul_left_cancel := fun a _ _ h =>
-Subtype.ext mul_left_cancel₀ a.prop.1.ne' (congr_arg Subtype.val h :)
-    mul_right_cancel := fun b _ _ h =>
-Subtype.ext mul_right_cancel₀ b.prop.1.ne' (congr_arg Subtype.val h :) }
-
-中文:
-实例 instCancelMonoid
-  签名: {R : 类型} [环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: { Set.Ioc.instMonoid with
-    mul_left_cancel := fun a _ _ h =>
-Subtype.ext mul_left_cancel₀ a.prop.1.ne' (congr_arg Subtype.val h :)
-    mul_right_cancel := fun b _ _ h =>
-Subtype.ext mul_right_cancel₀ b.prop.1.ne' (congr_arg Subtype.val h :) }
-
-Depends on / 依赖: Set.Ioc.instMonoid, Subtype, Subtype.ext, Subtype.val, a.prop, b.prop, congr_arg, instMonoid, mul_left_cancel, mul_right_cancel
+/-
+**Set.Ioc.instCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instCancelMonoid {R : Type*} [Ring R] [PartialOrder R] [IsStrictOrderedRin
+g R] [IsDomain R] : CancelMonoid (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCancelMonoid {R : Type*} [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
     [IsDomain R] : CancelMonoid (Ioc (0 : R) 1) :=
   { Set.Ioc.instMonoid with
     mul_left_cancel := fun a _ _ h =>
-Subtype.ext mul_left_cancel₀ a.prop.1.ne' (congr_arg Subtype.val h :)
+      Subtype.ext <| mul_left_cancel₀ a.prop.1.ne' <| (congr_arg Subtype.val h :)
     mul_right_cancel := fun b _ _ h =>
-Subtype.ext mul_right_cancel₀ b.prop.1.ne' (congr_arg Subtype.val h :) }
-
-/--
-Instance `instCancelCommMonoid` / 实例 `instCancelCommMonoid`
-
-English:
-instance instCancelCommMonoid
-  signature: {R : Type*} [CommRing R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: { Set.Ioc.instCommMonoid, Set.Ioc.instCancelMonoid with }
-
-中文:
-实例 instCancelCommMonoid
-  签名: {R : 类型} [交换环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: { Set.Ioc.instCommMonoid, Set.Ioc.instCancelMonoid with }
-
-Depends on / 依赖: Set.Ioc.instCancelMonoid, Set.Ioc.instCommMonoid, instCancelMonoid, instCommMonoid
+      Subtype.ext <| mul_right_cancel₀ b.prop.1.ne' <| (congr_arg Subtype.val h :) }
+/-
+**Set.Ioc.instCancelCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioc`。
+形式化陈述：instCancelCommMonoid {R : Type*} [CommRing R] [PartialOrder R] [IsStrictOr
+deredRing R] [IsDomain R] : CancelCommMonoid (Ioc (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCancelCommMonoid {R : Type*} [CommRing R] [PartialOrder R] [IsStrictOrderedRing R]
     [IsDomain R] :
@@ -1362,24 +851,17 @@ instance instCancelCommMonoid {R : Type*} [CommRing R] [PartialOrder R] [IsStric
 
 /-- The coercion from `Set.Ioc 0 1` as a `MonoidHom`. -/
 @[simps]
-/--
-Definition of `coeMonoidHom` / `coeMonoidHom` 的定义
+/-
+**Set.Ioc.coeMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Set.Ioc`。
+形式化陈述：coeMonoidHom : (Ioc (0 : R) 1) ->* R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioc.coe_mul`：coe_mul (x y : Ioc (0 : R) 1) : ↑(x * y) = (x * y : R)
 
-English:
-definition coeMonoidHom
-  signature: : (Ioc (0 : R) 1) ->* R where
-  body: (↑)
-  map_mul' := coe_mul
-  map_one' := rfl
-
-中文:
-定义 coeMonoidHom
-  签名: : (左开右闭区间 (0 : R) 1) ->* R where
-  定义体: (↑)
-  map_mul' := coe_mul
-  map_one' := rfl
+--- 原说明 ---
+The coercion from `Set.Ioc 0 1` as a `MonoidHom`.
 -/
-def coeMonoidHom : (Ioc (0 : R) 1) ->* R where
+def coeMonoidHom : (Ioc (0 : R) 1) →* R where
   toFun := (↑)
   map_mul' := coe_mul
   map_one' := rfl
@@ -1392,125 +874,66 @@ end Set.Ioc
 namespace Set.Ioo
 
 omit [IsStrictOrderedRing R] in
-/--
-theorem `pos` / 定理 `pos`
-
-English:
-theorem pos
-  given: (x : Ioo (0 : R) 1)
-  statement: 0 < (x : R)
-  proof: x.2.1
-
-omit [IsStrictOrderedRing R] in
-
-中文:
-定理 pos
-  条件: (x : 开区间 (0 : R) 1)
-  结论: 0 < (x : R)
-  证明: x.2.1
-
-omit [IsStrictOrderedRing R] in
+/-
+**Set.Ioo.pos** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：pos (x : Ioo (0 : R) 1) : 0 < (x : R)
+参数：x : Ioo (0 : R) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem pos (x : Ioo (0 : R) 1) : 0 < (x : R) :=
   x.2.1
 
 omit [IsStrictOrderedRing R] in
-/--
-theorem `lt_one` / 定理 `lt_one`
-
-English:
-theorem lt_one
-  given: (x : Ioo (0 : R) 1)
-  statement: (x : R) < 1
-  proof: x.2.2
-
-中文:
-定理 lt_one
-  条件: (x : 开区间 (0 : R) 1)
-  结论: (x : R) < 1
-  证明: x.2.2
+/-
+**Set.Ioo.lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：lt_one (x : Ioo (0 : R) 1) : (x : R) < 1
+参数：x : Ioo (0 : R) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem lt_one (x : Ioo (0 : R) 1) : (x : R) < 1 :=
   x.2.2
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (Ioo (0 : R) 1) where
-  body: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1.le q.2.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instMul
-  签名: : 乘法 (开区间 (0 : R) 1) where
-  定义体: ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1.le q.2.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mul_lt_one_of_nonneg_of_lt_one_right, mul_pos
+/-
+**Set.Ioo.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioo`。
+形式化陈述：instMul : Mul (Ioo (0 : R) 1) where mul p q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul : Mul (Ioo (0 : R) 1) where
   mul p q :=
     ⟨p.1 * q.1, ⟨mul_pos p.2.1 q.2.1, mul_lt_one_of_nonneg_of_lt_one_right p.2.2.le q.2.1.le q.2.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : Ioo (0 : R) 1)
-  statement: ↑(x * y) = (x * y : R)
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (x y : 开区间 (0 : R) 1)
-  结论: ↑(x * y) = (x * y : R)
-  证明: rfl
+/-
+**Set.Ioo.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：coe_mul (x y : Ioo (0 : R) 1) : ↑(x * y) = (x * y : R)
+参数：x y : Ioo (0 : R) 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : Ioo (0 : R) 1) : ↑(x * y) = (x * y : R) :=
   rfl
-
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: : Semigroup (Ioo (0 : R) 1)
-  body: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-中文:
-实例 instSemigroup
-  签名: : 半群 (开区间 (0 : R) 1)
-  定义体: fast_instance%
-  Subtype.coe_injective.semigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioo.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioo`。
+形式化陈述：instSemigroup : Semigroup (Ioo (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroup : Semigroup (Ioo (0 : R) 1) := fast_instance%
   Subtype.coe_injective.semigroup _ coe_mul
-
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-中文:
-实例 instCommSemigroup
-  签名: {R : 类型} [交换半环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commSemigroup _ coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Set.Ioo.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Set.Ioo`。
+形式化陈述：instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictO
+rderedRing R] : CommSemigroup (Ioo (0 : R) 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] :
     CommSemigroup (Ioo (0 : R) 1) := fast_instance%
@@ -1518,101 +941,140 @@ instance instCommSemigroup {R : Type*} [CommSemiring R] [PartialOrder R] [IsStri
 
 /-- The coercion from `Set.Ioo 0 1` as a `MulHom`. -/
 @[simps]
-/--
-Definition of `coeMulHom` / `coeMulHom` 的定义
+/-
+**Set.Ioo.coeMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Set.Ioo`。
+形式化陈述：coeMulHom : (Ioo (0 : R) 1) ->ₙ* R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioo.coe_mul`：coe_mul (x y : Ioo (0 : R) 1) : ↑(x * y) = (x * y : R)
 
-English:
-definition coeMulHom
-  signature: : (Ioo (0 : R) 1) ->ₙ* R where
-  body: (↑)
-  map_mul' := coe_mul
-
-中文:
-定义 coeMulHom
-  签名: : (开区间 (0 : R) 1) ->ₙ* R where
-  定义体: (↑)
-  map_mul' := coe_mul
+--- 原说明 ---
+The coercion from `Set.Ioo 0 1` as a `MulHom`.
 -/
-def coeMulHom : (Ioo (0 : R) 1) ->ₙ* R where
+def coeMulHom : (Ioo (0 : R) 1) →ₙ* R where
   toFun := (↑)
   map_mul' := coe_mul
 
 variable {β : Type*} [Ring β] [PartialOrder β] [IsOrderedRing β]
-
-/--
-theorem `one_sub_mem` / 定理 `one_sub_mem`
-
-English:
-theorem one_sub_mem
-  given: {t : β} (ht : t in Ioo (0 : β) 1)
-  statement: 1 - t in Ioo (0 : β) 1
-  proof: by
-  simp_all only [mem_Ioo, sub_pos, sub_lt_self_iff, and_self]
-
-中文:
-定理 one_sub_mem
-  条件: {t : β} (ht : t in 开区间 (0 : β) 1)
-  结论: 1 - t in 开区间 (0 : β) 1
-  证明: by
-  simp_all only [mem_Ioo, sub_pos, sub_lt_self_iff, and_self]
-
-Depends on / 依赖: and_self, mem_Ioo, sub_lt_self_iff, sub_pos
+/-
+**Set.Ioo.one_sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：one_sub_mem {t : β} (ht : t in Ioo (0 : β) 1) : 1 - t in Ioo (0 : β) 1
+参数：ht : t in Ioo (0 : β) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-theorem one_sub_mem {t : β} (ht : t in Ioo (0 : β) 1) : 1 - t in Ioo (0 : β) 1 := by
+theorem one_sub_mem {t : β} (ht : t ∈ Ioo (0 : β) 1) : 1 - t ∈ Ioo (0 : β) 1 := by
   simp_all only [mem_Ioo, sub_pos, sub_lt_self_iff, and_self]
-
-/--
-theorem `mem_iff_one_sub_mem` / 定理 `mem_iff_one_sub_mem`
-
-English:
-theorem mem_iff_one_sub_mem
-  given: {t : β}
-  statement: t in Ioo (0 : β) 1 ↔ 1 - t in Ioo (0 : β) 1
-  proof: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-中文:
-定理 mem_iff_one_sub_mem
-  条件: {t : β}
-  结论: t in 开区间 (0 : β) 1 ↔ 1 - t in 开区间 (0 : β) 1
-  证明: ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-Depends on / 依赖: one_sub_mem, sub_sub_cancel
+/-
+**Set.Ioo.mem_iff_one_sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：mem_iff_one_sub_mem {t : β} : t in Ioo (0 : β) 1 ↔ 1 - t in Ioo (0 : β) 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioo.one_sub_mem`：one_sub_mem {t : β} (ht : t in Ioo (0 : β) 1) : 1 -
+ t in Ioo (0 : β) 1
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
 -/
-theorem mem_iff_one_sub_mem {t : β} : t in Ioo (0 : β) 1 ↔ 1 - t in Ioo (0 : β) 1 :=
+theorem mem_iff_one_sub_mem {t : β} : t ∈ Ioo (0 : β) 1 ↔ 1 - t ∈ Ioo (0 : β) 1 :=
   ⟨one_sub_mem, fun h => sub_sub_cancel 1 t ▸ one_sub_mem h⟩
-
-/--
-theorem `one_minus_pos` / 定理 `one_minus_pos`
-
-English:
-theorem one_minus_pos
-  given: (x : Ioo (0 : β) 1)
-  statement: 0 < 1 - (x : β)
-  proof: by simpa using x.2.2
-
-中文:
-定理 one_minus_pos
-  条件: (x : 开区间 (0 : β) 1)
-  结论: 0 < 1 - (x : β)
-  证明: by simpa using x.2.2
+/-
+**Set.Ioo.one_minus_pos** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：one_minus_pos (x : Ioo (0 : β) 1) : 0 < 1 - (x : β)
+参数：x : Ioo (0 : β) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem one_minus_pos (x : Ioo (0 : β) 1) : 0 < 1 - (x : β) := by simpa using x.2.2
-
-/--
-theorem `one_minus_lt_one` / 定理 `one_minus_lt_one`
-
-English:
-theorem one_minus_lt_one
-  given: (x : Ioo (0 : β) 1)
-  statement: 1 - (x : β) < 1
-  proof: by simpa using x.2.1
-
-中文:
-定理 one_minus_lt_one
-  条件: (x : 开区间 (0 : β) 1)
-  结论: 1 - (x : β) < 1
-  证明: by simpa using x.2.1
+/-
+**Set.Ioo.one_minus_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：one_minus_lt_one (x : Ioo (0 : β) 1) : 1 - (x : β) < 1
+参数：x : Ioo (0 : β) 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem one_minus_lt_one (x : Ioo (0 : β) 1) : 1 - (x : β) < 1 := by simpa using x.2.1
 
 end Set.Ioo
+

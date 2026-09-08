@@ -30,82 +30,58 @@ namespace AffineSubspace
 variable {R V P : Type*} [Ring R] [AddCommGroup V] [Module R V] [TopologicalSpace P]
   [AddTorsor V P]
 
-/--
-Definition of `subtypeA` / `subtypeA` 的定义
+/-- Embedding of an affine subspace to the ambient space, as a continuous affine map. -/
+/-
+**AffineSubspace.subtypeA** 是 Mathlib 中的一个定义，位于命名空间 `AffineSubspace`。
+形式化陈述：subtypeA (s : AffineSubspace R P) [Nonempty s] : s ->ᴬ[R] P where toAffine
+Map
+参数：s : AffineSubspace R P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtypeA
-  signature: (s : AffineSubspace R P) [Nonempty s]
-  body: s.subtype
-  cont := continuous_subtype_val
-
-中文:
-定义 subtypeA
-  签名: (s : 仿射子空间 R P) [非空 s]
-  定义体: s.subtype
-  cont := continuous_subtype_val
-
-Depends on / 依赖: s.subtype, subtype
+--- 原说明 ---
+Embedding of an affine subspace to the ambient space, as a continuous affine map
+.
 -/
-def subtypeA (s : AffineSubspace R P) [Nonempty s] : s ->ᴬ[R] P where
+def subtypeA (s : AffineSubspace R P) [Nonempty s] : s →ᴬ[R] P where
   toAffineMap := s.subtype
   cont := continuous_subtype_val
-
-/--
-lemma `coe_subtypeA` / 引理 `coe_subtypeA`
-
-English:
-lemma coe_subtypeA
-  given: (s : AffineSubspace R P) [Nonempty s]
-  statement: ⇑s.subtypeA = Subtype.val
-  proof: rfl
-
-中文:
-引理 coe_subtypeA
-  条件: (s : 仿射子空间 R P) [非空 s]
-  结论: ⇑s.subtypeA = 子类型.val
-  证明: rfl
+/-
+**AffineSubspace.coe_subtypeA** 是 Mathlib 中的一个定理，位于命名空间 `AffineSubspace`。
+形式化陈述：∀ {R : Type u_1} {V : Type u_2} {P : Type u_3} [inst : Ring R] [inst_1 : A
+ddCommGroup V] [inst_2 : _root_.Module R V]   [inst_3 : TopologicalSpace P] [ins
+t_4 : AddTorsor V P] (s : AffineSubspace R P) [inst_5 : Nonempty ↥s],   ⇑s.subty
+peA = Subtype.val
+参数：s : AffineSubspace R P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_subtypeA (s : AffineSubspace R P) [Nonempty s] : ⇑s.subtypeA = Subtype.val :=
   rfl
-
-/--
-lemma `subtypeA_toAffineMap` / 引理 `subtypeA_toAffineMap`
-
-English:
-lemma subtypeA_toAffineMap
-  given: (s : AffineSubspace R P) [Nonempty s]
-  proof: rfl
-
-中文:
-引理 subtypeA_toAffineMap
-  条件: (s : 仿射子空间 R P) [非空 s]
-  证明: rfl
+/-
+**AffineSubspace.subtypeA_toAffineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineSubspace`
+。
+形式化陈述：∀ {R : Type u_1} {V : Type u_2} {P : Type u_3} [inst : Ring R] [inst_1 : A
+ddCommGroup V] [inst_2 : _root_.Module R V]   [inst_3 : TopologicalSpace P] [ins
+t_4 : AddTorsor V P] (s : AffineSubspace R P) [inst_5 : Nonempty ↥s],   ↑s.subty
+peA = s.subtype
+参数：s : AffineSubspace R P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma subtypeA_toAffineMap (s : AffineSubspace R P) [Nonempty s] :
     s.subtypeA.toAffineMap = s.subtype :=
   rfl
 
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-- `AffineEquiv.ofEq` as a continuous affine equivalence. -/
+/-
+**AffineSubspace.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `AffineSubspace`。
+形式化陈述：ofEq {s t : AffineSubspace R P} [Nonempty s] [Nonempty t] (h : s = t) : s 
+≃ᴬ[R] t where toAffineEquiv
+参数：h : s = t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
-  body: .ofEq s t h
-  continuous_toFun := by subst h; exact continuous_id
-  continuous_invFun := by subst h; exact continuous_id
-
-@[simp]
-
-中文:
-定义 ofEq
-  签名: {s t : 仿射子空间 R P} [非空 s] [非空 t]
-  定义体: .ofEq s t h
-  continuous_toFun := by subst h; exact continuous_id
-  continuous_invFun := by subst h; exact continuous_id
-
-@[simp]
+--- 原说明 ---
+`AffineEquiv.ofEq` as a continuous affine equivalence.
 -/
 noncomputable def ofEq {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
     (h : s = t) : s ≃ᴬ[R] t where
@@ -114,20 +90,15 @@ noncomputable def ofEq {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
   continuous_invFun := by subst h; exact continuous_id
 
 @[simp]
-/--
-theorem `coe_ofEq_apply` / 定理 `coe_ofEq_apply`
-
-English:
-theorem coe_ofEq_apply
-  statement: {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
-  proof: AffineEquiv.coe_ofEq_apply s t h x
-
-中文:
-定理 coe_ofEq_apply
-  结论: {s t : 仿射子空间 R P} [非空 s] [非空 t]
-  证明: AffineEquiv.coe_ofEq_apply s t h x
-
-Depends on / 依赖: AffineEquiv, AffineEquiv.coe_ofEq_apply, coe_ofEq_apply
+/-
+**AffineSubspace.coe_ofEq_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineSubspace`。
+形式化陈述：coe_ofEq_apply {s t : AffineSubspace R P} [Nonempty s] [Nonempty t] (h : s
+ = t) (x : s) : (ofEq h x : P) = x
+参数：h : s = t；x : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineEquiv.coe_ofEq_apply`：coe_ofEq_apply (h : S₁ = S₂) (x : S₁) : (ofE
+q S₁ S₂ h x : P₁) = x
 -/
 theorem coe_ofEq_apply {s t : AffineSubspace R P} [Nonempty s] [Nonempty t]
     (h : s = t) (x : s) : (ofEq h x : P) = x := AffineEquiv.coe_ofEq_apply s t h x
@@ -139,36 +110,25 @@ namespace ContinuousAffineEquiv
 variable {R V P W Q : Type*} [Ring R] [AddCommGroup V] [Module R V] [TopologicalSpace P]
   [AddTorsor V P] [AddCommGroup W] [Module R W] [TopologicalSpace Q] [AddTorsor W Q]
 
-/--
-Definition of `affineSubspaceMap` / `affineSubspaceMap` 的定义
+/-- A continuous affine equivalence restricts to a continuous affine equivalence between an affine
+subspace and its image.
 
-English:
-definition affineSubspaceMap
-  signature: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s]
-  body: { e.toAffineEquiv.affineSubspaceMap s with
-    continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
-    continuous_invFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.continuous_invFun.comp continuous_subtype_val).congr fun x =>
-        (e.eq_symm_apply.mpr
-          (AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x)).symm }
+This is the continuous affine version of `AffineEquiv.affineSubspaceMap`. -/
+/-
+**ContinuousAffineEquiv.affineSubspaceMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousA
+ffineEquiv`。
+形式化陈述：affineSubspaceMap (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s] : 
+s ≃ᴬ[R] s.map e.toAffineMap
+参数：e : P ≃ᴬ[R] Q；s : AffineSubspace R P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A continuous affine equivalence restricts to a continuous affine equivalence bet
+ween an affine
+subspace and its image.
 
-中文:
-定义 affineSubspaceMap
-  签名: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P) [非空 s]
-  定义体: { e.toAffineEquiv.affineSubspaceMap s with
-    continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
-    continuous_invFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.continuous_invFun.comp continuous_subtype_val).congr fun x =>
-        (e.eq_symm_apply.mpr
-          (AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x)).symm }
-
-@[simp]
-
-Depends on / 依赖: AffineEquiv, AffineEquiv.affineSubspaceMap_apply_symm_apply, IsEmbedding, Topology, Topology.IsEmbedding.subtypeVal.continuous_iff, affineSubspaceMap, affineSubspaceMap_apply_symm_apply, continuous, continuous_iff, continuous_invFun, continuous_subtype_val, continuous_toFun, e.continuous.comp, e.continuous_invFun.comp, e.eq_symm_apply.mpr, e.toAffineEquiv, e.toAffineEquiv.affineSubspaceMap, eq_symm_apply, subtypeVal, toAffineEquiv
+This is the continuous affine version of `AffineEquiv.affineSubspaceMap`.
 -/
 noncomputable def affineSubspaceMap (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s] :
     s ≃ᴬ[R] s.map e.toAffineMap :=
@@ -176,46 +136,36 @@ noncomputable def affineSubspaceMap (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P)
     continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
       (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
     continuous_invFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.continuous_invFun.comp continuous_subtype_val).congr fun x =>
+      (e.continuous_invFun.comp continuous_subtype_val).congr fun x ↦
         (e.eq_symm_apply.mpr
           (AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x)).symm }
 
 @[simp]
-/--
-theorem `affineSubspaceMap_apply` / 定理 `affineSubspaceMap_apply`
-
-English:
-theorem affineSubspaceMap_apply
-  statement: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 affineSubspaceMap_apply
-  结论: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P) [非空 s]
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAffineEquiv.affineSubspaceMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousAffineEquiv`。
+形式化陈述：affineSubspaceMap_apply (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty
+ s] (x : s) : e.affineSubspaceMap s x = e x
+参数：e : P ≃ᴬ[R] Q；s : AffineSubspace R P；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem affineSubspaceMap_apply (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P) [Nonempty s]
     (x : s) : e.affineSubspaceMap s x = e x := rfl
 
 @[simp]
-/--
-theorem `affineSubspaceMap_apply_symm_apply` / 定理 `affineSubspaceMap_apply_symm_apply`
-
-English:
-theorem affineSubspaceMap_apply_symm_apply
-  statement: (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P)
-  proof: AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x
-
-中文:
-定理 affineSubspaceMap_apply_symm_apply
-  结论: (e : P ≃ᴬ[R] Q) (s : 仿射子空间 R P)
-  证明: AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x
-
-Depends on / 依赖: AffineEquiv, AffineEquiv.affineSubspaceMap_apply_symm_apply, affineSubspaceMap_apply_symm_apply, e.toAffineEquiv, toAffineEquiv
+/-
+**ContinuousAffineEquiv.affineSubspaceMap_apply_symm_apply** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousAffineEquiv`。
+形式化陈述：affineSubspaceMap_apply_symm_apply (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P
+) [Nonempty s] (x : s.map e.toAffineMap) : e ((e.affineSubspaceMap s).symm x) = 
+x
+参数：e : P ≃ᴬ[R] Q；s : AffineSubspace R P；x : s.map e.toAffineMap。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineEquiv.affineSubspaceMap_apply_symm_apply`：affineSubspaceMap_apply_
+symm_apply (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁) [Nonempty s] (x : s.map e
+.toAffineMap) : e ((e.affineSubspace…
 -/
 theorem affineSubspaceMap_apply_symm_apply (e : P ≃ᴬ[R] Q) (s : AffineSubspace R P)
     [Nonempty s] (x : s.map e.toAffineMap) : e ((e.affineSubspaceMap s).symm x) = x :=
@@ -230,6 +180,10 @@ variable {R V P : Type*} [Ring R] [AddCommGroup V] [Module R V] [TopologicalSpac
 
 variable [TopologicalSpace V] [IsTopologicalAddTorsor P]
 
+/-
+**AffineSubspace.** 是 Mathlib 中的一个实例，位于命名空间 `AffineSubspace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : AffineSubspace R P} [Nonempty s] : IsTopologicalAddTorsor s where
   continuous_vadd := by
     rw [Topology.IsEmbedding.subtypeVal.continuous_iff]
@@ -239,31 +193,43 @@ instance {s : AffineSubspace R P} [Nonempty s] : IsTopologicalAddTorsor s where
     fun_prop
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isClosed_direction_iff` / 定理 `isClosed_direction_iff`
-
-English:
-theorem isClosed_direction_iff
-  given: [T1Space V] (s : AffineSubspace R P)
-  proof: by
-  rcases s.eq_bot_or_nonempty with (rfl | ⟨x, hx⟩); · simp
-  rw [← (Homeomorph.vaddConst x).symm.isClosed_image]; rw [AffineSubspace.coe_direction_eq_vsub_set_right hx]
-  simp only [Homeomorph.vaddConst_symm_apply]
-
-中文:
-定理 isClosed_direction_iff
-  条件: [T1空间 V] (s : 仿射子空间 R P)
-  证明: by
-  rcases s.eq_bot_or_nonempty with (rfl | ⟨x, hx⟩); · simp
-  rw [← (Homeomorph.vaddConst x).symm.isClosed_image]; rw [AffineSubspace.coe_direction_eq_vsub_set_right hx]
-  simp only [Homeomorph.vaddConst_symm_apply]
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.coe_direction_eq_vsub_set_right, Homeomorph, Homeomorph.vaddConst, Homeomorph.vaddConst_symm_apply, coe_direction_eq_vsub_set_right, eq_bot_or_nonempty, isClosed_image, s.eq_bot_or_nonempty, symm.isClosed_image, vaddConst, vaddConst_symm_apply
+/-
+**AffineSubspace.isClosed_direction_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineSubspac
+e`。
+形式化陈述：isClosed_direction_iff [T1Space V] (s : AffineSubspace R P) : IsClosed (s.
+direction : Set V) ↔ IsClosed (s : Set P)
+参数：s : AffineSubspace R P。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineSubspace.eq_bot_or_nonempty`：eq_bot_or_nonempty (Q : AffineSubspac
+e k P) : Q = ⊥ ∨ (Q : Set P).Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineSubspace.direction_bot`：direction_bot : (⊥ : AffineSubspace k P).d
+irection = ⊥
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.isClosed_image`：isClosed_image (h : X ≃ₜ Y) {s : Set X} : IsC
+losed (h '' s) ↔ IsClosed s
+· 使用定理 `AffineSubspace.coe_direction_eq_vsub_set_right`：coe_direction_eq_vsub_se
+t_right {s : AffineSubspace k P} {p : P} (hp : p in s) : (s.direction : Set V) =
+ (· -ᵥ p) '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Homeomorph.vaddConst_symm_apply`：∀ {V : Type u_1} {P : Type u_2} [inst :
+ AddGroup V] [inst_1 : TopologicalSpace V] [inst_2 : AddTorsor V P]   [inst_3 : 
+TopologicalSpace P] […
 -/
 theorem isClosed_direction_iff [T1Space V] (s : AffineSubspace R P) :
     IsClosed (s.direction : Set V) ↔ IsClosed (s : Set P) := by
   rcases s.eq_bot_or_nonempty with (rfl | ⟨x, hx⟩); · simp
-  rw [← (Homeomorph.vaddConst x).symm.isClosed_image]; rw [AffineSubspace.coe_direction_eq_vsub_set_right hx]
+  rw [← (Homeomorph.vaddConst x).symm.isClosed_image,
+    AffineSubspace.coe_direction_eq_vsub_set_right hx]
   simp only [Homeomorph.vaddConst_symm_apply]
 
 end AffineSubspace
+

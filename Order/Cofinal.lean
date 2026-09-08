@@ -33,143 +33,87 @@ variable {α β : Type*}
 section LE
 variable [LE α]
 
-/--
-theorem `IsCofinal.of_isEmpty` / 定理 `IsCofinal.of_isEmpty`
-
-English:
-theorem IsCofinal.of_isEmpty
-  given: [IsEmpty α] {s : Set α}
-  statement: IsCofinal s
-  proof: fun a => isEmptyElim a
-
-中文:
-定理 IsCofinal.of_isEmpty
-  条件: [是空 α] {s : 集合 α}
-  结论: IsCofinal s
-  证明: fun a => isEmptyElim a
-
-Depends on / 依赖: isEmptyElim
+/-
+**IsCofinal.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.of_isEmpty [IsEmpty α] {s : Set α} : IsCofinal s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsCofinal.of_isEmpty [IsEmpty α] {s : Set α} : IsCofinal s :=
-  fun a => isEmptyElim a
-
-/--
-theorem `isCofinal_empty_iff` / 定理 `isCofinal_empty_iff`
-
-English:
-theorem isCofinal_empty_iff
-  statement: IsCofinal (∅ : Set α) ↔ IsEmpty α
-  proof: by
-  refine ⟨fun h => ⟨fun a => ?_⟩, fun h => .of_isEmpty⟩
-  simpa using h a
-
-中文:
-定理 isCofinal_empty_iff
-  结论: IsCofinal (∅ : 集合 α) ↔ 是空 α
-  证明: by
-  refine ⟨fun h => ⟨fun a => ?_⟩, fun h => .of_isEmpty⟩
-  simpa using h a
-
-Depends on / 依赖: of_isEmpty
+  fun a ↦ isEmptyElim a
+/-
+**isCofinal_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_empty_iff : IsCofinal (∅ : Set α) ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `IsCofinal.of_isEmpty`：IsCofinal.of_isEmpty [IsEmpty α] {s : Set α} : IsC
+ofinal s
 -/
 theorem isCofinal_empty_iff : IsCofinal (∅ : Set α) ↔ IsEmpty α := by
-  refine ⟨fun h => ⟨fun a => ?_⟩, fun h => .of_isEmpty⟩
+  refine ⟨fun h ↦ ⟨fun a ↦ ?_⟩, fun h ↦ .of_isEmpty⟩
   simpa using h a
-
-/--
-theorem `IsCofinal.nonempty` / 定理 `IsCofinal.nonempty`
-
-English:
-theorem IsCofinal.nonempty
-  given: [Nonempty α] {s : Set α} (hs : IsCofinal s)
-  statement: s.Nonempty
-  proof: by
-  inhabit α
-  exact (hs default).imp fun _ => And.left
-
-@[simp]
-
-中文:
-定理 IsCofinal.nonempty
-  条件: [非空 α] {s : 集合 α} (hs : IsCofinal s)
-  结论: s.非空
-  证明: by
-  inhabit α
-  exact (hs default).imp fun _ => And.left
-
-@[simp]
-
-Depends on / 依赖: And.left, inhabit, map_one, toMonoidHom, toMonoidHom.map_one
+/-
+**IsCofinal.nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.nonempty [Nonempty α] {s : Set α} (hs : IsCofinal s) : s.Nonempt
+y
+参数：hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsCofinal.nonempty [Nonempty α] {s : Set α} (hs : IsCofinal s) : s.Nonempty := by
   inhabit α
-  exact (hs default).imp fun _ => And.left
+  exact (hs default).imp fun _ ↦ And.left
 
 @[simp]
-/--
-theorem `isCofinal_singleton_iff` / 定理 `isCofinal_singleton_iff`
-
-English:
-theorem isCofinal_singleton_iff
-  given: {x : α}
-  statement: IsCofinal {x} ↔ IsTop x
-  proof: by
-  simp [IsCofinal, IsTop]
-
-中文:
-定理 isCofinal_singleton_iff
-  条件: {x : α}
-  结论: IsCofinal {x} ↔ IsTop x
-  证明: by
-  simp [IsCofinal, IsTop]
-
-Depends on / 依赖: IsCofinal
+/-
+**isCofinal_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_singleton_iff {x : α} : IsCofinal {x} ↔ IsTop x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCofinal_singleton_iff {x : α} : IsCofinal {x} ↔ IsTop x := by
   simp [IsCofinal, IsTop]
-
-/--
-theorem `IsCofinal.singleton_top` / 定理 `IsCofinal.singleton_top`
-
-English:
-theorem IsCofinal.singleton_top
-  given: [OrderTop α]
-  statement: IsCofinal {(⊤ : α)}
-  proof: by
-  simp
-
-中文:
-定理 IsCofinal.singleton_top
-  条件: [有顶序 α]
-  结论: IsCofinal {(⊤ : α)}
-  证明: by
-  simp
+/-
+**IsCofinal.singleton_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.singleton_top [OrderTop α] : IsCofinal {(⊤ : α)}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem IsCofinal.singleton_top [OrderTop α] : IsCofinal {(⊤ : α)} := by
   simp
-
-/--
-theorem `IsCofinal.mono` / 定理 `IsCofinal.mono`
-
-English:
-theorem IsCofinal.mono
-  given: {s t : Set α} (h : s subseteq t) (hs : IsCofinal s)
-  statement: IsCofinal t
-  proof: by
-  intro a
-  obtain ⟨b, hb, hb'⟩ := hs a
-  exact ⟨b, h hb, hb'⟩
-
-中文:
-定理 IsCofinal.mono
-  条件: {s t : 集合 α} (h : s subseteq t) (hs : IsCofinal s)
-  结论: IsCofinal t
-  证明: by
-  intro a
-  obtain ⟨b, hb, hb'⟩ := hs a
-  exact ⟨b, h hb, hb'⟩
+/-
+**IsCofinal.mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.mono {s t : Set α} (h : s subseteq t) (hs : IsCofinal s) : IsCof
+inal t
+参数：h : s subseteq t；hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsCofinal.mono {s t : Set α} (h : s subseteq t) (hs : IsCofinal s) : IsCofinal t := by
+theorem IsCofinal.mono {s t : Set α} (h : s ⊆ t) (hs : IsCofinal s) : IsCofinal t := by
   intro a
   obtain ⟨b, hb, hb'⟩ := hs a
   exact ⟨b, h hb, hb'⟩
@@ -180,248 +124,184 @@ section Preorder
 variable [Preorder α] [Preorder β]
 
 @[simp]
-/--
-theorem `IsCofinal.univ` / 定理 `IsCofinal.univ`
-
-English:
-theorem IsCofinal.univ
-  statement: IsCofinal (@univ α)
-  proof: fun a => ⟨a, ⟨⟩, le_rfl⟩
-
-中文:
-定理 IsCofinal.univ
-  结论: IsCofinal (@univ α)
-  证明: fun a => ⟨a, ⟨⟩, le_rfl⟩
-
-Depends on / 依赖: le_rfl
+/-
+**IsCofinal.univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.univ : IsCofinal (@univ α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem IsCofinal.univ : IsCofinal (@univ α) :=
-  fun a => ⟨a, ⟨⟩, le_rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited {s : Set α // IsCofinal s}
-  body: ⟨_, .univ⟩
-
-中文:
-实例 :
-  签名: 可居 {s : 集合 α // IsCofinal s}
-  定义体: ⟨_, .univ⟩
+  fun a ↦ ⟨a, ⟨⟩, le_rfl⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited {s : Set α // IsCofinal s} :=
   ⟨_, .univ⟩
-
-/--
-theorem `IsCofinal.image` / 定理 `IsCofinal.image`
-
-English:
-theorem IsCofinal.image
-  statement: {f : α -> β} {s : Set α} (hs : IsCofinal s)
-  proof: by
-  intro a
-  obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' a
-  obtain ⟨c, hc, hc'⟩ := hs b
-  exact ⟨_, mem_image_of_mem f hc, hb.trans (hf hc')⟩
-
-中文:
-定理 IsCofinal.像
-  结论: {f : α -> β} {s : 集合 α} (hs : IsCofinal s)
-  证明: by
-  intro a
-  obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' a
-  obtain ⟨c, hc, hc'⟩ := hs b
-  exact ⟨_, mem_image_of_mem f hc, hb.trans (hf hc')⟩
-
-Depends on / 依赖: hb.trans, mem_image_of_mem
+/-
+**IsCofinal.image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.image {f : α -> β} {s : Set α} (hs : IsCofinal s) (hf : Monotone
+ f) (hf' : IsCofinal (.range f)) : IsCofinal (f '' s)
+参数：hs : IsCofinal s；hf : Monotone f；hf' : IsCofinal (.range f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem IsCofinal.image {f : α -> β} {s : Set α} (hs : IsCofinal s)
+theorem IsCofinal.image {f : α → β} {s : Set α} (hs : IsCofinal s)
     (hf : Monotone f) (hf' : IsCofinal (.range f)) : IsCofinal (f '' s) := by
   intro a
   obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' a
   obtain ⟨c, hc, hc'⟩ := hs b
   exact ⟨_, mem_image_of_mem f hc, hb.trans (hf hc')⟩
 
-/--
-theorem `IsCofinal.trans` / 定理 `IsCofinal.trans`
+/-- A cofinal subset of a cofinal subset is cofinal. -/
+/-
+**IsCofinal.trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.trans {s : Set α} {t : Set s} (hs : IsCofinal s) (ht : IsCofinal
+ t) : IsCofinal (Subtype.val '' t)
+参数：hs : IsCofinal s；ht : IsCofinal t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCofinal.image`：IsCofinal.image {f : α -> β} {s : Set α} (hs : IsCofina
+l s) (hf : Monotone f) (hf' : IsCofinal (.range f)) : IsCofinal (f '' s)
+· 使用定理 `Subtype.mono_coe`：Subtype.mono_coe [Preorder α] (p : α -> Prop) : Monoto
+ne ((↑) : Subtype p -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
 
-English:
-theorem IsCofinal.trans
-  given: {s : Set α} {t : Set s} (hs : IsCofinal s) (ht : IsCofinal t)
-  proof: ht.image (Subtype.mono_coe _) (by simpa)
-
-中文:
-定理 IsCofinal.trans
-  条件: {s : 集合 α} {t : 集合 s} (hs : IsCofinal s) (ht : IsCofinal t)
-  证明: ht.image (Subtype.mono_coe _) (by simpa)
-
-Depends on / 依赖: Subtype, Subtype.mono_coe, ht.image, mono_coe
+--- 原说明 ---
+A cofinal subset of a cofinal subset is cofinal.
 -/
 theorem IsCofinal.trans {s : Set α} {t : Set s} (hs : IsCofinal s) (ht : IsCofinal t) :
     IsCofinal (Subtype.val '' t) :=
   ht.image (Subtype.mono_coe _) (by simpa)
-
-/--
-theorem `GaloisConnection.isCofinal_range` / 定理 `GaloisConnection.isCofinal_range`
-
-English:
-theorem GaloisConnection.isCofinal_range
-  given: {f : β -> α} {g : α -> β} (h : GaloisConnection f g)
-  proof: fun a => ⟨_, mem_range_self _, le_u_l h a⟩
-
-中文:
-定理 GaloisConnection.isCofinal_range
-  条件: {f : β -> α} {g : α -> β} (h : GaloisConnection f g)
-  证明: fun a => ⟨_, mem_range_self _, le_u_l h a⟩
-
-Depends on / 依赖: le_u_l, mem_range_self
+/-
+**GaloisConnection.isCofinal_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：GaloisConnection.isCofinal_range {f : β -> α} {g : α -> β} (h : GaloisConn
+ection f g) : IsCofinal (range g)
+参数：h : GaloisConnection f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `GaloisConnection.le_u_l`：le_u_l (a) : a <= u (l a)
 -/
-theorem GaloisConnection.isCofinal_range {f : β -> α} {g : α -> β} (h : GaloisConnection f g) :
+theorem GaloisConnection.isCofinal_range {f : β → α} {g : α → β} (h : GaloisConnection f g) :
     IsCofinal (range g) :=
-  fun a => ⟨_, mem_range_self _, le_u_l h a⟩
-
-/--
-theorem `GaloisConnection.map_isCofinal` / 定理 `GaloisConnection.map_isCofinal`
-
-English:
-theorem GaloisConnection.map_isCofinal
-  statement: {f : β -> α} {g : α -> β}
-  proof: hs.image h.monotone_u h.isCofinal_range
-
-@[deprecated (since := "2026-03-15")]
-alias GaloisConnection.map_cofinal := GaloisConnection.map_isCofinal
-
-中文:
-定理 GaloisConnection.map_isCofinal
-  结论: {f : β -> α} {g : α -> β}
-  证明: hs.image h.monotone_u h.isCofinal_range
-
-@[deprecated (since := "2026-03-15")]
-alias GaloisConnection.map_cofinal := GaloisConnection.map_isCofinal
-
-Depends on / 依赖: h.isCofinal_range, h.monotone_u, hs.image, isCofinal_range, monotone_u
+  fun a ↦ ⟨_, mem_range_self _, le_u_l h a⟩
+/-
+**GaloisConnection.map_isCofinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：GaloisConnection.map_isCofinal {f : β -> α} {g : α -> β} (h : GaloisConnec
+tion f g) {s : Set α} (hs : IsCofinal s) : IsCofinal (g '' s)
+参数：h : GaloisConnection f g；hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCofinal.image`：IsCofinal.image {f : α -> β} {s : Set α} (hs : IsCofina
+l s) (hf : Monotone f) (hf' : IsCofinal (.range f)) : IsCofinal (f '' s)
+· 使用定理 `GaloisConnection.monotone_u`：monotone_u : Monotone u
+· 使用定理 `GaloisConnection.isCofinal_range`：GaloisConnection.isCofinal_range {f : 
+β -> α} {g : α -> β} (h : GaloisConnection f g) : IsCofinal (range g)
 -/
-theorem GaloisConnection.map_isCofinal {f : β -> α} {g : α -> β}
+theorem GaloisConnection.map_isCofinal {f : β → α} {g : α → β}
     (h : GaloisConnection f g) {s : Set α} (hs : IsCofinal s) : IsCofinal (g '' s) :=
   hs.image h.monotone_u h.isCofinal_range
 
 @[deprecated (since := "2026-03-15")]
 alias GaloisConnection.map_cofinal := GaloisConnection.map_isCofinal
-
-/--
-theorem `OrderIso.map_isCofinal` / 定理 `OrderIso.map_isCofinal`
-
-English:
-theorem OrderIso.map_isCofinal
-  given: (e : α ≃o β) {s : Set α} (hs : IsCofinal s)
-  statement: IsCofinal (e '' s)
-  proof: e.symm.to_galoisConnection.map_isCofinal hs
-
-@[simp]
-
-中文:
-定理 OrderIso.map_isCofinal
-  条件: (e : α ≃o β) {s : 集合 α} (hs : IsCofinal s)
-  结论: IsCofinal (e '' s)
-  证明: e.symm.to_galoisConnection.map_isCofinal hs
-
-@[simp]
-
-Depends on / 依赖: e.symm.to_galoisConnection.map_isCofinal, f.toFun, map_isCofinal, to_galoisConnection
+/-
+**OrderIso.map_isCofinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrderIso.map_isCofinal (e : α ≃o β) {s : Set α} (hs : IsCofinal s) : IsCof
+inal (e '' s)
+参数：e : α ≃o β；hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.map_isCofinal`：GaloisConnection.map_isCofinal {f : β ->
+ α} {g : α -> β} (h : GaloisConnection f g) {s : Set α} (hs : IsCofinal s) : IsC
+ofinal (g '' s)
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 theorem OrderIso.map_isCofinal (e : α ≃o β) {s : Set α} (hs : IsCofinal s) : IsCofinal (e '' s) :=
   e.symm.to_galoisConnection.map_isCofinal hs
 
 @[simp]
-/--
-theorem `OrderIso.map_isCofinal_iff` / 定理 `OrderIso.map_isCofinal_iff`
-
-English:
-theorem OrderIso.map_isCofinal_iff
-  given: (e : α ≃o β) {s : Set α}
-  statement: IsCofinal (e '' s) ↔ IsCofinal s
-  proof: ⟨fun hs => by simpa using e.symm.map_isCofinal hs, e.map_isCofinal⟩
-
-@[deprecated (since := "2026-03-15")]
-alias OrderIso.map_cofinal := OrderIso.map_isCofinal
-
-中文:
-定理 OrderIso.map_isCofinal_iff
-  条件: (e : α ≃o β) {s : 集合 α}
-  结论: IsCofinal (e '' s) ↔ IsCofinal s
-  证明: ⟨fun hs => by simpa using e.symm.map_isCofinal hs, e.map_isCofinal⟩
-
-@[deprecated (since := "2026-03-15")]
-alias OrderIso.map_cofinal := OrderIso.map_isCofinal
-
-Depends on / 依赖: e.map_isCofinal, e.symm.map_isCofinal, map_isCofinal
+/-
+**OrderIso.map_isCofinal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrderIso.map_isCofinal_iff (e : α ≃o β) {s : Set α} : IsCofinal (e '' s) ↔
+ IsCofinal s
+参数：e : α ≃o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.symm_image_image`：symm_image_image (e : α ≃o β) (s : Set α) : e
+.symm '' e '' s = s
+· 使用定理 `OrderIso.map_isCofinal`：OrderIso.map_isCofinal (e : α ≃o β) {s : Set α} 
+(hs : IsCofinal s) : IsCofinal (e '' s)
 -/
 theorem OrderIso.map_isCofinal_iff (e : α ≃o β) {s : Set α} : IsCofinal (e '' s) ↔ IsCofinal s :=
-  ⟨fun hs => by simpa using e.symm.map_isCofinal hs, e.map_isCofinal⟩
+  ⟨fun hs ↦ by simpa using e.symm.map_isCofinal hs, e.map_isCofinal⟩
 
 @[deprecated (since := "2026-03-15")]
 alias OrderIso.map_cofinal := OrderIso.map_isCofinal
-
-/--
-theorem `isCofinal_iff_iUnion_Iic_eq_univ` / 定理 `isCofinal_iff_iUnion_Iic_eq_univ`
-
-English:
-theorem isCofinal_iff_iUnion_Iic_eq_univ
-  given: {s : Set α}
-  proof: by
-  simp [IsCofinal, eq_univ_iff_forall]
-
-中文:
-定理 isCofinal_iff_iUnion_Iic_eq_univ
-  条件: {s : 集合 α}
-  证明: by
-  simp [IsCofinal, eq_univ_iff_forall]
-
-Depends on / 依赖: IsCofinal, eq_univ_iff_forall
+/-
+**isCofinal_iff_iUnion_Iic_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_iff_iUnion_Iic_eq_univ {s : Set α} : IsCofinal s ↔ ⋃ i in s, Iic
+ i = univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCofinal_iff_iUnion_Iic_eq_univ {s : Set α} :
-    IsCofinal s ↔ ⋃ i in s, Iic i = univ := by
+    IsCofinal s ↔ ⋃ i ∈ s, Iic i = univ := by
   simp [IsCofinal, eq_univ_iff_forall]
-
-/--
-theorem `isCofinal_iff_iUnion_Iio_eq_univ` / 定理 `isCofinal_iff_iUnion_Iio_eq_univ`
-
-English:
-theorem isCofinal_iff_iUnion_Iio_eq_univ
-  given: [NoMaxOrder α] {s : Set α}
-  proof: by
-    rw [isCofinal_iff_iUnion_Iic_eq_univ]; rw [← univ_subset_iff]; rw [← hs]
-    gcongr
-    exact Iio_subset_Iic_self
-  mp hs := by
-    simp_rw [eq_univ_iff_forall, mem_iUnion, exists_prop]
-    intro x
-    obtain ⟨y, hy⟩ := exists_gt x
-    obtain ⟨z, hz, hz'⟩ := hs y
-    exact ⟨z, hz, hy.trans_le hz'⟩
-
-中文:
-定理 isCofinal_iff_iUnion_Iio_eq_univ
-  条件: [NoMax序 α] {s : 集合 α}
-  证明: by
-    rw [isCofinal_iff_iUnion_Iic_eq_univ]; rw [← univ_subset_iff]; rw [← hs]
-    gcongr
-    exact Iio_subset_Iic_self
-  mp hs := by
-    simp_rw [eq_univ_iff_forall, mem_iUnion, exists_prop]
-    intro x
-    obtain ⟨y, hy⟩ := exists_gt x
-    obtain ⟨z, hz, hz'⟩ := hs y
-    exact ⟨z, hz, hy.trans_le hz'⟩
-
-Depends on / 依赖: Iio_subset_Iic_self, eq_univ_iff_forall, exists_gt, exists_prop, hy.trans_le, isCofinal_iff_iUnion_Iic_eq_univ, mem_iUnion, simp_rw, trans_le, univ_subset_iff
+/-
+**isCofinal_iff_iUnion_Iio_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_iff_iUnion_Iio_eq_univ [NoMaxOrder α] {s : Set α} : IsCofinal s 
+↔ ⋃ i in s, Iio i = univ where mpr hs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `isCofinal_iff_iUnion_Iic_eq_univ`：isCofinal_iff_iUnion_Iic_eq_univ {s : 
+Set α} : IsCofinal s ↔ ⋃ i in s, Iic i = univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `Set.iUnion_mono''`：iUnion_mono'' {s t : ι -> Set α} (h : forall i, s i s
+ubseteq t i) : iUnion s subseteq iUnion t
+· 使用定理 `Set.Iio_subset_Iic_self`：Iio_subset_Iic_self : Iio a subseteq Iic a
 -/
 theorem isCofinal_iff_iUnion_Iio_eq_univ [NoMaxOrder α] {s : Set α} :
-    IsCofinal s ↔ ⋃ i in s, Iio i = univ where
+    IsCofinal s ↔ ⋃ i ∈ s, Iio i = univ where
   mpr hs := by
-    rw [isCofinal_iff_iUnion_Iic_eq_univ]; rw [← univ_subset_iff]; rw [← hs]
+    rw [isCofinal_iff_iUnion_Iic_eq_univ, ← univ_subset_iff, ← hs]
     gcongr
     exact Iio_subset_Iic_self
   mp hs := by
@@ -436,266 +316,198 @@ end Preorder
 section PartialOrder
 variable [PartialOrder α]
 
-/--
-theorem `IsCofinal.mem_of_isMax` / 定理 `IsCofinal.mem_of_isMax`
-
-English:
-theorem IsCofinal.mem_of_isMax
-  given: {s : Set α} {a : α} (ha : IsMax a) (hs : IsCofinal s)
-  statement: a in s
-  proof: by
-  obtain ⟨b, hb, hb'⟩ := hs a
-  rwa [ha.eq_of_ge hb'] at hb
-
-中文:
-定理 IsCofinal.mem_of_isMax
-  条件: {s : 集合 α} {a : α} (ha : IsMax a) (hs : IsCofinal s)
-  结论: a in s
-  证明: by
-  obtain ⟨b, hb, hb'⟩ := hs a
-  rwa [ha.eq_of_ge hb'] at hb
-
-Depends on / 依赖: eq_of_ge, f.map_add, ha.eq_of_ge, map_add
+/-
+**IsCofinal.mem_of_isMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.mem_of_isMax {s : Set α} {a : α} (ha : IsMax a) (hs : IsCofinal 
+s) : a in s
+参数：ha : IsMax a；hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMax.eq_of_ge`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, IsMa
+x a → a ≤ b → b = a
 -/
-theorem IsCofinal.mem_of_isMax {s : Set α} {a : α} (ha : IsMax a) (hs : IsCofinal s) : a in s := by
+theorem IsCofinal.mem_of_isMax {s : Set α} {a : α} (ha : IsMax a) (hs : IsCofinal s) : a ∈ s := by
   obtain ⟨b, hb, hb'⟩ := hs a
   rwa [ha.eq_of_ge hb'] at hb
-
-/--
-theorem `IsCofinal.top_mem` / 定理 `IsCofinal.top_mem`
-
-English:
-theorem IsCofinal.top_mem
-  given: [OrderTop α] {s : Set α} (hs : IsCofinal s)
-  statement: ⊤ in s
-  proof: hs.mem_of_isMax isMax_top
-
-@[simp]
-
-中文:
-定理 IsCofinal.top_mem
-  条件: [有顶序 α] {s : 集合 α} (hs : IsCofinal s)
-  结论: ⊤ in s
-  证明: hs.mem_of_isMax isMax_top
-
-@[simp]
-
-Depends on / 依赖: hs.mem_of_isMax, isMax_top, mem_of_isMax
+/-
+**IsCofinal.top_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.top_mem [OrderTop α] {s : Set α} (hs : IsCofinal s) : ⊤ in s
+参数：hs : IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCofinal.mem_of_isMax`：IsCofinal.mem_of_isMax {s : Set α} {a : α} (ha :
+ IsMax a) (hs : IsCofinal s) : a in s
+· 使用定理 `isMax_top`：isMax_top : IsMax (⊤ : α)
 -/
-theorem IsCofinal.top_mem [OrderTop α] {s : Set α} (hs : IsCofinal s) : ⊤ in s :=
+theorem IsCofinal.top_mem [OrderTop α] {s : Set α} (hs : IsCofinal s) : ⊤ ∈ s :=
   hs.mem_of_isMax isMax_top
 
 @[simp]
-/--
-theorem `isCofinal_iff_top_mem` / 定理 `isCofinal_iff_top_mem`
-
-English:
-theorem isCofinal_iff_top_mem
-  given: [OrderTop α] {s : Set α}
-  statement: IsCofinal s ↔ ⊤ in s
-  proof: ⟨IsCofinal.top_mem, fun hs _ => ⟨⊤, hs, le_top⟩⟩
-
-中文:
-定理 isCofinal_iff_top_mem
-  条件: [有顶序 α] {s : 集合 α}
-  结论: IsCofinal s ↔ ⊤ in s
-  证明: ⟨IsCofinal.top_mem, fun hs _ => ⟨⊤, hs, le_top⟩⟩
-
-Depends on / 依赖: IsCofinal, IsCofinal.top_mem, le_top, top_mem
+/-
+**isCofinal_iff_top_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_iff_top_mem [OrderTop α] {s : Set α} : IsCofinal s ↔ ⊤ in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCofinal.top_mem`：IsCofinal.top_mem [OrderTop α] {s : Set α} (hs : IsCo
+final s) : ⊤ in s
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-theorem isCofinal_iff_top_mem [OrderTop α] {s : Set α} : IsCofinal s ↔ ⊤ in s :=
-  ⟨IsCofinal.top_mem, fun hs _ => ⟨⊤, hs, le_top⟩⟩
+theorem isCofinal_iff_top_mem [OrderTop α] {s : Set α} : IsCofinal s ↔ ⊤ ∈ s :=
+  ⟨IsCofinal.top_mem, fun hs _ ↦ ⟨⊤, hs, le_top⟩⟩
 
 end PartialOrder
 
 section LinearOrder
 variable [LinearOrder α]
 
-/--
-theorem `not_isCofinal_iff` / 定理 `not_isCofinal_iff`
-
-English:
-theorem not_isCofinal_iff
-  given: {s : Set α}
-  statement: ¬ IsCofinal s ↔ exists x, forall y in s, y < x
-  proof: by
-  simp [IsCofinal]
-
-中文:
-定理 not_isCofinal_iff
-  条件: {s : 集合 α}
-  结论: ¬ IsCofinal s ↔ 存在 x, 对任意 y in s, y < x
-  证明: by
-  simp [IsCofinal]
-
-Depends on / 依赖: IsCofinal
+/-
+**not_isCofinal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_isCofinal_iff {s : Set α} : ¬ IsCofinal s ↔ exists x, forall y in s, y
+ < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem not_isCofinal_iff {s : Set α} : ¬ IsCofinal s ↔ exists x, forall y in s, y < x := by
+theorem not_isCofinal_iff {s : Set α} : ¬ IsCofinal s ↔ ∃ x, ∀ y ∈ s, y < x := by
   simp [IsCofinal]
-
-/--
-theorem `BddAbove.of_not_isCofinal` / 定理 `BddAbove.of_not_isCofinal`
-
-English:
-theorem BddAbove.of_not_isCofinal
-  given: {s : Set α} (h : ¬ IsCofinal s)
-  statement: BddAbove s
-  proof: by
-  rw [not_isCofinal_iff] at h
-  obtain ⟨x, h⟩ := h
-  exact ⟨x, fun y hy => (h y hy).le⟩
-
-中文:
-定理 BddAbove.of_not_isCofinal
-  条件: {s : 集合 α} (h : ¬ IsCofinal s)
-  结论: BddAbove s
-  证明: by
-  rw [not_isCofinal_iff] at h
-  obtain ⟨x, h⟩ := h
-  exact ⟨x, fun y hy => (h y hy).le⟩
-
-Depends on / 依赖: not_isCofinal_iff
+/-
+**BddAbove.of_not_isCofinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：BddAbove.of_not_isCofinal {s : Set α} (h : ¬ IsCofinal s) : BddAbove s
+参数：h : ¬ IsCofinal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_isCofinal_iff`：not_isCofinal_iff {s : Set α} : ¬ IsCofinal s ↔ exist
+s x, forall y in s, y < x
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem BddAbove.of_not_isCofinal {s : Set α} (h : ¬ IsCofinal s) : BddAbove s := by
   rw [not_isCofinal_iff] at h
   obtain ⟨x, h⟩ := h
-  exact ⟨x, fun y hy => (h y hy).le⟩
-
-/--
-theorem `IsCofinal.of_not_bddAbove` / 定理 `IsCofinal.of_not_bddAbove`
-
-English:
-theorem IsCofinal.of_not_bddAbove
-  given: {s : Set α} (h : ¬ BddAbove s)
-  statement: IsCofinal s
-  proof: by
-  contrapose h
-  exact .of_not_isCofinal h
-
-中文:
-定理 IsCofinal.of_not_bddAbove
-  条件: {s : 集合 α} (h : ¬ BddAbove s)
-  结论: IsCofinal s
-  证明: by
-  contrapose h
-  exact .of_not_isCofinal h
-
-Depends on / 依赖: contrapose, of_not_isCofinal
+  exact ⟨x, fun y hy ↦ (h y hy).le⟩
+/-
+**IsCofinal.of_not_bddAbove** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCofinal.of_not_bddAbove {s : Set α} (h : ¬ BddAbove s) : IsCofinal s
+参数：h : ¬ BddAbove s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `BddAbove.of_not_isCofinal`：BddAbove.of_not_isCofinal {s : Set α} (h : ¬ 
+IsCofinal s) : BddAbove s
 -/
 theorem IsCofinal.of_not_bddAbove {s : Set α} (h : ¬ BddAbove s) : IsCofinal s := by
   contrapose h
   exact .of_not_isCofinal h
 
-/--
-theorem `not_isCofinal_iff_bddAbove` / 定理 `not_isCofinal_iff_bddAbove`
+/-- In a linear order with no maximum, cofinal sets are the same as unbounded sets. -/
+/-
+**not_isCofinal_iff_bddAbove** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_isCofinal_iff_bddAbove [NoMaxOrder α] {s : Set α} : ¬ IsCofinal s ↔ Bd
+dAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddAbove.of_not_isCofinal`：BddAbove.of_not_isCofinal {s : Set α} (h : ¬ 
+IsCofinal s) : BddAbove s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_isCofinal_iff`：not_isCofinal_iff {s : Set α} : ¬ IsCofinal s ↔ exist
+s x, forall y in s, y < x
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
 
-English:
-theorem not_isCofinal_iff_bddAbove
-  given: [NoMaxOrder α] {s : Set α}
-  statement: ¬ IsCofinal s ↔ BddAbove s
-  proof: by
-  use .of_not_isCofinal
-  rw [not_isCofinal_iff]
-  rintro ⟨x, h⟩
-  obtain ⟨z, hz⟩ := exists_gt x
-  exact ⟨z, fun y hy => (h hy).trans_lt hz⟩
-
-中文:
-定理 not_isCofinal_iff_bddAbove
-  条件: [NoMax序 α] {s : 集合 α}
-  结论: ¬ IsCofinal s ↔ BddAbove s
-  证明: by
-  use .of_not_isCofinal
-  rw [not_isCofinal_iff]
-  rintro ⟨x, h⟩
-  obtain ⟨z, hz⟩ := exists_gt x
-  exact ⟨z, fun y hy => (h hy).trans_lt hz⟩
-
-Depends on / 依赖: exists_gt, not_isCofinal_iff, of_not_isCofinal, trans_lt
+--- 原说明 ---
+In a linear order with no maximum, cofinal sets are the same as unbounded sets.
 -/
 theorem not_isCofinal_iff_bddAbove [NoMaxOrder α] {s : Set α} : ¬ IsCofinal s ↔ BddAbove s := by
   use .of_not_isCofinal
   rw [not_isCofinal_iff]
   rintro ⟨x, h⟩
   obtain ⟨z, hz⟩ := exists_gt x
-  exact ⟨z, fun y hy => (h hy).trans_lt hz⟩
+  exact ⟨z, fun y hy ↦ (h hy).trans_lt hz⟩
 
-/--
-theorem `not_bddAbove_iff_isCofinal` / 定理 `not_bddAbove_iff_isCofinal`
+/-- In a linear order with no maximum, cofinal sets are the same as unbounded sets. -/
+/-
+**not_bddAbove_iff_isCofinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_bddAbove_iff_isCofinal [NoMaxOrder α] {s : Set α} : ¬ BddAbove s ↔ IsC
+ofinal s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_comm`：not_iff_comm : (¬a ↔ b) ↔ (¬b ↔ a)
+· 使用定理 `not_isCofinal_iff_bddAbove`：not_isCofinal_iff_bddAbove [NoMaxOrder α] {s
+ : Set α} : ¬ IsCofinal s ↔ BddAbove s
 
-English:
-theorem not_bddAbove_iff_isCofinal
-  given: [NoMaxOrder α] {s : Set α}
-  statement: ¬ BddAbove s ↔ IsCofinal s
-  proof: not_iff_comm.1 not_isCofinal_iff_bddAbove
-
-中文:
-定理 not_bddAbove_iff_isCofinal
-  条件: [NoMax序 α] {s : 集合 α}
-  结论: ¬ BddAbove s ↔ IsCofinal s
-  证明: not_iff_comm.1 not_isCofinal_iff_bddAbove
-
-Depends on / 依赖: not_iff_comm, not_isCofinal_iff_bddAbove
+--- 原说明 ---
+In a linear order with no maximum, cofinal sets are the same as unbounded sets.
 -/
 theorem not_bddAbove_iff_isCofinal [NoMaxOrder α] {s : Set α} : ¬ BddAbove s ↔ IsCofinal s :=
   not_iff_comm.1 not_isCofinal_iff_bddAbove
 
-/--
-theorem `isCofinal_setOfPred_imp_lt` / 定理 `isCofinal_setOfPred_imp_lt`
+/-- The set of "records" (the smallest inputs yielding the highest values) with respect to a
+well-ordering of `α` is a cofinal set. -/
+/-
+**isCofinal_setOfPred_imp_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_setOfPred_imp_lt (r : α -> α -> Prop) [h : IsWellFounded α r] : 
+IsCofinal { a | forall b, r b a -> b < a }
+参数：r : α -> α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
+· 使用定理 `Set.nonempty_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, (Set.Ici
+ a).Nonempty
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 
-English:
-theorem isCofinal_setOfPred_imp_lt
-  given: (r : α -> α -> Prop) [h : IsWellFounded α r]
-  proof: by
-  intro a
-  obtain ⟨b, hb, hb'⟩ := h.wf.has_min (Set.Ici a) Set.nonempty_Ici
-  refine ⟨b, fun c hc => ?_, hb⟩
-  by_contra! hc'
-  exact hb' c (hb.trans hc') hc
-
-@[deprecated (since := "2026-07-09")] alias isCofinal_setOf_imp_lt := isCofinal_setOfPred_imp_lt
-
-中文:
-定理 isCofinal_setOfPred_imp_lt
-  条件: (r : α -> α -> 命题) [h : 是良基 α r]
-  证明: by
-  intro a
-  obtain ⟨b, hb, hb'⟩ := h.wf.has_min (Set.Ici a) Set.nonempty_Ici
-  refine ⟨b, fun c hc => ?_, hb⟩
-  by_contra! hc'
-  exact hb' c (hb.trans hc') hc
-
-@[deprecated (since := "2026-07-09")] alias isCofinal_setOf_imp_lt := isCofinal_setOfPred_imp_lt
-
-Depends on / 依赖: Set.Ici, Set.nonempty_Ici, h.wf.has_min, has_min, hb.trans, nonempty_Ici
+--- 原说明 ---
+The set of "records" (the smallest inputs yielding the highest values) with resp
+ect to a
+well-ordering of `α` is a cofinal set.
 -/
-theorem isCofinal_setOfPred_imp_lt (r : α -> α -> Prop) [h : IsWellFounded α r] :
-    IsCofinal { a | forall b, r b a -> b < a } := by
+theorem isCofinal_setOfPred_imp_lt (r : α → α → Prop) [h : IsWellFounded α r] :
+    IsCofinal { a | ∀ b, r b a → b < a } := by
   intro a
   obtain ⟨b, hb, hb'⟩ := h.wf.has_min (Set.Ici a) Set.nonempty_Ici
-  refine ⟨b, fun c hc => ?_, hb⟩
+  refine ⟨b, fun c hc ↦ ?_, hb⟩
   by_contra! hc'
   exact hb' c (hb.trans hc') hc
 
 @[deprecated (since := "2026-07-09")] alias isCofinal_setOf_imp_lt := isCofinal_setOfPred_imp_lt
-
-/--
-theorem `isCofinal_range_of_strictMono` / 定理 `isCofinal_range_of_strictMono`
-
-English:
-theorem isCofinal_range_of_strictMono
-  given: [WellFoundedLT α] {f : α -> α} (hf : StrictMono f)
-  proof: fun x => ⟨_, ⟨x, rfl⟩, hf.le_apply⟩
-
-中文:
-定理 isCofinal_range_of_strictMono
-  条件: [WellFoundedLT α] {f : α -> α} (hf : 严格递增 f)
-  证明: fun x => ⟨_, ⟨x, rfl⟩, hf.le_apply⟩
-
-Depends on / 依赖: hf.le_apply, le_apply
+/-
+**isCofinal_range_of_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCofinal_range_of_strictMono [WellFoundedLT α] {f : α -> α} (hf : StrictM
+ono f) : IsCofinal (range f)
+参数：hf : StrictMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
 -/
-theorem isCofinal_range_of_strictMono [WellFoundedLT α] {f : α -> α} (hf : StrictMono f) :
+theorem isCofinal_range_of_strictMono [WellFoundedLT α] {f : α → α} (hf : StrictMono f) :
     IsCofinal (range f) :=
-  fun x => ⟨_, ⟨x, rfl⟩, hf.le_apply⟩
+  fun x ↦ ⟨_, ⟨x, rfl⟩, hf.le_apply⟩
 
 end LinearOrder
+

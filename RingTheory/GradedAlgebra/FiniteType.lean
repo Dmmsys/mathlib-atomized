@@ -21,95 +21,135 @@ public section
 
 variable {S σ ι : Type*} [DecidableEq ι] [AddCommMonoid ι]
 variable [CommRing S] [SetLike σ S] [AddSubgroupClass σ S]
-variable (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable (𝒜 : ι → σ) [GradedRing 𝒜]
 
 variable [Algebra.FiniteType (𝒜 0) S]
 
 namespace GradedAlgebra
 
-/--
-theorem `exists_finset_adjoin_eq_top_and_homogeneous` / 定理 `exists_finset_adjoin_eq_top_and_homogeneous`
-
-English:
-theorem exists_finset_adjoin_eq_top_and_homogeneous
-  proof: by
-  classical
-  obtain ⟨F, hF⟩ := Algebra.FiniteType.out (R := 𝒜 0) (A := S)
-  let ι₀ := Σ (x : F), (DirectSum.decompose 𝒜 x.1).support
-  let x (i : ι₀) : S := ((DirectSum.decompose 𝒜) i.1 i.2).1
-  refine ⟨Finset.univ.image x, ?_, by simpa using fun f => ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
-  rw [← top_le_iff]; rw [← hF]; rw [Algebra.adjoin_le_iff]
-  intro s hs
-  rw [← DirectSum.sum_support_decompose 𝒜 s]
-  exact sum_mem fun n hn => Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
-
-中文:
-定理 存在_finset_adjoin_eq_top_and_homogeneous
-  证明: by
-  classical
-  obtain ⟨F, hF⟩ := Algebra.FiniteType.out (R := 𝒜 0) (A := S)
-  let ι₀ := Σ (x : F), (DirectSum.decompose 𝒜 x.1).support
-  let x (i : ι₀) : S := ((DirectSum.decompose 𝒜) i.1 i.2).1
-  refine ⟨Finset.univ.image x, ?_, by simpa using fun f => ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
-  rw [← top_le_iff]; rw [← hF]; rw [Algebra.adjoin_le_iff]
-  intro s hs
-  rw [← DirectSum.sum_support_decompose 𝒜 s]
-  exact sum_mem fun n hn => Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
+/-
+**GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous** 是 Mathlib 中的一个定理，位
+于命名空间 `GradedAlgebra`。
+形式化陈述：exists_finset_adjoin_eq_top_and_homogeneous : exists s : Finset S, Algebra
+.adjoin (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `Algebra.FiniteType.out`：∀ {R : Type uR} {A : Type uA} {inst : CommSemiri
+ng R} {inst_1 : Semiring A} {inst_2 : Algebra R A}   [self : Algebra.FiniteType 
+R A], ⊤.FG
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Algebra.adjoin_le_iff`：adjoin_le_iff {S : Subalgebra R A} : adjoin R s <
+= S ↔ s subseteq S
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem exists_finset_adjoin_eq_top_and_homogeneous :
-    exists s : Finset S, Algebra.adjoin (A := S) (𝒜 0) s = ⊤ ∧
-      forall i in s, SetLike.IsHomogeneousElem 𝒜 i := by
+    ∃ s : Finset S, Algebra.adjoin (A := S) (𝒜 0) s = ⊤ ∧
+      ∀ i ∈ s, SetLike.IsHomogeneousElem 𝒜 i := by
   classical
   obtain ⟨F, hF⟩ := Algebra.FiniteType.out (R := 𝒜 0) (A := S)
   let ι₀ := Σ (x : F), (DirectSum.decompose 𝒜 x.1).support
   let x (i : ι₀) : S := ((DirectSum.decompose 𝒜) i.1 i.2).1
-  refine ⟨Finset.univ.image x, ?_, by simpa using fun f => ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
-  rw [← top_le_iff]; rw [← hF]; rw [Algebra.adjoin_le_iff]
+  refine ⟨Finset.univ.image x, ?_, by simpa using fun f ↦ ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
+  rw [← top_le_iff, ← hF, Algebra.adjoin_le_iff]
   intro s hs
   rw [← DirectSum.sum_support_decompose 𝒜 s]
-  exact sum_mem fun n hn => Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
-
-/--
-theorem `exists_finset_adjoin_eq_top_and_homogeneous_ne_zero` / 定理 `exists_finset_adjoin_eq_top_and_homogeneous_ne_zero`
-
-English:
-theorem exists_finset_adjoin_eq_top_and_homogeneous_ne_zero
-  proof: by
-  obtain ⟨s, h₁, h₂⟩ := exists_finset_adjoin_eq_top_and_homogeneous 𝒜
-  choose! n hn using h₂
-  refine ⟨s.filter (n · != 0), ?_, by simpa using fun i hi hin => ⟨n i, hin, hn i hi⟩⟩
-  rw [← top_le_iff]; rw [← h₁]; rw [Algebra.adjoin_le_iff]
-  rintro i hi
-  by_cases hi0 : n i = 0
-  · exact Subalgebra.algebraMap_mem
-      (Algebra.adjoin (𝒜 0) (s.filter (n · != 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
-  · exact Algebra.subset_adjoin (by simpa [hi0] using hi)
-
-中文:
-定理 存在_finset_adjoin_eq_top_and_homogeneous_ne_zero
-  证明: by
-  obtain ⟨s, h₁, h₂⟩ := exists_finset_adjoin_eq_top_and_homogeneous 𝒜
-  choose! n hn using h₂
-  refine ⟨s.filter (n · != 0), ?_, by simpa using fun i hi hin => ⟨n i, hin, hn i hi⟩⟩
-  rw [← top_le_iff]; rw [← h₁]; rw [Algebra.adjoin_le_iff]
-  rintro i hi
-  by_cases hi0 : n i = 0
-  · exact Subalgebra.algebraMap_mem
-      (Algebra.adjoin (𝒜 0) (s.filter (n · != 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
-  · exact Algebra.subset_adjoin (by simpa [hi0] using hi)
-
-Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_le_iff, Algebra.subset_adjoin, Subalgebra, Subalgebra.algebraMap_mem, adjoin, adjoin_le_iff, algebraMap_mem, exists_finset_adjoin_eq_top_and_homogeneous, filter, s.filter, subset_adjoin, top_le_iff
+  exact sum_mem fun n hn ↦ Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
+/-
+**GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous_ne_zero** 是 Mathlib 
+中的一个定理，位于命名空间 `GradedAlgebra`。
+形式化陈述：exists_finset_adjoin_eq_top_and_homogeneous_ne_zero : exists s : Finset S,
+ Algebra.adjoin (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous`：exists_finset
+_adjoin_eq_top_and_homogeneous : exists s : Finset S, Algebra.adjoin (A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Algebra.adjoin_le_iff`：adjoin_le_iff {S : Subalgebra R A} : adjoin R s <
+= S ↔ s subseteq S
+· 使用定理 `Subalgebra.algebraMap_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemir
+ing R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   (r : 
+R), (algebraMap…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.coe_filter`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α), ↑(Finset.filter p s) = {x | x ∈ s ∧ p x}
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 theorem exists_finset_adjoin_eq_top_and_homogeneous_ne_zero :
-    exists s : Finset S, Algebra.adjoin (A := S) (𝒜 0) s = ⊤ ∧ forall i in s, exists n != 0, i in 𝒜 n := by
+    ∃ s : Finset S, Algebra.adjoin (A := S) (𝒜 0) s = ⊤ ∧ ∀ i ∈ s, ∃ n ≠ 0, i ∈ 𝒜 n := by
   obtain ⟨s, h₁, h₂⟩ := exists_finset_adjoin_eq_top_and_homogeneous 𝒜
   choose! n hn using h₂
-  refine ⟨s.filter (n · != 0), ?_, by simpa using fun i hi hin => ⟨n i, hin, hn i hi⟩⟩
-  rw [← top_le_iff]; rw [← h₁]; rw [Algebra.adjoin_le_iff]
+  refine ⟨s.filter (n · ≠ 0), ?_, by simpa using fun i hi hin ↦ ⟨n i, hin, hn i hi⟩⟩
+  rw [← top_le_iff, ← h₁, Algebra.adjoin_le_iff]
   rintro i hi
   by_cases hi0 : n i = 0
   · exact Subalgebra.algebraMap_mem
-      (Algebra.adjoin (𝒜 0) (s.filter (n · != 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
+      (Algebra.adjoin (𝒜 0) (s.filter (n · ≠ 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
   · exact Algebra.subset_adjoin (by simpa [hi0] using hi)
 
 end GradedAlgebra
+

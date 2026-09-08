@@ -28,43 +28,19 @@ variable {R : Type u} [Ring R]
 
 attribute [local instance] Abelian.hasFiniteBiproducts
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CountableAB4Star (LightCondMod.{u} R)
-  body: have := hasExactLimitsOfShape_of_preservesEpi (LightCondMod R) (Discrete Nat)
-  CountableAB4Star.of_hasExactLimitsOfShape_nat _
-
-中文:
-实例 :
-  签名: 余untableAB4Star (LightCondMod.{u} R)
-  定义体: have := hasExactLimitsOfShape_of_preservesEpi (LightCondMod R) (Discrete Nat)
-  CountableAB4Star.of_hasExactLimitsOfShape_nat _
-
-Depends on / 依赖: CountableAB4Star, CountableAB4Star.of_hasExactLimitsOfShape_nat, Discrete, LightCondMod, hasExactLimitsOfShape_of_preservesEpi, of_hasExactLimitsOfShape_nat
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CountableAB4Star (LightCondMod.{u} R) :=
-  have := hasExactLimitsOfShape_of_preservesEpi (LightCondMod R) (Discrete Nat)
+  have := hasExactLimitsOfShape_of_preservesEpi (LightCondMod R) (Discrete ℕ)
   CountableAB4Star.of_hasExactLimitsOfShape_nat _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsGrothendieckAbelian.{u} (LightCondMod.{u} R)
-  body: Sheaf.isGrothendieckAbelian_of_essentiallySmall _ _
-
-中文:
-实例 :
-  签名: 是GrothendieckAbelian.{u} (LightCondMod.{u} R)
-  定义体: Sheaf.isGrothendieckAbelian_of_essentiallySmall _ _
-
-Depends on / 依赖: Sheaf.isGrothendieckAbelian_of_essentiallySmall, isGrothendieckAbelian_of_essentiallySmall
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsGrothendieckAbelian.{u} (LightCondMod.{u} R) :=
   Sheaf.isGrothendieckAbelian_of_essentiallySmall _ _
 
 end LightCondensed
+

@@ -23,84 +23,70 @@ universe u
 
 open CategoryTheory
 
-/--
-Definition of `FinBddDistLat` / `FinBddDistLat` 的定义
+/-- The category of finite distributive lattices with bounded lattice morphisms. -/
+/-
+**FinBddDistLat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FinBddDistLat
-  parameters: extends BddDistLat
-  extends: BddDistLat
-  axioms and operations (1):
-    - [isFintype : Fintype carrier]
-
-中文:
-结构 FinBddDistLat
-  参数: extends 有界分配格
-  继承: 有界分配格
-  公理与运算 (1 个):
-    - [isFintype : 有限类型 carrier]
+--- 原说明 ---
+The category of finite distributive lattices with bounded lattice morphisms.
 -/
 structure FinBddDistLat extends BddDistLat where
   [isFintype : Fintype carrier]
 
 namespace FinBddDistLat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort FinBddDistLat Type*
-  body: ⟨fun X => X.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort FinBddDistLat 类型
-  定义体: ⟨fun X => X.carrier⟩
-
-Depends on / 依赖: X.carrier, carrier
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort FinBddDistLat Type* :=
   ⟨fun X => X.carrier⟩
-
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : FinBddDistLat) : DistribLattice X :=
   X.str
-
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : FinBddDistLat) : BoundedOrder X :=
   X.isBoundedOrder
 
 attribute [instance] FinBddDistLat.isFintype
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a bundled `FinBddDistLat` from a `Fintype` `BoundedOrder` `DistribLattice`. -/
+/-
+**FinBddDistLat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `FinBddDistLat`。
+形式化陈述：of (α : Type*) [DistribLattice α] [BoundedOrder α] [Fintype α] : FinBddDis
+tLat where carrier
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (α : Type*) [DistribLattice α] [BoundedOrder α] [Fintype α]
-  body: α
-
-中文:
-缩写 of
-  签名: (α : 类型) [Distrib格 α] [有界序 α] [有限类型 α]
-  定义体: α
+--- 原说明 ---
+Construct a bundled `FinBddDistLat` from a `Fintype` `BoundedOrder` `DistribLatt
+ice`.
 -/
 abbrev of (α : Type*) [DistribLattice α] [BoundedOrder α] [Fintype α] : FinBddDistLat where
   carrier := α
 
-/--
-Definition of `of'` / `of'` 的定义
+/-- Construct a bundled `FinBddDistLat` from a `Nonempty` `Fintype` `DistribLattice`. -/
+/-
+**FinBddDistLat.of'** 是 Mathlib 中的一个缩写定义，位于命名空间 `FinBddDistLat`。
+形式化陈述：of' (α : Type*) [DistribLattice α] [Fintype α] [Nonempty α] : FinBddDistLa
+t where carrier
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of'
-  signature: (α : Type*) [DistribLattice α] [Fintype α] [Nonempty α]
-  body: α
-  isBoundedOrder := Fintype.toBoundedOrder α
-
-中文:
-缩写 of'
-  签名: (α : 类型) [Distrib格 α] [有限类型 α] [非空 α]
-  定义体: α
-  isBoundedOrder := Fintype.toBoundedOrder α
+--- 原说明 ---
+Construct a bundled `FinBddDistLat` from a `Nonempty` `Fintype` `DistribLattice`
+.
 -/
 abbrev of' (α : Type*) [DistribLattice α] [Fintype α] [Nonempty α] : FinBddDistLat where
   carrier := α
@@ -108,22 +94,13 @@ abbrev of' (α : Type*) [DistribLattice α] [Fintype α] [Nonempty α] : FinBddD
 
 /-- The type of morphisms in `FinBddDistLat R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**FinBddDistLat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `FinBddDistLat`。
+形式化陈述：FinBddDistLat → FinBddDistLat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : FinBddDistLat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : BoundedLatticeHom X Y
-
-中文:
-结构 态射
-  参数: (X Y : FinBddDistLat.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : 有界格态射 X Y
+--- 原说明 ---
+The type of morphisms in `FinBddDistLat R`.
 -/
 structure Hom (X Y : FinBddDistLat.{u}) where
   private mk ::
@@ -132,22 +109,9 @@ structure Hom (X Y : FinBddDistLat.{u}) where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category FinBddDistLat.{u}
-  body: Hom X Y
-  id X := ⟨BoundedLatticeHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 FinBddDistLat.{u}
-  定义体: Hom X Y
-  id X := ⟨BoundedLatticeHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category FinBddDistLat.{u} where
   Hom X Y := Hom X Y
@@ -156,57 +120,39 @@ instance : Category FinBddDistLat.{u} where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory FinBddDistLat (BoundedLatticeHom · ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 FinBddDistLat (有界格态射 · ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory FinBddDistLat (BoundedLatticeHom · ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `FinBddDistLat` back into a `BoundedLatticeHom`. -/
+/-
+**FinBddDistLat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `FinBddDistLat.Hom`。
+形式化陈述：{X Y : FinBddDistLat} → X.Hom Y → BoundedLatticeHom ↑X.toDistLat ↑Y.toDist
+Lat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : FinBddDistLat.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := FinBddDistLat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : FinBddDistLat.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := FinBddDistLat) f
+--- 原说明 ---
+Turn a morphism in `FinBddDistLat` back into a `BoundedLatticeHom`.
 -/
 abbrev Hom.hom {X Y : FinBddDistLat.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := FinBddDistLat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `BoundedLatticeHom` as a morphism in `FinBddDistLat`. -/
+/-
+**FinBddDistLat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `FinBddDistLat`。
+形式化陈述：ofHom {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [Dist
+ribLattice Y] [BoundedOrder Y] [Fintype Y] (f : BoundedLatticeHom X Y) : of X ⟶ 
+of Y
+参数：f : BoundedLatticeHom X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
-  body: ConcreteCategory.ofHom (C := FinBddDistLat) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
-  定义体: ConcreteCategory.ofHom (C := FinBddDistLat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, FinBddDistLat
+--- 原说明 ---
+Typecheck a `BoundedLatticeHom` as a morphism in `FinBddDistLat`.
 -/
 abbrev ofHom {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
     [BoundedOrder Y] [Fintype Y]
@@ -215,412 +161,268 @@ abbrev ofHom {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [Dis
   ConcreteCategory.ofHom (C := FinBddDistLat) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**FinBddDistLat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `FinBddDistLat.Hom.Simps
+`。
+形式化陈述：(X Y : FinBddDistLat) → X.Hom Y → BoundedLatticeHom ↑X.toDistLat ↑Y.toDist
+Lat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : FinBddDistLat.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : FinBddDistLat.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : FinBddDistLat.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**FinBddDistLat.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：coe_id {X : FinBddDistLat} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : FinBddDistLat}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_id
-  条件: {X : FinBddDistLat}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : FinBddDistLat} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : FinBddDistLat} : (𝟙 X : X → X) = id := rfl
 
 @[simp]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : FinBddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : FinBddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[simp]
+/-
+**FinBddDistLat.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：coe_comp {X Y Z : FinBddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z
+) = g ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comp {X Y Z : FinBddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
+lemma coe_comp {X Y Z : FinBddDistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[simp]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {X Y : FinBddDistLat} (f : X ⟶ Y)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 forget_map
-  条件: {X Y : FinBddDistLat} (f : X ⟶ Y)
-  证明: rfl
-
-@[ext]
+/-
+**FinBddDistLat.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：forget_map {X Y : FinBddDistLat} (f : X ⟶ Y) : (forget FinBddDistLat).map 
+f = (f : _ -> _)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {X Y : FinBddDistLat} (f : X ⟶ Y) :
-    (forget FinBddDistLat).map f = (f : _ -> _) := rfl
+    (forget FinBddDistLat).map f = (f : _ → _) := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : FinBddDistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-@[simp]
-
-中文:
-引理 ext
-  条件: {X Y : FinBddDistLat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-@[simp]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**FinBddDistLat.ext** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：ext {X Y : FinBddDistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f 
+= g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma ext {X Y : FinBddDistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : FinBddDistLat} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : FinBddDistLat}
-  statement: (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : FinBddDistLat}
-  结论: (𝟙 X : X ⟶ X).hom = 有界格态射.id _
-  证明: rfl
+/-
+**FinBddDistLat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：hom_id {X : FinBddDistLat} : (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : FinBddDistLat} : (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _ := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**FinBddDistLat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：id_apply (X : FinBddDistLat) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : FinBddDistLat；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : FinBddDistLat) (x : X)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (X : FinBddDistLat) (x : X)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : FinBddDistLat) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**FinBddDistLat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：hom_comp {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = g
+.hom.comp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**FinBddDistLat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：comp_apply {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ 
+g) x = g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y Z : FinBddDistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : FinBddDistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : FinBddDistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**FinBddDistLat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：hom_ext {X Y : FinBddDistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FinBddDistLat.Hom.ext`：∀ {X Y : FinBddDistLat} {x y : X.Hom Y}, x.hom' =
+ y.hom' → x = y
 -/
 lemma hom_ext {X Y : FinBddDistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  statement: {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
-  证明: rfl
-
-@[simp]
+/-
+**FinBddDistLat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：hom_ofHom {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [
+DistribLattice Y] [BoundedOrder Y] [Fintype Y] (f : BoundedLatticeHom X Y) : (of
+Hom f).hom = f
+参数：f : BoundedLatticeHom X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ofHom {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
     [BoundedOrder Y] [Fintype Y] (f : BoundedLatticeHom X Y) : (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : FinBddDistLat} (f : X ⟶ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : FinBddDistLat} (f : X ⟶ Y)
-  证明: rfl
-
-@[simp]
+/-
+**FinBddDistLat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：ofHom_hom {X Y : FinBddDistLat} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : FinBddDistLat} (f : X ⟶ Y) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [Distrib格 X] [有界序 X] [有限类型 X]
-  证明: rfl
-
-@[simp]
+/-
+**FinBddDistLat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：ofHom_id {X : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] : of
+Hom (BoundedLatticeHom.id _) = 𝟙 (of X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] :
     ofHom (BoundedLatticeHom.id _) = 𝟙 (of X) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
-  证明: rfl
+/-
+**FinBddDistLat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X
+] [DistribLattice Y] [BoundedOrder Y] [Fintype Y] [DistribLattice Z] [BoundedOrd
+er Z] [Fintype Z] (f : BoundedLatticeHom X Y) (g : BoundedLatticeHom Y Z) : ofHo
+m (g.comp f) = ofHom f ≫ ofHom g
+参数：f : BoundedLatticeHom X Y；g : BoundedLatticeHom Y Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
     [BoundedOrder Y] [Fintype Y] [DistribLattice Z] [BoundedOrder Z] [Fintype Z]
     (f : BoundedLatticeHom X Y) (g : BoundedLatticeHom Y Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
-  证明: rfl
+/-
+**FinBddDistLat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：ofHom_apply {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X]
+ [DistribLattice Y] [BoundedOrder Y] [Fintype Y] (f : BoundedLatticeHom X Y) (x 
+: X) : (ofHom f) x = f x
+参数：f : BoundedLatticeHom X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
     [BoundedOrder Y] [Fintype Y]
     (f : BoundedLatticeHom X Y) (x : X) :
     (ofHom f) x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : FinBddDistLat} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : FinBddDistLat} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+/-
+**FinBddDistLat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：inv_hom_apply {X Y : FinBddDistLat} (e : X ≅ Y) (x : X) : e.inv (e.hom x) 
+= x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : FinBddDistLat} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : FinBddDistLat} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : FinBddDistLat} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**FinBddDistLat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `FinBddDistLat`。
+形式化陈述：hom_inv_apply {X Y : FinBddDistLat} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) 
+= s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : FinBddDistLat} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited FinBddDistLat
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 FinBddDistLat
-  定义体: ⟨of PUnit⟩
+/-
+**FinBddDistLat.** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited FinBddDistLat :=
   ⟨of PUnit⟩
-
-/--
-Instance `hasForgetToBddDistLat` / 实例 `hasForgetToBddDistLat`
-
-English:
-instance hasForgetToBddDistLat
-  signature: : HasForget₂ FinBddDistLat BddDistLat where
-  body: .of X
-  forget₂.map f := BddDistLat.ofHom f.hom
-
-中文:
-实例 hasForgetToBddDistLat
-  签名: : 有Forget₂ FinBddDistLat 有界分配格 where
-  定义体: .of X
-  forget₂.map f := BddDistLat.ofHom f.hom
+/-
+**FinBddDistLat.hasForgetToBddDistLat** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+形式化陈述：hasForgetToBddDistLat : HasForget₂ FinBddDistLat BddDistLat where forget₂.
+obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToBddDistLat : HasForget₂ FinBddDistLat BddDistLat where
   forget₂.obj X := .of X
   forget₂.map f := BddDistLat.ofHom f.hom
-
-/--
-Instance `hasForgetToFinPartOrd` / 实例 `hasForgetToFinPartOrd`
-
-English:
-instance hasForgetToFinPartOrd
-  signature: : HasForget₂ FinBddDistLat FinPartOrd where
-  body: .of X
-  forget₂.map f := ConcreteCategory.ofHom (OrderHomClass.toOrderHom f.hom)
-
-中文:
-实例 hasForgetToFinPartOrd
-  签名: : 有Forget₂ FinBddDistLat 有限偏序 where
-  定义体: .of X
-  forget₂.map f := ConcreteCategory.ofHom (OrderHomClass.toOrderHom f.hom)
+/-
+**FinBddDistLat.hasForgetToFinPartOrd** 是 Mathlib 中的一个实例，位于命名空间 `FinBddDistLat`。
+形式化陈述：hasForgetToFinPartOrd : HasForget₂ FinBddDistLat FinPartOrd where forget₂.
+obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToFinPartOrd : HasForget₂ FinBddDistLat FinPartOrd where
   forget₂.obj X := .of X
@@ -629,24 +431,16 @@ instance hasForgetToFinPartOrd : HasForget₂ FinBddDistLat FinPartOrd where
 /-- Constructs an equivalence between finite distributive lattices from an order isomorphism
 between them. -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**FinBddDistLat.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `FinBddDistLat.Iso`。
+形式化陈述：{α β : FinBddDistLat} → ↑α.toDistLat ≃o ↑β.toDistLat → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : FinBddDistLat.{u}} (e : α.carrier ≃o β.carrier)
-  body: ofHom e
-  inv := ofHom e.symm
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
-
-中文:
-定义 同构.mk
-  签名: {α β : FinBddDistLat.{u}} (e : α.carrier ≃o β.carrier)
-  定义体: ofHom e
-  inv := ofHom e.symm
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
+--- 原说明 ---
+Constructs an equivalence between finite distributive lattices from an order iso
+morphism
+between them.
 -/
 def Iso.mk {α β : FinBddDistLat.{u}} (e : α.carrier ≃o β.carrier) : α ≅ β where
   hom := ofHom e
@@ -656,20 +450,14 @@ def Iso.mk {α β : FinBddDistLat.{u}} (e : α.carrier ≃o β.carrier) : α ≅
 
 /-- `OrderDual` as a functor. -/
 @[simps map]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**FinBddDistLat.dual** 是 Mathlib 中的一个定义，位于命名空间 `FinBddDistLat`。
+形式化陈述：dual : FinBddDistLat ⥤ FinBddDistLat where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : FinBddDistLat ⥤ FinBddDistLat where
-  body: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-中文:
-定义 dual
-  签名: : FinBddDistLat ⥤ FinBddDistLat where
-  定义体: of Xᵒᵈ
-  map f := ofHom f.hom.dual
+--- 原说明 ---
+`OrderDual` as a functor.
 -/
 def dual : FinBddDistLat ⥤ FinBddDistLat where
   obj X := of Xᵒᵈ
@@ -677,24 +465,15 @@ def dual : FinBddDistLat ⥤ FinBddDistLat where
 
 /-- The equivalence between `FinBddDistLat` and itself induced by `OrderDual` both ways. -/
 @[simps functor inverse]
-/--
-Definition of `dualEquiv` / `dualEquiv` 的定义
+/-
+**FinBddDistLat.dualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `FinBddDistLat`。
+形式化陈述：dualEquiv : FinBddDistLat ≌ FinBddDistLat where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualEquiv
-  signature: : FinBddDistLat ≌ FinBddDistLat where
-  body: dual
-  inverse := dual
-  unitIso := NatIso.ofComponents (fun X => Iso.mk (α := X) <| OrderIso.dualDual X)
-  counitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X)
-
-中文:
-定义 dualEquiv
-  签名: : FinBddDistLat ≌ FinBddDistLat where
-  定义体: dual
-  inverse := dual
-  unitIso := NatIso.ofComponents (fun X => Iso.mk (α := X) <| OrderIso.dualDual X)
-  counitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X)
+--- 原说明 ---
+The equivalence between `FinBddDistLat` and itself induced by `OrderDual` both w
+ays.
 -/
 def dualEquiv : FinBddDistLat ≌ FinBddDistLat where
   functor := dual
@@ -704,16 +483,12 @@ def dualEquiv : FinBddDistLat ≌ FinBddDistLat where
 
 end FinBddDistLat
 
-/--
-theorem `finBddDistLat_dual_comp_forget_to_bddDistLat` / 定理 `finBddDistLat_dual_comp_forget_to_bddDistLat`
-
-English:
-theorem finBddDistLat_dual_comp_forget_to_bddDistLat
-  proof: rfl
-
-中文:
-定理 finBddDistLat_dual_comp_forget_to_bddDistLat
-  证明: rfl
+/-
+**finBddDistLat_dual_comp_forget_to_bddDistLat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finBddDistLat_dual_comp_forget_to_bddDistLat : FinBddDistLat.dual ⋙ forget
+₂ FinBddDistLat BddDistLat = forget₂ FinBddDistLat BddDistLat ⋙ BddDistLat.dual
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finBddDistLat_dual_comp_forget_to_bddDistLat :
     FinBddDistLat.dual ⋙ forget₂ FinBddDistLat BddDistLat =

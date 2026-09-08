@@ -27,379 +27,284 @@ variable [AddMonoidWithOne α] [PartialOrder α]
 variable [AddLeftMono α] [ZeroLEOneClass α]
 
 @[gcongr, mono]
-/--
-theorem `mono_cast` / 定理 `mono_cast`
-
-English:
-theorem mono_cast
-  statement: Monotone (Nat.cast : Nat -> α)
-  proof: monotone_nat_of_le_succ fun n => by
-    rw [Nat.cast_succ]; exact le_add_of_nonneg_right zero_le_one
-
-中文:
-定理 mono_cast
-  结论: 递增 (自然数.cast : 自然数 -> α)
-  证明: monotone_nat_of_le_succ fun n => by
-    rw [Nat.cast_succ]; exact le_add_of_nonneg_right zero_le_one
-
-Depends on / 依赖: Nat.cast_succ, cast_succ, le_add_of_nonneg_right, monotone_nat_of_le_succ, zero_le_one
+/-
+**Nat.mono_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：mono_cast : Monotone (Nat.cast : Nat -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `monotone_nat_of_le_succ`：monotone_nat_of_le_succ {f : Nat -> α} (hf : fo
+rall n, f n <= f (n + 1)) : Monotone f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
-theorem mono_cast : Monotone (Nat.cast : Nat -> α) :=
-  monotone_nat_of_le_succ fun n => by
+theorem mono_cast : Monotone (Nat.cast : ℕ → α) :=
+  monotone_nat_of_le_succ fun n ↦ by
     rw [Nat.cast_succ]; exact le_add_of_nonneg_right zero_le_one
 
 /-- See also `Nat.cast_nonneg`, specialised to `IsOrderedRing`. -/
 @[simp low]
-/--
-theorem `cast_nonneg'` / 定理 `cast_nonneg'`
+/-
+**Nat.cast_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_nonneg' (n : Nat) : 0 <= (n : α)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mono_cast`：mono_cast : Monotone (Nat.cast : Nat -> α)
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 
-English:
-theorem cast_nonneg'
-  given: (n : Nat)
-  statement: 0 <= (n : α)
-  proof: @Nat.cast_zero α _ ▸ mono_cast (Nat.zero_le n)
-
-中文:
-定理 cast_nonneg'
-  条件: (n : 自然数)
-  结论: 0 <= (n : α)
-  证明: @Nat.cast_zero α _ ▸ mono_cast (Nat.zero_le n)
-
-Depends on / 依赖: Nat.cast_zero, Nat.zero_le, cast_zero, mono_cast, zero_le
+--- 原说明 ---
+See also `Nat.cast_nonneg`, specialised to `IsOrderedRing`.
 -/
-theorem cast_nonneg' (n : Nat) : 0 <= (n : α) :=
+theorem cast_nonneg' (n : ℕ) : 0 ≤ (n : α) :=
   @Nat.cast_zero α _ ▸ mono_cast (Nat.zero_le n)
 
 /-- See also `Nat.ofNat_nonneg`, specialised to `IsOrderedRing`. -/
 @[simp low]
-/--
-theorem `ofNat_nonneg'` / 定理 `ofNat_nonneg'`
+/-
+**Nat.ofNat_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofNat_nonneg' (n : Nat) [n.AtLeastTwo] : 0 <= (ofNat(n) : α)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
 
-English:
-theorem ofNat_nonneg'
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: 0 <= (ofNat(n) : α)
-  proof: cast_nonneg' n
-
-中文:
-定理 of自然数_nonneg'
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: 0 <= (of自然数(n) : α)
-  证明: cast_nonneg' n
-
-Depends on / 依赖: cast_nonneg
+--- 原说明 ---
+See also `Nat.ofNat_nonneg`, specialised to `IsOrderedRing`.
 -/
-theorem ofNat_nonneg' (n : Nat) [n.AtLeastTwo] : 0 <= (ofNat(n) : α) := cast_nonneg' n
+theorem ofNat_nonneg' (n : ℕ) [n.AtLeastTwo] : 0 ≤ (ofNat(n) : α) := cast_nonneg' n
 
 section Nontrivial
 
 variable [NeZero (1 : α)]
 
-/--
-theorem `cast_add_one_pos` / 定理 `cast_add_one_pos`
-
-English:
-theorem cast_add_one_pos
-  given: (n : Nat)
-  statement: 0 < (n : α) + 1
-  proof: by
-  apply zero_lt_one.trans_le
-  convert! (@mono_cast α _).imp (?_ : 1 <= n + 1)
-  <;> simp
-
-中文:
-定理 cast_add_one_pos
-  条件: (n : 自然数)
-  结论: 0 < (n : α) + 1
-  证明: by
-  apply zero_lt_one.trans_le
-  convert! (@mono_cast α _).imp (?_ : 1 <= n + 1)
-  <;> simp
-
-Depends on / 依赖: convert, mono_cast, trans_le, zero_lt_one, zero_lt_one.trans_le
+/-
+**Nat.cast_add_one_pos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_add_one_pos (n : Nat) : 0 < (n : α) + 1
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Monotone.imp`：Monotone.imp (hf : Monotone f) (h : a <= b) : f a <= f b
+· 使用定理 `Nat.mono_cast`：mono_cast : Monotone (Nat.cast : Nat -> α)
 -/
-theorem cast_add_one_pos (n : Nat) : 0 < (n : α) + 1 := by
+theorem cast_add_one_pos (n : ℕ) : 0 < (n : α) + 1 := by
   apply zero_lt_one.trans_le
-  convert! (@mono_cast α _).imp (?_ : 1 <= n + 1)
+  convert! (@mono_cast α _).imp (?_ : 1 ≤ n + 1)
   <;> simp
 
 /-- See also `Nat.cast_pos`, specialised to `IsOrderedRing`. -/
 @[simp low]
-/--
-theorem `cast_pos'` / 定理 `cast_pos'`
+/-
+**Nat.cast_pos'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_pos' {n : Nat} : (0 : α) < n ↔ 0 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 
-English:
-theorem cast_pos'
-  given: {n : Nat}
-  statement: (0 : α) < n ↔ 0 < n
-  proof: by cases n <;> simp [cast_add_one_pos]
-
-中文:
-定理 cast_pos'
-  条件: {n : 自然数}
-  结论: (0 : α) < n ↔ 0 < n
-  证明: by cases n <;> simp [cast_add_one_pos]
-
-Depends on / 依赖: cast_add_one_pos
+--- 原说明 ---
+See also `Nat.cast_pos`, specialised to `IsOrderedRing`.
 -/
-theorem cast_pos' {n : Nat} : (0 : α) < n ↔ 0 < n := by cases n <;> simp [cast_add_one_pos]
+theorem cast_pos' {n : ℕ} : (0 : α) < n ↔ 0 < n := by cases n <;> simp [cast_add_one_pos]
 
 end Nontrivial
 
-variable [CharZero α] {m n : Nat}
+variable [CharZero α] {m n : ℕ}
 
 @[gcongr]
-/--
-theorem `strictMono_cast` / 定理 `strictMono_cast`
-
-English:
-theorem strictMono_cast
-  statement: StrictMono (Nat.cast : Nat -> α)
-  proof: mono_cast.strictMono_of_injective cast_injective
-
-中文:
-定理 strictMono_cast
-  结论: 严格递增 (自然数.cast : 自然数 -> α)
-  证明: mono_cast.strictMono_of_injective cast_injective
-
-Depends on / 依赖: cast_injective, mono_cast, mono_cast.strictMono_of_injective, strictMono_of_injective
+/-
+**Nat.strictMono_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：strictMono_cast : StrictMono (Nat.cast : Nat -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.strictMono_of_injective`：Monotone.strictMono_of_injective (h₁ :
+ Monotone f) (h₂ : Injective f) : StrictMono f
+· 使用定理 `Nat.mono_cast`：mono_cast : Monotone (Nat.cast : Nat -> α)
+· 使用定理 `Nat.cast_injective`：cast_injective : Function.Injective (Nat.cast : Nat 
+-> R)
 -/
-theorem strictMono_cast : StrictMono (Nat.cast : Nat -> α) :=
+theorem strictMono_cast : StrictMono (Nat.cast : ℕ → α) :=
   mono_cast.strictMono_of_injective cast_injective
 
 /-- `Nat.cast : ℕ → α` as an `OrderEmbedding` -/
 @[simps! -fullyApplied]
-/--
-Definition of `castOrderEmbedding` / `castOrderEmbedding` 的定义
+/-
+**Nat.castOrderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：castOrderEmbedding : Nat ↪o α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.strictMono_cast`：strictMono_cast : StrictMono (Nat.cast : Nat -> α)
 
-English:
-definition castOrderEmbedding
-  signature: : Nat ↪o α
-  body: OrderEmbedding.ofStrictMono Nat.cast Nat.strictMono_cast
-
-@[simp, norm_cast]
-
-中文:
-定义 castOrderEmbedding
-  签名: : 自然数 ↪o α
-  定义体: OrderEmbedding.ofStrictMono Nat.cast Nat.strictMono_cast
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Nat.cast, Nat.strictMono_cast, OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, strictMono_cast
+--- 原说明 ---
+`Nat.cast : ℕ → α` as an `OrderEmbedding`
 -/
-def castOrderEmbedding : Nat ↪o α :=
+def castOrderEmbedding : ℕ ↪o α :=
   OrderEmbedding.ofStrictMono Nat.cast Nat.strictMono_cast
 
 @[simp, norm_cast]
-/--
-theorem `cast_le` / 定理 `cast_le`
-
-English:
-theorem cast_le
-  statement: (m : α) <= n ↔ m <= n
-  proof: strictMono_cast.le_iff_le
-
-@[simp, norm_cast, mono]
-
-中文:
-定理 cast_le
-  结论: (m : α) <= n ↔ m <= n
-  证明: strictMono_cast.le_iff_le
-
-@[simp, norm_cast, mono]
-
-Depends on / 依赖: le_iff_le, strictMono_cast, strictMono_cast.le_iff_le
+/-
+**Nat.cast_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_le : (m : α) <= n ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Nat.strictMono_cast`：strictMono_cast : StrictMono (Nat.cast : Nat -> α)
 -/
-theorem cast_le : (m : α) <= n ↔ m <= n :=
+theorem cast_le : (m : α) ≤ n ↔ m ≤ n :=
   strictMono_cast.le_iff_le
 
 @[simp, norm_cast, mono]
-/--
-theorem `cast_lt` / 定理 `cast_lt`
-
-English:
-theorem cast_lt
-  statement: (m : α) < n ↔ m < n
-  proof: strictMono_cast.lt_iff_lt
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt
-  结论: (m : α) < n ↔ m < n
-  证明: strictMono_cast.lt_iff_lt
-
-@[simp, norm_cast]
-
-Depends on / 依赖: lt_iff_lt, strictMono_cast, strictMono_cast.lt_iff_lt
+/-
+**Nat.cast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_lt : (m : α) < n ↔ m < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Nat.strictMono_cast`：strictMono_cast : StrictMono (Nat.cast : Nat -> α)
 -/
 theorem cast_lt : (m : α) < n ↔ m < n :=
   strictMono_cast.lt_iff_lt
 
 @[simp, norm_cast]
-/--
-theorem `one_lt_cast` / 定理 `one_lt_cast`
-
-English:
-theorem one_lt_cast
-  statement: 1 < (n : α) ↔ 1 < n
-  proof: by rw [← cast_one, cast_lt]
-
-@[simp, norm_cast]
-
-中文:
-定理 one_lt_cast
-  结论: 1 < (n : α) ↔ 1 < n
-  证明: by rw [← cast_one, cast_lt]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_lt, cast_one
+/-
+**Nat.one_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_lt_cast : 1 < (n : α) ↔ 1 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem one_lt_cast : 1 < (n : α) ↔ 1 < n := by rw [← cast_one, cast_lt]
 
 @[simp, norm_cast]
-/--
-theorem `one_le_cast` / 定理 `one_le_cast`
-
-English:
-theorem one_le_cast
-  statement: 1 <= (n : α) ↔ 1 <= n
-  proof: by rw [← cast_one, cast_le]
-
-中文:
-定理 one_le_cast
-  结论: 1 <= (n : α) ↔ 1 <= n
-  证明: by rw [← cast_one, cast_le]
-
-Depends on / 依赖: cast_le, cast_one
+/-
+**Nat.one_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_le_cast : 1 <= (n : α) ↔ 1 <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem one_le_cast : 1 <= (n : α) ↔ 1 <= n := by rw [← cast_one, cast_le]
-
-/--
-theorem `one_le_cast_iff_ne_zero` / 定理 `one_le_cast_iff_ne_zero`
-
-English:
-theorem one_le_cast_iff_ne_zero
-  statement: 1 <= (n : α) ↔ n != 0
-  proof: one_le_cast.trans one_le_iff_ne_zero
-
-@[simp, norm_cast]
-
-中文:
-定理 one_le_cast_iff_ne_zero
-  结论: 1 <= (n : α) ↔ n != 0
-  证明: one_le_cast.trans one_le_iff_ne_zero
-
-@[simp, norm_cast]
-
-Depends on / 依赖: one_le_cast, one_le_cast.trans, one_le_iff_ne_zero
+theorem one_le_cast : 1 ≤ (n : α) ↔ 1 ≤ n := by rw [← cast_one, cast_le]
+/-
+**Nat.one_le_cast_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_le_cast_iff_ne_zero : 1 <= (n : α) ↔ n != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Nat.one_le_cast`：one_le_cast : 1 <= (n : α) ↔ 1 <= n
+· 使用定理 `Nat.one_le_iff_ne_zero`：∀ {n : ℕ}, 1 ≤ n ↔ n ≠ 0
 -/
-theorem one_le_cast_iff_ne_zero : 1 <= (n : α) ↔ n != 0 :=
+theorem one_le_cast_iff_ne_zero : 1 ≤ (n : α) ↔ n ≠ 0 :=
   one_le_cast.trans one_le_iff_ne_zero
 
 @[simp, norm_cast]
-/--
-theorem `cast_lt_one` / 定理 `cast_lt_one`
-
-English:
-theorem cast_lt_one
-  statement: (n : α) < 1 ↔ n = 0
-  proof: by
-  rw [← cast_one]; rw [cast_lt]; rw [Nat.lt_succ_iff]; rw [le_zero]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt_one
-  结论: (n : α) < 1 ↔ n = 0
-  证明: by
-  rw [← cast_one]; rw [cast_lt]; rw [Nat.lt_succ_iff]; rw [le_zero]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Nat.lt_succ_iff, cast_lt, cast_one, le_zero, lt_succ_iff
+/-
+**Nat.cast_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_lt_one : (n : α) < 1 ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `Nat.lt_succ_iff`：∀ {m n : ℕ}, m < n.succ ↔ m ≤ n
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem cast_lt_one : (n : α) < 1 ↔ n = 0 := by
-  rw [← cast_one]; rw [cast_lt]; rw [Nat.lt_succ_iff]; rw [le_zero]
+  rw [← cast_one, cast_lt, Nat.lt_succ_iff, le_zero]
 
 @[simp, norm_cast]
-/--
-theorem `cast_le_one` / 定理 `cast_le_one`
-
-English:
-theorem cast_le_one
-  statement: (n : α) <= 1 ↔ n <= 1
-  proof: by rw [← cast_one, cast_le]
-
-中文:
-定理 cast_le_one
-  结论: (n : α) <= 1 ↔ n <= 1
-  证明: by rw [← cast_one, cast_le]
-
-Depends on / 依赖: cast_le, cast_one
+/-
+**Nat.cast_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_le_one : (n : α) <= 1 ↔ n <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_le_one : (n : α) <= 1 ↔ n <= 1 := by rw [← cast_one, cast_le]
-
-/--
-lemma `cast_nonpos` / 引理 `cast_nonpos`
-
-English:
-lemma cast_nonpos
-  statement: (n : α) <= 0 ↔ n = 0
-  proof: by norm_cast; lia
-
-中文:
-引理 cast_nonpos
-  结论: (n : α) <= 0 ↔ n = 0
-  证明: by norm_cast; lia
+theorem cast_le_one : (n : α) ≤ 1 ↔ n ≤ 1 := by rw [← cast_one, cast_le]
+/-
+**Nat.cast_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialOrder α] [Ad
+dLeftMono α] [ZeroLEOneClass α] [CharZero α]   {n : ℕ}, ↑n ≤ 0 ↔ n = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-@[simp] lemma cast_nonpos : (n : α) <= 0 ↔ n = 0 := by norm_cast; lia
+@[simp] lemma cast_nonpos : (n : α) ≤ 0 ↔ n = 0 := by norm_cast; lia
 
 section
 variable [m.AtLeastTwo]
 
 @[simp]
-/--
-theorem `ofNat_le_cast` / 定理 `ofNat_le_cast`
-
-English:
-theorem ofNat_le_cast
-  statement: (ofNat(m) : α) <= n ↔ (OfNat.ofNat m : Nat) <= n
-  proof: cast_le
-
-@[simp]
-
-中文:
-定理 of自然数_le_cast
-  结论: (of自然数(m) : α) <= n ↔ (Of自然数.of自然数 m : 自然数) <= n
-  证明: cast_le
-
-@[simp]
-
-Depends on / 依赖: cast_le
+/-
+**Nat.ofNat_le_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofNat_le_cast : (ofNat(m) : α) <= n ↔ (OfNat.ofNat m : Nat) <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
 -/
-theorem ofNat_le_cast : (ofNat(m) : α) <= n ↔ (OfNat.ofNat m : Nat) <= n :=
+theorem ofNat_le_cast : (ofNat(m) : α) ≤ n ↔ (OfNat.ofNat m : ℕ) ≤ n :=
   cast_le
 
 @[simp]
-/--
-theorem `ofNat_lt_cast` / 定理 `ofNat_lt_cast`
-
-English:
-theorem ofNat_lt_cast
-  statement: (ofNat(m) : α) < n ↔ (OfNat.ofNat m : Nat) < n
-  proof: cast_lt
-
-中文:
-定理 of自然数_lt_cast
-  结论: (of自然数(m) : α) < n ↔ (Of自然数.of自然数 m : 自然数) < n
-  证明: cast_lt
-
-Depends on / 依赖: cast_lt
+/-
+**Nat.ofNat_lt_cast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofNat_lt_cast : (ofNat(m) : α) < n ↔ (OfNat.ofNat m : Nat) < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
 -/
-theorem ofNat_lt_cast : (ofNat(m) : α) < n ↔ (OfNat.ofNat m : Nat) < n :=
+theorem ofNat_lt_cast : (ofNat(m) : α) < n ↔ (OfNat.ofNat m : ℕ) < n :=
   cast_lt
 
 end
@@ -407,135 +312,80 @@ end
 variable [n.AtLeastTwo]
 
 @[simp]
-/--
-theorem `cast_le_ofNat` / 定理 `cast_le_ofNat`
-
-English:
-theorem cast_le_ofNat
-  statement: (m : α) <= (ofNat(n) : α) ↔ m <= OfNat.ofNat n
-  proof: cast_le
-
-@[simp]
-
-中文:
-定理 cast_le_of自然数
-  结论: (m : α) <= (of自然数(n) : α) ↔ m <= Of自然数.of自然数 n
-  证明: cast_le
-
-@[simp]
-
-Depends on / 依赖: cast_le
+/-
+**Nat.cast_le_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_le_ofNat : (m : α) <= (ofNat(n) : α) ↔ m <= OfNat.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
 -/
-theorem cast_le_ofNat : (m : α) <= (ofNat(n) : α) ↔ m <= OfNat.ofNat n :=
+theorem cast_le_ofNat : (m : α) ≤ (ofNat(n) : α) ↔ m ≤ OfNat.ofNat n :=
   cast_le
 
 @[simp]
-/--
-theorem `cast_lt_ofNat` / 定理 `cast_lt_ofNat`
-
-English:
-theorem cast_lt_ofNat
-  statement: (m : α) < (ofNat(n) : α) ↔ m < OfNat.ofNat n
-  proof: cast_lt
-
-@[simp]
-
-中文:
-定理 cast_lt_of自然数
-  结论: (m : α) < (of自然数(n) : α) ↔ m < Of自然数.of自然数 n
-  证明: cast_lt
-
-@[simp]
-
-Depends on / 依赖: cast_lt
+/-
+**Nat.cast_lt_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_lt_ofNat : (m : α) < (ofNat(n) : α) ↔ m < OfNat.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
 -/
 theorem cast_lt_ofNat : (m : α) < (ofNat(n) : α) ↔ m < OfNat.ofNat n :=
   cast_lt
 
 @[simp]
-/--
-theorem `one_lt_ofNat` / 定理 `one_lt_ofNat`
-
-English:
-theorem one_lt_ofNat
-  statement: 1 < (ofNat(n) : α)
-  proof: one_lt_cast.mpr AtLeastTwo.one_lt
-
-@[simp]
-
-中文:
-定理 one_lt_of自然数
-  结论: 1 < (of自然数(n) : α)
-  证明: one_lt_cast.mpr AtLeastTwo.one_lt
-
-@[simp]
-
-Depends on / 依赖: AtLeastTwo, AtLeastTwo.one_lt, one_lt, one_lt_cast, one_lt_cast.mpr
+/-
+**Nat.one_lt_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_lt_ofNat : 1 < (ofNat(n) : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.one_lt_cast`：one_lt_cast : 1 < (n : α) ↔ 1 < n
+· 使用引理 `Nat.AtLeastTwo.one_lt`：one_lt : 1 < n
 -/
 theorem one_lt_ofNat : 1 < (ofNat(n) : α) :=
   one_lt_cast.mpr AtLeastTwo.one_lt
 
 @[simp]
-/--
-theorem `one_le_ofNat` / 定理 `one_le_ofNat`
-
-English:
-theorem one_le_ofNat
-  statement: 1 <= (ofNat(n) : α)
-  proof: one_le_cast.mpr NeZero.one_le
-
-@[simp]
-
-中文:
-定理 one_le_of自然数
-  结论: 1 <= (of自然数(n) : α)
-  证明: one_le_cast.mpr NeZero.one_le
-
-@[simp]
-
-Depends on / 依赖: NeZero, NeZero.one_le, one_le, one_le_cast, one_le_cast.mpr
+/-
+**Nat.one_le_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_le_ofNat : 1 <= (ofNat(n) : α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.one_le_cast`：one_le_cast : 1 <= (n : α) ↔ 1 <= n
+· 使用定理 `NeZero.one_le`：one_le {n : Nat} [NeZero n] : 1 <= n
+· 使用定理 `Nat.AtLeastTwo.toNeZero`：∀ (n : ℕ) [n.AtLeastTwo], NeZero n
 -/
-theorem one_le_ofNat : 1 <= (ofNat(n) : α) :=
+theorem one_le_ofNat : 1 ≤ (ofNat(n) : α) :=
   one_le_cast.mpr NeZero.one_le
 
 @[simp]
-/--
-theorem `not_ofNat_le_one` / 定理 `not_ofNat_le_one`
-
-English:
-theorem not_ofNat_le_one
-  statement: ¬(ofNat(n) : α) <= 1
-  proof: (cast_le_one.not.trans not_le).mpr AtLeastTwo.one_lt
-
-@[simp]
-
-中文:
-定理 not_of自然数_le_one
-  结论: ¬(of自然数(n) : α) <= 1
-  证明: (cast_le_one.not.trans not_le).mpr AtLeastTwo.one_lt
-
-@[simp]
-
-Depends on / 依赖: AtLeastTwo, AtLeastTwo.one_lt, cast_le_one, cast_le_one.not.trans, not_le, one_lt
+/-
+**Nat.not_ofNat_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：not_ofNat_le_one : ¬(ofNat(n) : α) <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Nat.cast_le_one`：cast_le_one : (n : α) <= 1 ↔ n <= 1
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用引理 `Nat.AtLeastTwo.one_lt`：one_lt : 1 < n
 -/
-theorem not_ofNat_le_one : ¬(ofNat(n) : α) <= 1 :=
+theorem not_ofNat_le_one : ¬(ofNat(n) : α) ≤ 1 :=
   (cast_le_one.not.trans not_le).mpr AtLeastTwo.one_lt
 
 @[simp]
-/--
-theorem `not_ofNat_lt_one` / 定理 `not_ofNat_lt_one`
-
-English:
-theorem not_ofNat_lt_one
-  statement: ¬(ofNat(n) : α) < 1
-  proof: mt le_of_lt not_ofNat_le_one
-
-中文:
-定理 not_of自然数_lt_one
-  结论: ¬(of自然数(n) : α) < 1
-  证明: mt le_of_lt not_ofNat_le_one
-
-Depends on / 依赖: le_of_lt, not_ofNat_le_one
+/-
+**Nat.not_ofNat_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：not_ofNat_lt_one : ¬(ofNat(n) : α) < 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.not_ofNat_le_one`：not_ofNat_le_one : ¬(ofNat(n) : α) <= 1
 -/
 theorem not_ofNat_lt_one : ¬(ofNat(n) : α) < 1 :=
   mt le_of_lt not_ofNat_le_one
@@ -547,57 +397,36 @@ variable [m.AtLeastTwo]
 -- If https://github.com/leanprover/lean4/issues/2867 is fixed in a performant way, these can be made `@[simp]`.
 
 -- @[simp]
-/--
-theorem `ofNat_le` / 定理 `ofNat_le`
-
-English:
-theorem ofNat_le
-  proof: cast_le
-
-中文:
-定理 of自然数_le
-  证明: cast_le
-
-Depends on / 依赖: cast_le
+/-
+**Nat.ofNat_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofNat_le : (ofNat(m) : α) <= (ofNat(n) : α) ↔ (OfNat.ofNat m : Nat) <= OfN
+at.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
 -/
 theorem ofNat_le :
-    (ofNat(m) : α) <= (ofNat(n) : α) ↔ (OfNat.ofNat m : Nat) <= OfNat.ofNat n :=
+    (ofNat(m) : α) ≤ (ofNat(n) : α) ↔ (OfNat.ofNat m : ℕ) ≤ OfNat.ofNat n :=
   cast_le
 
 -- @[simp]
-/--
-theorem `ofNat_lt` / 定理 `ofNat_lt`
-
-English:
-theorem ofNat_lt
-  proof: cast_lt
-
-中文:
-定理 of自然数_lt
-  证明: cast_lt
-
-Depends on / 依赖: cast_lt
+/-
+**Nat.ofNat_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofNat_lt : (ofNat(m) : α) < (ofNat(n) : α) ↔ (OfNat.ofNat m : Nat) < OfNat
+.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
 -/
 theorem ofNat_lt :
-    (ofNat(m) : α) < (ofNat(n) : α) ↔ (OfNat.ofNat m : Nat) < OfNat.ofNat n :=
+    (ofNat(m) : α) < (ofNat(n) : α) ↔ (OfNat.ofNat m : ℕ) < OfNat.ofNat n :=
   cast_lt
 
 end Nat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoidWithOne
-  signature: α] [CharZero α] : Nontrivial α where exists_pair_ne
-  body: ⟨1, 0, (Nat.cast_one (R := α) ▸ Nat.cast_ne_zero.2 (by decide))⟩
-
-中文:
-实例 [加法带幺幺半群
-  签名: α] [特征零 α] : 非平凡 α where 存在_pair_ne
-  定义体: ⟨1, 0, (Nat.cast_one (R := α) ▸ Nat.cast_ne_zero.2 (by decide))⟩
-
-Depends on / 依赖: Nat.cast_ne_zero, Nat.cast_one, cast_ne_zero, cast_one
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoidWithOne α] [CharZero α] : Nontrivial α where exists_pair_ne :=
   ⟨1, 0, (Nat.cast_one (R := α) ▸ Nat.cast_ne_zero.2 (by decide))⟩
@@ -606,23 +435,33 @@ section RingHomClass
 
 variable {R S F : Type*} [NonAssocSemiring R] [NonAssocSemiring S] [FunLike F R S]
 
-/--
-theorem `NeZero.nat_of_injective` / 定理 `NeZero.nat_of_injective`
-
-English:
-theorem NeZero.nat_of_injective
-  statement: {n : Nat} [NeZero (n : R)] [RingHomClass F R S] {f : F}
-  proof: ⟨fun h => NeZero.natCast_ne n R hf by simpa only [map_natCast, map_zero f]⟩
-
-中文:
-定理 NeZero.nat_of_injective
-  结论: {n : 自然数} [NeZero (n : R)] [环态射类 F R S] {f : F}
-  证明: ⟨fun h => NeZero.natCast_ne n R hf by simpa only [map_natCast, map_zero f]⟩
-
-Depends on / 依赖: NeZero, NeZero.natCast_ne, map_natCast, map_zero, natCast_ne
+/-
+**NeZero.nat_of_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NeZero.nat_of_injective {n : Nat} [NeZero (n : R)] [RingHomClass F R S] {f
+ : F} (hf : Function.Injective f) : NeZero (n : S)
+参数：n : R；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NeZero.natCast_ne`：natCast_ne (n : Nat) (R) [AddMonoidWithOne R] [h : Ne
+Zero (n : R)] : (n : R) != 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem NeZero.nat_of_injective {n : Nat} [NeZero (n : R)] [RingHomClass F R S] {f : F}
+theorem NeZero.nat_of_injective {n : ℕ} [NeZero (n : R)] [RingHomClass F R S] {f : F}
     (hf : Function.Injective f) : NeZero (n : S) :=
-⟨fun h => NeZero.natCast_ne n R hf by simpa only [map_natCast, map_zero f]⟩
+  ⟨fun h ↦ NeZero.natCast_ne n R <| hf <| by simpa only [map_natCast, map_zero f]⟩
 
 end RingHomClass
+

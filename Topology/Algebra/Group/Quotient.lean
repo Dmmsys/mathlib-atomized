@@ -29,95 +29,46 @@ variable {G : Type*} [TopologicalSpace G] [Group G]
 namespace QuotientGroup
 
 @[to_additive]
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
-
-English:
-instance instTopologicalSpace
-  signature: (N : Subgroup G)
-  body: instTopologicalSpaceQuotient
-
-@[to_additive]
-
-中文:
-实例 instTopologicalSpace
-  签名: (N : 子群 G)
-  定义体: instTopologicalSpaceQuotient
-
-@[to_additive]
-
-Depends on / 依赖: instTopologicalSpaceQuotient
+/-
+**QuotientGroup.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+形式化陈述：instTopologicalSpace (N : Subgroup G) : TopologicalSpace (G ⧸ N)
+参数：N : Subgroup G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instTopologicalSpace (N : Subgroup G) : TopologicalSpace (G ⧸ N) :=
   instTopologicalSpaceQuotient
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompactSpace
-  signature: G] (N
-  body: Quotient.compactSpace
-
-@[to_additive]
-
-中文:
-实例 [紧空间
-  签名: G] (N
-  定义体: Quotient.compactSpace
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.compactSpace, compactSpace
+/-
+**QuotientGroup.** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CompactSpace G] (N : Subgroup G) : CompactSpace (G ⧸ N) :=
   Quotient.compactSpace
 
 @[to_additive]
-/--
-theorem `isQuotientMap_mk` / 定理 `isQuotientMap_mk`
-
-English:
-theorem isQuotientMap_mk
-  given: (N : Subgroup G)
-  statement: IsQuotientMap (mk : G -> G ⧸ N)
-  proof: isQuotientMap_quot_mk
-
-@[to_additive (attr := continuity, fun_prop)]
-
-中文:
-定理 isQuotientMap_mk
-  条件: (N : 子群 G)
-  结论: 是商映射 (mk : G -> G ⧸ N)
-  证明: isQuotientMap_quot_mk
-
-@[to_additive (attr := continuity, fun_prop)]
-
-Depends on / 依赖: isQuotientMap_quot_mk
+/-
+**QuotientGroup.isQuotientMap_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：isQuotientMap_mk (N : Subgroup G) : IsQuotientMap (mk : G -> G ⧸ N)
+参数：N : Subgroup G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isQuotientMap_quot_mk`：isQuotientMap_quot_mk : IsQuotientMap (@Quot.mk X
+ r)
 -/
-theorem isQuotientMap_mk (N : Subgroup G) : IsQuotientMap (mk : G -> G ⧸ N) :=
+theorem isQuotientMap_mk (N : Subgroup G) : IsQuotientMap (mk : G → G ⧸ N) :=
   isQuotientMap_quot_mk
 
 @[to_additive (attr := continuity, fun_prop)]
-/--
-theorem `continuous_mk` / 定理 `continuous_mk`
-
-English:
-theorem continuous_mk
-  given: {N : Subgroup G}
-  statement: Continuous (mk : G -> G ⧸ N)
-  proof: continuous_quot_mk
-
-中文:
-定理 continuous_mk
-  条件: {N : 子群 G}
-  结论: 连续 (mk : G -> G ⧸ N)
-  证明: continuous_quot_mk
-
-Depends on / 依赖: continuous_quot_mk
+/-
+**QuotientGroup.continuous_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：continuous_mk {N : Subgroup G} : Continuous (mk : G -> G ⧸ N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_quot_mk`：continuous_quot_mk : Continuous (@Quot.mk X r)
 -/
-theorem continuous_mk {N : Subgroup G} : Continuous (mk : G -> G ⧸ N) :=
+theorem continuous_mk {N : Subgroup G} : Continuous (mk : G → G ⧸ N) :=
   continuous_quot_mk
 
 section ContinuousMul
@@ -125,124 +76,97 @@ section ContinuousMul
 variable [SeparatelyContinuousMul G] {N : Subgroup G}
 
 @[to_additive]
-/--
-theorem `isOpenMap_coe` / 定理 `isOpenMap_coe`
-
-English:
-theorem isOpenMap_coe
-  statement: IsOpenMap ((↑) : G -> G ⧸ N)
-  proof: isOpenMap_quotient_mk'_mul
-
-@[to_additive]
-
-中文:
-定理 isOpenMap_coe
-  结论: 是开映射 ((↑) : G -> G ⧸ N)
-  证明: isOpenMap_quotient_mk'_mul
-
-@[to_additive]
-
-Depends on / 依赖: _mul, isOpenMap_quotient_mk
+/-
+**QuotientGroup.isOpenMap_coe** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：isOpenMap_coe : IsOpenMap ((↑) : G -> G ⧸ N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpenMap_quotient_mk'_mul`：∀ {Γ : Type u_4} [inst : Group Γ] {T : Type 
+u_5} [inst_1 : TopologicalSpace T] [inst_2 : MulAction Γ T]   [ContinuousConstSM
+ul Γ T], IsOpenM…
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
 -/
-theorem isOpenMap_coe : IsOpenMap ((↑) : G -> G ⧸ N) := isOpenMap_quotient_mk'_mul
+theorem isOpenMap_coe : IsOpenMap ((↑) : G → G ⧸ N) := isOpenMap_quotient_mk'_mul
 
 @[to_additive]
-/--
-theorem `isOpenQuotientMap_mk` / 定理 `isOpenQuotientMap_mk`
-
-English:
-theorem isOpenQuotientMap_mk
-  statement: IsOpenQuotientMap (mk : G -> G ⧸ N)
-  proof: MulAction.isOpenQuotientMap_quotientMk
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isOpenQuotientMap_mk
-  结论: 是OpenQuotient映射 (mk : G -> G ⧸ N)
-  证明: MulAction.isOpenQuotientMap_quotientMk
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: MulAction, MulAction.isOpenQuotientMap_quotientMk, isOpenQuotientMap_quotientMk
+/-
+**QuotientGroup.isOpenQuotientMap_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：isOpenQuotientMap_mk : IsOpenQuotientMap (mk : G -> G ⧸ N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.isOpenQuotientMap_quotientMk`：MulAction.isOpenQuotientMap_quot
+ientMk [ContinuousConstSMul Γ T] : IsOpenQuotientMap (Quotient.mk (MulAction.orb
+itRel Γ T))
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
 -/
-theorem isOpenQuotientMap_mk : IsOpenQuotientMap (mk : G -> G ⧸ N) :=
+theorem isOpenQuotientMap_mk : IsOpenQuotientMap (mk : G → G ⧸ N) :=
   MulAction.isOpenQuotientMap_quotientMk
 
 @[to_additive (attr := simp)]
-/--
-theorem `dense_preimage_mk` / 定理 `dense_preimage_mk`
-
-English:
-theorem dense_preimage_mk
-  given: {s : Set (G ⧸ N)}
-  statement: Dense ((↑) ⁻¹' s : Set G) ↔ Dense s
-  proof: isOpenQuotientMap_mk.dense_preimage_iff
-
-@[to_additive]
-
-中文:
-定理 dense_preimage_mk
-  条件: {s : 集合 (G ⧸ N)}
-  结论: 稠密 ((↑) ⁻¹' s : 集合 G) ↔ 稠密 s
-  证明: isOpenQuotientMap_mk.dense_preimage_iff
-
-@[to_additive]
-
-Depends on / 依赖: dense_preimage_iff, isOpenQuotientMap_mk, isOpenQuotientMap_mk.dense_preimage_iff
+/-
+**QuotientGroup.dense_preimage_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：dense_preimage_mk {s : Set (G ⧸ N)} : Dense ((↑) ⁻¹' s : Set G) ↔ Dense s
+参数：G ⧸ N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpenQuotientMap.dense_preimage_iff`：dense_preimage_iff (h : IsOpenQuot
+ientMap f) {s : Set Y} : Dense (f ⁻¹' s) ↔ Dense s
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
 -/
 theorem dense_preimage_mk {s : Set (G ⧸ N)} : Dense ((↑) ⁻¹' s : Set G) ↔ Dense s :=
   isOpenQuotientMap_mk.dense_preimage_iff
 
 @[to_additive]
-/--
-theorem `dense_image_mk` / 定理 `dense_image_mk`
-
-English:
-theorem dense_image_mk
-  given: {s : Set G}
-  proof: by
-  rw [← dense_preimage_mk]; rw [preimage_image_mk_eq_mul]
-
-@[to_additive]
-
-中文:
-定理 dense_image_mk
-  条件: {s : 集合 G}
-  证明: by
-  rw [← dense_preimage_mk]; rw [preimage_image_mk_eq_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dense_preimage_mk, preimage_image_mk_eq_mul
+/-
+**QuotientGroup.dense_image_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：dense_image_mk {s : Set G} : Dense (mk '' s : Set (G ⧸ N)) ↔ Dense (s * (N
+ : Set G))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.dense_preimage_mk`：dense_preimage_mk {s : Set (G ⧸ N)} : D
+ense ((↑) ⁻¹' s : Set G) ↔ Dense s
+· 使用定理 `QuotientGroup.preimage_image_mk_eq_mul`：preimage_image_mk_eq_mul (N : Su
+bgroup α) (s : Set α) : mk ⁻¹' ((mk : α -> α ⧸ N) '' s) = s * N
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem dense_image_mk {s : Set G} :
     Dense (mk '' s : Set (G ⧸ N)) ↔ Dense (s * (N : Set G)) := by
-  rw [← dense_preimage_mk]; rw [preimage_image_mk_eq_mul]
+  rw [← dense_preimage_mk, preimage_image_mk_eq_mul]
 
 @[to_additive]
-/--
-Instance `instContinuousSMul` / 实例 `instContinuousSMul`
-
-English:
-instance instContinuousSMul
-  signature: {G : Type*} [Group G] [TopologicalSpace G] [ContinuousMul G]
-  body: by
-    rw [← (IsOpenQuotientMap.id.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
-    exact continuous_mk.comp continuous_mul
-
-@[to_additive]
-
-中文:
-实例 instContinuousSMul
-  签名: {G : 类型} [群 G] [拓扑空间 G] [连续乘法 G]
-  定义体: by
-    rw [← (IsOpenQuotientMap.id.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
-    exact continuous_mk.comp continuous_mul
-
-@[to_additive]
-
-Depends on / 依赖: IsOpenQuotientMap, IsOpenQuotientMap.id.prodMap, continuous_comp_iff, continuous_mk, continuous_mk.comp, continuous_mul, isOpenQuotientMap_mk, prodMap
+/-
+**QuotientGroup.instContinuousSMul** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+形式化陈述：instContinuousSMul {G : Type*} [Group G] [TopologicalSpace G] [ContinuousM
+ul G] {N : Subgroup G} : ContinuousSMul G (G ⧸ N) where continuous_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOpenQuotientMap.continuous_comp_iff`：continuous_comp_iff (h : IsOpenQu
+otientMap f) {g : Y -> Z} : Continuous (g ∘ f) ↔ Continuous g
+· 使用定理 `IsOpenQuotientMap.prodMap`：IsOpenQuotientMap.prodMap {f : X -> Y} {g : Z
+ -> W} (hf : IsOpenQuotientMap f) (hg : IsOpenQuotientMap g) : IsOpenQuotientMap
+ (Prod.map f g)
+· 使用定理 `IsOpenQuotientMap.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], IsOp
+enQuotientMap id
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
+· 使用定理 `instSeparatelyContinuousMulOfContinuousMul`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Mul M] [ContinuousMul M], SeparatelyContinuousMul M
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `QuotientGroup.continuous_mk`：continuous_mk {N : Subgroup G} : Continuous
+ (mk : G -> G ⧸ N)
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
 -/
 instance instContinuousSMul {G : Type*} [Group G] [TopologicalSpace G] [ContinuousMul G]
     {N : Subgroup G} : ContinuousSMul G (G ⧸ N) where
@@ -251,82 +175,81 @@ instance instContinuousSMul {G : Type*} [Group G] [TopologicalSpace G] [Continuo
     exact continuous_mk.comp continuous_mul
 
 @[to_additive]
-/--
-Instance `instContinuousConstSMul` / 实例 `instContinuousConstSMul`
-
-English:
-instance instContinuousConstSMul
-  signature: : ContinuousConstSMul G (G ⧸ N) where
-  body: by
-    rw [← isOpenQuotientMap_mk.continuous_comp_iff]
-exact continuous_mk.comp continuous_const_smul γ
-
-@[to_additive]
-
-中文:
-实例 instContinuousConstSMul
-  签名: : 连续常数标量乘法 G (G ⧸ N) where
-  定义体: by
-    rw [← isOpenQuotientMap_mk.continuous_comp_iff]
-exact continuous_mk.comp continuous_const_smul γ
-
-@[to_additive]
-
-Depends on / 依赖: continuous_comp_iff, continuous_const_smul, continuous_mk, continuous_mk.comp, isOpenQuotientMap_mk, isOpenQuotientMap_mk.continuous_comp_iff
+/-
+**QuotientGroup.instContinuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup
+`。
+形式化陈述：instContinuousConstSMul : ContinuousConstSMul G (G ⧸ N) where continuous_c
+onst_smul γ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOpenQuotientMap.continuous_comp_iff`：continuous_comp_iff (h : IsOpenQu
+otientMap f) {g : Y -> Z} : Continuous (g ∘ f) ↔ Continuous g
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `QuotientGroup.continuous_mk`：continuous_mk {N : Subgroup G} : Continuous
+ (mk : G -> G ⧸ N)
+· 使用定理 `ContinuousConstSMul.continuous_const_smul`：∀ {Γ : Type u_1} {T : Type u_
+2} {inst : TopologicalSpace T} {inst_1 : SMul Γ T} [self : ContinuousConstSMul Γ
+ T]   (γ : Γ), Continuous fun x…
 -/
 instance instContinuousConstSMul : ContinuousConstSMul G (G ⧸ N) where
   continuous_const_smul γ := by
     rw [← isOpenQuotientMap_mk.continuous_comp_iff]
-exact continuous_mk.comp continuous_const_smul γ
+    exact continuous_mk.comp <| continuous_const_smul γ
 
 @[to_additive]
-/--
-theorem `t1Space_iff` / 定理 `t1Space_iff`
-
-English:
-theorem t1Space_iff
-  proof: by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.t1Space_iff G (mk 1)]; rw [isClosed_coinduced]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 t1Space_iff
-  证明: by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.t1Space_iff G (mk 1)]; rw [isClosed_coinduced]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: IsPretransitive, MulAction, MulAction.IsPretransitive.t1Space_iff, QuotientGroup, QuotientGroup.preimage_mk_one, isClosed_coinduced, preimage_mk_one, t1Space_iff
+/-
+**QuotientGroup.t1Space_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：t1Space_iff : T1Space (G ⧸ N) ↔ IsClosed (N : Set G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.preimage_mk_one`：preimage_mk_one (N : Subgroup α) : mk ⁻¹'
+ {(mk : α -> α ⧸ N) 1} = N
+· 使用引理 `MulAction.IsPretransitive.t1Space_iff`：t1Space_iff (x : α) [IsPretransit
+ive G α] : T1Space α ↔ IsClosed {x}
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `isClosed_coinduced`：isClosed_coinduced {t : TopologicalSpace α} {s : Set
+ β} {f : α -> β} : IsClosed[t.coinduced f] s ↔ IsClosed (f ⁻¹' s)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem t1Space_iff :
     T1Space (G ⧸ N) ↔ IsClosed (N : Set G) := by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.t1Space_iff G (mk 1)]; rw [isClosed_coinduced]
+  rw [← QuotientGroup.preimage_mk_one, MulAction.IsPretransitive.t1Space_iff G (mk 1),
+      isClosed_coinduced]
   rfl
 
 @[to_additive]
-/--
-theorem `discreteTopology_iff` / 定理 `discreteTopology_iff`
-
-English:
-theorem discreteTopology_iff
-  proof: by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.discreteTopology_iff G (mk 1)]; rw [isOpen_coinduced]
-  rfl
-
-中文:
-定理 discreteTopology_iff
-  证明: by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.discreteTopology_iff G (mk 1)]; rw [isOpen_coinduced]
-  rfl
-
-Depends on / 依赖: IsPretransitive, MulAction, MulAction.IsPretransitive.discreteTopology_iff, QuotientGroup, QuotientGroup.preimage_mk_one, discreteTopology_iff, isOpen_coinduced, preimage_mk_one
+/-
+**QuotientGroup.discreteTopology_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：discreteTopology_iff : DiscreteTopology (G ⧸ N) ↔ IsOpen (N : Set G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.preimage_mk_one`：preimage_mk_one (N : Subgroup α) : mk ⁻¹'
+ {(mk : α -> α ⧸ N) 1} = N
+· 使用引理 `MulAction.IsPretransitive.discreteTopology_iff`：discreteTopology_iff (x 
+: α) [IsPretransitive G α] : DiscreteTopology α ↔ IsOpen {x}
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `isOpen_coinduced`：isOpen_coinduced {t : TopologicalSpace α} {s : Set β} 
+{f : α -> β} : IsOpen[t.coinduced f] s ↔ IsOpen (f ⁻¹' s)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem discreteTopology_iff :
     DiscreteTopology (G ⧸ N) ↔ IsOpen (N : Set G) := by
-  rw [← QuotientGroup.preimage_mk_one]; rw [MulAction.IsPretransitive.discreteTopology_iff G (mk 1)]; rw [isOpen_coinduced]
+  rw [← QuotientGroup.preimage_mk_one, MulAction.IsPretransitive.discreteTopology_iff G (mk 1),
+      isOpen_coinduced]
   rfl
 
 /-- The quotient of a topological group `G` by a closed subgroup `N` is T1.
@@ -344,20 +267,15 @@ quotient is T3 (see `QuotientAddGroup.instT3Space`).
 
 Back to the general case, we will show later that the quotient is in fact T2
 since `N` acts on `G` properly. -/]
-/--
-Instance `instT1Space` / 实例 `instT1Space`
-
-English:
-instance instT1Space
-  signature: [hN : IsClosed (N : Set G)]
-  body: t1Space_iff.mpr hN
-
-中文:
-实例 instT1Space
-  签名: [hN : 是闭集 (N : 集合 G)]
-  定义体: t1Space_iff.mpr hN
-
-Depends on / 依赖: t1Space_iff, t1Space_iff.mpr
+/-
+**QuotientGroup.instT1Space** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+形式化陈述：instT1Space [hN : IsClosed (N : Set G)] : T1Space (G ⧸ N)
+参数：N : Set G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuotientGroup.t1Space_iff`：t1Space_iff : T1Space (G ⧸ N) ↔ IsClosed (N :
+ Set G)
 -/
 instance instT1Space [hN : IsClosed (N : Set G)] :
     T1Space (G ⧸ N) :=
@@ -365,20 +283,15 @@ instance instT1Space [hN : IsClosed (N : Set G)] :
 
 -- TODO: `IsOpen` should be a class and this should be an instance
 @[to_additive]
-/--
-theorem `discreteTopology` / 定理 `discreteTopology`
-
-English:
-theorem discreteTopology
-  given: (hN : IsOpen (N : Set G))
-  proof: discreteTopology_iff.mpr hN
-
-中文:
-定理 discreteTopology
-  条件: (hN : 是开集 (N : 集合 G))
-  证明: discreteTopology_iff.mpr hN
-
-Depends on / 依赖: discreteTopology_iff, discreteTopology_iff.mpr
+/-
+**QuotientGroup.discreteTopology** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：discreteTopology (hN : IsOpen (N : Set G)) : DiscreteTopology (G ⧸ N)
+参数：hN : IsOpen (N : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuotientGroup.discreteTopology_iff`：discreteTopology_iff : DiscreteTopol
+ogy (G ⧸ N) ↔ IsOpen (N : Set G)
 -/
 theorem discreteTopology (hN : IsOpen (N : Set G)) :
     DiscreteTopology (G ⧸ N) :=
@@ -386,20 +299,22 @@ theorem discreteTopology (hN : IsOpen (N : Set G)) :
 
 /-- A quotient of a locally compact group is locally compact. -/
 @[to_additive]
-/--
-Instance `instLocallyCompactSpace` / 实例 `instLocallyCompactSpace`
+/-
+**QuotientGroup.instLocallyCompactSpace** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup
+`。
+形式化陈述：instLocallyCompactSpace [LocallyCompactSpace G] (N : Subgroup G) : Locally
+CompactSpace (G ⧸ N)
+参数：N : Subgroup G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpenQuotientMap.locallyCompactSpace`：IsOpenQuotientMap.locallyCompactS
+pace [LocallyCompactSpace X] {f : X -> Y} (hf : IsOpenQuotientMap f) : LocallyCo
+mpactSpace Y where local_co…
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
 
-English:
-instance instLocallyCompactSpace
-  signature: [LocallyCompactSpace G] (N : Subgroup G)
-  body: QuotientGroup.isOpenQuotientMap_mk.locallyCompactSpace
-
-中文:
-实例 instLocallyCompactSpace
-  签名: [局部紧空间 G] (N : 子群 G)
-  定义体: QuotientGroup.isOpenQuotientMap_mk.locallyCompactSpace
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.isOpenQuotientMap_mk.locallyCompactSpace, isOpenQuotientMap_mk, locallyCompactSpace
+--- 原说明 ---
+A quotient of a locally compact group is locally compact.
 -/
 instance instLocallyCompactSpace [LocallyCompactSpace G] (N : Subgroup G) :
     LocallyCompactSpace (G ⧸ N) :=
@@ -410,68 +325,66 @@ variable (N)
 /-- Neighborhoods in the quotient are precisely the map of neighborhoods in the prequotient. -/
 @[to_additive
   /-- Neighborhoods in the quotient are precisely the map of neighborhoods in the prequotient. -/]
-/--
-theorem `nhds_eq` / 定理 `nhds_eq`
-
-English:
-theorem nhds_eq
-  given: (x : G)
-  statement: 𝓝 (x : G ⧸ N) = Filter.map (↑) (𝓝 x)
-  proof: (isOpenQuotientMap_mk.map_nhds_eq _).symm
-
-@[to_additive]
-
-中文:
-定理 nhds_eq
-  条件: (x : G)
-  结论: 𝓝 (x : G ⧸ N) = 滤子.map (↑) (𝓝 x)
-  证明: (isOpenQuotientMap_mk.map_nhds_eq _).symm
-
-@[to_additive]
-
-Depends on / 依赖: isOpenQuotientMap_mk, isOpenQuotientMap_mk.map_nhds_eq, map_nhds_eq
+/-
+**QuotientGroup.nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：nhds_eq (x : G) : 𝓝 (x : G ⧸ N) = Filter.map (↑) (𝓝 x)
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOpenQuotientMap.map_nhds_eq`：map_nhds_eq (h : IsOpenQuotientMap f) (x 
+: X) : map f (𝓝 x) = 𝓝 (f x)
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
 -/
 theorem nhds_eq (x : G) : 𝓝 (x : G ⧸ N) = Filter.map (↑) (𝓝 x) :=
   (isOpenQuotientMap_mk.map_nhds_eq _).symm
 
 @[to_additive]
-/--
-Instance `instFirstCountableTopology` / 实例 `instFirstCountableTopology`
-
-English:
-instance instFirstCountableTopology
-  signature: [FirstCountableTopology G]
-  body: mk_surjective.forall.2 fun x => nhds_eq N x ▸ inferInstance
-
-中文:
-实例 instFirstCountableTopology
-  签名: [第一可数拓扑 G]
-  定义体: mk_surjective.forall.2 fun x => nhds_eq N x ▸ inferInstance
-
-Depends on / 依赖: mk_surjective, mk_surjective.forall, nhds_eq
+/-
+**QuotientGroup.instFirstCountableTopology** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGr
+oup`。
+形式化陈述：instFirstCountableTopology [FirstCountableTopology G] : FirstCountableTopo
+logy (G ⧸ N) where nhds_generated_countable
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `QuotientGroup.mk_surjective`：mk_surjective : Function.Surjective @mk _ _
+ s
+· 使用定理 `Filter.map.isCountablyGenerated`：∀ {α : Type u_1} {β : Type u_2} (l : Fi
+lter α) [l.IsCountablyGenerated] (f : α → β),   (Filter.map f l).IsCountablyGene
+rated
+· 使用定理 `FirstCountableTopology.nhds_generated_countable`：∀ {α : Type u} {t : Top
+ologicalSpace α} [self : FirstCountableTopology α] (a : α), (nhds a).IsCountably
+Generated
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.nhds_eq`：nhds_eq (x : G) : 𝓝 (x : G ⧸ N) = Filter.map (↑) 
+(𝓝 x)
 -/
 instance instFirstCountableTopology [FirstCountableTopology G] :
     FirstCountableTopology (G ⧸ N) where
-  nhds_generated_countable := mk_surjective.forall.2 fun x => nhds_eq N x ▸ inferInstance
+  nhds_generated_countable := mk_surjective.forall.2 fun x ↦ nhds_eq N x ▸ inferInstance
 
 /-- The quotient of a second countable topological group by a subgroup is second countable. -/
 @[to_additive
   /-- The quotient of a second countable additive topological group by a subgroup is second
   countable. -/]
-/--
-Instance `instSecondCountableTopology` / 实例 `instSecondCountableTopology`
-
-English:
-instance instSecondCountableTopology
-  signature: [SecondCountableTopology G]
-  body: ContinuousConstSMul.secondCountableTopology
-
-中文:
-实例 instSecondCountableTopology
-  签名: [第二可数拓扑 G]
-  定义体: ContinuousConstSMul.secondCountableTopology
-
-Depends on / 依赖: ContinuousConstSMul, ContinuousConstSMul.secondCountableTopology, secondCountableTopology
+/-
+**QuotientGroup.instSecondCountableTopology** 是 Mathlib 中的一个实例，位于命名空间 `QuotientG
+roup`。
+形式化陈述：instSecondCountableTopology [SecondCountableTopology G] : SecondCountableT
+opology (G ⧸ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousConstSMul.secondCountableTopology`：ContinuousConstSMul.secondC
+ountableTopology [SecondCountableTopology T] [ContinuousConstSMul Γ T] : SecondC
+ountableTopology (Quotient (MulAc…
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
 -/
 instance instSecondCountableTopology [SecondCountableTopology G] :
     SecondCountableTopology (G ⧸ N) :=
@@ -482,30 +395,39 @@ end ContinuousMul
 variable [IsTopologicalGroup G] (N : Subgroup G)
 
 @[to_additive]
-/--
-Instance `instIsTopologicalGroup` / 实例 `instIsTopologicalGroup`
-
-English:
-instance instIsTopologicalGroup
-  signature: [N.Normal]
-  body: by
-    rw [← (isOpenQuotientMap_mk.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
-    exact continuous_mk.comp continuous_mul
-  continuous_inv := continuous_inv.quotient_map' _
-
-@[to_additive]
-
-中文:
-实例 instIsTopologicalGroup
-  签名: [N.正规]
-  定义体: by
-    rw [← (isOpenQuotientMap_mk.prodMap isOpenQuotientMap_mk).continuous_comp_iff]
-    exact continuous_mk.comp continuous_mul
-  continuous_inv := continuous_inv.quotient_map' _
-
-@[to_additive]
-
-Depends on / 依赖: continuous_comp_iff, continuous_inv, continuous_inv.quotient_map, continuous_mk, continuous_mk.comp, continuous_mul, isOpenQuotientMap_mk, isOpenQuotientMap_mk.prodMap, prodMap, quotient_map
+/-
+**QuotientGroup.instIsTopologicalGroup** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`
+。
+形式化陈述：instIsTopologicalGroup [N.Normal] : IsTopologicalGroup (G ⧸ N) where conti
+nuous_mul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOpenQuotientMap.continuous_comp_iff`：continuous_comp_iff (h : IsOpenQu
+otientMap f) {g : Y -> Z} : Continuous (g ∘ f) ↔ Continuous g
+· 使用定理 `IsOpenQuotientMap.prodMap`：IsOpenQuotientMap.prodMap {f : X -> Y} {g : Z
+ -> W} (hf : IsOpenQuotientMap f) (hg : IsOpenQuotientMap g) : IsOpenQuotientMap
+ (Prod.map f g)
+· 使用定理 `QuotientGroup.isOpenQuotientMap_mk`：isOpenQuotientMap_mk : IsOpenQuotien
+tMap (mk : G -> G ⧸ N)
+· 使用定理 `instSeparatelyContinuousMulOfContinuousMul`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Mul M] [ContinuousMul M], SeparatelyContinuousMul M
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `QuotientGroup.continuous_mk`：continuous_mk {N : Subgroup G} : Continuous
+ (mk : G -> G ⧸ N)
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `Continuous.quotient_map'`：Continuous.quotient_map' {t : Setoid Y} {f : X
+ -> Y} (hf : Continuous f) (H : (s.r ⇒ t.r) f f) : Continuous (Quotient.map' f H
+)
+· 使用定理 `ContinuousInv.continuous_inv`：∀ {G : Type u} {inst : TopologicalSpace G}
+ {inst_1 : Inv G} [self : ContinuousInv G], Continuous fun a => a⁻¹
+· 使用定理 `IsTopologicalGroup.toContinuousInv`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousInv G
 -/
 instance instIsTopologicalGroup [N.Normal] : IsTopologicalGroup (G ⧸ N) where
   continuous_mul := by
@@ -514,56 +436,55 @@ instance instIsTopologicalGroup [N.Normal] : IsTopologicalGroup (G ⧸ N) where
   continuous_inv := continuous_inv.quotient_map' _
 
 @[to_additive]
-/--
-theorem `isClosedMap_coe` / 定理 `isClosedMap_coe`
-
-English:
-theorem isClosedMap_coe
-  given: {H : Subgroup G} (hH : IsCompact (H : Set G))
-  proof: by
-  intro t ht
-  rw [← (isQuotientMap_mk H).isClosed_preimage]; rw [preimage_image_mk_eq_mul]
-  exact ht.mul_right_of_isCompact hH
-
-@[to_additive]
-
-中文:
-定理 isClosedMap_coe
-  条件: {H : 子群 G} (hH : 是紧集 (H : 集合 G))
-  证明: by
-  intro t ht
-  rw [← (isQuotientMap_mk H).isClosed_preimage]; rw [preimage_image_mk_eq_mul]
-  exact ht.mul_right_of_isCompact hH
-
-@[to_additive]
-
-Depends on / 依赖: ht.mul_right_of_isCompact, isClosed_preimage, isQuotientMap_mk, mul_right_of_isCompact, preimage_image_mk_eq_mul
+/-
+**QuotientGroup.isClosedMap_coe** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：isClosedMap_coe {H : Subgroup G} (hH : IsCompact (H : Set G)) : IsClosedMa
+p ((↑) : G -> G ⧸ H)
+参数：hH : IsCompact (H : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.isClosed_preimage`：∀ {X : Type u_1} {Y : Type u_2}
+ {f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolo
+gy.IsCoinducing f → ∀ {s : Se…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `QuotientGroup.isQuotientMap_mk`：isQuotientMap_mk (N : Subgroup G) : IsQu
+otientMap (mk : G -> G ⧸ N)
+· 使用定理 `QuotientGroup.preimage_image_mk_eq_mul`：preimage_image_mk_eq_mul (N : Su
+bgroup α) (s : Set α) : mk ⁻¹' ((mk : α -> α ⧸ N) '' s) = s * N
+· 使用定理 `IsClosed.mul_right_of_isCompact`：IsClosed.mul_right_of_isCompact (ht : I
+sClosed t) (hs : IsCompact s) : IsClosed (t * s)
 -/
 theorem isClosedMap_coe {H : Subgroup G} (hH : IsCompact (H : Set G)) :
-    IsClosedMap ((↑) : G -> G ⧸ H) := by
+    IsClosedMap ((↑) : G → G ⧸ H) := by
   intro t ht
-  rw [← (isQuotientMap_mk H).isClosed_preimage]; rw [preimage_image_mk_eq_mul]
+  rw [← (isQuotientMap_mk H).isClosed_preimage, preimage_image_mk_eq_mul]
   exact ht.mul_right_of_isCompact hH
 
 @[to_additive]
-/--
-Instance `instT3Space` / 实例 `instT3Space`
-
-English:
-instance instT3Space
-  signature: [N.Normal] [hN : IsClosed (N : Set G)]
-  body: by
-  infer_instance
-
-中文:
-实例 instT3Space
-  签名: [N.正规] [hN : 是闭集 (N : 集合 G)]
-  定义体: by
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**QuotientGroup.instT3Space** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+形式化陈述：instT3Space [N.Normal] [hN : IsClosed (N : Set G)] : T3Space (G ⧸ N)
+参数：N : Set G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `T1Space.t0Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T1Space X
+], T0Space X
+· 使用定理 `instSeparatelyContinuousMulOfContinuousMul`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Mul M] [ContinuousMul M], SeparatelyContinuousMul M
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用定理 `IsTopologicalGroup.regularSpace`：∀ (G : Type w) [inst : TopologicalSpace
+ G] [inst_1 : Group G] [IsTopologicalGroup G], RegularSpace G
 -/
 instance instT3Space [N.Normal] [hN : IsClosed (N : Set G)] : T3Space (G ⧸ N) := by
   infer_instance
 
 end QuotientGroup
+

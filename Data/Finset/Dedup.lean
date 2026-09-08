@@ -35,20 +35,15 @@ variable {α : Type*} {β : Type*} {γ : Type*}
 namespace Finset
 
 @[simp]
-/--
-theorem `dedup_eq_self` / 定理 `dedup_eq_self`
-
-English:
-theorem dedup_eq_self
-  given: [DecidableEq α] (s : Finset α)
-  statement: dedup s.1 = s.1
-  proof: s.2.dedup
-
-中文:
-定理 dedup_eq_self
-  条件: [DecidableEq α] (s : 有限集 α)
-  结论: dedup s.1 = s.1
-  证明: s.2.dedup
+/-
+**Finset.dedup_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：dedup_eq_self [DecidableEq α] (s : Finset α) : dedup s.1 = s.1
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem dedup_eq_self [DecidableEq α] (s : Finset α) : dedup s.1 = s.1 :=
   s.2.dedup
@@ -61,211 +56,153 @@ namespace Multiset
 
 variable [DecidableEq α] {s t : Multiset α}
 
-/--
-Definition of `toFinset` / `toFinset` 的定义
+/-- `toFinset s` removes duplicates from the multiset `s` to produce a finset. -/
+/-
+**Multiset.toFinset** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：toFinset (s : Multiset α) : Finset α
+参数：s : Multiset α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.nodup_dedup`：nodup_dedup (s : Multiset α) : Nodup (dedup s)
 
-English:
-definition toFinset
-  signature: (s : Multiset α)
-  body: ⟨_, nodup_dedup s⟩
-
-@[simp]
-
-中文:
-定义 toFinset
-  签名: (s : Multiset α)
-  定义体: ⟨_, nodup_dedup s⟩
-
-@[simp]
-
-Depends on / 依赖: nodup_dedup
+--- 原说明 ---
+`toFinset s` removes duplicates from the multiset `s` to produce a finset.
 -/
 def toFinset (s : Multiset α) : Finset α :=
   ⟨_, nodup_dedup s⟩
 
 @[simp]
-/--
-theorem `toFinset_val` / 定理 `toFinset_val`
-
-English:
-theorem toFinset_val
-  given: (s : Multiset α)
-  statement: s.toFinset.1 = s.dedup
-  proof: rfl
-
-中文:
-定理 toFinset_val
-  条件: (s : Multiset α)
-  结论: s.toFinset.1 = s.dedup
-  证明: rfl
+/-
+**Multiset.toFinset_val** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_val (s : Multiset α) : s.toFinset.1 = s.dedup
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinset_val (s : Multiset α) : s.toFinset.1 = s.dedup :=
   rfl
-
-/--
-theorem `toFinset_eq` / 定理 `toFinset_eq`
-
-English:
-theorem toFinset_eq
-  given: {s : Multiset α} (n : Nodup s)
-  statement: Finset.mk s n = s.toFinset
-  proof: Finset.val_inj.1 n.dedup.symm
-
-中文:
-定理 toFinset_eq
-  条件: {s : Multiset α} (n : Nodup s)
-  结论: 有限集.mk s n = s.toFinset
-  证明: Finset.val_inj.1 n.dedup.symm
-
-Depends on / 依赖: Finset, Finset.val_inj, n.dedup.symm, val_inj
+/-
+**Multiset.toFinset_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_eq {s : Multiset α} (n : Nodup s) : Finset.mk s n = s.toFinset
+参数：n : Nodup s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
 -/
 theorem toFinset_eq {s : Multiset α} (n : Nodup s) : Finset.mk s n = s.toFinset :=
   Finset.val_inj.1 n.dedup.symm
-
-/--
-theorem `Nodup.toFinset_inj` / 定理 `Nodup.toFinset_inj`
-
-English:
-theorem Nodup.toFinset_inj
-  statement: {l l' : Multiset α} (hl : Nodup l) (hl' : Nodup l')
-  proof: by
-  simpa [← toFinset_eq hl, ← toFinset_eq hl'] using h
-
-@[simp, grind =]
-
-中文:
-定理 Nodup.toFinset_inj
-  结论: {l l' : Multiset α} (hl : Nodup l) (hl' : Nodup l')
-  证明: by
-  simpa [← toFinset_eq hl, ← toFinset_eq hl'] using h
-
-@[simp, grind =]
-
-Depends on / 依赖: toFinset_eq
+/-
+**Multiset.Nodup.toFinset_inj** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {l l' : Multiset α}, l.Nodup → l'.
+Nodup → l.toFinset = l'.toFinset → l = l'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.toFinset_eq`：toFinset_eq {s : Multiset α} (n : Nodup s) : Finse
+t.mk s n = s.toFinset
+· 使用定理 `Finset.mk.injEq`：∀ {α : Type u_4} (val : Multiset α) (nodup : val.Nodup)
+ (val_1 : Multiset α) (nodup_1 : val_1.Nodup),   ({ val := val, nodup := nodup }
+ = { …
 -/
 theorem Nodup.toFinset_inj {l l' : Multiset α} (hl : Nodup l) (hl' : Nodup l')
     (h : l.toFinset = l'.toFinset) : l = l' := by
   simpa [← toFinset_eq hl, ← toFinset_eq hl'] using h
 
 @[simp, grind =]
-/--
-theorem `mem_toFinset` / 定理 `mem_toFinset`
-
-English:
-theorem mem_toFinset
-  given: {a : α} {s : Multiset α}
-  statement: a in s.toFinset ↔ a in s
-  proof: mem_dedup
-
-@[simp]
-
-中文:
-定理 mem_toFinset
-  条件: {a : α} {s : Multiset α}
-  结论: a in s.toFinset ↔ a in s
-  证明: mem_dedup
-
-@[simp]
-
-Depends on / 依赖: mem_dedup
+/-
+**Multiset.mem_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_toFinset {a : α} {s : Multiset α} : a in s.toFinset ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_dedup`：mem_dedup {a : α} {s : Multiset α} : a in dedup s ↔ 
+a in s
 -/
-theorem mem_toFinset {a : α} {s : Multiset α} : a in s.toFinset ↔ a in s :=
+theorem mem_toFinset {a : α} {s : Multiset α} : a ∈ s.toFinset ↔ a ∈ s :=
   mem_dedup
 
 @[simp]
-/--
-theorem `toFinset_subset` / 定理 `toFinset_subset`
-
-English:
-theorem toFinset_subset
-  statement: s.toFinset subseteq t.toFinset ↔ s subseteq t
-  proof: by
-  simp only [Finset.subset_iff, Multiset.subset_iff, Multiset.mem_toFinset]
-
-@[simp]
-
-中文:
-定理 toFinset_subset
-  结论: s.toFinset subseteq t.toFinset ↔ s subseteq t
-  证明: by
-  simp only [Finset.subset_iff, Multiset.subset_iff, Multiset.mem_toFinset]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.subset_iff, Multiset, Multiset.mem_toFinset, Multiset.subset_iff, mem_toFinset, subset_iff
+/-
+**Multiset.toFinset_subset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_subset : s.toFinset subseteq t.toFinset ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toFinset_subset : s.toFinset subseteq t.toFinset ↔ s subseteq t := by
+theorem toFinset_subset : s.toFinset ⊆ t.toFinset ↔ s ⊆ t := by
   simp only [Finset.subset_iff, Multiset.subset_iff, Multiset.mem_toFinset]
 
 @[simp]
-/--
-theorem `toFinset_ssubset` / 定理 `toFinset_ssubset`
-
-English:
-theorem toFinset_ssubset
-  statement: s.toFinset ⊂ t.toFinset ↔ s ⊂ t
-  proof: by
-  simp_rw [Finset.ssubset_def, toFinset_subset]
-  rfl
-
-@[simp]
-
-中文:
-定理 toFinset_ssubset
-  结论: s.toFinset ⊂ t.toFinset ↔ s ⊂ t
-  证明: by
-  simp_rw [Finset.ssubset_def, toFinset_subset]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.ssubset_def, simp_rw, ssubset_def, toFinset_subset
+/-
+**Multiset.toFinset_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_ssubset : s.toFinset ⊂ t.toFinset ↔ s ⊂ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toFinset_ssubset : s.toFinset ⊂ t.toFinset ↔ s ⊂ t := by
   simp_rw [Finset.ssubset_def, toFinset_subset]
   rfl
 
 @[simp]
-/--
-theorem `toFinset_dedup` / 定理 `toFinset_dedup`
-
-English:
-theorem toFinset_dedup
-  given: (m : Multiset α)
-  statement: m.dedup.toFinset = m.toFinset
-  proof: by
-  simp_rw [toFinset, dedup_idem]
-
-中文:
-定理 toFinset_dedup
-  条件: (m : Multiset α)
-  结论: m.dedup.toFinset = m.toFinset
-  证明: by
-  simp_rw [toFinset, dedup_idem]
-
-Depends on / 依赖: dedup_idem, simp_rw, toFinset
+/-
+**Multiset.toFinset_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_dedup (m : Multiset α) : m.dedup.toFinset = m.toFinset
+参数：m : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Multiset.nodup_dedup`：nodup_dedup (s : Multiset α) : Nodup (dedup s)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.dedup_idem`：dedup_idem {m : Multiset α} : m.dedup.dedup = m.ded
+up
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mk.congr_simp`：∀ {α : Type u_4} (val val_1 : Multiset α) (e_val :
+ val = val_1) (nodup : val.Nodup),   { val := val, nodup := nodup } = { val := v
+al_1, nodu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toFinset_dedup (m : Multiset α) : m.dedup.toFinset = m.toFinset := by
   simp_rw [toFinset, dedup_idem]
-
-/--
-Instance `isWellFounded_ssubset` / 实例 `isWellFounded_ssubset`
-
-English:
-instance isWellFounded_ssubset
-  signature: : IsWellFounded (Multiset β) (· ⊂ ·)
-  body: by
-  classical
-  exact Subrelation.isWellFounded (InvImage _ toFinset) toFinset_ssubset.2
-
-中文:
-实例 isWellFounded_ssubset
-  签名: : 是良基 (Multiset β) (· ⊂ ·)
-  定义体: by
-  classical
-  exact Subrelation.isWellFounded (InvImage _ toFinset) toFinset_ssubset.2
-
-Depends on / 依赖: InvImage, Subrelation, Subrelation.isWellFounded, classical, isWellFounded, shiftLeft, toFinset, toFinset_ssubset
+/-
+**Multiset.isWellFounded_ssubset** 是 Mathlib 中的一个实例，位于命名空间 `Multiset`。
+形式化陈述：isWellFounded_ssubset : IsWellFounded (Multiset β) (· ⊂ ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrelation.isWellFounded`：Subrelation.isWellFounded (r : α -> α -> Prop
+) [IsWellFounded α r] {s : α -> α -> Prop} (h : Subrelation s r) : IsWellFounded
+ α s
+· 使用定理 `instIsWellFoundedInvImage`：∀ {α : Type u} {β : Type v} (r : α → α → Prop
+) [IsWellFounded α r] (f : β → α), IsWellFounded β (InvImage r f)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.toFinset_ssubset`：toFinset_ssubset : s.toFinset ⊂ t.toFinset ↔ 
+s ⊂ t
 -/
 instance isWellFounded_ssubset : IsWellFounded (Multiset β) (· ⊂ ·) := by
   classical
@@ -276,336 +213,223 @@ end Multiset
 namespace Finset
 
 @[simp]
-/--
-theorem `val_toFinset` / 定理 `val_toFinset`
-
-English:
-theorem val_toFinset
-  given: [DecidableEq α] (s : Finset α)
-  statement: s.val.toFinset = s
-  proof: by
-  ext
-  rw [Multiset.mem_toFinset]; rw [← mem_def]
-
-中文:
-定理 val_toFinset
-  条件: [DecidableEq α] (s : 有限集 α)
-  结论: s.val.toFinset = s
-  证明: by
-  ext
-  rw [Multiset.mem_toFinset]; rw [← mem_def]
-
-Depends on / 依赖: Multiset, Multiset.mem_toFinset, mem_def, mem_toFinset
+/-
+**Finset.val_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_toFinset [DecidableEq α] (s : Finset α) : s.val.toFinset = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.mem_toFinset`：mem_toFinset {a : α} {s : Multiset α} : a in s.to
+Finset ↔ a in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem val_toFinset [DecidableEq α] (s : Finset α) : s.val.toFinset = s := by
   ext
-  rw [Multiset.mem_toFinset]; rw [← mem_def]
-
-/--
-theorem `val_le_iff_val_subset` / 定理 `val_le_iff_val_subset`
-
-English:
-theorem val_le_iff_val_subset
-  given: {a : Finset α} {b : Multiset α}
-  statement: a.val <= b ↔ a.val subseteq b
-  proof: Multiset.le_iff_subset a.nodup
-
-中文:
-定理 val_le_iff_val_subset
-  条件: {a : 有限集 α} {b : Multiset α}
-  结论: a.val <= b ↔ a.val subseteq b
-  证明: Multiset.le_iff_subset a.nodup
-
-Depends on / 依赖: Multiset, Multiset.le_iff_subset, a.nodup, le_iff_subset
+  rw [Multiset.mem_toFinset, ← mem_def]
+/-
+**Finset.val_le_iff_val_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_le_iff_val_subset {a : Finset α} {b : Multiset α} : a.val <= b ↔ a.val
+ subseteq b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.le_iff_subset`：le_iff_subset {s t : Multiset α} : Nodup s -> (s
+ <= t ↔ s subseteq t)
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
-theorem val_le_iff_val_subset {a : Finset α} {b : Multiset α} : a.val <= b ↔ a.val subseteq b :=
+theorem val_le_iff_val_subset {a : Finset α} {b : Multiset α} : a.val ≤ b ↔ a.val ⊆ b :=
   Multiset.le_iff_subset a.nodup
 
 end Finset
 
 namespace List
 
-variable [DecidableEq α] {l l' : List α} {a : α} {f : α -> β}
+variable [DecidableEq α] {l l' : List α} {a : α} {f : α → β}
   {s : Finset α} {t : Set β} {t' : Finset β}
 
-/--
-Definition of `toFinset` / `toFinset` 的定义
+/-- `toFinset l` removes duplicates from the list `l` to produce a finset. -/
+/-
+**List.toFinset** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：toFinset (l : List α) : Finset α
+参数：l : List α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFinset
-  signature: (l : List α)
-  body: Multiset.toFinset l
-
-@[simp]
-
-中文:
-定义 toFinset
-  签名: (l : 列表 α)
-  定义体: Multiset.toFinset l
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.toFinset, toFinset
+--- 原说明 ---
+`toFinset l` removes duplicates from the list `l` to produce a finset.
 -/
 def toFinset (l : List α) : Finset α :=
   Multiset.toFinset l
 
 @[simp]
-/--
-theorem `toFinset_val` / 定理 `toFinset_val`
-
-English:
-theorem toFinset_val
-  given: (l : List α)
-  statement: l.toFinset.1 = (l.dedup : Multiset α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFinset_val
-  条件: (l : 列表 α)
-  结论: l.toFinset.1 = (l.dedup : Multiset α)
-  证明: rfl
-
-@[simp]
+/-
+**List.toFinset_val** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_val (l : List α) : l.toFinset.1 = (l.dedup : Multiset α)
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinset_val (l : List α) : l.toFinset.1 = (l.dedup : Multiset α) :=
   rfl
 
 @[simp]
-/--
-theorem `toFinset_coe` / 定理 `toFinset_coe`
-
-English:
-theorem toFinset_coe
-  given: (l : List α)
-  statement: (l : Multiset α).toFinset = l.toFinset
-  proof: rfl
-
-中文:
-定理 toFinset_coe
-  条件: (l : 列表 α)
-  结论: (l : Multiset α).toFinset = l.toFinset
-  证明: rfl
+/-
+**List.toFinset_coe** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_coe (l : List α) : (l : Multiset α).toFinset = l.toFinset
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinset_coe (l : List α) : (l : Multiset α).toFinset = l.toFinset :=
   rfl
-
-/--
-theorem `toFinset_eq` / 定理 `toFinset_eq`
-
-English:
-theorem toFinset_eq
-  given: (n : Nodup l)
-  statement: @Finset.mk α l n = l.toFinset
-  proof: Multiset.toFinset_eq by rwa [Multiset.coe_nodup]
-
-@[simp]
-
-中文:
-定理 toFinset_eq
-  条件: (n : Nodup l)
-  结论: @有限集.mk α l n = l.toFinset
-  证明: Multiset.toFinset_eq by rwa [Multiset.coe_nodup]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.coe_nodup, Multiset.toFinset_eq, coe_nodup, toFinset_eq
+/-
+**List.toFinset_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_eq (n : Nodup l) : @Finset.mk α l n = l.toFinset
+参数：n : Nodup l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.toFinset_eq`：toFinset_eq {s : Multiset α} (n : Nodup s) : Finse
+t.mk s n = s.toFinset
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.coe_nodup`：coe_nodup {l : List α} : @Nodup α l ↔ l.Nodup
 -/
 theorem toFinset_eq (n : Nodup l) : @Finset.mk α l n = l.toFinset :=
-Multiset.toFinset_eq by rwa [Multiset.coe_nodup]
+  Multiset.toFinset_eq <| by rwa [Multiset.coe_nodup]
 
 @[simp]
-/--
-theorem `mem_toFinset` / 定理 `mem_toFinset`
-
-English:
-theorem mem_toFinset
-  statement: a in l.toFinset ↔ a in l
-  proof: mem_dedup
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_toFinset
-  结论: a in l.toFinset ↔ a in l
-  证明: mem_dedup
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mem_dedup
+/-
+**List.mem_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mem_toFinset : a in l.toFinset ↔ a in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_dedup`：mem_dedup {a : α} {l : List α} : a in dedup l ↔ a in l
 -/
-theorem mem_toFinset : a in l.toFinset ↔ a in l :=
+theorem mem_toFinset : a ∈ l.toFinset ↔ a ∈ l :=
   mem_dedup
 
 @[simp, norm_cast]
-/--
-theorem `coe_toFinset` / 定理 `coe_toFinset`
-
-English:
-theorem coe_toFinset
-  given: (l : List α)
-  statement: (l.toFinset : Set α) = { a | a in l }
-  proof: Set.ext fun _ => List.mem_toFinset
-
-中文:
-定理 coe_toFinset
-  条件: (l : 列表 α)
-  结论: (l.toFinset : 集合 α) = { a | a in l }
-  证明: Set.ext fun _ => List.mem_toFinset
-
-Depends on / 依赖: List.mem_toFinset, Set.ext, mem_toFinset
+/-
+**List.coe_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：coe_toFinset (l : List α) : (l.toFinset : Set α) = { a | a in l }
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `List.mem_toFinset`：mem_toFinset : a in l.toFinset ↔ a in l
 -/
-theorem coe_toFinset (l : List α) : (l.toFinset : Set α) = { a | a in l } :=
+theorem coe_toFinset (l : List α) : (l.toFinset : Set α) = { a | a ∈ l } :=
   Set.ext fun _ => List.mem_toFinset
-
-/--
-theorem `toFinset_surj_on` / 定理 `toFinset_surj_on`
-
-English:
-theorem toFinset_surj_on
-  statement: Set.SurjOn toFinset { l : List α | l.Nodup } Set.univ
-  proof: by
-  rintro ⟨⟨l⟩, hl⟩ _
-  exact ⟨l, hl, (toFinset_eq hl).symm⟩
-
-中文:
-定理 toFinset_surj_on
-  结论: 集合.满射限制 toFinset { l : 列表 α | l.Nodup } 集合.univ
-  证明: by
-  rintro ⟨⟨l⟩, hl⟩ _
-  exact ⟨l, hl, (toFinset_eq hl).symm⟩
-
-Depends on / 依赖: toFinset_eq
+/-
+**List.toFinset_surj_on** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_surj_on : Set.SurjOn toFinset { l : List α | l.Nodup } Set.univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.toFinset_eq`：toFinset_eq (n : Nodup l) : @Finset.mk α l n = l.toFin
+set
 -/
 theorem toFinset_surj_on : Set.SurjOn toFinset { l : List α | l.Nodup } Set.univ := by
   rintro ⟨⟨l⟩, hl⟩ _
   exact ⟨l, hl, (toFinset_eq hl).symm⟩
-
-/--
-theorem `toFinset_surjective` / 定理 `toFinset_surjective`
-
-English:
-theorem toFinset_surjective
-  statement: Surjective (toFinset : List α -> Finset α)
-  proof: fun s =>
-  let ⟨l, _, hls⟩ := toFinset_surj_on (Set.mem_univ s)
-  ⟨l, hls⟩
-
-中文:
-定理 toFinset_surjective
-  结论: 满射 (toFinset : 列表 α -> 有限集 α)
-  证明: fun s =>
-  let ⟨l, _, hls⟩ := toFinset_surj_on (Set.mem_univ s)
-  ⟨l, hls⟩
+/-
+**List.toFinset_surjective** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_surjective : Surjective (toFinset : List α -> Finset α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.toFinset_surj_on`：toFinset_surj_on : Set.SurjOn toFinset { l : List
+ α | l.Nodup } Set.univ
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem toFinset_surjective : Surjective (toFinset : List α -> Finset α) := fun s =>
+theorem toFinset_surjective : Surjective (toFinset : List α → Finset α) := fun s =>
   let ⟨l, _, hls⟩ := toFinset_surj_on (Set.mem_univ s)
   ⟨l, hls⟩
-
-/--
-theorem `toFinset_eq_iff_perm_dedup` / 定理 `toFinset_eq_iff_perm_dedup`
-
-English:
-theorem toFinset_eq_iff_perm_dedup
-  statement: l.toFinset = l'.toFinset ↔ l.dedup ~ l'.dedup
-  proof: by
-  simp [Finset.ext_iff, perm_ext_iff_of_nodup (nodup_dedup _) (nodup_dedup _)]
-
-中文:
-定理 toFinset_eq_iff_perm_dedup
-  结论: l.toFinset = l'.toFinset ↔ l.dedup ~ l'.dedup
-  证明: by
-  simp [Finset.ext_iff, perm_ext_iff_of_nodup (nodup_dedup _) (nodup_dedup _)]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff, nodup_dedup, perm_ext_iff_of_nodup
+/-
+**List.toFinset_eq_iff_perm_dedup** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_eq_iff_perm_dedup : l.toFinset = l'.toFinset ↔ l.dedup ~ l'.dedup
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `List.perm_ext_iff_of_nodup`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Nodup 
+→ l₂.Nodup → (l₁.Perm l₂ ↔ ∀ (a : α), a ∈ l₁ ↔ a ∈ l₂)
+· 使用定理 `List.nodup_dedup`：nodup_dedup : forall l : List α, Nodup (dedup l)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toFinset_eq_iff_perm_dedup : l.toFinset = l'.toFinset ↔ l.dedup ~ l'.dedup := by
   simp [Finset.ext_iff, perm_ext_iff_of_nodup (nodup_dedup _) (nodup_dedup _)]
-
-/--
-theorem `toFinset.ext_iff` / 定理 `toFinset.ext_iff`
-
-English:
-theorem toFinset.ext_iff
-  given: {a b : List α}
-  statement: a.toFinset = b.toFinset ↔ forall x, x in a ↔ x in b
-  proof: by
-  simp only [Finset.ext_iff, mem_toFinset]
-
-中文:
-定理 toFinset.ext_iff
-  条件: {a b : 列表 α}
-  结论: a.toFinset = b.toFinset ↔ 对任意 x, x in a ↔ x in b
-  证明: by
-  simp only [Finset.ext_iff, mem_toFinset]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff, mem_toFinset
+/-
+**List.toFinset.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.toFinset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {a b : List α}, a.toFinset = b.toF
+inset ↔ ∀ (x : α), x ∈ a ↔ x ∈ b
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toFinset.ext_iff {a b : List α} : a.toFinset = b.toFinset ↔ forall x, x in a ↔ x in b := by
+theorem toFinset.ext_iff {a b : List α} : a.toFinset = b.toFinset ↔ ∀ x, x ∈ a ↔ x ∈ b := by
   simp only [Finset.ext_iff, mem_toFinset]
-
-/--
-theorem `toFinset.ext` / 定理 `toFinset.ext`
-
-English:
-theorem toFinset.ext
-  statement: (forall x, x in l ↔ x in l') -> l.toFinset = l'.toFinset
-  proof: toFinset.ext_iff.mpr
-
-中文:
-定理 toFinset.ext
-  结论: (对任意 x, x in l ↔ x in l') -> l.toFinset = l'.toFinset
-  证明: toFinset.ext_iff.mpr
-
-Depends on / 依赖: ext_iff, toFinset, toFinset.ext_iff.mpr
+/-
+**List.toFinset.ext** 是 Mathlib 中的一个定理，位于命名空间 `List.toFinset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {l l' : List α}, (∀ (x : α), x ∈ l
+ ↔ x ∈ l') → l.toFinset = l'.toFinset
+参数：∀ (x : α), x ∈ l ↔ x ∈ l'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.toFinset.ext_iff`：∀ {α : Type u_1} [inst : DecidableEq α] {a b : Li
+st α}, a.toFinset = b.toFinset ↔ ∀ (x : α), x ∈ a ↔ x ∈ b
 -/
-theorem toFinset.ext : (forall x, x in l ↔ x in l') -> l.toFinset = l'.toFinset :=
+theorem toFinset.ext : (∀ x, x ∈ l ↔ x ∈ l') → l.toFinset = l'.toFinset :=
   toFinset.ext_iff.mpr
-
-/--
-theorem `toFinset_eq_of_perm` / 定理 `toFinset_eq_of_perm`
-
-English:
-theorem toFinset_eq_of_perm
-  given: (l l' : List α) (h : l ~ l')
-  statement: l.toFinset = l'.toFinset
-  proof: toFinset_eq_iff_perm_dedup.mpr h.dedup
-
-中文:
-定理 toFinset_eq_of_perm
-  条件: (l l' : 列表 α) (h : l ~ l')
-  结论: l.toFinset = l'.toFinset
-  证明: toFinset_eq_iff_perm_dedup.mpr h.dedup
-
-Depends on / 依赖: h.dedup, toFinset_eq_iff_perm_dedup, toFinset_eq_iff_perm_dedup.mpr
+/-
+**List.toFinset_eq_of_perm** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_eq_of_perm (l l' : List α) (h : l ~ l') : l.toFinset = l'.toFinse
+t
+参数：l l' : List α；h : l ~ l'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.toFinset_eq_iff_perm_dedup`：toFinset_eq_iff_perm_dedup : l.toFinset
+ = l'.toFinset ↔ l.dedup ~ l'.dedup
+· 使用定理 `List.Perm.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {l₁ l₂ : List α
+}, l₁.Perm l₂ → l₁.dedup.Perm l₂.dedup
 -/
 theorem toFinset_eq_of_perm (l l' : List α) (h : l ~ l') : l.toFinset = l'.toFinset :=
   toFinset_eq_iff_perm_dedup.mpr h.dedup
-
-/--
-theorem `perm_of_nodup_nodup_toFinset_eq` / 定理 `perm_of_nodup_nodup_toFinset_eq`
-
-English:
-theorem perm_of_nodup_nodup_toFinset_eq
-  statement: (hl : Nodup l) (hl' : Nodup l')
-  proof: by
-  rw [← Multiset.coe_eq_coe]
-  exact Multiset.Nodup.toFinset_inj hl hl' h
-
-@[simp]
-
-中文:
-定理 perm_of_nodup_nodup_toFinset_eq
-  结论: (hl : Nodup l) (hl' : Nodup l')
-  证明: by
-  rw [← Multiset.coe_eq_coe]
-  exact Multiset.Nodup.toFinset_inj hl hl' h
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.Nodup.toFinset_inj, Multiset.coe_eq_coe, coe_eq_coe, toFinset_inj
+/-
+**List.perm_of_nodup_nodup_toFinset_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：perm_of_nodup_nodup_toFinset_eq (hl : Nodup l) (hl' : Nodup l') (h : l.toF
+inset = l'.toFinset) : l ~ l'
+参数：hl : Nodup l；hl' : Nodup l'；h : l.toFinset = l'.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_eq_coe`：coe_eq_coe {l₁ l₂ : List α} : (l₁ : Multiset α) = l
+₂ ↔ l₁ ~ l₂
+· 使用定理 `Multiset.Nodup.toFinset_inj`：∀ {α : Type u_1} [inst : DecidableEq α] {l 
+l' : Multiset α}, l.Nodup → l'.Nodup → l.toFinset = l'.toFinset → l = l'
 -/
 theorem perm_of_nodup_nodup_toFinset_eq (hl : Nodup l) (hl' : Nodup l')
     (h : l.toFinset = l'.toFinset) : l ~ l' := by
@@ -613,22 +437,14 @@ theorem perm_of_nodup_nodup_toFinset_eq (hl : Nodup l) (hl' : Nodup l')
   exact Multiset.Nodup.toFinset_inj hl hl' h
 
 @[simp]
-/--
-theorem `toFinset_reverse` / 定理 `toFinset_reverse`
-
-English:
-theorem toFinset_reverse
-  given: {l : List α}
-  statement: toFinset l.reverse = l.toFinset
-  proof: toFinset_eq_of_perm _ _ (reverse_perm l)
-
-中文:
-定理 toFinset_reverse
-  条件: {l : 列表 α}
-  结论: toFinset l.reverse = l.toFinset
-  证明: toFinset_eq_of_perm _ _ (reverse_perm l)
-
-Depends on / 依赖: reverse_perm, toFinset_eq_of_perm
+/-
+**List.toFinset_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_reverse {l : List α} : toFinset l.reverse = l.toFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.toFinset_eq_of_perm`：toFinset_eq_of_perm (l l' : List α) (h : l ~ l
+') : l.toFinset = l'.toFinset
+· 使用定理 `List.reverse_perm`：∀ {α : Type u_1} (l : List α), l.reverse.Perm l
 -/
 theorem toFinset_reverse {l : List α} : toFinset l.reverse = l.toFinset :=
   toFinset_eq_of_perm _ _ (reverse_perm l)
@@ -639,196 +455,130 @@ namespace Finset
 
 section ToList
 
-/--
-Definition of `toList` / `toList` 的定义
+/-- Produce a list of the elements in the finite set using choice. -/
+/-
+**Finset.toList** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：toList (s : Finset α) : List α
+参数：s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toList
-  signature: (s : Finset α)
-  body: s.1.toList
-
-中文:
-定义 toList
-  签名: (s : 有限集 α)
-  定义体: s.1.toList
-
-Depends on / 依赖: toList
+--- 原说明 ---
+Produce a list of the elements in the finite set using choice.
 -/
 noncomputable def toList (s : Finset α) : List α :=
   s.1.toList
-
-/--
-theorem `nodup_toList` / 定理 `nodup_toList`
-
-English:
-theorem nodup_toList
-  given: (s : Finset α)
-  statement: s.toList.Nodup
-  proof: by
-  rw [toList]; rw [← Multiset.coe_nodup]; rw [Multiset.coe_toList]
-  exact s.nodup
-
-@[simp]
-
-中文:
-定理 nodup_toList
-  条件: (s : 有限集 α)
-  结论: s.toList.Nodup
-  证明: by
-  rw [toList]; rw [← Multiset.coe_nodup]; rw [Multiset.coe_toList]
-  exact s.nodup
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.coe_nodup, Multiset.coe_toList, coe_nodup, coe_toList, s.nodup, toList
+/-
+**Finset.nodup_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nodup_toList (s : Finset α) : s.toList.Nodup
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.toList.eq_1`：∀ {α : Type u_1} (s : Finset α), s.toList = s.val.to
+List
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_nodup`：coe_nodup {l : List α} : @Nodup α l ↔ l.Nodup
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem nodup_toList (s : Finset α) : s.toList.Nodup := by
-  rw [toList]; rw [← Multiset.coe_nodup]; rw [Multiset.coe_toList]
+  rw [toList, ← Multiset.coe_nodup, Multiset.coe_toList]
   exact s.nodup
 
 @[simp]
-/--
-theorem `mem_toList` / 定理 `mem_toList`
-
-English:
-theorem mem_toList
-  given: {a : α} {s : Finset α}
-  statement: a in s.toList ↔ a in s
-  proof: Multiset.mem_toList
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_toList
-  条件: {a : α} {s : 有限集 α}
-  结论: a in s.toList ↔ a in s
-  证明: Multiset.mem_toList
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Multiset, Multiset.mem_toList, mem_toList
+/-
+**Finset.mem_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_toList {a : α} {s : Finset α} : a in s.toList ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_toList`：mem_toList {a : α} {s : Multiset α} : a in s.toList
+ ↔ a in s
 -/
-theorem mem_toList {a : α} {s : Finset α} : a in s.toList ↔ a in s :=
+theorem mem_toList {a : α} {s : Finset α} : a ∈ s.toList ↔ a ∈ s :=
   Multiset.mem_toList
 
 @[simp, norm_cast]
-/--
-theorem `coe_toList` / 定理 `coe_toList`
-
-English:
-theorem coe_toList
-  given: (s : Finset α)
-  statement: (s.toList : Multiset α) = s.val
-  proof: s.val.coe_toList
-
-@[simp]
-
-中文:
-定理 coe_toList
-  条件: (s : 有限集 α)
-  结论: (s.toList : Multiset α) = s.val
-  证明: s.val.coe_toList
-
-@[simp]
-
-Depends on / 依赖: coe_toList, s.val.coe_toList
+/-
+**Finset.coe_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_toList (s : Finset α) : (s.toList : Multiset α) = s.val
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
 -/
 theorem coe_toList (s : Finset α) : (s.toList : Multiset α) = s.val :=
   s.val.coe_toList
 
 @[simp]
-/--
-theorem `toList_toFinset` / 定理 `toList_toFinset`
-
-English:
-theorem toList_toFinset
-  given: [DecidableEq α] (s : Finset α)
-  statement: s.toList.toFinset = s
-  proof: by
-  ext
-  simp
-
-中文:
-定理 toList_toFinset
-  条件: [DecidableEq α] (s : 有限集 α)
-  结论: s.toList.toFinset = s
-  证明: by
-  ext
-  simp
+/-
+**Finset.toList_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：toList_toFinset [DecidableEq α] (s : Finset α) : s.toList.toFinset = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toList_toFinset [DecidableEq α] (s : Finset α) : s.toList.toFinset = s := by
   ext
   simp
-
-/--
-theorem `_root_.List.toFinset_toList` / 定理 `_root_.List.toFinset_toList`
-
-English:
-theorem _root_.List.toFinset_toList
-  given: [DecidableEq α] {s : List α} (hs : s.Nodup)
-  proof: by
-  apply List.perm_of_nodup_nodup_toFinset_eq (nodup_toList _) hs
-  rw [toList_toFinset]
-
-中文:
-定理 _root_.列表.toFinset_toList
-  条件: [DecidableEq α] {s : 列表 α} (hs : s.Nodup)
-  证明: by
-  apply List.perm_of_nodup_nodup_toFinset_eq (nodup_toList _) hs
-  rw [toList_toFinset]
-
-Depends on / 依赖: List.perm_of_nodup_nodup_toFinset_eq, nodup_toList, perm_of_nodup_nodup_toFinset_eq, toList_toFinset
+/-
+**Finset._root_.List.toFinset_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.List.toFinset_toList [DecidableEq α] {s : List α} (hs : s.Nodup) :
     s.toFinset.toList.Perm s := by
   apply List.perm_of_nodup_nodup_toFinset_eq (nodup_toList _) hs
   rw [toList_toFinset]
-
-/--
-theorem `exists_list_nodup_eq` / 定理 `exists_list_nodup_eq`
-
-English:
-theorem exists_list_nodup_eq
-  given: [DecidableEq α] (s : Finset α)
-  proof: ⟨s.toList, s.nodup_toList, s.toList_toFinset⟩
-
-@[simp]
-
-中文:
-定理 存在_list_nodup_eq
-  条件: [DecidableEq α] (s : 有限集 α)
-  证明: ⟨s.toList, s.nodup_toList, s.toList_toFinset⟩
-
-@[simp]
-
-Depends on / 依赖: nodup_toList, s.nodup_toList, s.toList, s.toList_toFinset, toList, toList_toFinset
+/-
+**Finset.exists_list_nodup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_list_nodup_eq [DecidableEq α] (s : Finset α) : exists l : List α, l
+.Nodup ∧ l.toFinset = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.nodup_toList`：nodup_toList (s : Finset α) : s.toList.Nodup
+· 使用定理 `Finset.toList_toFinset`：toList_toFinset [DecidableEq α] (s : Finset α) :
+ s.toList.toFinset = s
 -/
 theorem exists_list_nodup_eq [DecidableEq α] (s : Finset α) :
-    exists l : List α, l.Nodup ∧ l.toFinset = s :=
+    ∃ l : List α, l.Nodup ∧ l.toFinset = s :=
   ⟨s.toList, s.nodup_toList, s.toList_toFinset⟩
 
 @[simp]
-/--
-theorem `perm_toList` / 定理 `perm_toList`
-
-English:
-theorem perm_toList
-  given: {f₁ f₂ : Finset α}
-  statement: f₁.toList.Perm f₂.toList ↔ f₁ = f₂ where
-  proof: Finset.ext fun x => by simp [← Finset.mem_toList, h.mem_iff]
-mpr h := .of_eq congrArg Finset.toList h
-
-中文:
-定理 perm_toList
-  条件: {f₁ f₂ : 有限集 α}
-  结论: f₁.toList.置换 f₂.toList ↔ f₁ = f₂ where
-  证明: Finset.ext fun x => by simp [← Finset.mem_toList, h.mem_iff]
-mpr h := .of_eq congrArg Finset.toList h
+/-
+**Finset.perm_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {f₁ f₂ : Finset α}, f₁.toList.Perm f₂.toList ↔ f₁ = f₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Perm.mem_iff`：∀ {α : Type u_1} {a : α} {l₁ l₂ : List α}, l₁.Perm l₂
+ → (a ∈ l₁ ↔ a ∈ l₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `List.Perm.of_eq`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁ = l₂ → l₁.Perm l₂
 -/
 protected theorem perm_toList {f₁ f₂ : Finset α} : f₁.toList.Perm f₂.toList ↔ f₁ = f₂ where
   mp h := Finset.ext fun x => by simp [← Finset.mem_toList, h.mem_iff]
-mpr h := .of_eq congrArg Finset.toList h
+  mpr h := .of_eq <| congrArg Finset.toList h
 
 end ToList
 
 end Finset
+

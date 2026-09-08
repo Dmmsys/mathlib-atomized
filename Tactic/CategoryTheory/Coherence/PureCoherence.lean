@@ -37,22 +37,15 @@ namespace Mathlib.Tactic
 
 namespace BicategoryLike
 
-/--
-Definition of `Normalize.Result` / `Normalize.Result` 的定义
+/-- The result of normalizing a 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Normalize.Result** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike.Normalize`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Normalize.Result
-  parameters: where
-  axioms and operations (2):
-    - normalizedHom : NormalizedHom
-    - toNormalize : Mor₂Iso
-
-中文:
-结构 Normalize.Result
-  参数: where
-  公理与运算 (2 个):
-    - normalizedHom : Normalized态射
-    - toNormalize : Mor₂Iso
+--- 原说明 ---
+The result of normalizing a 1-morphism.
 -/
 structure Normalize.Result where
   /-- The normalized 1-morphism. -/
@@ -65,48 +58,17 @@ open Mor₂Iso MonadMor₂Iso
 
 variable {ρ : Type} [Context ρ] [MonadMor₁ (CoherenceM ρ)] [MonadMor₂Iso (CoherenceM ρ)]
 
-/--
-Definition of `normalize` / `normalize` 的定义
+/-- Meta version of `CategoryTheory.FreeBicategory.normalizeIso`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.normalize** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.BicategoryLike`。
+形式化陈述：normalize (p : NormalizedHom) (f : Mor₁) : CoherenceM ρ Normalize.Result
+参数：p : NormalizedHom；f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalize
-  signature: (p : NormalizedHom) (f : Mor₁)
-  body: do
-  match f with
-  | .id _ _ =>
-    return ⟨p, ← rightUnitorM' p.e⟩
-  | .comp _ f g =>
-    let ⟨pf, η_f⟩ ← normalize p f
-    let η_f' ← whiskerRightM η_f g
-    let ⟨pfg, η_g⟩ ← normalize pf g
-    let η ← comp₂M η_f' η_g
-    let α ← symmM (← associatorM' p.e f g)
-    let η' ← comp₂M α η
-    return ⟨pfg, η'⟩
-  | .of f =>
-    let pf ← NormalizedHom.consM p f
-    let α ← id₂M' pf.e
-    return ⟨pf, α⟩
-
-中文:
-定义 normalize
-  签名: (p : Normalized态射) (f : Mor₁)
-  定义体: do
-  match f with
-  | .id _ _ =>
-    return ⟨p, ← rightUnitorM' p.e⟩
-  | .comp _ f g =>
-    let ⟨pf, η_f⟩ ← normalize p f
-    let η_f' ← whiskerRightM η_f g
-    let ⟨pfg, η_g⟩ ← normalize pf g
-    let η ← comp₂M η_f' η_g
-    let α ← symmM (← associatorM' p.e f g)
-    let η' ← comp₂M α η
-    return ⟨pfg, η'⟩
-  | .of f =>
-    let pf ← NormalizedHom.consM p f
-    let α ← id₂M' pf.e
-    return ⟨pf, α⟩
+--- 原说明 ---
+Meta version of `CategoryTheory.FreeBicategory.normalizeIso`.
 -/
 def normalize (p : NormalizedHom) (f : Mor₁) :
     CoherenceM ρ Normalize.Result := do
@@ -126,38 +88,26 @@ def normalize (p : NormalizedHom) (f : Mor₁) :
     let α ← id₂M' pf.e
     return ⟨pf, α⟩
 
-/--
-Definition of `MonadNormalizeNaturality` / `MonadNormalizeNaturality` 的定义
+/-- Lemmas to prove the meta version of `CategoryTheory.FreeBicategory.normalize_naturality`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadNormalizeNaturality** 是 Mathlib 中的一个类，位于命名空
+间 `Mathlib.Tactic.BicategoryLike`。
+形式化陈述：MonadNormalizeNaturality (m : Type -> Type) where /-- The naturality for t
+he associator. -/ mkNaturalityAssociator (p pf pfg pfgh : NormalizedHom) (f g h 
+: Mor₁) (η_f η_g η_h : Mor₂Iso) : m Expr /-- The naturality for the left unitor.
+ -/ mkNaturalityLeftUnitor (p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso) : m
+ Expr /-- The naturality for the right unitor. -/ mkNaturalityRightUnitor (p pf 
+: NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso) : m Expr /-- The naturality for the 
+identity. -/ mkNaturalityI
+参数：m : Type -> Type；p pf pfg pfgh : NormalizedHom；f g h : Mor₁；η_f η_g η_h : Mor
+₂Iso。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadNormalizeNaturality
-  parameters: (m : Type -> Type)
-  axioms and operations (9):
-    - mkNaturalityAssociator((p pf pfg pfgh : NormalizedHom) (f g h : Mor₁) (η_f η_g η_h : Mor₂Iso)) : m Expr
-    - mkNaturalityLeftUnitor((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityRightUnitor((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityId((p pf : NormalizedHom) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityComp((p pf : NormalizedHom) (f g h : Mor₁) (η θ η_f η_g η_h : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityWhiskerLeft((p pf pfg : NormalizedHom) (f g h : Mor₁) (η η_f η_fg η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityWhiskerRight((p pf pfh : NormalizedHom) (f g h : Mor₁) (η η_f η_g η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityHorizontalComp((p pf₁ pf₁f₂ : NormalizedHom) (f₁ g₁ f₂ g₂ : Mor₁) (η θ η_f₁ η_g₁ η_f₂ η_g₂ : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityInv((p pf : NormalizedHom) (f g : Mor₁) (η η_f η_g : Mor₂Iso) (ih_η : Expr)) : m Expr
-
-中文:
-类 MonadNormalize自然数urality
-  参数: (m : 类型 -> 类型)
-  公理与运算 (9 个):
-    - mkNaturalityAssociator((p pf pfg pfgh : Normalized态射) (f g h : Mor₁) (η_f η_g η_h : Mor₂Iso)) : m Expr
-    - mkNaturalityLeftUnitor((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityRightUnitor((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityId((p pf : Normalized态射) (f : Mor₁) (η_f : Mor₂Iso)) : m Expr
-    - mkNaturalityComp((p pf : Normalized态射) (f g h : Mor₁) (η θ η_f η_g η_h : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityWhiskerLeft((p pf pfg : Normalized态射) (f g h : Mor₁) (η η_f η_fg η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityWhiskerRight((p pf pfh : Normalized态射) (f g h : Mor₁) (η η_f η_g η_fh : Mor₂Iso) (ih_η : Expr)) : m Expr
-    - mkNaturalityHorizontalComp((p pf₁ pf₁f₂ : Normalized态射) (f₁ g₁ f₂ g₂ : Mor₁) (η θ η_f₁ η_g₁ η_f₂ η_g₂ : Mor₂Iso) (ih_η ih_θ : Expr)) : m Expr
-    - mkNaturalityInv((p pf : Normalized态射) (f g : Mor₁) (η η_f η_g : Mor₂Iso) (ih_η : Expr)) : m Expr
+--- 原说明 ---
+Lemmas to prove the meta version of `CategoryTheory.FreeBicategory.normalize_nat
+urality`.
 -/
-class MonadNormalizeNaturality (m : Type -> Type) where
+class MonadNormalizeNaturality (m : Type → Type) where
   /-- The naturality for the associator. -/
   mkNaturalityAssociator (p pf pfg pfgh : NormalizedHom) (f g h : Mor₁)
     (η_f η_g η_h : Mor₂Iso) : m Expr
@@ -186,138 +136,25 @@ open MonadNormalizeNaturality
 
 variable [MonadCoherehnceHom (CoherenceM ρ)] [MonadNormalizeNaturality (CoherenceM ρ)]
 
-/--
-Definition of `naturality` / `naturality` 的定义
+/-- Meta version of `CategoryTheory.FreeBicategory.normalize_naturality`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.naturality** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib
+.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.Bi
+categoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (M
+athlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.BicategoryLi
+ke.MonadCoherehnceHom (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [M
+athlib.Tactic.BicategoryLike.MonadNormalizeNaturality (Mathlib.Tactic.Bicategory
+Like.CoherenceM ρ)] →           Name →             Mathlib.Tactic.BicategoryLike
+.NormalizedHom →               Mathlib.Tactic.BicategoryLike.Mor₂Iso → Mathlib.T
+actic.BicategoryLike.CoherenceM ρ Expr
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition naturality
-  signature: (nm : Name) (p : NormalizedHom) (η : Mor₂Iso)
-  body: do
-  let result ← match η with
-  | .of _ => throwError m!"could not find a structural isomorphism, but {η.e}"
-  | .coherenceComp _ _ _ _ _ α η θ => withTraceNode nm (fun _ => return m!"monoidalComp") do
-    let α ← MonadCoherehnceHom.unfoldM α
-    let αθ ← comp₂M α θ
-    let ηαθ ← comp₂M η αθ
-    naturality nm p ηαθ
-  | .structuralAtom η => match η with
-    | .coherenceHom α => withTraceNode nm (fun _ => return m!"coherenceHom") do
-      let α ← MonadCoherehnceHom.unfoldM α
-      naturality nm p α
-    | .associator _ f g h => withTraceNode nm (fun _ => return m!"associator") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      let ⟨pfg, η_g⟩ ← normalize pf g
-      let ⟨pfgh, η_h⟩ ← normalize pfg h
-      mkNaturalityAssociator p pf pfg pfgh f g h η_f η_g η_h
-    | .leftUnitor _ f => withTraceNode nm (fun _ => return m!"leftUnitor") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      mkNaturalityLeftUnitor p pf f η_f
-    | .rightUnitor _ f => withTraceNode nm (fun _ => return m!"rightUnitor") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      mkNaturalityRightUnitor p pf f η_f
-    | .id _ f => withTraceNode nm (fun _ => return m!"id") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    mkNaturalityId p pf f η_f
-  | .comp _ f g h η θ => withTraceNode nm (fun _ => return m!"comp") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ⟨_, η_h⟩ ← normalize p h
-    let ih_η ← naturality nm p η
-    let ih_θ ← naturality nm p θ
-    mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ
-  | .whiskerLeft _ f g h η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨pfg, η_fg⟩ ← normalize pf g
-    let ⟨_, η_fh⟩ ← normalize pf h
-    let ih ← naturality nm pf η
-    mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih
-  | .whiskerRight _ f g η h => withTraceNode nm (fun _ => return m!"whiskerRight") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ⟨pfh, η_fh⟩ ← normalize pf h
-    let ih ← naturality nm p η
-    mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih
-  | .horizontalComp _ f₁ g₁ f₂ g₂ η θ => withTraceNode nm (fun _ => return m!"hComp") do
-    let ⟨pf₁, η_f₁⟩ ← normalize p f₁
-    let ⟨_, η_g₁⟩ ← normalize p g₁
-    let ⟨pf₁f₂, η_f₂⟩ ← normalize pf₁ f₂
-    let ⟨_, η_g₂⟩ ← normalize pf₁ g₂
-    let ih_η ← naturality nm p η
-    let ih_θ ← naturality nm pf₁ θ
-    mkNaturalityHorizontalComp p pf₁ pf₁f₂ f₁ g₁ f₂ g₂ η θ η_f₁ η_g₁ η_f₂ η_g₂ ih_η ih_θ
-  | .inv _ f g η => withTraceNode nm (fun _ => return m!"inv") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ih_η ← naturality nm p η
-    mkNaturalityInv p pf f g η η_f η_g ih_η
-  withTraceNode nm (fun _ => return m!"{← inferType result}") do
-    if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
-  return result
-
-中文:
-定义 naturality
-  签名: (nm : Name) (p : Normalized态射) (η : Mor₂Iso)
-  定义体: do
-  let result ← match η with
-  | .of _ => throwError m!"could not find a structural isomorphism, but {η.e}"
-  | .coherenceComp _ _ _ _ _ α η θ => withTraceNode nm (fun _ => return m!"monoidalComp") do
-    let α ← MonadCoherehnceHom.unfoldM α
-    let αθ ← comp₂M α θ
-    let ηαθ ← comp₂M η αθ
-    naturality nm p ηαθ
-  | .structuralAtom η => match η with
-    | .coherenceHom α => withTraceNode nm (fun _ => return m!"coherenceHom") do
-      let α ← MonadCoherehnceHom.unfoldM α
-      naturality nm p α
-    | .associator _ f g h => withTraceNode nm (fun _ => return m!"associator") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      let ⟨pfg, η_g⟩ ← normalize pf g
-      let ⟨pfgh, η_h⟩ ← normalize pfg h
-      mkNaturalityAssociator p pf pfg pfgh f g h η_f η_g η_h
-    | .leftUnitor _ f => withTraceNode nm (fun _ => return m!"leftUnitor") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      mkNaturalityLeftUnitor p pf f η_f
-    | .rightUnitor _ f => withTraceNode nm (fun _ => return m!"rightUnitor") do
-      let ⟨pf, η_f⟩ ← normalize p f
-      mkNaturalityRightUnitor p pf f η_f
-    | .id _ f => withTraceNode nm (fun _ => return m!"id") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    mkNaturalityId p pf f η_f
-  | .comp _ f g h η θ => withTraceNode nm (fun _ => return m!"comp") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ⟨_, η_h⟩ ← normalize p h
-    let ih_η ← naturality nm p η
-    let ih_θ ← naturality nm p θ
-    mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ
-  | .whiskerLeft _ f g h η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨pfg, η_fg⟩ ← normalize pf g
-    let ⟨_, η_fh⟩ ← normalize pf h
-    let ih ← naturality nm pf η
-    mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih
-  | .whiskerRight _ f g η h => withTraceNode nm (fun _ => return m!"whiskerRight") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ⟨pfh, η_fh⟩ ← normalize pf h
-    let ih ← naturality nm p η
-    mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih
-  | .horizontalComp _ f₁ g₁ f₂ g₂ η θ => withTraceNode nm (fun _ => return m!"hComp") do
-    let ⟨pf₁, η_f₁⟩ ← normalize p f₁
-    let ⟨_, η_g₁⟩ ← normalize p g₁
-    let ⟨pf₁f₂, η_f₂⟩ ← normalize pf₁ f₂
-    let ⟨_, η_g₂⟩ ← normalize pf₁ g₂
-    let ih_η ← naturality nm p η
-    let ih_θ ← naturality nm pf₁ θ
-    mkNaturalityHorizontalComp p pf₁ pf₁f₂ f₁ g₁ f₂ g₂ η θ η_f₁ η_g₁ η_f₂ η_g₂ ih_η ih_θ
-  | .inv _ f g η => withTraceNode nm (fun _ => return m!"inv") do
-    let ⟨pf, η_f⟩ ← normalize p f
-    let ⟨_, η_g⟩ ← normalize p g
-    let ih_η ← naturality nm p η
-    mkNaturalityInv p pf f g η η_f η_g ih_η
-  withTraceNode nm (fun _ => return m!"{← inferType result}") do
-    if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
-  return result
+--- 原说明 ---
+Meta version of `CategoryTheory.FreeBicategory.normalize_naturality`.
 -/
 partial def naturality (nm : Name) (p : NormalizedHom) (η : Mor₂Iso) : CoherenceM ρ Expr := do
   let result ← match η with
@@ -381,89 +218,41 @@ partial def naturality (nm : Name) (p : NormalizedHom) (η : Mor₂Iso) : Cohere
     if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
   return result
 
-/--
-Definition of `MkEqOfNaturality` / `MkEqOfNaturality` 的定义
+/-- Prove the equality between structural isomorphisms using the naturality of `normalize`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEqOfNaturality** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEqOfNaturality
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - mkEqOfNaturality((η θ : Expr) (η' θ' : IsoLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr)) : m Expr
-
-中文:
-类 MkEqOf自然数urality
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - mkEqOfNaturality((η θ : Expr) (η' θ' : 是oLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr)) : m Expr
+--- 原说明 ---
+Prove the equality between structural isomorphisms using the naturality of `norm
+alize`.
 -/
-class MkEqOfNaturality (m : Type -> Type) where
+class MkEqOfNaturality (m : Type → Type) where
   /-- Auxiliary function for `pureCoherence`. -/
   mkEqOfNaturality (η θ : Expr) (η' θ' : IsoLift) (η_f η_g : Mor₂Iso) (Hη Hθ : Expr) : m Expr
 
 export MkEqOfNaturality (mkEqOfNaturality)
 
-/--
-Definition of `pureCoherence` / `pureCoherence` 的定义
+/-- Close the goal of the form `η = θ`, where `η` and `θ` are 2-isomorphisms made up only of
+associators, unitors, and identities. -/
+/-
+**Mathlib.Tactic.BicategoryLike.pureCoherence** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.BicategoryLike`。
+形式化陈述：pureCoherence (ρ : Type) [Context ρ] [MkMor₂ (CoherenceM ρ)] [MonadMor₁ (C
+oherenceM ρ)] [MonadMor₂Iso (CoherenceM ρ)] [MonadCoherehnceHom (CoherenceM ρ)] 
+[MonadNormalizeNaturality (CoherenceM ρ)] [MkEqOfNaturality (CoherenceM ρ)] (nm 
+: Name) (mvarId : MVarId) : MetaM (List MVarId)
+参数：ρ : Type；CoherenceM ρ；CoherenceM ρ；CoherenceM ρ；CoherenceM ρ；CoherenceM ρ；Coh
+erenceM ρ；nm : Name；mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pureCoherence
-  signature: (ρ : Type) [Context ρ] [MkMor₂ (CoherenceM ρ)]
-  body: mvarId.withContext do
-    withTraceNode nm (fun ex => match ex with
-      | .ok _ => return m!"coherence equality: {← mvarId.getType}"
-      | .error err => return err.toMessageData) do
-let e ← instantiateMVars ← mvarId.getType
-      let some (_, η, θ) := (← whnfR e).eq?
-        | throwError "coherence requires an equality goal"
-      let ctx : ρ ← mkContext η
-      CoherenceM.run (ctx := ctx) do
-        let some ηIso := (← MkMor₂.ofExpr η).isoLift? |
-          throwError "could not find a structural isomorphism, but {η}"
-        let some θIso := (← MkMor₂.ofExpr θ).isoLift? |
-          throwError "could not find a structural isomorphism, but {θ}"
-        let f ← ηIso.e.srcM
-        let g ← ηIso.e.tgtM
-        let a := f.src
-        let nil ← normalizedHom.nilM a
-        let ⟨_, η_f⟩ ← normalize nil f
-        let ⟨_, η_g⟩ ← normalize nil g
-        let Hη ← withTraceNode nm (fun _ => do return m!"LHS") do
-          naturality nm nil ηIso.e
-        let Hθ ← withTraceNode nm (fun _ => do return m!"RHS") do
-          naturality nm nil θIso.e
-        let H ← mkEqOfNaturality η θ ηIso θIso η_f η_g Hη Hθ
-        mvarId.apply H
-
-中文:
-定义 pureCoherence
-  签名: (ρ : 类型) [余ntext ρ] [MkMor₂ (CoherenceM ρ)]
-  定义体: mvarId.withContext do
-    withTraceNode nm (fun ex => match ex with
-      | .ok _ => return m!"coherence equality: {← mvarId.getType}"
-      | .error err => return err.toMessageData) do
-let e ← instantiateMVars ← mvarId.getType
-      let some (_, η, θ) := (← whnfR e).eq?
-        | throwError "coherence requires an equality goal"
-      let ctx : ρ ← mkContext η
-      CoherenceM.run (ctx := ctx) do
-        let some ηIso := (← MkMor₂.ofExpr η).isoLift? |
-          throwError "could not find a structural isomorphism, but {η}"
-        let some θIso := (← MkMor₂.ofExpr θ).isoLift? |
-          throwError "could not find a structural isomorphism, but {θ}"
-        let f ← ηIso.e.srcM
-        let g ← ηIso.e.tgtM
-        let a := f.src
-        let nil ← normalizedHom.nilM a
-        let ⟨_, η_f⟩ ← normalize nil f
-        let ⟨_, η_g⟩ ← normalize nil g
-        let Hη ← withTraceNode nm (fun _ => do return m!"LHS") do
-          naturality nm nil ηIso.e
-        let Hθ ← withTraceNode nm (fun _ => do return m!"RHS") do
-          naturality nm nil θIso.e
-        let H ← mkEqOfNaturality η θ ηIso θIso η_f η_g Hη Hθ
-        mvarId.apply H
-
-Depends on / 依赖: CoherenceM, CoherenceM.run, coherence, equality, err.toMessageData, getType, instantiateMVars, isoLift, isomorphism, mkContext, mvarId, mvarId.getType, mvarId.withContext, ofExpr, requires, return, structural, throwError, toMessageData, withContext
+--- 原说明 ---
+Close the goal of the form `η = θ`, where `η` and `θ` are 2-isomorphisms made up
+ only of
+associators, unitors, and identities.
 -/
 def pureCoherence (ρ : Type) [Context ρ] [MkMor₂ (CoherenceM ρ)]
     [MonadMor₁ (CoherenceM ρ)] [MonadMor₂Iso (CoherenceM ρ)]
@@ -474,7 +263,7 @@ def pureCoherence (ρ : Type) [Context ρ] [MkMor₂ (CoherenceM ρ)]
     withTraceNode nm (fun ex => match ex with
       | .ok _ => return m!"coherence equality: {← mvarId.getType}"
       | .error err => return err.toMessageData) do
-let e ← instantiateMVars ← mvarId.getType
+      let e ← instantiateMVars <| ← mvarId.getType
       let some (_, η, θ) := (← whnfR e).eq?
         | throwError "coherence requires an equality goal"
       let ctx : ρ ← mkContext η
@@ -497,3 +286,4 @@ let e ← instantiateMVars ← mvarId.getType
         mvarId.apply H
 
 end Mathlib.Tactic.BicategoryLike
+

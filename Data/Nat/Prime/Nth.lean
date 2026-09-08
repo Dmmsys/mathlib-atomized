@@ -17,109 +17,59 @@ public section
 namespace Nat
 
 @[simp]
-/--
-theorem `nth_prime_zero_eq_two` / 定理 `nth_prime_zero_eq_two`
-
-English:
-theorem nth_prime_zero_eq_two
-  statement: nth Prime 0 = 2
-  proof: nth_count prime_two
-
-@[simp]
-
-中文:
-定理 nth_prime_zero_eq_two
-  结论: nth 素 0 = 2
-  证明: nth_count prime_two
-
-@[simp]
-
-Depends on / 依赖: nth_count, prime_two
+/-
+**Nat.nth_prime_zero_eq_two** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_prime_zero_eq_two : nth Prime 0 = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
 -/
 theorem nth_prime_zero_eq_two : nth Prime 0 = 2 := nth_count prime_two
 
 @[simp]
-/--
-theorem `nth_prime_one_eq_three` / 定理 `nth_prime_one_eq_three`
-
-English:
-theorem nth_prime_one_eq_three
-  statement: nth Nat.Prime 1 = 3
-  proof: nth_count prime_three
-
-@[simp]
-
-中文:
-定理 nth_prime_one_eq_three
-  结论: nth 自然数.素 1 = 3
-  证明: nth_count prime_three
-
-@[simp]
-
-Depends on / 依赖: nth_count, prime_three
+/-
+**Nat.nth_prime_one_eq_three** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_prime_one_eq_three : nth Nat.Prime 1 = 3
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用定理 `Nat.prime_three`：prime_three : Prime 3
 -/
 theorem nth_prime_one_eq_three : nth Nat.Prime 1 = 3 := nth_count prime_three
 
 @[simp]
-/--
-theorem `nth_prime_two_eq_five` / 定理 `nth_prime_two_eq_five`
-
-English:
-theorem nth_prime_two_eq_five
-  statement: nth Nat.Prime 2 = 5
-  proof: nth_count prime_five
-
-@[simp]
-
-中文:
-定理 nth_prime_two_eq_five
-  结论: nth 自然数.素 2 = 5
-  证明: nth_count prime_five
-
-@[simp]
-
-Depends on / 依赖: nth_count, prime_five
+/-
+**Nat.nth_prime_two_eq_five** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_prime_two_eq_five : nth Nat.Prime 2 = 5
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用定理 `Nat.prime_five`：prime_five : Prime 5
 -/
 theorem nth_prime_two_eq_five : nth Nat.Prime 2 = 5 := nth_count prime_five
 
 @[simp]
-/--
-theorem `nth_prime_three_eq_seven` / 定理 `nth_prime_three_eq_seven`
-
-English:
-theorem nth_prime_three_eq_seven
-  statement: nth Nat.Prime 3 = 7
-  proof: nth_count prime_seven
-
-@[simp]
-
-中文:
-定理 nth_prime_three_eq_seven
-  结论: nth 自然数.素 3 = 7
-  证明: nth_count prime_seven
-
-@[simp]
-
-Depends on / 依赖: nth_count, prime_seven
+/-
+**Nat.nth_prime_three_eq_seven** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_prime_three_eq_seven : nth Nat.Prime 3 = 7
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用定理 `Nat.prime_seven`：prime_seven : Prime 7
 -/
 theorem nth_prime_three_eq_seven : nth Nat.Prime 3 = 7 := nth_count prime_seven
 
 @[simp]
-/--
-theorem `nth_prime_four_eq_eleven` / 定理 `nth_prime_four_eq_eleven`
-
-English:
-theorem nth_prime_four_eq_eleven
-  statement: nth Nat.Prime 4 = 11
-  proof: nth_count prime_eleven
-
-中文:
-定理 nth_prime_four_eq_eleven
-  结论: nth 自然数.素 4 = 11
-  证明: nth_count prime_eleven
-
-Depends on / 依赖: nth_count, prime_eleven
+/-
+**Nat.nth_prime_four_eq_eleven** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_prime_four_eq_eleven : nth Nat.Prime 4 = 11
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用定理 `Nat.prime_eleven`：prime_eleven : Prime 11
 -/
 theorem nth_prime_four_eq_eleven : nth Nat.Prime 4 = 11 := nth_count prime_eleven
 
 end Nat
+

@@ -33,244 +33,176 @@ open Function
 
 variable (A B R : Type*) [CommSemiring A] [CommSemiring B] [CommRing R] [Algebra A B]
 
-/--
-Definition of `ACounit` / `ACounit` 的定义
+/-- `MvPolynomial.ACounit A B` is the natural surjective algebra homomorphism
+`MvPolynomial B A →ₐ[A] B` obtained by `X a ↦ a`.
 
-English:
-definition ACounit
-  signature: : MvPolynomial B A ->ₐ[A] B
-  body: aeval id
+See `MvPolynomial.counit` for the “absolute” variant with `A = ℤ`,
+and `MvPolynomial.counitNat` for the “absolute” variant with `A = ℕ`. -/
+/-
+**MvPolynomial.ACounit** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：ACounit : MvPolynomial B A ->ₐ[A] B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ACounit
-  签名: : 多元多项式 B A ->ₐ[A] B
-  定义体: aeval id
+--- 原说明 ---
+`MvPolynomial.ACounit A B` is the natural surjective algebra homomorphism
+`MvPolynomial B A →ₐ[A] B` obtained by `X a ↦ a`.
+
+See `MvPolynomial.counit` for the “absolute” variant with `A = ℤ`,
+and `MvPolynomial.counitNat` for the “absolute” variant with `A = ℕ`.
 -/
-noncomputable def ACounit : MvPolynomial B A ->ₐ[A] B :=
+noncomputable def ACounit : MvPolynomial B A →ₐ[A] B :=
   aeval id
 
 variable {B}
 
 @[simp]
-/--
-theorem `ACounit_X` / 定理 `ACounit_X`
-
-English:
-theorem ACounit_X
-  given: (b : B)
-  statement: ACounit A B (X b) = b
-  proof: aeval_X _ b
-
-中文:
-定理 ACounit_X
-  条件: (b : B)
-  结论: ACounit A B (X b) = b
-  证明: aeval_X _ b
-
-Depends on / 依赖: aeval_X
+/-
+**MvPolynomial.ACounit_X** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：ACounit_X (b : B) : ACounit A B (X b) = b
+参数：b : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
 -/
 theorem ACounit_X (b : B) : ACounit A B (X b) = b :=
   aeval_X _ b
 
 variable {A} (B)
-
-/--
-theorem `ACounit_C` / 定理 `ACounit_C`
-
-English:
-theorem ACounit_C
-  given: (a : A)
-  statement: ACounit A B (C a) = algebraMap A B a
-  proof: aeval_C _ a
-
-中文:
-定理 ACounit_C
-  条件: (a : A)
-  结论: ACounit A B (C a) = algebraMap A B a
-  证明: aeval_C _ a
-
-Depends on / 依赖: aeval_C
+/-
+**MvPolynomial.ACounit_C** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：ACounit_C (a : A) : ACounit A B (C a) = algebraMap A B a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.aeval_C`：aeval_C (r : R) : aeval f (C r) = algebraMap R S₁ 
+r
 -/
 theorem ACounit_C (a : A) : ACounit A B (C a) = algebraMap A B a :=
   aeval_C _ a
 
 variable (A)
-
-/--
-theorem `ACounit_surjective` / 定理 `ACounit_surjective`
-
-English:
-theorem ACounit_surjective
-  statement: Surjective (ACounit A B)
-  proof: fun b => ⟨X b, ACounit_X A b⟩
-
-中文:
-定理 ACounit_surjective
-  结论: 满射 (ACounit A B)
-  证明: fun b => ⟨X b, ACounit_X A b⟩
-
-Depends on / 依赖: ACounit_X
+/-
+**MvPolynomial.ACounit_surjective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：ACounit_surjective : Surjective (ACounit A B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_X`：ACounit_X (b : B) : ACounit A B (X b) = b
 -/
 theorem ACounit_surjective : Surjective (ACounit A B) := fun b => ⟨X b, ACounit_X A b⟩
 
-/--
-Definition of `counit` / `counit` 的定义
+/-- `MvPolynomial.counit R` is the natural surjective ring homomorphism
+`MvPolynomial R ℤ →+* R` obtained by `X r ↦ r`.
 
-English:
-definition counit
-  signature: : MvPolynomial R Int ->+* R
-  body: (ACounit Int R).toRingHom
+See `MvPolynomial.ACounit` for a “relative” variant for algebras over a base ring,
+and `MvPolynomial.counitNat` for the “absolute” variant with `R = ℕ`. -/
+/-
+**MvPolynomial.counit** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：counit : MvPolynomial R Int ->+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 counit
-  签名: : 多元多项式 R 整数 ->+* R
-  定义体: (ACounit Int R).toRingHom
+--- 原说明 ---
+`MvPolynomial.counit R` is the natural surjective ring homomorphism
+`MvPolynomial R ℤ →+* R` obtained by `X r ↦ r`.
 
-Depends on / 依赖: ACounit, toRingHom
+See `MvPolynomial.ACounit` for a “relative” variant for algebras over a base rin
+g,
+and `MvPolynomial.counitNat` for the “absolute” variant with `R = ℕ`.
 -/
-noncomputable def counit : MvPolynomial R Int ->+* R :=
-  (ACounit Int R).toRingHom
+noncomputable def counit : MvPolynomial R ℤ →+* R :=
+  (ACounit ℤ R).toRingHom
 
-/--
-Definition of `counitNat` / `counitNat` 的定义
+/-- `MvPolynomial.counitNat A` is the natural surjective ring homomorphism
+`MvPolynomial A ℕ →+* A` obtained by `X a ↦ a`.
 
-English:
-definition counitNat
-  signature: : MvPolynomial A Nat ->+* A
-  body: ACounit Nat A
+See `MvPolynomial.ACounit` for a “relative” variant for algebras over a base ring
+and `MvPolynomial.counit` for the “absolute” variant with `A = ℤ`. -/
+/-
+**MvPolynomial.counitNat** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：counitNat : MvPolynomial A Nat ->+* A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 counit自然数
-  签名: : 多元多项式 A 自然数 ->+* A
-  定义体: ACounit Nat A
+--- 原说明 ---
+`MvPolynomial.counitNat A` is the natural surjective ring homomorphism
+`MvPolynomial A ℕ →+* A` obtained by `X a ↦ a`.
 
-Depends on / 依赖: ACounit
+See `MvPolynomial.ACounit` for a “relative” variant for algebras over a base rin
+g
+and `MvPolynomial.counit` for the “absolute” variant with `A = ℤ`.
 -/
-noncomputable def counitNat : MvPolynomial A Nat ->+* A :=
-  ACounit Nat A
-
-/--
-theorem `counit_surjective` / 定理 `counit_surjective`
-
-English:
-theorem counit_surjective
-  statement: Surjective (counit R)
-  proof: ACounit_surjective Int R
-
-中文:
-定理 counit_surjective
-  结论: 满射 (counit R)
-  证明: ACounit_surjective Int R
-
-Depends on / 依赖: ACounit_surjective
+noncomputable def counitNat : MvPolynomial A ℕ →+* A :=
+  ACounit ℕ A
+/-
+**MvPolynomial.counit_surjective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counit_surjective : Surjective (counit R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_surjective`：ACounit_surjective : Surjective (ACouni
+t A B)
 -/
 theorem counit_surjective : Surjective (counit R) :=
-  ACounit_surjective Int R
-
-/--
-theorem `counitNat_surjective` / 定理 `counitNat_surjective`
-
-English:
-theorem counitNat_surjective
-  statement: Surjective (counitNat A)
-  proof: ACounit_surjective Nat A
-
-中文:
-定理 counit自然数_surjective
-  结论: 满射 (counit自然数 A)
-  证明: ACounit_surjective Nat A
-
-Depends on / 依赖: ACounit_surjective
+  ACounit_surjective ℤ R
+/-
+**MvPolynomial.counitNat_surjective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counitNat_surjective : Surjective (counitNat A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_surjective`：ACounit_surjective : Surjective (ACouni
+t A B)
 -/
 theorem counitNat_surjective : Surjective (counitNat A) :=
-  ACounit_surjective Nat A
-
-/--
-theorem `counit_C` / 定理 `counit_C`
-
-English:
-theorem counit_C
-  given: (n : Int)
-  statement: counit R (C n) = n
-  proof: ACounit_C _ _
-
-中文:
-定理 counit_C
-  条件: (n : 整数)
-  结论: counit R (C n) = n
-  证明: ACounit_C _ _
-
-Depends on / 依赖: ACounit_C
+  ACounit_surjective ℕ A
+/-
+**MvPolynomial.counit_C** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counit_C (n : Int) : counit R (C n) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_C`：ACounit_C (a : A) : ACounit A B (C a) = algebraM
+ap A B a
 -/
-theorem counit_C (n : Int) : counit R (C n) = n :=
+theorem counit_C (n : ℤ) : counit R (C n) = n :=
   ACounit_C _ _
-
-/--
-theorem `counitNat_C` / 定理 `counitNat_C`
-
-English:
-theorem counitNat_C
-  given: (n : Nat)
-  statement: counitNat A (C n) = n
-  proof: ACounit_C _ _
-
-中文:
-定理 counit自然数_C
-  条件: (n : 自然数)
-  结论: counit自然数 A (C n) = n
-  证明: ACounit_C _ _
-
-Depends on / 依赖: ACounit_C
+/-
+**MvPolynomial.counitNat_C** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counitNat_C (n : Nat) : counitNat A (C n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_C`：ACounit_C (a : A) : ACounit A B (C a) = algebraM
+ap A B a
 -/
-theorem counitNat_C (n : Nat) : counitNat A (C n) = n :=
+theorem counitNat_C (n : ℕ) : counitNat A (C n) = n :=
   ACounit_C _ _
 
 variable {R A}
 
 @[simp]
-/--
-theorem `counit_X` / 定理 `counit_X`
-
-English:
-theorem counit_X
-  given: (r : R)
-  statement: counit R (X r) = r
-  proof: ACounit_X _ _
-
-@[simp]
-
-中文:
-定理 counit_X
-  条件: (r : R)
-  结论: counit R (X r) = r
-  证明: ACounit_X _ _
-
-@[simp]
-
-Depends on / 依赖: ACounit_X
+/-
+**MvPolynomial.counit_X** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counit_X (r : R) : counit R (X r) = r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_X`：ACounit_X (b : B) : ACounit A B (X b) = b
 -/
 theorem counit_X (r : R) : counit R (X r) = r :=
   ACounit_X _ _
 
 @[simp]
-/--
-theorem `counitNat_X` / 定理 `counitNat_X`
-
-English:
-theorem counitNat_X
-  given: (a : A)
-  statement: counitNat A (X a) = a
-  proof: ACounit_X _ _
-
-中文:
-定理 counit自然数_X
-  条件: (a : A)
-  结论: counit自然数 A (X a) = a
-  证明: ACounit_X _ _
-
-Depends on / 依赖: ACounit_X
+/-
+**MvPolynomial.counitNat_X** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：counitNat_X (a : A) : counitNat A (X a) = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ACounit_X`：ACounit_X (b : B) : ACounit A B (X b) = b
 -/
 theorem counitNat_X (a : A) : counitNat A (X a) = a :=
   ACounit_X _ _
 
 end MvPolynomial
+

@@ -48,22 +48,14 @@ open scoped symmDiff
 
 variable {α β γ : Type*}
 
-/--
-Definition of `BooleanRing` / `BooleanRing` 的定义
+/-- A Boolean ring is a ring where multiplication is idempotent. -/
+/-
+**BooleanRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_4 → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BooleanRing
-  parameters: (α)
-  extends: Ring α
-  axioms and operations (1):
-    - isIdempotentElem((a : α)) : IsIdempotentElem a
-
-中文:
-类 布尔ean环
-  参数: (α)
-  继承: 环 α
-  公理与运算 (1 个):
-    - isIdempotentElem((a : α)) : IsIdempotentElem a
+--- 原说明 ---
+A Boolean ring is a ring where multiplication is idempotent.
 -/
 class BooleanRing (α) extends Ring α where
   /-- Multiplication in a Boolean ring is idempotent. -/
@@ -74,74 +66,44 @@ namespace BooleanRing
 variable [BooleanRing α] (a b : α)
 
 @[scoped simp]
-/--
-lemma `mul_self` / 引理 `mul_self`
-
-English:
-lemma mul_self
-  statement: a * a = a
-  proof: IsIdempotentElem.eq (isIdempotentElem a)
-
-中文:
-引理 mul_self
-  结论: a * a = a
-  证明: IsIdempotentElem.eq (isIdempotentElem a)
-
-Depends on / 依赖: IsIdempotentElem, IsIdempotentElem.eq, isIdempotentElem
+/-
+**BooleanRing.mul_self** 是 Mathlib 中的一个引理，位于命名空间 `BooleanRing`。
+形式化陈述：mul_self : a * a = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsIdempotentElem.eq`：eq (ha : IsIdempotentElem a) : a * a = a
+· 使用定理 `BooleanRing.isIdempotentElem`：∀ {α : Type u_4} [self : BooleanRing α] (a
+ : α), IsIdempotentElem a
 -/
 lemma mul_self : a * a = a := IsIdempotentElem.eq (isIdempotentElem a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.IdempotentOp (α := α) (· * ·)
-  body: ⟨BooleanRing.mul_self⟩
-
-@[scoped simp]
-
-中文:
-实例 :
-  签名: Std.IdempotentOp (α := α) (· * ·)
-  定义体: ⟨BooleanRing.mul_self⟩
-
-@[scoped simp]
+/-
+**BooleanRing.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.IdempotentOp (α := α) (· * ·) :=
   ⟨BooleanRing.mul_self⟩
 
 @[scoped simp]
-/--
-theorem `add_self` / 定理 `add_self`
-
-English:
-theorem add_self
-  statement: a + a = 0
-  proof: by
-  have : a + a = a + a + (a + a) :=
-    calc
-      a + a = (a + a) * (a + a) := by rw [mul_self]
-      _ = a * a + a * a + (a * a + a * a) := by rw [add_mul, mul_add]
-      _ = a + a + (a + a) := by rw [mul_self]
-  rwa [right_eq_add] at this
-
-@[scoped simp]
-
-中文:
-定理 add_self
-  结论: a + a = 0
-  证明: by
-  have : a + a = a + a + (a + a) :=
-    calc
-      a + a = (a + a) * (a + a) := by rw [mul_self]
-      _ = a * a + a * a + (a * a + a * a) := by rw [add_mul, mul_add]
-      _ = a + a + (a + a) := by rw [mul_self]
-  rwa [right_eq_add] at this
-
-@[scoped simp]
-
-Depends on / 依赖: add_mul, mul_add, mul_self, right_eq_add
+/-
+**BooleanRing.add_self** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：add_self : a + a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `right_eq_add`：∀ {M : Type u_4} [inst : AddMonoid M] [IsRightCancelAdd M]
+ {a b : M}, b = a + b ↔ a = 0
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem add_self : a + a = 0 := by
   have : a + a = a + a + (a + a) :=
@@ -152,55 +114,37 @@ theorem add_self : a + a = 0 := by
   rwa [right_eq_add] at this
 
 @[scoped simp]
-/--
-theorem `neg_eq` / 定理 `neg_eq`
-
-English:
-theorem neg_eq
-  statement: -a = a
-  proof: calc
-    -a = -a + 0 := by rw [add_zero]
-    _ = -a + -a + a := by rw [← neg_add_cancel, add_assoc]
-    _ = a := by rw [add_self, zero_add]
-
-中文:
-定理 neg_eq
-  结论: -a = a
-  证明: calc
-    -a = -a + 0 := by rw [add_zero]
-    _ = -a + -a + a := by rw [← neg_add_cancel, add_assoc]
-    _ = a := by rw [add_self, zero_add]
-
-Depends on / 依赖: add_assoc, add_self, add_zero, neg_add_cancel, zero_add
+/-
+**BooleanRing.neg_eq** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：neg_eq : -a = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem neg_eq : -a = a :=
   calc
     -a = -a + 0 := by rw [add_zero]
     _ = -a + -a + a := by rw [← neg_add_cancel, add_assoc]
     _ = a := by rw [add_self, zero_add]
-
-/--
-theorem `add_eq_zero'` / 定理 `add_eq_zero'`
-
-English:
-theorem add_eq_zero'
-  statement: a + b = 0 ↔ a = b
-  proof: calc
-    a + b = 0 ↔ a = -b := add_eq_zero_iff_eq_neg
-    _ ↔ a = b := by rw [neg_eq]
-
-@[simp]
-
-中文:
-定理 add_eq_zero'
-  结论: a + b = 0 ↔ a = b
-  证明: calc
-    a + b = 0 ↔ a = -b := add_eq_zero_iff_eq_neg
-    _ ↔ a = b := by rw [neg_eq]
-
-@[simp]
-
-Depends on / 依赖: add_eq_zero_iff_eq_neg, neg_eq
+/-
+**BooleanRing.add_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：add_eq_zero' : a + b = 0 ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_eq_zero_iff_eq_neg`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a + b = 0 ↔ a = -b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BooleanRing.neg_eq`：neg_eq : -a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem add_eq_zero' : a + b = 0 ↔ a = b :=
   calc
@@ -208,38 +152,36 @@ theorem add_eq_zero' : a + b = 0 ↔ a = b :=
     _ ↔ a = b := by rw [neg_eq]
 
 @[simp]
-/--
-theorem `mul_add_mul` / 定理 `mul_add_mul`
-
-English:
-theorem mul_add_mul
-  statement: a * b + b * a = 0
-  proof: by
-  have : a + b = a + b + (a * b + b * a) :=
-    calc
-      a + b = (a + b) * (a + b) := by rw [mul_self]
-      _ = a * a + a * b + (b * a + b * b) := by rw [add_mul, mul_add, mul_add]
-      _ = a + a * b + (b * a + b) := by simp only [mul_self]
-      _ = a + b + (a * b + b * a) := by abel
-  rwa [left_eq_add] at this
-
-@[scoped simp]
-
-中文:
-定理 mul_add_mul
-  结论: a * b + b * a = 0
-  证明: by
-  have : a + b = a + b + (a * b + b * a) :=
-    calc
-      a + b = (a + b) * (a + b) := by rw [mul_self]
-      _ = a * a + a * b + (b * a + b * b) := by rw [add_mul, mul_add, mul_add]
-      _ = a + a * b + (b * a + b) := by simp only [mul_self]
-      _ = a + b + (a * b + b * a) := by abel
-  rwa [left_eq_add] at this
-
-@[scoped simp]
-
-Depends on / 依赖: add_mul, left_eq_add, mul_add, mul_self
+/-
+**BooleanRing.mul_add_mul** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：mul_add_mul : a * b + b * a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `_private.Mathlib.Algebra.Ring.BooleanRing.0.BooleanRing.mul_add_mul._abe
+l_1_1`：∀ {α : Type u_1} [inst : BooleanRing α] (a b : α), a + a * b + (b * a + b
+) = a + b + (a * b + b * a)
+· 使用定理 `left_eq_add`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a = a + b ↔ b = 0
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
 theorem mul_add_mul : a * b + b * a = 0 := by
   have : a + b = a + b + (a * b + b * a) :=
@@ -251,66 +193,55 @@ theorem mul_add_mul : a * b + b * a = 0 := by
   rwa [left_eq_add] at this
 
 @[scoped simp]
-/--
-theorem `sub_eq_add` / 定理 `sub_eq_add`
-
-English:
-theorem sub_eq_add
-  statement: a - b = a + b
-  proof: by rw [sub_eq_add_neg, add_right_inj, neg_eq]
-
-@[simp]
-
-中文:
-定理 sub_eq_add
-  结论: a - b = a + b
-  证明: by rw [sub_eq_add_neg, add_right_inj, neg_eq]
-
-@[simp]
-
-Depends on / 依赖: add_right_inj, neg_eq, sub_eq_add_neg
+/-
+**BooleanRing.sub_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：sub_eq_add : a - b = a + b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `BooleanRing.neg_eq`：neg_eq : -a = a
 -/
 theorem sub_eq_add : a - b = a + b := by rw [sub_eq_add_neg, add_right_inj, neg_eq]
 
 @[simp]
-/--
-theorem `mul_one_add_self` / 定理 `mul_one_add_self`
-
-English:
-theorem mul_one_add_self
-  statement: a * (1 + a) = 0
-  proof: by rw [mul_add, mul_one, mul_self, add_self]
-
-中文:
-定理 mul_one_add_self
-  结论: a * (1 + a) = 0
-  证明: by rw [mul_add, mul_one, mul_self, add_self]
-
-Depends on / 依赖: add_self, mul_add, mul_one, mul_self
+/-
+**BooleanRing.mul_one_add_self** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：mul_one_add_self : a * (1 + a) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
 -/
 theorem mul_one_add_self : a * (1 + a) = 0 := by rw [mul_add, mul_one, mul_self, add_self]
 
 -- Note [lower instance priority]
+/-
+**BooleanRing.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toCommRing : CommRing α :=
   { (inferInstance : BooleanRing α) with
     mul_comm := fun a b => by rw [← add_eq_zero', mul_add_mul] }
 
 end BooleanRing
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BooleanRing PUnit
-  body: ⟨fun _ => Subsingleton.elim _ _⟩
-
-中文:
-实例 :
-  签名: 布尔ean环 命题单元
-  定义体: ⟨fun _ => Subsingleton.elim _ _⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BooleanRing PUnit :=
   ⟨fun _ => Subsingleton.elim _ _⟩
@@ -320,200 +251,111 @@ instance : BooleanRing PUnit :=
 
 section RingToAlgebra
 
-/--
-Definition of `AsBoolAlg` / `AsBoolAlg` 的定义
+/-- Type synonym to view a Boolean ring as a Boolean algebra. -/
+/-
+**AsBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AsBoolAlg (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AsBoolAlg
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 As布尔Alg
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+Type synonym to view a Boolean ring as a Boolean algebra.
 -/
 def AsBoolAlg (α : Type*) :=
   α
 
-/--
-Definition of `toBoolAlg` / `toBoolAlg` 的定义
+/-- The "identity" equivalence between `AsBoolAlg α` and `α`. -/
+/-
+**toBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toBoolAlg : α ≃ AsBoolAlg α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toBoolAlg
-  signature: : α ≃ AsBoolAlg α
-  body: Equiv.refl _
-
-中文:
-定义 to布尔Alg
-  签名: : α ≃ As布尔Alg α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The "identity" equivalence between `AsBoolAlg α` and `α`.
 -/
 def toBoolAlg : α ≃ AsBoolAlg α :=
   Equiv.refl _
 
-/--
-Definition of `ofBoolAlg` / `ofBoolAlg` 的定义
+/-- The "identity" equivalence between `α` and `AsBoolAlg α`. -/
+/-
+**ofBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ofBoolAlg : AsBoolAlg α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofBoolAlg
-  signature: : AsBoolAlg α ≃ α
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 of布尔Alg
-  签名: : As布尔Alg α ≃ α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The "identity" equivalence between `α` and `AsBoolAlg α`.
 -/
 def ofBoolAlg : AsBoolAlg α ≃ α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `toBoolAlg_symm_eq` / 定理 `toBoolAlg_symm_eq`
-
-English:
-theorem toBoolAlg_symm_eq
-  statement: (@toBoolAlg α).symm = ofBoolAlg
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_symm_eq
-  结论: (@to布尔Alg α).symm = of布尔Alg
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_symm_eq : (@toBoolAlg α).symm = ofBoolAlg
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toBoolAlg_symm_eq : (@toBoolAlg α).symm = ofBoolAlg :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_symm_eq` / 定理 `ofBoolAlg_symm_eq`
-
-English:
-theorem ofBoolAlg_symm_eq
-  statement: (@ofBoolAlg α).symm = toBoolAlg
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_symm_eq
-  结论: (@of布尔Alg α).symm = to布尔Alg
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_symm_eq : (@ofBoolAlg α).symm = toBoolAlg
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofBoolAlg_symm_eq : (@ofBoolAlg α).symm = toBoolAlg :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolAlg_ofBoolAlg` / 定理 `toBoolAlg_ofBoolAlg`
-
-English:
-theorem toBoolAlg_ofBoolAlg
-  given: (a : AsBoolAlg α)
-  statement: toBoolAlg (ofBoolAlg a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_of布尔Alg
-  条件: (a : As布尔Alg α)
-  结论: to布尔Alg (of布尔Alg a) = a
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_ofBoolAlg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_ofBoolAlg (a : AsBoolAlg α) : toBoolAlg (ofBoolAlg a) = a
+参数：a : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolAlg_ofBoolAlg (a : AsBoolAlg α) : toBoolAlg (ofBoolAlg a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_toBoolAlg` / 定理 `ofBoolAlg_toBoolAlg`
-
-English:
-theorem ofBoolAlg_toBoolAlg
-  given: (a : α)
-  statement: ofBoolAlg (toBoolAlg a) = a
-  proof: rfl
-
-中文:
-定理 of布尔Alg_to布尔Alg
-  条件: (a : α)
-  结论: of布尔Alg (to布尔Alg a) = a
-  证明: rfl
+/-
+**ofBoolAlg_toBoolAlg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_toBoolAlg (a : α) : ofBoolAlg (toBoolAlg a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_toBoolAlg (a : α) : ofBoolAlg (toBoolAlg a) = a :=
   rfl
-
-/--
-theorem `toBoolAlg_inj` / 定理 `toBoolAlg_inj`
-
-English:
-theorem toBoolAlg_inj
-  given: {a b : α}
-  statement: toBoolAlg a = toBoolAlg b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-定理 to布尔Alg_inj
-  条件: {a b : α}
-  结论: to布尔Alg a = to布尔Alg b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**toBoolAlg_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_inj {a b : α} : toBoolAlg a = toBoolAlg b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toBoolAlg_inj {a b : α} : toBoolAlg a = toBoolAlg b ↔ a = b :=
   Iff.rfl
-
-/--
-theorem `ofBoolAlg_inj` / 定理 `ofBoolAlg_inj`
-
-English:
-theorem ofBoolAlg_inj
-  given: {a b : AsBoolAlg α}
-  statement: ofBoolAlg a = ofBoolAlg b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-定理 of布尔Alg_inj
-  条件: {a b : As布尔Alg α}
-  结论: of布尔Alg a = of布尔Alg b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**ofBoolAlg_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_inj {a b : AsBoolAlg α} : ofBoolAlg a = ofBoolAlg b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofBoolAlg_inj {a b : AsBoolAlg α} : ofBoolAlg a = ofBoolAlg b ↔ a = b :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (AsBoolAlg α)
-  body: ‹Inhabited α›
-
-中文:
-实例 [可居
-  签名: α] : 可居 (As布尔Alg α)
-  定义体: ‹Inhabited α›
-
-Depends on / 依赖: Inhabited
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (AsBoolAlg α) :=
   ‹Inhabited α›
@@ -524,42 +366,28 @@ namespace BooleanRing
 
 /-- The join operation in a Boolean ring is `x + y + x * y`. -/
 @[instance_reducible]
-/--
-Definition of `sup` / `sup` 的定义
+/-
+**BooleanRing.sup** 是 Mathlib 中的一个定义，位于命名空间 `BooleanRing`。
+形式化陈述：sup : Max α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sup
-  signature: : Max α
-  body: ⟨fun x y => x + y + x * y⟩
-
-中文:
-定义 上确界
-  签名: : 最大值 α
-  定义体: ⟨fun x y => x + y + x * y⟩
+--- 原说明 ---
+The join operation in a Boolean ring is `x + y + x * y`.
 -/
 def sup : Max α :=
   ⟨fun x y => x + y + x * y⟩
 
 /-- The meet operation in a Boolean ring is `x * y`. -/
 @[instance_reducible]
-/--
-Definition of `inf` / `inf` 的定义
+/-
+**BooleanRing.inf** 是 Mathlib 中的一个定义，位于命名空间 `BooleanRing`。
+形式化陈述：inf : Min α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inf
-  signature: : Min α
-  body: ⟨(· * ·)⟩
-
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.sup
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.inf
-
-中文:
-定义 下确界
-  签名: : 最小值 α
-  定义体: ⟨(· * ·)⟩
-
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.sup
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.inf
+--- 原说明 ---
+The meet operation in a Boolean ring is `x * y`.
 -/
 def inf : Min α :=
   ⟨(· * ·)⟩
@@ -567,173 +395,316 @@ def inf : Min α :=
 scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.sup
 scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.inf
 open BooleanAlgebraOfBooleanRing
-
-/--
-theorem `sup_comm` / 定理 `sup_comm`
-
-English:
-theorem sup_comm
-  given: (a b : α)
-  statement: a ⊔ b = b ⊔ a
-  proof: by
-  dsimp only [(· ⊔ ·)]
-  ring
-
-中文:
-定理 sup_comm
-  条件: (a b : α)
-  结论: a ⊔ b = b ⊔ a
-  证明: by
-  dsimp only [(· ⊔ ·)]
-  ring
+/-
+**BooleanRing.sup_comm** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
 -/
 theorem sup_comm (a b : α) : a ⊔ b = b ⊔ a := by
   dsimp only [(· ⊔ ·)]
   ring
-
-/--
-theorem `inf_comm` / 定理 `inf_comm`
-
-English:
-theorem inf_comm
-  given: (a b : α)
-  statement: a ⊓ b = b ⊓ a
-  proof: by
-  dsimp only [(· ⊓ ·)]
-  ring
-
-中文:
-定理 inf_comm
-  条件: (a b : α)
-  结论: a ⊓ b = b ⊓ a
-  证明: by
-  dsimp only [(· ⊓ ·)]
-  ring
+/-
+**BooleanRing.inf_comm** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：inf_comm (a b : α) : a ⊓ b = b ⊓ a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
 -/
 theorem inf_comm (a b : α) : a ⊓ b = b ⊓ a := by
   dsimp only [(· ⊓ ·)]
   ring
-
-/--
-theorem `sup_assoc` / 定理 `sup_assoc`
-
-English:
-theorem sup_assoc
-  given: (a b c : α)
-  statement: a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
-  proof: by
-  dsimp only [(· ⊔ ·)]
-  ring
-
-中文:
-定理 sup_assoc
-  条件: (a b c : α)
-  结论: a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
-  证明: by
-  dsimp only [(· ⊔ ·)]
-  ring
+/-
+**BooleanRing.sup_assoc** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
 -/
 theorem sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c) := by
   dsimp only [(· ⊔ ·)]
   ring
-
-/--
-theorem `inf_assoc` / 定理 `inf_assoc`
-
-English:
-theorem inf_assoc
-  given: (a b c : α)
-  statement: a ⊓ b ⊓ c = a ⊓ (b ⊓ c)
-  proof: by
-  dsimp only [(· ⊓ ·)]
-  ring
-
-中文:
-定理 inf_assoc
-  条件: (a b c : α)
-  结论: a ⊓ b ⊓ c = a ⊓ (b ⊓ c)
-  证明: by
-  dsimp only [(· ⊓ ·)]
-  ring
+/-
+**BooleanRing.inf_assoc** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：inf_assoc (a b c : α) : a ⊓ b ⊓ c = a ⊓ (b ⊓ c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
 -/
 theorem inf_assoc (a b c : α) : a ⊓ b ⊓ c = a ⊓ (b ⊓ c) := by
   dsimp only [(· ⊓ ·)]
   ring
-
-/--
-theorem `sup_inf_self` / 定理 `sup_inf_self`
-
-English:
-theorem sup_inf_self
-  given: (a b : α)
-  statement: a ⊔ a ⊓ b = a
-  proof: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-中文:
-定理 sup_inf_self
-  条件: (a b : α)
-  结论: a ⊔ a ⊓ b = a
-  证明: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-Depends on / 依赖: add_assoc, add_self, add_zero, mul_assoc, mul_self
+/-
+**BooleanRing.sup_inf_self** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：sup_inf_self (a b : α) : a ⊔ a ⊓ b = a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem sup_inf_self (a b : α) : a ⊔ a ⊓ b = a := by
   dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-/--
-theorem `inf_sup_self` / 定理 `inf_sup_self`
-
-English:
-theorem inf_sup_self
-  given: (a b : α)
-  statement: a ⊓ (a ⊔ b) = a
-  proof: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [mul_add]; rw [mul_add]; rw [mul_self]; rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-中文:
-定理 inf_sup_self
-  条件: (a b : α)
-  结论: a ⊓ (a ⊔ b) = a
-  证明: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [mul_add]; rw [mul_add]; rw [mul_self]; rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-Depends on / 依赖: add_assoc, add_self, add_zero, mul_add, mul_assoc, mul_self
+  rw [← mul_assoc, mul_self, add_assoc, add_self, add_zero]
+/-
+**BooleanRing.inf_sup_self** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：inf_sup_self (a b : α) : a ⊓ (a ⊔ b) = a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem inf_sup_self (a b : α) : a ⊓ (a ⊔ b) = a := by
   dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [mul_add]; rw [mul_add]; rw [mul_self]; rw [← mul_assoc]; rw [mul_self]; rw [add_assoc]; rw [add_self]; rw [add_zero]
-
-/--
-theorem `le_sup_inf_aux` / 定理 `le_sup_inf_aux`
-
-English:
-theorem le_sup_inf_aux
-  given: (a b c : α)
-  statement: (a + b + a * b) * (a + c + a * c) = a + b * c + a * (b * c)
-  proof: calc
-    (a + b + a * b) * (a + c + a * c) =
-        a * a + b * c + a * (b * c) + (a * b + a * a * b) + (a * c + a * a * c) +
-          (a * b * c + a * a * b * c) := by ring
-    _ = a + b * c + a * (b * c) := by simp only [mul_self, add_self, add_zero]
-
-中文:
-定理 le_sup_inf_aux
-  条件: (a b c : α)
-  结论: (a + b + a * b) * (a + c + a * c) = a + b * c + a * (b * c)
-  证明: calc
-    (a + b + a * b) * (a + c + a * c) =
-        a * a + b * c + a * (b * c) + (a * b + a * a * b) + (a * c + a * a * c) +
-          (a * b * c + a * a * b * c) := by ring
-    _ = a + b * c + a * (b * c) := by simp only [mul_self, add_self, add_zero]
-
-Depends on / 依赖: add_self, add_zero, mul_self
+  rw [mul_add, mul_add, mul_self, ← mul_assoc, mul_self, add_assoc, add_self, add_zero]
+/-
+**BooleanRing.le_sup_inf_aux** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：le_sup_inf_aux (a b c : α) : (a + b + a * b) * (a + c + a * c) = a + b * c
+ + a * (b * c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap`：∀ {R : Type u_1} [inst : C
+ommSemiring R] {a₂ b₂ c : R} {ea eb e : ℕ} (x : R),   ea + eb = e → a₂ * b₂ = c 
+→ x ^ ea * a₂ * (x ^ eb * b₂) = x …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap`：∀ {R : Type u_1} [inst : 
+CommSemiring R] {a₁ a₂ b₁ b₂ c₁ c₂ : R},   a₁ + b₁ = c₁ → a₂ + b₂ = c₂ → a₁ + a₂
+ + (b₁ + b₂) = c₁ + c₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf`：∀ {R : Type u_1} [inst : Comm
+Semiring R] {a b c : R} (x : R) (e : ℕ), a + b = c → x ^ e * a + x ^ e * b = x ^
+ e * c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem le_sup_inf_aux (a b c : α) : (a + b + a * b) * (a + c + a * c) = a + b * c + a * (b * c) :=
   calc
@@ -741,31 +712,23 @@ theorem le_sup_inf_aux (a b c : α) : (a + b + a * b) * (a + c + a * c) = a + b 
         a * a + b * c + a * (b * c) + (a * b + a * a * b) + (a * c + a * a * c) +
           (a * b * c + a * a * b * c) := by ring
     _ = a + b * c + a * (b * c) := by simp only [mul_self, add_self, add_zero]
-
-/--
-theorem `le_sup_inf` / 定理 `le_sup_inf`
-
-English:
-theorem le_sup_inf
-  given: (a b c : α)
-  statement: (a ⊔ b) ⊓ (a ⊔ c) ⊔ (a ⊔ b ⊓ c) = a ⊔ b ⊓ c
-  proof: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [le_sup_inf_aux]; rw [add_self]; rw [mul_self]; rw [zero_add]
-
-中文:
-定理 le_sup_inf
-  条件: (a b c : α)
-  结论: (a ⊔ b) ⊓ (a ⊔ c) ⊔ (a ⊔ b ⊓ c) = a ⊔ b ⊓ c
-  证明: by
-  dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [le_sup_inf_aux]; rw [add_self]; rw [mul_self]; rw [zero_add]
-
-Depends on / 依赖: add_self, le_sup_inf_aux, mul_self, zero_add
+/-
+**BooleanRing.le_sup_inf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanRing`。
+形式化陈述：le_sup_inf (a b c : α) : (a ⊔ b) ⊓ (a ⊔ c) ⊔ (a ⊔ b ⊓ c) = a ⊔ b ⊓ c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BooleanRing.le_sup_inf_aux`：le_sup_inf_aux (a b c : α) : (a + b + a * b)
+ * (a + c + a * c) = a + b * c + a * (b * c)
+· 使用定理 `BooleanRing.add_self`：add_self : a + a = 0
+· 使用引理 `BooleanRing.mul_self`：mul_self : a * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem le_sup_inf (a b c : α) : (a ⊔ b) ⊓ (a ⊔ c) ⊔ (a ⊔ b ⊓ c) = a ⊔ b ⊓ c := by
   dsimp only [(· ⊔ ·), (· ⊓ ·)]
-  rw [le_sup_inf_aux]; rw [add_self]; rw [mul_self]; rw [zero_add]
+  rw [le_sup_inf_aux, add_self, mul_self, zero_add]
 
 /-- The Boolean algebra structure on a Boolean ring.
 
@@ -779,52 +742,37 @@ The data is defined so that:
 * `a \ b` unfolds to `a * (1 + b)`
 -/
 @[instance_reducible]
-/--
-Definition of `toBooleanAlgebra` / `toBooleanAlgebra` 的定义
+/-
+**BooleanRing.toBooleanAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `BooleanRing`。
+形式化陈述：toBooleanAlgebra : BooleanAlgebra α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanRing.sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `BooleanRing.sup_assoc`：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+· 使用定理 `BooleanRing.inf_comm`：inf_comm (a b : α) : a ⊓ b = b ⊓ a
+· 使用定理 `BooleanRing.inf_assoc`：inf_assoc (a b c : α) : a ⊓ b ⊓ c = a ⊓ (b ⊓ c)
+· 使用定理 `BooleanRing.sup_inf_self`：sup_inf_self (a b : α) : a ⊔ a ⊓ b = a
+· 使用定理 `BooleanRing.inf_sup_self`：inf_sup_self (a b : α) : a ⊓ (a ⊔ b) = a
+· 使用定理 `BooleanRing.le_sup_inf`：le_sup_inf (a b c : α) : (a ⊔ b) ⊓ (a ⊔ c) ⊔ (a 
+⊔ b ⊓ c) = a ⊔ b ⊓ c
+· 使用定理 `Lattice.inf_le_left`：∀ {α : Type u} [self : Lattice α] (a b : α), Lattic
+e.inf a b ≤ a
+· 使用定理 `Lattice.inf_le_right`：∀ {α : Type u} [self : Lattice α] (a b : α), Latti
+ce.inf a b ≤ b
+· 使用定理 `Lattice.le_inf`：∀ {α : Type u} [self : Lattice α] (a b c : α), a ≤ b → a
+ ≤ c → a ≤ Lattice.inf b c
 
-English:
-definition toBooleanAlgebra
-  signature: : BooleanAlgebra α
-  body: { Lattice.mk' sup_comm sup_assoc inf_comm inf_assoc sup_inf_self inf_sup_self with
-    le_sup_inf := le_sup_inf
-    top := 1
-    le_top := fun a => show a + 1 + a * 1 = 1 by rw [mul_one, add_comm a 1,
-                                                     add_assoc, add_self, add_zero]
-    bot := 0
-    bot_le := fun a => show 0 + a + 0 * a = a by rw [zero_mul, zero_add, add_zero]
-    compl := fun a => 1 + a
-    inf_compl_le_bot := fun a =>
-      show a * (1 + a) + 0 + a * (1 + a) * 0 = 0 by simp [mul_add, mul_self, add_self]
-    top_le_sup_compl := fun a => by
-      change
-        1 + (a + (1 + a) + a * (1 + a)) + 1 * (a + (1 + a) + a * (1 + a)) =
-          a + (1 + a) + a * (1 + a)
-      simp [mul_add, mul_self, add_self, ← add_assoc 1 a] }
+--- 原说明 ---
+The Boolean algebra structure on a Boolean ring.
 
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.toBooleanAlgebra
-
-中文:
-定义 to布尔eanAlgebra
-  签名: : 布尔代数 α
-  定义体: { Lattice.mk' sup_comm sup_assoc inf_comm inf_assoc sup_inf_self inf_sup_self with
-    le_sup_inf := le_sup_inf
-    top := 1
-    le_top := fun a => show a + 1 + a * 1 = 1 by rw [mul_one, add_comm a 1,
-                                                     add_assoc, add_self, add_zero]
-    bot := 0
-    bot_le := fun a => show 0 + a + 0 * a = a by rw [zero_mul, zero_add, add_zero]
-    compl := fun a => 1 + a
-    inf_compl_le_bot := fun a =>
-      show a * (1 + a) + 0 + a * (1 + a) * 0 = 0 by simp [mul_add, mul_self, add_self]
-    top_le_sup_compl := fun a => by
-      change
-        1 + (a + (1 + a) + a * (1 + a)) + 1 * (a + (1 + a) + a * (1 + a)) =
-          a + (1 + a) + a * (1 + a)
-      simp [mul_add, mul_self, add_self, ← add_assoc 1 a] }
-
-scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.toBooleanAlgebra
-
-Depends on / 依赖: Lattice, Lattice.mk, add_assoc, add_comm, add_self, add_zero, bot_le, inf_assoc, inf_comm, inf_compl_le_bot, inf_sup_self, le_sup_inf, le_top, mul_add, mul_one, mul_self, sup_assoc, sup_comm, sup_inf_self, top_le_sup_compl
+The data is defined so that:
+* `a ⊔ b` unfolds to `a + b + a * b`
+* `a ⊓ b` unfolds to `a * b`
+* `a ≤ b` unfolds to `a + b + a * b = b`
+* `⊥` unfolds to `0`
+* `⊤` unfolds to `1`
+* `aᶜ` unfolds to `1 + a`
+* `a \ b` unfolds to `a * (1 + b)`
 -/
 def toBooleanAlgebra : BooleanAlgebra α :=
   { Lattice.mk' sup_comm sup_assoc inf_comm inf_assoc sup_inf_self inf_sup_self with
@@ -849,179 +797,83 @@ end BooleanRing
 
 open BooleanRing
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BooleanAlgebra (AsBoolAlg α)
-  body: fast_instance% @BooleanRing.toBooleanAlgebra α _
-
-@[simp]
-
-中文:
-实例 :
-  签名: 布尔代数 (As布尔Alg α)
-  定义体: fast_instance% @BooleanRing.toBooleanAlgebra α _
-
-@[simp]
-
-Depends on / 依赖: BooleanRing, BooleanRing.toBooleanAlgebra, fast_instance, toBooleanAlgebra
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BooleanAlgebra (AsBoolAlg α) :=
   fast_instance% @BooleanRing.toBooleanAlgebra α _
 
 @[simp]
-/--
-theorem `ofBoolAlg_top` / 定理 `ofBoolAlg_top`
-
-English:
-theorem ofBoolAlg_top
-  statement: ofBoolAlg (⊤ : AsBoolAlg α) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_top
-  结论: of布尔Alg (⊤ : As布尔Alg α) = 1
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_top : ofBoolAlg (⊤ : AsBoolAlg α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_top : ofBoolAlg (⊤ : AsBoolAlg α) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_bot` / 定理 `ofBoolAlg_bot`
-
-English:
-theorem ofBoolAlg_bot
-  statement: ofBoolAlg (⊥ : AsBoolAlg α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_bot
-  结论: of布尔Alg (⊥ : As布尔Alg α) = 0
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_bot : ofBoolAlg (⊥ : AsBoolAlg α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_bot : ofBoolAlg (⊥ : AsBoolAlg α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_sup` / 定理 `ofBoolAlg_sup`
-
-English:
-theorem ofBoolAlg_sup
-  given: (a b : AsBoolAlg α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_sup
-  条件: (a b : As布尔Alg α)
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_sup (a b : AsBoolAlg α) : ofBoolAlg (a ⊔ b) = ofBoolAlg a + ofBo
+olAlg b + ofBoolAlg a * ofBoolAlg b
+参数：a b : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_sup (a b : AsBoolAlg α) :
     ofBoolAlg (a ⊔ b) = ofBoolAlg a + ofBoolAlg b + ofBoolAlg a * ofBoolAlg b :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_inf` / 定理 `ofBoolAlg_inf`
-
-English:
-theorem ofBoolAlg_inf
-  given: (a b : AsBoolAlg α)
-  statement: ofBoolAlg (a ⊓ b) = ofBoolAlg a * ofBoolAlg b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_inf
-  条件: (a b : As布尔Alg α)
-  结论: of布尔Alg (a ⊓ b) = of布尔Alg a * of布尔Alg b
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_inf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_inf (a b : AsBoolAlg α) : ofBoolAlg (a ⊓ b) = ofBoolAlg a * ofBo
+olAlg b
+参数：a b : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_inf (a b : AsBoolAlg α) : ofBoolAlg (a ⊓ b) = ofBoolAlg a * ofBoolAlg b :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_compl` / 定理 `ofBoolAlg_compl`
-
-English:
-theorem ofBoolAlg_compl
-  given: (a : AsBoolAlg α)
-  statement: ofBoolAlg aᶜ = 1 + ofBoolAlg a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Alg_compl
-  条件: (a : As布尔Alg α)
-  结论: of布尔Alg aᶜ = 1 + of布尔Alg a
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolAlg_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_compl (a : AsBoolAlg α) : ofBoolAlg aᶜ = 1 + ofBoolAlg a
+参数：a : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_compl (a : AsBoolAlg α) : ofBoolAlg aᶜ = 1 + ofBoolAlg a :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolAlg_sdiff` / 定理 `ofBoolAlg_sdiff`
-
-English:
-theorem ofBoolAlg_sdiff
-  given: (a b : AsBoolAlg α)
-  statement: ofBoolAlg (a \ b) = ofBoolAlg a * (1 + ofBoolAlg b)
-  proof: rfl
-
-中文:
-定理 of布尔Alg_sdiff
-  条件: (a b : As布尔Alg α)
-  结论: of布尔Alg (a \ b) = of布尔Alg a * (1 + of布尔Alg b)
-  证明: rfl
+/-
+**ofBoolAlg_sdiff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_sdiff (a b : AsBoolAlg α) : ofBoolAlg (a \ b) = ofBoolAlg a * (1
+ + ofBoolAlg b)
+参数：a b : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolAlg_sdiff (a b : AsBoolAlg α) : ofBoolAlg (a \ b) = ofBoolAlg a * (1 + ofBoolAlg b) :=
   rfl
-
-/--
-theorem `of_boolalg_symmDiff_aux` / 定理 `of_boolalg_symmDiff_aux`
-
-English:
-theorem of_boolalg_symmDiff_aux
-  given: (a b : α)
-  statement: (a + b + a * b) * (1 + a * b) = a + b
-  proof: calc (a + b + a * b) * (1 + a * b)
-    _ = a + b + (a * b + a * b * (a * b)) + (a * (b * b) + a * a * b) := by ring
-    _ = a + b := by simp only [mul_self, add_self, add_zero]
-
-@[simp]
-
-中文:
-定理 of_boolalg_symmDiff_aux
-  条件: (a b : α)
-  结论: (a + b + a * b) * (1 + a * b) = a + b
-  证明: calc (a + b + a * b) * (1 + a * b)
-    _ = a + b + (a * b + a * b * (a * b)) + (a * (b * b) + a * a * b) := by ring
-    _ = a + b := by simp only [mul_self, add_self, add_zero]
-
-@[simp]
+/-
+**of_boolalg_symmDiff_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem of_boolalg_symmDiff_aux (a b : α) : (a + b + a * b) * (1 + a * b) = a + b :=
   calc (a + b + a * b) * (1 + a * b)
@@ -1029,164 +881,92 @@ private theorem of_boolalg_symmDiff_aux (a b : α) : (a + b + a * b) * (1 + a * 
     _ = a + b := by simp only [mul_self, add_self, add_zero]
 
 @[simp]
-/--
-theorem `ofBoolAlg_symmDiff` / 定理 `ofBoolAlg_symmDiff`
-
-English:
-theorem ofBoolAlg_symmDiff
-  given: (a b : AsBoolAlg α)
-  statement: ofBoolAlg (a ∆ b) = ofBoolAlg a + ofBoolAlg b
-  proof: by
-  rw [symmDiff_eq_sup_sdiff_inf]
-  exact of_boolalg_symmDiff_aux _ _
-
-@[simp]
-
-中文:
-定理 of布尔Alg_symmDiff
-  条件: (a b : As布尔Alg α)
-  结论: of布尔Alg (a ∆ b) = of布尔Alg a + of布尔Alg b
-  证明: by
-  rw [symmDiff_eq_sup_sdiff_inf]
-  exact of_boolalg_symmDiff_aux _ _
-
-@[simp]
-
-Depends on / 依赖: of_boolalg_symmDiff_aux, symmDiff_eq_sup_sdiff_inf
+/-
+**ofBoolAlg_symmDiff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_symmDiff (a b : AsBoolAlg α) : ofBoolAlg (a ∆ b) = ofBoolAlg a +
+ ofBoolAlg b
+参数：a b : AsBoolAlg α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `symmDiff_eq_sup_sdiff_inf`：symmDiff_eq_sup_sdiff_inf : a ∆ b = (a ⊔ b) \
+ (a ⊓ b)
+· 使用定理 `_private.Mathlib.Algebra.Ring.BooleanRing.0.of_boolalg_symmDiff_aux`：∀ {
+α : Type u_1} [inst : BooleanRing α] (a b : α), (a + b + a * b) * (1 + a * b) = 
+a + b
 -/
 theorem ofBoolAlg_symmDiff (a b : AsBoolAlg α) : ofBoolAlg (a ∆ b) = ofBoolAlg a + ofBoolAlg b := by
   rw [symmDiff_eq_sup_sdiff_inf]
   exact of_boolalg_symmDiff_aux _ _
 
 @[simp]
-/--
-theorem `ofBoolAlg_mul_ofBoolAlg_eq_left_iff` / 定理 `ofBoolAlg_mul_ofBoolAlg_eq_left_iff`
-
-English:
-theorem ofBoolAlg_mul_ofBoolAlg_eq_left_iff
-  given: {a b : AsBoolAlg α}
-  proof: @inf_eq_left (AsBoolAlg α) _ _ _
-
-@[simp]
-
-中文:
-定理 of布尔Alg_mul_of布尔Alg_eq_left_iff
-  条件: {a b : As布尔Alg α}
-  证明: @inf_eq_left (AsBoolAlg α) _ _ _
-
-@[simp]
-
-Depends on / 依赖: AsBoolAlg, inf_eq_left
+/-
+**ofBoolAlg_mul_ofBoolAlg_eq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolAlg_mul_ofBoolAlg_eq_left_iff {a b : AsBoolAlg α} : ofBoolAlg a * of
+BoolAlg b = ofBoolAlg a ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b =
+ a ↔ a ≤ b
 -/
 theorem ofBoolAlg_mul_ofBoolAlg_eq_left_iff {a b : AsBoolAlg α} :
-    ofBoolAlg a * ofBoolAlg b = ofBoolAlg a ↔ a <= b :=
+    ofBoolAlg a * ofBoolAlg b = ofBoolAlg a ↔ a ≤ b :=
   @inf_eq_left (AsBoolAlg α) _ _ _
 
 @[simp]
-/--
-theorem `toBoolAlg_zero` / 定理 `toBoolAlg_zero`
-
-English:
-theorem toBoolAlg_zero
-  statement: toBoolAlg (0 : α) = ⊥
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_zero
-  结论: to布尔Alg (0 : α) = ⊥
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_zero : toBoolAlg (0 : α) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolAlg_zero : toBoolAlg (0 : α) = ⊥ :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolAlg_one` / 定理 `toBoolAlg_one`
-
-English:
-theorem toBoolAlg_one
-  statement: toBoolAlg (1 : α) = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_one
-  结论: to布尔Alg (1 : α) = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_one : toBoolAlg (1 : α) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolAlg_one : toBoolAlg (1 : α) = ⊤ :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolAlg_mul` / 定理 `toBoolAlg_mul`
-
-English:
-theorem toBoolAlg_mul
-  given: (a b : α)
-  statement: toBoolAlg (a * b) = toBoolAlg a ⊓ toBoolAlg b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_mul
-  条件: (a b : α)
-  结论: to布尔Alg (a * b) = to布尔Alg a ⊓ to布尔Alg b
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_mul (a b : α) : toBoolAlg (a * b) = toBoolAlg a ⊓ toBoolAlg b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolAlg_mul (a b : α) : toBoolAlg (a * b) = toBoolAlg a ⊓ toBoolAlg b :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolAlg_add_add_mul` / 定理 `toBoolAlg_add_add_mul`
-
-English:
-theorem toBoolAlg_add_add_mul
-  given: (a b : α)
-  statement: toBoolAlg (a + b + a * b) = toBoolAlg a ⊔ toBoolAlg b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Alg_add_add_mul
-  条件: (a b : α)
-  结论: to布尔Alg (a + b + a * b) = to布尔Alg a ⊔ to布尔Alg b
-  证明: rfl
-
-@[simp]
+/-
+**toBoolAlg_add_add_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_add_add_mul (a b : α) : toBoolAlg (a + b + a * b) = toBoolAlg a 
+⊔ toBoolAlg b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolAlg_add_add_mul (a b : α) : toBoolAlg (a + b + a * b) = toBoolAlg a ⊔ toBoolAlg b :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolAlg_add` / 定理 `toBoolAlg_add`
-
-English:
-theorem toBoolAlg_add
-  given: (a b : α)
-  statement: toBoolAlg (a + b) = toBoolAlg a ∆ toBoolAlg b
-  proof: (ofBoolAlg_symmDiff a b).symm
-
-中文:
-定理 to布尔Alg_add
-  条件: (a b : α)
-  结论: to布尔Alg (a + b) = to布尔Alg a ∆ to布尔Alg b
-  证明: (ofBoolAlg_symmDiff a b).symm
-
-Depends on / 依赖: ofBoolAlg_symmDiff
+/-
+**toBoolAlg_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolAlg_add (a b : α) : toBoolAlg (a + b) = toBoolAlg a ∆ toBoolAlg b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ofBoolAlg_symmDiff`：ofBoolAlg_symmDiff (a b : AsBoolAlg α) : ofBoolAlg (
+a ∆ b) = ofBoolAlg a + ofBoolAlg b
 -/
 theorem toBoolAlg_add (a b : α) : toBoolAlg (a + b) = toBoolAlg a ∆ toBoolAlg b :=
   (ofBoolAlg_symmDiff a b).symm
@@ -1194,36 +974,19 @@ theorem toBoolAlg_add (a b : α) : toBoolAlg (a + b) = toBoolAlg a ∆ toBoolAlg
 /-- Turn a ring homomorphism from Boolean rings `α` to `β` into a bounded lattice homomorphism
 from `α` to `β` considered as Boolean algebras. -/
 @[simps]
-/--
-Definition of `RingHom.asBoolAlg` / `RingHom.asBoolAlg` 的定义
+/-
+**RingHom.asBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : BooleanRing α] → [inst_1 :
+ BooleanRing β] → (α →+* β) → BoundedLatticeHom (AsBoolAlg α) (AsBoolAlg β)
+参数：α →+* β；AsBoolAlg α；AsBoolAlg β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingHom.asBoolAlg
-  signature: (f : α ->+* β)
-  body: toBoolAlg ∘ f ∘ ofBoolAlg
-  map_sup' a b := by
-    dsimp
-    simp_rw [map_add f, map_mul f, toBoolAlg_add_add_mul]
-  map_inf' := f.map_mul'
-  map_top' := f.map_one'
-  map_bot' := f.map_zero'
-
-@[simp]
-
-中文:
-定义 环态射.as布尔Alg
-  签名: (f : α ->+* β)
-  定义体: toBoolAlg ∘ f ∘ ofBoolAlg
-  map_sup' a b := by
-    dsimp
-    simp_rw [map_add f, map_mul f, toBoolAlg_add_add_mul]
-  map_inf' := f.map_mul'
-  map_top' := f.map_one'
-  map_bot' := f.map_zero'
-
-@[simp]
+--- 原说明 ---
+Turn a ring homomorphism from Boolean rings `α` to `β` into a bounded lattice ho
+momorphism
+from `α` to `β` considered as Boolean algebras.
 -/
-protected def RingHom.asBoolAlg (f : α ->+* β) : BoundedLatticeHom (AsBoolAlg α) (AsBoolAlg β) where
+protected def RingHom.asBoolAlg (f : α →+* β) : BoundedLatticeHom (AsBoolAlg α) (AsBoolAlg β) where
   toFun := toBoolAlg ∘ f ∘ ofBoolAlg
   map_sup' a b := by
     dsimp
@@ -1233,41 +996,25 @@ protected def RingHom.asBoolAlg (f : α ->+* β) : BoundedLatticeHom (AsBoolAlg 
   map_bot' := f.map_zero'
 
 @[simp]
-/--
-theorem `RingHom.asBoolAlg_id` / 定理 `RingHom.asBoolAlg_id`
-
-English:
-theorem RingHom.asBoolAlg_id
-  statement: (RingHom.id α).asBoolAlg = BoundedLatticeHom.id _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 环态射.as布尔Alg_id
-  结论: (环态射.id α).as布尔Alg = 有界格态射.id _
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.asBoolAlg_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.asBoolAlg_id : (RingHom.id α).asBoolAlg = BoundedLatticeHom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RingHom.asBoolAlg_id : (RingHom.id α).asBoolAlg = BoundedLatticeHom.id _ :=
   rfl
 
 @[simp]
-/--
-theorem `RingHom.asBoolAlg_comp` / 定理 `RingHom.asBoolAlg_comp`
-
-English:
-theorem RingHom.asBoolAlg_comp
-  given: (g : β ->+* γ) (f : α ->+* β)
-  proof: rfl
-
-中文:
-定理 环态射.as布尔Alg_comp
-  条件: (g : β ->+* γ) (f : α ->+* β)
-  证明: rfl
+/-
+**RingHom.asBoolAlg_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.asBoolAlg_comp (g : β ->+* γ) (f : α ->+* β) : (g.comp f).asBoolAl
+g = g.asBoolAlg.comp f.asBoolAlg
+参数：g : β ->+* γ；f : α ->+* β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.asBoolAlg_comp (g : β ->+* γ) (f : α ->+* β) :
+theorem RingHom.asBoolAlg_comp (g : β →+* γ) (f : α →+* β) :
     (g.comp f).asBoolAlg = g.asBoolAlg.comp f.asBoolAlg :=
   rfl
 
@@ -1278,247 +1025,145 @@ end RingToAlgebra
 
 section AlgebraToRing
 
-/--
-Definition of `AsBoolRing` / `AsBoolRing` 的定义
+/-- Type synonym to view a Boolean ring as a Boolean algebra. -/
+/-
+**AsBoolRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AsBoolRing (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AsBoolRing
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 As布尔Ring
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+Type synonym to view a Boolean ring as a Boolean algebra.
 -/
 def AsBoolRing (α : Type*) :=
   α
 
-/--
-Definition of `toBoolRing` / `toBoolRing` 的定义
+/-- The "identity" equivalence between `AsBoolRing α` and `α`. -/
+/-
+**toBoolRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toBoolRing : α ≃ AsBoolRing α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toBoolRing
-  signature: : α ≃ AsBoolRing α
-  body: Equiv.refl _
-
-中文:
-定义 to布尔Ring
-  签名: : α ≃ As布尔Ring α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The "identity" equivalence between `AsBoolRing α` and `α`.
 -/
 def toBoolRing : α ≃ AsBoolRing α :=
   Equiv.refl _
 
-/--
-Definition of `ofBoolRing` / `ofBoolRing` 的定义
+/-- The "identity" equivalence between `α` and `AsBoolRing α`. -/
+/-
+**ofBoolRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ofBoolRing : AsBoolRing α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofBoolRing
-  signature: : AsBoolRing α ≃ α
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 of布尔Ring
-  签名: : As布尔Ring α ≃ α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The "identity" equivalence between `α` and `AsBoolRing α`.
 -/
 def ofBoolRing : AsBoolRing α ≃ α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `toBoolRing_symm_eq` / 定理 `toBoolRing_symm_eq`
-
-English:
-theorem toBoolRing_symm_eq
-  statement: (@toBoolRing α).symm = ofBoolRing
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Ring_symm_eq
-  结论: (@to布尔Ring α).symm = of布尔Ring
-  证明: rfl
-
-@[simp]
+/-
+**toBoolRing_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_symm_eq : (@toBoolRing α).symm = ofBoolRing
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toBoolRing_symm_eq : (@toBoolRing α).symm = ofBoolRing :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_symm_eq` / 定理 `ofBoolRing_symm_eq`
-
-English:
-theorem ofBoolRing_symm_eq
-  statement: (@ofBoolRing α).symm = toBoolRing
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_symm_eq
-  结论: (@of布尔Ring α).symm = to布尔Ring
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_symm_eq : (@ofBoolRing α).symm = toBoolRing
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofBoolRing_symm_eq : (@ofBoolRing α).symm = toBoolRing :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolRing_ofBoolRing` / 定理 `toBoolRing_ofBoolRing`
-
-English:
-theorem toBoolRing_ofBoolRing
-  given: (a : AsBoolRing α)
-  statement: toBoolRing (ofBoolRing a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Ring_of布尔Ring
-  条件: (a : As布尔Ring α)
-  结论: to布尔Ring (of布尔Ring a) = a
-  证明: rfl
-
-@[simp]
+/-
+**toBoolRing_ofBoolRing** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_ofBoolRing (a : AsBoolRing α) : toBoolRing (ofBoolRing a) = a
+参数：a : AsBoolRing α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolRing_ofBoolRing (a : AsBoolRing α) : toBoolRing (ofBoolRing a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_toBoolRing` / 定理 `ofBoolRing_toBoolRing`
-
-English:
-theorem ofBoolRing_toBoolRing
-  given: (a : α)
-  statement: ofBoolRing (toBoolRing a) = a
-  proof: rfl
-
-中文:
-定理 of布尔Ring_to布尔Ring
-  条件: (a : α)
-  结论: of布尔Ring (to布尔Ring a) = a
-  证明: rfl
+/-
+**ofBoolRing_toBoolRing** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_toBoolRing (a : α) : ofBoolRing (toBoolRing a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_toBoolRing (a : α) : ofBoolRing (toBoolRing a) = a :=
   rfl
-
-/--
-theorem `toBoolRing_inj` / 定理 `toBoolRing_inj`
-
-English:
-theorem toBoolRing_inj
-  given: {a b : α}
-  statement: toBoolRing a = toBoolRing b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-定理 to布尔Ring_inj
-  条件: {a b : α}
-  结论: to布尔Ring a = to布尔Ring b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**toBoolRing_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_inj {a b : α} : toBoolRing a = toBoolRing b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toBoolRing_inj {a b : α} : toBoolRing a = toBoolRing b ↔ a = b :=
   Iff.rfl
-
-/--
-theorem `ofBoolRing_inj` / 定理 `ofBoolRing_inj`
-
-English:
-theorem ofBoolRing_inj
-  given: {a b : AsBoolRing α}
-  statement: ofBoolRing a = ofBoolRing b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-定理 of布尔Ring_inj
-  条件: {a b : As布尔Ring α}
-  结论: of布尔Ring a = of布尔Ring b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**ofBoolRing_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_inj {a b : AsBoolRing α} : ofBoolRing a = ofBoolRing b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofBoolRing_inj {a b : AsBoolRing α} : ofBoolRing a = ofBoolRing b ↔ a = b :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (AsBoolRing α)
-  body: ⟨default (α := α)⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (As布尔Ring α)
-  定义体: ⟨default (α := α)⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (AsBoolRing α) :=
   ⟨default (α := α)⟩
 
 -- See note [reducible non-instances]
-/--
-Definition of `GeneralizedBooleanAlgebra.toNonUnitalCommRing` / `GeneralizedBooleanAlgebra.toNonUnitalCommRing` 的定义
+/-- Every generalized Boolean algebra has the structure of a nonunital commutative ring with the
+following data:
 
-English:
-abbreviation GeneralizedBooleanAlgebra.toNonUnitalCommRing
-  signature: [GeneralizedBooleanAlgebra α]
-  body: (· ∆ ·)
-  add_assoc := symmDiff_assoc
-  zero := ⊥
-  zero_add := bot_symmDiff
-  add_zero := symmDiff_bot
-  zero_mul := bot_inf_eq
-  mul_zero := inf_bot_eq
-  neg := id
-  neg_add_cancel := symmDiff_self
-  add_comm := symmDiff_comm
-  mul := (· ⊓ ·)
-  mul_assoc := inf_assoc
-  mul_comm := inf_comm
-  left_distrib := inf_symmDiff_distrib_left
-  right_distrib := inf_symmDiff_distrib_right
-  nsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; nsmulRec
-  zsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; letI : Neg α := ⟨id⟩; zsmulRec
+* `a + b` unfolds to `a ∆ b` (symmetric difference)
+* `a * b` unfolds to `a ⊓ b`
+* `-a` unfolds to `a`
+* `0` unfolds to `⊥`
+-/
+/-
+**GeneralizedBooleanAlgebra.toNonUnitalCommRing** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：GeneralizedBooleanAlgebra.toNonUnitalCommRing [GeneralizedBooleanAlgebra α
+] : NonUnitalCommRing α where add
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `symmDiff_assoc`：symmDiff_assoc : a ∆ b ∆ c = a ∆ (b ∆ c)
+· 使用定理 `inf_symmDiff_distrib_left`：inf_symmDiff_distrib_left : a ⊓ b ∆ c = (a ⊓ 
+b) ∆ (a ⊓ c)
+· 使用定理 `inf_symmDiff_distrib_right`：inf_symmDiff_distrib_right : a ∆ b ⊓ c = (a 
+⊓ c) ∆ (b ⊓ c)
 
-中文:
-缩写 Generalized布尔ean代数.toNonUnitalCommRing
-  签名: [Generalized布尔ean代数 α]
-  定义体: (· ∆ ·)
-  add_assoc := symmDiff_assoc
-  zero := ⊥
-  zero_add := bot_symmDiff
-  add_zero := symmDiff_bot
-  zero_mul := bot_inf_eq
-  mul_zero := inf_bot_eq
-  neg := id
-  neg_add_cancel := symmDiff_self
-  add_comm := symmDiff_comm
-  mul := (· ⊓ ·)
-  mul_assoc := inf_assoc
-  mul_comm := inf_comm
-  left_distrib := inf_symmDiff_distrib_left
-  right_distrib := inf_symmDiff_distrib_right
-  nsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; nsmulRec
-  zsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; letI : Neg α := ⟨id⟩; zsmulRec
+--- 原说明 ---
+Every generalized Boolean algebra has the structure of a nonunital commutative r
+ing with the
+following data:
+
+* `a + b` unfolds to `a ∆ b` (symmetric difference)
+* `a * b` unfolds to `a ⊓ b`
+* `-a` unfolds to `a`
+* `0` unfolds to `⊥`
 -/
 abbrev GeneralizedBooleanAlgebra.toNonUnitalCommRing [GeneralizedBooleanAlgebra α] :
     NonUnitalCommRing α where
@@ -1539,21 +1184,9 @@ abbrev GeneralizedBooleanAlgebra.toNonUnitalCommRing [GeneralizedBooleanAlgebra 
   right_distrib := inf_symmDiff_distrib_right
   nsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; nsmulRec
   zsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; letI : Neg α := ⟨id⟩; zsmulRec
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [GeneralizedBooleanAlgebra
-  signature: α] : NonUnitalCommRing (AsBoolRing α)
-  body: @GeneralizedBooleanAlgebra.toNonUnitalCommRing α _
-
-中文:
-实例 [Generalized布尔ean代数
-  签名: α] : 非幺交换环 (As布尔Ring α)
-  定义体: @GeneralizedBooleanAlgebra.toNonUnitalCommRing α _
-
-Depends on / 依赖: GeneralizedBooleanAlgebra, GeneralizedBooleanAlgebra.toNonUnitalCommRing, toNonUnitalCommRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [GeneralizedBooleanAlgebra α] : NonUnitalCommRing (AsBoolRing α) :=
   @GeneralizedBooleanAlgebra.toNonUnitalCommRing α _
@@ -1561,34 +1194,29 @@ instance [GeneralizedBooleanAlgebra α] : NonUnitalCommRing (AsBoolRing α) :=
 variable [BooleanAlgebra α] [BooleanAlgebra β] [BooleanAlgebra γ]
 
 -- See note [reducible non-instances]
-/--
-Definition of `BooleanAlgebra.toBooleanRing` / `BooleanAlgebra.toBooleanRing` 的定义
+/-- Every Boolean algebra has the structure of a Boolean ring with the following data:
 
-English:
-abbreviation BooleanAlgebra.toBooleanRing
-  signature: : BooleanRing α where
-  body: GeneralizedBooleanAlgebra.toNonUnitalCommRing
-  one := ⊤
-  one_mul := top_inf_eq
-  mul_one := inf_top_eq
-  isIdempotentElem := inf_idem
+* `a + b` unfolds to `a ∆ b` (symmetric difference)
+* `a * b` unfolds to `a ⊓ b`
+* `-a` unfolds to `a`
+* `0` unfolds to `⊥`
+* `1` unfolds to `⊤`
+-/
+/-
+**BooleanAlgebra.toBooleanRing** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：BooleanAlgebra.toBooleanRing : BooleanRing α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-scoped[BooleanRingOfBooleanAlgebra]
-  attribute [instance] GeneralizedBooleanAlgebra.toNonUnitalCommRing BooleanAlgebra.toBooleanRing
+--- 原说明 ---
+Every Boolean algebra has the structure of a Boolean ring with the following dat
+a:
 
-中文:
-缩写 布尔代数.to布尔eanRing
-  签名: : 布尔ean环 α where
-  定义体: GeneralizedBooleanAlgebra.toNonUnitalCommRing
-  one := ⊤
-  one_mul := top_inf_eq
-  mul_one := inf_top_eq
-  isIdempotentElem := inf_idem
-
-scoped[BooleanRingOfBooleanAlgebra]
-  attribute [instance] GeneralizedBooleanAlgebra.toNonUnitalCommRing BooleanAlgebra.toBooleanRing
-
-Depends on / 依赖: GeneralizedBooleanAlgebra, GeneralizedBooleanAlgebra.toNonUnitalCommRing, toNonUnitalCommRing
+* `a + b` unfolds to `a ∆ b` (symmetric difference)
+* `a * b` unfolds to `a ⊓ b`
+* `-a` unfolds to `a`
+* `0` unfolds to `⊥`
+* `1` unfolds to `⊤`
 -/
 abbrev BooleanAlgebra.toBooleanRing : BooleanRing α where
   __ := GeneralizedBooleanAlgebra.toNonUnitalCommRing
@@ -1599,267 +1227,135 @@ abbrev BooleanAlgebra.toBooleanRing : BooleanRing α where
 
 scoped[BooleanRingOfBooleanAlgebra]
   attribute [instance] GeneralizedBooleanAlgebra.toNonUnitalCommRing BooleanAlgebra.toBooleanRing
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BooleanRing (AsBoolRing α)
-  body: fast_instance% @BooleanAlgebra.toBooleanRing α _
-
-@[simp]
-
-中文:
-实例 :
-  签名: 布尔ean环 (As布尔Ring α)
-  定义体: fast_instance% @BooleanAlgebra.toBooleanRing α _
-
-@[simp]
-
-Depends on / 依赖: BooleanAlgebra, BooleanAlgebra.toBooleanRing, fast_instance, toBooleanRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BooleanRing (AsBoolRing α) :=
   fast_instance% @BooleanAlgebra.toBooleanRing α _
 
 @[simp]
-/--
-theorem `ofBoolRing_zero` / 定理 `ofBoolRing_zero`
-
-English:
-theorem ofBoolRing_zero
-  statement: ofBoolRing (0 : AsBoolRing α) = ⊥
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_zero
-  结论: of布尔Ring (0 : As布尔Ring α) = ⊥
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_zero : ofBoolRing (0 : AsBoolRing α) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_zero : ofBoolRing (0 : AsBoolRing α) = ⊥ :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_one` / 定理 `ofBoolRing_one`
-
-English:
-theorem ofBoolRing_one
-  statement: ofBoolRing (1 : AsBoolRing α) = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_one
-  结论: of布尔Ring (1 : As布尔Ring α) = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_one : ofBoolRing (1 : AsBoolRing α) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_one : ofBoolRing (1 : AsBoolRing α) = ⊤ :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_neg` / 定理 `ofBoolRing_neg`
-
-English:
-theorem ofBoolRing_neg
-  given: (a : AsBoolRing α)
-  statement: ofBoolRing (-a) = ofBoolRing a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_neg
-  条件: (a : As布尔Ring α)
-  结论: of布尔Ring (-a) = of布尔Ring a
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_neg (a : AsBoolRing α) : ofBoolRing (-a) = ofBoolRing a
+参数：a : AsBoolRing α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_neg (a : AsBoolRing α) : ofBoolRing (-a) = ofBoolRing a :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_add` / 定理 `ofBoolRing_add`
-
-English:
-theorem ofBoolRing_add
-  given: (a b : AsBoolRing α)
-  statement: ofBoolRing (a + b) = ofBoolRing a ∆ ofBoolRing b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_add
-  条件: (a b : As布尔Ring α)
-  结论: of布尔Ring (a + b) = of布尔Ring a ∆ of布尔Ring b
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_add (a b : AsBoolRing α) : ofBoolRing (a + b) = ofBoolRing a ∆ 
+ofBoolRing b
+参数：a b : AsBoolRing α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_add (a b : AsBoolRing α) : ofBoolRing (a + b) = ofBoolRing a ∆ ofBoolRing b :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_sub` / 定理 `ofBoolRing_sub`
-
-English:
-theorem ofBoolRing_sub
-  given: (a b : AsBoolRing α)
-  statement: ofBoolRing (a - b) = ofBoolRing a ∆ ofBoolRing b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_sub
-  条件: (a b : As布尔Ring α)
-  结论: of布尔Ring (a - b) = of布尔Ring a ∆ of布尔Ring b
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_sub (a b : AsBoolRing α) : ofBoolRing (a - b) = ofBoolRing a ∆ 
+ofBoolRing b
+参数：a b : AsBoolRing α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_sub (a b : AsBoolRing α) : ofBoolRing (a - b) = ofBoolRing a ∆ ofBoolRing b :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_mul` / 定理 `ofBoolRing_mul`
-
-English:
-theorem ofBoolRing_mul
-  given: (a b : AsBoolRing α)
-  statement: ofBoolRing (a * b) = ofBoolRing a ⊓ ofBoolRing b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of布尔Ring_mul
-  条件: (a b : As布尔Ring α)
-  结论: of布尔Ring (a * b) = of布尔Ring a ⊓ of布尔Ring b
-  证明: rfl
-
-@[simp]
+/-
+**ofBoolRing_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_mul (a b : AsBoolRing α) : ofBoolRing (a * b) = ofBoolRing a ⊓ 
+ofBoolRing b
+参数：a b : AsBoolRing α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBoolRing_mul (a b : AsBoolRing α) : ofBoolRing (a * b) = ofBoolRing a ⊓ ofBoolRing b :=
   rfl
 
 @[simp]
-/--
-theorem `ofBoolRing_le_ofBoolRing_iff` / 定理 `ofBoolRing_le_ofBoolRing_iff`
-
-English:
-theorem ofBoolRing_le_ofBoolRing_iff
-  given: {a b : AsBoolRing α}
-  proof: inf_eq_left.symm
-
-@[simp]
-
-中文:
-定理 of布尔Ring_le_of布尔Ring_iff
-  条件: {a b : As布尔Ring α}
-  证明: inf_eq_left.symm
-
-@[simp]
-
-Depends on / 依赖: inf_eq_left, inf_eq_left.symm
+/-
+**ofBoolRing_le_ofBoolRing_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofBoolRing_le_ofBoolRing_iff {a b : AsBoolRing α} : ofBoolRing a <= ofBool
+Ring b ↔ a * b = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `inf_eq_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b =
+ a ↔ a ≤ b
 -/
 theorem ofBoolRing_le_ofBoolRing_iff {a b : AsBoolRing α} :
-    ofBoolRing a <= ofBoolRing b ↔ a * b = a :=
+    ofBoolRing a ≤ ofBoolRing b ↔ a * b = a :=
   inf_eq_left.symm
 
 @[simp]
-/--
-theorem `toBoolRing_bot` / 定理 `toBoolRing_bot`
-
-English:
-theorem toBoolRing_bot
-  statement: toBoolRing (⊥ : α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Ring_bot
-  结论: to布尔Ring (⊥ : α) = 0
-  证明: rfl
-
-@[simp]
+/-
+**toBoolRing_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_bot : toBoolRing (⊥ : α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolRing_bot : toBoolRing (⊥ : α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolRing_top` / 定理 `toBoolRing_top`
-
-English:
-theorem toBoolRing_top
-  statement: toBoolRing (⊤ : α) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Ring_top
-  结论: to布尔Ring (⊤ : α) = 1
-  证明: rfl
-
-@[simp]
+/-
+**toBoolRing_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_top : toBoolRing (⊤ : α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolRing_top : toBoolRing (⊤ : α) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolRing_inf` / 定理 `toBoolRing_inf`
-
-English:
-theorem toBoolRing_inf
-  given: (a b : α)
-  statement: toBoolRing (a ⊓ b) = toBoolRing a * toBoolRing b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to布尔Ring_inf
-  条件: (a b : α)
-  结论: to布尔Ring (a ⊓ b) = to布尔Ring a * to布尔Ring b
-  证明: rfl
-
-@[simp]
+/-
+**toBoolRing_inf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_inf (a b : α) : toBoolRing (a ⊓ b) = toBoolRing a * toBoolRing 
+b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolRing_inf (a b : α) : toBoolRing (a ⊓ b) = toBoolRing a * toBoolRing b :=
   rfl
 
 @[simp]
-/--
-theorem `toBoolRing_symmDiff` / 定理 `toBoolRing_symmDiff`
-
-English:
-theorem toBoolRing_symmDiff
-  given: (a b : α)
-  statement: toBoolRing (a ∆ b) = toBoolRing a + toBoolRing b
-  proof: rfl
-
-中文:
-定理 to布尔Ring_symmDiff
-  条件: (a b : α)
-  结论: to布尔Ring (a ∆ b) = to布尔Ring a + to布尔Ring b
-  证明: rfl
+/-
+**toBoolRing_symmDiff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toBoolRing_symmDiff (a b : α) : toBoolRing (a ∆ b) = toBoolRing a + toBool
+Ring b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBoolRing_symmDiff (a b : α) : toBoolRing (a ∆ b) = toBoolRing a + toBoolRing b :=
   rfl
@@ -1867,33 +1363,19 @@ theorem toBoolRing_symmDiff (a b : α) : toBoolRing (a ∆ b) = toBoolRing a + t
 /-- Turn a bounded lattice homomorphism from Boolean algebras `α` to `β` into a ring homomorphism
 from `α` to `β` considered as Boolean rings. -/
 @[simps]
-/--
-Definition of `BoundedLatticeHom.asBoolRing` / `BoundedLatticeHom.asBoolRing` 的定义
+/-
+**BoundedLatticeHom.asBoolRing** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : BooleanAlgebra α] → [inst_
+1 : BooleanAlgebra β] → BoundedLatticeHom α β → AsBoolRing α →+* AsBoolRing β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BoundedLatticeHom.asBoolRing
-  signature: (f : BoundedLatticeHom α β)
-  body: toBoolRing ∘ f ∘ ofBoolRing
-  map_zero' := f.map_bot'
-  map_one' := f.map_top'
-  map_add' := map_symmDiff' f
-  map_mul' := f.map_inf'
-
-@[simp]
-
-中文:
-定义 有界格态射.as布尔Ring
-  签名: (f : 有界格态射 α β)
-  定义体: toBoolRing ∘ f ∘ ofBoolRing
-  map_zero' := f.map_bot'
-  map_one' := f.map_top'
-  map_add' := map_symmDiff' f
-  map_mul' := f.map_inf'
-
-@[simp]
+--- 原说明 ---
+Turn a bounded lattice homomorphism from Boolean algebras `α` to `β` into a ring
+ homomorphism
+from `α` to `β` considered as Boolean rings.
 -/
 protected def BoundedLatticeHom.asBoolRing (f : BoundedLatticeHom α β) :
-    AsBoolRing α ->+* AsBoolRing β where
+    AsBoolRing α →+* AsBoolRing β where
   toFun := toBoolRing ∘ f ∘ ofBoolRing
   map_zero' := f.map_bot'
   map_one' := f.map_top'
@@ -1901,39 +1383,24 @@ protected def BoundedLatticeHom.asBoolRing (f : BoundedLatticeHom α β) :
   map_mul' := f.map_inf'
 
 @[simp]
-/--
-theorem `BoundedLatticeHom.asBoolRing_id` / 定理 `BoundedLatticeHom.asBoolRing_id`
-
-English:
-theorem BoundedLatticeHom.asBoolRing_id
-  statement: (BoundedLatticeHom.id α).asBoolRing = RingHom.id _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 有界格态射.as布尔Ring_id
-  结论: (有界格态射.id α).as布尔Ring = 环态射.id _
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.asBoolRing_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：BoundedLatticeHom.asBoolRing_id : (BoundedLatticeHom.id α).asBoolRing = Ri
+ngHom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem BoundedLatticeHom.asBoolRing_id : (BoundedLatticeHom.id α).asBoolRing = RingHom.id _ :=
   rfl
 
 @[simp]
-/--
-theorem `BoundedLatticeHom.asBoolRing_comp` / 定理 `BoundedLatticeHom.asBoolRing_comp`
-
-English:
-theorem BoundedLatticeHom.asBoolRing_comp
-  given: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
-  proof: rfl
-
-中文:
-定理 有界格态射.as布尔Ring_comp
-  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
-  证明: rfl
+/-
+**BoundedLatticeHom.asBoolRing_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：BoundedLatticeHom.asBoolRing_comp (g : BoundedLatticeHom β γ) (f : Bounded
+LatticeHom α β) : (g.comp f).asBoolRing = g.asBoolRing.comp f.asBoolRing
+参数：g : BoundedLatticeHom β γ；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem BoundedLatticeHom.asBoolRing_comp (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
     (g.comp f).asBoolRing = g.asBoolRing.comp f.asBoolRing :=
@@ -1947,22 +1414,20 @@ end AlgebraToRing
 /-- Order isomorphism between `α` considered as a Boolean ring considered as a Boolean algebra and
 `α`. -/
 @[simps!]
-/--
-Definition of `OrderIso.asBoolAlgAsBoolRing` / `OrderIso.asBoolAlgAsBoolRing` 的定义
+/-
+**OrderIso.asBoolAlgAsBoolRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.asBoolAlgAsBoolRing (α : Type*) [BooleanAlgebra α] : AsBoolAlg (A
+sBoolRing α) ≃o α
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition OrderIso.asBoolAlgAsBoolRing
-  signature: (α : Type*) [BooleanAlgebra α]
-  body: ⟨ofBoolAlg.trans ofBoolRing,
-   ofBoolRing_le_ofBoolRing_iff.trans ofBoolAlg_mul_ofBoolAlg_eq_left_iff⟩
-
-中文:
-定义 OrderIso.as布尔AlgAs布尔Ring
-  签名: (α : 类型) [布尔代数 α]
-  定义体: ⟨ofBoolAlg.trans ofBoolRing,
-   ofBoolRing_le_ofBoolRing_iff.trans ofBoolAlg_mul_ofBoolAlg_eq_left_iff⟩
-
-Depends on / 依赖: ofBoolAlg, ofBoolAlg.trans, ofBoolAlg_mul_ofBoolAlg_eq_left_iff, ofBoolRing, ofBoolRing_le_ofBoolRing_iff, ofBoolRing_le_ofBoolRing_iff.trans
+--- 原说明 ---
+Order isomorphism between `α` considered as a Boolean ring considered as a Boole
+an algebra and
+`α`.
 -/
 def OrderIso.asBoolAlgAsBoolRing (α : Type*) [BooleanAlgebra α] : AsBoolAlg (AsBoolRing α) ≃o α :=
   ⟨ofBoolAlg.trans ofBoolRing,
@@ -1971,24 +1436,22 @@ def OrderIso.asBoolAlgAsBoolRing (α : Type*) [BooleanAlgebra α] : AsBoolAlg (A
 /-- Ring isomorphism between `α` considered as a Boolean algebra considered as a Boolean ring and
 `α`. -/
 @[simps!]
-/--
-Definition of `RingEquiv.asBoolRingAsBoolAlg` / `RingEquiv.asBoolRingAsBoolAlg` 的定义
+/-
+**RingEquiv.asBoolRingAsBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingEquiv.asBoolRingAsBoolAlg (α : Type*) [BooleanRing α] : AsBoolRing (As
+BoolAlg α) ≃+* α
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `ofBoolAlg_symmDiff`：ofBoolAlg_symmDiff (a b : AsBoolAlg α) : ofBoolAlg (
+a ∆ b) = ofBoolAlg a + ofBoolAlg b
 
-English:
-definition RingEquiv.asBoolRingAsBoolAlg
-  signature: (α : Type*) [BooleanRing α]
-  body: { ofBoolRing.trans ofBoolAlg with
-    map_mul' := fun _a _b => rfl
-    map_add' := ofBoolAlg_symmDiff }
-
-中文:
-定义 环等价.as布尔RingAs布尔Alg
-  签名: (α : 类型) [布尔ean环 α]
-  定义体: { ofBoolRing.trans ofBoolAlg with
-    map_mul' := fun _a _b => rfl
-    map_add' := ofBoolAlg_symmDiff }
-
-Depends on / 依赖: map_add, map_mul, ofBoolAlg, ofBoolAlg_symmDiff, ofBoolRing, ofBoolRing.trans
+--- 原说明 ---
+Ring isomorphism between `α` considered as a Boolean algebra considered as a Boo
+lean ring and
+`α`.
 -/
 def RingEquiv.asBoolRingAsBoolAlg (α : Type*) [BooleanRing α] : AsBoolRing (AsBoolAlg α) ≃+* α :=
   { ofBoolRing.trans ofBoolAlg with
@@ -1996,139 +1459,39 @@ def RingEquiv.asBoolRingAsBoolAlg (α : Type*) [BooleanRing α] : AsBoolRing (As
     map_add' := ofBoolAlg_symmDiff }
 
 open Bool
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero Bool
-  body: false
-
-中文:
-实例 :
-  签名: 零 布尔值
-  定义体: false
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero Bool where zero := false
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One Bool
-  body: true
-
-中文:
-实例 :
-  签名: 幺 布尔值
-  定义体: true
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One Bool where one := true
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add Bool
-  body: xor
-
-中文:
-实例 :
-  签名: 加法 布尔值
-  定义体: xor
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add Bool where add := xor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg Bool
-  body: id
-
-中文:
-实例 :
-  签名: 取负 布尔值
-  定义体: id
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg Bool where neg := id
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub Bool
-  body: xor
-
-中文:
-实例 :
-  签名: 减法 布尔值
-  定义体: xor
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub Bool where sub := xor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul Bool
-  body: and
-
-中文:
-实例 :
-  签名: 乘法 布尔值
-  定义体: and
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul Bool where mul := and
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BooleanRing Bool
-  body: xor_assoc
-  zero_add := Bool.false_xor
-  add_zero := Bool.xor_false
-  neg_add_cancel := Bool.xor_self
-  add_comm := xor_comm
-  mul_assoc := and_assoc
-  one_mul := Bool.true_and
-  mul_one := Bool.and_true
-  left_distrib := and_xor_distrib_left
-  right_distrib := and_xor_distrib_right
-  isIdempotentElem := Bool.and_self
-  zero_mul _ := rfl
-  mul_zero a := by cases a <;> rfl
-  nsmul := nsmulRec
-  zsmul := zsmulRec
-
-中文:
-实例 :
-  签名: 布尔ean环 布尔值
-  定义体: xor_assoc
-  zero_add := Bool.false_xor
-  add_zero := Bool.xor_false
-  neg_add_cancel := Bool.xor_self
-  add_comm := xor_comm
-  mul_assoc := and_assoc
-  one_mul := Bool.true_and
-  mul_one := Bool.and_true
-  left_distrib := and_xor_distrib_left
-  right_distrib := and_xor_distrib_right
-  isIdempotentElem := Bool.and_self
-  zero_mul _ := rfl
-  mul_zero a := by cases a <;> rfl
-  nsmul := nsmulRec
-  zsmul := zsmulRec
-
-Depends on / 依赖: xor_assoc
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BooleanRing Bool where
   add_assoc := xor_assoc
@@ -2146,101 +1509,49 @@ instance : BooleanRing Bool where
   mul_zero a := by cases a <;> rfl
   nsmul := nsmulRec
   zsmul := zsmulRec
-
-/--
-theorem `Bool.zero_eq_false` / 定理 `Bool.zero_eq_false`
-
-English:
-theorem Bool.zero_eq_false
-  statement: 0 = false
-  proof: rfl
-
-中文:
-定理 布尔值.zero_eq_false
-  结论: 0 = false
-  证明: rfl
+/-
+**Bool.zero_eq_false** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.zero_eq_false : 0 = false
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.zero_eq_false : 0 = false := rfl
-
-/--
-theorem `Bool.one_eq_true` / 定理 `Bool.one_eq_true`
-
-English:
-theorem Bool.one_eq_true
-  statement: 1 = true
-  proof: rfl
-
-中文:
-定理 布尔值.one_eq_true
-  结论: 1 = true
-  证明: rfl
+/-
+**Bool.one_eq_true** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.one_eq_true : 1 = true
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.one_eq_true : 1 = true := rfl
-
-/--
-theorem `Bool.add_eq_xor` / 定理 `Bool.add_eq_xor`
-
-English:
-theorem Bool.add_eq_xor
-  given: (b c : Bool)
-  statement: b + c = (b ^^ c)
-  proof: rfl
-
-中文:
-定理 布尔值.add_eq_xor
-  条件: (b c : 布尔值)
-  结论: b + c = (b ^^ c)
-  证明: rfl
+/-
+**Bool.add_eq_xor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.add_eq_xor (b c : Bool) : b + c = (b ^^ c)
+参数：b c : Bool。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.add_eq_xor (b c : Bool) : b + c = (b ^^ c) := rfl
-
-/--
-theorem `Bool.neg_eq_id` / 定理 `Bool.neg_eq_id`
-
-English:
-theorem Bool.neg_eq_id
-  given: (b : Bool)
-  statement: -b = b
-  proof: rfl
-
-中文:
-定理 布尔值.neg_eq_id
-  条件: (b : 布尔值)
-  结论: -b = b
-  证明: rfl
+/-
+**Bool.neg_eq_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.neg_eq_id (b : Bool) : -b = b
+参数：b : Bool。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.neg_eq_id (b : Bool) : -b = b := rfl
-
-/--
-theorem `Bool.sub_eq_xor` / 定理 `Bool.sub_eq_xor`
-
-English:
-theorem Bool.sub_eq_xor
-  given: (b c : Bool)
-  statement: b - c = (b ^^ c)
-  proof: rfl
-
-中文:
-定理 布尔值.sub_eq_xor
-  条件: (b c : 布尔值)
-  结论: b - c = (b ^^ c)
-  证明: rfl
+/-
+**Bool.sub_eq_xor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.sub_eq_xor (b c : Bool) : b - c = (b ^^ c)
+参数：b c : Bool。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.sub_eq_xor (b c : Bool) : b - c = (b ^^ c) := rfl
-
-/--
-theorem `Bool.mul_eq_and` / 定理 `Bool.mul_eq_and`
-
-English:
-theorem Bool.mul_eq_and
-  given: (b c : Bool)
-  statement: b * c = (b && c)
-  proof: rfl
-
-中文:
-定理 布尔值.mul_eq_and
-  条件: (b c : 布尔值)
-  结论: b * c = (b && c)
-  证明: rfl
+/-
+**Bool.mul_eq_and** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.mul_eq_and (b c : Bool) : b * c = (b && c)
+参数：b c : Bool。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.mul_eq_and (b c : Bool) : b * c = (b && c) := rfl

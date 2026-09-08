@@ -67,62 +67,42 @@ ordered map, ordered set, data structure
 
 universe u
 
-/--
-Inductive type `Ordnode` / 归纳类型 `Ordnode`
+/-- An `Ordnode α` is a finite set of values, represented as a tree.
+  The operations on this type maintain that the tree is balanced
+  and correctly stores subtree sizes at each level.
 
-English:
-inductive Ordnode
-  parameters: (α : Type u)
-  constructors (2):
-    - nil: Ordnode α
-    - node: (size : Nat) (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+This is a copy of `BinaryTree` with a cached `size` field for `BinaryTree.numNodes`. -/
+/-
+**Ordnode** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 Ordnode
-  参数: (α : 类型u)
-  构造子 (2 个):
-    - nil: Ordnode α
-    - node: (size : 自然数) (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+--- 原说明 ---
+An `Ordnode α` is a finite set of values, represented as a tree.
+  The operations on this type maintain that the tree is balanced
+  and correctly stores subtree sizes at each level.
 
-Depends on / 依赖: ExpChar
+This is a copy of `BinaryTree` with a cached `size` field for `BinaryTree.numNod
+es`.
 -/
 inductive Ordnode (α : Type u) : Type u
   | nil : Ordnode α
-  | node (size : Nat) (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+  | node (size : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
 compile_inductive% Ordnode
 
 namespace Ordnode
 
 variable {α : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection (Ordnode α)
-  body: ⟨nil⟩
-
-中文:
-实例 :
-  签名: EmptyCollection (Ordnode α)
-  定义体: ⟨nil⟩
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection (Ordnode α) :=
   ⟨nil⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Ordnode α)
-  body: ⟨nil⟩
-
-中文:
-实例 :
-  签名: 可居 (Ordnode α)
-  定义体: ⟨nil⟩
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Ordnode α) :=
   ⟨nil⟩
@@ -136,16 +116,20 @@ According to the Haskell comment, only `(delta, ratio)` settings
 of `(3, 2)` and `(4, 2)` will work, and the proofs in
 `Ordset.lean` assume `delta := 3` and `ratio := 2`. -/
 @[inline]
-/--
-Definition of `delta` / `delta` 的定义
+/-
+**Ordnode.delta** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：delta
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delta
-  body: 3
+--- 原说明 ---
+**Internal use only**
 
-中文:
-定义 delta
-  定义体: 3
+The maximal relative difference between the sizes of
+two trees, it corresponds with the `w` in Adams' paper.
+
+According to the Haskell comment, only `(delta, ratio)` settings
+of `(3, 2)` and `(4, 2)` will work, and the proofs in
+`Ordset.lean` assume `delta := 3` and `ratio := 2`.
 -/
 def delta :=
   3
@@ -158,16 +142,19 @@ whether a double or single rotation should be performed
 to restore balance. It is corresponds with the inverse
 of `α` in Adam's article. -/
 @[inline]
-/--
-Definition of `ratio` / `ratio` 的定义
+/-
+**Ordnode.ratio** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：ratio
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ratio
-  body: 2
+--- 原说明 ---
+**Internal use only**
 
-中文:
-定义 ratio
-  定义体: 2
+The ratio between an outer and inner sibling of the
+heavier subtree in an unbalanced setting. It determines
+whether a double or single rotation should be performed
+to restore balance. It is corresponds with the inverse
+of `α` in Adam's article.
 -/
 def ratio :=
   2
@@ -178,42 +165,25 @@ def ratio :=
 singleton 3 = {3}
 ``` -/
 @[inline]
-/--
-Definition of `singleton` / `singleton` 的定义
+/-
+**Ordnode.singleton** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singleton
-  signature: (a : α)
-  body: node 1 nil a nil
+--- 原说明 ---
+O(1). Construct a singleton set containing value `a`.
 
-local prefix:arg "ι" => Ordnode.singleton
-
-中文:
-定义 singleton
-  签名: (a : α)
-  定义体: node 1 nil a nil
-
-local prefix:arg "ι" => Ordnode.singleton
+```
+singleton 3 = {3}
+```
 -/
 protected def singleton (a : α) : Ordnode α :=
   node 1 nil a nil
 
 local prefix:arg "ι" => Ordnode.singleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Singleton α (Ordnode α)
-  body: ⟨Ordnode.singleton⟩
-
-中文:
-实例 :
-  签名: 单例 α (Ordnode α)
-  定义体: ⟨Ordnode.singleton⟩
-
-Depends on / 依赖: Ordnode, Ordnode.singleton, singleton
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Singleton α (Ordnode α) :=
   ⟨Ordnode.singleton⟩
@@ -224,50 +194,36 @@ instance : Singleton α (Ordnode α) :=
 size {2, 1, 1, 4} = 3
 ``` -/
 @[inline]
-/--
-Definition of `size` / `size` 的定义
+/-
+**Ordnode.size** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition size
-  signature: : Ordnode α -> Nat
+--- 原说明 ---
+O(1). Get the size of the set.
 
-中文:
-定义 size
-  签名: : Ordnode α -> 自然数
+```
+size {2, 1, 1, 4} = 3
+```
 -/
-def size : Ordnode α -> Nat
+def size : Ordnode α → ℕ
   | nil => 0
   | node sz _ _ _ => sz
-
-/--
-theorem `size_nil` / 定理 `size_nil`
-
-English:
-theorem size_nil
-  statement: size (nil : Ordnode α) = 0
-  proof: rfl
-
-中文:
-定理 size_nil
-  结论: size (nil : Ordnode α) = 0
-  证明: rfl
+/-
+**Ordnode.size_nil** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：∀ {α : Type u_1}, Ordnode.nil.size = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem size_nil : size (nil : Ordnode α) = 0 :=
   rfl
-/--
-theorem `size_node` / 定理 `size_node`
-
-English:
-theorem size_node
-  given: (sz : Nat) (l : Ordnode α) (x : α) (r : Ordnode α)
-  proof: rfl
-
-中文:
-定理 size_node
-  条件: (sz : 自然数) (l : Ordnode α) (x : α) (r : Ordnode α)
-  证明: rfl
+/-
+**Ordnode.size_node** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：∀ {α : Type u_1} (sz : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), (Ordnod
+e.node sz l x r).size = sz
+参数：sz : ℕ；l : Ordnode α；x : α；r : Ordnode α；Ordnode.node sz l x r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem size_node (sz : Nat) (l : Ordnode α) (x : α) (r : Ordnode α) :
+@[simp] theorem size_node (sz : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α) :
     size (node sz l x r) = sz :=
   rfl
 
@@ -279,18 +235,20 @@ empty {1, 2, 3} = ff
 ```
 -/
 @[inline]
-/--
-Definition of `empty` / `empty` 的定义
+/-
+**Ordnode.empty** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty
-  signature: : Ordnode α -> Bool
+--- 原说明 ---
+O(1). Is the set empty?
 
-中文:
-定义 empty
-  签名: : Ordnode α -> 布尔值
+```
+empty ∅ = tt
+empty {1, 2, 3} = ff
+```
 -/
-def empty : Ordnode α -> Bool
+def empty : Ordnode α → Bool
   | nil => true
   | node _ _ _ _ => false
 
@@ -300,18 +258,22 @@ O(n). The dual of a tree is a tree with its left and right sides reversed throug
 The dual of a valid BST is valid under the dual order. This is convenient for exploiting
 symmetries in the algorithms. -/
 @[simp]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**Ordnode.dual** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : Ordnode α -> Ordnode α
+--- 原说明 ---
+**Internal use only**, because it violates the BST property on the original orde
+r.
 
-中文:
-定义 dual
-  签名: : Ordnode α -> Ordnode α
+O(n). The dual of a tree is a tree with its left and right sides reversed throug
+hout.
+The dual of a valid BST is valid under the dual order. This is convenient for ex
+ploiting
+symmetries in the algorithms.
 -/
-def dual : Ordnode α -> Ordnode α
+def dual : Ordnode α → Ordnode α
   | nil => nil
   | node s l x r => node s (dual r) x (dual l)
 
@@ -319,56 +281,50 @@ def dual : Ordnode α -> Ordnode α
 
 O(1). Construct a node with the correct size information, without rebalancing. -/
 @[inline, reducible]
-/--
-Definition of `node'` / `node'` 的定义
+/-
+**Ordnode.node'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：node' (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+参数：l : Ordnode α；x : α；r : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition node'
-  signature: (l : Ordnode α) (x : α) (r : Ordnode α)
-  body: node (size l + size r + 1) l x r
+--- 原说明 ---
+**Internal use only**
 
-中文:
-定义 node'
-  签名: (l : Ordnode α) (x : α) (r : Ordnode α)
-  定义体: node (size l + size r + 1) l x r
+O(1). Construct a node with the correct size information, without rebalancing.
 -/
 def node' (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α :=
   node (size l + size r + 1) l x r
 
 /-- Convert to an `OrdNode` by pre-computing the sizes. -/
 @[simp]
-/--
-Definition of `_root_.BinaryTree.toOrdNode` / `_root_.BinaryTree.toOrdNode` 的定义
+/-
+**Ordnode._root_.BinaryTree.toOrdNode** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.BinaryTree.toOrdNode
-  signature: : BinaryTree α -> Ordnode α
-
-中文:
-定义 _root_.BinaryTree.toOrdNode
-  签名: : BinaryTree α -> Ordnode α
+--- 原说明 ---
+Convert to an `OrdNode` by pre-computing the sizes.
 -/
-def _root_.BinaryTree.toOrdNode : BinaryTree α -> Ordnode α
+def _root_.BinaryTree.toOrdNode : BinaryTree α → Ordnode α
   | .nil => .nil
   | .node x l r => .node' l.toOrdNode x r.toOrdNode
 
 @[simp]
-/--
-theorem `size_toOrdNode` / 定理 `size_toOrdNode`
-
-English:
-theorem size_toOrdNode
-  given: (b : BinaryTree α)
-  proof: by
-  induction b with simp [BinaryTree.toOrdNode, *]
-
-中文:
-定理 size_toOrdNode
-  条件: (b : BinaryTree α)
-  证明: by
-  induction b with simp [BinaryTree.toOrdNode, *]
-
-Depends on / 依赖: BinaryTree, BinaryTree.toOrdNode, toOrdNode
+/-
+**Ordnode.size_toOrdNode** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：size_toOrdNode (b : BinaryTree α) : b.toOrdNode.size = b.numNodes
+参数：b : BinaryTree α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 theorem size_toOrdNode (b : BinaryTree α) :
     b.toOrdNode.size = b.numNodes := by
@@ -376,71 +332,64 @@ theorem size_toOrdNode (b : BinaryTree α) :
 
 /-- Convert to an `BinaryTree`, discarding the cached size information. -/
 @[simp]
-/--
-Definition of `toBinaryTree` / `toBinaryTree` 的定义
+/-
+**Ordnode.toBinaryTree** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → BinaryTree α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBinaryTree
-  signature: : Ordnode α -> BinaryTree α
-
-中文:
-定义 toBinaryTree
-  签名: : Ordnode α -> BinaryTree α
+--- 原说明 ---
+Convert to an `BinaryTree`, discarding the cached size information.
 -/
-def toBinaryTree : Ordnode α -> BinaryTree α
+def toBinaryTree : Ordnode α → BinaryTree α
   | .nil => .nil
   | .node _ l x r => .node x l.toBinaryTree r.toBinaryTree
 
 @[simp]
-/--
-theorem `toBinaryTree_toOrdNode` / 定理 `toBinaryTree_toOrdNode`
-
-English:
-theorem toBinaryTree_toOrdNode
-  given: (b : BinaryTree α)
-  proof: by
-  induction b with simp [BinaryTree.toOrdNode, toBinaryTree, * ]
-
-中文:
-定理 toBinaryTree_toOrdNode
-  条件: (b : BinaryTree α)
-  证明: by
-  induction b with simp [BinaryTree.toOrdNode, toBinaryTree, * ]
-
-Depends on / 依赖: BinaryTree, BinaryTree.toOrdNode, toBinaryTree, toOrdNode
+/-
+**Ordnode.toBinaryTree_toOrdNode** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：toBinaryTree_toOrdNode (b : BinaryTree α) : toBinaryTree b.toOrdNode = b
+参数：b : BinaryTree α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordnode.toBinaryTree.eq_1`：∀ {α : Type u_1}, Ordnode.nil.toBinaryTree = 
+BinaryTree.nil
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Ordnode.toBinaryTree.eq_2`：∀ {α : Type u_1} (sz : ℕ) (l : Ordnode α) (x_
+1 : α) (r : Ordnode α),   (Ordnode.node sz l x_1 r).toBinaryTree = BinaryTree.no
+de x_1 l.toBina…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 theorem toBinaryTree_toOrdNode (b : BinaryTree α) :
     toBinaryTree b.toOrdNode = b := by
   induction b with simp [BinaryTree.toOrdNode, toBinaryTree, * ]
 
-/--
-Definition of `repr` / `repr` 的定义
+/-- Basic pretty printing for `Ordnode α` that shows the structure of the tree.
 
-English:
-definition repr
-  signature: {α} [Repr α] (o : Ordnode α) (n : Nat)
-  body: match o with
-  | nil => (Std.Format.text "∅")
-  | node _ l x r =>
-      let fmt := Std.Format.joinSep
-        [repr l n, Repr.reprPrec x n, repr r n]
-        " "
-      Std.Format.paren fmt
+```
+repr {3, 1, 2, 4} = ((∅ 1 ∅) 2 ((∅ 3 ∅) 4 ∅))
+``` -/
+/-
+**Ordnode.repr** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：repr {α} [Repr α] (o : Ordnode α) (n : Nat) : Std.Format
+参数：o : Ordnode α；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 repr
-  签名: {α} [Repr α] (o : Ordnode α) (n : 自然数)
-  定义体: match o with
-  | nil => (Std.Format.text "∅")
-  | node _ l x r =>
-      let fmt := Std.Format.joinSep
-        [repr l n, Repr.reprPrec x n, repr r n]
-        " "
-      Std.Format.paren fmt
+--- 原说明 ---
+Basic pretty printing for `Ordnode α` that shows the structure of the tree.
 
-Depends on / 依赖: Format, Repr.reprPrec, Std.Format.joinSep, Std.Format.paren, Std.Format.text, joinSep, reprPrec
+```
+repr {3, 1, 2, 4} = ((∅ 1 ∅) 2 ((∅ 3 ∅) 4 ∅))
+```
 -/
-def repr {α} [Repr α] (o : Ordnode α) (n : Nat) : Std.Format :=
+def repr {α} [Repr α] (o : Ordnode α) (n : ℕ) : Std.Format :=
   match o with
   | nil => (Std.Format.text "∅")
   | node _ l x r =>
@@ -448,79 +397,30 @@ def repr {α} [Repr α] (o : Ordnode α) (n : Nat) : Std.Format :=
         [repr l n, Repr.reprPrec x n, repr r n]
         " "
       Std.Format.paren fmt
-
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α} [Repr α] : Repr (Ordnode α) :=
   ⟨repr⟩
 
 -- Note: The function has been written with tactics to avoid extra junk
-/--
-Definition of `balanceL` / `balanceL` 的定义
+/-- **Internal use only**
 
-English:
-definition balanceL
-  signature: (l : Ordnode α) (x : α) (r : Ordnode α)
-  body: by
-  rcases id r with _ | rs
-  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
-    · exact ι x
-    · rcases id ll with _ | lls
-      · rcases lr with _ | ⟨_, _, lrx⟩
-        · exact node 2 l x nil
-        · exact node 3 (ι lx) lrx ι x
-      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3 ll lx ι x
-        · exact
-            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
-            else
-              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-                (node (size lrr + 1) lrr x nil)
-  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
-    · exact node (rs + 1) nil x r
-    · refine if ls > delta * rs then ?_ else node (ls + rs + 1) l x r
-      rcases id ll with _ | lls
-      · exact nil
-      --should not happen
-      rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-      · exact nil
-      --should not happen
-      exact
-        if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (rs + lrs + 1) lr x r)
-        else
-          node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-            (node (size lrr + rs + 1) lrr x r)
+O(1). Rebalance a tree which was previously balanced but has had its left
+side grow by 1, or its right side shrink by 1. -/
+/-
+**Ordnode.balanceL** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：balanceL (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+参数：l : Ordnode α；x : α；r : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 balanceL
-  签名: (l : Ordnode α) (x : α) (r : Ordnode α)
-  定义体: by
-  rcases id r with _ | rs
-  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
-    · exact ι x
-    · rcases id ll with _ | lls
-      · rcases lr with _ | ⟨_, _, lrx⟩
-        · exact node 2 l x nil
-        · exact node 3 (ι lx) lrx ι x
-      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3 ll lx ι x
-        · exact
-            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
-            else
-              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-                (node (size lrr + 1) lrr x nil)
-  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
-    · exact node (rs + 1) nil x r
-    · refine if ls > delta * rs then ?_ else node (ls + rs + 1) l x r
-      rcases id ll with _ | lls
-      · exact nil
-      --should not happen
-      rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-      · exact nil
-      --should not happen
-      exact
-        if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (rs + lrs + 1) lr x r)
-        else
-          node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-            (node (size lrr + rs + 1) lrr x r)
+--- 原说明 ---
+**Internal use only**
+
+O(1). Rebalance a tree which was previously balanced but has had its left
+side grow by 1, or its right side shrink by 1.
 -/
 def balanceL (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id r with _ | rs
@@ -552,74 +452,22 @@ def balanceL (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
           node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
             (node (size lrr + rs + 1) lrr x r)
 
-/--
-Definition of `balanceR` / `balanceR` 的定义
+/-- **Internal use only**
 
-English:
-definition balanceR
-  signature: (l : Ordnode α) (x : α) (r : Ordnode α)
-  body: by
-  rcases id l with _ | ls
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact ι x
-    · rcases id rr with _ | rrs
-      · rcases rl with _ | ⟨_, _, rlx⟩
-        · exact node 2 nil x r
-        · exact node 3 (ι x) rlx ι rx
-      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact node 3 (ι x) rx rr
-        · exact
-            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
-            else
-              node (rs + 1) (node (size rll + 1) nil x rll) rlx
-                (node (size rlr + rrs + 1) rlr rx rr)
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact node (ls + 1) l x nil
-    · refine if rs > delta * ls then ?_ else node (ls + rs + 1) l x r
-      rcases id rr with _ | rrs
-      · exact nil
-      --should not happen
-      rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-      · exact nil
-      --should not happen
-      exact
-        if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
-        else
-          node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
-            (node (size rlr + rrs + 1) rlr rx rr)
+O(1). Rebalance a tree which was previously balanced but has had its right
+side grow by 1, or its left side shrink by 1. -/
+/-
+**Ordnode.balanceR** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：balanceR (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+参数：l : Ordnode α；x : α；r : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 balanceR
-  签名: (l : Ordnode α) (x : α) (r : Ordnode α)
-  定义体: by
-  rcases id l with _ | ls
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact ι x
-    · rcases id rr with _ | rrs
-      · rcases rl with _ | ⟨_, _, rlx⟩
-        · exact node 2 nil x r
-        · exact node 3 (ι x) rlx ι rx
-      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact node 3 (ι x) rx rr
-        · exact
-            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
-            else
-              node (rs + 1) (node (size rll + 1) nil x rll) rlx
-                (node (size rlr + rrs + 1) rlr rx rr)
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact node (ls + 1) l x nil
-    · refine if rs > delta * ls then ?_ else node (ls + rs + 1) l x r
-      rcases id rr with _ | rrs
-      · exact nil
-      --should not happen
-      rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-      · exact nil
-      --should not happen
-      exact
-        if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
-        else
-          node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
-            (node (size rlr + rrs + 1) rlr rx rr)
+--- 原说明 ---
+**Internal use only**
+
+O(1). Rebalance a tree which was previously balanced but has had its right
+side grow by 1, or its left side shrink by 1.
 -/
 def balanceR (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id l with _ | ls
@@ -651,118 +499,22 @@ def balanceR (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
           node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
             (node (size rlr + rrs + 1) rlr rx rr)
 
-/--
-Definition of `balance` / `balance` 的定义
+/-- **Internal use only**
 
-English:
-definition balance
-  signature: (l : Ordnode α) (x : α) (r : Ordnode α)
-  body: by
-  rcases id l with _ | ⟨ls, ll, lx, lr⟩
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact ι x
-    · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-      · cases id rr
-        · exact node 2 nil x r
-        · exact node 3 (ι x) rx rr
-      · rcases id rr with _ | rrs
-        · exact node 3 (ι x) rlx ι rx
-        · exact
-            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
-            else
-              node (rs + 1) (node (size rll + 1) nil x rll) rlx
-                (node (size rlr + rrs + 1) rlr rx rr)
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · rcases id ll with _ | lls
-      · rcases lr with _ | ⟨_, _, lrx⟩
-        · exact node 2 l x nil
-        · exact node 3 (ι lx) lrx ι x
-      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3 ll lx ι x
-        · exact
-            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
-            else
-              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-                (node (size lrr + 1) lrr x nil)
-    · refine
-        if delta * ls < rs then ?_ else if delta * rs < ls then ?_ else node (ls + rs + 1) l x r
-      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact nil
-        --should not happen
-        rcases id rr with _ | rrs
-        · exact nil
-        --should not happen
-        exact
-          if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
-          else
-            node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
-              (node (size rlr + rrs + 1) rlr rx rr)
-      · rcases id ll with _ | lls
-        · exact nil
-        --should not happen
-        rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact nil
-        --should not happen
-        exact
-          if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (lrs + rs + 1) lr x r)
-          else
-            node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-              (node (size lrr + rs + 1) lrr x r)
+O(1). Rebalance a tree which was previously balanced but has had one side change
+by at most 1. -/
+/-
+**Ordnode.balance** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：balance (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α
+参数：l : Ordnode α；x : α；r : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 balance
-  签名: (l : Ordnode α) (x : α) (r : Ordnode α)
-  定义体: by
-  rcases id l with _ | ⟨ls, ll, lx, lr⟩
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · exact ι x
-    · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-      · cases id rr
-        · exact node 2 nil x r
-        · exact node 3 (ι x) rx rr
-      · rcases id rr with _ | rrs
-        · exact node 3 (ι x) rlx ι rx
-        · exact
-            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
-            else
-              node (rs + 1) (node (size rll + 1) nil x rll) rlx
-                (node (size rlr + rrs + 1) rlr rx rr)
-  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
-    · rcases id ll with _ | lls
-      · rcases lr with _ | ⟨_, _, lrx⟩
-        · exact node 2 l x nil
-        · exact node 3 (ι lx) lrx ι x
-      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3 ll lx ι x
-        · exact
-            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
-            else
-              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-                (node (size lrr + 1) lrr x nil)
-    · refine
-        if delta * ls < rs then ?_ else if delta * rs < ls then ?_ else node (ls + rs + 1) l x r
-      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact nil
-        --should not happen
-        rcases id rr with _ | rrs
-        · exact nil
-        --should not happen
-        exact
-          if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
-          else
-            node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
-              (node (size rlr + rrs + 1) rlr rx rr)
-      · rcases id ll with _ | lls
-        · exact nil
-        --should not happen
-        rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact nil
-        --should not happen
-        exact
-          if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (lrs + rs + 1) lr x r)
-          else
-            node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
-              (node (size lrr + rs + 1) lrr x r)
+--- 原说明 ---
+**Internal use only**
+
+O(1). Rebalance a tree which was previously balanced but has had one side change
+by at most 1.
 -/
 def balance (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id l with _ | ⟨ls, ll, lx, lr⟩
@@ -816,348 +568,441 @@ def balance (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
             node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
               (node (size lrr + rs + 1) lrr x r)
 
-/--
-Definition of `All` / `All` 的定义
+/-- O(n). Does every element of the map satisfy property `P`?
 
-English:
-definition All
-  signature: (P : α -> Prop)
+```
+All (fun x ↦ x < 5) {1, 2, 3} = True
+All (fun x ↦ x < 5) {1, 2, 3, 5} = False
+``` -/
+/-
+**Ordnode.All** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → (α → Prop) → Ordnode α → Prop
+参数：α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 All
-  签名: (P : α -> 命题)
+--- 原说明 ---
+O(n). Does every element of the map satisfy property `P`?
+
+```
+All (fun x ↦ x < 5) {1, 2, 3} = True
+All (fun x ↦ x < 5) {1, 2, 3, 5} = False
+```
 -/
-def All (P : α -> Prop) : Ordnode α -> Prop
+def All (P : α → Prop) : Ordnode α → Prop
   | nil => True
   | node _ l x r => All P l ∧ P x ∧ All P r
-
-/--
-Instance `All.decidable` / 实例 `All.decidable`
-
-English:
-instance All.decidable
-  signature: {P : α -> Prop}
-  body: All.decidable l
-    have : Decidable (All P r) := All.decidable r
-inferInstanceAs Decidable (All P l ∧ P m ∧ All P r)
-
-中文:
-实例 All.decidable
-  签名: {P : α -> 命题}
-  定义体: All.decidable l
-    have : Decidable (All P r) := All.decidable r
-inferInstanceAs Decidable (All P l ∧ P m ∧ All P r)
-
-Depends on / 依赖: All.decidable, decidable
+/-
+**Ordnode.All.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode.All`。
+形式化陈述：{α : Type u_1} → {P : α → Prop} → (t : Ordnode α) → [DecidablePred P] → De
+cidable (Ordnode.All P t)
+参数：t : Ordnode α；Ordnode.All P t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance All.decidable {P : α -> Prop} : (t : Ordnode α) -> [DecidablePred P] -> Decidable (All P t)
+instance All.decidable {P : α → Prop} : (t : Ordnode α) → [DecidablePred P] → Decidable (All P t)
   | nil => isTrue trivial
   | node _ l m r =>
     have : Decidable (All P l) := All.decidable l
     have : Decidable (All P r) := All.decidable r
-inferInstanceAs Decidable (All P l ∧ P m ∧ All P r)
+    inferInstanceAs <| Decidable (All P l ∧ P m ∧ All P r)
 
-/--
-Definition of `Any` / `Any` 的定义
+/-- O(n). Does any element of the map satisfy property `P`?
 
-English:
-definition Any
-  signature: (P : α -> Prop)
-
-中文:
-定义 Any
-  签名: (P : α -> 命题)
+```
+Any (fun x ↦ x < 2) {1, 2, 3} = True
+Any (fun x ↦ x < 2) {2, 3, 5} = False
+```
 -/
-def Any (P : α -> Prop) : Ordnode α -> Prop
+/-
+**Ordnode.Any** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → (α → Prop) → Ordnode α → Prop
+参数：α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(n). Does any element of the map satisfy property `P`?
+
+```
+Any (fun x ↦ x < 2) {1, 2, 3} = True
+Any (fun x ↦ x < 2) {2, 3, 5} = False
+```
+-/
+def Any (P : α → Prop) : Ordnode α → Prop
   | nil => False
   | node _ l x r => Any P l ∨ P x ∨ Any P r
-
-/--
-Instance `Any.decidable` / 实例 `Any.decidable`
-
-English:
-instance Any.decidable
-  signature: {P : α -> Prop}
-  body: Any.decidable l
-    have : Decidable (Any P r) := Any.decidable r
-inferInstanceAs Decidable (Any P l ∨ P m ∨ Any P r)
-
-中文:
-实例 Any.decidable
-  签名: {P : α -> 命题}
-  定义体: Any.decidable l
-    have : Decidable (Any P r) := Any.decidable r
-inferInstanceAs Decidable (Any P l ∨ P m ∨ Any P r)
-
-Depends on / 依赖: Any.decidable, decidable
+/-
+**Ordnode.Any.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode.Any`。
+形式化陈述：{α : Type u_1} → {P : α → Prop} → (t : Ordnode α) → [DecidablePred P] → De
+cidable (Ordnode.Any P t)
+参数：t : Ordnode α；Ordnode.Any P t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Any.decidable {P : α -> Prop} : (t : Ordnode α) -> [DecidablePred P] -> Decidable (Any P t)
+instance Any.decidable {P : α → Prop} : (t : Ordnode α) → [DecidablePred P] → Decidable (Any P t)
   | nil => isFalse id
   | node _ l m r =>
     have : Decidable (Any P l) := Any.decidable l
     have : Decidable (Any P r) := Any.decidable r
-inferInstanceAs Decidable (Any P l ∨ P m ∨ Any P r)
+    inferInstanceAs <| Decidable (Any P l ∨ P m ∨ Any P r)
 
-/--
-Definition of `Emem` / `Emem` 的定义
+/-- O(n). Exact membership in the set. This is useful primarily for stating
+correctness properties; use `∈` for a version that actually uses the BST property
+of the tree.
 
-English:
-definition Emem
-  signature: (x : α)
-  body: Any (Eq x)
+```
+Emem 2 {1, 2, 3} = true
+Emem 4 {1, 2, 3} = false
+``` -/
+/-
+**Ordnode.Emem** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：Emem (x : α) : Ordnode α -> Prop
+参数：x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Emem
-  签名: (x : α)
-  定义体: Any (Eq x)
+--- 原说明 ---
+O(n). Exact membership in the set. This is useful primarily for stating
+correctness properties; use `∈` for a version that actually uses the BST propert
+y
+of the tree.
+
+```
+Emem 2 {1, 2, 3} = true
+Emem 4 {1, 2, 3} = false
+```
 -/
-def Emem (x : α) : Ordnode α -> Prop :=
+def Emem (x : α) : Ordnode α → Prop :=
   Any (Eq x)
-
-/--
-Instance `Emem.decidable` / 实例 `Emem.decidable`
-
-English:
-instance Emem.decidable
-  signature: (x : α) [DecidableEq α] (t : Ordnode α)
-  body: inferInstanceAs Decidable (Any _ t)
-
-中文:
-实例 Emem.decidable
-  签名: (x : α) [DecidableEq α] (t : Ordnode α)
-  定义体: inferInstanceAs Decidable (Any _ t)
-
-Depends on / 依赖: Decidable
+/-
+**Ordnode.Emem.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode.Emem`。
+形式化陈述：{α : Type u_1} → (x : α) → [DecidableEq α] → (t : Ordnode α) → Decidable (
+Ordnode.Emem x t)
+参数：x : α；t : Ordnode α；Ordnode.Emem x t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Emem.decidable (x : α) [DecidableEq α] (t : Ordnode α) : Decidable (Emem x t) :=
-inferInstanceAs Decidable (Any _ t)
+  inferInstanceAs <| Decidable (Any _ t)
 
-/--
-Definition of `Amem` / `Amem` 的定义
+/-- O(n). Approximate membership in the set, that is, whether some element in the
+set is equivalent to this one in the preorder. This is useful primarily for stating
+correctness properties; use `∈` for a version that actually uses the BST property
+of the tree.
 
-English:
-definition Amem
-  signature: [LE α] (x : α)
-  body: Any fun y => x <= y ∧ y <= x
+```
+Amem 2 {1, 2, 3} = true
+Amem 4 {1, 2, 3} = false
+```
 
-中文:
-定义 Amem
-  签名: [LE α] (x : α)
-  定义体: Any fun y => x <= y ∧ y <= x
+To see the difference with `Emem`, we need a preorder that is not a partial order.
+For example, suppose we compare pairs of numbers using only their first coordinate. Then:
+-- TODO: Verify below example
+```
+Emem (0, 1) {(0, 0), (1, 2)} = false
+Amem (0, 1) {(0, 0), (1, 2)} = true
+(0, 1) ∈ {(0, 0), (1, 2)} = true
+```
+
+The `∈` relation is equivalent to `Amem` as long as the `Ordnode` is well formed,
+and should always be used instead of `Amem`. -/
+/-
+**Ordnode.Amem** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：Amem [LE α] (x : α) : Ordnode α -> Prop
+参数：x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(n). Approximate membership in the set, that is, whether some element in the
+set is equivalent to this one in the preorder. This is useful primarily for stat
+ing
+correctness properties; use `∈` for a version that actually uses the BST propert
+y
+of the tree.
+
+```
+Amem 2 {1, 2, 3} = true
+Amem 4 {1, 2, 3} = false
+```
+
+To see the difference with `Emem`, we need a preorder that is not a partial orde
+r.
+For example, suppose we compare pairs of numbers using only their first coordina
+te. Then:
+-- TODO: Verify below example
+```
+Emem (0, 1) {(0, 0), (1, 2)} = false
+Amem (0, 1) {(0, 0), (1, 2)} = true
+(0, 1) ∈ {(0, 0), (1, 2)} = true
+```
+
+The `∈` relation is equivalent to `Amem` as long as the `Ordnode` is well formed
+,
+and should always be used instead of `Amem`.
 -/
-def Amem [LE α] (x : α) : Ordnode α -> Prop :=
-  Any fun y => x <= y ∧ y <= x
-
-/--
-Instance `Amem.decidable` / 实例 `Amem.decidable`
-
-English:
-instance Amem.decidable
-  signature: [LE α] [DecidableLE α] (x : α) (t : Ordnode α)
-  body: inferInstanceAs Decidable (Any _ t)
-
-中文:
-实例 Amem.decidable
-  签名: [LE α] [DecidableLE α] (x : α) (t : Ordnode α)
-  定义体: inferInstanceAs Decidable (Any _ t)
-
-Depends on / 依赖: Decidable
+def Amem [LE α] (x : α) : Ordnode α → Prop :=
+  Any fun y => x ≤ y ∧ y ≤ x
+/-
+**Ordnode.Amem.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode.Amem`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → (x : α) → (t : Ordnode 
+α) → Decidable (Ordnode.Amem x t)
+参数：x : α；t : Ordnode α；Ordnode.Amem x t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Amem.decidable [LE α] [DecidableLE α] (x : α) (t : Ordnode α) : Decidable (Amem x t) :=
-inferInstanceAs Decidable (Any _ t)
+  inferInstanceAs <| Decidable (Any _ t)
 
-/--
-Definition of `findMin'` / `findMin'` 的定义
+/-- O(log n). Return the minimum element of the tree, or the provided default value.
 
-English:
-definition findMin'
-  signature: : Ordnode α -> α -> α
+```
+findMin' 37 {1, 2, 3} = 1
+findMin' 37 ∅ = 37
+``` -/
+/-
+**Ordnode.findMin'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findMin'
-  签名: : Ordnode α -> α -> α
+--- 原说明 ---
+O(log n). Return the minimum element of the tree, or the provided default value.
+
+```
+findMin' 37 {1, 2, 3} = 1
+findMin' 37 ∅ = 37
+```
 -/
-def findMin' : Ordnode α -> α -> α
+def findMin' : Ordnode α → α → α
   | nil, x => x
   | node _ l x _, _ => findMin' l x
 
-/--
-Definition of `findMin` / `findMin` 的定义
+/-- O(log n). Return the minimum element of the tree, if it exists.
 
-English:
-definition findMin
-  signature: : Ordnode α -> Option α
+```
+findMin {1, 2, 3} = some 1
+findMin ∅ = none
+``` -/
+/-
+**Ordnode.findMin** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Option α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findMin
-  签名: : Ordnode α -> 选项类型 α
+--- 原说明 ---
+O(log n). Return the minimum element of the tree, if it exists.
+
+```
+findMin {1, 2, 3} = some 1
+findMin ∅ = none
+```
 -/
-def findMin : Ordnode α -> Option α
+def findMin : Ordnode α → Option α
   | nil => none
   | node _ l x _ => some (findMin' l x)
 
-/--
-Definition of `findMax'` / `findMax'` 的定义
+/-- O(log n). Return the maximum element of the tree, or the provided default value.
 
-English:
-definition findMax'
-  signature: : α -> Ordnode α -> α
+```
+findMax' 37 {1, 2, 3} = 3
+findMax' 37 ∅ = 37
+``` -/
+/-
+**Ordnode.findMax'** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：findMax'_dual (t) (x : α) : findMax' x (dual t) = findMin' t x
+参数：t；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findMax'
-  签名: : α -> Ordnode α -> α
+--- 原说明 ---
+O(log n). Return the maximum element of the tree, or the provided default value.
+
+```
+findMax' 37 {1, 2, 3} = 3
+findMax' 37 ∅ = 37
+```
 -/
-def findMax' : α -> Ordnode α -> α
+def findMax' : α → Ordnode α → α
   | x, nil => x
   | _, node _ _ x r => findMax' x r
 
-/--
-Definition of `findMax` / `findMax` 的定义
+/-- O(log n). Return the maximum element of the tree, if it exists.
 
-English:
-definition findMax
-  signature: : Ordnode α -> Option α
+```
+findMax {1, 2, 3} = some 3
+findMax ∅ = none
+``` -/
+/-
+**Ordnode.findMax** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Option α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordnode.findMax'`：findMax'_dual (t) (x : α) : findMax' x (dual t) = find
+Min' t x
 
-中文:
-定义 findMax
-  签名: : Ordnode α -> 选项类型 α
+--- 原说明 ---
+O(log n). Return the maximum element of the tree, if it exists.
+
+```
+findMax {1, 2, 3} = some 3
+findMax ∅ = none
+```
 -/
-def findMax : Ordnode α -> Option α
+def findMax : Ordnode α → Option α
   | nil => none
   | node _ _ x r => some (findMax' x r)
 
-/--
-Definition of `eraseMin` / `eraseMin` 的定义
+/-- O(log n). Remove the minimum element from the tree, or do nothing if it is already empty.
 
-English:
-definition eraseMin
-  signature: : Ordnode α -> Ordnode α
+```
+eraseMin {1, 2, 3} = {2, 3}
+eraseMin ∅ = ∅
+``` -/
+/-
+**Ordnode.eraseMin** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 eraseMin
-  签名: : Ordnode α -> Ordnode α
+--- 原说明 ---
+O(log n). Remove the minimum element from the tree, or do nothing if it is alrea
+dy empty.
+
+```
+eraseMin {1, 2, 3} = {2, 3}
+eraseMin ∅ = ∅
+```
 -/
-def eraseMin : Ordnode α -> Ordnode α
+def eraseMin : Ordnode α → Ordnode α
   | nil => nil
   | node _ nil _ r => r
   | node _ (node sz l' y r') x r => balanceR (eraseMin (node sz l' y r')) x r
 
-/--
-Definition of `eraseMax` / `eraseMax` 的定义
+/-- O(log n). Remove the maximum element from the tree, or do nothing if it is already empty.
 
-English:
-definition eraseMax
-  signature: : Ordnode α -> Ordnode α
+```
+eraseMax {1, 2, 3} = {1, 2}
+eraseMax ∅ = ∅
+``` -/
+/-
+**Ordnode.eraseMax** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 eraseMax
-  签名: : Ordnode α -> Ordnode α
+--- 原说明 ---
+O(log n). Remove the maximum element from the tree, or do nothing if it is alrea
+dy empty.
+
+```
+eraseMax {1, 2, 3} = {1, 2}
+eraseMax ∅ = ∅
+```
 -/
-def eraseMax : Ordnode α -> Ordnode α
+def eraseMax : Ordnode α → Ordnode α
   | nil => nil
   | node _ l _ nil => l
   | node _ l x (node sz l' y r') => balanceL l x (eraseMax (node sz l' y r'))
 
-/--
-Definition of `splitMin'` / `splitMin'` 的定义
+/-- **Internal use only**, because it requires a balancing constraint on the inputs.
 
-English:
-definition splitMin'
-  signature: : Ordnode α -> α -> Ordnode α -> α × Ordnode α
-  body: splitMin' ll lx lr
-    (xm, balanceR l' x r)
+O(log n). Extract and remove the minimum element from a nonempty tree. -/
+/-
+**Ordnode.splitMin'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：splitMin' : Ordnode α -> α -> Ordnode α -> α × Ordnode α | nil, x, r => (x
+, r) | node _ ll lx lr, x, r => let (xm, l')
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitMin'
-  签名: : Ordnode α -> α -> Ordnode α -> α × Ordnode α
-  定义体: splitMin' ll lx lr
-    (xm, balanceR l' x r)
+--- 原说明 ---
+**Internal use only**, because it requires a balancing constraint on the inputs.
 
-Depends on / 依赖: splitMin
+O(log n). Extract and remove the minimum element from a nonempty tree.
 -/
-def splitMin' : Ordnode α -> α -> Ordnode α -> α × Ordnode α
+def splitMin' : Ordnode α → α → Ordnode α → α × Ordnode α
   | nil, x, r => (x, r)
   | node _ ll lx lr, x, r =>
     let (xm, l') := splitMin' ll lx lr
     (xm, balanceR l' x r)
 
-/--
-Definition of `splitMin` / `splitMin` 的定义
+/-- O(log n). Extract and remove the minimum element from the tree, if it exists.
 
-English:
-definition splitMin
-  signature: : Ordnode α -> Option (α × Ordnode α)
+```
+split_min {1, 2, 3} = some (1, {2, 3})
+split_min ∅ = none
+``` -/
+/-
+**Ordnode.splitMin** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Option (α × Ordnode α)
+参数：α × Ordnode α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitMin
-  签名: : Ordnode α -> 选项类型 (α × Ordnode α)
+--- 原说明 ---
+O(log n). Extract and remove the minimum element from the tree, if it exists.
+
+```
+split_min {1, 2, 3} = some (1, {2, 3})
+split_min ∅ = none
+```
 -/
-def splitMin : Ordnode α -> Option (α × Ordnode α)
+def splitMin : Ordnode α → Option (α × Ordnode α)
   | nil => none
   | node _ l x r => splitMin' l x r
 
-/--
-Definition of `splitMax'` / `splitMax'` 的定义
+/-- **Internal use only**, because it requires a balancing constraint on the inputs.
 
-English:
-definition splitMax'
-  signature: : Ordnode α -> α -> Ordnode α -> Ordnode α × α
-  body: splitMax' rl rx rr
-    (balanceL l x r', xm)
+O(log n). Extract and remove the maximum element from a nonempty tree. -/
+/-
+**Ordnode.splitMax'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：splitMax' : Ordnode α -> α -> Ordnode α -> Ordnode α × α | l, x, nil => (l
+, x) | l, x, node _ rl rx rr => let (r', xm)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitMax'
-  签名: : Ordnode α -> α -> Ordnode α -> Ordnode α × α
-  定义体: splitMax' rl rx rr
-    (balanceL l x r', xm)
+--- 原说明 ---
+**Internal use only**, because it requires a balancing constraint on the inputs.
 
-Depends on / 依赖: splitMax
+O(log n). Extract and remove the maximum element from a nonempty tree.
 -/
-def splitMax' : Ordnode α -> α -> Ordnode α -> Ordnode α × α
+def splitMax' : Ordnode α → α → Ordnode α → Ordnode α × α
   | l, x, nil => (l, x)
   | l, x, node _ rl rx rr =>
     let (r', xm) := splitMax' rl rx rr
     (balanceL l x r', xm)
 
-/--
-Definition of `splitMax` / `splitMax` 的定义
+/-- O(log n). Extract and remove the maximum element from the tree, if it exists.
 
-English:
-definition splitMax
-  signature: : Ordnode α -> Option (Ordnode α × α)
+```
+split_max {1, 2, 3} = some ({1, 2}, 3)
+split_max ∅ = none
+``` -/
+/-
+**Ordnode.splitMax** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → Option (Ordnode α × α)
+参数：Ordnode α × α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitMax
-  签名: : Ordnode α -> 选项类型 (Ordnode α × α)
+--- 原说明 ---
+O(log n). Extract and remove the maximum element from the tree, if it exists.
+
+```
+split_max {1, 2, 3} = some ({1, 2}, 3)
+split_max ∅ = none
+```
 -/
-def splitMax : Ordnode α -> Option (Ordnode α × α)
+def splitMax : Ordnode α → Option (Ordnode α × α)
   | nil => none
   | node _ x l r => splitMax' x l r
 
-/--
-Definition of `glue` / `glue` 的定义
+/-- **Internal use only**
 
-English:
-definition glue
-  signature: : Ordnode α -> Ordnode α -> Ordnode α
-  body: splitMax' ll lx lr
-      balanceR l' m r
-    else
-      let (m, r') := splitMin' rl rx rr
-      balanceL l m r'
+O(log(m + n)). Concatenate two trees that are balanced and ordered with respect to each other. -/
+/-
+**Ordnode.glue** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：glue : Ordnode α -> Ordnode α -> Ordnode α | nil, r => r | l@(node _ _ _ _
+), nil => l | l@(node sl ll lx lr), r@(node sr rl rx rr) => if sl > sr then let 
+(l', m)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 glue
-  签名: : Ordnode α -> Ordnode α -> Ordnode α
-  定义体: splitMax' ll lx lr
-      balanceR l' m r
-    else
-      let (m, r') := splitMin' rl rx rr
-      balanceL l m r'
+--- 原说明 ---
+**Internal use only**
 
-Depends on / 依赖: splitMax
+O(log(m + n)). Concatenate two trees that are balanced and ordered with respect 
+to each other.
 -/
-def glue : Ordnode α -> Ordnode α -> Ordnode α
+def glue : Ordnode α → Ordnode α → Ordnode α
   | nil, r => r
   | l@(node _ _ _ _), nil => l
   | l@(node sl ll lx lr), r@(node sr rl rx rr) =>
@@ -1168,37 +1013,30 @@ def glue : Ordnode α -> Ordnode α -> Ordnode α
       let (m, r') := splitMin' rl rx rr
       balanceL l m r'
 
-/--
-Definition of `merge` / `merge` 的定义
+/-- O(log(m + n)). Concatenate two trees that are ordered with respect to each other.
 
-English:
-definition merge
-  signature: (l : Ordnode α)
-  body: (Ordnode.recOn (motive := fun _ => Ordnode α -> Ordnode α) l fun r => r)
-    fun ls ll lx lr _ IHlr r =>
-      (Ordnode.recOn (motive := fun _ => Ordnode α) r (node ls ll lx lr))
-        fun rs rl rx rr IHrl _ =>
-          if delta * ls < rs then balanceL IHrl rx rr
-          else
-            if delta * rs < ls then balanceR ll lx (IHlr <| node rs rl rx rr)
-            else glue (node ls ll lx lr) (node rs rl rx rr)
+```
+merge {1, 2} {3, 4} = {1, 2, 3, 4}
+merge {3, 4} {1, 2} = precondition violation
+``` -/
+/-
+**Ordnode.merge** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：merge (l : Ordnode α) : Ordnode α -> Ordnode α
+参数：l : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 merge
-  签名: (l : Ordnode α)
-  定义体: (Ordnode.recOn (motive := fun _ => Ordnode α -> Ordnode α) l fun r => r)
-    fun ls ll lx lr _ IHlr r =>
-      (Ordnode.recOn (motive := fun _ => Ordnode α) r (node ls ll lx lr))
-        fun rs rl rx rr IHrl _ =>
-          if delta * ls < rs then balanceL IHrl rx rr
-          else
-            if delta * rs < ls then balanceR ll lx (IHlr <| node rs rl rx rr)
-            else glue (node ls ll lx lr) (node rs rl rx rr)
+--- 原说明 ---
+O(log(m + n)). Concatenate two trees that are ordered with respect to each other
+.
 
-Depends on / 依赖: Ordnode, Ordnode.recOn, balanceL, balanceR, motive
+```
+merge {1, 2} {3, 4} = {1, 2, 3, 4}
+merge {3, 4} {1, 2} = precondition violation
+```
 -/
-def merge (l : Ordnode α) : Ordnode α -> Ordnode α :=
-  (Ordnode.recOn (motive := fun _ => Ordnode α -> Ordnode α) l fun r => r)
+def merge (l : Ordnode α) : Ordnode α → Ordnode α :=
+  (Ordnode.recOn (motive := fun _ => Ordnode α → Ordnode α) l fun r => r)
     fun ls ll lx lr _ IHlr r =>
       (Ordnode.recOn (motive := fun _ => Ordnode α) r (node ls ll lx lr))
         fun rs rl rx rr IHrl _ =>
@@ -1207,71 +1045,83 @@ def merge (l : Ordnode α) : Ordnode α -> Ordnode α :=
             if delta * rs < ls then balanceR ll lx (IHlr <| node rs rl rx rr)
             else glue (node ls ll lx lr) (node rs rl rx rr)
 
-/--
-Definition of `insertMax` / `insertMax` 的定义
+/-- O(log n). Insert an element above all the others, without any comparisons.
+(Assumes that the element is in fact above all the others).
 
-English:
-definition insertMax
-  signature: : Ordnode α -> α -> Ordnode α
+```
+insertMax {1, 2} 4 = {1, 2, 4}
+insertMax {1, 2} 0 = precondition violation
+``` -/
+/-
+**Ordnode.insertMax** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 insertMax
-  签名: : Ordnode α -> α -> Ordnode α
+--- 原说明 ---
+O(log n). Insert an element above all the others, without any comparisons.
+(Assumes that the element is in fact above all the others).
+
+```
+insertMax {1, 2} 4 = {1, 2, 4}
+insertMax {1, 2} 0 = precondition violation
+```
 -/
-def insertMax : Ordnode α -> α -> Ordnode α
+def insertMax : Ordnode α → α → Ordnode α
   | nil, x => ι x
   | node _ l y r, x => balanceR l y (insertMax r x)
 
-/--
-Definition of `insertMin` / `insertMin` 的定义
+/-- O(log n). Insert an element below all the others, without any comparisons.
+(Assumes that the element is in fact below all the others).
 
-English:
-definition insertMin
-  signature: (x : α)
+```
+insertMin {1, 2} 0 = {0, 1, 2}
+insertMin {1, 2} 4 = precondition violation
+``` -/
+/-
+**Ordnode.insertMin** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → α → Ordnode α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 insertMin
-  签名: (x : α)
+--- 原说明 ---
+O(log n). Insert an element below all the others, without any comparisons.
+(Assumes that the element is in fact below all the others).
+
+```
+insertMin {1, 2} 0 = {0, 1, 2}
+insertMin {1, 2} 4 = precondition violation
+```
 -/
-def insertMin (x : α) : Ordnode α -> Ordnode α
+def insertMin (x : α) : Ordnode α → Ordnode α
   | nil => ι x
   | node _ l y r => balanceR (insertMin x l) y r
 
-/--
-Definition of `link` / `link` 的定义
+/-- O(log(m+n)). Build a tree from an element between two trees, without any
+assumption on the relative sizes.
 
-English:
-definition link
-  signature: (l : Ordnode α) (x : α)
-  body: match l with
-  | nil => insertMin x
-  | node ls ll lx lr => fun r =>
-    match r with
-    | nil => insertMax l x
-    | node rs rl rx rr =>
-      if delta * ls < rs then balanceL (link ll x rl) rx rr
-      else if delta * rs < ls then balanceR ll lx (link lr x rr)
-      else node' l x r
+```
+link {1, 2} 4 {5, 6} = {1, 2, 4, 5, 6}
+link {1, 3} 2 {5} = precondition violation
+``` -/
+/-
+**Ordnode.link** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：link (l : Ordnode α) (x : α) : Ordnode α -> Ordnode α
+参数：l : Ordnode α；x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 link
-  签名: (l : Ordnode α) (x : α)
-  定义体: match l with
-  | nil => insertMin x
-  | node ls ll lx lr => fun r =>
-    match r with
-    | nil => insertMax l x
-    | node rs rl rx rr =>
-      if delta * ls < rs then balanceL (link ll x rl) rx rr
-      else if delta * rs < ls then balanceR ll lx (link lr x rr)
-      else node' l x r
+--- 原说明 ---
+O(log(m+n)). Build a tree from an element between two trees, without any
+assumption on the relative sizes.
 
-Depends on / 依赖: balanceL, balanceR, insertMax, insertMin
+```
+link {1, 2} 4 {5, 6} = {1, 2, 4, 5, 6}
+link {1, 3} 2 {5} = precondition violation
+```
 -/
-def link (l : Ordnode α) (x : α) : Ordnode α -> Ordnode α :=
+def link (l : Ordnode α) (x : α) : Ordnode α → Ordnode α :=
   match l with
   | nil => insertMin x
-  | node ls ll lx lr => fun r =>
+  | node ls ll lx lr => fun r ↦
     match r with
     | nil => insertMax l x
     | node rs rl rx rr =>
@@ -1279,312 +1129,385 @@ def link (l : Ordnode α) (x : α) : Ordnode α -> Ordnode α :=
       else if delta * rs < ls then balanceR ll lx (link lr x rr)
       else node' l x r
 
-/--
-Definition of `filter` / `filter` 的定义
+/-- O(n). Filter the elements of a tree satisfying a predicate.
 
-English:
-definition filter
-  signature: (p : α -> Prop) [DecidablePred p]
+```
+filter (fun x ↦ x < 3) {1, 2, 4} = {1, 2}
+filter (fun x ↦ x > 5) {1, 2, 4} = ∅
+``` -/
+/-
+**Ordnode.filter** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → (p : α → Prop) → [DecidablePred p] → Ordnode α → Ordnode 
+α
+参数：p : α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 filter
-  签名: (p : α -> 命题) [DecidablePred p]
+--- 原说明 ---
+O(n). Filter the elements of a tree satisfying a predicate.
+
+```
+filter (fun x ↦ x < 3) {1, 2, 4} = {1, 2}
+filter (fun x ↦ x > 5) {1, 2, 4} = ∅
+```
 -/
-def filter (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α
+def filter (p : α → Prop) [DecidablePred p] : Ordnode α → Ordnode α
   | nil => nil
   | node _ l x r => if p x then
                       link (filter p l) x (filter p r) else
                       merge (filter p l) (filter p r)
 
-/--
-Definition of `partition` / `partition` 的定义
+/-- O(n). Split the elements of a tree into those satisfying, and not satisfying, a predicate.
 
-English:
-definition partition
-  signature: (p : α -> Prop) [DecidablePred p]
-  body: partition p l
-    let (r₁, r₂) := partition p r
-    if p x then (link l₁ x r₁, merge l₂ r₂) else (merge l₁ r₁, link l₂ x r₂)
+```
+partition (fun x ↦ x < 3) {1, 2, 4} = ({1, 2}, {3})
+``` -/
+/-
+**Ordnode.partition** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：partition (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α × Ord
+node α | nil => (nil, nil) | node _ l x r => let (l₁, l₂)
+参数：p : α -> Prop。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 partition
-  签名: (p : α -> 命题) [DecidablePred p]
-  定义体: partition p l
-    let (r₁, r₂) := partition p r
-    if p x then (link l₁ x r₁, merge l₂ r₂) else (merge l₁ r₁, link l₂ x r₂)
+--- 原说明 ---
+O(n). Split the elements of a tree into those satisfying, and not satisfying, a 
+predicate.
 
-Depends on / 依赖: partition
+```
+partition (fun x ↦ x < 3) {1, 2, 4} = ({1, 2}, {3})
+```
 -/
-def partition (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α × Ordnode α
+def partition (p : α → Prop) [DecidablePred p] : Ordnode α → Ordnode α × Ordnode α
   | nil => (nil, nil)
   | node _ l x r =>
     let (l₁, l₂) := partition p l
     let (r₁, r₂) := partition p r
     if p x then (link l₁ x r₁, merge l₂ r₂) else (merge l₁ r₁, link l₂ x r₂)
 
-/--
-Definition of `map` / `map` 的定义
+/-- O(n). Map a function across a tree, without changing the structure. Only valid when
+the function is strictly monotone, i.e. `x < y → f x < f y`.
 
-English:
-definition map
-  signature: {β} (f : α -> β)
+```
+partition (fun x ↦ x + 2) {1, 2, 4} = {2, 3, 6}
+partition (fun x : ℕ ↦ x - 2) {1, 2, 4} = precondition violation
+``` -/
+/-
+**Ordnode.map** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → (α → β) → Ordnode α → Ordnode β
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 map
-  签名: {β} (f : α -> β)
+--- 原说明 ---
+O(n). Map a function across a tree, without changing the structure. Only valid w
+hen
+the function is strictly monotone, i.e. `x < y → f x < f y`.
+
+```
+partition (fun x ↦ x + 2) {1, 2, 4} = {2, 3, 6}
+partition (fun x : ℕ ↦ x - 2) {1, 2, 4} = precondition violation
+```
 -/
-def map {β} (f : α -> β) : Ordnode α -> Ordnode β
+def map {β} (f : α → β) : Ordnode α → Ordnode β
   | nil => nil
   | node s l x r => node s (map f l) (f x) (map f r)
 
-/--
-Definition of `fold` / `fold` 的定义
+/-- O(n). Fold a function across the structure of a tree.
 
-English:
-definition fold
-  signature: {β} (z : β) (f : β -> α -> β -> β)
+```
+fold z f {1, 2, 4} = f (f z 1 z) 2 (f z 4 z)
+```
 
-中文:
-定义 fold
-  签名: {β} (z : β) (f : β -> α -> β -> β)
+The exact structure of function applications depends on the tree and so
+is unspecified. -/
+/-
+**Ordnode.fold** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Sort u_2} → β → (β → α → β → β) → Ordnode α → β
+参数：β → α → β → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(n). Fold a function across the structure of a tree.
+
+```
+fold z f {1, 2, 4} = f (f z 1 z) 2 (f z 4 z)
+```
+
+The exact structure of function applications depends on the tree and so
+is unspecified.
 -/
-def fold {β} (z : β) (f : β -> α -> β -> β) : Ordnode α -> β
+def fold {β} (z : β) (f : β → α → β → β) : Ordnode α → β
   | nil => z
   | node _ l x r => f (fold z f l) x (fold z f r)
 
-/--
-Definition of `foldl` / `foldl` 的定义
+/-- O(n). Fold a function from left to right (in increasing order) across the tree.
 
-English:
-definition foldl
-  signature: {β} (f : β -> α -> β)
+```
+foldl f z {1, 2, 4} = f (f (f z 1) 2) 4
+``` -/
+/-
+**Ordnode.foldl** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Sort u_2} → (β → α → β) → β → Ordnode α → β
+参数：β → α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 foldl
-  签名: {β} (f : β -> α -> β)
+--- 原说明 ---
+O(n). Fold a function from left to right (in increasing order) across the tree.
+
+```
+foldl f z {1, 2, 4} = f (f (f z 1) 2) 4
+```
 -/
-def foldl {β} (f : β -> α -> β) : β -> Ordnode α -> β
+def foldl {β} (f : β → α → β) : β → Ordnode α → β
   | z, nil => z
   | z, node _ l x r => foldl f (f (foldl f z l) x) r
 
-/--
-Definition of `foldr` / `foldr` 的定义
+/-- O(n). Fold a function from right to left (in decreasing order) across the tree.
 
-English:
-definition foldr
-  signature: {β} (f : α -> β -> β)
+```
+foldr f {1, 2, 4} z = f 1 (f 2 (f 4 z))
+``` -/
+/-
+**Ordnode.foldr** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Sort u_2} → (α → β → β) → Ordnode α → β → β
+参数：α → β → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 foldr
-  签名: {β} (f : α -> β -> β)
+--- 原说明 ---
+O(n). Fold a function from right to left (in decreasing order) across the tree.
+
+```
+foldr f {1, 2, 4} z = f 1 (f 2 (f 4 z))
+```
 -/
-def foldr {β} (f : α -> β -> β) : Ordnode α -> β -> β
+def foldr {β} (f : α → β → β) : Ordnode α → β → β
   | nil, z => z
   | node _ l x r, z => foldr f l (f x (foldr f r z))
 
-/--
-Definition of `toList` / `toList` 的定义
+/-- O(n). Build a list of elements in ascending order from the tree.
 
-English:
-definition toList
-  signature: (t : Ordnode α)
-  body: foldr List.cons t []
+```
+toList {1, 2, 4} = [1, 2, 4]
+toList {2, 1, 1, 4} = [1, 2, 4]
+``` -/
+/-
+**Ordnode.toList** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：toList (t : Ordnode α) : List α
+参数：t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 toList
-  签名: (t : Ordnode α)
-  定义体: foldr List.cons t []
+--- 原说明 ---
+O(n). Build a list of elements in ascending order from the tree.
 
-Depends on / 依赖: List.cons
+```
+toList {1, 2, 4} = [1, 2, 4]
+toList {2, 1, 1, 4} = [1, 2, 4]
+```
 -/
 def toList (t : Ordnode α) : List α :=
   foldr List.cons t []
 
-/--
-Definition of `toRevList` / `toRevList` 的定义
+/-- O(n). Build a list of elements in descending order from the tree.
 
-English:
-definition toRevList
-  signature: (t : Ordnode α)
-  body: foldl (flip List.cons) [] t
+```
+toRevList {1, 2, 4} = [4, 2, 1]
+toRevList {2, 1, 1, 4} = [4, 2, 1]
+``` -/
+/-
+**Ordnode.toRevList** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：toRevList (t : Ordnode α) : List α
+参数：t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 toRevList
-  签名: (t : Ordnode α)
-  定义体: foldl (flip List.cons) [] t
+--- 原说明 ---
+O(n). Build a list of elements in descending order from the tree.
 
-Depends on / 依赖: List.cons
+```
+toRevList {1, 2, 4} = [4, 2, 1]
+toRevList {2, 1, 1, 4} = [4, 2, 1]
+```
 -/
 def toRevList (t : Ordnode α) : List α :=
   foldl (flip List.cons) [] t
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ToString
-  signature: α] : ToString (Ordnode α)
-  body: ⟨fun t => "{" ++ String.intercalate ", " (t.toList.map toString) ++ "}"⟩
-
-中文:
-实例 [ToString
-  签名: α] : ToString (Ordnode α)
-  定义体: ⟨fun t => "{" ++ String.intercalate ", " (t.toList.map toString) ++ "}"⟩
-
-Depends on / 依赖: String.intercalate, intercalate, t.toList.map, toList, toString
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ToString α] : ToString (Ordnode α) :=
   ⟨fun t => "{" ++ String.intercalate ", " (t.toList.map toString) ++ "}"⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.ToFormat
-  signature: α] : Std.ToFormat (Ordnode α) where
-  body: fun t => Std.Format.joinSep (t.toList.map Std.ToFormat.format) (Std.Format.text ", ")
-
-中文:
-实例 [Std.ToFormat
-  签名: α] : Std.ToFormat (Ordnode α) where
-  定义体: fun t => Std.Format.joinSep (t.toList.map Std.ToFormat.format) (Std.Format.text ", ")
-
-Depends on / 依赖: Format, Std.Format.joinSep, Std.Format.text, Std.ToFormat.format, ToFormat, format, joinSep, t.toList.map, toList
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Std.ToFormat α] : Std.ToFormat (Ordnode α) where
   format := fun t => Std.Format.joinSep (t.toList.map Std.ToFormat.format) (Std.Format.text ", ")
 
-/--
-Definition of `Equiv` / `Equiv` 的定义
+/-- O(n). True if the trees have the same elements, ignoring structural differences.
 
-English:
-definition Equiv
-  signature: (t₁ t₂ : Ordnode α)
-  body: t₁.size = t₂.size ∧ t₁.toList = t₂.toList
+```
+Equiv {1, 2, 4} {2, 1, 1, 4} = true
+Equiv {1, 2, 4} {1, 2, 3} = false
+``` -/
+/-
+**Ordnode.Equiv** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：Equiv (t₁ t₂ : Ordnode α) : Prop
+参数：t₁ t₂ : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 等价
-  签名: (t₁ t₂ : Ordnode α)
-  定义体: t₁.size = t₂.size ∧ t₁.toList = t₂.toList
+--- 原说明 ---
+O(n). True if the trees have the same elements, ignoring structural differences.
 
-Depends on / 依赖: toList
+```
+Equiv {1, 2, 4} {2, 1, 1, 4} = true
+Equiv {1, 2, 4} {1, 2, 3} = false
+```
 -/
 def Equiv (t₁ t₂ : Ordnode α) : Prop :=
   t₁.size = t₂.size ∧ t₁.toList = t₂.toList
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableRel (@Equiv α)
-  body: fun x y =>
-  inferInstanceAs (Decidable (x.size = y.size ∧ x.toList = y.toList))
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableRel (@等价 α)
-  定义体: fun x y =>
-  inferInstanceAs (Decidable (x.size = y.size ∧ x.toList = y.toList))
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableRel (@Equiv α) := fun x y =>
   inferInstanceAs (Decidable (x.size = y.size ∧ x.toList = y.toList))
 
-/--
-Definition of `powerset` / `powerset` 的定义
+/-- O(2^n). Constructs the powerset of a given set, that is, the set of all subsets.
 
-English:
-definition powerset
-  signature: (t : Ordnode α)
-  body: insertMin nil foldr (fun x ts => glue (insertMin (ι x) (map (insertMin x) ts)) ts) t nil
+```
+powerset {1, 2, 3} = {∅, {1}, {2}, {3}, {1,2}, {1,3}, {2,3}, {1,2,3}}
+``` -/
+/-
+**Ordnode.powerset** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：powerset (t : Ordnode α) : Ordnode (Ordnode α)
+参数：t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 powerset
-  签名: (t : Ordnode α)
-  定义体: insertMin nil foldr (fun x ts => glue (insertMin (ι x) (map (insertMin x) ts)) ts) t nil
+--- 原说明 ---
+O(2^n). Constructs the powerset of a given set, that is, the set of all subsets.
 
-Depends on / 依赖: insertMin
+```
+powerset {1, 2, 3} = {∅, {1}, {2}, {3}, {1,2}, {1,3}, {2,3}, {1,2,3}}
+```
 -/
 def powerset (t : Ordnode α) : Ordnode (Ordnode α) :=
-insertMin nil foldr (fun x ts => glue (insertMin (ι x) (map (insertMin x) ts)) ts) t nil
+  insertMin nil <| foldr (fun x ts => glue (insertMin (ι x) (map (insertMin x) ts)) ts) t nil
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- O(m * n). The Cartesian product of two sets: `(a, b) ∈ s.prod t` iff `a ∈ s` and `b ∈ t`.
 
-English:
-definition prod
-  signature: {β} (t₁ : Ordnode α) (t₂ : Ordnode β)
-  body: fold nil (fun s₁ a s₂ => merge s₁ <| merge (map (Prod.mk a) t₂) s₂) t₁
+```
+prod {1, 2} {2, 3} = {(1, 2), (1, 3), (2, 2), (2, 3)}
+``` -/
+/-
+**Ordnode.prod** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Ordnode α → Ordnode β → Ordnode (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 乘积
-  签名: {β} (t₁ : Ordnode α) (t₂ : Ordnode β)
-  定义体: fold nil (fun s₁ a s₂ => merge s₁ <| merge (map (Prod.mk a) t₂) s₂) t₁
+--- 原说明 ---
+O(m * n). The Cartesian product of two sets: `(a, b) ∈ s.prod t` iff `a ∈ s` and
+ `b ∈ t`.
+
+```
+prod {1, 2} {2, 3} = {(1, 2), (1, 3), (2, 2), (2, 3)}
+```
 -/
 protected def prod {β} (t₁ : Ordnode α) (t₂ : Ordnode β) : Ordnode (α × β) :=
   fold nil (fun s₁ a s₂ => merge s₁ <| merge (map (Prod.mk a) t₂) s₂) t₁
 
-/--
-Definition of `copair` / `copair` 的定义
+/-- O(m + n). Build a set on the disjoint union by combining sets on the factors.
+`Or.inl a ∈ s.copair t` iff `a ∈ s`, and `Or.inr b ∈ s.copair t` iff `b ∈ t`.
 
-English:
-definition copair
-  signature: {β} (t₁ : Ordnode α) (t₂ : Ordnode β)
-  body: merge (map Sum.inl t₁) (map Sum.inr t₂)
+```
+copair {1, 2} {2, 3} = {inl 1, inl 2, inr 2, inr 3}
+``` -/
+/-
+**Ordnode.copair** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Ordnode α → Ordnode β → Ordnode (α ⊕ β)
+参数：α ⊕ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 copair
-  签名: {β} (t₁ : Ordnode α) (t₂ : Ordnode β)
-  定义体: merge (map Sum.inl t₁) (map Sum.inr t₂)
+--- 原说明 ---
+O(m + n). Build a set on the disjoint union by combining sets on the factors.
+`Or.inl a ∈ s.copair t` iff `a ∈ s`, and `Or.inr b ∈ s.copair t` iff `b ∈ t`.
+
+```
+copair {1, 2} {2, 3} = {inl 1, inl 2, inr 2, inr 3}
+```
 -/
-protected def copair {β} (t₁ : Ordnode α) (t₂ : Ordnode β) : Ordnode (α oplus β) :=
+protected def copair {β} (t₁ : Ordnode α) (t₂ : Ordnode β) : Ordnode (α ⊕ β) :=
   merge (map Sum.inl t₁) (map Sum.inr t₂)
 
-/--
-Definition of `pmap` / `pmap` 的定义
+/-- O(n). Map a partial function across a set. The result depends on a proof
+that the function is defined on all members of the set.
 
-English:
-definition pmap
-  signature: {P : α -> Prop} {β} (f : forall a, P a -> β)
+```
+pmap (fin.mk : ∀ n, n < 4 → fin 4) {1, 2} H = {(1 : fin 4), (2 : fin 4)}
+``` -/
+/-
+**Ordnode.pmap** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → {P : α → Prop} → {β : Type u_2} → ((a : α) → P a → β) → (
+t : Ordnode α) → Ordnode.All P t → Ordnode β
+参数：(a : α) → P a → β；t : Ordnode α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 pmap
-  签名: {P : α -> 命题} {β} (f : 对任意 a, P a -> β)
+--- 原说明 ---
+O(n). Map a partial function across a set. The result depends on a proof
+that the function is defined on all members of the set.
+
+```
+pmap (fin.mk : ∀ n, n < 4 → fin 4) {1, 2} H = {(1 : fin 4), (2 : fin 4)}
+```
 -/
-def pmap {P : α -> Prop} {β} (f : forall a, P a -> β) : forall t : Ordnode α, All P t -> Ordnode β
+def pmap {P : α → Prop} {β} (f : ∀ a, P a → β) : ∀ t : Ordnode α, All P t → Ordnode β
   | nil, _ => nil
   | node s l x r, ⟨hl, hx, hr⟩ => node s (pmap f l hl) (f x hx) (pmap f r hr)
 
-/--
-Definition of `attach'` / `attach'` 的定义
+/-- O(n). "Attach" the information that every element of `t` satisfies property
+P to these elements inside the set, producing a set in the subtype.
 
-English:
-definition attach'
-  signature: {P : α -> Prop}
-  body: pmap Subtype.mk
+```
+attach' (fun x ↦ x < 4) {1, 2} H = ({1, 2} : Ordnode {x // x<4})
+``` -/
+/-
+**Ordnode.attach'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：attach' {P : α -> Prop} : forall t, All P t -> Ordnode { a // P a }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 attach'
-  签名: {P : α -> 命题}
-  定义体: pmap Subtype.mk
+--- 原说明 ---
+O(n). "Attach" the information that every element of `t` satisfies property
+P to these elements inside the set, producing a set in the subtype.
 
-Depends on / 依赖: Subtype, Subtype.mk
+```
+attach' (fun x ↦ x < 4) {1, 2} H = ({1, 2} : Ordnode {x // x<4})
+```
 -/
-def attach' {P : α -> Prop} : forall t, All P t -> Ordnode { a // P a } :=
+def attach' {P : α → Prop} : ∀ t, All P t → Ordnode { a // P a } :=
   pmap Subtype.mk
 
-/--
-Definition of `nth` / `nth` 的定义
+/-- O(log n). Get the `i`th element of the set, by its index from left to right.
 
-English:
-definition nth
-  signature: : Ordnode α -> Nat -> Option α
+```
+nth {a, b, c, d} 2 = some c
+nth {a, b, c, d} 5 = none
+``` -/
+/-
+**Ordnode.nth** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → ℕ → Option α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 nth
-  签名: : Ordnode α -> 自然数 -> 选项类型 α
+--- 原说明 ---
+O(log n). Get the `i`th element of the set, by its index from left to right.
+
+```
+nth {a, b, c, d} 2 = some c
+nth {a, b, c, d} 5 = none
+```
 -/
-def nth : Ordnode α -> Nat -> Option α
+def nth : Ordnode α → ℕ → Option α
   | nil, _ => none
   | node _ l x r, i =>
     match Nat.psub' i (size l) with
@@ -1592,18 +1515,26 @@ def nth : Ordnode α -> Nat -> Option α
     | some 0 => some x
     | some (j + 1) => nth r j
 
-/--
-Definition of `removeNth` / `removeNth` 的定义
+/-- O(log n). Remove the `i`th element of the set, by its index from left to right.
 
-English:
-definition removeNth
-  signature: : Ordnode α -> Nat -> Ordnode α
+```
+remove_nth {a, b, c, d} 2 = {a, b, d}
+remove_nth {a, b, c, d} 5 = {a, b, c, d}
+``` -/
+/-
+**Ordnode.removeNth** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → ℕ → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 removeNth
-  签名: : Ordnode α -> 自然数 -> Ordnode α
+--- 原说明 ---
+O(log n). Remove the `i`th element of the set, by its index from left to right.
+
+```
+remove_nth {a, b, c, d} 2 = {a, b, d}
+remove_nth {a, b, c, d} 5 = {a, b, c, d}
+```
 -/
-def removeNth : Ordnode α -> Nat -> Ordnode α
+def removeNth : Ordnode α → ℕ → Ordnode α
   | nil, _ => nil
   | node _ l x r, i =>
     match Nat.psub' i (size l) with
@@ -1611,18 +1542,29 @@ def removeNth : Ordnode α -> Nat -> Ordnode α
     | some 0 => glue l r
     | some (j + 1) => balanceL l x (removeNth r j)
 
-/--
-Definition of `takeAux` / `takeAux` 的定义
+/-- Auxiliary definition for `take`. (Can also be used in lieu of `take` if you know the
+index is within the range of the data structure.)
 
-English:
-definition takeAux
-  signature: : Ordnode α -> Nat -> Ordnode α
+```
+takeAux {a, b, c, d} 2 = {a, b}
+takeAux {a, b, c, d} 5 = {a, b, c, d}
+``` -/
+/-
+**Ordnode.takeAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → ℕ → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 takeAux
-  签名: : Ordnode α -> 自然数 -> Ordnode α
+--- 原说明 ---
+Auxiliary definition for `take`. (Can also be used in lieu of `take` if you know
+ the
+index is within the range of the data structure.)
+
+```
+takeAux {a, b, c, d} 2 = {a, b}
+takeAux {a, b, c, d} 5 = {a, b, c, d}
+```
 -/
-def takeAux : Ordnode α -> Nat -> Ordnode α
+def takeAux : Ordnode α → ℕ → Ordnode α
   | nil, _ => nil
   | node _ l x r, i =>
     if i = 0 then nil
@@ -1632,36 +1574,53 @@ def takeAux : Ordnode α -> Nat -> Ordnode α
       | some 0 => l
       | some (j + 1) => link l x (takeAux r j)
 
-/--
-Definition of `take` / `take` 的定义
+/-- O(log n). Get the first `i` elements of the set, counted from the left.
 
-English:
-definition take
-  signature: (i : Nat) (t : Ordnode α)
-  body: if size t <= i then t else takeAux t i
+```
+take 2 {a, b, c, d} = {a, b}
+take 5 {a, b, c, d} = {a, b, c, d}
+``` -/
+/-
+**Ordnode.take** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：take (i : Nat) (t : Ordnode α) : Ordnode α
+参数：i : Nat；t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 take
-  签名: (i : 自然数) (t : Ordnode α)
-  定义体: if size t <= i then t else takeAux t i
+--- 原说明 ---
+O(log n). Get the first `i` elements of the set, counted from the left.
 
-Depends on / 依赖: takeAux
+```
+take 2 {a, b, c, d} = {a, b}
+take 5 {a, b, c, d} = {a, b, c, d}
+```
 -/
-def take (i : Nat) (t : Ordnode α) : Ordnode α :=
-  if size t <= i then t else takeAux t i
+def take (i : ℕ) (t : Ordnode α) : Ordnode α :=
+  if size t ≤ i then t else takeAux t i
 
-/--
-Definition of `dropAux` / `dropAux` 的定义
+/-- Auxiliary definition for `drop`. (Can also be used in lieu of `drop` if you know the
+index is within the range of the data structure.)
 
-English:
-definition dropAux
-  signature: : Ordnode α -> Nat -> Ordnode α
+```
+drop_aux {a, b, c, d} 2 = {c, d}
+drop_aux {a, b, c, d} 5 = ∅
+``` -/
+/-
+**Ordnode.dropAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → Ordnode α → ℕ → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 dropAux
-  签名: : Ordnode α -> 自然数 -> Ordnode α
+--- 原说明 ---
+Auxiliary definition for `drop`. (Can also be used in lieu of `drop` if you know
+ the
+index is within the range of the data structure.)
+
+```
+drop_aux {a, b, c, d} 2 = {c, d}
+drop_aux {a, b, c, d} 5 = ∅
+```
 -/
-def dropAux : Ordnode α -> Nat -> Ordnode α
+def dropAux : Ordnode α → ℕ → Ordnode α
   | nil, _ => nil
   | t@(node _ l x r), i =>
     if i = 0 then t
@@ -1671,50 +1630,56 @@ def dropAux : Ordnode α -> Nat -> Ordnode α
       | some 0 => insertMin x r
       | some (j + 1) => dropAux r j
 
-/--
-Definition of `drop` / `drop` 的定义
+/-- O(log n). Remove the first `i` elements of the set, counted from the left.
 
-English:
-definition drop
-  signature: (i : Nat) (t : Ordnode α)
-  body: if size t <= i then nil else dropAux t i
+```
+drop 2 {a, b, c, d} = {c, d}
+drop 5 {a, b, c, d} = ∅
+``` -/
+/-
+**Ordnode.drop** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：drop (i : Nat) (t : Ordnode α) : Ordnode α
+参数：i : Nat；t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 drop
-  签名: (i : 自然数) (t : Ordnode α)
-  定义体: if size t <= i then nil else dropAux t i
+--- 原说明 ---
+O(log n). Remove the first `i` elements of the set, counted from the left.
 
-Depends on / 依赖: dropAux
+```
+drop 2 {a, b, c, d} = {c, d}
+drop 5 {a, b, c, d} = ∅
+```
 -/
-def drop (i : Nat) (t : Ordnode α) : Ordnode α :=
-  if size t <= i then nil else dropAux t i
+def drop (i : ℕ) (t : Ordnode α) : Ordnode α :=
+  if size t ≤ i then nil else dropAux t i
 
-/--
-Definition of `splitAtAux` / `splitAtAux` 的定义
+/-- Auxiliary definition for `splitAt`. (Can also be used in lieu of `splitAt` if you know the
+index is within the range of the data structure.)
 
-English:
-definition splitAtAux
-  signature: : Ordnode α -> Nat -> Ordnode α × Ordnode α
-  body: splitAtAux l i
-        (l₁, link l₂ x r)
-      | some 0 => (glue l r, insertMin x r)
-      | some (j + 1) =>
-        let (r₁, r₂) := splitAtAux r j
-        (link l x r₁, r₂)
+```
+splitAtAux {a, b, c, d} 2 = ({a, b}, {c, d})
+splitAtAux {a, b, c, d} 5 = ({a, b, c, d}, ∅)
+``` -/
+/-
+**Ordnode.splitAtAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：splitAtAux : Ordnode α -> Nat -> Ordnode α × Ordnode α | nil, _ => (nil, n
+il) | t@(node _ l x r), i => if i = 0 then (nil, t) else match Nat.psub' i (size
+ l) with | none => let (l₁, l₂)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitAtAux
-  签名: : Ordnode α -> 自然数 -> Ordnode α × Ordnode α
-  定义体: splitAtAux l i
-        (l₁, link l₂ x r)
-      | some 0 => (glue l r, insertMin x r)
-      | some (j + 1) =>
-        let (r₁, r₂) := splitAtAux r j
-        (link l x r₁, r₂)
+--- 原说明 ---
+Auxiliary definition for `splitAt`. (Can also be used in lieu of `splitAt` if yo
+u know the
+index is within the range of the data structure.)
 
-Depends on / 依赖: splitAtAux
+```
+splitAtAux {a, b, c, d} 2 = ({a, b}, {c, d})
+splitAtAux {a, b, c, d} 5 = ({a, b, c, d}, ∅)
+```
 -/
-def splitAtAux : Ordnode α -> Nat -> Ordnode α × Ordnode α
+def splitAtAux : Ordnode α → ℕ → Ordnode α × Ordnode α
   | nil, _ => (nil, nil)
   | t@(node _ l x r), i =>
     if i = 0 then (nil, t)
@@ -1728,76 +1693,111 @@ def splitAtAux : Ordnode α -> Nat -> Ordnode α × Ordnode α
         let (r₁, r₂) := splitAtAux r j
         (link l x r₁, r₂)
 
-/--
-Definition of `splitAt` / `splitAt` 的定义
+/-- O(log n). Split a set at the `i`th element, getting the first `i` and everything else.
 
-English:
-definition splitAt
-  signature: (i : Nat) (t : Ordnode α)
-  body: if size t <= i then (t, nil) else splitAtAux t i
+```
+splitAt 2 {a, b, c, d} = ({a, b}, {c, d})
+splitAt 5 {a, b, c, d} = ({a, b, c, d}, ∅)
+``` -/
+/-
+**Ordnode.splitAt** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：splitAt (i : Nat) (t : Ordnode α) : Ordnode α × Ordnode α
+参数：i : Nat；t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 splitAt
-  签名: (i : 自然数) (t : Ordnode α)
-  定义体: if size t <= i then (t, nil) else splitAtAux t i
+--- 原说明 ---
+O(log n). Split a set at the `i`th element, getting the first `i` and everything
+ else.
 
-Depends on / 依赖: splitAtAux
+```
+splitAt 2 {a, b, c, d} = ({a, b}, {c, d})
+splitAt 5 {a, b, c, d} = ({a, b, c, d}, ∅)
+```
 -/
-def splitAt (i : Nat) (t : Ordnode α) : Ordnode α × Ordnode α :=
-  if size t <= i then (t, nil) else splitAtAux t i
+def splitAt (i : ℕ) (t : Ordnode α) : Ordnode α × Ordnode α :=
+  if size t ≤ i then (t, nil) else splitAtAux t i
 
-/--
-Definition of `takeWhile` / `takeWhile` 的定义
+/-- O(log n). Get an initial segment of the set that satisfies the predicate `p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
 
-English:
-definition takeWhile
-  signature: (p : α -> Prop) [DecidablePred p]
+```
+takeWhile (fun x ↦ x < 4) {1, 2, 3, 4, 5} = {1, 2, 3}
+takeWhile (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+``` -/
+/-
+**Ordnode.takeWhile** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → (p : α → Prop) → [DecidablePred p] → Ordnode α → Ordnode 
+α
+参数：p : α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 takeWhile
-  签名: (p : α -> 命题) [DecidablePred p]
+--- 原说明 ---
+O(log n). Get an initial segment of the set that satisfies the predicate `p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
+
+```
+takeWhile (fun x ↦ x < 4) {1, 2, 3, 4, 5} = {1, 2, 3}
+takeWhile (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+```
 -/
-def takeWhile (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α
+def takeWhile (p : α → Prop) [DecidablePred p] : Ordnode α → Ordnode α
   | nil => nil
   | node _ l x r => if p x then link l x (takeWhile p r) else takeWhile p l
 
-/--
-Definition of `dropWhile` / `dropWhile` 的定义
+/-- O(log n). Remove an initial segment of the set that satisfies the predicate `p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
 
-English:
-definition dropWhile
-  signature: (p : α -> Prop) [DecidablePred p]
+```
+dropWhile (fun x ↦ x < 4) {1, 2, 3, 4, 5} = {4, 5}
+dropWhile (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+``` -/
+/-
+**Ordnode.dropWhile** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → (p : α → Prop) → [DecidablePred p] → Ordnode α → Ordnode 
+α
+参数：p : α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 dropWhile
-  签名: (p : α -> 命题) [DecidablePred p]
+--- 原说明 ---
+O(log n). Remove an initial segment of the set that satisfies the predicate `p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
+
+```
+dropWhile (fun x ↦ x < 4) {1, 2, 3, 4, 5} = {4, 5}
+dropWhile (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+```
 -/
-def dropWhile (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α
+def dropWhile (p : α → Prop) [DecidablePred p] : Ordnode α → Ordnode α
   | nil => nil
   | node _ l x r => if p x then dropWhile p r else link (dropWhile p l) x r
 
-/--
-Definition of `span` / `span` 的定义
+/-- O(log n). Split the set into those satisfying and not satisfying the predicate `p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
 
-English:
-definition span
-  signature: (p : α -> Prop) [DecidablePred p]
-  body: span p r
-      (link l x r₁, r₂)
-    else
-      let (l₁, l₂) := span p l
-      (l₁, link l₂ x r)
+```
+span (fun x ↦ x < 4) {1, 2, 3, 4, 5} = ({1, 2, 3}, {4, 5})
+span (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+``` -/
+/-
+**Ordnode.span** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：span (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α × Ordnode 
+α | nil => (nil, nil) | node _ l x r => if p x then let (r₁, r₂)
+参数：p : α -> Prop。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 span
-  签名: (p : α -> 命题) [DecidablePred p]
-  定义体: span p r
-      (link l x r₁, r₂)
-    else
-      let (l₁, l₂) := span p l
-      (l₁, link l₂ x r)
+--- 原说明 ---
+O(log n). Split the set into those satisfying and not satisfying the predicate `
+p`.
+`p` is required to be antitone, that is, `x < y → p y → p x`.
+
+```
+span (fun x ↦ x < 4) {1, 2, 3, 4, 5} = ({1, 2, 3}, {4, 5})
+span (fun x ↦ x > 4) {1, 2, 3, 4, 5} = precondition violation
+```
 -/
-def span (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α × Ordnode α
+def span (p : α → Prop) [DecidablePred p] : Ordnode α → Ordnode α × Ordnode α
   | nil => (nil, nil)
   | node _ l x r =>
     if p x then
@@ -1807,28 +1807,26 @@ def span (p : α -> Prop) [DecidablePred p] : Ordnode α -> Ordnode α × Ordnod
       let (l₁, l₂) := span p l
       (l₁, link l₂ x r)
 
-/--
-Definition of `ofAscListAux₁` / `ofAscListAux₁` 的定义
+/-- Auxiliary definition for `ofAscList`.
 
-English:
-definition ofAscListAux₁
-  signature: : forall l : List α, Nat -> Ordnode α × { l' : List α // l'.length <= l.length }
-  body: Nat.le_succ_of_le h
-        let (r, ⟨zs, h'⟩) := ofAscListAux₁ ys (s <<< 1)
-        (link l y r, ⟨zs, le_trans h' (le_of_lt this)⟩)
-        termination_by l => l.length
+**Note:** This function is defined by well-founded recursion, so it will probably not compute
+in the kernel, meaning that you probably can't prove things like
+`ofAscList [1, 2, 3] = {1, 2, 3}` by `rfl`.
+This implementation is optimized for VM evaluation. -/
+/-
+**Ordnode.ofAscListAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ofAscListAux₁
-  签名: : 对任意 l : 列表 α, 自然数 -> Ordnode α × { l' : 列表 α // l'.length <= l.length }
-  定义体: Nat.le_succ_of_le h
-        let (r, ⟨zs, h'⟩) := ofAscListAux₁ ys (s <<< 1)
-        (link l y r, ⟨zs, le_trans h' (le_of_lt this)⟩)
-        termination_by l => l.length
+--- 原说明 ---
+Auxiliary definition for `ofAscList`.
 
-Depends on / 依赖: Nat.le_succ_of_le, le_succ_of_le
+**Note:** This function is defined by well-founded recursion, so it will probabl
+y not compute
+in the kernel, meaning that you probably can't prove things like
+`ofAscList [1, 2, 3] = {1, 2, 3}` by `rfl`.
+This implementation is optimized for VM evaluation.
 -/
-def ofAscListAux₁ : forall l : List α, Nat -> Ordnode α × { l' : List α // l'.length <= l.length }
+def ofAscListAux₁ : ∀ l : List α, ℕ → Ordnode α × { l' : List α // l'.length ≤ l.length }
   | [] => fun _ => (nil, ⟨[], le_rfl⟩)
   | x :: xs => fun s =>
     if s = 1 then (ι x, ⟨xs, Nat.le_succ _⟩)
@@ -1841,26 +1839,15 @@ def ofAscListAux₁ : forall l : List α, Nat -> Ordnode α × { l' : List α //
         (link l y r, ⟨zs, le_trans h' (le_of_lt this)⟩)
         termination_by l => l.length
 
-/--
-Definition of `ofAscListAux₂` / `ofAscListAux₂` 的定义
+/-- Auxiliary definition for `ofAscList`. -/
+/-
+**Ordnode.ofAscListAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAscListAux₂
-  signature: : List α -> Ordnode α -> Nat -> Ordnode α
-  body: Nat.lt_succ_of_le h
-      ofAscListAux₂ ys (link l x r) (s <<< 1)
-      termination_by l => l.length
-
-中文:
-定义 ofAscListAux₂
-  签名: : 列表 α -> Ordnode α -> 自然数 -> Ordnode α
-  定义体: Nat.lt_succ_of_le h
-      ofAscListAux₂ ys (link l x r) (s <<< 1)
-      termination_by l => l.length
-
-Depends on / 依赖: Nat.lt_succ_of_le, lt_succ_of_le
+--- 原说明 ---
+Auxiliary definition for `ofAscList`.
 -/
-def ofAscListAux₂ : List α -> Ordnode α -> Nat -> Ordnode α
+def ofAscListAux₂ : List α → Ordnode α → ℕ → Ordnode α
   | [] => fun t _ => t
   | x :: xs => fun l s =>
     match ofAscListAux₁ xs s with
@@ -1869,18 +1856,26 @@ def ofAscListAux₂ : List α -> Ordnode α -> Nat -> Ordnode α
       ofAscListAux₂ ys (link l x r) (s <<< 1)
       termination_by l => l.length
 
-/--
-Definition of `ofAscList` / `ofAscList` 的定义
+/-- O(n). Build a set from a list which is already sorted. Performs no comparisons.
 
-English:
-definition ofAscList
-  signature: : List α -> Ordnode α
+```
+ofAscList [1, 2, 3] = {1, 2, 3}
+ofAscList [3, 2, 1] = precondition violation
+``` -/
+/-
+**Ordnode.ofAscList** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → List α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ofAscList
-  签名: : 列表 α -> Ordnode α
+--- 原说明 ---
+O(n). Build a set from a list which is already sorted. Performs no comparisons.
+
+```
+ofAscList [1, 2, 3] = {1, 2, 3}
+ofAscList [3, 2, 1] = precondition violation
+```
 -/
-def ofAscList : List α -> Ordnode α
+def ofAscList : List α → Ordnode α
   | [] => nil
   | x :: xs => ofAscListAux₂ xs (ι x) 1
 
@@ -1888,18 +1883,42 @@ section
 
 variable [LE α] [DecidableLE α]
 
-/--
-Definition of `mem` / `mem` 的定义
+/-- O(log n). Does the set (approximately) contain the element `x`? That is,
+is there an element that is equivalent to `x` in the order?
 
-English:
-definition mem
-  signature: (x : α)
+```
+1 ∈ {1, 2, 3} = true
+4 ∈ {1, 2, 3} = false
+```
 
-中文:
-定义 mem
-  签名: (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+(1, 1) ∈ {(0, 1), (1, 2)} = true
+(3, 1) ∈ {(0, 1), (1, 2)} = false
+``` -/
+/-
+**Ordnode.mem** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Does the set (approximately) contain the element `x`? That is,
+is there an element that is equivalent to `x` in the order?
+
+```
+1 ∈ {1, 2, 3} = true
+4 ∈ {1, 2, 3} = false
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+(1, 1) ∈ {(0, 1), (1, 2)} = true
+(3, 1) ∈ {(0, 1), (1, 2)} = false
+```
 -/
-def mem (x : α) : Ordnode α -> Bool
+def mem (x : α) : Ordnode α → Bool
   | nil => false
   | node _ l y r =>
     match cmpLE x y with
@@ -1907,73 +1926,107 @@ def mem (x : α) : Ordnode α -> Bool
     | Ordering.eq => true
     | Ordering.gt => mem x r
 
-/--
-Definition of `find` / `find` 的定义
+/-- O(log n). Retrieve an element in the set that is equivalent to `x` in the order,
+if it exists.
 
-English:
-definition find
-  signature: (x : α)
+```
+find 1 {1, 2, 3} = some 1
+find 4 {1, 2, 3} = none
+```
 
-中文:
-定义 find
-  签名: (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+find (1, 1) {(0, 1), (1, 2)} = some (1, 2)
+find (3, 1) {(0, 1), (1, 2)} = none
+``` -/
+/-
+**Ordnode.find** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Option 
+α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Retrieve an element in the set that is equivalent to `x` in the order,
+if it exists.
+
+```
+find 1 {1, 2, 3} = some 1
+find 4 {1, 2, 3} = none
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+find (1, 1) {(0, 1), (1, 2)} = some (1, 2)
+find (3, 1) {(0, 1), (1, 2)} = none
+```
 -/
-def find (x : α) : Ordnode α -> Option α
+def find (x : α) : Ordnode α → Option α
   | nil => none
   | node _ l y r =>
     match cmpLE x y with
     | Ordering.lt => find x l
     | Ordering.eq => some y
     | Ordering.gt => find x r
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership α (Ordnode α)
-  body: ⟨fun t x => t.mem x⟩
-
-中文:
-实例 :
-  签名: Membership α (Ordnode α)
-  定义体: ⟨fun t x => t.mem x⟩
-
-Depends on / 依赖: t.mem
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership α (Ordnode α) :=
   ⟨fun t x => t.mem x⟩
-
-/--
-Instance `mem.decidable` / 实例 `mem.decidable`
-
-English:
-instance mem.decidable
-  signature: (x : α) (t : Ordnode α)
-  body: Bool.decEq _ _
-
-中文:
-实例 mem.decidable
-  签名: (x : α) (t : Ordnode α)
-  定义体: Bool.decEq _ _
-
-Depends on / 依赖: Bool.decEq
+/-
+**Ordnode.mem.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode.mem`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [inst_1 : DecidableLE α] → (x : α) → (t :
+ Ordnode α) → Decidable (x ∈ t)
+参数：x : α；t : Ordnode α；x ∈ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance mem.decidable (x : α) (t : Ordnode α) : Decidable (x in t) :=
+instance mem.decidable (x : α) (t : Ordnode α) : Decidable (x ∈ t) :=
   Bool.decEq _ _
 
-/--
-Definition of `insertWith` / `insertWith` 的定义
+/-- O(log n). Insert an element into the set, preserving balance and the BST property.
+If an equivalent element is already in the set, the function `f` is used to generate
+the element to insert (being passed the current value in the set).
 
-English:
-definition insertWith
-  signature: (f : α -> α) (x : α)
+```
+insertWith f 0 {1, 2, 3} = {0, 1, 2, 3}
+insertWith f 1 {1, 2, 3} = {f 1, 2, 3}
+```
 
-中文:
-定义 insertWith
-  签名: (f : α -> α) (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insertWith f (1, 1) {(0, 1), (1, 2)} = {(0, 1), f (1, 2)}
+insertWith f (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+``` -/
+/-
+**Ordnode.insertWith** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → (α → α) → α → Ordnode α
+ → Ordnode α
+参数：α → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Insert an element into the set, preserving balance and the BST propert
+y.
+If an equivalent element is already in the set, the function `f` is used to gene
+rate
+the element to insert (being passed the current value in the set).
+
+```
+insertWith f 0 {1, 2, 3} = {0, 1, 2, 3}
+insertWith f 1 {1, 2, 3} = {f 1, 2, 3}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insertWith f (1, 1) {(0, 1), (1, 2)} = {(0, 1), f (1, 2)}
+insertWith f (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+```
 -/
-def insertWith (f : α -> α) (x : α) : Ordnode α -> Ordnode α
+def insertWith (f : α → α) (x : α) : Ordnode α → Ordnode α
   | nil => ι x
   | node sz l y r =>
     match cmpLE x y with
@@ -1981,18 +2034,46 @@ def insertWith (f : α -> α) (x : α) : Ordnode α -> Ordnode α
     | Ordering.eq => node sz l (f y) r
     | Ordering.gt => balanceR l y (insertWith f x r)
 
-/--
-Definition of `adjustWith` / `adjustWith` 的定义
+/-- O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
 
-English:
-definition adjustWith
-  signature: (f : α -> α) (x : α)
+```
+adjustWith f 0 {1, 2, 3} = {1, 2, 3}
+adjustWith f 1 {1, 2, 3} = {f 1, 2, 3}
+```
 
-中文:
-定义 adjustWith
-  签名: (f : α -> α) (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+adjustWith f (1, 1) {(0, 1), (1, 2)} = {(0, 1), f (1, 2)}
+adjustWith f (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+``` -/
+/-
+**Ordnode.adjustWith** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → (α → α) → α → Ordnode α
+ → Ordnode α
+参数：α → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
+
+```
+adjustWith f 0 {1, 2, 3} = {1, 2, 3}
+adjustWith f 1 {1, 2, 3} = {f 1, 2, 3}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+adjustWith f (1, 1) {(0, 1), (1, 2)} = {(0, 1), f (1, 2)}
+adjustWith f (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+```
 -/
-def adjustWith (f : α -> α) (x : α) : Ordnode α -> Ordnode α
+def adjustWith (f : α → α) (x : α) : Ordnode α → Ordnode α
   | nil => nil
   | _t@(node sz l y r) =>
     match cmpLE x y with
@@ -2000,18 +2081,34 @@ def adjustWith (f : α -> α) (x : α) : Ordnode α -> Ordnode α
     | Ordering.eq => node sz l (f y) r
     | Ordering.gt => node sz l y (adjustWith f x r)
 
-/--
-Definition of `updateWith` / `updateWith` 的定义
+/-- O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
 
-English:
-definition updateWith
-  signature: (f : α -> Option α) (x : α)
+```
+updateWith f 0 {1, 2, 3} = {1, 2, 3}
+updateWith f 1 {1, 2, 3} = {2, 3}     if f 1 = none
+                         = {a, 2, 3}  if f 1 = some a
+``` -/
+/-
+**Ordnode.updateWith** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → (α → Option α) → α → Or
+dnode α → Ordnode α
+参数：α → Option α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 updateWith
-  签名: (f : α -> 选项类型 α) (x : α)
+--- 原说明 ---
+O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
+
+```
+updateWith f 0 {1, 2, 3} = {1, 2, 3}
+updateWith f 1 {1, 2, 3} = {2, 3}     if f 1 = none
+                         = {a, 2, 3}  if f 1 = some a
+```
 -/
-def updateWith (f : α -> Option α) (x : α) : Ordnode α -> Ordnode α
+def updateWith (f : α → Option α) (x : α) : Ordnode α → Ordnode α
   | nil => nil
   | _t@(node sz l y r) =>
     match cmpLE x y with
@@ -2022,18 +2119,36 @@ def updateWith (f : α -> Option α) (x : α) : Ordnode α -> Ordnode α
       | some a => node sz l a r
     | Ordering.gt => balanceL l y (updateWith f x r)
 
-/--
-Definition of `alter` / `alter` 的定义
+/-- O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
 
-English:
-definition alter
-  signature: (f : Option α -> Option α) (x : α)
+```
+alter f 0 {1, 2, 3} = {1, 2, 3}     if f none = none
+                    = {a, 1, 2, 3}  if f none = some a
+alter f 1 {1, 2, 3} = {2, 3}     if f 1 = none
+                    = {a, 2, 3}  if f 1 = some a
+``` -/
+/-
+**Ordnode.alter** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → (Option α → Option α) →
+ α → Ordnode α → Ordnode α
+参数：Option α → Option α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 alter
-  签名: (f : 选项类型 α -> 选项类型 α) (x : α)
+--- 原说明 ---
+O(log n). Modify an element in the set with the given function,
+doing nothing if the key is not found.
+Note that the element returned by `f` must be equivalent to `x`.
+
+```
+alter f 0 {1, 2, 3} = {1, 2, 3}     if f none = none
+                    = {a, 1, 2, 3}  if f none = some a
+alter f 1 {1, 2, 3} = {2, 3}     if f 1 = none
+                    = {a, 2, 3}  if f 1 = some a
+```
 -/
-def alter (f : Option α -> Option α) (x : α) : Ordnode α -> Ordnode α
+def alter (f : Option α → Option α) (x : α) : Ordnode α → Ordnode α
   | nil => Option.recOn (f none) nil Ordnode.singleton
   | _t@(node sz l y r) =>
     match cmpLE x y with
@@ -2044,55 +2159,97 @@ def alter (f : Option α -> Option α) (x : α) : Ordnode α -> Ordnode α
       | some a => node sz l a r
     | Ordering.gt => balance l y (alter f x r)
 
-/--
-Definition of `insert` / `insert` 的定义
+/-- O(log n). Insert an element into the set, preserving balance and the BST property.
+If an equivalent element is already in the set, this replaces it.
 
-English:
-definition insert
-  signature: (x : α)
+```
+insert 1 {1, 2, 3} = {1, 2, 3}
+insert 4 {1, 2, 3} = {1, 2, 3, 4}
+```
 
-中文:
-定义 insert
-  签名: (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insert (1, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 1)}
+insert (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+``` -/
+/-
+**Ordnode.insert** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Ordnode
+ α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Insert an element into the set, preserving balance and the BST propert
+y.
+If an equivalent element is already in the set, this replaces it.
+
+```
+insert 1 {1, 2, 3} = {1, 2, 3}
+insert 4 {1, 2, 3} = {1, 2, 3, 4}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insert (1, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 1)}
+insert (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+```
 -/
-protected def insert (x : α) : Ordnode α -> Ordnode α
+protected def insert (x : α) : Ordnode α → Ordnode α
   | nil => ι x
   | node sz l y r =>
     match cmpLE x y with
     | Ordering.lt => balanceL (Ordnode.insert x l) y r
     | Ordering.eq => node sz l x r
     | Ordering.gt => balanceR l y (Ordnode.insert x r)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Insert α (Ordnode α)
-  body: ⟨Ordnode.insert⟩
-
-中文:
-实例 :
-  签名: Insert α (Ordnode α)
-  定义体: ⟨Ordnode.insert⟩
-
-Depends on / 依赖: Ordnode, Ordnode.insert, insert
+/-
+**Ordnode.** 是 Mathlib 中的一个实例，位于命名空间 `Ordnode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Insert α (Ordnode α) :=
   ⟨Ordnode.insert⟩
 
-/--
-Definition of `insert'` / `insert'` 的定义
+/-- O(log n). Insert an element into the set, preserving balance and the BST property.
+If an equivalent element is already in the set, the set is returned as is.
 
-English:
-definition insert'
-  signature: (x : α)
+```
+insert' 1 {1, 2, 3} = {1, 2, 3}
+insert' 4 {1, 2, 3} = {1, 2, 3, 4}
+```
 
-中文:
-定义 insert'
-  签名: (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insert' (1, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+insert' (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+``` -/
+/-
+**Ordnode.insert'** 是 Mathlib 中的一个定理，位于命名空间 `Ordnode`。
+形式化陈述：insert'.valid [@Std.Total α (· <= ·)] [DecidableLE α] (x : α) {t} (h : Val
+id t) : Valid (insert' x t)
+参数：· <= ·；x : α；h : Valid t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Insert an element into the set, preserving balance and the BST propert
+y.
+If an equivalent element is already in the set, the set is returned as is.
+
+```
+insert' 1 {1, 2, 3} = {1, 2, 3}
+insert' 4 {1, 2, 3} = {1, 2, 3, 4}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+insert' (1, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+insert' (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2), (3, 1)}
+```
 -/
-def insert' (x : α) : Ordnode α -> Ordnode α
+def insert' (x : α) : Ordnode α → Ordnode α
   | nil => ι x
   | t@(node _ l y r) =>
     match cmpLE x y with
@@ -2100,30 +2257,47 @@ def insert' (x : α) : Ordnode α -> Ordnode α
     | Ordering.eq => t
     | Ordering.gt => balanceR l y (insert' x r)
 
-/--
-Definition of `split` / `split` 的定义
+/-- O(log n). Split the tree into those smaller than `x` and those greater than it.
+If an element equivalent to `x` is in the set, it is discarded.
 
-English:
-definition split
-  signature: (x : α)
-  body: split x l
-      (lt, link gt y r)
-    | Ordering.eq => (l, r)
-    | Ordering.gt =>
-      let (lt, gt) := split x r
-      (link l y lt, gt)
+```
+split 2 {1, 2, 4} = ({1}, {4})
+split 3 {1, 2, 4} = ({1, 2}, {4})
+split 4 {1, 2, 4} = ({1, 2}, ∅)
+```
 
-中文:
-定义 split
-  签名: (x : α)
-  定义体: split x l
-      (lt, link gt y r)
-    | Ordering.eq => (l, r)
-    | Ordering.gt =>
-      let (lt, gt) := split x r
-      (link l y lt, gt)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+split (1, 1) {(0, 1), (1, 2)} = ({(0, 1)}, ∅)
+split (3, 1) {(0, 1), (1, 2)} = ({(0, 1), (1, 2)}, ∅)
+``` -/
+/-
+**Ordnode.split** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：split (x : α) : Ordnode α -> Ordnode α × Ordnode α | nil => (nil, nil) | n
+ode _ l y r => match cmpLE x y with | Ordering.lt => let (lt, gt)
+参数：x : α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Split the tree into those smaller than `x` and those greater than it.
+If an element equivalent to `x` is in the set, it is discarded.
+
+```
+split 2 {1, 2, 4} = ({1}, {4})
+split 3 {1, 2, 4} = ({1, 2}, {4})
+split 4 {1, 2, 4} = ({1, 2}, ∅)
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+split (1, 1) {(0, 1), (1, 2)} = ({(0, 1)}, ∅)
+split (3, 1) {(0, 1), (1, 2)} = ({(0, 1), (1, 2)}, ∅)
+```
 -/
-def split (x : α) : Ordnode α -> Ordnode α × Ordnode α
+def split (x : α) : Ordnode α → Ordnode α × Ordnode α
   | nil => (nil, nil)
   | node _ l y r =>
     match cmpLE x y with
@@ -2135,32 +2309,48 @@ def split (x : α) : Ordnode α -> Ordnode α × Ordnode α
       let (lt, gt) := split x r
       (link l y lt, gt)
 
-/--
-Definition of `split3` / `split3` 的定义
+/-- O(log n). Split the tree into those smaller than `x` and those greater than it,
+plus an element equivalent to `x`, if it exists.
 
-English:
-definition split3
-  signature: (x : α)
-  body: split3 x l
-      (lt, f, link gt y r)
-    | Ordering.eq => (l, some y, r)
-    | Ordering.gt =>
-      let (lt, f, gt) := split3 x r
-      (link l y lt, f, gt)
+```
+split3 2 {1, 2, 4} = ({1}, some 2, {4})
+split3 3 {1, 2, 4} = ({1, 2}, none, {4})
+split3 4 {1, 2, 4} = ({1, 2}, some 4, ∅)
+```
 
-中文:
-定义 split3
-  签名: (x : α)
-  定义体: split3 x l
-      (lt, f, link gt y r)
-    | Ordering.eq => (l, some y, r)
-    | Ordering.gt =>
-      let (lt, f, gt) := split3 x r
-      (link l y lt, f, gt)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
 
-Depends on / 依赖: split3
+```
+split3 (1, 1) {(0, 1), (1, 2)} = ({(0, 1)}, some (1, 2), ∅)
+split3 (3, 1) {(0, 1), (1, 2)} = ({(0, 1), (1, 2)}, none, ∅)
+``` -/
+/-
+**Ordnode.split3** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：split3 (x : α) : Ordnode α -> Ordnode α × Option α × Ordnode α | nil => (n
+il, none, nil) | node _ l y r => match cmpLE x y with | Ordering.lt => let (lt, 
+f, gt)
+参数：x : α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Split the tree into those smaller than `x` and those greater than it,
+plus an element equivalent to `x`, if it exists.
+
+```
+split3 2 {1, 2, 4} = ({1}, some 2, {4})
+split3 3 {1, 2, 4} = ({1, 2}, none, {4})
+split3 4 {1, 2, 4} = ({1, 2}, some 4, ∅)
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+split3 (1, 1) {(0, 1), (1, 2)} = ({(0, 1)}, some (1, 2), ∅)
+split3 (3, 1) {(0, 1), (1, 2)} = ({(0, 1), (1, 2)}, none, ∅)
+```
 -/
-def split3 (x : α) : Ordnode α -> Ordnode α × Option α × Ordnode α
+def split3 (x : α) : Ordnode α → Ordnode α × Option α × Ordnode α
   | nil => (nil, none, nil)
   | node _ l y r =>
     match cmpLE x y with
@@ -2172,18 +2362,44 @@ def split3 (x : α) : Ordnode α -> Ordnode α × Option α × Ordnode α
       let (lt, f, gt) := split3 x r
       (link l y lt, f, gt)
 
-/--
-Definition of `erase` / `erase` 的定义
+/-- O(log n). Remove an element from the set equivalent to `x`. Does nothing if there
+is no such element.
 
-English:
-definition erase
-  signature: (x : α)
+```
+erase 1 {1, 2, 3} = {2, 3}
+erase 4 {1, 2, 3} = {1, 2, 3}
+```
 
-中文:
-定义 erase
-  签名: (x : α)
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+erase (1, 1) {(0, 1), (1, 2)} = {(0, 1)}
+erase (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+``` -/
+/-
+**Ordnode.erase** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Ordnode
+ α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(log n). Remove an element from the set equivalent to `x`. Does nothing if ther
+e
+is no such element.
+
+```
+erase 1 {1, 2, 3} = {2, 3}
+erase 4 {1, 2, 3} = {1, 2, 3}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+erase (1, 1) {(0, 1), (1, 2)} = {(0, 1)}
+erase (3, 1) {(0, 1), (1, 2)} = {(0, 1), (1, 2)}
+```
 -/
-def erase (x : α) : Ordnode α -> Ordnode α
+def erase (x : α) : Ordnode α → Ordnode α
   | nil => nil
   | _t@(node _ l y r) =>
     match cmpLE x y with
@@ -2191,78 +2407,94 @@ def erase (x : α) : Ordnode α -> Ordnode α
     | Ordering.eq => glue l r
     | Ordering.gt => balanceL l y (erase x r)
 
-/--
-Definition of `findLtAux` / `findLtAux` 的定义
+/-- Auxiliary definition for `findLt`. -/
+/-
+**Ordnode.findLtAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findLtAux
-  signature: (x : α)
-
-中文:
-定义 findLtAux
-  签名: (x : α)
+--- 原说明 ---
+Auxiliary definition for `findLt`.
 -/
-def findLtAux (x : α) : Ordnode α -> α -> α
+def findLtAux (x : α) : Ordnode α → α → α
   | nil, best => best
-  | node _ l y r, best => if x <= y then findLtAux x l best else findLtAux x r y
+  | node _ l y r, best => if x ≤ y then findLtAux x l best else findLtAux x r y
 
-/--
-Definition of `findLt` / `findLt` 的定义
+/-- O(log n). Get the largest element in the tree that is `< x`.
 
-English:
-definition findLt
-  signature: (x : α)
+```
+findLt 2 {1, 2, 4} = some 1
+findLt 3 {1, 2, 4} = some 2
+findLt 0 {1, 2, 4} = none
+``` -/
+/-
+**Ordnode.findLt** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Option 
+α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findLt
-  签名: (x : α)
+--- 原说明 ---
+O(log n). Get the largest element in the tree that is `< x`.
+
+```
+findLt 2 {1, 2, 4} = some 1
+findLt 3 {1, 2, 4} = some 2
+findLt 0 {1, 2, 4} = none
+```
 -/
-def findLt (x : α) : Ordnode α -> Option α
+def findLt (x : α) : Ordnode α → Option α
   | nil => none
-  | node _ l y r => if x <= y then findLt x l else some (findLtAux x r y)
+  | node _ l y r => if x ≤ y then findLt x l else some (findLtAux x r y)
 
-/--
-Definition of `findGtAux` / `findGtAux` 的定义
+/-- Auxiliary definition for `findGt`. -/
+/-
+**Ordnode.findGtAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findGtAux
-  signature: (x : α)
-
-中文:
-定义 findGtAux
-  签名: (x : α)
+--- 原说明 ---
+Auxiliary definition for `findGt`.
 -/
-def findGtAux (x : α) : Ordnode α -> α -> α
+def findGtAux (x : α) : Ordnode α → α → α
   | nil, best => best
-  | node _ l y r, best => if y <= x then findGtAux x r best else findGtAux x l y
+  | node _ l y r, best => if y ≤ x then findGtAux x r best else findGtAux x l y
 
-/--
-Definition of `findGt` / `findGt` 的定义
+/-- O(log n). Get the smallest element in the tree that is `> x`.
 
-English:
-definition findGt
-  signature: (x : α)
+```
+findGt 2 {1, 2, 4} = some 4
+findGt 3 {1, 2, 4} = some 4
+findGt 4 {1, 2, 4} = none
+``` -/
+/-
+**Ordnode.findGt** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Option 
+α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findGt
-  签名: (x : α)
+--- 原说明 ---
+O(log n). Get the smallest element in the tree that is `> x`.
+
+```
+findGt 2 {1, 2, 4} = some 4
+findGt 3 {1, 2, 4} = some 4
+findGt 4 {1, 2, 4} = none
+```
 -/
-def findGt (x : α) : Ordnode α -> Option α
+def findGt (x : α) : Ordnode α → Option α
   | nil => none
-  | node _ l y r => if y <= x then findGt x r else some (findGtAux x l y)
+  | node _ l y r => if y ≤ x then findGt x r else some (findGtAux x l y)
 
-/--
-Definition of `findLeAux` / `findLeAux` 的定义
+/-- Auxiliary definition for `findLe`. -/
+/-
+**Ordnode.findLeAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findLeAux
-  signature: (x : α)
-
-中文:
-定义 findLeAux
-  签名: (x : α)
+--- 原说明 ---
+Auxiliary definition for `findLe`.
 -/
-def findLeAux (x : α) : Ordnode α -> α -> α
+def findLeAux (x : α) : Ordnode α → α → α
   | nil, best => best
   | node _ l y r, best =>
     match cmpLE x y with
@@ -2270,18 +2502,29 @@ def findLeAux (x : α) : Ordnode α -> α -> α
     | Ordering.eq => y
     | Ordering.gt => findLeAux x r y
 
-/--
-Definition of `findLe` / `findLe` 的定义
+/-- O(log n). Get the largest element in the tree that is `≤ x`.
 
-English:
-definition findLe
-  signature: (x : α)
+```
+findLe 2 {1, 2, 4} = some 2
+findLe 3 {1, 2, 4} = some 2
+findLe 0 {1, 2, 4} = none
+``` -/
+/-
+**Ordnode.findLe** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Option 
+α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findLe
-  签名: (x : α)
+--- 原说明 ---
+O(log n). Get the largest element in the tree that is `≤ x`.
+
+```
+findLe 2 {1, 2, 4} = some 2
+findLe 3 {1, 2, 4} = some 2
+findLe 0 {1, 2, 4} = none
+```
 -/
-def findLe (x : α) : Ordnode α -> Option α
+def findLe (x : α) : Ordnode α → Option α
   | nil => none
   | node _ l y r =>
     match cmpLE x y with
@@ -2289,18 +2532,16 @@ def findLe (x : α) : Ordnode α -> Option α
     | Ordering.eq => some y
     | Ordering.gt => some (findLeAux x r y)
 
-/--
-Definition of `findGeAux` / `findGeAux` 的定义
+/-- Auxiliary definition for `findGe`. -/
+/-
+**Ordnode.findGeAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findGeAux
-  signature: (x : α)
-
-中文:
-定义 findGeAux
-  签名: (x : α)
+--- 原说明 ---
+Auxiliary definition for `findGe`.
 -/
-def findGeAux (x : α) : Ordnode α -> α -> α
+def findGeAux (x : α) : Ordnode α → α → α
   | nil, best => best
   | node _ l y r, best =>
     match cmpLE x y with
@@ -2308,18 +2549,29 @@ def findGeAux (x : α) : Ordnode α -> α -> α
     | Ordering.eq => y
     | Ordering.gt => findGeAux x r best
 
-/--
-Definition of `findGe` / `findGe` 的定义
+/-- O(log n). Get the smallest element in the tree that is `≥ x`.
 
-English:
-definition findGe
-  signature: (x : α)
+```
+findGe 2 {1, 2, 4} = some 2
+findGe 3 {1, 2, 4} = some 4
+findGe 5 {1, 2, 4} = none
+``` -/
+/-
+**Ordnode.findGe** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → Option 
+α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findGe
-  签名: (x : α)
+--- 原说明 ---
+O(log n). Get the smallest element in the tree that is `≥ x`.
+
+```
+findGe 2 {1, 2, 4} = some 2
+findGe 3 {1, 2, 4} = some 4
+findGe 5 {1, 2, 4} = none
+```
 -/
-def findGe (x : α) : Ordnode α -> Option α
+def findGe (x : α) : Ordnode α → Option α
   | nil => none
   | node _ l y r =>
     match cmpLE x y with
@@ -2327,18 +2579,17 @@ def findGe (x : α) : Ordnode α -> Option α
     | Ordering.eq => some y
     | Ordering.gt => findGe x r
 
-/--
-Definition of `findIndexAux` / `findIndexAux` 的定义
+/-- Auxiliary definition for `findIndex`. -/
+/-
+**Ordnode.findIndexAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → α → Ordnode α → ℕ → Opt
+ion ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findIndexAux
-  signature: (x : α)
-
-中文:
-定义 findIndexAux
-  签名: (x : α)
+--- 原说明 ---
+Auxiliary definition for `findIndex`.
 -/
-def findIndexAux (x : α) : Ordnode α -> Nat -> Option Nat
+def findIndexAux (x : α) : Ordnode α → ℕ → Option ℕ
   | nil, _ => none
   | node _ l y r, i =>
     match cmpLE x y with
@@ -2346,106 +2597,141 @@ def findIndexAux (x : α) : Ordnode α -> Nat -> Option Nat
     | Ordering.eq => some (i + size l)
     | Ordering.gt => findIndexAux x r (i + size l + 1)
 
-/--
-Definition of `findIndex` / `findIndex` 的定义
+/-- O(log n). Get the index, counting from the left,
+of an element equivalent to `x` if it exists.
 
-English:
-definition findIndex
-  signature: (x : α) (t : Ordnode α)
-  body: findIndexAux x t 0
+```
+findIndex 2 {1, 2, 4} = some 1
+findIndex 4 {1, 2, 4} = some 2
+findIndex 5 {1, 2, 4} = none
+``` -/
+/-
+**Ordnode.findIndex** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：findIndex (x : α) (t : Ordnode α) : Option Nat
+参数：x : α；t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findIndex
-  签名: (x : α) (t : Ordnode α)
-  定义体: findIndexAux x t 0
+--- 原说明 ---
+O(log n). Get the index, counting from the left,
+of an element equivalent to `x` if it exists.
 
-Depends on / 依赖: findIndexAux
+```
+findIndex 2 {1, 2, 4} = some 1
+findIndex 4 {1, 2, 4} = some 2
+findIndex 5 {1, 2, 4} = none
+```
 -/
-def findIndex (x : α) (t : Ordnode α) : Option Nat :=
+def findIndex (x : α) (t : Ordnode α) : Option ℕ :=
   findIndexAux x t 0
 
-/--
-Definition of `isSubsetAux` / `isSubsetAux` 的定义
+/-- Auxiliary definition for `isSubset`. -/
+/-
+**Ordnode.isSubsetAux** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：isSubsetAux : Ordnode α -> Ordnode α -> Bool | nil, _ => true | _, nil => 
+false | node _ l x r, t => let (lt, found, gt)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isSubsetAux
-  signature: : Ordnode α -> Ordnode α -> Bool
-  body: split3 x t
-    found.isSome && isSubsetAux l lt && isSubsetAux r gt
-
-中文:
-定义 isSubsetAux
-  签名: : Ordnode α -> Ordnode α -> 布尔值
-  定义体: split3 x t
-    found.isSome && isSubsetAux l lt && isSubsetAux r gt
-
-Depends on / 依赖: split3
+--- 原说明 ---
+Auxiliary definition for `isSubset`.
 -/
-def isSubsetAux : Ordnode α -> Ordnode α -> Bool
+def isSubsetAux : Ordnode α → Ordnode α → Bool
   | nil, _ => true
   | _, nil => false
   | node _ l x r, t =>
     let (lt, found, gt) := split3 x t
     found.isSome && isSubsetAux l lt && isSubsetAux r gt
 
-/--
-Definition of `isSubset` / `isSubset` 的定义
+/-- O(m + n). Is every element of `t₁` equivalent to some element of `t₂`?
 
-English:
-definition isSubset
-  signature: (t₁ t₂ : Ordnode α)
-  body: decide (size t₁ <= size t₂) && isSubsetAux t₁ t₂
+```
+is_subset {1, 4} {1, 2, 4} = tt
+is_subset {1, 3} {1, 2, 4} = ff
+``` -/
+/-
+**Ordnode.isSubset** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：isSubset (t₁ t₂ : Ordnode α) : Bool
+参数：t₁ t₂ : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isSubset
-  签名: (t₁ t₂ : Ordnode α)
-  定义体: decide (size t₁ <= size t₂) && isSubsetAux t₁ t₂
+--- 原说明 ---
+O(m + n). Is every element of `t₁` equivalent to some element of `t₂`?
 
-Depends on / 依赖: isSubsetAux
+```
+is_subset {1, 4} {1, 2, 4} = tt
+is_subset {1, 3} {1, 2, 4} = ff
+```
 -/
 def isSubset (t₁ t₂ : Ordnode α) : Bool :=
-  decide (size t₁ <= size t₂) && isSubsetAux t₁ t₂
+  decide (size t₁ ≤ size t₂) && isSubsetAux t₁ t₂
 
-/--
-Definition of `disjoint` / `disjoint` 的定义
+/-- O(m + n). Is every element of `t₁` not equivalent to any element of `t₂`?
 
-English:
-definition disjoint
-  signature: : Ordnode α -> Ordnode α -> Bool
-  body: split3 x t
-    found.isNone && disjoint l lt && disjoint r gt
+```
+disjoint {1, 3} {2, 4} = tt
+disjoint {1, 2} {2, 4} = ff
+``` -/
+/-
+**Ordnode.disjoint** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：disjoint : Ordnode α -> Ordnode α -> Bool | nil, _ => true | _, nil => tru
+e | node _ l x r, t => let (lt, found, gt)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 disjoint
-  签名: : Ordnode α -> Ordnode α -> 布尔值
-  定义体: split3 x t
-    found.isNone && disjoint l lt && disjoint r gt
+--- 原说明 ---
+O(m + n). Is every element of `t₁` not equivalent to any element of `t₂`?
 
-Depends on / 依赖: split3
+```
+disjoint {1, 3} {2, 4} = tt
+disjoint {1, 2} {2, 4} = ff
+```
 -/
-def disjoint : Ordnode α -> Ordnode α -> Bool
+def disjoint : Ordnode α → Ordnode α → Bool
   | nil, _ => true
   | _, nil => true
   | node _ l x r, t =>
     let (lt, found, gt) := split3 x t
     found.isNone && disjoint l lt && disjoint r gt
 
-/--
-Definition of `union` / `union` 的定义
+/-- O(m * log(|m ∪ n| + 1)), m ≤ n. The union of two sets, preferring members of
+  `t₁` over those of `t₂` when equivalent elements are encountered.
 
-English:
-definition union
-  signature: : Ordnode α -> Ordnode α -> Ordnode α
-  body: split x₁ t₂
-        link (union l₁ l₂') x₁ (union r₁ r₂')
+```
+union {1, 2} {2, 3} = {1, 2, 3}
+union {1, 3} {2} = {1, 2, 3}
+```
 
-中文:
-定义 union
-  签名: : Ordnode α -> Ordnode α -> Ordnode α
-  定义体: split x₁ t₂
-        link (union l₁ l₂') x₁ (union r₁ r₂')
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+union {(1, 1)} {(0, 1), (1, 2)} = {(0, 1), (1, 1)}
+``` -/
+/-
+**Ordnode.union** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：union : Ordnode α -> Ordnode α -> Ordnode α | t₁, nil => t₁ | nil, t₂ => t
+₂ | t₁@(node s₁ l₁ x₁ r₁), t₂@(node s₂ _ x₂ _) => if s₂ = 1 then insert' x₂ t₁ e
+lse if s₁ = 1 then insert x₁ t₂ else let (l₂', r₂')
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(m * log(|m ∪ n| + 1)), m ≤ n. The union of two sets, preferring members of
+  `t₁` over those of `t₂` when equivalent elements are encountered.
+
+```
+union {1, 2} {2, 3} = {1, 2, 3}
+union {1, 3} {2} = {1, 2, 3}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+union {(1, 1)} {(0, 1), (1, 2)} = {(0, 1), (1, 1)}
+```
 -/
-def union : Ordnode α -> Ordnode α -> Ordnode α
+def union : Ordnode α → Ordnode α → Ordnode α
   | t₁, nil => t₁
   | nil, t₂ => t₂
   | t₁@(node s₁ l₁ x₁ r₁), t₂@(node s₂ _ x₂ _) =>
@@ -2456,115 +2742,163 @@ def union : Ordnode α -> Ordnode α -> Ordnode α
         let (l₂', r₂') := split x₁ t₂
         link (union l₁ l₂') x₁ (union r₁ r₂')
 
-/--
-Definition of `diff` / `diff` 的定义
+/-- O(m * log(|m ∪ n| + 1)), m ≤ n. Difference of two sets.
 
-English:
-definition diff
-  signature: : Ordnode α -> Ordnode α -> Ordnode α
-  body: split x t₁
-      let l₁₂ := diff l₁ l₂
-      let r₁₂ := diff r₁ r₂
-      if size l₁₂ + size r₁₂ = size t₁ then t₁ else merge l₁₂ r₁₂
+```
+diff {1, 2} {2, 3} = {1}
+diff {1, 2, 3} {2} = {1, 3}
+``` -/
+/-
+**Ordnode.diff** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：diff : Ordnode α -> Ordnode α -> Ordnode α | t₁, nil => t₁ | t₁, t₂@(node 
+_ l₂ x r₂) => cond t₁.empty t₂ let (l₁, r₁)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 diff
-  签名: : Ordnode α -> Ordnode α -> Ordnode α
-  定义体: split x t₁
-      let l₁₂ := diff l₁ l₂
-      let r₁₂ := diff r₁ r₂
-      if size l₁₂ + size r₁₂ = size t₁ then t₁ else merge l₁₂ r₁₂
+--- 原说明 ---
+O(m * log(|m ∪ n| + 1)), m ≤ n. Difference of two sets.
+
+```
+diff {1, 2} {2, 3} = {1}
+diff {1, 2, 3} {2} = {1, 3}
+```
 -/
-def diff : Ordnode α -> Ordnode α -> Ordnode α
+def diff : Ordnode α → Ordnode α → Ordnode α
   | t₁, nil => t₁
   | t₁, t₂@(node _ l₂ x r₂) =>
-cond t₁.empty t₂
+    cond t₁.empty t₂ <|
       let (l₁, r₁) := split x t₁
       let l₁₂ := diff l₁ l₂
       let r₁₂ := diff r₁ r₂
       if size l₁₂ + size r₁₂ = size t₁ then t₁ else merge l₁₂ r₁₂
 
-/--
-Definition of `inter` / `inter` 的定义
+/-- O(m * log(|m ∪ n| + 1)), m ≤ n. Intersection of two sets, preferring members of
+`t₁` over those of `t₂` when equivalent elements are encountered.
 
-English:
-definition inter
-  signature: : Ordnode α -> Ordnode α -> Ordnode α
-  body: split3 x t₂
-      let l₁₂ := inter l₁ l₂
-      let r₁₂ := inter r₁ r₂
-      cond y.isSome (link l₁₂ x r₁₂) (merge l₁₂ r₁₂)
+```
+inter {1, 2} {2, 3} = {2}
+inter {1, 3} {2} = ∅
+``` -/
+/-
+**Ordnode.inter** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：inter : Ordnode α -> Ordnode α -> Ordnode α | nil, _ => nil | t₁@(node _ l
+₁ x r₁), t₂ => cond t₂.empty t₁ let (l₂, y, r₂)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 inter
-  签名: : Ordnode α -> Ordnode α -> Ordnode α
-  定义体: split3 x t₂
-      let l₁₂ := inter l₁ l₂
-      let r₁₂ := inter r₁ r₂
-      cond y.isSome (link l₁₂ x r₁₂) (merge l₁₂ r₁₂)
+--- 原说明 ---
+O(m * log(|m ∪ n| + 1)), m ≤ n. Intersection of two sets, preferring members of
+`t₁` over those of `t₂` when equivalent elements are encountered.
 
-Depends on / 依赖: split3
+```
+inter {1, 2} {2, 3} = {2}
+inter {1, 3} {2} = ∅
+```
 -/
-def inter : Ordnode α -> Ordnode α -> Ordnode α
+def inter : Ordnode α → Ordnode α → Ordnode α
   | nil, _ => nil
   | t₁@(node _ l₁ x r₁), t₂ =>
-cond t₂.empty t₁
+    cond t₂.empty t₁ <|
       let (l₂, y, r₂) := split3 x t₂
       let l₁₂ := inter l₁ l₂
       let r₁₂ := inter r₁ r₂
       cond y.isSome (link l₁₂ x r₁₂) (merge l₁₂ r₁₂)
 
-/--
-Definition of `ofList` / `ofList` 的定义
+/-- O(n * log n). Build a set from a list, preferring elements that appear earlier in the list
+in the case of equivalent elements.
 
-English:
-definition ofList
-  signature: (l : List α)
-  body: l.foldr insert nil
+```
+ofList [1, 2, 3] = {1, 2, 3}
+ofList [2, 1, 1, 3] = {1, 2, 3}
+```
 
-中文:
-定义 ofList
-  签名: (l : 列表 α)
-  定义体: l.foldr insert nil
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
 
-Depends on / 依赖: insert, l.foldr
+```
+ofList [(1, 1), (0, 1), (1, 2)] = {(0, 1), (1, 1)}
+``` -/
+/-
+**Ordnode.ofList** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：ofList (l : List α) : Ordnode α
+参数：l : List α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+O(n * log n). Build a set from a list, preferring elements that appear earlier i
+n the list
+in the case of equivalent elements.
+
+```
+ofList [1, 2, 3] = {1, 2, 3}
+ofList [2, 1, 1, 3] = {1, 2, 3}
+```
+
+Using a preorder on `ℕ × ℕ` that only compares the first coordinate:
+
+```
+ofList [(1, 1), (0, 1), (1, 2)] = {(0, 1), (1, 1)}
+```
 -/
 def ofList (l : List α) : Ordnode α :=
   l.foldr insert nil
 
-/--
-Definition of `ofList'` / `ofList'` 的定义
+/-- O(n * log n). Adaptively chooses between the linear and log-linear algorithm depending
+  on whether the input list is already sorted.
 
-English:
-definition ofList'
-  signature: : List α -> Ordnode α
+```
+ofList' [1, 2, 3] = {1, 2, 3}
+ofList' [2, 1, 1, 3] = {1, 2, 3}
+``` -/
+/-
+**Ordnode.ofList'** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：{α : Type u_1} → [inst : LE α] → [DecidableLE α] → List α → Ordnode α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ofList'
-  签名: : 列表 α -> Ordnode α
+--- 原说明 ---
+O(n * log n). Adaptively chooses between the linear and log-linear algorithm dep
+ending
+  on whether the input list is already sorted.
+
+```
+ofList' [1, 2, 3] = {1, 2, 3}
+ofList' [2, 1, 1, 3] = {1, 2, 3}
+```
 -/
-def ofList' : List α -> Ordnode α
+def ofList' : List α → Ordnode α
   | [] => nil
-  | l@(_ :: _) => if List.IsChain (fun a b => ¬b <= a) l then ofAscList l else ofList l
+  | l@(_ :: _) => if List.IsChain (fun a b => ¬b ≤ a) l then ofAscList l else ofList l
 
-/--
-Definition of `image` / `image` 的定义
+/-- O(n * log n). Map a function on a set. Unlike `map` this has no requirements on
+`f`, and the resulting set may be smaller than the input if `f` is noninjective.
+Equivalent elements are selected with a preference for smaller source elements.
 
-English:
-definition image
-  signature: {α β} [LE β] [DecidableLE β] (f : α -> β) (t : Ordnode α)
-  body: ofList (t.toList.map f)
+```
+image (fun x ↦ x + 2) {1, 2, 4} = {3, 4, 6}
+image (fun x : ℕ ↦ x - 2) {1, 2, 4} = {0, 2}
+``` -/
+/-
+**Ordnode.image** 是 Mathlib 中的一个定义，位于命名空间 `Ordnode`。
+形式化陈述：image {α β} [LE β] [DecidableLE β] (f : α -> β) (t : Ordnode α) : Ordnode 
+β
+参数：f : α -> β；t : Ordnode α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 像
-  签名: {α β} [LE β] [DecidableLE β] (f : α -> β) (t : Ordnode α)
-  定义体: ofList (t.toList.map f)
+--- 原说明 ---
+O(n * log n). Map a function on a set. Unlike `map` this has no requirements on
+`f`, and the resulting set may be smaller than the input if `f` is noninjective.
+Equivalent elements are selected with a preference for smaller source elements.
 
-Depends on / 依赖: ofList, t.toList.map, toList
+```
+image (fun x ↦ x + 2) {1, 2, 4} = {3, 4, 6}
+image (fun x : ℕ ↦ x - 2) {1, 2, 4} = {0, 2}
+```
 -/
-def image {α β} [LE β] [DecidableLE β] (f : α -> β) (t : Ordnode α) : Ordnode β :=
+def image {α β} [LE β] [DecidableLE β] (f : α → β) (t : Ordnode α) : Ordnode β :=
   ofList (t.toList.map f)
 
 end
 
 end Ordnode
+

@@ -20,22 +20,21 @@ variable {M} [Monoid M] {F} [DivisionRing F]
 /-- Note that `smul_inv'` refers to the group case, and `smul_inv` has an additional inverse
 on `x`. -/
 @[simp]
-/--
-theorem `smul_inv''` / 定理 `smul_inv''`
+/-
+**smul_inv''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_inv'' [MulSemiringAction M F] (x : M) (m : F) : x • m⁻¹ = (x • m)⁻¹
+参数：x : M；m : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 
-English:
-theorem smul_inv''
-  given: [MulSemiringAction M F] (x : M) (m : F)
-  statement: x • m⁻¹ = (x • m)⁻¹
-  proof: map_inv₀ (MulSemiringAction.toRingHom M F x) _
-
-中文:
-定理 smul_inv''
-  条件: [MulSemiring作用 M F] (x : M) (m : F)
-  结论: x • m⁻¹ = (x • m)⁻¹
-  证明: map_inv₀ (MulSemiringAction.toRingHom M F x) _
-
-Depends on / 依赖: MulSemiringAction, MulSemiringAction.toRingHom, toRingHom
+--- 原说明 ---
+Note that `smul_inv'` refers to the group case, and `smul_inv` has an additional
+ inverse
+on `x`.
 -/
 theorem smul_inv'' [MulSemiringAction M F] (x : M) (m : F) : x • m⁻¹ = (x • m)⁻¹ :=
   map_inv₀ (MulSemiringAction.toRingHom M F x) _

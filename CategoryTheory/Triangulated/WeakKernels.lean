@@ -26,67 +26,56 @@ namespace CategoryTheory.Pretriangulated
 
 open Limits Category Preadditive Pretriangulated
 
-variable {C : Type*} [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C Int]
-  [forall n : Int, Functor.Additive (shiftFunctor C n)] [Pretriangulated C]
+variable {C : Type*} [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C ℤ]
+  [∀ n : ℤ, Functor.Additive (shiftFunctor C n)] [Pretriangulated C]
 
-/--
-Definition of `kernelForkOfDistTriangle` / `kernelForkOfDistTriangle` 的定义
+/-- If `T` is a distinguished triangle, then `T.mor₁` defines a kernel fork for `T.mor₂`. -/
+/-
+**CategoryTheory.Pretriangulated.kernelForkOfDistTriangle** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：kernelForkOfDistTriangle (T : Triangle C) (dT : T in distTriang C) : Kerne
+lFork T.mor₂
+参数：T : Triangle C；dT : T in distTriang C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.comp_distTriang_mor_zero₁₂`：comp_distTria
+ng_mor_zero₁₂ (T) (H : T in distTriang C) : T.mor₁ ≫ T.mor₂ = 0
 
-English:
-definition kernelForkOfDistTriangle
-  signature: (T : Triangle C) (dT : T in distTriang C)
-  body: KernelFork.ofι T.mor₁ (comp_distTriang_mor_zero₁₂ _ dT)
-
-中文:
-定义 kernelForkOfDistTriangle
-  签名: (T : Triangle C) (dT : T in distTriang C)
-  定义体: KernelFork.ofι T.mor₁ (comp_distTriang_mor_zero₁₂ _ dT)
-
-Depends on / 依赖: KernelFork, KernelFork.of, T.mor
+--- 原说明 ---
+If `T` is a distinguished triangle, then `T.mor₁` defines a kernel fork for `T.m
+or₂`.
 -/
-def kernelForkOfDistTriangle (T : Triangle C) (dT : T in distTriang C) :
+def kernelForkOfDistTriangle (T : Triangle C) (dT : T ∈ distTriang C) :
     KernelFork T.mor₂ := KernelFork.ofι T.mor₁ (comp_distTriang_mor_zero₁₂ _ dT)
 
-/--
-Definition of `isWeakLimitKernelForkOfDistTriangle` / `isWeakLimitKernelForkOfDistTriangle` 的定义
+/-- If `T` is a distinguished triangle, then the kernel fork for `T.mor₂` defined in
+`kernelForkOfDistTriangle` is a weak kernel fork. -/
+/-
+**CategoryTheory.Pretriangulated.isWeakLimitKernelForkOfDistTriangle** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：isWeakLimitKernelForkOfDistTriangle (T : Triangle C) (dT : T in distTriang
+ C) : IsWeakLimit (kernelForkOfDistTriangle _ dT)
+参数：T : Triangle C；dT : T in distTriang C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isWeakLimitKernelForkOfDistTriangle
-  signature: (T : Triangle C) (dT : T in distTriang C)
-  body: Fork.IsWeakLimit.mk' _
-    (fun s => ⟨_, (T.coyoneda_exact₂ dT _ (KernelFork.condition s)).choose_spec.symm⟩)
-
-中文:
-定义 isWeakLimitKernelForkOfDistTriangle
-  签名: (T : Triangle C) (dT : T in distTriang C)
-  定义体: Fork.IsWeakLimit.mk' _
-    (fun s => ⟨_, (T.coyoneda_exact₂ dT _ (KernelFork.condition s)).choose_spec.symm⟩)
-
-Depends on / 依赖: Fork.IsWeakLimit.mk, IsWeakLimit, KernelFork, KernelFork.condition, T.coyoneda_exact, choose_spec, choose_spec.symm, condition
+--- 原说明 ---
+If `T` is a distinguished triangle, then the kernel fork for `T.mor₂` defined in
+`kernelForkOfDistTriangle` is a weak kernel fork.
 -/
-def isWeakLimitKernelForkOfDistTriangle (T : Triangle C) (dT : T in distTriang C) :
+def isWeakLimitKernelForkOfDistTriangle (T : Triangle C) (dT : T ∈ distTriang C) :
     IsWeakLimit (kernelForkOfDistTriangle _ dT) :=
   Fork.IsWeakLimit.mk' _
-    (fun s => ⟨_, (T.coyoneda_exact₂ dT _ (KernelFork.condition s)).choose_spec.symm⟩)
+    (fun s ↦ ⟨_, (T.coyoneda_exact₂ dT _ (KernelFork.condition s)).choose_spec.symm⟩)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A pretriangulated category has weak kernels. -/
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasWeakKernels C
-  body: ⟨by
-    obtain ⟨K, i, p, h⟩ := distinguished_cocone_triangle₁ f
-    exact ⟨_, isWeakLimitKernelForkOfDistTriangle _ h⟩⟩
-
-中文:
-实例 :
-  签名: 有WeakKernels C
-  定义体: ⟨by
-    obtain ⟨K, i, p, h⟩ := distinguished_cocone_triangle₁ f
-    exact ⟨_, isWeakLimitKernelForkOfDistTriangle _ h⟩⟩
-
-Depends on / 依赖: isWeakLimitKernelForkOfDistTriangle
+--- 原说明 ---
+A pretriangulated category has weak kernels.
 -/
 instance : HasWeakKernels C where
   hasWeakLimit f := ⟨by
@@ -94,3 +83,4 @@ instance : HasWeakKernels C where
     exact ⟨_, isWeakLimitKernelForkOfDistTriangle _ h⟩⟩
 
 end CategoryTheory.Pretriangulated
+

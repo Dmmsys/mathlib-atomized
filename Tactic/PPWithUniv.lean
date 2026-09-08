@@ -12,7 +12,7 @@ public meta import Lean.PrettyPrinter.Delaborator.Builtins
 # Attribute to pretty-print universe level parameters by default
 
 This module contains the `pp_with_univ` attribute, which enables pretty-printing
-of universe parameters for the associated declaration. This is helpful for definitions like
+of universe parameters for the associated declaration.  This is helpful for definitions like
 `Ordinal`, where the universe levels are both relevant and not deducible from the arguments.
 -/
 
@@ -23,32 +23,23 @@ namespace Mathlib.PPWithUniv
 open Lean Parser PrettyPrinter Delaborator SubExpr Elab Command
 
 /--
-Definition of `delabWithUniv` / `delabWithUniv` 的定义
+Delaborator that prints the current application with universe parameters on the head symbol,
+unless `pp.universes` is explicitly set to `false`.
+-/
+/-
+**Mathlib.PPWithUniv.delabWithUniv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.PPWithUniv
+`。
+形式化陈述：delabWithUniv : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delabWithUniv
-  signature: : Delab
-  body: whenPPOption (·.get pp.universes.name true)
-  let enablePPUnivOnHead subExpr :=
-    let expr := subExpr.expr
-    let expr := mkAppN (expr.getAppFn.setOption pp.universes.name true) expr.getAppArgs
-    { subExpr with expr }
-  withTheReader SubExpr enablePPUnivOnHead delabApp
-
-中文:
-定义 delabWithUniv
-  签名: : Delab
-  定义体: whenPPOption (·.get pp.universes.name true)
-  let enablePPUnivOnHead subExpr :=
-    let expr := subExpr.expr
-    let expr := mkAppN (expr.getAppFn.setOption pp.universes.name true) expr.getAppArgs
-    { subExpr with expr }
-  withTheReader SubExpr enablePPUnivOnHead delabApp
-
-Depends on / 依赖: SubExpr, delabApp, enablePPUnivOnHead, expr.getAppArgs, expr.getAppFn.setOption, getAppArgs, getAppFn, mkAppN, pp.universes.name, setOption, subExpr, subExpr.expr, universes, whenPPOption, withTheReader
+--- 原说明 ---
+Delaborator that prints the current application with universe parameters on the 
+head symbol,
+unless `pp.universes` is explicitly set to `false`.
 -/
 def delabWithUniv : Delab :=
-whenPPOption (·.get pp.universes.name true)
+  whenPPOption (·.get pp.universes.name true) <|
   let enablePPUnivOnHead subExpr :=
     let expr := subExpr.expr
     let expr := mkAppN (expr.getAppFn.setOption pp.universes.name true) expr.getAppArgs
@@ -68,11 +59,12 @@ initialize registerBuiltinAttribute {
   applicationTime := .afterCompilation
   add := fun src ref kind => match ref with
   | `(attr| pp_with_univ) => do
-liftCommandElabM withRef ref do
-let attr ← Elab.elabAttr ← `(Term.attrInstance| delab $(mkIdent <| `app ++ src))
-liftTermElabM Term.applyAttributes ``delabWithUniv #[{attr with kind}]
+    liftCommandElabM <| withRef ref do
+      let attr ← Elab.elabAttr <| ← `(Term.attrInstance| delab $(mkIdent <| `app ++ src))
+      liftTermElabM <| Term.applyAttributes ``delabWithUniv #[{attr with kind}]
   | _ => throwUnsupportedSyntax }
 
 end PPWithUniv
 
 end Mathlib
+

@@ -15,68 +15,26 @@ public import Mathlib.Init
 
 namespace Thunk
 
-/--
-theorem `get_pure` / 定理 `get_pure`
-
-English:
-theorem get_pure
-  given: {α} (x : α)
-  statement: (Thunk.pure x).get = x
-  proof: rfl
-
-中文:
-定理 get_pure
-  条件: {α} (x : α)
-  结论: (Thunk.pure x).get = x
-  证明: rfl
+/-
+**Thunk.get_pure** 是 Mathlib 中的一个定理，位于命名空间 `Thunk`。
+形式化陈述：∀ {α : Type u_1} (x : α), (Thunk.pure x).get = x
+参数：x : α；Thunk.pure x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem get_pure {α} (x : α) : (Thunk.pure x).get = x := rfl
-/--
-theorem `get_mk` / 定理 `get_mk`
-
-English:
-theorem get_mk
-  given: {α} (f : Unit -> α)
-  statement: (Thunk.mk f).get = f ()
-  proof: rfl
-
-universe u v
-
-中文:
-定理 get_mk
-  条件: {α} (f : 单元 -> α)
-  结论: (Thunk.mk f).get = f ()
-  证明: rfl
-
-universe u v
+/-
+**Thunk.get_mk** 是 Mathlib 中的一个定理，位于命名空间 `Thunk`。
+形式化陈述：∀ {α : Type u_1} (f : Unit → α), { fn := f }.get = f ()
+参数：f : Unit → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem get_mk {α} (f : Unit -> α) : (Thunk.mk f).get = f () := rfl
+@[simp] theorem get_mk {α} (f : Unit → α) : (Thunk.mk f).get = f () := rfl
 
 universe u v
 variable {α : Type u} {β : Type v}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (Thunk α)
-  body: by
-  intro a b
-  have : a = b ↔ a.get = b.get := ⟨by intro x; rw [x], by intro; ext; assumption⟩
-  rw [this]
-  infer_instance
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (Thunk α)
-  定义体: by
-  intro a b
-  have : a = b ↔ a.get = b.get := ⟨by intro x; rw [x], by intro; ext; assumption⟩
-  rw [this]
-  infer_instance
-
-Depends on / 依赖: a.get, b.get, infer_instance
+/-
+**Thunk.** 是 Mathlib 中的一个实例，位于命名空间 `Thunk`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableEq (Thunk α) := by
   intro a b
@@ -84,103 +42,59 @@ instance [DecidableEq α] : DecidableEq (Thunk α) := by
   rw [this]
   infer_instance
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The Cartesian product of two thunks. -/
+/-
+**Thunk.prod** 是 Mathlib 中的一个定义，位于命名空间 `Thunk`。
+形式化陈述：prod (a : Thunk α) (b : Thunk β) : Thunk (α × β)
+参数：a : Thunk α；b : Thunk β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (a : Thunk α) (b : Thunk β)
-  body: Thunk.mk fun _ => (a.get, b.get)
-
-中文:
-定义 乘积
-  签名: (a : Thunk α) (b : Thunk β)
-  定义体: Thunk.mk fun _ => (a.get, b.get)
-
-Depends on / 依赖: Thunk.mk, a.get, b.get
+--- 原说明 ---
+The Cartesian product of two thunks.
 -/
 def prod (a : Thunk α) (b : Thunk β) : Thunk (α × β) := Thunk.mk fun _ => (a.get, b.get)
-
-/--
-theorem `prod_get_fst` / 定理 `prod_get_fst`
-
-English:
-theorem prod_get_fst
-  given: {a : Thunk α} {b : Thunk β}
-  statement: (prod a b).get.1 = a.get
-  proof: rfl
-
-中文:
-定理 prod_get_fst
-  条件: {a : Thunk α} {b : Thunk β}
-  结论: (乘积 a b).get.1 = a.get
-  证明: rfl
+/-
+**Thunk.prod_get_fst** 是 Mathlib 中的一个定理，位于命名空间 `Thunk`。
+形式化陈述：∀ {α : Type u} {β : Type v} {a : Thunk α} {b : Thunk β}, (a.prod b).get.1 
+= a.get
+参数：a.prod b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem prod_get_fst {a : Thunk α} {b : Thunk β} : (prod a b).get.1 = a.get := rfl
-/--
-theorem `prod_get_snd` / 定理 `prod_get_snd`
-
-English:
-theorem prod_get_snd
-  given: {a : Thunk α} {b : Thunk β}
-  statement: (prod a b).get.2 = b.get
-  proof: rfl
-
-中文:
-定理 prod_get_snd
-  条件: {a : Thunk α} {b : Thunk β}
-  结论: (乘积 a b).get.2 = b.get
-  证明: rfl
+/-
+**Thunk.prod_get_snd** 是 Mathlib 中的一个定理，位于命名空间 `Thunk`。
+形式化陈述：∀ {α : Type u} {β : Type v} {a : Thunk α} {b : Thunk β}, (a.prod b).get.2 
+= b.get
+参数：a.prod b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem prod_get_snd {a : Thunk α} {b : Thunk β} : (prod a b).get.2 = b.get := rfl
 
-/--
-Definition of `add` / `add` 的定义
+/-- The sum of two thunks. -/
+/-
+**Thunk.add** 是 Mathlib 中的一个定义，位于命名空间 `Thunk`。
+形式化陈述：add [Add α] (a b : Thunk α) : Thunk α
+参数：a b : Thunk α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: [Add α] (a b : Thunk α)
-  body: Thunk.mk fun _ => a.get + b.get
-
-中文:
-定义 add
-  签名: [加法 α] (a b : Thunk α)
-  定义体: Thunk.mk fun _ => a.get + b.get
-
-Depends on / 依赖: Thunk.mk, a.get, b.get
+--- 原说明 ---
+The sum of two thunks.
 -/
 def add [Add α] (a b : Thunk α) : Thunk α := Thunk.mk fun _ => a.get + b.get
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] : Add (Thunk α)
-  body: ⟨add⟩
-
-中文:
-实例 [加法
-  签名: α] : 加法 (Thunk α)
-  定义体: ⟨add⟩
+/-
+**Thunk.** 是 Mathlib 中的一个实例，位于命名空间 `Thunk`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add α] : Add (Thunk α) := ⟨add⟩
-
-/--
-theorem `add_get` / 定理 `add_get`
-
-English:
-theorem add_get
-  given: [Add α] {a b : Thunk α}
-  statement: (a + b).get = a.get + b.get
-  proof: rfl
-
-中文:
-定理 add_get
-  条件: [加法 α] {a b : Thunk α}
-  结论: (a + b).get = a.get + b.get
-  证明: rfl
+/-
+**Thunk.add_get** 是 Mathlib 中的一个定理，位于命名空间 `Thunk`。
+形式化陈述：∀ {α : Type u} [inst : Add α] {a b : Thunk α}, (a + b).get = a.get + b.get
+参数：a + b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem add_get [Add α] {a b : Thunk α} : (a + b).get = a.get + b.get := rfl
 
 end Thunk
+

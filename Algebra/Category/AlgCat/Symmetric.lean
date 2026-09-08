@@ -28,56 +28,26 @@ variable {R : Type u} [CommRing R]
 
 namespace AlgCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BraidedCategory (AlgCat.{u} R)
-  body: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
-    fun X Y => (Algebra.TensorProduct.comm R X Y).toAlgebraIso
-
-中文:
-实例 :
-  签名: 辫范畴 (Alg范畴.{u} R)
-  定义体: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
-    fun X Y => (Algebra.TensorProduct.comm R X Y).toAlgebraIso
-
-Depends on / 依赖: AlgCat, Algebra, Algebra.TensorProduct.comm, ModuleCat, TensorProduct, ofFaithful, toAlgebraIso
+/-
+**AlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `AlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BraidedCategory (AlgCat.{u} R) :=
   .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
-    fun X Y => (Algebra.TensorProduct.comm R X Y).toAlgebraIso
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ (AlgCat R) (ModuleCat R)).Braided
-
-中文:
-实例 :
-  签名: (forget₂ (Alg范畴 R) (模范畴 R)).辫
+    fun X Y ↦ (Algebra.TensorProduct.comm R X Y).toAlgebraIso
+/-
+**AlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `AlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ (AlgCat R) (ModuleCat R)).Braided where
-
-/--
-Instance `instSymmetricCategory` / 实例 `instSymmetricCategory`
-
-English:
-instance instSymmetricCategory
-  signature: : SymmetricCategory (AlgCat.{u} R)
-  body: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
-
-中文:
-实例 instSymmetricCategory
-  签名: : 对称范畴 (Alg范畴.{u} R)
-  定义体: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
-
-Depends on / 依赖: AlgCat, ModuleCat, ofFaithful
+/-
+**AlgCat.instSymmetricCategory** 是 Mathlib 中的一个实例，位于命名空间 `AlgCat`。
+形式化陈述：instSymmetricCategory : SymmetricCategory (AlgCat.{u} R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSymmetricCategory : SymmetricCategory (AlgCat.{u} R) :=
   .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
 
 end AlgCat
+

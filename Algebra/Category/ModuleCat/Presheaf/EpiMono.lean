@@ -27,179 +27,138 @@ namespace PresheafOfModules
 variable {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
   {M₁ M₂ : PresheafOfModules.{v} R} {f : M₁ ⟶ M₂}
 
-/--
-lemma `epi_of_surjective` / 引理 `epi_of_surjective`
-
-English:
-lemma epi_of_surjective
-  given: (hf : forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X))
-  statement: Epi f where
-  proof: by
-    ext X m₂
-    obtain ⟨m₁, rfl⟩ := hf m₂
-    exact ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m₁
-
-中文:
-引理 epi_of_surjective
-  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, 函数.满射 (f.app X))
-  结论: 满态射 f where
-  证明: by
-    ext X m₂
-    obtain ⟨m₁, rfl⟩ := hf m₂
-    exact ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m₁
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, congr_map, evaluation, forget
+/-
+**PresheafOfModules.epi_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModul
+es`。
+形式化陈述：epi_of_surjective (hf : forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X)) :
+ Epi f where left_cancellation g₁ g₂ hg
+参数：hf : forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.hom_ext`：hom_ext {f g : M₁ ⟶ M₂} (h : forall (X : Cᵒᵖ)
+, f.app X = g.app X) : f = g
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 -/
-lemma epi_of_surjective (hf : forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X)) : Epi f where
+lemma epi_of_surjective (hf : ∀ ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X)) : Epi f where
   left_cancellation g₁ g₂ hg := by
     ext X m₂
     obtain ⟨m₁, rfl⟩ := hf m₂
     exact ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m₁
-
-/--
-lemma `mono_of_injective` / 引理 `mono_of_injective`
-
-English:
-lemma mono_of_injective
-  given: (hf : forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X))
-  statement: Mono f where
-  proof: by
-    ext X m
-    exact hf (ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m)
-
-中文:
-引理 mono_of_injective
-  条件: (hf : 对任意 ⦃X : Cᵒᵖ⦄, 函数.单射 (f.app X))
-  结论: 单态射 f where
-  证明: by
-    ext X m
-    exact hf (ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, congr_map, evaluation, forget
+/-
+**PresheafOfModules.mono_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModul
+es`。
+形式化陈述：mono_of_injective (hf : forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X)) : 
+Mono f where right_cancellation {M} g₁ g₂ hg
+参数：hf : forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.hom_ext`：hom_ext {f g : M₁ ⟶ M₂} (h : forall (X : Cᵒᵖ)
+, f.app X = g.app X) : f = g
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 -/
-lemma mono_of_injective (hf : forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X)) : Mono f where
+lemma mono_of_injective (hf : ∀ ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X)) : Mono f where
   right_cancellation {M} g₁ g₂ hg := by
     ext X m
     exact hf (ConcreteCategory.congr_hom ((evaluation R X ⋙ forget _).congr_map hg) m)
 
 variable (f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Epi
-  signature: f] (X
-  body: inferInstanceAs (Epi ((evaluation R X).map f))
-
-中文:
-实例 [满态射
-  签名: f] (X
-  定义体: inferInstanceAs (Epi ((evaluation R X).map f))
-
-Depends on / 依赖: evaluation
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Epi f] (X : Cᵒᵖ) : Epi (f.app X) :=
   inferInstanceAs (Epi ((evaluation R X).map f))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] (X
-  body: inferInstanceAs (Mono ((evaluation R X).map f))
-
-中文:
-实例 [单态射
-  签名: f] (X
-  定义体: inferInstanceAs (Mono ((evaluation R X).map f))
-
-Depends on / 依赖: evaluation
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] (X : Cᵒᵖ) : Mono (f.app X) :=
   inferInstanceAs (Mono ((evaluation R X).map f))
-
-/--
-lemma `surjective_of_epi` / 引理 `surjective_of_epi`
-
-English:
-lemma surjective_of_epi
-  given: [Epi f] (X : Cᵒᵖ)
-  proof: by
-  rw [← ModuleCat.epi_iff_surjective]
-  infer_instance
-
-中文:
-引理 surjective_of_epi
-  条件: [满态射 f] (X : Cᵒᵖ)
-  证明: by
-  rw [← ModuleCat.epi_iff_surjective]
-  infer_instance
-
-Depends on / 依赖: ModuleCat, ModuleCat.epi_iff_surjective, epi_iff_surjective, infer_instance
+/-
+**PresheafOfModules.surjective_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModul
+es`。
+形式化陈述：surjective_of_epi [Epi f] (X : Cᵒᵖ) : Function.Surjective (f.app X)
+参数：X : Cᵒᵖ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ModuleCat.epi_iff_surjective`：epi_iff_surjective : Epi f ↔ Function.Surj
+ective f
+· 使用定理 `PresheafOfModules.instEpiModuleCatCarrierObjOppositeRingCatApp`：∀ {C : T
+ype u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {R : CategoryTheory.Functor 
+Cᵒᵖ RingCat}   {M₁ M₂ : PresheafOfModules R} (f : M₁…
 -/
 lemma surjective_of_epi [Epi f] (X : Cᵒᵖ) :
     Function.Surjective (f.app X) := by
   rw [← ModuleCat.epi_iff_surjective]
   infer_instance
-
-/--
-lemma `injective_of_mono` / 引理 `injective_of_mono`
-
-English:
-lemma injective_of_mono
-  given: [Mono f] (X : Cᵒᵖ)
-  proof: by
-  rw [← ModuleCat.mono_iff_injective]
-  infer_instance
-
-中文:
-引理 injective_of_mono
-  条件: [单态射 f] (X : Cᵒᵖ)
-  证明: by
-  rw [← ModuleCat.mono_iff_injective]
-  infer_instance
-
-Depends on / 依赖: ModuleCat, ModuleCat.mono_iff_injective, infer_instance, mono_iff_injective
+/-
+**PresheafOfModules.injective_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModul
+es`。
+形式化陈述：injective_of_mono [Mono f] (X : Cᵒᵖ) : Function.Injective (f.app X)
+参数：X : Cᵒᵖ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ModuleCat.mono_iff_injective`：mono_iff_injective : Mono f ↔ Function.Inj
+ective f
+· 使用定理 `PresheafOfModules.instMonoModuleCatCarrierObjOppositeRingCatApp`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {R : CategoryTheory.Functor
+ Cᵒᵖ RingCat}   {M₁ M₂ : PresheafOfModules R} (f : M₁…
 -/
 lemma injective_of_mono [Mono f] (X : Cᵒᵖ) :
     Function.Injective (f.app X) := by
   rw [← ModuleCat.mono_iff_injective]
   infer_instance
-
-/--
-lemma `epi_iff_surjective` / 引理 `epi_iff_surjective`
-
-English:
-lemma epi_iff_surjective
-  proof: ⟨fun _ => surjective_of_epi f, epi_of_surjective⟩
-
-中文:
-引理 epi_iff_surjective
-  证明: ⟨fun _ => surjective_of_epi f, epi_of_surjective⟩
-
-Depends on / 依赖: epi_of_surjective, surjective_of_epi
+/-
+**PresheafOfModules.epi_iff_surjective** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：epi_iff_surjective : Epi f ↔ forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app 
+X)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.surjective_of_epi`：surjective_of_epi [Epi f] (X : Cᵒᵖ)
+ : Function.Surjective (f.app X)
+· 使用引理 `PresheafOfModules.epi_of_surjective`：epi_of_surjective (hf : forall ⦃X :
+ Cᵒᵖ⦄, Function.Surjective (f.app X)) : Epi f where left_cancellation g₁ g₂ hg
 -/
 lemma epi_iff_surjective :
-    Epi f ↔ forall ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X) :=
-  ⟨fun _ => surjective_of_epi f, epi_of_surjective⟩
-
-/--
-lemma `mono_iff_surjective` / 引理 `mono_iff_surjective`
-
-English:
-lemma mono_iff_surjective
-  proof: ⟨fun _ => injective_of_mono f, mono_of_injective⟩
-
-中文:
-引理 mono_iff_surjective
-  证明: ⟨fun _ => injective_of_mono f, mono_of_injective⟩
-
-Depends on / 依赖: injective_of_mono, mono_of_injective
+    Epi f ↔ ∀ ⦃X : Cᵒᵖ⦄, Function.Surjective (f.app X) :=
+  ⟨fun _ ↦ surjective_of_epi f, epi_of_surjective⟩
+/-
+**PresheafOfModules.mono_iff_surjective** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfMod
+ules`。
+形式化陈述：mono_iff_surjective : Mono f ↔ forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app
+ X)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.injective_of_mono`：injective_of_mono [Mono f] (X : Cᵒᵖ
+) : Function.Injective (f.app X)
+· 使用引理 `PresheafOfModules.mono_of_injective`：mono_of_injective (hf : forall ⦃X :
+ Cᵒᵖ⦄, Function.Injective (f.app X)) : Mono f where right_cancellation {M} g₁ g₂
+ hg
 -/
 lemma mono_iff_surjective :
-    Mono f ↔ forall ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X) :=
-  ⟨fun _ => injective_of_mono f, mono_of_injective⟩
+    Mono f ↔ ∀ ⦃X : Cᵒᵖ⦄, Function.Injective (f.app X) :=
+  ⟨fun _ ↦ injective_of_mono f, mono_of_injective⟩
 
 end PresheafOfModules
+

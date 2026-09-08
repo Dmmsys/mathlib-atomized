@@ -39,42 +39,36 @@ variable {ι σ R L : Type*}
 
 section SetLike
 
-/--
-Definition of `SetLike.GradedBracket` / `SetLike.GradedBracket` 的定义
+/-- A class that ensures a bracket product preserves an additive grading. -/
+/-
+**SetLike.GradedBracket** 是 Mathlib 中的一个归纳类型，位于命名空间 `SetLike`。
+形式化陈述：{ι : Type u_1} → {σ : Type u_2} → {L : Type u_4} → [SetLike σ L] → [Bracke
+t L L] → [Add ι] → (ι → σ) → Prop
+参数：ι → σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SetLike.GradedBracket
-  parameters: [SetLike σ L] [Bracket L L] [Add ι] (ℒ : ι -> σ)
-  axioms and operations (1):
-    - bracket_mem : forall ⦃i j⦄ {gi gj}, gi in ℒ i -> gj in ℒ j -> ⁅gi, gj⁆ in ℒ (i + j)
-
-中文:
-类 集合状.GradedBracket
-  参数: [集合状 σ L] [Bracket L L] [加法 ι] (ℒ : ι -> σ)
-  公理与运算 (1 个):
-    - bracket_mem : 对任意 ⦃i j⦄ {gi gj}, gi in ℒ i -> gj in ℒ j -> ⁅gi, gj⁆ in ℒ (i + j)
+--- 原说明 ---
+A class that ensures a bracket product preserves an additive grading.
 -/
-class SetLike.GradedBracket [SetLike σ L] [Bracket L L] [Add ι] (ℒ : ι -> σ) : Prop where
+class SetLike.GradedBracket [SetLike σ L] [Bracket L L] [Add ι] (ℒ : ι → σ) : Prop where
   /-- Bracket is homogeneous -/
-  bracket_mem : forall ⦃i j⦄ {gi gj}, gi in ℒ i -> gj in ℒ j -> ⁅gi, gj⁆ in ℒ (i + j)
+  bracket_mem : ∀ ⦃i j⦄ {gi gj}, gi ∈ ℒ i → gj ∈ ℒ j → ⁅gi, gj⁆ ∈ ℒ (i + j)
 
 variable [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L]
-  (ℒ : ι -> Submodule R L)
+  (ℒ : ι → Submodule R L)
 
-/--
-Definition of `GradedLieAlgebra` / `GradedLieAlgebra` 的定义
+/-- A class that ensures a Lie algebra has a bracket that preserves a decomposition. -/
+/-
+**GradedLieAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   {R : Type u_3} →     {L : Type u_4} →       [DecidableE
+q ι] →         [AddCommMonoid ι] →           [inst : CommRing R] →             [
+inst_1 : LieRing L] → [inst_2 : LieAlgebra R L] → (ι → Submodule R L) → Type (ma
+x u_1 u_4)
+参数：ι → Submodule R L；max u_1 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GradedLieAlgebra
-  parameters: extends SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
-  extends: SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
-  (no additional axioms)
-
-中文:
-类 GradedLie代数
-  参数: extends 集合状.GradedBracket ℒ, 直和.分解 ℒ
-  继承: 集合状.GradedBracket ℒ, 直和.分解 ℒ
-  (无附加公理)
+--- 原说明 ---
+A class that ensures a Lie algebra has a bracket that preserves a decomposition.
 -/
 class GradedLieAlgebra extends SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
 
@@ -83,32 +77,11 @@ end SetLike
 namespace DirectSum
 
 variable [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L]
-  (ℒ : ι -> Submodule R L) [GradedLieAlgebra ℒ]
+  (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieRing (⨁ i, ℒ i)
-  body: decomposeLinearEquiv ℒ
-    ⁅(decomposeLinearEquiv ℒ).symm x, (decomposeLinearEquiv ℒ).symm y⁆
-  add_lie _ _ _ := by simp
-  lie_add _ _ _ := by simp
-  lie_self _ := by simp
-  leibniz_lie _ _ _ := by simp
-
-中文:
-实例 :
-  签名: Lie环 (⨁ i, ℒ i)
-  定义体: decomposeLinearEquiv ℒ
-    ⁅(decomposeLinearEquiv ℒ).symm x, (decomposeLinearEquiv ℒ).symm y⁆
-  add_lie _ _ _ := by simp
-  lie_add _ _ _ := by simp
-  lie_self _ := by simp
-  leibniz_lie _ _ _ := by simp
-
-Depends on / 依赖: decomposeLinearEquiv
+/-
+**DirectSum.** 是 Mathlib 中的一个实例，位于命名空间 `DirectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieRing (⨁ i, ℒ i) where
   bracket x y := decomposeLinearEquiv ℒ
@@ -117,19 +90,13 @@ instance : LieRing (⨁ i, ℒ i) where
   lie_add _ _ _ := by simp
   lie_self _ := by simp
   leibniz_lie _ _ _ := by simp
-
-/--
-lemma `bracket_apply_apply` / 引理 `bracket_apply_apply`
-
-English:
-lemma bracket_apply_apply
-  given: (x y : ⨁ i, ℒ i)
-  proof: rfl
-
-中文:
-引理 bracket_apply_apply
-  条件: (x y : ⨁ i, ℒ i)
-  证明: rfl
+/-
+**DirectSum.bracket_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `DirectSum`。
+形式化陈述：bracket_apply_apply (x y : ⨁ i, ℒ i) : ⁅x, y⁆ = decomposeLinearEquiv ℒ ⁅(d
+ecomposeLinearEquiv ℒ).symm x, (decomposeLinearEquiv ℒ).symm y⁆
+参数：x y : ⨁ i, ℒ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma bracket_apply_apply (x y : ⨁ i, ℒ i) :
     ⁅x, y⁆ =
@@ -139,54 +106,45 @@ lemma bracket_apply_apply (x y : ⨁ i, ℒ i) :
 attribute [local simp] bracket_apply_apply
 
 @[simp]
-/--
-lemma `decompose_bracket` / 引理 `decompose_bracket`
-
-English:
-lemma decompose_bracket
-  given: (x y : L)
-  statement: decompose ℒ ⁅x, y⁆ = ⁅decompose ℒ x, decompose ℒ y⁆
-  proof: by
-  simp only [← decomposeLinearEquiv_apply]
-  simp
-
-@[simp]
-
-中文:
-引理 decompose_bracket
-  条件: (x y : L)
-  结论: decompose ℒ ⁅x, y⁆ = ⁅decompose ℒ x, decompose ℒ y⁆
-  证明: by
-  simp only [← decomposeLinearEquiv_apply]
-  simp
-
-@[simp]
-
-Depends on / 依赖: decomposeLinearEquiv_apply
+/-
+**DirectSum.decompose_bracket** 是 Mathlib 中的一个引理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_bracket (x y : L) : decompose ℒ ⁅x, y⁆ = ⁅decompose ℒ x, decompo
+se ℒ y⁆
+参数：x y : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma decompose_bracket (x y : L) : decompose ℒ ⁅x, y⁆ = ⁅decompose ℒ x, decompose ℒ y⁆ := by
   simp only [← decomposeLinearEquiv_apply]
   simp
 
 @[simp]
-/--
-lemma `decompose_symm_bracket` / 引理 `decompose_symm_bracket`
-
-English:
-lemma decompose_symm_bracket
-  given: (x y : ⨁ i, ℒ i)
-  proof: by
-  simp only [← decomposeLinearEquiv_symm_apply]
-  simp
-
-中文:
-引理 decompose_symm_bracket
-  条件: (x y : ⨁ i, ℒ i)
-  证明: by
-  simp only [← decomposeLinearEquiv_symm_apply]
-  simp
-
-Depends on / 依赖: decomposeLinearEquiv_symm_apply
+/-
+**DirectSum.decompose_symm_bracket** 是 Mathlib 中的一个引理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_bracket (x y : ⨁ i, ℒ i) : (decompose ℒ).symm ⁅x, y⁆ = ⁅(de
+compose ℒ).symm x, (decompose ℒ).symm y⁆
+参数：x y : ⨁ i, ℒ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma decompose_symm_bracket (x y : ⨁ i, ℒ i) :
     (decompose ℒ).symm ⁅x, y⁆ = ⁅(decompose ℒ).symm x, (decompose ℒ).symm y⁆ := by
@@ -194,46 +152,27 @@ lemma decompose_symm_bracket (x y : ⨁ i, ℒ i) :
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieAlgebra R (⨁ i, ℒ i)
-  body: by simp [add_smul]
-  zero_smul _ := by simp
-  lie_smul _ _ _ := by simp
-
-中文:
-实例 :
-  签名: Lie代数 R (⨁ i, ℒ i)
-  定义体: by simp [add_smul]
-  zero_smul _ := by simp
-  lie_smul _ _ _ := by simp
-
-Depends on / 依赖: add_smul, lie_smul, zero_smul
+/-
+**DirectSum.** 是 Mathlib 中的一个实例，位于命名空间 `DirectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieAlgebra R (⨁ i, ℒ i) where
   add_smul _ _ _ := by simp [add_smul]
   zero_smul _ := by simp
   lie_smul _ _ _ := by simp
 
-/--
-Definition of `decomposeLieEquiv` / `decomposeLieEquiv` 的定义
+/-- If `L` is graded by `ι` with degree `i` component `ℒ i`, then it is isomorphic as
+a Lie algebra to a direct sum of components. -/
+/-
+**DirectSum.decomposeLieEquiv** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：decomposeLieEquiv : L ≃ₗ⁅R⁆ ⨁ i, ℒ i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decomposeLieEquiv
-  signature: : L ≃ₗ⁅R⁆ ⨁ i, ℒ i
-  body: { decomposeLinearEquiv ℒ with
-    map_lie' := by simp }
-
-中文:
-定义 decomposeLieEquiv
-  签名: : L ≃ₗ⁅R⁆ ⨁ i, ℒ i
-  定义体: { decomposeLinearEquiv ℒ with
-    map_lie' := by simp }
-
-Depends on / 依赖: decomposeLinearEquiv, map_lie
+--- 原说明 ---
+If `L` is graded by `ι` with degree `i` component `ℒ i`, then it is isomorphic a
+s
+a Lie algebra to a direct sum of components.
 -/
 def decomposeLieEquiv : L ≃ₗ⁅R⁆ ⨁ i, ℒ i :=
   { decomposeLinearEquiv ℒ with
@@ -244,86 +183,29 @@ end DirectSum
 namespace LieDerivation
 
 variable [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L]
-  (ℒ : ι -> Submodule R L) [GradedLieAlgebra ℒ]
+  (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ]
 
-/--
-Definition of `ofGradingSum` / `ofGradingSum` 的定义
+/-- A derivation on the direct sum of graded pieces of a graded Lie algebra, induced by an additive
+map on the grading monoid. -/
+/-
+**LieDerivation.ofGradingSum** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：ofGradingSum (φ : ι ->+ R) : LieDerivation R (⨁ i, ℒ i) (⨁ i, ℒ i)
+参数：φ : ι ->+ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofGradingSum
-  signature: (φ : ι ->+ R)
-  body: { __ := DirectSum.toModule R ι (⨁ i, ℒ i)
-      fun i => (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
-    leibniz' x y := by
-      have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b in ℒ k) :
-          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
-        obtain ⟨_, rfl⟩ : b in LinearMap.range (lof R ι (ℒ ·) k) := by
-          use ⟨(decompose ℒ).symm b, hb⟩
-          simp [lof_eq_of, ← decompose_of_mem]
-        simp
-      ext j
-      induction x using DirectSum.induction_on' with
-      | h0 => simp
-      | hadd i a f _ _ ih =>
-        simp only [Module.End.smulLeft_eq, DirectSum.sub_apply, AddSubgroupClass.coe_sub] at ih
-        simp only [Module.End.smulLeft_eq, add_lie, map_add, DirectSum.add_apply, Submodule.coe_add,
-          ih, lie_add, DirectSum.sub_apply, AddSubgroupClass.coe_sub]
-        rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [hM i (of (ℒ ·) i a) (by simp)]
-        clear ih
-        induction y using DirectSum.induction_on' with
-        | h0 => simp
-        | hadd k b f _ _ ih =>
-          simp only [lie_add, map_add, DirectSum.add_apply, Submodule.coe_add, ih, lie_smul,
-            add_lie, smul_add, add_sub, ← sub_sub]
-          congr 1
-          have : (decompose ℒ).symm ⁅of (fun i => ℒ i) i a, of (fun i => ℒ i) k b⁆ in ℒ (i + k) := by
-            simp [SetLike.GradedBracket.bracket_mem (Submodule.coe_mem a) (Submodule.coe_mem b)]
-          rw [hM _ _ this]; rw [hM k (of (ℒ ·) k b) (by simp)]; rw [← lie_skew (of (ℒ ·) k b)]; rw [add_sub_right_comm]; rw [add_right_cancel_iff]; rw [add_comm i k]; rw [map_add]; rw [add_smul]; rw [DirectSum.add_apply]; rw [Submodule.coe_add]; rw [sub_eq_add_neg]; rw [lie_smul]; rw [add_left_cancel_iff]; rw [smul_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Submodule.coe_add]; rw [Submodule.coe_eq_zero]; rw [← DirectSum.add_apply]; rw [add_neg_cancel]; rw [DirectSum.zero_apply] }
-
-@[simp]
-
-中文:
-定义 ofGradingSum
-  签名: (φ : ι ->+ R)
-  定义体: { __ := DirectSum.toModule R ι (⨁ i, ℒ i)
-      fun i => (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
-    leibniz' x y := by
-      have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b in ℒ k) :
-          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
-        obtain ⟨_, rfl⟩ : b in LinearMap.range (lof R ι (ℒ ·) k) := by
-          use ⟨(decompose ℒ).symm b, hb⟩
-          simp [lof_eq_of, ← decompose_of_mem]
-        simp
-      ext j
-      induction x using DirectSum.induction_on' with
-      | h0 => simp
-      | hadd i a f _ _ ih =>
-        simp only [Module.End.smulLeft_eq, DirectSum.sub_apply, AddSubgroupClass.coe_sub] at ih
-        simp only [Module.End.smulLeft_eq, add_lie, map_add, DirectSum.add_apply, Submodule.coe_add,
-          ih, lie_add, DirectSum.sub_apply, AddSubgroupClass.coe_sub]
-        rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [hM i (of (ℒ ·) i a) (by simp)]
-        clear ih
-        induction y using DirectSum.induction_on' with
-        | h0 => simp
-        | hadd k b f _ _ ih =>
-          simp only [lie_add, map_add, DirectSum.add_apply, Submodule.coe_add, ih, lie_smul,
-            add_lie, smul_add, add_sub, ← sub_sub]
-          congr 1
-          have : (decompose ℒ).symm ⁅of (fun i => ℒ i) i a, of (fun i => ℒ i) k b⁆ in ℒ (i + k) := by
-            simp [SetLike.GradedBracket.bracket_mem (Submodule.coe_mem a) (Submodule.coe_mem b)]
-          rw [hM _ _ this]; rw [hM k (of (ℒ ·) k b) (by simp)]; rw [← lie_skew (of (ℒ ·) k b)]; rw [add_sub_right_comm]; rw [add_right_cancel_iff]; rw [add_comm i k]; rw [map_add]; rw [add_smul]; rw [DirectSum.add_apply]; rw [Submodule.coe_add]; rw [sub_eq_add_neg]; rw [lie_smul]; rw [add_left_cancel_iff]; rw [smul_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Submodule.coe_add]; rw [Submodule.coe_eq_zero]; rw [← DirectSum.add_apply]; rw [add_neg_cancel]; rw [DirectSum.zero_apply] }
-
-@[simp]
-
-Depends on / 依赖: DirectSum, DirectSum.induction_on, DirectSum.toModule, LinearMap, LinearMap.range, Module, Module.End.smulLeft, decompose, decompose_of_mem, induction_on, leibniz, lof_eq_of, smulLeft, toModule
+--- 原说明 ---
+A derivation on the direct sum of graded pieces of a graded Lie algebra, induced
+ by an additive
+map on the grading monoid.
 -/
-def ofGradingSum (φ : ι ->+ R) : LieDerivation R (⨁ i, ℒ i) (⨁ i, ℒ i) :=
+def ofGradingSum (φ : ι →+ R) : LieDerivation R (⨁ i, ℒ i) (⨁ i, ℒ i) :=
   { __ := DirectSum.toModule R ι (⨁ i, ℒ i)
-      fun i => (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
+      fun i ↦ (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
     leibniz' x y := by
-      have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b in ℒ k) :
-          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
-        obtain ⟨_, rfl⟩ : b in LinearMap.range (lof R ι (ℒ ·) k) := by
+      have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b ∈ ℒ k) :
+          (toModule R ι (⨁ (i : ι), ℒ i) fun i ↦ lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
+        obtain ⟨_, rfl⟩ : b ∈ LinearMap.range (lof R ι (ℒ ·) k) := by
           use ⟨(decompose ℒ).symm b, hb⟩
           simp [lof_eq_of, ← decompose_of_mem]
         simp
@@ -334,7 +216,7 @@ def ofGradingSum (φ : ι ->+ R) : LieDerivation R (⨁ i, ℒ i) (⨁ i, ℒ i)
         simp only [Module.End.smulLeft_eq, DirectSum.sub_apply, AddSubgroupClass.coe_sub] at ih
         simp only [Module.End.smulLeft_eq, add_lie, map_add, DirectSum.add_apply, Submodule.coe_add,
           ih, lie_add, DirectSum.sub_apply, AddSubgroupClass.coe_sub]
-        rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [hM i (of (ℒ ·) i a) (by simp)]
+        rw [add_sub_add_comm, add_right_cancel_iff, hM i (of (ℒ ·) i a) (by simp)]
         clear ih
         induction y using DirectSum.induction_on' with
         | h0 => simp
@@ -342,84 +224,100 @@ def ofGradingSum (φ : ι ->+ R) : LieDerivation R (⨁ i, ℒ i) (⨁ i, ℒ i)
           simp only [lie_add, map_add, DirectSum.add_apply, Submodule.coe_add, ih, lie_smul,
             add_lie, smul_add, add_sub, ← sub_sub]
           congr 1
-          have : (decompose ℒ).symm ⁅of (fun i => ℒ i) i a, of (fun i => ℒ i) k b⁆ in ℒ (i + k) := by
+          have : (decompose ℒ).symm ⁅of (fun i ↦ ℒ i) i a, of (fun i ↦ ℒ i) k b⁆ ∈ ℒ (i + k) := by
             simp [SetLike.GradedBracket.bracket_mem (Submodule.coe_mem a) (Submodule.coe_mem b)]
-          rw [hM _ _ this]; rw [hM k (of (ℒ ·) k b) (by simp)]; rw [← lie_skew (of (ℒ ·) k b)]; rw [add_sub_right_comm]; rw [add_right_cancel_iff]; rw [add_comm i k]; rw [map_add]; rw [add_smul]; rw [DirectSum.add_apply]; rw [Submodule.coe_add]; rw [sub_eq_add_neg]; rw [lie_smul]; rw [add_left_cancel_iff]; rw [smul_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Submodule.coe_add]; rw [Submodule.coe_eq_zero]; rw [← DirectSum.add_apply]; rw [add_neg_cancel]; rw [DirectSum.zero_apply] }
+          rw [hM _ _ this, hM k (of (ℒ ·) k b) (by simp), ← lie_skew (of (ℒ ·) k b),
+            add_sub_right_comm, add_right_cancel_iff, add_comm i k, map_add, add_smul,
+            DirectSum.add_apply, Submodule.coe_add, sub_eq_add_neg, lie_smul, add_left_cancel_iff,
+            smul_neg, ← sub_eq_zero, sub_neg_eq_add, ← Submodule.coe_add, Submodule.coe_eq_zero,
+            ← DirectSum.add_apply, add_neg_cancel, DirectSum.zero_apply] }
 
 @[simp]
-/--
-lemma `ofGradingSum_of` / 引理 `ofGradingSum_of`
-
-English:
-lemma ofGradingSum_of
-  given: (φ : ι ->+ R) (i : ι) (a : ℒ i)
-  proof: by
-  simp [← lof_eq_of R, ofGradingSum]
-
-中文:
-引理 ofGradingSum_of
-  条件: (φ : ι ->+ R) (i : ι) (a : ℒ i)
-  证明: by
-  simp [← lof_eq_of R, ofGradingSum]
-
-Depends on / 依赖: lof_eq_of, ofGradingSum
+/-
+**LieDerivation.ofGradingSum_of** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：ofGradingSum_of (φ : ι ->+ R) (i : ι) (a : ℒ i) : ofGradingSum ℒ φ (of (ℒ 
+·) i a) = (φ i) • (of (ℒ ·) i a)
+参数：φ : ι ->+ R；i : ι；a : ℒ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.toModule_lof`：toModule_lof (i) (x : M i) : toModule R ι N φ (l
+of R ι M i x) = φ i x
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma ofGradingSum_of (φ : ι ->+ R) (i : ι) (a : ℒ i) :
+lemma ofGradingSum_of (φ : ι →+ R) (i : ι) (a : ℒ i) :
     ofGradingSum ℒ φ (of (ℒ ·) i a) = (φ i) • (of (ℒ ·) i a) := by
   simp [← lof_eq_of R, ofGradingSum]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `ofGrading` / `ofGrading` 的定义
+/-- The Lie derivation on a graded Lie algebra that scalar-multiplies by an additive function of
+the degree. -/
+/-
+**LieDerivation.ofGrading** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：ofGrading (φ : ι ->+ R) : LieDerivation R L L where toFun x
+参数：φ : ι ->+ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofGrading
-  signature: (φ : ι ->+ R)
-  body: (decomposeLinearEquiv ℒ).symm ofGradingSum ℒ φ decomposeLinearEquiv ℒ x
-  map_add' _ _ := by simp
-  map_smul' _ _ := by simp
-  leibniz' x y := by simp [decomposeLinearEquiv_apply, decomposeLinearEquiv_symm_apply]
-
-中文:
-定义 ofGrading
-  签名: (φ : ι ->+ R)
-  定义体: (decomposeLinearEquiv ℒ).symm ofGradingSum ℒ φ decomposeLinearEquiv ℒ x
-  map_add' _ _ := by simp
-  map_smul' _ _ := by simp
-  leibniz' x y := by simp [decomposeLinearEquiv_apply, decomposeLinearEquiv_symm_apply]
-
-Depends on / 依赖: decomposeLinearEquiv, ofGradingSum
+--- 原说明 ---
+The Lie derivation on a graded Lie algebra that scalar-multiplies by an additive
+ function of
+the degree.
 -/
-def ofGrading (φ : ι ->+ R) :
+def ofGrading (φ : ι →+ R) :
     LieDerivation R L L where
-toFun x := (decomposeLinearEquiv ℒ).symm ofGradingSum ℒ φ decomposeLinearEquiv ℒ x
+  toFun x := (decomposeLinearEquiv ℒ).symm <| ofGradingSum ℒ φ <| decomposeLinearEquiv ℒ x
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
   leibniz' x y := by simp [decomposeLinearEquiv_apply, decomposeLinearEquiv_symm_apply]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ofGrading_apply_apply` / 引理 `ofGrading_apply_apply`
-
-English:
-lemma ofGrading_apply_apply
-  given: (φ : ι ->+ R) {i : ι} {a : L} (ha : a in ℒ i)
-  proof: by
-  simp [ofGrading, decomposeLinearEquiv_apply, decompose_of_mem ℒ ha]
-  simp [decomposeLinearEquiv_symm_apply]
-
-中文:
-引理 ofGrading_apply_apply
-  条件: (φ : ι ->+ R) {i : ι} {a : L} (ha : a in ℒ i)
-  证明: by
-  simp [ofGrading, decomposeLinearEquiv_apply, decompose_of_mem ℒ ha]
-  simp [decomposeLinearEquiv_symm_apply]
-
-Depends on / 依赖: decomposeLinearEquiv_apply, decomposeLinearEquiv_symm_apply, decompose_of_mem, ofGrading
+/-
+**LieDerivation.ofGrading_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：ofGrading_apply_apply (φ : ι ->+ R) {i : ι} {a : L} (ha : a in ℒ i) : ofGr
+ading ℒ φ a = φ i • a
+参数：φ : ι ->+ R；ha : a in ℒ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用引理 `LieDerivation.ofGradingSum_of`：ofGradingSum_of (φ : ι ->+ R) (i : ι) (a 
+: ℒ i) : ofGradingSum ℒ φ (of (ℒ ·) i a) = (φ i) • (of (ℒ ·) i a)
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `DirectSum.decompose_symm_of`：decompose_symm_of {i : ι} (x : ℳ i) : (deco
+mpose ℳ).symm (DirectSum.of _ i x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma ofGrading_apply_apply (φ : ι ->+ R) {i : ι} {a : L} (ha : a in ℒ i) :
+lemma ofGrading_apply_apply (φ : ι →+ R) {i : ι} {a : L} (ha : a ∈ ℒ i) :
     ofGrading ℒ φ a = φ i • a := by
   simp [ofGrading, decomposeLinearEquiv_apply, decompose_of_mem ℒ ha]
   simp [decomposeLinearEquiv_symm_apply]
 
 end LieDerivation
+

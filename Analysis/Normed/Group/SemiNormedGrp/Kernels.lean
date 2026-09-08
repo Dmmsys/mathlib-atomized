@@ -37,32 +37,16 @@ namespace SemiNormedGrp₁
 noncomputable section
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `cokernelCocone` / `cokernelCocone` 的定义
+/-- Auxiliary definition for `HasCokernels SemiNormedGrp₁`. -/
+/-
+**SemiNormedGrp₁.cokernelCocone** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp₁`。
+形式化陈述：cokernelCocone {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) : Cofork f 0
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelCocone
-  signature: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y)
-  body: Cofork.ofπ
-    (@SemiNormedGrp₁.mkHom _ (Y ⧸ NormedAddGroupHom.range f.1) _ _
-      f.hom.1.range.normedMk (NormedAddGroupHom.isQuotientQuotient _).norm_le)
-    (by
-      ext x
-      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← NormedAddGroupHom.mem_ker]; rw [f.hom.1.range.ker_normedMk]; rw [f.hom.1.mem_range]
-      use x)
-
-中文:
-定义 cokernelCocone
-  签名: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y)
-  定义体: Cofork.ofπ
-    (@SemiNormedGrp₁.mkHom _ (Y ⧸ NormedAddGroupHom.range f.1) _ _
-      f.hom.1.range.normedMk (NormedAddGroupHom.isQuotientQuotient _).norm_le)
-    (by
-      ext x
-      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← NormedAddGroupHom.mem_ker]; rw [f.hom.1.range.ker_normedMk]; rw [f.hom.1.mem_range]
-      use x)
-
-Depends on / 依赖: Cofork, Cofork.of, Limits, Limits.zero_comp, NormedAddGroupHom, NormedAddGroupHom.isQuotientQuotient, NormedAddGroupHom.mem_ker, NormedAddGroupHom.range, comp_apply, f.hom, isQuotientQuotient, ker_normedMk, mem_ker, mem_range, mkHom_apply, norm_le, normedMk, range.ker_normedMk, range.normedMk, zero_apply
+--- 原说明 ---
+Auxiliary definition for `HasCokernels SemiNormedGrp₁`.
 -/
 def cokernelCocone {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) : Cofork f 0 :=
   Cofork.ofπ
@@ -70,40 +54,23 @@ def cokernelCocone {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) : Cofork f 0 :=
       f.hom.1.range.normedMk (NormedAddGroupHom.isQuotientQuotient _).norm_le)
     (by
       ext x
-      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← NormedAddGroupHom.mem_ker]; rw [f.hom.1.range.ker_normedMk]; rw [f.hom.1.mem_range]
+      rw [Limits.zero_comp, comp_apply, SemiNormedGrp₁.mkHom_apply,
+        SemiNormedGrp₁.zero_apply, ← NormedAddGroupHom.mem_ker, f.hom.1.range.ker_normedMk,
+        f.hom.1.mem_range]
       use x)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `cokernelLift` / `cokernelLift` 的定义
+/-- Auxiliary definition for `HasCokernels SemiNormedGrp₁`. -/
+/-
+**SemiNormedGrp₁.cokernelLift** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp₁`。
+形式化陈述：cokernelLift {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : CokernelCofork f)
+ : (cokernelCocone f).pt ⟶ s.pt
+参数：f : X ⟶ Y；s : CokernelCofork f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelLift
-  signature: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : CokernelCofork f)
-  body: by
-  fconstructor
-  -- The lift itself:
-  · apply NormedAddGroupHom.lift _ s.π.1
-    rintro _ ⟨b, rfl⟩
-    change (f ≫ s.π) b = 0
-    simp
-  -- The lift has norm at most one:
-  exact NormedAddGroupHom.lift_normNoninc _ _ _ s.π.2
-
-中文:
-定义 cokernelLift
-  签名: {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : 余核余叉 f)
-  定义体: by
-  fconstructor
-  -- The lift itself:
-  · apply NormedAddGroupHom.lift _ s.π.1
-    rintro _ ⟨b, rfl⟩
-    change (f ≫ s.π) b = 0
-    simp
-  -- The lift has norm at most one:
-  exact NormedAddGroupHom.lift_normNoninc _ _ _ s.π.2
-
-Depends on / 依赖: fconstructor
+--- 原说明 ---
+Auxiliary definition for `HasCokernels SemiNormedGrp₁`.
 -/
 def cokernelLift {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : CokernelCofork f) :
     (cokernelCocone f).pt ⟶ s.pt := by
@@ -117,46 +84,9 @@ def cokernelLift {X Y : SemiNormedGrp₁.{u}} (f : X ⟶ Y) (s : CokernelCofork 
   exact NormedAddGroupHom.lift_normNoninc _ _ _ s.π.2
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCokernels SemiNormedGrp₁.{u}
-  body: HasColimit.mk
-      { cocone := cokernelCocone f
-        isColimit :=
-          isColimitAux _ (cokernelLift f)
-            (fun s => by
-              ext
-              apply NormedAddGroupHom.lift_mk f.1.range
-              rintro _ ⟨b, rfl⟩
-              change (f ≫ s.π) b = 0
-              simp)
-            fun _ _ w =>
-SemiNormedGrp₁.hom_ext Subtype.ext
-              (NormedAddGroupHom.lift_unique f.1.range _ _ _
-                (congr_arg Subtype.val (congr_arg Hom.hom w))) }
-
-中文:
-实例 :
-  签名: 有余kernels SemiNormedGrp₁.{u}
-  定义体: HasColimit.mk
-      { cocone := cokernelCocone f
-        isColimit :=
-          isColimitAux _ (cokernelLift f)
-            (fun s => by
-              ext
-              apply NormedAddGroupHom.lift_mk f.1.range
-              rintro _ ⟨b, rfl⟩
-              change (f ≫ s.π) b = 0
-              simp)
-            fun _ _ w =>
-SemiNormedGrp₁.hom_ext Subtype.ext
-              (NormedAddGroupHom.lift_unique f.1.range _ _ _
-                (congr_arg Subtype.val (congr_arg Hom.hom w))) }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, Hom.hom, NormedAddGroupHom, NormedAddGroupHom.lift_mk, NormedAddGroupHom.lift_unique, Subtype, Subtype.ext, Subtype.val, cocone, cokernelCocone, cokernelLift, congr_arg, hom_ext, isColimit, isColimitAux, lift_mk, lift_unique
+/-
+**SemiNormedGrp₁.** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCokernels SemiNormedGrp₁.{u} where
   has_colimit f :=
@@ -171,11 +101,15 @@ instance : HasCokernels SemiNormedGrp₁.{u} where
               change (f ≫ s.π) b = 0
               simp)
             fun _ _ w =>
-SemiNormedGrp₁.hom_ext Subtype.ext
+            SemiNormedGrp₁.hom_ext <| Subtype.ext
               (NormedAddGroupHom.lift_unique f.1.range _ _ _
                 (congr_arg Subtype.val (congr_arg Hom.hom w))) }
 
 -- Sanity check
+/-
+**SemiNormedGrp₁.** 是 Mathlib 中的一个示例，位于命名空间 `SemiNormedGrp₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : HasCokernels SemiNormedGrp₁ := by infer_instance
 
 end
@@ -186,77 +120,73 @@ namespace SemiNormedGrp
 
 section EqualizersAndKernels
 
+/-
+**SemiNormedGrp.** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance {V W : SemiNormedGrp.{u}} : Norm (V ⟶ W) where
   norm f := norm f.hom
+/-
+**SemiNormedGrp.** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance {V W : SemiNormedGrp.{u}} : NNNorm (V ⟶ W) where
   nnnorm f := nnnorm f.hom
 
-/--
-Definition of `fork` / `fork` 的定义
+/-- The equalizer cone for a parallel pair of morphisms of seminormed groups. -/
+/-
+**SemiNormedGrp.fork** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：fork {V W : SemiNormedGrp.{u}} (f g : V ⟶ W) : Fork f g
+参数：f g : V ⟶ W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fork
-  signature: {V W : SemiNormedGrp.{u}} (f g : V ⟶ W)
-  body: @Fork.ofι _ _ _ _ _ _ (of (f - g).hom.ker)
-(ofHom (NormedAddGroupHom.incl (f - g).hom.ker)) by
-    ext v
-    have : v.1 in (f - g).hom.ker := v.2
-    simpa [-SetLike.coe_mem, NormedAddGroupHom.mem_ker, sub_eq_zero] using this
-
-中文:
-定义 fork
-  签名: {V W : SemiNormedGrp.{u}} (f g : V ⟶ W)
-  定义体: @Fork.ofι _ _ _ _ _ _ (of (f - g).hom.ker)
-(ofHom (NormedAddGroupHom.incl (f - g).hom.ker)) by
-    ext v
-    have : v.1 in (f - g).hom.ker := v.2
-    simpa [-SetLike.coe_mem, NormedAddGroupHom.mem_ker, sub_eq_zero] using this
-
-Depends on / 依赖: Fork.of, NormedAddGroupHom, NormedAddGroupHom.incl, NormedAddGroupHom.mem_ker, SetLike, SetLike.coe_mem, coe_mem, hom.ker, mem_ker, sub_eq_zero
+--- 原说明 ---
+The equalizer cone for a parallel pair of morphisms of seminormed groups.
 -/
 noncomputable def fork {V W : SemiNormedGrp.{u}} (f g : V ⟶ W) : Fork f g :=
   @Fork.ofι _ _ _ _ _ _ (of (f - g).hom.ker)
-(ofHom (NormedAddGroupHom.incl (f - g).hom.ker)) by
+    (ofHom (NormedAddGroupHom.incl (f - g).hom.ker)) <| by
     ext v
-    have : v.1 in (f - g).hom.ker := v.2
+    have : v.1 ∈ (f - g).hom.ker := v.2
     simpa [-SetLike.coe_mem, NormedAddGroupHom.mem_ker, sub_eq_zero] using this
-
-/--
-Instance `hasLimit_parallelPair` / 实例 `hasLimit_parallelPair`
-
-English:
-instance hasLimit_parallelPair
-  signature: {V W : SemiNormedGrp.{u}} (f g : V ⟶ W)
-  body: Nonempty.intro
-      { cone := fork f g
-        isLimit :=
-          have := fun (c : Fork f g) =>
-            show NormedAddGroupHom.compHom (f - g).hom c.ι.hom = 0 by
-              rw [hom_sub]; rw [map_sub]; rw [AddMonoidHom.sub_apply]; rw [sub_eq_zero]
-              exact congr_arg Hom.hom c.condition
-          Fork.IsLimit.mk _
-            (fun c => ofHom <|
-NormedAddGroupHom.ker.lift (Fork.ι c).hom _ this c)
-            (fun _ => SemiNormedGrp.hom_ext <| NormedAddGroupHom.ker.incl_comp_lift _ _ (this _))
-            fun c g h => by ext x; dsimp; simp_rw [← h]; rfl }
-
-中文:
-实例 hasLimit_parallelPair
-  签名: {V W : SemiNormedGrp.{u}} (f g : V ⟶ W)
-  定义体: Nonempty.intro
-      { cone := fork f g
-        isLimit :=
-          have := fun (c : Fork f g) =>
-            show NormedAddGroupHom.compHom (f - g).hom c.ι.hom = 0 by
-              rw [hom_sub]; rw [map_sub]; rw [AddMonoidHom.sub_apply]; rw [sub_eq_zero]
-              exact congr_arg Hom.hom c.condition
-          Fork.IsLimit.mk _
-            (fun c => ofHom <|
-NormedAddGroupHom.ker.lift (Fork.ι c).hom _ this c)
-            (fun _ => SemiNormedGrp.hom_ext <| NormedAddGroupHom.ker.incl_comp_lift _ _ (this _))
-            fun c g h => by ext x; dsimp; simp_rw [← h]; rfl }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.sub_apply, Fork.IsLimit.mk, Hom.hom, IsLimit, Nonempty, Nonempty.intro, NormedAddGroupHom, NormedAddGroupHom.compHom, NormedAddGroupHom.ker.incl_comp_lift, NormedAddGroupHom.ker.lift, SemiNormedGrp, SemiNormedGrp.hom_ext, c.condition, compHom, condition, congr_arg, hom_ext, hom_sub, incl_comp_lift
+/-
+**SemiNormedGrp.hasLimit_parallelPair** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp`。
+形式化陈述：hasLimit_parallelPair {V W : SemiNormedGrp.{u}} (f g : V ⟶ W) : HasLimit (
+parallelPair f g) where exists_limit
+参数：f g : V ⟶ W。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemiNormedGrp.hom_sub`：hom_sub {V W : SemiNormedGrp} (f g : V ⟶ W) : (f 
+- g).hom = f.hom - g.hom
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `AddMonoidHom.sub_apply`：∀ {M : Type u_2} {G : Type u_5} [inst : AddZeroC
+lass M] [inst_1 : AddCommGroup G] (f g : M →+ G) (x : M),   (f - g) x = f x - g 
+x
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Fork.condition`：∀ {C : Type u} {X Y : C} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Fork f
+ g),   CategoryTheory.Cate…
+· 使用引理 `SemiNormedGrp.hom_ext`：hom_ext {M N : SemiNormedGrp} {f g : M ⟶ N} (hf :
+ f.hom = g.hom) : f = g
+· 使用定理 `NormedAddGroupHom.ker.incl_comp_lift`：∀ {V₁ : Type u_3} {V₂ : Type u_4} 
+{V₃ : Type u_5} [inst : SeminormedAddCommGroup V₁]   [inst_1 : SeminormedAddComm
+Group V₂] [inst_2 : Semino…
+· 使用定理 `NormedAddGroupHom.ext`：ext (H : forall x, f x = g x) : f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NormedAddGroupHom.ker.lift.congr_simp`：∀ {V₁ : Type u_3} {V₂ : Type u_4}
+ {V₃ : Type u_5} [inst : SeminormedAddCommGroup V₁]   [inst_1 : SeminormedAddCom
+mGroup V₂] [inst_2 : Semino…
 -/
 instance hasLimit_parallelPair {V W : SemiNormedGrp.{u}} (f g : V ⟶ W) :
     HasLimit (parallelPair f g) where
@@ -266,30 +196,16 @@ instance hasLimit_parallelPair {V W : SemiNormedGrp.{u}} (f g : V ⟶ W) :
         isLimit :=
           have := fun (c : Fork f g) =>
             show NormedAddGroupHom.compHom (f - g).hom c.ι.hom = 0 by
-              rw [hom_sub]; rw [map_sub]; rw [AddMonoidHom.sub_apply]; rw [sub_eq_zero]
+              rw [hom_sub, map_sub, AddMonoidHom.sub_apply, sub_eq_zero]
               exact congr_arg Hom.hom c.condition
           Fork.IsLimit.mk _
             (fun c => ofHom <|
-NormedAddGroupHom.ker.lift (Fork.ι c).hom _ this c)
+              NormedAddGroupHom.ker.lift (Fork.ι c).hom _ <| this c)
             (fun _ => SemiNormedGrp.hom_ext <| NormedAddGroupHom.ker.incl_comp_lift _ _ (this _))
             fun c g h => by ext x; dsimp; simp_rw [← h]; rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.HasEqualizers.{u, u + 1} SemiNormedGrp
-  body: @hasEqualizers_of_hasLimit_parallelPair SemiNormedGrp _ fun {_ _ f g} =>
-    SemiNormedGrp.hasLimit_parallelPair f g
-
-中文:
-实例 :
-  签名: Limits.HasEqualizers.{u, u + 1} SemiNormedGrp
-  定义体: @hasEqualizers_of_hasLimit_parallelPair SemiNormedGrp _ fun {_ _ f g} =>
-    SemiNormedGrp.hasLimit_parallelPair f g
-
-Depends on / 依赖: SemiNormedGrp, SemiNormedGrp.hasLimit_parallelPair, hasEqualizers_of_hasLimit_parallelPair, hasLimit_parallelPair
+/-
+**SemiNormedGrp.** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.HasEqualizers.{u, u + 1} SemiNormedGrp :=
   @hasEqualizers_of_hasLimit_parallelPair SemiNormedGrp _ fun {_ _ f g} =>
@@ -303,24 +219,12 @@ section Cokernel
 -- I don't see a way to do this that is less work than just repeating the relevant parts.
 /-- Auxiliary definition for `HasCokernels SemiNormedGrp`. -/
 noncomputable
-/--
-Definition of `cokernelCocone` / `cokernelCocone` 的定义
-
-English:
-definition cokernelCocone
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  body: Cofork.ofπ (P := SemiNormedGrp.of (Y ⧸ NormedAddGroupHom.range f.hom))
-    (ofHom f.hom.range.normedMk)
-    (by aesop)
-
-中文:
-定义 cokernelCocone
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  定义体: Cofork.ofπ (P := SemiNormedGrp.of (Y ⧸ NormedAddGroupHom.range f.hom))
-    (ofHom f.hom.range.normedMk)
-    (by aesop)
-
-Depends on / 依赖: Cofork, Cofork.of, NormedAddGroupHom, NormedAddGroupHom.range, SemiNormedGrp, SemiNormedGrp.of, f.hom, f.hom.range.normedMk, normedMk
+/-
+**SemiNormedGrp.cokernelCocone** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：cokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : Cofork f 0
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def cokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : Cofork f 0 :=
   Cofork.ofπ (P := SemiNormedGrp.of (Y ⧸ NormedAddGroupHom.range f.hom))
@@ -329,32 +233,17 @@ def cokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : Cofork f 0 :=
 
 /-- Auxiliary definition for `HasCokernels SemiNormedGrp`. -/
 noncomputable
-/--
-Definition of `cokernelLift` / `cokernelLift` 的定义
-
-English:
-definition cokernelLift
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : CokernelCofork f)
-  body: ofHom NormedAddGroupHom.lift _ s.π.hom
-    (by
-      rintro _ ⟨b, rfl⟩
-      change (f ≫ s.π) b = 0
-      simp)
-
-中文:
-定义 cokernelLift
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : 余核余叉 f)
-  定义体: ofHom NormedAddGroupHom.lift _ s.π.hom
-    (by
-      rintro _ ⟨b, rfl⟩
-      change (f ≫ s.π) b = 0
-      simp)
-
-Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.lift
+/-
+**SemiNormedGrp.cokernelLift** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：cokernelLift {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : CokernelCofork f) 
+: (cokernelCocone f).pt ⟶ s.pt
+参数：f : X ⟶ Y；s : CokernelCofork f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def cokernelLift {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) (s : CokernelCofork f) :
     (cokernelCocone f).pt ⟶ s.pt :=
-ofHom NormedAddGroupHom.lift _ s.π.hom
+  ofHom <| NormedAddGroupHom.lift _ s.π.hom
     (by
       rintro _ ⟨b, rfl⟩
       change (f ≫ s.π) b = 0
@@ -362,36 +251,14 @@ ofHom NormedAddGroupHom.lift _ s.π.hom
 
 /-- Auxiliary definition for `HasCokernels SemiNormedGrp`. -/
 noncomputable
-/--
-Definition of `isColimitCokernelCocone` / `isColimitCokernelCocone` 的定义
-
-English:
-definition isColimitCokernelCocone
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  body: isColimitAux _ (cokernelLift f)
-    (fun s => by
-      ext
-      apply NormedAddGroupHom.lift_mk f.hom.range
-      rintro _ ⟨b, rfl⟩
-      change (f ≫ s.π) b = 0
-      simp)
-fun _ _ w => SemiNormedGrp.hom_ext NormedAddGroupHom.lift_unique f.hom.range _ _ _
-      congr_arg Hom.hom w
-
-中文:
-定义 isColimitCokernelCocone
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  定义体: isColimitAux _ (cokernelLift f)
-    (fun s => by
-      ext
-      apply NormedAddGroupHom.lift_mk f.hom.range
-      rintro _ ⟨b, rfl⟩
-      change (f ≫ s.π) b = 0
-      simp)
-fun _ _ w => SemiNormedGrp.hom_ext NormedAddGroupHom.lift_unique f.hom.range _ _ _
-      congr_arg Hom.hom w
-
-Depends on / 依赖: Hom.hom, NormedAddGroupHom, NormedAddGroupHom.lift_mk, NormedAddGroupHom.lift_unique, SemiNormedGrp, SemiNormedGrp.hom_ext, cokernelLift, congr_arg, f.hom.range, hom_ext, isColimitAux, lift_mk, lift_unique
+/-
+**SemiNormedGrp.isColimitCokernelCocone** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp
+`。
+形式化陈述：isColimitCokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : IsColimit 
+(cokernelCocone f)
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def isColimitCokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     IsColimit (cokernelCocone f) :=
@@ -402,27 +269,11 @@ def isColimitCokernelCocone {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
       rintro _ ⟨b, rfl⟩
       change (f ≫ s.π) b = 0
       simp)
-fun _ _ w => SemiNormedGrp.hom_ext NormedAddGroupHom.lift_unique f.hom.range _ _ _
+    fun _ _ w => SemiNormedGrp.hom_ext <| NormedAddGroupHom.lift_unique f.hom.range _ _ _ <|
       congr_arg Hom.hom w
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCokernels SemiNormedGrp.{u}
-  body: HasColimit.mk
-      { cocone := cokernelCocone f
-        isColimit := isColimitCokernelCocone f }
-
-中文:
-实例 :
-  签名: 有余kernels SemiNormedGrp.{u}
-  定义体: HasColimit.mk
-      { cocone := cokernelCocone f
-        isColimit := isColimitCokernelCocone f }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, cokernelCocone, isColimit, isColimitCokernelCocone
+/-
+**SemiNormedGrp.** 是 Mathlib 中的一个实例，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCokernels SemiNormedGrp.{u} where
   has_colimit f :=
@@ -431,46 +282,35 @@ instance : HasCokernels SemiNormedGrp.{u} where
         isColimit := isColimitCokernelCocone f }
 
 -- Sanity check
+/-
+**SemiNormedGrp.** 是 Mathlib 中的一个示例，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : HasCokernels SemiNormedGrp := by infer_instance
 
 section ExplicitCokernel
 
 /-- An explicit choice of cokernel, which has good properties with respect to the norm. -/
 noncomputable
-/--
-Definition of `explicitCokernel` / `explicitCokernel` 的定义
-
-English:
-definition explicitCokernel
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  body: (cokernelCocone f).pt
-
-中文:
-定义 explicitCokernel
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  定义体: (cokernelCocone f).pt
-
-Depends on / 依赖: cokernelCocone
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u} :=
   (cokernelCocone f).pt
 
 /-- Descend to the explicit cokernel. -/
 noncomputable
-/--
-Definition of `explicitCokernelDesc` / `explicitCokernelDesc` 的定义
-
-English:
-definition explicitCokernelDesc
-  signature: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0)
-  body: (isColimitCokernelCocone f).desc (Cofork.ofπ g (by simp [w]))
-
-中文:
-定义 explicitCokernelDesc
-  签名: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0)
-  定义体: (isColimitCokernelCocone f).desc (Cofork.ofπ g (by simp [w]))
-
-Depends on / 依赖: Cofork, Cofork.of, isColimitCokernelCocone
+/-
+**SemiNormedGrp.explicitCokernelDesc** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernelDesc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (
+w : f ≫ g = 0) : explicitCokernel f ⟶ Z
+参数：w : f ≫ g = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def explicitCokernelDesc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) :
     explicitCokernel f ⟶ Z :=
@@ -478,38 +318,21 @@ def explicitCokernelDesc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
 
 /-- The projection from `Y` to the explicit cokernel of `X ⟶ Y`. -/
 noncomputable
-/--
-Definition of `explicitCokernelπ` / `explicitCokernelπ` 的定义
-
-English:
-definition explicitCokernelπ
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  body: (cokernelCocone f).ι.app WalkingParallelPair.one
-
-中文:
-定义 explicitCokernelπ
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  定义体: (cokernelCocone f).ι.app WalkingParallelPair.one
-
-Depends on / 依赖: WalkingParallelPair, WalkingParallelPair.one, cokernelCocone
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def explicitCokernelπ {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : Y ⟶ explicitCokernel f :=
   (cokernelCocone f).ι.app WalkingParallelPair.one
-
-/--
-theorem `explicitCokernelπ_surjective` / 定理 `explicitCokernelπ_surjective`
-
-English:
-theorem explicitCokernelπ_surjective
-  given: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  proof: Quot.mk_surjective
-
-中文:
-定理 explicitCokernelπ_surjective
-  条件: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  证明: Quot.mk_surjective
-
-Depends on / 依赖: Quot.mk_surjective, mk_surjective
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelπ_surjective {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} :
     Function.Surjective (explicitCokernelπ f) :=
@@ -517,28 +340,9 @@ theorem explicitCokernelπ_surjective {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `comp_explicitCokernelπ` / 定理 `comp_explicitCokernelπ`
-
-English:
-theorem comp_explicitCokernelπ
-  given: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  proof: by
-  convert! (cokernelCocone f).w WalkingParallelPairHom.left
-  simp
-
-@[simp]
-
-中文:
-定理 comp_explicitCokernelπ
-  条件: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  证明: by
-  convert! (cokernelCocone f).w WalkingParallelPairHom.left
-  simp
-
-@[simp]
-
-Depends on / 依赖: WalkingParallelPairHom, WalkingParallelPairHom.left, cokernelCocone, convert
+/-
+**SemiNormedGrp.comp_explicitCokernel** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_explicitCokernelπ {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     f ≫ explicitCokernelπ f = 0 := by
@@ -546,66 +350,36 @@ theorem comp_explicitCokernelπ {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
   simp
 
 @[simp]
-/--
-theorem `explicitCokernelπ_apply_dom_eq_zero` / 定理 `explicitCokernelπ_apply_dom_eq_zero`
-
-English:
-theorem explicitCokernelπ_apply_dom_eq_zero
-  given: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} (x : X)
-  proof: show (f ≫ explicitCokernelπ f) x = 0 by rw [comp_explicitCokernelπ]; rfl
-
-@[simp, reassoc]
-
-中文:
-定理 explicitCokernelπ_apply_dom_eq_zero
-  条件: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} (x : X)
-  证明: show (f ≫ explicitCokernelπ f) x = 0 by rw [comp_explicitCokernelπ]; rfl
-
-@[simp, reassoc]
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelπ_apply_dom_eq_zero {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} (x : X) :
     (explicitCokernelπ f) (f x) = 0 :=
   show (f ≫ explicitCokernelπ f) x = 0 by rw [comp_explicitCokernelπ]; rfl
 
 @[simp, reassoc]
-/--
-theorem `explicitCokernelπ_desc` / 定理 `explicitCokernelπ_desc`
-
-English:
-theorem explicitCokernelπ_desc
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: (isColimitCokernelCocone f).fac _ _
-
-@[simp]
-
-中文:
-定理 explicitCokernelπ_desc
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: (isColimitCokernelCocone f).fac _ _
-
-@[simp]
-
-Depends on / 依赖: isColimitCokernelCocone
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelπ_desc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     (w : f ≫ g = 0) : explicitCokernelπ f ≫ explicitCokernelDesc w = g :=
   (isColimitCokernelCocone f).fac _ _
 
 @[simp]
-/--
-theorem `explicitCokernelπ_desc_apply` / 定理 `explicitCokernelπ_desc_apply`
-
-English:
-theorem explicitCokernelπ_desc_apply
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: show (explicitCokernelπ f ≫ explicitCokernelDesc cond) x = g x by rw [explicitCokernelπ_desc]
-
-中文:
-定理 explicitCokernelπ_desc_apply
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: show (explicitCokernelπ f ≫ explicitCokernelDesc cond) x = g x by rw [explicitCokernelπ_desc]
-
-Depends on / 依赖: explicitCokernelDesc
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelπ_desc_apply {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     {cond : f ≫ g = 0} (x : Y) : explicitCokernelDesc cond (explicitCokernelπ f x) = g x :=
@@ -613,30 +387,38 @@ theorem explicitCokernelπ_desc_apply {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `explicitCokernelDesc_unique` / 定理 `explicitCokernelDesc_unique`
-
-English:
-theorem explicitCokernelDesc_unique
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: by
-  apply (isColimitCokernelCocone f).uniq (Cofork.ofπ g (by simp [w]))
-  rintro (_ | _)
-  · convert! w.symm
-    simp
-  · exact he
-
-中文:
-定理 explicitCokernelDesc_unique
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: by
-  apply (isColimitCokernelCocone f).uniq (Cofork.ofπ g (by simp [w]))
-  rintro (_ | _)
-  · convert! w.symm
-    simp
-  · exact he
-
-Depends on / 依赖: Cofork, Cofork.of, convert, isColimitCokernelCocone, w.symm
+/-
+**SemiNormedGrp.explicitCokernelDesc_unique** 是 Mathlib 中的一个定理，位于命名空间 `SemiNorme
+dGrp`。
+形式化陈述：explicitCokernelDesc_unique {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y
+ ⟶ Z} (w : f ≫ g = 0) (e : explicitCokernel f ⟶ Z) (he : explicitCokernelπ f ≫ e
+ = g) : e = explicitCokernelDesc w
+参数：w : f ≫ g = 0；e : explicitCokernel f ⟶ Z；he : explicitCokernelπ f ≫ e = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.uniq`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.Cofork.app_zero_eq_comp_π_left`：∀ {C : Type u} {X 
+Y : C} [inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (s : CategoryTheo
+ry.Limits.Cofork f g),   s.ι.app CategoryT…
+· 使用定理 `CategoryTheory.Limits.CokernelCofork.condition`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C] {X Y : C}   {f : X ⟶ Y} (s : Ca…
 -/
 theorem explicitCokernelDesc_unique {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     (w : f ≫ g = 0) (e : explicitCokernel f ⟶ Z) (he : explicitCokernelπ f ≫ e = g) :
@@ -646,29 +428,27 @@ theorem explicitCokernelDesc_unique {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g
   · convert! w.symm
     simp
   · exact he
-
-/--
-theorem `explicitCokernelDesc_comp_eq_desc` / 定理 `explicitCokernelDesc_comp_eq_desc`
-
-English:
-theorem explicitCokernelDesc_comp_eq_desc
-  statement: {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: by
-  refine explicitCokernelDesc_unique _ _ ?_
-  rw [← CategoryTheory.Category.assoc]; rw [explicitCokernelπ_desc]
-
-@[simp]
-
-中文:
-定理 explicitCokernelDesc_comp_eq_desc
-  结论: {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: by
-  refine explicitCokernelDesc_unique _ _ ?_
-  rw [← CategoryTheory.Category.assoc]; rw [explicitCokernelπ_desc]
-
-@[simp]
-
-Depends on / 依赖: Category, CategoryTheory, CategoryTheory.Category.assoc, explicitCokernelDesc_unique
+/-
+**SemiNormedGrp.explicitCokernelDesc_comp_eq_desc** 是 Mathlib 中的一个定理，位于命名空间 `Sem
+iNormedGrp`。
+形式化陈述：explicitCokernelDesc_comp_eq_desc {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y
+} {g : Y ⟶ Z} {h : Z ⟶ W} {cond : f ≫ g = 0} : explicitCokernelDesc cond ≫ h = e
+xplicitCokernelDesc (show f ≫ g ≫ h = 0 by rw [← CategoryTheory.Category.assoc, 
+cond, Limits.zero_comp])
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiNormedGrp.explicitCokernelDesc_unique`：explicitCokernelDesc_unique {
+X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) (e : explicit
+Cokernel f ⟶ Z) (he : explicitC…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `SemiNormedGrp.explicitCokernelπ_desc`：explicitCokernelπ_desc {X Y Z : Se
+miNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) : explicitCokernelπ f ≫
+ explicitCokernelDesc w = …
 -/
 theorem explicitCokernelDesc_comp_eq_desc {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     {h : Z ⟶ W} {cond : f ≫ g = 0} :
@@ -676,59 +456,54 @@ theorem explicitCokernelDesc_comp_eq_desc {X Y Z W : SemiNormedGrp.{u}} {f : X �
       explicitCokernelDesc
         (show f ≫ g ≫ h = 0 by rw [← CategoryTheory.Category.assoc, cond, Limits.zero_comp]) := by
   refine explicitCokernelDesc_unique _ _ ?_
-  rw [← CategoryTheory.Category.assoc]; rw [explicitCokernelπ_desc]
+  rw [← CategoryTheory.Category.assoc, explicitCokernelπ_desc]
 
 @[simp]
-/--
-theorem `explicitCokernelDesc_zero` / 定理 `explicitCokernelDesc_zero`
-
-English:
-theorem explicitCokernelDesc_zero
-  given: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  proof: Eq.symm explicitCokernelDesc_unique _ _ CategoryTheory.Limits.comp_zero
-
-@[ext]
-
-中文:
-定理 explicitCokernelDesc_zero
-  条件: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  证明: Eq.symm explicitCokernelDesc_unique _ _ CategoryTheory.Limits.comp_zero
-
-@[ext]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Limits.comp_zero, Eq.symm, Limits, comp_zero, explicitCokernelDesc_unique
+/-
+**SemiNormedGrp.explicitCokernelDesc_zero** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedG
+rp`。
+形式化陈述：explicitCokernelDesc_zero {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} : explic
+itCokernelDesc (show f ≫ (0 : Y ⟶ Z) = 0 from CategoryTheory.Limits.comp_zero) =
+ 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `SemiNormedGrp.explicitCokernelDesc_unique`：explicitCokernelDesc_unique {
+X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) (e : explicit
+Cokernel f ⟶ Z) (he : explicitC…
 -/
 theorem explicitCokernelDesc_zero {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} :
     explicitCokernelDesc (show f ≫ (0 : Y ⟶ Z) = 0 from CategoryTheory.Limits.comp_zero) = 0 :=
-Eq.symm explicitCokernelDesc_unique _ _ CategoryTheory.Limits.comp_zero
+  Eq.symm <| explicitCokernelDesc_unique _ _ CategoryTheory.Limits.comp_zero
 
 @[ext]
-/--
-theorem `explicitCokernel_hom_ext` / 定理 `explicitCokernel_hom_ext`
-
-English:
-theorem explicitCokernel_hom_ext
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  proof: by
-  let g : Y ⟶ Z := explicitCokernelπ f ≫ e₂
-  have w : f ≫ g = 0 := by simp [g]
-  have : e₂ = explicitCokernelDesc w := by apply explicitCokernelDesc_unique; rfl
-  rw [this]
-  apply explicitCokernelDesc_unique
-  exact h
-
-中文:
-定理 explicitCokernel_hom_ext
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  证明: by
-  let g : Y ⟶ Z := explicitCokernelπ f ≫ e₂
-  have w : f ≫ g = 0 := by simp [g]
-  have : e₂ = explicitCokernelDesc w := by apply explicitCokernelDesc_unique; rfl
-  rw [this]
-  apply explicitCokernelDesc_unique
-  exact h
-
-Depends on / 依赖: explicitCokernelDesc, explicitCokernelDesc_unique
+/-
+**SemiNormedGrp.explicitCokernel_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedGr
+p`。
+形式化陈述：explicitCokernel_hom_ext {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} (e₁ e₂ : 
+explicitCokernel f ⟶ Z) (h : explicitCokernelπ f ≫ e₁ = explicitCokernelπ f ≫ e₂
+) : e₁ = e₂
+参数：e₁ e₂ : explicitCokernel f ⟶ Z；h : explicitCokernelπ f ≫ e₁ = explicitCokerne
+lπ f ≫ e₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemiNormedGrp.comp_explicitCokernelπ_assoc`：∀ {X Y : SemiNormedGrp} (f :
+ X ⟶ Y) {Z : SemiNormedGrp} (h : SemiNormedGrp.explicitCokernel f ⟶ Z),   Catego
+ryTheory.CategoryStruct.comp f (…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SemiNormedGrp.explicitCokernelDesc_unique`：explicitCokernelDesc_unique {
+X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) (e : explicit
+Cokernel f ⟶ Z) (he : explicitC…
 -/
 theorem explicitCokernel_hom_ext {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
     (e₁ e₂ : explicitCokernel f ⟶ Z) (h : explicitCokernelπ f ≫ e₁ = explicitCokernelπ f ≫ e₂) :
@@ -739,27 +514,12 @@ theorem explicitCokernel_hom_ext {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
   rw [this]
   apply explicitCokernelDesc_unique
   exact h
-
-/--
-Instance `explicitCokernelπ.epi` / 实例 `explicitCokernelπ.epi`
-
-English:
-instance explicitCokernelπ.epi
-  signature: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  body: by
-  constructor
-  intro Z g h H
-  ext x
-  rw [H]
-
-中文:
-实例 explicitCokernelπ.epi
-  签名: {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  定义体: by
-  constructor
-  intro Z g h H
-  ext x
-  rw [H]
+/-
+**SemiNormedGrp.explicitCokernel** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernel {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : SemiNormedGrp.{u}
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance explicitCokernelπ.epi {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} :
     Epi (explicitCokernelπ f) := by
@@ -767,90 +527,60 @@ instance explicitCokernelπ.epi {X Y : SemiNormedGrp.{u}} {f : X ⟶ Y} :
   intro Z g h H
   ext x
   rw [H]
-
-/--
-theorem `isQuotient_explicitCokernelπ` / 定理 `isQuotient_explicitCokernelπ`
-
-English:
-theorem isQuotient_explicitCokernelπ
-  given: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  proof: NormedAddGroupHom.isQuotientQuotient _
-
-中文:
-定理 isQuotient_explicitCokernelπ
-  条件: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  证明: NormedAddGroupHom.isQuotientQuotient _
-
-Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.isQuotientQuotient, isQuotientQuotient
+/-
+**SemiNormedGrp.isQuotient_explicitCokernel** 是 Mathlib 中的一个定理，位于命名空间 `SemiNorme
+dGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isQuotient_explicitCokernelπ {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     NormedAddGroupHom.IsQuotient (explicitCokernelπ f).hom :=
   NormedAddGroupHom.isQuotientQuotient _
-
-/--
-theorem `normNoninc_explicitCokernelπ` / 定理 `normNoninc_explicitCokernelπ`
-
-English:
-theorem normNoninc_explicitCokernelπ
-  given: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  proof: (isQuotient_explicitCokernelπ f).norm_le
-
-中文:
-定理 normNoninc_explicitCokernelπ
-  条件: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  证明: (isQuotient_explicitCokernelπ f).norm_le
-
-Depends on / 依赖: norm_le
+/-
+**SemiNormedGrp.normNoninc_explicitCokernel** 是 Mathlib 中的一个定理，位于命名空间 `SemiNorme
+dGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem normNoninc_explicitCokernelπ {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     (explicitCokernelπ f).hom.NormNoninc :=
   (isQuotient_explicitCokernelπ f).norm_le
 
 open scoped NNReal
-
-/--
-theorem `explicitCokernelDesc_norm_le_of_norm_le` / 定理 `explicitCokernelDesc_norm_le_of_norm_le`
-
-English:
-theorem explicitCokernelDesc_norm_le_of_norm_le
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  proof: NormedAddGroupHom.lift_norm_le _ _ _ h
-
-中文:
-定理 explicitCokernelDesc_norm_le_of_norm_le
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-  证明: NormedAddGroupHom.lift_norm_le _ _ _ h
-
-Depends on / 依赖: NormedAddGroupHom, NormedAddGroupHom.lift_norm_le, lift_norm_le
+/-
+**SemiNormedGrp.explicitCokernelDesc_norm_le_of_norm_le** 是 Mathlib 中的一个定理，位于命名空
+间 `SemiNormedGrp`。
+形式化陈述：explicitCokernelDesc_norm_le_of_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X
+ ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) (c : Real>=0) (h : ‖g‖ <= c) : ‖explicitCokern
+elDesc w‖ <= c
+参数：w : f ≫ g = 0；c : Real>=0；h : ‖g‖ <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedAddGroupHom.lift_norm_le`：lift_norm_le {N : Type*} [SeminormedAddC
+ommGroup N] (S : AddSubgroup M) (f : NormedAddGroupHom M N) (hf : forall s in S,
+ f s = 0) {c : Real>…
 -/
 theorem explicitCokernelDesc_norm_le_of_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y}
-    {g : Y ⟶ Z} (w : f ≫ g = 0) (c : Real>=0) (h : ‖g‖ <= c) : ‖explicitCokernelDesc w‖ <= c :=
+    {g : Y ⟶ Z} (w : f ≫ g = 0) (c : ℝ≥0) (h : ‖g‖ ≤ c) : ‖explicitCokernelDesc w‖ ≤ c :=
   NormedAddGroupHom.lift_norm_le _ _ _ h
-
-/--
-theorem `explicitCokernelDesc_normNoninc` / 定理 `explicitCokernelDesc_normNoninc`
-
-English:
-theorem explicitCokernelDesc_normNoninc
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: by
-  refine NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.2 ?_
-  rw [← NNReal.coe_one]
-  exact
-    explicitCokernelDesc_norm_le_of_norm_le cond 1
-      (NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.1 hg)
-
-中文:
-定理 explicitCokernelDesc_normNoninc
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: by
-  refine NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.2 ?_
-  rw [← NNReal.coe_one]
-  exact
-    explicitCokernelDesc_norm_le_of_norm_le cond 1
-      (NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.1 hg)
-
-Depends on / 依赖: NNReal, NNReal.coe_one, NormNoninc, NormedAddGroupHom, NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one, coe_one, explicitCokernelDesc_norm_le_of_norm_le, normNoninc_iff_norm_le_one
+/-
+**SemiNormedGrp.explicitCokernelDesc_normNoninc** 是 Mathlib 中的一个定理，位于命名空间 `SemiN
+ormedGrp`。
+形式化陈述：explicitCokernelDesc_normNoninc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g
+ : Y ⟶ Z} {cond : f ≫ g = 0} (hg : g.hom.NormNoninc) : (explicitCokernelDesc con
+d).hom.NormNoninc
+参数：hg : g.hom.NormNoninc。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one`：normNoninc_iff_
+norm_le_one : f.NormNoninc ↔ ‖f‖ <= 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_one`：↑1 = 1
+· 使用定理 `SemiNormedGrp.explicitCokernelDesc_norm_le_of_norm_le`：explicitCokernelD
+esc_norm_le_of_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : 
+f ≫ g = 0) (c : Real>=0) (h : ‖g‖ <= c) : ‖…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem explicitCokernelDesc_normNoninc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     {cond : f ≫ g = 0} (hg : g.hom.NormNoninc) : (explicitCokernelDesc cond).hom.NormNoninc := by
@@ -859,66 +589,71 @@ theorem explicitCokernelDesc_normNoninc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y
   exact
     explicitCokernelDesc_norm_le_of_norm_le cond 1
       (NormedAddGroupHom.NormNoninc.normNoninc_iff_norm_le_one.1 hg)
-
-/--
-theorem `explicitCokernelDesc_comp_eq_zero` / 定理 `explicitCokernelDesc_comp_eq_zero`
-
-English:
-theorem explicitCokernelDesc_comp_eq_zero
-  statement: {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: by
-  rw [← cancel_epi (explicitCokernelπ f)]; rw [← Category.assoc]; rw [explicitCokernelπ_desc]
-  simp [cond2]
-
-中文:
-定理 explicitCokernelDesc_comp_eq_zero
-  结论: {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: by
-  rw [← cancel_epi (explicitCokernelπ f)]; rw [← Category.assoc]; rw [explicitCokernelπ_desc]
-  simp [cond2]
-
-Depends on / 依赖: Category, Category.assoc, cancel_epi
+/-
+**SemiNormedGrp.explicitCokernelDesc_comp_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Sem
+iNormedGrp`。
+形式化陈述：explicitCokernelDesc_comp_eq_zero {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y
+} {g : Y ⟶ Z} {h : Z ⟶ W} (cond : f ≫ g = 0) (cond2 : g ≫ h = 0) : explicitCoker
+nelDesc cond ≫ h = 0
+参数：cond : f ≫ g = 0；cond2 : g ≫ h = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `SemiNormedGrp.explicitCokernelπ.epi`：∀ {X Y : SemiNormedGrp} {f : X ⟶ Y}
+, CategoryTheory.Epi (SemiNormedGrp.explicitCokernelπ f)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `SemiNormedGrp.explicitCokernelπ_desc`：explicitCokernelπ_desc {X Y Z : Se
+miNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) : explicitCokernelπ f ≫
+ explicitCokernelDesc w = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem explicitCokernelDesc_comp_eq_zero {X Y Z W : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     {h : Z ⟶ W} (cond : f ≫ g = 0) (cond2 : g ≫ h = 0) : explicitCokernelDesc cond ≫ h = 0 := by
-  rw [← cancel_epi (explicitCokernelπ f)]; rw [← Category.assoc]; rw [explicitCokernelπ_desc]
+  rw [← cancel_epi (explicitCokernelπ f), ← Category.assoc, explicitCokernelπ_desc]
   simp [cond2]
-
-/--
-theorem `explicitCokernelDesc_norm_le` / 定理 `explicitCokernelDesc_norm_le`
-
-English:
-theorem explicitCokernelDesc_norm_le
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: explicitCokernelDesc_norm_le_of_norm_le w ‖g‖₊ le_rfl
-
-中文:
-定理 explicitCokernelDesc_norm_le
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: explicitCokernelDesc_norm_le_of_norm_le w ‖g‖₊ le_rfl
-
-Depends on / 依赖: explicitCokernelDesc_norm_le_of_norm_le, le_rfl
+/-
+**SemiNormedGrp.explicitCokernelDesc_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `SemiNorm
+edGrp`。
+形式化陈述：explicitCokernelDesc_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : 
+Y ⟶ Z} (w : f ≫ g = 0) : ‖explicitCokernelDesc w‖ <= ‖g‖
+参数：w : f ≫ g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiNormedGrp.explicitCokernelDesc_norm_le_of_norm_le`：explicitCokernelD
+esc_norm_le_of_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : 
+f ≫ g = 0) (c : Real>=0) (h : ‖g‖ <= c) : ‖…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem explicitCokernelDesc_norm_le {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-    (w : f ≫ g = 0) : ‖explicitCokernelDesc w‖ <= ‖g‖ :=
+    (w : f ≫ g = 0) : ‖explicitCokernelDesc w‖ ≤ ‖g‖ :=
   explicitCokernelDesc_norm_le_of_norm_le w ‖g‖₊ le_rfl
 
 /-- The explicit cokernel is isomorphic to the usual cokernel. -/
 noncomputable
-/--
-Definition of `explicitCokernelIso` / `explicitCokernelIso` 的定义
-
-English:
-definition explicitCokernelIso
-  signature: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  body: (isColimitCokernelCocone f).coconePointUniqueUpToIso (colimit.isColimit _)
-
-中文:
-定义 explicitCokernelIso
-  签名: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  定义体: (isColimitCokernelCocone f).coconePointUniqueUpToIso (colimit.isColimit _)
-
-Depends on / 依赖: coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit, isColimitCokernelCocone
+/-
+**SemiNormedGrp.explicitCokernelIso** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp`。
+形式化陈述：explicitCokernelIso {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) : explicitCokern
+el f ≅ cokernel f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasCokernels.has_colimit`：∀ {C : Type u} {inst : C
+ategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C}   [self : CategoryTheory.Limits…
+· 使用定理 `SemiNormedGrp.instHasCokernels`：CategoryTheory.Limits.HasCokernels SemiN
+ormedGrp
 -/
 def explicitCokernelIso {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     explicitCokernel f ≅ cokernel f :=
@@ -926,22 +661,10 @@ def explicitCokernelIso {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `explicitCokernelIso_hom_π` / 定理 `explicitCokernelIso_hom_π`
-
-English:
-theorem explicitCokernelIso_hom_π
-  given: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  proof: by
-  simp [explicitCokernelπ, explicitCokernelIso, IsColimit.coconePointUniqueUpToIso]
-
-中文:
-定理 explicitCokernelIso_hom_π
-  条件: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  证明: by
-  simp [explicitCokernelπ, explicitCokernelIso, IsColimit.coconePointUniqueUpToIso]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, explicitCokernelIso
+/-
+**SemiNormedGrp.explicitCokernelIso_hom_** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedGr
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelIso_hom_π {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     explicitCokernelπ f ≫ (explicitCokernelIso f).hom = cokernel.π _ := by
@@ -949,22 +672,10 @@ theorem explicitCokernelIso_hom_π {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `explicitCokernelIso_inv_π` / 定理 `explicitCokernelIso_inv_π`
-
-English:
-theorem explicitCokernelIso_inv_π
-  given: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  proof: by
-  simp [explicitCokernelπ, explicitCokernelIso]
-
-中文:
-定理 explicitCokernelIso_inv_π
-  条件: {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y)
-  证明: by
-  simp [explicitCokernelπ, explicitCokernelIso]
-
-Depends on / 依赖: explicitCokernelIso
+/-
+**SemiNormedGrp.explicitCokernelIso_inv_** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedGr
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem explicitCokernelIso_inv_π {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
     cokernel.π f ≫ (explicitCokernelIso f).inv = explicitCokernelπ f := by
@@ -972,26 +683,50 @@ theorem explicitCokernelIso_inv_π {X Y : SemiNormedGrp.{u}} (f : X ⟶ Y) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `explicitCokernelIso_hom_desc` / 定理 `explicitCokernelIso_hom_desc`
-
-English:
-theorem explicitCokernelIso_hom_desc
-  statement: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  proof: by
-  ext1
-  simp [explicitCokernelDesc, explicitCokernelπ, explicitCokernelIso,
-    IsColimit.coconePointUniqueUpToIso]
-
-中文:
-定理 explicitCokernelIso_hom_desc
-  结论: {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
-  证明: by
-  ext1
-  simp [explicitCokernelDesc, explicitCokernelπ, explicitCokernelIso,
-    IsColimit.coconePointUniqueUpToIso]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, explicitCokernelDesc, explicitCokernelIso
+/-
+**SemiNormedGrp.explicitCokernelIso_hom_desc** 是 Mathlib 中的一个定理，位于命名空间 `SemiNorm
+edGrp`。
+形式化陈述：explicitCokernelIso_hom_desc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : 
+Y ⟶ Z} (w : f ≫ g = 0) : (explicitCokernelIso f).hom ≫ cokernel.desc f g w = exp
+licitCokernelDesc w
+参数：w : f ≫ g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiNormedGrp.explicitCokernel_hom_ext`：explicitCokernel_hom_ext {X Y Z 
+: SemiNormedGrp.{u}} {f : X ⟶ Y} (e₁ e₂ : explicitCokernel f ⟶ Z) (h : explicitC
+okernelπ f ≫ e₁ = explicitCo…
+· 使用定理 `CategoryTheory.Limits.HasCokernels.has_colimit`：∀ {C : Type u} {inst : C
+ategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C}   [self : CategoryTheory.Limits…
+· 使用定理 `SemiNormedGrp.instHasCokernels`：CategoryTheory.Limits.HasCokernels SemiN
+ormedGrp
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsColimit.uniqueUpToIso_hom`：∀ {J : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Ca
+tegory.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Cocone.forget_map`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsColimit.descCoconeMorphism_hom`：∀ {J : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheo
+ry.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Cofork.IsColimit.π_desc_assoc`：∀ {C : Type u} {X Y
+ : C} [inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   {s t : CategoryT
+heory.Limits.Cofork f g} (hs : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.cokernel.π_desc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {X Y
+ : C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `CategoryTheory.Limits.Cofork.IsColimit.π_desc`：∀ {C : Type u} {X Y : C} 
+[inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   {s t : CategoryTheory.
+Limits.Cofork f g} (hs : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem explicitCokernelIso_hom_desc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z}
     (w : f ≫ g = 0) :
@@ -1000,46 +735,66 @@ theorem explicitCokernelIso_hom_desc {X Y Z : SemiNormedGrp.{u}} {f : X ⟶ Y} {
   simp [explicitCokernelDesc, explicitCokernelπ, explicitCokernelIso,
     IsColimit.coconePointUniqueUpToIso]
 
-/--
-Definition of `explicitCokernel.map` / `explicitCokernel.map` 的定义
+/-- A special case of `CategoryTheory.Limits.cokernel.map` adapted to `explicitCokernel`. -/
+/-
+**SemiNormedGrp.explicitCokernel.map** 是 Mathlib 中的一个定义，位于命名空间 `SemiNormedGrp.ex
+plicitCokernel`。
+形式化陈述：{A B C D : SemiNormedGrp} →   {fab : A ⟶ B} →     {fbd : B ⟶ D} →       {f
+ac : A ⟶ C} →         {fcd : C ⟶ D} →           CategoryTheory.CategoryStruct.co
+mp fab fbd = CategoryTheory.CategoryStruct.comp fac fcd →             (SemiNorme
+dGrp.explicitCokernel fab ⟶ SemiNormedGrp.explicitCokernel fcd)
+参数：SemiNormedGrp.explicitCokernel fab ⟶ SemiNormedGrp.explicitCokernel fcd。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition explicitCokernel.map
-  signature: {A B C D : SemiNormedGrp.{u}}
-  body: @explicitCokernelDesc _ _ _ fab (fbd ≫ explicitCokernelπ _) by simp [reassoc_of% h]
-
-中文:
-定义 explicitCokernel.map
-  签名: {A B C D : SemiNormedGrp.{u}}
-  定义体: @explicitCokernelDesc _ _ _ fab (fbd ≫ explicitCokernelπ _) by simp [reassoc_of% h]
-
-Depends on / 依赖: explicitCokernelDesc, reassoc_of
+--- 原说明 ---
+A special case of `CategoryTheory.Limits.cokernel.map` adapted to `explicitCoker
+nel`.
 -/
 noncomputable def explicitCokernel.map {A B C D : SemiNormedGrp.{u}}
     {fab : A ⟶ B} {fbd : B ⟶ D} {fac : A ⟶ C} {fcd : C ⟶ D} (h : fab ≫ fbd = fac ≫ fcd) :
     explicitCokernel fab ⟶ explicitCokernel fcd :=
-@explicitCokernelDesc _ _ _ fab (fbd ≫ explicitCokernelπ _) by simp [reassoc_of% h]
+  @explicitCokernelDesc _ _ _ fab (fbd ≫ explicitCokernelπ _) <| by simp [reassoc_of% h]
 
-/--
-theorem `ExplicitCoker.map_desc` / 定理 `ExplicitCoker.map_desc`
+/-- A special case of `CategoryTheory.Limits.cokernel.map_desc` adapted to `explicitCokernel`. -/
+/-
+**SemiNormedGrp.ExplicitCoker.map_desc** 是 Mathlib 中的一个定理，位于命名空间 `SemiNormedGrp.
+ExplicitCoker`。
+形式化陈述：∀ {A B C D B' D' : SemiNormedGrp} {fab : A ⟶ B} {fbd : B ⟶ D} {fac : A ⟶ C
+} {fcd : C ⟶ D}   {h : CategoryTheory.CategoryStruct.comp fab fbd = CategoryTheo
+ry.CategoryStruct.comp fac fcd} {fbb' : B ⟶ B'}   {fdd' : D ⟶ D'} {condb : Categ
+oryTheory.CategoryStruct.comp fab fbb' = 0}   {condd : CategoryTheory.CategorySt
+ruct.comp fcd fdd' = 0} {g : B' ⟶ D'},   CategoryTheory.CategoryStruct.comp fbb'
+ g = CategoryTheory.CategoryStruct.comp fbd fdd' →     CategoryTheory.CategorySt
+ruct.comp (SemiNormedGrp.explicitCokernelDesc condb) g =       CategoryTheory.Ca
+tegoryStruct.comp (SemiNormedGrp.explicitCokernel.map h)         (SemiNormedGrp.
+explicitCokernelDesc condd)
+参数：SemiNormedGrp.explicitCokernelDesc condb；SemiNormedGrp.explicitCokernel.map h
+；SemiNormedGrp.explicitCokernelDesc condd。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `SemiNormedGrp.explicitCokernelπ.epi`：∀ {X Y : SemiNormedGrp} {f : X ⟶ Y}
+, CategoryTheory.Epi (SemiNormedGrp.explicitCokernelπ f)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SemiNormedGrp.explicitCokernelπ_desc`：explicitCokernelπ_desc {X Y Z : Se
+miNormedGrp.{u}} {f : X ⟶ Y} {g : Y ⟶ Z} (w : f ≫ g = 0) : explicitCokernelπ f ≫
+ explicitCokernelDesc w = …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem ExplicitCoker.map_desc
-  statement: {A B C D B' D' : SemiNormedGrp.{u}}
-  proof: by
-  delta explicitCokernel.map
-  simp only [← Category.assoc, ← cancel_epi (explicitCokernelπ fab)]
-  simp [Category.assoc, explicitCokernelπ_desc, h']
-
-中文:
-定理 ExplicitCoker.map_desc
-  结论: {A B C D B' D' : SemiNormedGrp.{u}}
-  证明: by
-  delta explicitCokernel.map
-  simp only [← Category.assoc, ← cancel_epi (explicitCokernelπ fab)]
-  simp [Category.assoc, explicitCokernelπ_desc, h']
-
-Depends on / 依赖: Category, Category.assoc, cancel_epi, explicitCokernel, explicitCokernel.map
+--- 原说明 ---
+A special case of `CategoryTheory.Limits.cokernel.map_desc` adapted to `explicit
+Cokernel`.
 -/
 theorem ExplicitCoker.map_desc {A B C D B' D' : SemiNormedGrp.{u}}
     {fab : A ⟶ B} {fbd : B ⟶ D} {fac : A ⟶ C} {fcd : C ⟶ D} {h : fab ≫ fbd = fac ≫ fcd}
@@ -1055,3 +810,4 @@ end ExplicitCokernel
 end Cokernel
 
 end SemiNormedGrp
+

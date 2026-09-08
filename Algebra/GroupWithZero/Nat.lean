@@ -23,151 +23,98 @@ assert_not_exists Ring
 
 namespace Nat
 
-/--
-Instance `instMulZeroClass` / 实例 `instMulZeroClass`
-
-English:
-instance instMulZeroClass
-  signature: : MulZeroClass Nat where
-  body: Nat.zero_mul
-  mul_zero := Nat.mul_zero
-
-中文:
-实例 instMulZeroClass
-  签名: : 乘零类 自然数 where
-  定义体: Nat.zero_mul
-  mul_zero := Nat.mul_zero
-
-Depends on / 依赖: Nat.zero_mul, zero_mul
+/-
+**Nat.instMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMulZeroClass : MulZeroClass Nat where zero_mul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_mul`：∀ (n : ℕ), 0 * n = 0
+· 使用定理 `Nat.mul_zero`：∀ (n : ℕ), n * 0 = 0
 -/
-instance instMulZeroClass : MulZeroClass Nat where
+instance instMulZeroClass : MulZeroClass ℕ where
   zero_mul := Nat.zero_mul
   mul_zero := Nat.mul_zero
-
-/--
-Instance `instSemigroupWithZero` / 实例 `instSemigroupWithZero`
-
-English:
-instance instSemigroupWithZero
-  signature: : SemigroupWithZero Nat where
-  body: instSemigroup
-  __ := instMulZeroClass
-
-中文:
-实例 instSemigroupWithZero
-  签名: : 带零半群 自然数 where
-  定义体: instSemigroup
-  __ := instMulZeroClass
-
-Depends on / 依赖: colimit, colimit.isColimit, instSemigroup, isColimit, isColimitCoconeOfHasColimitEval, preservesColimit_of_preserves_colimit_cocone
+/-
+**Nat.instSemigroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instSemigroupWithZero : SemigroupWithZero Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-instance instSemigroupWithZero : SemigroupWithZero Nat where
+instance instSemigroupWithZero : SemigroupWithZero ℕ where
   __ := instSemigroup
   __ := instMulZeroClass
-
-/--
-Instance `instMonoidWithZero` / 实例 `instMonoidWithZero`
-
-English:
-instance instMonoidWithZero
-  signature: : MonoidWithZero Nat where
-  body: instMonoid
-  __ := instMulZeroClass
-  __ := instSemigroupWithZero
-
-中文:
-实例 instMonoidWithZero
-  签名: : 带零幺半群 自然数 where
-  定义体: instMonoid
-  __ := instMulZeroClass
-  __ := instSemigroupWithZero
-
-Depends on / 依赖: instMonoid
+/-
+**Nat.instMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMonoidWithZero : MonoidWithZero Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-instance instMonoidWithZero : MonoidWithZero Nat where
+instance instMonoidWithZero : MonoidWithZero ℕ where
   __ := instMonoid
   __ := instMulZeroClass
   __ := instSemigroupWithZero
-
-/--
-Instance `instCommMonoidWithZero` / 实例 `instCommMonoidWithZero`
-
-English:
-instance instCommMonoidWithZero
-  signature: : CommMonoidWithZero Nat where
-  body: instCommMonoid
-  __ := instMonoidWithZero
-
-中文:
-实例 instCommMonoidWithZero
-  签名: : 带零交换幺半群 自然数 where
-  定义体: instCommMonoid
-  __ := instMonoidWithZero
-
-Depends on / 依赖: instCommMonoid
+/-
+**Nat.instCommMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCommMonoidWithZero : CommMonoidWithZero Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZero.zero_mul`：∀ {M₀ : Type u} [self : MonoidWithZero M₀] (a :
+ M₀), 0 * a = 0
+· 使用定理 `MonoidWithZero.mul_zero`：∀ {M₀ : Type u} [self : MonoidWithZero M₀] (a :
+ M₀), a * 0 = 0
 -/
-instance instCommMonoidWithZero : CommMonoidWithZero Nat where
+instance instCommMonoidWithZero : CommMonoidWithZero ℕ where
   __ := instCommMonoid
   __ := instMonoidWithZero
-
-/--
-Instance `instIsCancelMulZero` / 实例 `instIsCancelMulZero`
-
-English:
-instance instIsCancelMulZero
-  signature: : IsCancelMulZero Nat where
-  body: Nat.eq_of_mul_eq_mul_left (Nat.pos_of_ne_zero h)
-  mul_right_cancel_of_ne_zero h _ _ := Nat.eq_of_mul_eq_mul_right (Nat.pos_of_ne_zero h)
-
-中文:
-实例 instIsCancelMulZero
-  签名: : 是乘零消去 自然数 where
-  定义体: Nat.eq_of_mul_eq_mul_left (Nat.pos_of_ne_zero h)
-  mul_right_cancel_of_ne_zero h _ _ := Nat.eq_of_mul_eq_mul_right (Nat.pos_of_ne_zero h)
-
-Depends on / 依赖: Nat.eq_of_mul_eq_mul_left, Nat.pos_of_ne_zero, eq_of_mul_eq_mul_left, pos_of_ne_zero
+/-
+**Nat.instIsCancelMulZero** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instIsCancelMulZero : IsCancelMulZero Nat where mul_left_cancel_of_ne_zero
+ h _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_of_mul_eq_mul_left`：∀ {m k n : ℕ}, 0 < n → n * m = n * k → m = k
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Nat.eq_of_mul_eq_mul_right`：∀ {n m k : ℕ}, 0 < m → n * m = k * m → n = k
 -/
-instance instIsCancelMulZero : IsCancelMulZero Nat where
+instance instIsCancelMulZero : IsCancelMulZero ℕ where
   mul_left_cancel_of_ne_zero h _ _ := Nat.eq_of_mul_eq_mul_left (Nat.pos_of_ne_zero h)
   mul_right_cancel_of_ne_zero h _ _ := Nat.eq_of_mul_eq_mul_right (Nat.pos_of_ne_zero h)
-
-/--
-Instance `instMulDivCancelClass` / 实例 `instMulDivCancelClass`
-
-English:
-instance instMulDivCancelClass
-  signature: : MulDivCancelClass Nat where
-  body: Nat.mul_div_cancel _ (Nat.pos_iff_ne_zero.2 hb)
-
-中文:
-实例 instMulDivCancelClass
-  签名: : MulDivCancel类 自然数 where
-  定义体: Nat.mul_div_cancel _ (Nat.pos_iff_ne_zero.2 hb)
-
-Depends on / 依赖: Nat.mul_div_cancel, Nat.pos_iff_ne_zero, mul_div_cancel, pos_iff_ne_zero
+/-
+**Nat.instMulDivCancelClass** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMulDivCancelClass : MulDivCancelClass Nat where mul_div_cancel _ _b hb
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mul_div_cancel`：∀ (m : ℕ) {n : ℕ}, 0 < n → m * n / n = m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
 -/
-instance instMulDivCancelClass : MulDivCancelClass Nat where
+instance instMulDivCancelClass : MulDivCancelClass ℕ where
   mul_div_cancel _ _b hb := Nat.mul_div_cancel _ (Nat.pos_iff_ne_zero.2 hb)
-
-/--
-Instance `instMulZeroOneClass` / 实例 `instMulZeroOneClass`
-
-English:
-instance instMulZeroOneClass
-  signature: : MulZeroOneClass Nat where
-  body: instMulZeroClass
-  __ := instMulOneClass
-
-中文:
-实例 instMulZeroOneClass
-  签名: : 乘零幺类 自然数 where
-  定义体: instMulZeroClass
-  __ := instMulOneClass
-
-Depends on / 依赖: instMulZeroClass
+/-
+**Nat.instMulZeroOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMulZeroOneClass : MulZeroOneClass Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOneClass.one_mul`：∀ {M : Type u} [self : MulOneClass M] (a : M), 1 * 
+a = a
+· 使用定理 `MulOneClass.mul_one`：∀ {M : Type u} [self : MulOneClass M] (a : M), a * 
+1 = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-instance instMulZeroOneClass : MulZeroOneClass Nat where
+instance instMulZeroOneClass : MulZeroOneClass ℕ where
   __ := instMulZeroClass
   __ := instMulOneClass
 
 end Nat
+

@@ -47,138 +47,84 @@ namespace MeasureTheory
 
 open scoped Function -- required for scoped `on` notation
 
-/--
-Definition of `OuterMeasure` / `OuterMeasure` 的定义
+/-- An outer measure is a countably subadditive monotone function that sends `∅` to `0`. -/
+/-
+**MeasureTheory.OuterMeasure** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：Type u_2 → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OuterMeasure
-  parameters: (α : Type*)
-  axioms and operations (4):
-    - measureOf : Set α -> Real>=0∞
-    - empty : measureOf ∅ = 0
-    - mono : forall {s₁ s₂}, s₁ subseteq s₂ -> measureOf s₁ <= measureOf s₂
-    - iUnion_nat : forall s : Nat -> Set α, Pairwise (Disjoint on s) -> measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
-
-中文:
-结构 外测度
-  参数: (α : 类型)
-  公理与运算 (4 个):
-    - measureOf : 集合 α -> 实数>=0∞
-    - empty : measureOf ∅ = 0
-    - mono : 对任意 {s₁ s₂}, s₁ subseteq s₂ -> measureOf s₁ <= measureOf s₂
-    - iUnion_nat : 对任意 s : 自然数 -> 集合 α, 两两 (Disjoint on s) -> measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
+--- 原说明 ---
+An outer measure is a countably subadditive monotone function that sends `∅` to 
+`0`.
 -/
 structure OuterMeasure (α : Type*) where
   /-- Outer measure function. Use automatic coercion instead. -/
-  protected measureOf : Set α -> Real>=0∞
+  protected measureOf : Set α → ℝ≥0∞
   protected empty : measureOf ∅ = 0
-  protected mono : forall {s₁ s₂}, s₁ subseteq s₂ -> measureOf s₁ <= measureOf s₂
-  protected iUnion_nat : forall s : Nat -> Set α, Pairwise (Disjoint on s) ->
-    measureOf (⋃ i, s i) <= ∑' i, measureOf (s i)
+  protected mono : ∀ {s₁ s₂}, s₁ ⊆ s₂ → measureOf s₁ ≤ measureOf s₂
+  protected iUnion_nat : ∀ s : ℕ → Set α, Pairwise (Disjoint on s) →
+    measureOf (⋃ i, s i) ≤ ∑' i, measureOf (s i)
 
 attribute [gcongr] OuterMeasure.mono
 
-/--
-Definition of `OuterMeasureClass` / `OuterMeasureClass` 的定义
+/-- A mixin class saying that elements `μ : F` are outer measures on `α`.
 
-English:
-class OuterMeasureClass
-  parameters: (F : Type*) (α : outParam Type*) [FunLike F (Set α) Real>=0∞]
-  axioms and operations (3):
-    - measure_empty((f : F)) : f ∅ = 0
-    - measure_mono((f : F) {s t}) : s subseteq t -> f s <= f t
-    - measure_iUnion_nat_le((f : F) (s : Nat -> Set α)) : Pairwise (Disjoint on s) -> f (⋃ i, s i) <= ∑' i, f (s i)
+This typeclass is used to unify some API for outer measures and measures. -/
+/-
+**MeasureTheory.OuterMeasureClass** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：(F : Type u_2) → (α : outParam (Type u_3)) → [FunLike F (Set α) ENNReal] →
+ Prop
+参数：Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 外测度类
-  参数: (F : 类型) (α : outParam 类型) [函数状 F (集合 α) 实数>=0∞]
-  公理与运算 (3 个):
-    - measure_empty((f : F)) : f ∅ = 0
-    - measure_mono((f : F) {s t}) : s subseteq t -> f s <= f t
-    - measure_iUnion_nat_le((f : F) (s : 自然数 -> 集合 α)) : 两两 (Disjoint on s) -> f (⋃ i, s i) <= ∑' i, f (s i)
+--- 原说明 ---
+A mixin class saying that elements `μ : F` are outer measures on `α`.
+
+This typeclass is used to unify some API for outer measures and measures.
 -/
-class OuterMeasureClass (F : Type*) (α : outParam Type*) [FunLike F (Set α) Real>=0∞] : Prop where
+class OuterMeasureClass (F : Type*) (α : outParam Type*) [FunLike F (Set α) ℝ≥0∞] : Prop where
   protected measure_empty (f : F) : f ∅ = 0
-  protected measure_mono (f : F) {s t} : s subseteq t -> f s <= f t
-  protected measure_iUnion_nat_le (f : F) (s : Nat -> Set α) : Pairwise (Disjoint on s) ->
-    f (⋃ i, s i) <= ∑' i, f (s i)
+  protected measure_mono (f : F) {s t} : s ⊆ t → f s ≤ f t
+  protected measure_iUnion_nat_le (f : F) (s : ℕ → Set α) : Pairwise (Disjoint on s) →
+    f (⋃ i, s i) ≤ ∑' i, f (s i)
 
 attribute [gcongr] OuterMeasureClass.measure_mono
 
 namespace OuterMeasure
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (OuterMeasure α) (Set α) Real>=0∞
-  body: m.measureOf
-  coe_injective | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
-
-中文:
-实例 :
-  签名: 函数状 (外测度 α) (集合 α) 实数>=0∞
-  定义体: m.measureOf
-  coe_injective | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
-
-Depends on / 依赖: m.measureOf, measureOf
+/-
+**MeasureTheory.OuterMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.OuterMeas
+ure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (OuterMeasure α) (Set α) Real>=0∞ where
+instance : FunLike (OuterMeasure α) (Set α) ℝ≥0∞ where
   coe m := m.measureOf
   coe_injective | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
-
-/--
-theorem `measureOf_eq_coe` / 定理 `measureOf_eq_coe`
-
-English:
-theorem measureOf_eq_coe
-  given: (m : OuterMeasure α)
-  statement: m.measureOf = m
-  proof: rfl
-
-中文:
-定理 measureOf_eq_coe
-  条件: (m : 外测度 α)
-  结论: m.measureOf = m
-  证明: rfl
+/-
+**MeasureTheory.OuterMeasure.measureOf_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.OuterMeasure`。
+形式化陈述：∀ {α : Type u_1} (m : MeasureTheory.OuterMeasure α), m.measureOf = ⇑m
+参数：m : MeasureTheory.OuterMeasure α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem measureOf_eq_coe (m : OuterMeasure α) : m.measureOf = m := rfl
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (m : Set α -> Real>=0∞) (h₁ h₂ h₃)
-  statement: OuterMeasure.mk m h₁ h₂ h₃ = m
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (m : 集合 α -> 实数>=0∞) (h₁ h₂ h₃)
-  结论: 外测度.mk m h₁ h₂ h₃ = m
-  证明: rfl
+/-
+**MeasureTheory.OuterMeasure.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Out
+erMeasure`。
+形式化陈述：∀ {α : Type u_1} (m : Set α → ENNReal) (h₁ : m ∅ = 0) (h₂ : ∀ {s₁ s₂ : Set
+ α}, s₁ ⊆ s₂ → m s₁ ≤ m s₂)   (h₃ : ∀ (s : ℕ → Set α), Pairwise (Function.onFun 
+Disjoint s) → m (⋃ i, s i) ≤ ∑' (i : ℕ), m (s i)),   ⇑{ measureOf := m, empty :=
+ h₁, mono := h₂, iUnion_nat := h₃ } = m
+参数：m : Set α → ENNReal；h₁ : m ∅ = 0；h₂ : ∀ {s₁ s₂ : Set α}, s₁ ⊆ s₂ → m s₁ ≤ m s
+₂；h₃ : ∀ (s : ℕ → Set α), Pairwise (Function.onFun Disjoint s) → m (⋃ i, s i) ≤ 
+∑' (i : ℕ), m (s i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_mk (m : Set α -> Real>=0∞) (h₁ h₂ h₃) : OuterMeasure.mk m h₁ h₂ h₃ = m := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OuterMeasureClass (OuterMeasure α) α
-  body: f.empty
-  measure_mono f := f.mono
-  measure_iUnion_nat_le f := f.iUnion_nat
-
-中文:
-实例 :
-  签名: 外测度类 (外测度 α) α
-  定义体: f.empty
-  measure_mono f := f.mono
-  measure_iUnion_nat_le f := f.iUnion_nat
-
-Depends on / 依赖: f.empty
+@[simp] theorem coe_mk (m : Set α → ℝ≥0∞) (h₁ h₂ h₃) : OuterMeasure.mk m h₁ h₂ h₃ = m := rfl
+/-
+**MeasureTheory.OuterMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.OuterMeas
+ure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OuterMeasureClass (OuterMeasure α) α where
   measure_empty f := f.empty
@@ -188,3 +134,4 @@ instance : OuterMeasureClass (OuterMeasure α) α where
 end OuterMeasure
 
 end MeasureTheory
+

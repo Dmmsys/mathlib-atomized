@@ -20,62 +20,26 @@ open CategoryTheory CompHausLike
 
 universe u
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: lightProfiniteToLightCondSet.PreservesEpimorphisms
-  body: by
-    rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite]
-    intro S g
-    refine ⟨pullback f g, pullback.snd _ _, fun y => ?_, pullback.fst _ _, pullback.condition _ _⟩
-    rw [LightProfinite.epi_iff_surjective] at hf
-    obtain ⟨x, hx⟩ := hf (g.hom y)
-    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-中文:
-实例 :
-  签名: lightProfiniteToLightCondSet.保持Epimorphisms
-  定义体: by
-    rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite]
-    intro S g
-    refine ⟨pullback f g, pullback.snd _ _, fun y => ?_, pullback.fst _ _, pullback.condition _ _⟩
-    rw [LightProfinite.epi_iff_surjective] at hf
-    obtain ⟨x, hx⟩ := hf (g.hom y)
-    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-Depends on / 依赖: LightCondSet, LightCondSet.epi_iff_locallySurjective_on_lightProfinite, LightProfinite, LightProfinite.epi_iff_surjective, condition, epi_iff_locallySurjective_on_lightProfinite, epi_iff_surjective, g.hom, pullback, pullback.condition, pullback.fst, pullback.snd
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : lightProfiniteToLightCondSet.PreservesEpimorphisms where
   preserves f hf := by
     rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite]
     intro S g
-    refine ⟨pullback f g, pullback.snd _ _, fun y => ?_, pullback.fst _ _, pullback.condition _ _⟩
+    refine ⟨pullback f g, pullback.snd _ _, fun y ↦ ?_, pullback.fst _ _, pullback.condition _ _⟩
     rw [LightProfinite.epi_iff_surjective] at hf
     obtain ⟨x, hx⟩ := hf (g.hom y)
     exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRegularEpiCategory LightCondSet.{u}
-  body: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
-example : lightProfiniteToLightCondSet.PreservesEffectiveEpis := inferInstance
-
-中文:
-实例 :
-  签名: 是正则满态射范畴 LightCondSet.{u}
-  定义体: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
-example : lightProfiniteToLightCondSet.PreservesEffectiveEpis := inferInstance
-
-Depends on / 依赖: IsRegularEpiCategory
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsRegularEpiCategory LightCondSet.{u} :=
-inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
+  inferInstanceAs <| IsRegularEpiCategory (Sheaf _ _)
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : lightProfiniteToLightCondSet.PreservesEffectiveEpis := inferInstance

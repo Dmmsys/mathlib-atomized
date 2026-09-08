@@ -31,538 +31,432 @@ open ENNReal Filter NNReal Uniformity Pointwise Topology
 section SeminormedGroup
 
 variable [SeminormedGroup E] [SeminormedGroup F] [SeminormedGroup G] {s : Set E}
-  {a a₁ a₂ b c d : E} {r r₁ r₂ : Real}
+  {a a₁ a₂ b c d : E} {r r₁ r₂ : ℝ}
 
 @[to_additive]
-/--
-theorem `dist_eq_norm_inv_mul` / 定理 `dist_eq_norm_inv_mul`
-
-English:
-theorem dist_eq_norm_inv_mul
-  given: (a b : E)
-  statement: dist a b = ‖a⁻¹ * b‖
-  proof: SeminormedGroup.dist_eq _ _
-
-@[to_additive]
-
-中文:
-定理 dist_eq_norm_inv_mul
-  条件: (a b : E)
-  结论: dist a b = ‖a⁻¹ * b‖
-  证明: SeminormedGroup.dist_eq _ _
-
-@[to_additive]
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.dist_eq, dist_eq
+/-
+**dist_eq_norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ * b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
 theorem dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ * b‖ :=
   SeminormedGroup.dist_eq _ _
 
 @[to_additive]
-/--
-theorem `dist_eq_norm_inv_mul'` / 定理 `dist_eq_norm_inv_mul'`
-
-English:
-theorem dist_eq_norm_inv_mul'
-  given: (a b : E)
-  statement: dist a b = ‖b⁻¹ * a‖
-  proof: by
-  rw [dist_comm]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive of_forall_le_norm]
-
-中文:
-定理 dist_eq_norm_inv_mul'
-  条件: (a b : E)
-  结论: dist a b = ‖b⁻¹ * a‖
-  证明: by
-  rw [dist_comm]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive of_forall_le_norm]
-
-Depends on / 依赖: dist_comm, dist_eq_norm_inv_mul
+/-
+**dist_eq_norm_inv_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_eq_norm_inv_mul' (a b : E) : dist a b = ‖b⁻¹ * a‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
 -/
 theorem dist_eq_norm_inv_mul' (a b : E) : dist a b = ‖b⁻¹ * a‖ := by
-  rw [dist_comm]; rw [dist_eq_norm_inv_mul]
+  rw [dist_comm, dist_eq_norm_inv_mul]
 
 @[to_additive of_forall_le_norm]
-/--
-lemma `DiscreteTopology.of_forall_le_norm'` / 引理 `DiscreteTopology.of_forall_le_norm'`
-
-English:
-lemma DiscreteTopology.of_forall_le_norm'
-  given: (hpos : 0 < r) (hr : forall x : E, x != 1 -> r <= ‖x‖)
-  proof: .of_forall_le_dist hpos fun x y hne => by
-    simp only [dist_eq_norm_inv_mul]
-    exact hr _ (by simpa [inv_mul_eq_one] using hne)
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 离散拓扑.of_对任意_le_norm'
-  条件: (hpos : 0 < r) (hr : 对任意 x : E, x != 1 -> r <= ‖x‖)
-  证明: .of_forall_le_dist hpos fun x y hne => by
-    simp only [dist_eq_norm_inv_mul]
-    exact hr _ (by simpa [inv_mul_eq_one] using hne)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, inv_mul_eq_one, of_forall_le_dist
+/-
+**DiscreteTopology.of_forall_le_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：DiscreteTopology.of_forall_le_norm' (hpos : 0 < r) (hr : forall x : E, x !
+= 1 -> r <= ‖x‖) : DiscreteTopology E
+参数：hpos : 0 < r；hr : forall x : E, x != 1 -> r <= ‖x‖。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `DiscreteTopology.of_forall_le_dist`：DiscreteTopology.of_forall_le_dist {
+α} [PseudoMetricSpace α] {r : Real} (hpos : 0 < r) (hr : Pairwise (r <= dist · ·
+ : α -> α -> Prop)) : Di…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
 -/
-lemma DiscreteTopology.of_forall_le_norm' (hpos : 0 < r) (hr : forall x : E, x != 1 -> r <= ‖x‖) :
+lemma DiscreteTopology.of_forall_le_norm' (hpos : 0 < r) (hr : ∀ x : E, x ≠ 1 → r ≤ ‖x‖) :
     DiscreteTopology E :=
-  .of_forall_le_dist hpos fun x y hne => by
+  .of_forall_le_dist hpos fun x y hne ↦ by
     simp only [dist_eq_norm_inv_mul]
     exact hr _ (by simpa [inv_mul_eq_one] using hne)
 
 @[to_additive (attr := simp)]
-/--
-theorem `dist_one_right` / 定理 `dist_one_right`
-
-English:
-theorem dist_one_right
-  given: (a : E)
-  statement: dist a 1 = ‖a‖
-  proof: by rw [dist_eq_norm_inv_mul', inv_one, one_mul]
-
-@[to_additive]
-
-中文:
-定理 dist_one_right
-  条件: (a : E)
-  结论: dist a 1 = ‖a‖
-  证明: by rw [dist_eq_norm_inv_mul', inv_one, one_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, inv_one, one_mul
+/-
+**dist_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_one_right (a : E) : dist a 1 = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul'`：dist_eq_norm_inv_mul' (a b : E) : dist a b = ‖b⁻¹
+ * a‖
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem dist_one_right (a : E) : dist a 1 = ‖a‖ := by rw [dist_eq_norm_inv_mul', inv_one, one_mul]
 
 @[to_additive]
-/--
-theorem `inseparable_one_iff_norm` / 定理 `inseparable_one_iff_norm`
-
-English:
-theorem inseparable_one_iff_norm
-  given: {a : E}
-  statement: Inseparable a 1 ↔ ‖a‖ = 0
-  proof: by
-  rw [Metric.inseparable_iff]; rw [dist_one_right]
-
-@[to_additive]
-
-中文:
-定理 inseparable_one_iff_norm
-  条件: {a : E}
-  结论: 不可分 a 1 ↔ ‖a‖ = 0
-  证明: by
-  rw [Metric.inseparable_iff]; rw [dist_one_right]
-
-@[to_additive]
-
-Depends on / 依赖: Metric, Metric.inseparable_iff, dist_one_right, inseparable_iff
+/-
+**inseparable_one_iff_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inseparable_one_iff_norm {a : E} : Inseparable a 1 ↔ ‖a‖ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.inseparable_iff`：Metric.inseparable_iff {x y : α} : Inseparable x
+ y ↔ dist x y = 0
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem inseparable_one_iff_norm {a : E} : Inseparable a 1 ↔ ‖a‖ = 0 := by
-  rw [Metric.inseparable_iff]; rw [dist_one_right]
+  rw [Metric.inseparable_iff, dist_one_right]
 
 @[to_additive]
-/--
-lemma `dist_one_left` / 引理 `dist_one_left`
-
-English:
-lemma dist_one_left
-  given: (a : E)
-  statement: dist 1 a = ‖a‖
-  proof: by rw [dist_comm, dist_one_right]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 dist_one_left
-  条件: (a : E)
-  结论: dist 1 a = ‖a‖
-  证明: by rw [dist_comm, dist_one_right]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: dist_comm, dist_one_right
+/-
+**dist_one_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：dist_one_left (a : E) : dist 1 a = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
 -/
 lemma dist_one_left (a : E) : dist 1 a = ‖a‖ := by rw [dist_comm, dist_one_right]
 
 @[to_additive (attr := simp)]
-/--
-lemma `dist_one` / 引理 `dist_one`
-
-English:
-lemma dist_one
-  statement: dist (1 : E) = norm
-  proof: funext dist_one_left
-
-@[to_additive]
-
-中文:
-引理 dist_one
-  结论: dist (1 : E) = norm
-  证明: funext dist_one_left
-
-@[to_additive]
-
-Depends on / 依赖: dist_one_left
+/-
+**dist_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：dist_one : dist (1 : E) = norm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `dist_one_left`：dist_one_left (a : E) : dist 1 a = ‖a‖
 -/
 lemma dist_one : dist (1 : E) = norm := funext dist_one_left
 
 @[to_additive]
-/--
-theorem `norm_div_rev` / 定理 `norm_div_rev`
-
-English:
-theorem norm_div_rev
-  given: (a b : E)
-  statement: ‖a / b‖ = ‖b / a‖
-  proof: by
-  rw [← dist_one]; rw [dist_eq_norm_inv_mul]; rw [dist_eq_norm_inv_mul']
-  simp
-
-@[to_additive (attr := simp) norm_neg]
-
-中文:
-定理 norm_div_rev
-  条件: (a b : E)
-  结论: ‖a / b‖ = ‖b / a‖
-  证明: by
-  rw [← dist_one]; rw [dist_eq_norm_inv_mul]; rw [dist_eq_norm_inv_mul']
-  simp
-
-@[to_additive (attr := simp) norm_neg]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, dist_one
+/-
+**norm_div_rev** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_rev (a b : E) : ‖a / b‖ = ‖b / a‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `dist_one`：dist_one : dist (1 : E) = norm
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `dist_eq_norm_inv_mul'`：dist_eq_norm_inv_mul' (a b : E) : dist a b = ‖b⁻¹
+ * a‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_div_rev (a b : E) : ‖a / b‖ = ‖b / a‖ := by
-  rw [← dist_one]; rw [dist_eq_norm_inv_mul]; rw [dist_eq_norm_inv_mul']
+  rw [← dist_one, dist_eq_norm_inv_mul, dist_eq_norm_inv_mul']
   simp
 
 @[to_additive (attr := simp) norm_neg]
-/--
-theorem `norm_inv'` / 定理 `norm_inv'`
-
-English:
-theorem norm_inv'
-  given: (a : E)
-  statement: ‖a⁻¹‖ = ‖a‖
-  proof: by simpa using norm_div_rev 1 a
-
-@[to_additive (attr := simp) norm_abs_zsmul]
-
-中文:
-定理 norm_inv'
-  条件: (a : E)
-  结论: ‖a⁻¹‖ = ‖a‖
-  证明: by simpa using norm_div_rev 1 a
-
-@[to_additive (attr := simp) norm_abs_zsmul]
-
-Depends on / 依赖: norm_div_rev
+/-
+**norm_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `norm_div_rev`：norm_div_rev (a b : E) : ‖a / b‖ = ‖b / a‖
 -/
 theorem norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖ := by simpa using norm_div_rev 1 a
 
 @[to_additive (attr := simp) norm_abs_zsmul]
-/--
-theorem `norm_zpow_abs` / 定理 `norm_zpow_abs`
-
-English:
-theorem norm_zpow_abs
-  given: (a : E) (n : Int)
-  statement: ‖a ^ |n|‖ = ‖a ^ n‖
-  proof: by
+/-
+**norm_zpow_abs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖ = ‖a ^ n‖
+参数：a : E；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `abs_of_nonpos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], a ≤ 0 → |a| = -a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+-/
+theorem norm_zpow_abs (a : E) (n : ℤ) : ‖a ^ |n|‖ = ‖a ^ n‖ := by
   rcases le_total 0 n with hn | hn <;> simp [hn, abs_of_nonneg, abs_of_nonpos]
 
 @[to_additive (attr := simp) norm_natAbs_smul]
-
-中文:
-定理 norm_zpow_abs
-  条件: (a : E) (n : 整数)
-  结论: ‖a ^ |n|‖ = ‖a ^ n‖
-  证明: by
-  rcases le_total 0 n with hn | hn <;> simp [hn, abs_of_nonneg, abs_of_nonpos]
-
-@[to_additive (attr := simp) norm_natAbs_smul]
-
-Depends on / 依赖: abs_of_nonneg, abs_of_nonpos, le_total
+/-
+**norm_pow_natAbs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖ = ‖a ^ n‖
+参数：a : E；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Int.abs_eq_natAbs`：∀ (a : ℤ), |a| = ↑a.natAbs
+· 使用定理 `norm_zpow_abs`：norm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖ = ‖a ^ n‖
 -/
-theorem norm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖ = ‖a ^ n‖ := by
-  rcases le_total 0 n with hn | hn <;> simp [hn, abs_of_nonneg, abs_of_nonpos]
-
-@[to_additive (attr := simp) norm_natAbs_smul]
-/--
-theorem `norm_pow_natAbs` / 定理 `norm_pow_natAbs`
-
-English:
-theorem norm_pow_natAbs
-  given: (a : E) (n : Int)
-  statement: ‖a ^ n.natAbs‖ = ‖a ^ n‖
-  proof: by
-  rw [← zpow_natCast]; rw [← Int.abs_eq_natAbs]; rw [norm_zpow_abs]
+theorem norm_pow_natAbs (a : E) (n : ℤ) : ‖a ^ n.natAbs‖ = ‖a ^ n‖ := by
+  rw [← zpow_natCast, ← Int.abs_eq_natAbs, norm_zpow_abs]
 
 @[to_additive norm_isUnit_zsmul]
-
-中文:
-定理 norm_pow_natAbs
-  条件: (a : E) (n : 整数)
-  结论: ‖a ^ n.natAbs‖ = ‖a ^ n‖
-  证明: by
-  rw [← zpow_natCast]; rw [← Int.abs_eq_natAbs]; rw [norm_zpow_abs]
-
-@[to_additive norm_isUnit_zsmul]
-
-Depends on / 依赖: Int.abs_eq_natAbs, abs_eq_natAbs, norm_zpow_abs, zpow_natCast
+/-
+**norm_zpow_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_zpow_isUnit (a : E) {n : Int} (hn : IsUnit n) : ‖a ^ n‖ = ‖a‖
+参数：a : E；hn : IsUnit n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_pow_natAbs`：norm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖ = ‖a
+ ^ n‖
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Int.isUnit_iff_natAbs_eq`：isUnit_iff_natAbs_eq : IsUnit u ↔ u.natAbs = 1
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
-theorem norm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖ = ‖a ^ n‖ := by
-  rw [← zpow_natCast]; rw [← Int.abs_eq_natAbs]; rw [norm_zpow_abs]
-
-@[to_additive norm_isUnit_zsmul]
-/--
-theorem `norm_zpow_isUnit` / 定理 `norm_zpow_isUnit`
-
-English:
-theorem norm_zpow_isUnit
-  given: (a : E) {n : Int} (hn : IsUnit n)
-  statement: ‖a ^ n‖ = ‖a‖
-  proof: by
-  rw [← norm_pow_natAbs]; rw [Int.isUnit_iff_natAbs_eq.mp hn]; rw [pow_one]
+theorem norm_zpow_isUnit (a : E) {n : ℤ} (hn : IsUnit n) : ‖a ^ n‖ = ‖a‖ := by
+  rw [← norm_pow_natAbs, Int.isUnit_iff_natAbs_eq.mp hn, pow_one]
 
 @[simp]
-
-中文:
-定理 norm_zpow_isUnit
-  条件: (a : E) {n : 整数} (hn : 是单位 n)
-  结论: ‖a ^ n‖ = ‖a‖
-  证明: by
-  rw [← norm_pow_natAbs]; rw [Int.isUnit_iff_natAbs_eq.mp hn]; rw [pow_one]
-
-@[simp]
-
-Depends on / 依赖: Int.isUnit_iff_natAbs_eq.mp, isUnit_iff_natAbs_eq, norm_pow_natAbs, pow_one
+/-
+**norm_units_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E) : ‖
+n • a‖ = ‖a‖
+参数：n : Intˣ；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_isUnit_zsmul`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E
+) {n : ℤ}, IsUnit n → ‖n • a‖ = ‖a‖
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-theorem norm_zpow_isUnit (a : E) {n : Int} (hn : IsUnit n) : ‖a ^ n‖ = ‖a‖ := by
-  rw [← norm_pow_natAbs]; rw [Int.isUnit_iff_natAbs_eq.mp hn]; rw [pow_one]
-
-@[simp]
-/--
-theorem `norm_units_zsmul` / 定理 `norm_units_zsmul`
-
-English:
-theorem norm_units_zsmul
-  given: {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E)
-  statement: ‖n • a‖ = ‖a‖
-  proof: norm_isUnit_zsmul a n.isUnit
-
-中文:
-定理 norm_units_zsmul
-  条件: {E : 类型} [半赋范加群 E] (n : 整数ˣ) (a : E)
-  结论: ‖n • a‖ = ‖a‖
-  证明: norm_isUnit_zsmul a n.isUnit
-
-Depends on / 依赖: isUnit, n.isUnit, norm_isUnit_zsmul
--/
-theorem norm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E) : ‖n • a‖ = ‖a‖ :=
+theorem norm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : ℤˣ) (a : E) : ‖n • a‖ = ‖a‖ :=
   norm_isUnit_zsmul a n.isUnit
 
 open scoped symmDiff in
 @[to_additive]
-/--
-theorem `dist_mulIndicator` / 定理 `dist_mulIndicator`
-
-English:
-theorem dist_mulIndicator
-  given: (s t : Set α) (f : α -> E) (x : α)
-  proof: by
-  rw [dist_eq_norm_inv_mul]; rw [Set.apply_mulIndicator_symmDiff norm_inv']
-  simp only [Set.mulIndicator, mul_ite, mul_one]
-  split_ifs <;> simp
-
-中文:
-定理 dist_mulIndicator
-  条件: (s t : 集合 α) (f : α -> E) (x : α)
-  证明: by
-  rw [dist_eq_norm_inv_mul]; rw [Set.apply_mulIndicator_symmDiff norm_inv']
-  simp only [Set.mulIndicator, mul_ite, mul_one]
-  split_ifs <;> simp
-
-Depends on / 依赖: Set.apply_mulIndicator_symmDiff, Set.mulIndicator, apply_mulIndicator_symmDiff, dist_eq_norm_inv_mul, mulIndicator, mul_ite, mul_one, norm_inv, split_ifs
+/-
+**dist_mulIndicator** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_mulIndicator (s t : Set α) (f : α -> E) (x : α) : dist (s.mulIndicato
+r f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖
+参数：s t : Set α；f : α -> E；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Set.apply_mulIndicator_symmDiff`：apply_mulIndicator_symmDiff {g : G -> β
+} (hg : forall x, g x⁻¹ = g x) (s t : Set α) (f : α -> G) (x : α) : g (mulIndica
+tor (s ∆ t) f x) = g …
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `div_self'`：div_self' (a : G) : a / a = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
 -/
-theorem dist_mulIndicator (s t : Set α) (f : α -> E) (x : α) :
+theorem dist_mulIndicator (s t : Set α) (f : α → E) (x : α) :
     dist (s.mulIndicator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖ := by
-  rw [dist_eq_norm_inv_mul]; rw [Set.apply_mulIndicator_symmDiff norm_inv']
+  rw [dist_eq_norm_inv_mul, Set.apply_mulIndicator_symmDiff norm_inv']
   simp only [Set.mulIndicator, mul_ite, mul_one]
   split_ifs <;> simp
 
 /-- **Triangle inequality** for the norm. -/
 @[to_additive norm_add_le /-- **Triangle inequality** for the norm. -/]
-/--
-theorem `norm_mul_le'` / 定理 `norm_mul_le'`
+/-
+**norm_mul_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `dist_triangle`：dist_triangle (x y z : α) : dist x z <= dist x y + dist y
+ z
 
-English:
-theorem norm_mul_le'
-  given: (a b : E)
-  statement: ‖a * b‖ <= ‖a‖ + ‖b‖
-  proof: by
-  simpa [dist_eq_norm_inv_mul] using dist_triangle a⁻¹ 1 b
-
-中文:
-定理 norm_mul_le'
-  条件: (a b : E)
-  结论: ‖a * b‖ <= ‖a‖ + ‖b‖
-  证明: by
-  simpa [dist_eq_norm_inv_mul] using dist_triangle a⁻¹ 1 b
-
-Depends on / 依赖: dist_eq_norm_inv_mul, dist_triangle
+--- 原说明 ---
+**Triangle inequality** for the norm.
 -/
-theorem norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖ := by
+theorem norm_mul_le' (a b : E) : ‖a * b‖ ≤ ‖a‖ + ‖b‖ := by
   simpa [dist_eq_norm_inv_mul] using dist_triangle a⁻¹ 1 b
 
 /-- **Triangle inequality** for the norm. -/
 @[to_additive norm_add_le_of_le /-- **Triangle inequality** for the norm. -/]
-/--
-theorem `norm_mul_le_of_le'` / 定理 `norm_mul_le_of_le'`
+/-
+**norm_mul_le_of_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_mul_le_of_le' (h₁ : ‖a₁‖ <= r₁) (h₂ : ‖a₂‖ <= r₂) : ‖a₁ * a₂‖ <= r₁ +
+ r₂
+参数：h₁ : ‖a₁‖ <= r₁；h₂ : ‖a₂‖ <= r₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 
-English:
-theorem norm_mul_le_of_le'
-  given: (h₁ : ‖a₁‖ <= r₁) (h₂ : ‖a₂‖ <= r₂)
-  statement: ‖a₁ * a₂‖ <= r₁ + r₂
-  proof: (norm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
-
-中文:
-定理 norm_mul_le_of_le'
-  条件: (h₁ : ‖a₁‖ <= r₁) (h₂ : ‖a₂‖ <= r₂)
-  结论: ‖a₁ * a₂‖ <= r₁ + r₂
-  证明: (norm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
-
-Depends on / 依赖: add_le_add, norm_mul_le
+--- 原说明 ---
+**Triangle inequality** for the norm.
 -/
-theorem norm_mul_le_of_le' (h₁ : ‖a₁‖ <= r₁) (h₂ : ‖a₂‖ <= r₂) : ‖a₁ * a₂‖ <= r₁ + r₂ :=
-(norm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
+theorem norm_mul_le_of_le' (h₁ : ‖a₁‖ ≤ r₁) (h₂ : ‖a₂‖ ≤ r₂) : ‖a₁ * a₂‖ ≤ r₁ + r₂ :=
+  (norm_mul_le' a₁ a₂).trans <| add_le_add h₁ h₂
 
 /-- **Triangle inequality** for the norm. -/
 @[to_additive norm_add₃_le /-- **Triangle inequality** for the norm. -/]
-/--
-lemma `norm_mul₃_le'` / 引理 `norm_mul₃_le'`
+/-
+**norm_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClass α] (a b : 
+α), ‖a * b‖ = ‖a‖ * ‖b‖
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormMulClass.norm_mul`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : Mul α}
+ [self : NormMulClass α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
 
-English:
-lemma norm_mul₃_le'
-  statement: ‖a * b * c‖ <= ‖a‖ + ‖b‖ + ‖c‖
-  proof: norm_mul_le_of_le' (norm_mul_le' _ _) le_rfl
-
-中文:
-引理 norm_mul₃_le'
-  结论: ‖a * b * c‖ <= ‖a‖ + ‖b‖ + ‖c‖
-  证明: norm_mul_le_of_le' (norm_mul_le' _ _) le_rfl
-
-Depends on / 依赖: le_rfl, norm_mul_le, norm_mul_le_of_le
+--- 原说明 ---
+**Triangle inequality** for the norm.
 -/
-lemma norm_mul₃_le' : ‖a * b * c‖ <= ‖a‖ + ‖b‖ + ‖c‖ := norm_mul_le_of_le' (norm_mul_le' _ _) le_rfl
+lemma norm_mul₃_le' : ‖a * b * c‖ ≤ ‖a‖ + ‖b‖ + ‖c‖ := norm_mul_le_of_le' (norm_mul_le' _ _) le_rfl
 
 /-- **Triangle inequality** for the norm. -/
 @[to_additive norm_add₄_le /-- **Triangle inequality** for the norm. -/]
-/--
-lemma `norm_mul₄_le'` / 引理 `norm_mul₄_le'`
+/-
+**norm_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClass α] (a b : 
+α), ‖a * b‖ = ‖a‖ * ‖b‖
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormMulClass.norm_mul`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : Mul α}
+ [self : NormMulClass α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
 
-English:
-lemma norm_mul₄_le'
-  statement: ‖a * b * c * d‖ <= ‖a‖ + ‖b‖ + ‖c‖ + ‖d‖
-  proof: norm_mul_le_of_le' norm_mul₃_le' le_rfl
-
-@[to_additive]
-
-中文:
-引理 norm_mul₄_le'
-  结论: ‖a * b * c * d‖ <= ‖a‖ + ‖b‖ + ‖c‖ + ‖d‖
-  证明: norm_mul_le_of_le' norm_mul₃_le' le_rfl
-
-@[to_additive]
-
-Depends on / 依赖: le_rfl, norm_mul_le_of_le
+--- 原说明 ---
+**Triangle inequality** for the norm.
 -/
-lemma norm_mul₄_le' : ‖a * b * c * d‖ <= ‖a‖ + ‖b‖ + ‖c‖ + ‖d‖ :=
+lemma norm_mul₄_le' : ‖a * b * c * d‖ ≤ ‖a‖ + ‖b‖ + ‖c‖ + ‖d‖ :=
   norm_mul_le_of_le' norm_mul₃_le' le_rfl
 
 @[to_additive]
-/--
-lemma `norm_div_le_norm_div_add_norm_div` / 引理 `norm_div_le_norm_div_add_norm_div`
-
-English:
-lemma norm_div_le_norm_div_add_norm_div
-  given: (a b c : E)
-  statement: ‖a / c‖ <= ‖a / b‖ + ‖b / c‖
-  proof: by
+/-
+**norm_div_le_norm_div_add_norm_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_div_le_norm_div_add_norm_div (a b c : E) : ‖a / c‖ <= ‖a / b‖ + ‖b / 
+c‖
+参数：a b c : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_mul_div_cancel`：div_mul_div_cancel (a b c : G) : a / b * (b / c) = a
+ / c
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+-/
+lemma norm_div_le_norm_div_add_norm_div (a b c : E) : ‖a / c‖ ≤ ‖a / b‖ + ‖b / c‖ := by
   simpa using norm_mul_le' (a / b) (b / c)
 
 @[to_additive]
-
-中文:
-引理 norm_div_le_norm_div_add_norm_div
-  条件: (a b c : E)
-  结论: ‖a / c‖ <= ‖a / b‖ + ‖b / c‖
-  证明: by
-  simpa using norm_mul_le' (a / b) (b / c)
-
-@[to_additive]
-
-Depends on / 依赖: norm_mul_le
+/-
+**norm_le_norm_div_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_le_norm_div_add (a b : E) : ‖a‖ <= ‖a / b‖ + ‖b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用引理 `norm_div_le_norm_div_add_norm_div`：norm_div_le_norm_div_add_norm_div (a 
+b c : E) : ‖a / c‖ <= ‖a / b‖ + ‖b / c‖
 -/
-lemma norm_div_le_norm_div_add_norm_div (a b c : E) : ‖a / c‖ <= ‖a / b‖ + ‖b / c‖ := by
-  simpa using norm_mul_le' (a / b) (b / c)
-
-@[to_additive]
-/--
-lemma `norm_le_norm_div_add` / 引理 `norm_le_norm_div_add`
-
-English:
-lemma norm_le_norm_div_add
-  given: (a b : E)
-  statement: ‖a‖ <= ‖a / b‖ + ‖b‖
-  proof: by
+lemma norm_le_norm_div_add (a b : E) : ‖a‖ ≤ ‖a / b‖ + ‖b‖ := by
   simpa only [div_one] using norm_div_le_norm_div_add_norm_div a b 1
 
 @[to_additive (attr := simp) norm_nonneg]
-
-中文:
-引理 norm_le_norm_div_add
-  条件: (a b : E)
-  结论: ‖a‖ <= ‖a / b‖ + ‖b‖
-  证明: by
-  simpa only [div_one] using norm_div_le_norm_div_add_norm_div a b 1
-
-@[to_additive (attr := simp) norm_nonneg]
-
-Depends on / 依赖: div_one, norm_div_le_norm_div_add_norm_div
+/-
+**norm_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_nonneg' (a : E) : 0 <= ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
 -/
-lemma norm_le_norm_div_add (a b : E) : ‖a‖ <= ‖a / b‖ + ‖b‖ := by
-  simpa only [div_one] using norm_div_le_norm_div_add_norm_div a b 1
-
-@[to_additive (attr := simp) norm_nonneg]
-/--
-theorem `norm_nonneg'` / 定理 `norm_nonneg'`
-
-English:
-theorem norm_nonneg'
-  given: (a : E)
-  statement: 0 <= ‖a‖
-  proof: by
-  rw [← dist_one_right]
-  exact dist_nonneg
-
-中文:
-定理 norm_nonneg'
-  条件: (a : E)
-  结论: 0 <= ‖a‖
-  证明: by
-  rw [← dist_one_right]
-  exact dist_nonneg
-
-Depends on / 依赖: dist_nonneg, dist_one_right
--/
-theorem norm_nonneg' (a : E) : 0 <= ‖a‖ := by
+theorem norm_nonneg' (a : E) : 0 ≤ ‖a‖ := by
   rw [← dist_one_right]
   exact dist_nonneg
 
@@ -570,388 +464,302 @@ attribute [bound] norm_nonneg
 attribute [grind .] norm_nonneg
 
 @[to_additive (attr := simp) abs_norm]
-/--
-theorem `abs_norm'` / 定理 `abs_norm'`
-
-English:
-theorem abs_norm'
-  given: (z : E)
-  statement: |‖z‖| = ‖z‖
-  proof: abs_of_nonneg norm_nonneg' _
-
-@[to_additive (attr := simp) norm_zero]
-
-中文:
-定理 abs_norm'
-  条件: (z : E)
-  结论: |‖z‖| = ‖z‖
-  证明: abs_of_nonneg norm_nonneg' _
-
-@[to_additive (attr := simp) norm_zero]
-
-Depends on / 依赖: abs_of_nonneg, norm_nonneg
+/-
+**abs_norm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abs_norm' (z : E) : |‖z‖| = ‖z‖
+参数：z : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
-theorem abs_norm' (z : E) : |‖z‖| = ‖z‖ := abs_of_nonneg norm_nonneg' _
+theorem abs_norm' (z : E) : |‖z‖| = ‖z‖ := abs_of_nonneg <| norm_nonneg' _
 
 @[to_additive (attr := simp) norm_zero]
-/--
-theorem `norm_one'` / 定理 `norm_one'`
-
-English:
-theorem norm_one'
-  statement: ‖(1 : E)‖ = 0
-  proof: by rw [← dist_one_right, dist_self]
-
-@[to_additive]
-
-中文:
-定理 norm_one'
-  结论: ‖(1 : E)‖ = 0
-  证明: by rw [← dist_one_right, dist_self]
-
-@[to_additive]
-
-Depends on / 依赖: dist_one_right, dist_self
+/-
+**norm_one'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_one' : ‖(1 : E)‖ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
 -/
 theorem norm_one' : ‖(1 : E)‖ = 0 := by rw [← dist_one_right, dist_self]
 
 @[to_additive]
-/--
-theorem `ne_one_of_norm_ne_zero` / 定理 `ne_one_of_norm_ne_zero`
-
-English:
-theorem ne_one_of_norm_ne_zero
-  statement: ‖a‖ != 0 -> a != 1
-  proof: mt by
-    rintro rfl
-    exact norm_one'
-
-@[to_additive (attr := nontriviality) norm_of_subsingleton]
-
-中文:
-定理 ne_one_of_norm_ne_zero
-  结论: ‖a‖ != 0 -> a != 1
-  证明: mt by
-    rintro rfl
-    exact norm_one'
-
-@[to_additive (attr := nontriviality) norm_of_subsingleton]
-
-Depends on / 依赖: norm_one
+/-
+**ne_one_of_norm_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ne_one_of_norm_ne_zero : ‖a‖ != 0 -> a != 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ne_one_of_norm_ne_zero : ‖a‖ != 0 -> a != 1 :=
-mt by
+theorem ne_one_of_norm_ne_zero : ‖a‖ ≠ 0 → a ≠ 1 :=
+  mt <| by
     rintro rfl
     exact norm_one'
 
 @[to_additive (attr := nontriviality) norm_of_subsingleton]
-/--
-theorem `norm_of_subsingleton'` / 定理 `norm_of_subsingleton'`
-
-English:
-theorem norm_of_subsingleton'
-  given: [Subsingleton E] (a : E)
-  statement: ‖a‖ = 0
-  proof: by
-  rw [Subsingleton.elim a 1]; rw [norm_one']
-
-@[to_additive zero_lt_one_add_norm_sq]
-
-中文:
-定理 norm_of_subsingleton'
-  条件: [子单例 E] (a : E)
-  结论: ‖a‖ = 0
-  证明: by
-  rw [Subsingleton.elim a 1]; rw [norm_one']
-
-@[to_additive zero_lt_one_add_norm_sq]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, norm_one
+/-
+**norm_of_subsingleton'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_of_subsingleton' [Subsingleton E] (a : E) : ‖a‖ = 0
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
 -/
 theorem norm_of_subsingleton' [Subsingleton E] (a : E) : ‖a‖ = 0 := by
-  rw [Subsingleton.elim a 1]; rw [norm_one']
+  rw [Subsingleton.elim a 1, norm_one']
 
 @[to_additive zero_lt_one_add_norm_sq]
-/--
-theorem `zero_lt_one_add_norm_sq'` / 定理 `zero_lt_one_add_norm_sq'`
-
-English:
-theorem zero_lt_one_add_norm_sq'
-  given: (x : E)
-  statement: 0 < 1 + ‖x‖ ^ 2
-  proof: by
-  positivity
-
-@[to_additive]
-
-中文:
-定理 zero_lt_one_add_norm_sq'
-  条件: (x : E)
-  结论: 0 < 1 + ‖x‖ ^ 2
-  证明: by
-  positivity
-
-@[to_additive]
+/-
+**zero_lt_one_add_norm_sq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：zero_lt_one_add_norm_sq' (x : E) : 0 < 1 + ‖x‖ ^ 2
+参数：x : E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_pos_of_pos_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst
+_1 : Preorder α] [AddLeftMono α] {a b : α}, 0 < a → 0 ≤ b → 0 < a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Even.pow_nonneg`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : LinearOr
+der R] [IsOrderedRing R] [ExistsAddOfLE R] {n : ℕ},   Even n → ∀ (a : R), 0 ≤ a 
+^ n
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `even_two_mul`：even_two_mul (a : α) : Even (2 * a)
 -/
 theorem zero_lt_one_add_norm_sq' (x : E) : 0 < 1 + ‖x‖ ^ 2 := by
   positivity
 
 @[to_additive]
-/--
-theorem `norm_div_le` / 定理 `norm_div_le`
-
-English:
-theorem norm_div_le
-  given: (a b : E)
-  statement: ‖a / b‖ <= ‖a‖ + ‖b‖
-  proof: by
-  simpa [div_eq_mul_inv] using norm_mul_le' a b⁻¹
-
-中文:
-定理 norm_div_le
-  条件: (a b : E)
-  结论: ‖a / b‖ <= ‖a‖ + ‖b‖
-  证明: by
-  simpa [div_eq_mul_inv] using norm_mul_le' a b⁻¹
-
-Depends on / 依赖: div_eq_mul_inv, norm_mul_le
+/-
+**norm_div_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_le (a b : E) : ‖a / b‖ <= ‖a‖ + ‖b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_div_le (a b : E) : ‖a / b‖ <= ‖a‖ + ‖b‖ := by
+theorem norm_div_le (a b : E) : ‖a / b‖ ≤ ‖a‖ + ‖b‖ := by
   simpa [div_eq_mul_inv] using norm_mul_le' a b⁻¹
 
 attribute [bound] norm_sub_le
 
 @[to_additive]
-/--
-theorem `norm_div_le_of_le` / 定理 `norm_div_le_of_le`
-
-English:
-theorem norm_div_le_of_le
-  given: {r₁ r₂ : Real} (H₁ : ‖a₁‖ <= r₁) (H₂ : ‖a₂‖ <= r₂)
-  statement: ‖a₁ / a₂‖ <= r₁ + r₂
-  proof: (norm_div_le a₁ a₂).trans add_le_add H₁ H₂
-
-@[to_additive dist_le_norm_add_norm]
-
-中文:
-定理 norm_div_le_of_le
-  条件: {r₁ r₂ : 实数} (H₁ : ‖a₁‖ <= r₁) (H₂ : ‖a₂‖ <= r₂)
-  结论: ‖a₁ / a₂‖ <= r₁ + r₂
-  证明: (norm_div_le a₁ a₂).trans add_le_add H₁ H₂
-
-@[to_additive dist_le_norm_add_norm]
-
-Depends on / 依赖: add_le_add, norm_div_le
+/-
+**norm_div_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_le_of_le {r₁ r₂ : Real} (H₁ : ‖a₁‖ <= r₁) (H₂ : ‖a₂‖ <= r₂) : ‖a₁
+ / a₂‖ <= r₁ + r₂
+参数：H₁ : ‖a₁‖ <= r₁；H₂ : ‖a₂‖ <= r₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_div_le`：norm_div_le (a b : E) : ‖a / b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
-theorem norm_div_le_of_le {r₁ r₂ : Real} (H₁ : ‖a₁‖ <= r₁) (H₂ : ‖a₂‖ <= r₂) : ‖a₁ / a₂‖ <= r₁ + r₂ :=
-(norm_div_le a₁ a₂).trans add_le_add H₁ H₂
+theorem norm_div_le_of_le {r₁ r₂ : ℝ} (H₁ : ‖a₁‖ ≤ r₁) (H₂ : ‖a₂‖ ≤ r₂) : ‖a₁ / a₂‖ ≤ r₁ + r₂ :=
+  (norm_div_le a₁ a₂).trans <| add_le_add H₁ H₂
 
 @[to_additive dist_le_norm_add_norm]
-/--
-theorem `dist_le_norm_add_norm'` / 定理 `dist_le_norm_add_norm'`
-
-English:
-theorem dist_le_norm_add_norm'
-  given: (a b : E)
-  statement: dist a b <= ‖a‖ + ‖b‖
-  proof: by
+/-
+**dist_le_norm_add_norm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_le_norm_add_norm' (a b : E) : dist a b <= ‖a‖ + ‖b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+-/
+theorem dist_le_norm_add_norm' (a b : E) : dist a b ≤ ‖a‖ + ‖b‖ := by
   simpa [dist_eq_norm_inv_mul] using norm_mul_le' a⁻¹ b
 
 @[to_additive]
-
-中文:
-定理 dist_le_norm_add_norm'
-  条件: (a b : E)
-  结论: dist a b <= ‖a‖ + ‖b‖
-  证明: by
-  simpa [dist_eq_norm_inv_mul] using norm_mul_le' a⁻¹ b
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, norm_mul_le
+/-
+**abs_norm_sub_norm_le_norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abs_norm_sub_norm_le_norm_inv_mul (a b : E) : |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `abs_dist_sub_le`：abs_dist_sub_le (x y z : α) : |dist x z - dist y z| <= 
+dist x y
 -/
-theorem dist_le_norm_add_norm' (a b : E) : dist a b <= ‖a‖ + ‖b‖ := by
-  simpa [dist_eq_norm_inv_mul] using norm_mul_le' a⁻¹ b
-
-@[to_additive]
-/--
-theorem `abs_norm_sub_norm_le_norm_inv_mul` / 定理 `abs_norm_sub_norm_le_norm_inv_mul`
-
-English:
-theorem abs_norm_sub_norm_le_norm_inv_mul
-  given: (a b : E)
-  statement: |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
-  proof: by
+theorem abs_norm_sub_norm_le_norm_inv_mul (a b : E) : |‖a‖ - ‖b‖| ≤ ‖a⁻¹ * b‖ := by
   simpa [dist_eq_norm_inv_mul] using abs_dist_sub_le a b 1
 
 @[to_additive]
-
-中文:
-定理 abs_norm_sub_norm_le_norm_inv_mul
-  条件: (a b : E)
-  结论: |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
-  证明: by
-  simpa [dist_eq_norm_inv_mul] using abs_dist_sub_le a b 1
-
-@[to_additive]
-
-Depends on / 依赖: abs_dist_sub_le, dist_eq_norm_inv_mul
+/-
+**norm_sub_norm_le_norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_sub_norm_le_norm_inv_mul (a b : E) : ‖a‖ - ‖b‖ <= ‖a⁻¹ * b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_abs_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (
+a : α), a ≤ |a|
+· 使用定理 `abs_norm_sub_norm_le_norm_inv_mul`：abs_norm_sub_norm_le_norm_inv_mul (a 
+b : E) : |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
 -/
-theorem abs_norm_sub_norm_le_norm_inv_mul (a b : E) : |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖ := by
-  simpa [dist_eq_norm_inv_mul] using abs_dist_sub_le a b 1
-
-@[to_additive]
-/--
-theorem `norm_sub_norm_le_norm_inv_mul` / 定理 `norm_sub_norm_le_norm_inv_mul`
-
-English:
-theorem norm_sub_norm_le_norm_inv_mul
-  given: (a b : E)
-  statement: ‖a‖ - ‖b‖ <= ‖a⁻¹ * b‖
-  proof: (le_abs_self _).trans (abs_norm_sub_norm_le_norm_inv_mul a b)
-
-@[to_additive (attr := bound)]
-
-中文:
-定理 norm_sub_norm_le_norm_inv_mul
-  条件: (a b : E)
-  结论: ‖a‖ - ‖b‖ <= ‖a⁻¹ * b‖
-  证明: (le_abs_self _).trans (abs_norm_sub_norm_le_norm_inv_mul a b)
-
-@[to_additive (attr := bound)]
-
-Depends on / 依赖: abs_norm_sub_norm_le_norm_inv_mul, le_abs_self
--/
-theorem norm_sub_norm_le_norm_inv_mul (a b : E) : ‖a‖ - ‖b‖ <= ‖a⁻¹ * b‖ :=
+theorem norm_sub_norm_le_norm_inv_mul (a b : E) : ‖a‖ - ‖b‖ ≤ ‖a⁻¹ * b‖ :=
   (le_abs_self _).trans (abs_norm_sub_norm_le_norm_inv_mul a b)
 
 @[to_additive (attr := bound)]
-/--
-theorem `norm_sub_le_norm_mul` / 定理 `norm_sub_le_norm_mul`
-
-English:
-theorem norm_sub_le_norm_mul
-  given: (a b : E)
-  statement: ‖a‖ - ‖b‖ <= ‖a * b‖
-  proof: by
-  simpa using norm_mul_le' (a * b) (b⁻¹)
-
-@[to_additive]
-
-中文:
-定理 norm_sub_le_norm_mul
-  条件: (a b : E)
-  结论: ‖a‖ - ‖b‖ <= ‖a * b‖
-  证明: by
-  simpa using norm_mul_le' (a * b) (b⁻¹)
-
-@[to_additive]
-
-Depends on / 依赖: norm_mul_le
+/-
+**norm_sub_le_norm_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_sub_le_norm_mul (a b : E) : ‖a‖ - ‖b‖ <= ‖a * b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_inv_cancel_right`：mul_inv_cancel_right (a b : G) : a * b * b⁻¹ = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_sub_le_norm_mul (a b : E) : ‖a‖ - ‖b‖ <= ‖a * b‖ := by
+theorem norm_sub_le_norm_mul (a b : E) : ‖a‖ - ‖b‖ ≤ ‖a * b‖ := by
   simpa using norm_mul_le' (a * b) (b⁻¹)
 
 @[to_additive]
-/--
-theorem `dist_norm_norm_le_norm_inv_mul` / 定理 `dist_norm_norm_le_norm_inv_mul`
-
-English:
-theorem dist_norm_norm_le_norm_inv_mul
-  given: (a b : E)
-  statement: dist ‖a‖ ‖b‖ <= ‖a⁻¹ * b‖
-  proof: abs_norm_sub_norm_le_norm_inv_mul a b
-
-@[to_additive]
-
-中文:
-定理 dist_norm_norm_le_norm_inv_mul
-  条件: (a b : E)
-  结论: dist ‖a‖ ‖b‖ <= ‖a⁻¹ * b‖
-  证明: abs_norm_sub_norm_le_norm_inv_mul a b
-
-@[to_additive]
-
-Depends on / 依赖: abs_norm_sub_norm_le_norm_inv_mul
+/-
+**dist_norm_norm_le_norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_norm_norm_le_norm_inv_mul (a b : E) : dist ‖a‖ ‖b‖ <= ‖a⁻¹ * b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_norm_sub_norm_le_norm_inv_mul`：abs_norm_sub_norm_le_norm_inv_mul (a 
+b : E) : |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
 -/
-theorem dist_norm_norm_le_norm_inv_mul (a b : E) : dist ‖a‖ ‖b‖ <= ‖a⁻¹ * b‖ :=
+theorem dist_norm_norm_le_norm_inv_mul (a b : E) : dist ‖a‖ ‖b‖ ≤ ‖a⁻¹ * b‖ :=
   abs_norm_sub_norm_le_norm_inv_mul a b
 
 @[to_additive]
-/--
-theorem `norm_le_norm_add_norm_div'` / 定理 `norm_le_norm_add_norm_div'`
-
-English:
-theorem norm_le_norm_add_norm_div'
-  given: (u v : E)
-  statement: ‖u‖ <= ‖v‖ + ‖u / v‖
-  proof: by
-  rw [add_comm]
-  refine (norm_mul_le' _ _).trans_eq' ?_
-  rw [div_mul_cancel]
-
-@[to_additive]
-
-中文:
-定理 norm_le_norm_add_norm_div'
-  条件: (u v : E)
-  结论: ‖u‖ <= ‖v‖ + ‖u / v‖
-  证明: by
-  rw [add_comm]
-  refine (norm_mul_le' _ _).trans_eq' ?_
-  rw [div_mul_cancel]
-
-@[to_additive]
-
-Depends on / 依赖: add_comm, div_mul_cancel, norm_mul_le, trans_eq
+/-
+**norm_le_norm_add_norm_div'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_norm_add_norm_div' (u v : E) : ‖u‖ <= ‖v‖ + ‖u / v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `LE.le.trans_eq'`：∀ {α : Type u_1} {a b c : α} [inst : LE α], b ≤ a → b =
+ c → c ≤ a
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `div_mul_cancel`：div_mul_cancel (a b : G) : a / b * b = a
 -/
-theorem norm_le_norm_add_norm_div' (u v : E) : ‖u‖ <= ‖v‖ + ‖u / v‖ := by
+theorem norm_le_norm_add_norm_div' (u v : E) : ‖u‖ ≤ ‖v‖ + ‖u / v‖ := by
   rw [add_comm]
   refine (norm_mul_le' _ _).trans_eq' ?_
   rw [div_mul_cancel]
 
 @[to_additive]
-/--
-theorem `norm_le_norm_add_norm_inv_mul` / 定理 `norm_le_norm_add_norm_inv_mul`
-
-English:
-theorem norm_le_norm_add_norm_inv_mul
-  given: (u v : E)
-  statement: ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖
-  proof: by
-  rw [add_comm]; rw [← norm_inv' v]; rw [← norm_inv' u]
-  refine (norm_mul_le' _ _).trans_eq' ?_
-  group
-
-@[to_additive]
-
-中文:
-定理 norm_le_norm_add_norm_inv_mul
-  条件: (u v : E)
-  结论: ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖
-  证明: by
-  rw [add_comm]; rw [← norm_inv' v]; rw [← norm_inv' u]
-  refine (norm_mul_le' _ _).trans_eq' ?_
-  group
-
-@[to_additive]
-
-Depends on / 依赖: add_comm, norm_inv, norm_mul_le, trans_eq
+/-
+**norm_le_norm_add_norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_norm_add_norm_inv_mul (u v : E) : ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `LE.le.trans_eq'`：∀ {α : Type u_1} {a b c : α} [inst : LE α], b ≤ a → b =
+ c → c ≤ a
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Tactic.Group._zpow_trick_one`：_zpow_trick_one {G : Type*} [Group
+ G] (a b : G) (m : Int) : a * b * b ^ m = a * b ^ (m + 1)
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_le_norm_add_norm_inv_mul (u v : E) : ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖ := by
-  rw [add_comm]; rw [← norm_inv' v]; rw [← norm_inv' u]
+theorem norm_le_norm_add_norm_inv_mul (u v : E) : ‖u‖ ≤ ‖v‖ + ‖u⁻¹ * v‖ := by
+  rw [add_comm, ← norm_inv' v, ← norm_inv' u]
   refine (norm_mul_le' _ _).trans_eq' ?_
   group
 
 @[to_additive]
-/--
-theorem `norm_le_norm_add_norm_div` / 定理 `norm_le_norm_add_norm_div`
-
-English:
-theorem norm_le_norm_add_norm_div
-  given: (u v : E)
-  statement: ‖v‖ <= ‖u‖ + ‖u / v‖
-  proof: by
+/-
+**norm_le_norm_add_norm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_norm_add_norm_div (u v : E) : ‖v‖ <= ‖u‖ + ‖u / v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_div_rev`：norm_div_rev (a b : E) : ‖a / b‖ = ‖b / a‖
+· 使用定理 `norm_le_norm_add_norm_div'`：norm_le_norm_add_norm_div' (u v : E) : ‖u‖ <
+= ‖v‖ + ‖u / v‖
+-/
+theorem norm_le_norm_add_norm_div (u v : E) : ‖v‖ ≤ ‖u‖ + ‖u / v‖ := by
   rw [norm_div_rev]
   exact norm_le_norm_add_norm_div' v u
 
@@ -959,118 +767,68 @@ alias norm_le_insert' := norm_le_norm_add_norm_sub'
 alias norm_le_insert := norm_le_norm_add_norm_sub
 
 @[to_additive]
-
-中文:
-定理 norm_le_norm_add_norm_div
-  条件: (u v : E)
-  结论: ‖v‖ <= ‖u‖ + ‖u / v‖
-  证明: by
-  rw [norm_div_rev]
-  exact norm_le_norm_add_norm_div' v u
-
-alias norm_le_insert' := norm_le_norm_add_norm_sub'
-alias norm_le_insert := norm_le_norm_add_norm_sub
-
-@[to_additive]
-
-Depends on / 依赖: norm_div_rev, norm_le_norm_add_norm_div
+/-
+**norm_le_mul_norm_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_mul_norm_add (u v : E) : ‖u‖ <= ‖u * v‖ + ‖v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_div_cancel_right`：mul_div_cancel_right (a b : G) : a * b / b = a
+· 使用定理 `norm_div_le`：norm_div_le (a b : E) : ‖a / b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_le_norm_add_norm_div (u v : E) : ‖v‖ <= ‖u‖ + ‖u / v‖ := by
-  rw [norm_div_rev]
-  exact norm_le_norm_add_norm_div' v u
-
-alias norm_le_insert' := norm_le_norm_add_norm_sub'
-alias norm_le_insert := norm_le_norm_add_norm_sub
-
-@[to_additive]
-/--
-theorem `norm_le_mul_norm_add` / 定理 `norm_le_mul_norm_add`
-
-English:
-theorem norm_le_mul_norm_add
-  given: (u v : E)
-  statement: ‖u‖ <= ‖u * v‖ + ‖v‖
-  proof: calc
-    ‖u‖ = ‖u * v / v‖ := by rw [mul_div_cancel_right]
-    _ <= ‖u * v‖ + ‖v‖ := norm_div_le _ _
-
-中文:
-定理 norm_le_mul_norm_add
-  条件: (u v : E)
-  结论: ‖u‖ <= ‖u * v‖ + ‖v‖
-  证明: calc
-    ‖u‖ = ‖u * v / v‖ := by rw [mul_div_cancel_right]
-    _ <= ‖u * v‖ + ‖v‖ := norm_div_le _ _
-
-Depends on / 依赖: mul_div_cancel_right, norm_div_le
--/
-theorem norm_le_mul_norm_add (u v : E) : ‖u‖ <= ‖u * v‖ + ‖v‖ :=
+theorem norm_le_mul_norm_add (u v : E) : ‖u‖ ≤ ‖u * v‖ + ‖v‖ :=
   calc
     ‖u‖ = ‖u * v / v‖ := by rw [mul_div_cancel_right]
-    _ <= ‖u * v‖ + ‖v‖ := norm_div_le _ _
+    _ ≤ ‖u * v‖ + ‖v‖ := norm_div_le _ _
 
 /-- An analogue of `norm_le_mul_norm_add` for the multiplication from the left. -/
 @[to_additive /-- An analogue of `norm_le_add_norm_add` for the addition from the left. -/]
-/--
-theorem `norm_le_mul_norm_add'` / 定理 `norm_le_mul_norm_add'`
+/-
+**norm_le_mul_norm_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_mul_norm_add' (u v : E) : ‖v‖ <= ‖u * v‖ + ‖u‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-English:
-theorem norm_le_mul_norm_add'
-  given: (u v : E)
-  statement: ‖v‖ <= ‖u * v‖ + ‖u‖
-  proof: calc
-    ‖v‖ = ‖u⁻¹ * (u * v)‖ := by rw [← mul_assoc, inv_mul_cancel, one_mul]
-    _ <= ‖u⁻¹‖ + ‖u * v‖ := norm_mul_le' u⁻¹ (u * v)
-    _ = ‖u * v‖ + ‖u‖ := by rw [norm_inv', add_comm]
-
-@[to_additive]
-
-中文:
-定理 norm_le_mul_norm_add'
-  条件: (u v : E)
-  结论: ‖v‖ <= ‖u * v‖ + ‖u‖
-  证明: calc
-    ‖v‖ = ‖u⁻¹ * (u * v)‖ := by rw [← mul_assoc, inv_mul_cancel, one_mul]
-    _ <= ‖u⁻¹‖ + ‖u * v‖ := norm_mul_le' u⁻¹ (u * v)
-    _ = ‖u * v‖ + ‖u‖ := by rw [norm_inv', add_comm]
-
-@[to_additive]
-
-Depends on / 依赖: add_comm, inv_mul_cancel, mul_assoc, norm_inv, norm_mul_le, one_mul
+--- 原说明 ---
+An analogue of `norm_le_mul_norm_add` for the multiplication from the left.
 -/
-theorem norm_le_mul_norm_add' (u v : E) : ‖v‖ <= ‖u * v‖ + ‖u‖ :=
+theorem norm_le_mul_norm_add' (u v : E) : ‖v‖ ≤ ‖u * v‖ + ‖u‖ :=
   calc
     ‖v‖ = ‖u⁻¹ * (u * v)‖ := by rw [← mul_assoc, inv_mul_cancel, one_mul]
-    _ <= ‖u⁻¹‖ + ‖u * v‖ := norm_mul_le' u⁻¹ (u * v)
+    _ ≤ ‖u⁻¹‖ + ‖u * v‖ := norm_mul_le' u⁻¹ (u * v)
     _ = ‖u * v‖ + ‖u‖ := by rw [norm_inv', add_comm]
 
 @[to_additive]
-/--
-lemma `norm_mul_eq_norm_right` / 引理 `norm_mul_eq_norm_right`
-
-English:
-lemma norm_mul_eq_norm_right
-  given: {x : E} (y : E) (h : ‖x‖ = 0)
-  statement: ‖x * y‖ = ‖y‖
-  proof: by
-  apply le_antisymm ?_ ?_
-  · simpa [h] using norm_mul_le' x y
-  · simpa [h] using norm_le_mul_norm_add' x y
-
-@[to_additive]
-
-中文:
-引理 norm_mul_eq_norm_right
-  条件: {x : E} (y : E) (h : ‖x‖ = 0)
-  结论: ‖x * y‖ = ‖y‖
-  证明: by
-  apply le_antisymm ?_ ?_
-  · simpa [h] using norm_mul_le' x y
-  · simpa [h] using norm_le_mul_norm_add' x y
-
-@[to_additive]
-
-Depends on / 依赖: le_antisymm, norm_le_mul_norm_add, norm_mul_le
+/-
+**norm_mul_eq_norm_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_mul_eq_norm_right {x : E} (y : E) (h : ‖x‖ = 0) : ‖x * y‖ = ‖y‖
+参数：y : E；h : ‖x‖ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `norm_le_mul_norm_add'`：norm_le_mul_norm_add' (u v : E) : ‖v‖ <= ‖u * v‖ 
++ ‖u‖
 -/
 lemma norm_mul_eq_norm_right {x : E} (y : E) (h : ‖x‖ = 0) : ‖x * y‖ = ‖y‖ := by
   apply le_antisymm ?_ ?_
@@ -1078,32 +836,20 @@ lemma norm_mul_eq_norm_right {x : E} (y : E) (h : ‖x‖ = 0) : ‖x * y‖ = �
   · simpa [h] using norm_le_mul_norm_add' x y
 
 @[to_additive]
-/--
-lemma `norm_mul_eq_norm_left` / 引理 `norm_mul_eq_norm_left`
-
-English:
-lemma norm_mul_eq_norm_left
-  given: (x : E) {y : E} (h : ‖y‖ = 0)
-  statement: ‖x * y‖ = ‖x‖
-  proof: by
-  apply le_antisymm ?_ ?_
-  · simpa [h] using norm_mul_le' x y
-  · simpa [h] using norm_le_mul_norm_add x y
-
-@[to_additive]
-
-中文:
-引理 norm_mul_eq_norm_left
-  条件: (x : E) {y : E} (h : ‖y‖ = 0)
-  结论: ‖x * y‖ = ‖x‖
-  证明: by
-  apply le_antisymm ?_ ?_
-  · simpa [h] using norm_mul_le' x y
-  · simpa [h] using norm_le_mul_norm_add x y
-
-@[to_additive]
-
-Depends on / 依赖: le_antisymm, norm_le_mul_norm_add, norm_mul_le
+/-
+**norm_mul_eq_norm_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_mul_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 0) : ‖x * y‖ = ‖x‖
+参数：x : E；h : ‖y‖ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `norm_le_mul_norm_add`：norm_le_mul_norm_add (u v : E) : ‖u‖ <= ‖u * v‖ + 
+‖v‖
 -/
 lemma norm_mul_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 0) : ‖x * y‖ = ‖x‖ := by
   apply le_antisymm ?_ ?_
@@ -1111,575 +857,459 @@ lemma norm_mul_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 0) : ‖x * y‖ = �
   · simpa [h] using norm_le_mul_norm_add x y
 
 @[to_additive]
-/--
-lemma `norm_div_eq_norm_right` / 引理 `norm_div_eq_norm_right`
-
-English:
-lemma norm_div_eq_norm_right
-  given: {x : E} (y : E) (h : ‖x‖ = 0)
-  statement: ‖x / y‖ = ‖y‖
-  proof: by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_right _ h]; rw [norm_inv']
-
-@[to_additive]
-
-中文:
-引理 norm_div_eq_norm_right
-  条件: {x : E} (y : E) (h : ‖x‖ = 0)
-  结论: ‖x / y‖ = ‖y‖
-  证明: by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_right _ h]; rw [norm_inv']
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, norm_inv, norm_mul_eq_norm_right
+/-
+**norm_div_eq_norm_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_div_eq_norm_right {x : E} (y : E) (h : ‖x‖ = 0) : ‖x / y‖ = ‖y‖
+参数：y : E；h : ‖x‖ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `norm_mul_eq_norm_right`：norm_mul_eq_norm_right {x : E} (y : E) (h : ‖x‖ 
+= 0) : ‖x * y‖ = ‖y‖
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
 -/
 lemma norm_div_eq_norm_right {x : E} (y : E) (h : ‖x‖ = 0) : ‖x / y‖ = ‖y‖ := by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_right _ h]; rw [norm_inv']
+  rw [div_eq_mul_inv, norm_mul_eq_norm_right _ h, norm_inv']
 
 @[to_additive]
-/--
-lemma `norm_div_eq_norm_left` / 引理 `norm_div_eq_norm_left`
-
-English:
-lemma norm_div_eq_norm_left
-  given: (x : E) {y : E} (h : ‖y‖ = 0)
-  statement: ‖x / y‖ = ‖x‖
-  proof: by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_left]
-  rwa [norm_inv']
-
-@[to_additive]
-
-中文:
-引理 norm_div_eq_norm_left
-  条件: (x : E) {y : E} (h : ‖y‖ = 0)
-  结论: ‖x / y‖ = ‖x‖
-  证明: by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_left]
-  rwa [norm_inv']
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, norm_inv, norm_mul_eq_norm_left
+/-
+**norm_div_eq_norm_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_div_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 0) : ‖x / y‖ = ‖x‖
+参数：x : E；h : ‖y‖ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `norm_mul_eq_norm_left`：norm_mul_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 
+0) : ‖x * y‖ = ‖x‖
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
 -/
 lemma norm_div_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 0) : ‖x / y‖ = ‖x‖ := by
-  rw [div_eq_mul_inv]; rw [norm_mul_eq_norm_left]
+  rw [div_eq_mul_inv, norm_mul_eq_norm_left]
   rwa [norm_inv']
 
 @[to_additive]
-/--
-theorem `ball_eq_norm_inv_mul_lt` / 定理 `ball_eq_norm_inv_mul_lt`
-
-English:
-theorem ball_eq_norm_inv_mul_lt
-  given: (y : E) (ε : Real)
-  statement: ball y ε = { x | ‖x⁻¹ * y‖ < ε }
-  proof: Set.ext fun a => by simp [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 ball_eq_norm_inv_mul_lt
-  条件: (y : E) (ε : 实数)
-  结论: ball y ε = { x | ‖x⁻¹ * y‖ < ε }
-  证明: Set.ext fun a => by simp [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext, dist_eq_norm_inv_mul
+/-
+**ball_eq_norm_inv_mul_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ball_eq_norm_inv_mul_lt (y : E) (ε : Real) : ball y ε = { x | ‖x⁻¹ * y‖ < 
+ε }
+参数：y : E；ε : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ball_eq_norm_inv_mul_lt (y : E) (ε : Real) : ball y ε = { x | ‖x⁻¹ * y‖ < ε } :=
+theorem ball_eq_norm_inv_mul_lt (y : E) (ε : ℝ) : ball y ε = { x | ‖x⁻¹ * y‖ < ε } :=
   Set.ext fun a => by simp [dist_eq_norm_inv_mul]
 
 @[to_additive]
-/--
-theorem `ball_one_eq` / 定理 `ball_one_eq`
-
-English:
-theorem ball_one_eq
-  given: (r : Real)
-  statement: ball (1 : E) r = { x | ‖x‖ < r }
-  proof: Set.ext fun a => by simp
-
-@[to_additive]
-
-中文:
-定理 ball_one_eq
-  条件: (r : 实数)
-  结论: ball (1 : E) r = { x | ‖x‖ < r }
-  证明: Set.ext fun a => by simp
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext
+/-
+**ball_one_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ball_one_eq (r : Real) : ball (1 : E) r = { x | ‖x‖ < r }
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ball_one_eq (r : Real) : ball (1 : E) r = { x | ‖x‖ < r } :=
+theorem ball_one_eq (r : ℝ) : ball (1 : E) r = { x | ‖x‖ < r } :=
   Set.ext fun a => by simp
 
 @[to_additive]
-/--
-theorem `mem_ball_iff_norm_inv_mul_lt` / 定理 `mem_ball_iff_norm_inv_mul_lt`
-
-English:
-theorem mem_ball_iff_norm_inv_mul_lt
-  statement: b in ball a r ↔ ‖b⁻¹ * a‖ < r
-  proof: by
-  rw [mem_ball]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 mem_ball_iff_norm_inv_mul_lt
-  结论: b in ball a r ↔ ‖b⁻¹ * a‖ < r
-  证明: by
-  rw [mem_ball]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_ball
+/-
+**mem_ball_iff_norm_inv_mul_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_ball_iff_norm_inv_mul_lt : b in ball a r ↔ ‖b⁻¹ * a‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_ball`：mem_ball : y in ball x ε ↔ dist y x < ε
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ball_iff_norm_inv_mul_lt : b in ball a r ↔ ‖b⁻¹ * a‖ < r := by
-  rw [mem_ball]; rw [dist_eq_norm_inv_mul]
+theorem mem_ball_iff_norm_inv_mul_lt : b ∈ ball a r ↔ ‖b⁻¹ * a‖ < r := by
+  rw [mem_ball, dist_eq_norm_inv_mul]
 
 @[to_additive]
-/--
-theorem `mem_ball_iff_norm_inv_mul_lt'` / 定理 `mem_ball_iff_norm_inv_mul_lt'`
-
-English:
-theorem mem_ball_iff_norm_inv_mul_lt'
-  statement: b in ball a r ↔ ‖a⁻¹ * b‖ < r
-  proof: by
-  rw [mem_ball']; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 mem_ball_iff_norm_inv_mul_lt'
-  结论: b in ball a r ↔ ‖a⁻¹ * b‖ < r
-  证明: by
-  rw [mem_ball']; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_ball
+/-
+**mem_ball_iff_norm_inv_mul_lt'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_ball_iff_norm_inv_mul_lt' : b in ball a r ↔ ‖a⁻¹ * b‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_ball'`：mem_ball' : y in ball x ε ↔ dist x y < ε
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ball_iff_norm_inv_mul_lt' : b in ball a r ↔ ‖a⁻¹ * b‖ < r := by
-  rw [mem_ball']; rw [dist_eq_norm_inv_mul]
+theorem mem_ball_iff_norm_inv_mul_lt' : b ∈ ball a r ↔ ‖a⁻¹ * b‖ < r := by
+  rw [mem_ball', dist_eq_norm_inv_mul]
 
 @[to_additive]
-/--
-theorem `mem_ball_one_iff` / 定理 `mem_ball_one_iff`
-
-English:
-theorem mem_ball_one_iff
-  statement: a in ball (1 : E) r ↔ ‖a‖ < r
-  proof: by rw [mem_ball, dist_one_right]
-
-@[to_additive]
-
-中文:
-定理 mem_ball_one_iff
-  结论: a in ball (1 : E) r ↔ ‖a‖ < r
-  证明: by rw [mem_ball, dist_one_right]
-
-@[to_additive]
-
-Depends on / 依赖: dist_one_right, mem_ball
+/-
+**mem_ball_one_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_ball_one_iff : a in ball (1 : E) r ↔ ‖a‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_ball`：mem_ball : y in ball x ε ↔ dist y x < ε
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ball_one_iff : a in ball (1 : E) r ↔ ‖a‖ < r := by rw [mem_ball, dist_one_right]
+theorem mem_ball_one_iff : a ∈ ball (1 : E) r ↔ ‖a‖ < r := by rw [mem_ball, dist_one_right]
 
 @[to_additive]
-/--
-theorem `mem_closedBall_iff_norm_inv_mul_le` / 定理 `mem_closedBall_iff_norm_inv_mul_le`
-
-English:
-theorem mem_closedBall_iff_norm_inv_mul_le
-  statement: b in closedBall a r ↔ ‖b⁻¹ * a‖ <= r
-  proof: by
-  rw [mem_closedBall]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 mem_closedBall_iff_norm_inv_mul_le
-  结论: b in closedBall a r ↔ ‖b⁻¹ * a‖ <= r
-  证明: by
-  rw [mem_closedBall]; rw [dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_closedBall
+/-
+**mem_closedBall_iff_norm_inv_mul_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closedBall_iff_norm_inv_mul_le : b in closedBall a r ↔ ‖b⁻¹ * a‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closedBall_iff_norm_inv_mul_le : b in closedBall a r ↔ ‖b⁻¹ * a‖ <= r := by
-  rw [mem_closedBall]; rw [dist_eq_norm_inv_mul]
+theorem mem_closedBall_iff_norm_inv_mul_le : b ∈ closedBall a r ↔ ‖b⁻¹ * a‖ ≤ r := by
+  rw [mem_closedBall, dist_eq_norm_inv_mul]
 
 @[to_additive]
-/--
-theorem `mem_closedBall_one_iff` / 定理 `mem_closedBall_one_iff`
-
-English:
-theorem mem_closedBall_one_iff
-  statement: a in closedBall (1 : E) r ↔ ‖a‖ <= r
-  proof: by
-  rw [mem_closedBall]; rw [dist_one_right]
-
-@[to_additive]
-
-中文:
-定理 mem_closedBall_one_iff
-  结论: a in closedBall (1 : E) r ↔ ‖a‖ <= r
-  证明: by
-  rw [mem_closedBall]; rw [dist_one_right]
-
-@[to_additive]
-
-Depends on / 依赖: dist_one_right, mem_closedBall
+/-
+**mem_closedBall_one_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closedBall_one_iff : a in closedBall (1 : E) r ↔ ‖a‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closedBall_one_iff : a in closedBall (1 : E) r ↔ ‖a‖ <= r := by
-  rw [mem_closedBall]; rw [dist_one_right]
+theorem mem_closedBall_one_iff : a ∈ closedBall (1 : E) r ↔ ‖a‖ ≤ r := by
+  rw [mem_closedBall, dist_one_right]
 
 @[to_additive]
-/--
-theorem `mem_closedBall_iff_norm_inv_mul_le'` / 定理 `mem_closedBall_iff_norm_inv_mul_le'`
-
-English:
-theorem mem_closedBall_iff_norm_inv_mul_le'
-  statement: b in closedBall a r ↔ ‖a⁻¹ * b‖ <= r
-  proof: by
-  rw [mem_closedBall']; rw [dist_eq_norm_inv_mul]
+/-
+**mem_closedBall_iff_norm_inv_mul_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closedBall_iff_norm_inv_mul_le' : b in closedBall a r ↔ ‖a⁻¹ * b‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall'`：mem_closedBall' : y in closedBall x ε ↔ dist x y
+ <= ε
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem mem_closedBall_iff_norm_inv_mul_le' : b ∈ closedBall a r ↔ ‖a⁻¹ * b‖ ≤ r := by
+  rw [mem_closedBall', dist_eq_norm_inv_mul]
 
 @[to_additive norm_le_of_mem_closedBall]
-
-中文:
-定理 mem_closedBall_iff_norm_inv_mul_le'
-  结论: b in closedBall a r ↔ ‖a⁻¹ * b‖ <= r
-  证明: by
-  rw [mem_closedBall']; rw [dist_eq_norm_inv_mul]
-
-@[to_additive norm_le_of_mem_closedBall]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_closedBall
+/-
+**norm_le_of_mem_closedBall'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_of_mem_closedBall' (h : b in closedBall a r) : ‖b‖ <= ‖a‖ + r
+参数：h : b in closedBall a r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_le_norm_add_norm_inv_mul`：norm_le_norm_add_norm_inv_mul (u v : E) :
+ ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_closedBall_iff_norm_inv_mul_le`：mem_closedBall_iff_norm_inv_mul_le :
+ b in closedBall a r ↔ ‖b⁻¹ * a‖ <= r
 -/
-theorem mem_closedBall_iff_norm_inv_mul_le' : b in closedBall a r ↔ ‖a⁻¹ * b‖ <= r := by
-  rw [mem_closedBall']; rw [dist_eq_norm_inv_mul]
-
-@[to_additive norm_le_of_mem_closedBall]
-/--
-theorem `norm_le_of_mem_closedBall'` / 定理 `norm_le_of_mem_closedBall'`
-
-English:
-theorem norm_le_of_mem_closedBall'
-  given: (h : b in closedBall a r)
-  statement: ‖b‖ <= ‖a‖ + r
-  proof: (norm_le_norm_add_norm_inv_mul b a).trans (by simp [mem_closedBall_iff_norm_inv_mul_le.1 h])
-
-@[to_additive norm_le_norm_add_const_of_dist_le]
-
-中文:
-定理 norm_le_of_mem_closedBall'
-  条件: (h : b in closedBall a r)
-  结论: ‖b‖ <= ‖a‖ + r
-  证明: (norm_le_norm_add_norm_inv_mul b a).trans (by simp [mem_closedBall_iff_norm_inv_mul_le.1 h])
-
-@[to_additive norm_le_norm_add_const_of_dist_le]
-
-Depends on / 依赖: mem_closedBall_iff_norm_inv_mul_le, norm_le_norm_add_norm_inv_mul
--/
-theorem norm_le_of_mem_closedBall' (h : b in closedBall a r) : ‖b‖ <= ‖a‖ + r :=
+theorem norm_le_of_mem_closedBall' (h : b ∈ closedBall a r) : ‖b‖ ≤ ‖a‖ + r :=
   (norm_le_norm_add_norm_inv_mul b a).trans (by simp [mem_closedBall_iff_norm_inv_mul_le.1 h])
 
 @[to_additive norm_le_norm_add_const_of_dist_le]
-/--
-theorem `norm_le_norm_add_const_of_dist_le'` / 定理 `norm_le_norm_add_const_of_dist_le'`
-
-English:
-theorem norm_le_norm_add_const_of_dist_le'
-  statement: dist a b <= r -> ‖a‖ <= ‖b‖ + r
-  proof: norm_le_of_mem_closedBall'
-
-@[to_additive norm_lt_of_mem_ball]
-
-中文:
-定理 norm_le_norm_add_const_of_dist_le'
-  结论: dist a b <= r -> ‖a‖ <= ‖b‖ + r
-  证明: norm_le_of_mem_closedBall'
-
-@[to_additive norm_lt_of_mem_ball]
-
-Depends on / 依赖: norm_le_of_mem_closedBall
+/-
+**norm_le_norm_add_const_of_dist_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_le_norm_add_const_of_dist_le' : dist a b <= r -> ‖a‖ <= ‖b‖ + r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_le_of_mem_closedBall'`：norm_le_of_mem_closedBall' (h : b in closedB
+all a r) : ‖b‖ <= ‖a‖ + r
 -/
-theorem norm_le_norm_add_const_of_dist_le' : dist a b <= r -> ‖a‖ <= ‖b‖ + r :=
+theorem norm_le_norm_add_const_of_dist_le' : dist a b ≤ r → ‖a‖ ≤ ‖b‖ + r :=
   norm_le_of_mem_closedBall'
 
 @[to_additive norm_lt_of_mem_ball]
-/--
-theorem `norm_lt_of_mem_ball'` / 定理 `norm_lt_of_mem_ball'`
-
-English:
-theorem norm_lt_of_mem_ball'
-  given: (h : b in ball a r)
-  statement: ‖b‖ < ‖a‖ + r
-  proof: (norm_le_norm_add_norm_inv_mul b a).trans_lt (by simp [mem_ball_iff_norm_inv_mul_lt.1 h])
-
-@[to_additive]
-
-中文:
-定理 norm_lt_of_mem_ball'
-  条件: (h : b in ball a r)
-  结论: ‖b‖ < ‖a‖ + r
-  证明: (norm_le_norm_add_norm_inv_mul b a).trans_lt (by simp [mem_ball_iff_norm_inv_mul_lt.1 h])
-
-@[to_additive]
-
-Depends on / 依赖: mem_ball_iff_norm_inv_mul_lt, norm_le_norm_add_norm_inv_mul, trans_lt
+/-
+**norm_lt_of_mem_ball'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_lt_of_mem_ball' (h : b in ball a r) : ‖b‖ < ‖a‖ + r
+参数：h : b in ball a r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `norm_le_norm_add_norm_inv_mul`：norm_le_norm_add_norm_inv_mul (u v : E) :
+ ‖u‖ <= ‖v‖ + ‖u⁻¹ * v‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_ball_iff_norm_inv_mul_lt`：mem_ball_iff_norm_inv_mul_lt : b in ball a
+ r ↔ ‖b⁻¹ * a‖ < r
 -/
-theorem norm_lt_of_mem_ball' (h : b in ball a r) : ‖b‖ < ‖a‖ + r :=
+theorem norm_lt_of_mem_ball' (h : b ∈ ball a r) : ‖b‖ < ‖a‖ + r :=
   (norm_le_norm_add_norm_inv_mul b a).trans_lt (by simp [mem_ball_iff_norm_inv_mul_lt.1 h])
 
 @[to_additive]
-/--
-theorem `norm_div_sub_norm_div_le_norm_div` / 定理 `norm_div_sub_norm_div_le_norm_div`
-
-English:
-theorem norm_div_sub_norm_div_le_norm_div
-  given: (u v w : E)
-  statement: ‖u / w‖ - ‖v / w‖ <= ‖u / v‖
-  proof: by
-  simpa using norm_mul_le' (u / v) (v / w)
-
-@[to_additive norm_add_sub_norm_sub_le_two_mul]
-
-中文:
-定理 norm_div_sub_norm_div_le_norm_div
-  条件: (u v w : E)
-  结论: ‖u / w‖ - ‖v / w‖ <= ‖u / v‖
-  证明: by
-  simpa using norm_mul_le' (u / v) (v / w)
-
-@[to_additive norm_add_sub_norm_sub_le_two_mul]
-
-Depends on / 依赖: norm_mul_le
+/-
+**norm_div_sub_norm_div_le_norm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_sub_norm_div_le_norm_div (u v w : E) : ‖u / w‖ - ‖v / w‖ <= ‖u / 
+v‖
+参数：u v w : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_mul_div_cancel`：div_mul_div_cancel (a b c : G) : a / b * (b / c) = a
+ / c
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_div_sub_norm_div_le_norm_div (u v w : E) : ‖u / w‖ - ‖v / w‖ <= ‖u / v‖ := by
+theorem norm_div_sub_norm_div_le_norm_div (u v w : E) : ‖u / w‖ - ‖v / w‖ ≤ ‖u / v‖ := by
   simpa using norm_mul_le' (u / v) (v / w)
 
 @[to_additive norm_add_sub_norm_sub_le_two_mul]
-/--
-lemma `norm_mul_sub_norm_div_le_two_mul` / 引理 `norm_mul_sub_norm_div_le_two_mul`
-
-English:
-lemma norm_mul_sub_norm_div_le_two_mul
-  given: {E : Type*} [SeminormedGroup E] (u v : E)
-  proof: by
-  simpa [-tsub_le_iff_right, tsub_le_iff_left, two_mul, add_assoc]
-    using norm_mul₃_le' (a := (u / v)) (b := v) (c := v)
-
-@[to_additive norm_add_sub_norm_sub_le_two_mul_min]
-
-中文:
-引理 norm_mul_sub_norm_div_le_two_mul
-  条件: {E : 类型} [半赋范群 E] (u v : E)
-  证明: by
-  simpa [-tsub_le_iff_right, tsub_le_iff_left, two_mul, add_assoc]
-    using norm_mul₃_le' (a := (u / v)) (b := v) (c := v)
-
-@[to_additive norm_add_sub_norm_sub_le_two_mul_min]
-
-Depends on / 依赖: add_assoc, tsub_le_iff_left, tsub_le_iff_right, two_mul
+/-
+**norm_mul_sub_norm_div_le_two_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_mul_sub_norm_div_le_two_mul {E : Type*} [SeminormedGroup E] (u v : E)
+ : ‖u * v‖ - ‖u / v‖ <= 2 * ‖v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_mul_cancel`：div_mul_cancel (a b : G) : a / b * b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用引理 `norm_mul₃_le'`：norm_mul₃_le' : ‖a * b * c‖ <= ‖a‖ + ‖b‖ + ‖c‖
 -/
 lemma norm_mul_sub_norm_div_le_two_mul {E : Type*} [SeminormedGroup E] (u v : E) :
-    ‖u * v‖ - ‖u / v‖ <= 2 * ‖v‖ := by
+    ‖u * v‖ - ‖u / v‖ ≤ 2 * ‖v‖ := by
   simpa [-tsub_le_iff_right, tsub_le_iff_left, two_mul, add_assoc]
     using norm_mul₃_le' (a := (u / v)) (b := v) (c := v)
 
 @[to_additive norm_add_sub_norm_sub_le_two_mul_min]
-/--
-lemma `norm_mul_sub_norm_div_le_two_mul_min` / 引理 `norm_mul_sub_norm_div_le_two_mul_min`
-
-English:
-lemma norm_mul_sub_norm_div_le_two_mul_min
-  given: {E : Type*} [SeminormedCommGroup E] (u v : E)
-  proof: by
-  rw [mul_min_of_nonneg _ _ (by positivity)]
-  refine le_min ?_ (norm_mul_sub_norm_div_le_two_mul u v)
-  rw [norm_div_rev]; rw [mul_comm]
-  exact norm_mul_sub_norm_div_le_two_mul _ _
-
-中文:
-引理 norm_mul_sub_norm_div_le_two_mul_min
-  条件: {E : 类型} [SeminormedComm群 E] (u v : E)
-  证明: by
-  rw [mul_min_of_nonneg _ _ (by positivity)]
-  refine le_min ?_ (norm_mul_sub_norm_div_le_two_mul u v)
-  rw [norm_div_rev]; rw [mul_comm]
-  exact norm_mul_sub_norm_div_le_two_mul _ _
-
-Depends on / 依赖: le_min, mul_comm, mul_min_of_nonneg, norm_div_rev, norm_mul_sub_norm_div_le_two_mul
+/-
+**norm_mul_sub_norm_div_le_two_mul_min** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_mul_sub_norm_div_le_two_mul_min {E : Type*} [SeminormedCommGroup E] (
+u v : E) : ‖u * v‖ - ‖u / v‖ <= 2 * min ‖u‖ ‖v‖
+参数：u v : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_min_of_nonneg`：mul_min_of_nonneg [PosMulMono R] (b c : R) (ha : 0 <=
+ a) : a * min b c = min (a * b) (a * c)
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用引理 `le_min`：le_min (h₁ : c <= a) (h₂ : c <= b) : c <= min a b
+· 使用定理 `norm_div_rev`：norm_div_rev (a b : E) : ‖a / b‖ = ‖b / a‖
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `norm_mul_sub_norm_div_le_two_mul`：norm_mul_sub_norm_div_le_two_mul {E : 
+Type*} [SeminormedGroup E] (u v : E) : ‖u * v‖ - ‖u / v‖ <= 2 * ‖v‖
 -/
 lemma norm_mul_sub_norm_div_le_two_mul_min {E : Type*} [SeminormedCommGroup E] (u v : E) :
-    ‖u * v‖ - ‖u / v‖ <= 2 * min ‖u‖ ‖v‖ := by
+    ‖u * v‖ - ‖u / v‖ ≤ 2 * min ‖u‖ ‖v‖ := by
   rw [mul_min_of_nonneg _ _ (by positivity)]
   refine le_min ?_ (norm_mul_sub_norm_div_le_two_mul u v)
-  rw [norm_div_rev]; rw [mul_comm]
+  rw [norm_div_rev, mul_comm]
   exact norm_mul_sub_norm_div_le_two_mul _ _
 
 -- Higher priority to fire before `mem_sphere`.
 @[to_additive]
-/--
-theorem `mem_sphere_iff_norm_inv_mul_eq` / 定理 `mem_sphere_iff_norm_inv_mul_eq`
-
-English:
-theorem mem_sphere_iff_norm_inv_mul_eq
-  statement: b in sphere a r ↔ ‖b⁻¹ * a‖ = r
-  proof: by
-  simp [dist_eq_norm_inv_mul]
-
-@[to_additive] -- `simp` can prove this
-
-中文:
-定理 mem_sphere_iff_norm_inv_mul_eq
-  结论: b in sphere a r ↔ ‖b⁻¹ * a‖ = r
-  证明: by
-  simp [dist_eq_norm_inv_mul]
-
-@[to_additive] -- `simp` can prove this
-
-Depends on / 依赖: dist_eq_norm_inv_mul
+/-
+**mem_sphere_iff_norm_inv_mul_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_sphere_iff_norm_inv_mul_eq : b in sphere a r ↔ ‖b⁻¹ * a‖ = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sphere_iff_norm_inv_mul_eq : b in sphere a r ↔ ‖b⁻¹ * a‖ = r := by
+theorem mem_sphere_iff_norm_inv_mul_eq : b ∈ sphere a r ↔ ‖b⁻¹ * a‖ = r := by
   simp [dist_eq_norm_inv_mul]
 
 @[to_additive] -- `simp` can prove this
-/--
-theorem `mem_sphere_one_iff_norm` / 定理 `mem_sphere_one_iff_norm`
-
-English:
-theorem mem_sphere_one_iff_norm
-  statement: a in sphere (1 : E) r ↔ ‖a‖ = r
-  proof: by simp
-
-@[to_additive (attr := simp) norm_eq_of_mem_sphere]
-
-中文:
-定理 mem_sphere_one_iff_norm
-  结论: a in sphere (1 : E) r ↔ ‖a‖ = r
-  证明: by simp
-
-@[to_additive (attr := simp) norm_eq_of_mem_sphere]
+/-
+**mem_sphere_one_iff_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_sphere_one_iff_norm : a in sphere (1 : E) r ↔ ‖a‖ = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sphere_one_iff_norm : a in sphere (1 : E) r ↔ ‖a‖ = r := by simp
+theorem mem_sphere_one_iff_norm : a ∈ sphere (1 : E) r ↔ ‖a‖ = r := by simp
 
 @[to_additive (attr := simp) norm_eq_of_mem_sphere]
-/--
-theorem `norm_eq_of_mem_sphere'` / 定理 `norm_eq_of_mem_sphere'`
-
-English:
-theorem norm_eq_of_mem_sphere'
-  given: (x : sphere (1 : E) r)
-  statement: ‖(x : E)‖ = r
-  proof: mem_sphere_one_iff_norm.mp x.2
-
-@[to_additive]
-
-中文:
-定理 norm_eq_of_mem_sphere'
-  条件: (x : sphere (1 : E) r)
-  结论: ‖(x : E)‖ = r
-  证明: mem_sphere_one_iff_norm.mp x.2
-
-@[to_additive]
-
-Depends on / 依赖: mem_sphere_one_iff_norm, mem_sphere_one_iff_norm.mp
+/-
+**norm_eq_of_mem_sphere'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_eq_of_mem_sphere' (x : sphere (1 : E) r) : ‖(x : E)‖ = r
+参数：x : sphere (1 : E) r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_sphere_one_iff_norm`：mem_sphere_one_iff_norm : a in sphere (1 : E) r
+ ↔ ‖a‖ = r
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem norm_eq_of_mem_sphere' (x : sphere (1 : E) r) : ‖(x : E)‖ = r :=
   mem_sphere_one_iff_norm.mp x.2
 
 @[to_additive]
-/--
-theorem `ne_one_of_mem_sphere` / 定理 `ne_one_of_mem_sphere`
-
-English:
-theorem ne_one_of_mem_sphere
-  given: (hr : r != 0) (x : sphere (1 : E) r)
-  statement: (x : E) != 1
-  proof: ne_one_of_norm_ne_zero by rwa [norm_eq_of_mem_sphere' x]
-
-@[to_additive ne_zero_of_mem_unit_sphere]
-
-中文:
-定理 ne_one_of_mem_sphere
-  条件: (hr : r != 0) (x : sphere (1 : E) r)
-  结论: (x : E) != 1
-  证明: ne_one_of_norm_ne_zero by rwa [norm_eq_of_mem_sphere' x]
-
-@[to_additive ne_zero_of_mem_unit_sphere]
-
-Depends on / 依赖: ne_one_of_norm_ne_zero, norm_eq_of_mem_sphere
+/-
+**ne_one_of_mem_sphere** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ne_one_of_mem_sphere (hr : r != 0) (x : sphere (1 : E) r) : (x : E) != 1
+参数：hr : r != 0；x : sphere (1 : E) r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_one_of_norm_ne_zero`：ne_one_of_norm_ne_zero : ‖a‖ != 0 -> a != 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_eq_of_mem_sphere'`：norm_eq_of_mem_sphere' (x : sphere (1 : E) r) : 
+‖(x : E)‖ = r
 -/
-theorem ne_one_of_mem_sphere (hr : r != 0) (x : sphere (1 : E) r) : (x : E) != 1 :=
-ne_one_of_norm_ne_zero by rwa [norm_eq_of_mem_sphere' x]
+theorem ne_one_of_mem_sphere (hr : r ≠ 0) (x : sphere (1 : E) r) : (x : E) ≠ 1 :=
+  ne_one_of_norm_ne_zero <| by rwa [norm_eq_of_mem_sphere' x]
 
 @[to_additive ne_zero_of_mem_unit_sphere]
-/--
-theorem `ne_one_of_mem_unit_sphere` / 定理 `ne_one_of_mem_unit_sphere`
-
-English:
-theorem ne_one_of_mem_unit_sphere
-  given: (x : sphere (1 : E) 1)
-  statement: (x : E) != 1
-  proof: ne_one_of_mem_sphere one_ne_zero _
-
-中文:
-定理 ne_one_of_mem_unit_sphere
-  条件: (x : sphere (1 : E) 1)
-  结论: (x : E) != 1
-  证明: ne_one_of_mem_sphere one_ne_zero _
-
-Depends on / 依赖: ne_one_of_mem_sphere, one_ne_zero
+/-
+**ne_one_of_mem_unit_sphere** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ne_one_of_mem_unit_sphere (x : sphere (1 : E) 1) : (x : E) != 1
+参数：x : sphere (1 : E) 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_one_of_mem_sphere`：ne_one_of_mem_sphere (hr : r != 0) (x : sphere (1 
+: E) r) : (x : E) != 1
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem ne_one_of_mem_unit_sphere (x : sphere (1 : E) 1) : (x : E) != 1 :=
+theorem ne_one_of_mem_unit_sphere (x : sphere (1 : E) 1) : (x : E) ≠ 1 :=
   ne_one_of_mem_sphere one_ne_zero _
 
 variable (E)
 
 /-- The norm of a seminormed group as a group seminorm. -/
 @[to_additive /-- The norm of a seminormed group as an additive group seminorm. -/]
-/--
-Definition of `normGroupSeminorm` / `normGroupSeminorm` 的定义
+/-
+**normGroupSeminorm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：normGroupSeminorm : GroupSeminorm E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
 
-English:
-definition normGroupSeminorm
-  signature: : GroupSeminorm E
-  body: ⟨norm, norm_one', norm_mul_le', norm_inv'⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 normGroupSeminorm
-  签名: : 群半范数 E
-  定义体: ⟨norm, norm_one', norm_mul_le', norm_inv'⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: norm_inv, norm_mul_le, norm_one
+--- 原说明 ---
+The norm of a seminormed group as a group seminorm.
 -/
 def normGroupSeminorm : GroupSeminorm E :=
   ⟨norm, norm_one', norm_mul_le', norm_inv'⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_normGroupSeminorm` / 定理 `coe_normGroupSeminorm`
-
-English:
-theorem coe_normGroupSeminorm
-  statement: ⇑(normGroupSeminorm E) = norm
-  proof: rfl
-
-中文:
-定理 coe_normGroupSeminorm
-  结论: ⇑(normGroupSeminorm E) = norm
-  证明: rfl
+/-
+**coe_normGroupSeminorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_normGroupSeminorm : ⇑(normGroupSeminorm E) = norm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_normGroupSeminorm : ⇑(normGroupSeminorm E) = norm :=
   rfl
@@ -1687,40 +1317,33 @@ theorem coe_normGroupSeminorm : ⇑(normGroupSeminorm E) = norm :=
 variable {E}
 
 @[to_additive]
-/--
-theorem `NormedGroup.tendsto_nhds_one` / 定理 `NormedGroup.tendsto_nhds_one`
-
-English:
-theorem NormedGroup.tendsto_nhds_one
-  given: {f : α -> E} {l : Filter α}
-  proof: Metric.tendsto_nhds.trans by simp only [dist_one_right]
-
-@[deprecated (since := "2026-02-17")]
-alias NormedCommGroup.tendsto_nhds_one := NormedGroup.tendsto_nhds_one
-
-@[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.tendsto_nhds_zero := NormedAddGroup.tendsto_nhds_zero
-
-@[to_additive]
-
-中文:
-定理 赋范群.tendsto_nhds_one
-  条件: {f : α -> E} {l : 滤子 α}
-  证明: Metric.tendsto_nhds.trans by simp only [dist_one_right]
-
-@[deprecated (since := "2026-02-17")]
-alias NormedCommGroup.tendsto_nhds_one := NormedGroup.tendsto_nhds_one
-
-@[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.tendsto_nhds_zero := NormedAddGroup.tendsto_nhds_zero
-
-@[to_additive]
-
-Depends on / 依赖: Metric, Metric.tendsto_nhds.trans, dist_one_right, tendsto_nhds
+/-
+**NormedGroup.tendsto_nhds_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedGroup.tendsto_nhds_one {f : α -> E} {l : Filter α} : Tendsto f l (𝓝 
+1) ↔ forall ε > 0, forallᶠ x in l, ‖f x‖ < ε
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.tendsto_nhds`：tendsto_nhds {f : Filter β} {u : β -> α} {a : α} : 
+Tendsto u f (𝓝 a) ↔ forall ε > 0, forallᶠ x in f, dist (u x) a < ε
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem NormedGroup.tendsto_nhds_one {f : α -> E} {l : Filter α} :
-    Tendsto f l (𝓝 1) ↔ forall ε > 0, forallᶠ x in l, ‖f x‖ < ε :=
-Metric.tendsto_nhds.trans by simp only [dist_one_right]
+theorem NormedGroup.tendsto_nhds_one {f : α → E} {l : Filter α} :
+    Tendsto f l (𝓝 1) ↔ ∀ ε > 0, ∀ᶠ x in l, ‖f x‖ < ε :=
+  Metric.tendsto_nhds.trans <| by simp only [dist_one_right]
 
 @[deprecated (since := "2026-02-17")]
 alias NormedCommGroup.tendsto_nhds_one := NormedGroup.tendsto_nhds_one
@@ -1729,96 +1352,78 @@ alias NormedCommGroup.tendsto_nhds_one := NormedGroup.tendsto_nhds_one
 alias NormedAddCommGroup.tendsto_nhds_zero := NormedAddGroup.tendsto_nhds_zero
 
 @[to_additive]
-/--
-theorem `NormedGroup.tendsto_nhds_nhds` / 定理 `NormedGroup.tendsto_nhds_nhds`
-
-English:
-theorem NormedGroup.tendsto_nhds_nhds
-  given: {f : E -> F} {x : E} {y : F}
-  proof: by
-  simp_rw [Metric.tendsto_nhds_nhds, dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 赋范群.tendsto_nhds_nhds
-  条件: {f : E -> F} {x : E} {y : F}
-  证明: by
-  simp_rw [Metric.tendsto_nhds_nhds, dist_eq_norm_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: Metric, Metric.tendsto_nhds_nhds, dist_eq_norm_inv_mul, simp_rw, tendsto_nhds_nhds
+/-
+**NormedGroup.tendsto_nhds_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedGroup.tendsto_nhds_nhds {f : E -> F} {x : E} {y : F} : Tendsto f (𝓝 
+x) (𝓝 y) ↔ forall ε > 0, exists δ > 0, forall x', ‖x'⁻¹ * x‖ < δ -> ‖(f x')⁻¹ * 
+y‖ < ε
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem NormedGroup.tendsto_nhds_nhds {f : E -> F} {x : E} {y : F} :
-    Tendsto f (𝓝 x) (𝓝 y) ↔ forall ε > 0, exists δ > 0, forall x', ‖x'⁻¹ * x‖ < δ -> ‖(f x')⁻¹ * y‖ < ε := by
+theorem NormedGroup.tendsto_nhds_nhds {f : E → F} {x : E} {y : F} :
+    Tendsto f (𝓝 x) (𝓝 y) ↔ ∀ ε > 0, ∃ δ > 0, ∀ x', ‖x'⁻¹ * x‖ < δ → ‖(f x')⁻¹ * y‖ < ε := by
   simp_rw [Metric.tendsto_nhds_nhds, dist_eq_norm_inv_mul]
 
 @[to_additive]
-/--
-theorem `NormedGroup.nhds_basis_norm_lt` / 定理 `NormedGroup.nhds_basis_norm_lt`
-
-English:
-theorem NormedGroup.nhds_basis_norm_lt
-  given: (x : E)
-  proof: by
-  simp_rw [← ball_eq_norm_inv_mul_lt]
-  exact Metric.nhds_basis_ball
-
-@[to_additive]
-
-中文:
-定理 赋范群.nhds_basis_norm_lt
-  条件: (x : E)
-  证明: by
-  simp_rw [← ball_eq_norm_inv_mul_lt]
-  exact Metric.nhds_basis_ball
-
-@[to_additive]
-
-Depends on / 依赖: Metric, Metric.nhds_basis_ball, ball_eq_norm_inv_mul_lt, nhds_basis_ball, simp_rw
+/-
+**NormedGroup.nhds_basis_norm_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedGroup.nhds_basis_norm_lt (x : E) : (𝓝 x).HasBasis (fun ε : Real => 0
+ < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε }
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Metric.nhds_basis_ball`：nhds_basis_ball : (𝓝 x).HasBasis (0 < ·) (ball x
+)
 -/
 theorem NormedGroup.nhds_basis_norm_lt (x : E) :
-    (𝓝 x).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε } := by
+    (𝓝 x).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε } := by
   simp_rw [← ball_eq_norm_inv_mul_lt]
   exact Metric.nhds_basis_ball
 
 @[to_additive]
-/--
-theorem `NormedGroup.nhds_one_basis_norm_lt` / 定理 `NormedGroup.nhds_one_basis_norm_lt`
-
-English:
-theorem NormedGroup.nhds_one_basis_norm_lt
-  proof: by
-  convert! NormedGroup.nhds_basis_norm_lt (1 : E) using 1
-  simp
-
-@[deprecated (since := "2026-02-17")]
-alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_lt
-
-@[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds_zero_basis_norm_lt
-
-@[to_additive]
-
-中文:
-定理 赋范群.nhds_one_basis_norm_lt
-  证明: by
-  convert! NormedGroup.nhds_basis_norm_lt (1 : E) using 1
-  simp
-
-@[deprecated (since := "2026-02-17")]
-alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_lt
-
-@[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds_zero_basis_norm_lt
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.nhds_basis_norm_lt, convert, nhds_basis_norm_lt
+/-
+**NormedGroup.nhds_one_basis_norm_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedGroup.nhds_one_basis_norm_lt : (𝓝 (1 : E)).HasBasis (fun ε : Real =>
+ 0 < ε) fun ε => { y | ‖y‖ < ε }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NormedGroup.nhds_basis_norm_lt`：NormedGroup.nhds_basis_norm_lt (x : E) :
+ (𝓝 x).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε }
 -/
 theorem NormedGroup.nhds_one_basis_norm_lt :
-    (𝓝 (1 : E)).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y‖ < ε } := by
+    (𝓝 (1 : E)).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { y | ‖y‖ < ε } := by
   convert! NormedGroup.nhds_basis_norm_lt (1 : E) using 1
   simp
 
@@ -1829,25 +1434,28 @@ alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_
 alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds_zero_basis_norm_lt
 
 @[to_additive]
-/--
-theorem `NormedGroup.uniformity_basis_dist` / 定理 `NormedGroup.uniformity_basis_dist`
-
-English:
-theorem NormedGroup.uniformity_basis_dist
-  proof: by
-  convert Metric.uniformity_basis_dist (α := E)
-  simp [dist_eq_norm_inv_mul]
-
-中文:
-定理 赋范群.uniformity_basis_dist
-  证明: by
-  convert Metric.uniformity_basis_dist (α := E)
-  simp [dist_eq_norm_inv_mul]
-
-Depends on / 依赖: Metric, Metric.uniformity_basis_dist, convert, dist_eq_norm_inv_mul, uniformity_basis_dist
+/-
+**NormedGroup.uniformity_basis_dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedGroup.uniformity_basis_dist : (𝓤 E).HasBasis (fun ε : Real => 0 < ε)
+ fun ε => { p : E × E | ‖p.fst⁻¹ * p.snd‖ < ε }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Metric.uniformity_basis_dist`：uniformity_basis_dist : (𝓤 α).HasBasis (fu
+n ε : Real => 0 < ε) fun ε => { p : α × α | dist p.1 p.2 < ε }
 -/
 theorem NormedGroup.uniformity_basis_dist :
-    (𝓤 E).HasBasis (fun ε : Real => 0 < ε) fun ε => { p : E × E | ‖p.fst⁻¹ * p.snd‖ < ε } := by
+    (𝓤 E).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { p : E × E | ‖p.fst⁻¹ * p.snd‖ < ε } := by
   convert Metric.uniformity_basis_dist (α := E)
   simp [dist_eq_norm_inv_mul]
 
@@ -1859,126 +1467,67 @@ section NNNorm
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) SeminormedGroup.toNNNorm : NNNorm E :=
   ⟨fun a => .mk ‖a‖ (norm_nonneg' a)⟩
 
 @[to_additive (attr := simp, norm_cast) coe_nnnorm]
-/--
-theorem `coe_nnnorm'` / 定理 `coe_nnnorm'`
-
-English:
-theorem coe_nnnorm'
-  given: (a : E)
-  statement: (‖a‖₊ : Real) = ‖a‖
-  proof: rfl
-
-@[to_additive (attr := simp) coe_comp_nnnorm]
-
-中文:
-定理 coe_nnnorm'
-  条件: (a : E)
-  结论: (‖a‖₊ : 实数) = ‖a‖
-  证明: rfl
-
-@[to_additive (attr := simp) coe_comp_nnnorm]
+/-
+**coe_nnnorm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_nnnorm' (a : E) : (‖a‖₊ : Real) = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_nnnorm' (a : E) : (‖a‖₊ : Real) = ‖a‖ := rfl
+theorem coe_nnnorm' (a : E) : (‖a‖₊ : ℝ) = ‖a‖ := rfl
 
 @[to_additive (attr := simp) coe_comp_nnnorm]
-/--
-theorem `coe_comp_nnnorm'` / 定理 `coe_comp_nnnorm'`
-
-English:
-theorem coe_comp_nnnorm'
-  statement: (toReal : Real>=0 -> Real) ∘ (nnnorm : E -> Real>=0) = norm
-  proof: rfl
-
-@[to_additive (attr := simp) norm_toNNReal]
-
-中文:
-定理 coe_comp_nnnorm'
-  结论: (to实数 : 实数>=0 -> 实数) ∘ (nnnorm : E -> 实数>=0) = norm
-  证明: rfl
-
-@[to_additive (attr := simp) norm_toNNReal]
+/-
+**coe_comp_nnnorm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_comp_nnnorm' : (toReal : Real>=0 -> Real) ∘ (nnnorm : E -> Real>=0) = 
+norm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp_nnnorm' : (toReal : Real>=0 -> Real) ∘ (nnnorm : E -> Real>=0) = norm :=
+theorem coe_comp_nnnorm' : (toReal : ℝ≥0 → ℝ) ∘ (nnnorm : E → ℝ≥0) = norm :=
   rfl
 
 @[to_additive (attr := simp) norm_toNNReal]
-/--
-theorem `norm_toNNReal'` / 定理 `norm_toNNReal'`
-
-English:
-theorem norm_toNNReal'
-  statement: ‖a‖.toNNReal = ‖a‖₊
-  proof: @Real.toNNReal_coe ‖a‖₊
-
-@[to_additive (attr := simp) toReal_enorm]
-
-中文:
-定理 norm_toNN实数'
-  结论: ‖a‖.toNN实数 = ‖a‖₊
-  证明: @Real.toNNReal_coe ‖a‖₊
-
-@[to_additive (attr := simp) toReal_enorm]
-
-Depends on / 依赖: Real.toNNReal_coe, toNNReal_coe
+/-
+**norm_toNNReal'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_toNNReal' : ‖a‖.toNNReal = ‖a‖₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
 -/
 theorem norm_toNNReal' : ‖a‖.toNNReal = ‖a‖₊ :=
   @Real.toNNReal_coe ‖a‖₊
 
 @[to_additive (attr := simp) toReal_enorm]
-/--
-lemma `toReal_enorm'` / 引理 `toReal_enorm'`
-
-English:
-lemma toReal_enorm'
-  given: (x : E)
-  statement: ‖x‖ₑ.toReal = ‖x‖
-  proof: by simp [enorm]
-
-@[to_additive (attr := simp) ofReal_norm]
-
-中文:
-引理 to实数_enorm'
-  条件: (x : E)
-  结论: ‖x‖ₑ.to实数 = ‖x‖
-  证明: by simp [enorm]
-
-@[to_additive (attr := simp) ofReal_norm]
+/-
+**toReal_enorm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：toReal_enorm' (x : E) : ‖x‖ₑ.toReal = ‖x‖
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toReal_enorm' (x : E) : ‖x‖ₑ.toReal = ‖x‖ := by simp [enorm]
 
 @[to_additive (attr := simp) ofReal_norm]
-/--
-lemma `ofReal_norm'` / 引理 `ofReal_norm'`
-
-English:
-lemma ofReal_norm'
-  given: (x : E)
-  statement: .ofReal ‖x‖ = ‖x‖ₑ
-  proof: ENNReal.ofReal_eq_coe_nnreal _
-
-@[deprecated (since := "2026-05-25")] alias ofReal_norm_eq_enorm := ofReal_norm
-
-@[deprecated (since := "2026-05-25")] alias ofReal_norm_eq_enorm' := ofReal_norm'
-
-@[to_additive enorm_eq_iff_norm_eq]
-
-中文:
-引理 of实数_norm'
-  条件: (x : E)
-  结论: .of实数 ‖x‖ = ‖x‖ₑ
-  证明: ENNReal.ofReal_eq_coe_nnreal _
-
-@[deprecated (since := "2026-05-25")] alias ofReal_norm_eq_enorm := ofReal_norm
-
-@[deprecated (since := "2026-05-25")] alias ofReal_norm_eq_enorm' := ofReal_norm'
-
-@[to_additive enorm_eq_iff_norm_eq]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_coe_nnreal, ofReal_eq_coe_nnreal
+/-
+**ofReal_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ofReal_norm' (x : E) : .ofReal ‖x‖ = ‖x‖ₑ
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.ofReal_eq_coe_nnreal`：ofReal_eq_coe_nnreal {x : Real} (h : 0 <= 
+x) : ENNReal.ofReal x = ofNNReal (NNReal.mk x h)
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
 lemma ofReal_norm' (x : E) : .ofReal ‖x‖ = ‖x‖ₑ := ENNReal.ofReal_eq_coe_nnreal _
 
@@ -1987,597 +1536,364 @@ lemma ofReal_norm' (x : E) : .ofReal ‖x‖ = ‖x‖ₑ := ENNReal.ofReal_eq_c
 @[deprecated (since := "2026-05-25")] alias ofReal_norm_eq_enorm' := ofReal_norm'
 
 @[to_additive enorm_eq_iff_norm_eq]
-/--
-theorem `enorm'_eq_iff_norm_eq` / 定理 `enorm'_eq_iff_norm_eq`
-
-English:
-theorem enorm'_eq_iff_norm_eq
-  given: {x : E} {y : F}
-  statement: ‖x‖ₑ = ‖y‖ₑ ↔ ‖x‖ = ‖y‖
-  proof: by
-  simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by congr⟩
-  exact (Real.toNNReal_eq_toNNReal_iff (norm_nonneg' _) (norm_nonneg' _)).mp (ENNReal.coe_inj.mp h)
-
-@[to_additive enorm_le_iff_norm_le]
-
-中文:
-定理 enorm'_eq_iff_norm_eq
-  条件: {x : E} {y : F}
-  结论: ‖x‖ₑ = ‖y‖ₑ ↔ ‖x‖ = ‖y‖
-  证明: by
-  simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by congr⟩
-  exact (Real.toNNReal_eq_toNNReal_iff (norm_nonneg' _) (norm_nonneg' _)).mp (ENNReal.coe_inj.mp h)
-
-@[to_additive enorm_le_iff_norm_le]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inj.mp, Real.toNNReal_eq_toNNReal_iff, coe_inj, norm_nonneg, ofReal_norm, toNNReal_eq_toNNReal_iff
+/-
+**enorm'_eq_iff_norm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_5} {F : Type u_6} [inst : SeminormedGroup E] [inst_1 : Semin
+ormedGroup F] {x : E} {y : F},   ‖x‖ₑ = ‖y‖ₑ ↔ ‖x‖ = ‖y‖
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.toNNReal_eq_toNNReal_iff`：toNNReal_eq_toNNReal_iff {r p : Real} (hr
+ : 0 <= r) (hp : 0 <= p) : toNNReal r = toNNReal p ↔ r = p
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
 -/
 theorem enorm'_eq_iff_norm_eq {x : E} {y : F} : ‖x‖ₑ = ‖y‖ₑ ↔ ‖x‖ = ‖y‖ := by
   simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by congr⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ by congr⟩
   exact (Real.toNNReal_eq_toNNReal_iff (norm_nonneg' _) (norm_nonneg' _)).mp (ENNReal.coe_inj.mp h)
 
 @[to_additive enorm_le_iff_norm_le]
-/--
-theorem `enorm'_le_iff_norm_le` / 定理 `enorm'_le_iff_norm_le`
-
-English:
-theorem enorm'_le_iff_norm_le
-  given: {x : E} {y : F}
-  statement: ‖x‖ₑ <= ‖y‖ₑ ↔ ‖x‖ <= ‖y‖
-  proof: by
-  simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by gcongr⟩
-  rw [ENNReal.ofReal_le_ofReal_iff (norm_nonneg' _)] at h
-  exact h
-
-@[to_additive]
-
-中文:
-定理 enorm'_le_iff_norm_le
-  条件: {x : E} {y : F}
-  结论: ‖x‖ₑ <= ‖y‖ₑ ↔ ‖x‖ <= ‖y‖
-  证明: by
-  simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by gcongr⟩
-  rw [ENNReal.ofReal_le_ofReal_iff (norm_nonneg' _)] at h
-  exact h
-
-@[to_additive]
+/-
+**enorm'_le_iff_norm_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_5} {F : Type u_6} [inst : SeminormedGroup E] [inst_1 : Semin
+ormedGroup F] {x : E} {y : F},   ‖x‖ₑ ≤ ‖y‖ₑ ↔ ‖x‖ ≤ ‖y‖
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ENNReal.ofReal_le_ofReal_iff`：ofReal_le_ofReal_iff {p q : Real} (h : 0 <
+= q) : ENNReal.ofReal p <= ENNReal.ofReal q ↔ p <= q
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
 -/
-theorem enorm'_le_iff_norm_le {x : E} {y : F} : ‖x‖ₑ <= ‖y‖ₑ ↔ ‖x‖ <= ‖y‖ := by
+theorem enorm'_le_iff_norm_le {x : E} {y : F} : ‖x‖ₑ ≤ ‖y‖ₑ ↔ ‖x‖ ≤ ‖y‖ := by
   simp only [← ofReal_norm']
-  refine ⟨fun h => ?_, fun h => by gcongr⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ by gcongr⟩
   rw [ENNReal.ofReal_le_ofReal_iff (norm_nonneg' _)] at h
   exact h
 
 @[to_additive]
-/--
-theorem `nndist_eq_nnnorm_inv_mul` / 定理 `nndist_eq_nnnorm_inv_mul`
-
-English:
-theorem nndist_eq_nnnorm_inv_mul
-  given: (a b : E)
-  statement: nndist a b = ‖a⁻¹ * b‖₊
-  proof: NNReal.eq dist_eq_norm_inv_mul _ _
-
-@[to_additive (attr := simp) nnnorm_neg]
-
-中文:
-定理 nndist_eq_nnnorm_inv_mul
-  条件: (a b : E)
-  结论: nndist a b = ‖a⁻¹ * b‖₊
-  证明: NNReal.eq dist_eq_norm_inv_mul _ _
-
-@[to_additive (attr := simp) nnnorm_neg]
-
-Depends on / 依赖: NNReal, NNReal.eq, dist_eq_norm_inv_mul
+/-
+**nndist_eq_nnnorm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_eq_nnnorm_inv_mul (a b : E) : nndist a b = ‖a⁻¹ * b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
 -/
 theorem nndist_eq_nnnorm_inv_mul (a b : E) : nndist a b = ‖a⁻¹ * b‖₊ :=
-NNReal.eq dist_eq_norm_inv_mul _ _
+  NNReal.eq <| dist_eq_norm_inv_mul _ _
 
 @[to_additive (attr := simp) nnnorm_neg]
-/--
-theorem `nnnorm_inv'` / 定理 `nnnorm_inv'`
-
-English:
-theorem nnnorm_inv'
-  given: (a : E)
-  statement: ‖a⁻¹‖₊ = ‖a‖₊
-  proof: NNReal.eq norm_inv' a
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 nnnorm_inv'
-  条件: (a : E)
-  结论: ‖a⁻¹‖₊ = ‖a‖₊
-  证明: NNReal.eq norm_inv' a
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_inv
+/-
+**nnnorm_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_inv' (a : E) : ‖a⁻¹‖₊ = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
 -/
 theorem nnnorm_inv' (a : E) : ‖a⁻¹‖₊ = ‖a‖₊ :=
-NNReal.eq norm_inv' a
+  NNReal.eq <| norm_inv' a
 
 @[to_additive (attr := simp)]
-/--
-theorem `nndist_one_right` / 定理 `nndist_one_right`
-
-English:
-theorem nndist_one_right
-  given: (a : E)
-  statement: nndist a 1 = ‖a‖₊
-  proof: by
-  simp [nndist_eq_nnnorm_inv_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 nndist_one_right
-  条件: (a : E)
-  结论: nndist a 1 = ‖a‖₊
-  证明: by
-  simp [nndist_eq_nnnorm_inv_mul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: nndist_eq_nnnorm_inv_mul
+/-
+**nndist_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_one_right (a : E) : nndist a 1 = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nndist_eq_nnnorm_inv_mul`：nndist_eq_nnnorm_inv_mul (a b : E) : nndist a 
+b = ‖a⁻¹ * b‖₊
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `nnnorm_inv'`：nnnorm_inv' (a : E) : ‖a⁻¹‖₊ = ‖a‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nndist_one_right (a : E) : nndist a 1 = ‖a‖₊ := by
   simp [nndist_eq_nnnorm_inv_mul]
 
 @[to_additive (attr := simp)]
-/--
-lemma `edist_one_right` / 引理 `edist_one_right`
-
-English:
-lemma edist_one_right
-  given: (a : E)
-  statement: edist a 1 = ‖a‖ₑ
-  proof: by simp [edist_nndist, nndist_one_right, enorm]
-
-@[to_additive (attr := simp) nnnorm_zero]
-
-中文:
-引理 edist_one_right
-  条件: (a : E)
-  结论: edist a 1 = ‖a‖ₑ
-  证明: by simp [edist_nndist, nndist_one_right, enorm]
-
-@[to_additive (attr := simp) nnnorm_zero]
-
-Depends on / 依赖: edist_nndist, nndist_one_right
+/-
+**edist_one_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：edist_one_right (a : E) : edist a 1 = ‖a‖ₑ
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_nndist`：edist_nndist (x y : α) : edist x y = nndist x y
+· 使用定理 `nndist_one_right`：nndist_one_right (a : E) : nndist a 1 = ‖a‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma edist_one_right (a : E) : edist a 1 = ‖a‖ₑ := by simp [edist_nndist, nndist_one_right, enorm]
 
 @[to_additive (attr := simp) nnnorm_zero]
-/--
-theorem `nnnorm_one'` / 定理 `nnnorm_one'`
-
-English:
-theorem nnnorm_one'
-  statement: ‖(1 : E)‖₊ = 0
-  proof: NNReal.eq norm_one'
-
-@[to_additive]
-
-中文:
-定理 nnnorm_one'
-  结论: ‖(1 : E)‖₊ = 0
-  证明: NNReal.eq norm_one'
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_one
+/-
+**nnnorm_one'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_one' : ‖(1 : E)‖₊ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
 -/
 theorem nnnorm_one' : ‖(1 : E)‖₊ = 0 := NNReal.eq norm_one'
 
 @[to_additive]
-/--
-theorem `ne_one_of_nnnorm_ne_zero` / 定理 `ne_one_of_nnnorm_ne_zero`
-
-English:
-theorem ne_one_of_nnnorm_ne_zero
-  given: {a : E}
-  statement: ‖a‖₊ != 0 -> a != 1
-  proof: mt by
+/-
+**ne_one_of_nnnorm_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ne_one_of_nnnorm_ne_zero {a : E} : ‖a‖₊ != 0 -> a != 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `nnnorm_one'`：nnnorm_one' : ‖(1 : E)‖₊ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem ne_one_of_nnnorm_ne_zero {a : E} : ‖a‖₊ ≠ 0 → a ≠ 1 :=
+  mt <| by
     rintro rfl
     exact nnnorm_one'
 
 @[to_additive nnnorm_add_le]
-
-中文:
-定理 ne_one_of_nnnorm_ne_zero
-  条件: {a : E}
-  结论: ‖a‖₊ != 0 -> a != 1
-  证明: mt by
-    rintro rfl
-    exact nnnorm_one'
-
-@[to_additive nnnorm_add_le]
-
-Depends on / 依赖: nnnorm_one
+/-
+**nnnorm_mul_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_mul_le' (a b : E) : ‖a * b‖₊ <= ‖a‖₊ + ‖b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem ne_one_of_nnnorm_ne_zero {a : E} : ‖a‖₊ != 0 -> a != 1 :=
-mt by
-    rintro rfl
-    exact nnnorm_one'
-
-@[to_additive nnnorm_add_le]
-/--
-theorem `nnnorm_mul_le'` / 定理 `nnnorm_mul_le'`
-
-English:
-theorem nnnorm_mul_le'
-  given: (a b : E)
-  statement: ‖a * b‖₊ <= ‖a‖₊ + ‖b‖₊
-  proof: NNReal.coe_le_coe.1 norm_mul_le' a b
+theorem nnnorm_mul_le' (a b : E) : ‖a * b‖₊ ≤ ‖a‖₊ + ‖b‖₊ :=
+  NNReal.coe_le_coe.1 <| norm_mul_le' a b
 
 @[to_additive norm_nsmul_le]
-
-中文:
-定理 nnnorm_mul_le'
-  条件: (a b : E)
-  结论: ‖a * b‖₊ <= ‖a‖₊ + ‖b‖₊
-  证明: NNReal.coe_le_coe.1 norm_mul_le' a b
-
-@[to_additive norm_nsmul_le]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, norm_mul_le
+/-
+**norm_pow_le_mul_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_5} [inst : SeminormedGroup E] {a : E} {n : ℕ}, ‖a ^ n‖ ≤ ↑n 
+* ‖a‖
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nnnorm_mul_le' (a b : E) : ‖a * b‖₊ <= ‖a‖₊ + ‖b‖₊ :=
-NNReal.coe_le_coe.1 norm_mul_le' a b
-
-@[to_additive norm_nsmul_le]
-/--
-lemma `norm_pow_le_mul_norm` / 引理 `norm_pow_le_mul_norm`
-
-English:
-lemma norm_pow_le_mul_norm
-  statement: forall {n : Nat}, ‖a ^ n‖ <= n * ‖a‖
-
-中文:
-引理 norm_pow_le_mul_norm
-  结论: 对任意 {n : 自然数}, ‖a ^ n‖ <= n * ‖a‖
--/
-lemma norm_pow_le_mul_norm : forall {n : Nat}, ‖a ^ n‖ <= n * ‖a‖
+lemma norm_pow_le_mul_norm : ∀ {n : ℕ}, ‖a ^ n‖ ≤ n * ‖a‖
   | 0 => by simp
   | n + 1 => by simpa [pow_succ, add_mul] using norm_mul_le_of_le' norm_pow_le_mul_norm le_rfl
 
 @[to_additive nnnorm_nsmul_le]
-/--
-lemma `nnnorm_pow_le_mul_norm` / 引理 `nnnorm_pow_le_mul_norm`
-
-English:
-lemma nnnorm_pow_le_mul_norm
-  given: {n : Nat}
-  statement: ‖a ^ n‖₊ <= n * ‖a‖₊
-  proof: by
+/-
+**nnnorm_pow_le_mul_norm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_pow_le_mul_norm {n : Nat} : ‖a ^ n‖₊ <= n * ‖a‖₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNReal.coe_natCast`：∀ (n : ℕ), ↑↑n = ↑n
+· 使用定理 `norm_pow_le_mul_norm`：∀ {E : Type u_5} [inst : SeminormedGroup E] {a : E
+} {n : ℕ}, ‖a ^ n‖ ≤ ↑n * ‖a‖
+-/
+lemma nnnorm_pow_le_mul_norm {n : ℕ} : ‖a ^ n‖₊ ≤ n * ‖a‖₊ := by
   simpa only [← NNReal.coe_le_coe, NNReal.coe_mul, NNReal.coe_natCast] using! norm_pow_le_mul_norm
 
 @[to_additive (attr := simp) nnnorm_abs_zsmul]
-
-中文:
-引理 nnnorm_pow_le_mul_norm
-  条件: {n : 自然数}
-  结论: ‖a ^ n‖₊ <= n * ‖a‖₊
-  证明: by
-  simpa only [← NNReal.coe_le_coe, NNReal.coe_mul, NNReal.coe_natCast] using! norm_pow_le_mul_norm
-
-@[to_additive (attr := simp) nnnorm_abs_zsmul]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, NNReal.coe_mul, NNReal.coe_natCast, coe_le_coe, coe_mul, coe_natCast, norm_pow_le_mul_norm
+/-
+**nnnorm_zpow_abs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖₊ = ‖a ^ n‖₊
+参数：a : E；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_zpow_abs`：norm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖ = ‖a ^ n‖
 -/
-lemma nnnorm_pow_le_mul_norm {n : Nat} : ‖a ^ n‖₊ <= n * ‖a‖₊ := by
-  simpa only [← NNReal.coe_le_coe, NNReal.coe_mul, NNReal.coe_natCast] using! norm_pow_le_mul_norm
-
-@[to_additive (attr := simp) nnnorm_abs_zsmul]
-/--
-theorem `nnnorm_zpow_abs` / 定理 `nnnorm_zpow_abs`
-
-English:
-theorem nnnorm_zpow_abs
-  given: (a : E) (n : Int)
-  statement: ‖a ^ |n|‖₊ = ‖a ^ n‖₊
-  proof: NNReal.eq norm_zpow_abs a n
+theorem nnnorm_zpow_abs (a : E) (n : ℤ) : ‖a ^ |n|‖₊ = ‖a ^ n‖₊ :=
+  NNReal.eq <| norm_zpow_abs a n
 
 @[to_additive (attr := simp) nnnorm_natAbs_smul]
-
-中文:
-定理 nnnorm_zpow_abs
-  条件: (a : E) (n : 整数)
-  结论: ‖a ^ |n|‖₊ = ‖a ^ n‖₊
-  证明: NNReal.eq norm_zpow_abs a n
-
-@[to_additive (attr := simp) nnnorm_natAbs_smul]
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_zpow_abs
+/-
+**nnnorm_pow_natAbs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖₊ = ‖a ^ n‖₊
+参数：a : E；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_pow_natAbs`：norm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖ = ‖a
+ ^ n‖
 -/
-theorem nnnorm_zpow_abs (a : E) (n : Int) : ‖a ^ |n|‖₊ = ‖a ^ n‖₊ :=
-NNReal.eq norm_zpow_abs a n
-
-@[to_additive (attr := simp) nnnorm_natAbs_smul]
-/--
-theorem `nnnorm_pow_natAbs` / 定理 `nnnorm_pow_natAbs`
-
-English:
-theorem nnnorm_pow_natAbs
-  given: (a : E) (n : Int)
-  statement: ‖a ^ n.natAbs‖₊ = ‖a ^ n‖₊
-  proof: NNReal.eq norm_pow_natAbs a n
+theorem nnnorm_pow_natAbs (a : E) (n : ℤ) : ‖a ^ n.natAbs‖₊ = ‖a ^ n‖₊ :=
+  NNReal.eq <| norm_pow_natAbs a n
 
 @[to_additive nnnorm_isUnit_zsmul]
-
-中文:
-定理 nnnorm_pow_natAbs
-  条件: (a : E) (n : 整数)
-  结论: ‖a ^ n.natAbs‖₊ = ‖a ^ n‖₊
-  证明: NNReal.eq norm_pow_natAbs a n
-
-@[to_additive nnnorm_isUnit_zsmul]
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_pow_natAbs
+/-
+**nnnorm_zpow_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_zpow_isUnit (a : E) {n : Int} (hn : IsUnit n) : ‖a ^ n‖₊ = ‖a‖₊
+参数：a : E；hn : IsUnit n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_zpow_isUnit`：norm_zpow_isUnit (a : E) {n : Int} (hn : IsUnit n) : ‖
+a ^ n‖ = ‖a‖
 -/
-theorem nnnorm_pow_natAbs (a : E) (n : Int) : ‖a ^ n.natAbs‖₊ = ‖a ^ n‖₊ :=
-NNReal.eq norm_pow_natAbs a n
-
-@[to_additive nnnorm_isUnit_zsmul]
-/--
-theorem `nnnorm_zpow_isUnit` / 定理 `nnnorm_zpow_isUnit`
-
-English:
-theorem nnnorm_zpow_isUnit
-  given: (a : E) {n : Int} (hn : IsUnit n)
-  statement: ‖a ^ n‖₊ = ‖a‖₊
-  proof: NNReal.eq norm_zpow_isUnit a hn
+theorem nnnorm_zpow_isUnit (a : E) {n : ℤ} (hn : IsUnit n) : ‖a ^ n‖₊ = ‖a‖₊ :=
+  NNReal.eq <| norm_zpow_isUnit a hn
 
 @[simp]
-
-中文:
-定理 nnnorm_zpow_isUnit
-  条件: (a : E) {n : 整数} (hn : 是单位 n)
-  结论: ‖a ^ n‖₊ = ‖a‖₊
-  证明: NNReal.eq norm_zpow_isUnit a hn
-
-@[simp]
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_zpow_isUnit
+/-
+**nnnorm_units_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E) :
+ ‖n • a‖₊ = ‖a‖₊
+参数：n : Intˣ；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `norm_isUnit_zsmul`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E
+) {n : ℤ}, IsUnit n → ‖n • a‖ = ‖a‖
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-theorem nnnorm_zpow_isUnit (a : E) {n : Int} (hn : IsUnit n) : ‖a ^ n‖₊ = ‖a‖₊ :=
-NNReal.eq norm_zpow_isUnit a hn
-
-@[simp]
-/--
-theorem `nnnorm_units_zsmul` / 定理 `nnnorm_units_zsmul`
-
-English:
-theorem nnnorm_units_zsmul
-  given: {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E)
-  statement: ‖n • a‖₊ = ‖a‖₊
-  proof: NNReal.eq norm_isUnit_zsmul a n.isUnit
+theorem nnnorm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : ℤˣ) (a : E) : ‖n • a‖₊ = ‖a‖₊ :=
+  NNReal.eq <| norm_isUnit_zsmul a n.isUnit
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 nnnorm_units_zsmul
-  条件: {E : 类型} [半赋范加群 E] (n : 整数ˣ) (a : E)
-  结论: ‖n • a‖₊ = ‖a‖₊
-  证明: NNReal.eq norm_isUnit_zsmul a n.isUnit
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: NNReal, NNReal.eq, isUnit, n.isUnit, norm_isUnit_zsmul
--/
-theorem nnnorm_units_zsmul {E : Type*} [SeminormedAddGroup E] (n : Intˣ) (a : E) : ‖n • a‖₊ = ‖a‖₊ :=
-NNReal.eq norm_isUnit_zsmul a n.isUnit
-
-@[to_additive (attr := simp)]
-/--
-theorem `nndist_one_left` / 定理 `nndist_one_left`
-
-English:
-theorem nndist_one_left
-  given: (a : E)
-  statement: nndist 1 a = ‖a‖₊
-  proof: by simp [nndist_eq_nnnorm_inv_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 nndist_one_left
-  条件: (a : E)
-  结论: nndist 1 a = ‖a‖₊
-  证明: by simp [nndist_eq_nnnorm_inv_mul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: nndist_eq_nnnorm_inv_mul
+/-
+**nndist_one_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_one_left (a : E) : nndist 1 a = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nndist_eq_nnnorm_inv_mul`：nndist_eq_nnnorm_inv_mul (a b : E) : nndist a 
+b = ‖a⁻¹ * b‖₊
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nndist_one_left (a : E) : nndist 1 a = ‖a‖₊ := by simp [nndist_eq_nnnorm_inv_mul]
 
 @[to_additive (attr := simp)]
-/--
-theorem `edist_one_left` / 定理 `edist_one_left`
-
-English:
-theorem edist_one_left
-  given: (a : E)
-  statement: edist 1 a = ‖a‖₊
-  proof: by
-  rw [edist_nndist]; rw [nndist_one_left]
-
-中文:
-定理 edist_one_left
-  条件: (a : E)
-  结论: edist 1 a = ‖a‖₊
-  证明: by
-  rw [edist_nndist]; rw [nndist_one_left]
-
-Depends on / 依赖: edist_nndist, nndist_one_left
+/-
+**edist_one_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_one_left (a : E) : edist 1 a = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_nndist`：edist_nndist (x y : α) : edist x y = nndist x y
+· 使用定理 `nndist_one_left`：nndist_one_left (a : E) : nndist 1 a = ‖a‖₊
 -/
 theorem edist_one_left (a : E) : edist 1 a = ‖a‖₊ := by
-  rw [edist_nndist]; rw [nndist_one_left]
+  rw [edist_nndist, nndist_one_left]
 
 open scoped symmDiff in
 @[to_additive]
-/--
-theorem `nndist_mulIndicator` / 定理 `nndist_mulIndicator`
-
-English:
-theorem nndist_mulIndicator
-  given: (s t : Set α) (f : α -> E) (x : α)
-  proof: NNReal.eq dist_mulIndicator s t f x
-
-@[to_additive]
-
-中文:
-定理 nndist_mulIndicator
-  条件: (s t : 集合 α) (f : α -> E) (x : α)
-  证明: NNReal.eq dist_mulIndicator s t f x
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, dist_mulIndicator
+/-
+**nndist_mulIndicator** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_mulIndicator (s t : Set α) (f : α -> E) (x : α) : nndist (s.mulIndi
+cator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖₊
+参数：s t : Set α；f : α -> E；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `dist_mulIndicator`：dist_mulIndicator (s t : Set α) (f : α -> E) (x : α) 
+: dist (s.mulIndicator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖
 -/
-theorem nndist_mulIndicator (s t : Set α) (f : α -> E) (x : α) :
+theorem nndist_mulIndicator (s t : Set α) (f : α → E) (x : α) :
     nndist (s.mulIndicator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖₊ :=
-NNReal.eq dist_mulIndicator s t f x
+  NNReal.eq <| dist_mulIndicator s t f x
 
 @[to_additive]
-/--
-theorem `nnnorm_div_le` / 定理 `nnnorm_div_le`
-
-English:
-theorem nnnorm_div_le
-  given: (a b : E)
-  statement: ‖a / b‖₊ <= ‖a‖₊ + ‖b‖₊
-  proof: NNReal.coe_le_coe.1 norm_div_le _ _
-
-@[to_additive]
-
-中文:
-定理 nnnorm_div_le
-  条件: (a b : E)
-  结论: ‖a / b‖₊ <= ‖a‖₊ + ‖b‖₊
-  证明: NNReal.coe_le_coe.1 norm_div_le _ _
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, norm_div_le
+/-
+**nnnorm_div_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_div_le (a b : E) : ‖a / b‖₊ <= ‖a‖₊ + ‖b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `norm_div_le`：norm_div_le (a b : E) : ‖a / b‖ <= ‖a‖ + ‖b‖
 -/
-theorem nnnorm_div_le (a b : E) : ‖a / b‖₊ <= ‖a‖₊ + ‖b‖₊ :=
-NNReal.coe_le_coe.1 norm_div_le _ _
+theorem nnnorm_div_le (a b : E) : ‖a / b‖₊ ≤ ‖a‖₊ + ‖b‖₊ :=
+  NNReal.coe_le_coe.1 <| norm_div_le _ _
 
 @[to_additive]
-/--
-lemma `enorm_div_le` / 引理 `enorm_div_le`
-
-English:
-lemma enorm_div_le
-  statement: ‖a / b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
-  proof: by
+/-
+**enorm_div_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_div_le : ‖a / b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nnnorm_div_le`：nnnorm_div_le (a b : E) : ‖a / b‖₊ <= ‖a‖₊ + ‖b‖₊
+-/
+lemma enorm_div_le : ‖a / b‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ := by
   simpa [enorm, ← ENNReal.coe_add] using nnnorm_div_le a b
 
 @[to_additive]
-
-中文:
-引理 enorm_div_le
-  结论: ‖a / b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
-  证明: by
-  simpa [enorm, ← ENNReal.coe_add] using nnnorm_div_le a b
-
-@[to_additive]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_add, coe_add, nnnorm_div_le
+/-
+**nndist_nnnorm_nnnorm_le_nnnorm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_nnnorm_nnnorm_le_nnnorm_inv_mul (a b : E) : nndist ‖a‖₊ ‖b‖₊ <= ‖a⁻
+¹ * b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `dist_norm_norm_le_norm_inv_mul`：dist_norm_norm_le_norm_inv_mul (a b : E)
+ : dist ‖a‖ ‖b‖ <= ‖a⁻¹ * b‖
 -/
-lemma enorm_div_le : ‖a / b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ := by
-  simpa [enorm, ← ENNReal.coe_add] using nnnorm_div_le a b
+theorem nndist_nnnorm_nnnorm_le_nnnorm_inv_mul (a b : E) : nndist ‖a‖₊ ‖b‖₊ ≤ ‖a⁻¹ * b‖₊ :=
+  NNReal.coe_le_coe.1 <| dist_norm_norm_le_norm_inv_mul a b
 
 @[to_additive]
-/--
-theorem `nndist_nnnorm_nnnorm_le_nnnorm_inv_mul` / 定理 `nndist_nnnorm_nnnorm_le_nnnorm_inv_mul`
-
-English:
-theorem nndist_nnnorm_nnnorm_le_nnnorm_inv_mul
-  given: (a b : E)
-  statement: nndist ‖a‖₊ ‖b‖₊ <= ‖a⁻¹ * b‖₊
-  proof: NNReal.coe_le_coe.1 dist_norm_norm_le_norm_inv_mul a b
-
-@[to_additive]
-
-中文:
-定理 nndist_nnnorm_nnnorm_le_nnnorm_inv_mul
-  条件: (a b : E)
-  结论: nndist ‖a‖₊ ‖b‖₊ <= ‖a⁻¹ * b‖₊
-  证明: NNReal.coe_le_coe.1 dist_norm_norm_le_norm_inv_mul a b
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, dist_norm_norm_le_norm_inv_mul
+/-
+**nnnorm_le_nnnorm_add_nnnorm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_le_nnnorm_add_nnnorm_div (a b : E) : ‖b‖₊ <= ‖a‖₊ + ‖a / b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_le_norm_add_norm_div`：norm_le_norm_add_norm_div (u v : E) : ‖v‖ <= 
+‖u‖ + ‖u / v‖
 -/
-theorem nndist_nnnorm_nnnorm_le_nnnorm_inv_mul (a b : E) : nndist ‖a‖₊ ‖b‖₊ <= ‖a⁻¹ * b‖₊ :=
-NNReal.coe_le_coe.1 dist_norm_norm_le_norm_inv_mul a b
-
-@[to_additive]
-/--
-theorem `nnnorm_le_nnnorm_add_nnnorm_div` / 定理 `nnnorm_le_nnnorm_add_nnnorm_div`
-
-English:
-theorem nnnorm_le_nnnorm_add_nnnorm_div
-  given: (a b : E)
-  statement: ‖b‖₊ <= ‖a‖₊ + ‖a / b‖₊
-  proof: norm_le_norm_add_norm_div _ _
-
-@[to_additive]
-
-中文:
-定理 nnnorm_le_nnnorm_add_nnnorm_div
-  条件: (a b : E)
-  结论: ‖b‖₊ <= ‖a‖₊ + ‖a / b‖₊
-  证明: norm_le_norm_add_norm_div _ _
-
-@[to_additive]
-
-Depends on / 依赖: norm_le_norm_add_norm_div
--/
-theorem nnnorm_le_nnnorm_add_nnnorm_div (a b : E) : ‖b‖₊ <= ‖a‖₊ + ‖a / b‖₊ :=
+theorem nnnorm_le_nnnorm_add_nnnorm_div (a b : E) : ‖b‖₊ ≤ ‖a‖₊ + ‖a / b‖₊ :=
   norm_le_norm_add_norm_div _ _
 
 @[to_additive]
-/--
-theorem `nnnorm_le_nnnorm_add_nnnorm_div'` / 定理 `nnnorm_le_nnnorm_add_nnnorm_div'`
-
-English:
-theorem nnnorm_le_nnnorm_add_nnnorm_div'
-  given: (a b : E)
-  statement: ‖a‖₊ <= ‖b‖₊ + ‖a / b‖₊
-  proof: norm_le_norm_add_norm_div' _ _
-
-alias nnnorm_le_insert' := nnnorm_le_nnnorm_add_nnnorm_sub'
-
-alias nnnorm_le_insert := nnnorm_le_nnnorm_add_nnnorm_sub
-
-@[to_additive]
-
-中文:
-定理 nnnorm_le_nnnorm_add_nnnorm_div'
-  条件: (a b : E)
-  结论: ‖a‖₊ <= ‖b‖₊ + ‖a / b‖₊
-  证明: norm_le_norm_add_norm_div' _ _
-
-alias nnnorm_le_insert' := nnnorm_le_nnnorm_add_nnnorm_sub'
-
-alias nnnorm_le_insert := nnnorm_le_nnnorm_add_nnnorm_sub
-
-@[to_additive]
-
-Depends on / 依赖: norm_le_norm_add_norm_div
+/-
+**nnnorm_le_nnnorm_add_nnnorm_div'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_le_nnnorm_add_nnnorm_div' (a b : E) : ‖a‖₊ <= ‖b‖₊ + ‖a / b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_le_norm_add_norm_div'`：norm_le_norm_add_norm_div' (u v : E) : ‖u‖ <
+= ‖v‖ + ‖u / v‖
 -/
-theorem nnnorm_le_nnnorm_add_nnnorm_div' (a b : E) : ‖a‖₊ <= ‖b‖₊ + ‖a / b‖₊ :=
+theorem nnnorm_le_nnnorm_add_nnnorm_div' (a b : E) : ‖a‖₊ ≤ ‖b‖₊ + ‖a / b‖₊ :=
   norm_le_norm_add_norm_div' _ _
 
 alias nnnorm_le_insert' := nnnorm_le_nnnorm_add_nnnorm_sub'
@@ -2585,300 +1901,206 @@ alias nnnorm_le_insert' := nnnorm_le_nnnorm_add_nnnorm_sub'
 alias nnnorm_le_insert := nnnorm_le_nnnorm_add_nnnorm_sub
 
 @[to_additive]
-/--
-theorem `nnnorm_le_mul_nnnorm_add` / 定理 `nnnorm_le_mul_nnnorm_add`
-
-English:
-theorem nnnorm_le_mul_nnnorm_add
-  given: (a b : E)
-  statement: ‖a‖₊ <= ‖a * b‖₊ + ‖b‖₊
-  proof: norm_le_mul_norm_add _ _
-
-中文:
-定理 nnnorm_le_mul_nnnorm_add
-  条件: (a b : E)
-  结论: ‖a‖₊ <= ‖a * b‖₊ + ‖b‖₊
-  证明: norm_le_mul_norm_add _ _
-
-Depends on / 依赖: norm_le_mul_norm_add
+/-
+**nnnorm_le_mul_nnnorm_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_le_mul_nnnorm_add (a b : E) : ‖a‖₊ <= ‖a * b‖₊ + ‖b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_le_mul_norm_add`：norm_le_mul_norm_add (u v : E) : ‖u‖ <= ‖u * v‖ + 
+‖v‖
 -/
-theorem nnnorm_le_mul_nnnorm_add (a b : E) : ‖a‖₊ <= ‖a * b‖₊ + ‖b‖₊ :=
+theorem nnnorm_le_mul_nnnorm_add (a b : E) : ‖a‖₊ ≤ ‖a * b‖₊ + ‖b‖₊ :=
   norm_le_mul_norm_add _ _
 
 /-- An analogue of `nnnorm_le_mul_nnnorm_add` for the multiplication from the left. -/
 @[to_additive /-- An analogue of `nnnorm_le_add_nnnorm_add` for the addition from the left. -/]
-/--
-theorem `nnnorm_le_mul_nnnorm_add'` / 定理 `nnnorm_le_mul_nnnorm_add'`
+/-
+**nnnorm_le_mul_nnnorm_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_le_mul_nnnorm_add' (a b : E) : ‖b‖₊ <= ‖a * b‖₊ + ‖a‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_le_mul_norm_add'`：norm_le_mul_norm_add' (u v : E) : ‖v‖ <= ‖u * v‖ 
++ ‖u‖
 
-English:
-theorem nnnorm_le_mul_nnnorm_add'
-  given: (a b : E)
-  statement: ‖b‖₊ <= ‖a * b‖₊ + ‖a‖₊
-  proof: norm_le_mul_norm_add' _ _
-
-@[to_additive]
-
-中文:
-定理 nnnorm_le_mul_nnnorm_add'
-  条件: (a b : E)
-  结论: ‖b‖₊ <= ‖a * b‖₊ + ‖a‖₊
-  证明: norm_le_mul_norm_add' _ _
-
-@[to_additive]
-
-Depends on / 依赖: norm_le_mul_norm_add
+--- 原说明 ---
+An analogue of `nnnorm_le_mul_nnnorm_add` for the multiplication from the left.
 -/
-theorem nnnorm_le_mul_nnnorm_add' (a b : E) : ‖b‖₊ <= ‖a * b‖₊ + ‖a‖₊ :=
+theorem nnnorm_le_mul_nnnorm_add' (a b : E) : ‖b‖₊ ≤ ‖a * b‖₊ + ‖a‖₊ :=
   norm_le_mul_norm_add' _ _
 
 @[to_additive]
-/--
-lemma `nnnorm_mul_eq_nnnorm_right` / 引理 `nnnorm_mul_eq_nnnorm_right`
-
-English:
-lemma nnnorm_mul_eq_nnnorm_right
-  given: {x : E} (y : E) (h : ‖x‖₊ = 0)
-  statement: ‖x * y‖₊ = ‖y‖₊
-  proof: NNReal.eq norm_mul_eq_norm_right _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-中文:
-引理 nnnorm_mul_eq_nnnorm_right
-  条件: {x : E} (y : E) (h : ‖x‖₊ = 0)
-  结论: ‖x * y‖₊ = ‖y‖₊
-  证明: NNReal.eq norm_mul_eq_norm_right _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, NNReal.toReal, congr_arg, norm_mul_eq_norm_right, toReal
+/-
+**nnnorm_mul_eq_nnnorm_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_mul_eq_nnnorm_right {x : E} (y : E) (h : ‖x‖₊ = 0) : ‖x * y‖₊ = ‖y‖
+₊
+参数：y : E；h : ‖x‖₊ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `norm_mul_eq_norm_right`：norm_mul_eq_norm_right {x : E} (y : E) (h : ‖x‖ 
+= 0) : ‖x * y‖ = ‖y‖
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma nnnorm_mul_eq_nnnorm_right {x : E} (y : E) (h : ‖x‖₊ = 0) : ‖x * y‖₊ = ‖y‖₊ :=
-NNReal.eq norm_mul_eq_norm_right _ congr_arg NNReal.toReal h
+  NNReal.eq <| norm_mul_eq_norm_right _ <| congr_arg NNReal.toReal h
 
 @[to_additive]
-/--
-lemma `nnnorm_mul_eq_nnnorm_left` / 引理 `nnnorm_mul_eq_nnnorm_left`
-
-English:
-lemma nnnorm_mul_eq_nnnorm_left
-  given: (x : E) {y : E} (h : ‖y‖₊ = 0)
-  statement: ‖x * y‖₊ = ‖x‖₊
-  proof: NNReal.eq norm_mul_eq_norm_left _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-中文:
-引理 nnnorm_mul_eq_nnnorm_left
-  条件: (x : E) {y : E} (h : ‖y‖₊ = 0)
-  结论: ‖x * y‖₊ = ‖x‖₊
-  证明: NNReal.eq norm_mul_eq_norm_left _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, NNReal.toReal, congr_arg, norm_mul_eq_norm_left, toReal
+/-
+**nnnorm_mul_eq_nnnorm_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_mul_eq_nnnorm_left (x : E) {y : E} (h : ‖y‖₊ = 0) : ‖x * y‖₊ = ‖x‖₊
+参数：x : E；h : ‖y‖₊ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `norm_mul_eq_norm_left`：norm_mul_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 
+0) : ‖x * y‖ = ‖x‖
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma nnnorm_mul_eq_nnnorm_left (x : E) {y : E} (h : ‖y‖₊ = 0) : ‖x * y‖₊ = ‖x‖₊ :=
-NNReal.eq norm_mul_eq_norm_left _ congr_arg NNReal.toReal h
+  NNReal.eq <| norm_mul_eq_norm_left _ <| congr_arg NNReal.toReal h
 
 @[to_additive]
-/--
-lemma `nnnorm_div_eq_nnnorm_right` / 引理 `nnnorm_div_eq_nnnorm_right`
-
-English:
-lemma nnnorm_div_eq_nnnorm_right
-  given: {x : E} (y : E) (h : ‖x‖₊ = 0)
-  statement: ‖x / y‖₊ = ‖y‖₊
-  proof: NNReal.eq norm_div_eq_norm_right _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-中文:
-引理 nnnorm_div_eq_nnnorm_right
-  条件: {x : E} (y : E) (h : ‖x‖₊ = 0)
-  结论: ‖x / y‖₊ = ‖y‖₊
-  证明: NNReal.eq norm_div_eq_norm_right _ congr_arg NNReal.toReal h
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, NNReal.toReal, congr_arg, norm_div_eq_norm_right, toReal
+/-
+**nnnorm_div_eq_nnnorm_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_div_eq_nnnorm_right {x : E} (y : E) (h : ‖x‖₊ = 0) : ‖x / y‖₊ = ‖y‖
+₊
+参数：y : E；h : ‖x‖₊ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `norm_div_eq_norm_right`：norm_div_eq_norm_right {x : E} (y : E) (h : ‖x‖ 
+= 0) : ‖x / y‖ = ‖y‖
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma nnnorm_div_eq_nnnorm_right {x : E} (y : E) (h : ‖x‖₊ = 0) : ‖x / y‖₊ = ‖y‖₊ :=
-NNReal.eq norm_div_eq_norm_right _ congr_arg NNReal.toReal h
+  NNReal.eq <| norm_div_eq_norm_right _ <| congr_arg NNReal.toReal h
 
 @[to_additive]
-/--
-lemma `nnnorm_div_eq_nnnorm_left` / 引理 `nnnorm_div_eq_nnnorm_left`
-
-English:
-lemma nnnorm_div_eq_nnnorm_left
-  given: (x : E) {y : E} (h : ‖y‖₊ = 0)
-  statement: ‖x / y‖₊ = ‖x‖₊
-  proof: NNReal.eq norm_div_eq_norm_left _ congr_arg NNReal.toReal h
-
-中文:
-引理 nnnorm_div_eq_nnnorm_left
-  条件: (x : E) {y : E} (h : ‖y‖₊ = 0)
-  结论: ‖x / y‖₊ = ‖x‖₊
-  证明: NNReal.eq norm_div_eq_norm_left _ congr_arg NNReal.toReal h
-
-Depends on / 依赖: NNReal, NNReal.eq, NNReal.toReal, congr_arg, norm_div_eq_norm_left, toReal
+/-
+**nnnorm_div_eq_nnnorm_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_div_eq_nnnorm_left (x : E) {y : E} (h : ‖y‖₊ = 0) : ‖x / y‖₊ = ‖x‖₊
+参数：x : E；h : ‖y‖₊ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `norm_div_eq_norm_left`：norm_div_eq_norm_left (x : E) {y : E} (h : ‖y‖ = 
+0) : ‖x / y‖ = ‖x‖
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma nnnorm_div_eq_nnnorm_left (x : E) {y : E} (h : ‖y‖₊ = 0) : ‖x / y‖₊ = ‖x‖₊ :=
-NNReal.eq norm_div_eq_norm_left _ congr_arg NNReal.toReal h
+  NNReal.eq <| norm_div_eq_norm_left _ <| congr_arg NNReal.toReal h
 
 /-- The nonnegative norm seen as an `ENNReal` and then as a `Real` is equal to the norm. -/
 @[to_additive toReal_coe_nnnorm /-- The nonnegative norm seen as an `ENNReal` and
 then as a `Real` is equal to the norm. -/]
-/--
-theorem `toReal_coe_nnnorm'` / 定理 `toReal_coe_nnnorm'`
-
-English:
-theorem toReal_coe_nnnorm'
-  given: (a : E)
-  statement: (‖a‖₊ : Real>=0∞).toReal = ‖a‖
-  proof: rfl
-
-中文:
-定理 to实数_coe_nnnorm'
-  条件: (a : E)
-  结论: (‖a‖₊ : 实数>=0∞).to实数 = ‖a‖
-  证明: rfl
+/-
+**toReal_coe_nnnorm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toReal_coe_nnnorm' (a : E) : (‖a‖₊ : Real>=0∞).toReal = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toReal_coe_nnnorm' (a : E) : (‖a‖₊ : Real>=0∞).toReal = ‖a‖ := rfl
+theorem toReal_coe_nnnorm' (a : E) : (‖a‖₊ : ℝ≥0∞).toReal = ‖a‖ := rfl
 
 open scoped symmDiff in
 @[to_additive]
-/--
-theorem `edist_mulIndicator` / 定理 `edist_mulIndicator`
-
-English:
-theorem edist_mulIndicator
-  given: (s t : Set α) (f : α -> E) (x : α)
-  proof: by
-  rw [edist_nndist]; rw [nndist_mulIndicator]
-
-@[to_additive nontrivialTopology_iff_exists_nnnorm_ne_zero]
-
-中文:
-定理 edist_mulIndicator
-  条件: (s t : 集合 α) (f : α -> E) (x : α)
-  证明: by
-  rw [edist_nndist]; rw [nndist_mulIndicator]
-
-@[to_additive nontrivialTopology_iff_exists_nnnorm_ne_zero]
-
-Depends on / 依赖: edist_nndist, nndist_mulIndicator
+/-
+**edist_mulIndicator** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_mulIndicator (s t : Set α) (f : α -> E) (x : α) : edist (s.mulIndica
+tor f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖₊
+参数：s t : Set α；f : α -> E；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_nndist`：edist_nndist (x y : α) : edist x y = nndist x y
+· 使用定理 `nndist_mulIndicator`：nndist_mulIndicator (s t : Set α) (f : α -> E) (x :
+ α) : nndist (s.mulIndicator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f
+ x‖₊
 -/
-theorem edist_mulIndicator (s t : Set α) (f : α -> E) (x : α) :
+theorem edist_mulIndicator (s t : Set α) (f : α → E) (x : α) :
     edist (s.mulIndicator f x) (t.mulIndicator f x) = ‖(s ∆ t).mulIndicator f x‖₊ := by
-  rw [edist_nndist]; rw [nndist_mulIndicator]
+  rw [edist_nndist, nndist_mulIndicator]
 
 @[to_additive nontrivialTopology_iff_exists_nnnorm_ne_zero]
-/--
-theorem `nontrivialTopology_iff_exists_nnnorm_ne_zero'` / 定理 `nontrivialTopology_iff_exists_nnnorm_ne_zero'`
-
-English:
-theorem nontrivialTopology_iff_exists_nnnorm_ne_zero'
-  proof: by
-  simp_rw [TopologicalSpace.nontrivial_iff_exists_not_inseparable, Metric.inseparable_iff_nndist,
-    nndist_eq_nnnorm_inv_mul]
-  exact ⟨fun ⟨x, y, hxy⟩ => ⟨_, hxy⟩, fun ⟨x, hx⟩ => ⟨x, 1, by simpa using hx⟩⟩
-
-@[to_additive indiscreteTopology_iff_forall_nnnorm_eq_zero]
-
-中文:
-定理 nontrivialTopology_iff_存在_nnnorm_ne_zero'
-  证明: by
-  simp_rw [TopologicalSpace.nontrivial_iff_exists_not_inseparable, Metric.inseparable_iff_nndist,
-    nndist_eq_nnnorm_inv_mul]
-  exact ⟨fun ⟨x, y, hxy⟩ => ⟨_, hxy⟩, fun ⟨x, hx⟩ => ⟨x, 1, by simpa using hx⟩⟩
-
-@[to_additive indiscreteTopology_iff_forall_nnnorm_eq_zero]
-
-Depends on / 依赖: Metric, Metric.inseparable_iff_nndist, TopologicalSpace, TopologicalSpace.nontrivial_iff_exists_not_inseparable, inseparable_iff_nndist, nndist_eq_nnnorm_inv_mul, nontrivial_iff_exists_not_inseparable, simp_rw
+/-
+**nontrivialTopology_iff_exists_nnnorm_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nontrivialTopology_iff_exists_nnnorm_ne_zero' : NontrivialTopology E ↔ exi
+sts x : E, ‖x‖₊ != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `nndist_eq_nnnorm_inv_mul`：nndist_eq_nnnorm_inv_mul (a b : E) : nndist a 
+b = ‖a⁻¹ * b‖₊
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `nnnorm_inv'`：nnnorm_inv' (a : E) : ‖a⁻¹‖₊ = ‖a‖₊
 -/
 theorem nontrivialTopology_iff_exists_nnnorm_ne_zero' :
-    NontrivialTopology E ↔ exists x : E, ‖x‖₊ != 0 := by
+    NontrivialTopology E ↔ ∃ x : E, ‖x‖₊ ≠ 0 := by
   simp_rw [TopologicalSpace.nontrivial_iff_exists_not_inseparable, Metric.inseparable_iff_nndist,
     nndist_eq_nnnorm_inv_mul]
   exact ⟨fun ⟨x, y, hxy⟩ => ⟨_, hxy⟩, fun ⟨x, hx⟩ => ⟨x, 1, by simpa using hx⟩⟩
 
 @[to_additive indiscreteTopology_iff_forall_nnnorm_eq_zero]
-/--
-theorem `indiscreteTopology_iff_forall_nnnorm_eq_zero'` / 定理 `indiscreteTopology_iff_forall_nnnorm_eq_zero'`
-
-English:
-theorem indiscreteTopology_iff_forall_nnnorm_eq_zero'
-  proof: by
-  simpa using nontrivialTopology_iff_exists_nnnorm_ne_zero' (E := E).not
-
-中文:
-定理 indiscreteTopology_iff_对任意_nnnorm_eq_zero'
-  证明: by
-  simpa using nontrivialTopology_iff_exists_nnnorm_ne_zero' (E := E).not
-
-Depends on / 依赖: nontrivialTopology_iff_exists_nnnorm_ne_zero
+/-
+**indiscreteTopology_iff_forall_nnnorm_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：indiscreteTopology_iff_forall_nnnorm_eq_zero' : IndiscreteTopology E ↔ for
+all x : E, ‖x‖₊ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `nontrivialTopology_iff_exists_nnnorm_ne_zero'`：nontrivialTopology_iff_ex
+ists_nnnorm_ne_zero' : NontrivialTopology E ↔ exists x : E, ‖x‖₊ != 0
 -/
 theorem indiscreteTopology_iff_forall_nnnorm_eq_zero' :
-    IndiscreteTopology E ↔ forall x : E, ‖x‖₊ = 0 := by
+    IndiscreteTopology E ↔ ∀ x : E, ‖x‖₊ = 0 := by
   simpa using nontrivialTopology_iff_exists_nnnorm_ne_zero' (E := E).not
 
 variable (E) in
 @[to_additive exists_nnnorm_ne_zero]
-/--
-theorem `exists_nnnorm_ne_zero'` / 定理 `exists_nnnorm_ne_zero'`
-
-English:
-theorem exists_nnnorm_ne_zero'
-  given: [NontrivialTopology E]
-  statement: exists x : E, ‖x‖₊ != 0
-  proof: nontrivialTopology_iff_exists_nnnorm_ne_zero'.1 ‹_›
-
-@[to_additive (attr := nontriviality) nnnorm_eq_zero]
-
-中文:
-定理 存在_nnnorm_ne_zero'
-  条件: [非平凡拓扑 E]
-  结论: 存在 x : E, ‖x‖₊ != 0
-  证明: nontrivialTopology_iff_exists_nnnorm_ne_zero'.1 ‹_›
-
-@[to_additive (attr := nontriviality) nnnorm_eq_zero]
-
-Depends on / 依赖: nontrivialTopology_iff_exists_nnnorm_ne_zero
+/-
+**exists_nnnorm_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_nnnorm_ne_zero' [NontrivialTopology E] : exists x : E, ‖x‖₊ != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nontrivialTopology_iff_exists_nnnorm_ne_zero'`：nontrivialTopology_iff_ex
+ists_nnnorm_ne_zero' : NontrivialTopology E ↔ exists x : E, ‖x‖₊ != 0
 -/
-theorem exists_nnnorm_ne_zero' [NontrivialTopology E] : exists x : E, ‖x‖₊ != 0 :=
+theorem exists_nnnorm_ne_zero' [NontrivialTopology E] : ∃ x : E, ‖x‖₊ ≠ 0 :=
   nontrivialTopology_iff_exists_nnnorm_ne_zero'.1 ‹_›
 
 @[to_additive (attr := nontriviality) nnnorm_eq_zero]
-/--
-theorem `IndiscreteTopology.nnnorm_eq_zero'` / 定理 `IndiscreteTopology.nnnorm_eq_zero'`
-
-English:
-theorem IndiscreteTopology.nnnorm_eq_zero'
-  given: [IndiscreteTopology E]
-  statement: forall x : E, ‖x‖₊ = 0
-  proof: indiscreteTopology_iff_forall_nnnorm_eq_zero'.1 ‹_›
-
-alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero'⟩ :=
-  nontrivialTopology_iff_exists_nnnorm_ne_zero'
-alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero⟩ :=
-  nontrivialTopology_iff_exists_nnnorm_ne_zero
-
-中文:
-定理 Indiscrete拓扑.nnnorm_eq_zero'
-  条件: [Indiscrete拓扑 E]
-  结论: 对任意 x : E, ‖x‖₊ = 0
-  证明: indiscreteTopology_iff_forall_nnnorm_eq_zero'.1 ‹_›
-
-alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero'⟩ :=
-  nontrivialTopology_iff_exists_nnnorm_ne_zero'
-alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero⟩ :=
-  nontrivialTopology_iff_exists_nnnorm_ne_zero
-
-Depends on / 依赖: indiscreteTopology_iff_forall_nnnorm_eq_zero
+/-
+**IndiscreteTopology.nnnorm_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IndiscreteTopology.nnnorm_eq_zero' [IndiscreteTopology E] : forall x : E, 
+‖x‖₊ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `indiscreteTopology_iff_forall_nnnorm_eq_zero'`：indiscreteTopology_iff_fo
+rall_nnnorm_eq_zero' : IndiscreteTopology E ↔ forall x : E, ‖x‖₊ = 0
 -/
-theorem IndiscreteTopology.nnnorm_eq_zero' [IndiscreteTopology E] : forall x : E, ‖x‖₊ = 0 :=
+theorem IndiscreteTopology.nnnorm_eq_zero' [IndiscreteTopology E] : ∀ x : E, ‖x‖₊ = 0 :=
   indiscreteTopology_iff_forall_nnnorm_eq_zero'.1 ‹_›
 
 alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero'⟩ :=
@@ -2896,104 +2118,74 @@ attribute [to_additive existing IndiscreteTopology.of_forall_nnnorm_eq_zero]
   IndiscreteTopology.of_forall_nnnorm_eq_zero'
 
 @[to_additive nontrivialTopology_iff_exists_norm_ne_zero]
-/--
-theorem `nontrivialTopology_iff_exists_norm_ne_zero'` / 定理 `nontrivialTopology_iff_exists_norm_ne_zero'`
-
-English:
-theorem nontrivialTopology_iff_exists_norm_ne_zero'
-  proof: by
-  simp [nontrivialTopology_iff_exists_nnnorm_ne_zero', ← NNReal.ne_iff]
-
-@[to_additive indiscreteTopology_iff_forall_norm_eq_zero]
-
-中文:
-定理 nontrivialTopology_iff_存在_norm_ne_zero'
-  证明: by
-  simp [nontrivialTopology_iff_exists_nnnorm_ne_zero', ← NNReal.ne_iff]
-
-@[to_additive indiscreteTopology_iff_forall_norm_eq_zero]
-
-Depends on / 依赖: NNReal, NNReal.ne_iff, ne_iff, nontrivialTopology_iff_exists_nnnorm_ne_zero
+/-
+**nontrivialTopology_iff_exists_norm_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nontrivialTopology_iff_exists_norm_ne_zero' : NontrivialTopology E ↔ exist
+s x : E, ‖x‖ != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem nontrivialTopology_iff_exists_norm_ne_zero' :
-    NontrivialTopology E ↔ exists x : E, ‖x‖ != 0 := by
+    NontrivialTopology E ↔ ∃ x : E, ‖x‖ ≠ 0 := by
   simp [nontrivialTopology_iff_exists_nnnorm_ne_zero', ← NNReal.ne_iff]
 
 @[to_additive indiscreteTopology_iff_forall_norm_eq_zero]
-/--
-theorem `indiscreteTopology_iff_forall_norm_eq_zero'` / 定理 `indiscreteTopology_iff_forall_norm_eq_zero'`
-
-English:
-theorem indiscreteTopology_iff_forall_norm_eq_zero'
-  proof: by
-  simpa using nontrivialTopology_iff_exists_norm_ne_zero' (E := E).not
-
-中文:
-定理 indiscreteTopology_iff_对任意_norm_eq_zero'
-  证明: by
-  simpa using nontrivialTopology_iff_exists_norm_ne_zero' (E := E).not
-
-Depends on / 依赖: nontrivialTopology_iff_exists_norm_ne_zero
+/-
+**indiscreteTopology_iff_forall_norm_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：indiscreteTopology_iff_forall_norm_eq_zero' : IndiscreteTopology E ↔ foral
+l x : E, ‖x‖ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `nontrivialTopology_iff_exists_norm_ne_zero'`：nontrivialTopology_iff_exis
+ts_norm_ne_zero' : NontrivialTopology E ↔ exists x : E, ‖x‖ != 0
 -/
 theorem indiscreteTopology_iff_forall_norm_eq_zero' :
-    IndiscreteTopology E ↔ forall x : E, ‖x‖ = 0 := by
+    IndiscreteTopology E ↔ ∀ x : E, ‖x‖ = 0 := by
   simpa using nontrivialTopology_iff_exists_norm_ne_zero' (E := E).not
 
 variable (E) in
 @[to_additive exists_norm_ne_zero]
-/--
-theorem `exists_norm_ne_zero'` / 定理 `exists_norm_ne_zero'`
-
-English:
-theorem exists_norm_ne_zero'
-  given: [NontrivialTopology E]
-  statement: exists x : E, ‖x‖ != 0
-  proof: nontrivialTopology_iff_exists_norm_ne_zero'.1 ‹_›
-
-@[to_additive (attr := nontriviality) IndiscreteTopology.norm_eq_zero]
-
-中文:
-定理 存在_norm_ne_zero'
-  条件: [非平凡拓扑 E]
-  结论: 存在 x : E, ‖x‖ != 0
-  证明: nontrivialTopology_iff_exists_norm_ne_zero'.1 ‹_›
-
-@[to_additive (attr := nontriviality) IndiscreteTopology.norm_eq_zero]
-
-Depends on / 依赖: nontrivialTopology_iff_exists_norm_ne_zero
+/-
+**exists_norm_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_norm_ne_zero' [NontrivialTopology E] : exists x : E, ‖x‖ != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nontrivialTopology_iff_exists_norm_ne_zero'`：nontrivialTopology_iff_exis
+ts_norm_ne_zero' : NontrivialTopology E ↔ exists x : E, ‖x‖ != 0
 -/
-theorem exists_norm_ne_zero' [NontrivialTopology E] : exists x : E, ‖x‖ != 0 :=
+theorem exists_norm_ne_zero' [NontrivialTopology E] : ∃ x : E, ‖x‖ ≠ 0 :=
   nontrivialTopology_iff_exists_norm_ne_zero'.1 ‹_›
 
 @[to_additive (attr := nontriviality) IndiscreteTopology.norm_eq_zero]
-/--
-theorem `IndiscreteTopology.norm_eq_zero'` / 定理 `IndiscreteTopology.norm_eq_zero'`
-
-English:
-theorem IndiscreteTopology.norm_eq_zero'
-  given: [IndiscreteTopology E]
-  statement: forall x : E, ‖x‖ = 0
-  proof: indiscreteTopology_iff_forall_norm_eq_zero'.1 ‹_›
-
-alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero'⟩ :=
-  nontrivialTopology_iff_exists_norm_ne_zero'
-alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero⟩ :=
-  nontrivialTopology_iff_exists_norm_ne_zero
-
-中文:
-定理 Indiscrete拓扑.norm_eq_zero'
-  条件: [Indiscrete拓扑 E]
-  结论: 对任意 x : E, ‖x‖ = 0
-  证明: indiscreteTopology_iff_forall_norm_eq_zero'.1 ‹_›
-
-alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero'⟩ :=
-  nontrivialTopology_iff_exists_norm_ne_zero'
-alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero⟩ :=
-  nontrivialTopology_iff_exists_norm_ne_zero
-
-Depends on / 依赖: indiscreteTopology_iff_forall_norm_eq_zero
+/-
+**IndiscreteTopology.norm_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IndiscreteTopology.norm_eq_zero' [IndiscreteTopology E] : forall x : E, ‖x
+‖ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `indiscreteTopology_iff_forall_norm_eq_zero'`：indiscreteTopology_iff_fora
+ll_norm_eq_zero' : IndiscreteTopology E ↔ forall x : E, ‖x‖ = 0
 -/
-theorem IndiscreteTopology.norm_eq_zero' [IndiscreteTopology E] : forall x : E, ‖x‖ = 0 :=
+theorem IndiscreteTopology.norm_eq_zero' [IndiscreteTopology E] : ∀ x : E, ‖x‖ = 0 :=
   indiscreteTopology_iff_forall_norm_eq_zero'.1 ‹_›
 
 alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero'⟩ :=
@@ -3015,184 +2207,138 @@ end NNNorm
 section ENorm
 
 @[to_additive (attr := simp) enorm_zero]
-/--
-lemma `enorm_one'` / 引理 `enorm_one'`
-
-English:
-lemma enorm_one'
-  given: {E : Type*} [TopologicalSpace E] [ESeminormedMonoid E]
-  statement: ‖(1 : E)‖ₑ = 0
-  proof: by
-  rw [ESeminormedMonoid.enorm_zero]
-
-@[to_additive exists_enorm_lt]
-
-中文:
-引理 enorm_one'
-  条件: {E : 类型} [拓扑空间 E] [ESeminormed幺半群 E]
-  结论: ‖(1 : E)‖ₑ = 0
-  证明: by
-  rw [ESeminormedMonoid.enorm_zero]
-
-@[to_additive exists_enorm_lt]
-
-Depends on / 依赖: ESeminormedMonoid, ESeminormedMonoid.enorm_zero, enorm_zero
+/-
+**enorm_one'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_one' {E : Type*} [TopologicalSpace E] [ESeminormedMonoid E] : ‖(1 : 
+E)‖ₑ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ESeminormedMonoid.enorm_zero`：∀ {E : Type u_8} {inst : TopologicalSpace 
+E} [self : ESeminormedMonoid E], ‖1‖ₑ = 0
 -/
 lemma enorm_one' {E : Type*} [TopologicalSpace E] [ESeminormedMonoid E] : ‖(1 : E)‖ₑ = 0 := by
   rw [ESeminormedMonoid.enorm_zero]
 
 @[to_additive exists_enorm_lt]
-/--
-lemma `exists_enorm_lt'` / 引理 `exists_enorm_lt'`
-
-English:
-lemma exists_enorm_lt'
-  statement: (E : Type*) [TopologicalSpace E] [ESeminormedMonoid E]
-  proof: .and_eventually frequently_iff_neBot.mpr hbot
-    (ContinuousENorm.continuous_enorm.tendsto' 1 0 (by simp) |>.eventually_lt_const hc.bot_lt)
-.exists
-
-@[to_additive (attr := simp) enorm_neg]
-
-中文:
-引理 存在_enorm_lt'
-  结论: (E : 类型) [拓扑空间 E] [ESeminormed幺半群 E]
-  证明: .and_eventually frequently_iff_neBot.mpr hbot
-    (ContinuousENorm.continuous_enorm.tendsto' 1 0 (by simp) |>.eventually_lt_const hc.bot_lt)
-.exists
-
-@[to_additive (attr := simp) enorm_neg]
-
-Depends on / 依赖: ContinuousENorm, ContinuousENorm.continuous_enorm.tendsto, and_eventually, bot_lt, continuous_enorm, eventually_lt_const, frequently_iff_neBot, frequently_iff_neBot.mpr, hc.bot_lt, tendsto
+/-
+**exists_enorm_lt'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：exists_enorm_lt' (E : Type*) [TopologicalSpace E] [ESeminormedMonoid E] [h
+bot : NeBot (𝓝[!=] (1 : E))] {c : Real>=0∞} (hc : c != 0) : exists x != (1 : E),
+ ‖x‖ₑ < c
+参数：E : Type*；𝓝[!=] (1 : E)；hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Frequently.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Frequently.and_eventually`：∀ {α : Type u} {p q : α → Prop} {f : F
+ilter α},   (∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, q x) → ∃ᶠ (x : α) in f, p
+ x ∧ q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.frequently_iff_neBot`：frequently_iff_neBot {l : Filter α} {p : α 
+-> Prop} : (existsᶠ x in l, p x) ↔ NeBot (l ⊓ 𝓟 {x | p x})
+· 使用定理 `Filter.Tendsto.eventually_lt_const`：∀ {α : Type u} {γ : Type w} [inst : 
+TopologicalSpace α] [inst_1 : LinearOrder α] [ClosedIciTopology α] {l : Filter γ
+}   {f : γ → α} {u v : α…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
+· 使用定理 `Continuous.tendsto'`：Continuous.tendsto' (hf : Continuous f) (x : X) (y 
+: Y) (h : f x = y) : Tendsto f (𝓝 x) (𝓝 y)
+· 使用定理 `ContinuousENorm.continuous_enorm`：∀ {E : Type u_8} {inst : TopologicalSp
+ace E} [self : ContinuousENorm E], Continuous enorm
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `enorm_one'`：enorm_one' {E : Type*} [TopologicalSpace E] [ESeminormedMono
+id E] : ‖(1 : E)‖ₑ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma exists_enorm_lt' (E : Type*) [TopologicalSpace E] [ESeminormedMonoid E]
-    [hbot : NeBot (𝓝[!=] (1 : E))] {c : Real>=0∞} (hc : c != 0) : exists x != (1 : E), ‖x‖ₑ < c :=
-.and_eventually frequently_iff_neBot.mpr hbot
+    [hbot : NeBot (𝓝[≠] (1 : E))] {c : ℝ≥0∞} (hc : c ≠ 0) : ∃ x ≠ (1 : E), ‖x‖ₑ < c :=
+  frequently_iff_neBot.mpr hbot |>.and_eventually
     (ContinuousENorm.continuous_enorm.tendsto' 1 0 (by simp) |>.eventually_lt_const hc.bot_lt)
-.exists
+    |>.exists
 
 @[to_additive (attr := simp) enorm_neg]
-/--
-lemma `enorm_inv'` / 引理 `enorm_inv'`
-
-English:
-lemma enorm_inv'
-  given: (a : E)
-  statement: ‖a⁻¹‖ₑ = ‖a‖ₑ
-  proof: by simp [enorm]
-
-@[to_additive]
-
-中文:
-引理 enorm_inv'
-  条件: (a : E)
-  结论: ‖a⁻¹‖ₑ = ‖a‖ₑ
-  证明: by simp [enorm]
-
-@[to_additive]
+/-
+**enorm_inv'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_inv' (a : E) : ‖a⁻¹‖ₑ = ‖a‖ₑ
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nnnorm_inv'`：nnnorm_inv' (a : E) : ‖a⁻¹‖₊ = ‖a‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma enorm_inv' (a : E) : ‖a⁻¹‖ₑ = ‖a‖ₑ := by simp [enorm]
 
 @[to_additive]
-/--
-theorem `edist_eq_enorm_inv_mul` / 定理 `edist_eq_enorm_inv_mul`
-
-English:
-theorem edist_eq_enorm_inv_mul
-  given: (a b : E)
-  statement: edist a b = ‖a⁻¹ * b‖ₑ
-  proof: by
-  rw [edist_dist]; rw [dist_eq_norm_inv_mul]; rw [ofReal_norm']
-
-@[deprecated (since := "2026-02-11")] alias edist_one_eq_enorm := edist_one_right
-
-@[deprecated (since := "2026-02-11")] alias edist_zero_eq_enorm := edist_zero_right
-
-@[to_additive]
-
-中文:
-定理 edist_eq_enorm_inv_mul
-  条件: (a b : E)
-  结论: edist a b = ‖a⁻¹ * b‖ₑ
-  证明: by
-  rw [edist_dist]; rw [dist_eq_norm_inv_mul]; rw [ofReal_norm']
-
-@[deprecated (since := "2026-02-11")] alias edist_one_eq_enorm := edist_one_right
-
-@[deprecated (since := "2026-02-11")] alias edist_zero_eq_enorm := edist_zero_right
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, edist_dist, ofReal_norm
+/-
+**edist_eq_enorm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_eq_enorm_inv_mul (a b : E) : edist a b = ‖a⁻¹ * b‖ₑ
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_dist`：edist_dist (x y : α) : edist x y = ENNReal.ofReal (dist x y)
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用引理 `ofReal_norm'`：ofReal_norm' (x : E) : .ofReal ‖x‖ = ‖x‖ₑ
 -/
 theorem edist_eq_enorm_inv_mul (a b : E) : edist a b = ‖a⁻¹ * b‖ₑ := by
-  rw [edist_dist]; rw [dist_eq_norm_inv_mul]; rw [ofReal_norm']
+  rw [edist_dist, dist_eq_norm_inv_mul, ofReal_norm']
 
 @[deprecated (since := "2026-02-11")] alias edist_one_eq_enorm := edist_one_right
 
 @[deprecated (since := "2026-02-11")] alias edist_zero_eq_enorm := edist_zero_right
 
 @[to_additive]
-/--
-lemma `enorm_div_rev` / 引理 `enorm_div_rev`
-
-English:
-lemma enorm_div_rev
-  given: {E : Type*} [SeminormedGroup E] (a b : E)
-  statement: ‖a / b‖ₑ = ‖b / a‖ₑ
-  proof: by
-  rw [← enorm_inv']; rw [inv_div]
-
-@[to_additive]
-
-中文:
-引理 enorm_div_rev
-  条件: {E : 类型} [半赋范群 E] (a b : E)
-  结论: ‖a / b‖ₑ = ‖b / a‖ₑ
-  证明: by
-  rw [← enorm_inv']; rw [inv_div]
-
-@[to_additive]
-
-Depends on / 依赖: enorm_inv, inv_div
+/-
+**enorm_div_rev** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_div_rev {E : Type*} [SeminormedGroup E] (a b : E) : ‖a / b‖ₑ = ‖b / 
+a‖ₑ
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `enorm_inv'`：enorm_inv' (a : E) : ‖a⁻¹‖ₑ = ‖a‖ₑ
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
 -/
 lemma enorm_div_rev {E : Type*} [SeminormedGroup E] (a b : E) : ‖a / b‖ₑ = ‖b / a‖ₑ := by
-  rw [← enorm_inv']; rw [inv_div]
+  rw [← enorm_inv', inv_div]
 
 @[to_additive]
-/--
-theorem `mem_eball_one_iff` / 定理 `mem_eball_one_iff`
-
-English:
-theorem mem_eball_one_iff
-  given: {r : Real>=0∞}
-  statement: a in eball 1 r ↔ ‖a‖ₑ < r
-  proof: by
-  rw [Metric.mem_eball]; rw [edist_one_right]
-
-@[deprecated (since := "2026-01-24")]
-alias mem_emetric_ball_zero_iff := mem_eball_zero_iff
-
-@[to_additive existing, deprecated (since := "2026-01-24")]
-alias mem_emetric_ball_one_iff := mem_eball_one_iff
-
-中文:
-定理 mem_eball_one_iff
-  条件: {r : 实数>=0∞}
-  结论: a in eball 1 r ↔ ‖a‖ₑ < r
-  证明: by
-  rw [Metric.mem_eball]; rw [edist_one_right]
-
-@[deprecated (since := "2026-01-24")]
-alias mem_emetric_ball_zero_iff := mem_eball_zero_iff
-
-@[to_additive existing, deprecated (since := "2026-01-24")]
-alias mem_emetric_ball_one_iff := mem_eball_one_iff
-
-Depends on / 依赖: Metric, Metric.mem_eball, edist_one_right, mem_eball
+/-
+**mem_eball_one_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_eball_one_iff {r : Real>=0∞} : a in eball 1 r ↔ ‖a‖ₑ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_eball`：∀ {α : Type u} [inst : EDist α] {x y : α} {ε : ENNReal
+}, y ∈ Metric.eball x ε ↔ edist y x < ε
+· 使用引理 `edist_one_right`：edist_one_right (a : E) : edist a 1 = ‖a‖ₑ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_eball_one_iff {r : Real>=0∞} : a in eball 1 r ↔ ‖a‖ₑ < r := by
-  rw [Metric.mem_eball]; rw [edist_one_right]
+theorem mem_eball_one_iff {r : ℝ≥0∞} : a ∈ eball 1 r ↔ ‖a‖ₑ < r := by
+  rw [Metric.mem_eball, edist_one_right]
 
 @[deprecated (since := "2026-01-24")]
 alias mem_emetric_ball_zero_iff := mem_eball_zero_iff
@@ -3207,97 +2353,79 @@ section ESeminormedMonoid
 variable {E : Type*} [TopologicalSpace E] [ESeminormedMonoid E]
 
 @[to_additive enorm_add_le]
-/--
-lemma `enorm_mul_le'` / 引理 `enorm_mul_le'`
-
-English:
-lemma enorm_mul_le'
-  given: (a b : E)
-  statement: ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
-  proof: ESeminormedMonoid.enorm_mul_le a b
+/-
+**enorm_mul_le'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_mul_le' (a b : E) : ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ESeminormedMonoid.enorm_mul_le`：∀ {E : Type u_8} {inst : TopologicalSpac
+e E} [self : ESeminormedMonoid E] (x y : E), ‖x * y‖ₑ ≤ ‖x‖ₑ + ‖y‖ₑ
+-/
+lemma enorm_mul_le' (a b : E) : ‖a * b‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ := ESeminormedMonoid.enorm_mul_le a b
 
 @[to_additive enorm_add_le_of_le]
-
-中文:
-引理 enorm_mul_le'
-  条件: (a b : E)
-  结论: ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
-  证明: ESeminormedMonoid.enorm_mul_le a b
-
-@[to_additive enorm_add_le_of_le]
-
-Depends on / 依赖: ESeminormedMonoid, ESeminormedMonoid.enorm_mul_le, enorm_mul_le
+/-
+**enorm_mul_le_of_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_mul_le_of_le' {r₁ r₂ : Real>=0∞} {a₁ a₂ : E} (h₁ : ‖a₁‖ₑ <= r₁) (h₂ 
+: ‖a₂‖ₑ <= r₂) : ‖a₁ * a₂‖ₑ <= r₁ + r₂
+参数：h₁ : ‖a₁‖ₑ <= r₁；h₂ : ‖a₂‖ₑ <= r₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `enorm_mul_le'`：enorm_mul_le' (a b : E) : ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
-lemma enorm_mul_le' (a b : E) : ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ := ESeminormedMonoid.enorm_mul_le a b
-
-@[to_additive enorm_add_le_of_le]
-/--
-theorem `enorm_mul_le_of_le'` / 定理 `enorm_mul_le_of_le'`
-
-English:
-theorem enorm_mul_le_of_le'
-  statement: {r₁ r₂ : Real>=0∞} {a₁ a₂ : E}
-  proof: (enorm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
+theorem enorm_mul_le_of_le' {r₁ r₂ : ℝ≥0∞} {a₁ a₂ : E}
+    (h₁ : ‖a₁‖ₑ ≤ r₁) (h₂ : ‖a₂‖ₑ ≤ r₂) : ‖a₁ * a₂‖ₑ ≤ r₁ + r₂ :=
+  (enorm_mul_le' a₁ a₂).trans <| add_le_add h₁ h₂
 
 @[to_additive enorm_add₃_le]
-
-中文:
-定理 enorm_mul_le_of_le'
-  结论: {r₁ r₂ : 实数>=0∞} {a₁ a₂ : E}
-  证明: (enorm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
-
-@[to_additive enorm_add₃_le]
-
-Depends on / 依赖: add_le_add, enorm_mul_le
+/-
+**enorm_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 : Mul α] [NormM
+ulClass α] (a b : α), ‖a * b‖ₑ = ‖a‖ₑ * ‖b‖ₑ
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nnnorm_mul`：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 :
+ Mul α] [NormMulClass α] (a b : α), ‖a * b‖₊ = ‖a‖₊ * ‖b‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem enorm_mul_le_of_le' {r₁ r₂ : Real>=0∞} {a₁ a₂ : E}
-    (h₁ : ‖a₁‖ₑ <= r₁) (h₂ : ‖a₂‖ₑ <= r₂) : ‖a₁ * a₂‖ₑ <= r₁ + r₂ :=
-(enorm_mul_le' a₁ a₂).trans add_le_add h₁ h₂
-
-@[to_additive enorm_add₃_le]
-/--
-lemma `enorm_mul₃_le'` / 引理 `enorm_mul₃_le'`
-
-English:
-lemma enorm_mul₃_le'
-  given: {a b c : E}
-  statement: ‖a * b * c‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ
-  proof: enorm_mul_le_of_le' (enorm_mul_le' _ _) le_rfl
-
-@[to_additive enorm_add₄_le]
-
-中文:
-引理 enorm_mul₃_le'
-  条件: {a b c : E}
-  结论: ‖a * b * c‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ
-  证明: enorm_mul_le_of_le' (enorm_mul_le' _ _) le_rfl
-
-@[to_additive enorm_add₄_le]
-
-Depends on / 依赖: enorm_mul_le, enorm_mul_le_of_le, le_rfl
--/
-lemma enorm_mul₃_le' {a b c : E} : ‖a * b * c‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ :=
+lemma enorm_mul₃_le' {a b c : E} : ‖a * b * c‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ :=
   enorm_mul_le_of_le' (enorm_mul_le' _ _) le_rfl
 
 @[to_additive enorm_add₄_le]
-/--
-lemma `enorm_mul₄_le'` / 引理 `enorm_mul₄_le'`
-
-English:
-lemma enorm_mul₄_le'
-  given: {a b c d : E}
-  statement: ‖a * b * c * d‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ + ‖d‖ₑ
-  proof: enorm_mul_le_of_le' enorm_mul₃_le' le_rfl
-
-中文:
-引理 enorm_mul₄_le'
-  条件: {a b c d : E}
-  结论: ‖a * b * c * d‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ + ‖d‖ₑ
-  证明: enorm_mul_le_of_le' enorm_mul₃_le' le_rfl
-
-Depends on / 依赖: enorm_mul_le_of_le, le_rfl
+/-
+**enorm_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 : Mul α] [NormM
+ulClass α] (a b : α), ‖a * b‖ₑ = ‖a‖ₑ * ‖b‖ₑ
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nnnorm_mul`：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 :
+ Mul α] [NormMulClass α] (a b : α), ‖a * b‖₊ = ‖a‖₊ * ‖b‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma enorm_mul₄_le' {a b c d : E} : ‖a * b * c * d‖ₑ <= ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ + ‖d‖ₑ :=
+lemma enorm_mul₄_le' {a b c d : E} : ‖a * b * c * d‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ + ‖c‖ₑ + ‖d‖ₑ :=
   enorm_mul_le_of_le' enorm_mul₃_le' le_rfl
 
 end ESeminormedMonoid
@@ -3307,127 +2435,106 @@ section ENormedMonoid
 variable {E : Type*} [TopologicalSpace E] [ENormedMonoid E]
 
 @[to_additive (attr := simp) enorm_eq_zero]
-/--
-lemma `enorm_eq_zero'` / 引理 `enorm_eq_zero'`
-
-English:
-lemma enorm_eq_zero'
-  given: {a : E}
-  statement: ‖a‖ₑ = 0 ↔ a = 1
-  proof: by
-  simp [ENormedMonoid.enorm_eq_zero]
-
-@[to_additive enorm_ne_zero]
-
-中文:
-引理 enorm_eq_zero'
-  条件: {a : E}
-  结论: ‖a‖ₑ = 0 ↔ a = 1
-  证明: by
-  simp [ENormedMonoid.enorm_eq_zero]
-
-@[to_additive enorm_ne_zero]
-
-Depends on / 依赖: ENormedMonoid, ENormedMonoid.enorm_eq_zero, enorm_eq_zero
+/-
+**enorm_eq_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_eq_zero' {a : E} : ‖a‖ₑ = 0 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma enorm_eq_zero' {a : E} : ‖a‖ₑ = 0 ↔ a = 1 := by
   simp [ENormedMonoid.enorm_eq_zero]
 
 @[to_additive enorm_ne_zero]
-/--
-lemma `enorm_ne_zero'` / 引理 `enorm_ne_zero'`
-
-English:
-lemma enorm_ne_zero'
-  given: {a : E}
-  statement: ‖a‖ₑ != 0 ↔ a != 1
-  proof: enorm_eq_zero'.ne
-
-@[to_additive (attr := simp) enorm_pos]
-
-中文:
-引理 enorm_ne_zero'
-  条件: {a : E}
-  结论: ‖a‖ₑ != 0 ↔ a != 1
-  证明: enorm_eq_zero'.ne
-
-@[to_additive (attr := simp) enorm_pos]
-
-Depends on / 依赖: enorm_eq_zero
+/-
+**enorm_ne_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_ne_zero' {a : E} : ‖a‖ₑ != 0 ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用引理 `enorm_eq_zero'`：enorm_eq_zero' {a : E} : ‖a‖ₑ = 0 ↔ a = 1
 -/
-lemma enorm_ne_zero' {a : E} : ‖a‖ₑ != 0 ↔ a != 1 :=
+lemma enorm_ne_zero' {a : E} : ‖a‖ₑ ≠ 0 ↔ a ≠ 1 :=
   enorm_eq_zero'.ne
 
 @[to_additive (attr := simp) enorm_pos]
-/--
-lemma `enorm_pos'` / 引理 `enorm_pos'`
-
-English:
-lemma enorm_pos'
-  given: {a : E}
-  statement: 0 < ‖a‖ₑ ↔ a != 1
-  proof: pos_iff_ne_zero.trans enorm_ne_zero'
-
-中文:
-引理 enorm_pos'
-  条件: {a : E}
-  结论: 0 < ‖a‖ₑ ↔ a != 1
-  证明: pos_iff_ne_zero.trans enorm_ne_zero'
-
-Depends on / 依赖: enorm_ne_zero, pos_iff_ne_zero, pos_iff_ne_zero.trans
+/-
+**enorm_pos'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_pos' {a : E} : 0 < ‖a‖ₑ ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用引理 `enorm_ne_zero'`：enorm_ne_zero' {a : E} : ‖a‖ₑ != 0 ↔ a != 1
 -/
-lemma enorm_pos' {a : E} : 0 < ‖a‖ₑ ↔ a != 1 :=
+lemma enorm_pos' {a : E} : 0 < ‖a‖ₑ ↔ a ≠ 1 :=
   pos_iff_ne_zero.trans enorm_ne_zero'
 
 end ENormedMonoid
 
 open Set in
 @[to_additive]
-/--
-lemma `SeminormedGroup.disjoint_nhds` / 引理 `SeminormedGroup.disjoint_nhds`
-
-English:
-lemma SeminormedGroup.disjoint_nhds
-  given: (x : E) (f : Filter E)
-  proof: by
-  simp [NormedGroup.nhds_basis_norm_lt x |>.disjoint_iff_left, compl_ofPred, eventually_iff]
-
-@[to_additive]
-
-中文:
-引理 半赋范群.disjoint_nhds
-  条件: (x : E) (f : 滤子 E)
-  证明: by
-  simp [NormedGroup.nhds_basis_norm_lt x |>.disjoint_iff_left, compl_ofPred, eventually_iff]
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.nhds_basis_norm_lt, compl_ofPred, disjoint_iff_left, eventually_iff, nhds_basis_norm_lt
+/-
+**SeminormedGroup.disjoint_nhds** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SeminormedGroup.disjoint_nhds (x : E) (f : Filter E) : Disjoint (𝓝 x) f ↔ 
+exists δ > 0, forallᶠ y in f, δ <= ‖y⁻¹ * x‖
+参数：x : E；f : Filter E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.disjoint_iff_left`：∀ {α : Type u_1} {ι : Sort u_4} {l l'
+ : Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → (Disjoint l l' ↔
+ ∃ i, p i ∧ (s i)ᶜ ∈ l'…
+· 使用定理 `NormedGroup.nhds_basis_norm_lt`：NormedGroup.nhds_basis_norm_lt (x : E) :
+ (𝓝 x).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma SeminormedGroup.disjoint_nhds (x : E) (f : Filter E) :
-    Disjoint (𝓝 x) f ↔ exists δ > 0, forallᶠ y in f, δ <= ‖y⁻¹ * x‖ := by
+    Disjoint (𝓝 x) f ↔ ∃ δ > 0, ∀ᶠ y in f, δ ≤ ‖y⁻¹ * x‖ := by
   simp [NormedGroup.nhds_basis_norm_lt x |>.disjoint_iff_left, compl_ofPred, eventually_iff]
 
 @[to_additive]
-/--
-lemma `SeminormedGroup.disjoint_nhds_one` / 引理 `SeminormedGroup.disjoint_nhds_one`
-
-English:
-lemma SeminormedGroup.disjoint_nhds_one
-  given: (f : Filter E)
-  proof: by
-  simpa using disjoint_nhds 1 f
-
-中文:
-引理 半赋范群.disjoint_nhds_one
-  条件: (f : 滤子 E)
-  证明: by
-  simpa using disjoint_nhds 1 f
-
-Depends on / 依赖: disjoint_nhds
+/-
+**SeminormedGroup.disjoint_nhds_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SeminormedGroup.disjoint_nhds_one (f : Filter E) : Disjoint (𝓝 1) f ↔ exis
+ts δ > 0, forallᶠ y in f, δ <= ‖y‖
+参数：f : Filter E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用引理 `SeminormedGroup.disjoint_nhds`：SeminormedGroup.disjoint_nhds (x : E) (f 
+: Filter E) : Disjoint (𝓝 x) f ↔ exists δ > 0, forallᶠ y in f, δ <= ‖y⁻¹ * x‖
 -/
 lemma SeminormedGroup.disjoint_nhds_one (f : Filter E) :
-    Disjoint (𝓝 1) f ↔ exists δ > 0, forallᶠ y in f, δ <= ‖y‖ := by
+    Disjoint (𝓝 1) f ↔ ∃ δ > 0, ∀ᶠ y in f, δ ≤ ‖y‖ := by
   simpa using disjoint_nhds 1 f
 
 end SeminormedGroup
@@ -3439,27 +2546,20 @@ variable [FunLike 𝓕 E F]
 
 -- See note [reducible non-instances]
 /-- A group homomorphism from a `Group` to a `SeminormedGroup` induces a `SeminormedGroup`
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure on the domain. -/
 @[to_additive /-- A group homomorphism from an `AddGroup` to a
 `SeminormedAddGroup` induces a `SeminormedAddGroup` structure on the domain. -/]
-/--
-Definition of `SeminormedGroup.induced` / `SeminormedGroup.induced` 的定义
-
-English:
-abbreviation SeminormedGroup.induced
-  signature: [Group E] [SeminormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕)
-  body: fast_instance% { PseudoMetricSpace.induced f toPseudoMetricSpace with
-    norm := fun x => ‖f x‖
-    dist_eq := fun x y => by simp only [map_mul, map_inv, ← dist_eq_norm_inv_mul]; rfl }
-
-中文:
-缩写 半赋范群.induced
-  签名: [群 E] [半赋范群 F] [幺半群态射类 𝓕 E F] (f : 𝓕)
-  定义体: fast_instance% { PseudoMetricSpace.induced f toPseudoMetricSpace with
-    norm := fun x => ‖f x‖
-    dist_eq := fun x y => by simp only [map_mul, map_inv, ← dist_eq_norm_inv_mul]; rfl }
-
-Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.induced, dist_eq, dist_eq_norm_inv_mul, fast_instance, induced, map_inv, map_mul, toPseudoMetricSpace
+/-
+**SeminormedGroup.induced** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedGroup.induced [Group E] [SeminormedGroup F] [MonoidHomClass 𝓕 E 
+F] (f : 𝓕) : SeminormedGroup E
+参数：f : 𝓕。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev SeminormedGroup.induced [Group E] [SeminormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕) :
     SeminormedGroup E :=
@@ -3472,20 +2572,13 @@ abbrev SeminormedGroup.induced [Group E] [SeminormedGroup F] [MonoidHomClass �
 `SeminormedCommGroup` structure on the domain. -/
 @[to_additive /-- A group homomorphism from an `AddCommGroup` to a
 `SeminormedAddGroup` induces a `SeminormedAddCommGroup` structure on the domain. -/]
-/--
-Definition of `SeminormedCommGroup.induced` / `SeminormedCommGroup.induced` 的定义
-
-English:
-abbreviation SeminormedCommGroup.induced
-  body: fast_instance% { SeminormedGroup.induced E F f with
-    mul_comm := mul_comm }
-
-中文:
-缩写 SeminormedComm群.induced
-  定义体: fast_instance% { SeminormedGroup.induced E F f with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.induced, fast_instance, induced, mul_comm
+/-
+**SeminormedCommGroup.induced** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedCommGroup.induced [CommGroup E] [SeminormedGroup F] [MonoidHomCl
+ass 𝓕 E F] (f : 𝓕) : SeminormedCommGroup E
+参数：f : 𝓕。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev SeminormedCommGroup.induced
     [CommGroup E] [SeminormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕) :
@@ -3495,21 +2588,20 @@ abbrev SeminormedCommGroup.induced
 
 -- See note [reducible non-instances].
 /-- An injective group homomorphism from a `Group` to a `NormedGroup` induces a `NormedGroup`
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure on the domain. -/
 @[to_additive /-- An injective group homomorphism from an `AddGroup` to a
 `NormedAddGroup` induces a `NormedAddGroup` structure on the domain. -/]
-/--
-Definition of `NormedGroup.induced` / `NormedGroup.induced` 的定义
-
-English:
-abbreviation NormedGroup.induced
-  body: fast_instance% { SeminormedGroup.induced E F f, MetricSpace.induced f h _ with }
-
-中文:
-缩写 赋范群.induced
-  定义体: fast_instance% { SeminormedGroup.induced E F f, MetricSpace.induced f h _ with }
-
-Depends on / 依赖: MetricSpace, MetricSpace.induced, SeminormedGroup, SeminormedGroup.induced, fast_instance, induced
+/-
+**NormedGroup.induced** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedGroup.induced [Group E] [NormedGroup F] [MonoidHomClass 𝓕 E F] (f : 
+𝓕) (h : Injective f) : NormedGroup E
+参数：f : 𝓕；h : Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev NormedGroup.induced
     [Group E] [NormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕) (h : Injective f) :
@@ -3521,20 +2613,13 @@ abbrev NormedGroup.induced
 `NormedCommGroup` structure on the domain. -/
 @[to_additive /-- An injective group homomorphism from a `CommGroup` to a
 `NormedCommGroup` induces a `NormedCommGroup` structure on the domain. -/]
-/--
-Definition of `NormedCommGroup.induced` / `NormedCommGroup.induced` 的定义
-
-English:
-abbreviation NormedCommGroup.induced
-  signature: [CommGroup E] [NormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕)
-  body: fast_instance% { SeminormedCommGroup.induced E F f, MetricSpace.induced f h _ with }
-
-中文:
-缩写 NormedComm群.induced
-  签名: [交换群 E] [赋范群 F] [幺半群态射类 𝓕 E F] (f : 𝓕)
-  定义体: fast_instance% { SeminormedCommGroup.induced E F f, MetricSpace.induced f h _ with }
-
-Depends on / 依赖: MetricSpace, MetricSpace.induced, SeminormedCommGroup, SeminormedCommGroup.induced, fast_instance, induced
+/-
+**NormedCommGroup.induced** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedCommGroup.induced [CommGroup E] [NormedGroup F] [MonoidHomClass 𝓕 E 
+F] (f : 𝓕) (h : Injective f) : NormedCommGroup E
+参数：f : 𝓕；h : Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev NormedCommGroup.induced [CommGroup E] [NormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕)
     (h : Injective f) : NormedCommGroup E :=
@@ -3544,1285 +2629,1120 @@ end Induced
 
 section SeminormedCommGroup
 
-variable [SeminormedCommGroup E] [SeminormedCommGroup F] {a b : E} {r : Real}
+variable [SeminormedCommGroup E] [SeminormedCommGroup F] {a b : E} {r : ℝ}
 variable {ε : Type*} [TopologicalSpace ε] [ESeminormedCommMonoid ε]
 
 @[to_additive]
-/--
-theorem `dist_eq_norm_div` / 定理 `dist_eq_norm_div`
-
-English:
-theorem dist_eq_norm_div
-  given: (a b : E)
-  statement: dist a b = ‖a / b‖
-  proof: by
-  rw [dist_eq_norm_inv_mul']; rw [div_eq_inv_mul]
-
-@[to_additive]
-
-中文:
-定理 dist_eq_norm_div
-  条件: (a b : E)
-  结论: dist a b = ‖a / b‖
-  证明: by
-  rw [dist_eq_norm_inv_mul']; rw [div_eq_inv_mul]
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, div_eq_inv_mul
+/-
+**dist_eq_norm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul'`：dist_eq_norm_inv_mul' (a b : E) : dist a b = ‖b⁻¹
+ * a‖
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
 -/
 theorem dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖ := by
-  rw [dist_eq_norm_inv_mul']; rw [div_eq_inv_mul]
+  rw [dist_eq_norm_inv_mul', div_eq_inv_mul]
 
 @[to_additive]
-/--
-theorem `dist_eq_norm_div'` / 定理 `dist_eq_norm_div'`
-
-English:
-theorem dist_eq_norm_div'
-  given: (a b : E)
-  statement: dist a b = ‖b / a‖
-  proof: by
-  rw [dist_eq_norm_inv_mul]; rw [div_eq_inv_mul]
-
-alias dist_eq_norm := dist_eq_norm_sub
-
-alias dist_eq_norm' := dist_eq_norm_sub'
-
-@[to_additive]
-
-中文:
-定理 dist_eq_norm_div'
-  条件: (a b : E)
-  结论: dist a b = ‖b / a‖
-  证明: by
-  rw [dist_eq_norm_inv_mul]; rw [div_eq_inv_mul]
-
-alias dist_eq_norm := dist_eq_norm_sub
-
-alias dist_eq_norm' := dist_eq_norm_sub'
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, div_eq_inv_mul
+/-
+**dist_eq_norm_div'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_eq_norm_div' (a b : E) : dist a b = ‖b / a‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
 -/
 theorem dist_eq_norm_div' (a b : E) : dist a b = ‖b / a‖ := by
-  rw [dist_eq_norm_inv_mul]; rw [div_eq_inv_mul]
+  rw [dist_eq_norm_inv_mul, div_eq_inv_mul]
 
 alias dist_eq_norm := dist_eq_norm_sub
 
 alias dist_eq_norm' := dist_eq_norm_sub'
 
 @[to_additive]
-/--
-theorem `norm_inv_mul` / 定理 `norm_inv_mul`
-
-English:
-theorem norm_inv_mul
-  given: (a b : E)
-  statement: ‖a⁻¹ * b‖ = ‖a / b‖
-  proof: by
-  rw [← dist_eq_norm_inv_mul]; rw [dist_eq_norm_div]
-
-@[to_additive abs_norm_sub_norm_le]
-
-中文:
-定理 norm_inv_mul
-  条件: (a b : E)
-  结论: ‖a⁻¹ * b‖ = ‖a / b‖
-  证明: by
-  rw [← dist_eq_norm_inv_mul]; rw [dist_eq_norm_div]
-
-@[to_additive abs_norm_sub_norm_le]
-
-Depends on / 依赖: dist_eq_norm_div, dist_eq_norm_inv_mul
+/-
+**norm_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
 -/
 theorem norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖ := by
-  rw [← dist_eq_norm_inv_mul]; rw [dist_eq_norm_div]
+  rw [← dist_eq_norm_inv_mul, dist_eq_norm_div]
 
 @[to_additive abs_norm_sub_norm_le]
-/--
-theorem `abs_norm_sub_norm_le'` / 定理 `abs_norm_sub_norm_le'`
-
-English:
-theorem abs_norm_sub_norm_le'
-  given: (a b : E)
-  statement: |‖a‖ - ‖b‖| <= ‖a / b‖
-  proof: (abs_norm_sub_norm_le_norm_inv_mul a b).trans_eq (norm_inv_mul a b)
-
-@[to_additive norm_sub_norm_le]
-
-中文:
-定理 abs_norm_sub_norm_le'
-  条件: (a b : E)
-  结论: |‖a‖ - ‖b‖| <= ‖a / b‖
-  证明: (abs_norm_sub_norm_le_norm_inv_mul a b).trans_eq (norm_inv_mul a b)
-
-@[to_additive norm_sub_norm_le]
-
-Depends on / 依赖: abs_norm_sub_norm_le_norm_inv_mul, norm_inv_mul, trans_eq
+/-
+**abs_norm_sub_norm_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abs_norm_sub_norm_le' (a b : E) : |‖a‖ - ‖b‖| <= ‖a / b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `abs_norm_sub_norm_le_norm_inv_mul`：abs_norm_sub_norm_le_norm_inv_mul (a 
+b : E) : |‖a‖ - ‖b‖| <= ‖a⁻¹ * b‖
+· 使用定理 `norm_inv_mul`：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
 -/
-theorem abs_norm_sub_norm_le' (a b : E) : |‖a‖ - ‖b‖| <= ‖a / b‖ :=
+theorem abs_norm_sub_norm_le' (a b : E) : |‖a‖ - ‖b‖| ≤ ‖a / b‖ :=
   (abs_norm_sub_norm_le_norm_inv_mul a b).trans_eq (norm_inv_mul a b)
 
 @[to_additive norm_sub_norm_le]
-/--
-theorem `norm_sub_norm_le'` / 定理 `norm_sub_norm_le'`
-
-English:
-theorem norm_sub_norm_le'
-  given: (a b : E)
-  statement: ‖a‖ - ‖b‖ <= ‖a / b‖
-  proof: (le_abs_self _).trans (abs_norm_sub_norm_le' a b)
-
-@[to_additive dist_norm_norm_le]
-
-中文:
-定理 norm_sub_norm_le'
-  条件: (a b : E)
-  结论: ‖a‖ - ‖b‖ <= ‖a / b‖
-  证明: (le_abs_self _).trans (abs_norm_sub_norm_le' a b)
-
-@[to_additive dist_norm_norm_le]
-
-Depends on / 依赖: abs_norm_sub_norm_le, le_abs_self
+/-
+**norm_sub_norm_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_sub_norm_le' (a b : E) : ‖a‖ - ‖b‖ <= ‖a / b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_abs_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (
+a : α), a ≤ |a|
+· 使用定理 `abs_norm_sub_norm_le'`：abs_norm_sub_norm_le' (a b : E) : |‖a‖ - ‖b‖| <= 
+‖a / b‖
 -/
-theorem norm_sub_norm_le' (a b : E) : ‖a‖ - ‖b‖ <= ‖a / b‖ :=
+theorem norm_sub_norm_le' (a b : E) : ‖a‖ - ‖b‖ ≤ ‖a / b‖ :=
   (le_abs_self _).trans (abs_norm_sub_norm_le' a b)
 
 @[to_additive dist_norm_norm_le]
-/--
-theorem `dist_norm_norm_le'` / 定理 `dist_norm_norm_le'`
-
-English:
-theorem dist_norm_norm_le'
-  given: (a b : E)
-  statement: dist ‖a‖ ‖b‖ <= ‖a / b‖
-  proof: abs_norm_sub_norm_le' a b
-
-@[to_additive nndist_nnnorm_nnnorm_le]
-
-中文:
-定理 dist_norm_norm_le'
-  条件: (a b : E)
-  结论: dist ‖a‖ ‖b‖ <= ‖a / b‖
-  证明: abs_norm_sub_norm_le' a b
-
-@[to_additive nndist_nnnorm_nnnorm_le]
-
-Depends on / 依赖: abs_norm_sub_norm_le
+/-
+**dist_norm_norm_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_norm_norm_le' (a b : E) : dist ‖a‖ ‖b‖ <= ‖a / b‖
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_norm_sub_norm_le'`：abs_norm_sub_norm_le' (a b : E) : |‖a‖ - ‖b‖| <= 
+‖a / b‖
 -/
-theorem dist_norm_norm_le' (a b : E) : dist ‖a‖ ‖b‖ <= ‖a / b‖ :=
+theorem dist_norm_norm_le' (a b : E) : dist ‖a‖ ‖b‖ ≤ ‖a / b‖ :=
   abs_norm_sub_norm_le' a b
 
 @[to_additive nndist_nnnorm_nnnorm_le]
-/--
-theorem `nndist_nnnorm_nnnorm_le'` / 定理 `nndist_nnnorm_nnnorm_le'`
-
-English:
-theorem nndist_nnnorm_nnnorm_le'
-  given: (a b : E)
-  statement: nndist ‖a‖₊ ‖b‖₊ <= ‖a / b‖₊
-  proof: NNReal.coe_le_coe.1 dist_norm_norm_le' a b
-
-@[to_additive]
-
-中文:
-定理 nndist_nnnorm_nnnorm_le'
-  条件: (a b : E)
-  结论: nndist ‖a‖₊ ‖b‖₊ <= ‖a / b‖₊
-  证明: NNReal.coe_le_coe.1 dist_norm_norm_le' a b
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, dist_norm_norm_le
+/-
+**nndist_nnnorm_nnnorm_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_nnnorm_nnnorm_le' (a b : E) : nndist ‖a‖₊ ‖b‖₊ <= ‖a / b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `dist_norm_norm_le'`：dist_norm_norm_le' (a b : E) : dist ‖a‖ ‖b‖ <= ‖a / 
+b‖
 -/
-theorem nndist_nnnorm_nnnorm_le' (a b : E) : nndist ‖a‖₊ ‖b‖₊ <= ‖a / b‖₊ :=
-NNReal.coe_le_coe.1 dist_norm_norm_le' a b
+theorem nndist_nnnorm_nnnorm_le' (a b : E) : nndist ‖a‖₊ ‖b‖₊ ≤ ‖a / b‖₊ :=
+  NNReal.coe_le_coe.1 <| dist_norm_norm_le' a b
 
 @[to_additive]
-/--
-theorem `nndist_eq_nnnorm_div` / 定理 `nndist_eq_nnnorm_div`
-
-English:
-theorem nndist_eq_nnnorm_div
-  given: (a b : E)
-  statement: nndist a b = ‖a / b‖₊
-  proof: NNReal.eq dist_eq_norm_div _ _
-
-alias nndist_eq_nnnorm := nndist_eq_nnnorm_sub
-
-@[to_additive]
-
-中文:
-定理 nndist_eq_nnnorm_div
-  条件: (a b : E)
-  结论: nndist a b = ‖a / b‖₊
-  证明: NNReal.eq dist_eq_norm_div _ _
-
-alias nndist_eq_nnnorm := nndist_eq_nnnorm_sub
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.eq, dist_eq_norm_div
+/-
+**nndist_eq_nnnorm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nndist_eq_nnnorm_div (a b : E) : nndist a b = ‖a / b‖₊
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
 -/
 theorem nndist_eq_nnnorm_div (a b : E) : nndist a b = ‖a / b‖₊ :=
-NNReal.eq dist_eq_norm_div _ _
+  NNReal.eq <| dist_eq_norm_div _ _
 
 alias nndist_eq_nnnorm := nndist_eq_nnnorm_sub
 
 @[to_additive]
-/--
-theorem `edist_eq_enorm_div` / 定理 `edist_eq_enorm_div`
-
-English:
-theorem edist_eq_enorm_div
-  given: (a b : E)
-  statement: edist a b = ‖a / b‖ₑ
-  proof: by
-  rw [edist_dist]; rw [dist_eq_norm_div]; rw [ofReal_norm']
-
-@[to_additive]
-
-中文:
-定理 edist_eq_enorm_div
-  条件: (a b : E)
-  结论: edist a b = ‖a / b‖ₑ
-  证明: by
-  rw [edist_dist]; rw [dist_eq_norm_div]; rw [ofReal_norm']
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_div, edist_dist, ofReal_norm
+/-
+**edist_eq_enorm_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_eq_enorm_div (a b : E) : edist a b = ‖a / b‖ₑ
+参数：a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_dist`：edist_dist (x y : α) : edist x y = ENNReal.ofReal (dist x y)
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用引理 `ofReal_norm'`：ofReal_norm' (x : E) : .ofReal ‖x‖ = ‖x‖ₑ
 -/
 theorem edist_eq_enorm_div (a b : E) : edist a b = ‖a / b‖ₑ := by
-  rw [edist_dist]; rw [dist_eq_norm_div]; rw [ofReal_norm']
+  rw [edist_dist, dist_eq_norm_div, ofReal_norm']
 
 @[to_additive]
-/--
-theorem `dist_inv` / 定理 `dist_inv`
-
-English:
-theorem dist_inv
-  given: (x y : E)
-  statement: dist x⁻¹ y = dist x y⁻¹
-  proof: by
-  simp_rw [dist_eq_norm_inv_mul, ← norm_inv' (x⁻¹ * y⁻¹), mul_inv, inv_inv]
-
-中文:
-定理 dist_inv
-  条件: (x y : E)
-  结论: dist x⁻¹ y = dist x y⁻¹
-  证明: by
-  simp_rw [dist_eq_norm_inv_mul, ← norm_inv' (x⁻¹ * y⁻¹), mul_inv, inv_inv]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, inv_inv, mul_inv, norm_inv, simp_rw
+/-
+**dist_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_inv (x y : E) : dist x⁻¹ y = dist x y⁻¹
+参数：x y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_inv'`：norm_inv' (a : E) : ‖a⁻¹‖ = ‖a‖
+· 使用定理 `mul_inv`：mul_inv : (a * b)⁻¹ = a⁻¹ * b⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dist_inv (x y : E) : dist x⁻¹ y = dist x y⁻¹ := by
   simp_rw [dist_eq_norm_inv_mul, ← norm_inv' (x⁻¹ * y⁻¹), mul_inv, inv_inv]
-
-/--
-theorem `norm_multiset_sum_le` / 定理 `norm_multiset_sum_le`
-
-English:
-theorem norm_multiset_sum_le
-  given: {E} [SeminormedAddCommGroup E] (m : Multiset E)
-  proof: m.le_sum_of_subadditive norm norm_zero.le norm_add_le
-
-中文:
-定理 norm_multiset_sum_le
-  条件: {E} [SeminormedAddComm群 E] (m : Multiset E)
-  证明: m.le_sum_of_subadditive norm norm_zero.le norm_add_le
-
-Depends on / 依赖: le_sum_of_subadditive, m.le_sum_of_subadditive, norm_add_le, norm_zero, norm_zero.le
+/-
+**norm_multiset_sum_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_multiset_sum_le {E} [SeminormedAddCommGroup E] (m : Multiset E) : ‖m.
+sum‖ <= (m.map fun x => ‖x‖).sum
+参数：m : Multiset E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.le_sum_of_subadditive`：∀ {α : Type u_2} {β : Type u_3} [inst : 
+AddCommMonoid α] [inst_1 : AddCommMonoid β] [inst_2 : Preorder β]   [IsOrderedAd
+dMonoid β] (f : α → …
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `norm_add_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), ‖
+a + b‖ ≤ ‖a‖ + ‖b‖
 -/
 theorem norm_multiset_sum_le {E} [SeminormedAddCommGroup E] (m : Multiset E) :
-    ‖m.sum‖ <= (m.map fun x => ‖x‖).sum :=
+    ‖m.sum‖ ≤ (m.map fun x => ‖x‖).sum :=
   m.le_sum_of_subadditive norm norm_zero.le norm_add_le
 
 variable {ε : Type*} [TopologicalSpace ε] [ESeminormedAddCommMonoid ε] in
-/--
-theorem `enorm_multisetSum_le` / 定理 `enorm_multisetSum_le`
-
-English:
-theorem enorm_multisetSum_le
-  given: (m : Multiset ε)
-  proof: m.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le
-
-@[to_additive existing]
-
-中文:
-定理 enorm_multisetSum_le
-  条件: (m : Multiset ε)
-  证明: m.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le
-
-@[to_additive existing]
-
-Depends on / 依赖: enorm_add_le, enorm_zero, enorm_zero.le, le_sum_of_subadditive, m.le_sum_of_subadditive
+/-
+**enorm_multisetSum_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_multisetSum_le (m : Multiset ε) : ‖m.sum‖ₑ <= (m.map fun x => ‖x‖ₑ).
+sum
+参数：m : Multiset ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.le_sum_of_subadditive`：∀ {α : Type u_2} {β : Type u_3} [inst : 
+AddCommMonoid α] [inst_1 : AddCommMonoid β] [inst_2 : Preorder β]   [IsOrderedAd
+dMonoid β] (f : α → …
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `enorm_add_le`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESe
+minormedAddMonoid E] (a b : E), ‖a + b‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ
 -/
 theorem enorm_multisetSum_le (m : Multiset ε) :
-    ‖m.sum‖ₑ <= (m.map fun x => ‖x‖ₑ).sum :=
+    ‖m.sum‖ₑ ≤ (m.map fun x => ‖x‖ₑ).sum :=
   m.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le
 
 @[to_additive existing]
-/--
-theorem `norm_multiset_prod_le` / 定理 `norm_multiset_prod_le`
-
-English:
-theorem norm_multiset_prod_le
-  given: (m : Multiset E)
-  statement: ‖m.prod‖ <= (m.map fun x => ‖x‖).sum
-  proof: m.apply_prod_le_sum_map _ norm_one'.le norm_mul_le'
-
-中文:
-定理 norm_multiset_prod_le
-  条件: (m : Multiset E)
-  结论: ‖m.乘积‖ <= (m.map fun x => ‖x‖).求和
-  证明: m.apply_prod_le_sum_map _ norm_one'.le norm_mul_le'
-
-Depends on / 依赖: apply_prod_le_sum_map, m.apply_prod_le_sum_map, norm_mul_le, norm_one
+/-
+**norm_multiset_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_multiset_prod_le (m : Multiset E) : ‖m.prod‖ <= (m.map fun x => ‖x‖).
+sum
+参数：m : Multiset E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Multiset.apply_prod_le_sum_map`：apply_prod_le_sum_map (h_one : f 1 <= 0)
+ (h_mul : forall (a b : α), f (a * b) <= f a + f b) : f m.prod <= (m.map f).sum
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_multiset_prod_le (m : Multiset E) : ‖m.prod‖ <= (m.map fun x => ‖x‖).sum :=
+theorem norm_multiset_prod_le (m : Multiset E) : ‖m.prod‖ ≤ (m.map fun x => ‖x‖).sum :=
   m.apply_prod_le_sum_map _ norm_one'.le norm_mul_le'
 
 variable {ε : Type*} [TopologicalSpace ε] [ESeminormedCommMonoid ε] in
 @[to_additive existing]
-/--
-theorem `enorm_multisetProd_le` / 定理 `enorm_multisetProd_le`
-
-English:
-theorem enorm_multisetProd_le
-  given: (m : Multiset ε)
-  proof: m.apply_prod_le_sum_map _ enorm_one'.le enorm_mul_le'
-
-中文:
-定理 enorm_multisetProd_le
-  条件: (m : Multiset ε)
-  证明: m.apply_prod_le_sum_map _ enorm_one'.le enorm_mul_le'
-
-Depends on / 依赖: apply_prod_le_sum_map, enorm_mul_le, enorm_one, m.apply_prod_le_sum_map
+/-
+**enorm_multisetProd_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_multisetProd_le (m : Multiset ε) : ‖m.prod‖ₑ <= (m.map fun x => ‖x‖ₑ
+).sum
+参数：m : Multiset ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Multiset.apply_prod_le_sum_map`：apply_prod_le_sum_map (h_one : f 1 <= 0)
+ (h_mul : forall (a b : α), f (a * b) <= f a + f b) : f m.prod <= (m.map f).sum
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用引理 `enorm_one'`：enorm_one' {E : Type*} [TopologicalSpace E] [ESeminormedMono
+id E] : ‖(1 : E)‖ₑ = 0
+· 使用引理 `enorm_mul_le'`：enorm_mul_le' (a b : E) : ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
 -/
 theorem enorm_multisetProd_le (m : Multiset ε) :
-    ‖m.prod‖ₑ <= (m.map fun x => ‖x‖ₑ).sum :=
+    ‖m.prod‖ₑ ≤ (m.map fun x => ‖x‖ₑ).sum :=
   m.apply_prod_le_sum_map _ enorm_one'.le enorm_mul_le'
 
 variable {ε : Type*} [TopologicalSpace ε] [ESeminormedAddCommMonoid ε] in
 @[bound]
-/--
-theorem `enorm_sum_le` / 定理 `enorm_sum_le`
-
-English:
-theorem enorm_sum_le
-  given: (s : Finset ι) (f : ι -> ε)
-  proof: s.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le f
-
-@[bound]
-
-中文:
-定理 enorm_sum_le
-  条件: (s : 有限集 ι) (f : ι -> ε)
-  证明: s.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le f
-
-@[bound]
-
-Depends on / 依赖: enorm_add_le, enorm_zero, enorm_zero.le, le_sum_of_subadditive, s.le_sum_of_subadditive
+/-
+**enorm_sum_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_sum_le (s : Finset ι) (f : ι -> ε) : ‖∑ i in s, f i‖ₑ <= ∑ i in s, ‖
+f i‖ₑ
+参数：s : Finset ι；f : ι -> ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.le_sum_of_subadditive`：∀ {ι : Type u_1} {M : Type u_4} {N : Type 
+u_5} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N] [inst_2 : Preorder N]  
+ [IsOrderedAddMono…
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `enorm_add_le`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESe
+minormedAddMonoid E] (a b : E), ‖a + b‖ₑ ≤ ‖a‖ₑ + ‖b‖ₑ
 -/
-theorem enorm_sum_le (s : Finset ι) (f : ι -> ε) :
-    ‖∑ i in s, f i‖ₑ <= ∑ i in s, ‖f i‖ₑ :=
+theorem enorm_sum_le (s : Finset ι) (f : ι → ε) :
+    ‖∑ i ∈ s, f i‖ₑ ≤ ∑ i ∈ s, ‖f i‖ₑ :=
   s.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le f
 
 @[bound]
-/--
-theorem `norm_sum_le` / 定理 `norm_sum_le`
-
-English:
-theorem norm_sum_le
-  given: {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι -> E)
-  proof: s.le_sum_of_subadditive norm norm_zero.le norm_add_le f
-
-@[to_additive existing]
-
-中文:
-定理 norm_sum_le
-  条件: {E} [SeminormedAddComm群 E] (s : 有限集 ι) (f : ι -> E)
-  证明: s.le_sum_of_subadditive norm norm_zero.le norm_add_le f
-
-@[to_additive existing]
-
-Depends on / 依赖: le_sum_of_subadditive, norm_add_le, norm_zero, norm_zero.le, s.le_sum_of_subadditive
+/-
+**norm_sum_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_sum_le {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι -> E) : ‖
+∑ i in s, f i‖ <= ∑ i in s, ‖f i‖
+参数：s : Finset ι；f : ι -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.le_sum_of_subadditive`：∀ {ι : Type u_1} {M : Type u_4} {N : Type 
+u_5} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N] [inst_2 : Preorder N]  
+ [IsOrderedAddMono…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `norm_add_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), ‖
+a + b‖ ≤ ‖a‖ + ‖b‖
 -/
-theorem norm_sum_le {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι -> E) :
-    ‖∑ i in s, f i‖ <= ∑ i in s, ‖f i‖ :=
+theorem norm_sum_le {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι → E) :
+    ‖∑ i ∈ s, f i‖ ≤ ∑ i ∈ s, ‖f i‖ :=
   s.le_sum_of_subadditive norm norm_zero.le norm_add_le f
 
 @[to_additive existing]
-/--
-theorem `enorm_prod_le` / 定理 `enorm_prod_le`
-
-English:
-theorem enorm_prod_le
-  given: (s : Finset ι) (f : ι -> ε)
-  statement: ‖∏ i in s, f i‖ₑ <= ∑ i in s, ‖f i‖ₑ
-  proof: s.apply_prod_le_sum_apply _ enorm_one'.le enorm_mul_le'
-
-@[to_additive existing]
-
-中文:
-定理 enorm_prod_le
-  条件: (s : 有限集 ι) (f : ι -> ε)
-  结论: ‖∏ i in s, f i‖ₑ <= ∑ i in s, ‖f i‖ₑ
-  证明: s.apply_prod_le_sum_apply _ enorm_one'.le enorm_mul_le'
-
-@[to_additive existing]
-
-Depends on / 依赖: apply_prod_le_sum_apply, enorm_mul_le, enorm_one, s.apply_prod_le_sum_apply
+/-
+**enorm_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_prod_le (s : Finset ι) (f : ι -> ε) : ‖∏ i in s, f i‖ₑ <= ∑ i in s, 
+‖f i‖ₑ
+参数：s : Finset ι；f : ι -> ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_prod_le_sum_apply`：apply_prod_le_sum_apply (h_one : g 1 <= 
+0) (h_mul : forall (a b : α), g (a * b) <= g a + g b) : g (∏ x in s, f x) <= ∑ x
+ in s, g (f x)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用引理 `enorm_one'`：enorm_one' {E : Type*} [TopologicalSpace E] [ESeminormedMono
+id E] : ‖(1 : E)‖ₑ = 0
+· 使用引理 `enorm_mul_le'`：enorm_mul_le' (a b : E) : ‖a * b‖ₑ <= ‖a‖ₑ + ‖b‖ₑ
 -/
-theorem enorm_prod_le (s : Finset ι) (f : ι -> ε) : ‖∏ i in s, f i‖ₑ <= ∑ i in s, ‖f i‖ₑ :=
+theorem enorm_prod_le (s : Finset ι) (f : ι → ε) : ‖∏ i ∈ s, f i‖ₑ ≤ ∑ i ∈ s, ‖f i‖ₑ :=
   s.apply_prod_le_sum_apply _ enorm_one'.le enorm_mul_le'
 
 @[to_additive existing]
-/--
-theorem `norm_prod_le` / 定理 `norm_prod_le`
-
-English:
-theorem norm_prod_le
-  given: (s : Finset ι) (f : ι -> E)
-  statement: ‖∏ i in s, f i‖ <= ∑ i in s, ‖f i‖
-  proof: s.apply_prod_le_sum_apply _ norm_one'.le norm_mul_le'
-
-@[to_additive]
-
-中文:
-定理 norm_prod_le
-  条件: (s : 有限集 ι) (f : ι -> E)
-  结论: ‖∏ i in s, f i‖ <= ∑ i in s, ‖f i‖
-  证明: s.apply_prod_le_sum_apply _ norm_one'.le norm_mul_le'
-
-@[to_additive]
-
-Depends on / 依赖: apply_prod_le_sum_apply, norm_mul_le, norm_one, s.apply_prod_le_sum_apply
+/-
+**norm_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ i in s, f i‖ <= ∑ i in s, ‖f
+ i‖
+参数：s : Finset ι；f : ι -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_prod_le_sum_apply`：apply_prod_le_sum_apply (h_one : g 1 <= 
+0) (h_mul : forall (a b : α), g (a * b) <= g a + g b) : g (∏ x in s, f x) <= ∑ x
+ in s, g (f x)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
+· 使用定理 `norm_mul_le'`：norm_mul_le' (a b : E) : ‖a * b‖ <= ‖a‖ + ‖b‖
 -/
-theorem norm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ i in s, f i‖ <= ∑ i in s, ‖f i‖ :=
+theorem norm_prod_le (s : Finset ι) (f : ι → E) : ‖∏ i ∈ s, f i‖ ≤ ∑ i ∈ s, ‖f i‖ :=
   s.apply_prod_le_sum_apply _ norm_one'.le norm_mul_le'
 
 @[to_additive]
-/--
-theorem `enorm_prod_le_of_le` / 定理 `enorm_prod_le_of_le`
-
-English:
-theorem enorm_prod_le_of_le
-  given: (s : Finset ι) {f : ι -> ε} {n : ι -> Real>=0∞} (h : forall b in s, ‖f b‖ₑ <= n b)
-  proof: (enorm_prod_le s f).trans Finset.sum_le_sum h
-
-@[to_additive]
-
-中文:
-定理 enorm_prod_le_of_le
-  条件: (s : 有限集 ι) {f : ι -> ε} {n : ι -> 实数>=0∞} (h : 对任意 b in s, ‖f b‖ₑ <= n b)
-  证明: (enorm_prod_le s f).trans Finset.sum_le_sum h
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.sum_le_sum, enorm_prod_le, sum_le_sum
+/-
+**enorm_prod_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_prod_le_of_le (s : Finset ι) {f : ι -> ε} {n : ι -> Real>=0∞} (h : f
+orall b in s, ‖f b‖ₑ <= n b) : ‖∏ b in s, f b‖ₑ <= ∑ b in s, n b
+参数：s : Finset ι；h : forall b in s, ‖f b‖ₑ <= n b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `enorm_prod_le`：enorm_prod_le (s : Finset ι) (f : ι -> ε) : ‖∏ i in s, f 
+i‖ₑ <= ∑ i in s, ‖f i‖ₑ
+· 使用定理 `Finset.sum_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈
+ s, f i…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
 -/
-theorem enorm_prod_le_of_le (s : Finset ι) {f : ι -> ε} {n : ι -> Real>=0∞} (h : forall b in s, ‖f b‖ₑ <= n b) :
-    ‖∏ b in s, f b‖ₑ <= ∑ b in s, n b :=
-(enorm_prod_le s f).trans Finset.sum_le_sum h
+theorem enorm_prod_le_of_le (s : Finset ι) {f : ι → ε} {n : ι → ℝ≥0∞} (h : ∀ b ∈ s, ‖f b‖ₑ ≤ n b) :
+    ‖∏ b ∈ s, f b‖ₑ ≤ ∑ b ∈ s, n b :=
+  (enorm_prod_le s f).trans <| Finset.sum_le_sum h
 
 @[to_additive]
-/--
-theorem `norm_prod_le_of_le` / 定理 `norm_prod_le_of_le`
-
-English:
-theorem norm_prod_le_of_le
-  given: (s : Finset ι) {f : ι -> E} {n : ι -> Real} (h : forall b in s, ‖f b‖ <= n b)
-  proof: (norm_prod_le s f).trans Finset.sum_le_sum h
-
-@[to_additive]
-
-中文:
-定理 norm_prod_le_of_le
-  条件: (s : 有限集 ι) {f : ι -> E} {n : ι -> 实数} (h : 对任意 b in s, ‖f b‖ <= n b)
-  证明: (norm_prod_le s f).trans Finset.sum_le_sum h
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.sum_le_sum, norm_prod_le, sum_le_sum
+/-
+**norm_prod_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : ι -> Real} (h : forall
+ b in s, ‖f b‖ <= n b) : ‖∏ b in s, f b‖ <= ∑ b in s, n b
+参数：s : Finset ι；h : forall b in s, ‖f b‖ <= n b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_prod_le`：norm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ i in s, f i‖
+ <= ∑ i in s, ‖f i‖
+· 使用定理 `Finset.sum_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈
+ s, f i…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-theorem norm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : ι -> Real} (h : forall b in s, ‖f b‖ <= n b) :
-    ‖∏ b in s, f b‖ <= ∑ b in s, n b :=
-(norm_prod_le s f).trans Finset.sum_le_sum h
+theorem norm_prod_le_of_le (s : Finset ι) {f : ι → E} {n : ι → ℝ} (h : ∀ b ∈ s, ‖f b‖ ≤ n b) :
+    ‖∏ b ∈ s, f b‖ ≤ ∑ b ∈ s, n b :=
+  (norm_prod_le s f).trans <| Finset.sum_le_sum h
 
 @[to_additive]
-/--
-theorem `dist_prod_prod_le_of_le` / 定理 `dist_prod_prod_le_of_le`
-
-English:
-theorem dist_prod_prod_le_of_le
-  statement: (s : Finset ι) {f a : ι -> E} {d : ι -> Real}
-  proof: by
+/-
+**dist_prod_prod_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_prod_prod_le_of_le (s : Finset ι) {f a : ι -> E} {d : ι -> Real} (h :
+ forall b in s, dist (f b) (a b) <= d b) : dist (∏ b in s, f b) (∏ b in s, a b) 
+<= ∑ b in s, d b
+参数：s : Finset ι；h : forall b in s, dist (f b) (a b) <= d b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_inv_distrib`：prod_inv_distrib (f : ι -> G) : (∏ x in s, (f x
+)⁻¹) = (∏ x in s, f x)⁻¹
+· 使用定理 `Finset.prod_mul_distrib`：prod_mul_distrib : ∏ x in s, f x * g x = (∏ x i
+n s, f x) * ∏ x in s, g x
+· 使用定理 `norm_prod_le_of_le`：norm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : 
+ι -> Real} (h : forall b in s, ‖f b‖ <= n b) : ‖∏ b in s, f b‖ <= ∑ b in s, n b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+-/
+theorem dist_prod_prod_le_of_le (s : Finset ι) {f a : ι → E} {d : ι → ℝ}
+    (h : ∀ b ∈ s, dist (f b) (a b) ≤ d b) :
+    dist (∏ b ∈ s, f b) (∏ b ∈ s, a b) ≤ ∑ b ∈ s, d b := by
   simp_rw [dist_eq_norm_inv_mul] at h
-  rw [dist_eq_norm_inv_mul]; rw [← Finset.prod_inv_distrib]; rw [← Finset.prod_mul_distrib]
+  rw [dist_eq_norm_inv_mul, ← Finset.prod_inv_distrib, ← Finset.prod_mul_distrib]
   exact norm_prod_le_of_le s h
 
 @[to_additive]
-
-中文:
-定理 dist_prod_prod_le_of_le
-  结论: (s : 有限集 ι) {f a : ι -> E} {d : ι -> 实数}
-  证明: by
-  simp_rw [dist_eq_norm_inv_mul] at h
-  rw [dist_eq_norm_inv_mul]; rw [← Finset.prod_inv_distrib]; rw [← Finset.prod_mul_distrib]
-  exact norm_prod_le_of_le s h
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.prod_inv_distrib, Finset.prod_mul_distrib, dist_eq_norm_inv_mul, norm_prod_le_of_le, prod_inv_distrib, prod_mul_distrib, simp_rw
+/-
+**dist_prod_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_prod_prod_le (s : Finset ι) (f a : ι -> E) : dist (∏ b in s, f b) (∏ 
+b in s, a b) <= ∑ b in s, dist (f b) (a b)
+参数：s : Finset ι；f a : ι -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dist_prod_prod_le_of_le`：dist_prod_prod_le_of_le (s : Finset ι) {f a : ι
+ -> E} {d : ι -> Real} (h : forall b in s, dist (f b) (a b) <= d b) : dist (∏ b 
+in s, f b) (∏…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem dist_prod_prod_le_of_le (s : Finset ι) {f a : ι -> E} {d : ι -> Real}
-    (h : forall b in s, dist (f b) (a b) <= d b) :
-    dist (∏ b in s, f b) (∏ b in s, a b) <= ∑ b in s, d b := by
-  simp_rw [dist_eq_norm_inv_mul] at h
-  rw [dist_eq_norm_inv_mul]; rw [← Finset.prod_inv_distrib]; rw [← Finset.prod_mul_distrib]
-  exact norm_prod_le_of_le s h
-
-@[to_additive]
-/--
-theorem `dist_prod_prod_le` / 定理 `dist_prod_prod_le`
-
-English:
-theorem dist_prod_prod_le
-  given: (s : Finset ι) (f a : ι -> E)
-  proof: dist_prod_prod_le_of_le s fun _ _ => le_rfl
-
-@[to_additive ball_eq]
-
-中文:
-定理 dist_prod_prod_le
-  条件: (s : 有限集 ι) (f a : ι -> E)
-  证明: dist_prod_prod_le_of_le s fun _ _ => le_rfl
-
-@[to_additive ball_eq]
-
-Depends on / 依赖: dist_prod_prod_le_of_le, le_rfl
--/
-theorem dist_prod_prod_le (s : Finset ι) (f a : ι -> E) :
-    dist (∏ b in s, f b) (∏ b in s, a b) <= ∑ b in s, dist (f b) (a b) :=
+theorem dist_prod_prod_le (s : Finset ι) (f a : ι → E) :
+    dist (∏ b ∈ s, f b) (∏ b ∈ s, a b) ≤ ∑ b ∈ s, dist (f b) (a b) :=
   dist_prod_prod_le_of_le s fun _ _ => le_rfl
 
 @[to_additive ball_eq]
-/--
-theorem `ball_eq'` / 定理 `ball_eq'`
-
-English:
-theorem ball_eq'
-  given: (y : E) (ε : Real)
-  statement: ball y ε = { x | ‖x / y‖ < ε }
-  proof: by
+/-
+**ball_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ball_eq' (y : E) (ε : Real) : ball y ε = { x | ‖x / y‖ < ε }
+参数：y : E；ε : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ball_eq_norm_inv_mul_lt`：ball_eq_norm_inv_mul_lt (y : E) (ε : Real) : ba
+ll y ε = { x | ‖x⁻¹ * y‖ < ε }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `norm_inv_mul`：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem ball_eq' (y : E) (ε : ℝ) : ball y ε = { x | ‖x / y‖ < ε } := by
   simp_rw [ball_eq_norm_inv_mul_lt, norm_inv_mul]
 
 @[to_additive mem_ball_iff_norm]
-
-中文:
-定理 ball_eq'
-  条件: (y : E) (ε : 实数)
-  结论: ball y ε = { x | ‖x / y‖ < ε }
-  证明: by
-  simp_rw [ball_eq_norm_inv_mul_lt, norm_inv_mul]
-
-@[to_additive mem_ball_iff_norm]
-
-Depends on / 依赖: ball_eq_norm_inv_mul_lt, norm_inv_mul, simp_rw
+/-
+**mem_ball_iff_norm''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_ball_iff_norm'' : b in ball a r ↔ ‖b / a‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_ball`：mem_ball : y in ball x ε ↔ dist y x < ε
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ball_eq' (y : E) (ε : Real) : ball y ε = { x | ‖x / y‖ < ε } := by
-  simp_rw [ball_eq_norm_inv_mul_lt, norm_inv_mul]
-
-@[to_additive mem_ball_iff_norm]
-/--
-theorem `mem_ball_iff_norm''` / 定理 `mem_ball_iff_norm''`
-
-English:
-theorem mem_ball_iff_norm''
-  statement: b in ball a r ↔ ‖b / a‖ < r
-  proof: by
-  rw [mem_ball]; rw [dist_eq_norm_div]
+theorem mem_ball_iff_norm'' : b ∈ ball a r ↔ ‖b / a‖ < r := by
+  rw [mem_ball, dist_eq_norm_div]
 
 @[to_additive mem_ball_iff_norm']
-
-中文:
-定理 mem_ball_iff_norm''
-  结论: b in ball a r ↔ ‖b / a‖ < r
-  证明: by
-  rw [mem_ball]; rw [dist_eq_norm_div]
-
-@[to_additive mem_ball_iff_norm']
-
-Depends on / 依赖: dist_eq_norm_div, mem_ball
+/-
+**mem_ball_iff_norm'''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_ball_iff_norm''' : b in ball a r ↔ ‖a / b‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_ball'`：mem_ball' : y in ball x ε ↔ dist x y < ε
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ball_iff_norm'' : b in ball a r ↔ ‖b / a‖ < r := by
-  rw [mem_ball]; rw [dist_eq_norm_div]
-
-@[to_additive mem_ball_iff_norm']
-/--
-theorem `mem_ball_iff_norm'''` / 定理 `mem_ball_iff_norm'''`
-
-English:
-theorem mem_ball_iff_norm'''
-  statement: b in ball a r ↔ ‖a / b‖ < r
-  proof: by
-  rw [mem_ball']; rw [dist_eq_norm_div]
-
-中文:
-定理 mem_ball_iff_norm'''
-  结论: b in ball a r ↔ ‖a / b‖ < r
-  证明: by
-  rw [mem_ball']; rw [dist_eq_norm_div]
-
-Depends on / 依赖: dist_eq_norm_div, mem_ball
--/
-theorem mem_ball_iff_norm''' : b in ball a r ↔ ‖a / b‖ < r := by
-  rw [mem_ball']; rw [dist_eq_norm_div]
+theorem mem_ball_iff_norm''' : b ∈ ball a r ↔ ‖a / b‖ < r := by
+  rw [mem_ball', dist_eq_norm_div]
 
 /-- A scaled ball is a ball. -/
 @[to_additive setOf_sub_mem_ball_eq_ball /-- A translated ball is a ball. -/]
-/--
-theorem `setOf_div_mem_ball_eq_ball''` / 定理 `setOf_div_mem_ball_eq_ball''`
+/-
+**setOf_div_mem_ball_eq_ball''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：setOf_div_mem_ball_eq_ball'' : {x | x / a in ball 1 r} = Metric.ball a r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_ball_iff_norm''`：mem_ball_iff_norm'' : b in ball a r ↔ ‖b / a‖ < r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem setOf_div_mem_ball_eq_ball''
-  proof: by
-  ext x
-  rw [mem_ball_iff_norm'']
-  simp
-
-@[to_additive mem_closedBall_iff_norm]
-
-中文:
-定理 setOf_div_mem_ball_eq_ball''
-  证明: by
-  ext x
-  rw [mem_ball_iff_norm'']
-  simp
-
-@[to_additive mem_closedBall_iff_norm]
-
-Depends on / 依赖: mem_ball_iff_norm
+--- 原说明 ---
+A scaled ball is a ball.
 -/
 theorem setOf_div_mem_ball_eq_ball'' :
-    {x | x / a in ball 1 r} = Metric.ball a r := by
+    {x | x / a ∈ ball 1 r} = Metric.ball a r := by
   ext x
   rw [mem_ball_iff_norm'']
   simp
 
 @[to_additive mem_closedBall_iff_norm]
-/--
-theorem `mem_closedBall_iff_norm''` / 定理 `mem_closedBall_iff_norm''`
-
-English:
-theorem mem_closedBall_iff_norm''
-  statement: b in closedBall a r ↔ ‖b / a‖ <= r
-  proof: by
-  rw [mem_closedBall]; rw [dist_eq_norm_div]
-
-@[to_additive mem_closedBall_iff_norm']
-
-中文:
-定理 mem_closedBall_iff_norm''
-  结论: b in closedBall a r ↔ ‖b / a‖ <= r
-  证明: by
-  rw [mem_closedBall]; rw [dist_eq_norm_div]
-
-@[to_additive mem_closedBall_iff_norm']
-
-Depends on / 依赖: dist_eq_norm_div, mem_closedBall
+/-
+**mem_closedBall_iff_norm''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closedBall_iff_norm'' : b in closedBall a r ↔ ‖b / a‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closedBall_iff_norm'' : b in closedBall a r ↔ ‖b / a‖ <= r := by
-  rw [mem_closedBall]; rw [dist_eq_norm_div]
+theorem mem_closedBall_iff_norm'' : b ∈ closedBall a r ↔ ‖b / a‖ ≤ r := by
+  rw [mem_closedBall, dist_eq_norm_div]
 
 @[to_additive mem_closedBall_iff_norm']
-/--
-theorem `mem_closedBall_iff_norm'''` / 定理 `mem_closedBall_iff_norm'''`
-
-English:
-theorem mem_closedBall_iff_norm'''
-  statement: b in closedBall a r ↔ ‖a / b‖ <= r
-  proof: by
-  rw [mem_closedBall']; rw [dist_eq_norm_div]
-
-中文:
-定理 mem_closedBall_iff_norm'''
-  结论: b in closedBall a r ↔ ‖a / b‖ <= r
-  证明: by
-  rw [mem_closedBall']; rw [dist_eq_norm_div]
-
-Depends on / 依赖: dist_eq_norm_div, mem_closedBall
+/-
+**mem_closedBall_iff_norm'''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closedBall_iff_norm''' : b in closedBall a r ↔ ‖a / b‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall'`：mem_closedBall' : y in closedBall x ε ↔ dist x y
+ <= ε
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closedBall_iff_norm''' : b in closedBall a r ↔ ‖a / b‖ <= r := by
-  rw [mem_closedBall']; rw [dist_eq_norm_div]
+theorem mem_closedBall_iff_norm''' : b ∈ closedBall a r ↔ ‖a / b‖ ≤ r := by
+  rw [mem_closedBall', dist_eq_norm_div]
 
 /-- A scaled closed ball is a closed ball. -/
 @[to_additive setOf_sub_mem_closedBall_eq_closedBall
   /-- A translated closed ball is a closed ball. -/]
-/--
-theorem `setOf_div_mem_closedBall_eq_closedBall''` / 定理 `setOf_div_mem_closedBall_eq_closedBall''`
-
-English:
-theorem setOf_div_mem_closedBall_eq_closedBall''
-  proof: by
-  ext x
-  rw [mem_closedBall_iff_norm'']
-  simp
-
-中文:
-定理 setOf_div_mem_closedBall_eq_closedBall''
-  证明: by
-  ext x
-  rw [mem_closedBall_iff_norm'']
-  simp
-
-Depends on / 依赖: mem_closedBall_iff_norm
+/-
+**setOf_div_mem_closedBall_eq_closedBall''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：setOf_div_mem_closedBall_eq_closedBall'' : {x | x / a in closedBall 1 r} =
+ Metric.closedBall a r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closedBall_iff_norm''`：mem_closedBall_iff_norm'' : b in closedBall a
+ r ↔ ‖b / a‖ <= r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem setOf_div_mem_closedBall_eq_closedBall'' :
-    {x | x / a in closedBall 1 r} = Metric.closedBall a r := by
+    {x | x / a ∈ closedBall 1 r} = Metric.closedBall a r := by
   ext x
   rw [mem_closedBall_iff_norm'']
   simp
 
 -- Higher priority to fire before `mem_sphere`.
 @[to_additive (attr := simp high) mem_sphere_iff_norm]
-/--
-theorem `mem_sphere_iff_norm'` / 定理 `mem_sphere_iff_norm'`
-
-English:
-theorem mem_sphere_iff_norm'
-  statement: b in sphere a r ↔ ‖b / a‖ = r
-  proof: by simp [dist_eq_norm_div]
-
-中文:
-定理 mem_sphere_iff_norm'
-  结论: b in sphere a r ↔ ‖b / a‖ = r
-  证明: by simp [dist_eq_norm_div]
-
-Depends on / 依赖: dist_eq_norm_div
+/-
+**mem_sphere_iff_norm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_sphere_iff_norm' : b in sphere a r ↔ ‖b / a‖ = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_div`：dist_eq_norm_div (a b : E) : dist a b = ‖a / b‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sphere_iff_norm' : b in sphere a r ↔ ‖b / a‖ = r := by simp [dist_eq_norm_div]
+theorem mem_sphere_iff_norm' : b ∈ sphere a r ↔ ‖b / a‖ = r := by simp [dist_eq_norm_div]
 
 /-- A scaled sphere is a sphere. -/
 @[to_additive setOf_sub_mem_sphere_eq_sphere /-- A translated sphere is a sphere. -/]
-/--
-theorem `setOf_div_mem_sphere_eq_sphere''` / 定理 `setOf_div_mem_sphere_eq_sphere''`
+/-
+**setOf_div_mem_sphere_eq_sphere''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：setOf_div_mem_sphere_eq_sphere'' : {x | x / a in sphere 1 r} = Metric.sphe
+re a r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_sphere_iff_norm'`：mem_sphere_iff_norm' : b in sphere a r ↔ ‖b / a‖ =
+ r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem setOf_div_mem_sphere_eq_sphere''
-  proof: by
-  ext x
-  rw [mem_sphere_iff_norm']
-  simp
-
-@[to_additive]
-
-中文:
-定理 setOf_div_mem_sphere_eq_sphere''
-  证明: by
-  ext x
-  rw [mem_sphere_iff_norm']
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: mem_sphere_iff_norm
+--- 原说明 ---
+A scaled sphere is a sphere.
 -/
 theorem setOf_div_mem_sphere_eq_sphere'' :
-    {x | x / a in sphere 1 r} = Metric.sphere a r := by
+    {x | x / a ∈ sphere 1 r} = Metric.sphere a r := by
   ext x
   rw [mem_sphere_iff_norm']
   simp
 
 @[to_additive]
-/--
-theorem `mul_mem_ball_iff_norm` / 定理 `mul_mem_ball_iff_norm`
-
-English:
-theorem mul_mem_ball_iff_norm
-  statement: a * b in ball a r ↔ ‖b‖ < r
-  proof: by
-  rw [mem_ball_iff_norm'']
-  simp
-
-@[to_additive]
-
-中文:
-定理 mul_mem_ball_iff_norm
-  结论: a * b in ball a r ↔ ‖b‖ < r
-  证明: by
-  rw [mem_ball_iff_norm'']
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: mem_ball_iff_norm
+/-
+**mul_mem_ball_iff_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_mem_ball_iff_norm : a * b in ball a r ↔ ‖b‖ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_ball_iff_norm''`：mem_ball_iff_norm'' : b in ball a r ↔ ‖b / a‖ < r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_div_cancel_left`：mul_div_cancel_left (a b : G) : a * b / a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mul_mem_ball_iff_norm : a * b in ball a r ↔ ‖b‖ < r := by
+theorem mul_mem_ball_iff_norm : a * b ∈ ball a r ↔ ‖b‖ < r := by
   rw [mem_ball_iff_norm'']
   simp
 
 @[to_additive]
-/--
-theorem `mul_mem_closedBall_iff_norm` / 定理 `mul_mem_closedBall_iff_norm`
-
-English:
-theorem mul_mem_closedBall_iff_norm
-  statement: a * b in closedBall a r ↔ ‖b‖ <= r
-  proof: by
-  rw [mem_closedBall_iff_norm'']
-  simp
-
-中文:
-定理 mul_mem_closedBall_iff_norm
-  结论: a * b in closedBall a r ↔ ‖b‖ <= r
-  证明: by
-  rw [mem_closedBall_iff_norm'']
-  simp
-
-Depends on / 依赖: mem_closedBall_iff_norm
+/-
+**mul_mem_closedBall_iff_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_mem_closedBall_iff_norm : a * b in closedBall a r ↔ ‖b‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closedBall_iff_norm''`：mem_closedBall_iff_norm'' : b in closedBall a
+ r ↔ ‖b / a‖ <= r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_div_cancel_left`：mul_div_cancel_left (a b : G) : a * b / a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mul_mem_closedBall_iff_norm : a * b in closedBall a r ↔ ‖b‖ <= r := by
+theorem mul_mem_closedBall_iff_norm : a * b ∈ closedBall a r ↔ ‖b‖ ≤ r := by
   rw [mem_closedBall_iff_norm'']
   simp
 
 -- Higher priority to apply this before the equivalent lemma `Metric.preimage_mul_left_ball`.
 @[to_additive (attr := simp high)]
-/--
-theorem `preimage_mul_ball` / 定理 `preimage_mul_ball`
-
-English:
-theorem preimage_mul_ball
-  given: (a b : E) (r : Real)
-  statement: (b * ·) ⁻¹' ball a r = ball (a / b) r
-  proof: by
-  ext c
-  simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_ball, div_eq_mul_inv, mul_comm, mul_assoc]
-
-中文:
-定理 preimage_mul_ball
-  条件: (a b : E) (r : 实数)
-  结论: (b * ·) ⁻¹' ball a r = ball (a / b) r
-  证明: by
-  ext c
-  simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_ball, div_eq_mul_inv, mul_comm, mul_assoc]
-
-Depends on / 依赖: Set.mem_preimage, dist_eq_norm_inv_mul, div_eq_mul_inv, mem_ball, mem_preimage, mul_assoc, mul_comm
+/-
+**preimage_mul_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：preimage_mul_ball (a b : E) (r : Real) : (b * ·) ⁻¹' ball a r = ball (a / 
+b) r
+参数：a b : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_mul_ball (a b : E) (r : Real) : (b * ·) ⁻¹' ball a r = ball (a / b) r := by
+theorem preimage_mul_ball (a b : E) (r : ℝ) : (b * ·) ⁻¹' ball a r = ball (a / b) r := by
   ext c
   simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_ball, div_eq_mul_inv, mul_comm, mul_assoc]
 
 -- Higher priority to apply this before the equivalent lemma `Metric.preimage_mul_left_closedBall`.
 @[to_additive (attr := simp high)]
-/--
-theorem `preimage_mul_closedBall` / 定理 `preimage_mul_closedBall`
-
-English:
-theorem preimage_mul_closedBall
-  given: (a b : E) (r : Real)
-  proof: by
-  ext c
-  simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_closedBall, div_eq_mul_inv, mul_comm, mul_assoc]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 preimage_mul_closedBall
-  条件: (a b : E) (r : 实数)
-  证明: by
-  ext c
-  simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_closedBall, div_eq_mul_inv, mul_comm, mul_assoc]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.mem_preimage, dist_eq_norm_inv_mul, div_eq_mul_inv, mem_closedBall, mem_preimage, mul_assoc, mul_comm
+/-
+**preimage_mul_closedBall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：preimage_mul_closedBall (a b : E) (r : Real) : (b * ·) ⁻¹' closedBall a r 
+= closedBall (a / b) r
+参数：a b : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_mul_closedBall (a b : E) (r : Real) :
+theorem preimage_mul_closedBall (a b : E) (r : ℝ) :
     (b * ·) ⁻¹' closedBall a r = closedBall (a / b) r := by
   ext c
   simp [dist_eq_norm_inv_mul, Set.mem_preimage, mem_closedBall, div_eq_mul_inv, mul_comm, mul_assoc]
 
 @[to_additive (attr := simp)]
-/--
-theorem `preimage_mul_sphere` / 定理 `preimage_mul_sphere`
-
-English:
-theorem preimage_mul_sphere
-  given: (a b : E) (r : Real)
-  statement: (b * ·) ⁻¹' sphere a r = sphere (a / b) r
-  proof: by
-  ext c
-  simp only [Set.mem_preimage, mem_sphere_iff_norm', div_div_eq_mul_div, mul_comm]
-
-@[to_additive]
-
-中文:
-定理 preimage_mul_sphere
-  条件: (a b : E) (r : 实数)
-  结论: (b * ·) ⁻¹' sphere a r = sphere (a / b) r
-  证明: by
-  ext c
-  simp only [Set.mem_preimage, mem_sphere_iff_norm', div_div_eq_mul_div, mul_comm]
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_preimage, div_div_eq_mul_div, mem_preimage, mem_sphere_iff_norm, mul_comm
+/-
+**preimage_mul_sphere** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：preimage_mul_sphere (a b : E) (r : Real) : (b * ·) ⁻¹' sphere a r = sphere
+ (a / b) r
+参数：a b : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_div_eq_mul_div`：div_div_eq_mul_div : a / (b / c) = a * c / b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_mul_sphere (a b : E) (r : Real) : (b * ·) ⁻¹' sphere a r = sphere (a / b) r := by
+theorem preimage_mul_sphere (a b : E) (r : ℝ) : (b * ·) ⁻¹' sphere a r = sphere (a / b) r := by
   ext c
   simp only [Set.mem_preimage, mem_sphere_iff_norm', div_div_eq_mul_div, mul_comm]
 
 @[to_additive]
-/--
-theorem `pow_mem_closedBall` / 定理 `pow_mem_closedBall`
-
-English:
-theorem pow_mem_closedBall
-  given: {n : Nat} (h : a in closedBall b r)
-  proof: by
+/-
+**pow_mem_closedBall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_mem_closedBall {n : Nat} (h : a in closedBall b r) : a ^ n in closedBa
+ll (b ^ n) (n • r)
+参数：h : a in closedBall b r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_pow_le_mul_norm`：∀ {E : Type u_5} [inst : SeminormedGroup E] {a : E
+} {n : ℕ}, ‖a ^ n‖ ≤ ↑n * ‖a‖
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+-/
+theorem pow_mem_closedBall {n : ℕ} (h : a ∈ closedBall b r) :
+    a ^ n ∈ closedBall (b ^ n) (n • r) := by
   simp only [mem_closedBall, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
   refine norm_pow_le_mul_norm.trans ?_
   simpa only [nsmul_eq_mul] using mul_le_mul_of_nonneg_left h n.cast_nonneg
 
 @[to_additive]
-
-中文:
-定理 pow_mem_closedBall
-  条件: {n : 自然数} (h : a in closedBall b r)
-  证明: by
-  simp only [mem_closedBall, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
-  refine norm_pow_le_mul_norm.trans ?_
-  simpa only [nsmul_eq_mul] using mul_le_mul_of_nonneg_left h n.cast_nonneg
-
-@[to_additive]
-
-Depends on / 依赖: cast_nonneg, dist_eq_norm_inv_mul, inv_pow, mem_closedBall, mul_le_mul_of_nonneg_left, mul_pow, n.cast_nonneg, norm_pow_le_mul_norm, norm_pow_le_mul_norm.trans, nsmul_eq_mul
+/-
+**pow_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_mem_ball {n : Nat} (hn : 0 < n) (h : a in ball b r) : a ^ n in ball (b
+ ^ n) (n • r)
+参数：hn : 0 < n；h : a in ball b r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `norm_pow_le_mul_norm`：∀ {E : Type u_5} [inst : SeminormedGroup E] {a : E
+} {n : ℕ}, ‖a ^ n‖ ≤ ↑n * ‖a‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+（共 65 条，此处仅展示前 30 条）
 -/
-theorem pow_mem_closedBall {n : Nat} (h : a in closedBall b r) :
-    a ^ n in closedBall (b ^ n) (n • r) := by
-  simp only [mem_closedBall, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
-  refine norm_pow_le_mul_norm.trans ?_
-  simpa only [nsmul_eq_mul] using mul_le_mul_of_nonneg_left h n.cast_nonneg
-
-@[to_additive]
-/--
-theorem `pow_mem_ball` / 定理 `pow_mem_ball`
-
-English:
-theorem pow_mem_ball
-  given: {n : Nat} (hn : 0 < n) (h : a in ball b r)
-  statement: a ^ n in ball (b ^ n) (n • r)
-  proof: by
+theorem pow_mem_ball {n : ℕ} (hn : 0 < n) (h : a ∈ ball b r) : a ^ n ∈ ball (b ^ n) (n • r) := by
   simp only [mem_ball, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
   refine lt_of_le_of_lt norm_pow_le_mul_norm ?_
-  replace hn : 0 < (n : Real) := by norm_cast
+  replace hn : 0 < (n : ℝ) := by norm_cast
   rw [nsmul_eq_mul]
   nlinarith
 
 @[to_additive]
-
-中文:
-定理 pow_mem_ball
-  条件: {n : 自然数} (hn : 0 < n) (h : a in ball b r)
-  结论: a ^ n in ball (b ^ n) (n • r)
-  证明: by
-  simp only [mem_ball, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
-  refine lt_of_le_of_lt norm_pow_le_mul_norm ?_
-  replace hn : 0 < (n : Real) := by norm_cast
-  rw [nsmul_eq_mul]
-  nlinarith
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, inv_pow, lt_of_le_of_lt, mem_ball, mul_pow, norm_pow_le_mul_norm, nsmul_eq_mul, replace
+/-
+**mul_mem_closedBall_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_mem_closedBall_mul_iff {c : E} : a * c in closedBall (b * c) r ↔ a in 
+closedBall b r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用引理 `mul_mul_inv_mul_cancel`：mul_mul_inv_mul_cancel (a b c : G) : a * b * (b⁻
+¹ * c) = a * c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem pow_mem_ball {n : Nat} (hn : 0 < n) (h : a in ball b r) : a ^ n in ball (b ^ n) (n • r) := by
-  simp only [mem_ball, dist_eq_norm_inv_mul, ← inv_pow, ← mul_pow] at h ⊢
-  refine lt_of_le_of_lt norm_pow_le_mul_norm ?_
-  replace hn : 0 < (n : Real) := by norm_cast
-  rw [nsmul_eq_mul]
-  nlinarith
-
-@[to_additive]
-/--
-theorem `mul_mem_closedBall_mul_iff` / 定理 `mul_mem_closedBall_mul_iff`
-
-English:
-theorem mul_mem_closedBall_mul_iff
-  given: {c : E}
-  statement: a * c in closedBall (b * c) r ↔ a in closedBall b r
-  proof: by
+theorem mul_mem_closedBall_mul_iff {c : E} : a * c ∈ closedBall (b * c) r ↔ a ∈ closedBall b r := by
   simp only [mem_closedBall, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
   simp
 
 @[to_additive]
-
-中文:
-定理 mul_mem_closedBall_mul_iff
-  条件: {c : E}
-  结论: a * c in closedBall (b * c) r ↔ a in closedBall b r
-  证明: by
-  simp only [mem_closedBall, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_closedBall, mul_comm
+/-
+**mul_mem_ball_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_mem_ball_mul_iff {c : E} : a * c in ball (b * c) r ↔ a in ball b r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用引理 `mul_mul_inv_mul_cancel`：mul_mul_inv_mul_cancel (a b c : G) : a * b * (b⁻
+¹ * c) = a * c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mul_mem_closedBall_mul_iff {c : E} : a * c in closedBall (b * c) r ↔ a in closedBall b r := by
-  simp only [mem_closedBall, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
-  simp
-
-@[to_additive]
-/--
-theorem `mul_mem_ball_mul_iff` / 定理 `mul_mem_ball_mul_iff`
-
-English:
-theorem mul_mem_ball_mul_iff
-  given: {c : E}
-  statement: a * c in ball (b * c) r ↔ a in ball b r
-  proof: by
+theorem mul_mem_ball_mul_iff {c : E} : a * c ∈ ball (b * c) r ↔ a ∈ ball b r := by
   simp only [mem_ball, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
   simp
 
 @[to_additive]
-
-中文:
-定理 mul_mem_ball_mul_iff
-  条件: {c : E}
-  结论: a * c in ball (b * c) r ↔ a in ball b r
-  证明: by
-  simp only [mem_ball, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: dist_eq_norm_inv_mul, mem_ball, mul_comm
--/
-theorem mul_mem_ball_mul_iff {c : E} : a * c in ball (b * c) r ↔ a in ball b r := by
-  simp only [mem_ball, dist_eq_norm_inv_mul, mul_comm _ (b * c), mul_comm a⁻¹ b]
-  simp
-
-@[to_additive]
-/--
-theorem `smul_closedBall''` / 定理 `smul_closedBall''`
-
-English:
-theorem smul_closedBall''
-  statement: a • closedBall b r = closedBall (a • b) r
-  proof: by
-  ext
-  simp [mem_closedBall, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
-
-@[to_additive]
-
-中文:
-定理 smul_closedBall''
-  结论: a • closedBall b r = closedBall (a • b) r
-  证明: by
-  ext
-  simp [mem_closedBall, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_smul_set, dist_eq_norm_inv_mul, eq_inv_mul_iff_mul_eq, mem_closedBall, mem_smul_set, mul_assoc
+/-
+**smul_closedBall''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_closedBall'' : a • closedBall b r = closedBall (a • b) r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem smul_closedBall'' : a • closedBall b r = closedBall (a • b) r := by
   ext
   simp [mem_closedBall, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
 
 @[to_additive]
-/--
-theorem `smul_ball''` / 定理 `smul_ball''`
-
-English:
-theorem smul_ball''
-  statement: a • ball b r = ball (a • b) r
-  proof: by
-  ext
-  simp [mem_ball, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
-
-@[to_additive]
-
-中文:
-定理 smul_ball''
-  结论: a • ball b r = ball (a • b) r
-  证明: by
-  ext
-  simp [mem_ball, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_smul_set, dist_eq_norm_inv_mul, eq_inv_mul_iff_mul_eq, mem_ball, mem_smul_set, mul_assoc
+/-
+**smul_ball''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_ball'' : a • ball b r = ball (a • b) r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_inv_mul`：dist_eq_norm_inv_mul (a b : E) : dist a b = ‖a⁻¹ *
+ b‖
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem smul_ball'' : a • ball b r = ball (a • b) r := by
   ext
   simp [mem_ball, Set.mem_smul_set, dist_eq_norm_inv_mul, ← eq_inv_mul_iff_mul_eq, mul_assoc]
 
 @[to_additive]
-/--
-theorem `nnnorm_multiset_prod_le` / 定理 `nnnorm_multiset_prod_le`
-
-English:
-theorem nnnorm_multiset_prod_le
-  given: (m : Multiset E)
-  statement: ‖m.prod‖₊ <= (m.map fun x => ‖x‖₊).sum
-  proof: NNReal.coe_le_coe.1 by
+/-
+**nnnorm_multiset_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_multiset_prod_le (m : Multiset E) : ‖m.prod‖₊ <= (m.map fun x => ‖x
+‖₊).sum
+参数：m : Multiset E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.coe_multiset_sum`：coe_multiset_sum (s : Multiset Real>=0) : ((s.s
+um : Real>=0) : Real) = (s.map (↑)).sum
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `norm_multiset_prod_le`：norm_multiset_prod_le (m : Multiset E) : ‖m.prod‖
+ <= (m.map fun x => ‖x‖).sum
+-/
+theorem nnnorm_multiset_prod_le (m : Multiset E) : ‖m.prod‖₊ ≤ (m.map fun x => ‖x‖₊).sum :=
+  NNReal.coe_le_coe.1 <| by
     push_cast
     rw [Multiset.map_map]
     exact norm_multiset_prod_le _
 
 @[to_additive]
-
-中文:
-定理 nnnorm_multiset_prod_le
-  条件: (m : Multiset E)
-  结论: ‖m.乘积‖₊ <= (m.map fun x => ‖x‖₊).求和
-  证明: NNReal.coe_le_coe.1 by
-    push_cast
-    rw [Multiset.map_map]
-    exact norm_multiset_prod_le _
-
-@[to_additive]
-
-Depends on / 依赖: Multiset, Multiset.map_map, NNReal, NNReal.coe_le_coe, coe_le_coe, map_map, norm_multiset_prod_le
+/-
+**nnnorm_prod_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ a in s, f a‖₊ <= ∑ a in s,
+ ‖f a‖₊
+参数：s : Finset ι；f : ι -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.coe_sum`：coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f 
+i = ∑ i in s, (f i : Real)
+· 使用定理 `norm_prod_le`：norm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ i in s, f i‖
+ <= ∑ i in s, ‖f i‖
 -/
-theorem nnnorm_multiset_prod_le (m : Multiset E) : ‖m.prod‖₊ <= (m.map fun x => ‖x‖₊).sum :=
-NNReal.coe_le_coe.1 by
-    push_cast
-    rw [Multiset.map_map]
-    exact norm_multiset_prod_le _
-
-@[to_additive]
-/--
-theorem `nnnorm_prod_le` / 定理 `nnnorm_prod_le`
-
-English:
-theorem nnnorm_prod_le
-  given: (s : Finset ι) (f : ι -> E)
-  statement: ‖∏ a in s, f a‖₊ <= ∑ a in s, ‖f a‖₊
-  proof: NNReal.coe_le_coe.1 by
+theorem nnnorm_prod_le (s : Finset ι) (f : ι → E) : ‖∏ a ∈ s, f a‖₊ ≤ ∑ a ∈ s, ‖f a‖₊ :=
+  NNReal.coe_le_coe.1 <| by
     push_cast
     exact norm_prod_le _ _
 
 @[to_additive]
-
-中文:
-定理 nnnorm_prod_le
-  条件: (s : 有限集 ι) (f : ι -> E)
-  结论: ‖∏ a in s, f a‖₊ <= ∑ a in s, ‖f a‖₊
-  证明: NNReal.coe_le_coe.1 by
-    push_cast
-    exact norm_prod_le _ _
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, norm_prod_le
+/-
+**nnnorm_prod_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : ι -> Real>=0} (h : f
+orall b in s, ‖f b‖₊ <= n b) : ‖∏ b in s, f b‖₊ <= ∑ b in s, n b
+参数：s : Finset ι；h : forall b in s, ‖f b‖₊ <= n b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `norm_prod_le_of_le`：norm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : 
+ι -> Real} (h : forall b in s, ‖f b‖ <= n b) : ‖∏ b in s, f b‖ <= ∑ b in s, n b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_sum`：coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f 
+i = ∑ i in s, (f i : Real)
 -/
-theorem nnnorm_prod_le (s : Finset ι) (f : ι -> E) : ‖∏ a in s, f a‖₊ <= ∑ a in s, ‖f a‖₊ :=
-NNReal.coe_le_coe.1 by
-    push_cast
-    exact norm_prod_le _ _
-
-@[to_additive]
-/--
-theorem `nnnorm_prod_le_of_le` / 定理 `nnnorm_prod_le_of_le`
-
-English:
-theorem nnnorm_prod_le_of_le
-  given: (s : Finset ι) {f : ι -> E} {n : ι -> Real>=0} (h : forall b in s, ‖f b‖₊ <= n b)
-  proof: (norm_prod_le_of_le s h).trans_eq (NNReal.coe_sum ..).symm
-
-@[to_additive]
-
-中文:
-定理 nnnorm_prod_le_of_le
-  条件: (s : 有限集 ι) {f : ι -> E} {n : ι -> 实数>=0} (h : 对任意 b in s, ‖f b‖₊ <= n b)
-  证明: (norm_prod_le_of_le s h).trans_eq (NNReal.coe_sum ..).symm
-
-@[to_additive]
-
-Depends on / 依赖: NNReal, NNReal.coe_sum, coe_sum, norm_prod_le_of_le, trans_eq
--/
-theorem nnnorm_prod_le_of_le (s : Finset ι) {f : ι -> E} {n : ι -> Real>=0} (h : forall b in s, ‖f b‖₊ <= n b) :
-    ‖∏ b in s, f b‖₊ <= ∑ b in s, n b :=
+theorem nnnorm_prod_le_of_le (s : Finset ι) {f : ι → E} {n : ι → ℝ≥0} (h : ∀ b ∈ s, ‖f b‖₊ ≤ n b) :
+    ‖∏ b ∈ s, f b‖₊ ≤ ∑ b ∈ s, n b :=
   (norm_prod_le_of_le s h).trans_eq (NNReal.coe_sum ..).symm
 
 @[to_additive]
-/--
-theorem `NormedCommGroup.tendsto_nhds_nhds` / 定理 `NormedCommGroup.tendsto_nhds_nhds`
-
-English:
-theorem NormedCommGroup.tendsto_nhds_nhds
-  given: {f : E -> F} {x : E} {y : F}
-  proof: by
-  simpa [norm_inv_mul] using NormedGroup.tendsto_nhds_nhds (f := f) (x := x) (y := y)
-
-@[to_additive]
-
-中文:
-定理 NormedComm群.tendsto_nhds_nhds
-  条件: {f : E -> F} {x : E} {y : F}
-  证明: by
-  simpa [norm_inv_mul] using NormedGroup.tendsto_nhds_nhds (f := f) (x := x) (y := y)
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.tendsto_nhds_nhds, norm_inv_mul, tendsto_nhds_nhds
+/-
+**NormedCommGroup.tendsto_nhds_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedCommGroup.tendsto_nhds_nhds {f : E -> F} {x : E} {y : F} : Tendsto f
+ (𝓝 x) (𝓝 y) ↔ forall ε > 0, exists δ > 0, forall x', ‖x' / x‖ < δ -> ‖f x' / y‖
+ < ε
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_inv_mul`：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
+· 使用定理 `NormedGroup.tendsto_nhds_nhds`：NormedGroup.tendsto_nhds_nhds {f : E -> F
+} {x : E} {y : F} : Tendsto f (𝓝 x) (𝓝 y) ↔ forall ε > 0, exists δ > 0, forall x
+', ‖x'⁻¹ * x‖ < δ -…
 -/
-theorem NormedCommGroup.tendsto_nhds_nhds {f : E -> F} {x : E} {y : F} :
-    Tendsto f (𝓝 x) (𝓝 y) ↔ forall ε > 0, exists δ > 0, forall x', ‖x' / x‖ < δ -> ‖f x' / y‖ < ε := by
+theorem NormedCommGroup.tendsto_nhds_nhds {f : E → F} {x : E} {y : F} :
+    Tendsto f (𝓝 x) (𝓝 y) ↔ ∀ ε > 0, ∃ δ > 0, ∀ x', ‖x' / x‖ < δ → ‖f x' / y‖ < ε := by
   simpa [norm_inv_mul] using NormedGroup.tendsto_nhds_nhds (f := f) (x := x) (y := y)
 
 @[to_additive]
-/--
-theorem `NormedCommGroup.nhds_basis_norm_lt` / 定理 `NormedCommGroup.nhds_basis_norm_lt`
-
-English:
-theorem NormedCommGroup.nhds_basis_norm_lt
-  given: (x : E)
-  proof: by
-  simpa [norm_inv_mul] using NormedGroup.nhds_basis_norm_lt x
-
-@[to_additive]
-
-中文:
-定理 NormedComm群.nhds_basis_norm_lt
-  条件: (x : E)
-  证明: by
-  simpa [norm_inv_mul] using NormedGroup.nhds_basis_norm_lt x
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.nhds_basis_norm_lt, nhds_basis_norm_lt, norm_inv_mul
+/-
+**NormedCommGroup.nhds_basis_norm_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedCommGroup.nhds_basis_norm_lt (x : E) : (𝓝 x).HasBasis (fun ε : Real 
+=> 0 < ε) fun ε => { y | ‖y / x‖ < ε }
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_inv_mul`：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
+· 使用定理 `NormedGroup.nhds_basis_norm_lt`：NormedGroup.nhds_basis_norm_lt (x : E) :
+ (𝓝 x).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y⁻¹ * x‖ < ε }
 -/
 theorem NormedCommGroup.nhds_basis_norm_lt (x : E) :
-    (𝓝 x).HasBasis (fun ε : Real => 0 < ε) fun ε => { y | ‖y / x‖ < ε } := by
+    (𝓝 x).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { y | ‖y / x‖ < ε } := by
   simpa [norm_inv_mul] using NormedGroup.nhds_basis_norm_lt x
 
 @[to_additive]
-/--
-theorem `NormedCommGroup.uniformity_basis_dist` / 定理 `NormedCommGroup.uniformity_basis_dist`
-
-English:
-theorem NormedCommGroup.uniformity_basis_dist
-  proof: by
-  simpa [norm_inv_mul] using NormedGroup.uniformity_basis_dist (E := E)
-
-中文:
-定理 NormedComm群.uniformity_basis_dist
-  证明: by
-  simpa [norm_inv_mul] using NormedGroup.uniformity_basis_dist (E := E)
-
-Depends on / 依赖: NormedGroup, NormedGroup.uniformity_basis_dist, norm_inv_mul, uniformity_basis_dist
+/-
+**NormedCommGroup.uniformity_basis_dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NormedCommGroup.uniformity_basis_dist : (𝓤 E).HasBasis (fun ε : Real => 0 
+< ε) fun ε => { p : E × E | ‖p.fst / p.snd‖ < ε }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_inv_mul`：norm_inv_mul (a b : E) : ‖a⁻¹ * b‖ = ‖a / b‖
+· 使用定理 `NormedGroup.uniformity_basis_dist`：NormedGroup.uniformity_basis_dist : (
+𝓤 E).HasBasis (fun ε : Real => 0 < ε) fun ε => { p : E × E | ‖p.fst⁻¹ * p.snd‖ <
+ ε }
 -/
 theorem NormedCommGroup.uniformity_basis_dist :
-    (𝓤 E).HasBasis (fun ε : Real => 0 < ε) fun ε => { p : E × E | ‖p.fst / p.snd‖ < ε } := by
+    (𝓤 E).HasBasis (fun ε : ℝ => 0 < ε) fun ε => { p : E × E | ‖p.fst / p.snd‖ < ε } := by
   simpa [norm_inv_mul] using NormedGroup.uniformity_basis_dist (E := E)
 
 end SeminormedCommGroup
@@ -4832,168 +3752,108 @@ section NormedGroup
 variable [NormedGroup E] {a b : E}
 
 @[to_additive (attr := simp) norm_le_zero_iff]
-/--
-lemma `norm_le_zero_iff'` / 引理 `norm_le_zero_iff'`
-
-English:
-lemma norm_le_zero_iff'
-  statement: ‖a‖ <= 0 ↔ a = 1
-  proof: by rw [← dist_one_right, dist_le_zero]
-
-@[to_additive (attr := simp) norm_pos_iff]
-
-中文:
-引理 norm_le_zero_iff'
-  结论: ‖a‖ <= 0 ↔ a = 1
-  证明: by rw [← dist_one_right, dist_le_zero]
-
-@[to_additive (attr := simp) norm_pos_iff]
-
-Depends on / 依赖: dist_le_zero, dist_one_right
+/-
+**norm_le_zero_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_le_zero_iff' : ‖a‖ <= 0 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_one_right`：dist_one_right (a : E) : dist a 1 = ‖a‖
+· 使用定理 `dist_le_zero`：dist_le_zero {x y : γ} : dist x y <= 0 ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma norm_le_zero_iff' : ‖a‖ <= 0 ↔ a = 1 := by rw [← dist_one_right, dist_le_zero]
+lemma norm_le_zero_iff' : ‖a‖ ≤ 0 ↔ a = 1 := by rw [← dist_one_right, dist_le_zero]
 
 @[to_additive (attr := simp) norm_pos_iff]
-/--
-lemma `norm_pos_iff'` / 引理 `norm_pos_iff'`
-
-English:
-lemma norm_pos_iff'
-  statement: 0 < ‖a‖ ↔ a != 1
-  proof: by rw [← not_le, norm_le_zero_iff']
-
-@[to_additive (attr := simp) norm_eq_zero]
-
-中文:
-引理 norm_pos_iff'
-  结论: 0 < ‖a‖ ↔ a != 1
-  证明: by rw [← not_le, norm_le_zero_iff']
-
-@[to_additive (attr := simp) norm_eq_zero]
-
-Depends on / 依赖: norm_le_zero_iff, not_le
+/-
+**norm_pos_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_pos_iff' : 0 < ‖a‖ ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用引理 `norm_le_zero_iff'`：norm_le_zero_iff' : ‖a‖ <= 0 ↔ a = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma norm_pos_iff' : 0 < ‖a‖ ↔ a != 1 := by rw [← not_le, norm_le_zero_iff']
+lemma norm_pos_iff' : 0 < ‖a‖ ↔ a ≠ 1 := by rw [← not_le, norm_le_zero_iff']
 
 @[to_additive (attr := simp) norm_eq_zero]
-/--
-lemma `norm_eq_zero'` / 引理 `norm_eq_zero'`
-
-English:
-lemma norm_eq_zero'
-  statement: ‖a‖ = 0 ↔ a = 1
-  proof: (norm_nonneg' a).ge_iff_eq'.symm.trans norm_le_zero_iff'
-
-@[to_additive norm_ne_zero_iff]
-
-中文:
-引理 norm_eq_zero'
-  结论: ‖a‖ = 0 ↔ a = 1
-  证明: (norm_nonneg' a).ge_iff_eq'.symm.trans norm_le_zero_iff'
-
-@[to_additive norm_ne_zero_iff]
-
-Depends on / 依赖: ge_iff_eq, norm_le_zero_iff, norm_nonneg, symm.trans
+/-
+**norm_eq_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_eq_zero' : ‖a‖ = 0 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用引理 `norm_le_zero_iff'`：norm_le_zero_iff' : ‖a‖ <= 0 ↔ a = 1
 -/
 lemma norm_eq_zero' : ‖a‖ = 0 ↔ a = 1 := (norm_nonneg' a).ge_iff_eq'.symm.trans norm_le_zero_iff'
 
 @[to_additive norm_ne_zero_iff]
-/--
-lemma `norm_ne_zero_iff'` / 引理 `norm_ne_zero_iff'`
-
-English:
-lemma norm_ne_zero_iff'
-  statement: ‖a‖ != 0 ↔ a != 1
-  proof: norm_eq_zero'.not
-
-@[to_additive]
-
-中文:
-引理 norm_ne_zero_iff'
-  结论: ‖a‖ != 0 ↔ a != 1
-  证明: norm_eq_zero'.not
-
-@[to_additive]
-
-Depends on / 依赖: norm_eq_zero
+/-
+**norm_ne_zero_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_ne_zero_iff' : ‖a‖ != 0 ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `norm_eq_zero'`：norm_eq_zero' : ‖a‖ = 0 ↔ a = 1
 -/
-lemma norm_ne_zero_iff' : ‖a‖ != 0 ↔ a != 1 := norm_eq_zero'.not
+lemma norm_ne_zero_iff' : ‖a‖ ≠ 0 ↔ a ≠ 1 := norm_eq_zero'.not
 
 @[to_additive]
-/--
-theorem `norm_div_eq_zero_iff` / 定理 `norm_div_eq_zero_iff`
-
-English:
-theorem norm_div_eq_zero_iff
-  statement: ‖a / b‖ = 0 ↔ a = b
-  proof: by rw [norm_eq_zero', div_eq_one]
-
-@[to_additive]
-
-中文:
-定理 norm_div_eq_zero_iff
-  结论: ‖a / b‖ = 0 ↔ a = b
-  证明: by rw [norm_eq_zero', div_eq_one]
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_one, norm_eq_zero
+/-
+**norm_div_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_eq_zero_iff : ‖a / b‖ = 0 ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `norm_eq_zero'`：norm_eq_zero' : ‖a‖ = 0 ↔ a = 1
+· 使用定理 `div_eq_one`：div_eq_one : a / b = 1 ↔ a = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem norm_div_eq_zero_iff : ‖a / b‖ = 0 ↔ a = b := by rw [norm_eq_zero', div_eq_one]
 
 @[to_additive]
-/--
-theorem `norm_div_pos_iff` / 定理 `norm_div_pos_iff`
-
-English:
-theorem norm_div_pos_iff
-  statement: 0 < ‖a / b‖ ↔ a != b
-  proof: by
-  rw [(norm_nonneg' _).lt_iff_ne]; rw [ne_comm]
-  exact norm_div_eq_zero_iff.not
-
-@[to_additive eq_of_norm_sub_le_zero]
-
-中文:
-定理 norm_div_pos_iff
-  结论: 0 < ‖a / b‖ ↔ a != b
-  证明: by
-  rw [(norm_nonneg' _).lt_iff_ne]; rw [ne_comm]
-  exact norm_div_eq_zero_iff.not
-
-@[to_additive eq_of_norm_sub_le_zero]
-
-Depends on / 依赖: lt_iff_ne, ne_comm, norm_div_eq_zero_iff, norm_div_eq_zero_iff.not, norm_nonneg
+/-
+**norm_div_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_div_pos_iff : 0 < ‖a / b‖ ↔ a != b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.lt_iff_ne`：lt_iff_ne (h : a <= b) : a < b ↔ a != b
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用定理 `ne_comm`：∀ {α : Sort u_1} {a b : α}, a ≠ b ↔ b ≠ a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `norm_div_eq_zero_iff`：norm_div_eq_zero_iff : ‖a / b‖ = 0 ↔ a = b
 -/
-theorem norm_div_pos_iff : 0 < ‖a / b‖ ↔ a != b := by
-  rw [(norm_nonneg' _).lt_iff_ne]; rw [ne_comm]
+theorem norm_div_pos_iff : 0 < ‖a / b‖ ↔ a ≠ b := by
+  rw [(norm_nonneg' _).lt_iff_ne, ne_comm]
   exact norm_div_eq_zero_iff.not
 
 @[to_additive eq_of_norm_sub_le_zero]
-/--
-theorem `eq_of_norm_div_le_zero` / 定理 `eq_of_norm_div_le_zero`
-
-English:
-theorem eq_of_norm_div_le_zero
-  given: (h : ‖a / b‖ <= 0)
-  statement: a = b
-  proof: by
-  rwa [← div_eq_one, ← norm_le_zero_iff']
-
-alias ⟨eq_of_norm_div_eq_zero, _⟩ := norm_div_eq_zero_iff
-
-中文:
-定理 eq_of_norm_div_le_zero
-  条件: (h : ‖a / b‖ <= 0)
-  结论: a = b
-  证明: by
-  rwa [← div_eq_one, ← norm_le_zero_iff']
-
-alias ⟨eq_of_norm_div_eq_zero, _⟩ := norm_div_eq_zero_iff
-
-Depends on / 依赖: div_eq_one, norm_le_zero_iff
+/-
+**eq_of_norm_div_le_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_norm_div_le_zero (h : ‖a / b‖ <= 0) : a = b
+参数：h : ‖a / b‖ <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `div_eq_one`：div_eq_one : a / b = 1 ↔ a = b
+· 使用引理 `norm_le_zero_iff'`：norm_le_zero_iff' : ‖a‖ <= 0 ↔ a = 1
 -/
-theorem eq_of_norm_div_le_zero (h : ‖a / b‖ <= 0) : a = b := by
+theorem eq_of_norm_div_le_zero (h : ‖a / b‖ ≤ 0) : a = b := by
   rwa [← div_eq_one, ← norm_le_zero_iff']
 
 alias ⟨eq_of_norm_div_eq_zero, _⟩ := norm_div_eq_zero_iff
@@ -5001,162 +3861,102 @@ alias ⟨eq_of_norm_div_eq_zero, _⟩ := norm_div_eq_zero_iff
 attribute [to_additive] eq_of_norm_div_eq_zero
 
 @[to_additive]
-/--
-theorem `eq_one_or_norm_pos` / 定理 `eq_one_or_norm_pos`
-
-English:
-theorem eq_one_or_norm_pos
-  given: (a : E)
-  statement: a = 1 ∨ 0 < ‖a‖
-  proof: by
-  simpa [eq_comm] using (norm_nonneg' a).eq_or_lt
-
-@[to_additive]
-
-中文:
-定理 eq_one_or_norm_pos
-  条件: (a : E)
-  结论: a = 1 ∨ 0 < ‖a‖
-  证明: by
-  simpa [eq_comm] using (norm_nonneg' a).eq_or_lt
-
-@[to_additive]
-
-Depends on / 依赖: eq_comm, eq_or_lt, norm_nonneg
+/-
+**eq_one_or_norm_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_one_or_norm_pos (a : E) : a = 1 ∨ 0 < ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
 theorem eq_one_or_norm_pos (a : E) : a = 1 ∨ 0 < ‖a‖ := by
   simpa [eq_comm] using (norm_nonneg' a).eq_or_lt
 
 @[to_additive]
-/--
-theorem `eq_one_or_nnnorm_pos` / 定理 `eq_one_or_nnnorm_pos`
-
-English:
-theorem eq_one_or_nnnorm_pos
-  given: (a : E)
-  statement: a = 1 ∨ 0 < ‖a‖₊
-  proof: eq_one_or_norm_pos a
-
-@[to_additive (attr := simp) nnnorm_eq_zero]
-
-中文:
-定理 eq_one_or_nnnorm_pos
-  条件: (a : E)
-  结论: a = 1 ∨ 0 < ‖a‖₊
-  证明: eq_one_or_norm_pos a
-
-@[to_additive (attr := simp) nnnorm_eq_zero]
-
-Depends on / 依赖: eq_one_or_norm_pos
+/-
+**eq_one_or_nnnorm_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_one_or_nnnorm_pos (a : E) : a = 1 ∨ 0 < ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_one_or_norm_pos`：eq_one_or_norm_pos (a : E) : a = 1 ∨ 0 < ‖a‖
 -/
 theorem eq_one_or_nnnorm_pos (a : E) : a = 1 ∨ 0 < ‖a‖₊ :=
   eq_one_or_norm_pos a
 
 @[to_additive (attr := simp) nnnorm_eq_zero]
-/--
-theorem `nnnorm_eq_zero'` / 定理 `nnnorm_eq_zero'`
-
-English:
-theorem nnnorm_eq_zero'
-  statement: ‖a‖₊ = 0 ↔ a = 1
-  proof: by
-  rw [← NNReal.coe_eq_zero]; rw [coe_nnnorm']; rw [norm_eq_zero']
-
-@[to_additive nnnorm_ne_zero_iff]
-
-中文:
-定理 nnnorm_eq_zero'
-  结论: ‖a‖₊ = 0 ↔ a = 1
-  证明: by
-  rw [← NNReal.coe_eq_zero]; rw [coe_nnnorm']; rw [norm_eq_zero']
-
-@[to_additive nnnorm_ne_zero_iff]
-
-Depends on / 依赖: NNReal, NNReal.coe_eq_zero, coe_eq_zero, coe_nnnorm, norm_eq_zero
+/-
+**nnnorm_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_eq_zero' : ‖a‖₊ = 0 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_eq_zero`：∀ {r : NNReal}, ↑r = 0 ↔ r = 0
+· 使用定理 `coe_nnnorm'`：coe_nnnorm' (a : E) : (‖a‖₊ : Real) = ‖a‖
+· 使用引理 `norm_eq_zero'`：norm_eq_zero' : ‖a‖ = 0 ↔ a = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem nnnorm_eq_zero' : ‖a‖₊ = 0 ↔ a = 1 := by
-  rw [← NNReal.coe_eq_zero]; rw [coe_nnnorm']; rw [norm_eq_zero']
+  rw [← NNReal.coe_eq_zero, coe_nnnorm', norm_eq_zero']
 
 @[to_additive nnnorm_ne_zero_iff]
-/--
-theorem `nnnorm_ne_zero_iff'` / 定理 `nnnorm_ne_zero_iff'`
-
-English:
-theorem nnnorm_ne_zero_iff'
-  statement: ‖a‖₊ != 0 ↔ a != 1
-  proof: nnnorm_eq_zero'.not
-
-@[to_additive (attr := simp) nnnorm_pos]
-
-中文:
-定理 nnnorm_ne_zero_iff'
-  结论: ‖a‖₊ != 0 ↔ a != 1
-  证明: nnnorm_eq_zero'.not
-
-@[to_additive (attr := simp) nnnorm_pos]
-
-Depends on / 依赖: nnnorm_eq_zero
+/-
+**nnnorm_ne_zero_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_ne_zero_iff' : ‖a‖₊ != 0 ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `nnnorm_eq_zero'`：nnnorm_eq_zero' : ‖a‖₊ = 0 ↔ a = 1
 -/
-theorem nnnorm_ne_zero_iff' : ‖a‖₊ != 0 ↔ a != 1 :=
+theorem nnnorm_ne_zero_iff' : ‖a‖₊ ≠ 0 ↔ a ≠ 1 :=
   nnnorm_eq_zero'.not
 
 @[to_additive (attr := simp) nnnorm_pos]
-/--
-lemma `nnnorm_pos'` / 引理 `nnnorm_pos'`
-
-English:
-lemma nnnorm_pos'
-  statement: 0 < ‖a‖₊ ↔ a != 1
-  proof: pos_iff_ne_zero.trans nnnorm_ne_zero_iff'
-
-中文:
-引理 nnnorm_pos'
-  结论: 0 < ‖a‖₊ ↔ a != 1
-  证明: pos_iff_ne_zero.trans nnnorm_ne_zero_iff'
-
-Depends on / 依赖: nnnorm_ne_zero_iff, pos_iff_ne_zero, pos_iff_ne_zero.trans
+/-
+**nnnorm_pos'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_pos' : 0 < ‖a‖₊ ↔ a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `nnnorm_ne_zero_iff'`：nnnorm_ne_zero_iff' : ‖a‖₊ != 0 ↔ a != 1
 -/
-lemma nnnorm_pos' : 0 < ‖a‖₊ ↔ a != 1 := pos_iff_ne_zero.trans nnnorm_ne_zero_iff'
+lemma nnnorm_pos' : 0 < ‖a‖₊ ↔ a ≠ 1 := pos_iff_ne_zero.trans nnnorm_ne_zero_iff'
 
 variable (E)
 
 /-- The norm of a normed group as a group norm. -/
 @[to_additive /-- The norm of a normed group as an additive group norm. -/]
-/--
-Definition of `normGroupNorm` / `normGroupNorm` 的定义
+/-
+**normGroupNorm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：normGroupNorm : GroupNorm E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normGroupNorm
-  signature: : GroupNorm E
-  body: { normGroupSeminorm _ with eq_one_of_map_eq_zero' := fun _ => norm_eq_zero'.1 }
-
-@[simp]
-
-中文:
-定义 normGroupNorm
-  签名: : 群范数 E
-  定义体: { normGroupSeminorm _ with eq_one_of_map_eq_zero' := fun _ => norm_eq_zero'.1 }
-
-@[simp]
-
-Depends on / 依赖: eq_one_of_map_eq_zero, normGroupSeminorm, norm_eq_zero
+--- 原说明 ---
+The norm of a normed group as a group norm.
 -/
 def normGroupNorm : GroupNorm E :=
   { normGroupSeminorm _ with eq_one_of_map_eq_zero' := fun _ => norm_eq_zero'.1 }
 
 @[simp]
-/--
-theorem `coe_normGroupNorm` / 定理 `coe_normGroupNorm`
-
-English:
-theorem coe_normGroupNorm
-  statement: ⇑(normGroupNorm E) = norm
-  proof: rfl
-
-中文:
-定理 coe_normGroupNorm
-  结论: ⇑(normGroupNorm E) = norm
-  证明: rfl
+/-
+**coe_normGroupNorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_normGroupNorm : ⇑(normGroupNorm E) = norm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_normGroupNorm : ⇑(normGroupNorm E) = norm :=
   rfl
@@ -5165,27 +3965,24 @@ end NormedGroup
 
 section NormedAddGroup
 
-variable [NormedAddGroup E] [TopologicalSpace α] {f : α -> E}
+variable [NormedAddGroup E] [TopologicalSpace α] {f : α → E}
 
+/-! Some relations with `HasCompactSupport` -/
 
-/--
-theorem `hasCompactSupport_norm_iff` / 定理 `hasCompactSupport_norm_iff`
+/-
+**hasCompactSupport_norm_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasCompactSupport_norm_iff : (HasCompactSupport fun x => ‖f x‖) ↔ HasCompa
+ctSupport f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hasCompactSupport_comp_left`：∀ {α : Type u_2} {β : Type u_4} {γ : Type u
+_5} [inst : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : Zero γ]   {g : β → γ
+} {f : α → β}, (∀…
+· 使用定理 `norm_eq_zero`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a‖ = 
+0 ↔ a = 0
 
-English:
-theorem hasCompactSupport_norm_iff
-  statement: (HasCompactSupport fun x => ‖f x‖) ↔ HasCompactSupport f
-  proof: hasCompactSupport_comp_left norm_eq_zero
-
-alias ⟨_, HasCompactSupport.norm⟩ := hasCompactSupport_norm_iff
-
-中文:
-定理 hasCompactSupport_norm_iff
-  结论: (HasCompactSupport fun x => ‖f x‖) ↔ HasCompactSupport f
-  证明: hasCompactSupport_comp_left norm_eq_zero
-
-alias ⟨_, HasCompactSupport.norm⟩ := hasCompactSupport_norm_iff
-
-Depends on / 依赖: hasCompactSupport_comp_left, norm_eq_zero
+--- 原说明 ---
+Some relations with `HasCompactSupport`
 -/
 theorem hasCompactSupport_norm_iff : (HasCompactSupport fun x => ‖f x‖) ↔ HasCompactSupport f :=
   hasCompactSupport_comp_left norm_eq_zero
@@ -5206,14 +4003,14 @@ on non-one inputs. -/
 meta def evalMulNorm : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Real), ~q(@Norm.norm $E $_n $a) =>
+  | 0, ~q(ℝ), ~q(@Norm.norm $E $_n $a) =>
     let _seminormedGroup_E ← synthInstanceQ q(SeminormedGroup $E)
     assertInstancesCommute
     -- Check whether we are in a normed group and whether the context contains a `a ≠ 1` assumption
-    let o : Option (Q(NormedGroup $E) × Q($a != 1)) ← do
+    let o : Option (Q(NormedGroup $E) × Q($a ≠ 1)) ← do
       let .some normedGroup_E ← trySynthInstanceQ q(NormedGroup $E) | pure none
-      let some pa ← findLocalDeclWithTypeQ? q($a != 1) | pure none
-pure some (normedGroup_E, pa)
+      let some pa ← findLocalDeclWithTypeQ? q($a ≠ 1) | pure none
+      pure <| some (normedGroup_E, pa)
     match o with
     -- If so, return a proof of `0 < ‖a‖`
     | some (_normedGroup_E, pa) =>
@@ -5229,14 +4026,14 @@ on non-zero inputs. -/
 meta def evalAddNorm : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Real), ~q(@Norm.norm $E $_n $a) =>
+  | 0, ~q(ℝ), ~q(@Norm.norm $E $_n $a) =>
     let _seminormedAddGroup_E ← synthInstanceQ q(SeminormedAddGroup $E)
     assertInstancesCommute
     -- Check whether we are in a normed group and whether the context contains a `a ≠ 0` assumption
-    let o : Option (Q(NormedAddGroup $E) × Q($a != 0)) ← do
+    let o : Option (Q(NormedAddGroup $E) × Q($a ≠ 0)) ← do
       let .some normedAddGroup_E ← trySynthInstanceQ q(NormedAddGroup $E) | pure none
-      let some pa ← findLocalDeclWithTypeQ? q($a != 0) | pure none
-pure some (normedAddGroup_E, pa)
+      let some pa ← findLocalDeclWithTypeQ? q($a ≠ 0) | pure none
+      pure <| some (normedAddGroup_E, pa)
     match o with
     -- If so, return a proof of `0 < ‖a‖`
     | some (_normedAddGroup_E, pa) =>
@@ -5247,3 +4044,4 @@ pure some (normedAddGroup_E, pa)
   | _, _, _ => throwError "not `‖·‖`"
 
 end Mathlib.Meta.Positivity
+

@@ -34,100 +34,67 @@ variable {C : Type*} [Category* C]
 
 namespace ofCocone
 
-/--
-Definition of `obj` / `obj` 的定义
+/-- Auxiliary definition for `ofCocone`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.obj** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：obj (i : J) : C
+参数：i : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: (i : J)
-  body: if hi : i < j then
-    F.obj ⟨i, hi⟩
-  else c.pt
-
-中文:
-定义 obj
-  签名: (i : J)
-  定义体: if hi : i < j then
-    F.obj ⟨i, hi⟩
-  else c.pt
-
-Depends on / 依赖: F.obj, c.pt
+--- 原说明 ---
+Auxiliary definition for `ofCocone`.
 -/
 def obj (i : J) : C :=
   if hi : i < j then
     F.obj ⟨i, hi⟩
   else c.pt
 
-/--
-Definition of `objIso` / `objIso` 的定义
+/-- Auxiliary definition for `ofCocone`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.objIso** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：objIso (i : J) (hi : i < j) : obj c i ≅ F.obj ⟨i, hi⟩
+参数：i : J；hi : i < j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition objIso
-  signature: (i : J) (hi : i < j)
-  body: eqToIso (dif_pos hi)
-
-中文:
-定义 objIso
-  签名: (i : J) (hi : i < j)
-  定义体: eqToIso (dif_pos hi)
-
-Depends on / 依赖: dif_pos, eqToIso
+--- 原说明 ---
+Auxiliary definition for `ofCocone`.
 -/
 def objIso (i : J) (hi : i < j) :
     obj c i ≅ F.obj ⟨i, hi⟩ :=
   eqToIso (dif_pos hi)
 
-/--
-Definition of `objIsoPt` / `objIsoPt` 的定义
+/-- Auxiliary definition for `ofCocone`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.objIsoPt** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：objIsoPt : obj c j ≅ c.pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition objIsoPt
-  signature: :
-  body: eqToIso (dif_neg (by simp))
-
-中文:
-定义 objIsoPt
-  签名: :
-  定义体: eqToIso (dif_neg (by simp))
-
-Depends on / 依赖: dif_neg, eqToIso
+--- 原说明 ---
+Auxiliary definition for `ofCocone`.
 -/
 def objIsoPt :
     obj c j ≅ c.pt :=
   eqToIso (dif_neg (by simp))
 
-/--
-Definition of `map` / `map` 的定义
+/-- Auxiliary definition for `ofCocone`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.map** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : obj c i₁ ⟶ obj c i₂
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  body: if h₂ : i₂ < j then
-    (objIso c i₁ (lt_of_le_of_lt hi h₂)).hom ≫ F.map (homOfLE hi) ≫ (objIso c i₂ h₂).inv
-  else
-    have h₂' : i₂ = j := le_antisymm hi₂ (by simpa using h₂)
-    if h₁ : i₁ < j then
-      (objIso c i₁ h₁).hom ≫ c.ι.app ⟨i₁, h₁⟩ ≫ (objIsoPt c).inv ≫ eqToHom (by subst h₂'; rfl)
-    else
-      have h₁' : i₁ = j := le_antisymm (hi.trans hi₂) (by simpa using h₁)
-      eqToHom (by subst h₁' h₂'; rfl)
-
-中文:
-定义 map
-  签名: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  定义体: if h₂ : i₂ < j then
-    (objIso c i₁ (lt_of_le_of_lt hi h₂)).hom ≫ F.map (homOfLE hi) ≫ (objIso c i₂ h₂).inv
-  else
-    have h₂' : i₂ = j := le_antisymm hi₂ (by simpa using h₂)
-    if h₁ : i₁ < j then
-      (objIso c i₁ h₁).hom ≫ c.ι.app ⟨i₁, h₁⟩ ≫ (objIsoPt c).inv ≫ eqToHom (by subst h₂'; rfl)
-    else
-      have h₁' : i₁ = j := le_antisymm (hi.trans hi₂) (by simpa using h₁)
-      eqToHom (by subst h₁' h₂'; rfl)
-
-Depends on / 依赖: F.map, eqToHom, hi.trans, homOfLE, le_antisymm, lt_of_le_of_lt, objIso, objIsoPt
+--- 原说明 ---
+Auxiliary definition for `ofCocone`.
 -/
-def map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
+def map (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ j) :
     obj c i₁ ⟶ obj c i₂ :=
   if h₂ : i₂ < j then
     (objIso c i₁ (lt_of_le_of_lt hi h₂)).hom ≫ F.map (homOfLE hi) ≫ (objIso c i₂ h₂).inv
@@ -138,68 +105,71 @@ def map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
     else
       have h₁' : i₁ = j := le_antisymm (hi.trans hi₂) (by simpa using h₁)
       eqToHom (by subst h₁' h₂'; rfl)
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (i : J) (hi : i <= j)
-  proof: by
-  dsimp [map]
-  grind
-
-中文:
-引理 map_id
-  条件: (i : J) (hi : i <= j)
-  证明: by
-  dsimp [map]
-  grind
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.map_id** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：map_id (i : J) (hi : i <= j) : map c i i (by rfl) hi = 𝟙 _
+参数：i : J；hi : i <= j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_id (i : J) (hi : i <= j) :
+lemma map_id (i : J) (hi : i ≤ j) :
     map c i i (by rfl) hi = 𝟙 _ := by
   dsimp [map]
   grind
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (i₁ i₂ i₃ : J) (hi : i₁ <= i₂) (hi' : i₂ <= i₃) (hi₃ : i₃ <= j)
-  proof: by
-  obtain hi₁₂ | rfl := hi.lt_or_eq
-  · obtain hi₂₃ | rfl := hi'.lt_or_eq
-    · dsimp [map]
-      obtain hi₃' | rfl := hi₃.lt_or_eq
-      · rw [dif_pos hi₃', dif_pos (hi₂₃.trans hi₃'), dif_pos hi₃', assoc, assoc,
-          Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc, homOfLE_comp]
-      · rw [dif_neg (by simp), dif_pos (hi₁₂.trans hi₂₃), dif_pos hi₂₃, dif_neg (by simp),
-          dif_pos hi₂₃, eqToHom_refl, comp_id, assoc, assoc, Iso.inv_hom_id_assoc,
-          Cocone.w_assoc]
-    · rw [map_id, comp_id]
-  · rw [map_id, id_comp]
-
-中文:
-引理 map_comp
-  条件: (i₁ i₂ i₃ : J) (hi : i₁ <= i₂) (hi' : i₂ <= i₃) (hi₃ : i₃ <= j)
-  证明: by
-  obtain hi₁₂ | rfl := hi.lt_or_eq
-  · obtain hi₂₃ | rfl := hi'.lt_or_eq
-    · dsimp [map]
-      obtain hi₃' | rfl := hi₃.lt_or_eq
-      · rw [dif_pos hi₃', dif_pos (hi₂₃.trans hi₃'), dif_pos hi₃', assoc, assoc,
-          Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc, homOfLE_comp]
-      · rw [dif_neg (by simp), dif_pos (hi₁₂.trans hi₂₃), dif_pos hi₂₃, dif_neg (by simp),
-          dif_pos hi₂₃, eqToHom_refl, comp_id, assoc, assoc, Iso.inv_hom_id_assoc,
-          Cocone.w_assoc]
-    · rw [map_id, comp_id]
-  · rw [map_id, id_comp]
-
-Depends on / 依赖: Cocone, Cocone.w_assoc, Functor, Functor.map_comp_assoc, Iso.inv_hom_id_assoc, comp_id, dif_neg, dif_pos, eqToHom_refl, hi.lt_or_eq, homOfLE_comp, id_comp, inv_hom_id_assoc, lt_or_eq, map_comp_assoc, map_id, w_assoc
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone.map_comp** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.SmallObject.SuccStruct.ofCocone`。
+形式化陈述：map_comp (i₁ i₂ i₃ : J) (hi : i₁ <= i₂) (hi' : i₂ <= i₃) (hi₃ : i₃ <= j) :
+ map c i₁ i₃ (hi.trans hi') hi₃ = map c i₁ i₂ hi (hi'.trans hi₃) ≫ map c i₂ i₃ h
+i' hi₃
+参数：i₁ i₂ i₃ : J；hi : i₁ <= i₂；hi' : i₂ <= i₃；hi₃ : i₃ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LE.le.lt_or_eq`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a < b ∨ a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.homOfLE_comp`：homOfLE_comp {x y z : X} (h : x <= y) (k : 
+y <= z) : homOfLE h ≫ homOfLE k = homOfLE (h.trans k)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.Cocone.w_assoc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone.map_id`：map_id (i : J) (h
+i : i <= j) : map c i i (by rfl) hi = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
-lemma map_comp (i₁ i₂ i₃ : J) (hi : i₁ <= i₂) (hi' : i₂ <= i₃) (hi₃ : i₃ <= j) :
+lemma map_comp (i₁ i₂ i₃ : J) (hi : i₁ ≤ i₂) (hi' : i₂ ≤ i₃) (hi₃ : i₃ ≤ j) :
     map c i₁ i₃ (hi.trans hi') hi₃ =
       map c i₁ i₂ hi (hi'.trans hi₃) ≫
         map c i₂ i₃ hi' hi₃ := by
@@ -217,161 +187,138 @@ lemma map_comp (i₁ i₂ i₃ : J) (hi : i₁ <= i₂) (hi' : i₂ <= i₃) (hi
 
 end ofCocone
 
-/--
-Definition of `ofCocone` / `ofCocone` 的定义
+/-- Given a functor `F : Set.Iio j ⥤ C` and a cocone `c : Cocone F`,
+where `j : J` and `J` is linearly ordered, this is the functor
+`Set.Iic j ⥤ C` which extends `F` and sends the top element to `c.pt`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCocone : Set.Iic j ⥤ C where obj i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCocone
-  signature: : Set.Iic j ⥤ C where
-  body: ofCocone.obj c i.1
-  map {_ j} f := ofCocone.map c _ _ (leOfHom f) j.2
-  map_id i := ofCocone.map_id _ _ i.2
-  map_comp {_ _ i₃} _ _ := ofCocone.map_comp _ _ _ _ _ _ i₃.2
-
-中文:
-定义 ofCocone
-  签名: : 集合.左无界右闭区间 j ⥤ C where
-  定义体: ofCocone.obj c i.1
-  map {_ j} f := ofCocone.map c _ _ (leOfHom f) j.2
-  map_id i := ofCocone.map_id _ _ i.2
-  map_comp {_ _ i₃} _ _ := ofCocone.map_comp _ _ _ _ _ _ i₃.2
-
-Depends on / 依赖: ofCocone, ofCocone.obj
+--- 原说明 ---
+Given a functor `F : Set.Iio j ⥤ C` and a cocone `c : Cocone F`,
+where `j : J` and `J` is linearly ordered, this is the functor
+`Set.Iic j ⥤ C` which extends `F` and sends the top element to `c.pt`.
 -/
 def ofCocone : Set.Iic j ⥤ C where
   obj i := ofCocone.obj c i.1
   map {_ j} f := ofCocone.map c _ _ (leOfHom f) j.2
   map_id i := ofCocone.map_id _ _ i.2
   map_comp {_ _ i₃} _ _ := ofCocone.map_comp _ _ _ _ _ _ i₃.2
-
-/--
-lemma `ofCocone_obj_eq` / 引理 `ofCocone_obj_eq`
-
-English:
-lemma ofCocone_obj_eq
-  given: (i : J) (hi : i < j)
-  proof: dif_pos hi
-
-中文:
-引理 ofCocone_obj_eq
-  条件: (i : J) (hi : i < j)
-  证明: dif_pos hi
-
-Depends on / 依赖: dif_pos
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCocone_obj_eq (i : J) (hi : i < j) : (ofCocone c).obj ⟨i, hi.le⟩ = F.obj
+ ⟨i, hi⟩
+参数：i : J；hi : i < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 lemma ofCocone_obj_eq (i : J) (hi : i < j) :
     (ofCocone c).obj ⟨i, hi.le⟩ = F.obj ⟨i, hi⟩ :=
   dif_pos hi
 
-/--
-Definition of `ofCoconeObjIso` / `ofCoconeObjIso` 的定义
+/-- The isomorphism `(ofCocone c).obj ⟨i, _⟩ ≅ F.obj ⟨i, _⟩` when `i < j`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCoconeObjIso (i : J) (hi : i < j) : (ofCocone c).obj ⟨i, hi.le⟩ ≅ F.obj 
+⟨i, hi⟩
+参数：i : J；hi : i < j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCoconeObjIso
-  signature: (i : J) (hi : i < j)
-  body: ofCocone.objIso c _ _
-
-中文:
-定义 ofCoconeObjIso
-  签名: (i : J) (hi : i < j)
-  定义体: ofCocone.objIso c _ _
-
-Depends on / 依赖: objIso, ofCocone, ofCocone.objIso
+--- 原说明 ---
+The isomorphism `(ofCocone c).obj ⟨i, _⟩ ≅ F.obj ⟨i, _⟩` when `i < j`.
 -/
 def ofCoconeObjIso (i : J) (hi : i < j) :
     (ofCocone c).obj ⟨i, hi.le⟩ ≅ F.obj ⟨i, hi⟩ :=
   ofCocone.objIso c _ _
-
-/--
-lemma `ofCocone_obj_eq_pt` / 引理 `ofCocone_obj_eq_pt`
-
-English:
-lemma ofCocone_obj_eq_pt
-  proof: dif_neg (by simp)
-
-中文:
-引理 ofCocone_obj_eq_pt
-  证明: dif_neg (by simp)
-
-Depends on / 依赖: dif_neg
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCocone_obj_eq_pt : (ofCocone c).obj ⟨j, by simp⟩ = c.pt
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma ofCocone_obj_eq_pt :
     (ofCocone c).obj ⟨j, by simp⟩ = c.pt :=
   dif_neg (by simp)
 
-/--
-Definition of `ofCoconeObjIsoPt` / `ofCoconeObjIsoPt` 的定义
+/-- The isomorphism `(ofCocone c).obj ⟨j, _⟩ ≅ c.pt`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIsoPt** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCoconeObjIsoPt : (ofCocone c).obj ⟨j, by simp⟩ ≅ c.pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCoconeObjIsoPt
-  signature: :
-  body: ofCocone.objIsoPt c
-
-中文:
-定义 ofCoconeObjIsoPt
-  签名: :
-  定义体: ofCocone.objIsoPt c
-
-Depends on / 依赖: objIsoPt, ofCocone, ofCocone.objIsoPt
+--- 原说明 ---
+The isomorphism `(ofCocone c).obj ⟨j, _⟩ ≅ c.pt`.
 -/
 def ofCoconeObjIsoPt :
     (ofCocone c).obj ⟨j, by simp⟩ ≅ c.pt :=
   ofCocone.objIsoPt c
-
-/--
-lemma `ofCocone_map_to_top` / 引理 `ofCocone_map_to_top`
-
-English:
-lemma ofCocone_map_to_top
-  given: (i : J) (hi : i < j)
-  proof: by
-  dsimp [ofCocone, ofCocone.map, ofCoconeObjIso, ofCoconeObjIsoPt]
-  rw [dif_neg (by simp)]; rw [dif_pos hi]; rw [comp_id]
-
-@[reassoc]
-
-中文:
-引理 ofCocone_map_to_top
-  条件: (i : J) (hi : i < j)
-  证明: by
-  dsimp [ofCocone, ofCocone.map, ofCoconeObjIso, ofCoconeObjIsoPt]
-  rw [dif_neg (by simp)]; rw [dif_pos hi]; rw [comp_id]
-
-@[reassoc]
-
-Depends on / 依赖: comp_id, dif_neg, dif_pos, ofCocone, ofCocone.map, ofCoconeObjIso, ofCoconeObjIsoPt
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCocone_map_to_top (i : J) (hi : i < j) : (ofCocone c).map (homOfLE hi.le
+) = (ofCoconeObjIso c i hi).hom ≫ c.ι.app ⟨i, hi⟩ ≫ (ofCoconeObjIsoPt c).inv
+参数：i : J；hi : i < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma ofCocone_map_to_top (i : J) (hi : i < j) :
     (ofCocone c).map (homOfLE hi.le) =
       (ofCoconeObjIso c i hi).hom ≫ c.ι.app ⟨i, hi⟩ ≫ (ofCoconeObjIsoPt c).inv := by
   dsimp [ofCocone, ofCocone.map, ofCoconeObjIso, ofCoconeObjIsoPt]
-  rw [dif_neg (by simp)]; rw [dif_pos hi]; rw [comp_id]
+  rw [dif_neg (by simp), dif_pos hi, comp_id]
 
 @[reassoc]
-/--
-lemma `ofCocone_map` / 引理 `ofCocone_map`
-
-English:
-lemma ofCocone_map
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j)
-  proof: by
-  dsimp [ofCocone, ofCoconeObjIso, ofCocone.map]
-  rw [dif_pos hi₂]
-
-@[reassoc]
-
-中文:
-引理 ofCocone_map
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j)
-  证明: by
-  dsimp [ofCocone, ofCoconeObjIso, ofCocone.map]
-  rw [dif_pos hi₂]
-
-@[reassoc]
-
-Depends on / 依赖: dif_pos, ofCocone, ofCocone.map, ofCoconeObjIso
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCocone_map** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCocone_map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) : (ofCocone c).map
+ (homOfLE hi : ⟨i₁, hi.trans hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) = (ofCoconeObjIso c i₁ (lt_
+of_le_of_lt hi hi₂)).hom ≫ F.map (homOfLE hi) ≫ (ofCoconeObjIso c i₂ hi₂).inv
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-lemma ofCocone_map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) :
+lemma ofCocone_map (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ < j) :
     (ofCocone c).map (homOfLE hi : ⟨i₁, hi.trans hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) =
       (ofCoconeObjIso c i₁ (lt_of_le_of_lt hi hi₂)).hom ≫ F.map (homOfLE hi) ≫
         (ofCoconeObjIso c i₂ hi₂).inv := by
@@ -379,130 +326,136 @@ lemma ofCocone_map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) :
   rw [dif_pos hi₂]
 
 @[reassoc]
-/--
-lemma `ofCoconeObjIso_hom_naturality` / 引理 `ofCoconeObjIso_hom_naturality`
-
-English:
-lemma ofCoconeObjIso_hom_naturality
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j)
-  proof: by
-  rw [ofCocone_map c i₁ i₂ hi hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-中文:
-引理 ofCoconeObjIso_hom_naturality
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j)
-  证明: by
-  rw [ofCocone_map c i₁ i₂ hi hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_id, inv_hom_id, ofCocone_map
+/-
+**CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso_hom_naturality** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：ofCoconeObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) :
+ (ofCocone c).map (homOfLE hi : ⟨i₁, hi.trans hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) ≫ (ofCocon
+eObjIso c i₂ hi₂).hom = (ofCoconeObjIso c i₁ (lt_of_le_of_lt hi hi₂)).hom ≫ F.ma
+p (homOfLE hi)
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_map`：ofCocone_map (i₁ i₂ 
+: J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) : (ofCocone c).map (homOfLE hi : ⟨i₁, hi.tra
+ns hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) = (ofCoconeOb…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma ofCoconeObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) :
+lemma ofCoconeObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ < j) :
     (ofCocone c).map (homOfLE hi : ⟨i₁, hi.trans hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) ≫
       (ofCoconeObjIso c i₂ hi₂).hom =
       (ofCoconeObjIso c i₁ (lt_of_le_of_lt hi hi₂)).hom ≫ F.map (homOfLE hi) := by
-  rw [ofCocone_map c i₁ i₂ hi hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+  rw [ofCocone_map c i₁ i₂ hi hi₂, assoc, assoc, Iso.inv_hom_id, comp_id]
 
 /-- The isomorphism expressing that `ofCocone c` extends the functor `F`
 when `c : Cocone F`. -/
 @[simps!]
-/--
-Definition of `restrictionLTOfCoconeIso` / `restrictionLTOfCoconeIso` 的定义
+/-
+**CategoryTheory.SmallObject.SuccStruct.restrictionLTOfCoconeIso** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：restrictionLTOfCoconeIso : SmallObject.restrictionLT (ofCocone c) (le_refl
+ j) ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictionLTOfCoconeIso
-  signature: :
-  body: NatIso.ofComponents (fun ⟨i, hi⟩ => ofCoconeObjIso c i hi)
-    (by intros; apply ofCoconeObjIso_hom_naturality)
-
-中文:
-定义 restrictionLTOfCoconeIso
-  签名: :
-  定义体: NatIso.ofComponents (fun ⟨i, hi⟩ => ofCoconeObjIso c i hi)
-    (by intros; apply ofCoconeObjIso_hom_naturality)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, intros, ofCoconeObjIso, ofCoconeObjIso_hom_naturality, ofComponents
+--- 原说明 ---
+The isomorphism expressing that `ofCocone c` extends the functor `F`
+when `c : Cocone F`.
 -/
 def restrictionLTOfCoconeIso :
     SmallObject.restrictionLT (ofCocone c) (le_refl j) ≅ F :=
-  NatIso.ofComponents (fun ⟨i, hi⟩ => ofCoconeObjIso c i hi)
+  NatIso.ofComponents (fun ⟨i, hi⟩ ↦ ofCoconeObjIso c i hi)
     (by intros; apply ofCoconeObjIso_hom_naturality)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable {c} in
-/--
-Definition of `isColimitCoconeOfLEOfCocone` / `isColimitCoconeOfLEOfCocone` 的定义
+/-- If `c` is a colimit cocone, then so is `coconeOfLE (ofCocone c) (le_refl j)`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.isColimitCoconeOfLEOfCocone** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：isColimitCoconeOfLEOfCocone (hc : IsColimit c) : IsColimit (coconeOfLE (of
+Cocone c) (le_refl j))
+参数：hc : IsColimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoconeOfLEOfCocone
-  signature: (hc : IsColimit c)
-  body: (IsColimit.precomposeInvEquiv (restrictionLTOfCoconeIso c) _).1
-    (IsColimit.ofIsoColimit hc
-      (Cocone.ext (ofCoconeObjIsoPt c).symm (fun ⟨i, hi⟩ => by
-        dsimp
-        rw [ofCocone_map_to_top _ _ hi]; rw [Iso.inv_hom_id_assoc])))
-
-中文:
-定义 isColimitCoconeOfLEOfCocone
-  签名: (hc : 是余极限 c)
-  定义体: (IsColimit.precomposeInvEquiv (restrictionLTOfCoconeIso c) _).1
-    (IsColimit.ofIsoColimit hc
-      (Cocone.ext (ofCoconeObjIsoPt c).symm (fun ⟨i, hi⟩ => by
-        dsimp
-        rw [ofCocone_map_to_top _ _ hi]; rw [Iso.inv_hom_id_assoc])))
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, Iso.inv_hom_id_assoc, inv_hom_id_assoc, ofCoconeObjIsoPt, ofCocone_map_to_top, ofIsoColimit, precomposeInvEquiv, restrictionLTOfCoconeIso
+--- 原说明 ---
+If `c` is a colimit cocone, then so is `coconeOfLE (ofCocone c) (le_refl j)`.
 -/
 def isColimitCoconeOfLEOfCocone (hc : IsColimit c) :
     IsColimit (coconeOfLE (ofCocone c) (le_refl j)) :=
   (IsColimit.precomposeInvEquiv (restrictionLTOfCoconeIso c) _).1
     (IsColimit.ofIsoColimit hc
-      (Cocone.ext (ofCoconeObjIsoPt c).symm (fun ⟨i, hi⟩ => by
+      (Cocone.ext (ofCoconeObjIsoPt c).symm (fun ⟨i, hi⟩ ↦ by
         dsimp
-        rw [ofCocone_map_to_top _ _ hi]; rw [Iso.inv_hom_id_assoc])))
-
-/--
-lemma `arrowMap_ofCocone` / 引理 `arrowMap_ofCocone`
-
-English:
-lemma arrowMap_ofCocone
-  given: (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ < j)
-  proof: Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq _ _ _) (ofCocone_map _ _ _ _ _)
-
-中文:
-引理 arrowMap_ofCocone
-  条件: (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ < j)
-  证明: Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq _ _ _) (ofCocone_map _ _ _ _ _)
-
-Depends on / 依赖: Arrow.ext, ofCocone_map, ofCocone_obj_eq
+        rw [ofCocone_map_to_top _ _ hi, Iso.inv_hom_id_assoc])))
+/-
+**CategoryTheory.SmallObject.SuccStruct.arrowMap_ofCocone** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：arrowMap_ofCocone (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ < j) : arrowMap (o
+fCocone c) i₁ i₂ h₁₂ h₂.le = Arrow.mk (F.map (homOfLE h₁₂ : ⟨i₁, lt_of_le_of_lt 
+h₁₂ h₂⟩ ⟶ ⟨i₂, h₂⟩))
+参数：i₁ i₂ : J；h₁₂ : i₁ <= i₂；h₂ : i₂ < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.ext`：ext {f g : Arrow T} (h₁ : f.left = g.left) (h₂
+ : f.right = g.right) (h₃ : f.hom = eqToHom h₁ ≫ g.hom ≫ eqToHom h₂.symm) : f = 
+g
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq`：ofCocone_obj_eq (
+i : J) (hi : i < j) : (ofCocone c).obj ⟨i, hi.le⟩ = F.obj ⟨i, hi⟩
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_map`：ofCocone_map (i₁ i₂ 
+: J) (hi : i₁ <= i₂) (hi₂ : i₂ < j) : (ofCocone c).map (homOfLE hi : ⟨i₁, hi.tra
+ns hi₂.le⟩ ⟶ ⟨i₂, hi₂.le⟩) = (ofCoconeOb…
 -/
-lemma arrowMap_ofCocone (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ < j) :
+lemma arrowMap_ofCocone (i₁ i₂ : J) (h₁₂ : i₁ ≤ i₂) (h₂ : i₂ < j) :
     arrowMap (ofCocone c) i₁ i₂ h₁₂ h₂.le =
       Arrow.mk (F.map (homOfLE h₁₂ : ⟨i₁, lt_of_le_of_lt h₁₂ h₂⟩ ⟶ ⟨i₂, h₂⟩)) :=
   Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq _ _ _) (ofCocone_map _ _ _ _ _)
-
-/--
-lemma `arrowMap_ofCocone_to_top` / 引理 `arrowMap_ofCocone_to_top`
-
-English:
-lemma arrowMap_ofCocone_to_top
-  given: (i : J) (hi : i < j)
-  proof: by
-  rw [arrowMap]; rw [ofCocone_map_to_top _ _ hi]
-  exact Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq_pt _) rfl
-
-中文:
-引理 arrowMap_ofCocone_to_top
-  条件: (i : J) (hi : i < j)
-  证明: by
-  rw [arrowMap]; rw [ofCocone_map_to_top _ _ hi]
-  exact Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq_pt _) rfl
-
-Depends on / 依赖: Arrow.ext, arrowMap, ofCocone_map_to_top, ofCocone_obj_eq, ofCocone_obj_eq_pt
+/-
+**CategoryTheory.SmallObject.SuccStruct.arrowMap_ofCocone_to_top** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：arrowMap_ofCocone_to_top (i : J) (hi : i < j) : arrowMap (ofCocone c) i j 
+hi.le (by simp) = Arrow.mk (c.ι.app ⟨i, hi⟩)
+参数：i : J；hi : i < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SmallObject.SuccStruct.arrowMap.eq_1`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : LinearOrder J] {j :
+ J}   (F : CategoryTheory.Functor (↑(Set.…
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top`：ofCocone_map_
+to_top (i : J) (hi : i < j) : (ofCocone c).map (homOfLE hi.le) = (ofCoconeObjIso
+ c i hi).hom ≫ c.ι.app ⟨i, hi⟩ ≫ (ofCoconeObjIs…
+· 使用引理 `CategoryTheory.Arrow.ext`：ext {f g : Arrow T} (h₁ : f.left = g.left) (h₂
+ : f.right = g.right) (h₃ : f.hom = eqToHom h₁ ≫ g.hom ≫ eqToHom h₂.symm) : f = 
+g
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq`：ofCocone_obj_eq (
+i : J) (hi : i < j) : (ofCocone c).obj ⟨i, hi.le⟩ = F.obj ⟨i, hi⟩
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt`：ofCocone_obj_e
+q_pt : (ofCocone c).obj ⟨j, by simp⟩ = c.pt
 -/
 lemma arrowMap_ofCocone_to_top (i : J) (hi : i < j) :
     arrowMap (ofCocone c) i j hi.le (by simp) = Arrow.mk (c.ι.app ⟨i, hi⟩) := by
-  rw [arrowMap]; rw [ofCocone_map_to_top _ _ hi]
+  rw [arrowMap, ofCocone_map_to_top _ _ hi]
   exact Arrow.ext (ofCocone_obj_eq _ _ _) (ofCocone_obj_eq_pt _) rfl
 
 end SuccStruct
@@ -510,3 +463,4 @@ end SuccStruct
 end SmallObject
 
 end CategoryTheory
+

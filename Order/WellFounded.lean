@@ -22,312 +22,233 @@ and an induction principle `WellFounded.induction_bot`.
 
 @[expose] public section
 
-/--
-theorem `acc_def` / 定理 `acc_def`
+/-
+**acc_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：acc_def {α} {r : α -> α -> Prop} {a : α} : Acc r a ↔ forall b, r b a -> Ac
+c r b where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem acc_def
-  given: {α} {r : α -> α -> Prop} {a : α}
-  statement: Acc r a ↔ forall b, r b a -> Acc r b where
-  proof: h.rec fun _ h _ => h
-  mpr := .intro a
+--- 原说明 ---
+# Well-founded relations
 
-中文:
-定理 acc_def
-  条件: {α} {r : α -> α -> 命题} {a : α}
-  结论: Acc r a ↔ 对任意 b, r b a -> Acc r b where
-  证明: h.rec fun _ h _ => h
-  mpr := .intro a
+A relation is well-founded if it can be used for induction: for each `x`, `(∀ y,
+ r y x → P y) → P x`
+implies `P x`. Well-founded relations can be used for induction and recursion, i
+ncluding
+construction of fixed points in the space of dependent functions `Π x : α, β x`.
 
-Depends on / 依赖: h.rec
+The predicate `WellFounded` is defined in the core library. In this file we prov
+e some extra lemmas
+and provide a few new definitions: `WellFounded.min`, `WellFounded.sup`, and `We
+llFounded.succ`,
+and an induction principle `WellFounded.induction_bot`.
 -/
-theorem acc_def {α} {r : α -> α -> Prop} {a : α} : Acc r a ↔ forall b, r b a -> Acc r b where
-  mp h := h.rec fun _ h _ => h
+theorem acc_def {α} {r : α → α → Prop} {a : α} : Acc r a ↔ ∀ b, r b a → Acc r b where
+  mp h := h.rec fun _ h _ ↦ h
   mpr := .intro a
-
-/--
-theorem `exists_not_acc_lt_of_not_acc` / 定理 `exists_not_acc_lt_of_not_acc`
-
-English:
-theorem exists_not_acc_lt_of_not_acc
-  given: {α} {a : α} {r} (h : ¬Acc r a)
-  statement: exists b, ¬Acc r b ∧ r b a
-  proof: by
+/-
+**exists_not_acc_lt_of_not_acc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_not_acc_lt_of_not_acc {α} {a : α} {r} (h : ¬Acc r a) : exists b, ¬A
+cc r b ∧ r b a
+参数：h : ¬Acc r a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `acc_def`：acc_def {α} {r : α -> α -> Prop} {a : α} : Acc r a ↔ forall b, 
+r b a -> Acc r b where mp h
+-/
+theorem exists_not_acc_lt_of_not_acc {α} {a : α} {r} (h : ¬Acc r a) : ∃ b, ¬Acc r b ∧ r b a := by
   rw [acc_def] at h
   push Not at h
   simpa only [and_comm]
-
-中文:
-定理 存在_not_acc_lt_of_not_acc
-  条件: {α} {a : α} {r} (h : ¬Acc r a)
-  结论: 存在 b, ¬Acc r b ∧ r b a
-  证明: by
-  rw [acc_def] at h
-  push Not at h
-  simpa only [and_comm]
-
-Depends on / 依赖: acc_def, and_comm
+/-
+**not_acc_iff_exists_descending_chain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_acc_iff_exists_descending_chain {α} {r : α -> α -> Prop} {x : α} : ¬Ac
+c r x ↔ exists f : Nat -> α, f 0 = x ∧ forall n, r (f (n + 1)) (f n) where mp hx
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_not_acc_lt_of_not_acc`：exists_not_acc_lt_of_not_acc {α} {a : α} {
+r} (h : ¬Acc r a) : exists b, ¬Acc r b ∧ r b a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem exists_not_acc_lt_of_not_acc {α} {a : α} {r} (h : ¬Acc r a) : exists b, ¬Acc r b ∧ r b a := by
-  rw [acc_def] at h
-  push Not at h
-  simpa only [and_comm]
-
-/--
-theorem `not_acc_iff_exists_descending_chain` / 定理 `not_acc_iff_exists_descending_chain`
-
-English:
-theorem not_acc_iff_exists_descending_chain
-  given: {α} {r : α -> α -> Prop} {x : α}
-  proof: let f : Nat -> {a : α // ¬Acc r a} :=
-      Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
-    ⟨(f · |>.1), rfl, fun n => (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
+theorem not_acc_iff_exists_descending_chain {α} {r : α → α → Prop} {x : α} :
+    ¬Acc r x ↔ ∃ f : ℕ → α, f 0 = x ∧ ∀ n, r (f (n + 1)) (f n) where
+  mp hx := let f : ℕ → {a : α // ¬Acc r a} :=
+      Nat.rec ⟨x, hx⟩ fun _ a ↦ ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
+    ⟨(f · |>.1), rfl, fun n ↦ (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
   mpr h acc := acc.rec
-    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ => hf.2 _⟩) h
-
-中文:
-定理 not_acc_iff_存在_descending_chain
-  条件: {α} {r : α -> α -> 命题} {x : α}
-  证明: let f : Nat -> {a : α // ¬Acc r a} :=
-      Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
-    ⟨(f · |>.1), rfl, fun n => (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
-  mpr h acc := acc.rec
-    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ => hf.2 _⟩) h
+    (fun _x _ ih ⟨f, hf⟩ ↦ ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ ↦ hf.2 _⟩) h
+/-
+**acc_iff_isEmpty_descending_chain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：acc_iff_isEmpty_descending_chain {α} {r : α -> α -> Prop} {x : α} : Acc r 
+x ↔ IsEmpty { f : Nat -> α // f 0 = x ∧ forall n, r (f (n + 1)) (f n) }
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
+· 使用定理 `not_acc_iff_exists_descending_chain`：not_acc_iff_exists_descending_chain
+ {α} {r : α -> α -> Prop} {x : α} : ¬Acc r x ↔ exists f : Nat -> α, f 0 = x ∧ fo
+rall n, r (f (n + 1)) (f …
 -/
-theorem not_acc_iff_exists_descending_chain {α} {r : α -> α -> Prop} {x : α} :
-    ¬Acc r x ↔ exists f : Nat -> α, f 0 = x ∧ forall n, r (f (n + 1)) (f n) where
-  mp hx := let f : Nat -> {a : α // ¬Acc r a} :=
-      Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
-    ⟨(f · |>.1), rfl, fun n => (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
-  mpr h acc := acc.rec
-    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ => hf.2 _⟩) h
-
-/--
-theorem `acc_iff_isEmpty_descending_chain` / 定理 `acc_iff_isEmpty_descending_chain`
-
-English:
-theorem acc_iff_isEmpty_descending_chain
-  given: {α} {r : α -> α -> Prop} {x : α}
-  proof: by
+theorem acc_iff_isEmpty_descending_chain {α} {r : α → α → Prop} {x : α} :
+    Acc r x ↔ IsEmpty { f : ℕ → α // f 0 = x ∧ ∀ n, r (f (n + 1)) (f n) } := by
   contrapose!
   rw [nonempty_subtype]
   exact not_acc_iff_exists_descending_chain
 
-中文:
-定理 acc_iff_isEmpty_descending_chain
-  条件: {α} {r : α -> α -> 命题} {x : α}
-  证明: by
-  contrapose!
-  rw [nonempty_subtype]
-  exact not_acc_iff_exists_descending_chain
+/-- A relation is well-founded iff it doesn't have any infinite descending chain.
 
-Depends on / 依赖: contrapose, nonempty_subtype, not_acc_iff_exists_descending_chain
+See `RelEmbedding.wellFounded_iff_isEmpty` for a version in terms of relation embeddings. -/
+/-
+**wellFounded_iff_isEmpty_descending_chain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wellFounded_iff_isEmpty_descending_chain {α} {r : α -> α -> Prop} : WellFo
+unded r ↔ IsEmpty { f : Nat -> α // forall n, r (f (n + 1)) (f n) } where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsEmpty.false`：∀ {α : Sort u} [self : IsEmpty α] (a : α), False
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `acc_iff_isEmpty_descending_chain`：acc_iff_isEmpty_descending_chain {α} {
+r : α -> α -> Prop} {x : α} : Acc r x ↔ IsEmpty { f : Nat -> α // f 0 = x ∧ fora
+ll n, r (f (n + 1)) (f…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+
+--- 原说明 ---
+A relation is well-founded iff it doesn't have any infinite descending chain.
+
+See `RelEmbedding.wellFounded_iff_isEmpty` for a version in terms of relation em
+beddings.
 -/
-theorem acc_iff_isEmpty_descending_chain {α} {r : α -> α -> Prop} {x : α} :
-    Acc r x ↔ IsEmpty { f : Nat -> α // f 0 = x ∧ forall n, r (f (n + 1)) (f n) } := by
-  contrapose!
-  rw [nonempty_subtype]
-  exact not_acc_iff_exists_descending_chain
-
-/--
-theorem `wellFounded_iff_isEmpty_descending_chain` / 定理 `wellFounded_iff_isEmpty_descending_chain`
-
-English:
-theorem wellFounded_iff_isEmpty_descending_chain
-  given: {α} {r : α -> α -> Prop}
-  proof: fun ⟨h⟩ => ⟨fun ⟨f, hf⟩ => (acc_iff_isEmpty_descending_chain.mp (h (f 0))).false ⟨f, rfl, hf⟩⟩
-  mpr h := ⟨fun _ => acc_iff_isEmpty_descending_chain.mpr ⟨fun ⟨f, hf⟩ => h.false ⟨f, hf.2⟩⟩⟩
-
-中文:
-定理 wellFounded_iff_isEmpty_descending_chain
-  条件: {α} {r : α -> α -> 命题}
-  证明: fun ⟨h⟩ => ⟨fun ⟨f, hf⟩ => (acc_iff_isEmpty_descending_chain.mp (h (f 0))).false ⟨f, rfl, hf⟩⟩
-  mpr h := ⟨fun _ => acc_iff_isEmpty_descending_chain.mpr ⟨fun ⟨f, hf⟩ => h.false ⟨f, hf.2⟩⟩⟩
-
-Depends on / 依赖: acc_iff_isEmpty_descending_chain, acc_iff_isEmpty_descending_chain.mp
--/
-theorem wellFounded_iff_isEmpty_descending_chain {α} {r : α -> α -> Prop} :
-    WellFounded r ↔ IsEmpty { f : Nat -> α // forall n, r (f (n + 1)) (f n) } where
-  mp := fun ⟨h⟩ => ⟨fun ⟨f, hf⟩ => (acc_iff_isEmpty_descending_chain.mp (h (f 0))).false ⟨f, rfl, hf⟩⟩
-  mpr h := ⟨fun _ => acc_iff_isEmpty_descending_chain.mpr ⟨fun ⟨f, hf⟩ => h.false ⟨f, hf.2⟩⟩⟩
+theorem wellFounded_iff_isEmpty_descending_chain {α} {r : α → α → Prop} :
+    WellFounded r ↔ IsEmpty { f : ℕ → α // ∀ n, r (f (n + 1)) (f n) } where
+  mp := fun ⟨h⟩ ↦ ⟨fun ⟨f, hf⟩ ↦ (acc_iff_isEmpty_descending_chain.mp (h (f 0))).false ⟨f, rfl, hf⟩⟩
+  mpr h := ⟨fun _ ↦ acc_iff_isEmpty_descending_chain.mpr ⟨fun ⟨f, hf⟩ ↦ h.false ⟨f, hf.2⟩⟩⟩
 
 variable {α β γ : Type*}
 
 namespace WellFounded
 
-variable {r r' : α -> α -> Prop}
+variable {r r' : α → α → Prop}
 
-/--
-theorem `asymm` / 定理 `asymm`
-
-English:
-theorem asymm
-  given: (h : WellFounded r)
-  statement: Std.Asymm r
-  proof: ⟨h.asymmetric⟩
-
-@[deprecated (since := "2026-01-07")] protected alias isAsymm := WellFounded.asymm
-
-中文:
-定理 asymm
-  条件: (h : 良基 r)
-  结论: Std.Asymm r
-  证明: ⟨h.asymmetric⟩
-
-@[deprecated (since := "2026-01-07")] protected alias isAsymm := WellFounded.asymm
+/-
+**WellFounded.asymm** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop}, WellFounded r → Std.Asymm r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.asymmetric`：WellFounded.asymmetric {α : Sort*} {r : α -> α -
+> Prop} (h : WellFounded r) (a b) : r a b -> ¬r b a
 -/
 protected theorem asymm (h : WellFounded r) : Std.Asymm r := ⟨h.asymmetric⟩
 
 @[deprecated (since := "2026-01-07")] protected alias isAsymm := WellFounded.asymm
-
-/--
-theorem `irrefl` / 定理 `irrefl`
-
-English:
-theorem irrefl
-  given: (h : WellFounded r)
-  statement: Std.Irrefl r
-  proof: @Std.Asymm.irrefl α r h.asymm
-
-@[deprecated (since := "2026-01-07")] protected alias isIrrefl := WellFounded.irrefl
-
-中文:
-定理 irrefl
-  条件: (h : 良基 r)
-  结论: Std.Irrefl r
-  证明: @Std.Asymm.irrefl α r h.asymm
-
-@[deprecated (since := "2026-01-07")] protected alias isIrrefl := WellFounded.irrefl
+/-
+**WellFounded.irrefl** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop}, WellFounded r → Std.Irrefl r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Asymm.irrefl`：∀ {α : Sort u_1} {r : α → α → Prop} [Std.Asymm r], Std
+.Irrefl r
+· 使用定理 `WellFounded.asymm`：∀ {α : Type u_1} {r : α → α → Prop}, WellFounded r → 
+Std.Asymm r
 -/
 protected theorem irrefl (h : WellFounded r) : Std.Irrefl r := @Std.Asymm.irrefl α r h.asymm
 
 @[deprecated (since := "2026-01-07")] protected alias isIrrefl := WellFounded.irrefl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [WellFoundedRelation
-  signature: α] : Std.Asymm (α
-  body: WellFoundedRelation.wf.asymm
-
-中文:
-实例 [良基关系
-  签名: α] : Std.Asymm (α
-  定义体: WellFoundedRelation.wf.asymm
-
-Depends on / 依赖: WellFoundedRelation, WellFoundedRelation.rel
+/-
+**WellFounded.** 是 Mathlib 中的一个实例，位于命名空间 `WellFounded`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [WellFoundedRelation α] : Std.Asymm (α := α) WellFoundedRelation.rel :=
   WellFoundedRelation.wf.asymm
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: (hr : WellFounded r) (h : forall a b, r' a b -> r a b)
-  statement: WellFounded r'
-  proof: Subrelation.wf (h _ _) hr
-
-中文:
-定理 mono
-  条件: (hr : 良基 r) (h : 对任意 a b, r' a b -> r a b)
-  结论: 良基 r'
-  证明: Subrelation.wf (h _ _) hr
-
-Depends on / 依赖: Subrelation, Subrelation.wf
+/-
+**WellFounded.mono** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：mono (hr : WellFounded r) (h : forall a b, r' a b -> r a b) : WellFounded 
+r'
+参数：hr : WellFounded r；h : forall a b, r' a b -> r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrelation.wf`：∀ {α : Sort u} {r q : α → α → Prop}, Subrelation q r → W
+ellFounded r → WellFounded q
 -/
-theorem mono (hr : WellFounded r) (h : forall a b, r' a b -> r a b) : WellFounded r' :=
+theorem mono (hr : WellFounded r) (h : ∀ a b, r' a b → r a b) : WellFounded r' :=
   Subrelation.wf (h _ _) hr
 
 open scoped Function in -- required for scoped `on` notation
-/--
-theorem `onFun` / 定理 `onFun`
-
-English:
-theorem onFun
-  given: {α β : Sort*} {r : β -> β -> Prop} {f : α -> β}
-  proof: InvImage.wf _
-
-中文:
-定理 onFun
-  条件: {α β : 类型层*} {r : β -> β -> 命题} {f : α -> β}
-  证明: InvImage.wf _
-
-Depends on / 依赖: InvImage, InvImage.wf
+/-
+**WellFounded.onFun** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：onFun {α β : Sort*} {r : β -> β -> Prop} {f : α -> β} : WellFounded r -> W
+ellFounded (r on f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
 -/
-theorem onFun {α β : Sort*} {r : β -> β -> Prop} {f : α -> β} :
-    WellFounded r -> WellFounded (r on f) :=
+theorem onFun {α β : Sort*} {r : β → β → Prop} {f : α → β} :
+    WellFounded r → WellFounded (r on f) :=
   InvImage.wf _
-
-instance (r : β -> β -> Prop) (f : α -> β) [IsWellFounded β r] :
+/-
+**WellFounded.** 是 Mathlib 中的一个实例，位于命名空间 `WellFounded`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (r : β → β → Prop) (f : α → β) [IsWellFounded β r] :
     IsWellFounded α (r.onFun f) where
   wf := IsWellFounded.wf.onFun
-
-/--
-theorem `_root_.Function.Injective.isWellOrder` / 定理 `_root_.Function.Injective.isWellOrder`
-
-English:
-theorem _root_.Function.Injective.isWellOrder
-  statement: (r : β -> β -> Prop) {f : α -> β} (hf : f.Injective)
-  proof: hf.trichotomous_onFun r
-
-中文:
-定理 _root_.函数.单射.isWellOrder
-  结论: (r : β -> β -> 命题) {f : α -> β} (hf : f.单射)
-  证明: hf.trichotomous_onFun r
-
-Depends on / 依赖: hf.trichotomous_onFun, trichotomous_onFun
+/-
+**WellFounded._root_.Function.Injective.isWellOrder** 是 Mathlib 中的一个定理，位于命名空间 `W
+ellFounded`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.Injective.isWellOrder (r : β -> β -> Prop) {f : α -> β} (hf : f.Injective)
+theorem _root_.Function.Injective.isWellOrder (r : β → β → Prop) {f : α → β} (hf : f.Injective)
     [IsWellOrder β r] : IsWellOrder α (r.onFun f) where
   __ := hf.trichotomous_onFun r
 
-/--
-theorem `has_min` / 定理 `has_min`
+/-- If `r` is a well-founded relation, then any nonempty set has a minimal element
+with respect to `r`. -/
+/-
+**WellFounded.has_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r → ∀ (s : Set α), s.None
+mpty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.apply`：∀ {α : Sort u} {r : α → α → Prop}, WellFounded r → ∀ 
+(a : α), Acc r a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
 
-English:
-theorem has_min
-  given: {α} {r : α -> α -> Prop} (H : WellFounded r) (s : Set α)
-
-中文:
-定理 has_min
-  条件: {α} {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α)
+--- 原说明 ---
+If `r` is a well-founded relation, then any nonempty set has a minimal element
+with respect to `r`.
 -/
-theorem has_min {α} {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) :
-    s.Nonempty -> exists a in s, forall x in s, ¬r x a
-  | ⟨a, ha⟩ => show exists b in s, forall x in s, ¬r x b from
+theorem has_min {α} {r : α → α → Prop} (H : WellFounded r) (s : Set α) :
+    s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+  | ⟨a, ha⟩ => show ∃ b ∈ s, ∀ x ∈ s, ¬r x b from
     Acc.recOn (H.apply a) (fun x _ IH =>
-not_imp_not.1 fun hne hx => hne ⟨x, hx, fun y hy hyx => hne IH y hyx hy⟩)
+        not_imp_not.1 fun hne hx => hne <| ⟨x, hx, fun y hy hyx => hne <| IH y hyx hy⟩)
       ha
-
-/--
-theorem `not_rightTotal` / 定理 `not_rightTotal`
-
-English:
-theorem not_rightTotal
-  given: (wf : WellFounded r) [Nonempty α]
-  statement: ¬ Relator.RightTotal r
-  proof: by
-  intro h
-  obtain ⟨a, -, ha⟩ := wf.has_min Set.univ Set.univ_nonempty
-  obtain ⟨b, hba⟩ := h a
-  specialize ha b (Set.mem_univ b)
-  contradiction
-
-中文:
-定理 not_rightTotal
-  条件: (wf : 良基 r) [非空 α]
-  结论: ¬ Relator.RightTotal r
-  证明: by
-  intro h
-  obtain ⟨a, -, ha⟩ := wf.has_min Set.univ Set.univ_nonempty
-  obtain ⟨b, hba⟩ := h a
-  specialize ha b (Set.mem_univ b)
-  contradiction
-
-Depends on / 依赖: Set.mem_univ, Set.univ, Set.univ_nonempty, has_min, mem_univ, specialize, univ_nonempty, wf.has_min
+/-
+**WellFounded.not_rightTotal** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：not_rightTotal (wf : WellFounded r) [Nonempty α] : ¬ Relator.RightTotal r
+参数：wf : WellFounded r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem not_rightTotal (wf : WellFounded r) [Nonempty α] : ¬ Relator.RightTotal r := by
   intro h
@@ -335,31 +256,17 @@ theorem not_rightTotal (wf : WellFounded r) [Nonempty α] : ¬ Relator.RightTota
   obtain ⟨b, hba⟩ := h a
   specialize ha b (Set.mem_univ b)
   contradiction
-
-/--
-theorem `not_leftTotal` / 定理 `not_leftTotal`
-
-English:
-theorem not_leftTotal
-  given: (wf : WellFounded (Function.swap r)) [Nonempty α]
-  proof: by
-  intro h
-  obtain ⟨a, -, ha⟩ := wf.has_min Set.univ Set.univ_nonempty
-  obtain ⟨b, hab⟩ := h a
-  specialize ha b (Set.mem_univ b)
-  contradiction
-
-中文:
-定理 not_leftTotal
-  条件: (wf : 良基 (函数.swap r)) [非空 α]
-  证明: by
-  intro h
-  obtain ⟨a, -, ha⟩ := wf.has_min Set.univ Set.univ_nonempty
-  obtain ⟨b, hab⟩ := h a
-  specialize ha b (Set.mem_univ b)
-  contradiction
-
-Depends on / 依赖: Set.mem_univ, Set.univ, Set.univ_nonempty, has_min, mem_univ, specialize, univ_nonempty, wf.has_min
+/-
+**WellFounded.not_leftTotal** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：not_leftTotal (wf : WellFounded (Function.swap r)) [Nonempty α] : ¬ Relato
+r.LeftTotal r
+参数：wf : WellFounded (Function.swap r)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem not_leftTotal (wf : WellFounded (Function.swap r)) [Nonempty α] :
     ¬ Relator.LeftTotal r := by
@@ -369,177 +276,137 @@ theorem not_leftTotal (wf : WellFounded (Function.swap r)) [Nonempty α] :
   specialize ha b (Set.mem_univ b)
   contradiction
 
-/--
-Definition of `min` / `min` 的定义
+/-- A minimal element of a nonempty set in a well-founded order.
 
-English:
-definition min
-  signature: {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty)
-  body: Classical.choose (H.has_min s h)
+If you're working with a nonempty linear order, consider defining a
+`ConditionallyCompleteLinearOrderBot` instance via
+`WellFoundedLT.conditionallyCompleteLinearOrderBot` and using `Inf` instead. -/
+/-
+**WellFounded.min** 是 Mathlib 中的一个定义，位于命名空间 `WellFounded`。
+形式化陈述：min {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty) 
+: α
+参数：H : WellFounded r；s : Set α；h : s.Nonempty。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
 
-中文:
-定义 最小值
-  签名: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) (h : s.非空)
-  定义体: Classical.choose (H.has_min s h)
+--- 原说明 ---
+A minimal element of a nonempty set in a well-founded order.
 
-Depends on / 依赖: Classical, Classical.choose, H.has_min, has_min
+If you're working with a nonempty linear order, consider defining a
+`ConditionallyCompleteLinearOrderBot` instance via
+`WellFoundedLT.conditionallyCompleteLinearOrderBot` and using `Inf` instead.
 -/
-noncomputable def min {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty) : α :=
+noncomputable def min {r : α → α → Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty) : α :=
   Classical.choose (H.has_min s h)
-
-/--
-theorem `min_mem` / 定理 `min_mem`
-
-English:
-theorem min_mem
-  given: {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty)
-  proof: let ⟨h, _⟩ := Classical.choose_spec (H.has_min s h)
-  h
-
-中文:
-定理 min_mem
-  条件: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) (h : s.非空)
-  证明: let ⟨h, _⟩ := Classical.choose_spec (H.has_min s h)
-  h
-
-Depends on / 依赖: Classical, Classical.choose_spec, H.has_min, choose_spec, has_min
+/-
+**WellFounded.min_mem** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonemp
+ty) : H.min s h in s
+参数：H : WellFounded r；s : Set α；h : s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem min_mem {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty) :
-    H.min s h in s :=
+theorem min_mem {r : α → α → Prop} (H : WellFounded r) (s : Set α) (h : s.Nonempty) :
+    H.min s h ∈ s :=
   let ⟨h, _⟩ := Classical.choose_spec (H.has_min s h)
   h
-
-/--
-theorem `prop_min` / 定理 `prop_min`
-
-English:
-theorem prop_min
-  given: {r : α -> α -> Prop} (H : WellFounded r) {p : α -> Prop} (h : exists a, p a)
-  proof: H.min_mem {a | p a} h
-
-中文:
-定理 prop_min
-  条件: {r : α -> α -> 命题} (H : 良基 r) {p : α -> 命题} (h : 存在 a, p a)
-  证明: H.min_mem {a | p a} h
-
-Depends on / 依赖: H.min_mem, min_mem
+/-
+**WellFounded.prop_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：prop_min {r : α -> α -> Prop} (H : WellFounded r) {p : α -> Prop} (h : exi
+sts a, p a) : p (H.min {a | p a} h)
+参数：H : WellFounded r；h : exists a, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
 -/
-theorem prop_min {r : α -> α -> Prop} (H : WellFounded r) {p : α -> Prop} (h : exists a, p a) :
+theorem prop_min {r : α → α → Prop} (H : WellFounded r) {p : α → Prop} (h : ∃ a, p a) :
     p (H.min {a | p a} h) :=
   H.min_mem {a | p a} h
-
-/--
-theorem `not_lt_min` / 定理 `not_lt_min`
-
-English:
-theorem not_lt_min
-  given: {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) {x} (hx : x in s)
-  proof: let ⟨_, h'⟩ := Classical.choose_spec (H.has_min s ⟨x, hx⟩)
-  h' _ hx
-
-中文:
-定理 not_lt_min
-  条件: {r : α -> α -> 命题} (H : 良基 r) (s : 集合 α) {x} (hx : x in s)
-  证明: let ⟨_, h'⟩ := Classical.choose_spec (H.has_min s ⟨x, hx⟩)
-  h' _ hx
-
-Depends on / 依赖: Classical, Classical.choose_spec, H.has_min, choose_spec, has_min
+/-
+**WellFounded.not_lt_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：not_lt_min {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) {x} (hx : 
+x in s) : ¬r x (H.min s ⟨x, hx⟩)
+参数：H : WellFounded r；s : Set α；hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem not_lt_min {r : α -> α -> Prop} (H : WellFounded r) (s : Set α) {x} (hx : x in s) :
+theorem not_lt_min {r : α → α → Prop} (H : WellFounded r) (s : Set α) {x} (hx : x ∈ s) :
     ¬r x (H.min s ⟨x, hx⟩) :=
   let ⟨_, h'⟩ := Classical.choose_spec (H.has_min s ⟨x, hx⟩)
   h' _ hx
 
-/--
-theorem `min_eq_of_forall_not_lt` / 定理 `min_eq_of_forall_not_lt`
+/-- The minimal element of a trichotomous well-founded order is unique -/
+/-
+**WellFounded.min_eq_of_forall_not_lt** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：min_eq_of_forall_not_lt [Std.Trichotomous r] (wf : WellFounded r) {s : Set
+ α} {m : α} (hms : m in s) (hrm : forall x in s, ¬r x m) : wf.min s ⟨m, hms⟩ = m
+参数：wf : WellFounded r；hms : m in s；hrm : forall x in s, ¬r x m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Trichotomous.trichotomous`：∀ {α : Sort u} {r : α → α → Prop} [self :
+ Std.Trichotomous r] (a b : α), ¬r a b → ¬r b a → a = b
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
 
-English:
-theorem min_eq_of_forall_not_lt
-  statement: [Std.Trichotomous r] (wf : WellFounded r) {s : Set α} {m : α}
-  proof: Std.Trichotomous.trichotomous _ m (hrm _ <| wf.min_mem s _) (wf.not_lt_min s hms)
-
-中文:
-定理 min_eq_of_对任意_not_lt
-  结论: [Std.三歧 r] (wf : 良基 r) {s : 集合 α} {m : α}
-  证明: Std.Trichotomous.trichotomous _ m (hrm _ <| wf.min_mem s _) (wf.not_lt_min s hms)
-
-Depends on / 依赖: Std.Trichotomous.trichotomous, Trichotomous, min_mem, not_lt_min, trichotomous, wf.min_mem, wf.not_lt_min
+--- 原说明 ---
+The minimal element of a trichotomous well-founded order is unique
 -/
 theorem min_eq_of_forall_not_lt [Std.Trichotomous r] (wf : WellFounded r) {s : Set α} {m : α}
-    (hms : m in s) (hrm : forall x in s, ¬r x m) : wf.min s ⟨m, hms⟩ = m :=
+    (hms : m ∈ s) (hrm : ∀ x ∈ s, ¬r x m) : wf.min s ⟨m, hms⟩ = m :=
   Std.Trichotomous.trichotomous _ m (hrm _ <| wf.min_mem s _) (wf.not_lt_min s hms)
-
-/--
-theorem `notMem_of_lt_min` / 定理 `notMem_of_lt_min`
-
-English:
-theorem notMem_of_lt_min
-  statement: {wf : WellFounded r} {s : Set α} {hs : s.Nonempty} {x : α}
-  proof: (wf.not_lt_min s · hx)
-
-中文:
-定理 notMem_of_lt_min
-  结论: {wf : 良基 r} {s : 集合 α} {hs : s.非空} {x : α}
-  证明: (wf.not_lt_min s · hx)
-
-Depends on / 依赖: not_lt_min, wf.not_lt_min
+/-
+**WellFounded.notMem_of_lt_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：notMem_of_lt_min {wf : WellFounded r} {s : Set α} {hs : s.Nonempty} {x : α
+} (hx : r x (wf.min s hs)) : x ∉ s
+参数：hx : r x (wf.min s hs)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
 -/
 theorem notMem_of_lt_min {wf : WellFounded r} {s : Set α} {hs : s.Nonempty} {x : α}
     (hx : r x (wf.min s hs)) : x ∉ s :=
   (wf.not_lt_min s · hx)
-
-/--
-theorem `mem_of_lt_min_compl` / 定理 `mem_of_lt_min_compl`
-
-English:
-theorem mem_of_lt_min_compl
-  statement: {wf : WellFounded r} {s : Set α} {hs : sᶜ.Nonempty} {x : α}
-  proof: Set.notMem_compl_iff.mp notMem_of_lt_min hx
-
-中文:
-定理 mem_of_lt_min_compl
-  结论: {wf : 良基 r} {s : 集合 α} {hs : sᶜ.非空} {x : α}
-  证明: Set.notMem_compl_iff.mp notMem_of_lt_min hx
-
-Depends on / 依赖: Set.notMem_compl_iff.mp, notMem_compl_iff, notMem_of_lt_min
+/-
+**WellFounded.mem_of_lt_min_compl** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：mem_of_lt_min_compl {wf : WellFounded r} {s : Set α} {hs : sᶜ.Nonempty} {x
+ : α} (hx : r x (wf.min sᶜ hs)) : x in s
+参数：hx : r x (wf.min sᶜ hs)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.notMem_compl_iff`：notMem_compl_iff {x : α} : x ∉ sᶜ ↔ x in s
+· 使用定理 `WellFounded.notMem_of_lt_min`：notMem_of_lt_min {wf : WellFounded r} {s :
+ Set α} {hs : s.Nonempty} {x : α} (hx : r x (wf.min s hs)) : x ∉ s
 -/
 theorem mem_of_lt_min_compl {wf : WellFounded r} {s : Set α} {hs : sᶜ.Nonempty} {x : α}
-    (hx : r x (wf.min sᶜ hs)) : x in s :=
-Set.notMem_compl_iff.mp notMem_of_lt_min hx
-
-/--
-theorem `wellFounded_iff_has_min` / 定理 `wellFounded_iff_has_min`
-
-English:
-theorem wellFounded_iff_has_min
-  given: {r : α -> α -> Prop}
-  proof: by
-  refine ⟨fun h => h.has_min, fun h => ⟨fun x => ?_⟩⟩
-  by_contra hx
-  obtain ⟨m, hm, hm'⟩ := h {x | ¬Acc r x} ⟨x, hx⟩
-  refine hm ⟨_, fun y hy => ?_⟩
-  by_contra hy'
-  exact hm' y hy' hy
-
-@[to_dual]
-
-中文:
-定理 wellFounded_iff_has_min
-  条件: {r : α -> α -> 命题}
-  证明: by
-  refine ⟨fun h => h.has_min, fun h => ⟨fun x => ?_⟩⟩
-  by_contra hx
-  obtain ⟨m, hm, hm'⟩ := h {x | ¬Acc r x} ⟨x, hx⟩
-  refine hm ⟨_, fun y hy => ?_⟩
-  by_contra hy'
-  exact hm' y hy' hy
-
-@[to_dual]
-
-Depends on / 依赖: h.has_min, has_min
+    (hx : r x (wf.min sᶜ hs)) : x ∈ s :=
+  Set.notMem_compl_iff.mp <| notMem_of_lt_min hx
+/-
+**WellFounded.wellFounded_iff_has_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：wellFounded_iff_has_min {r : α -> α -> Prop} : WellFounded r ↔ forall s : 
+Set α, s.Nonempty -> exists m in s, forall x in s, ¬r x m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
 -/
-theorem wellFounded_iff_has_min {r : α -> α -> Prop} :
-    WellFounded r ↔ forall s : Set α, s.Nonempty -> exists m in s, forall x in s, ¬r x m := by
+theorem wellFounded_iff_has_min {r : α → α → Prop} :
+    WellFounded r ↔ ∀ s : Set α, s.Nonempty → ∃ m ∈ s, ∀ x ∈ s, ¬r x m := by
   refine ⟨fun h => h.has_min, fun h => ⟨fun x => ?_⟩⟩
   by_contra hx
   obtain ⟨m, hm, hm'⟩ := h {x | ¬Acc r x} ⟨x, hx⟩
@@ -548,178 +415,142 @@ theorem wellFounded_iff_has_min {r : α -> α -> Prop} :
   exact hm' y hy' hy
 
 @[to_dual]
-/--
-theorem `wellFoundedLT_iff_exists_minimal` / 定理 `wellFoundedLT_iff_exists_minimal`
-
-English:
-theorem wellFoundedLT_iff_exists_minimal
-  given: [Preorder α]
-  proof: by
-  simp only [isWellFounded_iff, wellFounded_iff_has_min, not_lt_iff_le_imp_ge, Minimal]
-
-@[to_dual]
-alias ⟨_root_.WellFoundedLT.exists_minimal, _⟩ := wellFoundedLT_iff_exists_minimal
-
-@[to_dual]
-
-中文:
-定理 wellFoundedLT_iff_存在_minimal
-  条件: [预序 α]
-  证明: by
-  simp only [isWellFounded_iff, wellFounded_iff_has_min, not_lt_iff_le_imp_ge, Minimal]
-
-@[to_dual]
-alias ⟨_root_.WellFoundedLT.exists_minimal, _⟩ := wellFoundedLT_iff_exists_minimal
-
-@[to_dual]
-
-Depends on / 依赖: Minimal, isWellFounded_iff, not_lt_iff_le_imp_ge, wellFounded_iff_has_min
+/-
+**WellFounded.wellFoundedLT_iff_exists_minimal** 是 Mathlib 中的一个定理，位于命名空间 `WellFo
+unded`。
+形式化陈述：wellFoundedLT_iff_exists_minimal [Preorder α] : WellFoundedLT α ↔ forall s
+ : Set α, s.Nonempty -> exists m, Minimal (· in s) m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem wellFoundedLT_iff_exists_minimal [Preorder α] :
-    WellFoundedLT α ↔ forall s : Set α, s.Nonempty -> exists m, Minimal (· in s) m := by
+    WellFoundedLT α ↔ ∀ s : Set α, s.Nonempty → ∃ m, Minimal (· ∈ s) m := by
   simp only [isWellFounded_iff, wellFounded_iff_has_min, not_lt_iff_le_imp_ge, Minimal]
 
 @[to_dual]
 alias ⟨_root_.WellFoundedLT.exists_minimal, _⟩ := wellFoundedLT_iff_exists_minimal
 
 @[to_dual]
-/--
-theorem `minimal_wellFounded_lt_min` / 定理 `minimal_wellFounded_lt_min`
-
-English:
-theorem minimal_wellFounded_lt_min
-  given: [Preorder α] [WellFoundedLT α] {s : Set α} (h : s.Nonempty)
-  proof: by
-  grind [Minimal, lt_iff_le_not_ge, WellFounded.min]
-
-中文:
-定理 minimal_wellFounded_lt_min
-  条件: [预序 α] [WellFoundedLT α] {s : 集合 α} (h : s.非空)
-  证明: by
-  grind [Minimal, lt_iff_le_not_ge, WellFounded.min]
-
-Depends on / 依赖: Minimal, WellFounded, WellFounded.min, lt_iff_le_not_ge
+/-
+**WellFounded.minimal_wellFounded_lt_min** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`
+。
+形式化陈述：minimal_wellFounded_lt_min [Preorder α] [WellFoundedLT α] {s : Set α} (h :
+ s.Nonempty) : Minimal (· in s) (wellFounded_lt.min s h)
+参数：h : s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem minimal_wellFounded_lt_min [Preorder α] [WellFoundedLT α] {s : Set α} (h : s.Nonempty) :
-    Minimal (· in s) (wellFounded_lt.min s h) := by
+    Minimal (· ∈ s) (wellFounded_lt.min s h) := by
   grind [Minimal, lt_iff_le_not_ge, WellFounded.min]
-
-/--
-theorem `isWellOrder_iff_exists_not_lt_and_eq_or_gt` / 定理 `isWellOrder_iff_exists_not_lt_and_eq_or_gt`
-
-English:
-theorem isWellOrder_iff_exists_not_lt_and_eq_or_gt
-  proof: by
-  refine ⟨fun h s hs => ?_, fun h => { wf := ?_, trichotomous a b := ?_ }⟩
-  · grind [h.wf.has_min, trichotomous_of r]
-  · grind [wellFounded_iff_has_min]
-  · grind [h {a, b} <| by simp]
-
-中文:
-定理 isWellOrder_iff_存在_not_lt_and_eq_or_gt
-  证明: by
-  refine ⟨fun h s hs => ?_, fun h => { wf := ?_, trichotomous a b := ?_ }⟩
-  · grind [h.wf.has_min, trichotomous_of r]
-  · grind [wellFounded_iff_has_min]
-  · grind [h {a, b} <| by simp]
-
-Depends on / 依赖: h.wf.has_min, has_min, trichotomous, trichotomous_of, wellFounded_iff_has_min
+/-
+**WellFounded.isWellOrder_iff_exists_not_lt_and_eq_or_gt** 是 Mathlib 中的一个定理，位于命名
+空间 `WellFounded`。
+形式化陈述：isWellOrder_iff_exists_not_lt_and_eq_or_gt : IsWellOrder α r ↔ forall s : 
+Set α, s.Nonempty -> exists m in s, forall x in s, ¬r x m ∧ (m = x ∨ r m x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isWellOrder_iff_exists_not_lt_and_eq_or_gt :
-    IsWellOrder α r ↔ forall s : Set α, s.Nonempty -> exists m in s, forall x in s, ¬r x m ∧ (m = x ∨ r m x) := by
-  refine ⟨fun h s hs => ?_, fun h => { wf := ?_, trichotomous a b := ?_ }⟩
+    IsWellOrder α r ↔ ∀ s : Set α, s.Nonempty → ∃ m ∈ s, ∀ x ∈ s, ¬r x m ∧ (m = x ∨ r m x) := by
+  refine ⟨fun h s hs ↦ ?_, fun h ↦ { wf := ?_, trichotomous a b := ?_ }⟩
   · grind [h.wf.has_min, trichotomous_of r]
   · grind [wellFounded_iff_has_min]
   · grind [h {a, b} <| by simp]
 
-/--
-theorem `min_image` / 定理 `min_image`
+/-- The minimum of `f '' s` is `f` applied to the minimum of `s`. -/
+/-
+**WellFounded.min_image** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：min_image {r : β -> β -> Prop} [Std.Trichotomous r] (wf : WellFounded r) (
+f : α -> β) {s : Set α} (hne : s.Nonempty) : wf.min (f '' s) (hne.image f) = f (
+wf.onFun (f
+参数：wf : WellFounded r；f : α -> β；hne : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.min_eq_of_forall_not_lt`：min_eq_of_forall_not_lt [Std.Tricho
+tomous r] (wf : WellFounded r) {s : Set α} {m : α} (hms : m in s) (hrm : forall 
+x in s, ¬r x m) : wf.min …
+· 使用定理 `WellFounded.onFun`：onFun {α β : Sort*} {r : β -> β -> Prop} {f : α -> β}
+ : WellFounded r -> WellFounded (r on f)
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
 
-English:
-theorem min_image
-  statement: {r : β -> β -> Prop} [Std.Trichotomous r] (wf : WellFounded r) (f : α -> β)
-  proof: by
-apply min_eq_of_forall_not_lt wf Set.mem_image_of_mem f min_mem wf.onFun s hne
-  rintro _ ⟨a, has, rfl⟩
-  exact wf.onFun.not_lt_min s has
-
-中文:
-定理 min_image
-  结论: {r : β -> β -> 命题} [Std.三歧 r] (wf : 良基 r) (f : α -> β)
-  证明: by
-apply min_eq_of_forall_not_lt wf Set.mem_image_of_mem f min_mem wf.onFun s hne
-  rintro _ ⟨a, has, rfl⟩
-  exact wf.onFun.not_lt_min s has
-
-Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem, min_eq_of_forall_not_lt, min_mem, not_lt_min, wf.onFun, wf.onFun.not_lt_min
+--- 原说明 ---
+The minimum of `f '' s` is `f` applied to the minimum of `s`.
 -/
-theorem min_image {r : β -> β -> Prop} [Std.Trichotomous r] (wf : WellFounded r) (f : α -> β)
+theorem min_image {r : β → β → Prop} [Std.Trichotomous r] (wf : WellFounded r) (f : α → β)
     {s : Set α} (hne : s.Nonempty) :
     wf.min (f '' s) (hne.image f) = f (wf.onFun (f := f) |>.min s hne) := by
-apply min_eq_of_forall_not_lt wf Set.mem_image_of_mem f min_mem wf.onFun s hne
+  apply min_eq_of_forall_not_lt wf <| Set.mem_image_of_mem f <| min_mem wf.onFun s hne
   rintro _ ⟨a, has, rfl⟩
   exact wf.onFun.not_lt_min s has
-
-/--
-theorem `not_rel_apply_succ` / 定理 `not_rel_apply_succ`
-
-English:
-theorem not_rel_apply_succ
-  given: [h : IsWellFounded α r] (f : Nat -> α)
-  statement: exists n, ¬ r (f (n + 1)) (f n)
-  proof: by
-  by_contra! hf
-  exact (wellFounded_iff_isEmpty_descending_chain.1 h.wf).elim ⟨f, hf⟩
-
-中文:
-定理 not_rel_apply_succ
-  条件: [h : 是良基 α r] (f : 自然数 -> α)
-  结论: 存在 n, ¬ r (f (n + 1)) (f n)
-  证明: by
-  by_contra! hf
-  exact (wellFounded_iff_isEmpty_descending_chain.1 h.wf).elim ⟨f, hf⟩
-
-Depends on / 依赖: h.wf, wellFounded_iff_isEmpty_descending_chain
+/-
+**WellFounded.not_rel_apply_succ** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：not_rel_apply_succ [h : IsWellFounded α r] (f : Nat -> α) : exists n, ¬ r 
+(f (n + 1)) (f n)
+参数：f : Nat -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `wellFounded_iff_isEmpty_descending_chain`：wellFounded_iff_isEmpty_descen
+ding_chain {α} {r : α -> α -> Prop} : WellFounded r ↔ IsEmpty { f : Nat -> α // 
+forall n, r (f (n + 1)) (f n) …
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-theorem not_rel_apply_succ [h : IsWellFounded α r] (f : Nat -> α) : exists n, ¬ r (f (n + 1)) (f n) := by
+theorem not_rel_apply_succ [h : IsWellFounded α r] (f : ℕ → α) : ∃ n, ¬ r (f (n + 1)) (f n) := by
   by_contra! hf
   exact (wellFounded_iff_isEmpty_descending_chain.1 h.wf).elim ⟨f, hf⟩
 
 open Set
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The supremum of a bounded, well-founded order -/
+/-
+**WellFounded.sup** 是 Mathlib 中的一个定义，位于命名空间 `WellFounded`。
+形式化陈述：{α : Type u_1} → {r : α → α → Prop} → WellFounded r → (s : Set α) → Set.Bo
+unded r s → α
+参数：s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def sup {r : α -> α -> Prop} (wf : WellFounded r) (s : Set α)
-  body: wf.min { x | forall a in s, r a x } h
-
-中文:
-定义 noncomputable
-  签名: def 上确界 {r : α -> α -> 命题} (wf : 良基 r) (s : 集合 α)
-  定义体: wf.min { x | forall a in s, r a x } h
+--- 原说明 ---
+The supremum of a bounded, well-founded order
 -/
-protected noncomputable def sup {r : α -> α -> Prop} (wf : WellFounded r) (s : Set α)
+protected noncomputable def sup {r : α → α → Prop} (wf : WellFounded r) (s : Set α)
     (h : Bounded r s) : α :=
-  wf.min { x | forall a in s, r a x } h
-
-/--
-theorem `lt_sup` / 定理 `lt_sup`
-
-English:
-theorem lt_sup
-  statement: {r : α -> α -> Prop} (wf : WellFounded r) {s : Set α} (h : Bounded r s) {x}
-  proof: min_mem wf { x | forall a in s, r a x } h x hx
-
-中文:
-定理 lt_sup
-  结论: {r : α -> α -> 命题} (wf : 良基 r) {s : 集合 α} (h : 有界 r s) {x}
-  证明: min_mem wf { x | forall a in s, r a x } h x hx
+  wf.min { x | ∀ a ∈ s, r a x } h
+/-
+**WellFounded.lt_sup** 是 Mathlib 中的一个定理，位于命名空间 `WellFounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} (wf : WellFounded r) {s : Set α} (h : 
+Set.Bounded r s) {x : α},   x ∈ s → r x (wf.sup s h)
+参数：wf : WellFounded r；h : Set.Bounded r s；wf.sup s h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
 -/
-protected theorem lt_sup {r : α -> α -> Prop} (wf : WellFounded r) {s : Set α} (h : Bounded r s) {x}
-    (hx : x in s) : r x (wf.sup s h) :=
-  min_mem wf { x | forall a in s, r a x } h x hx
+protected theorem lt_sup {r : α → α → Prop} (wf : WellFounded r) {s : Set α} (h : Bounded r s) {x}
+    (hx : x ∈ s) : r x (wf.sup s h) :=
+  min_mem wf { x | ∀ a ∈ s, r a x } h x hx
 
 end WellFounded
 
@@ -729,70 +560,47 @@ variable [LinearOrder β] [Preorder γ]
 
 -- TODO: the name `WellFounded.min` is incorrect when the assumption is that `>` is well-founded.
 @[to_dual none]
-/--
-theorem `WellFounded.min_le` / 定理 `WellFounded.min_le`
-
-English:
-theorem WellFounded.min_le
-  statement: (h : WellFounded ((· < ·) : β -> β -> Prop))
-  proof: not_lt.1 h.not_lt_min _ hx
-
-中文:
-定理 良基.min_le
-  结论: (h : 良基 ((· < ·) : β -> β -> 命题))
-  证明: not_lt.1 h.not_lt_min _ hx
-
-Depends on / 依赖: h.not_lt_min, not_lt, not_lt_min
+/-
+**WellFounded.min_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.min_le (h : WellFounded ((· < ·) : β -> β -> Prop)) {x : β} {s
+ : Set β} (hx : x in s) : h.min s ⟨x, hx⟩ <= x
+参数：h : WellFounded ((· < ·) : β -> β -> Prop)；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
 -/
-theorem WellFounded.min_le (h : WellFounded ((· < ·) : β -> β -> Prop))
-    {x : β} {s : Set β} (hx : x in s) : h.min s ⟨x, hx⟩ <= x :=
-not_lt.1 h.not_lt_min _ hx
-
-/--
-theorem `Set.range_injOn_strictMono` / 定理 `Set.range_injOn_strictMono`
-
-English:
-theorem Set.range_injOn_strictMono
-  given: [WellFoundedLT β]
-  proof: by
-  intro f hf g hg hfg
-  ext a
-  apply WellFoundedLT.induction a
-  intro a IH
-  obtain ⟨b, hb⟩ := hfg ▸ mem_range_self a
-  obtain h | rfl | h := lt_trichotomy b a
-  · rw [← IH b h] at hb
-    cases (hf.injective hb).not_lt h
-  · rw [hb]
-  · obtain ⟨c, hc⟩ := hfg.symm ▸ mem_range_self a
-    have := hg h
-    rw [hb]; rw [← hc]; rw [hf.lt_iff_lt] at this
-    rw [IH c this] at hc
-    cases (hg.injective hc).not_lt this
-
-中文:
-定理 集合.range_injOn_strictMono
-  条件: [WellFoundedLT β]
-  证明: by
-  intro f hf g hg hfg
-  ext a
-  apply WellFoundedLT.induction a
-  intro a IH
-  obtain ⟨b, hb⟩ := hfg ▸ mem_range_self a
-  obtain h | rfl | h := lt_trichotomy b a
-  · rw [← IH b h] at hb
-    cases (hf.injective hb).not_lt h
-  · rw [hb]
-  · obtain ⟨c, hc⟩ := hfg.symm ▸ mem_range_self a
-    have := hg h
-    rw [hb]; rw [← hc]; rw [hf.lt_iff_lt] at this
-    rw [IH c this] at hc
-    cases (hg.injective hc).not_lt this
-
-Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, hf.injective, hf.lt_iff_lt, hfg.symm, hg.injective, injective, lt_iff_lt, lt_trichotomy, mem_range_self, not_lt
+theorem WellFounded.min_le (h : WellFounded ((· < ·) : β → β → Prop))
+    {x : β} {s : Set β} (hx : x ∈ s) : h.min s ⟨x, hx⟩ ≤ x :=
+  not_lt.1 <| h.not_lt_min _ hx
+/-
+**Set.range_injOn_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.range_injOn_strictMono [WellFoundedLT β] : Set.InjOn Set.range { f : β
+ -> γ | StrictMono f }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `Eq.not_lt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬a < 
+b
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
 -/
 theorem Set.range_injOn_strictMono [WellFoundedLT β] :
-    Set.InjOn Set.range { f : β -> γ | StrictMono f } := by
+    Set.InjOn Set.range { f : β → γ | StrictMono f } := by
   intro f hf g hg hfg
   ext a
   apply WellFoundedLT.induction a
@@ -804,201 +612,200 @@ theorem Set.range_injOn_strictMono [WellFoundedLT β] :
   · rw [hb]
   · obtain ⟨c, hc⟩ := hfg.symm ▸ mem_range_self a
     have := hg h
-    rw [hb]; rw [← hc]; rw [hf.lt_iff_lt] at this
+    rw [hb, ← hc, hf.lt_iff_lt] at this
     rw [IH c this] at hc
     cases (hg.injective hc).not_lt this
-
-/--
-theorem `Set.range_injOn_strictAnti` / 定理 `Set.range_injOn_strictAnti`
-
-English:
-theorem Set.range_injOn_strictAnti
-  given: [WellFoundedGT β]
-  proof: fun _ hf _ hg => Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
-
-中文:
-定理 集合.range_injOn_strictAnti
-  条件: [WellFoundedGT β]
-  证明: fun _ hf _ hg => Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
-
-Depends on / 依赖: Set.range_injOn_strictMono, hf.dual, hg.dual, range_injOn_strictMono
+/-
+**Set.range_injOn_strictAnti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.range_injOn_strictAnti [WellFoundedGT β] : Set.InjOn Set.range { f : β
+ -> γ | StrictAnti f }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.range_injOn_strictMono`：Set.range_injOn_strictMono [WellFoundedLT β]
+ : Set.InjOn Set.range { f : β -> γ | StrictMono f }
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `instWellFoundedLTOrderDualOfWellFoundedGT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedGT α], WellFoundedLT αᵒᵈ
+· 使用定理 `StrictAnti.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β},   StrictAnti f → StrictAnti (⇑OrderDual.toDual ∘ f ∘
+ ⇑Ord…
 -/
 theorem Set.range_injOn_strictAnti [WellFoundedGT β] :
-    Set.InjOn Set.range { f : β -> γ | StrictAnti f } :=
-  fun _ hf _ hg => Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
-
-/--
-theorem `StrictMono.range_inj` / 定理 `StrictMono.range_inj`
-
-English:
-theorem StrictMono.range_inj
-  statement: [WellFoundedLT β] {f g : β -> γ}
-  proof: Set.range_injOn_strictMono.eq_iff hf hg
-
-中文:
-定理 严格递增.range_inj
-  结论: [WellFoundedLT β] {f g : β -> γ}
-  证明: Set.range_injOn_strictMono.eq_iff hf hg
-
-Depends on / 依赖: Set.range_injOn_strictMono.eq_iff, eq_iff, range_injOn_strictMono
+    Set.InjOn Set.range { f : β → γ | StrictAnti f } :=
+  fun _ hf _ hg ↦ Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual
+/-
+**StrictMono.range_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.range_inj [WellFoundedLT β] {f g : β -> γ} (hf : StrictMono f) 
+(hg : StrictMono g) : Set.range f = Set.range g ↔ f = g
+参数：hf : StrictMono f；hg : StrictMono g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Set.range_injOn_strictMono`：Set.range_injOn_strictMono [WellFoundedLT β]
+ : Set.InjOn Set.range { f : β -> γ | StrictMono f }
 -/
-theorem StrictMono.range_inj [WellFoundedLT β] {f g : β -> γ}
+theorem StrictMono.range_inj [WellFoundedLT β] {f g : β → γ}
     (hf : StrictMono f) (hg : StrictMono g) : Set.range f = Set.range g ↔ f = g :=
   Set.range_injOn_strictMono.eq_iff hf hg
-
-/--
-theorem `StrictAnti.range_inj` / 定理 `StrictAnti.range_inj`
-
-English:
-theorem StrictAnti.range_inj
-  statement: [WellFoundedGT β] {f g : β -> γ}
-  proof: Set.range_injOn_strictAnti.eq_iff hf hg
-
-中文:
-定理 严格递减.range_inj
-  结论: [WellFoundedGT β] {f g : β -> γ}
-  证明: Set.range_injOn_strictAnti.eq_iff hf hg
-
-Depends on / 依赖: Set.range_injOn_strictAnti.eq_iff, eq_iff, range_injOn_strictAnti
+/-
+**StrictAnti.range_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictAnti.range_inj [WellFoundedGT β] {f g : β -> γ} (hf : StrictAnti f) 
+(hg : StrictAnti g) : Set.range f = Set.range g ↔ f = g
+参数：hf : StrictAnti f；hg : StrictAnti g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Set.range_injOn_strictAnti`：Set.range_injOn_strictAnti [WellFoundedGT β]
+ : Set.InjOn Set.range { f : β -> γ | StrictAnti f }
 -/
-theorem StrictAnti.range_inj [WellFoundedGT β] {f g : β -> γ}
+theorem StrictAnti.range_inj [WellFoundedGT β] {f g : β → γ}
     (hf : StrictAnti f) (hg : StrictAnti g) : Set.range f = Set.range g ↔ f = g :=
   Set.range_injOn_strictAnti.eq_iff hf hg
 
-/--
-theorem `StrictMono.id_le` / 定理 `StrictMono.id_le`
+/-- A strictly monotone function `f` on a well-order satisfies `x ≤ f x` for all `x`. -/
+/-
+**StrictMono.id_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) : id <
+= f
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.le_def`：Pi.le_def {ι : Type*} {π : ι -> Type*} [forall i, LE (π i)] {
+x y : forall i, π i} : x <= y ↔ forall i, x i <= y i
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用引理 `wellFounded_lt`：wellFounded_lt [LT α] [WellFoundedLT α] : @WellFounded α
+ (· < ·)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem StrictMono.id_le
-  given: [WellFoundedLT β] {f : β -> β} (hf : StrictMono f)
-  statement: id <= f
-  proof: by
-  rw [Pi.le_def]
-  by_contra! H
-  obtain ⟨m, hm, hm'⟩ := wellFounded_lt.has_min {i | f i < i} H
-  exact hm' _ (hf hm) hm
-
-中文:
-定理 严格递增.id_le
-  条件: [WellFoundedLT β] {f : β -> β} (hf : 严格递增 f)
-  结论: id <= f
-  证明: by
-  rw [Pi.le_def]
-  by_contra! H
-  obtain ⟨m, hm, hm'⟩ := wellFounded_lt.has_min {i | f i < i} H
-  exact hm' _ (hf hm) hm
-
-Depends on / 依赖: Pi.le_def, has_min, le_def, wellFounded_lt, wellFounded_lt.has_min
+--- 原说明 ---
+A strictly monotone function `f` on a well-order satisfies `x ≤ f x` for all `x`
+.
 -/
-theorem StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) : id <= f := by
+theorem StrictMono.id_le [WellFoundedLT β] {f : β → β} (hf : StrictMono f) : id ≤ f := by
   rw [Pi.le_def]
   by_contra! H
   obtain ⟨m, hm, hm'⟩ := wellFounded_lt.has_min {i | f i < i} H
   exact hm' _ (hf hm) hm
-
-/--
-theorem `StrictMono.le_apply` / 定理 `StrictMono.le_apply`
-
-English:
-theorem StrictMono.le_apply
-  given: [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) {x}
-  statement: x <= f x
-  proof: hf.id_le x
-
-中文:
-定理 严格递增.le_apply
-  条件: [WellFoundedLT β] {f : β -> β} (hf : 严格递增 f) {x}
-  结论: x <= f x
-  证明: hf.id_le x
-
-Depends on / 依赖: hf.id_le, id_le
+/-
+**StrictMono.le_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) {x}
+ : x <= f x
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.id_le`：StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : 
+StrictMono f) : id <= f
 -/
-theorem StrictMono.le_apply [WellFoundedLT β] {f : β -> β} (hf : StrictMono f) {x} : x <= f x :=
+theorem StrictMono.le_apply [WellFoundedLT β] {f : β → β} (hf : StrictMono f) {x} : x ≤ f x :=
   hf.id_le x
 
-/--
-theorem `StrictMono.le_id` / 定理 `StrictMono.le_id`
+/-- A strictly monotone function `f` on a cowell-order satisfies `f x ≤ x` for all `x`. -/
+/-
+**StrictMono.le_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.le_id [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) : f <=
+ id
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.id_le`：StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : 
+StrictMono f) : id <= f
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `instWellFoundedLTOrderDualOfWellFoundedGT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedGT α], WellFoundedLT αᵒᵈ
+· 使用定理 `StrictMono.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β},   StrictMono f → StrictMono (⇑OrderDual.toDual ∘ f ∘
+ ⇑Ord…
 
-English:
-theorem StrictMono.le_id
-  given: [WellFoundedGT β] {f : β -> β} (hf : StrictMono f)
-  statement: f <= id
-  proof: StrictMono.id_le (β := βᵒᵈ) hf.dual
-
-中文:
-定理 严格递增.le_id
-  条件: [WellFoundedGT β] {f : β -> β} (hf : 严格递增 f)
-  结论: f <= id
-  证明: StrictMono.id_le (β := βᵒᵈ) hf.dual
-
-Depends on / 依赖: StrictMono, StrictMono.id_le, hf.dual, id_le
+--- 原说明 ---
+A strictly monotone function `f` on a cowell-order satisfies `f x ≤ x` for all `
+x`.
 -/
-theorem StrictMono.le_id [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) : f <= id :=
+theorem StrictMono.le_id [WellFoundedGT β] {f : β → β} (hf : StrictMono f) : f ≤ id :=
   StrictMono.id_le (β := βᵒᵈ) hf.dual
-
-/--
-theorem `StrictMono.apply_le` / 定理 `StrictMono.apply_le`
-
-English:
-theorem StrictMono.apply_le
-  given: [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) {x}
-  statement: f x <= x
-  proof: StrictMono.le_apply (β := βᵒᵈ) hf.dual
-
-中文:
-定理 严格递增.apply_le
-  条件: [WellFoundedGT β] {f : β -> β} (hf : 严格递增 f) {x}
-  结论: f x <= x
-  证明: StrictMono.le_apply (β := βᵒᵈ) hf.dual
-
-Depends on / 依赖: StrictMono, StrictMono.le_apply, hf.dual, le_apply
+/-
+**StrictMono.apply_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.apply_le [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) {x}
+ : f x <= x
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `instWellFoundedLTOrderDualOfWellFoundedGT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedGT α], WellFoundedLT αᵒᵈ
+· 使用定理 `StrictMono.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β},   StrictMono f → StrictMono (⇑OrderDual.toDual ∘ f ∘
+ ⇑Ord…
 -/
-theorem StrictMono.apply_le [WellFoundedGT β] {f : β -> β} (hf : StrictMono f) {x} : f x <= x :=
+theorem StrictMono.apply_le [WellFoundedGT β] {f : β → β} (hf : StrictMono f) {x} : f x ≤ x :=
   StrictMono.le_apply (β := βᵒᵈ) hf.dual
-
-/--
-theorem `StrictMono.not_bddAbove_range_of_wellFoundedLT` / 定理 `StrictMono.not_bddAbove_range_of_wellFoundedLT`
-
-English:
-theorem StrictMono.not_bddAbove_range_of_wellFoundedLT
-  statement: {f : β -> β} [WellFoundedLT β] [NoMaxOrder β]
-  proof: by
-  rintro ⟨a, ha⟩
-  obtain ⟨b, hb⟩ := exists_gt a
-  exact ((hf.le_apply.trans_lt (hf hb)).trans_le <| ha (Set.mem_range_self _)).false
-
-中文:
-定理 严格递增.not_bddAbove_range_of_wellFoundedLT
-  结论: {f : β -> β} [WellFoundedLT β] [NoMax序 β]
-  证明: by
-  rintro ⟨a, ha⟩
-  obtain ⟨b, hb⟩ := exists_gt a
-  exact ((hf.le_apply.trans_lt (hf hb)).trans_le <| ha (Set.mem_range_self _)).false
-
-Depends on / 依赖: Set.mem_range_self, exists_gt, hf.le_apply.trans_lt, le_apply, mem_range_self, trans_le, trans_lt
+/-
+**StrictMono.not_bddAbove_range_of_wellFoundedLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.not_bddAbove_range_of_wellFoundedLT {f : β -> β} [WellFoundedLT
+ β] [NoMaxOrder β] (hf : StrictMono f) : ¬ BddAbove (Set.range f)
+参数：hf : StrictMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem StrictMono.not_bddAbove_range_of_wellFoundedLT {f : β -> β} [WellFoundedLT β] [NoMaxOrder β]
+theorem StrictMono.not_bddAbove_range_of_wellFoundedLT {f : β → β} [WellFoundedLT β] [NoMaxOrder β]
     (hf : StrictMono f) : ¬ BddAbove (Set.range f) := by
   rintro ⟨a, ha⟩
   obtain ⟨b, hb⟩ := exists_gt a
   exact ((hf.le_apply.trans_lt (hf hb)).trans_le <| ha (Set.mem_range_self _)).false
-
-/--
-theorem `StrictMono.not_bddBelow_range_of_wellFoundedGT` / 定理 `StrictMono.not_bddBelow_range_of_wellFoundedGT`
-
-English:
-theorem StrictMono.not_bddBelow_range_of_wellFoundedGT
-  statement: {f : β -> β} [WellFoundedGT β] [NoMinOrder β]
-  proof: hf.dual.not_bddAbove_range_of_wellFoundedLT
-
-中文:
-定理 严格递增.not_bddBelow_range_of_wellFoundedGT
-  结论: {f : β -> β} [WellFoundedGT β] [NoMin序 β]
-  证明: hf.dual.not_bddAbove_range_of_wellFoundedLT
-
-Depends on / 依赖: hf.dual.not_bddAbove_range_of_wellFoundedLT, not_bddAbove_range_of_wellFoundedLT
+/-
+**StrictMono.not_bddBelow_range_of_wellFoundedGT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.not_bddBelow_range_of_wellFoundedGT {f : β -> β} [WellFoundedGT
+ β] [NoMinOrder β] (hf : StrictMono f) : ¬ BddBelow (Set.range f)
+参数：hf : StrictMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.not_bddAbove_range_of_wellFoundedLT`：StrictMono.not_bddAbove_
+range_of_wellFoundedLT {f : β -> β} [WellFoundedLT β] [NoMaxOrder β] (hf : Stric
+tMono f) : ¬ BddAbove (Set.range f)
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `instWellFoundedLTOrderDualOfWellFoundedGT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedGT α], WellFoundedLT αᵒᵈ
+· 使用定理 `OrderDual.noMaxOrder`：∀ {α : Type u_1} [inst : LT α] [NoMinOrder α], NoM
+axOrder αᵒᵈ
+· 使用定理 `StrictMono.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β},   StrictMono f → StrictMono (⇑OrderDual.toDual ∘ f ∘
+ ⇑Ord…
 -/
-theorem StrictMono.not_bddBelow_range_of_wellFoundedGT {f : β -> β} [WellFoundedGT β] [NoMinOrder β]
+theorem StrictMono.not_bddBelow_range_of_wellFoundedGT {f : β → β} [WellFoundedGT β] [NoMinOrder β]
     (hf : StrictMono f) : ¬ BddBelow (Set.range f) :=
   hf.dual.not_bddAbove_range_of_wellFoundedLT
 
@@ -1006,111 +813,107 @@ end LinearOrder
 
 namespace Function
 
-variable (f : α -> β)
+variable (f : α → β)
 
 section LT
 
 variable [LT β] [WellFoundedLT β]
 
-/--
-Definition of `argmin` / `argmin` 的定义
+/-- Given a function `f : α → β` where `β` carries a well-founded `<`, this is an element of `α`
+whose image under `f` is minimal in the sense of `Function.not_lt_argmin`.
 
-English:
-definition argmin
-  signature: [Nonempty α]
-  body: WellFounded.min (InvImage.wf f wellFounded_lt) Set.univ Set.univ_nonempty
+See also `Set.Finite.exists_minimalFor` and related lemmas for the case when `α` is finite. -/
+/-
+**Function.argmin** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：argmin [Nonempty α] : α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
 
-中文:
-定义 argmin
-  签名: [非空 α]
-  定义体: WellFounded.min (InvImage.wf f wellFounded_lt) Set.univ Set.univ_nonempty
+--- 原说明 ---
+Given a function `f : α → β` where `β` carries a well-founded `<`, this is an el
+ement of `α`
+whose image under `f` is minimal in the sense of `Function.not_lt_argmin`.
 
-Depends on / 依赖: InvImage, InvImage.wf, Set.univ, Set.univ_nonempty, WellFounded, WellFounded.min, univ_nonempty, wellFounded_lt
+See also `Set.Finite.exists_minimalFor` and related lemmas for the case when `α`
+ is finite.
 -/
 noncomputable def argmin [Nonempty α] : α :=
   WellFounded.min (InvImage.wf f wellFounded_lt) Set.univ Set.univ_nonempty
-
-/--
-theorem `not_lt_argmin` / 定理 `not_lt_argmin`
-
-English:
-theorem not_lt_argmin
-  given: [Nonempty α] (a : α)
-  statement: ¬f a < f (argmin f)
-  proof: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) _ (Set.mem_univ a)
-
-中文:
-定理 not_lt_argmin
-  条件: [非空 α] (a : α)
-  结论: ¬f a < f (argmin f)
-  证明: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) _ (Set.mem_univ a)
-
-Depends on / 依赖: InvImage, InvImage.wf, Set.mem_univ, WellFounded, WellFounded.not_lt_min, mem_univ, not_lt_min, wellFounded_lt
+/-
+**Function.not_lt_argmin** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：not_lt_argmin [Nonempty α] (a : α) : ¬f a < f (argmin f)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用引理 `wellFounded_lt`：wellFounded_lt [LT α] [WellFoundedLT α] : @WellFounded α
+ (· < ·)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem not_lt_argmin [Nonempty α] (a : α) : ¬f a < f (argmin f) :=
   WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) _ (Set.mem_univ a)
 
-/--
-Definition of `argminOn` / `argminOn` 的定义
+/-- Given a function `f : α → β` where `β` carries a well-founded `<`, and a non-empty subset `s`
+of `α`, this is an element of `s` whose image under `f` is minimal in the sense of
+`Function.not_lt_argminOn`.
 
-English:
-definition argminOn
-  signature: (s : Set α) (hs : s.Nonempty)
-  body: WellFounded.min (InvImage.wf f wellFounded_lt) s hs
+See also `Set.Finite.exists_minimalFor` and related lemmas for the case when `α` or `s` is finite.
 
-@[simp]
+TODO Consider removing this definition in favour of `exists_minimalFor_of_wellFoundedLT`. -/
+/-
+**Function.argminOn** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：argminOn (s : Set α) (hs : s.Nonempty) : α
+参数：s : Set α；hs : s.Nonempty。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 argminOn
-  签名: (s : 集合 α) (hs : s.非空)
-  定义体: WellFounded.min (InvImage.wf f wellFounded_lt) s hs
+--- 原说明 ---
+Given a function `f : α → β` where `β` carries a well-founded `<`, and a non-emp
+ty subset `s`
+of `α`, this is an element of `s` whose image under `f` is minimal in the sense 
+of
+`Function.not_lt_argminOn`.
 
-@[simp]
+See also `Set.Finite.exists_minimalFor` and related lemmas for the case when `α`
+ or `s` is finite.
 
-Depends on / 依赖: InvImage, InvImage.wf, WellFounded, WellFounded.min, wellFounded_lt
+TODO Consider removing this definition in favour of `exists_minimalFor_of_wellFo
+undedLT`.
 -/
 noncomputable def argminOn (s : Set α) (hs : s.Nonempty) : α :=
   WellFounded.min (InvImage.wf f wellFounded_lt) s hs
 
 @[simp]
-/--
-theorem `argminOn_mem` / 定理 `argminOn_mem`
-
-English:
-theorem argminOn_mem
-  given: (s : Set α) (hs : s.Nonempty)
-  statement: argminOn f s hs in s
-  proof: WellFounded.min_mem _ _ _
-
-中文:
-定理 argminOn_mem
-  条件: (s : 集合 α) (hs : s.非空)
-  结论: argminOn f s hs in s
-  证明: WellFounded.min_mem _ _ _
-
-Depends on / 依赖: WellFounded, WellFounded.min_mem, min_mem
+/-
+**Function.argminOn_mem** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：argminOn_mem (s : Set α) (hs : s.Nonempty) : argminOn f s hs in s
+参数：s : Set α；hs : s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
 -/
-theorem argminOn_mem (s : Set α) (hs : s.Nonempty) : argminOn f s hs in s :=
+theorem argminOn_mem (s : Set α) (hs : s.Nonempty) : argminOn f s hs ∈ s :=
   WellFounded.min_mem _ _ _
-
-/--
-theorem `not_lt_argminOn` / 定理 `not_lt_argminOn`
-
-English:
-theorem not_lt_argminOn
-  given: (s : Set α) {a : α} (ha : a in s)
-  statement: ¬f a < f (argminOn f s ⟨a, ha⟩)
-  proof: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) s ha
-
-中文:
-定理 not_lt_argminOn
-  条件: (s : 集合 α) {a : α} (ha : a in s)
-  结论: ¬f a < f (argminOn f s ⟨a, ha⟩)
-  证明: WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) s ha
-
-Depends on / 依赖: InvImage, InvImage.wf, WellFounded, WellFounded.not_lt_min, not_lt_min, wellFounded_lt
+/-
+**Function.not_lt_argminOn** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：not_lt_argminOn (s : Set α) {a : α} (ha : a in s) : ¬f a < f (argminOn f s
+ ⟨a, ha⟩)
+参数：s : Set α；ha : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用引理 `wellFounded_lt`：wellFounded_lt [LT α] [WellFoundedLT α] : @WellFounded α
+ (· < ·)
 -/
-theorem not_lt_argminOn (s : Set α) {a : α} (ha : a in s) : ¬f a < f (argminOn f s ⟨a, ha⟩) :=
+theorem not_lt_argminOn (s : Set α) {a : α} (ha : a ∈ s) : ¬f a < f (argminOn f s ⟨a, ha⟩) :=
   WellFounded.not_lt_min (InvImage.wf f wellFounded_lt) s ha
 
 end LT
@@ -1119,82 +922,62 @@ section LinearOrder
 
 variable [LinearOrder β] [WellFoundedLT β]
 
-/--
-theorem `argmin_le` / 定理 `argmin_le`
-
-English:
-theorem argmin_le
-  given: (a : α) [Nonempty α]
-  statement: f (argmin f) <= f a
-  proof: not_lt.mp not_lt_argmin f a
-
-中文:
-定理 argmin_le
-  条件: (a : α) [非空 α]
-  结论: f (argmin f) <= f a
-  证明: not_lt.mp not_lt_argmin f a
-
-Depends on / 依赖: not_lt, not_lt.mp, not_lt_argmin
+/-
+**Function.argmin_le** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：argmin_le (a : α) [Nonempty α] : f (argmin f) <= f a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Function.not_lt_argmin`：not_lt_argmin [Nonempty α] (a : α) : ¬f a < f (a
+rgmin f)
 -/
-theorem argmin_le (a : α) [Nonempty α] : f (argmin f) <= f a :=
-not_lt.mp not_lt_argmin f a
-
-/--
-theorem `isMinimalFor_argmin` / 定理 `isMinimalFor_argmin`
-
-English:
-theorem isMinimalFor_argmin
-  given: [Nonempty α]
-  proof: ⟨trivial, fun a _ _ => argmin_le f a⟩
-
-中文:
-定理 isMinimalFor_argmin
-  条件: [非空 α]
-  证明: ⟨trivial, fun a _ _ => argmin_le f a⟩
-
-Depends on / 依赖: argmin_le
+theorem argmin_le (a : α) [Nonempty α] : f (argmin f) ≤ f a :=
+  not_lt.mp <| not_lt_argmin f a
+/-
+**Function.isMinimalFor_argmin** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：isMinimalFor_argmin [Nonempty α] : MinimalFor (fun _ => True) f (argmin f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Function.argmin_le`：argmin_le (a : α) [Nonempty α] : f (argmin f) <= f a
 -/
 theorem isMinimalFor_argmin [Nonempty α] :
-    MinimalFor (fun _ => True) f (argmin f) :=
-  ⟨trivial, fun a _ _ => argmin_le f a⟩
-
-/--
-theorem `argminOn_le` / 定理 `argminOn_le`
-
-English:
-theorem argminOn_le
-  given: (s : Set α) {a : α} (ha : a in s)
-  proof: not_lt.mp not_lt_argminOn f s ha
-
-中文:
-定理 argminOn_le
-  条件: (s : 集合 α) {a : α} (ha : a in s)
-  证明: not_lt.mp not_lt_argminOn f s ha
-
-Depends on / 依赖: not_lt, not_lt.mp, not_lt_argminOn
+    MinimalFor (fun _ ↦ True) f (argmin f) :=
+  ⟨trivial, fun a _ _ ↦ argmin_le f a⟩
+/-
+**Function.argminOn_le** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：argminOn_le (s : Set α) {a : α} (ha : a in s) : f (argminOn f s ⟨a, ha⟩) <
+= f a
+参数：s : Set α；ha : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Function.not_lt_argminOn`：not_lt_argminOn (s : Set α) {a : α} (ha : a in
+ s) : ¬f a < f (argminOn f s ⟨a, ha⟩)
 -/
-theorem argminOn_le (s : Set α) {a : α} (ha : a in s) :
-    f (argminOn f s ⟨a, ha⟩) <= f a :=
-not_lt.mp not_lt_argminOn f s ha
-
-/--
-theorem `isMinimalFor_argminOn` / 定理 `isMinimalFor_argminOn`
-
-English:
-theorem isMinimalFor_argminOn
-  given: (s : Set α) (hs : s.Nonempty)
-  proof: ⟨argminOn_mem f s hs, fun _ h _ => argminOn_le f s h⟩
-
-中文:
-定理 isMinimalFor_argminOn
-  条件: (s : 集合 α) (hs : s.非空)
-  证明: ⟨argminOn_mem f s hs, fun _ h _ => argminOn_le f s h⟩
-
-Depends on / 依赖: argminOn_le, argminOn_mem
+theorem argminOn_le (s : Set α) {a : α} (ha : a ∈ s) :
+    f (argminOn f s ⟨a, ha⟩) ≤ f a :=
+  not_lt.mp <| not_lt_argminOn f s ha
+/-
+**Function.isMinimalFor_argminOn** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：isMinimalFor_argminOn (s : Set α) (hs : s.Nonempty) : MinimalFor (· in s) 
+f (argminOn f s hs)
+参数：s : Set α；hs : s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.argminOn_mem`：argminOn_mem (s : Set α) (hs : s.Nonempty) : argm
+inOn f s hs in s
+· 使用定理 `Function.argminOn_le`：argminOn_le (s : Set α) {a : α} (ha : a in s) : f 
+(argminOn f s ⟨a, ha⟩) <= f a
 -/
 theorem isMinimalFor_argminOn (s : Set α) (hs : s.Nonempty) :
-    MinimalFor (· in s) f (argminOn f s hs) :=
-  ⟨argminOn_mem f s hs, fun _ h _ => argminOn_le f s h⟩
+    MinimalFor (· ∈ s) f (argminOn f s hs) :=
+  ⟨argminOn_mem f s hs, fun _ h _ ↦ argminOn_le f s h⟩
 
 end LinearOrder
 
@@ -1202,90 +985,131 @@ end Function
 
 section Induction
 
-/--
-theorem `Acc.induction_bot'` / 定理 `Acc.induction_bot'`
+/-- Let `r` be a relation on `α`, let `f : α → β` be a function, let `C : β → Prop`, and
+let `bot : α`. This induction principle shows that `C (f bot)` holds, given that
+* some `a` that is accessible by `r` satisfies `C (f a)`, and
+* for each `b` such that `f b ≠ f bot` and `C (f b)` holds, there is `c`
+  satisfying `r c b` and `C (f c)`. -/
+/-
+**Acc.induction_bot'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Acc.induction_bot' {α β} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {
+C : β -> Prop} {f : α -> β} (ih : forall b, f b != f bot -> C (f b) -> exists c,
+ r c b ∧ C (f c)) : C (f a) -> C (f bot)
+参数：ha : Acc r a；ih : forall b, f b != f bot -> C (f b) -> exists c, r c b ∧ C (f
+ c)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
 
-English:
-theorem Acc.induction_bot'
-  statement: {α β} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {C : β -> Prop}
-  proof: (@Acc.recOn _ _ (fun x _ => C (f x) -> C (f bot)) _ ha) fun x _ ih' hC =>
-    (eq_or_ne (f x) (f bot)).elim (fun h => h ▸ hC) (fun h =>
-      let ⟨y, hy₁, hy₂⟩ := ih x h hC
-      ih' y hy₁ hy₂)
-
-中文:
-定理 Acc.induction_bot'
-  结论: {α β} {r : α -> α -> 命题} {a bot : α} (ha : Acc r a) {C : β -> 命题}
-  证明: (@Acc.recOn _ _ (fun x _ => C (f x) -> C (f bot)) _ ha) fun x _ ih' hC =>
-    (eq_or_ne (f x) (f bot)).elim (fun h => h ▸ hC) (fun h =>
-      let ⟨y, hy₁, hy₂⟩ := ih x h hC
-      ih' y hy₁ hy₂)
-
-Depends on / 依赖: Acc.recOn, eq_or_ne
+--- 原说明 ---
+Let `r` be a relation on `α`, let `f : α → β` be a function, let `C : β → Prop`,
+ and
+let `bot : α`. This induction principle shows that `C (f bot)` holds, given that
+* some `a` that is accessible by `r` satisfies `C (f a)`, and
+* for each `b` such that `f b ≠ f bot` and `C (f b)` holds, there is `c`
+  satisfying `r c b` and `C (f c)`.
 -/
-theorem Acc.induction_bot' {α β} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {C : β -> Prop}
-    {f : α -> β} (ih : forall b, f b != f bot -> C (f b) -> exists c, r c b ∧ C (f c)) : C (f a) -> C (f bot) :=
-  (@Acc.recOn _ _ (fun x _ => C (f x) -> C (f bot)) _ ha) fun x _ ih' hC =>
+theorem Acc.induction_bot' {α β} {r : α → α → Prop} {a bot : α} (ha : Acc r a) {C : β → Prop}
+    {f : α → β} (ih : ∀ b, f b ≠ f bot → C (f b) → ∃ c, r c b ∧ C (f c)) : C (f a) → C (f bot) :=
+  (@Acc.recOn _ _ (fun x _ => C (f x) → C (f bot)) _ ha) fun x _ ih' hC =>
     (eq_or_ne (f x) (f bot)).elim (fun h => h ▸ hC) (fun h =>
       let ⟨y, hy₁, hy₂⟩ := ih x h hC
       ih' y hy₁ hy₂)
 
-/--
-theorem `Acc.induction_bot` / 定理 `Acc.induction_bot`
+/-- Let `r` be a relation on `α`, let `C : α → Prop` and let `bot : α`.
+This induction principle shows that `C bot` holds, given that
+* some `a` that is accessible by `r` satisfies `C a`, and
+* for each `b ≠ bot` such that `C b` holds, there is `c` satisfying `r c b` and `C c`. -/
+/-
+**Acc.induction_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Acc.induction_bot {α} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {C :
+ α -> Prop} (ih : forall b, b != bot -> C b -> exists c, r c b ∧ C c) : C a -> C
+ bot
+参数：ha : Acc r a；ih : forall b, b != bot -> C b -> exists c, r c b ∧ C c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Acc.induction_bot'`：Acc.induction_bot' {α β} {r : α -> α -> Prop} {a bot
+ : α} (ha : Acc r a) {C : β -> Prop} {f : α -> β} (ih : forall b, f b != f bot -
+> C (f b…
 
-English:
-theorem Acc.induction_bot
-  statement: {α} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {C : α -> Prop}
-  proof: ha.induction_bot' ih
-
-中文:
-定理 Acc.induction_bot
-  结论: {α} {r : α -> α -> 命题} {a bot : α} (ha : Acc r a) {C : α -> 命题}
-  证明: ha.induction_bot' ih
-
-Depends on / 依赖: ha.induction_bot, induction_bot
+--- 原说明 ---
+Let `r` be a relation on `α`, let `C : α → Prop` and let `bot : α`.
+This induction principle shows that `C bot` holds, given that
+* some `a` that is accessible by `r` satisfies `C a`, and
+* for each `b ≠ bot` such that `C b` holds, there is `c` satisfying `r c b` and 
+`C c`.
 -/
-theorem Acc.induction_bot {α} {r : α -> α -> Prop} {a bot : α} (ha : Acc r a) {C : α -> Prop}
-    (ih : forall b, b != bot -> C b -> exists c, r c b ∧ C c) : C a -> C bot :=
+theorem Acc.induction_bot {α} {r : α → α → Prop} {a bot : α} (ha : Acc r a) {C : α → Prop}
+    (ih : ∀ b, b ≠ bot → C b → ∃ c, r c b ∧ C c) : C a → C bot :=
   ha.induction_bot' ih
 
-/--
-theorem `WellFounded.induction_bot'` / 定理 `WellFounded.induction_bot'`
+/-- Let `r` be a well-founded relation on `α`, let `f : α → β` be a function,
+let `C : β → Prop`, and let `bot : α`.
+This induction principle shows that `C (f bot)` holds, given that
+* some `a` satisfies `C (f a)`, and
+* for each `b` such that `f b ≠ f bot` and `C (f b)` holds, there is `c`
+  satisfying `r c b` and `C (f c)`. -/
+/-
+**WellFounded.induction_bot'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.induction_bot' {α β} {r : α -> α -> Prop} (hwf : WellFounded r
+) {a bot : α} {C : β -> Prop} {f : α -> β} (ih : forall b, f b != f bot -> C (f 
+b) -> exists c, r c b ∧ C (f c)) : C (f a) -> C (f bot)
+参数：hwf : WellFounded r；ih : forall b, f b != f bot -> C (f b) -> exists c, r c b
+ ∧ C (f c)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Acc.induction_bot'`：Acc.induction_bot' {α β} {r : α -> α -> Prop} {a bot
+ : α} (ha : Acc r a) {C : β -> Prop} {f : α -> β} (ih : forall b, f b != f bot -
+> C (f b…
+· 使用定理 `WellFounded.apply`：∀ {α : Sort u} {r : α → α → Prop}, WellFounded r → ∀ 
+(a : α), Acc r a
 
-English:
-theorem WellFounded.induction_bot'
-  statement: {α β} {r : α -> α -> Prop} (hwf : WellFounded r) {a bot : α}
-  proof: (hwf.apply a).induction_bot' ih
-
-中文:
-定理 良基.induction_bot'
-  结论: {α β} {r : α -> α -> 命题} (hwf : 良基 r) {a bot : α}
-  证明: (hwf.apply a).induction_bot' ih
-
-Depends on / 依赖: hwf.apply, induction_bot
+--- 原说明 ---
+Let `r` be a well-founded relation on `α`, let `f : α → β` be a function,
+let `C : β → Prop`, and let `bot : α`.
+This induction principle shows that `C (f bot)` holds, given that
+* some `a` satisfies `C (f a)`, and
+* for each `b` such that `f b ≠ f bot` and `C (f b)` holds, there is `c`
+  satisfying `r c b` and `C (f c)`.
 -/
-theorem WellFounded.induction_bot' {α β} {r : α -> α -> Prop} (hwf : WellFounded r) {a bot : α}
-    {C : β -> Prop} {f : α -> β} (ih : forall b, f b != f bot -> C (f b) -> exists c, r c b ∧ C (f c)) :
-    C (f a) -> C (f bot) :=
+theorem WellFounded.induction_bot' {α β} {r : α → α → Prop} (hwf : WellFounded r) {a bot : α}
+    {C : β → Prop} {f : α → β} (ih : ∀ b, f b ≠ f bot → C (f b) → ∃ c, r c b ∧ C (f c)) :
+    C (f a) → C (f bot) :=
   (hwf.apply a).induction_bot' ih
 
-/--
-theorem `WellFounded.induction_bot` / 定理 `WellFounded.induction_bot`
+/-- Let `r` be a well-founded relation on `α`, let `C : α → Prop`, and let `bot : α`.
+This induction principle shows that `C bot` holds, given that
+* some `a` satisfies `C a`, and
+* for each `b` that satisfies `C b`, there is `c` satisfying `r c b` and `C c`.
 
-English:
-theorem WellFounded.induction_bot
-  statement: {α} {r : α -> α -> Prop} (hwf : WellFounded r) {a bot : α}
-  proof: hwf.induction_bot' ih
+The naming is inspired by the fact that when `r` is transitive, it follows that `bot` is
+the smallest element w.r.t. `r` that satisfies `C`. -/
+/-
+**WellFounded.induction_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.induction_bot {α} {r : α -> α -> Prop} (hwf : WellFounded r) {
+a bot : α} {C : α -> Prop} (ih : forall b, b != bot -> C b -> exists c, r c b ∧ 
+C c) : C a -> C bot
+参数：hwf : WellFounded r；ih : forall b, b != bot -> C b -> exists c, r c b ∧ C c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFounded.induction_bot'`：WellFounded.induction_bot' {α β} {r : α -> α
+ -> Prop} (hwf : WellFounded r) {a bot : α} {C : β -> Prop} {f : α -> β} (ih : f
+orall b, f b != …
 
-中文:
-定理 良基.induction_bot
-  结论: {α} {r : α -> α -> 命题} (hwf : 良基 r) {a bot : α}
-  证明: hwf.induction_bot' ih
+--- 原说明 ---
+Let `r` be a well-founded relation on `α`, let `C : α → Prop`, and let `bot : α`
+.
+This induction principle shows that `C bot` holds, given that
+* some `a` satisfies `C a`, and
+* for each `b` that satisfies `C b`, there is `c` satisfying `r c b` and `C c`.
 
-Depends on / 依赖: hwf.induction_bot, induction_bot
+The naming is inspired by the fact that when `r` is transitive, it follows that 
+`bot` is
+the smallest element w.r.t. `r` that satisfies `C`.
 -/
-theorem WellFounded.induction_bot {α} {r : α -> α -> Prop} (hwf : WellFounded r) {a bot : α}
-    {C : α -> Prop} (ih : forall b, b != bot -> C b -> exists c, r c b ∧ C c) : C a -> C bot :=
+theorem WellFounded.induction_bot {α} {r : α → α → Prop} (hwf : WellFounded r) {a bot : α}
+    {C : α → Prop} (ih : ∀ b, b ≠ bot → C b → ∃ c, r c b ∧ C c) : C a → C bot :=
   hwf.induction_bot' ih
 
 end Induction
@@ -1293,26 +1117,14 @@ end Induction
 /-- A nonempty linear order with well-founded `<` has a bottom element. -/
 @[to_dual (attr := instance_reducible)
 /-- A nonempty linear order with well-founded `>` has a top element. -/]
-/--
-Definition of `WellFoundedLT.toOrderBot` / `WellFoundedLT.toOrderBot` 的定义
-
-English:
-definition WellFoundedLT.toOrderBot
-  signature: (α) [LinearOrder α] [Nonempty α] [h : WellFoundedLT α]
-  body: h.wf.min _ Set.univ_nonempty
-  bot_le a := h.wf.min_le (Set.mem_univ a)
-
-@[to_dual]
-
-中文:
-定义 WellFoundedLT.toOrderBot
-  签名: (α) [线性序 α] [非空 α] [h : WellFoundedLT α]
-  定义体: h.wf.min _ Set.univ_nonempty
-  bot_le a := h.wf.min_le (Set.mem_univ a)
-
-@[to_dual]
-
-Depends on / 依赖: Set.univ_nonempty, h.wf.min, univ_nonempty
+/-
+**WellFoundedLT.toOrderBot** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WellFoundedLT.toOrderBot (α) [LinearOrder α] [Nonempty α] [h : WellFounded
+LT α] : OrderBot α where bot
+参数：α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
 -/
 noncomputable def WellFoundedLT.toOrderBot (α) [LinearOrder α] [Nonempty α] [h : WellFoundedLT α] :
     OrderBot α where
@@ -1320,20 +1132,9 @@ noncomputable def WellFoundedLT.toOrderBot (α) [LinearOrder α] [Nonempty α] [
   bot_le a := h.wf.min_le (Set.mem_univ a)
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [h
-  body: InvImage.wf ULift.down h.wf
-
-中文:
-实例 [LT
-  签名: α] [h
-  定义体: InvImage.wf ULift.down h.wf
-
-Depends on / 依赖: InvImage, InvImage.wf, ULift.down, h.wf
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT α] [h : WellFoundedLT α] : WellFoundedLT (ULift α) where
   wf := InvImage.wf ULift.down h.wf

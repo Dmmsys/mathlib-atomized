@@ -7,7 +7,7 @@ module
 
 public meta import Qq
 public meta import Mathlib.Util.AtomM
-public import Mathlib.Data.List.TFAE -- shake: keep (dependency of Qq output)
+public import Mathlib.Data.List.TFAE  -- shake: keep (dependency of Qq output)
 public import Mathlib.Data.Nat.Notation
 public import Mathlib.Tactic.ExtendDoc
 public import Mathlib.Util.AtomM
@@ -34,85 +34,53 @@ open Lean.Parser Term
 namespace Parser
 
 -- An arrow of the form `←`, `→`, or `↔`.
-/--
-Definition of `impTo` / `impTo` 的定义
-
-English:
-definition impTo
-  signature: : Parser
-  body: leading_parser unicodeSymbol " -> " " -> "
-
-中文:
-定义 impTo
-  签名: : Parser
-  定义体: leading_parser unicodeSymbol " -> " " -> "
-
-Depends on / 依赖: leading_parser, unicodeSymbol
+/-
+**Mathlib.Tactic.TFAE.Parser.impTo** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFA
+E.Parser`。
+形式化陈述：impTo : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def impTo : Parser := leading_parser unicodeSymbol " -> " " -> "
-/--
-Definition of `impFrom` / `impFrom` 的定义
-
-English:
-definition impFrom
-  signature: : Parser
-  body: leading_parser unicodeSymbol " ← " " <- "
-
-中文:
-定义 impFrom
-  签名: : Parser
-  定义体: leading_parser unicodeSymbol " ← " " <- "
-
-Depends on / 依赖: leading_parser, unicodeSymbol
+def impTo : Parser := leading_parser unicodeSymbol " → " " -> "
+/-
+**Mathlib.Tactic.TFAE.Parser.impFrom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.T
+FAE.Parser`。
+形式化陈述：impFrom : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def impFrom : Parser := leading_parser unicodeSymbol " ← " " <- "
-/--
-Definition of `impIff` / `impIff` 的定义
-
-English:
-definition impIff
-  signature: : Parser
-  body: leading_parser unicodeSymbol " ↔ " " <-> "
-
-中文:
-定义 impIff
-  签名: : Parser
-  定义体: leading_parser unicodeSymbol " ↔ " " <-> "
-
-Depends on / 依赖: leading_parser, unicodeSymbol
+/-
+**Mathlib.Tactic.TFAE.Parser.impIff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TF
+AE.Parser`。
+形式化陈述：impIff : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def impIff : Parser := leading_parser unicodeSymbol " ↔ " " <-> "
-/--
-Definition of `impArrow` / `impArrow` 的定义
-
-English:
-definition impArrow
-  signature: : Parser
-  body: leading_parser impTo > impFrom > impIff
-
-中文:
-定义 impArrow
-  签名: : Parser
-  定义体: leading_parser impTo > impFrom > impIff
-
-Depends on / 依赖: impFrom, impIff, leading_parser
+/-
+**Mathlib.Tactic.TFAE.Parser.impArrow** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+TFAE.Parser`。
+形式化陈述：impArrow : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def impArrow : Parser := leading_parser impTo > impFrom > impIff
+def impArrow : Parser := leading_parser impTo <|> impFrom <|> impIff
 
 attribute [nolint docBlame] impTo impFrom impIff impArrow
 
-/--
-Definition of `tfaeType` / `tfaeType` 的定义
+/-- A `tfae_have` type specification, e.g. `1 ↔ 3` The numbers refer to the proposition at the
+corresponding position in the `TFAE` goal (starting at 1). -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+TFAE.Parser`。
+形式化陈述：tfaeType
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tfaeType
-  body: leading_parser num >> impArrow >> num
-
-中文:
-定义 tfaeType
-  定义体: leading_parser num >> impArrow >> num
-
-Depends on / 依赖: impArrow, leading_parser
+--- 原说明 ---
+A `tfae_have` type specification, e.g. `1 ↔ 3` The numbers refer to the proposit
+ion at the
+corresponding position in the `TFAE` goal (starting at 1).
 -/
 def tfaeType := leading_parser num >> impArrow >> num
 
@@ -124,105 +92,88 @@ sense in this context; we also include `" : "` after the binder to avoid breakin
 syntax (which, unlike `have`, omits `" : "`).
 -/
 
-/--
-Definition of `binder` / `binder` 的定义
+/-- We need this to ensure `<|>` in `tfaeHaveIdLhs` takes in the same number of syntax trees on
+each side. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.binder** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TF
+AE.Parser`。
+形式化陈述：binder
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binder
-  body: leading_parser ppSpace >> binderIdent >> " : "
-
-中文:
-定义 binder
-  定义体: leading_parser ppSpace >> binderIdent >> " : "
-
-Depends on / 依赖: binderIdent, leading_parser, ppSpace
+--- 原说明 ---
+We need this to ensure `<|>` in `tfaeHaveIdLhs` takes in the same number of synt
+ax trees on
+each side.
 -/
 def binder := leading_parser ppSpace >> binderIdent >> " : "
-/--
-Definition of `tfaeHaveIdLhs` / `tfaeHaveIdLhs` 的定义
+/-- See `haveIdLhs`.
 
-English:
-definition tfaeHaveIdLhs
-  body: leading_parser
-  (binder <|> hygieneInfo) >> tfaeType
+We omit `many (ppSpace >> letIdBinder)`, as it makes no sense to add extra arguments to a
+`tfae_have` decl. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeHaveIdLhs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TFAE.Parser`。
+形式化陈述：tfaeHaveIdLhs
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 tfaeHaveIdLhs
-  定义体: leading_parser
-  (binder <|> hygieneInfo) >> tfaeType
+--- 原说明 ---
+See `haveIdLhs`.
 
-Depends on / 依赖: leading_parser
+We omit `many (ppSpace >> letIdBinder)`, as it makes no sense to add extra argum
+ents to a
+`tfae_have` decl.
 -/
 def tfaeHaveIdLhs := leading_parser
-  (binder <|> hygieneInfo) >> tfaeType
-/--
-Definition of `tfaeHaveIdDecl` / `tfaeHaveIdDecl` 的定义
+  (binder <|> hygieneInfo)  >> tfaeType
+/-- See `haveIdDecl`. E.g. `h : 1 → 3 := term`. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeHaveIdDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.TFAE.Parser`。
+形式化陈述：tfaeHaveIdDecl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tfaeHaveIdDecl
-  body: leading_parser (withAnonymousAntiquot := false)
-  atomic (tfaeHaveIdLhs >> " := ") >> termParser
-
-中文:
-定义 tfaeHaveIdDecl
-  定义体: leading_parser (withAnonymousAntiquot := false)
-  atomic (tfaeHaveIdLhs >> " := ") >> termParser
-
-Depends on / 依赖: leading_parser, withAnonymousAntiquot
+--- 原说明 ---
+See `haveIdDecl`. E.g. `h : 1 → 3 := term`.
 -/
 def tfaeHaveIdDecl := leading_parser (withAnonymousAntiquot := false)
   atomic (tfaeHaveIdLhs >> " := ") >> termParser
-/--
-Definition of `tfaeHaveEqnsDecl` / `tfaeHaveEqnsDecl` 的定义
+/-- See `haveEqnsDecl`. E.g. `h : 1 → 3 | p => f p`. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeHaveEqnsDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.TFAE.Parser`。
+形式化陈述：tfaeHaveEqnsDecl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tfaeHaveEqnsDecl
-  body: leading_parser (withAnonymousAntiquot := false)
-  tfaeHaveIdLhs >> matchAlts
-
-中文:
-定义 tfaeHaveEqnsDecl
-  定义体: leading_parser (withAnonymousAntiquot := false)
-  tfaeHaveIdLhs >> matchAlts
-
-Depends on / 依赖: leading_parser, withAnonymousAntiquot
+--- 原说明 ---
+See `haveEqnsDecl`. E.g. `h : 1 → 3 | p => f p`.
 -/
 def tfaeHaveEqnsDecl := leading_parser (withAnonymousAntiquot := false)
   tfaeHaveIdLhs >> matchAlts
-/--
-Definition of `tfaeHavePatDecl` / `tfaeHavePatDecl` 的定义
+/-- See `letPatDecl`. E.g. `⟨mp, mpr⟩ : 1 ↔ 3 := term`. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeHavePatDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.TFAE.Parser`。
+形式化陈述：tfaeHavePatDecl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tfaeHavePatDecl
-  body: leading_parser (withAnonymousAntiquot := false)
-  atomic (termParser >> pushNone >> " : " >> tfaeType >> " := ") >> termParser
-
-中文:
-定义 tfaeHavePatDecl
-  定义体: leading_parser (withAnonymousAntiquot := false)
-  atomic (termParser >> pushNone >> " : " >> tfaeType >> " := ") >> termParser
-
-Depends on / 依赖: leading_parser, withAnonymousAntiquot
+--- 原说明 ---
+See `letPatDecl`. E.g. `⟨mp, mpr⟩ : 1 ↔ 3 := term`.
 -/
 def tfaeHavePatDecl := leading_parser (withAnonymousAntiquot := false)
   atomic (termParser >> pushNone >> " : " >> tfaeType >> " := ") >> termParser
-/--
-Definition of `tfaeHaveDecl` / `tfaeHaveDecl` 的定义
+/-- See `haveDecl`. Any of `tfaeHaveIdDecl`, `tfaeHavePatDecl`, or `tfaeHaveEqnsDecl`. -/
+/-
+**Mathlib.Tactic.TFAE.Parser.tfaeHaveDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.TFAE.Parser`。
+形式化陈述：tfaeHaveDecl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tfaeHaveDecl
-  body: leading_parser (withAnonymousAntiquot := false)
-tfaeHaveIdDecl > (ppSpace >> tfaeHavePatDecl) > tfaeHaveEqnsDecl
-
-中文:
-定义 tfaeHaveDecl
-  定义体: leading_parser (withAnonymousAntiquot := false)
-tfaeHaveIdDecl > (ppSpace >> tfaeHavePatDecl) > tfaeHaveEqnsDecl
-
-Depends on / 依赖: leading_parser, withAnonymousAntiquot
+--- 原说明 ---
+See `haveDecl`. Any of `tfaeHaveIdDecl`, `tfaeHavePatDecl`, or `tfaeHaveEqnsDecl
+`.
 -/
 def tfaeHaveDecl := leading_parser (withAnonymousAntiquot := false)
-tfaeHaveIdDecl > (ppSpace >> tfaeHavePatDecl) > tfaeHaveEqnsDecl
+  tfaeHaveIdDecl <|> (ppSpace >> tfaeHavePatDecl) <|> tfaeHaveEqnsDecl
 
 -- Don't put doc-strings on these parsers in order to not override hover doc-strings.
 attribute [nolint docBlame] binder
@@ -264,7 +215,7 @@ example (h : P → R) : TFAE [P, Q, R] := by
 -- An example of `tfae_have` and `tfae_finish`:
 example : TFAE [P, Q, R] := by
   tfae_have 1 → 2 := sorry /- proof of P → Q -/
-  tfae_have 2 -> 1 := sorry /- proof of Q → P -/
+  tfae_have 2 → 1 := sorry /- proof of Q → P -/
   tfae_have 2 ↔ 3 := sorry /- proof of Q ↔ R -/
   tfae_finish
 ```
@@ -273,20 +224,20 @@ example : TFAE [P, Q, R] := by
 -- All features of `have` are supported by `tfae_have`:
 example : TFAE [P, Q] := by
   -- assert `tfae_1_to_2 : P → Q`:
-  tfae_have 1 -> 2 := sorry
+  tfae_have 1 → 2 := sorry
 
   -- assert `hpq : P → Q`:
-  tfae_have hpq : 1 -> 2 := sorry
+  tfae_have hpq : 1 → 2 := sorry
 
   -- match on `p : P` and prove `Q` via `f p`:
-  tfae_have 1 -> 2
+  tfae_have 1 → 2
   | p => f p
 
   -- assert `pq : P → Q`, `qp : Q → P`:
   tfae_have ⟨pq, qp⟩ : 1 ↔ 2 := sorry
 
   -- assert `h : P → Q`; `?a` is a new goal:
-  tfae_have h : 1 -> 2 := f ?a
+  tfae_have h : 1 → 2 := f ?a
 
   sorry
 ```
@@ -303,7 +254,7 @@ Example:
 ```lean4
 example : TFAE [P, Q, R] := by
   tfae_have 1 → 2 := sorry /- proof of P → Q -/
-  tfae_have 2 -> 1 := sorry /- proof of Q → P -/
+  tfae_have 2 → 1 := sorry /- proof of Q → P -/
   tfae_have 2 ↔ 3 := sorry /- proof of Q ↔ R -/
   tfae_finish
 ```
@@ -315,31 +266,22 @@ syntax (name := tfaeFinish) "tfae_finish" : tactic
 
 open List Lean Meta Expr Elab Tactic Mathlib.Tactic Qq
 
-/--
-Definition of `getTFAEList` / `getTFAEList` 的定义
+/-- Extract a list of `Prop` expressions from an expression of the form `TFAE [P₁, P₂, ...]` as
+long as `[P₁, P₂, ...]` is an explicit list. -/
+/-
+**Mathlib.Tactic.TFAE.getTFAEList** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFAE
+`。
+形式化陈述：Expr → MetaM (Q(List Prop) × List Q(Prop))
+参数：Q(List Prop) × List Q(Prop)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getTFAEList
-  signature: (t : Expr)
-  body: do
-let .app tfae (l : Q(List Prop)) ← whnfR ← instantiateMVars t
-    | throwError "goal must be of the form TFAE [P₁, P₂, ...]"
-  unless (← withNewMCtxDepth <| isDefEq tfae q(TFAE)) do
-    throwError "goal must be of the form TFAE [P₁, P₂, ...]"
-  return (l, ← getExplicitList l)
-
-中文:
-定义 getTFAEList
-  签名: (t : Expr)
-  定义体: do
-let .app tfae (l : Q(List Prop)) ← whnfR ← instantiateMVars t
-    | throwError "goal must be of the form TFAE [P₁, P₂, ...]"
-  unless (← withNewMCtxDepth <| isDefEq tfae q(TFAE)) do
-    throwError "goal must be of the form TFAE [P₁, P₂, ...]"
-  return (l, ← getExplicitList l)
+--- 原说明 ---
+Extract a list of `Prop` expressions from an expression of the form `TFAE [P₁, P
+₂, ...]` as
+long as `[P₁, P₂, ...]` is an explicit list.
 -/
 partial def getTFAEList (t : Expr) : MetaM (Q(List Prop) × List Q(Prop)) := do
-let .app tfae (l : Q(List Prop)) ← whnfR ← instantiateMVars t
+  let .app tfae (l : Q(List Prop)) ← whnfR <|← instantiateMVars t
     | throwError "goal must be of the form TFAE [P₁, P₂, ...]"
   unless (← withNewMCtxDepth <| isDefEq tfae q(TFAE)) do
     throwError "goal must be of the form TFAE [P₁, P₂, ...]"
@@ -354,15 +296,20 @@ where
 
 /-! ### Proof construction -/
 
-variable (hyps : Array (Nat × Nat × Expr)) (atoms : Array Q(Prop))
+variable (hyps : Array (ℕ × ℕ × Expr)) (atoms : Array Q(Prop))
 
-/--
-Definition of `dfs` / `dfs` 的定义
+/-- Uses depth-first search to find a path from `P` to `P'`. -/
+/-
+**Mathlib.Tactic.TFAE.dfs** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.TFAE`。
+形式化陈述：Array (ℕ × ℕ × Expr) → Array Q(Prop) → ℕ → ℕ → (P P' : Q(Prop)) → Q(«$P») 
+→ StateT (Std.HashSet ℕ) MetaM Q(«$P'»)
+参数：ℕ × ℕ × Expr；Prop；P P' : Q(Prop)；«$P»；Std.HashSet ℕ；«$P'»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dfs
-  signature: (i j : Nat) (P P' : Q(Prop)) (hP : Q($P))
-  body: do
+--- 原说明 ---
+Uses depth-first search to find a path from `P` to `P'`.
+-/
+partial def dfs (i j : ℕ) (P P' : Q(Prop)) (hP : Q($P)) : StateT (Std.HashSet ℕ) MetaM Q($P') := do
   if i == j then
     return hP
   modify (·.insert i)
@@ -370,114 +317,69 @@ definition dfs
     if i == a then
       if !(← get).contains b then
         have Q := atoms[b]!
-        have h : Q($P -> $Q) := h
+        have h : Q($P → $Q) := h
         try return ← dfs b j Q P' q($h $hP) catch _ => pure ()
   failure
 
-中文:
-定义 dfs
-  签名: (i j : 自然数) (P P' : Q(命题)) (hP : Q($P))
-  定义体: do
-  if i == j then
-    return hP
-  modify (·.insert i)
-  for (a, b, h) in hyps do
-    if i == a then
-      if !(← get).contains b then
-        have Q := atoms[b]!
-        have h : Q($P -> $Q) := h
-        try return ← dfs b j Q P' q($h $hP) catch _ => pure ()
-  failure
+/-- Prove an implication via depth-first traversal. -/
+/-
+**Mathlib.Tactic.TFAE.proveImpl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFAE`。
+形式化陈述：proveImpl (i j : Nat) (P P' : Q(Prop)) : MetaM Q($P -> $P')
+参数：i j : Nat；P P' : Q(Prop)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Prove an implication via depth-first traversal.
 -/
-partial def dfs (i j : Nat) (P P' : Q(Prop)) (hP : Q($P)) : StateT (Std.HashSet Nat) MetaM Q($P') := do
-  if i == j then
-    return hP
-  modify (·.insert i)
-  for (a, b, h) in hyps do
-    if i == a then
-      if !(← get).contains b then
-        have Q := atoms[b]!
-        have h : Q($P -> $Q) := h
-        try return ← dfs b j Q P' q($h $hP) catch _ => pure ()
-  failure
-
-/--
-Definition of `proveImpl` / `proveImpl` 的定义
-
-English:
-definition proveImpl
-  signature: (i j : Nat) (P P' : Q(Prop))
-  body: do
+def proveImpl (i j : ℕ) (P P' : Q(Prop)) : MetaM Q($P → $P') := do
   try
     withLocalDeclD (← mkFreshUserName `h) P fun (h : Q($P)) => do
-mkLambdaFVars #[h] .run' {} ← dfs hyps atoms i j P P' h
+      mkLambdaFVars #[h] <|← dfs hyps atoms i j P P' h |>.run' {}
   catch _ =>
-    throwError "couldn't prove {P} -> {P'}"
+    throwError "couldn't prove {P} → {P'}"
 
-中文:
-定义 proveImpl
-  签名: (i j : 自然数) (P P' : Q(命题))
-  定义体: do
-  try
-    withLocalDeclD (← mkFreshUserName `h) P fun (h : Q($P)) => do
-mkLambdaFVars #[h] .run' {} ← dfs hyps atoms i j P P' h
-  catch _ =>
-    throwError "couldn't prove {P} -> {P'}"
+/-- Generate a proof of `Chain (· → ·) P l`. We assume `P : Prop` and `l : List Prop`, and that `l`
+is an explicit list. -/
+/-
+**Mathlib.Tactic.TFAE.proveChain** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.TF
+AE`。
+形式化陈述：Array (ℕ × ℕ × Expr) →   Array Q(Prop) →     ℕ → List ℕ → (P : Q(Prop)) → 
+(l : Q(List Prop)) → MetaM Q(List.IsChain (fun x1 x2 => x1 → x2) («$P» :: «$l»))
+参数：ℕ × ℕ × Expr；Prop；P : Q(Prop)；l : Q(List Prop)；List.IsChain (fun x1 x2 => x1 
+→ x2) («$P» :: «$l»)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Generate a proof of `Chain (· → ·) P l`. We assume `P : Prop` and `l : List Prop
+`, and that `l`
+is an explicit list.
 -/
-def proveImpl (i j : Nat) (P P' : Q(Prop)) : MetaM Q($P -> $P') := do
-  try
-    withLocalDeclD (← mkFreshUserName `h) P fun (h : Q($P)) => do
-mkLambdaFVars #[h] .run' {} ← dfs hyps atoms i j P P' h
-  catch _ =>
-    throwError "couldn't prove {P} -> {P'}"
-
-/--
-Definition of `proveChain` / `proveChain` 的定义
-
-English:
-definition proveChain
-  signature: (i : Nat) (is : List Nat) (P : Q(Prop)) (l : Q(List Prop))
-  body: do
+partial def proveChain (i : ℕ) (is : List ℕ) (P : Q(Prop)) (l : Q(List Prop)) :
+    MetaM Q(IsChain (· → ·) ($P :: $l)) := do
   match l with
   | ~q([]) => return q(.singleton _)
   | ~q($P' :: $l') =>
     -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
     let i' :: is' := id is | unreachable!
-    have cl' : Q(IsChain (· -> ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
+    have cl' : Q(IsChain (· → ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
     let p ← proveImpl hyps atoms i i' P P'
     return q(.cons_cons $p $cl')
 
-中文:
-定义 proveChain
-  签名: (i : 自然数) (is : 列表 自然数) (P : Q(命题)) (l : Q(列表 命题))
-  定义体: do
-  match l with
-  | ~q([]) => return q(.singleton _)
-  | ~q($P' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i' :: is' := id is | unreachable!
-    have cl' : Q(IsChain (· -> ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
-    let p ← proveImpl hyps atoms i i' P P'
-    return q(.cons_cons $p $cl')
+/-- Attempt to prove `getLastD l P' → P` given an explicit list `l`. -/
+/-
+**Mathlib.Tactic.TFAE.proveGetLastDImpl** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.TFAE`。
+形式化陈述：Array (ℕ × ℕ × Expr) →   Array Q(Prop) → ℕ → ℕ → List ℕ → (P P' : Q(Prop))
+ → (l : Q(List Prop)) → MetaM Q(«$l».getLastD «$P'» → «$P»)
+参数：ℕ × ℕ × Expr；Prop；P P' : Q(Prop)；l : Q(List Prop)；«$l».getLastD «$P'» → «$P»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Attempt to prove `getLastD l P' → P` given an explicit list `l`.
 -/
-partial def proveChain (i : Nat) (is : List Nat) (P : Q(Prop)) (l : Q(List Prop)) :
-    MetaM Q(IsChain (· -> ·) ($P :: $l)) := do
-  match l with
-  | ~q([]) => return q(.singleton _)
-  | ~q($P' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i' :: is' := id is | unreachable!
-    have cl' : Q(IsChain (· -> ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
-    let p ← proveImpl hyps atoms i i' P P'
-    return q(.cons_cons $p $cl')
-
-/--
-Definition of `proveGetLastDImpl` / `proveGetLastDImpl` 的定义
-
-English:
-definition proveGetLastDImpl
-  signature: (i i' : Nat) (is : List Nat) (P P' : Q(Prop)) (l : Q(List Prop))
-  body: do
+partial def proveGetLastDImpl (i i' : ℕ) (is : List ℕ) (P P' : Q(Prop)) (l : Q(List Prop)) :
+    MetaM Q(getLastD $l $P' → $P) := do
   match l with
   | ~q([]) => proveImpl hyps atoms i' i P' P
   | ~q($P'' :: $l') =>
@@ -485,58 +387,18 @@ definition proveGetLastDImpl
     let i'' :: is' := id is | unreachable!
     proveGetLastDImpl i i'' is' P P'' l'
 
-中文:
-定义 proveGetLastDImpl
-  签名: (i i' : 自然数) (is : 列表 自然数) (P P' : Q(命题)) (l : Q(列表 命题))
-  定义体: do
-  match l with
-  | ~q([]) => proveImpl hyps atoms i' i P' P
-  | ~q($P'' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i'' :: is' := id is | unreachable!
-    proveGetLastDImpl i i'' is' P P'' l'
+/-- Attempt to prove a statement of the form `TFAE [P₁, P₂, ...]`. -/
+/-
+**Mathlib.Tactic.TFAE.proveTFAE** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFAE`。
+形式化陈述：proveTFAE (is : List Nat) (l : Q(List Prop)) : MetaM Q(TFAE $l)
+参数：is : List Nat；l : Q(List Prop)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Attempt to prove a statement of the form `TFAE [P₁, P₂, ...]`.
 -/
-partial def proveGetLastDImpl (i i' : Nat) (is : List Nat) (P P' : Q(Prop)) (l : Q(List Prop)) :
-    MetaM Q(getLastD $l $P' -> $P) := do
-  match l with
-  | ~q([]) => proveImpl hyps atoms i' i P' P
-  | ~q($P'' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i'' :: is' := id is | unreachable!
-    proveGetLastDImpl i i'' is' P P'' l'
-
-/--
-Definition of `proveTFAE` / `proveTFAE` 的定义
-
-English:
-definition proveTFAE
-  signature: (is : List Nat) (l : Q(List Prop))
-  body: do
-  match l with
-  | ~q([]) => return q(tfae_nil)
-  | ~q([$P]) => return q(tfae_singleton $P)
-  | ~q($P :: $P' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i :: i' :: is' := id is | unreachable!
-    let c ← proveChain hyps atoms i (i'::is') P q($P' :: $l')
-    let il ← proveGetLastDImpl hyps atoms i i' is' P P' l'
-    return q(tfae_of_cycle $c $il)
-
-中文:
-定义 proveTFAE
-  签名: (is : 列表 自然数) (l : Q(列表 命题))
-  定义体: do
-  match l with
-  | ~q([]) => return q(tfae_nil)
-  | ~q([$P]) => return q(tfae_singleton $P)
-  | ~q($P :: $P' :: $l') =>
-    -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
-    let i :: i' :: is' := id is | unreachable!
-    let c ← proveChain hyps atoms i (i'::is') P q($P' :: $l')
-    let il ← proveGetLastDImpl hyps atoms i i' is' P P' l'
-    return q(tfae_of_cycle $c $il)
--/
-def proveTFAE (is : List Nat) (l : Q(List Prop)) : MetaM Q(TFAE $l) := do
+def proveTFAE (is : List ℕ) (l : Q(List Prop)) : MetaM Q(TFAE $l) := do
   match l with
   | ~q([]) => return q(tfae_nil)
   | ~q([$P]) => return q(tfae_singleton $P)
@@ -549,102 +411,64 @@ def proveTFAE (is : List Nat) (l : Q(List Prop)) : MetaM Q(TFAE $l) := do
 
 /-! ### `tfae_have` components -/
 
-/--
-Definition of `mkTFAEId` / `mkTFAEId` 的定义
+/-- Construct a name for a hypothesis introduced by `tfae_have`. -/
+/-
+**Mathlib.Tactic.TFAE.mkTFAEId** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFAE`。
+形式化陈述：TSyntax `Mathlib.Tactic.TFAE.Parser.tfaeType → MacroM Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkTFAEId
-  signature: : TSyntax ``tfaeType -> MacroM Name
-
-中文:
-定义 mkTFAEId
-  签名: : TSyntax ``tfaeType -> MacroM Name
+--- 原说明 ---
+Construct a name for a hypothesis introduced by `tfae_have`.
 -/
-def mkTFAEId : TSyntax ``tfaeType -> MacroM Name
+def mkTFAEId : TSyntax ``tfaeType → MacroM Name
   | `(tfaeType|$i:num $arr:impArrow $j:num) => do
     let arr ← match arr with
     | `(impArrow| ← ) => pure "from"
-    | `(impArrow| -> ) => pure "to"
+    | `(impArrow| → ) => pure "to"
     | `(impArrow| ↔ ) => pure "iff"
     | _ => Macro.throwUnsupported
-return .mkSimple String.intercalate "_" ["tfae", s!"{i.getNat}", arr, s!"{j.getNat}"]
+    return .mkSimple <| String.intercalate "_" ["tfae", s!"{i.getNat}", arr, s!"{j.getNat}"]
   | _ => Macro.throwUnsupported
 
-/--
-Definition of `elabIndex` / `elabIndex` 的定义
+/-- Turn syntax for a given index into a natural number, as long as it lies between `1` and
+`maxIndex`. -/
+/-
+**Mathlib.Tactic.TFAE.elabIndex** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFAE`。
+形式化陈述：elabIndex (i : TSyntax `num) (maxIndex : Nat) : MetaM Nat
+参数：i : TSyntax `num；maxIndex : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabIndex
-  signature: (i : TSyntax `num) (maxIndex : Nat)
-  body: do
-  let i' := i.getNat
-  unless 1 <= i' && i' <= maxIndex do
-    throwErrorAt i "{i} must be between 1 and {maxIndex}"
-  return i'
-
-中文:
-定义 elabIndex
-  签名: (i : TSyntax `num) (maxIndex : 自然数)
-  定义体: do
-  let i' := i.getNat
-  unless 1 <= i' && i' <= maxIndex do
-    throwErrorAt i "{i} must be between 1 and {maxIndex}"
-  return i'
+--- 原说明 ---
+Turn syntax for a given index into a natural number, as long as it lies between 
+`1` and
+`maxIndex`.
 -/
-def elabIndex (i : TSyntax `num) (maxIndex : Nat) : MetaM Nat := do
+def elabIndex (i : TSyntax `num) (maxIndex : ℕ) : MetaM ℕ := do
   let i' := i.getNat
-  unless 1 <= i' && i' <= maxIndex do
+  unless 1 ≤ i' && i' ≤ maxIndex do
     throwErrorAt i "{i} must be between 1 and {maxIndex}"
   return i'
 
 /-! ### Tactic implementation -/
 
-/--
-Definition of `elabTFAEType` / `elabTFAEType` 的定义
+/-- Accesses the propositions at indices `i` and `j` of `tfaeList`, and constructs the expression
+`Pi <arr> Pj`, which will be the type of our `tfae_have` hypothesis -/
+/-
+**Mathlib.Tactic.TFAE.elabTFAEType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TFA
+E`。
+形式化陈述：elabTFAEType (tfaeList : List Q(Prop)) : TSyntax ``tfaeType -> TermElabM E
+xpr | stx@`(tfaeType|$i:num $arr:impArrow $j:num) => do let l
+参数：tfaeList : List Q(Prop)。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabTFAEType
-  signature: (tfaeList : List Q(Prop))
-  body: tfaeList.length
-    let i' ← elabIndex i l
-    let j' ← elabIndex j l
-    let Pi := tfaeList[i'-1]!
-    let Pj := tfaeList[j'-1]!
-    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20terms.20to.20be.20shown.20in.20hover.3F). -/
-    Term.addTermInfo' i q(sorry : $Pi) Pi
-    Term.addTermInfo' j q(sorry : $Pj) Pj
-    let (ty : Q(Prop)) ← match arr with
-      | `(impArrow| ← ) => pure q($Pj -> $Pi)
-      | `(impArrow| -> ) => pure q($Pi -> $Pj)
-      | `(impArrow| ↔ ) => pure q($Pi ↔ $Pj)
-      | _ => throwUnsupportedSyntax
-    Term.addTermInfo' stx q(sorry : $ty) ty
-    return ty
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabTFAEType
-  签名: (tfaeList : 列表 Q(命题))
-  定义体: tfaeList.length
-    let i' ← elabIndex i l
-    let j' ← elabIndex j l
-    let Pi := tfaeList[i'-1]!
-    let Pj := tfaeList[j'-1]!
-    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20terms.20to.20be.20shown.20in.20hover.3F). -/
-    Term.addTermInfo' i q(sorry : $Pi) Pi
-    Term.addTermInfo' j q(sorry : $Pj) Pj
-    let (ty : Q(Prop)) ← match arr with
-      | `(impArrow| ← ) => pure q($Pj -> $Pi)
-      | `(impArrow| -> ) => pure q($Pi -> $Pj)
-      | `(impArrow| ↔ ) => pure q($Pi ↔ $Pj)
-      | _ => throwUnsupportedSyntax
-    Term.addTermInfo' stx q(sorry : $ty) ty
-    return ty
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: length, tfaeList, tfaeList.length
+--- 原说明 ---
+Accesses the propositions at indices `i` and `j` of `tfaeList`, and constructs t
+he expression
+`Pi <arr> Pj`, which will be the type of our `tfae_have` hypothesis
 -/
-def elabTFAEType (tfaeList : List Q(Prop)) : TSyntax ``tfaeType -> TermElabM Expr
+def elabTFAEType (tfaeList : List Q(Prop)) : TSyntax ``tfaeType → TermElabM Expr
   | stx@`(tfaeType|$i:num $arr:impArrow $j:num) => do
     let l := tfaeList.length
     let i' ← elabIndex i l
@@ -655,8 +479,8 @@ def elabTFAEType (tfaeList : List Q(Prop)) : TSyntax ``tfaeType -> TermElabM Exp
     Term.addTermInfo' i q(sorry : $Pi) Pi
     Term.addTermInfo' j q(sorry : $Pj) Pj
     let (ty : Q(Prop)) ← match arr with
-      | `(impArrow| ← ) => pure q($Pj -> $Pi)
-      | `(impArrow| -> ) => pure q($Pi -> $Pj)
+      | `(impArrow| ← ) => pure q($Pj → $Pi)
+      | `(impArrow| → ) => pure q($Pi → $Pj)
       | `(impArrow| ↔ ) => pure q($Pi ↔ $Pj)
       | _ => throwUnsupportedSyntax
     Term.addTermInfo' stx q(sorry : $ty) ty
@@ -683,13 +507,13 @@ elab_rules : tactic
     match d with
     | `(tfaeHaveDecl| $b : $t:tfaeType := $pf:term) =>
       let type ← elabTFAEType tfaeList t
-evalTactic ← `(tactic|have $b : $(← exprToSyntax type) := $pf)
+      evalTactic <|← `(tactic|have $b : $(← exprToSyntax type) := $pf)
     | `(tfaeHaveDecl| $b : $t:tfaeType $alts:matchAlts) =>
       let type ← elabTFAEType tfaeList t
-evalTactic ← `(tactic|have $b : $(← exprToSyntax type) $alts:matchAlts)
+      evalTactic <|← `(tactic|have $b : $(← exprToSyntax type) $alts:matchAlts)
     | `(tfaeHaveDecl| $pat:term : $t:tfaeType := $pf:term) =>
       let type ← elabTFAEType tfaeList t
-evalTactic ← `(tactic|have $pat:term : $(← exprToSyntax type) := $pf)
+      evalTactic <|← `(tactic|have $pat:term : $(← exprToSyntax type) := $pf)
     | _ => throwUnsupportedSyntax
 
 elab_rules : tactic
@@ -697,11 +521,11 @@ elab_rules : tactic
   let goal ← getMainGoal
   goal.withContext do
     let (tfaeListQ, tfaeList) ← getTFAEList (← goal.getType)
-closeMainGoal `tfae_finish ← AtomM.run .reducible do
-      let is ← tfaeList.mapM (fun e => Prod.fst <$> AtomM.addAtom e)
+    closeMainGoal `tfae_finish <|← AtomM.run .reducible do
+      let is ← tfaeList.mapM (fun e ↦ Prod.fst <$> AtomM.addAtom e)
       let mut hyps := #[]
       for hyp in ← getLocalHyps do
-let ty ← whnfR ← instantiateMVars ← inferType hyp
+        let ty ← whnfR <|← instantiateMVars <|← inferType hyp
         if let (``Iff, #[p1, p2]) := ty.getAppFnArgs then
           let (q1, _) ← AtomM.addAtom p1
           let (q2, _) ← AtomM.addAtom p2
@@ -739,7 +563,7 @@ syntax (name := tfaeHave') "tfae_have " tfaeHaveIdLhs : tactic
 
 extend_docs tfaeHave'
   before "\"Goal-style\" `tfae_have` syntax is deprecated. Now, `tfae_have ...` should be followed\
-    by `:= ...`; see below for the new behavior. This warning can be turned off with \
+    by  `:= ...`; see below for the new behavior. This warning can be turned off with \
     `set_option Mathlib.Tactic.TFAE.useDeprecated true`.\n\n***"
 
 elab_rules : tactic
@@ -747,13 +571,13 @@ elab_rules : tactic
   -- Deprecate syntax:
   let ref ← getRef
   unless useDeprecated.get (← getOptions) do
-logWarning .tagged ``Linter.deprecatedAttr m!"\
+    logWarning <| .tagged ``Linter.deprecatedAttr m!"\
       \"Goal-style\" syntax '{ref}' is deprecated in favor of '{ref} := ...'.\n\n\
       To turn this warning off, use set_option Mathlib.Tactic.TFAE.useDeprecated true"
 
   let goal ← getMainGoal
   let (_, tfaeList) ← getTFAEList (← goal.getType)
-let (b, t) ← liftMacroM match d with
+  let (b, t) ← liftMacroM <| match d with
     | `(tfaeHaveIdLhs| $hy:hygieneInfo $t:tfaeType) => do
       pure (HygieneInfo.mkIdent hy (← mkTFAEId t) (canonical := true), t)
     | `(tfaeHaveIdLhs| $b:ident : $t:tfaeType) =>
@@ -770,3 +594,4 @@ let (b, t) ← liftMacroM match d with
 end TFAE
 
 end Mathlib.Tactic
+

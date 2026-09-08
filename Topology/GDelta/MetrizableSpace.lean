@@ -25,22 +25,35 @@ open TopologicalSpace Set
 
 section Metrizable
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [PseudoMetrizableSpace X] : NormalSpace X :=
   (@UniformSpace.completelyNormalSpace_of_isCountablyGenerated_uniformity X
     (pseudoMetrizableSpaceUniformity X)
     (pseudoMetrizableSpaceUniformity_countably_generated X)).toNormalSpace
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 500) [PseudoMetrizableSpace X] : PerfectlyNormalSpace X where
   closed_gdelta s hs := by
     let := pseudoMetrizableSpaceUniformity X
     have := pseudoMetrizableSpaceUniformity_countably_generated X
     rcases (@uniformity_hasBasis_open X _).exists_antitone_subbasis with ⟨U, hUo, hU, -⟩
-    rw [← hs.closure_eq]; rw [← hU.biInter_biUnion_ball]
+    rw [← hs.closure_eq, ← hU.biInter_biUnion_ball]
     refine .biInter (to_countable _) fun n _ => IsOpen.isGδ ?_
     exact isOpen_biUnion fun x _ => UniformSpace.isOpen_ball _ (hUo _).2
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [MetrizableSpace X] : T4Space X where
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 500) [MetrizableSpace X] : T6Space X where
 
 end Metrizable
@@ -48,46 +61,11 @@ end Metrizable
 section ContinuousAt
 variable {Y : Type*} [TopologicalSpace Y]
 
-/--
-theorem `IsGδ.setOfPred_continuousAt` / 定理 `IsGδ.setOfPred_continuousAt`
-
-English:
-theorem IsGδ.setOfPred_continuousAt
-  given: [PseudoMetrizableSpace Y] (f : X -> Y)
-  proof: by
-  let := pseudoMetrizableSpaceUniformity Y
-  have := pseudoMetrizableSpaceUniformity_countably_generated Y
-  obtain ⟨U, _, hU⟩ := (@uniformity_hasBasis_open_symmetric Y _).exists_antitone_subbasis
-  simp only [Uniform.continuousAt_iff_prod, nhds_prod_eq]
-  simp only [(nhds_basis_opens _).prod_self.tendsto_iff hU.toHasBasis,
-    forall_prop_of_true, ofPred_forall]
-refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
-  rintro ⟨s, ⟨hsx, hso⟩, hsU⟩
-  filter_upwards [IsOpen.mem_nhds hso hsx] with _ hy using ⟨s, ⟨hy, hso⟩, hsU⟩
-
-@[deprecated (since := "2026-07-09")]
-alias IsGδ.setOf_continuousAt := IsGδ.setOfPred_continuousAt
-
-中文:
-定理 IsGδ.setOfPred_continuousAt
-  条件: [PseudoMetrizable空间 Y] (f : X -> Y)
-  证明: by
-  let := pseudoMetrizableSpaceUniformity Y
-  have := pseudoMetrizableSpaceUniformity_countably_generated Y
-  obtain ⟨U, _, hU⟩ := (@uniformity_hasBasis_open_symmetric Y _).exists_antitone_subbasis
-  simp only [Uniform.continuousAt_iff_prod, nhds_prod_eq]
-  simp only [(nhds_basis_opens _).prod_self.tendsto_iff hU.toHasBasis,
-    forall_prop_of_true, ofPred_forall]
-refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
-  rintro ⟨s, ⟨hsx, hso⟩, hsU⟩
-  filter_upwards [IsOpen.mem_nhds hso hsx] with _ hy using ⟨s, ⟨hy, hso⟩, hsU⟩
-
-@[deprecated (since := "2026-07-09")]
-alias IsGδ.setOf_continuousAt := IsGδ.setOfPred_continuousAt
-
-Depends on / 依赖: IsOpen, IsOpen.isG, IsOpen.mem_nhds, Uniform, Uniform.continuousAt_iff_prod, continuousAt_iff_prod, exists_antitone_subbasis, filter_upwards, forall_prop_of_true, hU.toHasBasis, iInter, isOpen_iff_mem_nhds, mem_nhds, nhds_basis_opens, nhds_prod_eq, ofPred_forall, prod_self, prod_self.tendsto_iff, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsGδ.setOfPred_continuousAt [PseudoMetrizableSpace Y] (f : X -> Y) :
+theorem IsGδ.setOfPred_continuousAt [PseudoMetrizableSpace Y] (f : X → Y) :
     IsGδ { x | ContinuousAt f x } := by
   let := pseudoMetrizableSpaceUniformity Y
   have := pseudoMetrizableSpaceUniformity_countably_generated Y
@@ -95,7 +73,7 @@ theorem IsGδ.setOfPred_continuousAt [PseudoMetrizableSpace Y] (f : X -> Y) :
   simp only [Uniform.continuousAt_iff_prod, nhds_prod_eq]
   simp only [(nhds_basis_opens _).prod_self.tendsto_iff hU.toHasBasis,
     forall_prop_of_true, ofPred_forall]
-refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
+  refine .iInter fun k ↦ IsOpen.isGδ <| isOpen_iff_mem_nhds.2 fun x ↦ ?_
   rintro ⟨s, ⟨hsx, hso⟩, hsU⟩
   filter_upwards [IsOpen.mem_nhds hso hsx] with _ hy using ⟨s, ⟨hy, hso⟩, hsU⟩
 
@@ -103,3 +81,4 @@ refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
 alias IsGδ.setOf_continuousAt := IsGδ.setOfPred_continuousAt
 
 end ContinuousAt
+

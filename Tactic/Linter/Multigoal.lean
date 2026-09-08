@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Parser.Term
 
 /-!
@@ -54,126 +54,39 @@ public register_option linter.style.multiGoal : Bool := {
 
 namespace Style.multiGoal
 
-/--
-Definition of `exclusions` / `exclusions` 的定义
+/-- The `SyntaxNodeKind`s in `exclusions` correspond to tactics that the linter allows,
+even though there are multiple active goals.
+Reasons for admitting a kind in `exclusions` include
+* the tactic focuses on one goal, e.g. `·`, `focus`, `on_goal i =>`, ...;
+* the tactic is reordering the goals, e.g. `swap`, `rotate_left`, ...;
+* the tactic is structuring a proof, e.g. `skip`, `<;>`, ...;
+* the tactic is creating new goals, e.g. `constructor`, `cases`, `induction`, ....
 
-English:
-abbreviation exclusions
-  signature: : Std.HashSet SyntaxNodeKind
-  body: .ofArray #[
-    -- structuring a proof
-    ``Lean.Parser.Term.cdot,
-    ``cdot,
-    ``cdotTk,
-    ``Lean.Parser.Tactic.tacticSeqBracketed,
-    `«;»,
-    `«<;>»,
-    ``Lean.Parser.Tactic.«tactic_<;>_»,
-    `«{»,
-    `«]»,
-    `null,
-    `then,
-    `else,
-    ``Lean.Parser.Tactic.«tacticNext_=>_»,
-    ``Lean.Parser.Tactic.tacticSeq1Indented,
-    ``Lean.Parser.Tactic.tacticSeq,
-    `focus,
-    ``Lean.Parser.Tactic.focus,
-    -- grind interactive mode
-    ``Lean.Parser.Tactic.Grind.grindSeq1Indented,
-    ``Lean.Parser.Tactic.Grind.grindSeq,
-    ``Lean.Parser.Tactic.Grind.«grind·_»,
-    ``Lean.Parser.Tactic.Grind.grindSeqBracketed,
-    ``Lean.Parser.Tactic.Grind.«grind_<;>_»,
-    ``Lean.Parser.Tactic.Grind.skip,
-    ``Lean.Parser.Tactic.Grind.focus,
-    ``Lean.Parser.Tactic.Grind.next,
-    ``Lean.Parser.Tactic.Grind.cases,
-    -- re-ordering goals
-    `Batteries.Tactic.tacticSwap,
-    ``Lean.Parser.Tactic.rotateLeft,
-    ``Lean.Parser.Tactic.rotateRight,
-    ``Lean.Parser.Tactic.skip,
-    `Batteries.Tactic.«tacticOn_goal-_=>_»,
-    `Mathlib.Tactic.«tacticSwap_var__,,»,
-    -- tactic combinators
-    ``Lean.Parser.Tactic.tacticRepeat_,
-    ``Lean.Parser.Tactic.tacticTry_,
-    -- creating new goals
-    ``Lean.Parser.Tactic.paren,
-    ``Lean.Parser.Tactic.case,
-    ``Lean.Parser.Tactic.constructor,
-    `Mathlib.Tactic.tacticAssumption',
-    ``Lean.Parser.Tactic.induction,
-    ``Lean.Parser.Tactic.cases,
-    ``Lean.Parser.Tactic.intros,
-    ``Lean.Parser.Tactic.injections,
-    ``Lean.Parser.Tactic.substVars,
-    `Batteries.Tactic.«tacticPick_goal-_»,
-    ``Lean.Parser.Tactic.case',
-    `«tactic#adaptation_note_»,
-    `tacticSleep_heartbeats_
-  ]
+There is some overlap in scope between `ignoreBranch` and `exclusions`.
 
-中文:
-缩写 exclusions
-  签名: : Std.HashSet SyntaxNodeKind
-  定义体: .ofArray #[
-    -- structuring a proof
-    ``Lean.Parser.Term.cdot,
-    ``cdot,
-    ``cdotTk,
-    ``Lean.Parser.Tactic.tacticSeqBracketed,
-    `«;»,
-    `«<;>»,
-    ``Lean.Parser.Tactic.«tactic_<;>_»,
-    `«{»,
-    `«]»,
-    `null,
-    `then,
-    `else,
-    ``Lean.Parser.Tactic.«tacticNext_=>_»,
-    ``Lean.Parser.Tactic.tacticSeq1Indented,
-    ``Lean.Parser.Tactic.tacticSeq,
-    `focus,
-    ``Lean.Parser.Tactic.focus,
-    -- grind interactive mode
-    ``Lean.Parser.Tactic.Grind.grindSeq1Indented,
-    ``Lean.Parser.Tactic.Grind.grindSeq,
-    ``Lean.Parser.Tactic.Grind.«grind·_»,
-    ``Lean.Parser.Tactic.Grind.grindSeqBracketed,
-    ``Lean.Parser.Tactic.Grind.«grind_<;>_»,
-    ``Lean.Parser.Tactic.Grind.skip,
-    ``Lean.Parser.Tactic.Grind.focus,
-    ``Lean.Parser.Tactic.Grind.next,
-    ``Lean.Parser.Tactic.Grind.cases,
-    -- re-ordering goals
-    `Batteries.Tactic.tacticSwap,
-    ``Lean.Parser.Tactic.rotateLeft,
-    ``Lean.Parser.Tactic.rotateRight,
-    ``Lean.Parser.Tactic.skip,
-    `Batteries.Tactic.«tacticOn_goal-_=>_»,
-    `Mathlib.Tactic.«tacticSwap_var__,,»,
-    -- tactic combinators
-    ``Lean.Parser.Tactic.tacticRepeat_,
-    ``Lean.Parser.Tactic.tacticTry_,
-    -- creating new goals
-    ``Lean.Parser.Tactic.paren,
-    ``Lean.Parser.Tactic.case,
-    ``Lean.Parser.Tactic.constructor,
-    `Mathlib.Tactic.tacticAssumption',
-    ``Lean.Parser.Tactic.induction,
-    ``Lean.Parser.Tactic.cases,
-    ``Lean.Parser.Tactic.intros,
-    ``Lean.Parser.Tactic.injections,
-    ``Lean.Parser.Tactic.substVars,
-    `Batteries.Tactic.«tacticPick_goal-_»,
-    ``Lean.Parser.Tactic.case',
-    `«tactic#adaptation_note_»,
-    `tacticSleep_heartbeats_
-  ]
+Tactic combinators like `repeat` or `try` are a mix of both.
+-/
+/-
+**Mathlib.Linter.Style.multiGoal.exclusions** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib
+.Linter.Style.multiGoal`。
+形式化陈述：exclusions : Std.HashSet SyntaxNodeKind
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: ofArray
+--- 原说明 ---
+The `SyntaxNodeKind`s in `exclusions` correspond to tactics that the linter allo
+ws,
+even though there are multiple active goals.
+Reasons for admitting a kind in `exclusions` include
+* the tactic focuses on one goal, e.g. `·`, `focus`, `on_goal i =>`, ...;
+* the tactic is reordering the goals, e.g. `swap`, `rotate_left`, ...;
+* the tactic is structuring a proof, e.g. `skip`, `<;>`, ...;
+* the tactic is creating new goals, e.g. `constructor`, `cases`, `induction`, ..
+..
+
+There is some overlap in scope between `ignoreBranch` and `exclusions`.
+
+Tactic combinators like `repeat` or `try` are a mix of both.
 -/
 abbrev exclusions : Std.HashSet SyntaxNodeKind := .ofArray #[
     -- structuring a proof
@@ -230,54 +143,31 @@ abbrev exclusions : Std.HashSet SyntaxNodeKind := .ofArray #[
     `tacticSleep_heartbeats_
   ]
 
-/--
-Definition of `ignoreBranch` / `ignoreBranch` 的定义
+/-- The `SyntaxNodeKind`s in `ignoreBranch` correspond to tactics that disable the linter from
+their first application until the corresponding proof branch is closed.
+Reasons for ignoring these tactics include
+* the linter gets confused by the proof management, e.g. `conv`;
+* the tactics are *intended* to act on multiple goals, e.g. `repeat`, `any_goals`, `all_goals`, ...
 
-English:
-abbreviation ignoreBranch
-  signature: : Std.HashSet SyntaxNodeKind
-  body: .ofArray #[
-    ``Lean.Parser.Tactic.Conv.conv,
-    `Mathlib.Tactic.Conv.convLHS,
-    `Mathlib.Tactic.Conv.convRHS,
-    ``Lean.Parser.Tactic.first,
-    ``Lean.Parser.Tactic.tacticRepeat_,
-    ``Lean.Parser.Tactic.repeat',
-    ``Lean.Parser.Tactic.tacticIterate____,
-    ``Lean.Parser.Tactic.anyGoals,
-    ``Lean.Parser.Tactic.allGoals,
-    ``Lean.Parser.Tactic.failIfSuccess,
-    ``Lean.Parser.Tactic.Grind.anyGoals,
-    ``Lean.Parser.Tactic.Grind.allGoals,
-    ``Lean.Parser.Tactic.Grind.first,
-    ``Lean.Parser.Tactic.Grind.failIfSuccess,
-    ``Lean.Parser.Tactic.Grind.grindRepeat_,
-    `Mathlib.Tactic.successIfFailWithMsg
-  ]
+There is some overlap in scope between `exclusions` and `ignoreBranch`.
+-/
+/-
+**Mathlib.Linter.Style.multiGoal.ignoreBranch** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathl
+ib.Linter.Style.multiGoal`。
+形式化陈述：ignoreBranch : Std.HashSet SyntaxNodeKind
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 ignoreBranch
-  签名: : Std.HashSet SyntaxNodeKind
-  定义体: .ofArray #[
-    ``Lean.Parser.Tactic.Conv.conv,
-    `Mathlib.Tactic.Conv.convLHS,
-    `Mathlib.Tactic.Conv.convRHS,
-    ``Lean.Parser.Tactic.first,
-    ``Lean.Parser.Tactic.tacticRepeat_,
-    ``Lean.Parser.Tactic.repeat',
-    ``Lean.Parser.Tactic.tacticIterate____,
-    ``Lean.Parser.Tactic.anyGoals,
-    ``Lean.Parser.Tactic.allGoals,
-    ``Lean.Parser.Tactic.failIfSuccess,
-    ``Lean.Parser.Tactic.Grind.anyGoals,
-    ``Lean.Parser.Tactic.Grind.allGoals,
-    ``Lean.Parser.Tactic.Grind.first,
-    ``Lean.Parser.Tactic.Grind.failIfSuccess,
-    ``Lean.Parser.Tactic.Grind.grindRepeat_,
-    `Mathlib.Tactic.successIfFailWithMsg
-  ]
+--- 原说明 ---
+The `SyntaxNodeKind`s in `ignoreBranch` correspond to tactics that disable the l
+inter from
+their first application until the corresponding proof branch is closed.
+Reasons for ignoring these tactics include
+* the linter gets confused by the proof management, e.g. `conv`;
+* the tactics are *intended* to act on multiple goals, e.g. `repeat`, `any_goals
+`, `all_goals`, ...
 
-Depends on / 依赖: ofArray
+There is some overlap in scope between `exclusions` and `ignoreBranch`.
 -/
 abbrev ignoreBranch : Std.HashSet SyntaxNodeKind := .ofArray #[
     ``Lean.Parser.Tactic.Conv.conv,
@@ -308,60 +198,21 @@ together with the number of goals before the tactic,
 the number of goals after the tactic, and the number of unaffected goals.
 -/
 partial
-/--
-Definition of `getManyGoals` / `getManyGoals` 的定义
-
-English:
-definition getManyGoals
-  signature: : InfoTree -> Array (Syntax × Nat × Nat × Nat)
-  body: (args.map getManyGoals).toArray.flatten
-    if let .ofTacticInfo info := info then
-      if ignoreBranch.contains info.stx.getKind then #[]
-      -- Ideal case: one goal, and it might or might not be closed.
-      else if info.goalsBefore.length == 1 && info.goalsAfter.length <= 1 then kargs
-      else if let .original .. := info.stx.getHeadInfo then
-        let backgroundGoals := info.goalsAfter.filter (info.goalsBefore.contains ·)
-        if backgroundGoals.length != 0 && !exclusions.contains info.stx.getKind then
-          kargs.push (info.stx,
-                      info.goalsBefore.length, info.goalsAfter.length, backgroundGoals.length)
-        else kargs
-      else kargs
-    else kargs
-  | .context _ t => getManyGoals t
-  | _ => default
-
-@[inherit_doc Mathlib.Linter.linter.style.multiGoal]
-
-中文:
-定义 getManyGoals
-  签名: : InfoTree -> 数组 (Syntax × 自然数 × 自然数 × 自然数)
-  定义体: (args.map getManyGoals).toArray.flatten
-    if let .ofTacticInfo info := info then
-      if ignoreBranch.contains info.stx.getKind then #[]
-      -- Ideal case: one goal, and it might or might not be closed.
-      else if info.goalsBefore.length == 1 && info.goalsAfter.length <= 1 then kargs
-      else if let .original .. := info.stx.getHeadInfo then
-        let backgroundGoals := info.goalsAfter.filter (info.goalsBefore.contains ·)
-        if backgroundGoals.length != 0 && !exclusions.contains info.stx.getKind then
-          kargs.push (info.stx,
-                      info.goalsBefore.length, info.goalsAfter.length, backgroundGoals.length)
-        else kargs
-      else kargs
-    else kargs
-  | .context _ t => getManyGoals t
-  | _ => default
-
-@[inherit_doc Mathlib.Linter.linter.style.multiGoal]
-
-Depends on / 依赖: args.map, flatten, getManyGoals, toArray, toArray.flatten
+/-
+**Mathlib.Linter.Style.multiGoal.getManyGoals** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Linter.Style.multiGoal`。
+形式化陈述：getManyGoals : InfoTree -> Array (Syntax × Nat × Nat × Nat) | .node info a
+rgs => let kargs
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def getManyGoals : InfoTree -> Array (Syntax × Nat × Nat × Nat)
+def getManyGoals : InfoTree → Array (Syntax × Nat × Nat × Nat)
   | .node info args =>
     let kargs := (args.map getManyGoals).toArray.flatten
     if let .ofTacticInfo info := info then
       if ignoreBranch.contains info.stx.getKind then #[]
       -- Ideal case: one goal, and it might or might not be closed.
-      else if info.goalsBefore.length == 1 && info.goalsAfter.length <= 1 then kargs
+      else if info.goalsBefore.length == 1 && info.goalsAfter.length ≤ 1 then kargs
       else if let .original .. := info.stx.getHeadInfo then
         let backgroundGoals := info.goalsAfter.filter (info.goalsBefore.contains ·)
         if backgroundGoals.length != 0 && !exclusions.contains info.stx.getKind then
@@ -374,52 +225,14 @@ def getManyGoals : InfoTree -> Array (Syntax × Nat × Nat × Nat)
   | _ => default
 
 @[inherit_doc Mathlib.Linter.linter.style.multiGoal]
-/--
-Definition of `multiGoalLinter` / `multiGoalLinter` 的定义
-
-English:
-definition multiGoalLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun _stx => do
-    unless getLinterValue linter.style.multiGoal (← getLinterOptions) do
-      return
-    if (← get).messages.hasErrors then
-      return
-    let trees ← getInfoTrees
-    for t in trees do
-      for (s, before, after, n) in getManyGoals t do
-        let goals (k : Nat) := if k == 1 then f!"1 goal" else f!"{k} goals"
-        let fmt ← Command.liftCoreM
-          try PrettyPrinter.ppTactic ⟨s⟩ catch _ => pure f!"(failed to pretty print)"
-        Linter.logLint linter.style.multiGoal s m!"\
-          The following tactic starts with {goals before} and ends with {goals after}, \
-          {n} of which {if n == 1 then "is" else "are"} not operated on.\
-          {indentD fmt}\n\
-          Please focus on the current goal, for instance using `·` (typed as \"\\.\")."
-
-中文:
-定义 multiGoalLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun _stx => do
-    unless getLinterValue linter.style.multiGoal (← getLinterOptions) do
-      return
-    if (← get).messages.hasErrors then
-      return
-    let trees ← getInfoTrees
-    for t in trees do
-      for (s, before, after, n) in getManyGoals t do
-        let goals (k : Nat) := if k == 1 then f!"1 goal" else f!"{k} goals"
-        let fmt ← Command.liftCoreM
-          try PrettyPrinter.ppTactic ⟨s⟩ catch _ => pure f!"(failed to pretty print)"
-        Linter.logLint linter.style.multiGoal s m!"\
-          The following tactic starts with {goals before} and ends with {goals after}, \
-          {n} of which {if n == 1 then "is" else "are"} not operated on.\
-          {indentD fmt}\n\
-          Please focus on the current goal, for instance using `·` (typed as \"\\.\")."
-
-Depends on / 依赖: _stx, withSetOptionIn
+/-
+**Mathlib.Linter.Style.multiGoal.multiGoalLinter** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Linter.Style.multiGoal`。
+形式化陈述：multiGoalLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def multiGoalLinter : Linter where run := withSetOptionIn fun _stx => do
+def multiGoalLinter : Linter where run := withSetOptionIn fun _stx ↦ do
     unless getLinterValue linter.style.multiGoal (← getLinterOptions) do
       return
     if (← get).messages.hasErrors then
@@ -441,3 +254,4 @@ initialize addLinter multiGoalLinter
 end Style.multiGoal
 
 end Mathlib.Linter
+

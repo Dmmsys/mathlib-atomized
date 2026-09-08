@@ -50,75 +50,83 @@ universe u u₁ v w w₁ w₂ w₃
 
 variable {R : Type u} {S : Type u₁}
 
-/--
-Definition of `NonUnitalAlgHom` / `NonUnitalAlgHom` 的定义
+/-- A morphism respecting addition, multiplication, and scalar multiplication
+(denoted as `A →ₛₙₐ[φ] B`, or `A →ₙₐ[R] B` when `φ` is the identity on `R`).
+When these arise from algebra structures, this is the same
+as a not-necessarily-unital morphism of algebras. -/
+/-
+**NonUnitalAlgHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u} →   {S : Type u₁} →     [inst : Monoid R] →       [inst_1 : M
+onoid S] →         (R →* S) →           (A : Type v) →             (B : Type w) 
+→               [inst_2 : NonUnitalNonAssocSemiring A] →                 [Distri
+bMulAction R A] → [inst : NonUnitalNonAssocSemiring B] → [DistribMulAction S B] 
+→ Type (max v w)
+参数：R →* S；A : Type v；B : Type w；max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NonUnitalAlgHom
-  parameters: [Monoid R] [Monoid S] (φ : R ->* S) (A : Type v) (B : Type w)
-  extends: A ->ₑ+[φ] B, A ->ₙ* B
-  (no additional axioms)
-
-中文:
-结构 非幺Alg态射
-  参数: [幺半群 R] [幺半群 S] (φ : R ->* S) (A : 类型v) (B : 类型 w)
-  继承: A ->ₑ+[φ] B, A ->ₙ* B
-  (无附加公理)
-
-Depends on / 依赖: PreEnvelGroup, PreEnvelGroup.inv, PreEnvelGroup.mul, PreEnvelGroupRel, Quotient, Quotient.inductionOn, Quotient.liftOn, Quotient.sound, congr_inv, congr_mul, inductionOn, liftOn, mul_assoc, mul_one, one_mul
+--- 原说明 ---
+A morphism respecting addition, multiplication, and scalar multiplication
+(denoted as `A →ₛₙₐ[φ] B`, or `A →ₙₐ[R] B` when `φ` is the identity on `R`).
+When these arise from algebra structures, this is the same
+as a not-necessarily-unital morphism of algebras.
 -/
-structure NonUnitalAlgHom [Monoid R] [Monoid S] (φ : R ->* S) (A : Type v) (B : Type w)
+structure NonUnitalAlgHom [Monoid R] [Monoid S] (φ : R →* S) (A : Type v) (B : Type w)
     [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
-    [NonUnitalNonAssocSemiring B] [DistribMulAction S B] extends A ->ₑ+[φ] B, A ->ₙ* B
+    [NonUnitalNonAssocSemiring B] [DistribMulAction S B] extends A →ₑ+[φ] B, A →ₙ* B
 
 @[inherit_doc NonUnitalAlgHom]
-infixr:25 " ->ₙₐ " => NonUnitalAlgHom _
+infixr:25 " →ₙₐ " => NonUnitalAlgHom _
 
 @[inherit_doc]
-notation:25 A " ->ₛₙₐ[" φ "] " B => NonUnitalAlgHom φ A B
+notation:25 A " →ₛₙₐ[" φ "] " B => NonUnitalAlgHom φ A B
 
 @[inherit_doc]
-notation:25 A " ->ₙₐ[" R "] " B => NonUnitalAlgHom (MonoidHom.id R) A B
+notation:25 A " →ₙₐ[" R "] " B => NonUnitalAlgHom (MonoidHom.id R) A B
 
 attribute [nolint docBlame] NonUnitalAlgHom.toMulHom
 
-/--
-Definition of `NonUnitalAlgSemiHomClass` / `NonUnitalAlgSemiHomClass` 的定义
+/-- `NonUnitalAlgSemiHomClass F φ A B` asserts `F` is a type of bundled algebra homomorphisms
+from `A` to `B` which are equivariant with respect to `φ`. -/
+/-
+**NonUnitalAlgSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   {R : outParam (Type u_2)} →     {S : outParam (Type u_3
+)} →       [inst : Monoid R] →         [inst_1 : Monoid S] →           outParam 
+(R →* S) →             (A : outParam (Type u_4)) →               (B : outParam (
+Type u_5)) →                 [inst_2 : NonUnitalNonAssocSemiring A] →           
+        [inst_3 : NonUnitalNonAssocSemiring B] →                     [DistribMul
+Action R A] → [DistribMulAction S B] → [FunLike F A B] → Prop
+参数：Type u_4；Type u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalAlgSemiHomClass
-  parameters: (F : Type*) {R S : outParam Type*} [Monoid R] [Monoid S]
-  extends: DistribMulActionSemiHomClass F φ A B, MulHomClass F A B
-  (no additional axioms)
-
-中文:
-类 非幺AlgSemi态射类
-  参数: (F : 类型) {R S : outParam 类型} [幺半群 R] [幺半群 S]
-  继承: DistribMulActionSemi态射类 F φ A B, 乘法态射类 F A B
-  (无附加公理)
-
-Depends on / 依赖: PreEnvelGroupRel, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn, inv_mul_cancel
+--- 原说明 ---
+`NonUnitalAlgSemiHomClass F φ A B` asserts `F` is a type of bundled algebra homo
+morphisms
+from `A` to `B` which are equivariant with respect to `φ`.
 -/
 class NonUnitalAlgSemiHomClass (F : Type*) {R S : outParam Type*} [Monoid R] [Monoid S]
-    (φ : outParam (R ->* S)) (A B : outParam Type*)
+    (φ : outParam (R →* S)) (A B : outParam Type*)
     [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B]
     [DistribMulAction R A] [DistribMulAction S B] [FunLike F A B] : Prop
     extends DistribMulActionSemiHomClass F φ A B, MulHomClass F A B
 
-/--
-Definition of `NonUnitalAlgHomClass` / `NonUnitalAlgHomClass` 的定义
+/-- `NonUnitalAlgHomClass F R A B` asserts `F` is a type of bundled algebra homomorphisms
+from `A` to `B` which are `R`-linear.
 
-English:
-abbreviation NonUnitalAlgHomClass
-  signature: (F : Type*) (R A B : outParam Type*)
-  body: NonUnitalAlgSemiHomClass F (MonoidHom.id R) A B
+  This is an abbreviation to `NonUnitalAlgSemiHomClass F (MonoidHom.id R) A B` -/
+/-
+**NonUnitalAlgHomClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NonUnitalAlgHomClass (F : Type*) (R A B : outParam Type*) [Monoid R] [NonU
+nitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B] [DistribMulAction R A] [D
+istribMulAction R B] [FunLike F A B]
+参数：F : Type*；R A B : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 NonUnitalAlgHomClass
-  签名: (F : 类型) (R A B : outParam 类型)
-  定义体: NonUnitalAlgSemiHomClass F (MonoidHom.id R) A B
+--- 原说明 ---
+`NonUnitalAlgHomClass F R A B` asserts `F` is a type of bundled algebra homomorp
+hisms
+from `A` to `B` which are `R`-linear.
 
-Depends on / 依赖: MonoidHom, MonoidHom.id, NonUnitalAlgSemiHomClass
+  This is an abbreviation to `NonUnitalAlgSemiHomClass F (MonoidHom.id R) A B`
 -/
 abbrev NonUnitalAlgHomClass (F : Type*) (R A B : outParam Type*)
     [Monoid R] [NonUnitalNonAssocSemiring A] [NonUnitalNonAssocSemiring B]
@@ -128,25 +136,36 @@ abbrev NonUnitalAlgHomClass (F : Type*) (R A B : outParam Type*)
 namespace NonUnitalAlgHomClass
 
 -- See note [lower instance priority]
+/-
+**NonUnitalAlgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toNonUnitalRingHomClass
-    {F R S A B : Type*} {_ : Monoid R} {_ : Monoid S} {φ : outParam (R ->* S)}
+    {F R S A B : Type*} {_ : Monoid R} {_ : Monoid S} {φ : outParam (R →* S)}
     {_ : NonUnitalNonAssocSemiring A} [DistribMulAction R A]
     {_ : NonUnitalNonAssocSemiring B} [DistribMulAction S B] [FunLike F A B]
     [NonUnitalAlgSemiHomClass F φ A B] : NonUnitalRingHomClass F A B :=
   { ‹NonUnitalAlgSemiHomClass F φ A B› with }
 
-variable [Semiring R] [Semiring S] {φ : R ->+* S}
+variable [Semiring R] [Semiring S] {φ : R →+* S}
   {A B : Type*} [NonUnitalNonAssocSemiring A] [Module R A]
   [NonUnitalNonAssocSemiring B] [Module S B]
 
 -- see Note [lower instance priority]
+/-
+**NonUnitalAlgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {F R S A B : Type*}
-    {_ : Semiring R} {_ : Semiring S} {φ : R ->+* S}
+    {_ : Semiring R} {_ : Semiring S} {φ : R →+* S}
     {_ : NonUnitalSemiring A} {_ : NonUnitalSemiring B} [Module R A] [Module S B] [FunLike F A B]
     [NonUnitalAlgSemiHomClass (R := R) (S := S) F φ A B] :
     SemilinearMapClass F φ A B :=
   { ‹NonUnitalAlgSemiHomClass F φ A B› with map_smulₛₗ := map_smulₛₗ }
-
+/-
+**NonUnitalAlgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {F : Type*} [FunLike F A B] [Module R B] [NonUnitalAlgHomClass F R A B] :
     LinearMapClass F R A B :=
   { ‹NonUnitalAlgHomClass F R A B› with map_smulₛₗ := map_smulₛₗ }
@@ -154,947 +173,696 @@ instance (priority := 100) {F : Type*} [FunLike F A B] [Module R B] [NonUnitalAl
 /-- Turn an element of a type `F` satisfying `NonUnitalAlgSemiHomClass F φ A B` into an actual
 `NonUnitalAlgHom`. This is declared as the default coercion from `F` to `A →ₛₙₐ[φ] B`. -/
 @[coe]
-/--
-Definition of `toNonUnitalAlgSemiHom` / `toNonUnitalAlgSemiHom` 的定义
+/-
+**NonUnitalAlgHomClass.toNonUnitalAlgSemiHom** 是 Mathlib 中的一个定义，位于命名空间 `NonUnita
+lAlgHomClass`。
+形式化陈述：toNonUnitalAlgSemiHom {F R S : Type*} [Monoid R] [Monoid S] {φ : R ->* S} 
+{A B : Type*} [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [NonUnitalNon
+AssocSemiring B] [DistribMulAction S B] [FunLike F A B] [NonUnitalAlgSemiHomClas
+s F φ A B] (f : F) : A ->ₛₙₐ[φ] B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} {S : Type u_3} {A : Type u_4} {B : Type u_5} {x : Monoid R} {x_1 : Monoid 
+S}   {φ : outParam (R →* S)} {x_2 …
+· 使用定理 `NonUnitalRingHom.map_zero'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonU
+nitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+*
+ β), self.toFun …
+· 使用定理 `NonUnitalRingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonUn
+italNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+* 
+β) (x y : α), s…
 
-English:
-definition toNonUnitalAlgSemiHom
-  signature: {F R S : Type*} [Monoid R] [Monoid S] {φ : R ->* S} {A B : Type*}
-  body: { (f : A ->ₙ+* B) with
-    toFun := f
-    map_smul' := map_smulₛₗ f }
-
-中文:
-定义 toNonUnitalAlgSemiHom
-  签名: {F R S : 类型} [幺半群 R] [幺半群 S] {φ : R ->* S} {A B : 类型}
-  定义体: { (f : A ->ₙ+* B) with
-    toFun := f
-    map_smul' := map_smulₛₗ f }
-
-Depends on / 依赖: map_smul
+--- 原说明 ---
+Turn an element of a type `F` satisfying `NonUnitalAlgSemiHomClass F φ A B` into
+ an actual
+`NonUnitalAlgHom`. This is declared as the default coercion from `F` to `A →ₛₙₐ[
+φ] B`.
 -/
-def toNonUnitalAlgSemiHom {F R S : Type*} [Monoid R] [Monoid S] {φ : R ->* S} {A B : Type*}
+def toNonUnitalAlgSemiHom {F R S : Type*} [Monoid R] [Monoid S] {φ : R →* S} {A B : Type*}
     [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
     [NonUnitalNonAssocSemiring B] [DistribMulAction S B] [FunLike F A B]
-    [NonUnitalAlgSemiHomClass F φ A B] (f : F) : A ->ₛₙₐ[φ] B :=
-  { (f : A ->ₙ+* B) with
+    [NonUnitalAlgSemiHomClass F φ A B] (f : F) : A →ₛₙₐ[φ] B :=
+  { (f : A →ₙ+* B) with
     toFun := f
     map_smul' := map_smulₛₗ f }
-
-instance {F R S A B : Type*} [Monoid R] [Monoid S] {φ : R ->* S}
+/-
+**NonUnitalAlgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {F R S A B : Type*} [Monoid R] [Monoid S] {φ : R →* S}
     [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
     [NonUnitalNonAssocSemiring B] [DistribMulAction S B] [FunLike F A B]
     [NonUnitalAlgSemiHomClass F φ A B] :
-      CoeTC F (A ->ₛₙₐ[φ] B) :=
+      CoeTC F (A →ₛₙₐ[φ] B) :=
   ⟨toNonUnitalAlgSemiHom⟩
 
-/--
-Definition of `toNonUnitalAlgHom` / `toNonUnitalAlgHom` 的定义
+/-- Turn an element of a type `F` satisfying `NonUnitalAlgHomClass F R A B` into an actual
+@[coe]
+`NonUnitalAlgHom`. This is declared as the default coercion from `F` to `A →ₛₙₐ[R] B`. -/
+/-
+**NonUnitalAlgHomClass.toNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlg
+HomClass`。
+形式化陈述：toNonUnitalAlgHom {F R : Type*} [Monoid R] {A B : Type*} [NonUnitalNonAsso
+cSemiring A] [DistribMulAction R A] [NonUnitalNonAssocSemiring B] [DistribMulAct
+ion R B] [FunLike F A B] [NonUnitalAlgHomClass F R A B] (f : F) : A ->ₙₐ[R] B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.map_zero'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonU
+nitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+*
+ β), self.toFun …
+· 使用定理 `NonUnitalRingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonUn
+italNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+* 
+β) (x y : α), s…
 
-English:
-definition toNonUnitalAlgHom
-  signature: {F R : Type*} [Monoid R] {A B : Type*}
-  body: { (f : A ->ₙ+* B) with
-    toFun := f
-    map_smul' := map_smulₛₗ f }
-
-中文:
-定义 toNonUnitalAlgHom
-  签名: {F R : 类型} [幺半群 R] {A B : 类型}
-  定义体: { (f : A ->ₙ+* B) with
-    toFun := f
-    map_smul' := map_smulₛₗ f }
-
-Depends on / 依赖: map_smul
+--- 原说明 ---
+Turn an element of a type `F` satisfying `NonUnitalAlgHomClass F R A B` into an 
+actual
+@[coe]
+`NonUnitalAlgHom`. This is declared as the default coercion from `F` to `A →ₛₙₐ[
+R] B`.
 -/
 def toNonUnitalAlgHom {F R : Type*} [Monoid R] {A B : Type*}
     [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
     [NonUnitalNonAssocSemiring B] [DistribMulAction R B]
-    [FunLike F A B] [NonUnitalAlgHomClass F R A B] (f : F) : A ->ₙₐ[R] B :=
-  { (f : A ->ₙ+* B) with
+    [FunLike F A B] [NonUnitalAlgHomClass F R A B] (f : F) : A →ₙₐ[R] B :=
+  { (f : A →ₙ+* B) with
     toFun := f
     map_smul' := map_smulₛₗ f }
-
+/-
+**NonUnitalAlgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F R : Type*} [Monoid R] {A B : Type*}
     [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
     [NonUnitalNonAssocSemiring B] [DistribMulAction R B]
     [FunLike F A B] [NonUnitalAlgHomClass F R A B] :
-    CoeTC F (A ->ₙₐ[R] B) :=
+    CoeTC F (A →ₙₐ[R] B) :=
   ⟨toNonUnitalAlgHom⟩
 
 end NonUnitalAlgHomClass
 
 namespace NonUnitalAlgHom
 
-variable {T : Type*} [Monoid R] [Monoid S] [Monoid T] (φ : R ->* S)
+variable {T : Type*} [Monoid R] [Monoid S] [Monoid T] (φ : R →* S)
 variable (A : Type v) (B : Type w) (C : Type w₁)
 variable [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
 variable [NonUnitalNonAssocSemiring B] [DistribMulAction S B]
 variable [NonUnitalNonAssocSemiring C] [DistribMulAction T C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ->ₛₙₐ[φ] B) A B
-  body: f.toFun
-  coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-@[simp]
-
-中文:
-实例 :
-  签名: 函数状 (A ->ₛₙₐ[φ] B) A B
-  定义体: f.toFun
-  coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-@[simp]
-
-Depends on / 依赖: f.toFun
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A ->ₛₙₐ[φ] B) A B where
+instance : FunLike (A →ₛₙₐ[φ] B) A B where
   coe f := f.toFun
   coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
 
 @[simp]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: f.toFun = ⇑f
-  proof: rfl
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: f.toFun = ⇑f
-  证明: rfl
+/-
+**NonUnitalAlgHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：toFun_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toFun = ⇑f
+参数：f : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toFun_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toFun = ⇑f :=
+theorem toFun_eq_coe (f : A →ₛₙₐ[φ] B) : f.toFun = ⇑f :=
   rfl
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**NonUnitalAlgHom.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom.Simps`。
+形式化陈述：{R : Type u} →   {S : Type u₁} →     [inst : Monoid R] →       [inst_1 : M
+onoid S] →         (φ : R →* S) →           (A : Type v) →             (B : Type
+ w) →               [inst_2 : NonUnitalNonAssocSemiring A] →                 [in
+st_3 : DistribMulAction R A] →                   [inst_4 : NonUnitalNonAssocSemi
+ring B] → [inst_5 : DistribMulAction S B] → (A →ₛₙₐ[φ] B) → A → B
+参数：φ : R →* S；A : Type v；B : Type w；A →ₛₙₐ[φ] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (f : A ->ₛₙₐ[φ] B)
-  body: f
-
-initialize_simps_projections NonUnitalAlgHom
-  (toDistribMulActionHom_toMulActionHom_toFun -> apply, -toDistribMulActionHom)
-
-中文:
-定义 Simps.apply
-  签名: (f : A ->ₛₙₐ[φ] B)
-  定义体: f
-
-initialize_simps_projections NonUnitalAlgHom
-  (toDistribMulActionHom_toMulActionHom_toFun -> apply, -toDistribMulActionHom)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (f : A ->ₛₙₐ[φ] B) : A -> B := f
+def Simps.apply (f : A →ₛₙₐ[φ] B) : A → B := f
 
 initialize_simps_projections NonUnitalAlgHom
-  (toDistribMulActionHom_toMulActionHom_toFun -> apply, -toDistribMulActionHom)
+  (toDistribMulActionHom_toMulActionHom_toFun → apply, -toDistribMulActionHom)
 
 variable {φ A B C}
 @[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: {F : Type*} [FunLike F A B]
-  proof: rfl
-
-中文:
-定理 coe_coe
-  结论: {F : 类型} [函数状 F A B]
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] {F : Type u_2} [inst_6 : FunLike F A B] [inst_7 : NonUnitalAlg
+SemiHomClass F φ A B]   (f : F), ⇑↑f = ⇑f
+参数：f : F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_coe {F : Type*} [FunLike F A B]
     [NonUnitalAlgSemiHomClass F φ A B] (f : F) :
-    ⇑(f : A ->ₛₙₐ[φ] B) = f :=
+    ⇑(f : A →ₛₙₐ[φ] B) = f :=
   rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: @Function.Injective (A ->ₛₙₐ[φ] B) (A -> B) (↑)
-  proof: by
-  rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-中文:
-定理 coe_injective
-  结论: @函数.单射 (A ->ₛₙₐ[φ] B) (A -> B) (↑)
-  证明: by
-  rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
+/-
+**NonUnitalAlgHom.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_injective : @Function.Injective (A ->ₛₙₐ[φ] B) (A -> B) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_injective : @Function.Injective (A ->ₛₙₐ[φ] B) (A -> B) (↑) := by
+theorem coe_injective : @Function.Injective (A →ₛₙₐ[φ] B) (A → B) (↑) := by
   rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ->ₛₙₐ[φ] B) A B
-  body: f.toFun
-  coe_injective := coe_injective
-
-中文:
-实例 :
-  签名: 函数状 (A ->ₛₙₐ[φ] B) A B
-  定义体: f.toFun
-  coe_injective := coe_injective
-
-Depends on / 依赖: f.toFun
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A ->ₛₙₐ[φ] B) A B where
+instance : FunLike (A →ₛₙₐ[φ] B) A B where
   coe f := f.toFun
   coe_injective := coe_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonUnitalAlgSemiHomClass (A ->ₛₙₐ[φ] B) φ A B
-  body: f.map_add'
-  map_zero f := f.map_zero'
-  map_mul f := f.map_mul'
-  map_smulₛₗ f := f.map_smul'
-
-@[ext]
-
-中文:
-实例 :
-  签名: 非幺AlgSemi态射类 (A ->ₛₙₐ[φ] B) φ A B
-  定义体: f.map_add'
-  map_zero f := f.map_zero'
-  map_mul f := f.map_mul'
-  map_smulₛₗ f := f.map_smul'
-
-@[ext]
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NonUnitalAlgSemiHomClass (A ->ₛₙₐ[φ] B) φ A B where
+instance : NonUnitalAlgSemiHomClass (A →ₛₙₐ[φ] B) φ A B where
   map_add f := f.map_add'
   map_zero f := f.map_zero'
   map_mul f := f.map_mul'
   map_smulₛₗ f := f.map_smul'
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x)
-  statement: f = g
-  proof: coe_injective funext h
-
-中文:
-定理 ext
-  条件: {f g : A ->ₛₙₐ[φ] B} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: coe_injective funext h
-
-Depends on / 依赖: coe_injective
+/-
+**NonUnitalAlgHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：ext {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHom.coe_injective`：coe_injective : @Function.Injective (A ->
+ₛₙₐ[φ] B) (A -> B) (↑)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem ext {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x) : f = g :=
-coe_injective funext h
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x : A)
-  statement: f x = g x
-  proof: h ▸ rfl
-
-@[simp]
-
-中文:
-定理 congr_fun
-  条件: {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x : A)
-  结论: f x = g x
-  证明: h ▸ rfl
-
-@[simp]
+theorem ext {f g : A →ₛₙₐ[φ] B} (h : ∀ x, f x = g x) : f = g :=
+  coe_injective <| funext h
+/-
+**NonUnitalAlgHom.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：congr_fun {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x : A) : f x = g x
+参数：h : f = g；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem congr_fun {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x : A) : f x = g x :=
+theorem congr_fun {f g : A →ₛₙₐ[φ] B} (h : f = g) (x : A) : f x = g x :=
   h ▸ rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : A -> B) (h₁ h₂ h₃ h₄)
-  statement: ⇑(⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : A -> B) (h₁ h₂ h₃ h₄)
-  结论: ⇑(⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_mk (f : A -> B) (h₁ h₂ h₃ h₄) : ⇑(⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ]
+ B) = f
+参数：f : A -> B；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : A -> B) (h₁ h₂ h₃ h₄) : ⇑(⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f :=
+theorem coe_mk (f : A → B) (h₁ h₂ h₃ h₄) : ⇑(⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A →ₛₙₐ[φ] B) = f :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  statement: (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f
-  proof: by
-  rfl
-
-中文:
-定理 mk_coe
-  条件: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  结论: (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f
-  证明: by
-  rfl
+/-
+**NonUnitalAlgHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：mk_coe (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) : (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛ
+ₙₐ[φ] B) = f
+参数：f : A ->ₛₙₐ[φ] B；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_coe (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) : (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) = f := by
+theorem mk_coe (f : A →ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) : (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A →ₛₙₐ[φ] B) = f := by
   rfl
-
-/--
-lemma `addHomMk_coe` / 引理 `addHomMk_coe`
-
-English:
-lemma addHomMk_coe
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: AddHom.mk f (map_add f) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 addHomMk_coe
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: 加法半群态射.mk f (map_add f) = f
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.addHomMk_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] (f : A →ₛₙₐ[φ] B), { toFun := ⇑f, map_add' := ⋯ } = ↑f
+参数：f : A →ₛₙₐ[φ] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-@[simp] lemma addHomMk_coe (f : A ->ₛₙₐ[φ] B) : AddHom.mk f (map_add f) = f := rfl
+@[simp] lemma addHomMk_coe (f : A →ₛₙₐ[φ] B) : AddHom.mk f (map_add f) = f := rfl
 
 @[simp]
-/--
-theorem `toDistribMulActionHom_eq_coe` / 定理 `toDistribMulActionHom_eq_coe`
-
-English:
-theorem toDistribMulActionHom_eq_coe
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: f.toDistribMulActionHom = ↑f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toDistribMulActionHom_eq_coe
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: f.toDistribMulActionHom = ↑f
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.toDistribMulActionHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUni
+talAlgHom`。
+形式化陈述：toDistribMulActionHom_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toDistribMulActionHom 
+= ↑f
+参数：f : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toDistribMulActionHom_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toDistribMulActionHom = ↑f :=
+theorem toDistribMulActionHom_eq_coe (f : A →ₛₙₐ[φ] B) : f.toDistribMulActionHom = ↑f :=
   rfl
 
 @[simp]
-/--
-theorem `toMulHom_eq_coe` / 定理 `toMulHom_eq_coe`
-
-English:
-theorem toMulHom_eq_coe
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: f.toMulHom = ↑f
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 toMulHom_eq_coe
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: f.toMulHom = ↑f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NonUnitalAlgHom.toMulHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：toMulHom_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toMulHom = ↑f
+参数：f : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMulHom_eq_coe (f : A ->ₛₙₐ[φ] B) : f.toMulHom = ↑f :=
+theorem toMulHom_eq_coe (f : A →ₛₙₐ[φ] B) : f.toMulHom = ↑f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_to_distribMulActionHom` / 定理 `coe_to_distribMulActionHom`
-
-English:
-theorem coe_to_distribMulActionHom
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: ⇑(f : A ->ₑ+[φ] B) = f
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_to_distribMulActionHom
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: ⇑(f : A ->ₑ+[φ] B) = f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NonUnitalAlgHom.coe_to_distribMulActionHom** 是 Mathlib 中的一个定理，位于命名空间 `NonUnita
+lAlgHom`。
+形式化陈述：coe_to_distribMulActionHom (f : A ->ₛₙₐ[φ] B) : ⇑(f : A ->ₑ+[φ] B) = f
+参数：f : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-theorem coe_to_distribMulActionHom (f : A ->ₛₙₐ[φ] B) : ⇑(f : A ->ₑ+[φ] B) = f :=
+theorem coe_to_distribMulActionHom (f : A →ₛₙₐ[φ] B) : ⇑(f : A →ₑ+[φ] B) = f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_to_mulHom` / 定理 `coe_to_mulHom`
-
-English:
-theorem coe_to_mulHom
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: ⇑(f : A ->ₙ* B) = f
-  proof: rfl
-
-中文:
-定理 coe_to_mulHom
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: ⇑(f : A ->ₙ* B) = f
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_to_mulHom** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_to_mulHom (f : A ->ₛₙₐ[φ] B) : ⇑(f : A ->ₙ* B) = f
+参数：f : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-theorem coe_to_mulHom (f : A ->ₛₙₐ[φ] B) : ⇑(f : A ->ₙ* B) = f :=
+theorem coe_to_mulHom (f : A →ₛₙₐ[φ] B) : ⇑(f : A →ₙ* B) = f :=
   rfl
-
-/--
-theorem `to_distribMulActionHom_injective` / 定理 `to_distribMulActionHom_injective`
-
-English:
-theorem to_distribMulActionHom_injective
-  statement: {f g : A ->ₛₙₐ[φ] B}
-  proof: by
+/-
+**NonUnitalAlgHom.to_distribMulActionHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `No
+nUnitalAlgHom`。
+形式化陈述：to_distribMulActionHom_injective {f g : A ->ₛₙₐ[φ] B} (h : (f : A ->ₑ+[φ] 
+B) = (g : A ->ₑ+[φ] B)) : f = g
+参数：h : (f : A ->ₑ+[φ] B) = (g : A ->ₑ+[φ] B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
+· 使用定理 `NonUnitalAlgHom.ext`：ext {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x) 
+: f = g
+· 使用定理 `DistribMulActionHom.congr_fun`：∀ {M : Type u_1} [inst : Monoid M] {N : T
+ype u_2} [inst_1 : Monoid N] {φ : M →* N} {A : Type u_4} [inst_2 : AddMonoid A] 
+  [inst_3 : Distrib…
+-/
+theorem to_distribMulActionHom_injective {f g : A →ₛₙₐ[φ] B}
+    (h : (f : A →ₑ+[φ] B) = (g : A →ₑ+[φ] B)) : f = g := by
   ext a
   exact DistribMulActionHom.congr_fun h a
-
-中文:
-定理 to_distribMulActionHom_injective
-  结论: {f g : A ->ₛₙₐ[φ] B}
-  证明: by
-  ext a
-  exact DistribMulActionHom.congr_fun h a
-
-Depends on / 依赖: DistribMulActionHom, DistribMulActionHom.congr_fun, congr_fun
+/-
+**NonUnitalAlgHom.to_mulHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom
+`。
+形式化陈述：to_mulHom_injective {f g : A ->ₛₙₐ[φ] B} (h : (f : A ->ₙ* B) = (g : A ->ₙ*
+ B)) : f = g
+参数：h : (f : A ->ₙ* B) = (g : A ->ₙ* B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
+· 使用定理 `NonUnitalAlgHom.ext`：ext {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x) 
+: f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem to_distribMulActionHom_injective {f g : A ->ₛₙₐ[φ] B}
-    (h : (f : A ->ₑ+[φ] B) = (g : A ->ₑ+[φ] B)) : f = g := by
-  ext a
-  exact DistribMulActionHom.congr_fun h a
-
-/--
-theorem `to_mulHom_injective` / 定理 `to_mulHom_injective`
-
-English:
-theorem to_mulHom_injective
-  given: {f g : A ->ₛₙₐ[φ] B} (h : (f : A ->ₙ* B) = (g : A ->ₙ* B))
-  statement: f = g
-  proof: by
+theorem to_mulHom_injective {f g : A →ₛₙₐ[φ] B} (h : (f : A →ₙ* B) = (g : A →ₙ* B)) : f = g := by
   ext a
   exact DFunLike.congr_fun h a
 
 @[norm_cast]
-
-中文:
-定理 to_mulHom_injective
-  条件: {f g : A ->ₛₙₐ[φ] B} (h : (f : A ->ₙ* B) = (g : A ->ₙ* B))
-  结论: f = g
-  证明: by
-  ext a
-  exact DFunLike.congr_fun h a
-
-@[norm_cast]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**NonUnitalAlgHom.coe_distribMulActionHom_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnita
+lAlgHom`。
+形式化陈述：coe_distribMulActionHom_mk (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) : ((⟨⟨⟨f, h₁⟩,
+ h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) : A ->ₑ+[φ] B) = ⟨⟨f, h₁⟩, h₂, h₃⟩
+参数：f : A ->ₛₙₐ[φ] B；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-theorem to_mulHom_injective {f g : A ->ₛₙₐ[φ] B} (h : (f : A ->ₙ* B) = (g : A ->ₙ* B)) : f = g := by
-  ext a
-  exact DFunLike.congr_fun h a
-
-@[norm_cast]
-/--
-theorem `coe_distribMulActionHom_mk` / 定理 `coe_distribMulActionHom_mk`
-
-English:
-theorem coe_distribMulActionHom_mk
-  given: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  proof: by
+theorem coe_distribMulActionHom_mk (f : A →ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) :
+    ((⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A →ₛₙₐ[φ] B) : A →ₑ+[φ] B) = ⟨⟨f, h₁⟩, h₂, h₃⟩ := by
   rfl
 
 @[norm_cast]
-
-中文:
-定理 coe_distribMulActionHom_mk
-  条件: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  证明: by
-  rfl
-
-@[norm_cast]
+/-
+**NonUnitalAlgHom.coe_mulHom_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_mulHom_mk (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) : ((⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩
+ : A ->ₛₙₐ[φ] B) : A ->ₙ* B) = ⟨f, h₄⟩
+参数：f : A ->ₛₙₐ[φ] B；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-theorem coe_distribMulActionHom_mk (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) :
-    ((⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) : A ->ₑ+[φ] B) = ⟨⟨f, h₁⟩, h₂, h₃⟩ := by
-  rfl
-
-@[norm_cast]
-/--
-theorem `coe_mulHom_mk` / 定理 `coe_mulHom_mk`
-
-English:
-theorem coe_mulHom_mk
-  given: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  proof: by
+theorem coe_mulHom_mk (f : A →ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) :
+    ((⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A →ₛₙₐ[φ] B) : A →ₙ* B) = ⟨f, h₄⟩ := by
   rfl
 
 @[simp] -- Marked as `@[simp]` because `MulActionSemiHomClass.map_smulₛₗ` can't be.
-
-中文:
-定理 coe_mulHom_mk
-  条件: (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄)
-  证明: by
-  rfl
-
-@[simp] -- Marked as `@[simp]` because `MulActionSemiHomClass.map_smulₛₗ` can't be.
+/-
+**NonUnitalAlgHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] (f : A →ₛₙₐ[φ] B) (c : R) (x : A), f (c • x) = φ c • f x
+参数：f : A →ₛₙₐ[φ] B；c : R；x : A；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `DistribMulActionSemiHomClass.toMulActionSemiHomClass`：∀ {F : Type u_10} 
+{M : outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {
+A : outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-theorem coe_mulHom_mk (f : A ->ₛₙₐ[φ] B) (h₁ h₂ h₃ h₄) :
-    ((⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->ₛₙₐ[φ] B) : A ->ₙ* B) = ⟨f, h₄⟩ := by
-  rfl
-
-@[simp] -- Marked as `@[simp]` because `MulActionSemiHomClass.map_smulₛₗ` can't be.
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (f : A ->ₛₙₐ[φ] B) (c : R) (x : A)
-  statement: f (c • x) = (φ c) • f x
-  proof: map_smulₛₗ _ _ _
-
-中文:
-定理 map_smul
-  条件: (f : A ->ₛₙₐ[φ] B) (c : R) (x : A)
-  结论: f (c • x) = (φ c) • f x
-  证明: map_smulₛₗ _ _ _
--/
-protected theorem map_smul (f : A ->ₛₙₐ[φ] B) (c : R) (x : A) : f (c • x) = (φ c) • f x :=
+protected theorem map_smul (f : A →ₛₙₐ[φ] B) (c : R) (x : A) : f (c • x) = (φ c) • f x :=
   map_smulₛₗ _ _ _
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : A ->ₛₙₐ[φ] B) (x y : A)
-  statement: f (x + y) = f x + f y
-  proof: map_add _ _ _
-
-中文:
-定理 map_add
-  条件: (f : A ->ₛₙₐ[φ] B) (x y : A)
-  结论: f (x + y) = f x + f y
-  证明: map_add _ _ _
+/-
+**NonUnitalAlgHom.map_add** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] (f : A →ₛₙₐ[φ] B) (x y : A), f (x + y) = f x + f y
+参数：f : A →ₛₙₐ[φ] B；x y : A；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-protected theorem map_add (f : A ->ₛₙₐ[φ] B) (x y : A) : f (x + y) = f x + f y :=
+protected theorem map_add (f : A →ₛₙₐ[φ] B) (x y : A) : f (x + y) = f x + f y :=
   map_add _ _ _
-
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  given: (f : A ->ₛₙₐ[φ] B) (x y : A)
-  statement: f (x * y) = f x * f y
-  proof: map_mul _ _ _
-
-中文:
-定理 map_mul
-  条件: (f : A ->ₛₙₐ[φ] B) (x y : A)
-  结论: f (x * y) = f x * f y
-  证明: map_mul _ _ _
+/-
+**NonUnitalAlgHom.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] (f : A →ₛₙₐ[φ] B) (x y : A), f (x * y) = f x * f y
+参数：f : A →ₛₙₐ[φ] B；x y : A；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-protected theorem map_mul (f : A ->ₛₙₐ[φ] B) (x y : A) : f (x * y) = f x * f y :=
+protected theorem map_mul (f : A →ₛₙₐ[φ] B) (x y : A) : f (x * y) = f x * f y :=
   map_mul _ _ _
-
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : A ->ₛₙₐ[φ] B)
-  statement: f 0 = 0
-  proof: map_zero _
-
-中文:
-定理 map_zero
-  条件: (f : A ->ₛₙₐ[φ] B)
-  结论: f 0 = 0
-  证明: map_zero _
+/-
+**NonUnitalAlgHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：∀ {R : Type u} {S : Type u₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R 
+→* S} {A : Type v} {B : Type w}   [inst_2 : NonUnitalNonAssocSemiring A] [inst_3
+ : DistribMulAction R A] [inst_4 : NonUnitalNonAssocSemiring B]   [inst_5 : Dist
+ribMulAction S B] (f : A →ₛₙₐ[φ] B), f 0 = 0
+参数：f : A →ₛₙₐ[φ] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-protected theorem map_zero (f : A ->ₛₙₐ[φ] B) : f 0 = 0 :=
+protected theorem map_zero (f : A →ₛₙₐ[φ] B) : f 0 = 0 :=
   map_zero _
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity map as a `NonUnitalAlgHom`. -/
+/-
+**NonUnitalAlgHom.id** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：(R : Type u_2) →   (A : Type u_3) →     [inst : Monoid R] → [inst_1 : NonU
+nitalNonAssocSemiring A] → [inst_2 : DistribMulAction R A] → A →ₙₐ[R] A
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.map_zero'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonU
+nitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+*
+ β), self.toFun …
+· 使用定理 `NonUnitalRingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonUn
+italNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+* 
+β) (x y : α), s…
 
-English:
-definition id
-  signature: (R A : Type*) [Monoid R] [NonUnitalNonAssocSemiring A]
-  body: { NonUnitalRingHom.id A with
-    toFun := id
-    map_smul' := fun _ _ => rfl }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: (R A : 类型) [幺半群 R] [非幺非结合半环 A]
-  定义体: { NonUnitalRingHom.id A with
-    toFun := id
-    map_smul' := fun _ _ => rfl }
-
-@[simp, norm_cast]
+--- 原说明 ---
+The identity map as a `NonUnitalAlgHom`.
 -/
 protected def id (R A : Type*) [Monoid R] [NonUnitalNonAssocSemiring A]
-    [DistribMulAction R A] : A ->ₙₐ[R] A :=
+    [DistribMulAction R A] : A →ₙₐ[R] A :=
   { NonUnitalRingHom.id A with
     toFun := id
     map_smul' := fun _ _ => rfl }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(NonUnitalAlgHom.id R A) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(非幺Alg态射.id R A) = id
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_id : ⇑(NonUnitalAlgHom.id R A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(NonUnitalAlgHom.id R A) = id :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (A ->ₛₙₐ[φ] B)
-  body: ⟨{ (0 : A ->ₑ+[φ] B) with map_mul' := by simp }⟩
-
-中文:
-实例 :
-  签名: 零 (A ->ₛₙₐ[φ] B)
-  定义体: ⟨{ (0 : A ->ₑ+[φ] B) with map_mul' := by simp }⟩
-
-Depends on / 依赖: map_mul
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Zero (A ->ₛₙₐ[φ] B) :=
-  ⟨{ (0 : A ->ₑ+[φ] B) with map_mul' := by simp }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (A ->ₙₐ[R] A)
-  body: ⟨NonUnitalAlgHom.id R A⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 (A ->ₙₐ[R] A)
-  定义体: ⟨NonUnitalAlgHom.id R A⟩
-
-@[simp]
-
-Depends on / 依赖: NonUnitalAlgHom, NonUnitalAlgHom.id
+instance : Zero (A →ₛₙₐ[φ] B) :=
+  ⟨{ (0 : A →ₑ+[φ] B) with map_mul' := by simp }⟩
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : One (A ->ₙₐ[R] A) :=
+instance : One (A →ₙₐ[R] A) :=
   ⟨NonUnitalAlgHom.id R A⟩
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ⇑(0 : A ->ₛₙₐ[φ] B) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ⇑(0 : A ->ₛₙₐ[φ] B) = 0
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_zero : ⇑(0 : A ->ₛₙₐ[φ] B) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ⇑(0 : A ->ₛₙₐ[φ] B) = 0 :=
+theorem coe_zero : ⇑(0 : A →ₛₙₐ[φ] B) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : A ->ₙₐ[R] A) : A -> A) = id
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ((1 : A ->ₙₐ[R] A) : A -> A) = id
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_one : ((1 : A ->ₙₐ[R] A) : A -> A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : ((1 : A ->ₙₐ[R] A) : A -> A) = id :=
+theorem coe_one : ((1 : A →ₙₐ[R] A) : A → A) = id :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (a : A)
-  statement: (0 : A ->ₛₙₐ[φ] B) a = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: (a : A)
-  结论: (0 : A ->ₛₙₐ[φ] B) a = 0
-  证明: rfl
+/-
+**NonUnitalAlgHom.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：zero_apply (a : A) : (0 : A ->ₛₙₐ[φ] B) a = 0
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_apply (a : A) : (0 : A ->ₛₙₐ[φ] B) a = 0 :=
+theorem zero_apply (a : A) : (0 : A →ₛₙₐ[φ] B) a = 0 :=
   rfl
-
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (a : A)
-  statement: (1 : A ->ₙₐ[R] A) a = a
-  proof: rfl
-
-中文:
-定理 one_apply
-  条件: (a : A)
-  结论: (1 : A ->ₙₐ[R] A) a = a
-  证明: rfl
+/-
+**NonUnitalAlgHom.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：one_apply (a : A) : (1 : A ->ₙₐ[R] A) a = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_apply (a : A) : (1 : A ->ₙₐ[R] A) a = a :=
+theorem one_apply (a : A) : (1 : A →ₙₐ[R] A) a = a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (A ->ₛₙₐ[φ] B)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (A ->ₛₙₐ[φ] B)
-  定义体: ⟨0⟩
+/-
+**NonUnitalAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (A ->ₛₙₐ[φ] B) :=
+instance : Inhabited (A →ₛₙₐ[φ] B) :=
   ⟨0⟩
 
-variable {φ' : S ->* R} {ψ : S ->* T} {χ : R ->* T}
+variable {φ' : S →* R} {ψ : S →* T} {χ : R →* T}
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of morphisms is a morphism. -/
+/-
+**NonUnitalAlgHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：comp (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : MonoidHom.CompTriple φ ψ χ
+] : A ->ₛₙₐ[χ] C
+参数：f : B ->ₛₙₐ[ψ] C；g : A ->ₛₙₐ[φ] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : MonoidHom.CompTriple φ ψ χ]
-  body: { (f : B ->ₙ* C).comp (g : A ->ₙ* B), (f : B ->ₑ+[ψ] C).comp (g : A ->ₑ+[φ] B) with }
-
-@[simp, norm_cast]
-
-中文:
-定义 comp
-  签名: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : 幺半群态射.余mpTriple φ ψ χ]
-  定义体: { (f : B ->ₙ* C).comp (g : A ->ₙ* B), (f : B ->ₑ+[ψ] C).comp (g : A ->ₑ+[φ] B) with }
-
-@[simp, norm_cast]
+--- 原说明 ---
+The composition of morphisms is a morphism.
 -/
-def comp (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : MonoidHom.CompTriple φ ψ χ] :
-    A ->ₛₙₐ[χ] C :=
-  { (f : B ->ₙ* C).comp (g : A ->ₙ* B), (f : B ->ₑ+[ψ] C).comp (g : A ->ₑ+[φ] B) with }
+def comp (f : B →ₛₙₐ[ψ] C) (g : A →ₛₙₐ[φ] B) [κ : MonoidHom.CompTriple φ ψ χ] :
+    A →ₛₙₐ[χ] C :=
+  { (f : B →ₙ* C).comp (g : A →ₙ* B), (f : B →ₑ+[ψ] C).comp (g : A →ₑ+[φ] B) with }
 
 @[simp, norm_cast]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ]
-  proof: rfl
-
-中文:
-定理 coe_comp
-  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [幺半群态射.余mpTriple φ ψ χ]
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_comp (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ
+] : ⇑(f.comp g) = (⇑f) ∘ (⇑g)
+参数：f : B ->ₛₙₐ[ψ] C；g : A ->ₛₙₐ[φ] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] :
+theorem coe_comp (f : B →ₛₙₐ[ψ] C) (g : A →ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] :
     ⇑(f.comp g) = (⇑f) ∘ (⇑g) := rfl
-
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [幺半群态射.余mpTriple φ ψ χ] (x : A)
-  证明: rfl
+/-
+**NonUnitalAlgHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：comp_apply (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ
+ χ] (x : A) : f.comp g x = f (g x)
+参数：f : B ->ₛₙₐ[ψ] C；g : A ->ₛₙₐ[φ] B；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
+theorem comp_apply (f : B →ₛₙₐ[ψ] C) (g : A →ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
     f.comp g x = f (g x) := rfl
 
 variable {B₁ : Type*} [NonUnitalNonAssocSemiring B₁] [DistribMulAction R B₁]
 
-/--
-Definition of `inverse` / `inverse` 的定义
+/-- The inverse of a bijective morphism is a morphism. -/
+/-
+**NonUnitalAlgHom.inverse** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inverse (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f) (
+h₂ : Function.RightInverse g f) : B₁ ->ₙₐ[R] A
+参数：f : A ->ₙₐ[R] B₁；g : B₁ -> A；h₁ : Function.LeftInverse g f；h₂ : Function.Righ
+tInverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A)
-  body: { (f : A ->ₙ* B₁).inverse g h₁ h₂, (f : A ->+[R] B₁).inverse g h₁ h₂ with }
-
-@[simp]
-
-中文:
-定义 inverse
-  签名: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A)
-  定义体: { (f : A ->ₙ* B₁).inverse g h₁ h₂, (f : A ->+[R] B₁).inverse g h₁ h₂ with }
-
-@[simp]
-
-Depends on / 依赖: inverse
+--- 原说明 ---
+The inverse of a bijective morphism is a morphism.
 -/
-def inverse (f : A ->ₙₐ[R] B₁) (g : B₁ -> A)
+def inverse (f : A →ₙₐ[R] B₁) (g : B₁ → A)
     (h₁ : Function.LeftInverse g f)
-    (h₂ : Function.RightInverse g f) : B₁ ->ₙₐ[R] A :=
-  { (f : A ->ₙ* B₁).inverse g h₁ h₂, (f : A ->+[R] B₁).inverse g h₁ h₂ with }
+    (h₂ : Function.RightInverse g f) : B₁ →ₙₐ[R] A :=
+  { (f : A →ₙ* B₁).inverse g h₁ h₂, (f : A →+[R] B₁).inverse g h₁ h₂ with }
 
 @[simp]
-/--
-theorem `coe_inverse` / 定理 `coe_inverse`
-
-English:
-theorem coe_inverse
-  statement: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
-  proof: rfl
-
-中文:
-定理 coe_inverse
-  结论: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : 函数.左逆 g f)
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_inverse** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_inverse (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g 
+f) (h₂ : Function.RightInverse g f) : (inverse f g h₁ h₂ : B₁ -> A) = g
+参数：f : A ->ₙₐ[R] B₁；g : B₁ -> A；h₁ : Function.LeftInverse g f；h₂ : Function.Righ
+tInverse g f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inverse (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
-    (h₂ : Function.RightInverse g f) : (inverse f g h₁ h₂ : B₁ -> A) = g :=
+theorem coe_inverse (f : A →ₙₐ[R] B₁) (g : B₁ → A) (h₁ : Function.LeftInverse g f)
+    (h₂ : Function.RightInverse g f) : (inverse f g h₁ h₂ : B₁ → A) = g :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `inverse'` / `inverse'` 的定义
+/-- The inverse of a bijective morphism is a morphism. -/
+/-
+**NonUnitalAlgHom.inverse'** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inverse' (f : A ->ₛₙₐ[φ] B) (g : B -> A) (k : Function.RightInverse φ' φ) 
+(h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : B ->ₛₙₐ[φ'] A
+参数：f : A ->ₛₙₐ[φ] B；g : B -> A；k : Function.RightInverse φ' φ；h₁ : Function.Left
+Inverse g f；h₂ : Function.RightInverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse'
-  signature: (f : A ->ₛₙₐ[φ] B) (g : B -> A)
-  body: { (f : A ->ₙ* B).inverse g h₁ h₂, (f : A ->ₑ+[φ] B).inverse' g k h₁ h₂ with
-    map_zero' := by
-      simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← f.map_zero]; rw [h₁]
-    map_add' := fun x y => by
-      simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← h₂ x]; rw [← h₂ y]; rw [← map_add]; rw [h₁]; rw [h₂]; rw [h₂] }
-
-@[simp]
-
-中文:
-定义 inverse'
-  签名: (f : A ->ₛₙₐ[φ] B) (g : B -> A)
-  定义体: { (f : A ->ₙ* B).inverse g h₁ h₂, (f : A ->ₑ+[φ] B).inverse' g k h₁ h₂ with
-    map_zero' := by
-      simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← f.map_zero]; rw [h₁]
-    map_add' := fun x y => by
-      simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← h₂ x]; rw [← h₂ y]; rw [← map_add]; rw [h₁]; rw [h₂]; rw [h₂] }
-
-@[simp]
-
-Depends on / 依赖: MulHom, MulHom.inverse_apply, MulHom.toFun_eq_coe, f.map_zero, inverse, inverse_apply, map_add, map_zero, toFun_eq_coe
+--- 原说明 ---
+The inverse of a bijective morphism is a morphism.
 -/
-def inverse' (f : A ->ₛₙₐ[φ] B) (g : B -> A)
+def inverse' (f : A →ₛₙₐ[φ] B) (g : B → A)
     (k : Function.RightInverse φ' φ)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
-    B ->ₛₙₐ[φ'] A :=
-  { (f : A ->ₙ* B).inverse g h₁ h₂, (f : A ->ₑ+[φ] B).inverse' g k h₁ h₂ with
+    B →ₛₙₐ[φ'] A :=
+  { (f : A →ₙ* B).inverse g h₁ h₂, (f : A →ₑ+[φ] B).inverse' g k h₁ h₂ with
     map_zero' := by
       simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← f.map_zero]; rw [h₁]
-    map_add' := fun x y => by
+      rw [← f.map_zero, h₁]
+    map_add' := fun x y ↦ by
       simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← h₂ x]; rw [← h₂ y]; rw [← map_add]; rw [h₁]; rw [h₂]; rw [h₂] }
+      rw [← h₂ x, ← h₂ y, ← map_add, h₁, h₂, h₂] }
 
 @[simp]
-/--
-theorem `coe_inverse'` / 定理 `coe_inverse'`
-
-English:
-theorem coe_inverse'
-  statement: (f : A ->ₛₙₐ[φ] B) (g : B -> A)
-  proof: rfl
-
-中文:
-定理 coe_inverse'
-  结论: (f : A ->ₛₙₐ[φ] B) (g : B -> A)
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_inverse'** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_inverse' (f : A ->ₛₙₐ[φ] B) (g : B -> A) (k : Function.RightInverse φ'
+ φ) (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : (inverse'
+ f g k h₁ h₂ : B -> A) = g
+参数：f : A ->ₛₙₐ[φ] B；g : B -> A；k : Function.RightInverse φ' φ；h₁ : Function.Left
+Inverse g f；h₂ : Function.RightInverse g f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inverse' (f : A ->ₛₙₐ[φ] B) (g : B -> A)
+theorem coe_inverse' (f : A →ₛₙₐ[φ] B) (g : B → A)
     (k : Function.RightInverse φ' φ)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
-    (inverse' f g k h₁ h₂ : B -> A) = g :=
+    (inverse' f g k h₁ h₂ : B → A) = g :=
   rfl
 
 /-! ### Operations on the product type
@@ -1109,30 +877,16 @@ variable [DistribMulAction R B]
 
 /-- The first projection of a product is a non-unital algebra homomorphism. -/
 @[simps toFun]
-/--
-Definition of `fst` / `fst` 的定义
+/-
+**NonUnitalAlgHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：fst : A × B ->ₙₐ[R] A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : A × B ->ₙₐ[R] A where
-  body: Prod.fst
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 fst
-  签名: : A × B ->ₙₐ[R] A where
-  定义体: Prod.fst
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: Prod.fst
+--- 原说明 ---
+The first projection of a product is a non-unital algebra homomorphism.
 -/
-def fst : A × B ->ₙₐ[R] A where
+def fst : A × B →ₙₐ[R] A where
   toFun := Prod.fst
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -1141,30 +895,16 @@ def fst : A × B ->ₙₐ[R] A where
 
 /-- The second projection of a product is a non-unital algebra homomorphism. -/
 @[simps toFun]
-/--
-Definition of `snd` / `snd` 的定义
+/-
+**NonUnitalAlgHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：snd : A × B ->ₙₐ[R] B where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : A × B ->ₙₐ[R] B where
-  body: Prod.snd
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 snd
-  签名: : A × B ->ₙₐ[R] B where
-  定义体: Prod.snd
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: Prod.snd
+--- 原说明 ---
+The second projection of a product is a non-unital algebra homomorphism.
 -/
-def snd : A × B ->ₙₐ[R] B where
+def snd : A × B →ₙₐ[R] B where
   toFun := Prod.snd
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -1177,123 +917,67 @@ variable [DistribMulAction R C]
 set_option backward.isDefEq.respectTransparency false in
 /-- The prod of two morphisms is a morphism. -/
 @[simps toFun]
-/--
-Definition of `prod` / `prod` 的定义
+/-
+**NonUnitalAlgHom.prod** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : A ->ₙₐ[R] B × C where toFun
+参数：f : A ->ₙₐ[R] B；g : A ->ₙₐ[R] C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  body: Function.prod f g
-  map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
-  map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
-  map_mul' x y := by simp only [Function.prod_apply, Prod.mk_mul_mk, map_mul]
-  map_smul' c x := by simp only [Function.prod_apply, map_smul, MonoidHom.id_apply, Prod.smul_mk]
-
-中文:
-定义 乘积
-  签名: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  定义体: Function.prod f g
-  map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
-  map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
-  map_mul' x y := by simp only [Function.prod_apply, Prod.mk_mul_mk, map_mul]
-  map_smul' c x := by simp only [Function.prod_apply, map_smul, MonoidHom.id_apply, Prod.smul_mk]
-
-Depends on / 依赖: Function, Function.prod
+--- 原说明 ---
+The prod of two morphisms is a morphism.
 -/
-def prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : A ->ₙₐ[R] B × C where
+def prod (f : A →ₙₐ[R] B) (g : A →ₙₐ[R] C) : A →ₙₐ[R] B × C where
   toFun := Function.prod f g
   map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
   map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
   map_mul' x y := by simp only [Function.prod_apply, Prod.mk_mul_mk, map_mul]
   map_smul' c x := by simp only [Function.prod_apply, map_smul, MonoidHom.id_apply, Prod.smul_mk]
-
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  statement: ⇑(f.prod g) = Function.prod f g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prod
-  条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: ⇑(f.乘积 g) = 函数.乘积 f g
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : ⇑(f.prod g) = Function.prod
+ f g
+参数：f : A ->ₙₐ[R] B；g : A ->ₙₐ[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : ⇑(f.prod g) = Function.prod f g :=
+theorem coe_prod (f : A →ₙₐ[R] B) (g : A →ₙₐ[R] C) : ⇑(f.prod g) = Function.prod f g :=
   rfl
 
 @[simp]
-/--
-theorem `fst_prod` / 定理 `fst_prod`
-
-English:
-theorem fst_prod
-  given: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  statement: (fst R B C).comp (prod f g) = f
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 fst_prod
-  条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: (fst R B C).comp (乘积 f g) = f
-  证明: by
-  rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.fst_prod** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：fst_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : (fst R B C).comp (prod f g)
+ = f
+参数：f : A ->ₙₐ[R] B；g : A ->ₙₐ[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fst_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : (fst R B C).comp (prod f g) = f := by
+theorem fst_prod (f : A →ₙₐ[R] B) (g : A →ₙₐ[R] C) : (fst R B C).comp (prod f g) = f := by
   rfl
 
 @[simp]
-/--
-theorem `snd_prod` / 定理 `snd_prod`
-
-English:
-theorem snd_prod
-  given: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  statement: (snd R B C).comp (prod f g) = g
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 snd_prod
-  条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: (snd R B C).comp (乘积 f g) = g
-  证明: by
-  rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.snd_prod** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：snd_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : (snd R B C).comp (prod f g)
+ = g
+参数：f : A ->ₙₐ[R] B；g : A ->ₙₐ[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem snd_prod (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C) : (snd R B C).comp (prod f g) = g := by
+theorem snd_prod (f : A →ₙₐ[R] B) (g : A →ₙₐ[R] C) : (snd R B C).comp (prod f g) = g := by
   rfl
 
 @[simp]
-/--
-theorem `prod_fst_snd` / 定理 `prod_fst_snd`
-
-English:
-theorem prod_fst_snd
-  statement: prod (fst R A B) (snd R A B) = 1
-  proof: coe_injective Function.prod_fst_snd
-
-中文:
-定理 prod_fst_snd
-  结论: 乘积 (fst R A B) (snd R A B) = 1
-  证明: coe_injective Function.prod_fst_snd
-
-Depends on / 依赖: Function, Function.prod_fst_snd, coe_injective, prod_fst_snd
+/-
+**NonUnitalAlgHom.prod_fst_snd** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：prod_fst_snd : prod (fst R A B) (snd R A B) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHom.coe_injective`：coe_injective : @Function.Injective (A ->
+ₛₙₐ[φ] B) (A -> B) (↑)
+· 使用定理 `Function.prod_fst_snd`：∀ {α : Type u_1} {β : Type u_2}, Function.prod Pr
+od.fst Prod.snd = id
 -/
 theorem prod_fst_snd : prod (fst R A B) (snd R A B) = 1 :=
   coe_injective Function.prod_fst_snd
@@ -1301,131 +985,86 @@ theorem prod_fst_snd : prod (fst R A B) (snd R A B) = 1 :=
 /-- Taking the product of two maps with the same domain is equivalent to taking the product of
 their codomains. -/
 @[simps]
-/--
-Definition of `prodEquiv` / `prodEquiv` 的定义
+/-
+**NonUnitalAlgHom.prodEquiv** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：prodEquiv : (A ->ₙₐ[R] B) × (A ->ₙₐ[R] C) ≃ (A ->ₙₐ[R] B × C) where toFun 
+f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodEquiv
-  signature: : (A ->ₙₐ[R] B) × (A ->ₙₐ[R] C) ≃ (A ->ₙₐ[R] B × C) where
-  body: f.1.prod f.2
-  invFun f := ((fst _ _ _).comp f, (snd _ _ _).comp f)
-
-中文:
-定义 prodEquiv
-  签名: : (A ->ₙₐ[R] B) × (A ->ₙₐ[R] C) ≃ (A ->ₙₐ[R] B × C) where
-  定义体: f.1.prod f.2
-  invFun f := ((fst _ _ _).comp f, (snd _ _ _).comp f)
+--- 原说明 ---
+Taking the product of two maps with the same domain is equivalent to taking the 
+product of
+their codomains.
 -/
-def prodEquiv : (A ->ₙₐ[R] B) × (A ->ₙₐ[R] C) ≃ (A ->ₙₐ[R] B × C) where
+def prodEquiv : (A →ₙₐ[R] B) × (A →ₙₐ[R] C) ≃ (A →ₙₐ[R] B × C) where
   toFun f := f.1.prod f.2
   invFun f := ((fst _ _ _).comp f, (snd _ _ _).comp f)
 
 variable (R A B)
 
-/--
-Definition of `inl` / `inl` 的定义
+/-- The left injection into a product is a non-unital algebra homomorphism. -/
+/-
+**NonUnitalAlgHom.inl** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inl : A ->ₙₐ[R] A × B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inl
-  signature: : A ->ₙₐ[R] A × B
-  body: prod 1 0
-
-中文:
-定义 inl
-  签名: : A ->ₙₐ[R] A × B
-  定义体: prod 1 0
+--- 原说明 ---
+The left injection into a product is a non-unital algebra homomorphism.
 -/
-def inl : A ->ₙₐ[R] A × B :=
+def inl : A →ₙₐ[R] A × B :=
   prod 1 0
 
-/--
-Definition of `inr` / `inr` 的定义
+/-- The right injection into a product is a non-unital algebra homomorphism. -/
+/-
+**NonUnitalAlgHom.inr** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inr : B ->ₙₐ[R] A × B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inr
-  signature: : B ->ₙₐ[R] A × B
-  body: prod 0 1
-
-中文:
-定义 inr
-  签名: : B ->ₙₐ[R] A × B
-  定义体: prod 0 1
+--- 原说明 ---
+The right injection into a product is a non-unital algebra homomorphism.
 -/
-def inr : B ->ₙₐ[R] A × B :=
+def inr : B →ₙₐ[R] A × B :=
   prod 0 1
 
 variable {R A B}
 
 @[simp]
-/--
-theorem `coe_inl` / 定理 `coe_inl`
-
-English:
-theorem coe_inl
-  statement: (inl R A B : A -> A × B) = fun x => (x, 0)
-  proof: rfl
-
-中文:
-定理 coe_inl
-  结论: (inl R A B : A -> A × B) = fun x => (x, 0)
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_inl** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_inl : (inl R A B : A -> A × B) = fun x => (x, 0)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inl : (inl R A B : A -> A × B) = fun x => (x, 0) :=
+theorem coe_inl : (inl R A B : A → A × B) = fun x => (x, 0) :=
   rfl
-
-/--
-theorem `inl_apply` / 定理 `inl_apply`
-
-English:
-theorem inl_apply
-  given: (x : A)
-  statement: inl R A B x = (x, 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inl_apply
-  条件: (x : A)
-  结论: inl R A B x = (x, 0)
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalAlgHom.inl_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inl_apply (x : A) : inl R A B x = (x, 0)
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inl_apply (x : A) : inl R A B x = (x, 0) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_inr` / 定理 `coe_inr`
-
-English:
-theorem coe_inr
-  statement: (inr R A B : B -> A × B) = Prod.mk 0
-  proof: rfl
-
-中文:
-定理 coe_inr
-  结论: (inr R A B : B -> A × B) = 积类型.mk 0
-  证明: rfl
+/-
+**NonUnitalAlgHom.coe_inr** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：coe_inr : (inr R A B : B -> A × B) = Prod.mk 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inr : (inr R A B : B -> A × B) = Prod.mk 0 :=
+theorem coe_inr : (inr R A B : B → A × B) = Prod.mk 0 :=
   rfl
-
-/--
-theorem `inr_apply` / 定理 `inr_apply`
-
-English:
-theorem inr_apply
-  given: (x : B)
-  statement: inr R A B x = (0, x)
-  proof: rfl
-
-中文:
-定理 inr_apply
-  条件: (x : B)
-  结论: inr R A B x = (0, x)
-  证明: rfl
+/-
+**NonUnitalAlgHom.inr_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：inr_apply (x : B) : inr R A B x = (0, x)
+参数：x : B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inr_apply (x : B) : inr R A B x = (0, x) :=
   rfl
@@ -1443,68 +1082,49 @@ variable {A B : Type*} [Semiring A] [Semiring B] [Algebra R A]
   [Algebra R B]
 
 -- see Note [lower instance priority]
+/-
+**AlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `AlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [FunLike F A B] [AlgHomClass F R A B] : NonUnitalAlgHomClass F R A B :=
   { ‹AlgHomClass F R A B› with map_smulₛₗ := map_smul }
 
 /-- A unital morphism of algebras is a `NonUnitalAlgHom`. -/
 @[coe]
-/--
-Definition of `toNonUnitalAlgHom` / `toNonUnitalAlgHom` 的定义
+/-
+**AlgHom.toNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `AlgHom`。
+形式化陈述：toNonUnitalAlgHom (f : A ->ₐ[R] B) : A ->ₙₐ[R] B
+参数：f : A ->ₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNonUnitalAlgHom
-  signature: (f : A ->ₐ[R] B)
-  body: { f with map_smul' := map_smul f }
-
-中文:
-定义 toNonUnitalAlgHom
-  签名: (f : A ->ₐ[R] B)
-  定义体: { f with map_smul' := map_smul f }
-
-Depends on / 依赖: map_smul
+--- 原说明 ---
+A unital morphism of algebras is a `NonUnitalAlgHom`.
 -/
-def toNonUnitalAlgHom (f : A ->ₐ[R] B) : A ->ₙₐ[R] B :=
+def toNonUnitalAlgHom (f : A →ₐ[R] B) : A →ₙₐ[R] B :=
   { f with map_smul' := map_smul f }
-
-/--
-Instance `NonUnitalAlgHom.hasCoe` / 实例 `NonUnitalAlgHom.hasCoe`
-
-English:
-instance NonUnitalAlgHom.hasCoe
-  signature: : CoeOut (A ->ₐ[R] B) (A ->ₙₐ[R] B)
-  body: ⟨toNonUnitalAlgHom⟩
-
-@[simp]
-
-中文:
-实例 非幺Alg态射.hasCoe
-  签名: : CoeOut (A ->ₐ[R] B) (A ->ₙₐ[R] B)
-  定义体: ⟨toNonUnitalAlgHom⟩
-
-@[simp]
-
-Depends on / 依赖: toNonUnitalAlgHom
+/-
+**AlgHom.NonUnitalAlgHom.hasCoe** 是 Mathlib 中的一个定义，位于命名空间 `AlgHom.NonUnitalAlgHo
+m`。
+形式化陈述：{R : Type u_2} →   [inst : CommSemiring R] →     {A : Type u_3} →       {B
+ : Type u_4} →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →
+ [inst_3 : Algebra R A] → [inst_4 : Algebra R B] → CoeOut (A →ₐ[R] B) (A →ₙₐ[R] 
+B)
+参数：A →ₐ[R] B；A →ₙₐ[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NonUnitalAlgHom.hasCoe : CoeOut (A ->ₐ[R] B) (A ->ₙₐ[R] B) :=
+instance NonUnitalAlgHom.hasCoe : CoeOut (A →ₐ[R] B) (A →ₙₐ[R] B) :=
   ⟨toNonUnitalAlgHom⟩
 
 @[simp]
-/--
-theorem `toNonUnitalAlgHom_eq_coe` / 定理 `toNonUnitalAlgHom_eq_coe`
-
-English:
-theorem toNonUnitalAlgHom_eq_coe
-  given: (f : A ->ₐ[R] B)
-  statement: f.toNonUnitalAlgHom = f
-  proof: rfl
-
-中文:
-定理 toNonUnitalAlgHom_eq_coe
-  条件: (f : A ->ₐ[R] B)
-  结论: f.toNonUnitalAlgHom = f
-  证明: rfl
+/-
+**AlgHom.toNonUnitalAlgHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgHom`。
+形式化陈述：toNonUnitalAlgHom_eq_coe (f : A ->ₐ[R] B) : f.toNonUnitalAlgHom = f
+参数：f : A ->ₐ[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toNonUnitalAlgHom_eq_coe (f : A ->ₐ[R] B) : f.toNonUnitalAlgHom = f :=
+theorem toNonUnitalAlgHom_eq_coe (f : A →ₐ[R] B) : f.toNonUnitalAlgHom = f :=
   rfl
 
 end AlgHom
@@ -1518,100 +1138,84 @@ variable (R : Type*) {S A B : Type*} [Monoid R] [Monoid S]
     [DistribMulAction S A] [DistribMulAction S B] [DistribMulAction R A] [DistribMulAction R B]
     [IsScalarTower R S A] [IsScalarTower R S B]
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- If a monoid `R` acts on another monoid `S`, then a non-unital algebra homomorphism
+over `S` can be viewed as a non-unital algebra homomorphism over `R`. -/
+/-
+**NonUnitalAlgHom.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalAlgHom`。
+形式化陈述：restrictScalars (f : A ->ₙₐ[S] B) : A ->ₙₐ[R] B
+参数：f : A ->ₙₐ[S] B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.map_zero'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonU
+nitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+*
+ β), self.toFun …
+· 使用定理 `NonUnitalRingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonUn
+italNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β]   (self : α →ₙ+* 
+β) (x y : α), s…
 
-English:
-definition restrictScalars
-  signature: (f : A ->ₙₐ[S] B)
-  body: { (f : A ->ₙ+* B) with
-    map_smul' := fun r x => by have := map_smul f (r • 1) x; simpa }
+--- 原说明 ---
+If a monoid `R` acts on another monoid `S`, then a non-unital algebra homomorphi
+sm
+over `S` can be viewed as a non-unital algebra homomorphism over `R`.
+-/
+def restrictScalars (f : A →ₙₐ[S] B) : A →ₙₐ[R] B :=
+  { (f : A →ₙ+* B) with
+    map_smul' := fun r x ↦ by have := map_smul f (r • 1) x; simpa }
 
 @[simp]
-
-中文:
-定义 restrictScalars
-  签名: (f : A ->ₙₐ[S] B)
-  定义体: { (f : A ->ₙ+* B) with
-    map_smul' := fun r x => by have := map_smul f (r • 1) x; simpa }
-
-@[simp]
-
-Depends on / 依赖: map_smul
+/-
+**NonUnitalAlgHom.restrictScalars_apply** 是 Mathlib 中的一个引理，位于命名空间 `NonUnitalAlgH
+om`。
+形式化陈述：restrictScalars_apply (f : A ->ₙₐ[S] B) (x : A) : f.restrictScalars R x = 
+f x
+参数：f : A ->ₙₐ[S] B；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def restrictScalars (f : A ->ₙₐ[S] B) : A ->ₙₐ[R] B :=
-  { (f : A ->ₙ+* B) with
-    map_smul' := fun r x => by have := map_smul f (r • 1) x; simpa }
-
-@[simp]
-/--
-lemma `restrictScalars_apply` / 引理 `restrictScalars_apply`
-
-English:
-lemma restrictScalars_apply
-  given: (f : A ->ₙₐ[S] B) (x : A)
-  statement: f.restrictScalars R x = f x
-  proof: rfl
-
-中文:
-引理 restrictScalars_apply
-  条件: (f : A ->ₙₐ[S] B) (x : A)
-  结论: f.restrictScalars R x = f x
-  证明: rfl
+lemma restrictScalars_apply (f : A →ₙₐ[S] B) (x : A) : f.restrictScalars R x = f x := rfl
+/-
+**NonUnitalAlgHom.coe_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `NonUnitalAlgHom
+`。
+形式化陈述：coe_restrictScalars (f : A ->ₙₐ[S] B) : (f.restrictScalars R : A ->ₙ+* B) 
+= f
+参数：f : A ->ₙₐ[S] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} {S : Type u_3} {A : Type u_4} {B : Type u_5} {x : Monoid R} {x_1 : Monoid 
+S}   {φ : outParam (R →* S)} {x_2 …
+· 使用定理 `NonUnitalAlgHom.instNonUnitalAlgSemiHomClass`：∀ {R : Type u} {S : Type u
+₁} [inst : Monoid R] [inst_1 : Monoid S] {φ : R →* S} {A : Type v} {B : Type w} 
+  [inst_2 : NonUnitalNonAssocSemir…
 -/
-lemma restrictScalars_apply (f : A ->ₙₐ[S] B) (x : A) : f.restrictScalars R x = f x := rfl
-
-/--
-lemma `coe_restrictScalars` / 引理 `coe_restrictScalars`
-
-English:
-lemma coe_restrictScalars
-  given: (f : A ->ₙₐ[S] B)
-  statement: (f.restrictScalars R : A ->ₙ+* B) = f
-  proof: rfl
-
-中文:
-引理 coe_restrictScalars
-  条件: (f : A ->ₙₐ[S] B)
-  结论: (f.restrictScalars R : A ->ₙ+* B) = f
-  证明: rfl
+lemma coe_restrictScalars (f : A →ₙₐ[S] B) : (f.restrictScalars R : A →ₙ+* B) = f := rfl
+/-
+**NonUnitalAlgHom.coe_restrictScalars'** 是 Mathlib 中的一个引理，位于命名空间 `NonUnitalAlgHo
+m`。
+形式化陈述：coe_restrictScalars' (f : A ->ₙₐ[S] B) : (f.restrictScalars R : A -> B) = 
+f
+参数：f : A ->ₙₐ[S] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_restrictScalars (f : A ->ₙₐ[S] B) : (f.restrictScalars R : A ->ₙ+* B) = f := rfl
-
-/--
-lemma `coe_restrictScalars'` / 引理 `coe_restrictScalars'`
-
-English:
-lemma coe_restrictScalars'
-  given: (f : A ->ₙₐ[S] B)
-  statement: (f.restrictScalars R : A -> B) = f
-  proof: rfl
-
-中文:
-引理 coe_restrictScalars'
-  条件: (f : A ->ₙₐ[S] B)
-  结论: (f.restrictScalars R : A -> B) = f
-  证明: rfl
--/
-lemma coe_restrictScalars' (f : A ->ₙₐ[S] B) : (f.restrictScalars R : A -> B) = f := rfl
-
-/--
-theorem `restrictScalars_injective` / 定理 `restrictScalars_injective`
-
-English:
-theorem restrictScalars_injective
-  proof: fun _ _ h => ext (congr_fun h :)
-
-中文:
-定理 restrictScalars_injective
-  证明: fun _ _ h => ext (congr_fun h :)
-
-Depends on / 依赖: congr_fun
+lemma coe_restrictScalars' (f : A →ₙₐ[S] B) : (f.restrictScalars R : A → B) = f := rfl
+/-
+**NonUnitalAlgHom.restrictScalars_injective** 是 Mathlib 中的一个定理，位于命名空间 `NonUnital
+AlgHom`。
+形式化陈述：restrictScalars_injective : Function.Injective (restrictScalars R : (A ->ₙ
+ₐ[S] B) -> A ->ₙₐ[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHom.ext`：ext {f g : A ->ₛₙₐ[φ] B} (h : forall x, f x = g x) 
+: f = g
+· 使用定理 `NonUnitalAlgHom.congr_fun`：congr_fun {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x
+ : A) : f x = g x
 -/
 theorem restrictScalars_injective :
-    Function.Injective (restrictScalars R : (A ->ₙₐ[S] B) -> A ->ₙₐ[R] B) :=
-  fun _ _ h => ext (congr_fun h :)
+    Function.Injective (restrictScalars R : (A →ₙₐ[S] B) → A →ₙₐ[R] B) :=
+  fun _ _ h ↦ ext (congr_fun h :)
 
 end NonUnitalAlgHom
 
 end RestrictScalars
+

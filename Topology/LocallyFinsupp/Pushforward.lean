@@ -33,7 +33,7 @@ specialized to the degree of the residue field extension
 open Set Order Topology TopologicalSpace
 
 variable {X Y R : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  {f : X -> Y} (hf : IsSpectralMap f) (w : X -> R)
+  {f : X → Y} (hf : IsSpectralMap f) (w : X → R)
 
 namespace Function.locallyFinsupp
 
@@ -46,137 +46,99 @@ The pushforward of a function `c` of locally finite support by a spectral map wi
 weight function `w`.
 -/
 noncomputable
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (hf : IsSpectralMap f) (c : locallyFinsupp X R)
-  body: ∑ᶠ x in f ⁻¹' {z}, c x * w x
-  supportWithinDomain' := by simp
-  supportLocallyFiniteWithinDomain' y _ := by
-    obtain ⟨U, hU⟩ := (PrespectralSpace.isTopologicalBasis (X := Y)).exists_subset_of_mem_open
-      (by simp : y in ⊤) (by simp)
-    refine ⟨U, IsOpen.mem_nhds hU.1.1 hU.2.1, ?_⟩
-    suffices h : (U inter {z | (f ⁻¹' {z} inter support ⇑c).Nonempty}).Finite by
-      refine h.subset (inter_subset_inter_right U fun y hy => ?_)
-      obtain ⟨x, (hx : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
-      use x
-      grind [mem_support]
-    suffices (f ⁻¹' (U inter {z | (f ⁻¹' {z} inter c.support).Nonempty}) inter c.support).Finite from
-      (this.image f).subset (fun a ha => by grind [Set.Nonempty])
-    exact (c.locallyFiniteSupport.finite_inter_support_of_isCompact <| hf.2 hU.1.1 hU.1.2).subset
-      (by simp; grind)
-
-@[simp]
-
-中文:
-定义 map
-  签名: (hf : 是谱映射 f) (c : locallyFinsupp X R)
-  定义体: ∑ᶠ x in f ⁻¹' {z}, c x * w x
-  supportWithinDomain' := by simp
-  supportLocallyFiniteWithinDomain' y _ := by
-    obtain ⟨U, hU⟩ := (PrespectralSpace.isTopologicalBasis (X := Y)).exists_subset_of_mem_open
-      (by simp : y in ⊤) (by simp)
-    refine ⟨U, IsOpen.mem_nhds hU.1.1 hU.2.1, ?_⟩
-    suffices h : (U inter {z | (f ⁻¹' {z} inter support ⇑c).Nonempty}).Finite by
-      refine h.subset (inter_subset_inter_right U fun y hy => ?_)
-      obtain ⟨x, (hx : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
-      use x
-      grind [mem_support]
-    suffices (f ⁻¹' (U inter {z | (f ⁻¹' {z} inter c.support).Nonempty}) inter c.support).Finite from
-      (this.image f).subset (fun a ha => by grind [Set.Nonempty])
-    exact (c.locallyFiniteSupport.finite_inter_support_of_isCompact <| hf.2 hU.1.1 hU.1.2).subset
-      (by simp; grind)
-
-@[simp]
+/-
+**Function.locallyFinsupp.map** 是 Mathlib 中的一个定义，位于命名空间 `Function.locallyFinsupp
+`。
+形式化陈述：map (hf : IsSpectralMap f) (c : locallyFinsupp X R) : Function.locallyFins
+upp Y R where toFun z
+参数：hf : IsSpectralMap f；c : locallyFinsupp X R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def map (hf : IsSpectralMap f) (c : locallyFinsupp X R) : Function.locallyFinsupp Y R where
-  toFun z := ∑ᶠ x in f ⁻¹' {z}, c x * w x
+  toFun z := ∑ᶠ x ∈ f ⁻¹' {z}, c x * w x
   supportWithinDomain' := by simp
   supportLocallyFiniteWithinDomain' y _ := by
     obtain ⟨U, hU⟩ := (PrespectralSpace.isTopologicalBasis (X := Y)).exists_subset_of_mem_open
-      (by simp : y in ⊤) (by simp)
+      (by simp : y ∈ ⊤) (by simp)
     refine ⟨U, IsOpen.mem_nhds hU.1.1 hU.2.1, ?_⟩
-    suffices h : (U inter {z | (f ⁻¹' {z} inter support ⇑c).Nonempty}).Finite by
-      refine h.subset (inter_subset_inter_right U fun y hy => ?_)
+    suffices h : (U ∩ {z | (f ⁻¹' {z} ∩ support ⇑c).Nonempty}).Finite by
+      refine h.subset (inter_subset_inter_right U fun y hy ↦ ?_)
       obtain ⟨x, (hx : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
       use x
       grind [mem_support]
-    suffices (f ⁻¹' (U inter {z | (f ⁻¹' {z} inter c.support).Nonempty}) inter c.support).Finite from
-      (this.image f).subset (fun a ha => by grind [Set.Nonempty])
+    suffices (f ⁻¹' (U ∩ {z | (f ⁻¹' {z} ∩ c.support).Nonempty}) ∩ c.support).Finite from
+      (this.image f).subset (fun a ha ↦ by grind [Set.Nonempty])
     exact (c.locallyFiniteSupport.finite_inter_support_of_isCompact <| hf.2 hU.1.1 hU.1.2).subset
       (by simp; grind)
 
 @[simp]
-/--
-lemma `map_apply` / 引理 `map_apply`
-
-English:
-lemma map_apply
-  given: (hf : IsSpectralMap f) (c : locallyFinsupp X R) (y : Y)
-  proof: rfl
-
-中文:
-引理 map_apply
-  条件: (hf : 是谱映射 f) (c : locallyFinsupp X R) (y : Y)
-  证明: rfl
+/-
+**Function.locallyFinsupp.map_apply** 是 Mathlib 中的一个引理，位于命名空间 `Function.locallyF
+insupp`。
+形式化陈述：map_apply (hf : IsSpectralMap f) (c : locallyFinsupp X R) (y : Y) : map f 
+w hf c y = ∑ᶠ x in f ⁻¹' {y}, c x * w x
+参数：hf : IsSpectralMap f；c : locallyFinsupp X R；y : Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_apply (hf : IsSpectralMap f) (c : locallyFinsupp X R) (y : Y) :
-    map f w hf c y = ∑ᶠ x in f ⁻¹' {y}, c x * w x := rfl
-
-/--
-lemma `support_map_subset_of_forall_mem` / 引理 `support_map_subset_of_forall_mem`
-
-English:
-lemma support_map_subset_of_forall_mem
-  statement: (s : Set X) (t : Set Y) (hc : c.support subseteq s)
-  proof: by
-  intro y hy
-  obtain ⟨x, (rfl : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
-  grind [mem_support]
-
-@[simp]
-
-中文:
-引理 support_map_subset_of_对任意_mem
-  结论: (s : 集合 X) (t : 集合 Y) (hc : c.support subseteq s)
-  证明: by
-  intro y hy
-  obtain ⟨x, (rfl : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
-  grind [mem_support]
-
-@[simp]
-
-Depends on / 依赖: exists_ne_zero_of_finsum_mem_ne_zero, mem_support
+    map f w hf c y = ∑ᶠ x ∈ f ⁻¹' {y}, c x * w x := rfl
+/-
+**Function.locallyFinsupp.support_map_subset_of_forall_mem** 是 Mathlib 中的一个引理，位于
+命名空间 `Function.locallyFinsupp`。
+形式化陈述：support_map_subset_of_forall_mem (s : Set X) (t : Set Y) (hc : c.support s
+ubseteq s) (h : forall x : X, x in s -> w x != 0 -> f x in t) : (map f w hf c).s
+upport subseteq t
+参数：s : Set X；t : Set Y；hc : c.support subseteq s；h : forall x : X, x in s -> w x
+ != 0 -> f x in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne_zero_of_finsum_mem_ne_zero`：∀ {α : Type u_1} {M : Type u_5} [i
+nst : AddCommMonoid M] {f : α → M} {s : Set α},   ∑ᶠ (i : α) (_ : i ∈ s), f i ≠ 
+0 → ∃ x ∈ s, f x ≠ 0
 -/
-lemma support_map_subset_of_forall_mem (s : Set X) (t : Set Y) (hc : c.support subseteq s)
-    (h : forall x : X, x in s -> w x != 0 -> f x in t) : (map f w hf c).support subseteq t := by
+lemma support_map_subset_of_forall_mem (s : Set X) (t : Set Y) (hc : c.support ⊆ s)
+    (h : ∀ x : X, x ∈ s → w x ≠ 0 → f x ∈ t) : (map f w hf c).support ⊆ t := by
   intro y hy
   obtain ⟨x, (rfl : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
   grind [mem_support]
 
 @[simp]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: [PrespectralSpace X] (hw : forall z : X, w z = 1)
-  proof: by
-  ext
-  simp [map, hw]
-
-中文:
-引理 map_id
-  条件: [Prespectral空间 X] (hw : 对任意 z : X, w z = 1)
-  证明: by
-  ext
-  simp [map, hw]
+/-
+**Function.locallyFinsupp.map_id** 是 Mathlib 中的一个引理，位于命名空间 `Function.locallyFins
+upp`。
+形式化陈述：map_id [PrespectralSpace X] (hw : forall z : X, w z = 1) : map id w isSpec
+tralMap_id c = c
+参数：hw : forall z : X, w z = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.locallyFinsuppWithin.ext`：ext [Zero Y] {D₁ D₂ : locallyFinsuppW
+ithin U Y} (h : forall a, D₁ a = D₂ a) : D₁ = D₂
+· 使用定理 `isSpectralMap_id`：isSpectralMap_id : IsSpectralMap (@id α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `finsum_congr_Prop`：∀ {M : Type u_2} [inst : AddCommMonoid M] {p q : Prop
+} {f : p → M} {g : q → M} (hpq : p = q),   (∀ (h : q), f ⋯ = g h) → finsum f = f
+insum g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `finsum_cond_eq_left`：∀ {α : Type u_1} {M : Type u_5} [inst : AddCommMono
+id M] {f : α → M} {a : α}, ∑ᶠ (i : α) (_ : i = a), f i = f a
+· 使用定理 `Function.locallyFinsuppWithin.mk.congr_simp`：∀ {X : Type u_1} [inst : To
+pologicalSpace X] {U : Set X} {Y : Type u_2} [inst_1 : Zero Y] (toFun toFun_1 : 
+X → Y)   (e_toFun : toFun = toFun…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_id [PrespectralSpace X] (hw : forall z : X, w z = 1) :
+lemma map_id [PrespectralSpace X] (hw : ∀ z : X, w z = 1) :
     map id w isSpectralMap_id c = c := by
   ext
   simp [map, hw]
 
 end Function.locallyFinsupp
+

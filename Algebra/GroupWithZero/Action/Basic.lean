@@ -57,58 +57,42 @@ variable {G G₀ A M M₀ N₀ R α : Type*}
 section GroupWithZero
 variable [GroupWithZero G₀] [MulAction G₀ α] {a : G₀}
 
-/--
-lemma `MulAction.bijective₀` / 引理 `MulAction.bijective₀`
-
-English:
-lemma MulAction.bijective₀
-  given: (ha : a != 0)
-  statement: Bijective (a • · : α -> α)
-  proof: MulAction.bijective Units.mk0 a ha
-
-中文:
-引理 乘法作用.bijective₀
-  条件: (ha : a != 0)
-  结论: 双射 (a • · : α -> α)
-  证明: MulAction.bijective Units.mk0 a ha
+/-
+**MulAction.bijective** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [inst_1 : MulAction α β] 
+(g : α), Function.Bijective fun x => g • x
+参数：g : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-protected lemma MulAction.bijective₀ (ha : a != 0) : Bijective (a • · : α -> α) :=
-MulAction.bijective Units.mk0 a ha
-
-/--
-lemma `MulAction.injective₀` / 引理 `MulAction.injective₀`
-
-English:
-lemma MulAction.injective₀
-  given: (ha : a != 0)
-  statement: Injective (a • · : α -> α)
-  proof: (MulAction.bijective₀ ha).injective
-
-中文:
-引理 乘法作用.injective₀
-  条件: (ha : a != 0)
-  结论: 单射 (a • · : α -> α)
-  证明: (MulAction.bijective₀ ha).injective
+protected lemma MulAction.bijective₀ (ha : a ≠ 0) : Bijective (a • · : α → α) :=
+  MulAction.bijective <| Units.mk0 a ha
+/-
+**MulAction.injective** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [inst_1 : MulAction α β] 
+(g : α), Function.Injective fun x => g • x
+参数：g : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `MulAction.bijective`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [i
+nst_1 : MulAction α β] (g : α), Function.Bijective fun x => g • x
 -/
-protected lemma MulAction.injective₀ (ha : a != 0) : Injective (a • · : α -> α) :=
+protected lemma MulAction.injective₀ (ha : a ≠ 0) : Injective (a • · : α → α) :=
   (MulAction.bijective₀ ha).injective
-
-/--
-lemma `MulAction.surjective₀` / 引理 `MulAction.surjective₀`
-
-English:
-lemma MulAction.surjective₀
-  given: (ha : a != 0)
-  statement: Surjective (a • · : α -> α)
-  proof: (MulAction.bijective₀ ha).surjective
-
-中文:
-引理 乘法作用.surjective₀
-  条件: (ha : a != 0)
-  结论: 满射 (a • · : α -> α)
-  证明: (MulAction.bijective₀ ha).surjective
+/-
+**MulAction.surjective** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [inst_1 : MulAction α β] 
+(g : α), Function.Surjective fun x => g • x
+参数：g : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用定理 `MulAction.bijective`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [i
+nst_1 : MulAction α β] (g : α), Function.Bijective fun x => g • x
 -/
-protected lemma MulAction.surjective₀ (ha : a != 0) : Surjective (a • · : α -> α) :=
+protected lemma MulAction.surjective₀ (ha : a ≠ 0) : Surjective (a • · : α → α) :=
   (MulAction.bijective₀ ha).surjective
 
 end GroupWithZero
@@ -121,22 +105,22 @@ variable (A)
 
 This is a stronger version of `MulAction.toPerm`. -/
 @[simps +simpRhs]
-/--
-Definition of `DistribMulAction.toAddEquiv` / `DistribMulAction.toAddEquiv` 的定义
+/-
+**DistribMulAction.toAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.toAddEquiv [DistribMulAction G A] (x : G) : A ≃+ A where 
+__
+参数：x : G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition DistribMulAction.toAddEquiv
-  signature: [DistribMulAction G A] (x : G)
-  body: DistribSMul.toAddMonoidHom A x
-  __ := MulAction.toPermHom G A x
+--- 原说明 ---
+Each element of the group defines an additive monoid isomorphism.
 
-中文:
-定义 分配乘法作用.toAddEquiv
-  签名: [分配乘法作用 G A] (x : G)
-  定义体: DistribSMul.toAddMonoidHom A x
-  __ := MulAction.toPermHom G A x
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, toAddMonoidHom
+This is a stronger version of `MulAction.toPerm`.
 -/
 def DistribMulAction.toAddEquiv [DistribMulAction G A] (x : G) : A ≃+ A where
   __ := DistribSMul.toAddMonoidHom A x
@@ -148,26 +132,19 @@ variable (G)
 
 This is a stronger version of `MulAction.toPermHom`. -/
 @[simps]
-/--
-Definition of `DistribMulAction.toAddAut` / `DistribMulAction.toAddAut` 的定义
+/-
+**DistribMulAction.toAddAut** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.toAddAut [DistribMulAction G A] : G ->* Multiplicative (A
+ddAut A) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DistribMulAction.toAddAut
-  signature: [DistribMulAction G A]
-  body: toAddEquiv _
-  map_one' := AddEquiv.ext (one_smul _)
-  map_mul' _ _ := AddEquiv.ext (mul_smul _ _)
+--- 原说明 ---
+Each element of the group defines an additive monoid isomorphism.
 
-中文:
-定义 分配乘法作用.toAddAut
-  签名: [分配乘法作用 G A]
-  定义体: toAddEquiv _
-  map_one' := AddEquiv.ext (one_smul _)
-  map_mul' _ _ := AddEquiv.ext (mul_smul _ _)
-
-Depends on / 依赖: toAddEquiv
+This is a stronger version of `MulAction.toPermHom`.
 -/
-def DistribMulAction.toAddAut [DistribMulAction G A] : G ->* Multiplicative (AddAut A) where
+def DistribMulAction.toAddAut [DistribMulAction G A] : G →* Multiplicative (AddAut A) where
   toFun := toAddEquiv _
   map_one' := AddEquiv.ext (one_smul _)
   map_mul' _ _ := AddEquiv.ext (mul_smul _ _)
@@ -176,77 +153,78 @@ end DistribMulAction
 
 /-- Scalar multiplication as a monoid homomorphism with zero. -/
 @[simps]
-/--
-Definition of `smulMonoidWithZeroHom` / `smulMonoidWithZeroHom` 的定义
+/-
+**smulMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：smulMonoidWithZeroHom [MonoidWithZero M₀] [MulZeroOneClass N₀] [MulActionW
+ithZero M₀ N₀] [IsScalarTower M₀ N₀ N₀] [SMulCommClass M₀ N₀ N₀] : M₀ × N₀ ->*₀ 
+N₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulMonoidWithZeroHom
-  signature: [MonoidWithZero M₀] [MulZeroOneClass N₀] [MulActionWithZero M₀ N₀]
-  body: { smulMonoidHom with map_zero' := smul_zero _ }
-
-中文:
-定义 smulMonoidWithZeroHom
-  签名: [带零幺半群 M₀] [乘零幺类 N₀] [带零乘法作用 M₀ N₀]
-  定义体: { smulMonoidHom with map_zero' := smul_zero _ }
-
-Depends on / 依赖: map_zero, smulMonoidHom, smul_zero
+--- 原说明 ---
+Scalar multiplication as a monoid homomorphism with zero.
 -/
 def smulMonoidWithZeroHom [MonoidWithZero M₀] [MulZeroOneClass N₀] [MulActionWithZero M₀ N₀]
-    [IsScalarTower M₀ N₀ N₀] [SMulCommClass M₀ N₀ N₀] : M₀ × N₀ ->*₀ N₀ :=
+    [IsScalarTower M₀ N₀ N₀] [SMulCommClass M₀ N₀ N₀] : M₀ × N₀ →*₀ N₀ :=
   { smulMonoidHom with map_zero' := smul_zero _ }
-
-/--
-lemma `IsUnit.smul_sub_iff_sub_inv_smul` / 引理 `IsUnit.smul_sub_iff_sub_inv_smul`
-
-English:
-lemma IsUnit.smul_sub_iff_sub_inv_smul
-  statement: [Group G] [Monoid R] [AddGroup R] [DistribMulAction G R]
-  proof: by
-  rw [← isUnit_smul_iff r (1 - r⁻¹ • a)]; rw [smul_sub]; rw [smul_inv_smul]
-
-中文:
-引理 是单位.smul_sub_iff_sub_inv_smul
-  结论: [群 G] [幺半群 R] [加法群 R] [分配乘法作用 G R]
-  证明: by
-  rw [← isUnit_smul_iff r (1 - r⁻¹ • a)]; rw [smul_sub]; rw [smul_inv_smul]
-
-Depends on / 依赖: isUnit_smul_iff, smul_inv_smul, smul_sub
+/-
+**IsUnit.smul_sub_iff_sub_inv_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsUnit.smul_sub_iff_sub_inv_smul [Group G] [Monoid R] [AddGroup R] [Distri
+bMulAction G R] [IsScalarTower G R R] [SMulCommClass G R R] (r : G) (a : R) : Is
+Unit (r • (1 : R) - a) ↔ IsUnit (1 - r⁻¹ • a)
+参数：r : G；a : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isUnit_smul_iff`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [inst_
+1 : Monoid β] [inst_2 : MulAction α β] [SMulCommClass α β β]   [IsScalarTower α 
+β β] …
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma IsUnit.smul_sub_iff_sub_inv_smul [Group G] [Monoid R] [AddGroup R] [DistribMulAction G R]
     [IsScalarTower G R R] [SMulCommClass G R R] (r : G) (a : R) :
     IsUnit (r • (1 : R) - a) ↔ IsUnit (1 - r⁻¹ • a) := by
-  rw [← isUnit_smul_iff r (1 - r⁻¹ • a)]; rw [smul_sub]; rw [smul_inv_smul]
-
-/--
-theorem `div_smul_div_comm` / 定理 `div_smul_div_comm`
-
-English:
-theorem div_smul_div_comm
-  statement: [Group G] [GroupWithZero G₀] [MulAction G G₀]
-  proof: by
-  have (x : G) : x • (0 : G₀) = 0 := by simpa using (smul_assoc x (0 : G₀) (0 : G₀)).symm
-  by_cases hb : b = 0
-  · simp [hb, this]
-  have : h • b != 0 := by
-    refine (ne_of_apply_ne (h⁻¹ • ·) ?_)
-    simpa [this]
-  rw [eq_div_iff_mul_eq this]; rw [smul_mul_smul_comm]
-  simp [hb]
-
-中文:
-定理 div_smul_div_comm
-  结论: [群 G] [带零群 G₀] [乘法作用 G G₀]
-  证明: by
-  have (x : G) : x • (0 : G₀) = 0 := by simpa using (smul_assoc x (0 : G₀) (0 : G₀)).symm
-  by_cases hb : b = 0
-  · simp [hb, this]
-  have : h • b != 0 := by
-    refine (ne_of_apply_ne (h⁻¹ • ·) ?_)
-    simpa [this]
-  rw [eq_div_iff_mul_eq this]; rw [smul_mul_smul_comm]
-  simp [hb]
-
-Depends on / 依赖: eq_div_iff_mul_eq, ne_of_apply_ne, smul_assoc, smul_mul_smul_comm
+  rw [← isUnit_smul_iff r (1 - r⁻¹ • a), smul_sub, smul_inv_smul]
+/-
+**div_smul_div_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：div_smul_div_comm [Group G] [GroupWithZero G₀] [MulAction G G₀] [IsScalarT
+ower G G₀ G₀] [SMulCommClass G G₀ G₀] (g h : G) (a b : G₀) : (g / h) • (a / b) =
+ (g • a) / (h • b)
+参数：g h : G；a b : G₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `eq_div_iff_mul_eq`：eq_div_iff_mul_eq (hc : c != 0) : a = b / c ↔ a * c =
+ b
+· 使用引理 `smul_mul_smul_comm`：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsSca
+larTower α β β] [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c :
+ α) (d :…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_mul_cancel`：div_mul_cancel (a b : G) : a / b * b = a
+· 使用定理 `IsUnit.div_mul_cancel`：∀ {α : Type u} [inst : DivisionMonoid α] {b : α},
+ IsUnit b → ∀ (a : α), a / b * b = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem div_smul_div_comm [Group G] [GroupWithZero G₀] [MulAction G G₀]
     [IsScalarTower G G₀ G₀] [SMulCommClass G G₀ G₀] (g h : G) (a b : G₀) :
@@ -254,27 +232,34 @@ theorem div_smul_div_comm [Group G] [GroupWithZero G₀] [MulAction G G₀]
   have (x : G) : x • (0 : G₀) = 0 := by simpa using (smul_assoc x (0 : G₀) (0 : G₀)).symm
   by_cases hb : b = 0
   · simp [hb, this]
-  have : h • b != 0 := by
+  have : h • b ≠ 0 := by
     refine (ne_of_apply_ne (h⁻¹ • ·) ?_)
     simpa [this]
-  rw [eq_div_iff_mul_eq this]; rw [smul_mul_smul_comm]
+  rw [eq_div_iff_mul_eq this, smul_mul_smul_comm]
   simp [hb]
-
-/--
-theorem `smul_zpow₀'` / 定理 `smul_zpow₀'`
-
-English:
-theorem smul_zpow₀'
-  statement: [Group G] [GroupWithZero G₀] [MulDistribMulAction G G₀]
-  proof: by
-  cases n <;> simp
-
-中文:
-定理 smul_zpow₀'
-  结论: [群 G] [带零群 G₀] [MulDistribMul作用 G G₀]
-  证明: by
-  cases n <;> simp
+/-
+**smul_zpow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_zpow (g : G) (a : H) (n : Int) : (g • a) ^ n = g ^ n • a ^ n
+参数：g : G；a : H；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `smul_pow`：∀ {M : Type u_1} {N : Type u_2} [inst : Monoid M] [inst_1 : Mo
+noid N] [inst_2 : MulAction M N] [IsScalarTower M N N]   [SMulCommClass M N N]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用引理 `smul_inv`：smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹
 -/
 @[simp] theorem smul_zpow₀' [Group G] [GroupWithZero G₀] [MulDistribMulAction G G₀]
-    (g : G) (x : G₀) (n : Int) : g • (x ^ n) = (g • x) ^ n := by
+    (g : G) (x : G₀) (n : ℤ) : g • (x ^ n) = (g • x) ^ n := by
   cases n <;> simp

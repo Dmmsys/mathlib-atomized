@@ -30,236 +30,217 @@ open Simplicial CategoryTheory Limits
 
 namespace SimplexCategory
 
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {a b : SimplexCategory} : Finite (a ⟶ b) :=
-  Finite.of_injective (fun f => f.toOrderHom.toFun)
-    (fun _ _ _ => by aesop)
-
+  Finite.of_injective (fun f ↦ f.toOrderHom.toFun)
+    (fun _ _ _ ↦ by aesop)
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n m : SimplexCategory} : DecidableEq (n ⟶ m) := fun a b =>
   decidable_of_iff (a.toOrderHom = b.toOrderHom) SimplexCategory.Hom.ext_iff.symm
 
 section Init
 
-/--
-lemma `congr_toOrderHom_apply` / 引理 `congr_toOrderHom_apply`
-
-English:
-lemma congr_toOrderHom_apply
-  statement: {a b : SimplexCategory} {f g : a ⟶ b} (h : f = g)
-  proof: by rw [h]
-
-中文:
-引理 congr_toOrderHom_apply
-  结论: {a b : 单纯形范畴} {f g : a ⟶ b} (h : f = g)
-  证明: by rw [h]
+/-
+**SimplexCategory.congr_toOrderHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCateg
+ory`。
+形式化陈述：congr_toOrderHom_apply {a b : SimplexCategory} {f g : a ⟶ b} (h : f = g) (
+x : Fin (a.len + 1)) : f.toOrderHom x = g.toOrderHom x
+参数：h : f = g；x : Fin (a.len + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma congr_toOrderHom_apply {a b : SimplexCategory} {f g : a ⟶ b} (h : f = g)
     (x : Fin (a.len + 1)) : f.toOrderHom x = g.toOrderHom x := by rw [h]
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant morphism from ⦋0⦌. -/
+/-
+**SimplexCategory.const** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：const (x y : SimplexCategory) (i : Fin (y.len + 1)) : x ⟶ y
+参数：x y : SimplexCategory；i : Fin (y.len + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (x y : SimplexCategory) (i : Fin (y.len + 1))
-  body: Hom.mk ⟨fun _ => i, by tauto⟩
-
-@[simp]
-
-中文:
-定义 const
-  签名: (x y : 单纯形范畴) (i : 有限集 (y.len + 1))
-  定义体: Hom.mk ⟨fun _ => i, by tauto⟩
-
-@[simp]
-
-Depends on / 依赖: Hom.mk
+--- 原说明 ---
+The constant morphism from ⦋0⦌.
 -/
 def const (x y : SimplexCategory) (i : Fin (y.len + 1)) : x ⟶ y :=
-Hom.mk ⟨fun _ => i, by tauto⟩
+  Hom.mk <| ⟨fun _ => i, by tauto⟩
 
 @[simp]
-/--
-lemma `const_eq_id` / 引理 `const_eq_id`
-
-English:
-lemma const_eq_id
-  statement: const ⦋0⦌ ⦋0⦌ 0 = 𝟙 _
-  proof: by aesop
-
-@[simp]
-
-中文:
-引理 const_eq_id
-  结论: const ⦋0⦌ ⦋0⦌ 0 = 𝟙 _
-  证明: by aesop
-
-@[simp]
+/-
+**SimplexCategory.const_eq_id** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：const_eq_id : const ⦋0⦌ ⦋0⦌ 0 = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.val_eq_zero`：∀ (a : Fin 1), ↑a = 0
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.id_coe`：∀ {α : Type u_2} [inst : Preorder α], ⇑OrderHom.id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma const_eq_id : const ⦋0⦌ ⦋0⦌ 0 = 𝟙 _ := by aesop
 
 @[simp]
-/--
-lemma `const_apply` / 引理 `const_apply`
-
-English:
-lemma const_apply
-  given: (x y : SimplexCategory) (i : Fin (y.len + 1)) (a : Fin (x.len + 1))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 const_apply
-  条件: (x y : 单纯形范畴) (i : 有限集 (y.len + 1)) (a : 有限集 (x.len + 1))
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategory.const_apply** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：const_apply (x y : SimplexCategory) (i : Fin (y.len + 1)) (a : Fin (x.len 
++ 1)) : (const x y i).toOrderHom a = i
+参数：x y : SimplexCategory；i : Fin (y.len + 1)；a : Fin (x.len + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma const_apply (x y : SimplexCategory) (i : Fin (y.len + 1)) (a : Fin (x.len + 1)) :
     (const x y i).toOrderHom a = i := rfl
 
 @[simp]
-/--
-theorem `const_comp` / 定理 `const_comp`
-
-English:
-theorem const_comp
-  statement: (x : SimplexCategory) {y z : SimplexCategory}
-  proof: rfl
-
-中文:
-定理 const_comp
-  结论: (x : 单纯形范畴) {y z : 单纯形范畴}
-  证明: rfl
+/-
+**SimplexCategory.const_comp** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：const_comp (x : SimplexCategory) {y z : SimplexCategory} (f : y ⟶ z) (i : 
+Fin (y.len + 1)) : const x y i ≫ f = const x z (f.toOrderHom i)
+参数：x : SimplexCategory；f : y ⟶ z；i : Fin (y.len + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_comp (x : SimplexCategory) {y z : SimplexCategory}
     (f : y ⟶ z) (i : Fin (y.len + 1)) :
     const x y i ≫ f = const x z (f.toOrderHom i) :=
   rfl
-
-/--
-theorem `const_fac_thru_zero` / 定理 `const_fac_thru_zero`
-
-English:
-theorem const_fac_thru_zero
-  given: (n m : SimplexCategory) (i : Fin (m.len + 1))
-  proof: by
-  rw [const_comp]; rfl
-
-中文:
-定理 const_fac_thru_zero
-  条件: (n m : 单纯形范畴) (i : 有限集 (m.len + 1))
-  证明: by
-  rw [const_comp]; rfl
-
-Depends on / 依赖: const_comp
+/-
+**SimplexCategory.const_fac_thru_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory
+`。
+形式化陈述：const_fac_thru_zero (n m : SimplexCategory) (i : Fin (m.len + 1)) : const 
+n m i = const n ⦋0⦌ 0 ≫ SimplexCategory.const ⦋0⦌ m i
+参数：n m : SimplexCategory；i : Fin (m.len + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimplexCategory.const_comp`：const_comp (x : SimplexCategory) {y z : Simp
+lexCategory} (f : y ⟶ z) (i : Fin (y.len + 1)) : const x y i ≫ f = const x z (f.
+toOrderHom i)
 -/
 theorem const_fac_thru_zero (n m : SimplexCategory) (i : Fin (m.len + 1)) :
     const n m i = const n ⦋0⦌ 0 ≫ SimplexCategory.const ⦋0⦌ m i := by
   rw [const_comp]; rfl
-
-/--
-theorem `Hom.ext_zero_left` / 定理 `Hom.ext_zero_left`
-
-English:
-theorem Hom.ext_zero_left
-  statement: {n : SimplexCategory} (f g : ⦋0⦌ ⟶ n)
-  proof: by
-  ext i; match i with | 0 => exact h0 ▸ rfl
-
-中文:
-定理 态射.ext_zero_left
-  结论: {n : 单纯形范畴} (f g : ⦋0⦌ ⟶ n)
-  证明: by
-  ext i; match i with | 0 => exact h0 ▸ rfl
+/-
+**SimplexCategory.Hom.ext_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory.H
+om`。
+形式化陈述：∀ {n : SimplexCategory} (f g : { len := 0 } ⟶ n),   autoParam ((SimplexCat
+egory.Hom.toOrderHom f) 0 = (SimplexCategory.Hom.toOrderHom g) 0)       SimplexC
+ategory.Hom.ext_zero_left._auto_1 →     f = g
+参数：f g : { len := 0 } ⟶ n；(SimplexCategory.Hom.toOrderHom f) 0 = (SimplexCategor
+y.Hom.toOrderHom g) 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
 -/
 theorem Hom.ext_zero_left {n : SimplexCategory} (f g : ⦋0⦌ ⟶ n)
     (h0 : f.toOrderHom 0 = g.toOrderHom 0 := by rfl) : f = g := by
   ext i; match i with | 0 => exact h0 ▸ rfl
-
-/--
-theorem `eq_const_of_zero` / 定理 `eq_const_of_zero`
-
-English:
-theorem eq_const_of_zero
-  given: {n : SimplexCategory} (f : ⦋0⦌ ⟶ n)
-  proof: by
-  ext x; match x with | 0 => rfl
-
-中文:
-定理 eq_const_of_zero
-  条件: {n : 单纯形范畴} (f : ⦋0⦌ ⟶ n)
-  证明: by
-  ext x; match x with | 0 => rfl
+/-
+**SimplexCategory.eq_const_of_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_const_of_zero {n : SimplexCategory} (f : ⦋0⦌ ⟶ n) : f = const _ n (f.to
+OrderHom 0)
+参数：f : ⦋0⦌ ⟶ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
 -/
 theorem eq_const_of_zero {n : SimplexCategory} (f : ⦋0⦌ ⟶ n) :
     f = const _ n (f.toOrderHom 0) := by
   ext x; match x with | 0 => rfl
-
-/--
-theorem `exists_eq_const_of_zero` / 定理 `exists_eq_const_of_zero`
-
-English:
-theorem exists_eq_const_of_zero
-  given: {n : SimplexCategory} (f : ⦋0⦌ ⟶ n)
-  proof: ⟨_, eq_const_of_zero _⟩
-
-中文:
-定理 存在_eq_const_of_zero
-  条件: {n : 单纯形范畴} (f : ⦋0⦌ ⟶ n)
-  证明: ⟨_, eq_const_of_zero _⟩
-
-Depends on / 依赖: eq_const_of_zero
+/-
+**SimplexCategory.exists_eq_const_of_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCate
+gory`。
+形式化陈述：exists_eq_const_of_zero {n : SimplexCategory} (f : ⦋0⦌ ⟶ n) : exists a, f 
+= const _ n a
+参数：f : ⦋0⦌ ⟶ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.eq_const_of_zero`：eq_const_of_zero {n : SimplexCategory}
+ (f : ⦋0⦌ ⟶ n) : f = const _ n (f.toOrderHom 0)
 -/
 theorem exists_eq_const_of_zero {n : SimplexCategory} (f : ⦋0⦌ ⟶ n) :
-    exists a, f = const _ n a := ⟨_, eq_const_of_zero _⟩
-
-/--
-theorem `eq_const_to_zero` / 定理 `eq_const_to_zero`
-
-English:
-theorem eq_const_to_zero
-  given: {n : SimplexCategory} (f : n ⟶ ⦋0⦌)
-  proof: by
-  ext : 3
-  apply @Subsingleton.elim (Fin 1)
-
-中文:
-定理 eq_const_to_zero
-  条件: {n : 单纯形范畴} (f : n ⟶ ⦋0⦌)
-  证明: by
-  ext : 3
-  apply @Subsingleton.elim (Fin 1)
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+    ∃ a, f = const _ n a := ⟨_, eq_const_of_zero _⟩
+/-
+**SimplexCategory.eq_const_to_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_const_to_zero {n : SimplexCategory} (f : n ⟶ ⦋0⦌) : f = const n _ 0
+参数：f : n ⟶ ⦋0⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
 -/
 theorem eq_const_to_zero {n : SimplexCategory} (f : n ⟶ ⦋0⦌) :
     f = const n _ 0 := by
   ext : 3
   apply @Subsingleton.elim (Fin 1)
-
-/--
-theorem `Hom.ext_one_left` / 定理 `Hom.ext_one_left`
-
-English:
-theorem Hom.ext_one_left
-  statement: {n : SimplexCategory} (f g : ⦋1⦌ ⟶ n)
-  proof: by
-  ext i
-  match i with
-  | 0 => exact h0 ▸ rfl
-  | 1 => exact h1 ▸ rfl
-
-中文:
-定理 态射.ext_one_left
-  结论: {n : 单纯形范畴} (f g : ⦋1⦌ ⟶ n)
-  证明: by
-  ext i
-  match i with
-  | 0 => exact h0 ▸ rfl
-  | 1 => exact h1 ▸ rfl
-
-Depends on / 依赖: f.toOrderHom, g.toOrderHom, toOrderHom
+/-
+**SimplexCategory.Hom.ext_one_left** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory.Ho
+m`。
+形式化陈述：∀ {n : SimplexCategory} (f g : { len := 1 } ⟶ n),   autoParam ((SimplexCat
+egory.Hom.toOrderHom f) 0 = (SimplexCategory.Hom.toOrderHom g) 0)       SimplexC
+ategory.Hom.ext_one_left._auto_1 →     autoParam ((SimplexCategory.Hom.toOrderHo
+m f) 1 = (SimplexCategory.Hom.toOrderHom g) 1)         SimplexCategory.Hom.ext_o
+ne_left._auto_3 →       f = g
+参数：f g : { len := 1 } ⟶ n；(SimplexCategory.Hom.toOrderHom f) 0 = (SimplexCategor
+y.Hom.toOrderHom g) 0；(SimplexCategory.Hom.toOrderHom f) 1 = (SimplexCategory.Ho
+m.toOrderHom g) 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
 -/
 theorem Hom.ext_one_left {n : SimplexCategory} (f g : ⦋1⦌ ⟶ n)
     (h0 : f.toOrderHom 0 = g.toOrderHom 0 := by rfl)
@@ -268,58 +249,30 @@ theorem Hom.ext_one_left {n : SimplexCategory} (f g : ⦋1⦌ ⟶ n)
   match i with
   | 0 => exact h0 ▸ rfl
   | 1 => exact h1 ▸ rfl
-
-/--
-theorem `eq_of_one_to_one` / 定理 `eq_of_one_to_one`
-
-English:
-theorem eq_of_one_to_one
-  given: (f : ⦋1⦌ ⟶ ⦋1⦌)
-  proof: by
-  match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
-  | 0, 0 | 1, 1 =>
-    refine .inl ⟨f.toOrderHom 0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => rfl
-    | 1 => exact e1.trans e0.symm
-  | 0, 1 =>
-    right
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 1, 0 =>
-    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
-    rw [e0]; rw [e1] at this
-    exact Not.elim (by decide) this
-
-中文:
-定理 eq_of_one_to_one
-  条件: (f : ⦋1⦌ ⟶ ⦋1⦌)
-  证明: by
-  match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
-  | 0, 0 | 1, 1 =>
-    refine .inl ⟨f.toOrderHom 0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => rfl
-    | 1 => exact e1.trans e0.symm
-  | 0, 1 =>
-    right
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 1, 0 =>
-    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
-    rw [e0]; rw [e1] at this
-    exact Not.elim (by decide) this
-
-Depends on / 依赖: Not.elim, e0.symm, e1.trans, f.toOrderHom, f.toOrderHom.monotone, monotone, toOrderHom
+/-
+**SimplexCategory.eq_of_one_to_one** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_of_one_to_one (f : ⦋1⦌ ⟶ ⦋1⦌) : (exists a, f = const ⦋1⦌ _ a) ∨ f = 𝟙 _
+参数：f : ⦋1⦌ ⟶ ⦋1⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem eq_of_one_to_one (f : ⦋1⦌ ⟶ ⦋1⦌) :
-    (exists a, f = const ⦋1⦌ _ a) ∨ f = 𝟙 _ := by
+    (∃ a, f = const ⦋1⦌ _ a) ∨ f = 𝟙 _ := by
   match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
   | 0, 0 | 1, 1 =>
     refine .inl ⟨f.toOrderHom 0, ?_⟩
@@ -334,8 +287,8 @@ theorem eq_of_one_to_one (f : ⦋1⦌ ⟶ ⦋1⦌) :
     | 0 => exact e0
     | 1 => exact e1
   | 1, 0 =>
-    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
-    rw [e0]; rw [e1] at this
+    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) ≤ 1)
+    rw [e0, e1] at this
     exact Not.elim (by decide) this
 
 /-- Make a morphism `⦋n⦌ ⟶ ⦋m⦌` from a monotone map between fin's.
@@ -343,54 +296,33 @@ This is useful for constructing morphisms between `⦋n⦌` directly
 without identifying `n` with `⦋n⦌.len`.
 -/
 @[simp]
-/--
-Definition of `mkHom` / `mkHom` 的定义
+/-
+**SimplexCategory.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：mkHom {n m : Nat} (f : Fin (n + 1) ->o Fin (m + 1)) : ⦋n⦌ ⟶ ⦋m⦌
+参数：f : Fin (n + 1) ->o Fin (m + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkHom
-  signature: {n m : Nat} (f : Fin (n + 1) ->o Fin (m + 1))
-  body: SimplexCategory.Hom.mk f
-
-中文:
-定义 mkHom
-  签名: {n m : 自然数} (f : 有限集 (n + 1) ->o 有限集 (m + 1))
-  定义体: SimplexCategory.Hom.mk f
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.Hom.mk
+--- 原说明 ---
+Make a morphism `⦋n⦌ ⟶ ⦋m⦌` from a monotone map between fin's.
+This is useful for constructing morphisms between `⦋n⦌` directly
+without identifying `n` with `⦋n⦌.len`.
 -/
-def mkHom {n m : Nat} (f : Fin (n + 1) ->o Fin (m + 1)) : ⦋n⦌ ⟶ ⦋m⦌ :=
+def mkHom {n m : ℕ} (f : Fin (n + 1) →o Fin (m + 1)) : ⦋n⦌ ⟶ ⦋m⦌ :=
   SimplexCategory.Hom.mk f
 
-/--
-Definition of `mkOfLe` / `mkOfLe` 的定义
+/-- The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out a specified `h : i ≤ j` in `Fin (n+1)`. -/
+/-
+**SimplexCategory.mkOfLe** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：mkOfLe {n} (i j : Fin (n + 1)) (h : i <= j) : ⦋1⦌ ⟶ ⦋n⦌
+参数：i j : Fin (n + 1)；h : i <= j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfLe
-  signature: {n} (i j : Fin (n + 1)) (h : i <= j)
-  body: SimplexCategory.mkHom {
-    toFun := fun | 0 => i | 1 => j
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ => le_rfl
-      | 0, 1, _ => h
-  }
-
-@[simp]
-
-中文:
-定义 mkOfLe
-  签名: {n} (i j : 有限集 (n + 1)) (h : i <= j)
-  定义体: SimplexCategory.mkHom {
-    toFun := fun | 0 => i | 1 => j
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ => le_rfl
-      | 0, 1, _ => h
-  }
-
-@[simp]
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.mkHom, le_rfl, monotone
+--- 原说明 ---
+The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out a specified `h : i ≤ j` in `Fin (n+1)`.
 -/
-def mkOfLe {n} (i j : Fin (n + 1)) (h : i <= j) : ⦋1⦌ ⟶ ⦋n⦌ :=
+def mkOfLe {n} (i j : Fin (n + 1)) (h : i ≤ j) : ⦋1⦌ ⟶ ⦋n⦌ :=
   SimplexCategory.mkHom {
     toFun := fun | 0 => i | 1 => j
     monotone' := fun
@@ -399,88 +331,61 @@ def mkOfLe {n} (i j : Fin (n + 1)) (h : i <= j) : ⦋1⦌ ⟶ ⦋n⦌ :=
   }
 
 @[simp]
-/--
-lemma `mkOfLe_refl` / 引理 `mkOfLe_refl`
-
-English:
-lemma mkOfLe_refl
-  given: {n} (j : Fin (n + 1))
-  proof: Hom.ext_one_left _ _
-
-中文:
-引理 mkOfLe_refl
-  条件: {n} (j : 有限集 (n + 1))
-  证明: Hom.ext_one_left _ _
-
-Depends on / 依赖: Hom.ext_one_left, ext_one_left
+/-
+**SimplexCategory.mkOfLe_refl** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：mkOfLe_refl {n} (j : Fin (n + 1)) : mkOfLe j j (by lia) = ⦋1⦌.const ⦋n⦌ j
+参数：j : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Hom.ext_one_left`：∀ {n : SimplexCategory} (f g : { len :
+= 1 } ⟶ n),   autoParam ((SimplexCategory.Hom.toOrderHom f) 0 = (SimplexCategory
+.Hom.toOrderHom g) 0) …
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma mkOfLe_refl {n} (j : Fin (n + 1)) :
     mkOfLe j j (by lia) = ⦋1⦌.const ⦋n⦌ j := Hom.ext_one_left _ _
 
-/--
-Definition of `diag` / `diag` 的定义
+/-- The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the "diagonal composite" edge -/
+/-
+**SimplexCategory.diag** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：diag (n : Nat) : ⦋1⦌ ⟶ ⦋n⦌
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diag
-  signature: (n : Nat)
-  body: mkOfLe 0 (Fin.last n) (Fin.zero_le _)
-
-中文:
-定义 diag
-  签名: (n : 自然数)
-  定义体: mkOfLe 0 (Fin.last n) (Fin.zero_le _)
-
-Depends on / 依赖: Fin.last, Fin.zero_le, mkOfLe, zero_le
+--- 原说明 ---
+The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the "diagonal composite" edge
 -/
-def diag (n : Nat) : ⦋1⦌ ⟶ ⦋n⦌ :=
+def diag (n : ℕ) : ⦋1⦌ ⟶ ⦋n⦌ :=
   mkOfLe 0 (Fin.last n) (Fin.zero_le _)
 
-/--
-Definition of `intervalEdge` / `intervalEdge` 的定义
+/-- The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the edge spanning the interval from `j` to `j + l`. -/
+/-
+**SimplexCategory.intervalEdge** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：intervalEdge {n} (j l : Nat) (hjl : j + l <= n) : ⦋1⦌ ⟶ ⦋n⦌
+参数：j l : Nat；hjl : j + l <= n。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
 
-English:
-definition intervalEdge
-  signature: {n} (j l : Nat) (hjl : j + l <= n)
-  body: mkOfLe ⟨j, (by lia)⟩ ⟨j + l, (by lia)⟩ (Nat.le_add_right j l)
-
-中文:
-定义 intervalEdge
-  签名: {n} (j l : 自然数) (hjl : j + l <= n)
-  定义体: mkOfLe ⟨j, (by lia)⟩ ⟨j + l, (by lia)⟩ (Nat.le_add_right j l)
-
-Depends on / 依赖: Nat.le_add_right, le_add_right, mkOfLe
+--- 原说明 ---
+The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the edge spanning the interval from `j` 
+to `j + l`.
 -/
-def intervalEdge {n} (j l : Nat) (hjl : j + l <= n) : ⦋1⦌ ⟶ ⦋n⦌ :=
+def intervalEdge {n} (j l : ℕ) (hjl : j + l ≤ n) : ⦋1⦌ ⟶ ⦋n⦌ :=
   mkOfLe ⟨j, (by lia)⟩ ⟨j + l, (by lia)⟩ (Nat.le_add_right j l)
 
-/--
-Definition of `mkOfSucc` / `mkOfSucc` 的定义
+/-- The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the arrow `i ⟶ i+1` in `Fin (n+1)`. -/
+/-
+**SimplexCategory.mkOfSucc** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：mkOfSucc {n} (i : Fin n) : ⦋1⦌ ⟶ ⦋n⦌
+参数：i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfSucc
-  signature: {n} (i : Fin n)
-  body: SimplexCategory.mkHom {
-    toFun := fun | 0 => i.castSucc | 1 => i.succ
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ => le_rfl
-      | 0, 1, _ => Fin.castSucc_le_succ i
-  }
-
-@[simp]
-
-中文:
-定义 mkOfSucc
-  签名: {n} (i : 有限集 n)
-  定义体: SimplexCategory.mkHom {
-    toFun := fun | 0 => i.castSucc | 1 => i.succ
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ => le_rfl
-      | 0, 1, _ => Fin.castSucc_le_succ i
-  }
-
-@[simp]
-
-Depends on / 依赖: Fin.castSucc_le_succ, SimplexCategory, SimplexCategory.mkHom, castSucc, castSucc_le_succ, i.castSucc, i.succ, le_rfl, monotone
+--- 原说明 ---
+The morphism `⦋1⦌ ⟶ ⦋n⦌` that picks out the arrow `i ⟶ i+1` in `Fin (n+1)`.
 -/
 def mkOfSucc {n} (i : Fin n) : ⦋1⦌ ⟶ ⦋n⦌ :=
   SimplexCategory.mkHom {
@@ -491,97 +396,57 @@ def mkOfSucc {n} (i : Fin n) : ⦋1⦌ ⟶ ⦋n⦌ :=
   }
 
 @[simp]
-/--
-lemma `mkOfSucc_homToOrderHom_zero` / 引理 `mkOfSucc_homToOrderHom_zero`
-
-English:
-lemma mkOfSucc_homToOrderHom_zero
-  given: {n} (i : Fin n)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mkOfSucc_homToOrderHom_zero
-  条件: {n} (i : 有限集 n)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Hom.toOrderHom, castSucc, i.castSucc, mkOfSucc, toOrderHom
+/-
+**SimplexCategory.mkOfSucc_homToOrderHom_zero** 是 Mathlib 中的一个引理，位于命名空间 `Simplex
+Category`。
+形式化陈述：mkOfSucc_homToOrderHom_zero {n} (i : Fin n) : DFunLike.coe (F
+参数：i : Fin n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma mkOfSucc_homToOrderHom_zero {n} (i : Fin n) :
-    DFunLike.coe (F := Fin 2 ->o Fin (n + 1)) (Hom.toOrderHom (mkOfSucc i)) 0 = i.castSucc := rfl
+    DFunLike.coe (F := Fin 2 →o Fin (n + 1)) (Hom.toOrderHom (mkOfSucc i)) 0 = i.castSucc := rfl
 
 @[simp]
-/--
-lemma `mkOfSucc_homToOrderHom_one` / 引理 `mkOfSucc_homToOrderHom_one`
-
-English:
-lemma mkOfSucc_homToOrderHom_one
-  given: {n} (i : Fin n)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mkOfSucc_homToOrderHom_one
-  条件: {n} (i : 有限集 n)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Hom.toOrderHom, i.succ, mkOfSucc, toOrderHom
+/-
+**SimplexCategory.mkOfSucc_homToOrderHom_one** 是 Mathlib 中的一个引理，位于命名空间 `SimplexC
+ategory`。
+形式化陈述：mkOfSucc_homToOrderHom_one {n} (i : Fin n) : DFunLike.coe (F
+参数：i : Fin n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma mkOfSucc_homToOrderHom_one {n} (i : Fin n) :
-    DFunLike.coe (F := Fin 2 ->o Fin (n + 1)) (Hom.toOrderHom (mkOfSucc i)) 1 = i.succ := rfl
+    DFunLike.coe (F := Fin 2 →o Fin (n + 1)) (Hom.toOrderHom (mkOfSucc i)) 1 = i.succ := rfl
 
 @[simp]
-/--
-lemma `mkOfSucc_eq_id` / 引理 `mkOfSucc_eq_id`
-
-English:
-lemma mkOfSucc_eq_id
-  statement: mkOfSucc (0 : Fin 1) = 𝟙 _
-  proof: by decide
-
-中文:
-引理 mkOfSucc_eq_id
-  结论: mkOfSucc (0 : 有限集 1) = 𝟙 _
-  证明: by decide
+/-
+**SimplexCategory.mkOfSucc_eq_id** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：mkOfSucc_eq_id : mkOfSucc (0 : Fin 1) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma mkOfSucc_eq_id : mkOfSucc (0 : Fin 1) = 𝟙 _ := by decide
 
-/--
-Definition of `mkOfLeComp` / `mkOfLeComp` 的定义
+/-- The morphism `⦋2⦌ ⟶ ⦋n⦌` that picks out a specified composite of morphisms in `Fin (n+1)`. -/
+/-
+**SimplexCategory.mkOfLeComp** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：mkOfLeComp {n} (i j k : Fin (n + 1)) (h₁ : i <= j) (h₂ : j <= k) : ⦋2⦌ ⟶ ⦋
+n⦌
+参数：i j k : Fin (n + 1)；h₁ : i <= j；h₂ : j <= k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfLeComp
-  signature: {n} (i j k : Fin (n + 1)) (h₁ : i <= j) (h₂ : j <= k)
-  body: SimplexCategory.mkHom {
-    toFun := fun | 0 => i | 1 => j | 2 => k
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ | 2, 2, _ => le_rfl
-      | 0, 1, _ => h₁
-      | 1, 2, _ => h₂
-      | 0, 2, _ => Fin.le_trans h₁ h₂
-  }
-
-中文:
-定义 mkOfLeComp
-  签名: {n} (i j k : 有限集 (n + 1)) (h₁ : i <= j) (h₂ : j <= k)
-  定义体: SimplexCategory.mkHom {
-    toFun := fun | 0 => i | 1 => j | 2 => k
-    monotone' := fun
-      | 0, 0, _ | 1, 1, _ | 2, 2, _ => le_rfl
-      | 0, 1, _ => h₁
-      | 1, 2, _ => h₂
-      | 0, 2, _ => Fin.le_trans h₁ h₂
-  }
-
-Depends on / 依赖: Fin.le_trans, SimplexCategory, SimplexCategory.mkHom, le_rfl, le_trans, monotone
+--- 原说明 ---
+The morphism `⦋2⦌ ⟶ ⦋n⦌` that picks out a specified composite of morphisms in `F
+in (n+1)`.
 -/
-def mkOfLeComp {n} (i j k : Fin (n + 1)) (h₁ : i <= j) (h₂ : j <= k) :
+def mkOfLeComp {n} (i j k : Fin (n + 1)) (h₁ : i ≤ j) (h₂ : j ≤ k) :
     ⦋2⦌ ⟶ ⦋n⦌ :=
   SimplexCategory.mkHom {
     toFun := fun | 0 => i | 1 => j | 2 => k
@@ -592,28 +457,19 @@ def mkOfLeComp {n} (i j k : Fin (n + 1)) (h₁ : i <= j) (h₂ : j <= k) :
       | 0, 2, _ => Fin.le_trans h₁ h₂
   }
 
-/--
-Definition of `subinterval` / `subinterval` 的定义
+/-- The "inert" morphism associated to a subinterval `j ≤ i ≤ j + l` of `Fin (n + 1)`. -/
+/-
+**SimplexCategory.subinterval** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：subinterval {n} (j l : Nat) (hjl : j + l <= n) : ⦋l⦌ ⟶ ⦋n⦌
+参数：j l : Nat；hjl : j + l <= n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subinterval
-  signature: {n} (j l : Nat) (hjl : j + l <= n)
-  body: SimplexCategory.mkHom {
-    toFun := fun i => ⟨i.1 + j, (by lia)⟩
-    monotone' := fun i i' hii' => by simpa only [Fin.mk_le_mk, add_le_add_iff_right] using! hii'
-  }
-
-中文:
-定义 subinterval
-  签名: {n} (j l : 自然数) (hjl : j + l <= n)
-  定义体: SimplexCategory.mkHom {
-    toFun := fun i => ⟨i.1 + j, (by lia)⟩
-    monotone' := fun i i' hii' => by simpa only [Fin.mk_le_mk, add_le_add_iff_right] using! hii'
-  }
-
-Depends on / 依赖: Fin.mk_le_mk, SimplexCategory, SimplexCategory.mkHom, add_le_add_iff_right, mk_le_mk, monotone
+--- 原说明 ---
+The "inert" morphism associated to a subinterval `j ≤ i ≤ j + l` of `Fin (n + 1)
+`.
 -/
-def subinterval {n} (j l : Nat) (hjl : j + l <= n) :
+def subinterval {n} (j l : ℕ) (hjl : j + l ≤ n) :
     ⦋l⦌ ⟶ ⦋n⦌ :=
   SimplexCategory.mkHom {
     toFun := fun i => ⟨i.1 + j, (by lia)⟩
@@ -621,34 +477,36 @@ def subinterval {n} (j l : Nat) (hjl : j + l <= n) :
   }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `const_subinterval_eq` / 引理 `const_subinterval_eq`
-
-English:
-lemma const_subinterval_eq
-  given: {n} (j l : Nat) (hjl : j + l <= n) (i : Fin (l + 1))
-  proof: by
-  rw [const_comp]
-  congr
-  ext
-  dsimp [subinterval]
-  rw [add_comm]
-
-中文:
-引理 const_subinterval_eq
-  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : 有限集 (l + 1))
-  证明: by
-  rw [const_comp]
-  congr
-  ext
-  dsimp [subinterval]
-  rw [add_comm]
-
-Depends on / 依赖: add_comm, const_comp, subinterval
+/-
+**SimplexCategory.const_subinterval_eq** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategor
+y`。
+形式化陈述：const_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin (l + 1)) 
+: ⦋0⦌.const ⦋l⦌ i ≫ subinterval j l hjl = ⦋0⦌.const ⦋n⦌ ⟨j + i.1, lt_add_of_lt_a
+dd_right (Nat.add_lt_add_left i.2 j) hjl⟩
+参数：j l : Nat；hjl : j + l <= n；i : Fin (l + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_add_of_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddRightMono α] {a b c d : α}, a < b + c → b ≤ d → a < d + c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.add_lt_add_left`：∀ {n m : ℕ}, n < m → ∀ (k : ℕ), k + n < k + m
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimplexCategory.const_comp`：const_comp (x : SimplexCategory) {y z : Simp
+lexCategory} (f : y ⟶ z) (i : Fin (y.len + 1)) : const x y i ≫ f = const x z (f.
+toOrderHom i)
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-lemma const_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin (l + 1)) :
+lemma const_subinterval_eq {n} (j l : ℕ) (hjl : j + l ≤ n) (i : Fin (l + 1)) :
     ⦋0⦌.const ⦋l⦌ i ≫ subinterval j l hjl =
-    ⦋0⦌.const ⦋n⦌ ⟨j + i.1, lt_add_of_lt_add_right (Nat.add_lt_add_left i.2 j) hjl⟩ := by
+    ⦋0⦌.const ⦋n⦌ ⟨j + i.1, lt_add_of_lt_add_right (Nat.add_lt_add_left i.2 j) hjl⟩  := by
   rw [const_comp]
   congr
   ext
@@ -657,28 +515,27 @@ lemma const_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin (l + 1)) 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `mkOfSucc_subinterval_eq` / 引理 `mkOfSucc_subinterval_eq`
-
-English:
-lemma mkOfSucc_subinterval_eq
-  given: {n} (j l : Nat) (hjl : j + l <= n) (i : Fin l)
-  proof: by
-  unfold subinterval mkOfSucc
-  ext (i : Fin 2)
-  match i with | 0 | 1 => simp; lia
-
-中文:
-引理 mkOfSucc_subinterval_eq
-  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : 有限集 l)
-  证明: by
-  unfold subinterval mkOfSucc
-  ext (i : Fin 2)
-  match i with | 0 | 1 => simp; lia
-
-Depends on / 依赖: mkOfSucc, subinterval
+/-
+**SimplexCategory.mkOfSucc_subinterval_eq** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCate
+gory`。
+形式化陈述：mkOfSucc_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin l) : m
+kOfSucc i ≫ subinterval j l hjl = mkOfSucc ⟨j + i.1, Nat.lt_of_lt_of_le (Nat.add
+_lt_add_left i.2 j) hjl⟩
+参数：j l : Nat；hjl : j + l <= n；i : Fin l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_of_lt_of_le`：∀ {n m k : ℕ}, n < m → m ≤ k → n < k
+· 使用定理 `Nat.add_lt_add_left`：∀ {n m : ℕ}, n < m → ∀ (k : ℕ), k + n < k + m
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma mkOfSucc_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin l) :
+lemma mkOfSucc_subinterval_eq {n} (j l : ℕ) (hjl : j + l ≤ n) (i : Fin l) :
     mkOfSucc i ≫ subinterval j l hjl =
     mkOfSucc ⟨j + i.1, Nat.lt_of_lt_of_le (Nat.add_lt_add_left i.2 j) hjl⟩ := by
   unfold subinterval mkOfSucc
@@ -687,83 +544,73 @@ lemma mkOfSucc_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) (i : Fin l) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `diag_subinterval_eq` / 引理 `diag_subinterval_eq`
-
-English:
-lemma diag_subinterval_eq
-  given: {n} (j l : Nat) (hjl : j + l <= n)
-  proof: by
-  unfold subinterval intervalEdge diag mkOfLe
-  ext (i : Fin 2)
-  match i with | 0 | 1 => simp <;> lia
-
-中文:
-引理 diag_subinterval_eq
-  条件: {n} (j l : 自然数) (hjl : j + l <= n)
-  证明: by
-  unfold subinterval intervalEdge diag mkOfLe
-  ext (i : Fin 2)
-  match i with | 0 | 1 => simp <;> lia
-
-Depends on / 依赖: intervalEdge, mkOfLe, subinterval
+/-
+**SimplexCategory.diag_subinterval_eq** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory
+`。
+形式化陈述：diag_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) : diag l ≫ subinter
+val j l hjl = intervalEdge j l hjl
+参数：j l : Nat；hjl : j + l <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma diag_subinterval_eq {n} (j l : Nat) (hjl : j + l <= n) :
+lemma diag_subinterval_eq {n} (j l : ℕ) (hjl : j + l ≤ n) :
     diag l ≫ subinterval j l hjl = intervalEdge j l hjl := by
   unfold subinterval intervalEdge diag mkOfLe
   ext (i : Fin 2)
   match i with | 0 | 1 => simp <;> lia
-
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (Δ : SimplexCategory) : Subsingleton (Δ ⟶ ⦋0⦌) where
   allEq f g := by ext : 3; apply Subsingleton.elim (α := Fin 1)
-
-/--
-theorem `hom_zero_zero` / 定理 `hom_zero_zero`
-
-English:
-theorem hom_zero_zero
-  given: (f : ⦋0⦌ ⟶ ⦋0⦌)
-  statement: f = 𝟙 _
-  proof: by
-  apply Subsingleton.elim
-
-@[simp]
-
-中文:
-定理 hom_zero_zero
-  条件: (f : ⦋0⦌ ⟶ ⦋0⦌)
-  结论: f = 𝟙 _
-  证明: by
-  apply Subsingleton.elim
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**SimplexCategory.hom_zero_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：hom_zero_zero (f : ⦋0⦌ ⟶ ⦋0⦌) : f = 𝟙 _
+参数：f : ⦋0⦌ ⟶ ⦋0⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `SimplexCategory.instSubsingletonHomMkOfNatNat`：∀ (Δ : SimplexCategory), 
+Subsingleton (Δ ⟶ { len := 0 })
 -/
 theorem hom_zero_zero (f : ⦋0⦌ ⟶ ⦋0⦌) : f = 𝟙 _ := by
   apply Subsingleton.elim
 
 @[simp]
-/--
-lemma `eqToHom_toOrderHom` / 引理 `eqToHom_toOrderHom`
-
-English:
-lemma eqToHom_toOrderHom
-  given: {x y : SimplexCategory} (h : x = y)
-  proof: by
-  subst h
-  rfl
-
-中文:
-引理 eqToHom_toOrderHom
-  条件: {x y : 单纯形范畴} (h : x = y)
-  证明: by
-  subst h
-  rfl
+/-
+**SimplexCategory.eqToHom_toOrderHom** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`
+。
+形式化陈述：eqToHom_toOrderHom {x y : SimplexCategory} (h : x = y) : SimplexCategory.H
+om.toOrderHom (eqToHom h) = (Fin.castOrderIso (congrArg (fun t => t.len + 1) h))
+.toOrderEmbedding.toOrderHom
+参数：h : x = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma eqToHom_toOrderHom {x y : SimplexCategory} (h : x = y) :
   SimplexCategory.Hom.toOrderHom (eqToHom h) =
-    (Fin.castOrderIso (congrArg (fun t => t.len + 1) h)).toOrderEmbedding.toOrderHom := by
+    (Fin.castOrderIso (congrArg (fun t ↦ t.len + 1) h)).toOrderEmbedding.toOrderHom := by
   subst h
   rfl
 
@@ -778,71 +625,38 @@ TODO: prove that the simplex category is equivalent to
 one given by the following generators and relations.
 -/
 
-/--
-Definition of `δ` / `δ` 的定义
+/-- The `i`-th face map from `⦋n⦌` to `⦋n+1⦌` -/
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition δ
-  signature: {n} (i : Fin (n + 2))
-  body: mkHom (Fin.succAboveOrderEmb i).toOrderHom
-
-中文:
-定义 δ
-  签名: {n} (i : 有限集 (n + 2))
-  定义体: mkHom (Fin.succAboveOrderEmb i).toOrderHom
-
-Depends on / 依赖: Fin.succAboveOrderEmb, succAboveOrderEmb, toOrderHom
+--- 原说明 ---
+The `i`-th face map from `⦋n⦌` to `⦋n+1⦌`
 -/
 def δ {n} (i : Fin (n + 2)) : ⦋n⦌ ⟶ ⦋n + 1⦌ :=
   mkHom (Fin.succAboveOrderEmb i).toOrderHom
 
-/--
-Definition of `σ` / `σ` 的定义
+/-- The `i`-th degeneracy map from `⦋n+1⦌` to `⦋n⦌` -/
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition σ
-  signature: {n} (i : Fin (n + 1))
-  body: mkHom i.predAboveOrderHom
-
-中文:
-定义 σ
-  签名: {n} (i : 有限集 (n + 1))
-  定义体: mkHom i.predAboveOrderHom
-
-Depends on / 依赖: i.predAboveOrderHom, predAboveOrderHom
+--- 原说明 ---
+The `i`-th degeneracy map from `⦋n+1⦌` to `⦋n⦌`
 -/
 def σ {n} (i : Fin (n + 1)) : ⦋n + 1⦌ ⟶ ⦋n⦌ :=
   mkHom i.predAboveOrderHom
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `δ_comp_δ` / 定理 `δ_comp_δ`
+/-- The generic case of the first simplicial identity -/
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_δ
-  given: {n} {i j : Fin (n + 2)} (H : i <= j)
-  proof: by
-  ext k
-  dsimp [δ, Fin.succAbove]
-  rcases i with ⟨i, _⟩
-  rcases j with ⟨j, _⟩
-  rcases k with ⟨k, _⟩
-  split_ifs <;> · simp at * <;> lia
-
-中文:
-定理 δ_comp_δ
-  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
-  证明: by
-  ext k
-  dsimp [δ, Fin.succAbove]
-  rcases i with ⟨i, _⟩
-  rcases j with ⟨j, _⟩
-  rcases k with ⟨k, _⟩
-  split_ifs <;> · simp at * <;> lia
-
-Depends on / 依赖: Fin.succAbove, split_ifs, succAbove
+--- 原说明 ---
+The generic case of the first simplicial identity
 -/
-theorem δ_comp_δ {n} {i j : Fin (n + 2)} (H : i <= j) :
+theorem δ_comp_δ {n} {i j : Fin (n + 2)} (H : i ≤ j) :
     δ i ≫ δ j.succ = δ j ≫ δ i.castSucc := by
   ext k
   dsimp [δ, Fin.succAbove]
@@ -850,29 +664,9 @@ theorem δ_comp_δ {n} {i j : Fin (n + 2)} (H : i <= j) :
   rcases j with ⟨j, _⟩
   rcases k with ⟨k, _⟩
   split_ifs <;> · simp at * <;> lia
-
-/--
-theorem `δ_comp_δ'` / 定理 `δ_comp_δ'`
-
-English:
-theorem δ_comp_δ'
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : i.castSucc < j)
-  proof: by
-  rw [← δ_comp_δ]
-  · rw [Fin.succ_pred]
-  · simpa only [Fin.le_iff_val_le_val, ← Nat.lt_succ_iff, Nat.succ_eq_add_one, ← Fin.val_succ,
-      j.succ_pred, Fin.lt_def] using! H
-
-中文:
-定理 δ_comp_δ'
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : i.castSucc < j)
-  证明: by
-  rw [← δ_comp_δ]
-  · rw [Fin.succ_pred]
-  · simpa only [Fin.le_iff_val_le_val, ← Nat.lt_succ_iff, Nat.succ_eq_add_one, ← Fin.val_succ,
-      j.succ_pred, Fin.lt_def] using! H
-
-Depends on / 依赖: Fin.le_iff_val_le_val, Fin.lt_def, Fin.succ_pred, Fin.val_succ, Nat.lt_succ_iff, Nat.succ_eq_add_one, j.succ_pred, le_iff_val_le_val, lt_def, lt_succ_iff, succ_eq_add_one, succ_pred, val_succ
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_δ' {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : i.castSucc < j) :
     δ i ≫ δ j =
@@ -882,27 +676,11 @@ theorem δ_comp_δ' {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : i.castSucc < j)
   · rw [Fin.succ_pred]
   · simpa only [Fin.le_iff_val_le_val, ← Nat.lt_succ_iff, Nat.succ_eq_add_one, ← Fin.val_succ,
       j.succ_pred, Fin.lt_def] using! H
-
-/--
-theorem `δ_comp_δ''` / 定理 `δ_comp_δ''`
-
-English:
-theorem δ_comp_δ''
-  given: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j)
-  proof: by
-  rw [δ_comp_δ]
-  · rfl
-  · exact H
-
-中文:
-定理 δ_comp_δ''
-  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : i <= 有限集.castSucc j)
-  证明: by
-  rw [δ_comp_δ]
-  · rfl
-  · exact H
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem δ_comp_δ'' {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j) :
+theorem δ_comp_δ'' {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i ≤ Fin.castSucc j) :
     δ (i.castLT (Nat.lt_of_le_of_lt (Fin.le_iff_val_le_val.mp H) j.is_lt)) ≫ δ j.succ =
       δ j ≫ δ i := by
   rw [δ_comp_δ]
@@ -911,47 +689,20 @@ theorem δ_comp_δ'' {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castS
 
 /-- The special case of the first simplicial identity -/
 @[reassoc]
-/--
-theorem `δ_comp_δ_self` / 定理 `δ_comp_δ_self`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_δ_self
-  given: {n} {i : Fin (n + 2)}
-  statement: δ i ≫ δ i.castSucc = δ i ≫ δ i.succ
-  proof: (δ_comp_δ (le_refl i)).symm
-
-@[reassoc]
-
-中文:
-定理 δ_comp_δ_self
-  条件: {n} {i : 有限集 (n + 2)}
-  结论: δ i ≫ δ i.castSucc = δ i ≫ δ i.succ
-  证明: (δ_comp_δ (le_refl i)).symm
-
-@[reassoc]
-
-Depends on / 依赖: le_refl
+--- 原说明 ---
+The special case of the first simplicial identity
 -/
 theorem δ_comp_δ_self {n} {i : Fin (n + 2)} : δ i ≫ δ i.castSucc = δ i ≫ δ i.succ :=
   (δ_comp_δ (le_refl i)).symm
 
 @[reassoc]
-/--
-theorem `δ_comp_δ_self'` / 定理 `δ_comp_δ_self'`
-
-English:
-theorem δ_comp_δ_self'
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = i.castSucc)
-  proof: by
-  subst H
-  rw [δ_comp_δ_self]
-
-中文:
-定理 δ_comp_δ_self'
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : j = i.castSucc)
-  证明: by
-  subst H
-  rw [δ_comp_δ_self]
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_δ_self' {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = i.castSucc) :
     δ i ≫ δ j = δ i ≫ δ i.succ := by
@@ -961,50 +712,14 @@ theorem δ_comp_δ_self' {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = i.cast
 set_option backward.defeqAttrib.useBackward true in
 /-- The second simplicial identity -/
 @[reassoc]
-/--
-theorem `δ_comp_σ_of_le` / 定理 `δ_comp_σ_of_le`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_σ_of_le
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc)
-  proof: by
-  ext k : 3
-  dsimp [σ, δ]
-  rcases le_or_gt i k with (hik | hik)
-  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hik),
-    Fin.succ_predAbove_succ, Fin.succAbove_of_le_castSucc]
-    rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rwa [Fin.predAbove_of_le_castSucc _ _ hjk, Fin.castSucc_castPred]
-    · rw [Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succ_pred]
-      exact H.trans_lt hjk
-  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hik)]
-    have hjk := H.trans_lt' hik
-    rw [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr
-      (hjk.trans Fin.castSucc_lt_succ).le)]; rw [Fin.predAbove_of_le_castSucc _ _ hjk.le]; rw [Fin.castPred_castSucc]; rw [Fin.succAbove_of_castSucc_lt]; rw [Fin.castSucc_castPred]
-    rwa [Fin.castSucc_castPred]
-
-中文:
-定理 δ_comp_σ_of_le
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc)
-  证明: by
-  ext k : 3
-  dsimp [σ, δ]
-  rcases le_or_gt i k with (hik | hik)
-  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hik),
-    Fin.succ_predAbove_succ, Fin.succAbove_of_le_castSucc]
-    rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rwa [Fin.predAbove_of_le_castSucc _ _ hjk, Fin.castSucc_castPred]
-    · rw [Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succ_pred]
-      exact H.trans_lt hjk
-  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hik)]
-    have hjk := H.trans_lt' hik
-    rw [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr
-      (hjk.trans Fin.castSucc_lt_succ).le)]; rw [Fin.predAbove_of_le_castSucc _ _ hjk.le]; rw [Fin.castPred_castSucc]; rw [Fin.succAbove_of_castSucc_lt]; rw [Fin.castSucc_castPred]
-    rwa [Fin.castSucc_castPred]
-
-Depends on / 依赖: Fin.castSucc_castPred, Fin.castSucc_le_castSucc_iff.mpr, Fin.castSucc_lt_castSucc_iff.mpr, Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, Fin.succAbove_of_le_castSucc, Fin.succ_pred, Fin.succ_predAbove_succ, H.trans_lt, castSucc, castSucc_castPred, castSucc_le_castSucc_iff, castSucc_lt_castSucc_iff, j.castSucc, le_castSucc_iff, le_or_gt, predAbove_of_castSucc_lt, predAbove_of_le_castSucc
+--- 原说明 ---
+The second simplicial identity
 -/
-theorem δ_comp_σ_of_le {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc) :
+theorem δ_comp_σ_of_le {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i ≤ j.castSucc) :
     δ i.castSucc ≫ σ j.succ = σ j ≫ δ i := by
   ext k : 3
   dsimp [σ, δ]
@@ -1018,44 +733,20 @@ theorem δ_comp_σ_of_le {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.cas
   · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hik)]
     have hjk := H.trans_lt' hik
     rw [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr
-      (hjk.trans Fin.castSucc_lt_succ).le)]; rw [Fin.predAbove_of_le_castSucc _ _ hjk.le]; rw [Fin.castPred_castSucc]; rw [Fin.succAbove_of_castSucc_lt]; rw [Fin.castSucc_castPred]
+      (hjk.trans Fin.castSucc_lt_succ).le),
+      Fin.predAbove_of_le_castSucc _ _ hjk.le, Fin.castPred_castSucc, Fin.succAbove_of_castSucc_lt,
+      Fin.castSucc_castPred]
     rwa [Fin.castSucc_castPred]
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The first part of the third simplicial identity -/
 @[reassoc]
-/--
-theorem `δ_comp_σ_self` / 定理 `δ_comp_σ_self`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_σ_self
-  given: {n} {i : Fin (n + 1)}
-  proof: by
-  rcases i with ⟨i, hi⟩
-  ext ⟨j, hj⟩
-  dsimp [σ, δ, Fin.predAbove, Fin.succAbove]
-  simp only [Fin.lt_def, Fin.dite_val, Fin.ite_val, Fin.val_pred]
-  split_ifs
-  any_goals simp
-  all_goals lia
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_self
-  条件: {n} {i : 有限集 (n + 1)}
-  证明: by
-  rcases i with ⟨i, hi⟩
-  ext ⟨j, hj⟩
-  dsimp [σ, δ, Fin.predAbove, Fin.succAbove]
-  simp only [Fin.lt_def, Fin.dite_val, Fin.ite_val, Fin.val_pred]
-  split_ifs
-  any_goals simp
-  all_goals lia
-
-@[reassoc]
-
-Depends on / 依赖: Fin.dite_val, Fin.ite_val, Fin.lt_def, Fin.predAbove, Fin.succAbove, Fin.val_pred, all_goals, any_goals, dite_val, ite_val, lt_def, predAbove, split_ifs, succAbove, val_pred
+--- 原说明 ---
+The first part of the third simplicial identity
 -/
 theorem δ_comp_σ_self {n} {i : Fin (n + 1)} :
     δ (Fin.castSucc i) ≫ σ i = 𝟙 ⦋n⦌ := by
@@ -1068,22 +759,9 @@ theorem δ_comp_σ_self {n} {i : Fin (n + 1)} :
   all_goals lia
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_self'` / 定理 `δ_comp_σ_self'`
-
-English:
-theorem δ_comp_σ_self'
-  given: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.castSucc)
-  proof: by
-  subst H
-  rw [δ_comp_σ_self]
-
-中文:
-定理 δ_comp_σ_self'
-  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.castSucc)
-  证明: by
-  subst H
-  rw [δ_comp_σ_self]
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_self' {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.castSucc) :
     δ j ≫ σ i = 𝟙 ⦋n⦌ := by
@@ -1093,36 +771,12 @@ theorem δ_comp_σ_self' {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.cast
 set_option backward.defeqAttrib.useBackward true in
 /-- The second part of the third simplicial identity -/
 @[reassoc]
-/--
-theorem `δ_comp_σ_succ` / 定理 `δ_comp_σ_succ`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_σ_succ
-  given: {n} {i : Fin (n + 1)}
-  statement: δ i.succ ≫ σ i = 𝟙 ⦋n⦌
-  proof: by
-  ext j
-  rcases i with ⟨i, _⟩
-  rcases j with ⟨j, _⟩
-  dsimp [δ, σ, Fin.succAbove, Fin.predAbove]
-  split_ifs <;> simp <;> simp at * <;> lia
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_succ
-  条件: {n} {i : 有限集 (n + 1)}
-  结论: δ i.succ ≫ σ i = 𝟙 ⦋n⦌
-  证明: by
-  ext j
-  rcases i with ⟨i, _⟩
-  rcases j with ⟨j, _⟩
-  dsimp [δ, σ, Fin.succAbove, Fin.predAbove]
-  split_ifs <;> simp <;> simp at * <;> lia
-
-@[reassoc]
-
-Depends on / 依赖: Fin.predAbove, Fin.succAbove, predAbove, split_ifs, succAbove
+--- 原说明 ---
+The second part of the third simplicial identity
 -/
 theorem δ_comp_σ_succ {n} {i : Fin (n + 1)} : δ i.succ ≫ σ i = 𝟙 ⦋n⦌ := by
   ext j
@@ -1132,22 +786,9 @@ theorem δ_comp_σ_succ {n} {i : Fin (n + 1)} : δ i.succ ≫ σ i = 𝟙 ⦋n�
   split_ifs <;> simp <;> simp at * <;> lia
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_succ'` / 定理 `δ_comp_σ_succ'`
-
-English:
-theorem δ_comp_σ_succ'
-  given: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ)
-  proof: by
-  subst H
-  rw [δ_comp_σ_succ]
-
-中文:
-定理 δ_comp_σ_succ'
-  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.succ)
-  证明: by
-  subst H
-  rw [δ_comp_σ_succ]
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_succ' {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ) :
     δ j ≫ σ i = 𝟙 ⦋n⦌ := by
@@ -1157,62 +798,12 @@ theorem δ_comp_σ_succ' {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ
 set_option backward.defeqAttrib.useBackward true in
 /-- The fourth simplicial identity -/
 @[reassoc]
-/--
-theorem `δ_comp_σ_of_gt` / 定理 `δ_comp_σ_of_gt`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_comp_σ_of_gt
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i)
-  proof: by
-  ext k : 3
-  dsimp [δ, σ]
-  rcases le_or_gt k i with (hik | hik)
-  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_succ_iff.mpr hik)]
-    rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rw [Fin.predAbove_of_le_castSucc _ _
-      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_castSucc,
-      Fin.predAbove_of_le_castSucc _ _ hjk, Fin.succAbove_of_castSucc_lt, Fin.castSucc_castPred]
-      rw [Fin.castSucc_castPred]
-      exact hjk.trans_lt H
-    · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hjk),
-      Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succAbove_of_castSucc_lt,
-      Fin.castSucc_pred_eq_pred_castSucc]
-      rwa [Fin.castSucc_lt_iff_succ_le, Fin.succ_pred]
-  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.succ_le_castSucc_iff.mpr hik)]
-    have hjk := H.trans hik
-    rw [Fin.predAbove_of_castSucc_lt _ _ hjk]; rw [Fin.predAbove_of_castSucc_lt _ _
-      (Fin.castSucc_lt_succ_iff.mpr hjk.le)]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc]; rw [Fin.succ_pred]
-    rwa [Fin.le_castSucc_pred_iff]
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_of_gt
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i)
-  证明: by
-  ext k : 3
-  dsimp [δ, σ]
-  rcases le_or_gt k i with (hik | hik)
-  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_succ_iff.mpr hik)]
-    rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rw [Fin.predAbove_of_le_castSucc _ _
-      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_castSucc,
-      Fin.predAbove_of_le_castSucc _ _ hjk, Fin.succAbove_of_castSucc_lt, Fin.castSucc_castPred]
-      rw [Fin.castSucc_castPred]
-      exact hjk.trans_lt H
-    · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hjk),
-      Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succAbove_of_castSucc_lt,
-      Fin.castSucc_pred_eq_pred_castSucc]
-      rwa [Fin.castSucc_lt_iff_succ_le, Fin.succ_pred]
-  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.succ_le_castSucc_iff.mpr hik)]
-    have hjk := H.trans hik
-    rw [Fin.predAbove_of_castSucc_lt _ _ hjk]; rw [Fin.predAbove_of_castSucc_lt _ _
-      (Fin.castSucc_lt_succ_iff.mpr hjk.le)]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc]; rw [Fin.succ_pred]
-    rwa [Fin.le_castSucc_pred_iff]
-
-@[reassoc]
-
-Depends on / 依赖: Fin.castPred_castSucc, Fin.castSucc_castPred, Fin.castSucc_le_castSucc_iff.mpr, Fin.castSucc_lt_castSucc_iff.mpr, Fin.castSucc_lt_succ_iff.mpr, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, castPred_castSucc, castSucc, castSucc_castPred, castSucc_le_castSucc_iff, castSucc_lt_castSucc_iff, castSucc_lt_succ_iff, hjk.trans_lt, j.castSucc, le_or_gt, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, succAbove_of_castSucc_lt
+--- 原说明 ---
+The fourth simplicial identity
 -/
 theorem δ_comp_σ_of_gt {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) :
     δ i.succ ≫ σ j.castSucc = σ j ≫ δ i := by
@@ -1232,33 +823,15 @@ theorem δ_comp_σ_of_gt {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc
       rwa [Fin.castSucc_lt_iff_succ_le, Fin.succ_pred]
   · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.succ_le_castSucc_iff.mpr hik)]
     have hjk := H.trans hik
-    rw [Fin.predAbove_of_castSucc_lt _ _ hjk]; rw [Fin.predAbove_of_castSucc_lt _ _
-      (Fin.castSucc_lt_succ_iff.mpr hjk.le)]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc]; rw [Fin.succ_pred]
+    rw [Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.predAbove_of_castSucc_lt _ _
+      (Fin.castSucc_lt_succ_iff.mpr hjk.le),
+    Fin.pred_succ, Fin.succAbove_of_le_castSucc, Fin.succ_pred]
     rwa [Fin.le_castSucc_pred_iff]
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_of_gt'` / 定理 `δ_comp_σ_of_gt'`
-
-English:
-theorem δ_comp_σ_of_gt'
-  given: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i)
-  proof: by
-  rw [← δ_comp_σ_of_gt]
-  · simp
-  · rw [Fin.castSucc_castLT, ← Fin.succ_lt_succ_iff, Fin.succ_pred]
-    exact H
-
-中文:
-定理 δ_comp_σ_of_gt'
-  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : j.succ < i)
-  证明: by
-  rw [← δ_comp_σ_of_gt]
-  · simp
-  · rw [Fin.castSucc_castLT, ← Fin.succ_lt_succ_iff, Fin.succ_pred]
-    exact H
-
-Depends on / 依赖: Fin.castSucc_castLT, Fin.succ_lt_succ_iff, Fin.succ_pred, castSucc_castLT, succ_lt_succ_iff, succ_pred
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_of_gt' {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i) :
     δ i ≫ σ j = σ (j.castLT ((add_lt_add_iff_right 1).mp (lt_of_lt_of_le H i.is_le))) ≫
@@ -1271,78 +844,14 @@ theorem δ_comp_σ_of_gt' {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < 
 set_option backward.defeqAttrib.useBackward true in
 /-- The fifth simplicial identity -/
 @[reassoc]
-/--
-theorem `σ_comp_σ` / 定理 `σ_comp_σ`
+/-
+**SimplexCategory.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem σ_comp_σ
-  given: {n} {i j : Fin (n + 1)} (H : i <= j)
-  proof: by
-  ext k : 3
-  dsimp [σ]
-  cases k using Fin.lastCases with
-  | last => simp only [len_mk, Fin.predAbove_right_last]
-  | cast k =>
-    cases k using Fin.cases with
-    | zero =>
-      simp
-    | succ k =>
-      rcases le_or_gt i k with (h | h)
-      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSucc _ (Fin.castSucc_lt_castSucc_iff.mpr
-        (Fin.castSucc_lt_succ_iff.mpr h)), ← Fin.succ_castSucc, Fin.pred_succ,
-        Fin.succ_predAbove_succ]
-        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _)]; rw [Fin.pred_succ]
-        rcases le_or_gt k j with (hkj | hkj)
-        · rwa [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hkj),
-          Fin.castPred_castSucc]
-        · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hkj),
-          Fin.le_pred_iff,
-          Fin.succ_le_castSucc_iff]
-          exact H.trans_lt hkj
-      · simp_rw [Fin.predAbove_of_le_castSucc i.castSucc _ (Fin.castSucc_le_castSucc_iff.mpr
-        (Fin.succ_le_castSucc_iff.mpr h)), Fin.castPred_castSucc, ← Fin.succ_castSucc,
-        Fin.succ_predAbove_succ]
-        rw [Fin.predAbove_of_le_castSucc _ k.castSucc
-        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H))]; rw [Fin.castPred_castSucc]; rw [Fin.predAbove_of_le_castSucc _ k.succ
-        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h))]; rw [Fin.predAbove_of_le_castSucc _ k.succ
-        (Fin.succ_le_castSucc_iff.mpr h)]
-
-中文:
-定理 σ_comp_σ
-  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
-  证明: by
-  ext k : 3
-  dsimp [σ]
-  cases k using Fin.lastCases with
-  | last => simp only [len_mk, Fin.predAbove_right_last]
-  | cast k =>
-    cases k using Fin.cases with
-    | zero =>
-      simp
-    | succ k =>
-      rcases le_or_gt i k with (h | h)
-      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSucc _ (Fin.castSucc_lt_castSucc_iff.mpr
-        (Fin.castSucc_lt_succ_iff.mpr h)), ← Fin.succ_castSucc, Fin.pred_succ,
-        Fin.succ_predAbove_succ]
-        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _)]; rw [Fin.pred_succ]
-        rcases le_or_gt k j with (hkj | hkj)
-        · rwa [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hkj),
-          Fin.castPred_castSucc]
-        · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hkj),
-          Fin.le_pred_iff,
-          Fin.succ_le_castSucc_iff]
-          exact H.trans_lt hkj
-      · simp_rw [Fin.predAbove_of_le_castSucc i.castSucc _ (Fin.castSucc_le_castSucc_iff.mpr
-        (Fin.succ_le_castSucc_iff.mpr h)), Fin.castPred_castSucc, ← Fin.succ_castSucc,
-        Fin.succ_predAbove_succ]
-        rw [Fin.predAbove_of_le_castSucc _ k.castSucc
-        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H))]; rw [Fin.castPred_castSucc]; rw [Fin.predAbove_of_le_castSucc _ k.succ
-        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h))]; rw [Fin.predAbove_of_le_castSucc _ k.succ
-        (Fin.succ_le_castSucc_iff.mpr h)]
-
-Depends on / 依赖: Fin.cases, Fin.castSucc_lt_castSucc_iff.mpr, Fin.castSucc_lt_succ_iff.mpr, Fin.lastCases, Fin.predAbove_of_castSucc_lt, Fin.predAbove_right_last, Fin.pred_succ, Fin.succ_castSucc, Fin.succ_predAbove_succ, castSucc, castSucc_lt_castSucc_iff, castSucc_lt_succ_iff, i.castSucc, lastCases, le_or_g, le_or_gt, len_mk, predAbove_of_castSucc_lt, predAbove_right_last, pred_succ
+--- 原说明 ---
+The fifth simplicial identity
 -/
-theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i <= j) :
+theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i ≤ j) :
     σ (Fin.castSucc i) ≫ σ j = σ j.succ ≫ σ i := by
   ext k : 3
   dsimp [σ]
@@ -1357,7 +866,7 @@ theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i <= j) :
       · simp_rw [Fin.predAbove_of_castSucc_lt i.castSucc _ (Fin.castSucc_lt_castSucc_iff.mpr
         (Fin.castSucc_lt_succ_iff.mpr h)), ← Fin.succ_castSucc, Fin.pred_succ,
         Fin.succ_predAbove_succ]
-        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _)]; rw [Fin.pred_succ]
+        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _), Fin.pred_succ]
         rcases le_or_gt k j with (hkj | hkj)
         · rwa [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hkj),
           Fin.castPred_castSucc]
@@ -1369,171 +878,80 @@ theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i <= j) :
         (Fin.succ_le_castSucc_iff.mpr h)), Fin.castPred_castSucc, ← Fin.succ_castSucc,
         Fin.succ_predAbove_succ]
         rw [Fin.predAbove_of_le_castSucc _ k.castSucc
-        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H))]; rw [Fin.castPred_castSucc]; rw [Fin.predAbove_of_le_castSucc _ k.succ
-        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h))]; rw [Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H)),
+        Fin.castPred_castSucc, Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h)), Fin.predAbove_of_le_castSucc _ k.succ
         (Fin.succ_le_castSucc_iff.mpr h)]
-
-/--
-lemma `δ_zero_eq_const` / 引理 `δ_zero_eq_const`
-
-English:
-lemma δ_zero_eq_const
-  statement: δ (0 : Fin 2) = const _ _ 1
-  proof: by decide
-
-中文:
-引理 δ_zero_eq_const
-  结论: δ (0 : 有限集 2) = const _ _ 1
-  证明: by decide
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_zero_eq_const : δ (0 : Fin 2) = const _ _ 1 := by decide
-
-/--
-lemma `δ_one_eq_const` / 引理 `δ_one_eq_const`
-
-English:
-lemma δ_one_eq_const
-  statement: δ (1 : Fin 2) = const _ _ 0
-  proof: by decide
-
-中文:
-引理 δ_one_eq_const
-  结论: δ (1 : 有限集 2) = const _ _ 0
-  证明: by decide
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_one_eq_const : δ (1 : Fin 2) = const _ _ 0 := by decide
 
 /--
-Definition of `factor_δ` / `factor_δ` 的定义
-
-English:
-definition factor_δ
-  signature: {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
-  body: f ≫ σ (Fin.predAbove 0 j)
-
-中文:
-定义 factor_δ
-  签名: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : 有限集 (n + 2))
-  定义体: f ≫ σ (Fin.predAbove 0 j)
-
-Depends on / 依赖: Fin.predAbove, predAbove
+If `f : ⦋m⦌ ⟶ ⦋n+1⦌` is a morphism and `j` is not in the range of `f`,
+then `factor_δ f j` is a morphism `⦋m⦌ ⟶ ⦋n⦌` such that
+`factor_δ f j ≫ δ j = f` (as witnessed by `factor_δ_spec`).
 -/
-def factor_δ {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2)) : ⦋m⦌ ⟶ ⦋n⦌ :=
+/-
+**SimplexCategory.factor_** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `f : ⦋m⦌ ⟶ ⦋n+1⦌` is a morphism and `j` is not in the range of `f`,
+then `factor_δ f j` is a morphism `⦋m⦌ ⟶ ⦋n⦌` such that
+`factor_δ f j ≫ δ j = f` (as witnessed by `factor_δ_spec`).
+-/
+def factor_δ {m n : ℕ} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2)) : ⦋m⦌ ⟶ ⦋n⦌ :=
   f ≫ σ (Fin.predAbove 0 j)
-
-/--
-lemma `factor_δ_spec` / 引理 `factor_δ_spec`
-
-English:
-lemma factor_δ_spec
-  statement: {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
-  proof: by
-  ext k : 3
-  cases j using Fin.cases <;> simp_all [factor_δ, δ, σ]
-
-@[simp]
-
-中文:
-引理 factor_δ_spec
-  结论: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : 有限集 (n + 2))
-  证明: by
-  ext k : 3
-  cases j using Fin.cases <;> simp_all [factor_δ, δ, σ]
-
-@[simp]
-
-Depends on / 依赖: Fin.cases
+/-
+**SimplexCategory.factor_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma factor_δ_spec {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
-    (hj : forall (k : Fin (m + 1)), f.toOrderHom k != j) :
+lemma factor_δ_spec {m n : ℕ} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
+    (hj : ∀ (k : Fin (m + 1)), f.toOrderHom k ≠ j) :
     factor_δ f j ≫ δ j = f := by
   ext k : 3
   cases j using Fin.cases <;> simp_all [factor_δ, δ, σ]
 
 @[simp]
-/--
-lemma `δ_zero_mkOfSucc` / 引理 `δ_zero_mkOfSucc`
-
-English:
-lemma δ_zero_mkOfSucc
-  given: {n : Nat} (i : Fin n)
-  proof: by
-  ext x
-  fin_cases x
-  rfl
-
-@[simp]
-
-中文:
-引理 δ_zero_mkOfSucc
-  条件: {n : 自然数} (i : 有限集 n)
-  证明: by
-  ext x
-  fin_cases x
-  rfl
-
-@[simp]
-
-Depends on / 依赖: fin_cases
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_zero_mkOfSucc {n : Nat} (i : Fin n) :
+lemma δ_zero_mkOfSucc {n : ℕ} (i : Fin n) :
     δ 0 ≫ mkOfSucc i = SimplexCategory.const _ ⦋n⦌ i.succ := by
   ext x
   fin_cases x
   rfl
 
 @[simp]
-/--
-lemma `δ_one_mkOfSucc` / 引理 `δ_one_mkOfSucc`
-
-English:
-lemma δ_one_mkOfSucc
-  given: {n : Nat} (i : Fin n)
-  proof: by
-  ext x
-  fin_cases x
-  rfl
-
-中文:
-引理 δ_one_mkOfSucc
-  条件: {n : 自然数} (i : 有限集 n)
-  证明: by
-  ext x
-  fin_cases x
-  rfl
-
-Depends on / 依赖: fin_cases
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_one_mkOfSucc {n : Nat} (i : Fin n) :
+lemma δ_one_mkOfSucc {n : ℕ} (i : Fin n) :
     δ 1 ≫ mkOfSucc i = SimplexCategory.const _ ⦋n⦌ i.castSucc := by
   ext x
   fin_cases x
   rfl
 
-/--
-lemma `mkOfSucc_δ_lt` / 引理 `mkOfSucc_δ_lt`
+/-- If `i + 1 < j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i` and `i + 1`, respectively. -/
+/-
+**SimplexCategory.mkOfSucc_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mkOfSucc_δ_lt
-  statement: {n : Nat} {i : Fin n} {j : Fin (n + 2)}
-  proof: by
-  ext x
-  fin_cases x
-  · simp [δ, Fin.succAbove_of_castSucc_lt _ _ (Nat.lt_trans _ h)]
-  · simp [δ, Fin.succAbove_of_castSucc_lt _ _ h]
-
-中文:
-引理 mkOfSucc_δ_lt
-  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
-  证明: by
-  ext x
-  fin_cases x
-  · simp [δ, Fin.succAbove_of_castSucc_lt _ _ (Nat.lt_trans _ h)]
-  · simp [δ, Fin.succAbove_of_castSucc_lt _ _ h]
-
-Depends on / 依赖: Fin.succAbove_of_castSucc_lt, Nat.lt_trans, fin_cases, lt_trans, succAbove_of_castSucc_lt
+--- 原说明 ---
+If `i + 1 < j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i` and `i + 1`, respectively.
 -/
-lemma mkOfSucc_δ_lt {n : Nat} {i : Fin n} {j : Fin (n + 2)}
+lemma mkOfSucc_δ_lt {n : ℕ} {i : Fin n} {j : Fin (n + 2)}
     (h : i.succ.castSucc < j) :
     mkOfSucc i ≫ δ j = mkOfSucc i.castSucc := by
   ext x
@@ -1541,38 +959,17 @@ lemma mkOfSucc_δ_lt {n : Nat} {i : Fin n} {j : Fin (n + 2)}
   · simp [δ, Fin.succAbove_of_castSucc_lt _ _ (Nat.lt_trans _ h)]
   · simp [δ, Fin.succAbove_of_castSucc_lt _ _ h]
 
-/--
-lemma `mkOfSucc_δ_gt` / 引理 `mkOfSucc_δ_gt`
+/-- If `i + 1 > j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i + 1` and `i + 2`, respectively. -/
+/-
+**SimplexCategory.mkOfSucc_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mkOfSucc_δ_gt
-  statement: {n : Nat} {i : Fin n} {j : Fin (n + 2)}
-  proof: by
-  ext x
-  simp only [δ, len_mk, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
-    OrderEmbedding.toOrderHom_coe, Function.comp_apply, Fin.succAboveOrderEmb_apply]
-  fin_cases x <;> rw [Fin.succAbove_of_le_castSucc]
-  · rfl
-  · exact Nat.le_of_lt_succ h
-  · rfl
-  · exact Nat.le_of_lt h
-
-中文:
-引理 mkOfSucc_δ_gt
-  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
-  证明: by
-  ext x
-  simp only [δ, len_mk, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
-    OrderEmbedding.toOrderHom_coe, Function.comp_apply, Fin.succAboveOrderEmb_apply]
-  fin_cases x <;> rw [Fin.succAbove_of_le_castSucc]
-  · rfl
-  · exact Nat.le_of_lt_succ h
-  · rfl
-  · exact Nat.le_of_lt h
-
-Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_le_castSucc, Function, Function.comp_apply, Hom.toOrderHom_mk, Nat.le_of_lt, Nat.le_of_lt_succ, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderHom, OrderHom.comp_coe, comp_apply, comp_coe, comp_toOrderHom, fin_cases, le_of_lt, le_of_lt_succ, len_mk, succAboveOrderEmb_apply, succAbove_of_le_castSucc
+--- 原说明 ---
+If `i + 1 > j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i + 1` and `i + 2`, respectively.
 -/
-lemma mkOfSucc_δ_gt {n : Nat} {i : Fin n} {j : Fin (n + 2)}
+lemma mkOfSucc_δ_gt {n : ℕ} {i : Fin n} {j : Fin (n + 2)}
     (h : j < i.succ.castSucc) :
     mkOfSucc i ≫ δ j = mkOfSucc i.succ := by
   ext x
@@ -1584,50 +981,17 @@ lemma mkOfSucc_δ_gt {n : Nat} {i : Fin n} {j : Fin (n + 2)}
   · rfl
   · exact Nat.le_of_lt h
 
-/--
-lemma `mkOfSucc_δ_eq` / 引理 `mkOfSucc_δ_eq`
+/-- If `i + 1 = j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i` and `i + 2`, respectively. -/
+/-
+**SimplexCategory.mkOfSucc_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mkOfSucc_δ_eq
-  statement: {n : Nat} {i : Fin n} {j : Fin (n + 2)}
-  proof: by
-  ext x
-  fin_cases x
-  · subst h
-    simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk,
-      Fin.zero_eta, OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
-      mkOfSucc_homToOrderHom_zero, Fin.succAboveOrderEmb_apply,
-      Fin.castSucc_succAbove_castSucc, Fin.succAbove_succ_self]
-    rfl
-  · simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, Fin.mk_one,
-      OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
-      mkOfSucc_homToOrderHom_one, Fin.succAboveOrderEmb_apply]
-    subst h
-    rw [Fin.succAbove_castSucc_self]
-    rfl
-
-中文:
-引理 mkOfSucc_δ_eq
-  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
-  证明: by
-  ext x
-  fin_cases x
-  · subst h
-    simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk,
-      Fin.zero_eta, OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
-      mkOfSucc_homToOrderHom_zero, Fin.succAboveOrderEmb_apply,
-      Fin.castSucc_succAbove_castSucc, Fin.succAbove_succ_self]
-    rfl
-  · simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, Fin.mk_one,
-      OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
-      mkOfSucc_homToOrderHom_one, Fin.succAboveOrderEmb_apply]
-    subst h
-    rw [Fin.succAbove_castSucc_self]
-    rfl
-
-Depends on / 依赖: Fin.castSucc_succAbove_castSucc, Fin.mk_one, Fin.succAboveOrderEmb_apply, Fin.succAbove_succ_self, Fin.zero_eta, Function, Function.comp_apply, Hom.toOrderHom_mk, Nat.reduceAdd, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderHom, OrderHom.comp_coe, castSucc_succAbove_castSucc, comp_apply, comp_coe, comp_toOrderHom, fin_cases, len_mk, mkOfSucc_homToOrder
+--- 原说明 ---
+If `i + 1 = j`, `mkOfSucc i ≫ δ j` is the morphism `⦋1⦌ ⟶ ⦋n⦌` that
+sends `0` and `1` to `i` and `i + 2`, respectively.
 -/
-lemma mkOfSucc_δ_eq {n : Nat} {i : Fin n} {j : Fin (n + 2)}
+lemma mkOfSucc_δ_eq {n : ℕ} {i : Fin n} {j : Fin (n + 2)}
     (h : j = i.succ.castSucc) :
     mkOfSucc i ≫ δ j = intervalEdge i 2 (by lia) := by
   ext x
@@ -1644,113 +1008,41 @@ lemma mkOfSucc_δ_eq {n : Nat} {i : Fin n} {j : Fin (n + 2)}
     subst h
     rw [Fin.succAbove_castSucc_self]
     rfl
-
-/--
-lemma `mkOfSucc_one_eq_δ` / 引理 `mkOfSucc_one_eq_δ`
-
-English:
-lemma mkOfSucc_one_eq_δ
-  statement: mkOfSucc (1 : Fin 2) = δ 0
-  proof: by decide
-
-中文:
-引理 mkOfSucc_one_eq_δ
-  结论: mkOfSucc (1 : 有限集 2) = δ 0
-  证明: by decide
+/-
+**SimplexCategory.mkOfSucc_one_eq_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkOfSucc_one_eq_δ : mkOfSucc (1 : Fin 2) = δ 0 := by decide
-
-/--
-lemma `mkOfSucc_zero_eq_δ` / 引理 `mkOfSucc_zero_eq_δ`
-
-English:
-lemma mkOfSucc_zero_eq_δ
-  statement: mkOfSucc (0 : Fin 2) = δ 2
-  proof: by decide
-
-中文:
-引理 mkOfSucc_zero_eq_δ
-  结论: mkOfSucc (0 : 有限集 2) = δ 2
-  证明: by decide
+/-
+**SimplexCategory.mkOfSucc_zero_eq_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkOfSucc_zero_eq_δ : mkOfSucc (0 : Fin 2) = δ 2 := by decide
-
-/--
-theorem `eq_of_one_to_two` / 定理 `eq_of_one_to_two`
-
-English:
-theorem eq_of_one_to_two
-  given: (f : ⦋1⦌ ⟶ ⦋2⦌)
-  proof: by
-  have : f.toOrderHom 0 <= f.toOrderHom 1 := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
-  match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
-  | 1, 2 =>
-    refine .inl ⟨0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 2 =>
-    refine .inl ⟨1, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 1 =>
-    refine .inl ⟨2, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 0 | 1, 1 | 2, 2 =>
-    refine .inr ⟨f.toOrderHom 0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => rfl
-    | 1 => exact e1.trans e0.symm
-  | 1, 0 | 2, 0 | 2, 1 =>
-    rw [e0]; rw [e1] at this
-    exact Not.elim (by decide) this
-
-中文:
-定理 eq_of_one_to_two
-  条件: (f : ⦋1⦌ ⟶ ⦋2⦌)
-  证明: by
-  have : f.toOrderHom 0 <= f.toOrderHom 1 := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
-  match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
-  | 1, 2 =>
-    refine .inl ⟨0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 2 =>
-    refine .inl ⟨1, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 1 =>
-    refine .inl ⟨2, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => exact e0
-    | 1 => exact e1
-  | 0, 0 | 1, 1 | 2, 2 =>
-    refine .inr ⟨f.toOrderHom 0, ?_⟩
-    ext i : 3
-    match i with
-    | 0 => rfl
-    | 1 => exact e1.trans e0.symm
-  | 1, 0 | 2, 0 | 2, 1 =>
-    rw [e0]; rw [e1] at this
-    exact Not.elim (by decide) this
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.const, f.toOrderHom, f.toOrderHom.monotone, monotone, toOrderHom
+/-
+**SimplexCategory.eq_of_one_to_two** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_of_one_to_two (f : ⦋1⦌ ⟶ ⦋2⦌) : (exists i, f = (δ (n
+参数：f : ⦋1⦌ ⟶ ⦋2⦌。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem eq_of_one_to_two (f : ⦋1⦌ ⟶ ⦋2⦌) :
-    (exists i, f = (δ (n := 1) i)) ∨ exists a, f = SimplexCategory.const _ _ a := by
-  have : f.toOrderHom 0 <= f.toOrderHom 1 := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
+    (∃ i, f = (δ (n := 1) i)) ∨ ∃ a, f = SimplexCategory.const _ _ a := by
+  have : f.toOrderHom 0 ≤ f.toOrderHom 1 := f.toOrderHom.monotone (by decide : (0 : Fin 2) ≤ 1)
   match e0 : f.toOrderHom 0, e1 : f.toOrderHom 1 with
   | 1, 2 =>
     refine .inl ⟨0, ?_⟩
@@ -1777,33 +1069,22 @@ theorem eq_of_one_to_two (f : ⦋1⦌ ⟶ ⦋2⦌) :
     | 0 => rfl
     | 1 => exact e1.trans e0.symm
   | 1, 0 | 2, 0 | 2, 1 =>
-    rw [e0]; rw [e1] at this
+    rw [e0, e1] at this
     exact Not.elim (by decide) this
-
-/--
-theorem `eq_of_one_to_two'` / 定理 `eq_of_one_to_two'`
-
-English:
-theorem eq_of_one_to_two'
-  given: (f : ⦋1⦌ ⟶ ⦋2⦌)
-  proof: match eq_of_one_to_two f with
-  | .inl ⟨0, h⟩ => .inl h
-  | .inl ⟨1, h⟩ => .inr (.inl h)
-  | .inl ⟨2, h⟩ => .inr (.inr (.inl h))
-  | .inr h => .inr (.inr (.inr h))
-
-中文:
-定理 eq_of_one_to_two'
-  条件: (f : ⦋1⦌ ⟶ ⦋2⦌)
-  证明: match eq_of_one_to_two f with
-  | .inl ⟨0, h⟩ => .inl h
-  | .inl ⟨1, h⟩ => .inr (.inl h)
-  | .inl ⟨2, h⟩ => .inr (.inr (.inl h))
-  | .inr h => .inr (.inr (.inr h))
+/-
+**SimplexCategory.eq_of_one_to_two'** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_of_one_to_two' (f : ⦋1⦌ ⟶ ⦋2⦌) : f = (δ (n
+参数：f : ⦋1⦌ ⟶ ⦋2⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.eq_of_one_to_two`：eq_of_one_to_two (f : ⦋1⦌ ⟶ ⦋2⦌) : (ex
+ists i, f = (δ (n
 -/
 theorem eq_of_one_to_two' (f : ⦋1⦌ ⟶ ⦋2⦌) :
     f = (δ (n := 1) 0) ∨ f = (δ (n := 1) 1) ∨ f = (δ (n := 1) 2) ∨
-      exists a, f = SimplexCategory.const _ _ a :=
+      ∃ a, f = SimplexCategory.const _ _ a :=
   match eq_of_one_to_two f with
   | .inl ⟨0, h⟩ => .inl h
   | .inl ⟨1, h⟩ => .inr (.inl h)
@@ -1817,68 +1098,44 @@ section Skeleton
 /-- The functor that exhibits `SimplexCategory` as skeleton
 of `NonemptyFinLinOrd` -/
 @[simps obj map]
-/--
-Definition of `skeletalFunctor` / `skeletalFunctor` 的定义
+/-
+**SimplexCategory.skeletalFunctor** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：skeletalFunctor : SimplexCategory ⥤ NonemptyFinLinOrd where obj a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition skeletalFunctor
-  signature: : SimplexCategory ⥤ NonemptyFinLinOrd where
-  body: NonemptyFinLinOrd.of (Fin (a.len + 1))
-  map f := NonemptyFinLinOrd.ofHom f.toOrderHom
-
-中文:
-定义 skeletalFunctor
-  签名: : 单纯形范畴 ⥤ 非空有限线性序 where
-  定义体: NonemptyFinLinOrd.of (Fin (a.len + 1))
-  map f := NonemptyFinLinOrd.ofHom f.toOrderHom
-
-Depends on / 依赖: NonemptyFinLinOrd, NonemptyFinLinOrd.of, a.len
+--- 原说明 ---
+The functor that exhibits `SimplexCategory` as skeleton
+of `NonemptyFinLinOrd`
 -/
 def skeletalFunctor : SimplexCategory ⥤ NonemptyFinLinOrd where
   obj a := NonemptyFinLinOrd.of (Fin (a.len + 1))
   map f := NonemptyFinLinOrd.ofHom f.toOrderHom
-
-/--
-theorem `skeletalFunctor.coe_map` / 定理 `skeletalFunctor.coe_map`
-
-English:
-theorem skeletalFunctor.coe_map
-  given: {Δ₁ Δ₂ : SimplexCategory} (f : Δ₁ ⟶ Δ₂)
-  proof: rfl
-
-中文:
-定理 skeletalFunctor.coe_map
-  条件: {Δ₁ Δ₂ : 单纯形范畴} (f : Δ₁ ⟶ Δ₂)
-  证明: rfl
+/-
+**SimplexCategory.skeletalFunctor.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCate
+gory.skeletalFunctor`。
+形式化陈述：∀ {Δ₁ Δ₂ : SimplexCategory} (f : Δ₁ ⟶ Δ₂),   LinOrd.Hom.hom (SimplexCatego
+ry.skeletalFunctor.map f).hom = SimplexCategory.Hom.toOrderHom f
+参数：f : Δ₁ ⟶ Δ₂；SimplexCategory.skeletalFunctor.map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem skeletalFunctor.coe_map {Δ₁ Δ₂ : SimplexCategory} (f : Δ₁ ⟶ Δ₂) :
     ↑(skeletalFunctor.map f).hom.hom = f.toOrderHom :=
   rfl
-
-/--
-theorem `skeletal` / 定理 `skeletal`
-
-English:
-theorem skeletal
-  statement: Skeletal SimplexCategory
-  proof: fun X Y ⟨I⟩ => by
-  suffices Fintype.card (Fin (X.len + 1)) = Fintype.card (Fin (Y.len + 1)) by
-    ext
-    simpa
-  apply Fintype.card_congr
-  exact ((skeletalFunctor ⋙ forget NonemptyFinLinOrd).mapIso I).toEquiv
-
-中文:
-定理 skeletal
-  结论: Skeletal 单纯形范畴
-  证明: fun X Y ⟨I⟩ => by
-  suffices Fintype.card (Fin (X.len + 1)) = Fintype.card (Fin (Y.len + 1)) by
-    ext
-    simpa
-  apply Fintype.card_congr
-  exact ((skeletalFunctor ⋙ forget NonemptyFinLinOrd).mapIso I).toEquiv
-
-Depends on / 依赖: Fintype, Fintype.card, Fintype.card_congr, NonemptyFinLinOrd, X.len, Y.len, card_congr, forget, mapIso, skeletalFunctor, toEquiv
+/-
+**SimplexCategory.skeletal** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：skeletal : Skeletal SimplexCategory
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `SimplexCategory.ext`：∀ {x y : SimplexCategory}, x.len = y.len → x = y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
 -/
 theorem skeletal : Skeletal SimplexCategory := fun X Y ⟨I⟩ => by
   suffices Fintype.card (Fin (X.len + 1)) = Fintype.card (Fin (Y.len + 1)) by
@@ -1889,96 +1146,30 @@ theorem skeletal : Skeletal SimplexCategory := fun X Y ⟨I⟩ => by
 
 namespace SkeletalFunctor
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: skeletalFunctor.Full
-  body: ⟨SimplexCategory.Hom.mk f.hom.hom, rfl⟩
-
-中文:
-实例 :
-  签名: skeletalFunctor.满
-  定义体: ⟨SimplexCategory.Hom.mk f.hom.hom, rfl⟩
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.Hom.mk, f.hom.hom
+/-
+**SimplexCategory.SkeletalFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory.Sk
+eletalFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : skeletalFunctor.Full where
   map_surjective f := ⟨SimplexCategory.Hom.mk f.hom.hom, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: skeletalFunctor.Faithful
-  body: by
-    ext : 3
-    exact CategoryTheory.congr_fun h _
-
-中文:
-实例 :
-  签名: skeletalFunctor.忠实
-  定义体: by
-    ext : 3
-    exact CategoryTheory.congr_fun h _
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, congr_fun
+/-
+**SimplexCategory.SkeletalFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory.Sk
+eletalFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : skeletalFunctor.Faithful where
   map_injective {_ _ f g} h := by
     ext : 3
     exact CategoryTheory.congr_fun h _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: skeletalFunctor.EssSurj
-  body: ⟨⦋(Fintype.card X - 1 : Nat)⦌,
-      ⟨by
-        have aux : Fintype.card X = Fintype.card X - 1 + 1 :=
-          (Nat.succ_pred_eq_of_pos <| Fintype.card_pos_iff.mpr ⟨⊥⟩).symm
-        let f := monoEquivOfFin X aux
-        have hf := (Finset.univ.orderEmbOfFin aux).strictMono
-        refine
-          { hom := InducedCategory.homMk (LinOrd.ofHom ⟨f, hf.monotone⟩)
-            inv := InducedCategory.homMk (LinOrd.ofHom ⟨f.symm, ?_⟩)
-            hom_inv_id := by ext; apply f.symm_apply_apply
-            inv_hom_id := by ext; apply f.apply_symm_apply }
-        intro i j h
-        change f.symm i <= f.symm j
-        rw [← hf.le_iff_le]
-        change f (f.symm i) <= f (f.symm j)
-        simpa only [OrderIso.apply_symm_apply]⟩⟩
-
-中文:
-实例 :
-  签名: skeletalFunctor.本质满射
-  定义体: ⟨⦋(Fintype.card X - 1 : Nat)⦌,
-      ⟨by
-        have aux : Fintype.card X = Fintype.card X - 1 + 1 :=
-          (Nat.succ_pred_eq_of_pos <| Fintype.card_pos_iff.mpr ⟨⊥⟩).symm
-        let f := monoEquivOfFin X aux
-        have hf := (Finset.univ.orderEmbOfFin aux).strictMono
-        refine
-          { hom := InducedCategory.homMk (LinOrd.ofHom ⟨f, hf.monotone⟩)
-            inv := InducedCategory.homMk (LinOrd.ofHom ⟨f.symm, ?_⟩)
-            hom_inv_id := by ext; apply f.symm_apply_apply
-            inv_hom_id := by ext; apply f.apply_symm_apply }
-        intro i j h
-        change f.symm i <= f.symm j
-        rw [← hf.le_iff_le]
-        change f (f.symm i) <= f (f.symm j)
-        simpa only [OrderIso.apply_symm_apply]⟩⟩
-
-Depends on / 依赖: Finset, Finset.univ.orderEmbOfFin, Fintype, Fintype.card, Fintype.card_pos_iff.mpr, InducedCategory, InducedCategory.homMk, LinOrd, LinOrd.ofHom, Nat.succ_pred_eq_of_pos, apply_symm_apply, card_pos_iff, f.apply_symm_apply, f.symm, f.symm_apply_apply, hf.monotone, hom_inv_id, inv_hom_id, monoEquivOfFin, monotone
+/-
+**SimplexCategory.SkeletalFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory.Sk
+eletalFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : skeletalFunctor.EssSurj where
   mem_essImage X :=
-    ⟨⦋(Fintype.card X - 1 : Nat)⦌,
+    ⟨⦋(Fintype.card X - 1 : ℕ)⦌,
       ⟨by
         have aux : Fintype.card X = Fintype.card X - 1 + 1 :=
           (Nat.succ_pred_eq_of_pos <| Fintype.card_pos_iff.mpr ⟨⊥⟩).symm
@@ -1990,60 +1181,60 @@ instance : skeletalFunctor.EssSurj where
             hom_inv_id := by ext; apply f.symm_apply_apply
             inv_hom_id := by ext; apply f.apply_symm_apply }
         intro i j h
-        change f.symm i <= f.symm j
+        change f.symm i ≤ f.symm j
         rw [← hf.le_iff_le]
-        change f (f.symm i) <= f (f.symm j)
+        change f (f.symm i) ≤ f (f.symm j)
         simpa only [OrderIso.apply_symm_apply]⟩⟩
-
-/--
-Instance `isEquivalence` / 实例 `isEquivalence`
-
-English:
-instance isEquivalence
-  signature: : skeletalFunctor.IsEquivalence where
-
-中文:
-实例 isEquivalence
-  签名: : skeletalFunctor.是等价 where
+/-
+**SimplexCategory.SkeletalFunctor.isEquivalence** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+exCategory.SkeletalFunctor`。
+形式化陈述：SimplexCategory.skeletalFunctor.IsEquivalence
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.SkeletalFunctor.instFaithfulNonemptyFinLinOrdSkeletalFun
+ctor`：SimplexCategory.skeletalFunctor.Faithful
+· 使用定理 `SimplexCategory.SkeletalFunctor.instFullNonemptyFinLinOrdSkeletalFunctor
+`：SimplexCategory.skeletalFunctor.Full
+· 使用定理 `SimplexCategory.SkeletalFunctor.instEssSurjNonemptyFinLinOrdSkeletalFunc
+tor`：SimplexCategory.skeletalFunctor.EssSurj
 -/
 noncomputable instance isEquivalence : skeletalFunctor.IsEquivalence where
 
 end SkeletalFunctor
 
-/--
-Definition of `skeletalEquivalence` / `skeletalEquivalence` 的定义
+/-- The equivalence that exhibits `SimplexCategory` as skeleton
+of `NonemptyFinLinOrd` -/
+/-
+**SimplexCategory.skeletalEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory
+`。
+形式化陈述：skeletalEquivalence : SimplexCategory ≌ NonemptyFinLinOrd
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.SkeletalFunctor.isEquivalence`：SimplexCategory.skeletalF
+unctor.IsEquivalence
 
-English:
-definition skeletalEquivalence
-  signature: : SimplexCategory ≌ NonemptyFinLinOrd
-  body: Functor.asEquivalence skeletalFunctor
-
-中文:
-定义 skeletalEquivalence
-  签名: : 单纯形范畴 ≌ 非空有限线性序
-  定义体: Functor.asEquivalence skeletalFunctor
-
-Depends on / 依赖: Functor, Functor.asEquivalence, asEquivalence, skeletalFunctor
+--- 原说明 ---
+The equivalence that exhibits `SimplexCategory` as skeleton
+of `NonemptyFinLinOrd`
 -/
 noncomputable def skeletalEquivalence : SimplexCategory ≌ NonemptyFinLinOrd :=
   Functor.asEquivalence skeletalFunctor
 
 end Skeleton
 
-/--
-lemma `isSkeletonOf` / 引理 `isSkeletonOf`
+/-- `SimplexCategory` is a skeleton of `NonemptyFinLinOrd`.
+-/
+/-
+**SimplexCategory.isSkeletonOf** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：isSkeletonOf : IsSkeletonOf NonemptyFinLinOrd SimplexCategory skeletalFunc
+tor where skel
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.skeletal`：skeletal : Skeletal SimplexCategory
+· 使用定理 `SimplexCategory.SkeletalFunctor.isEquivalence`：SimplexCategory.skeletalF
+unctor.IsEquivalence
 
-English:
-lemma isSkeletonOf
-  proof: skeletal
-  eqv := SkeletalFunctor.isEquivalence
-
-中文:
-引理 isSkeletonOf
-  证明: skeletal
-  eqv := SkeletalFunctor.isEquivalence
-
-Depends on / 依赖: skeletal
+--- 原说明 ---
+`SimplexCategory` is a skeleton of `NonemptyFinLinOrd`.
 -/
 lemma isSkeletonOf :
     IsSkeletonOf NonemptyFinLinOrd SimplexCategory skeletalFunctor where
@@ -2052,96 +1243,44 @@ lemma isSkeletonOf :
 
 section Concrete
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory SimplexCategory (fun i j => Fin (i.len + 1) ->o Fin (j.len + 1))
-  body: Hom.toOrderHom
-  ofHom f := Hom.mk f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 单纯形范畴 (fun i j => 有限集 (i.len + 1) ->o 有限集 (j.len + 1))
-  定义体: Hom.toOrderHom
-  ofHom f := Hom.mk f
-
-Depends on / 依赖: Hom.toOrderHom, toOrderHom
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory SimplexCategory (fun i j => Fin (i.len + 1) ->o Fin (j.len + 1)) where
+instance : ConcreteCategory SimplexCategory (fun i j => Fin (i.len + 1) →o Fin (j.len + 1)) where
   hom := Hom.toOrderHom
   ofHom f := Hom.mk f
-
-/--
-lemma `toType_apply` / 引理 `toType_apply`
-
-English:
-lemma toType_apply
-  given: (x : SimplexCategory)
-  statement: ToType x = Fin (x.len + 1)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toType_apply
-  条件: (x : 单纯形范畴)
-  结论: ToType x = 有限集 (x.len + 1)
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategory.toType_apply** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：toType_apply (x : SimplexCategory) : ToType x = Fin (x.len + 1)
+参数：x : SimplexCategory。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toType_apply (x : SimplexCategory) : ToType x = Fin (x.len + 1) := rfl
 
 @[simp]
-/--
-lemma `concreteCategoryHom_id` / 引理 `concreteCategoryHom_id`
-
-English:
-lemma concreteCategoryHom_id
-  given: (n : SimplexCategory)
-  statement: ConcreteCategory.hom (𝟙 n) = .id
-  proof: rfl
-
-中文:
-引理 concreteCategoryHom_id
-  条件: (n : 单纯形范畴)
-  结论: 余ncrete范畴.hom (𝟙 n) = .id
-  证明: rfl
+/-
+**SimplexCategory.concreteCategoryHom_id** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCateg
+ory`。
+形式化陈述：concreteCategoryHom_id (n : SimplexCategory) : ConcreteCategory.hom (𝟙 n) 
+= .id
+参数：n : SimplexCategory。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma concreteCategoryHom_id (n : SimplexCategory) : ConcreteCategory.hom (𝟙 n) = .id := rfl
-
-/--
-lemma `coe_δ` / 引理 `coe_δ`
-
-English:
-lemma coe_δ
-  given: {n : Nat} (i : Fin (n + 2))
-  proof: rfl
-
-中文:
-引理 coe_δ
-  条件: {n : 自然数} (i : 有限集 (n + 2))
-  证明: rfl
+/-
+**SimplexCategory.coe_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_δ {n : Nat} (i : Fin (n + 2)) :
+lemma coe_δ {n : ℕ} (i : Fin (n + 2)) :
     dsimp% ⇑(δ i) = Fin.succAbove i := rfl
-
-/--
-lemma `coe_σ` / 引理 `coe_σ`
-
-English:
-lemma coe_σ
-  given: {n : Nat} (i : Fin (n + 1))
-  proof: rfl
-
-中文:
-引理 coe_σ
-  条件: {n : 自然数} (i : 有限集 (n + 1))
-  证明: rfl
+/-
+**SimplexCategory.coe_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_σ {n : Nat} (i : Fin (n + 1)) :
+lemma coe_σ {n : ℕ} (i : Fin (n + 1)) :
     dsimp% ⇑(σ i) = Fin.predAbove i := rfl
 
 end Concrete
@@ -2149,28 +1288,48 @@ end Concrete
 section EpiMono
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `mono_iff_injective` / 定理 `mono_iff_injective`
+/-- A morphism in `SimplexCategory` is a monomorphism precisely when it is an injective function
+-/
+/-
+**SimplexCategory.mono_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`
+。
+形式化陈述：mono_iff_injective {n m : SimplexCategory} {f : n ⟶ m} : Mono f ↔ Function
+.Injective f.toOrderHom
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.mono_map_iff_mono`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preservesMonomorphisms_of_isRightAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用定理 `CategoryTheory.reflectsMonomorphisms_of_reflectsLimitsOfShape`：∀ {C : Ty
+pe u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.reflectsLimitsOfShape_of_reflectsLimits`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (J : Type w) [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mono_iff_injective
-  given: {n m : SimplexCategory} {f : n ⟶ m}
-  proof: by
-  rw [← Functor.mono_map_iff_mono skeletalEquivalence.functor]
-  dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
-  simp only [skeletalFunctor_obj, skeletalFunctor_map,
-    NonemptyFinLinOrd.mono_iff_injective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
-
-中文:
-定理 mono_iff_injective
-  条件: {n m : 单纯形范畴} {f : n ⟶ m}
-  证明: by
-  rw [← Functor.mono_map_iff_mono skeletalEquivalence.functor]
-  dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
-  simp only [skeletalFunctor_obj, skeletalFunctor_map,
-    NonemptyFinLinOrd.mono_iff_injective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.asEquivalence_functor, Functor.mono_map_iff_mono, NonemptyFinLinOrd, NonemptyFinLinOrd.coe_of, NonemptyFinLinOrd.mono_iff_injective, asEquivalence_functor, coe_of, functor, hom_ofHom, mono_iff_injective, mono_map_iff_mono, skeletalEquivalence, skeletalEquivalence.functor, skeletalFunctor_map, skeletalFunctor_obj
+--- 原说明 ---
+A morphism in `SimplexCategory` is a monomorphism precisely when it is an inject
+ive function
 -/
 theorem mono_iff_injective {n m : SimplexCategory} {f : n ⟶ m} :
     Mono f ↔ Function.Injective f.toOrderHom := by
@@ -2180,28 +1339,47 @@ theorem mono_iff_injective {n m : SimplexCategory} {f : n ⟶ m} :
     NonemptyFinLinOrd.mono_iff_injective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `epi_iff_surjective` / 定理 `epi_iff_surjective`
+/-- A morphism in `SimplexCategory` is an epimorphism if and only if it is a surjective function
+-/
+/-
+**SimplexCategory.epi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`
+。
+形式化陈述：epi_iff_surjective {n m : SimplexCategory} {f : n ⟶ m} : Epi f ↔ Function.
+Surjective f.toOrderHom
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.epi_map_iff_epi`：epi_map_iff_epi [hF₁ : Preserves
+Epimorphisms F] [hF₂ : ReflectsEpimorphisms F] : Epi (F.map f) ↔ Epi f
+· 使用定理 `CategoryTheory.Functor.preservesEpimorphisms_of_isLeftAdjoint`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用定理 `CategoryTheory.reflectsEpimorphisms_of_reflectsColimitsOfShape`：∀ {C : T
+ype u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.reflectsColimitsOfShape_of_reflectsColimits`：∀ {C 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D]   (J : Type w) [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem epi_iff_surjective
-  given: {n m : SimplexCategory} {f : n ⟶ m}
-  proof: by
-  rw [← Functor.epi_map_iff_epi skeletalEquivalence.functor]
-  dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
-  simp only [skeletalFunctor_obj, skeletalFunctor_map,
-    NonemptyFinLinOrd.epi_iff_surjective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
-
-中文:
-定理 epi_iff_surjective
-  条件: {n m : 单纯形范畴} {f : n ⟶ m}
-  证明: by
-  rw [← Functor.epi_map_iff_epi skeletalEquivalence.functor]
-  dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
-  simp only [skeletalFunctor_obj, skeletalFunctor_map,
-    NonemptyFinLinOrd.epi_iff_surjective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.asEquivalence_functor, Functor.epi_map_iff_epi, NonemptyFinLinOrd, NonemptyFinLinOrd.coe_of, NonemptyFinLinOrd.epi_iff_surjective, asEquivalence_functor, coe_of, epi_iff_surjective, epi_map_iff_epi, functor, hom_ofHom, skeletalEquivalence, skeletalEquivalence.functor, skeletalFunctor_map, skeletalFunctor_obj
+--- 原说明 ---
+A morphism in `SimplexCategory` is an epimorphism if and only if it is a surject
+ive function
 -/
 theorem epi_iff_surjective {n m : SimplexCategory} {f : n ⟶ m} :
     Epi f ↔ Function.Surjective f.toOrderHom := by
@@ -2210,190 +1388,169 @@ theorem epi_iff_surjective {n m : SimplexCategory} {f : n ⟶ m} :
   simp only [skeletalFunctor_obj, skeletalFunctor_map,
     NonemptyFinLinOrd.epi_iff_surjective, NonemptyFinLinOrd.coe_of, ConcreteCategory.hom_ofHom]
 
-/--
-theorem `len_le_of_mono` / 定理 `len_le_of_mono`
+/-- A monomorphism in `SimplexCategory` must increase lengths -/
+/-
+**SimplexCategory.len_le_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：len_le_of_mono {x y : SimplexCategory} (f : x ⟶ y) [Mono f] : x.len <= y.l
+en
+参数：f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `Fintype.card_le_of_injective`：card_le_of_injective (f : α -> β) (hf : Fu
+nction.Injective f) : card α <= card β
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimplexCategory.mono_iff_injective`：mono_iff_injective {n m : SimplexCat
+egory} {f : n ⟶ m} : Mono f ↔ Function.Injective f.toOrderHom
 
-English:
-theorem len_le_of_mono
-  given: {x y : SimplexCategory} (f : x ⟶ y) [Mono f]
-  statement: x.len <= y.len
-  proof: by
-  simpa using Fintype.card_le_of_injective f.toOrderHom.toFun
-    (by dsimp; rwa [← mono_iff_injective])
-
-中文:
-定理 len_le_of_mono
-  条件: {x y : 单纯形范畴} (f : x ⟶ y) [单态射 f]
-  结论: x.len <= y.len
-  证明: by
-  simpa using Fintype.card_le_of_injective f.toOrderHom.toFun
-    (by dsimp; rwa [← mono_iff_injective])
-
-Depends on / 依赖: Fintype, Fintype.card_le_of_injective, card_le_of_injective, f.toOrderHom.toFun, mono_iff_injective, toOrderHom
+--- 原说明 ---
+A monomorphism in `SimplexCategory` must increase lengths
 -/
-theorem len_le_of_mono {x y : SimplexCategory} (f : x ⟶ y) [Mono f] : x.len <= y.len := by
+theorem len_le_of_mono {x y : SimplexCategory} (f : x ⟶ y) [Mono f] : x.len ≤ y.len := by
   simpa using Fintype.card_le_of_injective f.toOrderHom.toFun
     (by dsimp; rwa [← mono_iff_injective])
-
-/--
-theorem `le_of_mono` / 定理 `le_of_mono`
-
-English:
-theorem le_of_mono
-  given: {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Mono f]
-  statement: n <= m
-  proof: len_le_of_mono f
-
-中文:
-定理 le_of_mono
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [单态射 f]
-  结论: n <= m
-  证明: len_le_of_mono f
-
-Depends on / 依赖: len_le_of_mono
+/-
+**SimplexCategory.le_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：le_of_mono {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Mono f] : n <= m
+参数：f : ⦋n⦌ ⟶ ⦋m⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.len_le_of_mono`：len_le_of_mono {x y : SimplexCategory} (
+f : x ⟶ y) [Mono f] : x.len <= y.len
 -/
-theorem le_of_mono {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Mono f] : n <= m :=
+theorem le_of_mono {n m : ℕ} (f : ⦋n⦌ ⟶ ⦋m⦌) [Mono f] : n ≤ m :=
   len_le_of_mono f
 
-/--
-theorem `len_le_of_epi` / 定理 `len_le_of_epi`
+/-- An epimorphism in `SimplexCategory` must decrease lengths -/
+/-
+**SimplexCategory.len_le_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：len_le_of_epi {x y : SimplexCategory} (f : x ⟶ y) [Epi f] : y.len <= x.len
+参数：f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `Fintype.card_le_of_surjective`：card_le_of_surjective (f : α -> β) (h : F
+unction.Surjective f) : card β <= card α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimplexCategory.epi_iff_surjective`：epi_iff_surjective {n m : SimplexCat
+egory} {f : n ⟶ m} : Epi f ↔ Function.Surjective f.toOrderHom
 
-English:
-theorem len_le_of_epi
-  given: {x y : SimplexCategory} (f : x ⟶ y) [Epi f]
-  statement: y.len <= x.len
-  proof: by
-  simpa using Fintype.card_le_of_surjective f.toOrderHom.toFun
-    (by dsimp; rwa [← epi_iff_surjective])
-
-中文:
-定理 len_le_of_epi
-  条件: {x y : 单纯形范畴} (f : x ⟶ y) [满态射 f]
-  结论: y.len <= x.len
-  证明: by
-  simpa using Fintype.card_le_of_surjective f.toOrderHom.toFun
-    (by dsimp; rwa [← epi_iff_surjective])
-
-Depends on / 依赖: Fintype, Fintype.card_le_of_surjective, card_le_of_surjective, epi_iff_surjective, f.toOrderHom.toFun, toOrderHom
+--- 原说明 ---
+An epimorphism in `SimplexCategory` must decrease lengths
 -/
-theorem len_le_of_epi {x y : SimplexCategory} (f : x ⟶ y) [Epi f] : y.len <= x.len := by
+theorem len_le_of_epi {x y : SimplexCategory} (f : x ⟶ y) [Epi f] : y.len ≤ x.len := by
   simpa using Fintype.card_le_of_surjective f.toOrderHom.toFun
     (by dsimp; rwa [← epi_iff_surjective])
-
-/--
-theorem `le_of_epi` / 定理 `le_of_epi`
-
-English:
-theorem le_of_epi
-  given: {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f]
-  statement: m <= n
-  proof: len_le_of_epi f
-
-中文:
-定理 le_of_epi
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [满态射 f]
-  结论: m <= n
-  证明: len_le_of_epi f
-
-Depends on / 依赖: len_le_of_epi
+/-
+**SimplexCategory.le_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：le_of_epi {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f] : m <= n
+参数：f : ⦋n⦌ ⟶ ⦋m⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.len_le_of_epi`：len_le_of_epi {x y : SimplexCategory} (f 
+: x ⟶ y) [Epi f] : y.len <= x.len
 -/
-theorem le_of_epi {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f] : m <= n := len_le_of_epi f
-
-/--
-lemma `len_eq_of_isIso` / 引理 `len_eq_of_isIso`
-
-English:
-lemma len_eq_of_isIso
-  given: {x y : SimplexCategory} (f : x ⟶ y) [IsIso f]
-  statement: x.len = y.len
-  proof: le_antisymm (len_le_of_mono f) (len_le_of_epi f)
-
-中文:
-引理 len_eq_of_isIso
-  条件: {x y : 单纯形范畴} (f : x ⟶ y) [是同构 f]
-  结论: x.len = y.len
-  证明: le_antisymm (len_le_of_mono f) (len_le_of_epi f)
-
-Depends on / 依赖: le_antisymm, len_le_of_epi, len_le_of_mono
+theorem le_of_epi {n m : ℕ} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f] : m ≤ n := len_le_of_epi f
+/-
+**SimplexCategory.len_eq_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：len_eq_of_isIso {x y : SimplexCategory} (f : x ⟶ y) [IsIso f] : x.len = y.
+len
+参数：f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `SimplexCategory.len_le_of_mono`：len_le_of_mono {x y : SimplexCategory} (
+f : x ⟶ y) [Mono f] : x.len <= y.len
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `SimplexCategory.len_le_of_epi`：len_le_of_epi {x y : SimplexCategory} (f 
+: x ⟶ y) [Epi f] : y.len <= x.len
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
 -/
 lemma len_eq_of_isIso {x y : SimplexCategory} (f : x ⟶ y) [IsIso f] : x.len = y.len :=
   le_antisymm (len_le_of_mono f) (len_le_of_epi f)
-
-/--
-lemma `eq_of_isIso` / 引理 `eq_of_isIso`
-
-English:
-lemma eq_of_isIso
-  given: {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [IsIso f]
-  statement: n = m
-  proof: len_eq_of_isIso f
-
-中文:
-引理 eq_of_isIso
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [是同构 f]
-  结论: n = m
-  证明: len_eq_of_isIso f
-
-Depends on / 依赖: len_eq_of_isIso
+/-
+**SimplexCategory.eq_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_of_isIso {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [IsIso f] : n = m
+参数：f : ⦋n⦌ ⟶ ⦋m⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimplexCategory.len_eq_of_isIso`：len_eq_of_isIso {x y : SimplexCategory}
+ (f : x ⟶ y) [IsIso f] : x.len = y.len
 -/
-lemma eq_of_isIso {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [IsIso f] : n = m :=
+lemma eq_of_isIso {n m : ℕ} (f : ⦋n⦌ ⟶ ⦋m⦌) [IsIso f] : n = m :=
   len_eq_of_isIso f
-
-instance {n : Nat} {i : Fin (n + 1)} : Epi (σ i) := by
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n : ℕ} {i : Fin (n + 1)} : Epi (σ i) := by
   simpa only [epi_iff_surjective] using! Fin.predAbove_surjective i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget SimplexCategory).ReflectsIsomorphisms
-  body: ⟨fun f hf =>
-    Iso.isIso_hom
-      { hom := f
-        inv := Hom.mk
-            { toFun := inv ((forget SimplexCategory).map f)
-              monotone' := fun y₁ y₂ h => by
-                by_cases h' : y₁ < y₂
-                · by_contra h''
-                  apply not_le.mpr h'
-                  convert! f.toOrderHom.monotone (le_of_not_ge h'')
-                  all_goals
-                    exact (ConcreteCategory.congr_hom (Iso.inv_hom_id
-                      (asIso ((forget SimplexCategory).map f))) _).symm
-                · rw [eq_of_le_of_not_lt h h'] }
-        hom_inv_id := by
-          ext x : 3
-          exact Iso.hom_inv_id_apply (asIso ((forget _).map f)) x
-        inv_hom_id := by
-          ext x : 3
-          exact Iso.inv_hom_id_apply (asIso ((forget _).map f)) x }⟩
-
-中文:
-实例 :
-  签名: (forget 单纯形范畴).反映同构
-  定义体: ⟨fun f hf =>
-    Iso.isIso_hom
-      { hom := f
-        inv := Hom.mk
-            { toFun := inv ((forget SimplexCategory).map f)
-              monotone' := fun y₁ y₂ h => by
-                by_cases h' : y₁ < y₂
-                · by_contra h''
-                  apply not_le.mpr h'
-                  convert! f.toOrderHom.monotone (le_of_not_ge h'')
-                  all_goals
-                    exact (ConcreteCategory.congr_hom (Iso.inv_hom_id
-                      (asIso ((forget SimplexCategory).map f))) _).symm
-                · rw [eq_of_le_of_not_lt h h'] }
-        hom_inv_id := by
-          ext x : 3
-          exact Iso.hom_inv_id_apply (asIso ((forget _).map f)) x
-        inv_hom_id := by
-          ext x : 3
-          exact Iso.inv_hom_id_apply (asIso ((forget _).map f)) x }⟩
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Hom.mk, Iso.hom_inv_id_apply, Iso.inv_hom_id, Iso.isIso_hom, SimplexCategory, all_goals, congr_hom, convert, eq_of_le_of_not_lt, f.toOrderHom.monotone, forget, hom_inv_id, hom_inv_id_apply, inv_hom_id, isIso_hom, le_of_not_ge, monotone, not_le
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget SimplexCategory).ReflectsIsomorphisms :=
   ⟨fun f hf =>
@@ -2416,111 +1573,99 @@ instance : (forget SimplexCategory).ReflectsIsomorphisms :=
         inv_hom_id := by
           ext x : 3
           exact Iso.inv_hom_id_apply (asIso ((forget _).map f)) x }⟩
-
-/--
-theorem `isIso_of_bijective` / 定理 `isIso_of_bijective`
-
-English:
-theorem isIso_of_bijective
-  statement: {x y : SimplexCategory} {f : x ⟶ y}
-  proof: haveI : IsIso ((forget SimplexCategory).map f) := (isIso_iff_bijective _).mpr hf
-  isIso_of_reflects_iso f (forget SimplexCategory)
-
-中文:
-定理 isIso_of_bijective
-  结论: {x y : 单纯形范畴} {f : x ⟶ y}
-  证明: haveI : IsIso ((forget SimplexCategory).map f) := (isIso_iff_bijective _).mpr hf
-  isIso_of_reflects_iso f (forget SimplexCategory)
-
-Depends on / 依赖: SimplexCategory, forget, isIso_iff_bijective, isIso_of_reflects_iso
+/-
+**SimplexCategory.isIso_of_bijective** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`
+。
+形式化陈述：isIso_of_bijective {x y : SimplexCategory} {f : x ⟶ y} (hf : Function.Bije
+ctive f.toOrderHom.toFun) : IsIso f
+参数：hf : Function.Bijective f.toOrderHom.toFun。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_reflects_iso`：isIso_of_reflects_iso {A B : C} (f
+ : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] [F.ReflectsIsomorphisms] : IsIso f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.isIso_iff_bijective`：isIso_iff_bijective {X Y : Type u} (
+f : X ⟶ Y) : IsIso f ↔ Function.Bijective f
+· 使用定理 `SimplexCategory.instReflectsIsomorphismsForgetOrderHomFinHAddNatLenOfNat
+`：(CategoryTheory.forget SimplexCategory).ReflectsIsomorphisms
 -/
 theorem isIso_of_bijective {x y : SimplexCategory} {f : x ⟶ y}
     (hf : Function.Bijective f.toOrderHom.toFun) : IsIso f :=
   haveI : IsIso ((forget SimplexCategory).map f) := (isIso_iff_bijective _).mpr hf
   isIso_of_reflects_iso f (forget SimplexCategory)
-
-/--
-lemma `isIso_iff_of_mono` / 引理 `isIso_iff_of_mono`
-
-English:
-lemma isIso_iff_of_mono
-  given: {n m : SimplexCategory} (f : n ⟶ m) [hf : Mono f]
-  proof: by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
-  obtain rfl : n = m := by aesop
-  rw [mono_iff_injective] at hf
-  exact isIso_of_bijective ⟨hf, by rwa [← Finite.injective_iff_surjective]⟩
-
-中文:
-引理 isIso_iff_of_mono
-  条件: {n m : 单纯形范畴} (f : n ⟶ m) [hf : 单态射 f]
-  证明: by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
-  obtain rfl : n = m := by aesop
-  rw [mono_iff_injective] at hf
-  exact isIso_of_bijective ⟨hf, by rwa [← Finite.injective_iff_surjective]⟩
-
-Depends on / 依赖: Finite, Finite.injective_iff_surjective, injective_iff_surjective, isIso_of_bijective, len_eq_of_isIso, mono_iff_injective
+/-
+**SimplexCategory.isIso_iff_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：isIso_iff_of_mono {n m : SimplexCategory} (f : n ⟶ m) [hf : Mono f] : IsIs
+o f ↔ n.len = m.len
+参数：f : n ⟶ m。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimplexCategory.len_eq_of_isIso`：len_eq_of_isIso {x y : SimplexCategory}
+ (f : x ⟶ y) [IsIso f] : x.len = y.len
+· 使用定理 `SimplexCategory.isIso_of_bijective`：isIso_of_bijective {x y : SimplexCat
+egory} {f : x ⟶ y} (hf : Function.Bijective f.toOrderHom.toFun) : IsIso f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimplexCategory.mono_iff_injective`：mono_iff_injective {n m : SimplexCat
+egory} {f : n ⟶ m} : Mono f ↔ Function.Injective f.toOrderHom
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finite.injective_iff_surjective`：injective_iff_surjective {f : α -> α} :
+ Injective f ↔ Surjective f
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `SimplexCategory.ext`：∀ {x y : SimplexCategory}, x.len = y.len → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isIso_iff_of_mono {n m : SimplexCategory} (f : n ⟶ m) [hf : Mono f] :
     IsIso f ↔ n.len = m.len := by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
+  refine ⟨fun _ ↦ len_eq_of_isIso f, fun h ↦ ?_⟩
   obtain rfl : n = m := by aesop
   rw [mono_iff_injective] at hf
   exact isIso_of_bijective ⟨hf, by rwa [← Finite.injective_iff_surjective]⟩
-
-instance {n : Nat} {i : Fin (n + 2)} : Mono (δ i) := by
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n : ℕ} {i : Fin (n + 2)} : Mono (δ i) := by
   rw [mono_iff_injective]
   exact Fin.succAbove_right_injective
-
-/--
-lemma `isIso_iff_of_epi` / 引理 `isIso_iff_of_epi`
-
-English:
-lemma isIso_iff_of_epi
-  given: {n m : SimplexCategory} (f : n ⟶ m) [hf : Epi f]
-  proof: by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
-  obtain rfl : n = m := by aesop
-  rw [epi_iff_surjective] at hf
-  exact isIso_of_bijective ⟨by rwa [Finite.injective_iff_surjective], hf⟩
-
-中文:
-引理 isIso_iff_of_epi
-  条件: {n m : 单纯形范畴} (f : n ⟶ m) [hf : 满态射 f]
-  证明: by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
-  obtain rfl : n = m := by aesop
-  rw [epi_iff_surjective] at hf
-  exact isIso_of_bijective ⟨by rwa [Finite.injective_iff_surjective], hf⟩
-
-Depends on / 依赖: Finite, Finite.injective_iff_surjective, epi_iff_surjective, injective_iff_surjective, isIso_of_bijective, len_eq_of_isIso
+/-
+**SimplexCategory.isIso_iff_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：isIso_iff_of_epi {n m : SimplexCategory} (f : n ⟶ m) [hf : Epi f] : IsIso 
+f ↔ n.len = m.len
+参数：f : n ⟶ m。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimplexCategory.len_eq_of_isIso`：len_eq_of_isIso {x y : SimplexCategory}
+ (f : x ⟶ y) [IsIso f] : x.len = y.len
+· 使用定理 `SimplexCategory.isIso_of_bijective`：isIso_of_bijective {x y : SimplexCat
+egory} {f : x ⟶ y} (hf : Function.Bijective f.toOrderHom.toFun) : IsIso f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finite.injective_iff_surjective`：injective_iff_surjective {f : α -> α} :
+ Injective f ↔ Surjective f
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `SimplexCategory.epi_iff_surjective`：epi_iff_surjective {n m : SimplexCat
+egory} {f : n ⟶ m} : Epi f ↔ Function.Surjective f.toOrderHom
+· 使用定理 `SimplexCategory.ext`：∀ {x y : SimplexCategory}, x.len = y.len → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isIso_iff_of_epi {n m : SimplexCategory} (f : n ⟶ m) [hf : Epi f] :
     IsIso f ↔ n.len = m.len := by
-  refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
+  refine ⟨fun _ ↦ len_eq_of_isIso f, fun h ↦ ?_⟩
   obtain rfl : n = m := by aesop
   rw [epi_iff_surjective] at hf
   exact isIso_of_bijective ⟨by rwa [Finite.injective_iff_surjective], hf⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Balanced SimplexCategory
-  body: by
-    rw [isIso_iff_of_epi]
-    exact le_antisymm (len_le_of_mono f) (len_le_of_epi f)
-
-中文:
-实例 :
-  签名: Balanced 单纯形范畴
-  定义体: by
-    rw [isIso_iff_of_epi]
-    exact le_antisymm (len_le_of_mono f) (len_le_of_epi f)
-
-Depends on / 依赖: isIso_iff_of_epi, le_antisymm, len_le_of_epi, len_le_of_mono
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Balanced SimplexCategory where
   isIso_of_mono_of_epi f _ _ := by
@@ -2529,34 +1674,16 @@ instance : Balanced SimplexCategory where
 
 /-- An isomorphism in `SimplexCategory` induces an `OrderIso`. -/
 @[simp]
-/--
-Definition of `orderIsoOfIso` / `orderIsoOfIso` 的定义
+/-
+**SimplexCategory.orderIsoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：orderIsoOfIso {x y : SimplexCategory} (e : x ≅ y) : Fin (x.len + 1) ≃o Fin
+ (y.len + 1)
+参数：e : x ≅ y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoOfIso
-  signature: {x y : SimplexCategory} (e : x ≅ y)
-  body: Equiv.toOrderIso
-    { toFun := e.hom.toOrderHom
-      invFun := e.inv.toOrderHom
-      left_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.hom_inv_id
-      right_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_hom_id }
-    e.hom.toOrderHom.monotone e.inv.toOrderHom.monotone
-
-中文:
-定义 orderIsoOfIso
-  签名: {x y : 单纯形范畴} (e : x ≅ y)
-  定义体: Equiv.toOrderIso
-    { toFun := e.hom.toOrderHom
-      invFun := e.inv.toOrderHom
-      left_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.hom_inv_id
-      right_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_hom_id }
-    e.hom.toOrderHom.monotone e.inv.toOrderHom.monotone
-
-Depends on / 依赖: Equiv.toOrderIso, Hom.toOrderHom, congr_arg, e.hom.toOrderHom, e.hom.toOrderHom.monotone, e.hom_inv_id, e.inv.toOrderHom, e.inv.toOrderHom.monotone, e.inv_hom_id, hom_inv_id, invFun, inv_hom_id, left_inv, monotone, right_inv, toOrderHom, toOrderIso
+--- 原说明 ---
+An isomorphism in `SimplexCategory` induces an `OrderIso`.
 -/
 def orderIsoOfIso {x y : SimplexCategory} (e : x ≅ y) : Fin (x.len + 1) ≃o Fin (y.len + 1) :=
   Equiv.toOrderIso
@@ -2567,35 +1694,28 @@ def orderIsoOfIso {x y : SimplexCategory} (e : x ≅ y) : Fin (x.len + 1) ≃o F
       right_inv := fun i => by
         simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_hom_id }
     e.hom.toOrderHom.monotone e.inv.toOrderHom.monotone
-
-/--
-theorem `iso_eq_iso_refl` / 定理 `iso_eq_iso_refl`
-
-English:
-theorem iso_eq_iso_refl
-  given: {x : SimplexCategory} (e : x ≅ x)
-  statement: e = Iso.refl x
-  proof: by
-  have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
-  have eq₁ := Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso e) i)
-  have eq₂ :=
-    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i)
-  ext : 4
-  exact DFunLike.congr_fun (eq₁.trans eq₂.symm) _
-
-中文:
-定理 iso_eq_iso_refl
-  条件: {x : 单纯形范畴} (e : x ≅ x)
-  结论: e = 同构.refl x
-  证明: by
-  have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
-  have eq₁ := Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso e) i)
-  have eq₂ :=
-    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i)
-  ext : 4
-  exact DFunLike.congr_fun (eq₁.trans eq₂.symm) _
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Finset, Finset.card_fin, Finset.mem_univ, Finset.orderEmbOfFin_unique, Finset.univ, Iso.refl, card_fin, congr_fun, mem_univ, orderEmbOfFin_unique, orderIsoOfIso, x.len
+/-
+**SimplexCategory.iso_eq_iso_refl** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：iso_eq_iso_refl {x : SimplexCategory} (e : x ≅ x) : e = Iso.refl x
+参数：e : x ≅ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_fin`：Finset.card_fin (n : Nat) : #(univ : Finset (Fin n)) = 
+n
+· 使用定理 `Finset.orderEmbOfFin_unique'`：orderEmbOfFin_unique' {s : Finset α} {k : 
+Nat} (h : s.card = k) {f : Fin k ↪o α} (hfs : forall x, f x in s) : f = s.orderE
+mbOfFin h
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem iso_eq_iso_refl {x : SimplexCategory} (e : x ≅ x) : e = Iso.refl x := by
   have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
@@ -2604,115 +1724,43 @@ theorem iso_eq_iso_refl {x : SimplexCategory} (e : x ≅ x) : e = Iso.refl x := 
     Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i)
   ext : 4
   exact DFunLike.congr_fun (eq₁.trans eq₂.symm) _
-
-/--
-theorem `eq_id_of_isIso` / 定理 `eq_id_of_isIso`
-
-English:
-theorem eq_id_of_isIso
-  given: {x : SimplexCategory} (f : x ⟶ x) [IsIso f]
-  statement: f = 𝟙 _
-  proof: congr_arg (fun φ : _ ≅ _ => φ.hom) (iso_eq_iso_refl (asIso f))
-
-中文:
-定理 eq_id_of_isIso
-  条件: {x : 单纯形范畴} (f : x ⟶ x) [是同构 f]
-  结论: f = 𝟙 _
-  证明: congr_arg (fun φ : _ ≅ _ => φ.hom) (iso_eq_iso_refl (asIso f))
-
-Depends on / 依赖: congr_arg, iso_eq_iso_refl
+/-
+**SimplexCategory.eq_id_of_isIso** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_id_of_isIso {x : SimplexCategory} (f : x ⟶ x) [IsIso f] : f = 𝟙 _
+参数：f : x ⟶ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `SimplexCategory.iso_eq_iso_refl`：iso_eq_iso_refl {x : SimplexCategory} (
+e : x ≅ x) : e = Iso.refl x
 -/
 theorem eq_id_of_isIso {x : SimplexCategory} (f : x ⟶ x) [IsIso f] : f = 𝟙 _ :=
   congr_arg (fun φ : _ ≅ _ => φ.hom) (iso_eq_iso_refl (asIso f))
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `eq_σ_comp_of_not_injective'` / 定理 `eq_σ_comp_of_not_injective'`
-
-English:
-theorem eq_σ_comp_of_not_injective'
-  statement: {n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
-  proof: by
-  use δ i.succ ≫ θ
-  ext x : 3
-  simp only [len_mk, σ, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
-    Function.comp_apply, Fin.predAboveOrderHom_coe]
-  by_cases h' : x <= Fin.castSucc i
-  · rw [Fin.predAbove_of_le_castSucc i x h']
-    dsimp [δ]
-    rw [Fin.succAbove_of_castSucc_lt]
-    · rw [Fin.castSucc_castPred]
-    · exact (Fin.castSucc_lt_succ_iff.mpr h')
-  · simp only [not_le] at h'
-let y := x.pred by rintro (rfl : x = 0); simp at h'
-    have hy : x = y.succ := (Fin.succ_pred x _).symm
-    rw [hy] at h' ⊢
-    rw [Fin.predAbove_of_castSucc_lt i y.succ h']; rw [Fin.pred_succ]
-    by_cases h'' : y = i
-    · rw [h'']
-      refine hi.symm.trans ?_
-      congr 1
-      dsimp [δ]
-      rw [Fin.succAbove_of_castSucc_lt i.succ]
-      exact Fin.castSucc_lt_succ
-    · dsimp [δ]
-      rw [Fin.succAbove_of_le_castSucc i.succ _]
-      simp only [Fin.lt_def, Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc,
-        Nat.lt_succ_iff, Fin.ext_iff] at h' h'' ⊢
-      lia
-
-中文:
-定理 eq_σ_comp_of_not_injective'
-  结论: {n : 自然数} {Δ' : 单纯形范畴} (θ : ⦋n + 1⦌ ⟶ Δ')
-  证明: by
-  use δ i.succ ≫ θ
-  ext x : 3
-  simp only [len_mk, σ, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
-    Function.comp_apply, Fin.predAboveOrderHom_coe]
-  by_cases h' : x <= Fin.castSucc i
-  · rw [Fin.predAbove_of_le_castSucc i x h']
-    dsimp [δ]
-    rw [Fin.succAbove_of_castSucc_lt]
-    · rw [Fin.castSucc_castPred]
-    · exact (Fin.castSucc_lt_succ_iff.mpr h')
-  · simp only [not_le] at h'
-let y := x.pred by rintro (rfl : x = 0); simp at h'
-    have hy : x = y.succ := (Fin.succ_pred x _).symm
-    rw [hy] at h' ⊢
-    rw [Fin.predAbove_of_castSucc_lt i y.succ h']; rw [Fin.pred_succ]
-    by_cases h'' : y = i
-    · rw [h'']
-      refine hi.symm.trans ?_
-      congr 1
-      dsimp [δ]
-      rw [Fin.succAbove_of_castSucc_lt i.succ]
-      exact Fin.castSucc_lt_succ
-    · dsimp [δ]
-      rw [Fin.succAbove_of_le_castSucc i.succ _]
-      simp only [Fin.lt_def, Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc,
-        Nat.lt_succ_iff, Fin.ext_iff] at h' h'' ⊢
-      lia
-
-Depends on / 依赖: Fin.castSucc, Fin.castSucc_castPred, Fin.castSucc_lt_succ_iff.mpr, Fin.predAboveOrderHom_coe, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, Fin.succ_pred, Function, Function.comp_apply, Hom.toOrderHom_mk, OrderHom, OrderHom.comp_coe, castSucc, castSucc_castPred, castSucc_lt_succ_iff, comp_apply, comp_coe, comp_toOrderHom, i.succ, len_mk
+/-
+**SimplexCategory.eq_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_σ_comp_of_not_injective' {n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
+theorem eq_σ_comp_of_not_injective' {n : ℕ} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
     (i : Fin (n + 1)) (hi : θ.toOrderHom (Fin.castSucc i) = θ.toOrderHom i.succ) :
-    exists θ' : ⦋n⦌ ⟶ Δ', θ = σ i ≫ θ' := by
+    ∃ θ' : ⦋n⦌ ⟶ Δ', θ = σ i ≫ θ' := by
   use δ i.succ ≫ θ
   ext x : 3
   simp only [len_mk, σ, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
     Function.comp_apply, Fin.predAboveOrderHom_coe]
-  by_cases h' : x <= Fin.castSucc i
+  by_cases h' : x ≤ Fin.castSucc i
   · rw [Fin.predAbove_of_le_castSucc i x h']
     dsimp [δ]
     rw [Fin.succAbove_of_castSucc_lt]
     · rw [Fin.castSucc_castPred]
     · exact (Fin.castSucc_lt_succ_iff.mpr h')
   · simp only [not_le] at h'
-let y := x.pred by rintro (rfl : x = 0); simp at h'
+    let y := x.pred <| by rintro (rfl : x = 0); simp at h'
     have hy : x = y.succ := (Fin.succ_pred x _).symm
     rw [hy] at h' ⊢
-    rw [Fin.predAbove_of_castSucc_lt i y.succ h']; rw [Fin.pred_succ]
+    rw [Fin.predAbove_of_castSucc_lt i y.succ h', Fin.pred_succ]
     by_cases h'' : y = i
     · rw [h'']
       refine hi.symm.trans ?_
@@ -2725,61 +1773,17 @@ let y := x.pred by rintro (rfl : x = 0); simp at h'
       simp only [Fin.lt_def, Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc,
         Nat.lt_succ_iff, Fin.ext_iff] at h' h'' ⊢
       lia
-
-/--
-theorem `eq_σ_comp_of_not_injective` / 定理 `eq_σ_comp_of_not_injective`
-
-English:
-theorem eq_σ_comp_of_not_injective
-  statement: {n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
-  proof: by
-  simp only [Function.Injective, exists_prop, not_forall] at hθ
-  -- as θ is not injective, there exists `x<y` such that `θ x = θ y`
-  -- and then, `θ x = θ (x+1)`
-  have hθ₂ : exists x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
-    rcases hθ with ⟨x, y, ⟨h₁, h₂⟩⟩
-    by_cases h : x < y
-    · exact ⟨x, y, ⟨h₁, h⟩⟩
-    · refine ⟨y, x, ⟨h₁.symm, ?_⟩⟩
-      lia
-  rcases hθ₂ with ⟨x, y, ⟨h₁, h₂⟩⟩
-  use x.castPred ((Fin.le_last _).trans_lt' h₂).ne
-  apply eq_σ_comp_of_not_injective'
-  apply le_antisymm
-  · exact θ.toOrderHom.monotone (le_of_lt Fin.castSucc_lt_succ)
-  · rw [Fin.castSucc_castPred, h₁]
-    exact θ.toOrderHom.monotone ((Fin.succ_castPred_le_iff _).mpr h₂)
-
-中文:
-定理 eq_σ_comp_of_not_injective
-  结论: {n : 自然数} {Δ' : 单纯形范畴} (θ : ⦋n + 1⦌ ⟶ Δ')
-  证明: by
-  simp only [Function.Injective, exists_prop, not_forall] at hθ
-  -- as θ is not injective, there exists `x<y` such that `θ x = θ y`
-  -- and then, `θ x = θ (x+1)`
-  have hθ₂ : exists x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
-    rcases hθ with ⟨x, y, ⟨h₁, h₂⟩⟩
-    by_cases h : x < y
-    · exact ⟨x, y, ⟨h₁, h⟩⟩
-    · refine ⟨y, x, ⟨h₁.symm, ?_⟩⟩
-      lia
-  rcases hθ₂ with ⟨x, y, ⟨h₁, h₂⟩⟩
-  use x.castPred ((Fin.le_last _).trans_lt' h₂).ne
-  apply eq_σ_comp_of_not_injective'
-  apply le_antisymm
-  · exact θ.toOrderHom.monotone (le_of_lt Fin.castSucc_lt_succ)
-  · rw [Fin.castSucc_castPred, h₁]
-    exact θ.toOrderHom.monotone ((Fin.succ_castPred_le_iff _).mpr h₂)
-
-Depends on / 依赖: Function, Function.Injective, Injective, exists_prop, not_forall
+/-
+**SimplexCategory.eq_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_σ_comp_of_not_injective {n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
+theorem eq_σ_comp_of_not_injective {n : ℕ} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
     (hθ : ¬Function.Injective θ.toOrderHom) :
-    exists (i : Fin (n + 1)) (θ' : ⦋n⦌ ⟶ Δ'), θ = σ i ≫ θ' := by
+    ∃ (i : Fin (n + 1)) (θ' : ⦋n⦌ ⟶ Δ'), θ = σ i ≫ θ' := by
   simp only [Function.Injective, exists_prop, not_forall] at hθ
   -- as θ is not injective, there exists `x<y` such that `θ x = θ y`
   -- and then, `θ x = θ (x+1)`
-  have hθ₂ : exists x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
+  have hθ₂ : ∃ x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
     rcases hθ with ⟨x, y, ⟨h₁, h₂⟩⟩
     by_cases h : x < y
     · exact ⟨x, y, ⟨h₁, h⟩⟩
@@ -2792,315 +1796,171 @@ theorem eq_σ_comp_of_not_injective {n : Nat} {Δ' : SimplexCategory} (θ : ⦋n
   · exact θ.toOrderHom.monotone (le_of_lt Fin.castSucc_lt_succ)
   · rw [Fin.castSucc_castPred, h₁]
     exact θ.toOrderHom.monotone ((Fin.succ_castPred_le_iff _).mpr h₂)
-
-/--
-theorem `eq_comp_δ_of_not_surjective'` / 定理 `eq_comp_δ_of_not_surjective'`
-
-English:
-theorem eq_comp_δ_of_not_surjective'
-  statement: {n : Nat} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
-  proof: by
-  use θ ≫ σ (.predAbove (.last n) i)
-  ext x : 3
-  suffices forall j != i, i.succAbove (((Fin.last n).predAbove i).predAbove j) = j by
-    dsimp [δ, σ]
-exact .symm this _ (hi _)
-  intro j hj
-  cases i using Fin.lastCases <;> simp [hj]
-
-中文:
-定理 eq_comp_δ_of_not_surjective'
-  结论: {n : 自然数} {Δ : 单纯形范畴} (θ : Δ ⟶ ⦋n + 1⦌)
-  证明: by
-  use θ ≫ σ (.predAbove (.last n) i)
-  ext x : 3
-  suffices forall j != i, i.succAbove (((Fin.last n).predAbove i).predAbove j) = j by
-    dsimp [δ, σ]
-exact .symm this _ (hi _)
-  intro j hj
-  cases i using Fin.lastCases <;> simp [hj]
-
-Depends on / 依赖: Fin.last, Fin.lastCases, i.succAbove, lastCases, predAbove, succAbove
+/-
+**SimplexCategory.eq_comp_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_comp_δ_of_not_surjective' {n : Nat} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
-    (i : Fin (n + 2)) (hi : forall x, θ.toOrderHom x != i) : exists θ' : Δ ⟶ ⦋n⦌, θ = θ' ≫ δ i := by
+theorem eq_comp_δ_of_not_surjective' {n : ℕ} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
+    (i : Fin (n + 2)) (hi : ∀ x, θ.toOrderHom x ≠ i) : ∃ θ' : Δ ⟶ ⦋n⦌, θ = θ' ≫ δ i := by
   use θ ≫ σ (.predAbove (.last n) i)
   ext x : 3
-  suffices forall j != i, i.succAbove (((Fin.last n).predAbove i).predAbove j) = j by
+  suffices ∀ j ≠ i, i.succAbove (((Fin.last n).predAbove i).predAbove j) = j by
     dsimp [δ, σ]
-exact .symm this _ (hi _)
+    exact .symm <| this _ (hi _)
   intro j hj
   cases i using Fin.lastCases <;> simp [hj]
-
-/--
-theorem `eq_comp_δ_of_not_surjective` / 定理 `eq_comp_δ_of_not_surjective`
-
-English:
-theorem eq_comp_δ_of_not_surjective
-  statement: {n : Nat} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
-  proof: by
-  obtain ⟨i, hi⟩ := not_forall.mp hθ
-  use i
-  exact eq_comp_δ_of_not_surjective' θ i (not_exists.mp hi)
-
-中文:
-定理 eq_comp_δ_of_not_surjective
-  结论: {n : 自然数} {Δ : 单纯形范畴} (θ : Δ ⟶ ⦋n + 1⦌)
-  证明: by
-  obtain ⟨i, hi⟩ := not_forall.mp hθ
-  use i
-  exact eq_comp_δ_of_not_surjective' θ i (not_exists.mp hi)
-
-Depends on / 依赖: not_exists, not_exists.mp, not_forall, not_forall.mp
+/-
+**SimplexCategory.eq_comp_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_comp_δ_of_not_surjective {n : Nat} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
+theorem eq_comp_δ_of_not_surjective {n : ℕ} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
     (hθ : ¬Function.Surjective θ.toOrderHom) :
-    exists (i : Fin (n + 2)) (θ' : Δ ⟶ ⦋n⦌), θ = θ' ≫ δ i := by
+    ∃ (i : Fin (n + 2)) (θ' : Δ ⟶ ⦋n⦌), θ = θ' ≫ δ i := by
   obtain ⟨i, hi⟩ := not_forall.mp hθ
   use i
   exact eq_comp_δ_of_not_surjective' θ i (not_exists.mp hi)
-
-/--
-theorem `eq_id_of_mono` / 定理 `eq_id_of_mono`
-
-English:
-theorem eq_id_of_mono
-  given: {x : SimplexCategory} (i : x ⟶ x) [Mono i]
-  statement: i = 𝟙 _
-  proof: have := (isIso_iff_of_mono i).mpr rfl
-  eq_id_of_isIso _
-
-中文:
-定理 eq_id_of_mono
-  条件: {x : 单纯形范畴} (i : x ⟶ x) [单态射 i]
-  结论: i = 𝟙 _
-  证明: have := (isIso_iff_of_mono i).mpr rfl
-  eq_id_of_isIso _
-
-Depends on / 依赖: eq_id_of_isIso, isIso_iff_of_mono
+/-
+**SimplexCategory.eq_id_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_id_of_mono {x : SimplexCategory} (i : x ⟶ x) [Mono i] : i = 𝟙 _
+参数：i : x ⟶ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimplexCategory.isIso_iff_of_mono`：isIso_iff_of_mono {n m : SimplexCateg
+ory} (f : n ⟶ m) [hf : Mono f] : IsIso f ↔ n.len = m.len
+· 使用定理 `SimplexCategory.eq_id_of_isIso`：eq_id_of_isIso {x : SimplexCategory} (f 
+: x ⟶ x) [IsIso f] : f = 𝟙 _
 -/
 theorem eq_id_of_mono {x : SimplexCategory} (i : x ⟶ x) [Mono i] : i = 𝟙 _ :=
   have := (isIso_iff_of_mono i).mpr rfl
   eq_id_of_isIso _
-
-/--
-theorem `eq_id_of_epi` / 定理 `eq_id_of_epi`
-
-English:
-theorem eq_id_of_epi
-  given: {x : SimplexCategory} (i : x ⟶ x) [Epi i]
-  statement: i = 𝟙 _
-  proof: have := (isIso_iff_of_epi i).mpr rfl
-  eq_id_of_isIso _
-
-中文:
-定理 eq_id_of_epi
-  条件: {x : 单纯形范畴} (i : x ⟶ x) [满态射 i]
-  结论: i = 𝟙 _
-  证明: have := (isIso_iff_of_epi i).mpr rfl
-  eq_id_of_isIso _
-
-Depends on / 依赖: eq_id_of_isIso, isIso_iff_of_epi
+/-
+**SimplexCategory.eq_id_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：eq_id_of_epi {x : SimplexCategory} (i : x ⟶ x) [Epi i] : i = 𝟙 _
+参数：i : x ⟶ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimplexCategory.isIso_iff_of_epi`：isIso_iff_of_epi {n m : SimplexCategor
+y} (f : n ⟶ m) [hf : Epi f] : IsIso f ↔ n.len = m.len
+· 使用定理 `SimplexCategory.eq_id_of_isIso`：eq_id_of_isIso {x : SimplexCategory} (f 
+: x ⟶ x) [IsIso f] : f = 𝟙 _
 -/
 theorem eq_id_of_epi {x : SimplexCategory} (i : x ⟶ x) [Epi i] : i = 𝟙 _ :=
   have := (isIso_iff_of_epi i).mpr rfl
   eq_id_of_isIso _
-
-/--
-theorem `eq_σ_of_epi` / 定理 `eq_σ_of_epi`
-
-English:
-theorem eq_σ_of_epi
-  given: {n : Nat} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [Epi θ]
-  statement: exists i : Fin (n + 1), θ = σ i
-  proof: by
+/-
+**SimplexCategory.eq_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem eq_σ_of_epi {n : ℕ} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [Epi θ] : ∃ i : Fin (n + 1), θ = σ i := by
   obtain ⟨i, θ', h⟩ := eq_σ_comp_of_not_injective θ (by
     rw [← mono_iff_injective]
-    grind [-> le_of_mono])
+    grind [→ le_of_mono])
   use i
   have : Epi (σ i ≫ θ') := by
     rw [← h]
     infer_instance
   have := CategoryTheory.epi_of_epi (σ i) θ'
-  rw [h]; rw [eq_id_of_epi θ']; rw [Category.comp_id]
-
-中文:
-定理 eq_σ_of_epi
-  条件: {n : 自然数} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [满态射 θ]
-  结论: 存在 i : 有限集 (n + 1), θ = σ i
-  证明: by
-  obtain ⟨i, θ', h⟩ := eq_σ_comp_of_not_injective θ (by
-    rw [← mono_iff_injective]
-    grind [-> le_of_mono])
-  use i
-  have : Epi (σ i ≫ θ') := by
-    rw [← h]
-    infer_instance
-  have := CategoryTheory.epi_of_epi (σ i) θ'
-  rw [h]; rw [eq_id_of_epi θ']; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, CategoryTheory, CategoryTheory.epi_of_epi, comp_id, epi_of_epi, eq_id_of_epi, infer_instance, le_of_mono, mono_iff_injective
+  rw [h, eq_id_of_epi θ', Category.comp_id]
+/-
+**SimplexCategory.eq_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_σ_of_epi {n : Nat} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [Epi θ] : exists i : Fin (n + 1), θ = σ i := by
-  obtain ⟨i, θ', h⟩ := eq_σ_comp_of_not_injective θ (by
-    rw [← mono_iff_injective]
-    grind [-> le_of_mono])
-  use i
-  have : Epi (σ i ≫ θ') := by
-    rw [← h]
-    infer_instance
-  have := CategoryTheory.epi_of_epi (σ i) θ'
-  rw [h]; rw [eq_id_of_epi θ']; rw [Category.comp_id]
-
-/--
-theorem `eq_δ_of_mono` / 定理 `eq_δ_of_mono`
-
-English:
-theorem eq_δ_of_mono
-  given: {n : Nat} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [Mono θ]
-  statement: exists i : Fin (n + 2), θ = δ i
-  proof: by
+theorem eq_δ_of_mono {n : ℕ} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [Mono θ] : ∃ i : Fin (n + 2), θ = δ i := by
   obtain ⟨i, θ', h⟩ := eq_comp_δ_of_not_surjective θ (by
     rw [← epi_iff_surjective]
-    grind [-> le_of_epi])
+    grind [→ le_of_epi])
   use i
   have : Mono (θ' ≫ δ i) := by
     rw [← h]
     infer_instance
   have := CategoryTheory.mono_of_mono θ' (δ i)
-  rw [h]; rw [eq_id_of_mono θ']; rw [Category.id_comp]
-
-中文:
-定理 eq_δ_of_mono
-  条件: {n : 自然数} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [单态射 θ]
-  结论: 存在 i : 有限集 (n + 2), θ = δ i
-  证明: by
-  obtain ⟨i, θ', h⟩ := eq_comp_δ_of_not_surjective θ (by
-    rw [← epi_iff_surjective]
-    grind [-> le_of_epi])
-  use i
-  have : Mono (θ' ≫ δ i) := by
-    rw [← h]
-    infer_instance
-  have := CategoryTheory.mono_of_mono θ' (δ i)
-  rw [h]; rw [eq_id_of_mono θ']; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, CategoryTheory, CategoryTheory.mono_of_mono, epi_iff_surjective, eq_id_of_mono, id_comp, infer_instance, le_of_epi, mono_of_mono
+  rw [h, eq_id_of_mono θ', Category.id_comp]
+/-
+**SimplexCategory.len_lt_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：len_lt_of_mono {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i] (hi' : Δ != 
+Δ') : Δ'.len < Δ.len
+参数：i : Δ' ⟶ Δ；hi' : Δ != Δ'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_δ_of_mono {n : Nat} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [Mono θ] : exists i : Fin (n + 2), θ = δ i := by
-  obtain ⟨i, θ', h⟩ := eq_comp_δ_of_not_surjective θ (by
-    rw [← epi_iff_surjective]
-    grind [-> le_of_epi])
-  use i
-  have : Mono (θ' ≫ δ i) := by
-    rw [← h]
-    infer_instance
-  have := CategoryTheory.mono_of_mono θ' (δ i)
-  rw [h]; rw [eq_id_of_mono θ']; rw [Category.id_comp]
-
-/--
-theorem `len_lt_of_mono` / 定理 `len_lt_of_mono`
-
-English:
-theorem len_lt_of_mono
-  given: {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i] (hi' : Δ != Δ')
-  proof: by
-  grind [-> len_le_of_mono, SimplexCategory.ext]
-
-中文:
-定理 len_lt_of_mono
-  条件: {Δ' Δ : 单纯形范畴} (i : Δ' ⟶ Δ) [单态射 i] (hi' : Δ != Δ')
-  证明: by
-  grind [-> len_le_of_mono, SimplexCategory.ext]
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.ext, len_le_of_mono
--/
-theorem len_lt_of_mono {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i] (hi' : Δ != Δ') :
+theorem len_lt_of_mono {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i] (hi' : Δ ≠ Δ') :
     Δ'.len < Δ.len := by
-  grind [-> len_le_of_mono, SimplexCategory.ext]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SplitEpiCategory SimplexCategory
-  body: skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence
-
-中文:
-实例 :
-  签名: 分裂满态射范畴 单纯形范畴
-  定义体: skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence
-
-Depends on / 依赖: inverse, skeletalEquivalence, skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence, splitEpiCategoryImpOfIsEquivalence
+  grind [→ len_le_of_mono, SimplexCategory.ext]
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : SplitEpiCategory SimplexCategory :=
   skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasStrongEpiMonoFactorisations SimplexCategory
-  body: Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence
-    SimplexCategory.skeletalEquivalence.inverse
-
-中文:
-实例 :
-  签名: 有StrongEpiMonoFactorisations 单纯形范畴
-  定义体: Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence
-    SimplexCategory.skeletalEquivalence.inverse
-
-Depends on / 依赖: Functor, Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence, SimplexCategory, SimplexCategory.skeletalEquivalence.inverse, hasStrongEpiMonoFactorisations_imp_of_isEquivalence, inverse, skeletalEquivalence
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasStrongEpiMonoFactorisations SimplexCategory :=
   Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence
     SimplexCategory.skeletalEquivalence.inverse
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasStrongEpiImages SimplexCategory
-  body: Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
-
-中文:
-实例 :
-  签名: 有StrongEpiImages 单纯形范畴
-  定义体: Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
-
-Depends on / 依赖: Limits, Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations, hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasStrongEpiImages SimplexCategory :=
   Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
-
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (Δ Δ' : SimplexCategory) (θ : Δ ⟶ Δ') : Epi (factorThruImage θ) :=
   StrongEpi.epi
-
-/--
-theorem `image_eq` / 定理 `image_eq`
-
-English:
-theorem image_eq
-  statement: {Δ Δ' Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [Epi e] {i : Δ' ⟶ Δ''}
-  proof: by
-  have := strongEpi_of_epi e
-  let e := image.isoStrongEpiMono e i fac
-  ext
-  exact le_antisymm (len_le_of_epi e.hom) (len_le_of_mono e.hom)
-
-中文:
-定理 image_eq
-  结论: {Δ Δ' Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [满态射 e] {i : Δ' ⟶ Δ''}
-  证明: by
-  have := strongEpi_of_epi e
-  let e := image.isoStrongEpiMono e i fac
-  ext
-  exact le_antisymm (len_le_of_epi e.hom) (len_le_of_mono e.hom)
-
-Depends on / 依赖: e.hom, image.isoStrongEpiMono, isoStrongEpiMono, le_antisymm, len_le_of_epi, len_le_of_mono, strongEpi_of_epi
+/-
+**SimplexCategory.image_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+形式化陈述：image_eq {Δ Δ' Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [Epi e] {
+i : Δ' ⟶ Δ''} [Mono i] (fac : e ≫ i = φ) : image φ = Δ'
+参数：fac : e ≫ i = φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.strongEpi_of_epi`：strongEpi_of_epi [StrongEpiCategory C] 
+(f : P ⟶ Q) [Epi f] : StrongEpi f
+· 使用定理 `CategoryTheory.strongEpiCategory_of_regularEpiCategory`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] [CategoryTheory.IsRegularEpiCategory
+ C],   CategoryTheory.StrongEpiCategory C
+· 使用定理 `CategoryTheory.regularEpiCategoryOfSplitEpiCategory`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] [CategoryTheory.SplitEpiCategory C],   
+CategoryTheory.IsRegularEpiCategory C
+· 使用定理 `SimplexCategory.instSplitEpiCategory`：CategoryTheory.SplitEpiCategory Si
+mplexCategory
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `CategoryTheory.Limits.hasImages_of_hasStrongEpiMonoFactorisations`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasSt
+rongEpiMonoFactorisations C],   CategoryTheory.Limits.H…
+· 使用定理 `SimplexCategory.instHasStrongEpiMonoFactorisations`：CategoryTheory.Limit
+s.HasStrongEpiMonoFactorisations SimplexCategory
+· 使用定理 `SimplexCategory.ext`：∀ {x y : SimplexCategory}, x.len = y.len → x = y
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `SimplexCategory.len_le_of_epi`：len_le_of_epi {x y : SimplexCategory} (f 
+: x ⟶ y) [Epi f] : y.len <= x.len
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `SimplexCategory.len_le_of_mono`：len_le_of_mono {x y : SimplexCategory} (
+f : x ⟶ y) [Mono f] : x.len <= y.len
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
 -/
 theorem image_eq {Δ Δ' Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [Epi e] {i : Δ' ⟶ Δ''}
     [Mono i] (fac : e ≫ i = φ) : image φ = Δ' := by
@@ -3108,113 +1968,88 @@ theorem image_eq {Δ Δ' Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ 
   let e := image.isoStrongEpiMono e i fac
   ext
   exact le_antisymm (len_le_of_epi e.hom) (len_le_of_mono e.hom)
-
-/--
-theorem `image_ι_eq` / 定理 `image_ι_eq`
-
-English:
-theorem image_ι_eq
-  statement: {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
-  proof: by
-  have := strongEpi_of_epi e
-  rw [← image.isoStrongEpiMono_hom_comp_ι e i fac]; rw [SimplexCategory.eq_id_of_isIso (image.isoStrongEpiMono e i fac).hom]; rw [Category.id_comp]
-
-中文:
-定理 image_ι_eq
-  结论: {Δ Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ 像 φ} [满态射 e]
-  证明: by
-  have := strongEpi_of_epi e
-  rw [← image.isoStrongEpiMono_hom_comp_ι e i fac]; rw [SimplexCategory.eq_id_of_isIso (image.isoStrongEpiMono e i fac).hom]; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, SimplexCategory, SimplexCategory.eq_id_of_isIso, eq_id_of_isIso, id_comp, image.isoStrongEpiMono, image.isoStrongEpiMono_hom_comp_, isoStrongEpiMono, strongEpi_of_epi
+/-
+**SimplexCategory.image_** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image_ι_eq {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
     {i : image φ ⟶ Δ''} [Mono i] (fac : e ≫ i = φ) : image.ι φ = i := by
   have := strongEpi_of_epi e
-  rw [← image.isoStrongEpiMono_hom_comp_ι e i fac]; rw [SimplexCategory.eq_id_of_isIso (image.isoStrongEpiMono e i fac).hom]; rw [Category.id_comp]
-
-/--
-theorem `factorThruImage_eq` / 定理 `factorThruImage_eq`
-
-English:
-theorem factorThruImage_eq
-  statement: {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
-  proof: by
-  rw [← cancel_mono i]; rw [fac]; rw [← image_ι_eq fac]; rw [image.fac]
-
-中文:
-定理 factorThruImage_eq
-  结论: {Δ Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ 像 φ} [满态射 e]
-  证明: by
-  rw [← cancel_mono i]; rw [fac]; rw [← image_ι_eq fac]; rw [image.fac]
-
-Depends on / 依赖: cancel_mono, image.fac
+  rw [← image.isoStrongEpiMono_hom_comp_ι e i fac,
+    SimplexCategory.eq_id_of_isIso (image.isoStrongEpiMono e i fac).hom, Category.id_comp]
+/-
+**SimplexCategory.factorThruImage_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory`
+。
+形式化陈述：factorThruImage_eq {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image 
+φ} [Epi e] {i : image φ ⟶ Δ''} [Mono i] (fac : e ≫ i = φ) : factorThruImage φ = 
+e
+参数：fac : e ≫ i = φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `CategoryTheory.Limits.hasImages_of_hasStrongEpiMonoFactorisations`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasSt
+rongEpiMonoFactorisations C],   CategoryTheory.Limits.H…
+· 使用定理 `SimplexCategory.instHasStrongEpiMonoFactorisations`：CategoryTheory.Limit
+s.HasStrongEpiMonoFactorisations SimplexCategory
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `SimplexCategory.image_ι_eq`：image_ι_eq {Δ Δ'' : SimplexCategory} {φ : Δ 
+⟶ Δ''} {e : Δ ⟶ image φ} [Epi e] {i : image φ ⟶ Δ''} [Mono i] (fac : e ≫ i = φ) 
+: image.ι φ = i
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
 -/
 theorem factorThruImage_eq {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
     {i : image φ ⟶ Δ''} [Mono i] (fac : e ≫ i = φ) : factorThruImage φ = e := by
-  rw [← cancel_mono i]; rw [fac]; rw [← image_ι_eq fac]; rw [image.fac]
+  rw [← cancel_mono i, fac, ← image_ι_eq fac, image.fac]
 
 end EpiMono
 
-/--
-Definition of `toPartOrd` / `toPartOrd` 的定义
+/-- The functor which sends `⦋n⦌ : SimplexCategory` to the partially ordered
+type `{0, 1, ..., n}` (ulifted to `Type u`). -/
+/-
+**SimplexCategory.toPartOrd** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：toPartOrd : SimplexCategory ⥤ PartOrd.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPartOrd
-  signature: : SimplexCategory ⥤ PartOrd.{u}
-  body: skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd FinPartOrd ⋙
-    forget₂ FinPartOrd PartOrd ⋙ PartOrd.uliftFunctor
-
-@[simp]
-
-中文:
-定义 toPartOrd
-  签名: : 单纯形范畴 ⥤ 偏序.{u}
-  定义体: skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd FinPartOrd ⋙
-    forget₂ FinPartOrd PartOrd ⋙ PartOrd.uliftFunctor
-
-@[simp]
-
-Depends on / 依赖: FinPartOrd, NonemptyFinLinOrd, PartOrd, PartOrd.uliftFunctor, skeletalFunctor, uliftFunctor
+--- 原说明 ---
+The functor which sends `⦋n⦌ : SimplexCategory` to the partially ordered
+type `{0, 1, ..., n}` (ulifted to `Type u`).
 -/
 def toPartOrd : SimplexCategory ⥤ PartOrd.{u} :=
   skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd FinPartOrd ⋙
     forget₂ FinPartOrd PartOrd ⋙ PartOrd.uliftFunctor
 
 @[simp]
-/--
-lemma `toPartOrd_obj` / 引理 `toPartOrd_obj`
-
-English:
-lemma toPartOrd_obj
-  given: (n : SimplexCategory)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toPartOrd_obj
-  条件: (n : 单纯形范畴)
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategory.toPartOrd_obj** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：toPartOrd_obj (n : SimplexCategory) : toPartOrd.{u}.obj n = .of (ULift.{u}
+ (Fin (n.len + 1)))
+参数：n : SimplexCategory。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toPartOrd_obj (n : SimplexCategory) :
     toPartOrd.{u}.obj n = .of (ULift.{u} (Fin (n.len + 1))) := rfl
 
 @[simp]
-/--
-lemma `toPartOrd_map_apply` / 引理 `toPartOrd_map_apply`
-
-English:
-lemma toPartOrd_map_apply
-  given: {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len + 1)))
-  proof: rfl
-
-中文:
-引理 toPartOrd_map_apply
-  条件: {n m : 单纯形范畴} (f : n ⟶ m) (i : (有限集 (n.len + 1)))
-  证明: rfl
+/-
+**SimplexCategory.toPartOrd_map_apply** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory
+`。
+形式化陈述：toPartOrd_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len +
+ 1))) : dsimp% toPartOrd.{u}.map f (ULift.up i) = ULift.up (f i)
+参数：f : n ⟶ m；i : (Fin (n.len + 1))。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toPartOrd_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len + 1))) :
     dsimp% toPartOrd.{u}.map f (ULift.up i) = ULift.up (f i) := rfl
@@ -3222,180 +2057,91 @@ lemma toPartOrd_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len
 /-- This functor `SimplexCategory ⥤ Cat` sends `⦋n⦌` (for `n : ℕ`)
 to the category attached to the ordered set `{0, 1, ..., n}` -/
 @[simps! obj map]
-/--
-Definition of `toCat` / `toCat` 的定义
+/-
+**SimplexCategory.toCat** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：toCat : SimplexCategory ⥤ Cat.{0}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCat
-  signature: : SimplexCategory ⥤ Cat.{0}
-  body: SimplexCategory.skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd LinOrd ⋙
-      forget₂ LinOrd Lat ⋙ forget₂ Lat PartOrd ⋙
-      forget₂ PartOrd Preord ⋙ preordToCat
-
-中文:
-定义 toCat
-  签名: : 单纯形范畴 ⥤ Cat.{0}
-  定义体: SimplexCategory.skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd LinOrd ⋙
-      forget₂ LinOrd Lat ⋙ forget₂ Lat PartOrd ⋙
-      forget₂ PartOrd Preord ⋙ preordToCat
-
-Depends on / 依赖: LinOrd, NonemptyFinLinOrd, PartOrd, Preord, SimplexCategory, SimplexCategory.skeletalFunctor, preordToCat, skeletalFunctor
+--- 原说明 ---
+This functor `SimplexCategory ⥤ Cat` sends `⦋n⦌` (for `n : ℕ`)
+to the category attached to the ordered set `{0, 1, ..., n}`
 -/
 def toCat : SimplexCategory ⥤ Cat.{0} :=
   SimplexCategory.skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd LinOrd ⋙
       forget₂ LinOrd Lat ⋙ forget₂ Lat PartOrd ⋙
       forget₂ PartOrd Preord ⋙ preordToCat
-
-/--
-theorem `toCat.obj_eq_Fin` / 定理 `toCat.obj_eq_Fin`
-
-English:
-theorem toCat.obj_eq_Fin
-  given: (n : Nat)
-  statement: toCat.obj ⦋n⦌ = Fin (n + 1)
-  proof: rfl
-
-中文:
-定理 toCat.obj_eq_Fin
-  条件: (n : 自然数)
-  结论: toCat.obj ⦋n⦌ = 有限集 (n + 1)
-  证明: rfl
+/-
+**SimplexCategory.toCat.obj_eq_Fin** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategory.to
+Cat`。
+形式化陈述：∀ (n : ℕ), ↑(SimplexCategory.toCat.obj { len := n }) = Fin (n + 1)
+参数：n : ℕ；SimplexCategory.toCat.obj { len := n }；n + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toCat.obj_eq_Fin (n : Nat) : toCat.obj ⦋n⦌ = Fin (n + 1) := rfl
-
-/--
-Instance `uniqueHomToZero` / 实例 `uniqueHomToZero`
-
-English:
-instance uniqueHomToZero
-  signature: {Δ : SimplexCategory}
-  body: Δ.const _ 0
-  uniq := eq_const_to_zero
-
-中文:
-实例 uniqueHomToZero
-  签名: {Δ : 单纯形范畴}
-  定义体: Δ.const _ 0
-  uniq := eq_const_to_zero
+theorem toCat.obj_eq_Fin (n : ℕ) : toCat.obj ⦋n⦌ = Fin (n + 1) := rfl
+/-
+**SimplexCategory.uniqueHomToZero** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+形式化陈述：uniqueHomToZero {Δ : SimplexCategory} : Unique (Δ ⟶ ⦋0⦌) where default
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.eq_const_to_zero`：eq_const_to_zero {n : SimplexCategory}
+ (f : n ⟶ ⦋0⦌) : f = const n _ 0
 -/
 instance uniqueHomToZero {Δ : SimplexCategory} : Unique (Δ ⟶ ⦋0⦌) where
   default := Δ.const _ 0
   uniq := eq_const_to_zero
 
-/--
-Definition of `isTerminalZero` / `isTerminalZero` 的定义
+/-- The object `⦋0⦌` is terminal in `SimplexCategory`. -/
+/-
+**SimplexCategory.isTerminalZero** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：isTerminalZero : IsTerminal (⦋0⦌ : SimplexCategory)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalZero
-  signature: : IsTerminal (⦋0⦌ : SimplexCategory)
-  body: IsTerminal.ofUnique ⦋0⦌
-
-中文:
-定义 isTerminalZero
-  签名: : 是终止 (⦋0⦌ : 单纯形范畴)
-  定义体: IsTerminal.ofUnique ⦋0⦌
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
+--- 原说明 ---
+The object `⦋0⦌` is terminal in `SimplexCategory`.
 -/
 def isTerminalZero : IsTerminal (⦋0⦌ : SimplexCategory) :=
   IsTerminal.ofUnique ⦋0⦌
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasTerminal SimplexCategory
-  body: IsTerminal.hasTerminal isTerminalZero
-
-中文:
-实例 :
-  签名: 有终止 单纯形范畴
-  定义体: IsTerminal.hasTerminal isTerminalZero
-
-Depends on / 依赖: IsTerminal, IsTerminal.hasTerminal, hasTerminal, isTerminalZero
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasTerminal SimplexCategory :=
   IsTerminal.hasTerminal isTerminalZero
 
-/--
-Definition of `topIsoZero` / `topIsoZero` 的定义
+/-- The isomorphism between the terminal object in `SimplexCategory` and `⦋0⦌`. -/
+/-
+**SimplexCategory.topIsoZero** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：topIsoZero : ⊤_ SimplexCategory ≅ ⦋0⦌
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.instHasTerminal`：CategoryTheory.Limits.HasTerminal Simpl
+exCategory
 
-English:
-definition topIsoZero
-  signature: : ⊤_ SimplexCategory ≅ ⦋0⦌
-  body: terminalIsoIsTerminal isTerminalZero
-
-中文:
-定义 topIsoZero
-  签名: : ⊤_ 单纯形范畴 ≅ ⦋0⦌
-  定义体: terminalIsoIsTerminal isTerminalZero
-
-Depends on / 依赖: isTerminalZero, terminalIsoIsTerminal
+--- 原说明 ---
+The isomorphism between the terminal object in `SimplexCategory` and `⦋0⦌`.
 -/
 noncomputable def topIsoZero : ⊤_ SimplexCategory ≅ ⦋0⦌ :=
   terminalIsoIsTerminal isTerminalZero
-
-/--
-lemma `δ_injective` / 引理 `δ_injective`
-
-English:
-lemma δ_injective
-  given: {n : Nat}
-  statement: Function.Injective (δ (n := n))
-  proof: by
-  intro i j hij
-  rw [← Fin.succAbove_left_inj]
-  ext k : 1
-  exact congr($hij k)
-
-中文:
-引理 δ_injective
-  条件: {n : 自然数}
-  结论: 函数.单射 (δ (n := n))
-  证明: by
-  intro i j hij
-  rw [← Fin.succAbove_left_inj]
-  ext k : 1
-  exact congr($hij k)
-
-Depends on / 依赖: Fin.succAbove_left_inj, succAbove_left_inj
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_injective {n : Nat} : Function.Injective (δ (n := n)) := by
+lemma δ_injective {n : ℕ} : Function.Injective (δ (n := n)) := by
   intro i j hij
   rw [← Fin.succAbove_left_inj]
   ext k : 1
   exact congr($hij k)
-
-/--
-lemma `σ_injective` / 引理 `σ_injective`
-
-English:
-lemma σ_injective
-  given: {n : Nat}
-  statement: Function.Injective (σ (n := n))
-  proof: by
-  intro i j hij
-  rw [← Fin.predAbove_left_inj]
-  ext k : 1
-  exact congr($hij k)
-
-中文:
-引理 σ_injective
-  条件: {n : 自然数}
-  结论: 函数.单射 (σ (n := n))
-  证明: by
-  intro i j hij
-  rw [← Fin.predAbove_left_inj]
-  ext k : 1
-  exact congr($hij k)
-
-Depends on / 依赖: Fin.predAbove_left_inj, predAbove_left_inj
+/-
+**SimplexCategory.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma σ_injective {n : Nat} : Function.Injective (σ (n := n)) := by
+lemma σ_injective {n : ℕ} : Function.Injective (σ (n := n)) := by
   intro i j hij
   rw [← Fin.predAbove_left_inj]
   ext k : 1
   exact congr($hij k)
 
 end SimplexCategory
+

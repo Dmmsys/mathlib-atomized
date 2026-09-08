@@ -21,28 +21,17 @@ import Mathlib.Algebra.Group.Submonoid.Units
 
 @[expose] public section
 
-/--
-Definition of `Units.posSubgroup` / `Units.posSubgroup` 的定义
+/-- The subgroup of positive units of a linear ordered semiring. -/
+/-
+**Units.posSubgroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Units.posSubgroup (R : Type*) [Semiring R] [LinearOrder R] [IsStrictOrdere
+dRing R] : Subgroup Rˣ
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Units.posSubgroup
-  signature: (R : Type*) [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
-  body: { (Submonoid.pos R).comap (Units.coeHom R) with
-    carrier := { x | (0 : R) < x }
-    inv_mem' := Units.inv_pos.mpr }
-
-@[simp]
-
-中文:
-定义 单位群.posSubgroup
-  签名: (R : 类型) [半环 R] [线性序 R] [是StrictOrdered环 R]
-  定义体: { (Submonoid.pos R).comap (Units.coeHom R) with
-    carrier := { x | (0 : R) < x }
-    inv_mem' := Units.inv_pos.mpr }
-
-@[simp]
-
-Depends on / 依赖: Submonoid, Submonoid.pos, Units.coeHom, Units.inv_pos.mpr, carrier, coeHom, inv_mem, inv_pos
+--- 原说明 ---
+The subgroup of positive units of a linear ordered semiring.
 -/
 def Units.posSubgroup (R : Type*) [Semiring R] [LinearOrder R] [IsStrictOrderedRing R] :
     Subgroup Rˣ :=
@@ -51,101 +40,63 @@ def Units.posSubgroup (R : Type*) [Semiring R] [LinearOrder R] [IsStrictOrderedR
     inv_mem' := Units.inv_pos.mpr }
 
 @[simp]
-/--
-theorem `Units.mem_posSubgroup` / 定理 `Units.mem_posSubgroup`
-
-English:
-theorem Units.mem_posSubgroup
-  statement: {R : Type*} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
-  proof: Iff.rfl
-
-中文:
-定理 单位群.mem_posSubgroup
-  结论: {R : 类型} [半环 R] [线性序 R] [是StrictOrdered环 R]
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Units.mem_posSubgroup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Units.mem_posSubgroup {R : Type*} [Semiring R] [LinearOrder R] [IsStrictOr
+deredRing R] (u : Rˣ) : u in Units.posSubgroup R ↔ (0 : R) < u
+参数：u : Rˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Units.mem_posSubgroup {R : Type*} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
-    (u : Rˣ) : u in Units.posSubgroup R ↔ (0 : R) < u :=
+    (u : Rˣ) : u ∈ Units.posSubgroup R ↔ (0 : R) < u :=
   Iff.rfl
 
 namespace RingHom
 
 variable {R T : Type*} [Semiring T]
 
-/--
-theorem `isUnit_eqLocusS_mk_iff` / 定理 `isUnit_eqLocusS_mk_iff`
-
-English:
-theorem isUnit_eqLocusS_mk_iff
-  given: [Semiring R] (f g : R ->+* T) {r : R} (hr : f r = g r)
-  proof: MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-中文:
-定理 isUnit_eqLocusS_mk_iff
-  条件: [半环 R] (f g : R ->+* T) {r : R} (hr : f r = g r)
-  证明: MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-Depends on / 依赖: MonoidHom, MonoidHom.isUnit_eqLocusM_mk_iff, isUnit_eqLocusM_mk_iff
+/-
+**RingHom.isUnit_eqLocusS_mk_iff** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：isUnit_eqLocusS_mk_iff [Semiring R] (f g : R ->+* T) {r : R} (hr : f r = g
+ r) : IsUnit (⟨r, hr⟩ : f.eqLocusS g) ↔ IsUnit r
+参数：f g : R ->+* T；hr : f r = g r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.isUnit_eqLocusM_mk_iff`：MonoidHom.isUnit_eqLocusM_mk_iff {N : 
+Type*} [Monoid N] (f g : M ->* N) {r : M} (hr : f r = g r) : IsUnit (⟨r, hr⟩ : f
+.eqLocusM g) ↔ IsUnit …
 -/
-theorem isUnit_eqLocusS_mk_iff [Semiring R] (f g : R ->+* T) {r : R} (hr : f r = g r) :
+theorem isUnit_eqLocusS_mk_iff [Semiring R] (f g : R →+* T) {r : R} (hr : f r = g r) :
     IsUnit (⟨r, hr⟩ : f.eqLocusS g) ↔ IsUnit r :=
   MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-/--
-theorem `isUnit_eqLocus_mk_iff` / 定理 `isUnit_eqLocus_mk_iff`
-
-English:
-theorem isUnit_eqLocus_mk_iff
-  given: [Ring R] (f g : R ->+* T) {r : R} (hr : f r = g r)
-  proof: MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-中文:
-定理 isUnit_eqLocus_mk_iff
-  条件: [环 R] (f g : R ->+* T) {r : R} (hr : f r = g r)
-  证明: MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-Depends on / 依赖: MonoidHom, MonoidHom.isUnit_eqLocusM_mk_iff, isUnit_eqLocusM_mk_iff
+/-
+**RingHom.isUnit_eqLocus_mk_iff** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：isUnit_eqLocus_mk_iff [Ring R] (f g : R ->+* T) {r : R} (hr : f r = g r) :
+ IsUnit (⟨r, hr⟩ : f.eqLocus g) ↔ IsUnit r
+参数：f g : R ->+* T；hr : f r = g r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.isUnit_eqLocusM_mk_iff`：MonoidHom.isUnit_eqLocusM_mk_iff {N : 
+Type*} [Monoid N] (f g : M ->* N) {r : M} (hr : f r = g r) : IsUnit (⟨r, hr⟩ : f
+.eqLocusM g) ↔ IsUnit …
 -/
-theorem isUnit_eqLocus_mk_iff [Ring R] (f g : R ->+* T) {r : R} (hr : f r = g r) :
+theorem isUnit_eqLocus_mk_iff [Ring R] (f g : R →+* T) {r : R} (hr : f r = g r) :
     IsUnit (⟨r, hr⟩ : f.eqLocus g) ↔ IsUnit r :=
   MonoidHom.isUnit_eqLocusM_mk_iff ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] (f g
-  body: f.isUnit_eqLocusS_mk_iff g r.prop
-
-中文:
-实例 [半环
-  签名: R] (f g
-  定义体: f.isUnit_eqLocusS_mk_iff g r.prop
-
-Depends on / 依赖: f.isUnit_eqLocusS_mk_iff, isUnit_eqLocusS_mk_iff, r.prop
+/-
+**RingHom.** 是 Mathlib 中的一个实例，位于命名空间 `RingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Semiring R] (f g : R ->+* T) : IsLocalHom (f.eqLocusS g).subtype where
-.2 map_nonunit r := f.isUnit_eqLocusS_mk_iff g r.prop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] (f g
-  body: f.isUnit_eqLocus_mk_iff g r.prop
-
-中文:
-实例 [环
-  签名: R] (f g
-  定义体: f.isUnit_eqLocus_mk_iff g r.prop
-
-Depends on / 依赖: f.isUnit_eqLocus_mk_iff, isUnit_eqLocus_mk_iff, r.prop
+instance [Semiring R] (f g : R →+* T) : IsLocalHom (f.eqLocusS g).subtype where
+  map_nonunit r := f.isUnit_eqLocusS_mk_iff g r.prop |>.2
+/-
+**RingHom.** 是 Mathlib 中的一个实例，位于命名空间 `RingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Ring R] (f g : R ->+* T) : IsLocalHom (f.eqLocus g).subtype where
-.2 map_nonunit r := f.isUnit_eqLocus_mk_iff g r.prop
+instance [Ring R] (f g : R →+* T) : IsLocalHom (f.eqLocus g).subtype where
+  map_nonunit r := f.isUnit_eqLocus_mk_iff g r.prop |>.2
 
 end RingHom
+

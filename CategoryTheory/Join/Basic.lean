@@ -43,30 +43,20 @@ namespace CategoryTheory
 
 open CategoryTheory.Functor
 
+/-- Elements of `Join C D` are either elements of `C` or elements of `D`. -/
 -- Impl. : We are not defining it as a type alias for `C ⊕ D` so that we can have
 -- aesop to call cases on `Join C D`
-/--
-Inductive type `Join` / 归纳类型 `Join`
-
-English:
-inductive Join
-  parameters: (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D]
-  constructors (2):
-    - left: C -> Join C D
-    - right: D -> Join C D
-
-中文:
-归纳类型 并
-  参数: (C : 类型u₁) [范畴.{v₁} C] (D : 类型u₂) [范畴.{v₂} D]
-  构造子 (2 个):
-    - left: C -> 并 C D
-    - right: D -> 并 C D
-
-Depends on / 依赖: CategoryTheory
+/-
+**CategoryTheory.Join** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：Join (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D] : Typ
+e (max u₁ u₂) | left : C -> Join C D | right : D -> Join C D  attribute [aesop s
+afe cases (rule_sets
+参数：C : Type u₁；D : Type u₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 inductive Join (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D] : Type (max u₁ u₂)
-  | left : C -> Join C D
-  | right : D -> Join C D
+  | left : C → Join C D
+  | right : D → Join C D
 
 attribute [aesop safe cases (rule_sets := [CategoryTheory])] Join
 
@@ -80,97 +70,61 @@ section CategoryStructure
 
 variable {C D}
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- Morphisms in `C ⋆ D` are those of `C` and `D`, plus a unique
+morphism `(left c ⟶ right d)` for every `c : C` and `d : D`. -/
+/-
+**CategoryTheory.Join.Hom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         Category
+Theory.Join C D → CategoryTheory.Join C D → Type (max v₁ v₂)
+参数：max v₁ v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: : C ⋆ D -> C ⋆ D -> Type (max v₁ v₂)
-
-中文:
-定义 态射
-  签名: : C ⋆ D -> C ⋆ D -> 类型 (最大值 v₁ v₂)
+--- 原说明 ---
+Morphisms in `C ⋆ D` are those of `C` and `D`, plus a unique
+morphism `(left c ⟶ right d)` for every `c : C` and `d : D`.
 -/
-def Hom : C ⋆ D -> C ⋆ D -> Type (max v₁ v₂)
+def Hom : C ⋆ D → C ⋆ D → Type (max v₁ v₂)
   | .left x, .left y => ULift (x ⟶ y)
   | .right x, .right y => ULift (x ⟶ y)
   | .left _, .right _ => PUnit
   | .right _, .left _ => PEmpty
 
-/--
-Definition of `id` / `id` 的定义
+/-- Identity morphisms in `C ⋆ D` are inherited from those in `C` and `D`. -/
+/-
+**CategoryTheory.Join.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → (X : CategoryTheory.Jo
+in C D) → X.Hom X
+参数：X : CategoryTheory.Join C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : forall X : C ⋆ D, Hom X X
-
-中文:
-定义 id
-  签名: : 对任意 X : C ⋆ D, 态射 X X
+--- 原说明 ---
+Identity morphisms in `C ⋆ D` are inherited from those in `C` and `D`.
 -/
-def id : forall X : C ⋆ D, Hom X X
+def id : ∀ X : C ⋆ D, Hom X X
   | .left x => ULift.up (𝟙 x)
   | .right x => ULift.up (𝟙 x)
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition in `C ⋆ D` is inherited from the compositions in `C` and `D`. -/
+/-
+**CategoryTheory.Join.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → {x y z : Categor
+yTheory.Join C D} → x.Hom y → y.Hom z → x.Hom z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: : forall {x y z : C ⋆ D}, Hom x y -> Hom y z -> Hom x z
-
-中文:
-定义 comp
-  签名: : 对任意 {x y z : C ⋆ D}, 态射 x y -> 态射 y z -> 态射 x z
+--- 原说明 ---
+Composition in `C ⋆ D` is inherited from the compositions in `C` and `D`.
 -/
-def comp : forall {x y z : C ⋆ D}, Hom x y -> Hom y z -> Hom x z
+def comp : ∀ {x y z : C ⋆ D}, Hom x y → Hom y z → Hom x z
   | .left _x, .left _y, .left _z, f, g => ULift.up (ULift.down f ≫ ULift.down g)
   | .left _x, .left _y, .right _z, _, _ => PUnit.unit
   | .left _x, .right _y, .right _z, _, _ => PUnit.unit
   | .right _x, .right _y, .right _z, f, g => ULift.up (ULift.down f ≫ ULift.down g)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{max v₁ v₂} (C ⋆ D)
-  body: Hom X Y
-  id _ := id _
-  comp := comp
-  assoc {a b c d} f g h := by
-    cases a <;>
-    cases b <;>
-    cases c <;>
-    cases d <;>
-    simp only [Hom, comp, Category.assoc] <;>
-    tauto
-  id_comp {x y} f := by
-    cases x <;> cases y <;> simp only [Hom, id, comp, Category.id_comp] <;> tauto
-  comp_id {x y} f := by
-    cases x <;> cases y <;> simp only [Hom, id, comp, Category.comp_id] <;> tauto
-
-@[aesop safe destruct (rule_sets := [CategoryTheory])]
-
-中文:
-实例 :
-  签名: 范畴.{最大值 v₁ v₂} (C ⋆ D)
-  定义体: Hom X Y
-  id _ := id _
-  comp := comp
-  assoc {a b c d} f g h := by
-    cases a <;>
-    cases b <;>
-    cases c <;>
-    cases d <;>
-    simp only [Hom, comp, Category.assoc] <;>
-    tauto
-  id_comp {x y} f := by
-    cases x <;> cases y <;> simp only [Hom, id, comp, Category.id_comp] <;> tauto
-  comp_id {x y} f := by
-    cases x <;> cases y <;> simp only [Hom, id, comp, Category.comp_id] <;> tauto
-
-@[aesop safe destruct (rule_sets := [CategoryTheory])]
+/-
+**CategoryTheory.Join.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Join`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{max v₁ v₂} (C ⋆ D) where
   Hom X Y := Hom X Y
@@ -189,39 +143,31 @@ instance : Category.{max v₁ v₂} (C ⋆ D) where
     cases x <;> cases y <;> simp only [Hom, id, comp, Category.comp_id] <;> tauto
 
 @[aesop safe destruct (rule_sets := [CategoryTheory])]
-/--
-lemma `false_of_right_to_left` / 引理 `false_of_right_to_left`
-
-English:
-lemma false_of_right_to_left
-  given: {X : D} {Y : C} (f : right X ⟶ left Y)
-  statement: False
-  proof: (f : PEmpty).elim
-
-中文:
-引理 false_of_right_to_left
-  条件: {X : D} {Y : C} (f : right X ⟶ left Y)
-  结论: 假
-  证明: (f : PEmpty).elim
-
-Depends on / 依赖: PEmpty
+/-
+**CategoryTheory.Join.false_of_right_to_left** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Join`。
+形式化陈述：false_of_right_to_left {X : D} {Y : C} (f : right X ⟶ left Y) : False
+参数：f : right X ⟶ left Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma false_of_right_to_left {X : D} {Y : C} (f : right X ⟶ left Y) : False := (f : PEmpty).elim
-
+/-
+**CategoryTheory.Join.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Join`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} {Y : D} : Unique (left X ⟶ right Y) := inferInstanceAs (Unique PUnit)
 
-/--
-Definition of `edge` / `edge` 的定义
+/-- Join.edge c d is the unique morphism from c to d. -/
+/-
+**CategoryTheory.Join.edge** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：edge (c : C) (d : D) : left c ⟶ right d
+参数：c : C；d : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition edge
-  signature: (c : C) (d : D)
-  body: default
-
-中文:
-定义 edge
-  签名: (c : C) (d : D)
-  定义体: default
+--- 原说明 ---
+Join.edge c d is the unique morphism from c to d.
 -/
 def edge (c : C) (d : D) : left c ⟶ right d := default
 
@@ -234,20 +180,19 @@ Terms of the form `(inclLeft C D).map f` should be treated as primitive when wor
 and one should avoid trying to reduce them. For this reason, there is no `inclLeft_map` simp
 lemma. -/
 @[simps! obj]
-/--
-Definition of `inclLeft` / `inclLeft` 的定义
+/-
+**CategoryTheory.Join.inclLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：inclLeft : C ⥤ C ⋆ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLeft
-  signature: : C ⥤ C ⋆ D where
-  body: left
-  map := ULift.up
-
-中文:
-定义 inclLeft
-  签名: : C ⥤ C ⋆ D where
-  定义体: left
-  map := ULift.up
+--- 原说明 ---
+The canonical inclusion from C to `C ⋆ D`.
+Terms of the form `(inclLeft C D).map f` should be treated as primitive when wor
+king with joins
+and one should avoid trying to reduce them. For this reason, there is no `inclLe
+ft_map` simp
+lemma.
 -/
 def inclLeft : C ⥤ C ⋆ D where
   obj := left
@@ -258,20 +203,19 @@ Terms of the form `(inclRight C D).map f` should be treated as primitive when wo
 and one should avoid trying to reduce them. For this reason, there is no `inclRight_map` simp
 lemma. -/
 @[simps! obj]
-/--
-Definition of `inclRight` / `inclRight` 的定义
+/-
+**CategoryTheory.Join.inclRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：inclRight : D ⥤ C ⋆ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclRight
-  signature: : D ⥤ C ⋆ D where
-  body: right
-  map := ULift.up
-
-中文:
-定义 inclRight
-  签名: : D ⥤ C ⋆ D where
-  定义体: right
-  map := ULift.up
+--- 原说明 ---
+The canonical inclusion from D to `C ⋆ D`.
+Terms of the form `(inclRight C D).map f` should be treated as primitive when wo
+rking with joins
+and one should avoid trying to reduce them. For this reason, there is no `inclRi
+ght_map` simp
+lemma.
 -/
 def inclRight : D ⥤ C ⋆ D where
   obj := right
@@ -282,33 +226,28 @@ variable {C D}
 /-- An induction principle for morphisms in a join of categories: a morphism is either of the form
 `(inclLeft _ _).map _`, `(inclRight _ _).map _`, or is `edge _ _`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `homInduction` / `homInduction` 的定义
+/-
+**CategoryTheory.Join.homInduction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：homInduction {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*} (left : forall x y : 
+C, (f : x ⟶ y) -> P ((inclLeft C D).map f)) (right : forall x y : D, (f : x ⟶ y)
+ -> P ((inclRight C D).map f)) (edge : forall (c : C) (d : D), P (edge c d)) {x 
+y : C ⋆ D} (f : x ⟶ y) : P f
+参数：x ⟶ y；left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)；right : 
+forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f)；edge : forall (c : C) (
+d : D), P (edge c d)；f : x ⟶ y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homInduction
-  signature: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-  body: match x, y, f with
-  | .left x, .left y, .up f => left x y f
-  | .right x, .right y, .up f => right x y f
-  | .left x, .right y, _ => edge x y
-
-@[simp]
-
-中文:
-定义 homInduction
-  签名: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
-  定义体: match x, y, f with
-  | .left x, .left y, .up f => left x y f
-  | .right x, .right y, .up f => right x y f
-  | .left x, .right y, _ => edge x y
-
-@[simp]
+--- 原说明 ---
+An induction principle for morphisms in a join of categories: a morphism is eith
+er of the form
+`(inclLeft _ _).map _`, `(inclRight _ _).map _`, or is `edge _ _`.
 -/
-def homInduction {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-    (left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f))
-    (right : forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f))
-    (edge : forall (c : C) (d : D), P (edge c d))
+def homInduction {P : {x y : C ⋆ D} → (x ⟶ y) → Sort*}
+    (left : ∀ x y : C, (f : x ⟶ y) → P ((inclLeft C D).map f))
+    (right : ∀ x y : D, (f : x ⟶ y) → P ((inclRight C D).map f))
+    (edge : ∀ (c : C) (d : D), P (edge c d))
     {x y : C ⋆ D} (f : x ⟶ y) : P f :=
   match x, y, f with
   | .left x, .left y, .up f => left x y f
@@ -316,171 +255,179 @@ def homInduction {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
   | .left x, .right y, _ => edge x y
 
 @[simp]
-/--
-lemma `homInduction_left` / 引理 `homInduction_left`
-
-English:
-lemma homInduction_left
-  statement: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homInduction_left
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.homInduction_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：homInduction_left {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*} (left : forall x
+ y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)) (right : forall x y : D, (f : x
+ ⟶ y) -> P ((inclRight C D).map f)) (edge : forall (c : C) (d : D), P (edge c d)
+) {x y : C} (f : x ⟶ y) : homInduction left right edge ((inclLeft C D).map f) = 
+left x y f
+参数：x ⟶ y；left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)；right : 
+forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f)；edge : forall (c : C) (
+d : D), P (edge c d)；f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homInduction_left {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-    (left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f))
-    (right : forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f))
-    (edge : forall (c : C) (d : D), P (edge c d))
+lemma homInduction_left {P : {x y : C ⋆ D} → (x ⟶ y) → Sort*}
+    (left : ∀ x y : C, (f : x ⟶ y) → P ((inclLeft C D).map f))
+    (right : ∀ x y : D, (f : x ⟶ y) → P ((inclRight C D).map f))
+    (edge : ∀ (c : C) (d : D), P (edge c d))
     {x y : C} (f : x ⟶ y) : homInduction left right edge ((inclLeft C D).map f) = left x y f :=
   rfl
 
 @[simp]
-/--
-lemma `homInduction_right` / 引理 `homInduction_right`
-
-English:
-lemma homInduction_right
-  statement: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homInduction_right
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.homInduction_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：homInduction_right {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*} (left : forall 
+x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)) (right : forall x y : D, (f : 
+x ⟶ y) -> P ((inclRight C D).map f)) (edge : forall (c : C) (d : D), P (edge c d
+)) {x y : D} (f : x ⟶ y) : homInduction left right edge ((inclRight C D).map f) 
+= right x y f
+参数：x ⟶ y；left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)；right : 
+forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f)；edge : forall (c : C) (
+d : D), P (edge c d)；f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homInduction_right {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-    (left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f))
-    (right : forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f))
-    (edge : forall (c : C) (d : D), P (edge c d))
+lemma homInduction_right {P : {x y : C ⋆ D} → (x ⟶ y) → Sort*}
+    (left : ∀ x y : C, (f : x ⟶ y) → P ((inclLeft C D).map f))
+    (right : ∀ x y : D, (f : x ⟶ y) → P ((inclRight C D).map f))
+    (edge : ∀ (c : C) (d : D), P (edge c d))
     {x y : D} (f : x ⟶ y) : homInduction left right edge ((inclRight C D).map f) = right x y f :=
   rfl
 
 @[simp]
-/--
-lemma `homInduction_edge` / 引理 `homInduction_edge`
-
-English:
-lemma homInduction_edge
-  statement: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-  proof: rfl
-
-中文:
-引理 homInduction_edge
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
-  证明: rfl
+/-
+**CategoryTheory.Join.homInduction_edge** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：homInduction_edge {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*} (left : forall x
+ y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)) (right : forall x y : D, (f : x
+ ⟶ y) -> P ((inclRight C D).map f)) (edge : forall (c : C) (d : D), P (edge c d)
+) {c : C} {d : D} : homInduction left right edge (Join.edge c d) = edge c d
+参数：x ⟶ y；left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f)；right : 
+forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f)；edge : forall (c : C) (
+d : D), P (edge c d)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homInduction_edge {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
-    (left : forall x y : C, (f : x ⟶ y) -> P ((inclLeft C D).map f))
-    (right : forall x y : D, (f : x ⟶ y) -> P ((inclRight C D).map f))
-    (edge : forall (c : C) (d : D), P (edge c d))
+lemma homInduction_edge {P : {x y : C ⋆ D} → (x ⟶ y) → Sort*}
+    (left : ∀ x y : C, (f : x ⟶ y) → P ((inclLeft C D).map f))
+    (right : ∀ x y : D, (f : x ⟶ y) → P ((inclRight C D).map f))
+    (edge : ∀ (c : C) (d : D), P (edge c d))
     {c : C} {d : D} : homInduction left right edge (Join.edge c d) = edge c d :=
   rfl
 
 variable (C D)
 
-/--
-Definition of `inclLeftFullyFaithful` / `inclLeftFullyFaithful` 的定义
+/-- The left inclusion is fully faithful. -/
+/-
+**CategoryTheory.Join.inclLeftFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Join`。
+形式化陈述：inclLeftFullyFaithful : (inclLeft C D).FullyFaithful where preimage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclLeftFullyFaithful
-  signature: : (inclLeft C D).FullyFaithful where
-  body: f.down
-
-中文:
-定义 inclLeftFullyFaithful
-  签名: : (inclLeft C D).满忠实 where
-  定义体: f.down
-
-Depends on / 依赖: f.down
+--- 原说明 ---
+The left inclusion is fully faithful.
 -/
 def inclLeftFullyFaithful : (inclLeft C D).FullyFaithful where
   preimage f := f.down
 
-/--
-Definition of `inclRightFullyFaithful` / `inclRightFullyFaithful` 的定义
+/-- The right inclusion is fully faithful. -/
+/-
+**CategoryTheory.Join.inclRightFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Join`。
+形式化陈述：inclRightFullyFaithful : (inclRight C D).FullyFaithful where preimage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclRightFullyFaithful
-  signature: : (inclRight C D).FullyFaithful where
-  body: f.down
-
-.full instance inclLeftFull : (inclLeft C D).Full := inclLeftFullyFaithful C D
-
-.full instance inclRightFull : (inclRight C D).Full := inclRightFullyFaithful C D
-
-.faithful instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D
-
-.faithful instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D
-
-中文:
-定义 inclRightFullyFaithful
-  签名: : (inclRight C D).满忠实 where
-  定义体: f.down
-
-.full instance inclLeftFull : (inclLeft C D).Full := inclLeftFullyFaithful C D
-
-.full instance inclRightFull : (inclRight C D).Full := inclRightFullyFaithful C D
-
-.faithful instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D
-
-.faithful instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D
-
-Depends on / 依赖: f.down
+--- 原说明 ---
+The right inclusion is fully faithful.
 -/
 def inclRightFullyFaithful : (inclRight C D).FullyFaithful where
   preimage f := f.down
-
-.full instance inclLeftFull : (inclLeft C D).Full := inclLeftFullyFaithful C D
-
-.full instance inclRightFull : (inclRight C D).Full := inclRightFullyFaithful C D
-
-.faithful instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D
-
-.faithful instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D
+/-
+**CategoryTheory.Join.inclLeftFull** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D],   (CategoryTheory.Join.inclLeft C
+ D).Full
+参数：C : Type u₁；D : Type u₂；CategoryTheory.Join.inclLeft C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
+-/
+instance inclLeftFull : (inclLeft C D).Full := inclLeftFullyFaithful C D |>.full
+/-
+**CategoryTheory.Join.inclRightFull** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Jo
+in`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D],   (CategoryTheory.Join.inclRight 
+C D).Full
+参数：C : Type u₁；D : Type u₂；CategoryTheory.Join.inclRight C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
+-/
+instance inclRightFull : (inclRight C D).Full := inclRightFullyFaithful C D |>.full
+/-
+**CategoryTheory.Join.inclLeftFaithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Join`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D],   (CategoryTheory.Join.inclLeft C
+ D).Faithful
+参数：C : Type u₁；D : Type u₂；CategoryTheory.Join.inclLeft C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
+-/
+instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D |>.faithful
+/-
+**CategoryTheory.Join.inclRightFaithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D],   (CategoryTheory.Join.inclRight 
+C D).Faithful
+参数：C : Type u₁；D : Type u₂；CategoryTheory.Join.inclRight C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
+-/
+instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D |>.faithful
 
 variable {C} in
-/--
-lemma `id_left` / 引理 `id_left`
+/-- A situational lemma to help putting identities in the form `(inclLeft _ _).map _` when using
+`homInduction`. -/
+/-
+**CategoryTheory.Join.id_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：id_left (c : C) : 𝟙 (left c) = (inclLeft C D).map (𝟙 c)
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma id_left
-  given: (c : C)
-  statement: 𝟙 (left c) = (inclLeft C D).map (𝟙 c)
-  proof: rfl
-
-中文:
-引理 id_left
-  条件: (c : C)
-  结论: 𝟙 (left c) = (inclLeft C D).map (𝟙 c)
-  证明: rfl
+--- 原说明 ---
+A situational lemma to help putting identities in the form `(inclLeft _ _).map _
+` when using
+`homInduction`.
 -/
 lemma id_left (c : C) : 𝟙 (left c) = (inclLeft C D).map (𝟙 c) := rfl
 
 variable {D} in
-/--
-lemma `id_right` / 引理 `id_right`
+/-- A situational lemma to help putting identities in the form `(inclRight _ _).map _` when using
+`homInduction`. -/
+/-
+**CategoryTheory.Join.id_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：id_right (d : D) : 𝟙 (right d) = (inclRight C D).map (𝟙 d)
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma id_right
-  given: (d : D)
-  statement: 𝟙 (right d) = (inclRight C D).map (𝟙 d)
-  proof: rfl
-
-中文:
-引理 id_right
-  条件: (d : D)
-  结论: 𝟙 (right d) = (inclRight C D).map (𝟙 d)
-  证明: rfl
+--- 原说明 ---
+A situational lemma to help putting identities in the form `(inclRight _ _).map 
+_` when using
+`homInduction`.
 -/
 lemma id_right (d : D) : 𝟙 (right d) = (inclRight C D).map (𝟙 d) := rfl
 
@@ -488,22 +435,23 @@ lemma id_right (d : D) : 𝟙 (right d) = (inclRight C D).map (𝟙 d) := rfl
 `(Prod.snd C D) ⋙ inclRight C D`. This is bundling together all the edge morphisms
 into the data of a natural transformation. -/
 @[simps!]
-/--
-Definition of `edgeTransform` / `edgeTransform` 的定义
+/-
+**CategoryTheory.Join.edgeTransform** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Jo
+in`。
+形式化陈述：edgeTransform : Prod.fst C D ⋙ inclLeft C D ⟶ Prod.snd C D ⋙ inclRight C D
+ where app
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition edgeTransform
-  signature: :
-  body: fun (c, d) => edge c d
-
-中文:
-定义 edgeTransform
-  签名: :
-  定义体: fun (c, d) => edge c d
+--- 原说明 ---
+The "canonical" natural transformation from `(Prod.fst C D) ⋙ inclLeft C D` to
+`(Prod.snd C D) ⋙ inclRight C D`. This is bundling together all the edge morphis
+ms
+into the data of a natural transformation.
 -/
 def edgeTransform :
     Prod.fst C D ⋙ inclLeft C D ⟶ Prod.snd C D ⋙ inclRight C D where
-  app := fun (c, d) => edge c d
+  app := fun (c, d) ↦ edge c d
 
 end Inclusions
 
@@ -513,60 +461,21 @@ variable {C D} {E : Type u₃} [Category.{v₃} E] {E' : Type u₄} [Category.{v
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `mkFunctor` / `mkFunctor` 的定义
+/-- A pair of functors `F : C ⥤ E, G : D ⥤ E` as well as a natural transformation
+`α : (Prod.fst C D) ⋙ F ⟶ (Prod.snd C D) ⋙ G` defines a functor out of `C ⋆ D`.
+This is the main entry point to define functors out of a join of categories. -/
+/-
+**CategoryTheory.Join.mkFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：mkFunctor (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd C D ⋙ G
+) : C ⋆ D ⥤ E where obj X
+参数：F : C ⥤ E；G : D ⥤ E；α : Prod.fst C D ⋙ F ⟶ Prod.snd C D ⋙ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFunctor
-  signature: (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd C D ⋙ G)
-  body: match X with
-    | .left x => F.obj x
-    | .right x => G.obj x
-  map f :=
-    homInduction
-      (left := fun _ _ f => F.map f)
-      (right := fun _ _ g => G.map g)
-      (edge := fun c d => α.app (c, d))
-      f
-  map_id x := by
-    cases x
-    · dsimp only [id_left, homInduction_left]
-      simp
-    · dsimp only [id_right, homInduction_right]
-      simp
-  map_comp {x y z} f g := by
-    cases f <;> cases g
-    · simp [← Functor.map_comp]
-    · case left.edge f d => simpa using! (α.naturality <| (Prod.sectL _ d).map f).symm
-    · simp [← Functor.map_comp]
-· case edge.right c _ _ f => simpa using! α.naturality (Prod.sectR c _).map f
-
-中文:
-定义 mkFunctor
-  签名: (F : C ⥤ E) (G : D ⥤ E) (α : 积类型.fst C D ⋙ F ⟶ 积类型.snd C D ⋙ G)
-  定义体: match X with
-    | .left x => F.obj x
-    | .right x => G.obj x
-  map f :=
-    homInduction
-      (left := fun _ _ f => F.map f)
-      (right := fun _ _ g => G.map g)
-      (edge := fun c d => α.app (c, d))
-      f
-  map_id x := by
-    cases x
-    · dsimp only [id_left, homInduction_left]
-      simp
-    · dsimp only [id_right, homInduction_right]
-      simp
-  map_comp {x y z} f g := by
-    cases f <;> cases g
-    · simp [← Functor.map_comp]
-    · case left.edge f d => simpa using! (α.naturality <| (Prod.sectL _ d).map f).symm
-    · simp [← Functor.map_comp]
-· case edge.right c _ _ f => simpa using! α.naturality (Prod.sectR c _).map f
-
-Depends on / 依赖: F.map, F.obj, Functor, Functor.map_comp, G.map, G.obj, Prod.sectL, edge.right, homInduction, homInduction_left, homInduction_right, id_left, id_right, left.edge, map_comp, map_id, naturality
+--- 原说明 ---
+A pair of functors `F : C ⥤ E, G : D ⥤ E` as well as a natural transformation
+`α : (Prod.fst C D) ⋙ F ⟶ (Prod.snd C D) ⋙ G` defines a functor out of `C ⋆ D`.
+This is the main entry point to define functors out of a join of categories.
 -/
 def mkFunctor (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd C D ⋙ G) :
     C ⋆ D ⥤ E where
@@ -576,9 +485,9 @@ def mkFunctor (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd 
     | .right x => G.obj x
   map f :=
     homInduction
-      (left := fun _ _ f => F.map f)
-      (right := fun _ _ g => G.map g)
-      (edge := fun c d => α.app (c, d))
+      (left := fun _ _ f ↦ F.map f)
+      (right := fun _ _ g ↦ G.map g)
+      (edge := fun c d ↦ α.app (c, d))
       f
   map_id x := by
     cases x
@@ -591,7 +500,7 @@ def mkFunctor (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd 
     · simp [← Functor.map_comp]
     · case left.edge f d => simpa using! (α.naturality <| (Prod.sectL _ d).map f).symm
     · simp [← Functor.map_comp]
-· case edge.right c _ _ f => simpa using! α.naturality (Prod.sectR c _).map f
+    · case edge.right c _ _ f => simpa using! α.naturality <| (Prod.sectR c _).map f
 
 section
 
@@ -599,62 +508,36 @@ variable (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd C D �
 
 -- As these equalities of objects are definitional, they should be fine.
 @[simp]
-/--
-lemma `mkFunctor_obj_left` / 引理 `mkFunctor_obj_left`
-
-English:
-lemma mkFunctor_obj_left
-  given: (c : C)
-  statement: (mkFunctor F G α).obj (left c) = F.obj c
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mkFunctor_obj_left
-  条件: (c : C)
-  结论: (mkFunctor F G α).obj (left c) = F.obj c
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.mkFunctor_obj_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：mkFunctor_obj_left (c : C) : (mkFunctor F G α).obj (left c) = F.obj c
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkFunctor_obj_left (c : C) : (mkFunctor F G α).obj (left c) = F.obj c := rfl
 
 @[simp]
-/--
-lemma `mkFunctor_obj_right` / 引理 `mkFunctor_obj_right`
-
-English:
-lemma mkFunctor_obj_right
-  given: (d : D)
-  statement: (mkFunctor F G α).obj (right d) = G.obj d
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mkFunctor_obj_right
-  条件: (d : D)
-  结论: (mkFunctor F G α).obj (right d) = G.obj d
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.mkFunctor_obj_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Join`。
+形式化陈述：mkFunctor_obj_right (d : D) : (mkFunctor F G α).obj (right d) = G.obj d
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkFunctor_obj_right (d : D) : (mkFunctor F G α).obj (right d) = G.obj d := rfl
 
 @[simp]
-/--
-lemma `mkFunctor_map_inclLeft` / 引理 `mkFunctor_map_inclLeft`
-
-English:
-lemma mkFunctor_map_inclLeft
-  given: {c c' : C} (f : c ⟶ c')
-  proof: rfl
-
-中文:
-引理 mkFunctor_map_inclLeft
-  条件: {c c' : C} (f : c ⟶ c')
-  证明: rfl
+/-
+**CategoryTheory.Join.mkFunctor_map_inclLeft** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Join`。
+形式化陈述：mkFunctor_map_inclLeft {c c' : C} (f : c ⟶ c') : (mkFunctor F G α).map ((i
+nclLeft C D).map f) = F.map f
+参数：f : c ⟶ c'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkFunctor_map_inclLeft {c c' : C} (f : c ⟶ c') :
     (mkFunctor F G α).map ((inclLeft C D).map f) = F.map f :=
@@ -662,59 +545,41 @@ lemma mkFunctor_map_inclLeft {c c' : C} (f : c ⟶ c') :
 
 /-- Precomposing `mkFunctor F G α` with the left inclusion gives back `F`. -/
 @[simps!]
-/--
-Definition of `mkFunctorLeft` / `mkFunctorLeft` 的定义
+/-
+**CategoryTheory.Join.mkFunctorLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Jo
+in`。
+形式化陈述：mkFunctorLeft : inclLeft C D ⋙ mkFunctor F G α ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFunctorLeft
-  signature: : inclLeft C D ⋙ mkFunctor F G α ≅ F
-  body: Iso.refl _
-
-中文:
-定义 mkFunctorLeft
-  签名: : inclLeft C D ⋙ mkFunctor F G α ≅ F
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Precomposing `mkFunctor F G α` with the left inclusion gives back `F`.
 -/
 def mkFunctorLeft : inclLeft C D ⋙ mkFunctor F G α ≅ F := Iso.refl _
 
 /-- Precomposing `mkFunctor F G α` with the right inclusion gives back `G`. -/
 @[simps!]
-/--
-Definition of `mkFunctorRight` / `mkFunctorRight` 的定义
+/-
+**CategoryTheory.Join.mkFunctorRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.J
+oin`。
+形式化陈述：mkFunctorRight : inclRight C D ⋙ mkFunctor F G α ≅ G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFunctorRight
-  signature: : inclRight C D ⋙ mkFunctor F G α ≅ G
-  body: Iso.refl _
-
-@[simp]
-
-中文:
-定义 mkFunctorRight
-  签名: : inclRight C D ⋙ mkFunctor F G α ≅ G
-  定义体: Iso.refl _
-
-@[simp]
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Precomposing `mkFunctor F G α` with the right inclusion gives back `G`.
 -/
 def mkFunctorRight : inclRight C D ⋙ mkFunctor F G α ≅ G := Iso.refl _
 
 @[simp]
-/--
-lemma `mkFunctor_map_inclRight` / 引理 `mkFunctor_map_inclRight`
-
-English:
-lemma mkFunctor_map_inclRight
-  given: {d d' : D} (f : d ⟶ d')
-  proof: rfl
-
-中文:
-引理 mkFunctor_map_inclRight
-  条件: {d d' : D} (f : d ⟶ d')
-  证明: rfl
+/-
+**CategoryTheory.Join.mkFunctor_map_inclRight** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Join`。
+形式化陈述：mkFunctor_map_inclRight {d d' : D} (f : d ⟶ d') : (mkFunctor F G α).map ((
+inclRight C D).map f) = G.map f
+参数：f : d ⟶ d'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkFunctor_map_inclRight {d d' : D} (f : d ⟶ d') :
     (mkFunctor F G α).map ((inclRight C D).map f) = G.map f :=
@@ -724,26 +589,22 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering `mkFunctor F G α` with the universal transformation gives back `α`. -/
 @[simp]
-/--
-lemma `mkFunctor_edgeTransform` / 引理 `mkFunctor_edgeTransform`
+/-
+**CategoryTheory.Join.mkFunctor_edgeTransform** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Join`。
+形式化陈述：mkFunctor_edgeTransform : whiskerRight (edgeTransform C D) (mkFunctor F G 
+α) = α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mkFunctor_edgeTransform
-  proof: by
-  ext x
-  simp [mkFunctor]
-
-@[simp]
-
-中文:
-引理 mkFunctor_edgeTransform
-  证明: by
-  ext x
-  simp [mkFunctor]
-
-@[simp]
-
-Depends on / 依赖: mkFunctor
+--- 原说明 ---
+Whiskering `mkFunctor F G α` with the universal transformation gives back `α`.
 -/
 lemma mkFunctor_edgeTransform :
     whiskerRight (edgeTransform C D) (mkFunctor F G α) = α := by
@@ -751,18 +612,14 @@ lemma mkFunctor_edgeTransform :
   simp [mkFunctor]
 
 @[simp]
-/--
-lemma `mkFunctor_map_edge` / 引理 `mkFunctor_map_edge`
-
-English:
-lemma mkFunctor_map_edge
-  given: (c : C) (d : D)
-  proof: rfl
-
-中文:
-引理 mkFunctor_map_edge
-  条件: (c : C) (d : D)
-  证明: rfl
+/-
+**CategoryTheory.Join.mkFunctor_map_edge** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：mkFunctor_map_edge (c : C) (d : D) : (mkFunctor F G α).map (edge c d) = α.
+app (c, d)
+参数：c : C；d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkFunctor_map_edge (c : C) (d : D) :
     (mkFunctor F G α).map (edge c d) = α.app (c, d) :=
@@ -770,34 +627,25 @@ lemma mkFunctor_map_edge (c : C) (d : D) :
 
 end
 
-/--
-Definition of `mkNatTrans` / `mkNatTrans` 的定义
+/-- Construct a natural transformation between functors out of a join from
+the data of natural transformations between each side that are compatible with the
+action on edge maps. -/
+/-
+**CategoryTheory.Join.mkNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`
+。
+形式化陈述：mkNatTrans {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E} (αₗ : inclLeft C D ⋙ F ⟶ inclL
+eft C D ⋙ F') (αᵣ : inclRight C D ⋙ F ⟶ inclRight C D ⋙ F') (h : whiskerRight (e
+dgeTransform C D) F ≫ whiskerLeft (Prod.snd C D) αᵣ = whiskerLeft (Prod.fst C D)
+ αₗ ≫ whiskerRight (edgeTransform C D) F'
+参数：αₗ : inclLeft C D ⋙ F ⟶ inclLeft C D ⋙ F'；αᵣ : inclRight C D ⋙ F ⟶ inclRight 
+C D ⋙ F'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNatTrans
-  signature: {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E}
-  body: match x with
-    | left x => αₗ.app x
-    | right x => αᵣ.app x
-  naturality {x y} f := by
-    cases f with
-    | @left x y f => simpa using! αₗ.naturality f
-    | @right x y f => simpa using! αᵣ.naturality f
-    | @edge c d => exact funext_iff.mp (NatTrans.ext_iff.mp h) (c, d)
-
-中文:
-定义 mk自然数Trans
-  签名: {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E}
-  定义体: match x with
-    | left x => αₗ.app x
-    | right x => αᵣ.app x
-  naturality {x y} f := by
-    cases f with
-    | @left x y f => simpa using! αₗ.naturality f
-    | @right x y f => simpa using! αᵣ.naturality f
-    | @edge c d => exact funext_iff.mp (NatTrans.ext_iff.mp h) (c, d)
-
-Depends on / 依赖: NatTrans, NatTrans.ext_iff.mp, cat_disch, ext_iff, funext_iff, funext_iff.mp, naturality
+--- 原说明 ---
+Construct a natural transformation between functors out of a join from
+the data of natural transformations between each side that are compatible with t
+he
+action on edge maps.
 -/
 def mkNatTrans {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E}
     (αₗ : inclLeft C D ⋙ F ⟶ inclLeft C D ⋙ F') (αᵣ : inclRight C D ⋙ F ⟶ inclRight C D ⋙ F')
@@ -822,99 +670,80 @@ variable {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E}
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `mkNatTrans_app_left` / 引理 `mkNatTrans_app_left`
-
-English:
-lemma mkNatTrans_app_left
-  given: (c : C)
-  statement: (mkNatTrans αₗ αᵣ h).app (left c) = αₗ.app c
-  proof: rfl
-
-中文:
-引理 mk自然数Trans_app_left
-  条件: (c : C)
-  结论: (mk自然数Trans αₗ αᵣ h).app (left c) = αₗ.app c
-  证明: rfl
+/-
+**CategoryTheory.Join.mkNatTrans_app_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Join`。
+形式化陈述：mkNatTrans_app_left (c : C) : (mkNatTrans αₗ αᵣ h).app (left c) = αₗ.app c
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkNatTrans_app_left (c : C) : (mkNatTrans αₗ αᵣ h).app (left c) = αₗ.app c := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `mkNatTrans_app_right` / 引理 `mkNatTrans_app_right`
-
-English:
-lemma mkNatTrans_app_right
-  given: (d : D)
-  statement: (mkNatTrans αₗ αᵣ h).app (right d) = αᵣ.app d
-  proof: rfl
-
-中文:
-引理 mk自然数Trans_app_right
-  条件: (d : D)
-  结论: (mk自然数Trans αₗ αᵣ h).app (right d) = αᵣ.app d
-  证明: rfl
+/-
+**CategoryTheory.Join.mkNatTrans_app_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Join`。
+形式化陈述：mkNatTrans_app_right (d : D) : (mkNatTrans αₗ αᵣ h).app (right d) = αᵣ.app
+ d
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkNatTrans_app_right (d : D) : (mkNatTrans αₗ αᵣ h).app (right d) = αᵣ.app d := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `whiskerLeft_inclLeft_mkNatTrans` / 引理 `whiskerLeft_inclLeft_mkNatTrans`
-
-English:
-lemma whiskerLeft_inclLeft_mkNatTrans
-  statement: whiskerLeft (inclLeft C D) (mkNatTrans αₗ αᵣ h) = αₗ
-  proof: rfl
-
-中文:
-引理 whiskerLeft_inclLeft_mk自然数Trans
-  结论: whiskerLeft (inclLeft C D) (mk自然数Trans αₗ αᵣ h) = αₗ
-  证明: rfl
+/-
+**CategoryTheory.Join.whiskerLeft_inclLeft_mkNatTrans** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Join`。
+形式化陈述：whiskerLeft_inclLeft_mkNatTrans : whiskerLeft (inclLeft C D) (mkNatTrans α
+ₗ αᵣ h) = αₗ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_inclLeft_mkNatTrans : whiskerLeft (inclLeft C D) (mkNatTrans αₗ αᵣ h) = αₗ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `whiskerLeft_inclRight_mkNatTrans` / 引理 `whiskerLeft_inclRight_mkNatTrans`
-
-English:
-lemma whiskerLeft_inclRight_mkNatTrans
-  proof: rfl
-
-中文:
-引理 whiskerLeft_inclRight_mk自然数Trans
-  证明: rfl
+/-
+**CategoryTheory.Join.whiskerLeft_inclRight_mkNatTrans** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Join`。
+形式化陈述：whiskerLeft_inclRight_mkNatTrans : whiskerLeft (inclRight C D) (mkNatTrans
+ αₗ αᵣ h) = αᵣ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_inclRight_mkNatTrans :
     whiskerLeft (inclRight C D) (mkNatTrans αₗ αᵣ h) = αᵣ := rfl
 
 end
 
-/--
-lemma `natTrans_ext` / 引理 `natTrans_ext`
+/-- Two natural transformations between functors out of a join are equal if they are so
+after whiskering with the inclusions. -/
+/-
+**CategoryTheory.Join.natTrans_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β : F ⟶ F'} (h₁ : whiskerLeft (inclLeft
+ C D) α = whiskerLeft (inclLeft C D) β) (h₂ : whiskerLeft (inclRight C D) α = wh
+iskerLeft (inclRight C D) β) : α = β
+参数：h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β；h₂ : whisker
+Left (inclRight C D) α = whiskerLeft (inclRight C D) β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma natTrans_ext
-  statement: {F F' : C ⋆ D ⥤ E} {α β : F ⟶ F'}
-  proof: by
-  ext t
-  cases t with
-  | left t => exact congrArg (fun x => x.app t) h₁
-  | right t => exact congrArg (fun x => x.app t) h₂
-
-中文:
-引理 natTrans_ext
-  结论: {F F' : C ⋆ D ⥤ E} {α β : F ⟶ F'}
-  证明: by
-  ext t
-  cases t with
-  | left t => exact congrArg (fun x => x.app t) h₁
-  | right t => exact congrArg (fun x => x.app t) h₂
-
-Depends on / 依赖: x.app
+--- 原说明 ---
+Two natural transformations between functors out of a join are equal if they are
+ so
+after whiskering with the inclusions.
 -/
 lemma natTrans_ext {F F' : C ⋆ D ⥤ E} {α β : F ⟶ F'}
     (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β)
@@ -922,26 +751,23 @@ lemma natTrans_ext {F F' : C ⋆ D ⥤ E} {α β : F ⟶ F'}
     α = β := by
   ext t
   cases t with
-  | left t => exact congrArg (fun x => x.app t) h₁
-  | right t => exact congrArg (fun x => x.app t) h₂
+  | left t => exact congrArg (fun x ↦ x.app t) h₁
+  | right t => exact congrArg (fun x ↦ x.app t) h₂
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `eq_mkNatTrans` / 引理 `eq_mkNatTrans`
-
-English:
-lemma eq_mkNatTrans
-  given: {F F' : C ⋆ D ⥤ E} (α : F ⟶ F')
-  proof: by
-  apply natTrans_ext <;> simp
-
-中文:
-引理 eq_mk自然数Trans
-  条件: {F F' : C ⋆ D ⥤ E} (α : F ⟶ F')
-  证明: by
-  apply natTrans_ext <;> simp
-
-Depends on / 依赖: natTrans_ext
+/-
+**CategoryTheory.Join.eq_mkNatTrans** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Jo
+in`。
+形式化陈述：eq_mkNatTrans {F F' : C ⋆ D ⥤ E} (α : F ⟶ F') : mkNatTrans (whiskerLeft (i
+nclLeft C D) α) (whiskerLeft (inclRight C D) α) = α
+参数：α : F ⟶ F'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eq_mkNatTrans {F F' : C ⋆ D ⥤ E} (α : F ⟶ F') :
     mkNatTrans (whiskerLeft (inclLeft C D) α) (whiskerLeft (inclRight C D) α) = α := by
@@ -949,20 +775,25 @@ lemma eq_mkNatTrans {F F' : C ⋆ D ⥤ E} (α : F ⟶ F') :
 
 section
 
-/--
-lemma `mkNatTransComp` / 引理 `mkNatTransComp`
+/-- `mkNatTrans` respects vertical composition. -/
+/-
+**CategoryTheory.Join.mkNatTransComp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.J
+oin`。
+形式化陈述：mkNatTransComp {F F' F'' : C ⋆ D ⥤ E} (αₗ : inclLeft C D ⋙ F ⟶ inclLeft C 
+D ⋙ F') (αᵣ : inclRight C D ⋙ F ⟶ inclRight C D ⋙ F') (βₗ : inclLeft C D ⋙ F' ⟶ 
+inclLeft C D ⋙ F'') (βᵣ : inclRight C D ⋙ F' ⟶ inclRight C D ⋙ F'') (h : whisker
+Right (edgeTransform C D) F ≫ whiskerLeft (Prod.snd C D) αᵣ = whiskerLeft (Prod.
+fst C D) αₗ ≫ whiskerRight (edgeTransform C D) F'
+参数：αₗ : inclLeft C D ⋙ F ⟶ inclLeft C D ⋙ F'；αᵣ : inclRight C D ⋙ F ⟶ inclRight 
+C D ⋙ F'；βₗ : inclLeft C D ⋙ F' ⟶ inclLeft C D ⋙ F''；βᵣ : inclRight C D ⋙ F' ⟶ i
+nclRight C D ⋙ F''。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
 
-English:
-lemma mkNatTransComp
-  proof: by
-  apply natTrans_ext <;> cat_disch
-
-中文:
-引理 mk自然数TransComp
-  证明: by
-  apply natTrans_ext <;> cat_disch
-
-Depends on / 依赖: Prod.fst, Prod.snd, cat_disch, edgeTransform, mkNatTrans, natTrans_ext, reassoc_of, whiskerLeft, whiskerRight
+--- 原说明 ---
+`mkNatTrans` respects vertical composition.
 -/
 lemma mkNatTransComp
     {F F' F'' : C ⋆ D ⥤ E}
@@ -985,24 +816,21 @@ set_option backward.isDefEq.respectTransparency false in
 compositions with the inclusions are isomorphic and the whiskering with the canonical
 transformation is respected through these isomorphisms. -/
 @[simps]
-/--
-Definition of `mkNatIso` / `mkNatIso` 的定义
+/-
+**CategoryTheory.Join.mkNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：mkNatIso {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E} (eₗ : inclLeft C D ⋙ F ≅ inclLeft
+ C D ⋙ G) (eᵣ : inclRight C D ⋙ F ≅ inclRight C D ⋙ G) (h : whiskerRight (edgeTr
+ansform C D) F ≫ (isoWhiskerLeft (Prod.snd C D) eᵣ).hom = (isoWhiskerLeft (Prod.
+fst C D) eₗ).hom ≫ whiskerRight (edgeTransform C D) G
+参数：eₗ : inclLeft C D ⋙ F ≅ inclLeft C D ⋙ G；eᵣ : inclRight C D ⋙ F ≅ inclRight C
+ D ⋙ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNatIso
-  signature: {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E}
-  body: mkNatTrans eₗ.hom eᵣ.hom (by simpa using h)
-  inv := mkNatTrans eₗ.inv eᵣ.inv (by rw [Eq.comm, ← isoWhiskerLeft_inv, ← isoWhiskerLeft_inv,
-    Iso.inv_comp_eq, ← Category.assoc, Eq.comm, Iso.comp_inv_eq, h])
-
-中文:
-定义 mk自然数Iso
-  签名: {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E}
-  定义体: mkNatTrans eₗ.hom eᵣ.hom (by simpa using h)
-  inv := mkNatTrans eₗ.inv eᵣ.inv (by rw [Eq.comm, ← isoWhiskerLeft_inv, ← isoWhiskerLeft_inv,
-    Iso.inv_comp_eq, ← Category.assoc, Eq.comm, Iso.comp_inv_eq, h])
-
-Depends on / 依赖: Category, Category.assoc, Eq.comm, Iso.comp_inv_eq, Iso.inv_comp_eq, cat_disch, comp_inv_eq, inv_comp_eq, isoWhiskerLeft_inv, mkNatTrans
+--- 原说明 ---
+Two functors out of a join of categories are naturally isomorphic if their
+compositions with the inclusions are isomorphic and the whiskering with the cano
+nical
+transformation is respected through these isomorphisms.
 -/
 def mkNatIso {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E}
     (eₗ : inclLeft C D ⋙ F ≅ inclLeft C D ⋙ G)
@@ -1014,145 +842,98 @@ def mkNatIso {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E}
   inv := mkNatTrans eₗ.inv eᵣ.inv (by rw [Eq.comm, ← isoWhiskerLeft_inv, ← isoWhiskerLeft_inv,
     Iso.inv_comp_eq, ← Category.assoc, Eq.comm, Iso.comp_inv_eq, h])
 
-/--
-Definition of `mapPair` / `mapPair` 的定义
+/-- A pair of functors ((C ⥤ E), (D ⥤ E')) induces a functor `C ⋆ D ⥤ E ⋆ E'`. -/
+/-
+**CategoryTheory.Join.mapPair** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：mapPair (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') : C ⋆ D ⥤ E ⋆ E'
+参数：Fₗ : C ⥤ E；Fᵣ : D ⥤ E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPair
-  signature: (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E')
-  body: mkFunctor (Fₗ ⋙ inclLeft _ _) (Fᵣ ⋙ inclRight _ _) { app := fun _ => edge _ _ }
-
-中文:
-定义 mapPair
-  签名: (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E')
-  定义体: mkFunctor (Fₗ ⋙ inclLeft _ _) (Fᵣ ⋙ inclRight _ _) { app := fun _ => edge _ _ }
-
-Depends on / 依赖: inclLeft, inclRight, mkFunctor
+--- 原说明 ---
+A pair of functors ((C ⥤ E), (D ⥤ E')) induces a functor `C ⋆ D ⥤ E ⋆ E'`.
 -/
 def mapPair (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') : C ⋆ D ⥤ E ⋆ E' :=
-  mkFunctor (Fₗ ⋙ inclLeft _ _) (Fᵣ ⋙ inclRight _ _) { app := fun _ => edge _ _ }
+  mkFunctor (Fₗ ⋙ inclLeft _ _) (Fᵣ ⋙ inclRight _ _) { app := fun _ ↦ edge _ _ }
 
 section mapPair
 
 variable (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E')
 
 @[simp]
-/--
-lemma `mapPair_obj_left` / 引理 `mapPair_obj_left`
-
-English:
-lemma mapPair_obj_left
-  given: (c : C)
-  statement: (mapPair Fₗ Fᵣ).obj (left c) = left (Fₗ.obj c)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapPair_obj_left
-  条件: (c : C)
-  结论: (mapPair Fₗ Fᵣ).obj (left c) = left (Fₗ.obj c)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.mapPair_obj_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Join`。
+形式化陈述：mapPair_obj_left (c : C) : (mapPair Fₗ Fᵣ).obj (left c) = left (Fₗ.obj c)
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapPair_obj_left (c : C) : (mapPair Fₗ Fᵣ).obj (left c) = left (Fₗ.obj c) := rfl
 
 @[simp]
-/--
-lemma `mapPair_obj_right` / 引理 `mapPair_obj_right`
-
-English:
-lemma mapPair_obj_right
-  given: (d : D)
-  statement: (mapPair Fₗ Fᵣ).obj (right d) = right (Fᵣ.obj d)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapPair_obj_right
-  条件: (d : D)
-  结论: (mapPair Fₗ Fᵣ).obj (right d) = right (Fᵣ.obj d)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.mapPair_obj_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：mapPair_obj_right (d : D) : (mapPair Fₗ Fᵣ).obj (right d) = right (Fᵣ.obj 
+d)
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapPair_obj_right (d : D) : (mapPair Fₗ Fᵣ).obj (right d) = right (Fᵣ.obj d) := rfl
 
 @[simp]
-/--
-lemma `mapPair_map_inclLeft` / 引理 `mapPair_map_inclLeft`
-
-English:
-lemma mapPair_map_inclLeft
-  given: {c c' : C} (f : c ⟶ c')
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapPair_map_inclLeft
-  条件: {c c' : C} (f : c ⟶ c')
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Join.mapPair_map_inclLeft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Join`。
+形式化陈述：mapPair_map_inclLeft {c c' : C} (f : c ⟶ c') : (mapPair Fₗ Fᵣ).map ((inclL
+eft C D).map f) = (inclLeft E E').map (Fₗ.map f)
+参数：f : c ⟶ c'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapPair_map_inclLeft {c c' : C} (f : c ⟶ c') :
     (mapPair Fₗ Fᵣ).map ((inclLeft C D).map f) = (inclLeft E E').map (Fₗ.map f) := rfl
 
 @[simp]
-/--
-lemma `mapPair_map_inclRight` / 引理 `mapPair_map_inclRight`
-
-English:
-lemma mapPair_map_inclRight
-  given: {d d' : D} (f : d ⟶ d')
-  proof: rfl
-
-中文:
-引理 mapPair_map_inclRight
-  条件: {d d' : D} (f : d ⟶ d')
-  证明: rfl
+/-
+**CategoryTheory.Join.mapPair_map_inclRight** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Join`。
+形式化陈述：mapPair_map_inclRight {d d' : D} (f : d ⟶ d') : (mapPair Fₗ Fᵣ).map ((incl
+Right C D).map f) = (inclRight E E').map (Fᵣ.map f)
+参数：f : d ⟶ d'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapPair_map_inclRight {d d' : D} (f : d ⟶ d') :
     (mapPair Fₗ Fᵣ).map ((inclRight C D).map f) = (inclRight E E').map (Fᵣ.map f) := rfl
 
 /-- Characterizing `mapPair` on left morphisms. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `mapPairLeft` / `mapPairLeft` 的定义
+/-
+**CategoryTheory.Join.mapPairLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join
+`。
+形式化陈述：mapPairLeft : inclLeft _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fₗ ⋙ inclLeft _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPairLeft
-  signature: : inclLeft _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fₗ ⋙ inclLeft _ _
-  body: mkFunctorLeft _ _ _
-
-中文:
-定义 mapPairLeft
-  签名: : inclLeft _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fₗ ⋙ inclLeft _ _
-  定义体: mkFunctorLeft _ _ _
-
-Depends on / 依赖: mkFunctorLeft
+--- 原说明 ---
+Characterizing `mapPair` on left morphisms.
 -/
 def mapPairLeft : inclLeft _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fₗ ⋙ inclLeft _ _ := mkFunctorLeft _ _ _
 
 /-- Characterizing `mapPair` on right morphisms. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `mapPairRight` / `mapPairRight` 的定义
+/-
+**CategoryTheory.Join.mapPairRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：mapPairRight : inclRight _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fᵣ ⋙ inclRight _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPairRight
-  signature: : inclRight _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fᵣ ⋙ inclRight _ _
-  body: mkFunctorRight _ _ _
-
-中文:
-定义 mapPairRight
-  签名: : inclRight _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fᵣ ⋙ inclRight _ _
-  定义体: mkFunctorRight _ _ _
-
-Depends on / 依赖: mkFunctorRight
+--- 原说明 ---
+Characterizing `mapPair` on right morphisms.
 -/
 def mapPairRight : inclRight _ _ ⋙ mapPair Fₗ Fᵣ ≅ Fᵣ ⋙ inclRight _ _ := mkFunctorRight _ _ _
 
@@ -1162,20 +943,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Any functor out of a join is naturally isomorphic to a functor of the form `mkFunctor F G α`. -/
 @[simps!]
-/--
-Definition of `isoMkFunctor` / `isoMkFunctor` 的定义
+/-
+**CategoryTheory.Join.isoMkFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：isoMkFunctor (F : C ⋆ D ⥤ E) : F ≅ mkFunctor (inclLeft C D ⋙ F) (inclRight
+ C D ⋙ F) (whiskerRight (edgeTransform C D) F)
+参数：F : C ⋆ D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMkFunctor
-  signature: (F : C ⋆ D ⥤ E)
-  body: mkNatIso (mkFunctorLeft _ _ _).symm (mkFunctorRight _ _ _).symm
-
-中文:
-定义 isoMkFunctor
-  签名: (F : C ⋆ D ⥤ E)
-  定义体: mkNatIso (mkFunctorLeft _ _ _).symm (mkFunctorRight _ _ _).symm
-
-Depends on / 依赖: mkFunctorLeft, mkFunctorRight, mkNatIso
+--- 原说明 ---
+Any functor out of a join is naturally isomorphic to a functor of the form `mkFu
+nctor F G α`.
 -/
 def isoMkFunctor (F : C ⋆ D ⥤ E) :
     F ≅ mkFunctor (inclLeft C D ⋙ F) (inclRight C D ⋙ F) (whiskerRight (edgeTransform C D) F) :=
@@ -1183,24 +962,14 @@ def isoMkFunctor (F : C ⋆ D ⥤ E) :
 
 /-- `mapPair` respects identities -/
 @[simps!]
-/--
-Definition of `mapPairId` / `mapPairId` 的定义
+/-
+**CategoryTheory.Join.mapPairId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join`。
+形式化陈述：mapPairId : mapPair (𝟭 C) (𝟭 D) ≅ 𝟭 (C ⋆ D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPairId
-  signature: : mapPair (𝟭 C) (𝟭 D) ≅ 𝟭 (C ⋆ D)
-  body: mkNatIso
-    (mapPairLeft _ _ ≪≫ Functor.leftUnitor _ ≪≫ (Functor.rightUnitor _).symm)
-    (mapPairRight _ _ ≪≫ Functor.leftUnitor _ ≪≫ (Functor.rightUnitor _).symm)
-
-中文:
-定义 mapPairId
-  签名: : mapPair (𝟭 C) (𝟭 D) ≅ 𝟭 (C ⋆ D)
-  定义体: mkNatIso
-    (mapPairLeft _ _ ≪≫ Functor.leftUnitor _ ≪≫ (Functor.rightUnitor _).symm)
-    (mapPairRight _ _ ≪≫ Functor.leftUnitor _ ≪≫ (Functor.rightUnitor _).symm)
-
-Depends on / 依赖: Functor, Functor.leftUnitor, Functor.rightUnitor, leftUnitor, mapPairLeft, mapPairRight, mkNatIso, rightUnitor
+--- 原说明 ---
+`mapPair` respects identities
 -/
 def mapPairId : mapPair (𝟭 C) (𝟭 D) ≅ 𝟭 (C ⋆ D) :=
   mkNatIso
@@ -1211,40 +980,18 @@ variable {J : Type u₅} [Category.{v₅} J]
   {K : Type u₆} [Category.{v₆} K]
 
 -- @[simps!] times out here
-/--
-Definition of `mapPairComp` / `mapPairComp` 的定义
+/-- `mapPair` respects composition -/
+/-
+**CategoryTheory.Join.mapPairComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join
+`。
+形式化陈述：mapPairComp (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gₗ : E ⥤ J) (Gᵣ : E' ⥤ K) : mapPai
+r (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≅ mapPair Fₗ Fᵣ ⋙ mapPair Gₗ Gᵣ
+参数：Fₗ : C ⥤ E；Fᵣ : D ⥤ E'；Gₗ : E ⥤ J；Gᵣ : E' ⥤ K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPairComp
-  signature: (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gₗ : E ⥤ J) (Gᵣ : E' ⥤ K)
-  body: mkNatIso
-    (mapPairLeft (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
-      Functor.associator Fₗ Gₗ (inclLeft J K) ≪≫
-      (isoWhiskerLeft Fₗ (mapPairLeft Gₗ Gᵣ).symm) ≪≫
-      (Functor.associator Fₗ (inclLeft E E') (mapPair Gₗ Gᵣ)).symm ≪≫
-      isoWhiskerRight (mapPairLeft Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-    (mapPairRight (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
-      Functor.associator Fᵣ Gᵣ (inclRight J K) ≪≫
-      (isoWhiskerLeft Fᵣ (mapPairRight Gₗ Gᵣ).symm) ≪≫
-      (Functor.associator Fᵣ (inclRight E E') (mapPair Gₗ Gᵣ)).symm ≪≫
-      isoWhiskerRight (mapPairRight Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-
-中文:
-定义 mapPairComp
-  签名: (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gₗ : E ⥤ J) (Gᵣ : E' ⥤ K)
-  定义体: mkNatIso
-    (mapPairLeft (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
-      Functor.associator Fₗ Gₗ (inclLeft J K) ≪≫
-      (isoWhiskerLeft Fₗ (mapPairLeft Gₗ Gᵣ).symm) ≪≫
-      (Functor.associator Fₗ (inclLeft E E') (mapPair Gₗ Gᵣ)).symm ≪≫
-      isoWhiskerRight (mapPairLeft Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-    (mapPairRight (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
-      Functor.associator Fᵣ Gᵣ (inclRight J K) ≪≫
-      (isoWhiskerLeft Fᵣ (mapPairRight Gₗ Gᵣ).symm) ≪≫
-      (Functor.associator Fᵣ (inclRight E E') (mapPair Gₗ Gᵣ)).symm ≪≫
-      isoWhiskerRight (mapPairRight Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-
-Depends on / 依赖: Functor, Functor.associator, associator, inclLeft, inclRight, isoWhiskerLeft, isoWhiskerRight, mapPair, mapPairLeft, mapPairRight, mkNatIso
+--- 原说明 ---
+`mapPair` respects composition
 -/
 def mapPairComp (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gₗ : E ⥤ J) (Gᵣ : E' ⥤ K) :
     mapPair (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≅ mapPair Fₗ Fᵣ ⋙ mapPair Gₗ Gᵣ :=
@@ -1267,24 +1014,27 @@ variable (Fₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gₗ : E ⥤ J) (Gᵣ : E' ⥤ K)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapPairComp_hom_app_left` / 引理 `mapPairComp_hom_app_left`
-
-English:
-lemma mapPairComp_hom_app_left
-  given: (c : C)
-  proof: by
-  dsimp [mapPairComp]
-  simp
-
-中文:
-引理 mapPairComp_hom_app_left
-  条件: (c : C)
-  证明: by
-  dsimp [mapPairComp]
-  simp
-
-Depends on / 依赖: mapPairComp
+/-
+**CategoryTheory.Join.mapPairComp_hom_app_left** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Join`。
+形式化陈述：mapPairComp_hom_app_left (c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left
+ c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)))
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapPairComp_hom_app_left (c : C) :
     (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c))) := by
@@ -1294,24 +1044,27 @@ lemma mapPairComp_hom_app_left (c : C) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapPairComp_hom_app_right` / 引理 `mapPairComp_hom_app_right`
-
-English:
-lemma mapPairComp_hom_app_right
-  given: (d : D)
-  proof: by
-  dsimp [mapPairComp]
-  simp
-
-中文:
-引理 mapPairComp_hom_app_right
-  条件: (d : D)
-  证明: by
-  dsimp [mapPairComp]
-  simp
-
-Depends on / 依赖: mapPairComp
+/-
+**CategoryTheory.Join.mapPairComp_hom_app_right** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Join`。
+形式化陈述：mapPairComp_hom_app_right (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (rig
+ht d) = 𝟙 (right (Gᵣ.obj (Fᵣ.obj d)))
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapPairComp_hom_app_right (d : D) :
     (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.obj d))) := by
@@ -1320,24 +1073,37 @@ lemma mapPairComp_hom_app_right (d : D) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapPairComp_inv_app_left` / 引理 `mapPairComp_inv_app_left`
-
-English:
-lemma mapPairComp_inv_app_left
-  given: (c : C)
-  proof: by
-  dsimp [mapPairComp]
-  simp
-
-中文:
-引理 mapPairComp_inv_app_left
-  条件: (c : C)
-  证明: by
-  dsimp [mapPairComp]
-  simp
-
-Depends on / 依赖: mapPairComp
+/-
+**CategoryTheory.Join.mapPairComp_inv_app_left** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Join`。
+形式化陈述：mapPairComp_inv_app_left (c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left
+ c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)))
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Join.mkNatTrans.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapPairComp_inv_app_left (c : C) :
     (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c))) := by
@@ -1346,24 +1112,37 @@ lemma mapPairComp_inv_app_left (c : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapPairComp_inv_app_right` / 引理 `mapPairComp_inv_app_right`
-
-English:
-lemma mapPairComp_inv_app_right
-  given: (d : D)
-  proof: by
-  dsimp [mapPairComp]
-  simp
-
-中文:
-引理 mapPairComp_inv_app_right
-  条件: (d : D)
-  证明: by
-  dsimp [mapPairComp]
-  simp
-
-Depends on / 依赖: mapPairComp
+/-
+**CategoryTheory.Join.mapPairComp_inv_app_right** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Join`。
+形式化陈述：mapPairComp_inv_app_right (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (rig
+ht d) = 𝟙 (right (Gᵣ.obj (Fᵣ.obj d)))
+参数：d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Join.mkNatTrans.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapPairComp_inv_app_right (d : D) :
     (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.obj d))) := by
@@ -1387,24 +1166,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural transformation `Fₗ ⟶ Gₗ` induces a natural transformation
   `mapPair Fₗ H ⟶ mapPair Gₗ H` for every `H : D ⥤ E'`. -/
 @[simps!]
-/--
-Definition of `mapWhiskerRight` / `mapWhiskerRight` 的定义
+/-
+**CategoryTheory.Join.mapWhiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Join`。
+形式化陈述：mapWhiskerRight {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) (H : D ⥤ E') : map
+Pair Fₗ H ⟶ mapPair Gₗ H
+参数：α : Fₗ ⟶ Gₗ；H : D ⥤ E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapWhiskerRight
-  signature: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) (H : D ⥤ E')
-  body: mkNatTrans
-    ((mapPairLeft Fₗ H).hom ≫ whiskerRight α (inclLeft E E') ≫ (mapPairLeft Gₗ H).inv)
-    ((mapPairRight Fₗ H).hom ≫ whiskerRight (𝟙 H) (inclRight E E') ≫ (mapPairRight Gₗ H).inv)
-
-中文:
-定义 mapWhiskerRight
-  签名: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) (H : D ⥤ E')
-  定义体: mkNatTrans
-    ((mapPairLeft Fₗ H).hom ≫ whiskerRight α (inclLeft E E') ≫ (mapPairLeft Gₗ H).inv)
-    ((mapPairRight Fₗ H).hom ≫ whiskerRight (𝟙 H) (inclRight E E') ≫ (mapPairRight Gₗ H).inv)
-
-Depends on / 依赖: inclLeft, inclRight, mapPairLeft, mapPairRight, mkNatTrans, whiskerRight
+--- 原说明 ---
+A natural transformation `Fₗ ⟶ Gₗ` induces a natural transformation
+  `mapPair Fₗ H ⟶ mapPair Gₗ H` for every `H : D ⥤ E'`.
 -/
 def mapWhiskerRight {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) (H : D ⥤ E') :
     mapPair Fₗ H ⟶ mapPair Gₗ H :=
@@ -1415,22 +1188,37 @@ def mapWhiskerRight {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) (H : 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapWhiskerRight_comp` / 引理 `mapWhiskerRight_comp`
-
-English:
-lemma mapWhiskerRight_comp
-  statement: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} {Hₗ : C ⥤ E}
-  proof: by
-  cat_disch
-
-中文:
-引理 mapWhiskerRight_comp
-  结论: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} {Hₗ : C ⥤ E}
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Join.mapWhiskerRight_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Join`。
+形式化陈述：mapWhiskerRight_comp {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} {Hₗ : C ⥤ E} (α : Fₗ ⟶ Gₗ) 
+(β : Gₗ ⟶ Hₗ) (H : D ⥤ E') : mapWhiskerRight (α ≫ β) H = mapWhiskerRight α H ≫ m
+apWhiskerRight β H
+参数：α : Fₗ ⟶ Gₗ；β : Gₗ ⟶ Hₗ；H : D ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma mapWhiskerRight_comp {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} {Hₗ : C ⥤ E}
     (α : Fₗ ⟶ Gₗ) (β : Gₗ ⟶ Hₗ) (H : D ⥤ E') :
@@ -1439,26 +1227,31 @@ lemma mapWhiskerRight_comp {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} {Hₗ : C ⥤ E}
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapWhiskerRight_id` / 引理 `mapWhiskerRight_id`
-
-English:
-lemma mapWhiskerRight_id
-  given: (Fₗ : C ⥤ E) (H : D ⥤ E')
-  proof: by
-  cat_disch
-
-#adaptation_note
-
-中文:
-引理 mapWhiskerRight_id
-  条件: (Fₗ : C ⥤ E) (H : D ⥤ E')
-  证明: by
-  cat_disch
-
-#adaptation_note
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Join.mapWhiskerRight_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：mapWhiskerRight_id (Fₗ : C ⥤ E) (H : D ⥤ E') : mapWhiskerRight (𝟙 Fₗ) H = 
+𝟙 _
+参数：Fₗ : C ⥤ E；H : D ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapWhiskerRight_id (Fₗ : C ⥤ E) (H : D ⥤ E') :
     mapWhiskerRight (𝟙 Fₗ) H = 𝟙 _ := by
@@ -1470,24 +1263,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural transformation `Fᵣ ⟶ Gᵣ` induces a natural transformation
   `mapPair H Fᵣ ⟶ mapPair H Gᵣ` for every `H : C ⥤ E`. -/
 @[simps!]
-/--
-Definition of `mapWhiskerLeft` / `mapWhiskerLeft` 的定义
+/-
+**CategoryTheory.Join.mapWhiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.J
+oin`。
+形式化陈述：mapWhiskerLeft (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ⟶ Gᵣ) : map
+Pair H Fᵣ ⟶ mapPair H Gᵣ
+参数：H : C ⥤ E；α : Fᵣ ⟶ Gᵣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapWhiskerLeft
-  signature: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ⟶ Gᵣ)
-  body: mkNatTrans
-    ((mapPairLeft H Fᵣ).hom ≫ whiskerRight (𝟙 H) (inclLeft E E') ≫ (mapPairLeft H Gᵣ).inv)
-    ((mapPairRight H Fᵣ).hom ≫ whiskerRight α (inclRight E E') ≫ (mapPairRight H Gᵣ).inv)
-
-中文:
-定义 mapWhiskerLeft
-  签名: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ⟶ Gᵣ)
-  定义体: mkNatTrans
-    ((mapPairLeft H Fᵣ).hom ≫ whiskerRight (𝟙 H) (inclLeft E E') ≫ (mapPairLeft H Gᵣ).inv)
-    ((mapPairRight H Fᵣ).hom ≫ whiskerRight α (inclRight E E') ≫ (mapPairRight H Gᵣ).inv)
-
-Depends on / 依赖: inclLeft, inclRight, mapPairLeft, mapPairRight, mkNatTrans, whiskerRight
+--- 原说明 ---
+A natural transformation `Fᵣ ⟶ Gᵣ` induces a natural transformation
+  `mapPair H Fᵣ ⟶ mapPair H Gᵣ` for every `H : C ⥤ E`.
 -/
 def mapWhiskerLeft (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ⟶ Gᵣ) :
     mapPair H Fᵣ ⟶ mapPair H Gᵣ :=
@@ -1498,22 +1285,35 @@ def mapWhiskerLeft (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapWhiskerLeft_comp` / 引理 `mapWhiskerLeft_comp`
-
-English:
-lemma mapWhiskerLeft_comp
-  statement: {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} {Hᵣ : D ⥤ E'}
-  proof: by
-  cat_disch
-
-中文:
-引理 mapWhiskerLeft_comp
-  结论: {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} {Hᵣ : D ⥤ E'}
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Join.mapWhiskerLeft_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Join`。
+形式化陈述：mapWhiskerLeft_comp {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} {Hᵣ : D ⥤ E'} (H : C ⥤ E) 
+(α : Fᵣ ⟶ Gᵣ) (β : Gᵣ ⟶ Hᵣ) : mapWhiskerLeft H (α ≫ β) = mapWhiskerLeft H α ≫ ma
+pWhiskerLeft H β
+参数：H : C ⥤ E；α : Fᵣ ⟶ Gᵣ；β : Gᵣ ⟶ Hᵣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapWhiskerLeft_comp {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} {Hᵣ : D ⥤ E'}
     (H : C ⥤ E) (α : Fᵣ ⟶ Gᵣ) (β : Gᵣ ⟶ Hᵣ) :
@@ -1522,26 +1322,31 @@ lemma mapWhiskerLeft_comp {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} {Hᵣ : D ⥤ E'}
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapWhiskerLeft_id` / 引理 `mapWhiskerLeft_id`
-
-English:
-lemma mapWhiskerLeft_id
-  given: (H : C ⥤ E) (Fᵣ : D ⥤ E')
-  proof: by
-  cat_disch
-
-#adaptation_note
-
-中文:
-引理 mapWhiskerLeft_id
-  条件: (H : C ⥤ E) (Fᵣ : D ⥤ E')
-  证明: by
-  cat_disch
-
-#adaptation_note
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Join.mapWhiskerLeft_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：mapWhiskerLeft_id (H : C ⥤ E) (Fᵣ : D ⥤ E') : mapWhiskerLeft H (𝟙 Fᵣ) = 𝟙 
+_
+参数：H : C ⥤ E；Fᵣ : D ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapWhiskerLeft_id (H : C ⥤ E) (Fᵣ : D ⥤ E') :
     mapWhiskerLeft H (𝟙 Fᵣ) = 𝟙 _ := by
@@ -1557,28 +1362,42 @@ Probable fix: Figure out what the intended statement of `mapWhiskerLeft_app` and
 -/
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mapWhisker_exchange` / 引理 `mapWhisker_exchange`
+/-- One can exchange `mapWhiskerLeft` and `mapWhiskerRight`. -/
+/-
+**CategoryTheory.Join.mapWhisker_exchange** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Join`。
+形式化陈述：mapWhisker_exchange (Fₗ : C ⥤ E) (Gₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gᵣ : D ⥤ E') 
+(αₗ : Fₗ ⟶ Gₗ) (αᵣ : Fᵣ ⟶ Gᵣ) : mapWhiskerLeft Fₗ αᵣ ≫ mapWhiskerRight αₗ Gᵣ = m
+apWhiskerRight αₗ Fᵣ ≫ mapWhiskerLeft Gₗ αᵣ
+参数：Fₗ : C ⥤ E；Gₗ : C ⥤ E；Fᵣ : D ⥤ E'；Gᵣ : D ⥤ E'；αₗ : Fₗ ⟶ Gₗ；αᵣ : Fᵣ ⟶ Gᵣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapWhisker_exchange
-  statement: (Fₗ : C ⥤ E) (Gₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gᵣ : D ⥤ E')
-  proof: by
-  ext
-  cat_disch
-
-#adaptation_note
-
-中文:
-引理 mapWhisker_exchange
-  结论: (Fₗ : C ⥤ E) (Gₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gᵣ : D ⥤ E')
-  证明: by
-  ext
-  cat_disch
-
-#adaptation_note
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+One can exchange `mapWhiskerLeft` and `mapWhiskerRight`.
 -/
 lemma mapWhisker_exchange (Fₗ : C ⥤ E) (Gₗ : C ⥤ E) (Fᵣ : D ⥤ E') (Gᵣ : D ⥤ E')
     (αₗ : Fₗ ⟶ Gₗ) (αᵣ : Fᵣ ⟶ Gᵣ) :
@@ -1593,28 +1412,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural isomorphism `Fᵣ ≅ Gᵣ` induces a natural isomorphism
   `mapPair H Fᵣ ≅ mapPair H Gᵣ` for every `H : C ⥤ E`. -/
 @[simps!]
-/--
-Definition of `mapIsoWhiskerLeft` / `mapIsoWhiskerLeft` 的定义
+/-
+**CategoryTheory.Join.mapIsoWhiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：mapIsoWhiskerLeft (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ) : 
+mapPair H Fᵣ ≅ mapPair H Gᵣ
+参数：H : C ⥤ E；α : Fᵣ ≅ Gᵣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIsoWhiskerLeft
-  signature: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  body: mkNatIso
-    (mapPairLeft H Fᵣ ≪≫ isoWhiskerRight (Iso.refl H) (inclLeft _ _) ≪≫ (mapPairLeft H Gᵣ).symm)
-    (mapPairRight H Fᵣ ≪≫ isoWhiskerRight α (inclRight E E') ≪≫ (mapPairRight H Gᵣ).symm)
-
-#adaptation_note
-
-中文:
-定义 mapIsoWhiskerLeft
-  签名: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  定义体: mkNatIso
-    (mapPairLeft H Fᵣ ≪≫ isoWhiskerRight (Iso.refl H) (inclLeft _ _) ≪≫ (mapPairLeft H Gᵣ).symm)
-    (mapPairRight H Fᵣ ≪≫ isoWhiskerRight α (inclRight E E') ≪≫ (mapPairRight H Gᵣ).symm)
-
-#adaptation_note
-
-Depends on / 依赖: Iso.refl, inclLeft, inclRight, isoWhiskerRight, mapPairLeft, mapPairRight, mkNatIso
+--- 原说明 ---
+A natural isomorphism `Fᵣ ≅ Gᵣ` induces a natural isomorphism
+  `mapPair H Fᵣ ≅ mapPair H Gᵣ` for every `H : C ⥤ E`.
 -/
 def mapIsoWhiskerLeft (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ) :
     mapPair H Fᵣ ≅ mapPair H Gᵣ :=
@@ -1628,47 +1437,32 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural isomorphism `Fᵣ ≅ Gᵣ` induces a natural isomorphism
   `mapPair Fₗ H ≅ mapPair Gₗ H` for every `H : C ⥤ E`. -/
 @[simps!]
-/--
-Definition of `mapIsoWhiskerRight` / `mapIsoWhiskerRight` 的定义
+/-
+**CategoryTheory.Join.mapIsoWhiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：mapIsoWhiskerRight {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E') : 
+mapPair Fₗ H ≅ mapPair Gₗ H
+参数：α : Fₗ ≅ Gₗ；H : D ⥤ E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIsoWhiskerRight
-  signature: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  body: mkNatIso
-    (mapPairLeft Fₗ H ≪≫ isoWhiskerRight α (inclLeft E E') ≪≫ (mapPairLeft Gₗ H).symm)
-    (mapPairRight Fₗ H ≪≫ isoWhiskerRight (Iso.refl H) (inclRight E E') ≪≫ (mapPairRight Gₗ H).symm)
-
-中文:
-定义 mapIsoWhiskerRight
-  签名: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  定义体: mkNatIso
-    (mapPairLeft Fₗ H ≪≫ isoWhiskerRight α (inclLeft E E') ≪≫ (mapPairLeft Gₗ H).symm)
-    (mapPairRight Fₗ H ≪≫ isoWhiskerRight (Iso.refl H) (inclRight E E') ≪≫ (mapPairRight Gₗ H).symm)
-
-Depends on / 依赖: Iso.refl, inclLeft, inclRight, isoWhiskerRight, mapPairLeft, mapPairRight, mkNatIso
+--- 原说明 ---
+A natural isomorphism `Fᵣ ≅ Gᵣ` induces a natural isomorphism
+  `mapPair Fₗ H ≅ mapPair Gₗ H` for every `H : C ⥤ E`.
 -/
 def mapIsoWhiskerRight {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E') :
     mapPair Fₗ H ≅ mapPair Gₗ H :=
   mkNatIso
     (mapPairLeft Fₗ H ≪≫ isoWhiskerRight α (inclLeft E E') ≪≫ (mapPairLeft Gₗ H).symm)
     (mapPairRight Fₗ H ≪≫ isoWhiskerRight (Iso.refl H) (inclRight E E') ≪≫ (mapPairRight Gₗ H).symm)
-
-/--
-lemma `mapIsoWhiskerRight_hom` / 引理 `mapIsoWhiskerRight_hom`
-
-English:
-lemma mapIsoWhiskerRight_hom
-  given: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  proof: rfl
-
-#adaptation_note
-
-中文:
-引理 mapIsoWhiskerRight_hom
-  条件: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.Join.mapIsoWhiskerRight_hom** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Join`。
+形式化陈述：mapIsoWhiskerRight_hom {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E'
+) : (mapIsoWhiskerRight α H).hom = mapWhiskerRight α.hom H
+参数：α : Fₗ ≅ Gₗ；H : D ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapIsoWhiskerRight_hom {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E') :
     (mapIsoWhiskerRight α H).hom = mapWhiskerRight α.hom H := rfl
@@ -1683,46 +1477,74 @@ Probable fix: Figure out what the intended statement of `mapWhiskerLeft_app` and
 -/
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mapIsoWhiskerRight_inv` / 引理 `mapIsoWhiskerRight_inv`
+/-
+**CategoryTheory.Join.mapIsoWhiskerRight_inv** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Join`。
+形式化陈述：mapIsoWhiskerRight_inv {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E'
+) : (mapIsoWhiskerRight α H).inv = mapWhiskerRight α.inv H
+参数：α : Fₗ ≅ Gₗ；H : D ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Functor.isoWhiskerRight_refl`：isoWhiskerRight_refl (F : C
+ ⥤ D) (G : D ⥤ E) : isoWhiskerRight (Iso.refl F) G = Iso.refl _
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Join.mkNatIso.congr_simp`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Join.mkNatTrans.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma mapIsoWhiskerRight_inv
-  given: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  proof: by
-  ext x
-  cases x <;> simp [mapIsoWhiskerRight]
-
-中文:
-引理 mapIsoWhiskerRight_inv
-  条件: {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E')
-  证明: by
-  ext x
-  cases x <;> simp [mapIsoWhiskerRight]
-
-Depends on / 依赖: mapIsoWhiskerRight
+--- 原说明 ---
+The statement of `mapWhiskerLeft_app` and `mapWhiskerRight_app` was determined u
+sing `simp` with
+`respectTransparency.types false`. In order to apply these, we need a matching n
+ormal form.
+We achieve this using `respectTransparency.types false` on this lemma, too.
+Probable fix: Figure out what the intended statement of `mapWhiskerLeft_app` and
+`mapWhiskerRight_app` is, and only then fix this lemma.
 -/
 lemma mapIsoWhiskerRight_inv {Fₗ : C ⥤ E} {Gₗ : C ⥤ E} (α : Fₗ ≅ Gₗ) (H : D ⥤ E') :
     (mapIsoWhiskerRight α H).inv = mapWhiskerRight α.inv H := by
   ext x
   cases x <;> simp [mapIsoWhiskerRight]
-
-/--
-lemma `mapIsoWhiskerLeft_hom` / 引理 `mapIsoWhiskerLeft_hom`
-
-English:
-lemma mapIsoWhiskerLeft_hom
-  given: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  proof: rfl
-
-#adaptation_note
-
-中文:
-引理 mapIsoWhiskerLeft_hom
-  条件: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.Join.mapIsoWhiskerLeft_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Join`。
+形式化陈述：mapIsoWhiskerLeft_hom (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ
+) : (mapIsoWhiskerLeft H α).hom = mapWhiskerLeft H α.hom
+参数：H : C ⥤ E；α : Fᵣ ≅ Gᵣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapIsoWhiskerLeft_hom (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ) :
     (mapIsoWhiskerLeft H α).hom = mapWhiskerLeft H α.hom := rfl
@@ -1737,24 +1559,61 @@ Probable fix: Figure out what the intended statement of `mapWhiskerLeft_app` and
 -/
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mapIsoWhiskerLeft_inv` / 引理 `mapIsoWhiskerLeft_inv`
+/-
+**CategoryTheory.Join.mapIsoWhiskerLeft_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Join`。
+形式化陈述：mapIsoWhiskerLeft_inv (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ
+) : (mapIsoWhiskerLeft H α).inv = mapWhiskerLeft H α.inv
+参数：H : C ⥤ E；α : Fᵣ ≅ Gᵣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Functor.isoWhiskerRight_refl`：isoWhiskerRight_refl (F : C
+ ⥤ D) (G : D ⥤ E) : isoWhiskerRight (Iso.refl F) G = Iso.refl _
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Join.mkNatIso.congr_simp`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Join.mkNatTrans.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-lemma mapIsoWhiskerLeft_inv
-  given: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  proof: by
-  ext x
-  cases x <;> simp [mapIsoWhiskerLeft]
-
-中文:
-引理 mapIsoWhiskerLeft_inv
-  条件: (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ)
-  证明: by
-  ext x
-  cases x <;> simp [mapIsoWhiskerLeft]
-
-Depends on / 依赖: mapIsoWhiskerLeft
+--- 原说明 ---
+The statement of `mapWhiskerLeft_app` and `mapWhiskerRight_app` was determined u
+sing `simp` with
+`respectTransparency.types false`. In order to apply these, we need a matching n
+ormal form.
+We achieve this using `respectTransparency.types false` on this lemma, too.
+Probable fix: Figure out what the intended statement of `mapWhiskerLeft_app` and
+`mapWhiskerRight_app` is, and only then fix this lemma.
 -/
 lemma mapIsoWhiskerLeft_inv (H : C ⥤ E) {Fᵣ : D ⥤ E'} {Gᵣ : D ⥤ E'} (α : Fᵣ ≅ Gᵣ) :
     (mapIsoWhiskerLeft H α).inv = mapWhiskerLeft H α.inv := by
@@ -1774,48 +1633,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Equivalent categories have equivalent joins. -/
 @[simps]
-/--
-Definition of `mapPairEquiv` / `mapPairEquiv` 的定义
+/-
+**CategoryTheory.Join.mapPairEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：mapPairEquiv (e : C ≌ C') (e' : D ≌ D') : C ⋆ D ≌ C' ⋆ D' where functor
+参数：e : C ≌ C'；e' : D ≌ D'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPairEquiv
-  signature: (e : C ≌ C') (e' : D ≌ D')
-  body: mapPair e.functor e'.functor
-  inverse := mapPair e.inverse e'.inverse
-  unitIso :=
-    mapPairId.symm ≪≫
-      mapIsoWhiskerRight e.unitIso _ ≪≫
-      mapIsoWhiskerLeft _ e'.unitIso ≪≫
-      mapPairComp _ _ _ _
-  counitIso :=
-    (mapPairComp _ _ _ _).symm ≪≫
-      mapIsoWhiskerRight e.counitIso _ ≪≫
-      mapIsoWhiskerLeft _ e'.counitIso ≪≫
-      mapPairId
-  functor_unitIso_comp x := by
-    cases x <;>
-    simp [← (inclLeft C' D').map_comp, ← (inclRight C' D').map_comp]
-
-中文:
-定义 mapPairEquiv
-  签名: (e : C ≌ C') (e' : D ≌ D')
-  定义体: mapPair e.functor e'.functor
-  inverse := mapPair e.inverse e'.inverse
-  unitIso :=
-    mapPairId.symm ≪≫
-      mapIsoWhiskerRight e.unitIso _ ≪≫
-      mapIsoWhiskerLeft _ e'.unitIso ≪≫
-      mapPairComp _ _ _ _
-  counitIso :=
-    (mapPairComp _ _ _ _).symm ≪≫
-      mapIsoWhiskerRight e.counitIso _ ≪≫
-      mapIsoWhiskerLeft _ e'.counitIso ≪≫
-      mapPairId
-  functor_unitIso_comp x := by
-    cases x <;>
-    simp [← (inclLeft C' D').map_comp, ← (inclRight C' D').map_comp]
-
-Depends on / 依赖: e.functor, functor, mapPair
+--- 原说明 ---
+Equivalent categories have equivalent joins.
 -/
 def mapPairEquiv (e : C ≌ C') (e' : D ≌ D') : C ⋆ D ≌ C' ⋆ D' where
   functor := mapPair e.functor e'.functor
@@ -1833,21 +1660,13 @@ def mapPairEquiv (e : C ≌ C') (e' : D ≌ D') : C ⋆ D ≌ C' ⋆ D' where
   functor_unitIso_comp x := by
     cases x <;>
     simp [← (inclLeft C' D').map_comp, ← (inclRight C' D').map_comp]
-
-/--
-Instance `isEquivalenceMapPair` / 实例 `isEquivalenceMapPair`
-
-English:
-instance isEquivalenceMapPair
-  signature: {F : C ⥤ C'} {F' : D ⥤ D'} [F.IsEquivalence] [F'.IsEquivalence]
-  body: inferInstanceAs (mapPairEquiv F.asEquivalence F'.asEquivalence).functor.IsEquivalence
-
-中文:
-实例 isEquivalenceMapPair
-  签名: {F : C ⥤ C'} {F' : D ⥤ D'} [F.是等价] [F'.是等价]
-  定义体: inferInstanceAs (mapPairEquiv F.asEquivalence F'.asEquivalence).functor.IsEquivalence
-
-Depends on / 依赖: F.asEquivalence, IsEquivalence, asEquivalence, functor, functor.IsEquivalence, mapPairEquiv
+/-
+**CategoryTheory.Join.isEquivalenceMapPair** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Join`。
+形式化陈述：isEquivalenceMapPair {F : C ⥤ C'} {F' : D ⥤ D'} [F.IsEquivalence] [F'.IsEq
+uivalence] : (mapPair F F').IsEquivalence
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isEquivalenceMapPair {F : C ⥤ C'} {F' : D ⥤ D'} [F.IsEquivalence] [F'.IsEquivalence] :
     (mapPair F F').IsEquivalence :=
@@ -1858,3 +1677,4 @@ end mapPairEquiv
 end Join
 
 end CategoryTheory
+

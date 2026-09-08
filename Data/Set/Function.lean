@@ -26,7 +26,7 @@ This file contains basic results on the following predicates of functions and se
 
 @[expose] public section
 
-variable {α β γ δ : Type*} {ι : Sort*} {π : α -> Type*}
+variable {α β γ δ : Type*} {ι : Sort*} {π : α → Type*}
 
 open Equiv Equiv.Perm Function
 
@@ -35,1122 +35,692 @@ namespace Set
 /-! ### Equality on a set -/
 section equality
 
-variable {s s₁ s₂ : Set α} {f₁ f₂ f₃ : α -> β} {g : β -> γ} {a : α}
+variable {s s₁ s₂ : Set α} {f₁ f₂ f₃ : α → β} {g : β → γ} {a : α}
 
 /-- This lemma exists for use by `grind`/`aesop` as a forward rule. -/
-@[aesop safe forward, grind ->]
-/--
-lemma `EqOn.eq_of_mem` / 引理 `EqOn.eq_of_mem`
+@[aesop safe forward, grind →]
+/-
+**Set.EqOn.eq_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β} {a : α}, Set.E
+qOn f₁ f₂ s → a ∈ s → f₁ a = f₂ a
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma EqOn.eq_of_mem
-  given: (h : s.EqOn f₁ f₂) (ha : a in s)
-  statement: f₁ a = f₂ a
-  proof: h ha
-
-@[simp]
-
-中文:
-引理 EqOn.eq_of_mem
-  条件: (h : s.EqOn f₁ f₂) (ha : a in s)
-  结论: f₁ a = f₂ a
-  证明: h ha
-
-@[simp]
+--- 原说明 ---
+This lemma exists for use by `grind`/`aesop` as a forward rule.
 -/
-lemma EqOn.eq_of_mem (h : s.EqOn f₁ f₂) (ha : a in s) : f₁ a = f₂ a :=
+lemma EqOn.eq_of_mem (h : s.EqOn f₁ f₂) (ha : a ∈ s) : f₁ a = f₂ a :=
   h ha
 
 @[simp]
-/--
-theorem `eqOn_empty` / 定理 `eqOn_empty`
-
-English:
-theorem eqOn_empty
-  given: (f₁ f₂ : α -> β)
-  statement: EqOn f₁ f₂ ∅
-  proof: fun _ => False.elim
-
-@[simp]
-
-中文:
-定理 eqOn_empty
-  条件: (f₁ f₂ : α -> β)
-  结论: EqOn f₁ f₂ ∅
-  证明: fun _ => False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**Set.eqOn_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_empty (f₁ f₂ : α -> β) : EqOn f₁ f₂ ∅
+参数：f₁ f₂ : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eqOn_empty (f₁ f₂ : α -> β) : EqOn f₁ f₂ ∅ := fun _ => False.elim
+theorem eqOn_empty (f₁ f₂ : α → β) : EqOn f₁ f₂ ∅ := fun _ => False.elim
 
 @[simp]
-/--
-theorem `eqOn_singleton` / 定理 `eqOn_singleton`
-
-English:
-theorem eqOn_singleton
-  statement: Set.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
-  proof: by
-  simp [Set.EqOn]
-
-@[simp]
-
-中文:
-定理 eqOn_singleton
-  结论: 集合.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
-  证明: by
-  simp [Set.EqOn]
-
-@[simp]
-
-Depends on / 依赖: Set.EqOn
+/-
+**Set.eqOn_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_singleton : Set.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem eqOn_singleton : Set.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a := by
   simp [Set.EqOn]
 
 @[simp]
-/--
-theorem `eqOn_univ` / 定理 `eqOn_univ`
-
-English:
-theorem eqOn_univ
-  given: (f₁ f₂ : α -> β)
-  statement: EqOn f₁ f₂ univ ↔ f₁ = f₂
-  proof: by
-  simp [EqOn, funext_iff]
-
-@[symm]
-
-中文:
-定理 eqOn_univ
-  条件: (f₁ f₂ : α -> β)
-  结论: EqOn f₁ f₂ univ ↔ f₁ = f₂
-  证明: by
-  simp [EqOn, funext_iff]
-
-@[symm]
-
-Depends on / 依赖: funext_iff
+/-
+**Set.eqOn_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_univ (f₁ f₂ : α -> β) : EqOn f₁ f₂ univ ↔ f₁ = f₂
+参数：f₁ f₂ : α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem eqOn_univ (f₁ f₂ : α -> β) : EqOn f₁ f₂ univ ↔ f₁ = f₂ := by
+theorem eqOn_univ (f₁ f₂ : α → β) : EqOn f₁ f₂ univ ↔ f₁ = f₂ := by
   simp [EqOn, funext_iff]
 
 @[symm]
-/--
-theorem `EqOn.symm` / 定理 `EqOn.symm`
-
-English:
-theorem EqOn.symm
-  given: (h : EqOn f₁ f₂ s)
-  statement: EqOn f₂ f₁ s
-  proof: fun _ hx => (h hx).symm
-
-中文:
-定理 EqOn.symm
-  条件: (h : EqOn f₁ f₂ s)
-  结论: EqOn f₂ f₁ s
-  证明: fun _ hx => (h hx).symm
+/-
+**Set.EqOn.symm** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β}, Set.EqOn f₁ f
+₂ s → Set.EqOn f₂ f₁ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem EqOn.symm (h : EqOn f₁ f₂ s) : EqOn f₂ f₁ s := fun _ hx => (h hx).symm
-
-/--
-theorem `eqOn_comm` / 定理 `eqOn_comm`
-
-English:
-theorem eqOn_comm
-  statement: EqOn f₁ f₂ s ↔ EqOn f₂ f₁ s
-  proof: ⟨EqOn.symm, EqOn.symm⟩
-
-中文:
-定理 eqOn_comm
-  结论: EqOn f₁ f₂ s ↔ EqOn f₂ f₁ s
-  证明: ⟨EqOn.symm, EqOn.symm⟩
-
-Depends on / 依赖: EqOn.symm
+/-
+**Set.eqOn_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_comm : EqOn f₁ f₂ s ↔ EqOn f₂ f₁ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
 -/
 theorem eqOn_comm : EqOn f₁ f₂ s ↔ EqOn f₂ f₁ s :=
   ⟨EqOn.symm, EqOn.symm⟩
 
 -- This cannot be tagged as `@[refl]` with the current argument order.
 -- See note below at `EqOn.trans`.
-/--
-theorem `eqOn_refl` / 定理 `eqOn_refl`
-
-English:
-theorem eqOn_refl
-  given: (f : α -> β) (s : Set α)
-  statement: EqOn f f s
-  proof: fun _ _ => rfl
-
-中文:
-定理 eqOn_refl
-  条件: (f : α -> β) (s : 集合 α)
-  结论: EqOn f f s
-  证明: fun _ _ => rfl
+/-
+**Set.eqOn_refl** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_refl (f : α -> β) (s : Set α) : EqOn f f s
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eqOn_refl (f : α -> β) (s : Set α) : EqOn f f s := fun _ _ => rfl
+theorem eqOn_refl (f : α → β) (s : Set α) : EqOn f f s := fun _ _ => rfl
 
 -- Note: this was formerly tagged with `@[trans]`, and although the `trans` attribute accepted it
 -- the `trans` tactic could not use it.
 -- An update to the trans tactic coming in https://github.com/leanprover-community/mathlib4/pull/7014 will reject this attribute.
 -- It can be restored by changing the argument order from `EqOn f₁ f₂ s` to `EqOn s f₁ f₂`.
 -- This change will be made separately: [zulip](https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/Reordering.20arguments.20of.20.60Set.2EEqOn.60/near/390467581).
-/--
-theorem `EqOn.trans` / 定理 `EqOn.trans`
-
-English:
-theorem EqOn.trans
-  given: (h₁ : EqOn f₁ f₂ s) (h₂ : EqOn f₂ f₃ s)
-  statement: EqOn f₁ f₃ s
-  proof: fun _ hx =>
-  (h₁ hx).trans (h₂ hx)
-
-中文:
-定理 EqOn.trans
-  条件: (h₁ : EqOn f₁ f₂ s) (h₂ : EqOn f₂ f₃ s)
-  结论: EqOn f₁ f₃ s
-  证明: fun _ hx =>
-  (h₁ hx).trans (h₂ hx)
+/-
+**Set.EqOn.trans** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ f₃ : α → β}, Set.EqOn f
+₁ f₂ s → Set.EqOn f₂ f₃ s → Set.EqOn f₁ f₃ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem EqOn.trans (h₁ : EqOn f₁ f₂ s) (h₂ : EqOn f₂ f₃ s) : EqOn f₁ f₃ s := fun _ hx =>
   (h₁ hx).trans (h₂ hx)
-
-/--
-theorem `EqOn.image_eq` / 定理 `EqOn.image_eq`
-
-English:
-theorem EqOn.image_eq
-  given: (heq : EqOn f₁ f₂ s)
-  statement: f₁ '' s = f₂ '' s
-  proof: by grind
-
-中文:
-定理 EqOn.image_eq
-  条件: (heq : EqOn f₁ f₂ s)
-  结论: f₁ '' s = f₂ '' s
-  证明: by grind
+/-
+**Set.EqOn.image_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β}, Set.EqOn f₁ f
+₂ s → f₁ '' s = f₂ '' s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem EqOn.image_eq (heq : EqOn f₁ f₂ s) : f₁ '' s = f₂ '' s := by grind
 
-/--
-theorem `EqOn.image_eq_self` / 定理 `EqOn.image_eq_self`
+/-- Variant of `EqOn.image_eq`, for one function being the identity. -/
+/-
+**Set.EqOn.image_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} {f : α → α}, Set.EqOn f id s → f '' s = s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem EqOn.image_eq_self
-  given: {f : α -> α} (h : Set.EqOn f id s)
-  statement: f '' s = s
-  proof: by grind
-
-中文:
-定理 EqOn.image_eq_self
-  条件: {f : α -> α} (h : 集合.EqOn f id s)
-  结论: f '' s = s
-  证明: by grind
+--- 原说明 ---
+Variant of `EqOn.image_eq`, for one function being the identity.
 -/
-theorem EqOn.image_eq_self {f : α -> α} (h : Set.EqOn f id s) : f '' s = s := by grind
-
-/--
-theorem `EqOn.inter_preimage_eq` / 定理 `EqOn.inter_preimage_eq`
-
-English:
-theorem EqOn.inter_preimage_eq
-  given: (heq : EqOn f₁ f₂ s) (t : Set β)
-  statement: s inter f₁ ⁻¹' t = s inter f₂ ⁻¹' t
-  proof: by
-  grind
-
-中文:
-定理 EqOn.inter_preimage_eq
-  条件: (heq : EqOn f₁ f₂ s) (t : 集合 β)
-  结论: s inter f₁ ⁻¹' t = s inter f₂ ⁻¹' t
-  证明: by
-  grind
+theorem EqOn.image_eq_self {f : α → α} (h : Set.EqOn f id s) : f '' s = s := by grind
+/-
+**Set.EqOn.inter_preimage_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β},   Set.EqOn f₁
+ f₂ s → ∀ (t : Set β), s ∩ f₁ ⁻¹' t = s ∩ f₂ ⁻¹' t
+参数：t : Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem EqOn.inter_preimage_eq (heq : EqOn f₁ f₂ s) (t : Set β) : s inter f₁ ⁻¹' t = s inter f₂ ⁻¹' t := by
+theorem EqOn.inter_preimage_eq (heq : EqOn f₁ f₂ s) (t : Set β) : s ∩ f₁ ⁻¹' t = s ∩ f₂ ⁻¹' t := by
   grind
-
-/--
-theorem `EqOn.mono` / 定理 `EqOn.mono`
-
-English:
-theorem EqOn.mono
-  given: (hs : s₁ subseteq s₂) (hf : EqOn f₁ f₂ s₂)
-  statement: EqOn f₁ f₂ s₁
-  proof: fun _ hx => hf (hs hx)
+/-
+**Set.EqOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f₁ f₂ : α → β}, s₁ ⊆ s₂ →
+ Set.EqOn f₁ f₂ s₂ → Set.EqOn f₁ f₂ s₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem EqOn.mono (hs : s₁ ⊆ s₂) (hf : EqOn f₁ f₂ s₂) : EqOn f₁ f₂ s₁ := fun _ hx => hf (hs hx)
 
 @[simp]
-
-中文:
-定理 EqOn.mono
-  条件: (hs : s₁ subseteq s₂) (hf : EqOn f₁ f₂ s₂)
-  结论: EqOn f₁ f₂ s₁
-  证明: fun _ hx => hf (hs hx)
-
-@[simp]
+/-
+**Set.eqOn_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_union : EqOn f₁ f₂ (s₁ union s₂) ↔ EqOn f₁ f₂ s₁ ∧ EqOn f₁ f₂ s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_or_left`：forall₂_or_left : (forall x, p x ∨ q x -> r x) ↔ (foral
+l x, p x -> r x) ∧ forall x, q x -> r x
 -/
-theorem EqOn.mono (hs : s₁ subseteq s₂) (hf : EqOn f₁ f₂ s₂) : EqOn f₁ f₂ s₁ := fun _ hx => hf (hs hx)
-
-@[simp]
-/--
-theorem `eqOn_union` / 定理 `eqOn_union`
-
-English:
-theorem eqOn_union
-  statement: EqOn f₁ f₂ (s₁ union s₂) ↔ EqOn f₁ f₂ s₁ ∧ EqOn f₁ f₂ s₂
-  proof: forall₂_or_left
-
-中文:
-定理 eqOn_union
-  结论: EqOn f₁ f₂ (s₁ union s₂) ↔ EqOn f₁ f₂ s₁ ∧ EqOn f₁ f₂ s₂
-  证明: forall₂_or_left
--/
-theorem eqOn_union : EqOn f₁ f₂ (s₁ union s₂) ↔ EqOn f₁ f₂ s₁ ∧ EqOn f₁ f₂ s₂ :=
+theorem eqOn_union : EqOn f₁ f₂ (s₁ ∪ s₂) ↔ EqOn f₁ f₂ s₁ ∧ EqOn f₁ f₂ s₂ :=
   forall₂_or_left
-
-/--
-theorem `EqOn.union` / 定理 `EqOn.union`
-
-English:
-theorem EqOn.union
-  given: (h₁ : EqOn f₁ f₂ s₁) (h₂ : EqOn f₁ f₂ s₂)
-  statement: EqOn f₁ f₂ (s₁ union s₂)
-  proof: eqOn_union.2 ⟨h₁, h₂⟩
-
-中文:
-定理 EqOn.union
-  条件: (h₁ : EqOn f₁ f₂ s₁) (h₂ : EqOn f₁ f₂ s₂)
-  结论: EqOn f₁ f₂ (s₁ union s₂)
-  证明: eqOn_union.2 ⟨h₁, h₂⟩
-
-Depends on / 依赖: eqOn_union
+/-
+**Set.EqOn.union** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f₁ f₂ : α → β},   Set.EqO
+n f₁ f₂ s₁ → Set.EqOn f₁ f₂ s₂ → Set.EqOn f₁ f₂ (s₁ ∪ s₂)
+参数：s₁ ∪ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eqOn_union`：eqOn_union : EqOn f₁ f₂ (s₁ union s₂) ↔ EqOn f₁ f₂ s₁ ∧ 
+EqOn f₁ f₂ s₂
 -/
-theorem EqOn.union (h₁ : EqOn f₁ f₂ s₁) (h₂ : EqOn f₁ f₂ s₂) : EqOn f₁ f₂ (s₁ union s₂) :=
+theorem EqOn.union (h₁ : EqOn f₁ f₂ s₁) (h₂ : EqOn f₁ f₂ s₂) : EqOn f₁ f₂ (s₁ ∪ s₂) :=
   eqOn_union.2 ⟨h₁, h₂⟩
-
-/--
-theorem `EqOn.comp_left` / 定理 `EqOn.comp_left`
-
-English:
-theorem EqOn.comp_left
-  given: (h : s.EqOn f₁ f₂)
-  statement: s.EqOn (g ∘ f₁) (g ∘ f₂)
-  proof: fun _ ha =>
-congr_arg _ h ha
-
-中文:
-定理 EqOn.comp_left
-  条件: (h : s.EqOn f₁ f₂)
-  结论: s.EqOn (g ∘ f₁) (g ∘ f₂)
-  证明: fun _ ha =>
-congr_arg _ h ha
+/-
+**Set.EqOn.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {f₁ f₂ : α → β}
+ {g : β → γ},   Set.EqOn f₁ f₂ s → Set.EqOn (g ∘ f₁) (g ∘ f₂) s
+参数：g ∘ f₁；g ∘ f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem EqOn.comp_left (h : s.EqOn f₁ f₂) : s.EqOn (g ∘ f₁) (g ∘ f₂) := fun _ ha =>
-congr_arg _ h ha
-
-/--
-theorem `EqOn.comp_left₂` / 定理 `EqOn.comp_left₂`
-
-English:
-theorem EqOn.comp_left₂
-  statement: {α β δ γ} {op : α -> β -> δ} {a₁ a₂ : γ -> α}
-  proof: fun _ hx => congr_arg₂ _ (ha hx) (hb hx)
-
-@[simp]
-
-中文:
-定理 EqOn.comp_left₂
-  结论: {α β δ γ} {op : α -> β -> δ} {a₁ a₂ : γ -> α}
-  证明: fun _ hx => congr_arg₂ _ (ha hx) (hb hx)
-
-@[simp]
+  congr_arg _ <| h ha
+/-
+**Set.EqOn.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {f₁ f₂ : α → β}
+ {g : β → γ},   Set.EqOn f₁ f₂ s → Set.EqOn (g ∘ f₁) (g ∘ f₂) s
+参数：g ∘ f₁；g ∘ f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem EqOn.comp_left₂ {α β δ γ} {op : α -> β -> δ} {a₁ a₂ : γ -> α}
-    {b₁ b₂ : γ -> β} {s : Set γ} (ha : s.EqOn a₁ a₂) (hb : s.EqOn b₁ b₂) :
-    s.EqOn (fun x => op (a₁ x) (b₁ x)) (fun x => op (a₂ x) (b₂ x)) :=
-  fun _ hx => congr_arg₂ _ (ha hx) (hb hx)
+theorem EqOn.comp_left₂ {α β δ γ} {op : α → β → δ} {a₁ a₂ : γ → α}
+    {b₁ b₂ : γ → β} {s : Set γ} (ha : s.EqOn a₁ a₂) (hb : s.EqOn b₁ b₂) :
+    s.EqOn (fun x ↦ op (a₁ x) (b₁ x)) (fun x ↦ op (a₂ x) (b₂ x)) :=
+  fun _ hx ↦ congr_arg₂ _ (ha hx) (hb hx)
 
 @[simp]
-/--
-theorem `eqOn_range` / 定理 `eqOn_range`
-
-English:
-theorem eqOn_range
-  given: {ι : Sort*} {f : ι -> α} {g₁ g₂ : α -> β}
-  proof: forall_mem_range.trans funext_iff.symm
-
-alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
-
-中文:
-定理 eqOn_range
-  条件: {ι : 类型层*} {f : ι -> α} {g₁ g₂ : α -> β}
-  证明: forall_mem_range.trans funext_iff.symm
-
-alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
-
-Depends on / 依赖: forall_mem_range, forall_mem_range.trans, funext_iff, funext_iff.symm
+/-
+**Set.eqOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_range {ι : Sort*} {f : ι -> α} {g₁ g₂ : α -> β} : EqOn g₁ g₂ (range f
+) ↔ g₁ ∘ f = g₂ ∘ f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
 -/
-theorem eqOn_range {ι : Sort*} {f : ι -> α} {g₁ g₂ : α -> β} :
+theorem eqOn_range {ι : Sort*} {f : ι → α} {g₁ g₂ : α → β} :
     EqOn g₁ g₂ (range f) ↔ g₁ ∘ f = g₂ ∘ f :=
-forall_mem_range.trans funext_iff.symm
+  forall_mem_range.trans <| funext_iff.symm
 
 alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
 
 end equality
 
-variable {s s₁ s₂ : Set α} {t t₁ t₂ : Set β} {p : Set γ} {f f₁ f₂ : α -> β} {g g₁ g₂ : β -> γ}
-  {f' f₁' f₂' : β -> α} {g' : γ -> β} {a : α} {b : β}
+variable {s s₁ s₂ : Set α} {t t₁ t₂ : Set β} {p : Set γ} {f f₁ f₂ : α → β} {g g₁ g₂ : β → γ}
+  {f' f₁' f₂' : β → α} {g' : γ → β} {a : α} {b : β}
 
 section MapsTo
 
-/--
-theorem `mapsTo_iff_image_subset` / 定理 `mapsTo_iff_image_subset`
-
-English:
-theorem mapsTo_iff_image_subset
-  statement: MapsTo f s t ↔ f '' s subseteq t
-  proof: image_subset_iff.symm
-
-中文:
-定理 mapsTo_iff_image_subset
-  结论: 映射到 f s t ↔ f '' s subseteq t
-  证明: image_subset_iff.symm
-
-Depends on / 依赖: image_subset_iff, image_subset_iff.symm
+/-
+**Set.mapsTo_iff_image_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_iff_image_subset : MapsTo f s t ↔ f '' s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
-theorem mapsTo_iff_image_subset : MapsTo f s t ↔ f '' s subseteq t :=
+theorem mapsTo_iff_image_subset : MapsTo f s t ↔ f '' s ⊆ t :=
   image_subset_iff.symm
-
-/--
-theorem `MapsTo.subset_preimage` / 定理 `MapsTo.subset_preimage`
-
-English:
-theorem MapsTo.subset_preimage
-  given: (hf : MapsTo f s t)
-  statement: s subseteq f ⁻¹' t
-  proof: hf
-
-中文:
-定理 映射到.subset_preimage
-  条件: (hf : 映射到 f s t)
-  结论: s subseteq f ⁻¹' t
-  证明: hf
+/-
+**Set.MapsTo.subset_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.M
+apsTo f s t → s ⊆ f ⁻¹' t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.subset_preimage (hf : MapsTo f s t) : s subseteq f ⁻¹' t := hf
-
-/--
-theorem `mapsTo_iff_subset_preimage` / 定理 `mapsTo_iff_subset_preimage`
-
-English:
-theorem mapsTo_iff_subset_preimage
-  statement: MapsTo f s t ↔ s subseteq f ⁻¹' t
-  proof: Iff.rfl
-
-中文:
-定理 mapsTo_iff_subset_preimage
-  结论: 映射到 f s t ↔ s subseteq f ⁻¹' t
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem MapsTo.subset_preimage (hf : MapsTo f s t) : s ⊆ f ⁻¹' t := hf
+/-
+**Set.mapsTo_iff_subset_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_iff_subset_preimage : MapsTo f s t ↔ s subseteq f ⁻¹' t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mapsTo_iff_subset_preimage : MapsTo f s t ↔ s subseteq f ⁻¹' t := Iff.rfl
-
-/--
-theorem `mapsTo_prodMap_diagonal` / 定理 `mapsTo_prodMap_diagonal`
-
-English:
-theorem mapsTo_prodMap_diagonal
-  statement: MapsTo (Prod.map f f) (diagonal α) (diagonal β)
-  proof: mapsTo_iff_subset_preimage.mpr diagonal_subset_iff.2 fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mapsTo_prodMap_diagonal
-  结论: 映射到 (积类型.map f f) (diagonal α) (diagonal β)
-  证明: mapsTo_iff_subset_preimage.mpr diagonal_subset_iff.2 fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: diagonal_subset_iff, mapsTo_iff_subset_preimage, mapsTo_iff_subset_preimage.mpr
+theorem mapsTo_iff_subset_preimage : MapsTo f s t ↔ s ⊆ f ⁻¹' t := Iff.rfl
+/-
+**Set.mapsTo_prodMap_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_prodMap_diagonal : MapsTo (Prod.map f f) (diagonal α) (diagonal β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mapsTo_iff_subset_preimage`：mapsTo_iff_subset_preimage : MapsTo f s 
+t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Set.diagonal_subset_iff`：diagonal_subset_iff {s} : diagonal α subseteq s
+ ↔ forall x, (x, x) in s
 -/
 theorem mapsTo_prodMap_diagonal : MapsTo (Prod.map f f) (diagonal α) (diagonal β) :=
-mapsTo_iff_subset_preimage.mpr diagonal_subset_iff.2 fun _ => rfl
+  mapsTo_iff_subset_preimage.mpr <| diagonal_subset_iff.2 fun _ => rfl
 
 @[simp]
-/--
-theorem `mapsTo_singleton` / 定理 `mapsTo_singleton`
-
-English:
-theorem mapsTo_singleton
-  given: {x : α}
-  statement: MapsTo f {x} t ↔ f x in t
-  proof: mapsTo_iff_subset_preimage.trans singleton_subset_iff
-
-中文:
-定理 mapsTo_singleton
-  条件: {x : α}
-  结论: 映射到 f {x} t ↔ f x in t
-  证明: mapsTo_iff_subset_preimage.trans singleton_subset_iff
-
-Depends on / 依赖: mapsTo_iff_subset_preimage, mapsTo_iff_subset_preimage.trans, singleton_subset_iff
+/-
+**Set.mapsTo_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_singleton {x : α} : MapsTo f {x} t ↔ f x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.mapsTo_iff_subset_preimage`：mapsTo_iff_subset_preimage : MapsTo f s 
+t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
 -/
-theorem mapsTo_singleton {x : α} : MapsTo f {x} t ↔ f x in t :=
+theorem mapsTo_singleton {x : α} : MapsTo f {x} t ↔ f x ∈ t :=
   mapsTo_iff_subset_preimage.trans singleton_subset_iff
-
-/--
-theorem `mapsTo_empty` / 定理 `mapsTo_empty`
-
-English:
-theorem mapsTo_empty
-  given: (f : α -> β) (t : Set β)
-  statement: MapsTo f ∅ t
-  proof: fun _ => False.elim
-
-中文:
-定理 mapsTo_empty
-  条件: (f : α -> β) (t : 集合 β)
-  结论: 映射到 f ∅ t
-  证明: fun _ => False.elim
-
-Depends on / 依赖: False.elim
+/-
+**Set.mapsTo_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_empty (f : α -> β) (t : Set β) : MapsTo f ∅ t
+参数：f : α -> β；t : Set β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapsTo_empty (f : α -> β) (t : Set β) : MapsTo f ∅ t :=
-  fun _ => False.elim
-
-/--
-theorem `mapsTo_empty_iff` / 定理 `mapsTo_empty_iff`
-
-English:
-theorem mapsTo_empty_iff
-  statement: MapsTo f s ∅ ↔ s = ∅
-  proof: by
-  simp [mapsTo_iff_image_subset, subset_empty_iff]
-
-中文:
-定理 mapsTo_empty_iff
-  结论: 映射到 f s ∅ ↔ s = ∅
-  证明: by
-  simp [mapsTo_iff_image_subset, subset_empty_iff]
+theorem mapsTo_empty (f : α → β) (t : Set β) : MapsTo f ∅ t :=
+  fun _ ↦ False.elim
+/-
+**Set.mapsTo_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.MapsTo f s ∅ 
+↔ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] theorem mapsTo_empty_iff : MapsTo f s ∅ ↔ s = ∅ := by
   simp [mapsTo_iff_image_subset, subset_empty_iff]
 
-/--
-theorem `MapsTo.nonempty` / 定理 `MapsTo.nonempty`
+/-- If `f` maps `s` to `t` and `s` is non-empty, `t` is non-empty. -/
+/-
+**Set.MapsTo.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.M
+apsTo f s t → s.Nonempty → t.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mapsTo_iff_image_subset`：mapsTo_iff_image_subset : MapsTo f s t ↔ f 
+'' s subseteq t
+· 使用定理 `Set.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {s : Set
+ α}, s.Nonempty → (f '' s).Nonempty
 
-English:
-theorem MapsTo.nonempty
-  given: (h : MapsTo f s t) (hs : s.Nonempty)
-  statement: t.Nonempty
-  proof: (hs.image f).mono (mapsTo_iff_image_subset.mp h)
-
-中文:
-定理 映射到.nonempty
-  条件: (h : 映射到 f s t) (hs : s.非空)
-  结论: t.非空
-  证明: (hs.image f).mono (mapsTo_iff_image_subset.mp h)
-
-Depends on / 依赖: hs.image, mapsTo_iff_image_subset, mapsTo_iff_image_subset.mp
+--- 原说明 ---
+If `f` maps `s` to `t` and `s` is non-empty, `t` is non-empty.
 -/
 theorem MapsTo.nonempty (h : MapsTo f s t) (hs : s.Nonempty) : t.Nonempty :=
   (hs.image f).mono (mapsTo_iff_image_subset.mp h)
-
-/--
-theorem `MapsTo.image_subset` / 定理 `MapsTo.image_subset`
-
-English:
-theorem MapsTo.image_subset
-  given: (h : MapsTo f s t)
-  statement: f '' s subseteq t
-  proof: mapsTo_iff_image_subset.1 h
-
-中文:
-定理 映射到.image_subset
-  条件: (h : 映射到 f s t)
-  结论: f '' s subseteq t
-  证明: mapsTo_iff_image_subset.1 h
-
-Depends on / 依赖: mapsTo_iff_image_subset
+/-
+**Set.MapsTo.image_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.M
+apsTo f s t → f '' s ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mapsTo_iff_image_subset`：mapsTo_iff_image_subset : MapsTo f s t ↔ f 
+'' s subseteq t
 -/
-theorem MapsTo.image_subset (h : MapsTo f s t) : f '' s subseteq t :=
+theorem MapsTo.image_subset (h : MapsTo f s t) : f '' s ⊆ t :=
   mapsTo_iff_image_subset.1 h
-
-/--
-theorem `MapsTo.congr` / 定理 `MapsTo.congr`
-
-English:
-theorem MapsTo.congr
-  given: (h₁ : MapsTo f₁ s t) (h : EqOn f₁ f₂ s)
-  statement: MapsTo f₂ s t
-  proof: fun _ hx =>
-  h hx ▸ h₁ hx
-
-中文:
-定理 映射到.congr
-  条件: (h₁ : 映射到 f₁ s t) (h : EqOn f₁ f₂ s)
-  结论: 映射到 f₂ s t
-  证明: fun _ hx =>
-  h hx ▸ h₁ hx
+/-
+**Set.MapsTo.congr** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.MapsTo f₁ s t → Set.EqOn f₁ f₂ s → Set.MapsTo f₂ s t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MapsTo.congr (h₁ : MapsTo f₁ s t) (h : EqOn f₁ f₂ s) : MapsTo f₂ s t := fun _ hx =>
   h hx ▸ h₁ hx
-
-/--
-theorem `EqOn.comp_right` / 定理 `EqOn.comp_right`
-
-English:
-theorem EqOn.comp_right
-  given: (hg : t.EqOn g₁ g₂) (hf : s.MapsTo f t)
-  statement: s.EqOn (g₁ ∘ f) (g₂ ∘ f)
-  proof: fun _ ha => hg hf ha
-
-中文:
-定理 EqOn.comp_right
-  条件: (hg : t.EqOn g₁ g₂) (hf : s.映射到 f t)
-  结论: s.EqOn (g₁ ∘ f) (g₂ ∘ f)
-  证明: fun _ ha => hg hf ha
+/-
+**Set.EqOn.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β} {g₁ g₂ : β → γ},   Set.EqOn g₁ g₂ t → Set.MapsTo f s t → Set.EqOn (g₁ ∘
+ f) (g₂ ∘ f) s
+参数：g₁ ∘ f；g₂ ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem EqOn.comp_right (hg : t.EqOn g₁ g₂) (hf : s.MapsTo f t) : s.EqOn (g₁ ∘ f) (g₂ ∘ f) :=
-fun _ ha => hg hf ha
-
-/--
-theorem `EqOn.mapsTo_iff` / 定理 `EqOn.mapsTo_iff`
-
-English:
-theorem EqOn.mapsTo_iff
-  given: (H : EqOn f₁ f₂ s)
-  statement: MapsTo f₁ s t ↔ MapsTo f₂ s t
-  proof: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-中文:
-定理 EqOn.mapsTo_iff
-  条件: (H : EqOn f₁ f₂ s)
-  结论: 映射到 f₁ s t ↔ 映射到 f₂ s t
-  证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-Depends on / 依赖: H.symm, h.congr
+  fun _ ha => hg <| hf ha
+/-
+**Set.EqOn.mapsTo_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.EqOn f₁ f₂ s → (Set.MapsTo f₁ s t ↔ Set.MapsTo f₂ s t)
+参数：Set.MapsTo f₁ s t ↔ Set.MapsTo f₂ s t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f₁ f₂ : α → β},   Set.MapsTo f₁ s t → Set.EqOn f₁ f₂ s → Set.MapsTo f₂ s t
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
 -/
 theorem EqOn.mapsTo_iff (H : EqOn f₁ f₂ s) : MapsTo f₁ s t ↔ MapsTo f₂ s t :=
   ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-/--
-theorem `MapsTo.comp` / 定理 `MapsTo.comp`
-
-English:
-theorem MapsTo.comp
-  given: (h₁ : MapsTo g t p) (h₂ : MapsTo f s t)
-  statement: MapsTo (g ∘ f) s p
-  proof: fun _ h =>
-  h₁ (h₂ h)
-
-中文:
-定理 映射到.comp
-  条件: (h₁ : 映射到 g t p) (h₂ : 映射到 f s t)
-  结论: 映射到 (g ∘ f) s p
-  证明: fun _ h =>
-  h₁ (h₂ h)
+/-
+**Set.MapsTo.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {p 
+: Set γ} {f : α → β} {g : β → γ},   Set.MapsTo g t p → Set.MapsTo f s t → Set.Ma
+psTo (g ∘ f) s p
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MapsTo.comp (h₁ : MapsTo g t p) (h₂ : MapsTo f s t) : MapsTo (g ∘ f) s p := fun _ h =>
   h₁ (h₂ h)
-
-/--
-theorem `mapsTo_id` / 定理 `mapsTo_id`
-
-English:
-theorem mapsTo_id
-  given: (s : Set α)
-  statement: MapsTo id s s
-  proof: fun _ => id
-
-中文:
-定理 mapsTo_id
-  条件: (s : 集合 α)
-  结论: 映射到 id s s
-  证明: fun _ => id
+/-
+**Set.mapsTo_id** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_id (s : Set α) : MapsTo id s s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapsTo_id (s : Set α) : MapsTo id s s := fun _ => id
-
-/--
-theorem `MapsTo.iterate` / 定理 `MapsTo.iterate`
-
-English:
-theorem MapsTo.iterate
-  given: {f : α -> α} {s : Set α} (h : MapsTo f s s)
-  statement: forall n, MapsTo f^[n] s s
-
-中文:
-定理 映射到.iterate
-  条件: {f : α -> α} {s : 集合 α} (h : 映射到 f s s)
-  结论: 对任意 n, 映射到 f^[n] s s
+/-
+**Set.MapsTo.iterate** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.MapsTo f s s → ∀ (n : ℕ), Se
+t.MapsTo f^[n] s s
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.iterate {f : α -> α} {s : Set α} (h : MapsTo f s s) : forall n, MapsTo f^[n] s s
+theorem MapsTo.iterate {f : α → α} {s : Set α} (h : MapsTo f s s) : ∀ n, MapsTo f^[n] s s
   | 0 => fun _ => id
   | n + 1 => (MapsTo.iterate h n).comp h
-
-/--
-theorem `MapsTo.iterate_restrict` / 定理 `MapsTo.iterate_restrict`
-
-English:
-theorem MapsTo.iterate_restrict
-  given: {f : α -> α} {s : Set α} (h : MapsTo f s s) (n : Nat)
-  proof: by
-  ext
-  simpa using coe_iterate_restrict _ _ _
-
-中文:
-定理 映射到.iterate_restrict
-  条件: {f : α -> α} {s : 集合 α} (h : 映射到 f s s) (n : 自然数)
-  证明: by
-  ext
-  simpa using coe_iterate_restrict _ _ _
-
-Depends on / 依赖: coe_iterate_restrict
+/-
+**Set.MapsTo.iterate_restrict** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {f : α → α} {s : Set α} (h : Set.MapsTo f s s) (n : ℕ),  
+ (Set.MapsTo.restrict f s s h)^[n] = Set.MapsTo.restrict f^[n] s s ⋯
+参数：h : Set.MapsTo f s s；n : ℕ；Set.MapsTo.restrict f s s h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.MapsTo.iterate`：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.MapsTo
+ f s s → ∀ (n : ℕ), Set.MapsTo f^[n] s s
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Set.MapsTo.coe_iterate_restrict`：∀ {α : Type u_1} {s : Set α} {f : α → α
+} (h : Set.MapsTo f s s) (x : ↑s) (k : ℕ),   ↑((Set.MapsTo.restrict f s s h)^[k]
+ x) = f^[k] ↑x
 -/
-theorem MapsTo.iterate_restrict {f : α -> α} {s : Set α} (h : MapsTo f s s) (n : Nat) :
+theorem MapsTo.iterate_restrict {f : α → α} {s : Set α} (h : MapsTo f s s) (n : ℕ) :
     (h.restrict f s s)^[n] = (h.iterate n).restrict _ _ _ := by
   ext
   simpa using coe_iterate_restrict _ _ _
-
-/--
-lemma `mapsTo_of_subsingleton'` / 引理 `mapsTo_of_subsingleton'`
-
-English:
-lemma mapsTo_of_subsingleton'
-  given: [Subsingleton β] (f : α -> β) (h : s.Nonempty -> t.Nonempty)
-  proof: fun a ha => Subsingleton.mem_iff_nonempty.2 h ⟨a, ha⟩
-
-中文:
-引理 mapsTo_of_subsingleton'
-  条件: [子单例 β] (f : α -> β) (h : s.非空 -> t.非空)
-  证明: fun a ha => Subsingleton.mem_iff_nonempty.2 h ⟨a, ha⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.mem_iff_nonempty, mem_iff_nonempty
+/-
+**Set.mapsTo_of_subsingleton'** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mapsTo_of_subsingleton' [Subsingleton β] (f : α -> β) (h : s.Nonempty -> t
+.Nonempty) : MapsTo f s t
+参数：f : α -> β；h : s.Nonempty -> t.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subsingleton.mem_iff_nonempty`：mem_iff_nonempty {α : Type*} [Subsingleto
+n α] {s : Set α} {x : α} : x in s ↔ s.Nonempty
 -/
-lemma mapsTo_of_subsingleton' [Subsingleton β] (f : α -> β) (h : s.Nonempty -> t.Nonempty) :
+lemma mapsTo_of_subsingleton' [Subsingleton β] (f : α → β) (h : s.Nonempty → t.Nonempty) :
     MapsTo f s t :=
-fun a ha => Subsingleton.mem_iff_nonempty.2 h ⟨a, ha⟩
-
-/--
-lemma `mapsTo_of_subsingleton` / 引理 `mapsTo_of_subsingleton`
-
-English:
-lemma mapsTo_of_subsingleton
-  given: [Subsingleton α] (f : α -> α) (s : Set α)
-  statement: MapsTo f s s
-  proof: mapsTo_of_subsingleton' _ id
-
-@[gcongr]
-
-中文:
-引理 mapsTo_of_subsingleton
-  条件: [子单例 α] (f : α -> α) (s : 集合 α)
-  结论: 映射到 f s s
-  证明: mapsTo_of_subsingleton' _ id
-
-@[gcongr]
-
-Depends on / 依赖: mapsTo_of_subsingleton
+  fun a ha ↦ Subsingleton.mem_iff_nonempty.2 <| h ⟨a, ha⟩
+/-
+**Set.mapsTo_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mapsTo_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : MapsTo 
+f s s
+参数：f : α -> α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.mapsTo_of_subsingleton'`：mapsTo_of_subsingleton' [Subsingleton β] (f
+ : α -> β) (h : s.Nonempty -> t.Nonempty) : MapsTo f s t
 -/
-lemma mapsTo_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : MapsTo f s s :=
+lemma mapsTo_of_subsingleton [Subsingleton α] (f : α → α) (s : Set α) : MapsTo f s s :=
   mapsTo_of_subsingleton' _ id
 
 @[gcongr]
-/--
-theorem `MapsTo.mono` / 定理 `MapsTo.mono`
-
-English:
-theorem MapsTo.mono
-  given: (hf : MapsTo f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂)
-  statement: MapsTo f s₂ t₂
-  proof: fun _ hx => ht (hf <| hs hx)
-
-中文:
-定理 映射到.mono
-  条件: (hf : 映射到 f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂)
-  结论: 映射到 f s₂ t₂
-  证明: fun _ hx => ht (hf <| hs hx)
+/-
+**Set.MapsTo.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.MapsTo f s₁ t₁ → s₂ ⊆ s₁ → t₁ ⊆ t₂ → Set.MapsTo f s₂ t₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.mono (hf : MapsTo f s₁ t₁) (hs : s₂ subseteq s₁) (ht : t₁ subseteq t₂) : MapsTo f s₂ t₂ :=
+theorem MapsTo.mono (hf : MapsTo f s₁ t₁) (hs : s₂ ⊆ s₁) (ht : t₁ ⊆ t₂) : MapsTo f s₂ t₂ :=
   fun _ hx => ht (hf <| hs hx)
-
-/--
-theorem `MapsTo.mono_left` / 定理 `MapsTo.mono_left`
-
-English:
-theorem MapsTo.mono_left
-  given: (hf : MapsTo f s₁ t) (hs : s₂ subseteq s₁)
-  statement: MapsTo f s₂ t
-  proof: fun _ hx =>
-  hf (hs hx)
-
-中文:
-定理 映射到.mono_left
-  条件: (hf : 映射到 f s₁ t) (hs : s₂ subseteq s₁)
-  结论: 映射到 f s₂ t
-  证明: fun _ hx =>
-  hf (hs hx)
+/-
+**Set.MapsTo.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t : Set β} {f : α → β}, S
+et.MapsTo f s₁ t → s₂ ⊆ s₁ → Set.MapsTo f s₂ t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.mono_left (hf : MapsTo f s₁ t) (hs : s₂ subseteq s₁) : MapsTo f s₂ t := fun _ hx =>
+theorem MapsTo.mono_left (hf : MapsTo f s₁ t) (hs : s₂ ⊆ s₁) : MapsTo f s₂ t := fun _ hx =>
   hf (hs hx)
-
-/--
-theorem `MapsTo.mono_right` / 定理 `MapsTo.mono_right`
-
-English:
-theorem MapsTo.mono_right
-  given: (hf : MapsTo f s t₁) (ht : t₁ subseteq t₂)
-  statement: MapsTo f s t₂
-  proof: fun _ hx =>
-  ht (hf hx)
-
-中文:
-定理 映射到.mono_right
-  条件: (hf : 映射到 f s t₁) (ht : t₁ subseteq t₂)
-  结论: 映射到 f s t₂
-  证明: fun _ hx =>
-  ht (hf hx)
+/-
+**Set.MapsTo.mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t₂ : Set β} {f : α → β}, S
+et.MapsTo f s t₁ → t₁ ⊆ t₂ → Set.MapsTo f s t₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.mono_right (hf : MapsTo f s t₁) (ht : t₁ subseteq t₂) : MapsTo f s t₂ := fun _ hx =>
+theorem MapsTo.mono_right (hf : MapsTo f s t₁) (ht : t₁ ⊆ t₂) : MapsTo f s t₂ := fun _ hx =>
   ht (hf hx)
-
-/--
-theorem `MapsTo.union_union` / 定理 `MapsTo.union_union`
-
-English:
-theorem MapsTo.union_union
-  given: (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂)
-  proof: fun _ hx =>
-hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr h₂ hx
-
-中文:
-定理 映射到.union_union
-  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 映射到 f s₂ t₂)
-  证明: fun _ hx =>
-hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr h₂ hx
+/-
+**Set.MapsTo.union_union** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.MapsTo f (s₁ ∪ s₂) (t₁ ∪ t₂)
+参数：s₁ ∪ s₂；t₁ ∪ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
 theorem MapsTo.union_union (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂) :
-    MapsTo f (s₁ union s₂) (t₁ union t₂) := fun _ hx =>
-hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr h₂ hx
-
-/--
-theorem `MapsTo.union` / 定理 `MapsTo.union`
-
-English:
-theorem MapsTo.union
-  given: (h₁ : MapsTo f s₁ t) (h₂ : MapsTo f s₂ t)
-  statement: MapsTo f (s₁ union s₂) t
-  proof: union_self t ▸ h₁.union_union h₂
-
-@[simp]
-
-中文:
-定理 映射到.union
-  条件: (h₁ : 映射到 f s₁ t) (h₂ : 映射到 f s₂ t)
-  结论: 映射到 f (s₁ union s₂) t
-  证明: union_self t ▸ h₁.union_union h₂
-
-@[simp]
-
-Depends on / 依赖: union_self, union_union
+    MapsTo f (s₁ ∪ s₂) (t₁ ∪ t₂) := fun _ hx =>
+  hx.elim (fun hx => Or.inl <| h₁ hx) fun hx => Or.inr <| h₂ hx
+/-
+**Set.MapsTo.union** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t : Set β} {f : α → β},  
+ Set.MapsTo f s₁ t → Set.MapsTo f s₂ t → Set.MapsTo f (s₁ ∪ s₂) t
+参数：s₁ ∪ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.union_union`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.Map
+sTo f (s₁ ∪ …
+· 使用定理 `Set.union_self`：union_self (a : Set α) : a union a = a
 -/
-theorem MapsTo.union (h₁ : MapsTo f s₁ t) (h₂ : MapsTo f s₂ t) : MapsTo f (s₁ union s₂) t :=
+theorem MapsTo.union (h₁ : MapsTo f s₁ t) (h₂ : MapsTo f s₂ t) : MapsTo f (s₁ ∪ s₂) t :=
   union_self t ▸ h₁.union_union h₂
 
 @[simp]
-/--
-theorem `mapsTo_union` / 定理 `mapsTo_union`
-
-English:
-theorem mapsTo_union
-  statement: MapsTo f (s₁ union s₂) t ↔ MapsTo f s₁ t ∧ MapsTo f s₂ t
-  proof: ⟨fun h =>
-    ⟨h.mono subset_union_left (Subset.refl t),
-      h.mono subset_union_right (Subset.refl t)⟩,
-    fun h => h.1.union h.2⟩
-
-中文:
-定理 mapsTo_union
-  结论: 映射到 f (s₁ union s₂) t ↔ 映射到 f s₁ t ∧ 映射到 f s₂ t
-  证明: ⟨fun h =>
-    ⟨h.mono subset_union_left (Subset.refl t),
-      h.mono subset_union_right (Subset.refl t)⟩,
-    fun h => h.1.union h.2⟩
-
-Depends on / 依赖: Subset, Subset.refl, h.mono, subset_union_left, subset_union_right
+/-
+**Set.mapsTo_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_union : MapsTo f (s₁ union s₂) t ↔ MapsTo f s₁ t ∧ MapsTo f s₂ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → s₂ ⊆ s₁ → t₁ ⊆ t₂ → Set.MapsTo f s₂
+ t₂
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `Set.MapsTo.union`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t : S
+et β} {f : α → β},   Set.MapsTo f s₁ t → Set.MapsTo f s₂ t → Set.MapsTo f (s₁ ∪ 
+s₂) t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mapsTo_union : MapsTo f (s₁ union s₂) t ↔ MapsTo f s₁ t ∧ MapsTo f s₂ t :=
+theorem mapsTo_union : MapsTo f (s₁ ∪ s₂) t ↔ MapsTo f s₁ t ∧ MapsTo f s₂ t :=
   ⟨fun h =>
     ⟨h.mono subset_union_left (Subset.refl t),
       h.mono subset_union_right (Subset.refl t)⟩,
     fun h => h.1.union h.2⟩
-
-/--
-theorem `MapsTo.inter` / 定理 `MapsTo.inter`
-
-English:
-theorem MapsTo.inter
-  given: (h₁ : MapsTo f s t₁) (h₂ : MapsTo f s t₂)
-  statement: MapsTo f s (t₁ inter t₂)
-  proof: fun _ hx =>
-  ⟨h₁ hx, h₂ hx⟩
-
-中文:
-定理 映射到.inter
-  条件: (h₁ : 映射到 f s t₁) (h₂ : 映射到 f s t₂)
-  结论: 映射到 f s (t₁ inter t₂)
-  证明: fun _ hx =>
-  ⟨h₁ hx, h₂ hx⟩
+/-
+**Set.MapsTo.inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t₂ : Set β} {f : α → β},  
+ Set.MapsTo f s t₁ → Set.MapsTo f s t₂ → Set.MapsTo f s (t₁ ∩ t₂)
+参数：t₁ ∩ t₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MapsTo.inter (h₁ : MapsTo f s t₁) (h₂ : MapsTo f s t₂) : MapsTo f s (t₁ inter t₂) := fun _ hx =>
+theorem MapsTo.inter (h₁ : MapsTo f s t₁) (h₂ : MapsTo f s t₂) : MapsTo f s (t₁ ∩ t₂) := fun _ hx =>
   ⟨h₁ hx, h₂ hx⟩
-
-/--
-lemma `MapsTo.insert` / 引理 `MapsTo.insert`
-
-English:
-lemma MapsTo.insert
-  given: (h : MapsTo f s t) (x : α)
-  statement: MapsTo f (insert x s) (insert (f x) t)
-  proof: by
-  simpa [← singleton_union] using h.mono_right subset_union_right
-
-中文:
-引理 映射到.insert
-  条件: (h : 映射到 f s t) (x : α)
-  结论: 映射到 f (insert x s) (insert (f x) t)
-  证明: by
-  simpa [← singleton_union] using h.mono_right subset_union_right
-
-Depends on / 依赖: h.mono_right, mono_right, singleton_union, subset_union_right
+/-
+**Set.MapsTo.insert** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.MapsTo f s t → ∀ (x : α), Set.MapsTo f (insert x s) (insert (f x) t)
+参数：x : α；insert x s；insert (f x) t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Set.MapsTo.mono_right`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t
+₂ : Set β} {f : α → β}, Set.MapsTo f s t₁ → t₁ ⊆ t₂ → Set.MapsTo f s t₂
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 -/
 lemma MapsTo.insert (h : MapsTo f s t) (x : α) : MapsTo f (insert x s) (insert (f x) t) := by
   simpa [← singleton_union] using h.mono_right subset_union_right
-
-/--
-theorem `MapsTo.inter_inter` / 定理 `MapsTo.inter_inter`
-
-English:
-theorem MapsTo.inter_inter
-  given: (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂)
-  proof: fun _ hx => ⟨h₁ hx.1, h₂ hx.2⟩
-
-@[simp]
-
-中文:
-定理 映射到.inter_inter
-  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 映射到 f s₂ t₂)
-  证明: fun _ hx => ⟨h₁ hx.1, h₂ hx.2⟩
-
-@[simp]
+/-
+**Set.MapsTo.inter_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.MapsTo f (s₁ ∩ s₂) (t₁ ∩ t₂)
+参数：s₁ ∩ s₂；t₁ ∩ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem MapsTo.inter_inter (h₁ : MapsTo f s₁ t₁) (h₂ : MapsTo f s₂ t₂) :
-    MapsTo f (s₁ inter s₂) (t₁ inter t₂) := fun _ hx => ⟨h₁ hx.1, h₂ hx.2⟩
+    MapsTo f (s₁ ∩ s₂) (t₁ ∩ t₂) := fun _ hx => ⟨h₁ hx.1, h₂ hx.2⟩
 
 @[simp]
-/--
-theorem `mapsTo_inter` / 定理 `mapsTo_inter`
-
-English:
-theorem mapsTo_inter
-  statement: MapsTo f s (t₁ inter t₂) ↔ MapsTo f s t₁ ∧ MapsTo f s t₂
-  proof: ⟨fun h =>
-    ⟨h.mono (Subset.refl s) inter_subset_left,
-      h.mono (Subset.refl s) inter_subset_right⟩,
-    fun h => h.1.inter h.2⟩
-
-中文:
-定理 mapsTo_inter
-  结论: 映射到 f s (t₁ inter t₂) ↔ 映射到 f s t₁ ∧ 映射到 f s t₂
-  证明: ⟨fun h =>
-    ⟨h.mono (Subset.refl s) inter_subset_left,
-      h.mono (Subset.refl s) inter_subset_right⟩,
-    fun h => h.1.inter h.2⟩
-
-Depends on / 依赖: Subset, Subset.refl, h.mono, inter_subset_left, inter_subset_right
+/-
+**Set.mapsTo_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_inter : MapsTo f s (t₁ inter t₂) ↔ MapsTo f s t₁ ∧ MapsTo f s t₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → s₂ ⊆ s₁ → t₁ ⊆ t₂ → Set.MapsTo f s₂
+ t₂
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.MapsTo.inter`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t₂ : S
+et β} {f : α → β},   Set.MapsTo f s t₁ → Set.MapsTo f s t₂ → Set.MapsTo f s (t₁ 
+∩ t₂)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mapsTo_inter : MapsTo f s (t₁ inter t₂) ↔ MapsTo f s t₁ ∧ MapsTo f s t₂ :=
+theorem mapsTo_inter : MapsTo f s (t₁ ∩ t₂) ↔ MapsTo f s t₁ ∧ MapsTo f s t₂ :=
   ⟨fun h =>
     ⟨h.mono (Subset.refl s) inter_subset_left,
       h.mono (Subset.refl s) inter_subset_right⟩,
     fun h => h.1.inter h.2⟩
-
-/--
-theorem `mapsTo_univ` / 定理 `mapsTo_univ`
-
-English:
-theorem mapsTo_univ
-  given: (f : α -> β) (s : Set α)
-  statement: MapsTo f s univ
-  proof: fun _ _ => trivial
-
-中文:
-定理 mapsTo_univ
-  条件: (f : α -> β) (s : 集合 α)
-  结论: 映射到 f s univ
-  证明: fun _ _ => trivial
+/-
+**Set.mapsTo_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (f : α → β) (s : Set α), Set.MapsTo f s Se
+t.univ
+参数：f : α → β；s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-@[simp] theorem mapsTo_univ (f : α -> β) (s : Set α) : MapsTo f s univ := fun _ _ => trivial
-
-/--
-theorem `mapsTo_range` / 定理 `mapsTo_range`
-
-English:
-theorem mapsTo_range
-  given: (f : α -> β) (s : Set α)
-  statement: MapsTo f s (range f)
-  proof: (mapsTo_image f s).mono (Subset.refl s) (image_subset_range _ _)
-
-@[simp]
-
-中文:
-定理 mapsTo_range
-  条件: (f : α -> β) (s : 集合 α)
-  结论: 映射到 f s (range f)
-  证明: (mapsTo_image f s).mono (Subset.refl s) (image_subset_range _ _)
-
-@[simp]
-
-Depends on / 依赖: Subset, Subset.refl, image_subset_range, mapsTo_image
+@[simp] theorem mapsTo_univ (f : α → β) (s : Set α) : MapsTo f s univ := fun _ _ => trivial
+/-
+**Set.mapsTo_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_range (f : α -> β) (s : Set α) : MapsTo f s (range f)
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → s₂ ⊆ s₁ → t₁ ⊆ t₂ → Set.MapsTo f s₂
+ t₂
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
 -/
-theorem mapsTo_range (f : α -> β) (s : Set α) : MapsTo f s (range f) :=
+theorem mapsTo_range (f : α → β) (s : Set α) : MapsTo f s (range f) :=
   (mapsTo_image f s).mono (Subset.refl s) (image_subset_range _ _)
 
 @[simp]
-/--
-theorem `mapsTo_image_iff` / 定理 `mapsTo_image_iff`
-
-English:
-theorem mapsTo_image_iff
-  given: {f : α -> β} {g : γ -> α} {s : Set γ} {t : Set β}
-  proof: ⟨fun h c hc => h ⟨c, hc, rfl⟩, fun h _ ⟨_, hc⟩ => hc.2 ▸ h hc.1⟩
-
-中文:
-定理 mapsTo_image_iff
-  条件: {f : α -> β} {g : γ -> α} {s : 集合 γ} {t : 集合 β}
-  证明: ⟨fun h c hc => h ⟨c, hc, rfl⟩, fun h _ ⟨_, hc⟩ => hc.2 ▸ h hc.1⟩
+/-
+**Set.mapsTo_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_image_iff {f : α -> β} {g : γ -> α} {s : Set γ} {t : Set β} : MapsT
+o f (g '' s) t ↔ MapsTo (f ∘ g) s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mapsTo_image_iff {f : α -> β} {g : γ -> α} {s : Set γ} {t : Set β} :
+theorem mapsTo_image_iff {f : α → β} {g : γ → α} {s : Set γ} {t : Set β} :
     MapsTo f (g '' s) t ↔ MapsTo (f ∘ g) s t :=
   ⟨fun h c hc => h ⟨c, hc, rfl⟩, fun h _ ⟨_, hc⟩ => hc.2 ▸ h hc.1⟩
-
-/--
-lemma `MapsTo.comp_left` / 引理 `MapsTo.comp_left`
-
-English:
-lemma MapsTo.comp_left
-  given: (g : β -> γ) (hf : MapsTo f s t)
-  statement: MapsTo (g ∘ f) s (g '' t)
-  proof: fun x hx => ⟨f x, hf hx, rfl⟩
-
-中文:
-引理 映射到.comp_left
-  条件: (g : β -> γ) (hf : 映射到 f s t)
-  结论: 映射到 (g ∘ f) s (g '' t)
-  证明: fun x hx => ⟨f x, hf hx, rfl⟩
+/-
+**Set.MapsTo.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β} (g : β → γ),   Set.MapsTo f s t → Set.MapsTo (g ∘ f) s (g '' t)
+参数：g : β → γ；g ∘ f；g '' t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma MapsTo.comp_left (g : β -> γ) (hf : MapsTo f s t) : MapsTo (g ∘ f) s (g '' t) :=
-  fun x hx => ⟨f x, hf hx, rfl⟩
-
-/--
-lemma `MapsTo.comp_right` / 引理 `MapsTo.comp_right`
-
-English:
-lemma MapsTo.comp_right
-  given: {s : Set β} {t : Set γ} (hg : MapsTo g s t) (f : α -> β)
-  proof: fun _ hx => hg hx
+lemma MapsTo.comp_left (g : β → γ) (hf : MapsTo f s t) : MapsTo (g ∘ f) s (g '' t) :=
+  fun x hx ↦ ⟨f x, hf hx, rfl⟩
+/-
+**Set.MapsTo.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {g : β → γ} {s : Set β} {t 
+: Set γ},   Set.MapsTo g s t → ∀ (f : α → β), Set.MapsTo (g ∘ f) (f ⁻¹' s) t
+参数：f : α → β；g ∘ f；f ⁻¹' s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma MapsTo.comp_right {s : Set β} {t : Set γ} (hg : MapsTo g s t) (f : α → β) :
+    MapsTo (g ∘ f) (f ⁻¹' s) t := fun _ hx ↦ hg hx
 
 @[simp]
-
-中文:
-引理 映射到.comp_right
-  条件: {s : 集合 β} {t : 集合 γ} (hg : 映射到 g s t) (f : α -> β)
-  证明: fun _ hx => hg hx
-
-@[simp]
+/-
+**Set.mapsTo_univ_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mapsTo_univ_iff : MapsTo f univ t ↔ forall x, f x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-lemma MapsTo.comp_right {s : Set β} {t : Set γ} (hg : MapsTo g s t) (f : α -> β) :
-    MapsTo (g ∘ f) (f ⁻¹' s) t := fun _ hx => hg hx
-
-@[simp]
-/--
-lemma `mapsTo_univ_iff` / 引理 `mapsTo_univ_iff`
-
-English:
-lemma mapsTo_univ_iff
-  statement: MapsTo f univ t ↔ forall x, f x in t
-  proof: ⟨fun h _ => h (mem_univ _), fun h x _ => h x⟩
-
-中文:
-引理 mapsTo_univ_iff
-  结论: 映射到 f univ t ↔ 对任意 x, f x in t
-  证明: ⟨fun h _ => h (mem_univ _), fun h x _ => h x⟩
-
-Depends on / 依赖: mem_univ
--/
-lemma mapsTo_univ_iff : MapsTo f univ t ↔ forall x, f x in t :=
+lemma mapsTo_univ_iff : MapsTo f univ t ↔ ∀ x, f x ∈ t :=
   ⟨fun h _ => h (mem_univ _), fun h x _ => h x⟩
-
-/--
-lemma `mapsTo_univ_iff_range_subset` / 引理 `mapsTo_univ_iff_range_subset`
-
-English:
-lemma mapsTo_univ_iff_range_subset
-  statement: MapsTo f univ t ↔ range f subseteq t
-  proof: mapsTo_univ_iff.trans range_subset_iff.symm
-
-@[simp]
-
-中文:
-引理 mapsTo_univ_iff_range_subset
-  结论: 映射到 f univ t ↔ range f subseteq t
-  证明: mapsTo_univ_iff.trans range_subset_iff.symm
-
-@[simp]
-
-Depends on / 依赖: mapsTo_univ_iff, mapsTo_univ_iff.trans, range_subset_iff, range_subset_iff.symm
+/-
+**Set.mapsTo_univ_iff_range_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mapsTo_univ_iff_range_subset : MapsTo f univ t ↔ range f subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用引理 `Set.mapsTo_univ_iff`：mapsTo_univ_iff : MapsTo f univ t ↔ forall x, f x i
+n t
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
 -/
-lemma mapsTo_univ_iff_range_subset : MapsTo f univ t ↔ range f subseteq t :=
+lemma mapsTo_univ_iff_range_subset : MapsTo f univ t ↔ range f ⊆ t :=
   mapsTo_univ_iff.trans range_subset_iff.symm
 
 @[simp]
-/--
-lemma `mapsTo_range_iff` / 引理 `mapsTo_range_iff`
-
-English:
-lemma mapsTo_range_iff
-  given: {g : ι -> α}
-  statement: MapsTo f (range g) t ↔ forall i, f (g i) in t
-  proof: forall_mem_range
-
-中文:
-引理 mapsTo_range_iff
-  条件: {g : ι -> α}
-  结论: 映射到 f (range g) t ↔ 对任意 i, f (g i) in t
-  证明: forall_mem_range
-
-Depends on / 依赖: forall_mem_range
+/-
+**Set.mapsTo_range_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mapsTo_range_iff {g : ι -> α} : MapsTo f (range g) t ↔ forall i, f (g i) i
+n t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
 -/
-lemma mapsTo_range_iff {g : ι -> α} : MapsTo f (range g) t ↔ forall i, f (g i) in t :=
+lemma mapsTo_range_iff {g : ι → α} : MapsTo f (range g) t ↔ ∀ i, f (g i) ∈ t :=
   forall_mem_range
-
-/--
-theorem `MapsTo.mem_iff` / 定理 `MapsTo.mem_iff`
-
-English:
-theorem MapsTo.mem_iff
-  given: (h : MapsTo f s t) (hc : MapsTo f sᶜ tᶜ) {x}
-  statement: f x in t ↔ x in s
-  proof: ⟨fun ht => by_contra fun hs => hc hs ht, fun hx => h hx⟩
-
-中文:
-定理 映射到.mem_iff
-  条件: (h : 映射到 f s t) (hc : 映射到 f sᶜ tᶜ) {x}
-  结论: f x in t ↔ x in s
-  证明: ⟨fun ht => by_contra fun hs => hc hs ht, fun hx => h hx⟩
+/-
+**Set.MapsTo.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.MapsTo f s t → Set.MapsTo f sᶜ tᶜ → ∀ {x : α}, f x ∈ t ↔ x ∈ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contra`：∀ {p : Prop}, (¬p → False) → p
 -/
-theorem MapsTo.mem_iff (h : MapsTo f s t) (hc : MapsTo f sᶜ tᶜ) {x} : f x in t ↔ x in s :=
+theorem MapsTo.mem_iff (h : MapsTo f s t) (hc : MapsTo f sᶜ tᶜ) {x} : f x ∈ t ↔ x ∈ s :=
   ⟨fun ht => by_contra fun hs => hc hs ht, fun hx => h hx⟩
 
 end MapsTo
@@ -1158,248 +728,150 @@ end MapsTo
 /-! ### Injectivity on a set -/
 section injOn
 
-/--
-theorem `Subsingleton.injOn` / 定理 `Subsingleton.injOn`
-
-English:
-theorem Subsingleton.injOn
-  given: (hs : s.Subsingleton) (f : α -> β)
-  statement: InjOn f s
-  proof: fun _ hx _ hy _ =>
-  hs hx hy
-
-@[simp]
-
-中文:
-定理 子单例.injOn
-  条件: (hs : s.子单例) (f : α -> β)
-  结论: 单射限制 f s
-  证明: fun _ hx _ hy _ =>
-  hs hx hy
-
-@[simp]
+/-
+**Set.Subsingleton.injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.Subsingleton → ∀ (f : α → β
+), Set.InjOn f s
+参数：f : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subsingleton.injOn (hs : s.Subsingleton) (f : α -> β) : InjOn f s := fun _ hx _ hy _ =>
+theorem Subsingleton.injOn (hs : s.Subsingleton) (f : α → β) : InjOn f s := fun _ hx _ hy _ =>
   hs hx hy
 
 @[simp]
-/--
-theorem `injOn_empty` / 定理 `injOn_empty`
-
-English:
-theorem injOn_empty
-  given: (f : α -> β)
-  statement: InjOn f ∅
-  proof: subsingleton_empty.injOn f
-@[simp]
-
-中文:
-定理 injOn_empty
-  条件: (f : α -> β)
-  结论: 单射限制 f ∅
-  证明: subsingleton_empty.injOn f
-@[simp]
-
-Depends on / 依赖: subsingleton_empty, subsingleton_empty.injOn
+/-
+**Set.injOn_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_empty (f : α -> β) : InjOn f ∅
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subsingleton.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.S
+ubsingleton → ∀ (f : α → β), Set.InjOn f s
+· 使用定理 `Set.subsingleton_empty`：subsingleton_empty : (∅ : Set α).Subsingleton
 -/
-theorem injOn_empty (f : α -> β) : InjOn f ∅ :=
+theorem injOn_empty (f : α → β) : InjOn f ∅ :=
   subsingleton_empty.injOn f
 @[simp]
-/--
-theorem `injOn_singleton` / 定理 `injOn_singleton`
-
-English:
-theorem injOn_singleton
-  given: (f : α -> β) (a : α)
-  statement: InjOn f {a}
-  proof: subsingleton_singleton.injOn f
-
-中文:
-定理 injOn_singleton
-  条件: (f : α -> β) (a : α)
-  结论: 单射限制 f {a}
-  证明: subsingleton_singleton.injOn f
-
-Depends on / 依赖: subsingleton_singleton, subsingleton_singleton.injOn
+/-
+**Set.injOn_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_singleton (f : α -> β) (a : α) : InjOn f {a}
+参数：f : α -> β；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subsingleton.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.S
+ubsingleton → ∀ (f : α → β), Set.InjOn f s
+· 使用定理 `Set.subsingleton_singleton`：subsingleton_singleton {a} : ({a} : Set α).S
+ubsingleton
 -/
-theorem injOn_singleton (f : α -> β) (a : α) : InjOn f {a} :=
+theorem injOn_singleton (f : α → β) (a : α) : InjOn f {a} :=
   subsingleton_singleton.injOn f
-
-/--
-lemma `injOn_pair` / 引理 `injOn_pair`
-
-English:
-lemma injOn_pair
-  given: {b : α}
-  statement: InjOn f {a, b} ↔ f a = f b -> a = b
-  proof: by unfold InjOn; aesop
-
-中文:
-引理 injOn_pair
-  条件: {b : α}
-  结论: 单射限制 f {a, b} ↔ f a = f b -> a = b
-  证明: by unfold InjOn; aesop
+/-
+**Set.injOn_pair** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {a b : α}, Set.InjOn f {a, b} 
+↔ f a = f b → a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-@[simp] lemma injOn_pair {b : α} : InjOn f {a, b} ↔ f a = f b -> a = b := by unfold InjOn; aesop
-
-/--
-lemma `injOn_of_eq_iff_eq` / 引理 `injOn_of_eq_iff_eq`
-
-English:
-lemma injOn_of_eq_iff_eq
-  given: (s : Set α) (h : forall x y, f x = f y ↔ x = y)
-  statement: Set.InjOn f s
-  proof: fun x _ y _ => (h x y).mp
-
-中文:
-引理 injOn_of_eq_iff_eq
-  条件: (s : 集合 α) (h : 对任意 x y, f x = f y ↔ x = y)
-  结论: 集合.单射限制 f s
-  证明: fun x _ y _ => (h x y).mp
+@[simp] lemma injOn_pair {b : α} : InjOn f {a, b} ↔ f a = f b → a = b := by unfold InjOn; aesop
+/-
+**Set.injOn_of_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} (s : Set α), (∀ (x y : α), f x
+ = f y ↔ x = y) → Set.InjOn f s
+参数：s : Set α；∀ (x y : α), f x = f y ↔ x = y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-@[simp low] lemma injOn_of_eq_iff_eq (s : Set α) (h : forall x y, f x = f y ↔ x = y) : Set.InjOn f s :=
+@[simp low] lemma injOn_of_eq_iff_eq (s : Set α) (h : ∀ x y, f x = f y ↔ x = y) : Set.InjOn f s :=
   fun x _ y _ => (h x y).mp
-
-/--
-theorem `InjOn.eq_iff` / 定理 `InjOn.eq_iff`
-
-English:
-theorem InjOn.eq_iff
-  given: {x y} (h : InjOn f s) (hx : x in s) (hy : y in s)
-  statement: f x = f y ↔ x = y
-  proof: ⟨h hx hy, fun h => h ▸ rfl⟩
-
-中文:
-定理 单射限制.eq_iff
-  条件: {x y} (h : 单射限制 f s) (hx : x in s) (hy : y in s)
-  结论: f x = f y ↔ x = y
-  证明: ⟨h hx hy, fun h => h ▸ rfl⟩
+/-
+**Set.InjOn.eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {x y : α}, Set.Inj
+On f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+参数：f x = f y ↔ x = y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem InjOn.eq_iff {x y} (h : InjOn f s) (hx : x in s) (hy : y in s) : f x = f y ↔ x = y :=
+theorem InjOn.eq_iff {x y} (h : InjOn f s) (hx : x ∈ s) (hy : y ∈ s) : f x = f y ↔ x = y :=
   ⟨h hx hy, fun h => h ▸ rfl⟩
-
-/--
-theorem `InjOn.ne_iff` / 定理 `InjOn.ne_iff`
-
-English:
-theorem InjOn.ne_iff
-  given: {x y} (h : InjOn f s) (hx : x in s) (hy : y in s)
-  statement: f x != f y ↔ x != y
-  proof: (h.eq_iff hx hy).not
-
-alias ⟨_, InjOn.ne⟩ := InjOn.ne_iff
-
-中文:
-定理 单射限制.ne_iff
-  条件: {x y} (h : 单射限制 f s) (hx : x in s) (hy : y in s)
-  结论: f x != f y ↔ x != y
-  证明: (h.eq_iff hx hy).not
-
-alias ⟨_, InjOn.ne⟩ := InjOn.ne_iff
-
-Depends on / 依赖: eq_iff, h.eq_iff
+/-
+**Set.InjOn.ne_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {x y : α}, Set.Inj
+On f s → x ∈ s → y ∈ s → (f x ≠ f y ↔ x ≠ y)
+参数：f x ≠ f y ↔ x ≠ y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
 -/
-theorem InjOn.ne_iff {x y} (h : InjOn f s) (hx : x in s) (hy : y in s) : f x != f y ↔ x != y :=
+theorem InjOn.ne_iff {x y} (h : InjOn f s) (hx : x ∈ s) (hy : y ∈ s) : f x ≠ f y ↔ x ≠ y :=
   (h.eq_iff hx hy).not
 
 alias ⟨_, InjOn.ne⟩ := InjOn.ne_iff
-
-/--
-theorem `InjOn.congr` / 定理 `InjOn.congr`
-
-English:
-theorem InjOn.congr
-  given: (h₁ : InjOn f₁ s) (h : EqOn f₁ f₂ s)
-  statement: InjOn f₂ s
-  proof: fun _ hx _ hy =>
-  h hx ▸ h hy ▸ h₁ hx hy
-
-中文:
-定理 单射限制.congr
-  条件: (h₁ : 单射限制 f₁ s) (h : EqOn f₁ f₂ s)
-  结论: 单射限制 f₂ s
-  证明: fun _ hx _ hy =>
-  h hx ▸ h hy ▸ h₁ hx hy
+/-
+**Set.InjOn.congr** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β}, Set.InjOn f₁ 
+s → Set.EqOn f₁ f₂ s → Set.InjOn f₂ s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem InjOn.congr (h₁ : InjOn f₁ s) (h : EqOn f₁ f₂ s) : InjOn f₂ s := fun _ hx _ hy =>
   h hx ▸ h hy ▸ h₁ hx hy
-
-/--
-theorem `EqOn.injOn_iff` / 定理 `EqOn.injOn_iff`
-
-English:
-theorem EqOn.injOn_iff
-  given: (H : EqOn f₁ f₂ s)
-  statement: InjOn f₁ s ↔ InjOn f₂ s
-  proof: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-@[gcongr]
-
-中文:
-定理 EqOn.injOn_iff
-  条件: (H : EqOn f₁ f₂ s)
-  结论: 单射限制 f₁ s ↔ 单射限制 f₂ s
-  证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-@[gcongr]
-
-Depends on / 依赖: H.symm, h.congr
+/-
+**Set.EqOn.injOn_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → β}, Set.EqOn f₁ f
+₂ s → (Set.InjOn f₁ s ↔ Set.InjOn f₂ s)
+参数：Set.InjOn f₁ s ↔ Set.InjOn f₂ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α 
+→ β}, Set.InjOn f₁ s → Set.EqOn f₁ f₂ s → Set.InjOn f₂ s
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
 -/
 theorem EqOn.injOn_iff (H : EqOn f₁ f₂ s) : InjOn f₁ s ↔ InjOn f₂ s :=
   ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
 
 @[gcongr]
-/--
-theorem `InjOn.mono` / 定理 `InjOn.mono`
-
-English:
-theorem InjOn.mono
-  given: (h : s₁ subseteq s₂) (ht : InjOn f s₂)
-  statement: InjOn f s₁
-  proof: fun _ hx _ hy H =>
-  ht (h hx) (h hy) H
-
-中文:
-定理 单射限制.mono
-  条件: (h : s₁ subseteq s₂) (ht : 单射限制 f s₂)
-  结论: 单射限制 f s₁
-  证明: fun _ hx _ hy H =>
-  ht (h hx) (h hy) H
+/-
+**Set.InjOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α → β}, s₁ ⊆ s₂ → Set
+.InjOn f s₂ → Set.InjOn f s₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem InjOn.mono (h : s₁ subseteq s₂) (ht : InjOn f s₂) : InjOn f s₁ := fun _ hx _ hy H =>
+theorem InjOn.mono (h : s₁ ⊆ s₂) (ht : InjOn f s₂) : InjOn f s₁ := fun _ hx _ hy H =>
   ht (h hx) (h hy) H
-
-/--
-theorem `injOn_union` / 定理 `injOn_union`
-
-English:
-theorem injOn_union
-  given: (h : Disjoint s₁ s₂)
-  proof: by
-  refine ⟨fun H => ⟨H.mono subset_union_left, H.mono subset_union_right, ?_⟩, ?_⟩
-  · intro x hx y hy hxy
-    obtain rfl : x = y := H (Or.inl hx) (Or.inr hy) hxy
-    exact h.le_bot ⟨hx, hy⟩
-  · rintro ⟨h₁, h₂, h₁₂⟩
-    rintro x (hx | hx) y (hy | hy) hxy
-    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hxy).elim, (h₁₂ _ hy _ hx hxy.symm).elim, h₂ hx hy hxy]
-
-中文:
-定理 injOn_union
-  条件: (h : Disjoint s₁ s₂)
-  证明: by
-  refine ⟨fun H => ⟨H.mono subset_union_left, H.mono subset_union_right, ?_⟩, ?_⟩
-  · intro x hx y hy hxy
-    obtain rfl : x = y := H (Or.inl hx) (Or.inr hy) hxy
-    exact h.le_bot ⟨hx, hy⟩
-  · rintro ⟨h₁, h₂, h₁₂⟩
-    rintro x (hx | hx) y (hy | hy) hxy
-    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hxy).elim, (h₁₂ _ hy _ hx hxy.symm).elim, h₂ hx hy hxy]
-
-Depends on / 依赖: H.mono, Or.inl, Or.inr, exacts, h.le_bot, hxy.symm, le_bot, subset_union_left, subset_union_right
+/-
+**Set.injOn_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_union (h : Disjoint s₁ s₂) : InjOn f (s₁ union s₂) ↔ InjOn f s₁ ∧ In
+jOn f s₂ ∧ forall x in s₁, forall y in s₂, f x != f y
+参数：h : Disjoint s₁ s₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `Disjoint.le_bot`：Disjoint.le_bot : Disjoint a b -> a ⊓ b <= ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem injOn_union (h : Disjoint s₁ s₂) :
-    InjOn f (s₁ union s₂) ↔ InjOn f s₁ ∧ InjOn f s₂ ∧ forall x in s₁, forall y in s₂, f x != f y := by
+    InjOn f (s₁ ∪ s₂) ↔ InjOn f s₁ ∧ InjOn f s₂ ∧ ∀ x ∈ s₁, ∀ y ∈ s₂, f x ≠ f y := by
   refine ⟨fun H => ⟨H.mono subset_union_left, H.mono subset_union_right, ?_⟩, ?_⟩
   · intro x hx y hy hxy
     obtain rfl : x = y := H (Or.inl hx) (Or.inr hy) hxy
@@ -1407,438 +879,307 @@ theorem injOn_union (h : Disjoint s₁ s₂) :
   · rintro ⟨h₁, h₂, h₁₂⟩
     rintro x (hx | hx) y (hy | hy) hxy
     exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hxy).elim, (h₁₂ _ hy _ hx hxy.symm).elim, h₂ hx hy hxy]
-
-/--
-theorem `injOn_insert` / 定理 `injOn_insert`
-
-English:
-theorem injOn_insert
-  given: {f : α -> β} {s : Set α} {a : α} (has : a ∉ s)
-  proof: by
-  rw [← union_singleton]; rw [injOn_union (disjoint_singleton_right.2 has)]
-  simp
-
-中文:
-定理 injOn_insert
-  条件: {f : α -> β} {s : 集合 α} {a : α} (has : a ∉ s)
-  证明: by
-  rw [← union_singleton]; rw [injOn_union (disjoint_singleton_right.2 has)]
-  simp
-
-Depends on / 依赖: disjoint_singleton_right, injOn_union, union_singleton
+/-
+**Set.injOn_insert** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_insert {f : α -> β} {s : Set α} {a : α} (has : a ∉ s) : Set.InjOn f 
+(insert a s) ↔ Set.InjOn f s ∧ f a ∉ f '' s
+参数：has : a ∉ s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `Set.injOn_union`：injOn_union (h : Disjoint s₁ s₂) : InjOn f (s₁ union s₂
+) ↔ InjOn f s₁ ∧ InjOn f s₂ ∧ forall x in s₁, forall y in s₂, f x != f y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.disjoint_singleton_right`：disjoint_singleton_right : Disjoint s {a} 
+↔ a ∉ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem injOn_insert {f : α -> β} {s : Set α} {a : α} (has : a ∉ s) :
+theorem injOn_insert {f : α → β} {s : Set α} {a : α} (has : a ∉ s) :
     Set.InjOn f (insert a s) ↔ Set.InjOn f s ∧ f a ∉ f '' s := by
-  rw [← union_singleton]; rw [injOn_union (disjoint_singleton_right.2 has)]
+  rw [← union_singleton, injOn_union (disjoint_singleton_right.2 has)]
   simp
-
-/--
-lemma `injOn_univ` / 引理 `injOn_univ`
-
-English:
-lemma injOn_univ
-  statement: InjOn f univ ↔ Injective f
-  proof: by simp [InjOn, Injective]
-
-中文:
-引理 injOn_univ
-  结论: 单射限制 f univ ↔ 单射 f
-  证明: by simp [InjOn, Injective]
+/-
+**Set.injOn_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, Set.InjOn f Set.univ ↔ Functi
+on.Injective f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma injOn_univ : InjOn f univ ↔ Injective f := by simp [InjOn, Injective]
-
-/--
-theorem `injOn_of_injective` / 定理 `injOn_of_injective`
-
-English:
-theorem injOn_of_injective
-  given: (h : Injective f) {s : Set α}
-  statement: InjOn f s
-  proof: fun _ _ _ _ hxy => h hxy
-
-alias _root_.Function.Injective.injOn := injOn_of_injective
-
-中文:
-定理 injOn_of_injective
-  条件: (h : 单射 f) {s : 集合 α}
-  结论: 单射限制 f s
-  证明: fun _ _ _ _ hxy => h hxy
-
-alias _root_.Function.Injective.injOn := injOn_of_injective
+/-
+**Set.injOn_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_of_injective (h : Injective f) {s : Set α} : InjOn f s
+参数：h : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem injOn_of_injective (h : Injective f) {s : Set α} : InjOn f s := fun _ _ _ _ hxy => h hxy
 
 alias _root_.Function.Injective.injOn := injOn_of_injective
 
 -- A specialization of `injOn_of_injective` for `Subtype.val`.
-/--
-theorem `injOn_subtype_val` / 定理 `injOn_subtype_val`
-
-English:
-theorem injOn_subtype_val
-  given: {p : α -> Prop} {s : Set {x // p x}}
-  statement: Set.InjOn Subtype.val s
-  proof: Subtype.coe_injective.injOn
-
-中文:
-定理 injOn_subtype_val
-  条件: {p : α -> 命题} {s : 集合 {x // p x}}
-  结论: 集合.单射限制 子类型.val s
-  证明: Subtype.coe_injective.injOn
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.injOn, coe_injective
+/-
+**Set.injOn_subtype_val** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_subtype_val {p : α -> Prop} {s : Set {x // p x}} : Set.InjOn Subtype
+.val s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-theorem injOn_subtype_val {p : α -> Prop} {s : Set {x // p x}} : Set.InjOn Subtype.val s :=
+theorem injOn_subtype_val {p : α → Prop} {s : Set {x // p x}} : Set.InjOn Subtype.val s :=
   Subtype.coe_injective.injOn
-
-/--
-lemma `injOn_id` / 引理 `injOn_id`
-
-English:
-lemma injOn_id
-  given: (s : Set α)
-  statement: InjOn id s
-  proof: injective_id.injOn
-
-中文:
-引理 injOn_id
-  条件: (s : 集合 α)
-  结论: 单射限制 id s
-  证明: injective_id.injOn
-
-Depends on / 依赖: injective_id, injective_id.injOn
+/-
+**Set.injOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：injOn_id (s : Set α) : InjOn id s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
 lemma injOn_id (s : Set α) : InjOn id s := injective_id.injOn
-
-/--
-theorem `InjOn.comp` / 定理 `InjOn.comp`
-
-English:
-theorem InjOn.comp
-  given: (hg : InjOn g t) (hf : InjOn f s) (h : MapsTo f s t)
-  statement: InjOn (g ∘ f) s
-  proof: fun _ hx _ hy heq => hf hx hy hg (h hx) (h hy) heq
-
-中文:
-定理 单射限制.comp
-  条件: (hg : 单射限制 g t) (hf : 单射限制 f s) (h : 映射到 f s t)
-  结论: 单射限制 (g ∘ f) s
-  证明: fun _ hx _ hy heq => hf hx hy hg (h hx) (h hy) heq
+/-
+**Set.InjOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β} {g : β → γ},   Set.InjOn g t → Set.InjOn f s → Set.MapsTo f s t → Set.I
+njOn (g ∘ f) s
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem InjOn.comp (hg : InjOn g t) (hf : InjOn f s) (h : MapsTo f s t) : InjOn (g ∘ f) s :=
-fun _ hx _ hy heq => hf hx hy hg (h hx) (h hy) heq
-
-/--
-lemma `InjOn.of_comp` / 引理 `InjOn.of_comp`
-
-English:
-lemma InjOn.of_comp
-  given: (h : InjOn (g ∘ f) s)
-  statement: InjOn f s
-  proof: fun _ hx _ hy heq => h hx hy (by simp [heq])
-
-中文:
-引理 单射限制.of_comp
-  条件: (h : 单射限制 (g ∘ f) s)
-  结论: 单射限制 f s
-  证明: fun _ hx _ hy heq => h hx hy (by simp [heq])
+  fun _ hx _ hy heq => hf hx hy <| hg (h hx) (h hy) heq
+/-
+**Set.InjOn.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {f : α → β} {g 
+: β → γ}, Set.InjOn (g ∘ f) s → Set.InjOn f s
+参数：g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma InjOn.of_comp (h : InjOn (g ∘ f) s) : InjOn f s :=
-  fun _ hx _ hy heq => h hx hy (by simp [heq])
-
-/--
-lemma `InjOn.image_of_comp` / 引理 `InjOn.image_of_comp`
-
-English:
-lemma InjOn.image_of_comp
-  given: (h : InjOn (g ∘ f) s)
-  statement: InjOn g (f '' s)
-  proof: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy heq => congr_arg f h hx hy heq
-
-中文:
-引理 单射限制.image_of_comp
-  条件: (h : 单射限制 (g ∘ f) s)
-  结论: 单射限制 g (f '' s)
-  证明: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy heq => congr_arg f h hx hy heq
-
-Depends on / 依赖: congr_arg, forall_mem_image
+  fun _ hx _ hy heq ↦ h hx hy (by simp [heq])
+/-
+**Set.InjOn.image_of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {f : α → β} {g 
+: β → γ},   Set.InjOn (g ∘ f) s → Set.InjOn g (f '' s)
+参数：g ∘ f；f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma InjOn.image_of_comp (h : InjOn (g ∘ f) s) : InjOn g (f '' s) :=
-forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy heq => congr_arg f h hx hy heq
-
-/--
-lemma `InjOn.comp_iff` / 引理 `InjOn.comp_iff`
-
-English:
-lemma InjOn.comp_iff
-  given: (hf : InjOn f s)
-  statement: InjOn (g ∘ f) s ↔ InjOn g (f '' s)
-  proof: ⟨image_of_comp, fun h => InjOn.comp h hf mapsTo_image f s⟩
-
-中文:
-引理 单射限制.comp_iff
-  条件: (hf : 单射限制 f s)
-  结论: 单射限制 (g ∘ f) s ↔ 单射限制 g (f '' s)
-  证明: ⟨image_of_comp, fun h => InjOn.comp h hf mapsTo_image f s⟩
-
-Depends on / 依赖: InjOn.comp, image_of_comp, mapsTo_image
+  forall_mem_image.2 fun _x hx ↦ forall_mem_image.2 fun _y hy heq ↦ congr_arg f <| h hx hy heq
+/-
+**Set.InjOn.comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {f : α → β} {g 
+: β → γ},   Set.InjOn f s → (Set.InjOn (g ∘ f) s ↔ Set.InjOn g (f '' s))
+参数：Set.InjOn (g ∘ f) s ↔ Set.InjOn g (f '' s)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.image_of_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{s : Set α} {f : α → β} {g : β → γ},   Set.InjOn (g ∘ f) s → Set.InjOn g (f '' s
+)
+· 使用定理 `Set.InjOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set 
+α} {t : Set β} {f : α → β} {g : β → γ},   Set.InjOn g t → Set.InjOn f s → Set.Ma
+psTo…
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
 lemma InjOn.comp_iff (hf : InjOn f s) : InjOn (g ∘ f) s ↔ InjOn g (f '' s) :=
-⟨image_of_comp, fun h => InjOn.comp h hf mapsTo_image f s⟩
-
-/--
-lemma `InjOn.iterate` / 引理 `InjOn.iterate`
-
-English:
-lemma InjOn.iterate
-  given: {f : α -> α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s)
-
-中文:
-引理 单射限制.iterate
-  条件: {f : α -> α} {s : 集合 α} (h : 单射限制 f s) (hf : 映射到 f s s)
+  ⟨image_of_comp, fun h ↦ InjOn.comp h hf <| mapsTo_image f s⟩
+/-
+**Set.InjOn.iterate** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.InjOn f s → Set.MapsTo f s s
+ → ∀ (n : ℕ), Set.InjOn f^[n] s
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma InjOn.iterate {f : α -> α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s) :
-    forall n, InjOn f^[n] s
+lemma InjOn.iterate {f : α → α} {s : Set α} (h : InjOn f s) (hf : MapsTo f s s) :
+    ∀ n, InjOn f^[n] s
   | 0 => injOn_id _
   | (n + 1) => (h.iterate hf n).comp h hf
-
-/--
-lemma `injOn_of_subsingleton` / 引理 `injOn_of_subsingleton`
-
-English:
-lemma injOn_of_subsingleton
-  given: [Subsingleton α] (f : α -> β) (s : Set α)
-  statement: InjOn f s
-  proof: (injective_of_subsingleton _).injOn
-
-中文:
-引理 injOn_of_subsingleton
-  条件: [子单例 α] (f : α -> β) (s : 集合 α)
-  结论: 单射限制 f s
-  证明: (injective_of_subsingleton _).injOn
-
-Depends on / 依赖: injective_of_subsingleton
+/-
+**Set.injOn_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：injOn_of_subsingleton [Subsingleton α] (f : α -> β) (s : Set α) : InjOn f 
+s
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Function.injective_of_subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} [Sub
+singleton α] (f : α → β), Function.Injective f
 -/
-lemma injOn_of_subsingleton [Subsingleton α] (f : α -> β) (s : Set α) : InjOn f s :=
+lemma injOn_of_subsingleton [Subsingleton α] (f : α → β) (s : Set α) : InjOn f s :=
   (injective_of_subsingleton _).injOn
-
-/--
-theorem `_root_.Function.Injective.injOn_range` / 定理 `_root_.Function.Injective.injOn_range`
-
-English:
-theorem _root_.Function.Injective.injOn_range
-  given: (h : Injective (g ∘ f))
-  statement: InjOn g (range f)
-  proof: by
-  rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ H
-  exact congr_arg f (h H)
-
-中文:
-定理 _root_.函数.单射.injOn_range
-  条件: (h : 单射 (g ∘ f))
-  结论: 单射限制 g (range f)
-  证明: by
-  rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ H
-  exact congr_arg f (h H)
-
-Depends on / 依赖: congr_arg
+/-
+**Set._root_.Function.Injective.injOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Function.Injective.injOn_range (h : Injective (g ∘ f)) : InjOn g (range f) := by
   rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ H
   exact congr_arg f (h H)
-
-/--
-theorem `_root_.Set.InjOn.injective_iff` / 定理 `_root_.Set.InjOn.injective_iff`
-
-English:
-theorem _root_.Set.InjOn.injective_iff
-  given: (s : Set β) (h : InjOn g s) (hs : range f subseteq s)
-  proof: ⟨(·.of_comp), fun h _ => by aesop⟩
-
-中文:
-定理 _root_.集合.单射限制.injective_iff
-  条件: (s : 集合 β) (h : 单射限制 g s) (hs : range f subseteq s)
-  证明: ⟨(·.of_comp), fun h _ => by aesop⟩
-
-Depends on / 依赖: of_comp
+/-
+**Set._root_.Set.InjOn.injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Set.InjOn.injective_iff (s : Set β) (h : InjOn g s) (hs : range f subseteq s) :
+theorem _root_.Set.InjOn.injective_iff (s : Set β) (h : InjOn g s) (hs : range f ⊆ s) :
     Injective (g ∘ f) ↔ Injective f :=
-  ⟨(·.of_comp), fun h _ => by aesop⟩
-
-/--
-theorem `exists_injOn_iff_injective` / 定理 `exists_injOn_iff_injective`
-
-English:
-theorem exists_injOn_iff_injective
-  given: [Nonempty β]
-  proof: ⟨fun ⟨_, hf⟩ => ⟨_, hf.injective⟩,
-   fun ⟨f, hf⟩ => by
-    lift f to α -> β using trivial
-    exact ⟨f, injOn_iff_injective.2 hf⟩⟩
-
-中文:
-定理 存在_injOn_iff_injective
-  条件: [非空 β]
-  证明: ⟨fun ⟨_, hf⟩ => ⟨_, hf.injective⟩,
-   fun ⟨f, hf⟩ => by
-    lift f to α -> β using trivial
-    exact ⟨f, injOn_iff_injective.2 hf⟩⟩
-
-Depends on / 依赖: hf.injective, injOn_iff_injective, injective
+  ⟨(·.of_comp), fun h _ ↦ by aesop⟩
+/-
+**Set.exists_injOn_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_injOn_iff_injective [Nonempty β] : (exists f : α -> β, InjOn f s) ↔
+ exists f : s -> β, Injective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.injective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α 
+→ β}, Set.InjOn f s → Function.Injective (s.domRestrict f)
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.PiSetCoe.canLift'`：∀ (ι : Type u) (α : Type v) [Nonempty α] (s : Set
+ ι), CanLift (↑s → α) (ι → α) (fun f i => f ↑i) fun x => True
+· 使用定理 `trivial`：True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.injOn_iff_injective`：injOn_iff_injective : InjOn f s ↔ Injective (s.
+domRestrict f)
 -/
 theorem exists_injOn_iff_injective [Nonempty β] :
-    (exists f : α -> β, InjOn f s) ↔ exists f : s -> β, Injective f :=
+    (∃ f : α → β, InjOn f s) ↔ ∃ f : s → β, Injective f :=
   ⟨fun ⟨_, hf⟩ => ⟨_, hf.injective⟩,
    fun ⟨f, hf⟩ => by
-    lift f to α -> β using trivial
+    lift f to α → β using trivial
     exact ⟨f, injOn_iff_injective.2 hf⟩⟩
-
-/--
-theorem `injOn_preimage` / 定理 `injOn_preimage`
-
-English:
-theorem injOn_preimage
-  given: {B : Set (Set β)} (hB : B subseteq 𝒫 range f)
-  statement: InjOn (preimage f) B
-  proof: fun _ hs _ ht hst => (preimage_eq_preimage' (hB hs) (hB ht)).1 hst
-
-中文:
-定理 injOn_preimage
-  条件: {B : 集合 (集合 β)} (hB : B subseteq 𝒫 range f)
-  结论: 单射限制 (原像 f) B
-  证明: fun _ hs _ ht hst => (preimage_eq_preimage' (hB hs) (hB ht)).1 hst
-
-Depends on / 依赖: preimage_eq_preimage
+/-
+**Set.injOn_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_preimage {B : Set (Set β)} (hB : B subseteq 𝒫 range f) : InjOn (prei
+mage f) B
+参数：Set β；hB : B subseteq 𝒫 range f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.preimage_eq_preimage'`：preimage_eq_preimage' {s t : Set α} {f : β ->
+ α} (hs : s subseteq range f) (ht : t subseteq range f) : f ⁻¹' s = f ⁻¹' t ↔ s 
+= t
 -/
-theorem injOn_preimage {B : Set (Set β)} (hB : B subseteq 𝒫 range f) : InjOn (preimage f) B :=
+theorem injOn_preimage {B : Set (Set β)} (hB : B ⊆ 𝒫 range f) : InjOn (preimage f) B :=
   fun _ hs _ ht hst => (preimage_eq_preimage' (hB hs) (hB ht)).1 hst
-
-/--
-theorem `InjOn.mem_of_mem_image` / 定理 `InjOn.mem_of_mem_image`
-
-English:
-theorem InjOn.mem_of_mem_image
-  given: {x} (hf : InjOn f s) (hs : s₁ subseteq s) (h : x in s) (h₁ : f x in f '' s₁)
-  proof: let ⟨_, h', Eq⟩ := h₁
-  hf (hs h') h Eq ▸ h'
-
-中文:
-定理 单射限制.mem_of_mem_image
-  条件: {x} (hf : 单射限制 f s) (hs : s₁ subseteq s) (h : x in s) (h₁ : f x in f '' s₁)
-  证明: let ⟨_, h', Eq⟩ := h₁
-  hf (hs h') h Eq ▸ h'
+/-
+**Set.InjOn.mem_of_mem_image** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set α} {f : α → β} {x : α},   Set.
+InjOn f s → s₁ ⊆ s → x ∈ s → f x ∈ f '' s₁ → x ∈ s₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem InjOn.mem_of_mem_image {x} (hf : InjOn f s) (hs : s₁ subseteq s) (h : x in s) (h₁ : f x in f '' s₁) :
-    x in s₁ :=
+theorem InjOn.mem_of_mem_image {x} (hf : InjOn f s) (hs : s₁ ⊆ s) (h : x ∈ s) (h₁ : f x ∈ f '' s₁) :
+    x ∈ s₁ :=
   let ⟨_, h', Eq⟩ := h₁
   hf (hs h') h Eq ▸ h'
-
-/--
-theorem `InjOn.mem_image_iff` / 定理 `InjOn.mem_image_iff`
-
-English:
-theorem InjOn.mem_image_iff
-  given: {x} (hf : InjOn f s) (hs : s₁ subseteq s) (hx : x in s)
-  proof: ⟨hf.mem_of_mem_image hs hx, mem_image_of_mem f⟩
-
-中文:
-定理 单射限制.mem_image_iff
-  条件: {x} (hf : 单射限制 f s) (hs : s₁ subseteq s) (hx : x in s)
-  证明: ⟨hf.mem_of_mem_image hs hx, mem_image_of_mem f⟩
-
-Depends on / 依赖: hf.mem_of_mem_image, mem_image_of_mem, mem_of_mem_image
+/-
+**Set.InjOn.mem_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set α} {f : α → β} {x : α},   Set.
+InjOn f s → s₁ ⊆ s → x ∈ s → (f x ∈ f '' s₁ ↔ x ∈ s₁)
+参数：f x ∈ f '' s₁ ↔ x ∈ s₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.mem_of_mem_image`：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set 
+α} {f : α → β} {x : α},   Set.InjOn f s → s₁ ⊆ s → x ∈ s → f x ∈ f '' s₁ → x ∈ s
+₁
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-theorem InjOn.mem_image_iff {x} (hf : InjOn f s) (hs : s₁ subseteq s) (hx : x in s) :
-    f x in f '' s₁ ↔ x in s₁ :=
+theorem InjOn.mem_image_iff {x} (hf : InjOn f s) (hs : s₁ ⊆ s) (hx : x ∈ s) :
+    f x ∈ f '' s₁ ↔ x ∈ s₁ :=
   ⟨hf.mem_of_mem_image hs hx, mem_image_of_mem f⟩
-
-/--
-theorem `InjOn.preimage_image_inter` / 定理 `InjOn.preimage_image_inter`
-
-English:
-theorem InjOn.preimage_image_inter
-  given: (hf : InjOn f s) (hs : s₁ subseteq s)
-  statement: f ⁻¹' f '' s₁ inter s = s₁
-  proof: ext fun _ => ⟨fun ⟨h₁, h₂⟩ => hf.mem_of_mem_image hs h₂ h₁, fun h => ⟨mem_image_of_mem _ h, hs h⟩⟩
-
-中文:
-定理 单射限制.preimage_image_inter
-  条件: (hf : 单射限制 f s) (hs : s₁ subseteq s)
-  结论: f ⁻¹' f '' s₁ inter s = s₁
-  证明: ext fun _ => ⟨fun ⟨h₁, h₂⟩ => hf.mem_of_mem_image hs h₂ h₁, fun h => ⟨mem_image_of_mem _ h, hs h⟩⟩
-
-Depends on / 依赖: hf.mem_of_mem_image, mem_image_of_mem, mem_of_mem_image
+/-
+**Set.InjOn.preimage_image_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set α} {f : α → β}, Set.InjOn f s 
+→ s₁ ⊆ s → f ⁻¹' f '' s₁ ∩ s = s₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.InjOn.mem_of_mem_image`：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set 
+α} {f : α → β} {x : α},   Set.InjOn f s → s₁ ⊆ s → x ∈ s → f x ∈ f '' s₁ → x ∈ s
+₁
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-theorem InjOn.preimage_image_inter (hf : InjOn f s) (hs : s₁ subseteq s) : f ⁻¹' f '' s₁ inter s = s₁ :=
+theorem InjOn.preimage_image_inter (hf : InjOn f s) (hs : s₁ ⊆ s) : f ⁻¹' f '' s₁ ∩ s = s₁ :=
   ext fun _ => ⟨fun ⟨h₁, h₂⟩ => hf.mem_of_mem_image hs h₂ h₁, fun h => ⟨mem_image_of_mem _ h, hs h⟩⟩
-
-/--
-theorem `EqOn.cancel_left` / 定理 `EqOn.cancel_left`
-
-English:
-theorem EqOn.cancel_left
-  statement: (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t)
-  proof: fun _ ha => hg (hf₁ ha) (hf₂ ha) (h ha)
-
-中文:
-定理 EqOn.cancel_left
-  结论: (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.单射限制 g) (hf₁ : s.映射到 f₁ t)
-  证明: fun _ ha => hg (hf₁ ha) (hf₂ ha) (h ha)
+/-
+**Set.EqOn.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f₁
+ f₂ : α → β} {g : β → γ},   Set.EqOn (g ∘ f₁) (g ∘ f₂) s → Set.InjOn g t → Set.M
+apsTo f₁ s t → Set.MapsTo f₂ s t → Set.EqOn f₁ f₂ s
+参数：g ∘ f₁；g ∘ f₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem EqOn.cancel_left (h : s.EqOn (g ∘ f₁) (g ∘ f₂)) (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t)
     (hf₂ : s.MapsTo f₂ t) : s.EqOn f₁ f₂ := fun _ ha => hg (hf₁ ha) (hf₂ ha) (h ha)
-
-/--
-theorem `InjOn.cancel_left` / 定理 `InjOn.cancel_left`
-
-English:
-theorem InjOn.cancel_left
-  given: (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t) (hf₂ : s.MapsTo f₂ t)
-  proof: ⟨fun h => h.cancel_left hg hf₁ hf₂, EqOn.comp_left⟩
-
-中文:
-定理 单射限制.cancel_left
-  条件: (hg : t.单射限制 g) (hf₁ : s.映射到 f₁ t) (hf₂ : s.映射到 f₂ t)
-  证明: ⟨fun h => h.cancel_left hg hf₁ hf₂, EqOn.comp_left⟩
-
-Depends on / 依赖: EqOn.comp_left, cancel_left, comp_left, h.cancel_left
+/-
+**Set.InjOn.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f₁
+ f₂ : α → β} {g : β → γ},   Set.InjOn g t → Set.MapsTo f₁ s t → Set.MapsTo f₂ s 
+t → (Set.EqOn (g ∘ f₁) (g ∘ f₂) s ↔ Set.EqOn f₁ f₂ s)
+参数：Set.EqOn (g ∘ f₁) (g ∘ f₂) s ↔ Set.EqOn f₁ f₂ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.cancel_left`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s 
+: Set α} {t : Set β} {f₁ f₂ : α → β} {g : β → γ},   Set.EqOn (g ∘ f₁) (g ∘ f₂) s
+ → Set.Inj…
+· 使用定理 `Set.EqOn.comp_left`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : 
+Set α} {f₁ f₂ : α → β} {g : β → γ},   Set.EqOn f₁ f₂ s → Set.EqOn (g ∘ f₁) (g ∘ 
+f₂) s
 -/
 theorem InjOn.cancel_left (hg : t.InjOn g) (hf₁ : s.MapsTo f₁ t) (hf₂ : s.MapsTo f₂ t) :
     s.EqOn (g ∘ f₁) (g ∘ f₂) ↔ s.EqOn f₁ f₂ :=
   ⟨fun h => h.cancel_left hg hf₁ hf₂, EqOn.comp_left⟩
-
-/--
-lemma `InjOn.image_inter` / 引理 `InjOn.image_inter`
-
-English:
-lemma InjOn.image_inter
-  given: {s t u : Set α} (hf : u.InjOn f) (hs : s subseteq u) (ht : t subseteq u)
-  proof: by
-  apply Subset.antisymm (image_inter_subset _ _ _)
-  intro x ⟨⟨y, ys, hy⟩, ⟨z, zt, hz⟩⟩
-  have : y = z := by
-    apply hf (hs ys) (ht zt)
-    rwa [← hz] at hy
-  rw [← this] at zt
-  exact ⟨y, ⟨ys, zt⟩, hy⟩
-
-中文:
-引理 单射限制.image_inter
-  条件: {s t u : 集合 α} (hf : u.单射限制 f) (hs : s subseteq u) (ht : t subseteq u)
-  证明: by
-  apply Subset.antisymm (image_inter_subset _ _ _)
-  intro x ⟨⟨y, ys, hy⟩, ⟨z, zt, hz⟩⟩
-  have : y = z := by
-    apply hf (hs ys) (ht zt)
-    rwa [← hz] at hy
-  rw [← this] at zt
-  exact ⟨y, ⟨ys, zt⟩, hy⟩
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, image_inter_subset
+/-
+**Set.InjOn.image_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {s t u : Set α},   Set.InjOn f
+ u → s ⊆ u → t ⊆ u → f '' (s ∩ t) = f '' s ∩ f '' t
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Set.image_inter_subset`：image_inter_subset (f : α -> β) (s t : Set α) : 
+f '' (s inter t) subseteq f '' s inter f '' t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma InjOn.image_inter {s t u : Set α} (hf : u.InjOn f) (hs : s subseteq u) (ht : t subseteq u) :
-    f '' (s inter t) = f '' s inter f '' t := by
+lemma InjOn.image_inter {s t u : Set α} (hf : u.InjOn f) (hs : s ⊆ u) (ht : t ⊆ u) :
+    f '' (s ∩ t) = f '' s ∩ f '' t := by
   apply Subset.antisymm (image_inter_subset _ _ _)
   intro x ⟨⟨y, ys, hy⟩, ⟨z, zt, hz⟩⟩
   have : y = z := by
@@ -1846,228 +1187,175 @@ lemma InjOn.image_inter {s t u : Set α} (hf : u.InjOn f) (hs : s subseteq u) (h
     rwa [← hz] at hy
   rw [← this] at zt
   exact ⟨y, ⟨ys, zt⟩, hy⟩
-
-/--
-lemma `InjOn.image` / 引理 `InjOn.image`
-
-English:
-lemma InjOn.image
-  given: (h : s.InjOn f)
-  statement: s.powerset.InjOn (image f)
-  proof: fun s₁ hs₁ s₂ hs₂ h' => by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
-
-中文:
-引理 单射限制.像
-  条件: (h : s.单射限制 f)
-  结论: s.powerset.单射限制 (像 f)
-  证明: fun s₁ hs₁ s₂ hs₂ h' => by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
-
-Depends on / 依赖: h.preimage_image_inter, preimage_image_inter
+/-
+**Set.InjOn.image** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.InjOn f s → S
+et.InjOn (Set.image f) (𝒫 s)
+参数：Set.image f；𝒫 s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.InjOn.preimage_image_inter`：∀ {α : Type u_1} {β : Type u_2} {s s₁ : 
+Set α} {f : α → β}, Set.InjOn f s → s₁ ⊆ s → f ⁻¹' f '' s₁ ∩ s = s₁
 -/
 lemma InjOn.image (h : s.InjOn f) : s.powerset.InjOn (image f) :=
-  fun s₁ hs₁ s₂ hs₂ h' => by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
-
-/--
-theorem `InjOn.image_eq_image_iff` / 定理 `InjOn.image_eq_image_iff`
-
-English:
-theorem InjOn.image_eq_image_iff
-  given: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  proof: h.image.eq_iff h₁ h₂
-
-中文:
-定理 单射限制.image_eq_image_iff
-  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  证明: h.image.eq_iff h₁ h₂
-
-Depends on / 依赖: eq_iff, h.image.eq_iff
+  fun s₁ hs₁ s₂ hs₂ h' ↦ by rw [← h.preimage_image_inter hs₁, h', h.preimage_image_inter hs₂]
+/-
+**Set.InjOn.image_eq_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ s₂ : Set α} {f : α → β},   Set.InjOn
+ f s → s₁ ⊆ s → s₂ ⊆ s → (f '' s₁ = f '' s₂ ↔ s₁ = s₂)
+参数：f '' s₁ = f '' s₂ ↔ s₁ = s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Set.InjOn.image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}
+, Set.InjOn f s → Set.InjOn (Set.image f) (𝒫 s)
 -/
-theorem InjOn.image_eq_image_iff (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s) :
+theorem InjOn.image_eq_image_iff (h : s.InjOn f) (h₁ : s₁ ⊆ s) (h₂ : s₂ ⊆ s) :
     f '' s₁ = f '' s₂ ↔ s₁ = s₂ :=
   h.image.eq_iff h₁ h₂
-
-/--
-lemma `InjOn.image_subset_image_iff` / 引理 `InjOn.image_subset_image_iff`
-
-English:
-lemma InjOn.image_subset_image_iff
-  given: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  proof: by
-  refine ⟨fun h' => ?_, image_mono⟩
-  rw [← h.preimage_image_inter h₁]; rw [← h.preimage_image_inter h₂]
-  exact inter_subset_inter_left _ (preimage_mono h')
-
-中文:
-引理 单射限制.image_subset_image_iff
-  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  证明: by
-  refine ⟨fun h' => ?_, image_mono⟩
-  rw [← h.preimage_image_inter h₁]; rw [← h.preimage_image_inter h₂]
-  exact inter_subset_inter_left _ (preimage_mono h')
-
-Depends on / 依赖: h.preimage_image_inter, image_mono, inter_subset_inter_left, preimage_image_inter, preimage_mono
+/-
+**Set.InjOn.image_subset_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ s₂ : Set α} {f : α → β},   Set.InjOn
+ f s → s₁ ⊆ s → s₂ ⊆ s → (f '' s₁ ⊆ f '' s₂ ↔ s₁ ⊆ s₂)
+参数：f '' s₁ ⊆ f '' s₂ ↔ s₁ ⊆ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.InjOn.preimage_image_inter`：∀ {α : Type u_1} {β : Type u_2} {s s₁ : 
+Set α} {f : α → β}, Set.InjOn f s → s₁ ⊆ s → f ⁻¹' f '' s₁ ∩ s = s₁
+· 使用定理 `Set.inter_subset_inter_left`：inter_subset_inter_left {s t : Set α} (u : 
+Set α) (H : s subseteq t) : s inter u subseteq t inter u
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-lemma InjOn.image_subset_image_iff (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s) :
-    f '' s₁ subseteq f '' s₂ ↔ s₁ subseteq s₂ := by
-  refine ⟨fun h' => ?_, image_mono⟩
-  rw [← h.preimage_image_inter h₁]; rw [← h.preimage_image_inter h₂]
+lemma InjOn.image_subset_image_iff (h : s.InjOn f) (h₁ : s₁ ⊆ s) (h₂ : s₂ ⊆ s) :
+    f '' s₁ ⊆ f '' s₂ ↔ s₁ ⊆ s₂ := by
+  refine ⟨fun h' ↦ ?_, image_mono⟩
+  rw [← h.preimage_image_inter h₁, ← h.preimage_image_inter h₂]
   exact inter_subset_inter_left _ (preimage_mono h')
-
-/--
-lemma `InjOn.image_ssubset_image_iff` / 引理 `InjOn.image_ssubset_image_iff`
-
-English:
-lemma InjOn.image_ssubset_image_iff
-  given: (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  proof: by
-  simp_rw [ssubset_def, h.image_subset_image_iff h₁ h₂, h.image_subset_image_iff h₂ h₁]
-
-中文:
-引理 单射限制.image_ssubset_image_iff
-  条件: (h : s.单射限制 f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s)
-  证明: by
-  simp_rw [ssubset_def, h.image_subset_image_iff h₁ h₂, h.image_subset_image_iff h₂ h₁]
-
-Depends on / 依赖: h.image_subset_image_iff, image_subset_image_iff, simp_rw, ssubset_def
+/-
+**Set.InjOn.image_ssubset_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ s₂ : Set α} {f : α → β},   Set.InjOn
+ f s → s₁ ⊆ s → s₂ ⊆ s → (f '' s₁ ⊂ f '' s₂ ↔ s₁ ⊂ s₂)
+参数：f '' s₁ ⊂ f '' s₂ ↔ s₁ ⊂ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.InjOn.image_subset_image_iff`：∀ {α : Type u_1} {β : Type u_2} {s s₁ 
+s₂ : Set α} {f : α → β},   Set.InjOn f s → s₁ ⊆ s → s₂ ⊆ s → (f '' s₁ ⊆ f '' s₂ 
+↔ s₁ ⊆ s₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma InjOn.image_ssubset_image_iff (h : s.InjOn f) (h₁ : s₁ subseteq s) (h₂ : s₂ subseteq s) :
+lemma InjOn.image_ssubset_image_iff (h : s.InjOn f) (h₁ : s₁ ⊆ s) (h₂ : s₂ ⊆ s) :
     f '' s₁ ⊂ f '' s₂ ↔ s₁ ⊂ s₂ := by
   simp_rw [ssubset_def, h.image_subset_image_iff h₁ h₂, h.image_subset_image_iff h₂ h₁]
 
 -- TODO: can this move to a better place?
-/--
-theorem `_root_.Disjoint.image` / 定理 `_root_.Disjoint.image`
-
-English:
-theorem _root_.Disjoint.image
-  statement: {s t u : Set α} {f : α -> β} (h : Disjoint s t) (hf : u.InjOn f)
-  proof: by
-  rw [disjoint_iff_inter_eq_empty] at h ⊢
-  rw [← hf.image_inter hs ht]; rw [h]; rw [image_empty]
-
-中文:
-定理 _root_.Disjoint.像
-  结论: {s t u : 集合 α} {f : α -> β} (h : Disjoint s t) (hf : u.单射限制 f)
-  证明: by
-  rw [disjoint_iff_inter_eq_empty] at h ⊢
-  rw [← hf.image_inter hs ht]; rw [h]; rw [image_empty]
-
-Depends on / 依赖: disjoint_iff_inter_eq_empty, hf.image_inter, image_empty, image_inter
+/-
+**Set._root_.Disjoint.image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Disjoint.image {s t u : Set α} {f : α -> β} (h : Disjoint s t) (hf : u.InjOn f)
-    (hs : s subseteq u) (ht : t subseteq u) : Disjoint (f '' s) (f '' t) := by
+theorem _root_.Disjoint.image {s t u : Set α} {f : α → β} (h : Disjoint s t) (hf : u.InjOn f)
+    (hs : s ⊆ u) (ht : t ⊆ u) : Disjoint (f '' s) (f '' t) := by
   rw [disjoint_iff_inter_eq_empty] at h ⊢
-  rw [← hf.image_inter hs ht]; rw [h]; rw [image_empty]
-
-/--
-lemma `InjOn.image_sdiff` / 引理 `InjOn.image_sdiff`
-
-English:
-lemma InjOn.image_sdiff
-  given: {t : Set α} (h : s.InjOn f)
-  statement: f '' (s \ t) = f '' s \ f '' (s inter t)
-  proof: by
+  rw [← hf.image_inter hs ht, h, image_empty]
+/-
+**Set.InjOn.image_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {t : Set α},   Set
+.InjOn f s → f '' (s \ t) = f '' s \ f '' (s ∩ t)
+参数：s \ t；s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `Disjoint.image`：∀ {α : Type u_1} {β : Type u_2} {s t u : Set α} {f : α →
+ β},   Disjoint s t → Set.InjOn f u → s ⊆ u → t ⊆ u → Disjoint (f '' s) (f '' t)
+· 使用引理 `Set.disjoint_sdiff_inter`：disjoint_sdiff_inter : Disjoint (s \ t) (s int
+er t)
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.sdiff_subset_iff`：sdiff_subset_iff {s t u : Set α} : s \ t subseteq 
+u ↔ s subseteq t union u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `Set.inter_union_sdiff`：inter_union_sdiff (s t : Set α) : s inter t union
+ s \ t = s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+-/
+lemma InjOn.image_sdiff {t : Set α} (h : s.InjOn f) : f '' (s \ t) = f '' s \ f '' (s ∩ t) := by
   refine subset_antisymm (subset_sdiff.2 ⟨image_mono sdiff_subset, ?_⟩)
     (sdiff_subset_iff.2 (by rw [← image_union, inter_union_sdiff]))
   exact Disjoint.image disjoint_sdiff_inter h sdiff_subset inter_subset_left
 
 @[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdiff
-
-中文:
-引理 单射限制.image_sdiff
-  条件: {t : 集合 α} (h : s.单射限制 f)
-  结论: f '' (s \ t) = f '' s \ f '' (s inter t)
-  证明: by
-  refine subset_antisymm (subset_sdiff.2 ⟨image_mono sdiff_subset, ?_⟩)
-    (sdiff_subset_iff.2 (by rw [← image_union, inter_union_sdiff]))
-  exact Disjoint.image disjoint_sdiff_inter h sdiff_subset inter_subset_left
-
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdiff
-
-Depends on / 依赖: Disjoint, Disjoint.image, disjoint_sdiff_inter, image_mono, image_union, inter_subset_left, inter_union_sdiff, sdiff_subset, sdiff_subset_iff, subset_antisymm, subset_sdiff
+/-
+**Set.InjOn.image_sdiff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {t : Set α},   Set
+.InjOn f s → t ⊆ s → f '' (s \ t) = f '' s \ f '' t
+参数：s \ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.InjOn.image_sdiff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β} {t : Set α},   Set.InjOn f s → f '' (s \ t) = f '' s \ f '' (s ∩ t)
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
 -/
-lemma InjOn.image_sdiff {t : Set α} (h : s.InjOn f) : f '' (s \ t) = f '' s \ f '' (s inter t) := by
-  refine subset_antisymm (subset_sdiff.2 ⟨image_mono sdiff_subset, ?_⟩)
-    (sdiff_subset_iff.2 (by rw [← image_union, inter_union_sdiff]))
-  exact Disjoint.image disjoint_sdiff_inter h sdiff_subset inter_subset_left
-
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdiff
-
-/--
-lemma `InjOn.image_sdiff_subset` / 引理 `InjOn.image_sdiff_subset`
-
-English:
-lemma InjOn.image_sdiff_subset
-  given: {f : α -> β} {t : Set α} (h : InjOn f s) (hst : t subseteq s)
-  proof: by
-  rw [h.image_sdiff]; rw [inter_eq_self_of_subset_right hst]
-
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff_subset := InjOn.image_sdiff_subset
-
-alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
-
-@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_injOn
-
-中文:
-引理 单射限制.image_sdiff_subset
-  条件: {f : α -> β} {t : 集合 α} (h : 单射限制 f s) (hst : t subseteq s)
-  证明: by
-  rw [h.image_sdiff]; rw [inter_eq_self_of_subset_right hst]
-
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff_subset := InjOn.image_sdiff_subset
-
-alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
-
-@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_injOn
-
-Depends on / 依赖: h.image_sdiff, image_sdiff, inter_eq_self_of_subset_right
--/
-lemma InjOn.image_sdiff_subset {f : α -> β} {t : Set α} (h : InjOn f s) (hst : t subseteq s) :
+lemma InjOn.image_sdiff_subset {f : α → β} {t : Set α} (h : InjOn f s) (hst : t ⊆ s) :
     f '' (s \ t) = f '' s \ f '' t := by
-  rw [h.image_sdiff]; rw [inter_eq_self_of_subset_right hst]
+  rw [h.image_sdiff, inter_eq_self_of_subset_right hst]
 
 @[deprecated (since := "2026-06-03")] alias InjOn.image_diff_subset := InjOn.image_sdiff_subset
 
 alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
 
 @[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_injOn
-
-/--
-theorem `InjOn.imageFactorization_injective` / 定理 `InjOn.imageFactorization_injective`
-
-English:
-theorem InjOn.imageFactorization_injective
-  given: (h : InjOn f s)
-  proof: fun ⟨x, hx⟩ ⟨y, hy⟩ h' => by simpa [imageFactorization, h.eq_iff hx hy] using h'
-
-中文:
-定理 单射限制.imageFactorization_injective
-  条件: (h : 单射限制 f s)
-  证明: fun ⟨x, hx⟩ ⟨y, hy⟩ h' => by simpa [imageFactorization, h.eq_iff hx hy] using h'
-
-Depends on / 依赖: eq_iff, h.eq_iff, imageFactorization
+/-
+**Set.InjOn.imageFactorization_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.InjOn f s → F
+unction.Injective (Set.imageFactorization f s)
+参数：Set.imageFactorization f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
 -/
 theorem InjOn.imageFactorization_injective (h : InjOn f s) :
     Injective (s.imageFactorization f) :=
-  fun ⟨x, hx⟩ ⟨y, hy⟩ h' => by simpa [imageFactorization, h.eq_iff hx hy] using h'
-
-/--
-theorem `imageFactorization_injective_iff` / 定理 `imageFactorization_injective_iff`
-
-English:
-theorem imageFactorization_injective_iff
-  statement: Injective (s.imageFactorization f) ↔ InjOn f s
-  proof: ⟨fun h x hx y hy _ => by simpa using @h ⟨x, hx⟩ ⟨y, hy⟩ (by simpa [imageFactorization]),
-    InjOn.imageFactorization_injective⟩
-
-中文:
-定理 imageFactorization_injective_iff
-  结论: 单射 (s.imageFactorization f) ↔ 单射限制 f s
-  证明: ⟨fun h x hx y hy _ => by simpa using @h ⟨x, hx⟩ ⟨y, hy⟩ (by simpa [imageFactorization]),
-    InjOn.imageFactorization_injective⟩
+  fun ⟨x, hx⟩ ⟨y, hy⟩ h' ↦ by simpa [imageFactorization, h.eq_iff hx hy] using h'
+/-
+**Set.imageFactorization_injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Function.Injectiv
+e (Set.imageFactorization f s) ↔ Set.InjOn f s
+参数：Set.imageFactorization f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `Set.InjOn.imageFactorization_injective`：∀ {α : Type u_1} {β : Type u_2} 
+{s : Set α} {f : α → β}, Set.InjOn f s → Function.Injective (Set.imageFactorizat
+ion f s)
 -/
 @[simp] theorem imageFactorization_injective_iff : Injective (s.imageFactorization f) ↔ InjOn f s :=
-  ⟨fun h x hx y hy _ => by simpa using @h ⟨x, hx⟩ ⟨y, hy⟩ (by simpa [imageFactorization]),
+  ⟨fun h x hx y hy _ ↦ by simpa using @h ⟨x, hx⟩ ⟨y, hy⟩ (by simpa [imageFactorization]),
     InjOn.imageFactorization_injective⟩
 
 end injOn
@@ -2075,109 +1363,90 @@ end injOn
 section graphOn
 variable {x : α × β}
 
-/--
-lemma `graphOn_univ_inj` / 引理 `graphOn_univ_inj`
-
-English:
-lemma graphOn_univ_inj
-  given: {g : α -> β}
-  statement: univ.graphOn f = univ.graphOn g ↔ f = g
-  proof: by simp
-
-中文:
-引理 graphOn_univ_inj
-  条件: {g : α -> β}
-  结论: univ.graphOn f = univ.graphOn g ↔ f = g
-  证明: by simp
+/-
+**Set.graphOn_univ_inj** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：graphOn_univ_inj {g : α -> β} : univ.graphOn f = univ.graphOn g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma graphOn_univ_inj {g : α -> β} : univ.graphOn f = univ.graphOn g ↔ f = g := by simp
-
-/--
-lemma `graphOn_univ_injective` / 引理 `graphOn_univ_injective`
-
-English:
-lemma graphOn_univ_injective
-  statement: Injective (univ.graphOn : (α -> β) -> Set (α × β))
-  proof: fun _f _g => graphOn_univ_inj.1
-
-中文:
-引理 graphOn_univ_injective
-  结论: 单射 (univ.graphOn : (α -> β) -> 集合 (α × β))
-  证明: fun _f _g => graphOn_univ_inj.1
-
-Depends on / 依赖: graphOn_univ_inj
+lemma graphOn_univ_inj {g : α → β} : univ.graphOn f = univ.graphOn g ↔ f = g := by simp
+/-
+**Set.graphOn_univ_injective** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：graphOn_univ_injective : Injective (univ.graphOn : (α -> β) -> Set (α × β)
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Set.graphOn_univ_inj`：graphOn_univ_inj {g : α -> β} : univ.graphOn f = u
+niv.graphOn g ↔ f = g
 -/
-lemma graphOn_univ_injective : Injective (univ.graphOn : (α -> β) -> Set (α × β)) :=
-  fun _f _g => graphOn_univ_inj.1
-
-/--
-lemma `exists_eq_graphOn_image_fst` / 引理 `exists_eq_graphOn_image_fst`
-
-English:
-lemma exists_eq_graphOn_image_fst
-  given: [Nonempty β] {s : Set (α × β)}
-  proof: by
-  refine ⟨?_, fun h => ?_⟩
-  · rintro ⟨f, hf⟩
-    rw [hf]
-exact InjOn.image_of_comp injOn_id _
-  · have : forall x in Prod.fst '' s, exists y, (x, y) in s := forall_mem_image.2 fun (x, y) h => ⟨y, h⟩
-    choose! f hf using this
-    rw [forall_mem_image] at hf
-    use f
-    rw [graphOn]; rw [image_image]; rw [EqOn.image_eq_self]
-    exact fun x hx => h (hf hx) hx rfl
-
-中文:
-引理 存在_eq_graphOn_image_fst
-  条件: [非空 β] {s : 集合 (α × β)}
-  证明: by
-  refine ⟨?_, fun h => ?_⟩
-  · rintro ⟨f, hf⟩
-    rw [hf]
-exact InjOn.image_of_comp injOn_id _
-  · have : forall x in Prod.fst '' s, exists y, (x, y) in s := forall_mem_image.2 fun (x, y) h => ⟨y, h⟩
-    choose! f hf using this
-    rw [forall_mem_image] at hf
-    use f
-    rw [graphOn]; rw [image_image]; rw [EqOn.image_eq_self]
-    exact fun x hx => h (hf hx) hx rfl
-
-Depends on / 依赖: EqOn.image_eq_self, InjOn.image_of_comp, Prod.fst, forall_mem_image, graphOn, image_eq_self, image_image, image_of_comp, injOn_id
+lemma graphOn_univ_injective : Injective (univ.graphOn : (α → β) → Set (α × β)) :=
+  fun _f _g ↦ graphOn_univ_inj.1
+/-
+**Set.exists_eq_graphOn_image_fst** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：exists_eq_graphOn_image_fst [Nonempty β] {s : Set (α × β)} : (exists f : α
+ -> β, s = graphOn f (Prod.fst '' s)) ↔ InjOn Prod.fst s
+参数：α × β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.InjOn.image_of_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{s : Set α} {f : α → β} {g : β → γ},   Set.InjOn (g ∘ f) s → Set.InjOn g (f '' s
+)
+· 使用引理 `Set.injOn_id`：injOn_id (s : Set α) : InjOn id s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `Set.graphOn.eq_1`：∀ {α : Type u} {β : Type v} (f : α → β) (s : Set α), S
+et.graphOn f s = (fun x => (x, f x)) '' s
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `Set.EqOn.image_eq_self`：∀ {α : Type u_1} {s : Set α} {f : α → α}, Set.Eq
+On f id s → f '' s = s
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma exists_eq_graphOn_image_fst [Nonempty β] {s : Set (α × β)} :
-    (exists f : α -> β, s = graphOn f (Prod.fst '' s)) ↔ InjOn Prod.fst s := by
-  refine ⟨?_, fun h => ?_⟩
+    (∃ f : α → β, s = graphOn f (Prod.fst '' s)) ↔ InjOn Prod.fst s := by
+  refine ⟨?_, fun h ↦ ?_⟩
   · rintro ⟨f, hf⟩
     rw [hf]
-exact InjOn.image_of_comp injOn_id _
-  · have : forall x in Prod.fst '' s, exists y, (x, y) in s := forall_mem_image.2 fun (x, y) h => ⟨y, h⟩
+    exact InjOn.image_of_comp <| injOn_id _
+  · have : ∀ x ∈ Prod.fst '' s, ∃ y, (x, y) ∈ s := forall_mem_image.2 fun (x, y) h ↦ ⟨y, h⟩
     choose! f hf using this
     rw [forall_mem_image] at hf
     use f
-    rw [graphOn]; rw [image_image]; rw [EqOn.image_eq_self]
-    exact fun x hx => h (hf hx) hx rfl
-
-/--
-lemma `exists_eq_graphOn` / 引理 `exists_eq_graphOn`
-
-English:
-lemma exists_eq_graphOn
-  given: [Nonempty β] {s : Set (α × β)}
-  proof: .trans ⟨fun ⟨f, t, hs⟩ => ⟨f, by rw [hs, image_fst_graphOn]⟩, fun ⟨f, hf⟩ => ⟨f, _, hf⟩⟩
-    exists_eq_graphOn_image_fst
-
-中文:
-引理 存在_eq_graphOn
-  条件: [非空 β] {s : 集合 (α × β)}
-  证明: .trans ⟨fun ⟨f, t, hs⟩ => ⟨f, by rw [hs, image_fst_graphOn]⟩, fun ⟨f, hf⟩ => ⟨f, _, hf⟩⟩
-    exists_eq_graphOn_image_fst
-
-Depends on / 依赖: exists_eq_graphOn_image_fst, image_fst_graphOn
+    rw [graphOn, image_image, EqOn.image_eq_self]
+    exact fun x hx ↦ h (hf hx) hx rfl
+/-
+**Set.exists_eq_graphOn** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：exists_eq_graphOn [Nonempty β] {s : Set (α × β)} : (exists f t, s = graphO
+n f t) ↔ InjOn Prod.fst s
+参数：α × β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.image_fst_graphOn`：image_fst_graphOn (f : α -> β) (s : Set α) : Prod
+.fst '' graphOn f s = s
+· 使用引理 `Set.exists_eq_graphOn_image_fst`：exists_eq_graphOn_image_fst [Nonempty β
+] {s : Set (α × β)} : (exists f : α -> β, s = graphOn f (Prod.fst '' s)) ↔ InjOn
+ Prod.fst s
 -/
 lemma exists_eq_graphOn [Nonempty β] {s : Set (α × β)} :
-    (exists f t, s = graphOn f t) ↔ InjOn Prod.fst s :=
-  .trans ⟨fun ⟨f, t, hs⟩ => ⟨f, by rw [hs, image_fst_graphOn]⟩, fun ⟨f, hf⟩ => ⟨f, _, hf⟩⟩
+    (∃ f t, s = graphOn f t) ↔ InjOn Prod.fst s :=
+  .trans ⟨fun ⟨f, t, hs⟩ ↦ ⟨f, by rw [hs, image_fst_graphOn]⟩, fun ⟨f, hf⟩ ↦ ⟨f, _, hf⟩⟩
     exists_eq_graphOn_image_fst
 
 end graphOn
@@ -2185,819 +1454,563 @@ end graphOn
 /-! ### Surjectivity on a set -/
 section surjOn
 
-/--
-theorem `SurjOn.subset_range` / 定理 `SurjOn.subset_range`
-
-English:
-theorem SurjOn.subset_range
-  given: (h : SurjOn f s t)
-  statement: t subseteq range f
-  proof: Subset.trans h image_subset_range f s
-
-中文:
-定理 满射限制.subset_range
-  条件: (h : 满射限制 f s t)
-  结论: t subseteq range f
-  证明: Subset.trans h image_subset_range f s
-
-Depends on / 依赖: Subset, Subset.trans, image_subset_range
+/-
+**Set.SurjOn.subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.S
+urjOn f s t → t ⊆ Set.range f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
 -/
-theorem SurjOn.subset_range (h : SurjOn f s t) : t subseteq range f :=
-Subset.trans h image_subset_range f s
-
-/--
-theorem `surjOn_iff_exists_map_subtype` / 定理 `surjOn_iff_exists_map_subtype`
-
-English:
-theorem surjOn_iff_exists_map_subtype
-  proof: ⟨fun h =>
-    ⟨_, (mapsTo_image f s).restrict f s _, h, surjective_mapsTo_image_restrict _ _, fun _ => rfl⟩,
-    fun ⟨t', g, htt', hg, hfg⟩ y hy =>
-    let ⟨x, hx⟩ := hg ⟨y, htt' hy⟩
-    ⟨x, x.2, by rw [hfg, hx, Subtype.coe_mk]⟩⟩
-
-中文:
-定理 surjOn_iff_存在_map_subtype
-  证明: ⟨fun h =>
-    ⟨_, (mapsTo_image f s).restrict f s _, h, surjective_mapsTo_image_restrict _ _, fun _ => rfl⟩,
-    fun ⟨t', g, htt', hg, hfg⟩ y hy =>
-    let ⟨x, hx⟩ := hg ⟨y, htt' hy⟩
-    ⟨x, x.2, by rw [hfg, hx, Subtype.coe_mk]⟩⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_mk, coe_mk, mapsTo_image, restrict, surjective_mapsTo_image_restrict
+theorem SurjOn.subset_range (h : SurjOn f s t) : t ⊆ range f :=
+  Subset.trans h <| image_subset_range f s
+/-
+**Set.surjOn_iff_exists_map_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：surjOn_iff_exists_map_subtype : SurjOn f s t ↔ exists (t' : Set β) (g : s 
+-> t'), t subseteq t' ∧ Surjective g ∧ forall x : s, f x = g x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
+· 使用定理 `Set.surjective_mapsTo_image_restrict`：surjective_mapsTo_image_restrict (
+f : α -> β) (s : Set α) : Surjective ((mapsTo_image f s).restrict f s (f '' s))
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
 -/
 theorem surjOn_iff_exists_map_subtype :
-    SurjOn f s t ↔ exists (t' : Set β) (g : s -> t'), t subseteq t' ∧ Surjective g ∧ forall x : s, f x = g x :=
+    SurjOn f s t ↔ ∃ (t' : Set β) (g : s → t'), t ⊆ t' ∧ Surjective g ∧ ∀ x : s, f x = g x :=
   ⟨fun h =>
     ⟨_, (mapsTo_image f s).restrict f s _, h, surjective_mapsTo_image_restrict _ _, fun _ => rfl⟩,
     fun ⟨t', g, htt', hg, hfg⟩ y hy =>
     let ⟨x, hx⟩ := hg ⟨y, htt' hy⟩
     ⟨x, x.2, by rw [hfg, hx, Subtype.coe_mk]⟩⟩
-
-/--
-theorem `surjOn_empty` / 定理 `surjOn_empty`
-
-English:
-theorem surjOn_empty
-  given: (f : α -> β) (s : Set α)
-  statement: SurjOn f s ∅
-  proof: empty_subset _
-
-中文:
-定理 surjOn_empty
-  条件: (f : α -> β) (s : 集合 α)
-  结论: 满射限制 f s ∅
-  证明: empty_subset _
-
-Depends on / 依赖: empty_subset
+/-
+**Set.surjOn_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：surjOn_empty (f : α -> β) (s : Set α) : SurjOn f s ∅
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
 -/
-theorem surjOn_empty (f : α -> β) (s : Set α) : SurjOn f s ∅ :=
+theorem surjOn_empty (f : α → β) (s : Set α) : SurjOn f s ∅ :=
   empty_subset _
-
-/--
-theorem `surjOn_empty_iff` / 定理 `surjOn_empty_iff`
-
-English:
-theorem surjOn_empty_iff
-  statement: SurjOn f ∅ t ↔ t = ∅
-  proof: by
-  simp [SurjOn, subset_empty_iff]
-
-中文:
-定理 surjOn_empty_iff
-  结论: 满射限制 f ∅ t ↔ t = ∅
-  证明: by
-  simp [SurjOn, subset_empty_iff]
+/-
+**Set.surjOn_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {t : Set β} {f : α → β}, Set.SurjOn f ∅ t 
+↔ t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] theorem surjOn_empty_iff : SurjOn f ∅ t ↔ t = ∅ := by
   simp [SurjOn, subset_empty_iff]
-
-/--
-lemma `surjOn_singleton` / 引理 `surjOn_singleton`
-
-English:
-lemma surjOn_singleton
-  statement: SurjOn f s {b} ↔ b in f '' s
-  proof: singleton_subset_iff
-
-中文:
-引理 surjOn_singleton
-  结论: 满射限制 f s {b} ↔ b in f '' s
-  证明: singleton_subset_iff
+/-
+**Set.surjOn_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {b : β}, Set.SurjO
+n f s {b} ↔ b ∈ f '' s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
 -/
-@[simp] lemma surjOn_singleton : SurjOn f s {b} ↔ b in f '' s := singleton_subset_iff
-
-/--
-lemma `surjOn_univ_of_subsingleton_nonempty` / 引理 `surjOn_univ_of_subsingleton_nonempty`
-
-English:
-lemma surjOn_univ_of_subsingleton_nonempty
-  given: [Subsingleton β] [Nonempty β]
-  proof: by
-  cases nonempty_unique β; simp [univ_unique, Subsingleton.elim (f _) default, Set.Nonempty]
-
-中文:
-引理 surjOn_univ_of_subsingleton_nonempty
-  条件: [子单例 β] [非空 β]
-  证明: by
-  cases nonempty_unique β; simp [univ_unique, Subsingleton.elim (f _) default, Set.Nonempty]
+@[simp] lemma surjOn_singleton : SurjOn f s {b} ↔ b ∈ f '' s := singleton_subset_iff
+/-
+**Set.surjOn_univ_of_subsingleton_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} [Subsingleton β] [
+Nonempty β],   Set.SurjOn f s Set.univ ↔ s.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.univ_unique`：univ_unique [Unique α] : @Set.univ α = {default}
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma surjOn_univ_of_subsingleton_nonempty [Subsingleton β] [Nonempty β] :
     SurjOn f s univ ↔ s.Nonempty := by
   cases nonempty_unique β; simp [univ_unique, Subsingleton.elim (f _) default, Set.Nonempty]
-
-/--
-theorem `surjOn_image` / 定理 `surjOn_image`
-
-English:
-theorem surjOn_image
-  given: (f : α -> β) (s : Set α)
-  statement: SurjOn f s (f '' s)
-  proof: Subset.rfl
-
-中文:
-定理 surjOn_image
-  条件: (f : α -> β) (s : 集合 α)
-  结论: 满射限制 f s (f '' s)
-  证明: Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl
+/-
+**Set.surjOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f '' s)
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f '' s) :=
+theorem surjOn_image (f : α → β) (s : Set α) : SurjOn f s (f '' s) :=
   Subset.rfl
-
-/--
-theorem `SurjOn.comap_nonempty` / 定理 `SurjOn.comap_nonempty`
-
-English:
-theorem SurjOn.comap_nonempty
-  given: (h : SurjOn f s t) (ht : t.Nonempty)
-  statement: s.Nonempty
-  proof: (ht.mono h).of_image
-
-中文:
-定理 满射限制.comap_nonempty
-  条件: (h : 满射限制 f s t) (ht : t.非空)
-  结论: s.非空
-  证明: (ht.mono h).of_image
-
-Depends on / 依赖: ht.mono, of_image
+/-
+**Set.SurjOn.comap_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.S
+urjOn f s t → t.Nonempty → s.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {s : 
+Set α}, (f '' s).Nonempty → s.Nonempty
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
 -/
 theorem SurjOn.comap_nonempty (h : SurjOn f s t) (ht : t.Nonempty) : s.Nonempty :=
   (ht.mono h).of_image
-
-/--
-lemma `SurjOn.nonempty_or_eq_empty` / 引理 `SurjOn.nonempty_or_eq_empty`
-
-English:
-lemma SurjOn.nonempty_or_eq_empty
-  given: (h : SurjOn f s t)
-  proof: by
-  by_contra!
-  exact (h.comap_nonempty this.2).ne_empty this.1
-
-中文:
-引理 满射限制.nonempty_or_eq_empty
-  条件: (h : 满射限制 f s t)
-  证明: by
-  by_contra!
-  exact (h.comap_nonempty this.2).ne_empty this.1
-
-Depends on / 依赖: comap_nonempty, h.comap_nonempty, ne_empty
+/-
+**Set.SurjOn.nonempty_or_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.S
+urjOn f s t → s.Nonempty ∨ t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `Set.SurjOn.comap_nonempty`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {
+t : Set β} {f : α → β}, Set.SurjOn f s t → t.Nonempty → s.Nonempty
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 lemma SurjOn.nonempty_or_eq_empty (h : SurjOn f s t) :
     s.Nonempty ∨ t = ∅ := by
   by_contra!
   exact (h.comap_nonempty this.2).ne_empty this.1
-
-/--
-theorem `SurjOn.congr` / 定理 `SurjOn.congr`
-
-English:
-theorem SurjOn.congr
-  given: (h : SurjOn f₁ s t) (H : EqOn f₁ f₂ s)
-  statement: SurjOn f₂ s t
-  proof: by
-  rwa [SurjOn, ← H.image_eq]
-
-中文:
-定理 满射限制.congr
-  条件: (h : 满射限制 f₁ s t) (H : EqOn f₁ f₂ s)
-  结论: 满射限制 f₂ s t
-  证明: by
-  rwa [SurjOn, ← H.image_eq]
-
-Depends on / 依赖: H.image_eq, SurjOn, image_eq
+/-
+**Set.SurjOn.congr** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.SurjOn f₁ s t → Set.EqOn f₁ f₂ s → Set.SurjOn f₂ s t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.SurjOn.eq_1`：∀ {α : Type u} {β : Type v} (f : α → β) (s : Set α) (t 
+: Set β), Set.SurjOn f s t = (t ⊆ f '' s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.EqOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : 
+α → β}, Set.EqOn f₁ f₂ s → f₁ '' s = f₂ '' s
 -/
 theorem SurjOn.congr (h : SurjOn f₁ s t) (H : EqOn f₁ f₂ s) : SurjOn f₂ s t := by
   rwa [SurjOn, ← H.image_eq]
-
-/--
-theorem `EqOn.surjOn_iff` / 定理 `EqOn.surjOn_iff`
-
-English:
-theorem EqOn.surjOn_iff
-  given: (h : EqOn f₁ f₂ s)
-  statement: SurjOn f₁ s t ↔ SurjOn f₂ s t
-  proof: ⟨fun H => H.congr h, fun H => H.congr h.symm⟩
-
-@[gcongr]
-
-中文:
-定理 EqOn.surjOn_iff
-  条件: (h : EqOn f₁ f₂ s)
-  结论: 满射限制 f₁ s t ↔ 满射限制 f₂ s t
-  证明: ⟨fun H => H.congr h, fun H => H.congr h.symm⟩
-
-@[gcongr]
-
-Depends on / 依赖: H.congr, h.symm
+/-
+**Set.EqOn.surjOn_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.EqOn f₁ f₂ s → (Set.SurjOn f₁ s t ↔ Set.SurjOn f₂ s t)
+参数：Set.SurjOn f₁ s t ↔ Set.SurjOn f₂ s t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f₁ f₂ : α → β},   Set.SurjOn f₁ s t → Set.EqOn f₁ f₂ s → Set.SurjOn f₂ s t
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
 -/
 theorem EqOn.surjOn_iff (h : EqOn f₁ f₂ s) : SurjOn f₁ s t ↔ SurjOn f₂ s t :=
   ⟨fun H => H.congr h, fun H => H.congr h.symm⟩
 
 @[gcongr]
-/--
-theorem `SurjOn.mono` / 定理 `SurjOn.mono`
-
-English:
-theorem SurjOn.mono
-  given: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (hf : SurjOn f s₁ t₂)
-  statement: SurjOn f s₂ t₁
-  proof: Subset.trans ht Subset.trans hf image_mono hs
-
-中文:
-定理 满射限制.mono
-  条件: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (hf : 满射限制 f s₁ t₂)
-  结论: 满射限制 f s₂ t₁
-  证明: Subset.trans ht Subset.trans hf image_mono hs
-
-Depends on / 依赖: Subset, Subset.trans, image_mono
+/-
+**Set.SurjOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂ t₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-theorem SurjOn.mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (hf : SurjOn f s₁ t₂) : SurjOn f s₂ t₁ :=
-Subset.trans ht Subset.trans hf image_mono hs
-
-/--
-theorem `SurjOn.union` / 定理 `SurjOn.union`
-
-English:
-theorem SurjOn.union
-  given: (h₁ : SurjOn f s t₁) (h₂ : SurjOn f s t₂)
-  statement: SurjOn f s (t₁ union t₂)
-  proof: fun _ hx =>
-  hx.elim (fun hx => h₁ hx) fun hx => h₂ hx
-
-中文:
-定理 满射限制.union
-  条件: (h₁ : 满射限制 f s t₁) (h₂ : 满射限制 f s t₂)
-  结论: 满射限制 f s (t₁ union t₂)
-  证明: fun _ hx =>
-  hx.elim (fun hx => h₁ hx) fun hx => h₂ hx
+theorem SurjOn.mono (hs : s₁ ⊆ s₂) (ht : t₁ ⊆ t₂) (hf : SurjOn f s₁ t₂) : SurjOn f s₂ t₁ :=
+  Subset.trans ht <| Subset.trans hf <| image_mono hs
+/-
+**Set.SurjOn.union** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t₂ : Set β} {f : α → β},  
+ Set.SurjOn f s t₁ → Set.SurjOn f s t₂ → Set.SurjOn f s (t₁ ∪ t₂)
+参数：t₁ ∪ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
-theorem SurjOn.union (h₁ : SurjOn f s t₁) (h₂ : SurjOn f s t₂) : SurjOn f s (t₁ union t₂) := fun _ hx =>
+theorem SurjOn.union (h₁ : SurjOn f s t₁) (h₂ : SurjOn f s t₂) : SurjOn f s (t₁ ∪ t₂) := fun _ hx =>
   hx.elim (fun hx => h₁ hx) fun hx => h₂ hx
-
-/--
-theorem `SurjOn.union_union` / 定理 `SurjOn.union_union`
-
-English:
-theorem SurjOn.union_union
-  given: (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂)
-  proof: (h₁.mono subset_union_left (Subset.refl _)).union
-    (h₂.mono subset_union_right (Subset.refl _))
-
-中文:
-定理 满射限制.union_union
-  条件: (h₁ : 满射限制 f s₁ t₁) (h₂ : 满射限制 f s₂ t₂)
-  证明: (h₁.mono subset_union_left (Subset.refl _)).union
-    (h₂.mono subset_union_right (Subset.refl _))
-
-Depends on / 依赖: Subset, Subset.refl, subset_union_left, subset_union_right
+/-
+**Set.SurjOn.union_union** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.SurjOn f s₁ t₁ → Set.SurjOn f s₂ t₂ → Set.SurjOn f (s₁ ∪ s₂) (t₁ ∪ t₂)
+参数：s₁ ∪ s₂；t₁ ∪ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.union`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t₁ t₂ : S
+et β} {f : α → β},   Set.SurjOn f s t₁ → Set.SurjOn f s t₂ → Set.SurjOn f s (t₁ 
+∪ t₂)
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 -/
 theorem SurjOn.union_union (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂) :
-    SurjOn f (s₁ union s₂) (t₁ union t₂) :=
+    SurjOn f (s₁ ∪ s₂) (t₁ ∪ t₂) :=
   (h₁.mono subset_union_left (Subset.refl _)).union
     (h₂.mono subset_union_right (Subset.refl _))
-
-/--
-theorem `SurjOn.inter_inter` / 定理 `SurjOn.inter_inter`
-
-English:
-theorem SurjOn.inter_inter
-  given: (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
-  proof: by
-  intro y hy
-  rcases h₁ hy.1 with ⟨x₁, hx₁, rfl⟩
-  rcases h₂ hy.2 with ⟨x₂, hx₂, heq⟩
-  obtain rfl : x₁ = x₂ := h (Or.inl hx₁) (Or.inr hx₂) heq.symm
-  exact mem_image_of_mem f ⟨hx₁, hx₂⟩
-
-中文:
-定理 满射限制.inter_inter
-  条件: (h₁ : 满射限制 f s₁ t₁) (h₂ : 满射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
-  证明: by
-  intro y hy
-  rcases h₁ hy.1 with ⟨x₁, hx₁, rfl⟩
-  rcases h₂ hy.2 with ⟨x₂, hx₂, heq⟩
-  obtain rfl : x₁ = x₂ := h (Or.inl hx₁) (Or.inr hx₂) heq.symm
-  exact mem_image_of_mem f ⟨hx₁, hx₂⟩
-
-Depends on / 依赖: Or.inl, Or.inr, heq.symm, mem_image_of_mem
+/-
+**Set.SurjOn.inter_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.SurjOn f s₁ t₁ → Set.SurjOn f s₂ t₂ → Set.InjOn f (s₁ ∪ s₂) → Set.SurjO
+n f (s₁ ∩ s₂) (t₁ ∩ t₂)
+参数：s₁ ∪ s₂；s₁ ∩ s₂；t₁ ∩ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem SurjOn.inter_inter (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂) (h : InjOn f (s₁ union s₂)) :
-    SurjOn f (s₁ inter s₂) (t₁ inter t₂) := by
+theorem SurjOn.inter_inter (h₁ : SurjOn f s₁ t₁) (h₂ : SurjOn f s₂ t₂) (h : InjOn f (s₁ ∪ s₂)) :
+    SurjOn f (s₁ ∩ s₂) (t₁ ∩ t₂) := by
   intro y hy
   rcases h₁ hy.1 with ⟨x₁, hx₁, rfl⟩
   rcases h₂ hy.2 with ⟨x₂, hx₂, heq⟩
   obtain rfl : x₁ = x₂ := h (Or.inl hx₁) (Or.inr hx₂) heq.symm
   exact mem_image_of_mem f ⟨hx₁, hx₂⟩
-
-/--
-theorem `SurjOn.inter` / 定理 `SurjOn.inter`
-
-English:
-theorem SurjOn.inter
-  given: (h₁ : SurjOn f s₁ t) (h₂ : SurjOn f s₂ t) (h : InjOn f (s₁ union s₂))
-  proof: inter_self t ▸ h₁.inter_inter h₂ h
-
-中文:
-定理 满射限制.inter
-  条件: (h₁ : 满射限制 f s₁ t) (h₂ : 满射限制 f s₂ t) (h : 单射限制 f (s₁ union s₂))
-  证明: inter_self t ▸ h₁.inter_inter h₂ h
-
-Depends on / 依赖: inter_inter, inter_self
+/-
+**Set.SurjOn.inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t : Set β} {f : α → β},  
+ Set.SurjOn f s₁ t → Set.SurjOn f s₂ t → Set.InjOn f (s₁ ∪ s₂) → Set.SurjOn f (s
+₁ ∩ s₂) t
+参数：s₁ ∪ s₂；s₁ ∩ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.inter_inter`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.SurjOn f s₁ t₁ → Set.SurjOn f s₂ t₂ → Set.Inj
+On f (s₁ ∪ s…
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
 -/
-theorem SurjOn.inter (h₁ : SurjOn f s₁ t) (h₂ : SurjOn f s₂ t) (h : InjOn f (s₁ union s₂)) :
-    SurjOn f (s₁ inter s₂) t :=
+theorem SurjOn.inter (h₁ : SurjOn f s₁ t) (h₂ : SurjOn f s₂ t) (h : InjOn f (s₁ ∪ s₂)) :
+    SurjOn f (s₁ ∩ s₂) t :=
   inter_self t ▸ h₁.inter_inter h₂ h
-
-/--
-lemma `surjOn_id` / 引理 `surjOn_id`
-
-English:
-lemma surjOn_id
-  given: (s : Set α)
-  statement: SurjOn id s s
-  proof: by simp [SurjOn]
-
-中文:
-引理 surjOn_id
-  条件: (s : 集合 α)
-  结论: 满射限制 id s s
-  证明: by simp [SurjOn]
-
-Depends on / 依赖: SurjOn
+/-
+**Set.surjOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：surjOn_id (s : Set α) : SurjOn id s s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
 -/
 lemma surjOn_id (s : Set α) : SurjOn id s s := by simp [SurjOn]
-
-/--
-theorem `SurjOn.comp` / 定理 `SurjOn.comp`
-
-English:
-theorem SurjOn.comp
-  given: (hg : SurjOn g t p) (hf : SurjOn f s t)
-  statement: SurjOn (g ∘ f) s p
-  proof: Subset.trans hg Subset.trans (image_mono hf) image_comp g f s ▸ Subset.refl _
-
-中文:
-定理 满射限制.comp
-  条件: (hg : 满射限制 g t p) (hf : 满射限制 f s t)
-  结论: 满射限制 (g ∘ f) s p
-  证明: Subset.trans hg Subset.trans (image_mono hf) image_comp g f s ▸ Subset.refl _
-
-Depends on / 依赖: Subset, Subset.refl, Subset.trans, image_comp, image_mono
+/-
+**Set.SurjOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {p 
+: Set γ} {f : α → β} {g : β → γ},   Set.SurjOn g t p → Set.SurjOn f s t → Set.Su
+rjOn (g ∘ f) s p
+参数：g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
 -/
 theorem SurjOn.comp (hg : SurjOn g t p) (hf : SurjOn f s t) : SurjOn (g ∘ f) s p :=
-Subset.trans hg Subset.trans (image_mono hf) image_comp g f s ▸ Subset.refl _
-
-/--
-lemma `SurjOn.of_comp` / 引理 `SurjOn.of_comp`
-
-English:
-lemma SurjOn.of_comp
-  given: (h : SurjOn (g ∘ f) s p) (hr : MapsTo f s t)
-  statement: SurjOn g t p
-  proof: by
-  intro z hz
-  obtain ⟨x, hx, rfl⟩ := h hz
-  exact ⟨f x, hr hx, rfl⟩
-
-中文:
-引理 满射限制.of_comp
-  条件: (h : 满射限制 (g ∘ f) s p) (hr : 映射到 f s t)
-  结论: 满射限制 g t p
-  证明: by
-  intro z hz
-  obtain ⟨x, hx, rfl⟩ := h hz
-  exact ⟨f x, hr hx, rfl⟩
+  Subset.trans hg <| Subset.trans (image_mono hf) <| image_comp g f s ▸ Subset.refl _
+/-
+**Set.SurjOn.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {p 
+: Set γ} {f : α → β} {g : β → γ},   Set.SurjOn (g ∘ f) s p → Set.MapsTo f s t → 
+Set.SurjOn g t p
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma SurjOn.of_comp (h : SurjOn (g ∘ f) s p) (hr : MapsTo f s t) : SurjOn g t p := by
   intro z hz
   obtain ⟨x, hx, rfl⟩ := h hz
   exact ⟨f x, hr hx, rfl⟩
-
-/--
-lemma `surjOn_comp_iff` / 引理 `surjOn_comp_iff`
-
-English:
-lemma surjOn_comp_iff
-  statement: SurjOn (g ∘ f) s p ↔ SurjOn g (f '' s) p
-  proof: ⟨fun h => h.of_comp mapsTo_image f s, fun h => h.comp surjOn_image _ _⟩
-
-中文:
-引理 surjOn_comp_iff
-  结论: 满射限制 (g ∘ f) s p ↔ 满射限制 g (f '' s) p
-  证明: ⟨fun h => h.of_comp mapsTo_image f s, fun h => h.comp surjOn_image _ _⟩
-
-Depends on / 依赖: h.comp, h.of_comp, mapsTo_image, of_comp, surjOn_image
+/-
+**Set.surjOn_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：surjOn_comp_iff : SurjOn (g ∘ f) s p ↔ SurjOn g (f '' s) p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.of_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : 
+Set α} {t : Set β} {p : Set γ} {f : α → β} {g : β → γ},   Set.SurjOn (g ∘ f) s p
+ → Set.M…
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
+· 使用定理 `Set.SurjOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set
+ α} {t : Set β} {p : Set γ} {f : α → β} {g : β → γ},   Set.SurjOn g t p → Set.Su
+rjOn …
+· 使用定理 `Set.surjOn_image`：surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f 
+'' s)
 -/
 lemma surjOn_comp_iff : SurjOn (g ∘ f) s p ↔ SurjOn g (f '' s) p :=
-⟨fun h => h.of_comp mapsTo_image f s, fun h => h.comp surjOn_image _ _⟩
-
-/--
-lemma `SurjOn.iterate` / 引理 `SurjOn.iterate`
-
-English:
-lemma SurjOn.iterate
-  given: {f : α -> α} {s : Set α} (h : SurjOn f s s)
-  statement: forall n, SurjOn f^[n] s s
-
-中文:
-引理 满射限制.iterate
-  条件: {f : α -> α} {s : 集合 α} (h : 满射限制 f s s)
-  结论: 对任意 n, 满射限制 f^[n] s s
+  ⟨fun h ↦ h.of_comp <| mapsTo_image f s, fun h ↦ h.comp <| surjOn_image _ _⟩
+/-
+**Set.SurjOn.iterate** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.SurjOn f s s → ∀ (n : ℕ), Se
+t.SurjOn f^[n] s s
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma SurjOn.iterate {f : α -> α} {s : Set α} (h : SurjOn f s s) : forall n, SurjOn f^[n] s s
+lemma SurjOn.iterate {f : α → α} {s : Set α} (h : SurjOn f s s) : ∀ n, SurjOn f^[n] s s
   | 0 => surjOn_id _
   | (n + 1) => (h.iterate n).comp h
-
-/--
-lemma `SurjOn.comp_left` / 引理 `SurjOn.comp_left`
-
-English:
-lemma SurjOn.comp_left
-  given: (hf : SurjOn f s t) (g : β -> γ)
-  statement: SurjOn (g ∘ f) s (g '' t)
-  proof: by
-  rw [SurjOn]; rw [image_comp g f]; exact image_mono hf
-
-中文:
-引理 满射限制.comp_left
-  条件: (hf : 满射限制 f s t) (g : β -> γ)
-  结论: 满射限制 (g ∘ f) s (g '' t)
-  证明: by
-  rw [SurjOn]; rw [image_comp g f]; exact image_mono hf
-
-Depends on / 依赖: SurjOn, image_comp, image_mono
+/-
+**Set.SurjOn.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β},   Set.SurjOn f s t → ∀ (g : β → γ), Set.SurjOn (g ∘ f) s (g '' t)
+参数：g : β → γ；g ∘ f；g '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.SurjOn.eq_1`：∀ {α : Type u} {β : Type v} (f : α → β) (s : Set α) (t 
+: Set β), Set.SurjOn f s t = (t ⊆ f '' s)
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-lemma SurjOn.comp_left (hf : SurjOn f s t) (g : β -> γ) : SurjOn (g ∘ f) s (g '' t) := by
-  rw [SurjOn]; rw [image_comp g f]; exact image_mono hf
-
-/--
-lemma `SurjOn.comp_right` / 引理 `SurjOn.comp_right`
-
-English:
-lemma SurjOn.comp_right
-  given: {s : Set β} {t : Set γ} (hf : Surjective f) (hg : SurjOn g s t)
-  proof: by
-  rwa [SurjOn, image_comp g f, image_preimage_eq _ hf]
-
-中文:
-引理 满射限制.comp_right
-  条件: {s : 集合 β} {t : 集合 γ} (hf : 满射 f) (hg : 满射限制 g s t)
-  证明: by
-  rwa [SurjOn, image_comp g f, image_preimage_eq _ hf]
-
-Depends on / 依赖: SurjOn, image_comp, image_preimage_eq
+lemma SurjOn.comp_left (hf : SurjOn f s t) (g : β → γ) : SurjOn (g ∘ f) s (g '' t) := by
+  rw [SurjOn, image_comp g f]; exact image_mono hf
+/-
+**Set.SurjOn.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f : α → β} {g : β → γ} {s 
+: Set β} {t : Set γ},   Function.Surjective f → Set.SurjOn g s t → Set.SurjOn (g
+ ∘ f) (f ⁻¹' s) t
+参数：g ∘ f；f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.SurjOn.eq_1`：∀ {α : Type u} {β : Type v} (f : α → β) (s : Set α) (t 
+: Set β), Set.SurjOn f s t = (t ⊆ f '' s)
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `Set.image_preimage_eq`：image_preimage_eq {f : α -> β} (s : Set β) (h : S
+urjective f) : f '' f ⁻¹' s = s
 -/
 lemma SurjOn.comp_right {s : Set β} {t : Set γ} (hf : Surjective f) (hg : SurjOn g s t) :
     SurjOn (g ∘ f) (f ⁻¹' s) t := by
   rwa [SurjOn, image_comp g f, image_preimage_eq _ hf]
-
-/--
-lemma `surjOn_of_subsingleton'` / 引理 `surjOn_of_subsingleton'`
-
-English:
-lemma surjOn_of_subsingleton'
-  given: [Subsingleton β] (f : α -> β) (h : t.Nonempty -> s.Nonempty)
-  proof: fun _ ha => Subsingleton.mem_iff_nonempty.2 (h ⟨_, ha⟩).image _
-
-中文:
-引理 surjOn_of_subsingleton'
-  条件: [子单例 β] (f : α -> β) (h : t.非空 -> s.非空)
-  证明: fun _ ha => Subsingleton.mem_iff_nonempty.2 (h ⟨_, ha⟩).image _
-
-Depends on / 依赖: Subsingleton, Subsingleton.mem_iff_nonempty, mem_iff_nonempty
+/-
+**Set.surjOn_of_subsingleton'** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：surjOn_of_subsingleton' [Subsingleton β] (f : α -> β) (h : t.Nonempty -> s
+.Nonempty) : SurjOn f s t
+参数：f : α -> β；h : t.Nonempty -> s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subsingleton.mem_iff_nonempty`：mem_iff_nonempty {α : Type*} [Subsingleto
+n α] {s : Set α} {x : α} : x in s ↔ s.Nonempty
+· 使用定理 `Set.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {s : Set
+ α}, s.Nonempty → (f '' s).Nonempty
 -/
-lemma surjOn_of_subsingleton' [Subsingleton β] (f : α -> β) (h : t.Nonempty -> s.Nonempty) :
+lemma surjOn_of_subsingleton' [Subsingleton β] (f : α → β) (h : t.Nonempty → s.Nonempty) :
     SurjOn f s t :=
-fun _ ha => Subsingleton.mem_iff_nonempty.2 (h ⟨_, ha⟩).image _
-
-/--
-lemma `surjOn_of_subsingleton` / 引理 `surjOn_of_subsingleton`
-
-English:
-lemma surjOn_of_subsingleton
-  given: [Subsingleton α] (f : α -> α) (s : Set α)
-  statement: SurjOn f s s
-  proof: surjOn_of_subsingleton' _ id
-
-中文:
-引理 surjOn_of_subsingleton
-  条件: [子单例 α] (f : α -> α) (s : 集合 α)
-  结论: 满射限制 f s s
-  证明: surjOn_of_subsingleton' _ id
-
-Depends on / 依赖: surjOn_of_subsingleton
+  fun _ ha ↦ Subsingleton.mem_iff_nonempty.2 <| (h ⟨_, ha⟩).image _
+/-
+**Set.surjOn_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：surjOn_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : SurjOn 
+f s s
+参数：f : α -> α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.surjOn_of_subsingleton'`：surjOn_of_subsingleton' [Subsingleton β] (f
+ : α -> β) (h : t.Nonempty -> s.Nonempty) : SurjOn f s t
 -/
-lemma surjOn_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : SurjOn f s s :=
+lemma surjOn_of_subsingleton [Subsingleton α] (f : α → α) (s : Set α) : SurjOn f s s :=
   surjOn_of_subsingleton' _ id
-
-/--
-lemma `surjOn_univ` / 引理 `surjOn_univ`
-
-English:
-lemma surjOn_univ
-  statement: SurjOn f univ univ ↔ Surjective f
-  proof: by
-  simp [Surjective, SurjOn, subset_def]
-
-中文:
-引理 surjOn_univ
-  结论: 满射限制 f univ univ ↔ 满射 f
-  证明: by
-  simp [Surjective, SurjOn, subset_def]
+/-
+**Set.surjOn_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, Set.SurjOn f Set.univ Set.uni
+v ↔ Function.Surjective f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma surjOn_univ : SurjOn f univ univ ↔ Surjective f := by
   simp [Surjective, SurjOn, subset_def]
-
-/--
-lemma `_root_.Function.Surjective.surjOn` / 引理 `_root_.Function.Surjective.surjOn`
-
-English:
-lemma _root_.Function.Surjective.surjOn
-  given: (hf : Surjective f)
-  statement: SurjOn f univ t
-  proof: (surjOn_univ.2 hf).mono .rfl (subset_univ _)
-
-中文:
-引理 _root_.函数.满射.surjOn
-  条件: (hf : 满射 f)
-  结论: 满射限制 f univ t
-  证明: (surjOn_univ.2 hf).mono .rfl (subset_univ _)
+/-
+**Set._root_.Function.Surjective.surjOn** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma _root_.Function.Surjective.surjOn (hf : Surjective f) : SurjOn f univ t :=
   (surjOn_univ.2 hf).mono .rfl (subset_univ _)
-
-/--
-lemma `SurjOn.surjective` / 引理 `SurjOn.surjective`
-
-English:
-lemma SurjOn.surjective
-  given: (hf : SurjOn f s .univ)
-  statement: f.Surjective
-  proof: surjOn_univ.1 hf.mono s.subset_univ .rfl
-
-中文:
-引理 满射限制.surjective
-  条件: (hf : 满射限制 f s .univ)
-  结论: f.满射
-  证明: surjOn_univ.1 hf.mono s.subset_univ .rfl
-
-Depends on / 依赖: hf.mono, s.subset_univ, subset_univ, surjOn_univ
+/-
+**Set.SurjOn.surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.SurjOn f s Se
+t.univ → Function.Surjective f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.surjOn_univ`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, Set.SurjOn
+ f Set.univ Set.univ ↔ Function.Surjective f
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 lemma SurjOn.surjective (hf : SurjOn f s .univ) : f.Surjective :=
-surjOn_univ.1 hf.mono s.subset_univ .rfl
-
-/--
-theorem `SurjOn.image_eq_of_mapsTo` / 定理 `SurjOn.image_eq_of_mapsTo`
-
-English:
-theorem SurjOn.image_eq_of_mapsTo
-  given: (h₁ : SurjOn f s t) (h₂ : MapsTo f s t)
-  statement: f '' s = t
-  proof: eq_of_subset_of_subset h₂.image_subset h₁
-
-中文:
-定理 满射限制.image_eq_of_mapsTo
-  条件: (h₁ : 满射限制 f s t) (h₂ : 映射到 f s t)
-  结论: f '' s = t
-  证明: eq_of_subset_of_subset h₂.image_subset h₁
-
-Depends on / 依赖: eq_of_subset_of_subset, image_subset
+  surjOn_univ.1 <| hf.mono s.subset_univ .rfl
+/-
+**Set.SurjOn.image_eq_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.S
+urjOn f s t → Set.MapsTo f s t → f '' s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_of_subset_of_subset`：eq_of_subset_of_subset {a b : Set α} : a sub
+seteq b -> b subseteq a -> a = b
+· 使用定理 `Set.MapsTo.image_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.MapsTo f s t → f '' s ⊆ t
 -/
 theorem SurjOn.image_eq_of_mapsTo (h₁ : SurjOn f s t) (h₂ : MapsTo f s t) : f '' s = t :=
   eq_of_subset_of_subset h₂.image_subset h₁
-
-/--
-theorem `image_eq_iff_surjOn_mapsTo` / 定理 `image_eq_iff_surjOn_mapsTo`
-
-English:
-theorem image_eq_iff_surjOn_mapsTo
-  statement: f '' s = t ↔ s.SurjOn f t ∧ s.MapsTo f t
-  proof: by
-  refine ⟨?_, fun h => h.1.image_eq_of_mapsTo h.2⟩
-  rintro rfl
-  exact ⟨s.surjOn_image f, s.mapsTo_image f⟩
-
-中文:
-定理 image_eq_iff_surjOn_mapsTo
-  结论: f '' s = t ↔ s.满射限制 f t ∧ s.映射到 f t
-  证明: by
-  refine ⟨?_, fun h => h.1.image_eq_of_mapsTo h.2⟩
-  rintro rfl
-  exact ⟨s.surjOn_image f, s.mapsTo_image f⟩
-
-Depends on / 依赖: image_eq_of_mapsTo, mapsTo_image, s.mapsTo_image, s.surjOn_image, surjOn_image
+/-
+**Set.image_eq_iff_surjOn_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：image_eq_iff_surjOn_mapsTo : f '' s = t ↔ s.SurjOn f t ∧ s.MapsTo f t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.surjOn_image`：surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f 
+'' s)
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
+· 使用定理 `Set.SurjOn.image_eq_of_mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set 
+α} {t : Set β} {f : α → β}, Set.SurjOn f s t → Set.MapsTo f s t → f '' s = t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem image_eq_iff_surjOn_mapsTo : f '' s = t ↔ s.SurjOn f t ∧ s.MapsTo f t := by
   refine ⟨?_, fun h => h.1.image_eq_of_mapsTo h.2⟩
   rintro rfl
   exact ⟨s.surjOn_image f, s.mapsTo_image f⟩
-
-/--
-lemma `SurjOn.image_preimage` / 引理 `SurjOn.image_preimage`
-
-English:
-lemma SurjOn.image_preimage
-  given: (h : Set.SurjOn f s t) (ht : t₁ subseteq t)
-  statement: f '' f ⁻¹' t₁ = t₁
-  proof: image_preimage_eq_iff.2 fun _ hx => mem_range_of_mem_image f s h ht hx
-
-中文:
-引理 满射限制.image_preimage
-  条件: (h : 集合.满射限制 f s t) (ht : t₁ subseteq t)
-  结论: f '' f ⁻¹' t₁ = t₁
-  证明: image_preimage_eq_iff.2 fun _ hx => mem_range_of_mem_image f s h ht hx
-
-Depends on / 依赖: image_preimage_eq_iff, mem_range_of_mem_image
+/-
+**Set.SurjOn.image_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t t₁ : Set β} {f : α → β}, Se
+t.SurjOn f s t → t₁ ⊆ t → f '' f ⁻¹' t₁ = t₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image_preimage_eq_iff`：image_preimage_eq_iff {f : α -> β} {s : Set β
+} : f '' f ⁻¹' s = s ↔ s subseteq range f
+· 使用定理 `Set.mem_range_of_mem_image`：mem_range_of_mem_image (f : α -> β) (s) {x :
+ β} (h : x in f '' s) : x in range f
 -/
-lemma SurjOn.image_preimage (h : Set.SurjOn f s t) (ht : t₁ subseteq t) : f '' f ⁻¹' t₁ = t₁ :=
-image_preimage_eq_iff.2 fun _ hx => mem_range_of_mem_image f s h ht hx
-
-/--
-theorem `SurjOn.mapsTo_compl` / 定理 `SurjOn.mapsTo_compl`
-
-English:
-theorem SurjOn.mapsTo_compl
-  given: (h : SurjOn f s t) (h' : Injective f)
-  statement: MapsTo f sᶜ tᶜ
-  proof: fun _ hs ht =>
-  let ⟨_, hx', HEq⟩ := h ht
-hs h' HEq ▸ hx'
-
-中文:
-定理 满射限制.mapsTo_compl
-  条件: (h : 满射限制 f s t) (h' : 单射 f)
-  结论: 映射到 f sᶜ tᶜ
-  证明: fun _ hs ht =>
-  let ⟨_, hx', HEq⟩ := h ht
-hs h' HEq ▸ hx'
+lemma SurjOn.image_preimage (h : Set.SurjOn f s t) (ht : t₁ ⊆ t) : f '' f ⁻¹' t₁ = t₁ :=
+  image_preimage_eq_iff.2 fun _ hx ↦ mem_range_of_mem_image f s <| h <| ht hx
+/-
+**Set.SurjOn.mapsTo_compl** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.SurjOn f s t → Function.Injective f → Set.MapsTo f sᶜ tᶜ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SurjOn.mapsTo_compl (h : SurjOn f s t) (h' : Injective f) : MapsTo f sᶜ tᶜ :=
   fun _ hs ht =>
   let ⟨_, hx', HEq⟩ := h ht
-hs h' HEq ▸ hx'
-
-/--
-theorem `MapsTo.surjOn_compl` / 定理 `MapsTo.surjOn_compl`
-
-English:
-theorem MapsTo.surjOn_compl
-  given: (h : MapsTo f s t) (h' : Surjective f)
-  statement: SurjOn f sᶜ tᶜ
-  proof: h'.forall.2 fun _ ht => (mem_image_of_mem _) fun hs => ht (h hs)
-
-中文:
-定理 映射到.surjOn_compl
-  条件: (h : 映射到 f s t) (h' : 满射 f)
-  结论: 满射限制 f sᶜ tᶜ
-  证明: h'.forall.2 fun _ ht => (mem_image_of_mem _) fun hs => ht (h hs)
-
-Depends on / 依赖: mem_image_of_mem
+  hs <| h' HEq ▸ hx'
+/-
+**Set.MapsTo.surjOn_compl** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.MapsTo f s t → Function.Surjective f → Set.SurjOn f sᶜ tᶜ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem MapsTo.surjOn_compl (h : MapsTo f s t) (h' : Surjective f) : SurjOn f sᶜ tᶜ :=
   h'.forall.2 fun _ ht => (mem_image_of_mem _) fun hs => ht (h hs)
-
-/--
-theorem `EqOn.cancel_right` / 定理 `EqOn.cancel_right`
-
-English:
-theorem EqOn.cancel_right
-  given: (hf : s.EqOn (g₁ ∘ f) (g₂ ∘ f)) (hf' : s.SurjOn f t)
-  statement: t.EqOn g₁ g₂
-  proof: by
-  intro b hb
-  obtain ⟨a, ha, rfl⟩ := hf' hb
-  exact hf ha
-
-中文:
-定理 EqOn.cancel_right
-  条件: (hf : s.EqOn (g₁ ∘ f) (g₂ ∘ f)) (hf' : s.满射限制 f t)
-  结论: t.EqOn g₁ g₂
-  证明: by
-  intro b hb
-  obtain ⟨a, ha, rfl⟩ := hf' hb
-  exact hf ha
+/-
+**Set.EqOn.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β} {g₁ g₂ : β → γ},   Set.EqOn (g₁ ∘ f) (g₂ ∘ f) s → Set.SurjOn f s t → Se
+t.EqOn g₁ g₂ t
+参数：g₁ ∘ f；g₂ ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem EqOn.cancel_right (hf : s.EqOn (g₁ ∘ f) (g₂ ∘ f)) (hf' : s.SurjOn f t) : t.EqOn g₁ g₂ := by
   intro b hb
   obtain ⟨a, ha, rfl⟩ := hf' hb
   exact hf ha
-
-/--
-theorem `SurjOn.cancel_right` / 定理 `SurjOn.cancel_right`
-
-English:
-theorem SurjOn.cancel_right
-  given: (hf : s.SurjOn f t) (hf' : s.MapsTo f t)
-  proof: ⟨fun h => h.cancel_right hf, fun h => h.comp_right hf'⟩
-
-中文:
-定理 满射限制.cancel_right
-  条件: (hf : s.满射限制 f t) (hf' : s.映射到 f t)
-  证明: ⟨fun h => h.cancel_right hf, fun h => h.comp_right hf'⟩
-
-Depends on / 依赖: cancel_right, comp_right, h.cancel_right, h.comp_right
+/-
+**Set.SurjOn.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {f 
+: α → β} {g₁ g₂ : β → γ},   Set.SurjOn f s t → Set.MapsTo f s t → (Set.EqOn (g₁ 
+∘ f) (g₂ ∘ f) s ↔ Set.EqOn g₁ g₂ t)
+参数：Set.EqOn (g₁ ∘ f) (g₂ ∘ f) s ↔ Set.EqOn g₁ g₂ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.cancel_right`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s
+ : Set α} {t : Set β} {f : α → β} {g₁ g₂ : β → γ},   Set.EqOn (g₁ ∘ f) (g₂ ∘ f) 
+s → Set.Sur…
+· 使用定理 `Set.EqOn.comp_right`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s :
+ Set α} {t : Set β} {f : α → β} {g₁ g₂ : β → γ},   Set.EqOn g₁ g₂ t → Set.MapsTo
+ f s t → …
 -/
 theorem SurjOn.cancel_right (hf : s.SurjOn f t) (hf' : s.MapsTo f t) :
     s.EqOn (g₁ ∘ f) (g₂ ∘ f) ↔ t.EqOn g₁ g₂ :=
   ⟨fun h => h.cancel_right hf, fun h => h.comp_right hf'⟩
-
-/--
-theorem `eqOn_comp_right_iff` / 定理 `eqOn_comp_right_iff`
-
-English:
-theorem eqOn_comp_right_iff
-  statement: s.EqOn (g₁ ∘ f) (g₂ ∘ f) ↔ (f '' s).EqOn g₁ g₂
-  proof: (s.surjOn_image f).cancel_right s.mapsTo_image f
-
-中文:
-定理 eqOn_comp_right_iff
-  结论: s.EqOn (g₁ ∘ f) (g₂ ∘ f) ↔ (f '' s).EqOn g₁ g₂
-  证明: (s.surjOn_image f).cancel_right s.mapsTo_image f
-
-Depends on / 依赖: cancel_right, mapsTo_image, s.mapsTo_image, s.surjOn_image, surjOn_image
+/-
+**Set.eqOn_comp_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_comp_right_iff : s.EqOn (g₁ ∘ f) (g₂ ∘ f) ↔ (f '' s).EqOn g₁ g₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.cancel_right`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{s : Set α} {t : Set β} {f : α → β} {g₁ g₂ : β → γ},   Set.SurjOn f s t → Set.Ma
+psTo f s t → …
+· 使用定理 `Set.surjOn_image`：surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f 
+'' s)
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
 theorem eqOn_comp_right_iff : s.EqOn (g₁ ∘ f) (g₂ ∘ f) ↔ (f '' s).EqOn g₁ g₂ :=
-(s.surjOn_image f).cancel_right s.mapsTo_image f
-
-/--
-theorem `SurjOn.forall` / 定理 `SurjOn.forall`
-
-English:
-theorem SurjOn.forall
-  given: {p : β -> Prop} (hf : s.SurjOn f t) (hf' : s.MapsTo f t)
-  proof: ⟨fun H x hx => H (f x) (hf' hx), fun H _y hy => let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
-
-中文:
-定理 满射限制.对任意
-  条件: {p : β -> 命题} (hf : s.满射限制 f t) (hf' : s.映射到 f t)
-  证明: ⟨fun H x hx => H (f x) (hf' hx), fun H _y hy => let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
+  (s.surjOn_image f).cancel_right <| s.mapsTo_image f
+/-
+**Set.SurjOn.forall** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {p : β
+ → Prop},   Set.SurjOn f s t → Set.MapsTo f s t → ((∀ y ∈ t, p y) ↔ ∀ x ∈ s, p (
+f x))
+参数：(∀ y ∈ t, p y) ↔ ∀ x ∈ s, p (f x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem SurjOn.forall {p : β -> Prop} (hf : s.SurjOn f t) (hf' : s.MapsTo f t) :
-    (forall y in t, p y) ↔ (forall x in s, p (f x)) :=
-  ⟨fun H x hx => H (f x) (hf' hx), fun H _y hy => let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
-
-/--
-theorem `_root_.Subtype.coind_surjective` / 定理 `_root_.Subtype.coind_surjective`
-
-English:
-theorem _root_.Subtype.coind_surjective
-  statement: {α β} {f : α -> β} {p : Set β} (h : forall a, f a in p)
-  proof: fun ⟨_, hb⟩ =>
-  let ⟨a, _, ha⟩ := hf hb
-  ⟨a, Subtype.coe_injective ha⟩
-
-中文:
-定理 _root_.子类型.coind_surjective
-  结论: {α β} {f : α -> β} {p : 集合 β} (h : 对任意 a, f a in p)
-  证明: fun ⟨_, hb⟩ =>
-  let ⟨a, _, ha⟩ := hf hb
-  ⟨a, Subtype.coe_injective ha⟩
+theorem SurjOn.forall {p : β → Prop} (hf : s.SurjOn f t) (hf' : s.MapsTo f t) :
+    (∀ y ∈ t, p y) ↔ (∀ x ∈ s, p (f x)) :=
+  ⟨fun H x hx ↦ H (f x) (hf' hx), fun H _y hy ↦ let ⟨x, hx, hxy⟩ := hf hy; hxy ▸ H x hx⟩
+/-
+**Set._root_.Subtype.coind_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Subtype.coind_surjective {α β} {f : α -> β} {p : Set β} (h : forall a, f a in p)
+theorem _root_.Subtype.coind_surjective {α β} {f : α → β} {p : Set β} (h : ∀ a, f a ∈ p)
     (hf : Set.SurjOn f Set.univ p) :
-    (Subtype.coind f h).Surjective := fun ⟨_, hb⟩ =>
+    (Subtype.coind f h).Surjective := fun ⟨_, hb⟩ ↦
   let ⟨a, _, ha⟩ := hf hb
   ⟨a, Subtype.coe_injective ha⟩
-
-/--
-theorem `_root_.Subtype.coind_bijective` / 定理 `_root_.Subtype.coind_bijective`
-
-English:
-theorem _root_.Subtype.coind_bijective
-  statement: {α β} {f : α -> β} {p : Set β} (h : forall a, f a in p)
-  proof: ⟨Subtype.coind_injective h hf_inj, Subtype.coind_surjective h hf_surj⟩
-
-中文:
-定理 _root_.子类型.coind_bijective
-  结论: {α β} {f : α -> β} {p : 集合 β} (h : 对任意 a, f a in p)
-  证明: ⟨Subtype.coind_injective h hf_inj, Subtype.coind_surjective h hf_surj⟩
-
-Depends on / 依赖: Subtype, Subtype.coind_injective, Subtype.coind_surjective, coind_injective, coind_surjective, hf_inj, hf_surj
+/-
+**Set._root_.Subtype.coind_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Subtype.coind_bijective {α β} {f : α -> β} {p : Set β} (h : forall a, f a in p)
+theorem _root_.Subtype.coind_bijective {α β} {f : α → β} {p : Set β} (h : ∀ a, f a ∈ p)
     (hf_inj : f.Injective) (hf_surj : Set.SurjOn f Set.univ p) :
     (Subtype.coind f h).Bijective :=
   ⟨Subtype.coind_injective h hf_inj, Subtype.coind_surjective h hf_surj⟩
@@ -3007,522 +2020,436 @@ end surjOn
 /-! ### Bijectivity -/
 section bijOn
 
-/--
-theorem `BijOn.mapsTo` / 定理 `BijOn.mapsTo`
-
-English:
-theorem BijOn.mapsTo
-  given: (h : BijOn f s t)
-  statement: MapsTo f s t
-  proof: h.left
-
-中文:
-定理 双射限制.mapsTo
-  条件: (h : 双射限制 f s t)
-  结论: 映射到 f s t
-  证明: h.left
-
-Depends on / 依赖: h.left
+/-
+**Set.BijOn.mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.B
+ijOn f s t → Set.MapsTo f s t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem BijOn.mapsTo (h : BijOn f s t) : MapsTo f s t :=
   h.left
-
-/--
-theorem `BijOn.injOn` / 定理 `BijOn.injOn`
-
-English:
-theorem BijOn.injOn
-  given: (h : BijOn f s t)
-  statement: InjOn f s
-  proof: h.right.left
-
-中文:
-定理 双射限制.injOn
-  条件: (h : 双射限制 f s t)
-  结论: 单射限制 f s
-  证明: h.right.left
-
-Depends on / 依赖: h.right.left
+/-
+**Set.BijOn.injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.B
+ijOn f s t → Set.InjOn f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem BijOn.injOn (h : BijOn f s t) : InjOn f s :=
   h.right.left
-
-/--
-theorem `BijOn.surjOn` / 定理 `BijOn.surjOn`
-
-English:
-theorem BijOn.surjOn
-  given: (h : BijOn f s t)
-  statement: SurjOn f s t
-  proof: h.right.right
-
-中文:
-定理 双射限制.surjOn
-  条件: (h : 双射限制 f s t)
-  结论: 满射限制 f s t
-  证明: h.right.right
-
-Depends on / 依赖: h.right.right
+/-
+**Set.BijOn.surjOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.B
+ijOn f s t → Set.SurjOn f s t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem BijOn.surjOn (h : BijOn f s t) : SurjOn f s t :=
   h.right.right
-
-/--
-theorem `BijOn.mk` / 定理 `BijOn.mk`
-
-English:
-theorem BijOn.mk
-  given: (h₁ : MapsTo f s t) (h₂ : InjOn f s) (h₃ : SurjOn f s t)
-  statement: BijOn f s t
-  proof: ⟨h₁, h₂, h₃⟩
-
-中文:
-定理 双射限制.mk
-  条件: (h₁ : 映射到 f s t) (h₂ : 单射限制 f s) (h₃ : 满射限制 f s t)
-  结论: 双射限制 f s t
-  证明: ⟨h₁, h₂, h₃⟩
+/-
+**Set.BijOn.mk** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.MapsTo f s t → Set.InjOn f s → Set.SurjOn f s t → Set.BijOn f s t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem BijOn.mk (h₁ : MapsTo f s t) (h₂ : InjOn f s) (h₃ : SurjOn f s t) : BijOn f s t :=
   ⟨h₁, h₂, h₃⟩
-
-/--
-theorem `bijOn_empty` / 定理 `bijOn_empty`
-
-English:
-theorem bijOn_empty
-  given: (f : α -> β)
-  statement: BijOn f ∅ ∅
-  proof: ⟨mapsTo_empty f ∅, injOn_empty f, surjOn_empty f ∅⟩
-
-中文:
-定理 bijOn_empty
-  条件: (f : α -> β)
-  结论: 双射限制 f ∅ ∅
-  证明: ⟨mapsTo_empty f ∅, injOn_empty f, surjOn_empty f ∅⟩
-
-Depends on / 依赖: injOn_empty, mapsTo_empty, surjOn_empty
+/-
+**Set.bijOn_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：bijOn_empty (f : α -> β) : BijOn f ∅ ∅
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mapsTo_empty`：mapsTo_empty (f : α -> β) (t : Set β) : MapsTo f ∅ t
+· 使用定理 `Set.injOn_empty`：injOn_empty (f : α -> β) : InjOn f ∅
+· 使用定理 `Set.surjOn_empty`：surjOn_empty (f : α -> β) (s : Set α) : SurjOn f s ∅
 -/
-theorem bijOn_empty (f : α -> β) : BijOn f ∅ ∅ :=
+theorem bijOn_empty (f : α → β) : BijOn f ∅ ∅ :=
   ⟨mapsTo_empty f ∅, injOn_empty f, surjOn_empty f ∅⟩
-
-/--
-theorem `bijOn_empty_iff_left` / 定理 `bijOn_empty_iff_left`
-
-English:
-theorem bijOn_empty_iff_left
-  statement: BijOn f s ∅ ↔ s = ∅
-  proof: ⟨fun h => by simpa using h.mapsTo, by rintro rfl; exact bijOn_empty f⟩
-
-中文:
-定理 bijOn_empty_iff_left
-  结论: 双射限制 f s ∅ ↔ s = ∅
-  证明: ⟨fun h => by simpa using h.mapsTo, by rintro rfl; exact bijOn_empty f⟩
+/-
+**Set.bijOn_empty_iff_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.BijOn f s ∅ ↔
+ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.bijOn_empty`：bijOn_empty (f : α -> β) : BijOn f ∅ ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] theorem bijOn_empty_iff_left : BijOn f s ∅ ↔ s = ∅ :=
-  ⟨fun h => by simpa using h.mapsTo, by rintro rfl; exact bijOn_empty f⟩
-
-/--
-theorem `bijOn_empty_iff_right` / 定理 `bijOn_empty_iff_right`
-
-English:
-theorem bijOn_empty_iff_right
-  statement: BijOn f ∅ t ↔ t = ∅
-  proof: ⟨fun h => by simpa using h.surjOn, by rintro rfl; exact bijOn_empty f⟩
-
-中文:
-定理 bijOn_empty_iff_right
-  结论: 双射限制 f ∅ t ↔ t = ∅
-  证明: ⟨fun h => by simpa using h.surjOn, by rintro rfl; exact bijOn_empty f⟩
+  ⟨fun h ↦ by simpa using h.mapsTo, by rintro rfl; exact bijOn_empty f⟩
+/-
+**Set.bijOn_empty_iff_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {t : Set β} {f : α → β}, Set.BijOn f ∅ t ↔
+ t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `Set.bijOn_empty`：bijOn_empty (f : α -> β) : BijOn f ∅ ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] theorem bijOn_empty_iff_right : BijOn f ∅ t ↔ t = ∅ :=
-  ⟨fun h => by simpa using h.surjOn, by rintro rfl; exact bijOn_empty f⟩
-
-/--
-lemma `bijOn_singleton` / 引理 `bijOn_singleton`
-
-English:
-lemma bijOn_singleton
-  statement: BijOn f {a} {b} ↔ f a = b
-  proof: by simp [BijOn, eq_comm]
-
-中文:
-引理 bijOn_singleton
-  结论: 双射限制 f {a} {b} ↔ f a = b
-  证明: by simp [BijOn, eq_comm]
+  ⟨fun h ↦ by simpa using h.surjOn, by rintro rfl; exact bijOn_empty f⟩
+/-
+**Set.bijOn_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {a : α} {b : β}, Set.BijOn f {
+a} {b} ↔ f a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma bijOn_singleton : BijOn f {a} {b} ↔ f a = b := by simp [BijOn, eq_comm]
-
-/--
-theorem `BijOn.inter_mapsTo` / 定理 `BijOn.inter_mapsTo`
-
-English:
-theorem BijOn.inter_mapsTo
-  given: (h₁ : BijOn f s₁ t₁) (h₂ : MapsTo f s₂ t₂) (h₃ : s₁ inter f ⁻¹' t₂ subseteq s₂)
-  proof: ⟨h₁.mapsTo.inter_inter h₂, h₁.injOn.mono inter_subset_left, fun _ hy =>
-    let ⟨x, hx, hxy⟩ := h₁.surjOn hy.1
-    ⟨x, ⟨hx, h₃ ⟨hx, hxy.symm.subst hy.2⟩⟩, hxy⟩⟩
-
-中文:
-定理 双射限制.inter_mapsTo
-  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 映射到 f s₂ t₂) (h₃ : s₁ inter f ⁻¹' t₂ subseteq s₂)
-  证明: ⟨h₁.mapsTo.inter_inter h₂, h₁.injOn.mono inter_subset_left, fun _ hy =>
-    let ⟨x, hx, hxy⟩ := h₁.surjOn hy.1
-    ⟨x, ⟨hx, h₃ ⟨hx, hxy.symm.subst hy.2⟩⟩, hxy⟩⟩
-
-Depends on / 依赖: hxy.symm.subst, injOn.mono, inter_inter, inter_subset_left, mapsTo, mapsTo.inter_inter, surjOn
+/-
+**Set.BijOn.inter_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.BijOn f s₁ t₁ → Set.MapsTo f s₂ t₂ → s₁ ∩ f ⁻¹' t₂ ⊆ s₂ → Set.BijOn f (
+s₁ ∩ s₂) (t₁ ∩ t₂)
+参数：s₁ ∩ s₂；t₁ ∩ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.inter_inter`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.Map
+sTo f (s₁ ∩ …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.subst`：∀ {α : Sort u} {motive : α → Prop} {a b : α}, a = b → motive a
+ → motive b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem BijOn.inter_mapsTo (h₁ : BijOn f s₁ t₁) (h₂ : MapsTo f s₂ t₂) (h₃ : s₁ inter f ⁻¹' t₂ subseteq s₂) :
-    BijOn f (s₁ inter s₂) (t₁ inter t₂) :=
+theorem BijOn.inter_mapsTo (h₁ : BijOn f s₁ t₁) (h₂ : MapsTo f s₂ t₂) (h₃ : s₁ ∩ f ⁻¹' t₂ ⊆ s₂) :
+    BijOn f (s₁ ∩ s₂) (t₁ ∩ t₂) :=
   ⟨h₁.mapsTo.inter_inter h₂, h₁.injOn.mono inter_subset_left, fun _ hy =>
     let ⟨x, hx, hxy⟩ := h₁.surjOn hy.1
     ⟨x, ⟨hx, h₃ ⟨hx, hxy.symm.subst hy.2⟩⟩, hxy⟩⟩
-
-/--
-theorem `MapsTo.inter_bijOn` / 定理 `MapsTo.inter_bijOn`
-
-English:
-theorem MapsTo.inter_bijOn
-  given: (h₁ : MapsTo f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h₃ : s₂ inter f ⁻¹' t₁ subseteq s₁)
-  proof: inter_comm s₂ s₁ ▸ inter_comm t₂ t₁ ▸ h₂.inter_mapsTo h₁ h₃
-
-中文:
-定理 映射到.inter_bijOn
-  条件: (h₁ : 映射到 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h₃ : s₂ inter f ⁻¹' t₁ subseteq s₁)
-  证明: inter_comm s₂ s₁ ▸ inter_comm t₂ t₁ ▸ h₂.inter_mapsTo h₁ h₃
-
-Depends on / 依赖: inter_comm, inter_mapsTo
+/-
+**Set.MapsTo.inter_bijOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.MapsTo f s₁ t₁ → Set.BijOn f s₂ t₂ → s₂ ∩ f ⁻¹' t₁ ⊆ s₁ → Set.BijOn f (
+s₁ ∩ s₂) (t₁ ∩ t₂)
+参数：s₁ ∩ s₂；t₁ ∩ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.inter_mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.BijOn f s₁ t₁ → Set.MapsTo f s₂ t₂ → s₁ ∩ f ⁻
+¹' t₂ ⊆ s₂ →…
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
-theorem MapsTo.inter_bijOn (h₁ : MapsTo f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h₃ : s₂ inter f ⁻¹' t₁ subseteq s₁) :
-    BijOn f (s₁ inter s₂) (t₁ inter t₂) :=
+theorem MapsTo.inter_bijOn (h₁ : MapsTo f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h₃ : s₂ ∩ f ⁻¹' t₁ ⊆ s₁) :
+    BijOn f (s₁ ∩ s₂) (t₁ ∩ t₂) :=
   inter_comm s₂ s₁ ▸ inter_comm t₂ t₁ ▸ h₂.inter_mapsTo h₁ h₃
-
-/--
-theorem `BijOn.inter` / 定理 `BijOn.inter`
-
-English:
-theorem BijOn.inter
-  given: (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
-  proof: ⟨h₁.mapsTo.inter_inter h₂.mapsTo, h₁.injOn.mono inter_subset_left,
-    h₁.surjOn.inter_inter h₂.surjOn h⟩
-
-中文:
-定理 双射限制.inter
-  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
-  证明: ⟨h₁.mapsTo.inter_inter h₂.mapsTo, h₁.injOn.mono inter_subset_left,
-    h₁.surjOn.inter_inter h₂.surjOn h⟩
-
-Depends on / 依赖: injOn.mono, inter_inter, inter_subset_left, mapsTo, mapsTo.inter_inter, surjOn, surjOn.inter_inter
+/-
+**Set.BijOn.inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.BijOn f s₁ t₁ → Set.BijOn f s₂ t₂ → Set.InjOn f (s₁ ∪ s₂) → Set.BijOn f
+ (s₁ ∩ s₂) (t₁ ∩ t₂)
+参数：s₁ ∪ s₂；s₁ ∩ s₂；t₁ ∩ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.inter_inter`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.Map
+sTo f (s₁ ∩ …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.SurjOn.inter_inter`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.SurjOn f s₁ t₁ → Set.SurjOn f s₂ t₂ → Set.Inj
+On f (s₁ ∪ s…
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-theorem BijOn.inter (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂)) :
-    BijOn f (s₁ inter s₂) (t₁ inter t₂) :=
+theorem BijOn.inter (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ ∪ s₂)) :
+    BijOn f (s₁ ∩ s₂) (t₁ ∩ t₂) :=
   ⟨h₁.mapsTo.inter_inter h₂.mapsTo, h₁.injOn.mono inter_subset_left,
     h₁.surjOn.inter_inter h₂.surjOn h⟩
-
-/--
-theorem `BijOn.union` / 定理 `BijOn.union`
-
-English:
-theorem BijOn.union
-  given: (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂))
-  proof: ⟨h₁.mapsTo.union_union h₂.mapsTo, h, h₁.surjOn.union_union h₂.surjOn⟩
-
-中文:
-定理 双射限制.union
-  条件: (h₁ : 双射限制 f s₁ t₁) (h₂ : 双射限制 f s₂ t₂) (h : 单射限制 f (s₁ union s₂))
-  证明: ⟨h₁.mapsTo.union_union h₂.mapsTo, h, h₁.surjOn.union_union h₂.surjOn⟩
-
-Depends on / 依赖: mapsTo, mapsTo.union_union, surjOn, surjOn.union_union, union_union
+/-
+**Set.BijOn.union** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ : Set β} {f : α → β
+},   Set.BijOn f s₁ t₁ → Set.BijOn f s₂ t₂ → Set.InjOn f (s₁ ∪ s₂) → Set.BijOn f
+ (s₁ ∪ s₂) (t₁ ∪ t₂)
+参数：s₁ ∪ s₂；s₁ ∪ s₂；t₁ ∪ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.union_union`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.MapsTo f s₁ t₁ → Set.MapsTo f s₂ t₂ → Set.Map
+sTo f (s₁ ∪ …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.SurjOn.union_union`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} 
+{t₁ t₂ : Set β} {f : α → β},   Set.SurjOn f s₁ t₁ → Set.SurjOn f s₂ t₂ → Set.Sur
+jOn f (s₁ ∪ …
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-theorem BijOn.union (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ union s₂)) :
-    BijOn f (s₁ union s₂) (t₁ union t₂) :=
+theorem BijOn.union (h₁ : BijOn f s₁ t₁) (h₂ : BijOn f s₂ t₂) (h : InjOn f (s₁ ∪ s₂)) :
+    BijOn f (s₁ ∪ s₂) (t₁ ∪ t₂) :=
   ⟨h₁.mapsTo.union_union h₂.mapsTo, h, h₁.surjOn.union_union h₂.surjOn⟩
-
-/--
-theorem `BijOn.subset_range` / 定理 `BijOn.subset_range`
-
-English:
-theorem BijOn.subset_range
-  given: (h : BijOn f s t)
-  statement: t subseteq range f
-  proof: h.surjOn.subset_range
-
-中文:
-定理 双射限制.subset_range
-  条件: (h : 双射限制 f s t)
-  结论: t subseteq range f
-  证明: h.surjOn.subset_range
-
-Depends on / 依赖: h.surjOn.subset_range, subset_range, surjOn
+/-
+**Set.BijOn.subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.B
+ijOn f s t → t ⊆ Set.range f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.subset_range`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.SurjOn f s t → t ⊆ Set.range f
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-theorem BijOn.subset_range (h : BijOn f s t) : t subseteq range f :=
+theorem BijOn.subset_range (h : BijOn f s t) : t ⊆ range f :=
   h.surjOn.subset_range
-
-/--
-theorem `InjOn.bijOn_image` / 定理 `InjOn.bijOn_image`
-
-English:
-theorem InjOn.bijOn_image
-  given: (h : InjOn f s)
-  statement: BijOn f s (f '' s)
-  proof: BijOn.mk (mapsTo_image f s) h (Subset.refl _)
-
-中文:
-定理 单射限制.bijOn_image
-  条件: (h : 单射限制 f s)
-  结论: 双射限制 f s (f '' s)
-  证明: BijOn.mk (mapsTo_image f s) h (Subset.refl _)
-
-Depends on / 依赖: BijOn.mk, Subset, Subset.refl, mapsTo_image
+/-
+**Set.InjOn.bijOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β}, Set.InjOn f s → S
+et.BijOn f s (f '' s)
+参数：f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mk`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f
+ : α → β},   Set.MapsTo f s t → Set.InjOn f s → Set.SurjOn f s t → Set.BijOn f s
+ t
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
 -/
 theorem InjOn.bijOn_image (h : InjOn f s) : BijOn f s (f '' s) :=
   BijOn.mk (mapsTo_image f s) h (Subset.refl _)
-
-/--
-theorem `SurjOn.preimage` / 定理 `SurjOn.preimage`
-
-English:
-theorem SurjOn.preimage
-  given: (h : SurjOn f s t)
-  statement: SurjOn f (f ⁻¹' t) t
-  proof: by
-  intro u hu
-  rw [image_preimage_eq_inter_range]
-  exact ⟨hu, mem_range.mpr (subset_range h hu)⟩
-
-中文:
-定理 满射限制.原像
-  条件: (h : 满射限制 f s t)
-  结论: 满射限制 f (f ⁻¹' t) t
-  证明: by
-  intro u hu
-  rw [image_preimage_eq_inter_range]
-  exact ⟨hu, mem_range.mpr (subset_range h hu)⟩
-
-Depends on / 依赖: image_preimage_eq_inter_range, mem_range, mem_range.mpr, subset_range
+/-
+**Set.SurjOn.preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.S
+urjOn f s t → Set.SurjOn f (f ⁻¹' t) t
+参数：f ⁻¹' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Set.SurjOn.subset_range`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.SurjOn f s t → t ⊆ Set.range f
 -/
 theorem SurjOn.preimage (h : SurjOn f s t) : SurjOn f (f ⁻¹' t) t := by
   intro u hu
   rw [image_preimage_eq_inter_range]
   exact ⟨hu, mem_range.mpr (subset_range h hu)⟩
-
-/--
-theorem `BijOn.congr` / 定理 `BijOn.congr`
-
-English:
-theorem BijOn.congr
-  given: (h₁ : BijOn f₁ s t) (h : EqOn f₁ f₂ s)
-  statement: BijOn f₂ s t
-  proof: BijOn.mk (h₁.mapsTo.congr h) (h₁.injOn.congr h) (h₁.surjOn.congr h)
-
-中文:
-定理 双射限制.congr
-  条件: (h₁ : 双射限制 f₁ s t) (h : EqOn f₁ f₂ s)
-  结论: 双射限制 f₂ s t
-  证明: BijOn.mk (h₁.mapsTo.congr h) (h₁.injOn.congr h) (h₁.surjOn.congr h)
-
-Depends on / 依赖: BijOn.mk, injOn.congr, mapsTo, mapsTo.congr, surjOn, surjOn.congr
+/-
+**Set.BijOn.congr** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.BijOn f₁ s t → Set.EqOn f₁ f₂ s → Set.BijOn f₂ s t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mk`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f
+ : α → β},   Set.MapsTo f s t → Set.InjOn f s → Set.SurjOn f s t → Set.BijOn f s
+ t
+· 使用定理 `Set.MapsTo.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f₁ f₂ : α → β},   Set.MapsTo f₁ s t → Set.EqOn f₁ f₂ s → Set.MapsTo f₂ s t
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α 
+→ β}, Set.InjOn f₁ s → Set.EqOn f₁ f₂ s → Set.InjOn f₂ s
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.SurjOn.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f₁ f₂ : α → β},   Set.SurjOn f₁ s t → Set.EqOn f₁ f₂ s → Set.SurjOn f₂ s t
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 theorem BijOn.congr (h₁ : BijOn f₁ s t) (h : EqOn f₁ f₂ s) : BijOn f₂ s t :=
   BijOn.mk (h₁.mapsTo.congr h) (h₁.injOn.congr h) (h₁.surjOn.congr h)
-
-/--
-theorem `EqOn.bijOn_iff` / 定理 `EqOn.bijOn_iff`
-
-English:
-theorem EqOn.bijOn_iff
-  given: (H : EqOn f₁ f₂ s)
-  statement: BijOn f₁ s t ↔ BijOn f₂ s t
-  proof: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-中文:
-定理 EqOn.bijOn_iff
-  条件: (H : EqOn f₁ f₂ s)
-  结论: 双射限制 f₁ s t ↔ 双射限制 f₂ s t
-  证明: ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-Depends on / 依赖: H.symm, h.congr
+/-
+**Set.EqOn.bijOn_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f₁ f₂ : α → β},  
+ Set.EqOn f₁ f₂ s → (Set.BijOn f₁ s t ↔ Set.BijOn f₂ s t)
+参数：Set.BijOn f₁ s t ↔ Set.BijOn f₂ s t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.congr`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f₁ f₂ : α → β},   Set.BijOn f₁ s t → Set.EqOn f₁ f₂ s → Set.BijOn f₂ s t
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
 -/
 theorem EqOn.bijOn_iff (H : EqOn f₁ f₂ s) : BijOn f₁ s t ↔ BijOn f₂ s t :=
   ⟨fun h => h.congr H, fun h => h.congr H.symm⟩
-
-/--
-theorem `BijOn.image_eq` / 定理 `BijOn.image_eq`
-
-English:
-theorem BijOn.image_eq
-  given: (h : BijOn f s t)
-  statement: f '' s = t
-  proof: h.surjOn.image_eq_of_mapsTo h.mapsTo
-
-中文:
-定理 双射限制.image_eq
-  条件: (h : 双射限制 f s t)
-  结论: f '' s = t
-  证明: h.surjOn.image_eq_of_mapsTo h.mapsTo
-
-Depends on / 依赖: h.mapsTo, h.surjOn.image_eq_of_mapsTo, image_eq_of_mapsTo, mapsTo, surjOn
+/-
+**Set.BijOn.image_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β}, Set.B
+ijOn f s t → f '' s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.image_eq_of_mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set 
+α} {t : Set β} {f : α → β}, Set.SurjOn f s t → Set.MapsTo f s t → f '' s = t
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
 -/
 theorem BijOn.image_eq (h : BijOn f s t) : f '' s = t :=
   h.surjOn.image_eq_of_mapsTo h.mapsTo
-
-/--
-lemma `BijOn.forall` / 引理 `BijOn.forall`
-
-English:
-lemma BijOn.forall
-  given: {p : β -> Prop} (hf : BijOn f s t)
-  statement: (forall b in t, p b) ↔ forall a in s, p (f a) where
-  proof: h _ hf.mapsTo ha
-  mpr h b hb := by obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact h _ ha
-
-中文:
-引理 双射限制.对任意
-  条件: {p : β -> 命题} (hf : 双射限制 f s t)
-  结论: (对任意 b in t, p b) ↔ 对任意 a in s, p (f a) where
-  证明: h _ hf.mapsTo ha
-  mpr h b hb := by obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact h _ ha
-
-Depends on / 依赖: hf.mapsTo, mapsTo
+/-
+**Set.BijOn.forall** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {p : β
+ → Prop},   Set.BijOn f s t → ((∀ b ∈ t, p b) ↔ ∀ a ∈ s, p (f a))
+参数：(∀ b ∈ t, p b) ↔ ∀ a ∈ s, p (f a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-lemma BijOn.forall {p : β -> Prop} (hf : BijOn f s t) : (forall b in t, p b) ↔ forall a in s, p (f a) where
-mp h _ ha := h _ hf.mapsTo ha
+lemma BijOn.forall {p : β → Prop} (hf : BijOn f s t) : (∀ b ∈ t, p b) ↔ ∀ a ∈ s, p (f a) where
+  mp h _ ha := h _ <| hf.mapsTo ha
   mpr h b hb := by obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact h _ ha
-
-/--
-lemma `BijOn.exists` / 引理 `BijOn.exists`
-
-English:
-lemma BijOn.exists
-  given: {p : β -> Prop} (hf : BijOn f s t)
-  statement: (exists b in t, p b) ↔ exists a in s, p (f a) where
-  proof: by rintro ⟨b, hb, h⟩; obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact ⟨a, ha, h⟩
-  mpr := by rintro ⟨a, ha, h⟩; exact ⟨f a, hf.mapsTo ha, h⟩
-
-中文:
-引理 双射限制.存在
-  条件: {p : β -> 命题} (hf : 双射限制 f s t)
-  结论: (存在 b in t, p b) ↔ 存在 a in s, p (f a) where
-  证明: by rintro ⟨b, hb, h⟩; obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact ⟨a, ha, h⟩
-  mpr := by rintro ⟨a, ha, h⟩; exact ⟨f a, hf.mapsTo ha, h⟩
-
-Depends on / 依赖: hf.mapsTo, hf.surjOn, mapsTo, surjOn
+/-
+**Set.BijOn.exists** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {p : β
+ → Prop},   Set.BijOn f s t → ((∃ b ∈ t, p b) ↔ ∃ a ∈ s, p (f a))
+参数：(∃ b ∈ t, p b) ↔ ∃ a ∈ s, p (f a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
 -/
-lemma BijOn.exists {p : β -> Prop} (hf : BijOn f s t) : (exists b in t, p b) ↔ exists a in s, p (f a) where
+lemma BijOn.exists {p : β → Prop} (hf : BijOn f s t) : (∃ b ∈ t, p b) ↔ ∃ a ∈ s, p (f a) where
   mp := by rintro ⟨b, hb, h⟩; obtain ⟨a, ha, rfl⟩ := hf.surjOn hb; exact ⟨a, ha, h⟩
   mpr := by rintro ⟨a, ha, h⟩; exact ⟨f a, hf.mapsTo ha, h⟩
-
-/--
-lemma `_root_.Equiv.image_eq_iff_bijOn` / 引理 `_root_.Equiv.image_eq_iff_bijOn`
-
-English:
-lemma _root_.Equiv.image_eq_iff_bijOn
-  given: (e : α ≃ β)
-  statement: e '' s = t ↔ BijOn e s t
-  proof: ⟨fun h => ⟨(mapsTo_image e s).mono_right h.subset, e.injective.injOn, h ▸ surjOn_image e s⟩,
-  BijOn.image_eq⟩
-
-中文:
-引理 _root_.等价.image_eq_iff_bijOn
-  条件: (e : α ≃ β)
-  结论: e '' s = t ↔ 双射限制 e s t
-  证明: ⟨fun h => ⟨(mapsTo_image e s).mono_right h.subset, e.injective.injOn, h ▸ surjOn_image e s⟩,
-  BijOn.image_eq⟩
-
-Depends on / 依赖: BijOn.image_eq, e.injective.injOn, h.subset, image_eq, injective, mapsTo_image, mono_right, subset, surjOn_image
+/-
+**Set._root_.Equiv.image_eq_iff_bijOn** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Equiv.image_eq_iff_bijOn (e : α ≃ β) : e '' s = t ↔ BijOn e s t :=
-  ⟨fun h => ⟨(mapsTo_image e s).mono_right h.subset, e.injective.injOn, h ▸ surjOn_image e s⟩,
+  ⟨fun h ↦ ⟨(mapsTo_image e s).mono_right h.subset, e.injective.injOn, h ▸ surjOn_image e s⟩,
   BijOn.image_eq⟩
-
-/--
-lemma `bijOn_id` / 引理 `bijOn_id`
-
-English:
-lemma bijOn_id
-  given: (s : Set α)
-  statement: BijOn id s s
-  proof: ⟨s.mapsTo_id, s.injOn_id, s.surjOn_id⟩
-
-中文:
-引理 bijOn_id
-  条件: (s : 集合 α)
-  结论: 双射限制 id s s
-  证明: ⟨s.mapsTo_id, s.injOn_id, s.surjOn_id⟩
-
-Depends on / 依赖: injOn_id, mapsTo_id, s.injOn_id, s.mapsTo_id, s.surjOn_id, surjOn_id
+/-
+**Set.bijOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：bijOn_id (s : Set α) : BijOn id s s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mapsTo_id`：mapsTo_id (s : Set α) : MapsTo id s s
+· 使用引理 `Set.injOn_id`：injOn_id (s : Set α) : InjOn id s
+· 使用引理 `Set.surjOn_id`：surjOn_id (s : Set α) : SurjOn id s s
 -/
 lemma bijOn_id (s : Set α) : BijOn id s s := ⟨s.mapsTo_id, s.injOn_id, s.surjOn_id⟩
-
-/--
-theorem `BijOn.comp` / 定理 `BijOn.comp`
-
-English:
-theorem BijOn.comp
-  given: (hg : BijOn g t p) (hf : BijOn f s t)
-  statement: BijOn (g ∘ f) s p
-  proof: BijOn.mk (hg.mapsTo.comp hf.mapsTo) (hg.injOn.comp hf.injOn hf.mapsTo) (hg.surjOn.comp hf.surjOn)
-
-中文:
-定理 双射限制.comp
-  条件: (hg : 双射限制 g t p) (hf : 双射限制 f s t)
-  结论: 双射限制 (g ∘ f) s p
-  证明: BijOn.mk (hg.mapsTo.comp hf.mapsTo) (hg.injOn.comp hf.injOn hf.mapsTo) (hg.surjOn.comp hf.surjOn)
-
-Depends on / 依赖: BijOn.mk, hf.injOn, hf.mapsTo, hf.surjOn, hg.injOn.comp, hg.mapsTo.comp, hg.surjOn.comp, mapsTo, surjOn
+/-
+**Set.BijOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set α} {t : Set β} {p 
+: Set γ} {f : α → β} {g : β → γ},   Set.BijOn g t p → Set.BijOn f s t → Set.BijO
+n (g ∘ f) s p
+参数：g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mk`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f
+ : α → β},   Set.MapsTo f s t → Set.InjOn f s → Set.SurjOn f s t → Set.BijOn f s
+ t
+· 使用定理 `Set.MapsTo.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set
+ α} {t : Set β} {p : Set γ} {f : α → β} {g : β → γ},   Set.MapsTo g t p → Set.Ma
+psTo …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set 
+α} {t : Set β} {f : α → β} {g : β → γ},   Set.InjOn g t → Set.InjOn f s → Set.Ma
+psTo…
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.SurjOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set
+ α} {t : Set β} {p : Set γ} {f : α → β} {g : β → γ},   Set.SurjOn g t p → Set.Su
+rjOn …
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 theorem BijOn.comp (hg : BijOn g t p) (hf : BijOn f s t) : BijOn (g ∘ f) s p :=
   BijOn.mk (hg.mapsTo.comp hf.mapsTo) (hg.injOn.comp hf.injOn hf.mapsTo) (hg.surjOn.comp hf.surjOn)
 
-/--
-theorem `bijOn_comp_iff` / 定理 `bijOn_comp_iff`
+/-- If `f : α → β` and `g : β → γ` and if `f` is injective on `s`, then `f ∘ g` is a bijection
+on `s` iff  `g` is a bijection on `f '' s`. -/
+/-
+**Set.bijOn_comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：bijOn_comp_iff (hf : InjOn f s) : BijOn (g ∘ f) s p ↔ BijOn g (f '' s) p
+参数：hf : InjOn f s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem bijOn_comp_iff
-  given: (hf : InjOn f s)
-  statement: BijOn (g ∘ f) s p ↔ BijOn g (f '' s) p
-  proof: by
-  simp only [BijOn, InjOn.comp_iff, surjOn_comp_iff, mapsTo_image_iff, hf]
-
-中文:
-定理 bijOn_comp_iff
-  条件: (hf : 单射限制 f s)
-  结论: 双射限制 (g ∘ f) s p ↔ 双射限制 g (f '' s) p
-  证明: by
-  simp only [BijOn, InjOn.comp_iff, surjOn_comp_iff, mapsTo_image_iff, hf]
-
-Depends on / 依赖: InjOn.comp_iff, comp_iff, mapsTo_image_iff, surjOn_comp_iff
+--- 原说明 ---
+If `f : α → β` and `g : β → γ` and if `f` is injective on `s`, then `f ∘ g` is a
+ bijection
+on `s` iff  `g` is a bijection on `f '' s`.
 -/
 theorem bijOn_comp_iff (hf : InjOn f s) : BijOn (g ∘ f) s p ↔ BijOn g (f '' s) p := by
   simp only [BijOn, InjOn.comp_iff, surjOn_comp_iff, mapsTo_image_iff, hf]
 
 /--
-theorem `bijOn_image_image` / 定理 `bijOn_image_image`
+If we have a commutative square
 
-English:
-theorem bijOn_image_image
-  statement: {p₁ : α -> γ} {p₂ : β -> δ} {g : γ -> δ} (comm : forall a, p₂ (f a) = g (p₁ a))
-  proof: by
-  obtain ⟨h1, h2, h3⟩ := hbij
-  refine ⟨?_, hinj, ?_⟩
-  · rintro _ ⟨a, ha, rfl⟩
-    exact ⟨f a, h1 ha, by rw [comm a]⟩
-  · rintro _ ⟨b, hb, rfl⟩
-    obtain ⟨a, ha, rfl⟩ := h3 hb
-    grind
+```
+α --f--> β
+|        |
+p₁       p₂
+|        |
+\/       \/
+γ --g--> δ
+```
 
-中文:
-定理 bijOn_image_image
-  结论: {p₁ : α -> γ} {p₂ : β -> δ} {g : γ -> δ} (comm : 对任意 a, p₂ (f a) = g (p₁ a))
-  证明: by
-  obtain ⟨h1, h2, h3⟩ := hbij
-  refine ⟨?_, hinj, ?_⟩
-  · rintro _ ⟨a, ha, rfl⟩
-    exact ⟨f a, h1 ha, by rw [comm a]⟩
-  · rintro _ ⟨b, hb, rfl⟩
-    obtain ⟨a, ha, rfl⟩ := h3 hb
-    grind
+and `f` induces a bijection from `s : Set α` to `t : Set β`, then `g`
+induces a bijection from the image of `s` to the image of `t`, as long as `g` is
+is injective on the image of `s`.
 -/
-theorem bijOn_image_image {p₁ : α -> γ} {p₂ : β -> δ} {g : γ -> δ} (comm : forall a, p₂ (f a) = g (p₁ a))
+/-
+**Set.bijOn_image_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：bijOn_image_image {p₁ : α -> γ} {p₂ : β -> δ} {g : γ -> δ} (comm : forall 
+a, p₂ (f a) = g (p₁ a)) (hbij : BijOn f s t) (hinj : InjOn g (p₁ '' s)) : BijOn 
+g (p₁ '' s) (p₂ '' t)
+参数：comm : forall a, p₂ (f a) = g (p₁ a)；hbij : BijOn f s t；hinj : InjOn g (p₁ ''
+ s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+
+--- 原说明 ---
+If we have a commutative square
+
+```
+α --f--> β
+|        |
+p₁       p₂
+|        |
+\/       \/
+γ --g--> δ
+```
+
+and `f` induces a bijection from `s : Set α` to `t : Set β`, then `g`
+induces a bijection from the image of `s` to the image of `t`, as long as `g` is
+is injective on the image of `s`.
+-/
+theorem bijOn_image_image {p₁ : α → γ} {p₂ : β → δ} {g : γ → δ} (comm : ∀ a, p₂ (f a) = g (p₁ a))
     (hbij : BijOn f s t) (hinj : InjOn g (p₁ '' s)) : BijOn g (p₁ '' s) (p₂ '' t) := by
   obtain ⟨h1, h2, h3⟩ := hbij
   refine ⟨?_, hinj, ?_⟩
@@ -3531,287 +2458,228 @@ theorem bijOn_image_image {p₁ : α -> γ} {p₂ : β -> δ} {g : γ -> δ} (co
   · rintro _ ⟨b, hb, rfl⟩
     obtain ⟨a, ha, rfl⟩ := h3 hb
     grind
-
-/--
-lemma `BijOn.iterate` / 引理 `BijOn.iterate`
-
-English:
-lemma BijOn.iterate
-  given: {f : α -> α} {s : Set α} (h : BijOn f s s)
-  statement: forall n, BijOn f^[n] s s
-
-中文:
-引理 双射限制.iterate
-  条件: {f : α -> α} {s : 集合 α} (h : 双射限制 f s s)
-  结论: 对任意 n, 双射限制 f^[n] s s
+/-
+**Set.BijOn.iterate** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.BijOn f s s → ∀ (n : ℕ), Set
+.BijOn f^[n] s s
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma BijOn.iterate {f : α -> α} {s : Set α} (h : BijOn f s s) : forall n, BijOn f^[n] s s
+lemma BijOn.iterate {f : α → α} {s : Set α} (h : BijOn f s s) : ∀ n, BijOn f^[n] s s
   | 0 => s.bijOn_id
   | (n + 1) => (h.iterate n).comp h
-
-/--
-lemma `bijOn_of_subsingleton'` / 引理 `bijOn_of_subsingleton'`
-
-English:
-lemma bijOn_of_subsingleton'
-  statement: [Subsingleton α] [Subsingleton β] (f : α -> β)
-  proof: ⟨mapsTo_of_subsingleton' _ h.1, injOn_of_subsingleton _ _, surjOn_of_subsingleton' _ h.2⟩
-
-中文:
-引理 bijOn_of_subsingleton'
-  结论: [子单例 α] [子单例 β] (f : α -> β)
-  证明: ⟨mapsTo_of_subsingleton' _ h.1, injOn_of_subsingleton _ _, surjOn_of_subsingleton' _ h.2⟩
-
-Depends on / 依赖: injOn_of_subsingleton, mapsTo_of_subsingleton, surjOn_of_subsingleton
+/-
+**Set.bijOn_of_subsingleton'** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：bijOn_of_subsingleton' [Subsingleton α] [Subsingleton β] (f : α -> β) (h :
+ s.Nonempty ↔ t.Nonempty) : BijOn f s t
+参数：f : α -> β；h : s.Nonempty ↔ t.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.mapsTo_of_subsingleton'`：mapsTo_of_subsingleton' [Subsingleton β] (f
+ : α -> β) (h : s.Nonempty -> t.Nonempty) : MapsTo f s t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Set.injOn_of_subsingleton`：injOn_of_subsingleton [Subsingleton α] (f : α
+ -> β) (s : Set α) : InjOn f s
+· 使用引理 `Set.surjOn_of_subsingleton'`：surjOn_of_subsingleton' [Subsingleton β] (f
+ : α -> β) (h : t.Nonempty -> s.Nonempty) : SurjOn f s t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-lemma bijOn_of_subsingleton' [Subsingleton α] [Subsingleton β] (f : α -> β)
+lemma bijOn_of_subsingleton' [Subsingleton α] [Subsingleton β] (f : α → β)
     (h : s.Nonempty ↔ t.Nonempty) : BijOn f s t :=
   ⟨mapsTo_of_subsingleton' _ h.1, injOn_of_subsingleton _ _, surjOn_of_subsingleton' _ h.2⟩
-
-/--
-lemma `bijOn_of_subsingleton` / 引理 `bijOn_of_subsingleton`
-
-English:
-lemma bijOn_of_subsingleton
-  given: [Subsingleton α] (f : α -> α) (s : Set α)
-  statement: BijOn f s s
-  proof: bijOn_of_subsingleton' _ Iff.rfl
-
-中文:
-引理 bijOn_of_subsingleton
-  条件: [子单例 α] (f : α -> α) (s : 集合 α)
-  结论: 双射限制 f s s
-  证明: bijOn_of_subsingleton' _ Iff.rfl
-
-Depends on / 依赖: Iff.rfl, bijOn_of_subsingleton
+/-
+**Set.bijOn_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：bijOn_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : BijOn f 
+s s
+参数：f : α -> α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.bijOn_of_subsingleton'`：bijOn_of_subsingleton' [Subsingleton α] [Sub
+singleton β] (f : α -> β) (h : s.Nonempty ↔ t.Nonempty) : BijOn f s t
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma bijOn_of_subsingleton [Subsingleton α] (f : α -> α) (s : Set α) : BijOn f s s :=
+lemma bijOn_of_subsingleton [Subsingleton α] (f : α → α) (s : Set α) : BijOn f s s :=
   bijOn_of_subsingleton' _ Iff.rfl
-
-/--
-theorem `BijOn.bijective` / 定理 `BijOn.bijective`
-
-English:
-theorem BijOn.bijective
-  given: (h : BijOn f s t)
-  statement: Bijective (h.mapsTo.restrict f s t)
-  proof: ⟨fun x y h' => Subtype.ext h.injOn x.2 y.2 Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
-    let ⟨x, hx, hxy⟩ := h.surjOn hy
-    ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
-
-中文:
-定理 双射限制.bijective
-  条件: (h : 双射限制 f s t)
-  结论: 双射 (h.mapsTo.restrict f s t)
-  证明: ⟨fun x y h' => Subtype.ext h.injOn x.2 y.2 Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
-    let ⟨x, hx, hxy⟩ := h.surjOn hy
-    ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
-
-Depends on / 依赖: Subtype, Subtype.ext, Subtype.ext_iff, ext_iff, h.injOn, h.surjOn, surjOn
+/-
+**Set.BijOn.bijective** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} (h : S
+et.BijOn f s t),   Function.Bijective (Set.MapsTo.restrict f s t ⋯)
+参数：h : Set.BijOn f s t；Set.MapsTo.restrict f s t ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 theorem BijOn.bijective (h : BijOn f s t) : Bijective (h.mapsTo.restrict f s t) :=
-⟨fun x y h' => Subtype.ext h.injOn x.2 y.2 Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
+  ⟨fun x y h' => Subtype.ext <| h.injOn x.2 y.2 <| Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
     let ⟨x, hx, hxy⟩ := h.surjOn hy
     ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
-
-/--
-lemma `bijOn_univ` / 引理 `bijOn_univ`
-
-English:
-lemma bijOn_univ
-  statement: BijOn f univ univ ↔ Bijective f
-  proof: by simp [Bijective, BijOn]
-
-protected alias ⟨_, _root_.Function.Bijective.bijOn_univ⟩ := bijOn_univ
-
-中文:
-引理 bijOn_univ
-  结论: 双射限制 f univ univ ↔ 双射 f
-  证明: by simp [Bijective, BijOn]
-
-protected alias ⟨_, _root_.Function.Bijective.bijOn_univ⟩ := bijOn_univ
+/-
+**Set.bijOn_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, Set.BijOn f Set.univ Set.univ
+ ↔ Function.Bijective f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma bijOn_univ : BijOn f univ univ ↔ Bijective f := by simp [Bijective, BijOn]
 
 protected alias ⟨_, _root_.Function.Bijective.bijOn_univ⟩ := bijOn_univ
-
-/--
-lemma `_root_.Function.Injective.bijOn_image` / 引理 `_root_.Function.Injective.bijOn_image`
-
-English:
-lemma _root_.Function.Injective.bijOn_image
-  given: (hf : f.Injective)
-  statement: BijOn f s (f '' s)
-  proof: hf.injOn.bijOn_image
-
-中文:
-引理 _root_.函数.单射.bijOn_image
-  条件: (hf : f.单射)
-  结论: 双射限制 f s (f '' s)
-  证明: hf.injOn.bijOn_image
-
-Depends on / 依赖: bijOn_image, hf.injOn.bijOn_image
+/-
+**Set._root_.Function.Injective.bijOn_image** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Function.Injective.bijOn_image (hf : f.Injective) : BijOn f s (f '' s) :=
   hf.injOn.bijOn_image
-
-/--
-lemma `_root_.Function.Surjective.surjOn_preimage` / 引理 `_root_.Function.Surjective.surjOn_preimage`
-
-English:
-lemma _root_.Function.Surjective.surjOn_preimage
-  given: (hf : f.Surjective)
-  statement: SurjOn f (f ⁻¹' t) t
-  proof: hf.surjOn.preimage
-
-中文:
-引理 _root_.函数.满射.surjOn_preimage
-  条件: (hf : f.满射)
-  结论: 满射限制 f (f ⁻¹' t) t
-  证明: hf.surjOn.preimage
-
-Depends on / 依赖: hf.surjOn.preimage, preimage, surjOn
+/-
+**Set._root_.Function.Surjective.surjOn_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Set`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Function.Surjective.surjOn_preimage (hf : f.Surjective) : SurjOn f (f ⁻¹' t) t :=
   hf.surjOn.preimage
-
-/--
-lemma `_root_.Function.Bijective.bijOn_preimage` / 引理 `_root_.Function.Bijective.bijOn_preimage`
-
-English:
-lemma _root_.Function.Bijective.bijOn_preimage
-  given: (hf : f.Bijective)
-  statement: BijOn f (f ⁻¹' t) t
-  proof: ⟨fun _ => id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
-
-中文:
-引理 _root_.函数.双射.bijOn_preimage
-  条件: (hf : f.双射)
-  结论: 双射限制 f (f ⁻¹' t) t
-  证明: ⟨fun _ => id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
-
-Depends on / 依赖: hf.injective.injOn, hf.surjective.surjOn_preimage, injective, surjOn_preimage, surjective
+/-
+**Set._root_.Function.Bijective.bijOn_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Function.Bijective.bijOn_preimage (hf : f.Bijective) : BijOn f (f ⁻¹' t) t :=
-  ⟨fun _ => id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
-
-/--
-theorem `BijOn.compl` / 定理 `BijOn.compl`
-
-English:
-theorem BijOn.compl
-  given: (hst : BijOn f s t) (hf : Bijective f)
-  statement: BijOn f sᶜ tᶜ
-  proof: ⟨hst.surjOn.mapsTo_compl hf.1, hf.1.injOn, hst.mapsTo.surjOn_compl hf.2⟩
-
-中文:
-定理 双射限制.compl
-  条件: (hst : 双射限制 f s t) (hf : 双射 f)
-  结论: 双射限制 f sᶜ tᶜ
-  证明: ⟨hst.surjOn.mapsTo_compl hf.1, hf.1.injOn, hst.mapsTo.surjOn_compl hf.2⟩
-
-Depends on / 依赖: hst.mapsTo.surjOn_compl, hst.surjOn.mapsTo_compl, mapsTo, mapsTo_compl, surjOn, surjOn_compl
+  ⟨fun _ ↦ id, hf.injective.injOn, hf.surjective.surjOn_preimage⟩
+/-
+**Set.BijOn.compl** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.BijOn f s t → Function.Bijective f → Set.BijOn f sᶜ tᶜ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.mapsTo_compl`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β},   Set.SurjOn f s t → Function.Injective f → Set.MapsTo f s
+ᶜ tᶜ
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Set.MapsTo.surjOn_compl`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β},   Set.MapsTo f s t → Function.Surjective f → Set.SurjOn f 
+sᶜ tᶜ
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem BijOn.compl (hst : BijOn f s t) (hf : Bijective f) : BijOn f sᶜ tᶜ :=
   ⟨hst.surjOn.mapsTo_compl hf.1, hf.1.injOn, hst.mapsTo.surjOn_compl hf.2⟩
-
-/--
-theorem `BijOn.subset_right` / 定理 `BijOn.subset_right`
-
-English:
-theorem BijOn.subset_right
-  given: {r : Set β} (hf : BijOn f s t) (hrt : r subseteq t)
-  proof: by
-  refine ⟨inter_subset_right, hf.injOn.mono inter_subset_left, fun x hx => ?_⟩
-  obtain ⟨y, hy, rfl⟩ := hf.surjOn (hrt hx)
-  exact ⟨y, ⟨hy, hx⟩, rfl⟩
-
-中文:
-定理 双射限制.subset_right
-  条件: {r : 集合 β} (hf : 双射限制 f s t) (hrt : r subseteq t)
-  证明: by
-  refine ⟨inter_subset_right, hf.injOn.mono inter_subset_left, fun x hx => ?_⟩
-  obtain ⟨y, hy, rfl⟩ := hf.surjOn (hrt hx)
-  exact ⟨y, ⟨hy, hx⟩, rfl⟩
-
-Depends on / 依赖: hf.injOn.mono, hf.surjOn, inter_subset_left, inter_subset_right, surjOn
+/-
+**Set.BijOn.subset_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {r : S
+et β},   Set.BijOn f s t → r ⊆ t → Set.BijOn f (s ∩ f ⁻¹' r) r
+参数：s ∩ f ⁻¹' r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-theorem BijOn.subset_right {r : Set β} (hf : BijOn f s t) (hrt : r subseteq t) :
-    BijOn f (s inter f ⁻¹' r) r := by
-  refine ⟨inter_subset_right, hf.injOn.mono inter_subset_left, fun x hx => ?_⟩
+theorem BijOn.subset_right {r : Set β} (hf : BijOn f s t) (hrt : r ⊆ t) :
+    BijOn f (s ∩ f ⁻¹' r) r := by
+  refine ⟨inter_subset_right, hf.injOn.mono inter_subset_left, fun x hx ↦ ?_⟩
   obtain ⟨y, hy, rfl⟩ := hf.surjOn (hrt hx)
   exact ⟨y, ⟨hy, hx⟩, rfl⟩
-
-/--
-theorem `BijOn.subset_left` / 定理 `BijOn.subset_left`
-
-English:
-theorem BijOn.subset_left
-  given: {r : Set α} (hf : BijOn f s t) (hrs : r subseteq s)
-  proof: (hf.injOn.mono hrs).bijOn_image
-
-中文:
-定理 双射限制.subset_left
-  条件: {r : 集合 α} (hf : 双射限制 f s t) (hrs : r subseteq s)
-  证明: (hf.injOn.mono hrs).bijOn_image
-
-Depends on / 依赖: bijOn_image, hf.injOn.mono
+/-
+**Set.BijOn.subset_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {r : S
+et α},   Set.BijOn f s t → r ⊆ s → Set.BijOn f r (f '' r)
+参数：f '' r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.bijOn_image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β}, Set.InjOn f s → Set.BijOn f s (f '' s)
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
 -/
-theorem BijOn.subset_left {r : Set α} (hf : BijOn f s t) (hrs : r subseteq s) :
+theorem BijOn.subset_left {r : Set α} (hf : BijOn f s t) (hrs : r ⊆ s) :
     BijOn f r (f '' r) :=
   (hf.injOn.mono hrs).bijOn_image
-
-/--
-theorem `BijOn.insert_iff` / 定理 `BijOn.insert_iff`
-
-English:
-theorem BijOn.insert_iff
-  given: (ha : a ∉ s) (hfa : f a ∉ t)
-  proof: by
-    have := congrArg (· \ {f a}) (image_insert_eq ▸ h.image_eq)
-    simp only [mem_singleton_iff, insert_sdiff_of_mem] at this
-    rw [sdiff_singleton_eq_self hfa]; rw [sdiff_singleton_eq_self] at this
-    · exact ⟨by simp [← this, mapsTo_iff_image_subset], h.injOn.mono (subset_insert ..),
-        by simp [← this, surjOn_image]⟩
-    simp only [mem_image, not_exists, not_and]
-    intro x hx
-    rw [h.injOn.eq_iff (by simp [hx]) (by simp)]
-    exact ha ∘ (· ▸ hx)
-  mpr h := by
-    repeat rw [insert_eq]
-    refine (bijOn_singleton.mpr rfl).union h ?_
-    simp only [singleton_union, injOn_insert fun x => (hfa (h.mapsTo x)), h.injOn, mem_image,
-      not_exists, not_and, true_and]
-    exact fun _ hx h₂ => hfa (h₂ ▸ h.mapsTo hx)
-
-中文:
-定理 双射限制.insert_iff
-  条件: (ha : a ∉ s) (hfa : f a ∉ t)
-  证明: by
-    have := congrArg (· \ {f a}) (image_insert_eq ▸ h.image_eq)
-    simp only [mem_singleton_iff, insert_sdiff_of_mem] at this
-    rw [sdiff_singleton_eq_self hfa]; rw [sdiff_singleton_eq_self] at this
-    · exact ⟨by simp [← this, mapsTo_iff_image_subset], h.injOn.mono (subset_insert ..),
-        by simp [← this, surjOn_image]⟩
-    simp only [mem_image, not_exists, not_and]
-    intro x hx
-    rw [h.injOn.eq_iff (by simp [hx]) (by simp)]
-    exact ha ∘ (· ▸ hx)
-  mpr h := by
-    repeat rw [insert_eq]
-    refine (bijOn_singleton.mpr rfl).union h ?_
-    simp only [singleton_union, injOn_insert fun x => (hfa (h.mapsTo x)), h.injOn, mem_image,
-      not_exists, not_and, true_and]
-    exact fun _ hx h₂ => hfa (h₂ ▸ h.mapsTo hx)
-
-Depends on / 依赖: bijOn_singleton, bijOn_singleton.mpr, eq_iff, h.image_eq, h.injOn.eq_iff, h.injOn.mono, image_eq, image_insert_eq, insert_eq, insert_sdiff_of_mem, mapsTo_iff_image_subset, mem_image, mem_singleton_iff, not_and, not_exists, repeat, sdiff_singleton_eq_self, subset_insert, surjOn_image
+/-
+**Set.BijOn.insert_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {a : α
+},   a ∉ s → f a ∉ t → (Set.BijOn f (insert a s) (insert (f a) t) ↔ Set.BijOn f 
+s t)
+参数：Set.BijOn f (insert a s) (insert (f a) t) ↔ Set.BijOn f s t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Set.image_insert_eq`：image_insert_eq {f : α -> β} {a : α} {s : Set α} : 
+f '' insert a s = insert (f a) (f '' s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.sdiff_singleton_eq_self`：sdiff_singleton_eq_self (h : a ∉ s) : s \ {
+a} = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Set.insert_sdiff_of_mem`：insert_sdiff_of_mem (s) (h : a in t) : insert a
+ s \ t = s \ t
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
+· 使用定理 `Set.insert_eq`：insert_eq (x : α) (s : Set α) : insert x s = ({x} : Set α
+) union s
+· 使用定理 `Set.BijOn.union`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   Set.BijOn f s₁ t₁ → Set.BijOn f s₂ t₂ → Set.InjOn f (s₁ 
+∪ s₂)…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.bijOn_singleton`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {a : α}
+ {b : β}, Set.BijOn f {a} {b} ↔ f a = b
+· 使用定理 `Set.injOn_insert`：injOn_insert {f : α -> β} {s : Set α} {a : α} (has : a
+ ∉ s) : Set.InjOn f (insert a s) ↔ Set.InjOn f s ∧ f a ∉ f '' s
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 theorem BijOn.insert_iff (ha : a ∉ s) (hfa : f a ∉ t) :
     BijOn f (insert a s) (insert (f a) t) ↔ BijOn f s t where
   mp h := by
     have := congrArg (· \ {f a}) (image_insert_eq ▸ h.image_eq)
     simp only [mem_singleton_iff, insert_sdiff_of_mem] at this
-    rw [sdiff_singleton_eq_self hfa]; rw [sdiff_singleton_eq_self] at this
+    rw [sdiff_singleton_eq_self hfa, sdiff_singleton_eq_self] at this
     · exact ⟨by simp [← this, mapsTo_iff_image_subset], h.injOn.mono (subset_insert ..),
         by simp [← this, surjOn_image]⟩
     simp only [mem_image, not_exists, not_and]
@@ -3821,49 +2689,57 @@ theorem BijOn.insert_iff (ha : a ∉ s) (hfa : f a ∉ t) :
   mpr h := by
     repeat rw [insert_eq]
     refine (bijOn_singleton.mpr rfl).union h ?_
-    simp only [singleton_union, injOn_insert fun x => (hfa (h.mapsTo x)), h.injOn, mem_image,
+    simp only [singleton_union, injOn_insert fun x ↦ (hfa (h.mapsTo x)), h.injOn, mem_image,
       not_exists, not_and, true_and]
-    exact fun _ hx h₂ => hfa (h₂ ▸ h.mapsTo hx)
-
-/--
-theorem `BijOn.insert` / 定理 `BijOn.insert`
-
-English:
-theorem BijOn.insert
-  given: (h₁ : BijOn f s t) (h₂ : f a ∉ t)
-  proof: (insert_iff (h₂ <| h₁.mapsTo ·) h₂).mpr h₁
-
-中文:
-定理 双射限制.insert
-  条件: (h₁ : 双射限制 f s t) (h₂ : f a ∉ t)
-  证明: (insert_iff (h₂ <| h₁.mapsTo ·) h₂).mpr h₁
-
-Depends on / 依赖: insert_iff, mapsTo
+    exact fun _ hx h₂ ↦ hfa (h₂ ▸ h.mapsTo hx)
+/-
+**Set.BijOn.insert** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {a : α
+},   Set.BijOn f s t → f a ∉ t → Set.BijOn f (insert a s) (insert (f a) t)
+参数：insert a s；insert (f a) t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.BijOn.insert_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : S
+et β} {f : α → β} {a : α},   a ∉ s → f a ∉ t → (Set.BijOn f (insert a s) (insert
+ (f a) t) …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
 -/
 theorem BijOn.insert (h₁ : BijOn f s t) (h₂ : f a ∉ t) :
     BijOn f (insert a s) (insert (f a) t) :=
   (insert_iff (h₂ <| h₁.mapsTo ·) h₂).mpr h₁
-
-/--
-theorem `BijOn.sdiff_singleton` / 定理 `BijOn.sdiff_singleton`
-
-English:
-theorem BijOn.sdiff_singleton
-  given: (h₁ : BijOn f s t) (h₂ : a in s)
-  proof: by
-  convert! h₁.subset_left sdiff_subset
-  simp [h₁.injOn.image_sdiff, h₁.image_eq, h₂, inter_eq_self_of_subset_right]
-
-中文:
-定理 双射限制.sdiff_singleton
-  条件: (h₁ : 双射限制 f s t) (h₂ : a in s)
-  证明: by
-  convert! h₁.subset_left sdiff_subset
-  simp [h₁.injOn.image_sdiff, h₁.image_eq, h₂, inter_eq_self_of_subset_right]
-
-Depends on / 依赖: convert, image_eq, image_sdiff, injOn.image_sdiff, inter_eq_self_of_subset_right, sdiff_subset, subset_left
+/-
+**Set.BijOn.sdiff_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {a : α
+},   Set.BijOn f s t → a ∈ s → Set.BijOn f (s \ {a}) (t \ {f a})
+参数：s \ {a}；t \ {f a}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.InjOn.image_sdiff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β} {t : Set α},   Set.InjOn f s → f '' (s \ t) = f '' s \ f '' (s ∩ t)
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.BijOn.subset_left`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : 
+Set β} {f : α → β} {r : Set α},   Set.BijOn f s t → r ⊆ s → Set.BijOn f r (f '' 
+r)
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-theorem BijOn.sdiff_singleton (h₁ : BijOn f s t) (h₂ : a in s) :
+theorem BijOn.sdiff_singleton (h₁ : BijOn f s t) (h₂ : a ∈ s) :
     BijOn f (s \ {a}) (t \ {f a}) := by
   convert! h₁.subset_left sdiff_subset
   simp [h₁.injOn.image_sdiff, h₁.image_eq, h₂, inter_eq_self_of_subset_right]
@@ -3873,310 +2749,189 @@ end bijOn
 /-! ### left inverse -/
 namespace LeftInvOn
 
-/--
-theorem `eqOn` / 定理 `eqOn`
-
-English:
-theorem eqOn
-  given: (h : LeftInvOn f' f s)
-  statement: EqOn (f' ∘ f) id s
-  proof: h
-
-中文:
-定理 eqOn
-  条件: (h : LeftInvOn f' f s)
-  结论: EqOn (f' ∘ f) id s
-  证明: h
+/-
+**Set.LeftInvOn.eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：eqOn (h : LeftInvOn f' f s) : EqOn (f' ∘ f) id s
+参数：h : LeftInvOn f' f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eqOn (h : LeftInvOn f' f s) : EqOn (f' ∘ f) id s :=
   h
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (h : LeftInvOn f' f s) {x} (hx : x in s)
-  statement: f' (f x) = x
-  proof: h hx
-
-中文:
-定理 eq
-  条件: (h : LeftInvOn f' f s) {x} (hx : x in s)
-  结论: f' (f x) = x
-  证明: h hx
+/-
+**Set.LeftInvOn.eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：eq (h : LeftInvOn f' f s) {x} (hx : x in s) : f' (f x) = x
+参数：h : LeftInvOn f' f s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq (h : LeftInvOn f' f s) {x} (hx : x in s) : f' (f x) = x :=
+theorem eq (h : LeftInvOn f' f s) {x} (hx : x ∈ s) : f' (f x) = x :=
   h hx
-
-/--
-theorem `congr_left` / 定理 `congr_left`
-
-English:
-theorem congr_left
-  statement: (h₁ : LeftInvOn f₁' f s) {t : Set β} (h₁' : MapsTo f s t)
-  proof: fun _ hx => heq (h₁' hx) ▸ h₁ hx
-
-中文:
-定理 congr_left
-  结论: (h₁ : LeftInvOn f₁' f s) {t : 集合 β} (h₁' : 映射到 f s t)
-  证明: fun _ hx => heq (h₁' hx) ▸ h₁ hx
+/-
+**Set.LeftInvOn.congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：congr_left (h₁ : LeftInvOn f₁' f s) {t : Set β} (h₁' : MapsTo f s t) (heq 
+: EqOn f₁' f₂' t) : LeftInvOn f₂' f s
+参数：h₁ : LeftInvOn f₁' f s；h₁' : MapsTo f s t；heq : EqOn f₁' f₂' t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congr_left (h₁ : LeftInvOn f₁' f s) {t : Set β} (h₁' : MapsTo f s t)
     (heq : EqOn f₁' f₂' t) : LeftInvOn f₂' f s := fun _ hx => heq (h₁' hx) ▸ h₁ hx
-
-/--
-theorem `congr_right` / 定理 `congr_right`
-
-English:
-theorem congr_right
-  given: (h₁ : LeftInvOn f₁' f₁ s) (heq : EqOn f₁ f₂ s)
-  statement: LeftInvOn f₁' f₂ s
-  proof: fun _ hx => heq hx ▸ h₁ hx
-
-中文:
-定理 congr_right
-  条件: (h₁ : LeftInvOn f₁' f₁ s) (heq : EqOn f₁ f₂ s)
-  结论: LeftInvOn f₁' f₂ s
-  证明: fun _ hx => heq hx ▸ h₁ hx
+/-
+**Set.LeftInvOn.congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：congr_right (h₁ : LeftInvOn f₁' f₁ s) (heq : EqOn f₁ f₂ s) : LeftInvOn f₁'
+ f₂ s
+参数：h₁ : LeftInvOn f₁' f₁ s；heq : EqOn f₁ f₂ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congr_right (h₁ : LeftInvOn f₁' f₁ s) (heq : EqOn f₁ f₂ s) : LeftInvOn f₁' f₂ s :=
   fun _ hx => heq hx ▸ h₁ hx
-
-/--
-theorem `injOn` / 定理 `injOn`
-
-English:
-theorem injOn
-  given: (h : LeftInvOn f₁' f s)
-  statement: InjOn f s
-  proof: fun x₁ h₁ x₂ h₂ heq =>
-  calc
-x₁ = f₁' (f x₁) := Eq.symm h h₁
-    _ = f₁' (f x₂) := congr_arg f₁' heq
-    _ = x₂ := h h₂
-
-中文:
-定理 injOn
-  条件: (h : LeftInvOn f₁' f s)
-  结论: 单射限制 f s
-  证明: fun x₁ h₁ x₂ h₂ heq =>
-  calc
-x₁ = f₁' (f x₁) := Eq.symm h h₁
-    _ = f₁' (f x₂) := congr_arg f₁' heq
-    _ = x₂ := h h₂
+/-
+**Set.LeftInvOn.injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：injOn (h : LeftInvOn f₁' f s) : InjOn f s
+参数：h : LeftInvOn f₁' f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem injOn (h : LeftInvOn f₁' f s) : InjOn f s := fun x₁ h₁ x₂ h₂ heq =>
   calc
-x₁ = f₁' (f x₁) := Eq.symm h h₁
+    x₁ = f₁' (f x₁) := Eq.symm <| h h₁
     _ = f₁' (f x₂) := congr_arg f₁' heq
     _ = x₂ := h h₂
-
-/--
-theorem `surjOn` / 定理 `surjOn`
-
-English:
-theorem surjOn
-  given: (h : LeftInvOn f' f s) (hf : MapsTo f s t)
-  statement: SurjOn f' t s
-  proof: fun x hx =>
-  ⟨f x, hf hx, h hx⟩
-
-中文:
-定理 surjOn
-  条件: (h : LeftInvOn f' f s) (hf : 映射到 f s t)
-  结论: 满射限制 f' t s
-  证明: fun x hx =>
-  ⟨f x, hf hx, h hx⟩
+/-
+**Set.LeftInvOn.surjOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：surjOn (h : LeftInvOn f' f s) (hf : MapsTo f s t) : SurjOn f' t s
+参数：h : LeftInvOn f' f s；hf : MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem surjOn (h : LeftInvOn f' f s) (hf : MapsTo f s t) : SurjOn f' t s := fun x hx =>
   ⟨f x, hf hx, h hx⟩
-
-/--
-theorem `mapsTo` / 定理 `mapsTo`
-
-English:
-theorem mapsTo
-  given: (h : LeftInvOn f' f s) (hf : SurjOn f s t)
-  proof: fun y hy => by
-  let ⟨x, hs, hx⟩ := hf hy
-  rwa [← hx, h hs]
-
-中文:
-定理 mapsTo
-  条件: (h : LeftInvOn f' f s) (hf : 满射限制 f s t)
-  证明: fun y hy => by
-  let ⟨x, hs, hx⟩ := hf hy
-  rwa [← hx, h hs]
+/-
+**Set.LeftInvOn.mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：mapsTo (h : LeftInvOn f' f s) (hf : SurjOn f s t) : MapsTo f' t s
+参数：h : LeftInvOn f' f s；hf : SurjOn f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mapsTo (h : LeftInvOn f' f s) (hf : SurjOn f s t) :
     MapsTo f' t s := fun y hy => by
   let ⟨x, hs, hx⟩ := hf hy
   rwa [← hx, h hs]
-
-/--
-lemma `_root_.Set.leftInvOn_id` / 引理 `_root_.Set.leftInvOn_id`
-
-English:
-lemma _root_.Set.leftInvOn_id
-  given: (s : Set α)
-  statement: LeftInvOn id id s
-  proof: fun _ _ => rfl
-
-中文:
-引理 _root_.集合.leftInvOn_id
-  条件: (s : 集合 α)
-  结论: LeftInvOn id id s
-  证明: fun _ _ => rfl
+/-
+**Set.LeftInvOn._root_.Set.leftInvOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set.LeftInvOn
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Set.leftInvOn_id (s : Set α) : LeftInvOn id id s := fun _ _ => rfl
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : MapsTo f s t)
-  proof: fun x h =>
-  calc
-    (f' ∘ g') ((g ∘ f) x) = f' (f x) := congr_arg f' (hg' (hf h))
-    _ = x := hf' h
-
-中文:
-定理 comp
-  条件: (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : 映射到 f s t)
-  证明: fun x h =>
-  calc
-    (f' ∘ g') ((g ∘ f) x) = f' (f x) := congr_arg f' (hg' (hf h))
-    _ = x := hf' h
+lemma _root_.Set.leftInvOn_id (s : Set α) : LeftInvOn id id s := fun _ _ ↦ rfl
+/-
+**Set.LeftInvOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：comp (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : MapsTo f s t)
+ : LeftInvOn (f' ∘ g') (g ∘ f) s
+参数：hf' : LeftInvOn f' f s；hg' : LeftInvOn g' g t；hf : MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem comp (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g t) (hf : MapsTo f s t) :
     LeftInvOn (f' ∘ g') (g ∘ f) s := fun x h =>
   calc
     (f' ∘ g') ((g ∘ f) x) = f' (f x) := congr_arg f' (hg' (hf h))
     _ = x := hf' h
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: (hf : LeftInvOn f' f s) (ht : s₁ subseteq s)
-  statement: LeftInvOn f' f s₁
-  proof: fun _ hx =>
-  hf (ht hx)
-
-中文:
-定理 mono
-  条件: (hf : LeftInvOn f' f s) (ht : s₁ subseteq s)
-  结论: LeftInvOn f' f s₁
-  证明: fun _ hx =>
-  hf (ht hx)
+/-
+**Set.LeftInvOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : LeftInvOn f' f s₁
+参数：hf : LeftInvOn f' f s；ht : s₁ subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : LeftInvOn f' f s₁ := fun _ hx =>
+theorem mono (hf : LeftInvOn f' f s) (ht : s₁ ⊆ s) : LeftInvOn f' f s₁ := fun _ hx =>
   hf (ht hx)
-
-/--
-theorem `image_inter'` / 定理 `image_inter'`
-
-English:
-theorem image_inter'
-  given: (hf : LeftInvOn f' f s)
-  statement: f '' (s₁ inter s) = f' ⁻¹' s₁ inter f '' s
-  proof: by
-  apply Subset.antisymm
-  · rintro _ ⟨x, ⟨h₁, h⟩, rfl⟩
-    exact ⟨by rwa [mem_preimage, hf h], mem_image_of_mem _ h⟩
-  · rintro _ ⟨h₁, ⟨x, h, rfl⟩⟩
-    exact mem_image_of_mem _ ⟨by rwa [← hf h], h⟩
-
-中文:
-定理 image_inter'
-  条件: (hf : LeftInvOn f' f s)
-  结论: f '' (s₁ inter s) = f' ⁻¹' s₁ inter f '' s
-  证明: by
-  apply Subset.antisymm
-  · rintro _ ⟨x, ⟨h₁, h⟩, rfl⟩
-    exact ⟨by rwa [mem_preimage, hf h], mem_image_of_mem _ h⟩
-  · rintro _ ⟨h₁, ⟨x, h, rfl⟩⟩
-    exact mem_image_of_mem _ ⟨by rwa [← hf h], h⟩
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, mem_image_of_mem, mem_preimage
+/-
+**Set.LeftInvOn.image_inter'** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：image_inter' (hf : LeftInvOn f' f s) : f '' (s₁ inter s) = f' ⁻¹' s₁ inter
+ f '' s
+参数：hf : LeftInvOn f' f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem image_inter' (hf : LeftInvOn f' f s) : f '' (s₁ inter s) = f' ⁻¹' s₁ inter f '' s := by
+theorem image_inter' (hf : LeftInvOn f' f s) : f '' (s₁ ∩ s) = f' ⁻¹' s₁ ∩ f '' s := by
   apply Subset.antisymm
   · rintro _ ⟨x, ⟨h₁, h⟩, rfl⟩
     exact ⟨by rwa [mem_preimage, hf h], mem_image_of_mem _ h⟩
   · rintro _ ⟨h₁, ⟨x, h, rfl⟩⟩
     exact mem_image_of_mem _ ⟨by rwa [← hf h], h⟩
-
-/--
-theorem `image_inter` / 定理 `image_inter`
-
-English:
-theorem image_inter
-  given: (hf : LeftInvOn f' f s)
-  proof: by
-  rw [hf.image_inter']
-  refine Subset.antisymm ?_ (inter_subset_inter_left _ (preimage_mono inter_subset_left))
-  rintro _ ⟨h₁, x, hx, rfl⟩; exact ⟨⟨h₁, by rwa [hf hx]⟩, mem_image_of_mem _ hx⟩
-
-中文:
-定理 image_inter
-  条件: (hf : LeftInvOn f' f s)
-  证明: by
-  rw [hf.image_inter']
-  refine Subset.antisymm ?_ (inter_subset_inter_left _ (preimage_mono inter_subset_left))
-  rintro _ ⟨h₁, x, hx, rfl⟩; exact ⟨⟨h₁, by rwa [hf hx]⟩, mem_image_of_mem _ hx⟩
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, hf.image_inter, image_inter, inter_subset_inter_left, inter_subset_left, mem_image_of_mem, preimage_mono
+/-
+**Set.LeftInvOn.image_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：image_inter (hf : LeftInvOn f' f s) : f '' (s₁ inter s) = f' ⁻¹' (s₁ inter
+ s) inter f '' s
+参数：hf : LeftInvOn f' f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.LeftInvOn.image_inter'`：image_inter' (hf : LeftInvOn f' f s) : f '' 
+(s₁ inter s) = f' ⁻¹' s₁ inter f '' s
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Set.inter_subset_inter_left`：inter_subset_inter_left {s t : Set α} (u : 
+Set α) (H : s subseteq t) : s inter u subseteq t inter u
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
 theorem image_inter (hf : LeftInvOn f' f s) :
-    f '' (s₁ inter s) = f' ⁻¹' (s₁ inter s) inter f '' s := by
+    f '' (s₁ ∩ s) = f' ⁻¹' (s₁ ∩ s) ∩ f '' s := by
   rw [hf.image_inter']
   refine Subset.antisymm ?_ (inter_subset_inter_left _ (preimage_mono inter_subset_left))
   rintro _ ⟨h₁, x, hx, rfl⟩; exact ⟨⟨h₁, by rwa [hf hx]⟩, mem_image_of_mem _ hx⟩
-
-/--
-theorem `image_image` / 定理 `image_image`
-
-English:
-theorem image_image
-  given: (hf : LeftInvOn f' f s)
-  statement: f' '' f '' s = s
-  proof: by
-  rw [Set.image_image]; rw [image_congr hf]; rw [image_id']
-
-中文:
-定理 image_image
-  条件: (hf : LeftInvOn f' f s)
-  结论: f' '' f '' s = s
-  证明: by
-  rw [Set.image_image]; rw [image_congr hf]; rw [image_id']
-
-Depends on / 依赖: Set.image_image, image_congr, image_id, image_image
+/-
+**Set.LeftInvOn.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：image_image (hf : LeftInvOn f' f s) : f' '' f '' s = s
+参数：hf : LeftInvOn f' f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
 -/
 theorem image_image (hf : LeftInvOn f' f s) : f' '' f '' s = s := by
-  rw [Set.image_image]; rw [image_congr hf]; rw [image_id']
-
-/--
-theorem `image_image'` / 定理 `image_image'`
-
-English:
-theorem image_image'
-  given: (hf : LeftInvOn f' f s) (hs : s₁ subseteq s)
-  statement: f' '' f '' s₁ = s₁
-  proof: (hf.mono hs).image_image
-
-中文:
-定理 image_image'
-  条件: (hf : LeftInvOn f' f s) (hs : s₁ subseteq s)
-  结论: f' '' f '' s₁ = s₁
-  证明: (hf.mono hs).image_image
-
-Depends on / 依赖: hf.mono, image_image
+  rw [Set.image_image, image_congr hf, image_id']
+/-
+**Set.LeftInvOn.image_image'** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：image_image' (hf : LeftInvOn f' f s) (hs : s₁ subseteq s) : f' '' f '' s₁ 
+= s₁
+参数：hf : LeftInvOn f' f s；hs : s₁ subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.image_image`：image_image (hf : LeftInvOn f' f s) : f' '' f
+ '' s = s
+· 使用定理 `Set.LeftInvOn.mono`：mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : 
+LeftInvOn f' f s₁
 -/
-theorem image_image' (hf : LeftInvOn f' f s) (hs : s₁ subseteq s) : f' '' f '' s₁ = s₁ :=
+theorem image_image' (hf : LeftInvOn f' f s) (hs : s₁ ⊆ s) : f' '' f '' s₁ = s₁ :=
   (hf.mono hs).image_image
 
 end LeftInvOn
@@ -4185,306 +2940,175 @@ end LeftInvOn
 section RightInvOn
 namespace RightInvOn
 
-/--
-theorem `eqOn` / 定理 `eqOn`
-
-English:
-theorem eqOn
-  given: (h : RightInvOn f' f t)
-  statement: EqOn (f ∘ f') id t
-  proof: h
-
-中文:
-定理 eqOn
-  条件: (h : RightInvOn f' f t)
-  结论: EqOn (f ∘ f') id t
-  证明: h
+/-
+**Set.RightInvOn.eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：eqOn (h : RightInvOn f' f t) : EqOn (f ∘ f') id t
+参数：h : RightInvOn f' f t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eqOn (h : RightInvOn f' f t) : EqOn (f ∘ f') id t :=
   h
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (h : RightInvOn f' f t) {y} (hy : y in t)
-  statement: f (f' y) = y
-  proof: h hy
-
-中文:
-定理 eq
-  条件: (h : RightInvOn f' f t) {y} (hy : y in t)
-  结论: f (f' y) = y
-  证明: h hy
+/-
+**Set.RightInvOn.eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：eq (h : RightInvOn f' f t) {y} (hy : y in t) : f (f' y) = y
+参数：h : RightInvOn f' f t；hy : y in t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq (h : RightInvOn f' f t) {y} (hy : y in t) : f (f' y) = y :=
+theorem eq (h : RightInvOn f' f t) {y} (hy : y ∈ t) : f (f' y) = y :=
   h hy
-
-/--
-theorem `_root_.Set.LeftInvOn.rightInvOn_image` / 定理 `_root_.Set.LeftInvOn.rightInvOn_image`
-
-English:
-theorem _root_.Set.LeftInvOn.rightInvOn_image
-  given: (h : LeftInvOn f' f s)
-  statement: RightInvOn f' f (f '' s)
-  proof: fun _y ⟨_x, hx, heq⟩ => heq ▸ (congr_arg f <| h.eq hx)
-
-中文:
-定理 _root_.集合.LeftInvOn.rightInvOn_image
-  条件: (h : LeftInvOn f' f s)
-  结论: RightInvOn f' f (f '' s)
-  证明: fun _y ⟨_x, hx, heq⟩ => heq ▸ (congr_arg f <| h.eq hx)
-
-Depends on / 依赖: congr_arg, h.eq
+/-
+**Set.RightInvOn._root_.Set.LeftInvOn.rightInvOn_image** 是 Mathlib 中的一个定理，位于命名空间
+ `Set.RightInvOn`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Set.LeftInvOn.rightInvOn_image (h : LeftInvOn f' f s) : RightInvOn f' f (f '' s) :=
   fun _y ⟨_x, hx, heq⟩ => heq ▸ (congr_arg f <| h.eq hx)
-
-/--
-theorem `congr_left` / 定理 `congr_left`
-
-English:
-theorem congr_left
-  given: (h₁ : RightInvOn f₁' f t) (heq : EqOn f₁' f₂' t)
-  proof: h₁.congr_right heq
-
-中文:
-定理 congr_left
-  条件: (h₁ : RightInvOn f₁' f t) (heq : EqOn f₁' f₂' t)
-  证明: h₁.congr_right heq
-
-Depends on / 依赖: congr_right
+/-
+**Set.RightInvOn.congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：congr_left (h₁ : RightInvOn f₁' f t) (heq : EqOn f₁' f₂' t) : RightInvOn f
+₂' f t
+参数：h₁ : RightInvOn f₁' f t；heq : EqOn f₁' f₂' t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.congr_right`：congr_right (h₁ : LeftInvOn f₁' f₁ s) (heq : 
+EqOn f₁ f₂ s) : LeftInvOn f₁' f₂ s
 -/
 theorem congr_left (h₁ : RightInvOn f₁' f t) (heq : EqOn f₁' f₂' t) :
     RightInvOn f₂' f t :=
   h₁.congr_right heq
-
-/--
-theorem `congr_right` / 定理 `congr_right`
-
-English:
-theorem congr_right
-  given: (h₁ : RightInvOn f' f₁ t) (hg : MapsTo f' t s) (heq : EqOn f₁ f₂ s)
-  proof: LeftInvOn.congr_left h₁ hg heq
-
-中文:
-定理 congr_right
-  条件: (h₁ : RightInvOn f' f₁ t) (hg : 映射到 f' t s) (heq : EqOn f₁ f₂ s)
-  证明: LeftInvOn.congr_left h₁ hg heq
-
-Depends on / 依赖: LeftInvOn, LeftInvOn.congr_left, congr_left
+/-
+**Set.RightInvOn.congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：congr_right (h₁ : RightInvOn f' f₁ t) (hg : MapsTo f' t s) (heq : EqOn f₁ 
+f₂ s) : RightInvOn f' f₂ t
+参数：h₁ : RightInvOn f' f₁ t；hg : MapsTo f' t s；heq : EqOn f₁ f₂ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.congr_left`：congr_left (h₁ : LeftInvOn f₁' f s) {t : Set β
+} (h₁' : MapsTo f s t) (heq : EqOn f₁' f₂' t) : LeftInvOn f₂' f s
 -/
 theorem congr_right (h₁ : RightInvOn f' f₁ t) (hg : MapsTo f' t s) (heq : EqOn f₁ f₂ s) :
     RightInvOn f' f₂ t :=
   LeftInvOn.congr_left h₁ hg heq
-
-/--
-theorem `surjOn` / 定理 `surjOn`
-
-English:
-theorem surjOn
-  given: (hf : RightInvOn f' f t) (hf' : MapsTo f' t s)
-  statement: SurjOn f s t
-  proof: LeftInvOn.surjOn hf hf'
-
-中文:
-定理 surjOn
-  条件: (hf : RightInvOn f' f t) (hf' : 映射到 f' t s)
-  结论: 满射限制 f s t
-  证明: LeftInvOn.surjOn hf hf'
-
-Depends on / 依赖: LeftInvOn, LeftInvOn.surjOn, surjOn
+/-
+**Set.RightInvOn.surjOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：surjOn (hf : RightInvOn f' f t) (hf' : MapsTo f' t s) : SurjOn f s t
+参数：hf : RightInvOn f' f t；hf' : MapsTo f' t s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.surjOn`：surjOn (h : LeftInvOn f' f s) (hf : MapsTo f s t) 
+: SurjOn f' t s
 -/
 theorem surjOn (hf : RightInvOn f' f t) (hf' : MapsTo f' t s) : SurjOn f s t :=
   LeftInvOn.surjOn hf hf'
-
-/--
-theorem `mapsTo` / 定理 `mapsTo`
-
-English:
-theorem mapsTo
-  given: (h : RightInvOn f' f t) (hf : SurjOn f' t s)
-  statement: MapsTo f s t
-  proof: LeftInvOn.mapsTo h hf
-
-中文:
-定理 mapsTo
-  条件: (h : RightInvOn f' f t) (hf : 满射限制 f' t s)
-  结论: 映射到 f s t
-  证明: LeftInvOn.mapsTo h hf
-
-Depends on / 依赖: LeftInvOn, LeftInvOn.mapsTo, mapsTo
+/-
+**Set.RightInvOn.mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：mapsTo (h : RightInvOn f' f t) (hf : SurjOn f' t s) : MapsTo f s t
+参数：h : RightInvOn f' f t；hf : SurjOn f' t s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.mapsTo`：mapsTo (h : LeftInvOn f' f s) (hf : SurjOn f s t) 
+: MapsTo f' t s
 -/
 theorem mapsTo (h : RightInvOn f' f t) (hf : SurjOn f' t s) : MapsTo f s t :=
   LeftInvOn.mapsTo h hf
-
-/--
-lemma `_root_.Set.rightInvOn_id` / 引理 `_root_.Set.rightInvOn_id`
-
-English:
-lemma _root_.Set.rightInvOn_id
-  given: (s : Set α)
-  statement: RightInvOn id id s
-  proof: fun _ _ => rfl
-
-中文:
-引理 _root_.集合.rightInvOn_id
-  条件: (s : 集合 α)
-  结论: RightInvOn id id s
-  证明: fun _ _ => rfl
+/-
+**Set.RightInvOn._root_.Set.rightInvOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set.RightIn
+vOn`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Set.rightInvOn_id (s : Set α) : RightInvOn id id s := fun _ _ => rfl
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : MapsTo g' p t)
-  proof: LeftInvOn.comp hg hf g'pt
-
-中文:
-定理 comp
-  条件: (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : 映射到 g' p t)
-  证明: LeftInvOn.comp hg hf g'pt
-
-Depends on / 依赖: LeftInvOn, LeftInvOn.comp
+lemma _root_.Set.rightInvOn_id (s : Set α) : RightInvOn id id s := fun _ _ ↦ rfl
+/-
+**Set.RightInvOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：comp (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : MapsTo g' p
+ t) : RightInvOn (f' ∘ g') (g ∘ f) p
+参数：hf : RightInvOn f' f t；hg : RightInvOn g' g p；g'pt : MapsTo g' p t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.comp`：comp (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g 
+t) (hf : MapsTo f s t) : LeftInvOn (f' ∘ g') (g ∘ f) s
 -/
 theorem comp (hf : RightInvOn f' f t) (hg : RightInvOn g' g p) (g'pt : MapsTo g' p t) :
     RightInvOn (f' ∘ g') (g ∘ f) p :=
   LeftInvOn.comp hg hf g'pt
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: (hf : RightInvOn f' f t) (ht : t₁ subseteq t)
-  statement: RightInvOn f' f t₁
-  proof: LeftInvOn.mono hf ht
-
-中文:
-定理 mono
-  条件: (hf : RightInvOn f' f t) (ht : t₁ subseteq t)
-  结论: RightInvOn f' f t₁
-  证明: LeftInvOn.mono hf ht
-
-Depends on / 依赖: LeftInvOn, LeftInvOn.mono
+/-
+**Set.RightInvOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：mono (hf : RightInvOn f' f t) (ht : t₁ subseteq t) : RightInvOn f' f t₁
+参数：hf : RightInvOn f' f t；ht : t₁ subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.mono`：mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : 
+LeftInvOn f' f s₁
 -/
-theorem mono (hf : RightInvOn f' f t) (ht : t₁ subseteq t) : RightInvOn f' f t₁ :=
+theorem mono (hf : RightInvOn f' f t) (ht : t₁ ⊆ t) : RightInvOn f' f t₁ :=
   LeftInvOn.mono hf ht
 end RightInvOn
 
-/--
-theorem `InjOn.rightInvOn_of_leftInvOn` / 定理 `InjOn.rightInvOn_of_leftInvOn`
-
-English:
-theorem InjOn.rightInvOn_of_leftInvOn
-  statement: (hf : InjOn f s) (hf' : LeftInvOn f f' t)
-  proof: fun _ h =>
-  hf (h₂ <| h₁ h) h (hf' (h₁ h))
-
-中文:
-定理 单射限制.rightInvOn_of_leftInvOn
-  结论: (hf : 单射限制 f s) (hf' : LeftInvOn f f' t)
-  证明: fun _ h =>
-  hf (h₂ <| h₁ h) h (hf' (h₁ h))
+/-
+**Set.InjOn.rightInvOn_of_leftInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {f' : 
+β → α},   Set.InjOn f s → Set.LeftInvOn f f' t → Set.MapsTo f s t → Set.MapsTo f
+' t s → Set.RightInvOn f f' s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem InjOn.rightInvOn_of_leftInvOn (hf : InjOn f s) (hf' : LeftInvOn f f' t)
     (h₁ : MapsTo f s t) (h₂ : MapsTo f' t s) : RightInvOn f f' s := fun _ h =>
   hf (h₂ <| h₁ h) h (hf' (h₁ h))
-
-/--
-theorem `eqOn_of_leftInvOn_of_rightInvOn` / 定理 `eqOn_of_leftInvOn_of_rightInvOn`
-
-English:
-theorem eqOn_of_leftInvOn_of_rightInvOn
-  statement: (h₁ : LeftInvOn f₁' f s) (h₂ : RightInvOn f₂' f t)
-  proof: fun y hy =>
-  calc
-    f₁' y = (f₁' ∘ f ∘ f₂') y := congr_arg f₁' (h₂ hy).symm
-    _ = f₂' y := h₁ (h hy)
-
-中文:
-定理 eqOn_of_leftInvOn_of_rightInvOn
-  结论: (h₁ : LeftInvOn f₁' f s) (h₂ : RightInvOn f₂' f t)
-  证明: fun y hy =>
-  calc
-    f₁' y = (f₁' ∘ f ∘ f₂') y := congr_arg f₁' (h₂ hy).symm
-    _ = f₂' y := h₁ (h hy)
+/-
+**Set.eqOn_of_leftInvOn_of_rightInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eqOn_of_leftInvOn_of_rightInvOn (h₁ : LeftInvOn f₁' f s) (h₂ : RightInvOn 
+f₂' f t) (h : MapsTo f₂' t s) : EqOn f₁' f₂' t
+参数：h₁ : LeftInvOn f₁' f s；h₂ : RightInvOn f₂' f t；h : MapsTo f₂' t s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem eqOn_of_leftInvOn_of_rightInvOn (h₁ : LeftInvOn f₁' f s) (h₂ : RightInvOn f₂' f t)
     (h : MapsTo f₂' t s) : EqOn f₁' f₂' t := fun y hy =>
   calc
     f₁' y = (f₁' ∘ f ∘ f₂') y := congr_arg f₁' (h₂ hy).symm
     _ = f₂' y := h₁ (h hy)
-
-/--
-theorem `SurjOn.leftInvOn_of_rightInvOn` / 定理 `SurjOn.leftInvOn_of_rightInvOn`
-
-English:
-theorem SurjOn.leftInvOn_of_rightInvOn
-  given: (hf : SurjOn f s t) (hf' : RightInvOn f f' s)
-  proof: fun y hy => by
-  let ⟨x, hx, heq⟩ := hf hy
-  rw [← heq]; rw [hf' hx]
-
-中文:
-定理 满射限制.leftInvOn_of_rightInvOn
-  条件: (hf : 满射限制 f s t) (hf' : RightInvOn f f' s)
-  证明: fun y hy => by
-  let ⟨x, hx, heq⟩ := hf hy
-  rw [← heq]; rw [hf' hx]
+/-
+**Set.SurjOn.leftInvOn_of_rightInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {f' : 
+β → α},   Set.SurjOn f s t → Set.RightInvOn f f' s → Set.LeftInvOn f f' t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem SurjOn.leftInvOn_of_rightInvOn (hf : SurjOn f s t) (hf' : RightInvOn f f' s) :
     LeftInvOn f f' t := fun y hy => by
   let ⟨x, hx, heq⟩ := hf hy
-  rw [← heq]; rw [hf' hx]
-
-/--
-theorem `image_eq_preimage_of_leftInvOn_injOn` / 定理 `image_eq_preimage_of_leftInvOn_injOn`
-
-English:
-theorem image_eq_preimage_of_leftInvOn_injOn
-  statement: {f : α -> β} {g : β -> α} {s : Set α}
-  proof: by
-  ext x
-  constructor
-  · rintro ⟨y, hy, rfl⟩
-    rw [mem_preimage]; rw [hgf hy]; exact hy
-  · intro hx
-    refine ⟨g x, hx, Set.InjOn.rightInvOn_of_leftInvOn ginj hgf (Set.mapsTo_preimage g s) ?_ hx⟩
-    intro y hy
-    simpa [hgf hy] using hy
-
-@[deprecated (since := "2026-03-27")]
-alias image_eq_preimage_of_leftInvOn_injOn_mapsTo := image_eq_preimage_of_leftInvOn_injOn
-
-中文:
-定理 image_eq_preimage_of_leftInvOn_injOn
-  结论: {f : α -> β} {g : β -> α} {s : 集合 α}
-  证明: by
-  ext x
-  constructor
-  · rintro ⟨y, hy, rfl⟩
-    rw [mem_preimage]; rw [hgf hy]; exact hy
-  · intro hx
-    refine ⟨g x, hx, Set.InjOn.rightInvOn_of_leftInvOn ginj hgf (Set.mapsTo_preimage g s) ?_ hx⟩
-    intro y hy
-    simpa [hgf hy] using hy
-
-@[deprecated (since := "2026-03-27")]
-alias image_eq_preimage_of_leftInvOn_injOn_mapsTo := image_eq_preimage_of_leftInvOn_injOn
-
-Depends on / 依赖: Set.InjOn.rightInvOn_of_leftInvOn, Set.mapsTo_preimage, mapsTo_preimage, mem_preimage, rightInvOn_of_leftInvOn
+  rw [← heq, hf' hx]
+/-
+**Set.image_eq_preimage_of_leftInvOn_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：image_eq_preimage_of_leftInvOn_injOn {f : α -> β} {g : β -> α} {s : Set α}
+ (hgf : LeftInvOn g f s) (ginj : Set.InjOn g (g ⁻¹' s)) : f '' s = g ⁻¹' s
+参数：hgf : LeftInvOn g f s；ginj : Set.InjOn g (g ⁻¹' s)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Set.InjOn.rightInvOn_of_leftInvOn`：∀ {α : Type u_1} {β : Type u_2} {s : 
+Set α} {t : Set β} {f : α → β} {f' : β → α},   Set.InjOn f s → Set.LeftInvOn f f
+' t → Set.MapsTo f s t …
+· 使用定理 `Set.mapsTo_preimage`：mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f
+ (f ⁻¹' t) t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem image_eq_preimage_of_leftInvOn_injOn {f : α -> β} {g : β -> α} {s : Set α}
+theorem image_eq_preimage_of_leftInvOn_injOn {f : α → β} {g : β → α} {s : Set α}
     (hgf : LeftInvOn g f s) (ginj : Set.InjOn g (g ⁻¹' s)) : f '' s = g ⁻¹' s := by
   ext x
   constructor
   · rintro ⟨y, hy, rfl⟩
-    rw [mem_preimage]; rw [hgf hy]; exact hy
+    rw [mem_preimage, hgf hy]; exact hy
   · intro hx
     refine ⟨g x, hx, Set.InjOn.rightInvOn_of_leftInvOn ginj hgf (Set.mapsTo_preimage g s) ?_ hx⟩
     intro y hy
@@ -4498,41 +3122,25 @@ end RightInvOn
 /-! ### Two-side inverses -/
 namespace InvOn
 
-/--
-lemma `_root_.Set.invOn_id` / 引理 `_root_.Set.invOn_id`
-
-English:
-lemma _root_.Set.invOn_id
-  given: (s : Set α)
-  statement: InvOn id id s s
-  proof: ⟨s.leftInvOn_id, s.rightInvOn_id⟩
-
-中文:
-引理 _root_.集合.invOn_id
-  条件: (s : 集合 α)
-  结论: InvOn id id s s
-  证明: ⟨s.leftInvOn_id, s.rightInvOn_id⟩
-
-Depends on / 依赖: leftInvOn_id, rightInvOn_id, s.leftInvOn_id, s.rightInvOn_id
+/-
+**Set.InvOn._root_.Set.invOn_id** 是 Mathlib 中的一个引理，位于命名空间 `Set.InvOn`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Set.invOn_id (s : Set α) : InvOn id id s s := ⟨s.leftInvOn_id, s.rightInvOn_id⟩
-
-/--
-lemma `comp` / 引理 `comp`
-
-English:
-lemma comp
-  statement: (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : MapsTo f s t)
-  proof: ⟨hf.1.comp hg.1 fst, hf.2.comp hg.2 g'pt⟩
-
-@[symm]
-
-中文:
-引理 comp
-  结论: (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : 映射到 f s t)
-  证明: ⟨hf.1.comp hg.1 fst, hf.2.comp hg.2 g'pt⟩
-
-@[symm]
+/-
+**Set.InvOn.comp** 是 Mathlib 中的一个引理，位于命名空间 `Set.InvOn`。
+形式化陈述：comp (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : MapsTo f s t) (g'p
+t : MapsTo g' p t) : InvOn (f' ∘ g') (g ∘ f) s p
+参数：hf : InvOn f' f s t；hg : InvOn g' g t p；fst : MapsTo f s t；g'pt : MapsTo g' p
+ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.comp`：comp (hf' : LeftInvOn f' f s) (hg' : LeftInvOn g' g 
+t) (hf : MapsTo f s t) : LeftInvOn (f' ∘ g') (g ∘ f) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.comp`：comp (hf : RightInvOn f' f t) (hg : RightInvOn g' g
+ p) (g'pt : MapsTo g' p t) : RightInvOn (f' ∘ g') (g ∘ f) p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma comp (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : MapsTo f s t)
     (g'pt : MapsTo g' p t) :
@@ -4540,60 +3148,56 @@ lemma comp (hf : InvOn f' f s t) (hg : InvOn g' g t p) (fst : MapsTo f s t)
   ⟨hf.1.comp hg.1 fst, hf.2.comp hg.2 g'pt⟩
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: (h : InvOn f' f s t)
-  statement: InvOn f f' t s
-  proof: ⟨h.right, h.left⟩
-
-中文:
-定理 symm
-  条件: (h : InvOn f' f s t)
-  结论: InvOn f f' t s
-  证明: ⟨h.right, h.left⟩
-
-Depends on / 依赖: h.left, h.right
+/-
+**Set.InvOn.symm** 是 Mathlib 中的一个定理，位于命名空间 `Set.InvOn`。
+形式化陈述：symm (h : InvOn f' f s t) : InvOn f f' t s
+参数：h : InvOn f' f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem symm (h : InvOn f' f s t) : InvOn f f' t s :=
   ⟨h.right, h.left⟩
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: (h : InvOn f' f s t) (hs : s₁ subseteq s) (ht : t₁ subseteq t)
-  statement: InvOn f' f s₁ t₁
-  proof: ⟨h.1.mono hs, h.2.mono ht⟩
-
-中文:
-定理 mono
-  条件: (h : InvOn f' f s t) (hs : s₁ subseteq s) (ht : t₁ subseteq t)
-  结论: InvOn f' f s₁ t₁
-  证明: ⟨h.1.mono hs, h.2.mono ht⟩
+/-
+**Set.InvOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.InvOn`。
+形式化陈述：mono (h : InvOn f' f s t) (hs : s₁ subseteq s) (ht : t₁ subseteq t) : InvO
+n f' f s₁ t₁
+参数：h : InvOn f' f s t；hs : s₁ subseteq s；ht : t₁ subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.mono`：mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : 
+LeftInvOn f' f s₁
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.mono`：mono (hf : RightInvOn f' f t) (ht : t₁ subseteq t) 
+: RightInvOn f' f t₁
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mono (h : InvOn f' f s t) (hs : s₁ subseteq s) (ht : t₁ subseteq t) : InvOn f' f s₁ t₁ :=
+theorem mono (h : InvOn f' f s t) (hs : s₁ ⊆ s) (ht : t₁ ⊆ t) : InvOn f' f s₁ t₁ :=
   ⟨h.1.mono hs, h.2.mono ht⟩
 
-/--
-theorem `bijOn` / 定理 `bijOn`
+/-- If functions `f'` and `f` are inverse on `s` and `t`, `f` maps `s` into `t`, and `f'` maps `t`
+into `s`, then `f` is a bijection between `s` and `t`. The `mapsTo` arguments can be deduced from
+`surjOn` statements using `LeftInvOn.mapsTo` and `RightInvOn.mapsTo`. -/
+/-
+**Set.InvOn.bijOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.InvOn`。
+形式化陈述：bijOn (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : MapsTo f' t s) : Bij
+On f s t
+参数：h : InvOn f' f s t；hf : MapsTo f s t；hf' : MapsTo f' t s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.injOn`：injOn (h : LeftInvOn f₁' f s) : InjOn f s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.surjOn`：surjOn (hf : RightInvOn f' f t) (hf' : MapsTo f' 
+t s) : SurjOn f s t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem bijOn
-  given: (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : MapsTo f' t s)
-  statement: BijOn f s t
-  proof: ⟨hf, h.left.injOn, h.right.surjOn hf'⟩
-
-中文:
-定理 bijOn
-  条件: (h : InvOn f' f s t) (hf : 映射到 f s t) (hf' : 映射到 f' t s)
-  结论: 双射限制 f s t
-  证明: ⟨hf, h.left.injOn, h.right.surjOn hf'⟩
-
-Depends on / 依赖: h.left.injOn, h.right.surjOn, surjOn
+--- 原说明 ---
+If functions `f'` and `f` are inverse on `s` and `t`, `f` maps `s` into `t`, and
+ `f'` maps `t`
+into `s`, then `f` is a bijection between `s` and `t`. The `mapsTo` arguments ca
+n be deduced from
+`surjOn` statements using `LeftInvOn.mapsTo` and `RightInvOn.mapsTo`.
 -/
 theorem bijOn (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : MapsTo f' t s) : BijOn f s t :=
   ⟨hf, h.left.injOn, h.right.surjOn hf'⟩
@@ -4605,161 +3209,111 @@ end Set
 /-! ### `invFunOn` is a left/right inverse -/
 namespace Function
 
-variable {s : Set α} {f : α -> β} {a : α} {b : β}
+variable {s : Set α} {f : α → β} {a : α} {b : β}
 
-/--
-Definition of `invFunOn` / `invFunOn` 的定义
+/-- Construct the inverse for a function `f` on domain `s`. This function is a right inverse of `f`
+on `f '' s`. For a computable version, see `Function.Embedding.invOfMemRange`. -/
+/-
+**Function.invFunOn** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：invFunOn [Nonempty α] (f : α -> β) (s : Set α) (b : β) : α
+参数：f : α -> β；s : Set α；b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invFunOn
-  signature: [Nonempty α] (f : α -> β) (s : Set α) (b : β)
-  body: open scoped Classical in
-  if h : exists a, a in s ∧ f a = b then Classical.choose h else Classical.choice ‹Nonempty α›
-
-中文:
-定义 invFunOn
-  签名: [非空 α] (f : α -> β) (s : 集合 α) (b : β)
-  定义体: open scoped Classical in
-  if h : exists a, a in s ∧ f a = b then Classical.choose h else Classical.choice ‹Nonempty α›
-
-Depends on / 依赖: Classical, Classical.choice, Classical.choose, Nonempty, choice, scoped
+--- 原说明 ---
+Construct the inverse for a function `f` on domain `s`. This function is a right
+ inverse of `f`
+on `f '' s`. For a computable version, see `Function.Embedding.invOfMemRange`.
 -/
-noncomputable def invFunOn [Nonempty α] (f : α -> β) (s : Set α) (b : β) : α :=
+noncomputable def invFunOn [Nonempty α] (f : α → β) (s : Set α) (b : β) : α :=
   open scoped Classical in
-  if h : exists a, a in s ∧ f a = b then Classical.choose h else Classical.choice ‹Nonempty α›
+  if h : ∃ a, a ∈ s ∧ f a = b then Classical.choose h else Classical.choice ‹Nonempty α›
 
 variable [Nonempty α]
-
-/--
-theorem `invFunOn_pos` / 定理 `invFunOn_pos`
-
-English:
-theorem invFunOn_pos
-  given: (h : exists a in s, f a = b)
-  statement: invFunOn f s b in s ∧ f (invFunOn f s b) = b
-  proof: by
-  rw [invFunOn]; rw [dif_pos h]
-  exact Classical.choose_spec h
-
-中文:
-定理 invFunOn_pos
-  条件: (h : 存在 a in s, f a = b)
-  结论: invFunOn f s b in s ∧ f (invFunOn f s b) = b
-  证明: by
-  rw [invFunOn]; rw [dif_pos h]
-  exact Classical.choose_spec h
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, dif_pos, invFunOn
+/-
+**Function.invFunOn_pos** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_pos (h : exists a in s, f a = b) : invFunOn f s b in s ∧ f (invFu
+nOn f s b) = b
+参数：h : exists a in s, f a = b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.invFunOn.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : Nonempty
+ α] (f : α → β) (s : Set α) (b : β),   Function.invFunOn f s b = if h : ∃ a ∈ s,
+ f a = b the…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem invFunOn_pos (h : exists a in s, f a = b) : invFunOn f s b in s ∧ f (invFunOn f s b) = b := by
-  rw [invFunOn]; rw [dif_pos h]
+theorem invFunOn_pos (h : ∃ a ∈ s, f a = b) : invFunOn f s b ∈ s ∧ f (invFunOn f s b) = b := by
+  rw [invFunOn, dif_pos h]
   exact Classical.choose_spec h
-
-/--
-theorem `invFunOn_mem` / 定理 `invFunOn_mem`
-
-English:
-theorem invFunOn_mem
-  given: (h : exists a in s, f a = b)
-  statement: invFunOn f s b in s
-  proof: (invFunOn_pos h).left
-
-中文:
-定理 invFunOn_mem
-  条件: (h : 存在 a in s, f a = b)
-  结论: invFunOn f s b in s
-  证明: (invFunOn_pos h).left
-
-Depends on / 依赖: invFunOn_pos
+/-
+**Function.invFunOn_mem** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_mem (h : exists a in s, f a = b) : invFunOn f s b in s
+参数：h : exists a in s, f a = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Function.invFunOn_pos`：invFunOn_pos (h : exists a in s, f a = b) : invFu
+nOn f s b in s ∧ f (invFunOn f s b) = b
 -/
-theorem invFunOn_mem (h : exists a in s, f a = b) : invFunOn f s b in s :=
+theorem invFunOn_mem (h : ∃ a ∈ s, f a = b) : invFunOn f s b ∈ s :=
   (invFunOn_pos h).left
-
-/--
-theorem `invFunOn_eq` / 定理 `invFunOn_eq`
-
-English:
-theorem invFunOn_eq
-  given: (h : exists a in s, f a = b)
-  statement: f (invFunOn f s b) = b
-  proof: (invFunOn_pos h).right
-
-中文:
-定理 invFunOn_eq
-  条件: (h : 存在 a in s, f a = b)
-  结论: f (invFunOn f s b) = b
-  证明: (invFunOn_pos h).right
-
-Depends on / 依赖: invFunOn_pos
+/-
+**Function.invFunOn_eq** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_eq (h : exists a in s, f a = b) : f (invFunOn f s b) = b
+参数：h : exists a in s, f a = b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Function.invFunOn_pos`：invFunOn_pos (h : exists a in s, f a = b) : invFu
+nOn f s b in s ∧ f (invFunOn f s b) = b
 -/
-theorem invFunOn_eq (h : exists a in s, f a = b) : f (invFunOn f s b) = b :=
+theorem invFunOn_eq (h : ∃ a ∈ s, f a = b) : f (invFunOn f s b) = b :=
   (invFunOn_pos h).right
-
-/--
-theorem `invFunOn_neg` / 定理 `invFunOn_neg`
-
-English:
-theorem invFunOn_neg
-  given: (h : ¬exists a in s, f a = b)
-  statement: invFunOn f s b = Classical.choice ‹Nonempty α›
-  proof: by
-  rw [invFunOn]; rw [dif_neg h]
-
-@[simp]
-
-中文:
-定理 invFunOn_neg
-  条件: (h : ¬存在 a in s, f a = b)
-  结论: invFunOn f s b = 经典.choice ‹非空 α›
-  证明: by
-  rw [invFunOn]; rw [dif_neg h]
-
-@[simp]
-
-Depends on / 依赖: dif_neg, invFunOn
+/-
+**Function.invFunOn_neg** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_neg (h : ¬exists a in s, f a = b) : invFunOn f s b = Classical.ch
+oice ‹Nonempty α›
+参数：h : ¬exists a in s, f a = b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.invFunOn.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : Nonempty
+ α] (f : α → β) (s : Set α) (b : β),   Function.invFunOn f s b = if h : ∃ a ∈ s,
+ f a = b the…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem invFunOn_neg (h : ¬exists a in s, f a = b) : invFunOn f s b = Classical.choice ‹Nonempty α› := by
-  rw [invFunOn]; rw [dif_neg h]
+theorem invFunOn_neg (h : ¬∃ a ∈ s, f a = b) : invFunOn f s b = Classical.choice ‹Nonempty α› := by
+  rw [invFunOn, dif_neg h]
 
 @[simp]
-/--
-theorem `invFunOn_apply_mem` / 定理 `invFunOn_apply_mem`
-
-English:
-theorem invFunOn_apply_mem
-  given: (h : a in s)
-  statement: invFunOn f s (f a) in s
-  proof: invFunOn_mem ⟨a, h, rfl⟩
-
-中文:
-定理 invFunOn_apply_mem
-  条件: (h : a in s)
-  结论: invFunOn f s (f a) in s
-  证明: invFunOn_mem ⟨a, h, rfl⟩
-
-Depends on / 依赖: invFunOn_mem
+/-
+**Function.invFunOn_apply_mem** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_apply_mem (h : a in s) : invFunOn f s (f a) in s
+参数：h : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.invFunOn_mem`：invFunOn_mem (h : exists a in s, f a = b) : invFu
+nOn f s b in s
 -/
-theorem invFunOn_apply_mem (h : a in s) : invFunOn f s (f a) in s :=
+theorem invFunOn_apply_mem (h : a ∈ s) : invFunOn f s (f a) ∈ s :=
   invFunOn_mem ⟨a, h, rfl⟩
-
-/--
-theorem `invFunOn_apply_eq` / 定理 `invFunOn_apply_eq`
-
-English:
-theorem invFunOn_apply_eq
-  given: (h : a in s)
-  statement: f (invFunOn f s (f a)) = f a
-  proof: invFunOn_eq ⟨a, h, rfl⟩
-
-中文:
-定理 invFunOn_apply_eq
-  条件: (h : a in s)
-  结论: f (invFunOn f s (f a)) = f a
-  证明: invFunOn_eq ⟨a, h, rfl⟩
-
-Depends on / 依赖: invFunOn_eq
+/-
+**Function.invFunOn_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：invFunOn_apply_eq (h : a in s) : f (invFunOn f s (f a)) = f a
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.invFunOn_eq`：invFunOn_eq (h : exists a in s, f a = b) : f (invF
+unOn f s b) = b
 -/
-theorem invFunOn_apply_eq (h : a in s) : f (invFunOn f s (f a)) = f a :=
+theorem invFunOn_apply_eq (h : a ∈ s) : f (invFunOn f s (f a)) = f a :=
   invFunOn_eq ⟨a, h, rfl⟩
 
 end Function
@@ -4768,326 +3322,243 @@ open Function
 
 namespace Set
 
-variable {s s₁ s₂ : Set α} {t : Set β} {f : α -> β}
+variable {s s₁ s₂ : Set α} {t : Set β} {f : α → β}
 
-/--
-theorem `InjOn.leftInvOn_invFunOn` / 定理 `InjOn.leftInvOn_invFunOn`
-
-English:
-theorem InjOn.leftInvOn_invFunOn
-  given: [Nonempty α] (h : InjOn f s)
-  statement: LeftInvOn (invFunOn f s) f s
-  proof: fun _a ha => h (invFunOn_apply_mem ha) ha (invFunOn_apply_eq ha)
-
-中文:
-定理 单射限制.leftInvOn_invFunOn
-  条件: [非空 α] (h : 单射限制 f s)
-  结论: LeftInvOn (invFunOn f s) f s
-  证明: fun _a ha => h (invFunOn_apply_mem ha) ha (invFunOn_apply_eq ha)
-
-Depends on / 依赖: invFunOn_apply_eq, invFunOn_apply_mem
+/-
+**Set.InjOn.leftInvOn_invFunOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} [inst : Nonempty α
+],   Set.InjOn f s → Set.LeftInvOn (Function.invFunOn f s) f s
+参数：Function.invFunOn f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.invFunOn_apply_mem`：invFunOn_apply_mem (h : a in s) : invFunOn 
+f s (f a) in s
+· 使用定理 `Function.invFunOn_apply_eq`：invFunOn_apply_eq (h : a in s) : f (invFunOn
+ f s (f a)) = f a
 -/
 theorem InjOn.leftInvOn_invFunOn [Nonempty α] (h : InjOn f s) : LeftInvOn (invFunOn f s) f s :=
   fun _a ha => h (invFunOn_apply_mem ha) ha (invFunOn_apply_eq ha)
-
-/--
-theorem `InjOn.invFunOn_image` / 定理 `InjOn.invFunOn_image`
-
-English:
-theorem InjOn.invFunOn_image
-  given: [Nonempty α] (h : InjOn f s₂) (ht : s₁ subseteq s₂)
-  proof: h.leftInvOn_invFunOn.image_image' ht
-
-中文:
-定理 单射限制.invFunOn_image
-  条件: [非空 α] (h : 单射限制 f s₂) (ht : s₁ subseteq s₂)
-  证明: h.leftInvOn_invFunOn.image_image' ht
-
-Depends on / 依赖: h.leftInvOn_invFunOn.image_image, image_image, leftInvOn_invFunOn
+/-
+**Set.InjOn.invFunOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α → β} [inst : Nonemp
+ty α],   Set.InjOn f s₂ → s₁ ⊆ s₂ → Function.invFunOn f s₂ '' f '' s₁ = s₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.image_image'`：image_image' (hf : LeftInvOn f' f s) (hs : s
+₁ subseteq s) : f' '' f '' s₁ = s₁
+· 使用定理 `Set.InjOn.leftInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α
+} {f : α → β} [inst : Nonempty α],   Set.InjOn f s → Set.LeftInvOn (Function.inv
+FunOn f s) f s
 -/
-theorem InjOn.invFunOn_image [Nonempty α] (h : InjOn f s₂) (ht : s₁ subseteq s₂) :
+theorem InjOn.invFunOn_image [Nonempty α] (h : InjOn f s₂) (ht : s₁ ⊆ s₂) :
     invFunOn f s₂ '' f '' s₁ = s₁ :=
   h.leftInvOn_invFunOn.image_image' ht
-
-/--
-theorem `_root_.Function.leftInvOn_invFunOn_of_subset_image_image` / 定理 `_root_.Function.leftInvOn_invFunOn_of_subset_image_image`
-
-English:
-theorem _root_.Function.leftInvOn_invFunOn_of_subset_image_image
-  statement: [Nonempty α]
-  proof: fun x hx => by
-    obtain ⟨-, ⟨x, hx', rfl⟩, rfl⟩ := h hx
-    rw [invFunOn_apply_eq (f := f) hx']
-
-中文:
-定理 _root_.函数.leftInvOn_invFunOn_of_subset_image_image
-  结论: [非空 α]
-  证明: fun x hx => by
-    obtain ⟨-, ⟨x, hx', rfl⟩, rfl⟩ := h hx
-    rw [invFunOn_apply_eq (f := f) hx']
-
-Depends on / 依赖: invFunOn_apply_eq
+/-
+**Set._root_.Function.leftInvOn_invFunOn_of_subset_image_image** 是 Mathlib 中的一个定
+理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Function.leftInvOn_invFunOn_of_subset_image_image [Nonempty α]
-    (h : s subseteq (invFunOn f s) '' f '' s) : LeftInvOn (invFunOn f s) f s :=
-  fun x hx => by
+    (h : s ⊆ (invFunOn f s) '' f '' s) : LeftInvOn (invFunOn f s) f s :=
+  fun x hx ↦ by
     obtain ⟨-, ⟨x, hx', rfl⟩, rfl⟩ := h hx
     rw [invFunOn_apply_eq (f := f) hx']
-
-/--
-theorem `injOn_iff_invFunOn_image_image_eq_self` / 定理 `injOn_iff_invFunOn_image_image_eq_self`
-
-English:
-theorem injOn_iff_invFunOn_image_image_eq_self
-  given: [Nonempty α]
-  proof: ⟨fun h => h.invFunOn_image Subset.rfl, fun h =>
-    (Function.leftInvOn_invFunOn_of_subset_image_image h.symm.subset).injOn⟩
-
-中文:
-定理 injOn_iff_invFunOn_image_image_eq_self
-  条件: [非空 α]
-  证明: ⟨fun h => h.invFunOn_image Subset.rfl, fun h =>
-    (Function.leftInvOn_invFunOn_of_subset_image_image h.symm.subset).injOn⟩
-
-Depends on / 依赖: Function, Function.leftInvOn_invFunOn_of_subset_image_image, Subset, Subset.rfl, h.invFunOn_image, h.symm.subset, invFunOn_image, leftInvOn_invFunOn_of_subset_image_image, subset
+/-
+**Set.injOn_iff_invFunOn_image_image_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：injOn_iff_invFunOn_image_image_eq_self [Nonempty α] : InjOn f s ↔ (invFunO
+n f s) '' f '' s = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.invFunOn_image`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α
+} {f : α → β} [inst : Nonempty α],   Set.InjOn f s₂ → s₁ ⊆ s₂ → Function.invFunO
+n f s₂ '' f ''…
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `Set.LeftInvOn.injOn`：injOn (h : LeftInvOn f₁' f s) : InjOn f s
+· 使用定理 `Function.leftInvOn_invFunOn_of_subset_image_image`：∀ {α : Type u_1} {β :
+ Type u_2} {s : Set α} {f : α → β} [inst : Nonempty α],   s ⊆ Function.invFunOn 
+f s '' f '' s → Set.LeftInvOn (Function…
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem injOn_iff_invFunOn_image_image_eq_self [Nonempty α] :
     InjOn f s ↔ (invFunOn f s) '' f '' s = s :=
-  ⟨fun h => h.invFunOn_image Subset.rfl, fun h =>
+  ⟨fun h ↦ h.invFunOn_image Subset.rfl, fun h ↦
     (Function.leftInvOn_invFunOn_of_subset_image_image h.symm.subset).injOn⟩
-
-/--
-theorem `_root_.Function.invFunOn_injOn_image` / 定理 `_root_.Function.invFunOn_injOn_image`
-
-English:
-theorem _root_.Function.invFunOn_injOn_image
-  given: [Nonempty α] (f : α -> β) (s : Set α)
-  proof: by
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨x', hx', rfl⟩ he
-  rw [← invFunOn_apply_eq (f := f) hx]; rw [he]; rw [invFunOn_apply_eq (f := f) hx']
-
-中文:
-定理 _root_.函数.invFunOn_injOn_image
-  条件: [非空 α] (f : α -> β) (s : 集合 α)
-  证明: by
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨x', hx', rfl⟩ he
-  rw [← invFunOn_apply_eq (f := f) hx]; rw [he]; rw [invFunOn_apply_eq (f := f) hx']
-
-Depends on / 依赖: invFunOn_apply_eq
+/-
+**Set._root_.Function.invFunOn_injOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.invFunOn_injOn_image [Nonempty α] (f : α -> β) (s : Set α) :
+theorem _root_.Function.invFunOn_injOn_image [Nonempty α] (f : α → β) (s : Set α) :
     Set.InjOn (invFunOn f s) (f '' s) := by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨x', hx', rfl⟩ he
-  rw [← invFunOn_apply_eq (f := f) hx]; rw [he]; rw [invFunOn_apply_eq (f := f) hx']
-
-/--
-theorem `_root_.Function.invFunOn_image_image_subset` / 定理 `_root_.Function.invFunOn_image_image_subset`
-
-English:
-theorem _root_.Function.invFunOn_image_image_subset
-  given: [Nonempty α] (f : α -> β) (s : Set α)
-  proof: by
-  rintro _ ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact invFunOn_apply_mem hx
-
-中文:
-定理 _root_.函数.invFunOn_image_image_subset
-  条件: [非空 α] (f : α -> β) (s : 集合 α)
-  证明: by
-  rintro _ ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact invFunOn_apply_mem hx
-
-Depends on / 依赖: invFunOn_apply_mem
+  rw [← invFunOn_apply_eq (f := f) hx, he, invFunOn_apply_eq (f := f) hx']
+/-
+**Set._root_.Function.invFunOn_image_image_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.invFunOn_image_image_subset [Nonempty α] (f : α -> β) (s : Set α) :
-    (invFunOn f s) '' f '' s subseteq s := by
+theorem _root_.Function.invFunOn_image_image_subset [Nonempty α] (f : α → β) (s : Set α) :
+    (invFunOn f s) '' f '' s ⊆ s := by
   rintro _ ⟨_, ⟨x, hx, rfl⟩, rfl⟩; exact invFunOn_apply_mem hx
-
-/--
-theorem `SurjOn.rightInvOn_invFunOn` / 定理 `SurjOn.rightInvOn_invFunOn`
-
-English:
-theorem SurjOn.rightInvOn_invFunOn
-  given: [Nonempty α] (h : SurjOn f s t)
-  proof: fun _y hy => invFunOn_eq h hy
-
-中文:
-定理 满射限制.rightInvOn_invFunOn
-  条件: [非空 α] (h : 满射限制 f s t)
-  证明: fun _y hy => invFunOn_eq h hy
-
-Depends on / 依赖: invFunOn_eq
+/-
+**Set.SurjOn.rightInvOn_invFunOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.SurjOn f s t → Set.RightInvOn (Function.invFunOn f s) f t
+参数：Function.invFunOn f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.invFunOn_eq`：invFunOn_eq (h : exists a in s, f a = b) : f (invF
+unOn f s b) = b
 -/
 theorem SurjOn.rightInvOn_invFunOn [Nonempty α] (h : SurjOn f s t) :
-RightInvOn (invFunOn f s) f t := fun _y hy => invFunOn_eq h hy
-
-/--
-theorem `BijOn.invOn_invFunOn` / 定理 `BijOn.invOn_invFunOn`
-
-English:
-theorem BijOn.invOn_invFunOn
-  given: [Nonempty α] (h : BijOn f s t)
-  statement: InvOn (invFunOn f s) f s t
-  proof: ⟨h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn⟩
-
-中文:
-定理 双射限制.invOn_invFunOn
-  条件: [非空 α] (h : 双射限制 f s t)
-  结论: InvOn (invFunOn f s) f s t
-  证明: ⟨h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn⟩
-
-Depends on / 依赖: h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn, leftInvOn_invFunOn, rightInvOn_invFunOn, surjOn
+    RightInvOn (invFunOn f s) f t := fun _y hy => invFunOn_eq <| h hy
+/-
+**Set.BijOn.invOn_invFunOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.BijOn f s t → Set.InvOn (Function.invFunOn f s) f s t
+参数：Function.invFunOn f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.leftInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α
+} {f : α → β} [inst : Nonempty α],   Set.InjOn f s → Set.LeftInvOn (Function.inv
+FunOn f s) f s
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.SurjOn.rightInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.RightI
+nvOn (Function.invFu…
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 theorem BijOn.invOn_invFunOn [Nonempty α] (h : BijOn f s t) : InvOn (invFunOn f s) f s t :=
   ⟨h.injOn.leftInvOn_invFunOn, h.surjOn.rightInvOn_invFunOn⟩
-
-/--
-theorem `SurjOn.invOn_invFunOn` / 定理 `SurjOn.invOn_invFunOn`
-
-English:
-theorem SurjOn.invOn_invFunOn
-  given: [Nonempty α] (h : SurjOn f s t)
-  proof: by
-  refine ⟨?_, h.rightInvOn_invFunOn⟩
-  rintro _ ⟨y, hy, rfl⟩
-  rw [h.rightInvOn_invFunOn hy]
-
-中文:
-定理 满射限制.invOn_invFunOn
-  条件: [非空 α] (h : 满射限制 f s t)
-  证明: by
-  refine ⟨?_, h.rightInvOn_invFunOn⟩
-  rintro _ ⟨y, hy, rfl⟩
-  rw [h.rightInvOn_invFunOn hy]
-
-Depends on / 依赖: h.rightInvOn_invFunOn, rightInvOn_invFunOn
+/-
+**Set.SurjOn.invOn_invFunOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.SurjOn f s t → Set.InvOn (Function.invFunOn f s) f (Functio
+n.invFunOn f s '' t) t
+参数：Function.invFunOn f s；Function.invFunOn f s '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.SurjOn.rightInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.RightI
+nvOn (Function.invFu…
 -/
 theorem SurjOn.invOn_invFunOn [Nonempty α] (h : SurjOn f s t) :
     InvOn (invFunOn f s) f (invFunOn f s '' t) t := by
   refine ⟨?_, h.rightInvOn_invFunOn⟩
   rintro _ ⟨y, hy, rfl⟩
   rw [h.rightInvOn_invFunOn hy]
-
-/--
-theorem `SurjOn.mapsTo_invFunOn` / 定理 `SurjOn.mapsTo_invFunOn`
-
-English:
-theorem SurjOn.mapsTo_invFunOn
-  given: [Nonempty α] (h : SurjOn f s t)
-  statement: MapsTo (invFunOn f s) t s
-  proof: fun _y hy => mem_preimage.2 invFunOn_mem h hy
-
-中文:
-定理 满射限制.mapsTo_invFunOn
-  条件: [非空 α] (h : 满射限制 f s t)
-  结论: 映射到 (invFunOn f s) t s
-  证明: fun _y hy => mem_preimage.2 invFunOn_mem h hy
-
-Depends on / 依赖: invFunOn_mem, mem_preimage
+/-
+**Set.SurjOn.mapsTo_invFunOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.SurjOn f s t → Set.MapsTo (Function.invFunOn f s) t s
+参数：Function.invFunOn f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Function.invFunOn_mem`：invFunOn_mem (h : exists a in s, f a = b) : invFu
+nOn f s b in s
 -/
 theorem SurjOn.mapsTo_invFunOn [Nonempty α] (h : SurjOn f s t) : MapsTo (invFunOn f s) t s :=
-fun _y hy => mem_preimage.2 invFunOn_mem h hy
+  fun _y hy => mem_preimage.2 <| invFunOn_mem <| h hy
 
-/--
-theorem `SurjOn.image_invFunOn_image_of_subset` / 定理 `SurjOn.image_invFunOn_image_of_subset`
+/-- This lemma is a special case of `rightInvOn_invFunOn.image_image'`; it may make more sense
+to use the other lemma directly in an application. -/
+/-
+**Set.SurjOn.image_invFunOn_image_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjO
+n`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α] {r : Set β},   Set.SurjOn f s t → r ⊆ t → f '' Function.invFunOn f
+ s '' r = r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.image_image'`：image_image' (hf : LeftInvOn f' f s) (hs : s
+₁ subseteq s) : f' '' f '' s₁ = s₁
+· 使用定理 `Set.SurjOn.rightInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.RightI
+nvOn (Function.invFu…
 
-English:
-theorem SurjOn.image_invFunOn_image_of_subset
-  statement: [Nonempty α] {r : Set β} (hf : SurjOn f s t)
-  proof: hf.rightInvOn_invFunOn.image_image' hrt
-
-中文:
-定理 满射限制.image_invFunOn_image_of_subset
-  结论: [非空 α] {r : 集合 β} (hf : 满射限制 f s t)
-  证明: hf.rightInvOn_invFunOn.image_image' hrt
-
-Depends on / 依赖: hf.rightInvOn_invFunOn.image_image, image_image, rightInvOn_invFunOn
+--- 原说明 ---
+This lemma is a special case of `rightInvOn_invFunOn.image_image'`; it may make 
+more sense
+to use the other lemma directly in an application.
 -/
 theorem SurjOn.image_invFunOn_image_of_subset [Nonempty α] {r : Set β} (hf : SurjOn f s t)
-    (hrt : r subseteq t) : f '' f.invFunOn s '' r = r :=
+    (hrt : r ⊆ t) : f '' f.invFunOn s '' r = r :=
   hf.rightInvOn_invFunOn.image_image' hrt
 
-/--
-theorem `SurjOn.image_invFunOn_image` / 定理 `SurjOn.image_invFunOn_image`
+/-- This lemma is a special case of `rightInvOn_invFunOn.image_image`; it may make more sense
+to use the other lemma directly in an application. -/
+/-
+**Set.SurjOn.image_invFunOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.SurjOn f s t → f '' Function.invFunOn f s '' t = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.image_image`：image_image (hf : LeftInvOn f' f s) : f' '' f
+ '' s = s
+· 使用定理 `Set.SurjOn.rightInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.RightI
+nvOn (Function.invFu…
 
-English:
-theorem SurjOn.image_invFunOn_image
-  given: [Nonempty α] (hf : SurjOn f s t)
-  proof: hf.rightInvOn_invFunOn.image_image
-
-中文:
-定理 满射限制.image_invFunOn_image
-  条件: [非空 α] (hf : 满射限制 f s t)
-  证明: hf.rightInvOn_invFunOn.image_image
-
-Depends on / 依赖: hf.rightInvOn_invFunOn.image_image, image_image, rightInvOn_invFunOn
+--- 原说明 ---
+This lemma is a special case of `rightInvOn_invFunOn.image_image`; it may make m
+ore sense
+to use the other lemma directly in an application.
 -/
 theorem SurjOn.image_invFunOn_image [Nonempty α] (hf : SurjOn f s t) :
     f '' f.invFunOn s '' t = t :=
   hf.rightInvOn_invFunOn.image_image
-
-/--
-theorem `SurjOn.bijOn_subset` / 定理 `SurjOn.bijOn_subset`
-
-English:
-theorem SurjOn.bijOn_subset
-  given: [Nonempty α] (h : SurjOn f s t)
-  statement: BijOn f (invFunOn f s '' t) t
-  proof: by
-  refine h.invOn_invFunOn.bijOn ?_ (mapsTo_image _ _)
-  rintro _ ⟨y, hy, rfl⟩
-  rwa [h.rightInvOn_invFunOn hy]
-
-中文:
-定理 满射限制.bijOn_subset
-  条件: [非空 α] (h : 满射限制 f s t)
-  结论: 双射限制 f (invFunOn f s '' t) t
-  证明: by
-  refine h.invOn_invFunOn.bijOn ?_ (mapsTo_image _ _)
-  rintro _ ⟨y, hy, rfl⟩
-  rwa [h.rightInvOn_invFunOn hy]
-
-Depends on / 依赖: h.invOn_invFunOn.bijOn, h.rightInvOn_invFunOn, invOn_invFunOn, mapsTo_image, rightInvOn_invFunOn
+/-
+**Set.SurjOn.bijOn_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} [inst 
+: Nonempty α],   Set.SurjOn f s t → Set.BijOn f (Function.invFunOn f s '' t) t
+参数：Function.invFunOn f s '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InvOn.bijOn`：bijOn (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : M
+apsTo f' t s) : BijOn f s t
+· 使用定理 `Set.SurjOn.invOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {
+t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.InvOn (Func
+tion.invFunOn f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.SurjOn.rightInvOn_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.RightI
+nvOn (Function.invFu…
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
 theorem SurjOn.bijOn_subset [Nonempty α] (h : SurjOn f s t) : BijOn f (invFunOn f s '' t) t := by
   refine h.invOn_invFunOn.bijOn ?_ (mapsTo_image _ _)
   rintro _ ⟨y, hy, rfl⟩
   rwa [h.rightInvOn_invFunOn hy]
-
-/--
-theorem `surjOn_iff_exists_bijOn_subset` / 定理 `surjOn_iff_exists_bijOn_subset`
-
-English:
-theorem surjOn_iff_exists_bijOn_subset
-  statement: SurjOn f s t ↔ exists s' subseteq s, BijOn f s' t
-  proof: by
-  constructor
-  · rcases eq_empty_or_nonempty t with (rfl | ht)
-    · exact fun _ => ⟨∅, empty_subset _, bijOn_empty f⟩
-    · intro h
-      have : Nonempty α := ⟨Classical.choose (h.comap_nonempty ht)⟩
-      exact ⟨_, h.mapsTo_invFunOn.image_subset, h.bijOn_subset⟩
-  · rintro ⟨s', hs', hfs'⟩
-    exact hfs'.surjOn.mono hs' (Subset.refl _)
-
-alias ⟨SurjOn.exists_bijOn_subset, _⟩ := Set.surjOn_iff_exists_bijOn_subset
-
-中文:
-定理 surjOn_iff_存在_bijOn_subset
-  结论: 满射限制 f s t ↔ 存在 s' subseteq s, 双射限制 f s' t
-  证明: by
-  constructor
-  · rcases eq_empty_or_nonempty t with (rfl | ht)
-    · exact fun _ => ⟨∅, empty_subset _, bijOn_empty f⟩
-    · intro h
-      have : Nonempty α := ⟨Classical.choose (h.comap_nonempty ht)⟩
-      exact ⟨_, h.mapsTo_invFunOn.image_subset, h.bijOn_subset⟩
-  · rintro ⟨s', hs', hfs'⟩
-    exact hfs'.surjOn.mono hs' (Subset.refl _)
-
-alias ⟨SurjOn.exists_bijOn_subset, _⟩ := Set.surjOn_iff_exists_bijOn_subset
-
-Depends on / 依赖: Classical, Classical.choose, Nonempty, Subset, Subset.refl, bijOn_empty, bijOn_subset, comap_nonempty, empty_subset, eq_empty_or_nonempty, h.bijOn_subset, h.comap_nonempty, h.mapsTo_invFunOn.image_subset, image_subset, mapsTo_invFunOn, surjOn, surjOn.mono
+/-
+**Set.surjOn_iff_exists_bijOn_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：surjOn_iff_exists_bijOn_subset : SurjOn f s t ↔ exists s' subseteq s, BijO
+n f s' t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
+· 使用定理 `Set.bijOn_empty`：bijOn_empty (f : α -> β) : BijOn f ∅ ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.SurjOn.comap_nonempty`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {
+t : Set β} {f : α → β}, Set.SurjOn f s t → t.Nonempty → s.Nonempty
+· 使用定理 `Set.MapsTo.image_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.MapsTo f s t → f '' s ⊆ t
+· 使用定理 `Set.SurjOn.mapsTo_invFunOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} 
+{t : Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.MapsTo (Fu
+nction.invFunOn …
+· 使用定理 `Set.SurjOn.bijOn_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β} [inst : Nonempty α],   Set.SurjOn f s t → Set.BijOn f (Func
+tion.invFunOn…
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
-theorem surjOn_iff_exists_bijOn_subset : SurjOn f s t ↔ exists s' subseteq s, BijOn f s' t := by
+theorem surjOn_iff_exists_bijOn_subset : SurjOn f s t ↔ ∃ s' ⊆ s, BijOn f s' t := by
   constructor
   · rcases eq_empty_or_nonempty t with (rfl | ht)
     · exact fun _ => ⟨∅, empty_subset _, bijOn_empty f⟩
@@ -5100,299 +3571,328 @@ theorem surjOn_iff_exists_bijOn_subset : SurjOn f s t ↔ exists s' subseteq s, 
 alias ⟨SurjOn.exists_bijOn_subset, _⟩ := Set.surjOn_iff_exists_bijOn_subset
 
 variable (f s)
-
-/--
-lemma `exists_subset_bijOn` / 引理 `exists_subset_bijOn`
-
-English:
-lemma exists_subset_bijOn
-  statement: exists s' subseteq s, BijOn f s' (f '' s)
-  proof: surjOn_iff_exists_bijOn_subset.mp (surjOn_image f s)
-
-中文:
-引理 存在_subset_bijOn
-  结论: 存在 s' subseteq s, 双射限制 f s' (f '' s)
-  证明: surjOn_iff_exists_bijOn_subset.mp (surjOn_image f s)
-
-Depends on / 依赖: surjOn_iff_exists_bijOn_subset, surjOn_iff_exists_bijOn_subset.mp, surjOn_image
+/-
+**Set.exists_subset_bijOn** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：exists_subset_bijOn : exists s' subseteq s, BijOn f s' (f '' s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.surjOn_iff_exists_bijOn_subset`：surjOn_iff_exists_bijOn_subset : Sur
+jOn f s t ↔ exists s' subseteq s, BijOn f s' t
+· 使用定理 `Set.surjOn_image`：surjOn_image (f : α -> β) (s : Set α) : SurjOn f s (f 
+'' s)
 -/
-lemma exists_subset_bijOn : exists s' subseteq s, BijOn f s' (f '' s) :=
+lemma exists_subset_bijOn : ∃ s' ⊆ s, BijOn f s' (f '' s) :=
   surjOn_iff_exists_bijOn_subset.mp (surjOn_image f s)
-
-/--
-lemma `exists_image_eq_and_injOn` / 引理 `exists_image_eq_and_injOn`
-
-English:
-lemma exists_image_eq_and_injOn
-  statement: exists u, f '' u = f '' s ∧ InjOn f u
-  proof: let ⟨u, _, hfu⟩ := exists_subset_bijOn s f
-  ⟨u, hfu.image_eq, hfu.injOn⟩
-
-中文:
-引理 存在_image_eq_and_injOn
-  结论: 存在 u, f '' u = f '' s ∧ 单射限制 f u
-  证明: let ⟨u, _, hfu⟩ := exists_subset_bijOn s f
-  ⟨u, hfu.image_eq, hfu.injOn⟩
-
-Depends on / 依赖: exists_subset_bijOn, hfu.image_eq, hfu.injOn, image_eq
+/-
+**Set.exists_image_eq_and_injOn** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：exists_image_eq_and_injOn : exists u, f '' u = f '' s ∧ InjOn f u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.exists_subset_bijOn`：exists_subset_bijOn : exists s' subseteq s, Bij
+On f s' (f '' s)
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
 -/
-lemma exists_image_eq_and_injOn : exists u, f '' u = f '' s ∧ InjOn f u :=
+lemma exists_image_eq_and_injOn : ∃ u, f '' u = f '' s ∧ InjOn f u :=
   let ⟨u, _, hfu⟩ := exists_subset_bijOn s f
   ⟨u, hfu.image_eq, hfu.injOn⟩
 
 variable {f s}
-
-/--
-lemma `exists_image_eq_injOn_of_subset_range` / 引理 `exists_image_eq_injOn_of_subset_range`
-
-English:
-lemma exists_image_eq_injOn_of_subset_range
-  given: (ht : t subseteq range f)
-  proof: image_preimage_eq_of_subset ht ▸ exists_image_eq_and_injOn _ _
-
-中文:
-引理 存在_image_eq_injOn_of_subset_range
-  条件: (ht : t subseteq range f)
-  证明: image_preimage_eq_of_subset ht ▸ exists_image_eq_and_injOn _ _
-
-Depends on / 依赖: exists_image_eq_and_injOn, image_preimage_eq_of_subset
+/-
+**Set.exists_image_eq_injOn_of_subset_range** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：exists_image_eq_injOn_of_subset_range (ht : t subseteq range f) : exists s
+, f '' s = t ∧ InjOn f s
+参数：ht : t subseteq range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.exists_image_eq_and_injOn`：exists_image_eq_and_injOn : exists u, f '
+' u = f '' s ∧ InjOn f u
+· 使用定理 `Set.image_preimage_eq_of_subset`：image_preimage_eq_of_subset {f : α -> β
+} {s : Set β} (hs : s subseteq range f) : f '' f ⁻¹' s = s
 -/
-lemma exists_image_eq_injOn_of_subset_range (ht : t subseteq range f) :
-    exists s, f '' s = t ∧ InjOn f s :=
+lemma exists_image_eq_injOn_of_subset_range (ht : t ⊆ range f) :
+    ∃ s, f '' s = t ∧ InjOn f s :=
   image_preimage_eq_of_subset ht ▸ exists_image_eq_and_injOn _ _
 
-/--
-theorem `BijOn.exists_extend_of_subset` / 定理 `BijOn.exists_extend_of_subset`
+/-- If `f` maps `s` bijectively to `t` and a set `t'` is contained in the image of some `s₁ ⊇ s`,
+then `s₁` has a subset containing `s` that `f` maps bijectively to `t'`. -/
+/-
+**Set.BijOn.exists_extend_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s s₁ : Set α} {t : Set β} {f : α → β} {t'
+ : Set β},   Set.BijOn f s t → s ⊆ s₁ → t ⊆ t' → Set.SurjOn f s₁ t' → ∃ s', s ⊆ 
+s' ∧ s' ⊆ s₁ ∧ Set.BijOn f s' t'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.exists_subset_bijOn`：exists_subset_bijOn : exists s' subseteq s, Bij
+On f s' (f '' s)
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.union_subset`：union_subset {s t r : Set α} (sr : s subseteq r) (tr :
+ t subseteq r) : s union t subseteq r
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mapsTo_iff_image_subset`：mapsTo_iff_image_subset : MapsTo f s t ↔ f 
+'' s subseteq t
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Set.image_inter_preimage`：image_inter_preimage (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (s inter f ⁻¹' t) = f '' s inter t
+· 使用定理 `Set.image_sdiff_preimage`：image_sdiff_preimage {f : α -> β} {s : Set α} 
+{t : Set β} : f '' (s \ f ⁻¹' t) = f '' s \ t
+· 使用定理 `Set.union_subset_iff`：union_subset_iff {s t u : Set α} : s union t subse
+teq u ↔ s subseteq u ∧ t subseteq u
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.injOn_union`：injOn_union (h : Disjoint s₁ s₂) : InjOn f (s₁ union s₂
+) ↔ InjOn f s₁ ∧ InjOn f s₂ ∧ forall x in s₁, forall y in s₂, f x != f y
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_sdiff_self`：union_sdiff_self {s t : Set α} : s union t \ s = s
+ union t
 
-English:
-theorem BijOn.exists_extend_of_subset
-  statement: {t' : Set β} (h : BijOn f s t) (hss₁ : s subseteq s₁) (htt' : t subseteq t')
-  proof: by
-  obtain ⟨r, hrss, hbij⟩ := exists_subset_bijOn ((s₁ inter f ⁻¹' t') \ f ⁻¹' t) f
-  rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
-  refine ⟨s union r, subset_union_left, ?_, ?_, ?_, fun y hyt' => ?_⟩
-· exact union_subset hss₁ hrss.trans sdiff_subset.trans inter_subset_left
+--- 原说明 ---
+If `f` maps `s` bijectively to `t` and a set `t'` is contained in the image of s
+ome `s₁ ⊇ s`,
+then `s₁` has a subset containing `s` that `f` maps bijectively to `t'`.
+-/
+theorem BijOn.exists_extend_of_subset {t' : Set β} (h : BijOn f s t) (hss₁ : s ⊆ s₁) (htt' : t ⊆ t')
+    (ht' : SurjOn f s₁ t') : ∃ s', s ⊆ s' ∧ s' ⊆ s₁ ∧ Set.BijOn f s' t' := by
+  obtain ⟨r, hrss, hbij⟩ := exists_subset_bijOn ((s₁ ∩ f ⁻¹' t') \ f ⁻¹' t) f
+  rw [image_sdiff_preimage, image_inter_preimage] at hbij
+  refine ⟨s ∪ r, subset_union_left, ?_, ?_, ?_, fun y hyt' ↦ ?_⟩
+  · exact union_subset hss₁ <| hrss.trans <| sdiff_subset.trans inter_subset_left
   · rw [mapsTo_iff_image_subset, image_union, hbij.image_eq, h.image_eq, union_subset_iff]
     exact ⟨htt', sdiff_subset.trans inter_subset_right⟩
   · rw [injOn_union, and_iff_right h.injOn, and_iff_right hbij.injOn]
-    · refine fun x hxs y hyr hxy => (hrss hyr).2 ?_
+    · refine fun x hxs y hyr hxy ↦ (hrss hyr).2 ?_
       rw [← h.image_eq]
       exact ⟨x, hxs, hxy⟩
     exact (subset_sdiff.1 hrss).2.symm.mono_left h.mapsTo
-  rw [image_union]; rw [h.image_eq]; rw [hbij.image_eq]; rw [union_sdiff_self]
+  rw [image_union, h.image_eq, hbij.image_eq, union_sdiff_self]
   exact .inr ⟨ht' hyt', hyt'⟩
 
-中文:
-定理 双射限制.存在_extend_of_subset
-  结论: {t' : 集合 β} (h : 双射限制 f s t) (hss₁ : s subseteq s₁) (htt' : t subseteq t')
-  证明: by
-  obtain ⟨r, hrss, hbij⟩ := exists_subset_bijOn ((s₁ inter f ⁻¹' t') \ f ⁻¹' t) f
-  rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
-  refine ⟨s union r, subset_union_left, ?_, ?_, ?_, fun y hyt' => ?_⟩
-· exact union_subset hss₁ hrss.trans sdiff_subset.trans inter_subset_left
-  · rw [mapsTo_iff_image_subset, image_union, hbij.image_eq, h.image_eq, union_subset_iff]
-    exact ⟨htt', sdiff_subset.trans inter_subset_right⟩
-  · rw [injOn_union, and_iff_right h.injOn, and_iff_right hbij.injOn]
-    · refine fun x hxs y hyr hxy => (hrss hyr).2 ?_
-      rw [← h.image_eq]
-      exact ⟨x, hxs, hxy⟩
-    exact (subset_sdiff.1 hrss).2.symm.mono_left h.mapsTo
-  rw [image_union]; rw [h.image_eq]; rw [hbij.image_eq]; rw [union_sdiff_self]
-  exact .inr ⟨ht' hyt', hyt'⟩
+/-- If `f` maps `s` bijectively to `t`, and `t'` is a superset of `t` contained in the range of `f`,
+then `f` maps some superset of `s` bijectively to `t'`. -/
+/-
+**Set.BijOn.exists_extend** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {t' : 
+Set β},   Set.BijOn f s t → t ⊆ t' → t' ⊆ Set.range f → ∃ s', s ⊆ s' ∧ Set.BijOn
+ f s' t'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Set.BijOn.exists_extend_of_subset`：∀ {α : Type u_1} {β : Type u_2} {s s₁
+ : Set α} {t : Set β} {f : α → β} {t' : Set β},   Set.BijOn f s t → s ⊆ s₁ → t ⊆
+ t' → Set.SurjOn f s₁ t…
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 
-Depends on / 依赖: and_iff_right, exists_subset_bijOn, h.image_eq, h.injOn, hbij.image_eq, hbij.injOn, hrss.trans, image_eq, image_inter_preimage, image_sdiff_preimage, image_union, injOn_union, inter_subset_left, inter_subset_right, mapsTo_iff_image_subset, sdiff_subset, sdiff_subset.trans, subset_union_left, union_subset, union_subset_iff
+--- 原说明 ---
+If `f` maps `s` bijectively to `t`, and `t'` is a superset of `t` contained in t
+he range of `f`,
+then `f` maps some superset of `s` bijectively to `t'`.
 -/
-theorem BijOn.exists_extend_of_subset {t' : Set β} (h : BijOn f s t) (hss₁ : s subseteq s₁) (htt' : t subseteq t')
-    (ht' : SurjOn f s₁ t') : exists s', s subseteq s' ∧ s' subseteq s₁ ∧ Set.BijOn f s' t' := by
-  obtain ⟨r, hrss, hbij⟩ := exists_subset_bijOn ((s₁ inter f ⁻¹' t') \ f ⁻¹' t) f
-  rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
-  refine ⟨s union r, subset_union_left, ?_, ?_, ?_, fun y hyt' => ?_⟩
-· exact union_subset hss₁ hrss.trans sdiff_subset.trans inter_subset_left
-  · rw [mapsTo_iff_image_subset, image_union, hbij.image_eq, h.image_eq, union_subset_iff]
-    exact ⟨htt', sdiff_subset.trans inter_subset_right⟩
-  · rw [injOn_union, and_iff_right h.injOn, and_iff_right hbij.injOn]
-    · refine fun x hxs y hyr hxy => (hrss hyr).2 ?_
-      rw [← h.image_eq]
-      exact ⟨x, hxs, hxy⟩
-    exact (subset_sdiff.1 hrss).2.symm.mono_left h.mapsTo
-  rw [image_union]; rw [h.image_eq]; rw [hbij.image_eq]; rw [union_sdiff_self]
-  exact .inr ⟨ht' hyt', hyt'⟩
-
-/--
-theorem `BijOn.exists_extend` / 定理 `BijOn.exists_extend`
-
-English:
-theorem BijOn.exists_extend
-  given: {t' : Set β} (h : BijOn f s t) (htt' : t subseteq t') (ht' : t' subseteq range f)
-  proof: by
+theorem BijOn.exists_extend {t' : Set β} (h : BijOn f s t) (htt' : t ⊆ t') (ht' : t' ⊆ range f) :
+    ∃ s', s ⊆ s' ∧ BijOn f s' t' := by
   simpa using h.exists_extend_of_subset (subset_univ s) htt' (by simpa [SurjOn])
-
-中文:
-定理 双射限制.存在_extend
-  条件: {t' : 集合 β} (h : 双射限制 f s t) (htt' : t subseteq t') (ht' : t' subseteq range f)
-  证明: by
-  simpa using h.exists_extend_of_subset (subset_univ s) htt' (by simpa [SurjOn])
-
-Depends on / 依赖: SurjOn, exists_extend_of_subset, h.exists_extend_of_subset, subset_univ
+/-
+**Set.InjOn.exists_subset_injOn_subset_range_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.I
+njOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} {r : Set α},   Set
+.InjOn f r → r ⊆ s → ∃ u, r ⊆ u ∧ u ⊆ s ∧ f '' u = f '' s ∧ Set.InjOn f u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.exists_extend_of_subset`：∀ {α : Type u_1} {β : Type u_2} {s s₁
+ : Set α} {t : Set β} {f : α → β} {t' : Set β},   Set.BijOn f s t → s ⊆ s₁ → t ⊆
+ t' → Set.SurjOn f s₁ t…
+· 使用定理 `Set.InjOn.bijOn_image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β}, Set.InjOn f s → Set.BijOn f s (f '' s)
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
 -/
-theorem BijOn.exists_extend {t' : Set β} (h : BijOn f s t) (htt' : t subseteq t') (ht' : t' subseteq range f) :
-    exists s', s subseteq s' ∧ BijOn f s' t' := by
-  simpa using h.exists_extend_of_subset (subset_univ s) htt' (by simpa [SurjOn])
-
-/--
-theorem `InjOn.exists_subset_injOn_subset_range_eq` / 定理 `InjOn.exists_subset_injOn_subset_range_eq`
-
-English:
-theorem InjOn.exists_subset_injOn_subset_range_eq
-  given: {r : Set α} (hinj : InjOn f r) (hrs : r subseteq s)
-  proof: by
+theorem InjOn.exists_subset_injOn_subset_range_eq {r : Set α} (hinj : InjOn f r) (hrs : r ⊆ s) :
+    ∃ u : Set α, r ⊆ u ∧ u ⊆ s ∧ f '' u = f '' s ∧ InjOn f u := by
   obtain ⟨u, hru, hus, h⟩ := hinj.bijOn_image.exists_extend_of_subset hrs
     (image_mono hrs) Subset.rfl
   exact ⟨u, hru, hus, h.image_eq, h.injOn⟩
-
-中文:
-定理 单射限制.存在_subset_injOn_subset_range_eq
-  条件: {r : 集合 α} (hinj : 单射限制 f r) (hrs : r subseteq s)
-  证明: by
-  obtain ⟨u, hru, hus, h⟩ := hinj.bijOn_image.exists_extend_of_subset hrs
-    (image_mono hrs) Subset.rfl
-  exact ⟨u, hru, hus, h.image_eq, h.injOn⟩
-
-Depends on / 依赖: Subset, Subset.rfl, bijOn_image, exists_extend_of_subset, h.image_eq, h.injOn, hinj.bijOn_image.exists_extend_of_subset, image_eq, image_mono
+/-
+**Set.preimage_invFun_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：preimage_invFun_of_mem [n : Nonempty α] {f : α -> β} (hf : Injective f) {s
+ : Set α} (h : Classical.choice n in s) : invFun f ⁻¹' s = f '' s union (range f
+)ᶜ
+参数：hf : Injective f；h : Classical.choice n in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.leftInverse_invFun`：leftInverse_invFun (hf : Injective f) : Lef
+tInverse (invFun f) f
+· 使用定理 `Function.Injective.mem_set_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β}, Function.Injective f → ∀ {s : Set α} {a : α}, f a ∈ f '' s ↔ a ∈ s
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Function.invFun_neg`：invFun_neg (h : ¬exists a, f a = b) : invFun f b = 
+Classical.choice ‹_›
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
-theorem InjOn.exists_subset_injOn_subset_range_eq {r : Set α} (hinj : InjOn f r) (hrs : r subseteq s) :
-    exists u : Set α, r subseteq u ∧ u subseteq s ∧ f '' u = f '' s ∧ InjOn f u := by
-  obtain ⟨u, hru, hus, h⟩ := hinj.bijOn_image.exists_extend_of_subset hrs
-    (image_mono hrs) Subset.rfl
-  exact ⟨u, hru, hus, h.image_eq, h.injOn⟩
-
-/--
-theorem `preimage_invFun_of_mem` / 定理 `preimage_invFun_of_mem`
-
-English:
-theorem preimage_invFun_of_mem
-  statement: [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
-  proof: by
+theorem preimage_invFun_of_mem [n : Nonempty α] {f : α → β} (hf : Injective f) {s : Set α}
+    (h : Classical.choice n ∈ s) : invFun f ⁻¹' s = f '' s ∪ (range f)ᶜ := by
   ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
+  rcases em (x ∈ range f) with (⟨a, rfl⟩ | hx)
   · simp only [mem_preimage, mem_union, mem_compl_iff, mem_range_self, not_true, or_false,
       leftInverse_invFun hf _, hf.mem_set_image]
   · simp only [mem_preimage, invFun_neg hx, h, hx, mem_union, mem_compl_iff, not_false_iff, or_true]
-
-中文:
-定理 preimage_invFun_of_mem
-  结论: [n : 非空 α] {f : α -> β} (hf : 单射 f) {s : 集合 α}
-  证明: by
-  ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
-  · simp only [mem_preimage, mem_union, mem_compl_iff, mem_range_self, not_true, or_false,
-      leftInverse_invFun hf _, hf.mem_set_image]
-  · simp only [mem_preimage, invFun_neg hx, h, hx, mem_union, mem_compl_iff, not_false_iff, or_true]
-
-Depends on / 依赖: hf.mem_set_image, invFun_neg, leftInverse_invFun, mem_compl_iff, mem_preimage, mem_range_self, mem_set_image, mem_union, not_false_iff, not_true, or_false, or_true
+/-
+**Set.preimage_invFun_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：preimage_invFun_of_notMem [n : Nonempty α] {f : α -> β} (hf : Injective f)
+ {s : Set α} (h : Classical.choice n ∉ s) : invFun f ⁻¹' s = f '' s
+参数：hf : Injective f；h : Classical.choice n ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Function.leftInverse_invFun`：leftInverse_invFun (hf : Injective f) : Lef
+tInverse (invFun f) f
+· 使用定理 `Function.Injective.mem_set_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β}, Function.Injective f → ∀ {s : Set α} {a : α}, f a ∈ f '' s ↔ a ∈ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Function.invFun_neg`：invFun_neg (h : ¬exists a, f a = b) : invFun f b = 
+Classical.choice ‹_›
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_invFun_of_mem [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
-    (h : Classical.choice n in s) : invFun f ⁻¹' s = f '' s union (range f)ᶜ := by
-  ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
-  · simp only [mem_preimage, mem_union, mem_compl_iff, mem_range_self, not_true, or_false,
-      leftInverse_invFun hf _, hf.mem_set_image]
-  · simp only [mem_preimage, invFun_neg hx, h, hx, mem_union, mem_compl_iff, not_false_iff, or_true]
-
-/--
-theorem `preimage_invFun_of_notMem` / 定理 `preimage_invFun_of_notMem`
-
-English:
-theorem preimage_invFun_of_notMem
-  statement: [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
-  proof: by
-  ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
-  · rw [mem_preimage, leftInverse_invFun hf, hf.mem_set_image]
-  · have : x ∉ f '' s := fun h' => hx (image_subset_range _ _ h')
-    simp only [mem_preimage, invFun_neg hx, h, this]
-
-中文:
-定理 preimage_invFun_of_notMem
-  结论: [n : 非空 α] {f : α -> β} (hf : 单射 f) {s : 集合 α}
-  证明: by
-  ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
-  · rw [mem_preimage, leftInverse_invFun hf, hf.mem_set_image]
-  · have : x ∉ f '' s := fun h' => hx (image_subset_range _ _ h')
-    simp only [mem_preimage, invFun_neg hx, h, this]
-
-Depends on / 依赖: hf.mem_set_image, image_subset_range, invFun_neg, leftInverse_invFun, mem_preimage, mem_set_image
--/
-theorem preimage_invFun_of_notMem [n : Nonempty α] {f : α -> β} (hf : Injective f) {s : Set α}
+theorem preimage_invFun_of_notMem [n : Nonempty α] {f : α → β} (hf : Injective f) {s : Set α}
     (h : Classical.choice n ∉ s) : invFun f ⁻¹' s = f '' s := by
   ext x
-  rcases em (x in range f) with (⟨a, rfl⟩ | hx)
+  rcases em (x ∈ range f) with (⟨a, rfl⟩ | hx)
   · rw [mem_preimage, leftInverse_invFun hf, hf.mem_set_image]
   · have : x ∉ f '' s := fun h' => hx (image_subset_range _ _ h')
     simp only [mem_preimage, invFun_neg hx, h, this]
-
-/--
-lemma `BijOn.symm` / 引理 `BijOn.symm`
-
-English:
-lemma BijOn.symm
-  given: {g : β -> α} (h : InvOn f g t s) (hf : BijOn f s t)
-  statement: BijOn g t s
-  proof: ⟨h.2.mapsTo hf.surjOn, h.1.injOn, h.2.surjOn hf.mapsTo⟩
-
-中文:
-引理 双射限制.symm
-  条件: {g : β -> α} (h : InvOn f g t s) (hf : 双射限制 f s t)
-  结论: 双射限制 g t s
-  证明: ⟨h.2.mapsTo hf.surjOn, h.1.injOn, h.2.surjOn hf.mapsTo⟩
-
-Depends on / 依赖: hf.mapsTo, hf.surjOn, mapsTo, surjOn
+/-
+**Set.BijOn.symm** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β} {g : β
+ → α},   Set.InvOn f g t s → Set.BijOn f s t → Set.BijOn g t s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.RightInvOn.mapsTo`：mapsTo (h : RightInvOn f' f t) (hf : SurjOn f' t 
+s) : MapsTo f s t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `Set.LeftInvOn.injOn`：injOn (h : LeftInvOn f₁' f s) : InjOn f s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.surjOn`：surjOn (hf : RightInvOn f' f t) (hf' : MapsTo f' 
+t s) : SurjOn f s t
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
 -/
-lemma BijOn.symm {g : β -> α} (h : InvOn f g t s) (hf : BijOn f s t) : BijOn g t s :=
+lemma BijOn.symm {g : β → α} (h : InvOn f g t s) (hf : BijOn f s t) : BijOn g t s :=
   ⟨h.2.mapsTo hf.surjOn, h.1.injOn, h.2.surjOn hf.mapsTo⟩
-
-/--
-lemma `bijOn_comm` / 引理 `bijOn_comm`
-
-English:
-lemma bijOn_comm
-  given: {g : β -> α} (h : InvOn f g t s)
-  statement: BijOn f s t ↔ BijOn g t s
-  proof: ⟨BijOn.symm h, BijOn.symm h.symm⟩
-
-中文:
-引理 bijOn_comm
-  条件: {g : β -> α} (h : InvOn f g t s)
-  结论: 双射限制 f s t ↔ 双射限制 g t s
-  证明: ⟨BijOn.symm h, BijOn.symm h.symm⟩
-
-Depends on / 依赖: BijOn.symm, h.symm
+/-
+**Set.bijOn_comm** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：bijOn_comm {g : β -> α} (h : InvOn f g t s) : BijOn f s t ↔ BijOn g t s
+参数：h : InvOn f g t s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} 
+{f : α → β} {g : β → α},   Set.InvOn f g t s → Set.BijOn f s t → Set.BijOn g t s
+· 使用定理 `Set.InvOn.symm`：symm (h : InvOn f' f s t) : InvOn f f' t s
 -/
-lemma bijOn_comm {g : β -> α} (h : InvOn f g t s) : BijOn f s t ↔ BijOn g t s :=
+lemma bijOn_comm {g : β → α} (h : InvOn f g t s) : BijOn f s t ↔ BijOn g t s :=
   ⟨BijOn.symm h, BijOn.symm h.symm⟩
 
-/--
-lemma `SurjOn.exists_subset_injOn_image_eq` / 引理 `SurjOn.exists_subset_injOn_image_eq`
+/-- If `t ⊆ f '' s`, there exists a preimage of `t` under `f` contained in `s` such that
+`f` restricted to `u` is injective. -/
+/-
+**Set.SurjOn.exists_subset_injOn_image_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} {f : α → β},   Set
+.SurjOn f s t → ∃ u ⊆ s, Set.InjOn f u ∧ f '' u = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-lemma SurjOn.exists_subset_injOn_image_eq
-  given: (hfs : s.SurjOn f t)
-  proof: by
-  choose x hmem heq using hfs
-  exact ⟨range (fun a : t => x a.2), by grind, fun _ => by grind, by aesop⟩
-
-中文:
-引理 满射限制.存在_subset_injOn_image_eq
-  条件: (hfs : s.满射限制 f t)
-  证明: by
-  choose x hmem heq using hfs
-  exact ⟨range (fun a : t => x a.2), by grind, fun _ => by grind, by aesop⟩
+--- 原说明 ---
+If `t ⊆ f '' s`, there exists a preimage of `t` under `f` contained in `s` such 
+that
+`f` restricted to `u` is injective.
 -/
 lemma SurjOn.exists_subset_injOn_image_eq (hfs : s.SurjOn f t) :
-    exists u subseteq s, u.InjOn f ∧ f '' u = t := by
+    ∃ u ⊆ s, u.InjOn f ∧ f '' u = t := by
   choose x hmem heq using hfs
-  exact ⟨range (fun a : t => x a.2), by grind, fun _ => by grind, by aesop⟩
+  exact ⟨range (fun a : t ↦ x a.2), by grind, fun _ ↦ by grind, by aesop⟩
 
 end Set
 
@@ -5400,419 +3900,334 @@ namespace Function
 
 open Set
 
-variable {fa : α -> α} {fb : β -> β} {f : α -> β} {g : β -> γ} {s t : Set α}
+variable {fa : α → α} {fb : β → β} {f : α → β} {g : β → γ} {s t : Set α}
 
-/--
-theorem `Injective.comp_injOn` / 定理 `Injective.comp_injOn`
-
-English:
-theorem Injective.comp_injOn
-  given: (hg : Injective g) (hf : s.InjOn f)
-  statement: s.InjOn (g ∘ f)
-  proof: hg.injOn.comp hf (mapsTo_univ _ _)
-
-中文:
-定理 单射.comp_injOn
-  条件: (hg : 单射 g) (hf : s.单射限制 f)
-  结论: s.单射限制 (g ∘ f)
-  证明: hg.injOn.comp hf (mapsTo_univ _ _)
-
-Depends on / 依赖: hg.injOn.comp, mapsTo_univ
+/-
+**Function.Injective.comp_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Function.Injective`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f : α → β} {g : β → γ} {s 
+: Set α},   Function.Injective g → Set.InjOn f s → Set.InjOn (g ∘ f) s
+参数：g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set 
+α} {t : Set β} {f : α → β} {g : β → γ},   Set.InjOn g t → Set.InjOn f s → Set.Ma
+psTo…
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Set.mapsTo_univ`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) (s : Set α)
+, Set.MapsTo f s Set.univ
 -/
 theorem Injective.comp_injOn (hg : Injective g) (hf : s.InjOn f) : s.InjOn (g ∘ f) :=
   hg.injOn.comp hf (mapsTo_univ _ _)
-
-/--
-theorem `LeftInverse.leftInvOn` / 定理 `LeftInverse.leftInvOn`
-
-English:
-theorem LeftInverse.leftInvOn
-  given: {g : β -> α} (h : LeftInverse f g) (s : Set β)
-  statement: LeftInvOn f g s
-  proof: fun x _ => h x
-
-中文:
-定理 左逆.leftInvOn
-  条件: {g : β -> α} (h : 左逆 f g) (s : 集合 β)
-  结论: LeftInvOn f g s
-  证明: fun x _ => h x
+/-
+**Function.LeftInverse.leftInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Function.LeftInverse
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {g : β → α}, Function.LeftInve
+rse f g → ∀ (s : Set β), Set.LeftInvOn f g s
+参数：s : Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem LeftInverse.leftInvOn {g : β -> α} (h : LeftInverse f g) (s : Set β) : LeftInvOn f g s :=
+theorem LeftInverse.leftInvOn {g : β → α} (h : LeftInverse f g) (s : Set β) : LeftInvOn f g s :=
   fun x _ => h x
-
-/--
-theorem `RightInverse.rightInvOn` / 定理 `RightInverse.rightInvOn`
-
-English:
-theorem RightInverse.rightInvOn
-  given: {g : β -> α} (h : RightInverse f g) (s : Set α)
-  proof: fun x _ => h x
-
-中文:
-定理 右逆.rightInvOn
-  条件: {g : β -> α} (h : 右逆 f g) (s : 集合 α)
-  证明: fun x _ => h x
+/-
+**Function.RightInverse.rightInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Function.RightInve
+rse`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {g : β → α}, Function.RightInv
+erse f g → ∀ (s : Set α), Set.RightInvOn f g s
+参数：s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RightInverse.rightInvOn {g : β -> α} (h : RightInverse f g) (s : Set α) :
+theorem RightInverse.rightInvOn {g : β → α} (h : RightInverse f g) (s : Set α) :
     RightInvOn f g s := fun x _ => h x
-
-/--
-theorem `LeftInverse.rightInvOn_range` / 定理 `LeftInverse.rightInvOn_range`
-
-English:
-theorem LeftInverse.rightInvOn_range
-  given: {g : β -> α} (h : LeftInverse f g)
-  proof: forall_mem_range.2 fun i => congr_arg g (h i)
-
-中文:
-定理 左逆.rightInvOn_range
-  条件: {g : β -> α} (h : 左逆 f g)
-  证明: forall_mem_range.2 fun i => congr_arg g (h i)
-
-Depends on / 依赖: congr_arg, forall_mem_range
+/-
+**Function.LeftInverse.rightInvOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Function.Left
+Inverse`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {g : β → α}, Function.LeftInve
+rse f g → Set.RightInvOn f g (Set.range g)
+参数：Set.range g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem LeftInverse.rightInvOn_range {g : β -> α} (h : LeftInverse f g) :
+theorem LeftInverse.rightInvOn_range {g : β → α} (h : LeftInverse f g) :
     RightInvOn f g (range g) :=
   forall_mem_range.2 fun i => congr_arg g (h i)
 
 namespace Semiconj
 
-/--
-theorem `mapsTo_image` / 定理 `mapsTo_image`
-
-English:
-theorem mapsTo_image
-  given: (h : Semiconj f fa fb) (ha : MapsTo fa s t)
-  statement: MapsTo fb (f '' s) (f '' t)
-  proof: fun _y ⟨x, hx, hy⟩ => hy ▸ ⟨fa x, ha hx, h x⟩
-
-中文:
-定理 mapsTo_image
-  条件: (h : Semiconj f fa fb) (ha : 映射到 fa s t)
-  结论: 映射到 fb (f '' s) (f '' t)
-  证明: fun _y ⟨x, hx, hy⟩ => hy ▸ ⟨fa x, ha hx, h x⟩
+/-
+**Function.Semiconj.mapsTo_image** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：mapsTo_image (h : Semiconj f fa fb) (ha : MapsTo fa s t) : MapsTo fb (f ''
+ s) (f '' t)
+参数：h : Semiconj f fa fb；ha : MapsTo fa s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapsTo_image (h : Semiconj f fa fb) (ha : MapsTo fa s t) : MapsTo fb (f '' s) (f '' t) :=
   fun _y ⟨x, hx, hy⟩ => hy ▸ ⟨fa x, ha hx, h x⟩
-
-/--
-theorem `mapsTo_image_right` / 定理 `mapsTo_image_right`
-
-English:
-theorem mapsTo_image_right
-  given: {t : Set β} (h : Semiconj f fa fb) (hst : MapsTo f s t)
-  proof: mapsTo_image_iff.2 fun x hx => ⟨f x, hst hx, (h x).symm⟩
-
-中文:
-定理 mapsTo_image_right
-  条件: {t : 集合 β} (h : Semiconj f fa fb) (hst : 映射到 f s t)
-  证明: mapsTo_image_iff.2 fun x hx => ⟨f x, hst hx, (h x).symm⟩
-
-Depends on / 依赖: mapsTo_image_iff
+/-
+**Function.Semiconj.mapsTo_image_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semic
+onj`。
+形式化陈述：mapsTo_image_right {t : Set β} (h : Semiconj f fa fb) (hst : MapsTo f s t)
+ : MapsTo f (fa '' s) (fb '' t)
+参数：h : Semiconj f fa fb；hst : MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mapsTo_image_iff`：mapsTo_image_iff {f : α -> β} {g : γ -> α} {s : Se
+t γ} {t : Set β} : MapsTo f (g '' s) t ↔ MapsTo (f ∘ g) s t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mapsTo_image_right {t : Set β} (h : Semiconj f fa fb) (hst : MapsTo f s t) :
     MapsTo f (fa '' s) (fb '' t) :=
-  mapsTo_image_iff.2 fun x hx => ⟨f x, hst hx, (h x).symm⟩
-
-/--
-theorem `mapsTo_range` / 定理 `mapsTo_range`
-
-English:
-theorem mapsTo_range
-  given: (h : Semiconj f fa fb)
-  statement: MapsTo fb (range f) (range f)
-  proof: fun _y ⟨x, hy⟩ =>
-  hy ▸ ⟨fa x, h x⟩
-
-中文:
-定理 mapsTo_range
-  条件: (h : Semiconj f fa fb)
-  结论: 映射到 fb (range f) (range f)
-  证明: fun _y ⟨x, hy⟩ =>
-  hy ▸ ⟨fa x, h x⟩
+  mapsTo_image_iff.2 fun x hx ↦ ⟨f x, hst hx, (h x).symm⟩
+/-
+**Function.Semiconj.mapsTo_range** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：mapsTo_range (h : Semiconj f fa fb) : MapsTo fb (range f) (range f)
+参数：h : Semiconj f fa fb。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapsTo_range (h : Semiconj f fa fb) : MapsTo fb (range f) (range f) := fun _y ⟨x, hy⟩ =>
   hy ▸ ⟨fa x, h x⟩
-
-/--
-theorem `surjOn_image` / 定理 `surjOn_image`
-
-English:
-theorem surjOn_image
-  given: (h : Semiconj f fa fb) (ha : SurjOn fa s t)
-  statement: SurjOn fb (f '' s) (f '' t)
-  proof: by
-  rintro y ⟨x, hxt, rfl⟩
-  rcases ha hxt with ⟨x, hxs, rfl⟩
-  rw [h x]
-  exact mem_image_of_mem _ (mem_image_of_mem _ hxs)
-
-中文:
-定理 surjOn_image
-  条件: (h : Semiconj f fa fb) (ha : 满射限制 fa s t)
-  结论: 满射限制 fb (f '' s) (f '' t)
-  证明: by
-  rintro y ⟨x, hxt, rfl⟩
-  rcases ha hxt with ⟨x, hxs, rfl⟩
-  rw [h x]
-  exact mem_image_of_mem _ (mem_image_of_mem _ hxs)
-
-Depends on / 依赖: mem_image_of_mem
+/-
+**Function.Semiconj.surjOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：surjOn_image (h : Semiconj f fa fb) (ha : SurjOn fa s t) : SurjOn fb (f ''
+ s) (f '' t)
+参数：h : Semiconj f fa fb；ha : SurjOn fa s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem surjOn_image (h : Semiconj f fa fb) (ha : SurjOn fa s t) : SurjOn fb (f '' s) (f '' t) := by
   rintro y ⟨x, hxt, rfl⟩
   rcases ha hxt with ⟨x, hxs, rfl⟩
   rw [h x]
   exact mem_image_of_mem _ (mem_image_of_mem _ hxs)
-
-/--
-theorem `surjOn_range` / 定理 `surjOn_range`
-
-English:
-theorem surjOn_range
-  given: (h : Semiconj f fa fb) (ha : Surjective fa)
-  proof: by
-  rw [← image_univ]
-  exact h.surjOn_image ha.surjOn
-
-中文:
-定理 surjOn_range
-  条件: (h : Semiconj f fa fb) (ha : 满射 fa)
-  证明: by
-  rw [← image_univ]
-  exact h.surjOn_image ha.surjOn
-
-Depends on / 依赖: h.surjOn_image, ha.surjOn, image_univ, surjOn, surjOn_image
+/-
+**Function.Semiconj.surjOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：surjOn_range (h : Semiconj f fa fb) (ha : Surjective fa) : SurjOn fb (rang
+e f) (range f)
+参数：h : Semiconj f fa fb；ha : Surjective fa。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Function.Semiconj.surjOn_image`：surjOn_image (h : Semiconj f fa fb) (ha 
+: SurjOn fa s t) : SurjOn fb (f '' s) (f '' t)
+· 使用定理 `Function.Surjective.surjOn`：∀ {α : Type u_1} {β : Type u_2} {t : Set β} 
+{f : α → β}, Function.Surjective f → Set.SurjOn f Set.univ t
 -/
 theorem surjOn_range (h : Semiconj f fa fb) (ha : Surjective fa) :
     SurjOn fb (range f) (range f) := by
   rw [← image_univ]
   exact h.surjOn_image ha.surjOn
-
-/--
-theorem `injOn_image` / 定理 `injOn_image`
-
-English:
-theorem injOn_image
-  given: (h : Semiconj f fa fb) (ha : InjOn fa s) (hf : InjOn f (fa '' s))
-  proof: by
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ H
-  simp only [← h.eq] at H
-  exact congr_arg f (ha hx hy <| hf (mem_image_of_mem fa hx) (mem_image_of_mem fa hy) H)
-
-中文:
-定理 injOn_image
-  条件: (h : Semiconj f fa fb) (ha : 单射限制 fa s) (hf : 单射限制 f (fa '' s))
-  证明: by
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ H
-  simp only [← h.eq] at H
-  exact congr_arg f (ha hx hy <| hf (mem_image_of_mem fa hx) (mem_image_of_mem fa hy) H)
-
-Depends on / 依赖: congr_arg, h.eq, mem_image_of_mem
+/-
+**Function.Semiconj.injOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：injOn_image (h : Semiconj f fa fb) (ha : InjOn fa s) (hf : InjOn f (fa '' 
+s)) : InjOn fb (f '' s)
+参数：h : Semiconj f fa fb；ha : InjOn fa s；hf : InjOn f (fa '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Semiconj.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : 
+α → α} {gb : β → β},   Function.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x
+)
 -/
 theorem injOn_image (h : Semiconj f fa fb) (ha : InjOn fa s) (hf : InjOn f (fa '' s)) :
     InjOn fb (f '' s) := by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ H
   simp only [← h.eq] at H
   exact congr_arg f (ha hx hy <| hf (mem_image_of_mem fa hx) (mem_image_of_mem fa hy) H)
-
-/--
-theorem `injOn_range` / 定理 `injOn_range`
-
-English:
-theorem injOn_range
-  given: (h : Semiconj f fa fb) (ha : Injective fa) (hf : InjOn f (range fa))
-  proof: by
-  rw [← image_univ] at *
-  exact h.injOn_image ha.injOn hf
-
-中文:
-定理 injOn_range
-  条件: (h : Semiconj f fa fb) (ha : 单射 fa) (hf : 单射限制 f (range fa))
-  证明: by
-  rw [← image_univ] at *
-  exact h.injOn_image ha.injOn hf
-
-Depends on / 依赖: h.injOn_image, ha.injOn, image_univ, injOn_image
+/-
+**Function.Semiconj.injOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：injOn_range (h : Semiconj f fa fb) (ha : Injective fa) (hf : InjOn f (rang
+e fa)) : InjOn fb (range f)
+参数：h : Semiconj f fa fb；ha : Injective fa；hf : InjOn f (range fa)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Function.Semiconj.injOn_image`：injOn_image (h : Semiconj f fa fb) (ha : 
+InjOn fa s) (hf : InjOn f (fa '' s)) : InjOn fb (f '' s)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
 -/
 theorem injOn_range (h : Semiconj f fa fb) (ha : Injective fa) (hf : InjOn f (range fa)) :
     InjOn fb (range f) := by
   rw [← image_univ] at *
   exact h.injOn_image ha.injOn hf
-
-/--
-theorem `bijOn_image` / 定理 `bijOn_image`
-
-English:
-theorem bijOn_image
-  given: (h : Semiconj f fa fb) (ha : BijOn fa s t) (hf : InjOn f t)
-  proof: ⟨h.mapsTo_image ha.mapsTo, h.injOn_image ha.injOn (ha.image_eq.symm ▸ hf),
-    h.surjOn_image ha.surjOn⟩
-
-中文:
-定理 bijOn_image
-  条件: (h : Semiconj f fa fb) (ha : 双射限制 fa s t) (hf : 单射限制 f t)
-  证明: ⟨h.mapsTo_image ha.mapsTo, h.injOn_image ha.injOn (ha.image_eq.symm ▸ hf),
-    h.surjOn_image ha.surjOn⟩
-
-Depends on / 依赖: h.injOn_image, h.mapsTo_image, h.surjOn_image, ha.image_eq.symm, ha.injOn, ha.mapsTo, ha.surjOn, image_eq, injOn_image, mapsTo, mapsTo_image, surjOn, surjOn_image
+/-
+**Function.Semiconj.bijOn_image** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：bijOn_image (h : Semiconj f fa fb) (ha : BijOn fa s t) (hf : InjOn f t) : 
+BijOn fb (f '' s) (f '' t)
+参数：h : Semiconj f fa fb；ha : BijOn fa s t；hf : InjOn f t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.mapsTo_image`：mapsTo_image (h : Semiconj f fa fb) (ha 
+: MapsTo fa s t) : MapsTo fb (f '' s) (f '' t)
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Function.Semiconj.injOn_image`：injOn_image (h : Semiconj f fa fb) (ha : 
+InjOn fa s) (hf : InjOn f (fa '' s)) : InjOn fb (f '' s)
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.BijOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set
+ β} {f : α → β}, Set.BijOn f s t → f '' s = t
+· 使用定理 `Function.Semiconj.surjOn_image`：surjOn_image (h : Semiconj f fa fb) (ha 
+: SurjOn fa s t) : SurjOn fb (f '' s) (f '' t)
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 theorem bijOn_image (h : Semiconj f fa fb) (ha : BijOn fa s t) (hf : InjOn f t) :
     BijOn fb (f '' s) (f '' t) :=
   ⟨h.mapsTo_image ha.mapsTo, h.injOn_image ha.injOn (ha.image_eq.symm ▸ hf),
     h.surjOn_image ha.surjOn⟩
-
-/--
-theorem `bijOn_range` / 定理 `bijOn_range`
-
-English:
-theorem bijOn_range
-  given: (h : Semiconj f fa fb) (ha : Bijective fa) (hf : Injective f)
-  proof: by
-  rw [← image_univ]
-  exact h.bijOn_image ha.bijOn_univ hf.injOn
-
-中文:
-定理 bijOn_range
-  条件: (h : Semiconj f fa fb) (ha : 双射 fa) (hf : 单射 f)
-  证明: by
-  rw [← image_univ]
-  exact h.bijOn_image ha.bijOn_univ hf.injOn
-
-Depends on / 依赖: bijOn_image, bijOn_univ, h.bijOn_image, ha.bijOn_univ, hf.injOn, image_univ
+/-
+**Function.Semiconj.bijOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：bijOn_range (h : Semiconj f fa fb) (ha : Bijective fa) (hf : Injective f) 
+: BijOn fb (range f) (range f)
+参数：h : Semiconj f fa fb；ha : Bijective fa；hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Function.Semiconj.bijOn_image`：bijOn_image (h : Semiconj f fa fb) (ha : 
+BijOn fa s t) (hf : InjOn f t) : BijOn fb (f '' s) (f '' t)
+· 使用定理 `Function.Bijective.bijOn_univ`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β}, Function.Bijective f → Set.BijOn f Set.univ Set.univ
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
 -/
 theorem bijOn_range (h : Semiconj f fa fb) (ha : Bijective fa) (hf : Injective f) :
     BijOn fb (range f) (range f) := by
   rw [← image_univ]
   exact h.bijOn_image ha.bijOn_univ hf.injOn
-
-/--
-theorem `mapsTo_preimage` / 定理 `mapsTo_preimage`
-
-English:
-theorem mapsTo_preimage
-  given: (h : Semiconj f fa fb) {s t : Set β} (hb : MapsTo fb s t)
-  proof: fun x hx => by simp only [mem_preimage, h x, hb hx]
-
-中文:
-定理 mapsTo_preimage
-  条件: (h : Semiconj f fa fb) {s t : 集合 β} (hb : 映射到 fb s t)
-  证明: fun x hx => by simp only [mem_preimage, h x, hb hx]
-
-Depends on / 依赖: mem_preimage
+/-
+**Function.Semiconj.mapsTo_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj
+`。
+形式化陈述：mapsTo_preimage (h : Semiconj f fa fb) {s t : Set β} (hb : MapsTo fb s t) 
+: MapsTo fa (f ⁻¹' s) (f ⁻¹' t)
+参数：h : Semiconj f fa fb；hb : MapsTo fb s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem mapsTo_preimage (h : Semiconj f fa fb) {s t : Set β} (hb : MapsTo fb s t) :
     MapsTo fa (f ⁻¹' s) (f ⁻¹' t) := fun x hx => by simp only [mem_preimage, h x, hb hx]
-
-/--
-theorem `injOn_preimage` / 定理 `injOn_preimage`
-
-English:
-theorem injOn_preimage
-  statement: (h : Semiconj f fa fb) {s : Set β} (hb : InjOn fb s)
-  proof: by
-  intro x hx y hy H
-  have := congr_arg f H
-  rw [h.eq]; rw [h.eq] at this
-  exact hf hx hy (hb hx hy this)
-
-中文:
-定理 injOn_preimage
-  结论: (h : Semiconj f fa fb) {s : 集合 β} (hb : 单射限制 fb s)
-  证明: by
-  intro x hx y hy H
-  have := congr_arg f H
-  rw [h.eq]; rw [h.eq] at this
-  exact hf hx hy (hb hx hy this)
-
-Depends on / 依赖: congr_arg, h.eq
+/-
+**Function.Semiconj.injOn_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`
+。
+形式化陈述：injOn_preimage (h : Semiconj f fa fb) {s : Set β} (hb : InjOn fb s) (hf : 
+InjOn f (f ⁻¹' s)) : InjOn fa (f ⁻¹' s)
+参数：h : Semiconj f fa fb；hb : InjOn fb s；hf : InjOn f (f ⁻¹' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : 
+α → α} {gb : β → β},   Function.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x
+)
 -/
 theorem injOn_preimage (h : Semiconj f fa fb) {s : Set β} (hb : InjOn fb s)
     (hf : InjOn f (f ⁻¹' s)) : InjOn fa (f ⁻¹' s) := by
   intro x hx y hy H
   have := congr_arg f H
-  rw [h.eq]; rw [h.eq] at this
+  rw [h.eq, h.eq] at this
   exact hf hx hy (hb hx hy this)
 
 end Semiconj
 
-/--
-theorem `update_comp_eq_of_notMem_range'` / 定理 `update_comp_eq_of_notMem_range'`
-
-English:
-theorem update_comp_eq_of_notMem_range'
-  statement: {α : Sort*} {β : Type*} {γ : β -> Sort*} [DecidableEq β]
-  proof: (update_comp_eq_of_forall_ne' _ _) fun x hx => h ⟨x, hx⟩
-
-中文:
-定理 update_comp_eq_of_notMem_range'
-  结论: {α : 类型层*} {β : 类型} {γ : β -> 类型层*} [DecidableEq β]
-  证明: (update_comp_eq_of_forall_ne' _ _) fun x hx => h ⟨x, hx⟩
-
-Depends on / 依赖: update_comp_eq_of_forall_ne
+/-
+**Function.update_comp_eq_of_notMem_range'** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：update_comp_eq_of_notMem_range' {α : Sort*} {β : Type*} {γ : β -> Sort*} [
+DecidableEq β] (g : forall b, γ b) {f : α -> β} {i : β} (a : γ i) (h : i ∉ Set.r
+ange f) : (fun j => update g i a (f j)) = fun j => g (f j)
+参数：g : forall b, γ b；a : γ i；h : i ∉ Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_comp_eq_of_forall_ne'`：update_comp_eq_of_forall_ne' {α'}
+ (g : forall a, β a) {f : α' -> α} {i : α} (a : β i) (h : forall x, f x != i) : 
+(fun j => (update g i a) (f…
 -/
-theorem update_comp_eq_of_notMem_range' {α : Sort*} {β : Type*} {γ : β -> Sort*} [DecidableEq β]
-    (g : forall b, γ b) {f : α -> β} {i : β} (a : γ i) (h : i ∉ Set.range f) :
+theorem update_comp_eq_of_notMem_range' {α : Sort*} {β : Type*} {γ : β → Sort*} [DecidableEq β]
+    (g : ∀ b, γ b) {f : α → β} {i : β} (a : γ i) (h : i ∉ Set.range f) :
     (fun j => update g i a (f j)) = fun j => g (f j) :=
   (update_comp_eq_of_forall_ne' _ _) fun x hx => h ⟨x, hx⟩
 
-/--
-theorem `update_comp_eq_of_notMem_range` / 定理 `update_comp_eq_of_notMem_range`
+/-- Non-dependent version of `Function.update_comp_eq_of_notMem_range'` -/
+/-
+**Function.update_comp_eq_of_notMem_range** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：update_comp_eq_of_notMem_range {α : Sort*} {β : Type*} {γ : Sort*} [Decida
+bleEq β] (g : β -> γ) {f : α -> β} {i : β} (a : γ) (h : i ∉ Set.range f) : updat
+e g i a ∘ f = g ∘ f
+参数：g : β -> γ；a : γ；h : i ∉ Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_comp_eq_of_notMem_range'`：update_comp_eq_of_notMem_range
+' {α : Sort*} {β : Type*} {γ : β -> Sort*} [DecidableEq β] (g : forall b, γ b) {
+f : α -> β} {i : β} (a : γ i) …
 
-English:
-theorem update_comp_eq_of_notMem_range
-  statement: {α : Sort*} {β : Type*} {γ : Sort*} [DecidableEq β]
-  proof: update_comp_eq_of_notMem_range' g a h
-
-中文:
-定理 update_comp_eq_of_notMem_range
-  结论: {α : 类型层*} {β : 类型} {γ : 类型层*} [DecidableEq β]
-  证明: update_comp_eq_of_notMem_range' g a h
-
-Depends on / 依赖: update_comp_eq_of_notMem_range
+--- 原说明 ---
+Non-dependent version of `Function.update_comp_eq_of_notMem_range'`
 -/
 theorem update_comp_eq_of_notMem_range {α : Sort*} {β : Type*} {γ : Sort*} [DecidableEq β]
-    (g : β -> γ) {f : α -> β} {i : β} (a : γ) (h : i ∉ Set.range f) : update g i a ∘ f = g ∘ f :=
+    (g : β → γ) {f : α → β} {i : β} (a : γ) (h : i ∉ Set.range f) : update g i a ∘ f = g ∘ f :=
   update_comp_eq_of_notMem_range' g a h
-
-/--
-theorem `insert_injOn` / 定理 `insert_injOn`
-
-English:
-theorem insert_injOn
-  given: (s : Set α)
-  statement: sᶜ.InjOn fun a => insert a s
-  proof: fun _a ha _ _ =>
-  (insert_inj ha).1
-
-中文:
-定理 insert_injOn
-  条件: (s : 集合 α)
-  结论: sᶜ.单射限制 fun a => insert a s
-  证明: fun _a ha _ _ =>
-  (insert_inj ha).1
+/-
+**Function.insert_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：insert_injOn (s : Set α) : sᶜ.InjOn fun a => insert a s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.insert_inj`：insert_inj (ha : a ∉ s) : insert a s = insert b s ↔ a = 
+b
 -/
 theorem insert_injOn (s : Set α) : sᶜ.InjOn fun a => insert a s := fun _a ha _ _ =>
   (insert_inj ha).1
-
-/--
-lemma `apply_eq_of_range_eq_singleton` / 引理 `apply_eq_of_range_eq_singleton`
-
-English:
-lemma apply_eq_of_range_eq_singleton
-  given: {f : α -> β} {b : β} (h : range f = {b}) (a : α)
-  proof: by
-  simpa only [h, mem_singleton_iff] using mem_range_self (f := f) a
-
-中文:
-引理 apply_eq_of_range_eq_singleton
-  条件: {f : α -> β} {b : β} (h : range f = {b}) (a : α)
-  证明: by
-  simpa only [h, mem_singleton_iff] using mem_range_self (f := f) a
-
-Depends on / 依赖: mem_range_self, mem_singleton_iff
+/-
+**Function.apply_eq_of_range_eq_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Function`。
+形式化陈述：apply_eq_of_range_eq_singleton {f : α -> β} {b : β} (h : range f = {b}) (a
+ : α) : f a = b
+参数：h : range f = {b}；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-lemma apply_eq_of_range_eq_singleton {f : α -> β} {b : β} (h : range f = {b}) (a : α) :
+lemma apply_eq_of_range_eq_singleton {f : α → β} {b : β} (h : range f = {b}) (a : α) :
     f a = b := by
   simpa only [h, mem_singleton_iff] using mem_range_self (f := f) a
 
@@ -5821,119 +4236,136 @@ end Function
 /-! ### Equivalences, permutations -/
 namespace Set
 
-variable {p : β -> Prop} [DecidablePred p] {f : α ≃ Subtype p} {g g₁ g₂ : Perm α} {s t : Set α}
+variable {p : β → Prop} [DecidablePred p] {f : α ≃ Subtype p} {g g₁ g₂ : Perm α} {s t : Set α}
 
-/--
-lemma `MapsTo.extendDomain` / 引理 `MapsTo.extendDomain`
-
-English:
-lemma MapsTo.extendDomain
-  given: (h : MapsTo g s t)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩; exact ⟨_, h ha, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
-
-中文:
-引理 映射到.extendDomain
-  条件: (h : 映射到 g s t)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩; exact ⟨_, h ha, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
+/-
+**Set.MapsTo.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α}, Set.MapsTo (⇑g) s t → Set.
+MapsTo (⇑(g.extendDomain f)) (Subtype.val ∘ ⇑f '' s) (Subtype.val ∘ ⇑f '' t)
+参数：⇑g；⇑(g.extendDomain f)；Subtype.val ∘ ⇑f '' s；Subtype.val ∘ ⇑f '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected lemma MapsTo.extendDomain (h : MapsTo g s t) :
     MapsTo (g.extendDomain f) ((↑) ∘ f '' s) ((↑) ∘ f '' t) := by
   rintro _ ⟨a, ha, rfl⟩; exact ⟨_, h ha, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
-
-/--
-lemma `SurjOn.extendDomain` / 引理 `SurjOn.extendDomain`
-
-English:
-lemma SurjOn.extendDomain
-  given: (h : SurjOn g s t)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩
-  obtain ⟨b, hb, rfl⟩ := h ha
-  exact ⟨_, ⟨_, hb, rfl⟩, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
-
-中文:
-引理 满射限制.extendDomain
-  条件: (h : 满射限制 g s t)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩
-  obtain ⟨b, hb, rfl⟩ := h ha
-  exact ⟨_, ⟨_, hb, rfl⟩, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
+/-
+**Set.SurjOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α}, Set.SurjOn (⇑g) s t → Set.
+SurjOn (⇑(g.extendDomain f)) (Subtype.val ∘ ⇑f '' s) (Subtype.val ∘ ⇑f '' t)
+参数：⇑g；⇑(g.extendDomain f)；Subtype.val ∘ ⇑f '' s；Subtype.val ∘ ⇑f '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected lemma SurjOn.extendDomain (h : SurjOn g s t) :
     SurjOn (g.extendDomain f) ((↑) ∘ f '' s) ((↑) ∘ f '' t) := by
   rintro _ ⟨a, ha, rfl⟩
   obtain ⟨b, hb, rfl⟩ := h ha
   exact ⟨_, ⟨_, hb, rfl⟩, by simp_rw [Function.comp_apply, extendDomain_apply_image]⟩
-
-/--
-lemma `BijOn.extendDomain` / 引理 `BijOn.extendDomain`
-
-English:
-lemma BijOn.extendDomain
-  given: (h : BijOn g s t)
-  proof: ⟨h.mapsTo.extendDomain, (g.extendDomain f).injective.injOn, h.surjOn.extendDomain⟩
-
-中文:
-引理 双射限制.extendDomain
-  条件: (h : 双射限制 g s t)
-  证明: ⟨h.mapsTo.extendDomain, (g.extendDomain f).injective.injOn, h.surjOn.extendDomain⟩
+/-
+**Set.BijOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α}, Set.BijOn (⇑g) s t → Set.B
+ijOn (⇑(g.extendDomain f)) (Subtype.val ∘ ⇑f '' s) (Subtype.val ∘ ⇑f '' t)
+参数：⇑g；⇑(g.extendDomain f)；Subtype.val ∘ ⇑f '' s；Subtype.val ∘ ⇑f '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.extendDomain`：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} 
+[inst : DecidablePred p] {f : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α},
+ Set.MapsTo (…
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Set.SurjOn.extendDomain`：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} 
+[inst : DecidablePred p] {f : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α},
+ Set.SurjOn (…
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 protected lemma BijOn.extendDomain (h : BijOn g s t) :
     BijOn (g.extendDomain f) ((↑) ∘ f '' s) ((↑) ∘ f '' t) :=
   ⟨h.mapsTo.extendDomain, (g.extendDomain f).injective.injOn, h.surjOn.extendDomain⟩
-
-/--
-lemma `LeftInvOn.extendDomain` / 引理 `LeftInvOn.extendDomain`
-
-English:
-lemma LeftInvOn.extendDomain
-  given: (h : LeftInvOn g₁ g₂ s)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
-
-中文:
-引理 LeftInvOn.extendDomain
-  条件: (h : LeftInvOn g₁ g₂ s)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
+/-
+**Set.LeftInvOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g₁ g₂ : Equiv.Perm α}   {s : Set α},   Set.LeftInvOn (⇑g₁) (⇑
+g₂) s → Set.LeftInvOn (⇑(g₁.extendDomain f)) (⇑(g₂.extendDomain f)) (Subtype.val
+ ∘ ⇑f '' s)
+参数：⇑g₁；⇑g₂；⇑(g₁.extendDomain f)；⇑(g₂.extendDomain f)；Subtype.val ∘ ⇑f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected lemma LeftInvOn.extendDomain (h : LeftInvOn g₁ g₂ s) :
     LeftInvOn (g₁.extendDomain f) (g₂.extendDomain f) ((↑) ∘ f '' s) := by
   rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
-
-/--
-lemma `RightInvOn.extendDomain` / 引理 `RightInvOn.extendDomain`
-
-English:
-lemma RightInvOn.extendDomain
-  given: (h : RightInvOn g₁ g₂ t)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
-
-中文:
-引理 RightInvOn.extendDomain
-  条件: (h : RightInvOn g₁ g₂ t)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
+/-
+**Set.RightInvOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g₁ g₂ : Equiv.Perm α}   {t : Set α},   Set.RightInvOn (⇑g₁) (
+⇑g₂) t → Set.RightInvOn (⇑(g₁.extendDomain f)) (⇑(g₂.extendDomain f)) (Subtype.v
+al ∘ ⇑f '' t)
+参数：⇑g₁；⇑g₂；⇑(g₁.extendDomain f)；⇑(g₂.extendDomain f)；Subtype.val ∘ ⇑f '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected lemma RightInvOn.extendDomain (h : RightInvOn g₁ g₂ t) :
     RightInvOn (g₁.extendDomain f) (g₂.extendDomain f) ((↑) ∘ f '' t) := by
   rintro _ ⟨a, ha, rfl⟩; simp_rw [Function.comp_apply, extendDomain_apply_image, h ha]
-
-/--
-lemma `InvOn.extendDomain` / 引理 `InvOn.extendDomain`
-
-English:
-lemma InvOn.extendDomain
-  given: (h : InvOn g₁ g₂ s t)
-  proof: ⟨h.1.extendDomain, h.2.extendDomain⟩
-
-中文:
-引理 InvOn.extendDomain
-  条件: (h : InvOn g₁ g₂ s t)
-  证明: ⟨h.1.extendDomain, h.2.extendDomain⟩
+/-
+**Set.InvOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Set.InvOn`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [inst : DecidablePred p] {f
+ : α ≃ Subtype p} {g₁ g₂ : Equiv.Perm α}   {s t : Set α},   Set.InvOn (⇑g₁) (⇑g₂
+) s t →     Set.InvOn (⇑(g₁.extendDomain f)) (⇑(g₂.extendDomain f)) (Subtype.val
+ ∘ ⇑f '' s) (Subtype.val ∘ ⇑f '' t)
+参数：⇑g₁；⇑g₂；⇑(g₁.extendDomain f)；⇑(g₂.extendDomain f)；Subtype.val ∘ ⇑f '' s；Subty
+pe.val ∘ ⇑f '' t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.extendDomain`：∀ {α : Type u_1} {β : Type u_2} {p : β → Pro
+p} [inst : DecidablePred p] {f : α ≃ Subtype p} {g₁ g₂ : Equiv.Perm α}   {s : Se
+t α},   Set.Left…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.extendDomain`：∀ {α : Type u_1} {β : Type u_2} {p : β → Pr
+op} [inst : DecidablePred p] {f : α ≃ Subtype p} {g₁ g₂ : Equiv.Perm α}   {t : S
+et α},   Set.Righ…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected lemma InvOn.extendDomain (h : InvOn g₁ g₂ s t) :
     InvOn (g₁.extendDomain f) (g₂.extendDomain f) ((↑) ∘ f '' s) ((↑) ∘ f '' t) :=
@@ -5946,315 +4378,287 @@ namespace Set
 section Prod
 
 variable {α β₁ β₂ : Type*} {s : Set α} {t₁ : Set β₁} {t₂ : Set β₂}
-  {f₁ : α -> β₁} {f₂ : α -> β₂} {g₁ : β₁ -> α} {g₂ : β₂ -> α}
+  {f₁ : α → β₁} {f₂ : α → β₂} {g₁ : β₁ → α} {g₂ : β₂ → α}
 
-/--
-lemma `InjOn.left_prodMk` / 引理 `InjOn.left_prodMk`
-
-English:
-lemma InjOn.left_prodMk
-  given: (h₁ : s.InjOn f₁)
-  statement: s.InjOn fun x => (f₁ x, f₂ x)
-  proof: fun _ hx _ hy h => h₁ hx hy (Prod.ext_iff.1 h).1
-
-中文:
-引理 单射限制.left_prodMk
-  条件: (h₁ : s.单射限制 f₁)
-  结论: s.单射限制 fun x => (f₁ x, f₂ x)
-  证明: fun _ hx _ hy h => h₁ hx hy (Prod.ext_iff.1 h).1
-
-Depends on / 依赖: Prod.ext_iff, ext_iff
+/-
+**Set.InjOn.left_prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_7} {β₁ : Type u_8} {β₂ : Type u_9} {s : Set α} {f₁ : α → β₁}
+ {f₂ : α → β₂},   Set.InjOn f₁ s → Set.InjOn (fun x => (f₁ x, f₂ x)) s
+参数：fun x => (f₁ x, f₂ x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
 -/
-lemma InjOn.left_prodMk (h₁ : s.InjOn f₁) : s.InjOn fun x => (f₁ x, f₂ x) :=
+lemma InjOn.left_prodMk (h₁ : s.InjOn f₁) : s.InjOn fun x ↦ (f₁ x, f₂ x) :=
   fun _ hx _ hy h => h₁ hx hy (Prod.ext_iff.1 h).1
-
-/--
-lemma `InjOn.right_prodMk` / 引理 `InjOn.right_prodMk`
-
-English:
-lemma InjOn.right_prodMk
-  given: (h₂ : s.InjOn f₂)
-  statement: s.InjOn fun x => (f₁ x, f₂ x)
-  proof: fun _ hx _ hy h => h₂ hx hy (Prod.ext_iff.1 h).2
-
-中文:
-引理 单射限制.right_prodMk
-  条件: (h₂ : s.单射限制 f₂)
-  结论: s.单射限制 fun x => (f₁ x, f₂ x)
-  证明: fun _ hx _ hy h => h₂ hx hy (Prod.ext_iff.1 h).2
-
-Depends on / 依赖: Prod.ext_iff, ext_iff
+/-
+**Set.InjOn.right_prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α : Type u_7} {β₁ : Type u_8} {β₂ : Type u_9} {s : Set α} {f₁ : α → β₁}
+ {f₂ : α → β₂},   Set.InjOn f₂ s → Set.InjOn (fun x => (f₁ x, f₂ x)) s
+参数：fun x => (f₁ x, f₂ x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
 -/
-lemma InjOn.right_prodMk (h₂ : s.InjOn f₂) : s.InjOn fun x => (f₁ x, f₂ x) :=
+lemma InjOn.right_prodMk (h₂ : s.InjOn f₂) : s.InjOn fun x ↦ (f₁ x, f₂ x) :=
   fun _ hx _ hy h => h₂ hx hy (Prod.ext_iff.1 h).2
-
-/--
-lemma `prod_surjOn_fst` / 引理 `prod_surjOn_fst`
-
-English:
-lemma prod_surjOn_fst
-  given: (h : t₂.Nonempty)
-  statement: (t₁ ×ˢ t₂).SurjOn Prod.fst t₁
-  proof: fun _ h => by simpa [h]
-
-中文:
-引理 prod_surjOn_fst
-  条件: (h : t₂.非空)
-  结论: (t₁ ×ˢ t₂).满射限制 积类型.fst t₁
-  证明: fun _ h => by simpa [h]
+/-
+**Set.prod_surjOn_fst** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：prod_surjOn_fst (h : t₂.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.fst t₁
+参数：h : t₂.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 lemma prod_surjOn_fst (h : t₂.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ :=
   fun _ h => by simpa [h]
-/--
-lemma `prod_surjOn_snd` / 引理 `prod_surjOn_snd`
-
-English:
-lemma prod_surjOn_snd
-  given: (h : t₁.Nonempty)
-  statement: (t₁ ×ˢ t₂).SurjOn Prod.snd t₂
-  proof: fun _ h => by simpa [h]
-
-中文:
-引理 prod_surjOn_snd
-  条件: (h : t₁.非空)
-  结论: (t₁ ×ˢ t₂).满射限制 积类型.snd t₂
-  证明: fun _ h => by simpa [h]
+/-
+**Set.prod_surjOn_snd** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：prod_surjOn_snd (h : t₁.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.snd t₂
+参数：h : t₁.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 lemma prod_surjOn_snd (h : t₁.Nonempty) : (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ :=
   fun _ h => by simpa [h]
-
-/--
-lemma `prod_surjOn_fst_iff` / 引理 `prod_surjOn_fst_iff`
-
-English:
-lemma prod_surjOn_fst_iff
-  statement: (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ ↔ t₁ = ∅ ∨ t₂.Nonempty
-  proof: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_fst]⟩
-
-中文:
-引理 prod_surjOn_fst_iff
-  结论: (t₁ ×ˢ t₂).满射限制 积类型.fst t₁ ↔ t₁ = ∅ ∨ t₂.非空
-  证明: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_fst]⟩
-
-Depends on / 依赖: contextual, or_imp, prod_surjOn_fst
+/-
+**Set.prod_surjOn_fst_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：prod_surjOn_fst_iff : (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ ↔ t₁ = ∅ ∨ t₂.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Set.empty_prod`：empty_prod : (∅ : Set α) ×ˢ t = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma prod_surjOn_fst_iff : (t₁ ×ˢ t₂).SurjOn Prod.fst t₁ ↔ t₁ = ∅ ∨ t₂.Nonempty :=
   ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_fst]⟩
-
-/--
-lemma `prod_surjOn_snd_iff` / 引理 `prod_surjOn_snd_iff`
-
-English:
-lemma prod_surjOn_snd_iff
-  statement: (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ ↔ t₁.Nonempty ∨ t₂ = ∅
-  proof: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_snd]⟩
-
-中文:
-引理 prod_surjOn_snd_iff
-  结论: (t₁ ×ˢ t₂).满射限制 积类型.snd t₂ ↔ t₁.非空 ∨ t₂ = ∅
-  证明: ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_snd]⟩
-
-Depends on / 依赖: contextual, or_imp, prod_surjOn_snd
+/-
+**Set.prod_surjOn_snd_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：prod_surjOn_snd_iff : (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ ↔ t₁.Nonempty ∨ t₂ = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.empty_prod`：empty_prod : (∅ : Set α) ×ˢ t = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma prod_surjOn_snd_iff : (t₁ ×ˢ t₂).SurjOn Prod.snd t₂ ↔ t₁.Nonempty ∨ t₂ = ∅ :=
   ⟨by by_contra!; aesop, by simp +contextual [or_imp, prod_surjOn_snd]⟩
-
-/--
-lemma `MapsTo.prodMk` / 引理 `MapsTo.prodMk`
-
-English:
-lemma MapsTo.prodMk
-  given: (h₁ : MapsTo f₁ s t₁) (h₂ : MapsTo f₂ s t₂)
-  proof: fun _ hx => ⟨h₁ hx, h₂ hx⟩
-
-中文:
-引理 映射到.prodMk
-  条件: (h₁ : 映射到 f₁ s t₁) (h₂ : 映射到 f₂ s t₂)
-  证明: fun _ hx => ⟨h₁ hx, h₂ hx⟩
+/-
+**Set.MapsTo.prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u_7} {β₁ : Type u_8} {β₂ : Type u_9} {s : Set α} {t₁ : Set β₁}
+ {t₂ : Set β₂} {f₁ : α → β₁} {f₂ : α → β₂},   Set.MapsTo f₁ s t₁ → Set.MapsTo f₂
+ s t₂ → Set.MapsTo (fun x => (f₁ x, f₂ x)) s (t₁ ×ˢ t₂)
+参数：fun x => (f₁ x, f₂ x)；t₁ ×ˢ t₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MapsTo.prodMk (h₁ : MapsTo f₁ s t₁) (h₂ : MapsTo f₂ s t₂) :
     MapsTo (fun x => (f₁ x, f₂ x)) s (t₁ ×ˢ t₂) :=
   fun _ hx => ⟨h₁ hx, h₂ hx⟩
-
-/--
-lemma `LeftInvOn.left_prodMk` / 引理 `LeftInvOn.left_prodMk`
-
-English:
-lemma LeftInvOn.left_prodMk
-  given: (h₁ : LeftInvOn g₁ f₁ s)
-  proof: h₁
-
-中文:
-引理 LeftInvOn.left_prodMk
-  条件: (h₁ : LeftInvOn g₁ f₁ s)
-  证明: h₁
+/-
+**Set.LeftInvOn.left_prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：∀ {α : Type u_7} {β₁ : Type u_8} {β₂ : Type u_9} {s : Set α} {f₁ : α → β₁}
+ {f₂ : α → β₂} {g₁ : β₁ → α},   Set.LeftInvOn g₁ f₁ s → Set.LeftInvOn (fun x => 
+g₁ x.1) (fun x => (f₁ x, f₂ x)) s
+参数：fun x => g₁ x.1；fun x => (f₁ x, f₂ x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LeftInvOn.left_prodMk (h₁ : LeftInvOn g₁ f₁ s) :
-    LeftInvOn (fun x => g₁ x.1) (fun x => (f₁ x, f₂ x)) s := h₁
-
-/--
-lemma `LeftInvOn.right_prodMk` / 引理 `LeftInvOn.right_prodMk`
-
-English:
-lemma LeftInvOn.right_prodMk
-  given: (h₂ : LeftInvOn g₂ f₂ s)
-  proof: h₂
-
-中文:
-引理 LeftInvOn.right_prodMk
-  条件: (h₂ : LeftInvOn g₂ f₂ s)
-  证明: h₂
+    LeftInvOn (fun x ↦ g₁ x.1) (fun x ↦ (f₁ x, f₂ x)) s := h₁
+/-
+**Set.LeftInvOn.right_prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：∀ {α : Type u_7} {β₁ : Type u_8} {β₂ : Type u_9} {s : Set α} {f₁ : α → β₁}
+ {f₂ : α → β₂} {g₂ : β₂ → α},   Set.LeftInvOn g₂ f₂ s → Set.LeftInvOn (fun x => 
+g₂ x.2) (fun x => (f₁ x, f₂ x)) s
+参数：fun x => g₂ x.2；fun x => (f₁ x, f₂ x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LeftInvOn.right_prodMk (h₂ : LeftInvOn g₂ f₂ s) :
-    LeftInvOn (fun x => g₂ x.2) (fun x => (f₁ x, f₂ x)) s := h₂
+    LeftInvOn (fun x ↦ g₂ x.2) (fun x ↦ (f₁ x, f₂ x)) s := h₂
 
 end Prod
 
 section ProdMap
 
 variable {α₁ α₂ β₁ β₂ : Type*} {s₁ : Set α₁} {s₂ : Set α₂} {t₁ : Set β₁} {t₂ : Set β₂}
-  {f₁ : α₁ -> β₁} {f₂ : α₂ -> β₂} {g₁ : β₁ -> α₁} {g₂ : β₂ -> α₂}
+  {f₁ : α₁ → β₁} {f₂ : α₂ → β₂} {g₁ : β₁ → α₁} {g₂ : β₂ → α₂}
 
-/--
-lemma `InjOn.prodMap` / 引理 `InjOn.prodMap`
-
-English:
-lemma InjOn.prodMap
-  given: (h₁ : s₁.InjOn f₁) (h₂ : s₂.InjOn f₂)
-  proof: fun x hx y hy => by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
-
-中文:
-引理 单射限制.prodMap
-  条件: (h₁ : s₁.单射限制 f₁) (h₂ : s₂.单射限制 f₂)
-  证明: fun x hx y hy => by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
-
-Depends on / 依赖: And.imp, Prod.ext_iff, ext_iff, simp_rw
+/-
+**Set.InjOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.InjOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂}, Set.InjOn f₁ s₁ → Set.InjO
+n f₂ s₂ → Set.InjOn (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂)
+参数：fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma InjOn.prodMap (h₁ : s₁.InjOn f₁) (h₂ : s₂.InjOn f₂) :
-    (s₁ ×ˢ s₂).InjOn fun x => (f₁ x.1, f₂ x.2) :=
-  fun x hx y hy => by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
-
-/--
-lemma `SurjOn.prodMap` / 引理 `SurjOn.prodMap`
-
-English:
-lemma SurjOn.prodMap
-  given: (h₁ : SurjOn f₁ s₁ t₁) (h₂ : SurjOn f₂ s₂ t₂)
-  proof: by
-  rintro x hx
-  obtain ⟨a₁, ha₁, hx₁⟩ := h₁ hx.1
-  obtain ⟨a₂, ha₂, hx₂⟩ := h₂ hx.2
-  exact ⟨(a₁, a₂), ⟨ha₁, ha₂⟩, Prod.ext hx₁ hx₂⟩
-
-中文:
-引理 满射限制.prodMap
-  条件: (h₁ : 满射限制 f₁ s₁ t₁) (h₂ : 满射限制 f₂ s₂ t₂)
-  证明: by
-  rintro x hx
-  obtain ⟨a₁, ha₁, hx₁⟩ := h₁ hx.1
-  obtain ⟨a₂, ha₂, hx₂⟩ := h₂ hx.2
-  exact ⟨(a₁, a₂), ⟨ha₁, ha₂⟩, Prod.ext hx₁ hx₂⟩
-
-Depends on / 依赖: Prod.ext
+    (s₁ ×ˢ s₂).InjOn fun x ↦ (f₁ x.1, f₂ x.2) :=
+  fun x hx y hy ↦ by simp_rw [Prod.ext_iff]; exact And.imp (h₁ hx.1 hy.1) (h₂ hx.2 hy.2)
+/-
+**Set.SurjOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.SurjOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α₁ → β₁} {f₂ : α₂ → β₂}
+,   Set.SurjOn f₁ s₁ t₁ → Set.SurjOn f₂ s₂ t₂ → Set.SurjOn (fun x => (f₁ x.1, f₂
+ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂)
+参数：fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂；t₁ ×ˢ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
 lemma SurjOn.prodMap (h₁ : SurjOn f₁ s₁ t₁) (h₂ : SurjOn f₂ s₂ t₂) :
-    SurjOn (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) := by
+    SurjOn (fun x ↦ (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) := by
   rintro x hx
   obtain ⟨a₁, ha₁, hx₁⟩ := h₁ hx.1
   obtain ⟨a₂, ha₂, hx₂⟩ := h₂ hx.2
   exact ⟨(a₁, a₂), ⟨ha₁, ha₂⟩, Prod.ext hx₁ hx₂⟩
-
-/--
-lemma `MapsTo.prodMap` / 引理 `MapsTo.prodMap`
-
-English:
-lemma MapsTo.prodMap
-  given: (h₁ : MapsTo f₁ s₁ t₁) (h₂ : MapsTo f₂ s₂ t₂)
-  proof: fun _x hx => ⟨h₁ hx.1, h₂ hx.2⟩
-
-中文:
-引理 映射到.prodMap
-  条件: (h₁ : 映射到 f₁ s₁ t₁) (h₂ : 映射到 f₂ s₂ t₂)
-  证明: fun _x hx => ⟨h₁ hx.1, h₂ hx.2⟩
+/-
+**Set.MapsTo.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α₁ → β₁} {f₂ : α₂ → β₂}
+,   Set.MapsTo f₁ s₁ t₁ → Set.MapsTo f₂ s₂ t₂ → Set.MapsTo (fun x => (f₁ x.1, f₂
+ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂)
+参数：fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂；t₁ ×ˢ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma MapsTo.prodMap (h₁ : MapsTo f₁ s₁ t₁) (h₂ : MapsTo f₂ s₂ t₂) :
-    MapsTo (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
-  fun _x hx => ⟨h₁ hx.1, h₂ hx.2⟩
-
-/--
-lemma `BijOn.prodMap` / 引理 `BijOn.prodMap`
-
-English:
-lemma BijOn.prodMap
-  given: (h₁ : BijOn f₁ s₁ t₁) (h₂ : BijOn f₂ s₂ t₂)
-  proof: ⟨h₁.mapsTo.prodMap h₂.mapsTo, h₁.injOn.prodMap h₂.injOn, h₁.surjOn.prodMap h₂.surjOn⟩
-
-中文:
-引理 双射限制.prodMap
-  条件: (h₁ : 双射限制 f₁ s₁ t₁) (h₂ : 双射限制 f₂ s₂ t₂)
-  证明: ⟨h₁.mapsTo.prodMap h₂.mapsTo, h₁.injOn.prodMap h₂.injOn, h₁.surjOn.prodMap h₂.surjOn⟩
-
-Depends on / 依赖: injOn.prodMap, mapsTo, mapsTo.prodMap, prodMap, surjOn, surjOn.prodMap
+    MapsTo (fun x ↦ (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
+  fun _x hx ↦ ⟨h₁ hx.1, h₂ hx.2⟩
+/-
+**Set.BijOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.BijOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α₁ → β₁} {f₂ : α₂ → β₂}
+,   Set.BijOn f₁ s₁ t₁ → Set.BijOn f₂ s₂ t₂ → Set.BijOn (fun x => (f₁ x.1, f₂ x.
+2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂)
+参数：fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂；t₁ ×ˢ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.prodMap`：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β
+₂ : Type u_10} {s₁ : Set α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α
+₁ → β₁} …
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.prodMap`：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂
+ : Type u_10} {s₁ : Set α₁} {s₂ : Set α₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂}, Set.I
+njOn f₁…
+· 使用定理 `Set.BijOn.injOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β}
+ {f : α → β}, Set.BijOn f s t → Set.InjOn f s
+· 使用定理 `Set.SurjOn.prodMap`：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β
+₂ : Type u_10} {s₁ : Set α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α
+₁ → β₁} …
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
 -/
 lemma BijOn.prodMap (h₁ : BijOn f₁ s₁ t₁) (h₂ : BijOn f₂ s₂ t₂) :
-    BijOn (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
+    BijOn (fun x ↦ (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
   ⟨h₁.mapsTo.prodMap h₂.mapsTo, h₁.injOn.prodMap h₂.injOn, h₁.surjOn.prodMap h₂.surjOn⟩
-
-/--
-lemma `LeftInvOn.prodMap` / 引理 `LeftInvOn.prodMap`
-
-English:
-lemma LeftInvOn.prodMap
-  given: (h₁ : LeftInvOn g₁ f₁ s₁) (h₂ : LeftInvOn g₂ f₂ s₂)
-  proof: fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-中文:
-引理 LeftInvOn.prodMap
-  条件: (h₁ : LeftInvOn g₁ f₁ s₁) (h₂ : LeftInvOn g₂ f₂ s₂)
-  证明: fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-Depends on / 依赖: Prod.ext
+/-
+**Set.LeftInvOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.LeftInvOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂} {g₁ : β₁ → α₁} {g₂ : β₂ → α
+₂},   Set.LeftInvOn g₁ f₁ s₁ →     Set.LeftInvOn g₂ f₂ s₂ → Set.LeftInvOn (fun x
+ => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂)
+参数：fun x => (g₁ x.1, g₂ x.2)；fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma LeftInvOn.prodMap (h₁ : LeftInvOn g₁ f₁ s₁) (h₂ : LeftInvOn g₂ f₂ s₂) :
-    LeftInvOn (fun x => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) :=
-  fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-/--
-lemma `RightInvOn.prodMap` / 引理 `RightInvOn.prodMap`
-
-English:
-lemma RightInvOn.prodMap
-  given: (h₁ : RightInvOn g₁ f₁ t₁) (h₂ : RightInvOn g₂ f₂ t₂)
-  proof: fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-中文:
-引理 RightInvOn.prodMap
-  条件: (h₁ : RightInvOn g₁ f₁ t₁) (h₂ : RightInvOn g₂ f₂ t₂)
-  证明: fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-Depends on / 依赖: Prod.ext
+    LeftInvOn (fun x ↦ (g₁ x.1, g₂ x.2)) (fun x ↦ (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) :=
+  fun _x hx ↦ Prod.ext (h₁ hx.1) (h₂ hx.2)
+/-
+**Set.RightInvOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.RightInvOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {t₁ : S
+et β₁} {t₂ : Set β₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂} {g₁ : β₁ → α₁} {g₂ : β₂ → α
+₂},   Set.RightInvOn g₁ f₁ t₁ →     Set.RightInvOn g₂ f₂ t₂ → Set.RightInvOn (fu
+n x => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (t₁ ×ˢ t₂)
+参数：fun x => (g₁ x.1, g₂ x.2)；fun x => (f₁ x.1, f₂ x.2)；t₁ ×ˢ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma RightInvOn.prodMap (h₁ : RightInvOn g₁ f₁ t₁) (h₂ : RightInvOn g₂ f₂ t₂) :
-    RightInvOn (fun x => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (t₁ ×ˢ t₂) :=
-  fun _x hx => Prod.ext (h₁ hx.1) (h₂ hx.2)
-
-/--
-lemma `InvOn.prodMap` / 引理 `InvOn.prodMap`
-
-English:
-lemma InvOn.prodMap
-  given: (h₁ : InvOn g₁ f₁ s₁ t₁) (h₂ : InvOn g₂ f₂ s₂ t₂)
-  proof: ⟨h₁.1.prodMap h₂.1, h₁.2.prodMap h₂.2⟩
-
-中文:
-引理 InvOn.prodMap
-  条件: (h₁ : InvOn g₁ f₁ s₁ t₁) (h₂ : InvOn g₂ f₂ s₂ t₂)
-  证明: ⟨h₁.1.prodMap h₂.1, h₁.2.prodMap h₂.2⟩
-
-Depends on / 依赖: prodMap
+    RightInvOn (fun x ↦ (g₁ x.1, g₂ x.2)) (fun x ↦ (f₁ x.1, f₂ x.2)) (t₁ ×ˢ t₂) :=
+  fun _x hx ↦ Prod.ext (h₁ hx.1) (h₂ hx.2)
+/-
+**Set.InvOn.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Set.InvOn`。
+形式化陈述：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9} {β₂ : Type u_10} {s₁ : S
+et α₁} {s₂ : Set α₂} {t₁ : Set β₁}   {t₂ : Set β₂} {f₁ : α₁ → β₁} {f₂ : α₂ → β₂}
+ {g₁ : β₁ → α₁} {g₂ : β₂ → α₂},   Set.InvOn g₁ f₁ s₁ t₁ →     Set.InvOn g₂ f₂ s₂
+ t₂ → Set.InvOn (fun x => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s
+₂) (t₁ ×ˢ t₂)
+参数：fun x => (g₁ x.1, g₂ x.2)；fun x => (f₁ x.1, f₂ x.2)；s₁ ×ˢ s₂；t₁ ×ˢ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.prodMap`：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9}
+ {β₂ : Type u_10} {s₁ : Set α₁} {s₂ : Set α₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂} {g
+₁ : β₁ → α₁…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.RightInvOn.prodMap`：∀ {α₁ : Type u_7} {α₂ : Type u_8} {β₁ : Type u_9
+} {β₂ : Type u_10} {t₁ : Set β₁} {t₂ : Set β₂} {f₁ : α₁ → β₁}   {f₂ : α₂ → β₂} {
+g₁ : β₁ → α₁…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma InvOn.prodMap (h₁ : InvOn g₁ f₁ s₁ t₁) (h₂ : InvOn g₂ f₂ s₂ t₂) :
-    InvOn (fun x => (g₁ x.1, g₂ x.2)) (fun x => (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
+    InvOn (fun x ↦ (g₁ x.1, g₂ x.2)) (fun x ↦ (f₁ x.1, f₂ x.2)) (s₁ ×ˢ s₂) (t₁ ×ˢ t₂) :=
   ⟨h₁.1.prodMap h₂.1, h₁.2.prodMap h₂.2⟩
 
 end ProdMap
@@ -6266,147 +4670,131 @@ open Set
 
 variable (e : α ≃ β) {s : Set α} {t : Set β}
 
-/--
-lemma `bijOn'` / 引理 `bijOn'`
-
-English:
-lemma bijOn'
-  given: (h₁ : MapsTo e s t) (h₂ : MapsTo e.symm t s)
-  statement: BijOn e s t
-  proof: ⟨h₁, e.injective.injOn, fun b hb => ⟨e.symm b, h₂ hb, apply_symm_apply _ _⟩⟩
-
-中文:
-引理 bijOn'
-  条件: (h₁ : 映射到 e s t) (h₂ : 映射到 e.symm t s)
-  结论: 双射限制 e s t
-  证明: ⟨h₁, e.injective.injOn, fun b hb => ⟨e.symm b, h₂ hb, apply_symm_apply _ _⟩⟩
-
-Depends on / 依赖: apply_symm_apply, e.injective.injOn, e.symm, injective
+/-
+**Equiv.bijOn'** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bijOn' (h₁ : MapsTo e s t) (h₂ : MapsTo e.symm t s) : BijOn e s t
+参数：h₁ : MapsTo e s t；h₂ : MapsTo e.symm t s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma bijOn' (h₁ : MapsTo e s t) (h₂ : MapsTo e.symm t s) : BijOn e s t :=
-  ⟨h₁, e.injective.injOn, fun b hb => ⟨e.symm b, h₂ hb, apply_symm_apply _ _⟩⟩
-
-/--
-lemma `bijOn` / 引理 `bijOn`
-
-English:
-lemma bijOn
-  given: (h : forall a, e a in t ↔ a in s)
-  statement: BijOn e s t
-  proof: e.bijOn' (fun _ => (h _).2) fun b hb => (h _).1 by rwa [apply_symm_apply]
-
-中文:
-引理 bijOn
-  条件: (h : 对任意 a, e a in t ↔ a in s)
-  结论: 双射限制 e s t
-  证明: e.bijOn' (fun _ => (h _).2) fun b hb => (h _).1 by rwa [apply_symm_apply]
+  ⟨h₁, e.injective.injOn, fun b hb ↦ ⟨e.symm b, h₂ hb, apply_symm_apply _ _⟩⟩
+/-
+**Equiv.bijOn** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) {s : Set α} {t : Set β}, (∀ (a
+ : α), e a ∈ t ↔ a ∈ s) → Set.BijOn (⇑e) s t
+参数：e : α ≃ β；∀ (a : α), e a ∈ t ↔ a ∈ s；⇑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.bijOn'`：bijOn' (h₁ : MapsTo e s t) (h₂ : MapsTo e.symm t s) : BijO
+n e s t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
-protected lemma bijOn (h : forall a, e a in t ↔ a in s) : BijOn e s t :=
-e.bijOn' (fun _ => (h _).2) fun b hb => (h _).1 by rwa [apply_symm_apply]
-
-/--
-lemma `invOn` / 引理 `invOn`
-
-English:
-lemma invOn
-  statement: InvOn e e.symm t s
-  proof: ⟨e.rightInverse_symm.leftInvOn _, e.leftInverse_symm.leftInvOn _⟩
-
-中文:
-引理 invOn
-  结论: InvOn e e.symm t s
-  证明: ⟨e.rightInverse_symm.leftInvOn _, e.leftInverse_symm.leftInvOn _⟩
-
-Depends on / 依赖: e.leftInverse_symm.leftInvOn, e.rightInverse_symm.leftInvOn, leftInvOn, leftInverse_symm, rightInverse_symm
+protected lemma bijOn (h : ∀ a, e a ∈ t ↔ a ∈ s) : BijOn e s t :=
+  e.bijOn' (fun _ ↦ (h _).2) fun b hb ↦ (h _).1 <| by rwa [apply_symm_apply]
+/-
+**Equiv.invOn** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：invOn : InvOn e e.symm t s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.LeftInverse.leftInvOn`：∀ {α : Type u_1} {β : Type u_2} {f : α →
+ β} {g : β → α}, Function.LeftInverse f g → ∀ (s : Set β), Set.LeftInvOn f g s
+· 使用定理 `Equiv.rightInverse_symm`：rightInverse_symm (f : α ≃ β) : Function.RightI
+nverse f.symm f
+· 使用定理 `Equiv.leftInverse_symm`：leftInverse_symm (f : α ≃ β) : LeftInverse f.sym
+m f
 -/
 lemma invOn : InvOn e e.symm t s :=
   ⟨e.rightInverse_symm.leftInvOn _, e.leftInverse_symm.leftInvOn _⟩
-
-/--
-lemma `bijOn_image` / 引理 `bijOn_image`
-
-English:
-lemma bijOn_image
-  statement: BijOn e s (e '' s)
-  proof: e.injective.injOn.bijOn_image
-
-中文:
-引理 bijOn_image
-  结论: 双射限制 e s (e '' s)
-  证明: e.injective.injOn.bijOn_image
-
-Depends on / 依赖: bijOn_image, e.injective.injOn.bijOn_image, injective
+/-
+**Equiv.bijOn_image** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bijOn_image : BijOn e s (e '' s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InjOn.bijOn_image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β}, Set.InjOn f s → Set.BijOn f s (f '' s)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma bijOn_image : BijOn e s (e '' s) := e.injective.injOn.bijOn_image
-/--
-lemma `bijOn_symm_image` / 引理 `bijOn_symm_image`
-
-English:
-lemma bijOn_symm_image
-  statement: BijOn e.symm (e '' s) s
-  proof: e.bijOn_image.symm e.invOn
-
-中文:
-引理 bijOn_symm_image
-  结论: 双射限制 e.symm (e '' s) s
-  证明: e.bijOn_image.symm e.invOn
-
-Depends on / 依赖: bijOn_image, e.bijOn_image.symm, e.invOn
+/-
+**Equiv.bijOn_symm_image** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bijOn_symm_image : BijOn e.symm (e '' s) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β} 
+{f : α → β} {g : β → α},   Set.InvOn f g t s → Set.BijOn f s t → Set.BijOn g t s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Equiv.invOn`：invOn : InvOn e e.symm t s
+· 使用引理 `Equiv.bijOn_image`：bijOn_image : BijOn e s (e '' s)
 -/
 lemma bijOn_symm_image : BijOn e.symm (e '' s) s := e.bijOn_image.symm e.invOn
 
 variable {e}
-
-/--
-lemma `bijOn_symm` / 引理 `bijOn_symm`
-
-English:
-lemma bijOn_symm
-  statement: BijOn e.symm t s ↔ BijOn e s t
-  proof: bijOn_comm e.symm.invOn
-
-alias ⟨_root_.Set.BijOn.of_equiv_symm, _root_.Set.BijOn.equiv_symm⟩ := bijOn_symm
-
-中文:
-引理 bijOn_symm
-  结论: 双射限制 e.symm t s ↔ 双射限制 e s t
-  证明: bijOn_comm e.symm.invOn
-
-alias ⟨_root_.Set.BijOn.of_equiv_symm, _root_.Set.BijOn.equiv_symm⟩ := bijOn_symm
+/-
+**Equiv.bijOn_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {e : α ≃ β} {s : Set α} {t : Set β}, Set.B
+ijOn (⇑e.symm) t s ↔ Set.BijOn (⇑e) s t
+参数：⇑e.symm；⇑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.bijOn_comm`：bijOn_comm {g : β -> α} (h : InvOn f g t s) : BijOn f s 
+t ↔ BijOn g t s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Equiv.invOn`：invOn : InvOn e e.symm t s
 -/
 @[simp] lemma bijOn_symm : BijOn e.symm t s ↔ BijOn e s t := bijOn_comm e.symm.invOn
 
 alias ⟨_root_.Set.BijOn.of_equiv_symm, _root_.Set.BijOn.equiv_symm⟩ := bijOn_symm
 
 variable [DecidableEq α] {a b : α}
-
-/--
-lemma `bijOn_swap` / 引理 `bijOn_swap`
-
-English:
-lemma bijOn_swap
-  given: (ha : a in s) (hb : b in s)
-  statement: BijOn (swap a b) s s
-  proof: (swap a b).bijOn fun x => by
-    obtain rfl | hxa := eq_or_ne x a <;>
-    obtain rfl | hxb := eq_or_ne x b <;>
-    simp [*, swap_apply_of_ne_of_ne]
-
-中文:
-引理 bijOn_swap
-  条件: (ha : a in s) (hb : b in s)
-  结论: 双射限制 (swap a b) s s
-  证明: (swap a b).bijOn fun x => by
-    obtain rfl | hxa := eq_or_ne x a <;>
-    obtain rfl | hxb := eq_or_ne x b <;>
-    simp [*, swap_apply_of_ne_of_ne]
-
-Depends on / 依赖: eq_or_ne, swap_apply_of_ne_of_ne
+/-
+**Equiv.bijOn_swap** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bijOn_swap (ha : a in s) (hb : b in s) : BijOn (swap a b) s s
+参数：ha : a in s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijOn`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) {s : Set α} {t 
+: Set β}, (∀ (a : α), e a ∈ t ↔ a ∈ s) → Set.BijOn (⇑e) s t
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma bijOn_swap (ha : a in s) (hb : b in s) : BijOn (swap a b) s s :=
-  (swap a b).bijOn fun x => by
+lemma bijOn_swap (ha : a ∈ s) (hb : b ∈ s) : BijOn (swap a b) s s :=
+  (swap a b).bijOn fun x ↦ by
     obtain rfl | hxa := eq_or_ne x a <;>
     obtain rfl | hxb := eq_or_ne x b <;>
     simp [*, swap_apply_of_ne_of_ne]
 
 end Equiv
+

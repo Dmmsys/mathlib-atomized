@@ -33,20 +33,23 @@ variable {C₁ C₂ C₃ C₁₂ C₂₃ D₁ D₂ D₃ D₁₂ D₂₃ C D E : 
 
 namespace MorphismProperty
 
-/--
-Definition of `IsInvertedBy₃` / `IsInvertedBy₃` 的定义
+/-- Classes of morphisms `W₁ : MorphismProperty C₁`, `W₂ : MorphismProperty C₂` and
+`W₃ : MorphismProperty C₃` are said to be inverted by `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E` if
+`W₁.prod (W₂.prod W₃)` is inverted by the
+functor `currying₃.functor.obj F : C₁ × C₂ × C₃ ⥤ E`. -/
+/-
+**CategoryTheory.MorphismProperty.IsInvertedBy** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty`。
+形式化陈述：IsInvertedBy (P : MorphismProperty C) (F : C ⥤ D) : Prop
+参数：P : MorphismProperty C；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInvertedBy₃
-  signature: (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
-  body: (W₁.prod (W₂.prod W₃)).IsInvertedBy (currying₃.functor.obj F)
-
-中文:
-定义 IsInvertedBy₃
-  签名: (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
-  定义体: (W₁.prod (W₂.prod W₃)).IsInvertedBy (currying₃.functor.obj F)
-
-Depends on / 依赖: IsInvertedBy, functor, functor.obj
+--- 原说明 ---
+Classes of morphisms `W₁ : MorphismProperty C₁`, `W₂ : MorphismProperty C₂` and
+`W₃ : MorphismProperty C₃` are said to be inverted by `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E` if
+`W₁.prod (W₂.prod W₃)` is inverted by the
+functor `currying₃.functor.obj F : C₁ × C₂ × C₃ ⥤ E`.
 -/
 def IsInvertedBy₃ (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
     (W₃ : MorphismProperty C₃) (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) : Prop :=
@@ -60,20 +63,28 @@ section
 
 variable (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (L₃ : C₃ ⥤ D₃)
 
-/--
-Definition of `Lifting₃` / `Lifting₃` 的定义
+/-- Given functors `L₁ : C₁ ⥤ D₁`, `L₂ : C₂ ⥤ D₂`, `L₃ : C₃ ⥤ D₃`,
+morphisms properties `W₁` on `C₁`, `W₂` on `C₂`, `W₃` on `C₃`, and
+functors `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E` and `F' : D₁ ⥤ D₂ ⥤ D₃ ⥤ E`, we say
+`Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F'` holds if `F` is induced by `F'`, up to an isomorphism. -/
+/-
+**CategoryTheory.Localization.Lifting** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y.Localization`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {E
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       CategoryTheory.Functor C D →               CategoryTheory.MorphismPropert
+y C →                 CategoryTheory.Functor C E → CategoryTheory.Functor D E → 
+Type (max u_1 v_3)
+参数：max u_1 v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Lifting₃
-  parameters: (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (L₃ : C₃ ⥤ D₃)
-  axioms and operations (1):
-    - iso((L₁ L₂ L₃ W₁ W₂ W₃ F F')) : ((((whiskeringLeft₃ E).obj L₁).obj L₂).obj L₃).obj F' ≅ F
-
-中文:
-类 Lifting₃
-  参数: (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (L₃ : C₃ ⥤ D₃)
-  公理与运算 (1 个):
-    - iso((L₁ L₂ L₃ W₁ W₂ W₃ F F')) : ((((whiskeringLeft₃ E).obj L₁).obj L₂).obj L₃).obj F' ≅ F
+--- 原说明 ---
+Given functors `L₁ : C₁ ⥤ D₁`, `L₂ : C₂ ⥤ D₂`, `L₃ : C₃ ⥤ D₃`,
+morphisms properties `W₁` on `C₁`, `W₂` on `C₂`, `W₃` on `C₃`, and
+functors `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E` and `F' : D₁ ⥤ D₂ ⥤ D₃ ⥤ E`, we say
+`Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F'` holds if `F` is induced by `F'`, up to an isom
+orphism.
 -/
 class Lifting₃ (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (L₃ : C₃ ⥤ D₃)
     (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂) (W₃ : MorphismProperty C₃)
@@ -86,21 +97,17 @@ variable (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂) (W₃ : M
   (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) (F' : D₁ ⥤ D₂ ⥤ D₃ ⥤ E) [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F']
 
 variable (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) (F' : D₁ ⥤ D₂ ⥤ D₃ ⥤ E)
-
-/--
-Instance `Lifting₃.uncurry` / 实例 `Lifting₃.uncurry`
-
-English:
-instance Lifting₃.uncurry
-  signature: [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F']
-  body: uncurry₃.mapIso (Lifting₃.iso L₁ L₂ L₃ W₁ W₂ W₃ F F')
-
-中文:
-实例 Lifting₃.uncurry
-  签名: [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F']
-  定义体: uncurry₃.mapIso (Lifting₃.iso L₁ L₂ L₃ W₁ W₂ W₃ F F')
-
-Depends on / 依赖: mapIso
+/-
+**CategoryTheory.Localization.Lifting** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y.Localization`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {E
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       CategoryTheory.Functor C D →               CategoryTheory.MorphismPropert
+y C →                 CategoryTheory.Functor C E → CategoryTheory.Functor D E → 
+Type (max u_1 v_3)
+参数：max u_1 v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Lifting₃.uncurry [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F F'] :
     Lifting (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃))
@@ -118,40 +125,33 @@ variable (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) {W₁ : MorphismProperty C₁} {W₂
   [L₁.IsLocalization W₁] [L₂.IsLocalization W₂] [L₃.IsLocalization W₃]
   [W₁.ContainsIdentities] [W₂.ContainsIdentities] [W₃.ContainsIdentities]
 
-/--
-Definition of `lift₃` / `lift₃` 的定义
+/-- Given localization functor `L₁ : C₁ ⥤ D₁`, `L₂ : C₂ ⥤ D₂` and `L₃ : C₃ ⥤ D₃`
+with respect to `W₁ : MorphismProperty C₁`, `W₂ : MorphismProperty C₂` and
+`W₃ : MorphismProperty C₃` respectively, and a trifunctor `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E`
+which inverts `W₁`, `W₂` and `W₃`, this is the induced localized
+trifunctor `D₁ ⥤ D₂ ⥤ D₃ ⥤ E`. -/
+/-
+**CategoryTheory.Localization.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Loc
+alization`。
+形式化陈述：lift (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W] 
+: D ⥤ E
+参数：F : C ⥤ E；hF : W.IsInvertedBy F；L : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift₃
-  signature: : D₁ ⥤ D₂ ⥤ D₃ ⥤ E
-  body: curry₃.obj (lift (uncurry₃.obj F) hF (L₁.prod (L₂.prod L₃)))
-
-中文:
-定义 lift₃
-  签名: : D₁ ⥤ D₂ ⥤ D₃ ⥤ E
-  定义体: curry₃.obj (lift (uncurry₃.obj F) hF (L₁.prod (L₂.prod L₃)))
+--- 原说明 ---
+Given localization functor `L₁ : C₁ ⥤ D₁`, `L₂ : C₂ ⥤ D₂` and `L₃ : C₃ ⥤ D₃`
+with respect to `W₁ : MorphismProperty C₁`, `W₂ : MorphismProperty C₂` and
+`W₃ : MorphismProperty C₃` respectively, and a trifunctor `F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E`
+which inverts `W₁`, `W₂` and `W₃`, this is the induced localized
+trifunctor `D₁ ⥤ D₂ ⥤ D₃ ⥤ E`.
 -/
 noncomputable def lift₃ : D₁ ⥤ D₂ ⥤ D₃ ⥤ E :=
   curry₃.obj (lift (uncurry₃.obj F) hF (L₁.prod (L₂.prod L₃)))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F (lift₃ F hF L₁ L₂ L₃)
-  body: (curry₃ObjProdComp L₁ L₂ L₃ _).symm ≪≫
-      curry₃.mapIso (fac (uncurry₃.obj F) hF (L₁.prod (L₂.prod L₃))) ≪≫
-        currying₃.unitIso.symm.app F
-
-中文:
-实例 :
-  签名: Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F (lift₃ F hF L₁ L₂ L₃)
-  定义体: (curry₃ObjProdComp L₁ L₂ L₃ _).symm ≪≫
-      curry₃.mapIso (fac (uncurry₃.obj F) hF (L₁.prod (L₂.prod L₃))) ≪≫
-        currying₃.unitIso.symm.app F
-
-Depends on / 依赖: mapIso, unitIso, unitIso.symm.app
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F (lift₃ F hF L₁ L₂ L₃) where
   iso :=
@@ -171,24 +171,22 @@ variable (L₁ : C₁ ⥤ D₁) (L₂ : C₂ ⥤ D₂) (L₃ : C₃ ⥤ D₃)
   [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₁'] [Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₂'] (τ : F₁ ⟶ F₂)
   (e : F₁ ≅ F₂)
 
-/--
-Definition of `lift₃NatTrans` / `lift₃NatTrans` 的定义
+/-- The natural transformation `F₁' ⟶ F₂'` of trifunctors induced by a
+natural transformation `τ : F₁ ⟶ F₂` when `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₁'`
+and `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₂'` hold. -/
+/-
+**CategoryTheory.Localization.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Loc
+alization`。
+形式化陈述：lift (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W] 
+: D ⥤ E
+参数：F : C ⥤ E；hF : W.IsInvertedBy F；L : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift₃NatTrans
-  signature: : F₁' ⟶ F₂'
-  body: fullyFaithfulUncurry₃.preimage
-    (liftNatTrans (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃)) (uncurry₃.obj F₁)
-      (uncurry₃.obj F₂) (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ))
-
-中文:
-定义 lift₃自然数Trans
-  签名: : F₁' ⟶ F₂'
-  定义体: fullyFaithfulUncurry₃.preimage
-    (liftNatTrans (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃)) (uncurry₃.obj F₁)
-      (uncurry₃.obj F₂) (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ))
-
-Depends on / 依赖: liftNatTrans, preimage
+--- 原说明 ---
+The natural transformation `F₁' ⟶ F₂'` of trifunctors induced by a
+natural transformation `τ : F₁ ⟶ F₂` when `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₁'`
+and `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₂'` hold.
 -/
 noncomputable def lift₃NatTrans : F₁' ⟶ F₂' :=
   fullyFaithfulUncurry₃.preimage
@@ -198,30 +196,14 @@ noncomputable def lift₃NatTrans : F₁' ⟶ F₂' :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lift₃NatTrans_app_app_app` / 定理 `lift₃NatTrans_app_app_app`
-
-English:
-theorem lift₃NatTrans_app_app_app
-  given: (X₁ : C₁) (X₂ : C₂) (X₃ : C₃)
-  proof: by
-  dsimp [lift₃NatTrans, fullyFaithfulUncurry₃, Equivalence.fullyFaithfulFunctor]
-  simp only [currying₃_unitIso_hom_app_app_app_app, Functor.id_obj,
-    currying₃_unitIso_inv_app_app_app_app, Functor.comp_obj,
-    Category.comp_id, Category.id_comp]
-  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ) ⟨X₁, X₂, X₃⟩
-
-中文:
-定理 lift₃自然数Trans_app_app_app
-  条件: (X₁ : C₁) (X₂ : C₂) (X₃ : C₃)
-  证明: by
-  dsimp [lift₃NatTrans, fullyFaithfulUncurry₃, Equivalence.fullyFaithfulFunctor]
-  simp only [currying₃_unitIso_hom_app_app_app_app, Functor.id_obj,
-    currying₃_unitIso_inv_app_app_app_app, Functor.comp_obj,
-    Category.comp_id, Category.id_comp]
-  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ) ⟨X₁, X₂, X₃⟩
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Equivalence, Equivalence.fullyFaithfulFunctor, Functor, Functor.comp_obj, Functor.id_obj, comp_id, comp_obj, fullyFaithfulFunctor, id_comp, id_obj, liftNatTrans_app
+/-
+**CategoryTheory.Localization.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Loc
+alization`。
+形式化陈述：lift (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W] 
+: D ⥤ E
+参数：F : C ⥤ E；hF : W.IsInvertedBy F；L : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift₃NatTrans_app_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
     (((lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₂ F₁' F₂' τ).app
@@ -237,54 +219,35 @@ theorem lift₃NatTrans_app_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
 
 variable {F₁' F₂'} in
 include W₁ W₂ W₃ in
-/--
-theorem `natTrans₃_ext` / 定理 `natTrans₃_ext`
-
-English:
-theorem natTrans₃_ext
-  statement: {τ τ' : F₁' ⟶ F₂'}
-  proof: uncurry₃.map_injective (natTrans_ext (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃))
-    (fun _ => h _ _ _))
-
-中文:
-定理 natTrans₃_ext
-  结论: {τ τ' : F₁' ⟶ F₂'}
-  证明: uncurry₃.map_injective (natTrans_ext (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃))
-    (fun _ => h _ _ _))
-
-Depends on / 依赖: map_injective, natTrans_ext
+/-
+**CategoryTheory.Localization.natTrans** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem natTrans₃_ext {τ τ' : F₁' ⟶ F₂'}
-    (h : forall (X₁ : C₁) (X₂ : C₂) (X₃ : C₃), ((τ.app (L₁.obj X₁)).app (L₂.obj X₂)).app (L₃.obj X₃) =
+    (h : ∀ (X₁ : C₁) (X₂ : C₂) (X₃ : C₃), ((τ.app (L₁.obj X₁)).app (L₂.obj X₂)).app (L₃.obj X₃) =
       ((τ'.app (L₁.obj X₁)).app (L₂.obj X₂)).app (L₃.obj X₃)) : τ = τ' :=
   uncurry₃.map_injective (natTrans_ext (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃))
-    (fun _ => h _ _ _))
+    (fun _ ↦ h _ _ _))
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The natural isomorphism `F₁' ≅ F₂'` of trifunctors induced by a
 natural isomorphism `e : F₁ ≅ F₂` when `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₁'`
 and `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₂'` hold. -/
 @[simps]
-/--
-Definition of `lift₃NatIso` / `lift₃NatIso` 的定义
+/-
+**CategoryTheory.Localization.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Loc
+alization`。
+形式化陈述：lift (F : C ⥤ E) (hF : W.IsInvertedBy F) (L : C ⥤ D) [L.IsLocalization W] 
+: D ⥤ E
+参数：F : C ⥤ E；hF : W.IsInvertedBy F；L : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift₃NatIso
-  signature: : F₁' ≅ F₂' where
-  body: lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₂ F₁' F₂' e.hom
-  inv := lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₁ F₂' F₁' e.inv
-  hom_inv_id := natTrans₃_ext L₁ L₂ L₃ W₁ W₂ W₃ (by cat_disch)
-  inv_hom_id := natTrans₃_ext L₁ L₂ L₃ W₁ W₂ W₃ (by cat_disch)
-
-中文:
-定义 lift₃自然数Iso
-  签名: : F₁' ≅ F₂' where
-  定义体: lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₂ F₁' F₂' e.hom
-  inv := lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₁ F₂' F₁' e.inv
-  hom_inv_id := natTrans₃_ext L₁ L₂ L₃ W₁ W₂ W₃ (by cat_disch)
-  inv_hom_id := natTrans₃_ext L₁ L₂ L₃ W₁ W₂ W₃ (by cat_disch)
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+The natural isomorphism `F₁' ≅ F₂'` of trifunctors induced by a
+natural isomorphism `e : F₁ ≅ F₂` when `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₁'`
+and `Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₂'` hold.
 -/
 noncomputable def lift₃NatIso : F₁' ≅ F₂' where
   hom := lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₂ F₁' F₂' e.hom
@@ -315,30 +278,21 @@ variable
 /-- The construction `bifunctorComp₁₂` of a trifunctor by composition of bifunctors
 is compatible with localization. -/
 @[instance_reducible]
-/--
-Definition of `Lifting₃.bifunctorComp₁₂` / `Lifting₃.bifunctorComp₁₂` 的定义
+/-
+**CategoryTheory.Localization.Lifting** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y.Localization`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {E
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       CategoryTheory.Functor C D →               CategoryTheory.MorphismPropert
+y C →                 CategoryTheory.Functor C E → CategoryTheory.Functor D E → 
+Type (max u_1 v_3)
+参数：max u_1 v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lifting₃.bifunctorComp₁₂
-  signature: :
-  body: ((whiskeringRight C₁ _ _).obj
-      ((whiskeringRight C₂ _ _).obj ((whiskeringLeft _ _ D).obj L₃))).mapIso
-        ((bifunctorComp₁₂Functor.mapIso
-          (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
-        (bifunctorComp₁₂Functor.obj F₁₂).mapIso
-          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G')
-
-中文:
-定义 Lifting₃.bifunctorComp₁₂
-  签名: :
-  定义体: ((whiskeringRight C₁ _ _).obj
-      ((whiskeringRight C₂ _ _).obj ((whiskeringLeft _ _ D).obj L₃))).mapIso
-        ((bifunctorComp₁₂Functor.mapIso
-          (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
-        (bifunctorComp₁₂Functor.obj F₁₂).mapIso
-          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G')
-
-Depends on / 依赖: Functor.mapIso, Functor.obj, mapIso, whiskeringLeft, whiskeringRight
+--- 原说明 ---
+The construction `bifunctorComp₁₂` of a trifunctor by composition of bifunctors
+is compatible with localization.
 -/
 noncomputable def Lifting₃.bifunctorComp₁₂ :
     Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃
@@ -355,26 +309,21 @@ noncomputable def Lifting₃.bifunctorComp₁₂ :
 /-- The construction `bifunctorComp₂₃` of a trifunctor by composition of bifunctors
 is compatible with localization. -/
 @[instance_reducible]
-/--
-Definition of `Lifting₃.bifunctorComp₂₃` / `Lifting₃.bifunctorComp₂₃` 的定义
+/-
+**CategoryTheory.Localization.Lifting** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y.Localization`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {E
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       CategoryTheory.Functor C D →               CategoryTheory.MorphismPropert
+y C →                 CategoryTheory.Functor C E → CategoryTheory.Functor D E → 
+Type (max u_1 v_3)
+参数：max u_1 v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lifting₃.bifunctorComp₂₃
-  signature: :
-  body: ((whiskeringLeft _ _ _).obj L₁).mapIso ((bifunctorComp₂₃Functor.obj F').mapIso
-      (Lifting₂.iso L₂ L₃ W₂ W₃ (G₂₃ ⋙ (whiskeringRight _ _ _).obj L₂₃) G₂₃')) ≪≫
-        (bifunctorComp₂₃Functor.mapIso
-          (Lifting₂.iso L₁ L₂₃ W₁ W₂₃ (F ⋙ (whiskeringRight _ _ _).obj L) F')).app G₂₃
-
-中文:
-定义 Lifting₃.bifunctorComp₂₃
-  签名: :
-  定义体: ((whiskeringLeft _ _ _).obj L₁).mapIso ((bifunctorComp₂₃Functor.obj F').mapIso
-      (Lifting₂.iso L₂ L₃ W₂ W₃ (G₂₃ ⋙ (whiskeringRight _ _ _).obj L₂₃) G₂₃')) ≪≫
-        (bifunctorComp₂₃Functor.mapIso
-          (Lifting₂.iso L₁ L₂₃ W₁ W₂₃ (F ⋙ (whiskeringRight _ _ _).obj L) F')).app G₂₃
-
-Depends on / 依赖: Functor.mapIso, Functor.obj, mapIso, whiskeringLeft, whiskeringRight
+--- 原说明 ---
+The construction `bifunctorComp₂₃` of a trifunctor by composition of bifunctors
+is compatible with localization.
 -/
 noncomputable def Lifting₃.bifunctorComp₂₃ :
     Lifting₃ L₁ L₂ L₃ W₁ W₂ W₃
@@ -388,24 +337,16 @@ noncomputable def Lifting₃.bifunctorComp₂₃ :
 
 variable {F₁₂ G F G₂₃}
 
-/--
-Definition of `associator` / `associator` 的定义
+/-- The associator isomorphism obtained by localization. -/
+/-
+**CategoryTheory.Localization.associator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Localization`。
+形式化陈述：associator : bifunctorComp₁₂ F₁₂' G' ≅ bifunctorComp₂₃ F' G₂₃'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: : bifunctorComp₁₂ F₁₂' G' ≅ bifunctorComp₂₃ F' G₂₃'
-  body: letI := Lifting₃.bifunctorComp₁₂ L₁ L₂ L₃ L₁₂ L W₁ W₂ W₃ W₁₂ F₁₂ G F₁₂' G'
-  letI := Lifting₃.bifunctorComp₂₃ L₁ L₂ L₃ L₂₃ L W₁ W₂ W₃ W₂₃ F G₂₃ F' G₂₃'
-  lift₃NatIso L₁ L₂ L₃ W₁ W₂ W₃ _ _ _ _ ((Functor.postcompose₃.obj L).mapIso iso)
-
-中文:
-定义 associator
-  签名: : bifunctorComp₁₂ F₁₂' G' ≅ bifunctorComp₂₃ F' G₂₃'
-  定义体: letI := Lifting₃.bifunctorComp₁₂ L₁ L₂ L₃ L₁₂ L W₁ W₂ W₃ W₁₂ F₁₂ G F₁₂' G'
-  letI := Lifting₃.bifunctorComp₂₃ L₁ L₂ L₃ L₂₃ L W₁ W₂ W₃ W₂₃ F G₂₃ F' G₂₃'
-  lift₃NatIso L₁ L₂ L₃ W₁ W₂ W₃ _ _ _ _ ((Functor.postcompose₃.obj L).mapIso iso)
-
-Depends on / 依赖: Functor, Functor.postcompose, mapIso
+--- 原说明 ---
+The associator isomorphism obtained by localization.
 -/
 noncomputable def associator : bifunctorComp₁₂ F₁₂' G' ≅ bifunctorComp₂₃ F' G₂₃' :=
   letI := Lifting₃.bifunctorComp₁₂ L₁ L₂ L₃ L₁₂ L W₁ W₂ W₃ W₁₂ F₁₂ G F₁₂' G'
@@ -414,28 +355,32 @@ noncomputable def associator : bifunctorComp₁₂ F₁₂' G' ≅ bifunctorComp
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `associator_hom_app_app_app` / 引理 `associator_hom_app_app_app`
-
-English:
-lemma associator_hom_app_app_app
-  given: (X₁ : C₁) (X₂ : C₂) (X₃ : C₃)
-  proof: by
-  dsimp [associator]
-  rw [lift₃NatTrans_app_app_app]
-  dsimp [Lifting₃.iso, Lifting₃.bifunctorComp₁₂, Lifting₃.bifunctorComp₂₃]
-  simp only [Category.assoc]
-
-中文:
-引理 associator_hom_app_app_app
-  条件: (X₁ : C₁) (X₂ : C₂) (X₃ : C₃)
-  证明: by
-  dsimp [associator]
-  rw [lift₃NatTrans_app_app_app]
-  dsimp [Lifting₃.iso, Lifting₃.bifunctorComp₁₂, Lifting₃.bifunctorComp₂₃]
-  simp only [Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, associator
+/-
+**CategoryTheory.Localization.associator_hom_app_app_app** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Localization`。
+形式化陈述：associator_hom_app_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) : (((associator L
+₁ L₂ L₃ L₁₂ L₂₃ L W₁ W₂ W₃ W₁₂ W₂₃ iso F₁₂' G' F' G₂₃').hom.app (L₁.obj X₁)).app
+ (L₂.obj X₂)).app (L₃.obj X₃) = (G'.map (((Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whis
+keringRight C₂ C₁₂ D₁₂).obj L₁₂) F₁₂').hom.app X₁).app X₂)).app (L₃.obj X₃) ≫ ((
+Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight C₃ C D).obj L) G').hom.app ((F₁
+₂.obj X₁).obj X₂)).app X₃ ≫ L.map (((iso.hom.app X₁).app X₂).app X₃) ≫ ((Lifting
+₂.iso L₁ L₂₃ W₁ W₂₃ (F ⋙ (
+参数：X₁ : C₁；X₂ : C₂；X₃ : C₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Localization.lift₃NatTrans_app_app_app`：lift₃NatTrans_app
+_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) : (((lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F
+₂ F₁' F₂' τ).app (L₁.obj X₁)).app (L₂.obj X…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_hom_app_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
     (((associator L₁ L₂ L₃ L₁₂ L₂₃ L W₁ W₂ W₃ W₁₂ W₂₃ iso F₁₂' G' F' G₂₃').hom.app (L₁.obj X₁)).app
@@ -460,3 +405,4 @@ end
 end Localization
 
 end CategoryTheory
+

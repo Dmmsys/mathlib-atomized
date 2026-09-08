@@ -33,26 +33,14 @@ open Lean Elab
 
 namespace Mathlib.CrossRef
 
-/--
-Inductive type `Database` / 归纳类型 `Database`
+/-- The supported external databases -/
+/-
+**Mathlib.CrossRef.Database** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Database
-  parameters: where
-  constructors (4):
-    - kerodon: 
-    - lmfdb: 
-    - stacks: 
-    - wikidata: 
-
-中文:
-归纳类型 Database
-  参数: where
-  构造子 (4 个):
-    - kerodon: 
-    - lmfdb: 
-    - stacks: 
-    - wikidata: 
+--- 原说明 ---
+The supported external databases
 -/
 inductive Database where
   | kerodon
@@ -63,79 +51,71 @@ inductive Database where
 
 namespace Database
 
-/--
-Definition of `url` / `url` 的定义
+/-- The base URL for an external database's tag pages. Always ends with `/`. -/
+/-
+**Mathlib.CrossRef.Database.url** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef.Data
+base`。
+形式化陈述：Mathlib.CrossRef.Database → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition url
-  signature: : Database -> String
-
-中文:
-定义 url
-  签名: : Database -> String
+--- 原说明 ---
+The base URL for an external database's tag pages. Always ends with `/`.
 -/
-def url : Database -> String
+def url : Database → String
   | .kerodon => "https://kerodon.net/tag/"
   | .lmfdb => "https://www.lmfdb.org/knowledge/show/"
   | .stacks => "https://stacks.math.columbia.edu/tag/"
   | .wikidata => "https://www.wikidata.org/wiki/"
 
-/--
-Definition of `label` / `label` 的定义
+/-- The display label used in docstring links and trace output. -/
+/-
+**Mathlib.CrossRef.Database.label** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef.Da
+tabase`。
+形式化陈述：Mathlib.CrossRef.Database → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition label
-  signature: : Database -> String
-
-中文:
-定义 label
-  签名: : Database -> String
+--- 原说明 ---
+The display label used in docstring links and trace output.
 -/
-def label : Database -> String
+def label : Database → String
   | .kerodon => "Kerodon Tag"
   | .lmfdb => "LMFDB"
   | .stacks => "Stacks Tag"
   | .wikidata => "Wikidata"
 
-/--
-Definition of `shortName` / `shortName` 的定义
+/-- A lowercase short name for the given database. Useful when exporting to JSON. -/
+/-
+**Mathlib.CrossRef.Database.shortName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRe
+f.Database`。
+形式化陈述：Mathlib.CrossRef.Database → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shortName
-  signature: : Database -> String
-
-中文:
-定义 shortName
-  签名: : Database -> String
+--- 原说明 ---
+A lowercase short name for the given database. Useful when exporting to JSON.
 -/
-def shortName : Database -> String
-  | .kerodon => "kerodon"
-  | .lmfdb => "lmfdb"
-  | .stacks => "stacks"
+def shortName : Database → String
+  | .kerodon  => "kerodon"
+  | .lmfdb    => "lmfdb"
+  | .stacks   => "stacks"
   | .wikidata => "wikidata"
 
 end Database
 
-/--
-Definition of `Tag` / `Tag` 的定义
+/-- A cross-reference from a Mathlib declaration to an entry in an external database. -/
+/-
+**Mathlib.CrossRef.Tag** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：Tag where /-- The name of the declaration carrying the cross-reference. -/
+ declName : Name /-- The external database the entry belongs to. -/ database : D
+atabase /-- The database identifier. -/ tag : String /-- An optional comment sup
+plied with the attribute. -/ comment : String deriving BEq, Hashable  /-- The en
+vironment extension storing all cross-references. `addImportedFn` is a constant 
+function to avoid a performance overhead during initialization. -/ initialize ta
+gExt : SimplePersistentEnv
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Tag
-  parameters: where
-  axioms and operations (4):
-    - declName : Name
-    - database : Database
-    - tag : String
-    - comment : String
-
-中文:
-结构 Tag
-  参数: where
-  公理与运算 (4 个):
-    - declName : Name
-    - database : Database
-    - tag : String
-    - comment : String
+--- 原说明 ---
+A cross-reference from a Mathlib declaration to an entry in an external database
+.
 -/
 structure Tag where
   /-- The name of the declaration carrying the cross-reference. -/
@@ -156,125 +136,76 @@ initialize tagExt : SimplePersistentEnvExtension Tag (Array (Array Tag)) ←
     addEntryFn tags _ := tags
   }
 
-/--
-Definition of `addTagEntry` / `addTagEntry` 的定义
+/-- `addTagEntry declName db tag comment` records a cross-reference for `declName` in `tagExt`. -/
+/-
+**Mathlib.CrossRef.addTagEntry** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：addTagEntry {m : Type -> Type} [MonadEnv m] (declName : Name) (db : Databa
+se) (tag comment : String) : m Unit
+参数：declName : Name；db : Database；tag comment : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addTagEntry
-  signature: {m : Type -> Type} [MonadEnv m]
-  body: modifyEnv (tagExt.addEntry ·
-    { declName := declName, database := db, tag := tag, comment := comment })
-
-中文:
-定义 addTagEntry
-  签名: {m : 类型 -> 类型} [MonadEnv m]
-  定义体: modifyEnv (tagExt.addEntry ·
-    { declName := declName, database := db, tag := tag, comment := comment })
-
-Depends on / 依赖: addEntry, comment, database, declName, modifyEnv, tagExt, tagExt.addEntry
+--- 原说明 ---
+`addTagEntry declName db tag comment` records a cross-reference for `declName` i
+n `tagExt`.
 -/
-def addTagEntry {m : Type -> Type} [MonadEnv m]
+def addTagEntry {m : Type → Type} [MonadEnv m]
     (declName : Name) (db : Database) (tag comment : String) : m Unit :=
   modifyEnv (tagExt.addEntry ·
     { declName := declName, database := db, tag := tag, comment := comment })
 
-/--
-Definition of `addCrossRefDoc` / `addCrossRefDoc` 的定义
+/-- Append a cross-reference link to the docstring of `decl` and record it in `tagExt`.
+This is the database-agnostic core of every cross-reference attribute's `add` handler. -/
+/-
+**Mathlib.CrossRef.addCrossRefDoc** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：addCrossRefDoc (db : Database) (decl : Name) (idStr comment : String) : Co
+reM Unit
+参数：db : Database；decl : Name；idStr comment : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addCrossRefDoc
-  signature: (db : Database) (decl : Name) (idStr comment : String)
-  body: do
-  let oldDoc := (← findDocString? (← getEnv) decl).getD ""
-  let commentInDoc := if comment.isEmpty then "" else s!" ({comment})"
-  let link := s!"[{db.label} {idStr}]({db.url}{idStr}){commentInDoc}"
-addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
-  addTagEntry decl db idStr comment
-
-中文:
-定义 addCrossRefDoc
-  签名: (db : Database) (decl : Name) (idStr comment : String)
-  定义体: do
-  let oldDoc := (← findDocString? (← getEnv) decl).getD ""
-  let commentInDoc := if comment.isEmpty then "" else s!" ({comment})"
-  let link := s!"[{db.label} {idStr}]({db.url}{idStr}){commentInDoc}"
-addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
-  addTagEntry decl db idStr comment
+--- 原说明 ---
+Append a cross-reference link to the docstring of `decl` and record it in `tagEx
+t`.
+This is the database-agnostic core of every cross-reference attribute's `add` ha
+ndler.
 -/
 def addCrossRefDoc (db : Database) (decl : Name) (idStr comment : String) : CoreM Unit := do
   let oldDoc := (← findDocString? (← getEnv) decl).getD ""
   let commentInDoc := if comment.isEmpty then "" else s!" ({comment})"
   let link := s!"[{db.label} {idStr}]({db.url}{idStr}){commentInDoc}"
-addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
+  addDocStringCore decl <| "\n\n".intercalate ([oldDoc, link].filter (· != ""))
   addTagEntry decl db idStr comment
 
 open Parser
 
 /-! ### Stacks (and Kerodon) parser -/
 
-/--
-Definition of `stacksTagKind` / `stacksTagKind` 的定义
+/-- `stacksTag` is the node kind of Stacks Project Tags: a sequence of digits and
+uppercase letters. -/
+/-
+**Mathlib.CrossRef.stacksTagKind** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：stacksTagKind : SyntaxNodeKind
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation stacksTagKind
-  signature: : SyntaxNodeKind
-  body: `stacksTag
-
-中文:
-缩写 stacksTagKind
-  签名: : SyntaxNodeKind
-  定义体: `stacksTag
-
-Depends on / 依赖: stacksTag
+--- 原说明 ---
+`stacksTag` is the node kind of Stacks Project Tags: a sequence of digits and
+uppercase letters.
 -/
 abbrev stacksTagKind : SyntaxNodeKind := `stacksTag
 
-/--
-Definition of `stacksTagFn` / `stacksTagFn` 的定义
+/-- The main parser for Stacks Project Tags: it accepts any sequence of 4 digits or
+uppercase letters. -/
+/-
+**Mathlib.CrossRef.stacksTagFn** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：stacksTagFn : ParserFn
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stacksTagFn
-  signature: : ParserFn
-  body: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum) c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "stacks tag"
-  else
-    let tag := c.extract i s.pos
-    if !tag.all fun (c : Char) => c.isDigit || c.isUpper then
-      ParserState.mkUnexpectedError s
-        "Stacks tags must consist only of digits and uppercase letters."
-    else if tag.length != 4 then
-      ParserState.mkUnexpectedError s "Stacks tags must be exactly 4 characters"
-    else
-      mkNodeToken stacksTagKind i true c s
-
-@[inherit_doc stacksTagFn]
-
-中文:
-定义 stacksTagFn
-  签名: : ParserFn
-  定义体: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum) c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "stacks tag"
-  else
-    let tag := c.extract i s.pos
-    if !tag.all fun (c : Char) => c.isDigit || c.isUpper then
-      ParserState.mkUnexpectedError s
-        "Stacks tags must consist only of digits and uppercase letters."
-    else if tag.length != 4 then
-      ParserState.mkUnexpectedError s "Stacks tags must be exactly 4 characters"
-    else
-      mkNodeToken stacksTagKind i true c s
-
-@[inherit_doc stacksTagFn]
+--- 原说明 ---
+The main parser for Stacks Project Tags: it accepts any sequence of 4 digits or
+uppercase letters.
 -/
 def stacksTagFn : ParserFn := fun c s =>
   let i := s.pos
@@ -294,124 +225,54 @@ def stacksTagFn : ParserFn := fun c s =>
       mkNodeToken stacksTagKind i true c s
 
 @[inherit_doc stacksTagFn]
-/--
-Definition of `stacksTagNoAntiquot` / `stacksTagNoAntiquot` 的定义
-
-English:
-definition stacksTagNoAntiquot
-  signature: : Parser
-  body: {
-  fn := stacksTagFn
-  info := mkAtomicInfo "stacksTag"
-}
-
-@[inherit_doc stacksTagFn]
-
-中文:
-定义 stacksTagNoAntiquot
-  签名: : Parser
-  定义体: {
-  fn := stacksTagFn
-  info := mkAtomicInfo "stacksTag"
-}
-
-@[inherit_doc stacksTagFn]
+/-
+**Mathlib.CrossRef.stacksTagNoAntiquot** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossR
+ef`。
+形式化陈述：stacksTagNoAntiquot : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def stacksTagNoAntiquot : Parser := {
-  fn := stacksTagFn
+  fn   := stacksTagFn
   info := mkAtomicInfo "stacksTag"
 }
 
 @[inherit_doc stacksTagFn]
-/--
-Definition of `stacksTagParser` / `stacksTagParser` 的定义
-
-English:
-definition stacksTagParser
-  signature: : Parser
-  body: withAntiquot (mkAntiquot "stacksTag" stacksTagKind) stacksTagNoAntiquot
-
-中文:
-定义 stacksTagParser
-  签名: : Parser
-  定义体: withAntiquot (mkAntiquot "stacksTag" stacksTagKind) stacksTagNoAntiquot
-
-Depends on / 依赖: mkAntiquot, stacksTag, stacksTagKind, stacksTagNoAntiquot, withAntiquot
+/-
+**Mathlib.CrossRef.stacksTagParser** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：stacksTagParser : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def stacksTagParser : Parser :=
   withAntiquot (mkAntiquot "stacksTag" stacksTagKind) stacksTagNoAntiquot
 
 /-! ### Wikidata parser -/
 
-/--
-Definition of `wikidataIdKind` / `wikidataIdKind` 的定义
+/-- `wikidataId` is the node kind of Wikidata identifiers: the letter `Q` followed by digits. -/
+/-
+**Mathlib.CrossRef.wikidataIdKind** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.CrossRef`
+。
+形式化陈述：wikidataIdKind : SyntaxNodeKind
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wikidataIdKind
-  signature: : SyntaxNodeKind
-  body: `wikidataId
-
-中文:
-缩写 wikidataIdKind
-  签名: : SyntaxNodeKind
-  定义体: `wikidataId
-
-Depends on / 依赖: wikidataId
+--- 原说明 ---
+`wikidataId` is the node kind of Wikidata identifiers: the letter `Q` followed b
+y digits.
 -/
 abbrev wikidataIdKind : SyntaxNodeKind := `wikidataId
 
-/--
-Definition of `wikidataIdFn` / `wikidataIdFn` 的定义
+/-- The main parser for Wikidata identifiers: it accepts `Q` followed by one or more digits. -/
+/-
+**Mathlib.CrossRef.wikidataIdFn** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：wikidataIdFn : ParserFn
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wikidataIdFn
-  signature: : ParserFn
-  body: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum) c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "wikidata id"
-  else
-    let id := c.extract i s.pos
-    match id.toList with
-    | 'Q' :: rest@(_ :: _) =>
-      if rest.all Char.isDigit then
-        mkNodeToken wikidataIdKind i true c s
-      else
-        ParserState.mkUnexpectedError s
-          "Wikidata ids must consist of the letter Q followed by digits."
-    | _ =>
-      ParserState.mkUnexpectedError s
-        "Wikidata ids must start with the letter Q followed by one or more digits."
-
-@[inherit_doc wikidataIdFn]
-
-中文:
-定义 wikidataIdFn
-  签名: : ParserFn
-  定义体: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum) c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "wikidata id"
-  else
-    let id := c.extract i s.pos
-    match id.toList with
-    | 'Q' :: rest@(_ :: _) =>
-      if rest.all Char.isDigit then
-        mkNodeToken wikidataIdKind i true c s
-      else
-        ParserState.mkUnexpectedError s
-          "Wikidata ids must consist of the letter Q followed by digits."
-    | _ =>
-      ParserState.mkUnexpectedError s
-        "Wikidata ids must start with the letter Q followed by one or more digits."
-
-@[inherit_doc wikidataIdFn]
+--- 原说明 ---
+The main parser for Wikidata identifiers: it accepts `Q` followed by one or more
+ digits.
 -/
 def wikidataIdFn : ParserFn := fun c s =>
   let i := s.pos
@@ -434,114 +295,58 @@ def wikidataIdFn : ParserFn := fun c s =>
         "Wikidata ids must start with the letter Q followed by one or more digits."
 
 @[inherit_doc wikidataIdFn]
-/--
-Definition of `wikidataIdNoAntiquot` / `wikidataIdNoAntiquot` 的定义
-
-English:
-definition wikidataIdNoAntiquot
-  signature: : Parser
-  body: {
-  fn := wikidataIdFn
-  info := mkAtomicInfo "wikidataId"
-}
-
-@[inherit_doc wikidataIdFn]
-
-中文:
-定义 wikidataIdNoAntiquot
-  签名: : Parser
-  定义体: {
-  fn := wikidataIdFn
-  info := mkAtomicInfo "wikidataId"
-}
-
-@[inherit_doc wikidataIdFn]
+/-
+**Mathlib.CrossRef.wikidataIdNoAntiquot** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Cross
+Ref`。
+形式化陈述：wikidataIdNoAntiquot : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def wikidataIdNoAntiquot : Parser := {
-  fn := wikidataIdFn
+  fn   := wikidataIdFn
   info := mkAtomicInfo "wikidataId"
 }
 
 @[inherit_doc wikidataIdFn]
-/--
-Definition of `wikidataIdParser` / `wikidataIdParser` 的定义
-
-English:
-definition wikidataIdParser
-  signature: : Parser
-  body: withAntiquot (mkAntiquot "wikidataId" wikidataIdKind) wikidataIdNoAntiquot
-
-中文:
-定义 wikidataIdParser
-  签名: : Parser
-  定义体: withAntiquot (mkAntiquot "wikidataId" wikidataIdKind) wikidataIdNoAntiquot
-
-Depends on / 依赖: mkAntiquot, wikidataId, wikidataIdKind, wikidataIdNoAntiquot, withAntiquot
+/-
+**Mathlib.CrossRef.wikidataIdParser** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`
+。
+形式化陈述：wikidataIdParser : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def wikidataIdParser : Parser :=
   withAntiquot (mkAntiquot "wikidataId" wikidataIdKind) wikidataIdNoAntiquot
 
 /-! # LMFDB parser -/
 
-/--
-Definition of `lmfdbIdKind` / `lmfdbIdKind` 的定义
+/-- `lmfdbId` is the node kind of LMFDB identifiers: lower case words with `.` in between.
+The words can also contain underscores and digits. -/
+/-
+**Mathlib.CrossRef.lmfdbIdKind** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：lmfdbIdKind : SyntaxNodeKind
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lmfdbIdKind
-  signature: : SyntaxNodeKind
-  body: `lmfdbId
-
-中文:
-缩写 lmfdbIdKind
-  签名: : SyntaxNodeKind
-  定义体: `lmfdbId
-
-Depends on / 依赖: lmfdbId
+--- 原说明 ---
+`lmfdbId` is the node kind of LMFDB identifiers: lower case words with `.` in be
+tween.
+The words can also contain underscores and digits.
 -/
 abbrev lmfdbIdKind : SyntaxNodeKind := `lmfdbId
 
-/--
-Definition of `lmfdbIdFn` / `lmfdbIdFn` 的定义
+/-- The main parser for LMFDB identifiers: it accepts lower case words with `.` in between.
+The words can also contain underscores and digits. -/
+/-
+**Mathlib.CrossRef.lmfdbIdFn** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：lmfdbIdFn : ParserFn
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lmfdbIdFn
-  signature: : ParserFn
-  body: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum || c == '.' || c == '_') c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "lmfdb id"
-  else
-    if !(c.extract i s.pos).toList.all
-      (fun c => c.isLower || c.isDigit || c == '.' || c == '_') then
-      ParserState.mkUnexpectedError s
-        "LMFDB ids must consist only of lowercase letters, digits, periods, and underscores."
-    else
-      mkNodeToken lmfdbIdKind i true c s
-
-@[inherit_doc lmfdbIdFn]
-
-中文:
-定义 lmfdbIdFn
-  签名: : ParserFn
-  定义体: fun c s =>
-  let i := s.pos
-  let s := takeWhileFn (fun c => c.isAlphanum || c == '.' || c == '_') c s
-  if s.hasError then
-    s
-  else if s.pos == i then
-    ParserState.mkError s "lmfdb id"
-  else
-    if !(c.extract i s.pos).toList.all
-      (fun c => c.isLower || c.isDigit || c == '.' || c == '_') then
-      ParserState.mkUnexpectedError s
-        "LMFDB ids must consist only of lowercase letters, digits, periods, and underscores."
-    else
-      mkNodeToken lmfdbIdKind i true c s
-
-@[inherit_doc lmfdbIdFn]
+--- 原说明 ---
+The main parser for LMFDB identifiers: it accepts lower case words with `.` in b
+etween.
+The words can also contain underscores and digits.
 -/
 def lmfdbIdFn : ParserFn := fun c s =>
   let i := s.pos
@@ -559,49 +364,24 @@ def lmfdbIdFn : ParserFn := fun c s =>
       mkNodeToken lmfdbIdKind i true c s
 
 @[inherit_doc lmfdbIdFn]
-/--
-Definition of `lmfdbIdNoAntiquot` / `lmfdbIdNoAntiquot` 的定义
-
-English:
-definition lmfdbIdNoAntiquot
-  signature: : Parser
-  body: {
-  fn := lmfdbIdFn
-  info := mkAtomicInfo "lmfdbId"
-}
-
-@[inherit_doc lmfdbIdFn]
-
-中文:
-定义 lmfdbIdNoAntiquot
-  签名: : Parser
-  定义体: {
-  fn := lmfdbIdFn
-  info := mkAtomicInfo "lmfdbId"
-}
-
-@[inherit_doc lmfdbIdFn]
+/-
+**Mathlib.CrossRef.lmfdbIdNoAntiquot** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef
+`。
+形式化陈述：lmfdbIdNoAntiquot : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def lmfdbIdNoAntiquot : Parser := {
-  fn := lmfdbIdFn
+  fn   := lmfdbIdFn
   info := mkAtomicInfo "lmfdbId"
 }
 
 @[inherit_doc lmfdbIdFn]
-/--
-Definition of `lmfdbIdParser` / `lmfdbIdParser` 的定义
-
-English:
-definition lmfdbIdParser
-  signature: : Parser
-  body: withAntiquot (mkAntiquot "lmfdbId" lmfdbIdKind) lmfdbIdNoAntiquot
-
-中文:
-定义 lmfdbIdParser
-  签名: : Parser
-  定义体: withAntiquot (mkAntiquot "lmfdbId" lmfdbIdKind) lmfdbIdNoAntiquot
-
-Depends on / 依赖: lmfdbId, lmfdbIdKind, lmfdbIdNoAntiquot, mkAntiquot, withAntiquot
+/-
+**Mathlib.CrossRef.lmfdbIdParser** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：lmfdbIdParser : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def lmfdbIdParser : Parser :=
   withAntiquot (mkAntiquot "lmfdbId" lmfdbIdKind) lmfdbIdNoAntiquot
@@ -610,64 +390,46 @@ end Mathlib.CrossRef
 
 open Mathlib.CrossRef
 
-/--
-Definition of `Lean.TSyntax.getStacksTag` / `Lean.TSyntax.getStacksTag` 的定义
+/-- Extract the underlying tag as a string from a `stacksTag` node. -/
+/-
+**Lean.TSyntax.getStacksTag** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.TSyntax.getStacksTag (stx : TSyntax stacksTagKind) : CoreM String
+参数：stx : TSyntax stacksTagKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.TSyntax.getStacksTag
-  signature: (stx : TSyntax stacksTagKind)
-  body: do
-  let some val := Syntax.isLit? stacksTagKind stx | throwError "Malformed Stacks tag"
-  return val
-
-中文:
-定义 Lean.TSyntax.getStacksTag
-  签名: (stx : TSyntax stacksTagKind)
-  定义体: do
-  let some val := Syntax.isLit? stacksTagKind stx | throwError "Malformed Stacks tag"
-  return val
+--- 原说明 ---
+Extract the underlying tag as a string from a `stacksTag` node.
 -/
 def Lean.TSyntax.getStacksTag (stx : TSyntax stacksTagKind) : CoreM String := do
   let some val := Syntax.isLit? stacksTagKind stx | throwError "Malformed Stacks tag"
   return val
 
-/--
-Definition of `Lean.TSyntax.getWikidataId` / `Lean.TSyntax.getWikidataId` 的定义
+/-- Extract the underlying identifier as a string from a `wikidataId` node. -/
+/-
+**Lean.TSyntax.getWikidataId** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.TSyntax.getWikidataId (stx : TSyntax wikidataIdKind) : CoreM String
+参数：stx : TSyntax wikidataIdKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.TSyntax.getWikidataId
-  signature: (stx : TSyntax wikidataIdKind)
-  body: do
-  let some val := Syntax.isLit? wikidataIdKind stx | throwError "Malformed Wikidata id"
-  return val
-
-中文:
-定义 Lean.TSyntax.getWikidataId
-  签名: (stx : TSyntax wikidataIdKind)
-  定义体: do
-  let some val := Syntax.isLit? wikidataIdKind stx | throwError "Malformed Wikidata id"
-  return val
+--- 原说明 ---
+Extract the underlying identifier as a string from a `wikidataId` node.
 -/
 def Lean.TSyntax.getWikidataId (stx : TSyntax wikidataIdKind) : CoreM String := do
   let some val := Syntax.isLit? wikidataIdKind stx | throwError "Malformed Wikidata id"
   return val
 
-/--
-Definition of `Lean.TSyntax.getLmfdbId` / `Lean.TSyntax.getLmfdbId` 的定义
+/-- Extract the underlying identifier as a string from a `lmfdbId` node. -/
+/-
+**Lean.TSyntax.getLmfdbId** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.TSyntax.getLmfdbId (stx : TSyntax lmfdbIdKind) : CoreM String
+参数：stx : TSyntax lmfdbIdKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.TSyntax.getLmfdbId
-  signature: (stx : TSyntax lmfdbIdKind)
-  body: do
-  let some val := Syntax.isLit? lmfdbIdKind stx | throwError "Malformed LMFDB id"
-  return val
-
-中文:
-定义 Lean.TSyntax.getLmfdbId
-  签名: (stx : TSyntax lmfdbIdKind)
-  定义体: do
-  let some val := Syntax.isLit? lmfdbIdKind stx | throwError "Malformed LMFDB id"
-  return val
+--- 原说明 ---
+Extract the underlying identifier as a string from a `lmfdbId` node.
 -/
 def Lean.TSyntax.getLmfdbId (stx : TSyntax lmfdbIdKind) : CoreM String := do
   let some val := Syntax.isLit? lmfdbIdKind stx | throwError "Malformed LMFDB id"
@@ -677,44 +439,41 @@ namespace Lean.PrettyPrinter
 
 namespace Formatter
 
-/--
-Definition of `stacksTagNoAntiquot.formatter` / `stacksTagNoAntiquot.formatter` 的定义
+/-- The formatter for Stacks Project Tags syntax. -/
+/-
+**Lean.PrettyPrinter.Formatter.stacksTagNoAntiquot.formatter** 是 Mathlib 中的一个定义，
+位于命名空间 `Lean.PrettyPrinter.Formatter.stacksTagNoAntiquot`。
+形式化陈述：PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stacksTagNoAntiquot.formatter
-  body: visitAtom stacksTagKind
-
-中文:
-定义 stacksTagNoAntiquot.formatter
-  定义体: visitAtom stacksTagKind
+--- 原说明 ---
+The formatter for Stacks Project Tags syntax.
 -/
 @[combinator_formatter stacksTagNoAntiquot] def stacksTagNoAntiquot.formatter :=
   visitAtom stacksTagKind
 
-/--
-Definition of `wikidataIdNoAntiquot.formatter` / `wikidataIdNoAntiquot.formatter` 的定义
+/-- The formatter for Wikidata identifier syntax. -/
+/-
+**Lean.PrettyPrinter.Formatter.wikidataIdNoAntiquot.formatter** 是 Mathlib 中的一个定义
+，位于命名空间 `Lean.PrettyPrinter.Formatter.wikidataIdNoAntiquot`。
+形式化陈述：PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wikidataIdNoAntiquot.formatter
-  body: visitAtom wikidataIdKind
-
-中文:
-定义 wikidataIdNoAntiquot.formatter
-  定义体: visitAtom wikidataIdKind
+--- 原说明 ---
+The formatter for Wikidata identifier syntax.
 -/
 @[combinator_formatter wikidataIdNoAntiquot] def wikidataIdNoAntiquot.formatter :=
   visitAtom wikidataIdKind
 
-/--
-Definition of `lmfdbIdNoAntiquot.formatter` / `lmfdbIdNoAntiquot.formatter` 的定义
+/-- The formatter for LMFDB identifier syntax. -/
+/-
+**Lean.PrettyPrinter.Formatter.lmfdbIdNoAntiquot.formatter** 是 Mathlib 中的一个定义，位于
+命名空间 `Lean.PrettyPrinter.Formatter.lmfdbIdNoAntiquot`。
+形式化陈述：PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lmfdbIdNoAntiquot.formatter
-  body: visitAtom lmfdbIdKind
-
-中文:
-定义 lmfdbIdNoAntiquot.formatter
-  定义体: visitAtom lmfdbIdKind
+--- 原说明 ---
+The formatter for LMFDB identifier syntax.
 -/
 @[combinator_formatter lmfdbIdNoAntiquot] def lmfdbIdNoAntiquot.formatter :=
   visitAtom lmfdbIdKind
@@ -723,42 +482,39 @@ end Formatter
 
 namespace Parenthesizer
 
-/--
-Definition of `stacksTagAntiquot.parenthesizer` / `stacksTagAntiquot.parenthesizer` 的定义
+/-- The parenthesizer for Stacks Project Tags syntax. -/
+/-
+**Lean.PrettyPrinter.Parenthesizer.stacksTagAntiquot.parenthesizer** 是 Mathlib 中
+的一个定义，位于命名空间 `Lean.PrettyPrinter.Parenthesizer.stacksTagAntiquot`。
+形式化陈述：PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stacksTagAntiquot.parenthesizer
-  body: visitToken
-
-中文:
-定义 stacksTagAntiquot.parenthesizer
-  定义体: visitToken
+--- 原说明 ---
+The parenthesizer for Stacks Project Tags syntax.
 -/
 @[combinator_parenthesizer stacksTagNoAntiquot] def stacksTagAntiquot.parenthesizer := visitToken
 
-/--
-Definition of `wikidataIdAntiquot.parenthesizer` / `wikidataIdAntiquot.parenthesizer` 的定义
+/-- The parenthesizer for Wikidata identifier syntax. -/
+/-
+**Lean.PrettyPrinter.Parenthesizer.wikidataIdAntiquot.parenthesizer** 是 Mathlib 
+中的一个定义，位于命名空间 `Lean.PrettyPrinter.Parenthesizer.wikidataIdAntiquot`。
+形式化陈述：PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wikidataIdAntiquot.parenthesizer
-  body: visitToken
-
-中文:
-定义 wikidataIdAntiquot.parenthesizer
-  定义体: visitToken
+--- 原说明 ---
+The parenthesizer for Wikidata identifier syntax.
 -/
 @[combinator_parenthesizer wikidataIdNoAntiquot] def wikidataIdAntiquot.parenthesizer := visitToken
 
-/--
-Definition of `lmfdbIdAntiquot.parenthesizer` / `lmfdbIdAntiquot.parenthesizer` 的定义
+/-- The parenthesizer for LMFDB identifier syntax. -/
+/-
+**Lean.PrettyPrinter.Parenthesizer.lmfdbIdAntiquot.parenthesizer** 是 Mathlib 中的一
+个定义，位于命名空间 `Lean.PrettyPrinter.Parenthesizer.lmfdbIdAntiquot`。
+形式化陈述：PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lmfdbIdAntiquot.parenthesizer
-  body: visitToken
-
-中文:
-定义 lmfdbIdAntiquot.parenthesizer
-  定义体: visitToken
+--- 原说明 ---
+The parenthesizer for LMFDB identifier syntax.
 -/
 @[combinator_parenthesizer lmfdbIdNoAntiquot] def lmfdbIdAntiquot.parenthesizer := visitToken
 
@@ -844,37 +600,25 @@ initialize Lean.registerBuiltinAttribute {
 
 end Mathlib.CrossRef
 
-/--
-Definition of `Lean.Environment.getSortedCrossRefs` / `Lean.Environment.getSortedCrossRefs` 的定义
+/-- Returns the array of `Tag`s in the environment, sorted alphabetically by tag. -/
+/-
+**Lean.Environment.getSortedCrossRefs** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.Environment.getSortedCrossRefs
-  signature: (env : Environment)
-  body: let tags := PersistentEnvExtension.getState tagExt env
-.qsort (·.tag < ·.tag) tags.2.flatten.appendList tags.1
-
-中文:
-定义 Lean.Environment.getSortedCrossRefs
-  签名: (env : Environment)
-  定义体: let tags := PersistentEnvExtension.getState tagExt env
-.qsort (·.tag < ·.tag) tags.2.flatten.appendList tags.1
+--- 原说明 ---
+Returns the array of `Tag`s in the environment, sorted alphabetically by tag.
 -/
 private def Lean.Environment.getSortedCrossRefs (env : Environment) : Array Tag :=
   let tags := PersistentEnvExtension.getState tagExt env
-.qsort (·.tag < ·.tag) tags.2.flatten.appendList tags.1
+  tags.2.flatten.appendList tags.1 |>.qsort (·.tag < ·.tag)
 
-/--
-Definition of `Lean.Environment.getCrossRefDeclNames` / `Lean.Environment.getCrossRefDeclNames` 的定义
+/-- Returns the declaration names of results carrying the cross-reference `tag`. -/
+/-
+**Lean.Environment.getCrossRefDeclNames** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.Environment.getCrossRefDeclNames
-  signature: (env : Environment) (tag : String)
-  body: env.getSortedCrossRefs.filterMap fun d => if d.tag == tag then some d.declName else none
-
-中文:
-定义 Lean.Environment.getCrossRefDeclNames
-  签名: (env : Environment) (tag : String)
-  定义体: env.getSortedCrossRefs.filterMap fun d => if d.tag == tag then some d.declName else none
+--- 原说明 ---
+Returns the declaration names of results carrying the cross-reference `tag`.
 -/
 private def Lean.Environment.getCrossRefDeclNames (env : Environment) (tag : String) :
     Array Name :=
@@ -882,53 +626,21 @@ private def Lean.Environment.getCrossRefDeclNames (env : Environment) (tag : Str
 
 namespace Mathlib.CrossRef
 
-/--
-Definition of `traceCrossRefs` / `traceCrossRefs` 的定义
+/-- `traceCrossRefs db verbose` prints the cross-references of database `db` and
+inlines the declaration types if `verbose` is `true`. -/
+/-
+**Mathlib.CrossRef.traceCrossRefs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CrossRef`。
+形式化陈述：Mathlib.CrossRef.Database → optParam Bool false → CommandElabM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition traceCrossRefs
-  signature: (db : Database) (verbose : Bool := false)
-  body: do
-  let env ← getEnv
-.filter (·.database == db) let entries := env.getSortedCrossRefs
-  if entries.isEmpty then logInfo "No tags found." else
-  let mut msgs := #[m!""]
-  for d in entries do
-    let (parL, parR) := if d.comment.isEmpty then ("", "") else (" (", ")")
-    let cmt := parL ++ d.comment ++ parR
-    msgs := msgs.push
-      m!"[{db.label} {d.tag}]({db.url ++ d.tag}) \
-        corresponds to declaration '{.ofConstName d.declName}'.{cmt}"
-    if verbose then
-      let dType := ((env.find? d.declName).getD default).type
-      msgs := (msgs.push m!"{dType}").push ""
-  let msg := MessageData.joinSep msgs.toList "\n"
-  logInfo msg
-
-中文:
-定义 traceCrossRefs
-  签名: (db : Database) (verbose : 布尔值 := false)
-  定义体: do
-  let env ← getEnv
-.filter (·.database == db) let entries := env.getSortedCrossRefs
-  if entries.isEmpty then logInfo "No tags found." else
-  let mut msgs := #[m!""]
-  for d in entries do
-    let (parL, parR) := if d.comment.isEmpty then ("", "") else (" (", ")")
-    let cmt := parL ++ d.comment ++ parR
-    msgs := msgs.push
-      m!"[{db.label} {d.tag}]({db.url ++ d.tag}) \
-        corresponds to declaration '{.ofConstName d.declName}'.{cmt}"
-    if verbose then
-      let dType := ((env.find? d.declName).getD default).type
-      msgs := (msgs.push m!"{dType}").push ""
-  let msg := MessageData.joinSep msgs.toList "\n"
-  logInfo msg
+--- 原说明 ---
+`traceCrossRefs db verbose` prints the cross-references of database `db` and
+inlines the declaration types if `verbose` is `true`.
 -/
 def traceCrossRefs (db : Database) (verbose : Bool := false) :
     Command.CommandElabM Unit := do
   let env ← getEnv
-.filter (·.database == db) let entries := env.getSortedCrossRefs
+  let entries := env.getSortedCrossRefs |>.filter (·.database == db)
   if entries.isEmpty then logInfo "No tags found." else
   let mut msgs := #[m!""]
   for d in entries do
@@ -993,3 +705,4 @@ elab (name := lmfdbTags) "#lmfdb_tags" tk:("!")? : command =>
   traceCrossRefs .lmfdb (tk.isSome)
 
 end Mathlib.CrossRef
+

@@ -17,294 +17,186 @@ namespace Set
 
 variable {α : Type*} {s t u : Set α}
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- `inclusion` is the "identity" function between two subsets `s` and `t`, where `s ⊆ t` -/
+/-
+**Set.inclusion** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set`。
+形式化陈述：inclusion (h : s subseteq t) : s -> t
+参数：h : s subseteq t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation inclusion
-  signature: (h : s subseteq t)
-  body: fun x => ⟨x, h x.prop⟩
-
-中文:
-缩写 inclusion
-  签名: (h : s subseteq t)
-  定义体: fun x => ⟨x, h x.prop⟩
-
-Depends on / 依赖: x.prop
+--- 原说明 ---
+`inclusion` is the "identity" function between two subsets `s` and `t`, where `s
+ ⊆ t`
 -/
-abbrev inclusion (h : s subseteq t) : s -> t := fun x => ⟨x, h x.prop⟩
-
-/--
-theorem `inclusion_self` / 定理 `inclusion_self`
-
-English:
-theorem inclusion_self
-  given: (x : s)
-  statement: inclusion Subset.rfl x = x
-  proof: rfl
-
-中文:
-定理 inclusion_self
-  条件: (x : s)
-  结论: inclusion 子集.rfl x = x
-  证明: rfl
+abbrev inclusion (h : s ⊆ t) : s → t := fun x ↦ ⟨x, h x.prop⟩
+/-
+**Set.inclusion_self** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_self (x : s) : inclusion Subset.rfl x = x
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 theorem inclusion_self (x : s) : inclusion Subset.rfl x = x :=
   rfl
-
-/--
-theorem `inclusion_eq_id` / 定理 `inclusion_eq_id`
-
-English:
-theorem inclusion_eq_id
-  given: (h : s subseteq s)
-  statement: inclusion h = id
-  proof: rfl
-
-中文:
-定理 inclusion_eq_id
-  条件: (h : s subseteq s)
-  结论: inclusion h = id
-  证明: rfl
+/-
+**Set.inclusion_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_eq_id (h : s subseteq s) : inclusion h = id
+参数：h : s subseteq s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inclusion_eq_id (h : s subseteq s) : inclusion h = id :=
+theorem inclusion_eq_id (h : s ⊆ s) : inclusion h = id :=
   rfl
-
-/--
-theorem `inclusion_eq_subtype_map` / 定理 `inclusion_eq_subtype_map`
-
-English:
-theorem inclusion_eq_subtype_map
-  given: (h : s subseteq t)
-  statement: inclusion h = Subtype.map id h
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inclusion_eq_subtype_map
-  条件: (h : s subseteq t)
-  结论: inclusion h = 子类型.map id h
-  证明: rfl
-
-@[simp]
+/-
+**Set.inclusion_eq_subtype_map** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_eq_subtype_map (h : s subseteq t) : inclusion h = Subtype.map id
+ h
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inclusion_eq_subtype_map (h : s subseteq t) : inclusion h = Subtype.map id h :=
+theorem inclusion_eq_subtype_map (h : s ⊆ t) : inclusion h = Subtype.map id h :=
   rfl
 
 @[simp]
-/--
-theorem `inclusion_mk` / 定理 `inclusion_mk`
-
-English:
-theorem inclusion_mk
-  given: {h : s subseteq t} (a : α) (ha : a in s)
-  statement: inclusion h ⟨a, ha⟩ = ⟨a, h ha⟩
-  proof: rfl
-
-中文:
-定理 inclusion_mk
-  条件: {h : s subseteq t} (a : α) (ha : a in s)
-  结论: inclusion h ⟨a, ha⟩ = ⟨a, h ha⟩
-  证明: rfl
+/-
+**Set.inclusion_mk** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_mk {h : s subseteq t} (a : α) (ha : a in s) : inclusion h ⟨a, ha
+⟩ = ⟨a, h ha⟩
+参数：a : α；ha : a in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inclusion_mk {h : s subseteq t} (a : α) (ha : a in s) : inclusion h ⟨a, ha⟩ = ⟨a, h ha⟩ :=
+theorem inclusion_mk {h : s ⊆ t} (a : α) (ha : a ∈ s) : inclusion h ⟨a, ha⟩ = ⟨a, h ha⟩ :=
   rfl
-
-/--
-theorem `inclusion_right` / 定理 `inclusion_right`
-
-English:
-theorem inclusion_right
-  given: (h : s subseteq t) (x : t) (m : (x : α) in s)
-  statement: inclusion h ⟨x, m⟩ = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inclusion_right
-  条件: (h : s subseteq t) (x : t) (m : (x : α) in s)
-  结论: inclusion h ⟨x, m⟩ = x
-  证明: rfl
-
-@[simp]
+/-
+**Set.inclusion_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_right (h : s subseteq t) (x : t) (m : (x : α) in s) : inclusion 
+h ⟨x, m⟩ = x
+参数：h : s subseteq t；x : t；m : (x : α) in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inclusion_right (h : s subseteq t) (x : t) (m : (x : α) in s) : inclusion h ⟨x, m⟩ = x :=
+theorem inclusion_right (h : s ⊆ t) (x : t) (m : (x : α) ∈ s) : inclusion h ⟨x, m⟩ = x :=
   rfl
 
 @[simp]
-/--
-theorem `inclusion_inclusion` / 定理 `inclusion_inclusion`
-
-English:
-theorem inclusion_inclusion
-  given: (hst : s subseteq t) (htu : t subseteq u) (x : s)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inclusion_inclusion
-  条件: (hst : s subseteq t) (htu : t subseteq u) (x : s)
-  证明: rfl
-
-@[simp]
+/-
+**Set.inclusion_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_inclusion (hst : s subseteq t) (htu : t subseteq u) (x : s) : in
+clusion htu (inclusion hst x) = inclusion (hst.trans htu) x
+参数：hst : s subseteq t；htu : t subseteq u；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inclusion_inclusion (hst : s subseteq t) (htu : t subseteq u) (x : s) :
+theorem inclusion_inclusion (hst : s ⊆ t) (htu : t ⊆ u) (x : s) :
     inclusion htu (inclusion hst x) = inclusion (hst.trans htu) x :=
   rfl
 
 @[simp]
-/--
-theorem `inclusion_comp_inclusion` / 定理 `inclusion_comp_inclusion`
-
-English:
-theorem inclusion_comp_inclusion
-  given: {α} {s t u : Set α} (hst : s subseteq t) (htu : t subseteq u)
-  proof: funext (inclusion_inclusion hst htu)
-
-@[simp]
-
-中文:
-定理 inclusion_comp_inclusion
-  条件: {α} {s t u : 集合 α} (hst : s subseteq t) (htu : t subseteq u)
-  证明: funext (inclusion_inclusion hst htu)
-
-@[simp]
-
-Depends on / 依赖: inclusion_inclusion
+/-
+**Set.inclusion_comp_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_comp_inclusion {α} {s t u : Set α} (hst : s subseteq t) (htu : t
+ subseteq u) : inclusion htu ∘ inclusion hst = inclusion (hst.trans htu)
+参数：hst : s subseteq t；htu : t subseteq u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.inclusion_inclusion`：inclusion_inclusion (hst : s subseteq t) (htu :
+ t subseteq u) (x : s) : inclusion htu (inclusion hst x) = inclusion (hst.trans 
+htu) x
 -/
-theorem inclusion_comp_inclusion {α} {s t u : Set α} (hst : s subseteq t) (htu : t subseteq u) :
+theorem inclusion_comp_inclusion {α} {s t u : Set α} (hst : s ⊆ t) (htu : t ⊆ u) :
     inclusion htu ∘ inclusion hst = inclusion (hst.trans htu) :=
   funext (inclusion_inclusion hst htu)
 
 @[simp]
-/--
-theorem `coe_inclusion` / 定理 `coe_inclusion`
-
-English:
-theorem coe_inclusion
-  given: (h : s subseteq t) (x : s)
-  statement: (inclusion h x : α) = (x : α)
-  proof: rfl
-
-中文:
-定理 coe_inclusion
-  条件: (h : s subseteq t) (x : s)
-  结论: (inclusion h x : α) = (x : α)
-  证明: rfl
+/-
+**Set.coe_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：coe_inclusion (h : s subseteq t) (x : s) : (inclusion h x : α) = (x : α)
+参数：h : s subseteq t；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inclusion (h : s subseteq t) (x : s) : (inclusion h x : α) = (x : α) :=
+theorem coe_inclusion (h : s ⊆ t) (x : s) : (inclusion h x : α) = (x : α) :=
   rfl
-
-/--
-theorem `val_comp_inclusion` / 定理 `val_comp_inclusion`
-
-English:
-theorem val_comp_inclusion
-  given: (h : s subseteq t)
-  statement: Subtype.val ∘ inclusion h = Subtype.val
-  proof: rfl
-
-中文:
-定理 val_comp_inclusion
-  条件: (h : s subseteq t)
-  结论: 子类型.val ∘ inclusion h = 子类型.val
-  证明: rfl
+/-
+**Set.val_comp_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：val_comp_inclusion (h : s subseteq t) : Subtype.val ∘ inclusion h = Subtyp
+e.val
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem val_comp_inclusion (h : s subseteq t) : Subtype.val ∘ inclusion h = Subtype.val :=
+theorem val_comp_inclusion (h : s ⊆ t) : Subtype.val ∘ inclusion h = Subtype.val :=
   rfl
-
-/--
-theorem `inclusion_injective` / 定理 `inclusion_injective`
-
-English:
-theorem inclusion_injective
-  given: (h : s subseteq t)
-  statement: (inclusion h).Injective
-  proof: Subtype.map_injective h injective_id
-
-中文:
-定理 inclusion_injective
-  条件: (h : s subseteq t)
-  结论: (inclusion h).单射
-  证明: Subtype.map_injective h injective_id
-
-Depends on / 依赖: Subtype, Subtype.map_injective, injective_id, map_injective
+/-
+**Set.inclusion_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_injective (h : s subseteq t) : (inclusion h).Injective
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.map_injective`：map_injective {p : α -> Prop} {q : β -> Prop} {f 
+: α -> β} (h : forall a, p a -> q (f a)) (hf : Injective f) : Injective (map f h
+)
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
-theorem inclusion_injective (h : s subseteq t) : (inclusion h).Injective :=
+theorem inclusion_injective (h : s ⊆ t) : (inclusion h).Injective :=
   Subtype.map_injective h injective_id
-
-/--
-theorem `inclusion_inj` / 定理 `inclusion_inj`
-
-English:
-theorem inclusion_inj
-  given: (h : s subseteq t) {x y : s}
-  statement: inclusion h x = inclusion h y ↔ x = y
-  proof: (inclusion_injective h).eq_iff
-
-中文:
-定理 inclusion_inj
-  条件: (h : s subseteq t) {x y : s}
-  结论: inclusion h x = inclusion h y ↔ x = y
-  证明: (inclusion_injective h).eq_iff
-
-Depends on / 依赖: eq_iff, inclusion_injective
+/-
+**Set.inclusion_inj** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_inj (h : s subseteq t) {x y : s} : inclusion h x = inclusion h y
+ ↔ x = y
+参数：h : s subseteq t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Set.inclusion_injective`：inclusion_injective (h : s subseteq t) : (inclu
+sion h).Injective
 -/
-theorem inclusion_inj (h : s subseteq t) {x y : s} : inclusion h x = inclusion h y ↔ x = y :=
+theorem inclusion_inj (h : s ⊆ t) {x y : s} : inclusion h x = inclusion h y ↔ x = y :=
   (inclusion_injective h).eq_iff
-
-/--
-theorem `eq_of_inclusion_surjective` / 定理 `eq_of_inclusion_surjective`
-
-English:
-theorem eq_of_inclusion_surjective
-  statement: {s t : Set α} {h : s subseteq t}
-  proof: h.antisymm fun x hx => by grind [h_surj ⟨x, hx⟩]
-
-中文:
-定理 eq_of_inclusion_surjective
-  结论: {s t : 集合 α} {h : s subseteq t}
-  证明: h.antisymm fun x hx => by grind [h_surj ⟨x, hx⟩]
-
-Depends on / 依赖: antisymm, h.antisymm, h_surj
+/-
+**Set.eq_of_inclusion_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_of_inclusion_surjective {s t : Set α} {h : s subseteq t} (h_surj : Func
+tion.Surjective (inclusion h)) : s = t
+参数：h_surj : Function.Surjective (inclusion h)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
 -/
-theorem eq_of_inclusion_surjective {s t : Set α} {h : s subseteq t}
+theorem eq_of_inclusion_surjective {s t : Set α} {h : s ⊆ t}
     (h_surj : Function.Surjective (inclusion h)) : s = t :=
-  h.antisymm fun x hx => by grind [h_surj ⟨x, hx⟩]
-
-/--
-theorem `inclusion_le_inclusion` / 定理 `inclusion_le_inclusion`
-
-English:
-theorem inclusion_le_inclusion
-  given: [LE α] {s t : Set α} (h : s subseteq t) {x y : s}
-  proof: .rfl
-
-中文:
-定理 inclusion_le_inclusion
-  条件: [LE α] {s t : 集合 α} (h : s subseteq t) {x y : s}
-  证明: .rfl
+  h.antisymm fun x hx ↦ by grind [h_surj ⟨x, hx⟩]
+/-
+**Set.inclusion_le_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_le_inclusion [LE α] {s t : Set α} (h : s subseteq t) {x y : s} :
+ inclusion h x <= inclusion h y ↔ x <= y
+参数：h : s subseteq t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem inclusion_le_inclusion [LE α] {s t : Set α} (h : s subseteq t) {x y : s} :
-    inclusion h x <= inclusion h y ↔ x <= y := .rfl
-
-/--
-theorem `inclusion_lt_inclusion` / 定理 `inclusion_lt_inclusion`
-
-English:
-theorem inclusion_lt_inclusion
-  given: [LT α] {s t : Set α} (h : s subseteq t) {x y : s}
-  proof: .rfl
-
-中文:
-定理 inclusion_lt_inclusion
-  条件: [LT α] {s t : 集合 α} (h : s subseteq t) {x y : s}
-  证明: .rfl
+theorem inclusion_le_inclusion [LE α] {s t : Set α} (h : s ⊆ t) {x y : s} :
+    inclusion h x ≤ inclusion h y ↔ x ≤ y := .rfl
+/-
+**Set.inclusion_lt_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inclusion_lt_inclusion [LT α] {s t : Set α} (h : s subseteq t) {x y : s} :
+ inclusion h x < inclusion h y ↔ x < y
+参数：h : s subseteq t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem inclusion_lt_inclusion [LT α] {s t : Set α} (h : s subseteq t) {x y : s} :
+theorem inclusion_lt_inclusion [LT α] {s t : Set α} (h : s ⊆ t) {x y : s} :
     inclusion h x < inclusion h y ↔ x < y := .rfl
 
 end Set
+

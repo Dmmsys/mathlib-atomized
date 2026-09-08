@@ -19,49 +19,46 @@ universe u
 variable (C : Type*) [Category.{u} C] [HasZeroMorphisms C]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `kerIsKernel` / `kerIsKernel` 的定义
+/-- The kernel inclusion is itself a kernel in the functor category. -/
+/-
+**CategoryTheory.Limits.kerIsKernel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：kerIsKernel [HasKernels C] : IsLimit (KernelFork.ofι (ker.ι C) (ker.condit
+ion C))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.ker.condition`：∀ (C : Type u) [inst : CategoryTheo
+ry.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   [ins
+t_2 : CategoryTheory.Limi…
 
-English:
-definition kerIsKernel
-  signature: [HasKernels C]
-  body: evaluationJointlyReflectsLimits _ fun f => (KernelFork.isLimitMapConeEquiv ..).2
-(kernelIsKernel f.hom).ofIsoLimit Fork.ext .refl _
-
-中文:
-定义 kerIsKernel
-  签名: [有Kernels C]
-  定义体: evaluationJointlyReflectsLimits _ fun f => (KernelFork.isLimitMapConeEquiv ..).2
-(kernelIsKernel f.hom).ofIsoLimit Fork.ext .refl _
-
-Depends on / 依赖: Fork.ext, KernelFork, KernelFork.isLimitMapConeEquiv, evaluationJointlyReflectsLimits, f.hom, isLimitMapConeEquiv, kernelIsKernel, ofIsoLimit
+--- 原说明 ---
+The kernel inclusion is itself a kernel in the functor category.
 -/
 noncomputable def kerIsKernel [HasKernels C] :
     IsLimit (KernelFork.ofι (ker.ι C) (ker.condition C)) :=
-evaluationJointlyReflectsLimits _ fun f => (KernelFork.isLimitMapConeEquiv ..).2
-(kernelIsKernel f.hom).ofIsoLimit Fork.ext .refl _
+  evaluationJointlyReflectsLimits _ fun f ↦ (KernelFork.isLimitMapConeEquiv ..).2 <|
+    (kernelIsKernel f.hom).ofIsoLimit <| Fork.ext <| .refl _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `cokerIsCokernel` / `cokerIsCokernel` 的定义
+/-- The cokernel projection is itself a cokernel in the functor category. -/
+/-
+**CategoryTheory.Limits.cokerIsCokernel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：cokerIsCokernel [HasCokernels C] : IsColimit (CokernelCofork.ofπ (coker.π 
+C) (coker.condition C))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coker.condition`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   [i
+nst_2 : CategoryTheory.Limi…
 
-English:
-definition cokerIsCokernel
-  signature: [HasCokernels C]
-  body: evaluationJointlyReflectsColimits _ fun f => (CokernelCofork.isColimitMapCoconeEquiv ..).2
-(cokernelIsCokernel f.hom).ofIsoColimit Cofork.ext .refl _
-
-中文:
-定义 cokerIsCokernel
-  签名: [有余kernels C]
-  定义体: evaluationJointlyReflectsColimits _ fun f => (CokernelCofork.isColimitMapCoconeEquiv ..).2
-(cokernelIsCokernel f.hom).ofIsoColimit Cofork.ext .refl _
-
-Depends on / 依赖: Cofork, Cofork.ext, CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, cokernelIsCokernel, evaluationJointlyReflectsColimits, f.hom, isColimitMapCoconeEquiv, ofIsoColimit
+--- 原说明 ---
+The cokernel projection is itself a cokernel in the functor category.
 -/
 noncomputable def cokerIsCokernel [HasCokernels C] :
     IsColimit (CokernelCofork.ofπ (coker.π C) (coker.condition C)) :=
-evaluationJointlyReflectsColimits _ fun f => (CokernelCofork.isColimitMapCoconeEquiv ..).2
-(cokernelIsCokernel f.hom).ofIsoColimit Cofork.ext .refl _
+  evaluationJointlyReflectsColimits _ fun f ↦ (CokernelCofork.isColimitMapCoconeEquiv ..).2 <|
+    (cokernelIsCokernel f.hom).ofIsoColimit <| Cofork.ext <| .refl _
 
 end CategoryTheory.Limits
+

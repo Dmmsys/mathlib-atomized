@@ -96,101 +96,108 @@ namespace CoxeterMatrix
 
 variable {B B' : Type*} (M : CoxeterMatrix B) (e : B ≃ B')
 
-/--
-Definition of `relation` / `relation` 的定义
+/-- The Coxeter relation associated to a Coxeter matrix $M$ and two indices $i, i' \in B$.
+That is, the relation $(s_i s_{i'})^{M_{i, i'}}$, considered as an element of the free group
+on $\{s_i\}_{i \in B}$.
+If $M_{i, i'} = 0$, then this is the identity, indicating that there is no relation between
+$s_i$ and $s_{i'}$. -/
+/-
+**CoxeterMatrix.relation** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：relation (i i' : B) : FreeGroup B
+参数：i i' : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relation
-  signature: (i i' : B)
-  body: (FreeGroup.of i * FreeGroup.of i') ^ M i i'
-
-中文:
-定义 relation
-  签名: (i i' : B)
-  定义体: (FreeGroup.of i * FreeGroup.of i') ^ M i i'
-
-Depends on / 依赖: FreeGroup, FreeGroup.of
+--- 原说明 ---
+The Coxeter relation associated to a Coxeter matrix $M$ and two indices $i, i' \
+in B$.
+That is, the relation $(s_i s_{i'})^{M_{i, i'}}$, considered as an element of th
+e free group
+on $\{s_i\}_{i \in B}$.
+If $M_{i, i'} = 0$, then this is the identity, indicating that there is no relat
+ion between
+$s_i$ and $s_{i'}$.
 -/
 def relation (i i' : B) : FreeGroup B := (FreeGroup.of i * FreeGroup.of i') ^ M i i'
 
-/--
-Definition of `relationsSet` / `relationsSet` 的定义
+/-- The set of all Coxeter relations associated to the Coxeter matrix $M$. -/
+/-
+**CoxeterMatrix.relationsSet** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：relationsSet : Set (FreeGroup B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relationsSet
-  signature: : Set (FreeGroup B)
-  body: range uncurry M.relation
-
-中文:
-定义 relationsSet
-  签名: : 集合 (自由群 B)
-  定义体: range uncurry M.relation
-
-Depends on / 依赖: M.relation, relation, uncurry
+--- 原说明 ---
+The set of all Coxeter relations associated to the Coxeter matrix $M$.
 -/
-def relationsSet : Set (FreeGroup B) := range uncurry M.relation
+def relationsSet : Set (FreeGroup B) := range <| uncurry M.relation
 
-/--
-Definition of `Group` / `Group` 的定义
+/-- The Coxeter group associated to a Coxeter matrix $M$; that is, the group
+$$\langle \{s_i\}_{i \in B} \vert \{(s_i s_{i'})^{M_{i, i'}}\}_{i, i' \in B} \rangle.$$ -/
+/-
+**CoxeterMatrix.Group** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：{B : Type u_1} → CoxeterMatrix B → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Group
-  signature: : Type _
-  body: PresentedGroup M.relationsSet
-deriving Group
-
-中文:
-定义 群
-  签名: : 类型 _
-  定义体: PresentedGroup M.relationsSet
-deriving Group
+--- 原说明 ---
+The Coxeter group associated to a Coxeter matrix $M$; that is, the group
+$$\langle \{s_i\}_{i \in B} \vert \{(s_i s_{i'})^{M_{i, i'}}\}_{i, i' \in B} \ra
+ngle.$$
 -/
 protected def Group : Type _ := PresentedGroup M.relationsSet
 deriving Group
 
-/--
-Definition of `simple` / `simple` 的定义
+/-- The simple reflection of the Coxeter group `M.Group` at the index `i`. -/
+/-
+**CoxeterMatrix.simple** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：simple (i : B) : M.Group
+参数：i : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simple
-  signature: (i : B)
-  body: PresentedGroup.of i
-
-中文:
-定义 simple
-  签名: (i : B)
-  定义体: PresentedGroup.of i
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrixAlgEquiv, PresentedGroup, PresentedGroup.of, apply_symm_apply, toMatrixAlgEquiv
+--- 原说明 ---
+The simple reflection of the Coxeter group `M.Group` at the index `i`.
 -/
 def simple (i : B) : M.Group := PresentedGroup.of i
-
-/--
-theorem `reindex_relationsSet` / 定理 `reindex_relationsSet`
-
-English:
-theorem reindex_relationsSet
-  proof: let M' := M.reindex e; calc
-  Set.range (uncurry M'.relation)
-  _ = Set.range (uncurry M'.relation ∘ Prod.map e e) := by simp [Set.range_comp]
-  _ = Set.range (FreeGroup.freeGroupCongr e ∘ uncurry M.relation) := by
-      apply congrArg Set.range
-      ext ⟨i, i'⟩
-      simp [relation, reindex_apply, M']
-  _ = _ := by simp [Set.range_comp, relationsSet]
-
-中文:
-定理 reindex_relationsSet
-  证明: let M' := M.reindex e; calc
-  Set.range (uncurry M'.relation)
-  _ = Set.range (uncurry M'.relation ∘ Prod.map e e) := by simp [Set.range_comp]
-  _ = Set.range (FreeGroup.freeGroupCongr e ∘ uncurry M.relation) := by
-      apply congrArg Set.range
-      ext ⟨i, i'⟩
-      simp [relation, reindex_apply, M']
-  _ = _ := by simp [Set.range_comp, relationsSet]
-
-Depends on / 依赖: M.reindex, Matrix, Matrix.toLinAlgEquiv, apply_symm_apply, reindex, toLinAlgEquiv
+/-
+**CoxeterMatrix.reindex_relationsSet** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterMatrix`。
+形式化陈述：reindex_relationsSet : (M.reindex e).relationsSet = FreeGroup.freeGroupCon
+gr e '' M.relationsSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Set.range_prodMap`：range_prodMap {m₁ : α -> γ} {m₂ : β -> δ} : range (Pr
+od.map m₁ m₂) = range m₁ ×ˢ range m₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `EquivLike.range_eq_univ`：range_eq_univ {α : Type*} {β : Type*} {E : Type
+*} [EquivLike E α β] (e : E) : range e = univ
+· 使用定理 `Set.univ_prod_univ`：univ_prod_univ : @univ α ×ˢ @univ β = univ
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `FreeGroup.freeGroupCongr_apply`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃
+ β) (a : FreeGroup α), (FreeGroup.freeGroupCongr e) a = (FreeGroup.map ⇑e) a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
 -/
 theorem reindex_relationsSet :
     (M.reindex e).relationsSet =
@@ -203,69 +210,47 @@ theorem reindex_relationsSet :
       simp [relation, reindex_apply, M']
   _ = _ := by simp [Set.range_comp, relationsSet]
 
-/--
-Definition of `reindexGroupEquiv` / `reindexGroupEquiv` 的定义
+/-- The isomorphism between the Coxeter group associated to the reindexed matrix `M.reindex e` and
+the Coxeter group associated to `M`. -/
+/-
+**CoxeterMatrix.reindexGroupEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：reindexGroupEquiv : (M.reindex e).Group ≃* M.Group
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reindexGroupEquiv
-  signature: : (M.reindex e).Group ≃* M.Group
-  body: .symm QuotientGroup.congr
-    (Subgroup.normalClosure M.relationsSet)
-    (Subgroup.normalClosure (M.reindex e).relationsSet)
-    (FreeGroup.freeGroupCongr e)
-    (by
-      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [MonoidHom.coe_coe])
-
-中文:
-定义 reindexGroupEquiv
-  签名: : (M.reindex e).群 ≃* M.群
-  定义体: .symm QuotientGroup.congr
-    (Subgroup.normalClosure M.relationsSet)
-    (Subgroup.normalClosure (M.reindex e).relationsSet)
-    (FreeGroup.freeGroupCongr e)
-    (by
-      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [MonoidHom.coe_coe])
-
-Depends on / 依赖: FreeGroup, FreeGroup.freeGroupCongr, M.reindex, M.relationsSet, MonoidHom, MonoidHom.coe_coe, QuotientGroup, QuotientGroup.congr, Subgroup, Subgroup.map_normalClosure, Subgroup.normalClosure, coe_coe, freeGroupCongr, map_normalClosure, normalClosure, reindex, reindex_relationsSet, relationsSet, surjective
+--- 原说明 ---
+The isomorphism between the Coxeter group associated to the reindexed matrix `M.
+reindex e` and
+the Coxeter group associated to `M`.
 -/
 def reindexGroupEquiv : (M.reindex e).Group ≃* M.Group :=
-.symm QuotientGroup.congr
+  .symm <| QuotientGroup.congr
     (Subgroup.normalClosure M.relationsSet)
     (Subgroup.normalClosure (M.reindex e).relationsSet)
     (FreeGroup.freeGroupCongr e)
     (by
-      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [MonoidHom.coe_coe])
-
-/--
-theorem `reindexGroupEquiv_apply_simple` / 定理 `reindexGroupEquiv_apply_simple`
-
-English:
-theorem reindexGroupEquiv_apply_simple
-  given: (i : B')
-  proof: rfl
-
-中文:
-定理 reindexGroupEquiv_apply_simple
-  条件: (i : B')
-  证明: rfl
+      rw [reindex_relationsSet,
+        Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective),
+        MonoidHom.coe_coe])
+/-
+**CoxeterMatrix.reindexGroupEquiv_apply_simple** 是 Mathlib 中的一个定理，位于命名空间 `Coxete
+rMatrix`。
+形式化陈述：reindexGroupEquiv_apply_simple (i : B') : (M.reindexGroupEquiv e) ((M.rein
+dex e).simple i) = M.simple (e.symm i)
+参数：i : B'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reindexGroupEquiv_apply_simple (i : B') :
     (M.reindexGroupEquiv e) ((M.reindex e).simple i) = M.simple (e.symm i) := rfl
-
-/--
-theorem `reindexGroupEquiv_symm_apply_simple` / 定理 `reindexGroupEquiv_symm_apply_simple`
-
-English:
-theorem reindexGroupEquiv_symm_apply_simple
-  given: (i : B)
-  proof: rfl
-
-中文:
-定理 reindexGroupEquiv_symm_apply_simple
-  条件: (i : B)
-  证明: rfl
-
-Depends on / 依赖: Matrix, Matrix.toLin, _one
+/-
+**CoxeterMatrix.reindexGroupEquiv_symm_apply_simple** 是 Mathlib 中的一个定理，位于命名空间 `C
+oxeterMatrix`。
+形式化陈述：reindexGroupEquiv_symm_apply_simple (i : B) : (M.reindexGroupEquiv e).symm
+ (M.simple i) = (M.reindex e).simple (e i)
+参数：i : B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reindexGroupEquiv_symm_apply_simple (i : B) :
     (M.reindexGroupEquiv e).symm (M.simple i) = (M.reindex e).simple (e i) := rfl
@@ -281,61 +266,43 @@ variable {B : Type*} (M : CoxeterMatrix B)
 /-- A Coxeter system `CoxeterSystem M W` is a structure recording the isomorphism between
 a group `W` and the Coxeter group associated to a Coxeter matrix `M`. -/
 @[ext]
-/--
-Definition of `CoxeterSystem` / `CoxeterSystem` 的定义
+/-
+**CoxeterSystem** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{B : Type u_1} → CoxeterMatrix B → (W : Type u_2) → [Group W] → Type (max 
+u_1 u_2)
+参数：W : Type u_2；max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoxeterSystem
-  parameters: (W : Type*) [Group W]
-  axioms and operations (1):
-    - mulEquiv : W ≃* M.Group
-
-中文:
-结构 余xeterSystem
-  参数: (W : 类型) [群 W]
-  公理与运算 (1 个):
-    - mulEquiv : W ≃* M.群
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, toMatrix
+--- 原说明 ---
+A Coxeter system `CoxeterSystem M W` is a structure recording the isomorphism be
+tween
+a group `W` and the Coxeter group associated to a Coxeter matrix `M`.
 -/
 structure CoxeterSystem (W : Type*) [Group W] where
   /-- The isomorphism between `W` and the Coxeter group associated to `M`. -/
   mulEquiv : W ≃* M.Group
 
-/--
-Definition of `IsCoxeterGroup.` / `IsCoxeterGroup.` 的定义
+/-- A group is a Coxeter group if it admits a Coxeter system for some Coxeter matrix `M`. -/
+/-
+**IsCoxeterGroup.** 是 Mathlib 中的一个类，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCoxeterGroup.{u}
-  parameters: (W : Type u) [Group W]
-  axioms and operations (1):
-    - nonempty_system : exists B : Type u, exists M : CoxeterMatrix B, Nonempty (CoxeterSystem M W)
-
-中文:
-类 IsCoxeterGroup.{u}
-  参数: (W : 类型u) [群 W]
-  公理与运算 (1 个):
-    - nonempty_system : 存在 B : 类型u, 存在 M : 余xeterMatrix B, 非空 (余xeterSystem M W)
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, _comp, toMatrix
+--- 原说明 ---
+A group is a Coxeter group if it admits a Coxeter system for some Coxeter matrix
+ `M`.
 -/
 class IsCoxeterGroup.{u} (W : Type u) [Group W] : Prop where
-  nonempty_system : exists B : Type u, exists M : CoxeterMatrix B, Nonempty (CoxeterSystem M W)
+  nonempty_system : ∃ B : Type u, ∃ M : CoxeterMatrix B, Nonempty (CoxeterSystem M W)
 
-/--
-Definition of `CoxeterMatrix.toCoxeterSystem` / `CoxeterMatrix.toCoxeterSystem` 的定义
+/-- The canonical Coxeter system on the Coxeter group associated to `M`. -/
+/-
+**CoxeterMatrix.toCoxeterSystem** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CoxeterMatrix.toCoxeterSystem : CoxeterSystem M M.Group
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CoxeterMatrix.toCoxeterSystem
-  signature: : CoxeterSystem M M.Group
-  body: ⟨.refl _⟩
-
-中文:
-定义 余xeterMatrix.toCoxeterSystem
-  签名: : 余xeterSystem M M.群
-  定义体: ⟨.refl _⟩
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrixAlgEquiv, _comp, toMatrixAlgEquiv
+--- 原说明 ---
+The canonical Coxeter system on the Coxeter group associated to `M`.
 -/
 def CoxeterMatrix.toCoxeterSystem : CoxeterSystem M M.Group := ⟨.refl _⟩
 
@@ -351,114 +318,73 @@ variable {M : CoxeterMatrix B} (cs : CoxeterSystem M W)
 
 /-- Reindex a Coxeter system through a bijection of the indexing sets. -/
 @[simps]
-/--
-Definition of `reindex` / `reindex` 的定义
+/-
+**CoxeterSystem.reindex** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：{B : Type u_1} →   {B' : Type u_2} →     {W : Type u_3} →       [inst : Gr
+oup W] →         {M : CoxeterMatrix B} → CoxeterSystem M W → (e : B ≃ B') → Coxe
+terSystem (CoxeterMatrix.reindex e M) W
+参数：e : B ≃ B'；CoxeterMatrix.reindex e M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reindex
-  signature: (e : B ≃ B')
-  body: ⟨cs.mulEquiv.trans (M.reindexGroupEquiv e).symm⟩
-
-中文:
-定义 reindex
-  签名: (e : B ≃ B')
-  定义体: ⟨cs.mulEquiv.trans (M.reindexGroupEquiv e).symm⟩
+--- 原说明 ---
+Reindex a Coxeter system through a bijection of the indexing sets.
 -/
 protected def reindex (e : B ≃ B') : CoxeterSystem (M.reindex e) W :=
   ⟨cs.mulEquiv.trans (M.reindexGroupEquiv e).symm⟩
 
 /-- Push a Coxeter system through a group isomorphism. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CoxeterSystem.map** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：{B : Type u_1} →   {W : Type u_3} →     {H : Type u_4} →       [inst : Gro
+up W] → [inst_1 : Group H] → {M : CoxeterMatrix B} → CoxeterSystem M W → W ≃* H 
+→ CoxeterSystem M H
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (e : W ≃* H)
-  body: ⟨e.symm.trans cs.mulEquiv⟩
-
-中文:
-定义 map
-  签名: (e : W ≃* H)
-  定义体: ⟨e.symm.trans cs.mulEquiv⟩
+--- 原说明 ---
+Push a Coxeter system through a group isomorphism.
 -/
 protected def map (e : W ≃* H) : CoxeterSystem M H := ⟨e.symm.trans cs.mulEquiv⟩
 
 /-! ### Simple reflections -/
 
-/--
-Definition of `simple` / `simple` 的定义
+/-- The simple reflection of `W` at the index `i`. -/
+/-
+**CoxeterSystem.simple** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：simple (i : B) : W
+参数：i : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simple
-  signature: (i : B)
-  body: cs.mulEquiv.symm (PresentedGroup.of i)
-
-@[simp]
-
-中文:
-定义 simple
-  签名: (i : B)
-  定义体: cs.mulEquiv.symm (PresentedGroup.of i)
-
-@[simp]
-
-Depends on / 依赖: PresentedGroup, PresentedGroup.of, cs.mulEquiv.symm, mulEquiv
+--- 原说明 ---
+The simple reflection of `W` at the index `i`.
 -/
 def simple (i : B) : W := cs.mulEquiv.symm (PresentedGroup.of i)
 
 @[simp]
-/--
-theorem `_root_.CoxeterMatrix.toCoxeterSystem_simple` / 定理 `_root_.CoxeterMatrix.toCoxeterSystem_simple`
-
-English:
-theorem _root_.CoxeterMatrix.toCoxeterSystem_simple
-  given: (M : CoxeterMatrix B)
-  proof: rfl
-
-中文:
-定理 _root_.余xeterMatrix.toCoxeterSystem_simple
-  条件: (M : 余xeterMatrix B)
-  证明: rfl
+/-
+**CoxeterSystem._root_.CoxeterMatrix.toCoxeterSystem_simple** 是 Mathlib 中的一个定理，位
+于命名空间 `CoxeterSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.CoxeterMatrix.toCoxeterSystem_simple (M : CoxeterMatrix B) :
     M.toCoxeterSystem.simple = M.simple := rfl
-
-/--
-theorem `reindex_simple` / 定理 `reindex_simple`
-
-English:
-theorem reindex_simple
-  given: (i' : B')
-  statement: (cs.reindex e).simple i' = cs.simple (e.symm i')
-  proof: rfl
-
-中文:
-定理 reindex_simple
-  条件: (i' : B')
-  结论: (cs.reindex e).simple i' = cs.simple (e.symm i')
-  证明: rfl
+/-
+**CoxeterSystem.reindex_simple** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {B' : Type u_2} (e : B ≃ B') {W : Type u_3} [inst : Group
+ W] {M : CoxeterMatrix B}   (cs : CoxeterSystem M W) (i' : B'), (cs.reindex e).s
+imple i' = cs.simple (e.symm i')
+参数：e : B ≃ B'；cs : CoxeterSystem M W；i' : B'；cs.reindex e；e.symm i'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem reindex_simple (i' : B') : (cs.reindex e).simple i' = cs.simple (e.symm i') := rfl
-
-/--
-theorem `map_simple` / 定理 `map_simple`
-
-English:
-theorem map_simple
-  given: (e : W ≃* H) (i : B)
-  statement: (cs.map e).simple i = e (cs.simple i)
-  proof: rfl
-
-local prefix:100 "s" => cs.simple
-
-中文:
-定理 map_simple
-  条件: (e : W ≃* H) (i : B)
-  结论: (cs.map e).simple i = e (cs.simple i)
-  证明: rfl
-
-local prefix:100 "s" => cs.simple
+/-
+**CoxeterSystem.map_simple** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} {H : Type u_4} [inst : Group W] [inst_1 : 
+Group H] {M : CoxeterMatrix B}   (cs : CoxeterSystem M W) (e : W ≃* H) (i : B), 
+(cs.map e).simple i = e (cs.simple i)
+参数：cs : CoxeterSystem M W；e : W ≃* H；i : B；cs.map e；cs.simple i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem map_simple (e : W ≃* H) (i : B) : (cs.map e).simple i = e (cs.simple i) := rfl
 
@@ -466,287 +392,311 @@ local prefix:100 "s" => cs.simple
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `simple_mul_simple_self` / 定理 `simple_mul_simple_self`
-
-English:
-theorem simple_mul_simple_self
-  given: (i : B)
-  statement: s i * s i = 1
-  proof: by
-  have : (FreeGroup.of i) * (FreeGroup.of i) in M.relationsSet := ⟨(i, i), by simp [relation]⟩
-  have : (PresentedGroup.mk _ (FreeGroup.of i * FreeGroup.of i) : M.Group) = 1 :=
-    (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
-  unfold simple
-  rw [← map_mul]; rw [PresentedGroup.of]; rw [map_mul]
-  exact map_mul_eq_one cs.mulEquiv.symm this
-
-@[simp]
-
-中文:
-定理 simple_mul_simple_self
-  条件: (i : B)
-  结论: s i * s i = 1
-  证明: by
-  have : (FreeGroup.of i) * (FreeGroup.of i) in M.relationsSet := ⟨(i, i), by simp [relation]⟩
-  have : (PresentedGroup.mk _ (FreeGroup.of i * FreeGroup.of i) : M.Group) = 1 :=
-    (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
-  unfold simple
-  rw [← map_mul]; rw [PresentedGroup.of]; rw [map_mul]
-  exact map_mul_eq_one cs.mulEquiv.symm this
-
-@[simp]
-
-Depends on / 依赖: FreeGroup, FreeGroup.of, M.Group, M.relationsSet, PresentedGroup, PresentedGroup.mk, PresentedGroup.of, QuotientGroup, QuotientGroup.eq_one_iff, Subgroup, Subgroup.subset_normalClosure, cs.mulEquiv.symm, eq_one_iff, map_mul, map_mul_eq_one, mulEquiv, relation, relationsSet, simple, subset_normalClosure
+/-
+**CoxeterSystem.simple_mul_simple_self** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`
+。
+形式化陈述：simple_mul_simple_self (i : B) : s i * s i = 1
+参数：i : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterMatrix.diagonal`：∀ {B : Type u_1} (self : CoxeterMatrix B) (i : B
+), self.M i i = 1
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `Subgroup.subset_normalClosure`：subset_normalClosure : s subseteq normalC
+losure s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `PresentedGroup.of.eq_1`：∀ {α : Type u_1} {rels : Set (FreeGroup α)} (x :
+ α), PresentedGroup.of x = (PresentedGroup.mk rels) (FreeGroup.of x)
+· 使用定理 `map_mul_eq_one`：map_mul_eq_one [MonoidHomClass F M N] (f : F) {a b : M} 
+(h : a * b = 1) : f a * f b = 1
 -/
 theorem simple_mul_simple_self (i : B) : s i * s i = 1 := by
-  have : (FreeGroup.of i) * (FreeGroup.of i) in M.relationsSet := ⟨(i, i), by simp [relation]⟩
+  have : (FreeGroup.of i) * (FreeGroup.of i) ∈ M.relationsSet := ⟨(i, i), by simp [relation]⟩
   have : (PresentedGroup.mk _ (FreeGroup.of i * FreeGroup.of i) : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [PresentedGroup.of]; rw [map_mul]
+  rw [← map_mul, PresentedGroup.of, map_mul]
   exact map_mul_eq_one cs.mulEquiv.symm this
 
 @[simp]
-/--
-theorem `simple_mul_simple_cancel_right` / 定理 `simple_mul_simple_cancel_right`
-
-English:
-theorem simple_mul_simple_cancel_right
-  given: {w : W} (i : B)
-  statement: w * s i * s i = w
-  proof: by
-  simp [mul_assoc]
-
-@[simp]
-
-中文:
-定理 simple_mul_simple_cancel_right
-  条件: {w : W} (i : B)
-  结论: w * s i * s i = w
-  证明: by
-  simp [mul_assoc]
-
-@[simp]
-
-Depends on / 依赖: mul_assoc
+/-
+**CoxeterSystem.simple_mul_simple_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Coxete
+rSystem`。
+形式化陈述：simple_mul_simple_cancel_right {w : W} (i : B) : w * s i * s i = w
+参数：i : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `CoxeterSystem.simple_mul_simple_self`：simple_mul_simple_self (i : B) : s
+ i * s i = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem simple_mul_simple_cancel_right {w : W} (i : B) : w * s i * s i = w := by
   simp [mul_assoc]
 
 @[simp]
-/--
-theorem `simple_mul_simple_cancel_left` / 定理 `simple_mul_simple_cancel_left`
-
-English:
-theorem simple_mul_simple_cancel_left
-  given: {w : W} (i : B)
-  statement: s i * (s i * w) = w
-  proof: by
-  simp [← mul_assoc]
-
-中文:
-定理 simple_mul_simple_cancel_left
-  条件: {w : W} (i : B)
-  结论: s i * (s i * w) = w
-  证明: by
-  simp [← mul_assoc]
-
-Depends on / 依赖: mul_assoc
+/-
+**CoxeterSystem.simple_mul_simple_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Coxeter
+System`。
+形式化陈述：simple_mul_simple_cancel_left {w : W} (i : B) : s i * (s i * w) = w
+参数：i : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterSystem.simple_mul_simple_self`：simple_mul_simple_self (i : B) : s
+ i * s i = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem simple_mul_simple_cancel_left {w : W} (i : B) : s i * (s i * w) = w := by
   simp [← mul_assoc]
-
-/--
-theorem `simple_sq` / 定理 `simple_sq`
-
-English:
-theorem simple_sq
-  given: (i : B)
-  statement: s i ^ 2 = 1
-  proof: pow_two (s i) ▸ cs.simple_mul_simple_self i
-
-@[simp]
-
-中文:
-定理 simple_sq
-  条件: (i : B)
-  结论: s i ^ 2 = 1
-  证明: pow_two (s i) ▸ cs.simple_mul_simple_self i
-
-@[simp]
+/-
+**CoxeterSystem.simple_sq** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} [inst : Group W] {M : CoxeterMatrix B} (cs
+ : CoxeterSystem M W) (i : B),   cs.simple i ^ 2 = 1
+参数：cs : CoxeterSystem M W；i : B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoxeterSystem.simple_mul_simple_self`：simple_mul_simple_self (i : B) : s
+ i * s i = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
 -/
 @[simp] theorem simple_sq (i : B) : s i ^ 2 = 1 := pow_two (s i) ▸ cs.simple_mul_simple_self i
 
 @[simp]
-/--
-theorem `inv_simple` / 定理 `inv_simple`
-
-English:
-theorem inv_simple
-  given: (i : B)
-  statement: (s i)⁻¹ = s i
-  proof: (eq_inv_of_mul_eq_one_right (cs.simple_mul_simple_self i)).symm
-
-中文:
-定理 inv_simple
-  条件: (i : B)
-  结论: (s i)⁻¹ = s i
-  证明: (eq_inv_of_mul_eq_one_right (cs.simple_mul_simple_self i)).symm
-
-Depends on / 依赖: cs.simple_mul_simple_self, eq_inv_of_mul_eq_one_right, simple_mul_simple_self
+/-
+**CoxeterSystem.inv_simple** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：inv_simple (i : B) : (s i)⁻¹ = s i
+参数：i : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_inv_of_mul_eq_one_right`：eq_inv_of_mul_eq_one_right (h : a * b = 1) :
+ b = a⁻¹
+· 使用定理 `CoxeterSystem.simple_mul_simple_self`：simple_mul_simple_self (i : B) : s
+ i * s i = 1
 -/
 theorem inv_simple (i : B) : (s i)⁻¹ = s i :=
   (eq_inv_of_mul_eq_one_right (cs.simple_mul_simple_self i)).symm
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `simple_mul_simple_pow` / 定理 `simple_mul_simple_pow`
-
-English:
-theorem simple_mul_simple_pow
-  given: (i i' : B)
-  statement: (s i * s i') ^ M i i' = 1
-  proof: by
-  have : (FreeGroup.of i * FreeGroup.of i') ^ M i i' in M.relationsSet := ⟨(i, i'), rfl⟩
-  have : (PresentedGroup.mk _ ((FreeGroup.of i * FreeGroup.of i') ^ M i i') : M.Group) = 1 :=
-    (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
-  unfold simple
-  rw [← map_mul]; rw [← map_pow]
-  exact (MulEquiv.map_eq_one_iff cs.mulEquiv.symm).mpr this
-
-中文:
-定理 simple_mul_simple_pow
-  条件: (i i' : B)
-  结论: (s i * s i') ^ M i i' = 1
-  证明: by
-  have : (FreeGroup.of i * FreeGroup.of i') ^ M i i' in M.relationsSet := ⟨(i, i'), rfl⟩
-  have : (PresentedGroup.mk _ ((FreeGroup.of i * FreeGroup.of i') ^ M i i') : M.Group) = 1 :=
-    (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
-  unfold simple
-  rw [← map_mul]; rw [← map_pow]
-  exact (MulEquiv.map_eq_one_iff cs.mulEquiv.symm).mpr this
-
-Depends on / 依赖: FreeGroup, FreeGroup.of, M.Group, M.relationsSet, MulEquiv, MulEquiv.map_eq_one_iff, PresentedGroup, PresentedGroup.mk, QuotientGroup, QuotientGroup.eq_one_iff, Subgroup, Subgroup.subset_normalClosure, cs.mulEquiv.symm, eq_one_iff, map_eq_one_iff, map_mul, map_pow, mulEquiv, relationsSet, simple
+/-
+**CoxeterSystem.simple_mul_simple_pow** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：simple_mul_simple_pow (i i' : B) : (s i * s i') ^ M i i' = 1
+参数：i i' : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `Subgroup.subset_normalClosure`：subset_normalClosure : s subseteq normalC
+losure s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MulEquiv.map_eq_one_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOneC
+lass M] [inst_1 : MulOneClass N] (h : M ≃* N) {x : M}, h x = 1 ↔ x = 1
 -/
 theorem simple_mul_simple_pow (i i' : B) : (s i * s i') ^ M i i' = 1 := by
-  have : (FreeGroup.of i * FreeGroup.of i') ^ M i i' in M.relationsSet := ⟨(i, i'), rfl⟩
+  have : (FreeGroup.of i * FreeGroup.of i') ^ M i i' ∈ M.relationsSet := ⟨(i, i'), rfl⟩
   have : (PresentedGroup.mk _ ((FreeGroup.of i * FreeGroup.of i') ^ M i i') : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [← map_pow]
+  rw [← map_mul, ← map_pow]
   exact (MulEquiv.map_eq_one_iff cs.mulEquiv.symm).mpr this
-
-/--
-theorem `simple_mul_simple_pow'` / 定理 `simple_mul_simple_pow'`
-
-English:
-theorem simple_mul_simple_pow'
-  given: (i i' : B)
-  statement: (s i' * s i) ^ M i i' = 1
-  proof: M.symmetric i' i ▸ cs.simple_mul_simple_pow i' i
-
-中文:
-定理 simple_mul_simple_pow'
-  条件: (i i' : B)
-  结论: (s i' * s i) ^ M i i' = 1
-  证明: M.symmetric i' i ▸ cs.simple_mul_simple_pow i' i
+/-
+**CoxeterSystem.simple_mul_simple_pow'** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`
+。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} [inst : Group W] {M : CoxeterMatrix B} (cs
+ : CoxeterSystem M W) (i i' : B),   (cs.simple i' * cs.simple i) ^ M.M i i' = 1
+参数：cs : CoxeterSystem M W；i i' : B；cs.simple i' * cs.simple i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoxeterSystem.simple_mul_simple_pow`：simple_mul_simple_pow (i i' : B) : 
+(s i * s i') ^ M i i' = 1
+· 使用定理 `CoxeterMatrix.symmetric`：symmetric (i i' : B) : M i i' = M i' i
 -/
 @[simp] theorem simple_mul_simple_pow' (i i' : B) : (s i' * s i) ^ M i i' = 1 :=
   M.symmetric i' i ▸ cs.simple_mul_simple_pow i' i
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `subgroup_closure_range_simple` / 定理 `subgroup_closure_range_simple`
+/-- The simple reflections of `W` generate `W` as a group. -/
+/-
+**CoxeterSystem.subgroup_closure_range_simple** 是 Mathlib 中的一个定理，位于命名空间 `Coxeter
+System`。
+形式化陈述：subgroup_closure_range_simple : Subgroup.closure (range cs.simple) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulEquiv.coe_toMonoidHom`：coe_toMonoidHom (e : M ≃* N) : ⇑e.toMonoidHom 
+= e
+· 使用定理 `MonoidHom.map_closure`：map_closure (f : G ->* N) (s : Set G) : (closure 
+s).map f = closure (f '' s)
+· 使用定理 `PresentedGroup.closure_range_of`：closure_range_of (rels : Set (FreeGroup
+ α)) : Subgroup.closure (Set.range (PresentedGroup.of : α -> PresentedGroup rels
+)) = ⊤
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `MulEquiv.surjective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [ins
+t_1 : Mul N] (e : M ≃* N), Function.Surjective ⇑e
 
-English:
-theorem subgroup_closure_range_simple
-  statement: Subgroup.closure (range cs.simple) = ⊤
-  proof: by
-  have : cs.simple = cs.mulEquiv.symm ∘ PresentedGroup.of := rfl
-  rw [this]; rw [Set.range_comp]; rw [← MulEquiv.coe_toMonoidHom]; rw [← MonoidHom.map_closure]; rw [PresentedGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
-  exact MonoidHom.range_eq_top.2 (MulEquiv.surjective _)
-
-中文:
-定理 subgroup_closure_range_simple
-  结论: 子群.closure (range cs.simple) = ⊤
-  证明: by
-  have : cs.simple = cs.mulEquiv.symm ∘ PresentedGroup.of := rfl
-  rw [this]; rw [Set.range_comp]; rw [← MulEquiv.coe_toMonoidHom]; rw [← MonoidHom.map_closure]; rw [PresentedGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
-  exact MonoidHom.range_eq_top.2 (MulEquiv.surjective _)
-
-Depends on / 依赖: MonoidHom, MonoidHom.map_closure, MonoidHom.range_eq_map, MonoidHom.range_eq_top, MulEquiv, MulEquiv.coe_toMonoidHom, MulEquiv.surjective, PresentedGroup, PresentedGroup.closure_range_of, PresentedGroup.of, Set.range_comp, closure_range_of, coe_toMonoidHom, cs.mulEquiv.symm, cs.simple, map_closure, mulEquiv, range_comp, range_eq_map, range_eq_top
+--- 原说明 ---
+The simple reflections of `W` generate `W` as a group.
 -/
 theorem subgroup_closure_range_simple : Subgroup.closure (range cs.simple) = ⊤ := by
   have : cs.simple = cs.mulEquiv.symm ∘ PresentedGroup.of := rfl
-  rw [this]; rw [Set.range_comp]; rw [← MulEquiv.coe_toMonoidHom]; rw [← MonoidHom.map_closure]; rw [PresentedGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
+  rw [this, Set.range_comp, ← MulEquiv.coe_toMonoidHom, ← MonoidHom.map_closure,
+    PresentedGroup.closure_range_of, ← MonoidHom.range_eq_map]
   exact MonoidHom.range_eq_top.2 (MulEquiv.surjective _)
 
-/--
-theorem `submonoid_closure_range_simple` / 定理 `submonoid_closure_range_simple`
+/-- The simple reflections of `W` generate `W` as a monoid. -/
+/-
+**CoxeterSystem.submonoid_closure_range_simple** 是 Mathlib 中的一个定理，位于命名空间 `Coxete
+rSystem`。
+形式化陈述：submonoid_closure_range_simple : Submonoid.closure (range cs.simple) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inv_range`：inv_range {ι : Sort*} {f : ι -> α} : (range f)⁻¹ = range 
+fun i => (f i)⁻¹
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CoxeterSystem.inv_simple`：inv_simple (i : B) : (s i)⁻¹ = s i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.union_self`：union_self (a : Set α) : a union a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.closure_toSubmonoid`：closure_toSubmonoid (S : Set G) : (closure
+ S).toSubmonoid = Submonoid.closure (S union S⁻¹)
+· 使用定理 `CoxeterSystem.subgroup_closure_range_simple`：subgroup_closure_range_simp
+le : Subgroup.closure (range cs.simple) = ⊤
+· 使用定理 `Subgroup.top_toSubmonoid`：top_toSubmonoid : (⊤ : Subgroup G).toSubmonoid
+ = ⊤
 
-English:
-theorem submonoid_closure_range_simple
-  statement: Submonoid.closure (range cs.simple) = ⊤
-  proof: by
-  have : range cs.simple = range cs.simple union (range cs.simple)⁻¹ := by
-    simp_rw [inv_range, inv_simple, union_self]
-  rw [this]; rw [← Subgroup.closure_toSubmonoid]; rw [subgroup_closure_range_simple]; rw [Subgroup.top_toSubmonoid]
-
-中文:
-定理 submonoid_closure_range_simple
-  结论: 子幺半群.closure (range cs.simple) = ⊤
-  证明: by
-  have : range cs.simple = range cs.simple union (range cs.simple)⁻¹ := by
-    simp_rw [inv_range, inv_simple, union_self]
-  rw [this]; rw [← Subgroup.closure_toSubmonoid]; rw [subgroup_closure_range_simple]; rw [Subgroup.top_toSubmonoid]
-
-Depends on / 依赖: Subgroup, Subgroup.closure_toSubmonoid, Subgroup.top_toSubmonoid, closure_toSubmonoid, cs.simple, inv_range, inv_simple, simp_rw, simple, subgroup_closure_range_simple, top_toSubmonoid, union_self
+--- 原说明 ---
+The simple reflections of `W` generate `W` as a monoid.
 -/
 theorem submonoid_closure_range_simple : Submonoid.closure (range cs.simple) = ⊤ := by
-  have : range cs.simple = range cs.simple union (range cs.simple)⁻¹ := by
+  have : range cs.simple = range cs.simple ∪ (range cs.simple)⁻¹ := by
     simp_rw [inv_range, inv_simple, union_self]
-  rw [this]; rw [← Subgroup.closure_toSubmonoid]; rw [subgroup_closure_range_simple]; rw [Subgroup.top_toSubmonoid]
+  rw [this, ← Subgroup.closure_toSubmonoid, subgroup_closure_range_simple, Subgroup.top_toSubmonoid]
 
 /-! ### Induction principles for Coxeter systems -/
 
-/--
-theorem `simple_induction` / 定理 `simple_induction`
+/-- If `p : W → Prop` holds for all simple reflections, it holds for the identity, and it is
+preserved under multiplication, then it holds for all elements of `W`. -/
+/-
+**CoxeterSystem.simple_induction** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：simple_induction {p : W -> Prop} (w : W) (simple : forall i : B, p (s i)) 
+(one : p 1) (mul : forall w w' : W, p w -> p w' -> p (w * w')) : p w
+参数：w : W；simple : forall i : B, p (s i)；one : p 1；mul : forall w w' : W, p w -> 
+p w' -> p (w * w')。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CoxeterSystem.submonoid_closure_range_simple`：submonoid_closure_range_si
+mple : Submonoid.closure (range cs.simple) = ⊤
+· 使用定理 `Submonoid.closure_induction`：closure_induction {s : Set M} {motive : (x 
+: M) -> x in closure s -> Prop} (mem : forall (x) (h : x in s), motive x (subset
+_closure h)) (one…
 
-English:
-theorem simple_induction
-  statement: {p : W -> Prop} (w : W) (simple : forall i : B, p (s i)) (one : p 1)
-  proof: by
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  exact Submonoid.closure_induction (fun x ⟨i, hi⟩ => hi ▸ simple i) one (fun _ _ _ _ => mul _ _)
-    this
-
-中文:
-定理 simple_induction
-  结论: {p : W -> 命题} (w : W) (simple : 对任意 i : B, p (s i)) (one : p 1)
-  证明: by
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  exact Submonoid.closure_induction (fun x ⟨i, hi⟩ => hi ▸ simple i) one (fun _ _ _ _ => mul _ _)
-    this
-
-Depends on / 依赖: Submonoid, Submonoid.closure_induction, Submonoid.mem_top, closure_induction, cs.submonoid_closure_range_simple.symm, mem_top, simple, submonoid_closure_range_simple
+--- 原说明 ---
+If `p : W → Prop` holds for all simple reflections, it holds for the identity, a
+nd it is
+preserved under multiplication, then it holds for all elements of `W`.
 -/
-theorem simple_induction {p : W -> Prop} (w : W) (simple : forall i : B, p (s i)) (one : p 1)
-    (mul : forall w w' : W, p w -> p w' -> p (w * w')) : p w := by
+theorem simple_induction {p : W → Prop} (w : W) (simple : ∀ i : B, p (s i)) (one : p 1)
+    (mul : ∀ w w' : W, p w → p w' → p (w * w')) : p w := by
   have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  exact Submonoid.closure_induction (fun x ⟨i, hi⟩ => hi ▸ simple i) one (fun _ _ _ _ => mul _ _)
+  exact Submonoid.closure_induction (fun x ⟨i, hi⟩ ↦ hi ▸ simple i) one (fun _ _ _ _ ↦ mul _ _)
     this
 
-/--
-theorem `simple_induction_left` / 定理 `simple_induction_left`
+/-- If `p : W → Prop` holds for the identity and it is preserved under multiplying on the left
+by a simple reflection, then it holds for all elements of `W`. -/
+/-
+**CoxeterSystem.simple_induction_left** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：simple_induction_left {p : W -> Prop} (w : W) (one : p 1) (mul_simple_left
+ : forall (w : W) (i : B), p w -> p (s i * w)) : p w
+参数：w : W；one : p 1；mul_simple_left : forall (w : W) (i : B), p w -> p (s i * w)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CoxeterSystem.submonoid_closure_range_simple`：submonoid_closure_range_si
+mple : Submonoid.closure (range cs.simple) = ⊤
+· 使用定理 `Submonoid.closure_induction_left`：closure_induction_left {s : Set M} {mo
+tive : (m : M) -> m in closure s -> Prop} (one : motive 1 (one_mem _)) (mul_left
+ : forall x (hx : x in…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-English:
-theorem simple_induction_left
-  statement: {p : W -> Prop} (w : W) (one : p 1)
-  proof: by
-  let p' : (w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop :=
-    fun w _ => p w
+--- 原说明 ---
+If `p : W → Prop` holds for the identity and it is preserved under multiplying o
+n the left
+by a simple reflection, then it holds for all elements of `W`.
+-/
+theorem simple_induction_left {p : W → Prop} (w : W) (one : p 1)
+    (mul_simple_left : ∀ (w : W) (i : B), p w → p (s i * w)) : p w := by
+  let p' : (w : W) → w ∈ Submonoid.closure (Set.range cs.simple) → Prop :=
+    fun w _ ↦ p w
   have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
   induction this using Submonoid.closure_induction_left with
   | one => exact one
@@ -754,67 +704,40 @@ theorem simple_induction_left
     rw [Set.mem_range] at mi
     exact mi.choose_spec ▸ mul_simple_left _ _ ih
 
-中文:
-定理 simple_induction_left
-  结论: {p : W -> 命题} (w : W) (one : p 1)
-  证明: by
-  let p' : (w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop :=
-    fun w _ => p w
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  induction this using Submonoid.closure_induction_left with
-  | one => exact one
-  | mul_left i mi y my ih =>
-    rw [Set.mem_range] at mi
-    exact mi.choose_spec ▸ mul_simple_left _ _ ih
+/-- If `p : W → Prop` holds for the identity and it is preserved under multiplying on the right
+by a simple reflection, then it holds for all elements of `W`. -/
+/-
+**CoxeterSystem.simple_induction_right** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`
+。
+形式化陈述：simple_induction_right {p : W -> Prop} (w : W) (one : p 1) (mul_simple_rig
+ht : forall (w : W) (i : B), p w -> p (w * s i)) : p w
+参数：w : W；one : p 1；mul_simple_right : forall (w : W) (i : B), p w -> p (w * s i)
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CoxeterSystem.submonoid_closure_range_simple`：submonoid_closure_range_si
+mple : Submonoid.closure (range cs.simple) = ⊤
+· 使用定理 `Submonoid.closure_induction_right`：closure_induction_right {s : Set M} {
+motive : (m : M) -> m in closure s -> Prop} (one : motive 1 (one_mem _)) (mul_ri
+ght : forall x hx, fora…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-Depends on / 依赖: Set.mem_range, Set.range, Submonoid, Submonoid.closure, Submonoid.closure_induction_left, Submonoid.mem_top, choose_spec, closure, closure_induction_left, cs.simple, cs.submonoid_closure_range_simple.symm, mem_range, mem_top, mi.choose_spec, mul_left, mul_simple_left, simple, submonoid_closure_range_simple
+--- 原说明 ---
+If `p : W → Prop` holds for the identity and it is preserved under multiplying o
+n the right
+by a simple reflection, then it holds for all elements of `W`.
 -/
-theorem simple_induction_left {p : W -> Prop} (w : W) (one : p 1)
-    (mul_simple_left : forall (w : W) (i : B), p w -> p (s i * w)) : p w := by
-  let p' : (w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop :=
-    fun w _ => p w
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  induction this using Submonoid.closure_induction_left with
-  | one => exact one
-  | mul_left i mi y my ih =>
-    rw [Set.mem_range] at mi
-    exact mi.choose_spec ▸ mul_simple_left _ _ ih
-
-/--
-theorem `simple_induction_right` / 定理 `simple_induction_right`
-
-English:
-theorem simple_induction_right
-  statement: {p : W -> Prop} (w : W) (one : p 1)
-  proof: by
-  let p' : ((w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop) :=
-    fun w _ => p w
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  induction this using Submonoid.closure_induction_right with
-  | one => exact one
-  | mul_right y my i mi ih =>
-    rw [Set.mem_range] at mi
-    exact mi.choose_spec ▸ mul_simple_right _ _ ih
-
-中文:
-定理 simple_induction_right
-  结论: {p : W -> 命题} (w : W) (one : p 1)
-  证明: by
-  let p' : ((w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop) :=
-    fun w _ => p w
-  have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
-  induction this using Submonoid.closure_induction_right with
-  | one => exact one
-  | mul_right y my i mi ih =>
-    rw [Set.mem_range] at mi
-    exact mi.choose_spec ▸ mul_simple_right _ _ ih
-
-Depends on / 依赖: Set.mem_range, Set.range, Submonoid, Submonoid.closure, Submonoid.closure_induction_right, Submonoid.mem_top, choose_spec, closure, closure_induction_right, cs.simple, cs.submonoid_closure_range_simple.symm, mem_range, mem_top, mi.choose_spec, mul_right, mul_simple_right, simple, submonoid_closure_range_simple
--/
-theorem simple_induction_right {p : W -> Prop} (w : W) (one : p 1)
-    (mul_simple_right : forall (w : W) (i : B), p w -> p (w * s i)) : p w := by
-  let p' : ((w : W) -> w in Submonoid.closure (Set.range cs.simple) -> Prop) :=
-    fun w _ => p w
+theorem simple_induction_right {p : W → Prop} (w : W) (one : p 1)
+    (mul_simple_right : ∀ (w : W) (i : B), p w → p (w * s i)) : p w := by
+  let p' : ((w : W) → w ∈ Submonoid.closure (Set.range cs.simple) → Prop) :=
+    fun w _ ↦ p w
   have := cs.submonoid_closure_range_simple.symm ▸ Submonoid.mem_top w
   induction this using Submonoid.closure_induction_right with
   | one => exact one
@@ -824,104 +747,65 @@ theorem simple_induction_right {p : W -> Prop} (w : W) (one : p 1)
 
 /-! ### Homomorphisms from a Coxeter group -/
 
-/--
-theorem `ext_simple` / 定理 `ext_simple`
+/-- If two homomorphisms with domain `W` agree on all simple reflections, then they are equal. -/
+/-
+**CoxeterSystem.ext_simple** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：ext_simple {G : Type*} [MulOneClass G] {φ₁ φ₂ : W ->* G} (h : forall i : B
+, φ₁ (s i) = φ₂ (s i)) : φ₁ = φ₂
+参数：h : forall i : B, φ₁ (s i) = φ₂ (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.eq_of_eqOn_denseM`：eq_of_eqOn_denseM {s : Set M} (hs : closure
+ s = ⊤) {f g : M ->* N} (h : s.EqOn f g) : f = g
+· 使用定理 `CoxeterSystem.submonoid_closure_range_simple`：submonoid_closure_range_si
+mple : Submonoid.closure (range cs.simple) = ⊤
 
-English:
-theorem ext_simple
-  given: {G : Type*} [MulOneClass G] {φ₁ φ₂ : W ->* G} (h : forall i : B, φ₁ (s i) = φ₂ (s i))
-  proof: MonoidHom.eq_of_eqOn_denseM cs.submonoid_closure_range_simple (fun _ ⟨i, hi⟩ => hi ▸ h i)
-
-中文:
-定理 ext_simple
-  条件: {G : 类型} [MulOne类 G] {φ₁ φ₂ : W ->* G} (h : 对任意 i : B, φ₁ (s i) = φ₂ (s i))
-  证明: MonoidHom.eq_of_eqOn_denseM cs.submonoid_closure_range_simple (fun _ ⟨i, hi⟩ => hi ▸ h i)
-
-Depends on / 依赖: MonoidHom, MonoidHom.eq_of_eqOn_denseM, cs.submonoid_closure_range_simple, eq_of_eqOn_denseM, submonoid_closure_range_simple
+--- 原说明 ---
+If two homomorphisms with domain `W` agree on all simple reflections, then they 
+are equal.
 -/
-theorem ext_simple {G : Type*} [MulOneClass G] {φ₁ φ₂ : W ->* G} (h : forall i : B, φ₁ (s i) = φ₂ (s i)) :
+theorem ext_simple {G : Type*} [MulOneClass G] {φ₁ φ₂ : W →* G} (h : ∀ i : B, φ₁ (s i) = φ₂ (s i)) :
     φ₁ = φ₂ :=
-  MonoidHom.eq_of_eqOn_denseM cs.submonoid_closure_range_simple (fun _ ⟨i, hi⟩ => hi ▸ h i)
+  MonoidHom.eq_of_eqOn_denseM cs.submonoid_closure_range_simple (fun _ ⟨i, hi⟩ ↦ hi ▸ h i)
 
-/--
-Definition of `_root_.CoxeterMatrix.IsLiftable` / `_root_.CoxeterMatrix.IsLiftable` 的定义
+/-- The proposition that the values of the function `f : B → G` satisfy the Coxeter relations
+corresponding to the matrix `M`. -/
+/-
+**CoxeterSystem._root_.CoxeterMatrix.IsLiftable** 是 Mathlib 中的一个定义，位于命名空间 `Coxet
+erSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CoxeterMatrix.IsLiftable
-  signature: {G : Type*} [Monoid G] (M : CoxeterMatrix B) (f : B -> G)
-  body: forall i i', (f i * f i') ^ M i i' = 1
-
-中文:
-定义 _root_.余xeterMatrix.IsLiftable
-  签名: {G : 类型} [幺半群 G] (M : 余xeterMatrix B) (f : B -> G)
-  定义体: forall i i', (f i * f i') ^ M i i' = 1
+--- 原说明 ---
+The proposition that the values of the function `f : B → G` satisfy the Coxeter 
+relations
+corresponding to the matrix `M`.
 -/
-def _root_.CoxeterMatrix.IsLiftable {G : Type*} [Monoid G] (M : CoxeterMatrix B) (f : B -> G) :
-    Prop := forall i i', (f i * f i') ^ M i i' = 1
-
-/--
-theorem `relations_liftable` / 定理 `relations_liftable`
-
-English:
-theorem relations_liftable
-  statement: {G : Type*} [Group G] {f : B -> G} (hf : IsLiftable M f)
-  proof: by
-  rcases hr with ⟨⟨i, i'⟩, rfl⟩
-  rw [uncurry]; rw [relation]; rw [map_pow]; rw [map_mul]; rw [FreeGroup.lift_apply_of]; rw [FreeGroup.lift_apply_of]
-  exact hf i i'
-
-中文:
-定理 relations_liftable
-  结论: {G : 类型} [群 G] {f : B -> G} (hf : IsLiftable M f)
-  证明: by
-  rcases hr with ⟨⟨i, i'⟩, rfl⟩
-  rw [uncurry]; rw [relation]; rw [map_pow]; rw [map_mul]; rw [FreeGroup.lift_apply_of]; rw [FreeGroup.lift_apply_of]
-  exact hf i i'
+def _root_.CoxeterMatrix.IsLiftable {G : Type*} [Monoid G] (M : CoxeterMatrix B) (f : B → G) :
+    Prop := ∀ i i', (f i * f i') ^ M i i' = 1
+/-
+**CoxeterSystem.relations_liftable** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem relations_liftable {G : Type*} [Group G] {f : B -> G} (hf : IsLiftable M f)
-    (r : FreeGroup B) (hr : r in M.relationsSet) : (FreeGroup.lift f) r = 1 := by
+private theorem relations_liftable {G : Type*} [Group G] {f : B → G} (hf : IsLiftable M f)
+    (r : FreeGroup B) (hr : r ∈ M.relationsSet) : (FreeGroup.lift f) r = 1 := by
   rcases hr with ⟨⟨i, i'⟩, rfl⟩
-  rw [uncurry]; rw [relation]; rw [map_pow]; rw [map_mul]; rw [FreeGroup.lift_apply_of]; rw [FreeGroup.lift_apply_of]
+  rw [uncurry, relation, map_pow, map_mul, FreeGroup.lift_apply_of, FreeGroup.lift_apply_of]
   exact hf i i'
 
 set_option backward.privateInPublic true in
-/--
-Definition of `groupLift` / `groupLift` 的定义
-
-English:
-definition groupLift
-  signature: {G : Type*} [Group G] {f : B -> G} (hf : IsLiftable M f)
-  body: (PresentedGroup.toGroup (relations_liftable hf)).comp cs.mulEquiv.toMonoidHom
-
-中文:
-定义 groupLift
-  签名: {G : 类型} [群 G] {f : B -> G} (hf : IsLiftable M f)
-  定义体: (PresentedGroup.toGroup (relations_liftable hf)).comp cs.mulEquiv.toMonoidHom
+/-
+**CoxeterSystem.groupLift** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def groupLift {G : Type*} [Group G] {f : B -> G} (hf : IsLiftable M f) : W ->* G :=
+private def groupLift {G : Type*} [Group G] {f : B → G} (hf : IsLiftable M f) : W →* G :=
   (PresentedGroup.toGroup (relations_liftable hf)).comp cs.mulEquiv.toMonoidHom
 
 set_option backward.privateInPublic true in
-/--
-Definition of `restrictUnit` / `restrictUnit` 的定义
-
-English:
-definition restrictUnit
-  signature: {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B)
-  body: f i
-  inv := f i
-  val_inv := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
-  inv_val := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
-
-中文:
-定义 restrictUnit
-  签名: {G : 类型} [幺半群 G] {f : B -> G} (hf : IsLiftable M f) (i : B)
-  定义体: f i
-  inv := f i
-  val_inv := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
-  inv_val := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
+/-
+**CoxeterSystem.restrictUnit** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def restrictUnit {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B) :
+private def restrictUnit {G : Type*} [Monoid G] {f : B → G} (hf : IsLiftable M f) (i : B) :
     Gˣ where
   val := f i
   inv := f i
@@ -929,25 +813,13 @@ private def restrictUnit {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M 
   inv_val := pow_one (f i * f i) ▸ M.diagonal i ▸ hf i i
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toMonoidHom_apply_symm_apply` / 定理 `toMonoidHom_apply_symm_apply`
-
-English:
-theorem toMonoidHom_apply_symm_apply
-  given: (a : PresentedGroup (M.relationsSet))
-  proof: calc
-  _ = cs.mulEquiv ((MulEquiv.symm cs.mulEquiv) a) := by rfl
-  _ = _ := by rw [MulEquiv.apply_symm_apply]
-
-中文:
-定理 toMonoidHom_apply_symm_apply
-  条件: (a : PresentedGroup (M.relationsSet))
-  证明: calc
-  _ = cs.mulEquiv ((MulEquiv.symm cs.mulEquiv) a) := by rfl
-  _ = _ := by rw [MulEquiv.apply_symm_apply]
+/-
+**CoxeterSystem.toMonoidHom_apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterS
+ystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem toMonoidHom_apply_symm_apply (a : PresentedGroup (M.relationsSet)) :
-    (MulEquiv.toMonoidHom cs.mulEquiv : W ->* PresentedGroup (M.relationsSet))
+    (MulEquiv.toMonoidHom cs.mulEquiv : W →* PresentedGroup (M.relationsSet))
     ((MulEquiv.symm cs.mulEquiv) a) = a := calc
   _ = cs.mulEquiv ((MulEquiv.symm cs.mulEquiv) a) := by rfl
   _ = _ := by rw [MulEquiv.apply_symm_apply]
@@ -955,117 +827,95 @@ private theorem toMonoidHom_apply_symm_apply (a : PresentedGroup (M.relationsSet
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `lift` / `lift` 的定义
+/-- The universal mapping property of Coxeter systems. For any monoid `G`,
+functions `f : B → G` whose values satisfy the Coxeter relations are equivalent to
+monoid homomorphisms `f' : W → G`. -/
+/-
+**CoxeterSystem.lift** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：lift {G : Type*} [Monoid G] : {f : B -> G // IsLiftable M f} ≃ (W ->* G) w
+here toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {G : Type*} [Monoid G]
-  body: MonoidHom.comp (Units.coeHom G) (cs.groupLift
-    (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
-      fun i i' => Units.ext (f.property i i')))
-  invFun ι := ⟨ι ∘ cs.simple, fun i i' => by
-    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [← map_pow]; rw [simple_mul_simple_pow]; rw [map_one]⟩
-  left_inv f := by
-    ext i
-    simp only [MonoidHom.comp_apply, comp_apply, groupLift, simple]
-    rw [← MonoidHom.toFun_eq_coe]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [Units.coeHom_apply]; rw [restrictUnit]
-  right_inv ι := by
-    apply cs.ext_simple
-    intro i
-    dsimp only
-    rw [groupLift]; rw [simple]; rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [CoxeterSystem.restrictUnit]; rw [Units.coeHom_apply]
-    simp only [comp_apply, simple]
-
-@[simp]
-
-中文:
-定义 lift
-  签名: {G : 类型} [幺半群 G]
-  定义体: MonoidHom.comp (Units.coeHom G) (cs.groupLift
-    (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
-      fun i i' => Units.ext (f.property i i')))
-  invFun ι := ⟨ι ∘ cs.simple, fun i i' => by
-    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [← map_pow]; rw [simple_mul_simple_pow]; rw [map_one]⟩
-  left_inv f := by
-    ext i
-    simp only [MonoidHom.comp_apply, comp_apply, groupLift, simple]
-    rw [← MonoidHom.toFun_eq_coe]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [Units.coeHom_apply]; rw [restrictUnit]
-  right_inv ι := by
-    apply cs.ext_simple
-    intro i
-    dsimp only
-    rw [groupLift]; rw [simple]; rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [CoxeterSystem.restrictUnit]; rw [Units.coeHom_apply]
-    simp only [comp_apply, simple]
-
-@[simp]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comp, Units.coeHom, coeHom, cs.groupLift, groupLift
+--- 原说明 ---
+The universal mapping property of Coxeter systems. For any monoid `G`,
+functions `f : B → G` whose values satisfy the Coxeter relations are equivalent 
+to
+monoid homomorphisms `f' : W → G`.
 -/
-def lift {G : Type*} [Monoid G] : {f : B -> G // IsLiftable M f} ≃ (W ->* G) where
+def lift {G : Type*} [Monoid G] : {f : B → G // IsLiftable M f} ≃ (W →* G) where
   toFun f := MonoidHom.comp (Units.coeHom G) (cs.groupLift
-    (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
-      fun i i' => Units.ext (f.property i i')))
-  invFun ι := ⟨ι ∘ cs.simple, fun i i' => by
-    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [← map_pow]; rw [simple_mul_simple_pow]; rw [map_one]⟩
+    (show ∀ i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
+      fun i i' ↦ Units.ext (f.property i i')))
+  invFun ι := ⟨ι ∘ cs.simple, fun i i' ↦ by
+    rw [comp_apply, comp_apply, ← map_mul, ← map_pow, simple_mul_simple_pow, map_one]⟩
   left_inv f := by
     ext i
     simp only [MonoidHom.comp_apply, comp_apply, groupLift, simple]
-    rw [← MonoidHom.toFun_eq_coe]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [Units.coeHom_apply]; rw [restrictUnit]
+    rw [← MonoidHom.toFun_eq_coe, toMonoidHom_apply_symm_apply, PresentedGroup.toGroup.of,
+      OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, Units.coeHom_apply, restrictUnit]
   right_inv ι := by
     apply cs.ext_simple
     intro i
     dsimp only
-    rw [groupLift]; rw [simple]; rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [CoxeterSystem.restrictUnit]; rw [Units.coeHom_apply]
+    rw [groupLift, simple, MonoidHom.comp_apply, MonoidHom.comp_apply, toMonoidHom_apply_symm_apply,
+      PresentedGroup.toGroup.of, CoxeterSystem.restrictUnit, Units.coeHom_apply]
     simp only [comp_apply, simple]
 
 @[simp]
-/--
-theorem `lift_apply_simple` / 定理 `lift_apply_simple`
-
-English:
-theorem lift_apply_simple
-  given: {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B)
-  proof: congrFun (congrArg Subtype.val (cs.lift.left_inv ⟨f, hf⟩)) i
-
-中文:
-定理 lift_apply_simple
-  条件: {G : 类型} [幺半群 G] {f : B -> G} (hf : IsLiftable M f) (i : B)
-  证明: congrFun (congrArg Subtype.val (cs.lift.left_inv ⟨f, hf⟩)) i
-
-Depends on / 依赖: Subtype, Subtype.val, cs.lift.left_inv, left_inv
+/-
+**CoxeterSystem.lift_apply_simple** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：lift_apply_simple {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M f
+) (i : B) : cs.lift ⟨f, hf⟩ (s i) = f i
+参数：hf : IsLiftable M f；i : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
-theorem lift_apply_simple {G : Type*} [Monoid G] {f : B -> G} (hf : IsLiftable M f) (i : B) :
+theorem lift_apply_simple {G : Type*} [Monoid G] {f : B → G} (hf : IsLiftable M f) (i : B) :
     cs.lift ⟨f, hf⟩ (s i) = f i := congrFun (congrArg Subtype.val (cs.lift.left_inv ⟨f, hf⟩)) i
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `simple_determines_coxeterSystem` / 定理 `simple_determines_coxeterSystem`
+/-- If two Coxeter systems on the same group `W` have the same Coxeter matrix `M : Matrix B B ℕ`
+and the same simple reflection map `B → W`, then they are identical. -/
+/-
+**CoxeterSystem.simple_determines_coxeterSystem** 是 Mathlib 中的一个定理，位于命名空间 `Coxet
+erSystem`。
+形式化陈述：simple_determines_coxeterSystem : Injective (simple : CoxeterSystem M W ->
+ B -> W)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoxeterSystem.ext`：∀ {B : Type u_1} {M : CoxeterMatrix B} {W : Type u_2}
+ {inst : Group W} {x y : CoxeterSystem M W},   x.mulEquiv = y.mulEquiv → x = y
+· 使用定理 `MulEquiv.toMonoidHom_injective`：toMonoidHom_injective : Injective (toMon
+oidHom : M ≃* N -> M ->* N)
+· 使用定理 `CoxeterSystem.ext_simple`：ext_simple {G : Type*} [MulOneClass G] {φ₁ φ₂ 
+: W ->* G} (h : forall i : B, φ₁ (s i) = φ₂ (s i)) : φ₁ = φ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulEquiv.apply_symm_apply`：apply_symm_apply (e : M ≃* N) (y : N) : e (e.
+symm y) = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem simple_determines_coxeterSystem
-  proof: by
-  intro cs1 cs2 h
-  apply CoxeterSystem.ext
-  apply MulEquiv.toMonoidHom_injective
-  apply cs1.ext_simple
-  nth_rw 2 [h]
-  simp [simple]
-
-中文:
-定理 simple_determines_coxeterSystem
-  证明: by
-  intro cs1 cs2 h
-  apply CoxeterSystem.ext
-  apply MulEquiv.toMonoidHom_injective
-  apply cs1.ext_simple
-  nth_rw 2 [h]
-  simp [simple]
-
-Depends on / 依赖: CoxeterSystem, CoxeterSystem.ext, MulEquiv, MulEquiv.toMonoidHom_injective, cs1.ext_simple, ext_simple, nth_rw, simple, toMonoidHom_injective
+--- 原说明 ---
+If two Coxeter systems on the same group `W` have the same Coxeter matrix `M : M
+atrix B B ℕ`
+and the same simple reflection map `B → W`, then they are identical.
 -/
 theorem simple_determines_coxeterSystem :
-    Injective (simple : CoxeterSystem M W -> B -> W) := by
+    Injective (simple : CoxeterSystem M W → B → W) := by
   intro cs1 cs2 h
   apply CoxeterSystem.ext
   apply MulEquiv.toMonoidHom_injective
@@ -1075,172 +925,172 @@ theorem simple_determines_coxeterSystem :
 
 /-! ### Words -/
 
-/--
-Definition of `wordProd` / `wordProd` 的定义
+/-- The product of the simple reflections of `W` corresponding to the indices in `ω`. -/
+/-
+**CoxeterSystem.wordProd** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd (ω : List B) : W
+参数：ω : List B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wordProd
-  signature: (ω : List B)
-  body: prod (map cs.simple ω)
-
-local prefix:100 "π " => cs.wordProd
-
-中文:
-定义 wordProd
-  签名: (ω : 列表 B)
-  定义体: prod (map cs.simple ω)
-
-local prefix:100 "π " => cs.wordProd
-
-Depends on / 依赖: cs.simple, simple
+--- 原说明 ---
+The product of the simple reflections of `W` corresponding to the indices in `ω`
+.
 -/
 def wordProd (ω : List B) : W := prod (map cs.simple ω)
 
 local prefix:100 "π " => cs.wordProd
-
-/--
-theorem `wordProd_nil` / 定理 `wordProd_nil`
-
-English:
-theorem wordProd_nil
-  statement: π [] = 1
-  proof: by simp [wordProd]
-
-中文:
-定理 wordProd_nil
-  结论: π [] = 1
-  证明: by simp [wordProd]
+/-
+**CoxeterSystem.wordProd_nil** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} [inst : Group W] {M : CoxeterMatrix B} (cs
+ : CoxeterSystem M W), cs.wordProd [] = 1
+参数：cs : CoxeterSystem M W。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem wordProd_nil : π [] = 1 := by simp [wordProd]
-
-/--
-theorem `wordProd_cons` / 定理 `wordProd_cons`
-
-English:
-theorem wordProd_cons
-  given: (i : B) (ω : List B)
-  statement: π (i :: ω) = s i * π ω
-  proof: by simp [wordProd]
-
-中文:
-定理 wordProd_cons
-  条件: (i : B) (ω : 列表 B)
-  结论: π (i :: ω) = s i * π ω
-  证明: by simp [wordProd]
-
-Depends on / 依赖: wordProd
+/-
+**CoxeterSystem.wordProd_cons** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd_cons (i : B) (ω : List B) : π (i :: ω) = s i * π ω
+参数：i : B；ω : List B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wordProd_cons (i : B) (ω : List B) : π (i :: ω) = s i * π ω := by simp [wordProd]
-
-/--
-theorem `wordProd_singleton` / 定理 `wordProd_singleton`
-
-English:
-theorem wordProd_singleton
-  given: (i : B)
-  statement: π ([i]) = s i
-  proof: by simp [wordProd]
-
-中文:
-定理 wordProd_singleton
-  条件: (i : B)
-  结论: π ([i]) = s i
-  证明: by simp [wordProd]
+/-
+**CoxeterSystem.wordProd_singleton** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} [inst : Group W] {M : CoxeterMatrix B} (cs
+ : CoxeterSystem M W) (i : B),   cs.wordProd [i] = cs.simple i
+参数：cs : CoxeterSystem M W；i : B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem wordProd_singleton (i : B) : π ([i]) = s i := by simp [wordProd]
-
-/--
-theorem `wordProd_concat` / 定理 `wordProd_concat`
-
-English:
-theorem wordProd_concat
-  given: (i : B) (ω : List B)
-  statement: π (ω.concat i) = π ω * s i
-  proof: by simp [wordProd]
-
-中文:
-定理 wordProd_concat
-  条件: (i : B) (ω : 列表 B)
-  结论: π (ω.concat i) = π ω * s i
-  证明: by simp [wordProd]
-
-Depends on / 依赖: wordProd
+/-
+**CoxeterSystem.wordProd_concat** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd_concat (i : B) (ω : List B) : π (ω.concat i) = π ω * s i
+参数：i : B；ω : List B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.concat_eq_append`：∀ {α : Type u} {as : List α} {a : α}, as.concat a
+ = as ++ [a]
+· 使用定理 `List.map_append`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁ l₂ : Li
+st α}, List.map f (l₁ ++ l₂) = List.map f l₁ ++ List.map f l₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `List.prod_append`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : One α] [Std.
+LawfulLeftIdentity (fun x1 x2 => x1 * x2) 1]   [Std.Associative fun x1 x2 => x1 
+* x2] …
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wordProd_concat (i : B) (ω : List B) : π (ω.concat i) = π ω * s i := by simp [wordProd]
-
-/--
-theorem `wordProd_append` / 定理 `wordProd_append`
-
-English:
-theorem wordProd_append
-  given: (ω ω' : List B)
-  statement: π (ω ++ ω') = π ω * π ω'
-  proof: by simp [wordProd]
-
-中文:
-定理 wordProd_append
-  条件: (ω ω' : 列表 B)
-  结论: π (ω ++ ω') = π ω * π ω'
-  证明: by simp [wordProd]
-
-Depends on / 依赖: wordProd
+/-
+**CoxeterSystem.wordProd_append** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd_append (ω ω' : List B) : π (ω ++ ω') = π ω * π ω'
+参数：ω ω' : List B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_append`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁ l₂ : Li
+st α}, List.map f (l₁ ++ l₂) = List.map f l₁ ++ List.map f l₂
+· 使用定理 `List.prod_append`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : One α] [Std.
+LawfulLeftIdentity (fun x1 x2 => x1 * x2) 1]   [Std.Associative fun x1 x2 => x1 
+* x2] …
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wordProd_append (ω ω' : List B) : π (ω ++ ω') = π ω * π ω' := by simp [wordProd]
-
-/--
-theorem `wordProd_reverse` / 定理 `wordProd_reverse`
-
-English:
-theorem wordProd_reverse
-  given: (ω : List B)
-  statement: π (reverse ω) = (π ω)⁻¹
-  proof: by
-  induction ω with
-  | nil => simp
-  | cons x ω' ih => simpa [wordProd_cons, wordProd_append] using ih
-
-中文:
-定理 wordProd_reverse
-  条件: (ω : 列表 B)
-  结论: π (reverse ω) = (π ω)⁻¹
-  证明: by
-  induction ω with
-  | nil => simp
-  | cons x ω' ih => simpa [wordProd_cons, wordProd_append] using ih
+/-
+**CoxeterSystem.wordProd_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：∀ {B : Type u_1} {W : Type u_3} [inst : Group W] {M : CoxeterMatrix B} (cs
+ : CoxeterSystem M W) (ω : List B),   cs.wordProd ω.reverse = (cs.wordProd ω)⁻¹
+参数：cs : CoxeterSystem M W；ω : List B；cs.wordProd ω。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterSystem.wordProd_nil`：∀ {B : Type u_1} {W : Type u_3} [inst : Grou
+p W] {M : CoxeterMatrix B} (cs : CoxeterSystem M W), cs.wordProd [] = 1
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `CoxeterSystem.wordProd_append`：wordProd_append (ω ω' : List B) : π (ω ++
+ ω') = π ω * π ω'
+· 使用定理 `CoxeterSystem.wordProd_cons`：wordProd_cons (i : B) (ω : List B) : π (i :
+: ω) = s i * π ω
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `CoxeterSystem.inv_simple`：inv_simple (i : B) : (s i)⁻¹ = s i
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
 -/
 @[simp] theorem wordProd_reverse (ω : List B) : π (reverse ω) = (π ω)⁻¹ := by
   induction ω with
   | nil => simp
   | cons x ω' ih => simpa [wordProd_cons, wordProd_append] using ih
-
-/--
-theorem `wordProd_surjective` / 定理 `wordProd_surjective`
-
-English:
-theorem wordProd_surjective
-  statement: Surjective cs.wordProd
-  proof: by
-  intro w
-  apply cs.simple_induction_left w
-  · use []
-    rw [wordProd_nil]
-  · rintro _ i ⟨ω, rfl⟩
-    use i :: ω
-    rw [wordProd_cons]
-
-中文:
-定理 wordProd_surjective
-  结论: 满射 cs.wordProd
-  证明: by
-  intro w
-  apply cs.simple_induction_left w
-  · use []
-    rw [wordProd_nil]
-  · rintro _ i ⟨ω, rfl⟩
-    use i :: ω
-    rw [wordProd_cons]
-
-Depends on / 依赖: cs.simple_induction_left, simple_induction_left, wordProd_cons, wordProd_nil
+/-
+**CoxeterSystem.wordProd_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd_surjective : Surjective cs.wordProd
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoxeterSystem.simple_induction_left`：simple_induction_left {p : W -> Pro
+p} (w : W) (one : p 1) (mul_simple_left : forall (w : W) (i : B), p w -> p (s i 
+* w)) : p w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterSystem.wordProd_nil`：∀ {B : Type u_1} {W : Type u_3} [inst : Grou
+p W] {M : CoxeterMatrix B} (cs : CoxeterSystem M W), cs.wordProd [] = 1
+· 使用定理 `CoxeterSystem.wordProd_cons`：wordProd_cons (i : B) (ω : List B) : π (i :
+: ω) = s i * π ω
 -/
 theorem wordProd_surjective : Surjective cs.wordProd := by
   intro w
@@ -1251,97 +1101,74 @@ theorem wordProd_surjective : Surjective cs.wordProd := by
     use i :: ω
     rw [wordProd_cons]
 
-/--
-Definition of `alternatingWord` / `alternatingWord` 的定义
+/-- The word of length `m` that alternates between `i` and `i'`, ending with `i'`. -/
+/-
+**CoxeterSystem.alternatingWord** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：alternatingWord (i i' : B) (m : Nat) : List B
+参数：i i' : B；m : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alternatingWord
-  signature: (i i' : B) (m : Nat)
-  body: match m with
-  | 0 => []
-  | m + 1 => (alternatingWord i' i m).concat i'
-
-中文:
-定义 alternatingWord
-  签名: (i i' : B) (m : 自然数)
-  定义体: match m with
-  | 0 => []
-  | m + 1 => (alternatingWord i' i m).concat i'
-
-Depends on / 依赖: alternatingWord, concat
+--- 原说明 ---
+The word of length `m` that alternates between `i` and `i'`, ending with `i'`.
 -/
-def alternatingWord (i i' : B) (m : Nat) : List B :=
+def alternatingWord (i i' : B) (m : ℕ) : List B :=
   match m with
   | 0 => []
   | m + 1 => (alternatingWord i' i m).concat i'
 
-/--
-Definition of `braidWord` / `braidWord` 的定义
+/-- The word of length `M i i'` that alternates between `i` and `i'`, ending with `i'`. -/
+/-
+**CoxeterSystem.braidWord** 是 Mathlib 中的一个缩写定义，位于命名空间 `CoxeterSystem`。
+形式化陈述：braidWord (M : CoxeterMatrix B) (i i' : B) : List B
+参数：M : CoxeterMatrix B；i i' : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation braidWord
-  signature: (M : CoxeterMatrix B) (i i' : B)
-  body: alternatingWord i i' (M i i')
-
-中文:
-缩写 braidWord
-  签名: (M : 余xeterMatrix B) (i i' : B)
-  定义体: alternatingWord i i' (M i i')
-
-Depends on / 依赖: alternatingWord
+--- 原说明 ---
+The word of length `M i i'` that alternates between `i` and `i'`, ending with `i
+'`.
 -/
 abbrev braidWord (M : CoxeterMatrix B) (i i' : B) : List B := alternatingWord i i' (M i i')
-
-/--
-theorem `alternatingWord_succ` / 定理 `alternatingWord_succ`
-
-English:
-theorem alternatingWord_succ
-  given: (i i' : B) (m : Nat)
-  proof: rfl
-
-中文:
-定理 alternatingWord_succ
-  条件: (i i' : B) (m : 自然数)
-  证明: rfl
+/-
+**CoxeterSystem.alternatingWord_succ** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：alternatingWord_succ (i i' : B) (m : Nat) : alternatingWord i i' (m + 1) =
+ (alternatingWord i' i m).concat i'
+参数：i i' : B；m : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem alternatingWord_succ (i i' : B) (m : Nat) :
+theorem alternatingWord_succ (i i' : B) (m : ℕ) :
     alternatingWord i i' (m + 1) = (alternatingWord i' i m).concat i' := rfl
-
-/--
-theorem `alternatingWord_succ'` / 定理 `alternatingWord_succ'`
-
-English:
-theorem alternatingWord_succ'
-  given: (i i' : B) (m : Nat)
-  proof: by
-  induction m generalizing i i' with
-  | zero => simp [alternatingWord]
-  | succ m ih =>
-    rw [alternatingWord]
-    nth_rw 1 [ih i' i]
-    rw [alternatingWord]
-    simp [Nat.even_add_one, -Nat.not_even_iff_odd]
-
-@[simp]
-
-中文:
-定理 alternatingWord_succ'
-  条件: (i i' : B) (m : 自然数)
-  证明: by
-  induction m generalizing i i' with
-  | zero => simp [alternatingWord]
-  | succ m ih =>
-    rw [alternatingWord]
-    nth_rw 1 [ih i' i]
-    rw [alternatingWord]
-    simp [Nat.even_add_one, -Nat.not_even_iff_odd]
-
-@[simp]
-
-Depends on / 依赖: Nat.even_add_one, Nat.not_even_iff_odd, alternatingWord, even_add_one, generalizing, not_even_iff_odd, nth_rw
+/-
+**CoxeterSystem.alternatingWord_succ'** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：alternatingWord_succ' (i i' : B) (m : Nat) : alternatingWord i i' (m + 1) 
+= (if Even m then i' else i) :: alternatingWord i i' m
+参数：i i' : B；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.concat_eq_append`：∀ {α : Type u} {as : List α} {a : α}, as.concat a
+ = as ++ [a]
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CoxeterSystem.alternatingWord.eq_2`：∀ {B : Type u_1} (i i' : B) (m_2 : ℕ
+),   CoxeterSystem.alternatingWord i i' m_2.succ = (CoxeterSystem.alternatingWor
+d i' i m_2).concat i'
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `ite_not`：∀ {α : Sort u_1} (p : Prop) [inst : Decidable p] (x y : α), (if
+ ¬p then x else y) = if p then y else x
 -/
-theorem alternatingWord_succ' (i i' : B) (m : Nat) :
+theorem alternatingWord_succ' (i i' : B) (m : ℕ) :
     alternatingWord i i' (m + 1) = (if Even m then i' else i) :: alternatingWord i i' m := by
   induction m generalizing i i' with
   | zero => simp [alternatingWord]
@@ -1352,157 +1179,144 @@ theorem alternatingWord_succ' (i i' : B) (m : Nat) :
     simp [Nat.even_add_one, -Nat.not_even_iff_odd]
 
 @[simp]
-/--
-theorem `length_alternatingWord` / 定理 `length_alternatingWord`
-
-English:
-theorem length_alternatingWord
-  given: (i i' : B) (m : Nat)
-  proof: by
-  induction m generalizing i i' with
-  | zero => dsimp [alternatingWord]
-  | succ m ih => simpa [alternatingWord] using ih i' i
-
-中文:
-定理 length_alternatingWord
-  条件: (i i' : B) (m : 自然数)
-  证明: by
-  induction m generalizing i i' with
-  | zero => dsimp [alternatingWord]
-  | succ m ih => simpa [alternatingWord] using ih i' i
-
-Depends on / 依赖: alternatingWord, generalizing
+/-
+**CoxeterSystem.length_alternatingWord** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`
+。
+形式化陈述：length_alternatingWord (i i' : B) (m : Nat) : List.length (alternatingWord
+ i i' m) = m
+参数：i i' : B；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.concat_eq_append`：∀ {α : Type u} {as : List α} {a : α}, as.concat a
+ = as ++ [a]
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem length_alternatingWord (i i' : B) (m : Nat) :
+theorem length_alternatingWord (i i' : B) (m : ℕ) :
     List.length (alternatingWord i i' m) = m := by
   induction m generalizing i i' with
   | zero => dsimp [alternatingWord]
   | succ m ih => simpa [alternatingWord] using ih i' i
-
-/--
-lemma `getElem_alternatingWord` / 引理 `getElem_alternatingWord`
-
-English:
-lemma getElem_alternatingWord
-  given: (i j : B) (p k : Nat) (hk : k < p)
-  proof: by
-  revert k
-  induction p with
-  | zero => grind
-  | succ n h => grind [CoxeterSystem.alternatingWord_succ']
-
-中文:
-引理 getElem_alternatingWord
-  条件: (i j : B) (p k : 自然数) (hk : k < p)
-  证明: by
-  revert k
-  induction p with
-  | zero => grind
-  | succ n h => grind [CoxeterSystem.alternatingWord_succ']
-
-Depends on / 依赖: CoxeterSystem, CoxeterSystem.alternatingWord_succ, alternatingWord_succ, revert
+/-
+**CoxeterSystem.getElem_alternatingWord** 是 Mathlib 中的一个引理，位于命名空间 `CoxeterSystem
+`。
+形式化陈述：getElem_alternatingWord (i j : B) (p k : Nat) (hk : k < p) : (alternatingW
+ord i j p)[k]'(by simp [hk]) = (if Even (p + k) then i else j)
+参数：i j : B；p k : Nat；hk : k < p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma getElem_alternatingWord (i j : B) (p k : Nat) (hk : k < p) :
+lemma getElem_alternatingWord (i j : B) (p k : ℕ) (hk : k < p) :
     (alternatingWord i j p)[k]'(by simp [hk]) = (if Even (p + k) then i else j) := by
   revert k
   induction p with
   | zero => grind
   | succ n h => grind [CoxeterSystem.alternatingWord_succ']
-
-/--
-lemma `getElem_alternatingWord_swapIndices` / 引理 `getElem_alternatingWord_swapIndices`
-
-English:
-lemma getElem_alternatingWord_swapIndices
-  given: (i j : B) (p k : Nat) (h : k + 1 < p)
-  proof: by
-  rw [getElem_alternatingWord i j p (k + 1) (by lia)]; rw [getElem_alternatingWord j i p k (by lia)]
-  by_cases h_even : Even (p + k)
-  · rw [if_pos h_even, ← add_assoc]
-    simp only [ite_eq_right_iff, isEmpty_Prop, Nat.not_even_iff_odd, Even.add_one h_even,
-      IsEmpty.forall_iff]
-  · rw [if_neg h_even, ← add_assoc]
-    simp [Odd.add_one (Nat.not_even_iff_odd.mp h_even)]
-
-中文:
-引理 getElem_alternatingWord_swapIndices
-  条件: (i j : B) (p k : 自然数) (h : k + 1 < p)
-  证明: by
-  rw [getElem_alternatingWord i j p (k + 1) (by lia)]; rw [getElem_alternatingWord j i p k (by lia)]
-  by_cases h_even : Even (p + k)
-  · rw [if_pos h_even, ← add_assoc]
-    simp only [ite_eq_right_iff, isEmpty_Prop, Nat.not_even_iff_odd, Even.add_one h_even,
-      IsEmpty.forall_iff]
-  · rw [if_neg h_even, ← add_assoc]
-    simp [Odd.add_one (Nat.not_even_iff_odd.mp h_even)]
-
-Depends on / 依赖: Even.add_one, IsEmpty, IsEmpty.forall_iff, Nat.not_even_iff_odd, Nat.not_even_iff_odd.mp, Odd.add_one, add_assoc, add_one, forall_iff, getElem_alternatingWord, h_even, if_neg, if_pos, isEmpty_Prop, ite_eq_right_iff, not_even_iff_odd
+/-
+**CoxeterSystem.getElem_alternatingWord_swapIndices** 是 Mathlib 中的一个引理，位于命名空间 `C
+oxeterSystem`。
+形式化陈述：getElem_alternatingWord_swapIndices (i j : B) (p k : Nat) (h : k + 1 < p) 
+: (alternatingWord i j p)[k + 1]'(by simp [h]) = (alternatingWord j i p)[k]'(by 
+simp; lia)
+参数：i j : B；p k : Nat；h : k + 1 < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CoxeterSystem.getElem_alternatingWord`：getElem_alternatingWord (i j : B)
+ (p k : Nat) (hk : k < p) : (alternatingWord i j p)[k]'(by simp [hk]) = (if Even
+ (p + k) then i else j)
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Even.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → Odd
+ (a + 1)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Odd.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Odd a → Even 
+(a + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.not_even_iff_odd`：∀ {n : ℕ}, ¬Even n ↔ Odd n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma getElem_alternatingWord_swapIndices (i j : B) (p k : Nat) (h : k + 1 < p) :
+lemma getElem_alternatingWord_swapIndices (i j : B) (p k : ℕ) (h : k + 1 < p) :
      (alternatingWord i j p)[k + 1]'(by simp [h]) =
      (alternatingWord j i p)[k]'(by simp; lia) := by
-  rw [getElem_alternatingWord i j p (k + 1) (by lia)]; rw [getElem_alternatingWord j i p k (by lia)]
+  rw [getElem_alternatingWord i j p (k + 1) (by lia),
+    getElem_alternatingWord j i p k (by lia)]
   by_cases h_even : Even (p + k)
   · rw [if_pos h_even, ← add_assoc]
     simp only [ite_eq_right_iff, isEmpty_Prop, Nat.not_even_iff_odd, Even.add_one h_even,
       IsEmpty.forall_iff]
   · rw [if_neg h_even, ← add_assoc]
     simp [Odd.add_one (Nat.not_even_iff_odd.mp h_even)]
-
-/--
-lemma `listTake_alternatingWord` / 引理 `listTake_alternatingWord`
-
-English:
-lemma listTake_alternatingWord
-  given: (i j : B) (p k : Nat) (h : k < 2 * p)
-  proof: by
-  induction k with
-    | zero =>
-      simp only [take_zero, Even.zero, ↓reduceIte, alternatingWord]
-    | succ k h' =>
-      have hk : k < 2 * p := by lia
-      apply h' at hk
-      by_cases h_even : Even k
-      · simp only [h_even, ↓reduceIte] at hk
-        simp only [Nat.not_even_iff_odd.mpr (Even.add_one h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [← hk]
-        apply congr_arg
-        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
-        simp [(by apply Nat.even_add.mpr; simp [h_even] : Even (2 * p + k))]
-      · simp only [h_even, ↓reduceIte] at hk
-        simp only [Odd.add_one (by simpa using h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [hk]
-        apply congr_arg
-        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
-        simp [(by apply Nat.odd_add.mpr; simp [h_even] : Odd (2 * p + k))]
-
-中文:
-引理 listTake_alternatingWord
-  条件: (i j : B) (p k : 自然数) (h : k < 2 * p)
-  证明: by
-  induction k with
-    | zero =>
-      simp only [take_zero, Even.zero, ↓reduceIte, alternatingWord]
-    | succ k h' =>
-      have hk : k < 2 * p := by lia
-      apply h' at hk
-      by_cases h_even : Even k
-      · simp only [h_even, ↓reduceIte] at hk
-        simp only [Nat.not_even_iff_odd.mpr (Even.add_one h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [← hk]
-        apply congr_arg
-        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
-        simp [(by apply Nat.even_add.mpr; simp [h_even] : Even (2 * p + k))]
-      · simp only [h_even, ↓reduceIte] at hk
-        simp only [Odd.add_one (by simpa using h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [hk]
-        apply congr_arg
-        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
-        simp [(by apply Nat.odd_add.mpr; simp [h_even] : Odd (2 * p + k))]
-
-Depends on / 依赖: Even.add_one, Even.zero, List.take_concat_get, Nat.even_add.mpr, Nat.not_even_iff_odd.mpr, add_one, alternatingWord, alternatingWord_succ, congr_arg, even_add, getElem_alternatingWord, h_even, not_even_iff_odd, reduceIte, take_concat_get, take_zero
+/-
+**CoxeterSystem.listTake_alternatingWord** 是 Mathlib 中的一个引理，位于命名空间 `CoxeterSyste
+m`。
+形式化陈述：listTake_alternatingWord (i j : B) (p k : Nat) (h : k < 2 * p) : List.take
+ k (alternatingWord i j (2 * p)) = if Even k then alternatingWord i j k else alt
+ernatingWord j i k
+参数：i j : B；p k : Nat；h : k < 2 * p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.not_even_iff_odd`：∀ {n : ℕ}, ¬Even n ↔ Odd n
+· 使用定理 `Even.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → Odd
+ (a + 1)
+· 使用定理 `CoxeterSystem.length_alternatingWord`：length_alternatingWord (i i' : B) 
+(m : Nat) : List.length (alternatingWord i i' m) = m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.take_concat_get`：∀ {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.l
+ength), (List.take i l).concat l[i] = List.take (i + 1) l
+· 使用定理 `CoxeterSystem.alternatingWord_succ`：alternatingWord_succ (i i' : B) (m :
+ Nat) : alternatingWord i i' (m + 1) = (alternatingWord i' i m).concat i'
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CoxeterSystem.getElem_alternatingWord`：getElem_alternatingWord (i j : B)
+ (p k : Nat) (hk : k < p) : (alternatingWord i j p)[k]'(by simp [hk]) = (if Even
+ (p + k) then i else j)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.even_add`：∀ {m n : ℕ}, Even (m + n) ↔ (Even m ↔ Even n)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Odd.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Odd a → Even 
+(a + 1)
+· 使用定理 `Nat.odd_add`：∀ {m n : ℕ}, Odd (m + n) ↔ (Odd m ↔ Even n)
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
 -/
-lemma listTake_alternatingWord (i j : B) (p k : Nat) (h : k < 2 * p) :
+lemma listTake_alternatingWord (i j : B) (p k : ℕ) (h : k < 2 * p) :
     List.take k (alternatingWord i j (2 * p)) =
     if Even k then alternatingWord i j k else alternatingWord j i k := by
   induction k with
@@ -1514,204 +1328,254 @@ lemma listTake_alternatingWord (i j : B) (p k : Nat) (h : k < 2 * p) :
       by_cases h_even : Even k
       · simp only [h_even, ↓reduceIte] at hk
         simp only [Nat.not_even_iff_odd.mpr (Even.add_one h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [← hk]
+        rw [← List.take_concat_get (by simp; lia), alternatingWord_succ, ← hk]
         apply congr_arg
         rw [getElem_alternatingWord i j (2 * p) k (by lia)]
         simp [(by apply Nat.even_add.mpr; simp [h_even] : Even (2 * p + k))]
       · simp only [h_even, ↓reduceIte] at hk
         simp only [Odd.add_one (by simpa using h_even), ↓reduceIte]
-        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [hk]
+        rw [← List.take_concat_get (by simp; lia), alternatingWord_succ, hk]
         apply congr_arg
         rw [getElem_alternatingWord i j (2 * p) k (by lia)]
         simp [(by apply Nat.odd_add.mpr; simp [h_even] : Odd (2 * p + k))]
-
-/--
-lemma `listTake_succ_alternatingWord` / 引理 `listTake_succ_alternatingWord`
-
-English:
-lemma listTake_succ_alternatingWord
-  given: (i j : B) (p : Nat) (k : Nat) (h : k + 1 < 2 * p)
-  proof: by
-  rw [listTake_alternatingWord j i p k (by lia)]; rw [listTake_alternatingWord i j p (k + 1) h]
-  by_cases h_even : Even k
-  · simp [Nat.not_even_iff_odd.mpr (Even.add_one h_even), alternatingWord_succ', h_even]
-  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k + 1)),
-      alternatingWord_succ', h_even]
-
-中文:
-引理 listTake_succ_alternatingWord
-  条件: (i j : B) (p : 自然数) (k : 自然数) (h : k + 1 < 2 * p)
-  证明: by
-  rw [listTake_alternatingWord j i p k (by lia)]; rw [listTake_alternatingWord i j p (k + 1) h]
-  by_cases h_even : Even k
-  · simp [Nat.not_even_iff_odd.mpr (Even.add_one h_even), alternatingWord_succ', h_even]
-  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k + 1)),
-      alternatingWord_succ', h_even]
-
-Depends on / 依赖: Even.add_one, Nat.not_even_iff_odd, Nat.not_even_iff_odd.mpr, Odd.add_one, add_one, alternatingWord_succ, h_even, listTake_alternatingWord, not_even_iff_odd
+/-
+**CoxeterSystem.listTake_succ_alternatingWord** 是 Mathlib 中的一个引理，位于命名空间 `Coxeter
+System`。
+形式化陈述：listTake_succ_alternatingWord (i j : B) (p : Nat) (k : Nat) (h : k + 1 < 2
+ * p) : List.take (k + 1) (alternatingWord i j (2 * p)) = i :: (List.take k (alt
+ernatingWord j i (2 * p)))
+参数：i j : B；p : Nat；k : Nat；h : k + 1 < 2 * p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CoxeterSystem.listTake_alternatingWord`：listTake_alternatingWord (i j : 
+B) (p k : Nat) (h : k < 2 * p) : List.take k (alternatingWord i j (2 * p)) = if 
+Even k then alternatingWord …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.not_even_iff_odd`：∀ {n : ℕ}, ¬Even n ↔ Odd n
+· 使用定理 `Even.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → Odd
+ (a + 1)
+· 使用定理 `CoxeterSystem.alternatingWord_succ'`：alternatingWord_succ' (i i' : B) (m
+ : Nat) : alternatingWord i i' (m + 1) = (if Even m then i' else i) :: alternati
+ngWord i i' m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Odd.add_one`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Odd a → Even 
+(a + 1)
 -/
-lemma listTake_succ_alternatingWord (i j : B) (p : Nat) (k : Nat) (h : k + 1 < 2 * p) :
+lemma listTake_succ_alternatingWord (i j : B) (p : ℕ) (k : ℕ) (h : k + 1 < 2 * p) :
     List.take (k + 1) (alternatingWord i j (2 * p)) =
     i :: (List.take k (alternatingWord j i (2 * p))) := by
-  rw [listTake_alternatingWord j i p k (by lia)]; rw [listTake_alternatingWord i j p (k + 1) h]
+  rw [listTake_alternatingWord j i p k (by lia), listTake_alternatingWord i j p (k + 1) h]
   by_cases h_even : Even k
   · simp [Nat.not_even_iff_odd.mpr (Even.add_one h_even), alternatingWord_succ', h_even]
   · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k + 1)),
       alternatingWord_succ', h_even]
-
-/--
-theorem `prod_alternatingWord_eq_mul_pow` / 定理 `prod_alternatingWord_eq_mul_pow`
-
-English:
-theorem prod_alternatingWord_eq_mul_pow
-  given: (i i' : B) (m : Nat)
-  proof: by
-  induction m with
-  | zero => simp [alternatingWord]
-  | succ m ih =>
-    rw [alternatingWord_succ']; rw [wordProd_cons]; rw [ih]
-    by_cases hm : Even m
-    · have h₁ : ¬ Even (m + 1) := by simp [hm, parity_simps]
-have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_dvd]
-      simp [hm, h₁, h₂]
-    · have h₁ : Even (m + 1) := by simp [hm, parity_simps]
-      have h₂ : (m + 1) / 2 = m / 2 + 1 := Nat.succ_div_of_dvd h₁.two_dvd
-      simp [hm, h₁, h₂, ← pow_succ', ← mul_assoc]
-
-中文:
-定理 prod_alternatingWord_eq_mul_pow
-  条件: (i i' : B) (m : 自然数)
-  证明: by
-  induction m with
-  | zero => simp [alternatingWord]
-  | succ m ih =>
-    rw [alternatingWord_succ']; rw [wordProd_cons]; rw [ih]
-    by_cases hm : Even m
-    · have h₁ : ¬ Even (m + 1) := by simp [hm, parity_simps]
-have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_dvd]
-      simp [hm, h₁, h₂]
-    · have h₁ : Even (m + 1) := by simp [hm, parity_simps]
-      have h₂ : (m + 1) / 2 = m / 2 + 1 := Nat.succ_div_of_dvd h₁.two_dvd
-      simp [hm, h₁, h₂, ← pow_succ', ← mul_assoc]
-
-Depends on / 依赖: Nat.succ_div_of_dvd, Nat.succ_div_of_not_dvd, alternatingWord, alternatingWord_succ, even_iff_two_dvd, mul_assoc, parity_simps, pow_succ, succ_div_of_dvd, succ_div_of_not_dvd, two_dvd, wordProd_cons
+/-
+**CoxeterSystem.prod_alternatingWord_eq_mul_pow** 是 Mathlib 中的一个定理，位于命名空间 `Coxet
+erSystem`。
+形式化陈述：prod_alternatingWord_eq_mul_pow (i i' : B) (m : Nat) : π (alternatingWord 
+i i' m) = (if Even m then 1 else s i') * (s i * s i') ^ (m / 2)
+参数：i i' : B；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterSystem.wordProd_nil`：∀ {B : Type u_1} {W : Type u_3} [inst : Grou
+p W] {M : CoxeterMatrix B} (cs : CoxeterSystem M W), cs.wordProd [] = 1
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Nat.zero_div`：∀ (b : ℕ), 0 / b = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CoxeterSystem.alternatingWord_succ'`：alternatingWord_succ' (i i' : B) (m
+ : Nat) : alternatingWord i i' (m + 1) = (if Even m then i' else i) :: alternati
+ngWord i i' m
+· 使用定理 `CoxeterSystem.wordProd_cons`：wordProd_cons (i : B) (ω : List B) : π (i :
+: ω) = s i * π ω
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.succ_div_of_not_dvd`：∀ {a b : ℕ}, ¬b ∣ a + 1 → (a + 1) / b = a / b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `even_iff_two_dvd`：even_iff_two_dvd : Even a ↔ 2 ∣ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.succ_div_of_dvd`：∀ {a b : ℕ}, b ∣ a + 1 → (a + 1) / b = a / b + 1
+· 使用定理 `Even.two_dvd`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → 2 ∣
+ a
 -/
-theorem prod_alternatingWord_eq_mul_pow (i i' : B) (m : Nat) :
+theorem prod_alternatingWord_eq_mul_pow (i i' : B) (m : ℕ) :
     π (alternatingWord i i' m) = (if Even m then 1 else s i') * (s i * s i') ^ (m / 2) := by
   induction m with
   | zero => simp [alternatingWord]
   | succ m ih =>
-    rw [alternatingWord_succ']; rw [wordProd_cons]; rw [ih]
+    rw [alternatingWord_succ', wordProd_cons, ih]
     by_cases hm : Even m
     · have h₁ : ¬ Even (m + 1) := by simp [hm, parity_simps]
-have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_dvd]
+      have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd <| by rwa [← even_iff_two_dvd]
       simp [hm, h₁, h₂]
     · have h₁ : Even (m + 1) := by simp [hm, parity_simps]
       have h₂ : (m + 1) / 2 = m / 2 + 1 := Nat.succ_div_of_dvd h₁.two_dvd
       simp [hm, h₁, h₂, ← pow_succ', ← mul_assoc]
-
-/--
-theorem `prod_alternatingWord_eq_prod_alternatingWord_sub` / 定理 `prod_alternatingWord_eq_prod_alternatingWord_sub`
-
-English:
-theorem prod_alternatingWord_eq_prod_alternatingWord_sub
-  given: (i i' : B) (m : Nat) (hm : m <= M i i' * 2)
-  proof: by
-  simp_rw [prod_alternatingWord_eq_mul_pow, ← Int.even_coe_nat]
-  /- Rewrite everything in terms of an integer m' which is equal to m.
-  The resulting equation holds for all integers m'. -/
-  simp_rw [← zpow_natCast, Int.natCast_ediv, Int.ofNat_sub hm]
-  generalize (m : Int) = m'
-  clear hm
-  push_cast
-  rcases Int.even_or_odd' m' with ⟨k, rfl | rfl⟩
-  · rw [if_pos (by use k; ring), if_pos (by use -k + (M i i'); ring), mul_comm 2 k, ← sub_mul]
-    repeat rw [Int.mul_ediv_cancel _ (by simp)]
-    rw [zpow_sub]; rw [zpow_natCast]; rw [simple_mul_simple_pow' cs i i']; rw [← inv_zpow]
-    simp
-  · have : ¬Even (2 * k + 1) := Int.not_even_iff_odd.2 ⟨k, rfl⟩
-    rw [if_neg this]
-    have : ¬Even (↑(M i i') * 2 - (2 * k + 1)) :=
-      Int.not_even_iff_odd.2 ⟨↑(M i i') - k - 1, by ring⟩
-    rw [if_neg this]
-    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2)]; rw [(by ring : 2 * k + 1 = 1 + k * 2)]
-    repeat rw [Int.add_mul_ediv_right _ _ (by simp)]
-    simp [zpow_add, simple_mul_simple_pow', ← inv_zpow, ← mul_assoc]
-
-中文:
-定理 prod_alternatingWord_eq_prod_alternatingWord_sub
-  条件: (i i' : B) (m : 自然数) (hm : m <= M i i' * 2)
-  证明: by
-  simp_rw [prod_alternatingWord_eq_mul_pow, ← Int.even_coe_nat]
-  /- Rewrite everything in terms of an integer m' which is equal to m.
-  The resulting equation holds for all integers m'. -/
-  simp_rw [← zpow_natCast, Int.natCast_ediv, Int.ofNat_sub hm]
-  generalize (m : Int) = m'
-  clear hm
-  push_cast
-  rcases Int.even_or_odd' m' with ⟨k, rfl | rfl⟩
-  · rw [if_pos (by use k; ring), if_pos (by use -k + (M i i'); ring), mul_comm 2 k, ← sub_mul]
-    repeat rw [Int.mul_ediv_cancel _ (by simp)]
-    rw [zpow_sub]; rw [zpow_natCast]; rw [simple_mul_simple_pow' cs i i']; rw [← inv_zpow]
-    simp
-  · have : ¬Even (2 * k + 1) := Int.not_even_iff_odd.2 ⟨k, rfl⟩
-    rw [if_neg this]
-    have : ¬Even (↑(M i i') * 2 - (2 * k + 1)) :=
-      Int.not_even_iff_odd.2 ⟨↑(M i i') - k - 1, by ring⟩
-    rw [if_neg this]
-    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2)]; rw [(by ring : 2 * k + 1 = 1 + k * 2)]
-    repeat rw [Int.add_mul_ediv_right _ _ (by simp)]
-    simp [zpow_add, simple_mul_simple_pow', ← inv_zpow, ← mul_assoc]
-
-Depends on / 依赖: Int.even_coe_nat, even_coe_nat, prod_alternatingWord_eq_mul_pow, simp_rw
+/-
+**CoxeterSystem.prod_alternatingWord_eq_prod_alternatingWord_sub** 是 Mathlib 中的一
+个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：prod_alternatingWord_eq_prod_alternatingWord_sub (i i' : B) (m : Nat) (hm 
+: m <= M i i' * 2) : π (alternatingWord i i' m) = π (alternatingWord i' i (M i i
+' * 2 - m))
+参数：i i' : B；m : Nat；hm : m <= M i i' * 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterSystem.prod_alternatingWord_eq_mul_pow`：prod_alternatingWord_eq_m
+ul_pow (i i' : B) (m : Nat) : π (alternatingWord i i' m) = (if Even m then 1 els
+e s i') * (s i * s i') ^ (m / 2)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Int.ofNat_sub`：∀ {m n : ℕ}, m ≤ n → ↑(n - m) = ↑n - ↑m
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用引理 `Int.even_or_odd'`：even_or_odd' (n : Int) : exists k, n = 2 * k ∨ n = 2 *
+ k + 1
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap`：∀ {R : Type u_1} [inst : 
+CommSemiring R] {a₁ a₂ b₁ b₂ c₁ c₂ : R},   a₁ + b₁ = c₁ → a₂ + b₂ = c₂ → a₁ + a₂
+ + (b₁ + b₂) = c₁ + c₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf`：∀ {R : Type u_1} [inst : Comm
+Semiring R] {a b c : R} (x : R) (e : ℕ), a + b = c → x ^ e * a + x ^ e * b = x ^
+ e * c
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+（共 71 条，此处仅展示前 30 条）
 -/
-theorem prod_alternatingWord_eq_prod_alternatingWord_sub (i i' : B) (m : Nat) (hm : m <= M i i' * 2) :
+theorem prod_alternatingWord_eq_prod_alternatingWord_sub (i i' : B) (m : ℕ) (hm : m ≤ M i i' * 2) :
     π (alternatingWord i i' m) = π (alternatingWord i' i (M i i' * 2 - m)) := by
   simp_rw [prod_alternatingWord_eq_mul_pow, ← Int.even_coe_nat]
   /- Rewrite everything in terms of an integer m' which is equal to m.
   The resulting equation holds for all integers m'. -/
   simp_rw [← zpow_natCast, Int.natCast_ediv, Int.ofNat_sub hm]
-  generalize (m : Int) = m'
+  generalize (m : ℤ) = m'
   clear hm
   push_cast
   rcases Int.even_or_odd' m' with ⟨k, rfl | rfl⟩
   · rw [if_pos (by use k; ring), if_pos (by use -k + (M i i'); ring), mul_comm 2 k, ← sub_mul]
     repeat rw [Int.mul_ediv_cancel _ (by simp)]
-    rw [zpow_sub]; rw [zpow_natCast]; rw [simple_mul_simple_pow' cs i i']; rw [← inv_zpow]
+    rw [zpow_sub, zpow_natCast, simple_mul_simple_pow' cs i i', ← inv_zpow]
     simp
   · have : ¬Even (2 * k + 1) := Int.not_even_iff_odd.2 ⟨k, rfl⟩
     rw [if_neg this]
     have : ¬Even (↑(M i i') * 2 - (2 * k + 1)) :=
       Int.not_even_iff_odd.2 ⟨↑(M i i') - k - 1, by ring⟩
     rw [if_neg this]
-    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2)]; rw [(by ring : 2 * k + 1 = 1 + k * 2)]
+    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2),
+      (by ring : 2 * k + 1 = 1 + k * 2)]
     repeat rw [Int.add_mul_ediv_right _ _ (by simp)]
     simp [zpow_add, simple_mul_simple_pow', ← inv_zpow, ← mul_assoc]
 
-/--
-theorem `wordProd_braidWord_eq` / 定理 `wordProd_braidWord_eq`
+/-- The two words of length `M i i'` that alternate between `i` and `i'` have the same product.
+This is known as the "braid relation" or "Artin-Tits relation". -/
+/-
+**CoxeterSystem.wordProd_braidWord_eq** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterSystem`。
+形式化陈述：wordProd_braidWord_eq (i i' : B) : π (braidWord M i i') = π (braidWord M i
+' i)
+参数：i i' : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoxeterSystem.prod_alternatingWord_eq_prod_alternatingWord_sub`：prod_alt
+ernatingWord_eq_prod_alternatingWord_sub (i i' : B) (m : Nat) (hm : m <= M i i' 
+* 2) : π (alternatingWord i i' m) = π (alternatingWo…
+· 使用定理 `Nat.le_mul_of_pos_right`：∀ {m : ℕ} (n : ℕ), 0 < m → n ≤ n * m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoxeterMatrix.symmetric`：symmetric (i i' : B) : M i i' = M i' i
+· 使用定理 `tsub_eq_of_eq_add`：tsub_eq_of_eq_add (h : a = c + b) : a - b = c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `mul_two`：mul_two (n : α) : n * 2 = n + n
 
-English:
-theorem wordProd_braidWord_eq
-  given: (i i' : B)
-  proof: by
-  have := cs.prod_alternatingWord_eq_prod_alternatingWord_sub i i' (M i i')
-    (Nat.le_mul_of_pos_right _ (by simp))
-  rw [tsub_eq_of_eq_add (mul_two (M i i'))] at this
-  nth_rw 2 [M.symmetric i i'] at this
-  exact this
-
-中文:
-定理 wordProd_braidWord_eq
-  条件: (i i' : B)
-  证明: by
-  have := cs.prod_alternatingWord_eq_prod_alternatingWord_sub i i' (M i i')
-    (Nat.le_mul_of_pos_right _ (by simp))
-  rw [tsub_eq_of_eq_add (mul_two (M i i'))] at this
-  nth_rw 2 [M.symmetric i i'] at this
-  exact this
-
-Depends on / 依赖: M.symmetric, Nat.le_mul_of_pos_right, cs.prod_alternatingWord_eq_prod_alternatingWord_sub, le_mul_of_pos_right, mul_two, nth_rw, prod_alternatingWord_eq_prod_alternatingWord_sub, symmetric, tsub_eq_of_eq_add
+--- 原说明 ---
+The two words of length `M i i'` that alternate between `i` and `i'` have the sa
+me product.
+This is known as the "braid relation" or "Artin-Tits relation".
 -/
 theorem wordProd_braidWord_eq (i i' : B) :
     π (braidWord M i i') = π (braidWord M i' i) := by
@@ -1722,3 +1586,4 @@ theorem wordProd_braidWord_eq (i i' : B) :
   exact this
 
 end CoxeterSystem
+

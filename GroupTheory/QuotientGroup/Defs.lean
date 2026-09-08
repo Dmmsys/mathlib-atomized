@@ -38,124 +38,116 @@ namespace QuotientGroup
 
 variable {G H I M : Type*} [Group G] [Group H] [Monoid M] {N : Subgroup G}
 
-/--
-lemma `leftRel_eq_top` / 引理 `leftRel_eq_top`
-
-English:
-lemma leftRel_eq_top
-  statement: leftRel N = ⊤ ↔ N = ⊤
-  proof: by
-  simpa [leftRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
-    MulAction.subgroup_smul_def, ← eq_inv_mul_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
-
-中文:
-引理 leftRel_eq_top
-  结论: leftRel N = ⊤ ↔ N = ⊤
-  证明: by
-  simpa [leftRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
-    MulAction.subgroup_smul_def, ← eq_inv_mul_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
+/-
+**QuotientGroup.leftRel_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {N : Subgroup G}, QuotientGroup.leftRel 
+N = ⊤ ↔ N = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Setoid.mk.congr_simp`：∀ {α : Sort u} (r r_1 : α → α → Prop) (e_r : r = r
+_1) (iseqv : Equivalence r),   { r := r, iseqv := iseqv } = { r := r_1, iseqv :=
+ ⋯ }
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[to_additive (attr := simp)] lemma leftRel_eq_top : leftRel N = ⊤ ↔ N = ⊤ := by
   simpa [leftRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
     MulAction.subgroup_smul_def, ← eq_inv_mul_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
-
-/--
-lemma `rightRel_eq_top` / 引理 `rightRel_eq_top`
-
-English:
-lemma rightRel_eq_top
-  statement: rightRel N = ⊤ ↔ N = ⊤
-  proof: by
-  simpa [rightRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
-    MulAction.subgroup_smul_def, ← eq_mul_inv_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
-
-中文:
-引理 rightRel_eq_top
-  结论: rightRel N = ⊤ ↔ N = ⊤
-  证明: by
-  simpa [rightRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
-    MulAction.subgroup_smul_def, ← eq_mul_inv_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
+    using ⟨fun h ↦ by ext; simpa using h _ 1, fun h ↦ by simp [h]⟩
+/-
+**QuotientGroup.rightRel_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {N : Subgroup G}, QuotientGroup.rightRel
+ N = ⊤ ↔ N = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Setoid.mk.congr_simp`：∀ {α : Sort u} (r r_1 : α → α → Prop) (e_r : r = r
+_1) (iseqv : Equivalence r),   { r := r, iseqv := iseqv } = { r := r_1, iseqv :=
+ ⋯ }
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[to_additive (attr := simp)] lemma rightRel_eq_top : rightRel N = ⊤ ↔ N = ⊤ := by
   simpa [rightRel, MulAction.orbitRel, funext_iff, MulAction.mem_orbit_iff,
     MulAction.subgroup_smul_def, ← eq_mul_inv_iff_mul_eq]
-    using ⟨fun h => by ext; simpa using h _ 1, fun h => by simp [h]⟩
-
-/--
-lemma `subsingleton_iff` / 引理 `subsingleton_iff`
-
-English:
-lemma subsingleton_iff
-  statement: Subsingleton (G ⧸ N) ↔ N = ⊤
-  proof: by
-  simp [HasQuotient.Quotient]
-
-中文:
-引理 subsingleton_iff
-  结论: 子单例 (G ⧸ N) ↔ N = ⊤
-  证明: by
-  simp [HasQuotient.Quotient]
+    using ⟨fun h ↦ by ext; simpa using h _ 1, fun h ↦ by simp [h]⟩
+/-
+**QuotientGroup.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {N : Subgroup G}, Subsingleton (G ⧸ N) ↔
+ N = ⊤
+参数：G ⧸ N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[to_additive (attr := simp)] protected lemma subsingleton_iff : Subsingleton (G ⧸ N) ↔ N = ⊤ := by
   simp [HasQuotient.Quotient]
-
-/--
-lemma `nontrivial_iff` / 引理 `nontrivial_iff`
-
-English:
-lemma nontrivial_iff
-  statement: Nontrivial (G ⧸ N) ↔ N != ⊤
-  proof: by
-  simp [← not_subsingleton_iff_nontrivial]
-
-中文:
-引理 nontrivial_iff
-  结论: 非平凡 (G ⧸ N) ↔ N != ⊤
-  证明: by
-  simp [← not_subsingleton_iff_nontrivial]
+/-
+**QuotientGroup.nontrivial_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {N : Subgroup G}, Nontrivial (G ⧸ N) ↔ N
+ ≠ ⊤
+参数：G ⧸ N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[to_additive (attr := simp)] protected lemma nontrivial_iff : Nontrivial (G ⧸ N) ↔ N != ⊤ := by
+@[to_additive (attr := simp)] protected lemma nontrivial_iff : Nontrivial (G ⧸ N) ↔ N ≠ ⊤ := by
   simp [← not_subsingleton_iff_nontrivial]
 
 variable (N) [nN : N.Normal]
 
 /-- The congruence relation generated by a normal subgroup. -/
 @[to_additive /-- The additive congruence relation generated by a normal additive subgroup. -/]
-/--
-Definition of `con` / `con` 的定义
+/-
+**QuotientGroup.con** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：{G : Type u_1} → [inst : Group G] → (N : Subgroup G) → [nN : N.Normal] → C
+on G
+参数：N : Subgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition con
-  signature: : Con G where
-  body: leftRel N
-  mul' := fun {a b c d} hab hcd => by
-    rw [leftRel_eq] at hab hcd ⊢
-    dsimp only
-    calc
-      c⁻¹ * (a⁻¹ * b) * c⁻¹⁻¹ * (c⁻¹ * d) in N := N.mul_mem (nN.conj_mem _ hab _) hcd
-      _ = (a * c)⁻¹ * (b * d) := by
-        simp only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
-
-@[to_additive]
-
-中文:
-定义 con
-  签名: : Con G where
-  定义体: leftRel N
-  mul' := fun {a b c d} hab hcd => by
-    rw [leftRel_eq] at hab hcd ⊢
-    dsimp only
-    calc
-      c⁻¹ * (a⁻¹ * b) * c⁻¹⁻¹ * (c⁻¹ * d) in N := N.mul_mem (nN.conj_mem _ hab _) hcd
-      _ = (a * c)⁻¹ * (b * d) := by
-        simp only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
-
-@[to_additive]
+--- 原说明 ---
+The congruence relation generated by a normal subgroup.
 -/
 protected def con : Con G where
   toSetoid := leftRel N
@@ -163,28 +155,25 @@ protected def con : Con G where
     rw [leftRel_eq] at hab hcd ⊢
     dsimp only
     calc
-      c⁻¹ * (a⁻¹ * b) * c⁻¹⁻¹ * (c⁻¹ * d) in N := N.mul_mem (nN.conj_mem _ hab _) hcd
+      c⁻¹ * (a⁻¹ * b) * c⁻¹⁻¹ * (c⁻¹ * d) ∈ N := N.mul_mem (nN.conj_mem _ hab _) hcd
       _ = (a * c)⁻¹ * (b * d) := by
         simp only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
 
 @[to_additive]
-/--
-Instance `Quotient.group` / 实例 `Quotient.group`
-
-English:
-instance Quotient.group
-  signature: : Group (G ⧸ N)
-  body: inferInstanceAs Group (delta% QuotientGroup.con N).Quotient
-
-中文:
-实例 商.group
-  签名: : 群 (G ⧸ N)
-  定义体: inferInstanceAs Group (delta% QuotientGroup.con N).Quotient
-
-Depends on / 依赖: Quotient, QuotientGroup, QuotientGroup.con
+/-
+**QuotientGroup.Quotient.group** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup.Quotient
+`。
+形式化陈述：{G : Type u_1} → [inst : Group G] → (N : Subgroup G) → [nN : N.Normal] → G
+roup (G ⧸ N)
+参数：N : Subgroup G；G ⧸ N。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
 -/
 instance Quotient.group : Group (G ⧸ N) :=
-inferInstanceAs Group (delta% QuotientGroup.con N).Quotient
+  inferInstanceAs <| Group (delta% QuotientGroup.con N).Quotient
 
 /--
 The congruence relation defined by the kernel of a group homomorphism is equal to its kernel
@@ -193,140 +182,104 @@ as a congruence relation.
 @[to_additive QuotientAddGroup.con_ker_eq_addConKer
 /-- The additive congruence relation defined by the kernel of an additive group homomorphism is
 equal to its kernel as an additive congruence relation. -/]
-/--
-theorem `con_ker_eq_conKer` / 定理 `con_ker_eq_conKer`
-
-English:
-theorem con_ker_eq_conKer
-  given: (f : G ->* M)
-  statement: QuotientGroup.con f.ker = Con.ker f
-  proof: by
-  ext
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [Setoid.comm']; rw [leftRel_apply]; rw [Con.ker_rel]; rw [MonoidHom.eq_iff]
-
-中文:
-定理 con_ker_eq_conKer
-  条件: (f : G ->* M)
-  结论: 商群.con f.ker = Con.ker f
-  证明: by
-  ext
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [Setoid.comm']; rw [leftRel_apply]; rw [Con.ker_rel]; rw [MonoidHom.eq_iff]
-
-Depends on / 依赖: Con.ker_rel, Con.rel_mk, MonoidHom, MonoidHom.eq_iff, QuotientGroup, QuotientGroup.con, Setoid, Setoid.comm, eq_iff, ker_rel, leftRel_apply, rel_mk
+/-
+**QuotientGroup.con_ker_eq_conKer** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：con_ker_eq_conKer (f : G ->* M) : QuotientGroup.con f.ker = Con.ker f
+参数：f : G ->* M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.ext`：ext {c d : Con M} (H : forall x y, c x y ↔ d x y) : c = d
+· 使用定理 `MonoidHom.normal_ker`：∀ {G : Type u_1} [inst : Group G] {M : Type u_7} [
+inst_1 : MulOneClass M] (f : G →* M), f.ker.Normal
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuotientGroup.con.eq_1`：∀ {G : Type u_1} [inst : Group G] (N : Subgroup 
+G) [nN : N.Normal],   QuotientGroup.con N = { toSetoid := QuotientGroup.leftRel 
+N, mul' := ⋯…
+· 使用定理 `Con.rel_mk`：rel_mk {s : Setoid M} {h a b} : Con.mk s h a b ↔ r a b
+· 使用定理 `Setoid.comm'`：comm' (s : Setoid α) {x y} : s x y ↔ s y x
+· 使用定理 `QuotientGroup.leftRel_apply`：leftRel_apply {x y : α} : leftRel s x y ↔ x
+⁻¹ * y in s
+· 使用定理 `Con.ker_rel`：ker_rel (f : F) {x y} : ker f x y ↔ f x = f y
+· 使用定理 `MonoidHom.eq_iff`：eq_iff (f : G ->* M) {x y : G} : f x = f y ↔ y⁻¹ * x i
+n f.ker
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem con_ker_eq_conKer (f : G ->* M) : QuotientGroup.con f.ker = Con.ker f := by
+theorem con_ker_eq_conKer (f : G →* M) : QuotientGroup.con f.ker = Con.ker f := by
   ext
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [Setoid.comm']; rw [leftRel_apply]; rw [Con.ker_rel]; rw [MonoidHom.eq_iff]
+  rw [QuotientGroup.con, Con.rel_mk, Setoid.comm', leftRel_apply, Con.ker_rel, MonoidHom.eq_iff]
 
 /-- The group homomorphism from `G` to `G/N`. -/
 @[to_additive /-- The additive group homomorphism from `G` to `G/N`. -/]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**QuotientGroup.mk'** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：mk' : G ->* G ⧸ N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: : G ->* G ⧸ N
-  body: MonoidHom.mk' QuotientGroup.mk fun _ _ => rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mk'
-  签名: : G ->* G ⧸ N
-  定义体: MonoidHom.mk' QuotientGroup.mk fun _ _ => rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mk, QuotientGroup, QuotientGroup.mk
+--- 原说明 ---
+The group homomorphism from `G` to `G/N`.
 -/
-def mk' : G ->* G ⧸ N :=
+def mk' : G →* G ⧸ N :=
   MonoidHom.mk' QuotientGroup.mk fun _ _ => rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  statement: (mk' N : G -> G ⧸ N) = mk
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_mk'
-  结论: (mk' N : G -> G ⧸ N) = mk
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：coe_mk' : (mk' N : G -> G ⧸ N) = mk
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' : (mk' N : G -> G ⧸ N) = mk :=
+theorem coe_mk' : (mk' N : G → G ⧸ N) = mk :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk'_apply` / 定理 `mk'_apply`
-
-English:
-theorem mk'_apply
-  given: (x : G)
-  statement: mk' N x = x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk'_apply
-  条件: (x : G)
-  结论: mk' N x = x
-  证明: rfl
-
-@[to_additive]
+/-
+**QuotientGroup.mk'_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal] (x : G)
+, (QuotientGroup.mk' N) x = ↑x
+参数：N : Subgroup G；x : G；QuotientGroup.mk' N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk'_apply (x : G) : mk' N x = x :=
   rfl
 
 @[to_additive]
-/--
-theorem `mk'_surjective` / 定理 `mk'_surjective`
-
-English:
-theorem mk'_surjective
-  statement: Surjective mk' N
-  proof: @mk_surjective _ _ N
-
-@[to_additive]
-
-中文:
-定理 mk'_surjective
-  结论: 满射 mk' N
-  证明: @mk_surjective _ _ N
-
-@[to_additive]
+/-
+**QuotientGroup.mk'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal], Functi
+on.Surjective ⇑(QuotientGroup.mk' N)
+参数：N : Subgroup G；QuotientGroup.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.mk_surjective`：mk_surjective : Function.Surjective @mk _ _
+ s
 -/
-theorem mk'_surjective : Surjective mk' N :=
+theorem mk'_surjective : Surjective <| mk' N :=
   @mk_surjective _ _ N
 
 @[to_additive]
-/--
-theorem `mk'_eq_mk'` / 定理 `mk'_eq_mk'`
-
-English:
-theorem mk'_eq_mk'
-  given: {x y : G}
-  statement: mk' N x = mk' N y ↔ exists z in N, x * z = y
-  proof: QuotientGroup.eq.trans by
-    simp only [← _root_.eq_inv_mul_iff_mul_eq, exists_eq_right]
-
-中文:
-定理 mk'_eq_mk'
-  条件: {x y : G}
-  结论: mk' N x = mk' N y ↔ 存在 z in N, x * z = y
-  证明: QuotientGroup.eq.trans by
-    simp only [← _root_.eq_inv_mul_iff_mul_eq, exists_eq_right]
+/-
+**QuotientGroup.mk'_eq_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal] {x y : 
+G},   (QuotientGroup.mk' N) x = (QuotientGroup.mk' N) y ↔ ∃ z ∈ N, x * z = y
+参数：N : Subgroup G；QuotientGroup.mk' N；QuotientGroup.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `QuotientGroup.eq`：∀ {α : Type u_1} [inst : Group α] {s : Subgroup α} {a 
+b : α}, ↑a = ↑b ↔ a⁻¹ * b ∈ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mk'_eq_mk' {x y : G} : mk' N x = mk' N y ↔ exists z in N, x * z = y :=
-QuotientGroup.eq.trans by
+theorem mk'_eq_mk' {x y : G} : mk' N x = mk' N y ↔ ∃ z ∈ N, x * z = y :=
+  QuotientGroup.eq.trans <| by
     simp only [← _root_.eq_inv_mul_iff_mul_eq, exists_eq_right]
 
 /-- Two `MonoidHom`s from a quotient group are equal if their compositions with
@@ -337,73 +290,54 @@ See note [partially-applied ext lemmas]. -/
 if their compositions with `AddQuotientGroup.mk'` are equal.
 
 See note [partially-applied ext lemmas]. -/]
-/--
-theorem `monoidHom_ext` / 定理 `monoidHom_ext`
-
-English:
-theorem monoidHom_ext
-  given: ⦃f g
-  statement: G ⧸ N ->* M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g
-  proof: MonoidHom.ext fun x => QuotientGroup.induction_on x (DFunLike.congr_fun h :)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 monoidHom_ext
-  条件: ⦃f g
-  结论: G ⧸ N ->* M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g
-  证明: MonoidHom.ext fun x => QuotientGroup.induction_on x (DFunLike.congr_fun h :)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, MonoidHom, MonoidHom.ext, QuotientGroup, QuotientGroup.induction_on, congr_fun, induction_on
+/-
+**QuotientGroup.monoidHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：monoidHom_ext ⦃f g : G ⧸ N ->* M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : 
+f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `QuotientGroup.induction_on`：induction_on {C : α ⧸ s -> Prop} (x : α ⧸ s)
+ (H : forall z, C (QuotientGroup.mk z)) : C x
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem monoidHom_ext ⦃f g : G ⧸ N ->* M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g :=
-MonoidHom.ext fun x => QuotientGroup.induction_on x (DFunLike.congr_fun h :)
+theorem monoidHom_ext ⦃f g : G ⧸ N →* M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g :=
+  MonoidHom.ext fun x => QuotientGroup.induction_on x <| (DFunLike.congr_fun h :)
 
 @[to_additive (attr := simp)]
-/--
-theorem `eq_one_iff` / 定理 `eq_one_iff`
-
-English:
-theorem eq_one_iff
-  given: {N : Subgroup G} [N.Normal] (x : G)
-  statement: (x : G ⧸ N) = 1 ↔ x in N
-  proof: by
-  refine QuotientGroup.eq.trans ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 eq_one_iff
-  条件: {N : 子群 G} [N.正规] (x : G)
-  结论: (x : G ⧸ N) = 1 ↔ x in N
-  证明: by
-  refine QuotientGroup.eq.trans ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq.trans, Subgroup, Subgroup.inv_mem_iff, inv_mem_iff, mul_one
+/-
+**QuotientGroup.eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：eq_one_iff {N : Subgroup G} [N.Normal] (x : G) : (x : G ⧸ N) = 1 ↔ x in N
+参数：x : G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `QuotientGroup.eq`：∀ {α : Type u_1} [inst : Group α] {s : Subgroup α} {a 
+b : α}, ↑a = ↑b ↔ a⁻¹ * b ∈ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Subgroup.inv_mem_iff`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G)
+ {x : G}, x⁻¹ ∈ H ↔ x ∈ H
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eq_one_iff {N : Subgroup G} [N.Normal] (x : G) : (x : G ⧸ N) = 1 ↔ x in N := by
+theorem eq_one_iff {N : Subgroup G} [N.Normal] (x : G) : (x : G ⧸ N) = 1 ↔ x ∈ N := by
   refine QuotientGroup.eq.trans ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
+  rw [mul_one, Subgroup.inv_mem_iff]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk'_comp_subtype` / 引理 `mk'_comp_subtype`
-
-English:
-lemma mk'_comp_subtype
-  statement: (mk' N).comp N.subtype = 1
-  proof: by ext; simp
-
-中文:
-引理 mk'_comp_subtype
-  结论: (mk' N).comp N.subtype = 1
-  证明: by ext; simp
+/-
+**QuotientGroup.mk'_comp_subtype** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal], (Quoti
+entGroup.mk' N).comp N.subtype = 1
+参数：N : Subgroup G；QuotientGroup.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma mk'_comp_subtype : (mk' N).comp N.subtype = 1 := by ext; simp
 
@@ -411,127 +345,93 @@ set_option linter.docPrime false in
 /-- Note: `range_mk'` is a lemma about the primed constructor `QuotientGroup.mk'`, not a
   modified version of some `range_mk`. -/
 @[to_additive (attr := simp)]
-/--
-theorem `range_mk'` / 定理 `range_mk'`
+/-
+**QuotientGroup.range_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：range_mk' : (QuotientGroup.mk' N).range = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
 
-English:
-theorem range_mk'
-  statement: (QuotientGroup.mk' N).range = ⊤
-  proof: MonoidHom.range_eq_top.mpr (mk'_surjective N)
-
-@[to_additive]
-
-中文:
-定理 range_mk'
-  结论: (商群.mk' N).range = ⊤
-  证明: MonoidHom.range_eq_top.mpr (mk'_surjective N)
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.range_eq_top.mpr, _surjective, range_eq_top
+--- 原说明 ---
+Note: `range_mk'` is a lemma about the primed constructor `QuotientGroup.mk'`, n
+ot a
+  modified version of some `range_mk`.
 -/
 theorem range_mk' : (QuotientGroup.mk' N).range = ⊤ :=
   MonoidHom.range_eq_top.mpr (mk'_surjective N)
 
 @[to_additive]
-/--
-theorem `ker_le_range_iff` / 定理 `ker_le_range_iff`
-
-English:
-theorem ker_le_range_iff
-  given: [MulOneClass I] (f : G ->* H) [f.range.Normal] (g : H ->* I)
-  proof: ⟨fun h => MonoidHom.ext fun ⟨_, hx⟩ => (eq_one_iff _).mpr h hx,
-fun h x hx => (eq_one_iff _).mp by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ker_le_range_iff
-  条件: [MulOne类 I] (f : G ->* H) [f.range.正规] (g : H ->* I)
-  证明: ⟨fun h => MonoidHom.ext fun ⟨_, hx⟩ => (eq_one_iff _).mpr h hx,
-fun h x hx => (eq_one_iff _).mp by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, MonoidHom, MonoidHom.ext, congr_fun, eq_one_iff
+/-
+**QuotientGroup.ker_le_range_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：ker_le_range_iff [MulOneClass I] (f : G ->* H) [f.range.Normal] (g : H ->*
+ I) : g.ker <= f.range ↔ (mk' f.range).comp g.ker.subtype = 1
+参数：f : G ->* H；g : H ->* I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem ker_le_range_iff [MulOneClass I] (f : G ->* H) [f.range.Normal] (g : H ->* I) :
-    g.ker <= f.range ↔ (mk' f.range).comp g.ker.subtype = 1 :=
-⟨fun h => MonoidHom.ext fun ⟨_, hx⟩ => (eq_one_iff _).mpr h hx,
-fun h x hx => (eq_one_iff _).mp by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
+theorem ker_le_range_iff [MulOneClass I] (f : G →* H) [f.range.Normal] (g : H →* I) :
+    g.ker ≤ f.range ↔ (mk' f.range).comp g.ker.subtype = 1 :=
+  ⟨fun h => MonoidHom.ext fun ⟨_, hx⟩ => (eq_one_iff _).mpr <| h hx,
+    fun h x hx => (eq_one_iff _).mp <| by exact DFunLike.congr_fun h ⟨x, hx⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `ker_mk'` / 定理 `ker_mk'`
-
-English:
-theorem ker_mk'
-  statement: MonoidHom.ker (QuotientGroup.mk' N : G ->* G ⧸ N) = N
-  proof: Subgroup.ext eq_one_iff
-
-@[to_additive]
-
-中文:
-定理 ker_mk'
-  结论: 幺半群态射.ker (商群.mk' N : G ->* G ⧸ N) = N
-  证明: Subgroup.ext eq_one_iff
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.ext, eq_one_iff
+/-
+**QuotientGroup.ker_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G ->* G ⧸ N) = N
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
 -/
-theorem ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G ->* G ⧸ N) = N :=
+theorem ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G →* G ⧸ N) = N :=
   Subgroup.ext eq_one_iff
 
 @[to_additive]
-/--
-theorem `eq_iff_div_mem` / 定理 `eq_iff_div_mem`
-
-English:
-theorem eq_iff_div_mem
-  given: {N : Subgroup G} [nN : N.Normal] {x y : G}
-  proof: by
-  refine eq_comm.trans (QuotientGroup.eq.trans ?_)
-  rw [nN.mem_comm_iff]; rw [div_eq_mul_inv]
-
-中文:
-定理 eq_iff_div_mem
-  条件: {N : 子群 G} [nN : N.正规] {x y : G}
-  证明: by
-  refine eq_comm.trans (QuotientGroup.eq.trans ?_)
-  rw [nN.mem_comm_iff]; rw [div_eq_mul_inv]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq.trans, div_eq_mul_inv, eq_comm, eq_comm.trans, mem_comm_iff, nN.mem_comm_iff
+/-
+**QuotientGroup.eq_iff_div_mem** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：eq_iff_div_mem {N : Subgroup G} [nN : N.Normal] {x y : G} : (x : G ⧸ N) = 
+y ↔ x / y in N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `QuotientGroup.eq`：∀ {α : Type u_1} [inst : Group α] {s : Subgroup α} {a 
+b : α}, ↑a = ↑b ↔ a⁻¹ * b ∈ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.Normal.mem_comm_iff`：mem_comm_iff (nH : H.Normal) {a b : G} : a
+ * b in H ↔ b * a in H
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem eq_iff_div_mem {N : Subgroup G} [nN : N.Normal] {x y : G} :
-    (x : G ⧸ N) = y ↔ x / y in N := by
+    (x : G ⧸ N) = y ↔ x / y ∈ N := by
   refine eq_comm.trans (QuotientGroup.eq.trans ?_)
-  rw [nN.mem_comm_iff]; rw [div_eq_mul_inv]
+  rw [nN.mem_comm_iff, div_eq_mul_inv]
 
 -- for commutative groups we don't need normality assumption
 @[to_additive]
-/--
-Instance `Quotient.commGroup` / 实例 `Quotient.commGroup`
-
-English:
-instance Quotient.commGroup
-  signature: {G : Type*} [CommGroup G] (N : Subgroup G)
-  body: fun a b => Quotient.inductionOn₂' a b fun a b => congr_arg mk (mul_comm a b)
-
-local notation " Q" => G ⧸ N
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 商.commGroup
-  签名: {G : 类型} [交换群 G] (N : 子群 G)
-  定义体: fun a b => Quotient.inductionOn₂' a b fun a b => congr_arg mk (mul_comm a b)
-
-local notation " Q" => G ⧸ N
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, congr_arg, mul_comm
+/-
+**QuotientGroup.Quotient.commGroup** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup.Quot
+ient`。
+形式化陈述：{G : Type u_5} → [inst : CommGroup G] → (N : Subgroup G) → CommGroup (G ⧸ 
+N)
+参数：N : Subgroup G；G ⧸ N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Quotient.commGroup {G : Type*} [CommGroup G] (N : Subgroup G) : CommGroup (G ⧸ N) where
   mul_comm := fun a b => Quotient.inductionOn₂' a b fun a b => congr_arg mk (mul_comm a b)
@@ -539,149 +439,98 @@ instance Quotient.commGroup {G : Type*} [CommGroup G] (N : Subgroup G) : CommGro
 local notation " Q" => G ⧸ N
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  statement: ((1 : G) : Q) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk_one
-  结论: ((1 : G) : Q) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_one : ((1 : G) : Q) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_one : ((1 : G) : Q) = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_mul` / 定理 `mk_mul`
-
-English:
-theorem mk_mul
-  given: (a b : G)
-  statement: ((a * b : G) : Q) = a * b
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk_mul
-  条件: (a b : G)
-  结论: ((a * b : G) : Q) = a * b
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.mk_mul** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_mul (a b : G) : ((a * b : G) : Q) = a * b
+参数：a b : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_mul (a b : G) : ((a * b : G) : Q) = a * b :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_inv` / 定理 `mk_inv`
-
-English:
-theorem mk_inv
-  given: (a : G)
-  statement: ((a⁻¹ : G) : Q) = (a : Q)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk_inv
-  条件: (a : G)
-  结论: ((a⁻¹ : G) : Q) = (a : Q)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.mk_inv** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_inv (a : G) : ((a⁻¹ : G) : Q) = (a : Q)⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_inv (a : G) : ((a⁻¹ : G) : Q) = (a : Q)⁻¹ :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_div` / 定理 `mk_div`
-
-English:
-theorem mk_div
-  given: (a b : G)
-  statement: ((a / b : G) : Q) = a / b
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk_div
-  条件: (a b : G)
-  结论: ((a / b : G) : Q) = a / b
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.mk_div** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_div (a b : G) : ((a / b : G) : Q) = a / b
+参数：a b : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_div (a b : G) : ((a / b : G) : Q) = a / b :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_pow` / 定理 `mk_pow`
-
-English:
-theorem mk_pow
-  given: (a : G) (n : Nat)
-  statement: ((a ^ n : G) : Q) = (a : Q) ^ n
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk_pow
-  条件: (a : G) (n : 自然数)
-  结论: ((a ^ n : G) : Q) = (a : Q) ^ n
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.mk_pow** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_pow (a : G) (n : Nat) : ((a ^ n : G) : Q) = (a : Q) ^ n
+参数：a : G；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_pow (a : G) (n : Nat) : ((a ^ n : G) : Q) = (a : Q) ^ n :=
+theorem mk_pow (a : G) (n : ℕ) : ((a ^ n : G) : Q) = (a : Q) ^ n :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_zpow` / 定理 `mk_zpow`
-
-English:
-theorem mk_zpow
-  given: (a : G) (n : Int)
-  statement: ((a ^ n : G) : Q) = (a : Q) ^ n
-  proof: rfl
-
-中文:
-定理 mk_zpow
-  条件: (a : G) (n : 整数)
-  结论: ((a ^ n : G) : Q) = (a : Q) ^ n
-  证明: rfl
+/-
+**QuotientGroup.mk_zpow** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：mk_zpow (a : G) (n : Int) : ((a ^ n : G) : Q) = (a : Q) ^ n
+参数：a : G；n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_zpow (a : G) (n : Int) : ((a ^ n : G) : Q) = (a : Q) ^ n :=
+theorem mk_zpow (a : G) (n : ℤ) : ((a ^ n : G) : Q) = (a : Q) ^ n :=
   rfl
-
-/--
-lemma `map_mk'_self` / 引理 `map_mk'_self`
-
-English:
-lemma map_mk'_self
-  statement: N.map (mk' N) = ⊥
-  proof: by aesop
-
-中文:
-引理 map_mk'_self
-  结论: N.map (mk' N) = ⊥
-  证明: by aesop
+/-
+**QuotientGroup.map_mk'_self** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal], Subgro
+up.map (QuotientGroup.mk' N) N = ⊥
+参数：N : Subgroup G；QuotientGroup.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[to_additive (attr := simp)] lemma map_mk'_self : N.map (mk' N) = ⊥ := by aesop
 
@@ -691,28 +540,9 @@ The subgroup defined by the class of `1` for a congruence relation on a group.
 @[to_additive
 /-- The `AddSubgroup` defined by the class of `0` for an additive congruence relation
 on an `AddGroup`. -/]
-/--
-Definition of `_root_.Con.subgroup` / `_root_.Con.subgroup` 的定义
-
-English:
-definition _root_.Con.subgroup
-  signature: (c : Con G)
-  body: { x | c x 1 }
-  one_mem' := c.refl 1
-  mul_mem' hx hy := by simpa using c.mul hx hy
-  inv_mem' h := by simpa using c.inv h
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 _root_.Con.subgroup
-  签名: (c : Con G)
-  定义体: { x | c x 1 }
-  one_mem' := c.refl 1
-  mul_mem' hx hy := by simpa using c.mul hx hy
-  inv_mem' h := by simpa using c.inv h
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup._root_.Con.subgroup** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def _root_.Con.subgroup (c : Con G) : Subgroup G where
   carrier := { x | c x 1 }
@@ -721,55 +551,27 @@ protected def _root_.Con.subgroup (c : Con G) : Subgroup G where
   inv_mem' h := by simpa using c.inv h
 
 @[to_additive (attr := simp)]
-/--
-theorem `_root_.Con.mem_subgroup_iff` / 定理 `_root_.Con.mem_subgroup_iff`
-
-English:
-theorem _root_.Con.mem_subgroup_iff
-  given: {c : Con G} {x : G}
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 _root_.Con.mem_subgroup_iff
-  条件: {c : Con G} {x : G}
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**QuotientGroup._root_.Con.mem_subgroup_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientG
+roup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Con.mem_subgroup_iff {c : Con G} {x : G} :
-    x in c.subgroup ↔ c x 1 := Iff.rfl
+    x ∈ c.subgroup ↔ c x 1 := Iff.rfl
 
 @[to_additive]
+/-
+**QuotientGroup.** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (c : Con G) : c.subgroup.Normal :=
-  ⟨fun x hx g => by simpa using (c.mul (c.mul (c.refl g) hx) (c.refl g⁻¹))⟩
+  ⟨fun x hx g ↦ by simpa using (c.mul (c.mul (c.refl g) hx) (c.refl g⁻¹))⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `_root_.Con.subgroup_quotientGroupCon` / 定理 `_root_.Con.subgroup_quotientGroupCon`
-
-English:
-theorem _root_.Con.subgroup_quotientGroupCon
-  given: (H : Subgroup G) [H.Normal]
-  proof: by
-  ext
-  simp [QuotientGroup.con, leftRel_apply]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 _root_.Con.subgroup_quotientGroupCon
-  条件: (H : 子群 G) [H.正规]
-  证明: by
-  ext
-  simp [QuotientGroup.con, leftRel_apply]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.con, leftRel_apply
+/-
+**QuotientGroup._root_.Con.subgroup_quotientGroupCon** 是 Mathlib 中的一个定理，位于命名空间 `
+QuotientGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Con.subgroup_quotientGroupCon (H : Subgroup G) [H.Normal] :
     (QuotientGroup.con H).subgroup = H := by
@@ -777,627 +579,419 @@ theorem _root_.Con.subgroup_quotientGroupCon (H : Subgroup G) [H.Normal] :
   simp [QuotientGroup.con, leftRel_apply]
 
 @[to_additive (attr := simp)]
-/--
-theorem `con_subgroup` / 定理 `con_subgroup`
-
-English:
-theorem con_subgroup
-  given: (c : Con G)
-  proof: by
-  ext x y
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [leftRel_apply]; rw [Con.mem_subgroup_iff]
-  exact ⟨fun h => by simpa using c.mul (c.refl x) (c.symm h),
-    fun h => by simpa using c.mul (c.refl x⁻¹) (c.symm h)⟩
-
-中文:
-定理 con_subgroup
-  条件: (c : Con G)
-  证明: by
-  ext x y
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [leftRel_apply]; rw [Con.mem_subgroup_iff]
-  exact ⟨fun h => by simpa using c.mul (c.refl x) (c.symm h),
-    fun h => by simpa using c.mul (c.refl x⁻¹) (c.symm h)⟩
-
-Depends on / 依赖: Con.mem_subgroup_iff, Con.rel_mk, QuotientGroup, QuotientGroup.con, c.mul, c.refl, c.symm, leftRel_apply, mem_subgroup_iff, rel_mk
+/-
+**QuotientGroup.con_subgroup** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：con_subgroup (c : Con G) : QuotientGroup.con c.subgroup = c
+参数：c : Con G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.ext`：ext {c d : Con M} (H : forall x y, c x y ↔ d x y) : c = d
+· 使用定理 `QuotientGroup.instNormalSubgroup`：∀ {G : Type u_1} [inst : Group G] (c :
+ Con G), c.subgroup.Normal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuotientGroup.con.eq_1`：∀ {G : Type u_1} [inst : Group G] (N : Subgroup 
+G) [nN : N.Normal],   QuotientGroup.con N = { toSetoid := QuotientGroup.leftRel 
+N, mul' := ⋯…
+· 使用定理 `Con.rel_mk`：rel_mk {s : Setoid M} {h a b} : Con.mk s h a b ↔ r a b
+· 使用定理 `QuotientGroup.leftRel_apply`：leftRel_apply {x y : α} : leftRel s x y ↔ x
+⁻¹ * y in s
+· 使用定理 `Con.mem_subgroup_iff`：∀ {G : Type u_1} [inst : Group G] {c : Con G} {x :
+ G}, x ∈ c.subgroup ↔ c x 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `Con.mul`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {w x y z : M}, c w 
+x → c y z → c (w * y) (x * z)
+· 使用定理 `Con.refl`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) (x : M), c x x
+· 使用定理 `Con.symm`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {x y : M}, c x y →
+ c y x
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
 -/
 theorem con_subgroup (c : Con G) :
     QuotientGroup.con c.subgroup = c := by
   ext x y
-  rw [QuotientGroup.con]; rw [Con.rel_mk]; rw [leftRel_apply]; rw [Con.mem_subgroup_iff]
-  exact ⟨fun h => by simpa using c.mul (c.refl x) (c.symm h),
-    fun h => by simpa using c.mul (c.refl x⁻¹) (c.symm h)⟩
+  rw [QuotientGroup.con, Con.rel_mk, leftRel_apply, Con.mem_subgroup_iff]
+  exact ⟨fun h ↦ by simpa using c.mul (c.refl x) (c.symm h),
+    fun h ↦ by simpa using c.mul (c.refl x⁻¹) (c.symm h)⟩
 
 /--
 The normal subgroups correspond to the congruence relations on a group.
 -/
 @[to_additive (attr := simps) AddSubgroup.orderIsoAddCon
 /-- The normal subgroups correspond to the additive congruence relations on an `AddGroup`. -/]
-/--
-Definition of `_root_.Subgroup.orderIsoCon` / `_root_.Subgroup.orderIsoCon` 的定义
-
-English:
-definition _root_.Subgroup.orderIsoCon
-  signature: :
-  body: letI : N.val.Normal := N.prop; QuotientGroup.con N
-  invFun c := ⟨c.subgroup, inferInstance⟩
-  left_inv := fun ⟨N, _⟩ => Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
-  right_inv c := QuotientGroup.con_subgroup c
-  map_rel_iff' := by
-    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le_def, Con.rel_mk, leftRel_apply]
-    refine ⟨fun h x _ => ?_, fun hle _ _ h => hle h⟩
-    specialize @h 1 x
-    simp_all
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 _root_.子群.orderIsoCon
-  签名: :
-  定义体: letI : N.val.Normal := N.prop; QuotientGroup.con N
-  invFun c := ⟨c.subgroup, inferInstance⟩
-  left_inv := fun ⟨N, _⟩ => Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
-  right_inv c := QuotientGroup.con_subgroup c
-  map_rel_iff' := by
-    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le_def, Con.rel_mk, leftRel_apply]
-    refine ⟨fun h x _ => ?_, fun hle _ _ h => hle h⟩
-    specialize @h 1 x
-    simp_all
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: N.prop, N.val.Normal, Normal, QuotientGroup, QuotientGroup.con
+/-
+**QuotientGroup._root_.Subgroup.orderIsoCon** 是 Mathlib 中的一个定义，位于命名空间 `QuotientG
+roup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.Subgroup.orderIsoCon :
     { N : Subgroup G // N.Normal } ≃o Con G where
   toFun N := letI : N.val.Normal := N.prop; QuotientGroup.con N
   invFun c := ⟨c.subgroup, inferInstance⟩
-  left_inv := fun ⟨N, _⟩ => Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
+  left_inv := fun ⟨N, _⟩ ↦ Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
   right_inv c := QuotientGroup.con_subgroup c
   map_rel_iff' := by
     simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le_def, Con.rel_mk, leftRel_apply]
-    refine ⟨fun h x _ => ?_, fun hle _ _ h => hle h⟩
+    refine ⟨fun h x _ ↦ ?_, fun hle _ _ h ↦ hle h⟩
     specialize @h 1 x
     simp_all
 
 @[to_additive (attr := simp)]
-/--
-lemma `con_le_iff` / 引理 `con_le_iff`
-
-English:
-lemma con_le_iff
-  given: {N M : Subgroup G} [N.Normal] [M.Normal]
-  proof: (Subgroup.orderIsoCon.map_rel_iff (a := ⟨N, inferInstance⟩) (b := ⟨M, inferInstance⟩))
-
-@[to_additive (attr := gcongr)]
-
-中文:
-引理 con_le_iff
-  条件: {N M : 子群 G} [N.正规] [M.正规]
-  证明: (Subgroup.orderIsoCon.map_rel_iff (a := ⟨N, inferInstance⟩) (b := ⟨M, inferInstance⟩))
-
-@[to_additive (attr := gcongr)]
-
-Depends on / 依赖: Subgroup, Subgroup.orderIsoCon.map_rel_iff, map_rel_iff, orderIsoCon
+/-
+**QuotientGroup.con_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`。
+形式化陈述：con_le_iff {N M : Subgroup G} [N.Normal] [M.Normal] : QuotientGroup.con N 
+<= QuotientGroup.con M ↔ N <= M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelIso.map_rel_iff`：map_rel_iff (f : r ≃r s) {a b} : s (f a) (f b) ↔ r a
+ b
 -/
 lemma con_le_iff {N M : Subgroup G} [N.Normal] [M.Normal] :
-    QuotientGroup.con N <= QuotientGroup.con M ↔ N <= M :=
+    QuotientGroup.con N ≤ QuotientGroup.con M ↔ N ≤ M :=
   (Subgroup.orderIsoCon.map_rel_iff (a := ⟨N, inferInstance⟩) (b := ⟨M, inferInstance⟩))
 
 @[to_additive (attr := gcongr)]
-/--
-lemma `con_mono` / 引理 `con_mono`
-
-English:
-lemma con_mono
-  given: {N M : Subgroup G} [hN : N.Normal] [hM : M.Normal] (h : N <= M)
-  proof: con_le_iff.mpr h
-
-中文:
-引理 con_mono
-  条件: {N M : 子群 G} [hN : N.正规] [hM : M.正规] (h : N <= M)
-  证明: con_le_iff.mpr h
-
-Depends on / 依赖: con_le_iff, con_le_iff.mpr
+/-
+**QuotientGroup.con_mono** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`。
+形式化陈述：con_mono {N M : Subgroup G} [hN : N.Normal] [hM : M.Normal] (h : N <= M) :
+ QuotientGroup.con N <= QuotientGroup.con M
+参数：h : N <= M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `QuotientGroup.con_le_iff`：con_le_iff {N M : Subgroup G} [N.Normal] [M.No
+rmal] : QuotientGroup.con N <= QuotientGroup.con M ↔ N <= M
 -/
-lemma con_mono {N M : Subgroup G} [hN : N.Normal] [hM : M.Normal] (h : N <= M) :
-    QuotientGroup.con N <= QuotientGroup.con M :=
+lemma con_mono {N M : Subgroup G} [hN : N.Normal] [hM : M.Normal] (h : N ≤ M) :
+    QuotientGroup.con N ≤ QuotientGroup.con M :=
   con_le_iff.mpr h
 
 /-- A group homomorphism `φ : G →* M` with `N ⊆ ker(φ)` descends (i.e. `lift`s) to a
 group homomorphism `G/N →* M`. -/
 @[to_additive /-- An `AddGroup` homomorphism `φ : G →+ M` with `N ⊆ ker(φ)` descends (i.e. `lift`s)
 to an `AddGroup` homomorphism `G/N →+ M`. -/]
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: (φ : G ->* M) (HN : N <= φ.ker)
-  body: (QuotientGroup.con N).lift φ con_ker_eq_conKer φ ▸ con_mono HN
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 lift
-  签名: (φ : G ->* M) (HN : N <= φ.ker)
-  定义体: (QuotientGroup.con N).lift φ con_ker_eq_conKer φ ▸ con_mono HN
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.con, con_ker_eq_conKer, con_mono
+/-
+**QuotientGroup.lift** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：lift (φ : G ->* M) (HN : N <= φ.ker) : Q ->* M
+参数：φ : G ->* M；HN : N <= φ.ker。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def lift (φ : G ->* M) (HN : N <= φ.ker) : Q ->* M :=
-(QuotientGroup.con N).lift φ con_ker_eq_conKer φ ▸ con_mono HN
+def lift (φ : G →* M) (HN : N ≤ φ.ker) : Q →* M :=
+  (QuotientGroup.con N).lift φ <| con_ker_eq_conKer φ ▸ con_mono HN
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_mk` / 定理 `lift_mk`
-
-English:
-theorem lift_mk
-  given: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  statement: lift N φ HN (g : Q) = φ g
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lift_mk
-  条件: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  结论: lift N φ HN (g : Q) = φ g
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.lift_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：lift_mk {φ : G ->* M} (HN : N <= φ.ker) (g : G) : lift N φ HN (g : Q) = φ 
+g
+参数：HN : N <= φ.ker；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_mk {φ : G ->* M} (HN : N <= φ.ker) (g : G) : lift N φ HN (g : Q) = φ g :=
+theorem lift_mk {φ : G →* M} (HN : N ≤ φ.ker) (g : G) : lift N φ HN (g : Q) = φ g :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_mk'` / 定理 `lift_mk'`
-
-English:
-theorem lift_mk'
-  given: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  statement: lift N φ HN (mk g : Q) = φ g
-  proof: rfl
-
-中文:
-定理 lift_mk'
-  条件: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  结论: lift N φ HN (mk g : Q) = φ g
-  证明: rfl
+/-
+**QuotientGroup.lift_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：lift_mk' {φ : G ->* M} (HN : N <= φ.ker) (g : G) : lift N φ HN (mk g : Q) 
+= φ g
+参数：HN : N <= φ.ker；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_mk' {φ : G ->* M} (HN : N <= φ.ker) (g : G) : lift N φ HN (mk g : Q) = φ g :=
+theorem lift_mk' {φ : G →* M} (HN : N ≤ φ.ker) (g : G) : lift N φ HN (mk g : Q) = φ g :=
   rfl
 -- TODO: replace `mk` with `mk'`)
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_comp_mk'` / 定理 `lift_comp_mk'`
-
-English:
-theorem lift_comp_mk'
-  given: (φ : G ->* M) (HN : N <= φ.ker)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lift_comp_mk'
-  条件: (φ : G ->* M) (HN : N <= φ.ker)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.lift_comp_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：lift_comp_mk' (φ : G ->* M) (HN : N <= φ.ker) : (QuotientGroup.lift N φ HN
+).comp (QuotientGroup.mk' N) = φ
+参数：φ : G ->* M；HN : N <= φ.ker。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_comp_mk' (φ : G ->* M) (HN : N <= φ.ker) :
+theorem lift_comp_mk' (φ : G →* M) (HN : N ≤ φ.ker) :
     (QuotientGroup.lift N φ HN).comp (QuotientGroup.mk' N) = φ :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_quot_mk` / 定理 `lift_quot_mk`
-
-English:
-theorem lift_quot_mk
-  given: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 lift_quot_mk
-  条件: {φ : G ->* M} (HN : N <= φ.ker) (g : G)
-  证明: rfl
-
-@[to_additive]
+/-
+**QuotientGroup.lift_quot_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：lift_quot_mk {φ : G ->* M} (HN : N <= φ.ker) (g : G) : lift N φ HN (Quot.m
+k _ g : Q) = φ g
+参数：HN : N <= φ.ker；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_quot_mk {φ : G ->* M} (HN : N <= φ.ker) (g : G) :
+theorem lift_quot_mk {φ : G →* M} (HN : N ≤ φ.ker) (g : G) :
     lift N φ HN (Quot.mk _ g : Q) = φ g :=
   rfl
 
 @[to_additive]
-/--
-theorem `lift_surjective_of_surjective` / 定理 `lift_surjective_of_surjective`
-
-English:
-theorem lift_surjective_of_surjective
-  given: (φ : G ->* M) (hφ : Function.Surjective φ) (HN : N <= φ.ker)
-  proof: Quotient.lift_surjective _ _ hφ
-
-@[to_additive]
-
-中文:
-定理 lift_surjective_of_surjective
-  条件: (φ : G ->* M) (hφ : 函数.满射 φ) (HN : N <= φ.ker)
-  证明: Quotient.lift_surjective _ _ hφ
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.lift_surjective, lift_surjective
+/-
+**QuotientGroup.lift_surjective_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Quotien
+tGroup`。
+形式化陈述：lift_surjective_of_surjective (φ : G ->* M) (hφ : Function.Surjective φ) (
+HN : N <= φ.ker) : Function.Surjective (QuotientGroup.lift N φ HN)
+参数：φ : G ->* M；hφ : Function.Surjective φ；HN : N <= φ.ker。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.lift_surjective`：Quotient.lift_surjective {α β : Sort*} {s : Se
+toid α} (f : α -> β) (h : forall (a b : α), a ≈ b -> f a = f b) (hf : Function.S
+urjective f) :…
 -/
-theorem lift_surjective_of_surjective (φ : G ->* M) (hφ : Function.Surjective φ) (HN : N <= φ.ker) :
+theorem lift_surjective_of_surjective (φ : G →* M) (hφ : Function.Surjective φ) (HN : N ≤ φ.ker) :
     Function.Surjective (QuotientGroup.lift N φ HN) :=
   Quotient.lift_surjective _ _ hφ
 
 @[to_additive]
-/--
-theorem `ker_lift` / 定理 `ker_lift`
-
-English:
-theorem ker_lift
-  given: (φ : G ->* M) (HN : N <= φ.ker)
-  proof: by
-  rw [← congrArg MonoidHom.ker (lift_comp_mk' N φ HN)]; rw [← MonoidHom.comap_ker]; rw [Subgroup.map_comap_eq_self_of_surjective (mk'_surjective N)]
-
-@[to_additive]
-
-中文:
-定理 ker_lift
-  条件: (φ : G ->* M) (HN : N <= φ.ker)
-  证明: by
-  rw [← congrArg MonoidHom.ker (lift_comp_mk' N φ HN)]; rw [← MonoidHom.comap_ker]; rw [Subgroup.map_comap_eq_self_of_surjective (mk'_surjective N)]
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comap_ker, MonoidHom.ker, Subgroup, Subgroup.map_comap_eq_self_of_surjective, _surjective, comap_ker, lift_comp_mk, map_comap_eq_self_of_surjective
+/-
+**QuotientGroup.ker_lift** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：ker_lift (φ : G ->* M) (HN : N <= φ.ker) : (QuotientGroup.lift N φ HN).ker
+ = Subgroup.map (QuotientGroup.mk' N) φ.ker
+参数：φ : G ->* M；HN : N <= φ.ker。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.lift_comp_mk'`：lift_comp_mk' (φ : G ->* M) (HN : N <= φ.ke
+r) : (QuotientGroup.lift N φ HN).comp (QuotientGroup.mk' N) = φ
+· 使用定理 `MonoidHom.comap_ker`：comap_ker {P : Type*} [MulOneClass P] (g : N ->* P)
+ (f : G ->* N) : g.ker.comap f = (g.comp f).ker
+· 使用定理 `Subgroup.map_comap_eq_self_of_surjective`：map_comap_eq_self_of_surjectiv
+e {f : G ->* N} (h : Function.Surjective f) (H : Subgroup N) : map f (comap f H)
+ = H
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
 -/
-theorem ker_lift (φ : G ->* M) (HN : N <= φ.ker) :
+theorem ker_lift (φ : G →* M) (HN : N ≤ φ.ker) :
     (QuotientGroup.lift N φ HN).ker = Subgroup.map (QuotientGroup.mk' N) φ.ker := by
-  rw [← congrArg MonoidHom.ker (lift_comp_mk' N φ HN)]; rw [← MonoidHom.comap_ker]; rw [Subgroup.map_comap_eq_self_of_surjective (mk'_surjective N)]
+  rw [← congrArg MonoidHom.ker (lift_comp_mk' N φ HN), ← MonoidHom.comap_ker,
+    Subgroup.map_comap_eq_self_of_surjective (mk'_surjective N)]
 
 @[to_additive]
-/--
-lemma `injective_lift_iff` / 引理 `injective_lift_iff`
-
-English:
-lemma injective_lift_iff
-  given: (φ : G ->* M) (HN : N <= φ.ker)
-  proof: by
-  rw [← MonoidHom.ker_eq_bot_iff]; rw [QuotientGroup.ker_lift]; rw [Subgroup.map_eq_bot_iff]
-  grind [QuotientGroup.ker_mk']
-
-中文:
-引理 injective_lift_iff
-  条件: (φ : G ->* M) (HN : N <= φ.ker)
-  证明: by
-  rw [← MonoidHom.ker_eq_bot_iff]; rw [QuotientGroup.ker_lift]; rw [Subgroup.map_eq_bot_iff]
-  grind [QuotientGroup.ker_mk']
-
-Depends on / 依赖: MonoidHom, MonoidHom.ker_eq_bot_iff, QuotientGroup, QuotientGroup.ker_lift, QuotientGroup.ker_mk, Subgroup, Subgroup.map_eq_bot_iff, ker_eq_bot_iff, ker_lift, ker_mk, map_eq_bot_iff
+/-
+**QuotientGroup.injective_lift_iff** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`。
+形式化陈述：injective_lift_iff (φ : G ->* M) (HN : N <= φ.ker) : Function.Injective (Q
+uotientGroup.lift N φ HN) ↔ N = φ.ker
+参数：φ : G ->* M；HN : N <= φ.ker。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.ker_eq_bot_iff`：ker_eq_bot_iff (f : G ->* M) : f.ker = ⊥ ↔ Fun
+ction.Injective f
+· 使用定理 `QuotientGroup.ker_lift`：ker_lift (φ : G ->* M) (HN : N <= φ.ker) : (Quot
+ientGroup.lift N φ HN).ker = Subgroup.map (QuotientGroup.mk' N) φ.ker
+· 使用定理 `Subgroup.map_eq_bot_iff`：map_eq_bot_iff {f : G ->* N} : H.map f = ⊥ ↔ H 
+<= f.ker
 -/
-lemma injective_lift_iff (φ : G ->* M) (HN : N <= φ.ker) :
+lemma injective_lift_iff (φ : G →* M) (HN : N ≤ φ.ker) :
     Function.Injective (QuotientGroup.lift N φ HN) ↔ N = φ.ker := by
-  rw [← MonoidHom.ker_eq_bot_iff]; rw [QuotientGroup.ker_lift]; rw [Subgroup.map_eq_bot_iff]
+  rw [← MonoidHom.ker_eq_bot_iff, QuotientGroup.ker_lift, Subgroup.map_eq_bot_iff]
   grind [QuotientGroup.ker_mk']
 
 /-- A surjective group homomorphism `φ : G →* H` with `N = ker(φ)` descends (i.e. `lift`s) to a
 group isomorphism `G/N ≃* H`. -/
 @[to_additive /-- A surjective `AddGroup` homomorphism `φ : G →+ H` with `N = ker(φ)` descends
 (i.e. `lift`s) to an `AddGroup` isomorphism `G/N ≃+ H`. -/]
-/--
-Definition of `liftEquiv` / `liftEquiv` 的定义
-
-English:
-definition liftEquiv
-  signature: {φ : G ->* H} (hφ : Function.Surjective φ)
-  body: MulEquiv.ofBijective (QuotientGroup.lift N φ HN.le)
-    ⟨by rw [← MonoidHom.ker_eq_bot_iff, ker_lift, ← HN, QuotientGroup.map_mk'_self],
-      lift_surjective_of_surjective N φ hφ HN.le⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 liftEquiv
-  签名: {φ : G ->* H} (hφ : 函数.满射 φ)
-  定义体: MulEquiv.ofBijective (QuotientGroup.lift N φ HN.le)
-    ⟨by rw [← MonoidHom.ker_eq_bot_iff, ker_lift, ← HN, QuotientGroup.map_mk'_self],
-      lift_surjective_of_surjective N φ hφ HN.le⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: HN.le, MonoidHom, MonoidHom.ker_eq_bot_iff, MulEquiv, MulEquiv.ofBijective, QuotientGroup, QuotientGroup.lift, QuotientGroup.map_mk, _self, ker_eq_bot_iff, ker_lift, lift_surjective_of_surjective, map_mk, ofBijective
+/-
+**QuotientGroup.liftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：liftEquiv {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) : G 
+⧸ N ≃* H
+参数：hφ : Function.Surjective φ；HN : N = φ.ker。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def liftEquiv {φ : G ->* H} (hφ : Function.Surjective φ)
+noncomputable def liftEquiv {φ : G →* H} (hφ : Function.Surjective φ)
     (HN : N = φ.ker) : G ⧸ N ≃* H :=
   MulEquiv.ofBijective (QuotientGroup.lift N φ HN.le)
     ⟨by rw [← MonoidHom.ker_eq_bot_iff, ker_lift, ← HN, QuotientGroup.map_mk'_self],
       lift_surjective_of_surjective N φ hφ HN.le⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `liftEquiv_coe` / 定理 `liftEquiv_coe`
-
-English:
-theorem liftEquiv_coe
-  given: {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 liftEquiv_coe
-  条件: {φ : G ->* H} (hφ : 函数.满射 φ) (HN : N = φ.ker) (g : G)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**QuotientGroup.liftEquiv_coe** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：liftEquiv_coe {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) 
+(g : G) : liftEquiv N hφ HN (g : Q) = φ g
+参数：hφ : Function.Surjective φ；HN : N = φ.ker；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftEquiv_coe {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G) :
+theorem liftEquiv_coe {φ : G →* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G) :
     liftEquiv N hφ HN (g : Q) = φ g := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `liftEquiv_mk` / 定理 `liftEquiv_mk`
-
-English:
-theorem liftEquiv_mk
-  given: {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G)
-  proof: rfl
-
-中文:
-定理 liftEquiv_mk
-  条件: {φ : G ->* H} (hφ : 函数.满射 φ) (HN : N = φ.ker) (g : G)
-  证明: rfl
+/-
+**QuotientGroup.liftEquiv_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：liftEquiv_mk {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (
+g : G) : liftEquiv N hφ HN (mk g : Q) = φ g
+参数：hφ : Function.Surjective φ；HN : N = φ.ker；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftEquiv_mk {φ : G ->* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G) :
+theorem liftEquiv_mk {φ : G →* H} (hφ : Function.Surjective φ) (HN : N = φ.ker) (g : G) :
     liftEquiv N hφ HN (mk g : Q) = φ g := rfl
 
 /-- A group homomorphism `f : G →* H` induces a map `G/N →* H/M` if `N ⊆ f⁻¹(M)`. -/
 @[to_additive
       /-- An `AddGroup` homomorphism `f : G →+ H` induces a map `G/N →+ H/M` if `N ⊆ f⁻¹(M)`. -/]
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f)
-  body: by
-  refine QuotientGroup.lift N ((mk' M).comp f) ?_
-  intro x hx
-  refine QuotientGroup.eq.2 ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
-  exact h hx
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 map
-  签名: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f)
-  定义体: by
-  refine QuotientGroup.lift N ((mk' M).comp f) ?_
-  intro x hx
-  refine QuotientGroup.eq.2 ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
-  exact h hx
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq, QuotientGroup.lift, Subgroup, Subgroup.inv_mem_iff, inv_mem_iff, mul_one
+/-
+**QuotientGroup.map** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：map (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) : G ⧸ N
+ ->* H ⧸ M
+参数：M : Subgroup H；f : G ->* H；h : N <= M.comap f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def map (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) : G ⧸ N ->* H ⧸ M := by
+def map (M : Subgroup H) [M.Normal] (f : G →* H) (h : N ≤ M.comap f) : G ⧸ N →* H ⧸ M := by
   refine QuotientGroup.lift N ((mk' M).comp f) ?_
   intro x hx
   refine QuotientGroup.eq.2 ?_
-  rw [mul_one]; rw [Subgroup.inv_mem_iff]
+  rw [mul_one, Subgroup.inv_mem_iff]
   exact h hx
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_mk` / 定理 `map_mk`
-
-English:
-theorem map_mk
-  given: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map_mk
-  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f) (x : G)
-  证明: rfl
-
-@[to_additive]
+/-
+**QuotientGroup.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_mk (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x :
+ G) : map N M f h ↑x = ↑(f x)
+参数：M : Subgroup H；f : G ->* H；h : N <= M.comap f；x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_mk (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G) :
+theorem map_mk (M : Subgroup H) [M.Normal] (f : G →* H) (h : N ≤ M.comap f) (x : G) :
     map N M f h ↑x = ↑(f x) :=
   rfl
 
 @[to_additive]
-/--
-theorem `map_mk'` / 定理 `map_mk'`
-
-English:
-theorem map_mk'
-  given: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map_mk'
-  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= M.comap f) (x : G)
-  证明: rfl
-
-@[to_additive]
+/-
+**QuotientGroup.map_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_mk' (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x 
+: G) : map N M f h (mk' _ x) = ↑(f x)
+参数：M : Subgroup H；f : G ->* H；h : N <= M.comap f；x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_mk' (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= M.comap f) (x : G) :
+theorem map_mk' (M : Subgroup H) [M.Normal] (f : G →* H) (h : N ≤ M.comap f) (x : G) :
     map N M f h (mk' _ x) = ↑(f x) :=
   rfl
 
 @[to_additive]
-/--
-theorem `map_surjective_of_surjective` / 定理 `map_surjective_of_surjective`
-
-English:
-theorem map_surjective_of_surjective
-  statement: (M : Subgroup H) [M.Normal] (f : G ->* H)
-  proof: lift_surjective_of_surjective _ _ hf _
-
-@[to_additive]
-
-中文:
-定理 map_surjective_of_surjective
-  结论: (M : 子群 H) [M.正规] (f : G ->* H)
-  证明: lift_surjective_of_surjective _ _ hf _
-
-@[to_additive]
-
-Depends on / 依赖: lift_surjective_of_surjective
+/-
+**QuotientGroup.map_surjective_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Quotient
+Group`。
+形式化陈述：map_surjective_of_surjective (M : Subgroup H) [M.Normal] (f : G ->* H) (hf
+ : Function.Surjective (mk ∘ f : G -> H ⧸ M)) (h : N <= M.comap f) : Function.Su
+rjective (map N M f h)
+参数：M : Subgroup H；f : G ->* H；hf : Function.Surjective (mk ∘ f : G -> H ⧸ M)；h :
+ N <= M.comap f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.lift_surjective_of_surjective`：lift_surjective_of_surjecti
+ve (φ : G ->* M) (hφ : Function.Surjective φ) (HN : N <= φ.ker) : Function.Surje
+ctive (QuotientGroup.lift N φ HN)
 -/
-theorem map_surjective_of_surjective (M : Subgroup H) [M.Normal] (f : G ->* H)
-    (hf : Function.Surjective (mk ∘ f : G -> H ⧸ M)) (h : N <= M.comap f) :
+theorem map_surjective_of_surjective (M : Subgroup H) [M.Normal] (f : G →* H)
+    (hf : Function.Surjective (mk ∘ f : G → H ⧸ M)) (h : N ≤ M.comap f) :
     Function.Surjective (map N M f h) :=
   lift_surjective_of_surjective _ _ hf _
 
 @[to_additive]
-/--
-theorem `ker_map` / 定理 `ker_map`
-
-English:
-theorem ker_map
-  given: (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= Subgroup.comap f M)
-  proof: by
-  simp_rw [← ker_mk' M, MonoidHom.comap_ker]
-  exact QuotientGroup.ker_lift _ _ _
-
-@[to_additive]
-
-中文:
-定理 ker_map
-  条件: (M : 子群 H) [M.正规] (f : G ->* H) (h : N <= 子群.comap f M)
-  证明: by
-  simp_rw [← ker_mk' M, MonoidHom.comap_ker]
-  exact QuotientGroup.ker_lift _ _ _
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comap_ker, QuotientGroup, QuotientGroup.ker_lift, comap_ker, ker_lift, ker_mk, simp_rw
+/-
+**QuotientGroup.ker_map** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：ker_map (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= Subgroup.comap
+ f M) : (map N M f h).ker = Subgroup.map (mk' N) (M.comap f)
+参数：M : Subgroup H；f : G ->* H；h : N <= Subgroup.comap f M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用定理 `QuotientGroup.ker_lift`：ker_lift (φ : G ->* M) (HN : N <= φ.ker) : (Quot
+ientGroup.lift N φ HN).ker = Subgroup.map (QuotientGroup.mk' N) φ.ker
 -/
-theorem ker_map (M : Subgroup H) [M.Normal] (f : G ->* H) (h : N <= Subgroup.comap f M) :
+theorem ker_map (M : Subgroup H) [M.Normal] (f : G →* H) (h : N ≤ Subgroup.comap f M) :
     (map N M f h).ker = Subgroup.map (mk' N) (M.comap f) := by
   simp_rw [← ker_mk' M, MonoidHom.comap_ker]
   exact QuotientGroup.ker_lift _ _ _
 
 @[to_additive]
-/--
-theorem `map_id_apply` / 定理 `map_id_apply`
-
-English:
-theorem map_id_apply
-  given: (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) (x)
-  proof: induction_on x fun _x => rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_id_apply
-  条件: (h : N <= 子群.comap (幺半群态射.id _) N := (子群.comap_id N).le) (x)
-  证明: induction_on x fun _x => rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.comap_id, comap_id
+/-
+**QuotientGroup.map_id_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_id_apply (h : N <= Subgroup.comap (MonoidHom.id _) N
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.induction_on`：induction_on {C : α ⧸ s -> Prop} (x : α ⧸ s)
+ (H : forall z, C (QuotientGroup.mk z)) : C x
 -/
-theorem map_id_apply (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) (x) :
+theorem map_id_apply (h : N ≤ Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) (x) :
     map N N (MonoidHom.id _) h x = x :=
   induction_on x fun _x => rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le)
-  proof: MonoidHom.ext (map_id_apply N h)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_id
-  条件: (h : N <= 子群.comap (幺半群态射.id _) N := (子群.comap_id N).le)
-  证明: MonoidHom.ext (map_id_apply N h)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.comap_id, comap_id
+/-
+**QuotientGroup.map_id** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_id (h : N <= Subgroup.comap (MonoidHom.id _) N
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `QuotientGroup.map_id_apply`：map_id_apply (h : N <= Subgroup.comap (Monoi
+dHom.id _) N
 -/
-theorem map_id (h : N <= Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) :
+theorem map_id (h : N ≤ Subgroup.comap (MonoidHom.id _) N := (Subgroup.comap_id N).le) :
     map N N (MonoidHom.id _) h = MonoidHom.id _ :=
   MonoidHom.ext (map_id_apply N h)
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  statement: {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
-  proof: by
-  refine induction_on x fun x => ?_
-  simp only [map_mk, MonoidHom.comp_apply]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_map
-  结论: {I : 类型} [群 I] (M : 子群 H) (O : 子群 I) [M.正规] [O.正规]
-  证明: by
-  refine induction_on x fun x => ?_
-  simp only [map_mk, MonoidHom.comp_apply]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comp_apply, Subgroup, Subgroup.comap_comap, Subgroup.comap_mono, comap_comap, comap_mono, comp_apply, g.comp, hf.trans, induction_on, map_mk, trans_eq
+/-
+**QuotientGroup.map_map** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_map {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal]
+ [O.Normal] (f : G ->* H) (g : H ->* I) (hf : N <= Subgroup.comap f M) (hg : M <
+= Subgroup.comap g O) (hgf : N <= Subgroup.comap (g.comp f) O
+参数：M : Subgroup H；O : Subgroup I；f : G ->* H；g : H ->* I；hf : N <= Subgroup.coma
+p f M；hg : M <= Subgroup.comap g O。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.induction_on`：induction_on {C : α ⧸ s -> Prop} (x : α ⧸ s)
+ (H : forall z, C (QuotientGroup.mk z)) : C x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_map {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
-    (f : G ->* H) (g : H ->* I) (hf : N <= Subgroup.comap f M) (hg : M <= Subgroup.comap g O)
-    (hgf : N <= Subgroup.comap (g.comp f) O :=
+    (f : G →* H) (g : H →* I) (hf : N ≤ Subgroup.comap f M) (hg : M ≤ Subgroup.comap g O)
+    (hgf : N ≤ Subgroup.comap (g.comp f) O :=
       hf.trans ((Subgroup.comap_mono hg).trans_eq (Subgroup.comap_comap _ _ _)))
     (x : G ⧸ N) : map M O g hg (map N M f hf x) = map N O (g.comp f) hgf x := by
   refine induction_on x fun x => ?_
   simp only [map_mk, MonoidHom.comp_apply]
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_comp_map` / 定理 `map_comp_map`
-
-English:
-theorem map_comp_map
-  statement: {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
-  proof: MonoidHom.ext (map_map N M O f g hf hg hgf)
-
-中文:
-定理 map_comp_map
-  结论: {I : 类型} [群 I] (M : 子群 H) (O : 子群 I) [M.正规] [O.正规]
-  证明: MonoidHom.ext (map_map N M O f g hf hg hgf)
-
-Depends on / 依赖: MonoidHom, MonoidHom.ext, Subgroup, Subgroup.comap_comap, Subgroup.comap_mono, comap_comap, comap_mono, g.comp, hf.trans, map_map, trans_eq
+/-
+**QuotientGroup.map_comp_map** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：map_comp_map {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.No
+rmal] [O.Normal] (f : G ->* H) (g : H ->* I) (hf : N <= Subgroup.comap f M) (hg 
+: M <= Subgroup.comap g O) (hgf : N <= Subgroup.comap (g.comp f) O
+参数：M : Subgroup H；O : Subgroup I；f : G ->* H；g : H ->* I；hf : N <= Subgroup.coma
+p f M；hg : M <= Subgroup.comap g O。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `QuotientGroup.map_map`：map_map {I : Type*} [Group I] (M : Subgroup H) (O
+ : Subgroup I) [M.Normal] [O.Normal] (f : G ->* H) (g : H ->* I) (hf : N <= Subg
+roup.comap …
 -/
 theorem map_comp_map {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.Normal] [O.Normal]
-    (f : G ->* H) (g : H ->* I) (hf : N <= Subgroup.comap f M) (hg : M <= Subgroup.comap g O)
-    (hgf : N <= Subgroup.comap (g.comp f) O :=
+    (f : G →* H) (g : H →* I) (hf : N ≤ Subgroup.comap f M) (hg : M ≤ Subgroup.comap g O)
+    (hgf : N ≤ Subgroup.comap (g.comp f) O :=
       hf.trans ((Subgroup.comap_mono hg).trans_eq (Subgroup.comap_comap _ _ _))) :
     (map M O g hg).comp (map N M f hf) = map N O (g.comp f) hgf :=
   MonoidHom.ext (map_map N M O f g hf hg hgf)
@@ -1405,35 +999,44 @@ theorem map_comp_map {I : Type*} [Group I] (M : Subgroup H) (O : Subgroup I) [M.
 section Pointwise
 open Set
 
-/--
-lemma `image_coe` / 引理 `image_coe`
-
-English:
-lemma image_coe
-  statement: ((↑) : G -> Q) '' N = 1
-  proof: congr_arg ((↑) : Subgroup Q -> Set Q) map_mk'_self N
-
-@[to_additive]
-
-中文:
-引理 image_coe
-  结论: ((↑) : G -> Q) '' N = 1
-  证明: congr_arg ((↑) : Subgroup Q -> Set Q) map_mk'_self N
-
-@[to_additive]
+/-
+**QuotientGroup.image_coe** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (N : Subgroup G) [nN : N.Normal], Quotie
+ntGroup.mk '' ↑N = 1
+参数：N : Subgroup G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `QuotientGroup.map_mk'_self`：∀ {G : Type u_1} [inst : Group G] (N : Subgr
+oup G) [nN : N.Normal], Subgroup.map (QuotientGroup.mk' N) N = ⊥
 -/
-@[to_additive (attr := simp)] lemma image_coe : ((↑) : G -> Q) '' N = 1 :=
-congr_arg ((↑) : Subgroup Q -> Set Q) map_mk'_self N
+@[to_additive (attr := simp)] lemma image_coe : ((↑) : G → Q) '' N = 1 :=
+  congr_arg ((↑) : Subgroup Q → Set Q) <| map_mk'_self N
 
 @[to_additive]
-/--
-lemma `preimage_image_coe` / 引理 `preimage_image_coe`
-
-English:
-lemma preimage_image_coe
-  given: (s : Set G)
-  statement: ((↑) : G -> Q) ⁻¹' ((↑) '' s) = N * s
-  proof: by
+/-
+**QuotientGroup.preimage_image_coe** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`。
+形式化陈述：preimage_image_coe (s : Set G) : ((↑) : G -> Q) ⁻¹' ((↑) '' s) = N * s
+参数：s : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_self'`：div_self' (a : G) : a / a = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `div_mul_cancel`：div_mul_cancel (a b : G) : a / b * b = a
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
+-/
+lemma preimage_image_coe (s : Set G) : ((↑) : G → Q) ⁻¹' ((↑) '' s) = N * s := by
   ext a
   constructor
   · rintro ⟨b, hb, h⟩
@@ -1444,58 +1047,25 @@ lemma preimage_image_coe
     simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.eq_one_iff]
 
 @[to_additive]
-
-中文:
-引理 preimage_image_coe
-  条件: (s : 集合 G)
-  结论: ((↑) : G -> Q) ⁻¹' ((↑) '' s) = N * s
-  证明: by
-  ext a
-  constructor
-  · rintro ⟨b, hb, h⟩
-    refine ⟨a / b, (QuotientGroup.eq_one_iff _).1 ?_, b, hb, div_mul_cancel _ _⟩
-    simp only [h, QuotientGroup.mk_div, div_self']
-  · rintro ⟨a, ha, b, hb, rfl⟩
-    refine ⟨b, hb, ?_⟩
-    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.eq_one_iff]
-
-@[to_additive]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk_div, QuotientGroup.mk_mul, div_mul_cancel, div_self, eq_one_iff, mk_div, mk_mul, right_eq_mul
+/-
+**QuotientGroup.image_coe_inj** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`。
+形式化陈述：image_coe_inj {s t : Set G} : ((↑) : G -> Q) '' s = ((↑) : G -> Q) '' t ↔ 
+↑N * s = N * t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.Surjective.preimage_injective`：∀ {α : Type u_1} {β : Type u_2} 
+{f : α → β}, Function.Surjective f → Function.Injective (Set.preimage f)
+· 使用定理 `QuotientGroup.mk_surjective`：mk_surjective : Function.Surjective @mk _ _
+ s
 -/
-lemma preimage_image_coe (s : Set G) : ((↑) : G -> Q) ⁻¹' ((↑) '' s) = N * s := by
-  ext a
-  constructor
-  · rintro ⟨b, hb, h⟩
-    refine ⟨a / b, (QuotientGroup.eq_one_iff _).1 ?_, b, hb, div_mul_cancel _ _⟩
-    simp only [h, QuotientGroup.mk_div, div_self']
-  · rintro ⟨a, ha, b, hb, rfl⟩
-    refine ⟨b, hb, ?_⟩
-    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.eq_one_iff]
-
-@[to_additive]
-/--
-lemma `image_coe_inj` / 引理 `image_coe_inj`
-
-English:
-lemma image_coe_inj
-  given: {s t : Set G}
-  statement: ((↑) : G -> Q) '' s = ((↑) : G -> Q) '' t ↔ ↑N * s = N * t
-  proof: by
-  simp_rw [← preimage_image_coe]
-  exact QuotientGroup.mk_surjective.preimage_injective.eq_iff.symm
-
-中文:
-引理 image_coe_inj
-  条件: {s t : 集合 G}
-  结论: ((↑) : G -> Q) '' s = ((↑) : G -> Q) '' t ↔ ↑N * s = N * t
-  证明: by
-  simp_rw [← preimage_image_coe]
-  exact QuotientGroup.mk_surjective.preimage_injective.eq_iff.symm
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.mk_surjective.preimage_injective.eq_iff.symm, eq_iff, mk_surjective, preimage_image_coe, preimage_injective, simp_rw
--/
-lemma image_coe_inj {s t : Set G} : ((↑) : G -> Q) '' s = ((↑) : G -> Q) '' t ↔ ↑N * s = N * t := by
+lemma image_coe_inj {s t : Set G} : ((↑) : G → Q) '' s = ((↑) : G → Q) '' t ↔ ↑N * s = N * t := by
   simp_rw [← preimage_image_coe]
   exact QuotientGroup.mk_surjective.preimage_injective.eq_iff.symm
 
@@ -1509,168 +1079,109 @@ variable (G' : Subgroup G) (H' : Subgroup H) [Subgroup.Normal G'] [Subgroup.Norm
 given that `e` maps `G` to `H`. -/
 @[to_additive /-- `QuotientAddGroup.congr` lifts the isomorphism `e : G ≃ H` to `G ⧸ G' ≃ H ⧸ H'`,
 given that `e` maps `G` to `H`. -/]
-/--
-Definition of `congr` / `congr` 的定义
-
-English:
-definition congr
-  signature: (e : G ≃* H) (he : G'.map e = H')
-  body: { map G' H' e (he ▸ G'.le_comap_map (e : G ->* H)) with
-    toFun := map G' H' e (he ▸ G'.le_comap_map (e : G ->* H))
-    invFun := map H' G' e.symm (he ▸ (G'.map_equiv_eq_comap_symm e).le)
-    left_inv := fun x => by
-      rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G ->* H))
-        (he ▸ (G'.map_equiv_eq_comap_symm e).le)]
-      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm,
-        MulEquiv.coe_monoidHom_refl, map_id_apply]
-    right_inv := fun x => by
-      rw [map_map H' G' H' e.symm e (he ▸ (G'.map_equiv_eq_comap_symm e).le)
-        (he ▸ G'.le_comap_map (e : G ->* H))]
-      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
-        MulEquiv.coe_monoidHom_refl, map_id_apply] }
-
-@[simp]
-
-中文:
-定义 congr
-  签名: (e : G ≃* H) (he : G'.map e = H')
-  定义体: { map G' H' e (he ▸ G'.le_comap_map (e : G ->* H)) with
-    toFun := map G' H' e (he ▸ G'.le_comap_map (e : G ->* H))
-    invFun := map H' G' e.symm (he ▸ (G'.map_equiv_eq_comap_symm e).le)
-    left_inv := fun x => by
-      rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G ->* H))
-        (he ▸ (G'.map_equiv_eq_comap_symm e).le)]
-      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm,
-        MulEquiv.coe_monoidHom_refl, map_id_apply]
-    right_inv := fun x => by
-      rw [map_map H' G' H' e.symm e (he ▸ (G'.map_equiv_eq_comap_symm e).le)
-        (he ▸ G'.le_comap_map (e : G ->* H))]
-      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
-        MulEquiv.coe_monoidHom_refl, map_id_apply] }
-
-@[simp]
-
-Depends on / 依赖: MulEquiv, MulEquiv.coe_monoidHom_refl, MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm, coe_monoidHom_refl, coe_monoidHom_trans, e.symm, invFun, le_comap_map, left_inv, map_equi, map_equiv_eq_comap_symm, map_id_apply, map_map, right_inv, self_trans_symm
+/-
+**QuotientGroup.congr** 是 Mathlib 中的一个定义，位于命名空间 `QuotientGroup`。
+形式化陈述：congr (e : G ≃* H) (he : G'.map e = H') : G ⧸ G' ≃* H ⧸ H'
+参数：e : G ≃* H；he : G'.map e = H'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def congr (e : G ≃* H) (he : G'.map e = H') : G ⧸ G' ≃* H ⧸ H' :=
-  { map G' H' e (he ▸ G'.le_comap_map (e : G ->* H)) with
-    toFun := map G' H' e (he ▸ G'.le_comap_map (e : G ->* H))
+  { map G' H' e (he ▸ G'.le_comap_map (e : G →* H)) with
+    toFun := map G' H' e (he ▸ G'.le_comap_map (e : G →* H))
     invFun := map H' G' e.symm (he ▸ (G'.map_equiv_eq_comap_symm e).le)
     left_inv := fun x => by
-      rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G ->* H))
+      rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G →* H))
         (he ▸ (G'.map_equiv_eq_comap_symm e).le)]
       simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm,
         MulEquiv.coe_monoidHom_refl, map_id_apply]
     right_inv := fun x => by
       rw [map_map H' G' H' e.symm e (he ▸ (G'.map_equiv_eq_comap_symm e).le)
-        (he ▸ G'.le_comap_map (e : G ->* H))]
+        (he ▸ G'.le_comap_map (e : G →* H))]
       simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
         MulEquiv.coe_monoidHom_refl, map_id_apply] }
 
 @[simp]
-/--
-theorem `congr_mk` / 定理 `congr_mk`
-
-English:
-theorem congr_mk
-  given: (e : G ≃* H) (he : G'.map ↑e = H') (x)
-  statement: congr G' H' e he (mk x) = e x
-  proof: rfl
-
-中文:
-定理 congr_mk
-  条件: (e : G ≃* H) (he : G'.map ↑e = H') (x)
-  结论: congr G' H' e he (mk x) = e x
-  证明: rfl
+/-
+**QuotientGroup.congr_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：congr_mk (e : G ≃* H) (he : G'.map ↑e = H') (x) : congr G' H' e he (mk x) 
+= e x
+参数：e : G ≃* H；he : G'.map ↑e = H'；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 theorem congr_mk (e : G ≃* H) (he : G'.map ↑e = H') (x) : congr G' H' e he (mk x) = e x :=
   rfl
-
-/--
-theorem `congr_mk'` / 定理 `congr_mk'`
-
-English:
-theorem congr_mk'
-  given: (e : G ≃* H) (he : G'.map ↑e = H') (x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 congr_mk'
-  条件: (e : G ≃* H) (he : G'.map ↑e = H') (x)
-  证明: rfl
-
-@[simp]
+/-
+**QuotientGroup.congr_mk'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：congr_mk' (e : G ≃* H) (he : G'.map ↑e = H') (x) : congr G' H' e he (mk' G
+' x) = mk' H' (e x)
+参数：e : G ≃* H；he : G'.map ↑e = H'；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 theorem congr_mk' (e : G ≃* H) (he : G'.map ↑e = H') (x) :
     congr G' H' e he (mk' G' x) = mk' H' (e x) :=
   rfl
 
 @[simp]
-/--
-theorem `congr_apply` / 定理 `congr_apply`
-
-English:
-theorem congr_apply
-  given: (e : G ≃* H) (he : G'.map ↑e = H') (x : G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 congr_apply
-  条件: (e : G ≃* H) (he : G'.map ↑e = H') (x : G)
-  证明: rfl
-
-@[simp]
+/-
+**QuotientGroup.congr_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：congr_apply (e : G ≃* H) (he : G'.map ↑e = H') (x : G) : congr G' H' e he 
+x = mk' H' (e x)
+参数：e : G ≃* H；he : G'.map ↑e = H'；x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 theorem congr_apply (e : G ≃* H) (he : G'.map ↑e = H') (x : G) :
     congr G' H' e he x = mk' H' (e x) :=
   rfl
 
 @[simp]
-/--
-theorem `congr_refl` / 定理 `congr_refl`
-
-English:
-theorem congr_refl
-  given: (he : G'.map (MulEquiv.refl G : G ->* G) = G' := Subgroup.map_id G')
-  proof: by
-  ext ⟨x⟩
-  rfl
-
-@[simp]
-
-中文:
-定理 congr_refl
-  条件: (he : G'.map (乘法等价.refl G : G ->* G) = G' := 子群.map_id G')
-  证明: by
-  ext ⟨x⟩
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Subgroup, Subgroup.map_id, map_id
+/-
+**QuotientGroup.congr_refl** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：congr_refl (he : G'.map (MulEquiv.refl G : G ->* G) = G'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `MulEquiv.ext`：ext {f g : MulEquiv M N} (h : forall x, f x = g x) : f = g
 -/
-theorem congr_refl (he : G'.map (MulEquiv.refl G : G ->* G) = G' := Subgroup.map_id G') :
+theorem congr_refl (he : G'.map (MulEquiv.refl G : G →* G) = G' := Subgroup.map_id G') :
     congr G' G' (MulEquiv.refl G) he = MulEquiv.refl (G ⧸ G') := by
   ext ⟨x⟩
   rfl
 
 @[simp]
-/--
-theorem `congr_symm` / 定理 `congr_symm`
-
-English:
-theorem congr_symm
-  given: (e : G ≃* H) (he : G'.map ↑e = H')
-  proof: rfl
-
-中文:
-定理 congr_symm
-  条件: (e : G ≃* H) (he : G'.map ↑e = H')
-  证明: rfl
+/-
+**QuotientGroup.congr_symm** 是 Mathlib 中的一个定理，位于命名空间 `QuotientGroup`。
+形式化陈述：congr_symm (e : G ≃* H) (he : G'.map ↑e = H') : (congr G' H' e he).symm = 
+congr H' G' e.symm ((Subgroup.map_symm_eq_iff_map_eq _).mpr he)
+参数：e : G ≃* H；he : G'.map ↑e = H'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 theorem congr_symm (e : G ≃* H) (he : G'.map ↑e = H') :
     (congr G' H' e he).symm = congr H' G' e.symm ((Subgroup.map_symm_eq_iff_map_eq _).mpr he) :=
@@ -1679,3 +1190,4 @@ theorem congr_symm (e : G ≃* H) (he : G'.map ↑e = H') :
 end congr
 
 end QuotientGroup
+

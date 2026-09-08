@@ -34,46 +34,16 @@ namespace LaxTrans
 set_option backward.defeqAttrib.useBackward true in
 /-- Left whiskering of a lax natural transformation and a modification. -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Lax.LaxTrans`。
+形式化陈述：whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where as
+参数：η : F ⟶ G；Γ : θ ⟶ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  body: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ η.app a ◁ ((Γ.as.app a ▷ H.map f ≫ ι.naturality f)) otimes≫
-              η.naturality f ▷ (ι.app b) otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f otimes≫
-              ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫ 𝟙 _ := by
-          rw [Γ.as.naturality]
-          bicategory
-        _ = _ := by
-          rw [whisker_exchange]
-          bicategory }
-
-中文:
-定义 whiskerLeft
-  签名: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  定义体: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ η.app a ◁ ((Γ.as.app a ▷ H.map f ≫ ι.naturality f)) otimes≫
-              η.naturality f ▷ (ι.app b) otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f otimes≫
-              ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫ 𝟙 _ := by
-          rw [Γ.as.naturality]
-          bicategory
-        _ = _ := by
-          rw [whisker_exchange]
-          bicategory }
+--- 原说明 ---
+Left whiskering of a lax natural transformation and a modification.
 -/
 def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where
   as := {
@@ -81,11 +51,11 @@ def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ �
     naturality {a b} f := by
       dsimp only [comp_app, comp_naturality]
       calc
-        _ = 𝟙 _ otimes≫ η.app a ◁ ((Γ.as.app a ▷ H.map f ≫ ι.naturality f)) otimes≫
-              η.naturality f ▷ (ι.app b) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ η.app a ◁ ((Γ.as.app a ▷ H.map f ≫ ι.naturality f)) ⊗≫
+              η.naturality f ▷ (ι.app b) ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f otimes≫
-              ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ η.app a ◁ θ.naturality f ⊗≫
+              ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) ⊗≫ 𝟙 _ := by
           rw [Γ.as.naturality]
           bicategory
         _ = _ := by
@@ -95,46 +65,17 @@ def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ �
 set_option backward.defeqAttrib.useBackward true in
 /-- Right whiskering of a lax natural transformation and a modification. -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Lax.LaxTrans`。
+形式化陈述：whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where a
+s
+参数：Γ : η ⟶ θ；ι : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  body: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) otimes≫
-              θ.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (η.app a ◁ ι.naturality f otimes≫ (Γ.as.app a ▷ G.map f ≫
-              θ.naturality f) ▷ ι.app b) otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]
-          bicategory
-        _ = _ := by
-          rw [Γ.as.naturality]
-          bicategory }
-
-中文:
-定义 whiskerRight
-  签名: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  定义体: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) otimes≫
-              θ.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (η.app a ◁ ι.naturality f otimes≫ (Γ.as.app a ▷ G.map f ≫
-              θ.naturality f) ▷ ι.app b) otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]
-          bicategory
-        _ = _ := by
-          rw [Γ.as.naturality]
-          bicategory }
+--- 原说明 ---
+Right whiskering of a lax natural transformation and a modification.
 -/
 def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where
   as := {
@@ -142,11 +83,11 @@ def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι �
     naturality {a b} f := by
       dsimp only [comp_app, comp_naturality]
       calc
-        _ = 𝟙 _ otimes≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) otimes≫
-              θ.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) ⊗≫
+              θ.naturality f ▷ ι.app b ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ (η.app a ◁ ι.naturality f otimes≫ (Γ.as.app a ▷ G.map f ≫
-              θ.naturality f) ▷ ι.app b) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (η.app a ◁ ι.naturality f ⊗≫ (Γ.as.app a ▷ G.map f ≫
+              θ.naturality f) ▷ ι.app b) ⊗≫ 𝟙 _ := by
           rw [← whisker_exchange]
           bicategory
         _ = _ := by
@@ -156,29 +97,19 @@ def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι �
 set_option backward.defeqAttrib.useBackward true in
 /-- Associator for the vertical composition of lax natural transformations. -/
 @[simps!]
-/--
-Definition of `associator` / `associator` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.associator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Lax.LaxTrans`。
+形式化陈述：associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι
+参数：η : F ⟶ G；θ : G ⟶ H；ι : H ⟶ I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  body: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
-    intro a b f
-    dsimp only [comp_app, comp_naturality]
-    bicategory
-
-中文:
-定义 associator
-  签名: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  定义体: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
-    intro a b f
-    dsimp only [comp_app, comp_naturality]
-    bicategory
-
-Depends on / 依赖: bicategory, comp_app, comp_naturality
+--- 原说明 ---
+Associator for the vertical composition of lax natural transformations.
 -/
 def associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι :=
-isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
+  isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) <| by
     intro a b f
     dsimp only [comp_app, comp_naturality]
     bicategory
@@ -186,39 +117,33 @@ isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
 set_option backward.defeqAttrib.useBackward true in
 /-- Left unitor for the vertical composition of lax natural transformations. -/
 @[simps!]
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.leftUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Lax.LaxTrans`。
+形式化陈述：leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => fun_ (η.app a))
-
-中文:
-定义 leftUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => fun_ (η.app a))
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+Left unitor for the vertical composition of lax natural transformations.
 -/
 def leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η :=
-  isoMk (fun a => fun_ (η.app a))
+  isoMk (fun a => λ_ (η.app a))
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Right unitor for the vertical composition of lax natural transformations. -/
 @[simps!]
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.rightUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Lax.LaxTrans`。
+形式化陈述：rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => ρ_ (η.app a))
-
-中文:
-定义 rightUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => ρ_ (η.app a))
+--- 原说明 ---
+Right unitor for the vertical composition of lax natural transformations.
 -/
 def rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η :=
   isoMk (fun a => ρ_ (η.app a))
@@ -229,6 +154,14 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A bicategory structure on the lax functors between bicategories, with lax transformations. -/
 @[simps! whiskerLeft_as_app whiskerRight_as_app associator_hom_as_app associator_inv_as_app
   rightUnitor_hom_as_app rightUnitor_inv_as_app leftUnitor_hom_as_app leftUnitor_inv_as_app]
+/-
+**CategoryTheory.Lax.LaxTrans.LaxFunctor.bicategory** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Lax.LaxTrans.LaxFunctor`。
+形式化陈述：(B : Type u₁) →   [inst : CategoryTheory.Bicategory B] →     (C : Type u₂)
+ → [inst_1 : CategoryTheory.Bicategory C] → CategoryTheory.Bicategory (CategoryT
+heory.LaxFunctor B C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance LaxFunctor.bicategory : Bicategory (B ⥤ᴸ C) where
   whiskerLeft {_ _ _} η _ _ Γ := whiskerLeft η Γ
   whiskerRight {_ _ _} _ _ Γ := whiskerRight Γ
@@ -244,46 +177,16 @@ namespace OplaxTrans
 set_option backward.defeqAttrib.useBackward true in
 /-- Left whiskering of an oplax natural transformation and a modification. -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Lax.OplaxTrans`。
+形式化陈述：whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where as
+参数：η : F ⟶ G；Γ : θ ⟶ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  body: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ ((F.map f ≫ η.app b) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫
-            η.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ θ.app b otimes≫ η.app a ◁ (G.map f ◁ Γ.as.app b ≫
-            ι.naturality f) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]
-          bicategory
-        _ = _ := by
-          rw [Γ.as.naturality]
-          bicategory }
-
-中文:
-定义 whiskerLeft
-  签名: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  定义体: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ ((F.map f ≫ η.app b) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫
-            η.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ θ.app b otimes≫ η.app a ◁ (G.map f ◁ Γ.as.app b ≫
-            ι.naturality f) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]
-          bicategory
-        _ = _ := by
-          rw [Γ.as.naturality]
-          bicategory }
+--- 原说明 ---
+Left whiskering of an oplax natural transformation and a modification.
 -/
 def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where
   as := {
@@ -291,11 +194,11 @@ def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ �
     naturality {a b} f := by
       dsimp only [comp_app, comp_naturality]
       calc
-        _ = 𝟙 _ otimes≫ ((F.map f ≫ η.app b) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) otimes≫
-            η.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ ((F.map f ≫ η.app b) ◁ Γ.as.app b ≫ η.naturality f ▷ ι.app b) ⊗≫
+            η.app a ◁ ι.naturality f ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ θ.app b otimes≫ η.app a ◁ (G.map f ◁ Γ.as.app b ≫
-            ι.naturality f) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ η.naturality f ▷ θ.app b ⊗≫ η.app a ◁ (G.map f ◁ Γ.as.app b ≫
+            ι.naturality f) ⊗≫ 𝟙 _ := by
           rw [whisker_exchange]
           bicategory
         _ = _ := by
@@ -305,46 +208,17 @@ def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ �
 set_option backward.defeqAttrib.useBackward true in
 /-- Right whiskering of an oplax natural transformation and a modification. -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Lax.OplaxTrans`。
+形式化陈述：whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where a
+s
+参数：Γ : η ⟶ θ；ι : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  body: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ (F.map f ◁ Γ.as.app b ≫ θ.naturality f) ▷ ι.app b otimes≫
-              θ.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ ι.app b otimes≫ (Γ.as.app a ▷ (G.map f ≫ ι.app b) ≫
-              θ.app a ◁ ι.naturality f) otimes≫ 𝟙 _ := by
-          rw [Γ.as.naturality]
-          bicategory
-        _ = _ := by
-          rw [← whisker_exchange]
-          bicategory }
-
-中文:
-定义 whiskerRight
-  签名: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  定义体: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp only [comp_app, comp_naturality]
-      calc
-        _ = 𝟙 _ otimes≫ (F.map f ◁ Γ.as.app b ≫ θ.naturality f) ▷ ι.app b otimes≫
-              θ.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ ι.app b otimes≫ (Γ.as.app a ▷ (G.map f ≫ ι.app b) ≫
-              θ.app a ◁ ι.naturality f) otimes≫ 𝟙 _ := by
-          rw [Γ.as.naturality]
-          bicategory
-        _ = _ := by
-          rw [← whisker_exchange]
-          bicategory }
+--- 原说明 ---
+Right whiskering of an oplax natural transformation and a modification.
 -/
 def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where
   as := {
@@ -352,11 +226,11 @@ def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι �
     naturality {a b} f := by
       dsimp only [comp_app, comp_naturality]
       calc
-        _ = 𝟙 _ otimes≫ (F.map f ◁ Γ.as.app b ≫ θ.naturality f) ▷ ι.app b otimes≫
-              θ.app a ◁ ι.naturality f otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (F.map f ◁ Γ.as.app b ≫ θ.naturality f) ▷ ι.app b ⊗≫
+              θ.app a ◁ ι.naturality f ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ η.naturality f ▷ ι.app b otimes≫ (Γ.as.app a ▷ (G.map f ≫ ι.app b) ≫
-              θ.app a ◁ ι.naturality f) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ η.naturality f ▷ ι.app b ⊗≫ (Γ.as.app a ▷ (G.map f ≫ ι.app b) ≫
+              θ.app a ◁ ι.naturality f) ⊗≫ 𝟙 _ := by
           rw [Γ.as.naturality]
           bicategory
         _ = _ := by
@@ -366,29 +240,19 @@ def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι �
 set_option backward.defeqAttrib.useBackward true in
 /-- Associator for the vertical composition of oplax natural transformations. -/
 @[simps!]
-/--
-Definition of `associator` / `associator` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.associator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Lax.OplaxTrans`。
+形式化陈述：associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι
+参数：η : F ⟶ G；θ : G ⟶ H；ι : H ⟶ I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  body: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
-    intro a b f
-    dsimp only [comp_app, comp_naturality]
-    bicategory
-
-中文:
-定义 associator
-  签名: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  定义体: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
-    intro a b f
-    dsimp only [comp_app, comp_naturality]
-    bicategory
-
-Depends on / 依赖: bicategory, comp_app, comp_naturality
+--- 原说明 ---
+Associator for the vertical composition of oplax natural transformations.
 -/
 def associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι :=
-isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
+  isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) <| by
     intro a b f
     dsimp only [comp_app, comp_naturality]
     bicategory
@@ -396,39 +260,33 @@ isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a)) by
 set_option backward.defeqAttrib.useBackward true in
 /-- Left unitor for the vertical composition of oplax natural transformations. -/
 @[simps!]
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.leftUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Lax.OplaxTrans`。
+形式化陈述：leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => fun_ (η.app a))
-
-中文:
-定义 leftUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => fun_ (η.app a))
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+Left unitor for the vertical composition of oplax natural transformations.
 -/
 def leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η :=
-  isoMk (fun a => fun_ (η.app a))
+  isoMk (fun a => λ_ (η.app a))
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Right unitor for the vertical composition of oplax natural transformations. -/
 @[simps!]
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.rightUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Lax.OplaxTrans`。
+形式化陈述：rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => ρ_ (η.app a))
-
-中文:
-定义 rightUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => ρ_ (η.app a))
+--- 原说明 ---
+Right unitor for the vertical composition of oplax natural transformations.
 -/
 def rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η :=
   isoMk (fun a => ρ_ (η.app a))
@@ -439,6 +297,14 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A bicategory structure on the lax functors between bicategories, with oplax transformations. -/
 @[simps! whiskerLeft_as_app whiskerRight_as_app associator_hom_as_app associator_inv_as_app
   rightUnitor_hom_as_app rightUnitor_inv_as_app leftUnitor_hom_as_app leftUnitor_inv_as_app]
+/-
+**CategoryTheory.Lax.OplaxTrans.LaxFunctor.bicategory** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Lax.OplaxTrans.LaxFunctor`。
+形式化陈述：(B : Type u₁) →   [inst : CategoryTheory.Bicategory B] →     (C : Type u₂)
+ → [inst_1 : CategoryTheory.Bicategory C] → CategoryTheory.Bicategory (CategoryT
+heory.LaxFunctor B C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance LaxFunctor.bicategory : Bicategory (B ⥤ᴸ C) where
   whiskerLeft {_ _ _} η _ _ Γ := whiskerLeft η Γ
   whiskerRight {_ _ _} _ _ Γ := whiskerRight Γ
@@ -450,3 +316,4 @@ scoped instance LaxFunctor.bicategory : Bicategory (B ⥤ᴸ C) where
 end OplaxTrans
 
 end CategoryTheory.Lax
+

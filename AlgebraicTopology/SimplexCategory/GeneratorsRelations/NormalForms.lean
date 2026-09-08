@@ -45,7 +45,7 @@ section AdmissibleLists
 -- easier to perform inductive constructions and proofs on such lists, and we instead bundle
 -- propositions asserting that various List constructions produce admissible lists.
 
-variable (m : Nat)
+variable (m : ℕ)
 /-- A list of natural numbers `[i₀, ⋯, iₙ]` is said to be `m`-admissible (for `m : ℕ`) if
 `i₀ < ⋯ < iₙ` and `iₖ ≤ m + k` for all `k`. This would suggest the definition
 `L.IsChain (· < ·) ∧ ∀ k, (h : k < L.length) → L[k] ≤ m + k`.
@@ -53,133 +53,103 @@ However, we instead define `IsAdmissible` inductively and show, in
 `isAdmissible_iff_isChain_and_le`, that this is equivalent to the non-inductive definition.
 -/
 @[mk_iff]
-/--
-Inductive type `IsAdmissible` / 归纳类型 `IsAdmissible`
+/-
+**SimplexCategoryGenRel.IsAdmissible** 是 Mathlib 中的一个归纳类型，位于命名空间 `SimplexCategor
+yGenRel`。
+形式化陈述：ℕ → List ℕ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IsAdmissible
-  parameters: : (m : Nat) -> (L : List Nat) -> Prop
-  constructors (3):
-    - nil: (m : Nat) : IsAdmissible m []
-    - singleton: {m a} (ha : a <= m) : IsAdmissible m [a]
-    - cons_cons: {m a b L'} (hab : a < b) (hbL : IsAdmissible (m + 1) (b :: L')) (ha : a <= m) : IsAdmissible m (a :: b :: L')
-
-中文:
-归纳类型 是Admissible
-  参数: : (m : 自然数) -> (L : 列表 自然数) -> 命题
-  构造子 (3 个):
-    - nil: (m : 自然数) : 是Admissible m []
-    - singleton: {m a} (ha : a <= m) : 是Admissible m [a]
-    - cons_cons: {m a b L'} (hab : a < b) (hbL : 是Admissible (m + 1) (b :: L')) (ha : a <= m) : 是Admissible m (a :: b :: L')
+--- 原说明 ---
+A list of natural numbers `[i₀, ⋯, iₙ]` is said to be `m`-admissible (for `m : ℕ
+`) if
+`i₀ < ⋯ < iₙ` and `iₖ ≤ m + k` for all `k`. This would suggest the definition
+`L.IsChain (· < ·) ∧ ∀ k, (h : k < L.length) → L[k] ≤ m + k`.
+However, we instead define `IsAdmissible` inductively and show, in
+`isAdmissible_iff_isChain_and_le`, that this is equivalent to the non-inductive 
+definition.
 -/
-inductive IsAdmissible : (m : Nat) -> (L : List Nat) -> Prop
-  | nil (m : Nat) : IsAdmissible m []
-  | singleton {m a} (ha : a <= m) : IsAdmissible m [a]
+inductive IsAdmissible : (m : ℕ) → (L : List ℕ) → Prop
+  | nil (m : ℕ) : IsAdmissible m []
+  | singleton {m a} (ha : a ≤ m) : IsAdmissible m [a]
   | cons_cons {m a b L'} (hab : a < b) (hbL : IsAdmissible (m + 1) (b :: L'))
-      (ha : a <= m) : IsAdmissible m (a :: b :: L')
+      (ha : a ≤ m) : IsAdmissible m (a :: b :: L')
 
 attribute [simp, grind ←] IsAdmissible.nil
-attribute [grind ->] IsAdmissible.cons_cons
+attribute [grind →] IsAdmissible.cons_cons
 
 section IsAdmissible
 
-variable {m a b : Nat} {L : List Nat}
+variable {m a b : ℕ} {L : List ℕ}
 
 @[simp, grind =]
-/--
-theorem `isAdmissible_singleton_iff` / 定理 `isAdmissible_singleton_iff`
-
-English:
-theorem isAdmissible_singleton_iff
-  statement: IsAdmissible m [a] ↔ a <= m
-  proof: ⟨fun | .singleton h => h, .singleton⟩
-
-@[simp, grind =]
-
-中文:
-定理 isAdmissible_singleton_iff
-  结论: 是Admissible m [a] ↔ a <= m
-  证明: ⟨fun | .singleton h => h, .singleton⟩
-
-@[simp, grind =]
-
-Depends on / 依赖: singleton
+/-
+**SimplexCategoryGenRel.isAdmissible_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mplexCategoryGenRel`。
+形式化陈述：isAdmissible_singleton_iff : IsAdmissible m [a] ↔ a <= m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isAdmissible_singleton_iff : IsAdmissible m [a] ↔ a <= m :=
+theorem isAdmissible_singleton_iff : IsAdmissible m [a] ↔ a ≤ m :=
   ⟨fun | .singleton h => h, .singleton⟩
 
 @[simp, grind =]
-/--
-theorem `isAdmissible_cons_cons_iff` / 定理 `isAdmissible_cons_cons_iff`
-
-English:
-theorem isAdmissible_cons_cons_iff
-  statement: IsAdmissible m (a :: b :: L) ↔
-  proof: ⟨fun | .cons_cons hab hbL ha => ⟨hab, hbL, ha⟩, by grind⟩
-
-中文:
-定理 isAdmissible_cons_cons_iff
-  结论: 是Admissible m (a :: b :: L) ↔
-  证明: ⟨fun | .cons_cons hab hbL ha => ⟨hab, hbL, ha⟩, by grind⟩
-
-Depends on / 依赖: cons_cons
+/-
+**SimplexCategoryGenRel.isAdmissible_cons_cons_iff** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mplexCategoryGenRel`。
+形式化陈述：isAdmissible_cons_cons_iff : IsAdmissible m (a :: b :: L) ↔ a < b ∧ IsAdmi
+ssible (m + 1) (b :: L) ∧ a <= m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isAdmissible_cons_cons_iff : IsAdmissible m (a :: b :: L) ↔
-    a < b ∧ IsAdmissible (m + 1) (b :: L) ∧ a <= m :=
+    a < b ∧ IsAdmissible (m + 1) (b :: L) ∧ a ≤ m :=
   ⟨fun | .cons_cons hab hbL ha => ⟨hab, hbL, ha⟩, by grind⟩
-
-/--
-theorem `isAdmissible_cons_iff` / 定理 `isAdmissible_cons_iff`
-
-English:
-theorem isAdmissible_cons_iff
-  statement: IsAdmissible m (a :: L) ↔
-  proof: by
-  cases L <;> grind
-
-中文:
-定理 isAdmissible_cons_iff
-  结论: 是Admissible m (a :: L) ↔
-  证明: by
-  cases L <;> grind
+/-
+**SimplexCategoryGenRel.isAdmissible_cons_iff** 是 Mathlib 中的一个定理，位于命名空间 `Simplex
+CategoryGenRel`。
+形式化陈述：isAdmissible_cons_iff : IsAdmissible m (a :: L) ↔ a <= m ∧ ((_ : 0 < L.len
+gth) -> a < L[0]) ∧ IsAdmissible (m + 1) L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isAdmissible_cons_iff : IsAdmissible m (a :: L) ↔
-    a <= m ∧ ((_ : 0 < L.length) -> a < L[0]) ∧ IsAdmissible (m + 1) L := by
+    a ≤ m ∧ ((_ : 0 < L.length) → a < L[0]) ∧ IsAdmissible (m + 1) L := by
   cases L <;> grind
-
-/--
-theorem `isAdmissible_iff_isChain_and_le` / 定理 `isAdmissible_iff_isChain_and_le`
-
-English:
-theorem isAdmissible_iff_isChain_and_le
-  statement: IsAdmissible m L ↔
-  proof: by
-  induction L using List.twoStepInduction generalizing m with
-  | nil => grind
-  | singleton _ => simp
-  | cons_cons _ _ _ _ IH =>
-    simp_rw [isAdmissible_cons_cons_iff, IH, List.length_cons, and_assoc,
-      List.isChain_cons_cons, and_assoc, and_congr_right_iff, and_comm]
-    exact fun _ _ => ⟨fun h => by grind,
-      fun h => ⟨h 0 (by grind), fun k _ => (h (k + 1) (by grind)).trans (by grind)⟩⟩
-
-中文:
-定理 isAdmissible_iff_isChain_and_le
-  结论: 是Admissible m L ↔
-  证明: by
-  induction L using List.twoStepInduction generalizing m with
-  | nil => grind
-  | singleton _ => simp
-  | cons_cons _ _ _ _ IH =>
-    simp_rw [isAdmissible_cons_cons_iff, IH, List.length_cons, and_assoc,
-      List.isChain_cons_cons, and_assoc, and_congr_right_iff, and_comm]
-    exact fun _ _ => ⟨fun h => by grind,
-      fun h => ⟨h 0 (by grind), fun k _ => (h (k + 1) (by grind)).trans (by grind)⟩⟩
-
-Depends on / 依赖: List.isChain_cons_cons, List.length_cons, List.twoStepInduction, and_assoc, and_comm, and_congr_right_iff, cons_cons, generalizing, isAdmissible_cons_cons_iff, isChain_cons_cons, length_cons, simp_rw, singleton, twoStepInduction
+/-
+**SimplexCategoryGenRel.isAdmissible_iff_isChain_and_le** 是 Mathlib 中的一个定理，位于命名空
+间 `SimplexCategoryGenRel`。
+形式化陈述：isAdmissible_iff_isChain_and_le : IsAdmissible m L ↔ L.IsChain (· < ·) ∧ f
+orall k, (h : k < L.length) -> L[k] <= m + k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `List.getElem_singleton`：∀ {α : Type u_1} {a : α} {i : ℕ} (h : i < 1), [a
+][i] = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
 theorem isAdmissible_iff_isChain_and_le : IsAdmissible m L ↔
-    L.IsChain (· < ·) ∧ forall k, (h : k < L.length) -> L[k] <= m + k := by
+    L.IsChain (· < ·) ∧ ∀ k, (h : k < L.length) → L[k] ≤ m + k := by
   induction L using List.twoStepInduction generalizing m with
   | nil => grind
   | singleton _ => simp
@@ -188,233 +158,212 @@ theorem isAdmissible_iff_isChain_and_le : IsAdmissible m L ↔
       List.isChain_cons_cons, and_assoc, and_congr_right_iff, and_comm]
     exact fun _ _ => ⟨fun h => by grind,
       fun h => ⟨h 0 (by grind), fun k _ => (h (k + 1) (by grind)).trans (by grind)⟩⟩
-
-/--
-theorem `isAdmissible_iff_pairwise_and_le` / 定理 `isAdmissible_iff_pairwise_and_le`
-
-English:
-theorem isAdmissible_iff_pairwise_and_le
-  statement: IsAdmissible m L ↔
-  proof: by
-  rw [isAdmissible_iff_isChain_and_le]; rw [List.isChain_iff_pairwise]
-
-中文:
-定理 isAdmissible_iff_pairwise_and_le
-  结论: 是Admissible m L ↔
-  证明: by
-  rw [isAdmissible_iff_isChain_and_le]; rw [List.isChain_iff_pairwise]
-
-Depends on / 依赖: List.isChain_iff_pairwise, isAdmissible_iff_isChain_and_le, isChain_iff_pairwise
+/-
+**SimplexCategoryGenRel.isAdmissible_iff_pairwise_and_le** 是 Mathlib 中的一个定理，位于命名
+空间 `SimplexCategoryGenRel`。
+形式化陈述：isAdmissible_iff_pairwise_and_le : IsAdmissible m L ↔ L.Pairwise (· < ·) ∧
+ forall k, (h : k < L.length) -> L[k] <= m + k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimplexCategoryGenRel.isAdmissible_iff_isChain_and_le`：isAdmissible_iff_
+isChain_and_le : IsAdmissible m L ↔ L.IsChain (· < ·) ∧ forall k, (h : k < L.len
+gth) -> L[k] <= m + k
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isAdmissible_iff_pairwise_and_le : IsAdmissible m L ↔
-    L.Pairwise (· < ·) ∧ forall k, (h : k < L.length) -> L[k] <= m + k := by
-  rw [isAdmissible_iff_isChain_and_le]; rw [List.isChain_iff_pairwise]
-
-/--
-theorem `isAdmissible_of_isChain_of_forall_getElem_le` / 定理 `isAdmissible_of_isChain_of_forall_getElem_le`
-
-English:
-theorem isAdmissible_of_isChain_of_forall_getElem_le
-  statement: {m L} (hL : L.IsChain (· < ·))
-  proof: isAdmissible_iff_isChain_and_le.mpr ⟨hL, hL₂⟩
-
-中文:
-定理 isAdmissible_of_isChain_of_对任意_getElem_le
-  结论: {m L} (hL : L.IsChain (· < ·))
-  证明: isAdmissible_iff_isChain_and_le.mpr ⟨hL, hL₂⟩
-
-Depends on / 依赖: isAdmissible_iff_isChain_and_le, isAdmissible_iff_isChain_and_le.mpr
+    L.Pairwise (· < ·) ∧ ∀ k, (h : k < L.length) → L[k] ≤ m + k := by
+  rw [isAdmissible_iff_isChain_and_le, List.isChain_iff_pairwise]
+/-
+**SimplexCategoryGenRel.isAdmissible_of_isChain_of_forall_getElem_le** 是 Mathlib
+ 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：isAdmissible_of_isChain_of_forall_getElem_le {m L} (hL : L.IsChain (· < ·)
+) (hL₂ : forall k, (h : k < L.length) -> L[k] <= m + k) : IsAdmissible m L
+参数：hL : L.IsChain (· < ·)；hL₂ : forall k, (h : k < L.length) -> L[k] <= m + k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimplexCategoryGenRel.isAdmissible_iff_isChain_and_le`：isAdmissible_iff_
+isChain_and_le : IsAdmissible m L ↔ L.IsChain (· < ·) ∧ forall k, (h : k < L.len
+gth) -> L[k] <= m + k
 -/
 theorem isAdmissible_of_isChain_of_forall_getElem_le {m L} (hL : L.IsChain (· < ·))
-    (hL₂ : forall k, (h : k < L.length) -> L[k] <= m + k) : IsAdmissible m L :=
+    (hL₂ : ∀ k, (h : k < L.length) → L[k] ≤ m + k) : IsAdmissible m L :=
   isAdmissible_iff_isChain_and_le.mpr ⟨hL, hL₂⟩
 
 namespace IsAdmissible
 
-/--
-theorem `isChain` / 定理 `isChain`
-
-English:
-theorem isChain
-  given: {m L} (hL : IsAdmissible m L)
-  proof: (isAdmissible_iff_isChain_and_le.mp hL).1
-
-中文:
-定理 isChain
-  条件: {m L} (hL : 是Admissible m L)
-  证明: (isAdmissible_iff_isChain_and_le.mp hL).1
+/-
+**SimplexCategoryGenRel.IsAdmissible.isChain** 是 Mathlib 中的一个定理，位于命名空间 `SimplexC
+ategoryGenRel.IsAdmissible`。
+形式化陈述：∀ {m : ℕ} {L : List ℕ}, SimplexCategoryGenRel.IsAdmissible m L → List.IsCh
+ain (fun x1 x2 => x1 < x2) L
+参数：fun x1 x2 => x1 < x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimplexCategoryGenRel.isAdmissible_iff_isChain_and_le`：isAdmissible_iff_
+isChain_and_le : IsAdmissible m L ↔ L.IsChain (· < ·) ∧ forall k, (h : k < L.len
+gth) -> L[k] <= m + k
 -/
-@[grind ->] theorem isChain {m L} (hL : IsAdmissible m L) :
+@[grind →] theorem isChain {m L} (hL : IsAdmissible m L) :
     L.IsChain (· < ·) := (isAdmissible_iff_isChain_and_le.mp hL).1
-
-/--
-theorem `le` / 定理 `le`
-
-English:
-theorem le
-  given: {m} {L : List Nat} (hL : IsAdmissible m L)
-  statement: forall k (h : k < L.length),
-  proof: (isAdmissible_iff_isChain_and_le.mp hL).2
-
-中文:
-定理 le
-  条件: {m} {L : 列表 自然数} (hL : 是Admissible m L)
-  结论: 对任意 k (h : k < L.length),
-  证明: (isAdmissible_iff_isChain_and_le.mp hL).2
+/-
+**SimplexCategoryGenRel.IsAdmissible.le** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCatego
+ryGenRel.IsAdmissible`。
+形式化陈述：∀ {m : ℕ} {L : List ℕ}, SimplexCategoryGenRel.IsAdmissible m L → ∀ (k : ℕ)
+ (h : k < L.length), L[k] ≤ m + k
+参数：k : ℕ；h : k < L.length。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimplexCategoryGenRel.isAdmissible_iff_isChain_and_le`：isAdmissible_iff_
+isChain_and_le : IsAdmissible m L ↔ L.IsChain (· < ·) ∧ forall k, (h : k < L.len
+gth) -> L[k] <= m + k
 -/
-@[grind ->] theorem le {m} {L : List Nat} (hL : IsAdmissible m L) : forall k (h : k < L.length),
-    L[k] <= m + k := (isAdmissible_iff_isChain_and_le.mp hL).2
+@[grind →] theorem le {m} {L : List ℕ} (hL : IsAdmissible m L) : ∀ k (h : k < L.length),
+    L[k] ≤ m + k := (isAdmissible_iff_isChain_and_le.mp hL).2
 
-/--
-lemma `of_cons` / 引理 `of_cons`
+/-- The tail of an `m`-admissible list is (m+1)-admissible. -/
+/-
+**SimplexCategoryGenRel.IsAdmissible.of_cons** 是 Mathlib 中的一个定理，位于命名空间 `SimplexC
+ategoryGenRel.IsAdmissible`。
+形式化陈述：∀ {m a : ℕ} {L : List ℕ}, SimplexCategoryGenRel.IsAdmissible m (a :: L) → 
+SimplexCategoryGenRel.IsAdmissible (m + 1) L
+参数：a :: L；m + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma of_cons
-  given: {m a L} (h : IsAdmissible m (a :: L))
-  proof: by cases L <;> grind
-
-中文:
-引理 of_cons
-  条件: {m a L} (h : 是Admissible m (a :: L))
-  证明: by cases L <;> grind
+--- 原说明 ---
+The tail of an `m`-admissible list is (m+1)-admissible.
 -/
-@[grind ->] lemma of_cons {m a L} (h : IsAdmissible m (a :: L)) :
+@[grind →] lemma of_cons {m a L} (h : IsAdmissible m (a :: L)) :
     IsAdmissible (m + 1) L := by cases L <;> grind
-
-/--
-lemma `cons` / 引理 `cons`
-
-English:
-lemma cons
-  statement: {m a L} (hL : IsAdmissible (m + 1) L) (ha : a <= m)
-  proof: by cases L <;> grind
-
-中文:
-引理 cons
-  结论: {m a L} (hL : 是Admissible (m + 1) L) (ha : a <= m)
-  证明: by cases L <;> grind
+/-
+**SimplexCategoryGenRel.IsAdmissible.cons** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCate
+goryGenRel.IsAdmissible`。
+形式化陈述：cons {m a L} (hL : IsAdmissible (m + 1) L) (ha : a <= m) (ha' : (_ : 0 < L
+.length) -> a < L[0]) : IsAdmissible m (a :: L)
+参数：hL : IsAdmissible (m + 1) L；ha : a <= m；ha' : (_ : 0 < L.length) -> a < L[0]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma cons {m a L} (hL : IsAdmissible (m + 1) L) (ha : a <= m)
-    (ha' : (_ : 0 < L.length) -> a < L[0]) : IsAdmissible m (a :: L) := by cases L <;> grind
-
-/--
-theorem `sortedLT` / 定理 `sortedLT`
-
-English:
-theorem sortedLT
-  given: {m L} (hL : IsAdmissible m L)
-  statement: L.SortedLT
-  proof: hL.isChain.sortedLT
-
-中文:
-定理 sortedLT
-  条件: {m L} (hL : 是Admissible m L)
-  结论: L.SortedLT
-  证明: hL.isChain.sortedLT
-
-Depends on / 依赖: hL.isChain.sortedLT, isChain, sortedLT
+lemma cons {m a L} (hL : IsAdmissible (m + 1) L) (ha : a ≤ m)
+    (ha' : (_ : 0 < L.length) → a < L[0]) : IsAdmissible m (a :: L) := by cases L <;> grind
+/-
+**SimplexCategoryGenRel.IsAdmissible.sortedLT** 是 Mathlib 中的一个定理，位于命名空间 `Simplex
+CategoryGenRel.IsAdmissible`。
+形式化陈述：sortedLT {m L} (hL : IsAdmissible m L) : L.SortedLT
+参数：hL : IsAdmissible m L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, List.IsChain (fun x1 x2 => x1 < x2) l → l.SortedLT
+· 使用定理 `SimplexCategoryGenRel.IsAdmissible.isChain`：∀ {m : ℕ} {L : List ℕ}, Simp
+lexCategoryGenRel.IsAdmissible m L → List.IsChain (fun x1 x2 => x1 < x2) L
 -/
 theorem sortedLT {m L} (hL : IsAdmissible m L) : L.SortedLT :=
   hL.isChain.sortedLT
 
 /-- If `(a :: l)` is `m`-admissible then a is less than all elements of `l` -/
-@[grind ->]
-/--
-lemma `head_lt` / 引理 `head_lt`
+@[grind →]
+/-
+**SimplexCategoryGenRel.IsAdmissible.head_lt** 是 Mathlib 中的一个引理，位于命名空间 `SimplexC
+ategoryGenRel.IsAdmissible`。
+形式化陈述：head_lt {m a L} (hL : IsAdmissible m (a :: L)) : forall a' in L, a < a'
+参数：hL : IsAdmissible m (a :: L)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.rel_of_pairwise_cons`：∀ {α : Type u_1} {a : α} {l : List α} {R : α 
+→ α → Prop}, List.Pairwise R (a :: l) → ∀ {a' : α}, a' ∈ l → R a a'
+· 使用定理 `List.SortedLT.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLT → List.Pairwise (fun x1 x2 => x1 < x2) l
+· 使用定理 `SimplexCategoryGenRel.IsAdmissible.sortedLT`：sortedLT {m L} (hL : IsAdmi
+ssible m L) : L.SortedLT
 
-English:
-lemma head_lt
-  given: {m a L} (hL : IsAdmissible m (a :: L))
-  proof: fun _ => L.rel_of_pairwise_cons hL.sortedLT.pairwise
-
-中文:
-引理 head_lt
-  条件: {m a L} (hL : 是Admissible m (a :: L))
-  证明: fun _ => L.rel_of_pairwise_cons hL.sortedLT.pairwise
-
-Depends on / 依赖: L.rel_of_pairwise_cons, hL.sortedLT.pairwise, pairwise, rel_of_pairwise_cons, sortedLT
+--- 原说明 ---
+If `(a :: l)` is `m`-admissible then a is less than all elements of `l`
 -/
 lemma head_lt {m a L} (hL : IsAdmissible m (a :: L)) :
-    forall a' in L, a < a' := fun _ => L.rel_of_pairwise_cons hL.sortedLT.pairwise
-
-/--
-lemma `getElem_lt` / 引理 `getElem_lt`
-
-English:
-lemma getElem_lt
-  statement: {m L} (hL : IsAdmissible m L)
-  proof: by
-  grw [hL.le, hk]
-
-中文:
-引理 getElem_lt
-  结论: {m L} (hL : 是Admissible m L)
-  证明: by
-  grw [hL.le, hk]
+    ∀ a' ∈ L, a < a' := fun _ => L.rel_of_pairwise_cons hL.sortedLT.pairwise
+/-
+**SimplexCategoryGenRel.IsAdmissible.getElem_lt** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+exCategoryGenRel.IsAdmissible`。
+形式化陈述：∀ {m : ℕ} {L : List ℕ}, SimplexCategoryGenRel.IsAdmissible m L → ∀ {k : ℕ}
+ {hk : k < L.length}, L[k] < m + L.length
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `SimplexCategoryGenRel.IsAdmissible.le`：∀ {m : ℕ} {L : List ℕ}, SimplexCa
+tegoryGenRel.IsAdmissible m L → ∀ (k : ℕ) (h : k < L.length), L[k] ≤ m + k
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-@[grind ->] lemma getElem_lt {m L} (hL : IsAdmissible m L)
-    {k : Nat} {hk : k < L.length} : L[k] < m + L.length := by
+@[grind →] lemma getElem_lt {m L} (hL : IsAdmissible m L)
+    {k : ℕ} {hk : k < L.length} : L[k] < m + L.length := by
   grw [hL.le, hk]
 
 /-- An element of an `m`-admissible list, as an element of the appropriate `Fin` -/
 @[simps]
-/--
-Definition of `getElemAsFin` / `getElemAsFin` 的定义
+/-
+**SimplexCategoryGenRel.IsAdmissible.getElemAsFin** 是 Mathlib 中的一个定义，位于命名空间 `Sim
+plexCategoryGenRel.IsAdmissible`。
+形式化陈述：getElemAsFin {m L} (hl : IsAdmissible m L) (k : Nat) (hK : k < L.length) :
+ Fin (m + k + 1)
+参数：hl : IsAdmissible m L；k : Nat；hK : k < L.length。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getElemAsFin
-  signature: {m L} (hl : IsAdmissible m L) (k : Nat)
-  body: Fin.mk L[k] Nat.le_iff_lt_add_one.mp (by grind)
-
-中文:
-定义 getElemAsFin
-  签名: {m L} (hl : 是Admissible m L) (k : 自然数)
-  定义体: Fin.mk L[k] Nat.le_iff_lt_add_one.mp (by grind)
-
-Depends on / 依赖: Fin.mk, Nat.le_iff_lt_add_one.mp, le_iff_lt_add_one
+--- 原说明 ---
+An element of an `m`-admissible list, as an element of the appropriate `Fin`
 -/
-def getElemAsFin {m L} (hl : IsAdmissible m L) (k : Nat)
+def getElemAsFin {m L} (hl : IsAdmissible m L) (k : ℕ)
     (hK : k < L.length) : Fin (m + k + 1) :=
-Fin.mk L[k] Nat.le_iff_lt_add_one.mp (by grind)
+  Fin.mk L[k] <| Nat.le_iff_lt_add_one.mp (by grind)
 
 /-- The head of an `m`-admissible list. -/
 @[simps!]
-/--
-Definition of `head` / `head` 的定义
+/-
+**SimplexCategoryGenRel.IsAdmissible.head** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCate
+goryGenRel.IsAdmissible`。
+形式化陈述：head {m a L} (hl : IsAdmissible m (a :: L)) : Fin (m + 1)
+参数：hl : IsAdmissible m (a :: L)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: {m a L} (hl : IsAdmissible m (a :: L))
-  body: hl.getElemAsFin 0 (by grind)
-
-中文:
-定义 head
-  签名: {m a L} (hl : 是Admissible m (a :: L))
-  定义体: hl.getElemAsFin 0 (by grind)
-
-Depends on / 依赖: getElemAsFin, hl.getElemAsFin
+--- 原说明 ---
+The head of an `m`-admissible list.
 -/
 def head {m a L} (hl : IsAdmissible m (a :: L)) : Fin (m + 1) :=
   hl.getElemAsFin 0 (by grind)
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: {n} (hmn : m <= n) (hL : IsAdmissible m L)
-  statement: IsAdmissible n L
-  proof: isAdmissible_of_isChain_of_forall_getElem_le (by grind) (by grind)
-
-中文:
-定理 mono
-  条件: {n} (hmn : m <= n) (hL : 是Admissible m L)
-  结论: 是Admissible n L
-  证明: isAdmissible_of_isChain_of_forall_getElem_le (by grind) (by grind)
-
-Depends on / 依赖: isAdmissible_of_isChain_of_forall_getElem_le
+/-
+**SimplexCategoryGenRel.IsAdmissible.mono** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCate
+goryGenRel.IsAdmissible`。
+形式化陈述：mono {n} (hmn : m <= n) (hL : IsAdmissible m L) : IsAdmissible n L
+参数：hmn : m <= n；hL : IsAdmissible m L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategoryGenRel.isAdmissible_of_isChain_of_forall_getElem_le`：isAd
+missible_of_isChain_of_forall_getElem_le {m L} (hL : L.IsChain (· < ·)) (hL₂ : f
+orall k, (h : k < L.length) -> L[k] <= m + k) : IsAdmiss…
 -/
-theorem mono {n} (hmn : m <= n) (hL : IsAdmissible m L) : IsAdmissible n L :=
+theorem mono {n} (hmn : m ≤ n) (hL : IsAdmissible m L) : IsAdmissible n L :=
   isAdmissible_of_isChain_of_forall_getElem_le (by grind) (by grind)
 
 end IsAdmissible
@@ -430,66 +379,65 @@ satisfying `P_σ`!
 This is similar in nature to `List.orderedInsert`, but note that we increment one of the element
 every time we perform an exchange, making it a different construction. -/
 @[local grind]
-/--
-Definition of `simplicialInsert` / `simplicialInsert` 的定义
+/-
+**SimplexCategoryGenRel.simplicialInsert** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCateg
+oryGenRel`。
+形式化陈述：ℕ → List ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simplicialInsert
-  signature: (a : Nat)
+--- 原说明 ---
+The construction `simplicialInsert` describes inserting an element in a list of 
+integer and
+moving it to its "right place" according to the simplicial relations. Somewhat m
+iraculously,
+the algorithm is the same for the first or the fifth simplicial relations, makin
+g it "valid"
+when we treat the list as a normal form for a morphism satisfying `P_δ`, or for 
+a morphism
+satisfying `P_σ`!
 
-中文:
-定义 simplicialInsert
-  签名: (a : 自然数)
+This is similar in nature to `List.orderedInsert`, but note that we increment on
+e of the element
+every time we perform an exchange, making it a different construction.
 -/
-def simplicialInsert (a : Nat) : List Nat -> List Nat
+def simplicialInsert (a : ℕ) : List ℕ → List ℕ
   | [] => [a]
   | b :: l => if a < b then a :: b :: l else b :: simplicialInsert (a + 1) l
 
-/--
-lemma `simplicialInsert_length` / 引理 `simplicialInsert_length`
+/-- `simplicialInsert` just adds one to the length. -/
+/-
+**SimplexCategoryGenRel.simplicialInsert_length** 是 Mathlib 中的一个引理，位于命名空间 `Simpl
+exCategoryGenRel`。
+形式化陈述：simplicialInsert_length (a : Nat) (L : List Nat) : (simplicialInsert a L).
+length = L.length + 1
+参数：a : Nat；L : List Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma simplicialInsert_length
-  given: (a : Nat) (L : List Nat)
-  proof: by
-  induction L generalizing a <;> grind
-
-中文:
-引理 simplicialInsert_length
-  条件: (a : 自然数) (L : 列表 自然数)
-  证明: by
-  induction L generalizing a <;> grind
-
-Depends on / 依赖: generalizing
+--- 原说明 ---
+`simplicialInsert` just adds one to the length.
 -/
-lemma simplicialInsert_length (a : Nat) (L : List Nat) :
+lemma simplicialInsert_length (a : ℕ) (L : List ℕ) :
     (simplicialInsert a L).length = L.length + 1 := by
   induction L generalizing a <;> grind
 
-/--
-theorem `simplicialInsert_isAdmissible` / 定理 `simplicialInsert_isAdmissible`
+/-- `simplicialInsert` preserves admissibility -/
+/-
+**SimplexCategoryGenRel.simplicialInsert_isAdmissible** 是 Mathlib 中的一个定理，位于命名空间 
+`SimplexCategoryGenRel`。
+形式化陈述：simplicialInsert_isAdmissible (L : List Nat) (hL : IsAdmissible (m + 1) L)
+ (j : Nat) (hj : j <= m) : IsAdmissible m simplicialInsert j L
+参数：L : List Nat；hL : IsAdmissible (m + 1) L；j : Nat；hj : j <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem simplicialInsert_isAdmissible
-  statement: (L : List Nat) (hL : IsAdmissible (m + 1) L) (j : Nat)
-  proof: by
-  induction L generalizing j m with
-  | nil => exact IsAdmissible.singleton hj
-  | cons a L h_rec => cases L <;> grind
-
-中文:
-定理 simplicialInsert_isAdmissible
-  结论: (L : 列表 自然数) (hL : 是Admissible (m + 1) L) (j : 自然数)
-  证明: by
-  induction L generalizing j m with
-  | nil => exact IsAdmissible.singleton hj
-  | cons a L h_rec => cases L <;> grind
-
-Depends on / 依赖: IsAdmissible, IsAdmissible.singleton, generalizing, h_rec, singleton
+--- 原说明 ---
+`simplicialInsert` preserves admissibility
 -/
-theorem simplicialInsert_isAdmissible (L : List Nat) (hL : IsAdmissible (m + 1) L) (j : Nat)
-    (hj : j <= m) :
-IsAdmissible m simplicialInsert j L := by
+theorem simplicialInsert_isAdmissible (L : List ℕ) (hL : IsAdmissible (m + 1) L) (j : ℕ)
+    (hj : j ≤ m) :
+    IsAdmissible m <| simplicialInsert j L := by
   induction L generalizing j m with
   | nil => exact IsAdmissible.singleton hj
   | cons a L h_rec => cases L <;> grind
@@ -502,112 +450,49 @@ section NormalFormsP_σ
 -- is necessary in order to avoid some type theory hell when proving that `orderedInsert`
 -- behaves as expected...
 
-/--
-Definition of `standardσ` / `standardσ` 的定义
+/-- Given a sequence `L = [ i 0, ..., i b ]`, `standardσ m L` i is the morphism
+`σ (i b) ≫ … ≫ σ (i 0)`. The construction is provided for any list of natural numbers,
+but it is intended to behave well only when the list is admissible. -/
+/-
+**SimplexCategoryGenRel.standard** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategoryGenRe
+l`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition standardσ
-  signature: (L : List Nat) {m₁ m₂ : Nat} (h : m₂ + L.length = m₁)
-  body: match L with
-  | .nil => eqToHom (by grind)
-  | .cons a t => standardσ t (by grind) ≫ σ (Fin.ofNat _ a)
-
-@[simp]
-
-中文:
-定义 standardσ
-  签名: (L : 列表 自然数) {m₁ m₂ : 自然数} (h : m₂ + L.length = m₁)
-  定义体: match L with
-  | .nil => eqToHom (by grind)
-  | .cons a t => standardσ t (by grind) ≫ σ (Fin.ofNat _ a)
-
-@[simp]
-
-Depends on / 依赖: Fin.ofNat, eqToHom
+--- 原说明 ---
+Given a sequence `L = [ i 0, ..., i b ]`, `standardσ m L` i is the morphism
+`σ (i b) ≫ … ≫ σ (i 0)`. The construction is provided for any list of natural nu
+mbers,
+but it is intended to behave well only when the list is admissible.
 -/
-def standardσ (L : List Nat) {m₁ m₂ : Nat} (h : m₂ + L.length = m₁) : mk m₁ ⟶ mk m₂ :=
+def standardσ (L : List ℕ) {m₁ m₂ : ℕ} (h : m₂ + L.length = m₁) : mk m₁ ⟶ mk m₂ :=
   match L with
   | .nil => eqToHom (by grind)
   | .cons a t => standardσ t (by grind) ≫ σ (Fin.ofNat _ a)
 
 @[simp]
-/--
-lemma `standardσ_nil` / 引理 `standardσ_nil`
-
-English:
-lemma standardσ_nil
-  given: (m : Nat)
-  statement: standardσ .nil (by grind) = 𝟙 (mk m)
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-引理 standardσ_nil
-  条件: (m : 自然数)
-  结论: standardσ .nil (by grind) = 𝟙 (mk m)
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**SimplexCategoryGenRel.standard** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRe
+l`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma standardσ_nil (m : Nat) : standardσ .nil (by grind) = 𝟙 (mk m) := rfl
+lemma standardσ_nil (m : ℕ) : standardσ .nil (by grind) = 𝟙 (mk m) := rfl
 
 @[simp, reassoc]
-/--
-lemma `standardσ_cons` / 引理 `standardσ_cons`
-
-English:
-lemma standardσ_cons
-  given: (L : List Nat) (a : Nat) {m₁ m₂ : Nat} (h : m₂ + (a :: L).length = m₁)
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 standardσ_cons
-  条件: (L : 列表 自然数) (a : 自然数) {m₁ m₂ : 自然数} (h : m₂ + (a :: L).length = m₁)
-  证明: rfl
-
-@[reassoc]
+/-
+**SimplexCategoryGenRel.standard** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRe
+l`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma standardσ_cons (L : List Nat) (a : Nat) {m₁ m₂ : Nat} (h : m₂ + (a :: L).length = m₁) :
+lemma standardσ_cons (L : List ℕ) (a : ℕ) {m₁ m₂ : ℕ} (h : m₂ + (a :: L).length = m₁) :
     standardσ (L.cons a) h = standardσ L (by grind) ≫ σ (Fin.ofNat _ a) := rfl
 
 @[reassoc]
-/--
-lemma `standardσ_comp_standardσ` / 引理 `standardσ_comp_standardσ`
-
-English:
-lemma standardσ_comp_standardσ
-  statement: (L₁ L₂ : List Nat) {m₁ m₂ m₃ : Nat}
-  proof: by
-  induction L₂ generalizing L₁ m₁ m₂ m₃ with
-  | nil =>
-    obtain rfl : m₃ = m₂ := by grind
-    simp
-  | cons a t H =>
-    dsimp at h' ⊢
-    obtain rfl : m₂ = (m₃ + t.length) + 1 := by grind
-    simp [reassoc_of% (H L₁ (m₁ := m₁) (m₂ := m₃ + t.length + 1) (m₃ := m₃ + 1)
-      (by grind) (by grind))]
-
-中文:
-引理 standardσ_comp_standardσ
-  结论: (L₁ L₂ : 列表 自然数) {m₁ m₂ m₃ : 自然数}
-  证明: by
-  induction L₂ generalizing L₁ m₁ m₂ m₃ with
-  | nil =>
-    obtain rfl : m₃ = m₂ := by grind
-    simp
-  | cons a t H =>
-    dsimp at h' ⊢
-    obtain rfl : m₂ = (m₃ + t.length) + 1 := by grind
-    simp [reassoc_of% (H L₁ (m₁ := m₁) (m₂ := m₃ + t.length + 1) (m₃ := m₃ + 1)
-      (by grind) (by grind))]
-
-Depends on / 依赖: generalizing, length, reassoc_of, t.length
+/-
+**SimplexCategoryGenRel.standard** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRe
+l`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma standardσ_comp_standardσ (L₁ L₂ : List Nat) {m₁ m₂ m₃ : Nat}
+lemma standardσ_comp_standardσ (L₁ L₂ : List ℕ) {m₁ m₂ m₃ : ℕ}
     (h : m₂ + L₁.length = m₁) (h' : m₃ + L₂.length = m₂) :
     standardσ L₁ h ≫ standardσ L₂ h' = standardσ (L₂ ++ L₁) (by grind) := by
   induction L₂ generalizing L₁ m₁ m₂ m₃ with
@@ -620,7 +505,7 @@ lemma standardσ_comp_standardσ (L₁ L₂ : List Nat) {m₁ m₂ m₃ : Nat}
     simp [reassoc_of% (H L₁ (m₁ := m₁) (m₂ := m₃ + t.length + 1) (m₃ := m₃ + 1)
       (by grind) (by grind))]
 
-variable (m : Nat) (L : List Nat)
+variable (m : ℕ) (L : List ℕ)
 
 /-- `simplicialEvalσ` is a lift to ℕ of `(toSimplexCategory.map (standardσ m L _ _)).toOrderHom`.
 Rather than defining it as such, we define it inductively for less painful inductive reasoning,
@@ -629,140 +514,62 @@ It is expected to produce the correct result only if `L` is admissible, and valu
 non-admissible lists should be considered junk values. Similarly, values for out-of-bounds inputs
 are junk values. -/
 @[local grind]
-/--
-Definition of `simplicialEvalσ` / `simplicialEvalσ` 的定义
+/-
+**SimplexCategoryGenRel.simplicialEval** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategor
+yGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simplicialEvalσ
-  signature: (L : List Nat)
-  body: fun j => match L with
+--- 原说明 ---
+`simplicialEvalσ` is a lift to ℕ of `(toSimplexCategory.map (standardσ m L _ _))
+.toOrderHom`.
+Rather than defining it as such, we define it inductively for less painful induc
+tive reasoning,
+(see `simplicialEvalσ_of_isAdmissible`).
+It is expected to produce the correct result only if `L` is admissible, and valu
+es for
+non-admissible lists should be considered junk values. Similarly, values for out
+-of-bounds inputs
+are junk values.
+-/
+def simplicialEvalσ (L : List ℕ) : ℕ → ℕ :=
+  fun j ↦ match L with
   | [] => j
   | a :: L => if a < simplicialEvalσ L j then simplicialEvalσ L j - 1 else simplicialEvalσ L j
 
 @[grind ←]
-
-中文:
-定义 simplicialEvalσ
-  签名: (L : 列表 自然数)
-  定义体: fun j => match L with
-  | [] => j
-  | a :: L => if a < simplicialEvalσ L j then simplicialEvalσ L j - 1 else simplicialEvalσ L j
-
-@[grind ←]
+/-
+**SimplexCategoryGenRel.simplicialEval** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategor
+yGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def simplicialEvalσ (L : List Nat) : Nat -> Nat :=
-  fun j => match L with
-  | [] => j
-  | a :: L => if a < simplicialEvalσ L j then simplicialEvalσ L j - 1 else simplicialEvalσ L j
-
-@[grind ←]
-/--
-lemma `simplicialEvalσ_of_le_mem` / 引理 `simplicialEvalσ_of_le_mem`
-
-English:
-lemma simplicialEvalσ_of_le_mem
-  given: (j : Nat) (hj : forall k in L, j <= k)
-  statement: simplicialEvalσ L j = j
-  proof: by
+lemma simplicialEvalσ_of_le_mem (j : ℕ) (hj : ∀ k ∈ L, j ≤ k) : simplicialEvalσ L j = j := by
   induction L with | nil => grind | cons _ _ _ => simp only [List.forall_mem_cons] at hj; grind
-
-中文:
-引理 simplicialEvalσ_of_le_mem
-  条件: (j : 自然数) (hj : 对任意 k in L, j <= k)
-  结论: simplicialEvalσ L j = j
-  证明: by
-  induction L with | nil => grind | cons _ _ _ => simp only [List.forall_mem_cons] at hj; grind
-
-Depends on / 依赖: List.forall_mem_cons, forall_mem_cons
+/-
+**SimplexCategoryGenRel.simplicialEval** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategor
+yGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma simplicialEvalσ_of_le_mem (j : Nat) (hj : forall k in L, j <= k) : simplicialEvalσ L j = j := by
-  induction L with | nil => grind | cons _ _ _ => simp only [List.forall_mem_cons] at hj; grind
-
-/--
-lemma `simplicialEvalσ_monotone` / 引理 `simplicialEvalσ_monotone`
-
-English:
-lemma simplicialEvalσ_monotone
-  given: (L : List Nat)
-  statement: Monotone (simplicialEvalσ L)
-  proof: by
-  induction L <;> grind [Monotone]
-
-中文:
-引理 simplicialEvalσ_monotone
-  条件: (L : 列表 自然数)
-  结论: 递增 (simplicialEvalσ L)
-  证明: by
-  induction L <;> grind [Monotone]
-
-Depends on / 依赖: Monotone
--/
-lemma simplicialEvalσ_monotone (L : List Nat) : Monotone (simplicialEvalσ L) := by
+lemma simplicialEvalσ_monotone (L : List ℕ) : Monotone (simplicialEvalσ L) := by
   induction L <;> grind [Monotone]
 
 variable {m}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `simplicialEvalσ_of_isAdmissible` / 引理 `simplicialEvalσ_of_isAdmissible`
+/- We prove that `simplicialEvalσ` is indeed a lift of
+`(toSimplexCategory.map (standardσ m L _ _)).toOrderHom` when the list is admissible. -/
+/-
+**SimplexCategoryGenRel.simplicialEval** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategor
+yGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma simplicialEvalσ_of_isAdmissible
-  proof: by
-  induction L generalizing m₁ m₂ with
-  | nil =>
-    obtain rfl : m₁ = m₂ := by grind
-    simp [simplicialEvalσ]
-  | cons a L h_rec =>
-    simp only [List.length_cons] at hk
-    subst hk
-    set a₀ := hL.head
-    have aux (t : Fin (m₂ + 2)) :
-        (a₀.predAbove t : Nat) = if a < ↑t then (t : Nat) - 1 else ↑t := by
-      simp only [Fin.predAbove, a₀]
-      split_ifs with h₁ h₂ h₂
-      · rfl
-      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val] at h₁; grind
-      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val, not_lt] at h₁; grind
-      · rfl
-    have := h_rec _ _ hL.of_cons (by grind) hj
-    have ha₀ : Fin.ofNat (m₂ + 1) a = a₀ := by ext; simpa [a₀] using hL.head.prop
-    simpa only [toSimplexCategory_obj_mk, SimplexCategory.len_mk, standardσ_cons, Functor.map_comp,
-      toSimplexCategory_map_σ, SimplexCategory.σ, SimplexCategory.mkHom,
-      SimplexCategory.comp_toOrderHom, SimplexCategory.Hom.toOrderHom_mk, OrderHom.comp_coe,
-      Function.comp_apply, Fin.predAboveOrderHom_coe, simplicialEvalσ, ha₀, ← this] using aux _
-
-中文:
-引理 simplicialEvalσ_of_isAdmissible
-  证明: by
-  induction L generalizing m₁ m₂ with
-  | nil =>
-    obtain rfl : m₁ = m₂ := by grind
-    simp [simplicialEvalσ]
-  | cons a L h_rec =>
-    simp only [List.length_cons] at hk
-    subst hk
-    set a₀ := hL.head
-    have aux (t : Fin (m₂ + 2)) :
-        (a₀.predAbove t : Nat) = if a < ↑t then (t : Nat) - 1 else ↑t := by
-      simp only [Fin.predAbove, a₀]
-      split_ifs with h₁ h₂ h₂
-      · rfl
-      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val] at h₁; grind
-      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val, not_lt] at h₁; grind
-      · rfl
-    have := h_rec _ _ hL.of_cons (by grind) hj
-    have ha₀ : Fin.ofNat (m₂ + 1) a = a₀ := by ext; simpa [a₀] using hL.head.prop
-    simpa only [toSimplexCategory_obj_mk, SimplexCategory.len_mk, standardσ_cons, Functor.map_comp,
-      toSimplexCategory_map_σ, SimplexCategory.σ, SimplexCategory.mkHom,
-      SimplexCategory.comp_toOrderHom, SimplexCategory.Hom.toOrderHom_mk, OrderHom.comp_coe,
-      Function.comp_apply, Fin.predAboveOrderHom_coe, simplicialEvalσ, ha₀, ← this] using aux _
-
-Depends on / 依赖: Fin.lt_def, Fin.predAbove, Fin.val_castSucc, IsAdmissible, IsAdmissible.head_val, List.length_cons, generalizing, hL.head, h_rec, head_val, length_cons, lt_def, not_lt, predAbove, split_ifs, val_castSucc
+--- 原说明 ---
+We prove that `simplicialEvalσ` is indeed a lift of
+`(toSimplexCategory.map (standardσ m L _ _)).toOrderHom` when the list is admiss
+ible.
 -/
 lemma simplicialEvalσ_of_isAdmissible
-    (m₁ m₂ : Nat) (hL : IsAdmissible m₂ L) (hk : m₂ + L.length = m₁)
-    (j : Nat) (hj : j < m₁ + 1) :
+    (m₁ m₂ : ℕ) (hL : IsAdmissible m₂ L) (hk : m₂ + L.length = m₁)
+    (j : ℕ) (hj : j < m₁ + 1) :
     (toSimplexCategory.map <| standardσ L hk).toOrderHom ⟨j, hj⟩ =
     simplicialEvalσ L j := by
   induction L generalizing m₁ m₂ with
@@ -774,7 +581,7 @@ lemma simplicialEvalσ_of_isAdmissible
     subst hk
     set a₀ := hL.head
     have aux (t : Fin (m₂ + 2)) :
-        (a₀.predAbove t : Nat) = if a < ↑t then (t : Nat) - 1 else ↑t := by
+        (a₀.predAbove t : ℕ) = if a < ↑t then (t : ℕ) - 1 else ↑t := by
       simp only [Fin.predAbove, a₀]
       split_ifs with h₁ h₂ h₂
       · rfl
@@ -788,45 +595,20 @@ lemma simplicialEvalσ_of_isAdmissible
       SimplexCategory.comp_toOrderHom, SimplexCategory.Hom.toOrderHom_mk, OrderHom.comp_coe,
       Function.comp_apply, Fin.predAboveOrderHom_coe, simplicialEvalσ, ha₀, ← this] using aux _
 
-/--
-lemma `standardσ_simplicialInsert` / 引理 `standardσ_simplicialInsert`
+/-- Performing a simplicial insertion in a list is the same as composition on the right by the
+corresponding degeneracy operator. -/
+/-
+**SimplexCategoryGenRel.standard** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRe
+l`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma standardσ_simplicialInsert
-  statement: (hL : IsAdmissible (m + 1) L) (j : Nat) (hj : j < m + 1)
-  proof: by
-  induction L generalizing m j with
-  | nil => simp [standardσ, simplicialInsert]
-  | cons a L h_rec =>
-    simp only [simplicialInsert]
-    split_ifs
-    · simp
-    · have : forall (j k : Nat) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
-      have : a < m + 2 := by grind -- helps grind below
-      have : σ (Fin.ofNat (m + 2) a) ≫ σ (.ofNat _ j) = σ (.ofNat _ (j + 1)) ≫ σ (.ofNat _ a) := by
-        convert! σ_comp_σ_nat (n := m) a j (by grind) (by grind) (by grind) <;> grind
-      grind [standardσ_cons]
-
-中文:
-引理 standardσ_simplicialInsert
-  结论: (hL : 是Admissible (m + 1) L) (j : 自然数) (hj : j < m + 1)
-  证明: by
-  induction L generalizing m j with
-  | nil => simp [standardσ, simplicialInsert]
-  | cons a L h_rec =>
-    simp only [simplicialInsert]
-    split_ifs
-    · simp
-    · have : forall (j k : Nat) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
-      have : a < m + 2 := by grind -- helps grind below
-      have : σ (Fin.ofNat (m + 2) a) ≫ σ (.ofNat _ j) = σ (.ofNat _ (j + 1)) ≫ σ (.ofNat _ a) := by
-        convert! σ_comp_σ_nat (n := m) a j (by grind) (by grind) (by grind) <;> grind
-      grind [standardσ_cons]
-
-Depends on / 依赖: simplicialInsert
+--- 原说明 ---
+Performing a simplicial insertion in a list is the same as composition on the ri
+ght by the
+corresponding degeneracy operator.
 -/
-lemma standardσ_simplicialInsert (hL : IsAdmissible (m + 1) L) (j : Nat) (hj : j < m + 1)
-    (m₁ : Nat) (hm₁ : m + L.length + 1 = m₁) :
+lemma standardσ_simplicialInsert (hL : IsAdmissible (m + 1) L) (j : ℕ) (hj : j < m + 1)
+    (m₁ : ℕ) (hm₁ : m + L.length + 1 = m₁) :
     standardσ (m₂ := m) (simplicialInsert j L) (m₁ := m₁)
       (by simpa only [simplicialInsert_length, add_assoc]) =
     standardσ (m₂ := m + 1) L (by grind) ≫ σ (Fin.ofNat _ j) := by
@@ -836,7 +618,7 @@ lemma standardσ_simplicialInsert (hL : IsAdmissible (m + 1) L) (j : Nat) (hj : 
     simp only [simplicialInsert]
     split_ifs
     · simp
-    · have : forall (j k : Nat) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
+    · have : ∀ (j k : ℕ) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
       have : a < m + 2 := by grind -- helps grind below
       have : σ (Fin.ofNat (m + 2) a) ≫ σ (.ofNat _ j) = σ (.ofNat _ (j + 1)) ≫ σ (.ofNat _ a) := by
         convert! σ_comp_σ_nat (n := m) a j (by grind) (by grind) (by grind) <;> grind
@@ -844,61 +626,22 @@ lemma standardσ_simplicialInsert (hL : IsAdmissible (m + 1) L) (j : Nat) (hj : 
 
 set_option backward.isDefEq.respectTransparency false in
 attribute [local grind! .] simplicialInsert_length simplicialInsert_isAdmissible in
-/--
-theorem `exists_normal_form_P_σ` / 定理 `exists_normal_form_P_σ`
+/-- Using `standardσ_simplicialInsert`, we can prove that every morphism satisfying `P_σ` is equal
+to some `standardσ` for some admissible list of indices. -/
+/-
+**SimplexCategoryGenRel.exists_normal_form_P_** 是 Mathlib 中的一个定理，位于命名空间 `Simplex
+CategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_normal_form_P_σ
-  given: {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf : P_σ f)
-  proof: by
-  induction hf with
-  | id n =>
-    use [], n.len, 0, rfl, rfl, rfl, IsAdmissible.nil _
-    rfl
-  | of f hf =>
-    cases hf with | @σ m k =>
-    use [k.val], m, 1, rfl, rfl, rfl, IsAdmissible.singleton k.is_le
-    simp [standardσ]
-  | @comp_of _ j x' g g' hg hg' h_rec =>
-    cases hg' with | @σ m k =>
-    obtain ⟨L₁, m₁, b₁, h₁', rfl, h', hL₁, e₁⟩ := h_rec
-    obtain rfl : m₁ = m + 1 := congrArg (fun x => x.len) h₁'
-    use simplicialInsert k.val L₁, m, b₁ + 1, rfl, by grind, by grind, by grind
-    subst_vars
-    have := standardσ (m₁ := m + 1 + L₁.length) [] (by grind) ≫=
-      (standardσ_simplicialInsert L₁ hL₁ k k.prop _ rfl).symm
-    simp_all [Fin.ofNat_eq_cast, Fin.cast_val_eq_self, standardσ_comp_standardσ_assoc,
-      standardσ_comp_standardσ]
-
-中文:
-定理 存在_normal_form_P_σ
-  条件: {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf : P_σ f)
-  证明: by
-  induction hf with
-  | id n =>
-    use [], n.len, 0, rfl, rfl, rfl, IsAdmissible.nil _
-    rfl
-  | of f hf =>
-    cases hf with | @σ m k =>
-    use [k.val], m, 1, rfl, rfl, rfl, IsAdmissible.singleton k.is_le
-    simp [standardσ]
-  | @comp_of _ j x' g g' hg hg' h_rec =>
-    cases hg' with | @σ m k =>
-    obtain ⟨L₁, m₁, b₁, h₁', rfl, h', hL₁, e₁⟩ := h_rec
-    obtain rfl : m₁ = m + 1 := congrArg (fun x => x.len) h₁'
-    use simplicialInsert k.val L₁, m, b₁ + 1, rfl, by grind, by grind, by grind
-    subst_vars
-    have := standardσ (m₁ := m + 1 + L₁.length) [] (by grind) ≫=
-      (standardσ_simplicialInsert L₁ hL₁ k k.prop _ rfl).symm
-    simp_all [Fin.ofNat_eq_cast, Fin.cast_val_eq_self, standardσ_comp_standardσ_assoc,
-      standardσ_comp_standardσ]
-
-Depends on / 依赖: IsAdmissible, IsAdmissible.nil, IsAdmissible.singleton, comp_of, h_rec, is_le, k.is_le, k.val, n.len, simplicialInsert, singleton, x.len
+--- 原说明 ---
+Using `standardσ_simplicialInsert`, we can prove that every morphism satisfying 
+`P_σ` is equal
+to some `standardσ` for some admissible list of indices.
 -/
 theorem exists_normal_form_P_σ {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf : P_σ f) :
-    exists L : List Nat,
-    exists m : Nat, exists b : Nat,
-    exists h₁ : mk m = y, exists h₂ : x = mk (m + b), exists h : L.length = b,
+    ∃ L : List ℕ,
+    ∃ m : ℕ, ∃ b : ℕ,
+    ∃ h₁ : mk m = y, ∃ h₂ : x = mk (m + b), ∃ h : L.length = b,
     IsAdmissible m L ∧ f = standardσ L (by rw [h, h₁.symm, h₂]; rfl) := by
   induction hf with
   | id n =>
@@ -911,7 +654,7 @@ theorem exists_normal_form_P_σ {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf 
   | @comp_of _ j x' g g' hg hg' h_rec =>
     cases hg' with | @σ m k =>
     obtain ⟨L₁, m₁, b₁, h₁', rfl, h', hL₁, e₁⟩ := h_rec
-    obtain rfl : m₁ = m + 1 := congrArg (fun x => x.len) h₁'
+    obtain rfl : m₁ = m + 1 := congrArg (fun x ↦ x.len) h₁'
     use simplicialInsert k.val L₁, m, b₁ + 1, rfl, by grind, by grind, by grind
     subst_vars
     have := standardσ (m₁ := m + 1 + L₁.length) [] (by grind) ≫=
@@ -921,112 +664,70 @@ theorem exists_normal_form_P_σ {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf 
 
 section MemIsAdmissible
 
-/--
-lemma `IsAdmissible.simplicialEvalσ_succ_getElem` / 引理 `IsAdmissible.simplicialEvalσ_succ_getElem`
-
-English:
-lemma IsAdmissible.simplicialEvalσ_succ_getElem
-  statement: (hL : IsAdmissible m L)
-  proof: by
-  induction L generalizing m k <;> grind [-> IsAdmissible.singleton]
-
-local grind_pattern IsAdmissible.simplicialEvalσ_succ_getElem =>
-  IsAdmissible m L, simplicialEvalσ L L[k]
-
-中文:
-引理 是Admissible.simplicialEvalσ_succ_getElem
-  结论: (hL : 是Admissible m L)
-  证明: by
-  induction L generalizing m k <;> grind [-> IsAdmissible.singleton]
-
-local grind_pattern IsAdmissible.simplicialEvalσ_succ_getElem =>
-  IsAdmissible m L, simplicialEvalσ L L[k]
-
-Depends on / 依赖: IsAdmissible, IsAdmissible.singleton, generalizing, singleton
+/-
+**SimplexCategoryGenRel.IsAdmissible.simplicialEval** 是 Mathlib 中的一个引理，位于命名空间 `S
+implexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsAdmissible.simplicialEvalσ_succ_getElem (hL : IsAdmissible m L)
-    {k : Nat} {hk : k < L.length} : simplicialEvalσ L L[k] = simplicialEvalσ L (L[k] + 1) := by
-  induction L generalizing m k <;> grind [-> IsAdmissible.singleton]
+    {k : ℕ} {hk : k < L.length} : simplicialEvalσ L L[k] = simplicialEvalσ L (L[k] + 1) := by
+  induction L generalizing m k <;> grind [→ IsAdmissible.singleton]
 
 local grind_pattern IsAdmissible.simplicialEvalσ_succ_getElem =>
   IsAdmissible m L, simplicialEvalσ L L[k]
-
-/--
-lemma `mem_isAdmissible_of_lt_and_eval_eq_eval_add_one` / 引理 `mem_isAdmissible_of_lt_and_eval_eq_eval_add_one`
-
-English:
-lemma mem_isAdmissible_of_lt_and_eval_eq_eval_add_one
-  statement: (hL : IsAdmissible m L)
-  proof: by
-  induction L generalizing m with
-  | nil => grind
-  | cons a L h_rec =>
-    have := simplicialEvalσ_monotone L (a := a + 1)
-    rcases lt_trichotomy j a with h | h | h <;> grind
-
-中文:
-引理 mem_isAdmissible_of_lt_and_eval_eq_eval_add_one
-  结论: (hL : 是Admissible m L)
-  证明: by
-  induction L generalizing m with
-  | nil => grind
-  | cons a L h_rec =>
-    have := simplicialEvalσ_monotone L (a := a + 1)
-    rcases lt_trichotomy j a with h | h | h <;> grind
-
-Depends on / 依赖: generalizing, h_rec, lt_trichotomy
+/-
+**SimplexCategoryGenRel.mem_isAdmissible_of_lt_and_eval_eq_eval_add_one** 是 Math
+lib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：mem_isAdmissible_of_lt_and_eval_eq_eval_add_one (hL : IsAdmissible m L) (j
+ : Nat) (hj₁ : j < m + L.length) (hj₂ : simplicialEvalσ L j = simplicialEvalσ L 
+(j + 1)) : j in L
+参数：hL : IsAdmissible m L；j : Nat；hj₁ : j < m + L.length；hj₂ : simplicialEvalσ L 
+j = simplicialEvalσ L (j + 1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimplexCategoryGenRel.simplicialEvalσ_monotone`：simplicialEvalσ_monotone
+ (L : List Nat) : Monotone (simplicialEvalσ L)
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
 -/
 lemma mem_isAdmissible_of_lt_and_eval_eq_eval_add_one (hL : IsAdmissible m L)
-    (j : Nat) (hj₁ : j < m + L.length) (hj₂ : simplicialEvalσ L j = simplicialEvalσ L (j + 1)) :
-    j in L := by
+    (j : ℕ) (hj₁ : j < m + L.length) (hj₂ : simplicialEvalσ L j = simplicialEvalσ L (j + 1)) :
+    j ∈ L := by
   induction L generalizing m with
   | nil => grind
   | cons a L h_rec =>
     have := simplicialEvalσ_monotone L (a := a + 1)
     rcases lt_trichotomy j a with h | h | h <;> grind
-
-/--
-lemma `lt_and_eval_eq_eval_add_one_of_mem_isAdmissible` / 引理 `lt_and_eval_eq_eval_add_one_of_mem_isAdmissible`
-
-English:
-lemma lt_and_eval_eq_eval_add_one_of_mem_isAdmissible
-  given: (hL : IsAdmissible m L) (j : Nat) (hj : j in L)
-  proof: by
-  grind [List.mem_iff_getElem]
-
-中文:
-引理 lt_and_eval_eq_eval_add_one_of_mem_isAdmissible
-  条件: (hL : 是Admissible m L) (j : 自然数) (hj : j in L)
-  证明: by
-  grind [List.mem_iff_getElem]
-
-Depends on / 依赖: List.mem_iff_getElem, mem_iff_getElem
+/-
+**SimplexCategoryGenRel.lt_and_eval_eq_eval_add_one_of_mem_isAdmissible** 是 Math
+lib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：lt_and_eval_eq_eval_add_one_of_mem_isAdmissible (hL : IsAdmissible m L) (j
+ : Nat) (hj : j in L) : j < m + L.length ∧ simplicialEvalσ L j = simplicialEvalσ
+ L (j + 1)
+参数：hL : IsAdmissible m L；j : Nat；hj : j in L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma lt_and_eval_eq_eval_add_one_of_mem_isAdmissible (hL : IsAdmissible m L) (j : Nat) (hj : j in L) :
+lemma lt_and_eval_eq_eval_add_one_of_mem_isAdmissible (hL : IsAdmissible m L) (j : ℕ) (hj : j ∈ L) :
     j < m + L.length ∧ simplicialEvalσ L j = simplicialEvalσ L (j + 1) := by
   grind [List.mem_iff_getElem]
 
-/--
-lemma `mem_isAdmissible_iff` / 引理 `mem_isAdmissible_iff`
+/-- We can characterize elements in an admissible list as exactly those for which
+`simplicialEvalσ` takes the same value twice in a row. -/
+/-
+**SimplexCategoryGenRel.mem_isAdmissible_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimplexC
+ategoryGenRel`。
+形式化陈述：mem_isAdmissible_iff (hL : IsAdmissible m L) (j : Nat) : j in L ↔ j < m + 
+L.length ∧ simplicialEvalσ L j = simplicialEvalσ L (j + 1)
+参数：hL : IsAdmissible m L；j : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mem_isAdmissible_iff
-  given: (hL : IsAdmissible m L) (j : Nat)
-  proof: by
-  grind [lt_and_eval_eq_eval_add_one_of_mem_isAdmissible,
-    mem_isAdmissible_of_lt_and_eval_eq_eval_add_one]
-
-中文:
-引理 mem_isAdmissible_iff
-  条件: (hL : 是Admissible m L) (j : 自然数)
-  证明: by
-  grind [lt_and_eval_eq_eval_add_one_of_mem_isAdmissible,
-    mem_isAdmissible_of_lt_and_eval_eq_eval_add_one]
-
-Depends on / 依赖: lt_and_eval_eq_eval_add_one_of_mem_isAdmissible, mem_isAdmissible_of_lt_and_eval_eq_eval_add_one
+--- 原说明 ---
+We can characterize elements in an admissible list as exactly those for which
+`simplicialEvalσ` takes the same value twice in a row.
 -/
-lemma mem_isAdmissible_iff (hL : IsAdmissible m L) (j : Nat) :
-    j in L ↔ j < m + L.length ∧ simplicialEvalσ L j = simplicialEvalσ L (j + 1) := by
+lemma mem_isAdmissible_iff (hL : IsAdmissible m L) (j : ℕ) :
+    j ∈ L ↔ j < m + L.length ∧ simplicialEvalσ L j = simplicialEvalσ L (j + 1) := by
   grind [lt_and_eval_eq_eval_add_one_of_mem_isAdmissible,
     mem_isAdmissible_of_lt_and_eval_eq_eval_add_one]
 
@@ -1035,3 +736,4 @@ end MemIsAdmissible
 end NormalFormsP_σ
 
 end SimplexCategoryGenRel
+

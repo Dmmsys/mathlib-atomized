@@ -17,57 +17,28 @@ exiled here during the port to minimize imports of `Algebra.Order.Ring.Rat`.
 
 public section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WellFoundedRelation (WithTop Nat)
-  body: (· < ·)
-  wf := IsWellFounded.wf
-
-中文:
-实例 :
-  签名: 良基关系 (WithTop 自然数)
-  定义体: (· < ·)
-  wf := IsWellFounded.wf
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : WellFoundedRelation (WithTop Nat) where
+instance : WellFoundedRelation (WithTop ℕ) where
   rel := (· < ·)
   wf := IsWellFounded.wf
-
-/--
-theorem `Nat.cast_withTop` / 定理 `Nat.cast_withTop`
-
-English:
-theorem Nat.cast_withTop
-  given: (n : Nat)
-  statement: Nat.cast n = WithTop.some n
-  proof: rfl
-
-中文:
-定理 自然数.cast_withTop
-  条件: (n : 自然数)
-  结论: 自然数.cast n = WithTop.some n
-  证明: rfl
+/-
+**Nat.cast_withTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.cast_withTop (n : Nat) : Nat.cast n = WithTop.some n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nat.cast_withTop (n : Nat) : Nat.cast n = WithTop.some n :=
+theorem Nat.cast_withTop (n : ℕ) : Nat.cast n = WithTop.some n :=
   rfl
-
-/--
-theorem `Nat.cast_withBot` / 定理 `Nat.cast_withBot`
-
-English:
-theorem Nat.cast_withBot
-  given: (n : Nat)
-  statement: Nat.cast n = WithBot.some n
-  proof: rfl
-
-中文:
-定理 自然数.cast_withBot
-  条件: (n : 自然数)
-  结论: 自然数.cast n = WithBot.some n
-  证明: rfl
+/-
+**Nat.cast_withBot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.cast_withBot (n : Nat) : Nat.cast n = WithBot.some n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nat.cast_withBot (n : Nat) : Nat.cast n = WithBot.some n :=
+theorem Nat.cast_withBot (n : ℕ) : Nat.cast n = WithBot.some n :=
   rfl

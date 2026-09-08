@@ -21,169 +21,124 @@ namespace MvQPF
 
 open MvFunctor
 
-variable {n : Nat} {A : Type u}
-variable (F : A -> TypeVec.{u} n -> Type u)
+variable {n : ℕ} {A : Type u}
+variable (F : A → TypeVec.{u} n → Type u)
 
-/--
-Definition of `Sigma` / `Sigma` 的定义
+/-- Dependent sum of an `n`-ary functor. The sum can range over
+data types like `ℕ` or over `Type.{u-1}` -/
+/-
+**MvQPF.Sigma** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：Sigma (v : TypeVec.{u} n) : Type u
+参数：v : TypeVec.{u} n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma
-  signature: (v : TypeVec.{u} n)
-  body: Σ α : A, F α v
-
-中文:
-定义 依赖和类型
-  签名: (v : TypeVec.{u} n)
-  定义体: Σ α : A, F α v
+--- 原说明 ---
+Dependent sum of an `n`-ary functor. The sum can range over
+data types like `ℕ` or over `Type.{u-1}`
 -/
 def Sigma (v : TypeVec.{u} n) : Type u :=
   Σ α : A, F α v
 
-/--
-Definition of `Pi` / `Pi` 的定义
+/-- Dependent product of an `n`-ary functor. The sum can range over
+data types like `ℕ` or over `Type.{u-1}` -/
+/-
+**MvQPF.Pi** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：Pi (v : TypeVec.{u} n) : Type u
+参数：v : TypeVec.{u} n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi
-  signature: (v : TypeVec.{u} n)
-  body: forall α : A, F α v
-
-中文:
-定义 依赖函数类型
-  签名: (v : TypeVec.{u} n)
-  定义体: forall α : A, F α v
+--- 原说明 ---
+Dependent product of an `n`-ary functor. The sum can range over
+data types like `ℕ` or over `Type.{u-1}`
 -/
 def Pi (v : TypeVec.{u} n) : Type u :=
-  forall α : A, F α v
-
-/--
-Instance `Sigma.inhabited` / 实例 `Sigma.inhabited`
-
-English:
-instance Sigma.inhabited
-  signature: {α} [Inhabited A] [Inhabited (F default α)]
-  body: ⟨⟨default, default⟩⟩
-
-中文:
-实例 依赖和类型.inhabited
-  签名: {α} [可居 A] [可居 (F default α)]
-  定义体: ⟨⟨default, default⟩⟩
+  ∀ α : A, F α v
+/-
+**MvQPF.Sigma.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Sigma`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) →       {α
+ : TypeVec.{u} n} → [inst : Inhabited A] → [Inhabited (F default α)] → Inhabited
+ (MvQPF.Sigma F α)
+参数：F : A → TypeVec.{u} n → Type u；F default α；MvQPF.Sigma F α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Sigma.inhabited {α} [Inhabited A] [Inhabited (F default α)] : Inhabited (Sigma F α) :=
   ⟨⟨default, default⟩⟩
-
-/--
-Instance `Pi.inhabited` / 实例 `Pi.inhabited`
-
-English:
-instance Pi.inhabited
-  signature: {α} [forall a, Inhabited (F a α)]
-  body: ⟨fun _a => default⟩
-
-中文:
-实例 依赖函数类型.inhabited
-  签名: {α} [对任意 a, 可居 (F a α)]
-  定义体: ⟨fun _a => default⟩
+/-
+**MvQPF.Pi.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Pi`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) → {α : Typ
+eVec.{u} n} → [(a : A) → Inhabited (F a α)] → Inhabited (MvQPF.Pi F α)
+参数：F : A → TypeVec.{u} n → Type u；a : A；F a α；MvQPF.Pi F α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Pi.inhabited {α} [forall a, Inhabited (F a α)] : Inhabited (Pi F α) :=
+instance Pi.inhabited {α} [∀ a, Inhabited (F a α)] : Inhabited (Pi F α) :=
   ⟨fun _a => default⟩
 
 namespace Sigma
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: α, MvFunctor <| F α] : MvFunctor (Sigma F) where
-  body: fun f ⟨a, x⟩ => ⟨a, f < > x⟩
-
-中文:
-实例 [对任意
-  签名: α, Mv函子 <| F α] : Mv函子 (依赖和类型 F) where
-  定义体: fun f ⟨a, x⟩ => ⟨a, f < > x⟩
+/-
+**MvQPF.Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall α, MvFunctor <| F α] : MvFunctor (Sigma F) where
-map := fun f ⟨a, x⟩ => ⟨a, f < > x⟩
+instance [∀ α, MvFunctor <| F α] : MvFunctor (Sigma F) where
+  map := fun f ⟨a, x⟩ => ⟨a, f <$$> x⟩
 
 
-variable [forall α, MvQPF <| F α]
+variable [∀ α, MvQPF <| F α]
 
-/--
-Definition of `P` / `P` 的定义
+/-- polynomial functor representation of a dependent sum -/
+/-
+**MvQPF.Sigma.P** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Sigma`。
+形式化陈述：{n : ℕ} → {A : Type u} → (F : A → TypeVec.{u} n → Type u) → [(α : A) → MvQ
+PF (F α)] → MvPFunctor.{u} n
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition P
-  signature: : MvPFunctor n
-  body: ⟨Σ a, (P (F a)).A, fun x => (P (F x.1)).B x.2⟩
-
-中文:
-定义 P
-  签名: : MvP函子 n
-  定义体: ⟨Σ a, (P (F a)).A, fun x => (P (F x.1)).B x.2⟩
+--- 原说明 ---
+polynomial functor representation of a dependent sum
 -/
 protected def P : MvPFunctor n :=
   ⟨Σ a, (P (F a)).A, fun x => (P (F x.1)).B x.2⟩
 
-/--
-Definition of `abs` / `abs` 的定义
+/-- abstraction function for dependent sums -/
+/-
+**MvQPF.Sigma.abs** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Sigma`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) →       [i
+nst : (α : A) → MvQPF (F α)] → ⦃α : TypeVec.{u} n⦄ → ↑(MvQPF.Sigma.P F) α → MvQP
+F.Sigma F α
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abs
-  signature: ⦃α⦄
-
-中文:
-定义 abs
-  签名: ⦃α⦄
+--- 原说明 ---
+abstraction function for dependent sums
 -/
-protected def abs ⦃α⦄ : Sigma.P F α -> Sigma F α
+protected def abs ⦃α⦄ : Sigma.P F α → Sigma F α
   | ⟨a, f⟩ => ⟨a.1, MvQPF.abs ⟨a.2, f⟩⟩
 
-/--
-Definition of `repr` / `repr` 的定义
+/-- representation function for dependent sums -/
+/-
+**MvQPF.Sigma.repr** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Sigma`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) →       [i
+nst : (α : A) → MvQPF (F α)] → ⦃α : TypeVec.{u} n⦄ → MvQPF.Sigma F α → ↑(MvQPF.S
+igma.P F) α
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition repr
-  signature: ⦃α⦄
-  body: MvQPF.repr f
-    ⟨⟨a, x.1⟩, x.2⟩
-
-中文:
-定义 repr
-  签名: ⦃α⦄
-  定义体: MvQPF.repr f
-    ⟨⟨a, x.1⟩, x.2⟩
+--- 原说明 ---
+representation function for dependent sums
 -/
-protected def repr ⦃α⦄ : Sigma F α -> Sigma.P F α
+protected def repr ⦃α⦄ : Sigma F α → Sigma.P F α
   | ⟨a, f⟩ =>
     let x := MvQPF.repr f
     ⟨⟨a, x.1⟩, x.2⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MvQPF (Sigma F)
-  body: Sigma.P F
-  abs {α} := @Sigma.abs _ _ F _ α
-  repr {α} := @Sigma.repr _ _ F _ α
-  abs_repr := by rintro α ⟨x, f⟩; simp only [Sigma.abs, Sigma.repr, Sigma.eta, abs_repr]
-  abs_map := by rintro α β f ⟨x, g⟩; simp only [Sigma.abs, MvPFunctor.map_eq]
-                simp only [(· <$$> ·), ← abs_map, ← MvPFunctor.map_eq]
-
-中文:
-实例 :
-  签名: MvQPF (依赖和类型 F)
-  定义体: Sigma.P F
-  abs {α} := @Sigma.abs _ _ F _ α
-  repr {α} := @Sigma.repr _ _ F _ α
-  abs_repr := by rintro α ⟨x, f⟩; simp only [Sigma.abs, Sigma.repr, Sigma.eta, abs_repr]
-  abs_map := by rintro α β f ⟨x, g⟩; simp only [Sigma.abs, MvPFunctor.map_eq]
-                simp only [(· <$$> ·), ← abs_map, ← MvPFunctor.map_eq]
-
-Depends on / 依赖: Sigma.P
+/-
+**MvQPF.Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MvQPF (Sigma F) where
   P := Sigma.P F
@@ -197,94 +152,64 @@ end Sigma
 
 namespace Pi
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: α, MvFunctor <| F α] : MvFunctor (Pi F) where map f x a
-  body: f < > x a
-
-中文:
-实例 [对任意
-  签名: α, Mv函子 <| F α] : Mv函子 (依赖函数类型 F) where map f x a
-  定义体: f < > x a
+/-
+**MvQPF.Pi.** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall α, MvFunctor <| F α] : MvFunctor (Pi F) where map f x a := f < > x a
+instance [∀ α, MvFunctor <| F α] : MvFunctor (Pi F) where map f x a := f <$$> x a
 
-variable [forall α, MvQPF <| F α]
+variable [∀ α, MvQPF <| F α]
 
-/--
-Definition of `P` / `P` 的定义
+/-- polynomial functor representation of a dependent product -/
+/-
+**MvQPF.Pi.P** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Pi`。
+形式化陈述：{n : ℕ} → {A : Type u} → (F : A → TypeVec.{u} n → Type u) → [(α : A) → MvQ
+PF (F α)] → MvPFunctor.{u} n
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition P
-  signature: : MvPFunctor n
-  body: ⟨forall a, (P (F a)).A, fun x i => Σ a, (P (F a)).B (x a) i⟩
-
-中文:
-定义 P
-  签名: : MvP函子 n
-  定义体: ⟨forall a, (P (F a)).A, fun x i => Σ a, (P (F a)).B (x a) i⟩
+--- 原说明 ---
+polynomial functor representation of a dependent product
 -/
 protected def P : MvPFunctor n :=
-  ⟨forall a, (P (F a)).A, fun x i => Σ a, (P (F a)).B (x a) i⟩
+  ⟨∀ a, (P (F a)).A, fun x i => Σ a, (P (F a)).B (x a) i⟩
 
-/--
-Definition of `abs` / `abs` 的定义
+/-- abstraction function for dependent products -/
+/-
+**MvQPF.Pi.abs** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Pi`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) →       [i
+nst : (α : A) → MvQPF (F α)] → ⦃α : TypeVec.{u} n⦄ → ↑(MvQPF.Pi.P F) α → MvQPF.P
+i F α
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abs
-  signature: ⦃α⦄
-
-中文:
-定义 abs
-  签名: ⦃α⦄
+--- 原说明 ---
+abstraction function for dependent products
 -/
-protected def abs ⦃α⦄ : Pi.P F α -> Pi F α
+protected def abs ⦃α⦄ : Pi.P F α → Pi F α
   | ⟨a, f⟩ => fun x => MvQPF.abs ⟨a x, fun i y => f i ⟨_, y⟩⟩
 
-/--
-Definition of `repr` / `repr` 的定义
+/-- representation function for dependent products -/
+/-
+**MvQPF.Pi.repr** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Pi`。
+形式化陈述：{n : ℕ} →   {A : Type u} →     (F : A → TypeVec.{u} n → Type u) →       [i
+nst : (α : A) → MvQPF (F α)] → ⦃α : TypeVec.{u} n⦄ → MvQPF.Pi F α → ↑(MvQPF.Pi.P
+ F) α
+参数：F : A → TypeVec.{u} n → Type u；α : A；F α。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition repr
-  signature: ⦃α⦄
-
-中文:
-定义 repr
-  签名: ⦃α⦄
+--- 原说明 ---
+representation function for dependent products
 -/
-protected def repr ⦃α⦄ : Pi F α -> Pi.P F α
+protected def repr ⦃α⦄ : Pi F α → Pi.P F α
   | f => ⟨fun a => (MvQPF.repr (f a)).1, fun _i a => (MvQPF.repr (f _)).2 _ a.2⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MvQPF (Pi F)
-  body: Pi.P F
-  abs := @Pi.abs _ _ F _
-  repr := @Pi.repr _ _ F _
-  abs_repr := by
-    rintro α f
-    simp +instances only [Pi.abs, Pi.repr, Sigma.eta, abs_repr]
-  abs_map := by rintro α β f ⟨x, g⟩; simp only [Pi.abs, (· <$$> ·), ← abs_map]; rfl
-
-中文:
-实例 :
-  签名: MvQPF (依赖函数类型 F)
-  定义体: Pi.P F
-  abs := @Pi.abs _ _ F _
-  repr := @Pi.repr _ _ F _
-  abs_repr := by
-    rintro α f
-    simp +instances only [Pi.abs, Pi.repr, Sigma.eta, abs_repr]
-  abs_map := by rintro α β f ⟨x, g⟩; simp only [Pi.abs, (· <$$> ·), ← abs_map]; rfl
-
-Depends on / 依赖: Pi.P
+/-
+**MvQPF.Pi.** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MvQPF (Pi F) where
   P := Pi.P F
@@ -298,3 +223,4 @@ instance : MvQPF (Pi F) where
 end Pi
 
 end MvQPF
+

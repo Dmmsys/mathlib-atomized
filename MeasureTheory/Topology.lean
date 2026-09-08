@@ -18,35 +18,15 @@ the existing files without introducing massive dependencies between the subjects
 public section
 open Filter MeasureTheory
 
-/--
-theorem `ae_restrict_le_codiscreteWithin` / 定理 `ae_restrict_le_codiscreteWithin`
-
-English:
-theorem ae_restrict_le_codiscreteWithin
-  proof: by
-  intro s hs
-  have : DiscreteTopology ↑(sᶜ inter U) := isDiscrete_iff_discreteTopology.mp
- isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
-  rw [mem_ae_iff]; rw [Measure.restrict_apply' hU]
-  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstance)
-
-中文:
-定理 ae_restrict_le_codiscreteWithin
-  证明: by
-  intro s hs
-  have : DiscreteTopology ↑(sᶜ inter U) := isDiscrete_iff_discreteTopology.mp
- isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
-  rw [mem_ae_iff]; rw [Measure.restrict_apply' hU]
-  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstance)
-
-Depends on / 依赖: Countable, DiscreteTopology, Measure, Measure.restrict_apply, Set.Countable.measure_zero, TopologicalSpace, TopologicalSpace.separableSpace_iff_countable, compl_compl, isDiscrete_iff_discreteTopology, isDiscrete_iff_discreteTopology.mp, isDiscrete_of_codiscreteWithin, measure_zero, mem_ae_iff, restrict_apply, separableSpace_iff_countable
--/
+/-- Under reasonable assumptions, sets that are codiscrete within `U` are contained in the "almost
+everywhere" filter of co-null sets. -/
 theorem ae_restrict_le_codiscreteWithin
     {α : Type*} [MeasurableSpace α] [TopologicalSpace α] [SecondCountableTopology α]
     {μ : Measure α} [NullSingletonClass μ] {U : Set α} (hU : MeasurableSet U) :
-    ae (μ.restrict U) <= codiscreteWithin U := by
+    ae (μ.restrict U) ≤ codiscreteWithin U := by
   intro s hs
-  have : DiscreteTopology ↑(sᶜ inter U) := isDiscrete_iff_discreteTopology.mp
- isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
-  rw [mem_ae_iff]; rw [Measure.restrict_apply' hU]
+  have : DiscreteTopology ↑(sᶜ ∩ U) := isDiscrete_iff_discreteTopology.mp
+    <| isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
+  rw [mem_ae_iff, Measure.restrict_apply' hU]
   apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstance)
+

@@ -52,133 +52,124 @@ section OrderTopology
 variable (α)
 variable [TopologicalSpace α] [SecondCountableTopology α] [LinearOrder α] [OrderTopology α]
 
-/--
-theorem `borel_eq_generateFrom_Iio` / 定理 `borel_eq_generateFrom_Iio`
-
-English:
-theorem borel_eq_generateFrom_Iio
-  statement: borel α = .generateFrom (range Iio)
-  proof: by
-  refine le_antisymm ?_ (generateFrom_le ?_)
-  · rw [borel_eq_generateFrom_of_subbasis (@OrderTopology.topology_eq_generate_intervals α _ _ _)]
-    let : MeasurableSpace α := MeasurableSpace.generateFrom (range Iio)
-    have H : forall a : α, MeasurableSet (Iio a) := fun a => GenerateMeasurable.basic _ ⟨_, rfl⟩
-    refine generateFrom_le ?_
-    rintro _ ⟨a, rfl | rfl⟩
-    · rcases em (exists b, a ⋖ b) with ⟨b, hb⟩ | hcovBy
-      · rw [hb.Ioi_eq, ← compl_Iio]
-        exact (H _).compl
-      · rcases isOpen_biUnion_countable (Ioi a) Ioi fun _ _ => isOpen_Ioi with ⟨t, hat, htc, htU⟩
-        have : Ioi a = ⋃ b in t, Ici b := by
-refine Subset.antisymm ?_ iUnion₂_subset fun b hb => Ici_subset_Ioi.2 (hat hb)
-refine Subset.trans ?_ iUnion₂_mono fun _ _ => Ioi_subset_Ici_self
-          simpa [CovBy, htU, subset_def] using hcovBy
-        simp only [this, ← compl_Iio]
-exact .biUnion htc fun _ _ => (H _).compl
-    · apply H
-  · rw [forall_mem_range]
-    intro a
-    exact GenerateMeasurable.basic _ isOpen_Iio
-
-中文:
-定理 borel_eq_generateFrom_Iio
-  结论: borel α = .generateFrom (range 左无界右开区间)
-  证明: by
-  refine le_antisymm ?_ (generateFrom_le ?_)
-  · rw [borel_eq_generateFrom_of_subbasis (@OrderTopology.topology_eq_generate_intervals α _ _ _)]
-    let : MeasurableSpace α := MeasurableSpace.generateFrom (range Iio)
-    have H : forall a : α, MeasurableSet (Iio a) := fun a => GenerateMeasurable.basic _ ⟨_, rfl⟩
-    refine generateFrom_le ?_
-    rintro _ ⟨a, rfl | rfl⟩
-    · rcases em (exists b, a ⋖ b) with ⟨b, hb⟩ | hcovBy
-      · rw [hb.Ioi_eq, ← compl_Iio]
-        exact (H _).compl
-      · rcases isOpen_biUnion_countable (Ioi a) Ioi fun _ _ => isOpen_Ioi with ⟨t, hat, htc, htU⟩
-        have : Ioi a = ⋃ b in t, Ici b := by
-refine Subset.antisymm ?_ iUnion₂_subset fun b hb => Ici_subset_Ioi.2 (hat hb)
-refine Subset.trans ?_ iUnion₂_mono fun _ _ => Ioi_subset_Ici_self
-          simpa [CovBy, htU, subset_def] using hcovBy
-        simp only [this, ← compl_Iio]
-exact .biUnion htc fun _ _ => (H _).compl
-    · apply H
-  · rw [forall_mem_range]
-    intro a
-    exact GenerateMeasurable.basic _ isOpen_Iio
-
-Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, Ioi_eq, MeasurableSet, MeasurableSpace, MeasurableSpace.generateFrom, OrderTopology, OrderTopology.topology_eq_generate_intervals, borel_eq_generateFrom_of_subbasis, compl_Iio, generateFrom, generateFrom_le, hb.Ioi_eq, hcovBy, isOpen_biUnion_countable, le_antisymm, topology_eq_generate_intervals
+/-
+**borel_eq_generateFrom_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Iio : borel α = .generateFrom (range Iio)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `borel_eq_generateFrom_of_subbasis`：borel_eq_generateFrom_of_subbasis {s 
+: Set (Set α)} [t : TopologicalSpace α] [SecondCountableTopology α] (hs : t = .g
+enerateFrom s) : borel …
+· 使用定理 `OrderTopology.topology_eq_generate_intervals`：∀ {α : Type u_1} {t : Topo
+logicalSpace α} {inst : Preorder α} [self : OrderTopology α], t = Preorder.topol
+ogy α
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `CovBy.Ioi_eq`：CovBy.Ioi_eq (h : a ⋖ b) : Ioi a = Ici b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_Iio`：compl_Iio : (Iio a)ᶜ = Ici a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `TopologicalSpace.isOpen_biUnion_countable`：isOpen_biUnion_countable [Sec
+ondCountableTopology α] {ι : Type*} (I : Set ι) (s : ι -> Set α) (H : forall i i
+n I, IsOpen (s i)) : exists T s…
+· 使用定理 `isOpen_Ioi`：isOpen_Ioi : IsOpen (Ioi a)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Set.iUnion₂_mono`：iUnion₂_mono {s t : forall i, κ i -> Set α} (h : foral
+l i j, s i j subseteq t i j) : ⋃ (i) (j), s i j subseteq ⋃ (i) (j), t i j
+· 使用定理 `Set.Ioi_subset_Ici_self`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, S
+et.Ioi a ⊆ Set.Ici a
+· 使用定理 `Set.iUnion₂_subset`：iUnion₂_subset {s : forall i, κ i -> Set α} {t : Set
+ α} (h : forall i j, s i j subseteq t) : ⋃ (i) (j), s i j subseteq t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Ici_subset_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.
+Ici a ⊆ Set.Ioi b ↔ b < a
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem borel_eq_generateFrom_Iio : borel α = .generateFrom (range Iio) := by
   refine le_antisymm ?_ (generateFrom_le ?_)
   · rw [borel_eq_generateFrom_of_subbasis (@OrderTopology.topology_eq_generate_intervals α _ _ _)]
     let : MeasurableSpace α := MeasurableSpace.generateFrom (range Iio)
-    have H : forall a : α, MeasurableSet (Iio a) := fun a => GenerateMeasurable.basic _ ⟨_, rfl⟩
+    have H : ∀ a : α, MeasurableSet (Iio a) := fun a => GenerateMeasurable.basic _ ⟨_, rfl⟩
     refine generateFrom_le ?_
     rintro _ ⟨a, rfl | rfl⟩
-    · rcases em (exists b, a ⋖ b) with ⟨b, hb⟩ | hcovBy
+    · rcases em (∃ b, a ⋖ b) with ⟨b, hb⟩ | hcovBy
       · rw [hb.Ioi_eq, ← compl_Iio]
         exact (H _).compl
-      · rcases isOpen_biUnion_countable (Ioi a) Ioi fun _ _ => isOpen_Ioi with ⟨t, hat, htc, htU⟩
-        have : Ioi a = ⋃ b in t, Ici b := by
-refine Subset.antisymm ?_ iUnion₂_subset fun b hb => Ici_subset_Ioi.2 (hat hb)
-refine Subset.trans ?_ iUnion₂_mono fun _ _ => Ioi_subset_Ici_self
+      · rcases isOpen_biUnion_countable (Ioi a) Ioi fun _ _ ↦ isOpen_Ioi with ⟨t, hat, htc, htU⟩
+        have : Ioi a = ⋃ b ∈ t, Ici b := by
+          refine Subset.antisymm ?_ <| iUnion₂_subset fun b hb ↦ Ici_subset_Ioi.2 (hat hb)
+          refine Subset.trans ?_ <| iUnion₂_mono fun _ _ ↦ Ioi_subset_Ici_self
           simpa [CovBy, htU, subset_def] using hcovBy
         simp only [this, ← compl_Iio]
-exact .biUnion htc fun _ _ => (H _).compl
+        exact .biUnion htc <| fun _ _ ↦ (H _).compl
     · apply H
   · rw [forall_mem_range]
     intro a
     exact GenerateMeasurable.basic _ isOpen_Iio
-
-/--
-theorem `borel_eq_generateFrom_Ioi` / 定理 `borel_eq_generateFrom_Ioi`
-
-English:
-theorem borel_eq_generateFrom_Ioi
-  statement: borel α = .generateFrom (range Ioi)
-  proof: @borel_eq_generateFrom_Iio αᵒᵈ _ (by infer_instance : SecondCountableTopology α) _ _
-
-中文:
-定理 borel_eq_generateFrom_Ioi
-  结论: borel α = .generateFrom (range 左开右无界区间)
-  证明: @borel_eq_generateFrom_Iio αᵒᵈ _ (by infer_instance : SecondCountableTopology α) _ _
-
-Depends on / 依赖: SecondCountableTopology, borel_eq_generateFrom_Iio, infer_instance
+/-
+**borel_eq_generateFrom_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Ioi : borel α = .generateFrom (range Ioi)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `borel_eq_generateFrom_Iio`：borel_eq_generateFrom_Iio : borel α = .genera
+teFrom (range Iio)
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 -/
 theorem borel_eq_generateFrom_Ioi : borel α = .generateFrom (range Ioi) :=
   @borel_eq_generateFrom_Iio αᵒᵈ _ (by infer_instance : SecondCountableTopology α) _ _
-
-/--
-theorem `borel_eq_generateFrom_Iic` / 定理 `borel_eq_generateFrom_Iic`
-
-English:
-theorem borel_eq_generateFrom_Iic
-  proof: by
-  rw [borel_eq_generateFrom_Ioi]
-  refine le_antisymm ?_ ?_
-  · refine MeasurableSpace.generateFrom_le fun t ht => ?_
-    obtain ⟨u, rfl⟩ := ht
-    rw [← compl_Iic]
-    exact (MeasurableSpace.measurableSet_generateFrom (mem_range.mpr ⟨u, rfl⟩)).compl
-  · refine MeasurableSpace.generateFrom_le fun t ht => ?_
-    obtain ⟨u, rfl⟩ := ht
-    rw [← compl_Ioi]
-    exact (MeasurableSpace.measurableSet_generateFrom (mem_range.mpr ⟨u, rfl⟩)).compl
-
-中文:
-定理 borel_eq_generateFrom_Iic
-  证明: by
-  rw [borel_eq_generateFrom_Ioi]
-  refine le_antisymm ?_ ?_
-  · refine MeasurableSpace.generateFrom_le fun t ht => ?_
-    obtain ⟨u, rfl⟩ := ht
-    rw [← compl_Iic]
-    exact (MeasurableSpace.measurableSet_generateFrom (mem_range.mpr ⟨u, rfl⟩)).compl
-  · refine MeasurableSpace.generateFrom_le fun t ht => ?_
-    obtain ⟨u, rfl⟩ := ht
-    rw [← compl_Ioi]
-    exact (MeasurableSpace.measurableSet_generateFrom (mem_range.mpr ⟨u, rfl⟩)).compl
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.generateFrom_le, MeasurableSpace.measurableSet_generateFrom, borel_eq_generateFrom_Ioi, compl_Iic, compl_Ioi, generateFrom_le, le_antisymm, measurableSet_generateFrom, mem_range, mem_range.mpr
+/-
+**borel_eq_generateFrom_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Iic : borel α = MeasurableSpace.generateFrom (range 
+Iic)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `borel_eq_generateFrom_Ioi`：borel_eq_generateFrom_Ioi : borel α = .genera
+teFrom (range Ioi)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_Iic`：compl_Iic : (Iic a)ᶜ = Ioi a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Set.compl_Ioi`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ioi
+ a)ᶜ = Set.Iic a
 -/
 theorem borel_eq_generateFrom_Iic :
     borel α = MeasurableSpace.generateFrom (range Iic) := by
@@ -192,21 +183,18 @@ theorem borel_eq_generateFrom_Iic :
     obtain ⟨u, rfl⟩ := ht
     rw [← compl_Ioi]
     exact (MeasurableSpace.measurableSet_generateFrom (mem_range.mpr ⟨u, rfl⟩)).compl
-
-/--
-theorem `borel_eq_generateFrom_Ici` / 定理 `borel_eq_generateFrom_Ici`
-
-English:
-theorem borel_eq_generateFrom_Ici
-  statement: borel α = MeasurableSpace.generateFrom (range Ici)
-  proof: @borel_eq_generateFrom_Iic αᵒᵈ _ _ _ _
-
-中文:
-定理 borel_eq_generateFrom_Ici
-  结论: borel α = 可测空间.generateFrom (range 左闭右无界区间)
-  证明: @borel_eq_generateFrom_Iic αᵒᵈ _ _ _ _
-
-Depends on / 依赖: borel_eq_generateFrom_Iic
+/-
+**borel_eq_generateFrom_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Ici : borel α = MeasurableSpace.generateFrom (range 
+Ici)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `borel_eq_generateFrom_Iic`：borel_eq_generateFrom_Iic : borel α = Measura
+bleSpace.generateFrom (range Iic)
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 -/
 theorem borel_eq_generateFrom_Ici : borel α = MeasurableSpace.generateFrom (range Ici) :=
   @borel_eq_generateFrom_Iic αᵒᵈ _ _ _ _
@@ -223,264 +211,171 @@ section Preorder
 variable [Preorder α] {a b x : α} {μ : Measure α}
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Ici` / 定理 `measurableSet_Ici`
-
-English:
-theorem measurableSet_Ici
-  given: [ClosedIciTopology α]
-  statement: MeasurableSet (Ici a)
-  proof: isClosed_Ici.measurableSet
-
-中文:
-定理 measurableSet_Ici
-  条件: [ClosedIci拓扑 α]
-  结论: 可测集 (左闭右无界区间 a)
-  证明: isClosed_Ici.measurableSet
-
-Depends on / 依赖: isClosed_Ici, isClosed_Ici.measurableSet, measurableSet
+/-
+**measurableSet_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Ici [ClosedIciTopology α] : MeasurableSet (Ici a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `isClosed_Ici`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Preor
+der α] [ClosedIciTopology α] {a : α}, IsClosed (Set.Ici a)
 -/
 theorem measurableSet_Ici [ClosedIciTopology α] : MeasurableSet (Ici a) :=
   isClosed_Ici.measurableSet
-
-/--
-theorem `nullMeasurableSet_Ici` / 定理 `nullMeasurableSet_Ici`
-
-English:
-theorem nullMeasurableSet_Ici
-  given: [ClosedIciTopology α]
-  statement: NullMeasurableSet (Ici a) μ
-  proof: measurableSet_Ici.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Ici
-  条件: [ClosedIci拓扑 α]
-  结论: NullMeasurableSet (左闭右无界区间 a) μ
-  证明: measurableSet_Ici.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Ici, measurableSet_Ici.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Ici [ClosedIciTopology α] : NullMeasurableSet (Ici a) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
 -/
 theorem nullMeasurableSet_Ici [ClosedIciTopology α] : NullMeasurableSet (Ici a) μ :=
   measurableSet_Ici.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Iic` / 定理 `measurableSet_Iic`
-
-English:
-theorem measurableSet_Iic
-  given: [ClosedIicTopology α]
-  statement: MeasurableSet (Iic a)
-  proof: isClosed_Iic.measurableSet
-
-中文:
-定理 measurableSet_Iic
-  条件: [ClosedIic拓扑 α]
-  结论: 可测集 (左无界右闭区间 a)
-  证明: isClosed_Iic.measurableSet
-
-Depends on / 依赖: isClosed_Iic, isClosed_Iic.measurableSet, measurableSet
+/-
+**measurableSet_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Iic [ClosedIicTopology α] : MeasurableSet (Iic a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `isClosed_Iic`：isClosed_Iic : IsClosed (Iic a)
 -/
 theorem measurableSet_Iic [ClosedIicTopology α] : MeasurableSet (Iic a) :=
   isClosed_Iic.measurableSet
-
-/--
-theorem `nullMeasurableSet_Iic` / 定理 `nullMeasurableSet_Iic`
-
-English:
-theorem nullMeasurableSet_Iic
-  given: [ClosedIicTopology α]
-  statement: NullMeasurableSet (Iic a) μ
-  proof: measurableSet_Iic.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Iic
-  条件: [ClosedIic拓扑 α]
-  结论: NullMeasurableSet (左无界右闭区间 a) μ
-  证明: measurableSet_Iic.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Iic, measurableSet_Iic.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Iic [ClosedIicTopology α] : NullMeasurableSet (Iic a) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Iic`：measurableSet_Iic [ClosedIicTopology α] : MeasurableS
+et (Iic a)
 -/
 theorem nullMeasurableSet_Iic [ClosedIicTopology α] : NullMeasurableSet (Iic a) μ :=
   measurableSet_Iic.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Icc` / 定理 `measurableSet_Icc`
-
-English:
-theorem measurableSet_Icc
-  given: [OrderClosedTopology α]
-  statement: MeasurableSet (Icc a b)
-  proof: isClosed_Icc.measurableSet
-
-中文:
-定理 measurableSet_Icc
-  条件: [OrderClosed拓扑 α]
-  结论: 可测集 (闭区间 a b)
-  证明: isClosed_Icc.measurableSet
-
-Depends on / 依赖: isClosed_Icc, isClosed_Icc.measurableSet, measurableSet
+/-
+**measurableSet_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Icc [OrderClosedTopology α] : MeasurableSet (Icc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `isClosed_Icc`：isClosed_Icc {a b : α} : IsClosed (Icc a b)
 -/
 theorem measurableSet_Icc [OrderClosedTopology α] : MeasurableSet (Icc a b) :=
   isClosed_Icc.measurableSet
-
-/--
-theorem `nullMeasurableSet_Icc` / 定理 `nullMeasurableSet_Icc`
-
-English:
-theorem nullMeasurableSet_Icc
-  given: [OrderClosedTopology α]
-  statement: NullMeasurableSet (Icc a b) μ
-  proof: measurableSet_Icc.nullMeasurableSet
-
-中文:
-定理 nullMeasurableSet_Icc
-  条件: [OrderClosed拓扑 α]
-  结论: NullMeasurableSet (闭区间 a b) μ
-  证明: measurableSet_Icc.nullMeasurableSet
-
-Depends on / 依赖: measurableSet_Icc, measurableSet_Icc.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Icc [OrderClosedTopology α] : NullMeasurableSet (Icc a b
+) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Icc`：measurableSet_Icc [OrderClosedTopology α] : Measurabl
+eSet (Icc a b)
 -/
 theorem nullMeasurableSet_Icc [OrderClosedTopology α] : NullMeasurableSet (Icc a b) μ :=
   measurableSet_Icc.nullMeasurableSet
-
-/--
-Instance `nhdsWithin_Ici_isMeasurablyGenerated` / 实例 `nhdsWithin_Ici_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_Ici_isMeasurablyGenerated
-  signature: [ClosedIciTopology α]
-  body: measurableSet_Ici.nhdsWithin_isMeasurablyGenerated _
-
-中文:
-实例 nhdsWithin_Ici_isMeasurablyGenerated
-  签名: [ClosedIci拓扑 α]
-  定义体: measurableSet_Ici.nhdsWithin_isMeasurablyGenerated _
-
-Depends on / 依赖: measurableSet_Ici, measurableSet_Ici.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
+/-
+**nhdsWithin_Ici_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_Ici_isMeasurablyGenerated [ClosedIciTopology α] : (𝓝[Ici b] a).
+IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nhdsWithin_isMeasurablyGenerated`：MeasurableSet.nhdsWithin
+_isMeasurablyGenerated {s : Set α} (hs : MeasurableSet s) (a : α) : (𝓝[s] a).IsM
+easurablyGenerated
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
 -/
 instance nhdsWithin_Ici_isMeasurablyGenerated [ClosedIciTopology α] :
     (𝓝[Ici b] a).IsMeasurablyGenerated :=
   measurableSet_Ici.nhdsWithin_isMeasurablyGenerated _
-
-/--
-Instance `nhdsWithin_Iic_isMeasurablyGenerated` / 实例 `nhdsWithin_Iic_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_Iic_isMeasurablyGenerated
-  signature: [ClosedIicTopology α]
-  body: measurableSet_Iic.nhdsWithin_isMeasurablyGenerated _
-
-中文:
-实例 nhdsWithin_Iic_isMeasurablyGenerated
-  签名: [ClosedIic拓扑 α]
-  定义体: measurableSet_Iic.nhdsWithin_isMeasurablyGenerated _
-
-Depends on / 依赖: measurableSet_Iic, measurableSet_Iic.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
+/-
+**nhdsWithin_Iic_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_Iic_isMeasurablyGenerated [ClosedIicTopology α] : (𝓝[Iic b] a).
+IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nhdsWithin_isMeasurablyGenerated`：MeasurableSet.nhdsWithin
+_isMeasurablyGenerated {s : Set α} (hs : MeasurableSet s) (a : α) : (𝓝[s] a).IsM
+easurablyGenerated
+· 使用定理 `measurableSet_Iic`：measurableSet_Iic [ClosedIicTopology α] : MeasurableS
+et (Iic a)
 -/
 instance nhdsWithin_Iic_isMeasurablyGenerated [ClosedIicTopology α] :
     (𝓝[Iic b] a).IsMeasurablyGenerated :=
   measurableSet_Iic.nhdsWithin_isMeasurablyGenerated _
-
-/--
-Instance `nhdsWithin_Icc_isMeasurablyGenerated` / 实例 `nhdsWithin_Icc_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_Icc_isMeasurablyGenerated
-  signature: [OrderClosedTopology α]
-  body: by
-  rw [← Ici_inter_Iic]; rw [nhdsWithin_inter]
-  infer_instance
-
-中文:
-实例 nhdsWithin_Icc_isMeasurablyGenerated
-  签名: [OrderClosed拓扑 α]
-  定义体: by
-  rw [← Ici_inter_Iic]; rw [nhdsWithin_inter]
-  infer_instance
-
-Depends on / 依赖: Ici_inter_Iic, infer_instance, nhdsWithin_inter
+/-
+**nhdsWithin_Icc_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_Icc_isMeasurablyGenerated [OrderClosedTopology α] : IsMeasurabl
+yGenerated (𝓝[Icc a b] x)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Ici_inter_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+ci a ∩ Set.Iic b = Set.Icc a b
+· 使用定理 `nhdsWithin_inter`：nhdsWithin_inter (a : α) (s t : Set α) : 𝓝[s inter t] 
+a = 𝓝[s] a ⊓ 𝓝[t] a
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
 -/
 instance nhdsWithin_Icc_isMeasurablyGenerated [OrderClosedTopology α] :
     IsMeasurablyGenerated (𝓝[Icc a b] x) := by
-  rw [← Ici_inter_Iic]; rw [nhdsWithin_inter]
+  rw [← Ici_inter_Iic, nhdsWithin_inter]
   infer_instance
-
-/--
-Instance `atTop_isMeasurablyGenerated` / 实例 `atTop_isMeasurablyGenerated`
-
-English:
-instance atTop_isMeasurablyGenerated
-  signature: [ClosedIciTopology α]
-  body: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
-    (measurableSet_Ici : MeasurableSet (Ici a)).principal_isMeasurablyGenerated
-
-中文:
-实例 atTop_isMeasurablyGenerated
-  签名: [ClosedIci拓扑 α]
-  定义体: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
-    (measurableSet_Ici : MeasurableSet (Ici a)).principal_isMeasurablyGenerated
-
-Depends on / 依赖: Filter, Filter.iInf_isMeasurablyGenerated, MeasurableSet, iInf_isMeasurablyGenerated, measurableSet_Ici, principal_isMeasurablyGenerated
+/-
+**atTop_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：atTop_isMeasurablyGenerated [ClosedIciTopology α] : (Filter.atTop : Filter
+ α).IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.principal_isMeasurablyGenerated`：∀ {α : Type u_1} [inst : 
+MeasurableSpace α] {s : Set α}, MeasurableSet s → (Filter.principal s).IsMeasura
+blyGenerated
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
 -/
 instance atTop_isMeasurablyGenerated [ClosedIciTopology α] :
     (Filter.atTop : Filter α).IsMeasurablyGenerated :=
   @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
     (measurableSet_Ici : MeasurableSet (Ici a)).principal_isMeasurablyGenerated
-
-/--
-Instance `atBot_isMeasurablyGenerated` / 实例 `atBot_isMeasurablyGenerated`
-
-English:
-instance atBot_isMeasurablyGenerated
-  signature: [ClosedIicTopology α]
-  body: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
-    (measurableSet_Iic : MeasurableSet (Iic a)).principal_isMeasurablyGenerated
-
-中文:
-实例 atBot_isMeasurablyGenerated
-  签名: [ClosedIic拓扑 α]
-  定义体: @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
-    (measurableSet_Iic : MeasurableSet (Iic a)).principal_isMeasurablyGenerated
-
-Depends on / 依赖: Filter, Filter.iInf_isMeasurablyGenerated, MeasurableSet, iInf_isMeasurablyGenerated, measurableSet_Iic, one_mem, principal_isMeasurablyGenerated
+/-
+**atBot_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：atBot_isMeasurablyGenerated [ClosedIicTopology α] : (Filter.atBot : Filter
+ α).IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.principal_isMeasurablyGenerated`：∀ {α : Type u_1} [inst : 
+MeasurableSpace α] {s : Set α}, MeasurableSet s → (Filter.principal s).IsMeasura
+blyGenerated
+· 使用定理 `measurableSet_Iic`：measurableSet_Iic [ClosedIicTopology α] : MeasurableS
+et (Iic a)
 -/
 instance atBot_isMeasurablyGenerated [ClosedIicTopology α] :
     (Filter.atBot : Filter α).IsMeasurablyGenerated :=
   @Filter.iInf_isMeasurablyGenerated _ _ _ _ fun a =>
     (measurableSet_Iic : MeasurableSet (Iic a)).principal_isMeasurablyGenerated
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [R1Space
-  signature: α] : IsMeasurablyGenerated (cocompact α) where
-  body: by
-    intro _ hs
-    obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
-    exact ⟨(closure t)ᶜ, ht.closure.compl_mem_cocompact, isClosed_closure.measurableSet.compl,
-      (compl_subset_compl.2 subset_closure).trans hts⟩
-
-中文:
-实例 [R1空间
-  签名: α] : 是MeasurablyGenerated (cocompact α) where
-  定义体: by
-    intro _ hs
-    obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
-    exact ⟨(closure t)ᶜ, ht.closure.compl_mem_cocompact, isClosed_closure.measurableSet.compl,
-      (compl_subset_compl.2 subset_closure).trans hts⟩
-
-Depends on / 依赖: closure, compl_mem_cocompact, compl_subset_compl, ht.closure.compl_mem_cocompact, isClosed_closure, isClosed_closure.measurableSet.compl, measurableSet, mem_cocompact, mem_cocompact.mp, one_mem, subset_closure
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [R1Space α] : IsMeasurablyGenerated (cocompact α) where
   exists_measurable_subset := by
@@ -495,85 +390,70 @@ section PartialOrder
 
 variable [PartialOrder α] [OrderClosedTopology α] [SecondCountableTopology α] {a b : α}
 
-/--
-theorem `measurableSet_le'` / 定理 `measurableSet_le'`
-
-English:
-theorem measurableSet_le'
-  statement: MeasurableSet { p : α × α | p.1 <= p.2 }
-  proof: OrderClosedTopology.isClosed_le'.measurableSet
-
-@[fun_prop]
-
-中文:
-定理 measurableSet_le'
-  结论: 可测集 { p : α × α | p.1 <= p.2 }
-  证明: OrderClosedTopology.isClosed_le'.measurableSet
-
-@[fun_prop]
-
-Depends on / 依赖: OrderClosedTopology, OrderClosedTopology.isClosed_le, isClosed_le, measurableSet
+/-
+**measurableSet_le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_le' : MeasurableSet { p : α × α | p.1 <= p.2 }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `OrderClosedTopology.isClosed_le'`：∀ {α : Type u_1} {inst : TopologicalSp
+ace α} {inst_1 : Preorder α} [self : OrderClosedTopology α],   IsClosed {p | p.1
+ ≤ p.2}
 -/
-theorem measurableSet_le' : MeasurableSet { p : α × α | p.1 <= p.2 } :=
+theorem measurableSet_le' : MeasurableSet { p : α × α | p.1 ≤ p.2 } :=
   OrderClosedTopology.isClosed_le'.measurableSet
 
 @[fun_prop]
-/--
-theorem `measurable_le` / 定理 `measurable_le`
-
-English:
-theorem measurable_le
-  statement: Measurable fun p : α × α => p.1 <= p.2
-  proof: measurableSet_setOfPred.mp measurableSet_le'
-
-中文:
-定理 measurable_le
-  结论: 可测 fun p : α × α => p.1 <= p.2
-  证明: measurableSet_setOfPred.mp measurableSet_le'
-
-Depends on / 依赖: measurableSet_le, measurableSet_setOfPred, measurableSet_setOfPred.mp
+/-
+**measurable_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_le : Measurable fun p : α × α => p.1 <= p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurableSet_setOfPred`：∀ {α : Type u_1} [inst : MeasurableSpace α] {p 
+: α → Prop}, MeasurableSet {a | p a} ↔ Measurable p
+· 使用定理 `measurableSet_le'`：measurableSet_le' : MeasurableSet { p : α × α | p.1 <
+= p.2 }
 -/
-theorem measurable_le : Measurable fun p : α × α => p.1 <= p.2 :=
+theorem measurable_le : Measurable fun p : α × α => p.1 ≤ p.2 :=
   measurableSet_setOfPred.mp measurableSet_le'
-
-/--
-theorem `measurableSet_le` / 定理 `measurableSet_le`
-
-English:
-theorem measurableSet_le
-  given: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: hf.prodMk hg measurableSet_le'
-
-中文:
-定理 measurableSet_le
-  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: hf.prodMk hg measurableSet_le'
-
-Depends on / 依赖: hf.prodMk, measurableSet_le, prodMk
+/-
+**measurableSet_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_le {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) : 
+MeasurableSet { a | f a <= g a }
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurableSet_le'`：measurableSet_le' : MeasurableSet { p : α × α | p.1 <
+= p.2 }
 -/
-theorem measurableSet_le {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) :
-    MeasurableSet { a | f a <= g a } :=
+theorem measurableSet_le {f g : δ → α} (hf : Measurable f) (hg : Measurable g) :
+    MeasurableSet { a | f a ≤ g a } :=
   hf.prodMk hg measurableSet_le'
-
-/--
-theorem `Measurable.le'` / 定理 `Measurable.le'`
-
-English:
-theorem Measurable.le'
-  given: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: by
-  fun_prop
-
-中文:
-定理 可测.le'
-  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: by
-  fun_prop
-
-Depends on / 依赖: fun_prop
+/-
+**Measurable.le'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.le' {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) : Me
+asurable fun a => f a <= g a
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `measurable_le`：measurable_le : Measurable fun p : α × α => p.1 <= p.2
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
 -/
-theorem Measurable.le' {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) :
-    Measurable fun a => f a <= g a := by
+theorem Measurable.le' {f g : δ → α} (hf : Measurable f) (hg : Measurable g) :
+    Measurable fun a => f a ≤ g a := by
   fun_prop
 
 end PartialOrder
@@ -586,616 +466,485 @@ variable [LinearOrder α] {a b x : α} {μ : Measure α}
 open Interval
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Iio` / 定理 `measurableSet_Iio`
-
-English:
-theorem measurableSet_Iio
-  given: [ClosedIciTopology α]
-  statement: MeasurableSet (Iio a)
-  proof: isOpen_Iio.measurableSet
-
-中文:
-定理 measurableSet_Iio
-  条件: [ClosedIci拓扑 α]
-  结论: 可测集 (左无界右开区间 a)
-  证明: isOpen_Iio.measurableSet
-
-Depends on / 依赖: isOpen_Iio, isOpen_Iio.measurableSet, measurableSet
+/-
+**measurableSet_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Iio [ClosedIciTopology α] : MeasurableSet (Iio a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `isOpen_Iio`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : LinearO
+rder α] [ClosedIciTopology α] {a : α}, IsOpen (Set.Iio a)
 -/
 theorem measurableSet_Iio [ClosedIciTopology α] : MeasurableSet (Iio a) :=
   isOpen_Iio.measurableSet
-
-/--
-theorem `nullMeasurableSet_Iio` / 定理 `nullMeasurableSet_Iio`
-
-English:
-theorem nullMeasurableSet_Iio
-  given: [ClosedIciTopology α]
-  statement: NullMeasurableSet (Iio a) μ
-  proof: measurableSet_Iio.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Iio
-  条件: [ClosedIci拓扑 α]
-  结论: NullMeasurableSet (左无界右开区间 a) μ
-  证明: measurableSet_Iio.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Iio, measurableSet_Iio.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Iio [ClosedIciTopology α] : NullMeasurableSet (Iio a) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Iio`：measurableSet_Iio [ClosedIciTopology α] : MeasurableS
+et (Iio a)
 -/
 theorem nullMeasurableSet_Iio [ClosedIciTopology α] : NullMeasurableSet (Iio a) μ :=
   measurableSet_Iio.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Ioi` / 定理 `measurableSet_Ioi`
-
-English:
-theorem measurableSet_Ioi
-  given: [ClosedIicTopology α]
-  statement: MeasurableSet (Ioi a)
-  proof: isOpen_Ioi.measurableSet
-
-中文:
-定理 measurableSet_Ioi
-  条件: [ClosedIic拓扑 α]
-  结论: 可测集 (左开右无界区间 a)
-  证明: isOpen_Ioi.measurableSet
-
-Depends on / 依赖: isOpen_Ioi, isOpen_Ioi.measurableSet, measurableSet
+/-
+**measurableSet_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Ioi [ClosedIicTopology α] : MeasurableSet (Ioi a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `isOpen_Ioi`：isOpen_Ioi : IsOpen (Ioi a)
 -/
 theorem measurableSet_Ioi [ClosedIicTopology α] : MeasurableSet (Ioi a) :=
   isOpen_Ioi.measurableSet
-
-/--
-theorem `nullMeasurableSet_Ioi` / 定理 `nullMeasurableSet_Ioi`
-
-English:
-theorem nullMeasurableSet_Ioi
-  given: [ClosedIicTopology α]
-  statement: NullMeasurableSet (Ioi a) μ
-  proof: measurableSet_Ioi.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Ioi
-  条件: [ClosedIic拓扑 α]
-  结论: NullMeasurableSet (左开右无界区间 a) μ
-  证明: measurableSet_Ioi.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Ioi, measurableSet_Ioi.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Ioi [ClosedIicTopology α] : NullMeasurableSet (Ioi a) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
 -/
 theorem nullMeasurableSet_Ioi [ClosedIicTopology α] : NullMeasurableSet (Ioi a) μ :=
   measurableSet_Ioi.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Ioo` / 定理 `measurableSet_Ioo`
-
-English:
-theorem measurableSet_Ioo
-  given: [OrderClosedTopology α]
-  statement: MeasurableSet (Ioo a b)
-  proof: isOpen_Ioo.measurableSet
-
-中文:
-定理 measurableSet_Ioo
-  条件: [OrderClosed拓扑 α]
-  结论: 可测集 (开区间 a b)
-  证明: isOpen_Ioo.measurableSet
-
-Depends on / 依赖: isOpen_Ioo, isOpen_Ioo.measurableSet, measurableSet
+/-
+**measurableSet_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Ioo [OrderClosedTopology α] : MeasurableSet (Ioo a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
 -/
 theorem measurableSet_Ioo [OrderClosedTopology α] : MeasurableSet (Ioo a b) :=
   isOpen_Ioo.measurableSet
-
-/--
-theorem `nullMeasurableSet_Ioo` / 定理 `nullMeasurableSet_Ioo`
-
-English:
-theorem nullMeasurableSet_Ioo
-  given: [OrderClosedTopology α]
-  statement: NullMeasurableSet (Ioo a b) μ
-  proof: measurableSet_Ioo.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Ioo
-  条件: [OrderClosed拓扑 α]
-  结论: NullMeasurableSet (开区间 a b) μ
-  证明: measurableSet_Ioo.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Ioo, measurableSet_Ioo.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Ioo [OrderClosedTopology α] : NullMeasurableSet (Ioo a b
+) μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Ioo`：measurableSet_Ioo [OrderClosedTopology α] : Measurabl
+eSet (Ioo a b)
 -/
 theorem nullMeasurableSet_Ioo [OrderClosedTopology α] : NullMeasurableSet (Ioo a b) μ :=
   measurableSet_Ioo.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Ioc` / 定理 `measurableSet_Ioc`
-
-English:
-theorem measurableSet_Ioc
-  given: [ClosedIicTopology α]
-  statement: MeasurableSet (Ioc a b)
-  proof: measurableSet_Ioi.inter measurableSet_Iic
-
-中文:
-定理 measurableSet_Ioc
-  条件: [ClosedIic拓扑 α]
-  结论: 可测集 (左开右闭区间 a b)
-  证明: measurableSet_Ioi.inter measurableSet_Iic
-
-Depends on / 依赖: measurableSet_Iic, measurableSet_Ioi, measurableSet_Ioi.inter
+/-
+**measurableSet_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Ioc [ClosedIicTopology α] : MeasurableSet (Ioc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `measurableSet_Iic`：measurableSet_Iic [ClosedIicTopology α] : MeasurableS
+et (Iic a)
 -/
 theorem measurableSet_Ioc [ClosedIicTopology α] : MeasurableSet (Ioc a b) :=
   measurableSet_Ioi.inter measurableSet_Iic
-
-/--
-theorem `nullMeasurableSet_Ioc` / 定理 `nullMeasurableSet_Ioc`
-
-English:
-theorem nullMeasurableSet_Ioc
-  given: [ClosedIicTopology α]
-  statement: NullMeasurableSet (Ioc a b) μ
-  proof: measurableSet_Ioc.nullMeasurableSet
-
-@[simp, measurability]
-
-中文:
-定理 nullMeasurableSet_Ioc
-  条件: [ClosedIic拓扑 α]
-  结论: NullMeasurableSet (左开右闭区间 a b) μ
-  证明: measurableSet_Ioc.nullMeasurableSet
-
-@[simp, measurability]
-
-Depends on / 依赖: measurableSet_Ioc, measurableSet_Ioc.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Ioc [ClosedIicTopology α] : NullMeasurableSet (Ioc a b) 
+μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
 -/
 theorem nullMeasurableSet_Ioc [ClosedIicTopology α] : NullMeasurableSet (Ioc a b) μ :=
   measurableSet_Ioc.nullMeasurableSet
 
 @[simp, measurability]
-/--
-theorem `measurableSet_Ico` / 定理 `measurableSet_Ico`
-
-English:
-theorem measurableSet_Ico
-  given: [ClosedIciTopology α]
-  statement: MeasurableSet (Ico a b)
-  proof: measurableSet_Ici.inter measurableSet_Iio
-
-中文:
-定理 measurableSet_Ico
-  条件: [ClosedIci拓扑 α]
-  结论: 可测集 (左闭右开区间 a b)
-  证明: measurableSet_Ici.inter measurableSet_Iio
-
-Depends on / 依赖: measurableSet_Ici, measurableSet_Ici.inter, measurableSet_Iio
+/-
+**measurableSet_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_Ico [ClosedIciTopology α] : MeasurableSet (Ico a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
+· 使用定理 `measurableSet_Iio`：measurableSet_Iio [ClosedIciTopology α] : MeasurableS
+et (Iio a)
 -/
 theorem measurableSet_Ico [ClosedIciTopology α] : MeasurableSet (Ico a b) :=
   measurableSet_Ici.inter measurableSet_Iio
-
-/--
-theorem `nullMeasurableSet_Ico` / 定理 `nullMeasurableSet_Ico`
-
-English:
-theorem nullMeasurableSet_Ico
-  given: [ClosedIciTopology α]
-  statement: NullMeasurableSet (Ico a b) μ
-  proof: measurableSet_Ico.nullMeasurableSet
-
-中文:
-定理 nullMeasurableSet_Ico
-  条件: [ClosedIci拓扑 α]
-  结论: NullMeasurableSet (左闭右开区间 a b) μ
-  证明: measurableSet_Ico.nullMeasurableSet
-
-Depends on / 依赖: measurableSet_Ico, measurableSet_Ico.nullMeasurableSet, nullMeasurableSet
+/-
+**nullMeasurableSet_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_Ico [ClosedIciTopology α] : NullMeasurableSet (Ico a b) 
+μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_Ico`：measurableSet_Ico [ClosedIciTopology α] : MeasurableS
+et (Ico a b)
 -/
 theorem nullMeasurableSet_Ico [ClosedIciTopology α] : NullMeasurableSet (Ico a b) μ :=
   measurableSet_Ico.nullMeasurableSet
-
-/--
-Instance `nhdsWithin_Ioi_isMeasurablyGenerated` / 实例 `nhdsWithin_Ioi_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_Ioi_isMeasurablyGenerated
-  signature: [ClosedIicTopology α]
-  body: measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated _
-
-中文:
-实例 nhdsWithin_Ioi_isMeasurablyGenerated
-  签名: [ClosedIic拓扑 α]
-  定义体: measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated _
-
-Depends on / 依赖: measurableSet_Ioi, measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
+/-
+**nhdsWithin_Ioi_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_Ioi_isMeasurablyGenerated [ClosedIicTopology α] : (𝓝[Ioi b] a).
+IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nhdsWithin_isMeasurablyGenerated`：MeasurableSet.nhdsWithin
+_isMeasurablyGenerated {s : Set α} (hs : MeasurableSet s) (a : α) : (𝓝[s] a).IsM
+easurablyGenerated
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
 -/
 instance nhdsWithin_Ioi_isMeasurablyGenerated [ClosedIicTopology α] :
     (𝓝[Ioi b] a).IsMeasurablyGenerated :=
   measurableSet_Ioi.nhdsWithin_isMeasurablyGenerated _
-
-/--
-Instance `nhdsWithin_Iio_isMeasurablyGenerated` / 实例 `nhdsWithin_Iio_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_Iio_isMeasurablyGenerated
-  signature: [ClosedIciTopology α]
-  body: measurableSet_Iio.nhdsWithin_isMeasurablyGenerated _
-
-中文:
-实例 nhdsWithin_Iio_isMeasurablyGenerated
-  签名: [ClosedIci拓扑 α]
-  定义体: measurableSet_Iio.nhdsWithin_isMeasurablyGenerated _
-
-Depends on / 依赖: measurableSet_Iio, measurableSet_Iio.nhdsWithin_isMeasurablyGenerated, nhdsWithin_isMeasurablyGenerated
+/-
+**nhdsWithin_Iio_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_Iio_isMeasurablyGenerated [ClosedIciTopology α] : (𝓝[Iio b] a).
+IsMeasurablyGenerated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nhdsWithin_isMeasurablyGenerated`：MeasurableSet.nhdsWithin
+_isMeasurablyGenerated {s : Set α} (hs : MeasurableSet s) (a : α) : (𝓝[s] a).IsM
+easurablyGenerated
+· 使用定理 `measurableSet_Iio`：measurableSet_Iio [ClosedIciTopology α] : MeasurableS
+et (Iio a)
 -/
 instance nhdsWithin_Iio_isMeasurablyGenerated [ClosedIciTopology α] :
     (𝓝[Iio b] a).IsMeasurablyGenerated :=
   measurableSet_Iio.nhdsWithin_isMeasurablyGenerated _
-
-/--
-Instance `nhdsWithin_uIcc_isMeasurablyGenerated` / 实例 `nhdsWithin_uIcc_isMeasurablyGenerated`
-
-English:
-instance nhdsWithin_uIcc_isMeasurablyGenerated
-  signature: [OrderClosedTopology α]
-  body: nhdsWithin_Icc_isMeasurablyGenerated
-
-中文:
-实例 nhdsWithin_uIcc_isMeasurablyGenerated
-  签名: [OrderClosed拓扑 α]
-  定义体: nhdsWithin_Icc_isMeasurablyGenerated
-
-Depends on / 依赖: nhdsWithin_Icc_isMeasurablyGenerated
+/-
+**nhdsWithin_uIcc_isMeasurablyGenerated** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nhdsWithin_uIcc_isMeasurablyGenerated [OrderClosedTopology α] : IsMeasurab
+lyGenerated (𝓝[[[a, b]]] x)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nhdsWithin_uIcc_isMeasurablyGenerated [OrderClosedTopology α] :
     IsMeasurablyGenerated (𝓝[[[a, b]]] x) :=
   nhdsWithin_Icc_isMeasurablyGenerated
-
-/--
-theorem `measurableSet_lt'` / 定理 `measurableSet_lt'`
-
-English:
-theorem measurableSet_lt'
-  given: [SecondCountableTopology α] [OrderClosedTopology α]
-  proof: (isOpen_lt continuous_fst continuous_snd).measurableSet
-
-@[fun_prop]
-
-中文:
-定理 measurableSet_lt'
-  条件: [第二可数拓扑 α] [OrderClosed拓扑 α]
-  证明: (isOpen_lt continuous_fst continuous_snd).measurableSet
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_fst, continuous_snd, isOpen_lt, measurableSet
+/-
+**measurableSet_lt'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_lt' [SecondCountableTopology α] [OrderClosedTopology α] : Me
+asurableSet { p : α × α | p.1 < p.2 }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `isOpen_lt`：isOpen_lt [TopologicalSpace β] {f g : β -> α} (hf : Continuou
+s f) (hg : Continuous g) : IsOpen { b | f b < g b }
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 -/
 theorem measurableSet_lt' [SecondCountableTopology α] [OrderClosedTopology α] :
     MeasurableSet { p : α × α | p.1 < p.2 } :=
   (isOpen_lt continuous_fst continuous_snd).measurableSet
 
 @[fun_prop]
-/--
-theorem `measurable_lt` / 定理 `measurable_lt`
-
-English:
-theorem measurable_lt
-  given: [SecondCountableTopology α] [OrderClosedTopology α]
-  proof: measurableSet_setOfPred.mp measurableSet_lt'
-
-中文:
-定理 measurable_lt
-  条件: [第二可数拓扑 α] [OrderClosed拓扑 α]
-  证明: measurableSet_setOfPred.mp measurableSet_lt'
-
-Depends on / 依赖: measurableSet_lt, measurableSet_setOfPred, measurableSet_setOfPred.mp
+/-
+**measurable_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_lt [SecondCountableTopology α] [OrderClosedTopology α] : Measur
+able fun p : α × α => p.1 < p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurableSet_setOfPred`：∀ {α : Type u_1} [inst : MeasurableSpace α] {p 
+: α → Prop}, MeasurableSet {a | p a} ↔ Measurable p
+· 使用定理 `measurableSet_lt'`：measurableSet_lt' [SecondCountableTopology α] [OrderC
+losedTopology α] : MeasurableSet { p : α × α | p.1 < p.2 }
 -/
 theorem measurable_lt [SecondCountableTopology α] [OrderClosedTopology α] :
     Measurable fun p : α × α => p.1 < p.2 :=
   measurableSet_setOfPred.mp measurableSet_lt'
-
-/--
-theorem `measurableSet_lt` / 定理 `measurableSet_lt`
-
-English:
-theorem measurableSet_lt
-  statement: [SecondCountableTopology α] [OrderClosedTopology α]
-  proof: hf.prodMk hg measurableSet_lt'
-
-中文:
-定理 measurableSet_lt
-  结论: [第二可数拓扑 α] [OrderClosed拓扑 α]
-  证明: hf.prodMk hg measurableSet_lt'
-
-Depends on / 依赖: hf.prodMk, measurableSet_lt, prodMk
+/-
+**measurableSet_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_lt [SecondCountableTopology α] [OrderClosedTopology α] {f g 
+: δ -> α} (hf : Measurable f) (hg : Measurable g) : MeasurableSet { a | f a < g 
+a }
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurableSet_lt'`：measurableSet_lt' [SecondCountableTopology α] [OrderC
+losedTopology α] : MeasurableSet { p : α × α | p.1 < p.2 }
 -/
 theorem measurableSet_lt [SecondCountableTopology α] [OrderClosedTopology α]
-    {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) :
+    {f g : δ → α} (hf : Measurable f) (hg : Measurable g) :
     MeasurableSet { a | f a < g a } :=
   hf.prodMk hg measurableSet_lt'
-
-/--
-theorem `Measurable.lt` / 定理 `Measurable.lt`
-
-English:
-theorem Measurable.lt
-  statement: [SecondCountableTopology α] [OrderClosedTopology α] {f g : δ -> α}
-  proof: by
-  fun_prop
-
-中文:
-定理 可测.lt
-  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {f g : δ -> α}
-  证明: by
-  fun_prop
-
-Depends on / 依赖: fun_prop
+/-
+**Measurable.lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.lt [SecondCountableTopology α] [OrderClosedTopology α] {f g : δ
+ -> α} (hf : Measurable f) (hg : Measurable g) : Measurable fun a => f a < g a
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `measurable_lt`：measurable_lt [SecondCountableTopology α] [OrderClosedTop
+ology α] : Measurable fun p : α × α => p.1 < p.2
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
 -/
-theorem Measurable.lt [SecondCountableTopology α] [OrderClosedTopology α] {f g : δ -> α}
+theorem Measurable.lt [SecondCountableTopology α] [OrderClosedTopology α] {f g : δ → α}
     (hf : Measurable f) (hg : Measurable g) :
     Measurable fun a => f a < g a := by
   fun_prop
-
-/--
-theorem `nullMeasurableSet_lt` / 定理 `nullMeasurableSet_lt`
-
-English:
-theorem nullMeasurableSet_lt
-  statement: [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
-  proof: (hf.prodMk hg).nullMeasurable measurableSet_lt'
-
-中文:
-定理 nullMeasurableSet_lt
-  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {μ : 测度 δ}
-  证明: (hf.prodMk hg).nullMeasurable measurableSet_lt'
-
-Depends on / 依赖: hf.prodMk, measurableSet_lt, nullMeasurable, prodMk
+/-
+**nullMeasurableSet_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_lt [SecondCountableTopology α] [OrderClosedTopology α] {
+μ : Measure δ} {f g : δ -> α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) : 
+NullMeasurableSet { a | f a < g a } μ
+参数：hf : AEMeasurable f μ；hg : AEMeasurable g μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.nullMeasurable`：∀ {α : Type u_1} {β : Type u_2} {m0 : Measu
+rableSpace α} {mβ : MeasurableSpace β} {μ : MeasureTheory.Measure α}   {f : α → 
+β}, AEMeasurable …
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `measurableSet_lt'`：measurableSet_lt' [SecondCountableTopology α] [OrderC
+losedTopology α] : MeasurableSet { p : α × α | p.1 < p.2 }
 -/
 theorem nullMeasurableSet_lt [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
-    {f g : δ -> α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) :
+    {f g : δ → α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) :
     NullMeasurableSet { a | f a < g a } μ :=
   (hf.prodMk hg).nullMeasurable measurableSet_lt'
-
-/--
-theorem `nullMeasurableSet_lt'` / 定理 `nullMeasurableSet_lt'`
-
-English:
-theorem nullMeasurableSet_lt'
-  statement: [SecondCountableTopology α] [OrderClosedTopology α]
-  proof: measurableSet_lt'.nullMeasurableSet
-
-中文:
-定理 nullMeasurableSet_lt'
-  结论: [第二可数拓扑 α] [OrderClosed拓扑 α]
-  证明: measurableSet_lt'.nullMeasurableSet
-
-Depends on / 依赖: measurableSet_lt, nullMeasurableSet
+/-
+**nullMeasurableSet_lt'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_lt' [SecondCountableTopology α] [OrderClosedTopology α] 
+{μ : Measure (α × α)} : NullMeasurableSet { p : α × α | p.1 < p.2 } μ
+参数：α × α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `measurableSet_lt'`：measurableSet_lt' [SecondCountableTopology α] [OrderC
+losedTopology α] : MeasurableSet { p : α × α | p.1 < p.2 }
 -/
 theorem nullMeasurableSet_lt' [SecondCountableTopology α] [OrderClosedTopology α]
     {μ : Measure (α × α)} :
     NullMeasurableSet { p : α × α | p.1 < p.2 } μ :=
   measurableSet_lt'.nullMeasurableSet
-
-/--
-theorem `nullMeasurableSet_le` / 定理 `nullMeasurableSet_le`
-
-English:
-theorem nullMeasurableSet_le
-  statement: [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
-  proof: (hf.prodMk hg).nullMeasurable measurableSet_le'
-
-中文:
-定理 nullMeasurableSet_le
-  结论: [第二可数拓扑 α] [OrderClosed拓扑 α] {μ : 测度 δ}
-  证明: (hf.prodMk hg).nullMeasurable measurableSet_le'
-
-Depends on / 依赖: hf.prodMk, measurableSet_le, nullMeasurable, prodMk
+/-
+**nullMeasurableSet_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nullMeasurableSet_le [SecondCountableTopology α] [OrderClosedTopology α] {
+μ : Measure δ} {f g : δ -> α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) : 
+NullMeasurableSet { a | f a <= g a } μ
+参数：hf : AEMeasurable f μ；hg : AEMeasurable g μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.nullMeasurable`：∀ {α : Type u_1} {β : Type u_2} {m0 : Measu
+rableSpace α} {mβ : MeasurableSpace β} {μ : MeasureTheory.Measure α}   {f : α → 
+β}, AEMeasurable …
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `measurableSet_le'`：measurableSet_le' : MeasurableSet { p : α × α | p.1 <
+= p.2 }
 -/
 theorem nullMeasurableSet_le [SecondCountableTopology α] [OrderClosedTopology α] {μ : Measure δ}
-    {f g : δ -> α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) :
-    NullMeasurableSet { a | f a <= g a } μ :=
+    {f g : δ → α} (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) :
+    NullMeasurableSet { a | f a ≤ g a } μ :=
   (hf.prodMk hg).nullMeasurable measurableSet_le'
-
-/--
-theorem `Set.OrdConnected.measurableSet` / 定理 `Set.OrdConnected.measurableSet`
-
-English:
-theorem Set.OrdConnected.measurableSet
-  given: [OrderClosedTopology α] (h : OrdConnected s)
-  proof: by
-  let u := ⋃ (x in s) (y in s), Ioo x y
-  have huopen : IsOpen u := isOpen_biUnion fun _ _ => isOpen_biUnion fun _ _ => isOpen_Ioo
-  have humeas : MeasurableSet u := huopen.measurableSet
-  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo
-  have : u subseteq s := iUnion₂_subset fun x hx => iUnion₂_subset fun y hy =>
-    Ioo_subset_Icc_self.trans (h.out hx hy)
-  rw [← union_sdiff_cancel this]
-  exact humeas.union hfinite.measurableSet
-
-中文:
-定理 集合.序连通.measurableSet
-  条件: [OrderClosed拓扑 α] (h : 序连通 s)
-  证明: by
-  let u := ⋃ (x in s) (y in s), Ioo x y
-  have huopen : IsOpen u := isOpen_biUnion fun _ _ => isOpen_biUnion fun _ _ => isOpen_Ioo
-  have humeas : MeasurableSet u := huopen.measurableSet
-  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo
-  have : u subseteq s := iUnion₂_subset fun x hx => iUnion₂_subset fun y hy =>
-    Ioo_subset_Icc_self.trans (h.out hx hy)
-  rw [← union_sdiff_cancel this]
-  exact humeas.union hfinite.measurableSet
-
-Depends on / 依赖: Finite, Ioo_subset_Icc_self, Ioo_subset_Icc_self.trans, IsOpen, MeasurableSet, finite_sdiff_iUnion_Ioo, h.out, hfinite, hfinite.measurableSet, humeas, humeas.union, huopen, huopen.measurableSet, isOpen_Ioo, isOpen_biUnion, measurableSet, s.finite_sdiff_iUnion_Ioo, subseteq, union_sdiff_cancel
+/-
+**Set.OrdConnected.measurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.OrdConnected.measurableSet [OrderClosedTopology α] (h : OrdConnected s
+) : MeasurableSet s
+参数：h : OrdConnected s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_biUnion`：isOpen_biUnion {s : Set α} {f : α -> Set X} (h : forall 
+i in s, IsOpen (f i)) : IsOpen (⋃ i in s, f i)
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用引理 `Set.finite_sdiff_iUnion_Ioo`：Set.finite_sdiff_iUnion_Ioo (s : Set α) : (
+s \ ⋃ (x in s) (y in s), Ioo x y).Finite
+· 使用定理 `Set.iUnion₂_subset`：iUnion₂_subset {s : forall i, κ i -> Set α} {t : Set
+ α} (h : forall i j, s i j subseteq t) : ⋃ (i) (j), s i j subseteq t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用定理 `Set.OrdConnected.out`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, 
+s.OrdConnected → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.Icc x y ⊆ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
+· 使用定理 `MeasurableSet.union`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∪ s₂)
+· 使用定理 `Set.Finite.measurableSet`：Set.Finite.measurableSet {s : Set α} (hs : s.F
+inite) : MeasurableSet s
+· 使用定理 `OpensMeasurableSpace.toMeasurableSingletonClass`：∀ {α : Type u_1} [inst 
+: TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α] [T1S
+pace α],   MeasurableSingletonClass α
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `OrderClosedTopology.to_t2Space`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : PartialOrder α] [t : OrderClosedTopology α], T2Space α
 -/
 theorem Set.OrdConnected.measurableSet [OrderClosedTopology α] (h : OrdConnected s) :
     MeasurableSet s := by
-  let u := ⋃ (x in s) (y in s), Ioo x y
+  let u := ⋃ (x ∈ s) (y ∈ s), Ioo x y
   have huopen : IsOpen u := isOpen_biUnion fun _ _ => isOpen_biUnion fun _ _ => isOpen_Ioo
   have humeas : MeasurableSet u := huopen.measurableSet
   have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo
-  have : u subseteq s := iUnion₂_subset fun x hx => iUnion₂_subset fun y hy =>
+  have : u ⊆ s := iUnion₂_subset fun x hx => iUnion₂_subset fun y hy =>
     Ioo_subset_Icc_self.trans (h.out hx hy)
   rw [← union_sdiff_cancel this]
   exact humeas.union hfinite.measurableSet
-
-/--
-theorem `IsPreconnected.measurableSet` / 定理 `IsPreconnected.measurableSet`
-
-English:
-theorem IsPreconnected.measurableSet
-  given: [OrderClosedTopology α] (h : IsPreconnected s)
-  proof: h.ordConnected.measurableSet
-
-中文:
-定理 是预连通.measurableSet
-  条件: [OrderClosed拓扑 α] (h : 是预连通 s)
-  证明: h.ordConnected.measurableSet
-
-Depends on / 依赖: h.ordConnected.measurableSet, measurableSet, ordConnected
+/-
+**IsPreconnected.measurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.measurableSet [OrderClosedTopology α] (h : IsPreconnected s
+) : MeasurableSet s
+参数：h : IsPreconnected s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.measurableSet`：Set.OrdConnected.measurableSet [OrderClo
+sedTopology α] (h : OrdConnected s) : MeasurableSet s
+· 使用定理 `IsPreconnected.ordConnected`：IsPreconnected.ordConnected {s : Set α} (h 
+: IsPreconnected s) : OrdConnected s
 -/
 theorem IsPreconnected.measurableSet [OrderClosedTopology α] (h : IsPreconnected s) :
     MeasurableSet s :=
   h.ordConnected.measurableSet
-
-/--
-theorem `generateFrom_Icc_mem_le_borel` / 定理 `generateFrom_Icc_mem_le_borel`
-
-English:
-theorem generateFrom_Icc_mem_le_borel
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: by
-  apply generateFrom_le
-  borelize α
-  rintro _ ⟨a, -, b, -, -, rfl⟩
-  exact measurableSet_Icc
-
-中文:
-定理 generateFrom_Icc_mem_le_borel
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: by
-  apply generateFrom_le
-  borelize α
-  rintro _ ⟨a, -, b, -, -, rfl⟩
-  exact measurableSet_Icc
-
-Depends on / 依赖: borelize, generateFrom_le, measurableSet_Icc
+/-
+**generateFrom_Icc_mem_le_borel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_Icc_mem_le_borel {α : Type*} [TopologicalSpace α] [LinearOrde
+r α] [OrderClosedTopology α] (s t : Set α) : MeasurableSpace.generateFrom { S | 
+exists l in s, exists u in t, l <= u ∧ Icc l u = S } <= borel α
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `measurableSet_Icc`：measurableSet_Icc [OrderClosedTopology α] : Measurabl
+eSet (Icc a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
 -/
 theorem generateFrom_Icc_mem_le_borel {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderClosedTopology α] (s t : Set α) :
-    MeasurableSpace.generateFrom { S | exists l in s, exists u in t, l <= u ∧ Icc l u = S }
-      <= borel α := by
+    MeasurableSpace.generateFrom { S | ∃ l ∈ s, ∃ u ∈ t, l ≤ u ∧ Icc l u = S }
+      ≤ borel α := by
   apply generateFrom_le
   borelize α
   rintro _ ⟨a, -, b, -, -, rfl⟩
   exact measurableSet_Icc
-
-/--
-theorem `Dense.borel_eq_generateFrom_Icc_mem_aux` / 定理 `Dense.borel_eq_generateFrom_Icc_mem_aux`
-
-English:
-theorem Dense.borel_eq_generateFrom_Icc_mem_aux
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l <= u ∧ Icc l u = S }
-  refine le_antisymm ?_ (generateFrom_Icc_mem_le_borel _ _)
-  let : MeasurableSpace α := generateFrom S
-  rw [borel_eq_generateFrom_Iio]
-  refine generateFrom_le (forall_mem_range.2 fun a => ?_)
-  rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u < a), Icc l u)
-    · ext y
-      push _ in _
-      constructor
-      · intro hy
-        rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
-        rcases htd.exists_mem_open isOpen_Ioo (ha y hy) with ⟨u, hut, hyu, hua⟩
-        exact ⟨l, hlt, u, hut, hly.trans_lt hyu, hua, hly, hyu.le⟩
-      · rintro ⟨l, -, u, -, -, hua, -, hyu⟩
-        exact hyu.trans_lt hua
-    · refine MeasurableSet.biUnion hc fun a ha => MeasurableSet.biUnion hc fun b hb => ?_
-      refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
-      exact .basic _ ⟨a, hts ha, b, hts hb, hab.le, mem_singleton _⟩
-  · rcases ha with ⟨b, ba, hb⟩
-    have hbs : b in s := hIoo b a ba hb
-    convert_to MeasurableSet (⋃ (l in t) (_ : l <= b), Icc l b)
-    · ext x
-      simp only [mem_Iio, mem_iUnion, mem_Icc, exists_and_left, exists_prop]
-      refine ⟨fun h => ?_, fun ⟨y, yx, hy1, hy2, hy⟩ => by order⟩
-      have : x <= b := by
-        contrapose! hb
-        exact ⟨x, hb, h⟩
-      rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) x with ⟨z, hzt, hzx⟩
-      exact ⟨z, hzx, by order, hzt, by order⟩
-    · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
-      exact .basic _ ⟨x, hts hx, b, hbs, hlt, mem_singleton _⟩
-
-中文:
-定理 稠密.borel_eq_generateFrom_Icc_mem_aux
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l <= u ∧ Icc l u = S }
-  refine le_antisymm ?_ (generateFrom_Icc_mem_le_borel _ _)
-  let : MeasurableSpace α := generateFrom S
-  rw [borel_eq_generateFrom_Iio]
-  refine generateFrom_le (forall_mem_range.2 fun a => ?_)
-  rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u < a), Icc l u)
-    · ext y
-      push _ in _
-      constructor
-      · intro hy
-        rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
-        rcases htd.exists_mem_open isOpen_Ioo (ha y hy) with ⟨u, hut, hyu, hua⟩
-        exact ⟨l, hlt, u, hut, hly.trans_lt hyu, hua, hly, hyu.le⟩
-      · rintro ⟨l, -, u, -, -, hua, -, hyu⟩
-        exact hyu.trans_lt hua
-    · refine MeasurableSet.biUnion hc fun a ha => MeasurableSet.biUnion hc fun b hb => ?_
-      refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
-      exact .basic _ ⟨a, hts ha, b, hts hb, hab.le, mem_singleton _⟩
-  · rcases ha with ⟨b, ba, hb⟩
-    have hbs : b in s := hIoo b a ba hb
-    convert_to MeasurableSet (⋃ (l in t) (_ : l <= b), Icc l b)
-    · ext x
-      simp only [mem_Iio, mem_iUnion, mem_Icc, exists_and_left, exists_prop]
-      refine ⟨fun h => ?_, fun ⟨y, yx, hy1, hy2, hy⟩ => by order⟩
-      have : x <= b := by
-        contrapose! hb
-        exact ⟨x, hb, h⟩
-      rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) x with ⟨z, hzt, hzx⟩
-      exact ⟨z, hzx, by order, hzt, by order⟩
-    · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
-      exact .basic _ ⟨x, hts hx, b, hbs, hlt, mem_singleton _⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSpace, Nonempty, borel_eq_generateFrom_Iio, convert_to, exists_countable_dense_subset_bot_top, forall_mem_range, generateFrom, generateFrom_Icc_mem_le_borel, generateFrom_le, hd.exists_countable_dense_subset_bot_top, le_antisymm
+/-
+**Dense.borel_eq_generateFrom_Icc_mem_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Icc_mem_aux {α : Type*} [TopologicalSpace α] [
+LinearOrder α] [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : D
+ense s) (hbot : forall x, IsBot x -> x in s) (hIoo : forall x y : α, x < y -> Io
+o x y = ∅ -> x in s) : borel α = .generateFrom {S : Set α | exists l in s, exist
+s u in s, l <= u ∧ Icc l u = S}
+参数：hd : Dense s；hbot : forall x, IsBot x -> x in s；hIoo : forall x y : α, x < y 
+-> Ioo x y = ∅ -> x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `borel_eq_generateFrom_Iio`：borel_eq_generateFrom_Iio : borel α = .genera
+teFrom (range Iio)
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `Dense.exists_countable_dense_subset_bot_top`：Dense.exists_countable_dens
+e_subset_bot_top {α : Type*} [TopologicalSpace α] [PartialOrder α] {s : Set α} [
+SeparableSpace s] (hs : Dense s) …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.Subtype.secondCountableTopology`：∀ {α : Type u} [t : To
+pologicalSpace α] (s : Set α) [SecondCountableTopology α], SecondCountableTopolo
+gy ↑s
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Dense.exists_le'`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : L
+inearOrder α] [ClosedIciTopology α] {s : Set α},   Dense s → (∀ (x : α), IsBot x
+ → x ∈…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Dense.exists_mem_open`：Dense.exists_mem_open (hs : Dense s) {U : Set X} 
+(ho : IsOpen U) (hne : U.Nonempty) : exists x in s, x in U
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem Dense.borel_eq_generateFrom_Icc_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : Dense s)
-    (hbot : forall x, IsBot x -> x in s) (hIoo : forall x y : α, x < y -> Ioo x y = ∅ -> x in s) :
-    borel α = .generateFrom {S : Set α | exists l in s, exists u in s, l <= u ∧ Icc l u = S} := by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l <= u ∧ Icc l u = S }
+    (hbot : ∀ x, IsBot x → x ∈ s) (hIoo : ∀ x y : α, x < y → Ioo x y = ∅ → x ∈ s) :
+    borel α = .generateFrom {S : Set α | ∃ l ∈ s, ∃ u ∈ s, l ≤ u ∧ Icc l u = S} := by
+  set S : Set (Set α) := { S | ∃ l ∈ s, ∃ u ∈ s, l ≤ u ∧ Icc l u = S }
   refine le_antisymm ?_ (generateFrom_Icc_mem_le_borel _ _)
   let : MeasurableSpace α := generateFrom S
   rw [borel_eq_generateFrom_Iio]
   refine generateFrom_le (forall_mem_range.2 fun a => ?_)
   rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u < a), Icc l u)
+  by_cases! ha : ∀ b < a, (Ioo b a).Nonempty
+  · convert_to MeasurableSet (⋃ (l ∈ t) (u ∈ t) (_ : l < u) (_ : u < a), Icc l u)
     · ext y
-      push _ in _
+      push _ ∈ _
       constructor
       · intro hy
         rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
@@ -1207,192 +956,188 @@ theorem Dense.borel_eq_generateFrom_Icc_mem_aux {α : Type*} [TopologicalSpace �
       refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
       exact .basic _ ⟨a, hts ha, b, hts hb, hab.le, mem_singleton _⟩
   · rcases ha with ⟨b, ba, hb⟩
-    have hbs : b in s := hIoo b a ba hb
-    convert_to MeasurableSet (⋃ (l in t) (_ : l <= b), Icc l b)
+    have hbs : b ∈ s := hIoo b a ba hb
+    convert_to MeasurableSet (⋃ (l ∈ t) (_ : l ≤ b), Icc l b)
     · ext x
       simp only [mem_Iio, mem_iUnion, mem_Icc, exists_and_left, exists_prop]
-      refine ⟨fun h => ?_, fun ⟨y, yx, hy1, hy2, hy⟩ => by order⟩
-      have : x <= b := by
+      refine ⟨fun h ↦ ?_, fun ⟨y, yx, hy1, hy2, hy⟩ ↦ by order⟩
+      have : x ≤ b := by
         contrapose! hb
         exact ⟨x, hb, h⟩
       rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) x with ⟨z, hzt, hzx⟩
       exact ⟨z, hzx, by order, hzt, by order⟩
     · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
       exact .basic _ ⟨x, hts hx, b, hbs, hlt, mem_singleton _⟩
-
-/--
-theorem `Dense.borel_eq_generateFrom_Icc_mem` / 定理 `Dense.borel_eq_generateFrom_Icc_mem`
-
-English:
-theorem Dense.borel_eq_generateFrom_Icc_mem
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: hd.borel_eq_generateFrom_Icc_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-中文:
-定理 稠密.borel_eq_generateFrom_Icc_mem
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: hd.borel_eq_generateFrom_Icc_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-Depends on / 依赖: borel_eq_generateFrom_Icc_mem_aux, hd.borel_eq_generateFrom_Icc_mem_aux, ne_empty, nonempty_Ioo
+/-
+**Dense.borel_eq_generateFrom_Icc_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Icc_mem {α : Type*} [TopologicalSpace α] [Line
+arOrder α] [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoM
+inOrder α] {s : Set α} (hd : Dense s) : borel α = .generateFrom { S : Set α | ex
+ists l in s, exists u in s, l <= u ∧ Icc l u = S }
+参数：hd : Dense s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.borel_eq_generateFrom_Icc_mem_aux`：Dense.borel_eq_generateFrom_Icc
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNoBotOrderOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMinO
+rder α], NoBotOrder α
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ioo`：nonempty_Ioo [DenselyOrdered α] : (Ioo a b).Nonempty ↔
+ a < b
 -/
 theorem Dense.borel_eq_generateFrom_Icc_mem {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoMinOrder α] {s : Set α}
     (hd : Dense s) :
-    borel α = .generateFrom { S : Set α | exists l in s, exists u in s, l <= u ∧ Icc l u = S } :=
+    borel α = .generateFrom { S : Set α | ∃ l ∈ s, ∃ u ∈ s, l ≤ u ∧ Icc l u = S } :=
   hd.borel_eq_generateFrom_Icc_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-/--
-theorem `borel_eq_generateFrom_Icc` / 定理 `borel_eq_generateFrom_Icc`
-
-English:
-theorem borel_eq_generateFrom_Icc
-  statement: (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
-  proof: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Icc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-中文:
-定理 borel_eq_generateFrom_Icc
-  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
-  证明: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Icc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-Depends on / 依赖: borel_eq_generateFrom_Icc_mem_aux, dense_univ, exists_prop, mem_univ, true_and
+/-
+**borel_eq_generateFrom_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Icc (α : Type*) [TopologicalSpace α] [SecondCountabl
+eTopology α] [LinearOrder α] [OrderTopology α] : borel α = .generateFrom { S : S
+et α | exists (l u : α), l <= u ∧ Icc l u = S }
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Dense.borel_eq_generateFrom_Icc_mem_aux`：Dense.borel_eq_generateFrom_Icc
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `dense_univ`：dense_univ : Dense (univ : Set X)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem borel_eq_generateFrom_Icc (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
     [LinearOrder α] [OrderTopology α] :
-    borel α = .generateFrom { S : Set α | exists (l u : α), l <= u ∧ Icc l u = S } := by
+    borel α = .generateFrom { S : Set α | ∃ (l u : α), l ≤ u ∧ Icc l u = S } := by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Icc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
       mem_univ _
-
-/--
-theorem `generateFrom_Ico_mem_le_borel` / 定理 `generateFrom_Ico_mem_le_borel`
-
-English:
-theorem generateFrom_Ico_mem_le_borel
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: by
-  apply generateFrom_le
-  borelize α
-  rintro _ ⟨a, -, b, -, -, rfl⟩
-  exact measurableSet_Ico
-
-中文:
-定理 generateFrom_Ico_mem_le_borel
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: by
-  apply generateFrom_le
-  borelize α
-  rintro _ ⟨a, -, b, -, -, rfl⟩
-  exact measurableSet_Ico
-
-Depends on / 依赖: borelize, generateFrom_le, measurableSet_Ico
+/-
+**generateFrom_Ico_mem_le_borel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_Ico_mem_le_borel {α : Type*} [TopologicalSpace α] [LinearOrde
+r α] [OrderClosedTopology α] (s t : Set α) : MeasurableSpace.generateFrom { S | 
+exists l in s, exists u in t, l < u ∧ Ico l u = S } <= borel α
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `measurableSet_Ico`：measurableSet_Ico [ClosedIciTopology α] : MeasurableS
+et (Ico a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
 -/
 theorem generateFrom_Ico_mem_le_borel {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderClosedTopology α] (s t : Set α) :
-    MeasurableSpace.generateFrom { S | exists l in s, exists u in t, l < u ∧ Ico l u = S }
-      <= borel α := by
+    MeasurableSpace.generateFrom { S | ∃ l ∈ s, ∃ u ∈ t, l < u ∧ Ico l u = S }
+      ≤ borel α := by
   apply generateFrom_le
   borelize α
   rintro _ ⟨a, -, b, -, -, rfl⟩
   exact measurableSet_Ico
-
-/--
-theorem `Dense.borel_eq_generateFrom_Ico_mem_aux` / 定理 `Dense.borel_eq_generateFrom_Ico_mem_aux`
-
-English:
-theorem Dense.borel_eq_generateFrom_Ico_mem_aux
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l < u ∧ Ico l u = S }
-  refine le_antisymm ?_ (generateFrom_Ico_mem_le_borel _ _)
-  let : MeasurableSpace α := generateFrom S
-  rw [borel_eq_generateFrom_Iio]
-  refine generateFrom_le (forall_mem_range.2 fun a => ?_)
-  rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u <= a), Ico l u)
-    · ext y
-      push _ in _
-      constructor
-      · intro hy
-        rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
-        rcases htd.exists_mem_open isOpen_Ioo (ha y hy) with ⟨u, hut, hyu, hua⟩
-        exact ⟨l, hlt, u, hut, hly.trans_lt hyu, hua.le, hly, hyu⟩
-      · rintro ⟨l, -, u, -, -, hua, -, hyu⟩
-        exact hyu.trans_le hua
-    · refine MeasurableSet.biUnion hc fun a ha => MeasurableSet.biUnion hc fun b hb => ?_
-      refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
-      exact .basic _ ⟨a, hts ha, b, hts hb, hab, mem_singleton _⟩
-  · replace ha : a in s := hIoo ha.choose a ha.choose_spec.1 ha.choose_spec.2
-    convert_to MeasurableSet (⋃ (l in t) (_ : l < a), Ico l a)
-    · symm
-      simp only [← Ici_inter_Iio, ← iUnion_inter, inter_eq_right, subset_def, mem_iUnion,
-        mem_Ici, mem_Iio]
-      intro x hx
-      rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) x with ⟨z, hzt, hzx⟩
-      exact ⟨z, hzt, hzx.trans_lt hx, hzx⟩
-    · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
-      exact .basic _ ⟨x, hts hx, a, ha, hlt, mem_singleton _⟩
-
-中文:
-定理 稠密.borel_eq_generateFrom_Ico_mem_aux
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l < u ∧ Ico l u = S }
-  refine le_antisymm ?_ (generateFrom_Ico_mem_le_borel _ _)
-  let : MeasurableSpace α := generateFrom S
-  rw [borel_eq_generateFrom_Iio]
-  refine generateFrom_le (forall_mem_range.2 fun a => ?_)
-  rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u <= a), Ico l u)
-    · ext y
-      push _ in _
-      constructor
-      · intro hy
-        rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
-        rcases htd.exists_mem_open isOpen_Ioo (ha y hy) with ⟨u, hut, hyu, hua⟩
-        exact ⟨l, hlt, u, hut, hly.trans_lt hyu, hua.le, hly, hyu⟩
-      · rintro ⟨l, -, u, -, -, hua, -, hyu⟩
-        exact hyu.trans_le hua
-    · refine MeasurableSet.biUnion hc fun a ha => MeasurableSet.biUnion hc fun b hb => ?_
-      refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
-      exact .basic _ ⟨a, hts ha, b, hts hb, hab, mem_singleton _⟩
-  · replace ha : a in s := hIoo ha.choose a ha.choose_spec.1 ha.choose_spec.2
-    convert_to MeasurableSet (⋃ (l in t) (_ : l < a), Ico l a)
-    · symm
-      simp only [← Ici_inter_Iio, ← iUnion_inter, inter_eq_right, subset_def, mem_iUnion,
-        mem_Ici, mem_Iio]
-      intro x hx
-      rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) x with ⟨z, hzt, hzx⟩
-      exact ⟨z, hzt, hzx.trans_lt hx, hzx⟩
-    · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
-      exact .basic _ ⟨x, hts hx, a, ha, hlt, mem_singleton _⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSpace, Nonempty, borel_eq_generateFrom_Iio, convert_to, exists_countable_dense_subset_bot_top, forall_mem_range, generateFrom, generateFrom_Ico_mem_le_borel, generateFrom_le, hd.exists_countable_dense_subset_bot_top, le_antisymm
+/-
+**Dense.borel_eq_generateFrom_Ico_mem_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Ico_mem_aux {α : Type*} [TopologicalSpace α] [
+LinearOrder α] [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : D
+ense s) (hbot : forall x, IsBot x -> x in s) (hIoo : forall x y : α, x < y -> Io
+o x y = ∅ -> y in s) : borel α = .generateFrom { S : Set α | exists l in s, exis
+ts u in s, l < u ∧ Ico l u = S }
+参数：hd : Dense s；hbot : forall x, IsBot x -> x in s；hIoo : forall x y : α, x < y 
+-> Ioo x y = ∅ -> y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `borel_eq_generateFrom_Iio`：borel_eq_generateFrom_Iio : borel α = .genera
+teFrom (range Iio)
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `Dense.exists_countable_dense_subset_bot_top`：Dense.exists_countable_dens
+e_subset_bot_top {α : Type*} [TopologicalSpace α] [PartialOrder α] {s : Set α} [
+SeparableSpace s] (hs : Dense s) …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.Subtype.secondCountableTopology`：∀ {α : Type u} [t : To
+pologicalSpace α] (s : Set α) [SecondCountableTopology α], SecondCountableTopolo
+gy ↑s
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Dense.exists_le'`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : L
+inearOrder α] [ClosedIciTopology α] {s : Set α},   Dense s → (∀ (x : α), IsBot x
+ → x ∈…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Dense.exists_mem_open`：Dense.exists_mem_open (hs : Dense s) {U : Set X} 
+(ho : IsOpen U) (hne : U.Nonempty) : exists x in s, x in U
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+（共 37 条，此处仅展示前 30 条）
 -/
 theorem Dense.borel_eq_generateFrom_Ico_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : Dense s)
-    (hbot : forall x, IsBot x -> x in s) (hIoo : forall x y : α, x < y -> Ioo x y = ∅ -> y in s) :
-    borel α = .generateFrom { S : Set α | exists l in s, exists u in s, l < u ∧ Ico l u = S } := by
-  set S : Set (Set α) := { S | exists l in s, exists u in s, l < u ∧ Ico l u = S }
+    (hbot : ∀ x, IsBot x → x ∈ s) (hIoo : ∀ x y : α, x < y → Ioo x y = ∅ → y ∈ s) :
+    borel α = .generateFrom { S : Set α | ∃ l ∈ s, ∃ u ∈ s, l < u ∧ Ico l u = S } := by
+  set S : Set (Set α) := { S | ∃ l ∈ s, ∃ u ∈ s, l < u ∧ Ico l u = S }
   refine le_antisymm ?_ (generateFrom_Ico_mem_le_borel _ _)
   let : MeasurableSpace α := generateFrom S
   rw [borel_eq_generateFrom_Iio]
   refine generateFrom_le (forall_mem_range.2 fun a => ?_)
   rcases hd.exists_countable_dense_subset_bot_top with ⟨t, hts, hc, htd, htb, -⟩
-  by_cases! ha : forall b < a, (Ioo b a).Nonempty
-  · convert_to MeasurableSet (⋃ (l in t) (u in t) (_ : l < u) (_ : u <= a), Ico l u)
+  by_cases! ha : ∀ b < a, (Ioo b a).Nonempty
+  · convert_to MeasurableSet (⋃ (l ∈ t) (u ∈ t) (_ : l < u) (_ : u ≤ a), Ico l u)
     · ext y
-      push _ in _
+      push _ ∈ _
       constructor
       · intro hy
         rcases htd.exists_le' (fun b hb => htb _ hb (hbot b hb)) y with ⟨l, hlt, hly⟩
@@ -1403,8 +1148,8 @@ theorem Dense.borel_eq_generateFrom_Ico_mem_aux {α : Type*} [TopologicalSpace �
     · refine MeasurableSet.biUnion hc fun a ha => MeasurableSet.biUnion hc fun b hb => ?_
       refine MeasurableSet.iUnion fun hab => MeasurableSet.iUnion fun _ => ?_
       exact .basic _ ⟨a, hts ha, b, hts hb, hab, mem_singleton _⟩
-  · replace ha : a in s := hIoo ha.choose a ha.choose_spec.1 ha.choose_spec.2
-    convert_to MeasurableSet (⋃ (l in t) (_ : l < a), Ico l a)
+  · replace ha : a ∈ s := hIoo ha.choose a ha.choose_spec.1 ha.choose_spec.2
+    convert_to MeasurableSet (⋃ (l ∈ t) (_ : l < a), Ico l a)
     · symm
       simp only [← Ici_inter_Iio, ← iUnion_inter, inter_eq_right, subset_def, mem_iUnion,
         mem_Ici, mem_Iio]
@@ -1413,92 +1158,106 @@ theorem Dense.borel_eq_generateFrom_Ico_mem_aux {α : Type*} [TopologicalSpace �
       exact ⟨z, hzt, hzx.trans_lt hx, hzx⟩
     · refine .biUnion hc fun x hx => MeasurableSet.iUnion fun hlt => ?_
       exact .basic _ ⟨x, hts hx, a, ha, hlt, mem_singleton _⟩
-
-/--
-theorem `Dense.borel_eq_generateFrom_Ico_mem` / 定理 `Dense.borel_eq_generateFrom_Ico_mem`
-
-English:
-theorem Dense.borel_eq_generateFrom_Ico_mem
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: hd.borel_eq_generateFrom_Ico_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-中文:
-定理 稠密.borel_eq_generateFrom_Ico_mem
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: hd.borel_eq_generateFrom_Ico_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-Depends on / 依赖: borel_eq_generateFrom_Ico_mem_aux, hd.borel_eq_generateFrom_Ico_mem_aux, ne_empty, nonempty_Ioo
+/-
+**Dense.borel_eq_generateFrom_Ico_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Ico_mem {α : Type*} [TopologicalSpace α] [Line
+arOrder α] [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoM
+inOrder α] {s : Set α} (hd : Dense s) : borel α = .generateFrom { S : Set α | ex
+ists l in s, exists u in s, l < u ∧ Ico l u = S }
+参数：hd : Dense s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.borel_eq_generateFrom_Ico_mem_aux`：Dense.borel_eq_generateFrom_Ico
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNoBotOrderOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMinO
+rder α], NoBotOrder α
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ioo`：nonempty_Ioo [DenselyOrdered α] : (Ioo a b).Nonempty ↔
+ a < b
 -/
 theorem Dense.borel_eq_generateFrom_Ico_mem {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoMinOrder α] {s : Set α}
     (hd : Dense s) :
-    borel α = .generateFrom { S : Set α | exists l in s, exists u in s, l < u ∧ Ico l u = S } :=
+    borel α = .generateFrom { S : Set α | ∃ l ∈ s, ∃ u ∈ s, l < u ∧ Ico l u = S } :=
   hd.borel_eq_generateFrom_Ico_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-/--
-theorem `borel_eq_generateFrom_Ico` / 定理 `borel_eq_generateFrom_Ico`
-
-English:
-theorem borel_eq_generateFrom_Ico
-  statement: (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
-  proof: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Ico_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-中文:
-定理 borel_eq_generateFrom_Ico
-  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
-  证明: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Ico_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-Depends on / 依赖: borel_eq_generateFrom_Ico_mem_aux, dense_univ, exists_prop, mem_univ, true_and
+/-
+**borel_eq_generateFrom_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Ico (α : Type*) [TopologicalSpace α] [SecondCountabl
+eTopology α] [LinearOrder α] [OrderTopology α] : borel α = .generateFrom { S : S
+et α | exists (l u : α), l < u ∧ Ico l u = S }
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Dense.borel_eq_generateFrom_Ico_mem_aux`：Dense.borel_eq_generateFrom_Ico
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `dense_univ`：dense_univ : Dense (univ : Set X)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem borel_eq_generateFrom_Ico (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
     [LinearOrder α] [OrderTopology α] :
-    borel α = .generateFrom { S : Set α | exists (l u : α), l < u ∧ Ico l u = S } := by
+    borel α = .generateFrom { S : Set α | ∃ (l u : α), l < u ∧ Ico l u = S } := by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Ico_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
       mem_univ _
-
-/--
-theorem `Dense.borel_eq_generateFrom_Ioc_mem_aux` / 定理 `Dense.borel_eq_generateFrom_Ioc_mem_aux`
-
-English:
-theorem Dense.borel_eq_generateFrom_Ioc_mem_aux
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: by
-  convert!
-    hd.orderDual.borel_eq_generateFrom_Ico_mem_aux hbot fun x y hlt he => hIoo y x hlt _ using 2
-  · ext s
-    constructor <;> rintro ⟨l, hl, u, hu, hlt, rfl⟩
-    exacts [⟨u, hu, l, hl, hlt, Ico_toDual⟩, ⟨u, hu, l, hl, hlt, Ioc_toDual⟩]
-  · erw [Ioo_toDual]
-    exact he
-
-中文:
-定理 稠密.borel_eq_generateFrom_Ioc_mem_aux
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: by
-  convert!
-    hd.orderDual.borel_eq_generateFrom_Ico_mem_aux hbot fun x y hlt he => hIoo y x hlt _ using 2
-  · ext s
-    constructor <;> rintro ⟨l, hl, u, hu, hlt, rfl⟩
-    exacts [⟨u, hu, l, hl, hlt, Ico_toDual⟩, ⟨u, hu, l, hl, hlt, Ioc_toDual⟩]
-  · erw [Ioo_toDual]
-    exact he
-
-Depends on / 依赖: Ico_toDual, Ioc_toDual, Ioo_toDual, borel_eq_generateFrom_Ico_mem_aux, convert, exacts, hd.orderDual.borel_eq_generateFrom_Ico_mem_aux, orderDual
+/-
+**Dense.borel_eq_generateFrom_Ioc_mem_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Ioc_mem_aux {α : Type*} [TopologicalSpace α] [
+LinearOrder α] [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : D
+ense s) (hbot : forall x, IsTop x -> x in s) (hIoo : forall x y : α, x < y -> Io
+o x y = ∅ -> x in s) : borel α = .generateFrom { S : Set α | exists l in s, exis
+ts u in s, l < u ∧ Ioc l u = S }
+参数：hd : Dense s；hbot : forall x, IsTop x -> x in s；hIoo : forall x y : α, x < y 
+-> Ioo x y = ∅ -> x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.Ico_toDual`：Ico_toDual : Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc 
+b a
+· 使用定理 `Set.Ioc_toDual`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},   Set.Io
+c (OrderDual.toDual b) (OrderDual.toDual a) = ⇑OrderDual.ofDual ⁻¹' Set.Ico a b
+· 使用定理 `Dense.borel_eq_generateFrom_Ico_mem_aux`：Dense.borel_eq_generateFrom_Ico
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+· 使用定理 `Dense.orderDual`：Dense.orderDual [TopologicalSpace α] {s : Set α} (hs : 
+Dense s) : Dense (OrderDual.ofDual ⁻¹' s)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ioo_toDual`：Ioo_toDual : Ioo (toDual a) (toDual b) = ofDual ⁻¹' Ioo 
+b a
 -/
 theorem Dense.borel_eq_generateFrom_Ioc_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] {s : Set α} (hd : Dense s)
-    (hbot : forall x, IsTop x -> x in s) (hIoo : forall x y : α, x < y -> Ioo x y = ∅ -> x in s) :
-    borel α = .generateFrom { S : Set α | exists l in s, exists u in s, l < u ∧ Ioc l u = S } := by
+    (hbot : ∀ x, IsTop x → x ∈ s) (hIoo : ∀ x y : α, x < y → Ioo x y = ∅ → x ∈ s) :
+    borel α = .generateFrom { S : Set α | ∃ l ∈ s, ∃ u ∈ s, l < u ∧ Ioc l u = S } := by
   convert!
     hd.orderDual.borel_eq_generateFrom_Ico_mem_aux hbot fun x y hlt he => hIoo y x hlt _ using 2
   · ext s
@@ -1506,91 +1265,99 @@ theorem Dense.borel_eq_generateFrom_Ioc_mem_aux {α : Type*} [TopologicalSpace �
     exacts [⟨u, hu, l, hl, hlt, Ico_toDual⟩, ⟨u, hu, l, hl, hlt, Ioc_toDual⟩]
   · erw [Ioo_toDual]
     exact he
-
-/--
-theorem `Dense.borel_eq_generateFrom_Ioc_mem` / 定理 `Dense.borel_eq_generateFrom_Ioc_mem`
-
-English:
-theorem Dense.borel_eq_generateFrom_Ioc_mem
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: hd.borel_eq_generateFrom_Ioc_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-中文:
-定理 稠密.borel_eq_generateFrom_Ioc_mem
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: hd.borel_eq_generateFrom_Ioc_mem_aux (by simp) fun _ _ hxy H =>
-    ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-Depends on / 依赖: borel_eq_generateFrom_Ioc_mem_aux, hd.borel_eq_generateFrom_Ioc_mem_aux, ne_empty, nonempty_Ioo
+/-
+**Dense.borel_eq_generateFrom_Ioc_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.borel_eq_generateFrom_Ioc_mem {α : Type*} [TopologicalSpace α] [Line
+arOrder α] [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoM
+axOrder α] {s : Set α} (hd : Dense s) : borel α = .generateFrom { S : Set α | ex
+ists l in s, exists u in s, l < u ∧ Ioc l u = S }
+参数：hd : Dense s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.borel_eq_generateFrom_Ioc_mem_aux`：Dense.borel_eq_generateFrom_Ioc
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ioo`：nonempty_Ioo [DenselyOrdered α] : (Ioo a b).Nonempty ↔
+ a < b
 -/
 theorem Dense.borel_eq_generateFrom_Ioc_mem {α : Type*} [TopologicalSpace α] [LinearOrder α]
     [OrderTopology α] [SecondCountableTopology α] [DenselyOrdered α] [NoMaxOrder α] {s : Set α}
     (hd : Dense s) :
-    borel α = .generateFrom { S : Set α | exists l in s, exists u in s, l < u ∧ Ioc l u = S } :=
+    borel α = .generateFrom { S : Set α | ∃ l ∈ s, ∃ u ∈ s, l < u ∧ Ioc l u = S } :=
   hd.borel_eq_generateFrom_Ioc_mem_aux (by simp) fun _ _ hxy H =>
     ((nonempty_Ioo.2 hxy).ne_empty H).elim
-
-/--
-theorem `borel_eq_generateFrom_Ioc` / 定理 `borel_eq_generateFrom_Ioc`
-
-English:
-theorem borel_eq_generateFrom_Ioc
-  statement: (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
-  proof: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Ioc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-中文:
-定理 borel_eq_generateFrom_Ioc
-  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
-  证明: by
-  simpa only [exists_prop, mem_univ, true_and] using
-    (@dense_univ α _).borel_eq_generateFrom_Ioc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
-      mem_univ _
-
-Depends on / 依赖: borel_eq_generateFrom_Ioc_mem_aux, dense_univ, exists_prop, mem_univ, true_and
+/-
+**borel_eq_generateFrom_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Ioc (α : Type*) [TopologicalSpace α] [SecondCountabl
+eTopology α] [LinearOrder α] [OrderTopology α] : borel α = .generateFrom { S : S
+et α | exists l u, l < u ∧ Ioc l u = S }
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Dense.borel_eq_generateFrom_Ioc_mem_aux`：Dense.borel_eq_generateFrom_Ioc
+_mem_aux {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderTopology α] [Sec
+ondCountableTopology α] {s : …
+· 使用定理 `dense_univ`：dense_univ : Dense (univ : Set X)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem borel_eq_generateFrom_Ioc (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
     [LinearOrder α] [OrderTopology α] :
-    borel α = .generateFrom { S : Set α | exists l u, l < u ∧ Ioc l u = S } := by
+    borel α = .generateFrom { S : Set α | ∃ l u, l < u ∧ Ioc l u = S } := by
   simpa only [exists_prop, mem_univ, true_and] using
     (@dense_univ α _).borel_eq_generateFrom_Ioc_mem_aux (fun _ _ => mem_univ _) fun _ _ _ _ =>
       mem_univ _
-
-/--
-theorem `borel_eq_generateFrom_Ioc_le` / 定理 `borel_eq_generateFrom_Ioc_le`
-
-English:
-theorem borel_eq_generateFrom_Ioc_le
-  statement: (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
-  proof: by
-  apply le_antisymm
-  · rw [borel_eq_generateFrom_Ioc]
-    apply generateFrom_mono (by grind)
-  · apply generateFrom_le
-    rintro - ⟨u, v, -, rfl⟩
-    borelize α
-    exact measurableSet_Ioc
-
-中文:
-定理 borel_eq_generateFrom_Ioc_le
-  结论: (α : 类型) [拓扑空间 α] [第二可数拓扑 α]
-  证明: by
-  apply le_antisymm
-  · rw [borel_eq_generateFrom_Ioc]
-    apply generateFrom_mono (by grind)
-  · apply generateFrom_le
-    rintro - ⟨u, v, -, rfl⟩
-    borelize α
-    exact measurableSet_Ioc
-
-Depends on / 依赖: borel_eq_generateFrom_Ioc, borelize, generateFrom_le, generateFrom_mono, le_antisymm, measurableSet_Ioc
+/-
+**borel_eq_generateFrom_Ioc_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：borel_eq_generateFrom_Ioc_le (α : Type*) [TopologicalSpace α] [SecondCount
+ableTopology α] [LinearOrder α] [OrderTopology α] : borel α = .generateFrom { S 
+: Set α | exists l u, l <= u ∧ Ioc l u = S }
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `borel_eq_generateFrom_Ioc`：borel_eq_generateFrom_Ioc (α : Type*) [Topolo
+gicalSpace α] [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] : bo
+rel α = .genera…
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
 -/
 theorem borel_eq_generateFrom_Ioc_le (α : Type*) [TopologicalSpace α] [SecondCountableTopology α]
     [LinearOrder α] [OrderTopology α] :
-    borel α = .generateFrom { S : Set α | exists l u, l <= u ∧ Ioc l u = S } := by
+    borel α = .generateFrom { S : Set α | ∃ l u, l ≤ u ∧ Ioc l u = S } := by
   apply le_antisymm
   · rw [borel_eq_generateFrom_Ioc]
     apply generateFrom_mono (by grind)
@@ -1601,128 +1368,170 @@ theorem borel_eq_generateFrom_Ioc_le (α : Type*) [TopologicalSpace α] [SecondC
 
 namespace MeasureTheory.Measure
 
-/--
-theorem `ext_of_Ico_finite` / 定理 `ext_of_Ico_finite`
+/-- Two finite measures on a Borel space are equal if they agree on all closed-open intervals.  If
+`α` is a conditionally complete linear order with no top element,
+`MeasureTheory.Measure.ext_of_Ico` is an extensionality lemma with weaker assumptions on `μ` and
+`ν`. -/
+/-
+**MeasureTheory.Measure.ext_of_Ico_finite** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：ext_of_Ico_finite {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
+ [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ
+ ν : Measure α) [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : forall ⦃a b⦄, a
+ < b -> μ (Ico a b) = ν (Ico a b)) : μ = ν
+参数：μ ν : Measure α；hμν : μ univ = ν univ；h : forall ⦃a b⦄, a < b -> μ (Ico a b) 
+= ν (Ico a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.ext_of_generate_finite`：ext_of_generate_finite (C : Set (S
+et α)) (hA : m0 = generateFrom C) (hC : IsPiSystem C) [IsFiniteMeasure μ] (hμν :
+ forall s in C, μ s = ν s)…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Ico`：borel_eq_generateFrom_Ico (α : Type*) [Topolo
+gicalSpace α] [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] : bo
+rel α = .genera…
+· 使用定理 `isPiSystem_Ico`：isPiSystem_Ico (f : ι -> α) (g : ι' -> α) : @IsPiSystem 
+α { S | exists i j, f i < g j ∧ Ico (f i) (g j) = S }
 
-English:
-theorem ext_of_Ico_finite
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  refine
-    ext_of_generate_finite _ (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α))
-      (isPiSystem_Ico (id : α -> α) id) ?_ hμν
-  rintro - ⟨a, b, hlt, rfl⟩
-  exact h hlt
-
-中文:
-定理 ext_of_Ico_finite
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  refine
-    ext_of_generate_finite _ (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α))
-      (isPiSystem_Ico (id : α -> α) id) ?_ hμν
-  rintro - ⟨a, b, hlt, rfl⟩
-  exact h hlt
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.trans, borel_eq_generateFrom_Ico, ext_of_generate_finite, isPiSystem_Ico, measurable_eq
+--- 原说明 ---
+Two finite measures on a Borel space are equal if they agree on all closed-open 
+intervals.  If
+`α` is a conditionally complete linear order with no top element,
+`MeasureTheory.Measure.ext_of_Ico` is an extensionality lemma with weaker assump
+tions on `μ` and
+`ν`.
 -/
 theorem ext_of_Ico_finite {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Measure α)
-    [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : forall ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)) :
+    [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : ∀ ⦃a b⦄, a < b → μ (Ico a b) = ν (Ico a b)) :
     μ = ν := by
   refine
     ext_of_generate_finite _ (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α))
-      (isPiSystem_Ico (id : α -> α) id) ?_ hμν
+      (isPiSystem_Ico (id : α → α) id) ?_ hμν
   rintro - ⟨a, b, hlt, rfl⟩
   exact h hlt
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `ext_of_Ioc_finite` / 定理 `ext_of_Ioc_finite`
+/-- Two finite measures on a Borel space are equal if they agree on all open-closed intervals.  If
+`α` is a conditionally complete linear order with no top element,
+`MeasureTheory.Measure.ext_of_Ioc` is an extensionality lemma with weaker assumptions on `μ` and
+`ν`. -/
+/-
+**MeasureTheory.Measure.ext_of_Ioc_finite** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：ext_of_Ioc_finite {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
+ [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ
+ ν : Measure α) [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : forall ⦃a b⦄, a
+ < b -> μ (Ioc a b) = ν (Ioc a b)) : μ = ν
+参数：μ ν : Measure α；hμν : μ univ = ν univ；h : forall ⦃a b⦄, a < b -> μ (Ioc a b) 
+= ν (Ioc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Ico_finite`：ext_of_Ico_finite {α : Type*} [
+TopologicalSpace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearO
+rder α] [OrderTopology α] [Bo…
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ico_toDual`：Ico_toDual : Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc 
+b a
 
-English:
-theorem ext_of_Ioc_finite
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  refine @ext_of_Ico_finite αᵒᵈ _ _ _ _ _ ‹_› μ ν _ hμν fun a b hab => ?_
-  erw [Ico_toDual (α := α)]
-  exact h hab
-
-中文:
-定理 ext_of_Ioc_finite
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  refine @ext_of_Ico_finite αᵒᵈ _ _ _ _ _ ‹_› μ ν _ hμν fun a b hab => ?_
-  erw [Ico_toDual (α := α)]
-  exact h hab
-
-Depends on / 依赖: Ico_toDual, ext_of_Ico_finite
+--- 原说明 ---
+Two finite measures on a Borel space are equal if they agree on all open-closed 
+intervals.  If
+`α` is a conditionally complete linear order with no top element,
+`MeasureTheory.Measure.ext_of_Ioc` is an extensionality lemma with weaker assump
+tions on `μ` and
+`ν`.
 -/
 theorem ext_of_Ioc_finite {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Measure α)
-    [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : forall ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)) :
+    [IsFiniteMeasure μ] (hμν : μ univ = ν univ) (h : ∀ ⦃a b⦄, a < b → μ (Ioc a b) = ν (Ioc a b)) :
     μ = ν := by
   refine @ext_of_Ico_finite αᵒᵈ _ _ _ _ _ ‹_› μ ν _ hμν fun a b hab => ?_
   erw [Ico_toDual (α := α)]
   exact h hab
 
-/--
-theorem `ext_of_Ico'` / 定理 `ext_of_Ico'`
+/-- Two measures which are finite on closed-open intervals are equal if they agree on all
+closed-open intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Ico'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Mea
+sure`。
+形式化陈述：ext_of_Ico' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α} [Seco
+ndCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] [NoMaxOr
+der α] (μ ν : Measure α) (hμ : forall ⦃a b⦄, a < b -> μ (Ico a b) != ∞) (h : for
+all ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)) : μ = ν
+参数：μ ν : Measure α；hμ : forall ⦃a b⦄, a < b -> μ (Ico a b) != ∞；h : forall ⦃a b⦄
+, a < b -> μ (Ico a b) = ν (Ico a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_countable_dense_bot_top`：exists_countable_dense_bot_top (α : Type
+*) [TopologicalSpace α] [SeparableSpace α] [PartialOrder α] : exists s : Set α, 
+s.Countable ∧ Dense …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `Set.Countable.biUnion`：∀ {α : Type u} {β : Type v} {s : Set α} {t : (a :
+ α) → a ∈ s → Set β},   s.Countable → (∀ (a : α) (ha : a ∈ s), (t a ha).Countabl
+e) → (⋃ a, …
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `Set.countable_singleton`：∀ {α : Type u} (a : α), {a}.Countable
+· 使用定理 `MeasureTheory.Measure.ext_of_generateFrom_of_cover_subset`：ext_of_genera
+teFrom_of_cover_subset {S T : Set (Set α)} (h_gen : ‹_› = generateFrom S) (h_int
+er : IsPiSystem S) (h_sub : T subseteq S) (hc :…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Ico`：borel_eq_generateFrom_Ico (α : Type*) [Topolo
+gicalSpace α] [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] : bo
+rel α = .genera…
+· 使用定理 `isPiSystem_Ico`：isPiSystem_Ico (f : ι -> α) (g : ι' -> α) : @IsPiSystem 
+α { S | exists i j, f i < g j ∧ Ico (f i) (g j) = S }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.sUnion_eq_univ_iff`：sUnion_eq_univ_iff {c : Set (Set α)} : ⋃₀ c = un
+iv ↔ forall a, exists b in c, a in b
+· 使用定理 `Dense.exists_le'`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : L
+inearOrder α] [ClosedIciTopology α] {s : Set α},   Dense s → (∀ (x : α), IsBot x
+ → x ∈…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Dense.exists_gt`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Li
+nearOrder α] [ClosedIicTopology α] [NoMaxOrder α] {s : Set α},   Dense s → ∀ (x 
+: α),…
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
 
-English:
-theorem ext_of_Ico'
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, _⟩
-  have : (⋃ (l in s) (u in s) (_ : l < u), {Ico l u} : Set (Set α)).Countable :=
-    hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
-  simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
-  refine
-    Measure.ext_of_generateFrom_of_cover_subset
-      (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α)) (isPiSystem_Ico id id) ?_ this
-      ?_ ?_ ?_
-  · rintro _ ⟨l, -, u, -, h, rfl⟩
-    exact ⟨l, u, h, rfl⟩
-  · refine sUnion_eq_univ_iff.2 fun x => ?_
-    rcases hsd.exists_le' hsb x with ⟨l, hls, hlx⟩
-    rcases hsd.exists_gt x with ⟨u, hus, hxu⟩
-    exact ⟨_, ⟨l, hls, u, hus, hlx.trans_lt hxu, rfl⟩, hlx, hxu⟩
-  · rintro _ ⟨l, -, u, -, hlt, rfl⟩
-    exact hμ hlt
-  · rintro _ ⟨l, u, hlt, rfl⟩
-    exact h hlt
-
-中文:
-定理 ext_of_Ico'
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, _⟩
-  have : (⋃ (l in s) (u in s) (_ : l < u), {Ico l u} : Set (Set α)).Countable :=
-    hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
-  simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
-  refine
-    Measure.ext_of_generateFrom_of_cover_subset
-      (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ico α)) (isPiSystem_Ico id id) ?_ this
-      ?_ ?_ ?_
-  · rintro _ ⟨l, -, u, -, h, rfl⟩
-    exact ⟨l, u, h, rfl⟩
-  · refine sUnion_eq_univ_iff.2 fun x => ?_
-    rcases hsd.exists_le' hsb x with ⟨l, hls, hlx⟩
-    rcases hsd.exists_gt x with ⟨u, hus, hxu⟩
-    exact ⟨_, ⟨l, hls, u, hus, hlx.trans_lt hxu, rfl⟩, hlx, hxu⟩
-  · rintro _ ⟨l, -, u, -, hlt, rfl⟩
-    exact hμ hlt
-  · rintro _ ⟨l, u, hlt, rfl⟩
-    exact h hlt
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.trans, Countable, Measure, Measure.ext_of_generateFrom_of_cover_subset, biUnion, borel_eq_generateFrom_Ico, countable_iUnion, countable_singleton, exists_countable_dense_bot_top, ext_of_generateFrom_of_cover_subset, hsc.biUnion, isPiSystem_Ico, measurable_eq, ofPred_eq_eq_singleton, ofPred_exists
+--- 原说明 ---
+Two measures which are finite on closed-open intervals are equal if they agree o
+n all
+closed-open intervals.
 -/
 theorem ext_of_Ico' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] [NoMaxOrder α]
-    (μ ν : Measure α) (hμ : forall ⦃a b⦄, a < b -> μ (Ico a b) != ∞)
-    (h : forall ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)) : μ = ν := by
+    (μ ν : Measure α) (hμ : ∀ ⦃a b⦄, a < b → μ (Ico a b) ≠ ∞)
+    (h : ∀ ⦃a b⦄, a < b → μ (Ico a b) = ν (Ico a b)) : μ = ν := by
   rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, _⟩
-  have : (⋃ (l in s) (u in s) (_ : l < u), {Ico l u} : Set (Set α)).Countable :=
+  have : (⋃ (l ∈ s) (u ∈ s) (_ : l < u), {Ico l u} : Set (Set α)).Countable :=
     hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
   simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
   refine
@@ -1740,195 +1549,294 @@ theorem ext_of_Ico' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
   · rintro _ ⟨l, u, hlt, rfl⟩
     exact h hlt
 
-/--
-theorem `ext_of_Ioc'` / 定理 `ext_of_Ioc'`
+/-- Two measures which are finite on closed-open intervals are equal if they agree on all
+open-closed intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Ioc'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Mea
+sure`。
+形式化陈述：ext_of_Ioc' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α} [Seco
+ndCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] [NoMinOr
+der α] (μ ν : Measure α) (hμ : forall ⦃a b⦄, a < b -> μ (Ioc a b) != ∞) (h : for
+all ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)) : μ = ν
+参数：μ ν : Measure α；hμ : forall ⦃a b⦄, a < b -> μ (Ioc a b) != ∞；h : forall ⦃a b⦄
+, a < b -> μ (Ioc a b) = ν (Ioc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Ico'`：ext_of_Ico' {α : Type*} [TopologicalS
+pace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearOrder α] [Ord
+erTopology α] [BorelSpa…
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `OrderDual.noMaxOrder`：∀ {α : Type u_1} [inst : LT α] [NoMinOrder α], NoM
+axOrder αᵒᵈ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ico_toDual`：Ico_toDual : Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc 
+b a
 
-English:
-theorem ext_of_Ioc'
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  refine @ext_of_Ico' αᵒᵈ _ _ _ _ _ ‹_› _ μ ν ?_ ?_ <;> intro a b hab <;> erw [Ico_toDual (α := α)]
-  exacts [hμ hab, h hab]
-
-中文:
-定理 ext_of_Ioc'
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  refine @ext_of_Ico' αᵒᵈ _ _ _ _ _ ‹_› _ μ ν ?_ ?_ <;> intro a b hab <;> erw [Ico_toDual (α := α)]
-  exacts [hμ hab, h hab]
-
-Depends on / 依赖: Ico_toDual, exacts, ext_of_Ico
+--- 原说明 ---
+Two measures which are finite on closed-open intervals are equal if they agree o
+n all
+open-closed intervals.
 -/
 theorem ext_of_Ioc' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] [NoMinOrder α]
-    (μ ν : Measure α) (hμ : forall ⦃a b⦄, a < b -> μ (Ioc a b) != ∞)
-    (h : forall ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)) : μ = ν := by
+    (μ ν : Measure α) (hμ : ∀ ⦃a b⦄, a < b → μ (Ioc a b) ≠ ∞)
+    (h : ∀ ⦃a b⦄, a < b → μ (Ioc a b) = ν (Ioc a b)) : μ = ν := by
   refine @ext_of_Ico' αᵒᵈ _ _ _ _ _ ‹_› _ μ ν ?_ ?_ <;> intro a b hab <;> erw [Ico_toDual (α := α)]
   exacts [hμ hab, h hab]
 
-/--
-theorem `ext_of_Ico` / 定理 `ext_of_Ico`
+/-- Two measures which are finite on closed-open intervals are equal if they agree on all
+closed-open intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：ext_of_Ico {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α} [Seco
+ndCountableTopology α] [ConditionallyCompleteLinearOrder α] [OrderTopology α] [B
+orelSpace α] [NoMaxOrder α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ] (h : fo
+rall ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)) : μ = ν
+参数：μ ν : Measure α；h : forall ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Ico'`：ext_of_Ico' {α : Type*} [TopologicalS
+pace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearOrder α] [Ord
+erTopology α] [BorelSpa…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `measure_Ico_lt_top`：measure_Ico_lt_top : μ (Ico a b) < ∞
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
 
-English:
-theorem ext_of_Ico
-  statement: {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
-  proof: μ.ext_of_Ico' ν (fun _ _ _ => measure_Ico_lt_top.ne) h
-
-中文:
-定理 ext_of_Ico
-  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
-  证明: μ.ext_of_Ico' ν (fun _ _ _ => measure_Ico_lt_top.ne) h
-
-Depends on / 依赖: ext_of_Ico, measure_Ico_lt_top, measure_Ico_lt_top.ne
+--- 原说明 ---
+Two measures which are finite on closed-open intervals are equal if they agree o
+n all
+closed-open intervals.
 -/
 theorem ext_of_Ico {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
     [SecondCountableTopology α] [ConditionallyCompleteLinearOrder α] [OrderTopology α]
     [BorelSpace α] [NoMaxOrder α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ]
-    (h : forall ⦃a b⦄, a < b -> μ (Ico a b) = ν (Ico a b)) : μ = ν :=
+    (h : ∀ ⦃a b⦄, a < b → μ (Ico a b) = ν (Ico a b)) : μ = ν :=
   μ.ext_of_Ico' ν (fun _ _ _ => measure_Ico_lt_top.ne) h
 
-/--
-theorem `ext_of_Ioc` / 定理 `ext_of_Ioc`
+/-- Two measures which are finite on closed-open intervals are equal if they agree on all
+open-closed intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：ext_of_Ioc {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α} [Seco
+ndCountableTopology α] [ConditionallyCompleteLinearOrder α] [OrderTopology α] [B
+orelSpace α] [NoMinOrder α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ] (h : fo
+rall ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)) : μ = ν
+参数：μ ν : Measure α；h : forall ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Ioc'`：ext_of_Ioc' {α : Type*} [TopologicalS
+pace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearOrder α] [Ord
+erTopology α] [BorelSpa…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `measure_Ioc_lt_top`：measure_Ioc_lt_top : μ (Ioc a b) < ∞
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
 
-English:
-theorem ext_of_Ioc
-  statement: {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
-  proof: μ.ext_of_Ioc' ν (fun _ _ _ => measure_Ioc_lt_top.ne) h
-
-中文:
-定理 ext_of_Ioc
-  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
-  证明: μ.ext_of_Ioc' ν (fun _ _ _ => measure_Ioc_lt_top.ne) h
-
-Depends on / 依赖: ext_of_Ioc, measure_Ioc_lt_top, measure_Ioc_lt_top.ne
+--- 原说明 ---
+Two measures which are finite on closed-open intervals are equal if they agree o
+n all
+open-closed intervals.
 -/
 theorem ext_of_Ioc {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
     [SecondCountableTopology α] [ConditionallyCompleteLinearOrder α] [OrderTopology α]
     [BorelSpace α] [NoMinOrder α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ]
-    (h : forall ⦃a b⦄, a < b -> μ (Ioc a b) = ν (Ioc a b)) : μ = ν :=
+    (h : ∀ ⦃a b⦄, a < b → μ (Ioc a b) = ν (Ioc a b)) : μ = ν :=
   μ.ext_of_Ioc' ν (fun _ _ _ => measure_Ioc_lt_top.ne) h
 
-/--
-theorem `ext_of_Iic` / 定理 `ext_of_Iic`
+/-- Two finite measures on a Borel space are equal if they agree on all left-infinite right-closed
+intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Iic** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：ext_of_Iic {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α} [Secon
+dCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Me
+asure α) [IsFiniteMeasure μ] (h : forall a, μ (Iic a) = ν (Iic a)) : μ = ν
+参数：μ ν : Measure α；h : forall a, μ (Iic a) = ν (Iic a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Ioc_finite`：ext_of_Ioc_finite {α : Type*} [
+TopologicalSpace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearO
+rder α] [OrderTopology α] [Bo…
+· 使用定理 `exists_countable_dense_bot_top`：exists_countable_dense_bot_top (α : Type
+*) [TopologicalSpace α] [SeparableSpace α] [PartialOrder α] : exists s : Set α, 
+s.Countable ∧ Dense …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `directedOn_iff_directed`：directedOn_iff_directed {s} : @DirectedOn α r s
+ ↔ Directed r (Subtype.val : s -> α)
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `Subtype.mono_coe`：Subtype.mono_coe [Preorder α] (p : α -> Prop) : Monoto
+ne ((↑) : Subtype p -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.biSup_measure_Iic`：biSup_measure_Iic [Preorder α] {s : Set
+ α} (hsc : s.Countable) (hst : forall x : α, exists y in s, x <= y) (hdir : Dire
+ctedOn (· <= ·) s) : …
+· 使用定理 `Dense.exists_ge'`：Dense.exists_ge' {s : Set α} (hs : Dense s) (htop : fo
+rall x, IsTop x -> x in s) (x : α) : exists y in s, x <= y
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.Iic_sdiff_Iic`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, Se
+t.Iic a \ Set.Iic b = Set.Ioc b a
+· 使用定理 `MeasureTheory.measure_sdiff`：measure_sdiff (h : s₂ subseteq s₁) (h₂ : Nu
+llMeasurableSet s₂ μ) (h_fin : μ s₂ != ∞) : μ (s₁ \ s₂) = μ s₁ - μ s₂
+· 使用定理 `Set.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `nullMeasurableSet_Iic`：nullMeasurableSet_Iic [ClosedIicTopology α] : Nul
+lMeasurableSet (Iic a) μ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 
-English:
-theorem ext_of_Iic
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  refine ext_of_Ioc_finite μ ν ?_ fun a b hlt => ?_
-  · rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, -, hst⟩
-    have : DirectedOn (· <= ·) s := directedOn_iff_directed.2 (Subtype.mono_coe _).directed_le
-    simp only [← biSup_measure_Iic hsc (hsd.exists_ge' hst) this, h]
-  rw [← Iic_sdiff_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [h a]; rw [h b]
-  · rw [← h a]
-    finiteness
-  · finiteness
-
-中文:
-定理 ext_of_Iic
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  refine ext_of_Ioc_finite μ ν ?_ fun a b hlt => ?_
-  · rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, -, hst⟩
-    have : DirectedOn (· <= ·) s := directedOn_iff_directed.2 (Subtype.mono_coe _).directed_le
-    simp only [← biSup_measure_Iic hsc (hsd.exists_ge' hst) this, h]
-  rw [← Iic_sdiff_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [h a]; rw [h b]
-  · rw [← h a]
-    finiteness
-  · finiteness
-
-Depends on / 依赖: DirectedOn, Iic_sdiff_Iic, Iic_subset_Iic, Subtype, Subtype.mono_coe, biSup_measure_Iic, directedOn_iff_directed, directed_le, exists_countable_dense_bot_top, exists_ge, ext_of_Ioc_finite, finiteness, hlt.le, hsd.exists_ge, measure_sdiff, mono_coe, nullMeasurableSet_Iic
+--- 原说明 ---
+Two finite measures on a Borel space are equal if they agree on all left-infinit
+e right-closed
+intervals.
 -/
 theorem ext_of_Iic {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Measure α)
-    [IsFiniteMeasure μ] (h : forall a, μ (Iic a) = ν (Iic a)) : μ = ν := by
+    [IsFiniteMeasure μ] (h : ∀ a, μ (Iic a) = ν (Iic a)) : μ = ν := by
   refine ext_of_Ioc_finite μ ν ?_ fun a b hlt => ?_
   · rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, -, hst⟩
-    have : DirectedOn (· <= ·) s := directedOn_iff_directed.2 (Subtype.mono_coe _).directed_le
+    have : DirectedOn (· ≤ ·) s := directedOn_iff_directed.2 (Subtype.mono_coe _).directed_le
     simp only [← biSup_measure_Iic hsc (hsd.exists_ge' hst) this, h]
-  rw [← Iic_sdiff_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic]; rw [h a]; rw [h b]
+  rw [← Iic_sdiff_Iic, measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic,
+    measure_sdiff (Iic_subset_Iic.2 hlt.le) nullMeasurableSet_Iic, h a, h b]
   · rw [← h a]
     finiteness
   · finiteness
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `ext_of_Ici` / 定理 `ext_of_Ici`
+/-- Two finite measures on a Borel space are equal if they agree on all left-closed right-infinite
+intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Ici** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：ext_of_Ici {α : Type*} [TopologicalSpace α] {_ : MeasurableSpace α} [Secon
+dCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Me
+asure α) [IsFiniteMeasure μ] (h : forall a, μ (Ici a) = ν (Ici a)) : μ = ν
+参数：μ ν : Measure α；h : forall a, μ (Ici a) = ν (Ici a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Iic`：ext_of_Iic {α : Type*} [TopologicalSpa
+ce α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearOrder α] [Order
+Topology α] [BorelSpac…
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 
-English:
-theorem ext_of_Ici
-  statement: {α : Type*} [TopologicalSpace α] {_ : MeasurableSpace α}
-  proof: @ext_of_Iic αᵒᵈ _ _ _ _ _ ‹_› _ _ _ h
-
-中文:
-定理 ext_of_Ici
-  结论: {α : 类型} [拓扑空间 α] {_ : 可测空间 α}
-  证明: @ext_of_Iic αᵒᵈ _ _ _ _ _ ‹_› _ _ _ h
-
-Depends on / 依赖: ext_of_Iic
+--- 原说明 ---
+Two finite measures on a Borel space are equal if they agree on all left-closed 
+right-infinite
+intervals.
 -/
 theorem ext_of_Ici {α : Type*} [TopologicalSpace α] {_ : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : Measure α)
-    [IsFiniteMeasure μ] (h : forall a, μ (Ici a) = ν (Ici a)) : μ = ν :=
+    [IsFiniteMeasure μ] (h : ∀ a, μ (Ici a) = ν (Ici a)) : μ = ν :=
   @ext_of_Iic αᵒᵈ _ _ _ _ _ ‹_› _ _ _ h
 
-/--
-theorem `ext_of_Icc'` / 定理 `ext_of_Icc'`
+/-- Two measures which are finite on closed intervals are equal if they agree on all
+closed intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Icc'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Mea
+sure`。
+形式化陈述：ext_of_Icc' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α} [Seco
+ndCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α] (μ ν : M
+easure α) (hμ : forall ⦃a b⦄, a <= b -> μ (Icc a b) != ∞) (h : forall ⦃a b⦄, a <
+= b -> μ (Icc a b) = ν (Icc a b)) : μ = ν
+参数：μ ν : Measure α；hμ : forall ⦃a b⦄, a <= b -> μ (Icc a b) != ∞；h : forall ⦃a b
+⦄, a <= b -> μ (Icc a b) = ν (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_countable_dense_bot_top`：exists_countable_dense_bot_top (α : Type
+*) [TopologicalSpace α] [SeparableSpace α] [PartialOrder α] : exists s : Set α, 
+s.Countable ∧ Dense …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `Set.Countable.biUnion`：∀ {α : Type u} {β : Type v} {s : Set α} {t : (a :
+ α) → a ∈ s → Set β},   s.Countable → (∀ (a : α) (ha : a ∈ s), (t a ha).Countabl
+e) → (⋃ a, …
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `Set.countable_singleton`：∀ {α : Type u} (a : α), {a}.Countable
+· 使用定理 `MeasureTheory.Measure.ext_of_generateFrom_of_cover_subset`：ext_of_genera
+teFrom_of_cover_subset {S T : Set (Set α)} (h_gen : ‹_› = generateFrom S) (h_int
+er : IsPiSystem S) (h_sub : T subseteq S) (hc :…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Icc`：borel_eq_generateFrom_Icc (α : Type*) [Topolo
+gicalSpace α] [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] : bo
+rel α = .genera…
+· 使用定理 `isPiSystem_Icc`：isPiSystem_Icc (f : ι -> α) (g : ι' -> α) : @IsPiSystem 
+α { S | exists i j, f i <= g j ∧ Icc (f i) (g j) = S }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.sUnion_eq_univ_iff`：sUnion_eq_univ_iff {c : Set (Set α)} : ⋃₀ c = un
+iv ↔ forall a, exists b in c, a in b
+· 使用定理 `Dense.exists_le'`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : L
+inearOrder α] [ClosedIciTopology α] {s : Set α},   Dense s → (∀ (x : α), IsBot x
+ → x ∈…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Dense.exists_ge'`：Dense.exists_ge' {s : Set α} (hs : Dense s) (htop : fo
+rall x, IsTop x -> x in s) (x : α) : exists y in s, x <= y
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 
-English:
-theorem ext_of_Icc'
-  statement: {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
-  proof: by
-  rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, hst⟩
-  have : (⋃ (l in s) (u in s) (_ : l <= u), {Icc l u} : Set (Set α)).Countable :=
-    hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
-  simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
-  refine
-    Measure.ext_of_generateFrom_of_cover_subset
-      (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Icc α)) (isPiSystem_Icc id id) ?_ this
-      ?_ ?_ ?_
-  · rintro _ ⟨l, -, u, -, h, rfl⟩
-    exact ⟨l, u, h, rfl⟩
-  · refine sUnion_eq_univ_iff.2 fun x => ?_
-    rcases hsd.exists_le' hsb x with ⟨l, hls, hlx⟩
-    rcases hsd.exists_ge' hst x with ⟨u, hus, hxu⟩
-    exact ⟨_, ⟨l, hls, u, hus, hlx.trans hxu, rfl⟩, hlx, hxu⟩
-  · rintro _ ⟨l, -, u, -, hlt, rfl⟩
-    exact hμ hlt
-  · rintro _ ⟨l, u, hlt, rfl⟩
-    exact h hlt
-
-中文:
-定理 ext_of_Icc'
-  结论: {α : 类型} [拓扑空间 α] {m : 可测空间 α}
-  证明: by
-  rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, hst⟩
-  have : (⋃ (l in s) (u in s) (_ : l <= u), {Icc l u} : Set (Set α)).Countable :=
-    hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
-  simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
-  refine
-    Measure.ext_of_generateFrom_of_cover_subset
-      (BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Icc α)) (isPiSystem_Icc id id) ?_ this
-      ?_ ?_ ?_
-  · rintro _ ⟨l, -, u, -, h, rfl⟩
-    exact ⟨l, u, h, rfl⟩
-  · refine sUnion_eq_univ_iff.2 fun x => ?_
-    rcases hsd.exists_le' hsb x with ⟨l, hls, hlx⟩
-    rcases hsd.exists_ge' hst x with ⟨u, hus, hxu⟩
-    exact ⟨_, ⟨l, hls, u, hus, hlx.trans hxu, rfl⟩, hlx, hxu⟩
-  · rintro _ ⟨l, -, u, -, hlt, rfl⟩
-    exact hμ hlt
-  · rintro _ ⟨l, u, hlt, rfl⟩
-    exact h hlt
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.trans, Countable, Measure, Measure.ext_of_generateFrom_of_cover_subset, biUnion, borel_eq_generateFrom_Icc, countable_iUnion, countable_singleton, exists_countable_dense_bot_top, ext_of_generateFrom_of_cover_subset, hsc.biUnion, isPiSystem_Icc, measurable_eq, ofPred_eq_eq_singleton, ofPred_exists
+--- 原说明 ---
+Two measures which are finite on closed intervals are equal if they agree on all
+closed intervals.
 -/
 theorem ext_of_Icc' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [BorelSpace α]
-    (μ ν : Measure α) (hμ : forall ⦃a b⦄, a <= b -> μ (Icc a b) != ∞)
-    (h : forall ⦃a b⦄, a <= b -> μ (Icc a b) = ν (Icc a b)) : μ = ν := by
+    (μ ν : Measure α) (hμ : ∀ ⦃a b⦄, a ≤ b → μ (Icc a b) ≠ ∞)
+    (h : ∀ ⦃a b⦄, a ≤ b → μ (Icc a b) = ν (Icc a b)) : μ = ν := by
   rcases exists_countable_dense_bot_top α with ⟨s, hsc, hsd, hsb, hst⟩
-  have : (⋃ (l in s) (u in s) (_ : l <= u), {Icc l u} : Set (Set α)).Countable :=
+  have : (⋃ (l ∈ s) (u ∈ s) (_ : l ≤ u), {Icc l u} : Set (Set α)).Countable :=
     hsc.biUnion fun l _ => hsc.biUnion fun u _ => countable_iUnion fun _ => countable_singleton _
   simp only [← ofPred_eq_eq_singleton, ← ofPred_exists] at this
   refine
@@ -1946,71 +1854,56 @@ theorem ext_of_Icc' {α : Type*} [TopologicalSpace α] {m : MeasurableSpace α}
   · rintro _ ⟨l, u, hlt, rfl⟩
     exact h hlt
 
-/--
-theorem `ext_of_Icc` / 定理 `ext_of_Icc`
+/-- Two measures which are finite on closed intervals are equal if they agree on all
+closed intervals. -/
+/-
+**MeasureTheory.Measure.ext_of_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：ext_of_Icc {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α} [Seco
+ndCountableTopology α] [LinearOrder α] [OrderTopology α] [CompactIccSpace α] [Bo
+relSpace α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ] (h : forall ⦃a b⦄, a <=
+ b -> μ (Icc a b) = ν (Icc a b)) : μ = ν
+参数：μ ν : Measure α；h : forall ⦃a b⦄, a <= b -> μ (Icc a b) = ν (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_Icc'`：ext_of_Icc' {α : Type*} [TopologicalS
+pace α] {m : MeasurableSpace α} [SecondCountableTopology α] [LinearOrder α] [Ord
+erTopology α] [BorelSpa…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `measure_Icc_lt_top`：measure_Icc_lt_top : μ (Icc a b) < ∞
 
-English:
-theorem ext_of_Icc
-  statement: {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
-  proof: μ.ext_of_Icc' ν (fun _ _ _ => measure_Icc_lt_top.ne) h
-
-中文:
-定理 ext_of_Icc
-  结论: {α : 类型} [拓扑空间 α] {_m : 可测空间 α}
-  证明: μ.ext_of_Icc' ν (fun _ _ _ => measure_Icc_lt_top.ne) h
-
-Depends on / 依赖: ext_of_Icc, measure_Icc_lt_top, measure_Icc_lt_top.ne
+--- 原说明 ---
+Two measures which are finite on closed intervals are equal if they agree on all
+closed intervals.
 -/
 theorem ext_of_Icc {α : Type*} [TopologicalSpace α] {_m : MeasurableSpace α}
     [SecondCountableTopology α] [LinearOrder α] [OrderTopology α] [CompactIccSpace α]
     [BorelSpace α] (μ ν : Measure α) [IsLocallyFiniteMeasure μ]
-    (h : forall ⦃a b⦄, a <= b -> μ (Icc a b) = ν (Icc a b)) : μ = ν :=
+    (h : ∀ ⦃a b⦄, a ≤ b → μ (Icc a b) = ν (Icc a b)) : μ = ν :=
   μ.ext_of_Icc' ν (fun _ _ _ => measure_Icc_lt_top.ne) h
 
 end MeasureTheory.Measure
 
 @[measurability]
-/--
-theorem `measurableSet_uIcc` / 定理 `measurableSet_uIcc`
-
-English:
-theorem measurableSet_uIcc
-  given: [OrderClosedTopology α]
-  statement: MeasurableSet (uIcc a b)
-  proof: measurableSet_Icc
-
-@[measurability]
-
-中文:
-定理 measurableSet_uIcc
-  条件: [OrderClosed拓扑 α]
-  结论: 可测集 (uIcc a b)
-  证明: measurableSet_Icc
-
-@[measurability]
-
-Depends on / 依赖: measurableSet_Icc
+/-
+**measurableSet_uIcc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_uIcc [OrderClosedTopology α] : MeasurableSet (uIcc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurableSet_Icc`：measurableSet_Icc [OrderClosedTopology α] : Measurabl
+eSet (Icc a b)
 -/
 theorem measurableSet_uIcc [OrderClosedTopology α] : MeasurableSet (uIcc a b) :=
   measurableSet_Icc
 
 @[measurability]
-/--
-theorem `measurableSet_uIoc` / 定理 `measurableSet_uIoc`
-
-English:
-theorem measurableSet_uIoc
-  given: [ClosedIicTopology α]
-  statement: MeasurableSet (uIoc a b)
-  proof: measurableSet_Ioc
-
-中文:
-定理 measurableSet_uIoc
-  条件: [ClosedIic拓扑 α]
-  结论: 可测集 (uIoc a b)
-  证明: measurableSet_Ioc
-
-Depends on / 依赖: measurableSet_Ioc
+/-
+**measurableSet_uIoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_uIoc [ClosedIicTopology α] : MeasurableSet (uIoc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
 -/
 theorem measurableSet_uIoc [ClosedIicTopology α] : MeasurableSet (uIoc a b) :=
   measurableSet_Ioc
@@ -2018,85 +1911,59 @@ theorem measurableSet_uIoc [ClosedIicTopology α] : MeasurableSet (uIoc a b) :=
 variable [SecondCountableTopology α] [OrderClosedTopology α]
 
 @[fun_prop]
-/--
-theorem `Measurable.max` / 定理 `Measurable.max`
-
-English:
-theorem Measurable.max
-  given: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: by
-  simpa only [max_def'] using! hf.piecewise (measurableSet_le hg hf) hg
-
-@[fun_prop]
-nonrec theorem AEMeasurable.max {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
-    (hg : AEMeasurable g μ) : AEMeasurable (fun a => max (f a) (g a)) μ :=
-  ⟨fun a => max (hf.mk f a) (hg.mk g a), hf.measurable_mk.max hg.measurable_mk,
-    EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
-
-@[fun_prop]
-
-中文:
-定理 可测.最大值
-  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: by
-  simpa only [max_def'] using! hf.piecewise (measurableSet_le hg hf) hg
-
-@[fun_prop]
-nonrec theorem AEMeasurable.max {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
-    (hg : AEMeasurable g μ) : AEMeasurable (fun a => max (f a) (g a)) μ :=
-  ⟨fun a => max (hf.mk f a) (hg.mk g a), hf.measurable_mk.max hg.measurable_mk,
-    EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
-
-@[fun_prop]
-
-Depends on / 依赖: hf.piecewise, max_def, measurableSet_le, piecewise
+/-
+**Measurable.max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.max {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) : Me
+asurable fun a => max (f a) (g a)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `max_def'`：max_def' (a b : α) : max a b = if b <= a then a else b
+· 使用定理 `Measurable.piecewise`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f g :
+ α → β} {m : MeasurableSpace α} {mβ : MeasurableSpace β}   {x : DecidablePred fu
+n x => x ∈…
+· 使用定理 `measurableSet_le`：measurableSet_le {f g : δ -> α} (hf : Measurable f) (h
+g : Measurable g) : MeasurableSet { a | f a <= g a }
 -/
-theorem Measurable.max {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) :
+theorem Measurable.max {f g : δ → α} (hf : Measurable f) (hg : Measurable g) :
     Measurable fun a => max (f a) (g a) := by
   simpa only [max_def'] using! hf.piecewise (measurableSet_le hg hf) hg
 
 @[fun_prop]
-nonrec theorem AEMeasurable.max {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
+nonrec theorem AEMeasurable.max {f g : δ → α} {μ : Measure δ} (hf : AEMeasurable f μ)
     (hg : AEMeasurable g μ) : AEMeasurable (fun a => max (f a) (g a)) μ :=
   ⟨fun a => max (hf.mk f a) (hg.mk g a), hf.measurable_mk.max hg.measurable_mk,
     EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
 
 @[fun_prop]
-/--
-theorem `Measurable.min` / 定理 `Measurable.min`
-
-English:
-theorem Measurable.min
-  given: {f g : δ -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: by
-  simpa only [min_def] using! hf.piecewise (measurableSet_le hf hg) hg
-
-@[fun_prop]
-nonrec theorem AEMeasurable.min {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
-    (hg : AEMeasurable g μ) : AEMeasurable (fun a => min (f a) (g a)) μ :=
-  ⟨fun a => min (hf.mk f a) (hg.mk g a), hf.measurable_mk.min hg.measurable_mk,
-    EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
-
-中文:
-定理 可测.最小值
-  条件: {f g : δ -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: by
-  simpa only [min_def] using! hf.piecewise (measurableSet_le hf hg) hg
-
-@[fun_prop]
-nonrec theorem AEMeasurable.min {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
-    (hg : AEMeasurable g μ) : AEMeasurable (fun a => min (f a) (g a)) μ :=
-  ⟨fun a => min (hf.mk f a) (hg.mk g a), hf.measurable_mk.min hg.measurable_mk,
-    EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
-
-Depends on / 依赖: hf.piecewise, measurableSet_le, min_def, piecewise
+/-
+**Measurable.min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.min {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) : Me
+asurable fun a => min (f a) (g a)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `min_def`：min_def (a b : α) : min a b = if a <= b then a else b
+· 使用定理 `Measurable.piecewise`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f g :
+ α → β} {m : MeasurableSpace α} {mβ : MeasurableSpace β}   {x : DecidablePred fu
+n x => x ∈…
+· 使用定理 `measurableSet_le`：measurableSet_le {f g : δ -> α} (hf : Measurable f) (h
+g : Measurable g) : MeasurableSet { a | f a <= g a }
 -/
-theorem Measurable.min {f g : δ -> α} (hf : Measurable f) (hg : Measurable g) :
+theorem Measurable.min {f g : δ → α} (hf : Measurable f) (hg : Measurable g) :
     Measurable fun a => min (f a) (g a) := by
   simpa only [min_def] using! hf.piecewise (measurableSet_le hf hg) hg
 
 @[fun_prop]
-nonrec theorem AEMeasurable.min {f g : δ -> α} {μ : Measure δ} (hf : AEMeasurable f μ)
+nonrec theorem AEMeasurable.min {f g : δ → α} {μ : Measure δ} (hf : AEMeasurable f μ)
     (hg : AEMeasurable g μ) : AEMeasurable (fun a => min (f a) (g a)) μ :=
   ⟨fun a => min (hf.mk f a) (hg.mk g a), hf.measurable_mk.min hg.measurable_mk,
     EventuallyEq.comp₂ hf.ae_eq_mk _ hg.ae_eq_mk⟩
@@ -2107,16 +1974,29 @@ section Lattice
 
 variable [TopologicalSpace γ] {mγ : MeasurableSpace γ} [BorelSpace γ]
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ContinuousSup.measurableSup [Max γ] [ContinuousSup γ] :
     MeasurableSup γ where
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ContinuousSup.measurableSup₂ [SecondCountableTopology γ] [Max γ]
     [ContinuousSup γ] : MeasurableSup₂ γ :=
   ⟨continuous_sup.measurable⟩
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ContinuousInf.measurableInf [Min γ] [ContinuousInf γ] :
     MeasurableInf γ where
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ContinuousInf.measurableInf₂ [SecondCountableTopology γ] [Min γ]
     [ContinuousInf γ] : MeasurableInf₂ γ :=
   ⟨continuous_inf.measurable⟩
@@ -2135,437 +2015,427 @@ section LinearOrder
 
 variable [LinearOrder α] [OrderTopology α] [SecondCountableTopology α]
 
-/--
-theorem `measurable_of_Iio` / 定理 `measurable_of_Iio`
-
-English:
-theorem measurable_of_Iio
-  given: {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iio x))
-  statement: Measurable f
-  proof: by
-  convert! measurable_generateFrom (α := δ) _
-  · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Iio _)
-  · rintro _ ⟨x, rfl⟩; exact hf x
-
-中文:
-定理 measurable_of_Iio
-  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左无界右开区间 x))
-  结论: 可测 f
-  证明: by
-  convert! measurable_generateFrom (α := δ) _
-  · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Iio _)
-  · rintro _ ⟨x, rfl⟩; exact hf x
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.trans, borel_eq_generateFrom_Iio, convert, measurable_eq, measurable_generateFrom
+/-
+**measurable_of_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_of_Iio {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iio x)
+) : Measurable f
+参数：hf : forall x, MeasurableSet (f ⁻¹' Iio x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Iio`：borel_eq_generateFrom_Iio : borel α = .genera
+teFrom (range Iio)
+· 使用定理 `measurable_generateFrom`：measurable_generateFrom [MeasurableSpace α] {s 
+: Set (Set β)} {f : α -> β} (h : forall t in s, MeasurableSet (f ⁻¹' t)) : @Meas
+urable _ _ _ …
 -/
-theorem measurable_of_Iio {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iio x)) : Measurable f := by
+theorem measurable_of_Iio {f : δ → α} (hf : ∀ x, MeasurableSet (f ⁻¹' Iio x)) : Measurable f := by
   convert! measurable_generateFrom (α := δ) _
   · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Iio _)
   · rintro _ ⟨x, rfl⟩; exact hf x
-
-/--
-theorem `UpperSemicontinuous.measurable` / 定理 `UpperSemicontinuous.measurable`
-
-English:
-theorem UpperSemicontinuous.measurable
-  statement: [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
-  proof: measurable_of_Iio fun y => (hf.isOpen_preimage y).measurableSet
-
-中文:
-定理 UpperSemicontinuous.measurable
-  结论: [拓扑空间 δ] [OpensMeasurable空间 δ] {f : δ -> α}
-  证明: measurable_of_Iio fun y => (hf.isOpen_preimage y).measurableSet
-
-Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage, measurableSet, measurable_of_Iio
+/-
+**UpperSemicontinuous.measurable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UpperSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace 
+δ] {f : δ -> α} (hf : UpperSemicontinuous f) : Measurable f
+参数：hf : UpperSemicontinuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_Iio`：measurable_of_Iio {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Iio x)) : Measurable f
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `UpperSemicontinuous.isOpen_preimage`：UpperSemicontinuous.isOpen_preimage
+ (hf : UpperSemicontinuous f) (y : β) : IsOpen (f ⁻¹' Iio y)
 -/
-theorem UpperSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
+theorem UpperSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ → α}
     (hf : UpperSemicontinuous f) : Measurable f :=
   measurable_of_Iio fun y => (hf.isOpen_preimage y).measurableSet
-
-/--
-theorem `measurable_of_Ioi` / 定理 `measurable_of_Ioi`
-
-English:
-theorem measurable_of_Ioi
-  given: {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ioi x))
-  statement: Measurable f
-  proof: by
-  convert! measurable_generateFrom (α := δ) _
-  · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ioi _)
-  · rintro _ ⟨x, rfl⟩; exact hf x
-
-中文:
-定理 measurable_of_Ioi
-  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左开右无界区间 x))
-  结论: 可测 f
-  证明: by
-  convert! measurable_generateFrom (α := δ) _
-  · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ioi _)
-  · rintro _ ⟨x, rfl⟩; exact hf x
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.trans, borel_eq_generateFrom_Ioi, convert, measurable_eq, measurable_generateFrom
+/-
+**measurable_of_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_of_Ioi {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ioi x)
+) : Measurable f
+参数：hf : forall x, MeasurableSet (f ⁻¹' Ioi x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Ioi`：borel_eq_generateFrom_Ioi : borel α = .genera
+teFrom (range Ioi)
+· 使用定理 `measurable_generateFrom`：measurable_generateFrom [MeasurableSpace α] {s 
+: Set (Set β)} {f : α -> β} (h : forall t in s, MeasurableSet (f ⁻¹' t)) : @Meas
+urable _ _ _ …
 -/
-theorem measurable_of_Ioi {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ioi x)) : Measurable f := by
+theorem measurable_of_Ioi {f : δ → α} (hf : ∀ x, MeasurableSet (f ⁻¹' Ioi x)) : Measurable f := by
   convert! measurable_generateFrom (α := δ) _
   · exact BorelSpace.measurable_eq.trans (borel_eq_generateFrom_Ioi _)
   · rintro _ ⟨x, rfl⟩; exact hf x
-
-/--
-lemma `measurable_iSup_of_lowerSemicontinuous` / 引理 `measurable_iSup_of_lowerSemicontinuous`
-
-English:
-lemma measurable_iSup_of_lowerSemicontinuous
-  statement: [CompleteLinearOrder β] [OrderTopology β]
-  proof: by
-  refine measurable_of_Ioi fun c => ?_
-  obtain ⟨J, cJ, dJ⟩ := TopologicalSpace.exists_countable_dense ι
-  suffices (⨆ i, f i) ⁻¹' Ioi c = ⋃ j in J, {x | c < f j x} by
-    rw [this]
-    exact .biUnion cJ fun j _ => by measurability
-  ext x
-  push _ in _
-  simp_rw [iSup_apply, lt_iSup_iff]
-  refine ⟨fun ⟨i, hi⟩ => ?_, by grind⟩
-  obtain ⟨v, hv, hv'⟩ := eventually_iff_exists_mem.1 (cf x i c hi)
-  have hj := dJ.inter_nhds_nonempty hv
-  exact ⟨hj.some, mem_of_mem_inter_left hj.some_mem,
-    hv' _ (mem_of_mem_inter_right hj.some_mem)⟩
-
-中文:
-引理 measurable_iSup_of_lowerSemicontinuous
-  结论: [完备线性序 β] [Order拓扑 β]
-  证明: by
-  refine measurable_of_Ioi fun c => ?_
-  obtain ⟨J, cJ, dJ⟩ := TopologicalSpace.exists_countable_dense ι
-  suffices (⨆ i, f i) ⁻¹' Ioi c = ⋃ j in J, {x | c < f j x} by
-    rw [this]
-    exact .biUnion cJ fun j _ => by measurability
-  ext x
-  push _ in _
-  simp_rw [iSup_apply, lt_iSup_iff]
-  refine ⟨fun ⟨i, hi⟩ => ?_, by grind⟩
-  obtain ⟨v, hv, hv'⟩ := eventually_iff_exists_mem.1 (cf x i c hi)
-  have hj := dJ.inter_nhds_nonempty hv
-  exact ⟨hj.some, mem_of_mem_inter_left hj.some_mem,
-    hv' _ (mem_of_mem_inter_right hj.some_mem)⟩
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.exists_countable_dense, biUnion, dJ.inter_nhds_nonempty, eventually_iff_exists_mem, exists_countable_dense, hj.some, hj.some_mem, iSup_apply, inter_nhds_nonempty, lt_iSup_iff, measurability, measurable_of_Ioi, mem_of_mem_inter_left, mem_of_mem_inter_right, simp_rw, some_mem
+/-
+**measurable_iSup_of_lowerSemicontinuous** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：measurable_iSup_of_lowerSemicontinuous [CompleteLinearOrder β] [OrderTopol
+ogy β] [SecondCountableTopology β] {ι : Type*} [TopologicalSpace ι] [SeparableSp
+ace ι] {f : ι -> δ -> β} (mf : forall t, Measurable (f t)) (cf : forall x, Lower
+Semicontinuous (f · x)) : Measurable (⨆ i, f i)
+参数：mf : forall t, Measurable (f t)；cf : forall x, LowerSemicontinuous (f · x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_Ioi`：measurable_of_Ioi {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Ioi x)) : Measurable f
+· 使用定理 `TopologicalSpace.exists_countable_dense`：exists_countable_dense [Separab
+leSpace α] : exists s : Set α, s.Countable ∧ Dense s
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_apply`：iSup_apply {α : Type*} {β : α -> Type*} {ι : Sort*} [forall 
+i, SupSet (β i)] {f : ι -> forall a, β a} {a : α} : (⨆ i, f i) a = ⨆ i, f i a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.eventually_iff_exists_mem`：eventually_iff_exists_mem {p : α -> Pr
+op} {f : Filter α} : (forallᶠ x in f, p x) ↔ exists v in f, forall y in v, p y
+· 使用定理 `Dense.inter_nhds_nonempty`：Dense.inter_nhds_nonempty (hs : Dense s) (ht 
+: t in 𝓝 x) : (s inter t).Nonempty
+· 使用定理 `Set.mem_of_mem_inter_left`：mem_of_mem_inter_left {x : α} {a b : Set α} (
+h : x in a inter b) : x in a
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Set.mem_of_mem_inter_right`：mem_of_mem_inter_right {x : α} {a b : Set α}
+ (h : x in a inter b) : x in b
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `measurable_lt`：measurable_lt [SecondCountableTopology α] [OrderClosedTop
+ology α] : Measurable fun p : α × α => p.1 < p.2
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
 -/
 lemma measurable_iSup_of_lowerSemicontinuous [CompleteLinearOrder β] [OrderTopology β]
     [SecondCountableTopology β]
     {ι : Type*} [TopologicalSpace ι] [SeparableSpace ι]
-    {f : ι -> δ -> β} (mf : forall t, Measurable (f t))
-    (cf : forall x, LowerSemicontinuous (f · x)) :
+    {f : ι → δ → β} (mf : ∀ t, Measurable (f t))
+    (cf : ∀ x, LowerSemicontinuous (f · x)) :
     Measurable (⨆ i, f i) := by
-  refine measurable_of_Ioi fun c => ?_
+  refine measurable_of_Ioi fun c ↦ ?_
   obtain ⟨J, cJ, dJ⟩ := TopologicalSpace.exists_countable_dense ι
-  suffices (⨆ i, f i) ⁻¹' Ioi c = ⋃ j in J, {x | c < f j x} by
+  suffices (⨆ i, f i) ⁻¹' Ioi c = ⋃ j ∈ J, {x | c < f j x} by
     rw [this]
-    exact .biUnion cJ fun j _ => by measurability
+    exact .biUnion cJ fun j _ ↦ by measurability
   ext x
-  push _ in _
+  push _ ∈ _
   simp_rw [iSup_apply, lt_iSup_iff]
-  refine ⟨fun ⟨i, hi⟩ => ?_, by grind⟩
+  refine ⟨fun ⟨i, hi⟩ ↦ ?_, by grind⟩
   obtain ⟨v, hv, hv'⟩ := eventually_iff_exists_mem.1 (cf x i c hi)
   have hj := dJ.inter_nhds_nonempty hv
   exact ⟨hj.some, mem_of_mem_inter_left hj.some_mem,
     hv' _ (mem_of_mem_inter_right hj.some_mem)⟩
-
-/--
-lemma `measurable_iInf_of_upperSemicontinuous` / 引理 `measurable_iInf_of_upperSemicontinuous`
-
-English:
-lemma measurable_iInf_of_upperSemicontinuous
-  statement: [CompleteLinearOrder β] [OrderTopology β]
-  proof: measurable_iSup_of_lowerSemicontinuous (β := βᵒᵈ) mf cf
-
-中文:
-引理 measurable_iInf_of_upperSemicontinuous
-  结论: [完备线性序 β] [Order拓扑 β]
-  证明: measurable_iSup_of_lowerSemicontinuous (β := βᵒᵈ) mf cf
-
-Depends on / 依赖: measurable_iSup_of_lowerSemicontinuous
+/-
+**measurable_iInf_of_upperSemicontinuous** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：measurable_iInf_of_upperSemicontinuous [CompleteLinearOrder β] [OrderTopol
+ogy β] [SecondCountableTopology β] {ι : Type*} [TopologicalSpace ι] [SeparableSp
+ace ι] {f : ι -> δ -> β} (mf : forall t, Measurable (f t)) (cf : forall x, Upper
+Semicontinuous (f · x)) : Measurable (⨅ i, f i)
+参数：mf : forall t, Measurable (f t)；cf : forall x, UpperSemicontinuous (f · x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `measurable_iSup_of_lowerSemicontinuous`：measurable_iSup_of_lowerSemicont
+inuous [CompleteLinearOrder β] [OrderTopology β] [SecondCountableTopology β] {ι 
+: Type*} [TopologicalSpace ι…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
 lemma measurable_iInf_of_upperSemicontinuous [CompleteLinearOrder β] [OrderTopology β]
     [SecondCountableTopology β]
     {ι : Type*} [TopologicalSpace ι] [SeparableSpace ι]
-    {f : ι -> δ -> β} (mf : forall t, Measurable (f t))
-    (cf : forall x, UpperSemicontinuous (f · x)) :
+    {f : ι → δ → β} (mf : ∀ t, Measurable (f t))
+    (cf : ∀ x, UpperSemicontinuous (f · x)) :
     Measurable (⨅ i, f i) :=
    measurable_iSup_of_lowerSemicontinuous (β := βᵒᵈ) mf cf
-
-/--
-theorem `LowerSemicontinuous.measurable` / 定理 `LowerSemicontinuous.measurable`
-
-English:
-theorem LowerSemicontinuous.measurable
-  statement: [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
-  proof: measurable_of_Ioi fun y => (hf.isOpen_preimage y).measurableSet
-
-中文:
-定理 LowerSemicontinuous.measurable
-  结论: [拓扑空间 δ] [OpensMeasurable空间 δ] {f : δ -> α}
-  证明: measurable_of_Ioi fun y => (hf.isOpen_preimage y).measurableSet
-
-Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage, measurableSet, measurable_of_Ioi
+/-
+**LowerSemicontinuous.measurable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LowerSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace 
+δ] {f : δ -> α} (hf : LowerSemicontinuous f) : Measurable f
+参数：hf : LowerSemicontinuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_Ioi`：measurable_of_Ioi {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Ioi x)) : Measurable f
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `LowerSemicontinuous.isOpen_preimage`：LowerSemicontinuous.isOpen_preimage
+ (hf : LowerSemicontinuous f) (y : β) : IsOpen (f ⁻¹' Ioi y)
 -/
-theorem LowerSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ -> α}
+theorem LowerSemicontinuous.measurable [TopologicalSpace δ] [OpensMeasurableSpace δ] {f : δ → α}
     (hf : LowerSemicontinuous f) : Measurable f :=
   measurable_of_Ioi fun y => (hf.isOpen_preimage y).measurableSet
-
-/--
-theorem `measurable_of_Iic` / 定理 `measurable_of_Iic`
-
-English:
-theorem measurable_of_Iic
-  given: {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iic x))
-  statement: Measurable f
-  proof: by
-  apply measurable_of_Ioi
-  simp_rw [← compl_Iic, preimage_compl, MeasurableSet.compl_iff]
-  assumption
-
-中文:
-定理 measurable_of_Iic
-  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左无界右闭区间 x))
-  结论: 可测 f
-  证明: by
-  apply measurable_of_Ioi
-  simp_rw [← compl_Iic, preimage_compl, MeasurableSet.compl_iff]
-  assumption
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.compl_iff, compl_Iic, compl_iff, measurable_of_Ioi, preimage_compl, simp_rw
+/-
+**measurable_of_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_of_Iic {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iic x)
+) : Measurable f
+参数：hf : forall x, MeasurableSet (f ⁻¹' Iic x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_Ioi`：measurable_of_Ioi {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Ioi x)) : Measurable f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem measurable_of_Iic {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Iic x)) : Measurable f := by
+theorem measurable_of_Iic {f : δ → α} (hf : ∀ x, MeasurableSet (f ⁻¹' Iic x)) : Measurable f := by
   apply measurable_of_Ioi
   simp_rw [← compl_Iic, preimage_compl, MeasurableSet.compl_iff]
   assumption
-
-/--
-theorem `measurable_of_Ici` / 定理 `measurable_of_Ici`
-
-English:
-theorem measurable_of_Ici
-  given: {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ici x))
-  statement: Measurable f
-  proof: by
-  apply measurable_of_Iio
-  simp_rw [← compl_Ici, preimage_compl, MeasurableSet.compl_iff]
-  assumption
-
-中文:
-定理 measurable_of_Ici
-  条件: {f : δ -> α} (hf : 对任意 x, 可测集 (f ⁻¹' 左闭右无界区间 x))
-  结论: 可测 f
-  证明: by
-  apply measurable_of_Iio
-  simp_rw [← compl_Ici, preimage_compl, MeasurableSet.compl_iff]
-  assumption
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.compl_iff, compl_Ici, compl_iff, measurable_of_Iio, preimage_compl, simp_rw
+/-
+**measurable_of_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_of_Ici {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ici x)
+) : Measurable f
+参数：hf : forall x, MeasurableSet (f ⁻¹' Ici x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_Iio`：measurable_of_Iio {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Iio x)) : Measurable f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem measurable_of_Ici {f : δ -> α} (hf : forall x, MeasurableSet (f ⁻¹' Ici x)) : Measurable f := by
+theorem measurable_of_Ici {f : δ → α} (hf : ∀ x, MeasurableSet (f ⁻¹' Ici x)) : Measurable f := by
   apply measurable_of_Iio
   simp_rw [← compl_Ici, preimage_compl, MeasurableSet.compl_iff]
   assumption
 
-/--
-theorem `Measurable.isLUB` / 定理 `Measurable.isLUB`
+/-- If a function is the least upper bound of countably many measurable functions,
+then it is measurable. -/
+/-
+**Measurable.isLUB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.isLUB {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : fo
+rall i, Measurable (f i)) (hg : forall b, IsLUB { a | exists i, f i b = a } (g b
+)) : Measurable g
+参数：hf : forall i, Measurable (f i)；hg : forall b, IsLUB { a | exists i, f i b = 
+a } (g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `borel_eq_generateFrom_Ioi`：borel_eq_generateFrom_Ioi : borel α = .genera
+teFrom (range Ioi)
+· 使用定理 `measurable_generateFrom`：measurable_generateFrom [MeasurableSpace α] {s 
+: Set (Set β)} {f : α -> β} (h : forall t in s, MeasurableSet (f ⁻¹' t)) : @Meas
+urable _ _ _ …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `lt_isLUB_iff`：lt_isLUB_iff (h : IsLUB s a) : b < a ↔ exists c in s, b < 
+c
+· 使用定理 `Set.ofPred_exists`：ofPred_exists (p : ι -> β -> Prop) : { x | exists i, 
+p i x } = ⋃ i, { x | p i x }
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `isOpen_lt'`：isOpen_lt' [OrderTopology α] (a : α) : IsOpen { b : α | a < 
+b }
 
-English:
-theorem Measurable.isLUB
-  statement: {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : forall i, Measurable (f i))
-  proof: by
-  change forall b, IsLUB (range fun i => f i b) (g b) at hg
-  rw [‹BorelSpace α›.measurable_eq]; rw [borel_eq_generateFrom_Ioi α]
+--- 原说明 ---
+If a function is the least upper bound of countably many measurable functions,
+then it is measurable.
+-/
+theorem Measurable.isLUB {ι} [Countable ι] {f : ι → δ → α} {g : δ → α} (hf : ∀ i, Measurable (f i))
+    (hg : ∀ b, IsLUB { a | ∃ i, f i b = a } (g b)) : Measurable g := by
+  change ∀ b, IsLUB (range fun i => f i b) (g b) at hg
+  rw [‹BorelSpace α›.measurable_eq, borel_eq_generateFrom_Ioi α]
   apply measurable_generateFrom
   rintro _ ⟨a, rfl⟩
   simp_rw [Set.preimage, mem_Ioi, lt_isLUB_iff (hg _), exists_range_iff, ofPred_exists]
   exact MeasurableSet.iUnion fun i => hf i (isOpen_lt' _).measurableSet
 
-中文:
-定理 可测.isLUB
-  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: by
-  change forall b, IsLUB (range fun i => f i b) (g b) at hg
-  rw [‹BorelSpace α›.measurable_eq]; rw [borel_eq_generateFrom_Ioi α]
-  apply measurable_generateFrom
-  rintro _ ⟨a, rfl⟩
-  simp_rw [Set.preimage, mem_Ioi, lt_isLUB_iff (hg _), exists_range_iff, ofPred_exists]
-  exact MeasurableSet.iUnion fun i => hf i (isOpen_lt' _).measurableSet
+/-- If a function is the least upper bound of countably many measurable functions on a measurable
+set `s`, and coincides with a measurable function outside of `s`, then it is measurable. -/
+/-
+**Measurable.isLUB_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.isLUB_of_mem {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α
+} (hf : forall i, Measurable (f i)) {s : Set δ} (hs : MeasurableSet s) (hg : for
+all b in s, IsLUB { a | exists i, f i b = a } (g b)) (hg' : EqOn g g' sᶜ) (g'_me
+as : Measurable g') : Measurable g
+参数：hf : forall i, Measurable (f i)；hs : MeasurableSet s；hg : forall b in s, IsLU
+B { a | exists i, f i b = a } (g b)；hg' : EqOn g g' sᶜ；g'_meas : Measurable g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eqOn_univ`：eqOn_univ (f₁ f₂ : α -> β) : EqOn f₁ f₂ univ ↔ f₁ = f₂
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.piecewise_eq_of_mem`：piecewise_eq_of_mem {i : α} (hi : i in s) : s.p
+iecewise f g i = f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.piecewise_eq_of_notMem`：piecewise_eq_of_notMem {i : α} (hi : i ∉ s) 
+: s.piecewise f g i = g i
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Measurable.piecewise`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f g :
+ α → β} {m : MeasurableSpace α} {mβ : MeasurableSpace β}   {x : DecidablePred fu
+n x => x ∈…
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `Set.ofPred_eq_eq_singleton'`：ofPred_eq_eq_singleton' {a : α} : { x | a =
+ x } = {a}
+· 使用定理 `Measurable.isLUB`：Measurable.isLUB {ι} [Countable ι] {f : ι -> δ -> α} {
+g : δ -> α} (hf : forall i, Measurable (f i)) (hg : forall b, IsLUB { a | exists
+ i, f …
 
-Depends on / 依赖: BorelSpace, MeasurableSet, MeasurableSet.iUnion, Set.preimage, borel_eq_generateFrom_Ioi, exists_range_iff, iUnion, isOpen_lt, lt_isLUB_iff, measurableSet, measurable_eq, measurable_generateFrom, mem_Ioi, ofPred_exists, preimage, simp_rw
+--- 原说明 ---
+If a function is the least upper bound of countably many measurable functions on
+ a measurable
+set `s`, and coincides with a measurable function outside of `s`, then it is mea
+surable.
 -/
-theorem Measurable.isLUB {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : forall i, Measurable (f i))
-    (hg : forall b, IsLUB { a | exists i, f i b = a } (g b)) : Measurable g := by
-  change forall b, IsLUB (range fun i => f i b) (g b) at hg
-  rw [‹BorelSpace α›.measurable_eq]; rw [borel_eq_generateFrom_Ioi α]
-  apply measurable_generateFrom
-  rintro _ ⟨a, rfl⟩
-  simp_rw [Set.preimage, mem_Ioi, lt_isLUB_iff (hg _), exists_range_iff, ofPred_exists]
-  exact MeasurableSet.iUnion fun i => hf i (isOpen_lt' _).measurableSet
-
-/--
-theorem `Measurable.isLUB_of_mem` / 定理 `Measurable.isLUB_of_mem`
-
-English:
-theorem Measurable.isLUB_of_mem
-  statement: {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
-  proof: by
-  classical
-  rcases isEmpty_or_nonempty ι with hι | ⟨⟨i⟩⟩
-  · rcases eq_empty_or_nonempty s with rfl | ⟨x, hx⟩
-    · convert! g'_meas
-      rwa [compl_empty, eqOn_univ] at hg'
-    · have A : forall b in s, IsBot (g b) := by simpa using hg
-      have B : forall b in s, g b = g x := by
-        intro b hb
-        apply le_antisymm (A b hb (g x)) (A x hx (g b))
-      have : g = s.piecewise (fun _y => g x) g' := by
-        ext b
-        by_cases hb : b in s
-        · simp [hb, B]
-        · simp [hb, hg' hb]
-      rw [this]
-      exact Measurable.piecewise hs measurable_const g'_meas
-  · have : Nonempty ι := ⟨i⟩
-    let f' : ι -> δ -> α := fun i => s.piecewise (f i) g'
-    suffices forall b, IsLUB { a | exists i, f' i b = a } (g b) from
-      Measurable.isLUB (fun i => Measurable.piecewise hs (hf i) g'_meas) this
-    intro b
-    by_cases hb : b in s
-    · have A : forall i, f' i b = f i b := fun i => by simp [f', hb]
-      simpa [A] using hg b hb
-    · have A : forall i, f' i b = g' b := fun i => by simp [f', hb]
-      simp [A, hg' hb, isLUB_singleton]
-
-中文:
-定理 可测.isLUB_of_mem
-  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g g' : δ -> α}
-  证明: by
-  classical
-  rcases isEmpty_or_nonempty ι with hι | ⟨⟨i⟩⟩
-  · rcases eq_empty_or_nonempty s with rfl | ⟨x, hx⟩
-    · convert! g'_meas
-      rwa [compl_empty, eqOn_univ] at hg'
-    · have A : forall b in s, IsBot (g b) := by simpa using hg
-      have B : forall b in s, g b = g x := by
-        intro b hb
-        apply le_antisymm (A b hb (g x)) (A x hx (g b))
-      have : g = s.piecewise (fun _y => g x) g' := by
-        ext b
-        by_cases hb : b in s
-        · simp [hb, B]
-        · simp [hb, hg' hb]
-      rw [this]
-      exact Measurable.piecewise hs measurable_const g'_meas
-  · have : Nonempty ι := ⟨i⟩
-    let f' : ι -> δ -> α := fun i => s.piecewise (f i) g'
-    suffices forall b, IsLUB { a | exists i, f' i b = a } (g b) from
-      Measurable.isLUB (fun i => Measurable.piecewise hs (hf i) g'_meas) this
-    intro b
-    by_cases hb : b in s
-    · have A : forall i, f' i b = f i b := fun i => by simp [f', hb]
-      simpa [A] using hg b hb
-    · have A : forall i, f' i b = g' b := fun i => by simp [f', hb]
-      simp [A, hg' hb, isLUB_singleton]
-
-Depends on / 依赖: Measurable, Measurable.piecewise, _meas, classical, compl_empty, convert, eqOn_univ, eq_empty_or_nonempty, isEmpty_or_nonempty, le_antisymm, measurable_const, piecewise, s.piecewise
--/
-theorem Measurable.isLUB_of_mem {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
-    (hf : forall i, Measurable (f i))
-    {s : Set δ} (hs : MeasurableSet s) (hg : forall b in s, IsLUB { a | exists i, f i b = a } (g b))
+theorem Measurable.isLUB_of_mem {ι} [Countable ι] {f : ι → δ → α} {g g' : δ → α}
+    (hf : ∀ i, Measurable (f i))
+    {s : Set δ} (hs : MeasurableSet s) (hg : ∀ b ∈ s, IsLUB { a | ∃ i, f i b = a } (g b))
     (hg' : EqOn g g' sᶜ) (g'_meas : Measurable g') : Measurable g := by
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨i⟩⟩
   · rcases eq_empty_or_nonempty s with rfl | ⟨x, hx⟩
     · convert! g'_meas
       rwa [compl_empty, eqOn_univ] at hg'
-    · have A : forall b in s, IsBot (g b) := by simpa using hg
-      have B : forall b in s, g b = g x := by
+    · have A : ∀ b ∈ s, IsBot (g b) := by simpa using hg
+      have B : ∀ b ∈ s, g b = g x := by
         intro b hb
         apply le_antisymm (A b hb (g x)) (A x hx (g b))
-      have : g = s.piecewise (fun _y => g x) g' := by
+      have : g = s.piecewise (fun _y ↦ g x) g' := by
         ext b
-        by_cases hb : b in s
+        by_cases hb : b ∈ s
         · simp [hb, B]
         · simp [hb, hg' hb]
       rw [this]
       exact Measurable.piecewise hs measurable_const g'_meas
   · have : Nonempty ι := ⟨i⟩
-    let f' : ι -> δ -> α := fun i => s.piecewise (f i) g'
-    suffices forall b, IsLUB { a | exists i, f' i b = a } (g b) from
-      Measurable.isLUB (fun i => Measurable.piecewise hs (hf i) g'_meas) this
+    let f' : ι → δ → α := fun i ↦ s.piecewise (f i) g'
+    suffices ∀ b, IsLUB { a | ∃ i, f' i b = a } (g b) from
+      Measurable.isLUB (fun i ↦ Measurable.piecewise hs (hf i) g'_meas) this
     intro b
-    by_cases hb : b in s
-    · have A : forall i, f' i b = f i b := fun i => by simp [f', hb]
+    by_cases hb : b ∈ s
+    · have A : ∀ i, f' i b = f i b := fun i ↦ by simp [f', hb]
       simpa [A] using hg b hb
-    · have A : forall i, f' i b = g' b := fun i => by simp [f', hb]
+    · have A : ∀ i, f' i b = g' b := fun i ↦ by simp [f', hb]
       simp [A, hg' hb, isLUB_singleton]
-
-/--
-theorem `AEMeasurable.isLUB` / 定理 `AEMeasurable.isLUB`
-
-English:
-theorem AEMeasurable.isLUB
-  statement: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
-  proof: by
-  classical
-  nontriviality α
-  have hα : Nonempty α := inferInstance
-  rcases isEmpty_or_nonempty ι with hι | hι
-  · simp only [IsEmpty.exists_iff, ofPred_false, isLUB_empty_iff] at hg
-    exact aemeasurable_const' (hg.mono fun a ha => hg.mono fun b hb => (ha _).antisymm (hb _))
-  let p : δ -> (ι -> α) -> Prop := fun x f' => IsLUB { a | exists i, f' i = a } (g x)
-  let g_seq := (aeSeqSet hf p).piecewise g fun _ => hα.some
-  have hg_seq : forall b, IsLUB { a | exists i, aeSeq hf p i b = a } (g_seq b) := by
-    intro b
-    simp only [g_seq, aeSeq, Set.piecewise]
-    split_ifs with h
-    · have h_set_eq : { a : α | exists i : ι, (hf i).mk (f i) b = a } =
-        { a : α | exists i : ι, f i b = a } := by
-        ext x
-        simp_rw [Set.mem_ofPred_eq, aeSeq.mk_eq_fun_of_mem_aeSeqSet hf h]
-      rw [h_set_eq]
-      exact aeSeq.fun_prop_of_mem_aeSeqSet hf h
-    · exact IsGreatest.isLUB ⟨(@exists_const (hα.some = hα.some) ι _).2 rfl, fun x ⟨i, hi⟩ => hi.ge⟩
-  refine ⟨g_seq, Measurable.isLUB (aeSeq.measurable hf p) hg_seq, ?_⟩
-  exact
-    (ite_ae_eq_of_measure_compl_zero g (fun _ => hα.some) (aeSeqSet hf p)
-        (aeSeq.measure_compl_aeSeqSet_eq_zero hf hg)).symm
-
-中文:
-定理 几乎处处可测.isLUB
-  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α} {g : δ -> α}
-  证明: by
-  classical
-  nontriviality α
-  have hα : Nonempty α := inferInstance
-  rcases isEmpty_or_nonempty ι with hι | hι
-  · simp only [IsEmpty.exists_iff, ofPred_false, isLUB_empty_iff] at hg
-    exact aemeasurable_const' (hg.mono fun a ha => hg.mono fun b hb => (ha _).antisymm (hb _))
-  let p : δ -> (ι -> α) -> Prop := fun x f' => IsLUB { a | exists i, f' i = a } (g x)
-  let g_seq := (aeSeqSet hf p).piecewise g fun _ => hα.some
-  have hg_seq : forall b, IsLUB { a | exists i, aeSeq hf p i b = a } (g_seq b) := by
-    intro b
-    simp only [g_seq, aeSeq, Set.piecewise]
-    split_ifs with h
-    · have h_set_eq : { a : α | exists i : ι, (hf i).mk (f i) b = a } =
-        { a : α | exists i : ι, f i b = a } := by
-        ext x
-        simp_rw [Set.mem_ofPred_eq, aeSeq.mk_eq_fun_of_mem_aeSeqSet hf h]
-      rw [h_set_eq]
-      exact aeSeq.fun_prop_of_mem_aeSeqSet hf h
-    · exact IsGreatest.isLUB ⟨(@exists_const (hα.some = hα.some) ι _).2 rfl, fun x ⟨i, hi⟩ => hi.ge⟩
-  refine ⟨g_seq, Measurable.isLUB (aeSeq.measurable hf p) hg_seq, ?_⟩
-  exact
-    (ite_ae_eq_of_measure_compl_zero g (fun _ => hα.some) (aeSeqSet hf p)
-        (aeSeq.measure_compl_aeSeqSet_eq_zero hf hg)).symm
-
-Depends on / 依赖: IsEmpty, IsEmpty.exists_iff, Nonempty, aeSeqSet, aemeasurable_const, antisymm, classical, exists_iff, g_seq, hg.mono, hg_seq, isEmpty_or_nonempty, isLUB_empty_iff, nontriviality, ofPred_false, piecewise
+/-
+**AEMeasurable.isLUB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g 
+: δ -> α} (hf : forall i, AEMeasurable (f i) μ) (hg : forallᵐ b ∂μ, IsLUB { a | 
+exists i, f i b = a } (g b)) : AEMeasurable g μ
+参数：hf : forall i, AEMeasurable (f i) μ；hg : forallᵐ b ∂μ, IsLUB { a | exists i, 
+f i b = a } (g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `aemeasurable_const'`：aemeasurable_const' (h : forallᵐ (x) (y) ∂μ, f x = 
+f y) : AEMeasurable f μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Set.piecewise.eq_1`：∀ {α : Type u} {β : α → Sort v} (s : Set α) (f g : (
+i : α) → β i) [inst : (j : α) → Decidable (j ∈ s)] (i : α),   s.piecewise f g i 
+= if i ∈…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `aeSeq.mk_eq_fun_of_mem_aeSeqSet`：mk_eq_fun_of_mem_aeSeqSet (hf : forall 
+i, AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p) (i : ι) : (hf i).mk (
+f i) x = f i x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `aeSeq.fun_prop_of_mem_aeSeqSet`：fun_prop_of_mem_aeSeqSet (hf : forall i,
+ AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p) : p x fun n => f n x
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `IsGreatest.isLUB`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {a : 
+α}, IsGreatest s a → IsLUB s a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `exists_const`：∀ {b : Prop} (α : Sort u_1) [i : Nonempty α], (∃ x, b) ↔ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Measurable.isLUB`：Measurable.isLUB {ι} [Countable ι] {f : ι -> δ -> α} {
+g : δ -> α} (hf : forall i, Measurable (f i)) (hg : forall b, IsLUB { a | exists
+ i, f …
+· 使用定理 `aeSeq.measurable`：measurable (hf : forall i, AEMeasurable (f i) μ) (p : 
+α -> (ι -> β) -> Prop) (i : ι) : Measurable (aeSeq hf p i)
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.ite_ae_eq_of_measure_compl_zero`：ite_ae_eq_of_measure_comp
+l_zero {γ} (f : α -> γ) (g : α -> γ) (s : Set α) [DecidablePred (· in s)] (hs_ze
+ro : μ sᶜ = 0) : (fun x => ite (x i…
+· 使用定理 `aeSeq.measure_compl_aeSeqSet_eq_zero`：measure_compl_aeSeqSet_eq_zero [Co
+untable ι] (hf : forall i, AEMeasurable (f i) μ) (hp : forallᵐ x ∂μ, p x fun n =
+> f n x) : μ (aeSeqSet hf …
 -/
-theorem AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
-    (hf : forall i, AEMeasurable (f i) μ) (hg : forallᵐ b ∂μ, IsLUB { a | exists i, f i b = a } (g b)) :
+theorem AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι] {f : ι → δ → α} {g : δ → α}
+    (hf : ∀ i, AEMeasurable (f i) μ) (hg : ∀ᵐ b ∂μ, IsLUB { a | ∃ i, f i b = a } (g b)) :
     AEMeasurable g μ := by
   classical
   nontriviality α
@@ -2573,14 +2443,14 @@ theorem AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -
   rcases isEmpty_or_nonempty ι with hι | hι
   · simp only [IsEmpty.exists_iff, ofPred_false, isLUB_empty_iff] at hg
     exact aemeasurable_const' (hg.mono fun a ha => hg.mono fun b hb => (ha _).antisymm (hb _))
-  let p : δ -> (ι -> α) -> Prop := fun x f' => IsLUB { a | exists i, f' i = a } (g x)
+  let p : δ → (ι → α) → Prop := fun x f' => IsLUB { a | ∃ i, f' i = a } (g x)
   let g_seq := (aeSeqSet hf p).piecewise g fun _ => hα.some
-  have hg_seq : forall b, IsLUB { a | exists i, aeSeq hf p i b = a } (g_seq b) := by
+  have hg_seq : ∀ b, IsLUB { a | ∃ i, aeSeq hf p i b = a } (g_seq b) := by
     intro b
     simp only [g_seq, aeSeq, Set.piecewise]
     split_ifs with h
-    · have h_set_eq : { a : α | exists i : ι, (hf i).mk (f i) b = a } =
-        { a : α | exists i : ι, f i b = a } := by
+    · have h_set_eq : { a : α | ∃ i : ι, (hf i).mk (f i) b = a } =
+        { a : α | ∃ i : ι, f i b = a } := by
         ext x
         simp_rw [Set.mem_ofPred_eq, aeSeq.mk_eq_fun_of_mem_aeSeqSet hf h]
       rw [h_set_eq]
@@ -2591,240 +2461,333 @@ theorem AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -
     (ite_ae_eq_of_measure_compl_zero g (fun _ => hα.some) (aeSeqSet hf p)
         (aeSeq.measure_compl_aeSeqSet_eq_zero hf hg)).symm
 
-/--
-theorem `Measurable.isGLB` / 定理 `Measurable.isGLB`
+/-- If a function is the greatest lower bound of countably many measurable functions,
+then it is measurable. -/
+/-
+**Measurable.isGLB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.isGLB {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : fo
+rall i, Measurable (f i)) (hg : forall b, IsGLB { a | exists i, f i b = a } (g b
+)) : Measurable g
+参数：hf : forall i, Measurable (f i)；hg : forall b, IsGLB { a | exists i, f i b = 
+a } (g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.isLUB`：Measurable.isLUB {ι} [Countable ι] {f : ι -> δ -> α} {
+g : δ -> α} (hf : forall i, Measurable (f i)) (hg : forall b, IsLUB { a | exists
+ i, f …
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 
-English:
-theorem Measurable.isGLB
-  statement: {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : forall i, Measurable (f i))
-  proof: Measurable.isLUB (α := αᵒᵈ) hf hg
-
-中文:
-定理 可测.isGLB
-  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g : δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: Measurable.isLUB (α := αᵒᵈ) hf hg
-
-Depends on / 依赖: Measurable, Measurable.isLUB
+--- 原说明 ---
+If a function is the greatest lower bound of countably many measurable functions
+,
+then it is measurable.
 -/
-theorem Measurable.isGLB {ι} [Countable ι] {f : ι -> δ -> α} {g : δ -> α} (hf : forall i, Measurable (f i))
-    (hg : forall b, IsGLB { a | exists i, f i b = a } (g b)) : Measurable g :=
+theorem Measurable.isGLB {ι} [Countable ι] {f : ι → δ → α} {g : δ → α} (hf : ∀ i, Measurable (f i))
+    (hg : ∀ b, IsGLB { a | ∃ i, f i b = a } (g b)) : Measurable g :=
   Measurable.isLUB (α := αᵒᵈ) hf hg
 
-/--
-theorem `Measurable.isGLB_of_mem` / 定理 `Measurable.isGLB_of_mem`
+/-- If a function is the greatest lower bound of countably many measurable functions on a measurable
+set `s`, and coincides with a measurable function outside of `s`, then it is measurable. -/
+/-
+**Measurable.isGLB_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.isGLB_of_mem {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α
+} (hf : forall i, Measurable (f i)) {s : Set δ} (hs : MeasurableSet s) (hg : for
+all b in s, IsGLB { a | exists i, f i b = a } (g b)) (hg' : EqOn g g' sᶜ) (g'_me
+as : Measurable g') : Measurable g
+参数：hf : forall i, Measurable (f i)；hs : MeasurableSet s；hg : forall b in s, IsGL
+B { a | exists i, f i b = a } (g b)；hg' : EqOn g g' sᶜ；g'_meas : Measurable g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.isLUB_of_mem`：Measurable.isLUB_of_mem {ι} [Countable ι] {f : 
+ι -> δ -> α} {g g' : δ -> α} (hf : forall i, Measurable (f i)) {s : Set δ} (hs :
+ MeasurableSe…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 
-English:
-theorem Measurable.isGLB_of_mem
-  statement: {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
-  proof: Measurable.isLUB_of_mem (α := αᵒᵈ) hf hs hg hg' g'_meas
-
-中文:
-定理 可测.isGLB_of_mem
-  结论: {ι} [可数 ι] {f : ι -> δ -> α} {g g' : δ -> α}
-  证明: Measurable.isLUB_of_mem (α := αᵒᵈ) hf hs hg hg' g'_meas
-
-Depends on / 依赖: Measurable, Measurable.isLUB_of_mem, _meas, isLUB_of_mem
+--- 原说明 ---
+If a function is the greatest lower bound of countably many measurable functions
+ on a measurable
+set `s`, and coincides with a measurable function outside of `s`, then it is mea
+surable.
 -/
-theorem Measurable.isGLB_of_mem {ι} [Countable ι] {f : ι -> δ -> α} {g g' : δ -> α}
-    (hf : forall i, Measurable (f i))
-    {s : Set δ} (hs : MeasurableSet s) (hg : forall b in s, IsGLB { a | exists i, f i b = a } (g b))
+theorem Measurable.isGLB_of_mem {ι} [Countable ι] {f : ι → δ → α} {g g' : δ → α}
+    (hf : ∀ i, Measurable (f i))
+    {s : Set δ} (hs : MeasurableSet s) (hg : ∀ b ∈ s, IsGLB { a | ∃ i, f i b = a } (g b))
     (hg' : EqOn g g' sᶜ) (g'_meas : Measurable g') : Measurable g :=
   Measurable.isLUB_of_mem (α := αᵒᵈ) hf hs hg hg' g'_meas
-
-/--
-theorem `AEMeasurable.isGLB` / 定理 `AEMeasurable.isGLB`
-
-English:
-theorem AEMeasurable.isGLB
-  statement: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
-  proof: AEMeasurable.isLUB (α := αᵒᵈ) hf hg
-
-中文:
-定理 几乎处处可测.isGLB
-  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α} {g : δ -> α}
-  证明: AEMeasurable.isLUB (α := αᵒᵈ) hf hg
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.isLUB
+/-
+**AEMeasurable.isGLB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.isGLB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g 
+: δ -> α} (hf : forall i, AEMeasurable (f i) μ) (hg : forallᵐ b ∂μ, IsGLB { a | 
+exists i, f i b = a } (g b)) : AEMeasurable g μ
+参数：hf : forall i, AEMeasurable (f i) μ；hg : forallᵐ b ∂μ, IsGLB { a | exists i, 
+f i b = a } (g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `AEMeasurable.isLUB`：AEMeasurable.isLUB {ι} {μ : Measure δ} [Countable ι]
+ {f : ι -> δ -> α} {g : δ -> α} (hf : forall i, AEMeasurable (f i) μ) (hg : fora
+llᵐ b ∂μ…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-theorem AEMeasurable.isGLB {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α} {g : δ -> α}
-    (hf : forall i, AEMeasurable (f i) μ) (hg : forallᵐ b ∂μ, IsGLB { a | exists i, f i b = a } (g b)) :
+theorem AEMeasurable.isGLB {ι} {μ : Measure δ} [Countable ι] {f : ι → δ → α} {g : δ → α}
+    (hf : ∀ i, AEMeasurable (f i) μ) (hg : ∀ᵐ b ∂μ, IsGLB { a | ∃ i, f i b = a } (g b)) :
     AEMeasurable g μ :=
   AEMeasurable.isLUB (α := αᵒᵈ) hf hg
-
-/--
-theorem `Monotone.measurable` / 定理 `Monotone.measurable`
-
-English:
-theorem Monotone.measurable
-  statement: [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
-  proof: suffices h : forall x, OrdConnected (f ⁻¹' Ioi x) from measurable_of_Ioi fun x => (h x).measurableSet
-  fun _ => ordConnected_def.mpr fun _a ha _ _ _c hc => lt_of_lt_of_le ha (hf hc.1)
-
-中文:
-定理 递增.measurable
-  结论: [线性序 β] [OrderClosed拓扑 β] {f : β -> α}
-  证明: suffices h : forall x, OrdConnected (f ⁻¹' Ioi x) from measurable_of_Ioi fun x => (h x).measurableSet
-  fun _ => ordConnected_def.mpr fun _a ha _ _ _c hc => lt_of_lt_of_le ha (hf hc.1)
+/-
+**Monotone.measurable** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   [inst_2 : TopologicalSpace β] {mβ : MeasurableSpace 
+β} [BorelSpace β] [inst_4 : LinearOrder α] [OrderTopology α]   [SecondCountableT
+opology α] [inst : LinearOrder β] [OrderClosedTopology β] {f : β → α}, Monotone 
+f → Measurable f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.ordConnected_def`：ordConnected_def : OrdConnected s ↔ forall ⦃x⦄ (_ 
+: x in s) ⦃y⦄ (_ : y in s), Icc x y subseteq s
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `measurable_of_Ioi`：measurable_of_Ioi {f : δ -> α} (hf : forall x, Measur
+ableSet (f ⁻¹' Ioi x)) : Measurable f
+· 使用定理 `Set.OrdConnected.measurableSet`：Set.OrdConnected.measurableSet [OrderClo
+sedTopology α] (h : OrdConnected s) : MeasurableSet s
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
 -/
-protected theorem Monotone.measurable [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
+protected theorem Monotone.measurable [LinearOrder β] [OrderClosedTopology β] {f : β → α}
     (hf : Monotone f) : Measurable f :=
-  suffices h : forall x, OrdConnected (f ⁻¹' Ioi x) from measurable_of_Ioi fun x => (h x).measurableSet
+  suffices h : ∀ x, OrdConnected (f ⁻¹' Ioi x) from measurable_of_Ioi fun x => (h x).measurableSet
   fun _ => ordConnected_def.mpr fun _a ha _ _ _c hc => lt_of_lt_of_le ha (hf hc.1)
-
-/--
-theorem `aemeasurable_restrict_of_monotoneOn` / 定理 `aemeasurable_restrict_of_monotoneOn`
-
-English:
-theorem aemeasurable_restrict_of_monotoneOn
-  statement: [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
-  proof: have : Monotone (f ∘ (↑) : s -> α) := fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (hxy : x <= y) => hf hx hy hxy
-  aemeasurable_restrict_of_measurable_subtype hs this.measurable
-
-中文:
-定理 aemeasurable_restrict_of_monotoneOn
-  结论: [线性序 β] [OrderClosed拓扑 β] {μ : 测度 β}
-  证明: have : Monotone (f ∘ (↑) : s -> α) := fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (hxy : x <= y) => hf hx hy hxy
-  aemeasurable_restrict_of_measurable_subtype hs this.measurable
-
-Depends on / 依赖: Monotone, aemeasurable_restrict_of_measurable_subtype, measurable, this.measurable
+/-
+**aemeasurable_restrict_of_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：aemeasurable_restrict_of_monotoneOn [LinearOrder β] [OrderClosedTopology β
+] {μ : Measure β} {s : Set β} (hs : MeasurableSet s) {f : β -> α} (hf : Monotone
+On f s) : AEMeasurable f (μ.restrict s)
+参数：hs : MeasurableSet s；hf : MonotoneOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `aemeasurable_restrict_of_measurable_subtype`：aemeasurable_restrict_of_me
+asurable_subtype {s : Set α} (hs : MeasurableSet s) (hf : Measurable fun x : s =
+> f x) : AEMeasurable f (μ.restri…
+· 使用定理 `Monotone.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Topological
+Space α] {mα : MeasurableSpace α} [BorelSpace α]   [inst_2 : TopologicalSpace β]
+ {mβ : Me…
+· 使用定理 `Subtype.instOrderClosedTopology`：∀ {α : Type u} [inst : TopologicalSpace
+ α] [inst_1 : Preorder α] [t : OrderClosedTopology α] {p : α → Prop},   OrderClo
+sedTopology (Subtype …
 -/
 theorem aemeasurable_restrict_of_monotoneOn [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
-    {s : Set β} (hs : MeasurableSet s) {f : β -> α} (hf : MonotoneOn f s) :
+    {s : Set β} (hs : MeasurableSet s) {f : β → α} (hf : MonotoneOn f s) :
     AEMeasurable f (μ.restrict s) :=
-  have : Monotone (f ∘ (↑) : s -> α) := fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (hxy : x <= y) => hf hx hy hxy
+  have : Monotone (f ∘ (↑) : s → α) := fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (hxy : x ≤ y) => hf hx hy hxy
   aemeasurable_restrict_of_measurable_subtype hs this.measurable
-
-/--
-theorem `Antitone.measurable` / 定理 `Antitone.measurable`
-
-English:
-theorem Antitone.measurable
-  statement: [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
-  proof: @Monotone.measurable αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ hf
-
-中文:
-定理 递减.measurable
-  结论: [线性序 β] [OrderClosed拓扑 β] {f : β -> α}
-  证明: @Monotone.measurable αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ hf
+/-
+**Antitone.measurable** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   [inst_2 : TopologicalSpace β] {mβ : MeasurableSpace 
+β} [BorelSpace β] [inst_4 : LinearOrder α] [OrderTopology α]   [SecondCountableT
+opology α] [inst : LinearOrder β] [OrderClosedTopology β] {f : β → α}, Antitone 
+f → Measurable f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Topological
+Space α] {mα : MeasurableSpace α} [BorelSpace α]   [inst_2 : TopologicalSpace β]
+ {mβ : Me…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 -/
-protected theorem Antitone.measurable [LinearOrder β] [OrderClosedTopology β] {f : β -> α}
+protected theorem Antitone.measurable [LinearOrder β] [OrderClosedTopology β] {f : β → α}
     (hf : Antitone f) : Measurable f :=
   @Monotone.measurable αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ hf
-
-/--
-theorem `aemeasurable_restrict_of_antitoneOn` / 定理 `aemeasurable_restrict_of_antitoneOn`
-
-English:
-theorem aemeasurable_restrict_of_antitoneOn
-  statement: [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
-  proof: @aemeasurable_restrict_of_monotoneOn αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ _ hs _ hf
-
-中文:
-定理 aemeasurable_restrict_of_antitoneOn
-  结论: [线性序 β] [OrderClosed拓扑 β] {μ : 测度 β}
-  证明: @aemeasurable_restrict_of_monotoneOn αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ _ hs _ hf
-
-Depends on / 依赖: aemeasurable_restrict_of_monotoneOn
+/-
+**aemeasurable_restrict_of_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：aemeasurable_restrict_of_antitoneOn [LinearOrder β] [OrderClosedTopology β
+] {μ : Measure β} {s : Set β} (hs : MeasurableSet s) {f : β -> α} (hf : Antitone
+On f s) : AEMeasurable f (μ.restrict s)
+参数：hs : MeasurableSet s；hf : AntitoneOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `aemeasurable_restrict_of_monotoneOn`：aemeasurable_restrict_of_monotoneOn
+ [LinearOrder β] [OrderClosedTopology β] {μ : Measure β} {s : Set β} (hs : Measu
+rableSet s) {f : β -> α} …
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 -/
 theorem aemeasurable_restrict_of_antitoneOn [LinearOrder β] [OrderClosedTopology β] {μ : Measure β}
-    {s : Set β} (hs : MeasurableSet s) {f : β -> α} (hf : AntitoneOn f s) :
+    {s : Set β} (hs : MeasurableSet s) {f : β → α} (hf : AntitoneOn f s) :
     AEMeasurable f (μ.restrict s) :=
   @aemeasurable_restrict_of_monotoneOn αᵒᵈ β _ _ ‹_› _ _ _ _ _ ‹_› _ _ _ _ hs _ hf
-
-/--
-theorem `MeasurableSet.of_mem_nhdsGT_aux` / 定理 `MeasurableSet.of_mem_nhdsGT_aux`
-
-English:
-theorem MeasurableSet.of_mem_nhdsGT_aux
-  statement: {s : Set α} (h : forall x in s, s in 𝓝[>] x)
-  proof: by
-  choose! M hM using h'
-  suffices H : (s \ interior s).Countable by
-    have : s = interior s union s \ interior s := by rw [union_sdiff_cancel interior_subset]
-    rw [this]
-    exact isOpen_interior.measurableSet.union H.measurableSet
-  have A : forall x in s, exists y in Ioi x, Ioo x y subseteq s := fun x hx =>
-    (mem_nhdsGT_iff_exists_Ioo_subset' (hM x hx)).1 (h x hx)
-  choose! y hy h'y using A
-  have B : Set.PairwiseDisjoint (s \ interior s) fun x => Ioo x (y x) := by
-    intro x hx x' hx' hxx'
-    rcases lt_or_gt_of_ne hxx' with (h' | h')
-    · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x' in interior s :=
-        mem_interior.2 ⟨Ioo x (y x), h'y _ hx.1, isOpen_Ioo, ⟨h', h'z.1.trans hz.2⟩⟩
-      exact False.elim (hx'.2 this)
-    · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x in interior s :=
-        mem_interior.2 ⟨Ioo x' (y x'), h'y _ hx'.1, isOpen_Ioo, ⟨h', hz.1.trans h'z.2⟩⟩
-      exact False.elim (hx.2 this)
-  exact B.countable_of_Ioo fun x hx => hy x hx.1
-
-中文:
-定理 可测集.of_mem_nhdsGT_aux
-  结论: {s : 集合 α} (h : 对任意 x in s, s in 𝓝[>] x)
-  证明: by
-  choose! M hM using h'
-  suffices H : (s \ interior s).Countable by
-    have : s = interior s union s \ interior s := by rw [union_sdiff_cancel interior_subset]
-    rw [this]
-    exact isOpen_interior.measurableSet.union H.measurableSet
-  have A : forall x in s, exists y in Ioi x, Ioo x y subseteq s := fun x hx =>
-    (mem_nhdsGT_iff_exists_Ioo_subset' (hM x hx)).1 (h x hx)
-  choose! y hy h'y using A
-  have B : Set.PairwiseDisjoint (s \ interior s) fun x => Ioo x (y x) := by
-    intro x hx x' hx' hxx'
-    rcases lt_or_gt_of_ne hxx' with (h' | h')
-    · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x' in interior s :=
-        mem_interior.2 ⟨Ioo x (y x), h'y _ hx.1, isOpen_Ioo, ⟨h', h'z.1.trans hz.2⟩⟩
-      exact False.elim (hx'.2 this)
-    · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x in interior s :=
-        mem_interior.2 ⟨Ioo x' (y x'), h'y _ hx'.1, isOpen_Ioo, ⟨h', hz.1.trans h'z.2⟩⟩
-      exact False.elim (hx.2 this)
-  exact B.countable_of_Ioo fun x hx => hy x hx.1
-
-Depends on / 依赖: Countable, H.measurableSet, PairwiseDisjoint, Set.PairwiseDisjoint, interior, interior_subset, isOpen_interior, isOpen_interior.measurableSet.union, lt_or_gt_of_, measurableSet, mem_nhdsGT_iff_exists_Ioo_subset, subseteq, union_sdiff_cancel
+/-
+**MeasurableSet.of_mem_nhdsGT_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.of_mem_nhdsGT_aux {s : Set α} (h : forall x in s, s in 𝓝[>] 
+x) (h' : forall x in s, exists y, x < y) : MeasurableSet s
+参数：h : forall x in s, s in 𝓝[>] x；h' : forall x in s, exists y, x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhdsGT_iff_exists_Ioo_subset'`：mem_nhdsGT_iff_exists_Ioo_subset' {a 
+u' : α} {s : Set α} (hu' : a < u') : s in 𝓝[>] a ↔ exists u in Ioi a, Ioo a u su
+bseteq s
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `mem_interior`：mem_interior : x in interior s ↔ exists t subseteq s, IsOp
+en t ∧ x in t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Set.PairwiseDisjoint.countable_of_Ioo`：Set.PairwiseDisjoint.countable_of
+_Ioo [SecondCountableTopology α] {y : α -> α} {s : Set α} (h : PairwiseDisjoint 
+s fun x => Ioo x (y x)) (h'…
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `MeasurableSet.union`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∪ s₂)
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
+· 使用定理 `Set.Countable.measurableSet`：Set.Countable.measurableSet {s : Set α} (hs
+ : s.Countable) : MeasurableSet s
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `instMeasurableEqOfSecondCountableTopologyOfT2Space`：∀ {α : Type u_1} [in
+st : TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α]  
+ [SecondCountableTopology α] [T2Space α]…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `T5Space.toT4Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T5Space
+ X], T4Space X
+· 使用定理 `OrderTopology.t5Space`：∀ {X : Type u_1} [inst : LinearOrder X] [inst_1 :
+ TopologicalSpace X] [OrderTopology X], T5Space X
 -/
-theorem MeasurableSet.of_mem_nhdsGT_aux {s : Set α} (h : forall x in s, s in 𝓝[>] x)
-    (h' : forall x in s, exists y, x < y) : MeasurableSet s := by
+theorem MeasurableSet.of_mem_nhdsGT_aux {s : Set α} (h : ∀ x ∈ s, s ∈ 𝓝[>] x)
+    (h' : ∀ x ∈ s, ∃ y, x < y) : MeasurableSet s := by
   choose! M hM using h'
   suffices H : (s \ interior s).Countable by
-    have : s = interior s union s \ interior s := by rw [union_sdiff_cancel interior_subset]
+    have : s = interior s ∪ s \ interior s := by rw [union_sdiff_cancel interior_subset]
     rw [this]
     exact isOpen_interior.measurableSet.union H.measurableSet
-  have A : forall x in s, exists y in Ioi x, Ioo x y subseteq s := fun x hx =>
+  have A : ∀ x ∈ s, ∃ y ∈ Ioi x, Ioo x y ⊆ s := fun x hx =>
     (mem_nhdsGT_iff_exists_Ioo_subset' (hM x hx)).1 (h x hx)
   choose! y hy h'y using A
   have B : Set.PairwiseDisjoint (s \ interior s) fun x => Ioo x (y x) := by
     intro x hx x' hx' hxx'
     rcases lt_or_gt_of_ne hxx' with (h' | h')
     · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x' in interior s :=
+      have : x' ∈ interior s :=
         mem_interior.2 ⟨Ioo x (y x), h'y _ hx.1, isOpen_Ioo, ⟨h', h'z.1.trans hz.2⟩⟩
       exact False.elim (hx'.2 this)
     · refine disjoint_left.2 fun z hz h'z => ?_
-      have : x in interior s :=
+      have : x ∈ interior s :=
         mem_interior.2 ⟨Ioo x' (y x'), h'y _ hx'.1, isOpen_Ioo, ⟨h', hz.1.trans h'z.2⟩⟩
       exact False.elim (hx.2 this)
   exact B.countable_of_Ioo fun x hx => hy x hx.1
 
-/--
-theorem `MeasurableSet.of_mem_nhdsGT` / 定理 `MeasurableSet.of_mem_nhdsGT`
+/-- If a set is a right-neighborhood of all of its points, then it is measurable. -/
+/-
+**MeasurableSet.of_mem_nhdsGT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.of_mem_nhdsGT {s : Set α} (h : forall x in s, s in 𝓝[>] x) :
+ MeasurableSet s
+参数：h : forall x in s, s in 𝓝[>] x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `MeasurableSet.union`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∪ s₂)
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `instMeasurableEqOfSecondCountableTopologyOfT2Space`：∀ {α : Type u_1} [in
+st : TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α]  
+ [SecondCountableTopology α] [T2Space α]…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `T5Space.toT4Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T5Space
+ X], T4Space X
+· 使用定理 `OrderTopology.t5Space`：∀ {X : Type u_1} [inst : LinearOrder X] [inst_1 :
+ TopologicalSpace X] [OrderTopology X], T5Space X
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasurableSet.of_mem_nhdsGT_aux`：MeasurableSet.of_mem_nhdsGT_aux {s : Se
+t α} (h : forall x in s, s in 𝓝[>] x) (h' : forall x in s, exists y, x < y) : Me
+asurableSet s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhdsGT_iff_exists_Ioo_subset'`：mem_nhdsGT_iff_exists_Ioo_subset' {a 
+u' : α} {s : Set α} (hu' : a < u') : s in 𝓝[>] a ↔ exists u in Ioi a, Ioo a u su
+bseteq s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem MeasurableSet.of_mem_nhdsGT
-  given: {s : Set α} (h : forall x in s, s in 𝓝[>] x)
-  statement: MeasurableSet s
-  proof: by
-  by_cases H : exists x in s, IsTop x
+--- 原说明 ---
+If a set is a right-neighborhood of all of its points, then it is measurable.
+-/
+theorem MeasurableSet.of_mem_nhdsGT {s : Set α} (h : ∀ x ∈ s, s ∈ 𝓝[>] x) : MeasurableSet s := by
+  by_cases H : ∃ x ∈ s, IsTop x
   · rcases H with ⟨x₀, x₀s, h₀⟩
-    have : s = { x₀ } union s \ { x₀ } := by rw [union_sdiff_cancel (singleton_subset_iff.2 x₀s)]
+    have : s = { x₀ } ∪ s \ { x₀ } := by rw [union_sdiff_cancel (singleton_subset_iff.2 x₀s)]
     rw [this]
     refine (measurableSet_singleton _).union ?_
-    have A : forall x in s \ { x₀ }, x < x₀ := fun x hx => lt_of_le_of_ne (h₀ _) (by simpa using hx.2)
+    have A : ∀ x ∈ s \ { x₀ }, x < x₀ := fun x hx => lt_of_le_of_ne (h₀ _) (by simpa using hx.2)
     refine .of_mem_nhdsGT_aux (fun x hx => ?_) fun x hx => ⟨x₀, A x hx⟩
-    obtain ⟨u, hu, us⟩ : exists (u : α), u in Ioi x ∧ Ioo x u subseteq s :=
+    obtain ⟨u, hu, us⟩ : ∃ (u : α), u ∈ Ioi x ∧ Ioo x u ⊆ s :=
       (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).1 (h x hx.1)
     refine (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).2 ⟨u, hu, fun y hy => ⟨us hy, ?_⟩⟩
     exact ne_of_lt (hy.2.trans_le (h₀ _))
@@ -2832,148 +2795,109 @@ theorem MeasurableSet.of_mem_nhdsGT
     simp only [IsTop] at H
     push Not at H
     exact H
-
-中文:
-定理 可测集.of_mem_nhdsGT
-  条件: {s : 集合 α} (h : 对任意 x in s, s in 𝓝[>] x)
-  结论: 可测集 s
-  证明: by
-  by_cases H : exists x in s, IsTop x
-  · rcases H with ⟨x₀, x₀s, h₀⟩
-    have : s = { x₀ } union s \ { x₀ } := by rw [union_sdiff_cancel (singleton_subset_iff.2 x₀s)]
-    rw [this]
-    refine (measurableSet_singleton _).union ?_
-    have A : forall x in s \ { x₀ }, x < x₀ := fun x hx => lt_of_le_of_ne (h₀ _) (by simpa using hx.2)
-    refine .of_mem_nhdsGT_aux (fun x hx => ?_) fun x hx => ⟨x₀, A x hx⟩
-    obtain ⟨u, hu, us⟩ : exists (u : α), u in Ioi x ∧ Ioo x u subseteq s :=
-      (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).1 (h x hx.1)
-    refine (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).2 ⟨u, hu, fun y hy => ⟨us hy, ?_⟩⟩
-    exact ne_of_lt (hy.2.trans_le (h₀ _))
-  · refine .of_mem_nhdsGT_aux h ?_
-    simp only [IsTop] at H
-    push Not at H
-    exact H
-
-Depends on / 依赖: lt_of_le_of_ne, measurableSet_singleton, mem_nhdsGT_iff_exists_Ioo_subset, of_mem_nhdsGT_aux, singleton_subset_iff, subseteq, union_sdiff_cancel
+/-
+**measurableSet_bddAbove_range** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：measurableSet_bddAbove_range {ι} [Countable ι] {f : ι -> δ -> α} (hf : for
+all i, Measurable (f i)) : MeasurableSet {b | BddAbove (range (fun i => f i b))}
+参数：hf : forall i, Measurable (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用引理 `Set.eq_empty_of_isEmpty`：eq_empty_of_isEmpty (s : Set α) [IsEmpty s] : s
+ = ∅
+· 使用定理 `instIsEmptySubtype`：∀ {α : Sort u} [IsEmpty α] (p : α → Prop), IsEmpty (
+Subtype p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `measurableSet_le`：measurableSet_le {f g : δ -> α} (hf : Measurable f) (h
+g : Measurable g) : MeasurableSet { a | f a <= g a }
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `Set.ofPred_forall`：ofPred_forall (p : ι -> β -> Prop) : { x | forall i, 
+p i x } = ⋂ i, { x | p i x }
+· 使用定理 `MeasurableSet.iInter`：MeasurableSet.iInter [Countable ι] {f : ι -> Set α
+} (h : forall b, MeasurableSet (f b)) : MeasurableSet (⋂ b, f b)
+· 使用定理 `Filter.exists_seq_tendsto`：exists_seq_tendsto (f : Filter α) [IsCountabl
+yGenerated f] [NeBot f] : exists x : Nat -> α, Tendsto x atTop f
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_atTop`：tendsto_atTop [Preorder β] {m : α -> β} {f : Filte
+r α} : Tendsto m f atTop ↔ forall b, forallᶠ a in f, b <= m a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.ofPred_exists`：ofPred_exists (p : ι -> β -> Prop) : { x | exists i, 
+p i x } = ⋃ i, { x | p i x }
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
-theorem MeasurableSet.of_mem_nhdsGT {s : Set α} (h : forall x in s, s in 𝓝[>] x) : MeasurableSet s := by
-  by_cases H : exists x in s, IsTop x
-  · rcases H with ⟨x₀, x₀s, h₀⟩
-    have : s = { x₀ } union s \ { x₀ } := by rw [union_sdiff_cancel (singleton_subset_iff.2 x₀s)]
-    rw [this]
-    refine (measurableSet_singleton _).union ?_
-    have A : forall x in s \ { x₀ }, x < x₀ := fun x hx => lt_of_le_of_ne (h₀ _) (by simpa using hx.2)
-    refine .of_mem_nhdsGT_aux (fun x hx => ?_) fun x hx => ⟨x₀, A x hx⟩
-    obtain ⟨u, hu, us⟩ : exists (u : α), u in Ioi x ∧ Ioo x u subseteq s :=
-      (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).1 (h x hx.1)
-    refine (mem_nhdsGT_iff_exists_Ioo_subset' (A x hx)).2 ⟨u, hu, fun y hy => ⟨us hy, ?_⟩⟩
-    exact ne_of_lt (hy.2.trans_le (h₀ _))
-  · refine .of_mem_nhdsGT_aux h ?_
-    simp only [IsTop] at H
-    push Not at H
-    exact H
-
-/--
-lemma `measurableSet_bddAbove_range` / 引理 `measurableSet_bddAbove_range`
-
-English:
-lemma measurableSet_bddAbove_range
-  given: {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: by
+lemma measurableSet_bddAbove_range {ι} [Countable ι] {f : ι → δ → α} (hf : ∀ i, Measurable (f i)) :
+    MeasurableSet {b | BddAbove (range (fun i ↦ f i b))} := by
   rcases isEmpty_or_nonempty α with hα | hα
-  · have : forall b, range (fun i => f i b) = ∅ := fun b => eq_empty_of_isEmpty _
+  · have : ∀ b, range (fun i ↦ f i b) = ∅ := fun b ↦ eq_empty_of_isEmpty _
     simp [this]
-  have A : forall (i : ι) (c : α), MeasurableSet {x | f i x <= c} := by
+  have A : ∀ (i : ι) (c : α), MeasurableSet {x | f i x ≤ c} := by
     intro i c
     exact measurableSet_le (hf i) measurable_const
-  have B : forall (c : α), MeasurableSet {x | forall i, f i x <= c} := by
+  have B : ∀ (c : α), MeasurableSet {x | ∀ i, f i x ≤ c} := by
     intro c
     rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun i => A i c)
-  obtain ⟨u, hu⟩ : exists (u : Nat -> α), Tendsto u atTop atTop := exists_seq_tendsto (atTop : Filter α)
-  have : {b | BddAbove (range (fun i => f i b))} = {x | exists n, forall i, f i x <= u n} := by
+    exact MeasurableSet.iInter (fun i ↦ A i c)
+  obtain ⟨u, hu⟩ : ∃ (u : ℕ → α), Tendsto u atTop atTop := exists_seq_tendsto (atTop : Filter α)
+  have : {b | BddAbove (range (fun i ↦ f i b))} = {x | ∃ n, ∀ i, f i x ≤ u n} := by
     apply Subset.antisymm
     · rintro x ⟨c, hc⟩
-      obtain ⟨n, hn⟩ : exists n, c <= u n := (tendsto_atTop.1 hu c).exists
-      exact ⟨n, fun i => (hc ((mem_range_self i))).trans hn⟩
+      obtain ⟨n, hn⟩ : ∃ n, c ≤ u n := (tendsto_atTop.1 hu c).exists
+      exact ⟨n, fun i ↦ (hc ((mem_range_self i))).trans hn⟩
     · rintro x ⟨n, hn⟩
       refine ⟨u n, ?_⟩
       rintro - ⟨i, rfl⟩
       exact hn i
-  rw [this]; rw [ofPred_exists]
-  exact MeasurableSet.iUnion (fun n => B (u n))
-
-中文:
-引理 measurableSet_bddAbove_range
-  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: by
-  rcases isEmpty_or_nonempty α with hα | hα
-  · have : forall b, range (fun i => f i b) = ∅ := fun b => eq_empty_of_isEmpty _
-    simp [this]
-  have A : forall (i : ι) (c : α), MeasurableSet {x | f i x <= c} := by
-    intro i c
-    exact measurableSet_le (hf i) measurable_const
-  have B : forall (c : α), MeasurableSet {x | forall i, f i x <= c} := by
-    intro c
-    rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun i => A i c)
-  obtain ⟨u, hu⟩ : exists (u : Nat -> α), Tendsto u atTop atTop := exists_seq_tendsto (atTop : Filter α)
-  have : {b | BddAbove (range (fun i => f i b))} = {x | exists n, forall i, f i x <= u n} := by
-    apply Subset.antisymm
-    · rintro x ⟨c, hc⟩
-      obtain ⟨n, hn⟩ : exists n, c <= u n := (tendsto_atTop.1 hu c).exists
-      exact ⟨n, fun i => (hc ((mem_range_self i))).trans hn⟩
-    · rintro x ⟨n, hn⟩
-      refine ⟨u n, ?_⟩
-      rintro - ⟨i, rfl⟩
-      exact hn i
-  rw [this]; rw [ofPred_exists]
-  exact MeasurableSet.iUnion (fun n => B (u n))
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.iInter, Tendsto, eq_empty_of_isEmpty, exists_seq_tendsto, iInter, isEmpty_or_nonempty, measurableSet_le, measurable_const, ofPred_forall
+  rw [this, ofPred_exists]
+  exact MeasurableSet.iUnion (fun n ↦ B (u n))
+/-
+**measurableSet_bddBelow_range** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：measurableSet_bddBelow_range {ι} [Countable ι] {f : ι -> δ -> α} (hf : for
+all i, Measurable (f i)) : MeasurableSet {b | BddBelow (range (fun i => f i b))}
+参数：hf : forall i, Measurable (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `measurableSet_bddAbove_range`：measurableSet_bddAbove_range {ι} [Countabl
+e ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) : MeasurableSet {b | Bd
+dAbove (range (fun…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-lemma measurableSet_bddAbove_range {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) :
-    MeasurableSet {b | BddAbove (range (fun i => f i b))} := by
-  rcases isEmpty_or_nonempty α with hα | hα
-  · have : forall b, range (fun i => f i b) = ∅ := fun b => eq_empty_of_isEmpty _
-    simp [this]
-  have A : forall (i : ι) (c : α), MeasurableSet {x | f i x <= c} := by
-    intro i c
-    exact measurableSet_le (hf i) measurable_const
-  have B : forall (c : α), MeasurableSet {x | forall i, f i x <= c} := by
-    intro c
-    rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun i => A i c)
-  obtain ⟨u, hu⟩ : exists (u : Nat -> α), Tendsto u atTop atTop := exists_seq_tendsto (atTop : Filter α)
-  have : {b | BddAbove (range (fun i => f i b))} = {x | exists n, forall i, f i x <= u n} := by
-    apply Subset.antisymm
-    · rintro x ⟨c, hc⟩
-      obtain ⟨n, hn⟩ : exists n, c <= u n := (tendsto_atTop.1 hu c).exists
-      exact ⟨n, fun i => (hc ((mem_range_self i))).trans hn⟩
-    · rintro x ⟨n, hn⟩
-      refine ⟨u n, ?_⟩
-      rintro - ⟨i, rfl⟩
-      exact hn i
-  rw [this]; rw [ofPred_exists]
-  exact MeasurableSet.iUnion (fun n => B (u n))
-
-/--
-lemma `measurableSet_bddBelow_range` / 引理 `measurableSet_bddBelow_range`
-
-English:
-lemma measurableSet_bddBelow_range
-  given: {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: measurableSet_bddAbove_range (α := αᵒᵈ) hf
-
-中文:
-引理 measurableSet_bddBelow_range
-  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: measurableSet_bddAbove_range (α := αᵒᵈ) hf
-
-Depends on / 依赖: measurableSet_bddAbove_range
--/
-lemma measurableSet_bddBelow_range {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) :
-    MeasurableSet {b | BddBelow (range (fun i => f i b))} :=
+lemma measurableSet_bddBelow_range {ι} [Countable ι] {f : ι → δ → α} (hf : ∀ i, Measurable (f i)) :
+    MeasurableSet {b | BddBelow (range (fun i ↦ f i b))} :=
   measurableSet_bddAbove_range (α := αᵒᵈ) hf
 
 end LinearOrder
@@ -2981,37 +2905,29 @@ end LinearOrder
 section ConditionallyCompleteLattice
 
 @[fun_prop]
-/--
-theorem `Measurable.iSup_Prop` / 定理 `Measurable.iSup_Prop`
-
-English:
-theorem Measurable.iSup_Prop
-  statement: {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
-  proof: by
-  classical
-  simp_rw [ciSup_eq_ite]
-  split_ifs with h
-  · exact hf
-  · exact measurable_const
-
-@[fun_prop]
-
-中文:
-定理 可测.iSup_Prop
-  结论: {α} {mα : 可测空间 α} [条件完备格 α]
-  证明: by
-  classical
-  simp_rw [ciSup_eq_ite]
-  split_ifs with h
-  · exact hf
-  · exact measurable_const
-
-@[fun_prop]
-
-Depends on / 依赖: ciSup_eq_ite, classical, measurable_const, simp_rw, split_ifs
+/-
+**Measurable.iSup_Prop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.iSup_Prop {α} {mα : MeasurableSpace α} [ConditionallyCompleteLa
+ttice α] (p : Prop) {f : δ -> α} (hf : Measurable f) : Measurable fun b => ⨆ _ :
+ p, f b
+参数：p : Prop；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ciSup_eq_ite`：ciSup_eq_ite {p : Prop} [Decidable p] {f : p -> α} : (⨆ h 
+: p, f h) = if h : p then f h else sSup (∅ : Set α)
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
 -/
 theorem Measurable.iSup_Prop {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
-    (p : Prop) {f : δ -> α} (hf : Measurable f) : Measurable fun b => ⨆ _ : p, f b := by
+    (p : Prop) {f : δ → α} (hf : Measurable f) : Measurable fun b => ⨆ _ : p, f b := by
   classical
   simp_rw [ciSup_eq_ite]
   split_ifs with h
@@ -3019,33 +2935,30 @@ theorem Measurable.iSup_Prop {α} {mα : MeasurableSpace α} [ConditionallyCompl
   · exact measurable_const
 
 @[fun_prop]
-/--
-theorem `Measurable.iInf_Prop` / 定理 `Measurable.iInf_Prop`
-
-English:
-theorem Measurable.iInf_Prop
-  statement: {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
-  proof: by
-  classical
-  simp_rw [ciInf_eq_ite]
-  split_ifs with h
-  · exact hf
-  · exact measurable_const
-
-中文:
-定理 可测.iInf_Prop
-  结论: {α} {mα : 可测空间 α} [条件完备格 α]
-  证明: by
-  classical
-  simp_rw [ciInf_eq_ite]
-  split_ifs with h
-  · exact hf
-  · exact measurable_const
-
-Depends on / 依赖: ciInf_eq_ite, classical, measurable_const, simp_rw, split_ifs
+/-
+**Measurable.iInf_Prop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.iInf_Prop {α} {mα : MeasurableSpace α} [ConditionallyCompleteLa
+ttice α] (p : Prop) {f : δ -> α} (hf : Measurable f) : Measurable fun b => ⨅ _ :
+ p, f b
+参数：p : Prop；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ciInf_eq_ite`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialOrder
+Inf α] {p : Prop} [inst_1 : Decidable p] {f : p → α},   ⨅ (h : p), f h = if h : 
+p …
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
 -/
 theorem Measurable.iInf_Prop {α} {mα : MeasurableSpace α} [ConditionallyCompleteLattice α]
-    (p : Prop) {f : δ -> α} (hf : Measurable f) : Measurable fun b => ⨅ _ : p, f b := by
+    (p : Prop) {f : δ → α} (hf : Measurable f) : Measurable fun b => ⨅ _ : p, f b := by
   classical
   simp_rw [ciInf_eq_ite]
   split_ifs with h
@@ -3059,50 +2972,44 @@ section ConditionallyCompleteLinearOrder
 variable [ConditionallyCompleteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]
 
 @[fun_prop]
-/--
-theorem `Measurable.iSup` / 定理 `Measurable.iSup`
-
-English:
-theorem Measurable.iSup
-  given: {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: by
-  rcases isEmpty_or_nonempty ι with hι | hι
-  · simp [iSup_of_empty']
-  have A : MeasurableSet {b | BddAbove (range (fun i => f i b))} :=
-    measurableSet_bddAbove_range hf
-  have : Measurable (fun (_b : δ) => sSup (∅ : Set α)) := measurable_const
-  apply Measurable.isLUB_of_mem hf A _ _ this
-  · intro b hb
-    apply isLUB_ciSup
-    simpa
-  · intro b hb
-    apply csSup_of_not_bddAbove
-    simpa
-
-中文:
-定理 可测.iSup
-  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: by
-  rcases isEmpty_or_nonempty ι with hι | hι
-  · simp [iSup_of_empty']
-  have A : MeasurableSet {b | BddAbove (range (fun i => f i b))} :=
-    measurableSet_bddAbove_range hf
-  have : Measurable (fun (_b : δ) => sSup (∅ : Set α)) := measurable_const
-  apply Measurable.isLUB_of_mem hf A _ _ this
-  · intro b hb
-    apply isLUB_ciSup
-    simpa
-  · intro b hb
-    apply csSup_of_not_bddAbove
-    simpa
+/-
+**Measurable.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Sort u_5
+} [Countable ι] {f : ι → δ → α}, (∀ (i : ι), Measurable (f i)) → Measurable fun 
+b => ⨆ i, f i b
+参数：∀ (i : ι), Measurable (f i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_of_empty'`：iSup_of_empty' {α ι} [SupSet α] [IsEmpty ι] (f : ι -> α)
+ : iSup f = sSup (∅ : Set α)
+· 使用引理 `measurableSet_bddAbove_range`：measurableSet_bddAbove_range {ι} [Countabl
+e ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) : MeasurableSet {b | Bd
+dAbove (range (fun…
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `Measurable.isLUB_of_mem`：Measurable.isLUB_of_mem {ι} [Countable ι] {f : 
+ι -> δ -> α} {g g' : δ -> α} (hf : forall i, Measurable (f i)) {s : Set δ} (hs :
+ MeasurableSe…
+· 使用定理 `isLUB_ciSup`：isLUB_ciSup [Nonempty ι] {f : ι -> α} (H : BddAbove (range 
+f)) : IsLUB (range f) (⨆ i, f i)
+· 使用引理 `csSup_of_not_bddAbove`：csSup_of_not_bddAbove (hs : ¬BddAbove s) : sSup s
+ = sSup ∅
 -/
-protected theorem Measurable.iSup {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) :
-    Measurable (fun b => ⨆ i, f i b) := by
+protected theorem Measurable.iSup {ι} [Countable ι] {f : ι → δ → α} (hf : ∀ i, Measurable (f i)) :
+    Measurable (fun b ↦ ⨆ i, f i b) := by
   rcases isEmpty_or_nonempty ι with hι | hι
   · simp [iSup_of_empty']
-  have A : MeasurableSet {b | BddAbove (range (fun i => f i b))} :=
+  have A : MeasurableSet {b | BddAbove (range (fun i ↦ f i b))} :=
     measurableSet_bddAbove_range hf
-  have : Measurable (fun (_b : δ) => sSup (∅ : Set α)) := measurable_const
+  have : Measurable (fun (_b : δ) ↦ sSup (∅ : Set α)) := measurable_const
   apply Measurable.isLUB_of_mem hf A _ _ this
   · intro b hb
     apply isLUB_ciSup
@@ -3115,364 +3022,372 @@ protected theorem Measurable.iSup {ι} [Countable ι] {f : ι -> δ -> α} (hf :
 -- /-- Compositional version of `Measurable.iSup` for use by `fun_prop`. -/
 -- @[fun_prop]
 -- protected lemma Measurable.iSup'' {_ : MeasurableSpace γ} {ι : Sort*} [Countable ι]
--- {f : ι → γ → δ → α} {h : γ → δ} (hf : ∀ i, Measurable ↿(f i)) (hh : Measurable h) :
--- Measurable fun a ↦ (⨆ i, f i a) (h a) := by
--- simp_rw [iSup_apply]
--- exact .iSup fun i ↦ by fun_prop
+--     {f : ι → γ → δ → α} {h : γ → δ} (hf : ∀ i, Measurable ↿(f i)) (hh : Measurable h) :
+--     Measurable fun a ↦ (⨆ i, f i a) (h a) := by
+--   simp_rw [iSup_apply]
+--   exact .iSup fun i ↦ by fun_prop
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.iSup` / 定理 `AEMeasurable.iSup`
-
-English:
-theorem AEMeasurable.iSup
-  statement: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
-  proof: by
-  refine ⟨fun b => ⨆ i, (hf i).mk (f i) b, .iSup (fun i => (hf i).measurable_mk), ?_⟩
-  filter_upwards [ae_all_iff.2 (fun i => (hf i).ae_eq_mk)] with b hb using by simp [hb]
-
-@[fun_prop]
-
-中文:
-定理 几乎处处可测.iSup
-  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α}
-  证明: by
-  refine ⟨fun b => ⨆ i, (hf i).mk (f i) b, .iSup (fun i => (hf i).measurable_mk), ?_⟩
-  filter_upwards [ae_all_iff.2 (fun i => (hf i).ae_eq_mk)] with b hb using by simp [hb]
-
-@[fun_prop]
+/-
+**AEMeasurable.iSup** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Sort u_5
+} {μ : MeasureTheory.Measure δ} [Countable ι] {f : ι → δ → α},   (∀ (i : ι), AEM
+easurable (f i) μ) → AEMeasurable (fun b => ⨆ i, f i b) μ
+参数：∀ (i : ι), AEMeasurable (f i) μ；fun b => ⨆ i, f i b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `AEMeasurable.measurable_mk`：measurable_mk (h : AEMeasurable f μ) : Measu
+rable (h.mk f)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.ae_all_iff`：ae_all_iff {ι : Sort*} [Countable ι] {p : α ->
+ ι -> Prop} : (forallᵐ a ∂μ, forall i, p a i) ↔ forall i, forallᵐ a ∂μ, p a i
+· 使用定理 `AEMeasurable.ae_eq_mk`：ae_eq_mk (h : AEMeasurable f μ) : f =ᵐ[μ] h.mk f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem AEMeasurable.iSup {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
-    (hf : forall i, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨆ i, f i b) μ := by
-  refine ⟨fun b => ⨆ i, (hf i).mk (f i) b, .iSup (fun i => (hf i).measurable_mk), ?_⟩
-  filter_upwards [ae_all_iff.2 (fun i => (hf i).ae_eq_mk)] with b hb using by simp [hb]
+protected theorem AEMeasurable.iSup {ι} {μ : Measure δ} [Countable ι] {f : ι → δ → α}
+    (hf : ∀ i, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨆ i, f i b) μ := by
+  refine ⟨fun b ↦ ⨆ i, (hf i).mk (f i) b, .iSup (fun i ↦ (hf i).measurable_mk), ?_⟩
+  filter_upwards [ae_all_iff.2 (fun i ↦ (hf i).ae_eq_mk)] with b hb using by simp [hb]
 
 @[fun_prop]
-/--
-theorem `Measurable.iInf` / 定理 `Measurable.iInf`
-
-English:
-theorem Measurable.iInf
-  given: {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: .iSup (α := αᵒᵈ) hf
-
-@[fun_prop]
-
-中文:
-定理 可测.iInf
-  条件: {ι} [可数 ι] {f : ι -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: .iSup (α := αᵒᵈ) hf
-
-@[fun_prop]
+/-
+**Measurable.iInf** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Sort u_5
+} [Countable ι] {f : ι → δ → α}, (∀ (i : ι), Measurable (f i)) → Measurable fun 
+b => ⨅ i, f i b
+参数：∀ (i : ι), Measurable (f i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-protected theorem Measurable.iInf {ι} [Countable ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) :
+protected theorem Measurable.iInf {ι} [Countable ι] {f : ι → δ → α} (hf : ∀ i, Measurable (f i)) :
     Measurable fun b => ⨅ i, f i b :=
   .iSup (α := αᵒᵈ) hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.iInf` / 定理 `AEMeasurable.iInf`
-
-English:
-theorem AEMeasurable.iInf
-  statement: {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
-  proof: .iSup (α := αᵒᵈ) hf
-
-中文:
-定理 几乎处处可测.iInf
-  结论: {ι} {μ : 测度 δ} [可数 ι] {f : ι -> δ -> α}
-  证明: .iSup (α := αᵒᵈ) hf
+/-
+**AEMeasurable.iInf** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Sort u_5
+} {μ : MeasureTheory.Measure δ} [Countable ι] {f : ι → δ → α},   (∀ (i : ι), AEM
+easurable (f i) μ) → AEMeasurable (fun b => ⨅ i, f i b) μ
+参数：∀ (i : ι), AEMeasurable (f i) μ；fun b => ⨅ i, f i b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSp
+ace α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_
+2 : Con…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-protected theorem AEMeasurable.iInf {ι} {μ : Measure δ} [Countable ι] {f : ι -> δ -> α}
-    (hf : forall i, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨅ i, f i b) μ :=
+protected theorem AEMeasurable.iInf {ι} {μ : Measure δ} [Countable ι] {f : ι → δ → α}
+    (hf : ∀ i, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨅ i, f i b) μ :=
   .iSup (α := αᵒᵈ) hf
-
-/--
-theorem `Measurable.sSup` / 定理 `Measurable.sSup`
-
-English:
-theorem Measurable.sSup
-  statement: {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
-  proof: by
-  simp_rw [image_eq_range]
-  have : Countable s := hs.to_subtype
-  exact .iSup fun i => hf i i.2
-
-中文:
-定理 可测.sSup
-  结论: {ι} {f : ι -> δ -> α} {s : 集合 ι} (hs : s.可数)
-  证明: by
-  simp_rw [image_eq_range]
-  have : Countable s := hs.to_subtype
-  exact .iSup fun i => hf i i.2
+/-
+**Measurable.sSup** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Type u_5
+} {f : ι → δ → α} {s : Set ι},   s.Countable → (∀ i ∈ s, Measurable (f i)) → Mea
+surable fun x => sSup ((fun i => f i x) '' s)
+参数：∀ i ∈ s, Measurable (f i)；(fun i => f i x) '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.image_eq_range`：image_eq_range (f : α -> β) (s : Set α) : f '' s = r
+ange fun x : s => f x
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-protected theorem Measurable.sSup {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
-    (hf : forall i in s, Measurable (f i)) :
+protected theorem Measurable.sSup {ι} {f : ι → δ → α} {s : Set ι} (hs : s.Countable)
+    (hf : ∀ i ∈ s, Measurable (f i)) :
     Measurable fun x => sSup ((fun i => f i x) '' s) := by
   simp_rw [image_eq_range]
   have : Countable s := hs.to_subtype
-  exact .iSup fun i => hf i i.2
-
-/--
-theorem `Measurable.sInf` / 定理 `Measurable.sInf`
-
-English:
-theorem Measurable.sInf
-  statement: {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
-  proof: .sSup (α := αᵒᵈ) hs hf
-
-中文:
-定理 可测.sInf
-  结论: {ι} {f : ι -> δ -> α} {s : 集合 ι} (hs : s.可数)
-  证明: .sSup (α := αᵒᵈ) hs hf
+  exact .iSup fun i ↦ hf i i.2
+/-
+**Measurable.sInf** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpace α] {mα : Measurab
+leSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 : ConditionallyComp
+leteLinearOrder α] [OrderTopology α] [SecondCountableTopology α]   {ι : Type u_5
+} {f : ι → δ → α} {s : Set ι},   s.Countable → (∀ i ∈ s, Measurable (f i)) → Mea
+surable fun x => sInf ((fun i => f i x) '' s)
+参数：∀ i ∈ s, Measurable (f i)；(fun i => f i x) '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.sSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-protected theorem Measurable.sInf {ι} {f : ι -> δ -> α} {s : Set ι} (hs : s.Countable)
-    (hf : forall i in s, Measurable (f i)) :
+protected theorem Measurable.sInf {ι} {f : ι → δ → α} {s : Set ι} (hs : s.Countable)
+    (hf : ∀ i ∈ s, Measurable (f i)) :
     Measurable fun x => sInf ((fun i => f i x) '' s) :=
   .sSup (α := αᵒᵈ) hs hf
-
-/--
-theorem `Measurable.biSup` / 定理 `Measurable.biSup`
-
-English:
-theorem Measurable.biSup
-  statement: {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-  proof: by
+/-
+**Measurable.biSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.biSup {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable) (hf 
+: forall i in s, Measurable (f i)) : Measurable fun b => ⨆ i in s, f i b
+参数：s : Set ι；hs : s.Countable；hf : forall i in s, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `cbiSup_eq_of_forall`：cbiSup_eq_of_forall {p : ι -> Prop} {f : Subtype p 
+-> α} (hp : forall i, p i) : ⨆ (i) (h : p i), f ⟨i, h⟩ = iSup f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `cbiSup_eq_of_not_forall`：cbiSup_eq_of_not_forall {p : ι -> Prop} {f : Su
+btype p -> α} (hp : ¬ (forall i, p i)) : ⨆ (i) (h : p i), f ⟨i, h⟩ = iSup f ⊔ sS
+up ∅
+· 使用定理 `Measurable.sup`：Measurable.sup (hf : Measurable f) (hg : Measurable g) :
+ Measurable (f ⊔ g)
+· 使用定理 `ContinuousSup.measurableSup₂`：∀ {γ : Type u_3} [inst : TopologicalSpace 
+γ] {mγ : MeasurableSpace γ} [BorelSpace γ] [SecondCountableTopology γ]   [inst_3
+ : Max γ] [Continu…
+· 使用定理 `TopologicalLattice.toContinuousSup`：∀ {L : Type u_1} {inst : Topological
+Space L} {inst_1 : Lattice L} [self : TopologicalLattice L], ContinuousSup L
+· 使用定理 `LinearOrder.topologicalLattice`：∀ {L : Type u_1} [inst : TopologicalSpac
+e L] [inst_1 : LinearOrder L] [OrderClosedTopology L], TopologicalLattice L
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+-/
+theorem Measurable.biSup {ι} (s : Set ι) {f : ι → δ → α} (hs : s.Countable)
+    (hf : ∀ i ∈ s, Measurable (f i)) : Measurable fun b => ⨆ i ∈ s, f i b := by
   have : Encodable s := hs.toEncodable
-  by_cases H : forall i, i in s
-  · have : forall b, ⨆ i in s, f i b = ⨆ (i : s), f i b :=
-      fun b => cbiSup_eq_of_forall (f := fun i => f i b) H
+  by_cases H : ∀ i, i ∈ s
+  · have : ∀ b, ⨆ i ∈ s, f i b = ⨆ (i : s), f i b :=
+      fun b ↦ cbiSup_eq_of_forall (f := fun i ↦ f i b) H
     simp only [this]
-    exact .iSup (fun (i : s) => hf i i.2)
-  · have : forall b, ⨆ i in s, f i b = (⨆ (i : s), f i b) ⊔ sSup ∅ :=
-      fun b => cbiSup_eq_of_not_forall (f := fun i => f i b) H
+    exact .iSup (fun (i : s) ↦ hf i i.2)
+  · have : ∀ b, ⨆ i ∈ s, f i b = (⨆ (i : s), f i b) ⊔ sSup ∅ :=
+      fun b ↦ cbiSup_eq_of_not_forall (f := fun i ↦ f i b) H
     simp only [this]
     apply Measurable.sup _ measurable_const
-    exact .iSup (fun (i : s) => hf i i.2)
-
-中文:
-定理 可测.biSup
-  结论: {ι} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
-  证明: by
-  have : Encodable s := hs.toEncodable
-  by_cases H : forall i, i in s
-  · have : forall b, ⨆ i in s, f i b = ⨆ (i : s), f i b :=
-      fun b => cbiSup_eq_of_forall (f := fun i => f i b) H
-    simp only [this]
-    exact .iSup (fun (i : s) => hf i i.2)
-  · have : forall b, ⨆ i in s, f i b = (⨆ (i : s), f i b) ⊔ sSup ∅ :=
-      fun b => cbiSup_eq_of_not_forall (f := fun i => f i b) H
-    simp only [this]
-    apply Measurable.sup _ measurable_const
-    exact .iSup (fun (i : s) => hf i i.2)
-
-Depends on / 依赖: Encodable, Measurable, Measurable.sup, cbiSup_eq_of_forall, cbiSup_eq_of_not_forall, hs.toEncodable, measurable_const, toEncodable
+    exact .iSup (fun (i : s) ↦ hf i i.2)
+/-
+**AEMeasurable.biSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.biSup {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs :
+ s.Countable) (hf : forall i in s, AEMeasurable (f i) μ) : AEMeasurable (fun b =
+> ⨆ i in s, f i b) μ
+参数：s : Set ι；hs : s.Countable；hf : forall i in s, AEMeasurable (f i) μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `AEMeasurable.measurable_mk`：measurable_mk (h : AEMeasurable f μ) : Measu
+rable (h.mk f)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Measurable.biSup`：Measurable.biSup {ι} (s : Set ι) {f : ι -> δ -> α} (hs
+ : s.Countable) (hf : forall i in s, Measurable (f i)) : Measurable fun b => ⨆ i
+ in s,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AEMeasurable.ae_eq_mk`：ae_eq_mk (h : AEMeasurable f μ) : f =ᵐ[μ] h.mk f
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.ae_ball_iff`：ae_ball_iff {ι : Type*} {S : Set ι} (hS : S.C
+ountable) {p : α -> forall i in S, Prop} : (forallᵐ x ∂μ, forall i (hi : i in S)
+, p x i hi) ↔ f…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `iSup_congr`：iSup_congr (h : forall i, f i = g i) : ⨆ i, f i = ⨆ i, g i
 -/
-theorem Measurable.biSup {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-    (hf : forall i in s, Measurable (f i)) : Measurable fun b => ⨆ i in s, f i b := by
-  have : Encodable s := hs.toEncodable
-  by_cases H : forall i, i in s
-  · have : forall b, ⨆ i in s, f i b = ⨆ (i : s), f i b :=
-      fun b => cbiSup_eq_of_forall (f := fun i => f i b) H
-    simp only [this]
-    exact .iSup (fun (i : s) => hf i i.2)
-  · have : forall b, ⨆ i in s, f i b = (⨆ (i : s), f i b) ⊔ sSup ∅ :=
-      fun b => cbiSup_eq_of_not_forall (f := fun i => f i b) H
-    simp only [this]
-    apply Measurable.sup _ measurable_const
-    exact .iSup (fun (i : s) => hf i i.2)
-
-/--
-theorem `AEMeasurable.biSup` / 定理 `AEMeasurable.biSup`
-
-English:
-theorem AEMeasurable.biSup
-  statement: {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-  proof: by
+theorem AEMeasurable.biSup {ι} {μ : Measure δ} (s : Set ι) {f : ι → δ → α} (hs : s.Countable)
+    (hf : ∀ i ∈ s, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨆ i ∈ s, f i b) μ := by
   classical
-  let g : ι -> δ -> α := fun i => if hi : i in s then (hf i hi).mk (f i) else fun _b => sSup ∅
-  have : forall i in s, Measurable (g i) := by
+  let g : ι → δ → α := fun i ↦ if hi : i ∈ s then (hf i hi).mk (f i) else fun _b ↦ sSup ∅
+  have : ∀ i ∈ s, Measurable (g i) := by
     intro i hi
     simpa [g, hi] using! (hf i hi).measurable_mk
-  refine ⟨fun b => ⨆ (i) (_ : i in s), g i b, .biSup s hs this, ?_⟩
-  have : forall i in s, forallᵐ b ∂μ, f i b = g i b :=
-    fun i hi => by simpa [g, hi] using! (hf i hi).ae_eq_mk
+  refine ⟨fun b ↦ ⨆ (i) (_ : i ∈ s), g i b, .biSup s hs this, ?_⟩
+  have : ∀ i ∈ s, ∀ᵐ b ∂μ, f i b = g i b :=
+    fun i hi ↦ by simpa [g, hi] using! (hf i hi).ae_eq_mk
   filter_upwards [(ae_ball_iff hs).2 this] with b hb
   exact iSup_congr fun i => iSup_congr (hb i)
-
-中文:
-定理 几乎处处可测.biSup
-  结论: {ι} {μ : 测度 δ} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
-  证明: by
-  classical
-  let g : ι -> δ -> α := fun i => if hi : i in s then (hf i hi).mk (f i) else fun _b => sSup ∅
-  have : forall i in s, Measurable (g i) := by
-    intro i hi
-    simpa [g, hi] using! (hf i hi).measurable_mk
-  refine ⟨fun b => ⨆ (i) (_ : i in s), g i b, .biSup s hs this, ?_⟩
-  have : forall i in s, forallᵐ b ∂μ, f i b = g i b :=
-    fun i hi => by simpa [g, hi] using! (hf i hi).ae_eq_mk
-  filter_upwards [(ae_ball_iff hs).2 this] with b hb
-  exact iSup_congr fun i => iSup_congr (hb i)
-
-Depends on / 依赖: Measurable, ae_ball_iff, ae_eq_mk, classical, filter_upwards, iSup_congr, measurable_mk
+/-
+**Measurable.biInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.biInf {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable) (hf 
+: forall i in s, Measurable (f i)) : Measurable fun b => ⨅ i in s, f i b
+参数：s : Set ι；hs : s.Countable；hf : forall i in s, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.biSup`：Measurable.biSup {ι} (s : Set ι) {f : ι -> δ -> α} (hs
+ : s.Countable) (hf : forall i in s, Measurable (f i)) : Measurable fun b => ⨆ i
+ in s,…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-theorem AEMeasurable.biSup {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-    (hf : forall i in s, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨆ i in s, f i b) μ := by
-  classical
-  let g : ι -> δ -> α := fun i => if hi : i in s then (hf i hi).mk (f i) else fun _b => sSup ∅
-  have : forall i in s, Measurable (g i) := by
-    intro i hi
-    simpa [g, hi] using! (hf i hi).measurable_mk
-  refine ⟨fun b => ⨆ (i) (_ : i in s), g i b, .biSup s hs this, ?_⟩
-  have : forall i in s, forallᵐ b ∂μ, f i b = g i b :=
-    fun i hi => by simpa [g, hi] using! (hf i hi).ae_eq_mk
-  filter_upwards [(ae_ball_iff hs).2 this] with b hb
-  exact iSup_congr fun i => iSup_congr (hb i)
-
-/--
-theorem `Measurable.biInf` / 定理 `Measurable.biInf`
-
-English:
-theorem Measurable.biInf
-  statement: {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-  proof: .biSup (α := αᵒᵈ) s hs hf
-
-中文:
-定理 可测.biInf
-  结论: {ι} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
-  证明: .biSup (α := αᵒᵈ) s hs hf
+theorem Measurable.biInf {ι} (s : Set ι) {f : ι → δ → α} (hs : s.Countable)
+    (hf : ∀ i ∈ s, Measurable (f i)) : Measurable fun b => ⨅ i ∈ s, f i b :=
+  .biSup (α := αᵒᵈ) s hs hf
+/-
+**AEMeasurable.biInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.biInf {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs :
+ s.Countable) (hf : forall i in s, AEMeasurable (f i) μ) : AEMeasurable (fun b =
+> ⨅ i in s, f i b) μ
+参数：s : Set ι；hs : s.Countable；hf : forall i in s, AEMeasurable (f i) μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.biSup`：AEMeasurable.biSup {ι} {μ : Measure δ} (s : Set ι) {
+f : ι -> δ -> α} (hs : s.Countable) (hf : forall i in s, AEMeasurable (f i) μ) :
+ AEMeasu…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
 -/
-theorem Measurable.biInf {ι} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-    (hf : forall i in s, Measurable (f i)) : Measurable fun b => ⨅ i in s, f i b :=
+theorem AEMeasurable.biInf {ι} {μ : Measure δ} (s : Set ι) {f : ι → δ → α} (hs : s.Countable)
+    (hf : ∀ i ∈ s, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨅ i ∈ s, f i b) μ :=
   .biSup (α := αᵒᵈ) s hs hf
 
-/--
-theorem `AEMeasurable.biInf` / 定理 `AEMeasurable.biInf`
-
-English:
-theorem AEMeasurable.biInf
-  statement: {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-  proof: .biSup (α := αᵒᵈ) s hs hf
-
-中文:
-定理 几乎处处可测.biInf
-  结论: {ι} {μ : 测度 δ} (s : 集合 ι) {f : ι -> δ -> α} (hs : s.可数)
-  证明: .biSup (α := αᵒᵈ) s hs hf
+/-- `liminf` over a general filter is measurable. See `Measurable.liminf` for the version over `ℕ`.
 -/
-theorem AEMeasurable.biInf {ι} {μ : Measure δ} (s : Set ι) {f : ι -> δ -> α} (hs : s.Countable)
-    (hf : forall i in s, AEMeasurable (f i) μ) : AEMeasurable (fun b => ⨅ i in s, f i b) μ :=
-  .biSup (α := αᵒᵈ) s hs hf
+/-
+**Measurable.liminf'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.liminf' {ι ι'} {f : ι -> δ -> α} {v : Filter ι} (hf : forall i,
+ Measurable (f i)) {p : ι' -> Prop} {s : ι' -> Set ι} (hv : v.HasCountableBasis 
+p s) (hs : forall j, (s j).Countable) : Measurable fun x => liminf (f · x) v
+参数：hf : forall i, Measurable (f i)；hv : v.HasCountableBasis p s；hs : forall j, (
+s j).Countable。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasCountableBasis.countable`：∀ {α : Type u_1} {ι : Type u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasCountableBasis p s → (Set.ofPr
+ed p).Countable
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.HasBasis.liminf_eq_sSup_iUnion_iInter`：∀ {α : Type u_1} [inst : C
+onditionallyCompleteLattice α] {ι : Type u_6} {ι' : Type u_7} {f : ι → α} {v : F
+ilter ι}   {p : ι' → Prop} {s : ι'…
+· 使用定理 `Filter.HasCountableBasis.toHasBasis`：∀ {α : Type u_1} {ι : Type u_4} {l 
+: Filter α} {p : ι → Prop} {s : ι → Set α}, l.HasCountableBasis p s → l.HasBasis
+ p s
+· 使用定理 `Set.iInter_coe_set`：iInter_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋂ i, f i = ⋂ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `Filter.HasBasis.liminf_eq_ite`：∀ {α : Type u_1} {ι : Type u_4} {ι' : Typ
+e u_5} [inst : ConditionallyCompleteLinearOrder α] {v : Filter ι}   {p : ι' → Pr
+op} {s : ι' → Set ι…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.countable_coe_iff`：countable_coe_iff {s : Set α} : Countable s ↔ s.C
+ountable
+· 使用引理 `measurableSet_bddBelow_range`：measurableSet_bddBelow_range {ι} [Countabl
+e ι] {f : ι -> δ -> α} (hf : forall i, Measurable (f i)) : MeasurableSet {b | Bd
+dBelow (range (fun…
+· 使用定理 `Set.ofPred_forall`：ofPred_forall (p : ι -> β -> Prop) : { x | forall i, 
+p i x } = ⋂ i, { x | p i x }
+· 使用定理 `MeasurableSet.iInter`：MeasurableSet.iInter [Countable ι] {f : ι -> Set α
+} (h : forall b, MeasurableSet (f b)) : MeasurableSet (⋂ b, f b)
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Measurable.piecewise`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f g :
+ α → β} {m : MeasurableSpace α} {mβ : MeasurableSpace β}   {x : DecidablePred fu
+n x => x ∈…
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `Measurable.iInf`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `exists_surjective_nat`：exists_surjective_nat (α : Sort u) [Nonempty α] [
+Countable α] : exists f : Nat -> α, Surjective f
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Measurable.find`：Measurable.find {_ : MeasurableSpace α} {f : Nat -> α -
+> β} {p : Nat -> α -> Prop} [forall n, DecidablePred (p n)] (hf : forall n, Meas
+urabl…
+（共 31 条，此处仅展示前 30 条）
 
-/--
-theorem `Measurable.liminf'` / 定理 `Measurable.liminf'`
-
-English:
-theorem Measurable.liminf'
-  statement: {ι ι'} {f : ι -> δ -> α} {v : Filter ι} (hf : forall i, Measurable (f i))
-  proof: by
-  classical
-  /- We would like to write the liminf as `⨆ (j : Subtype p), ⨅ (i : s j), f i x`, as the
-  measurability would follow from the measurability of infs and sups. Unfortunately, this is not
-  true in general conditionally complete linear orders because of issues with empty sets or sets
-  which are not bounded above or below. A slightly more complicated expression for the liminf,
-  valid in general, is given in `Filter.HasBasis.liminf_eq_ite`. This expression, built from
-  `if ... then ... else` and infs and sups, can be readily checked to be measurable. -/
-  have : Countable (Subtype p) := hv.countable
-  rcases isEmpty_or_nonempty (Subtype p) with hp | hp
-  · simp [hv.liminf_eq_sSup_iUnion_iInter]
-  by_cases H : exists (j : Subtype p), s j = ∅
-  · simp_rw [hv.liminf_eq_ite, if_pos H, measurable_const]
-  simp_rw [hv.liminf_eq_ite, if_neg H]
-  have : forall i, Countable (s i) := fun i => countable_coe_iff.2 (hs i)
-  let m : Subtype p -> Set δ := fun j => {x | BddBelow (range (fun (i : s j) => f i x))}
-  have m_meas : forall j, MeasurableSet (m j) :=
-    fun j => measurableSet_bddBelow_range (fun (i : s j) => hf i)
-  have mc_meas : MeasurableSet {x | forall (j : Subtype p), x ∉ m j} := by
-    rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun j => (m_meas j).compl)
-refine measurable_const.piecewise mc_meas .iSup fun j => ?_
-  let reparam : δ -> Subtype p -> Subtype p := fun x => liminfReparam (fun i => f i x) s p
-  let F0 : Subtype p -> δ -> α := fun j x => ⨅ (i : s j), f i x
-  have F0_meas : forall j, Measurable (F0 j) := fun j => .iInf (fun (i : s j) => hf i)
-  set F1 : δ -> α := fun x => F0 (reparam x j) x with hF1
-  change Measurable F1
-  let g : Nat -> Subtype p := Classical.choose (exists_surjective_nat (Subtype p))
-  have Z : forall x, exists n, x in m (g n) ∨ forall k, x ∉ m k := by
-    intro x
-    by_cases! H : exists k, x in m k
-    · rcases H with ⟨k, hk⟩
-      rcases Classical.choose_spec (exists_surjective_nat (Subtype p)) k with ⟨n, rfl⟩
-      exact ⟨n, Or.inl hk⟩
-    · exact ⟨0, Or.inr H⟩
-  have : F1 = fun x => if x in m j then F0 j x else F0 (g (Nat.find (Z x))) x := by
-    ext x
-    have A : reparam x j = if x in m j then j else g (Nat.find (Z x)) := rfl
-    split_ifs with hjx
-    · have : reparam x j = j := by rw [A, if_pos hjx]
-      simp only [hF1, this]
-    · have : reparam x j = g (Nat.find (Z x)) := by rw [A, if_neg hjx]
-      simp only [hF1, this]
-  rw [this]
-  apply Measurable.piecewise (m_meas j) (F0_meas j)
-  apply Measurable.find (fun n => F0_meas (g n)) (fun n => ?_)
-  exact (m_meas (g n)).union mc_meas
-
-中文:
-定理 可测.liminf'
-  结论: {ι ι'} {f : ι -> δ -> α} {v : 滤子 ι} (hf : 对任意 i, 可测 (f i))
-  证明: by
-  classical
-  /- We would like to write the liminf as `⨆ (j : Subtype p), ⨅ (i : s j), f i x`, as the
-  measurability would follow from the measurability of infs and sups. Unfortunately, this is not
-  true in general conditionally complete linear orders because of issues with empty sets or sets
-  which are not bounded above or below. A slightly more complicated expression for the liminf,
-  valid in general, is given in `Filter.HasBasis.liminf_eq_ite`. This expression, built from
-  `if ... then ... else` and infs and sups, can be readily checked to be measurable. -/
-  have : Countable (Subtype p) := hv.countable
-  rcases isEmpty_or_nonempty (Subtype p) with hp | hp
-  · simp [hv.liminf_eq_sSup_iUnion_iInter]
-  by_cases H : exists (j : Subtype p), s j = ∅
-  · simp_rw [hv.liminf_eq_ite, if_pos H, measurable_const]
-  simp_rw [hv.liminf_eq_ite, if_neg H]
-  have : forall i, Countable (s i) := fun i => countable_coe_iff.2 (hs i)
-  let m : Subtype p -> Set δ := fun j => {x | BddBelow (range (fun (i : s j) => f i x))}
-  have m_meas : forall j, MeasurableSet (m j) :=
-    fun j => measurableSet_bddBelow_range (fun (i : s j) => hf i)
-  have mc_meas : MeasurableSet {x | forall (j : Subtype p), x ∉ m j} := by
-    rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun j => (m_meas j).compl)
-refine measurable_const.piecewise mc_meas .iSup fun j => ?_
-  let reparam : δ -> Subtype p -> Subtype p := fun x => liminfReparam (fun i => f i x) s p
-  let F0 : Subtype p -> δ -> α := fun j x => ⨅ (i : s j), f i x
-  have F0_meas : forall j, Measurable (F0 j) := fun j => .iInf (fun (i : s j) => hf i)
-  set F1 : δ -> α := fun x => F0 (reparam x j) x with hF1
-  change Measurable F1
-  let g : Nat -> Subtype p := Classical.choose (exists_surjective_nat (Subtype p))
-  have Z : forall x, exists n, x in m (g n) ∨ forall k, x ∉ m k := by
-    intro x
-    by_cases! H : exists k, x in m k
-    · rcases H with ⟨k, hk⟩
-      rcases Classical.choose_spec (exists_surjective_nat (Subtype p)) k with ⟨n, rfl⟩
-      exact ⟨n, Or.inl hk⟩
-    · exact ⟨0, Or.inr H⟩
-  have : F1 = fun x => if x in m j then F0 j x else F0 (g (Nat.find (Z x))) x := by
-    ext x
-    have A : reparam x j = if x in m j then j else g (Nat.find (Z x)) := rfl
-    split_ifs with hjx
-    · have : reparam x j = j := by rw [A, if_pos hjx]
-      simp only [hF1, this]
-    · have : reparam x j = g (Nat.find (Z x)) := by rw [A, if_neg hjx]
-      simp only [hF1, this]
-  rw [this]
-  apply Measurable.piecewise (m_meas j) (F0_meas j)
-  apply Measurable.find (fun n => F0_meas (g n)) (fun n => ?_)
-  exact (m_meas (g n)).union mc_meas
-
-Depends on / 依赖: classical
+--- 原说明 ---
+`liminf` over a general filter is measurable. See `Measurable.liminf` for the ve
+rsion over `ℕ`.
 -/
-theorem Measurable.liminf' {ι ι'} {f : ι -> δ -> α} {v : Filter ι} (hf : forall i, Measurable (f i))
-    {p : ι' -> Prop} {s : ι' -> Set ι} (hv : v.HasCountableBasis p s) (hs : forall j, (s j).Countable) :
+theorem Measurable.liminf' {ι ι'} {f : ι → δ → α} {v : Filter ι} (hf : ∀ i, Measurable (f i))
+    {p : ι' → Prop} {s : ι' → Set ι} (hv : v.HasCountableBasis p s) (hs : ∀ j, (s j).Countable) :
     Measurable fun x => liminf (f · x) v := by
   classical
   /- We would like to write the liminf as `⨆ (j : Subtype p), ⨅ (i : s j), f i x`, as the
@@ -3484,33 +3399,33 @@ theorem Measurable.liminf' {ι ι'} {f : ι -> δ -> α} {v : Filter ι} (hf : f
   have : Countable (Subtype p) := hv.countable
   rcases isEmpty_or_nonempty (Subtype p) with hp | hp
   · simp [hv.liminf_eq_sSup_iUnion_iInter]
-  by_cases H : exists (j : Subtype p), s j = ∅
+  by_cases H : ∃ (j : Subtype p), s j = ∅
   · simp_rw [hv.liminf_eq_ite, if_pos H, measurable_const]
   simp_rw [hv.liminf_eq_ite, if_neg H]
-  have : forall i, Countable (s i) := fun i => countable_coe_iff.2 (hs i)
-  let m : Subtype p -> Set δ := fun j => {x | BddBelow (range (fun (i : s j) => f i x))}
-  have m_meas : forall j, MeasurableSet (m j) :=
-    fun j => measurableSet_bddBelow_range (fun (i : s j) => hf i)
-  have mc_meas : MeasurableSet {x | forall (j : Subtype p), x ∉ m j} := by
+  have : ∀ i, Countable (s i) := fun i ↦ countable_coe_iff.2 (hs i)
+  let m : Subtype p → Set δ := fun j ↦ {x | BddBelow (range (fun (i : s j) ↦ f i x))}
+  have m_meas : ∀ j, MeasurableSet (m j) :=
+    fun j ↦ measurableSet_bddBelow_range (fun (i : s j) ↦ hf i)
+  have mc_meas : MeasurableSet {x | ∀ (j : Subtype p), x ∉ m j} := by
     rw [ofPred_forall]
-    exact MeasurableSet.iInter (fun j => (m_meas j).compl)
-refine measurable_const.piecewise mc_meas .iSup fun j => ?_
-  let reparam : δ -> Subtype p -> Subtype p := fun x => liminfReparam (fun i => f i x) s p
-  let F0 : Subtype p -> δ -> α := fun j x => ⨅ (i : s j), f i x
-  have F0_meas : forall j, Measurable (F0 j) := fun j => .iInf (fun (i : s j) => hf i)
-  set F1 : δ -> α := fun x => F0 (reparam x j) x with hF1
+    exact MeasurableSet.iInter (fun j ↦ (m_meas j).compl)
+  refine measurable_const.piecewise mc_meas <| .iSup fun j ↦ ?_
+  let reparam : δ → Subtype p → Subtype p := fun x ↦ liminfReparam (fun i ↦ f i x) s p
+  let F0 : Subtype p → δ → α := fun j x ↦ ⨅ (i : s j), f i x
+  have F0_meas : ∀ j, Measurable (F0 j) := fun j ↦ .iInf (fun (i : s j) ↦ hf i)
+  set F1 : δ → α := fun x ↦ F0 (reparam x j) x with hF1
   change Measurable F1
-  let g : Nat -> Subtype p := Classical.choose (exists_surjective_nat (Subtype p))
-  have Z : forall x, exists n, x in m (g n) ∨ forall k, x ∉ m k := by
+  let g : ℕ → Subtype p := Classical.choose (exists_surjective_nat (Subtype p))
+  have Z : ∀ x, ∃ n, x ∈ m (g n) ∨ ∀ k, x ∉ m k := by
     intro x
-    by_cases! H : exists k, x in m k
+    by_cases! H : ∃ k, x ∈ m k
     · rcases H with ⟨k, hk⟩
       rcases Classical.choose_spec (exists_surjective_nat (Subtype p)) k with ⟨n, rfl⟩
       exact ⟨n, Or.inl hk⟩
     · exact ⟨0, Or.inr H⟩
-  have : F1 = fun x => if x in m j then F0 j x else F0 (g (Nat.find (Z x))) x := by
+  have : F1 = fun x ↦ if x ∈ m j then F0 j x else F0 (g (Nat.find (Z x))) x := by
     ext x
-    have A : reparam x j = if x in m j then j else g (Nat.find (Z x)) := rfl
+    have A : reparam x j = if x ∈ m j then j else g (Nat.find (Z x)) := rfl
     split_ifs with hjx
     · have : reparam x j = j := by rw [A, if_pos hjx]
       simp only [hF1, this]
@@ -3518,70 +3433,105 @@ refine measurable_const.piecewise mc_meas .iSup fun j => ?_
       simp only [hF1, this]
   rw [this]
   apply Measurable.piecewise (m_meas j) (F0_meas j)
-  apply Measurable.find (fun n => F0_meas (g n)) (fun n => ?_)
+  apply Measurable.find (fun n ↦ F0_meas (g n)) (fun n ↦ ?_)
   exact (m_meas (g n)).union mc_meas
 
-/--
-theorem `Measurable.limsup'` / 定理 `Measurable.limsup'`
-
-English:
-theorem Measurable.limsup'
-  statement: {ι ι'} {f : ι -> δ -> α} {u : Filter ι} (hf : forall i, Measurable (f i))
-  proof: .liminf' (α := αᵒᵈ) hf hu hs
-
-中文:
-定理 可测.limsup'
-  结论: {ι ι'} {f : ι -> δ -> α} {u : 滤子 ι} (hf : 对任意 i, 可测 (f i))
-  证明: .liminf' (α := αᵒᵈ) hf hu hs
-
-Depends on / 依赖: liminf
+/-- `limsup` over a general filter is measurable. See `Measurable.limsup` for the version over `ℕ`.
 -/
-theorem Measurable.limsup' {ι ι'} {f : ι -> δ -> α} {u : Filter ι} (hf : forall i, Measurable (f i))
-    {p : ι' -> Prop} {s : ι' -> Set ι} (hu : u.HasCountableBasis p s) (hs : forall i, (s i).Countable) :
+/-
+**Measurable.limsup'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.limsup' {ι ι'} {f : ι -> δ -> α} {u : Filter ι} (hf : forall i,
+ Measurable (f i)) {p : ι' -> Prop} {s : ι' -> Set ι} (hu : u.HasCountableBasis 
+p s) (hs : forall i, (s i).Countable) : Measurable fun x => limsup (fun i => f i
+ x) u
+参数：hf : forall i, Measurable (f i)；hu : u.HasCountableBasis p s；hs : forall i, (
+s i).Countable。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.liminf'`：Measurable.liminf' {ι ι'} {f : ι -> δ -> α} {v : Fil
+ter ι} (hf : forall i, Measurable (f i)) {p : ι' -> Prop} {s : ι' -> Set ι} (hv 
+: v.HasC…
+· 使用定理 `OrderDual.borelSpace`：∀ {α : Type u_6} [inst : TopologicalSpace α] [inst
+_1 : MeasurableSpace α] [h : BorelSpace α], BorelSpace αᵒᵈ
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `instSecondCountableTopologyOrderDual`：∀ {α : Type u} [inst : Topological
+Space α] [h : SecondCountableTopology α], SecondCountableTopology αᵒᵈ
+
+--- 原说明 ---
+`limsup` over a general filter is measurable. See `Measurable.limsup` for the ve
+rsion over `ℕ`.
+-/
+theorem Measurable.limsup' {ι ι'} {f : ι → δ → α} {u : Filter ι} (hf : ∀ i, Measurable (f i))
+    {p : ι' → Prop} {s : ι' → Set ι} (hu : u.HasCountableBasis p s) (hs : ∀ i, (s i).Countable) :
     Measurable fun x => limsup (fun i => f i x) u :=
   .liminf' (α := αᵒᵈ) hf hu hs
 
 /-- `liminf` over `ℕ` is measurable. See `Measurable.liminf'` for a version with a general filter.
 -/
 @[fun_prop]
-/--
-theorem `Measurable.liminf` / 定理 `Measurable.liminf`
+/-
+**Measurable.liminf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.liminf {f : Nat -> δ -> α} (hf : forall i, Measurable (f i)) : 
+Measurable fun x => liminf (fun i => f i x) atTop
+参数：hf : forall i, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.liminf'`：Measurable.liminf' {ι ι'} {f : ι -> δ -> α} {v : Fil
+ter ι} (hf : forall i, Measurable (f i)) {p : ι' -> Prop} {s : ι' -> Set ι} (hv 
+: v.HasC…
+· 使用引理 `Filter.atTop_countable_basis`：atTop_countable_basis [Preorder α] [IsDire
+ctedOrder α] [Nonempty α] [Countable α] : HasCountableBasis (atTop : Filter α) (
+fun _ => True) Ici
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 
-English:
-theorem Measurable.liminf
-  given: {f : Nat -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: .liminf' hf atTop_countable_basis fun _ => to_countable _
-
-中文:
-定理 可测.liminf
-  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: .liminf' hf atTop_countable_basis fun _ => to_countable _
-
-Depends on / 依赖: atTop_countable_basis, liminf, to_countable
+--- 原说明 ---
+`liminf` over `ℕ` is measurable. See `Measurable.liminf'` for a version with a g
+eneral filter.
 -/
-theorem Measurable.liminf {f : Nat -> δ -> α} (hf : forall i, Measurable (f i)) :
+theorem Measurable.liminf {f : ℕ → δ → α} (hf : ∀ i, Measurable (f i)) :
     Measurable fun x => liminf (fun i => f i x) atTop :=
   .liminf' hf atTop_countable_basis fun _ => to_countable _
 
 /-- `limsup` over `ℕ` is measurable. See `Measurable.limsup'` for a version with a general filter.
 -/
 @[fun_prop]
-/--
-theorem `Measurable.limsup` / 定理 `Measurable.limsup`
+/-
+**Measurable.limsup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.limsup {f : Nat -> δ -> α} (hf : forall i, Measurable (f i)) : 
+Measurable fun x => limsup (fun i => f i x) atTop
+参数：hf : forall i, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.limsup'`：Measurable.limsup' {ι ι'} {f : ι -> δ -> α} {u : Fil
+ter ι} (hf : forall i, Measurable (f i)) {p : ι' -> Prop} {s : ι' -> Set ι} (hu 
+: u.HasC…
+· 使用引理 `Filter.atTop_countable_basis`：atTop_countable_basis [Preorder α] [IsDire
+ctedOrder α] [Nonempty α] [Countable α] : HasCountableBasis (atTop : Filter α) (
+fun _ => True) Ici
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 
-English:
-theorem Measurable.limsup
-  given: {f : Nat -> δ -> α} (hf : forall i, Measurable (f i))
-  proof: .limsup' hf atTop_countable_basis fun _ => to_countable _
-
-中文:
-定理 可测.limsup
-  条件: {f : 自然数 -> δ -> α} (hf : 对任意 i, 可测 (f i))
-  证明: .limsup' hf atTop_countable_basis fun _ => to_countable _
-
-Depends on / 依赖: atTop_countable_basis, limsup, to_countable
+--- 原说明 ---
+`limsup` over `ℕ` is measurable. See `Measurable.limsup'` for a version with a g
+eneral filter.
 -/
-theorem Measurable.limsup {f : Nat -> δ -> α} (hf : forall i, Measurable (f i)) :
+theorem Measurable.limsup {f : ℕ → δ → α} (hf : ∀ i, Measurable (f i)) :
     Measurable fun x => limsup (fun i => f i x) atTop :=
   .limsup' hf atTop_countable_basis fun _ => to_countable _
 
@@ -3591,103 +3541,93 @@ end BorelSpace
 
 section ENNReal
 
-/--
-theorem `measure_eq_measure_preimage_add_measure_tsum_Ico_zpow` / 定理 `measure_eq_measure_preimage_add_measure_tsum_Ico_zpow`
+/-- One can cut out `ℝ≥0∞` into the sets `{0}`, `Ico (t^n) (t^(n+1))` for `n : ℤ` and `{∞}`. This
+gives a way to compute the measure of a set in terms of sets on which a given function `f` does not
+fluctuate by more than `t`. -/
+/-
+**measure_eq_measure_preimage_add_measure_tsum_Ico_zpow** 是 Mathlib 中的一个定理，位于命名空
+间 ``。
+形式化陈述：measure_eq_measure_preimage_add_measure_tsum_Ico_zpow {α : Type*} {mα : Me
+asurableSpace α} (μ : Measure α) {f : α -> Real>=0∞} (hf : Measurable f) {s : Se
+t α} (hs : MeasurableSet s) {t : Real>=0} (ht : 1 < t) : μ s = μ (s inter f ⁻¹' 
+{0}) + μ (s inter f ⁻¹' {∞}) + ∑' n : Int, μ (s inter f ⁻¹' Ico ((t : Real>=0∞) 
+^ n) ((t : Real>=0∞) ^ (n + 1)))
+参数：μ : Measure α；hf : Measurable f；hs : MeasurableSet s；ht : 1 < t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.measure_union`：measure_union (hd : Disjoint s₁ s₂) (h : Me
+asurableSet s₂) : μ (s₁ union s₂) = μ s₁ + μ s₂
+· 使用定理 `Disjoint.inter_left'`：inter_left' (u : Set α) (h : Disjoint s t) : Disjo
+int (u inter s) t
+· 使用定理 `Disjoint.inter_right'`：inter_right' (u : Set α) (h : Disjoint s t) : Dis
+joint s (u inter t)
+· 使用定理 `Disjoint.preimage`：Disjoint.preimage (f : α -> β) {s t : Set β} (h : Dis
+joint s t) : Disjoint (f ⁻¹' s) (f ⁻¹' t)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.disjoint_singleton_left`：disjoint_singleton_left : Disjoint {a} s ↔ 
+a ∉ s
+· 使用定理 `Set.self_notMem_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∉ S
+et.Ioi a
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `Set.inter_union_distrib_left`：inter_union_distrib_left (s t u : Set α) :
+ s inter (t union u) = s inter t union s inter u
+· 使用定理 `Set.preimage_union`：preimage_union {s t : Set β} : f ⁻¹' (s union t) = f
+ ⁻¹' s union f ⁻¹' t
+· 使用定理 `Set.singleton_union`：singleton_union : {a} union s = insert a s
+· 使用定理 `Set.Ioi_insert`：∀ {α : Type u_1} [inst : PartialOrder α] {a : α}, insert
+ a (Set.Ioi a) = Set.Ici a
+· 使用定理 `bot_eq_zero`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero α] 
+[IsBotZeroClass α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Set.Ici_bot`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α],
+ Set.Ici ⊥ = Set.univ
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+（共 68 条，此处仅展示前 30 条）
 
-English:
-theorem measure_eq_measure_preimage_add_measure_tsum_Ico_zpow
-  statement: {α : Type*} {mα : MeasurableSpace α}
-  proof: by
-  have A : μ s = μ (s inter f ⁻¹' {0}) + μ (s inter f ⁻¹' Ioi 0) := by
-    rw [← measure_union]
-    · rw [← inter_union_distrib_left, ← preimage_union, singleton_union, Ioi_insert,
-        ← _root_.bot_eq_zero, Ici_bot, preimage_univ, inter_univ]
-    · exact disjoint_singleton_left.mpr self_notMem_Ioi
-.inter_left' s .inter_right' s .preimage f
-    · exact hs.inter (hf measurableSet_Ioi)
-  have B : μ (s inter f ⁻¹' Ioi 0) = μ (s inter f ⁻¹' {∞}) + μ (s inter f ⁻¹' Ioo 0 ∞) := by
-    rw [← measure_union]
-    · rw [← inter_union_distrib_left]
-      congr
-      ext x
-      simp only [mem_singleton_iff, mem_union, mem_Ioo, mem_Ioi, mem_preimage]
-      obtain (H | H) : f x = ∞ ∨ f x < ∞ := eq_or_lt_of_le le_top
-      · simp only [H, or_false, ENNReal.zero_lt_top, not_top_lt, and_false]
-      · simp only [H, H.ne, and_true, false_or]
-    · refine disjoint_left.2 fun x hx h'x => ?_
-      have : f x < ∞ := h'x.2.2
-      exact lt_irrefl _ (this.trans_le (le_of_eq hx.2.symm))
-    · exact hs.inter (hf measurableSet_Ioo)
-  have C : μ (s inter f ⁻¹' Ioo 0 ∞) =
-      ∑' n : Int, μ (s inter f ⁻¹' Ico ((t : Real>=0∞) ^ n) ((t : Real>=0∞) ^ (n + 1))) := by
-    rw [← measure_iUnion]; rw [ENNReal.Ioo_zero_top_eq_iUnion_Ico_zpow (ENNReal.one_lt_coe_iff.2 ht) ENNReal.coe_ne_top]; rw [preimage_iUnion]; rw [inter_iUnion]
-    · intro i j hij
-      wlog h : i < j generalizing i j
-      · exact (this hij.symm (hij.lt_or_gt.resolve_left h)).symm
-      refine disjoint_left.2 fun x hx h'x => lt_irrefl (f x) ?_
-      calc
-        f x < (t : Real>=0∞) ^ (i + 1) := hx.2.2
-        _ <= (t : Real>=0∞) ^ j := ENNReal.zpow_le_of_le (ENNReal.one_le_coe_iff.2 ht.le) h
-        _ <= f x := h'x.2.1
-    · intro n
-      exact hs.inter (hf measurableSet_Ico)
-  rw [A]; rw [B]; rw [C]; rw [add_assoc]
-
-中文:
-定理 measure_eq_measure_preimage_add_measure_tsum_Ico_zpow
-  结论: {α : 类型} {mα : 可测空间 α}
-  证明: by
-  have A : μ s = μ (s inter f ⁻¹' {0}) + μ (s inter f ⁻¹' Ioi 0) := by
-    rw [← measure_union]
-    · rw [← inter_union_distrib_left, ← preimage_union, singleton_union, Ioi_insert,
-        ← _root_.bot_eq_zero, Ici_bot, preimage_univ, inter_univ]
-    · exact disjoint_singleton_left.mpr self_notMem_Ioi
-.inter_left' s .inter_right' s .preimage f
-    · exact hs.inter (hf measurableSet_Ioi)
-  have B : μ (s inter f ⁻¹' Ioi 0) = μ (s inter f ⁻¹' {∞}) + μ (s inter f ⁻¹' Ioo 0 ∞) := by
-    rw [← measure_union]
-    · rw [← inter_union_distrib_left]
-      congr
-      ext x
-      simp only [mem_singleton_iff, mem_union, mem_Ioo, mem_Ioi, mem_preimage]
-      obtain (H | H) : f x = ∞ ∨ f x < ∞ := eq_or_lt_of_le le_top
-      · simp only [H, or_false, ENNReal.zero_lt_top, not_top_lt, and_false]
-      · simp only [H, H.ne, and_true, false_or]
-    · refine disjoint_left.2 fun x hx h'x => ?_
-      have : f x < ∞ := h'x.2.2
-      exact lt_irrefl _ (this.trans_le (le_of_eq hx.2.symm))
-    · exact hs.inter (hf measurableSet_Ioo)
-  have C : μ (s inter f ⁻¹' Ioo 0 ∞) =
-      ∑' n : Int, μ (s inter f ⁻¹' Ico ((t : Real>=0∞) ^ n) ((t : Real>=0∞) ^ (n + 1))) := by
-    rw [← measure_iUnion]; rw [ENNReal.Ioo_zero_top_eq_iUnion_Ico_zpow (ENNReal.one_lt_coe_iff.2 ht) ENNReal.coe_ne_top]; rw [preimage_iUnion]; rw [inter_iUnion]
-    · intro i j hij
-      wlog h : i < j generalizing i j
-      · exact (this hij.symm (hij.lt_or_gt.resolve_left h)).symm
-      refine disjoint_left.2 fun x hx h'x => lt_irrefl (f x) ?_
-      calc
-        f x < (t : Real>=0∞) ^ (i + 1) := hx.2.2
-        _ <= (t : Real>=0∞) ^ j := ENNReal.zpow_le_of_le (ENNReal.one_le_coe_iff.2 ht.le) h
-        _ <= f x := h'x.2.1
-    · intro n
-      exact hs.inter (hf measurableSet_Ico)
-  rw [A]; rw [B]; rw [C]; rw [add_assoc]
-
-Depends on / 依赖: Ici_bot, Ioi_insert, _root_, _root_.bot_eq_zero, bot_eq_zero, disjoint_singleton_left, disjoint_singleton_left.mpr, hs.inter, inter_left, inter_right, inter_union_d, inter_union_distrib_left, inter_univ, measurableSet_Ioi, measure_union, preimage, preimage_union, preimage_univ, self_notMem_Ioi, singleton_union
+--- 原说明 ---
+One can cut out `ℝ≥0∞` into the sets `{0}`, `Ico (t^n) (t^(n+1))` for `n : ℤ` an
+d `{∞}`. This
+gives a way to compute the measure of a set in terms of sets on which a given fu
+nction `f` does not
+fluctuate by more than `t`.
 -/
 theorem measure_eq_measure_preimage_add_measure_tsum_Ico_zpow {α : Type*} {mα : MeasurableSpace α}
-    (μ : Measure α) {f : α -> Real>=0∞} (hf : Measurable f) {s : Set α} (hs : MeasurableSet s)
-    {t : Real>=0} (ht : 1 < t) :
+    (μ : Measure α) {f : α → ℝ≥0∞} (hf : Measurable f) {s : Set α} (hs : MeasurableSet s)
+    {t : ℝ≥0} (ht : 1 < t) :
     μ s =
-      μ (s inter f ⁻¹' {0}) + μ (s inter f ⁻¹' {∞}) +
-      ∑' n : Int, μ (s inter f ⁻¹' Ico ((t : Real>=0∞) ^ n) ((t : Real>=0∞) ^ (n + 1))) := by
-  have A : μ s = μ (s inter f ⁻¹' {0}) + μ (s inter f ⁻¹' Ioi 0) := by
+      μ (s ∩ f ⁻¹' {0}) + μ (s ∩ f ⁻¹' {∞}) +
+      ∑' n : ℤ, μ (s ∩ f ⁻¹' Ico ((t : ℝ≥0∞) ^ n) ((t : ℝ≥0∞) ^ (n + 1))) := by
+  have A : μ s = μ (s ∩ f ⁻¹' {0}) + μ (s ∩ f ⁻¹' Ioi 0) := by
     rw [← measure_union]
     · rw [← inter_union_distrib_left, ← preimage_union, singleton_union, Ioi_insert,
         ← _root_.bot_eq_zero, Ici_bot, preimage_univ, inter_univ]
     · exact disjoint_singleton_left.mpr self_notMem_Ioi
-.inter_left' s .inter_right' s .preimage f
+        |>.preimage f |>.inter_right' s |>.inter_left' s
     · exact hs.inter (hf measurableSet_Ioi)
-  have B : μ (s inter f ⁻¹' Ioi 0) = μ (s inter f ⁻¹' {∞}) + μ (s inter f ⁻¹' Ioo 0 ∞) := by
+  have B : μ (s ∩ f ⁻¹' Ioi 0) = μ (s ∩ f ⁻¹' {∞}) + μ (s ∩ f ⁻¹' Ioo 0 ∞) := by
     rw [← measure_union]
     · rw [← inter_union_distrib_left]
       congr
@@ -3700,19 +3640,22 @@ theorem measure_eq_measure_preimage_add_measure_tsum_Ico_zpow {α : Type*} {mα 
       have : f x < ∞ := h'x.2.2
       exact lt_irrefl _ (this.trans_le (le_of_eq hx.2.symm))
     · exact hs.inter (hf measurableSet_Ioo)
-  have C : μ (s inter f ⁻¹' Ioo 0 ∞) =
-      ∑' n : Int, μ (s inter f ⁻¹' Ico ((t : Real>=0∞) ^ n) ((t : Real>=0∞) ^ (n + 1))) := by
-    rw [← measure_iUnion]; rw [ENNReal.Ioo_zero_top_eq_iUnion_Ico_zpow (ENNReal.one_lt_coe_iff.2 ht) ENNReal.coe_ne_top]; rw [preimage_iUnion]; rw [inter_iUnion]
+  have C : μ (s ∩ f ⁻¹' Ioo 0 ∞) =
+      ∑' n : ℤ, μ (s ∩ f ⁻¹' Ico ((t : ℝ≥0∞) ^ n) ((t : ℝ≥0∞) ^ (n + 1))) := by
+    rw [← measure_iUnion,
+      ENNReal.Ioo_zero_top_eq_iUnion_Ico_zpow (ENNReal.one_lt_coe_iff.2 ht) ENNReal.coe_ne_top,
+      preimage_iUnion, inter_iUnion]
     · intro i j hij
       wlog h : i < j generalizing i j
       · exact (this hij.symm (hij.lt_or_gt.resolve_left h)).symm
       refine disjoint_left.2 fun x hx h'x => lt_irrefl (f x) ?_
       calc
-        f x < (t : Real>=0∞) ^ (i + 1) := hx.2.2
-        _ <= (t : Real>=0∞) ^ j := ENNReal.zpow_le_of_le (ENNReal.one_le_coe_iff.2 ht.le) h
-        _ <= f x := h'x.2.1
+        f x < (t : ℝ≥0∞) ^ (i + 1) := hx.2.2
+        _ ≤ (t : ℝ≥0∞) ^ j := ENNReal.zpow_le_of_le (ENNReal.one_le_coe_iff.2 ht.le) h
+        _ ≤ f x := h'x.2.1
     · intro n
       exact hs.inter (hf measurableSet_Ico)
-  rw [A]; rw [B]; rw [C]; rw [add_assoc]
+  rw [A, B, C, add_assoc]
 
 end ENNReal
+

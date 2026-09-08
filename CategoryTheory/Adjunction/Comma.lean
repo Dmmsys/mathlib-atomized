@@ -38,49 +38,26 @@ variable {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D]
 
 section OfInitials
 
-variable [forall A, HasInitial (StructuredArrow A G)]
+variable [∀ A, HasInitial (StructuredArrow A G)]
 
 attribute [local simp] eq_iff_true_of_subsingleton in
 /-- Implementation: If each structured arrow category on `G` has an initial object, an equivalence
 which is helpful for constructing a left adjoint to `G`.
 -/
 @[simps]
-/--
-Definition of `leftAdjointOfStructuredArrowInitialsAux` / `leftAdjointOfStructuredArrowInitialsAux` 的定义
+/-
+**CategoryTheory.leftAdjointOfStructuredArrowInitialsAux** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory`。
+形式化陈述：leftAdjointOfStructuredArrowInitialsAux (A : C) (B : D) : ((⊥_ StructuredA
+rrow A G).right ⟶ B) ≃ (A ⟶ G.obj B) where toFun g
+参数：A : C；B : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftAdjointOfStructuredArrowInitialsAux
-  signature: (A : C) (B : D)
-  body: (⊥_ StructuredArrow A G).hom ≫ G.map g
-  invFun f := CommaMorphism.right (initial.to (StructuredArrow.mk f))
-  left_inv g := by
-    let B' : StructuredArrow A G := StructuredArrow.mk ((⊥_ StructuredArrow A G).hom ≫ G.map g)
-    let g' : ⊥_ StructuredArrow A G ⟶ B' := StructuredArrow.homMk g rfl
-    have : initial.to _ = g' := by cat_disch
-    change CommaMorphism.right (initial.to B') = _
-    rw [this]
-    rfl
-  right_inv f := by
-    let B' : StructuredArrow A G := StructuredArrow.mk f
-    apply (CommaMorphism.w (initial.to B')).symm.trans (Category.id_comp _)
-
-中文:
-定义 leftAdjointOfStructuredArrowInitialsAux
-  签名: (A : C) (B : D)
-  定义体: (⊥_ StructuredArrow A G).hom ≫ G.map g
-  invFun f := CommaMorphism.right (initial.to (StructuredArrow.mk f))
-  left_inv g := by
-    let B' : StructuredArrow A G := StructuredArrow.mk ((⊥_ StructuredArrow A G).hom ≫ G.map g)
-    let g' : ⊥_ StructuredArrow A G ⟶ B' := StructuredArrow.homMk g rfl
-    have : initial.to _ = g' := by cat_disch
-    change CommaMorphism.right (initial.to B') = _
-    rw [this]
-    rfl
-  right_inv f := by
-    let B' : StructuredArrow A G := StructuredArrow.mk f
-    apply (CommaMorphism.w (initial.to B')).symm.trans (Category.id_comp _)
-
-Depends on / 依赖: G.map, StructuredArrow
+--- 原说明 ---
+Implementation: If each structured arrow category on `G` has an initial object, 
+an equivalence
+which is helpful for constructing a left adjoint to `G`.
 -/
 def leftAdjointOfStructuredArrowInitialsAux (A : C) (B : D) :
     ((⊥_ StructuredArrow A G).right ⟶ B) ≃ (A ⟶ G.obj B) where
@@ -98,55 +75,56 @@ def leftAdjointOfStructuredArrowInitialsAux (A : C) (B : D) :
     apply (CommaMorphism.w (initial.to B')).symm.trans (Category.id_comp _)
 
 /--
-Definition of `leftAdjointOfStructuredArrowInitials` / `leftAdjointOfStructuredArrowInitials` 的定义
+If each structured arrow category on `G` has an initial object, construct a left adjoint to `G`. It
+is shown that it is a left adjoint in `adjunctionOfStructuredArrowInitials`.
+-/
+/-
+**CategoryTheory.leftAdjointOfStructuredArrowInitials** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory`。
+形式化陈述：leftAdjointOfStructuredArrowInitials : C ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftAdjointOfStructuredArrowInitials
-  signature: : C ⥤ D
-  body: Adjunction.leftAdjointOfEquiv (leftAdjointOfStructuredArrowInitialsAux G) fun _ _ => by simp
-
-中文:
-定义 leftAdjointOfStructuredArrowInitials
-  签名: : C ⥤ D
-  定义体: Adjunction.leftAdjointOfEquiv (leftAdjointOfStructuredArrowInitialsAux G) fun _ _ => by simp
-
-Depends on / 依赖: Adjunction, Adjunction.leftAdjointOfEquiv, leftAdjointOfEquiv, leftAdjointOfStructuredArrowInitialsAux
+--- 原说明 ---
+If each structured arrow category on `G` has an initial object, construct a left
+ adjoint to `G`. It
+is shown that it is a left adjoint in `adjunctionOfStructuredArrowInitials`.
 -/
 def leftAdjointOfStructuredArrowInitials : C ⥤ D :=
   Adjunction.leftAdjointOfEquiv (leftAdjointOfStructuredArrowInitialsAux G) fun _ _ => by simp
 
 /--
-Definition of `adjunctionOfStructuredArrowInitials` / `adjunctionOfStructuredArrowInitials` 的定义
+If each structured arrow category on `G` has an initial object, we have a constructed left adjoint
+to `G`.
+-/
+/-
+**CategoryTheory.adjunctionOfStructuredArrowInitials** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory`。
+形式化陈述：adjunctionOfStructuredArrowInitials : leftAdjointOfStructuredArrowInitials
+ G ⊣ G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunctionOfStructuredArrowInitials
-  signature: : leftAdjointOfStructuredArrowInitials G ⊣ G
-  body: Adjunction.adjunctionOfEquivLeft _ _
-
-中文:
-定义 adjunctionOfStructuredArrowInitials
-  签名: : leftAdjointOfStructuredArrowInitials G ⊣ G
-  定义体: Adjunction.adjunctionOfEquivLeft _ _
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivLeft, adjunctionOfEquivLeft
+--- 原说明 ---
+If each structured arrow category on `G` has an initial object, we have a constr
+ucted left adjoint
+to `G`.
 -/
 def adjunctionOfStructuredArrowInitials : leftAdjointOfStructuredArrowInitials G ⊣ G :=
   Adjunction.adjunctionOfEquivLeft _ _
 
-/--
-lemma `isRightAdjointOfStructuredArrowInitials` / 引理 `isRightAdjointOfStructuredArrowInitials`
+/-- If each structured arrow category on `G` has an initial object, `G` is a right adjoint. -/
+/-
+**CategoryTheory.isRightAdjointOfStructuredArrowInitials** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory`。
+形式化陈述：isRightAdjointOfStructuredArrowInitials : G.IsRightAdjoint where exists_le
+ftAdjoint
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isRightAdjointOfStructuredArrowInitials
-  statement: G.IsRightAdjoint where
-  proof: ⟨_, ⟨adjunctionOfStructuredArrowInitials G⟩⟩
-
-中文:
-引理 isRightAdjointOfStructuredArrowInitials
-  结论: G.是右伴随 where
-  证明: ⟨_, ⟨adjunctionOfStructuredArrowInitials G⟩⟩
-
-Depends on / 依赖: adjunctionOfStructuredArrowInitials
+--- 原说明 ---
+If each structured arrow category on `G` has an initial object, `G` is a right a
+djoint.
 -/
 lemma isRightAdjointOfStructuredArrowInitials : G.IsRightAdjoint where
   exists_leftAdjoint := ⟨_, ⟨adjunctionOfStructuredArrowInitials G⟩⟩
@@ -155,7 +133,7 @@ end OfInitials
 
 section OfTerminals
 
-variable [forall A, HasTerminal (CostructuredArrow G A)]
+variable [∀ A, HasTerminal (CostructuredArrow G A)]
 
 set_option backward.isDefEq.respectTransparency false in
 attribute [local simp] eq_iff_true_of_subsingleton in
@@ -163,40 +141,19 @@ attribute [local simp] eq_iff_true_of_subsingleton in
 which is helpful for constructing a right adjoint to `G`.
 -/
 @[simps]
-/--
-Definition of `rightAdjointOfCostructuredArrowTerminalsAux` / `rightAdjointOfCostructuredArrowTerminalsAux` 的定义
+/-
+**CategoryTheory.rightAdjointOfCostructuredArrowTerminalsAux** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory`。
+形式化陈述：rightAdjointOfCostructuredArrowTerminalsAux (B : D) (A : C) : (G.obj B ⟶ A
+) ≃ (B ⟶ (⊤_ CostructuredArrow G A).left) where toFun g
+参数：B : D；A : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightAdjointOfCostructuredArrowTerminalsAux
-  signature: (B : D) (A : C)
-  body: CommaMorphism.left (terminal.from (CostructuredArrow.mk g))
-  invFun g := G.map g ≫ (⊤_ CostructuredArrow G A).hom
-  left_inv := by cat_disch
-  right_inv g := by
-    let B' : CostructuredArrow G A :=
-      CostructuredArrow.mk (G.map g ≫ (⊤_ CostructuredArrow G A).hom)
-    let g' : B' ⟶ ⊤_ CostructuredArrow G A := CostructuredArrow.homMk g rfl
-    have : terminal.from _ = g' := by cat_disch
-    change CommaMorphism.left (terminal.from B') = _
-    rw [this]
-    rfl
-
-中文:
-定义 rightAdjointOfCostructuredArrowTerminalsAux
-  签名: (B : D) (A : C)
-  定义体: CommaMorphism.left (terminal.from (CostructuredArrow.mk g))
-  invFun g := G.map g ≫ (⊤_ CostructuredArrow G A).hom
-  left_inv := by cat_disch
-  right_inv g := by
-    let B' : CostructuredArrow G A :=
-      CostructuredArrow.mk (G.map g ≫ (⊤_ CostructuredArrow G A).hom)
-    let g' : B' ⟶ ⊤_ CostructuredArrow G A := CostructuredArrow.homMk g rfl
-    have : terminal.from _ = g' := by cat_disch
-    change CommaMorphism.left (terminal.from B') = _
-    rw [this]
-    rfl
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, CostructuredArrow, CostructuredArrow.mk, terminal, terminal.from
+--- 原说明 ---
+Implementation: If each costructured arrow category on `G` has a terminal object
+, an equivalence
+which is helpful for constructing a right adjoint to `G`.
 -/
 def rightAdjointOfCostructuredArrowTerminalsAux (B : D) (A : C) :
     (G.obj B ⟶ A) ≃ (B ⟶ (⊤_ CostructuredArrow G A).left) where
@@ -214,25 +171,21 @@ def rightAdjointOfCostructuredArrowTerminalsAux (B : D) (A : C) :
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `rightAdjointOfCostructuredArrowTerminals` / `rightAdjointOfCostructuredArrowTerminals` 的定义
+If each costructured arrow category on `G` has a terminal object, construct a right adjoint to `G`.
+It is shown that it is a right adjoint in `adjunctionOfCostructuredArrowTerminals`.
+-/
+/-
+**CategoryTheory.rightAdjointOfCostructuredArrowTerminals** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory`。
+形式化陈述：rightAdjointOfCostructuredArrowTerminals : C ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightAdjointOfCostructuredArrowTerminals
-  signature: : C ⥤ D
-  body: Adjunction.rightAdjointOfEquiv (rightAdjointOfCostructuredArrowTerminalsAux G)
-      fun B₁ B₂ A f g => by
-    rw [← Equiv.eq_symm_apply]
-    simp
-
-中文:
-定义 rightAdjointOfCostructuredArrowTerminals
-  签名: : C ⥤ D
-  定义体: Adjunction.rightAdjointOfEquiv (rightAdjointOfCostructuredArrowTerminalsAux G)
-      fun B₁ B₂ A f g => by
-    rw [← Equiv.eq_symm_apply]
-    simp
-
-Depends on / 依赖: Adjunction, Adjunction.rightAdjointOfEquiv, Equiv.eq_symm_apply, eq_symm_apply, rightAdjointOfCostructuredArrowTerminalsAux, rightAdjointOfEquiv
+--- 原说明 ---
+If each costructured arrow category on `G` has a terminal object, construct a ri
+ght adjoint to `G`.
+It is shown that it is a right adjoint in `adjunctionOfCostructuredArrowTerminal
+s`.
 -/
 def rightAdjointOfCostructuredArrowTerminals : C ⥤ D :=
   Adjunction.rightAdjointOfEquiv (rightAdjointOfCostructuredArrowTerminalsAux G)
@@ -240,38 +193,37 @@ def rightAdjointOfCostructuredArrowTerminals : C ⥤ D :=
     rw [← Equiv.eq_symm_apply]
     simp
 
-/--
-Definition of `adjunctionOfCostructuredArrowTerminals` / `adjunctionOfCostructuredArrowTerminals` 的定义
+/-- If each costructured arrow category on `G` has a terminal object, we have a constructed right
+adjoint to `G`.
+-/
+/-
+**CategoryTheory.adjunctionOfCostructuredArrowTerminals** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory`。
+形式化陈述：adjunctionOfCostructuredArrowTerminals : G ⊣ rightAdjointOfCostructuredArr
+owTerminals G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunctionOfCostructuredArrowTerminals
-  signature: : G ⊣ rightAdjointOfCostructuredArrowTerminals G
-  body: Adjunction.adjunctionOfEquivRight _ _
-
-中文:
-定义 adjunctionOfCostructuredArrowTerminals
-  签名: : G ⊣ rightAdjointOfCostructuredArrowTerminals G
-  定义体: Adjunction.adjunctionOfEquivRight _ _
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivRight, adjunctionOfEquivRight
+--- 原说明 ---
+If each costructured arrow category on `G` has a terminal object, we have a cons
+tructed right
+adjoint to `G`.
 -/
 def adjunctionOfCostructuredArrowTerminals : G ⊣ rightAdjointOfCostructuredArrowTerminals G :=
   Adjunction.adjunctionOfEquivRight _ _
 
-/--
-lemma `isLeftAdjoint_of_costructuredArrowTerminals` / 引理 `isLeftAdjoint_of_costructuredArrowTerminals`
+/-- If each costructured arrow category on `G` has a terminal object, `G` is a left adjoint. -/
+/-
+**CategoryTheory.isLeftAdjoint_of_costructuredArrowTerminals** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory`。
+形式化陈述：isLeftAdjoint_of_costructuredArrowTerminals : G.IsLeftAdjoint where exists
+_rightAdjoint
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isLeftAdjoint_of_costructuredArrowTerminals
-  statement: G.IsLeftAdjoint where
-  proof: ⟨rightAdjointOfCostructuredArrowTerminals G, ⟨Adjunction.adjunctionOfEquivRight _ _⟩⟩
-
-中文:
-引理 isLeftAdjoint_of_costructuredArrowTerminals
-  结论: G.是左伴随 where
-  证明: ⟨rightAdjointOfCostructuredArrowTerminals G, ⟨Adjunction.adjunctionOfEquivRight _ _⟩⟩
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivRight, adjunctionOfEquivRight, rightAdjointOfCostructuredArrowTerminals
+--- 原说明 ---
+If each costructured arrow category on `G` has a terminal object, `G` is a left 
+adjoint.
 -/
 lemma isLeftAdjoint_of_costructuredArrowTerminals : G.IsLeftAdjoint where
   exists_rightAdjoint :=
@@ -286,26 +238,22 @@ variable {F : C ⥤ D}
 attribute [local simp] Adjunction.homEquiv_unit Adjunction.homEquiv_counit
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mkInitialOfLeftAdjoint` / `mkInitialOfLeftAdjoint` 的定义
+/-- Given a left adjoint to `G`, we can construct an initial object in each structured arrow
+category on `G`. -/
+/-
+**CategoryTheory.mkInitialOfLeftAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：mkInitialOfLeftAdjoint (h : F ⊣ G) (A : C) : IsInitial (StructuredArrow.mk
+ (h.unit.app A) : StructuredArrow A G) where desc B
+参数：h : F ⊣ G；A : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mkInitialOfLeftAdjoint
-  signature: (h : F ⊣ G) (A : C)
-  body: StructuredArrow.homMk ((h.homEquiv _ _).symm B.pt.hom)
-  uniq s m _ := by
-    apply StructuredArrow.ext
-    simp [← StructuredArrow.w m]
-
-中文:
-定义 mkInitialOfLeftAdjoint
-  签名: (h : F ⊣ G) (A : C)
-  定义体: StructuredArrow.homMk ((h.homEquiv _ _).symm B.pt.hom)
-  uniq s m _ := by
-    apply StructuredArrow.ext
-    simp [← StructuredArrow.w m]
-
-Depends on / 依赖: B.pt.hom, StructuredArrow, StructuredArrow.homMk, h.homEquiv, homEquiv
+--- 原说明 ---
+Given a left adjoint to `G`, we can construct an initial object in each structur
+ed arrow
+category on `G`.
 -/
 def mkInitialOfLeftAdjoint (h : F ⊣ G) (A : C) :
     IsInitial (StructuredArrow.mk (h.unit.app A) : StructuredArrow A G) where
@@ -315,26 +263,21 @@ def mkInitialOfLeftAdjoint (h : F ⊣ G) (A : C) :
     simp [← StructuredArrow.w m]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mkTerminalOfRightAdjoint` / `mkTerminalOfRightAdjoint` 的定义
+/-- Given a right adjoint to `F`, we can construct a terminal object in each costructured arrow
+category on `F`. -/
+/-
+**CategoryTheory.mkTerminalOfRightAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：mkTerminalOfRightAdjoint (h : F ⊣ G) (A : D) : IsTerminal (CostructuredArr
+ow.mk (h.counit.app A) : CostructuredArrow F A) where lift B
+参数：h : F ⊣ G；A : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkTerminalOfRightAdjoint
-  signature: (h : F ⊣ G) (A : D)
-  body: CostructuredArrow.homMk (h.homEquiv _ _ B.pt.hom)
-  uniq s m _ := by
-    apply CostructuredArrow.ext
-    simp [← CostructuredArrow.w m]
-
-中文:
-定义 mkTerminalOfRightAdjoint
-  签名: (h : F ⊣ G) (A : D)
-  定义体: CostructuredArrow.homMk (h.homEquiv _ _ B.pt.hom)
-  uniq s m _ := by
-    apply CostructuredArrow.ext
-    simp [← CostructuredArrow.w m]
-
-Depends on / 依赖: B.pt.hom, CostructuredArrow, CostructuredArrow.homMk, h.homEquiv, homEquiv
+--- 原说明 ---
+Given a right adjoint to `F`, we can construct a terminal object in each costruc
+tured arrow
+category on `F`.
 -/
 def mkTerminalOfRightAdjoint (h : F ⊣ G) (A : D) :
     IsTerminal (CostructuredArrow.mk (h.counit.app A) : CostructuredArrow F A) where
@@ -345,48 +288,40 @@ def mkTerminalOfRightAdjoint (h : F ⊣ G) (A : D) :
 
 end
 
-/--
-theorem `isRightAdjoint_iff_hasInitial_structuredArrow` / 定理 `isRightAdjoint_iff_hasInitial_structuredArrow`
-
-English:
-theorem isRightAdjoint_iff_hasInitial_structuredArrow
-  given: {G : D ⥤ C}
-  proof: ⟨fun _ A => (mkInitialOfLeftAdjoint _ (Adjunction.ofIsRightAdjoint G) A).hasInitial,
-    fun _ => isRightAdjointOfStructuredArrowInitials _⟩
-
-中文:
-定理 isRightAdjoint_iff_hasInitial_structuredArrow
-  条件: {G : D ⥤ C}
-  证明: ⟨fun _ A => (mkInitialOfLeftAdjoint _ (Adjunction.ofIsRightAdjoint G) A).hasInitial,
-    fun _ => isRightAdjointOfStructuredArrowInitials _⟩
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, hasInitial, isRightAdjointOfStructuredArrowInitials, mkInitialOfLeftAdjoint, ofIsRightAdjoint
+/-
+**CategoryTheory.isRightAdjoint_iff_hasInitial_structuredArrow** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory`。
+形式化陈述：isRightAdjoint_iff_hasInitial_structuredArrow {G : D ⥤ C} : G.IsRightAdjoi
+nt ↔ forall A, HasInitial (StructuredArrow A G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hasInitial`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (h : CategoryTheory.Limits.IsInitial X),
+   CategoryTheory.Limits.HasInit…
+· 使用引理 `CategoryTheory.isRightAdjointOfStructuredArrowInitials`：isRightAdjointOf
+StructuredArrowInitials : G.IsRightAdjoint where exists_leftAdjoint
 -/
 theorem isRightAdjoint_iff_hasInitial_structuredArrow {G : D ⥤ C} :
-    G.IsRightAdjoint ↔ forall A, HasInitial (StructuredArrow A G) :=
+    G.IsRightAdjoint ↔ ∀ A, HasInitial (StructuredArrow A G) :=
   ⟨fun _ A => (mkInitialOfLeftAdjoint _ (Adjunction.ofIsRightAdjoint G) A).hasInitial,
     fun _ => isRightAdjointOfStructuredArrowInitials _⟩
-
-/--
-theorem `isLeftAdjoint_iff_hasTerminal_costructuredArrow` / 定理 `isLeftAdjoint_iff_hasTerminal_costructuredArrow`
-
-English:
-theorem isLeftAdjoint_iff_hasTerminal_costructuredArrow
-  given: {F : C ⥤ D}
-  proof: ⟨fun _ A => (mkTerminalOfRightAdjoint _ (Adjunction.ofIsLeftAdjoint F) A).hasTerminal,
-    fun _ => isLeftAdjoint_of_costructuredArrowTerminals _⟩
-
-中文:
-定理 isLeftAdjoint_iff_hasTerminal_costructuredArrow
-  条件: {F : C ⥤ D}
-  证明: ⟨fun _ A => (mkTerminalOfRightAdjoint _ (Adjunction.ofIsLeftAdjoint F) A).hasTerminal,
-    fun _ => isLeftAdjoint_of_costructuredArrowTerminals _⟩
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, hasTerminal, isLeftAdjoint_of_costructuredArrowTerminals, mkTerminalOfRightAdjoint, ofIsLeftAdjoint
+/-
+**CategoryTheory.isLeftAdjoint_iff_hasTerminal_costructuredArrow** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isLeftAdjoint_iff_hasTerminal_costructuredArrow {F : C ⥤ D} : F.IsLeftAdjo
+int ↔ forall A, HasTerminal (CostructuredArrow F A)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hasTerminal`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X : C} (h : CategoryTheory.Limits.IsTerminal 
+X),   CategoryTheory.Limits.HasTer…
+· 使用引理 `CategoryTheory.isLeftAdjoint_of_costructuredArrowTerminals`：isLeftAdjoin
+t_of_costructuredArrowTerminals : G.IsLeftAdjoint where exists_rightAdjoint
 -/
 theorem isLeftAdjoint_iff_hasTerminal_costructuredArrow {F : C ⥤ D} :
-    F.IsLeftAdjoint ↔ forall A, HasTerminal (CostructuredArrow F A) :=
+    F.IsLeftAdjoint ↔ ∀ A, HasTerminal (CostructuredArrow F A) :=
   ⟨fun _ A => (mkTerminalOfRightAdjoint _ (Adjunction.ofIsLeftAdjoint F) A).hasTerminal,
     fun _ => isLeftAdjoint_of_costructuredArrowTerminals _⟩
 
 end CategoryTheory
+

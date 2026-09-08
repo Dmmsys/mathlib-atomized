@@ -57,92 +57,39 @@ open CliffordAlgebra MulAction
 
 open scoped Pointwise
 
-/--
-Definition of `lipschitzGroup` / `lipschitzGroup` 的定义
+/-- `lipschitzGroup` is the subgroup closure of all the invertible elements in the form of `ι Q m`
+where `ι` is the canonical linear map `M →ₗ[R] CliffordAlgebra Q`. -/
+/-
+**lipschitzGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：lipschitzGroup (Q : QuadraticForm R M) : Subgroup (CliffordAlgebra Q)ˣ
+参数：Q : QuadraticForm R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lipschitzGroup
-  signature: (Q : QuadraticForm R M)
-  body: Subgroup.closure ((↑) ⁻¹' Set.range (ι Q) : Set (CliffordAlgebra Q)ˣ)
-
-中文:
-定义 lipschitzGroup
-  签名: (Q : QuadraticForm R M)
-  定义体: Subgroup.closure ((↑) ⁻¹' Set.range (ι Q) : Set (CliffordAlgebra Q)ˣ)
-
-Depends on / 依赖: CliffordAlgebra, Set.range, Subgroup, Subgroup.closure, closure
+--- 原说明 ---
+`lipschitzGroup` is the subgroup closure of all the invertible elements in the f
+orm of `ι Q m`
+where `ι` is the canonical linear map `M →ₗ[R] CliffordAlgebra Q`.
 -/
 def lipschitzGroup (Q : QuadraticForm R M) : Subgroup (CliffordAlgebra Q)ˣ :=
   Subgroup.closure ((↑) ⁻¹' Set.range (ι Q) : Set (CliffordAlgebra Q)ˣ)
 
 namespace lipschitzGroup
 
-/--
-theorem `conjAct_smul_ι_mem_range_ι` / 定理 `conjAct_smul_ι_mem_range_ι`
+/-- The conjugation action by elements of the Lipschitz group keeps vectors as vectors. -/
+/-
+**lipschitzGroup.conjAct_smul_** 是 Mathlib 中的一个定理，位于命名空间 `lipschitzGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_ι_mem_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
-  proof: by
-  unfold lipschitzGroup at hx
-  rw [ConjAct.units_smul_def]; rw [ConjAct.ofConjAct_toConjAct]
-  induction hx using Subgroup.closure_induction'' generalizing m with
-  | mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, ← ha, ι_mul_ι_mul_invOf_ι, LinearMap.mem_range_self]
-  | inv_mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, inv_inv, ← ha, invOf_ι_mul_ι_mul_ι, LinearMap.mem_range_self]
-  | one => simp_rw [inv_one, Units.val_one, one_mul, mul_one, LinearMap.mem_range_self]
-  | mul y z _ _ hy hz =>
-    simp_rw [mul_inv_rev, Units.val_mul]
-    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ in _ by
-      simpa only [mul_assoc] using this
-    obtain ⟨z', hz'⟩ := hz m
-    obtain ⟨y', hy'⟩ := hy z'
-    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
-
-中文:
-定理 conjAct_smul_ι_mem_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
-  证明: by
-  unfold lipschitzGroup at hx
-  rw [ConjAct.units_smul_def]; rw [ConjAct.ofConjAct_toConjAct]
-  induction hx using Subgroup.closure_induction'' generalizing m with
-  | mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, ← ha, ι_mul_ι_mul_invOf_ι, LinearMap.mem_range_self]
-  | inv_mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, inv_inv, ← ha, invOf_ι_mul_ι_mul_ι, LinearMap.mem_range_self]
-  | one => simp_rw [inv_one, Units.val_one, one_mul, mul_one, LinearMap.mem_range_self]
-  | mul y z _ _ hy hz =>
-    simp_rw [mul_inv_rev, Units.val_mul]
-    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ in _ by
-      simpa only [mul_assoc] using this
-    obtain ⟨z', hz'⟩ := hz m
-    obtain ⟨y', hy'⟩ := hy z'
-    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
-
-Depends on / 依赖: ConjAct, ConjAct.ofConjAct_toConjAct, ConjAct.units_smul_def, Invert, Invertible, LinearMap, LinearMap.mem_range_self, Subgroup, Subgroup.closure_induction, closure_induction, generalizing, invOf_units, inv_mem, invertible, lipschitzGroup, mem_range_self, ofConjAct_toConjAct, simp_rw, units_smul_def, x.invertible
+--- 原说明 ---
+The conjugation action by elements of the Lipschitz group keeps vectors as vecto
+rs.
 -/
-theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
+theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : x ∈ lipschitzGroup Q)
     [Invertible (2 : R)] (m : M) :
-    ConjAct.toConjAct x • ι Q m in LinearMap.range (ι Q) := by
+    ConjAct.toConjAct x • ι Q m ∈ LinearMap.range (ι Q) := by
   unfold lipschitzGroup at hx
-  rw [ConjAct.units_smul_def]; rw [ConjAct.ofConjAct_toConjAct]
+  rw [ConjAct.units_smul_def, ConjAct.ofConjAct_toConjAct]
   induction hx using Subgroup.closure_induction'' generalizing m with
   | mem x hx =>
     obtain ⟨a, ha⟩ := hx
@@ -159,82 +106,24 @@ theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : x in lips
   | one => simp_rw [inv_one, Units.val_one, one_mul, mul_one, LinearMap.mem_range_self]
   | mul y z _ _ hy hz =>
     simp_rw [mul_inv_rev, Units.val_mul]
-    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ in _ by
+    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ ∈ _ by
       simpa only [mul_assoc] using this
     obtain ⟨z', hz'⟩ := hz m
     obtain ⟨y', hy'⟩ := hy z'
     simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
-/--
-theorem `involute_act_ι_mem_range_ι` / 定理 `involute_act_ι_mem_range_ι`
+/-- This is another version of `lipschitzGroup.conjAct_smul_ι_mem_range_ι` which uses `involute`. -/
+/-
+**lipschitzGroup.involute_act_** 是 Mathlib 中的一个定理，位于命名空间 `lipschitzGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem involute_act_ι_mem_range_ι
-  statement: [Invertible (2 : R)]
-  proof: by
-  unfold lipschitzGroup at hx
-  induction hx using Subgroup.closure_induction'' generalizing b with
-  | mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, ← ha, involute_ι, neg_mul, ι_mul_ι_mul_invOf_ι Q a b, ← map_neg,
-      LinearMap.mem_range_self]
-  | inv_mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    let := invertibleNeg (ι Q a)
-    let := Invertible.map involute (ι Q a)
-    simp_rw [← invOf_units x, inv_inv, ← ha, map_invOf, involute_ι, invOf_neg, neg_mul,
-      invOf_ι_mul_ι_mul_ι, ← map_neg, LinearMap.mem_range_self]
-  | one => simp_rw [inv_one, Units.val_one, map_one, one_mul, mul_one, LinearMap.mem_range_self]
-  | mul y z _ _ hy hz =>
-    simp_rw [mul_inv_rev, Units.val_mul, map_mul]
-    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ in _ by
-      simpa only [mul_assoc] using this
-    obtain ⟨z', hz'⟩ := hz b
-    obtain ⟨y', hy'⟩ := hy z'
-    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
-
-中文:
-定理 involute_act_ι_mem_range_ι
-  结论: [可逆 (2 : R)]
-  证明: by
-  unfold lipschitzGroup at hx
-  induction hx using Subgroup.closure_induction'' generalizing b with
-  | mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, ← ha, involute_ι, neg_mul, ι_mul_ι_mul_invOf_ι Q a b, ← map_neg,
-      LinearMap.mem_range_self]
-  | inv_mem x hx =>
-    obtain ⟨a, ha⟩ := hx
-    let := x.invertible
-    let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    let := invertibleNeg (ι Q a)
-    let := Invertible.map involute (ι Q a)
-    simp_rw [← invOf_units x, inv_inv, ← ha, map_invOf, involute_ι, invOf_neg, neg_mul,
-      invOf_ι_mul_ι_mul_ι, ← map_neg, LinearMap.mem_range_self]
-  | one => simp_rw [inv_one, Units.val_one, map_one, one_mul, mul_one, LinearMap.mem_range_self]
-  | mul y z _ _ hy hz =>
-    simp_rw [mul_inv_rev, Units.val_mul, map_mul]
-    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ in _ by
-      simpa only [mul_assoc] using this
-    obtain ⟨z', hz'⟩ := hz b
-    obtain ⟨y', hy'⟩ := hy z'
-    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
-
-Depends on / 依赖: Invertible, LinearMap, LinearMap.mem_range_self, LinearMap.range, Subgroup, Subgroup.closure_induction, closure_induction, generalizing, invOf_units, inv_mem, invertible, lipschitzGroup, map_neg, mem_range_self, neg_mul, simp_rw, x.invertible
+--- 原说明 ---
+This is another version of `lipschitzGroup.conjAct_smul_ι_mem_range_ι` which use
+s `involute`.
 -/
 theorem involute_act_ι_mem_range_ι [Invertible (2 : R)]
-    {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q) (b : M) :
-      involute (Q := Q) ↑x * ι Q b * ↑x⁻¹ in LinearMap.range (ι Q) := by
+    {x : (CliffordAlgebra Q)ˣ} (hx : x ∈ lipschitzGroup Q) (b : M) :
+      involute (Q := Q) ↑x * ι Q b * ↑x⁻¹ ∈ LinearMap.range (ι Q) := by
   unfold lipschitzGroup at hx
   induction hx using Subgroup.closure_induction'' generalizing b with
   | mem x hx =>
@@ -256,358 +145,268 @@ theorem involute_act_ι_mem_range_ι [Invertible (2 : R)]
   | one => simp_rw [inv_one, Units.val_one, map_one, one_mul, mul_one, LinearMap.mem_range_self]
   | mul y z _ _ hy hz =>
     simp_rw [mul_inv_rev, Units.val_mul, map_mul]
-    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ in _ by
+    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ ∈ _ by
       simpa only [mul_assoc] using this
     obtain ⟨z', hz'⟩ := hz b
     obtain ⟨y', hy'⟩ := hy z'
     simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
-/--
-theorem `conjAct_smul_range_ι` / 定理 `conjAct_smul_range_ι`
+/-- If x is in `lipschitzGroup Q`, then `(ι Q).range` is closed under twisted conjugation.
+The reverse statement presumably is true only in finite dimensions. -/
+/-
+**lipschitzGroup.conjAct_smul_range_** 是 Mathlib 中的一个定理，位于命名空间 `lipschitzGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
-  proof: by
-  suffices forall x in lipschitzGroup Q,
-      ConjAct.toConjAct x • LinearMap.range (ι Q) <= LinearMap.range (ι Q) by
-    apply le_antisymm
-    · exact this _ hx
-· have := smul_mono_right (ConjAct.toConjAct x) this _ (inv_mem hx)
-      refine Eq.trans_le ?_ this
-      simp only [map_inv, smul_inv_smul]
-  intro x hx
-  rw [Submodule.pointwise_smul_def]; rw [Submodule.map_le_iff_le_comap]
-  rintro _ ⟨m, rfl⟩
-  exact conjAct_smul_ι_mem_range_ι hx _
-
-中文:
-定理 conjAct_smul_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
-  证明: by
-  suffices forall x in lipschitzGroup Q,
-      ConjAct.toConjAct x • LinearMap.range (ι Q) <= LinearMap.range (ι Q) by
-    apply le_antisymm
-    · exact this _ hx
-· have := smul_mono_right (ConjAct.toConjAct x) this _ (inv_mem hx)
-      refine Eq.trans_le ?_ this
-      simp only [map_inv, smul_inv_smul]
-  intro x hx
-  rw [Submodule.pointwise_smul_def]; rw [Submodule.map_le_iff_le_comap]
-  rintro _ ⟨m, rfl⟩
-  exact conjAct_smul_ι_mem_range_ι hx _
-
-Depends on / 依赖: ConjAct, ConjAct.toConjAct, Eq.trans_le, LinearMap, LinearMap.range, Submodule, Submodule.map_le_iff_le_comap, Submodule.pointwise_smul_def, inv_mem, le_antisymm, lipschitzGroup, map_inv, map_le_iff_le_comap, pointwise_smul_def, smul_inv_smul, smul_mono_right, toConjAct, trans_le
+--- 原说明 ---
+If x is in `lipschitzGroup Q`, then `(ι Q).range` is closed under twisted conjug
+ation.
+The reverse statement presumably is true only in finite dimensions.
 -/
-theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : x in lipschitzGroup Q)
+theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : x ∈ lipschitzGroup Q)
     [Invertible (2 : R)] :
     ConjAct.toConjAct x • LinearMap.range (ι Q) = LinearMap.range (ι Q) := by
-  suffices forall x in lipschitzGroup Q,
-      ConjAct.toConjAct x • LinearMap.range (ι Q) <= LinearMap.range (ι Q) by
+  suffices ∀ x ∈ lipschitzGroup Q,
+      ConjAct.toConjAct x • LinearMap.range (ι Q) ≤ LinearMap.range (ι Q) by
     apply le_antisymm
     · exact this _ hx
-· have := smul_mono_right (ConjAct.toConjAct x) this _ (inv_mem hx)
+    · have := smul_mono_right (ConjAct.toConjAct x) <| this _ (inv_mem hx)
       refine Eq.trans_le ?_ this
       simp only [map_inv, smul_inv_smul]
   intro x hx
-  rw [Submodule.pointwise_smul_def]; rw [Submodule.map_le_iff_le_comap]
+  rw [Submodule.pointwise_smul_def, Submodule.map_le_iff_le_comap]
   rintro _ ⟨m, rfl⟩
   exact conjAct_smul_ι_mem_range_ι hx _
-
-/--
-theorem `coe_mem_iff_mem` / 定理 `coe_mem_iff_mem`
-
-English:
-theorem coe_mem_iff_mem
-  given: {x : (CliffordAlgebra Q)ˣ}
-  proof: by
-  simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  norm_cast
-  exact exists_eq_right
-
-中文:
-定理 coe_mem_iff_mem
-  条件: {x : (CliffordAlgebra Q)ˣ}
-  证明: by
-  simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  norm_cast
-  exact exists_eq_right
-
-Depends on / 依赖: Subgroup, Subgroup.mem_toSubmonoid, Submonoid, Submonoid.mem_map, Units.coeHom_apply, coeHom_apply, exists_eq_right, mem_map, mem_toSubmonoid
+/-
+**lipschitzGroup.coe_mem_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `lipschitzGroup`。
+形式化陈述：coe_mem_iff_mem {x : (CliffordAlgebra Q)ˣ} : ↑x in (lipschitzGroup Q).toSu
+bmonoid.map (Units.coeHom <| CliffordAlgebra Q) ↔ x in lipschitzGroup Q
+参数：CliffordAlgebra Q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_eq_right`：∀ {α : Sort u_1} {p : α → Prop} {a' : α}, (∃ a, p a ∧ a
+ = a') ↔ p a'
 -/
 theorem coe_mem_iff_mem {x : (CliffordAlgebra Q)ˣ} :
-    ↑x in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ↔
-    x in lipschitzGroup Q := by
+    ↑x ∈ (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ↔
+    x ∈ lipschitzGroup Q := by
   simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
   norm_cast
   exact exists_eq_right
 
 end lipschitzGroup
 
-/--
-Definition of `pinGroup` / `pinGroup` 的定义
+/-- `pinGroup Q` is defined as the infimum of `lipschitzGroup Q` and `unitary (CliffordAlgebra Q)`.
+See `mem_iff`. -/
+/-
+**pinGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pinGroup (Q : QuadraticForm R M) : Submonoid (CliffordAlgebra Q)
+参数：Q : QuadraticForm R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pinGroup
-  signature: (Q : QuadraticForm R M)
-  body: (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ⊓ unitary _
-
-中文:
-定义 pinGroup
-  签名: (Q : QuadraticForm R M)
-  定义体: (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ⊓ unitary _
-
-Depends on / 依赖: CliffordAlgebra, Units.coeHom, coeHom, lipschitzGroup, toSubmonoid, toSubmonoid.map, unitary
+--- 原说明 ---
+`pinGroup Q` is defined as the infimum of `lipschitzGroup Q` and `unitary (Cliff
+ordAlgebra Q)`.
+See `mem_iff`.
 -/
 def pinGroup (Q : QuadraticForm R M) : Submonoid (CliffordAlgebra Q) :=
   (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ⊓ unitary _
 
 namespace pinGroup
 
-/--
-theorem `mem_iff` / 定理 `mem_iff`
+/-- An element is in `pinGroup Q` if and only if it is in `lipschitzGroup Q` and `unitary`. -/
+/-
+**pinGroup.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：mem_iff {x : CliffordAlgebra Q} : x in pinGroup Q ↔ x in (lipschitzGroup Q
+).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ∧ x in unitary (CliffordAl
+gebra Q)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_iff
-  given: {x : CliffordAlgebra Q}
-  proof: Iff.rfl
-
-中文:
-定理 mem_iff
-  条件: {x : CliffordAlgebra Q}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+An element is in `pinGroup Q` if and only if it is in `lipschitzGroup Q` and `un
+itary`.
 -/
 theorem mem_iff {x : CliffordAlgebra Q} :
-    x in pinGroup Q ↔
-      x in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ∧
-        x in unitary (CliffordAlgebra Q) :=
+    x ∈ pinGroup Q ↔
+      x ∈ (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ∧
+        x ∈ unitary (CliffordAlgebra Q) :=
   Iff.rfl
-
-/--
-theorem `mem_lipschitzGroup` / 定理 `mem_lipschitzGroup`
-
-English:
-theorem mem_lipschitzGroup
-  given: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  proof: hx.1
-
-中文:
-定理 mem_lipschitzGroup
-  条件: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  证明: hx.1
+/-
+**pinGroup.mem_lipschitzGroup** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：mem_lipschitzGroup {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : x in (
+lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q)
+参数：hx : x in pinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem mem_lipschitzGroup {x : CliffordAlgebra Q} (hx : x in pinGroup Q) :
-    x in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) :=
+theorem mem_lipschitzGroup {x : CliffordAlgebra Q} (hx : x ∈ pinGroup Q) :
+    x ∈ (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) :=
   hx.1
-
-/--
-theorem `mem_unitary` / 定理 `mem_unitary`
-
-English:
-theorem mem_unitary
-  given: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  proof: hx.2
-
-中文:
-定理 mem_unitary
-  条件: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  证明: hx.2
+/-
+**pinGroup.mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：mem_unitary {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : x in unitary 
+(CliffordAlgebra Q)
+参数：hx : x in pinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mem_unitary {x : CliffordAlgebra Q} (hx : x in pinGroup Q) :
-    x in unitary (CliffordAlgebra Q) :=
+theorem mem_unitary {x : CliffordAlgebra Q} (hx : x ∈ pinGroup Q) :
+    x ∈ unitary (CliffordAlgebra Q) :=
   hx.2
-
-/--
-theorem `units_mem_iff` / 定理 `units_mem_iff`
-
-English:
-theorem units_mem_iff
-  given: {x : (CliffordAlgebra Q)ˣ}
-  proof: by
-  rw [mem_iff]; rw [lipschitzGroup.coe_mem_iff_mem]
-
-中文:
-定理 units_mem_iff
-  条件: {x : (CliffordAlgebra Q)ˣ}
-  证明: by
-  rw [mem_iff]; rw [lipschitzGroup.coe_mem_iff_mem]
-
-Depends on / 依赖: coe_mem_iff_mem, lipschitzGroup, lipschitzGroup.coe_mem_iff_mem, mem_iff
+/-
+**pinGroup.units_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：units_mem_iff {x : (CliffordAlgebra Q)ˣ} : ↑x in pinGroup Q ↔ x in lipschi
+tzGroup Q ∧ ↑x in unitary (CliffordAlgebra Q)
+参数：CliffordAlgebra Q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pinGroup.mem_iff`：mem_iff {x : CliffordAlgebra Q} : x in pinGroup Q ↔ x 
+in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ∧ x in
+ unita…
+· 使用定理 `lipschitzGroup.coe_mem_iff_mem`：coe_mem_iff_mem {x : (CliffordAlgebra Q)
+ˣ} : ↑x in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q
+) ↔ x in lipschitzGr…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem units_mem_iff {x : (CliffordAlgebra Q)ˣ} :
-    ↑x in pinGroup Q ↔ x in lipschitzGroup Q ∧ ↑x in unitary (CliffordAlgebra Q) := by
-  rw [mem_iff]; rw [lipschitzGroup.coe_mem_iff_mem]
-
-/--
-theorem `units_mem_lipschitzGroup` / 定理 `units_mem_lipschitzGroup`
-
-English:
-theorem units_mem_lipschitzGroup
-  given: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  proof: (units_mem_iff.1 hx).1
-
-中文:
-定理 units_mem_lipschitzGroup
-  条件: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  证明: (units_mem_iff.1 hx).1
-
-Depends on / 依赖: units_mem_iff
+    ↑x ∈ pinGroup Q ↔ x ∈ lipschitzGroup Q ∧ ↑x ∈ unitary (CliffordAlgebra Q) := by
+  rw [mem_iff, lipschitzGroup.coe_mem_iff_mem]
+/-
+**pinGroup.units_mem_lipschitzGroup** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q
+) : x in lipschitzGroup Q
+参数：CliffordAlgebra Q；hx : ↑x in pinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `pinGroup.units_mem_iff`：units_mem_iff {x : (CliffordAlgebra Q)ˣ} : ↑x in
+ pinGroup Q ↔ x in lipschitzGroup Q ∧ ↑x in unitary (CliffordAlgebra Q)
 -/
-theorem units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q) :
-    x in lipschitzGroup Q :=
+theorem units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ pinGroup Q) :
+    x ∈ lipschitzGroup Q :=
   (units_mem_iff.1 hx).1
 
-/--
-theorem `conjAct_smul_ι_mem_range_ι` / 定理 `conjAct_smul_ι_mem_range_ι`
+/-- The conjugation action by elements of the spin group keeps vectors as vectors. -/
+/-
+**pinGroup.conjAct_smul_** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_ι_mem_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  proof: lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-中文:
-定理 conjAct_smul_ι_mem_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  证明: lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-Depends on / 依赖: lipschitzGroup, lipschitzGroup.conjAct_smul_, units_mem_lipschitzGroup
+--- 原说明 ---
+The conjugation action by elements of the spin group keeps vectors as vectors.
 -/
-theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-    [Invertible (2 : R)] (y : M) : ConjAct.toConjAct x • ι Q y in LinearMap.range (ι Q) :=
+theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ pinGroup Q)
+    [Invertible (2 : R)] (y : M) : ConjAct.toConjAct x • ι Q y ∈ LinearMap.range (ι Q) :=
   lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
 
-/--
-theorem `involute_act_ι_mem_range_ι` / 定理 `involute_act_ι_mem_range_ι`
+/-- This is another version of `conjAct_smul_ι_mem_range_ι` which uses `involute`. -/
+/-
+**pinGroup.involute_act_** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem involute_act_ι_mem_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  proof: lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-中文:
-定理 involute_act_ι_mem_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  证明: lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-Depends on / 依赖: LinearMap, LinearMap.range
+--- 原说明 ---
+This is another version of `conjAct_smul_ι_mem_range_ι` which uses `involute`.
 -/
-theorem involute_act_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-    [Invertible (2 : R)] (y : M) : involute (Q := Q) ↑x * ι Q y * ↑x⁻¹ in LinearMap.range (ι Q) :=
+theorem involute_act_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ pinGroup Q)
+    [Invertible (2 : R)] (y : M) : involute (Q := Q) ↑x * ι Q y * ↑x⁻¹ ∈ LinearMap.range (ι Q) :=
   lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
 
-/--
-theorem `conjAct_smul_range_ι` / 定理 `conjAct_smul_range_ι`
+/-- If x is in `pinGroup Q`, then `(ι Q).range` is closed under twisted conjugation. The reverse
+statement presumably being true only in finite dimensions. -/
+/-
+**pinGroup.conjAct_smul_range_** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  proof: lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
-
-@[simp]
-
-中文:
-定理 conjAct_smul_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
-  证明: lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
-
-@[simp]
-
-Depends on / 依赖: lipschitzGroup, lipschitzGroup.conjAct_smul_range_, units_mem_lipschitzGroup
+--- 原说明 ---
+If x is in `pinGroup Q`, then `(ι Q).range` is closed under twisted conjugation.
+ The reverse
+statement presumably being true only in finite dimensions.
 -/
-theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in pinGroup Q)
+theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ pinGroup Q)
     [Invertible (2 : R)] : ConjAct.toConjAct x • LinearMap.range (ι Q) = LinearMap.range (ι Q) :=
   lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
 
 @[simp]
-/--
-theorem `star_mul_self_of_mem` / 定理 `star_mul_self_of_mem`
-
-English:
-theorem star_mul_self_of_mem
-  given: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  statement: star x * x = 1
-  proof: hx.2.1
-
-@[simp]
-
-中文:
-定理 star_mul_self_of_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  结论: star x * x = 1
-  证明: hx.2.1
-
-@[simp]
+/-
+**pinGroup.star_mul_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : star
+ x * x = 1
+参数：hx : x in pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : star x * x = 1 :=
+theorem star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x ∈ pinGroup Q) : star x * x = 1 :=
   hx.2.1
 
 @[simp]
-/--
-theorem `mul_star_self_of_mem` / 定理 `mul_star_self_of_mem`
-
-English:
-theorem mul_star_self_of_mem
-  given: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  statement: x * star x = 1
-  proof: hx.2.2
-
-中文:
-定理 mul_star_self_of_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  结论: x * star x = 1
-  证明: hx.2.2
+/-
+**pinGroup.mul_star_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : x * 
+star x = 1
+参数：hx : x in pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : x * star x = 1 :=
+theorem mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x ∈ pinGroup Q) : x * star x = 1 :=
   hx.2.2
 
-/--
-theorem `star_mem` / 定理 `star_mem`
+/-- See `star_mem_iff` for both directions. -/
+/-
+**pinGroup.star_mem** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : star x in pinGro
+up Q
+参数：hx : x in pinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pinGroup.mem_iff`：mem_iff {x : CliffordAlgebra Q} : x in pinGroup Q ↔ x 
+in (lipschitzGroup Q).toSubmonoid.map (Units.coeHom <| CliffordAlgebra Q) ∧ x in
+ unita…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.val_inj`：val_inj {a b : αˣ} : (a : α) = b ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Unitary.star_mem`：star_mem {U : R} (hU : U in unitary R) : star U in uni
+tary R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem star_mem
-  given: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  statement: star x in pinGroup Q
-  proof: by
-  rw [mem_iff] at hx ⊢
-  refine ⟨?_, Unitary.star_mem hx.2⟩
-  rcases hx with ⟨⟨y, hy₁, hy₂⟩, _hx₂, hx₃⟩
-  simp only [Subgroup.coe_toSubmonoid, SetLike.mem_coe] at hy₁
-  simp only [Units.coeHom_apply] at hy₂
-  simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  refine ⟨star y, ?_, by simp only [hy₂, Units.coe_star]⟩
-  rw [← hy₂] at hx₃
-  have hy₃ : y * star y = 1 := by
-    rw [← Units.val_inj]
-    simp only [hx₃, Units.val_mul, Units.coe_star, Units.val_one]
-  apply_fun fun x => y⁻¹ * x at hy₃
-  simp only [inv_mul_cancel_left, mul_one] at hy₃
-  simp only [hy₃, hy₁, inv_mem_iff]
-
-中文:
-定理 star_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in pinGroup Q)
-  结论: star x in pinGroup Q
-  证明: by
-  rw [mem_iff] at hx ⊢
-  refine ⟨?_, Unitary.star_mem hx.2⟩
-  rcases hx with ⟨⟨y, hy₁, hy₂⟩, _hx₂, hx₃⟩
-  simp only [Subgroup.coe_toSubmonoid, SetLike.mem_coe] at hy₁
-  simp only [Units.coeHom_apply] at hy₂
-  simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  refine ⟨star y, ?_, by simp only [hy₂, Units.coe_star]⟩
-  rw [← hy₂] at hx₃
-  have hy₃ : y * star y = 1 := by
-    rw [← Units.val_inj]
-    simp only [hx₃, Units.val_mul, Units.coe_star, Units.val_one]
-  apply_fun fun x => y⁻¹ * x at hy₃
-  simp only [inv_mul_cancel_left, mul_one] at hy₃
-  simp only [hy₃, hy₁, inv_mem_iff]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, Subgroup, Subgroup.coe_toSubmonoid, Subgroup.mem_toSubmonoid, Submonoid, Submonoid.mem_map, Unitary, Unitary.star_mem, Units.coeHom_apply, Units.coe_star, Units.val_inj, Units.val_mul, Units.val_one, apply_fun, coeHom_apply, coe_star, coe_toSubmonoid, mem_coe, mem_iff
+--- 原说明 ---
+See `star_mem_iff` for both directions.
 -/
-theorem star_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : star x in pinGroup Q := by
+theorem star_mem {x : CliffordAlgebra Q} (hx : x ∈ pinGroup Q) : star x ∈ pinGroup Q := by
   rw [mem_iff] at hx ⊢
   refine ⟨?_, Unitary.star_mem hx.2⟩
   rcases hx with ⟨⟨y, hy₁, hy₂⟩, _hx₂, hx₃⟩
@@ -626,301 +425,173 @@ theorem star_mem {x : CliffordAlgebra Q} (hx : x in pinGroup Q) : star x in pinG
 /-- An element is in `pinGroup Q` if and only if `star x` is in `pinGroup Q`.
 See `star_mem` for only one direction. -/
 @[simp]
-/--
-theorem `star_mem_iff` / 定理 `star_mem_iff`
+/-
+**pinGroup.star_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_mem_iff {x : CliffordAlgebra Q} : star x in pinGroup Q ↔ x in pinGrou
+p Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `pinGroup.star_mem`：star_mem {x : CliffordAlgebra Q} (hx : x in pinGroup 
+Q) : star x in pinGroup Q
 
-English:
-theorem star_mem_iff
-  given: {x : CliffordAlgebra Q}
-  statement: star x in pinGroup Q ↔ x in pinGroup Q
-  proof: by
-  refine ⟨?_, star_mem⟩
-  intro hx
-  convert! star_mem hx
-  exact (star_star x).symm
-
-中文:
-定理 star_mem_iff
-  条件: {x : CliffordAlgebra Q}
-  结论: star x in pinGroup Q ↔ x in pinGroup Q
-  证明: by
-  refine ⟨?_, star_mem⟩
-  intro hx
-  convert! star_mem hx
-  exact (star_star x).symm
-
-Depends on / 依赖: convert, star_mem, star_star
+--- 原说明 ---
+An element is in `pinGroup Q` if and only if `star x` is in `pinGroup Q`.
+See `star_mem` for only one direction.
 -/
-theorem star_mem_iff {x : CliffordAlgebra Q} : star x in pinGroup Q ↔ x in pinGroup Q := by
+theorem star_mem_iff {x : CliffordAlgebra Q} : star x ∈ pinGroup Q ↔ x ∈ pinGroup Q := by
   refine ⟨?_, star_mem⟩
   intro hx
   convert! star_mem hx
   exact (star_star x).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (pinGroup Q)
-  body: ⟨star x, star_mem x.prop⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 对合 (pinGroup Q)
-  定义体: ⟨star x, star_mem x.prop⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: star_mem, x.prop
+/-
+**pinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Star (pinGroup Q) where
   star x := ⟨star x, star_mem x.prop⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: {x : pinGroup Q}
-  statement: ↑(star x) = (star x : CliffordAlgebra Q)
-  proof: rfl
-
-中文:
-定理 coe_star
-  条件: {x : pinGroup Q}
-  结论: ↑(star x) = (star x : CliffordAlgebra Q)
-  证明: rfl
+/-
+**pinGroup.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：coe_star {x : pinGroup Q} : ↑(star x) = (star x : CliffordAlgebra Q)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star {x : pinGroup Q} : ↑(star x) = (star x : CliffordAlgebra Q) :=
   rfl
-
-/--
-theorem `coe_star_mul_self` / 定理 `coe_star_mul_self`
-
-English:
-theorem coe_star_mul_self
-  given: (x : pinGroup Q)
-  statement: (star x : CliffordAlgebra Q) * x = 1
-  proof: star_mul_self_of_mem x.prop
-
-中文:
-定理 coe_star_mul_self
-  条件: (x : pinGroup Q)
-  结论: (star x : CliffordAlgebra Q) * x = 1
-  证明: star_mul_self_of_mem x.prop
-
-Depends on / 依赖: star_mul_self_of_mem, x.prop
+/-
+**pinGroup.coe_star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：coe_star_mul_self (x : pinGroup Q) : (star x : CliffordAlgebra Q) * x = 1
+参数：x : pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pinGroup.star_mul_self_of_mem`：star_mul_self_of_mem {x : CliffordAlgebra
+ Q} (hx : x in pinGroup Q) : star x * x = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_star_mul_self (x : pinGroup Q) : (star x : CliffordAlgebra Q) * x = 1 :=
   star_mul_self_of_mem x.prop
-
-/--
-theorem `coe_mul_star_self` / 定理 `coe_mul_star_self`
-
-English:
-theorem coe_mul_star_self
-  given: (x : pinGroup Q)
-  statement: (x : CliffordAlgebra Q) * star x = 1
-  proof: mul_star_self_of_mem x.prop
-
-@[simp]
-
-中文:
-定理 coe_mul_star_self
-  条件: (x : pinGroup Q)
-  结论: (x : CliffordAlgebra Q) * star x = 1
-  证明: mul_star_self_of_mem x.prop
-
-@[simp]
-
-Depends on / 依赖: mul_star_self_of_mem, x.prop
+/-
+**pinGroup.coe_mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：coe_mul_star_self (x : pinGroup Q) : (x : CliffordAlgebra Q) * star x = 1
+参数：x : pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pinGroup.mul_star_self_of_mem`：mul_star_self_of_mem {x : CliffordAlgebra
+ Q} (hx : x in pinGroup Q) : x * star x = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_mul_star_self (x : pinGroup Q) : (x : CliffordAlgebra Q) * star x = 1 :=
   mul_star_self_of_mem x.prop
 
 @[simp]
-/--
-theorem `star_mul_self` / 定理 `star_mul_self`
-
-English:
-theorem star_mul_self
-  given: (x : pinGroup Q)
-  statement: star x * x = 1
-  proof: Subtype.ext coe_star_mul_self x
-
-@[simp]
-
-中文:
-定理 star_mul_self
-  条件: (x : pinGroup Q)
-  结论: star x * x = 1
-  证明: Subtype.ext coe_star_mul_self x
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_star_mul_self
+/-
+**pinGroup.star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_mul_self (x : pinGroup Q) : star x * x = 1
+参数：x : pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `pinGroup.coe_star_mul_self`：coe_star_mul_self (x : pinGroup Q) : (star x
+ : CliffordAlgebra Q) * x = 1
 -/
 theorem star_mul_self (x : pinGroup Q) : star x * x = 1 :=
-Subtype.ext coe_star_mul_self x
+  Subtype.ext <| coe_star_mul_self x
 
 @[simp]
-/--
-theorem `mul_star_self` / 定理 `mul_star_self`
-
-English:
-theorem mul_star_self
-  given: (x : pinGroup Q)
-  statement: x * star x = 1
-  proof: Subtype.ext coe_mul_star_self x
-
-中文:
-定理 mul_star_self
-  条件: (x : pinGroup Q)
-  结论: x * star x = 1
-  证明: Subtype.ext coe_mul_star_self x
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_mul_star_self
+/-
+**pinGroup.mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：mul_star_self (x : pinGroup Q) : x * star x = 1
+参数：x : pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `pinGroup.coe_mul_star_self`：coe_mul_star_self (x : pinGroup Q) : (x : Cl
+iffordAlgebra Q) * star x = 1
 -/
 theorem mul_star_self (x : pinGroup Q) : x * star x = 1 :=
-Subtype.ext coe_mul_star_self x
+  Subtype.ext <| coe_mul_star_self x
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `pinGroup Q` forms a group where the inverse is `star`. -/
+/-
+**pinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Group (pinGroup Q)
-  body: star
-  inv_mul_cancel := star_mul_self
-
-中文:
-实例 :
-  签名: 群 (pinGroup Q)
-  定义体: star
-  inv_mul_cancel := star_mul_self
+--- 原说明 ---
+`pinGroup Q` forms a group where the inverse is `star`.
 -/
 instance : Group (pinGroup Q) where
   inv := star
   inv_mul_cancel := star_mul_self
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (pinGroup Q)
-  body: Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-中文:
-实例 :
-  签名: StarMul (pinGroup Q)
-  定义体: Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-Depends on / 依赖: Subtype, Subtype.ext, star_involutive
+/-
+**pinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul (pinGroup Q) where
-star_involutive _ := Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (pinGroup Q)
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 (pinGroup Q)
-  定义体: ⟨1⟩
+  star_involutive _ := Subtype.ext <| star_involutive _
+  star_mul _ _ := Subtype.ext <| star_mul _ _
+/-
+**pinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `pinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (pinGroup Q) :=
   ⟨1⟩
-
-/--
-theorem `star_eq_inv` / 定理 `star_eq_inv`
-
-English:
-theorem star_eq_inv
-  given: (x : pinGroup Q)
-  statement: star x = x⁻¹
-  proof: rfl
-
-中文:
-定理 star_eq_inv
-  条件: (x : pinGroup Q)
-  结论: star x = x⁻¹
-  证明: rfl
+/-
+**pinGroup.star_eq_inv** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_eq_inv (x : pinGroup Q) : star x = x⁻¹
+参数：x : pinGroup Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_eq_inv (x : pinGroup Q) : star x = x⁻¹ :=
   rfl
-
-/--
-theorem `star_eq_inv'` / 定理 `star_eq_inv'`
-
-English:
-theorem star_eq_inv'
-  statement: (star : pinGroup Q -> pinGroup Q) = Inv.inv
-  proof: rfl
-
-中文:
-定理 star_eq_inv'
-  结论: (star : pinGroup Q -> pinGroup Q) = 取逆.inv
-  证明: rfl
+/-
+**pinGroup.star_eq_inv'** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：star_eq_inv' : (star : pinGroup Q -> pinGroup Q) = Inv.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_eq_inv' : (star : pinGroup Q -> pinGroup Q) = Inv.inv :=
+theorem star_eq_inv' : (star : pinGroup Q → pinGroup Q) = Inv.inv :=
   rfl
 
 /-- The elements in `pinGroup Q` embed into (CliffordAlgebra Q)ˣ. -/
 @[simps]
-/--
-Definition of `toUnits` / `toUnits` 的定义
+/-
+**pinGroup.toUnits** 是 Mathlib 中的一个定义，位于命名空间 `pinGroup`。
+形式化陈述：toUnits : pinGroup Q ->* (CliffordAlgebra Q)ˣ where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `pinGroup.coe_mul_star_self`：coe_mul_star_self (x : pinGroup Q) : (x : Cl
+iffordAlgebra Q) * star x = 1
+· 使用定理 `pinGroup.coe_star_mul_self`：coe_star_mul_self (x : pinGroup Q) : (star x
+ : CliffordAlgebra Q) * x = 1
 
-English:
-definition toUnits
-  signature: : pinGroup Q ->* (CliffordAlgebra Q)ˣ where
-  body: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _x _y := Units.ext rfl
-
-中文:
-定义 toUnits
-  签名: : pinGroup Q ->* (CliffordAlgebra Q)ˣ where
-  定义体: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _x _y := Units.ext rfl
-
-Depends on / 依赖: coe_mul_star_self, coe_star_mul_self
+--- 原说明 ---
+The elements in `pinGroup Q` embed into (CliffordAlgebra Q)ˣ.
 -/
-def toUnits : pinGroup Q ->* (CliffordAlgebra Q)ˣ where
+def toUnits : pinGroup Q →* (CliffordAlgebra Q)ˣ where
   toFun x := ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
   map_one' := Units.ext rfl
   map_mul' _x _y := Units.ext rfl
-
-/--
-theorem `toUnits_injective` / 定理 `toUnits_injective`
-
-English:
-theorem toUnits_injective
-  statement: Function.Injective (toUnits : pinGroup Q -> (CliffordAlgebra Q)ˣ)
-  proof: fun _x _y h => Subtype.ext Units.ext_iff.mp h
-
-中文:
-定理 toUnits_injective
-  结论: 函数.单射 (toUnits : pinGroup Q -> (CliffordAlgebra Q)ˣ)
-  证明: fun _x _y h => Subtype.ext Units.ext_iff.mp h
-
-Depends on / 依赖: Subtype, Subtype.ext, Units.ext_iff.mp, ext_iff
+/-
+**pinGroup.toUnits_injective** 是 Mathlib 中的一个定理，位于命名空间 `pinGroup`。
+形式化陈述：toUnits_injective : Function.Injective (toUnits : pinGroup Q -> (CliffordA
+lgebra Q)ˣ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
 -/
-theorem toUnits_injective : Function.Injective (toUnits : pinGroup Q -> (CliffordAlgebra Q)ˣ) :=
-fun _x _y h => Subtype.ext Units.ext_iff.mp h
+theorem toUnits_injective : Function.Injective (toUnits : pinGroup Q → (CliffordAlgebra Q)ˣ) :=
+  fun _x _y h => Subtype.ext <| Units.ext_iff.mp h
 
 end pinGroup
 
@@ -932,275 +603,203 @@ open CliffordAlgebra MulAction
 
 open scoped Pointwise
 
-/--
-Definition of `spinGroup` / `spinGroup` 的定义
+/-- `spinGroup Q` is defined as the infimum of `pinGroup Q` and `CliffordAlgebra.even Q`.
+See `mem_iff`. -/
+/-
+**spinGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：spinGroup (Q : QuadraticForm R M) : Submonoid (CliffordAlgebra Q)
+参数：Q : QuadraticForm R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spinGroup
-  signature: (Q : QuadraticForm R M)
-  body: pinGroup Q ⊓ (CliffordAlgebra.even Q).toSubring.toSubmonoid
-
-中文:
-定义 spinGroup
-  签名: (Q : QuadraticForm R M)
-  定义体: pinGroup Q ⊓ (CliffordAlgebra.even Q).toSubring.toSubmonoid
-
-Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.even, pinGroup, toSubmonoid, toSubring, toSubring.toSubmonoid
+--- 原说明 ---
+`spinGroup Q` is defined as the infimum of `pinGroup Q` and `CliffordAlgebra.eve
+n Q`.
+See `mem_iff`.
 -/
 def spinGroup (Q : QuadraticForm R M) : Submonoid (CliffordAlgebra Q) :=
   pinGroup Q ⊓ (CliffordAlgebra.even Q).toSubring.toSubmonoid
 
 namespace spinGroup
 
-/--
-theorem `mem_iff` / 定理 `mem_iff`
+/-- An element is in `spinGroup Q` if and only if it is in `pinGroup Q` and `even Q`. -/
+/-
+**spinGroup.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：mem_iff {x : CliffordAlgebra Q} : x in spinGroup Q ↔ x in pinGroup Q ∧ x i
+n even Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_iff
-  given: {x : CliffordAlgebra Q}
-  statement: x in spinGroup Q ↔ x in pinGroup Q ∧ x in even Q
-  proof: Iff.rfl
-
-中文:
-定理 mem_iff
-  条件: {x : CliffordAlgebra Q}
-  结论: x in spinGroup Q ↔ x in pinGroup Q ∧ x in even Q
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+An element is in `spinGroup Q` if and only if it is in `pinGroup Q` and `even Q`
+.
 -/
-theorem mem_iff {x : CliffordAlgebra Q} : x in spinGroup Q ↔ x in pinGroup Q ∧ x in even Q :=
+theorem mem_iff {x : CliffordAlgebra Q} : x ∈ spinGroup Q ↔ x ∈ pinGroup Q ∧ x ∈ even Q :=
   Iff.rfl
-
-/--
-theorem `mem_pin` / 定理 `mem_pin`
-
-English:
-theorem mem_pin
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: x in pinGroup Q
-  proof: hx.1
-
-中文:
-定理 mem_pin
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: x in pinGroup Q
-  证明: hx.1
+/-
+**spinGroup.mem_pin** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：mem_pin {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x in pinGroup Q
+参数：hx : x in spinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem mem_pin {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x in pinGroup Q :=
+theorem mem_pin {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : x ∈ pinGroup Q :=
   hx.1
-
-/--
-theorem `mem_even` / 定理 `mem_even`
-
-English:
-theorem mem_even
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: x in even Q
-  proof: hx.2
-
-中文:
-定理 mem_even
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: x in even Q
-  证明: hx.2
+/-
+**spinGroup.mem_even** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：mem_even {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x in even Q
+参数：hx : x in spinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mem_even {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x in even Q :=
+theorem mem_even {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : x ∈ even Q :=
   hx.2
-
-/--
-theorem `units_mem_lipschitzGroup` / 定理 `units_mem_lipschitzGroup`
-
-English:
-theorem units_mem_lipschitzGroup
-  given: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  proof: pinGroup.units_mem_lipschitzGroup (mem_pin hx)
-
-中文:
-定理 units_mem_lipschitzGroup
-  条件: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  证明: pinGroup.units_mem_lipschitzGroup (mem_pin hx)
-
-Depends on / 依赖: mem_pin, pinGroup, pinGroup.units_mem_lipschitzGroup, units_mem_lipschitzGroup
+/-
+**spinGroup.units_mem_lipschitzGroup** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup 
+Q) : x in lipschitzGroup Q
+参数：CliffordAlgebra Q；hx : ↑x in spinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pinGroup.units_mem_lipschitzGroup`：units_mem_lipschitzGroup {x : (Cliffo
+rdAlgebra Q)ˣ} (hx : ↑x in pinGroup Q) : x in lipschitzGroup Q
+· 使用定理 `spinGroup.mem_pin`：mem_pin {x : CliffordAlgebra Q} (hx : x in spinGroup 
+Q) : x in pinGroup Q
 -/
-theorem units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q) :
-    x in lipschitzGroup Q :=
+theorem units_mem_lipschitzGroup {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ spinGroup Q) :
+    x ∈ lipschitzGroup Q :=
   pinGroup.units_mem_lipschitzGroup (mem_pin hx)
 
-/--
-theorem `involute_eq` / 定理 `involute_eq`
+/-- If x is in `spinGroup Q`, then `involute x` is equal to x. -/
+/-
+**spinGroup.involute_eq** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：involute_eq {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : involute x =
+ x
+参数：hx : x in spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.involute_eq_of_mem_even`：involute_eq_of_mem_even {x : Cl
+iffordAlgebra Q} (h : x in evenOdd Q 0) : involute x = x
+· 使用定理 `spinGroup.mem_even`：mem_even {x : CliffordAlgebra Q} (hx : x in spinGrou
+p Q) : x in even Q
 
-English:
-theorem involute_eq
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: involute x = x
-  proof: involute_eq_of_mem_even (mem_even hx)
-
-中文:
-定理 involute_eq
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: involute x = x
-  证明: involute_eq_of_mem_even (mem_even hx)
-
-Depends on / 依赖: involute_eq_of_mem_even, mem_even
+--- 原说明 ---
+If x is in `spinGroup Q`, then `involute x` is equal to x.
 -/
-theorem involute_eq {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : involute x = x :=
+theorem involute_eq {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : involute x = x :=
   involute_eq_of_mem_even (mem_even hx)
-
-/--
-theorem `units_involute_act_eq_conjAct` / 定理 `units_involute_act_eq_conjAct`
-
-English:
-theorem units_involute_act_eq_conjAct
-  given: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q) (y : M)
-  proof: by
-  rw [involute_eq hx]; rw [@ConjAct.units_smul_def]; rw [@ConjAct.ofConjAct_toConjAct]
-
-中文:
-定理 units_involute_act_eq_conjAct
-  条件: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q) (y : M)
-  证明: by
-  rw [involute_eq hx]; rw [@ConjAct.units_smul_def]; rw [@ConjAct.ofConjAct_toConjAct]
-
-Depends on / 依赖: ConjAct, ConjAct.ofConjAct_toConjAct, ConjAct.toConjAct, ConjAct.units_smul_def, involute_eq, ofConjAct_toConjAct, toConjAct, units_smul_def
+/-
+**spinGroup.units_involute_act_eq_conjAct** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：units_involute_act_eq_conjAct {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinG
+roup Q) (y : M) : involute (Q
+参数：CliffordAlgebra Q；hx : ↑x in spinGroup Q；y : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `spinGroup.involute_eq`：involute_eq {x : CliffordAlgebra Q} (hx : x in sp
+inGroup Q) : involute x = x
+· 使用定理 `ConjAct.units_smul_def`：units_smul_def (g : ConjAct Mˣ) (h : M) : g • h 
+= ofConjAct g * h * ↑(ofConjAct g)⁻¹
+· 使用定理 `ConjAct.ofConjAct_toConjAct`：ofConjAct_toConjAct (x : G) : ofConjAct (to
+ConjAct x) = x
 -/
-theorem units_involute_act_eq_conjAct {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q) (y : M) :
+theorem units_involute_act_eq_conjAct {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ spinGroup Q) (y : M) :
     involute (Q := Q) ↑x * ι Q y * ↑x⁻¹ = ConjAct.toConjAct x • (ι Q y) := by
-  rw [involute_eq hx]; rw [@ConjAct.units_smul_def]; rw [@ConjAct.ofConjAct_toConjAct]
+  rw [involute_eq hx, @ConjAct.units_smul_def, @ConjAct.ofConjAct_toConjAct]
 
-/--
-theorem `conjAct_smul_ι_mem_range_ι` / 定理 `conjAct_smul_ι_mem_range_ι`
+/-- The conjugation action by elements of the spin group keeps vectors as vectors. -/
+/-
+**spinGroup.conjAct_smul_** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_ι_mem_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  proof: lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-中文:
-定理 conjAct_smul_ι_mem_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  证明: lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-Depends on / 依赖: lipschitzGroup, lipschitzGroup.conjAct_smul_, units_mem_lipschitzGroup
+--- 原说明 ---
+The conjugation action by elements of the spin group keeps vectors as vectors.
 -/
-theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-    [Invertible (2 : R)] (y : M) : ConjAct.toConjAct x • ι Q y in LinearMap.range (ι Q) :=
+theorem conjAct_smul_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ spinGroup Q)
+    [Invertible (2 : R)] (y : M) : ConjAct.toConjAct x • ι Q y ∈ LinearMap.range (ι Q) :=
   lipschitzGroup.conjAct_smul_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
 
-/--
-theorem `involute_act_ι_mem_range_ι` / 定理 `involute_act_ι_mem_range_ι`
+/-- This is another version of `conjAct_smul_ι_mem_range_ι` which uses `involute`. -/
+/-
+**spinGroup.involute_act_** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem involute_act_ι_mem_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  proof: lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-中文:
-定理 involute_act_ι_mem_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  证明: lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
-
-Depends on / 依赖: LinearMap, LinearMap.range
+--- 原说明 ---
+This is another version of `conjAct_smul_ι_mem_range_ι` which uses `involute`.
 -/
-theorem involute_act_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-    [Invertible (2 : R)] (y : M) : involute (Q := Q) ↑x * ι Q y * ↑x⁻¹ in LinearMap.range (ι Q) :=
+theorem involute_act_ι_mem_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ spinGroup Q)
+    [Invertible (2 : R)] (y : M) : involute (Q := Q) ↑x * ι Q y * ↑x⁻¹ ∈ LinearMap.range (ι Q) :=
   lipschitzGroup.involute_act_ι_mem_range_ι (units_mem_lipschitzGroup hx) y
 
-/--
-theorem `conjAct_smul_range_ι` / 定理 `conjAct_smul_range_ι`
+/- If x is in `spinGroup Q`, then `(ι Q).range` is closed under twisted conjugation. The reverse
+statement presumably being true only in finite dimensions. -/
+/-
+**spinGroup.conjAct_smul_range_** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem conjAct_smul_range_ι
-  statement: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  proof: lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
-
-@[simp]
-
-中文:
-定理 conjAct_smul_range_ι
-  结论: {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
-  证明: lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
-
-@[simp]
-
-Depends on / 依赖: lipschitzGroup, lipschitzGroup.conjAct_smul_range_, units_mem_lipschitzGroup
+--- 原说明 ---
+If x is in `spinGroup Q`, then `(ι Q).range` is closed under twisted conjugation
+. The reverse
+statement presumably being true only in finite dimensions.
 -/
-theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x in spinGroup Q)
+theorem conjAct_smul_range_ι {x : (CliffordAlgebra Q)ˣ} (hx : ↑x ∈ spinGroup Q)
     [Invertible (2 : R)] : ConjAct.toConjAct x • LinearMap.range (ι Q) = LinearMap.range (ι Q) :=
   lipschitzGroup.conjAct_smul_range_ι (units_mem_lipschitzGroup hx)
 
 @[simp]
-/--
-theorem `star_mul_self_of_mem` / 定理 `star_mul_self_of_mem`
-
-English:
-theorem star_mul_self_of_mem
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: star x * x = 1
-  proof: hx.1.2.1
-
-@[simp]
-
-中文:
-定理 star_mul_self_of_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: star x * x = 1
-  证明: hx.1.2.1
-
-@[simp]
+/-
+**spinGroup.star_mul_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : sta
+r x * x = 1
+参数：hx : x in spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : star x * x = 1 :=
+theorem star_mul_self_of_mem {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : star x * x = 1 :=
   hx.1.2.1
 
 @[simp]
-/--
-theorem `mul_star_self_of_mem` / 定理 `mul_star_self_of_mem`
-
-English:
-theorem mul_star_self_of_mem
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: x * star x = 1
-  proof: hx.1.2.2
-
-中文:
-定理 mul_star_self_of_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: x * star x = 1
-  证明: hx.1.2.2
+/-
+**spinGroup.mul_star_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x *
+ star x = 1
+参数：hx : x in spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : x * star x = 1 :=
+theorem mul_star_self_of_mem {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : x * star x = 1 :=
   hx.1.2.2
 
-/--
-theorem `star_mem` / 定理 `star_mem`
+/-- See `star_mem_iff` for both directions. -/
+/-
+**spinGroup.star_mem** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : star x in spinG
+roup Q
+参数：hx : x in spinGroup Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `spinGroup.mem_iff`：mem_iff {x : CliffordAlgebra Q} : x in spinGroup Q ↔ 
+x in pinGroup Q ∧ x in even Q
+· 使用定理 `pinGroup.star_mem`：star_mem {x : CliffordAlgebra Q} (hx : x in pinGroup 
+Q) : star x in pinGroup Q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 
-English:
-theorem star_mem
-  given: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  statement: star x in spinGroup Q
-  proof: by
-  rw [mem_iff] at hx ⊢
-  obtain ⟨hx₁, hx₂⟩ := hx
-  refine ⟨pinGroup.star_mem hx₁, ?_⟩
-  dsimp only [CliffordAlgebra.even] at hx₂ ⊢
-  simp only [Submodule.mem_toSubalgebra] at hx₂ ⊢
-  simp only [star_def, reverse_mem_evenOdd_iff, involute_mem_evenOdd_iff, hx₂]
-
-中文:
-定理 star_mem
-  条件: {x : CliffordAlgebra Q} (hx : x in spinGroup Q)
-  结论: star x in spinGroup Q
-  证明: by
-  rw [mem_iff] at hx ⊢
-  obtain ⟨hx₁, hx₂⟩ := hx
-  refine ⟨pinGroup.star_mem hx₁, ?_⟩
-  dsimp only [CliffordAlgebra.even] at hx₂ ⊢
-  simp only [Submodule.mem_toSubalgebra] at hx₂ ⊢
-  simp only [star_def, reverse_mem_evenOdd_iff, involute_mem_evenOdd_iff, hx₂]
-
-Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.even, Submodule, Submodule.mem_toSubalgebra, involute_mem_evenOdd_iff, mem_iff, mem_toSubalgebra, pinGroup, pinGroup.star_mem, reverse_mem_evenOdd_iff, star_def, star_mem
+--- 原说明 ---
+See `star_mem_iff` for both directions.
 -/
-theorem star_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : star x in spinGroup Q := by
+theorem star_mem {x : CliffordAlgebra Q} (hx : x ∈ spinGroup Q) : star x ∈ spinGroup Q := by
   rw [mem_iff] at hx ⊢
   obtain ⟨hx₁, hx₂⟩ := hx
   refine ⟨pinGroup.star_mem hx₁, ?_⟩
@@ -1212,302 +811,175 @@ theorem star_mem {x : CliffordAlgebra Q} (hx : x in spinGroup Q) : star x in spi
 See `star_mem` for only one direction.
 -/
 @[simp]
-/--
-theorem `star_mem_iff` / 定理 `star_mem_iff`
+/-
+**spinGroup.star_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_mem_iff {x : CliffordAlgebra Q} : star x in spinGroup Q ↔ x in spinGr
+oup Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `spinGroup.star_mem`：star_mem {x : CliffordAlgebra Q} (hx : x in spinGrou
+p Q) : star x in spinGroup Q
 
-English:
-theorem star_mem_iff
-  given: {x : CliffordAlgebra Q}
-  statement: star x in spinGroup Q ↔ x in spinGroup Q
-  proof: by
-  refine ⟨?_, star_mem⟩
-  intro hx
-  convert! star_mem hx
-  exact (star_star x).symm
-
-中文:
-定理 star_mem_iff
-  条件: {x : CliffordAlgebra Q}
-  结论: star x in spinGroup Q ↔ x in spinGroup Q
-  证明: by
-  refine ⟨?_, star_mem⟩
-  intro hx
-  convert! star_mem hx
-  exact (star_star x).symm
-
-Depends on / 依赖: convert, star_mem, star_star
+--- 原说明 ---
+An element is in `spinGroup Q` if and only if `star x` is in `spinGroup Q`.
+See `star_mem` for only one direction.
 -/
-theorem star_mem_iff {x : CliffordAlgebra Q} : star x in spinGroup Q ↔ x in spinGroup Q := by
+theorem star_mem_iff {x : CliffordAlgebra Q} : star x ∈ spinGroup Q ↔ x ∈ spinGroup Q := by
   refine ⟨?_, star_mem⟩
   intro hx
   convert! star_mem hx
   exact (star_star x).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (spinGroup Q)
-  body: ⟨star x, star_mem x.prop⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 对合 (spinGroup Q)
-  定义体: ⟨star x, star_mem x.prop⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: star_mem, x.prop
+/-
+**spinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Star (spinGroup Q) where
   star x := ⟨star x, star_mem x.prop⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: {x : spinGroup Q}
-  statement: ↑(star x) = (star x : CliffordAlgebra Q)
-  proof: rfl
-
-中文:
-定理 coe_star
-  条件: {x : spinGroup Q}
-  结论: ↑(star x) = (star x : CliffordAlgebra Q)
-  证明: rfl
+/-
+**spinGroup.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：coe_star {x : spinGroup Q} : ↑(star x) = (star x : CliffordAlgebra Q)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star {x : spinGroup Q} : ↑(star x) = (star x : CliffordAlgebra Q) :=
   rfl
-
-/--
-theorem `coe_star_mul_self` / 定理 `coe_star_mul_self`
-
-English:
-theorem coe_star_mul_self
-  given: (x : spinGroup Q)
-  statement: (star x : CliffordAlgebra Q) * x = 1
-  proof: star_mul_self_of_mem x.prop
-
-中文:
-定理 coe_star_mul_self
-  条件: (x : spinGroup Q)
-  结论: (star x : CliffordAlgebra Q) * x = 1
-  证明: star_mul_self_of_mem x.prop
-
-Depends on / 依赖: star_mul_self_of_mem, x.prop
+/-
+**spinGroup.coe_star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：coe_star_mul_self (x : spinGroup Q) : (star x : CliffordAlgebra Q) * x = 1
+参数：x : spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `spinGroup.star_mul_self_of_mem`：star_mul_self_of_mem {x : CliffordAlgebr
+a Q} (hx : x in spinGroup Q) : star x * x = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_star_mul_self (x : spinGroup Q) : (star x : CliffordAlgebra Q) * x = 1 :=
   star_mul_self_of_mem x.prop
-
-/--
-theorem `coe_mul_star_self` / 定理 `coe_mul_star_self`
-
-English:
-theorem coe_mul_star_self
-  given: (x : spinGroup Q)
-  statement: (x : CliffordAlgebra Q) * star x = 1
-  proof: mul_star_self_of_mem x.prop
-
-@[simp]
-
-中文:
-定理 coe_mul_star_self
-  条件: (x : spinGroup Q)
-  结论: (x : CliffordAlgebra Q) * star x = 1
-  证明: mul_star_self_of_mem x.prop
-
-@[simp]
-
-Depends on / 依赖: mul_star_self_of_mem, x.prop
+/-
+**spinGroup.coe_mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：coe_mul_star_self (x : spinGroup Q) : (x : CliffordAlgebra Q) * star x = 1
+参数：x : spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `spinGroup.mul_star_self_of_mem`：mul_star_self_of_mem {x : CliffordAlgebr
+a Q} (hx : x in spinGroup Q) : x * star x = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_mul_star_self (x : spinGroup Q) : (x : CliffordAlgebra Q) * star x = 1 :=
   mul_star_self_of_mem x.prop
 
 @[simp]
-/--
-theorem `star_mul_self` / 定理 `star_mul_self`
-
-English:
-theorem star_mul_self
-  given: (x : spinGroup Q)
-  statement: star x * x = 1
-  proof: Subtype.ext coe_star_mul_self x
-
-@[simp]
-
-中文:
-定理 star_mul_self
-  条件: (x : spinGroup Q)
-  结论: star x * x = 1
-  证明: Subtype.ext coe_star_mul_self x
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_star_mul_self
+/-
+**spinGroup.star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_mul_self (x : spinGroup Q) : star x * x = 1
+参数：x : spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `spinGroup.coe_star_mul_self`：coe_star_mul_self (x : spinGroup Q) : (star
+ x : CliffordAlgebra Q) * x = 1
 -/
 theorem star_mul_self (x : spinGroup Q) : star x * x = 1 :=
-Subtype.ext coe_star_mul_self x
+  Subtype.ext <| coe_star_mul_self x
 
 @[simp]
-/--
-theorem `mul_star_self` / 定理 `mul_star_self`
-
-English:
-theorem mul_star_self
-  given: (x : spinGroup Q)
-  statement: x * star x = 1
-  proof: Subtype.ext coe_mul_star_self x
-
-中文:
-定理 mul_star_self
-  条件: (x : spinGroup Q)
-  结论: x * star x = 1
-  证明: Subtype.ext coe_mul_star_self x
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_mul_star_self
+/-
+**spinGroup.mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：mul_star_self (x : spinGroup Q) : x * star x = 1
+参数：x : spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `spinGroup.coe_mul_star_self`：coe_mul_star_self (x : spinGroup Q) : (x : 
+CliffordAlgebra Q) * star x = 1
 -/
 theorem mul_star_self (x : spinGroup Q) : x * star x = 1 :=
-Subtype.ext coe_mul_star_self x
+  Subtype.ext <| coe_mul_star_self x
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `spinGroup Q` forms a group where the inverse is `star`. -/
+/-
+**spinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Group (spinGroup Q)
-  body: star
-  inv_mul_cancel := star_mul_self
-
-中文:
-实例 :
-  签名: 群 (spinGroup Q)
-  定义体: star
-  inv_mul_cancel := star_mul_self
+--- 原说明 ---
+`spinGroup Q` forms a group where the inverse is `star`.
 -/
 instance : Group (spinGroup Q) where
   inv := star
   inv_mul_cancel := star_mul_self
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (spinGroup Q)
-  body: Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-中文:
-实例 :
-  签名: StarMul (spinGroup Q)
-  定义体: Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-Depends on / 依赖: Subtype, Subtype.ext, star_involutive
+/-
+**spinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul (spinGroup Q) where
-star_involutive _ := Subtype.ext star_involutive _
-star_mul _ _ := Subtype.ext star_mul _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (spinGroup Q)
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 (spinGroup Q)
-  定义体: ⟨1⟩
+  star_involutive _ := Subtype.ext <| star_involutive _
+  star_mul _ _ := Subtype.ext <| star_mul _ _
+/-
+**spinGroup.** 是 Mathlib 中的一个实例，位于命名空间 `spinGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (spinGroup Q) :=
   ⟨1⟩
-
-/--
-theorem `star_eq_inv` / 定理 `star_eq_inv`
-
-English:
-theorem star_eq_inv
-  given: (x : spinGroup Q)
-  statement: star x = x⁻¹
-  proof: rfl
-
-中文:
-定理 star_eq_inv
-  条件: (x : spinGroup Q)
-  结论: star x = x⁻¹
-  证明: rfl
+/-
+**spinGroup.star_eq_inv** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_eq_inv (x : spinGroup Q) : star x = x⁻¹
+参数：x : spinGroup Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_eq_inv (x : spinGroup Q) : star x = x⁻¹ :=
   rfl
-
-/--
-theorem `star_eq_inv'` / 定理 `star_eq_inv'`
-
-English:
-theorem star_eq_inv'
-  statement: (star : spinGroup Q -> spinGroup Q) = Inv.inv
-  proof: rfl
-
-中文:
-定理 star_eq_inv'
-  结论: (star : spinGroup Q -> spinGroup Q) = 取逆.inv
-  证明: rfl
+/-
+**spinGroup.star_eq_inv'** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：star_eq_inv' : (star : spinGroup Q -> spinGroup Q) = Inv.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_eq_inv' : (star : spinGroup Q -> spinGroup Q) = Inv.inv :=
+theorem star_eq_inv' : (star : spinGroup Q → spinGroup Q) = Inv.inv :=
   rfl
 
 /-- The elements in `spinGroup Q` embed into (CliffordAlgebra Q)ˣ. -/
 @[simps]
-/--
-Definition of `toUnits` / `toUnits` 的定义
+/-
+**spinGroup.toUnits** 是 Mathlib 中的一个定义，位于命名空间 `spinGroup`。
+形式化陈述：toUnits : spinGroup Q ->* (CliffordAlgebra Q)ˣ where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `spinGroup.coe_mul_star_self`：coe_mul_star_self (x : spinGroup Q) : (x : 
+CliffordAlgebra Q) * star x = 1
+· 使用定理 `spinGroup.coe_star_mul_self`：coe_star_mul_self (x : spinGroup Q) : (star
+ x : CliffordAlgebra Q) * x = 1
 
-English:
-definition toUnits
-  signature: : spinGroup Q ->* (CliffordAlgebra Q)ˣ where
-  body: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _x _y := Units.ext rfl
-
-中文:
-定义 toUnits
-  签名: : spinGroup Q ->* (CliffordAlgebra Q)ˣ where
-  定义体: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _x _y := Units.ext rfl
-
-Depends on / 依赖: coe_mul_star_self, coe_star_mul_self
+--- 原说明 ---
+The elements in `spinGroup Q` embed into (CliffordAlgebra Q)ˣ.
 -/
-def toUnits : spinGroup Q ->* (CliffordAlgebra Q)ˣ where
+def toUnits : spinGroup Q →* (CliffordAlgebra Q)ˣ where
   toFun x := ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
   map_one' := Units.ext rfl
   map_mul' _x _y := Units.ext rfl
-
-/--
-theorem `toUnits_injective` / 定理 `toUnits_injective`
-
-English:
-theorem toUnits_injective
-  statement: Function.Injective (toUnits : spinGroup Q -> (CliffordAlgebra Q)ˣ)
-  proof: fun _x _y h => Subtype.ext Units.ext_iff.mp h
-
-中文:
-定理 toUnits_injective
-  结论: 函数.单射 (toUnits : spinGroup Q -> (CliffordAlgebra Q)ˣ)
-  证明: fun _x _y h => Subtype.ext Units.ext_iff.mp h
-
-Depends on / 依赖: Subtype, Subtype.ext, Units.ext_iff.mp, ext_iff
+/-
+**spinGroup.toUnits_injective** 是 Mathlib 中的一个定理，位于命名空间 `spinGroup`。
+形式化陈述：toUnits_injective : Function.Injective (toUnits : spinGroup Q -> (Clifford
+Algebra Q)ˣ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
 -/
-theorem toUnits_injective : Function.Injective (toUnits : spinGroup Q -> (CliffordAlgebra Q)ˣ) :=
-fun _x _y h => Subtype.ext Units.ext_iff.mp h
+theorem toUnits_injective : Function.Injective (toUnits : spinGroup Q → (CliffordAlgebra Q)ˣ) :=
+  fun _x _y h => Subtype.ext <| Units.ext_iff.mp h
 
 end spinGroup
 
 end Spin
+

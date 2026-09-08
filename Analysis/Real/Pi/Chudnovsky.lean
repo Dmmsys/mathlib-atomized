@@ -5,7 +5,7 @@ Authors: Kim Morrison
 -/
 module
 
-meta import Batteries.Data.Float.Rat -- shake: keep (for `#eval` sanity check)
+meta import Batteries.Data.Float.Rat  -- shake: keep (for `#eval` sanity check)
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 public import Mathlib.Tactic.Positivity
@@ -41,54 +41,46 @@ but at present we are a long way off.
 open scoped Real
 open Nat
 
-/--
-Definition of `chudnovskyNum` / `chudnovskyNum` 的定义
+/-- The numerator of the nth term in Chudnovsky's series -/
+/-
+**chudnovskyNum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：chudnovskyNum (n : Nat) : Int
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chudnovskyNum
-  signature: (n : Nat)
-  body: (-1 : Int) ^ n * (6 * n)! * (545140134 * n + 13591409)
-
-中文:
-定义 chudnovskyNum
-  签名: (n : 自然数)
-  定义体: (-1 : Int) ^ n * (6 * n)! * (545140134 * n + 13591409)
+--- 原说明 ---
+The numerator of the nth term in Chudnovsky's series
 -/
-def chudnovskyNum (n : Nat) : Int :=
-  (-1 : Int) ^ n * (6 * n)! * (545140134 * n + 13591409)
+def chudnovskyNum (n : ℕ) : ℤ :=
+  (-1 : ℤ) ^ n * (6 * n)! * (545140134 * n + 13591409)
 
-/--
-Definition of `chudnovskyDenom` / `chudnovskyDenom` 的定义
+/-- The denominator of the nth term in Chudnovsky's series -/
+/-
+**chudnovskyDenom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：chudnovskyDenom (n : Nat) : Nat
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chudnovskyDenom
-  signature: (n : Nat)
-  body: (3 * n)! * (n)! ^ 3 * 640320 ^ (3 * n)
-
-中文:
-定义 chudnovskyDenom
-  签名: (n : 自然数)
-  定义体: (3 * n)! * (n)! ^ 3 * 640320 ^ (3 * n)
+--- 原说明 ---
+The denominator of the nth term in Chudnovsky's series
 -/
-def chudnovskyDenom (n : Nat) : Nat :=
+def chudnovskyDenom (n : ℕ) : ℕ :=
   (3 * n)! * (n)! ^ 3 * 640320 ^ (3 * n)
 
-/--
-Definition of `chudnovskyTerm` / `chudnovskyTerm` 的定义
+/-- The term at index `n` in Chudnovsky's series for `π⁻¹` -/
+/-
+**chudnovskyTerm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：chudnovskyTerm (n : Nat) : Rat
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chudnovskyTerm
-  signature: (n : Nat)
-  body: chudnovskyNum n / chudnovskyDenom n
-
-中文:
-定义 chudnovskyTerm
-  签名: (n : 自然数)
-  定义体: chudnovskyNum n / chudnovskyDenom n
-
-Depends on / 依赖: chudnovskyDenom, chudnovskyNum
+--- 原说明 ---
+The term at index `n` in Chudnovsky's series for `π⁻¹`
 -/
-def chudnovskyTerm (n : Nat) : Rat :=
+def chudnovskyTerm (n : ℕ) : ℚ :=
   chudnovskyNum n / chudnovskyDenom n
 
 -- Sanity check that when calculated in `Float` we get the right answer:
@@ -97,23 +89,19 @@ def chudnovskyTerm (n : Nat) : Rat :=
 #eval 1 / (12 / (640320 : Float) ^ (3 / 2) *
   (List.ofFn fun n : Fin 37 => (chudnovskyTerm n).toFloat).sum)
 
-/--
-Definition of `chudnovskySum` / `chudnovskySum` 的定义
+/-- The infinite sum in Chudnovsky's formula for `π⁻¹` -/
+/-
+**chudnovskySum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：chudnovskySum : Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chudnovskySum
-  signature: : Real
-  body: 12 / (640320 : Real) ^ (3 / 2 : Real) * ∑' n : Nat, (chudnovskyTerm n : Real)
-
-中文:
-定义 chudnovskySum
-  签名: : 实数
-  定义体: 12 / (640320 : Real) ^ (3 / 2 : Real) * ∑' n : Nat, (chudnovskyTerm n : Real)
-
-Depends on / 依赖: chudnovskyTerm
+--- 原说明 ---
+The infinite sum in Chudnovsky's formula for `π⁻¹`
 -/
-noncomputable def chudnovskySum : Real :=
-  12 / (640320 : Real) ^ (3 / 2 : Real) * ∑' n : Nat, (chudnovskyTerm n : Real)
+noncomputable def chudnovskySum : ℝ :=
+  12 / (640320 : ℝ) ^ (3 / 2 : ℝ) * ∑' n : ℕ, (chudnovskyTerm n : ℝ)
 
 /-- **Chudnovsky's formula**: The sum equals `π⁻¹` -/
 proof_wanted chudnovskySum_eq_pi_inv : chudnovskySum = π⁻¹
+

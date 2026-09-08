@@ -18,26 +18,20 @@ This file is eligible to upstreaming to Batteries.
 
 @[expose] public section
 
-@[inherit_doc] notation "Rat" => Rat
+@[inherit_doc] notation "ℚ" => Rat
 
-/--
-Definition of `NNRat` / `NNRat` 的定义
+/-- Nonnegative rational numbers. -/
+/-
+**NNRat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：NNRat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NNRat
-  body: {q : Rat // 0 <= q}
-
-@[inherit_doc] notation "Rat>=0" => NNRat
-
-中文:
-定义 NNRat
-  定义体: {q : Rat // 0 <= q}
-
-@[inherit_doc] notation "Rat>=0" => NNRat
+--- 原说明 ---
+Nonnegative rational numbers.
 -/
-def NNRat := {q : Rat // 0 <= q}
+def NNRat := {q : ℚ // 0 ≤ q}
 
-@[inherit_doc] notation "Rat>=0" => NNRat
+@[inherit_doc] notation "ℚ≥0" => NNRat
 
 /-!
 ### Cast from `NNRat`
@@ -46,209 +40,132 @@ This section sets up the typeclasses necessary to declare the canonical embeddin
 semifield.
 -/
 
-/--
-Definition of `NNRatCast` / `NNRatCast` 的定义
+/-- Typeclass for the canonical homomorphism `ℚ≥0 → K`.
 
-English:
-class NNRatCast
-  parameters: (K : Type*)
-  axioms and operations (1):
-    - nnratCast : Rat>=0 -> K
+This should be considered as a notation typeclass. The sole purpose of this typeclass is to be
+extended by `DivisionSemiring`. -/
+/-
+**NNRatCast** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 非负有理数嵌入
-  参数: (K : 类型)
-  公理与运算 (1 个):
-    - nnratCast : 有理数>=0 -> K
+--- 原说明 ---
+Typeclass for the canonical homomorphism `ℚ≥0 → K`.
+
+This should be considered as a notation typeclass. The sole purpose of this type
+class is to be
+extended by `DivisionSemiring`.
 -/
 class NNRatCast (K : Type*) where
   /-- The canonical homomorphism `ℚ≥0 → K`.
 
   Do not use directly. Use the coercion instead. -/
-  protected nnratCast : Rat>=0 -> K
-
-/--
-Instance `NNRat.instNNRatCast` / 实例 `NNRat.instNNRatCast`
-
-English:
-instance NNRat.instNNRatCast
-  signature: : NNRatCast Rat>=0 where nnratCast q
-  body: q
-
-中文:
-实例 NNRat.instNNRatCast
-  签名: : 非负有理数嵌入 有理数>=0 where nnratCast q
-  定义体: q
+  protected nnratCast : ℚ≥0 → K
+/-
+**NNRat.instNNRatCast** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRat.instNNRatCast : NNRatCast Rat>=0 where nnratCast q
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNRat.instNNRatCast : NNRatCast Rat>=0 where nnratCast q := q
+instance NNRat.instNNRatCast : NNRatCast ℚ≥0 where nnratCast q := q
 
 variable {K : Type*} [NNRatCast K]
 
-/--
-Definition of `NNRat.cast` / `NNRat.cast` 的定义
+/-- Canonical homomorphism from `ℚ≥0` to a division semiring `K`.
 
-English:
-definition NNRat.cast
-  signature: : Rat>=0 -> K
-  body: NNRatCast.nnratCast
+This is just the bare function in order to aid in creating instances of `DivisionSemiring`. -/
+/-
+**NNRat.cast** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：{K : Type u_1} → [NNRatCast K] → ℚ≥0 → K
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 NNRat.cast
-  签名: : 有理数>=0 -> K
-  定义体: NNRatCast.nnratCast
+--- 原说明 ---
+Canonical homomorphism from `ℚ≥0` to a division semiring `K`.
+
+This is just the bare function in order to aid in creating instances of `Divisio
+nSemiring`.
 -/
-@[coe, reducible, match_pattern] protected def NNRat.cast : Rat>=0 -> K := NNRatCast.nnratCast
+@[coe, reducible, match_pattern] protected def NNRat.cast : ℚ≥0 → K := NNRatCast.nnratCast
 
 -- See note [coercion into rings]
-/--
-Instance `NNRatCast.toCoeTail` / 实例 `NNRatCast.toCoeTail`
-
-English:
-instance NNRatCast.toCoeTail
-  signature: : CoeTail Rat>=0 K where coe
-  body: NNRat.cast
-
-中文:
-实例 非负有理数嵌入.toCoeTail
-  签名: : CoeTail 有理数>=0 K where coe
-  定义体: NNRat.cast
-
-Depends on / 依赖: NNRat.cast
+/-
+**NNRatCast.toCoeTail** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRatCast.toCoeTail : CoeTail Rat>=0 K where coe
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNRatCast.toCoeTail : CoeTail Rat>=0 K where coe := NNRat.cast
+instance NNRatCast.toCoeTail : CoeTail ℚ≥0 K where coe := NNRat.cast
 
 -- See note [coercion into rings]
-/--
-Instance `NNRatCast.toCoeHTCT` / 实例 `NNRatCast.toCoeHTCT`
-
-English:
-instance NNRatCast.toCoeHTCT
-  signature: : CoeHTCT Rat>=0 K where coe
-  body: NNRat.cast
-
-中文:
-实例 非负有理数嵌入.toCoeHTCT
-  签名: : CoeHTCT 有理数>=0 K where coe
-  定义体: NNRat.cast
-
-Depends on / 依赖: NNRat.cast
+/-
+**NNRatCast.toCoeHTCT** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRatCast.toCoeHTCT : CoeHTCT Rat>=0 K where coe
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNRatCast.toCoeHTCT : CoeHTCT Rat>=0 K where coe := NNRat.cast
-
-/--
-Instance `Rat.instNNRatCast` / 实例 `Rat.instNNRatCast`
-
-English:
-instance Rat.instNNRatCast
-  signature: : NNRatCast Rat
-  body: ⟨Subtype.val⟩
-
-中文:
-实例 有理数.instNNRatCast
-  签名: : 非负有理数嵌入 有理数
-  定义体: ⟨Subtype.val⟩
-
-Depends on / 依赖: Subtype, Subtype.val
+instance NNRatCast.toCoeHTCT : CoeHTCT ℚ≥0 K where coe := NNRat.cast
+/-
+**Rat.instNNRatCast** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Rat.instNNRatCast : NNRatCast Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Rat.instNNRatCast : NNRatCast Rat := ⟨Subtype.val⟩
+instance Rat.instNNRatCast : NNRatCast ℚ := ⟨Subtype.val⟩
 
 /-! ### Numerator and denominator of a nonnegative rational -/
 
 namespace NNRat
 
-/--
-Definition of `num` / `num` 的定义
+/-- The numerator of a nonnegative rational. -/
+/-
+**NNRat.num** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：num (q : Rat>=0) : Nat
+参数：q : Rat>=0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition num
-  signature: (q : Rat>=0)
-  body: (q : Rat).num.natAbs
-
-中文:
-定义 num
-  签名: (q : 有理数>=0)
-  定义体: (q : Rat).num.natAbs
-
-Depends on / 依赖: natAbs, num.natAbs
+--- 原说明 ---
+The numerator of a nonnegative rational.
 -/
-def num (q : Rat>=0) : Nat := (q : Rat).num.natAbs
+def num (q : ℚ≥0) : ℕ := (q : ℚ).num.natAbs
 
-/--
-Definition of `den` / `den` 的定义
+/-- The denominator of a nonnegative rational. -/
+/-
+**NNRat.den** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：den (q : Rat>=0) : Nat
+参数：q : Rat>=0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition den
-  signature: (q : Rat>=0)
-  body: (q : Rat).den
-
-中文:
-定义 den
-  签名: (q : 有理数>=0)
-  定义体: (q : Rat).den
+--- 原说明 ---
+The denominator of a nonnegative rational.
 -/
-def den (q : Rat>=0) : Nat := (q : Rat).den
-
-/--
-lemma `num_mk` / 引理 `num_mk`
-
-English:
-lemma num_mk
-  given: (q : Rat) (hq : 0 <= q)
-  statement: num ⟨q, hq⟩ = q.num.natAbs
-  proof: rfl
-
-中文:
-引理 num_mk
-  条件: (q : 有理数) (hq : 0 <= q)
-  结论: num ⟨q, hq⟩ = q.num.natAbs
-  证明: rfl
+def den (q : ℚ≥0) : ℕ := (q : ℚ).den
+/-
+**NNRat.num_mk** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ) (hq : 0 ≤ q), NNRat.num ⟨q, hq⟩ = q.num.natAbs
+参数：q : ℚ；hq : 0 ≤ q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma num_mk (q : Rat) (hq : 0 <= q) : num ⟨q, hq⟩ = q.num.natAbs := rfl
-/--
-lemma `den_mk` / 引理 `den_mk`
-
-English:
-lemma den_mk
-  given: (q : Rat) (hq : 0 <= q)
-  statement: den ⟨q, hq⟩ = q.den
-  proof: rfl
-
-中文:
-引理 den_mk
-  条件: (q : 有理数) (hq : 0 <= q)
-  结论: den ⟨q, hq⟩ = q.den
-  证明: rfl
+@[simp] lemma num_mk (q : ℚ) (hq : 0 ≤ q) : num ⟨q, hq⟩ = q.num.natAbs := rfl
+/-
+**NNRat.den_mk** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ) (hq : 0 ≤ q), NNRat.den ⟨q, hq⟩ = q.den
+参数：q : ℚ；hq : 0 ≤ q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma den_mk (q : Rat) (hq : 0 <= q) : den ⟨q, hq⟩ = q.den := rfl
-
-/--
-lemma `cast_id` / 引理 `cast_id`
-
-English:
-lemma cast_id
-  given: (n : Rat>=0)
-  statement: NNRat.cast n = n
-  proof: rfl
-
-中文:
-引理 cast_id
-  条件: (n : 有理数>=0)
-  结论: NNRat.cast n = n
-  证明: rfl
+@[simp] lemma den_mk (q : ℚ) (hq : 0 ≤ q) : den ⟨q, hq⟩ = q.den := rfl
+/-
+**NNRat.cast_id** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℚ≥0), ↑n = n
+参数：n : ℚ≥0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[norm_cast] lemma cast_id (n : Rat>=0) : NNRat.cast n = n := rfl
-/--
-lemma `cast_eq_id` / 引理 `cast_eq_id`
-
-English:
-lemma cast_eq_id
-  statement: NNRat.cast = id
-  proof: rfl
-
-中文:
-引理 cast_eq_id
-  结论: NNRat.cast = id
-  证明: rfl
+@[norm_cast] lemma cast_id (n : ℚ≥0) : NNRat.cast n = n := rfl
+/-
+**NNRat.cast_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：NNRat.cast = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma cast_eq_id : NNRat.cast = id := rfl
 
@@ -256,35 +173,19 @@ end NNRat
 
 namespace Rat
 
-/--
-lemma `cast_id` / 引理 `cast_id`
-
-English:
-lemma cast_id
-  given: (n : Rat)
-  statement: Rat.cast n = n
-  proof: rfl
-
-中文:
-引理 cast_id
-  条件: (n : 有理数)
-  结论: 有理数.cast n = n
-  证明: rfl
+/-
+**Rat.cast_id** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ (n : ℚ), ↑n = n
+参数：n : ℚ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[norm_cast] lemma cast_id (n : Rat) : Rat.cast n = n := rfl
-/--
-lemma `cast_eq_id` / 引理 `cast_eq_id`
-
-English:
-lemma cast_eq_id
-  statement: Rat.cast = id
-  proof: rfl
-
-中文:
-引理 cast_eq_id
-  结论: 有理数.cast = id
-  证明: rfl
+@[norm_cast] lemma cast_id (n : ℚ) : Rat.cast n = n := rfl
+/-
+**Rat.cast_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：Rat.cast = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma cast_eq_id : Rat.cast = id := rfl
 
 end Rat
+

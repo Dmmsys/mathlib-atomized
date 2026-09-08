@@ -22,155 +22,83 @@ variable {C₁ C₂ D : Type*} [Category* C₁] [Category* C₂] [Category* D]
   (F₁ : C₁ ⥤ D) (F₂ : C₂ ⥤ D)
   (P₁ : ObjectProperty C₁) (P₂ : ObjectProperty C₂)
 
-/--
-Definition of `comma` / `comma` 的定义
+/-- Given functors `F₁ : C₁ ⥤ D` and `F₂ : C₂ ⥤ D`, and properties
+of objects `P₁ : ObjectProperty C₁` and `P₂ : ObjectProperty C₂`,
+this is the property of objects in `Comma F₁ F₂` satisfying
+by the objects corresponding to morphisms `F₁.obj X₁ ⟶ F₂.obj X₂`
+where `P₁ X₁` and `P₂ X₂` hold. -/
+/-
+**CategoryTheory.ObjectProperty.comma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+ObjectProperty`。
+形式化陈述：comma : ObjectProperty (Comma F₁ F₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comma
-  signature: : ObjectProperty (Comma F₁ F₂)
-  body: P₁.inverseImage (Comma.fst _ _) ⊓ P₂.inverseImage (Comma.snd _ _)
-
-中文:
-定义 comma
-  签名: : ObjectProperty (交换a F₁ F₂)
-  定义体: P₁.inverseImage (Comma.fst _ _) ⊓ P₂.inverseImage (Comma.snd _ _)
-
-Depends on / 依赖: Comma.fst, Comma.snd, inverseImage
+--- 原说明 ---
+Given functors `F₁ : C₁ ⥤ D` and `F₂ : C₂ ⥤ D`, and properties
+of objects `P₁ : ObjectProperty C₁` and `P₂ : ObjectProperty C₂`,
+this is the property of objects in `Comma F₁ F₂` satisfying
+by the objects corresponding to morphisms `F₁.obj X₁ ⟶ F₂.obj X₂`
+where `P₁ X₁` and `P₂ X₂` hold.
 -/
 def comma : ObjectProperty (Comma F₁ F₂) :=
   P₁.inverseImage (Comma.fst _ _) ⊓ P₂.inverseImage (Comma.snd _ _)
 
 variable {F₁ F₂} in
 @[simp]
-/--
-lemma `comma_iff` / 引理 `comma_iff`
-
-English:
-lemma comma_iff
-  given: (X : Comma F₁ F₂)
-  proof: Iff.rfl
-
-中文:
-引理 comma_iff
-  条件: (X : 交换a F₁ F₂)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.ObjectProperty.comma_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ObjectProperty`。
+形式化陈述：comma_iff (X : Comma F₁ F₂) : comma F₁ F₂ P₁ P₂ X ↔ P₁ X.left ∧ P₂ X.right
+参数：X : Comma F₁ F₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma comma_iff (X : Comma F₁ F₂) :
     comma F₁ F₂ P₁ P₂ X ↔ P₁ X.left ∧ P₂ X.right := Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P₁.IsStableUnderRetracts]
-  signature: [P₂.IsStableUnderRetracts]
-  body: ⟨P₁.prop_of_retract (r.map (Comma.fst _ _)) h.1,
-      P₂.prop_of_retract (r.map (Comma.snd _ _)) h.2⟩
-
-中文:
-实例 [P₁.是StableUnderRetracts]
-  签名: [P₂.是StableUnderRetracts]
-  定义体: ⟨P₁.prop_of_retract (r.map (Comma.fst _ _)) h.1,
-      P₂.prop_of_retract (r.map (Comma.snd _ _)) h.2⟩
-
-Depends on / 依赖: Comma.fst, Comma.snd, prop_of_retract, r.map
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P₁.IsStableUnderRetracts] [P₂.IsStableUnderRetracts] :
     (comma F₁ F₂ P₁ P₂).IsStableUnderRetracts where
   of_retract r h :=
     ⟨P₁.prop_of_retract (r.map (Comma.fst _ _)) h.1,
       P₂.prop_of_retract (r.map (Comma.snd _ _)) h.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P₁.IsClosedUnderIsomorphisms]
-  signature: [P₂.IsClosedUnderIsomorphisms]
-  body: ⟨P₁.prop_of_iso ((Comma.fst _ _).mapIso e) h.1,
-      P₂.prop_of_iso ((Comma.snd _ _).mapIso e) h.2⟩
-
-中文:
-实例 [P₁.在同构下封闭]
-  签名: [P₂.在同构下封闭]
-  定义体: ⟨P₁.prop_of_iso ((Comma.fst _ _).mapIso e) h.1,
-      P₂.prop_of_iso ((Comma.snd _ _).mapIso e) h.2⟩
-
-Depends on / 依赖: Comma.fst, Comma.snd, mapIso, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P₁.IsClosedUnderIsomorphisms] [P₂.IsClosedUnderIsomorphisms] :
     (comma F₁ F₂ P₁ P₂).IsClosedUnderIsomorphisms where
   of_iso e h :=
     ⟨P₁.prop_of_iso ((Comma.fst _ _).mapIso e) h.1,
       P₂.prop_of_iso ((Comma.snd _ _).mapIso e) h.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ObjectProperty.Small.{w}
-  signature: P₁] [ObjectProperty.Small.{w} P₂] [LocallySmall.{w} D] :
-  body: small_of_surjective
-    (α := Σ (X₁ : Subtype P₁) (X₂ : Subtype P₂), F₁.obj X₁.val ⟶ F₂.obj X₂.val)
-    (f := fun ⟨X₁, X₂, f⟩ => ⟨Comma.mk _ _ f, X₁.prop, X₂.prop⟩)
-    (fun f => ⟨⟨⟨_, f.prop.1⟩, ⟨_, f.prop.2⟩, f.val.hom⟩, rfl⟩)
-
-中文:
-实例 [ObjectProperty.Small.{w}
-  签名: P₁] [ObjectProperty.Small.{w} P₂] [LocallySmall.{w} D] :
-  定义体: small_of_surjective
-    (α := Σ (X₁ : Subtype P₁) (X₂ : Subtype P₂), F₁.obj X₁.val ⟶ F₂.obj X₂.val)
-    (f := fun ⟨X₁, X₂, f⟩ => ⟨Comma.mk _ _ f, X₁.prop, X₂.prop⟩)
-    (fun f => ⟨⟨⟨_, f.prop.1⟩, ⟨_, f.prop.2⟩, f.val.hom⟩, rfl⟩)
-
-Depends on / 依赖: Comma.mk, Subtype, f.prop, f.val.hom, small_of_surjective
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ObjectProperty.Small.{w} P₁] [ObjectProperty.Small.{w} P₂] [LocallySmall.{w} D] :
     ObjectProperty.Small.{w} (comma F₁ F₂ P₁ P₂) :=
   small_of_surjective
     (α := Σ (X₁ : Subtype P₁) (X₂ : Subtype P₂), F₁.obj X₁.val ⟶ F₂.obj X₂.val)
-    (f := fun ⟨X₁, X₂, f⟩ => ⟨Comma.mk _ _ f, X₁.prop, X₂.prop⟩)
-    (fun f => ⟨⟨⟨_, f.prop.1⟩, ⟨_, f.prop.2⟩, f.val.hom⟩, rfl⟩)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ObjectProperty.EssentiallySmall.{w}
-  signature: P₁]
-  body: by
-  obtain ⟨Q₁, _, h₁, h₁'⟩ := EssentiallySmall.exists_small_le.{w} P₁
-  obtain ⟨Q₂, _, h₂, h₂'⟩ := EssentiallySmall.exists_small_le.{w} P₂
-  refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf => ?_⟩
-  simp only [comma_iff] at hf
-  obtain ⟨X₁, hX₁, ⟨e₁⟩⟩ := h₁' _ hf.1
-  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂' _ hf.2
-  exact ⟨Comma.mk _ _ (F₁.map e₁.inv ≫ f.hom ≫ F₂.map e₂.hom), by tauto,
-    ⟨Comma.isoMk e₁ e₂⟩⟩
-
-中文:
-实例 [ObjectProperty.EssentiallySmall.{w}
-  签名: P₁]
-  定义体: by
-  obtain ⟨Q₁, _, h₁, h₁'⟩ := EssentiallySmall.exists_small_le.{w} P₁
-  obtain ⟨Q₂, _, h₂, h₂'⟩ := EssentiallySmall.exists_small_le.{w} P₂
-  refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf => ?_⟩
-  simp only [comma_iff] at hf
-  obtain ⟨X₁, hX₁, ⟨e₁⟩⟩ := h₁' _ hf.1
-  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂' _ hf.2
-  exact ⟨Comma.mk _ _ (F₁.map e₁.inv ≫ f.hom ≫ F₂.map e₂.hom), by tauto,
-    ⟨Comma.isoMk e₁ e₂⟩⟩
-
-Depends on / 依赖: Comma.isoMk, Comma.mk, EssentiallySmall, EssentiallySmall.exists_small_le, comma_iff, exists_small_le, f.hom
+    (f := fun ⟨X₁, X₂, f⟩ ↦ ⟨Comma.mk _ _ f, X₁.prop, X₂.prop⟩)
+    (fun f ↦ ⟨⟨⟨_, f.prop.1⟩, ⟨_, f.prop.2⟩, f.val.hom⟩, rfl⟩)
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ObjectProperty.EssentiallySmall.{w} P₁]
     [ObjectProperty.EssentiallySmall.{w} P₂] [LocallySmall.{w} D] :
     ObjectProperty.EssentiallySmall.{w} (comma F₁ F₂ P₁ P₂) := by
   obtain ⟨Q₁, _, h₁, h₁'⟩ := EssentiallySmall.exists_small_le.{w} P₁
   obtain ⟨Q₂, _, h₂, h₂'⟩ := EssentiallySmall.exists_small_le.{w} P₂
-  refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf => ?_⟩
+  refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf ↦ ?_⟩
   simp only [comma_iff] at hf
   obtain ⟨X₁, hX₁, ⟨e₁⟩⟩ := h₁' _ hf.1
   obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂' _ hf.2
@@ -178,3 +106,4 @@ instance [ObjectProperty.EssentiallySmall.{w} P₁]
     ⟨Comma.isoMk e₁ e₂⟩⟩
 
 end CategoryTheory.ObjectProperty
+

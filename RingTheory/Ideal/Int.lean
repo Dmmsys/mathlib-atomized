@@ -33,77 +33,83 @@ In particular, for `I` an ideal of a ring `R` extending `ℤ`, we prove several 
 
 public section
 
-/--
-theorem `Int.card_ideal_quot` / 定理 `Int.card_ideal_quot`
-
-English:
-theorem Int.card_ideal_quot
-  given: (n : Nat)
-  statement: Nat.card (Int ⧸ (Ideal.span {(n : Int)})) = n
-  proof: by
-  simp [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply]
-
-中文:
-定理 整数.card_ideal_quot
-  条件: (n : 自然数)
-  结论: 自然数.card (整数 ⧸ (理想.span {(n : 整数)})) = n
-  证明: by
-  simp [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply]
-
-Depends on / 依赖: Ideal.absNorm_apply, Submodule, Submodule.cardQuot_apply, absNorm_apply, cardQuot_apply
+/-
+**Int.card_ideal_quot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.card_ideal_quot (n : Nat) : Nat.card (Int ⧸ (Ideal.span {(n : Int)})) 
+= n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `Ideal.absNorm_span_singleton`：absNorm_span_singleton (r : S) : absNorm (
+span ({r} : Set S)) = (Algebra.norm Int r).natAbs
+· 使用定理 `Algebra.norm_self`：norm_self : Algebra.norm R = MonoidHom.id R
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Int.card_ideal_quot (n : Nat) : Nat.card (Int ⧸ (Ideal.span {(n : Int)})) = n := by
+theorem Int.card_ideal_quot (n : ℕ) : Nat.card (ℤ ⧸ (Ideal.span {(n : ℤ)})) = n := by
   simp [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply]
-
-/--
-Instance `Int.ideal_span_isMaximal_of_prime` / 实例 `Int.ideal_span_isMaximal_of_prime`
-
-English:
-instance Int.ideal_span_isMaximal_of_prime
-  signature: (p : Nat) [Fact (Nat.Prime p)]
-  body: Ideal.Quotient.maximal_of_isField _
-    (Int.quotientSpanNatEquivZMod p).toMulEquiv.isField (Field.toIsField _)
-
-中文:
-实例 整数.ideal_span_isMaximal_of_prime
-  签名: (p : 自然数) [Fact (自然数.素 p)]
-  定义体: Ideal.Quotient.maximal_of_isField _
-    (Int.quotientSpanNatEquivZMod p).toMulEquiv.isField (Field.toIsField _)
-
-Depends on / 依赖: Field.toIsField, Ideal.Quotient.maximal_of_isField, Int.quotientSpanNatEquivZMod, Quotient, isField, maximal_of_isField, quotientSpanNatEquivZMod, toIsField, toMulEquiv, toMulEquiv.isField
+/-
+**Int.ideal_span_isMaximal_of_prime** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.ideal_span_isMaximal_of_prime (p : Nat) [Fact (Nat.Prime p)] : (Ideal.
+span {(p : Int)}).IsMaximal
+参数：p : Nat；Nat.Prime p。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.Quotient.maximal_of_isField`：maximal_of_isField {R} [CommRing R] (
+I : Ideal R) (hqf : IsField (R ⧸ I)) : I.IsMaximal
+· 使用定理 `MulEquiv.isField`：∀ {A : Type u_1} {B : Type u_2} [inst : Semiring A] [i
+nst_1 : Semiring B], IsField B → ∀ (e : A ≃* B), IsField A
+· 使用定理 `Field.toIsField`：Field.toIsField (R : Type u) [Field R] : IsField R
 -/
-instance Int.ideal_span_isMaximal_of_prime (p : Nat) [Fact (Nat.Prime p)] :
-    (Ideal.span {(p : Int)}).IsMaximal :=
-Ideal.Quotient.maximal_of_isField _
+instance Int.ideal_span_isMaximal_of_prime (p : ℕ) [Fact (Nat.Prime p)] :
+    (Ideal.span {(p : ℤ)}).IsMaximal :=
+  Ideal.Quotient.maximal_of_isField _ <|
     (Int.quotientSpanNatEquivZMod p).toMulEquiv.isField (Field.toIsField _)
-
-/--
-theorem `Int.ringChar_idealQuot` / 定理 `Int.ringChar_idealQuot`
-
-English:
-theorem Int.ringChar_idealQuot
-  given: (n : Nat)
-  statement: ringChar (Int ⧸ Ideal.span {(n : Int)}) = n
-  proof: by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
-  change Ideal.Quotient.mk (Ideal.span {(n : Int)}) x = 0 ↔ _
-  rw [Ideal.Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [Ideal.mem_span_singleton]; rw [Int.cast_natCast]; rw [Int.natCast_dvd_natCast]
-
-中文:
-定理 整数.ringChar_idealQuot
-  条件: (n : 自然数)
-  结论: ringChar (整数 ⧸ 理想.span {(n : 整数)}) = n
-  证明: by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
-  change Ideal.Quotient.mk (Ideal.span {(n : Int)}) x = 0 ↔ _
-  rw [Ideal.Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [Ideal.mem_span_singleton]; rw [Int.cast_natCast]; rw [Int.natCast_dvd_natCast]
-
-Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.mem_span_singleton, Ideal.span, Int.cast_natCast, Int.natCast_dvd_natCast, Quotient, cast_natCast, charP_iff, eq_iff, eq_zero_iff_mem, mem_span_singleton, natCast_dvd_natCast, ringChar, ringChar.eq_iff.mpr
+/-
+**Int.ringChar_idealQuot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.ringChar_idealQuot (n : Nat) : ringChar (Int ⧸ Ideal.span {(n : Int)})
+ = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ringChar.eq_iff`：eq_iff {p : Nat} : ringChar R = p ↔ CharP R p
+· 使用定理 `charP_iff`：∀ (R : Type u_2) [inst : AddMonoidWithOne R] (p : outParam ℕ)
+, CharP R p ↔ ∀ (x : ℕ), ↑x = 0 ↔ p ∣ x
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Int.ringChar_idealQuot (n : Nat) : ringChar (Int ⧸ Ideal.span {(n : Int)}) = n := by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
-  change Ideal.Quotient.mk (Ideal.span {(n : Int)}) x = 0 ↔ _
-  rw [Ideal.Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [Ideal.mem_span_singleton]; rw [Int.cast_natCast]; rw [Int.natCast_dvd_natCast]
+theorem Int.ringChar_idealQuot (n : ℕ) : ringChar (ℤ ⧸ Ideal.span {(n : ℤ)}) = n := by
+  refine ringChar.eq_iff.mpr <| (charP_iff _ _).mpr fun x ↦ ?_
+  change Ideal.Quotient.mk (Ideal.span {(n : ℤ)}) x = 0 ↔ _
+  rw [Ideal.Quotient.eq_zero_iff_mem, ← Int.cast_natCast, Ideal.mem_span_singleton,
+    Int.cast_natCast, Int.natCast_dvd_natCast]
 
 open Ideal
 
@@ -115,205 +121,233 @@ section Ring
 
 variable [Ring R] {I : Ideal R}
 
-/--
-Instance `liesOver_span_absNorm` / 实例 `liesOver_span_absNorm`
-
-English:
-instance liesOver_span_absNorm
-  signature: (I : Ideal R)
-  body: by
-  rw [liesOver_iff]; rw [under_def]; rw [Int.ideal_span_absNorm_eq_self]
-
-中文:
-实例 liesOver_span_absNorm
-  签名: (I : 理想 R)
-  定义体: by
-  rw [liesOver_iff]; rw [under_def]; rw [Int.ideal_span_absNorm_eq_self]
-
-Depends on / 依赖: Int.ideal_span_absNorm_eq_self, ideal_span_absNorm_eq_self, liesOver_iff, under_def
+/-
+**Int.liesOver_span_absNorm** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：liesOver_span_absNorm (I : Ideal R) : I.LiesOver (span {(absNorm (under In
+t I) : Int)})
+参数：I : Ideal R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.liesOver_iff`：∀ {A : Type u_2} [inst : CommSemiring A] {B : Type u
+_3} [inst_1 : Semiring B] [inst_2 : Algebra A B] (P : Ideal B)   (p : Ideal A), 
+P.LiesOv…
+· 使用定理 `Ideal.under_def`：under_def : P.under A = Ideal.comap (algebraMap A B) P
+· 使用定理 `Int.ideal_span_absNorm_eq_self`：Int.ideal_span_absNorm_eq_self (J : Idea
+l Int) : span {(absNorm J : Int)} = J
 -/
 instance liesOver_span_absNorm (I : Ideal R) :
-    I.LiesOver (span {(absNorm (under Int I) : Int)}) := by
-  rw [liesOver_iff]; rw [under_def]; rw [Int.ideal_span_absNorm_eq_self]
-
-/--
-theorem `cast_mem_ideal_iff` / 定理 `cast_mem_ideal_iff`
-
-English:
-theorem cast_mem_ideal_iff
-  given: {d : Int}
-  proof: by
-  rw [← mem_span_singleton]; rw [ideal_span_absNorm_eq_self]; rw [under_def]; rw [mem_comap]; rw [eq_intCast]
-
-中文:
-定理 cast_mem_ideal_iff
-  条件: {d : 整数}
-  证明: by
-  rw [← mem_span_singleton]; rw [ideal_span_absNorm_eq_self]; rw [under_def]; rw [mem_comap]; rw [eq_intCast]
-
-Depends on / 依赖: eq_intCast, ideal_span_absNorm_eq_self, mem_comap, mem_span_singleton, under_def
+    I.LiesOver (span {(absNorm (under ℤ I) : ℤ)}) := by
+  rw [liesOver_iff, under_def, Int.ideal_span_absNorm_eq_self]
+/-
+**Int.cast_mem_ideal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：cast_mem_ideal_iff {d : Int} : (d : R) in I ↔ (absNorm (under Int I) : Int
+) ∣ d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Int.ideal_span_absNorm_eq_self`：Int.ideal_span_absNorm_eq_self (J : Idea
+l Int) : span {(absNorm J : Int)} = J
+· 使用定理 `Ideal.under_def`：under_def : P.under A = Ideal.comap (algebraMap A B) P
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_mem_ideal_iff {d : Int} :
-    (d : R) in I ↔ (absNorm (under Int I) : Int) ∣ d := by
-  rw [← mem_span_singleton]; rw [ideal_span_absNorm_eq_self]; rw [under_def]; rw [mem_comap]; rw [eq_intCast]
+theorem cast_mem_ideal_iff {d : ℤ} :
+    (d : R) ∈ I ↔ (absNorm (under ℤ I) : ℤ) ∣ d := by
+  rw [← mem_span_singleton, ideal_span_absNorm_eq_self, under_def, mem_comap, eq_intCast]
 
 variable (I)
-
-/--
-theorem `absNorm_under_mem` / 定理 `absNorm_under_mem`
-
-English:
-theorem absNorm_under_mem
-  proof: by
-  rw [← cast_natCast]; rw [cast_mem_ideal_iff]
-
-中文:
-定理 absNorm_under_mem
-  证明: by
-  rw [← cast_natCast]; rw [cast_mem_ideal_iff]
-
-Depends on / 依赖: cast_mem_ideal_iff, cast_natCast
+/-
+**Int.absNorm_under_mem** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：absNorm_under_mem : (absNorm (under Int I) : R) in I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Int.cast_mem_ideal_iff`：cast_mem_ideal_iff {d : Int} : (d : R) in I ↔ (a
+bsNorm (under Int I) : Int) ∣ d
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 -/
 theorem absNorm_under_mem :
-    (absNorm (under Int I) : R) in I := by
-  rw [← cast_natCast]; rw [cast_mem_ideal_iff]
-
-/--
-theorem `absNorm_under_eq_sInf` / 定理 `absNorm_under_eq_sInf`
-
-English:
-theorem absNorm_under_eq_sInf
-  proof: by
-  by_cases h : absNorm (under Int I) = 0
-  · have : {d : Nat | 0 < d ∧ ↑d in I} = ∅ := by
-      refine Set.eq_empty_of_forall_notMem ?_
-      intro x ⟨hx₁, hx₂⟩
-      rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [h]; rw [natCast_dvd_natCast]; rw [Nat.zero_dvd] at hx₂
-      rw [Nat.pos_iff_ne_zero] at hx₁
-      exact hx₁ hx₂
-    rw [h]; rw [this]; rw [Nat.sInf_empty]
-  · have h₁ : absNorm (under Int I) in {d : Nat | 0 < d ∧ ↑d in I} :=
-      ⟨Nat.pos_of_ne_zero h, absNorm_under_mem I⟩
-    refine le_antisymm ?_ (Nat.sInf_le h₁)
-    by_contra! h₀
-    have h₂ := (Nat.sInf_mem (Set.nonempty_of_mem h₁)).2
-    rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast] at h₂
-exact lt_iff_not_ge.mp h₀ Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
-
-中文:
-定理 absNorm_under_eq_sInf
-  证明: by
-  by_cases h : absNorm (under Int I) = 0
-  · have : {d : Nat | 0 < d ∧ ↑d in I} = ∅ := by
-      refine Set.eq_empty_of_forall_notMem ?_
-      intro x ⟨hx₁, hx₂⟩
-      rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [h]; rw [natCast_dvd_natCast]; rw [Nat.zero_dvd] at hx₂
-      rw [Nat.pos_iff_ne_zero] at hx₁
-      exact hx₁ hx₂
-    rw [h]; rw [this]; rw [Nat.sInf_empty]
-  · have h₁ : absNorm (under Int I) in {d : Nat | 0 < d ∧ ↑d in I} :=
-      ⟨Nat.pos_of_ne_zero h, absNorm_under_mem I⟩
-    refine le_antisymm ?_ (Nat.sInf_le h₁)
-    by_contra! h₀
-    have h₂ := (Nat.sInf_mem (Set.nonempty_of_mem h₁)).2
-    rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast] at h₂
-exact lt_iff_not_ge.mp h₀ Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
-
-Depends on / 依赖: Nat.pos_iff_ne_zero, Nat.pos_of_ne_zero, Nat.sInf_empty, Nat.sInf_le, Nat.zero_dvd, Set.eq_empty_of_forall_notMem, absNorm, absNorm_under_mem, cast_mem_ideal_iff, cast_natCast, eq_empty_of_forall_notMem, le_antisymm, natCast_dvd_natCast, pos_iff_ne_zero, pos_of_ne_zero, sInf_empty, sInf_le, zero_dvd
+    (absNorm (under ℤ I) : R) ∈ I := by
+  rw [← cast_natCast, cast_mem_ideal_iff]
+/-
+**Int.absNorm_under_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：absNorm_under_eq_sInf : absNorm (under Int I) = sInf {d : Nat | 0 < d ∧ (d
+ : R) in I}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `Nat.zero_dvd`：∀ {n : ℕ}, 0 ∣ n ↔ n = 0
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `Int.cast_mem_ideal_iff`：cast_mem_ideal_iff {d : Int} : (d : R) in I ↔ (a
+bsNorm (under Int I) : Int) ∣ d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Nat.sInf_empty`：sInf_empty : sInf ∅ = 0
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Int.absNorm_under_mem`：absNorm_under_mem : (absNorm (under Int I) : R) i
+n I
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Nat.sInf_mem`：sInf_mem {s : Set Nat} (h : s.Nonempty) : sInf s in s
+· 使用定理 `Set.nonempty_of_mem`：nonempty_of_mem {x} (h : x in s) : s.Nonempty
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `lt_iff_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a < b 
+↔ ¬b ≤ a
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.sInf_le`：∀ {s : Set ℕ} {m : ℕ}, m ∈ s → sInf s ≤ m
 -/
 theorem absNorm_under_eq_sInf :
-    absNorm (under Int I) = sInf {d : Nat | 0 < d ∧ (d : R) in I} := by
-  by_cases h : absNorm (under Int I) = 0
-  · have : {d : Nat | 0 < d ∧ ↑d in I} = ∅ := by
+    absNorm (under ℤ I) = sInf {d : ℕ | 0 < d ∧ (d : R) ∈ I} := by
+  by_cases h : absNorm (under ℤ I) = 0
+  · have : {d : ℕ | 0 < d ∧ ↑d ∈ I} = ∅ := by
       refine Set.eq_empty_of_forall_notMem ?_
       intro x ⟨hx₁, hx₂⟩
-      rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [h]; rw [natCast_dvd_natCast]; rw [Nat.zero_dvd] at hx₂
+      rw [← cast_natCast, cast_mem_ideal_iff, h, natCast_dvd_natCast, Nat.zero_dvd] at hx₂
       rw [Nat.pos_iff_ne_zero] at hx₁
       exact hx₁ hx₂
-    rw [h]; rw [this]; rw [Nat.sInf_empty]
-  · have h₁ : absNorm (under Int I) in {d : Nat | 0 < d ∧ ↑d in I} :=
+    rw [h, this, Nat.sInf_empty]
+  · have h₁ : absNorm (under ℤ I) ∈ {d : ℕ | 0 < d ∧ ↑d ∈ I} :=
       ⟨Nat.pos_of_ne_zero h, absNorm_under_mem I⟩
     refine le_antisymm ?_ (Nat.sInf_le h₁)
     by_contra! h₀
     have h₂ := (Nat.sInf_mem (Set.nonempty_of_mem h₁)).2
-    rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast] at h₂
-exact lt_iff_not_ge.mp h₀ Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
-
-/--
-theorem `absNorm_under_dvd_absNorm` / 定理 `absNorm_under_dvd_absNorm`
-
-English:
-theorem absNorm_under_dvd_absNorm
-  statement: {S : Type*} [CommRing S] [IsDedekindDomain S] [Module.Free Int S]
-  proof: by
-  cases finite_or_infinite (S ⧸ I)
-  · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
-    have h_main {d : Nat} : (d : S) in I ↔ forall (x : S ⧸ I), d • x = 0 := by
-      simp_rw [nsmul_eq_mul, ← map_natCast (Ideal.Quotient.mk I), ← Quotient.eq_zero_iff_mem]
-      exact ⟨fun h _ => by simp [h], fun h => by simpa using h 1⟩
-    rw [Ideal.absNorm_apply I]; rw [Submodule.cardQuot_apply]; rw [Nat.card_eq_fintype_card]
-    simp_rw [absNorm_under_eq_sInf, h_main, ← AddMonoid.exponent_eq_sInf]
-    exact AddGroup.exponent_dvd_card (G := S ⧸ I)
-  · rw [absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_zero_of_infinite]
-    exact Nat.dvd_zero _
-
-中文:
-定理 absNorm_under_dvd_absNorm
-  结论: {S : 类型} [交换环 S] [是Dedekind整环 S] [模.自由 整数 S]
-  证明: by
-  cases finite_or_infinite (S ⧸ I)
-  · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
-    have h_main {d : Nat} : (d : S) in I ↔ forall (x : S ⧸ I), d • x = 0 := by
-      simp_rw [nsmul_eq_mul, ← map_natCast (Ideal.Quotient.mk I), ← Quotient.eq_zero_iff_mem]
-      exact ⟨fun h _ => by simp [h], fun h => by simpa using h 1⟩
-    rw [Ideal.absNorm_apply I]; rw [Submodule.cardQuot_apply]; rw [Nat.card_eq_fintype_card]
-    simp_rw [absNorm_under_eq_sInf, h_main, ← AddMonoid.exponent_eq_sInf]
-    exact AddGroup.exponent_dvd_card (G := S ⧸ I)
-  · rw [absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_zero_of_infinite]
-    exact Nat.dvd_zero _
-
-Depends on / 依赖: AddGroup, AddGroup.exponent_dvd_c, AddMonoid, AddMonoid.exponent_eq_sInf, Fintype, Fintype.ofFinite, Ideal.Quotient.mk, Ideal.absNorm_apply, Nat.card_eq_fintype_card, Quotient, Quotient.eq_zero_iff_mem, Submodule, Submodule.cardQuot_apply, absNorm_apply, absNorm_under_eq_sInf, cardQuot_apply, card_eq_fintype_card, eq_zero_iff_mem, exponent_dvd_c, exponent_eq_sInf
+    rw [← cast_natCast, cast_mem_ideal_iff, natCast_dvd_natCast] at h₂
+    exact lt_iff_not_ge.mp h₀ <| Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
+/-
+**Int.absNorm_under_dvd_absNorm** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：absNorm_under_dvd_absNorm {S : Type*} [CommRing S] [IsDedekindDomain S] [M
+odule.Free Int S] (I : Ideal S) : absNorm (under Int I) ∣ absNorm I
+参数：I : Ideal S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Ideal.absNorm_apply`：absNorm_apply (I : Ideal S) : absNorm I = cardQuot 
+I
+· 使用定理 `Submodule.cardQuot_apply`：cardQuot_apply (S : Submodule R M) : cardQuot 
+S = Nat.card (M ⧸ S)
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Int.absNorm_under_eq_sInf`：absNorm_under_eq_sInf : absNorm (under Int I)
+ = sInf {d : Nat | 0 < d ∧ (d : R) in I}
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AddGroup.exponent_dvd_card`：∀ {G : Type u} [inst : AddGroup G] [inst_1 :
+ Fintype G], AddMonoid.exponent G ∣ Fintype.card G
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
+· 使用定理 `Nat.dvd_zero`：∀ (a : ℕ), a ∣ 0
 -/
-theorem absNorm_under_dvd_absNorm {S : Type*} [CommRing S] [IsDedekindDomain S] [Module.Free Int S]
+theorem absNorm_under_dvd_absNorm {S : Type*} [CommRing S] [IsDedekindDomain S] [Module.Free ℤ S]
     (I : Ideal S) :
-    absNorm (under Int I) ∣ absNorm I := by
+    absNorm (under ℤ I) ∣ absNorm I := by
   cases finite_or_infinite (S ⧸ I)
   · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
-    have h_main {d : Nat} : (d : S) in I ↔ forall (x : S ⧸ I), d • x = 0 := by
+    have h_main {d : ℕ} : (d : S) ∈ I ↔ ∀ (x : S ⧸ I), d • x = 0 := by
       simp_rw [nsmul_eq_mul, ← map_natCast (Ideal.Quotient.mk I), ← Quotient.eq_zero_iff_mem]
-      exact ⟨fun h _ => by simp [h], fun h => by simpa using h 1⟩
-    rw [Ideal.absNorm_apply I]; rw [Submodule.cardQuot_apply]; rw [Nat.card_eq_fintype_card]
+      exact ⟨fun h _ ↦ by simp [h], fun h ↦ by simpa using h 1⟩
+    rw [Ideal.absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_fintype_card]
     simp_rw [absNorm_under_eq_sInf, h_main, ← AddMonoid.exponent_eq_sInf]
     exact AddGroup.exponent_dvd_card (G := S ⧸ I)
   · rw [absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_zero_of_infinite]
     exact Nat.dvd_zero _
-
-/--
-theorem `_root_.Ideal.ringChar_quot` / 定理 `_root_.Ideal.ringChar_quot`
-
-English:
-theorem _root_.Ideal.ringChar_quot
-  given: {S : Type*} [CommRing S] (I : Ideal S)
-  proof: by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
-  change Ideal.Quotient.mk I x = 0 ↔ _
-  rw [Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast]
-
-中文:
-定理 _root_.理想.ringChar_quot
-  条件: {S : 类型} [交换环 S] (I : 理想 S)
-  证明: by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
-  change Ideal.Quotient.mk I x = 0 ↔ _
-  rw [Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast]
-
-Depends on / 依赖: Ideal.Quotient.mk, Int.cast_natCast, Quotient, Quotient.eq_zero_iff_mem, cast_mem_ideal_iff, cast_natCast, charP_iff, eq_iff, eq_zero_iff_mem, natCast_dvd_natCast, ringChar, ringChar.eq_iff.mpr
+/-
+**Int._root_.Ideal.ringChar_quot** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Ideal.ringChar_quot {S : Type*} [CommRing S] (I : Ideal S) :
-    ringChar (S ⧸ I) = absNorm (under Int I) := by
-refine ringChar.eq_iff.mpr (charP_iff _ _).mpr fun x => ?_
+    ringChar (S ⧸ I) = absNorm (under ℤ I) := by
+  refine ringChar.eq_iff.mpr <| (charP_iff _ _).mpr fun x ↦ ?_
   change Ideal.Quotient.mk I x = 0 ↔ _
-  rw [Quotient.eq_zero_iff_mem]; rw [← Int.cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast]
+  rw [Quotient.eq_zero_iff_mem, ← Int.cast_natCast, cast_mem_ideal_iff, natCast_dvd_natCast]
 
 end Ring
 
@@ -321,42 +355,57 @@ end Int
 
 section CommRing
 
-variable [CommRing R] [IsDomain R] [Algebra.IsIntegral Int R]
+variable [CommRing R] [IsDomain R] [Algebra.IsIntegral ℤ R]
 
-/--
-theorem `Nat.absNorm_under_prime` / 定理 `Nat.absNorm_under_prime`
-
-English:
-theorem Nat.absNorm_under_prime
-  given: (P : Ideal R) [P.IsPrime] [NeZero P]
-  proof: by
-  rw [Nat.prime_iff_prime_int]; rw [← span_singleton_prime]; rw [Int.ideal_span_absNorm_eq_self]
-  · infer_instance
-· refine Int.natCast_ne_zero.mpr absNorm_eq_zero_iff.not.mpr ?_
-    have : P != ⊥ := NeZero.ne _
-    contrapose this
-    exact eq_bot_of_comap_eq_bot this
-
-中文:
-定理 自然数.absNorm_under_prime
-  条件: (P : 理想 R) [P.是素] [NeZero P]
-  证明: by
-  rw [Nat.prime_iff_prime_int]; rw [← span_singleton_prime]; rw [Int.ideal_span_absNorm_eq_self]
-  · infer_instance
-· refine Int.natCast_ne_zero.mpr absNorm_eq_zero_iff.not.mpr ?_
-    have : P != ⊥ := NeZero.ne _
-    contrapose this
-    exact eq_bot_of_comap_eq_bot this
-
-Depends on / 依赖: Int.ideal_span_absNorm_eq_self, Int.natCast_ne_zero.mpr, Nat.prime_iff_prime_int, NeZero, NeZero.ne, absNorm_eq_zero_iff, absNorm_eq_zero_iff.not.mpr, contrapose, eq_bot_of_comap_eq_bot, ideal_span_absNorm_eq_self, infer_instance, natCast_ne_zero, prime_iff_prime_int, span_singleton_prime
+/-
+**Nat.absNorm_under_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.absNorm_under_prime (P : Ideal R) [P.IsPrime] [NeZero P] : (absNorm (u
+nder Int P)).Prime
+参数：P : Ideal R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `AddGroup.instFGInt`：AddGroup.FG ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_singleton_prime`：span_singleton_prime {p : α} (hp : p != 0) :
+ IsPrime (span ({p} : Set α)) ↔ Prime p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_ne_zero`：∀ {n : ℕ}, ↑n ≠ 0 ↔ n ≠ 0
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Ideal.absNorm_eq_zero_iff`：absNorm_eq_zero_iff {I : Ideal S} : Ideal.abs
+Norm I = 0 ↔ I = ⊥
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Ideal.eq_bot_of_comap_eq_bot`：eq_bot_of_comap_eq_bot [Nontrivial R] [IsD
+omain S] [Algebra.IsIntegral R S] (hI : I.comap (algebraMap R S) = ⊥) : I = ⊥
+· 使用定理 `Int.ideal_span_absNorm_eq_self`：Int.ideal_span_absNorm_eq_self (J : Idea
+l Int) : span {(absNorm J : Int)} = J
+· 使用定理 `Ideal.IsPrime.under`：∀ (A : Type u_2) [inst : CommSemiring A] {B : Type 
+u_3} [inst_1 : Semiring B] [inst_2 : Algebra A B] (P : Ideal B)   [hP : P.IsPrim
+e], (Idea…
 -/
 theorem Nat.absNorm_under_prime (P : Ideal R) [P.IsPrime] [NeZero P] :
-    (absNorm (under Int P)).Prime := by
-  rw [Nat.prime_iff_prime_int]; rw [← span_singleton_prime]; rw [Int.ideal_span_absNorm_eq_self]
+    (absNorm (under ℤ P)).Prime := by
+  rw [Nat.prime_iff_prime_int, ← span_singleton_prime, Int.ideal_span_absNorm_eq_self]
   · infer_instance
-· refine Int.natCast_ne_zero.mpr absNorm_eq_zero_iff.not.mpr ?_
-    have : P != ⊥ := NeZero.ne _
+  · refine Int.natCast_ne_zero.mpr <| absNorm_eq_zero_iff.not.mpr ?_
+    have : P ≠ ⊥ := NeZero.ne _
     contrapose this
     exact eq_bot_of_comap_eq_bot this
 
 end CommRing
+

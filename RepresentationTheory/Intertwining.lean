@@ -25,189 +25,146 @@ section Monoid
 
 variable {A G V W U : Type*} [Semiring A] [Monoid G] [AddCommMonoid V] [AddCommMonoid W]
   [AddCommMonoid U] [Module A V] [Module A W] [Module A U] (ρ : Representation A G V)
-  (σ : Representation A G W) (τ : Representation A G U) (f : V ->ₗ[A] W)
+  (σ : Representation A G W) (τ : Representation A G U) (f : V →ₗ[A] W)
 
-/--
-Definition of `IsIntertwiningMap` / `IsIntertwiningMap` 的定义
+/-- An unbundled version of `IntertwiningMap`. -/
+/-
+**Representation.IsIntertwiningMap** 是 Mathlib 中的一个归纳类型，位于命名空间 `Representation`。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {V : Type u_3} →       {W : Type u
+_4} →         [inst : Semiring A] →           [inst_1 : Monoid G] →             
+[inst_2 : AddCommMonoid V] →               [inst_3 : AddCommMonoid W] →         
+        [inst_4 : _root_.Module A V] →                   [inst_5 : _root_.Module
+ A W] → Representation A G V → Representation A G W → (V →ₗ[A] W) → Prop
+参数：V →ₗ[A] W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsIntertwiningMap
-  parameters: : Prop where
-  axioms and operations (1):
-    - isIntertwining((g : G) (v : V)) : f (ρ g v) = σ g (f v)
-
-中文:
-结构 是整数ertwining映射
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isIntertwining((g : G) (v : V)) : f (ρ g v) = σ g (f v)
+--- 原说明 ---
+An unbundled version of `IntertwiningMap`.
 -/
 @[mk_iff] structure IsIntertwiningMap : Prop where
   isIntertwining (g : G) (v : V) : f (ρ g v) = σ g (f v)
 
-/--
-Definition of `IntertwiningMap` / `IntertwiningMap` 的定义
+/-- An intertwining map between two representations `ρ` and `σ` of the same monoid `G` is a map
+  between underlying modules which commutes with the `G`-actions. -/
+/-
+**Representation.IntertwiningMap** 是 Mathlib 中的一个归纳类型，位于命名空间 `Representation`。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {V : Type u_3} →       {W : Type u
+_4} →         [inst : Semiring A] →           [inst_1 : Monoid G] →             
+[inst_2 : AddCommMonoid V] →               [inst_3 : AddCommMonoid W] →         
+        [inst_4 : _root_.Module A V] →                   [inst_5 : _root_.Module
+ A W] → Representation A G V → Representation A G W → Type (max u_3 u_4)
+参数：max u_3 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IntertwiningMap
-  parameters: extends V ->ₗ[A] W
-  extends: V ->ₗ[A] W
-  axioms and operations (1):
-    - isIntertwining'((g : G)) : toLinearMap ∘ₗ ρ g = σ g ∘ₗ toLinearMap
-
-中文:
-结构 整数ertwining映射
-  参数: extends V ->ₗ[A] W
-  继承: V ->ₗ[A] W
-  公理与运算 (1 个):
-    - isIntertwining'((g : G)) : toLinearMap ∘ₗ ρ g = σ g ∘ₗ toLinearMap
+--- 原说明 ---
+An intertwining map between two representations `ρ` and `σ` of the same monoid `
+G` is a map
+  between underlying modules which commutes with the `G`-actions.
 -/
-structure IntertwiningMap extends V ->ₗ[A] W where
+structure IntertwiningMap extends V →ₗ[A] W where
   /-- An underlying `A`-linear map of the underlying `A`-modules. -/
   isIntertwining' (g : G) : toLinearMap ∘ₗ ρ g = σ g ∘ₗ toLinearMap
 
-/--
-Definition of `_root_.LinearMap.intertwiningMap_of_isIntertwiningMap` / `_root_.LinearMap.intertwiningMap_of_isIntertwiningMap` 的定义
+/-- An intertwining map constructed form the linear map and the fact that it is intertwining. -/
+/-
+**Representation._root_.LinearMap.intertwiningMap_of_isIntertwiningMap** 是 Mathl
+ib 中的一个定义，位于命名空间 `Representation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearMap.intertwiningMap_of_isIntertwiningMap
-  body: { f with isIntertwining' g := by ext v; exact hf g v }
-
-中文:
-定义 _root_.线性映射.intertwiningMap_of_is整数ertwiningMap
-  定义体: { f with isIntertwining' g := by ext v; exact hf g v }
-
-Depends on / 依赖: isIntertwining
+--- 原说明 ---
+An intertwining map constructed form the linear map and the fact that it is inte
+rtwining.
 -/
 def _root_.LinearMap.intertwiningMap_of_isIntertwiningMap
-    (hf : forall (g : G), forall (v : V), f (ρ g v) = σ g (f v)) : IntertwiningMap ρ σ :=
+    (hf : ∀ (g : G), ∀ (v : V), f (ρ g v) = σ g (f v)) : IntertwiningMap ρ σ :=
   { f with isIntertwining' g := by ext v; exact hf g v }
-
-/--
-lemma `IntertwiningMap.isIntertwining_assoc` / 引理 `IntertwiningMap.isIntertwining_assoc`
-
-English:
-lemma IntertwiningMap.isIntertwining_assoc
-  given: {f : IntertwiningMap ρ σ} (g : G) (l : U ->ₗ[A] V)
-  proof: by
-  rw [← LinearMap.comp_assoc]; rw [f.2]; rw [LinearMap.comp_assoc]
-
-中文:
-引理 整数ertwining映射.is整数ertwining_assoc
-  条件: {f : 整数ertwining映射 ρ σ} (g : G) (l : U ->ₗ[A] V)
-  证明: by
-  rw [← LinearMap.comp_assoc]; rw [f.2]; rw [LinearMap.comp_assoc]
-
-Depends on / 依赖: LinearMap, LinearMap.comp_assoc, comp_assoc
+/-
+**Representation.IntertwiningMap.isIntertwining_assoc** 是 Mathlib 中的一个定理，位于命名空间 
+`Representation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} {U : Type u_
+5} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 
+: AddCommMonoid W] [inst_4 : AddCommMonoid U] [inst_5 : _root_.Module A V]   [in
+st_6 : _root_.Module A W] [inst_7 : _root_.Module A U] (ρ : Representation A G V
+) (σ : Representation A G W)   {f : ρ.IntertwiningMap σ} (g : G) (l : U →ₗ[A] V)
+, f.toLinearMap ∘ₗ ρ g ∘ₗ l = σ g ∘ₗ f.toLinearMap ∘ₗ l
+参数：ρ : Representation A G V；σ : Representation A G W；g : G；l : U →ₗ[A] V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `Representation.IntertwiningMap.isIntertwining'`：∀ {A : Type u_1} {G : Ty
+pe u_2} {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   
+[inst_2 : AddCommMonoid V] [inst_3 :…
 -/
-lemma IntertwiningMap.isIntertwining_assoc {f : IntertwiningMap ρ σ} (g : G) (l : U ->ₗ[A] V) :
+lemma IntertwiningMap.isIntertwining_assoc {f : IntertwiningMap ρ σ} (g : G) (l : U →ₗ[A] V) :
     f.toLinearMap ∘ₗ ρ g ∘ₗ l = σ g ∘ₗ f.toLinearMap ∘ₗ l := by
-  rw [← LinearMap.comp_assoc]; rw [f.2]; rw [LinearMap.comp_assoc]
+  rw [← LinearMap.comp_assoc, f.2, LinearMap.comp_assoc]
 
 namespace IntertwiningMap
 
 variable {ρ σ} in
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {f g : IntertwiningMap ρ σ} (h : f.toLinearMap = g.toLinearMap)
-  statement: f = g
-  proof: by
-  cases f; cases g
-  simpa using h
-
-中文:
-引理 ext
-  条件: {f g : 整数ertwining映射 ρ σ} (h : f.toLinearMap = g.toLinearMap)
-  结论: f = g
-  证明: by
-  cases f; cases g
-  simpa using h
+/-
+**Representation.IntertwiningMap.ext** 是 Mathlib 中的一个引理，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：ext {f g : IntertwiningMap ρ σ} (h : f.toLinearMap = g.toLinearMap) : f = 
+g
+参数：h : f.toLinearMap = g.toLinearMap。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.IntertwiningMap.mk.injEq`：∀ {A : Type u_1} {G : Type u_2}
+ {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2
+ : AddCommMonoid V] [inst_3 :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma ext {f g : IntertwiningMap ρ σ} (h : f.toLinearMap = g.toLinearMap) : f = g := by
   cases f; cases g
   simpa using h
-
-/--
-lemma `toLinearMap_injective` / 引理 `toLinearMap_injective`
-
-English:
-lemma toLinearMap_injective
-  statement: Function.Injective fun f : IntertwiningMap ρ σ => f.toLinearMap
-  proof: fun _ _ => ext
-
-中文:
-引理 toLinearMap_injective
-  结论: 函数.单射 fun f : 整数ertwining映射 ρ σ => f.toLinearMap
-  证明: fun _ _ => ext
+/-
+**Representation.IntertwiningMap.toLinearMap_injective** 是 Mathlib 中的一个引理，位于命名空间
+ `Representation.IntertwiningMap`。
+形式化陈述：toLinearMap_injective : Function.Injective fun f : IntertwiningMap ρ σ => 
+f.toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
 -/
-lemma toLinearMap_injective : Function.Injective fun f : IntertwiningMap ρ σ => f.toLinearMap :=
-  fun _ _ => ext
-
-/--
-lemma `toFun_injective` / 引理 `toFun_injective`
-
-English:
-lemma toFun_injective
-  statement: Function.Injective fun f : IntertwiningMap ρ σ => f.toLinearMap.toFun
-  proof: by
-  intro f g h
-  ext x
-  exact congrFun h x
-
-中文:
-引理 toFun_injective
-  结论: 函数.单射 fun f : 整数ertwining映射 ρ σ => f.toLinearMap.toFun
-  证明: by
-  intro f g h
-  ext x
-  exact congrFun h x
+lemma toLinearMap_injective : Function.Injective fun f : IntertwiningMap ρ σ ↦ f.toLinearMap :=
+  fun _ _ ↦ ext
+/-
+**Representation.IntertwiningMap.toFun_injective** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：toFun_injective : Function.Injective fun f : IntertwiningMap ρ σ => f.toLi
+nearMap.toFun
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
-lemma toFun_injective : Function.Injective fun f : IntertwiningMap ρ σ => f.toLinearMap.toFun := by
+lemma toFun_injective : Function.Injective fun f : IntertwiningMap ρ σ ↦ f.toLinearMap.toFun := by
   intro f g h
   ext x
   exact congrFun h x
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (IntertwiningMap ρ σ) V W
-  body: f.toFun
-  coe_injective := toFun_injective ρ σ
-
-中文:
-实例 :
-  签名: 函数状 (整数ertwining映射 ρ σ) V W
-  定义体: f.toFun
-  coe_injective := toFun_injective ρ σ
-
-Depends on / 依赖: f.toFun
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (IntertwiningMap ρ σ) V W where
   coe f := f.toFun
   coe_injective := toFun_injective ρ σ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearMapClass (IntertwiningMap ρ σ) A V W
-  body: f.map_add
-  map_smulₛₗ f := f.map_smul
-
-中文:
-实例 :
-  签名: 线性映射类 (整数ertwining映射 ρ σ) A V W
-  定义体: f.map_add
-  map_smulₛₗ f := f.map_smul
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LinearMapClass (IntertwiningMap ρ σ) A V W where
   map_add f := f.map_add
@@ -217,275 +174,180 @@ instance : LinearMapClass (IntertwiningMap ρ σ) A V W where
 -- we are actively moving away from these design decisions.
 -- See e.g. https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/Concrete.20homomorphism.20type.20vs.20abstract.20class/with/492579416
 @[simp]
-/--
-lemma `coe_eq_toLinearMap` / 引理 `coe_eq_toLinearMap`
-
-English:
-lemma coe_eq_toLinearMap
-  given: {f : IntertwiningMap ρ σ}
-  proof: rfl
-
-中文:
-引理 coe_eq_toLinearMap
-  条件: {f : 整数ertwining映射 ρ σ}
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_eq_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `R
+epresentation.IntertwiningMap`。
+形式化陈述：coe_eq_toLinearMap {f : IntertwiningMap ρ σ} : SemilinearMapClass.semiline
+arMap f = f.toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.IntertwiningMap.instLinearMapClass`：∀ {A : Type u_1} {G :
+ Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]
+   [inst_2 : AddCommMonoid V] [inst_3 :…
 -/
 lemma coe_eq_toLinearMap {f : IntertwiningMap ρ σ} :
   SemilinearMapClass.semilinearMap f = f.toLinearMap := rfl
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : V ->ₗ[A] W) (h)
-  statement: ⇑(⟨f, h⟩ : IntertwiningMap ρ σ) = f
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : V ->ₗ[A] W) (h)
-  结论: ⇑(⟨f, h⟩ : 整数ertwining映射 ρ σ) = f
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Representatio
+n.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W) (f : V →ₗ[A] W) (h : ∀ (g : G), f ∘ₗ ρ g =
+ σ g ∘ₗ f),   ⇑{ toLinearMap := f, isIntertwining' := h } = ⇑f
+参数：ρ : Representation A G V；σ : Representation A G W；f : V →ₗ[A] W；h : ∀ (g : G)
+, f ∘ₗ ρ g = σ g ∘ₗ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_mk (f : V ->ₗ[A] W) (h) : ⇑(⟨f, h⟩ : IntertwiningMap ρ σ) = f := rfl
-
-/--
-lemma `toLinearMap_mk` / 引理 `toLinearMap_mk`
-
-English:
-lemma toLinearMap_mk
-  given: (f : V ->ₗ[A] W) (h)
-  proof: rfl
-
-中文:
-引理 toLinearMap_mk
-  条件: (f : V ->ₗ[A] W) (h)
-  证明: rfl
+@[simp] theorem coe_mk (f : V →ₗ[A] W) (h) : ⇑(⟨f, h⟩ : IntertwiningMap ρ σ) = f := rfl
+/-
+**Representation.IntertwiningMap.toLinearMap_mk** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：toLinearMap_mk (f : V ->ₗ[A] W) (h) : (⟨f, h⟩ : IntertwiningMap ρ σ).toLin
+earMap = f
+参数：f : V ->ₗ[A] W；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_mk (f : V ->ₗ[A] W) (h) :
+lemma toLinearMap_mk (f : V →ₗ[A] W) (h) :
   (⟨f, h⟩ : IntertwiningMap ρ σ).toLinearMap = f := rfl
-
-/--
-lemma `isIntertwining` / 引理 `isIntertwining`
-
-English:
-lemma isIntertwining
-  given: (f : IntertwiningMap ρ σ) (g : G) (v : V)
-  proof: congr($(f.isIntertwining' g) v)
-
-中文:
-引理 is整数ertwining
-  条件: (f : 整数ertwining映射 ρ σ) (g : G) (v : V)
-  证明: congr($(f.isIntertwining' g) v)
-
-Depends on / 依赖: f.isIntertwining, isIntertwining
+/-
+**Representation.IntertwiningMap.isIntertwining** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：isIntertwining (f : IntertwiningMap ρ σ) (g : G) (v : V) : f (ρ g v) = σ g
+ (f v)
+参数：f : IntertwiningMap ρ σ；g : G；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Representation.IntertwiningMap.isIntertwining'`：∀ {A : Type u_1} {G : Ty
+pe u_2} {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   
+[inst_2 : AddCommMonoid V] [inst_3 :…
 -/
 lemma isIntertwining (f : IntertwiningMap ρ σ) (g : G) (v : V) :
     f (ρ g v) = σ g (f v) := congr($(f.isIntertwining' g) v)
-
-/--
-lemma `toLinearMap_apply` / 引理 `toLinearMap_apply`
-
-English:
-lemma toLinearMap_apply
-  given: (f : IntertwiningMap ρ σ) (v : V)
-  statement: f.toLinearMap v = f v
-  proof: rfl
-
-中文:
-引理 toLinearMap_apply
-  条件: (f : 整数ertwining映射 ρ σ) (v : V)
-  结论: f.toLinearMap v = f v
-  证明: rfl
+/-
+**Representation.IntertwiningMap.toLinearMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `Re
+presentation.IntertwiningMap`。
+形式化陈述：toLinearMap_apply (f : IntertwiningMap ρ σ) (v : V) : f.toLinearMap v = f 
+v
+参数：f : IntertwiningMap ρ σ；v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_apply (f : IntertwiningMap ρ σ) (v : V) : f.toLinearMap v = f v := rfl
-
-/--
-lemma `coe_toLinearMap` / 引理 `coe_toLinearMap`
-
-English:
-lemma coe_toLinearMap
-  given: (f : IntertwiningMap ρ σ)
-  statement: (f.toLinearMap : _ -> _) = f
-  proof: rfl
-
-中文:
-引理 coe_toLinearMap
-  条件: (f : 整数ertwining映射 ρ σ)
-  结论: (f.toLinearMap : _ -> _) = f
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W) (f : ρ.IntertwiningMap σ), ⇑f.toLinearMap 
+= ⇑f
+参数：ρ : Representation A G V；σ : Representation A G W；f : ρ.IntertwiningMap σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_toLinearMap (f : IntertwiningMap ρ σ) : (f.toLinearMap : _ -> _) = f := rfl
-
-/--
-lemma `_root_.LinearMap.toIntertwiningMap` / 引理 `_root_.LinearMap.toIntertwiningMap`
-
-English:
-lemma _root_.LinearMap.toIntertwiningMap
-  proof: rfl
-
-中文:
-引理 _root_.线性映射.to整数ertwiningMap
-  证明: rfl
+@[simp] lemma coe_toLinearMap (f : IntertwiningMap ρ σ) : (f.toLinearMap : _ → _) = f := rfl
+/-
+**Representation.IntertwiningMap._root_.LinearMap.toIntertwiningMap** 是 Mathlib 
+中的一个引理，位于命名空间 `Representation.IntertwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.LinearMap.toIntertwiningMap
-  (hf : forall (g : G), forall (v : V), f (ρ g v) = σ g (f v)) (v : V) :
+  (hf : ∀ (g : G), ∀ (v : V), f (ρ g v) = σ g (f v)) (v : V) :
   f.intertwiningMap_of_isIntertwiningMap ρ σ hf v = f v := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (IntertwiningMap ρ σ)
-  body: ⟨⟨0, by simp⟩⟩
-
-中文:
-实例 :
-  签名: 零 (整数ertwining映射 ρ σ)
-  定义体: ⟨⟨0, by simp⟩⟩
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (IntertwiningMap ρ σ) := ⟨⟨0, by simp⟩⟩
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ((0 : IntertwiningMap ρ σ) : V -> W) = 0
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: ((0 : 整数ertwining映射 ρ σ) : V -> W) = 0
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W), ⇑0 = 0
+参数：ρ : Representation A G V；σ : Representation A G W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_zero : ((0 : IntertwiningMap ρ σ) : V -> W) = 0 := rfl
-
-/--
-lemma `zero_toLinearMap` / 引理 `zero_toLinearMap`
-
-English:
-lemma zero_toLinearMap
-  statement: (0 : IntertwiningMap ρ σ).toLinearMap = 0
-  proof: rfl
-
-中文:
-引理 zero_toLinearMap
-  结论: (0 : 整数ertwining映射 ρ σ).toLinearMap = 0
-  证明: rfl
+@[simp] lemma coe_zero : ((0 : IntertwiningMap ρ σ) : V → W) = 0 := rfl
+/-
+**Representation.IntertwiningMap.zero_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W), Representation.IntertwiningMap.toLinearMa
+p 0 = 0
+参数：ρ : Representation A G V；σ : Representation A G W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma zero_toLinearMap : (0 : IntertwiningMap ρ σ).toLinearMap = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (IntertwiningMap ρ σ)
-  body: ⟨fun f g => ⟨f.toLinearMap + g.toLinearMap, by
-    simp [LinearMap.add_comp, LinearMap.comp_add, f.2, g.2,]⟩⟩
-
-中文:
-实例 :
-  签名: 加法 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun f g => ⟨f.toLinearMap + g.toLinearMap, by
-    simp [LinearMap.add_comp, LinearMap.comp_add, f.2, g.2,]⟩⟩
-
-Depends on / 依赖: LinearMap, LinearMap.add_comp, LinearMap.comp_add, add_comp, comp_add, f.toLinearMap, g.toLinearMap, toLinearMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (IntertwiningMap ρ σ) :=
-  ⟨fun f g => ⟨f.toLinearMap + g.toLinearMap, by
+  ⟨fun f g ↦ ⟨f.toLinearMap + g.toLinearMap, by
     simp [LinearMap.add_comp, LinearMap.comp_add, f.2, g.2,]⟩⟩
-
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: (f g : IntertwiningMap ρ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_add
-  条件: (f g : 整数ertwining映射 ρ σ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W) (f g : ρ.IntertwiningMap σ), ⇑(f + g) = ⇑f
+ + ⇑g
+参数：ρ : Representation A G V；σ : Representation A G W；f g : ρ.IntertwiningMap σ；f
+ + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_add (f g : IntertwiningMap ρ σ) :
-    ((f + g : IntertwiningMap ρ σ) : V -> W) = f + g := rfl
+    ((f + g : IntertwiningMap ρ σ) : V → W) = f + g := rfl
 
 @[simp]
-/--
-lemma `add_toLinearMap` / 引理 `add_toLinearMap`
-
-English:
-lemma add_toLinearMap
-  given: (f g : IntertwiningMap ρ σ)
-  proof: rfl
-
-中文:
-引理 add_toLinearMap
-  条件: (f g : 整数ertwining映射 ρ σ)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.add_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：add_toLinearMap (f g : IntertwiningMap ρ σ) : (f + g).toLinearMap = f.toLi
+nearMap + g.toLinearMap
+参数：f g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma add_toLinearMap (f g : IntertwiningMap ρ σ) :
     (f + g).toLinearMap = f.toLinearMap + g.toLinearMap := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Nat (IntertwiningMap ρ σ)
-  body: ⟨fun n f => ⟨n • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-中文:
-实例 :
-  签名: 标量乘法 自然数 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun n f => ⟨n • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Nat (IntertwiningMap ρ σ) :=
-  ⟨fun n f => ⟨n • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-/--
-lemma `coe_nsmul` / 引理 `coe_nsmul`
-
-English:
-lemma coe_nsmul
-  given: (f : IntertwiningMap ρ σ) (n : Nat)
-  proof: rfl
-
-中文:
-引理 coe_nsmul
-  条件: (f : 整数ertwining映射 ρ σ) (n : 自然数)
-  证明: rfl
+instance : SMul ℕ (IntertwiningMap ρ σ) :=
+  ⟨fun n f ↦ ⟨n • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
+/-
+**Representation.IntertwiningMap.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W) (f : ρ.IntertwiningMap σ) (n : ℕ), ⇑(n • f
+) = n • ⇑f
+参数：ρ : Representation A G V；σ : Representation A G W；f : ρ.IntertwiningMap σ；n :
+ ℕ；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_nsmul (f : IntertwiningMap ρ σ) (n : Nat) :
-    ((n • f : IntertwiningMap ρ σ) : V -> W) = n • f := rfl
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid (IntertwiningMap ρ σ)
-  body: fast_instance%
-  DFunLike.coe_injective.addCommMonoid _ (coe_zero ρ σ) (coe_add ρ σ) (by intro f n; rw [coe_nsmul])
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 (整数ertwining映射 ρ σ)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommMonoid _ (coe_zero ρ σ) (coe_add ρ σ) (by intro f n; rw [coe_nsmul])
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_nsmul, coe_zero, fast_instance
+@[simp] lemma coe_nsmul (f : IntertwiningMap ρ σ) (n : ℕ) :
+    ((n • f : IntertwiningMap ρ σ) : V → W) = n • f := rfl
+/-
+**Representation.IntertwiningMap.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Re
+presentation.IntertwiningMap`。
+形式化陈述：instAddCommMonoid : AddCommMonoid (IntertwiningMap ρ σ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid : AddCommMonoid (IntertwiningMap ρ σ) :=
   fast_instance%
@@ -493,303 +355,209 @@ instance instAddCommMonoid : AddCommMonoid (IntertwiningMap ρ σ) :=
 
 /-- The range of an intertwining map from `V` to `W` as a subrepresentation of `W`. -/
 @[simps]
-/--
-Definition of `range` / `range` 的定义
+/-
+**Representation.IntertwiningMap.range** 是 Mathlib 中的一个定义，位于命名空间 `Representation
+.IntertwiningMap`。
+形式化陈述：range (f : IntertwiningMap ρ σ) : Subrepresentation σ where toSubmodule
+参数：f : IntertwiningMap ρ σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: (f : IntertwiningMap ρ σ)
-  body: LinearMap.range f.toLinearMap
-  apply_mem_toSubmodule g {w} := fun ⟨v, hv⟩ => ⟨(ρ g) v, by
-    simp [f.isIntertwining, (f.toLinearMap_apply _ _ _).symm.trans hv]⟩
-
-@[simp]
-
-中文:
-定义 range
-  签名: (f : 整数ertwining映射 ρ σ)
-  定义体: LinearMap.range f.toLinearMap
-  apply_mem_toSubmodule g {w} := fun ⟨v, hv⟩ => ⟨(ρ g) v, by
-    simp [f.isIntertwining, (f.toLinearMap_apply _ _ _).symm.trans hv]⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.range, f.toLinearMap, toLinearMap
+--- 原说明 ---
+The range of an intertwining map from `V` to `W` as a subrepresentation of `W`.
 -/
 def range (f : IntertwiningMap ρ σ) : Subrepresentation σ where
   toSubmodule := LinearMap.range f.toLinearMap
-  apply_mem_toSubmodule g {w} := fun ⟨v, hv⟩ => ⟨(ρ g) v, by
+  apply_mem_toSubmodule g {w} := fun ⟨v, hv⟩ ↦ ⟨(ρ g) v, by
     simp [f.isIntertwining, (f.toLinearMap_apply _ _ _).symm.trans hv]⟩
 
 @[simp]
-/--
-lemma `mem_range` / 引理 `mem_range`
-
-English:
-lemma mem_range
-  given: (f : IntertwiningMap ρ σ) (w : W)
-  proof: Iff.rfl
-
-中文:
-引理 mem_range
-  条件: (f : 整数ertwining映射 ρ σ) (w : W)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Representation.IntertwiningMap.mem_range** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：mem_range (f : IntertwiningMap ρ σ) (w : W) : w in f.range ↔ exists v, f v
+ = w
+参数：f : IntertwiningMap ρ σ；w : W。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_range (f : IntertwiningMap ρ σ) (w : W) :
-    w in f.range ↔ exists v, f v = w := Iff.rfl
+    w ∈ f.range ↔ ∃ v, f v = w := Iff.rfl
 
 /-- The kernel of an intertwining map from `V` to `W` as a subrepresentation of `V`. -/
 @[simps]
-/--
-Definition of `ker` / `ker` 的定义
+/-
+**Representation.IntertwiningMap.ker** 是 Mathlib 中的一个定义，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：ker (f : IntertwiningMap ρ σ) : Subrepresentation ρ where toSubmodule
+参数：f : IntertwiningMap ρ σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ker
-  signature: (f : IntertwiningMap ρ σ)
-  body: LinearMap.ker f.toLinearMap
-  apply_mem_toSubmodule g := by simp +contextual [f.isIntertwining]
-
-@[simp]
-
-中文:
-定义 ker
-  签名: (f : 整数ertwining映射 ρ σ)
-  定义体: LinearMap.ker f.toLinearMap
-  apply_mem_toSubmodule g := by simp +contextual [f.isIntertwining]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ker, f.toLinearMap, toLinearMap
+--- 原说明 ---
+The kernel of an intertwining map from `V` to `W` as a subrepresentation of `V`.
 -/
 def ker (f : IntertwiningMap ρ σ) : Subrepresentation ρ where
   toSubmodule := LinearMap.ker f.toLinearMap
   apply_mem_toSubmodule g := by simp +contextual [f.isIntertwining]
 
 @[simp]
-/--
-lemma `mem_ker` / 引理 `mem_ker`
-
-English:
-lemma mem_ker
-  given: (f : IntertwiningMap ρ σ) (v : V)
-  proof: Iff.rfl
-
-中文:
-引理 mem_ker
-  条件: (f : 整数ertwining映射 ρ σ) (v : V)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Representation.IntertwiningMap.mem_ker** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：mem_ker (f : IntertwiningMap ρ σ) (v : V) : v in f.ker ↔ f v = 0
+参数：f : IntertwiningMap ρ σ；v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_ker (f : IntertwiningMap ρ σ) (v : V) :
-    v in f.ker ↔ f v = 0 := Iff.rfl
-
-/--
-lemma `toLinearMap_sum` / 引理 `toLinearMap_sum`
-
-English:
-lemma toLinearMap_sum
-  given: {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ)
-  proof: by
-  classical induction s using Finset.induction with
-  | empty => simp
-  | insert i s hi ih => simp [Finset.sum_insert hi, ih]
-
-中文:
-引理 toLinearMap_sum
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 整数ertwining映射 ρ σ)
-  证明: by
-  classical induction s using Finset.induction with
-  | empty => simp
-  | insert i s hi ih => simp [Finset.sum_insert hi, ih]
-
-Depends on / 依赖: Finset, Finset.induction, Finset.sum_insert, classical, insert, sum_insert
+    v ∈ f.ker ↔ f v = 0 := Iff.rfl
+/-
+**Representation.IntertwiningMap.toLinearMap_sum** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：toLinearMap_sum {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) 
+: (∑ i in s, f i : IntertwiningMap ρ σ).toLinearMap = ∑ i in s, (f i).toLinearMa
+p
+参数：s : Finset ι；f : ι -> IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
 -/
-lemma toLinearMap_sum {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) :
-    (∑ i in s, f i : IntertwiningMap ρ σ).toLinearMap = ∑ i in s, (f i).toLinearMap := by
+lemma toLinearMap_sum {ι : Type*} (s : Finset ι) (f : ι → IntertwiningMap ρ σ) :
+    (∑ i ∈ s, f i : IntertwiningMap ρ σ).toLinearMap = ∑ i ∈ s, (f i).toLinearMap := by
   classical induction s using Finset.induction with
   | empty => simp
   | insert i s hi ih => simp [Finset.sum_insert hi, ih]
-
-/--
-lemma `sum_apply` / 引理 `sum_apply`
-
-English:
-lemma sum_apply
-  given: {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) (v : V)
-  proof: by
-  simp [← toLinearMap_apply _ _ (∑ _ in s, _), toLinearMap_sum, LinearMap.sum_apply]
-
-中文:
-引理 sum_apply
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 整数ertwining映射 ρ σ) (v : V)
-  证明: by
-  simp [← toLinearMap_apply _ _ (∑ _ in s, _), toLinearMap_sum, LinearMap.sum_apply]
-
-Depends on / 依赖: LinearMap, LinearMap.sum_apply, sum_apply, toLinearMap_apply, toLinearMap_sum
+/-
+**Representation.IntertwiningMap.sum_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：sum_apply {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) (v : V
+) : (∑ i in s, f i) v = ∑ i in s, f i v
+参数：s : Finset ι；f : ι -> IntertwiningMap ρ σ；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Representation.IntertwiningMap.toLinearMap_apply`：toLinearMap_apply (f :
+ IntertwiningMap ρ σ) (v : V) : f.toLinearMap v = f v
+· 使用引理 `Representation.IntertwiningMap.toLinearMap_sum`：toLinearMap_sum {ι : Typ
+e*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) : (∑ i in s, f i : Intertwinin
+gMap ρ σ).toLinearMap = ∑ i in s, (f…
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sum_apply {ι : Type*} (s : Finset ι) (f : ι -> IntertwiningMap ρ σ) (v : V) :
-    (∑ i in s, f i) v = ∑ i in s, f i v := by
-  simp [← toLinearMap_apply _ _ (∑ _ in s, _), toLinearMap_sum, LinearMap.sum_apply]
+lemma sum_apply {ι : Type*} (s : Finset ι) (f : ι → IntertwiningMap ρ σ) (v : V) :
+    (∑ i ∈ s, f i) v = ∑ i ∈ s, f i v := by
+  simp [← toLinearMap_apply _ _ (∑ _ ∈ s, _), toLinearMap_sum, LinearMap.sum_apply]
 
 section group
 
 variable {V W P : Type*} [AddCommMonoid V] [AddCommGroup W]
   [AddCommGroup P] [Module A V] [Module A W] [Module A P] (ρ : Representation A G V)
-  (σ : Representation A G W) (τ : Representation A G P) (f : V ->ₗ[A] W)
+  (σ : Representation A G W) (τ : Representation A G P) (f : V →ₗ[A] W)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (IntertwiningMap ρ σ)
-  body: ⟨fun f => ⟨-f.toLinearMap, by simp [LinearMap.neg_comp, f.2]⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun f => ⟨-f.toLinearMap, by simp [LinearMap.neg_comp, f.2]⟩⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.neg_comp, f.toLinearMap, neg_comp, toLinearMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (IntertwiningMap ρ σ) :=
-  ⟨fun f => ⟨-f.toLinearMap, by simp [LinearMap.neg_comp, f.2]⟩⟩
+  ⟨fun f ↦ ⟨-f.toLinearMap, by simp [LinearMap.neg_comp, f.2]⟩⟩
 
 @[simp]
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: (f : IntertwiningMap ρ σ)
-  statement: ((-f : IntertwiningMap ρ σ) : V -> W) = -f
-  proof: rfl
-
-中文:
-引理 coe_neg
-  条件: (f : 整数ertwining映射 ρ σ)
-  结论: ((-f : 整数ertwining映射 ρ σ) : V -> W) = -f
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_neg** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：coe_neg (f : IntertwiningMap ρ σ) : ((-f : IntertwiningMap ρ σ) : V -> W) 
+= -f
+参数：f : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_neg (f : IntertwiningMap ρ σ) : ((-f : IntertwiningMap ρ σ) : V -> W) = -f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (IntertwiningMap ρ σ)
-  body: ⟨fun f g => ⟨f.toLinearMap - g.toLinearMap, by
-    simp [LinearMap.sub_comp, LinearMap.comp_sub, f.2, g.2]⟩⟩
-
-中文:
-实例 :
-  签名: 减法 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun f g => ⟨f.toLinearMap - g.toLinearMap, by
-    simp [LinearMap.sub_comp, LinearMap.comp_sub, f.2, g.2]⟩⟩
-
-Depends on / 依赖: LinearMap, LinearMap.comp_sub, LinearMap.sub_comp, comp_sub, f.toLinearMap, g.toLinearMap, sub_comp, toLinearMap
+lemma coe_neg (f : IntertwiningMap ρ σ) : ((-f : IntertwiningMap ρ σ) : V → W) = -f := rfl
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (IntertwiningMap ρ σ) :=
-  ⟨fun f g => ⟨f.toLinearMap - g.toLinearMap, by
+  ⟨fun f g ↦ ⟨f.toLinearMap - g.toLinearMap, by
     simp [LinearMap.sub_comp, LinearMap.comp_sub, f.2, g.2]⟩⟩
-
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: (f g : IntertwiningMap ρ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_sub
-  条件: (f g : 整数ertwining映射 ρ σ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} [inst : Semiring A] [inst_1 : Monoid G] {V
+ : Type u_6} {W : Type u_7}   [inst_2 : AddCommMonoid V] [inst_3 : AddCommGroup 
+W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representati
+on A G V) (σ : Representation A G W) (f g : ρ.IntertwiningMap σ), ⇑(f - g) = ⇑f 
+- ⇑g
+参数：ρ : Representation A G V；σ : Representation A G W；f g : ρ.IntertwiningMap σ；f
+ - g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_sub (f g : IntertwiningMap ρ σ) :
-    ((f - g : IntertwiningMap ρ σ) : V -> W) = f - g := rfl
+    ((f - g : IntertwiningMap ρ σ) : V → W) = f - g := rfl
 
 @[simp]
-/--
-lemma `sub_toLinearMap` / 引理 `sub_toLinearMap`
-
-English:
-lemma sub_toLinearMap
-  given: (f g : IntertwiningMap ρ σ)
-  proof: rfl
-
-中文:
-引理 sub_toLinearMap
-  条件: (f g : 整数ertwining映射 ρ σ)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.sub_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：sub_toLinearMap (f g : IntertwiningMap ρ σ) : (f - g).toLinearMap = f.toLi
+nearMap - g.toLinearMap
+参数：f g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sub_toLinearMap (f g : IntertwiningMap ρ σ) :
     (f - g).toLinearMap = f.toLinearMap - g.toLinearMap := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Int (IntertwiningMap ρ σ)
-  body: ⟨fun z f => ⟨z • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-中文:
-实例 :
-  签名: 标量乘法 整数 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun z f => ⟨z • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Int (IntertwiningMap ρ σ) :=
-  ⟨fun z f => ⟨z • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-/--
-lemma `coe_zsmul` / 引理 `coe_zsmul`
-
-English:
-lemma coe_zsmul
-  given: (f : IntertwiningMap ρ σ) (z : Int)
-  proof: rfl
-
-中文:
-引理 coe_zsmul
-  条件: (f : 整数ertwining映射 ρ σ) (z : 整数)
-  证明: rfl
+instance : SMul ℤ (IntertwiningMap ρ σ) :=
+  ⟨fun z f ↦ ⟨z • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
+/-
+**Representation.IntertwiningMap.coe_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} [inst : Semiring A] [inst_1 : Monoid G] {V
+ : Type u_6} {W : Type u_7}   [inst_2 : AddCommMonoid V] [inst_3 : AddCommGroup 
+W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representati
+on A G V) (σ : Representation A G W) (f : ρ.IntertwiningMap σ) (z : ℤ), ⇑(z • f)
+ = z • ⇑f
+参数：ρ : Representation A G V；σ : Representation A G W；f : ρ.IntertwiningMap σ；z :
+ ℤ；z • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_zsmul (f : IntertwiningMap ρ σ) (z : Int) :
-    ((z • f : IntertwiningMap ρ σ) : V -> W) = z • f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (IntertwiningMap ρ σ)
-  body: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ (coe_zero ρ σ) (coe_add ρ σ) (coe_neg ρ σ) (coe_sub ρ σ)
-    (coe_nsmul ρ σ) (coe_zsmul ρ σ)
-
-中文:
-实例 :
-  签名: 加法交换群 (整数ertwining映射 ρ σ)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ (coe_zero ρ σ) (coe_add ρ σ) (coe_neg ρ σ) (coe_sub ρ σ)
-    (coe_nsmul ρ σ) (coe_zsmul ρ σ)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommGroup, addCommGroup, coe_add, coe_injective, coe_neg, coe_nsmul, coe_sub, coe_zero, coe_zsmul, fast_instance
+@[simp] lemma coe_zsmul (f : IntertwiningMap ρ σ) (z : ℤ) :
+    ((z • f : IntertwiningMap ρ σ) : V → W) = z • f := rfl
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (IntertwiningMap ρ σ) :=
   fast_instance%
@@ -798,603 +566,495 @@ instance : AddCommGroup (IntertwiningMap ρ σ) :=
 
 end group
 
-/--
-Definition of `coeFnAddMonoidHom` / `coeFnAddMonoidHom` 的定义
+/-- A coercion from intertwining maps to additive monoid homomorphisms. -/
+/-
+**Representation.IntertwiningMap.coeFnAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Re
+presentation.IntertwiningMap`。
+形式化陈述：coeFnAddMonoidHom : IntertwiningMap ρ σ ->+ V -> W where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.IntertwiningMap.coe_zero`：∀ {A : Type u_1} {G : Type u_2}
+ {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2
+ : AddCommMonoid V] [inst_3 :…
+· 使用定理 `Representation.IntertwiningMap.coe_add`：∀ {A : Type u_1} {G : Type u_2} 
+{V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 
+: AddCommMonoid V] [inst_3 :…
 
-English:
-definition coeFnAddMonoidHom
-  signature: : IntertwiningMap ρ σ ->+ V -> W where
-  body: (⇑)
-  map_zero' := coe_zero ρ σ
-  map_add' := coe_add ρ σ
-
-中文:
-定义 coeFnAddMonoidHom
-  签名: : 整数ertwining映射 ρ σ ->+ V -> W where
-  定义体: (⇑)
-  map_zero' := coe_zero ρ σ
-  map_add' := coe_add ρ σ
+--- 原说明 ---
+A coercion from intertwining maps to additive monoid homomorphisms.
 -/
-def coeFnAddMonoidHom : IntertwiningMap ρ σ ->+ V -> W where
+def coeFnAddMonoidHom : IntertwiningMap ρ σ →+ V → W where
   toFun := (⇑)
   map_zero' := coe_zero ρ σ
   map_add' := coe_add ρ σ
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity map, considered as an intertwining map from a representation to itself. -/
+/-
+**Representation.IntertwiningMap.id** 是 Mathlib 中的一个定义，位于命名空间 `Representation.In
+tertwiningMap`。
+形式化陈述：id : IntertwiningMap ρ ρ where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : IntertwiningMap ρ ρ where
-  body: LinearMap.id
-  isIntertwining' := by simp
-
-@[simp]
-
-中文:
-定义 id
-  签名: : 整数ertwining映射 ρ ρ where
-  定义体: LinearMap.id
-  isIntertwining' := by simp
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+The identity map, considered as an intertwining map from a representation to its
+elf.
 -/
 def id : IntertwiningMap ρ ρ where
   toLinearMap := LinearMap.id
   isIntertwining' := by simp
 
 @[simp]
-/--
-lemma `toLinearMap_id` / 引理 `toLinearMap_id`
-
-English:
-lemma toLinearMap_id
-  statement: (id ρ).toLinearMap = LinearMap.id
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_id
-  结论: (id ρ).toLinearMap = 线性映射.id
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.toLinearMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：toLinearMap_id : (id ρ).toLinearMap = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_id : (id ρ).toLinearMap = LinearMap.id := rfl
 
 @[simp]
-/--
-lemma `id_apply` / 引理 `id_apply`
-
-English:
-lemma id_apply
-  given: (v : V)
-  statement: id ρ v = v
-  proof: rfl
-
-中文:
-引理 id_apply
-  条件: (v : V)
-  结论: id ρ v = v
-  证明: rfl
+/-
+**Representation.IntertwiningMap.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：id_apply (v : V) : id ρ v = v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_apply (v : V) : id ρ v = v := rfl
 
 variable {ρ σ τ} in
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of intertwining maps.
 
-English:
-definition comp
-  signature: (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  body: f.toLinearMap ∘ₗ g.toLinearMap
-  isIntertwining' := by simp [LinearMap.comp_assoc, g.2, f.isIntertwining_assoc]
+A convenience variant of `IntertwiningMap.llcomp` for use in dot notation. -/
+/-
+**Representation.IntertwiningMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `Representation.
+IntertwiningMap`。
+形式化陈述：comp (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : IntertwiningMap
+ ρ τ where __
+参数：f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Composition of intertwining maps.
 
-中文:
-定义 comp
-  签名: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  定义体: f.toLinearMap ∘ₗ g.toLinearMap
-  isIntertwining' := by simp [LinearMap.comp_assoc, g.2, f.isIntertwining_assoc]
-
-@[simp]
-
-Depends on / 依赖: f.toLinearMap, g.toLinearMap, toLinearMap
+A convenience variant of `IntertwiningMap.llcomp` for use in dot notation.
 -/
 def comp (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : IntertwiningMap ρ τ where
   __ := f.toLinearMap ∘ₗ g.toLinearMap
   isIntertwining' := by simp [LinearMap.comp_assoc, g.2, f.isIntertwining_assoc]
 
 @[simp]
-/--
-lemma `comp_toLinearMap` / 引理 `comp_toLinearMap`
-
-English:
-lemma comp_toLinearMap
-  given: (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comp_toLinearMap
-  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.comp_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：comp_toLinearMap (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : (co
+mp f g).toLinearMap = f.toLinearMap.comp g.toLinearMap
+参数：f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_toLinearMap (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
     (comp f g).toLinearMap = f.toLinearMap.comp g.toLinearMap := rfl
 
 @[simp]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
-
-English:
-lemma comp_apply
-  given: (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) (v : V)
-  proof: rfl
-
-中文:
-引理 comp_apply
-  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ) (v : V)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `Represent
+ation.IntertwiningMap`。
+形式化陈述：comp_apply (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) (v : V) : c
+omp f g v = f (g v)
+参数：f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ；v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_apply (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) (v : V) :
     comp f g v = f (g v) := rfl
-
-/--
-lemma `comp_add` / 引理 `comp_add`
-
-English:
-lemma comp_add
-  given: (f₁ f₂ : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  proof: by ext1; simp [LinearMap.add_comp]
-
-中文:
-引理 comp_add
-  条件: (f₁ f₂ : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  证明: by ext1; simp [LinearMap.add_comp]
-
-Depends on / 依赖: LinearMap, LinearMap.add_comp, add_comp
+/-
+**Representation.IntertwiningMap.comp_add** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：comp_add (f₁ f₂ : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : (f₁ + f
+₂).comp g = comp f₁ g + comp f₂ g
+参数：f₁ f₂ : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_add (f₁ f₂ : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
     (f₁ + f₂).comp g = comp f₁ g + comp f₂ g := by ext1; simp [LinearMap.add_comp]
-
-/--
-lemma `add_comp` / 引理 `add_comp`
-
-English:
-lemma add_comp
-  given: (f : IntertwiningMap σ τ) (g₁ g₂ : IntertwiningMap ρ σ)
-  proof: by ext1; simp [LinearMap.comp_add]
-
-中文:
-引理 add_comp
-  条件: (f : 整数ertwining映射 σ τ) (g₁ g₂ : 整数ertwining映射 ρ σ)
-  证明: by ext1; simp [LinearMap.comp_add]
-
-Depends on / 依赖: LinearMap, LinearMap.comp_add, comp_add
+/-
+**Representation.IntertwiningMap.add_comp** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：add_comp (f : IntertwiningMap σ τ) (g₁ g₂ : IntertwiningMap ρ σ) : comp f 
+(g₁ + g₂) = comp f g₁ + comp f g₂
+参数：f : IntertwiningMap σ τ；g₁ g₂ : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp_add`：comp_add (f g : M ->ₛₗ[σ₁₂] M₂) (h : M₂ ->ₛₗ[σ₂₃] M₃
+) : (h.comp (f + g) : M ->ₛₗ[σ₁₃] M₃) = h.comp f + h.comp g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma add_comp (f : IntertwiningMap σ τ) (g₁ g₂ : IntertwiningMap ρ σ) :
     comp f (g₁ + g₂) = comp f g₁ + comp f g₂ := by ext1; simp [LinearMap.comp_add]
 
 variable (A) in
-/--
-Definition of `fst` / `fst` 的定义
+/-- The projection of a product representation onto its first component is an intertwining map. -/
+/-
+**Representation.IntertwiningMap.fst** 是 Mathlib 中的一个定义，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：fst : IntertwiningMap (ρ.prod σ) ρ where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : IntertwiningMap (ρ.prod σ) ρ where
-  body: LinearMap.fst A V W
-isIntertwining' _ := LinearMap.ext by simp
-
-中文:
-定义 fst
-  签名: : 整数ertwining映射 (ρ.乘积 σ) ρ where
-  定义体: LinearMap.fst A V W
-isIntertwining' _ := LinearMap.ext by simp
-
-Depends on / 依赖: LinearMap, LinearMap.fst
+--- 原说明 ---
+The projection of a product representation onto its first component is an intert
+wining map.
 -/
 def fst : IntertwiningMap (ρ.prod σ) ρ where
   toLinearMap := LinearMap.fst A V W
-isIntertwining' _ := LinearMap.ext by simp
+  isIntertwining' _ := LinearMap.ext <| by simp
 
 variable (A) in
-/--
-Definition of `snd` / `snd` 的定义
+/-- The projection of a product representation onto its second component is an intertwining map. -/
+/-
+**Representation.IntertwiningMap.snd** 是 Mathlib 中的一个定义，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：snd : IntertwiningMap (ρ.prod σ) σ where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : IntertwiningMap (ρ.prod σ) σ where
-  body: LinearMap.snd A V W
-isIntertwining' _ := LinearMap.ext by simp
-
-@[simp]
-
-中文:
-定义 snd
-  签名: : 整数ertwining映射 (ρ.乘积 σ) σ where
-  定义体: LinearMap.snd A V W
-isIntertwining' _ := LinearMap.ext by simp
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.snd
+--- 原说明 ---
+The projection of a product representation onto its second component is an inter
+twining map.
 -/
 def snd : IntertwiningMap (ρ.prod σ) σ where
   toLinearMap := LinearMap.snd A V W
-isIntertwining' _ := LinearMap.ext by simp
+  isIntertwining' _ := LinearMap.ext <| by simp
 
 @[simp]
-/--
-lemma `fst_apply` / 引理 `fst_apply`
-
-English:
-lemma fst_apply
-  given: (v : V × W)
-  statement: fst A ρ σ v = v.1
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fst_apply
-  条件: (v : V × W)
-  结论: fst A ρ σ v = v.1
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.fst_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：fst_apply (v : V × W) : fst A ρ σ v = v.1
+参数：v : V × W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst_apply (v : V × W) : fst A ρ σ v = v.1 := rfl
 
 @[simp]
-/--
-lemma `snd_apply` / 引理 `snd_apply`
-
-English:
-lemma snd_apply
-  given: (v : V × W)
-  statement: snd A ρ σ v = v.2
-  proof: rfl
-
-中文:
-引理 snd_apply
-  条件: (v : V × W)
-  结论: snd A ρ σ v = v.2
-  证明: rfl
+/-
+**Representation.IntertwiningMap.snd_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：snd_apply (v : V × W) : snd A ρ σ v = v.2
+参数：v : V × W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd_apply (v : V × W) : snd A ρ σ v = v.2 := rfl
-
-/--
-lemma `coe_fst` / 引理 `coe_fst`
-
-English:
-lemma coe_fst
-  statement: ⇑(fst A ρ σ) = Prod.fst
-  proof: rfl
-
-中文:
-引理 coe_fst
-  结论: ⇑(fst A ρ σ) = 积类型.fst
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_fst** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W), ⇑(Representation.IntertwiningMap.fst A ρ 
+σ) = Prod.fst
+参数：ρ : Representation A G V；σ : Representation A G W；Representation.Intertwining
+Map.fst A ρ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_fst : ⇑(fst A ρ σ) = Prod.fst := rfl
-
-/--
-lemma `coe_snd` / 引理 `coe_snd`
-
-English:
-lemma coe_snd
-  statement: ⇑(snd A ρ σ) = Prod.snd
-  proof: rfl
-
-中文:
-引理 coe_snd
-  结论: ⇑(snd A ρ σ) = 积类型.snd
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_snd** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Representat
+ion A G V) (σ : Representation A G W), ⇑(Representation.IntertwiningMap.snd A ρ 
+σ) = Prod.snd
+参数：ρ : Representation A G V；σ : Representation A G W；Representation.Intertwining
+Map.snd A ρ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_snd : ⇑(snd A ρ σ) = Prod.snd := rfl
-
-/--
-lemma `fst_surjective` / 引理 `fst_surjective`
-
-English:
-lemma fst_surjective
-  statement: Function.Surjective (fst A ρ σ)
-  proof: LinearMap.fst_surjective
-
-中文:
-引理 fst_surjective
-  结论: 函数.满射 (fst A ρ σ)
-  证明: LinearMap.fst_surjective
-
-Depends on / 依赖: LinearMap, LinearMap.fst_surjective, fst_surjective
+/-
+**Representation.IntertwiningMap.fst_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：fst_surjective : Function.Surjective (fst A ρ σ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.fst_surjective`：fst_surjective : Function.Surjective (fst R M 
+M₂)
 -/
 lemma fst_surjective : Function.Surjective (fst A ρ σ) := LinearMap.fst_surjective
-
-/--
-lemma `snd_surjective` / 引理 `snd_surjective`
-
-English:
-lemma snd_surjective
-  statement: Function.Surjective (snd A ρ σ)
-  proof: LinearMap.snd_surjective
-
-中文:
-引理 snd_surjective
-  结论: 函数.满射 (snd A ρ σ)
-  证明: LinearMap.snd_surjective
-
-Depends on / 依赖: LinearMap, LinearMap.snd_surjective, snd_surjective
+/-
+**Representation.IntertwiningMap.snd_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：snd_surjective : Function.Surjective (snd A ρ σ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.snd_surjective`：snd_surjective : Function.Surjective (snd R M 
+M₂)
 -/
 lemma snd_surjective : Function.Surjective (snd A ρ σ) := LinearMap.snd_surjective
 
 section prod
 
 variable {ρ σ τ}
-/--
-Definition of `prod` / `prod` 的定义
+/-- The product of two intertwining maps is an intertwining map. -/
+/-
+**Representation.IntertwiningMap.prod** 是 Mathlib 中的一个定义，位于命名空间 `Representation.
+IntertwiningMap`。
+形式化陈述：prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) : IntertwiningMap
+ ρ (σ.prod τ) where toLinearMap
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap ρ τ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ)
-  body: f.toLinearMap.prod g.toLinearMap
-isIntertwining' _ := LinearMap.ext by simp [f.isIntertwining, g.isIntertwining]
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
-  定义体: f.toLinearMap.prod g.toLinearMap
-isIntertwining' _ := LinearMap.ext by simp [f.isIntertwining, g.isIntertwining]
-
-@[simp]
-
-Depends on / 依赖: f.toLinearMap.prod, g.toLinearMap, toLinearMap
+--- 原说明 ---
+The product of two intertwining maps is an intertwining map.
 -/
 def prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) : IntertwiningMap ρ (σ.prod τ) where
   toLinearMap := f.toLinearMap.prod g.toLinearMap
-isIntertwining' _ := LinearMap.ext by simp [f.isIntertwining, g.isIntertwining]
+  isIntertwining' _ := LinearMap.ext <| by simp [f.isIntertwining, g.isIntertwining]
 
 @[simp]
-/--
-lemma `fst_prod` / 引理 `fst_prod`
-
-English:
-lemma fst_prod
-  given: (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ)
-  proof: IntertwiningMap.ext LinearMap.fst_prod _ _
-
-@[simp]
-
-中文:
-引理 fst_prod
-  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
-  证明: IntertwiningMap.ext LinearMap.fst_prod _ _
-
-@[simp]
-
-Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext, LinearMap, LinearMap.fst_prod, fst_prod
+/-
+**Representation.IntertwiningMap.fst_prod** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：fst_prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) : (fst A σ τ)
+.comp (prod f g) = f
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap ρ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.fst_prod`：fst_prod (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) : (fst 
+R M₂ M₃).comp (prod f g) = f
 -/
 lemma fst_prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) :
-(fst A σ τ).comp (prod f g) = f := IntertwiningMap.ext LinearMap.fst_prod _ _
+    (fst A σ τ).comp (prod f g) = f := IntertwiningMap.ext <| LinearMap.fst_prod _ _
 
 @[simp]
-/--
-lemma `snd_prod` / 引理 `snd_prod`
-
-English:
-lemma snd_prod
-  given: (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ)
-  proof: IntertwiningMap.ext LinearMap.snd_prod _ _
-
-中文:
-引理 snd_prod
-  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 ρ τ)
-  证明: IntertwiningMap.ext LinearMap.snd_prod _ _
-
-Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext, LinearMap, LinearMap.snd_prod, snd_prod
+/-
+**Representation.IntertwiningMap.snd_prod** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：snd_prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) : (snd A σ τ)
+.comp (prod f g) = g
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap ρ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.snd_prod`：snd_prod (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) : (snd 
+R M₂ M₃).comp (prod f g) = g
 -/
 lemma snd_prod (f : IntertwiningMap ρ σ) (g : IntertwiningMap ρ τ) :
-(snd A σ τ).comp (prod f g) = g := IntertwiningMap.ext LinearMap.snd_prod _ _
-
-/--
-lemma `prod_comp` / 引理 `prod_comp`
-
-English:
-lemma prod_comp
-  statement: (X : Type*) [AddCommMonoid X] [Module A X] {π : Representation A G X}
-  proof: IntertwiningMap.ext LinearMap.prod_comp ..
-
-中文:
-引理 prod_comp
-  结论: (X : 类型) [加法交换幺半群 X] [模 A X] {π : Representation A G X}
-  证明: IntertwiningMap.ext LinearMap.prod_comp ..
-
-Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext, LinearMap, LinearMap.prod_comp, prod_comp
+    (snd A σ τ).comp (prod f g) = g := IntertwiningMap.ext <| LinearMap.snd_prod _ _
+/-
+**Representation.IntertwiningMap.prod_comp** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：prod_comp (X : Type*) [AddCommMonoid X] [Module A X] {π : Representation A
+ G X} (f : IntertwiningMap ρ σ) (g₁ : IntertwiningMap σ τ) (g₂ : IntertwiningMap
+ σ π) : (prod g₁ g₂).comp f = prod (g₁.comp f) (g₂.comp f)
+参数：X : Type*；f : IntertwiningMap ρ σ；g₁ : IntertwiningMap σ τ；g₂ : IntertwiningM
+ap σ π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.prod_comp`：prod_comp (f : M₂ ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₄) (h 
+: M ->ₗ[R] M₂) : (f.prod g).comp h = (f.comp h).prod (g.comp h)
 -/
 lemma prod_comp (X : Type*) [AddCommMonoid X] [Module A X] {π : Representation A G X}
     (f : IntertwiningMap ρ σ) (g₁ : IntertwiningMap σ τ) (g₂ : IntertwiningMap σ π) :
     (prod g₁ g₂).comp f = prod (g₁.comp f) (g₂.comp f) :=
-IntertwiningMap.ext LinearMap.prod_comp ..
+  IntertwiningMap.ext <| LinearMap.prod_comp ..
 
 variable (A ρ σ) in
-/--
-Definition of `inl` / `inl` 的定义
+/-- The left inclusion of a product representation is an intertwining map. -/
+/-
+**Representation.IntertwiningMap.inl** 是 Mathlib 中的一个定义，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：inl : IntertwiningMap ρ (ρ.prod σ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inl
-  signature: : IntertwiningMap ρ (ρ.prod σ)
-  body: prod (id ρ) 0
-
-中文:
-定义 inl
-  签名: : 整数ertwining映射 ρ (ρ.乘积 σ)
-  定义体: prod (id ρ) 0
+--- 原说明 ---
+The left inclusion of a product representation is an intertwining map.
 -/
 def inl : IntertwiningMap ρ (ρ.prod σ) := prod (id ρ) 0
 
 variable (A ρ σ) in
-/--
-Definition of `inr` / `inr` 的定义
+/-- The right inclusion of a product representation is an intertwining map. -/
+/-
+**Representation.IntertwiningMap.inr** 是 Mathlib 中的一个定义，位于命名空间 `Representation.I
+ntertwiningMap`。
+形式化陈述：inr : IntertwiningMap σ (ρ.prod σ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inr
-  signature: : IntertwiningMap σ (ρ.prod σ)
-  body: prod (0 : IntertwiningMap σ ρ) (id σ)
-
-中文:
-定义 inr
-  签名: : 整数ertwining映射 σ (ρ.乘积 σ)
-  定义体: prod (0 : IntertwiningMap σ ρ) (id σ)
-
-Depends on / 依赖: IntertwiningMap
+--- 原说明 ---
+The right inclusion of a product representation is an intertwining map.
 -/
 def inr : IntertwiningMap σ (ρ.prod σ) := prod (0 : IntertwiningMap σ ρ) (id σ)
-
-/--
-lemma `range_inl` / 引理 `range_inl`
-
-English:
-lemma range_inl
-  statement: (inl A ρ σ).range = (snd A ρ σ).ker
-  proof: Subrepresentation.ext LinearMap.range_inl ..
-
-中文:
-引理 range_inl
-  结论: (inl A ρ σ).range = (snd A ρ σ).ker
-  证明: Subrepresentation.ext LinearMap.range_inl ..
-
-Depends on / 依赖: LinearMap, LinearMap.range_inl, Subrepresentation, Subrepresentation.ext, range_inl
+/-
+**Representation.IntertwiningMap.range_inl** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：range_inl : (inl A ρ σ).range = (snd A ρ σ).ker
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrepresentation.ext`：∀ {A : Type u_1} {G : Type u_2} {W : Type u_3} {i
+nst : Semiring A} {inst_1 : Monoid G} {inst_2 : AddCommMonoid W}   {inst_3 : _ro
+ot_.Module …
+· 使用定理 `LinearMap.range_inl`：range_inl : range (inl R M M₂) = ker (snd R M M₂)
 -/
 lemma range_inl : (inl A ρ σ).range = (snd A ρ σ).ker :=
-Subrepresentation.ext LinearMap.range_inl ..
-
-/--
-lemma `range_inr` / 引理 `range_inr`
-
-English:
-lemma range_inr
-  statement: (inr A ρ σ).range = (fst A ρ σ).ker
-  proof: Subrepresentation.ext LinearMap.range_inr ..
-
-中文:
-引理 range_inr
-  结论: (inr A ρ σ).range = (fst A ρ σ).ker
-  证明: Subrepresentation.ext LinearMap.range_inr ..
-
-Depends on / 依赖: LinearMap, LinearMap.range_inr, Subrepresentation, Subrepresentation.ext, range_inr
+  Subrepresentation.ext <| LinearMap.range_inl ..
+/-
+**Representation.IntertwiningMap.range_inr** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：range_inr : (inr A ρ σ).range = (fst A ρ σ).ker
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrepresentation.ext`：∀ {A : Type u_1} {G : Type u_2} {W : Type u_3} {i
+nst : Semiring A} {inst_1 : Monoid G} {inst_2 : AddCommMonoid W}   {inst_3 : _ro
+ot_.Module …
+· 使用定理 `LinearMap.range_inr`：range_inr : range (inr R M M₂) = ker (fst R M M₂)
 -/
 lemma range_inr : (inr A ρ σ).range = (fst A ρ σ).ker :=
-Subrepresentation.ext LinearMap.range_inr ..
-
-/--
-lemma `fst_comp_inl` / 引理 `fst_comp_inl`
-
-English:
-lemma fst_comp_inl
-  statement: (fst A ρ σ).comp (inl A ρ σ) = id ρ
-  proof: IntertwiningMap.ext LinearMap.fst_comp_inl ..
-
-中文:
-引理 fst_comp_inl
-  结论: (fst A ρ σ).comp (inl A ρ σ) = id ρ
-  证明: IntertwiningMap.ext LinearMap.fst_comp_inl ..
+  Subrepresentation.ext <| LinearMap.range_inr ..
+/-
+**Representation.IntertwiningMap.fst_comp_inl** 是 Mathlib 中的一个定理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W},   (Representation.IntertwiningMap.fst A ρ
+ σ).comp (Representation.IntertwiningMap.inl A ρ σ) =     Representation.Intertw
+iningMap.id ρ
+参数：Representation.IntertwiningMap.fst A ρ σ；Representation.IntertwiningMap.inl A
+ ρ σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.fst_comp_inl`：∀ (R : Type u) (M : Type v) (M₂ : Type w) [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : AddCommMonoid M₂]   [inst_3 :
+ _root_.Modu…
 -/
 @[simp] lemma fst_comp_inl : (fst A ρ σ).comp (inl A ρ σ) = id ρ :=
-IntertwiningMap.ext LinearMap.fst_comp_inl ..
-
-/--
-lemma `snd_comp_inl` / 引理 `snd_comp_inl`
-
-English:
-lemma snd_comp_inl
-  statement: (snd A ρ σ).comp (inl A ρ σ) = 0
-  proof: IntertwiningMap.ext LinearMap.snd_comp_inl ..
-
-中文:
-引理 snd_comp_inl
-  结论: (snd A ρ σ).comp (inl A ρ σ) = 0
-  证明: IntertwiningMap.ext LinearMap.snd_comp_inl ..
+  IntertwiningMap.ext <| LinearMap.fst_comp_inl ..
+/-
+**Representation.IntertwiningMap.snd_comp_inl** 是 Mathlib 中的一个定理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W},   (Representation.IntertwiningMap.snd A ρ
+ σ).comp (Representation.IntertwiningMap.inl A ρ σ) = 0
+参数：Representation.IntertwiningMap.snd A ρ σ；Representation.IntertwiningMap.inl A
+ ρ σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.snd_comp_inl`：∀ (R : Type u) (M : Type v) (M₂ : Type w) [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : AddCommMonoid M₂]   [inst_3 :
+ _root_.Modu…
 -/
 @[simp] lemma snd_comp_inl : (snd A ρ σ).comp (inl A ρ σ) = 0 :=
-IntertwiningMap.ext LinearMap.snd_comp_inl ..
-
-/--
-lemma `fst_comp_inr` / 引理 `fst_comp_inr`
-
-English:
-lemma fst_comp_inr
-  statement: (fst A ρ σ).comp (inr A ρ σ) = 0
-  proof: IntertwiningMap.ext LinearMap.fst_comp_inr ..
-
-中文:
-引理 fst_comp_inr
-  结论: (fst A ρ σ).comp (inr A ρ σ) = 0
-  证明: IntertwiningMap.ext LinearMap.fst_comp_inr ..
+  IntertwiningMap.ext <| LinearMap.snd_comp_inl ..
+/-
+**Representation.IntertwiningMap.fst_comp_inr** 是 Mathlib 中的一个定理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W},   (Representation.IntertwiningMap.fst A ρ
+ σ).comp (Representation.IntertwiningMap.inr A ρ σ) = 0
+参数：Representation.IntertwiningMap.fst A ρ σ；Representation.IntertwiningMap.inr A
+ ρ σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.fst_comp_inr`：∀ (R : Type u) (M : Type v) (M₂ : Type w) [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : AddCommMonoid M₂]   [inst_3 :
+ _root_.Modu…
 -/
 @[simp] lemma fst_comp_inr : (fst A ρ σ).comp (inr A ρ σ) = 0 :=
-IntertwiningMap.ext LinearMap.fst_comp_inr ..
-
-/--
-lemma `snd_comp_inr` / 引理 `snd_comp_inr`
-
-English:
-lemma snd_comp_inr
-  statement: (snd A ρ σ).comp (inr A ρ σ) = id σ
-  proof: IntertwiningMap.ext LinearMap.snd_comp_inr ..
-
-中文:
-引理 snd_comp_inr
-  结论: (snd A ρ σ).comp (inr A ρ σ) = id σ
-  证明: IntertwiningMap.ext LinearMap.snd_comp_inr ..
+  IntertwiningMap.ext <| LinearMap.fst_comp_inr ..
+/-
+**Representation.IntertwiningMap.snd_comp_inr** 是 Mathlib 中的一个定理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W},   (Representation.IntertwiningMap.snd A ρ
+ σ).comp (Representation.IntertwiningMap.inr A ρ σ) =     Representation.Intertw
+iningMap.id σ
+参数：Representation.IntertwiningMap.snd A ρ σ；Representation.IntertwiningMap.inr A
+ ρ σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.snd_comp_inr`：∀ (R : Type u) (M : Type v) (M₂ : Type w) [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : AddCommMonoid M₂]   [inst_3 :
+ _root_.Modu…
 -/
 @[simp] lemma snd_comp_inr : (snd A ρ σ).comp (inr A ρ σ) = id σ :=
-IntertwiningMap.ext LinearMap.snd_comp_inr ..
-
-/--
-lemma `coprod_inl_inr` / 引理 `coprod_inl_inr`
-
-English:
-lemma coprod_inl_inr
-  statement: (inl A ρ σ).comp (fst A ρ σ) + (inr A ρ σ).comp (snd A ρ σ) =
-  proof: IntertwiningMap.ext LinearMap.coprod_inl_inr
-
-中文:
-引理 coprod_inl_inr
-  结论: (inl A ρ σ).comp (fst A ρ σ) + (inr A ρ σ).comp (snd A ρ σ) =
-  证明: IntertwiningMap.ext LinearMap.coprod_inl_inr
+  IntertwiningMap.ext <| LinearMap.snd_comp_inr ..
+/-
+**Representation.IntertwiningMap.coprod_inl_inr** 是 Mathlib 中的一个定理，位于命名空间 `Repre
+sentation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W},   (Representation.IntertwiningMap.inl A ρ
+ σ).comp (Representation.IntertwiningMap.fst A ρ σ) +       (Representation.Inte
+rtwiningMap.inr A ρ σ).comp (Representation.IntertwiningMap.snd A ρ σ) =     Rep
+resentation.IntertwiningMap.id (ρ.prod σ)
+参数：Representation.IntertwiningMap.inl A ρ σ；Representation.IntertwiningMap.fst A
+ ρ σ；Representation.IntertwiningMap.inr A ρ σ；Representation.IntertwiningMap.snd
+ A ρ σ；ρ.prod σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `LinearMap.coprod_inl_inr`：coprod_inl_inr : coprod (inl R M M₂) (inr R M 
+M₂) = LinearMap.id
 -/
 @[simp] lemma coprod_inl_inr : (inl A ρ σ).comp (fst A ρ σ) + (inr A ρ σ).comp (snd A ρ σ) =
-.id _ := IntertwiningMap.ext LinearMap.coprod_inl_inr
+    .id _ := IntertwiningMap.ext <| LinearMap.coprod_inl_inr
 
 end prod
 
 end IntertwiningMap
 
-/--
-Definition of `Equiv` / `Equiv` 的定义
+/-- Equivalence between representations is a bijective intertwining map. -/
+/-
+**Representation.Equiv** 是 Mathlib 中的一个归纳类型，位于命名空间 `Representation`。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {V : Type u_3} →       {W : Type u
+_4} →         [inst : Semiring A] →           [inst_1 : Monoid G] →             
+[inst_2 : AddCommMonoid V] →               [inst_3 : AddCommMonoid W] →         
+        [inst_4 : _root_.Module A V] →                   [inst_5 : _root_.Module
+ A W] → Representation A G V → Representation A G W → Type (max u_3 u_4)
+参数：max u_3 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Equiv
-  parameters: extends IntertwiningMap ρ σ, V ≃ₗ[A] W
-  extends: IntertwiningMap ρ σ, V ≃ₗ[A] W
-  axioms and operations (1):
-    - mk' : :
-
-中文:
-结构 等价
-  参数: extends 整数ertwining映射 ρ σ, V ≃ₗ[A] W
-  继承: 整数ertwining映射 ρ σ, V ≃ₗ[A] W
-  公理与运算 (1 个):
-    - mk' : :
+--- 原说明 ---
+Equivalence between representations is a bijective intertwining map.
 -/
 structure Equiv extends IntertwiningMap ρ σ, V ≃ₗ[A] W where
   mk' ::
@@ -1411,142 +1071,105 @@ namespace Equiv
 
 variable {ρ σ} (φ : Equiv ρ σ)
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- An `Equiv` between representations could be built from a `LinearEquiv` and an assumption
+  proving the `G`-equivariance. -/
+/-
+**Representation.Equiv.mk** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Equiv`。
+形式化陈述：mk (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) : ρ.Equiv σ wh
+ere __
+参数：e : V ≃ₗ[A] W；he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  body: e
-  isIntertwining' := he
-
-中文:
-定义 mk
-  签名: (e : V ≃ₗ[A] W) (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  定义体: e
-  isIntertwining' := he
+--- 原说明 ---
+An `Equiv` between representations could be built from a `LinearEquiv` and an as
+sumption
+  proving the `G`-equivariance.
 -/
-def mk (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) : ρ.Equiv σ where
+def mk (e : V ≃ₗ[A] W) (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) : ρ.Equiv σ where
   __ := e
   isIntertwining' := he
-
-/--
-lemma `toLinearEquiv_mk'` / 引理 `toLinearEquiv_mk'`
-
-English:
-lemma toLinearEquiv_mk'
-  given: {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  proof: rfl
-
-中文:
-引理 toLinearEquiv_mk'
-  条件: {e : V ≃ₗ[A] W} (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  证明: rfl
+/-
+**Representation.Equiv.toLinearEquiv_mk'** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.Equiv`。
+形式化陈述：toLinearEquiv_mk' {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
+ : (mk e he).toLinearEquiv = e
+参数：he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearEquiv_mk' {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
+lemma toLinearEquiv_mk' {e : V ≃ₗ[A] W} (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
     (mk e he).toLinearEquiv = e := rfl
-
-/--
-lemma `toIntertwiningMap_mk'` / 引理 `toIntertwiningMap_mk'`
-
-English:
-lemma toIntertwiningMap_mk'
-  given: (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 to整数ertwiningMap_mk'
-  条件: (e : V ≃ₗ[A] W) (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.Equiv.toIntertwiningMap_mk'** 是 Mathlib 中的一个引理，位于命名空间 `Represen
+tation.Equiv`。
+形式化陈述：toIntertwiningMap_mk' (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘
+ₗ e) : (mk e he).toIntertwiningMap = ⟨e.toLinearMap, he⟩
+参数：e : V ≃ₗ[A] W；he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toIntertwiningMap_mk' (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
+lemma toIntertwiningMap_mk' (e : V ≃ₗ[A] W) (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
     (mk e he).toIntertwiningMap = ⟨e.toLinearMap, he⟩ := rfl
 
 @[simp]
-/--
-lemma `toLinearMap_mk'` / 引理 `toLinearMap_mk'`
-
-English:
-lemma toLinearMap_mk'
-  given: (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  proof: rfl
-
-中文:
-引理 toLinearMap_mk'
-  条件: (e : V ≃ₗ[A] W) (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  证明: rfl
+/-
+**Representation.Equiv.toLinearMap_mk'** 是 Mathlib 中的一个引理，位于命名空间 `Representation
+.Equiv`。
+形式化陈述：toLinearMap_mk' (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
+ (mk e he).toLinearMap = e.toLinearMap
+参数：e : V ≃ₗ[A] W；he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_mk' (e : V ≃ₗ[A] W) (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
+lemma toLinearMap_mk' (e : V ≃ₗ[A] W) (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
     (mk e he).toLinearMap = e.toLinearMap := rfl
-
-/--
-lemma `toLinearEquiv_injective` / 引理 `toLinearEquiv_injective`
-
-English:
-lemma toLinearEquiv_injective
-  statement: Function.Injective (toLinearEquiv : (σ.Equiv ρ) -> _)
-  proof: fun φ ψ h => by cases φ; cases ψ; simpa [IntertwiningMap.ext_iff] using h
-
-中文:
-引理 toLinearEquiv_injective
-  结论: 函数.单射 (toLinearEquiv : (σ.等价 ρ) -> _)
-  证明: fun φ ψ h => by cases φ; cases ψ; simpa [IntertwiningMap.ext_iff] using h
-
-Depends on / 依赖: IntertwiningMap, IntertwiningMap.ext_iff, ext_iff
+/-
+**Representation.Equiv.toLinearEquiv_injective** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.Equiv`。
+形式化陈述：toLinearEquiv_injective : Function.Injective (toLinearEquiv : (σ.Equiv ρ) 
+-> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Representation.Equiv.mk'.injEq`：∀ {A : Type u_1} {G : Type u_2} {V : Typ
+e u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCom
+mMonoid V] [inst_3 :…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.mk.injEq`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `Representation.Equiv.left_inv`：∀ {A : Type u_1} {G : Type u_2} {V : Type
+ u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddComm
+Monoid V] [inst_3 :…
+· 使用定理 `Representation.Equiv.right_inv`：∀ {A : Type u_1} {G : Type u_2} {V : Typ
+e u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCom
+mMonoid V] [inst_3 :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma toLinearEquiv_injective : Function.Injective (toLinearEquiv : (σ.Equiv ρ) -> _) :=
-  fun φ ψ h => by cases φ; cases ψ; simpa [IntertwiningMap.ext_iff] using h
-
-/--
-lemma `toLinearEquiv_inj` / 引理 `toLinearEquiv_inj`
-
-English:
-lemma toLinearEquiv_inj
-  given: (φ ψ : σ.Equiv ρ)
-  statement: φ.toLinearEquiv = ψ.toLinearEquiv ↔ φ = ψ
-  proof: toLinearEquiv_injective.eq_iff
-
-中文:
-引理 toLinearEquiv_inj
-  条件: (φ ψ : σ.等价 ρ)
-  结论: φ.toLinearEquiv = ψ.toLinearEquiv ↔ φ = ψ
-  证明: toLinearEquiv_injective.eq_iff
-
-Depends on / 依赖: IsNontrivial, IsNontrivial.condition, condition, eq_iff, lt_or_lt_iff_ne, lt_or_lt_iff_ne.mpr, toLinearEquiv_injective, toLinearEquiv_injective.eq_iff, zero_lt_iff, zero_lt_iff.mpr
+lemma toLinearEquiv_injective : Function.Injective (toLinearEquiv : (σ.Equiv ρ) → _) :=
+  fun φ ψ h ↦ by cases φ; cases ψ; simpa [IntertwiningMap.ext_iff] using h
+/-
+**Representation.Equiv.toLinearEquiv_inj** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.Equiv`。
+形式化陈述：toLinearEquiv_inj (φ ψ : σ.Equiv ρ) : φ.toLinearEquiv = ψ.toLinearEquiv ↔ 
+φ = ψ
+参数：φ ψ : σ.Equiv ρ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `Representation.Equiv.toLinearEquiv_injective`：toLinearEquiv_injective : 
+Function.Injective (toLinearEquiv : (σ.Equiv ρ) -> _)
 -/
 lemma toLinearEquiv_inj (φ ψ : σ.Equiv ρ) : φ.toLinearEquiv = ψ.toLinearEquiv ↔ φ = ψ :=
   toLinearEquiv_injective.eq_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (Equiv ρ σ) V W
-  body: φ.toLinearEquiv
-  inv φ := φ.invFun
-  left_inv e := e.left_inv
-  right_inv e := e.right_inv
-  coe_injective' φ ψ h1 h2 := by
-    cases φ; cases ψ
-    simp_all [IntertwiningMap.ext_iff]
-
-中文:
-实例 :
-  签名: 等价状 (等价 ρ σ) V W
-  定义体: φ.toLinearEquiv
-  inv φ := φ.invFun
-  left_inv e := e.left_inv
-  right_inv e := e.right_inv
-  coe_injective' φ ψ h1 h2 := by
-    cases φ; cases ψ
-    simp_all [IntertwiningMap.ext_iff]
-
-Depends on / 依赖: toLinearEquiv
+/-
+**Representation.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (Equiv ρ σ) V W where
   coe φ := φ.toLinearEquiv
@@ -1556,329 +1179,198 @@ instance : EquivLike (Equiv ρ σ) V W where
   coe_injective' φ ψ h1 h2 := by
     cases φ; cases ψ
     simp_all [IntertwiningMap.ext_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearEquivClass (σ.Equiv ρ) A W V
-  body: f.map_add
-  map_smulₛₗ f := f.map_smul
-
-@[simp]
-
-中文:
-实例 :
-  签名: LinearEquivClass (σ.等价 ρ) A W V
-  定义体: f.map_add
-  map_smulₛₗ f := f.map_smul
-
-@[simp]
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**Representation.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LinearEquivClass (σ.Equiv ρ) A W V where
   map_add f := f.map_add
   map_smulₛₗ f := f.map_smul
 
 @[simp]
-/--
-lemma `mk_apply` / 引理 `mk_apply`
-
-English:
-lemma mk_apply
-  given: {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (v : V)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 mk_apply
-  条件: {e : V ≃ₗ[A] W} (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (v : V)
-  证明: rfl
-
-@[ext]
-
-Depends on / 依赖: isNontrivial_iff_isNontrivial
+/-
+**Representation.Equiv.mk_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equiv`
+。
+形式化陈述：mk_apply {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (v : V) 
+: (mk e he) v = e v
+参数：he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e；v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_apply {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (v : V) :
+lemma mk_apply {e : V ≃ₗ[A] W} (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (v : V) :
     (mk e he) v = e v := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ)
-  statement: φ = ψ
-  proof: by
-  cases φ; cases ψ
-  simpa using h
-
-中文:
-引理 ext
-  条件: {φ ψ : 等价 ρ σ} (h : (φ : V -> W) = ψ)
-  结论: φ = ψ
-  证明: by
-  cases φ; cases ψ
-  simpa using h
+/-
+**Representation.Equiv.ext** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equiv`。
+形式化陈述：ext {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ) : φ = ψ
+参数：h : (φ : V -> W) = ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.Equiv.mk'.injEq`：∀ {A : Type u_1} {G : Type u_2} {V : Typ
+e u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCom
+mMonoid V] [inst_3 :…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma ext {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ) : φ = ψ := by
+lemma ext {φ ψ : Equiv ρ σ} (h : (φ : V → W) = ψ) : φ = ψ := by
   cases φ; cases ψ
   simpa using h
 
 variable (ρ) in
-/--
-Definition of `refl` / `refl` 的定义
+/-- Any representation is equivalent to itself. -/
+/-
+**Representation.Equiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Equiv`。
+形式化陈述：refl : Equiv ρ ρ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : Equiv ρ ρ where
-  body: LinearEquiv.refl _ _
-  isIntertwining' g := by simp
-
-中文:
-定义 refl
-  签名: : 等价 ρ ρ where
-  定义体: LinearEquiv.refl _ _
-  isIntertwining' g := by simp
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl
+--- 原说明 ---
+Any representation is equivalent to itself.
 -/
 def refl : Equiv ρ ρ where
   __ := LinearEquiv.refl _ _
   isIntertwining' g := by simp
-
-/--
-lemma `toIntertwiningMap_refl` / 引理 `toIntertwiningMap_refl`
-
-English:
-lemma toIntertwiningMap_refl
-  statement: (refl ρ).toIntertwiningMap = .id ρ
-  proof: rfl
-
-中文:
-引理 to整数ertwiningMap_refl
-  结论: (refl ρ).to整数ertwiningMap = .id ρ
-  证明: rfl
+/-
+**Representation.Equiv.toIntertwiningMap_refl** 是 Mathlib 中的一个定理，位于命名空间 `Represe
+ntation.Equiv`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : Semiring A] [inst_1
+ : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] {ρ : Repr
+esentation A G V},   ↑(Representation.Equiv.refl ρ) = Representation.Intertwinin
+gMap.id ρ
+参数：Representation.Equiv.refl ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toIntertwiningMap_refl : (refl ρ).toIntertwiningMap = .id ρ := rfl
-
-/--
-lemma `toLinearMap_refl` / 引理 `toLinearMap_refl`
-
-English:
-lemma toLinearMap_refl
-  statement: (refl ρ).toLinearMap = LinearMap.id
-  proof: rfl
-
-中文:
-引理 toLinearMap_refl
-  结论: (refl ρ).toLinearMap = 线性映射.id
-  证明: rfl
+/-
+**Representation.Equiv.toLinearMap_refl** 是 Mathlib 中的一个定理，位于命名空间 `Representatio
+n.Equiv`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : Semiring A] [inst_1
+ : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] {ρ : Repr
+esentation A G V}, (↑(Representation.Equiv.refl ρ)).toLinearMap = LinearMap.id
+参数：↑(Representation.Equiv.refl ρ)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearMap_refl : (refl ρ).toLinearMap = LinearMap.id := rfl
-
-/--
-lemma `refl_apply` / 引理 `refl_apply`
-
-English:
-lemma refl_apply
-  given: (v : V)
-  statement: refl ρ v = v
-  proof: rfl
-
-中文:
-引理 refl_apply
-  条件: (v : V)
-  结论: refl ρ v = v
-  证明: rfl
+/-
+**Representation.Equiv.refl_apply** 是 Mathlib 中的一个定理，位于命名空间 `Representation.Equi
+v`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : Semiring A] [inst_1
+ : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] {ρ : Repr
+esentation A G V} (v : V), (Representation.Equiv.refl ρ) v = v
+参数：v : V；Representation.Equiv.refl ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma refl_apply (v : V) : refl ρ v = v := rfl
-
-/--
-lemma `coe_toIntertwiningMap` / 引理 `coe_toIntertwiningMap`
-
-English:
-lemma coe_toIntertwiningMap
-  statement: ⇑φ.toIntertwiningMap = φ
-  proof: rfl
-
-中文:
-引理 coe_to整数ertwiningMap
-  结论: ⇑φ.to整数ertwiningMap = φ
-  证明: rfl
+/-
+**Representation.Equiv.coe_toIntertwiningMap** 是 Mathlib 中的一个定理，位于命名空间 `Represen
+tation.Equiv`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W} (φ : ρ.Equiv σ), ⇑↑φ = ⇑φ
+参数：φ : ρ.Equiv σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toIntertwiningMap : ⇑φ.toIntertwiningMap = φ := rfl
-
-/--
-lemma `coe_toLinearMap` / 引理 `coe_toLinearMap`
-
-English:
-lemma coe_toLinearMap
-  statement: ⇑φ.toLinearMap = φ
-  proof: rfl
-
-中文:
-引理 coe_toLinearMap
-  结论: ⇑φ.toLinearMap = φ
-  证明: rfl
+/-
+**Representation.Equiv.coe_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Representation
+.Equiv`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Semi
+ring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMonoid
+ W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Representat
+ion A G V} {σ : Representation A G W} (φ : ρ.Equiv σ), ⇑(↑φ).toLinearMap = ⇑φ
+参数：φ : ρ.Equiv σ；↑φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toLinearMap : ⇑φ.toLinearMap = φ := rfl
-
-/--
-lemma `coe_invFun` / 引理 `coe_invFun`
-
-English:
-lemma coe_invFun
-  statement: φ.invFun = φ.symm
-  proof: rfl
-
-中文:
-引理 coe_invFun
-  结论: φ.invFun = φ.symm
-  证明: rfl
+/-
+**Representation.Equiv.coe_invFun** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equi
+v`。
+形式化陈述：coe_invFun : φ.invFun = φ.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_invFun : φ.invFun = φ.symm := rfl
-
-/--
-theorem `toLinearEquiv_toLinearMap` / 定理 `toLinearEquiv_toLinearMap`
-
-English:
-theorem toLinearEquiv_toLinearMap
-  proof: rfl
-
-中文:
-定理 toLinearEquiv_toLinearMap
-  证明: rfl
+/-
+**Representation.Equiv.toLinearEquiv_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Repr
+esentation.Equiv`。
+形式化陈述：toLinearEquiv_toLinearMap : φ.toLinearEquiv.toLinearMap = φ.toIntertwining
+Map.toLinearMap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_toLinearMap :
   φ.toLinearEquiv.toLinearMap = φ.toIntertwiningMap.toLinearMap := rfl
-
-/--
-theorem `toLinearEquiv_apply` / 定理 `toLinearEquiv_apply`
-
-English:
-theorem toLinearEquiv_apply
-  given: (v : V)
-  statement: φ.toLinearEquiv v = φ.toIntertwiningMap v
-  proof: rfl
-
-中文:
-定理 toLinearEquiv_apply
-  条件: (v : V)
-  结论: φ.toLinearEquiv v = φ.to整数ertwiningMap v
-  证明: rfl
+/-
+**Representation.Equiv.toLinearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Representa
+tion.Equiv`。
+形式化陈述：toLinearEquiv_apply (v : V) : φ.toLinearEquiv v = φ.toIntertwiningMap v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_apply (v : V) : φ.toLinearEquiv v = φ.toIntertwiningMap v := rfl
 
 open LinearMap in
 /-- The equiv between representations are symmetric. -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**Representation.Equiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Equiv`。
+形式化陈述：symm (φ : Equiv ρ σ) : Equiv σ ρ where __
+参数：φ : Equiv ρ σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (φ : Equiv ρ σ)
-  body: φ.toLinearEquiv.symm
-  isIntertwining' g := by
-    rw [← cancel_left φ.toLinearEquiv.injective]; rw [← comp_assoc]; rw [← comp_assoc]; rw [φ.1.2 g]; rw [φ.comp_symm]; rw [comp_assoc]; rw [φ.comp_symm]; rw [id_comp]; rw [comp_id]
-
-中文:
-定义 symm
-  签名: (φ : 等价 ρ σ)
-  定义体: φ.toLinearEquiv.symm
-  isIntertwining' g := by
-    rw [← cancel_left φ.toLinearEquiv.injective]; rw [← comp_assoc]; rw [← comp_assoc]; rw [φ.1.2 g]; rw [φ.comp_symm]; rw [comp_assoc]; rw [φ.comp_symm]; rw [id_comp]; rw [comp_id]
-
-Depends on / 依赖: toLinearEquiv, toLinearEquiv.symm
+--- 原说明 ---
+The equiv between representations are symmetric.
 -/
 def symm (φ : Equiv ρ σ) : Equiv σ ρ where
   __ := φ.toLinearEquiv.symm
   isIntertwining' g := by
-    rw [← cancel_left φ.toLinearEquiv.injective]; rw [← comp_assoc]; rw [← comp_assoc]; rw [φ.1.2 g]; rw [φ.comp_symm]; rw [comp_assoc]; rw [φ.comp_symm]; rw [id_comp]; rw [comp_id]
+    rw [← cancel_left φ.toLinearEquiv.injective, ← comp_assoc, ← comp_assoc, φ.1.2 g, φ.comp_symm,
+      comp_assoc, φ.comp_symm, id_comp, comp_id]
 
 open LinearMap in
-/--
-lemma `_root_.LinearEquiv.isIntertwining_symm_isIntertwining` / 引理 `_root_.LinearEquiv.isIntertwining_symm_isIntertwining`
-
-English:
-lemma _root_.LinearEquiv.isIntertwining_symm_isIntertwining
-  statement: {e : V ≃ₗ[A] W}
-  proof: by
-.1 apply e.comp_toLinearMap_eq_iff _ _
-  rw [← comp_assoc]; rw [← comp_assoc]; rw [he g]; rw [e.comp_symm]; rw [id_comp]; rw [comp_assoc]; rw [e.comp_symm]; rw [comp_id]
-
-@[simp]
-
-中文:
-引理 _root_.线性等价.is整数ertwining_symm_is整数ertwining
-  结论: {e : V ≃ₗ[A] W}
-  证明: by
-.1 apply e.comp_toLinearMap_eq_iff _ _
-  rw [← comp_assoc]; rw [← comp_assoc]; rw [he g]; rw [e.comp_symm]; rw [id_comp]; rw [comp_assoc]; rw [e.comp_symm]; rw [comp_id]
-
-@[simp]
-
-Depends on / 依赖: comp_assoc, comp_id, comp_symm, comp_toLinearMap_eq_iff, e.comp_symm, e.comp_toLinearMap_eq_iff, id_comp
+/-
+**Representation.Equiv._root_.LinearEquiv.isIntertwining_symm_isIntertwining** 是
+ Mathlib 中的一个引理，位于命名空间 `Representation.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LinearEquiv.isIntertwining_symm_isIntertwining {e : V ≃ₗ[A] W}
-    (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (g : G) :
+    (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) (g : G) :
     e.symm ∘ₗ (σ g) = (ρ g) ∘ₗ e.symm := by
-.1 apply e.comp_toLinearMap_eq_iff _ _
-  rw [← comp_assoc]; rw [← comp_assoc]; rw [he g]; rw [e.comp_symm]; rw [id_comp]; rw [comp_assoc]; rw [e.comp_symm]; rw [comp_id]
+  apply e.comp_toLinearMap_eq_iff _ _ |>.1
+  rw [← comp_assoc, ← comp_assoc, he g, e.comp_symm, id_comp, comp_assoc, e.comp_symm, comp_id]
 
 @[simp]
-/--
-lemma `mk_symm` / 引理 `mk_symm`
-
-English:
-lemma mk_symm
-  given: {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  proof: rfl
-
-中文:
-引理 mk_symm
-  条件: {e : V ≃ₗ[A] W} (he : 对任意 g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e)
-  证明: rfl
+/-
+**Representation.Equiv.mk_symm** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equiv`。
+形式化陈述：mk_symm {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) : (mk e h
+e).symm = mk e.symm (e.isIntertwining_symm_isIntertwining he)
+参数：he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_symm {e : V ≃ₗ[A] W} (he : forall g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
+lemma mk_symm {e : V ≃ₗ[A] W} (he : ∀ g, e ∘ₗ (ρ g) = (σ g) ∘ₗ e) :
     (mk e he).symm = mk e.symm (e.isIntertwining_symm_isIntertwining he) := rfl
-
-/--
-lemma `toLinearMap_symm` / 引理 `toLinearMap_symm`
-
-English:
-lemma toLinearMap_symm
-  given: (φ : Equiv ρ σ)
-  statement: (symm φ).toLinearMap = φ.toLinearEquiv.symm
-  proof: rfl
-
-中文:
-引理 toLinearMap_symm
-  条件: (φ : 等价 ρ σ)
-  结论: (symm φ).toLinearMap = φ.toLinearEquiv.symm
-  证明: rfl
+/-
+**Representation.Equiv.toLinearMap_symm** 是 Mathlib 中的一个引理，位于命名空间 `Representatio
+n.Equiv`。
+形式化陈述：toLinearMap_symm (φ : Equiv ρ σ) : (symm φ).toLinearMap = φ.toLinearEquiv.
+symm
+参数：φ : Equiv ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_symm (φ : Equiv ρ σ) : (symm φ).toLinearMap = φ.toLinearEquiv.symm := rfl
-
-/--
-lemma `coe_symm` / 引理 `coe_symm`
-
-English:
-lemma coe_symm
-  given: (φ : Equiv ρ σ)
-  statement: ⇑φ.toLinearEquiv.symm = φ.symm
-  proof: rfl
-
-中文:
-引理 coe_symm
-  条件: (φ : 等价 ρ σ)
-  结论: ⇑φ.toLinearEquiv.symm = φ.symm
-  证明: rfl
+/-
+**Representation.Equiv.coe_symm** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equiv`
+。
+形式化陈述：coe_symm (φ : Equiv ρ σ) : ⇑φ.toLinearEquiv.symm = φ.symm
+参数：φ : Equiv ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_symm (φ : Equiv ρ σ) : ⇑φ.toLinearEquiv.symm = φ.symm := rfl
 
@@ -1887,182 +1379,133 @@ variable {τ}
 open LinearMap in
 /-- Composition of two `Equiv`. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**Representation.Equiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Equiv`。
+形式化陈述：trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) : Equiv ρ τ where __
+参数：φ : Equiv ρ σ；ψ : Equiv σ τ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
-  body: φ.toLinearEquiv.trans ψ.toLinearEquiv
-  isIntertwining' g := by
-    rw [LinearEquiv.coe_trans]; rw [comp_assoc]; rw [φ.1.2]; rw [← comp_assoc]; rw [ψ.1.2]; rw [comp_assoc]
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
-  定义体: φ.toLinearEquiv.trans ψ.toLinearEquiv
-  isIntertwining' g := by
-    rw [LinearEquiv.coe_trans]; rw [comp_assoc]; rw [φ.1.2]; rw [← comp_assoc]; rw [ψ.1.2]; rw [comp_assoc]
-
-@[simp]
-
-Depends on / 依赖: toLinearEquiv, toLinearEquiv.trans
+--- 原说明 ---
+Composition of two `Equiv`.
 -/
 def trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) : Equiv ρ τ where
   __ := φ.toLinearEquiv.trans ψ.toLinearEquiv
   isIntertwining' g := by
-    rw [LinearEquiv.coe_trans]; rw [comp_assoc]; rw [φ.1.2]; rw [← comp_assoc]; rw [ψ.1.2]; rw [comp_assoc]
+    rw [LinearEquiv.coe_trans, comp_assoc, φ.1.2, ← comp_assoc, ψ.1.2, comp_assoc]
 
 @[simp]
-/--
-lemma `toIntertwiningMap_trans` / 引理 `toIntertwiningMap_trans`
-
-English:
-lemma toIntertwiningMap_trans
-  given: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 to整数ertwiningMap_trans
-  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.Equiv.toIntertwiningMap_trans** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.Equiv`。
+形式化陈述：toIntertwiningMap_trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) : (φ.trans ψ).toIn
+tertwiningMap = ψ.toIntertwiningMap.comp φ.toIntertwiningMap
+参数：φ : Equiv ρ σ；ψ : Equiv σ τ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toIntertwiningMap_trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) :
     (φ.trans ψ).toIntertwiningMap = ψ.toIntertwiningMap.comp φ.toIntertwiningMap := rfl
 
 @[simp]
-/--
-lemma `toLinearMap_trans` / 引理 `toLinearMap_trans`
-
-English:
-lemma toLinearMap_trans
-  given: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_trans
-  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.Equiv.toLinearMap_trans** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.Equiv`。
+形式化陈述：toLinearMap_trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) : (trans φ ψ).toLinearMa
+p = ψ.toLinearMap ∘ₗ φ.toLinearMap
+参数：φ : Equiv ρ σ；ψ : Equiv σ τ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_trans (φ : Equiv ρ σ) (ψ : Equiv σ τ) :
     (trans φ ψ).toLinearMap = ψ.toLinearMap ∘ₗ φ.toLinearMap := rfl
 
 @[simp]
-/--
-lemma `trans_apply` / 引理 `trans_apply`
-
-English:
-lemma trans_apply
-  given: (φ : Equiv ρ σ) (ψ : Equiv σ τ) (v : V)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 trans_apply
-  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ) (v : V)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.Equiv.trans_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equ
+iv`。
+形式化陈述：trans_apply (φ : Equiv ρ σ) (ψ : Equiv σ τ) (v : V) : trans φ ψ v = ψ (φ v
+)
+参数：φ : Equiv ρ σ；ψ : Equiv σ τ；v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trans_apply (φ : Equiv ρ σ) (ψ : Equiv σ τ) (v : V) :
     trans φ ψ v = ψ (φ v) := rfl
 
 @[simp]
-/--
-lemma `apply_symm_apply` / 引理 `apply_symm_apply`
-
-English:
-lemma apply_symm_apply
-  given: (φ : Equiv ρ σ) (v : W)
-  statement: φ (φ.symm v) = v
-  proof: φ.right_inv v
-
-@[simp]
-
-中文:
-引理 apply_symm_apply
-  条件: (φ : 等价 ρ σ) (v : W)
-  结论: φ (φ.symm v) = v
-  证明: φ.right_inv v
-
-@[simp]
-
-Depends on / 依赖: right_inv
+/-
+**Representation.Equiv.apply_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representatio
+n.Equiv`。
+形式化陈述：apply_symm_apply (φ : Equiv ρ σ) (v : W) : φ (φ.symm v) = v
+参数：φ : Equiv ρ σ；v : W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.Equiv.right_inv`：∀ {A : Type u_1} {G : Type u_2} {V : Typ
+e u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCom
+mMonoid V] [inst_3 :…
 -/
 lemma apply_symm_apply (φ : Equiv ρ σ) (v : W) : φ (φ.symm v) = v := φ.right_inv v
 
 @[simp]
-/--
-lemma `symm_apply_apply` / 引理 `symm_apply_apply`
-
-English:
-lemma symm_apply_apply
-  given: (φ : Equiv ρ σ) (v : V)
-  statement: φ.symm (φ v) = v
-  proof: φ.left_inv v
-
-@[simp]
-
-中文:
-引理 symm_apply_apply
-  条件: (φ : 等价 ρ σ) (v : V)
-  结论: φ.symm (φ v) = v
-  证明: φ.left_inv v
-
-@[simp]
-
-Depends on / 依赖: left_inv
+/-
+**Representation.Equiv.symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representatio
+n.Equiv`。
+形式化陈述：symm_apply_apply (φ : Equiv ρ σ) (v : V) : φ.symm (φ v) = v
+参数：φ : Equiv ρ σ；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.Equiv.left_inv`：∀ {A : Type u_1} {G : Type u_2} {V : Type
+ u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : AddComm
+Monoid V] [inst_3 :…
 -/
 lemma symm_apply_apply (φ : Equiv ρ σ) (v : V) : φ.symm (φ v) = v := φ.left_inv v
 
 @[simp]
-/--
-lemma `trans_symm` / 引理 `trans_symm`
-
-English:
-lemma trans_symm
-  given: (φ : Equiv ρ σ)
-  statement: φ.trans φ.symm = .refl ρ
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 trans_symm
-  条件: (φ : 等价 ρ σ)
-  结论: φ.trans φ.symm = .refl ρ
-  证明: by ext; simp
-
-@[simp]
+/-
+**Representation.Equiv.trans_symm** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equi
+v`。
+形式化陈述：trans_symm (φ : Equiv ρ σ) : φ.trans φ.symm = .refl ρ
+参数：φ : Equiv ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.Equiv.ext`：ext {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ) :
+ φ = ψ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Representation.Equiv.symm_apply_apply`：symm_apply_apply (φ : Equiv ρ σ) 
+(v : V) : φ.symm (φ v) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma trans_symm (φ : Equiv ρ σ) : φ.trans φ.symm = .refl ρ := by ext; simp
 
 @[simp]
-/--
-lemma `symm_trans` / 引理 `symm_trans`
-
-English:
-lemma symm_trans
-  given: (φ : Equiv ρ σ)
-  statement: φ.symm.trans φ = .refl σ
-  proof: by ext; simp
-
-中文:
-引理 symm_trans
-  条件: (φ : 等价 ρ σ)
-  结论: φ.symm.trans φ = .refl σ
-  证明: by ext; simp
+/-
+**Representation.Equiv.symm_trans** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Equi
+v`。
+形式化陈述：symm_trans (φ : Equiv ρ σ) : φ.symm.trans φ = .refl σ
+参数：φ : Equiv ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.Equiv.ext`：ext {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ) :
+ φ = ψ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Representation.Equiv.apply_symm_apply`：apply_symm_apply (φ : Equiv ρ σ) 
+(v : W) : φ (φ.symm v) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma symm_trans (φ : Equiv ρ σ) : φ.symm.trans φ = .refl σ := by ext; simp
 
@@ -2074,35 +1517,34 @@ end non_comm
 
 variable {A G V W U : Type*} [CommSemiring A] [Monoid G] [AddCommMonoid V] [AddCommMonoid W]
   [AddCommMonoid U] [Module A V] [Module A W] [Module A U] (ρ : Representation A G V)
-  (σ : Representation A G W) (τ : Representation A G U) (f : V ->ₗ[A] W)
+  (σ : Representation A G W) (τ : Representation A G U) (f : V →ₗ[A] W)
 
 variable {ρ σ} in
-/--
-theorem `Equiv.conj_apply_self` / 定理 `Equiv.conj_apply_self`
-
-English:
-theorem Equiv.conj_apply_self
-  given: (g : G) (φ : Equiv ρ σ)
-  statement: φ.conj (ρ g) = σ g
-  proof: by
-  ext w
-  have := (congr($(φ.symm.toIntertwiningMap.2 g) w)).symm
-  simp only [LinearMap.coe_comp, coe_toLinearMap, Function.comp_apply, LinearEquiv.conj_apply_apply,
-    coe_symm, toLinearEquiv_apply, coe_toIntertwiningMap] at this ⊢
-  simp [this]
-
-中文:
-定理 等价.conj_apply_self
-  条件: (g : G) (φ : 等价 ρ σ)
-  结论: φ.conj (ρ g) = σ g
-  证明: by
-  ext w
-  have := (congr($(φ.symm.toIntertwiningMap.2 g) w)).symm
-  simp only [LinearMap.coe_comp, coe_toLinearMap, Function.comp_apply, LinearEquiv.conj_apply_apply,
-    coe_symm, toLinearEquiv_apply, coe_toIntertwiningMap] at this ⊢
-  simp [this]
-
-Depends on / 依赖: Function, Function.comp_apply, LinearEquiv, LinearEquiv.conj_apply_apply, LinearMap, LinearMap.coe_comp, coe_comp, coe_symm, coe_toIntertwiningMap, coe_toLinearMap, comp_apply, conj_apply_apply, symm.toIntertwiningMap, toIntertwiningMap, toLinearEquiv_apply
+/-
+**Representation.Equiv.conj_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `Representation
+.Equiv`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Comm
+Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMo
+noid W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   {ρ : Represe
+ntation A G V} {σ : Representation A G W} (g : G) (φ : ρ.Equiv σ), φ.toLinearEqu
+iv.conj (ρ g) = σ g
+参数：g : G；φ : ρ.Equiv σ；ρ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Representation.IntertwiningMap.isIntertwining'`：∀ {A : Type u_1} {G : Ty
+pe u_2} {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   
+[inst_2 : AddCommMonoid V] [inst_3 :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Representation.Equiv.apply_symm_apply`：apply_symm_apply (φ : Equiv ρ σ) 
+(v : W) : φ (φ.symm v) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Equiv.conj_apply_self (g : G) (φ : Equiv ρ σ) : φ.conj (ρ g) = σ g := by
   ext w
@@ -2115,144 +1557,74 @@ section Monoid
 
 namespace IntertwiningMap
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul A (IntertwiningMap ρ σ)
-  body: ⟨fun a f => ⟨a • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-中文:
-实例 :
-  签名: 标量乘法 A (整数ertwining映射 ρ σ)
-  定义体: ⟨fun a f => ⟨a • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-Depends on / 依赖: LinearMap, LinearMap.comp_smul, LinearMap.smul_comp, comp_smul, f.toLinearMap, smul_comp, toLinearMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul A (IntertwiningMap ρ σ) :=
-  ⟨fun a f => ⟨a • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
-
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (a : A) (f : IntertwiningMap ρ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_smul
-  条件: (a : A) (f : 整数ertwining映射 ρ σ)
-  证明: rfl
-
-@[simp]
+  ⟨fun a f ↦ ⟨a • f.toLinearMap, by simp [LinearMap.smul_comp, LinearMap.comp_smul, f.2]⟩⟩
+/-
+**Representation.IntertwiningMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} {W : Type u_4} [inst : Comm
+Semiring A] [inst_1 : Monoid G]   [inst_2 : AddCommMonoid V] [inst_3 : AddCommMo
+noid W] [inst_4 : _root_.Module A V] [inst_5 : _root_.Module A W]   (ρ : Represe
+ntation A G V) (σ : Representation A G W) (a : A) (f : ρ.IntertwiningMap σ), ⇑(a
+ • f) = a • ⇑f
+参数：ρ : Representation A G V；σ : Representation A G W；a : A；f : ρ.IntertwiningMap
+ σ；a • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_smul (a : A) (f : IntertwiningMap ρ σ) :
-    ((a • f : IntertwiningMap ρ σ) : V -> W) = a • f := rfl
+    ((a • f : IntertwiningMap ρ σ) : V → W) = a • f := rfl
 
 @[simp]
-/--
-lemma `toLinearMap_smul` / 引理 `toLinearMap_smul`
-
-English:
-lemma toLinearMap_smul
-  given: (a : A) (f : IntertwiningMap ρ σ)
-  proof: rfl
-
-中文:
-引理 toLinearMap_smul
-  条件: (a : A) (f : 整数ertwining映射 ρ σ)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.toLinearMap_smul** 是 Mathlib 中的一个引理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：toLinearMap_smul (a : A) (f : IntertwiningMap ρ σ) : (a • f).toLinearMap =
+ a • f.toLinearMap
+参数：a : A；f : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_smul (a : A) (f : IntertwiningMap ρ σ) :
     (a • f).toLinearMap = a • f.toLinearMap := rfl
-
-/--
-lemma `smul_apply` / 引理 `smul_apply`
-
-English:
-lemma smul_apply
-  given: (a : A) (f : IntertwiningMap ρ σ) (v : V)
-  proof: rfl
-
-中文:
-引理 smul_apply
-  条件: (a : A) (f : 整数ertwining映射 ρ σ) (v : V)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.smul_apply** 是 Mathlib 中的一个引理，位于命名空间 `Represent
+ation.IntertwiningMap`。
+形式化陈述：smul_apply (a : A) (f : IntertwiningMap ρ σ) (v : V) : (a • f) v = a • f v
+参数：a : A；f : IntertwiningMap ρ σ；v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_apply (a : A) (f : IntertwiningMap ρ σ) (v : V) :
     (a • f) v = a • f v := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module A (IntertwiningMap ρ σ)
-  body: fast_instance%
-  Function.Injective.module A (coeFnAddMonoidHom ρ σ) DFunLike.coe_injective (coe_smul ρ σ)
-
-中文:
-实例 :
-  签名: 模 A (整数ertwining映射 ρ σ)
-  定义体: fast_instance%
-  Function.Injective.module A (coeFnAddMonoidHom ρ σ) DFunLike.coe_injective (coe_smul ρ σ)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, fast_instance, module
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module A (IntertwiningMap ρ σ) :=
   fast_instance%
   Function.Injective.module A (coeFnAddMonoidHom ρ σ) DFunLike.coe_injective (coe_smul ρ σ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `equivLinearMapAsModule` / `equivLinearMapAsModule` 的定义
+/-- An intertwining map is the same thing as a linear map over the group ring. -/
+/-
+**Representation.IntertwiningMap.equivLinearMapAsModule** 是 Mathlib 中的一个定义，位于命名空
+间 `Representation.IntertwiningMap`。
+形式化陈述：equivLinearMapAsModule : IntertwiningMap ρ σ ≃ₗ[A] ρ.asModule ->ₗ[A[G]] σ.
+asModule where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivLinearMapAsModule
-  signature: :
-  body: { toFun := f.toLinearMap
-      map_add' := f.toLinearMap.map_add'
-      map_smul' m v := by
-        induction m using MonoidAlgebra.induction_linear with
-          | zero => simp [f.toLinearMap.map_zero]
-          | add x y hx hy => simp [add_smul, map_add, hx, hy]
-          | single g a => simp [f.isIntertwining]; rfl }
-  invFun f :=
-    { toLinearMap := { f with
-        map_smul' a v := by simp }
-      isIntertwining' g := by ext v; simpa using! f.map_smul' (MonoidAlgebra.single g 1) v }
-  map_add' g₁ g₂ := by ext; simp
-  map_smul' t g := by ext; simp
-  left_inv f := rfl
-  right_inv f := rfl
-
-中文:
-定义 equivLinearMapAsModule
-  签名: :
-  定义体: { toFun := f.toLinearMap
-      map_add' := f.toLinearMap.map_add'
-      map_smul' m v := by
-        induction m using MonoidAlgebra.induction_linear with
-          | zero => simp [f.toLinearMap.map_zero]
-          | add x y hx hy => simp [add_smul, map_add, hx, hy]
-          | single g a => simp [f.isIntertwining]; rfl }
-  invFun f :=
-    { toLinearMap := { f with
-        map_smul' a v := by simp }
-      isIntertwining' g := by ext v; simpa using! f.map_smul' (MonoidAlgebra.single g 1) v }
-  map_add' g₁ g₂ := by ext; simp
-  map_smul' t g := by ext; simp
-  left_inv f := rfl
-  right_inv f := rfl
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.induction_linear, MonoidAlgebra.single, add_smul, f.isIntertwining, f.map_smul, f.toLinearMap, f.toLinearMap.map_add, f.toLinearMap.map_zero, induction_linear, invFun, isIntertwining, left_inv, map_add, map_smul, map_zero, single, toLinearMap
+--- 原说明 ---
+An intertwining map is the same thing as a linear map over the group ring.
 -/
 def equivLinearMapAsModule :
-    IntertwiningMap ρ σ ≃ₗ[A] ρ.asModule ->ₗ[A[G]] σ.asModule where
+    IntertwiningMap ρ σ ≃ₗ[A] ρ.asModule →ₗ[A[G]] σ.asModule where
   toFun f :=
     { toFun := f.toLinearMap
       map_add' := f.toLinearMap.map_add'
@@ -2271,32 +1643,19 @@ def equivLinearMapAsModule :
   right_inv f := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `llcomp` / `llcomp` 的定义
+/-- Composition of intertwining maps. -/
+/-
+**Representation.IntertwiningMap.llcomp** 是 Mathlib 中的一个定义，位于命名空间 `Representatio
+n.IntertwiningMap`。
+形式化陈述：llcomp : IntertwiningMap σ τ ->ₗ[A] IntertwiningMap ρ σ ->ₗ[A] Intertwinin
+gMap ρ τ where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition llcomp
-  signature: : IntertwiningMap σ τ ->ₗ[A] IntertwiningMap ρ σ ->ₗ[A] IntertwiningMap ρ τ where
-  body: { toFun g := ((f.toLinearMap.comp g.toLinearMap).intertwiningMap_of_isIntertwiningMap ρ τ
-      (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
-      map_add' _ _ := by ext; simp [map_add, toLinearMap_apply]
-      map_smul' _ _ := by ext; simp [toLinearMap_apply] }
-  map_add' _ _ := by ext; simp [toLinearMap_apply]
-  map_smul' _ _ := by ext; simp [toLinearMap_apply]
-
-中文:
-定义 llcomp
-  签名: : 整数ertwining映射 σ τ ->ₗ[A] 整数ertwining映射 ρ σ ->ₗ[A] 整数ertwining映射 ρ τ where
-  定义体: { toFun g := ((f.toLinearMap.comp g.toLinearMap).intertwiningMap_of_isIntertwiningMap ρ τ
-      (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
-      map_add' _ _ := by ext; simp [map_add, toLinearMap_apply]
-      map_smul' _ _ := by ext; simp [toLinearMap_apply] }
-  map_add' _ _ := by ext; simp [toLinearMap_apply]
-  map_smul' _ _ := by ext; simp [toLinearMap_apply]
-
-Depends on / 依赖: f.isIntertwining, f.toLinearMap.comp, g.isIntertwining, g.toLinearMap, intertwiningMap_of_isIntertwiningMap, isIntertwining, map_add, map_smul, toLinearMap, toLinearMap_apply
+--- 原说明 ---
+Composition of intertwining maps.
 -/
-def llcomp : IntertwiningMap σ τ ->ₗ[A] IntertwiningMap ρ σ ->ₗ[A] IntertwiningMap ρ τ where
+def llcomp : IntertwiningMap σ τ →ₗ[A] IntertwiningMap ρ σ →ₗ[A] IntertwiningMap ρ τ where
   toFun f :=
     { toFun g := ((f.toLinearMap.comp g.toLinearMap).intertwiningMap_of_isIntertwiningMap ρ τ
       (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
@@ -2304,200 +1663,126 @@ def llcomp : IntertwiningMap σ τ ->ₗ[A] IntertwiningMap ρ σ ->ₗ[A] Inter
       map_smul' _ _ := by ext; simp [toLinearMap_apply] }
   map_add' _ _ := by ext; simp [toLinearMap_apply]
   map_smul' _ _ := by ext; simp [toLinearMap_apply]
-
-/--
-lemma `comp_def` / 引理 `comp_def`
-
-English:
-lemma comp_def
-  given: (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  proof: rfl
-
-中文:
-引理 comp_def
-  条件: (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.comp_def** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.IntertwiningMap`。
+形式化陈述：comp_def (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : comp f g = 
+llcomp _ _ _ f g
+参数：f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_def (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
     comp f g = llcomp _ _ _ f g := rfl
-
-/--
-lemma `smul_comp` / 引理 `smul_comp`
-
-English:
-lemma smul_comp
-  given: (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  proof: by simp [comp_def]
-
-中文:
-引理 smul_comp
-  条件: (a : A) (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  证明: by simp [comp_def]
-
-Depends on / 依赖: comp_def
+/-
+**Representation.IntertwiningMap.smul_comp** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：smul_comp (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : (a
+ • f).comp g = a • comp f g
+参数：a : A；f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smul_comp (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
     (a • f).comp g = a • comp f g := by simp [comp_def]
-
-/--
-lemma `comp_smul` / 引理 `comp_smul`
-
-English:
-lemma comp_smul
-  given: (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ)
-  proof: by simp [comp_def]
-
-中文:
-引理 comp_smul
-  条件: (a : A) (f : 整数ertwining映射 σ τ) (g : 整数ertwining映射 ρ σ)
-  证明: by simp [comp_def]
-
-Depends on / 依赖: comp_def
+/-
+**Representation.IntertwiningMap.comp_smul** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：comp_smul (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) : co
+mp f (a • g) = a • comp f g
+参数：a : A；f : IntertwiningMap σ τ；g : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_smul (a : A) (f : IntertwiningMap σ τ) (g : IntertwiningMap ρ σ) :
     comp f (a • g) = a • comp f g := by simp [comp_def]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (IntertwiningMap ρ ρ)
-  body: comp
-
-中文:
-实例 :
-  签名: 乘法 (整数ertwining映射 ρ ρ)
-  定义体: comp
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (IntertwiningMap ρ ρ) where
   mul := comp
-
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: (f g : IntertwiningMap ρ ρ)
-  proof: rfl
-
-中文:
-引理 coe_mul
-  条件: (f g : 整数ertwining映射 ρ ρ)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] (ρ : 
+Representation A G V) (f g : ρ.IntertwiningMap ρ),   (f * g).toLinearMap = f.toL
+inearMap * g.toLinearMap
+参数：ρ : Representation A G V；f g : ρ.IntertwiningMap ρ；f * g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_mul (f g : IntertwiningMap ρ ρ) :
     (f * g).toLinearMap = f.toLinearMap * g.toLinearMap := rfl
-
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  given: (f g : IntertwiningMap ρ ρ) (v : V)
-  statement: (f * g) v = f (g v)
-  proof: rfl
-
-中文:
-引理 mul_apply
-  条件: (f g : 整数ertwining映射 ρ ρ) (v : V)
-  结论: (f * g) v = f (g v)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Representa
+tion.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] (ρ : 
+Representation A G V) (f g : ρ.IntertwiningMap ρ) (v : V), (f * g) v = f (g v)
+参数：ρ : Representation A G V；f g : ρ.IntertwiningMap ρ；v : V；f * g；g v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mul_apply (f g : IntertwiningMap ρ ρ) (v : V) : (f * g) v = f (g v) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (IntertwiningMap ρ ρ)
-  body: ⟨id ρ⟩
-
-中文:
-实例 :
-  签名: 幺 (整数ertwining映射 ρ ρ)
-  定义体: ⟨id ρ⟩
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (IntertwiningMap ρ ρ) := ⟨id ρ⟩
-
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  statement: ((1 : IntertwiningMap ρ ρ) : V -> V) = (_root_.id : V -> V)
-  proof: rfl
-
-中文:
-引理 coe_one
-  结论: ((1 : 整数ertwining映射 ρ ρ) : V -> V) = (_root_.id : V -> V)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] (ρ : 
+Representation A G V), ⇑1 = id
+参数：ρ : Representation A G V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_one : ((1 : IntertwiningMap ρ ρ) : V -> V) = (_root_.id : V -> V) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Semigroup (IntertwiningMap ρ ρ)
-  body: Function.Injective.semigroup (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) (coe_mul ρ)
-
-中文:
-实例 :
-  签名: 半群 (整数ertwining映射 ρ ρ)
-  定义体: Function.Injective.semigroup (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) (coe_mul ρ)
-
-Depends on / 依赖: Function, Function.Injective.semigroup, Injective, IntertwiningMap, coe_mul, f.toLinearMap, semigroup, toLinearMap, toLinearMap_injective
+@[simp] lemma coe_one : ((1 : IntertwiningMap ρ ρ) : V → V) = (_root_.id : V → V) := rfl
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Semigroup (IntertwiningMap ρ ρ) :=
   Function.Injective.semigroup (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
     (toLinearMap_injective ρ ρ) (coe_mul ρ)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow (IntertwiningMap ρ ρ) Nat
-  body: ⟨fun f n => npowRecAuto n f⟩
-
-中文:
-实例 :
-  签名: 幂 (整数ertwining映射 ρ ρ) 自然数
-  定义体: ⟨fun f n => npowRecAuto n f⟩
-
-Depends on / 依赖: npowRecAuto
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow (IntertwiningMap ρ ρ) Nat := ⟨fun f n => npowRecAuto n f⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (IntertwiningMap ρ ρ)
-  body: Function.Injective.monoid (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) rfl (fun _ _ => rfl)
-    (fun f n => by
-      induction n with
-      | zero => rfl
-      | succ n ih => simp only [pow_succ, coe_mul, show f ^ (n + 1) = f ^ n * f from rfl, ih])
-
-中文:
-实例 :
-  签名: 幺半群 (整数ertwining映射 ρ ρ)
-  定义体: Function.Injective.monoid (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) rfl (fun _ _ => rfl)
-    (fun f n => by
-      induction n with
-      | zero => rfl
-      | succ n ih => simp only [pow_succ, coe_mul, show f ^ (n + 1) = f ^ n * f from rfl, ih])
-
-Depends on / 依赖: Function, Function.Injective.monoid, Injective, IntertwiningMap, coe_mul, f.toLinearMap, monoid, pow_succ, toLinearMap, toLinearMap_injective
+instance : Pow (IntertwiningMap ρ ρ) ℕ := ⟨fun f n => npowRecAuto n f⟩
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monoid (IntertwiningMap ρ ρ) :=
   Function.Injective.monoid (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
@@ -2506,55 +1791,19 @@ instance : Monoid (IntertwiningMap ρ ρ) :=
       induction n with
       | zero => rfl
       | succ n ih => simp only [pow_succ, coe_mul, show f ^ (n + 1) = f ^ n * f from rfl, ih])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast (IntertwiningMap ρ ρ)
-  body: n • (1 : IntertwiningMap ρ ρ)
-
-中文:
-实例 :
-  签名: 自然数嵌入 (整数ertwining映射 ρ ρ)
-  定义体: n • (1 : IntertwiningMap ρ ρ)
-
-Depends on / 依赖: IntertwiningMap
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatCast (IntertwiningMap ρ ρ) where
   natCast n := n • (1 : IntertwiningMap ρ ρ)
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: : Semiring (IntertwiningMap ρ ρ)
-  body: fast_instance%
-  Function.Injective.semiring (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (by
-      intro f n
-      induction n with
-      | zero => rfl
-      | succ n ih => simp [ih, pow_succ])
-    (fun _ => rfl)
-
-中文:
-实例 instSemiring
-  签名: : 半环 (整数ertwining映射 ρ ρ)
-  定义体: fast_instance%
-  Function.Injective.semiring (fun f : IntertwiningMap ρ ρ => f.toLinearMap)
-    (toLinearMap_injective ρ ρ) rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (by
-      intro f n
-      induction n with
-      | zero => rfl
-      | succ n ih => simp [ih, pow_succ])
-    (fun _ => rfl)
-
-Depends on / 依赖: Function, Function.Injective.semiring, Injective, IntertwiningMap, f.toLinearMap, fast_instance, pow_succ, semiring, toLinearMap, toLinearMap_injective
+/-
+**Representation.IntertwiningMap.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：instSemiring : Semiring (IntertwiningMap ρ ρ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring : Semiring (IntertwiningMap ρ ρ) :=
   fast_instance%
@@ -2566,62 +1815,38 @@ instance instSemiring : Semiring (IntertwiningMap ρ ρ) :=
       | zero => rfl
       | succ n ih => simp [ih, pow_succ])
     (fun _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra A (IntertwiningMap ρ ρ)
-  body: Algebra.ofModule (fun a f g => rfl) (fun a f g => by ext; simp)
-
-中文:
-实例 :
-  签名: 代数 A (整数ertwining映射 ρ ρ)
-  定义体: Algebra.ofModule (fun a f g => rfl) (fun a f g => by ext; simp)
-
-Depends on / 依赖: Algebra, Algebra.ofModule, ofModule
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra A (IntertwiningMap ρ ρ) :=
   Algebra.ofModule (fun a f g => rfl) (fun a f g => by ext; simp)
-
-/--
-lemma `algebraMap_apply` / 引理 `algebraMap_apply`
-
-English:
-lemma algebraMap_apply
-  given: (a : A)
-  statement: algebraMap A (IntertwiningMap ρ ρ) a = a • 1
-  proof: rfl
-
-中文:
-引理 algebraMap_apply
-  条件: (a : A)
-  结论: algebraMap A (整数ertwining映射 ρ ρ) a = a • 1
-  证明: rfl
+/-
+**Representation.IntertwiningMap.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] (ρ : 
+Representation A G V) (a : A), (algebraMap A (ρ.IntertwiningMap ρ)) a = a • 1
+参数：ρ : Representation A G V；a : A；algebraMap A (ρ.IntertwiningMap ρ)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algebraMap_apply (a : A) : algebraMap A (IntertwiningMap ρ ρ) a = a • 1 := rfl
 
-/--
-Definition of `equivAlgEnd` / `equivAlgEnd` 的定义
+/-- Intertwining maps from `ρ` to itself are the same as `A[G]`-linear endomorphisms. -/
+/-
+**Representation.IntertwiningMap.equivAlgEnd** 是 Mathlib 中的一个定义，位于命名空间 `Represen
+tation.IntertwiningMap`。
+形式化陈述：equivAlgEnd : IntertwiningMap ρ ρ ≃ₐ[A] Module.End A[G] ρ.asModule
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
 
-English:
-definition equivAlgEnd
-  signature: :
-  body: AlgEquiv.ofLinearEquiv
-    (equivLinearMapAsModule ρ ρ)
-    rfl
-    (by intro f g; rfl)
-
-中文:
-定义 equivAlgEnd
-  签名: :
-  定义体: AlgEquiv.ofLinearEquiv
-    (equivLinearMapAsModule ρ ρ)
-    rfl
-    (by intro f g; rfl)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofLinearEquiv, equivLinearMapAsModule, ofLinearEquiv
+--- 原说明 ---
+Intertwining maps from `ρ` to itself are the same as `A[G]`-linear endomorphisms
+.
 -/
 noncomputable def equivAlgEnd :
     IntertwiningMap ρ ρ ≃ₐ[A] Module.End A[G] ρ.asModule :=
@@ -2629,157 +1854,139 @@ noncomputable def equivAlgEnd :
     (equivLinearMapAsModule ρ ρ)
     rfl
     (by intro f g; rfl)
-
-/--
-theorem `isIntertwiningMap_of_mem_center` / 定理 `isIntertwiningMap_of_mem_center`
-
-English:
-theorem isIntertwiningMap_of_mem_center
-  given: (g : G) (hg : g in Submonoid.center G)
-  proof: by
-  rw [isIntertwiningMap_iff]
-  intro g' v
-  rw [Submonoid.mem_center_iff] at hg
-  rw [← Module.End.mul_apply]; rw [← Module.End.mul_apply]; rw [← ρ.map_mul]; rw [← hg g']; rw [ρ.map_mul]
-
-中文:
-定理 is整数ertwiningMap_of_mem_center
-  条件: (g : G) (hg : g in 子幺半群.center G)
-  证明: by
-  rw [isIntertwiningMap_iff]
-  intro g' v
-  rw [Submonoid.mem_center_iff] at hg
-  rw [← Module.End.mul_apply]; rw [← Module.End.mul_apply]; rw [← ρ.map_mul]; rw [← hg g']; rw [ρ.map_mul]
-
-Depends on / 依赖: Module, Module.End.mul_apply, Submonoid, Submonoid.mem_center_iff, isIntertwiningMap_iff, map_mul, mem_center_iff, mul_apply
+/-
+**Representation.IntertwiningMap.isIntertwiningMap_of_mem_center** 是 Mathlib 中的一
+个定理，位于命名空间 `Representation.IntertwiningMap`。
+形式化陈述：isIntertwiningMap_of_mem_center (g : G) (hg : g in Submonoid.center G) : I
+sIntertwiningMap ρ ρ (ρ g)
+参数：g : G；hg : g in Submonoid.center G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Representation.isIntertwiningMap_iff`：∀ {A : Type u_1} {G : Type u_2} {V
+ : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [inst_2 : 
+AddCommMonoid V] [inst_3 :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.End.mul_apply`：mul_apply (f g : Module.End R M) (x : M) : (f * g)
+ x = f (g x)
+· 使用定理 `MonoidHom.map_mul`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOne M] [in
+st_1 : MulOne N] (f : M →* N) (a b : M), f (a * b) = f a * f b
+· 使用定理 `Submonoid.mem_center_iff`：mem_center_iff {z : M} : z in center M ↔ foral
+l g, g * z = z * g
 -/
-theorem isIntertwiningMap_of_mem_center (g : G) (hg : g in Submonoid.center G) :
+theorem isIntertwiningMap_of_mem_center (g : G) (hg : g ∈ Submonoid.center G) :
     IsIntertwiningMap ρ ρ (ρ g) := by
   rw [isIntertwiningMap_iff]
   intro g' v
   rw [Submonoid.mem_center_iff] at hg
-  rw [← Module.End.mul_apply]; rw [← Module.End.mul_apply]; rw [← ρ.map_mul]; rw [← hg g']; rw [ρ.map_mul]
+  rw [← Module.End.mul_apply, ← Module.End.mul_apply, ← ρ.map_mul, ← hg g', ρ.map_mul]
 
-/--
-Definition of `centralMul` / `centralMul` 的定义
+/-- If `g` is a central element of a monoid `G`, then this is the action of `g`, considered as an
+  intertwining map from any representation of `G` to itself. -/
+/-
+**Representation.IntertwiningMap.centralMul** 是 Mathlib 中的一个定义，位于命名空间 `Represent
+ation.IntertwiningMap`。
+形式化陈述：centralMul (g : G) (hg : g in Submonoid.center G) : IntertwiningMap ρ ρ wh
+ere toLinearMap
+参数：g : G；hg : g in Submonoid.center G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition centralMul
-  signature: (g : G) (hg : g in Submonoid.center G)
-  body: ρ g
-isIntertwining' x := LinearMap.ext (isIntertwiningMap_of_mem_center ρ g hg).isIntertwining x
-
-中文:
-定义 centralMul
-  签名: (g : G) (hg : g in 子幺半群.center G)
-  定义体: ρ g
-isIntertwining' x := LinearMap.ext (isIntertwiningMap_of_mem_center ρ g hg).isIntertwining x
+--- 原说明 ---
+If `g` is a central element of a monoid `G`, then this is the action of `g`, con
+sidered as an
+  intertwining map from any representation of `G` to itself.
 -/
-def centralMul (g : G) (hg : g in Submonoid.center G) : IntertwiningMap ρ ρ where
+def centralMul (g : G) (hg : g ∈ Submonoid.center G) : IntertwiningMap ρ ρ where
   toLinearMap := ρ g
-isIntertwining' x := LinearMap.ext (isIntertwiningMap_of_mem_center ρ g hg).isIntertwining x
+  isIntertwining' x := LinearMap.ext <| (isIntertwiningMap_of_mem_center ρ g hg).isIntertwining x
 
-/--
-Definition of `centralAlgebraMul` / `centralAlgebraMul` 的定义
+/-- If `z` is a central element of the monoid algebra `A[G]`, then this is the action of `z`,
+  considered as an intertwining map from any representation of `G` to itself. -/
+/-
+**Representation.IntertwiningMap.centralAlgebraMul** 是 Mathlib 中的一个定义，位于命名空间 `Re
+presentation.IntertwiningMap`。
+形式化陈述：centralAlgebraMul {z : A[G]} (hz : z in Submonoid.center A[G]) : ρ.Intertw
+iningMap ρ where toLinearMap
+参数：hz : z in Submonoid.center A[G]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition centralAlgebraMul
-  signature: {z : A[G]} (hz : z in Submonoid.center A[G])
-  body: ρ.asAlgebraHom z
-  isIntertwining' _ := by simp_rw [← ρ.asAlgebraHom_of, ← Module.End.mul_eq_comp,
-    ← map_mul, Submonoid.mem_center_iff.1 hz]
-
-中文:
-定义 centralAlgebraMul
-  签名: {z : A[G]} (hz : z in 子幺半群.center A[G])
-  定义体: ρ.asAlgebraHom z
-  isIntertwining' _ := by simp_rw [← ρ.asAlgebraHom_of, ← Module.End.mul_eq_comp,
-    ← map_mul, Submonoid.mem_center_iff.1 hz]
-
-Depends on / 依赖: asAlgebraHom
+--- 原说明 ---
+If `z` is a central element of the monoid algebra `A[G]`, then this is the actio
+n of `z`,
+  considered as an intertwining map from any representation of `G` to itself.
 -/
-noncomputable def centralAlgebraMul {z : A[G]} (hz : z in Submonoid.center A[G]) :
+noncomputable def centralAlgebraMul {z : A[G]} (hz : z ∈ Submonoid.center A[G]) :
     ρ.IntertwiningMap ρ where
   toLinearMap := ρ.asAlgebraHom z
   isIntertwining' _ := by simp_rw [← ρ.asAlgebraHom_of, ← Module.End.mul_eq_comp,
     ← map_mul, Submonoid.mem_center_iff.1 hz]
-
-/--
-lemma `centralAlgebraMul_apply` / 引理 `centralAlgebraMul_apply`
-
-English:
-lemma centralAlgebraMul_apply
-  given: {z : A[G]} (hz : z in Submonoid.center A[G]) (v : V)
-  proof: rfl
-
-中文:
-引理 centralAlgebraMul_apply
-  条件: {z : A[G]} (hz : z in 子幺半群.center A[G]) (v : V)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.centralAlgebraMul_apply** 是 Mathlib 中的一个定理，位于命名
+空间 `Representation.IntertwiningMap`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {V : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid V]   [inst_3 : _root_.Module A V] (ρ : 
+Representation A G V) {z : MonoidAlgebra A G}   (hz : z ∈ Submonoid.center (Mono
+idAlgebra A G)) (v : V),   (Representation.IntertwiningMap.centralAlgebraMul ρ h
+z) v = (ρ.asAlgebraHom z) v
+参数：ρ : Representation A G V；hz : z ∈ Submonoid.center (MonoidAlgebra A G)；v : V；
+Representation.IntertwiningMap.centralAlgebraMul ρ hz；ρ.asAlgebraHom z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma centralAlgebraMul_apply {z : A[G]} (hz : z in Submonoid.center A[G]) (v : V) :
+@[simp] lemma centralAlgebraMul_apply {z : A[G]} (hz : z ∈ Submonoid.center A[G]) (v : V) :
     centralAlgebraMul ρ hz v = ρ.asAlgebraHom z v := rfl
 
-/--
-Definition of `centralAlgebraMulHom` / `centralAlgebraMulHom` 的定义
+/-- `centralAlgebraMul` as monoid homomorphism from the center of `A[G]` to intertwining map
+  from any representation of `G` to itself. -/
+/-
+**Representation.IntertwiningMap.centralAlgebraMulHom** 是 Mathlib 中的一个定义，位于命名空间 
+`Representation.IntertwiningMap`。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {V : Type u_3} →       [inst : Com
+mSemiring A] →         [inst_1 : Monoid G] →           [inst_2 : AddCommMonoid V
+] →             [inst_3 : _root_.Module A V] →               (ρ : Representation
+ A G V) → ↥(Submonoid.center (MonoidAlgebra A G)) →* ρ.IntertwiningMap ρ
+参数：ρ : Representation A G V；Submonoid.center (MonoidAlgebra A G)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition centralAlgebraMulHom
-  signature: : Submonoid.center A[G] ->* ρ.IntertwiningMap ρ where
-  body: centralAlgebraMul _ z.2
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
-
-中文:
-定义 centralAlgebraMulHom
-  签名: : 子幺半群.center A[G] ->* ρ.整数ertwining映射 ρ where
-  定义体: centralAlgebraMul _ z.2
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
+--- 原说明 ---
+`centralAlgebraMul` as monoid homomorphism from the center of `A[G]` to intertwi
+ning map
+  from any representation of `G` to itself.
 -/
-@[simps] noncomputable def centralAlgebraMulHom : Submonoid.center A[G] ->* ρ.IntertwiningMap ρ where
+@[simps] noncomputable def centralAlgebraMulHom : Submonoid.center A[G] →* ρ.IntertwiningMap ρ where
   toFun z := centralAlgebraMul _ z.2
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
 
-/--
-Definition of `toLinearMapl` / `toLinearMapl` 的定义
+/-- `IntertwiningMap.toLinearMap` as a linear map. -/
+/-
+**Representation.IntertwiningMap.toLinearMapl** 是 Mathlib 中的一个定义，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {V : Type u_3} →       {W : Type u
+_4} →         [inst : CommSemiring A] →           [inst_1 : Monoid G] →         
+    [inst_2 : AddCommMonoid V] →               [inst_3 : AddCommMonoid W] →     
+            [inst_4 : _root_.Module A V] →                   [inst_5 : _root_.Mo
+dule A W] →                     (ρ : Representation A G V) → (σ : Representation
+ A G W) → ρ.IntertwiningMap σ →ₗ[A] V →ₗ[A] W
+参数：ρ : Representation A G V；σ : Representation A G W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearMapl
-  signature: : IntertwiningMap ρ σ ->ₗ[A] V ->ₗ[A] W where
-  body: toLinearMap
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 toLinearMapl
-  签名: : 整数ertwining映射 ρ σ ->ₗ[A] V ->ₗ[A] W where
-  定义体: toLinearMap
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
+--- 原说明 ---
+`IntertwiningMap.toLinearMap` as a linear map.
 -/
-@[simps] def toLinearMapl : IntertwiningMap ρ σ ->ₗ[A] V ->ₗ[A] W where
+@[simps] def toLinearMapl : IntertwiningMap ρ σ →ₗ[A] V →ₗ[A] W where
   toFun := toLinearMap
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
 variable {A G V W : Type*} [CommRing A] [Monoid G] [AddCommGroup V] [AddCommGroup W]
   [Module A V] [Module A W] (ρ : Representation A G V) (σ : Representation A G W) in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Finite
-  signature: A V] [IsNoetherian A W] :
-  body: .of_injective (toLinearMapl (ρ := ρ) (σ := σ)) (toLinearMap_injective ρ σ)
-
-中文:
-实例 [模.有限
-  签名: A V] [是Noether A W] :
-  定义体: .of_injective (toLinearMapl (ρ := ρ) (σ := σ)) (toLinearMap_injective ρ σ)
-
-Depends on / 依赖: of_injective, toLinearMap_injective, toLinearMapl
+/-
+**Representation.IntertwiningMap.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.Inte
+rtwiningMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Finite A V] [IsNoetherian A W] :
     Module.Finite A (IntertwiningMap ρ σ) :=
@@ -2788,26 +1995,14 @@ instance [Module.Finite A V] [IsNoetherian A W] :
 variable {ρ σ} in
 /-- A bijective intertwining map is an equivalence of representations. -/
 noncomputable
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
-
-English:
-definition ofBijective
-  signature: (f : IntertwiningMap ρ σ) (hf : Function.Bijective f)
-  body: f.isIntertwining'
-  toLinearEquiv := LinearEquiv.ofBijective f.toLinearMap hf
-
-@[simp]
-
-中文:
-定义 ofBijective
-  签名: (f : 整数ertwining映射 ρ σ) (hf : 函数.双射 f)
-  定义体: f.isIntertwining'
-  toLinearEquiv := LinearEquiv.ofBijective f.toLinearMap hf
-
-@[simp]
-
-Depends on / 依赖: f.isIntertwining, isIntertwining
+/-
+**Representation.IntertwiningMap.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `Represen
+tation.IntertwiningMap`。
+形式化陈述：ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) : Equiv 
+ρ σ where isIntertwining'
+参数：f : IntertwiningMap ρ σ；hf : Function.Bijective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) :
     Equiv ρ σ where
@@ -2815,18 +2010,14 @@ def ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) :
   toLinearEquiv := LinearEquiv.ofBijective f.toLinearMap hf
 
 @[simp]
-/--
-theorem `coe_ofBijective` / 定理 `coe_ofBijective`
-
-English:
-theorem coe_ofBijective
-  given: (f : IntertwiningMap ρ σ) (hf : Function.Bijective f)
-  proof: rfl
-
-中文:
-定理 coe_ofBijective
-  条件: (f : 整数ertwining映射 ρ σ) (hf : 函数.双射 f)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.coe_ofBijective** 是 Mathlib 中的一个定理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：coe_ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) : ⇑(
+f.ofBijective hf) = ⇑f
+参数：f : IntertwiningMap ρ σ；hf : Function.Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofBijective (f : IntertwiningMap ρ σ) (hf : Function.Bijective f) :
     ⇑(f.ofBijective hf) = ⇑f := rfl
@@ -2835,489 +2026,558 @@ variable {P : Type*} [AddCommMonoid P] [Module A P] {π : Representation A G P}
 
 variable {ρ σ τ}
 
-/--
-Definition of `tensor` / `tensor` 的定义
+/-- The tensor product of intertwining maps induced from tensor product of linear maps. -/
+/-
+**Representation.IntertwiningMap.tensor** 是 Mathlib 中的一个定义，位于命名空间 `Representatio
+n.IntertwiningMap`。
+形式化陈述：tensor (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) : (tprod ρ τ).I
+ntertwiningMap (tprod σ π) where toLinearMap
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap τ π。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensor
-  signature: (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π)
-  body: TensorProduct.map f.toLinearMap g.toLinearMap
-  isIntertwining' x := by
-    rw [tprod_apply]; rw [← TensorProduct.map_comp]; rw [f.2]; rw [g.2]; rw [TensorProduct.map_comp]; rw [tprod_apply]
-
-@[simp]
-
-中文:
-定义 tensor
-  签名: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
-  定义体: TensorProduct.map f.toLinearMap g.toLinearMap
-  isIntertwining' x := by
-    rw [tprod_apply]; rw [← TensorProduct.map_comp]; rw [f.2]; rw [g.2]; rw [TensorProduct.map_comp]; rw [tprod_apply]
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.map, f.toLinearMap, g.toLinearMap, toLinearMap
+--- 原说明 ---
+The tensor product of intertwining maps induced from tensor product of linear ma
+ps.
 -/
 def tensor (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) :
     (tprod ρ τ).IntertwiningMap (tprod σ π) where
   toLinearMap := TensorProduct.map f.toLinearMap g.toLinearMap
   isIntertwining' x := by
-    rw [tprod_apply]; rw [← TensorProduct.map_comp]; rw [f.2]; rw [g.2]; rw [TensorProduct.map_comp]; rw [tprod_apply]
+    rw [tprod_apply, ← TensorProduct.map_comp, f.2, g.2, TensorProduct.map_comp, tprod_apply]
 
 @[simp]
-/--
-lemma `toLinearMap_tensor` / 引理 `toLinearMap_tensor`
-
-English:
-lemma toLinearMap_tensor
-  given: (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_tensor
-  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.toLinearMap_tensor** 是 Mathlib 中的一个引理，位于命名空间 `R
+epresentation.IntertwiningMap`。
+形式化陈述：toLinearMap_tensor (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) : (
+f.tensor g).toLinearMap = TensorProduct.map f.toLinearMap g.toLinearMap
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap τ π。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_tensor (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) :
     (f.tensor g).toLinearMap = TensorProduct.map f.toLinearMap g.toLinearMap := rfl
 
 @[simp]
-/--
-lemma `tensor_add_left` / 引理 `tensor_add_left`
-
-English:
-lemma tensor_add_left
-  given: (f₁ f₂ : IntertwiningMap ρ σ) (g : IntertwiningMap τ π)
-  proof: by ext; simp [TensorProduct.add_tmul]
-
-@[simp]
-
-中文:
-引理 tensor_add_left
-  条件: (f₁ f₂ : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
-  证明: by ext; simp [TensorProduct.add_tmul]
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.add_tmul, add_tmul
+/-
+**Representation.IntertwiningMap.tensor_add_left** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.IntertwiningMap`。
+形式化陈述：tensor_add_left (f₁ f₂ : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) : 
+(f₁ + f₂).tensor g = f₁.tensor g + f₂.tensor g
+参数：f₁ f₂ : IntertwiningMap ρ σ；g : IntertwiningMap τ π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.add_tmul`：add_tmul (m₁ m₂ : M) (n : N) : (m₁ + m₂) otimesₜ
+ n = m₁ otimesₜ n + m₂ otimesₜ[R] n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensor_add_left (f₁ f₂ : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) :
     (f₁ + f₂).tensor g = f₁.tensor g + f₂.tensor g := by ext; simp [TensorProduct.add_tmul]
 
 @[simp]
-/--
-lemma `tensor_add_right` / 引理 `tensor_add_right`
-
-English:
-lemma tensor_add_right
-  given: (f : IntertwiningMap ρ σ) (g₁ g₂ : IntertwiningMap τ π)
-  proof: by ext; simp [TensorProduct.tmul_add]
-
-@[simp]
-
-中文:
-引理 tensor_add_right
-  条件: (f : 整数ertwining映射 ρ σ) (g₁ g₂ : 整数ertwining映射 τ π)
-  证明: by ext; simp [TensorProduct.tmul_add]
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.tmul_add, tmul_add
+/-
+**Representation.IntertwiningMap.tensor_add_right** 是 Mathlib 中的一个引理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：tensor_add_right (f : IntertwiningMap ρ σ) (g₁ g₂ : IntertwiningMap τ π) :
+ f.tensor (g₁ + g₂) = f.tensor g₁ + f.tensor g₂
+参数：f : IntertwiningMap ρ σ；g₁ g₂ : IntertwiningMap τ π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_add`：tmul_add (m : M) (n₁ n₂ : N) : m otimesₜ (n₁ + n
+₂) = m otimesₜ n₁ + m otimesₜ[R] n₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensor_add_right (f : IntertwiningMap ρ σ) (g₁ g₂ : IntertwiningMap τ π) :
     f.tensor (g₁ + g₂) = f.tensor g₁ + f.tensor g₂ := by ext; simp [TensorProduct.tmul_add]
 
 @[simp]
-/--
-lemma `tensor_smul_left` / 引理 `tensor_smul_left`
-
-English:
-lemma tensor_smul_left
-  given: (a : A) (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π)
-  proof: by ext; simp [TensorProduct.smul_tmul]
-
-@[simp]
-
-中文:
-引理 tensor_smul_left
-  条件: (a : A) (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π)
-  证明: by ext; simp [TensorProduct.smul_tmul]
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.smul_tmul, smul_tmul
+/-
+**Representation.IntertwiningMap.tensor_smul_left** 是 Mathlib 中的一个引理，位于命名空间 `Rep
+resentation.IntertwiningMap`。
+形式化陈述：tensor_smul_left (a : A) (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ 
+π) : (a • f).tensor g = a • (f.tensor g)
+参数：a : A；f : IntertwiningMap ρ σ；g : IntertwiningMap τ π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.smul_tmul`：smul_tmul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (m : M) (n : N) : (r • m) otimesₜ n = m otimesₜ[R] (r • n)
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensor_smul_left (a : A) (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) :
     (a • f).tensor g = a • (f.tensor g) := by ext; simp [TensorProduct.smul_tmul]
 
 @[simp]
-/--
-lemma `tensor_smul_right` / 引理 `tensor_smul_right`
-
-English:
-lemma tensor_smul_right
-  given: (f : IntertwiningMap ρ σ) (a : A) (g : IntertwiningMap τ π)
-  proof: by ext; simp [TensorProduct.tmul_smul]
-
-@[simp]
-
-中文:
-引理 tensor_smul_right
-  条件: (f : 整数ertwining映射 ρ σ) (a : A) (g : 整数ertwining映射 τ π)
-  证明: by ext; simp [TensorProduct.tmul_smul]
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.tmul_smul, tmul_smul
+/-
+**Representation.IntertwiningMap.tensor_smul_right** 是 Mathlib 中的一个引理，位于命名空间 `Re
+presentation.IntertwiningMap`。
+形式化陈述：tensor_smul_right (f : IntertwiningMap ρ σ) (a : A) (g : IntertwiningMap τ
+ π) : f.tensor (a • g) = a • (f.tensor g)
+参数：f : IntertwiningMap ρ σ；a : A；g : IntertwiningMap τ π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensor_smul_right (f : IntertwiningMap ρ σ) (a : A) (g : IntertwiningMap τ π) :
     f.tensor (a • g) = a • (f.tensor g) := by ext; simp [TensorProduct.tmul_smul]
 
 @[simp]
-/--
-lemma `tensor_apply` / 引理 `tensor_apply`
-
-English:
-lemma tensor_apply
-  given: (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) (v : V) (w : U)
-  proof: rfl
-
-中文:
-引理 tensor_apply
-  条件: (f : 整数ertwining映射 ρ σ) (g : 整数ertwining映射 τ π) (v : V) (w : U)
-  证明: rfl
+/-
+**Representation.IntertwiningMap.tensor_apply** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：tensor_apply (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) (v : V) (
+w : U) : f.tensor g (v otimesₜ w) = f v otimesₜ g w
+参数：f : IntertwiningMap ρ σ；g : IntertwiningMap τ π；v : V；w : U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensor_apply (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) (v : V) (w : U) :
-    f.tensor g (v otimesₜ w) = f v otimesₜ g w := rfl
+    f.tensor g (v ⊗ₜ w) = f v ⊗ₜ g w := rfl
 
 variable (ρ) in
-/--
-Definition of `lTensor` / `lTensor` 的定义
+/-- The intertwining map induced from `f : σ → τ` to `ρ.tprod σ → ρ.tprod τ`. -/
+/-
+**Representation.IntertwiningMap.lTensor** 是 Mathlib 中的一个定义，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：lTensor (f : IntertwiningMap σ τ) : (tprod ρ σ).IntertwiningMap (tprod ρ τ
+)
+参数：f : IntertwiningMap σ τ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lTensor
-  signature: (f : IntertwiningMap σ τ)
-  body: tensor (id ρ) f
-
-@[simp]
-
-中文:
-定义 lTensor
-  签名: (f : 整数ertwining映射 σ τ)
-  定义体: tensor (id ρ) f
-
-@[simp]
-
-Depends on / 依赖: tensor
+--- 原说明 ---
+The intertwining map induced from `f : σ → τ` to `ρ.tprod σ → ρ.tprod τ`.
 -/
 def lTensor (f : IntertwiningMap σ τ) :
     (tprod ρ σ).IntertwiningMap (tprod ρ τ) := tensor (id ρ) f
 
 @[simp]
-/--
-lemma `toLinearMap_lTensor` / 引理 `toLinearMap_lTensor`
-
-English:
-lemma toLinearMap_lTensor
-  given: (f : IntertwiningMap ρ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_lTensor
-  条件: (f : 整数ertwining映射 ρ σ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.toLinearMap_lTensor** 是 Mathlib 中的一个引理，位于命名空间 `
+Representation.IntertwiningMap`。
+形式化陈述：toLinearMap_lTensor (f : IntertwiningMap ρ σ) : (f.lTensor τ).toLinearMap 
+= f.toLinearMap.lTensor U
+参数：f : IntertwiningMap ρ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_lTensor (f : IntertwiningMap ρ σ) :
     (f.lTensor τ).toLinearMap = f.toLinearMap.lTensor U := rfl
 
 @[simp]
-/--
-lemma `lTensor_apply` / 引理 `lTensor_apply`
-
-English:
-lemma lTensor_apply
-  given: (f : IntertwiningMap σ τ) (v : V) (w : W)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 lTensor_apply
-  条件: (f : 整数ertwining映射 σ τ) (v : V) (w : W)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.lTensor_apply** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.IntertwiningMap`。
+形式化陈述：lTensor_apply (f : IntertwiningMap σ τ) (v : V) (w : W) : f.lTensor ρ (v o
+timesₜ w) = v otimesₜ f w
+参数：f : IntertwiningMap σ τ；v : V；w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lTensor_apply (f : IntertwiningMap σ τ) (v : V) (w : W) :
-    f.lTensor ρ (v otimesₜ w) = v otimesₜ f w := rfl
+    f.lTensor ρ (v ⊗ₜ w) = v ⊗ₜ f w := rfl
 
 @[simp]
-/--
-lemma `lTensor_id` / 引理 `lTensor_id`
-
-English:
-lemma lTensor_id
-  statement: lTensor ρ (id σ) = id (tprod ρ σ)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 lTensor_id
-  结论: lTensor ρ (id σ) = id (tprod ρ σ)
-  证明: by ext; simp
-
-@[simp]
+/-
+**Representation.IntertwiningMap.lTensor_id** 是 Mathlib 中的一个引理，位于命名空间 `Represent
+ation.IntertwiningMap`。
+形式化陈述：lTensor_id : lTensor ρ (id σ) = id (tprod ρ σ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.lTensor_id`：lTensor_id : (id : N ->ₗ[R] N).lTensor M = id
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lTensor_id : lTensor ρ (id σ) = id (tprod ρ σ) := by ext; simp
 
 @[simp]
-/--
-lemma `lTensor_zero` / 引理 `lTensor_zero`
-
-English:
-lemma lTensor_zero
-  statement: lTensor ρ (0 : IntertwiningMap σ τ) = 0
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 lTensor_zero
-  结论: lTensor ρ (0 : 整数ertwining映射 σ τ) = 0
-  证明: by ext; simp
-
-@[simp]
+/-
+**Representation.IntertwiningMap.lTensor_zero** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：lTensor_zero : lTensor ρ (0 : IntertwiningMap σ τ) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.lTensor_zero`：lTensor_zero : lTensor M (0 : N ->ₗ[R] P) = 0
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lTensor_zero : lTensor ρ (0 : IntertwiningMap σ τ) = 0 := by ext; simp
 
 @[simp]
-/--
-lemma `lTensor_add` / 引理 `lTensor_add`
-
-English:
-lemma lTensor_add
-  given: (f₁ f₂ : IntertwiningMap σ τ)
-  proof: tensor_add_right _ _ _
-
-@[simp]
-
-中文:
-引理 lTensor_add
-  条件: (f₁ f₂ : 整数ertwining映射 σ τ)
-  证明: tensor_add_right _ _ _
-
-@[simp]
-
-Depends on / 依赖: tensor_add_right
+/-
+**Representation.IntertwiningMap.lTensor_add** 是 Mathlib 中的一个引理，位于命名空间 `Represen
+tation.IntertwiningMap`。
+形式化陈述：lTensor_add (f₁ f₂ : IntertwiningMap σ τ) : lTensor ρ (f₁ + f₂) = lTensor 
+ρ f₁ + lTensor ρ f₂
+参数：f₁ f₂ : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.tensor_add_right`：tensor_add_right (f : I
+ntertwiningMap ρ σ) (g₁ g₂ : IntertwiningMap τ π) : f.tensor (g₁ + g₂) = f.tenso
+r g₁ + f.tensor g₂
 -/
 lemma lTensor_add (f₁ f₂ : IntertwiningMap σ τ) :
     lTensor ρ (f₁ + f₂) = lTensor ρ f₁ + lTensor ρ f₂ := tensor_add_right _ _ _
 
 @[simp]
-/--
-lemma `lTensor_smul` / 引理 `lTensor_smul`
-
-English:
-lemma lTensor_smul
-  given: (a : A) (f : IntertwiningMap σ τ)
-  proof: tensor_smul_right _ _ _
-
-中文:
-引理 lTensor_smul
-  条件: (a : A) (f : 整数ertwining映射 σ τ)
-  证明: tensor_smul_right _ _ _
-
-Depends on / 依赖: tensor_smul_right
+/-
+**Representation.IntertwiningMap.lTensor_smul** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：lTensor_smul (a : A) (f : IntertwiningMap σ τ) : lTensor ρ (a • f) = a • l
+Tensor ρ f
+参数：a : A；f : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.tensor_smul_right`：tensor_smul_right (f :
+ IntertwiningMap ρ σ) (a : A) (g : IntertwiningMap τ π) : f.tensor (a • g) = a •
+ (f.tensor g)
 -/
 lemma lTensor_smul (a : A) (f : IntertwiningMap σ τ) :
     lTensor ρ (a • f) = a • lTensor ρ f := tensor_smul_right _ _ _
 
 variable (ρ) in
-/--
-Definition of `rTensor` / `rTensor` 的定义
+/-- The natural intertwining map `σ.tprod ρ → τ.tprod ρ` induced by `f : σ → τ`. -/
+/-
+**Representation.IntertwiningMap.rTensor** 是 Mathlib 中的一个定义，位于命名空间 `Representati
+on.IntertwiningMap`。
+形式化陈述：rTensor (f : IntertwiningMap σ τ) : (tprod σ ρ).IntertwiningMap (tprod τ ρ
+)
+参数：f : IntertwiningMap σ τ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rTensor
-  signature: (f : IntertwiningMap σ τ)
-  body: tensor f (id ρ)
-
-@[simp]
-
-中文:
-定义 rTensor
-  签名: (f : 整数ertwining映射 σ τ)
-  定义体: tensor f (id ρ)
-
-@[simp]
-
-Depends on / 依赖: tensor
+--- 原说明 ---
+The natural intertwining map `σ.tprod ρ → τ.tprod ρ` induced by `f : σ → τ`.
 -/
 def rTensor (f : IntertwiningMap σ τ) :
     (tprod σ ρ).IntertwiningMap (tprod τ ρ) := tensor f (id ρ)
 
 @[simp]
-/--
-lemma `toLinearMap_rTensor` / 引理 `toLinearMap_rTensor`
-
-English:
-lemma toLinearMap_rTensor
-  given: (f : IntertwiningMap σ τ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_rTensor
-  条件: (f : 整数ertwining映射 σ τ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.toLinearMap_rTensor** 是 Mathlib 中的一个引理，位于命名空间 `
+Representation.IntertwiningMap`。
+形式化陈述：toLinearMap_rTensor (f : IntertwiningMap σ τ) : (f.rTensor ρ).toLinearMap 
+= f.toLinearMap.rTensor V
+参数：f : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_rTensor (f : IntertwiningMap σ τ) :
     (f.rTensor ρ).toLinearMap = f.toLinearMap.rTensor V := rfl
 
 @[simp]
-/--
-lemma `rTensor_apply` / 引理 `rTensor_apply`
-
-English:
-lemma rTensor_apply
-  given: (f : IntertwiningMap σ τ) (v : V) (w : W)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 rTensor_apply
-  条件: (f : 整数ertwining映射 σ τ) (v : V) (w : W)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.IntertwiningMap.rTensor_apply** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.IntertwiningMap`。
+形式化陈述：rTensor_apply (f : IntertwiningMap σ τ) (v : V) (w : W) : f.rTensor ρ (w o
+timesₜ v) = f w otimesₜ v
+参数：f : IntertwiningMap σ τ；v : V；w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rTensor_apply (f : IntertwiningMap σ τ) (v : V) (w : W) :
-    f.rTensor ρ (w otimesₜ v) = f w otimesₜ v := rfl
+    f.rTensor ρ (w ⊗ₜ v) = f w ⊗ₜ v := rfl
 
 @[simp]
-/--
-lemma `rTensor_id` / 引理 `rTensor_id`
-
-English:
-lemma rTensor_id
-  statement: rTensor ρ (id σ) = id (tprod σ ρ)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 rTensor_id
-  结论: rTensor ρ (id σ) = id (tprod σ ρ)
-  证明: by ext; simp
-
-@[simp]
+/-
+**Representation.IntertwiningMap.rTensor_id** 是 Mathlib 中的一个引理，位于命名空间 `Represent
+ation.IntertwiningMap`。
+形式化陈述：rTensor_id : rTensor ρ (id σ) = id (tprod σ ρ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.rTensor_id`：rTensor_id : (id : N ->ₗ[R] N).rTensor M = id
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rTensor_id : rTensor ρ (id σ) = id (tprod σ ρ) := by ext; simp
 
 @[simp]
-/--
-lemma `rTensor_zero` / 引理 `rTensor_zero`
-
-English:
-lemma rTensor_zero
-  statement: rTensor ρ (0 : IntertwiningMap σ τ) = 0
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 rTensor_zero
-  结论: rTensor ρ (0 : 整数ertwining映射 σ τ) = 0
-  证明: by ext; simp
-
-@[simp]
+/-
+**Representation.IntertwiningMap.rTensor_zero** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：rTensor_zero : rTensor ρ (0 : IntertwiningMap σ τ) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.rTensor_zero`：rTensor_zero : rTensor M (0 : N ->ₗ[R] P) = 0
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rTensor_zero : rTensor ρ (0 : IntertwiningMap σ τ) = 0 := by ext; simp
 
 @[simp]
-/--
-lemma `rTensor_add` / 引理 `rTensor_add`
-
-English:
-lemma rTensor_add
-  given: (f₁ f₂ : IntertwiningMap σ τ)
-  proof: tensor_add_left _ _ _
-
-@[simp]
-
-中文:
-引理 rTensor_add
-  条件: (f₁ f₂ : 整数ertwining映射 σ τ)
-  证明: tensor_add_left _ _ _
-
-@[simp]
-
-Depends on / 依赖: tensor_add_left
+/-
+**Representation.IntertwiningMap.rTensor_add** 是 Mathlib 中的一个引理，位于命名空间 `Represen
+tation.IntertwiningMap`。
+形式化陈述：rTensor_add (f₁ f₂ : IntertwiningMap σ τ) : rTensor ρ (f₁ + f₂) = rTensor 
+ρ f₁ + rTensor ρ f₂
+参数：f₁ f₂ : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.tensor_add_left`：tensor_add_left (f₁ f₂ :
+ IntertwiningMap ρ σ) (g : IntertwiningMap τ π) : (f₁ + f₂).tensor g = f₁.tensor
+ g + f₂.tensor g
 -/
 lemma rTensor_add (f₁ f₂ : IntertwiningMap σ τ) :
     rTensor ρ (f₁ + f₂) = rTensor ρ f₁ + rTensor ρ f₂ := tensor_add_left _ _ _
 
 @[simp]
-/--
-lemma `rTensor_smul` / 引理 `rTensor_smul`
-
-English:
-lemma rTensor_smul
-  given: (a : A) (f : IntertwiningMap σ τ)
-  proof: tensor_smul_left _ _ _
-
-中文:
-引理 rTensor_smul
-  条件: (a : A) (f : 整数ertwining映射 σ τ)
-  证明: tensor_smul_left _ _ _
-
-Depends on / 依赖: tensor_smul_left
+/-
+**Representation.IntertwiningMap.rTensor_smul** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.IntertwiningMap`。
+形式化陈述：rTensor_smul (a : A) (f : IntertwiningMap σ τ) : rTensor ρ (a • f) = a • r
+Tensor ρ f
+参数：a : A；f : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.tensor_smul_left`：tensor_smul_left (a : A
+) (f : IntertwiningMap ρ σ) (g : IntertwiningMap τ π) : (a • f).tensor g = a • (
+f.tensor g)
 -/
 lemma rTensor_smul (a : A) (f : IntertwiningMap σ τ) :
     rTensor ρ (a • f) = a • rTensor ρ f := tensor_smul_left _ _ _
 
 variable {Q : Type*} [AddCommMonoid Q] [Module A Q] {υ : Representation A G Q}
-
-/--
-lemma `rTensor_comp_lTensor` / 引理 `rTensor_comp_lTensor`
-
-English:
-lemma rTensor_comp_lTensor
-  given: (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ)
-  proof: by ext; simp
-
-中文:
-引理 rTensor_comp_lTensor
-  条件: (f : ρ.整数ertwining映射 τ) (g : σ.整数ertwining映射 υ)
-  证明: by ext; simp
+/-
+**Representation.IntertwiningMap.rTensor_comp_lTensor** 是 Mathlib 中的一个引理，位于命名空间 
+`Representation.IntertwiningMap`。
+形式化陈述：rTensor_comp_lTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
+ (f.rTensor υ).comp (g.lTensor ρ) = f.tensor g
+参数：f : ρ.IntertwiningMap τ；g : σ.IntertwiningMap υ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.rTensor_comp_lTensor`：rTensor_comp_lTensor (f : M ->ₗ[R] P) (g
+ : N ->ₗ[R] Q) : (f.rTensor Q).comp (g.lTensor M) = map f g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rTensor_comp_lTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
     (f.rTensor υ).comp (g.lTensor ρ) = f.tensor g := by ext; simp
-
-/--
-lemma `lTensor_comp_rTensor` / 引理 `lTensor_comp_rTensor`
-
-English:
-lemma lTensor_comp_rTensor
-  given: (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ)
-  proof: by ext; simp
-
-中文:
-引理 lTensor_comp_rTensor
-  条件: (f : ρ.整数ertwining映射 τ) (g : σ.整数ertwining映射 υ)
-  证明: by ext; simp
+/-
+**Representation.IntertwiningMap.lTensor_comp_rTensor** 是 Mathlib 中的一个引理，位于命名空间 
+`Representation.IntertwiningMap`。
+形式化陈述：lTensor_comp_rTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
+ (g.lTensor τ).comp (f.rTensor σ) = f.tensor g
+参数：f : ρ.IntertwiningMap τ；g : σ.IntertwiningMap υ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.lTensor_comp_rTensor`：lTensor_comp_rTensor (f : M ->ₗ[R] P) (g
+ : N ->ₗ[R] Q) : (g.lTensor P).comp (f.rTensor N) = map f g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lTensor_comp_rTensor (f : ρ.IntertwiningMap τ) (g : σ.IntertwiningMap υ) :
     (g.lTensor τ).comp (f.rTensor σ) = f.tensor g := by ext; simp
@@ -3328,359 +2588,258 @@ namespace TensorProduct
 
 noncomputable section
 
-/--
-Definition of `comm` / `comm` 的定义
+/-- Equivalence between representations induced from `TensorProduct.comm`. -/
+/-
+**Representation.TensorProduct.comm** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Te
+nsorProduct`。
+形式化陈述：comm : (tprod ρ σ).Equiv (tprod σ ρ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comm
-  signature: : (tprod ρ σ).Equiv (tprod σ ρ)
-  body: .mk (_root_.TensorProduct.comm A V W) fun g => by ext; simp
-
-@[simp]
-
-中文:
-定义 comm
-  签名: : (tprod ρ σ).等价 (tprod σ ρ)
-  定义体: .mk (_root_.TensorProduct.comm A V W) fun g => by ext; simp
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.comm
+--- 原说明 ---
+Equivalence between representations induced from `TensorProduct.comm`.
 -/
 def comm : (tprod ρ σ).Equiv (tprod σ ρ) :=
-.mk (_root_.TensorProduct.comm A V W) fun g => by ext; simp
+  .mk (_root_.TensorProduct.comm A V W) <| fun g ↦ by ext; simp
 
 @[simp]
-/--
-lemma `toLinearMap_comm` / 引理 `toLinearMap_comm`
-
-English:
-lemma toLinearMap_comm
-  statement: (comm ρ σ).toLinearMap = _root_.TensorProduct.comm A V W
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_comm
-  结论: (comm ρ σ).toLinearMap = _root_.张量积.comm A V W
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.toLinearMap_comm** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.TensorProduct`。
+形式化陈述：toLinearMap_comm : (comm ρ σ).toLinearMap = _root_.TensorProduct.comm A V 
+W
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_comm : (comm ρ σ).toLinearMap = _root_.TensorProduct.comm A V W := rfl
 
 @[simp]
-/--
-lemma `comm_apply` / 引理 `comm_apply`
-
-English:
-lemma comm_apply
-  given: (v : V) (w : W)
-  statement: comm ρ σ (v otimesₜ w) = w otimesₜ v
-  proof: rfl
-
-中文:
-引理 comm_apply
-  条件: (v : V) (w : W)
-  结论: comm ρ σ (v otimesₜ w) = w otimesₜ v
-  证明: rfl
+/-
+**Representation.TensorProduct.comm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.TensorProduct`。
+形式化陈述：comm_apply (v : V) (w : W) : comm ρ σ (v otimesₜ w) = w otimesₜ v
+参数：v : V；w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comm_apply (v : V) (w : W) : comm ρ σ (v otimesₜ w) = w otimesₜ v := rfl
-
-/--
-lemma `comm_comp_lTensor` / 引理 `comm_comp_lTensor`
-
-English:
-lemma comm_comp_lTensor
-  given: (f : IntertwiningMap σ τ)
-  proof: by ext; simp
-
-中文:
-引理 comm_comp_lTensor
-  条件: (f : 整数ertwining映射 σ τ)
-  证明: by ext; simp
+lemma comm_apply (v : V) (w : W) : comm ρ σ (v ⊗ₜ w) = w ⊗ₜ v := rfl
+/-
+**Representation.TensorProduct.comm_comp_lTensor** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.TensorProduct`。
+形式化陈述：comm_comp_lTensor (f : IntertwiningMap σ τ) : (comm ρ τ).comp (f.lTensor ρ
+) = (f.rTensor ρ).comp (comm ρ σ).toIntertwiningMap
+参数：f : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comm_comp_lTensor (f : IntertwiningMap σ τ) :
     (comm ρ τ).comp (f.lTensor ρ) = (f.rTensor ρ).comp (comm ρ σ).toIntertwiningMap := by ext; simp
-
-/--
-lemma `comm_comp_rTensor` / 引理 `comm_comp_rTensor`
-
-English:
-lemma comm_comp_rTensor
-  given: (f : IntertwiningMap σ τ)
-  proof: by ext; simp
-
-中文:
-引理 comm_comp_rTensor
-  条件: (f : 整数ertwining映射 σ τ)
-  证明: by ext; simp
+/-
+**Representation.TensorProduct.comm_comp_rTensor** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.TensorProduct`。
+形式化陈述：comm_comp_rTensor (f : IntertwiningMap σ τ) : (comm τ ρ).comp (f.rTensor ρ
+) = (f.lTensor ρ).comp (comm σ ρ).toIntertwiningMap
+参数：f : IntertwiningMap σ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comm_comp_rTensor (f : IntertwiningMap σ τ) :
     (comm τ ρ).comp (f.rTensor ρ) = (f.lTensor ρ).comp (comm σ ρ).toIntertwiningMap := by ext; simp
-
-/--
-lemma `comm_symm` / 引理 `comm_symm`
-
-English:
-lemma comm_symm
-  statement: (comm σ ρ).symm = comm ρ σ
-  proof: by rfl
-
-中文:
-引理 comm_symm
-  结论: (comm σ ρ).symm = comm ρ σ
-  证明: by rfl
+/-
+**Representation.TensorProduct.comm_symm** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.TensorProduct`。
+形式化陈述：comm_symm : (comm σ ρ).symm = comm ρ σ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comm_symm : (comm σ ρ).symm = comm ρ σ := by rfl
 
-/--
-Definition of `assoc` / `assoc` 的定义
+/-- The `Equiv` between representations induced from `TensorProduct.assoc`. -/
+/-
+**Representation.TensorProduct.assoc** 是 Mathlib 中的一个定义，位于命名空间 `Representation.T
+ensorProduct`。
+形式化陈述：assoc : (tprod (tprod ρ σ) τ).Equiv (tprod ρ (tprod σ τ))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assoc
-  signature: : (tprod (tprod ρ σ) τ).Equiv (tprod ρ (tprod σ τ))
-  body: .mk (_root_.TensorProduct.assoc A V W U) fun g => by ext; simp
-
-@[simp]
-
-中文:
-定义 assoc
-  签名: : (tprod (tprod ρ σ) τ).等价 (tprod ρ (tprod σ τ))
-  定义体: .mk (_root_.TensorProduct.assoc A V W U) fun g => by ext; simp
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.assoc
+--- 原说明 ---
+The `Equiv` between representations induced from `TensorProduct.assoc`.
 -/
 def assoc : (tprod (tprod ρ σ) τ).Equiv (tprod ρ (tprod σ τ)) :=
-.mk (_root_.TensorProduct.assoc A V W U) fun g => by ext; simp
+  .mk (_root_.TensorProduct.assoc A V W U) <| fun g ↦ by ext; simp
 
 @[simp]
-/--
-lemma `toLinearMap_assoc` / 引理 `toLinearMap_assoc`
-
-English:
-lemma toLinearMap_assoc
-  statement: (assoc ρ σ τ).toLinearMap = _root_.TensorProduct.assoc A V W U
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_assoc
-  结论: (assoc ρ σ τ).toLinearMap = _root_.张量积.assoc A V W U
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.toLinearMap_assoc** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.TensorProduct`。
+形式化陈述：toLinearMap_assoc : (assoc ρ σ τ).toLinearMap = _root_.TensorProduct.assoc
+ A V W U
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_assoc : (assoc ρ σ τ).toLinearMap = _root_.TensorProduct.assoc A V W U := rfl
 
 @[simp]
-/--
-lemma `assoc_symm_toLinearMap` / 引理 `assoc_symm_toLinearMap`
-
-English:
-lemma assoc_symm_toLinearMap
-  statement: (assoc ρ σ τ).symm.toLinearMap =
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 assoc_symm_toLinearMap
-  结论: (assoc ρ σ τ).symm.toLinearMap =
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.assoc_symm_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 
+`Representation.TensorProduct`。
+形式化陈述：assoc_symm_toLinearMap : (assoc ρ σ τ).symm.toLinearMap = (_root_.TensorPr
+oduct.assoc A V W U).symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma assoc_symm_toLinearMap : (assoc ρ σ τ).symm.toLinearMap =
   (_root_.TensorProduct.assoc A V W U).symm := rfl
 
 @[simp]
-/--
-lemma `assoc_apply` / 引理 `assoc_apply`
-
-English:
-lemma assoc_apply
-  given: (v : V) (w : W) (u : U)
-  statement: assoc ρ σ τ ((v otimesₜ w) otimesₜ u) = v otimesₜ (w otimesₜ u)
-  proof: rfl
-
-中文:
-引理 assoc_apply
-  条件: (v : V) (w : W) (u : U)
-  结论: assoc ρ σ τ ((v otimesₜ w) otimesₜ u) = v otimesₜ (w otimesₜ u)
-  证明: rfl
+/-
+**Representation.TensorProduct.assoc_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion.TensorProduct`。
+形式化陈述：assoc_apply (v : V) (w : W) (u : U) : assoc ρ σ τ ((v otimesₜ w) otimesₜ u
+) = v otimesₜ (w otimesₜ u)
+参数：v : V；w : W；u : U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma assoc_apply (v : V) (w : W) (u : U) : assoc ρ σ τ ((v otimesₜ w) otimesₜ u) = v otimesₜ (w otimesₜ u) := rfl
+lemma assoc_apply (v : V) (w : W) (u : U) : assoc ρ σ τ ((v ⊗ₜ w) ⊗ₜ u) = v ⊗ₜ (w ⊗ₜ u) := rfl
 
 variable (A) in
-/--
-Definition of `rid` / `rid` 的定义
+/-- The `Equiv` between representations induced from `TensorProduct.rid`. -/
+/-
+**Representation.TensorProduct.rid** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Ten
+sorProduct`。
+形式化陈述：rid : (σ.tprod (trivial A G A)).Equiv σ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rid
-  signature: : (σ.tprod (trivial A G A)).Equiv σ
-  body: .mk (_root_.TensorProduct.rid A W) fun g => by ext; simp
-
-@[simp]
-
-中文:
-定义 rid
-  签名: : (σ.tprod (trivial A G A)).等价 σ
-  定义体: .mk (_root_.TensorProduct.rid A W) fun g => by ext; simp
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.rid
+--- 原说明 ---
+The `Equiv` between representations induced from `TensorProduct.rid`.
 -/
 def rid : (σ.tprod (trivial A G A)).Equiv σ :=
-.mk (_root_.TensorProduct.rid A W) fun g => by ext; simp
+  .mk (_root_.TensorProduct.rid A W) <| fun g ↦ by ext; simp
 
 @[simp]
-/--
-lemma `toLinearMap_rid` / 引理 `toLinearMap_rid`
-
-English:
-lemma toLinearMap_rid
-  statement: (rid A σ).toLinearMap = _root_.TensorProduct.rid A W
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_rid
-  结论: (rid A σ).toLinearMap = _root_.张量积.rid A W
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.toLinearMap_rid** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.TensorProduct`。
+形式化陈述：toLinearMap_rid : (rid A σ).toLinearMap = _root_.TensorProduct.rid A W
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_rid : (rid A σ).toLinearMap = _root_.TensorProduct.rid A W := rfl
 
 @[simp]
-/--
-lemma `rid_apply` / 引理 `rid_apply`
-
-English:
-lemma rid_apply
-  given: (w : W) (a : A)
-  statement: rid A σ (w otimesₜ a) = a • w
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 rid_apply
-  条件: (w : W) (a : A)
-  结论: rid A σ (w otimesₜ a) = a • w
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.rid_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.TensorProduct`。
+形式化陈述：rid_apply (w : W) (a : A) : rid A σ (w otimesₜ a) = a • w
+参数：w : W；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma rid_apply (w : W) (a : A) : rid A σ (w otimesₜ a) = a • w := rfl
+lemma rid_apply (w : W) (a : A) : rid A σ (w ⊗ₜ a) = a • w := rfl
 
 @[simp]
-/--
-lemma `rid_symm_apply` / 引理 `rid_symm_apply`
-
-English:
-lemma rid_symm_apply
-  given: (w : W)
-  statement: (rid A σ).symm w = w otimesₜ 1
-  proof: rfl
-
-中文:
-引理 rid_symm_apply
-  条件: (w : W)
-  结论: (rid A σ).symm w = w otimesₜ 1
-  证明: rfl
+/-
+**Representation.TensorProduct.rid_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.TensorProduct`。
+形式化陈述：rid_symm_apply (w : W) : (rid A σ).symm w = w otimesₜ 1
+参数：w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma rid_symm_apply (w : W) : (rid A σ).symm w = w otimesₜ 1 := rfl
+lemma rid_symm_apply (w : W) : (rid A σ).symm w = w ⊗ₜ 1 := rfl
 
 variable (A) in
-/--
-Definition of `lid` / `lid` 的定义
+/-- The `Equiv` between representations induced from `TensorProduct.lid`. -/
+/-
+**Representation.TensorProduct.lid** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Ten
+sorProduct`。
+形式化陈述：lid : ((trivial A G A).tprod σ).Equiv σ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lid
-  signature: : ((trivial A G A).tprod σ).Equiv σ
-  body: .mk (_root_.TensorProduct.lid A W) fun g => by ext; simp
-
-@[simp]
-
-中文:
-定义 lid
-  签名: : ((trivial A G A).tprod σ).等价 σ
-  定义体: .mk (_root_.TensorProduct.lid A W) fun g => by ext; simp
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.lid
+--- 原说明 ---
+The `Equiv` between representations induced from `TensorProduct.lid`.
 -/
 def lid : ((trivial A G A).tprod σ).Equiv σ :=
-.mk (_root_.TensorProduct.lid A W) fun g => by ext; simp
+  .mk (_root_.TensorProduct.lid A W) <| fun g ↦ by ext; simp
 
 @[simp]
-/--
-lemma `toLinearMap_lid` / 引理 `toLinearMap_lid`
-
-English:
-lemma toLinearMap_lid
-  statement: (lid A σ).toLinearMap = _root_.TensorProduct.lid A W
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_lid
-  结论: (lid A σ).toLinearMap = _root_.张量积.lid A W
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.toLinearMap_lid** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.TensorProduct`。
+形式化陈述：toLinearMap_lid : (lid A σ).toLinearMap = _root_.TensorProduct.lid A W
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_lid : (lid A σ).toLinearMap = _root_.TensorProduct.lid A W := rfl
 
 @[simp]
-/--
-lemma `lid_apply` / 引理 `lid_apply`
-
-English:
-lemma lid_apply
-  given: (a : A) (w : W)
-  statement: lid A σ (a otimesₜ w) = a • w
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 lid_apply
-  条件: (a : A) (w : W)
-  结论: lid A σ (a otimesₜ w) = a • w
-  证明: rfl
-
-@[simp]
+/-
+**Representation.TensorProduct.lid_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representati
+on.TensorProduct`。
+形式化陈述：lid_apply (a : A) (w : W) : lid A σ (a otimesₜ w) = a • w
+参数：a : A；w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma lid_apply (a : A) (w : W) : lid A σ (a otimesₜ w) = a • w := rfl
+lemma lid_apply (a : A) (w : W) : lid A σ (a ⊗ₜ w) = a • w := rfl
 
 @[simp]
-/--
-lemma `lid_symm_apply` / 引理 `lid_symm_apply`
-
-English:
-lemma lid_symm_apply
-  given: (w : W)
-  statement: (lid A σ).symm w = 1 otimesₜ w
-  proof: rfl
-
-中文:
-引理 lid_symm_apply
-  条件: (w : W)
-  结论: (lid A σ).symm w = 1 otimesₜ w
-  证明: rfl
+/-
+**Representation.TensorProduct.lid_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Represe
+ntation.TensorProduct`。
+形式化陈述：lid_symm_apply (w : W) : (lid A σ).symm w = 1 otimesₜ w
+参数：w : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma lid_symm_apply (w : W) : (lid A σ).symm w = 1 otimesₜ w := rfl
+lemma lid_symm_apply (w : W) : (lid A σ).symm w = 1 ⊗ₜ w := rfl
 
 end
 
@@ -3696,22 +2855,22 @@ variable {G k V W : Type*} [Group G] [Field k] [AddCommGroup V] [Module k V] [Ad
     [Module k W] [FiniteDimensional k V] [FiniteDimensional k W]
     (ρ : Representation k G V) (σ : Representation k G W)
 
-/--
-Definition of `dualTensorHom` / `dualTensorHom` 的定义
+/-- dualTensorHom as an equivalence of representations. -/
+/-
+**Representation.Equiv.dualTensorHom** 是 Mathlib 中的一个定义，位于命名空间 `Representation.E
+quiv`。
+形式化陈述：{G : Type u_6} →   {k : Type u_7} →     {V : Type u_8} →       {W : Type u
+_9} →         [inst : Group G] →           [inst_1 : Field k] →             [ins
+t_2 : AddCommGroup V] →               [inst_3 : _root_.Module k V] →            
+     [inst_4 : AddCommGroup W] →                   [inst_5 : _root_.Module k W] 
+→                     [FiniteDimensional k V] →                       (ρ : Repre
+sentation k G V) → (σ : Representation k G W) → (ρ.dual.tprod σ).Equiv (ρ.linHom
+ σ)
+参数：ρ : Representation k G V；σ : Representation k G W；ρ.dual.tprod σ；ρ.linHom σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualTensorHom
-  signature: : Equiv (tprod ρ.dual σ) (linHom ρ σ) where
-  body: dualTensorHomEquiv (R := k) (M := V) (N := W)
-  isIntertwining' g := by
-    ext v' w v; simp [Module.Dual.transpose_apply]
-
-中文:
-定义 dualTensorHom
-  签名: : 等价 (tprod ρ.dual σ) (linHom ρ σ) where
-  定义体: dualTensorHomEquiv (R := k) (M := V) (N := W)
-  isIntertwining' g := by
-    ext v' w v; simp [Module.Dual.transpose_apply]
+--- 原说明 ---
+dualTensorHom as an equivalence of representations.
 -/
 @[simps!] noncomputable def dualTensorHom : Equiv (tprod ρ.dual σ) (linHom ρ σ) where
   toLinearEquiv := dualTensorHomEquiv (R := k) (M := V) (N := W)
@@ -3723,3 +2882,4 @@ end Group
 end Equiv
 
 end Representation
+

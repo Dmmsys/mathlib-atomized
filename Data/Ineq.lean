@@ -23,20 +23,17 @@ namespace Mathlib
 
 /-! ### Inequalities -/
 
-/--
-Inductive type `Ineq` / 归纳类型 `Ineq`
+/-- The three-element type `Ineq` is used to represent the strength of a comparison between
+terms. -/
+/-
+**Mathlib.Ineq** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Ineq
-  parameters: : Type
-  constructors (1):
-    - eq: | le | lt
-
-中文:
-归纳类型 Ineq
-  参数: : 类型
-  构造子 (1 个):
-    - eq: | le | lt
+--- 原说明 ---
+The three-element type `Ineq` is used to represent the strength of a comparison 
+between
+terms.
 -/
 inductive Ineq : Type
   | eq | le | lt
@@ -45,35 +42,36 @@ deriving DecidableEq, Inhabited, Repr
 namespace Ineq
 
 /--
-Definition of `max` / `max` 的定义
-
-English:
-definition max
-  signature: : Ineq -> Ineq -> Ineq
-
-中文:
-定义 最大值
-  签名: : Ineq -> Ineq -> Ineq
+`max R1 R2` computes the strength of the sum of two inequalities. If `t1 R1 0` and `t2 R2 0`,
+then `t1 + t2 (max R1 R2) 0`.
 -/
-def max : Ineq -> Ineq -> Ineq
+/-
+**Mathlib.Ineq.max** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → Mathlib.Ineq → Mathlib.Ineq
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`max R1 R2` computes the strength of the sum of two inequalities. If `t1 R1 0` a
+nd `t2 R2 0`,
+then `t1 + t2 (max R1 R2) 0`.
+-/
+def max : Ineq → Ineq → Ineq
   | lt, _ => lt
   | _, lt => lt
   | le, _ => le
   | _, le => le
   | eq, eq => eq
 
-/--
-Definition of `cmp` / `cmp` 的定义
+/-- `Ineq` is ordered `eq < le < lt`. -/
+/-
+**Mathlib.Ineq.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → Mathlib.Ineq → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cmp
-  signature: : Ineq -> Ineq -> Ordering
-
-中文:
-定义 cmp
-  签名: : Ineq -> Ineq -> Ordering
+--- 原说明 ---
+`Ineq` is ordered `eq < le < lt`.
 -/
-def cmp : Ineq -> Ineq -> Ordering
+def cmp : Ineq → Ineq → Ordering
   | eq, eq => Ordering.eq
   | eq, _ => Ordering.lt
   | le, le => Ordering.eq
@@ -81,53 +79,27 @@ def cmp : Ineq -> Ineq -> Ordering
   | lt, lt => Ordering.eq
   | _, _ => Ordering.gt
 
-/--
-Definition of `toString` / `toString` 的定义
+/-- Prints an `Ineq` as the corresponding infix symbol. -/
+/-
+**Mathlib.Ineq.toString** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toString
-  signature: : Ineq -> String
-
-中文:
-定义 toString
-  签名: : Ineq -> String
+--- 原说明 ---
+Prints an `Ineq` as the corresponding infix symbol.
 -/
-def toString : Ineq -> String
+def toString : Ineq → String
   | eq => "="
-  | le => "<="
+  | le => "≤"
   | lt => "<"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToString Ineq
-  body: ⟨toString⟩
-
-中文:
-实例 :
-  签名: ToString Ineq
-  定义体: ⟨toString⟩
-
-Depends on / 依赖: toString
+/-
+**Mathlib.Ineq.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Ineq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToString Ineq := ⟨toString⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat Ineq
-  body: ⟨fun i => Ineq.toString i⟩
-
-中文:
-实例 :
-  签名: ToFormat Ineq
-  定义体: ⟨fun i => Ineq.toString i⟩
-
-Depends on / 依赖: Ineq.toString, toString
+/-
+**Mathlib.Ineq.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Ineq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat Ineq := ⟨fun i => Ineq.toString i⟩
 
@@ -138,38 +110,27 @@ end Mathlib.Ineq
 namespace Lean.Expr
 open Mathlib
 
-/--
-Definition of `ineq?` / `ineq?` 的定义
+/-- Given an expression `e`, parse it as a `=`, `≤` or `<`, and return this relation (as a
+`Linarith.Ineq`) together with the type in which the (in)equality occurs and the two sides of the
+(in)equality.
 
-English:
-definition ineq?
-  signature: (e : Expr)
-  body: do
-  let e ← whnfR (← instantiateMVars e)
-  match e.eq? with
-  | some p => return (Ineq.eq, p)
-  | none =>
-  match e.le? with
-  | some p => return (Ineq.le, p)
-  | none =>
-  match e.lt? with
-  | some p => return (Ineq.lt, p)
-  | none => throwError "Not a comparison: {e}"
+This function is more naturally in the `Option` monad, but it is convenient to put in `MetaM`
+for compositionality.
+-/
+/-
+**Lean.Expr.ineq** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ineq?
-  签名: (e : Expr)
-  定义体: do
-  let e ← whnfR (← instantiateMVars e)
-  match e.eq? with
-  | some p => return (Ineq.eq, p)
-  | none =>
-  match e.le? with
-  | some p => return (Ineq.le, p)
-  | none =>
-  match e.lt? with
-  | some p => return (Ineq.lt, p)
-  | none => throwError "Not a comparison: {e}"
+--- 原说明 ---
+Given an expression `e`, parse it as a `=`, `≤` or `<`, and return this relation
+ (as a
+`Linarith.Ineq`) together with the type in which the (in)equality occurs and the
+ two sides of the
+(in)equality.
+
+This function is more naturally in the `Option` monad, but it is convenient to p
+ut in `MetaM`
+for compositionality.
 -/
 def ineq? (e : Expr) : MetaM (Ineq × Expr × Expr × Expr) := do
   let e ← whnfR (← instantiateMVars e)
@@ -183,28 +144,28 @@ def ineq? (e : Expr) : MetaM (Ineq × Expr × Expr × Expr) := do
   | some p => return (Ineq.lt, p)
   | none => throwError "Not a comparison: {e}"
 
-/--
-Definition of `ineqOrNotIneq?` / `ineqOrNotIneq?` 的定义
+/-- Given an expression `e`, parse it as a `=`, `≤` or `<`, or the negation of such, and return this
+relation (as a `Linarith.Ineq`) together with the type in which the (in)equality occurs, the two
+sides of the (in)equality, and a Boolean flag indicating the presence or absence of the `¬`.
 
-English:
-definition ineqOrNotIneq?
-  signature: (e : Expr)
-  body: do
-  try
-    return (true, ← e.ineq?)
-  catch _ =>
-    let some e' := e.not? | throwError "Not a comparison: {e}"
-    return (false, ← e'.ineq?)
+This function is more naturally in the `Option` monad, but it is convenient to put in `MetaM`
+for compositionality.
+-/
+/-
+**Lean.Expr.ineqOrNotIneq** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ineqOrNotIneq?
-  签名: (e : Expr)
-  定义体: do
-  try
-    return (true, ← e.ineq?)
-  catch _ =>
-    let some e' := e.not? | throwError "Not a comparison: {e}"
-    return (false, ← e'.ineq?)
+--- 原说明 ---
+Given an expression `e`, parse it as a `=`, `≤` or `<`, or the negation of such,
+ and return this
+relation (as a `Linarith.Ineq`) together with the type in which the (in)equality
+ occurs, the two
+sides of the (in)equality, and a Boolean flag indicating the presence or absence
+ of the `¬`.
+
+This function is more naturally in the `Option` monad, but it is convenient to p
+ut in `MetaM`
+for compositionality.
 -/
 def ineqOrNotIneq? (e : Expr) : MetaM (Bool × Ineq × Expr × Expr × Expr) := do
   try
@@ -214,3 +175,4 @@ def ineqOrNotIneq? (e : Expr) : MetaM (Bool × Ineq × Expr × Expr × Expr) := 
     return (false, ← e'.ineq?)
 
 end Lean.Expr
+

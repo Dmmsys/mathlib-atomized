@@ -34,36 +34,26 @@ section SemilatticeSupTop
 
 variable [SemilatticeSup α] [OrderTop α]
 
-/--
-theorem `top_sup_eq` / 定理 `top_sup_eq`
-
-English:
-theorem top_sup_eq
-  given: (a : α)
-  statement: ⊤ ⊔ a = ⊤
-  proof: sup_of_le_left le_top
-
-中文:
-定理 top_sup_eq
-  条件: (a : α)
-  结论: ⊤ ⊔ a = ⊤
-  证明: sup_of_le_left le_top
+/-
+**top_sup_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderTop α] (a : α), 
+⊤ ⊔ a = ⊤
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
 @[to_dual] theorem top_sup_eq (a : α) : ⊤ ⊔ a = ⊤ := sup_of_le_left le_top
-/--
-theorem `sup_top_eq` / 定理 `sup_top_eq`
-
-English:
-theorem sup_top_eq
-  given: (a : α)
-  statement: a ⊔ ⊤ = ⊤
-  proof: sup_of_le_right le_top
-
-中文:
-定理 sup_top_eq
-  条件: (a : α)
-  结论: a ⊔ ⊤ = ⊤
-  证明: sup_of_le_right le_top
+/-
+**sup_top_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderTop α] (a : α), 
+a ⊔ ⊤ = ⊤
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
 @[to_dual] theorem sup_top_eq (a : α) : a ⊔ ⊤ = ⊤ := sup_of_le_right le_top
 
@@ -73,58 +63,49 @@ section SemilatticeSupBot
 
 variable [SemilatticeSup α] [OrderBot α] {a b : α}
 
-/--
-theorem `bot_sup_eq` / 定理 `bot_sup_eq`
-
-English:
-theorem bot_sup_eq
-  given: (a : α)
-  statement: ⊥ ⊔ a = a
-  proof: sup_of_le_right bot_le
-
-中文:
-定理 bot_sup_eq
-  条件: (a : α)
-  结论: ⊥ ⊔ a = a
-  证明: sup_of_le_right bot_le
+/-
+**bot_sup_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBot α] (a : α), 
+⊥ ⊔ a = a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
 @[to_dual] theorem bot_sup_eq (a : α) : ⊥ ⊔ a = a := sup_of_le_right bot_le
-/--
-theorem `sup_bot_eq` / 定理 `sup_bot_eq`
-
-English:
-theorem sup_bot_eq
-  given: (a : α)
-  statement: a ⊔ ⊥ = a
-  proof: sup_of_le_left bot_le
-
-@[to_dual (attr := simp, grind =)]
-
-中文:
-定理 sup_bot_eq
-  条件: (a : α)
-  结论: a ⊔ ⊥ = a
-  证明: sup_of_le_left bot_le
-
-@[to_dual (attr := simp, grind =)]
+/-
+**sup_bot_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBot α] (a : α), 
+a ⊔ ⊥ = a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
 @[to_dual] theorem sup_bot_eq (a : α) : a ⊔ ⊥ = a := sup_of_le_left bot_le
 
 @[to_dual (attr := simp, grind =)]
-/--
-theorem `sup_eq_bot_iff` / 定理 `sup_eq_bot_iff`
-
-English:
-theorem sup_eq_bot_iff
-  statement: a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥
-  proof: by rw [eq_bot_iff, sup_le_iff]; simp
-
-中文:
-定理 sup_eq_bot_iff
-  结论: a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥
-  证明: by rw [eq_bot_iff, sup_le_iff]; simp
-
-Depends on / 依赖: eq_bot_iff, sup_le_iff
+/-
+**sup_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sup_eq_bot_iff : a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `sup_le_iff`：sup_le_iff : a ⊔ b <= c ↔ a <= c ∧ b <= c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sup_eq_bot_iff : a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥ := by rw [eq_bot_iff, sup_le_iff]; simp
 
@@ -136,139 +117,83 @@ variable [LinearOrder α] [OrderBot α]
 
 -- `simp` can prove these, so they shouldn't be simp-lemmas.
 
-/--
-theorem `min_bot_left` / 定理 `min_bot_left`
-
-English:
-theorem min_bot_left
-  given: (a : α)
-  statement: min ⊥ a = ⊥
-  proof: bot_inf_eq _
-
-中文:
-定理 min_bot_left
-  条件: (a : α)
-  结论: 最小值 ⊥ a = ⊥
-  证明: bot_inf_eq _
+/-
+**min_bot_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : OrderBot α] (a : α), min
+ ⊥ a = ⊥
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_inf_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderBo
+t α] (a : α), ⊥ ⊓ a = ⊥
 -/
 @[to_dual] theorem min_bot_left (a : α) : min ⊥ a = ⊥ := bot_inf_eq _
-/--
-theorem `min_bot_right` / 定理 `min_bot_right`
-
-English:
-theorem min_bot_right
-  given: (a : α)
-  statement: min a ⊥ = ⊥
-  proof: inf_bot_eq _
-
-中文:
-定理 min_bot_right
-  条件: (a : α)
-  结论: 最小值 a ⊥ = ⊥
-  证明: inf_bot_eq _
+/-
+**min_bot_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : OrderBot α] (a : α), min
+ a ⊥ = ⊥
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_bot_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderBo
+t α] (a : α), a ⊓ ⊥ = ⊥
 -/
 @[to_dual] theorem min_bot_right (a : α) : min a ⊥ = ⊥ := inf_bot_eq _
-
-/--
-theorem `max_bot_left` / 定理 `max_bot_left`
-
-English:
-theorem max_bot_left
-  given: (a : α)
-  statement: max ⊥ a = a
-  proof: bot_sup_eq _
-
-中文:
-定理 max_bot_left
-  条件: (a : α)
-  结论: 最大值 ⊥ a = a
-  证明: bot_sup_eq _
+/-
+**max_bot_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : OrderBot α] (a : α), max
+ ⊥ a = a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_sup_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBo
+t α] (a : α), ⊥ ⊔ a = a
 -/
 @[to_dual] theorem max_bot_left (a : α) : max ⊥ a = a := bot_sup_eq _
-/--
-theorem `max_bot_right` / 定理 `max_bot_right`
-
-English:
-theorem max_bot_right
-  given: (a : α)
-  statement: max a ⊥ = a
-  proof: sup_bot_eq _
-
-中文:
-定理 max_bot_right
-  条件: (a : α)
-  结论: 最大值 a ⊥ = a
-  证明: sup_bot_eq _
+/-
+**max_bot_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : OrderBot α] (a : α), max
+ a ⊥ = a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_bot_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBo
+t α] (a : α), a ⊔ ⊥ = a
 -/
 @[to_dual] theorem max_bot_right (a : α) : max a ⊥ = a := sup_bot_eq _
-
-/--
-theorem `max_eq_bot` / 定理 `max_eq_bot`
-
-English:
-theorem max_eq_bot
-  given: {a b : α}
-  statement: max a b = ⊥ ↔ a = ⊥ ∧ b = ⊥
-  proof: sup_eq_bot_iff
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 max_eq_bot
-  条件: {a b : α}
-  结论: 最大值 a b = ⊥ ↔ a = ⊥ ∧ b = ⊥
-  证明: sup_eq_bot_iff
-
-@[to_dual (attr := simp)]
+/-
+**max_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : OrderBot α] {a b : α}, m
+ax a b = ⊥ ↔ a = ⊥ ∧ b = ⊥
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_bot_iff`：sup_eq_bot_iff : a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥
 -/
 @[to_dual] theorem max_eq_bot {a b : α} : max a b = ⊥ ↔ a = ⊥ ∧ b = ⊥ := sup_eq_bot_iff
 
 @[to_dual (attr := simp)]
-/--
-theorem `min_eq_bot` / 定理 `min_eq_bot`
-
-English:
-theorem min_eq_bot
-  given: {a b : α}
-  statement: min a b = ⊥ ↔ a = ⊥ ∨ b = ⊥
-  proof: by
-  simp_rw [← le_bot_iff, inf_le_iff]
-
-@[to_dual (attr := aesop (rule_sets := [finiteness]) safe apply)]
-
-中文:
-定理 min_eq_bot
-  条件: {a b : α}
-  结论: 最小值 a b = ⊥ ↔ a = ⊥ ∨ b = ⊥
-  证明: by
-  simp_rw [← le_bot_iff, inf_le_iff]
-
-@[to_dual (attr := aesop (rule_sets := [finiteness]) safe apply)]
-
-Depends on / 依赖: inf_le_iff, le_bot_iff, simp_rw
+/-
+**min_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_eq_bot {a b : α} : min a b = ⊥ ↔ a = ⊥ ∨ b = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem min_eq_bot {a b : α} : min a b = ⊥ ↔ a = ⊥ ∨ b = ⊥ := by
   simp_rw [← le_bot_iff, inf_le_iff]
 
 @[to_dual (attr := aesop (rule_sets := [finiteness]) safe apply)]
-/--
-lemma `min_ne_bot` / 引理 `min_ne_bot`
-
-English:
-lemma min_ne_bot
-  given: {a b : α} (ha : a != ⊥) (hb : b != ⊥)
-  statement: min a b != ⊥
-  proof: by
-  grind
-
-中文:
-引理 min_ne_bot
-  条件: {a b : α} (ha : a != ⊥) (hb : b != ⊥)
-  结论: 最小值 a b != ⊥
-  证明: by
-  grind
+/-
+**min_ne_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：min_ne_bot {a b : α} (ha : a != ⊥) (hb : b != ⊥) : min a b != ⊥
+参数：ha : a != ⊥；hb : b != ⊥。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma min_ne_bot {a b : α} (ha : a != ⊥) (hb : b != ⊥) : min a b != ⊥ := by
+lemma min_ne_bot {a b : α} (ha : a ≠ ⊥) (hb : b ≠ ⊥) : min a b ≠ ⊥ := by
   grind
 
 end LinearOrder
@@ -278,41 +203,25 @@ end LinearOrder
 section WellFounded
 
 @[to_dual (attr := elab_as_elim)]
-/--
-theorem `WellFoundedGT.induction_top` / 定理 `WellFoundedGT.induction_top`
-
-English:
-theorem WellFoundedGT.induction_top
-  statement: [Preorder α] [WellFoundedGT α] [OrderTop α]
-  proof: by
-  contrapose! hexists
-  intro M
-  induction M using WellFoundedGT.induction with
-  | ind x IH =>
-    by_cases hx : x = ⊤
-    · exact hx ▸ hexists
-    · intro hx'
-      obtain ⟨M, hM, hM'⟩ := hind x hx hx'
-      exact IH _ hM hM'
-
-中文:
-定理 WellFoundedGT.induction_top
-  结论: [预序 α] [WellFoundedGT α] [有顶序 α]
-  证明: by
-  contrapose! hexists
-  intro M
-  induction M using WellFoundedGT.induction with
-  | ind x IH =>
-    by_cases hx : x = ⊤
-    · exact hx ▸ hexists
-    · intro hx'
-      obtain ⟨M, hM, hM'⟩ := hind x hx hx'
-      exact IH _ hM hM'
-
-Depends on / 依赖: WellFoundedGT, WellFoundedGT.induction, contrapose, hexists
+/-
+**WellFoundedGT.induction_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFoundedGT.induction_top [Preorder α] [WellFoundedGT α] [OrderTop α] {P
+ : α -> Prop} (hexists : exists M, P M) (hind : forall N != ⊤, P N -> exists M >
+ N, P M) : P ⊤
+参数：hexists : exists M, P M；hind : forall N != ⊤, P N -> exists M > N, P M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `WellFoundedGT.induction`：∀ {α : Type u} [inst : LT α] [WellFoundedGT α] 
+{motive : α → Prop} (a : α),   (∀ (x : α), (∀ (y : α), x < y → motive y) → motiv
+e x) → motive…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem WellFoundedGT.induction_top [Preorder α] [WellFoundedGT α] [OrderTop α]
-    {P : α -> Prop} (hexists : exists M, P M) (hind : forall N != ⊤, P N -> exists M > N, P M) : P ⊤ := by
+    {P : α → Prop} (hexists : ∃ M, P M) (hind : ∀ N ≠ ⊤, P N → ∃ M > N, P M) : P ⊤ := by
   contrapose! hexists
   intro M
   induction M using WellFoundedGT.induction with
@@ -324,3 +233,4 @@ theorem WellFoundedGT.induction_top [Preorder α] [WellFoundedGT α] [OrderTop �
       exact IH _ hM hM'
 
 end WellFounded
+

@@ -69,170 +69,95 @@ namespace ContinuousLinearMap
 
 variable [CompleteSpace E] [CompleteSpace G]
 
-/--
-Definition of `adjointAux` / `adjointAux` 的定义
+/-- The adjoint, as a continuous conjugate-linear map. This is only meant as an auxiliary
+definition for the main definition `adjoint`, where this is bundled as a conjugate-linear isometric
+equivalence. -/
+/-
+**ContinuousLinearMap.adjointAux** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：adjointAux : (E ->L[𝕜] F) ->L⋆[𝕜] F ->L[𝕜] E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjointAux
-  signature: : (E ->L[𝕜] F) ->L⋆[𝕜] F ->L[𝕜] E
-  body: (ContinuousLinearMap.compSL _ _ _ _ _ ((toDual 𝕜 E).symm : StrongDual 𝕜 E ->L⋆[𝕜] E)).comp
-    (toSesqForm : (E ->L[𝕜] F) ->L[𝕜] F ->L⋆[𝕜] StrongDual 𝕜 E)
-
-@[simp]
-
-中文:
-定义 adjointAux
-  签名: : (E ->L[𝕜] F) ->L⋆[𝕜] F ->L[𝕜] E
-  定义体: (ContinuousLinearMap.compSL _ _ _ _ _ ((toDual 𝕜 E).symm : StrongDual 𝕜 E ->L⋆[𝕜] E)).comp
-    (toSesqForm : (E ->L[𝕜] F) ->L[𝕜] F ->L⋆[𝕜] StrongDual 𝕜 E)
-
-@[simp]
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compSL, StrongDual, compSL, toDual, toSesqForm
+--- 原说明 ---
+The adjoint, as a continuous conjugate-linear map. This is only meant as an auxi
+liary
+definition for the main definition `adjoint`, where this is bundled as a conjuga
+te-linear isometric
+equivalence.
 -/
-def adjointAux : (E ->L[𝕜] F) ->L⋆[𝕜] F ->L[𝕜] E :=
-  (ContinuousLinearMap.compSL _ _ _ _ _ ((toDual 𝕜 E).symm : StrongDual 𝕜 E ->L⋆[𝕜] E)).comp
-    (toSesqForm : (E ->L[𝕜] F) ->L[𝕜] F ->L⋆[𝕜] StrongDual 𝕜 E)
+def adjointAux : (E →L[𝕜] F) →L⋆[𝕜] F →L[𝕜] E :=
+  (ContinuousLinearMap.compSL _ _ _ _ _ ((toDual 𝕜 E).symm : StrongDual 𝕜 E →L⋆[𝕜] E)).comp
+    (toSesqForm : (E →L[𝕜] F) →L[𝕜] F →L⋆[𝕜] StrongDual 𝕜 E)
 
 @[simp]
-/--
-theorem `adjointAux_apply` / 定理 `adjointAux_apply`
-
-English:
-theorem adjointAux_apply
-  given: (A : E ->L[𝕜] F) (x : F)
-  proof: rfl
-
-中文:
-定理 adjointAux_apply
-  条件: (A : E ->L[𝕜] F) (x : F)
-  证明: rfl
+/-
+**ContinuousLinearMap.adjointAux_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：adjointAux_apply (A : E ->L[𝕜] F) (x : F) : adjointAux A x = ((toDual 𝕜 E)
+.symm : StrongDual 𝕜 E -> E) ((toSesqForm A) x)
+参数：A : E ->L[𝕜] F；x : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjointAux_apply (A : E ->L[𝕜] F) (x : F) :
-    adjointAux A x = ((toDual 𝕜 E).symm : StrongDual 𝕜 E -> E) ((toSesqForm A) x) :=
+theorem adjointAux_apply (A : E →L[𝕜] F) (x : F) :
+    adjointAux A x = ((toDual 𝕜 E).symm : StrongDual 𝕜 E → E) ((toSesqForm A) x) :=
   rfl
-
-/--
-theorem `adjointAux_inner_left` / 定理 `adjointAux_inner_left`
-
-English:
-theorem adjointAux_inner_left
-  given: (A : E ->L[𝕜] F) (x : E) (y : F)
-  statement: ⟪adjointAux A y, x⟫ = ⟪y, A x⟫
-  proof: by
-  simp
-
-中文:
-定理 adjointAux_inner_left
-  条件: (A : E ->L[𝕜] F) (x : E) (y : F)
-  结论: ⟪adjointAux A y, x⟫ = ⟪y, A x⟫
-  证明: by
-  simp
+/-
+**ContinuousLinearMap.adjointAux_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：adjointAux_inner_left (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪adjointAux A y, 
+x⟫ = ⟪y, A x⟫
+参数：A : E ->L[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjointAux_inner_left (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪adjointAux A y, x⟫ = ⟪y, A x⟫ := by
+theorem adjointAux_inner_left (A : E →L[𝕜] F) (x : E) (y : F) : ⟪adjointAux A y, x⟫ = ⟪y, A x⟫ := by
   simp
-
-/--
-theorem `adjointAux_inner_right` / 定理 `adjointAux_inner_right`
-
-English:
-theorem adjointAux_inner_right
-  given: (A : E ->L[𝕜] F) (x : E) (y : F)
-  proof: by
-  rw [← inner_conj_symm]; rw [adjointAux_inner_left]; rw [inner_conj_symm]
-
-中文:
-定理 adjointAux_inner_right
-  条件: (A : E ->L[𝕜] F) (x : E) (y : F)
-  证明: by
-  rw [← inner_conj_symm]; rw [adjointAux_inner_left]; rw [inner_conj_symm]
-
-Depends on / 依赖: adjointAux_inner_left, inner_conj_symm
+/-
+**ContinuousLinearMap.adjointAux_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：adjointAux_inner_right (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪x, adjointAux A
+ y⟫ = ⟪A x, y⟫
+参数：A : E ->L[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjointAux_inner_right (A : E ->L[𝕜] F) (x : E) (y : F) :
+theorem adjointAux_inner_right (A : E →L[𝕜] F) (x : E) (y : F) :
     ⟪x, adjointAux A y⟫ = ⟪A x, y⟫ := by
-  rw [← inner_conj_symm]; rw [adjointAux_inner_left]; rw [inner_conj_symm]
+  rw [← inner_conj_symm, adjointAux_inner_left, inner_conj_symm]
 
 variable [CompleteSpace F]
-
-/--
-theorem `adjointAux_adjointAux` / 定理 `adjointAux_adjointAux`
-
-English:
-theorem adjointAux_adjointAux
-  given: (A : E ->L[𝕜] F)
-  statement: adjointAux (adjointAux A) = A
-  proof: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjointAux_inner_right]; rw [adjointAux_inner_left]
-
-@[simp]
-
-中文:
-定理 adjointAux_adjointAux
-  条件: (A : E ->L[𝕜] F)
-  结论: adjointAux (adjointAux A) = A
-  证明: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjointAux_inner_right]; rw [adjointAux_inner_left]
-
-@[simp]
-
-Depends on / 依赖: adjointAux_inner_left, adjointAux_inner_right, ext_inner_left
+/-
+**ContinuousLinearMap.adjointAux_adjointAux** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：adjointAux_adjointAux (A : E ->L[𝕜] F) : adjointAux (adjointAux A) = A
+参数：A : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjointAux_adjointAux (A : E ->L[𝕜] F) : adjointAux (adjointAux A) = A := by
+theorem adjointAux_adjointAux (A : E →L[𝕜] F) : adjointAux (adjointAux A) = A := by
   ext v
   refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjointAux_inner_right]; rw [adjointAux_inner_left]
+  rw [adjointAux_inner_right, adjointAux_inner_left]
 
 @[simp]
-/--
-theorem `adjointAux_norm` / 定理 `adjointAux_norm`
-
-English:
-theorem adjointAux_norm
-  given: (A : E ->L[𝕜] F)
-  statement: ‖adjointAux A‖ = ‖A‖
-  proof: by
-  refine le_antisymm ?_ ?_
-  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
-    exact toSesqForm_apply_norm_le
-  · nth_rw 1 [← adjointAux_adjointAux A]
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
-    exact toSesqForm_apply_norm_le
-
-public section
-
-中文:
-定理 adjointAux_norm
-  条件: (A : E ->L[𝕜] F)
-  结论: ‖adjointAux A‖ = ‖A‖
-  证明: by
-  refine le_antisymm ?_ ?_
-  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
-    exact toSesqForm_apply_norm_le
-  · nth_rw 1 [← adjointAux_adjointAux A]
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
-    exact toSesqForm_apply_norm_le
-
-public section
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, LinearIsometryEquiv, LinearIsometryEquiv.norm_map, adjointAux_adjointAux, adjointAux_apply, le_antisymm, norm_map, norm_nonneg, nth_rw, opNorm_le_bound, toSesqForm_apply_norm_le
+/-
+**ContinuousLinearMap.adjointAux_norm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：adjointAux_norm (A : E ->L[𝕜] F) : ‖adjointAux A‖ = ‖A‖
+参数：A : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjointAux_norm (A : E ->L[𝕜] F) : ‖adjointAux A‖ = ‖A‖ := by
+theorem adjointAux_norm (A : E →L[𝕜] F) : ‖adjointAux A‖ = ‖A‖ := by
   refine le_antisymm ?_ ?_
   · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
+    rw [adjointAux_apply, LinearIsometryEquiv.norm_map]
     exact toSesqForm_apply_norm_le
   · nth_rw 1 [← adjointAux_adjointAux A]
     refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
+    rw [adjointAux_apply, LinearIsometryEquiv.norm_map]
     exact toSesqForm_apply_norm_le
 
 public section
@@ -240,30 +165,21 @@ public section
 /-- The adjoint of a bounded operator `A` from a Hilbert space `E` to another Hilbert space `F`,
   denoted as `A†`. -/
 @[wikidata Q1509647]
-/--
-Definition of `adjoint` / `adjoint` 的定义
+/-
+**ContinuousLinearMap.adjoint** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：adjoint : (E ->L[𝕜] F) ≃ₗᵢ⋆[𝕜] F ->L[𝕜] E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Analysis.InnerProductSpace.Adjoint.0.ContinuousLinearMa
+p.adjointAux_norm`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike
+ 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [inst_3 :…
 
-English:
-definition adjoint
-  signature: : (E ->L[𝕜] F) ≃ₗᵢ⋆[𝕜] F ->L[𝕜] E
-  body: LinearIsometryEquiv.ofSurjective { adjointAux with norm_map' := adjointAux_norm } fun A =>
-    ⟨adjointAux A, adjointAux_adjointAux A⟩
-
-@[inherit_doc]
-scoped[InnerProduct] postfix:1000 "†" => ContinuousLinearMap.adjoint
-
-中文:
-定义 adjoint
-  签名: : (E ->L[𝕜] F) ≃ₗᵢ⋆[𝕜] F ->L[𝕜] E
-  定义体: LinearIsometryEquiv.ofSurjective { adjointAux with norm_map' := adjointAux_norm } fun A =>
-    ⟨adjointAux A, adjointAux_adjointAux A⟩
-
-@[inherit_doc]
-scoped[InnerProduct] postfix:1000 "†" => ContinuousLinearMap.adjoint
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.ofSurjective, adjointAux, adjointAux_adjointAux, adjointAux_norm, norm_map, ofSurjective
+--- 原说明 ---
+The adjoint of a bounded operator `A` from a Hilbert space `E` to another Hilber
+t space `F`,
+  denoted as `A†`.
 -/
-def adjoint : (E ->L[𝕜] F) ≃ₗᵢ⋆[𝕜] F ->L[𝕜] E :=
+def adjoint : (E →L[𝕜] F) ≃ₗᵢ⋆[𝕜] F →L[𝕜] E :=
   LinearIsometryEquiv.ofSurjective { adjointAux with norm_map' := adjointAux_norm } fun A =>
     ⟨adjointAux A, adjointAux_adjointAux A⟩
 
@@ -271,955 +187,1283 @@ def adjoint : (E ->L[𝕜] F) ≃ₗᵢ⋆[𝕜] F ->L[𝕜] E :=
 scoped[InnerProduct] postfix:1000 "†" => ContinuousLinearMap.adjoint
 open InnerProduct
 
-/--
-theorem `adjoint_inner_left` / 定理 `adjoint_inner_left`
+/-- The fundamental property of the adjoint. -/
+/-
+**ContinuousLinearMap.adjoint_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：adjoint_inner_left (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A 
+x⟫
+参数：A : E ->L[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Analysis.InnerProductSpace.Adjoint.0.ContinuousLinearMa
+p.adjointAux_inner_left`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : 
+RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [ins
+t_3 :…
 
-English:
-theorem adjoint_inner_left
-  given: (A : E ->L[𝕜] F) (x : E) (y : F)
-  statement: ⟪(A†) y, x⟫ = ⟪y, A x⟫
-  proof: adjointAux_inner_left A x y
-
-中文:
-定理 adjoint_inner_left
-  条件: (A : E ->L[𝕜] F) (x : E) (y : F)
-  结论: ⟪(A†) y, x⟫ = ⟪y, A x⟫
-  证明: adjointAux_inner_left A x y
-
-Depends on / 依赖: adjointAux_inner_left
+--- 原说明 ---
+The fundamental property of the adjoint.
 -/
-theorem adjoint_inner_left (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫ :=
+theorem adjoint_inner_left (A : E →L[𝕜] F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫ :=
   adjointAux_inner_left A x y
 
-/--
-theorem `adjoint_inner_right` / 定理 `adjoint_inner_right`
+/-- The fundamental property of the adjoint. -/
+/-
+**ContinuousLinearMap.adjoint_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：adjoint_inner_right (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x,
+ y⟫
+参数：A : E ->L[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Analysis.InnerProductSpace.Adjoint.0.ContinuousLinearMa
+p.adjointAux_inner_right`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst :
+ RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [in
+st_3 :…
 
-English:
-theorem adjoint_inner_right
-  given: (A : E ->L[𝕜] F) (x : E) (y : F)
-  statement: ⟪x, (A†) y⟫ = ⟪A x, y⟫
-  proof: adjointAux_inner_right A x y
-
-中文:
-定理 adjoint_inner_right
-  条件: (A : E ->L[𝕜] F) (x : E) (y : F)
-  结论: ⟪x, (A†) y⟫ = ⟪A x, y⟫
-  证明: adjointAux_inner_right A x y
-
-Depends on / 依赖: adjointAux_inner_right
+--- 原说明 ---
+The fundamental property of the adjoint.
 -/
-theorem adjoint_inner_right (A : E ->L[𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫ :=
+theorem adjoint_inner_right (A : E →L[𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫ :=
   adjointAux_inner_right A x y
 
 /-- The adjoint is involutive. -/
 @[simp]
-/--
-theorem `adjoint_adjoint` / 定理 `adjoint_adjoint`
+/-
+**ContinuousLinearMap.adjoint_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：adjoint_adjoint (A : E ->L[𝕜] F) : A†† = A
+参数：A : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Analysis.InnerProductSpace.Adjoint.0.ContinuousLinearMa
+p.adjointAux_adjointAux`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : 
+RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [ins
+t_3 :…
 
-English:
-theorem adjoint_adjoint
-  given: (A : E ->L[𝕜] F)
-  statement: A†† = A
-  proof: adjointAux_adjointAux A
-
-中文:
-定理 adjoint_adjoint
-  条件: (A : E ->L[𝕜] F)
-  结论: A†† = A
-  证明: adjointAux_adjointAux A
-
-Depends on / 依赖: adjointAux_adjointAux
+--- 原说明 ---
+The adjoint is involutive.
 -/
-theorem adjoint_adjoint (A : E ->L[𝕜] F) : A†† = A :=
+theorem adjoint_adjoint (A : E →L[𝕜] F) : A†† = A :=
   adjointAux_adjointAux A
 
 /-- The adjoint of the composition of two operators is the composition of the two adjoints
 in reverse order. -/
 @[simp]
-/--
-theorem `adjoint_comp` / 定理 `adjoint_comp`
+/-
+**ContinuousLinearMap.adjoint_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：adjoint_comp (A : F ->L[𝕜] G) (B : E ->L[𝕜] F) : (A ∘L B)† = B† ∘L A†
+参数：A : F ->L[𝕜] G；B : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ext_inner_left`：ext_inner_left {x y : E} (h : forall v, ⟪v, x⟫ = ⟪v, y⟫)
+ : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem adjoint_comp
-  given: (A : F ->L[𝕜] G) (B : E ->L[𝕜] F)
-  statement: (A ∘L B)† = B† ∘L A†
-  proof: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  simp [adjoint_inner_right]
-
-中文:
-定理 adjoint_comp
-  条件: (A : F ->L[𝕜] G) (B : E ->L[𝕜] F)
-  结论: (A ∘L B)† = B† ∘L A†
-  证明: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  simp [adjoint_inner_right]
-
-Depends on / 依赖: adjoint_inner_right, ext_inner_left
+--- 原说明 ---
+The adjoint of the composition of two operators is the composition of the two ad
+joints
+in reverse order.
 -/
-theorem adjoint_comp (A : F ->L[𝕜] G) (B : E ->L[𝕜] F) : (A ∘L B)† = B† ∘L A† := by
+theorem adjoint_comp (A : F →L[𝕜] G) (B : E →L[𝕜] F) : (A ∘L B)† = B† ∘L A† := by
   ext v
   refine ext_inner_left 𝕜 fun w => ?_
   simp [adjoint_inner_right]
-
-/--
-theorem `apply_norm_sq_eq_inner_adjoint_left` / 定理 `apply_norm_sq_eq_inner_adjoint_left`
-
-English:
-theorem apply_norm_sq_eq_inner_adjoint_left
-  given: (A : E ->L[𝕜] F) (x : E)
-  proof: by
-  have h : ⟪(A† ∘L A) x, x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_left]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-中文:
-定理 apply_norm_sq_eq_inner_adjoint_left
-  条件: (A : E ->L[𝕜] F) (x : E)
-  证明: by
-  have h : ⟪(A† ∘L A) x, x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_left]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-Depends on / 依赖: adjoint_inner_left, inner_self_eq_norm_sq
+/-
+**ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap`。
+形式化陈述：apply_norm_sq_eq_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) : ‖A x‖ ^ 2 =
+ re ⟪(A† ∘L A) x, x⟫
+参数：A : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `inner_self_eq_norm_sq`：inner_self_eq_norm_sq (x : E) : re ⟪x, x⟫ = ‖x‖ ^
+ 2
 -/
-theorem apply_norm_sq_eq_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) :
+theorem apply_norm_sq_eq_inner_adjoint_left (A : E →L[𝕜] F) (x : E) :
     ‖A x‖ ^ 2 = re ⟪(A† ∘L A) x, x⟫ := by
   have h : ⟪(A† ∘L A) x, x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_left]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-/--
-theorem `apply_norm_eq_sqrt_inner_adjoint_left` / 定理 `apply_norm_eq_sqrt_inner_adjoint_left`
-
-English:
-theorem apply_norm_eq_sqrt_inner_adjoint_left
-  given: (A : E ->L[𝕜] F) (x : E)
-  proof: by
-  rw [← apply_norm_sq_eq_inner_adjoint_left]; rw [Real.sqrt_sq (norm_nonneg _)]
-
-中文:
-定理 apply_norm_eq_sqrt_inner_adjoint_left
-  条件: (A : E ->L[𝕜] F) (x : E)
-  证明: by
-  rw [← apply_norm_sq_eq_inner_adjoint_left]; rw [Real.sqrt_sq (norm_nonneg _)]
-
-Depends on / 依赖: Real.sqrt_sq, apply_norm_sq_eq_inner_adjoint_left, norm_nonneg, sqrt_sq
+  rw [h, ← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
+/-
+**ContinuousLinearMap.apply_norm_eq_sqrt_inner_adjoint_left** 是 Mathlib 中的一个定理，位
+于命名空间 `ContinuousLinearMap`。
+形式化陈述：apply_norm_eq_sqrt_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) : ‖A x‖ = √
+(re ⟪(A† ∘L A) x, x⟫)
+参数：A : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left`：apply_norm_sq_e
+q_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) : ‖A x‖ ^ 2 = re ⟪(A† ∘L A) x, x⟫
+· 使用定理 `Real.sqrt_sq`：sqrt_sq (h : 0 <= x) : √(x ^ 2) = x
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem apply_norm_eq_sqrt_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) :
+theorem apply_norm_eq_sqrt_inner_adjoint_left (A : E →L[𝕜] F) (x : E) :
     ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by
-  rw [← apply_norm_sq_eq_inner_adjoint_left]; rw [Real.sqrt_sq (norm_nonneg _)]
-
-/--
-theorem `apply_norm_sq_eq_inner_adjoint_right` / 定理 `apply_norm_sq_eq_inner_adjoint_right`
-
-English:
-theorem apply_norm_sq_eq_inner_adjoint_right
-  given: (A : E ->L[𝕜] F) (x : E)
-  proof: by
-  have h : ⟪x, (A† ∘L A) x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_right]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-中文:
-定理 apply_norm_sq_eq_inner_adjoint_right
-  条件: (A : E ->L[𝕜] F) (x : E)
-  证明: by
-  have h : ⟪x, (A† ∘L A) x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_right]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-Depends on / 依赖: adjoint_inner_right, inner_self_eq_norm_sq
+  rw [← apply_norm_sq_eq_inner_adjoint_left, Real.sqrt_sq (norm_nonneg _)]
+/-
+**ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_right** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousLinearMap`。
+形式化陈述：apply_norm_sq_eq_inner_adjoint_right (A : E ->L[𝕜] F) (x : E) : ‖A x‖ ^ 2 
+= re ⟪x, (A† ∘L A) x⟫
+参数：A : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
+· 使用定理 `inner_self_eq_norm_sq`：inner_self_eq_norm_sq (x : E) : re ⟪x, x⟫ = ‖x‖ ^
+ 2
 -/
-theorem apply_norm_sq_eq_inner_adjoint_right (A : E ->L[𝕜] F) (x : E) :
+theorem apply_norm_sq_eq_inner_adjoint_right (A : E →L[𝕜] F) (x : E) :
     ‖A x‖ ^ 2 = re ⟪x, (A† ∘L A) x⟫ := by
   have h : ⟪x, (A† ∘L A) x⟫ = ⟪A x, A x⟫ := by rw [← adjoint_inner_right]; rfl
-  rw [h]; rw [← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
-
-/--
-theorem `apply_norm_eq_sqrt_inner_adjoint_right` / 定理 `apply_norm_eq_sqrt_inner_adjoint_right`
-
-English:
-theorem apply_norm_eq_sqrt_inner_adjoint_right
-  given: (A : E ->L[𝕜] F) (x : E)
-  proof: by
-  rw [← apply_norm_sq_eq_inner_adjoint_right]; rw [Real.sqrt_sq (norm_nonneg _)]
-
-中文:
-定理 apply_norm_eq_sqrt_inner_adjoint_right
-  条件: (A : E ->L[𝕜] F) (x : E)
-  证明: by
-  rw [← apply_norm_sq_eq_inner_adjoint_right]; rw [Real.sqrt_sq (norm_nonneg _)]
-
-Depends on / 依赖: Real.sqrt_sq, apply_norm_sq_eq_inner_adjoint_right, norm_nonneg, sqrt_sq
+  rw [h, ← inner_self_eq_norm_sq (𝕜 := 𝕜) _]
+/-
+**ContinuousLinearMap.apply_norm_eq_sqrt_inner_adjoint_right** 是 Mathlib 中的一个定理，
+位于命名空间 `ContinuousLinearMap`。
+形式化陈述：apply_norm_eq_sqrt_inner_adjoint_right (A : E ->L[𝕜] F) (x : E) : ‖A x‖ = 
+√(re ⟪x, (A† ∘L A) x⟫)
+参数：A : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_right`：apply_norm_sq_
+eq_inner_adjoint_right (A : E ->L[𝕜] F) (x : E) : ‖A x‖ ^ 2 = re ⟪x, (A† ∘L A) x
+⟫
+· 使用定理 `Real.sqrt_sq`：sqrt_sq (h : 0 <= x) : √(x ^ 2) = x
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem apply_norm_eq_sqrt_inner_adjoint_right (A : E ->L[𝕜] F) (x : E) :
+theorem apply_norm_eq_sqrt_inner_adjoint_right (A : E →L[𝕜] F) (x : E) :
     ‖A x‖ = √(re ⟪x, (A† ∘L A) x⟫) := by
-  rw [← apply_norm_sq_eq_inner_adjoint_right]; rw [Real.sqrt_sq (norm_nonneg _)]
+  rw [← apply_norm_sq_eq_inner_adjoint_right, Real.sqrt_sq (norm_nonneg _)]
 
-/--
-theorem `eq_adjoint_iff` / 定理 `eq_adjoint_iff`
+/-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
+for all `x` and `y`. -/
+/-
+**ContinuousLinearMap.eq_adjoint_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：eq_adjoint_iff (A : E ->L[𝕜] F) (B : F ->L[𝕜] E) : A = B† ↔ forall x y, ⟪A
+ x, y⟫ = ⟪x, B y⟫
+参数：A : E ->L[𝕜] F；B : F ->L[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ext_inner_right`：ext_inner_right {x y : E} (h : forall v, ⟪x, v⟫ = ⟪y, v
+⟫) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem eq_adjoint_iff
-  given: (A : E ->L[𝕜] F) (B : F ->L[𝕜] E)
-  statement: A = B† ↔ forall x y, ⟪A x, y⟫ = ⟪x, B y⟫
-  proof: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
-
-@[simp]
-
-中文:
-定理 eq_adjoint_iff
-  条件: (A : E ->L[𝕜] F) (B : F ->L[𝕜] E)
-  结论: A = B† ↔ 对任意 x y, ⟪A x, y⟫ = ⟪x, B y⟫
-  证明: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
-
-@[simp]
-
-Depends on / 依赖: adjoint_inner_left, ext_inner_right
+--- 原说明 ---
+The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y
+⟫ = ⟪x, B y⟫`
+for all `x` and `y`.
 -/
-theorem eq_adjoint_iff (A : E ->L[𝕜] F) (B : F ->L[𝕜] E) : A = B† ↔ forall x y, ⟪A x, y⟫ = ⟪x, B y⟫ := by
+theorem eq_adjoint_iff (A : E →L[𝕜] F) (B : F →L[𝕜] E) : A = B† ↔ ∀ x y, ⟪A x, y⟫ = ⟪x, B y⟫ := by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   ext x
   exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
 
 @[simp]
-/--
-theorem `_root_.LinearMap.IsSymmetric.clm_adjoint_eq` / 定理 `_root_.LinearMap.IsSymmetric.clm_adjoint_eq`
-
-English:
-theorem _root_.LinearMap.IsSymmetric.clm_adjoint_eq
-  given: {A : E ->L[𝕜] E} (hA : A.IsSymmetric)
-  proof: by
-  rwa [eq_comm, eq_adjoint_iff A A]
-
-中文:
-定理 _root_.线性映射.IsSymmetric.clm_adjoint_eq
-  条件: {A : E ->L[𝕜] E} (hA : A.IsSymmetric)
-  证明: by
-  rwa [eq_comm, eq_adjoint_iff A A]
-
-Depends on / 依赖: eq_adjoint_iff, eq_comm
+/-
+**ContinuousLinearMap._root_.LinearMap.IsSymmetric.clm_adjoint_eq** 是 Mathlib 中的
+一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.LinearMap.IsSymmetric.clm_adjoint_eq {A : E ->L[𝕜] E} (hA : A.IsSymmetric) :
+theorem _root_.LinearMap.IsSymmetric.clm_adjoint_eq {A : E →L[𝕜] E} (hA : A.IsSymmetric) :
     A† = A := by
   rwa [eq_comm, eq_adjoint_iff A A]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `adjoint_id` / 引理 `adjoint_id`
-
-English:
-lemma adjoint_id
-  statement: (.id 𝕜 E)† = .id 𝕜 E
-  proof: by simp
-
-中文:
-引理 adjoint_id
-  结论: (.id 𝕜 E)† = .id 𝕜 E
-  证明: by simp
+/-
+**ContinuousLinearMap.adjoint_id** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：adjoint_id : (.id 𝕜 E)† = .id 𝕜 E
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.clm_adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [i
+nst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]
+   [inst_3 : CompleteSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma adjoint_id : (.id 𝕜 E)† = .id 𝕜 E := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `adjoint_one` / 引理 `adjoint_one`
-
-English:
-lemma adjoint_one
-  statement: (1 : E ->L[𝕜] E)† = 1
-  proof: by simp
-
-中文:
-引理 adjoint_one
-  结论: (1 : E ->L[𝕜] E)† = 1
-  证明: by simp
+/-
+**ContinuousLinearMap.adjoint_one** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：adjoint_one : (1 : E ->L[𝕜] E)† = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.clm_adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [i
+nst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]
+   [inst_3 : CompleteSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma adjoint_one : (1 : E ->L[𝕜] E)† = 1 := by simp
-
-/--
-theorem `_root_.Submodule.adjoint_subtypeL` / 定理 `_root_.Submodule.adjoint_subtypeL`
-
-English:
-theorem _root_.Submodule.adjoint_subtypeL
-  given: (U : Submodule 𝕜 E) [CompleteSpace U]
-  proof: by
-  symm
-  simp [eq_adjoint_iff]
-
-中文:
-定理 _root_.子模.adjoint_subtypeL
-  条件: (U : 子模 𝕜 E) [完备空间 U]
-  证明: by
-  symm
-  simp [eq_adjoint_iff]
-
-Depends on / 依赖: eq_adjoint_iff
+lemma adjoint_one : (1 : E →L[𝕜] E)† = 1 := by simp
+/-
+**ContinuousLinearMap._root_.Submodule.adjoint_subtypeL** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Submodule.adjoint_subtypeL (U : Submodule 𝕜 E) [CompleteSpace U] :
     U.subtypeL† = U.orthogonalProjectionOnto := by
   symm
   simp [eq_adjoint_iff]
-
-/--
-theorem `_root_.Submodule.adjoint_orthogonalProjectionOnto` / 定理 `_root_.Submodule.adjoint_orthogonalProjectionOnto`
-
-English:
-theorem _root_.Submodule.adjoint_orthogonalProjectionOnto
-  given: (U : Submodule 𝕜 E) [CompleteSpace U]
-  proof: by
-  rw [← U.adjoint_subtypeL]; rw [adjoint_adjoint]
-
-@[deprecated (since := "2026-05-05")] alias _root_.Submodule.adjoint_orthogonalProjection :=
-  Submodule.adjoint_orthogonalProjectionOnto
-
-中文:
-定理 _root_.子模.adjoint_orthogonalProjectionOnto
-  条件: (U : 子模 𝕜 E) [完备空间 U]
-  证明: by
-  rw [← U.adjoint_subtypeL]; rw [adjoint_adjoint]
-
-@[deprecated (since := "2026-05-05")] alias _root_.Submodule.adjoint_orthogonalProjection :=
-  Submodule.adjoint_orthogonalProjectionOnto
-
-Depends on / 依赖: U.adjoint_subtypeL, adjoint_adjoint, adjoint_subtypeL
+/-
+**ContinuousLinearMap._root_.Submodule.adjoint_orthogonalProjectionOnto** 是 Math
+lib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Submodule.adjoint_orthogonalProjectionOnto (U : Submodule 𝕜 E) [CompleteSpace U] :
-    (U.orthogonalProjectionOnto : E ->L[𝕜] U)† = U.subtypeL := by
-  rw [← U.adjoint_subtypeL]; rw [adjoint_adjoint]
+    (U.orthogonalProjectionOnto : E →L[𝕜] U)† = U.subtypeL := by
+  rw [← U.adjoint_subtypeL, adjoint_adjoint]
 
 @[deprecated (since := "2026-05-05")] alias _root_.Submodule.adjoint_orthogonalProjection :=
   Submodule.adjoint_orthogonalProjectionOnto
-
-/--
-theorem `orthogonal_ker` / 定理 `orthogonal_ker`
-
-English:
-theorem orthogonal_ker
-  given: (T : E ->L[𝕜] F)
-  proof: by
-  rw [← Submodule.orthogonal_orthogonal_eq_closure]
-  apply le_antisymm
-  all_goals refine Submodule.orthogonal_le fun x hx => ?_
-  · refine ext_inner_left 𝕜 fun y => ?_
-    simp [← T.adjoint_inner_left, hx _]
-  · rintro _ ⟨y, rfl⟩
-    simp_all [T.adjoint_inner_left]
-
-中文:
-定理 orthogonal_ker
-  条件: (T : E ->L[𝕜] F)
-  证明: by
-  rw [← Submodule.orthogonal_orthogonal_eq_closure]
-  apply le_antisymm
-  all_goals refine Submodule.orthogonal_le fun x hx => ?_
-  · refine ext_inner_left 𝕜 fun y => ?_
-    simp [← T.adjoint_inner_left, hx _]
-  · rintro _ ⟨y, rfl⟩
-    simp_all [T.adjoint_inner_left]
-
-Depends on / 依赖: Submodule, Submodule.orthogonal_le, Submodule.orthogonal_orthogonal_eq_closure, T.adjoint_inner_left, adjoint_inner_left, all_goals, ext_inner_left, le_antisymm, orthogonal_le, orthogonal_orthogonal_eq_closure
+/-
+**ContinuousLinearMap.orthogonal_ker** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：orthogonal_ker (T : E ->L[𝕜] F) : T.kerᗮ = T†.range.topologicalClosure
+参数：T : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.orthogonal_orthogonal_eq_closure`：orthogonal_orthogonal_eq_clo
+sure [CompleteSpace E] : Kᗮᗮ = K.topologicalClosure
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Submodule.orthogonal_le`：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <
+= K₂) : K₂ᗮ <= K₁ᗮ
+· 使用定理 `ext_inner_left`：ext_inner_left {x y : E} (h : forall v, ⟪v, x⟫ = ⟪v, y⟫)
+ : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `inner_zero_right`：inner_zero_right (x : E) : ⟪x, 0⟫ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem orthogonal_ker (T : E ->L[𝕜] F) :
+theorem orthogonal_ker (T : E →L[𝕜] F) :
     T.kerᗮ = T†.range.topologicalClosure := by
   rw [← Submodule.orthogonal_orthogonal_eq_closure]
   apply le_antisymm
-  all_goals refine Submodule.orthogonal_le fun x hx => ?_
-  · refine ext_inner_left 𝕜 fun y => ?_
+  all_goals refine Submodule.orthogonal_le fun x hx ↦ ?_
+  · refine ext_inner_left 𝕜 fun y ↦ ?_
     simp [← T.adjoint_inner_left, hx _]
   · rintro _ ⟨y, rfl⟩
     simp_all [T.adjoint_inner_left]
-
-/--
-theorem `orthogonal_range` / 定理 `orthogonal_range`
-
-English:
-theorem orthogonal_range
-  given: (T : E ->L[𝕜] F)
-  statement: T.rangeᗮ = T†.ker
-  proof: by
-  rw [← T†.ker.orthogonal_orthogonal]; rw [T†.orthogonal_ker]
-  simp
-
-中文:
-定理 orthogonal_range
-  条件: (T : E ->L[𝕜] F)
-  结论: T.rangeᗮ = T†.ker
-  证明: by
-  rw [← T†.ker.orthogonal_orthogonal]; rw [T†.orthogonal_ker]
-  simp
-
-Depends on / 依赖: ker.orthogonal_orthogonal, orthogonal_ker, orthogonal_orthogonal
+/-
+**ContinuousLinearMap.orthogonal_range** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：orthogonal_range (T : E ->L[𝕜] F) : T.rangeᗮ = T†.ker
+参数：T : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.orthogonal_orthogonal`：orthogonal_orthogonal [K.HasOrthogonalP
+rojection] : Kᗮᗮ = K
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousLinearMap.orthogonal_ker`：orthogonal_ker (T : E ->L[𝕜] F) : T.
+kerᗮ = T†.range.topologicalClosure
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.topologicalClosure.congr_simp`：∀ {R : Type u} {M : Type v} [in
+st : Semiring R] [inst_1 : TopologicalSpace M] [inst_2 : AddCommMonoid M]   [ins
+t_3 : _root_.Module R M] [ins…
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用引理 `Submodule.orthogonal_closure`：orthogonal_closure (K : Submodule 𝕜 E) : K
+.topologicalClosureᗮ = Kᗮ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem orthogonal_range (T : E ->L[𝕜] F) : T.rangeᗮ = T†.ker := by
-  rw [← T†.ker.orthogonal_orthogonal]; rw [T†.orthogonal_ker]
+theorem orthogonal_range (T : E →L[𝕜] F) : T.rangeᗮ = T†.ker := by
+  rw [← T†.ker.orthogonal_orthogonal, T†.orthogonal_ker]
   simp
 
-/--
-theorem `norm_eq_iInf_range_iff_adjoint_apply_eq_zero` / 定理 `norm_eq_iInf_range_iff_adjoint_apply_eq_zero`
+/-- The fitted value `A x` minimizes the distance to `y` among points in `A.range`
+if and only if the adjoint of `A` sends the residual `y - A x` to zero. -/
+/-
+**ContinuousLinearMap.norm_eq_iInf_range_iff_adjoint_apply_eq_zero** 是 Mathlib 中
+的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：norm_eq_iInf_range_iff_adjoint_apply_eq_zero (A : E ->L[𝕜] F) (y : F) (x :
+ E) : (‖y - A x‖ = ⨅ z : A.range, ‖y - z‖) ↔ (A†) (y - A x) = 0
+参数：A : E ->L[𝕜] F；y : F；x : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.norm_eq_iInf_iff_inner_eq_zero`：norm_eq_iInf_iff_inner_eq_zero
+ {u : E} {v : E} (hv : v in K) : (‖u - v‖ = ⨅ w : K, ‖u - w‖) ↔ forall w in K, ⟪
+u - v, w⟫ = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mem_orthogonal'`：mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u 
+in K, ⟪v, u⟫ = 0
+· 使用定理 `ContinuousLinearMap.orthogonal_range`：orthogonal_range (T : E ->L[𝕜] F) 
+: T.rangeᗮ = T†.ker
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `ContinuousLinearMap.coe_coe`：coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->
+ₛₗ[σ₁₂] M₂) = f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem norm_eq_iInf_range_iff_adjoint_apply_eq_zero
-  given: (A : E ->L[𝕜] F) (y : F) (x : E)
-  proof: by
-  rw [A.range.norm_eq_iInf_iff_inner_eq_zero (by simp)]; rw [← Submodule.mem_orthogonal']; rw [A.orthogonal_range]; rw [LinearMap.mem_ker]; rw [coe_coe]
-
-中文:
-定理 norm_eq_iInf_range_iff_adjoint_apply_eq_zero
-  条件: (A : E ->L[𝕜] F) (y : F) (x : E)
-  证明: by
-  rw [A.range.norm_eq_iInf_iff_inner_eq_zero (by simp)]; rw [← Submodule.mem_orthogonal']; rw [A.orthogonal_range]; rw [LinearMap.mem_ker]; rw [coe_coe]
-
-Depends on / 依赖: A.orthogonal_range, A.range.norm_eq_iInf_iff_inner_eq_zero, LinearMap, LinearMap.mem_ker, Submodule, Submodule.mem_orthogonal, coe_coe, mem_ker, mem_orthogonal, norm_eq_iInf_iff_inner_eq_zero, orthogonal_range
+--- 原说明 ---
+The fitted value `A x` minimizes the distance to `y` among points in `A.range`
+if and only if the adjoint of `A` sends the residual `y - A x` to zero.
 -/
-theorem norm_eq_iInf_range_iff_adjoint_apply_eq_zero (A : E ->L[𝕜] F) (y : F) (x : E) :
+theorem norm_eq_iInf_range_iff_adjoint_apply_eq_zero (A : E →L[𝕜] F) (y : F) (x : E) :
     (‖y - A x‖ = ⨅ z : A.range, ‖y - z‖) ↔ (A†) (y - A x) = 0 := by
-  rw [A.range.norm_eq_iInf_iff_inner_eq_zero (by simp)]; rw [← Submodule.mem_orthogonal']; rw [A.orthogonal_range]; rw [LinearMap.mem_ker]; rw [coe_coe]
+  rw [A.range.norm_eq_iInf_iff_inner_eq_zero (by simp),
+    ← Submodule.mem_orthogonal', A.orthogonal_range, LinearMap.mem_ker, coe_coe]
 
-/--
-theorem `forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero` / 定理 `forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero`
+/-- The residual norm at `x` is minimal among all points of `E` if and only if
+the adjoint of `A` sends the residual `y - A x` to zero. -/
+/-
+**ContinuousLinearMap.forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero** 是
+ Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero (A : E ->L[𝕜] F) (y
+ : F) (x : E) : (forall z : E, ‖y - A x‖ <= ‖y - A z‖) ↔ (A†) (y - A x) = 0
+参数：A : E ->L[𝕜] F；y : F；x : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.norm_eq_iInf_range_iff_adjoint_apply_eq_zero`：norm_e
+q_iInf_range_iff_adjoint_apply_eq_zero (A : E ->L[𝕜] F) (y : F) (x : E) : (‖y - 
+A x‖ = ⨅ z : A.range, ‖y - z‖) ↔ (A†) (y - A x) = 0
+· 使用引理 `le_antisymm_iff`：le_antisymm_iff : a = b ↔ a <= b ∧ b <= a
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `ciInf_le`：ciInf_le {f : ι -> α} (H : BddBelow (range f)) (c : ι) : iInf 
+f <= f c
+· 使用定理 `le_ciInf_iff`：le_ciInf_iff [Nonempty ι] {f : ι -> α} {a : α} (hf : BddBe
+low (range f)) : a <= iInf f ↔ forall i, a <= f i
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
-  proof: by
-  have hb : BddBelow (Set.range fun w : A.range => ‖y - w‖) := ⟨0, by rintro - ⟨_, rfl⟩; positivity⟩
-  rw [← A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero y x]; rw [le_antisymm_iff]; rw [and_iff_left (ciInf_le hb ⟨A x]; rw [x]; rw [rfl⟩)]; rw [le_ciInf_iff hb]
-  simp
-
-omit [CompleteSpace E] in
-
-中文:
-定理 对任意_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
-  证明: by
-  have hb : BddBelow (Set.range fun w : A.range => ‖y - w‖) := ⟨0, by rintro - ⟨_, rfl⟩; positivity⟩
-  rw [← A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero y x]; rw [le_antisymm_iff]; rw [and_iff_left (ciInf_le hb ⟨A x]; rw [x]; rw [rfl⟩)]; rw [le_ciInf_iff hb]
-  simp
-
-omit [CompleteSpace E] in
-
-Depends on / 依赖: A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero, A.range, BddBelow, Set.range, and_iff_left, ciInf_le, le_antisymm_iff, le_ciInf_iff, norm_eq_iInf_range_iff_adjoint_apply_eq_zero
+--- 原说明 ---
+The residual norm at `x` is minimal among all points of `E` if and only if
+the adjoint of `A` sends the residual `y - A x` to zero.
 -/
 theorem forall_norm_sub_apply_le_iff_adjoint_apply_sub_eq_zero
-    (A : E ->L[𝕜] F) (y : F) (x : E) :
-    (forall z : E, ‖y - A x‖ <= ‖y - A z‖) ↔ (A†) (y - A x) = 0 := by
+    (A : E →L[𝕜] F) (y : F) (x : E) :
+    (∀ z : E, ‖y - A x‖ ≤ ‖y - A z‖) ↔ (A†) (y - A x) = 0 := by
   have hb : BddBelow (Set.range fun w : A.range => ‖y - w‖) := ⟨0, by rintro - ⟨_, rfl⟩; positivity⟩
-  rw [← A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero y x]; rw [le_antisymm_iff]; rw [and_iff_left (ciInf_le hb ⟨A x]; rw [x]; rw [rfl⟩)]; rw [le_ciInf_iff hb]
+  rw [← A.norm_eq_iInf_range_iff_adjoint_apply_eq_zero y x, le_antisymm_iff,
+    and_iff_left (ciInf_le hb ⟨A x, x, rfl⟩), le_ciInf_iff hb]
   simp
 
 omit [CompleteSpace E] in
-/--
-theorem `ker_le_ker_iff_range_le_range` / 定理 `ker_le_ker_iff_range_le_range`
-
-English:
-theorem ker_le_ker_iff_range_le_range
-  statement: [FiniteDimensional 𝕜 E] {T U : E ->L[𝕜] E}
-  proof: by
-  refine ⟨fun h => ?_, LinearMap.ker_le_ker_of_range hT hU⟩
-  have := FiniteDimensional.complete 𝕜 E
-  simpa [orthogonal_ker, hT, hU] using Submodule.orthogonal_le h
-
-中文:
-定理 ker_le_ker_iff_range_le_range
-  结论: [有限维 𝕜 E] {T U : E ->L[𝕜] E}
-  证明: by
-  refine ⟨fun h => ?_, LinearMap.ker_le_ker_of_range hT hU⟩
-  have := FiniteDimensional.complete 𝕜 E
-  simpa [orthogonal_ker, hT, hU] using Submodule.orthogonal_le h
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, LinearMap, LinearMap.ker_le_ker_of_range, Submodule, Submodule.orthogonal_le, complete, ker_le_ker_of_range, orthogonal_ker, orthogonal_le
+/-
+**ContinuousLinearMap.ker_le_ker_iff_range_le_range** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：ker_le_ker_iff_range_le_range [FiniteDimensional 𝕜 E] {T U : E ->L[𝕜] E} (
+hT : T.IsSymmetric) (hU : U.IsSymmetric) : U.ker <= T.ker ↔ T.range <= U.range
+参数：hT : T.IsSymmetric；hU : U.IsSymmetric。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `ContinuousLinearMap.orthogonal_ker`：orthogonal_ker (T : E ->L[𝕜] F) : T.
+kerᗮ = T†.range.topologicalClosure
+· 使用定理 `Submodule.topologicalClosure.congr_simp`：∀ {R : Type u} {M : Type v} [in
+st : Semiring R] [inst_1 : TopologicalSpace M] [inst_2 : AddCommMonoid M]   [ins
+t_3 : _root_.Module R M] [ins…
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `LinearMap.IsSymmetric.clm_adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [i
+nst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]
+   [inst_3 : CompleteSpace…
+· 使用定理 `Submodule.topologicalClosure_eq_self`：topologicalClosure_eq_self : K.top
+ologicalClosure = K
+· 使用定理 `Submodule.orthogonal_le`：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <
+= K₂) : K₂ᗮ <= K₁ᗮ
+· 使用定理 `LinearMap.ker_le_ker_of_range`：ker_le_ker_of_range {S T : E ->ₗ[𝕜] E} (h
+S : S.IsSymmetric) (hT : T.IsSymmetric) (h : range S <= range T) : ker T <= ker 
+S
 -/
-theorem ker_le_ker_iff_range_le_range [FiniteDimensional 𝕜 E] {T U : E ->L[𝕜] E}
+theorem ker_le_ker_iff_range_le_range [FiniteDimensional 𝕜 E] {T U : E →L[𝕜] E}
     (hT : T.IsSymmetric) (hU : U.IsSymmetric) :
-    U.ker <= T.ker ↔ T.range <= U.range := by
-  refine ⟨fun h => ?_, LinearMap.ker_le_ker_of_range hT hU⟩
+    U.ker ≤ T.ker ↔ T.range ≤ U.range := by
+  refine ⟨fun h ↦ ?_, LinearMap.ker_le_ker_of_range hT hU⟩
   have := FiniteDimensional.complete 𝕜 E
   simpa [orthogonal_ker, hT, hU] using Submodule.orthogonal_le h
 
-/--
-theorem `ker_adjoint_comp_self` / 定理 `ker_adjoint_comp_self`
+/-- Infinite-dimensional version of 7.64(b) in [axler2024]. -/
+/-
+**ContinuousLinearMap.ker_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：ker_adjoint_comp_self (T : E ->L[𝕜] F) : (T† ∘L T).ker = T.ker
+参数：T : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
+· 使用定理 `ContinuousLinearMap.coe_coe`：coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->
+ₛₗ[σ₁₂] M₂) = f
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inner_zero_left`：inner_zero_left (x : E) : ⟪0, x⟫ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 
-English:
-theorem ker_adjoint_comp_self
-  given: (T : E ->L[𝕜] F)
-  statement: (T† ∘L T).ker = T.ker
-  proof: by
-  refine le_antisymm (fun _ _ => ?_) fun _ _ => by simp_all
-  rw [LinearMap.mem_ker]; rw [← inner_self_eq_zero (𝕜 := 𝕜)]; rw [coe_coe]; rw [← adjoint_inner_left]
-  simp_all
-
-中文:
-定理 ker_adjoint_comp_self
-  条件: (T : E ->L[𝕜] F)
-  结论: (T† ∘L T).ker = T.ker
-  证明: by
-  refine le_antisymm (fun _ _ => ?_) fun _ _ => by simp_all
-  rw [LinearMap.mem_ker]; rw [← inner_self_eq_zero (𝕜 := 𝕜)]; rw [coe_coe]; rw [← adjoint_inner_left]
-  simp_all
-
-Depends on / 依赖: LinearMap, LinearMap.mem_ker, adjoint_inner_left, coe_coe, inner_self_eq_zero, le_antisymm, mem_ker
+--- 原说明 ---
+Infinite-dimensional version of 7.64(b) in [axler2024].
 -/
-theorem ker_adjoint_comp_self (T : E ->L[𝕜] F) : (T† ∘L T).ker = T.ker := by
-  refine le_antisymm (fun _ _ => ?_) fun _ _ => by simp_all
-  rw [LinearMap.mem_ker]; rw [← inner_self_eq_zero (𝕜 := 𝕜)]; rw [coe_coe]; rw [← adjoint_inner_left]
+theorem ker_adjoint_comp_self (T : E →L[𝕜] F) : (T† ∘L T).ker = T.ker := by
+  refine le_antisymm (fun _ _ ↦ ?_) fun _ _ ↦ by simp_all
+  rw [LinearMap.mem_ker, ← inner_self_eq_zero (𝕜 := 𝕜), coe_coe, ← adjoint_inner_left]
   simp_all
-
-/--
-theorem `ker_self_comp_adjoint` / 定理 `ker_self_comp_adjoint`
-
-English:
-theorem ker_self_comp_adjoint
-  given: (T : E ->L[𝕜] F)
-  statement: (T ∘L T†).ker = T†.ker
-  proof: by
+/-
+**ContinuousLinearMap.ker_self_comp_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：ker_self_comp_adjoint (T : E ->L[𝕜] F) : (T ∘L T†).ker = T†.ker
+参数：T : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.comp.congr_simp`：∀ {R₁ : Type u_1} {R₂ : Type u_2} {
+R₃ : Type u_3} [inst : Semiring R₁] [inst_1 : Semiring R₂] [inst_2 : Semiring R₃
+]   {σ₁₂ : R₁ →+* R₂} {σ₂…
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用定理 `ContinuousLinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (T : E 
+->L[𝕜] F) : (T† ∘L T).ker = T.ker
+-/
+theorem ker_self_comp_adjoint (T : E →L[𝕜] F) : (T ∘L T†).ker = T†.ker := by
   simpa using T†.ker_adjoint_comp_self
 
-中文:
-定理 ker_self_comp_adjoint
-  条件: (T : E ->L[𝕜] F)
-  结论: (T ∘L T†).ker = T†.ker
-  证明: by
-  simpa using T†.ker_adjoint_comp_self
-
-Depends on / 依赖: ker_adjoint_comp_self
--/
-theorem ker_self_comp_adjoint (T : E ->L[𝕜] F) : (T ∘L T†).ker = T†.ker := by
-  simpa using T†.ker_adjoint_comp_self
-
 /--
-lemma `adjoint_comp_self_injective_iff` / 引理 `adjoint_comp_self_injective_iff`
-
-English:
-lemma adjoint_comp_self_injective_iff
-  given: (T : E ->L[𝕜] F)
-  proof: by
-  rw [← coe_comp]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [ker_adjoint_comp_self]
-
-中文:
-引理 adjoint_comp_self_injective_iff
-  条件: (T : E ->L[𝕜] F)
-  证明: by
-  rw [← coe_comp]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [ker_adjoint_comp_self]
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, coe_coe, coe_comp, ker_adjoint_comp_self, ker_eq_bot
+This lemma uses the simp-normal form `⇑(T†) ∘ ⇑T` instead of `⇑(T† ∘L T)`
+(note the difference between `∘` and `∘L`).
+You may need to rewrite with `ContinuousLinearMap.coe_comp'` before applying this lemma.
 -/
-lemma adjoint_comp_self_injective_iff (T : E ->L[𝕜] F) :
+/-
+**ContinuousLinearMap.adjoint_comp_self_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`ContinuousLinearMap`。
+形式化陈述：adjoint_comp_self_injective_iff (T : E ->L[𝕜] F) : Function.Injective (T† 
+∘ T) ↔ Function.Injective T
+参数：T : E ->L[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.coe_comp`：coe_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->S
+L[σ₁₂] M₂) : ⇑(h ∘SL f) = h ∘ f
+· 使用定理 `ContinuousLinearMap.coe_coe`：coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->
+ₛₗ[σ₁₂] M₂) = f
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `ContinuousLinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (T : E 
+->L[𝕜] F) : (T† ∘L T).ker = T.ker
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+
+--- 原说明 ---
+This lemma uses the simp-normal form `⇑(T†) ∘ ⇑T` instead of `⇑(T† ∘L T)`
+(note the difference between `∘` and `∘L`).
+You may need to rewrite with `ContinuousLinearMap.coe_comp'` before applying thi
+s lemma.
+-/
+lemma adjoint_comp_self_injective_iff (T : E →L[𝕜] F) :
     Function.Injective (T† ∘ T) ↔ Function.Injective T := by
-  rw [← coe_comp]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [← coe_coe]; rw [← LinearMap.ker_eq_bot]; rw [ker_adjoint_comp_self]
+  rw [← coe_comp, ← coe_coe, ← LinearMap.ker_eq_bot, ← coe_coe, ← LinearMap.ker_eq_bot,
+    ker_adjoint_comp_self]
 
 /--
-lemma `self_comp_adjoint_injective_iff` / 引理 `self_comp_adjoint_injective_iff`
-
-English:
-lemma self_comp_adjoint_injective_iff
-  given: (T : E ->L[𝕜] F)
-  proof: by
-  simpa using T†.adjoint_comp_self_injective_iff
-
-中文:
-引理 self_comp_adjoint_injective_iff
-  条件: (T : E ->L[𝕜] F)
-  证明: by
-  simpa using T†.adjoint_comp_self_injective_iff
-
-Depends on / 依赖: adjoint_comp_self_injective_iff
+This lemma uses the simp-normal form `⇑T ∘ ⇑(T†)` instead of `⇑(T ∘L T†)`
+(note the difference between `∘` and `∘L`).
+You may need to rewrite with `ContinuousLinearMap.coe_comp'` before applying this lemma.
 -/
-lemma self_comp_adjoint_injective_iff (T : E ->L[𝕜] F) :
+/-
+**ContinuousLinearMap.self_comp_adjoint_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`ContinuousLinearMap`。
+形式化陈述：self_comp_adjoint_injective_iff (T : E ->L[𝕜] F) : Function.Injective (T ∘
+ T†) ↔ Function.Injective (T†)
+参数：T : E ->L[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用引理 `ContinuousLinearMap.adjoint_comp_self_injective_iff`：adjoint_comp_self_i
+njective_iff (T : E ->L[𝕜] F) : Function.Injective (T† ∘ T) ↔ Function.Injective
+ T
+
+--- 原说明 ---
+This lemma uses the simp-normal form `⇑T ∘ ⇑(T†)` instead of `⇑(T ∘L T†)`
+(note the difference between `∘` and `∘L`).
+You may need to rewrite with `ContinuousLinearMap.coe_comp'` before applying thi
+s lemma.
+-/
+lemma self_comp_adjoint_injective_iff (T : E →L[𝕜] F) :
     Function.Injective (T ∘ T†) ↔ Function.Injective (T†) := by
   simpa using T†.adjoint_comp_self_injective_iff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `E →L[𝕜] E` is a star algebra with the adjoint as the star operation. -/
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Star (E ->L[𝕜] E)
-  body: ⟨adjoint⟩
-
-中文:
-实例 :
-  签名: 对合 (E ->L[𝕜] E)
-  定义体: ⟨adjoint⟩
-
-Depends on / 依赖: adjoint
+--- 原说明 ---
+`E →L[𝕜] E` is a star algebra with the adjoint as the star operation.
 -/
-instance : Star (E ->L[𝕜] E) :=
+instance : Star (E →L[𝕜] E) :=
   ⟨adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar (E ->L[𝕜] E)
-  body: ⟨adjoint_adjoint⟩
-
-中文:
-实例 :
-  签名: InvolutiveStar (E ->L[𝕜] E)
-  定义体: ⟨adjoint_adjoint⟩
-
-Depends on / 依赖: adjoint_adjoint
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : InvolutiveStar (E ->L[𝕜] E) :=
+instance : InvolutiveStar (E →L[𝕜] E) :=
   ⟨adjoint_adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (E ->L[𝕜] E)
-  body: ⟨adjoint_comp⟩
-
-中文:
-实例 :
-  签名: StarMul (E ->L[𝕜] E)
-  定义体: ⟨adjoint_comp⟩
-
-Depends on / 依赖: adjoint_comp
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarMul (E ->L[𝕜] E) :=
+instance : StarMul (E →L[𝕜] E) :=
   ⟨adjoint_comp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarRing (E ->L[𝕜] E)
-  body: ⟨map_add adjoint⟩
-
-中文:
-实例 :
-  签名: 对合环 (E ->L[𝕜] E)
-  定义体: ⟨map_add adjoint⟩
-
-Depends on / 依赖: adjoint, map_add
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarRing (E ->L[𝕜] E) :=
+instance : StarRing (E →L[𝕜] E) :=
   ⟨map_add adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule 𝕜 (E ->L[𝕜] E)
-  body: ⟨map_smulₛₗ adjoint⟩
-
-中文:
-实例 :
-  签名: 对合模 𝕜 (E ->L[𝕜] E)
-  定义体: ⟨map_smulₛₗ adjoint⟩
-
-Depends on / 依赖: adjoint
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarModule 𝕜 (E ->L[𝕜] E) :=
+instance : StarModule 𝕜 (E →L[𝕜] E) :=
   ⟨map_smulₛₗ adjoint⟩
-
-/--
-theorem `star_eq_adjoint` / 定理 `star_eq_adjoint`
-
-English:
-theorem star_eq_adjoint
-  given: (A : E ->L[𝕜] E)
-  statement: star A = A†
-  proof: rfl
-
-中文:
-定理 star_eq_adjoint
-  条件: (A : E ->L[𝕜] E)
-  结论: star A = A†
-  证明: rfl
+/-
+**ContinuousLinearMap.star_eq_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：star_eq_adjoint (A : E ->L[𝕜] E) : star A = A†
+参数：A : E ->L[𝕜] E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_eq_adjoint (A : E ->L[𝕜] E) : star A = A† :=
+theorem star_eq_adjoint (A : E →L[𝕜] E) : star A = A† :=
   rfl
 
-/--
-theorem `isSelfAdjoint_iff'` / 定理 `isSelfAdjoint_iff'`
+/-- A continuous linear operator is self-adjoint iff it is equal to its adjoint. -/
+/-
+**ContinuousLinearMap.isSelfAdjoint_iff'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：isSelfAdjoint_iff' {A : E ->L[𝕜] E} : IsSelfAdjoint A ↔ A† = A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem isSelfAdjoint_iff'
-  given: {A : E ->L[𝕜] E}
-  statement: IsSelfAdjoint A ↔ A† = A
-  proof: Iff.rfl
-
-中文:
-定理 isSelfAdjoint_iff'
-  条件: {A : E ->L[𝕜] E}
-  结论: IsSelfAdjoint A ↔ A† = A
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+A continuous linear operator is self-adjoint iff it is equal to its adjoint.
 -/
-theorem isSelfAdjoint_iff' {A : E ->L[𝕜] E} : IsSelfAdjoint A ↔ A† = A :=
+theorem isSelfAdjoint_iff' {A : E →L[𝕜] E} : IsSelfAdjoint A ↔ A† = A :=
   Iff.rfl
-
-/--
-lemma `id_mem_unitary` / 引理 `id_mem_unitary`
-
-English:
-lemma id_mem_unitary
-  statement: .id 𝕜 E in unitary (E ->L[𝕜] E)
-  proof: one_mem _
-
-中文:
-引理 id_mem_unitary
-  结论: .id 𝕜 E in unitary (E ->L[𝕜] E)
-  证明: one_mem _
+/-
+**ContinuousLinearMap.id_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : CompleteSpace E], Continuou
+sLinearMap.id 𝕜 E ∈ unitary (E →L[𝕜] E)
+参数：E →L[𝕜] E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
-@[simp] lemma id_mem_unitary : .id 𝕜 E in unitary (E ->L[𝕜] E) := one_mem _
-
-/--
-theorem `norm_adjoint_comp_self` / 定理 `norm_adjoint_comp_self`
-
-English:
-theorem norm_adjoint_comp_self
-  given: (A : E ->L[𝕜] F)
-  proof: by
-  refine le_antisymm ?_ ?_
-  · calc
-      ‖A† ∘L A‖ <= ‖A†‖ * ‖A‖ := opNorm_comp_le _ _
-      _ = ‖A‖ * ‖A‖ := by rw [LinearIsometryEquiv.norm_map]
-  · rw [← sq, ← Real.sqrt_le_sqrt_iff (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)]
-    refine opNorm_le_bound _ (Real.sqrt_nonneg _) fun x => ?_
-    have :=
-      calc
-        re ⟪(A† ∘L A) x, x⟫ <= ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
-        _ <= ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
-    calc
-      ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by rw [apply_norm_eq_sqrt_inner_adjoint_left]
-      _ <= √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
-      _ = √‖A† ∘L A‖ * ‖x‖ := by
-        simp_rw [mul_assoc, Real.sqrt_mul (norm_nonneg _) (‖x‖ * ‖x‖),
-          Real.sqrt_mul_self (norm_nonneg x)]
-
-中文:
-定理 norm_adjoint_comp_self
-  条件: (A : E ->L[𝕜] F)
-  证明: by
-  refine le_antisymm ?_ ?_
-  · calc
-      ‖A† ∘L A‖ <= ‖A†‖ * ‖A‖ := opNorm_comp_le _ _
-      _ = ‖A‖ * ‖A‖ := by rw [LinearIsometryEquiv.norm_map]
-  · rw [← sq, ← Real.sqrt_le_sqrt_iff (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)]
-    refine opNorm_le_bound _ (Real.sqrt_nonneg _) fun x => ?_
-    have :=
-      calc
-        re ⟪(A† ∘L A) x, x⟫ <= ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
-        _ <= ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
-    calc
-      ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by rw [apply_norm_eq_sqrt_inner_adjoint_left]
-      _ <= √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
-      _ = √‖A† ∘L A‖ * ‖x‖ := by
-        simp_rw [mul_assoc, Real.sqrt_mul (norm_nonneg _) (‖x‖ * ‖x‖),
-          Real.sqrt_mul_self (norm_nonneg x)]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, Real.sqrt_le_sqrt_iff, Real.sqrt_nonneg, Real.sqrt_sq, apply_norm_eq_sqrt_inner_adjoint_left, le_antisymm, le_opNorm, norm_map, norm_nonneg, opNorm_comp_le, opNorm_le_bound, re_inner_le_norm, sqrt_le_sqrt_iff, sqrt_nonneg, sqrt_sq
+@[simp] lemma id_mem_unitary : .id 𝕜 E ∈ unitary (E →L[𝕜] E) := one_mem _
+/-
+**ContinuousLinearMap.norm_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：norm_adjoint_comp_self (A : E ->L[𝕜] F) : ‖A† ∘L A‖ = ‖A‖ * ‖A‖
+参数：A : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.opNorm_comp_le`：opNorm_comp_le (f : E ->SL[σ₁₂] F) :
+ ‖h.comp f‖ <= ‖h‖ * ‖f‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Real.sqrt_le_sqrt_iff`：sqrt_le_sqrt_iff (hy : 0 <= y) : √x <= √y ↔ x <= 
+y
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Real.sqrt_sq`：sqrt_sq (h : 0 <= x) : √(x ^ 2) = x
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `Real.sqrt_nonneg`：∀ (x : ℝ), 0 ≤ √x
+· 使用定理 `re_inner_le_norm`：re_inner_le_norm (x y : E) : re ⟪x, y⟫ <= ‖x‖ * ‖y‖
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
+· 使用定理 `ContinuousLinearMap.apply_norm_eq_sqrt_inner_adjoint_left`：apply_norm_eq
+_sqrt_inner_adjoint_left (A : E ->L[𝕜] F) (x : E) : ‖A x‖ = √(re ⟪(A† ∘L A) x, x
+⟫)
+· 使用定理 `Real.sqrt_le_sqrt`：sqrt_le_sqrt (h : x <= y) : √x <= √y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Real.sqrt_mul`：sqrt_mul {x : Real} (hx : 0 <= x) (y : Real) : √(x * y) =
+ √x * √y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.sqrt_mul_self`：sqrt_mul_self (h : 0 <= x) : √(x * x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_adjoint_comp_self (A : E ->L[𝕜] F) :
+theorem norm_adjoint_comp_self (A : E →L[𝕜] F) :
     ‖A† ∘L A‖ = ‖A‖ * ‖A‖ := by
   refine le_antisymm ?_ ?_
   · calc
-      ‖A† ∘L A‖ <= ‖A†‖ * ‖A‖ := opNorm_comp_le _ _
+      ‖A† ∘L A‖ ≤ ‖A†‖ * ‖A‖ := opNorm_comp_le _ _
       _ = ‖A‖ * ‖A‖ := by rw [LinearIsometryEquiv.norm_map]
   · rw [← sq, ← Real.sqrt_le_sqrt_iff (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)]
     refine opNorm_le_bound _ (Real.sqrt_nonneg _) fun x => ?_
     have :=
       calc
-        re ⟪(A† ∘L A) x, x⟫ <= ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
-        _ <= ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
+        re ⟪(A† ∘L A) x, x⟫ ≤ ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
+        _ ≤ ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
     calc
       ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by rw [apply_norm_eq_sqrt_inner_adjoint_left]
-      _ <= √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
+      _ ≤ √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
       _ = √‖A† ∘L A‖ * ‖x‖ := by
         simp_rw [mul_assoc, Real.sqrt_mul (norm_nonneg _) (‖x‖ * ‖x‖),
           Real.sqrt_mul_self (norm_nonneg x)]
-
-/--
-theorem `adjoint_comp_self_eq_zero_iff` / 定理 `adjoint_comp_self_eq_zero_iff`
-
-English:
-theorem adjoint_comp_self_eq_zero_iff
-  given: {A : E ->L[𝕜] F}
-  proof: by rw [← norm_eq_zero]; simp [norm_adjoint_comp_self]
-
-中文:
-定理 adjoint_comp_self_eq_zero_iff
-  条件: {A : E ->L[𝕜] F}
-  证明: by rw [← norm_eq_zero]; simp [norm_adjoint_comp_self]
+/-
+**ContinuousLinearMap.adjoint_comp_self_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [inst_3 : InnerProductS
+pace 𝕜 E] [inst_4 : InnerProductSpace 𝕜 F]   [inst_5 : CompleteSpace E] [inst_6 
+: CompleteSpace F] {A : E →L[𝕜] F}, ContinuousLinearMap.adjoint A ∘SL A = 0 ↔ A 
+= 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_eq_zero`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a‖ = 
+0 ↔ a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ContinuousLinearMap.norm_adjoint_comp_self`：norm_adjoint_comp_self (A : 
+E ->L[𝕜] F) : ‖A† ∘L A‖ = ‖A‖ * ‖A‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem adjoint_comp_self_eq_zero_iff {A : E ->L[𝕜] F} :
+@[simp] theorem adjoint_comp_self_eq_zero_iff {A : E →L[𝕜] F} :
     adjoint A ∘L A = 0 ↔ A = 0 := by rw [← norm_eq_zero]; simp [norm_adjoint_comp_self]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The C⋆-algebra instance when `𝕜 := ℂ` can be found in
+`Mathlib/Analysis/CStarAlgebra/ContinuousLinearMap.lean`. -/
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CStarRing (E ->L[𝕜] E)
-  body: le_of_eq Eq.symm norm_adjoint_comp_self x
-
-中文:
-实例 :
-  签名: CStar环 (E ->L[𝕜] E)
-  定义体: le_of_eq Eq.symm norm_adjoint_comp_self x
-
-Depends on / 依赖: Eq.symm, le_of_eq, norm_adjoint_comp_self
+--- 原说明 ---
+The C⋆-algebra instance when `𝕜 := ℂ` can be found in
+`Mathlib/Analysis/CStarAlgebra/ContinuousLinearMap.lean`.
 -/
-instance : CStarRing (E ->L[𝕜] E) where
-norm_mul_self_le x := le_of_eq Eq.symm norm_adjoint_comp_self x
-
-/--
-theorem `isAdjointPair_inner` / 定理 `isAdjointPair_inner`
-
-English:
-theorem isAdjointPair_inner
-  given: (A : E ->L[𝕜] F)
-  proof: by
-  intro x y
-  simp [adjoint_inner_left]
-
-中文:
-定理 isAdjointPair_inner
-  条件: (A : E ->L[𝕜] F)
-  证明: by
-  intro x y
-  simp [adjoint_inner_left]
+instance : CStarRing (E →L[𝕜] E) where
+  norm_mul_self_le x := le_of_eq <| Eq.symm <| norm_adjoint_comp_self x
+/-
+**ContinuousLinearMap.isAdjointPair_inner** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：isAdjointPair_inner (A : E ->L[𝕜] F) : LinearMap.IsAdjointPair (LinearMap.
+flip (innerₛₗ 𝕜 (E
+参数：A : E ->L[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isAdjointPair_inner (A : E ->L[𝕜] F) :
+theorem isAdjointPair_inner (A : E →L[𝕜] F) :
     LinearMap.IsAdjointPair (LinearMap.flip (innerₛₗ 𝕜 (E := E)))
       (innerₛₗ 𝕜 (E := F)).flip A (A†) := by
   intro x y
   simp [adjoint_inner_left]
-
-/--
-theorem `adjoint_innerSL_apply` / 定理 `adjoint_innerSL_apply`
-
-English:
-theorem adjoint_innerSL_apply
-  given: (x : E)
-  proof: ext_ring ext_inner_left 𝕜 fun _ => by simp [adjoint_inner_right]
-
-中文:
-定理 adjoint_innerSL_apply
-  条件: (x : E)
-  证明: ext_ring ext_inner_left 𝕜 fun _ => by simp [adjoint_inner_right]
-
-Depends on / 依赖: adjoint_inner_right, ext_inner_left, ext_ring
+/-
+**ContinuousLinearMap.adjoint_innerSL_apply** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：adjoint_innerSL_apply (x : E) : adjoint (innerSL 𝕜 x) = toSpanSingleton 𝕜 
+x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ext_inner_left`：ext_inner_left {x y : E} (h : forall v, ⟪v, x⟫ = ⟪v, y⟫)
+ : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
+· 使用定理 `inner_conj_symm`：inner_conj_symm (x y : E) : ⟪y, x⟫† = ⟪x, y⟫
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem adjoint_innerSL_apply (x : E) :
     adjoint (innerSL 𝕜 x) = toSpanSingleton 𝕜 x :=
-ext_ring ext_inner_left 𝕜 fun _ => by simp [adjoint_inner_right]
-
-/--
-theorem `adjoint_toSpanSingleton` / 定理 `adjoint_toSpanSingleton`
-
-English:
-theorem adjoint_toSpanSingleton
-  given: (x : E)
-  proof: by
-  simp [← adjoint_innerSL_apply]
-
-中文:
-定理 adjoint_toSpanSingleton
-  条件: (x : E)
-  证明: by
-  simp [← adjoint_innerSL_apply]
-
-Depends on / 依赖: adjoint_innerSL_apply
+  ext_ring <| ext_inner_left 𝕜 <| fun _ => by simp [adjoint_inner_right]
+/-
+**ContinuousLinearMap.adjoint_toSpanSingleton** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousLinearMap`。
+形式化陈述：adjoint_toSpanSingleton (x : E) : adjoint (toSpanSingleton 𝕜 x) = innerSL 
+𝕜 x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem adjoint_toSpanSingleton (x : E) :
     adjoint (toSpanSingleton 𝕜 x) = innerSL 𝕜 x := by
   simp [← adjoint_innerSL_apply]
-
-/--
-theorem `innerSL_apply_comp` / 定理 `innerSL_apply_comp`
-
-English:
-theorem innerSL_apply_comp
-  given: (x : F) (f : E ->L[𝕜] F)
-  proof: by
-  ext; simp [adjoint_inner_left]
-
-omit [CompleteSpace E] in
-
-中文:
-定理 innerSL_apply_comp
-  条件: (x : F) (f : E ->L[𝕜] F)
-  证明: by
-  ext; simp [adjoint_inner_left]
-
-omit [CompleteSpace E] in
-
-Depends on / 依赖: adjoint_inner_left
+/-
+**ContinuousLinearMap.innerSL_apply_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：innerSL_apply_comp (x : F) (f : E ->L[𝕜] F) : innerSL 𝕜 x ∘L f = innerSL 𝕜
+ (adjoint f x)
+参数：x : F；f : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem innerSL_apply_comp (x : F) (f : E ->L[𝕜] F) :
+theorem innerSL_apply_comp (x : F) (f : E →L[𝕜] F) :
     innerSL 𝕜 x ∘L f = innerSL 𝕜 (adjoint f x) := by
   ext; simp [adjoint_inner_left]
 
 omit [CompleteSpace E] in
-/--
-theorem `innerSL_apply_comp_of_isSymmetric` / 定理 `innerSL_apply_comp_of_isSymmetric`
-
-English:
-theorem innerSL_apply_comp_of_isSymmetric
-  given: (x : E) {f : E ->L[𝕜] E} (hf : f.IsSymmetric)
-  proof: by
-  ext; simp [hf]
-
-中文:
-定理 innerSL_apply_comp_of_isSymmetric
-  条件: (x : E) {f : E ->L[𝕜] E} (hf : f.IsSymmetric)
-  证明: by
-  ext; simp [hf]
+/-
+**ContinuousLinearMap.innerSL_apply_comp_of_isSymmetric** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousLinearMap`。
+形式化陈述：innerSL_apply_comp_of_isSymmetric (x : E) {f : E ->L[𝕜] E} (hf : f.IsSymme
+tric) : innerSL 𝕜 x ∘L f = innerSL 𝕜 (f x)
+参数：x : E；hf : f.IsSymmetric。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.apply_clm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst :
+ RCLike 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] 
+  {T : E →L[𝕜] E}, (↑…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem innerSL_apply_comp_of_isSymmetric (x : E) {f : E ->L[𝕜] E} (hf : f.IsSymmetric) :
+theorem innerSL_apply_comp_of_isSymmetric (x : E) {f : E →L[𝕜] E} (hf : f.IsSymmetric) :
     innerSL 𝕜 x ∘L f = innerSL 𝕜 (f x) := by
   ext; simp [hf]
-
-/--
-lemma `_root_.InnerProductSpace.adjoint_rankOne` / 引理 `_root_.InnerProductSpace.adjoint_rankOne`
-
-English:
-lemma _root_.InnerProductSpace.adjoint_rankOne
-  given: (x : E) (y : F)
-  proof: by
-  simp [rankOne_def', adjoint_comp, ← adjoint_innerSL_apply]
-
-中文:
-引理 _root_.内积空间.adjoint_rankOne
-  条件: (x : E) (y : F)
-  证明: by
-  simp [rankOne_def', adjoint_comp, ← adjoint_innerSL_apply]
+/-
+**ContinuousLinearMap._root_.InnerProductSpace.adjoint_rankOne** 是 Mathlib 中的一个引
+理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.InnerProductSpace.adjoint_rankOne (x : E) (y : F) :
     adjoint (rankOne 𝕜 x y) = rankOne 𝕜 y x := by
   simp [rankOne_def', adjoint_comp, ← adjoint_innerSL_apply]
-
-/--
-lemma `_root_.InnerProductSpace.rankOne_comp` / 引理 `_root_.InnerProductSpace.rankOne_comp`
-
-English:
-lemma _root_.InnerProductSpace.rankOne_comp
-  statement: {E G : Type*} [SeminormedAddCommGroup E]
-  proof: by
-  simp_rw [rankOne_def', comp_assoc, innerSL_apply_comp]
-
-中文:
-引理 _root_.内积空间.rankOne_comp
-  结论: {E G : 类型} [SeminormedAddComm群 E]
-  证明: by
-  simp_rw [rankOne_def', comp_assoc, innerSL_apply_comp]
-
-Depends on / 依赖: comp_assoc, innerSL_apply_comp, rankOne_def, simp_rw
+/-
+**ContinuousLinearMap._root_.InnerProductSpace.rankOne_comp** 是 Mathlib 中的一个引理，位
+于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.InnerProductSpace.rankOne_comp {E G : Type*} [SeminormedAddCommGroup E]
     [NormedSpace 𝕜 E] [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (x : E) (y : F) (f : G ->L[𝕜] F) :
+    (x : E) (y : F) (f : G →L[𝕜] F) :
     rankOne 𝕜 x y ∘L f = rankOne 𝕜 x (adjoint f y) := by
   simp_rw [rankOne_def', comp_assoc, innerSL_apply_comp]
 
@@ -1238,233 +1482,287 @@ open ContinuousLinearMap
 
 variable [CompleteSpace E] [CompleteSpace F]
 
-/--
-theorem `adjoint_eq` / 定理 `adjoint_eq`
-
-English:
-theorem adjoint_eq
-  given: {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A)
-  statement: A.adjoint = A
-  proof: hA
-
-中文:
-定理 adjoint_eq
-  条件: {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A)
-  结论: A.adjoint = A
-  证明: hA
+/-
+**IsSelfAdjoint.adjoint_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+形式化陈述：adjoint_eq {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A) : A.adjoint = A
+参数：hA : IsSelfAdjoint A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem adjoint_eq {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A) : A.adjoint = A :=
+theorem adjoint_eq {A : E →L[𝕜] E} (hA : IsSelfAdjoint A) : A.adjoint = A :=
   hA
 
-/--
-theorem `isSymmetric` / 定理 `isSymmetric`
+/-- Every self-adjoint operator on an inner product space is symmetric. -/
+/-
+**IsSelfAdjoint.isSymmetric** 是 Mathlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+形式化陈述：isSymmetric {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A) : (A : E ->ₗ[𝕜] E).IsS
+ymmetric
+参数：hA : IsSelfAdjoint A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
+· 使用定理 `IsSelfAdjoint.adjoint_eq`：adjoint_eq {A : E ->L[𝕜] E} (hA : IsSelfAdjoin
+t A) : A.adjoint = A
 
-English:
-theorem isSymmetric
-  given: {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A)
-  statement: (A : E ->ₗ[𝕜] E).IsSymmetric
-  proof: by
-  intro x y
-  rw_mod_cast [← A.adjoint_inner_right, hA.adjoint_eq]
-
-中文:
-定理 isSymmetric
-  条件: {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A)
-  结论: (A : E ->ₗ[𝕜] E).IsSymmetric
-  证明: by
-  intro x y
-  rw_mod_cast [← A.adjoint_inner_right, hA.adjoint_eq]
-
-Depends on / 依赖: A.adjoint_inner_right, adjoint_eq, adjoint_inner_right, hA.adjoint_eq, rw_mod_cast
+--- 原说明 ---
+Every self-adjoint operator on an inner product space is symmetric.
 -/
-theorem isSymmetric {A : E ->L[𝕜] E} (hA : IsSelfAdjoint A) : (A : E ->ₗ[𝕜] E).IsSymmetric := by
+theorem isSymmetric {A : E →L[𝕜] E} (hA : IsSelfAdjoint A) : (A : E →ₗ[𝕜] E).IsSymmetric := by
   intro x y
   rw_mod_cast [← A.adjoint_inner_right, hA.adjoint_eq]
 
-/--
-theorem `conj_adjoint` / 定理 `conj_adjoint`
+/-- Conjugating preserves self-adjointness. -/
+/-
+**IsSelfAdjoint.conj_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+形式化陈述：conj_adjoint {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : E ->L[𝕜] F) : Is
+SelfAdjoint (S ∘L T ∘L S.adjoint)
+参数：hT : IsSelfAdjoint T；S : E ->L[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.isSelfAdjoint_iff'`：isSelfAdjoint_iff' {A : E ->L[𝕜]
+ E} : IsSelfAdjoint A ↔ A† = A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ContinuousLinearMap.adjoint_comp`：adjoint_comp (A : F ->L[𝕜] G) (B : E -
+>L[𝕜] F) : (A ∘L B)† = B† ∘L A†
+· 使用定理 `ContinuousLinearMap.comp.congr_simp`：∀ {R₁ : Type u_1} {R₂ : Type u_2} {
+R₃ : Type u_3} [inst : Semiring R₁] [inst_1 : Semiring R₂] [inst_2 : Semiring R₃
+]   {σ₁₂ : R₁ →+* R₂} {σ₂…
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用定理 `ContinuousLinearMap.comp_assoc`：comp_assoc {R₄ : Type*} [Semiring R₄] [M
+odule R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₃₄ : R₃ ->+* R₄} [RingHomCo
+mpTriple σ₁₃ σ₃₄ σ₁₄…
 
-English:
-theorem conj_adjoint
-  given: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : E ->L[𝕜] F)
-  proof: by
-  rw [isSelfAdjoint_iff'] at hT ⊢
-  simp only [hT, adjoint_comp, adjoint_adjoint]
-  exact ContinuousLinearMap.comp_assoc _ _ _
-
-中文:
-定理 conj_adjoint
-  条件: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : E ->L[𝕜] F)
-  证明: by
-  rw [isSelfAdjoint_iff'] at hT ⊢
-  simp only [hT, adjoint_comp, adjoint_adjoint]
-  exact ContinuousLinearMap.comp_assoc _ _ _
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_assoc, adjoint_adjoint, adjoint_comp, comp_assoc, isSelfAdjoint_iff
+--- 原说明 ---
+Conjugating preserves self-adjointness.
 -/
-theorem conj_adjoint {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : E ->L[𝕜] F) :
+theorem conj_adjoint {T : E →L[𝕜] E} (hT : IsSelfAdjoint T) (S : E →L[𝕜] F) :
     IsSelfAdjoint (S ∘L T ∘L S.adjoint) := by
   rw [isSelfAdjoint_iff'] at hT ⊢
   simp only [hT, adjoint_comp, adjoint_adjoint]
   exact ContinuousLinearMap.comp_assoc _ _ _
 
-/--
-theorem `adjoint_conj` / 定理 `adjoint_conj`
+/-- Conjugating preserves self-adjointness. -/
+/-
+**IsSelfAdjoint.adjoint_conj** 是 Mathlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+形式化陈述：adjoint_conj {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : F ->L[𝕜] E) : Is
+SelfAdjoint (S.adjoint ∘L T ∘L S)
+参数：hT : IsSelfAdjoint T；S : F ->L[𝕜] E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.isSelfAdjoint_iff'`：isSelfAdjoint_iff' {A : E ->L[𝕜]
+ E} : IsSelfAdjoint A ↔ A† = A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ContinuousLinearMap.adjoint_comp`：adjoint_comp (A : F ->L[𝕜] G) (B : E -
+>L[𝕜] F) : (A ∘L B)† = B† ∘L A†
+· 使用定理 `ContinuousLinearMap.comp.congr_simp`：∀ {R₁ : Type u_1} {R₂ : Type u_2} {
+R₃ : Type u_3} [inst : Semiring R₁] [inst_1 : Semiring R₂] [inst_2 : Semiring R₃
+]   {σ₁₂ : R₁ →+* R₂} {σ₂…
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用定理 `ContinuousLinearMap.comp_assoc`：comp_assoc {R₄ : Type*} [Semiring R₄] [M
+odule R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₃₄ : R₃ ->+* R₄} [RingHomCo
+mpTriple σ₁₃ σ₃₄ σ₁₄…
 
-English:
-theorem adjoint_conj
-  given: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : F ->L[𝕜] E)
-  proof: by
-  rw [isSelfAdjoint_iff'] at hT ⊢
-  simp only [hT, adjoint_comp, adjoint_adjoint]
-  exact ContinuousLinearMap.comp_assoc _ _ _
-
-中文:
-定理 adjoint_conj
-  条件: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : F ->L[𝕜] E)
-  证明: by
-  rw [isSelfAdjoint_iff'] at hT ⊢
-  simp only [hT, adjoint_comp, adjoint_adjoint]
-  exact ContinuousLinearMap.comp_assoc _ _ _
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_assoc, adjoint_adjoint, adjoint_comp, comp_assoc, isSelfAdjoint_iff
+--- 原说明 ---
+Conjugating preserves self-adjointness.
 -/
-theorem adjoint_conj {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (S : F ->L[𝕜] E) :
+theorem adjoint_conj {T : E →L[𝕜] E} (hT : IsSelfAdjoint T) (S : F →L[𝕜] E) :
     IsSelfAdjoint (S.adjoint ∘L T ∘L S) := by
   rw [isSelfAdjoint_iff'] at hT ⊢
   simp only [hT, adjoint_comp, adjoint_adjoint]
   exact ContinuousLinearMap.comp_assoc _ _ _
-
-/--
-theorem `_root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric` / 定理 `_root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric`
-
-English:
-theorem _root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric
-  given: {A : E ->L[𝕜] E}
-  proof: ⟨fun hA => hA.isSymmetric, fun hA =>
-    ext fun x => ext_inner_right 𝕜 fun y => (A.adjoint_inner_left y x).symm ▸ (hA x y).symm⟩
-
-中文:
-定理 _root_.连续线性映射.isSelfAdjoint_iff_isSymmetric
-  条件: {A : E ->L[𝕜] E}
-  证明: ⟨fun hA => hA.isSymmetric, fun hA =>
-    ext fun x => ext_inner_right 𝕜 fun y => (A.adjoint_inner_left y x).symm ▸ (hA x y).symm⟩
-
-Depends on / 依赖: A.adjoint_inner_left, adjoint_inner_left, ext_inner_right, hA.isSymmetric, isSymmetric
+/-
+**IsSelfAdjoint._root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric** 是 Mat
+hlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric {A : E ->L[𝕜] E} :
-    IsSelfAdjoint A ↔ (A : E ->ₗ[𝕜] E).IsSymmetric :=
+theorem _root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric {A : E →L[𝕜] E} :
+    IsSelfAdjoint A ↔ (A : E →ₗ[𝕜] E).IsSymmetric :=
   ⟨fun hA => hA.isSymmetric, fun hA =>
     ext fun x => ext_inner_right 𝕜 fun y => (A.adjoint_inner_left y x).symm ▸ (hA x y).symm⟩
-
-/--
-theorem `_root_.LinearMap.IsSymmetric.isSelfAdjoint` / 定理 `_root_.LinearMap.IsSymmetric.isSelfAdjoint`
-
-English:
-theorem _root_.LinearMap.IsSymmetric.isSelfAdjoint
-  statement: {A : E ->L[𝕜] E}
-  proof: by
-  rwa [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA
-
-中文:
-定理 _root_.线性映射.IsSymmetric.isSelfAdjoint
-  结论: {A : E ->L[𝕜] E}
-  证明: by
-  rwa [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric, isSelfAdjoint_iff_isSymmetric
+/-
+**IsSelfAdjoint._root_.LinearMap.IsSymmetric.isSelfAdjoint** 是 Mathlib 中的一个定理，位于
+命名空间 `IsSelfAdjoint`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.LinearMap.IsSymmetric.isSelfAdjoint {A : E ->L[𝕜] E}
-    (hA : (A : E ->ₗ[𝕜] E).IsSymmetric) : IsSelfAdjoint A := by
+theorem _root_.LinearMap.IsSymmetric.isSelfAdjoint {A : E →L[𝕜] E}
+    (hA : (A : E →ₗ[𝕜] E).IsSymmetric) : IsSelfAdjoint A := by
   rwa [← ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hA
 
 /-- The orthogonal projection is self-adjoint. -/
 @[simp]
-/--
-theorem `_root_.isSelfAdjoint_starProjection` / 定理 `_root_.isSelfAdjoint_starProjection`
+/-
+**IsSelfAdjoint._root_.isSelfAdjoint_starProjection** 是 Mathlib 中的一个定理，位于命名空间 `I
+sSelfAdjoint`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.isSelfAdjoint_starProjection
-  proof: U.starProjection_isSymmetric.isSelfAdjoint
-
-中文:
-定理 _root_.isSelfAdjoint_starProjection
-  证明: U.starProjection_isSymmetric.isSelfAdjoint
-
-Depends on / 依赖: U.starProjection_isSymmetric.isSelfAdjoint, isSelfAdjoint, starProjection_isSymmetric
+--- 原说明 ---
+The orthogonal projection is self-adjoint.
 -/
 theorem _root_.isSelfAdjoint_starProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     IsSelfAdjoint U.starProjection :=
   U.starProjection_isSymmetric.isSelfAdjoint
-
-/--
-theorem `conj_starProjection` / 定理 `conj_starProjection`
-
-English:
-theorem conj_starProjection
-  statement: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T)
-  proof: by
-  rw [← mul_def]; rw [← mul_def]; rw [← mul_assoc]
-exact hT.conjugate_self isSelfAdjoint_starProjection U
-
-中文:
-定理 conj_starProjection
-  结论: {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T)
-  证明: by
-  rw [← mul_def]; rw [← mul_def]; rw [← mul_assoc]
-exact hT.conjugate_self isSelfAdjoint_starProjection U
-
-Depends on / 依赖: conjugate_self, hT.conjugate_self, isSelfAdjoint_starProjection, mul_assoc, mul_def
+/-
+**IsSelfAdjoint.conj_starProjection** 是 Mathlib 中的一个定理，位于命名空间 `IsSelfAdjoint`。
+形式化陈述：conj_starProjection {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T) (U : Submodule
+ 𝕜 E) [U.HasOrthogonalProjection] : IsSelfAdjoint (U.starProjection ∘L T ∘L U.st
+arProjection)
+参数：hT : IsSelfAdjoint T；U : Submodule 𝕜 E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.mul_def`：mul_def (f g : M₁ ->L[R₁] M₁) : f * g = f ∘
+L g
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsSelfAdjoint.conjugate_self`：conjugate_self {x : R} (hx : IsSelfAdjoint
+ x) {z : R} (hz : IsSelfAdjoint z) : IsSelfAdjoint (z * x * z)
+· 使用定理 `isSelfAdjoint_starProjection`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RC
+Like 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst
+_3 : CompleteSpace…
 -/
-theorem conj_starProjection {T : E ->L[𝕜] E} (hT : IsSelfAdjoint T)
+theorem conj_starProjection {T : E →L[𝕜] E} (hT : IsSelfAdjoint T)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     IsSelfAdjoint (U.starProjection ∘L T ∘L U.starProjection) := by
-  rw [← mul_def]; rw [← mul_def]; rw [← mul_assoc]
-exact hT.conjugate_self isSelfAdjoint_starProjection U
+  rw [← mul_def, ← mul_def, ← mul_assoc]
+  exact hT.conjugate_self <| isSelfAdjoint_starProjection U
 
 end IsSelfAdjoint
 
 namespace ContinuousLinearMap
 
-variable {T : E ->L[𝕜] E} [CompleteSpace E]
+variable {T : E →L[𝕜] E} [CompleteSpace E]
 
-/--
-theorem `isStarNormal_iff_norm_eq_adjoint` / 定理 `isStarNormal_iff_norm_eq_adjoint`
+/-- An operator `T` is normal iff `‖T v‖ = ‖(adjoint T) v‖` for all `v`. -/
+/-
+**ContinuousLinearMap.isStarNormal_iff_norm_eq_adjoint** 是 Mathlib 中的一个定理，位于命名空间
+ `ContinuousLinearMap`。
+形式化陈述：isStarNormal_iff_norm_eq_adjoint : IsStarNormal T ↔ forall v : E, ‖T v‖ = 
+‖adjoint T v‖
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isStarNormal_iff`：∀ {R : Type u_1} [inst : Mul R] [inst_1 : Star R] (x :
+ R), IsStarNormal x ↔ Commute (star x) x
+· 使用定理 `Commute.eq_1`：∀ {S : Type u_3} [inst : Mul S] (a b : S), Commute a b = S
+emiconjBy a b b
+· 使用定理 `SemiconjBy.eq_1`：∀ {M : Type u_2} [inst : Mul M] (a x y : M), SemiconjBy
+ a x y = (a * x = y * a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsSelfAdjoint.isSymmetric`：isSymmetric {A : E ->L[𝕜] E} (hA : IsSelfAdjo
+int A) : (A : E ->ₗ[𝕜] E).IsSymmetric
+· 使用定理 `IsSelfAdjoint.sub`：sub {x y : R} (hx : IsSelfAdjoint x) (hy : IsSelfAdjo
+int y) : IsSelfAdjoint (x - y)
+· 使用定理 `IsSelfAdjoint.star_mul_self`：star_mul_self [Mul R] [StarMul R] (x : R) :
+ IsSelfAdjoint (star x * x)
+· 使用定理 `IsSelfAdjoint.mul_star_self`：mul_star_self [Mul R] [StarMul R] (x : R) :
+ IsSelfAdjoint (x * star x)
+· 使用定理 `ContinuousLinearMap.toLinearMap_sub`：toLinearMap_sub (f g : M ->SL[σ₁₂] 
+M₂) : (↑(f - g) : M ->ₛₗ[σ₁₂] M₂) = f - g
+· 使用定理 `ContinuousLinearMap.star_eq_adjoint`：star_eq_adjoint (A : E ->L[𝕜] E) : 
+star A = A†
+· 使用定理 `LinearMap.IsSymmetric.inner_map_self_eq_zero`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSp
+ace 𝕜 E]   {T : E →ₗ[𝕜] E}, T.IsSy…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `inner_sub_left`：inner_sub_left (x y z : E) : ⟪x - y, z⟫ = ⟪x, z⟫ - ⟪y, z
+⟫
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_apply_eq_comp`：∀ {F : Type u_1} {α : outParam (Type u_2)} {inst : Fu
+nLike F α α} {inst_1 : Mul F} [self : IsMulApplyEqComp F α]   (f g : F) (x : α),
+ (f * g…
+· 使用定理 `ContinuousLinearMap.instIsMulApplyEqCompId`：∀ {R₁ : Type u_1} [inst : Se
+miring R₁] {M₁ : Type u_4} [inst_1 : TopologicalSpace M₁] [inst_2 : AddCommMonoi
+d M₁]   [inst_3 : _root_.Module …
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `inner_self_eq_norm_sq_to_K`：inner_self_eq_norm_sq_to_K (x : E) : ⟪x, x⟫ 
+= (‖x‖ : 𝕜) ^ 2
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
+· 使用引理 `sq_eq_sq₀`：sq_eq_sq₀ (ha : 0 <= a) (hb : 0 <= b) : a ^ 2 = b ^ 2 ↔ a = b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+（共 36 条，此处仅展示前 30 条）
 
-English:
-theorem isStarNormal_iff_norm_eq_adjoint
-  proof: by
-  rw [isStarNormal_iff]; rw [Commute]; rw [SemiconjBy]; rw [← sub_eq_zero]
-  simp_rw [ContinuousLinearMap.ext_iff, ← coe_coe, toLinearMap_sub, ← LinearMap.ext_iff,
-    toLinearMap_zero]
-  have := star_eq_adjoint T ▸ toLinearMap_sub (star _ * T) _ ▸
-    ((IsSelfAdjoint.star_mul_self T).sub (IsSelfAdjoint.mul_star_self T)).isSymmetric
-  simp_rw [star_eq_adjoint, ← LinearMap.IsSymmetric.inner_map_self_eq_zero this,
-    LinearMap.sub_apply, inner_sub_left, coe_coe, mul_apply_eq_comp, adjoint_inner_left,
-    inner_self_eq_norm_sq_to_K, ← adjoint_inner_right T, inner_self_eq_norm_sq_to_K,
-    sub_eq_zero, ← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
-  norm_cast
-
-中文:
-定理 isStarNormal_iff_norm_eq_adjoint
-  证明: by
-  rw [isStarNormal_iff]; rw [Commute]; rw [SemiconjBy]; rw [← sub_eq_zero]
-  simp_rw [ContinuousLinearMap.ext_iff, ← coe_coe, toLinearMap_sub, ← LinearMap.ext_iff,
-    toLinearMap_zero]
-  have := star_eq_adjoint T ▸ toLinearMap_sub (star _ * T) _ ▸
-    ((IsSelfAdjoint.star_mul_self T).sub (IsSelfAdjoint.mul_star_self T)).isSymmetric
-  simp_rw [star_eq_adjoint, ← LinearMap.IsSymmetric.inner_map_self_eq_zero this,
-    LinearMap.sub_apply, inner_sub_left, coe_coe, mul_apply_eq_comp, adjoint_inner_left,
-    inner_self_eq_norm_sq_to_K, ← adjoint_inner_right T, inner_self_eq_norm_sq_to_K,
-    sub_eq_zero, ← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
-  norm_cast
-
-Depends on / 依赖: Commute, ContinuousLinearMap, ContinuousLinearMap.ext_iff, IsSelfAdjoint, IsSelfAdjoint.mul_star_self, IsSelfAdjoint.star_mul_self, IsSymmetric, LinearMap, LinearMap.IsSymmetric.inner_map_self_eq_zero, LinearMap.ext_iff, LinearMap.sub_apply, SemiconjBy, adjoint_inner_left, coe_coe, ext_iff, inner_map_self_eq_zero, inner_self_e, inner_sub_left, isStarNormal_iff, isSymmetric
+--- 原说明 ---
+An operator `T` is normal iff `‖T v‖ = ‖(adjoint T) v‖` for all `v`.
 -/
 theorem isStarNormal_iff_norm_eq_adjoint :
-    IsStarNormal T ↔ forall v : E, ‖T v‖ = ‖adjoint T v‖ := by
-  rw [isStarNormal_iff]; rw [Commute]; rw [SemiconjBy]; rw [← sub_eq_zero]
+    IsStarNormal T ↔ ∀ v : E, ‖T v‖ = ‖adjoint T v‖ := by
+  rw [isStarNormal_iff, Commute, SemiconjBy, ← sub_eq_zero]
   simp_rw [ContinuousLinearMap.ext_iff, ← coe_coe, toLinearMap_sub, ← LinearMap.ext_iff,
     toLinearMap_zero]
   have := star_eq_adjoint T ▸ toLinearMap_sub (star _ * T) _ ▸
@@ -1474,65 +1772,107 @@ theorem isStarNormal_iff_norm_eq_adjoint :
     inner_self_eq_norm_sq_to_K, ← adjoint_inner_right T, inner_self_eq_norm_sq_to_K,
     sub_eq_zero, ← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
   norm_cast
-
-/--
-lemma `IsStarNormal.adjoint_apply_eq_zero_iff` / 引理 `IsStarNormal.adjoint_apply_eq_zero_iff`
-
-English:
-lemma IsStarNormal.adjoint_apply_eq_zero_iff
-  given: (hT : IsStarNormal T) (x : E)
-  proof: by
-  simp_rw [← norm_eq_zero (E := E), ← isStarNormal_iff_norm_eq_adjoint.mp hT]
-
-中文:
-引理 是StarNormal.adjoint_apply_eq_zero_iff
-  条件: (hT : 是StarNormal T) (x : E)
-  证明: by
-  simp_rw [← norm_eq_zero (E := E), ← isStarNormal_iff_norm_eq_adjoint.mp hT]
-
-Depends on / 依赖: isStarNormal_iff_norm_eq_adjoint, isStarNormal_iff_norm_eq_adjoint.mp, norm_eq_zero, simp_rw
+/-
+**ContinuousLinearMap.IsStarNormal.adjoint_apply_eq_zero_iff** 是 Mathlib 中的一个定理，
+位于命名空间 `ContinuousLinearMap.IsStarNormal`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3 : CompleteSpa
+ce E],   IsStarNormal T → ∀ (x : E), (ContinuousLinearMap.adjoint T) x = 0 ↔ T x
+ = 0
+参数：x : E；ContinuousLinearMap.adjoint T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_eq_zero`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a‖ = 
+0 ↔ a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousLinearMap.isStarNormal_iff_norm_eq_adjoint`：isStarNormal_iff_n
+orm_eq_adjoint : IsStarNormal T ↔ forall v : E, ‖T v‖ = ‖adjoint T v‖
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma IsStarNormal.adjoint_apply_eq_zero_iff (hT : IsStarNormal T) (x : E) :
     adjoint T x = 0 ↔ T x = 0 := by
   simp_rw [← norm_eq_zero (E := E), ← isStarNormal_iff_norm_eq_adjoint.mp hT]
 
 open ContinuousLinearMap
-
-/--
-theorem `IsStarNormal.ker_adjoint_eq_ker` / 定理 `IsStarNormal.ker_adjoint_eq_ker`
-
-English:
-theorem IsStarNormal.ker_adjoint_eq_ker
-  given: (hT : IsStarNormal T)
-  proof: Submodule.ext hT.adjoint_apply_eq_zero_iff
-
-中文:
-定理 是StarNormal.ker_adjoint_eq_ker
-  条件: (hT : 是StarNormal T)
-  证明: Submodule.ext hT.adjoint_apply_eq_zero_iff
-
-Depends on / 依赖: Submodule, Submodule.ext, adjoint_apply_eq_zero_iff, hT.adjoint_apply_eq_zero_iff
+/-
+**ContinuousLinearMap.IsStarNormal.ker_adjoint_eq_ker** 是 Mathlib 中的一个定理，位于命名空间 
+`ContinuousLinearMap.IsStarNormal`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3 : CompleteSpa
+ce E], IsStarNormal T → (↑(ContinuousLinearMap.adjoint T)).ker = (↑T).ker
+参数：↑(ContinuousLinearMap.adjoint T)；↑T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.IsStarNormal.adjoint_apply_eq_zero_iff`：∀ {𝕜 : Type 
+u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : 
+InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3…
 -/
 theorem IsStarNormal.ker_adjoint_eq_ker (hT : IsStarNormal T) :
     (adjoint T).ker = T.ker :=
   Submodule.ext hT.adjoint_apply_eq_zero_iff
 
-/--
-theorem `IsStarNormal.orthogonal_range` / 定理 `IsStarNormal.orthogonal_range`
+/-- The range of a normal operator is pairwise orthogonal to its kernel.
 
-English:
-theorem IsStarNormal.orthogonal_range
-  given: (hT : IsStarNormal T)
-  statement: T.rangeᗮ = T.ker
-  proof: T.orthogonal_range ▸ hT.ker_adjoint_eq_ker
+This is a weaker version of `LinearMap.IsSymmetric.orthogonal_range`
+but with stronger type class assumptions (i.e., `CompleteSpace`). -/
+/-
+**ContinuousLinearMap.IsStarNormal.orthogonal_range** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap.IsStarNormal`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3 : CompleteSpa
+ce E], IsStarNormal T → (↑T).rangeᗮ = (↑T).ker
+参数：↑T；↑T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.IsStarNormal.ker_adjoint_eq_ker`：∀ {𝕜 : Type u_1} {E
+ : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerPr
+oductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.orthogonal_range`：orthogonal_range (T : E ->L[𝕜] F) 
+: T.rangeᗮ = T†.ker
 
-中文:
-定理 是StarNormal.orthogonal_range
-  条件: (hT : 是StarNormal T)
-  结论: T.rangeᗮ = T.ker
-  证明: T.orthogonal_range ▸ hT.ker_adjoint_eq_ker
+--- 原说明 ---
+The range of a normal operator is pairwise orthogonal to its kernel.
 
-Depends on / 依赖: T.orthogonal_range, hT.ker_adjoint_eq_ker, ker_adjoint_eq_ker, orthogonal_range
+This is a weaker version of `LinearMap.IsSymmetric.orthogonal_range`
+but with stronger type class assumptions (i.e., `CompleteSpace`).
 -/
 theorem IsStarNormal.orthogonal_range (hT : IsStarNormal T) : T.rangeᗮ = T.ker :=
   T.orthogonal_range ▸ hT.ker_adjoint_eq_ker
@@ -1541,105 +1881,145 @@ set_option backward.isDefEq.respectTransparency false in
 /- TODO: As we have a more general result of this for elements in non-unital C⋆-algebras
 (see `Mathlib/Analysis/CStarAlgebra/Projection.lean`), we will want to simplify the proof
 by using the complexification of an inner product space over `𝕜`. -/
-/--
-theorem `IsIdempotentElem.isSelfAdjoint_iff_isStarNormal` / 定理 `IsIdempotentElem.isSelfAdjoint_iff_isStarNormal`
+/-- An idempotent operator is self-adjoint iff it is normal. -/
+/-
+**ContinuousLinearMap.IsIdempotentElem.isSelfAdjoint_iff_isStarNormal** 是 Mathli
+b 中的一个定理，位于命名空间 `ContinuousLinearMap.IsIdempotentElem`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3 : CompleteSpa
+ce E], IsIdempotentElem T → (IsSelfAdjoint T ↔ IsStarNormal T)
+参数：IsSelfAdjoint T ↔ IsStarNormal T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isStarNormal_iff`：∀ {R : Type u_1} [inst : Mul R] [inst_1 : Star R] (x :
+ R), IsStarNormal x ↔ Commute (star x) x
+· 使用定理 `Commute.refl`：∀ {S : Type u_3} [inst : Mul S] (a : S), Commute a a
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `ContinuousLinearMap.ext_iff`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : S
+emiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 :
+ TopologicalSpace…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `norm_eq_zero`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a‖ = 
+0 ↔ a = 0
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Sub β}   {inst_2 : Sub F} [self : IsSu…
+· 使用定理 `ContinuousLinearMap.instIsSubApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `mul_apply_eq_comp`：∀ {F : Type u_1} {α : outParam (Type u_2)} {inst : Fu
+nLike F α α} {inst_1 : Mul F} [self : IsMulApplyEqComp F α]   (f g : F) (x : α),
+ (f * g…
+· 使用定理 `ContinuousLinearMap.instIsMulApplyEqCompId`：∀ {R₁ : Type u_1} [inst : Se
+miring R₁] {M₁ : Type u_4} [inst_1 : TopologicalSpace M₁] [inst_2 : AddCommMonoi
+d M₁]   [inst_3 : _root_.Module …
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `SemilinearIsometryEquivClass.toSemilinearIsometryClass`：∀ {R : Type u_1}
+ {R₂ : Type u_2} {E : Type u_5} {E₂ : Type u_6} (𝓕 : Type u_10) [inst : Semiring
+ R]   [inst_1 : Semiring R₂] {σ₁₂ : R →+* R₂…
+· 使用定理 `LinearMap.IsSymmetric.clm_adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [i
+nst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]
+   [inst_3 : CompleteSpace…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+（共 35 条，此处仅展示前 30 条）
 
-English:
-theorem IsIdempotentElem.isSelfAdjoint_iff_isStarNormal
-  given: (hT : IsIdempotentElem T)
-  proof: by
-  refine ⟨fun h => by rw [isStarNormal_iff, h], fun h => ?_⟩
-  suffices T = star T * T from this ▸ IsSelfAdjoint.star_mul_self _
-  rw [← sub_eq_zero]; rw [ContinuousLinearMap.ext_iff]
-  simp_rw [zero_apply, ← norm_eq_zero (E := E)]
-  have :=
-    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ forall x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
-          simp [star_eq_adjoint, one_def]
-      _ ↔ forall x, ‖(1 - T) (T x)‖ = 0 := by
-          simp only [isStarNormal_iff_norm_eq_adjoint.mp h.one_sub]
-      _ ↔ forall x, ‖(T - T * T) x‖ = 0 := by simp
-      _ ↔ T - T * T = 0 := by simp only [norm_eq_zero, ContinuousLinearMap.ext_iff, zero_apply]
-      _ ↔ IsIdempotentElem T := by simp only [sub_eq_zero, IsIdempotentElem, eq_comm]
-  exact this.mpr hT
-
-中文:
-定理 IsIdempotentElem.isSelfAdjoint_iff_isStarNormal
-  条件: (hT : IsIdempotentElem T)
-  证明: by
-  refine ⟨fun h => by rw [isStarNormal_iff, h], fun h => ?_⟩
-  suffices T = star T * T from this ▸ IsSelfAdjoint.star_mul_self _
-  rw [← sub_eq_zero]; rw [ContinuousLinearMap.ext_iff]
-  simp_rw [zero_apply, ← norm_eq_zero (E := E)]
-  have :=
-    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ forall x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
-          simp [star_eq_adjoint, one_def]
-      _ ↔ forall x, ‖(1 - T) (T x)‖ = 0 := by
-          simp only [isStarNormal_iff_norm_eq_adjoint.mp h.one_sub]
-      _ ↔ forall x, ‖(T - T * T) x‖ = 0 := by simp
-      _ ↔ T - T * T = 0 := by simp only [norm_eq_zero, ContinuousLinearMap.ext_iff, zero_apply]
-      _ ↔ IsIdempotentElem T := by simp only [sub_eq_zero, IsIdempotentElem, eq_comm]
-  exact this.mpr hT
+--- 原说明 ---
+An idempotent operator is self-adjoint iff it is normal.
 -/
 theorem IsIdempotentElem.isSelfAdjoint_iff_isStarNormal (hT : IsIdempotentElem T) :
     IsSelfAdjoint T ↔ IsStarNormal T := by
   refine ⟨fun h => by rw [isStarNormal_iff, h], fun h => ?_⟩
   suffices T = star T * T from this ▸ IsSelfAdjoint.star_mul_self _
-  rw [← sub_eq_zero]; rw [ContinuousLinearMap.ext_iff]
+  rw [← sub_eq_zero, ContinuousLinearMap.ext_iff]
   simp_rw [zero_apply, ← norm_eq_zero (E := E)]
   have :=
-    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ forall x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
+    calc (∀ x : E, ‖(T - star T * T) x‖ = 0) ↔ ∀ x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
           simp [star_eq_adjoint, one_def]
-      _ ↔ forall x, ‖(1 - T) (T x)‖ = 0 := by
+      _ ↔ ∀ x, ‖(1 - T) (T x)‖ = 0 := by
           simp only [isStarNormal_iff_norm_eq_adjoint.mp h.one_sub]
-      _ ↔ forall x, ‖(T - T * T) x‖ = 0 := by simp
+      _ ↔ ∀ x, ‖(T - T * T) x‖ = 0 := by simp
       _ ↔ T - T * T = 0 := by simp only [norm_eq_zero, ContinuousLinearMap.ext_iff, zero_apply]
       _ ↔ IsIdempotentElem T := by simp only [sub_eq_zero, IsIdempotentElem, eq_comm]
   exact this.mpr hT
 
-/--
-theorem `isStarProjection_iff_isIdempotentElem_and_isStarNormal` / 定理 `isStarProjection_iff_isIdempotentElem_and_isStarNormal`
+/-- A continuous linear map is a star projection iff it is idempotent and normal. -/
+/-
+**ContinuousLinearMap.isStarProjection_iff_isIdempotentElem_and_isStarNormal** 是
+ Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：isStarProjection_iff_isIdempotentElem_and_isStarNormal : IsStarProjection 
+T ↔ IsIdempotentElem T ∧ IsStarNormal T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isStarProjection_iff`：∀ {R : Type u_1} [inst : Mul R] [inst_1 : Star R] 
+(p : R), IsStarProjection p ↔ IsIdempotentElem p ∧ IsSelfAdjoint p
+· 使用定理 `and_congr_right_iff`：∀ {a b c : Prop}, (a ∧ b ↔ a ∧ c) ↔ a → (b ↔ c)
+· 使用定理 `ContinuousLinearMap.IsIdempotentElem.isSelfAdjoint_iff_isStarNormal`：∀ {
+𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [
+inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3…
 
-English:
-theorem isStarProjection_iff_isIdempotentElem_and_isStarNormal
-  proof: by
-  rw [isStarProjection_iff]; rw [and_congr_right_iff]
-  exact fun h => IsIdempotentElem.isSelfAdjoint_iff_isStarNormal h
-
-中文:
-定理 isStarProjection_iff_isIdempotentElem_and_isStarNormal
-  证明: by
-  rw [isStarProjection_iff]; rw [and_congr_right_iff]
-  exact fun h => IsIdempotentElem.isSelfAdjoint_iff_isStarNormal h
-
-Depends on / 依赖: IsIdempotentElem, IsIdempotentElem.isSelfAdjoint_iff_isStarNormal, and_congr_right_iff, isSelfAdjoint_iff_isStarNormal, isStarProjection_iff
+--- 原说明 ---
+A continuous linear map is a star projection iff it is idempotent and normal.
 -/
 theorem isStarProjection_iff_isIdempotentElem_and_isStarNormal :
     IsStarProjection T ↔ IsIdempotentElem T ∧ IsStarNormal T := by
-  rw [isStarProjection_iff]; rw [and_congr_right_iff]
+  rw [isStarProjection_iff, and_congr_right_iff]
   exact fun h => IsIdempotentElem.isSelfAdjoint_iff_isStarNormal h
-
-/--
-theorem `isStarProjection_iff_isSymmetricProjection` / 定理 `isStarProjection_iff_isSymmetricProjection`
-
-English:
-theorem isStarProjection_iff_isSymmetricProjection
-  proof: by
-  simp [isStarProjection_iff, LinearMap.isSymmetricProjection_iff,
-    isSelfAdjoint_iff_isSymmetric, IsIdempotentElem, End.mul_eq_comp, ← toLinearMap_comp, mul_def]
-
-alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection.isStarProjection⟩ :=
-  isStarProjection_iff_isSymmetricProjection
-
-中文:
-定理 isStarProjection_iff_isSymmetricProjection
-  证明: by
-  simp [isStarProjection_iff, LinearMap.isSymmetricProjection_iff,
-    isSelfAdjoint_iff_isSymmetric, IsIdempotentElem, End.mul_eq_comp, ← toLinearMap_comp, mul_def]
-
-alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection.isStarProjection⟩ :=
-  isStarProjection_iff_isSymmetricProjection
-
-Depends on / 依赖: End.mul_eq_comp, IsIdempotentElem, LinearMap, LinearMap.isSymmetricProjection_iff, isSelfAdjoint_iff_isSymmetric, isStarProjection_iff, isSymmetricProjection_iff, mul_def, mul_eq_comp, toLinearMap_comp
+/-
+**ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection** 是 Mathlib 中的一
+个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：isStarProjection_iff_isSymmetricProjection : IsStarProjection T ↔ T.IsSymm
+etricProjection
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isStarProjection_iff_isSymmetricProjection :
     IsStarProjection T ↔ T.IsSymmetricProjection := by
@@ -1649,99 +2029,111 @@ theorem isStarProjection_iff_isSymmetricProjection :
 alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection.isStarProjection⟩ :=
   isStarProjection_iff_isSymmetricProjection
 
-/--
-theorem `IsStarProjection.ext_iff` / 定理 `IsStarProjection.ext_iff`
+/-- Star projection operators are equal iff their range are. -/
+/-
+**ContinuousLinearMap.IsStarProjection.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousLinearMap.IsStarProjection`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3 : CompleteSpa
+ce E] {S : E →L[𝕜] E},   IsStarProjection S → IsStarProjection T → (S = T ↔ (↑S)
+.range = (↑T).range)
+参数：S = T ↔ (↑S).range = (↑T).range。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetricProjection.ext_iff`：∀ {𝕜 : Type u_1} {E : Type u_2}
+ [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜
+ E]   {S T : E →ₗ[𝕜] E}, S.Is…
+· 使用定理 `ContinuousLinearMap.IsStarProjection.isSymmetricProjection`：∀ {𝕜 : Type 
+u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : 
+InnerProductSpace 𝕜 E]   {T : E →L[𝕜] E} [inst_3…
 
-English:
-theorem IsStarProjection.ext_iff
-  statement: {S : E ->L[𝕜] E}
-  proof: by
-  simpa using hS.isSymmetricProjection.ext_iff hT.isSymmetricProjection
-
-alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
-
-中文:
-定理 是StarProjection.ext_iff
-  结论: {S : E ->L[𝕜] E}
-  证明: by
-  simpa using hS.isSymmetricProjection.ext_iff hT.isSymmetricProjection
-
-alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
-
-Depends on / 依赖: ext_iff, hS.isSymmetricProjection.ext_iff, hT.isSymmetricProjection, isSymmetricProjection
+--- 原说明 ---
+Star projection operators are equal iff their range are.
 -/
-theorem IsStarProjection.ext_iff {S : E ->L[𝕜] E}
+theorem IsStarProjection.ext_iff {S : E →L[𝕜] E}
     (hS : IsStarProjection S) (hT : IsStarProjection T) :
     S = T ↔ S.range = T.range := by
   simpa using hS.isSymmetricProjection.ext_iff hT.isSymmetricProjection
 
 alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
-
-/--
-theorem `_root_.InnerProductSpace.isStarProjection_rankOne_self` / 定理 `_root_.InnerProductSpace.isStarProjection_rankOne_self`
-
-English:
-theorem _root_.InnerProductSpace.isStarProjection_rankOne_self
-  given: {x : E} (hx : ‖x‖ = 1)
-  proof: (isSymmetricProjection_rankOne_self hx).isStarProjection
-
-中文:
-定理 _root_.内积空间.isStarProjection_rankOne_self
-  条件: {x : E} (hx : ‖x‖ = 1)
-  证明: (isSymmetricProjection_rankOne_self hx).isStarProjection
-
-Depends on / 依赖: isStarProjection, isSymmetricProjection_rankOne_self
+/-
+**ContinuousLinearMap._root_.InnerProductSpace.isStarProjection_rankOne_self** 是
+ Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.InnerProductSpace.isStarProjection_rankOne_self {x : E} (hx : ‖x‖ = 1) :
     IsStarProjection (rankOne 𝕜 x x) := (isSymmetricProjection_rankOne_self hx).isStarProjection
 
 open Module End Submodule in
-/--
-theorem `orthogonal_mem_invtSubmodule` / 定理 `orthogonal_mem_invtSubmodule`
-
-English:
-theorem orthogonal_mem_invtSubmodule
-  statement: {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
-  proof: by
-  simp only [mem_invtSubmodule_iff_forall_mem_of_mem, coe_coe, mem_orthogonal] at h ⊢
-  grind [T.adjoint_inner_left]
-
-中文:
-定理 orthogonal_mem_invtSubmodule
-  结论: {T : E ->L[𝕜] E} {U : 子模 𝕜 E}
-  证明: by
-  simp only [mem_invtSubmodule_iff_forall_mem_of_mem, coe_coe, mem_orthogonal] at h ⊢
-  grind [T.adjoint_inner_left]
-
-Depends on / 依赖: T.adjoint_inner_left, adjoint_inner_left, coe_coe, mem_invtSubmodule_iff_forall_mem_of_mem, mem_orthogonal
+/-
+**ContinuousLinearMap.orthogonal_mem_invtSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：orthogonal_mem_invtSubmodule {T : E ->L[𝕜] E} {U : Submodule 𝕜 E} (h : U i
+n invtSubmodule T.adjoint.toLinearMap) : Uᗮ in invtSubmodule T.toLinearMap
+参数：h : U in invtSubmodule T.adjoint.toLinearMap。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem orthogonal_mem_invtSubmodule {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
-    (h : U in invtSubmodule T.adjoint.toLinearMap) :
-    Uᗮ in invtSubmodule T.toLinearMap := by
+theorem orthogonal_mem_invtSubmodule {T : E →L[𝕜] E} {U : Submodule 𝕜 E}
+    (h : U ∈ invtSubmodule T.adjoint.toLinearMap) :
+    Uᗮ ∈ invtSubmodule T.toLinearMap := by
   simp only [mem_invtSubmodule_iff_forall_mem_of_mem, coe_coe, mem_orthogonal] at h ⊢
   grind [T.adjoint_inner_left]
 
 open Module End in
-/--
-theorem `mem_invtSubmodule_adjoint_iff` / 定理 `mem_invtSubmodule_adjoint_iff`
-
-English:
-theorem mem_invtSubmodule_adjoint_iff
-  statement: {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
-  proof: orthogonal_mem_invtSubmodule
-  mpr := by simpa using orthogonal_mem_invtSubmodule (T := T.adjoint) (U := Uᗮ)
-
-中文:
-定理 mem_invtSubmodule_adjoint_iff
-  结论: {T : E ->L[𝕜] E} {U : 子模 𝕜 E}
-  证明: orthogonal_mem_invtSubmodule
-  mpr := by simpa using orthogonal_mem_invtSubmodule (T := T.adjoint) (U := Uᗮ)
-
-Depends on / 依赖: orthogonal_mem_invtSubmodule
+/-
+**ContinuousLinearMap.mem_invtSubmodule_adjoint_iff** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：mem_invtSubmodule_adjoint_iff {T : E ->L[𝕜] E} {U : Submodule 𝕜 E} [U.HasO
+rthogonalProjection] : U in invtSubmodule T.adjoint.toLinearMap ↔ Uᗮ in invtSubm
+odule T.toLinearMap where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.orthogonal_mem_invtSubmodule`：orthogonal_mem_invtSub
+module {T : E ->L[𝕜] E} {U : Submodule 𝕜 E} (h : U in invtSubmodule T.adjoint.to
+LinearMap) : Uᗮ in invtSubmodule T.toL…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->L[𝕜] F) : 
+A†† = A
+· 使用定理 `Submodule.orthogonal_orthogonal`：orthogonal_orthogonal [K.HasOrthogonalP
+rojection] : Kᗮᗮ = K
 -/
-theorem mem_invtSubmodule_adjoint_iff {T : E ->L[𝕜] E} {U : Submodule 𝕜 E}
+theorem mem_invtSubmodule_adjoint_iff {T : E →L[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] :
-    U in invtSubmodule T.adjoint.toLinearMap ↔ Uᗮ in invtSubmodule T.toLinearMap where
+    U ∈ invtSubmodule T.adjoint.toLinearMap ↔ Uᗮ ∈ invtSubmodule T.toLinearMap where
   mp := orthogonal_mem_invtSubmodule
   mpr := by simpa using orthogonal_mem_invtSubmodule (T := T.adjoint) (U := Uᗮ)
 
@@ -1749,130 +2141,142 @@ end ContinuousLinearMap
 
 /-- `U.starProjection` is a star projection. -/
 @[simp]
-/--
-theorem `isStarProjection_starProjection` / 定理 `isStarProjection_starProjection`
+/-
+**isStarProjection_starProjection** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isStarProjection_starProjection [CompleteSpace E] {U : Submodule 𝕜 E} [U.H
+asOrthogonalProjection] : IsStarProjection U.starProjection
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submodule.isIdempotentElem_starProjection`：isIdempotentElem_starProjecti
+on : IsIdempotentElem K.starProjection
+· 使用定理 `isSelfAdjoint_starProjection`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RC
+Like 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst
+_3 : CompleteSpace…
 
-English:
-theorem isStarProjection_starProjection
-  statement: [CompleteSpace E] {U : Submodule 𝕜 E}
-  proof: ⟨U.isIdempotentElem_starProjection, isSelfAdjoint_starProjection U⟩
-
-中文:
-定理 isStarProjection_starProjection
-  结论: [完备空间 E] {U : 子模 𝕜 E}
-  证明: ⟨U.isIdempotentElem_starProjection, isSelfAdjoint_starProjection U⟩
-
-Depends on / 依赖: U.isIdempotentElem_starProjection, isIdempotentElem_starProjection, isSelfAdjoint_starProjection
+--- 原说明 ---
+`U.starProjection` is a star projection.
 -/
 theorem isStarProjection_starProjection [CompleteSpace E] {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] : IsStarProjection U.starProjection :=
   ⟨U.isIdempotentElem_starProjection, isSelfAdjoint_starProjection U⟩
 
 open ContinuousLinearMap in
-/--
-theorem `isStarProjection_iff_eq_starProjection_range` / 定理 `isStarProjection_iff_eq_starProjection_range`
+/-- An operator is a star projection if and only if it is an orthogonal projection. -/
+/-
+**isStarProjection_iff_eq_starProjection_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isStarProjection_iff_eq_starProjection_range [CompleteSpace E] {p : E ->L[
+𝕜] E} : IsStarProjection p ↔ exists (_ : p.range.HasOrthogonalProjection), p = p
+.range.starProjection
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection`：isStarPr
+ojection_iff_isSymmetricProjection : IsStarProjection T ↔ T.IsSymmetricProjectio
+n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isStarProjection_iff_eq_starProjection_range
-  given: [CompleteSpace E] {p : E ->L[𝕜] E}
-  proof: by
-  simp_rw [p.isStarProjection_iff_isSymmetricProjection.eq,
-    LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range, coe_inj]
-
-中文:
-定理 isStarProjection_iff_eq_starProjection_range
-  条件: [完备空间 E] {p : E ->L[𝕜] E}
-  证明: by
-  simp_rw [p.isStarProjection_iff_isSymmetricProjection.eq,
-    LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range, coe_inj]
-
-Depends on / 依赖: LinearMap, LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range, coe_inj, isStarProjection_iff_isSymmetricProjection, isSymmetricProjection_iff_eq_coe_starProjection_range, p.isStarProjection_iff_isSymmetricProjection.eq, simp_rw
+--- 原说明 ---
+An operator is a star projection if and only if it is an orthogonal projection.
 -/
-theorem isStarProjection_iff_eq_starProjection_range [CompleteSpace E] {p : E ->L[𝕜] E} :
-    IsStarProjection p ↔ exists (_ : p.range.HasOrthogonalProjection),
+theorem isStarProjection_iff_eq_starProjection_range [CompleteSpace E] {p : E →L[𝕜] E} :
+    IsStarProjection p ↔ ∃ (_ : p.range.HasOrthogonalProjection),
     p = p.range.starProjection := by
   simp_rw [p.isStarProjection_iff_isSymmetricProjection.eq,
     LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range, coe_inj]
-
-/--
-lemma `isStarProjection_iff_eq_starProjection` / 引理 `isStarProjection_iff_eq_starProjection`
-
-English:
-lemma isStarProjection_iff_eq_starProjection
-  given: [CompleteSpace E] {p : E ->L[𝕜] E}
-  proof: ⟨fun h => ⟨p.range, isStarProjection_iff_eq_starProjection_range.mp h⟩,
-    by rintro ⟨_, _, rfl⟩; simp⟩
-
-中文:
-引理 isStarProjection_iff_eq_starProjection
-  条件: [完备空间 E] {p : E ->L[𝕜] E}
-  证明: ⟨fun h => ⟨p.range, isStarProjection_iff_eq_starProjection_range.mp h⟩,
-    by rintro ⟨_, _, rfl⟩; simp⟩
-
-Depends on / 依赖: isStarProjection_iff_eq_starProjection_range, isStarProjection_iff_eq_starProjection_range.mp, p.range
+/-
+**isStarProjection_iff_eq_starProjection** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isStarProjection_iff_eq_starProjection [CompleteSpace E] {p : E ->L[𝕜] E} 
+: IsStarProjection p ↔ exists (K : Submodule 𝕜 E) (_ : K.HasOrthogonalProjection
+), p = K.starProjection
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isStarProjection_iff_eq_starProjection_range`：isStarProjection_iff_eq_st
+arProjection_range [CompleteSpace E] {p : E ->L[𝕜] E} : IsStarProjection p ↔ exi
+sts (_ : p.range.HasOrthogonalProj…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma isStarProjection_iff_eq_starProjection [CompleteSpace E] {p : E ->L[𝕜] E} :
+lemma isStarProjection_iff_eq_starProjection [CompleteSpace E] {p : E →L[𝕜] E} :
     IsStarProjection p
-      ↔ exists (K : Submodule 𝕜 E) (_ : K.HasOrthogonalProjection), p = K.starProjection :=
-  ⟨fun h => ⟨p.range, isStarProjection_iff_eq_starProjection_range.mp h⟩,
+      ↔ ∃ (K : Submodule 𝕜 E) (_ : K.HasOrthogonalProjection), p = K.starProjection :=
+  ⟨fun h ↦ ⟨p.range, isStarProjection_iff_eq_starProjection_range.mp h⟩,
     by rintro ⟨_, _, rfl⟩; simp⟩
 
 namespace LinearMap
 
 variable [CompleteSpace E]
-variable {T : E ->ₗ[𝕜] E}
+variable {T : E →ₗ[𝕜] E}
 
-/--
-Definition of `IsSymmetric.toSelfAdjoint` / `IsSymmetric.toSelfAdjoint` 的定义
+/-- The **Hellinger--Toeplitz theorem**: Construct a self-adjoint operator from an everywhere
+  defined symmetric operator. -/
+/-
+**LinearMap.IsSymmetric.toSelfAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.IsSym
+metric`。
+形式化陈述：{𝕜 : Type u_1} →   {E : Type u_2} →     [inst : RCLike 𝕜] →       [inst_1 
+: NormedAddCommGroup E] →         [inst_2 : InnerProductSpace 𝕜 E] →           [
+inst_3 : CompleteSpace E] → {T : E →ₗ[𝕜] E} → T.IsSymmetric → ↥(selfAdjoint (E →
+L[𝕜] E))
+参数：selfAdjoint (E →L[𝕜] E)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsSymmetric.continuous`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [
+CompleteSpace E] {T : …
 
-English:
-definition IsSymmetric.toSelfAdjoint
-  signature: (hT : IsSymmetric T)
-  body: ⟨⟨T, hT.continuous⟩, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT⟩
-
-中文:
-定义 IsSymmetric.toSelfAdjoint
-  签名: (hT : IsSymmetric T)
-  定义体: ⟨⟨T, hT.continuous⟩, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT⟩
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr, continuous, hT.continuous, isSelfAdjoint_iff_isSymmetric
+--- 原说明 ---
+The **Hellinger--Toeplitz theorem**: Construct a self-adjoint operator from an e
+verywhere
+  defined symmetric operator.
 -/
-def IsSymmetric.toSelfAdjoint (hT : IsSymmetric T) : selfAdjoint (E ->L[𝕜] E) :=
+def IsSymmetric.toSelfAdjoint (hT : IsSymmetric T) : selfAdjoint (E →L[𝕜] E) :=
   ⟨⟨T, hT.continuous⟩, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT⟩
-
-/--
-theorem `IsSymmetric.coe_toSelfAdjoint` / 定理 `IsSymmetric.coe_toSelfAdjoint`
-
-English:
-theorem IsSymmetric.coe_toSelfAdjoint
-  given: (hT : IsSymmetric T)
-  statement: (hT.toSelfAdjoint : E ->ₗ[𝕜] E) = T
-  proof: rfl
-
-中文:
-定理 IsSymmetric.coe_toSelfAdjoint
-  条件: (hT : IsSymmetric T)
-  结论: (hT.toSelfAdjoint : E ->ₗ[𝕜] E) = T
-  证明: rfl
+/-
+**LinearMap.IsSymmetric.coe_toSelfAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.I
+sSymmetric`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : CompleteSpace E] {T : E →ₗ[
+𝕜] E} (hT : T.IsSymmetric), ↑↑hT.toSelfAdjoint = T
+参数：hT : T.IsSymmetric。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
-theorem IsSymmetric.coe_toSelfAdjoint (hT : IsSymmetric T) : (hT.toSelfAdjoint : E ->ₗ[𝕜] E) = T :=
+theorem IsSymmetric.coe_toSelfAdjoint (hT : IsSymmetric T) : (hT.toSelfAdjoint : E →ₗ[𝕜] E) = T :=
   rfl
-
-/--
-theorem `IsSymmetric.toSelfAdjoint_apply` / 定理 `IsSymmetric.toSelfAdjoint_apply`
-
-English:
-theorem IsSymmetric.toSelfAdjoint_apply
-  given: (hT : IsSymmetric T) {x : E}
-  proof: rfl
-
-中文:
-定理 IsSymmetric.toSelfAdjoint_apply
-  条件: (hT : IsSymmetric T) {x : E}
-  证明: rfl
+/-
+**LinearMap.IsSymmetric.toSelfAdjoint_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap
+.IsSymmetric`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : CompleteSpace E] {T : E →ₗ[
+𝕜] E} (hT : T.IsSymmetric) {x : E}, ↑↑hT.toSelfAdjoint x = T x
+参数：hT : T.IsSymmetric。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem IsSymmetric.toSelfAdjoint_apply (hT : IsSymmetric T) {x : E} :
-    (hT.toSelfAdjoint : E -> E) x = T x :=
+    (hT.toSelfAdjoint : E → E) x = T x :=
   rfl
 
 end LinearMap
@@ -1881,48 +2285,22 @@ namespace LinearMap
 
 variable [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 G]
 
-/--
-Definition of `adjoint` / `adjoint` 的定义
+/-- The adjoint of an operator from the finite-dimensional inner product space `E` to the
+finite-dimensional inner product space `F`. -/
+/-
+**LinearMap.adjoint** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：adjoint : (E ->ₗ[𝕜] F) ≃ₗ⋆[𝕜] F ->ₗ[𝕜] E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
 
-English:
-definition adjoint
-  signature: : (E ->ₗ[𝕜] F) ≃ₗ⋆[𝕜] F ->ₗ[𝕜] E
-  body: haveI := FiniteDimensional.complete 𝕜 E
-  haveI := FiniteDimensional.complete 𝕜 F
-  /- Note: Instead of the two instances above, the following works:
-    ```
-      haveI := FiniteDimensional.complete 𝕜
-      haveI := FiniteDimensional.complete 𝕜
-    ```
-    But removing one of the `have`s makes it fail. The reason is that `E` and `F` don't live
-    in the same universe, so the first `have` can no longer be used for `F` after its universe
-    metavariable has been assigned to that of `E`!
-  -/
-  ((LinearMap.toContinuousLinearMap : (E ->ₗ[𝕜] F) ≃ₗ[𝕜] E ->L[𝕜] F).trans
-      ContinuousLinearMap.adjoint.toLinearEquiv).trans
-    LinearMap.toContinuousLinearMap.symm
-
-中文:
-定义 adjoint
-  签名: : (E ->ₗ[𝕜] F) ≃ₗ⋆[𝕜] F ->ₗ[𝕜] E
-  定义体: haveI := FiniteDimensional.complete 𝕜 E
-  haveI := FiniteDimensional.complete 𝕜 F
-  /- Note: Instead of the two instances above, the following works:
-    ```
-      haveI := FiniteDimensional.complete 𝕜
-      haveI := FiniteDimensional.complete 𝕜
-    ```
-    But removing one of the `have`s makes it fail. The reason is that `E` and `F` don't live
-    in the same universe, so the first `have` can no longer be used for `F` after its universe
-    metavariable has been assigned to that of `E`!
-  -/
-  ((LinearMap.toContinuousLinearMap : (E ->ₗ[𝕜] F) ≃ₗ[𝕜] E ->L[𝕜] F).trans
-      ContinuousLinearMap.adjoint.toLinearEquiv).trans
-    LinearMap.toContinuousLinearMap.symm
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+--- 原说明 ---
+The adjoint of an operator from the finite-dimensional inner product space `E` t
+o the
+finite-dimensional inner product space `F`.
 -/
-def adjoint : (E ->ₗ[𝕜] F) ≃ₗ⋆[𝕜] F ->ₗ[𝕜] E :=
+def adjoint : (E →ₗ[𝕜] F) ≃ₗ⋆[𝕜] F →ₗ[𝕜] E :=
   haveI := FiniteDimensional.complete 𝕜 E
   haveI := FiniteDimensional.complete 𝕜 F
   /- Note: Instead of the two instances above, the following works:
@@ -1934,784 +2312,883 @@ def adjoint : (E ->ₗ[𝕜] F) ≃ₗ⋆[𝕜] F ->ₗ[𝕜] E :=
     in the same universe, so the first `have` can no longer be used for `F` after its universe
     metavariable has been assigned to that of `E`!
   -/
-  ((LinearMap.toContinuousLinearMap : (E ->ₗ[𝕜] F) ≃ₗ[𝕜] E ->L[𝕜] F).trans
+  ((LinearMap.toContinuousLinearMap : (E →ₗ[𝕜] F) ≃ₗ[𝕜] E →L[𝕜] F).trans
       ContinuousLinearMap.adjoint.toLinearEquiv).trans
     LinearMap.toContinuousLinearMap.symm
-
-/--
-theorem `adjoint_toContinuousLinearMap` / 定理 `adjoint_toContinuousLinearMap`
-
-English:
-theorem adjoint_toContinuousLinearMap
-  given: (A : E ->ₗ[𝕜] F)
-  proof: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.adjoint.toContinuousLinearMap = A.toContinuousLinearMap.adjoint :=
-  rfl
-
-中文:
-定理 adjoint_toContinuousLinearMap
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.adjoint.toContinuousLinearMap = A.toContinuousLinearMap.adjoint :=
-  rfl
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap.adjoint_toContinuousLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_toContinuousLinearMap (A : E ->ₗ[𝕜] F) : haveI
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
 -/
-theorem adjoint_toContinuousLinearMap (A : E ->ₗ[𝕜] F) :
+theorem adjoint_toContinuousLinearMap (A : E →ₗ[𝕜] F) :
     haveI := FiniteDimensional.complete 𝕜 E
     haveI := FiniteDimensional.complete 𝕜 F
     A.adjoint.toContinuousLinearMap = A.toContinuousLinearMap.adjoint :=
   rfl
-
-/--
-theorem `adjoint_eq_toCLM_adjoint` / 定理 `adjoint_eq_toCLM_adjoint`
-
-English:
-theorem adjoint_eq_toCLM_adjoint
-  given: (A : E ->ₗ[𝕜] F)
-  proof: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.adjoint = A.toContinuousLinearMap.adjoint :=
-  rfl
-
-中文:
-定理 adjoint_eq_toCLM_adjoint
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.adjoint = A.toContinuousLinearMap.adjoint :=
-  rfl
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap.adjoint_eq_toCLM_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_eq_toCLM_adjoint (A : E ->ₗ[𝕜] F) : haveI
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
 -/
-theorem adjoint_eq_toCLM_adjoint (A : E ->ₗ[𝕜] F) :
+theorem adjoint_eq_toCLM_adjoint (A : E →ₗ[𝕜] F) :
     haveI := FiniteDimensional.complete 𝕜 E
     haveI := FiniteDimensional.complete 𝕜 F
     A.adjoint = A.toContinuousLinearMap.adjoint :=
   rfl
-
-/--
-theorem `_root_.ContinuousLinearMap.adjoint_toLinearMap` / 定理 `_root_.ContinuousLinearMap.adjoint_toLinearMap`
-
-English:
-theorem _root_.ContinuousLinearMap.adjoint_toLinearMap
-  given: (A : E ->L[𝕜] F)
-  proof: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.toLinearMap.adjoint = A.adjoint.toLinearMap :=
-  rfl
-
-中文:
-定理 _root_.连续线性映射.adjoint_toLinearMap
-  条件: (A : E ->L[𝕜] F)
-  证明: FiniteDimensional.complete 𝕜 E
-    haveI := FiniteDimensional.complete 𝕜 F
-    A.toLinearMap.adjoint = A.adjoint.toLinearMap :=
-  rfl
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap._root_.ContinuousLinearMap.adjoint_toLinearMap** 是 Mathlib 中的一个定理，位于
+命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousLinearMap.adjoint_toLinearMap (A : E ->L[𝕜] F) :
+theorem _root_.ContinuousLinearMap.adjoint_toLinearMap (A : E →L[𝕜] F) :
     haveI := FiniteDimensional.complete 𝕜 E
     haveI := FiniteDimensional.complete 𝕜 F
     A.toLinearMap.adjoint = A.adjoint.toLinearMap :=
   rfl
 
-/--
-theorem `adjoint_inner_left` / 定理 `adjoint_inner_left`
+/-- The fundamental property of the adjoint. -/
+/-
+**LinearMap.adjoint_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E) (y : F) : ⟪adjoint A y, x⟫ = ⟪
+y, A x⟫
+参数：A : E ->ₗ[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.coe_toContinuousLinearMap`：coe_toContinuousLinearMap (f : E ->
+ₗ[𝕜] F') : ((LinearMap.toContinuousLinearMap f) : E ->ₗ[𝕜] F') = f
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `LinearMap.adjoint_eq_toCLM_adjoint`：adjoint_eq_toCLM_adjoint (A : E ->ₗ[
+𝕜] F) : haveI
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
 
-English:
-theorem adjoint_inner_left
-  given: (A : E ->ₗ[𝕜] F) (x : E) (y : F)
-  statement: ⟪adjoint A y, x⟫ = ⟪y, A x⟫
-  proof: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
-  exact ContinuousLinearMap.adjoint_inner_left _ x y
-
-中文:
-定理 adjoint_inner_left
-  条件: (A : E ->ₗ[𝕜] F) (x : E) (y : F)
-  结论: ⟪adjoint A y, x⟫ = ⟪y, A x⟫
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
-  exact ContinuousLinearMap.adjoint_inner_left _ x y
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.adjoint_inner_left, FiniteDimensional, FiniteDimensional.complete, adjoint_eq_toCLM_adjoint, adjoint_inner_left, coe_toContinuousLinearMap, complete
+--- 原说明 ---
+The fundamental property of the adjoint.
 -/
-theorem adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫ := by
+theorem adjoint_inner_left (A : E →ₗ[𝕜] F) (x : E) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫ := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
+  rw [← coe_toContinuousLinearMap A, adjoint_eq_toCLM_adjoint]
   exact ContinuousLinearMap.adjoint_inner_left _ x y
 
-/--
-theorem `adjoint_inner_right` / 定理 `adjoint_inner_right`
+/-- The fundamental property of the adjoint. -/
+/-
+**LinearMap.adjoint_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x : E) (y : F) : ⟪x, adjoint A y⟫ = 
+⟪A x, y⟫
+参数：A : E ->ₗ[𝕜] F；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.coe_toContinuousLinearMap`：coe_toContinuousLinearMap (f : E ->
+ₗ[𝕜] F') : ((LinearMap.toContinuousLinearMap f) : E ->ₗ[𝕜] F') = f
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `LinearMap.adjoint_eq_toCLM_adjoint`：adjoint_eq_toCLM_adjoint (A : E ->ₗ[
+𝕜] F) : haveI
+· 使用定理 `ContinuousLinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->L[
+𝕜] F) (x : E) (y : F) : ⟪x, (A†) y⟫ = ⟪A x, y⟫
 
-English:
-theorem adjoint_inner_right
-  given: (A : E ->ₗ[𝕜] F) (x : E) (y : F)
-  statement: ⟪x, adjoint A y⟫ = ⟪A x, y⟫
-  proof: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
-  exact ContinuousLinearMap.adjoint_inner_right _ x y
-
-中文:
-定理 adjoint_inner_right
-  条件: (A : E ->ₗ[𝕜] F) (x : E) (y : F)
-  结论: ⟪x, adjoint A y⟫ = ⟪A x, y⟫
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
-  exact ContinuousLinearMap.adjoint_inner_right _ x y
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.adjoint_inner_right, FiniteDimensional, FiniteDimensional.complete, adjoint_eq_toCLM_adjoint, adjoint_inner_right, coe_toContinuousLinearMap, complete
+--- 原说明 ---
+The fundamental property of the adjoint.
 -/
-theorem adjoint_inner_right (A : E ->ₗ[𝕜] F) (x : E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫ := by
+theorem adjoint_inner_right (A : E →ₗ[𝕜] F) (x : E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫ := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 F
-  rw [← coe_toContinuousLinearMap A]; rw [adjoint_eq_toCLM_adjoint]
+  rw [← coe_toContinuousLinearMap A, adjoint_eq_toCLM_adjoint]
   exact ContinuousLinearMap.adjoint_inner_right _ x y
 
 /-- The adjoint is involutive. -/
 @[simp]
-/--
-theorem `adjoint_adjoint` / 定理 `adjoint_adjoint`
+/-
+**LinearMap.adjoint_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.adjoint = A
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `ext_inner_left`：ext_inner_left {x y : E} (h : forall v, ⟪v, x⟫ = ⟪v, y⟫)
+ : x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x :
+ E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
 
-English:
-theorem adjoint_adjoint
-  given: (A : E ->ₗ[𝕜] F)
-  statement: A.adjoint.adjoint = A
-  proof: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjoint_inner_right]; rw [adjoint_inner_left]
-
-中文:
-定理 adjoint_adjoint
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: A.adjoint.adjoint = A
-  证明: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjoint_inner_right]; rw [adjoint_inner_left]
-
-Depends on / 依赖: adjoint_inner_left, adjoint_inner_right, ext_inner_left
+--- 原说明 ---
+The adjoint is involutive.
 -/
-theorem adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.adjoint = A := by
+theorem adjoint_adjoint (A : E →ₗ[𝕜] F) : A.adjoint.adjoint = A := by
   ext v
   refine ext_inner_left 𝕜 fun w => ?_
-  rw [adjoint_inner_right]; rw [adjoint_inner_left]
+  rw [adjoint_inner_right, adjoint_inner_left]
 
 /-- The adjoint of the composition of two operators is the composition of the two adjoints
 in reverse order. -/
 @[simp]
-/--
-theorem `adjoint_comp` / 定理 `adjoint_comp`
+/-
+**LinearMap.adjoint_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_comp (A : F ->ₗ[𝕜] G) (B : E ->ₗ[𝕜] F) : (A ∘ₗ B).adjoint = B.adjo
+int ∘ₗ A.adjoint
+参数：A : F ->ₗ[𝕜] G；B : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `ext_inner_left`：ext_inner_left {x y : E} (h : forall v, ⟪v, x⟫ = ⟪v, y⟫)
+ : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x :
+ E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem adjoint_comp
-  given: (A : F ->ₗ[𝕜] G) (B : E ->ₗ[𝕜] F)
-  proof: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  simp only [adjoint_inner_right, LinearMap.coe_comp, Function.comp_apply]
-
-中文:
-定理 adjoint_comp
-  条件: (A : F ->ₗ[𝕜] G) (B : E ->ₗ[𝕜] F)
-  证明: by
-  ext v
-  refine ext_inner_left 𝕜 fun w => ?_
-  simp only [adjoint_inner_right, LinearMap.coe_comp, Function.comp_apply]
-
-Depends on / 依赖: Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, adjoint_inner_right, coe_comp, comp_apply, ext_inner_left
+--- 原说明 ---
+The adjoint of the composition of two operators is the composition of the two ad
+joints
+in reverse order.
 -/
-theorem adjoint_comp (A : F ->ₗ[𝕜] G) (B : E ->ₗ[𝕜] F) :
+theorem adjoint_comp (A : F →ₗ[𝕜] G) (B : E →ₗ[𝕜] F) :
     (A ∘ₗ B).adjoint = B.adjoint ∘ₗ A.adjoint := by
   ext v
   refine ext_inner_left 𝕜 fun w => ?_
   simp only [adjoint_inner_right, LinearMap.coe_comp, Function.comp_apply]
 
-/--
-theorem `eq_adjoint_iff` / 定理 `eq_adjoint_iff`
+/-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
+for all `x` and `y`. -/
+/-
+**LinearMap.eq_adjoint_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eq_adjoint_iff (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) : A = B.adjoint ↔ forall 
+x y, ⟪A x, y⟫ = ⟪x, B y⟫
+参数：A : E ->ₗ[𝕜] F；B : F ->ₗ[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `ext_inner_right`：ext_inner_right {x y : E} (h : forall v, ⟪x, v⟫ = ⟪y, v
+⟫) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem eq_adjoint_iff
-  given: (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  proof: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
-
-@[simp]
-
-中文:
-定理 eq_adjoint_iff
-  条件: (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  证明: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
-
-@[simp]
-
-Depends on / 依赖: adjoint_inner_left, ext_inner_right
+--- 原说明 ---
+The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y
+⟫ = ⟪x, B y⟫`
+for all `x` and `y`.
 -/
-theorem eq_adjoint_iff (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) :
-    A = B.adjoint ↔ forall x y, ⟪A x, y⟫ = ⟪x, B y⟫ := by
+theorem eq_adjoint_iff (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E) :
+    A = B.adjoint ↔ ∀ x y, ⟪A x, y⟫ = ⟪x, B y⟫ := by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   ext x
   exact ext_inner_right 𝕜 fun y => by simp only [adjoint_inner_left, h x y]
 
 @[simp]
-/--
-theorem `IsSymmetric.adjoint_eq` / 定理 `IsSymmetric.adjoint_eq`
-
-English:
-theorem IsSymmetric.adjoint_eq
-  given: {A : E ->ₗ[𝕜] E} (hA : A.IsSymmetric)
-  proof: by
-  rwa [eq_comm, eq_adjoint_iff A A]
-
-中文:
-定理 IsSymmetric.adjoint_eq
-  条件: {A : E ->ₗ[𝕜] E} (hA : A.IsSymmetric)
-  证明: by
-  rwa [eq_comm, eq_adjoint_iff A A]
-
-Depends on / 依赖: eq_adjoint_iff, eq_comm
+/-
+**LinearMap.IsSymmetric.adjoint_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsSymmet
+ric`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : FiniteDimensional 𝕜 E] {A :
+ E →ₗ[𝕜] E}, A.IsSymmetric → LinearMap.adjoint A = A
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `LinearMap.eq_adjoint_iff`：eq_adjoint_iff (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] 
+E) : A = B.adjoint ↔ forall x y, ⟪A x, y⟫ = ⟪x, B y⟫
 -/
-theorem IsSymmetric.adjoint_eq {A : E ->ₗ[𝕜] E} (hA : A.IsSymmetric) :
+theorem IsSymmetric.adjoint_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) :
     A.adjoint = A := by
   rwa [eq_comm, eq_adjoint_iff A A]
-
-/--
-lemma `adjoint_id` / 引理 `adjoint_id`
-
-English:
-lemma adjoint_id
-  statement: (.id : E ->ₗ[𝕜] E).adjoint = .id
-  proof: by simp
-
-中文:
-引理 adjoint_id
-  结论: (.id : E ->ₗ[𝕜] E).adjoint = .id
-  证明: by simp
+/-
+**LinearMap.adjoint_id** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_id : (.id : E ->ₗ[𝕜] E).adjoint = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [
+inst_3 : FiniteDimensi…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma adjoint_id : (.id : E ->ₗ[𝕜] E).adjoint = .id := by simp
-/--
-lemma `adjoint_one` / 引理 `adjoint_one`
-
-English:
-lemma adjoint_one
-  statement: (1 : E ->ₗ[𝕜] E).adjoint = 1
-  proof: by simp
-
-中文:
-引理 adjoint_one
-  结论: (1 : E ->ₗ[𝕜] E).adjoint = 1
-  证明: by simp
+lemma adjoint_id : (.id : E →ₗ[𝕜] E).adjoint = .id := by simp
+/-
+**LinearMap.adjoint_one** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_one : (1 : E ->ₗ[𝕜] E).adjoint = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [
+inst_3 : FiniteDimensi…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma adjoint_one : (1 : E ->ₗ[𝕜] E).adjoint = 1 := by simp
+lemma adjoint_one : (1 : E →ₗ[𝕜] E).adjoint = 1 := by simp
 
-/--
-lemma `orthogonal_ker` / 引理 `orthogonal_ker`
+/-- 7.6(b) from [axler2024].
+See `ContinuousLinearMap.orthogonal_ker` for the infinite-dimensional version. -/
+/-
+**LinearMap.orthogonal_ker** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：orthogonal_ker (A : E ->ₗ[𝕜] F) : A.kerᗮ = A.adjoint.range
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.topologicalClosure_eq_self`：topologicalClosure_eq_self : K.top
+ologicalClosure = K
+· 使用定理 `ContinuousLinearMap.orthogonal_ker`：orthogonal_ker (T : E ->L[𝕜] F) : T.
+kerᗮ = T†.range.topologicalClosure
 
-English:
-lemma orthogonal_ker
-  given: (A : E ->ₗ[𝕜] F)
-  statement: A.kerᗮ = A.adjoint.range
-  proof: by
+--- 原说明 ---
+7.6(b) from [axler2024].
+See `ContinuousLinearMap.orthogonal_ker` for the infinite-dimensional version.
+-/
+lemma orthogonal_ker (A : E →ₗ[𝕜] F) : A.kerᗮ = A.adjoint.range := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 F
   simpa using! A.toContinuousLinearMap.orthogonal_ker
 
-中文:
-引理 orthogonal_ker
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: A.kerᗮ = A.adjoint.range
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.orthogonal_ker
+/-- 7.6(a) from [axler2024].
+See `ContinuousLinearMap.orthogonal_range` for the infinite-dimensional version. -/
+/-
+**LinearMap.orthogonal_range** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：orthogonal_range (A : E ->ₗ[𝕜] F) : A.rangeᗮ = A.adjoint.ker
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ContinuousLinearMap.orthogonal_range`：orthogonal_range (T : E ->L[𝕜] F) 
+: T.rangeᗮ = T†.ker
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
 
-Depends on / 依赖: A.toContinuousLinearMap.orthogonal_ker, FiniteDimensional, FiniteDimensional.complete, complete, orthogonal_ker, toContinuousLinearMap
+--- 原说明 ---
+7.6(a) from [axler2024].
+See `ContinuousLinearMap.orthogonal_range` for the infinite-dimensional version.
 -/
-lemma orthogonal_ker (A : E ->ₗ[𝕜] F) : A.kerᗮ = A.adjoint.range := by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.orthogonal_ker
-
-/--
-lemma `orthogonal_range` / 引理 `orthogonal_range`
-
-English:
-lemma orthogonal_range
-  given: (A : E ->ₗ[𝕜] F)
-  statement: A.rangeᗮ = A.adjoint.ker
-  proof: by
+lemma orthogonal_range (A : E →ₗ[𝕜] F) : A.rangeᗮ = A.adjoint.ker := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 F
   simpa using! A.toContinuousLinearMap.orthogonal_range
 
-中文:
-引理 orthogonal_range
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: A.rangeᗮ = A.adjoint.ker
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.orthogonal_range
+/-- 7.64(b) in [axler2024] -/
+/-
+**LinearMap.ker_adjoint_comp_self** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：ker_adjoint_comp_self (A : E ->ₗ[𝕜] F) : (A.adjoint ∘ₗ A).ker = A.ker
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ContinuousLinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (T : E 
+->L[𝕜] F) : (T† ∘L T).ker = T.ker
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
 
-Depends on / 依赖: A.toContinuousLinearMap.orthogonal_range, FiniteDimensional, FiniteDimensional.complete, complete, orthogonal_range, toContinuousLinearMap
+--- 原说明 ---
+7.64(b) in [axler2024]
 -/
-lemma orthogonal_range (A : E ->ₗ[𝕜] F) : A.rangeᗮ = A.adjoint.ker := by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.orthogonal_range
-
-/--
-lemma `ker_adjoint_comp_self` / 引理 `ker_adjoint_comp_self`
-
-English:
-lemma ker_adjoint_comp_self
-  given: (A : E ->ₗ[𝕜] F)
-  statement: (A.adjoint ∘ₗ A).ker = A.ker
-  proof: by
+lemma ker_adjoint_comp_self (A : E →ₗ[𝕜] F) : (A.adjoint ∘ₗ A).ker = A.ker := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 F
   simpa using! A.toContinuousLinearMap.ker_adjoint_comp_self
-
-中文:
-引理 ker_adjoint_comp_self
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: (A.adjoint ∘ₗ A).ker = A.ker
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.ker_adjoint_comp_self
-
-Depends on / 依赖: A.toContinuousLinearMap.ker_adjoint_comp_self, FiniteDimensional, FiniteDimensional.complete, complete, ker_adjoint_comp_self, toContinuousLinearMap
+/-
+**LinearMap.ker_self_comp_adjoint** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：ker_self_comp_adjoint (A : E ->ₗ[𝕜] F) : (A ∘ₗ A.adjoint).ker = A.adjoint.
+ker
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用引理 `LinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (A : E ->ₗ[𝕜] F) 
+: (A.adjoint ∘ₗ A).ker = A.ker
 -/
-lemma ker_adjoint_comp_self (A : E ->ₗ[𝕜] F) : (A.adjoint ∘ₗ A).ker = A.ker := by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 F
-  simpa using! A.toContinuousLinearMap.ker_adjoint_comp_self
-
-/--
-lemma `ker_self_comp_adjoint` / 引理 `ker_self_comp_adjoint`
-
-English:
-lemma ker_self_comp_adjoint
-  given: (A : E ->ₗ[𝕜] F)
-  statement: (A ∘ₗ A.adjoint).ker = A.adjoint.ker
-  proof: by
-  simpa using A.adjoint.ker_adjoint_comp_self
-
-中文:
-引理 ker_self_comp_adjoint
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: (A ∘ₗ A.adjoint).ker = A.adjoint.ker
-  证明: by
-  simpa using A.adjoint.ker_adjoint_comp_self
-
-Depends on / 依赖: A.adjoint.ker_adjoint_comp_self, adjoint, ker_adjoint_comp_self
--/
-lemma ker_self_comp_adjoint (A : E ->ₗ[𝕜] F) : (A ∘ₗ A.adjoint).ker = A.adjoint.ker := by
+lemma ker_self_comp_adjoint (A : E →ₗ[𝕜] F) : (A ∘ₗ A.adjoint).ker = A.adjoint.ker := by
   simpa using A.adjoint.ker_adjoint_comp_self
 
 /--
-lemma `adjoint_comp_self_injective_iff` / 引理 `adjoint_comp_self_injective_iff`
-
-English:
-lemma adjoint_comp_self_injective_iff
-  given: (A : E ->ₗ[𝕜] F)
-  proof: by
-  rw [← coe_comp]; rw [← ker_eq_bot]; rw [← ker_eq_bot]; rw [ker_adjoint_comp_self]
-
-中文:
-引理 adjoint_comp_self_injective_iff
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: by
-  rw [← coe_comp]; rw [← ker_eq_bot]; rw [← ker_eq_bot]; rw [ker_adjoint_comp_self]
-
-Depends on / 依赖: coe_comp, ker_adjoint_comp_self, ker_eq_bot
+This lemma uses the simp-normal form `⇑(A.adjoint) ∘ ⇑A` instead of `⇑(A.adjoint ∘ₗ A)`
+(note the difference between `∘` and `∘ₗ`).
+You may need to rewrite with `LinearMap.coe_comp` before applying this lemma.
 -/
-lemma adjoint_comp_self_injective_iff (A : E ->ₗ[𝕜] F) :
+/-
+**LinearMap.adjoint_comp_self_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap
+`。
+形式化陈述：adjoint_comp_self_injective_iff (A : E ->ₗ[𝕜] F) : Function.Injective (A.a
+djoint ∘ A) ↔ Function.Injective A
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.coe_comp`：coe_comp : (f.comp g : M₁ -> M₃) = f ∘ g
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用引理 `LinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (A : E ->ₗ[𝕜] F) 
+: (A.adjoint ∘ₗ A).ker = A.ker
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+
+--- 原说明 ---
+This lemma uses the simp-normal form `⇑(A.adjoint) ∘ ⇑A` instead of `⇑(A.adjoint
+ ∘ₗ A)`
+(note the difference between `∘` and `∘ₗ`).
+You may need to rewrite with `LinearMap.coe_comp` before applying this lemma.
+-/
+lemma adjoint_comp_self_injective_iff (A : E →ₗ[𝕜] F) :
     Function.Injective (A.adjoint ∘ A) ↔ Function.Injective A := by
-  rw [← coe_comp]; rw [← ker_eq_bot]; rw [← ker_eq_bot]; rw [ker_adjoint_comp_self]
+  rw [← coe_comp, ← ker_eq_bot, ← ker_eq_bot, ker_adjoint_comp_self]
 
 /--
-lemma `self_comp_adjoint_injective_iff` / 引理 `self_comp_adjoint_injective_iff`
-
-English:
-lemma self_comp_adjoint_injective_iff
-  given: (A : E ->ₗ[𝕜] F)
-  proof: by
-  simpa using A.adjoint.adjoint_comp_self_injective_iff
-
-中文:
-引理 self_comp_adjoint_injective_iff
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: by
-  simpa using A.adjoint.adjoint_comp_self_injective_iff
-
-Depends on / 依赖: A.adjoint.adjoint_comp_self_injective_iff, adjoint, adjoint_comp_self_injective_iff
+This lemma uses the simp-normal form `⇑A ∘ ⇑(A.adjoint)` instead of `⇑(A ∘ₗ A.adjoint)`
+(note the difference between `∘` and `∘ₗ`).
+You may need to rewrite with `LinearMap.coe_comp` before applying this lemma.
 -/
-lemma self_comp_adjoint_injective_iff (A : E ->ₗ[𝕜] F) :
+/-
+**LinearMap.self_comp_adjoint_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap
+`。
+形式化陈述：self_comp_adjoint_injective_iff (A : E ->ₗ[𝕜] F) : Function.Injective (A ∘
+ A.adjoint) ↔ Function.Injective A.adjoint
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用引理 `LinearMap.adjoint_comp_self_injective_iff`：adjoint_comp_self_injective_i
+ff (A : E ->ₗ[𝕜] F) : Function.Injective (A.adjoint ∘ A) ↔ Function.Injective A
+
+--- 原说明 ---
+This lemma uses the simp-normal form `⇑A ∘ ⇑(A.adjoint)` instead of `⇑(A ∘ₗ A.ad
+joint)`
+(note the difference between `∘` and `∘ₗ`).
+You may need to rewrite with `LinearMap.coe_comp` before applying this lemma.
+-/
+lemma self_comp_adjoint_injective_iff (A : E →ₗ[𝕜] F) :
     Function.Injective (A ∘ A.adjoint) ↔ Function.Injective A.adjoint := by
   simpa using A.adjoint.adjoint_comp_self_injective_iff
 
-/--
-lemma `range_adjoint_comp_self` / 引理 `range_adjoint_comp_self`
+/-- 7.64(c) in [axler2024]. -/
+/-
+**LinearMap.range_adjoint_comp_self** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：range_adjoint_comp_self (A : E ->ₗ[𝕜] F) : (A.adjoint ∘ₗ A).range = A.adjo
+int.range
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.orthogonal_ker`：orthogonal_ker (A : E ->ₗ[𝕜] F) : A.kerᗮ = A.a
+djoint.range
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `LinearMap.adjoint_comp`：adjoint_comp (A : F ->ₗ[𝕜] G) (B : E ->ₗ[𝕜] F) :
+ (A ∘ₗ B).adjoint = B.adjoint ∘ₗ A.adjoint
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `LinearMap.ker_adjoint_comp_self`：ker_adjoint_comp_self (A : E ->ₗ[𝕜] F) 
+: (A.adjoint ∘ₗ A).ker = A.ker
 
-English:
-lemma range_adjoint_comp_self
-  given: (A : E ->ₗ[𝕜] F)
-  statement: (A.adjoint ∘ₗ A).range = A.adjoint.range
-  proof: calc
-    (A.adjoint ∘ₗ A).range = (A.adjoint ∘ₗ A).kerᗮ := by simp [orthogonal_ker]
-    _ = A.adjoint.range := by rw [ker_adjoint_comp_self, orthogonal_ker]
-
-中文:
-引理 range_adjoint_comp_self
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: (A.adjoint ∘ₗ A).range = A.adjoint.range
-  证明: calc
-    (A.adjoint ∘ₗ A).range = (A.adjoint ∘ₗ A).kerᗮ := by simp [orthogonal_ker]
-    _ = A.adjoint.range := by rw [ker_adjoint_comp_self, orthogonal_ker]
-
-Depends on / 依赖: A.adjoint, A.adjoint.range, adjoint, ker_adjoint_comp_self, orthogonal_ker
+--- 原说明 ---
+7.64(c) in [axler2024].
 -/
-lemma range_adjoint_comp_self (A : E ->ₗ[𝕜] F) : (A.adjoint ∘ₗ A).range = A.adjoint.range :=
+lemma range_adjoint_comp_self (A : E →ₗ[𝕜] F) : (A.adjoint ∘ₗ A).range = A.adjoint.range :=
   calc
     (A.adjoint ∘ₗ A).range = (A.adjoint ∘ₗ A).kerᗮ := by simp [orthogonal_ker]
     _ = A.adjoint.range := by rw [ker_adjoint_comp_self, orthogonal_ker]
-
-/--
-lemma `range_self_comp_adjoint` / 引理 `range_self_comp_adjoint`
-
-English:
-lemma range_self_comp_adjoint
-  given: (A : E ->ₗ[𝕜] F)
-  statement: (A ∘ₗ A.adjoint).range = A.range
-  proof: by
-  simpa using A.adjoint.range_adjoint_comp_self
-
-中文:
-引理 range_self_comp_adjoint
-  条件: (A : E ->ₗ[𝕜] F)
-  结论: (A ∘ₗ A.adjoint).range = A.range
-  证明: by
-  simpa using A.adjoint.range_adjoint_comp_self
-
-Depends on / 依赖: A.adjoint.range_adjoint_comp_self, adjoint, range_adjoint_comp_self
+/-
+**LinearMap.range_self_comp_adjoint** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：range_self_comp_adjoint (A : E ->ₗ[𝕜] F) : (A ∘ₗ A.adjoint).range = A.rang
+e
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用引理 `LinearMap.range_adjoint_comp_self`：range_adjoint_comp_self (A : E ->ₗ[𝕜]
+ F) : (A.adjoint ∘ₗ A).range = A.adjoint.range
 -/
-lemma range_self_comp_adjoint (A : E ->ₗ[𝕜] F) : (A ∘ₗ A.adjoint).range = A.range := by
+lemma range_self_comp_adjoint (A : E →ₗ[𝕜] F) : (A ∘ₗ A.adjoint).range = A.range := by
   simpa using A.adjoint.range_adjoint_comp_self
 
-/--
-theorem `finrank_range_adjoint` / 定理 `finrank_range_adjoint`
+/-- Part of 7.64(d) in [axler2024]. -/
+/-
+**LinearMap.finrank_range_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：finrank_range_adjoint (A : E ->ₗ[𝕜] F) : Module.finrank 𝕜 A.adjoint.range 
+= Module.finrank 𝕜 A.range
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.finrank_range_add_finrank_ker`：finrank_range_add_finrank_ker [
+FiniteDimensional K V] (f : V ->ₗ[K] V₂) : finrank K (LinearMap.range f) + finra
+nk K (LinearMap.ker f) = finr…
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.finrank_add_finrank_orthogonal`：finrank_add_finrank_orthogonal
+ [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E) : finrank 𝕜 K + finrank 𝕜 Kᗮ = finr
+ank 𝕜 E
+· 使用引理 `LinearMap.orthogonal_ker`：orthogonal_ker (A : E ->ₗ[𝕜] F) : A.kerᗮ = A.a
+djoint.range
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用定理 `add_tsub_cancel_left`：add_tsub_cancel_left (a b : α) : a + b - a = b
 
-English:
-theorem finrank_range_adjoint
-  given: (A : E ->ₗ[𝕜] F)
-  proof: calc
-  _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
-    simp [← A.adjoint.finrank_range_add_finrank_ker]
-  _ = _ := by rw [← A.adjoint.ker.finrank_add_finrank_orthogonal,
-    orthogonal_ker, adjoint_adjoint]; simp
-
-中文:
-定理 finrank_range_adjoint
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: calc
-  _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
-    simp [← A.adjoint.finrank_range_add_finrank_ker]
-  _ = _ := by rw [← A.adjoint.ker.finrank_add_finrank_orthogonal,
-    orthogonal_ker, adjoint_adjoint]; simp
+--- 原说明 ---
+Part of 7.64(d) in [axler2024].
 -/
-theorem finrank_range_adjoint (A : E ->ₗ[𝕜] F) :
+theorem finrank_range_adjoint (A : E →ₗ[𝕜] F) :
     Module.finrank 𝕜 A.adjoint.range = Module.finrank 𝕜 A.range := calc
   _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
     simp [← A.adjoint.finrank_range_add_finrank_ker]
   _ = _ := by rw [← A.adjoint.ker.finrank_add_finrank_orthogonal,
     orthogonal_ker, adjoint_adjoint]; simp
 
-/--
-theorem `eq_adjoint_iff_basis` / 定理 `eq_adjoint_iff_basis`
+/-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
+for all basis vectors `x` and `y`. -/
+/-
+**LinearMap.eq_adjoint_iff_basis** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eq_adjoint_iff_basis {ι₁ : Type*} {ι₂ : Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : B
+asis ι₂ 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) : A = B.adjoint ↔ forall (i₁ : ι₁
+) (i₂ : ι₂), ⟪A (b₁ i₁), b₂ i₂⟫ = ⟪b₁ i₁, B (b₂ i₂)⟫
+参数：b₁ : Basis ι₁ 𝕜 E；b₂ : Basis ι₂ 𝕜 F；A : E ->ₗ[𝕜] F；B : F ->ₗ[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `InnerProductSpace.ext_inner_right_basis`：ext_inner_right_basis {ι : Type
+*} {x y : E} (b : Basis ι 𝕜 E) (h : forall i : ι, ⟪x, b i⟫ = ⟪y, b i⟫) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem eq_adjoint_iff_basis
-  statement: {ι₁ : Type*} {ι₂ : Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F)
-  proof: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  refine Basis.ext b₁ fun i₁ => ?_
-  exact ext_inner_right_basis b₂ fun i₂ => by simp only [adjoint_inner_left, h i₁ i₂]
-
-中文:
-定理 eq_adjoint_iff_basis
-  结论: {ι₁ : 类型} {ι₂ : 类型} (b₁ : 基 ι₁ 𝕜 E) (b₂ : 基 ι₂ 𝕜 F)
-  证明: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  refine Basis.ext b₁ fun i₁ => ?_
-  exact ext_inner_right_basis b₂ fun i₂ => by simp only [adjoint_inner_left, h i₁ i₂]
-
-Depends on / 依赖: Basis.ext, adjoint_inner_left, ext_inner_right_basis
+--- 原说明 ---
+The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y
+⟫ = ⟪x, B y⟫`
+for all basis vectors `x` and `y`.
 -/
 theorem eq_adjoint_iff_basis {ι₁ : Type*} {ι₂ : Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F)
-    (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) :
-    A = B.adjoint ↔ forall (i₁ : ι₁) (i₂ : ι₂), ⟪A (b₁ i₁), b₂ i₂⟫ = ⟪b₁ i₁, B (b₂ i₂)⟫ := by
+    (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E) :
+    A = B.adjoint ↔ ∀ (i₁ : ι₁) (i₂ : ι₂), ⟪A (b₁ i₁), b₂ i₂⟫ = ⟪b₁ i₁, B (b₂ i₂)⟫ := by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   refine Basis.ext b₁ fun i₁ => ?_
   exact ext_inner_right_basis b₂ fun i₂ => by simp only [adjoint_inner_left, h i₁ i₂]
-
-/--
-theorem `eq_adjoint_iff_basis_left` / 定理 `eq_adjoint_iff_basis_left`
-
-English:
-theorem eq_adjoint_iff_basis_left
-  given: {ι : Type*} (b : Basis ι 𝕜 E) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  proof: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => Basis.ext b fun i => ?_⟩
-  exact ext_inner_right 𝕜 fun y => by simp only [h i, adjoint_inner_left]
-
-中文:
-定理 eq_adjoint_iff_basis_left
-  条件: {ι : 类型} (b : 基 ι 𝕜 E) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  证明: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => Basis.ext b fun i => ?_⟩
-  exact ext_inner_right 𝕜 fun y => by simp only [h i, adjoint_inner_left]
-
-Depends on / 依赖: Basis.ext, adjoint_inner_left, ext_inner_right
+/-
+**LinearMap.eq_adjoint_iff_basis_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eq_adjoint_iff_basis_left {ι : Type*} (b : Basis ι 𝕜 E) (A : E ->ₗ[𝕜] F) (
+B : F ->ₗ[𝕜] E) : A = B.adjoint ↔ forall i y, ⟪A (b i), y⟫ = ⟪b i, B y⟫
+参数：b : Basis ι 𝕜 E；A : E ->ₗ[𝕜] F；B : F ->ₗ[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `ext_inner_right`：ext_inner_right {x y : E} (h : forall v, ⟪x, v⟫ = ⟪y, v
+⟫) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eq_adjoint_iff_basis_left {ι : Type*} (b : Basis ι 𝕜 E) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) :
-    A = B.adjoint ↔ forall i y, ⟪A (b i), y⟫ = ⟪b i, B y⟫ := by
+theorem eq_adjoint_iff_basis_left {ι : Type*} (b : Basis ι 𝕜 E) (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E) :
+    A = B.adjoint ↔ ∀ i y, ⟪A (b i), y⟫ = ⟪b i, B y⟫ := by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => Basis.ext b fun i => ?_⟩
   exact ext_inner_right 𝕜 fun y => by simp only [h i, adjoint_inner_left]
-
-/--
-theorem `eq_adjoint_iff_basis_right` / 定理 `eq_adjoint_iff_basis_right`
-
-English:
-theorem eq_adjoint_iff_basis_right
-  given: {ι : Type*} (b : Basis ι 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  proof: by
+/-
+**LinearMap.eq_adjoint_iff_basis_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eq_adjoint_iff_basis_right {ι : Type*} (b : Basis ι 𝕜 F) (A : E ->ₗ[𝕜] F) 
+(B : F ->ₗ[𝕜] E) : A = B.adjoint ↔ forall i x, ⟪A x, b i⟫ = ⟪x, B (b i)⟫
+参数：b : Basis ι 𝕜 F；A : E ->ₗ[𝕜] F；B : F ->ₗ[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `InnerProductSpace.ext_inner_right_basis`：ext_inner_right_basis {ι : Type
+*} {x y : E} (b : Basis ι 𝕜 E) (h : forall i : ι, ⟪x, b i⟫ = ⟪y, b i⟫) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem eq_adjoint_iff_basis_right {ι : Type*} (b : Basis ι 𝕜 F) (A : E →ₗ[𝕜] F) (B : F →ₗ[𝕜] E) :
+    A = B.adjoint ↔ ∀ i x, ⟪A x, b i⟫ = ⟪x, B (b i)⟫ := by
   refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
   ext x
   exact ext_inner_right_basis b fun i => by simp only [h i, adjoint_inner_left]
 
-中文:
-定理 eq_adjoint_iff_basis_right
-  条件: {ι : 类型} (b : 基 ι 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
-  证明: by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right_basis b fun i => by simp only [h i, adjoint_inner_left]
+/-- `E →ₗ[𝕜] E` is a star algebra with the adjoint as the star operation. -/
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: adjoint_inner_left, ext_inner_right_basis
+--- 原说明 ---
+`E →ₗ[𝕜] E` is a star algebra with the adjoint as the star operation.
 -/
-theorem eq_adjoint_iff_basis_right {ι : Type*} (b : Basis ι 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E) :
-    A = B.adjoint ↔ forall i x, ⟪A x, b i⟫ = ⟪x, B (b i)⟫ := by
-  refine ⟨fun h x y => by rw [h, adjoint_inner_left], fun h => ?_⟩
-  ext x
-  exact ext_inner_right_basis b fun i => by simp only [h i, adjoint_inner_left]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (E ->ₗ[𝕜] E)
-  body: ⟨adjoint⟩
-
-中文:
-实例 :
-  签名: 对合 (E ->ₗ[𝕜] E)
-  定义体: ⟨adjoint⟩
-
-Depends on / 依赖: adjoint
--/
-instance : Star (E ->ₗ[𝕜] E) :=
+instance : Star (E →ₗ[𝕜] E) :=
   ⟨adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar (E ->ₗ[𝕜] E)
-  body: ⟨adjoint_adjoint⟩
-
-中文:
-实例 :
-  签名: InvolutiveStar (E ->ₗ[𝕜] E)
-  定义体: ⟨adjoint_adjoint⟩
-
-Depends on / 依赖: adjoint_adjoint
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : InvolutiveStar (E ->ₗ[𝕜] E) :=
+instance : InvolutiveStar (E →ₗ[𝕜] E) :=
   ⟨adjoint_adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (E ->ₗ[𝕜] E)
-  body: ⟨adjoint_comp⟩
-
-中文:
-实例 :
-  签名: StarMul (E ->ₗ[𝕜] E)
-  定义体: ⟨adjoint_comp⟩
-
-Depends on / 依赖: adjoint_comp
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarMul (E ->ₗ[𝕜] E) :=
+instance : StarMul (E →ₗ[𝕜] E) :=
   ⟨adjoint_comp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarRing (E ->ₗ[𝕜] E)
-  body: ⟨map_add adjoint⟩
-
-中文:
-实例 :
-  签名: 对合环 (E ->ₗ[𝕜] E)
-  定义体: ⟨map_add adjoint⟩
-
-Depends on / 依赖: adjoint, map_add
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarRing (E ->ₗ[𝕜] E) :=
+instance : StarRing (E →ₗ[𝕜] E) :=
   ⟨map_add adjoint⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule 𝕜 (E ->ₗ[𝕜] E)
-  body: ⟨map_smulₛₗ adjoint⟩
-
-中文:
-实例 :
-  签名: 对合模 𝕜 (E ->ₗ[𝕜] E)
-  定义体: ⟨map_smulₛₗ adjoint⟩
-
-Depends on / 依赖: adjoint
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarModule 𝕜 (E ->ₗ[𝕜] E) :=
+instance : StarModule 𝕜 (E →ₗ[𝕜] E) :=
   ⟨map_smulₛₗ adjoint⟩
-
-/--
-theorem `star_eq_adjoint` / 定理 `star_eq_adjoint`
-
-English:
-theorem star_eq_adjoint
-  given: (A : E ->ₗ[𝕜] E)
-  statement: star A = A.adjoint
-  proof: rfl
-
-中文:
-定理 star_eq_adjoint
-  条件: (A : E ->ₗ[𝕜] E)
-  结论: star A = A.adjoint
-  证明: rfl
+/-
+**LinearMap.star_eq_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：star_eq_adjoint (A : E ->ₗ[𝕜] E) : star A = A.adjoint
+参数：A : E ->ₗ[𝕜] E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_eq_adjoint (A : E ->ₗ[𝕜] E) : star A = A.adjoint :=
+theorem star_eq_adjoint (A : E →ₗ[𝕜] E) : star A = A.adjoint :=
   rfl
 
-/--
-theorem `isSelfAdjoint_iff'` / 定理 `isSelfAdjoint_iff'`
+/-- A continuous linear operator is self-adjoint iff it is equal to its adjoint. -/
+/-
+**LinearMap.isSelfAdjoint_iff'** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isSelfAdjoint_iff' {A : E ->ₗ[𝕜] E} : IsSelfAdjoint A ↔ A.adjoint = A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem isSelfAdjoint_iff'
-  given: {A : E ->ₗ[𝕜] E}
-  statement: IsSelfAdjoint A ↔ A.adjoint = A
-  proof: Iff.rfl
-
-中文:
-定理 isSelfAdjoint_iff'
-  条件: {A : E ->ₗ[𝕜] E}
-  结论: IsSelfAdjoint A ↔ A.adjoint = A
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+A continuous linear operator is self-adjoint iff it is equal to its adjoint.
 -/
-theorem isSelfAdjoint_iff' {A : E ->ₗ[𝕜] E} : IsSelfAdjoint A ↔ A.adjoint = A :=
+theorem isSelfAdjoint_iff' {A : E →ₗ[𝕜] E} : IsSelfAdjoint A ↔ A.adjoint = A :=
   Iff.rfl
-
-/--
-theorem `isSymmetric_iff_isSelfAdjoint` / 定理 `isSymmetric_iff_isSelfAdjoint`
-
-English:
-theorem isSymmetric_iff_isSelfAdjoint
-  given: (A : E ->ₗ[𝕜] E)
-  statement: IsSymmetric A ↔ IsSelfAdjoint A
-  proof: by
-  rw [isSelfAdjoint_iff']; rw [IsSymmetric]; rw [← LinearMap.eq_adjoint_iff]
-  exact eq_comm
-
-中文:
-定理 isSymmetric_iff_isSelfAdjoint
-  条件: (A : E ->ₗ[𝕜] E)
-  结论: IsSymmetric A ↔ IsSelfAdjoint A
-  证明: by
-  rw [isSelfAdjoint_iff']; rw [IsSymmetric]; rw [← LinearMap.eq_adjoint_iff]
-  exact eq_comm
-
-Depends on / 依赖: IsSymmetric, LinearMap, LinearMap.eq_adjoint_iff, eq_adjoint_iff, eq_comm, isSelfAdjoint_iff
+/-
+**LinearMap.isSymmetric_iff_isSelfAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isSymmetric_iff_isSelfAdjoint (A : E ->ₗ[𝕜] E) : IsSymmetric A ↔ IsSelfAdj
+oint A
+参数：A : E ->ₗ[𝕜] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.isSelfAdjoint_iff'`：isSelfAdjoint_iff' {A : E ->ₗ[𝕜] E} : IsSe
+lfAdjoint A ↔ A.adjoint = A
+· 使用定理 `LinearMap.IsSymmetric.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLi
+ke 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   (T 
+: E →ₗ[𝕜] E), T.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.eq_adjoint_iff`：eq_adjoint_iff (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] 
+E) : A = B.adjoint ↔ forall x y, ⟪A x, y⟫ = ⟪x, B y⟫
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
 -/
-theorem isSymmetric_iff_isSelfAdjoint (A : E ->ₗ[𝕜] E) : IsSymmetric A ↔ IsSelfAdjoint A := by
-  rw [isSelfAdjoint_iff']; rw [IsSymmetric]; rw [← LinearMap.eq_adjoint_iff]
+theorem isSymmetric_iff_isSelfAdjoint (A : E →ₗ[𝕜] E) : IsSymmetric A ↔ IsSelfAdjoint A := by
+  rw [isSelfAdjoint_iff', IsSymmetric, ← LinearMap.eq_adjoint_iff]
   exact eq_comm
-
-/--
-lemma `id_mem_unitary` / 引理 `id_mem_unitary`
-
-English:
-lemma id_mem_unitary
-  statement: .id in unitary (E ->ₗ[𝕜] E)
-  proof: one_mem _
-
-中文:
-引理 id_mem_unitary
-  结论: .id in unitary (E ->ₗ[𝕜] E)
-  证明: one_mem _
+/-
+**LinearMap.id_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : FiniteDimensional 𝕜 E], Lin
+earMap.id ∈ unitary (E →ₗ[𝕜] E)
+参数：E →ₗ[𝕜] E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
-@[simp] lemma id_mem_unitary : .id in unitary (E ->ₗ[𝕜] E) := one_mem _
-
-/--
-theorem `isAdjointPair_inner` / 定理 `isAdjointPair_inner`
-
-English:
-theorem isAdjointPair_inner
-  given: (A : E ->ₗ[𝕜] F)
-  proof: by
-  intro x y
-  simp [adjoint_inner_left]
-
-中文:
-定理 isAdjointPair_inner
-  条件: (A : E ->ₗ[𝕜] F)
-  证明: by
-  intro x y
-  simp [adjoint_inner_left]
+@[simp] lemma id_mem_unitary : .id ∈ unitary (E →ₗ[𝕜] E) := one_mem _
+/-
+**LinearMap.isAdjointPair_inner** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isAdjointPair_inner (A : E ->ₗ[𝕜] F) : IsAdjointPair (innerₛₗ 𝕜 (E
+参数：A : E ->ₗ[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isAdjointPair_inner (A : E ->ₗ[𝕜] F) :
+theorem isAdjointPair_inner (A : E →ₗ[𝕜] F) :
     IsAdjointPair (innerₛₗ 𝕜 (E := E)).flip
       (innerₛₗ 𝕜 (E := F)).flip A A.adjoint := by
   intro x y
@@ -2722,313 +3199,393 @@ are in a downstream file but historically existed before these lemmas. We can't 
 where `LinearMap.IsSymmetric` is defined because they depend on the adjoint. -/
 
 @[aesop safe apply]
-/--
-theorem `IsSymmetric.conj_adjoint` / 定理 `IsSymmetric.conj_adjoint`
+/-
+**LinearMap.IsSymmetric.conj_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsSymm
+etric`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [inst_3 : InnerProductS
+pace 𝕜 E] [inst_4 : InnerProductSpace 𝕜 F]   [inst_5 : FiniteDimensional 𝕜 E] [i
+nst_6 : FiniteDimensional 𝕜 F] {T : E →ₗ[𝕜] E},   T.IsSymmetric → ∀ (S : E →ₗ[𝕜]
+ F), (S ∘ₗ T ∘ₗ LinearMap.adjoint S).IsSymmetric
+参数：S : E →ₗ[𝕜] F；S ∘ₗ T ∘ₗ LinearMap.adjoint S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsSymmetric.adjoint_eq`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   [
+inst_3 : FiniteDimensi…
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem IsSymmetric.conj_adjoint
-  given: {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E ->ₗ[𝕜] F)
-  proof: fun _ _ => by simp [← adjoint_inner_right, hT]
-
-中文:
-定理 IsSymmetric.conj_adjoint
-  条件: {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E ->ₗ[𝕜] F)
-  证明: fun _ _ => by simp [← adjoint_inner_right, hT]
-
-Depends on / 依赖: adjoint_inner_right
+--- 原说明 ---
+This next batch of lemmas is based on theorems like `LinearMap.IsPositive.conj_a
+djoint`, which
+are in a downstream file but historically existed before these lemmas. We can't 
+put them in the file
+where `LinearMap.IsSymmetric` is defined because they depend on the adjoint.
 -/
-theorem IsSymmetric.conj_adjoint {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E ->ₗ[𝕜] F) :
-    (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := fun _ _ => by simp [← adjoint_inner_right, hT]
-
-/--
-theorem `isSymmetric_self_comp_adjoint` / 定理 `isSymmetric_self_comp_adjoint`
-
-English:
-theorem isSymmetric_self_comp_adjoint
-  given: (T : E ->ₗ[𝕜] F)
-  statement: (T ∘ₗ adjoint T).IsSymmetric
-  proof: by
+theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) :
+    (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := fun _ _ ↦ by simp [← adjoint_inner_right, hT]
+/-
+**LinearMap.isSymmetric_self_comp_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isSymmetric_self_comp_adjoint (T : E ->ₗ[𝕜] F) : (T ∘ₗ adjoint T).IsSymmet
+ric
+参数：T : E ->ₗ[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsSymmetric.conj_adjoint`：∀ {𝕜 : Type u_1} {E : Type u_2} {F :
+ Type u_3} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedA
+ddCommGroup F] [inst_3 :…
+· 使用定理 `LinearMap.IsSymmetric.id`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike
+ 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E],   Line
+arMap.id.IsSym…
+-/
+theorem isSymmetric_self_comp_adjoint (T : E →ₗ[𝕜] F) : (T ∘ₗ adjoint T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.conj_adjoint T
 
 @[aesop safe apply]
-
-中文:
-定理 isSymmetric_self_comp_adjoint
-  条件: (T : E ->ₗ[𝕜] F)
-  结论: (T ∘ₗ adjoint T).IsSymmetric
-  证明: by
-  simpa using LinearMap.IsSymmetric.id.conj_adjoint T
-
-@[aesop safe apply]
-
-Depends on / 依赖: IsSymmetric, LinearMap, LinearMap.IsSymmetric.id.conj_adjoint, conj_adjoint
+/-
+**LinearMap.IsSymmetric.adjoint_conj** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsSymm
+etric`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : NormedAddCommGroup F] [inst_3 : InnerProductS
+pace 𝕜 E] [inst_4 : InnerProductSpace 𝕜 F]   [inst_5 : FiniteDimensional 𝕜 E] [i
+nst_6 : FiniteDimensional 𝕜 F] {T : E →ₗ[𝕜] E},   T.IsSymmetric → ∀ (S : F →ₗ[𝕜]
+ E), (LinearMap.adjoint S ∘ₗ T ∘ₗ S).IsSymmetric
+参数：S : F →ₗ[𝕜] E；LinearMap.adjoint S ∘ₗ T ∘ₗ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用定理 `LinearMap.IsSymmetric.conj_adjoint`：∀ {𝕜 : Type u_1} {E : Type u_2} {F :
+ Type u_3} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedA
+ddCommGroup F] [inst_3 :…
 -/
-theorem isSymmetric_self_comp_adjoint (T : E ->ₗ[𝕜] F) : (T ∘ₗ adjoint T).IsSymmetric := by
-  simpa using LinearMap.IsSymmetric.id.conj_adjoint T
-
-@[aesop safe apply]
-/--
-theorem `IsSymmetric.adjoint_conj` / 定理 `IsSymmetric.adjoint_conj`
-
-English:
-theorem IsSymmetric.adjoint_conj
-  given: {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : F ->ₗ[𝕜] E)
-  proof: by
-  simpa using hT.conj_adjoint S.adjoint
-
-中文:
-定理 IsSymmetric.adjoint_conj
-  条件: {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : F ->ₗ[𝕜] E)
-  证明: by
-  simpa using hT.conj_adjoint S.adjoint
-
-Depends on / 依赖: S.adjoint, adjoint, conj_adjoint, hT.conj_adjoint
--/
-theorem IsSymmetric.adjoint_conj {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetric) (S : F ->ₗ[𝕜] E) :
+theorem IsSymmetric.adjoint_conj {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (S : F →ₗ[𝕜] E) :
     (S.adjoint ∘ₗ T ∘ₗ S).IsSymmetric := by
   simpa using hT.conj_adjoint S.adjoint
 
-/--
-theorem `isSymmetric_adjoint_comp_self` / 定理 `isSymmetric_adjoint_comp_self`
+/-- Like `LinearMap.isSymmetric_adjoint_mul_self` but domain and range can be different -/
+/-
+**LinearMap.isSymmetric_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isSymmetric_adjoint_comp_self (T : E ->ₗ[𝕜] F) : (adjoint T ∘ₗ T).IsSymmet
+ric
+参数：T : E ->ₗ[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsSymmetric.adjoint_conj`：∀ {𝕜 : Type u_1} {E : Type u_2} {F :
+ Type u_3} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedA
+ddCommGroup F] [inst_3 :…
+· 使用定理 `LinearMap.IsSymmetric.id`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike
+ 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E],   Line
+arMap.id.IsSym…
 
-English:
-theorem isSymmetric_adjoint_comp_self
-  given: (T : E ->ₗ[𝕜] F)
-  statement: (adjoint T ∘ₗ T).IsSymmetric
-  proof: by
-  simpa using LinearMap.IsSymmetric.id.adjoint_conj T
-
-中文:
-定理 isSymmetric_adjoint_comp_self
-  条件: (T : E ->ₗ[𝕜] F)
-  结论: (adjoint T ∘ₗ T).IsSymmetric
-  证明: by
-  simpa using LinearMap.IsSymmetric.id.adjoint_conj T
-
-Depends on / 依赖: IsSymmetric, LinearMap, LinearMap.IsSymmetric.id.adjoint_conj, adjoint_conj
+--- 原说明 ---
+Like `LinearMap.isSymmetric_adjoint_mul_self` but domain and range can be differ
+ent
 -/
-theorem isSymmetric_adjoint_comp_self (T : E ->ₗ[𝕜] F) : (adjoint T ∘ₗ T).IsSymmetric := by
+theorem isSymmetric_adjoint_comp_self (T : E →ₗ[𝕜] F) : (adjoint T ∘ₗ T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.adjoint_conj T
 
-/--
-theorem `isSymmetric_adjoint_mul_self` / 定理 `isSymmetric_adjoint_mul_self`
+/-- The Gram operator T†T is symmetric. See `LinearMap.isSymmetric_adjoint_comp_self` for a version
+where the domain and codomain are distinct. -/
+/-
+**LinearMap.isSymmetric_adjoint_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isSymmetric_adjoint_mul_self (T : E ->ₗ[𝕜] E) : IsSymmetric (T.adjoint * T
+)
+参数：T : E ->ₗ[𝕜] E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->ₗ[𝕜] F) (x : E
+) (y : F) : ⟪adjoint A y, x⟫ = ⟪y, A x⟫
+· 使用定理 `LinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x :
+ E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem isSymmetric_adjoint_mul_self
-  given: (T : E ->ₗ[𝕜] E)
-  statement: IsSymmetric (T.adjoint * T)
-  proof: by
-  intro x y
-  simp [adjoint_inner_left, adjoint_inner_right]
-
-中文:
-定理 isSymmetric_adjoint_mul_self
-  条件: (T : E ->ₗ[𝕜] E)
-  结论: IsSymmetric (T.adjoint * T)
-  证明: by
-  intro x y
-  simp [adjoint_inner_left, adjoint_inner_right]
-
-Depends on / 依赖: adjoint_inner_left, adjoint_inner_right
+--- 原说明 ---
+The Gram operator T†T is symmetric. See `LinearMap.isSymmetric_adjoint_comp_self
+` for a version
+where the domain and codomain are distinct.
 -/
-theorem isSymmetric_adjoint_mul_self (T : E ->ₗ[𝕜] E) : IsSymmetric (T.adjoint * T) := by
+theorem isSymmetric_adjoint_mul_self (T : E →ₗ[𝕜] E) : IsSymmetric (T.adjoint * T) := by
   intro x y
   simp [adjoint_inner_left, adjoint_inner_right]
 
-/--
-theorem `re_inner_adjoint_mul_self_nonneg` / 定理 `re_inner_adjoint_mul_self_nonneg`
+/-- The Gram operator T†T is a positive operator. -/
+/-
+**LinearMap.re_inner_adjoint_mul_self_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `LinearMa
+p`。
+形式化陈述：re_inner_adjoint_mul_self_nonneg (T : E ->ₗ[𝕜] E) (x : E) : 0 <= re ⟪x, (T
+.adjoint * T) x⟫
+参数：T : E ->ₗ[𝕜] E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x :
+ E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫
+· 使用定理 `inner_self_eq_norm_sq_to_K`：inner_self_eq_norm_sq_to_K (x : E) : ⟪x, x⟫ 
+= (‖x‖ : 𝕜) ^ 2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用引理 `sq_nonneg`：sq_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R] (a
+ : R) : 0 <= a ^ 2
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem re_inner_adjoint_mul_self_nonneg
-  given: (T : E ->ₗ[𝕜] E) (x : E)
-  proof: by
+--- 原说明 ---
+The Gram operator T†T is a positive operator.
+-/
+theorem re_inner_adjoint_mul_self_nonneg (T : E →ₗ[𝕜] E) (x : E) :
+    0 ≤ re ⟪x, (T.adjoint * T) x⟫ := by
   simp only [Module.End.mul_apply, adjoint_inner_right, inner_self_eq_norm_sq_to_K]
   norm_cast
   exact sq_nonneg _
 
 @[simp]
-
-中文:
-定理 re_inner_adjoint_mul_self_nonneg
-  条件: (T : E ->ₗ[𝕜] E) (x : E)
-  证明: by
-  simp only [Module.End.mul_apply, adjoint_inner_right, inner_self_eq_norm_sq_to_K]
-  norm_cast
-  exact sq_nonneg _
-
-@[simp]
-
-Depends on / 依赖: Module, Module.End.mul_apply, adjoint_inner_right, inner_self_eq_norm_sq_to_K, mul_apply, sq_nonneg
+/-
+**LinearMap.im_inner_adjoint_mul_self_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+形式化陈述：im_inner_adjoint_mul_self_eq_zero (T : E ->ₗ[𝕜] E) (x : E) : im ⟪x, T.adjo
+int (T x)⟫ = 0
+参数：T : E ->ₗ[𝕜] E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.adjoint_inner_right`：adjoint_inner_right (A : E ->ₗ[𝕜] F) (x :
+ E) (y : F) : ⟪x, adjoint A y⟫ = ⟪A x, y⟫
+· 使用定理 `inner_self_eq_norm_sq_to_K`：inner_self_eq_norm_sq_to_K (x : E) : ⟪x, x⟫ 
+= (‖x‖ : 𝕜) ^ 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem re_inner_adjoint_mul_self_nonneg (T : E ->ₗ[𝕜] E) (x : E) :
-    0 <= re ⟪x, (T.adjoint * T) x⟫ := by
-  simp only [Module.End.mul_apply, adjoint_inner_right, inner_self_eq_norm_sq_to_K]
-  norm_cast
-  exact sq_nonneg _
-
-@[simp]
-/--
-theorem `im_inner_adjoint_mul_self_eq_zero` / 定理 `im_inner_adjoint_mul_self_eq_zero`
-
-English:
-theorem im_inner_adjoint_mul_self_eq_zero
-  given: (T : E ->ₗ[𝕜] E) (x : E)
-  proof: by
-  simp only [adjoint_inner_right, inner_self_eq_norm_sq_to_K]
-  norm_cast
-
-中文:
-定理 im_inner_adjoint_mul_self_eq_zero
-  条件: (T : E ->ₗ[𝕜] E) (x : E)
-  证明: by
-  simp only [adjoint_inner_right, inner_self_eq_norm_sq_to_K]
-  norm_cast
-
-Depends on / 依赖: adjoint_inner_right, inner_self_eq_norm_sq_to_K
--/
-theorem im_inner_adjoint_mul_self_eq_zero (T : E ->ₗ[𝕜] E) (x : E) :
+theorem im_inner_adjoint_mul_self_eq_zero (T : E →ₗ[𝕜] E) (x : E) :
     im ⟪x, T.adjoint (T x)⟫ = 0 := by
   simp only [adjoint_inner_right, inner_self_eq_norm_sq_to_K]
   norm_cast
-
-/--
-theorem `isSelfAdjoint_toContinuousLinearMap_iff` / 定理 `isSelfAdjoint_toContinuousLinearMap_iff`
-
-English:
-theorem isSelfAdjoint_toContinuousLinearMap_iff
-  given: (T : E ->ₗ[𝕜] E)
-  proof: FiniteDimensional.complete 𝕜 E
-    IsSelfAdjoint T.toContinuousLinearMap ↔ IsSelfAdjoint T := by
-  simp [IsSelfAdjoint, star, adjoint,
-    ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
-
-中文:
-定理 isSelfAdjoint_toContinuousLinearMap_iff
-  条件: (T : E ->ₗ[𝕜] E)
-  证明: FiniteDimensional.complete 𝕜 E
-    IsSelfAdjoint T.toContinuousLinearMap ↔ IsSelfAdjoint T := by
-  simp [IsSelfAdjoint, star, adjoint,
-    ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap.isSelfAdjoint_toContinuousLinearMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearMap`。
+形式化陈述：isSelfAdjoint_toContinuousLinearMap_iff (T : E ->ₗ[𝕜] E) : have
+参数：T : E ->ₗ[𝕜] E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isSelfAdjoint_toContinuousLinearMap_iff (T : E ->ₗ[𝕜] E) :
+theorem isSelfAdjoint_toContinuousLinearMap_iff (T : E →ₗ[𝕜] E) :
     have := FiniteDimensional.complete 𝕜 E
     IsSelfAdjoint T.toContinuousLinearMap ↔ IsSelfAdjoint T := by
   simp [IsSelfAdjoint, star, adjoint,
     ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
-
-/--
-theorem `_root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff` / 定理 `_root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff`
-
-English:
-theorem _root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff
-  given: (T : E ->L[𝕜] E)
-  proof: FiniteDimensional.complete 𝕜 E
-    IsSelfAdjoint T.toLinearMap ↔ IsSelfAdjoint T := by
-  simp only [IsSelfAdjoint, star, adjoint, LinearEquiv.trans_apply,
-    coe_toContinuousLinearMap_symm,
-    ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
-  rfl
-
-中文:
-定理 _root_.连续线性映射.isSelfAdjoint_toLinearMap_iff
-  条件: (T : E ->L[𝕜] E)
-  证明: FiniteDimensional.complete 𝕜 E
-    IsSelfAdjoint T.toLinearMap ↔ IsSelfAdjoint T := by
-  simp only [IsSelfAdjoint, star, adjoint, LinearEquiv.trans_apply,
-    coe_toContinuousLinearMap_symm,
-    ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
-  rfl
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap._root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff** 是 Mathlib
+ 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff (T : E ->L[𝕜] E) :
+theorem _root_.ContinuousLinearMap.isSelfAdjoint_toLinearMap_iff (T : E →L[𝕜] E) :
     have := FiniteDimensional.complete 𝕜 E
     IsSelfAdjoint T.toLinearMap ↔ IsSelfAdjoint T := by
   simp only [IsSelfAdjoint, star, adjoint, LinearEquiv.trans_apply,
     coe_toContinuousLinearMap_symm,
     ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap]
   rfl
-
-/--
-theorem `isStarProjection_toContinuousLinearMap_iff` / 定理 `isStarProjection_toContinuousLinearMap_iff`
-
-English:
-theorem isStarProjection_toContinuousLinearMap_iff
-  given: {T : E ->ₗ[𝕜] E}
-  proof: FiniteDimensional.complete 𝕜 E
-    IsStarProjection (toContinuousLinearMap T) ↔ IsStarProjection T := by
-  simp [isStarProjection_iff, isSelfAdjoint_toContinuousLinearMap_iff,
-    ← ContinuousLinearMap.isIdempotentElem_toLinearMap_iff]
-
-中文:
-定理 isStarProjection_toContinuousLinearMap_iff
-  条件: {T : E ->ₗ[𝕜] E}
-  证明: FiniteDimensional.complete 𝕜 E
-    IsStarProjection (toContinuousLinearMap T) ↔ IsStarProjection T := by
-  simp [isStarProjection_iff, isSelfAdjoint_toContinuousLinearMap_iff,
-    ← ContinuousLinearMap.isIdempotentElem_toLinearMap_iff]
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
+/-
+**LinearMap.isStarProjection_toContinuousLinearMap_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `LinearMap`。
+形式化陈述：isStarProjection_toContinuousLinearMap_iff {T : E ->ₗ[𝕜] E} : have
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isStarProjection_toContinuousLinearMap_iff {T : E ->ₗ[𝕜] E} :
+theorem isStarProjection_toContinuousLinearMap_iff {T : E →ₗ[𝕜] E} :
     have := FiniteDimensional.complete 𝕜 E
     IsStarProjection (toContinuousLinearMap T) ↔ IsStarProjection T := by
   simp [isStarProjection_iff, isSelfAdjoint_toContinuousLinearMap_iff,
     ← ContinuousLinearMap.isIdempotentElem_toLinearMap_iff]
-
-/--
-theorem `isStarProjection_iff_isSymmetricProjection` / 定理 `isStarProjection_iff_isSymmetricProjection`
-
-English:
-theorem isStarProjection_iff_isSymmetricProjection
-  given: {T : E ->ₗ[𝕜] E}
-  proof: by
-  simp [← isStarProjection_toContinuousLinearMap_iff,
-    ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection]
-
-中文:
-定理 isStarProjection_iff_isSymmetricProjection
-  条件: {T : E ->ₗ[𝕜] E}
-  证明: by
-  simp [← isStarProjection_toContinuousLinearMap_iff,
-    ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection]
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection, isStarProjection_iff_isSymmetricProjection, isStarProjection_toContinuousLinearMap_iff
+/-
+**LinearMap.isStarProjection_iff_isSymmetricProjection** 是 Mathlib 中的一个定理，位于命名空间
+ `LinearMap`。
+形式化陈述：isStarProjection_iff_isSymmetricProjection {T : E ->ₗ[𝕜] E} : IsStarProjec
+tion T ↔ T.IsSymmetricProjection
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isStarProjection_iff_isSymmetricProjection {T : E ->ₗ[𝕜] E} :
+theorem isStarProjection_iff_isSymmetricProjection {T : E →ₗ[𝕜] E} :
     IsStarProjection T ↔ T.IsSymmetricProjection := by
   simp [← isStarProjection_toContinuousLinearMap_iff,
     ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection]
 
 open LinearMap in
-/--
-theorem `IsStarProjection.ext_iff` / 定理 `IsStarProjection.ext_iff`
+/-- Star projection operators are equal iff their range are. -/
+/-
+**LinearMap.IsStarProjection.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsStar
+Projection`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   [inst_3 : FiniteDimensional 𝕜 E] {S T
+ : E →ₗ[𝕜] E},   IsStarProjection S → IsStarProjection T → (S = T ↔ S.range = T.
+range)
+参数：S = T ↔ S.range = T.range。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `ContinuousLinearMap.IsStarProjection.ext_iff`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSp
+ace 𝕜 E]   {T : E →L[𝕜] E} [inst_3…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.isStarProjection_toContinuousLinearMap_iff`：isStarProjection_t
+oContinuousLinearMap_iff {T : E ->ₗ[𝕜] E} : have
 
-English:
-theorem IsStarProjection.ext_iff
-  statement: {S T : E ->ₗ[𝕜] E}
-  proof: by
-  have := FiniteDimensional.complete 𝕜 E
-  simpa using ContinuousLinearMap.IsStarProjection.ext_iff
-    (S.isStarProjection_toContinuousLinearMap_iff.mpr hS)
-    (T.isStarProjection_toContinuousLinearMap_iff.mpr hT)
-
-alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
-
-中文:
-定理 是StarProjection.ext_iff
-  结论: {S T : E ->ₗ[𝕜] E}
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  simpa using ContinuousLinearMap.IsStarProjection.ext_iff
-    (S.isStarProjection_toContinuousLinearMap_iff.mpr hS)
-    (T.isStarProjection_toContinuousLinearMap_iff.mpr hT)
-
-alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
+--- 原说明 ---
+Star projection operators are equal iff their range are.
 -/
-theorem IsStarProjection.ext_iff {S T : E ->ₗ[𝕜] E}
+theorem IsStarProjection.ext_iff {S T : E →ₗ[𝕜] E}
     (hS : IsStarProjection S) (hT : IsStarProjection T) :
     S = T ↔ LinearMap.range S = LinearMap.range T := by
   have := FiniteDimensional.complete 𝕜 E
@@ -3037,68 +3594,53 @@ theorem IsStarProjection.ext_iff {S T : E ->ₗ[𝕜] E}
     (T.isStarProjection_toContinuousLinearMap_iff.mpr hT)
 
 alias ⟨_, IsStarProjection.ext⟩ := IsStarProjection.ext_iff
-
-/--
-theorem `adjoint_innerₛₗ_apply` / 定理 `adjoint_innerₛₗ_apply`
-
-English:
-theorem adjoint_innerₛₗ_apply
-  given: (x : E)
-  proof: have := FiniteDimensional.complete 𝕜 E
-  ext fun _ => congr($(ContinuousLinearMap.adjoint_innerSL_apply x) _)
-
-中文:
-定理 adjoint_innerₛₗ_apply
-  条件: (x : E)
-  证明: have := FiniteDimensional.complete 𝕜 E
-  ext fun _ => congr($(ContinuousLinearMap.adjoint_innerSL_apply x) _)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.adjoint_innerSL_apply, FiniteDimensional, FiniteDimensional.complete, adjoint_innerSL_apply, complete
+/-
+**LinearMap.adjoint_inner** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjoint_innerₛₗ_apply (x : E) :
     adjoint (innerₛₗ 𝕜 x) = toSpanSingleton 𝕜 E x :=
   have := FiniteDimensional.complete 𝕜 E
-  ext fun _ => congr($(ContinuousLinearMap.adjoint_innerSL_apply x) _)
-
-/--
-theorem `adjoint_toSpanSingleton` / 定理 `adjoint_toSpanSingleton`
-
-English:
-theorem adjoint_toSpanSingleton
-  given: (x : E)
-  proof: by
-  simp [← adjoint_innerₛₗ_apply]
-
-中文:
-定理 adjoint_toSpanSingleton
-  条件: (x : E)
-  证明: by
-  simp [← adjoint_innerₛₗ_apply]
+  ext fun _ ↦ congr($(ContinuousLinearMap.adjoint_innerSL_apply x) _)
+/-
+**LinearMap.adjoint_toSpanSingleton** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：adjoint_toSpanSingleton (x : E) : adjoint (toSpanSingleton 𝕜 E x) = innerₛ
+ₗ 𝕜 x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.adjoint_adjoint`：adjoint_adjoint (A : E ->ₗ[𝕜] F) : A.adjoint.
+adjoint = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem adjoint_toSpanSingleton (x : E) :
     adjoint (toSpanSingleton 𝕜 E x) = innerₛₗ 𝕜 x := by
   simp [← adjoint_innerₛₗ_apply]
 
 open Module End in
-/--
-theorem `_root_.Module.End.mem_invtSubmodule_adjoint_iff` / 定理 `_root_.Module.End.mem_invtSubmodule_adjoint_iff`
+/-- The linear map version of `ContinuousLinearMap.mem_invtSubmodule_adjoint_iff`
+in a finite-dimensional space. -/
+/-
+**LinearMap._root_.Module.End.mem_invtSubmodule_adjoint_iff** 是 Mathlib 中的一个定理，位
+于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Module.End.mem_invtSubmodule_adjoint_iff
-  given: {T : E ->ₗ[𝕜] E} {U : Submodule 𝕜 E}
-  proof: have := FiniteDimensional.complete 𝕜 E
-  ContinuousLinearMap.mem_invtSubmodule_adjoint_iff
-
-中文:
-定理 _root_.模.End.mem_invtSubmodule_adjoint_iff
-  条件: {T : E ->ₗ[𝕜] E} {U : 子模 𝕜 E}
-  证明: have := FiniteDimensional.complete 𝕜 E
-  ContinuousLinearMap.mem_invtSubmodule_adjoint_iff
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mem_invtSubmodule_adjoint_iff, FiniteDimensional, FiniteDimensional.complete, complete, mem_invtSubmodule_adjoint_iff
+--- 原说明 ---
+The linear map version of `ContinuousLinearMap.mem_invtSubmodule_adjoint_iff`
+in a finite-dimensional space.
 -/
-theorem _root_.Module.End.mem_invtSubmodule_adjoint_iff {T : E ->ₗ[𝕜] E} {U : Submodule 𝕜 E} :
-    U in invtSubmodule T.adjoint ↔ Uᗮ in invtSubmodule T :=
+theorem _root_.Module.End.mem_invtSubmodule_adjoint_iff {T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} :
+    U ∈ invtSubmodule T.adjoint ↔ Uᗮ ∈ invtSubmodule T :=
   have := FiniteDimensional.complete 𝕜 E
   ContinuousLinearMap.mem_invtSubmodule_adjoint_iff
 
@@ -3113,136 +3655,143 @@ variable {K : Type*} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [Complete
 
 namespace ContinuousLinearMap
 
-/--
-theorem `inner_map_map_iff_adjoint_comp_self` / 定理 `inner_map_map_iff_adjoint_comp_self`
-
-English:
-theorem inner_map_map_iff_adjoint_comp_self
-  given: (u : H ->L[𝕜] K)
-  proof: by
-  refine ⟨fun h => ext fun x => ?_, fun h => ?_⟩
-  · refine ext_inner_right 𝕜 fun y => ?_
+/-
+**ContinuousLinearMap.inner_map_map_iff_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap`。
+形式化陈述：inner_map_map_iff_adjoint_comp_self (u : H ->L[𝕜] K) : (forall x y : H, ⟪u
+ x, u y⟫_𝕜 = ⟪x, y⟫_𝕜) ↔ adjoint u ∘L u = 1
+参数：u : H ->L[𝕜] K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ext_inner_right`：ext_inner_right {x y : E} (h : forall v, ⟪x, v⟫ = ⟪y, v
+⟫) : x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.adjoint_inner_left`：adjoint_inner_left (A : E ->L[𝕜]
+ F) (x : E) (y : F) : ⟪(A†) y, x⟫ = ⟪y, A x⟫
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_apply_eq_self`：∀ {F : Type u_1} {α : outParam (Type u_2)} {inst : Fu
+nLike F α α} {inst_1 : One F} [self : IsOneApplyEqSelf F α]   (x : α), 1 x = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+-/
+theorem inner_map_map_iff_adjoint_comp_self (u : H →L[𝕜] K) :
+    (∀ x y : H, ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜) ↔ adjoint u ∘L u = 1 := by
+  refine ⟨fun h ↦ ext fun x ↦ ?_, fun h ↦ ?_⟩
+  · refine ext_inner_right 𝕜 fun y ↦ ?_
     simpa [star_eq_adjoint, adjoint_inner_left] using h x y
   · simp [← adjoint_inner_left, ← comp_apply, h]
-
-中文:
-定理 inner_map_map_iff_adjoint_comp_self
-  条件: (u : H ->L[𝕜] K)
-  证明: by
-  refine ⟨fun h => ext fun x => ?_, fun h => ?_⟩
-  · refine ext_inner_right 𝕜 fun y => ?_
-    simpa [star_eq_adjoint, adjoint_inner_left] using h x y
-  · simp [← adjoint_inner_left, ← comp_apply, h]
-
-Depends on / 依赖: adjoint_inner_left, comp_apply, ext_inner_right, star_eq_adjoint
+/-
+**ContinuousLinearMap.norm_map_iff_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousLinearMap`。
+形式化陈述：norm_map_iff_adjoint_comp_self (u : H ->L[𝕜] K) : (forall x : H, ‖u x‖ = ‖
+x‖) ↔ adjoint u ∘L u = 1
+参数：u : H ->L[𝕜] K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.norm_map_iff_inner_map_map`：LinearMap.norm_map_iff_inner_map_m
+ap {F : Type*} [FunLike F E E'] [LinearMapClass F 𝕜 E E'] (f : F) : (forall x, ‖
+f x‖ = ‖x‖) ↔ (forall x y,…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.inner_map_map_iff_adjoint_comp_self`：inner_map_map_i
+ff_adjoint_comp_self (u : H ->L[𝕜] K) : (forall x y : H, ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜
+) ↔ adjoint u ∘L u = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem inner_map_map_iff_adjoint_comp_self (u : H ->L[𝕜] K) :
-    (forall x y : H, ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜) ↔ adjoint u ∘L u = 1 := by
-  refine ⟨fun h => ext fun x => ?_, fun h => ?_⟩
-  · refine ext_inner_right 𝕜 fun y => ?_
-    simpa [star_eq_adjoint, adjoint_inner_left] using h x y
-  · simp [← adjoint_inner_left, ← comp_apply, h]
-
-/--
-theorem `norm_map_iff_adjoint_comp_self` / 定理 `norm_map_iff_adjoint_comp_self`
-
-English:
-theorem norm_map_iff_adjoint_comp_self
-  given: (u : H ->L[𝕜] K)
-  proof: by
-  rw [LinearMap.norm_map_iff_inner_map_map u]; rw [u.inner_map_map_iff_adjoint_comp_self]
-
-中文:
-定理 norm_map_iff_adjoint_comp_self
-  条件: (u : H ->L[𝕜] K)
-  证明: by
-  rw [LinearMap.norm_map_iff_inner_map_map u]; rw [u.inner_map_map_iff_adjoint_comp_self]
-
-Depends on / 依赖: LinearMap, LinearMap.norm_map_iff_inner_map_map, inner_map_map_iff_adjoint_comp_self, norm_map_iff_inner_map_map, u.inner_map_map_iff_adjoint_comp_self
+theorem norm_map_iff_adjoint_comp_self (u : H →L[𝕜] K) :
+    (∀ x : H, ‖u x‖ = ‖x‖) ↔ adjoint u ∘L u = 1 := by
+  rw [LinearMap.norm_map_iff_inner_map_map u, u.inner_map_map_iff_adjoint_comp_self]
+/-
+**ContinuousLinearMap.isometry_iff_adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousLinearMap`。
+形式化陈述：isometry_iff_adjoint_comp_self (u : H ->L[𝕜] K) : Isometry u ↔ adjoint u ∘
+L u = 1
+参数：u : H ->L[𝕜] K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidHomClass.isometry_iff_norm`：∀ {𝓕 : Type u_1} {E : Type u_2} {F 
+: Type u_3} [inst : SeminormedAddGroup E] [inst_1 : SeminormedAddGroup F]   [ins
+t_2 : FunLike 𝓕 E F] [Add…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.norm_map_iff_adjoint_comp_self`：norm_map_iff_adjoint
+_comp_self (u : H ->L[𝕜] K) : (forall x : H, ‖u x‖ = ‖x‖) ↔ adjoint u ∘L u = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem norm_map_iff_adjoint_comp_self (u : H ->L[𝕜] K) :
-    (forall x : H, ‖u x‖ = ‖x‖) ↔ adjoint u ∘L u = 1 := by
-  rw [LinearMap.norm_map_iff_inner_map_map u]; rw [u.inner_map_map_iff_adjoint_comp_self]
-
-/--
-theorem `isometry_iff_adjoint_comp_self` / 定理 `isometry_iff_adjoint_comp_self`
-
-English:
-theorem isometry_iff_adjoint_comp_self
-  given: (u : H ->L[𝕜] K)
-  proof: by
-  rw [AddMonoidHomClass.isometry_iff_norm]; rw [norm_map_iff_adjoint_comp_self]
-
-@[simp]
-
-中文:
-定理 isometry_iff_adjoint_comp_self
-  条件: (u : H ->L[𝕜] K)
-  证明: by
-  rw [AddMonoidHomClass.isometry_iff_norm]; rw [norm_map_iff_adjoint_comp_self]
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_iff_norm, isometry_iff_norm, norm_map_iff_adjoint_comp_self
--/
-theorem isometry_iff_adjoint_comp_self (u : H ->L[𝕜] K) :
+theorem isometry_iff_adjoint_comp_self (u : H →L[𝕜] K) :
     Isometry u ↔ adjoint u ∘L u = 1 := by
-  rw [AddMonoidHomClass.isometry_iff_norm]; rw [norm_map_iff_adjoint_comp_self]
+  rw [AddMonoidHomClass.isometry_iff_norm, norm_map_iff_adjoint_comp_self]
 
 @[simp]
-/--
-lemma `_root_.LinearIsometryEquiv.adjoint_eq_symm` / 引理 `_root_.LinearIsometryEquiv.adjoint_eq_symm`
-
-English:
-lemma _root_.LinearIsometryEquiv.adjoint_eq_symm
-  given: (e : H ≃ₗᵢ[𝕜] K)
-  proof: calc
-    _ = adjoint (e : H ->L[𝕜] K) ∘L e ∘L (e.symm : K ->L[𝕜] H) := by simp
-    _ = e.symm := by
-      rw [← comp_assoc]; rw [norm_map_iff_adjoint_comp_self _ |>.mp e.norm_map]; rw [one_def]; rw [id_comp]
-
-omit [CompleteSpace H] [CompleteSpace K] in
-
-中文:
-引理 _root_.线性等距等价.adjoint_eq_symm
-  条件: (e : H ≃ₗᵢ[𝕜] K)
-  证明: calc
-    _ = adjoint (e : H ->L[𝕜] K) ∘L e ∘L (e.symm : K ->L[𝕜] H) := by simp
-    _ = e.symm := by
-      rw [← comp_assoc]; rw [norm_map_iff_adjoint_comp_self _ |>.mp e.norm_map]; rw [one_def]; rw [id_comp]
-
-omit [CompleteSpace H] [CompleteSpace K] in
-
-Depends on / 依赖: adjoint, comp_assoc, e.norm_map, e.symm, id_comp, norm_map, norm_map_iff_adjoint_comp_self, one_def
+/-
+**ContinuousLinearMap._root_.LinearIsometryEquiv.adjoint_eq_symm** 是 Mathlib 中的一
+个引理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LinearIsometryEquiv.adjoint_eq_symm (e : H ≃ₗᵢ[𝕜] K) :
-    adjoint (e : H ->L[𝕜] K) = e.symm :=
+    adjoint (e : H →L[𝕜] K) = e.symm :=
   calc
-    _ = adjoint (e : H ->L[𝕜] K) ∘L e ∘L (e.symm : K ->L[𝕜] H) := by simp
+    _ = adjoint (e : H →L[𝕜] K) ∘L e ∘L (e.symm : K →L[𝕜] H) := by simp
     _ = e.symm := by
-      rw [← comp_assoc]; rw [norm_map_iff_adjoint_comp_self _ |>.mp e.norm_map]; rw [one_def]; rw [id_comp]
+      rw [← comp_assoc, norm_map_iff_adjoint_comp_self _ |>.mp e.norm_map, one_def, id_comp]
 
 omit [CompleteSpace H] [CompleteSpace K] in
-/--
-theorem `_root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm` / 定理 `_root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm`
-
-English:
-theorem _root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm
-  proof: have := FiniteDimensional.complete 𝕜 H
-  have := FiniteDimensional.complete 𝕜 K
-  congr($e.adjoint_eq_symm)
-
-@[simp]
-
-中文:
-定理 _root_.线性等距等价.adjoint_toLinearMap_eq_symm
-  证明: have := FiniteDimensional.complete 𝕜 H
-  have := FiniteDimensional.complete 𝕜 K
-  congr($e.adjoint_eq_symm)
-
-@[simp]
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, adjoint_eq_symm, complete, e.adjoint_eq_symm
+/-
+**ContinuousLinearMap._root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm** 是
+ Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm
     [FiniteDimensional 𝕜 H] [FiniteDimensional 𝕜 K] (e : H ≃ₗᵢ[𝕜] K) :
@@ -3252,66 +3801,75 @@ theorem _root_.LinearIsometryEquiv.adjoint_toLinearMap_eq_symm
   congr($e.adjoint_eq_symm)
 
 @[simp]
-/--
-lemma `_root_.LinearIsometryEquiv.star_eq_symm` / 引理 `_root_.LinearIsometryEquiv.star_eq_symm`
-
-English:
-lemma _root_.LinearIsometryEquiv.star_eq_symm
-  given: (e : H ≃ₗᵢ[𝕜] H)
-  proof: e.adjoint_eq_symm
-
-中文:
-引理 _root_.线性等距等价.star_eq_symm
-  条件: (e : H ≃ₗᵢ[𝕜] H)
-  证明: e.adjoint_eq_symm
-
-Depends on / 依赖: adjoint_eq_symm, e.adjoint_eq_symm
+/-
+**ContinuousLinearMap._root_.LinearIsometryEquiv.star_eq_symm** 是 Mathlib 中的一个引理
+，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LinearIsometryEquiv.star_eq_symm (e : H ≃ₗᵢ[𝕜] H) :
-    star (e : H ->L[𝕜] H) = e.symm :=
+    star (e : H →L[𝕜] H) = e.symm :=
   e.adjoint_eq_symm
-
-/--
-theorem `norm_map_of_mem_unitary` / 定理 `norm_map_of_mem_unitary`
-
-English:
-theorem norm_map_of_mem_unitary
-  given: {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x : H)
-  proof: -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
-  have := Unitary.star_mul_self_of_mem hu
-  u.norm_map_iff_adjoint_comp_self.mpr this x
-
-中文:
-定理 norm_map_of_mem_unitary
-  条件: {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x : H)
-  证明: -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
-  have := Unitary.star_mul_self_of_mem hu
-  u.norm_map_iff_adjoint_comp_self.mpr this x
+/-
+**ContinuousLinearMap.norm_map_of_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousLinearMap`。
+形式化陈述：norm_map_of_mem_unitary {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) 
+(x : H) : ‖u x‖ = ‖x‖
+参数：hu : u in unitary (H ->L[𝕜] H)；x : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Unitary.star_mul_self_of_mem`：star_mul_self_of_mem {U : R} (hU : U in un
+itary R) : star U * U = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousLinearMap.norm_map_iff_adjoint_comp_self`：norm_map_iff_adjoint
+_comp_self (u : H ->L[𝕜] K) : (forall x : H, ‖u x‖ = ‖x‖) ↔ adjoint u ∘L u = 1
 -/
-theorem norm_map_of_mem_unitary {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x : H) :
+theorem norm_map_of_mem_unitary {u : H →L[𝕜] H} (hu : u ∈ unitary (H →L[𝕜] H)) (x : H) :
     ‖u x‖ = ‖x‖ :=
   -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
   have := Unitary.star_mul_self_of_mem hu
   u.norm_map_iff_adjoint_comp_self.mpr this x
-
-/--
-theorem `inner_map_map_of_mem_unitary` / 定理 `inner_map_map_of_mem_unitary`
-
-English:
-theorem inner_map_map_of_mem_unitary
-  given: {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x y : H)
-  proof: -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
-  have := Unitary.star_mul_self_of_mem hu
-  u.inner_map_map_iff_adjoint_comp_self.mpr this x y
-
-中文:
-定理 inner_map_map_of_mem_unitary
-  条件: {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x y : H)
-  证明: -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
-  have := Unitary.star_mul_self_of_mem hu
-  u.inner_map_map_iff_adjoint_comp_self.mpr this x y
+/-
+**ContinuousLinearMap.inner_map_map_of_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：inner_map_map_of_mem_unitary {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜]
+ H)) (x y : H) : ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜
+参数：hu : u in unitary (H ->L[𝕜] H)；x y : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Unitary.star_mul_self_of_mem`：star_mul_self_of_mem {U : R} (hU : U in un
+itary R) : star U * U = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousLinearMap.inner_map_map_iff_adjoint_comp_self`：inner_map_map_i
+ff_adjoint_comp_self (u : H ->L[𝕜] K) : (forall x y : H, ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜
+) ↔ adjoint u ∘L u = 1
 -/
-theorem inner_map_map_of_mem_unitary {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x y : H) :
+theorem inner_map_map_of_mem_unitary {u : H →L[𝕜] H} (hu : u ∈ unitary (H →L[𝕜] H)) (x y : H) :
     ⟪u x, u y⟫_𝕜 = ⟪x, y⟫_𝕜 :=
   -- Elaborates faster with this broken out https://github.com/leanprover-community/mathlib4/issues/11299
   have := Unitary.star_mul_self_of_mem hu
@@ -3322,118 +3880,164 @@ end ContinuousLinearMap
 namespace LinearIsometryEquiv
 
 open ContinuousLinearMap ContinuousLinearEquiv in
-/--
-Definition of `conjStarAlgEquiv` / `conjStarAlgEquiv` 的定义
+/-- An isometric linear equivalence of two Hilbert spaces induces an equivalence of
+⋆-algebras of their endomorphisms.
 
-English:
-definition conjStarAlgEquiv
-  signature: (e : H ≃ₗᵢ[𝕜] K)
-  body: .ofAlgEquiv e.toContinuousLinearEquiv.conjContinuousAlgEquiv fun x => by
-    simp [star_eq_adjoint, conjContinuousAlgEquiv_apply, ← toContinuousLinearEquiv_symm, comp_assoc]
+When `H = K`, this is exactly `Unitary.conjStarAlgAut`
+(see `Unitary.conjStarAlgEquiv_unitaryLinearIsometryEquiv` and
+`Unitary.conjStarAlgAut_symm_unitaryLinearIsometryEquiv`). -/
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearIsometry
+Equiv`。
+形式化陈述：conjStarAlgEquiv (e : H ≃ₗᵢ[𝕜] K) : (H ->L[𝕜] H) ≃⋆ₐ[𝕜] (K ->L[𝕜] K)
+参数：e : H ≃ₗᵢ[𝕜] K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 conjStarAlgEquiv
-  签名: (e : H ≃ₗᵢ[𝕜] K)
-  定义体: .ofAlgEquiv e.toContinuousLinearEquiv.conjContinuousAlgEquiv fun x => by
-    simp [star_eq_adjoint, conjContinuousAlgEquiv_apply, ← toContinuousLinearEquiv_symm, comp_assoc]
+--- 原说明 ---
+An isometric linear equivalence of two Hilbert spaces induces an equivalence of
+⋆-algebras of their endomorphisms.
 
-Depends on / 依赖: comp_assoc, conjContinuousAlgEquiv, conjContinuousAlgEquiv_apply, e.toContinuousLinearEquiv.conjContinuousAlgEquiv, ofAlgEquiv, star_eq_adjoint, toContinuousLinearEquiv, toContinuousLinearEquiv_symm
+When `H = K`, this is exactly `Unitary.conjStarAlgAut`
+(see `Unitary.conjStarAlgEquiv_unitaryLinearIsometryEquiv` and
+`Unitary.conjStarAlgAut_symm_unitaryLinearIsometryEquiv`).
 -/
-def conjStarAlgEquiv (e : H ≃ₗᵢ[𝕜] K) : (H ->L[𝕜] H) ≃⋆ₐ[𝕜] (K ->L[𝕜] K) :=
-  .ofAlgEquiv e.toContinuousLinearEquiv.conjContinuousAlgEquiv fun x => by
+def conjStarAlgEquiv (e : H ≃ₗᵢ[𝕜] K) : (H →L[𝕜] H) ≃⋆ₐ[𝕜] (K →L[𝕜] K) :=
+  .ofAlgEquiv e.toContinuousLinearEquiv.conjContinuousAlgEquiv fun x ↦ by
     simp [star_eq_adjoint, conjContinuousAlgEquiv_apply, ← toContinuousLinearEquiv_symm, comp_assoc]
-
-/--
-lemma `conjStarAlgEquiv_apply_apply` / 引理 `conjStarAlgEquiv_apply_apply`
-
-English:
-lemma conjStarAlgEquiv_apply_apply
-  given: (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H) (y : K)
-  proof: rfl
-
-中文:
-引理 conjStarAlgEquiv_apply_apply
-  条件: (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H) (y : K)
-  证明: rfl
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearIsometryEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {H : Type u_5} [inst_1 : NormedAddCommG
+roup H] [inst_2 : InnerProductSpace 𝕜 H]   [inst_3 : CompleteSpace H] {K : Type 
+u_6} [inst_4 : NormedAddCommGroup K] [inst_5 : InnerProductSpace 𝕜 K]   [inst_6 
+: CompleteSpace K] (e : H ≃ₗᵢ[𝕜] K) (x : H →L[𝕜] H) (y : K), (e.conjStarAlgEquiv
+ x) y = e (x (e.symm y))
+参数：e : H ≃ₗᵢ[𝕜] K；x : H →L[𝕜] H；y : K；e.conjStarAlgEquiv x；x (e.symm y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-@[simp] lemma conjStarAlgEquiv_apply_apply (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H) (y : K) :
+@[simp] lemma conjStarAlgEquiv_apply_apply (e : H ≃ₗᵢ[𝕜] K) (x : H →L[𝕜] H) (y : K) :
     e.conjStarAlgEquiv x y = e (x (e.symm y)) := rfl
-
-/--
-theorem `symm_conjStarAlgEquiv_apply_apply` / 定理 `symm_conjStarAlgEquiv_apply_apply`
-
-English:
-theorem symm_conjStarAlgEquiv_apply_apply
-  given: (e : H ≃ₗᵢ[𝕜] K) (f : K ->L[𝕜] K) (x : H)
-  proof: rfl
-
-中文:
-定理 symm_conjStarAlgEquiv_apply_apply
-  条件: (e : H ≃ₗᵢ[𝕜] K) (f : K ->L[𝕜] K) (x : H)
-  证明: rfl
+/-
+**LinearIsometryEquiv.symm_conjStarAlgEquiv_apply_apply** 是 Mathlib 中的一个定理，位于命名空
+间 `LinearIsometryEquiv`。
+形式化陈述：symm_conjStarAlgEquiv_apply_apply (e : H ≃ₗᵢ[𝕜] K) (f : K ->L[𝕜] K) (x : H
+) : e.conjStarAlgEquiv.symm f x = e.symm (f (e x))
+参数：e : H ≃ₗᵢ[𝕜] K；f : K ->L[𝕜] K；x : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem symm_conjStarAlgEquiv_apply_apply (e : H ≃ₗᵢ[𝕜] K) (f : K ->L[𝕜] K) (x : H) :
+theorem symm_conjStarAlgEquiv_apply_apply (e : H ≃ₗᵢ[𝕜] K) (f : K →L[𝕜] K) (x : H) :
     e.conjStarAlgEquiv.symm f x = e.symm (f (e x)) := rfl
-
-/--
-lemma `conjStarAlgEquiv_apply` / 引理 `conjStarAlgEquiv_apply`
-
-English:
-lemma conjStarAlgEquiv_apply
-  given: (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H)
-  proof: rfl
-
-中文:
-引理 conjStarAlgEquiv_apply
-  条件: (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H)
-  证明: rfl
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinearIs
+ometryEquiv`。
+形式化陈述：conjStarAlgEquiv_apply (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H) : e.conjStarAlgEq
+uiv x = e ∘L x ∘L e.symm
+参数：e : H ≃ₗᵢ[𝕜] K；x : H ->L[𝕜] H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-lemma conjStarAlgEquiv_apply (e : H ≃ₗᵢ[𝕜] K) (x : H ->L[𝕜] H) :
+lemma conjStarAlgEquiv_apply (e : H ≃ₗᵢ[𝕜] K) (x : H →L[𝕜] H) :
     e.conjStarAlgEquiv x = e ∘L x ∘L e.symm := rfl
-
-/--
-lemma `symm_conjStarAlgEquiv` / 引理 `symm_conjStarAlgEquiv`
-
-English:
-lemma symm_conjStarAlgEquiv
-  given: (e : H ≃ₗᵢ[𝕜] K)
-  proof: rfl
-
-中文:
-引理 symm_conjStarAlgEquiv
-  条件: (e : H ≃ₗᵢ[𝕜] K)
-  证明: rfl
+/-
+**LinearIsometryEquiv.symm_conjStarAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearIso
+metryEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {H : Type u_5} [inst_1 : NormedAddCommG
+roup H] [inst_2 : InnerProductSpace 𝕜 H]   [inst_3 : CompleteSpace H] {K : Type 
+u_6} [inst_4 : NormedAddCommGroup K] [inst_5 : InnerProductSpace 𝕜 K]   [inst_6 
+: CompleteSpace K] (e : H ≃ₗᵢ[𝕜] K), e.conjStarAlgEquiv.symm = e.symm.conjStarAl
+gEquiv
+参数：e : H ≃ₗᵢ[𝕜] K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 @[simp] lemma symm_conjStarAlgEquiv (e : H ≃ₗᵢ[𝕜] K) :
     e.conjStarAlgEquiv.symm = e.symm.conjStarAlgEquiv := rfl
-
-/--
-theorem `conjStarAlgEquiv_refl` / 定理 `conjStarAlgEquiv_refl`
-
-English:
-theorem conjStarAlgEquiv_refl
-  statement: conjStarAlgEquiv (.refl 𝕜 H) = .refl _ _
-  proof: rfl
-
-中文:
-定理 conjStarAlgEquiv_refl
-  结论: conjStarAlgEquiv (.refl 𝕜 H) = .refl _ _
-  证明: rfl
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `LinearIso
+metryEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {H : Type u_5} [inst_1 : NormedAddCommG
+roup H] [inst_2 : InnerProductSpace 𝕜 H]   [inst_3 : CompleteSpace H], (LinearIs
+ometryEquiv.refl 𝕜 H).conjStarAlgEquiv = StarAlgEquiv.refl 𝕜 (H →L[𝕜] H)
+参数：LinearIsometryEquiv.refl 𝕜 H；H →L[𝕜] H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 @[simp] theorem conjStarAlgEquiv_refl : conjStarAlgEquiv (.refl 𝕜 H) = .refl _ _ := rfl
-
-/--
-theorem `conjStarAlgEquiv_trans` / 定理 `conjStarAlgEquiv_trans`
-
-English:
-theorem conjStarAlgEquiv_trans
-  statement: {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-  proof: rfl
-
-中文:
-定理 conjStarAlgEquiv_trans
-  结论: {G : 类型} [赋范交换加群 G] [内积空间 𝕜 G]
-  证明: rfl
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearIs
+ometryEquiv`。
+形式化陈述：conjStarAlgEquiv_trans {G : Type*} [NormedAddCommGroup G] [InnerProductSpa
+ce 𝕜 G] [CompleteSpace G] (e : H ≃ₗᵢ[𝕜] K) (f : K ≃ₗᵢ[𝕜] G) : (e.trans f).conjSt
+arAlgEquiv = e.conjStarAlgEquiv.trans f.conjStarAlgEquiv
+参数：e : H ≃ₗᵢ[𝕜] K；f : K ≃ₗᵢ[𝕜] G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 theorem conjStarAlgEquiv_trans {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     [CompleteSpace G] (e : H ≃ₗᵢ[𝕜] K) (f : K ≃ₗᵢ[𝕜] G) :
@@ -3441,280 +4045,282 @@ theorem conjStarAlgEquiv_trans {G : Type*} [NormedAddCommGroup G] [InnerProductS
 
 set_option backward.isDefEq.respectTransparency false in
 open ContinuousLinearEquiv ContinuousLinearMap in
-/--
-theorem `conjStarAlgEquiv_ext_iff` / 定理 `conjStarAlgEquiv_ext_iff`
-
-English:
-theorem conjStarAlgEquiv_ext_iff
-  given: (f g : H ≃ₗᵢ[𝕜] K)
-  proof: by
-  conv_lhs => rw [eq_comm]
-  simp_rw [StarAlgEquiv.ext_iff, LinearIsometryEquiv.ext_iff, conjStarAlgEquiv_apply,
-    ← eq_toContinuousLinearMap_symm_comp, ← comp_assoc, toContinuousLinearEquiv_symm,
-    eq_comp_toContinuousLinearMap_symm,
-    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
-    ← Subalgebra.mem_center_iff (R := 𝕜), Algebra.IsCentral.center_eq_bot, ← comp_coe,
-    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one]
-  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : 𝕜), by ext; simp [h]⟩⟩
-  by_cases! hy : y = 0
-  · exact ⟨1, fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
-  have hfg : (f : H ->L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
-  have hgf : (g : H ->L[𝕜] K) = star y • f := by
-    ext x
-    have := by simpa [map_smulₛₗ, ← ContinuousLinearEquiv.comp_coe, ← toContinuousLinearEquiv_symm,
-      ← adjoint_eq_symm, ContinuousLinearMap.one_def] using congr(f (adjoint $h x)).symm
-    simpa
-  have : (g : H ->L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
-    simp [← smul_smul, ← hfg, ← star_def, ← hgf]
-  nth_rw 1 [← one_smul 𝕜 (g : H ->L[𝕜] K)] at this
-  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at this
-  obtain (this | this) := this
-  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x => congr($hfg x)⟩
-  · exact ⟨1, fun x => by simp [by simpa using congr($this x)]⟩
-
-中文:
-定理 conjStarAlgEquiv_ext_iff
-  条件: (f g : H ≃ₗᵢ[𝕜] K)
-  证明: by
-  conv_lhs => rw [eq_comm]
-  simp_rw [StarAlgEquiv.ext_iff, LinearIsometryEquiv.ext_iff, conjStarAlgEquiv_apply,
-    ← eq_toContinuousLinearMap_symm_comp, ← comp_assoc, toContinuousLinearEquiv_symm,
-    eq_comp_toContinuousLinearMap_symm,
-    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
-    ← Subalgebra.mem_center_iff (R := 𝕜), Algebra.IsCentral.center_eq_bot, ← comp_coe,
-    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one]
-  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : 𝕜), by ext; simp [h]⟩⟩
-  by_cases! hy : y = 0
-  · exact ⟨1, fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
-  have hfg : (f : H ->L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
-  have hgf : (g : H ->L[𝕜] K) = star y • f := by
-    ext x
-    have := by simpa [map_smulₛₗ, ← ContinuousLinearEquiv.comp_coe, ← toContinuousLinearEquiv_symm,
-      ← adjoint_eq_symm, ContinuousLinearMap.one_def] using congr(f (adjoint $h x)).symm
-    simpa
-  have : (g : H ->L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
-    simp [← smul_smul, ← hfg, ← star_def, ← hgf]
-  nth_rw 1 [← one_smul 𝕜 (g : H ->L[𝕜] K)] at this
-  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at this
-  obtain (this | this) := this
-  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x => congr($hfg x)⟩
-  · exact ⟨1, fun x => by simp [by simpa using congr($this x)]⟩
-
-Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, Algebra.algebraMap_eq_smul_one, Algebra.mem_bot, ContinuousLinearMap, ContinuousLinearMap.mul_def, IsCentral, LinearIsometryEquiv, LinearIsometryEquiv.ext_iff, Set.mem_range, StarAlgEquiv, StarAlgEquiv.ext_iff, Subalgebra, Subalgebra.mem_center_iff, algebraMap_eq_smul_one, center_eq_bot, comp_assoc, comp_coe, conjStarAlgEquiv_apply, conv_lhs
+/-
+**LinearIsometryEquiv.conjStarAlgEquiv_ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+IsometryEquiv`。
+形式化陈述：conjStarAlgEquiv_ext_iff (f g : H ≃ₗᵢ[𝕜] K) : f.conjStarAlgEquiv = g.conjS
+tarAlgEquiv ↔ exists α : unitary 𝕜, f = α • g
+参数：f g : H ≃ₗᵢ[𝕜] K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.comp_assoc`：comp_assoc {R₄ : Type*} [Semiring R₄] [M
+odule R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₃₄ : R₃ ->+* R₄} [RingHomCo
+mpTriple σ₁₃ σ₃₄ σ₁₄…
+· 使用定理 `Subalgebra.mem_center_iff`：mem_center_iff {a : A} : a in center R A ↔ fo
+rall b : A, b * a = a * b
+· 使用引理 `Algebra.IsCentral.center_eq_bot`：center_eq_bot : Subalgebra.center K D =
+ ⊥
+· 使用定理 `Algebra.IsCentral.instContinuousLinearMap`：∀ {R : Type u_1} {V : Type u_
+2} [inst : Field R] [inst_1 : AddCommGroup V] [inst_2 : TopologicalSpace R]   [i
+nst_3 : TopologicalSpace V] [Is…
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `instSeparatingDual`：∀ {E : Type u_1} {𝕜 : Type u_2} [inst : RCLike 𝕜] [i
+nst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   SeparatingDual 𝕜 E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+（共 61 条，此处仅展示前 30 条）
 -/
 theorem conjStarAlgEquiv_ext_iff (f g : H ≃ₗᵢ[𝕜] K) :
-    f.conjStarAlgEquiv = g.conjStarAlgEquiv ↔ exists α : unitary 𝕜, f = α • g := by
+    f.conjStarAlgEquiv = g.conjStarAlgEquiv ↔ ∃ α : unitary 𝕜, f = α • g := by
   conv_lhs => rw [eq_comm]
   simp_rw [StarAlgEquiv.ext_iff, LinearIsometryEquiv.ext_iff, conjStarAlgEquiv_apply,
     ← eq_toContinuousLinearMap_symm_comp, ← comp_assoc, toContinuousLinearEquiv_symm,
     eq_comp_toContinuousLinearMap_symm,
-    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
+    comp_assoc, ← comp_assoc _ (f : H →L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
     ← Subalgebra.mem_center_iff (R := 𝕜), Algebra.IsCentral.center_eq_bot, ← comp_coe,
     Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one]
-  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : 𝕜), by ext; simp [h]⟩⟩
+  refine ⟨fun ⟨y, h⟩ ↦ ?_, fun ⟨y, h⟩ ↦ ⟨(y : 𝕜), by ext; simp [h]⟩⟩
   by_cases! hy : y = 0
-  · exact ⟨1, fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
-  have hfg : (f : H ->L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
-  have hgf : (g : H ->L[𝕜] K) = star y • f := by
+  · exact ⟨1, fun x ↦ by simp [by simpa [hy] using congr($h x).symm]⟩
+  have hfg : (f : H →L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
+  have hgf : (g : H →L[𝕜] K) = star y • f := by
     ext x
     have := by simpa [map_smulₛₗ, ← ContinuousLinearEquiv.comp_coe, ← toContinuousLinearEquiv_symm,
       ← adjoint_eq_symm, ContinuousLinearMap.one_def] using congr(f (adjoint $h x)).symm
     simpa
-  have : (g : H ->L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
+  have : (g : H →L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
     simp [← smul_smul, ← hfg, ← star_def, ← hgf]
-  nth_rw 1 [← one_smul 𝕜 (g : H ->L[𝕜] K)] at this
-  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at this
+  nth_rw 1 [← one_smul 𝕜 (g : H →L[𝕜] K)] at this
+  rw [← sub_eq_zero, ← sub_smul, smul_eq_zero, sub_eq_zero, eq_comm] at this
   obtain (this | this) := this
-  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x => congr($hfg x)⟩
-  · exact ⟨1, fun x => by simp [by simpa using congr($this x)]⟩
+  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x ↦ congr($hfg x)⟩
+  · exact ⟨1, fun x ↦ by simp [by simpa using congr($this x)]⟩
 
 end LinearIsometryEquiv
 end linearIsometryEquiv
 
 namespace Unitary
 
-/--
-theorem `norm_map` / 定理 `norm_map`
-
-English:
-theorem norm_map
-  given: (u : unitary (H ->L[𝕜] H)) (x : H)
-  statement: ‖(u : H ->L[𝕜] H) x‖ = ‖x‖
-  proof: u.val.norm_map_of_mem_unitary u.property x
-
-中文:
-定理 norm_map
-  条件: (u : unitary (H ->L[𝕜] H)) (x : H)
-  结论: ‖(u : H ->L[𝕜] H) x‖ = ‖x‖
-  证明: u.val.norm_map_of_mem_unitary u.property x
-
-Depends on / 依赖: norm_map_of_mem_unitary, property, u.property, u.val.norm_map_of_mem_unitary
+/-
+**Unitary.norm_map** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：norm_map (u : unitary (H ->L[𝕜] H)) (x : H) : ‖(u : H ->L[𝕜] H) x‖ = ‖x‖
+参数：u : unitary (H ->L[𝕜] H)；x : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.norm_map_of_mem_unitary`：norm_map_of_mem_unitary {u 
+: H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x : H) : ‖u x‖ = ‖x‖
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem norm_map (u : unitary (H ->L[𝕜] H)) (x : H) : ‖(u : H ->L[𝕜] H) x‖ = ‖x‖ :=
+theorem norm_map (u : unitary (H →L[𝕜] H)) (x : H) : ‖(u : H →L[𝕜] H) x‖ = ‖x‖ :=
   u.val.norm_map_of_mem_unitary u.property x
-
-/--
-theorem `inner_map_map` / 定理 `inner_map_map`
-
-English:
-theorem inner_map_map
-  given: (u : unitary (H ->L[𝕜] H)) (x y : H)
-  proof: u.val.inner_map_map_of_mem_unitary u.property x y
-
-中文:
-定理 inner_map_map
-  条件: (u : unitary (H ->L[𝕜] H)) (x y : H)
-  证明: u.val.inner_map_map_of_mem_unitary u.property x y
-
-Depends on / 依赖: inner_map_map_of_mem_unitary, property, u.property, u.val.inner_map_map_of_mem_unitary
+/-
+**Unitary.inner_map_map** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：inner_map_map (u : unitary (H ->L[𝕜] H)) (x y : H) : ⟪(u : H ->L[𝕜] H) x, 
+(u : H ->L[𝕜] H) y⟫_𝕜 = ⟪x, y⟫_𝕜
+参数：u : unitary (H ->L[𝕜] H)；x y : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.inner_map_map_of_mem_unitary`：inner_map_map_of_mem_u
+nitary {u : H ->L[𝕜] H} (hu : u in unitary (H ->L[𝕜] H)) (x y : H) : ⟪u x, u y⟫_
+𝕜 = ⟪x, y⟫_𝕜
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem inner_map_map (u : unitary (H ->L[𝕜] H)) (x y : H) :
-    ⟪(u : H ->L[𝕜] H) x, (u : H ->L[𝕜] H) y⟫_𝕜 = ⟪x, y⟫_𝕜 :=
+theorem inner_map_map (u : unitary (H →L[𝕜] H)) (x y : H) :
+    ⟪(u : H →L[𝕜] H) x, (u : H →L[𝕜] H) y⟫_𝕜 = ⟪x, y⟫_𝕜 :=
   u.val.inner_map_map_of_mem_unitary u.property x y
 
-/--
-Definition of `linearIsometryEquiv` / `linearIsometryEquiv` 的定义
+/-- The unitary elements of continuous linear maps on a Hilbert space coincide with the linear
+isometric equivalences on that Hilbert space. -/
+/-
+**Unitary.linearIsometryEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitary`。
+形式化陈述：linearIsometryEquiv : unitary (H ->L[𝕜] H) ≃* (H ≃ₗᵢ[𝕜] H) where toFun u
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.norm_map`：norm_map (u : unitary (H ->L[𝕜] H)) (x : H) : ‖(u : H 
+->L[𝕜] H) x‖ = ‖x‖
 
-English:
-definition linearIsometryEquiv
-  signature: : unitary (H ->L[𝕜] H) ≃* (H ≃ₗᵢ[𝕜] H) where
-  body: { (u : H ->L[𝕜] H) with
-      norm_map' := norm_map u
-      invFun := ↑(star u)
-      left_inv := fun x => congr($(star_mul_self u).val x)
-      right_inv := fun x => congr($(mul_star_self u).val x) }
-  invFun e :=
-    { val := e
-      property := by
-        let e' : (H ->L[𝕜] H)ˣ :=
-          { val := (e : H ->L[𝕜] H)
-            inv := (e.symm : H ->L[𝕜] H)
-            val_inv := by ext; simp
-            inv_val := by ext; simp }
-exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩
-          (e : H ->L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
-  map_mul' u v := by ext; rfl
-
-@[simp]
-
-中文:
-定义 linearIsometryEquiv
-  签名: : unitary (H ->L[𝕜] H) ≃* (H ≃ₗᵢ[𝕜] H) where
-  定义体: { (u : H ->L[𝕜] H) with
-      norm_map' := norm_map u
-      invFun := ↑(star u)
-      left_inv := fun x => congr($(star_mul_self u).val x)
-      right_inv := fun x => congr($(mul_star_self u).val x) }
-  invFun e :=
-    { val := e
-      property := by
-        let e' : (H ->L[𝕜] H)ˣ :=
-          { val := (e : H ->L[𝕜] H)
-            inv := (e.symm : H ->L[𝕜] H)
-            val_inv := by ext; simp
-            inv_val := by ext; simp }
-exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩
-          (e : H ->L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
-  map_mul' u v := by ext; rfl
-
-@[simp]
-
-Depends on / 依赖: IsUnit, IsUnit.mem_unitary_of_star_mul_self, e.norm_map, e.symm, invFun, inv_val, left_inv, map_mul, mem_unitary_of_star_mul_self, mul_star_self, norm_map, norm_map_iff_adjoint_comp_self, norm_map_iff_adjoint_comp_self.mp, property, right_inv, star_mul_self, val_inv
+--- 原说明 ---
+The unitary elements of continuous linear maps on a Hilbert space coincide with 
+the linear
+isometric equivalences on that Hilbert space.
 -/
-noncomputable def linearIsometryEquiv : unitary (H ->L[𝕜] H) ≃* (H ≃ₗᵢ[𝕜] H) where
+noncomputable def linearIsometryEquiv : unitary (H →L[𝕜] H) ≃* (H ≃ₗᵢ[𝕜] H) where
   toFun u :=
-    { (u : H ->L[𝕜] H) with
+    { (u : H →L[𝕜] H) with
       norm_map' := norm_map u
       invFun := ↑(star u)
-      left_inv := fun x => congr($(star_mul_self u).val x)
-      right_inv := fun x => congr($(mul_star_self u).val x) }
+      left_inv := fun x ↦ congr($(star_mul_self u).val x)
+      right_inv := fun x ↦ congr($(mul_star_self u).val x) }
   invFun e :=
     { val := e
       property := by
-        let e' : (H ->L[𝕜] H)ˣ :=
-          { val := (e : H ->L[𝕜] H)
-            inv := (e.symm : H ->L[𝕜] H)
+        let e' : (H →L[𝕜] H)ˣ :=
+          { val := (e : H →L[𝕜] H)
+            inv := (e.symm : H →L[𝕜] H)
             val_inv := by ext; simp
             inv_val := by ext; simp }
-exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩
-          (e : H ->L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
+        exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩ <|
+          (e : H →L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
   map_mul' u v := by ext; rfl
 
 @[simp]
-/--
-lemma `coe_linearIsometryEquiv_apply` / 引理 `coe_linearIsometryEquiv_apply`
-
-English:
-lemma coe_linearIsometryEquiv_apply
-  given: (u : unitary (H ->L[𝕜] H))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_linearIsometryEquiv_apply
-  条件: (u : unitary (H ->L[𝕜] H))
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.coe_linearIsometryEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：coe_linearIsometryEquiv_apply (u : unitary (H ->L[𝕜] H)) : linearIsometryE
+quiv u = (u : H ->L[𝕜] H)
+参数：u : unitary (H ->L[𝕜] H)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
-lemma coe_linearIsometryEquiv_apply (u : unitary (H ->L[𝕜] H)) :
-    linearIsometryEquiv u = (u : H ->L[𝕜] H) :=
+lemma coe_linearIsometryEquiv_apply (u : unitary (H →L[𝕜] H)) :
+    linearIsometryEquiv u = (u : H →L[𝕜] H) :=
   rfl
 
 @[simp]
-/--
-lemma `coe_symm_linearIsometryEquiv_apply` / 引理 `coe_symm_linearIsometryEquiv_apply`
-
-English:
-lemma coe_symm_linearIsometryEquiv_apply
-  given: (e : H ≃ₗᵢ[𝕜] H)
-  proof: rfl
-
-中文:
-引理 coe_symm_linearIsometryEquiv_apply
-  条件: (e : H ≃ₗᵢ[𝕜] H)
-  证明: rfl
+/-
+**Unitary.coe_symm_linearIsometryEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`
+。
+形式化陈述：coe_symm_linearIsometryEquiv_apply (e : H ≃ₗᵢ[𝕜] H) : linearIsometryEquiv.
+symm e = (e : H ->L[𝕜] H)
+参数：e : H ≃ₗᵢ[𝕜] H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 lemma coe_symm_linearIsometryEquiv_apply (e : H ≃ₗᵢ[𝕜] H) :
-    linearIsometryEquiv.symm e = (e : H ->L[𝕜] H) :=
+    linearIsometryEquiv.symm e = (e : H →L[𝕜] H) :=
   rfl
-
-/--
-theorem `conjStarAlgEquiv_unitaryLinearIsometryEquiv` / 定理 `conjStarAlgEquiv_unitaryLinearIsometryEquiv`
-
-English:
-theorem conjStarAlgEquiv_unitaryLinearIsometryEquiv
-  given: (u : unitary (H ->L[𝕜] H))
-  proof: rfl
-
-中文:
-定理 conjStarAlgEquiv_unitaryLinearIsometryEquiv
-  条件: (u : unitary (H ->L[𝕜] H))
-  证明: rfl
+/-
+**Unitary.conjStarAlgEquiv_unitaryLinearIsometryEquiv** 是 Mathlib 中的一个定理，位于命名空间 
+`Unitary`。
+形式化陈述：conjStarAlgEquiv_unitaryLinearIsometryEquiv (u : unitary (H ->L[𝕜] H)) : (
+linearIsometryEquiv u).conjStarAlgEquiv = conjStarAlgAut 𝕜 _ u
+参数：u : unitary (H ->L[𝕜] H)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem conjStarAlgEquiv_unitaryLinearIsometryEquiv (u : unitary (H ->L[𝕜] H)) :
+theorem conjStarAlgEquiv_unitaryLinearIsometryEquiv (u : unitary (H →L[𝕜] H)) :
     (linearIsometryEquiv u).conjStarAlgEquiv = conjStarAlgAut 𝕜 _ u := rfl
-
-/--
-theorem `conjStarAlgAut_symm_unitaryLinearIsometryEquiv` / 定理 `conjStarAlgAut_symm_unitaryLinearIsometryEquiv`
-
-English:
-theorem conjStarAlgAut_symm_unitaryLinearIsometryEquiv
-  given: (u : H ≃ₗᵢ[𝕜] H)
-  proof: by
-  simp [← conjStarAlgEquiv_unitaryLinearIsometryEquiv]
-
-中文:
-定理 conjStarAlgAut_symm_unitaryLinearIsometryEquiv
-  条件: (u : H ≃ₗᵢ[𝕜] H)
-  证明: by
-  simp [← conjStarAlgEquiv_unitaryLinearIsometryEquiv]
-
-Depends on / 依赖: conjStarAlgEquiv_unitaryLinearIsometryEquiv
+/-
+**Unitary.conjStarAlgAut_symm_unitaryLinearIsometryEquiv** 是 Mathlib 中的一个定理，位于命名
+空间 `Unitary`。
+形式化陈述：conjStarAlgAut_symm_unitaryLinearIsometryEquiv (u : H ≃ₗᵢ[𝕜] H) : conjStar
+AlgAut 𝕜 (H ->L[𝕜] H) (linearIsometryEquiv.symm u) = u.conjStarAlgEquiv
+参数：u : H ≃ₗᵢ[𝕜] H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulEquiv.apply_symm_apply`：apply_symm_apply (e : M ≃* N) (y : N) : e (e.
+symm y) = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem conjStarAlgAut_symm_unitaryLinearIsometryEquiv (u : H ≃ₗᵢ[𝕜] H) :
-    conjStarAlgAut 𝕜 (H ->L[𝕜] H) (linearIsometryEquiv.symm u) = u.conjStarAlgEquiv := by
+    conjStarAlgAut 𝕜 (H →L[𝕜] H) (linearIsometryEquiv.symm u) = u.conjStarAlgEquiv := by
   simp [← conjStarAlgEquiv_unitaryLinearIsometryEquiv]
 
 end Unitary
@@ -3729,131 +4335,189 @@ variable {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
 variable [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
 variable (v₁ : OrthonormalBasis n 𝕜 E) (v₂ : OrthonormalBasis m 𝕜 F)
 
-/--
-lemma `Matrix.toLin_conjTranspose` / 引理 `Matrix.toLin_conjTranspose`
+/-- The linear map associated to the conjugate transpose of a matrix corresponding to two
+orthonormal bases is the adjoint of the linear map associated to the matrix. -/
+/-
+**Matrix.toLin_conjTranspose** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Matrix.toLin_conjTranspose (A : Matrix m n 𝕜) : toLin v₂.toBasis v₁.toBasi
+s Aᴴ = adjoint (toLin v₁.toBasis v₂.toBasis A)
+参数：A : Matrix m n 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `LinearMap.eq_adjoint_iff_basis`：eq_adjoint_iff_basis {ι₁ : Type*} {ι₂ : 
+Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F) (A : E ->ₗ[𝕜] F) (B : F ->ₗ[𝕜] E)
+ : A = B.adjoint ↔ f…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.toLin_self`：Matrix.toLin_self [Fintype m] (M : Matrix m n R) (i :
+ n) : Matrix.toLin v₁ v₂ M (v₁ i) = ∑ j, M j i • v₂ j
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sum_inner`：sum_inner {ι : Type*} (s : Finset ι) (f : ι -> E) (x : E) : ⟪
+∑ i in s, f i, x⟫ = ∑ i in s, ⟪f i, x⟫
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `inner_smul_left`：inner_smul_left (x y : E) (r : 𝕜) : ⟪r • x, y⟫ = r† * ⟪
+x, y⟫
+· 使用定理 `RingHomCompTriple.comp_apply`：comp_apply [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+ {x : R₁} : σ₂₃ (σ₁₂ x) = σ₁₃ x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `orthonormal_iff_ite`：orthonormal_iff_ite [DecidableEq ι] {v : ι -> E} : 
+Orthonormal 𝕜 v ↔ forall i j, ⟪v i, v j⟫ = if i = j then (1 : 𝕜) else (0 : 𝕜)
+· 使用定理 `OrthonormalBasis.orthonormal`：∀ {ι : Type u_1} {𝕜 : Type u_3} [inst : RC
+Like 𝕜] {E : Type u_4} [inst_1 : NormedAddCommGroup E]   [inst_2 : InnerProductS
+pace 𝕜 E] [inst_3 …
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `inner_sum`：inner_sum {ι : Type*} (s : Finset ι) (f : ι -> E) (x : E) : ⟪
+x, ∑ i in s, f i⟫ = ∑ i in s, ⟪x, f i⟫
+· 使用定理 `inner_smul_right`：inner_smul_right (x y : E) (r : 𝕜) : ⟪x, r • y⟫ = r * 
+⟪x, y⟫
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Matrix.toLin_conjTranspose
-  given: (A : Matrix m n 𝕜)
-  proof: by
-.mpr fun i j => ?_ refine eq_adjoint_iff_basis v₂.toBasis v₁.toBasis _ _
-  simp_rw [toLin_self]
-  simp [sum_inner, inner_smul_left, inner_sum, inner_smul_right,
-    orthonormal_iff_ite.mp v₁.orthonormal, orthonormal_iff_ite.mp v₂.orthonormal]
-
-中文:
-引理 矩阵.toLin_conjTranspose
-  条件: (A : 矩阵 m n 𝕜)
-  证明: by
-.mpr fun i j => ?_ refine eq_adjoint_iff_basis v₂.toBasis v₁.toBasis _ _
-  simp_rw [toLin_self]
-  simp [sum_inner, inner_smul_left, inner_sum, inner_smul_right,
-    orthonormal_iff_ite.mp v₁.orthonormal, orthonormal_iff_ite.mp v₂.orthonormal]
-
-Depends on / 依赖: eq_adjoint_iff_basis, inner_smul_left, inner_smul_right, inner_sum, orthonormal, orthonormal_iff_ite, orthonormal_iff_ite.mp, simp_rw, sum_inner, toBasis, toLin_self
+--- 原说明 ---
+The linear map associated to the conjugate transpose of a matrix corresponding t
+o two
+orthonormal bases is the adjoint of the linear map associated to the matrix.
 -/
 lemma Matrix.toLin_conjTranspose (A : Matrix m n 𝕜) :
     toLin v₂.toBasis v₁.toBasis Aᴴ = adjoint (toLin v₁.toBasis v₂.toBasis A) := by
-.mpr fun i j => ?_ refine eq_adjoint_iff_basis v₂.toBasis v₁.toBasis _ _
+  refine eq_adjoint_iff_basis v₂.toBasis v₁.toBasis _ _ |>.mpr fun i j ↦ ?_
   simp_rw [toLin_self]
   simp [sum_inner, inner_smul_left, inner_sum, inner_smul_right,
     orthonormal_iff_ite.mp v₁.orthonormal, orthonormal_iff_ite.mp v₂.orthonormal]
 
-/--
-lemma `LinearMap.toMatrix_adjoint` / 引理 `LinearMap.toMatrix_adjoint`
+/-- The matrix associated to the adjoint of a linear map corresponding to two orthonormal bases
+is the conjugate transpose of the matrix associated to the linear map. -/
+/-
+**LinearMap.toMatrix_adjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearMap.toMatrix_adjoint (f : E ->ₗ[𝕜] F) : toMatrix v₂.toBasis v₁.toBas
+is (adjoint f) = (toMatrix v₁.toBasis v₂.toBasis f)ᴴ
+参数：f : E ->ₗ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.toLin_toMatrix`：Matrix.toLin_toMatrix (f : M₁ ->ₗ[R] M₂) : Matrix
+.toLin v₁ v₂ (LinearMap.toMatrix v₁ v₂ f) = f
+· 使用引理 `Matrix.toLin_conjTranspose`：Matrix.toLin_conjTranspose (A : Matrix m n 𝕜
+) : toLin v₂.toBasis v₁.toBasis Aᴴ = adjoint (toLin v₁.toBasis v₂.toBasis A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma LinearMap.toMatrix_adjoint
-  given: (f : E ->ₗ[𝕜] F)
-  proof: .injective by simp [toLin_conjTranspose] toLin v₂.toBasis v₁.toBasis
-
-中文:
-引理 线性映射.toMatrix_adjoint
-  条件: (f : E ->ₗ[𝕜] F)
-  证明: .injective by simp [toLin_conjTranspose] toLin v₂.toBasis v₁.toBasis
-
-Depends on / 依赖: injective, toBasis, toLin_conjTranspose
+--- 原说明 ---
+The matrix associated to the adjoint of a linear map corresponding to two orthon
+ormal bases
+is the conjugate transpose of the matrix associated to the linear map.
 -/
-lemma LinearMap.toMatrix_adjoint (f : E ->ₗ[𝕜] F) :
+lemma LinearMap.toMatrix_adjoint (f : E →ₗ[𝕜] F) :
     toMatrix v₂.toBasis v₁.toBasis (adjoint f) = (toMatrix v₁.toBasis v₂.toBasis f)ᴴ :=
-.injective by simp [toLin_conjTranspose] toLin v₂.toBasis v₁.toBasis
+  toLin v₂.toBasis v₁.toBasis |>.injective <| by simp [toLin_conjTranspose]
 
 /-- The star algebra equivalence between the linear endomorphisms of finite-dimensional inner
 product space and square matrices induced by the choice of an orthonormal basis. -/
 @[simps]
-/--
-Definition of `LinearMap.toMatrixOrthonormal` / `LinearMap.toMatrixOrthonormal` 的定义
+/-
+**LinearMap.toMatrixOrthonormal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearMap.toMatrixOrthonormal : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] Matrix n n 𝕜
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `LinearMap.toMatrix_adjoint`：LinearMap.toMatrix_adjoint (f : E ->ₗ[𝕜] F) 
+: toMatrix v₂.toBasis v₁.toBasis (adjoint f) = (toMatrix v₁.toBasis v₂.toBasis f
+)ᴴ
 
-English:
-definition LinearMap.toMatrixOrthonormal
-  signature: : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] Matrix n n 𝕜
-  body: { LinearMap.toMatrix v₁.toBasis v₁.toBasis with
-    map_mul' := LinearMap.toMatrix_mul v₁.toBasis
-    map_star' := LinearMap.toMatrix_adjoint v₁ v₁ }
-
-中文:
-定义 线性映射.toMatrixOrthonormal
-  签名: : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] 矩阵 n n 𝕜
-  定义体: { LinearMap.toMatrix v₁.toBasis v₁.toBasis with
-    map_mul' := LinearMap.toMatrix_mul v₁.toBasis
-    map_star' := LinearMap.toMatrix_adjoint v₁ v₁ }
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, LinearMap.toMatrix_adjoint, LinearMap.toMatrix_mul, map_mul, map_star, toBasis, toMatrix, toMatrix_adjoint, toMatrix_mul
+--- 原说明 ---
+The star algebra equivalence between the linear endomorphisms of finite-dimensio
+nal inner
+product space and square matrices induced by the choice of an orthonormal basis.
 -/
-def LinearMap.toMatrixOrthonormal : (E ->ₗ[𝕜] E) ≃⋆ₐ[𝕜] Matrix n n 𝕜 :=
+def LinearMap.toMatrixOrthonormal : (E →ₗ[𝕜] E) ≃⋆ₐ[𝕜] Matrix n n 𝕜 :=
   { LinearMap.toMatrix v₁.toBasis v₁.toBasis with
     map_mul' := LinearMap.toMatrix_mul v₁.toBasis
     map_star' := LinearMap.toMatrix_adjoint v₁ v₁ }
-
-/--
-lemma `LinearMap.toMatrixOrthonormal_apply_apply` / 引理 `LinearMap.toMatrixOrthonormal_apply_apply`
-
-English:
-lemma LinearMap.toMatrixOrthonormal_apply_apply
-  given: (f : E ->ₗ[𝕜] E) (i j : n)
-  proof: calc
-    _ = v₁.repr (f (v₁ j)) i := f.toMatrix_apply ..
-    _ = ⟪v₁ i, f (v₁ j)⟫_𝕜 := v₁.repr_apply_apply ..
-
-中文:
-引理 线性映射.toMatrixOrthonormal_apply_apply
-  条件: (f : E ->ₗ[𝕜] E) (i j : n)
-  证明: calc
-    _ = v₁.repr (f (v₁ j)) i := f.toMatrix_apply ..
-    _ = ⟪v₁ i, f (v₁ j)⟫_𝕜 := v₁.repr_apply_apply ..
-
-Depends on / 依赖: f.toMatrix_apply, repr_apply_apply, toMatrix_apply
+/-
+**LinearMap.toMatrixOrthonormal_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearMap.toMatrixOrthonormal_apply_apply (f : E ->ₗ[𝕜] E) (i j : n) : toM
+atrixOrthonormal v₁ f i j = ⟪v₁ i, f (v₁ j)⟫_𝕜
+参数：f : E ->ₗ[𝕜] E；i j : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `LinearMap.toMatrix_apply`：LinearMap.toMatrix_apply (f : M₁ ->ₗ[R] M₂) (i
+ : m) (j : n) : LinearMap.toMatrix v₁ v₂ f i j = v₂.repr (f (v₁ j)) i
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `OrthonormalBasis.repr_apply_apply`：∀ {ι : Type u_1} {𝕜 : Type u_3} [inst
+ : RCLike 𝕜] {E : Type u_4} [inst_1 : NormedAddCommGroup E]   [inst_2 : InnerPro
+ductSpace 𝕜 E] [inst_3 …
 -/
-lemma LinearMap.toMatrixOrthonormal_apply_apply (f : E ->ₗ[𝕜] E) (i j : n) :
+lemma LinearMap.toMatrixOrthonormal_apply_apply (f : E →ₗ[𝕜] E) (i j : n) :
     toMatrixOrthonormal v₁ f i j = ⟪v₁ i, f (v₁ j)⟫_𝕜 :=
   calc
     _ = v₁.repr (f (v₁ j)) i := f.toMatrix_apply ..
     _ = ⟪v₁ i, f (v₁ j)⟫_𝕜 := v₁.repr_apply_apply ..
-
-/--
-lemma `LinearMap.toMatrixOrthonormal_reindex` / 引理 `LinearMap.toMatrixOrthonormal_reindex`
-
-English:
-lemma LinearMap.toMatrixOrthonormal_reindex
-  given: (e : n ≃ m) (f : E ->ₗ[𝕜] E)
-  proof: Matrix.ext fun i j =>
-    calc toMatrixOrthonormal (v₁.reindex e) f i j
-      _ = (v₁.reindex e).repr (f (v₁.reindex e j)) i := f.toMatrix_apply ..
-      _ = v₁.repr (f (v₁ (e.symm j))) (e.symm i) := by simp
-      _ = toMatrixOrthonormal v₁ f (e.symm i) (e.symm j) := Eq.symm (f.toMatrix_apply ..)
-
-中文:
-引理 线性映射.toMatrixOrthonormal_reindex
-  条件: (e : n ≃ m) (f : E ->ₗ[𝕜] E)
-  证明: Matrix.ext fun i j =>
-    calc toMatrixOrthonormal (v₁.reindex e) f i j
-      _ = (v₁.reindex e).repr (f (v₁.reindex e j)) i := f.toMatrix_apply ..
-      _ = v₁.repr (f (v₁ (e.symm j))) (e.symm i) := by simp
-      _ = toMatrixOrthonormal v₁ f (e.symm i) (e.symm j) := Eq.symm (f.toMatrix_apply ..)
-
-Depends on / 依赖: Eq.symm, Matrix, Matrix.ext, e.symm, f.toMatrix_apply, reindex, toMatrixOrthonormal, toMatrix_apply
+/-
+**LinearMap.toMatrixOrthonormal_reindex** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearMap.toMatrixOrthonormal_reindex (e : n ≃ m) (f : E ->ₗ[𝕜] E) : toMat
+rixOrthonormal (v₁.reindex e) f = (toMatrixOrthonormal v₁ f).reindex e e
+参数：e : n ≃ m；f : E ->ₗ[𝕜] E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `LinearMap.toMatrix_apply`：LinearMap.toMatrix_apply (f : M₁ ->ₗ[R] M₂) (i
+ : m) (j : n) : LinearMap.toMatrix v₁ v₂ f i j = v₂.repr (f (v₁ j)) i
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrthonormalBasis.coe_reindex`：∀ {ι : Type u_1} {ι' : Type u_2} {𝕜 : Type
+ u_3} [inst : RCLike 𝕜] {E : Type u_4} [inst_1 : NormedAddCommGroup E]   [inst_2
+ : InnerProductSpa…
+· 使用定理 `OrthonormalBasis.repr_reindex`：∀ {ι : Type u_1} {ι' : Type u_2} {𝕜 : Typ
+e u_3} [inst : RCLike 𝕜] {E : Type u_4} [inst_1 : NormedAddCommGroup E]   [inst_
+2 : InnerProductSpa…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma LinearMap.toMatrixOrthonormal_reindex (e : n ≃ m) (f : E ->ₗ[𝕜] E) :
+lemma LinearMap.toMatrixOrthonormal_reindex (e : n ≃ m) (f : E →ₗ[𝕜] E) :
     toMatrixOrthonormal (v₁.reindex e) f = (toMatrixOrthonormal v₁ f).reindex e e :=
   Matrix.ext fun i j =>
     calc toMatrixOrthonormal (v₁.reindex e) f i j
@@ -3863,20 +4527,24 @@ lemma LinearMap.toMatrixOrthonormal_reindex (e : n ≃ m) (f : E ->ₗ[𝕜] E) 
 
 open scoped ComplexConjugate
 
-/--
-theorem `Matrix.toEuclideanLin_conjTranspose_eq_adjoint` / 定理 `Matrix.toEuclideanLin_conjTranspose_eq_adjoint`
+/-- The adjoint of the linear map associated to a matrix is the linear map associated to the
+conjugate transpose of that matrix. -/
+/-
+**Matrix.toEuclideanLin_conjTranspose_eq_adjoint** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Matrix.toEuclideanLin_conjTranspose_eq_adjoint (A : Matrix m n 𝕜) : A.conj
+Transpose.toEuclideanLin = A.toEuclideanLin.adjoint
+参数：A : Matrix m n 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Matrix.toLin_conjTranspose`：Matrix.toLin_conjTranspose (A : Matrix m n 𝕜
+) : toLin v₂.toBasis v₁.toBasis Aᴴ = adjoint (toLin v₁.toBasis v₂.toBasis A)
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem Matrix.toEuclideanLin_conjTranspose_eq_adjoint
-  given: (A : Matrix m n 𝕜)
-  proof: A.toLin_conjTranspose (EuclideanSpace.basisFun n 𝕜) (EuclideanSpace.basisFun m 𝕜)
-
-中文:
-定理 矩阵.toEuclideanLin_conjTranspose_eq_adjoint
-  条件: (A : 矩阵 m n 𝕜)
-  证明: A.toLin_conjTranspose (EuclideanSpace.basisFun n 𝕜) (EuclideanSpace.basisFun m 𝕜)
-
-Depends on / 依赖: A.toLin_conjTranspose, EuclideanSpace, EuclideanSpace.basisFun, basisFun, toLin_conjTranspose
+--- 原说明 ---
+The adjoint of the linear map associated to a matrix is the linear map associate
+d to the
+conjugate transpose of that matrix.
 -/
 theorem Matrix.toEuclideanLin_conjTranspose_eq_adjoint (A : Matrix m n 𝕜) :
     A.conjTranspose.toEuclideanLin = A.toEuclideanLin.adjoint :=
@@ -3885,55 +4553,86 @@ theorem Matrix.toEuclideanLin_conjTranspose_eq_adjoint (A : Matrix m n 𝕜) :
 end Matrix
 
 @[simp]
-/--
-theorem `LinearIsometry.adjoint_comp_self` / 定理 `LinearIsometry.adjoint_comp_self`
-
-English:
-theorem LinearIsometry.adjoint_comp_self
-  statement: {E E' : Type*}
-  proof: f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp f.isometry
-
-中文:
-定理 线性等距.adjoint_comp_self
-  结论: {E E' : 类型}
-  证明: f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp f.isometry
-
-Depends on / 依赖: f.isometry, f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp, isometry, isometry_iff_adjoint_comp_self, toContinuousLinearMap
+/-
+**LinearIsometry.adjoint_comp_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearIsometry.adjoint_comp_self {E E' : Type*} [NormedAddCommGroup E] [In
+nerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup E'] [InnerProductSpac
+e 𝕜 E'] [CompleteSpace E'] (f : E ->ₗᵢ[𝕜] E') : f.toContinuousLinearMap.adjoint 
+∘L f.toContinuousLinearMap = 1
+参数：f : E ->ₗᵢ[𝕜] E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.isometry_iff_adjoint_comp_self`：isometry_iff_adjoint
+_comp_self (u : H ->L[𝕜] K) : Isometry u ↔ adjoint u ∘L u = 1
+· 使用定理 `LinearIsometry.isometry`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type u_5}
+ {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* R₂} [
+inst_2 : Semi…
 -/
 theorem LinearIsometry.adjoint_comp_self {E E' : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E'] (f : E ->ₗᵢ[𝕜] E') :
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E'] (f : E →ₗᵢ[𝕜] E') :
     f.toContinuousLinearMap.adjoint ∘L f.toContinuousLinearMap = 1 :=
   f.toContinuousLinearMap.isometry_iff_adjoint_comp_self.mp f.isometry
 
 /-- A version of `LinearIsometry.adjoint_comp_self` in terms of `LinearMap.adjoint`. -/
 @[simp]
-/--
-theorem `LinearIsometry.adjoint_comp_self'` / 定理 `LinearIsometry.adjoint_comp_self'`
+/-
+**LinearIsometry.adjoint_comp_self'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearIsometry.adjoint_comp_self' {E E' : Type*} [NormedAddCommGroup E] [I
+nnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] [NormedAddCommGroup E'] [InnerProd
+uctSpace 𝕜 E'] [FiniteDimensional 𝕜 E'] (f : E ->ₗᵢ[𝕜] E') : f.adjoint ∘ₗ f.toLi
+nearMap = LinearMap.id
+参数：f : E ->ₗᵢ[𝕜] E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.complete`：FiniteDimensional.complete [FiniteDimensiona
+l 𝕜 E] : CompleteSpace E
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `LinearIsometry.adjoint_comp_self`：LinearIsometry.adjoint_comp_self {E E'
+ : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [Norm
+edAddCommGroup E'] [In…
 
-English:
-theorem LinearIsometry.adjoint_comp_self'
-  statement: {E E' : Type*}
-  proof: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 E'
-  ext x
-  exact congr($(f.adjoint_comp_self) x)
-
-中文:
-定理 线性等距.adjoint_comp_self'
-  结论: {E E' : 类型}
-  证明: by
-  have := FiniteDimensional.complete 𝕜 E
-  have := FiniteDimensional.complete 𝕜 E'
-  ext x
-  exact congr($(f.adjoint_comp_self) x)
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, adjoint_comp_self, complete, f.adjoint_comp_self
+--- 原说明 ---
+A version of `LinearIsometry.adjoint_comp_self` in terms of `LinearMap.adjoint`.
 -/
 theorem LinearIsometry.adjoint_comp_self' {E E' : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [FiniteDimensional 𝕜 E'] (f : E ->ₗᵢ[𝕜] E') :
+    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [FiniteDimensional 𝕜 E'] (f : E →ₗᵢ[𝕜] E') :
     f.adjoint ∘ₗ f.toLinearMap = LinearMap.id := by
   have := FiniteDimensional.complete 𝕜 E
   have := FiniteDimensional.complete 𝕜 E'

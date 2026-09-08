@@ -47,22 +47,15 @@ variable (α : Type*)
 
 /-!### Definitions -/
 
-/--
-Definition of `GenContFract.Pair` / `GenContFract.Pair` 的定义
+/-- We collect a partial numerator `aᵢ` and partial denominator `bᵢ` in a pair `⟨aᵢ, bᵢ⟩`. -/
+/-
+**GenContFract.Pair** 是 Mathlib 中的一个归纳类型，位于命名空间 `GenContFract`。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GenContFract.Pair
-  parameters: where
-  axioms and operations (2):
-    - a : α
-    - b : α
-
-中文:
-结构 GenContFract.对
-  参数: where
-  公理与运算 (2 个):
-    - a : α
-    - b : α
+--- 原说明 ---
+We collect a partial numerator `aᵢ` and partial denominator `bᵢ` in a pair `⟨aᵢ,
+ bᵢ⟩`.
 -/
 structure GenContFract.Pair where
   /-- Partial numerator -/
@@ -79,38 +72,29 @@ namespace GenContFract.Pair
 
 variable {α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Make a `GenContFract.Pair` printable. -/
+/-
+**GenContFract.Pair.** 是 Mathlib 中的一个实例，位于命名空间 `GenContFract.Pair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Repr
-  signature: α] : Repr (Pair α)
-  body: ⟨fun p _ => "(a : " ++ repr p.a ++ ", b : " ++ repr p.b ++ ")"⟩
-
-中文:
-实例 [Repr
-  签名: α] : Repr (对 α)
-  定义体: ⟨fun p _ => "(a : " ++ repr p.a ++ ", b : " ++ repr p.b ++ ")"⟩
+--- 原说明 ---
+Make a `GenContFract.Pair` printable.
 -/
 instance [Repr α] : Repr (Pair α) :=
-  ⟨fun p _ => "(a : " ++ repr p.a ++ ", b : " ++ repr p.b ++ ")"⟩
+  ⟨fun p _ ↦ "(a : " ++ repr p.a ++ ", b : " ++ repr p.b ++ ")"⟩
 
-/--
-Definition of `map` / `map` 的定义
+/-- Maps a function `f` on both components of a given pair. -/
+/-
+**GenContFract.Pair.map** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract.Pair`。
+形式化陈述：map {β : Type*} (f : α -> β) (gp : Pair α) : Pair β
+参数：f : α -> β；gp : Pair α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {β : Type*} (f : α -> β) (gp : Pair α)
-  body: ⟨f gp.a, f gp.b⟩
-
-中文:
-定义 map
-  签名: {β : 类型} (f : α -> β) (gp : 对 α)
-  定义体: ⟨f gp.a, f gp.b⟩
-
-Depends on / 依赖: gp.a, gp.b, ringChar
+--- 原说明 ---
+Maps a function `f` on both components of a given pair.
 -/
-def map {β : Type*} (f : α -> β) (gp : Pair α) : Pair β :=
+def map {β : Type*} (f : α → β) (gp : Pair α) : Pair β :=
   ⟨f gp.a, f gp.b⟩
 
 section coe
@@ -120,56 +104,34 @@ variable {β : Type*} [Coe α β]
 
 /-- The coercion between numerator-denominator pairs happens componentwise. -/
 @[coe]
-/--
-Definition of `coeFn` / `coeFn` 的定义
+/-
+**GenContFract.Pair.coeFn** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract.Pair`。
+形式化陈述：coeFn : Pair α -> Pair β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFn
-  signature: : Pair α -> Pair β
-  body: map (↑)
-
-中文:
-定义 coeFn
-  签名: : 对 α -> 对 β
-  定义体: map (↑)
+--- 原说明 ---
+The coercion between numerator-denominator pairs happens componentwise.
 -/
-def coeFn : Pair α -> Pair β := map (↑)
+def coeFn : Pair α → Pair β := map (↑)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Coerce a pair by elementwise coercion. -/
+/-
+**GenContFract.Pair.** 是 Mathlib 中的一个实例，位于命名空间 `GenContFract.Pair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (Pair α) (Pair β)
-  body: ⟨coeFn⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: Coe (对 α) (对 β)
-  定义体: ⟨coeFn⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+Coerce a pair by elementwise coercion.
 -/
 instance : Coe (Pair α) (Pair β) :=
   ⟨coeFn⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_toPair` / 定理 `coe_toPair`
-
-English:
-theorem coe_toPair
-  given: {a b : α}
-  statement: (↑(Pair.mk a b) : Pair β) = Pair.mk (a : β) (b : β)
-  proof: rfl
-
-中文:
-定理 coe_toPair
-  条件: {a b : α}
-  结论: (↑(对.mk a b) : 对 β) = 对.mk (a : β) (b : β)
-  证明: rfl
+/-
+**GenContFract.Pair.coe_toPair** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract.Pair`。
+形式化陈述：coe_toPair {a b : α} : (↑(Pair.mk a b) : Pair β) = Pair.mk (a : β) (b : β)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toPair {a b : α} : (↑(Pair.mk a b) : Pair β) = Pair.mk (a : β) (b : β) := rfl
 
@@ -192,138 +154,111 @@ We store the sequence of partial numerators and denominators in a sequence of `G
 For convenience, one often writes `[h; (a₀, b₀), (a₁, b₁), (a₂, b₂),...]`.
 -/
 @[ext, wikidata Q4115724]
-/--
-Definition of `GenContFract` / `GenContFract` 的定义
+/-
+**GenContFract** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GenContFract
-  parameters: where
-  axioms and operations (1):
-    - h : α
-
-中文:
-结构 GenContFract
-  参数: where
-  公理与运算 (1 个):
-    - h : α
+--- 原说明 ---
+A *generalised continued fraction* (gcf) is a potentially infinite expression of
+ the form
+$$
+  h + \dfrac{a_0}
+            {b_0 + \dfrac{a_1}
+                         {b_1 + \dfrac{a_2}
+                                      {b_2 + \dfrac{a_3}
+                                                   {b_3 + \dots}}}}
+$$
+where `h` is called the *head term* or *integer part*, the `aᵢ` are called the
+*partial numerators* and the `bᵢ` the *partial denominators* of the gcf.
+We store the sequence of partial numerators and denominators in a sequence of `G
+enContFract.Pair`s
+`s`.
+For convenience, one often writes `[h; (a₀, b₀), (a₁, b₁), (a₂, b₂),...]`.
 -/
 structure GenContFract where
   /-- Head term -/
   h : α
   /-- Sequence of partial numerator and denominator pairs. -/
-s : Stream'.Seq Pair α
+  s : Stream'.Seq <| Pair α
 
 variable {α}
 
 namespace GenContFract
 
-/--
-Definition of `ofInteger` / `ofInteger` 的定义
+/-- Constructs a generalized continued fraction without fractional part. -/
+/-
+**GenContFract.ofInteger** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：ofInteger (a : α) : GenContFract α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInteger
-  signature: (a : α)
-  body: ⟨a, Stream'.Seq.nil⟩
-
-中文:
-定义 of整数eger
-  签名: (a : α)
-  定义体: ⟨a, Stream'.Seq.nil⟩
-
-Depends on / 依赖: Seq.nil, Stream
+--- 原说明 ---
+Constructs a generalized continued fraction without fractional part.
 -/
 def ofInteger (a : α) : GenContFract α :=
   ⟨a, Stream'.Seq.nil⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (GenContFract α)
-  body: ⟨ofInteger default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (GenContFract α)
-  定义体: ⟨ofInteger default⟩
-
-Depends on / 依赖: ofInteger
+/-
+**GenContFract.** 是 Mathlib 中的一个实例，位于命名空间 `GenContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (GenContFract α) :=
   ⟨ofInteger default⟩
 
-/--
-Definition of `partNums` / `partNums` 的定义
+/-- Returns the sequence of partial numerators `aᵢ` of `g`. -/
+/-
+**GenContFract.partNums** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：partNums (g : GenContFract α) : Stream'.Seq α
+参数：g : GenContFract α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partNums
-  signature: (g : GenContFract α)
-  body: g.s.map Pair.a
-
-中文:
-定义 partNums
-  签名: (g : GenContFract α)
-  定义体: g.s.map Pair.a
-
-Depends on / 依赖: Pair.a, g.s.map
+--- 原说明 ---
+Returns the sequence of partial numerators `aᵢ` of `g`.
 -/
 def partNums (g : GenContFract α) : Stream'.Seq α :=
   g.s.map Pair.a
 
-/--
-Definition of `partDens` / `partDens` 的定义
+/-- Returns the sequence of partial denominators `bᵢ` of `g`. -/
+/-
+**GenContFract.partDens** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：partDens (g : GenContFract α) : Stream'.Seq α
+参数：g : GenContFract α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partDens
-  signature: (g : GenContFract α)
-  body: g.s.map Pair.b
-
-中文:
-定义 partDens
-  签名: (g : GenContFract α)
-  定义体: g.s.map Pair.b
-
-Depends on / 依赖: Pair.b, g.s.map
+--- 原说明 ---
+Returns the sequence of partial denominators `bᵢ` of `g`.
 -/
 def partDens (g : GenContFract α) : Stream'.Seq α :=
   g.s.map Pair.b
 
-/--
-Definition of `TerminatedAt` / `TerminatedAt` 的定义
+/-- A gcf terminated at position `n` if its sequence terminates at position `n`. -/
+/-
+**GenContFract.TerminatedAt** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：TerminatedAt (g : GenContFract α) (n : Nat) : Prop
+参数：g : GenContFract α；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TerminatedAt
-  signature: (g : GenContFract α) (n : Nat)
-  body: g.s.TerminatedAt n
-deriving Decidable
-
-中文:
-定义 TerminatedAt
-  签名: (g : GenContFract α) (n : 自然数)
-  定义体: g.s.TerminatedAt n
-deriving Decidable
-
-Depends on / 依赖: TerminatedAt, g.s.TerminatedAt
+--- 原说明 ---
+A gcf terminated at position `n` if its sequence terminates at position `n`.
 -/
-def TerminatedAt (g : GenContFract α) (n : Nat) : Prop :=
+def TerminatedAt (g : GenContFract α) (n : ℕ) : Prop :=
   g.s.TerminatedAt n
 deriving Decidable
 
-/--
-Definition of `Terminates` / `Terminates` 的定义
+/-- A gcf terminates if its sequence terminates. -/
+/-
+**GenContFract.Terminates** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：Terminates (g : GenContFract α) : Prop
+参数：g : GenContFract α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Terminates
-  signature: (g : GenContFract α)
-  body: g.s.Terminates
-
-中文:
-定义 Terminates
-  签名: (g : GenContFract α)
-  定义体: g.s.Terminates
-
-Depends on / 依赖: Terminates, g.s.Terminates
+--- 原说明 ---
+A gcf terminates if its sequence terminates.
 -/
 def Terminates (g : GenContFract α) : Prop :=
   g.s.Terminates
@@ -338,57 +273,37 @@ variable {β : Type*} [Coe α β]
 /-- The coercion between `GenContFract` happens on the head term
 and all numerator-denominator pairs componentwise. -/
 @[coe]
-/--
-Definition of `coeFn` / `coeFn` 的定义
+/-
+**GenContFract.coeFn** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：coeFn : GenContFract α -> GenContFract β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFn
-  signature: : GenContFract α -> GenContFract β
-  body: fun g => ⟨(g.h : β), (g.s.map (↑) : Stream'.Seq <| Pair β)⟩
-
-中文:
-定义 coeFn
-  签名: : GenContFract α -> GenContFract β
-  定义体: fun g => ⟨(g.h : β), (g.s.map (↑) : Stream'.Seq <| Pair β)⟩
-
-Depends on / 依赖: Stream, g.s.map
+--- 原说明 ---
+The coercion between `GenContFract` happens on the head term
+and all numerator-denominator pairs componentwise.
 -/
-def coeFn : GenContFract α -> GenContFract β :=
-  fun g => ⟨(g.h : β), (g.s.map (↑) : Stream'.Seq <| Pair β)⟩
+def coeFn : GenContFract α → GenContFract β :=
+  fun g ↦ ⟨(g.h : β), (g.s.map (↑) : Stream'.Seq <| Pair β)⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Coerce a gcf by elementwise coercion. -/
+/-
+**GenContFract.** 是 Mathlib 中的一个实例，位于命名空间 `GenContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (GenContFract α) (GenContFract β)
-  body: ⟨coeFn⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: Coe (GenContFract α) (GenContFract β)
-  定义体: ⟨coeFn⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+Coerce a gcf by elementwise coercion.
 -/
 instance : Coe (GenContFract α) (GenContFract β) :=
   ⟨coeFn⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_toGenContFract` / 定理 `coe_toGenContFract`
-
-English:
-theorem coe_toGenContFract
-  given: {g : GenContFract α}
-  proof: rfl
-
-中文:
-定理 coe_toGenContFract
-  条件: {g : GenContFract α}
-  证明: rfl
+/-
+**GenContFract.coe_toGenContFract** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：coe_toGenContFract {g : GenContFract α} : (g : GenContFract β) = ⟨(g.h : β
+), (g.s.map (↑) : Stream'.Seq <| Pair β)⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toGenContFract {g : GenContFract α} :
     (g : GenContFract β) =
@@ -398,40 +313,71 @@ end coe
 
 end GenContFract
 
-/--
-Definition of `GenContFract.IsSimpContFract` / `GenContFract.IsSimpContFract` 的定义
+/-- A generalized continued fraction is a *simple continued fraction* if all partial numerators are
+equal to one.
+$$
+  h + \dfrac{1}
+            {b_0 + \dfrac{1}
+                         {b_1 + \dfrac{1}
+                                      {b_2 + \dfrac{1}
+                                                   {b_3 + \dots}}}}
+$$
+-/
+/-
+**GenContFract.IsSimpContFract** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：GenContFract.IsSimpContFract (g : GenContFract α) [One α] : Prop
+参数：g : GenContFract α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GenContFract.IsSimpContFract
-  signature: (g : GenContFract α)
-  body: forall (n : Nat) (aₙ : α), g.partNums.get? n = some aₙ -> aₙ = 1
-
-中文:
-定义 GenContFract.IsSimpContFract
-  签名: (g : GenContFract α)
-  定义体: forall (n : Nat) (aₙ : α), g.partNums.get? n = some aₙ -> aₙ = 1
-
-Depends on / 依赖: g.partNums.get, partNums
+--- 原说明 ---
+A generalized continued fraction is a *simple continued fraction* if all partial
+ numerators are
+equal to one.
+$$
+  h + \dfrac{1}
+            {b_0 + \dfrac{1}
+                         {b_1 + \dfrac{1}
+                                      {b_2 + \dfrac{1}
+                                                   {b_3 + \dots}}}}
+$$
 -/
 def GenContFract.IsSimpContFract (g : GenContFract α)
     [One α] : Prop :=
-  forall (n : Nat) (aₙ : α), g.partNums.get? n = some aₙ -> aₙ = 1
+  ∀ (n : ℕ) (aₙ : α), g.partNums.get? n = some aₙ → aₙ = 1
 
 variable (α) in
-/--
-Definition of `SimpContFract` / `SimpContFract` 的定义
+/-- A *simple continued fraction* (scf) is a generalized continued fraction (gcf) whose partial
+numerators are equal to one.
+$$
+  h + \dfrac{1}
+            {b_0 + \dfrac{1}
+                         {b_1 + \dfrac{1}
+                                      {b_2 + \dfrac{1}
+                                                   {b_3 + \dots}}}}
+$$
+For convenience, one often writes `[h; b₀, b₁, b₂,...]`.
+It is encoded as the subtype of gcfs that satisfy `GenContFract.IsSimpContFract`.
+-/
+/-
+**SimpContFract** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SimpContFract [One α]
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimpContFract
-  signature: [One α]
-  body: { g : GenContFract α // g.IsSimpContFract }
-
-中文:
-定义 SimpContFract
-  签名: [幺 α]
-  定义体: { g : GenContFract α // g.IsSimpContFract }
-
-Depends on / 依赖: GenContFract, IsSimpContFract, g.IsSimpContFract
+--- 原说明 ---
+A *simple continued fraction* (scf) is a generalized continued fraction (gcf) wh
+ose partial
+numerators are equal to one.
+$$
+  h + \dfrac{1}
+            {b_0 + \dfrac{1}
+                         {b_1 + \dfrac{1}
+                                      {b_2 + \dfrac{1}
+                                                   {b_3 + \dots}}}}
+$$
+For convenience, one often writes `[h; b₀, b₁, b₂,...]`.
+It is encoded as the subtype of gcfs that satisfy `GenContFract.IsSimpContFract`
+.
 -/
 def SimpContFract [One α] :=
   { g : GenContFract α // g.IsSimpContFract }
@@ -441,56 +387,33 @@ namespace SimpContFract
 
 variable [One α]
 
-/--
-Definition of `ofInteger` / `ofInteger` 的定义
+/-- Constructs a simple continued fraction without fractional part. -/
+/-
+**SimpContFract.ofInteger** 是 Mathlib 中的一个定义，位于命名空间 `SimpContFract`。
+形式化陈述：ofInteger (a : α) : SimpContFract α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInteger
-  signature: (a : α)
-  body: ⟨GenContFract.ofInteger a, fun n aₙ h => by cases h⟩
-
-中文:
-定义 of整数eger
-  签名: (a : α)
-  定义体: ⟨GenContFract.ofInteger a, fun n aₙ h => by cases h⟩
-
-Depends on / 依赖: GenContFract, GenContFract.ofInteger, ofInteger
+--- 原说明 ---
+Constructs a simple continued fraction without fractional part.
 -/
 def ofInteger (a : α) : SimpContFract α :=
-  ⟨GenContFract.ofInteger a, fun n aₙ h => by cases h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (SimpContFract α)
-  body: ⟨ofInteger 1⟩
-
-中文:
-实例 :
-  签名: 可居 (SimpContFract α)
-  定义体: ⟨ofInteger 1⟩
-
-Depends on / 依赖: ofInteger
+  ⟨GenContFract.ofInteger a, fun n aₙ h ↦ by cases h⟩
+/-
+**SimpContFract.** 是 Mathlib 中的一个实例，位于命名空间 `SimpContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (SimpContFract α) :=
   ⟨ofInteger 1⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Lift a scf to a gcf using the inclusion map. -/
+/-
+**SimpContFract.** 是 Mathlib 中的一个实例，位于命名空间 `SimpContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (SimpContFract α) (GenContFract α)
-  body: ⟨Subtype.val⟩
-
-中文:
-实例 :
-  签名: Coe (SimpContFract α) (GenContFract α)
-  定义体: ⟨Subtype.val⟩
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+Lift a scf to a gcf using the inclusion map.
 -/
 instance : Coe (SimpContFract α) (GenContFract α) :=
   ⟨Subtype.val⟩
@@ -498,42 +421,41 @@ instance : Coe (SimpContFract α) (GenContFract α) :=
 end SimpContFract
 
 /--
-Definition of `SimpContFract.IsContFract` / `SimpContFract.IsContFract` 的定义
+A simple continued fraction is a *(regular) continued fraction* ((r)cf) if all partial denominators
+`bᵢ` are positive, i.e. `0 < bᵢ`.
+-/
+/-
+**SimpContFract.IsContFract** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SimpContFract.IsContFract [One α] [Zero α] [LT α] (s : SimpContFract α) : 
+Prop
+参数：s : SimpContFract α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimpContFract.IsContFract
-  signature: [One α] [Zero α] [LT α]
-  body: forall (n : Nat) (bₙ : α),
-    (↑s : GenContFract α).partDens.get? n = some bₙ -> 0 < bₙ
-
-中文:
-定义 SimpContFract.IsContFract
-  签名: [幺 α] [零 α] [LT α]
-  定义体: forall (n : Nat) (bₙ : α),
-    (↑s : GenContFract α).partDens.get? n = some bₙ -> 0 < bₙ
-
-Depends on / 依赖: GenContFract, partDens, partDens.get
+--- 原说明 ---
+A simple continued fraction is a *(regular) continued fraction* ((r)cf) if all p
+artial denominators
+`bᵢ` are positive, i.e. `0 < bᵢ`.
 -/
 def SimpContFract.IsContFract [One α] [Zero α] [LT α]
     (s : SimpContFract α) : Prop :=
-  forall (n : Nat) (bₙ : α),
-    (↑s : GenContFract α).partDens.get? n = some bₙ -> 0 < bₙ
+  ∀ (n : ℕ) (bₙ : α),
+    (↑s : GenContFract α).partDens.get? n = some bₙ → 0 < bₙ
 
 variable (α) in
-/--
-Definition of `ContFract` / `ContFract` 的定义
+/-- A *(regular) continued fraction* ((r)cf) is a simple continued fraction (scf) whose partial
+denominators are all positive. It is the subtype of scfs that satisfy `SimpContFract.IsContFract`.
+-/
+/-
+**ContFract** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContFract [One α] [Zero α] [LT α]
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContFract
-  signature: [One α] [Zero α] [LT α]
-  body: { s : SimpContFract α // s.IsContFract }
-
-中文:
-定义 ContFract
-  签名: [幺 α] [零 α] [LT α]
-  定义体: { s : SimpContFract α // s.IsContFract }
-
-Depends on / 依赖: IsContFract, SimpContFract, s.IsContFract
+--- 原说明 ---
+A *(regular) continued fraction* ((r)cf) is a simple continued fraction (scf) wh
+ose partial
+denominators are all positive. It is the subtype of scfs that satisfy `SimpContF
+ract.IsContFract`.
 -/
 def ContFract [One α] [Zero α] [LT α] :=
   { s : SimpContFract α // s.IsContFract }
@@ -544,77 +466,47 @@ namespace ContFract
 
 variable [One α] [Zero α] [LT α]
 
-/--
-Definition of `ofInteger` / `ofInteger` 的定义
+/-- Constructs a continued fraction without fractional part. -/
+/-
+**ContFract.ofInteger** 是 Mathlib 中的一个定义，位于命名空间 `ContFract`。
+形式化陈述：ofInteger (a : α) : ContFract α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInteger
-  signature: (a : α)
-  body: ⟨SimpContFract.ofInteger a, fun n bₙ h => by cases h⟩
-
-中文:
-定义 of整数eger
-  签名: (a : α)
-  定义体: ⟨SimpContFract.ofInteger a, fun n bₙ h => by cases h⟩
-
-Depends on / 依赖: SimpContFract, SimpContFract.ofInteger, ofInteger
+--- 原说明 ---
+Constructs a continued fraction without fractional part.
 -/
 def ofInteger (a : α) : ContFract α :=
-  ⟨SimpContFract.ofInteger a, fun n bₙ h => by cases h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (ContFract α)
-  body: ⟨ofInteger 0⟩
-
-中文:
-实例 :
-  签名: 可居 (ContFract α)
-  定义体: ⟨ofInteger 0⟩
-
-Depends on / 依赖: ofInteger
+  ⟨SimpContFract.ofInteger a, fun n bₙ h ↦ by cases h⟩
+/-
+**ContFract.** 是 Mathlib 中的一个实例，位于命名空间 `ContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (ContFract α) :=
   ⟨ofInteger 0⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Lift a cf to a scf using the inclusion map. -/
+/-
+**ContFract.** 是 Mathlib 中的一个实例，位于命名空间 `ContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (ContFract α) (SimpContFract α)
-  body: ⟨Subtype.val⟩
-
-中文:
-实例 :
-  签名: Coe (ContFract α) (SimpContFract α)
-  定义体: ⟨Subtype.val⟩
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+Lift a cf to a scf using the inclusion map.
 -/
 instance : Coe (ContFract α) (SimpContFract α) :=
   ⟨Subtype.val⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Lift a cf to a scf using the inclusion map. -/
+/-
+**ContFract.** 是 Mathlib 中的一个实例，位于命名空间 `ContFract`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (ContFract α) (GenContFract α)
-  body: ⟨fun c => c.val⟩
-
-中文:
-实例 :
-  签名: Coe (ContFract α) (GenContFract α)
-  定义体: ⟨fun c => c.val⟩
-
-Depends on / 依赖: c.val
+--- 原说明 ---
+Lift a cf to a scf using the inclusion map.
 -/
 instance : Coe (ContFract α) (GenContFract α) :=
-  ⟨fun c => c.val⟩
+  ⟨fun c ↦ c.val⟩
 
 end ContFract
 
@@ -634,77 +526,78 @@ variable {K : Type*} [DivisionRing K]
 
 /-!
 We start with the definition of the recurrence relation. Given a gcf `g`, for all `n ≥ 1`, we define
-- `A₋₁ = 1, A₀ = h, Aₙ = bₙ₋₁ * Aₙ₋₁ + aₙ₋₁ * Aₙ₋₂`, and
-- `B₋₁ = 0, B₀ = 1, Bₙ = bₙ₋₁ * Bₙ₋₁ + aₙ₋₁ * Bₙ₋₂`.
+- `A₋₁ = 1,  A₀ = h,  Aₙ = bₙ₋₁ * Aₙ₋₁ + aₙ₋₁ * Aₙ₋₂`, and
+- `B₋₁ = 0,  B₀ = 1,  Bₙ = bₙ₋₁ * Bₙ₋₁ + aₙ₋₁ * Bₙ₋₂`.
 
 `Aₙ, Bₙ` are called the *nth continuants*, `Aₙ` the *nth numerator*, and `Bₙ` the
 *nth denominator* of `g`. The *nth convergent* of `g` is given by `Aₙ / Bₙ`.
 -/
 
-/--
-Definition of `nextNum` / `nextNum` 的定义
+/-- Returns the next numerator `Aₙ = bₙ₋₁ * Aₙ₋₁ + aₙ₋₁ * Aₙ₋₂`, where `predA` is `Aₙ₋₁`,
+`ppredA` is `Aₙ₋₂`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
+-/
+/-
+**GenContFract.nextNum** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：nextNum (a b ppredA predA : K) : K
+参数：a b ppredA predA : K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nextNum
-  signature: (a b ppredA predA : K)
-  body: b * predA + a * ppredA
-
-中文:
-定义 nextNum
-  签名: (a b ppredA predA : K)
-  定义体: b * predA + a * ppredA
-
-Depends on / 依赖: ppredA
+--- 原说明 ---
+Returns the next numerator `Aₙ = bₙ₋₁ * Aₙ₋₁ + aₙ₋₁ * Aₙ₋₂`, where `predA` is `A
+ₙ₋₁`,
+`ppredA` is `Aₙ₋₂`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
 -/
 def nextNum (a b ppredA predA : K) : K :=
   b * predA + a * ppredA
 
-/--
-Definition of `nextDen` / `nextDen` 的定义
+/-- Returns the next denominator `Bₙ = bₙ₋₁ * Bₙ₋₁ + aₙ₋₁ * Bₙ₋₂`, where `predB` is `Bₙ₋₁` and
+`ppredB` is `Bₙ₋₂`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
+-/
+/-
+**GenContFract.nextDen** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：nextDen (aₙ bₙ ppredB predB : K) : K
+参数：aₙ bₙ ppredB predB : K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nextDen
-  signature: (aₙ bₙ ppredB predB : K)
-  body: bₙ * predB + aₙ * ppredB
-
-中文:
-定义 nextDen
-  签名: (aₙ bₙ ppredB predB : K)
-  定义体: bₙ * predB + aₙ * ppredB
-
-Depends on / 依赖: ppredB
+--- 原说明 ---
+Returns the next denominator `Bₙ = bₙ₋₁ * Bₙ₋₁ + aₙ₋₁ * Bₙ₋₂`, where `predB` is 
+`Bₙ₋₁` and
+`ppredB` is `Bₙ₋₂`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
 -/
 def nextDen (aₙ bₙ ppredB predB : K) : K :=
   bₙ * predB + aₙ * ppredB
 
 /--
-Definition of `nextConts` / `nextConts` 的定义
+Returns the next continuants `⟨Aₙ, Bₙ⟩` using `nextNum` and `nextDen`, where `pred`
+is `⟨Aₙ₋₁, Bₙ₋₁⟩`, `ppred` is `⟨Aₙ₋₂, Bₙ₋₂⟩`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
+-/
+/-
+**GenContFract.nextConts** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：nextConts (a b : K) (ppred pred : Pair K) : Pair K
+参数：a b : K；ppred pred : Pair K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nextConts
-  signature: (a b : K) (ppred pred : Pair K)
-  body: ⟨nextNum a b ppred.a pred.a, nextDen a b ppred.b pred.b⟩
-
-中文:
-定义 nextConts
-  签名: (a b : K) (ppred pred : 对 K)
-  定义体: ⟨nextNum a b ppred.a pred.a, nextDen a b ppred.b pred.b⟩
-
-Depends on / 依赖: nextDen, nextNum, ppred.a, ppred.b, pred.a, pred.b
+--- 原说明 ---
+Returns the next continuants `⟨Aₙ, Bₙ⟩` using `nextNum` and `nextDen`, where `pr
+ed`
+is `⟨Aₙ₋₁, Bₙ₋₁⟩`, `ppred` is `⟨Aₙ₋₂, Bₙ₋₂⟩`, `a` is `aₙ₋₁`, and `b` is `bₙ₋₁`.
 -/
 def nextConts (a b : K) (ppred pred : Pair K) : Pair K :=
   ⟨nextNum a b ppred.a pred.a, nextDen a b ppred.b pred.b⟩
 
-/--
-Definition of `contsAux` / `contsAux` 的定义
+/-- Returns the continuants `⟨Aₙ₋₁, Bₙ₋₁⟩` of `g`. -/
+/-
+**GenContFract.contsAux** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：{K : Type u_2} → [DivisionRing K] → GenContFract K → Stream' (GenContFract
+.Pair K)
+参数：GenContFract.Pair K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contsAux
-  signature: (g : GenContFract K)
-
-中文:
-定义 contsAux
-  签名: (g : GenContFract K)
+--- 原说明 ---
+Returns the continuants `⟨Aₙ₋₁, Bₙ₋₁⟩` of `g`.
 -/
 def contsAux (g : GenContFract K) : Stream' (Pair K)
   | 0 => ⟨1, 0⟩
@@ -714,110 +607,108 @@ def contsAux (g : GenContFract K) : Stream' (Pair K)
     | none => contsAux g (n + 1)
     | some gp => nextConts gp.a gp.b (contsAux g n) (contsAux g (n + 1))
 
-/--
-Definition of `conts` / `conts` 的定义
+/-- Returns the continuants `⟨Aₙ, Bₙ⟩` of `g`. -/
+/-
+**GenContFract.conts** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：conts (g : GenContFract K) : Stream' (Pair K)
+参数：g : GenContFract K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conts
-  signature: (g : GenContFract K)
-  body: g.contsAux.tail
-
-中文:
-定义 conts
-  签名: (g : GenContFract K)
-  定义体: g.contsAux.tail
-
-Depends on / 依赖: contsAux, g.contsAux.tail
+--- 原说明 ---
+Returns the continuants `⟨Aₙ, Bₙ⟩` of `g`.
 -/
 def conts (g : GenContFract K) : Stream' (Pair K) :=
   g.contsAux.tail
 
-/--
-Definition of `nums` / `nums` 的定义
+/-- Returns the numerators `Aₙ` of `g`. -/
+/-
+**GenContFract.nums** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：nums (g : GenContFract K) : Stream' K
+参数：g : GenContFract K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nums
-  signature: (g : GenContFract K)
-  body: g.conts.map Pair.a
-
-中文:
-定义 nums
-  签名: (g : GenContFract K)
-  定义体: g.conts.map Pair.a
-
-Depends on / 依赖: Pair.a, g.conts.map
+--- 原说明 ---
+Returns the numerators `Aₙ` of `g`.
 -/
 def nums (g : GenContFract K) : Stream' K :=
   g.conts.map Pair.a
 
-/--
-Definition of `dens` / `dens` 的定义
+/-- Returns the denominators `Bₙ` of `g`. -/
+/-
+**GenContFract.dens** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：dens (g : GenContFract K) : Stream' K
+参数：g : GenContFract K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dens
-  signature: (g : GenContFract K)
-  body: g.conts.map Pair.b
-
-中文:
-定义 dens
-  签名: (g : GenContFract K)
-  定义体: g.conts.map Pair.b
-
-Depends on / 依赖: Pair.b, g.conts.map
+--- 原说明 ---
+Returns the denominators `Bₙ` of `g`.
 -/
 def dens (g : GenContFract K) : Stream' K :=
   g.conts.map Pair.b
 
-/--
-Definition of `convs` / `convs` 的定义
+/-- Returns the convergents `Aₙ / Bₙ` of `g`, where `Aₙ, Bₙ` are the nth continuants of `g`. -/
+/-
+**GenContFract.convs** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：convs (g : GenContFract K) : Stream' K
+参数：g : GenContFract K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition convs
-  signature: (g : GenContFract K)
-  body: fun n : Nat => g.nums n / g.dens n
-
-中文:
-定义 convs
-  签名: (g : GenContFract K)
-  定义体: fun n : Nat => g.nums n / g.dens n
-
-Depends on / 依赖: g.dens, g.nums
+--- 原说明 ---
+Returns the convergents `Aₙ / Bₙ` of `g`, where `Aₙ, Bₙ` are the nth continuants
+ of `g`.
 -/
 def convs (g : GenContFract K) : Stream' K :=
-  fun n : Nat => g.nums n / g.dens n
+  fun n : ℕ ↦ g.nums n / g.dens n
 
 /--
-Definition of `convs'Aux` / `convs'Aux` 的定义
-
-English:
-definition convs'Aux
-  signature: : Stream'.Seq (Pair K) -> Nat -> K
-
-中文:
-定义 convs'Aux
-  签名: : Stream'.序列 (对 K) -> 自然数 -> K
+Returns the approximation of the fraction described by the given sequence up to a given position n.
+For example, `convs'Aux [(1, 2), (3, 4), (5, 6)] 2 = 1 / (2 + 3 / 4)` and
+`convs'Aux [(1, 2), (3, 4), (5, 6)] 0 = 0`.
 -/
-def convs'Aux : Stream'.Seq (Pair K) -> Nat -> K
+/-
+**GenContFract.convs'Aux** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：{K : Type u_2} → [DivisionRing K] → Stream'.Seq (GenContFract.Pair K) → ℕ 
+→ K
+参数：GenContFract.Pair K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Returns the approximation of the fraction described by the given sequence up to 
+a given position n.
+For example, `convs'Aux [(1, 2), (3, 4), (5, 6)] 2 = 1 / (2 + 3 / 4)` and
+`convs'Aux [(1, 2), (3, 4), (5, 6)] 0 = 0`.
+-/
+def convs'Aux : Stream'.Seq (Pair K) → ℕ → K
   | _, 0 => 0
   | s, n + 1 =>
     match s.head with
     | none => 0
     | some gp => gp.a / (gp.b + convs'Aux s.tail n)
 
-/--
-Definition of `convs'` / `convs'` 的定义
-
-English:
-definition convs'
-  signature: (g : GenContFract K) (n : Nat)
-  body: g.h + convs'Aux g.s n
-
-中文:
-定义 convs'
-  签名: (g : GenContFract K) (n : 自然数)
-  定义体: g.h + convs'Aux g.s n
+/-- Returns the convergents of `g` by evaluating the fraction described by `g` up to a given
+position `n`. For example, `convs' [9; (1, 2), (3, 4), (5, 6)] 2 = 9 + 1 / (2 + 3 / 4)` and
+`convs' [9; (1, 2), (3, 4), (5, 6)] 0 = 9`
 -/
-def convs' (g : GenContFract K) (n : Nat) : K :=
+/-
+**GenContFract.convs'** 是 Mathlib 中的一个定义，位于命名空间 `GenContFract`。
+形式化陈述：convs' (g : GenContFract K) (n : Nat) : K
+参数：g : GenContFract K；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Returns the convergents of `g` by evaluating the fraction described by `g` up to
+ a given
+position `n`. For example, `convs' [9; (1, 2), (3, 4), (5, 6)] 2 = 9 + 1 / (2 + 
+3 / 4)` and
+`convs' [9; (1, 2), (3, 4), (5, 6)] 0 = 9`
+-/
+def convs' (g : GenContFract K) (n : ℕ) : K :=
   g.h + convs'Aux g.s n
 
 end GenContFract
+

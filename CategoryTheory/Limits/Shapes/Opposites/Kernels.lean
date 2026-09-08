@@ -36,28 +36,14 @@ section HasZeroMorphisms
 variable [HasZeroMorphisms C]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `CokernelCofork.IsColimit.ofπOp` / `CokernelCofork.IsColimit.ofπOp` 的定义
+/-- A colimit cokernel cofork gives a limit kernel fork in the opposite category -/
+/-
+**CategoryTheory.Limits.CokernelCofork.IsColimit.of** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CokernelCofork.IsColimit.ofπOp
-  signature: {X Y Q : C} (p : Y ⟶ Q) {f : X ⟶ Y}
-  body: KernelFork.IsLimit.ofι _ _
-    (fun x hx => (h.desc (CokernelCofork.ofπ x.unop (Quiver.Hom.op_inj hx))).op)
-    (fun _ _ => Quiver.Hom.unop_inj (Cofork.IsColimit.π_desc h))
-    (fun x hx b hb => Quiver.Hom.unop_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimit.π_desc] using! Quiver.Hom.op_inj hb)))
-
-中文:
-定义 余核余叉.是余极限.ofπOp
-  签名: {X Y Q : C} (p : Y ⟶ Q) {f : X ⟶ Y}
-  定义体: KernelFork.IsLimit.ofι _ _
-    (fun x hx => (h.desc (CokernelCofork.ofπ x.unop (Quiver.Hom.op_inj hx))).op)
-    (fun _ _ => Quiver.Hom.unop_inj (Cofork.IsColimit.π_desc h))
-    (fun x hx b hb => Quiver.Hom.unop_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimit.π_desc] using! Quiver.Hom.op_inj hb)))
-
-Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, h.desc, hom_ext, op_inj, unop_inj, unop_op, x.unop
+--- 原说明 ---
+A colimit cokernel cofork gives a limit kernel fork in the opposite category
 -/
 def CokernelCofork.IsColimit.ofπOp {X Y Q : C} (p : Y ⟶ Q) {f : X ⟶ Y}
     (w : f ≫ p = 0) (h : IsColimit (CokernelCofork.ofπ p w)) :
@@ -69,28 +55,16 @@ def CokernelCofork.IsColimit.ofπOp {X Y Q : C} (p : Y ⟶ Q) {f : X ⟶ Y}
       (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimit.π_desc] using! Quiver.Hom.op_inj hb)))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `CokernelCofork.IsColimit.ofπUnop` / `CokernelCofork.IsColimit.ofπUnop` 的定义
+/-- A colimit cokernel cofork in the opposite category gives a limit kernel fork
+in the original category -/
+/-
+**CategoryTheory.Limits.CokernelCofork.IsColimit.of** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CokernelCofork.IsColimit.ofπUnop
-  signature: {X Y Q : Cᵒᵖ} (p : Y ⟶ Q) {f : X ⟶ Y}
-  body: KernelFork.IsLimit.ofι _ _
-    (fun x hx => (h.desc (CokernelCofork.ofπ x.op (Quiver.Hom.unop_inj hx))).unop)
-    (fun _ _ => Quiver.Hom.op_inj (Cofork.IsColimit.π_desc h))
-    (fun x hx b hb => Quiver.Hom.op_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.π_desc] using! Quiver.Hom.unop_inj hb)))
-
-中文:
-定义 余核余叉.是余极限.ofπUnop
-  签名: {X Y Q : Cᵒᵖ} (p : Y ⟶ Q) {f : X ⟶ Y}
-  定义体: KernelFork.IsLimit.ofι _ _
-    (fun x hx => (h.desc (CokernelCofork.ofπ x.op (Quiver.Hom.unop_inj hx))).unop)
-    (fun _ _ => Quiver.Hom.op_inj (Cofork.IsColimit.π_desc h))
-    (fun x hx b hb => Quiver.Hom.op_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.π_desc] using! Quiver.Hom.unop_inj hb)))
-
-Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, h.desc, hom_ext, op_inj, op_unop, unop_inj, x.op
+--- 原说明 ---
+A colimit cokernel cofork in the opposite category gives a limit kernel fork
+in the original category
 -/
 def CokernelCofork.IsColimit.ofπUnop {X Y Q : Cᵒᵖ} (p : Y ⟶ Q) {f : X ⟶ Y}
     (w : f ≫ p = 0) (h : IsColimit (CokernelCofork.ofπ p w)) :
@@ -102,28 +76,14 @@ def CokernelCofork.IsColimit.ofπUnop {X Y Q : Cᵒᵖ} (p : Y ⟶ Q) {f : X ⟶
       (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.π_desc] using! Quiver.Hom.unop_inj hb)))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `KernelFork.IsLimit.ofιOp` / `KernelFork.IsLimit.ofιOp` 的定义
+/-- A limit kernel fork gives a colimit cokernel cofork in the opposite category -/
+/-
+**CategoryTheory.Limits.KernelFork.IsLimit.of** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KernelFork.IsLimit.ofιOp
-  signature: {K X Y : C} (i : K ⟶ X) {f : X ⟶ Y}
-  body: CokernelCofork.IsColimit.ofπ _ _
-    (fun x hx => (h.lift (KernelFork.ofι x.unop (Quiver.Hom.op_inj hx))).op)
-    (fun _ _ => Quiver.Hom.unop_inj (Fork.IsLimit.lift_ι h))
-    (fun x hx b hb => Quiver.Hom.unop_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] using! Quiver.Hom.op_inj hb)))
-
-中文:
-定义 核叉.是极限.ofιOp
-  签名: {K X Y : C} (i : K ⟶ X) {f : X ⟶ Y}
-  定义体: CokernelCofork.IsColimit.ofπ _ _
-    (fun x hx => (h.lift (KernelFork.ofι x.unop (Quiver.Hom.op_inj hx))).op)
-    (fun _ _ => Quiver.Hom.unop_inj (Fork.IsLimit.lift_ι h))
-    (fun x hx b hb => Quiver.Hom.unop_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] using! Quiver.Hom.op_inj hb)))
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, Fork.IsLimit.hom_ext, Fork.IsLimit.lift_, IsColimit, IsLimit, KernelFork, KernelFork.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, h.lift, hom_ext, op_inj, unop_inj, unop_op, x.unop
+--- 原说明 ---
+A limit kernel fork gives a colimit cokernel cofork in the opposite category
 -/
 def KernelFork.IsLimit.ofιOp {K X Y : C} (i : K ⟶ X) {f : X ⟶ Y}
     (w : i ≫ f = 0) (h : IsLimit (KernelFork.ofι i w)) :
@@ -136,28 +96,16 @@ def KernelFork.IsLimit.ofιOp {K X Y : C} (i : K ⟶ X) {f : X ⟶ Y}
       simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] using! Quiver.Hom.op_inj hb)))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `KernelFork.IsLimit.ofιUnop` / `KernelFork.IsLimit.ofιUnop` 的定义
+/-- A limit kernel fork in the opposite category gives a colimit cokernel cofork
+in the original category -/
+/-
+**CategoryTheory.Limits.KernelFork.IsLimit.of** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KernelFork.IsLimit.ofιUnop
-  signature: {K X Y : Cᵒᵖ} (i : K ⟶ X) {f : X ⟶ Y}
-  body: CokernelCofork.IsColimit.ofπ _ _
-    (fun x hx => (h.lift (KernelFork.ofι x.op (Quiver.Hom.unop_inj hx))).unop)
-    (fun _ _ => Quiver.Hom.op_inj (Fork.IsLimit.lift_ι h))
-    (fun x hx b hb => Quiver.Hom.op_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] using! Quiver.Hom.unop_inj hb)))
-
-中文:
-定义 核叉.是极限.ofιUnop
-  签名: {K X Y : Cᵒᵖ} (i : K ⟶ X) {f : X ⟶ Y}
-  定义体: CokernelCofork.IsColimit.ofπ _ _
-    (fun x hx => (h.lift (KernelFork.ofι x.op (Quiver.Hom.unop_inj hx))).unop)
-    (fun _ _ => Quiver.Hom.op_inj (Fork.IsLimit.lift_ι h))
-    (fun x hx b hb => Quiver.Hom.op_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] using! Quiver.Hom.unop_inj hb)))
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, Fork.IsLimit.hom_ext, Fork.IsLimit.lift_, IsColimit, IsLimit, KernelFork, KernelFork.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, h.lift, hom_ext, op_inj, op_unop, unop_inj, x.op
+--- 原说明 ---
+A limit kernel fork in the opposite category gives a colimit cokernel cofork
+in the original category
 -/
 def KernelFork.IsLimit.ofιUnop {K X Y : Cᵒᵖ} (i : K ⟶ X) {f : X ⟶ Y}
     (w : i ≫ f = 0) (h : IsLimit (KernelFork.ofι i w)) :
@@ -172,3 +120,4 @@ def KernelFork.IsLimit.ofιUnop {K X Y : Cᵒᵖ} (i : K ⟶ X) {f : X ⟶ Y}
 end HasZeroMorphisms
 
 end CategoryTheory.Limits
+

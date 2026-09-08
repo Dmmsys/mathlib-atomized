@@ -43,90 +43,83 @@ open Function Set Topology Setoid
 namespace Topology
 
 variable {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
-  {f : X -> Y} {g : Y -> Z}
+  {f : X → Y} {g : Y → Z}
 
 variable (f) in
-/--
-Definition of `IsStrictMap` / `IsStrictMap` 的定义
+/-- A map is a strict map in the sense of Bourbaki if the natural map to its image
+is a quotient map. -/
+/-
+**Topology.IsStrictMap** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：IsStrictMap : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsStrictMap
-  signature: : Prop
-  body: IsQuotientMap (Set.rangeFactorization f)
-
-中文:
-定义 IsStrictMap
-  签名: : 命题
-  定义体: IsQuotientMap (Set.rangeFactorization f)
-
-Depends on / 依赖: IsQuotientMap, Set.rangeFactorization, rangeFactorization
+--- 原说明 ---
+A map is a strict map in the sense of Bourbaki if the natural map to its image
+is a quotient map.
 -/
 def IsStrictMap : Prop :=
   IsQuotientMap (Set.rangeFactorization f)
-
-/--
-lemma `isStrictMap_iff_isQuotientMap_rangeFactorization` / 引理 `isStrictMap_iff_isQuotientMap_rangeFactorization`
-
-English:
-lemma isStrictMap_iff_isQuotientMap_rangeFactorization
-  proof: Iff.rfl
-
-中文:
-引理 isStrictMap_iff_isQuotientMap_rangeFactorization
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Topology.isStrictMap_iff_isQuotientMap_rangeFactorization** 是 Mathlib 中的一个引理，位
+于命名空间 `Topology`。
+形式化陈述：isStrictMap_iff_isQuotientMap_rangeFactorization : IsStrictMap f ↔ IsQuoti
+entMap (Set.rangeFactorization f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isStrictMap_iff_isQuotientMap_rangeFactorization :
     IsStrictMap f ↔ IsQuotientMap (Set.rangeFactorization f) :=
   Iff.rfl
 
-/--
-theorem `isStrictMap_iff_isHomeomorph_quotientKerEquivRange` / 定理 `isStrictMap_iff_isHomeomorph_quotientKerEquivRange`
+/-- A map is a strict map if and only if the canonical bijection
+`Quotient (Setoid.ker f) ≃ Set.range f` is a homeomorphism. -/
+/-
+**Topology.isStrictMap_iff_isHomeomorph_quotientKerEquivRange** 是 Mathlib 中的一个定理
+，位于命名空间 `Topology`。
+形式化陈述：isStrictMap_iff_isHomeomorph_quotientKerEquivRange : IsStrictMap f ↔ IsHom
+eomorph (Setoid.quotientKerEquivRange f : Quotient (Setoid.ker f) -> Set.range f
+)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Topology.IsQuotientMap.of_comp_isQuotientMap`：∀ {X : Type u_1} {Y : Type
+ u_2} {Z : Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst
+_1 : TopologicalSpace Y] [inst_2 :…
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `isQuotientMap_quotient_mk'`：isQuotientMap_quotient_mk' : IsQuotientMap (
+@Quotient.mk' X s)
+· 使用定理 `Topology.IsQuotientMap.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u
+_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalS
+pace Y] [inst_2 :…
 
-English:
-theorem isStrictMap_iff_isHomeomorph_quotientKerEquivRange
-  proof: by
-  simp only [IsStrictMap, isHomeomorph_iff_isQuotientMap_injective, Equiv.injective, and_true]
-  exact ⟨fun h => IsQuotientMap.of_comp_isQuotientMap isQuotientMap_quotient_mk' h,
-         fun h => h.comp isQuotientMap_quotient_mk'⟩
-
-中文:
-定理 isStrictMap_iff_isHomeomorph_quotientKerEquivRange
-  证明: by
-  simp only [IsStrictMap, isHomeomorph_iff_isQuotientMap_injective, Equiv.injective, and_true]
-  exact ⟨fun h => IsQuotientMap.of_comp_isQuotientMap isQuotientMap_quotient_mk' h,
-         fun h => h.comp isQuotientMap_quotient_mk'⟩
-
-Depends on / 依赖: Equiv.injective, IsQuotientMap, IsQuotientMap.of_comp_isQuotientMap, IsStrictMap, and_true, h.comp, injective, isHomeomorph_iff_isQuotientMap_injective, isQuotientMap_quotient_mk, of_comp_isQuotientMap
+--- 原说明 ---
+A map is a strict map if and only if the canonical bijection
+`Quotient (Setoid.ker f) ≃ Set.range f` is a homeomorphism.
 -/
 theorem isStrictMap_iff_isHomeomorph_quotientKerEquivRange :
     IsStrictMap f ↔
-      IsHomeomorph (Setoid.quotientKerEquivRange f : Quotient (Setoid.ker f) -> Set.range f) := by
+      IsHomeomorph (Setoid.quotientKerEquivRange f : Quotient (Setoid.ker f) → Set.range f) := by
   simp only [IsStrictMap, isHomeomorph_iff_isQuotientMap_injective, Equiv.injective, and_true]
   exact ⟨fun h => IsQuotientMap.of_comp_isQuotientMap isQuotientMap_quotient_mk' h,
-         fun h => h.comp isQuotientMap_quotient_mk'⟩
+         fun h ↦ h.comp isQuotientMap_quotient_mk'⟩
 
-/--
-Definition of `_root_.Homeomorph.quotientKerEquivRange` / `_root_.Homeomorph.quotientKerEquivRange` 的定义
+/-- The homeomorphism `Quotient (Setoid.ker f) ≃ₜ Set.range f` given by a strict map `f`.
+This is the homeomorphism obtained from the first isomorphism theorem. -/
+/-
+**Topology._root_.Homeomorph.quotientKerEquivRange** 是 Mathlib 中的一个定义，位于命名空间 `To
+pology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Homeomorph.quotientKerEquivRange
-  signature: (hf : IsStrictMap f)
-  body: (isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp hf).homeomorph
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.quotientKerEquivRange :=
-  Homeomorph.quotientKerEquivRange
-
-中文:
-定义 _root_.同胚.quotientKerEquivRange
-  签名: (hf : IsStrictMap f)
-  定义体: (isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp hf).homeomorph
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.quotientKerEquivRange :=
-  Homeomorph.quotientKerEquivRange
-
-Depends on / 依赖: homeomorph, isStrictMap_iff_isHomeomorph_quotientKerEquivRange, isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp
+--- 原说明 ---
+The homeomorphism `Quotient (Setoid.ker f) ≃ₜ Set.range f` given by a strict map
+ `f`.
+This is the homeomorphism obtained from the first isomorphism theorem.
 -/
 noncomputable def _root_.Homeomorph.quotientKerEquivRange (hf : IsStrictMap f) :
     Quotient (Setoid.ker f) ≃ₜ Set.range f :=
@@ -135,24 +128,32 @@ noncomputable def _root_.Homeomorph.quotientKerEquivRange (hf : IsStrictMap f) :
 @[deprecated (since := "2026-07-10")] protected alias Homeomorph.quotientKerEquivRange :=
   Homeomorph.quotientKerEquivRange
 
-/--
-theorem `isStrictMap_iff_isEmbedding_kerLift` / 定理 `isStrictMap_iff_isEmbedding_kerLift`
+/-- A map is a strict map if and only if the canonical injection `Quotient (Setoid.ker f) → Y`
+(`Setoid.kerLift f`) is an embedding. -/
+/-
+**Topology.isStrictMap_iff_isEmbedding_kerLift** 是 Mathlib 中的一个定理，位于命名空间 `Topolo
+gy`。
+形式化陈述：isStrictMap_iff_isEmbedding_kerLift : IsStrictMap f ↔ IsEmbedding (Setoid.
+kerLift f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.IsEmbedding.of_comp_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z : T
+ype u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topolog
+icalSpace Y] [inst_2 :…
+· 使用引理 `Topology.IsEmbedding.subtypeVal`：Topology.IsEmbedding.subtypeVal : IsEmb
+edding ((↑) : Subtype p -> X)
 
-English:
-theorem isStrictMap_iff_isEmbedding_kerLift
-  proof: by
-  simp only [isStrictMap_iff_isHomeomorph_quotientKerEquivRange,
-    isHomeomorph_iff_isEmbedding_surjective, Equiv.surjective, and_true]
-  exact (IsEmbedding.of_comp_iff .subtypeVal).symm
-
-中文:
-定理 isStrictMap_iff_isEmbedding_kerLift
-  证明: by
-  simp only [isStrictMap_iff_isHomeomorph_quotientKerEquivRange,
-    isHomeomorph_iff_isEmbedding_surjective, Equiv.surjective, and_true]
-  exact (IsEmbedding.of_comp_iff .subtypeVal).symm
-
-Depends on / 依赖: Equiv.surjective, IsEmbedding, IsEmbedding.of_comp_iff, and_true, isHomeomorph_iff_isEmbedding_surjective, isStrictMap_iff_isHomeomorph_quotientKerEquivRange, of_comp_iff, subtypeVal, surjective
+--- 原说明 ---
+A map is a strict map if and only if the canonical injection `Quotient (Setoid.k
+er f) → Y`
+(`Setoid.kerLift f`) is an embedding.
 -/
 theorem isStrictMap_iff_isEmbedding_kerLift :
     IsStrictMap f ↔ IsEmbedding (Setoid.kerLift f) := by
@@ -160,57 +161,39 @@ theorem isStrictMap_iff_isEmbedding_kerLift :
     isHomeomorph_iff_isEmbedding_surjective, Equiv.surjective, and_true]
   exact (IsEmbedding.of_comp_iff .subtypeVal).symm
 
-/--
-lemma `IsStrictMap.continuous` / 引理 `IsStrictMap.continuous`
+/-- A strict map is continuous, since the range factorization is continuous. -/
+/-
+**Topology.IsStrictMap.continuous** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsStrictMa
+p`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   Topology.IsStrictMap f → Continuous f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuous_rangeFactorization_iff`：continuous_rangeFactorization_iff {f 
+: X -> Y} : Continuous (rangeFactorization f) ↔ Continuous f
+· 使用定理 `Topology.IsQuotientMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : 
+X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsQ
+uotientMap f → Continuo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.isStrictMap_iff_isQuotientMap_rangeFactorization`：isStrictMap_i
+ff_isQuotientMap_rangeFactorization : IsStrictMap f ↔ IsQuotientMap (Set.rangeFa
+ctorization f)
 
-English:
-lemma IsStrictMap.continuous
-  given: {f : X -> Y} (hf : IsStrictMap f)
-  statement: Continuous f
-  proof: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at hf
-  exact continuous_rangeFactorization_iff.mp hf.continuous
-
-中文:
-引理 IsStrictMap.continuous
-  条件: {f : X -> Y} (hf : IsStrictMap f)
-  结论: 连续 f
-  证明: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at hf
-  exact continuous_rangeFactorization_iff.mp hf.continuous
-
-Depends on / 依赖: continuous, continuous_rangeFactorization_iff, continuous_rangeFactorization_iff.mp, hf.continuous, isStrictMap_iff_isQuotientMap_rangeFactorization
+--- 原说明 ---
+A strict map is continuous, since the range factorization is continuous.
 -/
-lemma IsStrictMap.continuous {f : X -> Y} (hf : IsStrictMap f) : Continuous f := by
+lemma IsStrictMap.continuous {f : X → Y} (hf : IsStrictMap f) : Continuous f := by
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at hf
   exact continuous_rangeFactorization_iff.mp hf.continuous
 
-/--
-lemma `_root_.IsOpenMap.isStrictMap` / 引理 `_root_.IsOpenMap.isStrictMap`
+/-- A open continuous map is a strict map. -/
+/-
+**Topology._root_.IsOpenMap.isStrictMap** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.IsOpenMap.isStrictMap
-  given: (ho : IsOpenMap f) (h_cont : Continuous f)
-  proof: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
-  exact (ho.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
-    h_cont.rangeFactorization Set.rangeFactorization_surjective
-
-@[deprecated (since := "2026-07-10")] protected alias IsOpenMap.isStrictMap :=
-  IsOpenMap.isStrictMap
-
-中文:
-引理 _root_.是开映射.isStrictMap
-  条件: (ho : 是开映射 f) (h_cont : 连续 f)
-  证明: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
-  exact (ho.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
-    h_cont.rangeFactorization Set.rangeFactorization_surjective
-
-@[deprecated (since := "2026-07-10")] protected alias IsOpenMap.isStrictMap :=
-  IsOpenMap.isStrictMap
-
-Depends on / 依赖: Set.rangeFactorization_surjective, h_cont, h_cont.rangeFactorization, ho.subtype_mk, isQuotientMap, isStrictMap_iff_isQuotientMap_rangeFactorization, rangeFactorization, rangeFactorization_surjective, subtype_mk
+--- 原说明 ---
+A open continuous map is a strict map.
 -/
 lemma _root_.IsOpenMap.isStrictMap (ho : IsOpenMap f) (h_cont : Continuous f) :
     IsStrictMap f := by
@@ -221,32 +204,13 @@ lemma _root_.IsOpenMap.isStrictMap (ho : IsOpenMap f) (h_cont : Continuous f) :
 @[deprecated (since := "2026-07-10")] protected alias IsOpenMap.isStrictMap :=
   IsOpenMap.isStrictMap
 
-/--
-lemma `_root_.IsClosedMap.isStrictMap` / 引理 `_root_.IsClosedMap.isStrictMap`
+/-- A closed continuous map is a strict map. -/
+/-
+**Topology._root_.IsClosedMap.isStrictMap** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.IsClosedMap.isStrictMap
-  given: (hc : IsClosedMap f) (h_cont : Continuous f)
-  proof: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
-  exact (hc.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
-    h_cont.rangeFactorization Set.rangeFactorization_surjective
-
-@[deprecated (since := "2026-07-10")] protected alias IsClosedMap.isStrictMap :=
-  IsClosedMap.isStrictMap
-
-中文:
-引理 _root_.是闭映射.isStrictMap
-  条件: (hc : 是闭映射 f) (h_cont : 连续 f)
-  证明: by
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
-  exact (hc.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
-    h_cont.rangeFactorization Set.rangeFactorization_surjective
-
-@[deprecated (since := "2026-07-10")] protected alias IsClosedMap.isStrictMap :=
-  IsClosedMap.isStrictMap
-
-Depends on / 依赖: Set.rangeFactorization_surjective, h_cont, h_cont.rangeFactorization, hc.subtype_mk, isQuotientMap, isStrictMap_iff_isQuotientMap_rangeFactorization, rangeFactorization, rangeFactorization_surjective, subtype_mk
+--- 原说明 ---
+A closed continuous map is a strict map.
 -/
 lemma _root_.IsClosedMap.isStrictMap (hc : IsClosedMap f) (h_cont : Continuous f) :
     IsStrictMap f := by
@@ -257,26 +221,13 @@ lemma _root_.IsClosedMap.isStrictMap (hc : IsClosedMap f) (h_cont : Continuous f
 @[deprecated (since := "2026-07-10")] protected alias IsClosedMap.isStrictMap :=
   IsClosedMap.isStrictMap
 
-/--
-lemma `_root_.IsHomeomorph.isStrictMap` / 引理 `_root_.IsHomeomorph.isStrictMap`
+/-- A homeomorphism is a strict map. -/
+/-
+**Topology._root_.IsHomeomorph.isStrictMap** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.IsHomeomorph.isStrictMap
-  given: (f_homeo : IsHomeomorph f)
-  proof: f_homeo.isOpenMap.isStrictMap f_homeo.continuous
-
-@[deprecated (since := "2026-07-10")] protected alias IsHomeomorph.isStrictMap :=
-  IsHomeomorph.isStrictMap
-
-中文:
-引理 _root_.是同胚.isStrictMap
-  条件: (f_homeo : 是同胚 f)
-  证明: f_homeo.isOpenMap.isStrictMap f_homeo.continuous
-
-@[deprecated (since := "2026-07-10")] protected alias IsHomeomorph.isStrictMap :=
-  IsHomeomorph.isStrictMap
-
-Depends on / 依赖: continuous, f_homeo, f_homeo.continuous, f_homeo.isOpenMap.isStrictMap, isOpenMap, isStrictMap
+--- 原说明 ---
+A homeomorphism is a strict map.
 -/
 lemma _root_.IsHomeomorph.isStrictMap (f_homeo : IsHomeomorph f) :
     IsStrictMap f :=
@@ -285,261 +236,290 @@ lemma _root_.IsHomeomorph.isStrictMap (f_homeo : IsHomeomorph f) :
 @[deprecated (since := "2026-07-10")] protected alias IsHomeomorph.isStrictMap :=
   IsHomeomorph.isStrictMap
 
-/--
-lemma `IsStrictMap.id` / 引理 `IsStrictMap.id`
+/-- The identity is a strict map. -/
+/-
+**Topology.IsStrictMap.id** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsStrictMap`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X], Topology.IsStrictMap id
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHomeomorph.isStrictMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Topo
+logy.IsStrictM…
+· 使用定理 `IsHomeomorph.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], IsHomeomo
+rph id
 
-English:
-lemma IsStrictMap.id
-  statement: IsStrictMap (id : X -> X)
-  proof: IsHomeomorph.id.isStrictMap
-
-中文:
-引理 IsStrictMap.id
-  结论: IsStrictMap (id : X -> X)
-  证明: IsHomeomorph.id.isStrictMap
-
-Depends on / 依赖: IsHomeomorph, IsHomeomorph.id.isStrictMap, isStrictMap
+--- 原说明 ---
+The identity is a strict map.
 -/
-lemma IsStrictMap.id : IsStrictMap (id : X -> X) := IsHomeomorph.id.isStrictMap
+lemma IsStrictMap.id : IsStrictMap (id : X → X) := IsHomeomorph.id.isStrictMap
 
-/--
-lemma `IsQuotientMap.isStrictMap_iff` / 引理 `IsQuotientMap.isStrictMap_iff`
+/-- Assume that `f : X → Y` is a quotient map. Then `g : Y → Z` is strict
+if and only if `g ∘ f` is strict. -/
+/-
+**Topology.IsQuotientMap.isStrictMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsQ
+uotientMap`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst : TopologicalSpace X]
+ [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace Z] {f : X → Y} {g : 
+Y → Z},   Topology.IsQuotientMap f → (Topology.IsStrictMap g ↔ Topology.IsStrict
+Map (g ∘ f))
+参数：Topology.IsStrictMap g ↔ Topology.IsStrictMap (g ∘ f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.range_comp`：∀ {α : Type u_1} {ι : Sort u_3} {ι' : So
+rt u_4} {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α), Set.range (g ∘ f
+) = Set.range g
+· 使用定理 `Topology.IsQuotientMap.surjective`：∀ {X : Type u_3} {Y : Type u_4} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsQ
+uotientMap f → Function…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsQuotientMap.of_comp_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z :
+ Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topol
+ogicalSpace Y] [inst_2 :…
+· 使用定理 `Topology.IsQuotientMap.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u
+_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalS
+pace Y] [inst_2 :…
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
 
-English:
-lemma IsQuotientMap.isStrictMap_iff
-  given: (f_quot : IsQuotientMap f)
-  proof: by
-set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
-  have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
-  simp_rw [isStrictMap_iff_isQuotientMap_rangeFactorization, ← f_quot.of_comp_iff, key]
-  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap.comp H, fun H => Φ.isQuotientMap.comp H⟩
-
-中文:
-引理 是商映射.isStrictMap_iff
-  条件: (f_quot : 是商映射 f)
-  证明: by
-set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
-  have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
-  simp_rw [isStrictMap_iff_isQuotientMap_rangeFactorization, ← f_quot.of_comp_iff, key]
-  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap.comp H, fun H => Φ.isQuotientMap.comp H⟩
-
-Depends on / 依赖: f_quot, f_quot.of_comp_iff, f_quot.surjective.range_comp, isQuotientMap, isQuotientMap.comp, isStrictMap_iff_isQuotientMap_rangeFactorization, of_comp_iff, rangeFactorization, range_comp, setCongr, simp_rw, surjective, symm.isQuotientMap.comp
+--- 原说明 ---
+Assume that `f : X → Y` is a quotient map. Then `g : Y → Z` is strict
+if and only if `g ∘ f` is strict.
 -/
 lemma IsQuotientMap.isStrictMap_iff (f_quot : IsQuotientMap f) :
     IsStrictMap g ↔ IsStrictMap (g ∘ f) := by
-set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
+  set Φ : range (g ∘ f) ≃ₜ range g := .setCongr <| f_quot.surjective.range_comp g
   have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
   simp_rw [isStrictMap_iff_isQuotientMap_rangeFactorization, ← f_quot.of_comp_iff, key]
-  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap.comp H, fun H => Φ.isQuotientMap.comp H⟩
+  exact ⟨fun H ↦ by simpa using! Φ.symm.isQuotientMap.comp H, fun H ↦ Φ.isQuotientMap.comp H⟩
 
-/--
-lemma `IsQuotientMap.isStrictMap` / 引理 `IsQuotientMap.isStrictMap`
+/-- A quotient map is strict. See also `isQuotientMap_iff_isStrictMap_surjective`. -/
+/-
+**Topology.IsQuotientMap.isStrictMap** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsQuoti
+entMap`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   Topology.IsQuotientMap f → Topology.IsStrictMap f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Topology.IsQuotientMap.isStrictMap_iff`：∀ {X : Type u_1} {Y : Type u_2} 
+{Z : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst
+_2 : TopologicalSpace Z] {f …
+· 使用定理 `Topology.IsStrictMap.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], T
+opology.IsStrictMap id
 
-English:
-lemma IsQuotientMap.isStrictMap
-  given: (f_quot : IsQuotientMap f)
-  proof: f_quot.isStrictMap_iff.mp .id
-
-中文:
-引理 是商映射.isStrictMap
-  条件: (f_quot : 是商映射 f)
-  证明: f_quot.isStrictMap_iff.mp .id
-
-Depends on / 依赖: f_quot, f_quot.isStrictMap_iff.mp, isStrictMap_iff
+--- 原说明 ---
+A quotient map is strict. See also `isQuotientMap_iff_isStrictMap_surjective`.
 -/
 lemma IsQuotientMap.isStrictMap (f_quot : IsQuotientMap f) :
     IsStrictMap f :=
   f_quot.isStrictMap_iff.mp .id
 
-/--
-lemma `IsEmbedding.isStrictMap_iff` / 引理 `IsEmbedding.isStrictMap_iff`
+/-- Assume that `g : Y → Z` is an embedding. Then `f : X → Y` is strict
+if and only if `g ∘ f` is strict. -/
+/-
+**Topology.IsEmbedding.isStrictMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsEmb
+edding`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst : TopologicalSpace X]
+ [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace Z] {f : X → Y} {g : 
+Y → Z},   Topology.IsEmbedding g → (Topology.IsStrictMap f ↔ Topology.IsStrictMa
+p (g ∘ f))
+参数：Topology.IsStrictMap f ↔ Topology.IsStrictMap (g ∘ f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsEmbedding.of_comp_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z : T
+ype u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topolog
+icalSpace Y] [inst_2 :…
+· 使用定理 `Topology.IsEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3
+} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalSpa
+ce Y] [inst_2 :…
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
+· 使用定理 `Homeomorph.self_comp_symm`：self_comp_symm (h : X ≃ₜ Y) : h ∘ h.symm = id
 
-English:
-lemma IsEmbedding.isStrictMap_iff
-  given: (g_emb : IsEmbedding g)
-  proof: by
-  set Φ : Quotient (Setoid.ker (g ∘ f)) ≃ₜ Quotient (Setoid.ker (f)) :=
-    Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
-  have key : g ∘ kerLift f ∘ Φ = kerLift (g ∘ f) :=
-funext Quotient.ind fun _ => rfl
-  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_comp_iff, ← key]
-  exact ⟨fun H => H.comp Φ.isEmbedding,
-    fun H => by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
-
-中文:
-引理 是嵌入.isStrictMap_iff
-  条件: (g_emb : 是嵌入 g)
-  证明: by
-  set Φ : Quotient (Setoid.ker (g ∘ f)) ≃ₜ Quotient (Setoid.ker (f)) :=
-    Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
-  have key : g ∘ kerLift f ∘ Φ = kerLift (g ∘ f) :=
-funext Quotient.ind fun _ => rfl
-  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_comp_iff, ← key]
-  exact ⟨fun H => H.comp Φ.isEmbedding,
-    fun H => by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
-
-Depends on / 依赖: H.comp, Homeomorph, Homeomorph.Quotient.congrRight, Quotient, Quotient.ind, Setoid, Setoid.ker, comp_assoc, congrRight, eq_iff, g_emb, g_emb.injective.eq_iff, g_emb.of_comp_iff, injective, isEmbedding, isStrictMap_iff_isEmbedding_kerLift, kerLift, of_comp_iff, simp_rw, symm.isEmbedding
+--- 原说明 ---
+Assume that `g : Y → Z` is an embedding. Then `f : X → Y` is strict
+if and only if `g ∘ f` is strict.
 -/
 lemma IsEmbedding.isStrictMap_iff (g_emb : IsEmbedding g) :
     IsStrictMap f ↔ IsStrictMap (g ∘ f) := by
   set Φ : Quotient (Setoid.ker (g ∘ f)) ≃ₜ Quotient (Setoid.ker (f)) :=
-    Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
+    Homeomorph.Quotient.congrRight (fun _ _ ↦ by simp [g_emb.injective.eq_iff])
   have key : g ∘ kerLift f ∘ Φ = kerLift (g ∘ f) :=
-funext Quotient.ind fun _ => rfl
+    funext <| Quotient.ind fun _ ↦ rfl
   simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_comp_iff, ← key]
-  exact ⟨fun H => H.comp Φ.isEmbedding,
-    fun H => by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
+  exact ⟨fun H ↦ H.comp Φ.isEmbedding,
+    fun H ↦ by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
 
-/--
-lemma `IsEmbedding.isStrictMap` / 引理 `IsEmbedding.isStrictMap`
+/-- An embedding is strict. See also `isEmbedding_iff_isStrictMap_injective`. -/
+/-
+**Topology.IsEmbedding.isStrictMap** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsEmbeddi
+ng`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   Topology.IsEmbedding f → Topology.IsStrictMap f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Topology.IsEmbedding.isStrictMap_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z
+ : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2
+ : TopologicalSpace Z] {f …
+· 使用定理 `Topology.IsStrictMap.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], T
+opology.IsStrictMap id
 
-English:
-lemma IsEmbedding.isStrictMap
-  given: (f_emb : IsEmbedding f)
-  proof: f_emb.isStrictMap_iff.mp .id
-
-中文:
-引理 是嵌入.isStrictMap
-  条件: (f_emb : 是嵌入 f)
-  证明: f_emb.isStrictMap_iff.mp .id
-
-Depends on / 依赖: f_emb, f_emb.isStrictMap_iff.mp, isStrictMap_iff
+--- 原说明 ---
+An embedding is strict. See also `isEmbedding_iff_isStrictMap_injective`.
 -/
 lemma IsEmbedding.isStrictMap (f_emb : IsEmbedding f) :
     IsStrictMap f :=
   f_emb.isStrictMap_iff.mp .id
 
-/--
-lemma `isQuotientMap_iff_isStrictMap_surjective` / 引理 `isQuotientMap_iff_isStrictMap_surjective`
+/-- Quotient maps are precisely surjective strict maps. -/
+/-
+**Topology.isQuotientMap_iff_isStrictMap_surjective** 是 Mathlib 中的一个引理，位于命名空间 `T
+opology`。
+形式化陈述：isQuotientMap_iff_isStrictMap_surjective : IsQuotientMap f ↔ IsStrictMap f
+ ∧ Surjective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsQuotientMap.isStrictMap`：∀ {X : Type u_1} {Y : Type u_2} [ins
+t : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.Is
+QuotientMap f → Topology…
+· 使用定理 `Topology.IsQuotientMap.surjective`：∀ {X : Type u_3} {Y : Type u_4} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsQ
+uotientMap f → Function…
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `Topology.IsQuotientMap.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u
+_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalS
+pace Y] [inst_2 :…
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.isStrictMap_iff_isQuotientMap_rangeFactorization`：isStrictMap_i
+ff_isQuotientMap_rangeFactorization : IsStrictMap f ↔ IsQuotientMap (Set.rangeFa
+ctorization f)
 
-English:
-lemma isQuotientMap_iff_isStrictMap_surjective
-  proof: by
-  refine ⟨fun H => ⟨H.isStrictMap, H.surjective⟩, fun ⟨f_strict, f_surj⟩ => ?_⟩
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at f_strict
-  set Φ : range f ≃ₜ Y := .trans (.setCongr f_surj.range_eq) (Homeomorph.Set.univ Y)
-  exact Φ.isQuotientMap.comp f_strict
-
-中文:
-引理 isQuotientMap_iff_isStrictMap_surjective
-  证明: by
-  refine ⟨fun H => ⟨H.isStrictMap, H.surjective⟩, fun ⟨f_strict, f_surj⟩ => ?_⟩
-  rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at f_strict
-  set Φ : range f ≃ₜ Y := .trans (.setCongr f_surj.range_eq) (Homeomorph.Set.univ Y)
-  exact Φ.isQuotientMap.comp f_strict
-
-Depends on / 依赖: H.isStrictMap, H.surjective, Homeomorph, Homeomorph.Set.univ, f_strict, f_surj, f_surj.range_eq, isQuotientMap, isQuotientMap.comp, isStrictMap, isStrictMap_iff_isQuotientMap_rangeFactorization, range_eq, setCongr, surjective
+--- 原说明 ---
+Quotient maps are precisely surjective strict maps.
 -/
 lemma isQuotientMap_iff_isStrictMap_surjective :
     IsQuotientMap f ↔ IsStrictMap f ∧ Surjective f := by
-  refine ⟨fun H => ⟨H.isStrictMap, H.surjective⟩, fun ⟨f_strict, f_surj⟩ => ?_⟩
+  refine ⟨fun H ↦ ⟨H.isStrictMap, H.surjective⟩, fun ⟨f_strict, f_surj⟩ ↦ ?_⟩
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at f_strict
   set Φ : range f ≃ₜ Y := .trans (.setCongr f_surj.range_eq) (Homeomorph.Set.univ Y)
   exact Φ.isQuotientMap.comp f_strict
 
-/--
-lemma `isEmbedding_iff_isStrictMap_injective` / 引理 `isEmbedding_iff_isStrictMap_injective`
+/-- Embeddings are precisely injective strict maps. -/
+/-
+**Topology.isEmbedding_iff_isStrictMap_injective** 是 Mathlib 中的一个引理，位于命名空间 `Topo
+logy`。
+形式化陈述：isEmbedding_iff_isStrictMap_injective : IsEmbedding f ↔ IsStrictMap f ∧ In
+jective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.isStrictMap`：∀ {X : Type u_1} {Y : Type u_2} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsEm
+bedding f → Topology.I…
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Topology.IsEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3
+} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalSpa
+ce Y] [inst_2 :…
+· 使用定理 `Topology.isStrictMap_iff_isEmbedding_kerLift`：isStrictMap_iff_isEmbeddin
+g_kerLift : IsStrictMap f ↔ IsEmbedding (Setoid.kerLift f)
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 
-English:
-lemma isEmbedding_iff_isStrictMap_injective
-  proof: by
-  refine ⟨fun H => ⟨H.isStrictMap, H.injective⟩, fun ⟨f_strict, f_inj⟩ => ?_⟩
-  rw [isStrictMap_iff_isEmbedding_kerLift] at f_strict
-  set Φ : Quotient (ker f) ≃ₜ X :=
-    (Homeomorph.Quotient.congrRight <| by simp [f_inj.eq_iff]).trans Homeomorph.quotientBot
-  exact f_strict.comp Φ.symm.isEmbedding
-
-中文:
-引理 isEmbedding_iff_isStrictMap_injective
-  证明: by
-  refine ⟨fun H => ⟨H.isStrictMap, H.injective⟩, fun ⟨f_strict, f_inj⟩ => ?_⟩
-  rw [isStrictMap_iff_isEmbedding_kerLift] at f_strict
-  set Φ : Quotient (ker f) ≃ₜ X :=
-    (Homeomorph.Quotient.congrRight <| by simp [f_inj.eq_iff]).trans Homeomorph.quotientBot
-  exact f_strict.comp Φ.symm.isEmbedding
-
-Depends on / 依赖: H.injective, H.isStrictMap, Homeomorph, Homeomorph.Quotient.congrRight, Homeomorph.quotientBot, Quotient, congrRight, eq_iff, f_inj, f_inj.eq_iff, f_strict, f_strict.comp, injective, isEmbedding, isStrictMap, isStrictMap_iff_isEmbedding_kerLift, quotientBot, symm.isEmbedding
+--- 原说明 ---
+Embeddings are precisely injective strict maps.
 -/
 lemma isEmbedding_iff_isStrictMap_injective :
     IsEmbedding f ↔ IsStrictMap f ∧ Injective f := by
-  refine ⟨fun H => ⟨H.isStrictMap, H.injective⟩, fun ⟨f_strict, f_inj⟩ => ?_⟩
+  refine ⟨fun H ↦ ⟨H.isStrictMap, H.injective⟩, fun ⟨f_strict, f_inj⟩ ↦ ?_⟩
   rw [isStrictMap_iff_isEmbedding_kerLift] at f_strict
   set Φ : Quotient (ker f) ≃ₜ X :=
     (Homeomorph.Quotient.congrRight <| by simp [f_inj.eq_iff]).trans Homeomorph.quotientBot
   exact f_strict.comp Φ.symm.isEmbedding
 
-/--
-lemma `isHomeomorph_iff_isStrictMap_bijective` / 引理 `isHomeomorph_iff_isStrictMap_bijective`
+/-- Homeomorphisms are precisely bijective strict maps. -/
+/-
+**Topology.isHomeomorph_iff_isStrictMap_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Top
+ology`。
+形式化陈述：isHomeomorph_iff_isStrictMap_bijective : IsHomeomorph f ↔ IsStrictMap f ∧ 
+Bijective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma isHomeomorph_iff_isStrictMap_bijective
-  proof: by
-  simp [isHomeomorph_iff_isEmbedding_surjective, isEmbedding_iff_isStrictMap_injective, Bijective,
-    and_assoc]
-
-中文:
-引理 isHomeomorph_iff_isStrictMap_bijective
-  证明: by
-  simp [isHomeomorph_iff_isEmbedding_surjective, isEmbedding_iff_isStrictMap_injective, Bijective,
-    and_assoc]
-
-Depends on / 依赖: Bijective, and_assoc, isEmbedding_iff_isStrictMap_injective, isHomeomorph_iff_isEmbedding_surjective
+--- 原说明 ---
+Homeomorphisms are precisely bijective strict maps.
 -/
 lemma isHomeomorph_iff_isStrictMap_bijective :
     IsHomeomorph f ↔ IsStrictMap f ∧ Bijective f := by
   simp [isHomeomorph_iff_isEmbedding_surjective, isEmbedding_iff_isStrictMap_injective, Bijective,
     and_assoc]
 
-/--
-lemma `_root_.Homeomorph.isStrictMap_comp_iff` / 引理 `_root_.Homeomorph.isStrictMap_comp_iff`
+/-- Strict maps are preserved when precomposing with a homeomorphism. -/
+/-
+**Topology._root_.Homeomorph.isStrictMap_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `Top
+ology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Homeomorph.isStrictMap_comp_iff
-  given: (e : X ≃ₜ Y) {f : Y -> Z}
-  proof: e.isQuotientMap.isStrictMap_iff.symm
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.isStrictMap_comp_iff :=
-  Homeomorph.isStrictMap_comp_iff
-
-中文:
-引理 _root_.同胚.isStrictMap_comp_iff
-  条件: (e : X ≃ₜ Y) {f : Y -> Z}
-  证明: e.isQuotientMap.isStrictMap_iff.symm
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.isStrictMap_comp_iff :=
-  Homeomorph.isStrictMap_comp_iff
-
-Depends on / 依赖: e.isQuotientMap.isStrictMap_iff.symm, isQuotientMap, isStrictMap_iff
+--- 原说明 ---
+Strict maps are preserved when precomposing with a homeomorphism.
 -/
-lemma _root_.Homeomorph.isStrictMap_comp_iff (e : X ≃ₜ Y) {f : Y -> Z} :
+lemma _root_.Homeomorph.isStrictMap_comp_iff (e : X ≃ₜ Y) {f : Y → Z} :
     IsStrictMap (f ∘ e) ↔ IsStrictMap f :=
   e.isQuotientMap.isStrictMap_iff.symm
 
 @[deprecated (since := "2026-07-10")] protected alias Homeomorph.isStrictMap_comp_iff :=
   Homeomorph.isStrictMap_comp_iff
 
-/--
-lemma `_root_.Homeomorph.comp_isStrictMap_iff` / 引理 `_root_.Homeomorph.comp_isStrictMap_iff`
+/-- Strict maps are preserved when postcomposing with a homeomorphism. -/
+/-
+**Topology._root_.Homeomorph.comp_isStrictMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `Top
+ology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Homeomorph.comp_isStrictMap_iff
-  given: (e : Y ≃ₜ Z) {f : X -> Y}
-  proof: e.isEmbedding.isStrictMap_iff.symm
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.comp_isStrictMap_iff :=
-  Homeomorph.comp_isStrictMap_iff
-
-中文:
-引理 _root_.同胚.comp_isStrictMap_iff
-  条件: (e : Y ≃ₜ Z) {f : X -> Y}
-  证明: e.isEmbedding.isStrictMap_iff.symm
-
-@[deprecated (since := "2026-07-10")] protected alias Homeomorph.comp_isStrictMap_iff :=
-  Homeomorph.comp_isStrictMap_iff
-
-Depends on / 依赖: e.isEmbedding.isStrictMap_iff.symm, isEmbedding, isStrictMap_iff
+--- 原说明 ---
+Strict maps are preserved when postcomposing with a homeomorphism.
 -/
-lemma _root_.Homeomorph.comp_isStrictMap_iff (e : Y ≃ₜ Z) {f : X -> Y} :
+lemma _root_.Homeomorph.comp_isStrictMap_iff (e : Y ≃ₜ Z) {f : X → Y} :
     IsStrictMap (e ∘ f) ↔ IsStrictMap f :=
   e.isEmbedding.isStrictMap_iff.symm
 
@@ -547,3 +527,4 @@ lemma _root_.Homeomorph.comp_isStrictMap_iff (e : Y ≃ₜ Z) {f : X -> Y} :
   Homeomorph.comp_isStrictMap_iff
 
 end Topology
+

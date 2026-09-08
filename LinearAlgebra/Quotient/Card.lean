@@ -19,28 +19,26 @@ open LinearMap QuotientAddGroup
 
 variable {R M : Type*} [Ring R] [AddCommGroup M] [Module R M]
 
-/--
-theorem `card_eq_card_quotient_mul_card` / 定理 `card_eq_card_quotient_mul_card`
-
-English:
-theorem card_eq_card_quotient_mul_card
-  given: (S : Submodule R M)
-  proof: by
-  rw [mul_comm]; rw [← Nat.card_prod]
-  exact Nat.card_congr AddSubgroup.addGroupEquivQuotientProdAddSubgroup
-
-中文:
-定理 card_eq_card_quotient_mul_card
-  条件: (S : 子模 R M)
-  证明: by
-  rw [mul_comm]; rw [← Nat.card_prod]
-  exact Nat.card_congr AddSubgroup.addGroupEquivQuotientProdAddSubgroup
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.addGroupEquivQuotientProdAddSubgroup, Nat.card_congr, Nat.card_prod, addGroupEquivQuotientProdAddSubgroup, card_congr, card_prod, mul_comm
+/-
+**Submodule.card_eq_card_quotient_mul_card** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`
+。
+形式化陈述：card_eq_card_quotient_mul_card (S : Submodule R M) : Nat.card M = Nat.card
+ S * Nat.card (M ⧸ S)
+参数：S : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_prod`：card_prod (α β : Type*) : Nat.card (α × β) = Nat.card α *
+ Nat.card β
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
 -/
 theorem card_eq_card_quotient_mul_card (S : Submodule R M) :
     Nat.card M = Nat.card S * Nat.card (M ⧸ S) := by
-  rw [mul_comm]; rw [← Nat.card_prod]
+  rw [mul_comm, ← Nat.card_prod]
   exact Nat.card_congr AddSubgroup.addGroupEquivQuotientProdAddSubgroup
 
 end Submodule
+

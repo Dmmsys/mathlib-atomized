@@ -54,112 +54,139 @@ open Submodule
 section RCLike
 
 variable [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-variable {α : 𝕜} {A B : E ->ₗ[𝕜] E} {T : n -> Module.End 𝕜 E}
+variable {α : 𝕜} {A B : E →ₗ[𝕜] E} {T : n → Module.End 𝕜 E}
 
-/--
-theorem `orthogonalFamily_eigenspace_inf_eigenspace` / 定理 `orthogonalFamily_eigenspace_inf_eigenspace`
+/-- The joint eigenspaces of a pair of symmetric operators form an
+`OrthogonalFamily`. -/
+/-
+**LinearMap.IsSymmetric.orthogonalFamily_eigenspace_inf_eigenspace** 是 Mathlib 中
+的一个定理，位于命名空间 `LinearMap.IsSymmetric`。
+形式化陈述：orthogonalFamily_eigenspace_inf_eigenspace (hA : A.IsSymmetric) (hB : B.Is
+Symmetric) : OrthogonalFamily 𝕜 (fun (i : 𝕜 × 𝕜) => (eigenspace A i.2 ⊓ eigenspa
+ce B i.1 : Submodule 𝕜 E)) fun i => (eigenspace A i.2 ⊓ eigenspace B i.1).subtyp
+eₗᵢ
+参数：hA : A.IsSymmetric；hB : B.IsSymmetric。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrthogonalFamily.of_pairwise`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RC
+Like 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {ι : 
+Type u_4} {V : ι →…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
+· 使用定理 `Ne.eq_def`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `OrthogonalFamily.pairwise`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLik
+e 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {ι : Typ
+e u_4} {V : ι →…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalFamily_eigenspaces`：orthogonalFamily_eig
+enspaces (hT : T.IsSymmetric) : OrthogonalFamily 𝕜 (fun μ => eigenspace T μ) fun
+ μ => (eigenspace T μ).subtypeₗᵢ
 
-English:
-theorem orthogonalFamily_eigenspace_inf_eigenspace
-  given: (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-  proof: OrthogonalFamily.of_pairwise fun i j hij v ⟨hv1, hv2⟩ => by
-    obtain (h₁ | h₂) : i.1 != j.1 ∨ i.2 != j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
-    all_goals intro w ⟨hw1, hw2⟩
-    · exact hB.orthogonalFamily_eigenspaces.pairwise h₁ hv2 w hw2
-    · exact hA.orthogonalFamily_eigenspaces.pairwise h₂ hv1 w hw1
-
-中文:
-定理 orthogonalFamily_eigenspace_inf_eigenspace
-  条件: (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-  证明: OrthogonalFamily.of_pairwise fun i j hij v ⟨hv1, hv2⟩ => by
-    obtain (h₁ | h₂) : i.1 != j.1 ∨ i.2 != j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
-    all_goals intro w ⟨hw1, hw2⟩
-    · exact hB.orthogonalFamily_eigenspaces.pairwise h₁ hv2 w hw2
-    · exact hA.orthogonalFamily_eigenspaces.pairwise h₂ hv1 w hw1
-
-Depends on / 依赖: Ne.eq_def, OrthogonalFamily, OrthogonalFamily.of_pairwise, Prod.ext_iff, all_goals, eq_def, ext_iff, hA.orthogonalFamily_eigenspaces.pairwise, hB.orthogonalFamily_eigenspaces.pairwise, not_and_or, of_pairwise, orthogonalFamily_eigenspaces, pairwise
+--- 原说明 ---
+The joint eigenspaces of a pair of symmetric operators form an
+`OrthogonalFamily`.
 -/
 theorem orthogonalFamily_eigenspace_inf_eigenspace (hA : A.IsSymmetric) (hB : B.IsSymmetric) :
     OrthogonalFamily 𝕜 (fun (i : 𝕜 × 𝕜) => (eigenspace A i.2 ⊓ eigenspace B i.1 : Submodule 𝕜 E))
       fun i => (eigenspace A i.2 ⊓ eigenspace B i.1).subtypeₗᵢ :=
-  OrthogonalFamily.of_pairwise fun i j hij v ⟨hv1, hv2⟩ => by
-    obtain (h₁ | h₂) : i.1 != j.1 ∨ i.2 != j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
+  OrthogonalFamily.of_pairwise fun i j hij v ⟨hv1, hv2⟩ ↦ by
+    obtain (h₁ | h₂) : i.1 ≠ j.1 ∨ i.2 ≠ j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
     all_goals intro w ⟨hw1, hw2⟩
     · exact hB.orthogonalFamily_eigenspaces.pairwise h₁ hv2 w hw2
     · exact hA.orthogonalFamily_eigenspaces.pairwise h₂ hv1 w hw1
 
-/--
-theorem `orthogonalFamily_iInf_eigenspaces` / 定理 `orthogonalFamily_iInf_eigenspaces`
+/-- The joint eigenspaces of a family of symmetric operators form an
+`OrthogonalFamily`. -/
+/-
+**LinearMap.IsSymmetric.orthogonalFamily_iInf_eigenspaces** 是 Mathlib 中的一个定理，位于命
+名空间 `LinearMap.IsSymmetric`。
+形式化陈述：orthogonalFamily_iInf_eigenspaces (hT : forall i, (T i).IsSymmetric) : Ort
+hogonalFamily 𝕜 (fun γ : n -> 𝕜 => (⨅ j, eigenspace (T j) (γ j) : Submodule 𝕜 E)
+) fun γ : n -> 𝕜 => (⨅ j, eigenspace (T j) (γ j)).subtypeₗᵢ
+参数：hT : forall i, (T i).IsSymmetric。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.ne_iff`：ne_iff {β : α -> Sort*} {f₁ f₂ : forall a, β a} : f₁ !=
+ f₂ ↔ exists a, f₁ a != f₂ a
+· 使用定理 `LinearMap.IsSymmetric.orthogonalFamily_eigenspaces`：orthogonalFamily_eig
+enspaces (hT : T.IsSymmetric) : OrthogonalFamily 𝕜 (fun μ => eigenspace T μ) fun
+ μ => (eigenspace T μ).subtypeₗᵢ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Submodule.mem_iInf`：mem_iInf {ι} (p : ι -> Submodule R M) {x} : x in ⨅ i
+, p i ↔ forall i, x in p i
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem orthogonalFamily_iInf_eigenspaces
-  given: (hT : forall i, (T i).IsSymmetric)
-  proof: by
-  intro f g hfg Ef Eg
-  obtain ⟨a, ha⟩ := Function.ne_iff.mp hfg
-  have H := orthogonalFamily_eigenspaces (hT a) ha
-  simp only [Submodule.coe_subtypeₗᵢ, Submodule.coe_subtype, Subtype.forall] at H
-  apply H
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (f _)).mp Ef.2 _
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (g _)).mp Eg.2 _
-
-中文:
-定理 orthogonalFamily_iInf_eigenspaces
-  条件: (hT : 对任意 i, (T i).IsSymmetric)
-  证明: by
-  intro f g hfg Ef Eg
-  obtain ⟨a, ha⟩ := Function.ne_iff.mp hfg
-  have H := orthogonalFamily_eigenspaces (hT a) ha
-  simp only [Submodule.coe_subtypeₗᵢ, Submodule.coe_subtype, Subtype.forall] at H
-  apply H
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (f _)).mp Ef.2 _
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (g _)).mp Eg.2 _
-
-Depends on / 依赖: Function, Function.ne_iff.mp, Submodule, Submodule.coe_subtype, Submodule.mem_iInf, Subtype, Subtype.forall, coe_subtype, eigenspace, mem_iInf, ne_iff, orthogonalFamily_eigenspaces
+--- 原说明 ---
+The joint eigenspaces of a family of symmetric operators form an
+`OrthogonalFamily`.
 -/
-theorem orthogonalFamily_iInf_eigenspaces (hT : forall i, (T i).IsSymmetric) :
-    OrthogonalFamily 𝕜 (fun γ : n -> 𝕜 => (⨅ j, eigenspace (T j) (γ j) : Submodule 𝕜 E))
-      fun γ : n -> 𝕜 => (⨅ j, eigenspace (T j) (γ j)).subtypeₗᵢ := by
+theorem orthogonalFamily_iInf_eigenspaces (hT : ∀ i, (T i).IsSymmetric) :
+    OrthogonalFamily 𝕜 (fun γ : n → 𝕜 ↦ (⨅ j, eigenspace (T j) (γ j) : Submodule 𝕜 E))
+      fun γ : n → 𝕜 ↦ (⨅ j, eigenspace (T j) (γ j)).subtypeₗᵢ := by
   intro f g hfg Ef Eg
   obtain ⟨a, ha⟩ := Function.ne_iff.mp hfg
   have H := orthogonalFamily_eigenspaces (hT a) ha
   simp only [Submodule.coe_subtypeₗᵢ, Submodule.coe_subtype, Subtype.forall] at H
   apply H
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (f _)).mp Ef.2 _
-  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (g _)).mp Eg.2 _
+  · exact (Submodule.mem_iInf <| fun _ ↦ eigenspace (T _) (f _)).mp Ef.2 _
+  · exact (Submodule.mem_iInf <| fun _ ↦ eigenspace (T _) (g _)).mp Eg.2 _
 
 variable [FiniteDimensional 𝕜 E]
 
 open IsFinitelySemisimple
 
-/--
-theorem `iSup_eigenspace_inf_eigenspace_of_commute` / 定理 `iSup_eigenspace_inf_eigenspace_of_commute`
+/-- If A and B are commuting symmetric operators on a finite-dimensional inner product space
+then the eigenspaces of the restriction of B to any eigenspace of A exhaust that eigenspace. -/
+/-
+**LinearMap.IsSymmetric.iSup_eigenspace_inf_eigenspace_of_commute** 是 Mathlib 中的
+一个定理，位于命名空间 `LinearMap.IsSymmetric`。
+形式化陈述：iSup_eigenspace_inf_eigenspace_of_commute (hB : B.IsSymmetric) (hAB : Comm
+ute A B) : (⨆ γ, eigenspace A α ⊓ eigenspace B γ) = eigenspace A α
+参数：hB : B.IsSymmetric；hAB : Commute A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.map_subtype_top`：map_subtype_top : map p.subtype (⊤ : Submodul
+e R p) = p
+· 使用引理 `Module.End.mapsTo_genEigenspace_of_comm`：mapsTo_genEigenspace_of_comm {f
+ g : End R M} (h : Commute f g) (μ : R) (k : Nat∞) : MapsTo g (f.genEigenspace μ
+ k) (f.genEigenspace μ k)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submodule.inf_genEigenspace`：∀ {R : Type v} {M : Type w} [inst : CommRin
+g R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (f : Module.End R 
+M) (p : Submodule…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalComplement_iSup_eigenspaces_eq_bot`：orth
+ogonalComplement_iSup_eigenspaces_eq_bot (hT : T.IsSymmetric) : (⨆ μ, eigenspace
+ T μ)ᗮ = ⊥
+· 使用定理 `LinearMap.IsSymmetric.restrict_invariant`：∀ {𝕜 : Type u_1} {E : Type u_2
+} [inst : RCLike 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : InnerProductSp
+ace 𝕜 E]   {T : E →ₗ[𝕜] E}, T.…
 
-English:
-theorem iSup_eigenspace_inf_eigenspace_of_commute
-  given: (hB : B.IsSymmetric) (hAB : Commute A B)
-  proof: by
-  conv_rhs => rw [← (eigenspace A α).map_subtype_top]
-  simp only [← Submodule.map_iSup,
-    (eigenspace A α).inf_genEigenspace _ (mapsTo_genEigenspace_of_comm hAB α 1)]
-  congr 1
-  simpa only [genEigenspace_eq_eigenspace, Submodule.orthogonal_eq_bot_iff]
-using orthogonalComplement_iSup_eigenspaces_eq_bot
-hB.restrict_invariant mapsTo_genEigenspace_of_comm hAB α 1
-
-中文:
-定理 iSup_eigenspace_inf_eigenspace_of_commute
-  条件: (hB : B.IsSymmetric) (hAB : Commute A B)
-  证明: by
-  conv_rhs => rw [← (eigenspace A α).map_subtype_top]
-  simp only [← Submodule.map_iSup,
-    (eigenspace A α).inf_genEigenspace _ (mapsTo_genEigenspace_of_comm hAB α 1)]
-  congr 1
-  simpa only [genEigenspace_eq_eigenspace, Submodule.orthogonal_eq_bot_iff]
-using orthogonalComplement_iSup_eigenspaces_eq_bot
-hB.restrict_invariant mapsTo_genEigenspace_of_comm hAB α 1
-
-Depends on / 依赖: Submodule, Submodule.map_iSup, Submodule.orthogonal_eq_bot_iff, conv_rhs, eigenspace, genEigenspace_eq_eigenspace, hB.restrict_invariant, inf_genEigenspace, map_iSup, map_subtype_top, mapsTo_genEigenspace_of_comm, orthogonalComplement_iSup_eigenspaces_eq_bot, orthogonal_eq_bot_iff, restrict_invariant
+--- 原说明 ---
+If A and B are commuting symmetric operators on a finite-dimensional inner produ
+ct space
+then the eigenspaces of the restriction of B to any eigenspace of A exhaust that
+ eigenspace.
 -/
 theorem iSup_eigenspace_inf_eigenspace_of_commute (hB : B.IsSymmetric) (hAB : Commute A B) :
     (⨆ γ, eigenspace A α ⊓ eigenspace B γ) = eigenspace A α := by
@@ -168,126 +195,198 @@ theorem iSup_eigenspace_inf_eigenspace_of_commute (hB : B.IsSymmetric) (hAB : Co
     (eigenspace A α).inf_genEigenspace _ (mapsTo_genEigenspace_of_comm hAB α 1)]
   congr 1
   simpa only [genEigenspace_eq_eigenspace, Submodule.orthogonal_eq_bot_iff]
-using orthogonalComplement_iSup_eigenspaces_eq_bot
-hB.restrict_invariant mapsTo_genEigenspace_of_comm hAB α 1
+    using orthogonalComplement_iSup_eigenspaces_eq_bot <|
+      hB.restrict_invariant <| mapsTo_genEigenspace_of_comm hAB α 1
 
-/--
-theorem `iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute` / 定理 `iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute`
+/-- If A and B are commuting symmetric operators acting on a finite-dimensional inner product space,
+then the simultaneous eigenspaces of A and B exhaust the space. -/
+/-
+**LinearMap.IsSymmetric.iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute** 
+是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsSymmetric`。
+形式化陈述：iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute (hA : A.IsSymmetric)
+ (hB : B.IsSymmetric) (hAB : Commute A B) : (⨆ α, ⨆ γ, eigenspace A α ⊓ eigenspa
+ce B γ) = ⊤
+参数：hA : A.IsSymmetric；hB : B.IsSymmetric；hAB : Commute A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LinearMap.IsSymmetric.iSup_eigenspace_inf_eigenspace_of_commute`：iSup_ei
+genspace_inf_eigenspace_of_commute (hB : B.IsSymmetric) (hAB : Commute A B) : (⨆
+ γ, eigenspace A α ⊓ eigenspace B γ) = eigenspace A α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.orthogonal_eq_bot_iff`：orthogonal_eq_bot_iff [K.HasOrthogonalP
+rojection] : Kᗮ = ⊥ ↔ K = ⊤
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalComplement_iSup_eigenspaces_eq_bot`：orth
+ogonalComplement_iSup_eigenspaces_eq_bot (hT : T.IsSymmetric) : (⨆ μ, eigenspace
+ T μ)ᗮ = ⊥
 
-English:
-theorem iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute
-  statement: (hA : A.IsSymmetric)
-  proof: by
-  simpa [iSup_eigenspace_inf_eigenspace_of_commute hB hAB] using
-Submodule.orthogonal_eq_bot_iff.mp hA.orthogonalComplement_iSup_eigenspaces_eq_bot
-
-中文:
-定理 iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute
-  结论: (hA : A.IsSymmetric)
-  证明: by
-  simpa [iSup_eigenspace_inf_eigenspace_of_commute hB hAB] using
-Submodule.orthogonal_eq_bot_iff.mp hA.orthogonalComplement_iSup_eigenspaces_eq_bot
-
-Depends on / 依赖: Submodule, Submodule.orthogonal_eq_bot_iff.mp, hA.orthogonalComplement_iSup_eigenspaces_eq_bot, iSup_eigenspace_inf_eigenspace_of_commute, orthogonalComplement_iSup_eigenspaces_eq_bot, orthogonal_eq_bot_iff
+--- 原说明 ---
+If A and B are commuting symmetric operators acting on a finite-dimensional inne
+r product space,
+then the simultaneous eigenspaces of A and B exhaust the space.
 -/
 theorem iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute (hA : A.IsSymmetric)
     (hB : B.IsSymmetric) (hAB : Commute A B) :
     (⨆ α, ⨆ γ, eigenspace A α ⊓ eigenspace B γ) = ⊤ := by
   simpa [iSup_eigenspace_inf_eigenspace_of_commute hB hAB] using
-Submodule.orthogonal_eq_bot_iff.mp hA.orthogonalComplement_iSup_eigenspaces_eq_bot
+    Submodule.orthogonal_eq_bot_iff.mp <| hA.orthogonalComplement_iSup_eigenspaces_eq_bot
 
-/--
-theorem `directSum_isInternal_of_commute` / 定理 `directSum_isInternal_of_commute`
+/-- Given a commuting pair of symmetric linear operators on a finite-dimensional inner product
+space, the space decomposes as an internal direct sum of simultaneous eigenspaces of these
+operators. -/
+/-
+**LinearMap.IsSymmetric.directSum_isInternal_of_commute** 是 Mathlib 中的一个定理，位于命名空
+间 `LinearMap.IsSymmetric`。
+形式化陈述：directSum_isInternal_of_commute (hA : A.IsSymmetric) (hB : B.IsSymmetric) 
+(hAB : Commute A B) : DirectSum.IsInternal (fun (i : 𝕜 × 𝕜) => (eigenspace A i.2
+ ⊓ eigenspace B i.1))
+参数：hA : A.IsSymmetric；hB : B.IsSymmetric；hAB : Commute A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrthogonalFamily.isInternal_iff`：OrthogonalFamily.isInternal_iff [Decida
+bleEq ι] [FiniteDimensional 𝕜 E] {V : ι -> Submodule 𝕜 E} (hV : OrthogonalFamily
+ 𝕜 (fun i => V i) fun…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalFamily_eigenspace_inf_eigenspace`：orthog
+onalFamily_eigenspace_inf_eigenspace (hA : A.IsSymmetric) (hB : B.IsSymmetric) :
+ OrthogonalFamily 𝕜 (fun (i : 𝕜 × 𝕜) => (eigenspace A …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.orthogonal_eq_bot_iff`：orthogonal_eq_bot_iff [K.HasOrthogonalP
+rojection] : Kᗮ = ⊥ ↔ K = ⊤
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `iSup_prod`：iSup_prod {f : β × γ -> α} : ⨆ x, f x = ⨆ (i) (j), f (i, j)
+· 使用定理 `iSup_comm`：iSup_comm {f : ι -> ι' -> α} : ⨆ (i) (j), f i j = ⨆ (j) (i), 
+f i j
+· 使用定理 `LinearMap.IsSymmetric.iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_comm
+ute`：iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute (hA : A.IsSymmetric) 
+(hB : B.IsSymmetric) (hAB : Commute A B) : (⨆ α, ⨆ γ, eigenspace …
 
-English:
-theorem directSum_isInternal_of_commute
-  statement: (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-  proof: by
-  apply (orthogonalFamily_eigenspace_inf_eigenspace hA hB).isInternal_iff.mpr
-  rw [Submodule.orthogonal_eq_bot_iff]; rw [iSup_prod]; rw [iSup_comm]
-  exact iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute hA hB hAB
-
-中文:
-定理 directSum_is整数ernal_of_commute
-  结论: (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-  证明: by
-  apply (orthogonalFamily_eigenspace_inf_eigenspace hA hB).isInternal_iff.mpr
-  rw [Submodule.orthogonal_eq_bot_iff]; rw [iSup_prod]; rw [iSup_comm]
-  exact iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute hA hB hAB
-
-Depends on / 依赖: Submodule, Submodule.orthogonal_eq_bot_iff, iSup_comm, iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute, iSup_prod, isInternal_iff, isInternal_iff.mpr, orthogonalFamily_eigenspace_inf_eigenspace, orthogonal_eq_bot_iff
+--- 原说明 ---
+Given a commuting pair of symmetric linear operators on a finite-dimensional inn
+er product
+space, the space decomposes as an internal direct sum of simultaneous eigenspace
+s of these
+operators.
 -/
 theorem directSum_isInternal_of_commute (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     (hAB : Commute A B) :
-    DirectSum.IsInternal (fun (i : 𝕜 × 𝕜) => (eigenspace A i.2 ⊓ eigenspace B i.1)) := by
+    DirectSum.IsInternal (fun (i : 𝕜 × 𝕜) ↦ (eigenspace A i.2 ⊓ eigenspace B i.1)) := by
   apply (orthogonalFamily_eigenspace_inf_eigenspace hA hB).isInternal_iff.mpr
-  rw [Submodule.orthogonal_eq_bot_iff]; rw [iSup_prod]; rw [iSup_comm]
+  rw [Submodule.orthogonal_eq_bot_iff, iSup_prod, iSup_comm]
   exact iSup_iSup_eigenspace_inf_eigenspace_eq_top_of_commute hA hB hAB
 
 open scoped Function -- required for scoped `on` notation
 
-/--
-theorem `iSup_iInf_eq_top_of_commute` / 定理 `iSup_iInf_eq_top_of_commute`
+/-- A commuting family of symmetric linear maps on a finite-dimensional inner
+product space is simultaneously diagonalizable. -/
+/-
+**LinearMap.IsSymmetric.iSup_iInf_eq_top_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearMap.IsSymmetric`。
+形式化陈述：iSup_iInf_eq_top_of_commute {ι : Type*} {T : ι -> E ->ₗ[𝕜] E} (hT : forall
+ i, (T i).IsSymmetric) (h : Pairwise (Commute on T)) : ⨆ χ : ι -> 𝕜, ⨅ i, eigens
+pace (T i) (χ i) = ⊤
+参数：hT : forall i, (T i).IsSymmetric；h : Pairwise (Commute on T)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Module.End.IsFinitelySemisimple.maxGenEigenspace_eq_eigenspace`：∀ {R : T
+ype u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : 
+_root_.Module R M]   {f : Module.End R M}, f.IsFinit…
+· 使用定理 `LinearMap.IsSymmetric.isFinitelySemisimple`：isFinitelySemisimple : T.IsF
+initelySemisimple
+· 使用定理 `Module.End.iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq
+_top_of_commute`：iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_t
+op_of_commute [FiniteDimensional K M] (f : ι -> Module.End K M) (h : Pairwise…
+· 使用定理 `Submodule.orthogonal_eq_bot_iff`：orthogonal_eq_bot_iff [K.HasOrthogonalP
+rojection] : Kᗮ = ⊥ ↔ K = ⊤
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalComplement_iSup_eigenspaces_eq_bot`：orth
+ogonalComplement_iSup_eigenspaces_eq_bot (hT : T.IsSymmetric) : (⨆ μ, eigenspace
+ T μ)ᗮ = ⊥
 
-English:
-theorem iSup_iInf_eq_top_of_commute
-  statement: {ι : Type*} {T : ι -> E ->ₗ[𝕜] E}
-  proof: calc
-  _ = ⨆ χ : ι -> 𝕜, ⨅ i, maxGenEigenspace (T i) (χ i) :=
-    congr(⨆ χ : ι -> 𝕜, ⨅ i,
- (maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
-  _ = ⊤ :=
-    iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ => by
-    rw [← orthogonal_eq_bot_iff]; rw [congr(⨆ μ]; rw [$(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ))]; rw [(hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
-
-中文:
-定理 iSup_iInf_eq_top_of_commute
-  结论: {ι : 类型} {T : ι -> E ->ₗ[𝕜] E}
-  证明: calc
-  _ = ⨆ χ : ι -> 𝕜, ⨅ i, maxGenEigenspace (T i) (χ i) :=
-    congr(⨆ χ : ι -> 𝕜, ⨅ i,
- (maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
-  _ = ⊤ :=
-    iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ => by
-    rw [← orthogonal_eq_bot_iff]; rw [congr(⨆ μ]; rw [$(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ))]; rw [(hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
-
-Depends on / 依赖: iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute, isFinitelySemisimple, maxGenEigenspace, maxGenEigenspace_eq_eigenspace, orthogonalComplement_iSup_eigenspaces_eq_bot, orthogonal_eq_bot_iff
+--- 原说明 ---
+A commuting family of symmetric linear maps on a finite-dimensional inner
+product space is simultaneously diagonalizable.
 -/
-theorem iSup_iInf_eq_top_of_commute {ι : Type*} {T : ι -> E ->ₗ[𝕜] E}
-    (hT : forall i, (T i).IsSymmetric) (h : Pairwise (Commute on T)) :
-    ⨆ χ : ι -> 𝕜, ⨅ i, eigenspace (T i) (χ i) = ⊤ :=
+theorem iSup_iInf_eq_top_of_commute {ι : Type*} {T : ι → E →ₗ[𝕜] E}
+    (hT : ∀ i, (T i).IsSymmetric) (h : Pairwise (Commute on T)) :
+    ⨆ χ : ι → 𝕜, ⨅ i, eigenspace (T i) (χ i) = ⊤ :=
   calc
-  _ = ⨆ χ : ι -> 𝕜, ⨅ i, maxGenEigenspace (T i) (χ i) :=
-    congr(⨆ χ : ι -> 𝕜, ⨅ i,
- (maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
+  _ = ⨆ χ : ι → 𝕜, ⨅ i, maxGenEigenspace (T i) (χ i) :=
+    congr(⨆ χ : ι → 𝕜, ⨅ i,
+      $(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
   _ = ⊤ :=
-    iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ => by
-    rw [← orthogonal_eq_bot_iff]; rw [congr(⨆ μ]; rw [$(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ))]; rw [(hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
+    iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ ↦ by
+    rw [← orthogonal_eq_bot_iff,
+      congr(⨆ μ, $(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ)),
+      (hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
 
-/--
-theorem `directSum_isInternal_of_pairwise_commute` / 定理 `directSum_isInternal_of_pairwise_commute`
+/-- In finite dimensions, given a commuting family of symmetric linear operators, the inner
+product space on which they act decomposes as an internal direct sum of joint eigenspaces. -/
+/-
+**LinearMap.IsSymmetric.directSum_isInternal_of_pairwise_commute** 是 Mathlib 中的一
+个定理，位于命名空间 `LinearMap.IsSymmetric`。
+形式化陈述：directSum_isInternal_of_pairwise_commute [DecidableEq (n -> 𝕜)] (hT : fora
+ll i, (T i).IsSymmetric) (hC : Pairwise (Commute on T)) : DirectSum.IsInternal (
+fun α : n -> 𝕜 => ⨅ j, eigenspace (T j) (α j))
+参数：n -> 𝕜；hT : forall i, (T i).IsSymmetric；hC : Pairwise (Commute on T)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrthogonalFamily.isInternal_iff`：OrthogonalFamily.isInternal_iff [Decida
+bleEq ι] [FiniteDimensional 𝕜 E] {V : ι -> Submodule 𝕜 E} (hV : OrthogonalFamily
+ 𝕜 (fun i => V i) fun…
+· 使用定理 `LinearMap.IsSymmetric.orthogonalFamily_iInf_eigenspaces`：orthogonalFamil
+y_iInf_eigenspaces (hT : forall i, (T i).IsSymmetric) : OrthogonalFamily 𝕜 (fun 
+γ : n -> 𝕜 => (⨅ j, eigenspace (T j) (γ j) : …
+· 使用定理 `LinearMap.IsSymmetric.iSup_iInf_eq_top_of_commute`：iSup_iInf_eq_top_of_c
+ommute {ι : Type*} {T : ι -> E ->ₗ[𝕜] E} (hT : forall i, (T i).IsSymmetric) (h :
+ Pairwise (Commute on T)) : ⨆ χ : ι -> …
+· 使用定理 `Submodule.top_orthogonal_eq_bot`：top_orthogonal_eq_bot : (⊤ : Submodule 
+𝕜 E)ᗮ = ⊥
 
-English:
-theorem directSum_isInternal_of_pairwise_commute
-  statement: [DecidableEq (n -> 𝕜)]
-  proof: by
-  rw [OrthogonalFamily.isInternal_iff]
-  · rw [iSup_iInf_eq_top_of_commute hT hC, top_orthogonal_eq_bot]
-  · exact orthogonalFamily_iInf_eigenspaces hT
-
-中文:
-定理 directSum_is整数ernal_of_pairwise_commute
-  结论: [DecidableEq (n -> 𝕜)]
-  证明: by
-  rw [OrthogonalFamily.isInternal_iff]
-  · rw [iSup_iInf_eq_top_of_commute hT hC, top_orthogonal_eq_bot]
-  · exact orthogonalFamily_iInf_eigenspaces hT
-
-Depends on / 依赖: OrthogonalFamily, OrthogonalFamily.isInternal_iff, iSup_iInf_eq_top_of_commute, isInternal_iff, orthogonalFamily_iInf_eigenspaces, top_orthogonal_eq_bot
+--- 原说明 ---
+In finite dimensions, given a commuting family of symmetric linear operators, th
+e inner
+product space on which they act decomposes as an internal direct sum of joint ei
+genspaces.
 -/
-theorem directSum_isInternal_of_pairwise_commute [DecidableEq (n -> 𝕜)]
-    (hT : forall i, (T i).IsSymmetric) (hC : Pairwise (Commute on T)) :
-    DirectSum.IsInternal (fun α : n -> 𝕜 => ⨅ j, eigenspace (T j) (α j)) := by
+theorem directSum_isInternal_of_pairwise_commute [DecidableEq (n → 𝕜)]
+    (hT : ∀ i, (T i).IsSymmetric) (hC : Pairwise (Commute on T)) :
+    DirectSum.IsInternal (fun α : n → 𝕜 ↦ ⨅ j, eigenspace (T j) (α j)) := by
   rw [OrthogonalFamily.isInternal_iff]
   · rw [iSup_iInf_eq_top_of_commute hT hC, top_orthogonal_eq_bot]
   · exact orthogonalFamily_iInf_eigenspaces hT
@@ -302,3 +401,4 @@ end RCLike
 end IsSymmetric
 
 end LinearMap
+

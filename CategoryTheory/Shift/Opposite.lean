@@ -61,38 +61,18 @@ variable (C : Type*) [Category* C] (A : Type*) [AddMonoid A] [HasShift C A]
 namespace HasShift
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mkShiftCoreOp` / `mkShiftCoreOp` 的定义
+/-- Construction of the naive shift on the opposite category of a category `C`:
+the shiftfunctor by `n` is `(shiftFunctor C n).op`. -/
+/-
+**CategoryTheory.HasShift.mkShiftCoreOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.HasShift`。
+形式化陈述：mkShiftCoreOp : ShiftMkCore Cᵒᵖ A where F n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkShiftCoreOp
-  signature: : ShiftMkCore Cᵒᵖ A where
-  body: (shiftFunctor C n).op
-  zero := (NatIso.op (shiftFunctorZero C A)).symm
-  add a b := (NatIso.op (shiftFunctorAdd C a b)).symm
-  assoc_hom_app m₁ m₂ m₃ X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_assoc_inv_app m₁ m₂ m₃ X.unop).trans
-      (by simp [shiftFunctorAdd']))
-  zero_add_hom_app n X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_zero_add_inv_app n X.unop).trans (by simp))
-  add_zero_hom_app n X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_add_zero_inv_app n X.unop).trans (by simp))
-
-中文:
-定义 mkShiftCoreOp
-  签名: : ShiftMkCore Cᵒᵖ A where
-  定义体: (shiftFunctor C n).op
-  zero := (NatIso.op (shiftFunctorZero C A)).symm
-  add a b := (NatIso.op (shiftFunctorAdd C a b)).symm
-  assoc_hom_app m₁ m₂ m₃ X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_assoc_inv_app m₁ m₂ m₃ X.unop).trans
-      (by simp [shiftFunctorAdd']))
-  zero_add_hom_app n X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_zero_add_inv_app n X.unop).trans (by simp))
-  add_zero_hom_app n X :=
-    Quiver.Hom.unop_inj ((shiftFunctorAdd_add_zero_inv_app n X.unop).trans (by simp))
-
-Depends on / 依赖: shiftFunctor
+--- 原说明 ---
+Construction of the naive shift on the opposite category of a category `C`:
+the shiftfunctor by `n` is `(shiftFunctor C n).op`.
 -/
 def mkShiftCoreOp : ShiftMkCore Cᵒᵖ A where
   F n := (shiftFunctor C n).op
@@ -111,224 +91,187 @@ end HasShift
 /-- The category `OppositeShift C A` is the opposite category `Cᵒᵖ` equipped
 with the naive shift: `shiftFunctor (OppositeShift C A) n` is `(shiftFunctor C n).op`. -/
 @[nolint unusedArguments]
-/--
-Definition of `OppositeShift` / `OppositeShift` 的定义
+/-
+**CategoryTheory.OppositeShift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：OppositeShift (A : Type*) [AddMonoid A] [HasShift C A]
+参数：A : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift
-  signature: (A : Type*) [AddMonoid A] [HasShift C A]
-  body: Cᵒᵖ
-
-中文:
-定义 OppositeShift
-  签名: (A : 类型) [加法幺半群 A] [有Shift C A]
-  定义体: Cᵒᵖ
+--- 原说明 ---
+The category `OppositeShift C A` is the opposite category `Cᵒᵖ` equipped
+with the naive shift: `shiftFunctor (OppositeShift C A) n` is `(shiftFunctor C n
+).op`.
 -/
 def OppositeShift (A : Type*) [AddMonoid A] [HasShift C A] := Cᵒᵖ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (OppositeShift C A)
-  body: inferInstanceAs (Category Cᵒᵖ)
-
-中文:
-实例 :
-  签名: 范畴 (OppositeShift C A)
-  定义体: inferInstanceAs (Category Cᵒᵖ)
-
-Depends on / 依赖: Category
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (OppositeShift C A) := inferInstanceAs (Category Cᵒᵖ)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasShift (OppositeShift C A) A
-  body: hasShiftMk Cᵒᵖ A (HasShift.mkShiftCoreOp C A)
-
-中文:
-实例 :
-  签名: 有Shift (OppositeShift C A) A
-  定义体: hasShiftMk Cᵒᵖ A (HasShift.mkShiftCoreOp C A)
-
-Depends on / 依赖: HasShift, HasShift.mkShiftCoreOp, hasShiftMk, mkShiftCoreOp
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasShift (OppositeShift C A) A :=
   hasShiftMk Cᵒᵖ A (HasShift.mkShiftCoreOp C A)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: C] : HasZeroObject (OppositeShift C A)
-  body: by
-  dsimp only [OppositeShift]
-  infer_instance
-
-中文:
-实例 [有ZeroObject
-  签名: C] : 有ZeroObject (OppositeShift C A)
-  定义体: by
-  dsimp only [OppositeShift]
-  infer_instance
-
-Depends on / 依赖: OppositeShift, infer_instance
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasZeroObject C] : HasZeroObject (OppositeShift C A) := by
   dsimp only [OppositeShift]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preadditive
-  signature: C] : Preadditive (OppositeShift C A)
-  body: inferInstanceAs (Preadditive Cᵒᵖ)
-
-中文:
-实例 [预加性
-  签名: C] : 预加性 (OppositeShift C A)
-  定义体: inferInstanceAs (Preadditive Cᵒᵖ)
-
-Depends on / 依赖: Preadditive
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preadditive C] : Preadditive (OppositeShift C A) :=
   inferInstanceAs (Preadditive Cᵒᵖ)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preadditive
-  signature: C] (n
-  body: by
-  change (shiftFunctor C n).op.Additive
-  infer_instance
-
-中文:
-实例 [预加性
-  签名: C] (n
-  定义体: by
-  change (shiftFunctor C n).op.Additive
-  infer_instance
-
-Depends on / 依赖: Additive, infer_instance, op.Additive, shiftFunctor
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preadditive C] (n : A) [(shiftFunctor C n).Additive] :
     (shiftFunctor (OppositeShift C A) n).Additive := by
   change (shiftFunctor C n).op.Additive
   infer_instance
-
-/--
-lemma `oppositeShiftFunctorZero_inv_app` / 引理 `oppositeShiftFunctorZero_inv_app`
-
-English:
-lemma oppositeShiftFunctorZero_inv_app
-  given: (X : OppositeShift C A)
-  proof: rfl
-
-中文:
-引理 oppositeShiftFunctorZero_inv_app
-  条件: (X : OppositeShift C A)
-  证明: rfl
+/-
+**CategoryTheory.oppositeShiftFunctorZero_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：oppositeShiftFunctorZero_inv_app (X : OppositeShift C A) : (shiftFunctorZe
+ro (OppositeShift C A) A).inv.app X = ((shiftFunctorZero C A).hom.app X.unop).op
+参数：X : OppositeShift C A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma oppositeShiftFunctorZero_inv_app (X : OppositeShift C A) :
     (shiftFunctorZero (OppositeShift C A) A).inv.app X =
       ((shiftFunctorZero C A).hom.app X.unop).op := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `oppositeShiftFunctorZero_hom_app` / 引理 `oppositeShiftFunctorZero_hom_app`
-
-English:
-lemma oppositeShiftFunctorZero_hom_app
-  given: (X : OppositeShift C A)
-  proof: by
-  rw [← cancel_mono ((shiftFunctorZero (OppositeShift C A) A).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorZero_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
-  rfl
-
-中文:
-引理 oppositeShiftFunctorZero_hom_app
-  条件: (X : OppositeShift C A)
-  证明: by
-  rw [← cancel_mono ((shiftFunctorZero (OppositeShift C A) A).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorZero_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
-  rfl
-
-Depends on / 依赖: Iso.hom_inv_id_app, OppositeShift, cancel_mono, hom_inv_id_app, inv.app, op_comp, op_id, oppositeShiftFunctorZero_inv_app, shiftFunctorZero
+/-
+**CategoryTheory.oppositeShiftFunctorZero_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：oppositeShiftFunctorZero_hom_app (X : OppositeShift C A) : (shiftFunctorZe
+ro (OppositeShift C A) A).hom.app X = ((shiftFunctorZero C A).inv.app X.unop).op
+参数：X : OppositeShift C A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.oppositeShiftFunctorZero_inv_app`：oppositeShiftFunctorZer
+o_inv_app (X : OppositeShift C A) : (shiftFunctorZero (OppositeShift C A) A).inv
+.app X = ((shiftFunctorZero C A).hom.…
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.op_id`：op_id {X : C} : (𝟙 X).op = 𝟙 (op X)
 -/
 lemma oppositeShiftFunctorZero_hom_app (X : OppositeShift C A) :
     (shiftFunctorZero (OppositeShift C A) A).hom.app X =
       ((shiftFunctorZero C A).inv.app X.unop).op := by
-  rw [← cancel_mono ((shiftFunctorZero (OppositeShift C A) A).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorZero_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
+  rw [← cancel_mono ((shiftFunctorZero (OppositeShift C A) A).inv.app X),
+    Iso.hom_inv_id_app, oppositeShiftFunctorZero_inv_app, ← op_comp,
+    Iso.hom_inv_id_app, op_id]
   rfl
 
 variable {C A}
 variable (X : OppositeShift C A) (a b c : A) (h : a + b = c)
-
-/--
-lemma `oppositeShiftFunctorAdd_inv_app` / 引理 `oppositeShiftFunctorAdd_inv_app`
-
-English:
-lemma oppositeShiftFunctorAdd_inv_app
-  proof: rfl
-
-中文:
-引理 oppositeShiftFunctorAdd_inv_app
-  证明: rfl
+/-
+**CategoryTheory.oppositeShiftFunctorAdd_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：oppositeShiftFunctorAdd_inv_app : (shiftFunctorAdd (OppositeShift C A) a b
+).inv.app X = ((shiftFunctorAdd C a b).hom.app X.unop).op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma oppositeShiftFunctorAdd_inv_app :
     (shiftFunctorAdd (OppositeShift C A) a b).inv.app X =
       ((shiftFunctorAdd C a b).hom.app X.unop).op := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `oppositeShiftFunctorAdd_hom_app` / 引理 `oppositeShiftFunctorAdd_hom_app`
-
-English:
-lemma oppositeShiftFunctorAdd_hom_app
-  proof: by
-  rw [← cancel_mono ((shiftFunctorAdd (OppositeShift C A) a b).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorAdd_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
-  rfl
-
-中文:
-引理 oppositeShiftFunctorAdd_hom_app
-  证明: by
-  rw [← cancel_mono ((shiftFunctorAdd (OppositeShift C A) a b).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorAdd_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
-  rfl
-
-Depends on / 依赖: Iso.hom_inv_id_app, OppositeShift, cancel_mono, hom_inv_id_app, inv.app, op_comp, op_id, oppositeShiftFunctorAdd_inv_app, shiftFunctorAdd
+/-
+**CategoryTheory.oppositeShiftFunctorAdd_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：oppositeShiftFunctorAdd_hom_app : (shiftFunctorAdd (OppositeShift C A) a b
+).hom.app X = ((shiftFunctorAdd C a b).inv.app X.unop).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.oppositeShiftFunctorAdd_inv_app`：oppositeShiftFunctorAdd_
+inv_app : (shiftFunctorAdd (OppositeShift C A) a b).inv.app X = ((shiftFunctorAd
+d C a b).hom.app X.unop).op
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.op_id`：op_id {X : C} : (𝟙 X).op = 𝟙 (op X)
 -/
 lemma oppositeShiftFunctorAdd_hom_app :
     (shiftFunctorAdd (OppositeShift C A) a b).hom.app X =
       ((shiftFunctorAdd C a b).inv.app X.unop).op := by
-  rw [← cancel_mono ((shiftFunctorAdd (OppositeShift C A) a b).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [oppositeShiftFunctorAdd_inv_app]; rw [← op_comp]; rw [Iso.hom_inv_id_app]; rw [op_id]
+  rw [← cancel_mono ((shiftFunctorAdd (OppositeShift C A) a b).inv.app X),
+    Iso.hom_inv_id_app, oppositeShiftFunctorAdd_inv_app, ← op_comp,
+    Iso.hom_inv_id_app, op_id]
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `oppositeShiftFunctorAdd'_inv_app` / 引理 `oppositeShiftFunctorAdd'_inv_app`
-
-English:
-lemma oppositeShiftFunctorAdd'_inv_app
-  proof: by
-  subst h
-  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, oppositeShiftFunctorAdd_inv_app]
-
-中文:
-引理 oppositeShiftFunctorAdd'_inv_app
-  证明: by
-  subst h
-  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, oppositeShiftFunctorAdd_inv_app]
-
-Depends on / 依赖: _eq_shiftFunctorAdd, oppositeShiftFunctorAdd_inv_app, shiftFunctorAdd
+/-
+**CategoryTheory.oppositeShiftFunctorAdd'_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {A : Type u
+_2} [inst_1 : AddMonoid A]   [inst_2 : CategoryTheory.HasShift C A] (X : Categor
+yTheory.OppositeShift C A) (a b c : A) (h : a + b = c),   (CategoryTheory.shiftF
+unctorAdd' (CategoryTheory.OppositeShift C A) a b c h).inv.app X =     ((Categor
+yTheory.shiftFunctorAdd' C a b c h).hom.app (Opposite.unop X)).op
+参数：X : CategoryTheory.OppositeShift C A；a b c : A；h : a + b = c；CategoryTheory.s
+hiftFunctorAdd' (CategoryTheory.OppositeShift C A) a b c h；(CategoryTheory.shift
+FunctorAdd' C a b c h).hom.app (Opposite.unop X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.shiftFunctorAdd'_eq_shiftFunctorAdd`：∀ (C : Type u) {A : 
+Type u_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddMonoid A]   [in
+st_2 : CategoryTheory.HasShift C A] (i j…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma oppositeShiftFunctorAdd'_inv_app :
     (shiftFunctorAdd' (OppositeShift C A) a b c h).inv.app X =
@@ -337,20 +280,33 @@ lemma oppositeShiftFunctorAdd'_inv_app :
   simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, oppositeShiftFunctorAdd_inv_app]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `oppositeShiftFunctorAdd'_hom_app` / 引理 `oppositeShiftFunctorAdd'_hom_app`
-
-English:
-lemma oppositeShiftFunctorAdd'_hom_app
-  proof: by
-  subst h
-  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, oppositeShiftFunctorAdd_hom_app]
-
-中文:
-引理 oppositeShiftFunctorAdd'_hom_app
-  证明: by
-  subst h
-  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, oppositeShiftFunctorAdd_hom_app]
+/-
+**CategoryTheory.oppositeShiftFunctorAdd'_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {A : Type u
+_2} [inst_1 : AddMonoid A]   [inst_2 : CategoryTheory.HasShift C A] (X : Categor
+yTheory.OppositeShift C A) (a b c : A) (h : a + b = c),   (CategoryTheory.shiftF
+unctorAdd' (CategoryTheory.OppositeShift C A) a b c h).hom.app X =     ((Categor
+yTheory.shiftFunctorAdd' C a b c h).inv.app (Opposite.unop X)).op
+参数：X : CategoryTheory.OppositeShift C A；a b c : A；h : a + b = c；CategoryTheory.s
+hiftFunctorAdd' (CategoryTheory.OppositeShift C A) a b c h；(CategoryTheory.shift
+FunctorAdd' C a b c h).inv.app (Opposite.unop X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.shiftFunctorAdd'_eq_shiftFunctorAdd`：∀ (C : Type u) {A : 
+Type u_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddMonoid A]   [in
+st_2 : CategoryTheory.HasShift C A] (i j…
+· 使用引理 `CategoryTheory.oppositeShiftFunctorAdd_hom_app`：oppositeShiftFunctorAdd_
+hom_app : (shiftFunctorAdd (OppositeShift C A) a b).hom.app X = ((shiftFunctorAd
+d C a b).inv.app X.unop).op
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma oppositeShiftFunctorAdd'_hom_app :
     (shiftFunctorAdd' (OppositeShift C A) a b c h).hom.app X =
@@ -364,37 +320,58 @@ variable {C D : Type*} [Category* C] [Category* D] (A : Type*) [AddMonoid A]
   [HasShift C A] [HasShift D A] (F : C ⥤ D)
 
 /--
-Definition of `OppositeShift.functor` / `OppositeShift.functor` 的定义
+The functor `F.op`, seen as a functor from `OppositeShift C A` to `OppositeShift D A`.
+(We will use this to carry a `CommShift` instance for the naive shifts on the opposite category.
+Then, in the pretriangulated case, we will be able to put a `CommShift` instance on `F.op`
+for the modified shifts and not deal with instance clashes.)
+-/
+/-
+**CategoryTheory.OppositeShift.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.OppositeShift`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (A
+ : Type u_3) →           [inst_2 : AddMonoid A] →             [inst_3 : Category
+Theory.HasShift C A] →               [inst_4 : CategoryTheory.HasShift D A] →   
+              CategoryTheory.Functor C D →                   CategoryTheory.Func
+tor (CategoryTheory.OppositeShift C A) (CategoryTheory.OppositeShift D A)
+参数：A : Type u_3；CategoryTheory.OppositeShift C A；CategoryTheory.OppositeShift D 
+A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift.functor
-  signature: : OppositeShift C A ⥤ OppositeShift D A
-  body: F.op
-
-中文:
-定义 OppositeShift.functor
-  签名: : OppositeShift C A ⥤ OppositeShift D A
-  定义体: F.op
-
-Depends on / 依赖: F.op
+--- 原说明 ---
+The functor `F.op`, seen as a functor from `OppositeShift C A` to `OppositeShift
+ D A`.
+(We will use this to carry a `CommShift` instance for the naive shifts on the op
+posite category.
+Then, in the pretriangulated case, we will be able to put a `CommShift` instance
+ on `F.op`
+for the modified shifts and not deal with instance clashes.)
 -/
 def OppositeShift.functor : OppositeShift C A ⥤ OppositeShift D A := F.op
 
 variable {F} in
 /--
-Definition of `OppositeShift.natTrans` / `OppositeShift.natTrans` 的定义
+The natural transformation `τ`, seen as a natural transformation from `OppositeShift.functor F A`
+to `OppositeShift.functor G A`..
+-/
+/-
+**CategoryTheory.OppositeShift.natTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OppositeShift`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (A
+ : Type u_3) →           [inst_2 : AddMonoid A] →             [inst_3 : Category
+Theory.HasShift C A] →               [inst_4 : CategoryTheory.HasShift D A] →   
+              {F G : CategoryTheory.Functor C D} →                   (F ⟶ G) → (
+CategoryTheory.OppositeShift.functor A G ⟶ CategoryTheory.OppositeShift.functor 
+A F)
+参数：A : Type u_3；F ⟶ G；CategoryTheory.OppositeShift.functor A G ⟶ CategoryTheory.
+OppositeShift.functor A F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift.natTrans
-  signature: {G : C ⥤ D} (τ : F ⟶ G)
-  body: NatTrans.op τ
-
-中文:
-定义 OppositeShift.natTrans
-  签名: {G : C ⥤ D} (τ : F ⟶ G)
-  定义体: NatTrans.op τ
-
-Depends on / 依赖: NatTrans, NatTrans.op
+--- 原说明 ---
+The natural transformation `τ`, seen as a natural transformation from `OppositeS
+hift.functor F A`
+to `OppositeShift.functor G A`..
 -/
 def OppositeShift.natTrans {G : C ⥤ D} (τ : F ⟶ G) :
     OppositeShift.functor A G ⟶ OppositeShift.functor A F :=
@@ -405,47 +382,21 @@ namespace Functor
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /--
-Instance `commShiftOp` / 实例 `commShiftOp`
+Given a `CommShift` structure on `F`, this is the corresponding `CommShift` structure on
+`OppositeShift.functor F` (for the naive shifts on the opposite categories).
+-/
+/-
+**CategoryTheory.Functor.commShiftOp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：commShiftOp [CommShift F A] : CommShift (OppositeShift.functor A F) A wher
+e commShiftIso a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance commShiftOp
-  signature: [CommShift F A]
-  body: (NatIso.op (F.commShiftIso a)).symm
-  commShiftIso_zero := by
-    rw [commShiftIso_zero]
-    ext
-    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
-      CommShift.isoZero_inv_app, op_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_inv_app, oppositeShiftFunctorZero_hom_app]
-    rfl
-  commShiftIso_add a b := by
-    rw [commShiftIso_add]
-    ext
-    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
-      CommShift.isoAdd_inv_app, op_comp, Category.assoc, CommShift.isoAdd_hom_app]
-    erw [oppositeShiftFunctorAdd_inv_app, oppositeShiftFunctorAdd_hom_app]
-    rfl
-
-中文:
-实例 commShiftOp
-  签名: [交换Shift F A]
-  定义体: (NatIso.op (F.commShiftIso a)).symm
-  commShiftIso_zero := by
-    rw [commShiftIso_zero]
-    ext
-    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
-      CommShift.isoZero_inv_app, op_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_inv_app, oppositeShiftFunctorZero_hom_app]
-    rfl
-  commShiftIso_add a b := by
-    rw [commShiftIso_add]
-    ext
-    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
-      CommShift.isoAdd_inv_app, op_comp, Category.assoc, CommShift.isoAdd_hom_app]
-    erw [oppositeShiftFunctorAdd_inv_app, oppositeShiftFunctorAdd_hom_app]
-    rfl
-
-Depends on / 依赖: F.commShiftIso, NatIso, NatIso.op, commShiftIso
+--- 原说明 ---
+Given a `CommShift` structure on `F`, this is the corresponding `CommShift` stru
+cture on
+`OppositeShift.functor F` (for the naive shifts on the opposite categories).
 -/
 instance commShiftOp [CommShift F A] :
     CommShift (OppositeShift.functor A F) A where
@@ -466,18 +417,14 @@ instance commShiftOp [CommShift F A] :
     rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `commShiftOp_iso_eq` / 引理 `commShiftOp_iso_eq`
-
-English:
-lemma commShiftOp_iso_eq
-  given: [CommShift F A] (a : A)
-  proof: rfl
-
-中文:
-引理 commShiftOp_iso_eq
-  条件: [交换Shift F A] (a : A)
-  证明: rfl
+/-
+**CategoryTheory.Functor.commShiftOp_iso_eq** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：commShiftOp_iso_eq [CommShift F A] (a : A) : (OppositeShift.functor A F).c
+ommShiftIso a = (NatIso.op (F.commShiftIso a)).symm
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commShiftOp_iso_eq [CommShift F A] (a : A) :
     (OppositeShift.functor A F).commShiftIso a = (NatIso.op (F.commShiftIso a)).symm := rfl
@@ -488,48 +435,19 @@ Given a `CommShift` structure on `OppositeShift.functor F` (for the naive shifts
 categories), this is the corresponding `CommShift` structure on `F`.
 -/
 @[simps -isSimp, instance_reducible]
-/--
-Definition of `commShiftUnop` / `commShiftUnop` 的定义
+/-
+**CategoryTheory.Functor.commShiftUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：commShiftUnop [CommShift (OppositeShift.functor A F) A] : CommShift F A wh
+ere commShiftIso a
+参数：OppositeShift.functor A F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commShiftUnop
-  body: NatIso.removeOp ((OppositeShift.functor A F).commShiftIso a).symm
-  commShiftIso_zero := by
-    rw [commShiftIso_zero]
-    ext
-    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
-      CommShift.isoZero_inv_app, unop_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_hom_app, oppositeShiftFunctorZero_inv_app]
-    rfl
-  commShiftIso_add a b := by
-    rw [commShiftIso_add]
-    ext
-    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
-      CommShift.isoAdd_inv_app, unop_comp, Category.assoc,
-      CommShift.isoAdd_hom_app]
-    erw [oppositeShiftFunctorAdd_hom_app, oppositeShiftFunctorAdd_inv_app]
-    rfl
-
-中文:
-定义 commShiftUnop
-  定义体: NatIso.removeOp ((OppositeShift.functor A F).commShiftIso a).symm
-  commShiftIso_zero := by
-    rw [commShiftIso_zero]
-    ext
-    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
-      CommShift.isoZero_inv_app, unop_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_hom_app, oppositeShiftFunctorZero_inv_app]
-    rfl
-  commShiftIso_add a b := by
-    rw [commShiftIso_add]
-    ext
-    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
-      CommShift.isoAdd_inv_app, unop_comp, Category.assoc,
-      CommShift.isoAdd_hom_app]
-    erw [oppositeShiftFunctorAdd_hom_app, oppositeShiftFunctorAdd_inv_app]
-    rfl
-
-Depends on / 依赖: NatIso, NatIso.removeOp, OppositeShift, OppositeShift.functor, commShiftIso, functor, removeOp
+--- 原说明 ---
+Given a `CommShift` structure on `OppositeShift.functor F` (for the naive shifts
+ on the opposite
+categories), this is the corresponding `CommShift` structure on `F`.
 -/
 def commShiftUnop
     [CommShift (OppositeShift.functor A F) A] : CommShift F A where
@@ -557,36 +475,68 @@ namespace NatTrans
 variable {F} {G : C ⥤ D} [F.CommShift A] [G.CommShift A]
 
 open Opposite in
-/--
-Instance `commShift_op` / 实例 `commShift_op`
-
-English:
-instance commShift_op
-  signature: (τ : F ⟶ G) [NatTrans.CommShift τ A]
-  body: by
-    ext
-    rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
-    simp only [Functor.comp_obj, comp_app, Functor.whiskerRight_app, assoc,
-      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, Iso.hom_inv_id_app, comp_id]
-    exact (op_inj_iff _ _).mpr (NatTrans.shift_app_comm τ _ (unop _))
-
-中文:
-实例 commShift_op
-  签名: (τ : F ⟶ G) [自然变换.交换Shift τ A]
-  定义体: by
-    ext
-    rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
-    simp only [Functor.comp_obj, comp_app, Functor.whiskerRight_app, assoc,
-      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, Iso.hom_inv_id_app, comp_id]
-    exact (op_inj_iff _ _).mpr (NatTrans.shift_app_comm τ _ (unop _))
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.whiskerLeft_app, Functor.whiskerRight_app, IndepMatroid, IndepMatroid.matroid, IndepMatroid.ofFoo, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, MyIndep, NatTrans, NatTrans.shift_app_comm, OppositeShift, OppositeShift.functor, cancel_epi, cancel_mono, commShiftIso, comp_app, comp_id, comp_obj
+/-
+**CategoryTheory.NatTrans.commShift_op** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.NatTrans`。
+形式化陈述：commShift_op (τ : F ⟶ G) [NatTrans.CommShift τ A] : NatTrans.CommShift (Op
+positeShift.natTrans A τ) A where shift_comm _
+参数：τ : F ⟶ G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Opposite.op_inj_iff`：op_inj_iff (x y : α) : op x = op y ↔ x = y
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
 -/
 instance commShift_op (τ : F ⟶ G) [NatTrans.CommShift τ A] :
     NatTrans.CommShift (OppositeShift.natTrans A τ) A where
   shift_comm _ := by
     ext
-    rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
+    rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _),
+      ← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
     simp only [Functor.comp_obj, comp_app, Functor.whiskerRight_app, assoc,
       Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, Iso.hom_inv_id_app, comp_id]
     exact (op_inj_iff _ _).mpr (NatTrans.shift_app_comm τ _ (unop _))
@@ -596,49 +546,37 @@ end NatTrans
 namespace NatTrans
 
 variable (C) in
-/--
-Definition of `OppositeShift.natIsoId` / `OppositeShift.natIsoId` 的定义
+/-- The obvious isomorphism between the identity of `OppositeShift C A` and
+`OppositeShift.functor (𝟙 C)`.
+-/
+/-
+**CategoryTheory.NatTrans.OppositeShift.natIsoId** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.NatTrans.OppositeShift`。
+形式化陈述：(C : Type u_1) →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     (A 
+: Type u_3) →       [inst_1 : AddMonoid A] →         [inst_2 : CategoryTheory.Ha
+sShift C A] →           CategoryTheory.Functor.id (CategoryTheory.OppositeShift 
+C A) ≅             CategoryTheory.OppositeShift.functor A (CategoryTheory.Functo
+r.id C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift.natIsoId
-  signature: : 𝟭 (OppositeShift C A) ≅ OppositeShift.functor A (𝟭 C)
-  body: Iso.refl _
-
-中文:
-定义 OppositeShift.natIsoId
-  签名: : 𝟭 (OppositeShift C A) ≅ OppositeShift.functor A (𝟭 C)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl, matroid, myIndepMatroid
+--- 原说明 ---
+The obvious isomorphism between the identity of `OppositeShift C A` and
+`OppositeShift.functor (𝟙 C)`.
 -/
 def OppositeShift.natIsoId : 𝟭 (OppositeShift C A) ≅ OppositeShift.functor A (𝟭 C) := Iso.refl _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The natural isomorphism `NatTrans.OppositeShift.natIsoId C A` commutes with shifts.
+-/
+/-
+**CategoryTheory.NatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.NatTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: NatTrans.CommShift (OppositeShift.natIsoId C A).hom A
-  body: by
-    ext
-    dsimp [OppositeShift.natIsoId, Functor.commShiftOp_iso_eq]
-    simp only [Functor.commShiftIso_id_hom_app, Functor.map_id,
-      comp_id, Functor.commShiftIso_id_inv_app, CategoryTheory.op_id, id_comp]
-    rfl
-
-中文:
-实例 :
-  签名: 自然变换.交换Shift (OppositeShift.natIsoId C A).hom A
-  定义体: by
-    ext
-    dsimp [OppositeShift.natIsoId, Functor.commShiftOp_iso_eq]
-    simp only [Functor.commShiftIso_id_hom_app, Functor.map_id,
-      comp_id, Functor.commShiftIso_id_inv_app, CategoryTheory.op_id, id_comp]
-    rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.op_id, Functor, Functor.commShiftIso_id_hom_app, Functor.commShiftIso_id_inv_app, Functor.commShiftOp_iso_eq, Functor.map_id, OppositeShift, OppositeShift.natIsoId, commShiftIso_id_hom_app, commShiftIso_id_inv_app, commShiftOp_iso_eq, comp_id, id_comp, map_id, natIsoId, op_id
+--- 原说明 ---
+The natural isomorphism `NatTrans.OppositeShift.natIsoId C A` commutes with shif
+ts.
 -/
 instance : NatTrans.CommShift (OppositeShift.natIsoId C A).hom A where
   shift_comm _ := by
@@ -650,48 +588,39 @@ instance : NatTrans.CommShift (OppositeShift.natIsoId C A).hom A where
 
 variable {E : Type*} [Category* E] [HasShift E A] (G : D ⥤ E)
 
-/--
-Definition of `OppositeShift.natIsoComp` / `OppositeShift.natIsoComp` 的定义
+/-- The obvious isomorphism between `OppositeShift.functor (F ⋙ G)` and the
+composition of `OppositeShift.functor F` and `OppositeShift.functor G`.
+-/
+/-
+**CategoryTheory.NatTrans.OppositeShift.natIsoComp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.NatTrans.OppositeShift`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (A
+ : Type u_3) →           [inst_2 : AddMonoid A] →             [inst_3 : Category
+Theory.HasShift C A] →               [inst_4 : CategoryTheory.HasShift D A] →   
+              (F : CategoryTheory.Functor C D) →                   {E : Type u_4
+} →                     [inst_5 : CategoryTheory.Category.{v_3, u_4} E] →       
+                [inst_6 : CategoryTheory.HasShift E A] →                        
+ (G : CategoryTheory.Functor D E) →                           CategoryTheory.Opp
+ositeShift.functor A (F.comp G) ≅                             (CategoryTheory.Op
+positeShift.functor A F).comp (CategoryTheory.OppositeShift.functor A G)
+参数：A : Type u_3；F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.
+comp G；CategoryTheory.OppositeShift.functor A F；CategoryTheory.OppositeShift.fun
+ctor A G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift.natIsoComp
-  signature: : OppositeShift.functor A (F ⋙ G) ≅
-  body: Iso.refl _
-
-中文:
-定义 OppositeShift.natIsoComp
-  签名: : OppositeShift.functor A (F ⋙ G) ≅
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The obvious isomorphism between `OppositeShift.functor (F ⋙ G)` and the
+composition of `OppositeShift.functor F` and `OppositeShift.functor G`.
 -/
 def OppositeShift.natIsoComp : OppositeShift.functor A (F ⋙ G) ≅
     OppositeShift.functor A F ⋙ OppositeShift.functor A G := Iso.refl _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.CommShift
-  signature: A] [G.CommShift A] :
-  body: by
-    ext
-    dsimp [OppositeShift.natIsoComp, Functor.commShiftOp_iso_eq]
-    simp only [Functor.map_id, comp_id, id_comp]
-    rfl
-
-中文:
-实例 [F.交换Shift
-  签名: A] [G.交换Shift A] :
-  定义体: by
-    ext
-    dsimp [OppositeShift.natIsoComp, Functor.commShiftOp_iso_eq]
-    simp only [Functor.map_id, comp_id, id_comp]
-    rfl
-
-Depends on / 依赖: Functor, Functor.commShiftOp_iso_eq, Functor.map_id, OppositeShift, OppositeShift.natIsoComp, commShiftOp_iso_eq, comp_id, id_comp, map_id, natIsoComp
+/-
+**CategoryTheory.NatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.NatTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.CommShift A] [G.CommShift A] :
     NatTrans.CommShift (OppositeShift.natIsoComp A F G).hom A where
@@ -710,50 +639,23 @@ The adjunction `adj`, seen as an adjunction between `OppositeShift.functor G`
 and `OppositeShift.functor F`.
 -/
 @[simps -isSimp]
-/--
-Definition of `OppositeShift.adjunction` / `OppositeShift.adjunction` 的定义
+/-
+**CategoryTheory.OppositeShift.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.OppositeShift`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (A
+ : Type u_3) →           [inst_2 : AddMonoid A] →             [inst_3 : Category
+Theory.HasShift C A] →               [inst_4 : CategoryTheory.HasShift D A] →   
+              {F : CategoryTheory.Functor C D} →                   {G : Category
+Theory.Functor D C} →                     (F ⊣ G) → (CategoryTheory.OppositeShif
+t.functor A G ⊣ CategoryTheory.OppositeShift.functor A F)
+参数：A : Type u_3；F ⊣ G；CategoryTheory.OppositeShift.functor A G ⊣ CategoryTheory.
+OppositeShift.functor A F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OppositeShift.adjunction
-  signature: {F} {G : D ⥤ C} (adj : F ⊣ G)
-  body: (NatTrans.OppositeShift.natIsoId D A).hom ≫
-    OppositeShift.natTrans A adj.counit ≫ (NatTrans.OppositeShift.natIsoComp A G F).hom
-  counit := (NatTrans.OppositeShift.natIsoComp A F G).inv ≫
-    OppositeShift.natTrans A adj.unit ≫ (NatTrans.OppositeShift.natIsoId C A).inv
-  left_triangle_components _ := by
-    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
-      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
-    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.right_triangle_components]
-    rfl
-  right_triangle_components _ := by
-    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
-      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
-    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.left_triangle_components]
-    rfl
-
-中文:
-定义 OppositeShift.adjunction
-  签名: {F} {G : D ⥤ C} (adj : F ⊣ G)
-  定义体: (NatTrans.OppositeShift.natIsoId D A).hom ≫
-    OppositeShift.natTrans A adj.counit ≫ (NatTrans.OppositeShift.natIsoComp A G F).hom
-  counit := (NatTrans.OppositeShift.natIsoComp A F G).inv ≫
-    OppositeShift.natTrans A adj.unit ≫ (NatTrans.OppositeShift.natIsoId C A).inv
-  left_triangle_components _ := by
-    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
-      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
-    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.right_triangle_components]
-    rfl
-  right_triangle_components _ := by
-    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
-      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
-    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.left_triangle_components]
-    rfl
-
-Depends on / 依赖: NatTrans, NatTrans.OppositeShift.natIsoId, OppositeShift, natIsoId
+--- 原说明 ---
+The adjunction `adj`, seen as an adjunction between `OppositeShift.functor G`
+and `OppositeShift.functor F`.
 -/
 def OppositeShift.adjunction {F} {G : D ⥤ C} (adj : F ⊣ G) :
     OppositeShift.functor A G ⊣ OppositeShift.functor A F where
@@ -765,13 +667,13 @@ def OppositeShift.adjunction {F} {G : D ⥤ C} (adj : F ⊣ G) :
     dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
       NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
     simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.right_triangle_components]
+    rw [← op_comp, adj.right_triangle_components]
     rfl
   right_triangle_components _ := by
     dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
       NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
     simp only [comp_id, id_comp, Quiver.Hom.unop_op]
-    rw [← op_comp]; rw [adj.left_triangle_components]
+    rw [← op_comp, adj.left_triangle_components]
     rfl
 
 namespace Adjunction
@@ -779,21 +681,39 @@ namespace Adjunction
 variable {F} {G : D ⥤ C} (adj : F ⊣ G)
 
 /--
-Instance `commShift_op` / 实例 `commShift_op`
+If an adjunction `F ⊣ G` is compatible with `CommShift` structures on `F` and `G`, then
+the opposite adjunction `OppositeShift.adjunction adj` is compatible with the opposite
+`CommShift` structures.
+-/
+/-
+**CategoryTheory.Adjunction.commShift_op** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Adjunction`。
+形式化陈述：commShift_op [F.CommShift A] [G.CommShift A] [adj.CommShift A] : Adjunctio
+n.CommShift (OppositeShift.adjunction A adj) A where commShift_unit
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.CommShift.comp`：∀ {C : Type u_1} {D : Type u_2} 
+[inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Categor
+y.{v_2, u_2} D] {F₁ F₂ F₃ : …
+· 使用定理 `CategoryTheory.NatTrans.instCommShiftOppositeShiftHomFunctorNatIsoId`：∀ 
+{C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (A : Type u_3) [ins
+t_1 : AddMonoid A]   [inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_counit`：∀ {C : Type u_1} {
+D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} {F : Categor…
+· 使用定理 `CategoryTheory.NatTrans.instCommShiftOppositeShiftHomFunctorNatIsoComp`：
+∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   
+[inst_1 : CategoryTheory.Category.{v_2, u_2} D] (A : Type u_…
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_unit`：∀ {C : Type u_1} {D 
+: Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D} {F : Categor…
 
-English:
-instance commShift_op
-  signature: [F.CommShift A] [G.CommShift A] [adj.CommShift A]
-  body: by dsimp [OppositeShift.adjunction]; infer_instance
-  commShift_counit := by dsimp [OppositeShift.adjunction]; infer_instance
-
-中文:
-实例 commShift_op
-  签名: [F.交换Shift A] [G.交换Shift A] [adj.交换Shift A]
-  定义体: by dsimp [OppositeShift.adjunction]; infer_instance
-  commShift_counit := by dsimp [OppositeShift.adjunction]; infer_instance
-
-Depends on / 依赖: IndepMatroid, IndepMatroid.ofBdd, OppositeShift, OppositeShift.adjunction, adjunction, commShift_counit, exists_isBase, finite_of_encard_le_coe, hB.indep, hB.rankFinite_of_finite, h_bdd, infer_instance, matroid, matroid.exists_isBase, rankFinite_of_finite
+--- 原说明 ---
+If an adjunction `F ⊣ G` is compatible with `CommShift` structures on `F` and `G
+`, then
+the opposite adjunction `OppositeShift.adjunction adj` is compatible with the op
+posite
+`CommShift` structures.
 -/
 instance commShift_op [F.CommShift A] [G.CommShift A] [adj.CommShift A] :
     Adjunction.CommShift (OppositeShift.adjunction A adj) A where
@@ -803,3 +723,4 @@ instance commShift_op [F.CommShift A] [G.CommShift A] [adj.CommShift A] :
 end Adjunction
 
 end CategoryTheory
+

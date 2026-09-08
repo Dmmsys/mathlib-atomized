@@ -13,7 +13,7 @@ public meta import Lean.Util.Path
 
 TODO:
 `getLeanLibs` contains a hard-coded choice of which dependencies should be built and which ones
-should not. Could this be made more structural and robust, possibly with extra `Lake` support?
+should not.  Could this be made more structural and robust, possibly with extra `Lake` support?
 
 -/
 
@@ -21,52 +21,42 @@ public meta section
 
 open Lean System.FilePath
 
-/--
-Definition of `getAllFiles` / `getAllFiles` 的定义
+/-- `getAllFiles git ml` takes all `.lean` files in the directory `ml`
+(recursing into sub-directories) and returns the `Array` of `String`s
+```
+#[file₁, ..., fileₙ]
+```
+of all their file names. These are not sorted in general.
 
-English:
-definition getAllFiles
-  signature: (git : Bool) (ml : String)
-  body: do
-  let ml.lean := addExtension ⟨ml⟩ "lean" -- for example, `Mathlib.lean`
-  let allModules : Array System.FilePath ← (do
-    if git then
-      let mlDir := ml.push pathSeparator -- for example, `Mathlib/`
-      let allLean ← IO.Process.run { cmd := "git", args := #["ls-files", mlDir ++ "*.lean"] }
-      return (((allLean.dropEndWhile (· == '\n')).copy.splitOn "\n").map (⟨·⟩)).toArray
-    else do
-      let all ← walkDir ml
-      return all.filter (·.extension == some "lean"))
-  -- Filter out all files which do not exist.
-  -- This check is helpful in case the `git` option is on and a local file has been removed.
-  return ← (allModules.erase ml.lean).filterMapM (fun f => do
-    if ← pathExists f then pure (some f) else pure none
-  )
+The input `git` is a `Bool`ean flag:
+* `true` means that the command uses `git ls-files` to find the relevant files;
+* `false` means that the command recursively scans all dirs searching for `.lean` files.
+-/
+/-
+**getAllFiles** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：getAllFiles (git : Bool) (ml : String) : IO (Array System.FilePath)
+参数：git : Bool；ml : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getAllFiles
-  签名: (git : 布尔值) (ml : String)
-  定义体: do
-  let ml.lean := addExtension ⟨ml⟩ "lean" -- for example, `Mathlib.lean`
-  let allModules : Array System.FilePath ← (do
-    if git then
-      let mlDir := ml.push pathSeparator -- for example, `Mathlib/`
-      let allLean ← IO.Process.run { cmd := "git", args := #["ls-files", mlDir ++ "*.lean"] }
-      return (((allLean.dropEndWhile (· == '\n')).copy.splitOn "\n").map (⟨·⟩)).toArray
-    else do
-      let all ← walkDir ml
-      return all.filter (·.extension == some "lean"))
-  -- Filter out all files which do not exist.
-  -- This check is helpful in case the `git` option is on and a local file has been removed.
-  return ← (allModules.erase ml.lean).filterMapM (fun f => do
-    if ← pathExists f then pure (some f) else pure none
-  )
+--- 原说明 ---
+`getAllFiles git ml` takes all `.lean` files in the directory `ml`
+(recursing into sub-directories) and returns the `Array` of `String`s
+```
+#[file₁, ..., fileₙ]
+```
+of all their file names. These are not sorted in general.
+
+The input `git` is a `Bool`ean flag:
+* `true` means that the command uses `git ls-files` to find the relevant files;
+* `false` means that the command recursively scans all dirs searching for `.lean
+` files.
 -/
 def getAllFiles (git : Bool) (ml : String) : IO (Array System.FilePath) := do
-  let ml.lean := addExtension ⟨ml⟩ "lean" -- for example, `Mathlib.lean`
+  let ml.lean := addExtension ⟨ml⟩ "lean"  -- for example, `Mathlib.lean`
   let allModules : Array System.FilePath ← (do
     if git then
-      let mlDir := ml.push pathSeparator -- for example, `Mathlib/`
+      let mlDir := ml.push pathSeparator   -- for example, `Mathlib/`
       let allLean ← IO.Process.run { cmd := "git", args := #["ls-files", mlDir ++ "*.lean"] }
       return (((allLean.dropEndWhile (· == '\n')).copy.splitOn "\n").map (⟨·⟩)).toArray
     else do
@@ -74,30 +64,24 @@ def getAllFiles (git : Bool) (ml : String) : IO (Array System.FilePath) := do
       return all.filter (·.extension == some "lean"))
   -- Filter out all files which do not exist.
   -- This check is helpful in case the `git` option is on and a local file has been removed.
-  return ← (allModules.erase ml.lean).filterMapM (fun f => do
+  return ← (allModules.erase ml.lean).filterMapM (fun f ↦ do
     if ← pathExists f then pure (some f) else pure none
   )
 
-/--
-Definition of `getAllModulesSorted` / `getAllModulesSorted` 的定义
+/-- Like `getAllFiles`, but return an array of *module* names instead,
+i.e. names of the form `Mathlib/Algebra/Algebra/Basic.lean`.
+In addition, these names are sorted in a platform-independent order. -/
+/-
+**getAllModulesSorted** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：getAllModulesSorted (git : Bool) (ml : String) : IO (Array String)
+参数：git : Bool；ml : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAllModulesSorted
-  signature: (git : Bool) (ml : String)
-  body: do
-  let files ← getAllFiles git ml
-  let names ← files.mapM fun f => do
-     return (← moduleNameOfFileName f none).toString
-  return names.qsort (· < ·)
-
-中文:
-定义 getAllModulesSorted
-  签名: (git : 布尔值) (ml : String)
-  定义体: do
-  let files ← getAllFiles git ml
-  let names ← files.mapM fun f => do
-     return (← moduleNameOfFileName f none).toString
-  return names.qsort (· < ·)
+--- 原说明 ---
+Like `getAllFiles`, but return an array of *module* names instead,
+i.e. names of the form `Mathlib/Algebra/Algebra/Basic.lean`.
+In addition, these names are sorted in a platform-independent order.
 -/
 def getAllModulesSorted (git : Bool) (ml : String) : IO (Array String) := do
   let files ← getAllFiles git ml

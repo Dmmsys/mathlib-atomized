@@ -23,26 +23,19 @@ universe u v
 
 noncomputable section
 
-/--
-theorem `UnivLE.ofEssSurj` / 定理 `UnivLE.ofEssSurj`
-
-English:
-theorem UnivLE.ofEssSurj
-  given: (w : (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSurj)
-  proof: by
-    obtain ⟨a', m⟩ := w.mem_essImage α
-    obtain ⟨m'⟩ := m
-    exact ⟨a', ⟨(Iso.toEquiv m').symm.trans Equiv.ulift⟩⟩
-
-中文:
-定理 UnivLE.ofEssSurj
-  条件: (w : (uliftFunctor.{u, v} : 类型v ⥤ 类型 最大值 u v).本质满射)
-  证明: by
-    obtain ⟨a', m⟩ := w.mem_essImage α
-    obtain ⟨m'⟩ := m
-    exact ⟨a', ⟨(Iso.toEquiv m').symm.trans Equiv.ulift⟩⟩
-
-Depends on / 依赖: Equiv.ulift, Iso.toEquiv, mem_essImage, symm.trans, toEquiv, w.mem_essImage
+/-
+**UnivLE.ofEssSurj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UnivLE.ofEssSurj (w : (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSur
+j) : UnivLE.{max u v, v} where small α
+参数：w : (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSurj。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem UnivLE.ofEssSurj (w : (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSurj) :
     UnivLE.{max u v, v} where
@@ -50,107 +43,57 @@ theorem UnivLE.ofEssSurj (w : (uliftFunctor.{u, v} : Type v ⥤ Type max u v).Es
     obtain ⟨a', m⟩ := w.mem_essImage α
     obtain ⟨m'⟩ := m
     exact ⟨a', ⟨(Iso.toEquiv m').symm.trans Equiv.ulift⟩⟩
-
-/--
-Instance `EssSurj.ofUnivLE` / 实例 `EssSurj.ofUnivLE`
-
-English:
-instance EssSurj.ofUnivLE
-  signature: [UnivLE.{max u v, v}]
-  body: ⟨Shrink α, ⟨Equiv.toIso (Equiv.ulift.trans (equivShrink α).symm)⟩⟩
-
-中文:
-实例 本质满射.ofUnivLE
-  签名: [UnivLE.{最大值 u v, v}]
-  定义体: ⟨Shrink α, ⟨Equiv.toIso (Equiv.ulift.trans (equivShrink α).symm)⟩⟩
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.trans, Shrink, equivShrink
+/-
+**EssSurj.ofUnivLE** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：EssSurj.ofUnivLE [UnivLE.{max u v, v}] : (uliftFunctor.{u, v} : Type v ⥤ T
+ype max u v).EssSurj where mem_essImage α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance EssSurj.ofUnivLE [UnivLE.{max u v, v}] :
     (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSurj where
   mem_essImage α :=
     ⟨Shrink α, ⟨Equiv.toIso (Equiv.ulift.trans (equivShrink α).symm)⟩⟩
-
-/--
-theorem `UnivLE_iff_essSurj` / 定理 `UnivLE_iff_essSurj`
-
-English:
-theorem UnivLE_iff_essSurj
-  proof: ⟨fun _ => inferInstance, fun w => UnivLE.ofEssSurj w⟩
-
-中文:
-定理 UnivLE_iff_essSurj
-  证明: ⟨fun _ => inferInstance, fun w => UnivLE.ofEssSurj w⟩
-
-Depends on / 依赖: UnivLE, UnivLE.ofEssSurj, ofEssSurj
+/-
+**UnivLE_iff_essSurj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UnivLE_iff_essSurj : UnivLE.{max u v, v} ↔ (uliftFunctor.{u, v} : Type v ⥤
+ Type max u v).EssSurj
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.ofEssSurj`：UnivLE.ofEssSurj (w : (uliftFunctor.{u, v} : Type v ⥤ 
+Type max u v).EssSurj) : UnivLE.{max u v, v} where small α
 -/
 theorem UnivLE_iff_essSurj :
     UnivLE.{max u v, v} ↔ (uliftFunctor.{u, v} : Type v ⥤ Type max u v).EssSurj :=
   ⟨fun _ => inferInstance, fun w => UnivLE.ofEssSurj w⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [UnivLE.{max
-  signature: u v, v}] : uliftFunctor.{u, v}.IsEquivalence where
-
-中文:
-实例 [UnivLE.{最大值
-  签名: u v, v}] : uliftFunctor.{u, v}.是等价 where
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [UnivLE.{max u v, v}] : uliftFunctor.{u, v}.IsEquivalence where
-
-/--
-Definition of `UnivLE.witness` / `UnivLE.witness` 的定义
-
-English:
-definition UnivLE.witness
-  signature: [UnivLE.{max u v, v}]
-  body: uliftFunctor.{v, u} ⋙ (uliftFunctor.{u, v}).inv
-
-中文:
-定义 UnivLE.witness
-  签名: [UnivLE.{最大值 u v, v}]
-  定义体: uliftFunctor.{v, u} ⋙ (uliftFunctor.{u, v}).inv
-
-Depends on / 依赖: uliftFunctor
+/-
+**UnivLE.witness** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UnivLE.witness [UnivLE.{max u v, v}] : Type u ⥤ Type v
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsEquivalenceUliftFunctorOfUnivLE`：∀ [UnivLE.{max u v, v}], Category
+Theory.uliftFunctor.{u, v}.IsEquivalence
 -/
 def UnivLE.witness [UnivLE.{max u v, v}] : Type u ⥤ Type v :=
   uliftFunctor.{v, u} ⋙ (uliftFunctor.{u, v}).inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [UnivLE.{max
-  signature: u v, v}] : UnivLE.witness.{u, v}.Faithful
-  body: inferInstanceAs Functor.Faithful (_ ⋙ _)
-
-中文:
-实例 [UnivLE.{最大值
-  签名: u v, v}] : UnivLE.witness.{u, v}.忠实
-  定义体: inferInstanceAs Functor.Faithful (_ ⋙ _)
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [UnivLE.{max u v, v}] : UnivLE.witness.{u, v}.Faithful :=
-inferInstanceAs Functor.Faithful (_ ⋙ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [UnivLE.{max
-  signature: u v, v}] : UnivLE.witness.{u, v}.Full
-  body: inferInstanceAs Functor.Full (_ ⋙ _)
-
-中文:
-实例 [UnivLE.{最大值
-  签名: u v, v}] : UnivLE.witness.{u, v}.满
-  定义体: inferInstanceAs Functor.Full (_ ⋙ _)
-
-Depends on / 依赖: Functor, Functor.Full
+  inferInstanceAs <| Functor.Faithful (_ ⋙ _)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [UnivLE.{max u v, v}] : UnivLE.witness.{u, v}.Full :=
-inferInstanceAs Functor.Full (_ ⋙ _)
+  inferInstanceAs <| Functor.Full (_ ⋙ _)

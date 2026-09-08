@@ -30,28 +30,15 @@ variable {R A B C D : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiri
 
 variable (S : Subalgebra R A) (S₁ : Subalgebra R B)
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The product of two subalgebras is a subalgebra. -/
+/-
+**Subalgebra.prod** 是 Mathlib 中的一个定义，位于命名空间 `Subalgebra`。
+形式化陈述：prod : Subalgebra R (A × B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : Subalgebra R (A × B)
-  body: { S.toSubsemiring.prod S₁.toSubsemiring with
-    carrier := S ×ˢ S₁
-    algebraMap_mem' := fun _ => ⟨algebraMap_mem _ _, algebraMap_mem _ _⟩ }
-
-@[simp, norm_cast]
-
-中文:
-定义 乘积
-  签名: : 子代数 R (A × B)
-  定义体: { S.toSubsemiring.prod S₁.toSubsemiring with
-    carrier := S ×ˢ S₁
-    algebraMap_mem' := fun _ => ⟨algebraMap_mem _ _, algebraMap_mem _ _⟩ }
-
-@[simp, norm_cast]
-
-Depends on / 依赖: S.toSubsemiring.prod, algebraMap_mem, carrier, toSubsemiring
+--- 原说明 ---
+The product of two subalgebras is a subalgebra.
 -/
 def prod : Subalgebra R (A × B) :=
   { S.toSubsemiring.prod S₁.toSubsemiring with
@@ -59,162 +46,107 @@ def prod : Subalgebra R (A × B) :=
     algebraMap_mem' := fun _ => ⟨algebraMap_mem _ _, algebraMap_mem _ _⟩ }
 
 @[simp, norm_cast]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  statement: (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ (S₁ : Set B)
-  proof: rfl
-
-中文:
-定理 coe_prod
-  结论: (乘积 S S₁ : 集合 (A × B)) = (S : 集合 A) ×ˢ (S₁ : 集合 B)
-  证明: rfl
+/-
+**Subalgebra.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：coe_prod : (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ (S₁ : Set B)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prod : (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ (S₁ : Set B) :=
   rfl
 
 open Subalgebra in
-/--
-theorem `prod_toSubmodule` / 定理 `prod_toSubmodule`
-
-English:
-theorem prod_toSubmodule
-  statement: toSubmodule (S.prod S₁) = (toSubmodule S).prod (toSubmodule S₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prod_toSubmodule
-  结论: toSubmodule (S.乘积 S₁) = (toSubmodule S).乘积 (toSubmodule S₁)
-  证明: rfl
-
-@[simp]
+/-
+**Subalgebra.prod_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：prod_toSubmodule : toSubmodule (S.prod S₁) = (toSubmodule S).prod (toSubmo
+dule S₁)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_toSubmodule : toSubmodule (S.prod S₁) = (toSubmodule S).prod (toSubmodule S₁) := rfl
 
 @[simp]
-/--
-theorem `mem_prod` / 定理 `mem_prod`
-
-English:
-theorem mem_prod
-  given: {S : Subalgebra R A} {S₁ : Subalgebra R B} {x : A × B}
-  proof: Set.mem_prod
-
-@[simp]
-
-中文:
-定理 mem_prod
-  条件: {S : 子代数 R A} {S₁ : 子代数 R B} {x : A × B}
-  证明: Set.mem_prod
-
-@[simp]
-
-Depends on / 依赖: Set.mem_prod, mem_prod
+/-
+**Subalgebra.mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：mem_prod {S : Subalgebra R A} {S₁ : Subalgebra R B} {x : A × B} : x in pro
+d S S₁ ↔ x.1 in S ∧ x.2 in S₁
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_prod`：mem_prod : p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t
 -/
 theorem mem_prod {S : Subalgebra R A} {S₁ : Subalgebra R B} {x : A × B} :
-    x in prod S S₁ ↔ x.1 in S ∧ x.2 in S₁ := Set.mem_prod
+    x ∈ prod S S₁ ↔ x.1 ∈ S ∧ x.2 ∈ S₁ := Set.mem_prod
 
 @[simp]
-/--
-theorem `prod_top` / 定理 `prod_top`
-
-English:
-theorem prod_top
-  statement: (prod ⊤ ⊤ : Subalgebra R (A × B)) = ⊤
-  proof: by ext; simp
-
-中文:
-定理 prod_top
-  结论: (乘积 ⊤ ⊤ : 子代数 R (A × B)) = ⊤
-  证明: by ext; simp
+/-
+**Subalgebra.prod_top** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：prod_top : (prod ⊤ ⊤ : Subalgebra R (A × B)) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.ext`：ext {S T : Subalgebra R A} (h : forall x : A, x in S ↔ x
+ in T) : S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem prod_top : (prod ⊤ ⊤ : Subalgebra R (A × B)) = ⊤ := by ext; simp
-
-/--
-theorem `prod_mono` / 定理 `prod_mono`
-
-English:
-theorem prod_mono
-  given: {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B}
-  proof: Set.prod_mono
-
-@[simp]
-
-中文:
-定理 prod_mono
-  条件: {S T : 子代数 R A} {S₁ T₁ : 子代数 R B}
-  证明: Set.prod_mono
-
-@[simp]
-
-Depends on / 依赖: Set.prod_mono, prod_mono
+/-
+**Subalgebra.prod_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：prod_mono {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B} : S <= T -> S₁ <
+= T₁ -> prod S S₁ <= prod T T₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.prod_mono`：prod_mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) : s
+₁ ×ˢ t₁ subseteq s₂ ×ˢ t₂
 -/
 theorem prod_mono {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B} :
-    S <= T -> S₁ <= T₁ -> prod S S₁ <= prod T T₁ :=
+    S ≤ T → S₁ ≤ T₁ → prod S S₁ ≤ prod T T₁ :=
   Set.prod_mono
 
 @[simp]
-/--
-theorem `prod_inf_prod` / 定理 `prod_inf_prod`
-
-English:
-theorem prod_inf_prod
-  given: {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B}
-  proof: SetLike.coe_injective Set.prod_inter_prod
-
-中文:
-定理 prod_inf_prod
-  条件: {S T : 子代数 R A} {S₁ T₁ : 子代数 R B}
-  证明: SetLike.coe_injective Set.prod_inter_prod
-
-Depends on / 依赖: Set.prod_inter_prod, SetLike, SetLike.coe_injective, coe_injective, prod_inter_prod
+/-
+**Subalgebra.prod_inf_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：prod_inf_prod {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B} : S.prod S₁ 
+⊓ T.prod T₁ = (S ⊓ T).prod (S₁ ⊓ T₁)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.prod_inter_prod`：prod_inter_prod : s₁ ×ˢ t₁ inter s₂ ×ˢ t₂ = (s₁ int
+er s₂) ×ˢ (t₁ inter t₂)
 -/
 theorem prod_inf_prod {S T : Subalgebra R A} {S₁ T₁ : Subalgebra R B} :
     S.prod S₁ ⊓ T.prod T₁ = (S ⊓ T).prod (S₁ ⊓ T₁) :=
   SetLike.coe_injective Set.prod_inter_prod
-
-/--
-theorem `center_prod` / 定理 `center_prod`
-
-English:
-theorem center_prod
-  statement: center R (A × B) = prod (center R A) (center R B)
-  proof: SetLike.coe_injective Set.center_prod
-
-@[simp]
-
-中文:
-定理 center_prod
-  结论: center R (A × B) = 乘积 (center R A) (center R B)
-  证明: SetLike.coe_injective Set.center_prod
-
-@[simp]
+/-
+**Subalgebra.center_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semiring B] [inst_4 : Alge
+bra R B],   Subalgebra.center R (A × B) = (Subalgebra.center R A).prod (Subalgeb
+ra.center R B)
+参数：A × B；Subalgebra.center R A；Subalgebra.center R B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.center_prod`：∀ {M : Type u_1} [inst : Mul M] {N : Type u_2} [inst_1 
+: Mul N], Set.center (M × N) = Set.center M ×ˢ Set.center N
 -/
 protected theorem center_prod : center R (A × B) = prod (center R A) (center R B) :=
   SetLike.coe_injective Set.center_prod
 
 @[simp]
-/--
-theorem `_root_.AlgHom.range_prodMap` / 定理 `_root_.AlgHom.range_prodMap`
-
-English:
-theorem _root_.AlgHom.range_prodMap
-  given: (f : A ->ₐ[R] B) (g : C ->ₐ[R] D)
-  proof: SetLike.coe_injective Set.range_prodMap
-
-中文:
-定理 _root_.代数态射.range_prodMap
-  条件: (f : A ->ₐ[R] B) (g : C ->ₐ[R] D)
-  证明: SetLike.coe_injective Set.range_prodMap
-
-Depends on / 依赖: Set.range_prodMap, SetLike, SetLike.coe_injective, coe_injective, range_prodMap
+/-
+**Subalgebra._root_.AlgHom.range_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.AlgHom.range_prodMap (f : A ->ₐ[R] B) (g : C ->ₐ[R] D) :
+theorem _root_.AlgHom.range_prodMap (f : A →ₐ[R] B) (g : C →ₐ[R] D) :
     (f.prodMap g).range = f.range.prod g.range :=
   SetLike.coe_injective Set.range_prodMap
 
 end Subalgebra
+

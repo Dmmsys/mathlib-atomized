@@ -23,135 +23,102 @@ universe v
 
 namespace Function
 
-/--
-Inductive type `Coequalizer.Rel` / 归纳类型 `Coequalizer.Rel`
+/-- The relation generating the equivalence relation used for defining `Function.coequalizer`. -/
+/-
+**Function.Coequalizer.Rel** 是 Mathlib 中的一个归纳类型，位于命名空间 `Function.Coequalizer`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → (α → β) → (α → β) → β → β → Prop
+参数：α → β；α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Coequalizer.Rel
-  parameters: {α β : Type*} (f g : α -> β)
-  constructors (1):
-    - intro: (x : α) : Rel f g (f x) (g x)
-
-中文:
-归纳类型 Coequalizer.关系
-  参数: {α β : 类型} (f g : α -> β)
-  构造子 (1 个):
-    - intro: (x : α) : 关系 f g (f x) (g x)
+--- 原说明 ---
+The relation generating the equivalence relation used for defining `Function.coe
+qualizer`.
 -/
-inductive Coequalizer.Rel {α β : Type*} (f g : α -> β) : β -> β -> Prop where
+inductive Coequalizer.Rel {α β : Type*} (f g : α → β) : β → β → Prop where
   | intro (x : α) : Rel f g (f x) (g x)
 
-/--
-Definition of `Coequalizer` / `Coequalizer` 的定义
+/-- The coequalizer of two functions `f g : α → β` is the pair (`μ`, `p : β → μ`) that
+satisfies the following universal property: Every function `u : β → γ`
+with `u ∘ f = u ∘ g` factors uniquely via `p`. -/
+/-
+**Function.Coequalizer** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：Coequalizer {α : Type*} {β : Type v} (f g : α -> β) : Type v
+参数：f g : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Coequalizer
-  signature: {α : Type*} {β : Type v} (f g : α -> β)
-  body: Quot (Function.Coequalizer.Rel f g)
-
-中文:
-定义 Coequalizer
-  签名: {α : 类型} {β : 类型v} (f g : α -> β)
-  定义体: Quot (Function.Coequalizer.Rel f g)
-
-Depends on / 依赖: Coequalizer, Function, Function.Coequalizer.Rel
+--- 原说明 ---
+The coequalizer of two functions `f g : α → β` is the pair (`μ`, `p : β → μ`) th
+at
+satisfies the following universal property: Every function `u : β → γ`
+with `u ∘ f = u ∘ g` factors uniquely via `p`.
 -/
-def Coequalizer {α : Type*} {β : Type v} (f g : α -> β) : Type v :=
+def Coequalizer {α : Type*} {β : Type v} (f g : α → β) : Type v :=
   Quot (Function.Coequalizer.Rel f g)
 
 namespace Coequalizer
 
-variable {α β : Type*} (f g : α -> β)
+variable {α β : Type*} (f g : α → β)
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The canonical projection to the coequalizer. -/
+/-
+**Function.Coequalizer.mk** 是 Mathlib 中的一个定义，位于命名空间 `Function.Coequalizer`。
+形式化陈述：mk (x : β) : Coequalizer f g
+参数：x : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (x : β)
-  body: Quot.mk _ x
-
-中文:
-定义 mk
-  签名: (x : β)
-  定义体: Quot.mk _ x
-
-Depends on / 依赖: Quot.mk
+--- 原说明 ---
+The canonical projection to the coequalizer.
 -/
 def mk (x : β) : Coequalizer f g :=
   Quot.mk _ x
-
-/--
-lemma `condition` / 引理 `condition`
-
-English:
-lemma condition
-  given: (x : α)
-  statement: mk f g (f x) = mk f g (g x)
-  proof: Quot.sound (.intro x)
-
-中文:
-引理 condition
-  条件: (x : α)
-  结论: mk f g (f x) = mk f g (g x)
-  证明: Quot.sound (.intro x)
-
-Depends on / 依赖: Quot.sound
+/-
+**Function.Coequalizer.condition** 是 Mathlib 中的一个引理，位于命名空间 `Function.Coequalizer
+`。
+形式化陈述：condition (x : α) : mk f g (f x) = mk f g (g x)
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma condition (x : α) : mk f g (f x) = mk f g (g x) :=
   Quot.sound (.intro x)
-
-/--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  statement: Function.Surjective (mk f g)
-  proof: Quot.exists_rep
-
-中文:
-引理 mk_surjective
-  结论: 函数.满射 (mk f g)
-  证明: Quot.exists_rep
-
-Depends on / 依赖: Quot.exists_rep, exists_rep
+/-
+**Function.Coequalizer.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Function.Coequal
+izer`。
+形式化陈述：mk_surjective : Function.Surjective (mk f g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
 lemma mk_surjective : Function.Surjective (mk f g) :=
   Quot.exists_rep
 
-/--
-Definition of `desc` / `desc` 的定义
+/-- Any map `u : β → γ` with `u ∘ f = u ∘ g` factors via `Function.Coequalizer.mk`. -/
+/-
+**Function.Coequalizer.desc** 是 Mathlib 中的一个定义，位于命名空间 `Function.Coequalizer`。
+形式化陈述：desc {γ : Type*} (u : β -> γ) (hu : u ∘ f = u ∘ g) : Coequalizer f g -> γ
+参数：u : β -> γ；hu : u ∘ f = u ∘ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition desc
-  signature: {γ : Type*} (u : β -> γ) (hu : u ∘ f = u ∘ g)
-  body: Quot.lift u (fun _ _ (.intro e) => congrFun hu e)
-
-中文:
-定义 desc
-  签名: {γ : 类型} (u : β -> γ) (hu : u ∘ f = u ∘ g)
-  定义体: Quot.lift u (fun _ _ (.intro e) => congrFun hu e)
-
-Depends on / 依赖: Quot.lift
+--- 原说明 ---
+Any map `u : β → γ` with `u ∘ f = u ∘ g` factors via `Function.Coequalizer.mk`.
 -/
-def desc {γ : Type*} (u : β -> γ) (hu : u ∘ f = u ∘ g) : Coequalizer f g -> γ :=
-  Quot.lift u (fun _ _ (.intro e) => congrFun hu e)
-
-/--
-lemma `desc_mk` / 引理 `desc_mk`
-
-English:
-lemma desc_mk
-  given: {γ : Type*} (u : β -> γ) (hu : u ∘ f = u ∘ g) (x : β)
-  proof: rfl
-
-中文:
-引理 desc_mk
-  条件: {γ : 类型} (u : β -> γ) (hu : u ∘ f = u ∘ g) (x : β)
-  证明: rfl
+def desc {γ : Type*} (u : β → γ) (hu : u ∘ f = u ∘ g) : Coequalizer f g → γ :=
+  Quot.lift u (fun _ _ (.intro e) ↦ congrFun hu e)
+/-
+**Function.Coequalizer.desc_mk** 是 Mathlib 中的一个定理，位于命名空间 `Function.Coequalizer`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (f g : α → β) {γ : Type u_3} (u : β → γ) (
+hu : u ∘ f = u ∘ g) (x : β),   Function.Coequalizer.desc f g u hu (Function.Coeq
+ualizer.mk f g x) = u x
+参数：f g : α → β；u : β → γ；hu : u ∘ f = u ∘ g；x : β；Function.Coequalizer.mk f g x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma desc_mk {γ : Type*} (u : β -> γ) (hu : u ∘ f = u ∘ g) (x : β) :
+@[simp] lemma desc_mk {γ : Type*} (u : β → γ) (hu : u ∘ f = u ∘ g) (x : β) :
     desc f g u hu (mk f g x) = u x :=
   rfl
 
 end Function.Coequalizer
+

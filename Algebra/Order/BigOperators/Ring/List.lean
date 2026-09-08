@@ -18,20 +18,21 @@ public section
 
 variable {R : Type*}
 
-/--
-lemma `CanonicallyOrderedAdd.list_prod_pos` / 引理 `CanonicallyOrderedAdd.list_prod_pos`
+/-- A variant of `List.prod_pos` for `CanonicallyOrderedAdd`. -/
+/-
+**CanonicallyOrderedAdd.list_prod_pos** 是 Mathlib 中的一个定理，位于命名空间 `CanonicallyOrde
+redAdd`。
+形式化陈述：∀ {α : Type u_2} [inst : CommSemiring α] [inst_1 : PartialOrder α] [Canoni
+callyOrderedAdd α] [NoZeroDivisors α]   [Nontrivial α] {l : List α}, 0 < l.prod 
+↔ ∀ x ∈ l, 0 < x
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma CanonicallyOrderedAdd.list_prod_pos
-  statement: {α : Type*}
-
-中文:
-引理 典范有序加法.list_prod_pos
-  结论: {α : 类型}
+--- 原说明 ---
+A variant of `List.prod_pos` for `CanonicallyOrderedAdd`.
 -/
 @[simp] lemma CanonicallyOrderedAdd.list_prod_pos {α : Type*}
     [CommSemiring α] [PartialOrder α] [CanonicallyOrderedAdd α] [NoZeroDivisors α] [Nontrivial α] :
-    forall {l : List α}, 0 < l.prod ↔ (forall x in l, (0 : α) < x)
+    ∀ {l : List α}, 0 < l.prod ↔ (∀ x ∈ l, (0 : α) < x)
   | [] => by simp
   | (x :: xs) => by simp_rw [List.prod_cons, List.forall_mem_cons, CanonicallyOrderedAdd.mul_pos,
     list_prod_pos]

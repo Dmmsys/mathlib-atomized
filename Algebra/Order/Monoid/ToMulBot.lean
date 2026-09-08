@@ -25,171 +25,100 @@ namespace WithZero
 
 variable [Add α]
 
-/--
-Definition of `toMulBot` / `toMulBot` 的定义
+/-- Making an additive monoid multiplicative then adding a zero is the same as adding a bottom
+element then making it multiplicative. -/
+/-
+**WithZero.toMulBot** 是 Mathlib 中的一个定义，位于命名空间 `WithZero`。
+形式化陈述：toMulBot : WithZero (Multiplicative α) ≃* Multiplicative (WithBot α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMulBot
-  signature: : WithZero (Multiplicative α) ≃* Multiplicative (WithBot α)
-  body: MulEquiv.refl _
-
-@[simp]
-
-中文:
-定义 toMulBot
-  签名: : WithZero (Multiplicative α) ≃* Multiplicative (WithBot α)
-  定义体: MulEquiv.refl _
-
-@[simp]
-
-Depends on / 依赖: MulEquiv, MulEquiv.refl
+--- 原说明 ---
+Making an additive monoid multiplicative then adding a zero is the same as addin
+g a bottom
+element then making it multiplicative.
 -/
 def toMulBot : WithZero (Multiplicative α) ≃* Multiplicative (WithBot α) :=
   MulEquiv.refl _
 
 @[simp]
-/--
-theorem `toMulBot_zero` / 定理 `toMulBot_zero`
-
-English:
-theorem toMulBot_zero
-  statement: toMulBot (0 : WithZero (Multiplicative α)) = Multiplicative.ofAdd ⊥
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMulBot_zero
-  结论: toMulBot (0 : WithZero (Multiplicative α)) = Multiplicative.ofAdd ⊥
-  证明: rfl
-
-@[simp]
+/-
+**WithZero.toMulBot_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_zero : toMulBot (0 : WithZero (Multiplicative α)) = Multiplicativ
+e.ofAdd ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMulBot_zero : toMulBot (0 : WithZero (Multiplicative α)) = Multiplicative.ofAdd ⊥ :=
   rfl
 
 @[simp]
-/--
-theorem `toMulBot_coe` / 定理 `toMulBot_coe`
-
-English:
-theorem toMulBot_coe
-  given: (x : Multiplicative α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMulBot_coe
-  条件: (x : Multiplicative α)
-  证明: rfl
-
-@[simp]
+/-
+**WithZero.toMulBot_coe** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_coe (x : Multiplicative α) : toMulBot ↑x = Multiplicative.ofAdd (
+↑x.toAdd : WithBot α)
+参数：x : Multiplicative α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMulBot_coe (x : Multiplicative α) :
     toMulBot ↑x = Multiplicative.ofAdd (↑x.toAdd : WithBot α) :=
   rfl
 
 @[simp]
-/--
-theorem `toMulBot_symm_bot` / 定理 `toMulBot_symm_bot`
-
-English:
-theorem toMulBot_symm_bot
-  statement: toMulBot.symm (Multiplicative.ofAdd (⊥ : WithBot α)) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMulBot_symm_bot
-  结论: toMulBot.symm (Multiplicative.ofAdd (⊥ : WithBot α)) = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithZero.toMulBot_symm_bot** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_symm_bot : toMulBot.symm (Multiplicative.ofAdd (⊥ : WithBot α)) =
+ 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMulBot_symm_bot : toMulBot.symm (Multiplicative.ofAdd (⊥ : WithBot α)) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `toMulBot_coe_ofAdd` / 定理 `toMulBot_coe_ofAdd`
-
-English:
-theorem toMulBot_coe_ofAdd
-  given: (x : α)
-  proof: rfl
-
-中文:
-定理 toMulBot_coe_ofAdd
-  条件: (x : α)
-  证明: rfl
+/-
+**WithZero.toMulBot_coe_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_coe_ofAdd (x : α) : toMulBot.symm (Multiplicative.ofAdd (x : With
+Bot α)) = Multiplicative.ofAdd x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMulBot_coe_ofAdd (x : α) :
     toMulBot.symm (Multiplicative.ofAdd (x : WithBot α)) = Multiplicative.ofAdd x :=
   rfl
 
 variable [Preorder α] (a b : WithZero (Multiplicative α))
-
-/--
-theorem `toMulBot_strictMono` / 定理 `toMulBot_strictMono`
-
-English:
-theorem toMulBot_strictMono
-  statement: StrictMono (@toMulBot α _)
-  proof: fun _ _ => id
-
-@[simp]
-
-中文:
-定理 toMulBot_strictMono
-  结论: 严格递增 (@toMulBot α _)
-  证明: fun _ _ => id
-
-@[simp]
+/-
+**WithZero.toMulBot_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_strictMono : StrictMono (@toMulBot α _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMulBot_strictMono : StrictMono (@toMulBot α _) := fun _ _ => id
 
 @[simp]
-/--
-theorem `toMulBot_le` / 定理 `toMulBot_le`
-
-English:
-theorem toMulBot_le
-  statement: toMulBot a <= toMulBot b ↔ a <= b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 toMulBot_le
-  结论: toMulBot a <= toMulBot b ↔ a <= b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**WithZero.toMulBot_le** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_le : toMulBot a <= toMulBot b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toMulBot_le : toMulBot a <= toMulBot b ↔ a <= b :=
+theorem toMulBot_le : toMulBot a ≤ toMulBot b ↔ a ≤ b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toMulBot_lt` / 定理 `toMulBot_lt`
-
-English:
-theorem toMulBot_lt
-  statement: toMulBot a < toMulBot b ↔ a < b
-  proof: Iff.rfl
-
-中文:
-定理 toMulBot_lt
-  结论: toMulBot a < toMulBot b ↔ a < b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**WithZero.toMulBot_lt** 是 Mathlib 中的一个定理，位于命名空间 `WithZero`。
+形式化陈述：toMulBot_lt : toMulBot a < toMulBot b ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toMulBot_lt : toMulBot a < toMulBot b ↔ a < b :=
   Iff.rfl
 
 end WithZero
+

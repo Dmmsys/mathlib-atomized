@@ -25,38 +25,15 @@ namespace ModuleCat
 variable {R : Type u} [Ring R]
 
 -- As `ModuleCat R` is preadditive, and has all limits, it automatically has biproducts.
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasBinaryBiproducts (ModuleCat.{v} R)
-  body: HasBinaryBiproducts.of_hasBinaryProducts
-
-中文:
-实例 :
-  签名: 有BinaryBiproducts (模范畴.{v} R)
-  定义体: HasBinaryBiproducts.of_hasBinaryProducts
-
-Depends on / 依赖: HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryProducts, of_hasBinaryProducts
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasBinaryBiproducts (ModuleCat.{v} R) :=
   HasBinaryBiproducts.of_hasBinaryProducts
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteBiproducts (ModuleCat.{v} R)
-  body: HasFiniteBiproducts.of_hasFiniteProducts
-
-中文:
-实例 :
-  签名: 有FiniteBiproducts (模范畴.{v} R)
-  定义体: HasFiniteBiproducts.of_hasFiniteProducts
-
-Depends on / 依赖: Finite, HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, Module, Module.Finite, ModuleCat, ModuleCat.homLinearEquiv.symm, homLinearEquiv, of_hasFiniteProducts
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteBiproducts (ModuleCat.{v} R) :=
   HasFiniteBiproducts.of_hasFiniteProducts
@@ -66,50 +43,17 @@ instance : HasFiniteBiproducts (ModuleCat.{v} R) :=
 /-- Construct limit data for a binary product in `ModuleCat R`, using `ModuleCat.of R (M × N)`.
 -/
 @[simps cone_pt isLimit_lift]
-/--
-Definition of `binaryProductLimitCone` / `binaryProductLimitCone` 的定义
+/-
+**ModuleCat.binaryProductLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：binaryProductLimitCone (M N : ModuleCat.{v} R) : Limits.LimitCone (pair M 
+N) where cone
+参数：M N : ModuleCat.{v} R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductLimitCone
-  signature: (M N : ModuleCat.{v} R)
-  body: { pt := ModuleCat.of R (M × N)
-      π :=
-        { app := fun j =>
-            Discrete.casesOn j fun j =>
-              WalkingPair.casesOn j (ofHom <| LinearMap.fst R M N) (ofHom <| LinearMap.snd R M N)
-          naturality := by rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟨⟩⟩⟩ <;> rfl } }
-  isLimit :=
-    { lift := fun s => ofHom <| LinearMap.prod
-        (s.π.app ⟨WalkingPair.left⟩).hom
-        (s.π.app ⟨WalkingPair.right⟩).hom
-      fac := by rintro s (⟨⟩ | ⟨⟩) <;> rfl
-      uniq := fun s m w => by
-        simp_rw [← w ⟨WalkingPair.left⟩, ← w ⟨WalkingPair.right⟩]
-        rfl }
-
-@[simp]
-
-中文:
-定义 binaryProductLimitCone
-  签名: (M N : 模范畴.{v} R)
-  定义体: { pt := ModuleCat.of R (M × N)
-      π :=
-        { app := fun j =>
-            Discrete.casesOn j fun j =>
-              WalkingPair.casesOn j (ofHom <| LinearMap.fst R M N) (ofHom <| LinearMap.snd R M N)
-          naturality := by rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟨⟩⟩⟩ <;> rfl } }
-  isLimit :=
-    { lift := fun s => ofHom <| LinearMap.prod
-        (s.π.app ⟨WalkingPair.left⟩).hom
-        (s.π.app ⟨WalkingPair.right⟩).hom
-      fac := by rintro s (⟨⟩ | ⟨⟩) <;> rfl
-      uniq := fun s m w => by
-        simp_rw [← w ⟨WalkingPair.left⟩, ← w ⟨WalkingPair.right⟩]
-        rfl }
-
-@[simp]
-
-Depends on / 依赖: Discrete, Discrete.casesOn, Finite, InducedCategory, InducedCategory.homLinearEquiv.symm, LinearMap, LinearMap.fst, LinearMap.prod, LinearMap.snd, Module, Module.Finite, ModuleCat, ModuleCat.of, V.obj, W.obj, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, casesOn
+--- 原说明 ---
+Construct limit data for a binary product in `ModuleCat R`, using `ModuleCat.of 
+R (M × N)`.
 -/
 def binaryProductLimitCone (M N : ModuleCat.{v} R) : Limits.LimitCone (pair M N) where
   cone :=
@@ -129,107 +73,69 @@ def binaryProductLimitCone (M N : ModuleCat.{v} R) : Limits.LimitCone (pair M N)
         rfl }
 
 @[simp]
-/--
-theorem `binaryProductLimitCone_cone_π_app_left` / 定理 `binaryProductLimitCone_cone_π_app_left`
-
-English:
-theorem binaryProductLimitCone_cone_π_app_left
-  given: (M N : ModuleCat.{v} R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 binaryProductLimitCone_cone_π_app_left
-  条件: (M N : 模范畴.{v} R)
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.binaryProductLimitCone_cone_** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem binaryProductLimitCone_cone_π_app_left (M N : ModuleCat.{v} R) :
     (binaryProductLimitCone M N).cone.π.app ⟨WalkingPair.left⟩ = ofHom (LinearMap.fst R M N) :=
   rfl
 
 @[simp]
-/--
-theorem `binaryProductLimitCone_cone_π_app_right` / 定理 `binaryProductLimitCone_cone_π_app_right`
-
-English:
-theorem binaryProductLimitCone_cone_π_app_right
-  given: (M N : ModuleCat.{v} R)
-  proof: rfl
-
-中文:
-定理 binaryProductLimitCone_cone_π_app_right
-  条件: (M N : 模范畴.{v} R)
-  证明: rfl
+/-
+**ModuleCat.binaryProductLimitCone_cone_** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem binaryProductLimitCone_cone_π_app_right (M N : ModuleCat.{v} R) :
     (binaryProductLimitCone M N).cone.π.app ⟨WalkingPair.right⟩ = ofHom (LinearMap.snd R M N) :=
   rfl
 
-/--
-Definition of `biprodIsoProd` / `biprodIsoProd` 的定义
+/-- We verify that the biproduct in `ModuleCat R` is isomorphic to
+the Cartesian product of the underlying types:
+-/
+/-
+**ModuleCat.biprodIsoProd** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：biprodIsoProd (M N : ModuleCat.{v} R) : (M ⊞ N : ModuleCat.{v} R) ≅ Module
+Cat.of R (M × N)
+参数：M N : ModuleCat.{v} R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition biprodIsoProd
-  signature: (M N : ModuleCat.{v} R)
-  body: IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit M N) (binaryProductLimitCone M N).isLimit
-
-@[simp, elementwise]
-
-中文:
-定义 biprodIsoProd
-  签名: (M N : 模范畴.{v} R)
-  定义体: IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit M N) (binaryProductLimitCone M N).isLimit
-
-@[simp, elementwise]
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isLimit, IsLimit, IsLimit.conePointUniqueUpToIso, binaryProductLimitCone, conePointUniqueUpToIso, isLimit
+--- 原说明 ---
+We verify that the biproduct in `ModuleCat R` is isomorphic to
+the Cartesian product of the underlying types:
 -/
 noncomputable def biprodIsoProd (M N : ModuleCat.{v} R) :
     (M ⊞ N : ModuleCat.{v} R) ≅ ModuleCat.of R (M × N) :=
   IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit M N) (binaryProductLimitCone M N).isLimit
 
 @[simp, elementwise]
-/--
-theorem `biprodIsoProd_inv_comp_fst` / 定理 `biprodIsoProd_inv_comp_fst`
-
-English:
-theorem biprodIsoProd_inv_comp_fst
-  given: (M N : ModuleCat.{v} R)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.left)
-
-@[simp, elementwise]
-
-中文:
-定理 biprodIsoProd_inv_comp_fst
-  条件: (M N : 模范畴.{v} R)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.left)
-
-@[simp, elementwise]
-
-Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingPair, WalkingPair.left, conePointUniqueUpToIso_inv_comp
+/-
+**ModuleCat.biprodIsoProd_inv_comp_fst** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：biprodIsoProd_inv_comp_fst (M N : ModuleCat.{v} R) : (biprodIsoProd M N).i
+nv ≫ biprod.fst = ofHom (LinearMap.fst R M N)
+参数：M N : ModuleCat.{v} R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem biprodIsoProd_inv_comp_fst (M N : ModuleCat.{v} R) :
     (biprodIsoProd M N).inv ≫ biprod.fst = ofHom (LinearMap.fst R M N) :=
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.left)
 
 @[simp, elementwise]
-/--
-theorem `biprodIsoProd_inv_comp_snd` / 定理 `biprodIsoProd_inv_comp_snd`
-
-English:
-theorem biprodIsoProd_inv_comp_snd
-  given: (M N : ModuleCat.{v} R)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.right)
-
-中文:
-定理 biprodIsoProd_inv_comp_snd
-  条件: (M N : 模范畴.{v} R)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.right)
-
-Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingPair, WalkingPair.right, conePointUniqueUpToIso_inv_comp
+/-
+**ModuleCat.biprodIsoProd_inv_comp_snd** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：biprodIsoProd_inv_comp_snd (M N : ModuleCat.{v} R) : (biprodIsoProd M N).i
+nv ≫ biprod.snd = ofHom (LinearMap.snd R M N)
+参数：M N : ModuleCat.{v} R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem biprodIsoProd_inv_comp_snd (M N : ModuleCat.{v} R) :
     (biprodIsoProd M N).inv ≫ biprod.snd = ofHom (LinearMap.snd R M N) :=
@@ -237,43 +143,25 @@ theorem biprodIsoProd_inv_comp_snd (M N : ModuleCat.{v} R) :
 
 namespace HasLimit
 
-variable {J : Type w} (f : J -> ModuleCat.{max w v} R)
+variable {J : Type w} (f : J → ModuleCat.{max w v} R)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The map from an arbitrary cone over an indexed family of abelian groups
 to the Cartesian product of those groups.
 -/
 @[simps!]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**ModuleCat.HasLimit.lift** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.HasLimit`。
+形式化陈述：lift (s : Fan f) : s.pt ⟶ ModuleCat.of R (forall j, f j)
+参数：s : Fan f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (s : Fan f)
-  body: ofHom
-  { toFun := fun x j => s.π.app ⟨j⟩ x
-    map_add' := fun x y => by
-      simp only [Functor.const_obj_obj, map_add]
-      rfl
-    map_smul' := fun r x => by
-      simp only [Functor.const_obj_obj, map_smul]
-      rfl }
-
-中文:
-定义 lift
-  签名: (s : Fan f)
-  定义体: ofHom
-  { toFun := fun x j => s.π.app ⟨j⟩ x
-    map_add' := fun x y => by
-      simp only [Functor.const_obj_obj, map_add]
-      rfl
-    map_smul' := fun r x => by
-      simp only [Functor.const_obj_obj, map_smul]
-      rfl }
-
-Depends on / 依赖: Functor, Functor.const_obj_obj, const_obj_obj, map_add, map_smul
+--- 原说明 ---
+The map from an arbitrary cone over an indexed family of abelian groups
+to the Cartesian product of those groups.
 -/
-def lift (s : Fan f) : s.pt ⟶ ModuleCat.of R (forall j, f j) :=
+def lift (s : Fan f) : s.pt ⟶ ModuleCat.of R (∀ j, f j) :=
   ofHom
   { toFun := fun x j => s.π.app ⟨j⟩ x
     map_add' := fun x y => by
@@ -286,93 +174,61 @@ def lift (s : Fan f) : s.pt ⟶ ModuleCat.of R (forall j, f j) :=
 /-- Construct limit data for a product in `ModuleCat R`, using `ModuleCat.of R (∀ j, F.obj j)`.
 -/
 @[simps]
-/--
-Definition of `productLimitCone` / `productLimitCone` 的定义
+/-
+**ModuleCat.HasLimit.productLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.HasLi
+mit`。
+形式化陈述：productLimitCone : Limits.LimitCone (Discrete.functor f) where cone
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productLimitCone
-  signature: : Limits.LimitCone (Discrete.functor f) where
-  body: { pt := ModuleCat.of R (forall j, f j)
-      π := Discrete.natTrans fun j => ofHom (LinearMap.proj j.as : (forall j, f j) ->ₗ[R] f j.as) }
-  isLimit :=
-    { lift := lift.{_, v} f
-      fac := fun _ _ => rfl
-      uniq := fun s m w => by
-        ext x j
-        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt -> f j) x) (w ⟨j⟩) }
-
-中文:
-定义 productLimitCone
-  签名: : Limits.极限锥 (离散.functor f) where
-  定义体: { pt := ModuleCat.of R (forall j, f j)
-      π := Discrete.natTrans fun j => ofHom (LinearMap.proj j.as : (forall j, f j) ->ₗ[R] f j.as) }
-  isLimit :=
-    { lift := lift.{_, v} f
-      fac := fun _ _ => rfl
-      uniq := fun s m w => by
-        ext x j
-        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt -> f j) x) (w ⟨j⟩) }
-
-Depends on / 依赖: Discrete, Discrete.natTrans, LinearMap, LinearMap.proj, ModuleCat, ModuleCat.of, congr_arg, isLimit, j.as, natTrans, s.pt
+--- 原说明 ---
+Construct limit data for a product in `ModuleCat R`, using `ModuleCat.of R (∀ j,
+ F.obj j)`.
 -/
 def productLimitCone : Limits.LimitCone (Discrete.functor f) where
   cone :=
-    { pt := ModuleCat.of R (forall j, f j)
-      π := Discrete.natTrans fun j => ofHom (LinearMap.proj j.as : (forall j, f j) ->ₗ[R] f j.as) }
+    { pt := ModuleCat.of R (∀ j, f j)
+      π := Discrete.natTrans fun j => ofHom (LinearMap.proj j.as : (∀ j, f j) →ₗ[R] f j.as) }
   isLimit :=
     { lift := lift.{_, v} f
       fac := fun _ _ => rfl
       uniq := fun s m w => by
         ext x j
-        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt -> f j) x) (w ⟨j⟩) }
+        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt → f j) x) (w ⟨j⟩) }
 
 end HasLimit
 
 open HasLimit
 
-variable {J : Type} (f : J -> ModuleCat.{v} R)
+variable {J : Type} (f : J → ModuleCat.{v} R)
 
-/--
-Definition of `biproductIsoPi` / `biproductIsoPi` 的定义
-
-English:
-definition biproductIsoPi
-  signature: [Finite J] (f : J -> ModuleCat.{v} R)
-  body: IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (productLimitCone f).isLimit
-
-@[simp, elementwise]
-
-中文:
-定义 biproductIsoPi
-  签名: [有限 J] (f : J -> 模范畴.{v} R)
-  定义体: IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (productLimitCone f).isLimit
-
-@[simp, elementwise]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, biproduct, biproduct.isLimit, conePointUniqueUpToIso, isLimit, productLimitCone
+/-- We verify that the biproduct we've just defined is isomorphic to the `ModuleCat R` structure
+on the dependent function type.
 -/
-noncomputable def biproductIsoPi [Finite J] (f : J -> ModuleCat.{v} R) :
-    ((⨁ f) : ModuleCat.{v} R) ≅ ModuleCat.of R (forall j, f j) :=
+/-
+**ModuleCat.biproductIsoPi** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：biproductIsoPi [Finite J] (f : J -> ModuleCat.{v} R) : ((⨁ f) : ModuleCat.
+{v} R) ≅ ModuleCat.of R (forall j, f j)
+参数：f : J -> ModuleCat.{v} R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We verify that the biproduct we've just defined is isomorphic to the `ModuleCat 
+R` structure
+on the dependent function type.
+-/
+noncomputable def biproductIsoPi [Finite J] (f : J → ModuleCat.{v} R) :
+    ((⨁ f) : ModuleCat.{v} R) ≅ ModuleCat.of R (∀ j, f j) :=
   IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (productLimitCone f).isLimit
 
 @[simp, elementwise]
-/--
-theorem `biproductIsoPi_inv_comp_π` / 定理 `biproductIsoPi_inv_comp_π`
-
-English:
-theorem biproductIsoPi_inv_comp_π
-  given: [Finite J] (f : J -> ModuleCat.{v} R) (j : J)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk j)
-
-中文:
-定理 biproductIsoPi_inv_comp_π
-  条件: [有限 J] (f : J -> 模范畴.{v} R) (j : J)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk j)
-
-Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**ModuleCat.biproductIsoPi_inv_comp_** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem biproductIsoPi_inv_comp_π [Finite J] (f : J -> ModuleCat.{v} R) (j : J) :
-    (biproductIsoPi f).inv ≫ biproduct.π f j = ofHom (LinearMap.proj j : (forall j, f j) ->ₗ[R] f j) :=
+theorem biproductIsoPi_inv_comp_π [Finite J] (f : J → ModuleCat.{v} R) (j : J) :
+    (biproductIsoPi f).inv ≫ biproduct.π f j = ofHom (LinearMap.proj j : (∀ j, f j) →ₗ[R] f j) :=
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk j)
 
 end ModuleCat
@@ -384,32 +240,15 @@ section universe_monomorphic
 variable {R : Type u} {A M B : Type v} [Ring R] [AddCommGroup A] [Module R A] [AddCommGroup B]
   [Module R B] [AddCommGroup M] [Module R M]
 
-variable {j : A ->ₗ[R] M} {g : M ->ₗ[R] B}
+variable {j : A →ₗ[R] M} {g : M →ₗ[R] B}
 
 
 set_option backward.privateInPublic true in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : Function.Injective j)
-  body: ((ShortComplex.Splitting.ofExactOfSection _
-    (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
-    (ModuleCat.ofHom g) exac) (ofHom f) (hom_ext h)
-    (by simpa only [ModuleCat.mono_iff_injective])).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearEquiv
-
-中文:
-定义 noncomputable
-  签名: def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : 函数.单射 j)
-  定义体: ((ShortComplex.Splitting.ofExactOfSection _
-    (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
-    (ModuleCat.ofHom g) exac) (ofHom f) (hom_ext h)
-    (by simpa only [ModuleCat.mono_iff_injective])).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearEquiv
+/-
+**lequivProdOfRightSplitExact'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private noncomputable def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : Function.Injective j)
+private noncomputable def lequivProdOfRightSplitExact' {f : B →ₗ[R] M} (hj : Function.Injective j)
     (exac : LinearMap.range j = LinearMap.ker g) (h : g.comp f = LinearMap.id) : (A × B) ≃ₗ[R] M :=
   ((ShortComplex.Splitting.ofExactOfSection _
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
@@ -418,28 +257,11 @@ private noncomputable def lequivProdOfRightSplitExact' {f : B ->ₗ[R] M} (hj : 
     biprodIsoProd _ _).symm.toLinearEquiv
 
 set_option backward.privateInPublic true in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : Function.Surjective g)
-  body: ((ShortComplex.Splitting.ofExactOfRetraction _
-    (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
-    (ModuleCat.ofHom g) exac) (ModuleCat.ofHom f) (hom_ext h)
-    (by simpa only [ModuleCat.epi_iff_surjective] using! hg)).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearEquiv
-
-中文:
-定义 noncomputable
-  签名: def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : 函数.满射 g)
-  定义体: ((ShortComplex.Splitting.ofExactOfRetraction _
-    (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
-    (ModuleCat.ofHom g) exac) (ModuleCat.ofHom f) (hom_ext h)
-    (by simpa only [ModuleCat.epi_iff_surjective] using! hg)).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearEquiv
+/-
+**lequivProdOfLeftSplitExact'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private noncomputable def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : Function.Surjective g)
+private noncomputable def lequivProdOfLeftSplitExact' {f : M →ₗ[R] A} (hg : Function.Surjective g)
     (exac : LinearMap.range j = LinearMap.ker g) (h : f.comp j = LinearMap.id) : (A × B) ≃ₗ[R] M :=
   ((ShortComplex.Splitting.ofExactOfRetraction _
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
@@ -456,42 +278,28 @@ variable {R : Type u} {A : Type uA} {M : Type uM} {B : Type uB}
 variable [Ring R] [AddCommGroup A] [AddCommGroup B] [AddCommGroup M]
 variable [Module R A] [Module R B] [Module R M]
 
-variable {j : A ->ₗ[R] M} {g : M ->ₗ[R] B}
+variable {j : A →ₗ[R] M} {g : M →ₗ[R] B}
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `lequivProdOfRightSplitExact` / `lequivProdOfRightSplitExact` 的定义
+/-- The isomorphism `A × B ≃ₗ[R] M` coming from a right split exact sequence `0 ⟶ A ⟶ M ⟶ B ⟶ 0`
+of modules. -/
+/-
+**lequivProdOfRightSplitExact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：lequivProdOfRightSplitExact {f : B ->ₗ[R] M} (hj : Function.Injective j) (
+exac : LinearMap.range j = LinearMap.ker g) (h : g.comp f = LinearMap.id) : (A ×
+ B) ≃ₗ[R] M
+参数：hj : Function.Injective j；exac : LinearMap.range j = LinearMap.ker g；h : g.co
+mp f = LinearMap.id。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lequivProdOfRightSplitExact
-  signature: {f : B ->ₗ[R] M} (hj : Function.Injective j)
-  body: have := lequivProdOfRightSplitExact'
-    (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
-    (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (by simpa using hj)
-    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
-    (by ext x; simpa using congr($h x.down))
-  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
-
-中文:
-定义 lequivProdOfRightSplitExact
-  签名: {f : B ->ₗ[R] M} (hj : 函数.单射 j)
-  定义体: have := lequivProdOfRightSplitExact'
-    (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
-    (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (by simpa using hj)
-    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
-    (by ext x; simpa using congr($h x.down))
-  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
-
-Depends on / 依赖: LinearMap, LinearMap.ker_comp, LinearMap.range_comp, Submodule, Submodule.comap_equiv_eq_map_symm, ULift.moduleEquiv.symm.toLinearMap, ULift.moduleEquiv.toLinearMap, comap_equiv_eq_map_symm, ker_comp, lequivProdOfRightSplitExact, moduleEquiv, range_comp, toLinearMap
+--- 原说明 ---
+The isomorphism `A × B ≃ₗ[R] M` coming from a right split exact sequence `0 ⟶ A 
+⟶ M ⟶ B ⟶ 0`
+of modules.
 -/
-noncomputable def lequivProdOfRightSplitExact {f : B ->ₗ[R] M} (hj : Function.Injective j)
+noncomputable def lequivProdOfRightSplitExact {f : B →ₗ[R] M} (hj : Function.Injective j)
     (exac : LinearMap.range j = LinearMap.ker g) (h : g.comp f = LinearMap.id) : (A × B) ≃ₗ[R] M :=
   have := lequivProdOfRightSplitExact'
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
@@ -505,38 +313,24 @@ noncomputable def lequivProdOfRightSplitExact {f : B ->ₗ[R] M} (hj : Function.
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `lequivProdOfLeftSplitExact` / `lequivProdOfLeftSplitExact` 的定义
+/-- The isomorphism `A × B ≃ₗ[R] M` coming from a left split exact sequence `0 ⟶ A ⟶ M ⟶ B ⟶ 0`
+of modules. -/
+/-
+**lequivProdOfLeftSplitExact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：lequivProdOfLeftSplitExact {f : M ->ₗ[R] A} (hg : Function.Surjective g) (
+exac : LinearMap.range j = LinearMap.ker g) (h : f.comp j = LinearMap.id) : (A ×
+ B) ≃ₗ[R] M
+参数：hg : Function.Surjective g；exac : LinearMap.range j = LinearMap.ker g；h : f.c
+omp j = LinearMap.id。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lequivProdOfLeftSplitExact
-  signature: {f : M ->ₗ[R] A} (hg : Function.Surjective g)
-  body: have := lequivProdOfLeftSplitExact'
-    (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
-    (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (by simpa using hg)
-    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
-    (by ext x; simpa using congr($h x.down))
-  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
-
-中文:
-定义 lequivProdOfLeftSplitExact
-  签名: {f : M ->ₗ[R] A} (hg : 函数.满射 g)
-  定义体: have := lequivProdOfLeftSplitExact'
-    (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
-    (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
-    (by simpa using hg)
-    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
-    (by ext x; simpa using congr($h x.down))
-  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
-
-Depends on / 依赖: Finite, LinearMap, LinearMap.ker_comp, LinearMap.range_comp, Module, Module.Finite.equiv_iff, ModuleCat, ModuleCat.coprodIsoDirectSum, Submodule, Submodule.comap_equiv_eq_map_symm, ULift.moduleEquiv.symm.toLinearMap, ULift.moduleEquiv.toLinearMap, classical, comap_equiv_eq_map_symm, coprodIsoDirectSum, equiv_iff, ker_comp, lequivProdOfLeftSplitExact, moduleEquiv, range_comp
+--- 原说明 ---
+The isomorphism `A × B ≃ₗ[R] M` coming from a left split exact sequence `0 ⟶ A ⟶
+ M ⟶ B ⟶ 0`
+of modules.
 -/
-noncomputable def lequivProdOfLeftSplitExact {f : M ->ₗ[R] A} (hg : Function.Surjective g)
+noncomputable def lequivProdOfLeftSplitExact {f : M →ₗ[R] A} (hg : Function.Surjective g)
     (exac : LinearMap.range j = LinearMap.ker g) (h : f.comp j = LinearMap.id) : (A × B) ≃ₗ[R] M :=
   have := lequivProdOfLeftSplitExact'
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
@@ -551,3 +345,4 @@ noncomputable def lequivProdOfLeftSplitExact {f : M ->ₗ[R] A} (hg : Function.S
 end universe_polymorphic
 
 end SplitExact
+

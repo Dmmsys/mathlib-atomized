@@ -31,9 +31,9 @@ so that `m` factors through the `m'` in any other such factorisation.
   `i : image f ⟶ image g` making the diagram
 
   X ----→ image f ----→ Y
-  | | |
-  | | |
-  ↓ ↓ ↓
+  |         |           |
+  |         |           |
+  ↓         ↓           ↓
   P ----→ image g ----→ Q
 
   commute, where the top row is the image factorisation of `f`, the bottom row is the image
@@ -70,30 +70,17 @@ namespace CategoryTheory.Limits
 variable {C : Type u} [Category.{v} C]
 variable {X Y : C} (f : X ⟶ Y)
 
-/--
-Definition of `MonoFactorisation` / `MonoFactorisation` 的定义
+/-- A factorisation of a morphism `f = e ≫ m`, with `m` monic. -/
+/-
+**CategoryTheory.Limits.MonoFactorisation** 是 Mathlib 中的一个结构，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：MonoFactorisation (f : X ⟶ Y) where I : C m : I ⟶ Y [m_mono : Mono m] e : 
+X ⟶ I fac : e ≫ m = f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MonoFactorisation
-  parameters: (f : X ⟶ Y)
-  axioms and operations (5):
-    - I : C
-    - m : I ⟶ Y
-    - [m_mono : Mono m]
-    - e : X ⟶ I
-    - fac : e ≫ m = f  [default: by cat_disch]
-
-中文:
-结构 单态射分解
-  参数: (f : X ⟶ Y)
-  公理与运算 (5 个):
-    - I : C
-    - m : I ⟶ Y
-    - [m_mono : 单态射 m]
-    - e : X ⟶ I
-    - fac : e ≫ m = f  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A factorisation of a morphism `f = e ≫ m`, with `m` monic.
 -/
 structure MonoFactorisation (f : X ⟶ Y) where
   I : C
@@ -111,22 +98,16 @@ attribute [instance] MonoFactorisation.m_mono
 
 namespace MonoFactorisation
 
-/--
-Definition of `self` / `self` 的定义
+/-- The obvious factorisation of a monomorphism through itself. -/
+/-
+**CategoryTheory.Limits.MonoFactorisation.self** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.MonoFactorisation`。
+形式化陈述：self [Mono f] : MonoFactorisation f where I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition self
-  signature: [Mono f]
-  body: X
-  m := f
-  e := 𝟙 X
-
-中文:
-定义 self
-  签名: [单态射 f]
-  定义体: X
-  m := f
-  e := 𝟙 X
+--- 原说明 ---
+The obvious factorisation of a monomorphism through itself.
 -/
 def self [Mono f] : MonoFactorisation f where
   I := X
@@ -135,18 +116,10 @@ def self [Mono f] : MonoFactorisation f where
 
 -- I'm not sure we really need this, but the linter says that an inhabited instance
 -- ought to exist...
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] : Inhabited (MonoFactorisation f)
-  body: ⟨self f⟩
-
-中文:
-实例 [单态射
-  签名: f] : 可居 (单态射分解 f)
-  定义体: ⟨self f⟩
+/-
+**CategoryTheory.Limits.MonoFactorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Limits.MonoFactorisation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] : Inhabited (MonoFactorisation f) := ⟨self f⟩
 
@@ -155,32 +128,30 @@ variable {f}
 /-- The morphism `m` in a factorisation `f = e ≫ m` through a monomorphism is uniquely
 determined. -/
 @[ext (iff := false)]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**CategoryTheory.Limits.MonoFactorisation.ext** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.MonoFactorisation`。
+形式化陈述：ext {F F' : MonoFactorisation f} (hI : F.I = F'.I) (hm : F.m = eqToHom hI 
+≫ F'.m) : F = F'
+参数：hI : F.I = F'.I；hm : F.m = eqToHom hI ≫ F'.m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 
-English:
-theorem ext
-  statement: {F F' : MonoFactorisation f} (hI : F.I = F'.I)
-  proof: by
-  obtain ⟨_, Fm, _, Ffac⟩ := F; obtain ⟨_, Fm', _, Ffac'⟩ := F'
-  cases hI
-  replace hm : Fm = Fm' := by simpa using hm
-  congr
-  apply (cancel_mono Fm).1
-  rw [Ffac]; rw [hm]; rw [Ffac']
-
-中文:
-定理 ext
-  结论: {F F' : 单态射分解 f} (hI : F.I = F'.I)
-  证明: by
-  obtain ⟨_, Fm, _, Ffac⟩ := F; obtain ⟨_, Fm', _, Ffac'⟩ := F'
-  cases hI
-  replace hm : Fm = Fm' := by simpa using hm
-  congr
-  apply (cancel_mono Fm).1
-  rw [Ffac]; rw [hm]; rw [Ffac']
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, cancel_mono, isIso_of_isIso_app, prodComparisonNatTrans, replace
+--- 原说明 ---
+The morphism `m` in a factorisation `f = e ≫ m` through a monomorphism is unique
+ly
+determined.
 -/
 theorem ext {F F' : MonoFactorisation f} (hI : F.I = F'.I)
     (hm : F.m = eqToHom hI ≫ F'.m) : F = F' := by
@@ -189,28 +160,22 @@ theorem ext {F F' : MonoFactorisation f} (hI : F.I = F'.I)
   replace hm : Fm = Fm' := by simpa using hm
   congr
   apply (cancel_mono Fm).1
-  rw [Ffac]; rw [hm]; rw [Ffac']
+  rw [Ffac, hm, Ffac']
 
 /-- Any mono factorisation of `f` gives a mono factorisation of `f ≫ g` when `g` is a mono. -/
 @[simps]
-/--
-Definition of `compMono` / `compMono` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.compMono** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.MonoFactorisation`。
+形式化陈述：compMono (F : MonoFactorisation f) {Y' : C} (g : Y ⟶ Y') [Mono g] : MonoFa
+ctorisation (f ≫ g) where I
+参数：F : MonoFactorisation f；g : Y ⟶ Y'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compMono
-  signature: (F : MonoFactorisation f) {Y' : C} (g : Y ⟶ Y') [Mono g]
-  body: F.I
-  m := F.m ≫ g
-  m_mono := mono_comp _ _
-  e := F.e
-
-中文:
-定义 compMono
-  签名: (F : 单态射分解 f) {Y' : C} (g : Y ⟶ Y') [单态射 g]
-  定义体: F.I
-  m := F.m ≫ g
-  m_mono := mono_comp _ _
-  e := F.e
+--- 原说明 ---
+Any mono factorisation of `f` gives a mono factorisation of `f ≫ g` when `g` is 
+a mono.
 -/
 def compMono (F : MonoFactorisation f) {Y' : C} (g : Y ⟶ Y') [Mono g] :
     MonoFactorisation (f ≫ g) where
@@ -222,24 +187,18 @@ def compMono (F : MonoFactorisation f) {Y' : C} (g : Y ⟶ Y') [Mono g] :
 /-- A mono factorisation of `f ≫ g`, where `g` is an isomorphism,
 gives a mono factorisation of `f`. -/
 @[simps]
-/--
-Definition of `ofCompIso` / `ofCompIso` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.ofCompIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.MonoFactorisation`。
+形式化陈述：ofCompIso {Y' : C} {g : Y ⟶ Y'} [IsIso g] (F : MonoFactorisation (f ≫ g)) 
+: MonoFactorisation f where I
+参数：F : MonoFactorisation (f ≫ g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCompIso
-  signature: {Y' : C} {g : Y ⟶ Y'} [IsIso g] (F : MonoFactorisation (f ≫ g))
-  body: F.I
-  m := F.m ≫ inv g
-  m_mono := mono_comp _ _
-  e := F.e
-
-中文:
-定义 ofCompIso
-  签名: {Y' : C} {g : Y ⟶ Y'} [是同构 g] (F : 单态射分解 (f ≫ g))
-  定义体: F.I
-  m := F.m ≫ inv g
-  m_mono := mono_comp _ _
-  e := F.e
+--- 原说明 ---
+A mono factorisation of `f ≫ g`, where `g` is an isomorphism,
+gives a mono factorisation of `f`.
 -/
 def ofCompIso {Y' : C} {g : Y ⟶ Y'} [IsIso g] (F : MonoFactorisation (f ≫ g)) :
     MonoFactorisation f where
@@ -250,22 +209,20 @@ def ofCompIso {Y' : C} {g : Y ⟶ Y'} [IsIso g] (F : MonoFactorisation (f ≫ g)
 
 /-- Any mono factorisation of `f` gives a mono factorisation of `g ≫ f`. -/
 @[simps]
-/--
-Definition of `isoComp` / `isoComp` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.isoComp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.MonoFactorisation`。
+形式化陈述：isoComp (F : MonoFactorisation f) {X' : C} (g : X' ⟶ X) : MonoFactorisatio
+n (g ≫ f) where I
+参数：F : MonoFactorisation f；g : X' ⟶ X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.m_mono`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.
+Limits.MonoFactorisation f), Categor…
 
-English:
-definition isoComp
-  signature: (F : MonoFactorisation f) {X' : C} (g : X' ⟶ X)
-  body: F.I
-  m := F.m
-  e := g ≫ F.e
-
-中文:
-定义 isoComp
-  签名: (F : 单态射分解 f) {X' : C} (g : X' ⟶ X)
-  定义体: F.I
-  m := F.m
-  e := g ≫ F.e
+--- 原说明 ---
+Any mono factorisation of `f` gives a mono factorisation of `g ≫ f`.
 -/
 def isoComp (F : MonoFactorisation f) {X' : C} (g : X' ⟶ X) : MonoFactorisation (g ≫ f) where
   I := F.I
@@ -275,22 +232,18 @@ def isoComp (F : MonoFactorisation f) {X' : C} (g : X' ⟶ X) : MonoFactorisatio
 /-- A mono factorisation of `g ≫ f`, where `g` is an isomorphism,
 gives a mono factorisation of `f`. -/
 @[simps]
-/--
-Definition of `ofIsoComp` / `ofIsoComp` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.ofIsoComp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.MonoFactorisation`。
+形式化陈述：ofIsoComp {X' : C} (g : X' ⟶ X) [IsIso g] (F : MonoFactorisation (g ≫ f)) 
+: MonoFactorisation f where I
+参数：g : X' ⟶ X；F : MonoFactorisation (g ≫ f)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsoComp
-  signature: {X' : C} (g : X' ⟶ X) [IsIso g] (F : MonoFactorisation (g ≫ f))
-  body: F.I
-  m := F.m
-  e := inv g ≫ F.e
-
-中文:
-定义 ofIsoComp
-  签名: {X' : C} (g : X' ⟶ X) [是同构 g] (F : 单态射分解 (g ≫ f))
-  定义体: F.I
-  m := F.m
-  e := inv g ≫ F.e
+--- 原说明 ---
+A mono factorisation of `g ≫ f`, where `g` is an isomorphism,
+gives a mono factorisation of `f`.
 -/
 def ofIsoComp {X' : C} (g : X' ⟶ X) [IsIso g] (F : MonoFactorisation (g ≫ f)) :
     MonoFactorisation f where
@@ -301,26 +254,18 @@ def ofIsoComp {X' : C} (g : X' ⟶ X) [IsIso g] (F : MonoFactorisation (g ≫ f)
 /-- If `f` and `g` are isomorphic arrows, then a mono factorisation of `f`
 gives a mono factorisation of `g` -/
 @[simps]
-/--
-Definition of `ofArrowIso` / `ofArrowIso` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.MonoFactorisation`。
+形式化陈述：ofArrowIso {f g : Arrow C} (F : MonoFactorisation f.hom) (sq : f ⟶ g) [IsI
+so sq] : MonoFactorisation g.hom where I
+参数：F : MonoFactorisation f.hom；sq : f ⟶ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofArrowIso
-  signature: {f g : Arrow C} (F : MonoFactorisation f.hom) (sq : f ⟶ g) [IsIso sq]
-  body: F.I
-  m := F.m ≫ sq.right
-  e := inv sq.left ≫ F.e
-  m_mono := mono_comp _ _
-  fac := by simp only [fac_assoc, Arrow.w, IsIso.inv_comp_eq, Category.assoc]
-
-中文:
-定义 ofArrowIso
-  签名: {f g : 箭头 C} (F : 单态射分解 f.hom) (sq : f ⟶ g) [是同构 sq]
-  定义体: F.I
-  m := F.m ≫ sq.right
-  e := inv sq.left ≫ F.e
-  m_mono := mono_comp _ _
-  fac := by simp only [fac_assoc, Arrow.w, IsIso.inv_comp_eq, Category.assoc]
+--- 原说明 ---
+If `f` and `g` are isomorphic arrows, then a mono factorisation of `f`
+gives a mono factorisation of `g`
 -/
 def ofArrowIso {f g : Arrow C} (F : MonoFactorisation f.hom) (sq : f ⟶ g) [IsIso sq] :
     MonoFactorisation g.hom where
@@ -335,22 +280,19 @@ Given a mono factorisation `X ⟶ I ⟶ Y` of an arrow `f`, an isomorphism `I �
 factorisation `X ⟶ I' ⟶ Y` of `f`.
 -/
 @[simps]
-/--
-Definition of `ofIsoI` / `ofIsoI` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.ofIsoI** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.MonoFactorisation`。
+形式化陈述：ofIsoI (F : MonoFactorisation f) {I'} (e : F.I ≅ I') : MonoFactorisation f
+ where I
+参数：F : MonoFactorisation f；e : F.I ≅ I'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsoI
-  signature: (F : MonoFactorisation f) {I'} (e : F.I ≅ I')
-  body: I'
-  m := e.inv ≫ F.m
-  e := F.e ≫ e.hom
-
-中文:
-定义 ofIsoI
-  签名: (F : 单态射分解 f) {I'} (e : F.I ≅ I')
-  定义体: I'
-  m := e.inv ≫ F.m
-  e := F.e ≫ e.hom
+--- 原说明 ---
+Given a mono factorisation `X ⟶ I ⟶ Y` of an arrow `f`, an isomorphism `I ≅ I'` 
+gives a new mono
+factorisation `X ⟶ I' ⟶ Y` of `f`.
 -/
 def ofIsoI (F : MonoFactorisation f) {I'} (e : F.I ≅ I') :
     MonoFactorisation f where
@@ -363,30 +305,17 @@ Copying a mono factorisation to another mono factorisation with propositionally 
 `m` and `e` fields.
 -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**CategoryTheory.Limits.MonoFactorisation.copy** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.MonoFactorisation`。
+形式化陈述：copy (F : MonoFactorisation f) (m : F.I ⟶ Y) (e : X ⟶ F.I) (hm : m = F.m
+参数：F : MonoFactorisation f；m : F.I ⟶ Y；e : X ⟶ F.I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (F : MonoFactorisation f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
-  body: F.I
-  m := m
-  e := e
-  m_mono := by rw [hm]; infer_instance
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (F : 单态射分解 f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
-  定义体: F.I
-  m := m
-  e := e
-  m_mono := by rw [hm]; infer_instance
-
-@[simp]
-
-Depends on / 依赖: MonoFactorisation, cat_disch, infer_instance, m_mono
+--- 原说明 ---
+Copying a mono factorisation to another mono factorisation with propositionally 
+equal
+`m` and `e` fields.
 -/
 def copy (F : MonoFactorisation f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
     (hm : m = F.m := by cat_disch) (he : e = F.e := by cat_disch) :
@@ -397,22 +326,26 @@ def copy (F : MonoFactorisation f) (m : F.I ⟶ Y) (e : X ⟶ F.I)
   m_mono := by rw [hm]; infer_instance
 
 @[simp]
-/--
-lemma `fac_apply` / 引理 `fac_apply`
-
-English:
-lemma fac_apply
-  statement: {F G : C ⥤ Type w} {f : F ⟶ G} {X : C}
-  proof: by
-  simp [← comp_apply, ← NatTrans.comp_app]
-
-中文:
-引理 fac_apply
-  结论: {F G : C ⥤ 类型 w} {f : F ⟶ G} {X : C}
-  证明: by
-  simp [← comp_apply, ← NatTrans.comp_app]
-
-Depends on / 依赖: NatTrans, NatTrans.comp_app, comp_app, comp_apply
+/-
+**CategoryTheory.Limits.MonoFactorisation.fac_apply** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Limits.MonoFactorisation`。
+形式化陈述：fac_apply {F G : C ⥤ Type w} {f : F ⟶ G} {X : C} (H : MonoFactorisation f)
+ (x : F.obj X) : H.m.app X (H.e.app X x) = f.app X x
+参数：H : MonoFactorisation f；x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.Lim
+its.MonoFactorisation f), Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma fac_apply {F G : C ⥤ Type w} {f : F ⟶ G} {X : C}
     (H : MonoFactorisation f) (x : F.obj X) : H.m.app X (H.e.app X x) = f.app X x := by
@@ -422,28 +355,22 @@ end MonoFactorisation
 
 variable {f}
 
-/--
-Definition of `IsImage` / `IsImage` 的定义
+/-- Data exhibiting that a given factorisation through a mono is initial. -/
+/-
+**CategoryTheory.Limits.IsImage** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：IsImage (F : MonoFactorisation f) where lift : forall F' : MonoFactorisati
+on f, F.I ⟶ F'.I lift_fac : forall F' : MonoFactorisation f, lift F' ≫ F'.m = F.
+m
+参数：F : MonoFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsImage
-  parameters: (F : MonoFactorisation f)
-  axioms and operations (2):
-    - lift : forall F' : MonoFactorisation f, F.I ⟶ F'.I
-    - lift_fac : forall F' : MonoFactorisation f, lift F' ≫ F'.m = F.m  [default: by cat_disch]
-
-中文:
-结构 是像
-  参数: (F : 单态射分解 f)
-  公理与运算 (2 个):
-    - lift : 对任意 F' : 单态射分解 f, F.I ⟶ F'.I
-    - lift_fac : 对任意 F' : 单态射分解 f, lift F' ≫ F'.m = F.m  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Data exhibiting that a given factorisation through a mono is initial.
 -/
 structure IsImage (F : MonoFactorisation f) where
-  lift : forall F' : MonoFactorisation f, F.I ⟶ F'.I
-  lift_fac : forall F' : MonoFactorisation f, lift F' ≫ F'.m = F.m := by cat_disch
+  lift : ∀ F' : MonoFactorisation f, F.I ⟶ F'.I
+  lift_fac : ∀ F' : MonoFactorisation f, lift F' ≫ F'.m = F.m := by cat_disch
 
 attribute [inherit_doc IsImage] IsImage.lift IsImage.lift_fac
 
@@ -452,57 +379,62 @@ attribute [reassoc (attr := simp)] IsImage.lift_fac
 namespace IsImage
 
 @[reassoc (attr := simp)]
-/--
-theorem `fac_lift` / 定理 `fac_lift`
-
-English:
-theorem fac_lift
-  given: {F : MonoFactorisation f} (hF : IsImage F) (F' : MonoFactorisation f)
-  proof: (cancel_mono F'.m).1 by simp
-
-中文:
-定理 fac_lift
-  条件: {F : 单态射分解 f} (hF : 是像 F) (F' : 单态射分解 f)
-  证明: (cancel_mono F'.m).1 by simp
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Limits.IsImage.fac_lift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.IsImage`。
+形式化陈述：fac_lift {F : MonoFactorisation f} (hF : IsImage F) (F' : MonoFactorisatio
+n f) : F.e ≫ hF.lift F' = F'.e
+参数：hF : IsImage F；F' : MonoFactorisation f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.m_mono`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.
+Limits.MonoFactorisation f), Categor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsImage.lift_fac`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F : CategoryTheory.Limits.Mono
+Factorisation f} (self : Cat…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.Lim
+its.MonoFactorisation f), Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fac_lift {F : MonoFactorisation f} (hF : IsImage F) (F' : MonoFactorisation f) :
     F.e ≫ hF.lift F' = F'.e :=
-(cancel_mono F'.m).1 by simp
+  (cancel_mono F'.m).1 <| by simp
 
 variable (f)
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The trivial factorisation of a monomorphism satisfies the universal property. -/
 @[simps]
-/--
-Definition of `self` / `self` 的定义
+/-
+**CategoryTheory.Limits.IsImage.self** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsImage`。
+形式化陈述：self [Mono f] : IsImage (MonoFactorisation.self f) where lift F'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition self
-  signature: [Mono f]
-  body: F'.e
-
-中文:
-定义 self
-  签名: [单态射 f]
-  定义体: F'.e
+--- 原说明 ---
+The trivial factorisation of a monomorphism satisfies the universal property.
 -/
 def self [Mono f] : IsImage (MonoFactorisation.self f) where lift F' := F'.e
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] : Inhabited (IsImage (MonoFactorisation.self f))
-  body: ⟨self f⟩
-
-中文:
-实例 [单态射
-  签名: f] : 可居 (是像 (单态射分解.self f))
-  定义体: ⟨self f⟩
+/-
+**CategoryTheory.Limits.IsImage.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limit
+s.IsImage`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] : Inhabited (IsImage (MonoFactorisation.self f)) :=
   ⟨self f⟩
@@ -513,26 +445,18 @@ variable {f}
 /-- Two factorisations through monomorphisms satisfying the universal property
 must factor through isomorphic objects. -/
 @[simps]
-/--
-Definition of `isoExt` / `isoExt` 的定义
+/-
+**CategoryTheory.Limits.IsImage.isoExt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsImage`。
+形式化陈述：isoExt {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F') : 
+F.I ≅ F'.I where hom
+参数：hF : IsImage F；hF' : IsImage F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoExt
-  signature: {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F')
-  body: hF.lift F'
-  inv := hF'.lift F
-  hom_inv_id := (cancel_mono F.m).1 (by simp)
-  inv_hom_id := (cancel_mono F'.m).1 (by simp)
-
-中文:
-定义 isoExt
-  签名: {F F' : 单态射分解 f} (hF : 是像 F) (hF' : 是像 F')
-  定义体: hF.lift F'
-  inv := hF'.lift F
-  hom_inv_id := (cancel_mono F.m).1 (by simp)
-  inv_hom_id := (cancel_mono F'.m).1 (by simp)
-
-Depends on / 依赖: hF.lift
+--- 原说明 ---
+Two factorisations through monomorphisms satisfying the universal property
+must factor through isomorphic objects.
 -/
 def isoExt {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F') :
     F.I ≅ F'.I where
@@ -542,64 +466,86 @@ def isoExt {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F') :
   inv_hom_id := (cancel_mono F'.m).1 (by simp)
 
 variable {F F' : MonoFactorisation f} (hF : IsImage F) (hF' : IsImage F')
-
-/--
-theorem `isoExt_hom_m` / 定理 `isoExt_hom_m`
-
-English:
-theorem isoExt_hom_m
-  statement: (isoExt hF hF').hom ≫ F'.m = F.m
-  proof: by simp
-
-中文:
-定理 isoExt_hom_m
-  结论: (isoExt hF hF').hom ≫ F'.m = F.m
-  证明: by simp
+/-
+**CategoryTheory.Limits.IsImage.isoExt_hom_m** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsImage`。
+形式化陈述：isoExt_hom_m : (isoExt hF hF').hom ≫ F'.m = F.m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsImage.isoExt_hom`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F F' : CategoryTheory.Limits
+.MonoFactorisation f} (hF : Ca…
+· 使用定理 `CategoryTheory.Limits.IsImage.lift_fac`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F : CategoryTheory.Limits.Mono
+Factorisation f} (self : Cat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoExt_hom_m : (isoExt hF hF').hom ≫ F'.m = F.m := by simp
-
-/--
-theorem `isoExt_inv_m` / 定理 `isoExt_inv_m`
-
-English:
-theorem isoExt_inv_m
-  statement: (isoExt hF hF').inv ≫ F.m = F'.m
-  proof: by simp
-
-中文:
-定理 isoExt_inv_m
-  结论: (isoExt hF hF').inv ≫ F.m = F'.m
-  证明: by simp
+/-
+**CategoryTheory.Limits.IsImage.isoExt_inv_m** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsImage`。
+形式化陈述：isoExt_inv_m : (isoExt hF hF').inv ≫ F.m = F'.m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsImage.isoExt_inv`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F F' : CategoryTheory.Limits
+.MonoFactorisation f} (hF : Ca…
+· 使用定理 `CategoryTheory.Limits.IsImage.lift_fac`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F : CategoryTheory.Limits.Mono
+Factorisation f} (self : Cat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoExt_inv_m : (isoExt hF hF').inv ≫ F.m = F'.m := by simp
-
-/--
-theorem `e_isoExt_hom` / 定理 `e_isoExt_hom`
-
-English:
-theorem e_isoExt_hom
-  statement: F.e ≫ (isoExt hF hF').hom = F'.e
-  proof: by simp
-
-中文:
-定理 e_isoExt_hom
-  结论: F.e ≫ (isoExt hF hF').hom = F'.e
-  证明: by simp
+/-
+**CategoryTheory.Limits.IsImage.e_isoExt_hom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsImage`。
+形式化陈述：e_isoExt_hom : F.e ≫ (isoExt hF hF').hom = F'.e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsImage.isoExt_hom`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F F' : CategoryTheory.Limits
+.MonoFactorisation f} (hF : Ca…
+· 使用定理 `CategoryTheory.Limits.IsImage.fac_lift`：fac_lift {F : MonoFactorisation 
+f} (hF : IsImage F) (F' : MonoFactorisation f) : F.e ≫ hF.lift F' = F'.e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem e_isoExt_hom : F.e ≫ (isoExt hF hF').hom = F'.e := by simp
-
-/--
-theorem `e_isoExt_inv` / 定理 `e_isoExt_inv`
-
-English:
-theorem e_isoExt_inv
-  statement: F'.e ≫ (isoExt hF hF').inv = F.e
-  proof: by simp
-
-中文:
-定理 e_isoExt_inv
-  结论: F'.e ≫ (isoExt hF hF').inv = F.e
-  证明: by simp
+/-
+**CategoryTheory.Limits.IsImage.e_isoExt_inv** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsImage`。
+形式化陈述：e_isoExt_inv : F'.e ≫ (isoExt hF hF').inv = F.e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsImage.isoExt_inv`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F F' : CategoryTheory.Limits
+.MonoFactorisation f} (hF : Ca…
+· 使用定理 `CategoryTheory.Limits.IsImage.fac_lift`：fac_lift {F : MonoFactorisation 
+f} (hF : IsImage F) (F' : MonoFactorisation f) : F.e ≫ hF.lift F' = F'.e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem e_isoExt_inv : F'.e ≫ (isoExt hF hF').inv = F.e := by simp
 
@@ -607,26 +553,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `f` and `g` are isomorphic arrows, then a mono factorisation of `f` that is an image
 gives a mono factorisation of `g` that is an image -/
 @[simps]
-/--
-Definition of `ofArrowIso` / `ofArrowIso` 的定义
+/-
+**CategoryTheory.Limits.IsImage.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsImage`。
+形式化陈述：ofArrowIso {f g : Arrow C} {F : MonoFactorisation f.hom} (hF : IsImage F) 
+(sq : f ⟶ g) [IsIso sq] : IsImage (F.ofArrowIso sq) where lift F'
+参数：hF : IsImage F；sq : f ⟶ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofArrowIso
-  signature: {f g : Arrow C} {F : MonoFactorisation f.hom} (hF : IsImage F) (sq : f ⟶ g)
-  body: hF.lift (F'.ofArrowIso (inv sq))
-  lift_fac F' := by
-    simpa only [MonoFactorisation.ofArrowIso_m, Arrow.inv_right, ← Category.assoc,
-      IsIso.comp_inv_eq] using hF.lift_fac (F'.ofArrowIso (inv sq))
-
-中文:
-定义 ofArrowIso
-  签名: {f g : 箭头 C} {F : 单态射分解 f.hom} (hF : 是像 F) (sq : f ⟶ g)
-  定义体: hF.lift (F'.ofArrowIso (inv sq))
-  lift_fac F' := by
-    simpa only [MonoFactorisation.ofArrowIso_m, Arrow.inv_right, ← Category.assoc,
-      IsIso.comp_inv_eq] using hF.lift_fac (F'.ofArrowIso (inv sq))
-
-Depends on / 依赖: hF.lift, ofArrowIso
+--- 原说明 ---
+If `f` and `g` are isomorphic arrows, then a mono factorisation of `f` that is a
+n image
+gives a mono factorisation of `g` that is an image
 -/
 def ofArrowIso {f g : Arrow C} {F : MonoFactorisation f.hom} (hF : IsImage F) (sq : f ⟶ g)
     [IsIso sq] : IsImage (F.ofArrowIso sq) where
@@ -641,20 +580,19 @@ Given a mono factorisation `X ⟶ I ⟶ Y` of an arrow `f` that is an image and 
 the induced mono factorisation by the isomorphism is also an image.
 -/
 @[simps]
-/--
-Definition of `ofIsoI` / `ofIsoI` 的定义
+/-
+**CategoryTheory.Limits.IsImage.ofIsoI** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsImage`。
+形式化陈述：ofIsoI {F : MonoFactorisation f} (hF : IsImage F) {I' : C} (e : F.I ≅ I') 
+: IsImage (F.ofIsoI e) where lift F'
+参数：hF : IsImage F；e : F.I ≅ I'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsoI
-  signature: {F : MonoFactorisation f} (hF : IsImage F) {I' : C} (e : F.I ≅ I')
-  body: e.inv ≫ hF.lift F'
-
-中文:
-定义 ofIsoI
-  签名: {F : 单态射分解 f} (hF : 是像 F) {I' : C} (e : F.I ≅ I')
-  定义体: e.inv ≫ hF.lift F'
-
-Depends on / 依赖: e.inv, hF.lift, isIso_prodComparison_of_preservesLimit_pair
+--- 原说明 ---
+Given a mono factorisation `X ⟶ I ⟶ Y` of an arrow `f` that is an image and an i
+somorphism `I ≅ I'`,
+the induced mono factorisation by the isomorphism is also an image.
 -/
 def ofIsoI {F : MonoFactorisation f} (hF : IsImage F) {I' : C} (e : F.I ≅ I') :
     IsImage (F.ofIsoI e) where
@@ -667,20 +605,19 @@ preserves the property of being an image.
 This is useful when one needs precise control of the `m` and `e` fields.
 -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**CategoryTheory.Limits.IsImage.copy** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsImage`。
+形式化陈述：copy {F : MonoFactorisation f} (hF : IsImage F) (m : F.I ⟶ Y) (e : X ⟶ F.I
+) (hm : m = F.m
+参数：hF : IsImage F；m : F.I ⟶ Y；e : X ⟶ F.I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: {F : MonoFactorisation f} (hF : IsImage F) (m : F.I ⟶ Y) (e : X ⟶ F.I)
-  body: hF.lift
-
-中文:
-定义 copy
-  签名: {F : 单态射分解 f} (hF : 是像 F) (m : F.I ⟶ Y) (e : X ⟶ F.I)
-  定义体: hF.lift
-
-Depends on / 依赖: F.copy, IsImage, cat_disch, hF.lift
+--- 原说明 ---
+Copying a mono factorisation to another mono factorisation with propositionally 
+equal fields
+preserves the property of being an image.
+This is useful when one needs precise control of the `m` and `e` fields.
 -/
 def copy {F : MonoFactorisation f} (hF : IsImage F) (m : F.I ⟶ Y) (e : X ⟶ F.I)
     (hm : m = F.m := by cat_disch) (he : e = F.e := by cat_disch) :
@@ -691,22 +628,17 @@ end IsImage
 
 variable (f)
 
-/--
-Definition of `ImageFactorisation` / `ImageFactorisation` 的定义
+/-- Data exhibiting that a morphism `f` has an image. -/
+/-
+**CategoryTheory.Limits.ImageFactorisation** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (X 
+⟶ Y) → Type (max u v)
+参数：X ⟶ Y；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ImageFactorisation
-  parameters: (f : X ⟶ Y)
-  axioms and operations (2):
-    - F : MonoFactorisation f
-    - isImage : IsImage F
-
-中文:
-结构 ImageFactorisation
-  参数: (f : X ⟶ Y)
-  公理与运算 (2 个):
-    - F : 单态射分解 f
-    - isImage : 是像 F
+--- 原说明 ---
+Data exhibiting that a morphism `f` has an image.
 -/
 structure ImageFactorisation (f : X ⟶ Y) where
   F : MonoFactorisation f
@@ -716,20 +648,10 @@ attribute [inherit_doc ImageFactorisation] ImageFactorisation.F ImageFactorisati
 
 namespace ImageFactorisation
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] : Inhabited (ImageFactorisation f)
-  body: ⟨⟨_, IsImage.self f⟩⟩
-
-中文:
-实例 [单态射
-  签名: f] : 可居 (ImageFactorisation f)
-  定义体: ⟨⟨_, IsImage.self f⟩⟩
-
-Depends on / 依赖: IsImage, IsImage.self
+/-
+**CategoryTheory.Limits.ImageFactorisation.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Limits.ImageFactorisation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] : Inhabited (ImageFactorisation f) :=
   ⟨⟨_, IsImage.self f⟩⟩
@@ -737,22 +659,18 @@ instance [Mono f] : Inhabited (ImageFactorisation f) :=
 /-- If `f` and `g` are isomorphic arrows, then an image factorisation of `f`
 gives an image factorisation of `g` -/
 @[simps]
-/--
-Definition of `ofArrowIso` / `ofArrowIso` 的定义
+/-
+**CategoryTheory.Limits.ImageFactorisation.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.ImageFactorisation`。
+形式化陈述：ofArrowIso {f g : Arrow C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [Is
+Iso sq] : ImageFactorisation g.hom where F
+参数：F : ImageFactorisation f.hom；sq : f ⟶ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofArrowIso
-  signature: {f g : Arrow C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [IsIso sq]
-  body: F.F.ofArrowIso sq
-  isImage := F.isImage.ofArrowIso sq
-
-中文:
-定义 ofArrowIso
-  签名: {f g : 箭头 C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [是同构 sq]
-  定义体: F.F.ofArrowIso sq
-  isImage := F.isImage.ofArrowIso sq
-
-Depends on / 依赖: F.F.ofArrowIso, ofArrowIso
+--- 原说明 ---
+If `f` and `g` are isomorphic arrows, then an image factorisation of `f`
+gives an image factorisation of `g`
 -/
 def ofArrowIso {f g : Arrow C} (F : ImageFactorisation f.hom) (sq : f ⟶ g) [IsIso sq] :
     ImageFactorisation g.hom where
@@ -764,22 +682,19 @@ Given an image factorisation `X ⟶ I ⟶ Y` of an arrow `f`, an isomorphism `I 
 image factorisation `X ⟶ I' ⟶ Y` of `f`.
 -/
 @[simps]
-/--
-Definition of `ofIsoI` / `ofIsoI` 的定义
+/-
+**CategoryTheory.Limits.ImageFactorisation.ofIsoI** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.ImageFactorisation`。
+形式化陈述：ofIsoI {f : X ⟶ Y} (F : ImageFactorisation f) {I' : C} (e : F.F.I ≅ I') : 
+ImageFactorisation f where F
+参数：F : ImageFactorisation f；e : F.F.I ≅ I'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsoI
-  signature: {f : X ⟶ Y} (F : ImageFactorisation f) {I' : C} (e : F.F.I ≅ I')
-  body: F.F.ofIsoI e
-  isImage := F.isImage.ofIsoI e
-
-中文:
-定义 ofIsoI
-  签名: {f : X ⟶ Y} (F : ImageFactorisation f) {I' : C} (e : F.F.I ≅ I')
-  定义体: F.F.ofIsoI e
-  isImage := F.isImage.ofIsoI e
-
-Depends on / 依赖: F.F.ofIsoI, ofIsoI
+--- 原说明 ---
+Given an image factorisation `X ⟶ I ⟶ Y` of an arrow `f`, an isomorphism `I ≅ I'
+` induces a new
+image factorisation `X ⟶ I' ⟶ Y` of `f`.
 -/
 def ofIsoI {f : X ⟶ Y} (F : ImageFactorisation f) {I' : C} (e : F.F.I ≅ I') :
     ImageFactorisation f where
@@ -791,22 +706,18 @@ Copying an image factorisation to another image factorisation with propositional
 `m` and `e` fields.
 -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**CategoryTheory.Limits.ImageFactorisation.copy** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.ImageFactorisation`。
+形式化陈述：copy {f : X ⟶ Y} (F : ImageFactorisation f) (m : F.F.I ⟶ Y) (e : X ⟶ F.F.I
+) (hm : m = F.F.m
+参数：F : ImageFactorisation f；m : F.F.I ⟶ Y；e : X ⟶ F.F.I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: {f : X ⟶ Y} (F : ImageFactorisation f) (m : F.F.I ⟶ Y) (e : X ⟶ F.F.I)
-  body: F.F.copy m e
-  isImage := F.isImage.copy m e
-
-中文:
-定义 copy
-  签名: {f : X ⟶ Y} (F : ImageFactorisation f) (m : F.F.I ⟶ Y) (e : X ⟶ F.F.I)
-  定义体: F.F.copy m e
-  isImage := F.isImage.copy m e
-
-Depends on / 依赖: F.F.copy, F.F.e, F.isImage.copy, ImageFactorisation, cat_disch, isImage
+--- 原说明 ---
+Copying an image factorisation to another image factorisation with propositional
+ly equal
+`m` and `e` fields.
 -/
 def copy {f : X ⟶ Y} (F : ImageFactorisation f) (m : F.F.I ⟶ Y) (e : X ⟶ F.F.I)
     (hm : m = F.F.m := by cat_disch) (he : e = F.F.e := by cat_disch) :
@@ -816,63 +727,52 @@ def copy {f : X ⟶ Y} (F : ImageFactorisation f) (m : F.F.I ⟶ Y) (e : X ⟶ F
 
 end ImageFactorisation
 
-/--
-Definition of `HasImage` / `HasImage` 的定义
+/-- `HasImage f` means that there exists an image factorisation of `f`. -/
+/-
+**CategoryTheory.Limits.HasImage** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (X 
+⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasImage
-  parameters: (f : X ⟶ Y)
-  (no additional axioms)
-
-中文:
-类 有像
-  参数: (f : X ⟶ Y)
-  (无附加公理)
+--- 原说明 ---
+`HasImage f` means that there exists an image factorisation of `f`.
 -/
 class HasImage (f : X ⟶ Y) : Prop where mk' ::
   exists_image : Nonempty (ImageFactorisation f)
 
 attribute [inherit_doc HasImage] HasImage.exists_image
-
-/--
-theorem `HasImage.mk` / 定理 `HasImage.mk`
-
-English:
-theorem HasImage.mk
-  given: {f : X ⟶ Y} (F : ImageFactorisation f)
-  statement: HasImage f
-  proof: ⟨Nonempty.intro F⟩
-
-中文:
-定理 有像.mk
-  条件: {f : X ⟶ Y} (F : ImageFactorisation f)
-  结论: 有像 f
-  证明: ⟨Nonempty.intro F⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.Limits.HasImage.mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits.HasImage`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   (F : CategoryTheory.Limits.ImageFactorisation f), CategoryTheory.Limits.H
+asImage f
+参数：F : CategoryTheory.Limits.ImageFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasImage.mk {f : X ⟶ Y} (F : ImageFactorisation f) : HasImage f :=
   ⟨Nonempty.intro F⟩
-
-/--
-theorem `HasImage.of_arrow_iso` / 定理 `HasImage.of_arrow_iso`
-
-English:
-theorem HasImage.of_arrow_iso
-  given: {f g : Arrow C} [h : HasImage f.hom] (sq : f ⟶ g) [IsIso sq]
-  proof: ⟨⟨h.exists_image.some.ofArrowIso sq⟩⟩
-
-中文:
-定理 有像.of_arrow_iso
-  条件: {f g : 箭头 C} [h : 有像 f.hom] (sq : f ⟶ g) [是同构 sq]
-  证明: ⟨⟨h.exists_image.some.ofArrowIso sq⟩⟩
-
-Depends on / 依赖: exists_image, h.exists_image.some.ofArrowIso, ofArrowIso
+/-
+**CategoryTheory.Limits.HasImage.of_arrow_iso** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.HasImage`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [h : CategoryTheory.Limits.HasImage f.hom] (sq : f ⟶ g) [Categor
+yTheory.IsIso sq],   CategoryTheory.Limits.HasImage g.hom
+参数：sq : f ⟶ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImage.exists_image`：∀ {C : Type u} {inst : Cate
+goryTheory.Category.{v, u} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.Lim
+its.HasImage f], Nonempty (Catego…
 -/
 theorem HasImage.of_arrow_iso {f g : Arrow C} [h : HasImage f.hom] (sq : f ⟶ g) [IsIso sq] :
     HasImage g.hom :=
   ⟨⟨h.exists_image.some.ofArrowIso sq⟩⟩
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) mono_hasImage (f : X ⟶ Y) [Mono f] : HasImage f :=
   HasImage.mk ⟨_, IsImage.self f⟩
 
@@ -880,343 +780,283 @@ section
 
 variable [HasImage f]
 
-/--
-Definition of `Image.imageFactorisation` / `Image.imageFactorisation` 的定义
+/-- Some image factorisation of `f` through a monomorphism (selected with choice). -/
+/-
+**CategoryTheory.Limits.Image.imageFactorisation** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.Image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → (f : X ⟶ Y) → [CategoryTheory.Limits.HasImage f] → CategoryTheory.Limits.Imag
+eFactorisation f
+参数：f : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImage.exists_image`：∀ {C : Type u} {inst : Cate
+goryTheory.Category.{v, u} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.Lim
+its.HasImage f], Nonempty (Catego…
 
-English:
-definition Image.imageFactorisation
-  signature: : ImageFactorisation f
-  body: Classical.choice HasImage.exists_image
-
-中文:
-定义 像.imageFactorisation
-  签名: : ImageFactorisation f
-  定义体: Classical.choice HasImage.exists_image
-
-Depends on / 依赖: Classical, Classical.choice, HasImage, HasImage.exists_image, choice, exists_image
+--- 原说明 ---
+Some image factorisation of `f` through a monomorphism (selected with choice).
 -/
 def Image.imageFactorisation : ImageFactorisation f :=
   Classical.choice HasImage.exists_image
 
-/--
-Definition of `Image.monoFactorisation` / `Image.monoFactorisation` 的定义
+/-- Some factorisation of `f` through a monomorphism (selected with choice). -/
+/-
+**CategoryTheory.Limits.Image.monoFactorisation** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.Image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → (f : X ⟶ Y) → [CategoryTheory.Limits.HasImage f] → CategoryTheory.Limits.Mono
+Factorisation f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Image.monoFactorisation
-  signature: : MonoFactorisation f
-  body: (Image.imageFactorisation f).F
-
-中文:
-定义 像.monoFactorisation
-  签名: : 单态射分解 f
-  定义体: (Image.imageFactorisation f).F
-
-Depends on / 依赖: Image.imageFactorisation, imageFactorisation
+--- 原说明 ---
+Some factorisation of `f` through a monomorphism (selected with choice).
 -/
 def Image.monoFactorisation : MonoFactorisation f :=
   (Image.imageFactorisation f).F
 
-/--
-Definition of `Image.isImage` / `Image.isImage` 的定义
+/-- The witness of the universal property for the chosen factorisation of `f` through
+a monomorphism. -/
+/-
+**CategoryTheory.Limits.Image.isImage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (f : X ⟶ Y) →         [inst_1 : CategoryTheory.Limits.HasImage f] →    
+       CategoryTheory.Limits.IsImage (CategoryTheory.Limits.Image.monoFactorisat
+ion f)
+参数：f : X ⟶ Y；CategoryTheory.Limits.Image.monoFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Image.isImage
-  signature: : IsImage (Image.monoFactorisation f)
-  body: (Image.imageFactorisation f).isImage
-
-中文:
-定义 像.isImage
-  签名: : 是像 (像.monoFactorisation f)
-  定义体: (Image.imageFactorisation f).isImage
-
-Depends on / 依赖: Image.imageFactorisation, imageFactorisation, isImage
+--- 原说明 ---
+The witness of the universal property for the chosen factorisation of `f` throug
+h
+a monomorphism.
 -/
 def Image.isImage : IsImage (Image.monoFactorisation f) :=
   (Image.imageFactorisation f).isImage
 
 /-- The categorical image of a morphism. -/
 @[implicit_reducible]
-/--
-Definition of `image` / `image` 的定义
+/-
+**CategoryTheory.Limits.image** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：image : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: : C
-  body: (Image.monoFactorisation f).I
-
-中文:
-定义 像
-  签名: : C
-  定义体: (Image.monoFactorisation f).I
-
-Depends on / 依赖: Image.monoFactorisation, monoFactorisation
+--- 原说明 ---
+The categorical image of a morphism.
 -/
 def image : C :=
   (Image.monoFactorisation f).I
 
-/--
-Definition of `image.ι` / `image.ι` 的定义
+/-- The inclusion of the image of a morphism into the target. -/
+/-
+**CategoryTheory.Limits.image.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image.ι
-  signature: : image f ⟶ Y
-  body: (Image.monoFactorisation f).m
-
-@[simp]
-
-中文:
-定义 像.ι
-  签名: : 像 f ⟶ Y
-  定义体: (Image.monoFactorisation f).m
-
-@[simp]
+--- 原说明 ---
+The inclusion of the image of a morphism into the target.
 -/
 def image.ι : image f ⟶ Y :=
   (Image.monoFactorisation f).m
 
 @[simp]
-/--
-theorem `image.as_ι` / 定理 `image.as_ι`
-
-English:
-theorem image.as_ι
-  statement: (Image.monoFactorisation f).m = image.ι f
-  proof: rfl
-
-中文:
-定理 像.as_ι
-  结论: (像.monoFactorisation f).m = 像.ι f
-  证明: rfl
+/-
+**CategoryTheory.Limits.image.as_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.as_ι : (Image.monoFactorisation f).m = image.ι f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (image.ι f)
-  body: (Image.monoFactorisation f).m_mono
-
-中文:
-实例 :
-  签名: 单态射 (像.ι f)
-  定义体: (Image.monoFactorisation f).m_mono
-
-Depends on / 依赖: Image.monoFactorisation, m_mono, monoFactorisation
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (image.ι f) :=
   (Image.monoFactorisation f).m_mono
 
-/--
-Definition of `factorThruImage` / `factorThruImage` 的定义
+/-- The map from the source to the image of a morphism. -/
+/-
+**CategoryTheory.Limits.factorThruImage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：factorThruImage : X ⟶ image f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factorThruImage
-  signature: : X ⟶ image f
-  body: (Image.monoFactorisation f).e
-
-中文:
-定义 factorThruImage
-  签名: : X ⟶ 像 f
-  定义体: (Image.monoFactorisation f).e
-
-Depends on / 依赖: Image.monoFactorisation, monoFactorisation
+--- 原说明 ---
+The map from the source to the image of a morphism.
 -/
 def factorThruImage : X ⟶ image f :=
   (Image.monoFactorisation f).e
 
 /-- Rewrite in terms of the `factorThruImage` interface. -/
 @[simp]
-/--
-theorem `as_factorThruImage` / 定理 `as_factorThruImage`
+/-
+**CategoryTheory.Limits.as_factorThruImage** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：as_factorThruImage : (Image.monoFactorisation f).e = factorThruImage f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem as_factorThruImage
-  statement: (Image.monoFactorisation f).e = factorThruImage f
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 as_factorThruImage
-  结论: (像.monoFactorisation f).e = factorThruImage f
-  证明: rfl
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+Rewrite in terms of the `factorThruImage` interface.
 -/
 theorem as_factorThruImage : (Image.monoFactorisation f).e = factorThruImage f :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.fac` / 定理 `image.fac`
-
-English:
-theorem image.fac
-  statement: factorThruImage f ≫ image.ι f = f
-  proof: (Image.monoFactorisation f).fac
-
-中文:
-定理 像.fac
-  结论: factorThruImage f ≫ 像.ι f = f
-  证明: (Image.monoFactorisation f).fac
+/-
+**CategoryTheory.Limits.image.fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y)   [inst_1 : CategoryTheory.Limits.HasImage f],   CategoryTheory.CategoryStr
+uct.comp (CategoryTheory.Limits.factorThruImage f) (CategoryTheory.Limits.image.
+ι f) = f
+参数：f : X ⟶ Y；CategoryTheory.Limits.factorThruImage f；CategoryTheory.Limits.image
+.ι f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.Lim
+its.MonoFactorisation f), Categor…
 -/
 theorem image.fac : factorThruImage f ≫ image.ι f = f :=
   (Image.monoFactorisation f).fac
 
 variable {f}
 
-/--
-Definition of `image.lift` / `image.lift` 的定义
+/-- Any other factorisation of the morphism `f` through a monomorphism receives a map from the
+image. -/
+/-
+**CategoryTheory.Limits.image.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f : X ⟶ Y} →         [inst_1 : CategoryTheory.Limits.HasImage f] →    
+       (F' : CategoryTheory.Limits.MonoFactorisation f) → CategoryTheory.Limits.
+image f ⟶ F'.I
+参数：F' : CategoryTheory.Limits.MonoFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image.lift
-  signature: (F' : MonoFactorisation f)
-  body: (Image.isImage f).lift F'
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 像.lift
-  签名: (F' : 单态射分解 f)
-  定义体: (Image.isImage f).lift F'
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+Any other factorisation of the morphism `f` through a monomorphism receives a ma
+p from the
+image.
 -/
 def image.lift (F' : MonoFactorisation f) : image f ⟶ F'.I :=
   (Image.isImage f).lift F'
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.lift_fac` / 定理 `image.lift_fac`
-
-English:
-theorem image.lift_fac
-  given: (F' : MonoFactorisation f)
-  statement: image.lift F' ≫ F'.m = image.ι f
-  proof: (Image.isImage f).lift_fac F'
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 像.lift_fac
-  条件: (F' : 单态射分解 f)
-  结论: 像.lift F' ≫ F'.m = 像.ι f
-  证明: (Image.isImage f).lift_fac F'
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.image.lift_fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] (F' : CategoryTheory.Limits.M
+onoFactorisation f),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits
+.image.lift F') F'.m = CategoryTheory.Limits.image.ι f
+参数：F' : CategoryTheory.Limits.MonoFactorisation f；CategoryTheory.Limits.image.li
+ft F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsImage.lift_fac`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F : CategoryTheory.Limits.Mono
+Factorisation f} (self : Cat…
 -/
 theorem image.lift_fac (F' : MonoFactorisation f) : image.lift F' ≫ F'.m = image.ι f :=
   (Image.isImage f).lift_fac F'
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.fac_lift` / 定理 `image.fac_lift`
-
-English:
-theorem image.fac_lift
-  given: (F' : MonoFactorisation f)
-  statement: factorThruImage f ≫ image.lift F' = F'.e
-  proof: (Image.isImage f).fac_lift F'
-
-@[simp]
-
-中文:
-定理 像.fac_lift
-  条件: (F' : 单态射分解 f)
-  结论: factorThruImage f ≫ 像.lift F' = F'.e
-  证明: (Image.isImage f).fac_lift F'
-
-@[simp]
-
-Depends on / 依赖: Image.isImage, fac_lift, isImage
+/-
+**CategoryTheory.Limits.image.fac_lift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] (F' : CategoryTheory.Limits.M
+onoFactorisation f),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits
+.factorThruImage f) (CategoryTheory.Limits.image.lift F') =     F'.e
+参数：F' : CategoryTheory.Limits.MonoFactorisation f；CategoryTheory.Limits.factorTh
+ruImage f；CategoryTheory.Limits.image.lift F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsImage.fac_lift`：fac_lift {F : MonoFactorisation 
+f} (hF : IsImage F) (F' : MonoFactorisation f) : F.e ≫ hF.lift F' = F'.e
 -/
 theorem image.fac_lift (F' : MonoFactorisation f) : factorThruImage f ≫ image.lift F' = F'.e :=
   (Image.isImage f).fac_lift F'
 
 @[simp]
-/--
-theorem `image.isImage_lift` / 定理 `image.isImage_lift`
-
-English:
-theorem image.isImage_lift
-  given: (F : MonoFactorisation f)
-  statement: (Image.isImage f).lift F = image.lift F
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 像.isImage_lift
-  条件: (F : 单态射分解 f)
-  结论: (像.isImage f).lift F = 像.lift F
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.image.isImage_lift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] (F : CategoryTheory.Limits.Mo
+noFactorisation f),   (CategoryTheory.Limits.Image.isImage f).lift F = CategoryT
+heory.Limits.image.lift F
+参数：F : CategoryTheory.Limits.MonoFactorisation f；CategoryTheory.Limits.Image.isI
+mage f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.isImage_lift (F : MonoFactorisation f) : (Image.isImage f).lift F = image.lift F :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-theorem `IsImage.lift_ι` / 定理 `IsImage.lift_ι`
-
-English:
-theorem IsImage.lift_ι
-  given: {F : MonoFactorisation f} (hF : IsImage F)
-  proof: hF.lift_fac _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 是像.lift_ι
-  条件: {F : 单态射分解 f} (hF : 是像 F)
-  证明: hF.lift_fac _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: hF.lift_fac, lift_fac
+/-
+**CategoryTheory.Limits.IsImage.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsImage.lift_ι {F : MonoFactorisation f} (hF : IsImage F) :
     hF.lift (Image.monoFactorisation f) ≫ image.ι f = F.m :=
   hF.lift_fac _
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.lift_mk_factorThruImage` / 定理 `image.lift_mk_factorThruImage`
-
-English:
-theorem image.lift_mk_factorThruImage
-  proof: (Image.isImage f).lift_fac _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 像.lift_mk_factorThruImage
-  证明: (Image.isImage f).lift_fac _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: factorThruImage
+/-
+**CategoryTheory.Limits.image.lift_mk_factorThruImage** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f],   CategoryTheory.CategoryStr
+uct.comp       (CategoryTheory.Limits.image.lift         { I := CategoryTheory.L
+imits.image f, m := CategoryTheory.Limits.image.ι f, m_mono := ⋯,           e :=
+ CategoryTheory.Limits.factorThruImage f, fac := ⋯ })       (CategoryTheory.Limi
+ts.image.ι f) =     CategoryTheory.Limits.image.ι f
+参数：CategoryTheory.Limits.image.lift         { I := CategoryTheory.Limits.image f
+, m := CategoryTheory.Limits.image.ι f, m_mono := ⋯,           e := CategoryTheo
+ry.Limits.factorThruImage f, fac := ⋯ }；CategoryTheory.Limits.image.ι f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsImage.lift_fac`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   {F : CategoryTheory.Limits.Mono
+Factorisation f} (self : Cat…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 -/
 theorem image.lift_mk_factorThruImage :
     image.lift { I := image f, m := ι f, e := factorThruImage f } ≫ image.ι f = image.ι f :=
   (Image.isImage f).lift_fac _
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.lift_mk_comp` / 定理 `image.lift_mk_comp`
-
-English:
-theorem image.lift_mk_comp
-  statement: {C : Type u} [Category.{v} C] {X Y Z : C}
-  proof: image.lift_fac _
-
-中文:
-定理 像.lift_mk_comp
-  结论: {C : 类型u} [范畴.{v} C] {X Y Z : C}
-  证明: image.lift_fac _
+/-
+**CategoryTheory.Limits.image.lift_mk_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (f : 
+X ⟶ Y) (g : Y ⟶ Z)   [inst_1 : CategoryTheory.Limits.HasImage g]   [inst_2 : Cat
+egoryTheory.Limits.HasImage (CategoryTheory.CategoryStruct.comp f g)]   (h : Y ⟶
+ CategoryTheory.Limits.image g)   (H :     CategoryTheory.CategoryStruct.comp (C
+ategoryTheory.CategoryStruct.comp f h) (CategoryTheory.Limits.image.ι g) =      
+ CategoryTheory.CategoryStruct.comp f g),   CategoryTheory.CategoryStruct.comp  
+     (CategoryTheory.Limits.image.lift         { I := CategoryTheory.Limits.imag
+e g, m := CategoryTheory.Limits.image.ι g, m_mono := ⋯,           e := CategoryT
+heory.CategoryStruct.comp f h, fac := ⋯ })       (CategoryTheory.Limits.image.ι 
+g) =     CategoryTheory.Limits.image.ι (CategoryTheory.CategoryStruct.comp f g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；h : Y ⟶ CategoryTh
+eory.Limits.image g；H :     CategoryTheory.CategoryStruct.comp (CategoryTheory.C
+ategoryStruct.comp f h) (CategoryTheory.Limits.image.ι g) =       CategoryTheory
+.CategoryStruct.comp f g；CategoryTheory.Limits.image.lift         { I := Categor
+yTheory.Limits.image g, m := CategoryTheory.Limits.image.ι g, m_mono := ⋯,      
+     e := CategoryTheory.CategoryStruct.comp f h, fac := ⋯ }；CategoryTheory.Limi
+ts.image.ι g；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 -/
 theorem image.lift_mk_comp {C : Type u} [Category.{v} C] {X Y Z : C}
     (f : X ⟶ Y) (g : Y ⟶ Z) [HasImage g] [HasImage (f ≫ g)]
@@ -1229,52 +1069,74 @@ theorem image.lift_mk_comp {C : Type u} [Category.{v} C] {X Y Z : C}
 -- (they then automatically commute with the `e`s)
 -- and show that an `imageOf f` gives an initial object there
 -- (uniqueness of the lift comes for free).
-/--
-Instance `image.lift_mono` / 实例 `image.lift_mono`
-
-English:
-instance image.lift_mono
-  signature: (F' : MonoFactorisation f)
-  body: by
-  refine @mono_of_mono _ _ _ _ _ _ F'.m ?_
-  simpa using! MonoFactorisation.m_mono _
-
-中文:
-实例 像.lift_mono
-  签名: (F' : 单态射分解 f)
-  定义体: by
-  refine @mono_of_mono _ _ _ _ _ _ F'.m ?_
-  simpa using! MonoFactorisation.m_mono _
-
-Depends on / 依赖: MonoFactorisation, MonoFactorisation.m_mono, m_mono, mono_of_mono
+/-
+**CategoryTheory.Limits.image.lift_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] (F' : CategoryTheory.Limits.M
+onoFactorisation f),   CategoryTheory.Mono (CategoryTheory.Limits.image.lift F')
+参数：F' : CategoryTheory.Limits.MonoFactorisation f；CategoryTheory.Limits.image.li
+ft F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.mono_of_mono`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X)   [CategoryTheory.Mono (Catego
+ryTheory.Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.m_mono`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.
+Limits.MonoFactorisation f), Categor…
 -/
 instance image.lift_mono (F' : MonoFactorisation f) : Mono (image.lift F') := by
   refine @mono_of_mono _ _ _ _ _ _ F'.m ?_
   simpa using! MonoFactorisation.m_mono _
-
-/--
-theorem `HasImage.uniq` / 定理 `HasImage.uniq`
-
-English:
-theorem HasImage.uniq
-  given: (F' : MonoFactorisation f) (l : image f ⟶ F'.I) (w : l ≫ F'.m = image.ι f)
-  proof: (cancel_mono F'.m).1 (by simp [w])
-
-中文:
-定理 有像.uniq
-  条件: (F' : 单态射分解 f) (l : 像 f ⟶ F'.I) (w : l ≫ F'.m = 像.ι f)
-  证明: (cancel_mono F'.m).1 (by simp [w])
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Limits.HasImage.uniq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.HasImage`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X 
+⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] (F' : CategoryTheory.Limits.M
+onoFactorisation f)   (l : CategoryTheory.Limits.image f ⟶ F'.I),   CategoryTheo
+ry.CategoryStruct.comp l F'.m = CategoryTheory.Limits.image.ι f → l = CategoryTh
+eory.Limits.image.lift F'
+参数：F' : CategoryTheory.Limits.MonoFactorisation f；l : CategoryTheory.Limits.imag
+e f ⟶ F'.I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.m_mono`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.
+Limits.MonoFactorisation f), Categor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem HasImage.uniq (F' : MonoFactorisation f) (l : image f ⟶ F'.I) (w : l ≫ F'.m = image.ι f) :
     l = image.lift F' :=
   (cancel_mono F'.m).1 (by simp [w])
 
 /-- If `has_image g`, then `has_image (f ≫ g)` when `f` is an isomorphism. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `has_image g`, then `has_image (f ≫ g)` when `f` is an isomorphism.
+-/
 instance {X Y Z : C} (f : X ⟶ Y) [IsIso f] (g : Y ⟶ Z) [HasImage g] : HasImage (f ≫ g) where
   exists_image :=
-    ⟨{ F :=
+    ⟨{  F :=
           { I := image g
             m := image.ι g
             e := f ≫ factorThruImage g }
@@ -1290,23 +1152,18 @@ section
 
 variable (C)
 
-/--
-Definition of `HasImages` / `HasImages` 的定义
+/-- `HasImages` asserts that every morphism has an image. -/
+/-
+**CategoryTheory.Limits.HasImages** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasImages
-  parameters: : Prop where
-  axioms and operations (1):
-    - has_image : forall {X Y : C} (f : X ⟶ Y), HasImage f
-
-中文:
-类 有Images
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - has_image : 对任意 {X Y : C} (f : X ⟶ Y), 有像 f
+--- 原说明 ---
+`HasImages` asserts that every morphism has an image.
 -/
 class HasImages : Prop where
-  has_image : forall {X Y : C} (f : X ⟶ Y), HasImage f
+  has_image : ∀ {X Y : C} (f : X ⟶ Y), HasImage f
 
 attribute [inherit_doc HasImages] HasImages.has_image
 
@@ -1316,146 +1173,121 @@ end
 
 section
 
-/--
-Definition of `imageMonoIsoSource` / `imageMonoIsoSource` 的定义
+/-- The image of a monomorphism is isomorphic to the source. -/
+/-
+**CategoryTheory.Limits.imageMonoIsoSource** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：imageMonoIsoSource [Mono f] : image f ≅ X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.mono_hasImage`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.Mono f],   CategoryT
+heory.Limits.HasImage f
 
-English:
-definition imageMonoIsoSource
-  signature: [Mono f]
-  body: IsImage.isoExt (Image.isImage f) (IsImage.self f)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 imageMonoIsoSource
-  签名: [单态射 f]
-  定义体: IsImage.isoExt (Image.isImage f) (IsImage.self f)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Image.isImage, IsImage, IsImage.isoExt, IsImage.self, isImage, isoExt
+--- 原说明 ---
+The image of a monomorphism is isomorphic to the source.
 -/
 def imageMonoIsoSource [Mono f] : image f ≅ X :=
   IsImage.isoExt (Image.isImage f) (IsImage.self f)
 
 @[reassoc (attr := simp)]
-/--
-theorem `imageMonoIsoSource_inv_ι` / 定理 `imageMonoIsoSource_inv_ι`
-
-English:
-theorem imageMonoIsoSource_inv_ι
-  given: [Mono f]
-  statement: (imageMonoIsoSource f).inv ≫ image.ι f = f
-  proof: by
-  simp [imageMonoIsoSource]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 imageMonoIsoSource_inv_ι
-  条件: [单态射 f]
-  结论: (imageMonoIsoSource f).inv ≫ 像.ι f = f
-  证明: by
-  simp [imageMonoIsoSource]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: imageMonoIsoSource
+/-
+**CategoryTheory.Limits.imageMonoIsoSource_inv_** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem imageMonoIsoSource_inv_ι [Mono f] : (imageMonoIsoSource f).inv ≫ image.ι f = f := by
   simp [imageMonoIsoSource]
 
 @[reassoc (attr := simp)]
-/--
-theorem `imageMonoIsoSource_hom_self` / 定理 `imageMonoIsoSource_hom_self`
-
-English:
-theorem imageMonoIsoSource_hom_self
-  given: [Mono f]
-  statement: (imageMonoIsoSource f).hom ≫ f = image.ι f
-  proof: by
-  simp only [← imageMonoIsoSource_inv_ι f]
-  rw [← Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.id_comp]
-
-中文:
-定理 imageMonoIsoSource_hom_self
-  条件: [单态射 f]
-  结论: (imageMonoIsoSource f).hom ≫ f = 像.ι f
-  证明: by
-  simp only [← imageMonoIsoSource_inv_ι f]
-  rw [← Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Iso.hom_inv_id, hom_inv_id, id_comp
+/-
+**CategoryTheory.Limits.imageMonoIsoSource_hom_self** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：imageMonoIsoSource_hom_self [Mono f] : (imageMonoIsoSource f).hom ≫ f = im
+age.ι f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.mono_hasImage`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.Mono f],   CategoryT
+heory.Limits.HasImage f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.imageMonoIsoSource_inv_ι`：imageMonoIsoSource_inv_ι
+ [Mono f] : (imageMonoIsoSource f).inv ≫ image.ι f = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem imageMonoIsoSource_hom_self [Mono f] : (imageMonoIsoSource f).hom ≫ f = image.ι f := by
   simp only [← imageMonoIsoSource_inv_ι f]
-  rw [← Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.id_comp]
+  rw [← Category.assoc, Iso.hom_inv_id, Category.id_comp]
 
 set_option backward.isDefEq.respectTransparency false in
 -- This is the proof that `factorThruImage f` is an epimorphism
 -- from https://en.wikipedia.org/wiki/Image_%28category_theory%29, which is in turn taken from:
 -- Mitchell, Barry (1965), Theory of categories, MR 0202787, p.12, Proposition 10.1
 @[ext (iff := false)]
-/--
-theorem `image.ext` / 定理 `image.ext`
-
-English:
-theorem image.ext
-  statement: [HasImage f] {W : C} {g h : image f ⟶ W} [HasLimit (parallelPair g h)]
-  proof: by
-  let q := equalizer.ι g h
-  let e' := equalizer.lift _ w
-  let F' : MonoFactorisation f :=
-    { I := equalizer g h
-      m := q ≫ image.ι f
-      m_mono := mono_comp _ _
-      e := e' }
-  let v := image.lift F'
-  have t₀ : v ≫ q ≫ image.ι f = image.ι f := image.lift_fac F'
-  have t : v ≫ q = 𝟙 (image f) :=
-    (cancel_mono_id (image.ι f)).1
-      (by
-        convert! t₀ using 1
-        rw [Category.assoc])
-  -- The proof from wikipedia next proves `q ≫ v = 𝟙 _`,
-  -- and concludes that `equalizer g h ≅ image f`,
-  -- but this isn't necessary.
-  calc
-    g = 𝟙 (image f) ≫ g := by rw [Category.id_comp]
-    _ = v ≫ q ≫ g := by rw [← t, Category.assoc]
-    _ = v ≫ q ≫ h := by rw [equalizer.condition g h]
-    _ = 𝟙 (image f) ≫ h := by rw [← Category.assoc, t]
-    _ = h := by rw [Category.id_comp]
-
-中文:
-定理 像.ext
-  结论: [有像 f] {W : C} {g h : 像 f ⟶ W} [有极限 (parallelPair g h)]
-  证明: by
-  let q := equalizer.ι g h
-  let e' := equalizer.lift _ w
-  let F' : MonoFactorisation f :=
-    { I := equalizer g h
-      m := q ≫ image.ι f
-      m_mono := mono_comp _ _
-      e := e' }
-  let v := image.lift F'
-  have t₀ : v ≫ q ≫ image.ι f = image.ι f := image.lift_fac F'
-  have t : v ≫ q = 𝟙 (image f) :=
-    (cancel_mono_id (image.ι f)).1
-      (by
-        convert! t₀ using 1
-        rw [Category.assoc])
-  -- The proof from wikipedia next proves `q ≫ v = 𝟙 _`,
-  -- and concludes that `equalizer g h ≅ image f`,
-  -- but this isn't necessary.
-  calc
-    g = 𝟙 (image f) ≫ g := by rw [Category.id_comp]
-    _ = v ≫ q ≫ g := by rw [← t, Category.assoc]
-    _ = v ≫ q ≫ h := by rw [equalizer.condition g h]
-    _ = 𝟙 (image f) ≫ h := by rw [← Category.assoc, t]
-    _ = h := by rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.assoc, MonoFactorisation, cancel_mono_id, convert, equalizer, equalizer.lift, image.lift, image.lift_fac, lift_fac, m_mono, mono_comp
+/-
+**CategoryTheory.Limits.image.ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y)   [inst_1 : CategoryTheory.Limits.HasImage f] {W : C} {g h : CategoryTheory
+.Limits.image f ⟶ W}   [CategoryTheory.Limits.HasLimit (CategoryTheory.Limits.pa
+rallelPair g h)],   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.fa
+ctorThruImage f) g =       CategoryTheory.CategoryStruct.comp (CategoryTheory.Li
+mits.factorThruImage f) h →     g = h
+参数：f : X ⟶ Y；CategoryTheory.Limits.parallelPair g h；CategoryTheory.Limits.factor
+ThruImage f；CategoryTheory.Limits.factorThruImage f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.Limits.equalizer.ι_mono`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Limi
+ts.HasEqualizer f g], Catego…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {h : Y ⟶ Y},   Cat
+egoryTheory.Categor…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
 -/
 theorem image.ext [HasImage f] {W : C} {g h : image f ⟶ W} [HasLimit (parallelPair g h)]
     (w : factorThruImage f ≫ g = factorThruImage f ≫ h) : g = h := by
@@ -1482,69 +1314,47 @@ theorem image.ext [HasImage f] {W : C} {g h : image f ⟶ W} [HasLimit (parallel
     _ = v ≫ q ≫ h := by rw [equalizer.condition g h]
     _ = 𝟙 (image f) ≫ h := by rw [← Category.assoc, t]
     _ = h := by rw [Category.id_comp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasImage
-  signature: f] [forall {Z : C} (g h : image f ⟶ Z), HasLimit (parallelPair g h)] :
-  body: ⟨fun _ _ w => image.ext f w⟩
-
-中文:
-实例 [有像
-  签名: f] [对任意 {Z : C} (g h : 像 f ⟶ Z), 有极限 (parallelPair g h)] :
-  定义体: ⟨fun _ _ w => image.ext f w⟩
-
-Depends on / 依赖: image.ext
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [HasImage f] [forall {Z : C} (g h : image f ⟶ Z), HasLimit (parallelPair g h)] :
+instance [HasImage f] [∀ {Z : C} (g h : image f ⟶ Z), HasLimit (parallelPair g h)] :
     Epi (factorThruImage f) :=
   ⟨fun _ _ w => image.ext f w⟩
-
-/--
-theorem `epi_image_of_epi` / 定理 `epi_image_of_epi`
-
-English:
-theorem epi_image_of_epi
-  given: {X Y : C} (f : X ⟶ Y) [HasImage f] [E : Epi f]
-  statement: Epi (image.ι f)
-  proof: by
-  rw [← image.fac f] at E
-  exact epi_of_epi (factorThruImage f) (image.ι f)
-
-中文:
-定理 epi_image_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [有像 f] [E : 满态射 f]
-  结论: 满态射 (像.ι f)
-  证明: by
-  rw [← image.fac f] at E
-  exact epi_of_epi (factorThruImage f) (image.ι f)
-
-Depends on / 依赖: epi_of_epi, factorThruImage, image.fac
+/-
+**CategoryTheory.Limits.epi_image_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：epi_image_of_epi {X Y : C} (f : X ⟶ Y) [HasImage f] [E : Epi f] : Epi (ima
+ge.ι f)
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.epi_of_epi`：epi_of_epi (f : X ⟶ Y) (g : Y ⟶ Z) [Epi (f ≫ 
+g)] : Epi g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
 -/
 theorem epi_image_of_epi {X Y : C} (f : X ⟶ Y) [HasImage f] [E : Epi f] : Epi (image.ι f) := by
   rw [← image.fac f] at E
   exact epi_of_epi (factorThruImage f) (image.ι f)
-
-/--
-theorem `epi_of_epi_image` / 定理 `epi_of_epi_image`
-
-English:
-theorem epi_of_epi_image
-  statement: {X Y : C} (f : X ⟶ Y) [HasImage f] [Epi (image.ι f)]
-  proof: by
-  rw [← image.fac f]
-  apply epi_comp
-
-中文:
-定理 epi_of_epi_image
-  结论: {X Y : C} (f : X ⟶ Y) [有像 f] [满态射 (像.ι f)]
-  证明: by
-  rw [← image.fac f]
-  apply epi_comp
-
-Depends on / 依赖: epi_comp, image.fac
+/-
+**CategoryTheory.Limits.epi_of_epi_image** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：epi_of_epi_image {X Y : C} (f : X ⟶ Y) [HasImage f] [Epi (image.ι f)] [Epi
+ (factorThruImage f)] : Epi f
+参数：f : X ⟶ Y；image.ι f；factorThruImage f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
 -/
 theorem epi_of_epi_image {X Y : C} (f : X ⟶ Y) [HasImage f] [Epi (image.ι f)]
     [Epi (factorThruImage f)] : Epi f := by
@@ -1558,28 +1368,25 @@ section
 variable {f}
 variable {f' : X ⟶ Y} [HasImage f] [HasImage f']
 
-/--
-Definition of `image.eqToHom` / `image.eqToHom` 的定义
+/-- An equation between morphisms gives a comparison map between the images
+(which momentarily we prove is an iso).
+-/
+/-
+**CategoryTheory.Limits.image.eqToHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f f' : X ⟶ Y} →         [inst_1 : CategoryTheory.Limits.HasImage f] → 
+          [inst_2 : CategoryTheory.Limits.HasImage f'] →             f = f' → (C
+ategoryTheory.Limits.image f ⟶ CategoryTheory.Limits.image f')
+参数：CategoryTheory.Limits.image f ⟶ CategoryTheory.Limits.image f'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 
-English:
-definition image.eqToHom
-  signature: (h : f = f')
-  body: image.lift
-    { I := image f'
-      m := image.ι f'
-      e := factorThruImage f'
-      fac := by rw [h]; simp only [image.fac] }
-
-中文:
-定义 像.eqToHom
-  签名: (h : f = f')
-  定义体: image.lift
-    { I := image f'
-      m := image.ι f'
-      e := factorThruImage f'
-      fac := by rw [h]; simp only [image.fac] }
-
-Depends on / 依赖: factorThruImage, image.fac, image.lift
+--- 原说明 ---
+An equation between morphisms gives a comparison map between the images
+(which momentarily we prove is an iso).
 -/
 def image.eqToHom (h : f = f') : image f ⟶ image f' :=
   image.lift
@@ -1587,7 +1394,10 @@ def image.eqToHom (h : f = f') : image f ⟶ image f' :=
       m := image.ι f'
       e := factorThruImage f'
       fac := by rw [h]; simp only [image.fac] }
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (h : f = f') : IsIso (image.eqToHom h) :=
   ⟨⟨image.eqToHom h.symm,
       ⟨(cancel_mono (image.ι f)).1 (by
@@ -1597,44 +1407,63 @@ instance (h : f = f') : IsIso (image.eqToHom h) :=
           subst h
           simp [image.eqToHom])⟩⟩⟩
 
-/--
-Definition of `image.eqToIso` / `image.eqToIso` 的定义
+/-- An equation between morphisms gives an isomorphism between the images. -/
+/-
+**CategoryTheory.Limits.image.eqToIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f f' : X ⟶ Y} →         [inst_1 : CategoryTheory.Limits.HasImage f] → 
+          [inst_2 : CategoryTheory.Limits.HasImage f'] →             f = f' → (C
+ategoryTheory.Limits.image f ≅ CategoryTheory.Limits.image f')
+参数：CategoryTheory.Limits.image f ≅ CategoryTheory.Limits.image f'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsIsoEqToHom`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} {f f' : X ⟶ Y}   [inst_1 : CategoryTheory.Lim
+its.HasImage f] [inst_2 : Ca…
 
-English:
-definition image.eqToIso
-  signature: (h : f = f')
-  body: asIso (image.eqToHom h)
-
-中文:
-定义 像.eqToIso
-  签名: (h : f = f')
-  定义体: asIso (image.eqToHom h)
-
-Depends on / 依赖: eqToHom, image.eqToHom
+--- 原说明 ---
+An equation between morphisms gives an isomorphism between the images.
 -/
 def image.eqToIso (h : f = f') : image f ≅ image f' :=
   asIso (image.eqToHom h)
 
-/--
-theorem `image.eq_fac` / 定理 `image.eq_fac`
+/-- As long as the category has equalizers,
+the image inclusion maps commute with `image.eqToIso`.
+-/
+/-
+**CategoryTheory.Limits.image.eq_fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f f' :
+ X ⟶ Y}   [inst_1 : CategoryTheory.Limits.HasImage f] [inst_2 : CategoryTheory.L
+imits.HasImage f']   [CategoryTheory.Limits.HasEqualizers C] (h : f = f'),   Cat
+egoryTheory.Limits.image.ι f =     CategoryTheory.CategoryStruct.comp (CategoryT
+heory.Limits.image.eqToIso h).hom (CategoryTheory.Limits.image.ι f')
+参数：h : f = f'；CategoryTheory.Limits.image.eqToIso h；CategoryTheory.Limits.image.
+ι f'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.image.ext`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f] {W : C} {g h : …
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
+· 使用定理 `CategoryTheory.Limits.image.lift_mk_factorThruImage`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : Category
+Theory.Limits.HasImage f],   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image.eq_fac
-  given: [HasEqualizers C] (h : f = f')
-  proof: by
-  apply image.ext
-  subst h
-  simp [asIso, image.eqToIso, image.eqToHom]
-
-中文:
-定理 像.eq_fac
-  条件: [HasEqualizers C] (h : f = f')
-  证明: by
-  apply image.ext
-  subst h
-  simp [asIso, image.eqToIso, image.eqToHom]
-
-Depends on / 依赖: eqToHom, eqToIso, image.eqToHom, image.eqToIso, image.ext
+--- 原说明 ---
+As long as the category has equalizers,
+the image inclusion maps commute with `image.eqToIso`.
 -/
 theorem image.eq_fac [HasEqualizers C] (h : f = f') :
     image.ι f = (image.eqToIso h).hom ≫ image.ι f' := by
@@ -1648,30 +1477,25 @@ section
 
 variable {Z : C} (g : Y ⟶ Z)
 
-/--
-Definition of `image.preComp` / `image.preComp` 的定义
+/-- The comparison map `image (f ≫ g) ⟶ image g`. -/
+/-
+**CategoryTheory.Limits.image.preComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (f : X ⟶ Y) →         {Z : C} →           (g : Y ⟶ Z) →             [in
+st_1 : CategoryTheory.Limits.HasImage g] →               [inst_2 : CategoryTheor
+y.Limits.HasImage (CategoryTheory.CategoryStruct.comp f g)] →                 Ca
+tegoryTheory.Limits.image (CategoryTheory.CategoryStruct.comp f g) ⟶ CategoryThe
+ory.Limits.image g
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheory.Cat
+egoryStruct.comp f g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 
-English:
-definition image.preComp
-  signature: [HasImage g] [HasImage (f ≫ g)]
-  body: image.lift
-    { I := image g
-      m := image.ι g
-      e := f ≫ factorThruImage g }
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 像.preComp
-  签名: [有像 g] [有像 (f ≫ g)]
-  定义体: image.lift
-    { I := image g
-      m := image.ι g
-      e := f ≫ factorThruImage g }
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: factorThruImage, image.lift
+--- 原说明 ---
+The comparison map `image (f ≫ g) ⟶ image g`.
 -/
 def image.preComp [HasImage g] [HasImage (f ≫ g)] : image (f ≫ g) ⟶ image g :=
   image.lift
@@ -1680,96 +1504,140 @@ def image.preComp [HasImage g] [HasImage (f ≫ g)] : image (f ≫ g) ⟶ image 
       e := f ≫ factorThruImage g }
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.preComp_ι` / 定理 `image.preComp_ι`
-
-English:
-theorem image.preComp_ι
-  given: [HasImage g] [HasImage (f ≫ g)]
-  proof: by
-      simp [image.preComp]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 像.preComp_ι
-  条件: [有像 g] [有像 (f ≫ g)]
-  证明: by
-      simp [image.preComp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: image.preComp, preComp
+/-
+**CategoryTheory.Limits.image.preComp_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.preComp_ι [HasImage g] [HasImage (f ≫ g)] :
     image.preComp f g ≫ image.ι g = image.ι (f ≫ g) := by
       simp [image.preComp]
 
 @[reassoc (attr := simp)]
-/--
-theorem `image.factorThruImage_preComp` / 定理 `image.factorThruImage_preComp`
-
-English:
-theorem image.factorThruImage_preComp
-  given: [HasImage g] [HasImage (f ≫ g)]
-  proof: by simp [image.preComp]
-
-中文:
-定理 像.factorThruImage_preComp
-  条件: [有像 g] [有像 (f ≫ g)]
-  证明: by simp [image.preComp]
-
-Depends on / 依赖: image.preComp, preComp
+/-
+**CategoryTheory.Limits.image.factorThruImage_preComp** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y) {Z : C} (g : Y ⟶ Z)   [inst_1 : CategoryTheory.Limits.HasImage g]   [inst_2
+ : CategoryTheory.Limits.HasImage (CategoryTheory.CategoryStruct.comp f g)],   C
+ategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.factorThruImage (Catego
+ryTheory.CategoryStruct.comp f g))       (CategoryTheory.Limits.image.preComp f 
+g) =     CategoryTheory.CategoryStruct.comp f (CategoryTheory.Limits.factorThruI
+mage g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheory.Lim
+its.factorThruImage (CategoryTheory.CategoryStruct.comp f g)；CategoryTheory.Limi
+ts.image.preComp f g；CategoryTheory.Limits.factorThruImage g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.image.fac_lift`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem image.factorThruImage_preComp [HasImage g] [HasImage (f ≫ g)] :
     factorThruImage (f ≫ g) ≫ image.preComp f g = f ≫ factorThruImage g := by simp [image.preComp]
 
-/--
-Instance `image.preComp_mono` / 实例 `image.preComp_mono`
+/-- `image.preComp f g` is a monomorphism.
+-/
+/-
+**CategoryTheory.Limits.image.preComp_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y) {Z : C} (g : Y ⟶ Z)   [inst_1 : CategoryTheory.Limits.HasImage g]   [inst_2
+ : CategoryTheory.Limits.HasImage (CategoryTheory.CategoryStruct.comp f g)],   C
+ategoryTheory.Mono (CategoryTheory.Limits.image.preComp f g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheory.Lim
+its.image.preComp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.mono_of_mono`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X)   [CategoryTheory.Mono (Catego
+ryTheory.Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.image.preComp_ι`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) {Z : C} (g : Y ⟶ Z)   [inst_1 : Ca
+tegoryTheory.Limits.HasImag…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 
-English:
-instance image.preComp_mono
-  signature: [HasImage g] [HasImage (f ≫ g)]
-  body: by
-  refine @mono_of_mono _ _ _ _ _ _ (image.ι g) ?_
-  simp only [image.preComp_ι]
-  infer_instance
-
-中文:
-实例 像.preComp_mono
-  签名: [有像 g] [有像 (f ≫ g)]
-  定义体: by
-  refine @mono_of_mono _ _ _ _ _ _ (image.ι g) ?_
-  simp only [image.preComp_ι]
-  infer_instance
-
-Depends on / 依赖: image.preComp_, infer_instance, mono_of_mono
+--- 原说明 ---
+`image.preComp f g` is a monomorphism.
 -/
 instance image.preComp_mono [HasImage g] [HasImage (f ≫ g)] : Mono (image.preComp f g) := by
   refine @mono_of_mono _ _ _ _ _ _ (image.ι g) ?_
   simp only [image.preComp_ι]
   infer_instance
 
-/--
-theorem `image.preComp_comp` / 定理 `image.preComp_comp`
+/-- The two step comparison map
+  `image (f ≫ (g ≫ h)) ⟶ image (g ≫ h) ⟶ image h`
+agrees with the one step comparison map
+  `image (f ≫ (g ≫ h)) ≅ image ((f ≫ g) ≫ h) ⟶ image h`.
+-/
+/-
+**CategoryTheory.Limits.image.preComp_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y) {Z : C} (g : Y ⟶ Z) {W : C} (h : Z ⟶ W)   [inst_1 : CategoryTheory.Limits.H
+asImage (CategoryTheory.CategoryStruct.comp g h)]   [inst_2 :     CategoryTheory
+.Limits.HasImage (CategoryTheory.CategoryStruct.comp f (CategoryTheory.CategoryS
+truct.comp g h))]   [inst_3 : CategoryTheory.Limits.HasImage h]   [inst_4 :     
+CategoryTheory.Limits.HasImage (CategoryTheory.CategoryStruct.comp (CategoryTheo
+ry.CategoryStruct.comp f g) h)],   CategoryTheory.CategoryStruct.comp (CategoryT
+heory.Limits.image.preComp f (CategoryTheory.CategoryStruct.comp g h))       (Ca
+tegoryTheory.Limits.image.preComp g h) =     CategoryTheory.CategoryStruct.comp 
+(CategoryTheory.Limits.image.eqToHom ⋯)       (CategoryTheory.Limits.image.preCo
+mp (CategoryTheory.CategoryStruct.comp f g) h)
+参数：f : X ⟶ Y；g : Y ⟶ Z；h : Z ⟶ W；CategoryTheory.CategoryStruct.comp g h；Category
+Theory.CategoryStruct.comp f (CategoryTheory.CategoryStruct.comp g h)；CategoryTh
+eory.CategoryStruct.comp (CategoryTheory.CategoryStruct.comp f g) h；CategoryTheo
+ry.Limits.image.preComp f (CategoryTheory.CategoryStruct.comp g h)；CategoryTheor
+y.Limits.image.preComp g h；CategoryTheory.Limits.image.eqToHom ⋯；CategoryTheory.
+Limits.image.preComp (CategoryTheory.CategoryStruct.comp f g) h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.image.lift_mk_comp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)   [inst_1 : Categ
+oryTheory.Limits.HasImage g]  …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
 
-English:
-theorem image.preComp_comp
-  statement: {W : C} (h : Z ⟶ W) [HasImage (g ≫ h)] [HasImage (f ≫ g ≫ h)]
-  proof: by
-  apply (cancel_mono (image.ι h)).1
-  simp only [preComp, Category.assoc, fac, lift_mk_comp, eqToHom]
-  rw [image.lift_fac]
-
-中文:
-定理 像.preComp_comp
-  结论: {W : C} (h : Z ⟶ W) [有像 (g ≫ h)] [有像 (f ≫ g ≫ h)]
-  证明: by
-  apply (cancel_mono (image.ι h)).1
-  simp only [preComp, Category.assoc, fac, lift_mk_comp, eqToHom]
-  rw [image.lift_fac]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono, eqToHom, image.lift_fac, lift_fac, lift_mk_comp, preComp
+--- 原说明 ---
+The two step comparison map
+  `image (f ≫ (g ≫ h)) ⟶ image (g ≫ h) ⟶ image h`
+agrees with the one step comparison map
+  `image (f ≫ (g ≫ h)) ≅ image ((f ≫ g) ≫ h) ⟶ image h`.
 -/
 theorem image.preComp_comp {W : C} (h : Z ⟶ W) [HasImage (g ≫ h)] [HasImage (f ≫ g ≫ h)]
     [HasImage h] [HasImage ((f ≫ g) ≫ h)] :
@@ -1781,24 +1649,35 @@ theorem image.preComp_comp {W : C} (h : Z ⟶ W) [HasImage (g ≫ h)] [HasImage 
 
 variable [HasEqualizers C]
 
-/--
-Instance `image.preComp_epi_of_epi` / 实例 `image.preComp_epi_of_epi`
+/-- `image.preComp f g` is an epimorphism when `f` is an epimorphism
+(we need `C` to have equalizers to prove this).
+-/
+/-
+**CategoryTheory.Limits.image.preComp_epi_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X 
+⟶ Y) {Z : C} (g : Y ⟶ Z)   [CategoryTheory.Limits.HasEqualizers C] [inst_2 : Cat
+egoryTheory.Limits.HasImage g]   [inst_3 : CategoryTheory.Limits.HasImage (Categ
+oryTheory.CategoryStruct.comp f g)] [CategoryTheory.Epi f],   CategoryTheory.Epi
+ (CategoryTheory.Limits.image.preComp f g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheory.Lim
+its.image.preComp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.epi_of_epi_fac`：epi_of_epi_fac {f : X ⟶ Y} {g : Y ⟶ Z} {h
+ : X ⟶ Z} [Epi h] (w : f ≫ g = h) : Epi g
+· 使用定理 `CategoryTheory.Limits.instEpiFactorThruImageOfHasLimitWalkingParallelPai
+rParallelPair`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C
+} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasImage f]   [∀ {Z : C} (g…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.image.factorThruImage_preComp`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) {Z : C} (g : Y ⟶ Z) 
+  [inst_1 : CategoryTheory.Limits.HasImag…
 
-English:
-instance image.preComp_epi_of_epi
-  signature: [HasImage g] [HasImage (f ≫ g)] [Epi f]
-  body: by
-  apply @epi_of_epi_fac _ _ _ _ _ _ _ _ ?_ (image.factorThruImage_preComp _ _)
-  exact epi_comp _ _
-
-中文:
-实例 像.preComp_epi_of_epi
-  签名: [有像 g] [有像 (f ≫ g)] [满态射 f]
-  定义体: by
-  apply @epi_of_epi_fac _ _ _ _ _ _ _ _ ?_ (image.factorThruImage_preComp _ _)
-  exact epi_comp _ _
-
-Depends on / 依赖: epi_comp, epi_of_epi_fac, factorThruImage_preComp, image.factorThruImage_preComp
+--- 原说明 ---
+`image.preComp f g` is an epimorphism when `f` is an epimorphism
+(we need `C` to have equalizers to prove this).
 -/
 instance image.preComp_epi_of_epi [HasImage g] [HasImage (f ≫ g)] [Epi f] :
     Epi (image.preComp f g) := by
@@ -1807,32 +1686,21 @@ instance image.preComp_epi_of_epi [HasImage g] [HasImage (f ≫ g)] [Epi f] :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `hasImage_iso_comp` / 实例 `hasImage_iso_comp`
-
-English:
-instance hasImage_iso_comp
-  signature: [IsIso f] [HasImage g]
-  body: HasImage.mk
-    { F := (Image.monoFactorisation g).isoComp f
-      isImage := { lift := fun F' => image.lift (F'.ofIsoComp f)
-                   lift_fac := fun F' => by
-                    dsimp
-                    have : (MonoFactorisation.ofIsoComp f F').m = F'.m := rfl
-                    rw [← this]; rw [image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
-
-中文:
-实例 hasImage_iso_comp
-  签名: [是同构 f] [有像 g]
-  定义体: HasImage.mk
-    { F := (Image.monoFactorisation g).isoComp f
-      isImage := { lift := fun F' => image.lift (F'.ofIsoComp f)
-                   lift_fac := fun F' => by
-                    dsimp
-                    have : (MonoFactorisation.ofIsoComp f F').m = F'.m := rfl
-                    rw [← this]; rw [image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
-
-Depends on / 依赖: HasImage, HasImage.mk, Image.monoFactorisation, MonoFactorisation, MonoFactorisation.ofIsoComp, image.lift, image.lift_fac, isImage, isoComp, lift_fac, monoFactorisation, ofIsoComp
+/-
+**CategoryTheory.Limits.hasImage_iso_comp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：hasImage_iso_comp [IsIso f] [HasImage g] : HasImage (f ≫ g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImage.mk`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (F : CategoryTheory.Limits.ImageFact
+orisation f), CategoryT…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
 -/
 instance hasImage_iso_comp [IsIso f] [HasImage g] : HasImage (f ≫ g) :=
   HasImage.mk
@@ -1841,38 +1709,63 @@ instance hasImage_iso_comp [IsIso f] [HasImage g] : HasImage (f ≫ g) :=
                    lift_fac := fun F' => by
                     dsimp
                     have : (MonoFactorisation.ofIsoComp f F').m = F'.m := rfl
-                    rw [← this]; rw [image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
+                    rw [← this, image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
 
-/--
-Instance `image.isIso_precomp_iso` / 实例 `image.isIso_precomp_iso`
+/-- `image.preComp f g` is an isomorphism when `f` is an isomorphism
+(we need `C` to have equalizers to prove this).
+-/
+/-
+**CategoryTheory.Limits.image.isIso_precomp_iso** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (g : 
+Y ⟶ Z) [CategoryTheory.Limits.HasEqualizers C]   (f : X ⟶ Y) [inst_2 : CategoryT
+heory.IsIso f] [inst_3 : CategoryTheory.Limits.HasImage g],   CategoryTheory.IsI
+so (CategoryTheory.Limits.image.preComp f g)
+参数：g : Y ⟶ Z；f : X ⟶ Y；CategoryTheory.Limits.image.preComp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.image.ext`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f] {W : C} {g h : …
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.image.fac_lift_assoc`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.Limits.image.fac_lift`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 
-English:
-instance image.isIso_precomp_iso
-  signature: (f : X ⟶ Y) [IsIso f] [HasImage g]
-  body: ⟨⟨image.lift
-        { I := image (f ≫ g)
-          m := image.ι (f ≫ g)
-          e := inv f ≫ factorThruImage (f ≫ g) },
-      ⟨by
-        ext
-        simp [image.preComp], by
-        ext
-        simp [image.preComp]⟩⟩⟩
-
-中文:
-实例 像.isIso_precomp_iso
-  签名: (f : X ⟶ Y) [是同构 f] [有像 g]
-  定义体: ⟨⟨image.lift
-        { I := image (f ≫ g)
-          m := image.ι (f ≫ g)
-          e := inv f ≫ factorThruImage (f ≫ g) },
-      ⟨by
-        ext
-        simp [image.preComp], by
-        ext
-        simp [image.preComp]⟩⟩⟩
-
-Depends on / 依赖: factorThruImage, image.lift, image.preComp, preComp
+--- 原说明 ---
+`image.preComp f g` is an isomorphism when `f` is an isomorphism
+(we need `C` to have equalizers to prove this).
 -/
 instance image.isIso_precomp_iso (f : X ⟶ Y) [IsIso f] [HasImage g] : IsIso (image.preComp f g) :=
   ⟨⟨image.lift
@@ -1888,44 +1781,46 @@ instance image.isIso_precomp_iso (f : X ⟶ Y) [IsIso f] [HasImage g] : IsIso (i
 set_option backward.isDefEq.respectTransparency false in
 -- Note that in general we don't have the other comparison map you might expect
 -- `image f ⟶ image (f ≫ g)`.
-/--
-Instance `hasImage_comp_iso` / 实例 `hasImage_comp_iso`
-
-English:
-instance hasImage_comp_iso
-  signature: [HasImage f] [IsIso g]
-  body: HasImage.mk
-    { F := (Image.monoFactorisation f).compMono g
-      isImage :=
-      { lift := fun F' => image.lift F'.ofCompIso
-        lift_fac := fun F' => by
-          rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m)]; rw [← IsIso.inv_hom_id g]; rw [← Category.assoc]
-          refine congrArg (· ≫ g) ?_
-          have : (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m) ≫ inv g =
-            image.lift (MonoFactorisation.ofCompIso F') ≫
-            ((MonoFactorisation.ofCompIso F').m) := by
-              simp only [Category.assoc,
-                MonoFactorisation.ofCompIso_m]
-          rw [this]; rw [image.lift_fac (MonoFactorisation.ofCompIso F')]; rw [image.as_ι] } }
-
-中文:
-实例 hasImage_comp_iso
-  签名: [有像 f] [是同构 g]
-  定义体: HasImage.mk
-    { F := (Image.monoFactorisation f).compMono g
-      isImage :=
-      { lift := fun F' => image.lift F'.ofCompIso
-        lift_fac := fun F' => by
-          rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m)]; rw [← IsIso.inv_hom_id g]; rw [← Category.assoc]
-          refine congrArg (· ≫ g) ?_
-          have : (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m) ≫ inv g =
-            image.lift (MonoFactorisation.ofCompIso F') ≫
-            ((MonoFactorisation.ofCompIso F').m) := by
-              simp only [Category.assoc,
-                MonoFactorisation.ofCompIso_m]
-          rw [this]; rw [image.lift_fac (MonoFactorisation.ofCompIso F')]; rw [image.as_ι] } }
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, HasImage, HasImage.mk, Image.monoFactorisation, IsIso.inv_hom_id, MonoFactorisation, MonoFactorisation.ofCo, MonoFactorisation.ofCompIso, compMono, comp_id, image.lift, inv_hom_id, isImage, lift_fac, monoFactorisation, ofCompIso
+/-
+**CategoryTheory.Limits.hasImage_comp_iso** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：hasImage_comp_iso [HasImage f] [IsIso g] : HasImage (f ≫ g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImage.mk`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (F : CategoryTheory.Limits.ImageFact
+orisation f), CategoryT…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.ofCompIso_m`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y} {Y' : C} {g : Y ⟶ Y'
+}   [inst_1 : CategoryTheory.IsIso g]   (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
+· 使用定理 `CategoryTheory.Limits.image.as_ι`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIm
+age f],   (CategoryThe…
 -/
 instance hasImage_comp_iso [HasImage f] [IsIso g] : HasImage (f ≫ g) :=
   HasImage.mk
@@ -1933,32 +1828,32 @@ instance hasImage_comp_iso [HasImage f] [IsIso g] : HasImage (f ≫ g) :=
       isImage :=
       { lift := fun F' => image.lift F'.ofCompIso
         lift_fac := fun F' => by
-          rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m)]; rw [← IsIso.inv_hom_id g]; rw [← Category.assoc]
+          rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m),
+            ← IsIso.inv_hom_id g, ← Category.assoc]
           refine congrArg (· ≫ g) ?_
           have : (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m) ≫ inv g =
             image.lift (MonoFactorisation.ofCompIso F') ≫
             ((MonoFactorisation.ofCompIso F').m) := by
               simp only [Category.assoc,
                 MonoFactorisation.ofCompIso_m]
-          rw [this]; rw [image.lift_fac (MonoFactorisation.ofCompIso F')]; rw [image.as_ι] } }
+          rw [this, image.lift_fac (MonoFactorisation.ofCompIso F'), image.as_ι] } }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `image.compIso` / `image.compIso` 的定义
+/-- Postcomposing by an isomorphism induces an isomorphism on the image. -/
+/-
+**CategoryTheory.Limits.image.compIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (f : X ⟶ Y) →         {Z : C} →           (g : Y ⟶ Z) →             [Ca
+tegoryTheory.Limits.HasEqualizers C] →               [inst_2 : CategoryTheory.Li
+mits.HasImage f] →                 [inst_3 : CategoryTheory.IsIso g] →          
+         CategoryTheory.Limits.image f ≅ CategoryTheory.Limits.image (CategoryTh
+eory.CategoryStruct.comp f g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image.compIso
-  signature: [HasImage f] [IsIso g]
-  body: image.lift (Image.monoFactorisation (f ≫ g)).ofCompIso
-  inv := image.lift ((Image.monoFactorisation f).compMono g)
-
-中文:
-定义 像.compIso
-  签名: [有像 f] [是同构 g]
-  定义体: image.lift (Image.monoFactorisation (f ≫ g)).ofCompIso
-  inv := image.lift ((Image.monoFactorisation f).compMono g)
-
-Depends on / 依赖: Image.monoFactorisation, image.lift, monoFactorisation, ofCompIso
+--- 原说明 ---
+Postcomposing by an isomorphism induces an isomorphism on the image.
 -/
 def image.compIso [HasImage f] [IsIso g] : image f ≅ image (f ≫ g) where
   hom := image.lift (Image.monoFactorisation (f ≫ g)).ofCompIso
@@ -1966,24 +1861,10 @@ def image.compIso [HasImage f] [IsIso g] : image f ≅ image (f ≫ g) where
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `image.compIso_hom_comp_image_ι` / 定理 `image.compIso_hom_comp_image_ι`
-
-English:
-theorem image.compIso_hom_comp_image_ι
-  given: [HasImage f] [IsIso g]
-  proof: by
-  ext
-  simp [image.compIso]
-
-中文:
-定理 像.compIso_hom_comp_image_ι
-  条件: [有像 f] [是同构 g]
-  证明: by
-  ext
-  simp [image.compIso]
-
-Depends on / 依赖: compIso, image.compIso
+/-
+**CategoryTheory.Limits.image.compIso_hom_comp_image_** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.compIso_hom_comp_image_ι [HasImage f] [IsIso g] :
     (image.compIso f g).hom ≫ image.ι (f ≫ g) = image.ι f ≫ g := by
@@ -1992,24 +1873,10 @@ theorem image.compIso_hom_comp_image_ι [HasImage f] [IsIso g] :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `image.compIso_inv_comp_image_ι` / 定理 `image.compIso_inv_comp_image_ι`
-
-English:
-theorem image.compIso_inv_comp_image_ι
-  given: [HasImage f] [IsIso g]
-  proof: by
-  ext
-  simp [image.compIso]
-
-中文:
-定理 像.compIso_inv_comp_image_ι
-  条件: [有像 f] [是同构 g]
-  证明: by
-  ext
-  simp [image.compIso]
-
-Depends on / 依赖: compIso, image.compIso
+/-
+**CategoryTheory.Limits.image.compIso_inv_comp_image_** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.compIso_inv_comp_image_ι [HasImage f] [IsIso g] :
     (image.compIso f g).inv ≫ image.ι f = image.ι (f ≫ g) ≫ inv g := by
@@ -2026,48 +1893,45 @@ variable {C : Type u} [Category.{v} C]
 
 section
 
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (f : X ⟶ Y) [HasImage f] : HasImage (Arrow.mk f).hom :=
-inferInstanceAs HasImage f
+  inferInstanceAs <| HasImage f
 
 end
 
 section HasImageMap
 
-/--
-Definition of `ImageMap` / `ImageMap` 的定义
+/-- An image map is a morphism `image f → image g` fitting into a commutative square and satisfying
+the obvious commutativity conditions. -/
+/-
+**CategoryTheory.Limits.ImageMap** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Limit
+s`。
+形式化陈述：ImageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g) wh
+ere map : image f.hom ⟶ image g.hom map_ι : map ≫ image.ι g.hom = image.ι f.hom 
+≫ sq.right
+参数：sq : f ⟶ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ImageMap
-  parameters: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  axioms and operations (2):
-    - map : image f.hom ⟶ image g.hom
-    - map_ι : map ≫ image.ι g.hom = image.ι f.hom ≫ sq.right  [default: by aesop]
-
-中文:
-结构 像映射
-  参数: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  公理与运算 (2 个):
-    - map : 像 f.hom ⟶ 像 g.hom
-    - map_ι : map ≫ 像.ι g.hom = 像.ι f.hom ≫ sq.right  [默认: by aesop]
+--- 原说明 ---
+An image map is a morphism `image f → image g` fitting into a commutative square
+ and satisfying
+the obvious commutativity conditions.
 -/
 structure ImageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g) where
   map : image f.hom ⟶ image g.hom
   map_ι : map ≫ image.ι g.hom = image.ι f.hom ≫ sq.right := by aesop
 
 attribute [inherit_doc ImageMap] ImageMap.map ImageMap.map_ι
-
-/--
-Instance `inhabitedImageMap` / 实例 `inhabitedImageMap`
-
-English:
-instance inhabitedImageMap
-  signature: {f : Arrow C} [HasImage f.hom]
-  body: ⟨⟨𝟙 _, by simp⟩⟩
-
-中文:
-实例 inhabitedImageMap
-  签名: {f : 箭头 C} [有像 f.hom]
-  定义体: ⟨⟨𝟙 _, by simp⟩⟩
+/-
+**CategoryTheory.Limits.inhabitedImageMap** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：inhabitedImageMap {f : Arrow C} [HasImage f.hom] : Inhabited (ImageMap (𝟙 
+f))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabitedImageMap {f : Arrow C} [HasImage f.hom] : Inhabited (ImageMap (𝟙 f)) :=
   ⟨⟨𝟙 _, by simp⟩⟩
@@ -2075,42 +1939,76 @@ instance inhabitedImageMap {f : Arrow C} [HasImage f.hom] : Inhabited (ImageMap 
 attribute [reassoc (attr := simp)] ImageMap.map_ι
 
 @[reassoc (attr := simp)]
-/--
-theorem `ImageMap.factor_map` / 定理 `ImageMap.factor_map`
-
-English:
-theorem ImageMap.factor_map
-  statement: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  proof: (cancel_mono (image.ι g.hom)).1 by simp
-
-中文:
-定理 像映射.factor_map
-  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  证明: (cancel_mono (image.ι g.hom)).1 by simp
-
-Depends on / 依赖: cancel_mono, g.hom
+/-
+**CategoryTheory.Limits.ImageMap.factor_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.ImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] (sq : f ⟶ g)   (m : CategoryTheory.Limits.ImageM
+ap sq),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.factorThruIm
+age f.hom) m.map =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Arrow.
+Hom.left sq) (CategoryTheory.Limits.factorThruImage g.hom)
+参数：sq : f ⟶ g；m : CategoryTheory.Limits.ImageMap sq；CategoryTheory.Limits.factor
+ThruImage f.hom；CategoryTheory.Arrow.Hom.left sq；CategoryTheory.Limits.factorThr
+uImage g.hom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.ImageMap.map_ι`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryTheory
+.Limits.HasImage f.hom] [i…
+· 使用定理 `CategoryTheory.Limits.image.fac_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.
+HasImage f] {Z : C} (h : Y …
+· 使用定理 `CategoryTheory.Limits.image.fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f],   CategoryTheo…
+· 使用定理 `CategoryTheory.Arrow.w`：w {f g : Arrow T} (sq : f ⟶ g) : sq.left ≫ g.hom
+ = f.hom ≫ sq.right
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ImageMap.factor_map {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
     (m : ImageMap sq) : factorThruImage f.hom ≫ m.map = sq.left ≫ factorThruImage g.hom :=
-(cancel_mono (image.ι g.hom)).1 by simp
+  (cancel_mono (image.ι g.hom)).1 <| by simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `ImageMap.transport` / `ImageMap.transport` 的定义
+/-- To give an image map for a commutative square with `f` at the top and `g` at the bottom, it
+suffices to give a map between any mono factorisation of `f` and any image factorisation of `g`. -/
+/-
+**CategoryTheory.Limits.ImageMap.transport** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.ImageMap`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {f g : Ca
+tegoryTheory.Arrow C} →       [inst_1 : CategoryTheory.Limits.HasImage f.hom] → 
+        [inst_2 : CategoryTheory.Limits.HasImage g.hom] →           (sq : f ⟶ g)
+ →             (F : CategoryTheory.Limits.MonoFactorisation f.hom) →            
+   {F' : CategoryTheory.Limits.MonoFactorisation g.hom} →                 Catego
+ryTheory.Limits.IsImage F' →                   {map : F.I ⟶ F'.I} →             
+        CategoryTheory.CategoryStruct.comp map F'.m =                         Ca
+tegoryTheory.CategoryStruct.comp F.m (CategoryTheory.Arrow.Hom.right sq) →      
+                 CategoryTheory.Limits.ImageMap sq
+参数：sq : f ⟶ g；F : CategoryTheory.Limits.MonoFactorisation f.hom；CategoryTheory.A
+rrow.Hom.right sq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ImageMap.transport
-  signature: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  body: image.lift F ≫ map ≫ hF'.lift (Image.monoFactorisation g.hom)
-  map_ι := by simp [map_ι]
-
-中文:
-定义 像映射.transport
-  签名: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  定义体: image.lift F ≫ map ≫ hF'.lift (Image.monoFactorisation g.hom)
-  map_ι := by simp [map_ι]
-
-Depends on / 依赖: Image.monoFactorisation, g.hom, image.lift, monoFactorisation
+--- 原说明 ---
+To give an image map for a commutative square with `f` at the top and `g` at the
+ bottom, it
+suffices to give a map between any mono factorisation of `f` and any image facto
+risation of `g`.
 -/
 def ImageMap.transport {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
     (F : MonoFactorisation f.hom) {F' : MonoFactorisation g.hom} (hF' : IsImage F')
@@ -2118,86 +2016,85 @@ def ImageMap.transport {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f
   map := image.lift F ≫ map ≫ hF'.lift (Image.monoFactorisation g.hom)
   map_ι := by simp [map_ι]
 
-/--
-Definition of `HasImageMap` / `HasImageMap` 的定义
+/-- `HasImageMap sq` means that there is an `ImageMap` for the square `sq`. -/
+/-
+**CategoryTheory.Limits.HasImageMap** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {f g : Ca
+tegoryTheory.Arrow C} →       [CategoryTheory.Limits.HasImage f.hom] → [Category
+Theory.Limits.HasImage g.hom] → (f ⟶ g) → Prop
+参数：f ⟶ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasImageMap
-  parameters: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  axioms and operations (1):
-    - mk' : : has_image_map : Nonempty (ImageMap sq)
-
-中文:
-类 有像映射
-  参数: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  公理与运算 (1 个):
-    - mk' : : has_image_map : 非空 (像映射 sq)
+--- 原说明 ---
+`HasImageMap sq` means that there is an `ImageMap` for the square `sq`.
 -/
 class HasImageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g) : Prop where
 mk' ::
   has_image_map : Nonempty (ImageMap sq)
 
 attribute [inherit_doc HasImageMap] HasImageMap.has_image_map
-
-/--
-theorem `HasImageMap.mk` / 定理 `HasImageMap.mk`
-
-English:
-theorem HasImageMap.mk
-  statement: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
-  proof: ⟨Nonempty.intro m⟩
-
-中文:
-定理 有像映射.mk
-  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] {sq : f ⟶ g}
-  证明: ⟨Nonempty.intro m⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.Limits.HasImageMap.mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.HasImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] {sq : f ⟶ g}   (m : CategoryTheory.Limits.ImageM
+ap sq), CategoryTheory.Limits.HasImageMap sq
+参数：m : CategoryTheory.Limits.ImageMap sq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasImageMap.mk {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
     (m : ImageMap sq) : HasImageMap sq :=
   ⟨Nonempty.intro m⟩
-
-/--
-theorem `HasImageMap.transport` / 定理 `HasImageMap.transport`
-
-English:
-theorem HasImageMap.transport
-  statement: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  proof: HasImageMap.mk ImageMap.transport sq F hF' map_ι
-
-中文:
-定理 有像映射.transport
-  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  证明: HasImageMap.mk ImageMap.transport sq F hF' map_ι
-
-Depends on / 依赖: HasImageMap, HasImageMap.mk, ImageMap, ImageMap.transport, transport
+/-
+**CategoryTheory.Limits.HasImageMap.transport** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.HasImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] (sq : f ⟶ g)   (F : CategoryTheory.Limits.MonoFa
+ctorisation f.hom) {F' : CategoryTheory.Limits.MonoFactorisation g.hom}   (hF' :
+ CategoryTheory.Limits.IsImage F') (map : F.I ⟶ F'.I),   CategoryTheory.Category
+Struct.comp map F'.m =       CategoryTheory.CategoryStruct.comp F.m (CategoryThe
+ory.Arrow.Hom.right sq) →     CategoryTheory.Limits.HasImageMap sq
+参数：sq : f ⟶ g；F : CategoryTheory.Limits.MonoFactorisation f.hom；hF' : CategoryTh
+eory.Limits.IsImage F'；map : F.I ⟶ F'.I；CategoryTheory.Arrow.Hom.right sq。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImageMap.mk`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryTheory
+.Limits.HasImage f.hom] [i…
 -/
 theorem HasImageMap.transport {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
     (F : MonoFactorisation f.hom) {F' : MonoFactorisation g.hom} (hF' : IsImage F')
     (map : F.I ⟶ F'.I) (map_ι : map ≫ F'.m = F.m ≫ sq.right) : HasImageMap sq :=
-HasImageMap.mk ImageMap.transport sq F hF' map_ι
+  HasImageMap.mk <| ImageMap.transport sq F hF' map_ι
 
-/--
-Definition of `HasImageMap.imageMap` / `HasImageMap.imageMap` 的定义
+/-- Obtain an `ImageMap` from a `HasImageMap` instance. -/
+/-
+**CategoryTheory.Limits.HasImageMap.imageMap** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.HasImageMap`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {f g : Ca
+tegoryTheory.Arrow C} →       [inst_1 : CategoryTheory.Limits.HasImage f.hom] → 
+        [inst_2 : CategoryTheory.Limits.HasImage g.hom] →           (sq : f ⟶ g)
+ → [CategoryTheory.Limits.HasImageMap sq] → CategoryTheory.Limits.ImageMap sq
+参数：sq : f ⟶ g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImageMap.has_image_map`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {f g : CategoryTheory.Arrow C}   {inst_1 : Cat
+egoryTheory.Limits.HasImage f.hom} {i…
 
-English:
-definition HasImageMap.imageMap
-  signature: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
-  body: Classical.choice @HasImageMap.has_image_map _ _ _ _ _ _ sq _
-
-中文:
-定义 有像映射.imageMap
-  签名: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] (sq : f ⟶ g)
-  定义体: Classical.choice @HasImageMap.has_image_map _ _ _ _ _ _ sq _
-
-Depends on / 依赖: Classical, Classical.choice, HasImageMap, HasImageMap.has_image_map, choice, has_image_map
+--- 原说明 ---
+Obtain an `ImageMap` from a `HasImageMap` instance.
 -/
 def HasImageMap.imageMap {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
     [HasImageMap sq] : ImageMap sq :=
-Classical.choice @HasImageMap.has_image_map _ _ _ _ _ _ sq _
+  Classical.choice <| @HasImageMap.has_image_map _ _ _ _ _ _ sq _
 
 -- see Note [lower instance priority]
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasImageMapOfIsIso {f g : Arrow C} [HasImage f.hom] [HasImage g.hom]
     (sq : f ⟶ g) [IsIso sq] : HasImageMap sq :=
   HasImageMap.mk
@@ -2206,34 +2103,41 @@ instance (priority := 100) hasImageMapOfIsIso {f g : Arrow C} [HasImage f.hom] [
         erw [← cancel_mono (inv sq).right, Category.assoc, ← MonoFactorisation.ofArrowIso_m,
           image.lift_fac, Category.assoc, ← Comma.comp_right, IsIso.hom_inv_id, Comma.id_right,
           Category.comp_id] }
-
-/--
-Instance `HasImageMap.comp` / 实例 `HasImageMap.comp`
-
-English:
-instance HasImageMap.comp
-  signature: {f g h : Arrow C} [HasImage f.hom] [HasImage g.hom] [HasImage h.hom]
-  body: HasImageMap.mk
-    { map := (HasImageMap.imageMap sq1).map ≫ (HasImageMap.imageMap sq2).map
-      map_ι := by
-        rw [Category.assoc]; rw [ImageMap.map_ι]; rw [ImageMap.map_ι_assoc]; rw [Arrow.comp_right] }
-
-中文:
-实例 有像映射.comp
-  签名: {f g h : 箭头 C} [有像 f.hom] [有像 g.hom] [有像 h.hom]
-  定义体: HasImageMap.mk
-    { map := (HasImageMap.imageMap sq1).map ≫ (HasImageMap.imageMap sq2).map
-      map_ι := by
-        rw [Category.assoc]; rw [ImageMap.map_ι]; rw [ImageMap.map_ι_assoc]; rw [Arrow.comp_right] }
-
-Depends on / 依赖: Arrow.comp_right, Category, Category.assoc, HasImageMap, HasImageMap.imageMap, HasImageMap.mk, ImageMap, ImageMap.map_, comp_right, imageMap
+/-
+**CategoryTheory.Limits.HasImageMap.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.HasImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g h : Category
+Theory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Cate
+goryTheory.Limits.HasImage g.hom]   [inst_3 : CategoryTheory.Limits.HasImage h.h
+om] (sq1 : f ⟶ g) (sq2 : g ⟶ h) [CategoryTheory.Limits.HasImageMap sq1]   [Categ
+oryTheory.Limits.HasImageMap sq2],   CategoryTheory.Limits.HasImageMap (Category
+Theory.CategoryStruct.comp sq1 sq2)
+参数：sq1 : f ⟶ g；sq2 : g ⟶ h；CategoryTheory.CategoryStruct.comp sq1 sq2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImageMap.mk`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryTheory
+.Limits.HasImage f.hom] [i…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.ImageMap.map_ι`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryTheory
+.Limits.HasImage f.hom] [i…
+· 使用定理 `CategoryTheory.Limits.ImageMap.map_ι_assoc`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : Category
+Theory.Limits.HasImage f.hom] [i…
+· 使用定理 `CategoryTheory.Arrow.comp_right`：∀ {T : Type u} [inst : CategoryTheory.C
+ategory.{v, u} T] {X Y Z : CategoryTheory.Arrow T} (g : Z ⟶ Y) (f : Y ⟶ X),   Ca
+tegoryTheory.Arrow.Ho…
 -/
 instance HasImageMap.comp {f g h : Arrow C} [HasImage f.hom] [HasImage g.hom] [HasImage h.hom]
     (sq1 : f ⟶ g) (sq2 : g ⟶ h) [HasImageMap sq1] [HasImageMap sq2] : HasImageMap (sq1 ≫ sq2) :=
   HasImageMap.mk
     { map := (HasImageMap.imageMap sq1).map ≫ (HasImageMap.imageMap sq2).map
       map_ι := by
-        rw [Category.assoc]; rw [ImageMap.map_ι]; rw [ImageMap.map_ι_assoc]; rw [Arrow.comp_right] }
+        rw [Category.assoc, ImageMap.map_ι, ImageMap.map_ι_assoc, Arrow.comp_right] }
 
 variable {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] (sq : f ⟶ g)
 
@@ -2241,24 +2145,36 @@ section
 
 attribute [local ext] ImageMap
 
-/--
-theorem `ImageMap.map_uniq_aux` / 定理 `ImageMap.map_uniq_aux`
-
-English:
-theorem ImageMap.map_uniq_aux
-  statement: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
-  proof: by
-  have : map ≫ image.ι g.hom = map' ≫ image.ι g.hom := by rw [map_ι, map_ι']
-  apply (cancel_mono (image.ι g.hom)).1 this
-
-中文:
-定理 像映射.map_uniq_aux
-  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom] {sq : f ⟶ g}
-  证明: by
-  have : map ≫ image.ι g.hom = map' ≫ image.ι g.hom := by rw [map_ι, map_ι']
-  apply (cancel_mono (image.ι g.hom)).1 this
-
-Depends on / 依赖: cancel_mono, cat_disch, f.hom, g.hom, sq.right
+/-
+**CategoryTheory.Limits.ImageMap.map_uniq_aux** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.ImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] {sq : f ⟶ g}   (map : CategoryTheory.Limits.imag
+e f.hom ⟶ CategoryTheory.Limits.image g.hom),   autoParam       (CategoryTheory.
+CategoryStruct.comp map (CategoryTheory.Limits.image.ι g.hom) =         Category
+Theory.CategoryStruct.comp (CategoryTheory.Limits.image.ι f.hom) (CategoryTheory
+.Arrow.Hom.right sq))       CategoryTheory.Limits.ImageMap.map_uniq_aux._auto_1 
+→     ∀ (map' : CategoryTheory.Limits.image f.hom ⟶ CategoryTheory.Limits.image 
+g.hom),       CategoryTheory.CategoryStruct.comp map' (CategoryTheory.Limits.ima
+ge.ι g.hom) =           CategoryTheory.CategoryStruct.comp (CategoryTheory.Limit
+s.image.ι f.hom) (CategoryTheory.Arrow.Hom.right sq) →         map = map'
+参数：map : CategoryTheory.Limits.image f.hom ⟶ CategoryTheory.Limits.image g.hom；C
+ategoryTheory.CategoryStruct.comp map (CategoryTheory.Limits.image.ι g.hom) =   
+      CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.image.ι f.hom) (
+CategoryTheory.Arrow.Hom.right sq)；map' : CategoryTheory.Limits.image f.hom ⟶ Ca
+tegoryTheory.Limits.image g.hom；CategoryTheory.Limits.image.ι g.hom；CategoryTheo
+ry.Limits.image.ι f.hom；CategoryTheory.Arrow.Hom.right sq。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Limits.instMonoι`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.Limits.HasIma
+ge f], CategoryTheory…
 -/
 theorem ImageMap.map_uniq_aux {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] {sq : f ⟶ g}
     (map : image f.hom ⟶ image g.hom)
@@ -2267,29 +2183,21 @@ theorem ImageMap.map_uniq_aux {f g : Arrow C} [HasImage f.hom] [HasImage g.hom] 
     (map_ι' : map' ≫ image.ι g.hom = image.ι f.hom ≫ sq.right) : (map = map') := by
   have : map ≫ image.ι g.hom = map' ≫ image.ι g.hom := by rw [map_ι, map_ι']
   apply (cancel_mono (image.ι g.hom)).1 this
-
-/--
-theorem `ImageMap.map_uniq` / 定理 `ImageMap.map_uniq`
-
-English:
-theorem ImageMap.map_uniq
-  statement: {f g : Arrow C} [HasImage f.hom] [HasImage g.hom]
-  proof: by
-  apply ImageMap.map_uniq_aux _ F.map_ι _ G.map_ι
-
-@[deprecated (since := "2026-04-08")]
-alias ImageMap.mk.injEq' := ImageMap.mk.injEq
-
-中文:
-定理 像映射.map_uniq
-  结论: {f g : 箭头 C} [有像 f.hom] [有像 g.hom]
-  证明: by
-  apply ImageMap.map_uniq_aux _ F.map_ι _ G.map_ι
-
-@[deprecated (since := "2026-04-08")]
-alias ImageMap.mk.injEq' := ImageMap.mk.injEq
-
-Depends on / 依赖: F.map_, G.map_, ImageMap, ImageMap.map_uniq_aux, map_uniq_aux
+/-
+**CategoryTheory.Limits.ImageMap.map_uniq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.ImageMap`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] {sq : f ⟶ g}   (F G : CategoryTheory.Limits.Imag
+eMap sq), F.map = G.map
+参数：F G : CategoryTheory.Limits.ImageMap sq。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.ImageMap.map_uniq_aux`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : Categor
+yTheory.Limits.HasImage f.hom] [i…
+· 使用定理 `CategoryTheory.Limits.ImageMap.map_ι`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryTheory
+.Limits.HasImage f.hom] [i…
 -/
 theorem ImageMap.map_uniq {f g : Arrow C} [HasImage f.hom] [HasImage g.hom]
     {sq : f ⟶ g} (F G : ImageMap sq) : F.map = G.map := by
@@ -2297,93 +2205,72 @@ theorem ImageMap.map_uniq {f g : Arrow C} [HasImage f.hom] [HasImage g.hom]
 
 @[deprecated (since := "2026-04-08")]
 alias ImageMap.mk.injEq' := ImageMap.mk.injEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (ImageMap sq)
-  body: Subsingleton.intro fun a b =>
-ImageMap.ext ImageMap.map_uniq a b
-
-中文:
-实例 :
-  签名: 子单例 (像映射 sq)
-  定义体: Subsingleton.intro fun a b =>
-ImageMap.ext ImageMap.map_uniq a b
-
-Depends on / 依赖: ImageMap, ImageMap.ext, ImageMap.map_uniq, Subsingleton, Subsingleton.intro, map_uniq
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (ImageMap sq) :=
   Subsingleton.intro fun a b =>
-ImageMap.ext ImageMap.map_uniq a b
+    ImageMap.ext <| ImageMap.map_uniq a b
 
 end
 
 variable [HasImageMap sq]
 
-/--
-Definition of `image.map` / `image.map` 的定义
+/-- The map on images induced by a commutative square. -/
+/-
+**CategoryTheory.Limits.image.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {f g : Ca
+tegoryTheory.Arrow C} →       [inst_1 : CategoryTheory.Limits.HasImage f.hom] → 
+        [inst_2 : CategoryTheory.Limits.HasImage g.hom] →           (sq : f ⟶ g)
+ →             [CategoryTheory.Limits.HasImageMap sq] →               CategoryTh
+eory.Limits.image f.hom ⟶ CategoryTheory.Limits.image g.hom
+参数：sq : f ⟶ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation image.map
-  signature: : image f.hom ⟶ image g.hom
-  body: (HasImageMap.imageMap sq).map
-
-中文:
-缩写 像.map
-  签名: : 像 f.hom ⟶ 像 g.hom
-  定义体: (HasImageMap.imageMap sq).map
-
-Depends on / 依赖: HasImageMap, HasImageMap.imageMap, imageMap
+--- 原说明 ---
+The map on images induced by a commutative square.
 -/
 abbrev image.map : image f.hom ⟶ image g.hom :=
   (HasImageMap.imageMap sq).map
-
-/--
-theorem `image.factor_map` / 定理 `image.factor_map`
-
-English:
-theorem image.factor_map
-  proof: by simp
-
-中文:
-定理 像.factor_map
-  证明: by simp
+/-
+**CategoryTheory.Limits.image.factor_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] (sq : f ⟶ g)   [inst_3 : CategoryTheory.Limits.H
+asImageMap sq],   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.fact
+orThruImage f.hom)       (CategoryTheory.Limits.image.map sq) =     CategoryTheo
+ry.CategoryStruct.comp (CategoryTheory.Arrow.Hom.left sq) (CategoryTheory.Limits
+.factorThruImage g.hom)
+参数：sq : f ⟶ g；CategoryTheory.Limits.factorThruImage f.hom；CategoryTheory.Limits.
+image.map sq；CategoryTheory.Arrow.Hom.left sq；CategoryTheory.Limits.factorThruIm
+age g.hom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ImageMap.factor_map`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : CategoryT
+heory.Limits.HasImage f.hom] [i…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem image.factor_map :
     factorThruImage f.hom ≫ image.map sq = sq.left ≫ factorThruImage g.hom := by simp
-
-/--
-theorem `image.map_ι` / 定理 `image.map_ι`
-
-English:
-theorem image.map_ι
-  statement: image.map sq ≫ image.ι g.hom = image.ι f.hom ≫ sq.right
-  proof: by simp
-
-中文:
-定理 像.map_ι
-  结论: 像.map sq ≫ 像.ι g.hom = 像.ι f.hom ≫ sq.right
-  证明: by simp
+/-
+**CategoryTheory.Limits.image.map_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.map_ι : image.map sq ≫ image.ι g.hom = image.ι f.hom ≫ sq.right := by simp
-
-/--
-theorem `image.map_homMk'_ι` / 定理 `image.map_homMk'_ι`
-
-English:
-theorem image.map_homMk'_ι
-  statement: {X Y P Q : C} {k : X ⟶ Y} [HasImage k] {l : P ⟶ Q} [HasImage l]
-  proof: image.map_ι _
-
-中文:
-定理 像.map_homMk'_ι
-  结论: {X Y P Q : C} {k : X ⟶ Y} [有像 k] {l : P ⟶ Q} [有像 l]
-  证明: image.map_ι _
-
-Depends on / 依赖: F.obj, Iso.refl, NatIso, NatIso.ofComponents, evaluation, image.map_, ofComponents, preservesColimitsOfShape_of_evaluation, preservesColimitsOfShape_of_natIso, tensorLeft, this.symm
+/-
+**CategoryTheory.Limits.image.map_homMk'_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.map_homMk'_ι {X Y P Q : C} {k : X ⟶ Y} [HasImage k] {l : P ⟶ Q} [HasImage l]
     {m : X ⟶ P} {n : Y ⟶ Q} (w : m ≫ l = k ≫ n) [HasImageMap (Arrow.homMk' _ _ w)] :
@@ -2395,44 +2282,41 @@ section
 variable {h : Arrow C} [HasImage h.hom] (sq' : g ⟶ h)
 variable [HasImageMap sq']
 
-/--
-Definition of `imageMapComp` / `imageMapComp` 的定义
+/-- Image maps for composable commutative squares induce an image map in the composite square. -/
+/-
+**CategoryTheory.Limits.imageMapComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：imageMapComp : ImageMap (sq ≫ sq') where map
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageMapComp
-  signature: : ImageMap (sq ≫ sq') where map
-  body: image.map sq ≫ image.map sq'
-
-@[simp]
-
-中文:
-定义 imageMapComp
-  签名: : 像映射 (sq ≫ sq') where map
-  定义体: image.map sq ≫ image.map sq'
-
-@[simp]
-
-Depends on / 依赖: image.map
+--- 原说明 ---
+Image maps for composable commutative squares induce an image map in the composi
+te square.
 -/
 def imageMapComp : ImageMap (sq ≫ sq') where map := image.map sq ≫ image.map sq'
 
 @[simp]
-/--
-theorem `image.map_comp` / 定理 `image.map_comp`
-
-English:
-theorem image.map_comp
-  given: [HasImageMap (sq ≫ sq')]
-  proof: show (HasImageMap.imageMap (sq ≫ sq')).map = (imageMapComp sq sq').map by
-    congr; simp only [eq_iff_true_of_subsingleton]
-
-中文:
-定理 像.map_comp
-  条件: [有像映射 (sq ≫ sq')]
-  证明: show (HasImageMap.imageMap (sq ≫ sq')).map = (imageMapComp sq sq').map by
-    congr; simp only [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: HasImageMap, HasImageMap.imageMap, eq_iff_true_of_subsingleton, imageMap, imageMapComp
+/-
+**CategoryTheory.Limits.image.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g : CategoryTh
+eory.Arrow C}   [inst_1 : CategoryTheory.Limits.HasImage f.hom] [inst_2 : Catego
+ryTheory.Limits.HasImage g.hom] (sq : f ⟶ g)   [inst_3 : CategoryTheory.Limits.H
+asImageMap sq] {h : CategoryTheory.Arrow C}   [inst_4 : CategoryTheory.Limits.Ha
+sImage h.hom] (sq' : g ⟶ h) [inst_5 : CategoryTheory.Limits.HasImageMap sq']   [
+inst_6 : CategoryTheory.Limits.HasImageMap (CategoryTheory.CategoryStruct.comp s
+q sq')],   CategoryTheory.Limits.image.map (CategoryTheory.CategoryStruct.comp s
+q sq') =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.image.map
+ sq) (CategoryTheory.Limits.image.map sq')
+参数：sq : f ⟶ g；sq' : g ⟶ h；CategoryTheory.CategoryStruct.comp sq sq'；CategoryTheo
+ry.CategoryStruct.comp sq sq'；CategoryTheory.Limits.image.map sq；CategoryTheory.
+Limits.image.map sq'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instSubsingletonImageMap`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : Cate
+goryTheory.Limits.HasImage f.hom] [i…
 -/
 theorem image.map_comp [HasImageMap (sq ≫ sq')] :
     image.map (sq ≫ sq') = image.map sq ≫ image.map sq' :=
@@ -2445,46 +2329,38 @@ section
 
 variable (f)
 
-/--
-Definition of `imageMapId` / `imageMapId` 的定义
+/-- The identity `image f ⟶ image f` fits into the commutative square represented by the identity
+morphism `𝟙 f` in the arrow category. -/
+/-
+**CategoryTheory.Limits.imageMapId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：imageMapId : ImageMap (𝟙 f) where map
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageMapId
-  signature: : ImageMap (𝟙 f) where map
-  body: 𝟙 (image f.hom)
-
-@[simp]
-
-中文:
-定义 imageMapId
-  签名: : 像映射 (𝟙 f) where map
-  定义体: 𝟙 (image f.hom)
-
-@[simp]
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The identity `image f ⟶ image f` fits into the commutative square represented by
+ the identity
+morphism `𝟙 f` in the arrow category.
 -/
 def imageMapId : ImageMap (𝟙 f) where map := 𝟙 (image f.hom)
 
 @[simp]
-/--
-theorem `image.map_id` / 定理 `image.map_id`
-
-English:
-theorem image.map_id
-  given: [HasImageMap (𝟙 f)]
-  statement: image.map (𝟙 f) = 𝟙 (image f.hom)
-  proof: show (HasImageMap.imageMap (𝟙 f)).map = (imageMapId f).map by
-    congr; simp only [eq_iff_true_of_subsingleton]
-
-中文:
-定理 像.map_id
-  条件: [有像映射 (𝟙 f)]
-  结论: 像.map (𝟙 f) = 𝟙 (像 f.hom)
-  证明: show (HasImageMap.imageMap (𝟙 f)).map = (imageMapId f).map by
-    congr; simp only [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: HasImageMap, HasImageMap.imageMap, eq_iff_true_of_subsingleton, imageMap, imageMapId
+/-
+**CategoryTheory.Limits.image.map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (f : CategoryTheo
+ry.Arrow C)   [inst_1 : CategoryTheory.Limits.HasImage f.hom]   [inst_2 : Catego
+ryTheory.Limits.HasImageMap (CategoryTheory.CategoryStruct.id f)],   CategoryThe
+ory.Limits.image.map (CategoryTheory.CategoryStruct.id f) =     CategoryTheory.C
+ategoryStruct.id (CategoryTheory.Limits.image f.hom)
+参数：f : CategoryTheory.Arrow C；CategoryTheory.CategoryStruct.id f；CategoryTheory.
+CategoryStruct.id f；CategoryTheory.Limits.image f.hom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instSubsingletonImageMap`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : CategoryTheory.Arrow C}   [inst_1 : Cate
+goryTheory.Limits.HasImage f.hom] [i…
 -/
 theorem image.map_id [HasImageMap (𝟙 f)] : image.map (𝟙 f) = 𝟙 (image f.hom) :=
   show (HasImageMap.imageMap (𝟙 f)).map = (imageMapId f).map by
@@ -2498,23 +2374,20 @@ section
 
 variable (C) [HasImages C]
 
-/--
-Definition of `HasImageMaps` / `HasImageMaps` 的定义
+/-- If a category `HasImageMaps`, then all commutative squares induce morphisms on images. -/
+/-
+**CategoryTheory.Limits.HasImageMaps** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.Limits.HasImages C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasImageMaps
-  parameters: : Prop where
-  axioms and operations (1):
-    - has_image_map : forall {f g : Arrow C} (st : f ⟶ g), HasImageMap st
-
-中文:
-类 有ImageMaps
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - has_image_map : 对任意 {f g : 箭头 C} (st : f ⟶ g), 有像映射 st
+--- 原说明 ---
+If a category `HasImageMaps`, then all commutative squares induce morphisms on i
+mages.
 -/
 class HasImageMaps : Prop where
-  has_image_map : forall {f g : Arrow C} (st : f ⟶ g), HasImageMap st
+  has_image_map : ∀ {f g : Arrow C} (st : f ⟶ g), HasImageMap st
 
 attribute [instance 100] HasImageMaps.has_image_map
 
@@ -2527,22 +2400,19 @@ variable [HasImages C] [HasImageMaps C]
 /-- The functor from the arrow category of `C` to `C` itself that maps a morphism to its image
 and a commutative square to the induced morphism on images. -/
 @[simps]
-/--
-Definition of `im` / `im` 的定义
+/-
+**CategoryTheory.Limits.im** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：im : Arrow C ⥤ C where obj f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImageMaps.has_image_map`：∀ {C : Type u} {inst :
+ CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasImages C} 
+  [self : CategoryTheory.Limits.HasIma…
 
-English:
-definition im
-  signature: : Arrow C ⥤ C where
-  body: image f.hom
-  map st := image.map st
-
-中文:
-定义 im
-  签名: : 箭头 C ⥤ C where
-  定义体: image f.hom
-  map st := image.map st
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The functor from the arrow category of `C` to `C` itself that maps a morphism to
+ its image
+and a commutative square to the induced morphism on images.
 -/
 def im : Arrow C ⥤ C where
   obj f := image f.hom
@@ -2552,22 +2422,20 @@ end HasImageMaps
 
 section StrongEpiMonoFactorisation
 
-/--
-Definition of `StrongEpiMonoFactorisation` / `StrongEpiMonoFactorisation` 的定义
+/-- A strong epi-mono factorisation is a decomposition `f = e ≫ m` with `e` a strong epimorphism
+and `m` a monomorphism. -/
+/-
+**CategoryTheory.Limits.StrongEpiMonoFactorisation** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (X 
+⟶ Y) → Type (max u v)
+参数：X ⟶ Y；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure StrongEpiMonoFactorisation
-  parameters: {X Y : C} (f : X ⟶ Y)
-  extends: MonoFactorisation f
-  axioms and operations (1):
-    - [e_strong_epi : StrongEpi e]
-
-中文:
-结构 StrongEpiMonoFactorisation
-  参数: {X Y : C} (f : X ⟶ Y)
-  继承: 单态射分解 f
-  公理与运算 (1 个):
-    - [e_strong_epi : 强满态射 e]
+--- 原说明 ---
+A strong epi-mono factorisation is a decomposition `f = e ≫ m` with `e` a strong
+ epimorphism
+and `m` a monomorphism.
 -/
 structure StrongEpiMonoFactorisation {X Y : C} (f : X ⟶ Y) extends MonoFactorisation f where
   [e_strong_epi : StrongEpi e]
@@ -2576,37 +2444,40 @@ attribute [inherit_doc StrongEpiMonoFactorisation] StrongEpiMonoFactorisation.e_
 
 attribute [instance] StrongEpiMonoFactorisation.e_strong_epi
 
-/--
-Instance `strongEpiMonoFactorisationInhabited` / 实例 `strongEpiMonoFactorisationInhabited`
+/-- Satisfying the inhabited linter -/
+/-
+**CategoryTheory.Limits.strongEpiMonoFactorisationInhabited** 是 Mathlib 中的一个实例，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：strongEpiMonoFactorisationInhabited {X Y : C} (f : X ⟶ Y) [StrongEpi f] : 
+Inhabited (StrongEpiMonoFactorisation f)
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instMonoId`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] (X : C),   CategoryTheory.Mono (CategoryTheory.CategoryStruct.id X)
 
-English:
-instance strongEpiMonoFactorisationInhabited
-  signature: {X Y : C} (f : X ⟶ Y) [StrongEpi f]
-  body: ⟨⟨⟨Y, 𝟙 Y, f, by simp⟩⟩⟩
-
-中文:
-实例 strongEpiMonoFactorisationInhabited
-  签名: {X Y : C} (f : X ⟶ Y) [强满态射 f]
-  定义体: ⟨⟨⟨Y, 𝟙 Y, f, by simp⟩⟩⟩
+--- 原说明 ---
+Satisfying the inhabited linter
 -/
 instance strongEpiMonoFactorisationInhabited {X Y : C} (f : X ⟶ Y) [StrongEpi f] :
     Inhabited (StrongEpiMonoFactorisation f) :=
   ⟨⟨⟨Y, 𝟙 Y, f, by simp⟩⟩⟩
 
-/--
-Definition of `StrongEpiMonoFactorisation.toMonoIsImage` / `StrongEpiMonoFactorisation.toMonoIsImage` 的定义
+/-- A mono factorisation coming from a strong epi-mono factorisation always has the universal
+property of the image. -/
+/-
+**CategoryTheory.Limits.StrongEpiMonoFactorisation.toMonoIsImage** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Limits.StrongEpiMonoFactorisation`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f : X ⟶ Y} →         (F : CategoryTheory.Limits.StrongEpiMonoFactorisa
+tion f) → CategoryTheory.Limits.IsImage F.toMonoFactorisation
+参数：F : CategoryTheory.Limits.StrongEpiMonoFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StrongEpiMonoFactorisation.toMonoIsImage
-  signature: {X Y : C} {f : X ⟶ Y}
-  body: (CommSq.mk (show G.e ≫ G.m = F.e ≫ F.m by rw [F.toMonoFactorisation.fac, G.fac])).lift
-
-中文:
-定义 StrongEpiMonoFactorisation.toMonoIsImage
-  签名: {X Y : C} {f : X ⟶ Y}
-  定义体: (CommSq.mk (show G.e ≫ G.m = F.e ≫ F.m by rw [F.toMonoFactorisation.fac, G.fac])).lift
-
-Depends on / 依赖: CommSq, CommSq.mk, F.toMonoFactorisation.fac, G.fac, toMonoFactorisation
+--- 原说明 ---
+A mono factorisation coming from a strong epi-mono factorisation always has the 
+universal
+property of the image.
 -/
 def StrongEpiMonoFactorisation.toMonoIsImage {X Y : C} {f : X ⟶ Y}
     (F : StrongEpiMonoFactorisation f) : IsImage F.toMonoFactorisation where
@@ -2615,44 +2486,43 @@ def StrongEpiMonoFactorisation.toMonoIsImage {X Y : C} {f : X ⟶ Y}
 
 variable (C)
 
-/--
-Definition of `HasStrongEpiMonoFactorisations` / `HasStrongEpiMonoFactorisations` 的定义
+/-- A category has strong epi-mono factorisations if every morphism admits a strong epi-mono
+factorisation. -/
+/-
+**CategoryTheory.Limits.HasStrongEpiMonoFactorisations** 是 Mathlib 中的一个归纳类型，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasStrongEpiMonoFactorisations
-  parameters: : Prop where mk' ::
-  (no additional axioms)
-
-中文:
-类 有StrongEpiMonoFactorisations
-  参数: : 命题 where mk' ::
-  (无附加公理)
+--- 原说明 ---
+A category has strong epi-mono factorisations if every morphism admits a strong 
+epi-mono
+factorisation.
 -/
 class HasStrongEpiMonoFactorisations : Prop where mk' ::
-  has_fac : forall {X Y : C} (f : X ⟶ Y), Nonempty (StrongEpiMonoFactorisation f)
+  has_fac : ∀ {X Y : C} (f : X ⟶ Y), Nonempty (StrongEpiMonoFactorisation f)
 
 attribute [inherit_doc HasStrongEpiMonoFactorisations] HasStrongEpiMonoFactorisations.has_fac
 
 variable {C}
-
-/--
-theorem `HasStrongEpiMonoFactorisations.mk` / 定理 `HasStrongEpiMonoFactorisations.mk`
-
-English:
-theorem HasStrongEpiMonoFactorisations.mk
-  proof: ⟨fun f => Nonempty.intro d f⟩
-
-中文:
-定理 有StrongEpiMonoFactorisations.mk
-  证明: ⟨fun f => Nonempty.intro d f⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.Limits.HasStrongEpiMonoFactorisations.mk** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits.HasStrongEpiMonoFactorisations`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C]   (d : {X Y : C} 
+→ (f : X ⟶ Y) → CategoryTheory.Limits.StrongEpiMonoFactorisation f),   CategoryT
+heory.Limits.HasStrongEpiMonoFactorisations C
+参数：d : {X Y : C} → (f : X ⟶ Y) → CategoryTheory.Limits.StrongEpiMonoFactorisatio
+n f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasStrongEpiMonoFactorisations.mk
-    (d : forall {X Y : C} (f : X ⟶ Y), StrongEpiMonoFactorisation f) :
+    (d : ∀ {X Y : C} (f : X ⟶ Y), StrongEpiMonoFactorisation f) :
     HasStrongEpiMonoFactorisations C :=
-⟨fun f => Nonempty.intro d f⟩
-
+  ⟨fun f => Nonempty.intro <| d f⟩
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasImages_of_hasStrongEpiMonoFactorisations
     [HasStrongEpiMonoFactorisations C] : HasImages C where
   has_image f :=
@@ -2667,23 +2537,22 @@ section HasStrongEpiImages
 
 variable (C) [HasImages C]
 
-/--
-Definition of `HasStrongEpiImages` / `HasStrongEpiImages` 的定义
+/-- A category has strong epi images if it has all images and `factorThruImage f` is a strong
+epimorphism for all `f`. -/
+/-
+**CategoryTheory.Limits.HasStrongEpiImages** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.Limits.HasImages C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasStrongEpiImages
-  parameters: : Prop where
-  axioms and operations (1):
-    - strong_factorThruImage : forall {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
-
-中文:
-类 有StrongEpiImages
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - strong_factorThruImage : 对任意 {X Y : C} (f : X ⟶ Y), 强满态射 (factorThruImage f)
+--- 原说明 ---
+A category has strong epi images if it has all images and `factorThruImage f` is
+ a strong
+epimorphism for all `f`.
 -/
 class HasStrongEpiImages : Prop where
-  strong_factorThruImage : forall {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
+  strong_factorThruImage : ∀ {X Y : C} (f : X ⟶ Y), StrongEpi (factorThruImage f)
 
 attribute [instance] HasStrongEpiImages.strong_factorThruImage
 
@@ -2691,57 +2560,74 @@ end HasStrongEpiImages
 
 section HasStrongEpiImages
 
-/--
-theorem `strongEpi_of_strongEpiMonoFactorisation` / 定理 `strongEpi_of_strongEpiMonoFactorisation`
+/-- If there is a single strong epi-mono factorisation of `f`, then every image factorisation is a
+strong epi-mono factorisation. -/
+/-
+**CategoryTheory.Limits.strongEpi_of_strongEpiMonoFactorisation** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：strongEpi_of_strongEpiMonoFactorisation {X Y : C} {f : X ⟶ Y} (F : StrongE
+piMonoFactorisation f) {F' : MonoFactorisation f} (hF' : IsImage F') : StrongEpi
+ F'.e
+参数：F : StrongEpiMonoFactorisation f；hF' : IsImage F'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsImage.e_isoExt_hom`：e_isoExt_hom : F.e ≫ (isoExt
+ hF hF').hom = F'.e
+· 使用定理 `CategoryTheory.Limits.StrongEpiMonoFactorisation.e_strong_epi`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : 
+CategoryTheory.Limits.StrongEpiMonoFactorisation f)…
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-theorem strongEpi_of_strongEpiMonoFactorisation
-  statement: {X Y : C} {f : X ⟶ Y}
-  proof: by
-  rw [← IsImage.e_isoExt_hom F.toMonoIsImage hF']
-  apply strongEpi_comp
-
-中文:
-定理 strongEpi_of_strongEpiMonoFactorisation
-  结论: {X Y : C} {f : X ⟶ Y}
-  证明: by
-  rw [← IsImage.e_isoExt_hom F.toMonoIsImage hF']
-  apply strongEpi_comp
-
-Depends on / 依赖: F.toMonoIsImage, IsImage, IsImage.e_isoExt_hom, e_isoExt_hom, strongEpi_comp, toMonoIsImage
+--- 原说明 ---
+If there is a single strong epi-mono factorisation of `f`, then every image fact
+orisation is a
+strong epi-mono factorisation.
 -/
 theorem strongEpi_of_strongEpiMonoFactorisation {X Y : C} {f : X ⟶ Y}
     (F : StrongEpiMonoFactorisation f) {F' : MonoFactorisation f} (hF' : IsImage F') :
     StrongEpi F'.e := by
   rw [← IsImage.e_isoExt_hom F.toMonoIsImage hF']
   apply strongEpi_comp
-
-/--
-theorem `strongEpi_factorThruImage_of_strongEpiMonoFactorisation` / 定理 `strongEpi_factorThruImage_of_strongEpiMonoFactorisation`
-
-English:
-theorem strongEpi_factorThruImage_of_strongEpiMonoFactorisation
-  statement: {X Y : C} {f : X ⟶ Y} [HasImage f]
-  proof: strongEpi_of_strongEpiMonoFactorisation F Image.isImage f
-
-中文:
-定理 strongEpi_factorThruImage_of_strongEpiMonoFactorisation
-  结论: {X Y : C} {f : X ⟶ Y} [有像 f]
-  证明: strongEpi_of_strongEpiMonoFactorisation F Image.isImage f
-
-Depends on / 依赖: Image.isImage, isImage, strongEpi_of_strongEpiMonoFactorisation
+/-
+**CategoryTheory.Limits.strongEpi_factorThruImage_of_strongEpiMonoFactorisation*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：strongEpi_factorThruImage_of_strongEpiMonoFactorisation {X Y : C} {f : X ⟶
+ Y} [HasImage f] (F : StrongEpiMonoFactorisation f) : StrongEpi (factorThruImage
+ f)
+参数：F : StrongEpiMonoFactorisation f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.strongEpi_of_strongEpiMonoFactorisation`：strongEpi
+_of_strongEpiMonoFactorisation {X Y : C} {f : X ⟶ Y} (F : StrongEpiMonoFactorisa
+tion f) {F' : MonoFactorisation f} (hF' : IsImage F…
 -/
 theorem strongEpi_factorThruImage_of_strongEpiMonoFactorisation {X Y : C} {f : X ⟶ Y} [HasImage f]
     (F : StrongEpiMonoFactorisation f) : StrongEpi (factorThruImage f) :=
-strongEpi_of_strongEpiMonoFactorisation F Image.isImage f
+  strongEpi_of_strongEpiMonoFactorisation F <| Image.isImage f
 
 /-- If we constructed our images from strong epi-mono factorisations, then these images are
 strong epi images. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If we constructed our images from strong epi-mono factorisations, then these ima
+ges are
+strong epi images.
+-/
 instance (priority := 100) hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
     [HasStrongEpiMonoFactorisations C] : HasStrongEpiImages C where
   strong_factorThruImage f :=
-strongEpi_factorThruImage_of_strongEpiMonoFactorisation
-Classical.choice HasStrongEpiMonoFactorisations.has_fac f
+    strongEpi_factorThruImage_of_strongEpiMonoFactorisation <|
+      Classical.choice <| HasStrongEpiMonoFactorisations.has_fac f
 
 end HasStrongEpiImages
 
@@ -2750,6 +2636,13 @@ section HasStrongEpiImages
 variable [HasImages C]
 
 /-- A category with strong epi images has image maps. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A category with strong epi images has image maps.
+-/
 instance (priority := 100) hasImageMapsOfHasStrongEpiImages [HasStrongEpiImages C] :
     HasImageMaps C where
   has_image_map {f} {g} st :=
@@ -2764,6 +2657,15 @@ instance (priority := 100) hasImageMapsOfHasStrongEpiImages [HasStrongEpiImages 
 set_option backward.isDefEq.respectTransparency false in
 /-- If a category has images, equalizers and pullbacks, then images are automatically strong epi
 images. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If a category has images, equalizers and pullbacks, then images are automaticall
+y strong epi
+images.
+-/
 instance (priority := 100) hasStrongEpiImages_of_hasPullbacks_of_hasEqualizers [HasPullbacks C]
     [HasEqualizers C] : HasStrongEpiImages C where
   strong_factorThruImage f :=
@@ -2787,51 +2689,40 @@ variable [HasStrongEpiMonoFactorisations C]
 variable {X Y : C} {f : X ⟶ Y}
 
 /--
-Definition of `image.isoStrongEpiMono` / `image.isoStrongEpiMono` 的定义
+If `C` has strong epi mono factorisations, then the image is unique up to isomorphism, in that if
+`f` factors as a strong epi followed by a mono, this factorisation is essentially the image
+factorisation.
+-/
+/-
+**CategoryTheory.Limits.image.isoStrongEpiMono** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.image`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasStrongEpiMonoFactorisations C] →       {X Y : C} →    
+     {f : X ⟶ Y} →           {I' : C} →             (e : X ⟶ I') →              
+ (m : I' ⟶ Y) →                 CategoryTheory.CategoryStruct.comp e m = f →    
+               [CategoryTheory.StrongEpi e] → [CategoryTheory.Mono m] → I' ≅ Cat
+egoryTheory.Limits.image f
+参数：e : X ⟶ I'；m : I' ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image.isoStrongEpiMono
-  signature: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f) [StrongEpi e]
-  body: let F : StrongEpiMonoFactorisation f := { I := I', m := m, e := e }
-IsImage.isoExt F.toMonoIsImage Image.isImage f
-
-中文:
-定义 像.isoStrongEpiMono
-  签名: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f) [强满态射 e]
-  定义体: let F : StrongEpiMonoFactorisation f := { I := I', m := m, e := e }
-IsImage.isoExt F.toMonoIsImage Image.isImage f
-
-Depends on / 依赖: F.toMonoIsImage, Image.isImage, IsImage, IsImage.isoExt, StrongEpiMonoFactorisation, isImage, isoExt, toMonoIsImage
+--- 原说明 ---
+If `C` has strong epi mono factorisations, then the image is unique up to isomor
+phism, in that if
+`f` factors as a strong epi followed by a mono, this factorisation is essentiall
+y the image
+factorisation.
 -/
 def image.isoStrongEpiMono {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f) [StrongEpi e]
     [Mono m] : I' ≅ image f :=
   let F : StrongEpiMonoFactorisation f := { I := I', m := m, e := e }
-IsImage.isoExt F.toMonoIsImage Image.isImage f
+  IsImage.isoExt F.toMonoIsImage <| Image.isImage f
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `image.isoStrongEpiMono_hom_comp_ι` / 定理 `image.isoStrongEpiMono_hom_comp_ι`
-
-English:
-theorem image.isoStrongEpiMono_hom_comp_ι
-  statement: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
-  proof: by
-  dsimp [isoStrongEpiMono]
-  apply IsImage.lift_fac
-
-@[simp]
-
-中文:
-定理 像.isoStrongEpiMono_hom_comp_ι
-  结论: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
-  证明: by
-  dsimp [isoStrongEpiMono]
-  apply IsImage.lift_fac
-
-@[simp]
-
-Depends on / 依赖: IsImage, IsImage.lift_fac, isoStrongEpiMono, lift_fac
+/-
+**CategoryTheory.Limits.image.isoStrongEpiMono_hom_comp_** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image.isoStrongEpiMono_hom_comp_ι {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
     [StrongEpi e] [Mono m] : (image.isoStrongEpiMono e m comm).hom ≫ image.ι f = m := by
@@ -2839,20 +2730,21 @@ theorem image.isoStrongEpiMono_hom_comp_ι {I' : C} (e : X ⟶ I') (m : I' ⟶ Y
   apply IsImage.lift_fac
 
 @[simp]
-/--
-theorem `image.isoStrongEpiMono_inv_comp_mono` / 定理 `image.isoStrongEpiMono_inv_comp_mono`
-
-English:
-theorem image.isoStrongEpiMono_inv_comp_mono
-  statement: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
-  proof: image.lift_fac _
-
-中文:
-定理 像.isoStrongEpiMono_inv_comp_mono
-  结论: {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
-  证明: image.lift_fac _
-
-Depends on / 依赖: image.lift_fac, lift_fac
+/-
+**CategoryTheory.Limits.image.isoStrongEpiMono_inv_comp_mono** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits.image`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C]   [inst_1 : Categ
+oryTheory.Limits.HasStrongEpiMonoFactorisations C] {X Y : C} {f : X ⟶ Y} {I' : C
+} (e : X ⟶ I')   (m : I' ⟶ Y) (comm : CategoryTheory.CategoryStruct.comp e m = f
+) [inst_2 : CategoryTheory.StrongEpi e]   [inst_3 : CategoryTheory.Mono m],   Ca
+tegoryTheory.CategoryStruct.comp (CategoryTheory.Limits.image.isoStrongEpiMono e
+ m comm).inv m =     CategoryTheory.Limits.image.ι f
+参数：e : X ⟶ I'；m : I' ⟶ Y；comm : CategoryTheory.CategoryStruct.comp e m = f；Categ
+oryTheory.Limits.image.isoStrongEpiMono e m comm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.image.lift_fac`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   [inst_1 : CategoryTheory.Limits.H
+asImage f] (F' : CategoryT…
 -/
 theorem image.isoStrongEpiMono_inv_comp_mono {I' : C} (e : X ⟶ I') (m : I' ⟶ Y) (comm : e ≫ m = f)
     [StrongEpi e] [Mono m] : (image.isoStrongEpiMono e m comm).inv ≫ m = image.ι f :=
@@ -2863,26 +2755,21 @@ open MorphismProperty
 variable (C)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `functorialEpiMonoFactorizationData` / `functorialEpiMonoFactorizationData` 的定义
+/-- A category with strong epi mono factorisations admits functorial epi/mono factorizations. -/
+/-
+**CategoryTheory.Limits.functorialEpiMonoFactorizationData** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：functorialEpiMonoFactorizationData : FunctorialFactorizationData (epimorph
+isms C) (monomorphisms C) where Z
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasImages_of_hasStrongEpiMonoFactorisations`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasSt
+rongEpiMonoFactorisations C],   CategoryTheory.Limits.H…
 
-English:
-definition functorialEpiMonoFactorizationData
-  signature: :
-  body: im
-  i := { app := fun f => factorThruImage f.hom }
-  p := { app := fun f => image.ι f.hom }
-  hi _ := epimorphisms.infer_property _
-  hp _ := monomorphisms.infer_property _
-
-中文:
-定义 functorialEpiMonoFactorizationData
-  签名: :
-  定义体: im
-  i := { app := fun f => factorThruImage f.hom }
-  p := { app := fun f => image.ι f.hom }
-  hi _ := epimorphisms.infer_property _
-  hp _ := monomorphisms.infer_property _
+--- 原说明 ---
+A category with strong epi mono factorisations admits functorial epi/mono factor
+izations.
 -/
 noncomputable def functorialEpiMonoFactorizationData :
     FunctorialFactorizationData (epimorphisms C) (monomorphisms C) where
@@ -2901,46 +2788,80 @@ open CategoryTheory.Limits
 variable {C D : Type*} [Category* C] [Category* D]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasStrongEpiMonoFactorisations_imp_of_isEquivalence` / 定理 `hasStrongEpiMonoFactorisations_imp_of_isEquivalence`
-
-English:
-theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence
-  statement: (F : C ⥤ D) [IsEquivalence F]
-  proof: ⟨fun {X} {Y} f => by
-    let em : StrongEpiMonoFactorisation (F.inv.map f) :=
-      (HasStrongEpiMonoFactorisations.has_fac (F.inv.map f)).some
-    have : Mono (F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y) := mono_comp _ _
-    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) := strongEpi_comp _ _
-    exact
-      Nonempty.intro
-        { I := F.obj em.I
-          e := F.asEquivalence.counitIso.inv.app X ≫ F.map em.e
-          m := F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y
-          fac := by
-            simp only [Category.assoc, ← F.map_comp_assoc,
-              MonoFactorisation.fac, fun_inv_map, id_obj, Iso.inv_hom_id_app, Category.comp_id,
-              Iso.inv_hom_id_app_assoc] }⟩
-
-中文:
-定理 hasStrongEpiMonoFactorisations_imp_of_isEquivalence
-  结论: (F : C ⥤ D) [是等价 F]
-  证明: ⟨fun {X} {Y} f => by
-    let em : StrongEpiMonoFactorisation (F.inv.map f) :=
-      (HasStrongEpiMonoFactorisations.has_fac (F.inv.map f)).some
-    have : Mono (F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y) := mono_comp _ _
-    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) := strongEpi_comp _ _
-    exact
-      Nonempty.intro
-        { I := F.obj em.I
-          e := F.asEquivalence.counitIso.inv.app X ≫ F.map em.e
-          m := F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y
-          fac := by
-            simp only [Category.assoc, ← F.map_comp_assoc,
-              MonoFactorisation.fac, fun_inv_map, id_obj, Iso.inv_hom_id_app, Category.comp_id,
-              Iso.inv_hom_id_app_assoc] }⟩
-
-Depends on / 依赖: Category, Category.assoc, F.asEquivalence.counitIso.hom.app, F.asEquivalence.counitIso.inv.app, F.inv.map, F.map, F.map_comp, F.obj, HasStrongEpiMonoFactorisations, HasStrongEpiMonoFactorisations.has_fac, Nonempty, Nonempty.intro, StrongEpi, StrongEpiMonoFactorisation, asEquivalence, counitIso, em.I, em.e, em.m, has_fac
+/-
+**CategoryTheory.Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence** 是
+ Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：hasStrongEpiMonoFactorisations_imp_of_isEquivalence (F : C ⥤ D) [IsEquival
+ence F] [h : HasStrongEpiMonoFactorisations C] : HasStrongEpiMonoFactorisations 
+D
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasStrongEpiMonoFactorisations.has_fac`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.Has
+StrongEpiMonoFactorisations C]   {X Y : C} (f : X …
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.Functor.map_mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preservesMonomorphisms_of_isRightAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.m_mono`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.
+Limits.MonoFactorisation f), Categor…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.StrongEpiMonoFactorisation.e_strong_epi`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : 
+CategoryTheory.Limits.StrongEpiMonoFactorisation f)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.Lim
+its.MonoFactorisation f), Categor…
+· 使用定理 `CategoryTheory.Functor.fun_inv_map`：fun_inv_map (F : C ⥤ D) [IsEquivalen
+ce F] (X Y : D) (f : X ⟶ Y) : F.map (F.inv.map f) = F.asEquivalence.counit.app X
+ ≫ f ≫ F.asEquivalence.c…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence (F : C ⥤ D) [IsEquivalence F]
     [h : HasStrongEpiMonoFactorisations C] : HasStrongEpiMonoFactorisations D :=
@@ -2960,3 +2881,4 @@ theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence (F : C ⥤ D) [IsEqu
               Iso.inv_hom_id_app_assoc] }⟩
 
 end CategoryTheory.Functor
+

@@ -34,241 +34,252 @@ open scoped Topology Pointwise ENNReal NNReal
 
 section SMul
 
-/--
-Definition of `egauge` / `egauge` 的定义
+/-- The Minkowski functional for vector spaces over normed fields.
+Given a set `s` in a vector space over a normed field `𝕜`,
+`egauge s` is the functional which sends `x : E`
+to the infimum of `‖c‖ₑ` over `c` such that `x` belongs to `s` scaled by `c`.
 
-English:
-definition egauge
-  signature: (𝕜 : Type*) [ENorm 𝕜] {E : Type*} [SMul 𝕜 E] (s : Set E) (x : E)
-  body: ⨅ (c : 𝕜) (_ : x in c • s), ‖c‖ₑ
+The definition only requires `𝕜` to have a `ENorm` instance
+and `(· • ·) : 𝕜 → E → E` to be defined.
+This way the definition applies, e.g., to `𝕜 = ℝ≥0`.
+For `𝕜 = ℝ≥0`, the function is equal (up to conversion to `ℝ`)
+to the usual Minkowski functional defined in `gauge`. -/
+/-
+**egauge** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：egauge (𝕜 : Type*) [ENorm 𝕜] {E : Type*} [SMul 𝕜 E] (s : Set E) (x : E) : 
+Real>=0∞
+参数：𝕜 : Type*；s : Set E；x : E。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 egauge
-  签名: (𝕜 : 类型) [E范数 𝕜] {E : 类型} [标量乘法 𝕜 E] (s : 集合 E) (x : E)
-  定义体: ⨅ (c : 𝕜) (_ : x in c • s), ‖c‖ₑ
+--- 原说明 ---
+The Minkowski functional for vector spaces over normed fields.
+Given a set `s` in a vector space over a normed field `𝕜`,
+`egauge s` is the functional which sends `x : E`
+to the infimum of `‖c‖ₑ` over `c` such that `x` belongs to `s` scaled by `c`.
+
+The definition only requires `𝕜` to have a `ENorm` instance
+and `(· • ·) : 𝕜 → E → E` to be defined.
+This way the definition applies, e.g., to `𝕜 = ℝ≥0`.
+For `𝕜 = ℝ≥0`, the function is equal (up to conversion to `ℝ`)
+to the usual Minkowski functional defined in `gauge`.
 -/
-noncomputable def egauge (𝕜 : Type*) [ENorm 𝕜] {E : Type*} [SMul 𝕜 E] (s : Set E) (x : E) : Real>=0∞ :=
-  ⨅ (c : 𝕜) (_ : x in c • s), ‖c‖ₑ
+noncomputable def egauge (𝕜 : Type*) [ENorm 𝕜] {E : Type*} [SMul 𝕜 E] (s : Set E) (x : E) : ℝ≥0∞ :=
+  ⨅ (c : 𝕜) (_ : x ∈ c • s), ‖c‖ₑ
 
-variable (𝕜 : Type*) [NNNorm 𝕜] {E : Type*} [SMul 𝕜 E] {c : 𝕜} {s t : Set E} {x : E} {r : Real>=0∞}
-
-/--
-lemma `Set.MapsTo.egauge_le` / 引理 `Set.MapsTo.egauge_le`
-
-English:
-lemma Set.MapsTo.egauge_le
-  statement: {E' F : Type*} [SMul 𝕜 E'] [FunLike F E E'] [MulActionHomClass F 𝕜 E E']
-  proof: iInf_mono fun c => iInf_mono' fun hc => ⟨h.smul_set c hc, le_rfl⟩
-
-@[mono, gcongr]
-
-中文:
-引理 集合.映射到.egauge_le
-  结论: {E' F : 类型} [标量乘法 𝕜 E'] [函数状 F E E'] [MulActionHomClass F 𝕜 E E']
-  证明: iInf_mono fun c => iInf_mono' fun hc => ⟨h.smul_set c hc, le_rfl⟩
-
-@[mono, gcongr]
-
-Depends on / 依赖: h.smul_set, iInf_mono, le_rfl, smul_set
+variable (𝕜 : Type*) [NNNorm 𝕜] {E : Type*} [SMul 𝕜 E] {c : 𝕜} {s t : Set E} {x : E} {r : ℝ≥0∞}
+/-
+**Set.MapsTo.egauge_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [FunLike F E E'] [MulActio
+nHomClass F 𝕜 E E'] (f : F) {t : Set E'} (h : MapsTo f s t) (x : E) : egauge 𝕜 t
+ (f x) <= egauge 𝕜 s x
+参数：f : F；h : MapsTo f s t；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_mono`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f
+ g : ι → α}, (∀ (i : ι), g i ≤ f i) → iInf g ≤ iInf f
+· 使用定理 `iInf_mono'`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} [inst : Comp
+leteLattice α] {f : ι → α} {g : ι' → α},   (∀ (i : ι), ∃ i', g i' ≤ f i) → iInf 
+…
+· 使用定理 `Set.MapsTo.smul_set`：Set.MapsTo.smul_set {f : F} {s : Set α} {t : Set β}
+ (hst : MapsTo f s t) (c : M) : MapsTo f (c • s) (c • t)
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 lemma Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [FunLike F E E'] [MulActionHomClass F 𝕜 E E']
-    (f : F) {t : Set E'} (h : MapsTo f s t) (x : E) : egauge 𝕜 t (f x) <= egauge 𝕜 s x :=
-  iInf_mono fun c => iInf_mono' fun hc => ⟨h.smul_set c hc, le_rfl⟩
+    (f : F) {t : Set E'} (h : MapsTo f s t) (x : E) : egauge 𝕜 t (f x) ≤ egauge 𝕜 s x :=
+  iInf_mono fun c ↦ iInf_mono' fun hc ↦ ⟨h.smul_set c hc, le_rfl⟩
 
 @[mono, gcongr]
-/--
-lemma `egauge_anti` / 引理 `egauge_anti`
-
-English:
-lemma egauge_anti
-  given: (h : s subseteq t) (x : E)
-  statement: egauge 𝕜 t x <= egauge 𝕜 s x
-  proof: MapsTo.egauge_le _ (MulActionHom.id ..) h _
-
-中文:
-引理 egauge_anti
-  条件: (h : s subseteq t) (x : E)
-  结论: egauge 𝕜 t x <= egauge 𝕜 s x
-  证明: MapsTo.egauge_le _ (MulActionHom.id ..) h _
-
-Depends on / 依赖: MapsTo, MapsTo.egauge_le, MulActionHom, MulActionHom.id, egauge_le
+/-
+**egauge_anti** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_anti (h : s subseteq t) (x : E) : egauge 𝕜 t x <= egauge 𝕜 s x
+参数：h : s subseteq t；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.MapsTo.egauge_le`：Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [F
+unLike F E E'] [MulActionHomClass F 𝕜 E E'] (f : F) {t : Set E'} (h : MapsTo f s
+ t) (x : E…
+· 使用定理 `instMulActionSemiHomClassMulActionHom`：∀ {M : Type u_2} {N : Type u_3} (
+φ : M → N) (X : Type u_5) [inst : SMul M X] (Y : Type u_6) [inst_1 : SMul N Y], 
+  MulActionSemiHomClass (X …
 -/
-lemma egauge_anti (h : s subseteq t) (x : E) : egauge 𝕜 t x <= egauge 𝕜 s x :=
+lemma egauge_anti (h : s ⊆ t) (x : E) : egauge 𝕜 t x ≤ egauge 𝕜 s x :=
   MapsTo.egauge_le _ (MulActionHom.id ..) h _
-
-/--
-lemma `egauge_empty` / 引理 `egauge_empty`
-
-English:
-lemma egauge_empty
-  given: (x : E)
-  statement: egauge 𝕜 ∅ x = ∞
-  proof: by simp [egauge]
-
-中文:
-引理 egauge_empty
-  条件: (x : E)
-  结论: egauge 𝕜 ∅ x = ∞
-  证明: by simp [egauge]
+/-
+**egauge_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (𝕜 : Type u_1) [inst : NNNorm 𝕜] {E : Type u_2} [inst_1 : SMul 𝕜 E] (x :
+ E), egauge 𝕜 ∅ x = ⊤
+参数：𝕜 : Type u_1；x : E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `iInf_neg`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α}, ¬p → ⨅ (h : p), f h = ⊤
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iInf_top`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α], ⨅ 
+x, ⊤ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma egauge_empty (x : E) : egauge 𝕜 ∅ x = ∞ := by simp [egauge]
 
 variable {𝕜}
-
-/--
-lemma `egauge_le_of_mem_smul` / 引理 `egauge_le_of_mem_smul`
-
-English:
-lemma egauge_le_of_mem_smul
-  given: (h : x in c • s)
-  statement: egauge 𝕜 s x <= ‖c‖ₑ
-  proof: iInf₂_le c h
-
-中文:
-引理 egauge_le_of_mem_smul
-  条件: (h : x in c • s)
-  结论: egauge 𝕜 s x <= ‖c‖ₑ
-  证明: iInf₂_le c h
+/-
+**egauge_le_of_mem_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜 s x <= ‖c‖ₑ
+参数：h : x in c • s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
 -/
-lemma egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜 s x <= ‖c‖ₑ := iInf₂_le c h
-
-/--
-lemma `le_egauge_iff` / 引理 `le_egauge_iff`
-
-English:
-lemma le_egauge_iff
-  statement: r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c • s -> r <= ‖c‖ₑ
-  proof: le_iInf₂_iff
-
-中文:
-引理 le_egauge_iff
-  结论: r <= egauge 𝕜 s x ↔ 对任意 c : 𝕜, x in c • s -> r <= ‖c‖ₑ
-  证明: le_iInf₂_iff
+lemma egauge_le_of_mem_smul (h : x ∈ c • s) : egauge 𝕜 s x ≤ ‖c‖ₑ := iInf₂_le c h
+/-
+**le_egauge_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_iff : r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c • s -> r <= ‖c‖ₑ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iInf₂_iff`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst :
+ CompleteLattice α] {a : α} {f : (i : ι) → κ i → α},   a ≤ ⨅ i, ⨅ j, f i j ↔ ∀ (
+i …
 -/
-lemma le_egauge_iff : r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c • s -> r <= ‖c‖ₑ := le_iInf₂_iff
-
-/--
-lemma `egauge_eq_top` / 引理 `egauge_eq_top`
-
-English:
-lemma egauge_eq_top
-  statement: egauge 𝕜 s x = ∞ ↔ forall c : 𝕜, x ∉ c • s
-  proof: by simp [egauge]
-
-中文:
-引理 egauge_eq_top
-  结论: egauge 𝕜 s x = ∞ ↔ 对任意 c : 𝕜, x ∉ c • s
-  证明: by simp [egauge]
-
-Depends on / 依赖: egauge
+lemma le_egauge_iff : r ≤ egauge 𝕜 s x ↔ ∀ c : 𝕜, x ∈ c • s → r ≤ ‖c‖ₑ := le_iInf₂_iff
+/-
+**egauge_eq_top** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_eq_top : egauge 𝕜 s x = ∞ ↔ forall c : 𝕜, x ∉ c • s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma egauge_eq_top : egauge 𝕜 s x = ∞ ↔ forall c : 𝕜, x ∉ c • s := by simp [egauge]
-
-/--
-lemma `egauge_lt_iff` / 引理 `egauge_lt_iff`
-
-English:
-lemma egauge_lt_iff
-  statement: egauge 𝕜 s x < r ↔ exists c : 𝕜, x in c • s ∧ ‖c‖ₑ < r
-  proof: by
+lemma egauge_eq_top : egauge 𝕜 s x = ∞ ↔ ∀ c : 𝕜, x ∉ c • s := by simp [egauge]
+/-
+**egauge_lt_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_lt_iff : egauge 𝕜 s x < r ↔ exists c : 𝕜, x in c • s ∧ ‖c‖ₑ < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma egauge_lt_iff : egauge 𝕜 s x < r ↔ ∃ c : 𝕜, x ∈ c • s ∧ ‖c‖ₑ < r := by
   simp [egauge, iInf_lt_iff]
-
-中文:
-引理 egauge_lt_iff
-  结论: egauge 𝕜 s x < r ↔ 存在 c : 𝕜, x in c • s ∧ ‖c‖ₑ < r
-  证明: by
-  simp [egauge, iInf_lt_iff]
-
-Depends on / 依赖: egauge, iInf_lt_iff
+/-
+**egauge_union** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_union (s t : Set E) (x : E) : egauge 𝕜 (s union t) x = egauge 𝕜 s x
+ ⊓ egauge 𝕜 t x
+参数：s t : Set E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `Set.smul_set_union`：smul_set_union : a • (t₁ union t₂) = a • t₁ union a 
+• t₂
+· 使用定理 `iInf_or`：∀ {α : Type u_1} [inst : CompleteLattice α] {p q : Prop} {s : p
+ ∨ q → α},   ⨅ (x : p ∨ q), s x = (⨅ (i : p), s ⋯) ⊓ ⨅ (j : q), s ⋯
+· 使用定理 `iInf_inf_eq`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] 
+{f g : ι → α}, ⨅ x, f x ⊓ g x = (⨅ x, f x) ⊓ ⨅ x, g x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma egauge_lt_iff : egauge 𝕜 s x < r ↔ exists c : 𝕜, x in c • s ∧ ‖c‖ₑ < r := by
-  simp [egauge, iInf_lt_iff]
-
-/--
-lemma `egauge_union` / 引理 `egauge_union`
-
-English:
-lemma egauge_union
-  given: (s t : Set E) (x : E)
-  statement: egauge 𝕜 (s union t) x = egauge 𝕜 s x ⊓ egauge 𝕜 t x
-  proof: by
+lemma egauge_union (s t : Set E) (x : E) : egauge 𝕜 (s ∪ t) x = egauge 𝕜 s x ⊓ egauge 𝕜 t x := by
   unfold egauge
   simp [smul_set_union, iInf_or, iInf_inf_eq]
-
-中文:
-引理 egauge_union
-  条件: (s t : 集合 E) (x : E)
-  结论: egauge 𝕜 (s union t) x = egauge 𝕜 s x ⊓ egauge 𝕜 t x
-  证明: by
-  unfold egauge
-  simp [smul_set_union, iInf_or, iInf_inf_eq]
-
-Depends on / 依赖: egauge, iInf_inf_eq, iInf_or, smul_set_union
--/
-lemma egauge_union (s t : Set E) (x : E) : egauge 𝕜 (s union t) x = egauge 𝕜 s x ⊓ egauge 𝕜 t x := by
-  unfold egauge
-  simp [smul_set_union, iInf_or, iInf_inf_eq]
-
-/--
-lemma `le_egauge_inter` / 引理 `le_egauge_inter`
-
-English:
-lemma le_egauge_inter
-  given: (s t : Set E) (x : E)
-  proof: max_le (egauge_anti _ inter_subset_left _) (egauge_anti _ inter_subset_right _)
-
-中文:
-引理 le_egauge_inter
-  条件: (s t : 集合 E) (x : E)
-  证明: max_le (egauge_anti _ inter_subset_left _) (egauge_anti _ inter_subset_right _)
-
-Depends on / 依赖: egauge_anti, inter_subset_left, inter_subset_right, max_le
+/-
+**le_egauge_inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_inter (s t : Set E) (x : E) : egauge 𝕜 s x ⊔ egauge 𝕜 t x <= ega
+uge 𝕜 (s inter t) x
+参数：s t : Set E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用引理 `egauge_anti`：egauge_anti (h : s subseteq t) (x : E) : egauge 𝕜 t x <= eg
+auge 𝕜 s x
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 lemma le_egauge_inter (s t : Set E) (x : E) :
-    egauge 𝕜 s x ⊔ egauge 𝕜 t x <= egauge 𝕜 (s inter t) x :=
+    egauge 𝕜 s x ⊔ egauge 𝕜 t x ≤ egauge 𝕜 (s ∩ t) x :=
   max_le (egauge_anti _ inter_subset_left _) (egauge_anti _ inter_subset_right _)
-
-/--
-lemma `le_egauge_pi` / 引理 `le_egauge_pi`
-
-English:
-lemma le_egauge_pi
-  statement: {ι : Type*} {E : ι -> Type*} [forall i, SMul 𝕜 (E i)] {I : Set ι} {i : ι}
-  proof: MapsTo.egauge_le _ (Pi.evalMulActionHom i) (fun x hx => by exact hx i hi) _
-
-中文:
-引理 le_egauge_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 标量乘法 𝕜 (E i)] {I : 集合 ι} {i : ι}
-  证明: MapsTo.egauge_le _ (Pi.evalMulActionHom i) (fun x hx => by exact hx i hi) _
-
-Depends on / 依赖: MapsTo, MapsTo.egauge_le, Pi.evalMulActionHom, egauge_le, evalMulActionHom
+/-
+**le_egauge_pi** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_pi {ι : Type*} {E : ι -> Type*} [forall i, SMul 𝕜 (E i)] {I : Se
+t ι} {i : ι} (hi : i in I) (s : forall i, Set (E i)) (x : forall i, E i) : egaug
+e 𝕜 (s i) (x i) <= egauge 𝕜 (I.pi s) x
+参数：E i；hi : i in I；s : forall i, Set (E i)；x : forall i, E i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.MapsTo.egauge_le`：Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [F
+unLike F E E'] [MulActionHomClass F 𝕜 E E'] (f : F) {t : Set E'} (h : MapsTo f s
+ t) (x : E…
+· 使用定理 `instMulActionSemiHomClassMulActionHom`：∀ {M : Type u_2} {N : Type u_3} (
+φ : M → N) (X : Type u_5) [inst : SMul M X] (Y : Type u_6) [inst_1 : SMul N Y], 
+  MulActionSemiHomClass (X …
 -/
-lemma le_egauge_pi {ι : Type*} {E : ι -> Type*} [forall i, SMul 𝕜 (E i)] {I : Set ι} {i : ι}
-    (hi : i in I) (s : forall i, Set (E i)) (x : forall i, E i) :
-    egauge 𝕜 (s i) (x i) <= egauge 𝕜 (I.pi s) x :=
-  MapsTo.egauge_le _ (Pi.evalMulActionHom i) (fun x hx => by exact hx i hi) _
+lemma le_egauge_pi {ι : Type*} {E : ι → Type*} [∀ i, SMul 𝕜 (E i)] {I : Set ι} {i : ι}
+    (hi : i ∈ I) (s : ∀ i, Set (E i)) (x : ∀ i, E i) :
+    egauge 𝕜 (s i) (x i) ≤ egauge 𝕜 (I.pi s) x :=
+  MapsTo.egauge_le _ (Pi.evalMulActionHom i) (fun x hx ↦ by exact hx i hi) _
 
 variable {F : Type*} [SMul 𝕜 F]
-
-/--
-lemma `le_egauge_prod` / 引理 `le_egauge_prod`
-
-English:
-lemma le_egauge_prod
-  given: (s : Set E) (t : Set F) (a : E) (b : F)
-  proof: max_le (mapsTo_fst_prod.egauge_le 𝕜 (MulActionHom.fst 𝕜 E F) (a, b))
-    (MapsTo.egauge_le 𝕜 (MulActionHom.snd 𝕜 E F) mapsTo_snd_prod (a, b))
-
-中文:
-引理 le_egauge_prod
-  条件: (s : 集合 E) (t : 集合 F) (a : E) (b : F)
-  证明: max_le (mapsTo_fst_prod.egauge_le 𝕜 (MulActionHom.fst 𝕜 E F) (a, b))
-    (MapsTo.egauge_le 𝕜 (MulActionHom.snd 𝕜 E F) mapsTo_snd_prod (a, b))
-
-Depends on / 依赖: MapsTo, MapsTo.egauge_le, MulActionHom, MulActionHom.fst, MulActionHom.snd, egauge_le, mapsTo_fst_prod, mapsTo_fst_prod.egauge_le, mapsTo_snd_prod, max_le
+/-
+**le_egauge_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_prod (s : Set E) (t : Set F) (a : E) (b : F) : max (egauge 𝕜 s a
+) (egauge 𝕜 t b) <= egauge 𝕜 (s ×ˢ t) (a, b)
+参数：s : Set E；t : Set F；a : E；b : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用引理 `Set.MapsTo.egauge_le`：Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [F
+unLike F E E'] [MulActionHomClass F 𝕜 E E'] (f : F) {t : Set E'} (h : MapsTo f s
+ t) (x : E…
+· 使用定理 `instMulActionSemiHomClassMulActionHom`：∀ {M : Type u_2} {N : Type u_3} (
+φ : M → N) (X : Type u_5) [inst : SMul M X] (Y : Type u_6) [inst_1 : SMul N Y], 
+  MulActionSemiHomClass (X …
+· 使用引理 `Set.mapsTo_fst_prod`：mapsTo_fst_prod {s : Set α} {t : Set β} : MapsTo Pr
+od.fst (s ×ˢ t) s
+· 使用引理 `Set.mapsTo_snd_prod`：mapsTo_snd_prod {s : Set α} {t : Set β} : MapsTo Pr
+od.snd (s ×ˢ t) t
 -/
 lemma le_egauge_prod (s : Set E) (t : Set F) (a : E) (b : F) :
-    max (egauge 𝕜 s a) (egauge 𝕜 t b) <= egauge 𝕜 (s ×ˢ t) (a, b) :=
+    max (egauge 𝕜 s a) (egauge 𝕜 t b) ≤ egauge 𝕜 (s ×ˢ t) (a, b) :=
   max_le (mapsTo_fst_prod.egauge_le 𝕜 (MulActionHom.fst 𝕜 E F) (a, b))
     (MapsTo.egauge_le 𝕜 (MulActionHom.snd 𝕜 E F) mapsTo_snd_prod (a, b))
 
@@ -278,26 +289,24 @@ section SMulZero
 
 variable (𝕜 : Type*) [NNNorm 𝕜] [Nonempty 𝕜] {E : Type*} [Zero E] [SMulZeroClass 𝕜 E] {x : E}
 
-/--
-lemma `egauge_zero_left_eq_top` / 引理 `egauge_zero_left_eq_top`
-
-English:
-lemma egauge_zero_left_eq_top
-  statement: egauge 𝕜 0 x = ∞ ↔ x != 0
-  proof: by
-  simp [egauge_eq_top]
-
-@[simp] alias ⟨_, egauge_zero_left⟩ := egauge_zero_left_eq_top
-
-中文:
-引理 egauge_zero_left_eq_top
-  结论: egauge 𝕜 0 x = ∞ ↔ x != 0
-  证明: by
-  simp [egauge_eq_top]
-
-@[simp] alias ⟨_, egauge_zero_left⟩ := egauge_zero_left_eq_top
+/-
+**egauge_zero_left_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (𝕜 : Type u_1) [inst : NNNorm 𝕜] [Nonempty 𝕜] {E : Type u_2} [inst_2 : Z
+ero E] [inst_3 : SMulZeroClass 𝕜 E] {x : E},   egauge 𝕜 0 x = ⊤ ↔ x ≠ 0
+参数：𝕜 : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma egauge_zero_left_eq_top : egauge 𝕜 0 x = ∞ ↔ x != 0 := by
+@[simp] lemma egauge_zero_left_eq_top : egauge 𝕜 0 x = ∞ ↔ x ≠ 0 := by
   simp [egauge_eq_top]
 
 @[simp] alias ⟨_, egauge_zero_left⟩ := egauge_zero_left_eq_top
@@ -309,274 +318,290 @@ section NormedDivisionRing
 variable {𝕜 : Type*} [NormedDivisionRing 𝕜] {E : Type*} [AddCommGroup E] [Module 𝕜 E]
     {c : 𝕜} {s : Set E} {x : E}
 
-/--
-lemma `egauge_le_of_smul_mem_of_ne` / 引理 `egauge_le_of_smul_mem_of_ne`
+/-- If `c • x ∈ s` and `c ≠ 0`, then `egauge 𝕜 s x` is at most `(‖c‖₊⁻¹ : ℝ≥0)`.
 
-English:
-lemma egauge_le_of_smul_mem_of_ne
-  given: (h : c • x in s) (hc : c != 0)
-  statement: egauge 𝕜 s x <= (‖c‖₊⁻¹ : Real>=0)
-  proof: by
-  rw [← nnnorm_inv]
-exact egauge_le_of_mem_smul (mem_inv_smul_set_iff₀ hc _ _).2 h
+See also `egauge_le_of_smul_mem`. -/
+/-
+**egauge_le_of_smul_mem_of_ne** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_le_of_smul_mem_of_ne (h : c • x in s) (hc : c != 0) : egauge 𝕜 s x 
+<= (‖c‖₊⁻¹ : Real>=0)
+参数：h : c • x in s；hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nnnorm_inv`：nnnorm_inv (a : α) : ‖a⁻¹‖₊ = ‖a‖₊⁻¹
+· 使用引理 `egauge_le_of_mem_smul`：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜
+ s x <= ‖c‖ₑ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.mem_inv_smul_set_iff₀`：mem_inv_smul_set_iff₀ (ha : a != 0) (A : Set 
+β) (x : β) : x in a⁻¹ • A ↔ a • x in A
 
-中文:
-引理 egauge_le_of_smul_mem_of_ne
-  条件: (h : c • x in s) (hc : c != 0)
-  结论: egauge 𝕜 s x <= (‖c‖₊⁻¹ : 实数>=0)
-  证明: by
-  rw [← nnnorm_inv]
-exact egauge_le_of_mem_smul (mem_inv_smul_set_iff₀ hc _ _).2 h
+--- 原说明 ---
+If `c • x ∈ s` and `c ≠ 0`, then `egauge 𝕜 s x` is at most `(‖c‖₊⁻¹ : ℝ≥0)`.
 
-Depends on / 依赖: egauge_le_of_mem_smul, nnnorm_inv
+See also `egauge_le_of_smul_mem`.
 -/
-lemma egauge_le_of_smul_mem_of_ne (h : c • x in s) (hc : c != 0) : egauge 𝕜 s x <= (‖c‖₊⁻¹ : Real>=0) := by
+lemma egauge_le_of_smul_mem_of_ne (h : c • x ∈ s) (hc : c ≠ 0) : egauge 𝕜 s x ≤ (‖c‖₊⁻¹ : ℝ≥0) := by
   rw [← nnnorm_inv]
-exact egauge_le_of_mem_smul (mem_inv_smul_set_iff₀ hc _ _).2 h
+  exact egauge_le_of_mem_smul <| (mem_inv_smul_set_iff₀ hc _ _).2 h
 
-/--
-lemma `egauge_le_of_smul_mem` / 引理 `egauge_le_of_smul_mem`
+/-- If `c • x ∈ s`, then `egauge 𝕜 s x` is at most `‖c‖ₑ⁻¹`.
 
-English:
-lemma egauge_le_of_smul_mem
-  given: (h : c • x in s)
-  statement: egauge 𝕜 s x <= ‖c‖ₑ⁻¹
-  proof: by
+See also `egauge_le_of_smul_mem_of_ne`. -/
+/-
+**egauge_le_of_smul_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_le_of_smul_mem (h : c • x in s) : egauge 𝕜 s x <= ‖c‖ₑ⁻¹
+参数：h : c • x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `egauge_le_of_smul_mem_of_ne`：egauge_le_of_smul_mem_of_ne (h : c • x in s
+) (hc : c != 0) : egauge 𝕜 s x <= (‖c‖₊⁻¹ : Real>=0)
+· 使用定理 `ENNReal.coe_inv_le`：coe_inv_le : (↑r⁻¹ : Real>=0∞) <= (↑r)⁻¹
+
+--- 原说明 ---
+If `c • x ∈ s`, then `egauge 𝕜 s x` is at most `‖c‖ₑ⁻¹`.
+
+See also `egauge_le_of_smul_mem_of_ne`.
+-/
+lemma egauge_le_of_smul_mem (h : c • x ∈ s) : egauge 𝕜 s x ≤ ‖c‖ₑ⁻¹ := by
   rcases eq_or_ne c 0 with rfl | hc
   · simp
   · exact (egauge_le_of_smul_mem_of_ne h hc).trans ENNReal.coe_inv_le
-
-中文:
-引理 egauge_le_of_smul_mem
-  条件: (h : c • x in s)
-  结论: egauge 𝕜 s x <= ‖c‖ₑ⁻¹
-  证明: by
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-  · exact (egauge_le_of_smul_mem_of_ne h hc).trans ENNReal.coe_inv_le
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inv_le, coe_inv_le, egauge_le_of_smul_mem_of_ne, eq_or_ne
+/-
+**mem_smul_of_egauge_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_smul_of_egauge_lt (hs : Balanced 𝕜 s) (hc : egauge 𝕜 s x < ‖c‖ₑ) : x i
+n c • s
+参数：hs : Balanced 𝕜 s；hc : egauge 𝕜 s x < ‖c‖ₑ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `egauge_lt_iff`：egauge_lt_iff : egauge 𝕜 s x < r ↔ exists c : 𝕜, x in c •
+ s ∧ ‖c‖ₑ < r
+· 使用定理 `Balanced.smul_mono`：Balanced.smul_mono (hs : Balanced 𝕝 s) {a : 𝕝} (h : 
+‖a‖ <= ‖b‖) : a • s subseteq b • s
+· 使用定理 `NormMulClass.toNormSMulClass`：∀ {α : Type u_1} [inst : Norm α] [inst_1 :
+ Mul α] [NormMulClass α], NormSMulClass α α
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma egauge_le_of_smul_mem (h : c • x in s) : egauge 𝕜 s x <= ‖c‖ₑ⁻¹ := by
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-  · exact (egauge_le_of_smul_mem_of_ne h hc).trans ENNReal.coe_inv_le
-
-/--
-lemma `mem_smul_of_egauge_lt` / 引理 `mem_smul_of_egauge_lt`
-
-English:
-lemma mem_smul_of_egauge_lt
-  given: (hs : Balanced 𝕜 s) (hc : egauge 𝕜 s x < ‖c‖ₑ)
-  statement: x in c • s
-  proof: let ⟨a, hxa, ha⟩ := egauge_lt_iff.1 hc
-  hs.smul_mono (by simpa [enorm] using! ha.le) hxa
-
-中文:
-引理 mem_smul_of_egauge_lt
-  条件: (hs : Balanced 𝕜 s) (hc : egauge 𝕜 s x < ‖c‖ₑ)
-  结论: x in c • s
-  证明: let ⟨a, hxa, ha⟩ := egauge_lt_iff.1 hc
-  hs.smul_mono (by simpa [enorm] using! ha.le) hxa
-
-Depends on / 依赖: egauge_lt_iff, ha.le, hs.smul_mono, smul_mono
--/
-lemma mem_smul_of_egauge_lt (hs : Balanced 𝕜 s) (hc : egauge 𝕜 s x < ‖c‖ₑ) : x in c • s :=
+lemma mem_smul_of_egauge_lt (hs : Balanced 𝕜 s) (hc : egauge 𝕜 s x < ‖c‖ₑ) : x ∈ c • s :=
   let ⟨a, hxa, ha⟩ := egauge_lt_iff.1 hc
   hs.smul_mono (by simpa [enorm] using! ha.le) hxa
-
-/--
-lemma `mem_of_egauge_lt_one` / 引理 `mem_of_egauge_lt_one`
-
-English:
-lemma mem_of_egauge_lt_one
-  given: (hs : Balanced 𝕜 s) (hx : egauge 𝕜 s x < 1)
-  statement: x in s
-  proof: one_smul 𝕜 s ▸ mem_smul_of_egauge_lt hs (by simpa)
-
-中文:
-引理 mem_of_egauge_lt_one
-  条件: (hs : Balanced 𝕜 s) (hx : egauge 𝕜 s x < 1)
-  结论: x in s
-  证明: one_smul 𝕜 s ▸ mem_smul_of_egauge_lt hs (by simpa)
-
-Depends on / 依赖: mem_smul_of_egauge_lt, one_smul
+/-
+**mem_of_egauge_lt_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_of_egauge_lt_one (hs : Balanced 𝕜 s) (hx : egauge 𝕜 s x < 1) : x in s
+参数：hs : Balanced 𝕜 s；hx : egauge 𝕜 s x < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `mem_smul_of_egauge_lt`：mem_smul_of_egauge_lt (hs : Balanced 𝕜 s) (hc : e
+gauge 𝕜 s x < ‖c‖ₑ) : x in c • s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `enorm_one`：∀ {G : Type u_1} [inst : SeminormedAddCommGroup G] [inst_1 : 
+One G] [NormOneClass G], ‖1‖ₑ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma mem_of_egauge_lt_one (hs : Balanced 𝕜 s) (hx : egauge 𝕜 s x < 1) : x in s :=
+lemma mem_of_egauge_lt_one (hs : Balanced 𝕜 s) (hx : egauge 𝕜 s x < 1) : x ∈ s :=
   one_smul 𝕜 s ▸ mem_smul_of_egauge_lt hs (by simpa)
-
-/--
-lemma `egauge_eq_zero_iff` / 引理 `egauge_eq_zero_iff`
-
-English:
-lemma egauge_eq_zero_iff
-  statement: egauge 𝕜 s x = 0 ↔ existsᶠ c : 𝕜 in 𝓝 0, x in c • s
-  proof: by
-  refine (iInf₂_eq_bot _).trans ?_
-  rw [(nhds_basis_uniformity uniformity_basis_edist).frequently_iff]
-  simp [and_comm]
-
-@[simp]
-
-中文:
-引理 egauge_eq_zero_iff
-  结论: egauge 𝕜 s x = 0 ↔ 存在ᶠ c : 𝕜 in 𝓝 0, x in c • s
-  证明: by
-  refine (iInf₂_eq_bot _).trans ?_
-  rw [(nhds_basis_uniformity uniformity_basis_edist).frequently_iff]
-  simp [and_comm]
-
-@[simp]
-
-Depends on / 依赖: and_comm, frequently_iff, nhds_basis_uniformity, uniformity_basis_edist
+/-
+**egauge_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_eq_zero_iff : egauge 𝕜 s x = 0 ↔ existsᶠ c : 𝕜 in 𝓝 0, x in c • s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `iInf₂_eq_bot`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst :
+ CompleteLinearOrder α] (f : (i : ι) → κ i → α),   ⨅ i, ⨅ j, f i j = ⊥ ↔ ∀ (b : 
+α)…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.frequently_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Fil
+ter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {q : α → Prop}, (∃ᶠ 
+(x : α) in l, q x) ↔…
+· 使用定理 `nhds_basis_uniformity`：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> S
+etRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y
+, x) in s i…
+· 使用定理 `uniformity_basis_edist`：uniformity_basis_edist : (𝓤 α).HasBasis (fun ε :
+ Real>=0∞ => 0 < ε) fun ε => { p : α × α | edist p.1 p.2 < ε }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `edist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E)
+, edist a 0 = ‖a‖ₑ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma egauge_eq_zero_iff : egauge 𝕜 s x = 0 ↔ existsᶠ c : 𝕜 in 𝓝 0, x in c • s := by
+lemma egauge_eq_zero_iff : egauge 𝕜 s x = 0 ↔ ∃ᶠ c : 𝕜 in 𝓝 0, x ∈ c • s := by
   refine (iInf₂_eq_bot _).trans ?_
   rw [(nhds_basis_uniformity uniformity_basis_edist).frequently_iff]
   simp [and_comm]
 
 @[simp]
-/--
-lemma `egauge_univ` / 引理 `egauge_univ`
-
-English:
-lemma egauge_univ
-  given: [(𝓝[!=] (0 : 𝕜)).NeBot]
-  statement: egauge 𝕜 univ x = 0
-  proof: by
-  rw [egauge_eq_zero_iff]
-  refine (frequently_iff_neBot.2 ‹_›).mono fun c hc => ?_
-  simp_all [smul_set_univ₀]
-
-中文:
-引理 egauge_univ
-  条件: [(𝓝[!=] (0 : 𝕜)).NeBot]
-  结论: egauge 𝕜 univ x = 0
-  证明: by
-  rw [egauge_eq_zero_iff]
-  refine (frequently_iff_neBot.2 ‹_›).mono fun c hc => ?_
-  simp_all [smul_set_univ₀]
-
-Depends on / 依赖: egauge_eq_zero_iff, frequently_iff_neBot
+/-
+**egauge_univ** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_univ [(𝓝[!=] (0 : 𝕜)).NeBot] : egauge 𝕜 univ x = 0
+参数：𝓝[!=] (0 : 𝕜)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `egauge_eq_zero_iff`：egauge_eq_zero_iff : egauge 𝕜 s x = 0 ↔ existsᶠ c : 
+𝕜 in 𝓝 0, x in c • s
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.frequently_iff_neBot`：frequently_iff_neBot {l : Filter α} {p : α 
+-> Prop} : (existsᶠ x in l, p x) ↔ NeBot (l ⊓ 𝓟 {x | p x})
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Set.smul_set_univ₀`：smul_set_univ₀ (ha : a != 0) : a • (univ : Set β) = 
+univ
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma egauge_univ [(𝓝[!=] (0 : 𝕜)).NeBot] : egauge 𝕜 univ x = 0 := by
+lemma egauge_univ [(𝓝[≠] (0 : 𝕜)).NeBot] : egauge 𝕜 univ x = 0 := by
   rw [egauge_eq_zero_iff]
-  refine (frequently_iff_neBot.2 ‹_›).mono fun c hc => ?_
+  refine (frequently_iff_neBot.2 ‹_›).mono fun c hc ↦ ?_
   simp_all [smul_set_univ₀]
 
 variable (𝕜)
 
 @[simp]
-/--
-lemma `egauge_zero_right` / 引理 `egauge_zero_right`
-
-English:
-lemma egauge_zero_right
-  given: (hs : s.Nonempty)
-  statement: egauge 𝕜 s 0 = 0
-  proof: by
-  have : 0 in (0 : 𝕜) • s := by simp [zero_smul_set hs]
-  simpa using egauge_le_of_mem_smul this
-
-中文:
-引理 egauge_zero_right
-  条件: (hs : s.非空)
-  结论: egauge 𝕜 s 0 = 0
-  证明: by
-  have : 0 in (0 : 𝕜) • s := by simp [zero_smul_set hs]
-  simpa using egauge_le_of_mem_smul this
-
-Depends on / 依赖: egauge_le_of_mem_smul, zero_smul_set
+/-
+**egauge_zero_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_zero_right (hs : s.Nonempty) : egauge 𝕜 s 0 = 0
+参数：hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.zero_smul_set`：∀ {α : Type u_1} {β : Type u_2} [inst : Zero α] [inst
+_1 : Zero β] [inst_2 : SMulWithZero α β] {s : Set β},   s.Nonempty → 0 • s = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用引理 `egauge_le_of_mem_smul`：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜
+ s x <= ‖c‖ₑ
 -/
 lemma egauge_zero_right (hs : s.Nonempty) : egauge 𝕜 s 0 = 0 := by
-  have : 0 in (0 : 𝕜) • s := by simp [zero_smul_set hs]
+  have : 0 ∈ (0 : 𝕜) • s := by simp [zero_smul_set hs]
   simpa using egauge_le_of_mem_smul this
-
-/--
-lemma `egauge_zero_zero` / 引理 `egauge_zero_zero`
-
-English:
-lemma egauge_zero_zero
-  statement: egauge 𝕜 (0 : Set E) 0 = 0
-  proof: by simp
-
-中文:
-引理 egauge_zero_zero
-  结论: egauge 𝕜 (0 : 集合 E) 0 = 0
-  证明: by simp
+/-
+**egauge_zero_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_zero_zero : egauge 𝕜 (0 : Set E) 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `egauge_zero_right`：egauge_zero_right (hs : s.Nonempty) : egauge 𝕜 s 0 = 
+0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma egauge_zero_zero : egauge 𝕜 (0 : Set E) 0 = 0 := by simp
-
-/--
-lemma `egauge_le_one` / 引理 `egauge_le_one`
-
-English:
-lemma egauge_le_one
-  given: (h : x in s)
-  statement: egauge 𝕜 s x <= 1
-  proof: by
-  rw [← one_smul 𝕜 s] at h
-  simpa using egauge_le_of_mem_smul h
-
-中文:
-引理 egauge_le_one
-  条件: (h : x in s)
-  结论: egauge 𝕜 s x <= 1
-  证明: by
-  rw [← one_smul 𝕜 s] at h
-  simpa using egauge_le_of_mem_smul h
-
-Depends on / 依赖: egauge_le_of_mem_smul, one_smul
+/-
+**egauge_le_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_le_one (h : x in s) : egauge 𝕜 s x <= 1
+参数：h : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `enorm_one`：∀ {G : Type u_1} [inst : SeminormedAddCommGroup G] [inst_1 : 
+One G] [NormOneClass G], ‖1‖ₑ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用引理 `egauge_le_of_mem_smul`：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜
+ s x <= ‖c‖ₑ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma egauge_le_one (h : x in s) : egauge 𝕜 s x <= 1 := by
+lemma egauge_le_one (h : x ∈ s) : egauge 𝕜 s x ≤ 1 := by
   rw [← one_smul 𝕜 s] at h
   simpa using egauge_le_of_mem_smul h
 
 variable {𝕜}
-
-/--
-lemma `le_egauge_of_forall_ne_zero` / 引理 `le_egauge_of_forall_ne_zero`
-
-English:
-lemma le_egauge_of_forall_ne_zero
-  statement: [(𝓝[!=] (0 : 𝕜)).NeBot] {r : Real>=0∞}
-  proof: by
-  rw [le_egauge_iff]
-  intro c hc
-  rcases ne_or_eq c 0 with hc₀ | rfl
-  · exact h c hc₀ hc
-  obtain rfl : x = 0 := by
-    grw [zero_smul_set_subset, Set.mem_zero] at hc
-    exact hc
-  apply le_of_forall_gt
-  intro b hb
-rcases Filter.nonempty_of_mem
-    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eball_mem_nhds 0 (by simpa using hb))
-    with ⟨c, hc₀, hcb⟩
-  exact (h c (by simpa using hc₀) ⟨_, hs₀, by simp⟩).trans_lt (by simpa using hcb)
-
-中文:
-引理 le_egauge_of_对任意_ne_zero
-  结论: [(𝓝[!=] (0 : 𝕜)).NeBot] {r : 实数>=0∞}
-  证明: by
-  rw [le_egauge_iff]
-  intro c hc
-  rcases ne_or_eq c 0 with hc₀ | rfl
-  · exact h c hc₀ hc
-  obtain rfl : x = 0 := by
-    grw [zero_smul_set_subset, Set.mem_zero] at hc
-    exact hc
-  apply le_of_forall_gt
-  intro b hb
-rcases Filter.nonempty_of_mem
-    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eball_mem_nhds 0 (by simpa using hb))
-    with ⟨c, hc₀, hcb⟩
-  exact (h c (by simpa using hc₀) ⟨_, hs₀, by simp⟩).trans_lt (by simpa using hcb)
-
-Depends on / 依赖: Filter, Filter.nonempty_of_mem, Metric, Metric.eball_mem_nhds, Set.mem_zero, eball_mem_nhds, inter_mem_nhdsWithin, le_egauge_iff, le_of_forall_gt, mem_zero, ne_or_eq, nonempty_of_mem, trans_lt, zero_smul_set_subset
+/-
+**le_egauge_of_forall_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_of_forall_ne_zero [(𝓝[!=] (0 : 𝕜)).NeBot] {r : Real>=0∞} (hs₀ : 
+0 in s) (h : forall c : 𝕜, c != 0 -> x in c • s -> r <= ‖c‖ₑ) : r <= egauge 𝕜 s 
+x
+参数：𝓝[!=] (0 : 𝕜)；hs₀ : 0 in s；h : forall c : 𝕜, c != 0 -> x in c • s -> r <= ‖c‖
+ₑ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_egauge_iff`：le_egauge_iff : r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c 
+• s -> r <= ‖c‖ₑ
+· 使用定理 `ne_or_eq`：ne_or_eq {α : Sort*} (x y : α) : x != y ∨ x = y
+· 使用定理 `le_of_forall_gt`：∀ {α : Type u_2} [inst : LinearOrder α] {a b : α}, (∀ (
+c : α), a < c → b < c) → b ≤ a
+· 使用定理 `Filter.nonempty_of_mem`：nonempty_of_mem {f : Filter α} [hf : NeBot f] {s
+ : Set α} (hs : s in f) : s.Nonempty
+· 使用定理 `inter_mem_nhdsWithin`：inter_mem_nhdsWithin (s : Set α) {t : Set α} {a : 
+α} (h : t in 𝓝 a) : s inter t in 𝓝[s] a
+· 使用定理 `Metric.eball_mem_nhds`：eball_mem_nhds (x : α) {ε : Real>=0∞} (ε0 : 0 < ε
+) : eball x ε in 𝓝 x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `edist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E)
+, edist a 0 = ‖a‖ₑ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_zero`：∀ {α : Type u_2} [inst : Zero α] {a : α}, a ∈ 0 ↔ a = 0
+· 使用定理 `Set.mem_of_subset_of_mem`：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s
+₂ → a ∈ s₁ → a ∈ s₂
+· 使用引理 `Set.zero_smul_set_subset`：zero_smul_set_subset (s : Set β) : (0 : α) • s
+ subseteq 0
 -/
-lemma le_egauge_of_forall_ne_zero [(𝓝[!=] (0 : 𝕜)).NeBot] {r : Real>=0∞}
-    (hs₀ : 0 in s) (h : forall c : 𝕜, c != 0 -> x in c • s -> r <= ‖c‖ₑ) : r <= egauge 𝕜 s x := by
+lemma le_egauge_of_forall_ne_zero [(𝓝[≠] (0 : 𝕜)).NeBot] {r : ℝ≥0∞}
+    (hs₀ : 0 ∈ s) (h : ∀ c : 𝕜, c ≠ 0 → x ∈ c • s → r ≤ ‖c‖ₑ) : r ≤ egauge 𝕜 s x := by
   rw [le_egauge_iff]
   intro c hc
   rcases ne_or_eq c 0 with hc₀ | rfl
@@ -586,155 +611,172 @@ lemma le_egauge_of_forall_ne_zero [(𝓝[!=] (0 : 𝕜)).NeBot] {r : Real>=0∞}
     exact hc
   apply le_of_forall_gt
   intro b hb
-rcases Filter.nonempty_of_mem
+  rcases Filter.nonempty_of_mem <|
     inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eball_mem_nhds 0 (by simpa using hb))
     with ⟨c, hc₀, hcb⟩
   exact (h c (by simpa using hc₀) ⟨_, hs₀, by simp⟩).trans_lt (by simpa using hcb)
-
-/--
-lemma `le_egauge_smul_left` / 引理 `le_egauge_smul_left`
-
-English:
-lemma le_egauge_smul_left
-  given: (c : 𝕜) (s : Set E) (x : E)
-  proof: by
-  simp_rw [le_egauge_iff, smul_smul]
-  rintro a ⟨x, hx, rfl⟩
-  apply ENNReal.div_le_of_le_mul
-  rw [← enorm_mul]
-exact egauge_le_of_mem_smul smul_mem_smul_set hx
-
-中文:
-引理 le_egauge_smul_left
-  条件: (c : 𝕜) (s : 集合 E) (x : E)
-  证明: by
-  simp_rw [le_egauge_iff, smul_smul]
-  rintro a ⟨x, hx, rfl⟩
-  apply ENNReal.div_le_of_le_mul
-  rw [← enorm_mul]
-exact egauge_le_of_mem_smul smul_mem_smul_set hx
-
-Depends on / 依赖: ENNReal, ENNReal.div_le_of_le_mul, div_le_of_le_mul, egauge_le_of_mem_smul, enorm_mul, le_egauge_iff, simp_rw, smul_mem_smul_set, smul_smul
+/-
+**le_egauge_smul_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_smul_left (c : 𝕜) (s : Set E) (x : E) : egauge 𝕜 s x / ‖c‖ₑ <= e
+gauge 𝕜 (c • s) x
+参数：c : 𝕜；s : Set E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `ENNReal.div_le_of_le_mul`：div_le_of_le_mul (h : a <= b * c) : a / c <= b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `enorm_mul`：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 : 
+Mul α] [NormMulClass α] (a b : α), ‖a * b‖ₑ = ‖a‖ₑ * ‖b‖ₑ
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用引理 `egauge_le_of_mem_smul`：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜
+ s x <= ‖c‖ₑ
+· 使用定理 `Set.smul_mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β]
+ {s : Set β} {a : α} {b : β}, b ∈ s → a • b ∈ a • s
 -/
 lemma le_egauge_smul_left (c : 𝕜) (s : Set E) (x : E) :
-    egauge 𝕜 s x / ‖c‖ₑ <= egauge 𝕜 (c • s) x := by
+    egauge 𝕜 s x / ‖c‖ₑ ≤ egauge 𝕜 (c • s) x := by
   simp_rw [le_egauge_iff, smul_smul]
   rintro a ⟨x, hx, rfl⟩
   apply ENNReal.div_le_of_le_mul
   rw [← enorm_mul]
-exact egauge_le_of_mem_smul smul_mem_smul_set hx
-
-/--
-lemma `egauge_smul_left` / 引理 `egauge_smul_left`
-
-English:
-lemma egauge_smul_left
-  given: (hc : c != 0) (s : Set E) (x : E)
-  proof: by
-  refine le_antisymm ?_ (le_egauge_smul_left _ _ _)
-  rw [ENNReal.le_div_iff_mul_le (by simp [*]) (by simp)]
-  calc
-    egauge 𝕜 (c • s) x * ‖c‖ₑ = egauge 𝕜 (c • s) x / ‖c⁻¹‖ₑ := by
-      rw [enorm_inv (by simpa)]; rw [div_eq_mul_inv]; rw [inv_inv]
-    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
-    _ = egauge 𝕜 s x := by rw [inv_smul_smul₀ hc]
-
-中文:
-引理 egauge_smul_left
-  条件: (hc : c != 0) (s : 集合 E) (x : E)
-  证明: by
-  refine le_antisymm ?_ (le_egauge_smul_left _ _ _)
-  rw [ENNReal.le_div_iff_mul_le (by simp [*]) (by simp)]
-  calc
-    egauge 𝕜 (c • s) x * ‖c‖ₑ = egauge 𝕜 (c • s) x / ‖c⁻¹‖ₑ := by
-      rw [enorm_inv (by simpa)]; rw [div_eq_mul_inv]; rw [inv_inv]
-    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
-    _ = egauge 𝕜 s x := by rw [inv_smul_smul₀ hc]
-
-Depends on / 依赖: ENNReal, ENNReal.le_div_iff_mul_le, div_eq_mul_inv, egauge, enorm_inv, inv_inv, le_antisymm, le_div_iff_mul_le, le_egauge_smul_left
+  exact egauge_le_of_mem_smul <| smul_mem_smul_set hx
+/-
+**egauge_smul_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_smul_left (hc : c != 0) (s : Set E) (x : E) : egauge 𝕜 (c • s) x = 
+egauge 𝕜 s x / ‖c‖ₑ
+参数：hc : c != 0；s : Set E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.le_div_iff_mul_le`：∀ {a b c : ENNReal}, b ≠ 0 ∨ c ≠ 0 → b ≠ ⊤ ∨ 
+c ≠ ⊤ → (a ≤ c / b ↔ a * b ≤ c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用引理 `enorm_inv`：enorm_inv {a : α} (ha : a != 0) : ‖a⁻¹‖ₑ = ‖a‖ₑ⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用引理 `le_egauge_smul_left`：le_egauge_smul_left (c : 𝕜) (s : Set E) (x : E) : e
+gauge 𝕜 s x / ‖c‖ₑ <= egauge 𝕜 (c • s) x
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
 -/
-lemma egauge_smul_left (hc : c != 0) (s : Set E) (x : E) :
+lemma egauge_smul_left (hc : c ≠ 0) (s : Set E) (x : E) :
     egauge 𝕜 (c • s) x = egauge 𝕜 s x / ‖c‖ₑ := by
   refine le_antisymm ?_ (le_egauge_smul_left _ _ _)
   rw [ENNReal.le_div_iff_mul_le (by simp [*]) (by simp)]
   calc
     egauge 𝕜 (c • s) x * ‖c‖ₑ = egauge 𝕜 (c • s) x / ‖c⁻¹‖ₑ := by
-      rw [enorm_inv (by simpa)]; rw [div_eq_mul_inv]; rw [inv_inv]
-    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
+      rw [enorm_inv (by simpa), div_eq_mul_inv, inv_inv]
+    _ ≤ egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
     _ = egauge 𝕜 s x := by rw [inv_smul_smul₀ hc]
-
-/--
-lemma `le_egauge_smul_right` / 引理 `le_egauge_smul_right`
-
-English:
-lemma le_egauge_smul_right
-  given: (c : 𝕜) (s : Set E) (x : E)
-  proof: by
-  rw [le_egauge_iff]
-  rintro a ⟨y, hy, hxy⟩
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-· refine ENNReal.mul_le_of_le_div' le_trans ?_ ENNReal.coe_div_le
-    rw [div_eq_inv_mul]; rw [← nnnorm_inv]; rw [← nnnorm_mul]
-    refine egauge_le_of_mem_smul ⟨y, hy, ?_⟩
-    simp only [mul_smul, hxy, inv_smul_smul₀ hc]
-
-中文:
-引理 le_egauge_smul_right
-  条件: (c : 𝕜) (s : 集合 E) (x : E)
-  证明: by
-  rw [le_egauge_iff]
-  rintro a ⟨y, hy, hxy⟩
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-· refine ENNReal.mul_le_of_le_div' le_trans ?_ ENNReal.coe_div_le
-    rw [div_eq_inv_mul]; rw [← nnnorm_inv]; rw [← nnnorm_mul]
-    refine egauge_le_of_mem_smul ⟨y, hy, ?_⟩
-    simp only [mul_smul, hxy, inv_smul_smul₀ hc]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_div_le, ENNReal.mul_le_of_le_div, coe_div_le, div_eq_inv_mul, egauge_le_of_mem_smul, eq_or_ne, le_egauge_iff, le_trans, mul_le_of_le_div, mul_smul, nnnorm_inv, nnnorm_mul
+/-
+**le_egauge_smul_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_smul_right (c : 𝕜) (s : Set E) (x : E) : ‖c‖ₑ * egauge 𝕜 s x <= 
+egauge 𝕜 s (c • x)
+参数：c : 𝕜；s : Set E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_egauge_iff`：le_egauge_iff : r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c 
+• s -> r <= ‖c‖ₑ
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.mul_le_of_le_div'`：mul_le_of_le_div' (h : a <= b / c) : c * a <=
+ b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
+· 使用定理 `nnnorm_inv`：nnnorm_inv (a : α) : ‖a⁻¹‖₊ = ‖a‖₊⁻¹
+· 使用定理 `nnnorm_mul`：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 :
+ Mul α] [NormMulClass α] (a b : α), ‖a * b‖₊ = ‖a‖₊ * ‖b‖₊
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用引理 `egauge_le_of_mem_smul`：egauge_le_of_mem_smul (h : x in c • s) : egauge 𝕜
+ s x <= ‖c‖ₑ
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `ENNReal.coe_div_le`：coe_div_le : ↑(p / r) <= (p / r : Real>=0∞)
 -/
 lemma le_egauge_smul_right (c : 𝕜) (s : Set E) (x : E) :
-    ‖c‖ₑ * egauge 𝕜 s x <= egauge 𝕜 s (c • x) := by
+    ‖c‖ₑ * egauge 𝕜 s x ≤ egauge 𝕜 s (c • x) := by
   rw [le_egauge_iff]
   rintro a ⟨y, hy, hxy⟩
   rcases eq_or_ne c 0 with rfl | hc
   · simp
-· refine ENNReal.mul_le_of_le_div' le_trans ?_ ENNReal.coe_div_le
-    rw [div_eq_inv_mul]; rw [← nnnorm_inv]; rw [← nnnorm_mul]
+  · refine ENNReal.mul_le_of_le_div' <| le_trans ?_ ENNReal.coe_div_le
+    rw [div_eq_inv_mul, ← nnnorm_inv, ← nnnorm_mul]
     refine egauge_le_of_mem_smul ⟨y, hy, ?_⟩
     simp only [mul_smul, hxy, inv_smul_smul₀ hc]
-
-/--
-lemma `egauge_smul_right` / 引理 `egauge_smul_right`
-
-English:
-lemma egauge_smul_right
-  given: (h : c = 0 -> s.Nonempty) (x : E)
-  proof: by
-  refine le_antisymm ?_ (le_egauge_smul_right c s x)
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp [egauge_zero_right _ (h rfl)]
-  · rw [mul_comm, ← ENNReal.div_le_iff_le_mul (.inl <| by simpa) (.inl enorm_ne_top),
-      ENNReal.div_eq_inv_mul, ← enorm_inv (by simpa)]
-    refine (le_egauge_smul_right _ _ _).trans_eq ?_
-    rw [inv_smul_smul₀ hc]
-
-中文:
-引理 egauge_smul_right
-  条件: (h : c = 0 -> s.非空) (x : E)
-  证明: by
-  refine le_antisymm ?_ (le_egauge_smul_right c s x)
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp [egauge_zero_right _ (h rfl)]
-  · rw [mul_comm, ← ENNReal.div_le_iff_le_mul (.inl <| by simpa) (.inl enorm_ne_top),
-      ENNReal.div_eq_inv_mul, ← enorm_inv (by simpa)]
-    refine (le_egauge_smul_right _ _ _).trans_eq ?_
-    rw [inv_smul_smul₀ hc]
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.div_le_iff_le_mul, div_eq_inv_mul, div_le_iff_le_mul, egauge_zero_right, enorm_inv, enorm_ne_top, eq_or_ne, le_antisymm, le_egauge_smul_right, mul_comm, trans_eq
+/-
+**egauge_smul_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_smul_right (h : c = 0 -> s.Nonempty) (x : E) : egauge 𝕜 s (c • x) =
+ ‖c‖ₑ * egauge 𝕜 s x
+参数：h : c = 0 -> s.Nonempty；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用引理 `egauge_zero_right`：egauge_zero_right (hs : s.Nonempty) : egauge 𝕜 s 0 = 
+0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `ENNReal.div_le_iff_le_mul`：∀ {a b c : ENNReal}, b ≠ 0 ∨ c ≠ ⊤ → b ≠ ⊤ ∨ 
+c ≠ 0 → (a / b ≤ c ↔ a ≤ c * b)
+· 使用引理 `enorm_ne_top`：enorm_ne_top : ‖x‖ₑ != ∞
+· 使用定理 `ENNReal.div_eq_inv_mul`：∀ {a b : ENNReal}, a / b = b⁻¹ * a
+· 使用引理 `enorm_inv`：enorm_inv {a : α} (ha : a != 0) : ‖a⁻¹‖ₑ = ‖a‖ₑ⁻¹
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `le_egauge_smul_right`：le_egauge_smul_right (c : 𝕜) (s : Set E) (x : E) :
+ ‖c‖ₑ * egauge 𝕜 s x <= egauge 𝕜 s (c • x)
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
 -/
-lemma egauge_smul_right (h : c = 0 -> s.Nonempty) (x : E) :
+lemma egauge_smul_right (h : c = 0 → s.Nonempty) (x : E) :
     egauge 𝕜 s (c • x) = ‖c‖ₑ * egauge 𝕜 s x := by
   refine le_antisymm ?_ (le_egauge_smul_right c s x)
   rcases eq_or_ne c 0 with rfl | hc
@@ -744,219 +786,288 @@ lemma egauge_smul_right (h : c = 0 -> s.Nonempty) (x : E) :
     refine (le_egauge_smul_right _ _ _).trans_eq ?_
     rw [inv_smul_smul₀ hc]
 
-/--
-theorem `egauge_prod_mk` / 定理 `egauge_prod_mk`
+/-- The extended gauge of a point `(a, b)` with respect to the product of balanced sets `U` and `V`
+is equal to the maximum of the extended gauges of `a` with respect to `U`
+and `b` with respect to `V`.
+-/
+/-
+**egauge_prod_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：egauge_prod_mk {F : Type*} [AddCommGroup F] [Module 𝕜 F] {U : Set E} {V : 
+Set F} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a : E) (b : F) : egauge 𝕜 (U ×ˢ 
+V) (a, b) = max (egauge 𝕜 U a) (egauge 𝕜 V b)
+参数：hU : Balanced 𝕜 U；hV : Balanced 𝕜 V；a : E；b : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_of_forall_gt`：∀ {α : Type u_2} [inst : LinearOrder α] {a b : α}, (∀ (
+c : α), a < c → b < c) → b ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Set.smul_set_prod`：smul_set_prod {M α : Type*} [SMul M α] [SMul M β] (c 
+: M) (s : Set α) (t : Set β) : c • (s ×ˢ t) = (c • s) ×ˢ (c • t)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `Balanced.smul_mono`：Balanced.smul_mono (hs : Balanced 𝕝 s) {a : 𝕝} (h : 
+‖a‖ <= ‖b‖) : a • s subseteq b • s
+· 使用定理 `NormMulClass.toNormSMulClass`：∀ {α : Type u_1} [inst : Norm α] [inst_1 :
+ Mul α] [NormMulClass α], NormSMulClass α α
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用引理 `le_egauge_prod`：le_egauge_prod (s : Set E) (t : Set F) (a : E) (b : F) :
+ max (egauge 𝕜 s a) (egauge 𝕜 t b) <= egauge 𝕜 (s ×ˢ t) (a, b)
 
-English:
-theorem egauge_prod_mk
-  statement: {F : Type*} [AddCommGroup F] [Module 𝕜 F] {U : Set E} {V : Set F}
-  proof: by
-  refine le_antisymm (le_of_forall_gt fun r hr => ?_) (le_egauge_prod _ _ _ _)
-  simp only [max_lt_iff, egauge_lt_iff, smul_set_prod] at hr ⊢
-  rcases hr with ⟨⟨x, hx, hxr⟩, ⟨y, hy, hyr⟩⟩
-  cases le_total ‖x‖ ‖y‖ with
-  | inl hle => exact ⟨y, ⟨hU.smul_mono hle hx, hy⟩, hyr⟩
-  | inr hle => exact ⟨x, ⟨hx, hV.smul_mono hle hy⟩, hxr⟩
-
-中文:
-定理 egauge_prod_mk
-  结论: {F : 类型} [加法交换群 F] [模 𝕜 F] {U : 集合 E} {V : 集合 F}
-  证明: by
-  refine le_antisymm (le_of_forall_gt fun r hr => ?_) (le_egauge_prod _ _ _ _)
-  simp only [max_lt_iff, egauge_lt_iff, smul_set_prod] at hr ⊢
-  rcases hr with ⟨⟨x, hx, hxr⟩, ⟨y, hy, hyr⟩⟩
-  cases le_total ‖x‖ ‖y‖ with
-  | inl hle => exact ⟨y, ⟨hU.smul_mono hle hx, hy⟩, hyr⟩
-  | inr hle => exact ⟨x, ⟨hx, hV.smul_mono hle hy⟩, hxr⟩
-
-Depends on / 依赖: egauge_lt_iff, hU.smul_mono, hV.smul_mono, le_antisymm, le_egauge_prod, le_of_forall_gt, le_total, max_lt_iff, smul_mono, smul_set_prod
+--- 原说明 ---
+The extended gauge of a point `(a, b)` with respect to the product of balanced s
+ets `U` and `V`
+is equal to the maximum of the extended gauges of `a` with respect to `U`
+and `b` with respect to `V`.
 -/
 theorem egauge_prod_mk {F : Type*} [AddCommGroup F] [Module 𝕜 F] {U : Set E} {V : Set F}
     (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a : E) (b : F) :
     egauge 𝕜 (U ×ˢ V) (a, b) = max (egauge 𝕜 U a) (egauge 𝕜 V b) := by
-  refine le_antisymm (le_of_forall_gt fun r hr => ?_) (le_egauge_prod _ _ _ _)
+  refine le_antisymm (le_of_forall_gt fun r hr ↦ ?_) (le_egauge_prod _ _ _ _)
   simp only [max_lt_iff, egauge_lt_iff, smul_set_prod] at hr ⊢
   rcases hr with ⟨⟨x, hx, hxr⟩, ⟨y, hy, hyr⟩⟩
   cases le_total ‖x‖ ‖y‖ with
   | inl hle => exact ⟨y, ⟨hU.smul_mono hle hx, hy⟩, hyr⟩
   | inr hle => exact ⟨x, ⟨hx, hV.smul_mono hle hy⟩, hxr⟩
-
-/--
-theorem `egauge_add_add_le` / 定理 `egauge_add_add_le`
-
-English:
-theorem egauge_add_add_le
-  given: {U V : Set E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a b : E)
-  proof: by
-  rw [← egauge_prod_mk hU hV a b]; rw [← add_image_prod]
-  exact MapsTo.egauge_le 𝕜 (LinearMap.fst 𝕜 E E + LinearMap.snd 𝕜 E E) (mapsTo_image _ _) (a, b)
-
-中文:
-定理 egauge_add_add_le
-  条件: {U V : 集合 E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a b : E)
-  证明: by
-  rw [← egauge_prod_mk hU hV a b]; rw [← add_image_prod]
-  exact MapsTo.egauge_le 𝕜 (LinearMap.fst 𝕜 E E + LinearMap.snd 𝕜 E E) (mapsTo_image _ _) (a, b)
-
-Depends on / 依赖: LinearMap, LinearMap.fst, LinearMap.snd, MapsTo, MapsTo.egauge_le, add_image_prod, egauge_le, egauge_prod_mk, mapsTo_image
+/-
+**egauge_add_add_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：egauge_add_add_le {U V : Set E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a
+ b : E) : egauge 𝕜 (U + V) (a + b) <= max (egauge 𝕜 U a) (egauge 𝕜 V b)
+参数：hU : Balanced 𝕜 U；hV : Balanced 𝕜 V；a b : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `egauge_prod_mk`：egauge_prod_mk {F : Type*} [AddCommGroup F] [Module 𝕜 F]
+ {U : Set E} {V : Set F} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a : E) (b : F)
+ : e…
+· 使用定理 `Set.add_image_prod`：∀ {α : Type u_2} [inst : Add α] {s t : Set α}, (fun 
+x => x.1 + x.2) '' s ×ˢ t = s + t
+· 使用引理 `Set.MapsTo.egauge_le`：Set.MapsTo.egauge_le {E' F : Type*} [SMul 𝕜 E'] [F
+unLike F E E'] [MulActionHomClass F 𝕜 E E'] (f : F) {t : Set E'} (h : MapsTo f s
+ t) (x : E…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
 theorem egauge_add_add_le {U V : Set E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a b : E) :
-    egauge 𝕜 (U + V) (a + b) <= max (egauge 𝕜 U a) (egauge 𝕜 V b) := by
-  rw [← egauge_prod_mk hU hV a b]; rw [← add_image_prod]
+    egauge 𝕜 (U + V) (a + b) ≤ max (egauge 𝕜 U a) (egauge 𝕜 V b) := by
+  rw [← egauge_prod_mk hU hV a b, ← add_image_prod]
   exact MapsTo.egauge_le 𝕜 (LinearMap.fst 𝕜 E E + LinearMap.snd 𝕜 E E) (mapsTo_image _ _) (a, b)
 
 end NormedDivisionRing
 
 section Pi
 
-variable {𝕜 : Type*} {ι : Type*} {E : ι -> Type*}
-variable [NormedDivisionRing 𝕜] [forall i, AddCommGroup (E i)] [forall i, Module 𝕜 (E i)]
+variable {𝕜 : Type*} {ι : Type*} {E : ι → Type*}
+variable [NormedDivisionRing 𝕜] [∀ i, AddCommGroup (E i)] [∀ i, Module 𝕜 (E i)]
 
-/--
-theorem `egauge_pi'` / 定理 `egauge_pi'`
+/-- The extended gauge of a point `x` in an indexed product
+with respect to a product of finitely many balanced sets `U i`, `i ∈ I`,
+(and the whole spaces for the other indices)
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
 
-English:
-theorem egauge_pi'
-  statement: {I : Set ι} (hI : I.Finite)
-  proof: by
-  refine le_antisymm ?_ (iSup₂_le fun i hi => le_egauge_pi hi _ _)
-  refine le_of_forall_gt fun r hr => ?_
-  have : forall i in I, exists c : 𝕜, x i in c • U i ∧ ‖c‖ₑ < r := fun i hi =>
-egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
-  choose! c hc hcr using this
-  obtain ⟨c₀, hc₀, hc₀I, hc₀r⟩ :
-      exists c₀ : 𝕜, (c₀ != 0 ∨ I = univ) ∧ (forall i in I, ‖c i‖ <= ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
-    have hr₀ : 0 < r := hr.bot_lt
-    rcases I.eq_empty_or_nonempty with rfl | hIne
-    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[!=] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
-      · use 0
-        simp [@eq_comm _ ∅, hι, hr₀]
-      · rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₀, hc₀, hc₀r⟩
-        exact ⟨c₀, .inl hc₀, by simp, hc₀r⟩
-    · obtain ⟨i₀, hi₀I, hc_max⟩ : exists i₀ in I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
-        exists_max_image _ (‖c ·‖ₑ) hI hIne
-      by_cases! H : c i₀ != 0 ∨ I = univ
-      · exact ⟨c i₀, H, fun i hi => by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
-      · have hc0 (i : ι) (hi : i in I) : c i = 0 := by simpa [H] using hc_max hi
-        have heg0 (i : ι) (hi : i in I) : x i = 0 :=
-          zero_smul_set_subset (α := 𝕜) (U i) (hc0 i hi ▸ hc i hi)
-        have : (𝓝[!=] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
-        rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₁, hc₁, hc₁r⟩
-        refine ⟨c₁, .inl hc₁, fun i hi => ?_, hc₁r⟩
-        simp [hc0 i hi]
-  refine egauge_lt_iff.2 ⟨c₀, ?_, hc₀r⟩
-  rw [smul_set_pi₀' hc₀]
-  intro i hi
-  exact (hU i hi).smul_mono (hc₀I i hi) (hc i hi)
+This version assumes the following technical condition:
+- either `I` is the universal set;
+- or one of `x i`, `i ∈ I`, is nonzero;
+- or `𝕜` is nontrivially normed.
+-/
+/-
+**egauge_pi'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：egauge_pi' {I : Set ι} (hI : I.Finite) {U : forall i, Set (E i)} (hU : for
+all i in I, Balanced 𝕜 (U i)) (x : forall i, E i) (hI₀ : I = univ ∨ (exists i in
+ I, x i != 0) ∨ (𝓝[!=] (0 : 𝕜)).NeBot) : egauge 𝕜 (I.pi U) x = ⨆ i in I, egauge 
+𝕜 (U i) (x i)
+参数：hI : I.Finite；E i；hU : forall i in I, Balanced 𝕜 (U i)；x : forall i, E i；hI₀ 
+: I = univ ∨ (exists i in I, x i != 0) ∨ (𝓝[!=] (0 : 𝕜)).NeBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_of_forall_gt`：∀ {α : Type u_2} [inst : LinearOrder α] {a b : α}, (∀ (
+c : α), a < c → b < c) → b ≤ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `egauge_lt_iff`：egauge_lt_iff : egauge 𝕜 s x < r ↔ exists c : 𝕜, x in c •
+ s ∧ ‖c‖ₑ < r
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `le_iSup₂`：le_iSup₂ {f : forall i, κ i -> α} (i : ι) (j : κ i) : f i j <=
+ ⨆ (i) (j), f i j
+· 使用定理 `LT.lt.bot_lt`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {
+a b : α}, b < a → ⊥ < a
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `exists_enorm_lt`：∀ (E : Type u_8) [inst : TopologicalSpace E] [inst_1 : 
+ESeminormedAddMonoid E] [hbot : (nhdsWithin 0 {0}ᶜ).NeBot]   {c : ENNReal}, c ≠ 
+0 → ∃…
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+（共 49 条，此处仅展示前 30 条）
 
-中文:
-定理 egauge_pi'
-  结论: {I : 集合 ι} (hI : I.有限)
-  证明: by
-  refine le_antisymm ?_ (iSup₂_le fun i hi => le_egauge_pi hi _ _)
-  refine le_of_forall_gt fun r hr => ?_
-  have : forall i in I, exists c : 𝕜, x i in c • U i ∧ ‖c‖ₑ < r := fun i hi =>
-egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
-  choose! c hc hcr using this
-  obtain ⟨c₀, hc₀, hc₀I, hc₀r⟩ :
-      exists c₀ : 𝕜, (c₀ != 0 ∨ I = univ) ∧ (forall i in I, ‖c i‖ <= ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
-    have hr₀ : 0 < r := hr.bot_lt
-    rcases I.eq_empty_or_nonempty with rfl | hIne
-    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[!=] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
-      · use 0
-        simp [@eq_comm _ ∅, hι, hr₀]
-      · rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₀, hc₀, hc₀r⟩
-        exact ⟨c₀, .inl hc₀, by simp, hc₀r⟩
-    · obtain ⟨i₀, hi₀I, hc_max⟩ : exists i₀ in I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
-        exists_max_image _ (‖c ·‖ₑ) hI hIne
-      by_cases! H : c i₀ != 0 ∨ I = univ
-      · exact ⟨c i₀, H, fun i hi => by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
-      · have hc0 (i : ι) (hi : i in I) : c i = 0 := by simpa [H] using hc_max hi
-        have heg0 (i : ι) (hi : i in I) : x i = 0 :=
-          zero_smul_set_subset (α := 𝕜) (U i) (hc0 i hi ▸ hc i hi)
-        have : (𝓝[!=] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
-        rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₁, hc₁, hc₁r⟩
-        refine ⟨c₁, .inl hc₁, fun i hi => ?_, hc₁r⟩
-        simp [hc0 i hi]
-  refine egauge_lt_iff.2 ⟨c₀, ?_, hc₀r⟩
-  rw [smul_set_pi₀' hc₀]
-  intro i hi
-  exact (hU i hi).smul_mono (hc₀I i hi) (hc i hi)
+--- 原说明 ---
+The extended gauge of a point `x` in an indexed product
+with respect to a product of finitely many balanced sets `U i`, `i ∈ I`,
+(and the whole spaces for the other indices)
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
 
-Depends on / 依赖: I.eq_empty_or_nonempty, IsEmpty, bot_lt, egauge_lt_iff, egauge_lt_iff.mp, eq_empty_or_nonempty, hr.bot_lt, le_antisymm, le_egauge_pi, le_of_forall_gt, trans_lt
+This version assumes the following technical condition:
+- either `I` is the universal set;
+- or one of `x i`, `i ∈ I`, is nonzero;
+- or `𝕜` is nontrivially normed.
 -/
 theorem egauge_pi' {I : Set ι} (hI : I.Finite)
-    {U : forall i, Set (E i)} (hU : forall i in I, Balanced 𝕜 (U i))
-    (x : forall i, E i) (hI₀ : I = univ ∨ (exists i in I, x i != 0) ∨ (𝓝[!=] (0 : 𝕜)).NeBot) :
-    egauge 𝕜 (I.pi U) x = ⨆ i in I, egauge 𝕜 (U i) (x i) := by
-  refine le_antisymm ?_ (iSup₂_le fun i hi => le_egauge_pi hi _ _)
-  refine le_of_forall_gt fun r hr => ?_
-  have : forall i in I, exists c : 𝕜, x i in c • U i ∧ ‖c‖ₑ < r := fun i hi =>
-egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
+    {U : ∀ i, Set (E i)} (hU : ∀ i ∈ I, Balanced 𝕜 (U i))
+    (x : ∀ i, E i) (hI₀ : I = univ ∨ (∃ i ∈ I, x i ≠ 0) ∨ (𝓝[≠] (0 : 𝕜)).NeBot) :
+    egauge 𝕜 (I.pi U) x = ⨆ i ∈ I, egauge 𝕜 (U i) (x i) := by
+  refine le_antisymm ?_ (iSup₂_le fun i hi ↦ le_egauge_pi hi _ _)
+  refine le_of_forall_gt fun r hr ↦ ?_
+  have : ∀ i ∈ I, ∃ c : 𝕜, x i ∈ c • U i ∧ ‖c‖ₑ < r := fun i hi ↦
+    egauge_lt_iff.mp <| (le_iSup₂ i hi).trans_lt hr
   choose! c hc hcr using this
   obtain ⟨c₀, hc₀, hc₀I, hc₀r⟩ :
-      exists c₀ : 𝕜, (c₀ != 0 ∨ I = univ) ∧ (forall i in I, ‖c i‖ <= ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
+      ∃ c₀ : 𝕜, (c₀ ≠ 0 ∨ I = univ) ∧ (∀ i ∈ I, ‖c i‖ ≤ ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
     have hr₀ : 0 < r := hr.bot_lt
     rcases I.eq_empty_or_nonempty with rfl | hIne
-    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[!=] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
+    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[≠] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
       · use 0
         simp [@eq_comm _ ∅, hι, hr₀]
       · rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₀, hc₀, hc₀r⟩
         exact ⟨c₀, .inl hc₀, by simp, hc₀r⟩
-    · obtain ⟨i₀, hi₀I, hc_max⟩ : exists i₀ in I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
+    · obtain ⟨i₀, hi₀I, hc_max⟩ : ∃ i₀ ∈ I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
         exists_max_image _ (‖c ·‖ₑ) hI hIne
-      by_cases! H : c i₀ != 0 ∨ I = univ
-      · exact ⟨c i₀, H, fun i hi => by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
-      · have hc0 (i : ι) (hi : i in I) : c i = 0 := by simpa [H] using hc_max hi
-        have heg0 (i : ι) (hi : i in I) : x i = 0 :=
+      by_cases! H : c i₀ ≠ 0 ∨ I = univ
+      · exact ⟨c i₀, H, fun i hi ↦ by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
+      · have hc0 (i : ι) (hi : i ∈ I) : c i = 0 := by simpa [H] using hc_max hi
+        have heg0 (i : ι) (hi : i ∈ I) : x i = 0 :=
           zero_smul_set_subset (α := 𝕜) (U i) (hc0 i hi ▸ hc i hi)
-        have : (𝓝[!=] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
+        have : (𝓝[≠] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
         rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₁, hc₁, hc₁r⟩
-        refine ⟨c₁, .inl hc₁, fun i hi => ?_, hc₁r⟩
+        refine ⟨c₁, .inl hc₁, fun i hi ↦ ?_, hc₁r⟩
         simp [hc0 i hi]
   refine egauge_lt_iff.2 ⟨c₀, ?_, hc₀r⟩
   rw [smul_set_pi₀' hc₀]
   intro i hi
   exact (hU i hi).smul_mono (hc₀I i hi) (hc i hi)
 
-/--
-theorem `egauge_univ_pi` / 定理 `egauge_univ_pi`
-
-English:
-theorem egauge_univ_pi
-  given: [Finite ι] {U : forall i, Set (E i)} (hU : forall i, Balanced 𝕜 (U i)) (x : forall i, E i)
-  proof: .trans by simp egauge_pi' finite_univ (fun i _ => hU i) x (.inl rfl)
-
-中文:
-定理 egauge_univ_pi
-  条件: [有限 ι] {U : 对任意 i, 集合 (E i)} (hU : 对任意 i, Balanced 𝕜 (U i)) (x : 对任意 i, E i)
-  证明: .trans by simp egauge_pi' finite_univ (fun i _ => hU i) x (.inl rfl)
-
-Depends on / 依赖: egauge_pi, finite_univ
+/-- The extended gauge of a point `x` in an indexed product with finite index type
+with respect to a product of balanced sets `U i`,
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
 -/
-theorem egauge_univ_pi [Finite ι] {U : forall i, Set (E i)} (hU : forall i, Balanced 𝕜 (U i)) (x : forall i, E i) :
+/-
+**egauge_univ_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：egauge_univ_pi [Finite ι] {U : forall i, Set (E i)} (hU : forall i, Balanc
+ed 𝕜 (U i)) (x : forall i, E i) : egauge 𝕜 (univ.pi U) x = ⨆ i, egauge 𝕜 (U i) (
+x i)
+参数：E i；hU : forall i, Balanced 𝕜 (U i)；x : forall i, E i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `egauge_pi'`：egauge_pi' {I : Set ι} (hI : I.Finite) {U : forall i, Set (E
+ i)} (hU : forall i in I, Balanced 𝕜 (U i)) (x : forall i, E i) (hI₀ : I = univ 
+…
+· 使用定理 `Set.finite_univ`：∀ {α : Type u} [Finite α], Set.univ.Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+
+--- 原说明 ---
+The extended gauge of a point `x` in an indexed product with finite index type
+with respect to a product of balanced sets `U i`,
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
+-/
+theorem egauge_univ_pi [Finite ι] {U : ∀ i, Set (E i)} (hU : ∀ i, Balanced 𝕜 (U i)) (x : ∀ i, E i) :
     egauge 𝕜 (univ.pi U) x = ⨆ i, egauge 𝕜 (U i) (x i) :=
-.trans by simp egauge_pi' finite_univ (fun i _ => hU i) x (.inl rfl)
+  egauge_pi' finite_univ (fun i _ ↦ hU i) x (.inl rfl) |>.trans <| by simp
 
-/--
-theorem `egauge_pi` / 定理 `egauge_pi`
+/-- The extended gauge of a point `x` in an indexed product
+with respect to a product of finitely many balanced sets `U i`, `i ∈ I`,
+(and the whole spaces for the other indices)
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
 
-English:
-theorem egauge_pi
-  statement: [(𝓝[!=] (0 : 𝕜)).NeBot] {I : Set ι} {U : forall i, Set (E i)}
-  proof: egauge_pi' hI hU x .inr .inr inferInstance
-
-中文:
-定理 egauge_pi
-  结论: [(𝓝[!=] (0 : 𝕜)).NeBot] {I : 集合 ι} {U : 对任意 i, 集合 (E i)}
-  证明: egauge_pi' hI hU x .inr .inr inferInstance
-
-Depends on / 依赖: egauge_pi
+This version assumes that `𝕜` is a nontrivially normed division ring.
+See also `egauge_univ_pi` for when `s = univ`,
+and `egauge_pi'` for a version with more choices of the technical assumptions.
 -/
-theorem egauge_pi [(𝓝[!=] (0 : 𝕜)).NeBot] {I : Set ι} {U : forall i, Set (E i)}
-    (hI : I.Finite) (hU : forall i in I, Balanced 𝕜 (U i)) (x : forall i, E i) :
-    egauge 𝕜 (I.pi U) x = ⨆ i in I, egauge 𝕜 (U i) (x i) :=
-egauge_pi' hI hU x .inr .inr inferInstance
+/-
+**egauge_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：egauge_pi [(𝓝[!=] (0 : 𝕜)).NeBot] {I : Set ι} {U : forall i, Set (E i)} (h
+I : I.Finite) (hU : forall i in I, Balanced 𝕜 (U i)) (x : forall i, E i) : egaug
+e 𝕜 (I.pi U) x = ⨆ i in I, egauge 𝕜 (U i) (x i)
+参数：𝓝[!=] (0 : 𝕜)；E i；hI : I.Finite；hU : forall i in I, Balanced 𝕜 (U i)；x : fora
+ll i, E i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `egauge_pi'`：egauge_pi' {I : Set ι} (hI : I.Finite) {U : forall i, Set (E
+ i)} (hU : forall i in I, Balanced 𝕜 (U i)) (x : forall i, E i) (hI₀ : I = univ 
+…
+
+--- 原说明 ---
+The extended gauge of a point `x` in an indexed product
+with respect to a product of finitely many balanced sets `U i`, `i ∈ I`,
+(and the whole spaces for the other indices)
+is the supremum of the extended gauges of the components of `x`
+with respect to the corresponding balanced set.
+
+This version assumes that `𝕜` is a nontrivially normed division ring.
+See also `egauge_univ_pi` for when `s = univ`,
+and `egauge_pi'` for a version with more choices of the technical assumptions.
+-/
+theorem egauge_pi [(𝓝[≠] (0 : 𝕜)).NeBot] {I : Set ι} {U : ∀ i, Set (E i)}
+    (hI : I.Finite) (hU : ∀ i ∈ I, Balanced 𝕜 (U i)) (x : ∀ i, E i) :
+    egauge 𝕜 (I.pi U) x = ⨆ i ∈ I, egauge 𝕜 (U i) (x i) :=
+  egauge_pi' hI hU x <| .inr <| .inr inferInstance
 
 end Pi
 
@@ -964,164 +1075,157 @@ section SeminormedAddCommGroup
 
 variable (𝕜 : Type*) [NormedField 𝕜] {E : Type*} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
 
-/--
-lemma `div_le_egauge_closedBall` / 引理 `div_le_egauge_closedBall`
-
-English:
-lemma div_le_egauge_closedBall
-  given: (r : Real>=0) (x : E)
-  statement: ‖x‖ₑ / r <= egauge 𝕜 (closedBall 0 r) x
-  proof: by
+/-
+**div_le_egauge_closedBall** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：div_le_egauge_closedBall (r : Real>=0) (x : E) : ‖x‖ₑ / r <= egauge 𝕜 (clo
+sedBall 0 r) x
+参数：r : Real>=0；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_egauge_iff`：le_egauge_iff : r <= egauge 𝕜 s x ↔ forall c : 𝕜, x in c 
+• s -> r <= ‖c‖ₑ
+· 使用引理 `enorm_smul`：enorm_smul [ENorm α] [ENorm β] [SMul α β] [ENormSMulClass α 
+β] (r : α) (x : β) : ‖r • x‖ₑ = ‖r‖ₑ * ‖x‖ₑ
+· 使用定理 `instENormSMulClass`：∀ {α : Type u_1} {β : Type u_2} [inst : SeminormedRi
+ng α] [inst_1 : SeminormedAddGroup β] [inst_2 : SMul α β]   [NormSMulClass α β],
+ ENormSM…
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `ENNReal.div_le_of_le_mul`：div_le_of_le_mul (h : a <= b * c) : a / c <= b
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `ENNReal.instIsOrderedMonoid`：IsOrderedMonoid ENNReal
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `enorm_le_coe`：∀ {E : Type u_8} [inst : NNNorm E] {x : E} {r : NNReal}, ‖
+x‖ₑ ≤ ↑r ↔ ‖x‖₊ ≤ r
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `coe_nnnorm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ↑‖a‖
+₊ = ‖a‖
+· 使用定理 `mem_closedBall_zero_iff`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] 
+{a : E} {r : ℝ}, a ∈ Metric.closedBall 0 r ↔ ‖a‖ ≤ r
+-/
+lemma div_le_egauge_closedBall (r : ℝ≥0) (x : E) : ‖x‖ₑ / r ≤ egauge 𝕜 (closedBall 0 r) x := by
   rw [le_egauge_iff]
   rintro c ⟨y, hy, rfl⟩
-  rw [mem_closedBall_zero_iff]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe] at hy
+  rw [mem_closedBall_zero_iff, ← coe_nnnorm, NNReal.coe_le_coe] at hy
   rw [enorm_smul]
   apply ENNReal.div_le_of_le_mul
   gcongr
   rwa [enorm_le_coe]
-
-中文:
-引理 div_le_egauge_closedBall
-  条件: (r : 实数>=0) (x : E)
-  结论: ‖x‖ₑ / r <= egauge 𝕜 (closedBall 0 r) x
-  证明: by
-  rw [le_egauge_iff]
-  rintro c ⟨y, hy, rfl⟩
-  rw [mem_closedBall_zero_iff]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe] at hy
-  rw [enorm_smul]
-  apply ENNReal.div_le_of_le_mul
-  gcongr
-  rwa [enorm_le_coe]
-
-Depends on / 依赖: ENNReal, ENNReal.div_le_of_le_mul, NNReal, NNReal.coe_le_coe, coe_le_coe, coe_nnnorm, div_le_of_le_mul, enorm_le_coe, enorm_smul, le_egauge_iff, mem_closedBall_zero_iff
+/-
+**le_egauge_closedBall_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_closedBall_one (x : E) : ‖x‖ₑ <= egauge 𝕜 (closedBall 0 1) x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用引理 `div_le_egauge_closedBall`：div_le_egauge_closedBall (r : Real>=0) (x : E)
+ : ‖x‖ₑ / r <= egauge 𝕜 (closedBall 0 r) x
 -/
-lemma div_le_egauge_closedBall (r : Real>=0) (x : E) : ‖x‖ₑ / r <= egauge 𝕜 (closedBall 0 r) x := by
-  rw [le_egauge_iff]
-  rintro c ⟨y, hy, rfl⟩
-  rw [mem_closedBall_zero_iff]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe] at hy
-  rw [enorm_smul]
-  apply ENNReal.div_le_of_le_mul
-  gcongr
-  rwa [enorm_le_coe]
-
-/--
-lemma `le_egauge_closedBall_one` / 引理 `le_egauge_closedBall_one`
-
-English:
-lemma le_egauge_closedBall_one
-  given: (x : E)
-  statement: ‖x‖ₑ <= egauge 𝕜 (closedBall 0 1) x
-  proof: by
+lemma le_egauge_closedBall_one (x : E) : ‖x‖ₑ ≤ egauge 𝕜 (closedBall 0 1) x := by
   simpa using div_le_egauge_closedBall 𝕜 1 x
-
-中文:
-引理 le_egauge_closedBall_one
-  条件: (x : E)
-  结论: ‖x‖ₑ <= egauge 𝕜 (closedBall 0 1) x
-  证明: by
-  simpa using div_le_egauge_closedBall 𝕜 1 x
-
-Depends on / 依赖: div_le_egauge_closedBall
+/-
+**div_le_egauge_ball** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：div_le_egauge_ball (r : Real>=0) (x : E) : ‖x‖ₑ / r <= egauge 𝕜 (ball 0 r)
+ x
+参数：r : Real>=0；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `div_le_egauge_closedBall`：div_le_egauge_closedBall (r : Real>=0) (x : E)
+ : ‖x‖ₑ / r <= egauge 𝕜 (closedBall 0 r) x
+· 使用引理 `egauge_anti`：egauge_anti (h : s subseteq t) (x : E) : egauge 𝕜 t x <= eg
+auge 𝕜 s x
+· 使用定理 `Metric.ball_subset_closedBall`：ball_subset_closedBall : ball x ε subsete
+q closedBall x ε
 -/
-lemma le_egauge_closedBall_one (x : E) : ‖x‖ₑ <= egauge 𝕜 (closedBall 0 1) x := by
-  simpa using div_le_egauge_closedBall 𝕜 1 x
-
-/--
-lemma `div_le_egauge_ball` / 引理 `div_le_egauge_ball`
-
-English:
-lemma div_le_egauge_ball
-  given: (r : Real>=0) (x : E)
-  statement: ‖x‖ₑ / r <= egauge 𝕜 (ball 0 r) x
-  proof: (div_le_egauge_closedBall 𝕜 r x).trans egauge_anti _ ball_subset_closedBall _
-
-中文:
-引理 div_le_egauge_ball
-  条件: (r : 实数>=0) (x : E)
-  结论: ‖x‖ₑ / r <= egauge 𝕜 (ball 0 r) x
-  证明: (div_le_egauge_closedBall 𝕜 r x).trans egauge_anti _ ball_subset_closedBall _
-
-Depends on / 依赖: ball_subset_closedBall, div_le_egauge_closedBall, egauge_anti
+lemma div_le_egauge_ball (r : ℝ≥0) (x : E) : ‖x‖ₑ / r ≤ egauge 𝕜 (ball 0 r) x :=
+  (div_le_egauge_closedBall 𝕜 r x).trans <| egauge_anti _ ball_subset_closedBall _
+/-
+**le_egauge_ball_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_egauge_ball_one (x : E) : ‖x‖ₑ <= egauge 𝕜 (ball 0 1) x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用引理 `div_le_egauge_ball`：div_le_egauge_ball (r : Real>=0) (x : E) : ‖x‖ₑ / r 
+<= egauge 𝕜 (ball 0 r) x
 -/
-lemma div_le_egauge_ball (r : Real>=0) (x : E) : ‖x‖ₑ / r <= egauge 𝕜 (ball 0 r) x :=
-(div_le_egauge_closedBall 𝕜 r x).trans egauge_anti _ ball_subset_closedBall _
-
-/--
-lemma `le_egauge_ball_one` / 引理 `le_egauge_ball_one`
-
-English:
-lemma le_egauge_ball_one
-  given: (x : E)
-  statement: ‖x‖ₑ <= egauge 𝕜 (ball 0 1) x
-  proof: by
-  simpa using div_le_egauge_ball 𝕜 1 x
-
-中文:
-引理 le_egauge_ball_one
-  条件: (x : E)
-  结论: ‖x‖ₑ <= egauge 𝕜 (ball 0 1) x
-  证明: by
-  simpa using div_le_egauge_ball 𝕜 1 x
-
-Depends on / 依赖: div_le_egauge_ball
--/
-lemma le_egauge_ball_one (x : E) : ‖x‖ₑ <= egauge 𝕜 (ball 0 1) x := by
+lemma le_egauge_ball_one (x : E) : ‖x‖ₑ ≤ egauge 𝕜 (ball 0 1) x := by
   simpa using div_le_egauge_ball 𝕜 1 x
 
 variable {𝕜}
-variable {c : 𝕜} {x : E} {r : Real>=0}
-
-/--
-lemma `egauge_ball_le_of_one_lt_norm` / 引理 `egauge_ball_le_of_one_lt_norm`
-
-English:
-lemma egauge_ball_le_of_one_lt_norm
-  given: (hc : 1 < ‖c‖) (h₀ : r != 0 ∨ ‖x‖ != 0)
-  proof: by
-  let : NontriviallyNormedField 𝕜 := ⟨c, hc⟩
-  rcases eq_zero_or_pos r with rfl | hr
-  · rw [ENNReal.coe_zero, ENNReal.div_zero (mul_ne_zero _ _)]
-    · apply le_top
-    · simpa using one_pos.trans hc
-    · simpa [enorm, ← NNReal.coe_eq_zero] using h₀
-  · rcases eq_or_ne ‖x‖ 0 with hx | hx
-    · have hx' : ‖x‖ₑ = 0 := by simpa [enorm, ← coe_nnnorm, NNReal.coe_eq_zero] using hx
-      simp only [hx', mul_zero, ENNReal.zero_div, nonpos_iff_eq_zero, egauge_eq_zero_iff]
-      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[!=] (0 : 𝕜)))).mono fun c hc => ?_
-      simp [mem_smul_set_iff_inv_smul_mem₀ hc, norm_smul, hx, hr]
-    · rcases rescale_to_shell_semi_normed hc hr hx with ⟨a, ha₀, har, -, hainv⟩
-      calc
-        egauge 𝕜 (ball 0 r) x <= ↑(‖a‖₊⁻¹) :=
-          egauge_le_of_smul_mem_of_ne (mem_ball_zero_iff.2 har) ha₀
-        _ <= ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
-_ <= ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans by simp [ENNReal.coe_mul, enorm]
-
-中文:
-引理 egauge_ball_le_of_one_lt_norm
-  条件: (hc : 1 < ‖c‖) (h₀ : r != 0 ∨ ‖x‖ != 0)
-  证明: by
-  let : NontriviallyNormedField 𝕜 := ⟨c, hc⟩
-  rcases eq_zero_or_pos r with rfl | hr
-  · rw [ENNReal.coe_zero, ENNReal.div_zero (mul_ne_zero _ _)]
-    · apply le_top
-    · simpa using one_pos.trans hc
-    · simpa [enorm, ← NNReal.coe_eq_zero] using h₀
-  · rcases eq_or_ne ‖x‖ 0 with hx | hx
-    · have hx' : ‖x‖ₑ = 0 := by simpa [enorm, ← coe_nnnorm, NNReal.coe_eq_zero] using hx
-      simp only [hx', mul_zero, ENNReal.zero_div, nonpos_iff_eq_zero, egauge_eq_zero_iff]
-      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[!=] (0 : 𝕜)))).mono fun c hc => ?_
-      simp [mem_smul_set_iff_inv_smul_mem₀ hc, norm_smul, hx, hr]
-    · rcases rescale_to_shell_semi_normed hc hr hx with ⟨a, ha₀, har, -, hainv⟩
-      calc
-        egauge 𝕜 (ball 0 r) x <= ↑(‖a‖₊⁻¹) :=
-          egauge_le_of_smul_mem_of_ne (mem_ball_zero_iff.2 har) ha₀
-        _ <= ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
-_ <= ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans by simp [ENNReal.coe_mul, enorm]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_zero, ENNReal.div_zero, ENNReal.zero_div, NNReal, NNReal.coe_eq_zero, NontriviallyNormedField, coe_eq_zero, coe_nnnorm, coe_zero, div_zero, egauge_eq_zero_iff, eq_or_ne, eq_zero_or_pos, frequently_iff_neBot, le_top, mul_ne_zero, mul_zero, nonpos_iff_eq_zero, one_pos
+variable {c : 𝕜} {x : E} {r : ℝ≥0}
+/-
+**egauge_ball_le_of_one_lt_norm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_ball_le_of_one_lt_norm (hc : 1 < ‖c‖) (h₀ : r != 0 ∨ ‖x‖ != 0) : eg
+auge 𝕜 (ball 0 r) x <= ‖c‖ₑ * ‖x‖ₑ / r
+参数：hc : 1 < ‖c‖；h₀ : r != 0 ∨ ‖x‖ != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_zero`：↑0 = 0
+· 使用定理 `ENNReal.div_zero`：div_zero (h : a != 0) : a / 0 = ∞
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `ENNReal.instNoZeroDivisors`：NoZeroDivisors ENNReal
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `one_pos`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 : Par
+tialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.frequently_iff_neBot`：frequently_iff_neBot {l : Filter α} {p : α 
+-> Prop} : (existsᶠ x in l, p x) ↔ NeBot (l ⊓ 𝓟 {x | p x})
+· 使用定理 `NormedField.nhdsNE_neBot`：nhdsNE_neBot (x : α) : NeBot (𝓝[!=] x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `Set.mem_smul_set_iff_inv_smul_mem₀`：mem_smul_set_iff_inv_smul_mem₀ (ha :
+ a != 0) (A : Set β) (x : β) : x in a • A ↔ a⁻¹ • x in A
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+（共 42 条，此处仅展示前 30 条）
 -/
-lemma egauge_ball_le_of_one_lt_norm (hc : 1 < ‖c‖) (h₀ : r != 0 ∨ ‖x‖ != 0) :
-    egauge 𝕜 (ball 0 r) x <= ‖c‖ₑ * ‖x‖ₑ / r := by
+lemma egauge_ball_le_of_one_lt_norm (hc : 1 < ‖c‖) (h₀ : r ≠ 0 ∨ ‖x‖ ≠ 0) :
+    egauge 𝕜 (ball 0 r) x ≤ ‖c‖ₑ * ‖x‖ₑ / r := by
   let : NontriviallyNormedField 𝕜 := ⟨c, hc⟩
   rcases eq_zero_or_pos r with rfl | hr
   · rw [ENNReal.coe_zero, ENNReal.div_zero (mul_ne_zero _ _)]
@@ -1131,34 +1235,34 @@ lemma egauge_ball_le_of_one_lt_norm (hc : 1 < ‖c‖) (h₀ : r != 0 ∨ ‖x�
   · rcases eq_or_ne ‖x‖ 0 with hx | hx
     · have hx' : ‖x‖ₑ = 0 := by simpa [enorm, ← coe_nnnorm, NNReal.coe_eq_zero] using hx
       simp only [hx', mul_zero, ENNReal.zero_div, nonpos_iff_eq_zero, egauge_eq_zero_iff]
-      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[!=] (0 : 𝕜)))).mono fun c hc => ?_
+      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[≠] (0 : 𝕜)))).mono fun c hc ↦ ?_
       simp [mem_smul_set_iff_inv_smul_mem₀ hc, norm_smul, hx, hr]
     · rcases rescale_to_shell_semi_normed hc hr hx with ⟨a, ha₀, har, -, hainv⟩
       calc
-        egauge 𝕜 (ball 0 r) x <= ↑(‖a‖₊⁻¹) :=
+        egauge 𝕜 (ball 0 r) x ≤ ↑(‖a‖₊⁻¹) :=
           egauge_le_of_smul_mem_of_ne (mem_ball_zero_iff.2 har) ha₀
-        _ <= ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
-_ <= ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans by simp [ENNReal.coe_mul, enorm]
-
-/--
-lemma `egauge_ball_one_le_of_one_lt_norm` / 引理 `egauge_ball_one_le_of_one_lt_norm`
-
-English:
-lemma egauge_ball_one_le_of_one_lt_norm
-  given: (hc : 1 < ‖c‖) (x : E)
-  proof: by
-  simpa using egauge_ball_le_of_one_lt_norm hc (.inl one_ne_zero)
-
-中文:
-引理 egauge_ball_one_le_of_one_lt_norm
-  条件: (hc : 1 < ‖c‖) (x : E)
-  证明: by
-  simpa using egauge_ball_le_of_one_lt_norm hc (.inl one_ne_zero)
-
-Depends on / 依赖: egauge_ball_le_of_one_lt_norm, one_ne_zero
+        _ ≤ ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
+        _ ≤ ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans <| by simp [ENNReal.coe_mul, enorm]
+/-
+**egauge_ball_one_le_of_one_lt_norm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：egauge_ball_one_le_of_one_lt_norm (hc : 1 < ‖c‖) (x : E) : egauge 𝕜 (ball 
+0 1) x <= ‖c‖ₑ * ‖x‖ₑ
+参数：hc : 1 < ‖c‖；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用引理 `egauge_ball_le_of_one_lt_norm`：egauge_ball_le_of_one_lt_norm (hc : 1 < ‖
+c‖) (h₀ : r != 0 ∨ ‖x‖ != 0) : egauge 𝕜 (ball 0 r) x <= ‖c‖ₑ * ‖x‖ₑ / r
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
 lemma egauge_ball_one_le_of_one_lt_norm (hc : 1 < ‖c‖) (x : E) :
-    egauge 𝕜 (ball 0 1) x <= ‖c‖ₑ * ‖x‖ₑ := by
+    egauge 𝕜 (ball 0 1) x ≤ ‖c‖ₑ * ‖x‖ₑ := by
   simpa using egauge_ball_le_of_one_lt_norm hc (.inl one_ne_zero)
 
 end SeminormedAddCommGroup
+

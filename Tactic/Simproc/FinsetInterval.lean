@@ -22,344 +22,151 @@ open Qq Lean Finset
 
 namespace Mathlib.Tactic.Simp
 namespace Nat
-variable {m n : Nat} {s : Finset Nat}
+variable {m n : ℕ} {s : Finset ℕ}
 
-/--
-lemma `Icc_eq_empty_of_lt` / 引理 `Icc_eq_empty_of_lt`
-
-English:
-lemma Icc_eq_empty_of_lt
-  given: (hnm : n.blt m)
-  statement: Icc m n = ∅
-  proof: by simpa using hnm
-
-中文:
-引理 Icc_eq_empty_of_lt
-  条件: (hnm : n.blt m)
-  结论: 闭区间 m n = ∅
-  证明: by simpa using hnm
+/-
+**Mathlib.Tactic.Simp.Nat.Icc_eq_empty_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Icc_eq_empty_of_lt (hnm : n.blt m) : Icc m n = ∅ := by simpa using hnm
-
-/--
-lemma `Icc_eq_insert_of_Icc_succ_eq` / 引理 `Icc_eq_insert_of_Icc_succ_eq`
-
-English:
-lemma Icc_eq_insert_of_Icc_succ_eq
-  given: (hmn : m.ble n) (hs : Icc (m + 1) n = s)
-  proof: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
-
-中文:
-引理 Icc_eq_insert_of_Icc_succ_eq
-  条件: (hmn : m.ble n) (hs : 闭区间 (m + 1) n = s)
-  证明: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
+/-
+**Mathlib.Tactic.Simp.Nat.Icc_eq_insert_of_Icc_succ_eq** 是 Mathlib 中的一个引理，位于命名空间
+ `Mathlib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Icc_eq_insert_of_Icc_succ_eq (hmn : m.ble n) (hs : Icc (m + 1) n = s) :
     Icc m n = insert m s := by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
-
-/--
-lemma `Ico_succ_eq_of_Icc_eq` / 引理 `Ico_succ_eq_of_Icc_eq`
-
-English:
-lemma Ico_succ_eq_of_Icc_eq
-  given: (hs : Icc m n = s)
-  statement: Ico m (n + 1) = s
-  proof: by
-  rw [← hs]; rw [Ico_add_one_right_eq_Icc]
-
-中文:
-引理 Ico_succ_eq_of_Icc_eq
-  条件: (hs : 闭区间 m n = s)
-  结论: 左闭右开区间 m (n + 1) = s
-  证明: by
-  rw [← hs]; rw [Ico_add_one_right_eq_Icc]
+/-
+**Mathlib.Tactic.Simp.Nat.Ico_succ_eq_of_Icc_eq** 是 Mathlib 中的一个引理，位于命名空间 `Mathl
+ib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ico_succ_eq_of_Icc_eq (hs : Icc m n = s) : Ico m (n + 1) = s := by
-  rw [← hs]; rw [Ico_add_one_right_eq_Icc]
-
-/--
-lemma `Ico_zero` / 引理 `Ico_zero`
-
-English:
-lemma Ico_zero
-  given: (m : Nat)
-  statement: Ico m 0 = ∅
-  proof: by simp
-
-中文:
-引理 Ico_zero
-  条件: (m : 自然数)
-  结论: 左闭右开区间 m 0 = ∅
-  证明: by simp
+  rw [← hs, Ico_add_one_right_eq_Icc]
+/-
+**Mathlib.Tactic.Simp.Nat.Ico_zero** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tactic.Sim
+p.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma Ico_zero (m : Nat) : Ico m 0 = ∅ := by simp
-
-/--
-lemma `Ioc_eq_of_Icc_succ_eq` / 引理 `Ioc_eq_of_Icc_succ_eq`
-
-English:
-lemma Ioc_eq_of_Icc_succ_eq
-  given: (hs : Icc (m + 1) n = s)
-  statement: Ioc m n = s
-  proof: by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
-
-中文:
-引理 Ioc_eq_of_Icc_succ_eq
-  条件: (hs : 闭区间 (m + 1) n = s)
-  结论: 左开右闭区间 m n = s
-  证明: by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
+private lemma Ico_zero (m : ℕ) : Ico m 0 = ∅ := by simp
+/-
+**Mathlib.Tactic.Simp.Nat.Ioc_eq_of_Icc_succ_eq** 是 Mathlib 中的一个引理，位于命名空间 `Mathl
+ib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ioc_eq_of_Icc_succ_eq (hs : Icc (m + 1) n = s) : Ioc m n = s := by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
-
-/--
-lemma `Ioo_eq_of_Icc_succ_pred_eq` / 引理 `Ioo_eq_of_Icc_succ_pred_eq`
-
-English:
-lemma Ioo_eq_of_Icc_succ_pred_eq
-  given: (hs : Icc (m + 1) (n - 1) = s)
-  statement: Ioo m n = s
-  proof: by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
-
-中文:
-引理 Ioo_eq_of_Icc_succ_pred_eq
-  条件: (hs : 闭区间 (m + 1) (n - 1) = s)
-  结论: 开区间 m n = s
-  证明: by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
+  rw [← hs, Icc_add_one_left_eq_Ioc]
+/-
+**Mathlib.Tactic.Simp.Nat.Ioo_eq_of_Icc_succ_pred_eq** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ioo_eq_of_Icc_succ_pred_eq (hs : Icc (m + 1) (n - 1) = s) : Ioo m n = s := by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
-
-/--
-lemma `Iic_eq_of_Icc_zero_eq` / 引理 `Iic_eq_of_Icc_zero_eq`
-
-English:
-lemma Iic_eq_of_Icc_zero_eq
-  given: (hs : Icc 0 n = s)
-  statement: Iic n = s
-  proof: hs
-
-中文:
-引理 Iic_eq_of_Icc_zero_eq
-  条件: (hs : 闭区间 0 n = s)
-  结论: 左无界右闭区间 n = s
-  证明: hs
+  rw [← hs, ← Icc_add_one_sub_one_eq_Ioo]
+/-
+**Mathlib.Tactic.Simp.Nat.Iic_eq_of_Icc_zero_eq** 是 Mathlib 中的一个引理，位于命名空间 `Mathl
+ib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Iic_eq_of_Icc_zero_eq (hs : Icc 0 n = s) : Iic n = s := hs
-
-/--
-lemma `Iio_succ_eq_of_Icc_zero_eq` / 引理 `Iio_succ_eq_of_Icc_zero_eq`
-
-English:
-lemma Iio_succ_eq_of_Icc_zero_eq
-  given: (hs : Icc 0 n = s)
-  statement: Iio (n + 1) = s
-  proof: by
-  rw [Iio_eq_Ico]; rw [Ico_add_one_right_eq_Icc]; rw [bot_eq_zero]; rw [hs]
-
-中文:
-引理 Iio_succ_eq_of_Icc_zero_eq
-  条件: (hs : 闭区间 0 n = s)
-  结论: 左无界右开区间 (n + 1) = s
-  证明: by
-  rw [Iio_eq_Ico]; rw [Ico_add_one_right_eq_Icc]; rw [bot_eq_zero]; rw [hs]
+/-
+**Mathlib.Tactic.Simp.Nat.Iio_succ_eq_of_Icc_zero_eq** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Simp.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Iio_succ_eq_of_Icc_zero_eq (hs : Icc 0 n = s) : Iio (n + 1) = s := by
-  rw [Iio_eq_Ico]; rw [Ico_add_one_right_eq_Icc]; rw [bot_eq_zero]; rw [hs]
-
-/--
-lemma `Iio_zero` / 引理 `Iio_zero`
-
-English:
-lemma Iio_zero
-  statement: Iio 0 = ∅
-  proof: by simp
-
-中文:
-引理 Iio_zero
-  结论: 左无界右开区间 0 = ∅
-  证明: by simp
+  rw [Iio_eq_Ico, Ico_add_one_right_eq_Icc, bot_eq_zero, hs]
+/-
+**Mathlib.Tactic.Simp.Nat.Iio_zero** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tactic.Sim
+p.Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Iio_zero : Iio 0 = ∅ := by simp
 
 end Nat
 
 namespace Int
-variable {m n : Int} {s : Finset Int}
+variable {m n : ℤ} {s : Finset ℤ}
 
-/--
-lemma `Icc_eq_empty_of_lt` / 引理 `Icc_eq_empty_of_lt`
-
-English:
-lemma Icc_eq_empty_of_lt
-  given: (hnm : n < m)
-  statement: Icc m n = ∅
-  proof: by simpa using hnm
-
-中文:
-引理 Icc_eq_empty_of_lt
-  条件: (hnm : n < m)
-  结论: 闭区间 m n = ∅
-  证明: by simpa using hnm
-
-Depends on / 依赖: F.germ, F.obj, ToType, g.base, g.germ, generateFrom
+/-
+**Mathlib.Tactic.Simp.Int.Icc_eq_empty_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Tactic.Simp.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Icc_eq_empty_of_lt (hnm : n < m) : Icc m n = ∅ := by simpa using hnm
-
-/--
-lemma `Icc_eq_insert_of_Icc_succ_eq` / 引理 `Icc_eq_insert_of_Icc_succ_eq`
-
-English:
-lemma Icc_eq_insert_of_Icc_succ_eq
-  given: (hmn : m <= n) (hs : Icc (m + 1) n = s)
-  proof: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
-
-中文:
-引理 Icc_eq_insert_of_Icc_succ_eq
-  条件: (hmn : m <= n) (hs : 闭区间 (m + 1) n = s)
-  证明: by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
+/-
+**Mathlib.Tactic.Simp.Int.Icc_eq_insert_of_Icc_succ_eq** 是 Mathlib 中的一个引理，位于命名空间
+ `Mathlib.Tactic.Simp.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma Icc_eq_insert_of_Icc_succ_eq (hmn : m <= n) (hs : Icc (m + 1) n = s) :
+private lemma Icc_eq_insert_of_Icc_succ_eq (hmn : m ≤ n) (hs : Icc (m + 1) n = s) :
     Icc m n = insert m s := by rw [← hs, insert_Icc_add_one_left_eq_Icc (by simpa using hmn)]
-
-/--
-lemma `Ico_eq_of_Icc_pred_eq` / 引理 `Ico_eq_of_Icc_pred_eq`
-
-English:
-lemma Ico_eq_of_Icc_pred_eq
-  given: (hs : Icc m (n - 1) = s)
-  statement: Ico m n = s
-  proof: by
-  rw [← hs]; rw [Icc_sub_one_right_eq_Ico]
-
-中文:
-引理 Ico_eq_of_Icc_pred_eq
-  条件: (hs : 闭区间 m (n - 1) = s)
-  结论: 左闭右开区间 m n = s
-  证明: by
-  rw [← hs]; rw [Icc_sub_one_right_eq_Ico]
+/-
+**Mathlib.Tactic.Simp.Int.Ico_eq_of_Icc_pred_eq** 是 Mathlib 中的一个引理，位于命名空间 `Mathl
+ib.Tactic.Simp.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ico_eq_of_Icc_pred_eq (hs : Icc m (n - 1) = s) : Ico m n = s := by
-  rw [← hs]; rw [Icc_sub_one_right_eq_Ico]
-
-/--
-lemma `Ioc_eq_of_Icc_succ_eq` / 引理 `Ioc_eq_of_Icc_succ_eq`
-
-English:
-lemma Ioc_eq_of_Icc_succ_eq
-  given: (hs : Icc (m + 1) n = s)
-  statement: Ioc m n = s
-  proof: by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
-
-中文:
-引理 Ioc_eq_of_Icc_succ_eq
-  条件: (hs : 闭区间 (m + 1) n = s)
-  结论: 左开右闭区间 m n = s
-  证明: by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
+  rw [← hs, Icc_sub_one_right_eq_Ico]
+/-
+**Mathlib.Tactic.Simp.Int.Ioc_eq_of_Icc_succ_eq** 是 Mathlib 中的一个引理，位于命名空间 `Mathl
+ib.Tactic.Simp.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ioc_eq_of_Icc_succ_eq (hs : Icc (m + 1) n = s) : Ioc m n = s := by
-  rw [← hs]; rw [Icc_add_one_left_eq_Ioc]
-
-/--
-lemma `Ioo_eq_of_Icc_succ_pred_eq` / 引理 `Ioo_eq_of_Icc_succ_pred_eq`
-
-English:
-lemma Ioo_eq_of_Icc_succ_pred_eq
-  given: (hs : Icc (m + 1) (n - 1) = s)
-  statement: Ioo m n = s
-  proof: by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
-
-中文:
-引理 Ioo_eq_of_Icc_succ_pred_eq
-  条件: (hs : 闭区间 (m + 1) (n - 1) = s)
-  结论: 开区间 m n = s
-  证明: by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
+  rw [← hs, Icc_add_one_left_eq_Ioc]
+/-
+**Mathlib.Tactic.Simp.Int.Ioo_eq_of_Icc_succ_pred_eq** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Simp.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Ioo_eq_of_Icc_succ_pred_eq (hs : Icc (m + 1) (n - 1) = s) : Ioo m n = s := by
-  rw [← hs]; rw [← Icc_add_one_sub_one_eq_Ioo]
-
-/--
-lemma `Iio_zero` / 引理 `Iio_zero`
-
-English:
-lemma Iio_zero
-  statement: Iio 0 = ∅
-  proof: by simp
-
-中文:
-引理 Iio_zero
-  结论: 左无界右开区间 0 = ∅
-  证明: by simp
+  rw [← hs, ← Icc_add_one_sub_one_eq_Ioo]
+/-
+**Mathlib.Tactic.Simp.Int.Iio_zero** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tactic.Sim
+p.Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Iio_zero : Iio 0 = ∅ := by simp
 
 end Int
 
-/--
-Definition of `evalFinsetIccNat` / `evalFinsetIccNat` 的定义
+/-- Given natural numbers `m` and `n` and corresponding natural literals `em` and `en`,
+returns `(s, ⊢ Finset.Icc m n = s)`.
 
-English:
-definition evalFinsetIccNat
-  signature: (m n : Nat) (em en : Q(Nat))
-  body: do
-  -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
-  -- not syntactically `{m}`.
-  if m = n then
-have : em =Q en := ⟨⟩
-    return ⟨q({$em}), q(Icc_self _)⟩
-  -- If `m < n`, then `Icc m n = insert m (Icc (m + 1) n)`.
-  else if m < n then
-    let hmn : Q(Nat.ble $em $en = true) := (q(Eq.refl true) :)
-    have em' : Q(Nat) := mkNatLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
-    let ⟨s, hs⟩ ← evalFinsetIccNat (m + 1) n em' en
-    return ⟨q(insert $em $s), q(Nat.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
-  -- Else `n < m` and `Icc m n = ∅`.
-  else
-    let hnm : Q(Nat.blt $en $em = true) := (q(Eq.refl true) :)
-    return ⟨q(∅), q(Nat.Icc_eq_empty_of_lt $hnm)⟩
+This cannot be easily merged with `evalFinsetIccInt` since they require different
+handling of numerals for `ℕ` and `ℤ`. -/
+/-
+**Mathlib.Tactic.Simp.evalFinsetIccNat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Simp`。
+形式化陈述：evalFinsetIccNat (m n : Nat) (em en : Q(Nat)) : MetaM ((s : Q(Finset Nat))
+ × Q(.Icc $em $en = $s))
+参数：m n : Nat；em en : Q(Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 evalFinsetIcc自然数
-  签名: (m n : 自然数) (em en : Q(自然数))
-  定义体: do
-  -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
-  -- not syntactically `{m}`.
-  if m = n then
-have : em =Q en := ⟨⟩
-    return ⟨q({$em}), q(Icc_self _)⟩
-  -- If `m < n`, then `Icc m n = insert m (Icc (m + 1) n)`.
-  else if m < n then
-    let hmn : Q(Nat.ble $em $en = true) := (q(Eq.refl true) :)
-    have em' : Q(Nat) := mkNatLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
-    let ⟨s, hs⟩ ← evalFinsetIccNat (m + 1) n em' en
-    return ⟨q(insert $em $s), q(Nat.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
-  -- Else `n < m` and `Icc m n = ∅`.
-  else
-    let hnm : Q(Nat.blt $en $em = true) := (q(Eq.refl true) :)
-    return ⟨q(∅), q(Nat.Icc_eq_empty_of_lt $hnm)⟩
+--- 原说明 ---
+Given natural numbers `m` and `n` and corresponding natural literals `em` and `e
+n`,
+returns `(s, ⊢ Finset.Icc m n = s)`.
+
+This cannot be easily merged with `evalFinsetIccInt` since they require differen
+t
+handling of numerals for `ℕ` and `ℤ`.
 -/
-def evalFinsetIccNat (m n : Nat) (em en : Q(Nat)) :
-    MetaM ((s : Q(Finset Nat)) × Q(.Icc $em $en = $s)) := do
+def evalFinsetIccNat (m n : ℕ) (em en : Q(ℕ)) :
+    MetaM ((s : Q(Finset ℕ)) × Q(.Icc $em $en = $s)) := do
   -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
   -- not syntactically `{m}`.
   if m = n then
-have : em =Q en := ⟨⟩
+    have : $em =Q $en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc (m + 1) n)`.
   else if m < n then
     let hmn : Q(Nat.ble $em $en = true) := (q(Eq.refl true) :)
-    have em' : Q(Nat) := mkNatLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
+    have em' : Q(ℕ) := mkNatLitQ (m + 1)
+    have : $em' =Q $em + 1 := ⟨⟩
     let ⟨s, hs⟩ ← evalFinsetIccNat (m + 1) n em' en
     return ⟨q(insert $em $s), q(Nat.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
   -- Else `n < m` and `Icc m n = ∅`.
@@ -367,63 +174,39 @@ have : em' =Q em + 1 := ⟨⟩
     let hnm : Q(Nat.blt $en $em = true) := (q(Eq.refl true) :)
     return ⟨q(∅), q(Nat.Icc_eq_empty_of_lt $hnm)⟩
 
-/--
-Definition of `evalFinsetIccInt` / `evalFinsetIccInt` 的定义
+/-- Given integers `m` and `n` and corresponding integer literals `em` and `en`,
+returns `(s, ⊢ Finset.Icc m n = s)`.
 
-English:
-definition evalFinsetIccInt
-  signature: (m n : Int) (em en : Q(Int))
-  body: do
-  -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
-  -- not syntactically `{m}`.
-  if m = n then
-have : em =Q en := ⟨⟩
-    return ⟨q({$em}), q(Icc_self _)⟩
-  -- If `m < n`, then `Icc m n = insert m (Icc m n)`.
-  else if m < n then
-    let hmn ← mkDecideProofQ q($em <= $en)
-    have em' : Q(Int) := mkIntLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
-    let ⟨s, hs⟩ ← evalFinsetIccInt (m + 1) n em' en
-    return ⟨q(insert $em $s), q(Int.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
-  -- Else `n < m` and `Icc m n = ∅`.
-  else
-    let hnm ← mkDecideProofQ q($en < $em)
-    return ⟨q(∅), q(Icc_eq_empty_of_lt $hnm)⟩
+This cannot be easily merged with `evalFinsetIccNat` since they require different
+handling of numerals for `ℕ` and `ℤ`. -/
+/-
+**Mathlib.Tactic.Simp.evalFinsetIccInt** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tac
+tic.Simp`。
+形式化陈述：ℤ → ℤ → (em en : Q(ℤ)) → MetaM ((s : Q(Finset ℤ)) × Q(Finset.Icc «$em» «$e
+n» = «$s»))
+参数：em en : Q(ℤ)；(s : Q(Finset ℤ)) × Q(Finset.Icc «$em» «$en» = «$s»)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 evalFinsetIcc整数
-  签名: (m n : 整数) (em en : Q(整数))
-  定义体: do
-  -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
-  -- not syntactically `{m}`.
-  if m = n then
-have : em =Q en := ⟨⟩
-    return ⟨q({$em}), q(Icc_self _)⟩
-  -- If `m < n`, then `Icc m n = insert m (Icc m n)`.
-  else if m < n then
-    let hmn ← mkDecideProofQ q($em <= $en)
-    have em' : Q(Int) := mkIntLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
-    let ⟨s, hs⟩ ← evalFinsetIccInt (m + 1) n em' en
-    return ⟨q(insert $em $s), q(Int.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
-  -- Else `n < m` and `Icc m n = ∅`.
-  else
-    let hnm ← mkDecideProofQ q($en < $em)
-    return ⟨q(∅), q(Icc_eq_empty_of_lt $hnm)⟩
+--- 原说明 ---
+Given integers `m` and `n` and corresponding integer literals `em` and `en`,
+returns `(s, ⊢ Finset.Icc m n = s)`.
+
+This cannot be easily merged with `evalFinsetIccNat` since they require differen
+t
+handling of numerals for `ℕ` and `ℤ`.
 -/
-partial def evalFinsetIccInt (m n : Int) (em en : Q(Int)) :
-    MetaM ((s : Q(Finset Int)) × Q(.Icc $em $en = $s)) := do
+partial def evalFinsetIccInt (m n : ℤ) (em en : Q(ℤ)) :
+    MetaM ((s : Q(Finset ℤ)) × Q(.Icc $em $en = $s)) := do
   -- If `m = n`, then `Icc m n = {m}`. We handle this case separately because `insert m ∅` is
   -- not syntactically `{m}`.
   if m = n then
-have : em =Q en := ⟨⟩
+    have : $em =Q $en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc m n)`.
   else if m < n then
-    let hmn ← mkDecideProofQ q($em <= $en)
-    have em' : Q(Int) := mkIntLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
+    let hmn ← mkDecideProofQ q($em ≤ $en)
+    have em' : Q(ℤ) := mkIntLitQ (m + 1)
+    have : $em' =Q $em + 1 := ⟨⟩
     let ⟨s, hs⟩ ← evalFinsetIccInt (m + 1) n em' en
     return ⟨q(insert $em $s), q(Int.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
   -- Else `n < m` and `Icc m n = ∅`.
@@ -447,18 +230,18 @@ namespace Finset
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Icc_ofNat_ofNat (Icc _ _) := .ofQ fun u α e => do
+simproc_decl Icc_ofNat_ofNat (Icc _ _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Icc $em $en) =>
+  | 1, ~q(Finset ℕ), ~q(Icc $em $en) =>
     let some m := em.nat? | return .continue
     let some n := en.nat? | return .continue
     let ⟨es, p⟩ ← evalFinsetIccNat m n em en
-return .done .mk es .some p
-  | 1, ~q(Finset Int), ~q(Icc $em $en) =>
+    return .done <| .mk es <| .some p
+  | 1, ~q(Finset ℤ), ~q(Icc $em $en) =>
     let some m := em.int? | return .continue
     let some n := en.int? | return .continue
     let ⟨es, p⟩ ← evalFinsetIccInt m n em en
-return .done .mk es .some p
+    return .done <| .mk es <| .some p
   | _, _, _ => return .continue
 
 /-- Simproc to compute `Finset.Ico a b` where `a` and `b` are numerals.
@@ -467,25 +250,25 @@ return .done .mk es .some p
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Ico_ofNat_ofNat (Ico _ _) := .ofQ fun u α e => do
+simproc_decl Ico_ofNat_ofNat (Ico _ _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Ico $em $en) =>
+  | 1, ~q(Finset ℕ), ~q(Ico $em $en) =>
     let some m := em.nat? | return .continue
     let some n := en.nat? | return .continue
     match n with
     | 0 =>
-have : en =Q 0 := ⟨⟩
-return .done .mk q(∅) .some q(Nat.Ico_zero $em)
+      have : $en =Q 0 := ⟨⟩
+      return .done <| .mk q(∅) <| .some q(Nat.Ico_zero $em)
     | n + 1 =>
       have en' := mkNatLitQ n
-have : en =Q en' + 1 := ⟨⟩
+      have : $en =Q $en' + 1 := ⟨⟩
       let ⟨es, p⟩ ← evalFinsetIccNat m n em en'
       return .done { expr := es, proof? := q(Nat.Ico_succ_eq_of_Icc_eq $p) }
-  | 1, ~q(Finset Int), ~q(Ico $em $en) =>
+  | 1, ~q(Finset ℤ), ~q(Ico $em $en) =>
     let some m := em.int? | return .continue
     let some n := en.int? | return .continue
     have en' := mkIntLitQ (n - 1)
-have : en' =Q en - 1 := ⟨⟩
+    have : $en' =Q $en - 1 := ⟨⟩
     let ⟨es, p⟩ ← evalFinsetIccInt m (n - 1) em en'
     return .done { expr := es, proof? := q(Int.Ico_eq_of_Icc_pred_eq $p) }
   | _, _, _ => return .continue
@@ -496,20 +279,20 @@ have : en' =Q en - 1 := ⟨⟩
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Ioc_ofNat_ofNat (Ioc _ _) := .ofQ fun u α e => do
+simproc_decl Ioc_ofNat_ofNat (Ioc _ _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Ioc $em $en) =>
+  | 1, ~q(Finset ℕ), ~q(Ioc $em $en) =>
     let some m := em.nat? | return .continue
     let some n := en.nat? | return .continue
     have em' := mkNatLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
+    have : $em' =Q $em + 1 := ⟨⟩
     let ⟨es, p⟩ ← evalFinsetIccNat (m + 1) n em' en
-return .done .mk es .some q(Nat.Ioc_eq_of_Icc_succ_eq $p)
-  | 1, ~q(Finset Int), ~q(Ioc $em $en) =>
+    return .done <| .mk es <| .some q(Nat.Ioc_eq_of_Icc_succ_eq $p)
+  | 1, ~q(Finset ℤ), ~q(Ioc $em $en) =>
     let some m := em.int? | return .continue
     let some n := en.int? | return .continue
     have em' := mkIntLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
+    have : $em' =Q $em + 1 := ⟨⟩
     let ⟨es, p⟩ ← evalFinsetIccInt (m + 1) n em' en
     return .done { expr := es, proof? := q(Int.Ioc_eq_of_Icc_succ_eq $p) }
   | _, _, _ => return .continue
@@ -520,20 +303,20 @@ have : em' =Q em + 1 := ⟨⟩
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Ioo_ofNat_ofNat (Ioo _ _) := .ofQ fun u α e => do
+simproc_decl Ioo_ofNat_ofNat (Ioo _ _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Ioo $em $en) =>
+  | 1, ~q(Finset ℕ), ~q(Ioo $em $en) =>
     let some m := em.nat? | return .continue
     let some n := en.nat? | return .continue
     let ⟨es, p⟩ ← evalFinsetIccNat (m + 1) (n - 1) q($em + 1) q($en - 1)
-return .done .mk es .some q(Nat.Ioo_eq_of_Icc_succ_pred_eq $p)
-  | 1, ~q(Finset Int), ~q(Ioo $em $en) =>
+    return .done <| .mk es <| .some q(Nat.Ioo_eq_of_Icc_succ_pred_eq $p)
+  | 1, ~q(Finset ℤ), ~q(Ioo $em $en) =>
     let some m := em.int? | return .continue
     let some n := en.int? | return .continue
     have em' := mkIntLitQ (m + 1)
-have : em' =Q em + 1 := ⟨⟩
+    have : $em' =Q $em + 1 := ⟨⟩
     have en' := mkIntLitQ (n - 1)
-have : en' =Q en - 1 := ⟨⟩
+    have : $en' =Q $en - 1 := ⟨⟩
     let ⟨es, p⟩ ← evalFinsetIccInt (m + 1) (n - 1) em' en'
     return .done { expr := es, proof? := q(Int.Ioo_eq_of_Icc_succ_pred_eq $p) }
   | _, _, _ => return .continue
@@ -544,12 +327,12 @@ have : en' =Q en - 1 := ⟨⟩
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Iic_ofNat (Iic _) := .ofQ fun u α e => do
+simproc_decl Iic_ofNat (Iic _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Iic $en) =>
+  | 1, ~q(Finset ℕ), ~q(Iic $en) =>
     let some n := en.nat? | return .continue
     let ⟨es, p⟩ ← evalFinsetIccNat 0 n q(0) en
-return .done .mk es .some q(Nat.Iic_eq_of_Icc_zero_eq $p)
+    return .done <| .mk es <| .some q(Nat.Iic_eq_of_Icc_zero_eq $p)
   | _, _, _ => return .continue
 
 /-- Simproc to compute `Finset.Iio b` where `b` is a numeral.
@@ -558,19 +341,19 @@ return .done .mk es .some q(Nat.Iic_eq_of_Icc_zero_eq $p)
 * With the standard depth recursion limit, this simproc can compute intervals of size 250 at most.
 * Make sure to exclude `Finset.insert_eq_of_mem` from your simp call when using this simproc. This
   avoids a quadratic time performance hit. -/
-simproc_decl Iio_ofNat (Iio _) := .ofQ fun u α e => do
+simproc_decl Iio_ofNat (Iio _) := .ofQ fun u α e ↦ do
   match u, α, e with
-  | 1, ~q(Finset Nat), ~q(Iio $en) =>
+  | 1, ~q(Finset ℕ), ~q(Iio $en) =>
     let some n := en.nat? | return .continue
     match n with
     | 0 =>
-have : en =Q 0 := ⟨⟩
-return .done .mk q(∅) .some q(Nat.Iio_zero)
+      have : $en =Q 0 := ⟨⟩
+      return .done <| .mk q(∅) <| .some q(Nat.Iio_zero)
     | n + 1 =>
       have en' := mkNatLitQ n
-have : en =Q en' + 1 := ⟨⟩
+      have : $en =Q $en' + 1 := ⟨⟩
       let ⟨es, p⟩ ← evalFinsetIccNat 0 n q(0) q($en')
-return .done .mk es some q(Nat.Iio_succ_eq_of_Icc_zero_eq $p)
+      return .done  <| .mk es <| some q(Nat.Iio_succ_eq_of_Icc_zero_eq $p)
   | _, _, _ => return .continue
 
 attribute [nolint unusedHavesSuffices]
@@ -578,46 +361,165 @@ attribute [nolint unusedHavesSuffices]
 
 /-! ### `ℕ` -/
 
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+### `ℕ`
+-/
 example : Icc 1 0 = ∅ := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Icc 1 1 = {1} := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Icc 1 2 = {1, 2} := by simp only [Icc_ofNat_ofNat]
-
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ico 1 1 = ∅ := by simp only [Ico_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ico 1 2 = {1} := by simp only [Ico_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ico 1 3 = {1, 2} := by simp only [Ico_ofNat_ofNat]
-
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioc 1 1 = ∅ := by simp only [Ioc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioc 1 2 = {2} := by simp only [Ioc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioc 1 3 = {2, 3} := by simp only [Ioc_ofNat_ofNat]
-
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioo 1 2 = ∅ := by simp only [Ioo_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioo 1 3 = {2} := by simp only [Ioo_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Ioo 1 4 = {2, 3} := by simp only [Ioo_ofNat_ofNat]
-
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iic 0 = {0} := by simp only [Iic_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iic 1 = {0, 1} := by simp only [Iic_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iic 2 = {0, 1, 2} := by simp only [Iic_ofNat]
-
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iio 0 = ∅ := by simp only [Iio_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iio 1 = {0} := by simp only [Iio_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Iio 2 = {0, 1} := by simp only [Iio_ofNat]
 
 /-! ### `ℤ` -/
 
-example : Icc (1 : Int) 0 = ∅ := by simp only [Icc_ofNat_ofNat]
-example : Icc (1 : Int) 1 = {1} := by simp only [Icc_ofNat_ofNat]
-example : Icc (1 : Int) 2 = {1, 2} := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-example : Ico (1 : Int) 1 = ∅ := by simp only [Ico_ofNat_ofNat]
-example : Ico (1 : Int) 2 = {1} := by simp only [Ico_ofNat_ofNat]
-example : Ico (1 : Int) 3 = {1, 2} := by simp only [Ico_ofNat_ofNat]
-
-example : Ioc (1 : Int) 1 = ∅ := by simp only [Ioc_ofNat_ofNat]
-example : Ioc (1 : Int) 2 = {2} := by simp only [Ioc_ofNat_ofNat]
-example : Ioc (1 : Int) 3 = {2, 3} := by simp only [Ioc_ofNat_ofNat]
-
-example : Ioo (1 : Int) 2 = ∅ := by simp only [Ioo_ofNat_ofNat]
-example : Ioo (1 : Int) 3 = {2} := by simp only [Ioo_ofNat_ofNat]
-example : Ioo (1 : Int) 4 = {2, 3} := by simp only [Ioo_ofNat_ofNat]
+--- 原说明 ---
+### `ℤ`
+-/
+example : Icc (1 : ℤ) 0 = ∅ := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Icc (1 : ℤ) 1 = {1} := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Icc (1 : ℤ) 2 = {1, 2} := by simp only [Icc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ico (1 : ℤ) 1 = ∅ := by simp only [Ico_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ico (1 : ℤ) 2 = {1} := by simp only [Ico_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ico (1 : ℤ) 3 = {1, 2} := by simp only [Ico_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioc (1 : ℤ) 1 = ∅ := by simp only [Ioc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioc (1 : ℤ) 2 = {2} := by simp only [Ioc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioc (1 : ℤ) 3 = {2, 3} := by simp only [Ioc_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioo (1 : ℤ) 2 = ∅ := by simp only [Ioo_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioo (1 : ℤ) 3 = {2} := by simp only [Ioo_ofNat_ofNat]
+/-
+**Finset.** 是 Mathlib 中的一个示例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Ioo (1 : ℤ) 4 = {2, 3} := by simp only [Ioo_ofNat_ofNat]
 
 end Finset
+

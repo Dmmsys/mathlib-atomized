@@ -29,56 +29,30 @@ to the equivalence class of `(x, 1)` in the localization of `R` at an `M`.
 
 variable {R : Type*} [CommRing R] [TopologicalSpace R] {M : Submonoid R}
 
-/--
-Definition of `Localization.ringTopology` / `Localization.ringTopology` 的定义
+/-- The ring topology on `Localization M` coinduced from the natural homomorphism sending `x : R`
+to the equivalence class of `(x, 1)`. -/
+/-
+**Localization.ringTopology** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Localization.ringTopology : RingTopology (Localization M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Localization.ringTopology
-  signature: : RingTopology (Localization M)
-  body: RingTopology.coinduced (Localization.monoidOf M).toFun
-
-中文:
-定义 Localization.ringTopology
-  签名: : 环拓扑 (Localization M)
-  定义体: RingTopology.coinduced (Localization.monoidOf M).toFun
-
-Depends on / 依赖: Localization, Localization.monoidOf, RingTopology, RingTopology.coinduced, coinduced, monoidOf
+--- 原说明 ---
+The ring topology on `Localization M` coinduced from the natural homomorphism se
+nding `x : R`
+to the equivalence class of `(x, 1)`.
 -/
 def Localization.ringTopology : RingTopology (Localization M) :=
   RingTopology.coinduced (Localization.monoidOf M).toFun
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TopologicalSpace (Localization M)
-  body: Localization.ringTopology.toTopologicalSpace
-
-中文:
-实例 :
-  签名: 拓扑空间 (Localization M)
-  定义体: Localization.ringTopology.toTopologicalSpace
-
-Depends on / 依赖: Localization, Localization.ringTopology.toTopologicalSpace, ringTopology, toTopologicalSpace
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : TopologicalSpace (Localization M) :=
   Localization.ringTopology.toTopologicalSpace
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTopologicalRing (Localization M)
-  body: Localization.ringTopology.toIsTopologicalRing
-
-中文:
-实例 :
-  签名: 是拓扑环 (Localization M)
-  定义体: Localization.ringTopology.toIsTopologicalRing
-
-Depends on / 依赖: Localization, Localization.ringTopology.toIsTopologicalRing, ringTopology, toIsTopologicalRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTopologicalRing (Localization M) :=
   Localization.ringTopology.toIsTopologicalRing

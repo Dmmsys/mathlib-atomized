@@ -21,390 +21,293 @@ This file contains some results about prime numbers which depend on finiteness o
 open Finset
 
 namespace Nat
-variable {a b k m n p : Nat}
+variable {a b k m n p : ℕ}
 
-/--
-theorem `infinite_setOfPred_prime` / 定理 `infinite_setOfPred_prime`
+/-- A version of `Nat.exists_infinite_primes` using the `Set.Infinite` predicate. -/
+/-
+**Nat.infinite_setOfPred_prime** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：infinite_setOfPred_prime : { p | Prime p }.Infinite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.infinite_of_not_bddAbove`：infinite_of_not_bddAbove : ¬BddAbove s -> 
+s.Infinite
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Nat.not_bddAbove_setOfPred_prime`：not_bddAbove_setOfPred_prime : ¬BddAbo
+ve { p | Prime p }
 
-English:
-theorem infinite_setOfPred_prime
-  statement: { p | Prime p }.Infinite
-  proof: Set.infinite_of_not_bddAbove not_bddAbove_setOfPred_prime
-
-@[deprecated (since := "2026-07-09")] alias infinite_setOf_prime := infinite_setOfPred_prime
-
-中文:
-定理 infinite_setOfPred_prime
-  结论: { p | 素 p }.无限
-  证明: Set.infinite_of_not_bddAbove not_bddAbove_setOfPred_prime
-
-@[deprecated (since := "2026-07-09")] alias infinite_setOf_prime := infinite_setOfPred_prime
-
-Depends on / 依赖: Set.infinite_of_not_bddAbove, infinite_of_not_bddAbove, not_bddAbove_setOfPred_prime
+--- 原说明 ---
+A version of `Nat.exists_infinite_primes` using the `Set.Infinite` predicate.
 -/
 theorem infinite_setOfPred_prime : { p | Prime p }.Infinite :=
   Set.infinite_of_not_bddAbove not_bddAbove_setOfPred_prime
 
 @[deprecated (since := "2026-07-09")] alias infinite_setOf_prime := infinite_setOfPred_prime
-
-/--
-Instance `Primes.infinite` / 实例 `Primes.infinite`
-
-English:
-instance Primes.infinite
-  signature: : Infinite Primes
-  body: infinite_setOfPred_prime.to_subtype
-
-中文:
-实例 Primes.infinite
-  签名: : 无限 Primes
-  定义体: infinite_setOfPred_prime.to_subtype
-
-Depends on / 依赖: infinite_setOfPred_prime, infinite_setOfPred_prime.to_subtype, to_subtype
+/-
+**Nat.Primes.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Primes`。
+形式化陈述：Infinite Nat.Primes
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `Nat.infinite_setOfPred_prime`：infinite_setOfPred_prime : { p | Prime p }
+.Infinite
 -/
 instance Primes.infinite : Infinite Primes := infinite_setOfPred_prime.to_subtype
-
-/--
-Instance `Primes.countable` / 实例 `Primes.countable`
-
-English:
-instance Primes.countable
-  signature: : Countable Primes
-  body: ⟨⟨coeNat.coe, coe_nat_injective⟩⟩
-
-中文:
-实例 Primes.countable
-  签名: : 可数 Primes
-  定义体: ⟨⟨coeNat.coe, coe_nat_injective⟩⟩
-
-Depends on / 依赖: coeNat, coeNat.coe, coe_nat_injective
+/-
+**Nat.Primes.countable** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Primes`。
+形式化陈述：Countable Nat.Primes
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Primes.coe_nat_injective`：coe_nat_injective : Function.Injective ((↑
+) : Nat.Primes -> Nat)
 -/
 instance Primes.countable : Countable Primes := ⟨⟨coeNat.coe, coe_nat_injective⟩⟩
 
-/--
-Definition of `primeFactors` / `primeFactors` 的定义
+/-- The prime factors of a natural number as a finset. -/
+/-
+**Nat.primeFactors** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：primeFactors (n : Nat) : Finset Nat
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition primeFactors
-  signature: (n : Nat)
-  body: n.primeFactorsList.toFinset
-
-中文:
-定义 primeFactors
-  签名: (n : 自然数)
-  定义体: n.primeFactorsList.toFinset
-
-Depends on / 依赖: n.primeFactorsList.toFinset, primeFactorsList, toFinset
+--- 原说明 ---
+The prime factors of a natural number as a finset.
 -/
-def primeFactors (n : Nat) : Finset Nat := n.primeFactorsList.toFinset
-
-/--
-lemma `toFinset_factors` / 引理 `toFinset_factors`
-
-English:
-lemma toFinset_factors
-  given: (n : Nat)
-  statement: n.primeFactorsList.toFinset = n.primeFactors
-  proof: rfl
-
-中文:
-引理 toFinset_factors
-  条件: (n : 自然数)
-  结论: n.primeFactorsList.toFinset = n.primeFactors
-  证明: rfl
+def primeFactors (n : ℕ) : Finset ℕ := n.primeFactorsList.toFinset
+/-
+**Nat.toFinset_factors** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (n : ℕ), n.primeFactorsList.toFinset = n.primeFactors
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toFinset_factors (n : Nat) : n.primeFactorsList.toFinset = n.primeFactors := rfl
-
-/--
-lemma `mem_primeFactors` / 引理 `mem_primeFactors`
-
-English:
-lemma mem_primeFactors
-  statement: p in n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n != 0
-  proof: by
+@[simp] lemma toFinset_factors (n : ℕ) : n.primeFactorsList.toFinset = n.primeFactors := rfl
+/-
+**Nat.mem_primeFactors** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p ∣ n ∧ n ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+@[simp, grind =] lemma mem_primeFactors : p ∈ n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n ≠ 0 := by
   simp_rw [← toFinset_factors, List.mem_toFinset, mem_primeFactorsList']
-
-中文:
-引理 mem_primeFactors
-  结论: p in n.primeFactors ↔ p.素 ∧ p ∣ n ∧ n != 0
-  证明: by
-  simp_rw [← toFinset_factors, List.mem_toFinset, mem_primeFactorsList']
+/-
+**Nat.mem_primeFactors_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：mem_primeFactors_of_ne_zero (hn : n != 0) : p in n.primeFactors ↔ p.Prime 
+∧ p ∣ n
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp, grind =] lemma mem_primeFactors : p in n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n != 0 := by
-  simp_rw [← toFinset_factors, List.mem_toFinset, mem_primeFactorsList']
-
-/--
-lemma `mem_primeFactors_of_ne_zero` / 引理 `mem_primeFactors_of_ne_zero`
-
-English:
-lemma mem_primeFactors_of_ne_zero
-  given: (hn : n != 0)
-  statement: p in n.primeFactors ↔ p.Prime ∧ p ∣ n
-  proof: by
+lemma mem_primeFactors_of_ne_zero (hn : n ≠ 0) : p ∈ n.primeFactors ↔ p.Prime ∧ p ∣ n := by
   simp [hn]
-
-中文:
-引理 mem_primeFactors_of_ne_zero
-  条件: (hn : n != 0)
-  结论: p in n.primeFactors ↔ p.素 ∧ p ∣ n
-  证明: by
-  simp [hn]
+/-
+**Nat.Prime.mem_primeFactors** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {n p : ℕ}, Nat.Prime p → p ∣ n → n ≠ 0 → p ∈ n.primeFactors
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.mem_primeFactors`：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p 
+∣ n ∧ n ≠ 0
 -/
-lemma mem_primeFactors_of_ne_zero (hn : n != 0) : p in n.primeFactors ↔ p.Prime ∧ p ∣ n := by
-  simp [hn]
-
-/--
-lemma `Prime.mem_primeFactors` / 引理 `Prime.mem_primeFactors`
-
-English:
-lemma Prime.mem_primeFactors
-  given: (hp : p.Prime) (hdvd : p ∣ n) (hn : n != 0)
-  statement: p in n.primeFactors
-  proof: Nat.mem_primeFactors.mpr ⟨hp, hdvd, hn⟩
-
-中文:
-引理 素.mem_primeFactors
-  条件: (hp : p.素) (hdvd : p ∣ n) (hn : n != 0)
-  结论: p in n.primeFactors
-  证明: Nat.mem_primeFactors.mpr ⟨hp, hdvd, hn⟩
-
-Depends on / 依赖: Nat.mem_primeFactors.mpr, mem_primeFactors
--/
-lemma Prime.mem_primeFactors (hp : p.Prime) (hdvd : p ∣ n) (hn : n != 0) : p in n.primeFactors :=
+lemma Prime.mem_primeFactors (hp : p.Prime) (hdvd : p ∣ n) (hn : n ≠ 0) : p ∈ n.primeFactors :=
   Nat.mem_primeFactors.mpr ⟨hp, hdvd, hn⟩
 
-/--
-lemma `Prime.mem_primeFactors'` / 引理 `Prime.mem_primeFactors'`
+/-- A version of `Nat.Prime.mem_primeFactors` using `[NeZero n]` instead of an explicit argument. -/
+/-
+**Nat.Prime.mem_primeFactors'** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {n p : ℕ}, Nat.Prime p → p ∣ n → ∀ [NeZero n], p ∈ n.primeFactors
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.mem_primeFactors`：∀ {n p : ℕ}, Nat.Prime p → p ∣ n → n ≠ 0 → p
+ ∈ n.primeFactors
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 
-English:
-lemma Prime.mem_primeFactors'
-  given: (hp : p.Prime) (hdvd : p ∣ n) [NeZero n]
-  statement: p in n.primeFactors
-  proof: hp.mem_primeFactors hdvd (NeZero.ne n)
-
-中文:
-引理 素.mem_primeFactors'
-  条件: (hp : p.素) (hdvd : p ∣ n) [NeZero n]
-  结论: p in n.primeFactors
-  证明: hp.mem_primeFactors hdvd (NeZero.ne n)
-
-Depends on / 依赖: NeZero, NeZero.ne, hp.mem_primeFactors, mem_primeFactors
+--- 原说明 ---
+A version of `Nat.Prime.mem_primeFactors` using `[NeZero n]` instead of an expli
+cit argument.
 -/
-lemma Prime.mem_primeFactors' (hp : p.Prime) (hdvd : p ∣ n) [NeZero n] : p in n.primeFactors :=
+lemma Prime.mem_primeFactors' (hp : p.Prime) (hdvd : p ∣ n) [NeZero n] : p ∈ n.primeFactors :=
   hp.mem_primeFactors hdvd (NeZero.ne n)
-
-/--
-lemma `Prime.mem_primeFactors_self` / 引理 `Prime.mem_primeFactors_self`
-
-English:
-lemma Prime.mem_primeFactors_self
-  given: (hp : p.Prime)
-  statement: p in p.primeFactors
-  proof: hp.mem_primeFactors p.dvd_refl hp.ne_zero
-
-中文:
-引理 素.mem_primeFactors_self
-  条件: (hp : p.素)
-  结论: p in p.primeFactors
-  证明: hp.mem_primeFactors p.dvd_refl hp.ne_zero
-
-Depends on / 依赖: dvd_refl, hp.mem_primeFactors, hp.ne_zero, mem_primeFactors, ne_zero, p.dvd_refl
+/-
+**Nat.Prime.mem_primeFactors_self** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {p : ℕ}, Nat.Prime p → p ∈ p.primeFactors
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.mem_primeFactors`：∀ {n p : ℕ}, Nat.Prime p → p ∣ n → n ≠ 0 → p
+ ∈ n.primeFactors
+· 使用定理 `Nat.dvd_refl`：∀ (a : ℕ), a ∣ a
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
 -/
-lemma Prime.mem_primeFactors_self (hp : p.Prime) : p in p.primeFactors :=
+lemma Prime.mem_primeFactors_self (hp : p.Prime) : p ∈ p.primeFactors :=
   hp.mem_primeFactors p.dvd_refl hp.ne_zero
-
-/--
-lemma `primeFactors_mono` / 引理 `primeFactors_mono`
-
-English:
-lemma primeFactors_mono
-  given: (hmn : m ∣ n) (hn : n != 0)
-  statement: primeFactors m subseteq primeFactors n
-  proof: by
+/-
+**Nat.primeFactors_mono** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_mono (hmn : m ∣ n) (hn : n != 0) : primeFactors m subseteq pr
+imeFactors n
+参数：hmn : m ∣ n；hn : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+-/
+lemma primeFactors_mono (hmn : m ∣ n) (hn : n ≠ 0) : primeFactors m ⊆ primeFactors n := by
   simp only [subset_iff, mem_primeFactors, and_imp]
-  exact fun p hp hpm _ => ⟨hp, hpm.trans hmn, hn⟩
-
-中文:
-引理 primeFactors_mono
-  条件: (hmn : m ∣ n) (hn : n != 0)
-  结论: primeFactors m subseteq primeFactors n
-  证明: by
-  simp only [subset_iff, mem_primeFactors, and_imp]
-  exact fun p hp hpm _ => ⟨hp, hpm.trans hmn, hn⟩
-
-Depends on / 依赖: and_imp, hpm.trans, mem_primeFactors, subset_iff
+  exact fun p hp hpm _ ↦ ⟨hp, hpm.trans hmn, hn⟩
+/-
+**Nat.mem_primeFactors_iff_mem_primeFactorsList** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：mem_primeFactors_iff_mem_primeFactorsList : p in n.primeFactors ↔ p in n.p
+rimeFactorsList
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma primeFactors_mono (hmn : m ∣ n) (hn : n != 0) : primeFactors m subseteq primeFactors n := by
-  simp only [subset_iff, mem_primeFactors, and_imp]
-  exact fun p hp hpm _ => ⟨hp, hpm.trans hmn, hn⟩
-
-/--
-lemma `mem_primeFactors_iff_mem_primeFactorsList` / 引理 `mem_primeFactors_iff_mem_primeFactorsList`
-
-English:
-lemma mem_primeFactors_iff_mem_primeFactorsList
-  statement: p in n.primeFactors ↔ p in n.primeFactorsList
-  proof: by
+lemma mem_primeFactors_iff_mem_primeFactorsList : p ∈ n.primeFactors ↔ p ∈ n.primeFactorsList := by
   simp only [primeFactors, List.mem_toFinset]
-
-中文:
-引理 mem_primeFactors_iff_mem_primeFactorsList
-  结论: p in n.primeFactors ↔ p in n.primeFactorsList
-  证明: by
-  simp only [primeFactors, List.mem_toFinset]
-
-Depends on / 依赖: List.mem_toFinset, mem_toFinset, primeFactors
+/-
+**Nat.prime_of_mem_primeFactors** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：prime_of_mem_primeFactors (hp : p in n.primeFactors) : p.Prime
+参数：hp : p in n.primeFactors。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mem_primeFactors`：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p 
+∣ n ∧ n ≠ 0
 -/
-lemma mem_primeFactors_iff_mem_primeFactorsList : p in n.primeFactors ↔ p in n.primeFactorsList := by
-  simp only [primeFactors, List.mem_toFinset]
-
-/--
-lemma `prime_of_mem_primeFactors` / 引理 `prime_of_mem_primeFactors`
-
-English:
-lemma prime_of_mem_primeFactors
-  given: (hp : p in n.primeFactors)
-  statement: p.Prime
-  proof: (mem_primeFactors.1 hp).1
-
-中文:
-引理 prime_of_mem_primeFactors
-  条件: (hp : p in n.primeFactors)
-  结论: p.素
-  证明: (mem_primeFactors.1 hp).1
-
-Depends on / 依赖: mem_primeFactors
+lemma prime_of_mem_primeFactors (hp : p ∈ n.primeFactors) : p.Prime := (mem_primeFactors.1 hp).1
+/-
+**Nat.dvd_of_mem_primeFactors** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：dvd_of_mem_primeFactors (hp : p in n.primeFactors) : p ∣ n
+参数：hp : p in n.primeFactors。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mem_primeFactors`：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p 
+∣ n ∧ n ≠ 0
 -/
-lemma prime_of_mem_primeFactors (hp : p in n.primeFactors) : p.Prime := (mem_primeFactors.1 hp).1
-/--
-lemma `dvd_of_mem_primeFactors` / 引理 `dvd_of_mem_primeFactors`
-
-English:
-lemma dvd_of_mem_primeFactors
-  given: (hp : p in n.primeFactors)
-  statement: p ∣ n
-  proof: (mem_primeFactors.1 hp).2.1
-
-中文:
-引理 dvd_of_mem_primeFactors
-  条件: (hp : p in n.primeFactors)
-  结论: p ∣ n
-  证明: (mem_primeFactors.1 hp).2.1
-
-Depends on / 依赖: mem_primeFactors
+lemma dvd_of_mem_primeFactors (hp : p ∈ n.primeFactors) : p ∣ n := (mem_primeFactors.1 hp).2.1
+/-
+**Nat.pos_of_mem_primeFactors** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：pos_of_mem_primeFactors (hp : p in n.primeFactors) : 0 < p
+参数：hp : p in n.primeFactors。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用引理 `Nat.prime_of_mem_primeFactors`：prime_of_mem_primeFactors (hp : p in n.pr
+imeFactors) : p.Prime
 -/
-lemma dvd_of_mem_primeFactors (hp : p in n.primeFactors) : p ∣ n := (mem_primeFactors.1 hp).2.1
-
-/--
-lemma `pos_of_mem_primeFactors` / 引理 `pos_of_mem_primeFactors`
-
-English:
-lemma pos_of_mem_primeFactors
-  given: (hp : p in n.primeFactors)
-  statement: 0 < p
-  proof: (prime_of_mem_primeFactors hp).pos
-
-中文:
-引理 pos_of_mem_primeFactors
-  条件: (hp : p in n.primeFactors)
-  结论: 0 < p
-  证明: (prime_of_mem_primeFactors hp).pos
-
-Depends on / 依赖: prime_of_mem_primeFactors
--/
-lemma pos_of_mem_primeFactors (hp : p in n.primeFactors) : 0 < p :=
+lemma pos_of_mem_primeFactors (hp : p ∈ n.primeFactors) : 0 < p :=
   (prime_of_mem_primeFactors hp).pos
-
-/--
-lemma `le_of_mem_primeFactors` / 引理 `le_of_mem_primeFactors`
-
-English:
-lemma le_of_mem_primeFactors
-  given: (h : p in n.primeFactors)
-  statement: p <= n
-  proof: le_of_dvd (mem_primeFactors.1 h).2.2.bot_lt dvd_of_mem_primeFactors h
-
-中文:
-引理 le_of_mem_primeFactors
-  条件: (h : p in n.primeFactors)
-  结论: p <= n
-  证明: le_of_dvd (mem_primeFactors.1 h).2.2.bot_lt dvd_of_mem_primeFactors h
-
-Depends on / 依赖: bot_lt, dvd_of_mem_primeFactors, le_of_dvd, mem_primeFactors
+/-
+**Nat.le_of_mem_primeFactors** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_of_mem_primeFactors (h : p in n.primeFactors) : p <= n
+参数：h : p in n.primeFactors。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mem_primeFactors`：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p 
+∣ n ∧ n ≠ 0
+· 使用引理 `Nat.dvd_of_mem_primeFactors`：dvd_of_mem_primeFactors (hp : p in n.primeF
+actors) : p ∣ n
 -/
-lemma le_of_mem_primeFactors (h : p in n.primeFactors) : p <= n :=
-le_of_dvd (mem_primeFactors.1 h).2.2.bot_lt dvd_of_mem_primeFactors h
-
-/--
-lemma `primeFactors_zero` / 引理 `primeFactors_zero`
-
-English:
-lemma primeFactors_zero
-  statement: primeFactors 0 = ∅
-  proof: by
-  ext
-  simp
-
-中文:
-引理 primeFactors_zero
-  结论: primeFactors 0 = ∅
-  证明: by
-  ext
-  simp
+lemma le_of_mem_primeFactors (h : p ∈ n.primeFactors) : p ≤ n :=
+  le_of_dvd (mem_primeFactors.1 h).2.2.bot_lt <| dvd_of_mem_primeFactors h
+/-
+**Nat.primeFactors_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.primeFactors 0 = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma primeFactors_zero : primeFactors 0 = ∅ := by
   ext
   simp
-
-/--
-lemma `primeFactors_one` / 引理 `primeFactors_one`
-
-English:
-lemma primeFactors_one
-  statement: primeFactors 1 = ∅
-  proof: by
-  ext
-  simpa using Prime.ne_one
-
-中文:
-引理 primeFactors_one
-  结论: primeFactors 1 = ∅
-  证明: by
-  ext
-  simpa using Prime.ne_one
+/-
+**Nat.primeFactors_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.primeFactors 1 = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
 -/
 @[simp] lemma primeFactors_one : primeFactors 1 = ∅ := by
   ext
   simpa using Prime.ne_one
-
-/--
-lemma `primeFactors_eq_empty` / 引理 `primeFactors_eq_empty`
-
-English:
-lemma primeFactors_eq_empty
-  statement: n.primeFactors = ∅ ↔ n = 0 ∨ n = 1
-  proof: by
-  constructor
-  · contrapose!
-    rintro hn
-    obtain ⟨p, hp, hpn⟩ := exists_prime_and_dvd hn.2
-    exact ⟨_, mem_primeFactors.2 ⟨hp, hpn, hn.1⟩⟩
-  · rintro (rfl | rfl) <;> simp
-
-@[simp]
-
-中文:
-引理 primeFactors_eq_empty
-  结论: n.primeFactors = ∅ ↔ n = 0 ∨ n = 1
-  证明: by
-  constructor
-  · contrapose!
-    rintro hn
-    obtain ⟨p, hp, hpn⟩ := exists_prime_and_dvd hn.2
-    exact ⟨_, mem_primeFactors.2 ⟨hp, hpn, hn.1⟩⟩
-  · rintro (rfl | rfl) <;> simp
-
-@[simp]
+/-
+**Nat.primeFactors_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, n.primeFactors = ∅ ↔ n = 0 ∨ n = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Nat.exists_prime_and_dvd`：exists_prime_and_dvd {n : Nat} (hn : n != 1) :
+ exists p, Prime p ∧ p ∣ n
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.mem_primeFactors`：∀ {n p : ℕ}, p ∈ n.primeFactors ↔ Nat.Prime p ∧ p 
+∣ n ∧ n ≠ 0
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.primeFactors_zero`：Nat.primeFactors 0 = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.primeFactors_one`：Nat.primeFactors 1 = ∅
 -/
 @[simp] lemma primeFactors_eq_empty : n.primeFactors = ∅ ↔ n = 0 ∨ n = 1 := by
   constructor
@@ -415,232 +318,225 @@ lemma primeFactors_eq_empty
   · rintro (rfl | rfl) <;> simp
 
 @[simp]
-/--
-lemma `nonempty_primeFactors` / 引理 `nonempty_primeFactors`
-
-English:
-lemma nonempty_primeFactors
-  given: {n : Nat}
-  statement: n.primeFactors.Nonempty ↔ 1 < n
-  proof: by
-  contrapose!
-  rw [primeFactors_eq_empty]; rw [Nat.le_one_iff_eq_zero_or_eq_one]
-
-中文:
-引理 nonempty_primeFactors
-  条件: {n : 自然数}
-  结论: n.primeFactors.非空 ↔ 1 < n
-  证明: by
-  contrapose!
-  rw [primeFactors_eq_empty]; rw [Nat.le_one_iff_eq_zero_or_eq_one]
-
-Depends on / 依赖: Nat.le_one_iff_eq_zero_or_eq_one, contrapose, le_one_iff_eq_zero_or_eq_one, primeFactors_eq_empty
+/-
+**Nat.nonempty_primeFactors** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nonempty_primeFactors {n : Nat} : n.primeFactors.Nonempty ↔ 1 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.primeFactors_eq_empty`：∀ {n : ℕ}, n.primeFactors = ∅ ↔ n = 0 ∨ n = 1
+· 使用定理 `Nat.le_one_iff_eq_zero_or_eq_one`：∀ {n : ℕ}, n ≤ 1 ↔ n = 0 ∨ n = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma nonempty_primeFactors {n : Nat} : n.primeFactors.Nonempty ↔ 1 < n := by
+lemma nonempty_primeFactors {n : ℕ} : n.primeFactors.Nonempty ↔ 1 < n := by
   contrapose!
-  rw [primeFactors_eq_empty]; rw [Nat.le_one_iff_eq_zero_or_eq_one]
-
-/--
-lemma `Prime.primeFactors` / 引理 `Prime.primeFactors`
-
-English:
-lemma Prime.primeFactors
-  given: (hp : p.Prime)
-  statement: p.primeFactors = {p}
-  proof: by
-  simp [Nat.primeFactors, primeFactorsList_prime hp]
-
-中文:
-引理 素.primeFactors
-  条件: (hp : p.素)
-  结论: p.primeFactors = {p}
-  证明: by
-  simp [Nat.primeFactors, primeFactorsList_prime hp]
+  rw [primeFactors_eq_empty, Nat.le_one_iff_eq_zero_or_eq_one]
+/-
+**Nat.Prime.primeFactors** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {p : ℕ}, Nat.Prime p → p.primeFactors = {p}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.primeFactorsList_prime`：primeFactorsList_prime {p : Nat} (hp : Nat.P
+rime p) : p.primeFactorsList = [p]
+· 使用定理 `List.toFinset_cons`：toFinset_cons : toFinset (a :: l) = insert a (toFins
+et l)
+· 使用定理 `LawfulSingleton.insert_empty_eq`：∀ {α : Type u} {β : Type v} {inst : Emp
+tyCollection β} {inst_1 : Insert α β} {inst_2 : Singleton α β}   [self : LawfulS
+ingleton α β] (x : α)…
+· 使用定理 `Finset.instLawfulSingleton`：∀ {α : Type u_1} [inst : DecidableEq α], Law
+fulSingleton α (Finset α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] protected lemma Prime.primeFactors (hp : p.Prime) : p.primeFactors = {p} := by
   simp [Nat.primeFactors, primeFactorsList_prime hp]
-
-/--
-lemma `primeFactors_mul` / 引理 `primeFactors_mul`
-
-English:
-lemma primeFactors_mul
-  given: (ha : a != 0) (hb : b != 0)
-  proof: by
+/-
+**Nat.primeFactors_mul** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_mul (ha : a != 0) (hb : b != 0) : (a * b).primeFactors = a.pr
+imeFactors union b.primeFactors
+参数：ha : a != 0；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.mem_primeFactorsList_mul`：mem_primeFactorsList_mul {a b : Nat} (ha :
+ a != 0) (hb : b != 0) {p : Nat} : p in (a * b).primeFactorsList ↔ p in a.primeF
+actorsList ∨ p in …
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma primeFactors_mul (ha : a ≠ 0) (hb : b ≠ 0) :
+    (a * b).primeFactors = a.primeFactors ∪ b.primeFactors := by
   ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_primeFactorsList,
     mem_primeFactorsList_mul ha hb]
-
-中文:
-引理 primeFactors_mul
-  条件: (ha : a != 0) (hb : b != 0)
-  证明: by
-  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_primeFactorsList,
-    mem_primeFactorsList_mul ha hb]
-
-Depends on / 依赖: Finset, Finset.mem_union, mem_primeFactorsList_mul, mem_primeFactors_iff_mem_primeFactorsList, mem_union
+/-
+**Nat.Coprime.primeFactors_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Coprime`。
+形式化陈述：∀ {a b : ℕ}, a.Coprime b → (a * b).primeFactors = a.primeFactors ∪ b.prime
+Factors
+参数：a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.toFinset.ext`：∀ {α : Type u_1} [inst : DecidableEq α] {l l' : List 
+α}, (∀ (x : α), x ∈ l ↔ x ∈ l') → l.toFinset = l'.toFinset
+· 使用定理 `Nat.mem_primeFactorsList_mul_of_coprime`：mem_primeFactorsList_mul_of_cop
+rime {a b : Nat} (hab : Coprime a b) (p : Nat) : p in (a * b).primeFactorsList ↔
+ p in a.primeFactorsList unio…
+· 使用定理 `List.toFinset_union`：toFinset_union (l l' : List α) : (l union l').toFin
+set = l.toFinset union l'.toFinset
 -/
-lemma primeFactors_mul (ha : a != 0) (hb : b != 0) :
-    (a * b).primeFactors = a.primeFactors union b.primeFactors := by
-  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_primeFactorsList,
-    mem_primeFactorsList_mul ha hb]
-
-/--
-lemma `Coprime.primeFactors_mul` / 引理 `Coprime.primeFactors_mul`
-
-English:
-lemma Coprime.primeFactors_mul
-  given: {a b : Nat} (hab : Coprime a b)
-  proof: (List.toFinset.ext <| mem_primeFactorsList_mul_of_coprime hab).trans List.toFinset_union _ _
-
-中文:
-引理 Coprime.primeFactors_mul
-  条件: {a b : 自然数} (hab : Coprime a b)
-  证明: (List.toFinset.ext <| mem_primeFactorsList_mul_of_coprime hab).trans List.toFinset_union _ _
-
-Depends on / 依赖: List.toFinset.ext, List.toFinset_union, mem_primeFactorsList_mul_of_coprime, toFinset, toFinset_union
+lemma Coprime.primeFactors_mul {a b : ℕ} (hab : Coprime a b) :
+    (a * b).primeFactors = a.primeFactors ∪ b.primeFactors :=
+  (List.toFinset.ext <| mem_primeFactorsList_mul_of_coprime hab).trans <| List.toFinset_union _ _
+/-
+**Nat.primeFactors_gcd** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_gcd (ha : a != 0) (hb : b != 0) : (a.gcd b).primeFactors = a.
+primeFactors inter b.primeFactors
+参数：ha : a != 0；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Coprime.primeFactors_mul {a b : Nat} (hab : Coprime a b) :
-    (a * b).primeFactors = a.primeFactors union b.primeFactors :=
-(List.toFinset.ext <| mem_primeFactorsList_mul_of_coprime hab).trans List.toFinset_union _ _
-
-/--
-lemma `primeFactors_gcd` / 引理 `primeFactors_gcd`
-
-English:
-lemma primeFactors_gcd
-  given: (ha : a != 0) (hb : b != 0)
-  proof: by
+lemma primeFactors_gcd (ha : a ≠ 0) (hb : b ≠ 0) :
+    (a.gcd b).primeFactors = a.primeFactors ∩ b.primeFactors := by
   grind [dvd_gcd_iff]
-
-中文:
-引理 primeFactors_gcd
-  条件: (ha : a != 0) (hb : b != 0)
-  证明: by
-  grind [dvd_gcd_iff]
-
-Depends on / 依赖: dvd_gcd_iff
+/-
+**Nat.disjoint_primeFactors** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {a b : ℕ}, a ≠ 0 → b ≠ 0 → (Disjoint a.primeFactors b.primeFactors ↔ a.C
+oprime b)
+参数：Disjoint a.primeFactors b.primeFactors ↔ a.Coprime b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma primeFactors_gcd (ha : a != 0) (hb : b != 0) :
-    (a.gcd b).primeFactors = a.primeFactors inter b.primeFactors := by
-  grind [dvd_gcd_iff]
-
-/--
-lemma `disjoint_primeFactors` / 引理 `disjoint_primeFactors`
-
-English:
-lemma disjoint_primeFactors
-  given: (ha : a != 0) (hb : b != 0)
-  proof: by
-  simp [disjoint_iff_inter_eq_empty, coprime_iff_gcd_eq_one, ← primeFactors_gcd,
-    ha, hb]
-
-中文:
-引理 disjoint_primeFactors
-  条件: (ha : a != 0) (hb : b != 0)
-  证明: by
-  simp [disjoint_iff_inter_eq_empty, coprime_iff_gcd_eq_one, ← primeFactors_gcd,
-    ha, hb]
--/
-@[simp] lemma disjoint_primeFactors (ha : a != 0) (hb : b != 0) :
+@[simp] lemma disjoint_primeFactors (ha : a ≠ 0) (hb : b ≠ 0) :
     Disjoint a.primeFactors b.primeFactors ↔ Coprime a b := by
   simp [disjoint_iff_inter_eq_empty, coprime_iff_gcd_eq_one, ← primeFactors_gcd,
     ha, hb]
-
-/--
-lemma `Coprime.disjoint_primeFactors` / 引理 `Coprime.disjoint_primeFactors`
-
-English:
-lemma Coprime.disjoint_primeFactors
-  given: (hab : Coprime a b)
-  proof: List.disjoint_toFinset_iff_disjoint.2 coprime_primeFactorsList_disjoint hab
-
-中文:
-引理 Coprime.disjoint_primeFactors
-  条件: (hab : Coprime a b)
-  证明: List.disjoint_toFinset_iff_disjoint.2 coprime_primeFactorsList_disjoint hab
+/-
+**Nat.Coprime.disjoint_primeFactors** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Coprime`。
+形式化陈述：∀ {a b : ℕ}, a.Coprime b → Disjoint a.primeFactors b.primeFactors
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.disjoint_toFinset_iff_disjoint`：disjoint_toFinset_iff_disjoint : _r
+oot_.Disjoint l.toFinset l'.toFinset ↔ l.Disjoint l'
+· 使用定理 `Nat.coprime_primeFactorsList_disjoint`：coprime_primeFactorsList_disjoint
+ {a b : Nat} (hab : a.Coprime b) : List.Disjoint a.primeFactorsList b.primeFacto
+rsList
 -/
 protected lemma Coprime.disjoint_primeFactors (hab : Coprime a b) :
     Disjoint a.primeFactors b.primeFactors :=
-List.disjoint_toFinset_iff_disjoint.2 coprime_primeFactorsList_disjoint hab
-
-/--
-lemma `primeFactors_pow_succ` / 引理 `primeFactors_pow_succ`
-
-English:
-lemma primeFactors_pow_succ
-  given: (n k : Nat)
-  statement: (n ^ (k + 1)).primeFactors = n.primeFactors
-  proof: by
+  List.disjoint_toFinset_iff_disjoint.2 <| coprime_primeFactorsList_disjoint hab
+/-
+**Nat.primeFactors_pow_succ** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_pow_succ (n k : Nat) : (n ^ (k + 1)).primeFactors = n.primeFa
+ctors
+参数：n k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.primeFactors_zero`：Nat.primeFactors 0 = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `Nat.pow_succ'`：∀ {m n : ℕ}, m ^ n.succ = m * m ^ n
+· 使用引理 `Nat.primeFactors_mul`：primeFactors_mul (ha : a != 0) (hb : b != 0) : (a 
+* b).primeFactors = a.primeFactors union b.primeFactors
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Nat.instIsDomain`：IsDomain ℕ
+· 使用定理 `Finset.union_idempotent`：union_idempotent (s : Finset α) : s union s = s
+-/
+lemma primeFactors_pow_succ (n k : ℕ) : (n ^ (k + 1)).primeFactors = n.primeFactors := by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp
   induction k with
   | zero => simp
   | succ k ih => rw [pow_succ', primeFactors_mul hn (pow_ne_zero _ hn), ih, Finset.union_idempotent]
-
-中文:
-引理 primeFactors_pow_succ
-  条件: (n k : 自然数)
-  结论: (n ^ (k + 1)).primeFactors = n.primeFactors
-  证明: by
-  rcases eq_or_ne n 0 with (rfl | hn)
-  · simp
-  induction k with
-  | zero => simp
-  | succ k ih => rw [pow_succ', primeFactors_mul hn (pow_ne_zero _ hn), ih, Finset.union_idempotent]
-
-Depends on / 依赖: Finset, Finset.union_idempotent, eq_or_ne, pow_ne_zero, pow_succ, primeFactors_mul, union_idempotent
+/-
+**Nat.primeFactors_pow** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_pow (n : Nat) (hk : k != 0) : (n ^ k).primeFactors = n.primeF
+actors
+参数：n : Nat；hk : k != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nat.primeFactors_pow_succ`：primeFactors_pow_succ (n k : Nat) : (n ^ (k +
+ 1)).primeFactors = n.primeFactors
 -/
-lemma primeFactors_pow_succ (n k : Nat) : (n ^ (k + 1)).primeFactors = n.primeFactors := by
-  rcases eq_or_ne n 0 with (rfl | hn)
-  · simp
-  induction k with
-  | zero => simp
-  | succ k ih => rw [pow_succ', primeFactors_mul hn (pow_ne_zero _ hn), ih, Finset.union_idempotent]
-
-/--
-lemma `primeFactors_pow` / 引理 `primeFactors_pow`
-
-English:
-lemma primeFactors_pow
-  given: (n : Nat) (hk : k != 0)
-  statement: (n ^ k).primeFactors = n.primeFactors
-  proof: by
+lemma primeFactors_pow (n : ℕ) (hk : k ≠ 0) : (n ^ k).primeFactors = n.primeFactors := by
   cases k
   · simp at hk
   rw [primeFactors_pow_succ]
 
-中文:
-引理 primeFactors_pow
-  条件: (n : 自然数) (hk : k != 0)
-  结论: (n ^ k).primeFactors = n.primeFactors
-  证明: by
-  cases k
-  · simp at hk
-  rw [primeFactors_pow_succ]
+/-- The only prime divisor of positive prime power `p^k` is `p` itself -/
+/-
+**Nat.primeFactors_prime_pow** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：primeFactors_prime_pow (hk : k != 0) (hp : Prime p) : (p ^ k).primeFactors
+ = {p}
+参数：hk : k != 0；hp : Prime p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Nat.primeFactors_pow`：primeFactors_pow (n : Nat) (hk : k != 0) : (n ^ k)
+.primeFactors = n.primeFactors
+· 使用定理 `Nat.Prime.primeFactors`：∀ {p : ℕ}, Nat.Prime p → p.primeFactors = {p}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: primeFactors_pow_succ
+--- 原说明 ---
+The only prime divisor of positive prime power `p^k` is `p` itself
 -/
-lemma primeFactors_pow (n : Nat) (hk : k != 0) : (n ^ k).primeFactors = n.primeFactors := by
-  cases k
-  · simp at hk
-  rw [primeFactors_pow_succ]
-
-/--
-lemma `primeFactors_prime_pow` / 引理 `primeFactors_prime_pow`
-
-English:
-lemma primeFactors_prime_pow
-  given: (hk : k != 0) (hp : Prime p)
-  proof: by simp [primeFactors_pow p hk, hp]
-
-中文:
-引理 primeFactors_prime_pow
-  条件: (hk : k != 0) (hp : 素 p)
-  证明: by simp [primeFactors_pow p hk, hp]
-
-Depends on / 依赖: primeFactors_pow
--/
-lemma primeFactors_prime_pow (hk : k != 0) (hp : Prime p) :
+lemma primeFactors_prime_pow (hk : k ≠ 0) (hp : Prime p) :
     (p ^ k).primeFactors = {p} := by simp [primeFactors_pow p hk, hp]
 
 end Nat
+

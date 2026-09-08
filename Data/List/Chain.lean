@@ -27,1277 +27,949 @@ assert_not_imported Mathlib.Algebra.Order.Group.Nat
 
 open Nat
 
-variable {α β : Type*} {R r : α -> α -> Prop} {l l₁ l₂ : List α} {a b : α}
+variable {α β : Type*} {R r : α → α → Prop} {l l₁ l₂ : List α} {a b : α}
 
 namespace List
 
 mk_iff_of_inductive_prop List.IsChain List.isChain_iff
 
-/--
-theorem `isChain_nil` / 定理 `isChain_nil`
-
-English:
-theorem isChain_nil
-  statement: IsChain R []
-  proof: .nil
-
-中文:
-定理 isChain_nil
-  结论: IsChain R []
-  证明: .nil
+/-
+**List.isChain_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_nil : IsChain R []
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_nil : IsChain R [] := .nil
-/--
-theorem `isChain_singleton` / 定理 `isChain_singleton`
-
-English:
-theorem isChain_singleton
-  given: (a : α)
-  statement: IsChain R [a]
-  proof: .singleton _
-
-中文:
-定理 isChain_singleton
-  条件: (a : α)
-  结论: IsChain R [a]
-  证明: .singleton _
-
-Depends on / 依赖: singleton
+/-
+**List.isChain_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_singleton (a : α) : IsChain R [a]
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_singleton (a : α) : IsChain R [a] := .singleton _
-
-/--
-theorem `isChain_cons_iff` / 定理 `isChain_cons_iff`
-
-English:
-theorem isChain_cons_iff
-  given: (R : α -> α -> Prop) (a : α) (l : List α)
-  proof: (isChain_iff _ _).trans by
-    simp only [cons_ne_nil, List.cons_eq_cons, exists_and_right,
-      exists_eq', true_and, exists_and_left, false_or]
-    grind
-
-中文:
-定理 isChain_cons_iff
-  条件: (R : α -> α -> 命题) (a : α) (l : 列表 α)
-  证明: (isChain_iff _ _).trans by
-    simp only [cons_ne_nil, List.cons_eq_cons, exists_and_right,
-      exists_eq', true_and, exists_and_left, false_or]
-    grind
-
-Depends on / 依赖: List.cons_eq_cons, cons_eq_cons, cons_ne_nil, exists_and_left, exists_and_right, exists_eq, false_or, isChain_iff, true_and
+/-
+**List.isChain_cons_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_iff (R : α -> α -> Prop) (a : α) (l : List α) : IsChain R (a 
+:: l) ↔ l = [] ∨ exists (b : α) (l' : List α), R a b ∧ IsChain R (b :: l') ∧ l =
+ b :: l'
+参数：R : α -> α -> Prop；a : α；l : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `List.isChain_iff`：∀ {α : Type u_1} (R : α → α → Prop) (a : List α),   Li
+st.IsChain R a ↔ a = [] ∨ (∃ a_1, a = [a_1]) ∨ ∃ a_1 b l, R a_1 b ∧ List.IsChain
+ R (b …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
-theorem isChain_cons_iff (R : α -> α -> Prop) (a : α) (l : List α) :
+theorem isChain_cons_iff (R : α → α → Prop) (a : α) (l : List α) :
     IsChain R (a :: l) ↔ l = [] ∨
-      exists (b : α) (l' : List α), R a b ∧ IsChain R (b :: l') ∧ l = b :: l' :=
-(isChain_iff _ _).trans by
+      ∃ (b : α) (l' : List α), R a b ∧ IsChain R (b :: l') ∧ l = b :: l' :=
+  (isChain_iff _ _).trans <| by
     simp only [cons_ne_nil, List.cons_eq_cons, exists_and_right,
       exists_eq', true_and, exists_and_left, false_or]
     grind
-
-/--
-theorem `IsChain.imp_of_mem_tail_imp` / 定理 `IsChain.imp_of_mem_tail_imp`
-
-English:
-theorem IsChain.imp_of_mem_tail_imp
-  statement: {S : α -> α -> Prop} {l : List α}
-  proof: by
-  induction p with grind
-
-中文:
-定理 IsChain.imp_of_mem_tail_imp
-  结论: {S : α -> α -> 命题} {l : 列表 α}
-  证明: by
-  induction p with grind
+/-
+**List.IsChain.imp_of_mem_tail_imp** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α},   (∀ (a b : α), a ∈ l 
+→ b ∈ l.tail → R a b → S a b) → List.IsChain R l → List.IsChain S l
+参数：∀ (a b : α), a ∈ l → b ∈ l.tail → R a b → S a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsChain.imp_of_mem_tail_imp {S : α -> α -> Prop} {l : List α}
-    (H : forall a b : α, a in l -> b in l.tail -> R a b -> S a b) (p : IsChain R l) : IsChain S l := by
+theorem IsChain.imp_of_mem_tail_imp {S : α → α → Prop} {l : List α}
+    (H : ∀ a b : α, a ∈ l → b ∈ l.tail → R a b → S a b) (p : IsChain R l) : IsChain S l := by
   induction p with grind
-
-/--
-theorem `IsChain.imp_of_mem_imp` / 定理 `IsChain.imp_of_mem_imp`
-
-English:
-theorem IsChain.imp_of_mem_imp
-  statement: {S : α -> α -> Prop} {l : List α}
-  proof: p.imp_of_mem_tail_imp (H · · · <| mem_of_mem_tail ·)
-
-中文:
-定理 IsChain.imp_of_mem_imp
-  结论: {S : α -> α -> 命题} {l : 列表 α}
-  证明: p.imp_of_mem_tail_imp (H · · · <| mem_of_mem_tail ·)
-
-Depends on / 依赖: imp_of_mem_tail_imp, mem_of_mem_tail, p.imp_of_mem_tail_imp
+/-
+**List.IsChain.imp_of_mem_imp** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α},   (∀ (a b : α), a ∈ l 
+→ b ∈ l → R a b → S a b) → List.IsChain R l → List.IsChain S l
+参数：∀ (a b : α), a ∈ l → b ∈ l → R a b → S a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp_of_mem_tail_imp`：∀ {α : Type u_1} {R S : α → α → Prop} 
+{l : List α},   (∀ (a b : α), a ∈ l → b ∈ l.tail → R a b → S a b) → List.IsChain
+ R l → List.IsChain S …
+· 使用定理 `List.mem_of_mem_tail`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l.tail 
+→ a ∈ l
 -/
-theorem IsChain.imp_of_mem_imp {S : α -> α -> Prop} {l : List α}
-    (H : forall a b : α, a in l -> b in l -> R a b -> S a b) (p : IsChain R l) : IsChain S l :=
+theorem IsChain.imp_of_mem_imp {S : α → α → Prop} {l : List α}
+    (H : ∀ a b : α, a ∈ l → b ∈ l → R a b → S a b) (p : IsChain R l) : IsChain S l :=
   p.imp_of_mem_tail_imp (H · · · <| mem_of_mem_tail ·)
-
-/--
-theorem `IsChain.iff` / 定理 `IsChain.iff`
-
-English:
-theorem IsChain.iff
-  given: {S : α -> α -> Prop} (H : forall a b, R a b ↔ S a b) {l : List α}
-  proof: ⟨IsChain.imp fun a b => (H a b).1, IsChain.imp fun a b => (H a b).2⟩
-
-中文:
-定理 IsChain.iff
-  条件: {S : α -> α -> 命题} (H : 对任意 a b, R a b ↔ S a b) {l : 列表 α}
-  证明: ⟨IsChain.imp fun a b => (H a b).1, IsChain.imp fun a b => (H a b).2⟩
-
-Depends on / 依赖: IsChain, IsChain.imp
+/-
+**List.IsChain.iff** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R S : α → α → Prop},   (∀ (a b : α), R a b ↔ S a b) → ∀ 
+{l : List α}, List.IsChain R l ↔ List.IsChain S l
+参数：∀ (a b : α), R a b ↔ S a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem IsChain.iff {S : α -> α -> Prop} (H : forall a b, R a b ↔ S a b) {l : List α} :
+theorem IsChain.iff {S : α → α → Prop} (H : ∀ a b, R a b ↔ S a b) {l : List α} :
     IsChain R l ↔ IsChain S l :=
   ⟨IsChain.imp fun a b => (H a b).1, IsChain.imp fun a b => (H a b).2⟩
-
-/--
-theorem `IsChain.iff_of_mem_imp` / 定理 `IsChain.iff_of_mem_imp`
-
-English:
-theorem IsChain.iff_of_mem_imp
-  statement: {S : α -> α -> Prop} {l : List α}
-  proof: ⟨IsChain.imp_of_mem_imp (Iff.mp <| H · · · ·), IsChain.imp_of_mem_imp (Iff.mpr <| H · · · ·)⟩
-
-中文:
-定理 IsChain.iff_of_mem_imp
-  结论: {S : α -> α -> 命题} {l : 列表 α}
-  证明: ⟨IsChain.imp_of_mem_imp (Iff.mp <| H · · · ·), IsChain.imp_of_mem_imp (Iff.mpr <| H · · · ·)⟩
-
-Depends on / 依赖: Iff.mp, Iff.mpr, IsChain, IsChain.imp_of_mem_imp, imp_of_mem_imp
+/-
+**List.IsChain.iff_of_mem_imp** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α},   (∀ (a b : α), a ∈ l 
+→ b ∈ l → (R a b ↔ S a b)) → (List.IsChain R l ↔ List.IsChain S l)
+参数：∀ (a b : α), a ∈ l → b ∈ l → (R a b ↔ S a b)；List.IsChain R l ↔ List.IsChain 
+S l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp_of_mem_imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : 
+List α},   (∀ (a b : α), a ∈ l → b ∈ l → R a b → S a b) → List.IsChain R l → Lis
+t.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem IsChain.iff_of_mem_imp {S : α -> α -> Prop} {l : List α}
-    (H : forall a b : α, a in l -> b in l -> (R a b ↔ S a b)) : IsChain R l ↔ IsChain S l :=
+theorem IsChain.iff_of_mem_imp {S : α → α → Prop} {l : List α}
+    (H : ∀ a b : α, a ∈ l → b ∈ l → (R a b ↔ S a b)) : IsChain R l ↔ IsChain S l :=
   ⟨IsChain.imp_of_mem_imp (Iff.mp <| H · · · ·), IsChain.imp_of_mem_imp (Iff.mpr <| H · · · ·)⟩
-
-/--
-theorem `IsChain.iff_of_mem_tail_imp` / 定理 `IsChain.iff_of_mem_tail_imp`
-
-English:
-theorem IsChain.iff_of_mem_tail_imp
-  statement: {S : α -> α -> Prop} {l : List α}
-  proof: ⟨IsChain.imp_of_mem_tail_imp (Iff.mp <| H · · · ·),
-  IsChain.imp_of_mem_tail_imp (Iff.mpr <| H · · · ·)⟩
-
-中文:
-定理 IsChain.iff_of_mem_tail_imp
-  结论: {S : α -> α -> 命题} {l : 列表 α}
-  证明: ⟨IsChain.imp_of_mem_tail_imp (Iff.mp <| H · · · ·),
-  IsChain.imp_of_mem_tail_imp (Iff.mpr <| H · · · ·)⟩
-
-Depends on / 依赖: Iff.mp, Iff.mpr, IsChain, IsChain.imp_of_mem_tail_imp, imp_of_mem_tail_imp
+/-
+**List.IsChain.iff_of_mem_tail_imp** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α},   (∀ (a b : α), a ∈ l 
+→ b ∈ l.tail → (R a b ↔ S a b)) → (List.IsChain R l ↔ List.IsChain S l)
+参数：∀ (a b : α), a ∈ l → b ∈ l.tail → (R a b ↔ S a b)；List.IsChain R l ↔ List.IsC
+hain S l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp_of_mem_tail_imp`：∀ {α : Type u_1} {R S : α → α → Prop} 
+{l : List α},   (∀ (a b : α), a ∈ l → b ∈ l.tail → R a b → S a b) → List.IsChain
+ R l → List.IsChain S …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem IsChain.iff_of_mem_tail_imp {S : α -> α -> Prop} {l : List α}
-    (H : forall a b : α, a in l -> b in l.tail -> (R a b ↔ S a b)) : IsChain R l ↔ IsChain S l :=
+theorem IsChain.iff_of_mem_tail_imp {S : α → α → Prop} {l : List α}
+    (H : ∀ a b : α, a ∈ l → b ∈ l.tail → (R a b ↔ S a b)) : IsChain R l ↔ IsChain S l :=
   ⟨IsChain.imp_of_mem_tail_imp (Iff.mp <| H · · · ·),
   IsChain.imp_of_mem_tail_imp (Iff.mpr <| H · · · ·)⟩
-
-/--
-theorem `IsChain.iff_mem` / 定理 `IsChain.iff_mem`
-
-English:
-theorem IsChain.iff_mem
-  given: {l : List α}
-  proof: IsChain.iff_of_mem_imp by grind
-
-中文:
-定理 IsChain.iff_mem
-  条件: {l : 列表 α}
-  证明: IsChain.iff_of_mem_imp by grind
-
-Depends on / 依赖: IsChain, IsChain.iff_of_mem_imp, iff_of_mem_imp
+/-
+**List.IsChain.iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, List.IsChain R l ↔ List.
+IsChain (fun x y => x ∈ l ∧ y ∈ l ∧ R x y) l
+参数：fun x y => x ∈ l ∧ y ∈ l ∧ R x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.iff_of_mem_imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : 
+List α},   (∀ (a b : α), a ∈ l → b ∈ l → (R a b ↔ S a b)) → (List.IsChain R l ↔ 
+List.IsChain S l)
 -/
 theorem IsChain.iff_mem {l : List α} :
-    IsChain R l ↔ IsChain (fun x y => x in l ∧ y in l ∧ R x y) l :=
-IsChain.iff_of_mem_imp by grind
-
-/--
-theorem `IsChain.iff_mem_mem_tail` / 定理 `IsChain.iff_mem_mem_tail`
-
-English:
-theorem IsChain.iff_mem_mem_tail
-  given: {l : List α}
-  proof: IsChain.iff_of_mem_tail_imp by grind
-
-中文:
-定理 IsChain.iff_mem_mem_tail
-  条件: {l : 列表 α}
-  证明: IsChain.iff_of_mem_tail_imp by grind
-
-Depends on / 依赖: IsChain, IsChain.iff_of_mem_tail_imp, iff_of_mem_tail_imp
+    IsChain R l ↔ IsChain (fun x y => x ∈ l ∧ y ∈ l ∧ R x y) l :=
+  IsChain.iff_of_mem_imp <| by grind
+/-
+**List.IsChain.iff_mem_mem_tail** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α},   List.IsChain R l ↔ Lis
+t.IsChain (fun x y => x ∈ l ∧ y ∈ l.tail ∧ R x y) l
+参数：fun x y => x ∈ l ∧ y ∈ l.tail ∧ R x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.iff_of_mem_tail_imp`：∀ {α : Type u_1} {R S : α → α → Prop} 
+{l : List α},   (∀ (a b : α), a ∈ l → b ∈ l.tail → (R a b ↔ S a b)) → (List.IsCh
+ain R l ↔ List.IsChain…
 -/
 theorem IsChain.iff_mem_mem_tail {l : List α} :
-    IsChain R l ↔ IsChain (fun x y => x in l ∧ y in l.tail ∧ R x y) l :=
-IsChain.iff_of_mem_tail_imp by grind
-
-/--
-theorem `isChain_pair` / 定理 `isChain_pair`
-
-English:
-theorem isChain_pair
-  given: {x y}
-  statement: IsChain R [x, y] ↔ R x y
-  proof: by
-  simp only [IsChain.singleton, isChain_cons_cons, and_true]
-
-中文:
-定理 isChain_pair
-  条件: {x y}
-  结论: IsChain R [x, y] ↔ R x y
-  证明: by
-  simp only [IsChain.singleton, isChain_cons_cons, and_true]
-
-Depends on / 依赖: IsChain, IsChain.singleton, and_true, isChain_cons_cons, singleton
+    IsChain R l ↔ IsChain (fun x y => x ∈ l ∧ y ∈ l.tail ∧ R x y) l :=
+  IsChain.iff_of_mem_tail_imp <| by grind
+/-
+**List.isChain_pair** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_pair {x y} : IsChain R [x, y] ↔ R x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isChain_pair {x y} : IsChain R [x, y] ↔ R x y := by
   simp only [IsChain.singleton, isChain_cons_cons, and_true]
-
-/--
-theorem `isChain_isInfix` / 定理 `isChain_isInfix`
-
-English:
-theorem isChain_isInfix
-  statement: forall l : List α, IsChain (fun x y => [x, y] <:+: l) l
-
-中文:
-定理 isChain_isInfix
-  结论: 对任意 l : 列表 α, IsChain (fun x y => [x, y] <:+: l) l
+/-
+**List.isChain_isInfix** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (l : List α), List.IsChain (fun x y => [x, y] <:+: l) l
+参数：l : List α；fun x y => [x, y] <:+: l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_isInfix : forall l : List α, IsChain (fun x y => [x, y] <:+: l) l
+theorem isChain_isInfix : ∀ l : List α, IsChain (fun x y => [x, y] <:+: l) l
   | [] => .nil
   | [_] => .singleton _
   | a :: b :: l => .cons_cons ⟨[], l, by simp⟩
     ((isChain_isInfix (b :: l)).imp fun _ _ h => h.trans ⟨[a], [], by simp⟩)
-
-/--
-theorem `isChain_split` / 定理 `isChain_split`
-
-English:
-theorem isChain_split
-  given: {c : α} {l₁ l₂ : List α}
-  proof: by
-  induction l₁ using twoStepInduction generalizing l₂ with grind
-
-中文:
-定理 isChain_split
-  条件: {c : α} {l₁ l₂ : 列表 α}
-  证明: by
-  induction l₁ using twoStepInduction generalizing l₂ with grind
-
-Depends on / 依赖: generalizing, twoStepInduction
+/-
+**List.isChain_split** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_split {c : α} {l₁ l₂ : List α} : IsChain R (l₁ ++ c :: l₂) ↔ IsCha
+in R (l₁ ++ [c]) ∧ IsChain R (c :: l₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_split {c : α} {l₁ l₂ : List α} :
     IsChain R (l₁ ++ c :: l₂) ↔ IsChain R (l₁ ++ [c]) ∧ IsChain R (c :: l₂) := by
   induction l₁ using twoStepInduction generalizing l₂ with grind
-
-/--
-theorem `isChain_cons_split` / 定理 `isChain_cons_split`
-
-English:
-theorem isChain_cons_split
-  given: {c : α} {l₁ l₂ : List α}
-  proof: by
-  simp_rw [← cons_append, isChain_split (l₂ := l₂)]
-
-@[simp]
-
-中文:
-定理 isChain_cons_split
-  条件: {c : α} {l₁ l₂ : 列表 α}
-  证明: by
-  simp_rw [← cons_append, isChain_split (l₂ := l₂)]
-
-@[simp]
-
-Depends on / 依赖: cons_append, isChain_split, simp_rw
+/-
+**List.isChain_cons_split** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_split {c : α} {l₁ l₂ : List α} : IsChain R (a :: (l₁ ++ c :: 
+l₂)) ↔ IsChain R (a :: (l₁ ++ [c])) ∧ IsChain R (c :: l₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_split`：isChain_split {c : α} {l₁ l₂ : List α} : IsChain R (
+l₁ ++ c :: l₂) ↔ IsChain R (l₁ ++ [c]) ∧ IsChain R (c :: l₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isChain_cons_split {c : α} {l₁ l₂ : List α} :
     IsChain R (a :: (l₁ ++ c :: l₂)) ↔ IsChain R (a :: (l₁ ++ [c])) ∧ IsChain R (c :: l₂) := by
   simp_rw [← cons_append, isChain_split (l₂ := l₂)]
 
 @[simp]
-/--
-theorem `isChain_append_cons_cons` / 定理 `isChain_append_cons_cons`
-
-English:
-theorem isChain_append_cons_cons
-  given: {b c : α} {l₁ l₂ : List α}
-  proof: by
-  rw [isChain_split]; rw [isChain_cons_cons]
-
-@[simp]
-
-中文:
-定理 isChain_append_cons_cons
-  条件: {b c : α} {l₁ l₂ : 列表 α}
-  证明: by
-  rw [isChain_split]; rw [isChain_cons_cons]
-
-@[simp]
-
-Depends on / 依赖: isChain_cons_cons, isChain_split
+/-
+**List.isChain_append_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_append_cons_cons {b c : α} {l₁ l₂ : List α} : IsChain R (l₁ ++ b :
+: c :: l₂) ↔ IsChain R (l₁ ++ [b]) ∧ R b c ∧ IsChain R (c :: l₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_split`：isChain_split {c : α} {l₁ l₂ : List α} : IsChain R (
+l₁ ++ c :: l₂) ↔ IsChain R (l₁ ++ [c]) ∧ IsChain R (c :: l₂)
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isChain_append_cons_cons {b c : α} {l₁ l₂ : List α} :
     IsChain R (l₁ ++ b :: c :: l₂) ↔ IsChain R (l₁ ++ [b]) ∧ R b c ∧ IsChain R (c :: l₂) := by
-  rw [isChain_split]; rw [isChain_cons_cons]
+  rw [isChain_split, isChain_cons_cons]
 
 @[simp]
-/--
-theorem `isChain_cons_append_cons_cons` / 定理 `isChain_cons_append_cons_cons`
-
-English:
-theorem isChain_cons_append_cons_cons
-  given: {a b c : α} {l₁ l₂ : List α}
-  proof: by
-  rw [isChain_cons_split]; rw [isChain_cons_cons]
-
-中文:
-定理 isChain_cons_append_cons_cons
-  条件: {a b c : α} {l₁ l₂ : 列表 α}
-  证明: by
-  rw [isChain_cons_split]; rw [isChain_cons_cons]
-
-Depends on / 依赖: isChain_cons_cons, isChain_cons_split
+/-
+**List.isChain_cons_append_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_append_cons_cons {a b c : α} {l₁ l₂ : List α} : IsChain R (a 
+:: (l₁ ++ b :: c :: l₂)) ↔ IsChain R (a :: (l₁ ++ [b])) ∧ R b c ∧ IsChain R (c :
+: l₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_cons_split`：isChain_cons_split {c : α} {l₁ l₂ : List α} : I
+sChain R (a :: (l₁ ++ c :: l₂)) ↔ IsChain R (a :: (l₁ ++ [c])) ∧ IsChain R (c ::
+ l₂)
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isChain_cons_append_cons_cons {a b c : α} {l₁ l₂ : List α} :
     IsChain R (a :: (l₁ ++ b :: c :: l₂)) ↔
     IsChain R (a :: (l₁ ++ [b])) ∧ R b c ∧ IsChain R (c :: l₂) := by
-  rw [isChain_cons_split]; rw [isChain_cons_cons]
-
-/--
-theorem `isChain_iff_forall_rel_of_append_cons_cons` / 定理 `isChain_iff_forall_rel_of_append_cons_cons`
-
-English:
-theorem isChain_iff_forall_rel_of_append_cons_cons
-  given: {l : List α}
-  proof: by
-  refine ⟨fun h _ _ _ _ eq => (isChain_append_cons_cons.mp (eq ▸ h)).2.1, ?_⟩
-  induction l using twoStepInduction with
-  | nil | singleton => grind
-  | cons_cons head head' tail _ ih =>
-    refine fun h => isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
-    apply h
-    rw [eq]; rw [cons_append]
-
-中文:
-定理 isChain_iff_对任意_rel_of_append_cons_cons
-  条件: {l : 列表 α}
-  证明: by
-  refine ⟨fun h _ _ _ _ eq => (isChain_append_cons_cons.mp (eq ▸ h)).2.1, ?_⟩
-  induction l using twoStepInduction with
-  | nil | singleton => grind
-  | cons_cons head head' tail _ ih =>
-    refine fun h => isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
-    apply h
-    rw [eq]; rw [cons_append]
-
-Depends on / 依赖: cons_append, cons_cons, isChain_append_cons_cons, isChain_append_cons_cons.mp, isChain_cons_cons, isChain_cons_cons.mpr, nil_append, singleton, twoStepInduction
+  rw [isChain_cons_split, isChain_cons_cons]
+/-
+**List.isChain_iff_forall_rel_of_append_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `Lis
+t`。
+形式化陈述：isChain_iff_forall_rel_of_append_cons_cons {l : List α} : IsChain R l ↔ fo
+rall ⦃a b l₁ l₂⦄, l = l₁ ++ a :: b :: l₂ -> R a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_append_cons_cons`：isChain_append_cons_cons {b c : α} {l₁ l₂
+ : List α} : IsChain R (l₁ ++ b :: c :: l₂) ↔ IsChain R (l₁ ++ [b]) ∧ R b c ∧ Is
+Chain R (c :: l₂)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.cons_append`：∀ {α : Type u} {a : α} {as bs : List α}, a :: as ++ bs
+ = a :: (as ++ bs)
 -/
 theorem isChain_iff_forall_rel_of_append_cons_cons {l : List α} :
-    IsChain R l ↔ forall ⦃a b l₁ l₂⦄, l = l₁ ++ a :: b :: l₂ -> R a b := by
+    IsChain R l ↔ ∀ ⦃a b l₁ l₂⦄, l = l₁ ++ a :: b :: l₂ → R a b := by
   refine ⟨fun h _ _ _ _ eq => (isChain_append_cons_cons.mp (eq ▸ h)).2.1, ?_⟩
   induction l using twoStepInduction with
   | nil | singleton => grind
   | cons_cons head head' tail _ ih =>
-    refine fun h => isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
+    refine fun h ↦ isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
     apply h
-    rw [eq]; rw [cons_append]
-
-/--
-theorem `isChain_iff_forall₂` / 定理 `isChain_iff_forall₂`
-
-English:
-theorem isChain_iff_forall₂
-  given: {l : List α}
-  proof: by
-  induction l using twoStepInduction <;> simp_all
-
-中文:
-定理 isChain_iff_对任意₂
-  条件: {l : 列表 α}
-  证明: by
-  induction l using twoStepInduction <;> simp_all
-
-Depends on / 依赖: twoStepInduction
+    rw [eq, cons_append]
+/-
+**List.isChain_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_iff_forall₂ {l : List α} :
     IsChain R l ↔ Forall₂ R l.dropLast l.tail := by
   induction l using twoStepInduction <;> simp_all
-
-/--
-theorem `isChain_cons_iff_forall₂` / 定理 `isChain_cons_iff_forall₂`
-
-English:
-theorem isChain_cons_iff_forall₂
-  statement: IsChain R (a :: l) ↔ l = [] ∨ Forall₂ R (a :: dropLast l) l
-  proof: by
-  cases l <;> simp [isChain_iff_forall₂]
-
-中文:
-定理 isChain_cons_iff_对任意₂
-  结论: IsChain R (a :: l) ↔ l = [] ∨ Forall₂ R (a :: dropLast l) l
-  证明: by
-  cases l <;> simp [isChain_iff_forall₂]
+/-
+**List.isChain_cons_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_cons_iff_forall₂ : IsChain R (a :: l) ↔ l = [] ∨ Forall₂ R (a :: dropLast l) l := by
   cases l <;> simp [isChain_iff_forall₂]
-
-/--
-theorem `isChain_cons_append_singleton_iff_forall₂` / 定理 `isChain_cons_append_singleton_iff_forall₂`
-
-English:
-theorem isChain_cons_append_singleton_iff_forall₂
-  proof: by
-  simp_rw [isChain_iff_forall₂, dropLast_concat, cons_append, tail_cons]
-
-中文:
-定理 isChain_cons_append_singleton_iff_对任意₂
-  证明: by
-  simp_rw [isChain_iff_forall₂, dropLast_concat, cons_append, tail_cons]
-
-Depends on / 依赖: cons_append, dropLast_concat, simp_rw, tail_cons
+/-
+**List.isChain_cons_append_singleton_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `List`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_cons_append_singleton_iff_forall₂ :
     IsChain R (a :: l ++ [b]) ↔ Forall₂ R (a :: l) (l ++ [b]) := by
   simp_rw [isChain_iff_forall₂, dropLast_concat, cons_append, tail_cons]
-
-/--
-theorem `isChain_map` / 定理 `isChain_map`
-
-English:
-theorem isChain_map
-  given: (f : β -> α) {l : List β}
-  proof: by
-  induction l using twoStepInduction <;> grind
-
-中文:
-定理 isChain_map
-  条件: (f : β -> α) {l : 列表 β}
-  证明: by
-  induction l using twoStepInduction <;> grind
-
-Depends on / 依赖: twoStepInduction
+/-
+**List.isChain_map** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_map (f : β -> α) {l : List β} : IsChain R (map f l) ↔ IsChain (fun
+ a b : β => R (f a) (f b)) l
+参数：f : β -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_map (f : β -> α) {l : List β} :
+theorem isChain_map (f : β → α) {l : List β} :
     IsChain R (map f l) ↔ IsChain (fun a b : β => R (f a) (f b)) l := by
   induction l using twoStepInduction <;> grind
-
-/--
-theorem `isChain_of_isChain_map` / 定理 `isChain_of_isChain_map`
-
-English:
-theorem isChain_of_isChain_map
-  statement: {S : β -> β -> Prop} (f : α -> β) (H : forall a b : α, S (f a) (f b) -> R a b)
-  proof: ((isChain_map f).1 p).imp H
-
-中文:
-定理 isChain_of_isChain_map
-  结论: {S : β -> β -> 命题} (f : α -> β) (H : 对任意 a b : α, S (f a) (f b) -> R a b)
-  证明: ((isChain_map f).1 p).imp H
-
-Depends on / 依赖: isChain_map
+/-
+**List.isChain_of_isChain_map** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_of_isChain_map {S : β -> β -> Prop} (f : α -> β) (H : forall a b :
+ α, S (f a) (f b) -> R a b) {l : List α} (p : IsChain S (map f l)) : IsChain R l
+参数：f : α -> β；H : forall a b : α, S (f a) (f b) -> R a b；p : IsChain S (map f l)
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_map`：isChain_map (f : β -> α) {l : List β} : IsChain R (map
+ f l) ↔ IsChain (fun a b : β => R (f a) (f b)) l
 -/
-theorem isChain_of_isChain_map {S : β -> β -> Prop} (f : α -> β) (H : forall a b : α, S (f a) (f b) -> R a b)
+theorem isChain_of_isChain_map {S : β → β → Prop} (f : α → β) (H : ∀ a b : α, S (f a) (f b) → R a b)
     {l : List α} (p : IsChain S (map f l)) : IsChain R l :=
   ((isChain_map f).1 p).imp H
-
-/--
-theorem `isChain_map_of_isChain` / 定理 `isChain_map_of_isChain`
-
-English:
-theorem isChain_map_of_isChain
-  statement: {S : β -> β -> Prop} (f : α -> β) (H : forall a b : α, R a b -> S (f a) (f b))
-  proof: (isChain_map f).2 p.imp H
-
-中文:
-定理 isChain_map_of_isChain
-  结论: {S : β -> β -> 命题} (f : α -> β) (H : 对任意 a b : α, R a b -> S (f a) (f b))
-  证明: (isChain_map f).2 p.imp H
-
-Depends on / 依赖: isChain_map, p.imp
+/-
+**List.isChain_map_of_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_map_of_isChain {S : β -> β -> Prop} (f : α -> β) (H : forall a b :
+ α, R a b -> S (f a) (f b)) {l : List α} (p : IsChain R l) : IsChain S (map f l)
+参数：f : α -> β；H : forall a b : α, R a b -> S (f a) (f b)；p : IsChain R l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_map`：isChain_map (f : β -> α) {l : List β} : IsChain R (map
+ f l) ↔ IsChain (fun a b : β => R (f a) (f b)) l
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
 -/
-theorem isChain_map_of_isChain {S : β -> β -> Prop} (f : α -> β) (H : forall a b : α, R a b -> S (f a) (f b))
+theorem isChain_map_of_isChain {S : β → β → Prop} (f : α → β) (H : ∀ a b : α, R a b → S (f a) (f b))
     {l : List α} (p : IsChain R l) : IsChain S (map f l) :=
-(isChain_map f).2 p.imp H
-
-/--
-theorem `isChain_cons_map` / 定理 `isChain_cons_map`
-
-English:
-theorem isChain_cons_map
-  given: (f : β -> α) {l : List β} {b : β}
-  proof: isChain_map f (l := b :: l)
-
-中文:
-定理 isChain_cons_map
-  条件: (f : β -> α) {l : 列表 β} {b : β}
-  证明: isChain_map f (l := b :: l)
-
-Depends on / 依赖: isChain_map
+  (isChain_map f).2 <| p.imp H
+/-
+**List.isChain_cons_map** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_map (f : β -> α) {l : List β} {b : β} : IsChain R (f b :: map
+ f l) ↔ IsChain (fun a b : β => R (f a) (f b)) (b :: l)
+参数：f : β -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.isChain_map`：isChain_map (f : β -> α) {l : List β} : IsChain R (map
+ f l) ↔ IsChain (fun a b : β => R (f a) (f b)) l
 -/
-theorem isChain_cons_map (f : β -> α) {l : List β} {b : β} :
+theorem isChain_cons_map (f : β → α) {l : List β} {b : β} :
     IsChain R (f b :: map f l) ↔ IsChain (fun a b : β => R (f a) (f b)) (b :: l) :=
   isChain_map f (l := b :: l)
-
-/--
-theorem `isChain_cons_of_isChain_cons_map` / 定理 `isChain_cons_of_isChain_cons_map`
-
-English:
-theorem isChain_cons_of_isChain_cons_map
-  statement: {S : β -> β -> Prop} (f : α -> β)
-  proof: ((isChain_cons_map f).1 p).imp H
-
-中文:
-定理 isChain_cons_of_isChain_cons_map
-  结论: {S : β -> β -> 命题} (f : α -> β)
-  证明: ((isChain_cons_map f).1 p).imp H
-
-Depends on / 依赖: isChain_cons_map
+/-
+**List.isChain_cons_of_isChain_cons_map** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_of_isChain_cons_map {S : β -> β -> Prop} (f : α -> β) (H : fo
+rall a b : α, S (f a) (f b) -> R a b) {l : List α} (p : IsChain S (f a :: map f 
+l)) : IsChain R (a :: l)
+参数：f : α -> β；H : forall a b : α, S (f a) (f b) -> R a b；p : IsChain S (f a :: m
+ap f l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_cons_map`：isChain_cons_map (f : β -> α) {l : List β} {b : β
+} : IsChain R (f b :: map f l) ↔ IsChain (fun a b : β => R (f a) (f b)) (b :: l)
 -/
-theorem isChain_cons_of_isChain_cons_map {S : β -> β -> Prop} (f : α -> β)
-    (H : forall a b : α, S (f a) (f b) -> R a b)
+theorem isChain_cons_of_isChain_cons_map {S : β → β → Prop} (f : α → β)
+    (H : ∀ a b : α, S (f a) (f b) → R a b)
     {l : List α} (p : IsChain S (f a :: map f l)) : IsChain R (a :: l) :=
   ((isChain_cons_map f).1 p).imp H
-
-/--
-theorem `isChain_cons_map_of_isChain_cons` / 定理 `isChain_cons_map_of_isChain_cons`
-
-English:
-theorem isChain_cons_map_of_isChain_cons
-  statement: {S : β -> β -> Prop} (f : α -> β)
-  proof: (isChain_cons_map f).2 p.imp H
-
-中文:
-定理 isChain_cons_map_of_isChain_cons
-  结论: {S : β -> β -> 命题} (f : α -> β)
-  证明: (isChain_cons_map f).2 p.imp H
-
-Depends on / 依赖: isChain_cons_map, p.imp
+/-
+**List.isChain_cons_map_of_isChain_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_map_of_isChain_cons {S : β -> β -> Prop} (f : α -> β) (H : fo
+rall a b : α, R a b -> S (f a) (f b)) {l : List α} (p : IsChain R (a :: l)) : Is
+Chain S (f a :: map f l)
+参数：f : α -> β；H : forall a b : α, R a b -> S (f a) (f b)；p : IsChain R (a :: l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_cons_map`：isChain_cons_map (f : β -> α) {l : List β} {b : β
+} : IsChain R (f b :: map f l) ↔ IsChain (fun a b : β => R (f a) (f b)) (b :: l)
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
 -/
-theorem isChain_cons_map_of_isChain_cons {S : β -> β -> Prop} (f : α -> β)
-    (H : forall a b : α, R a b -> S (f a) (f b))
+theorem isChain_cons_map_of_isChain_cons {S : β → β → Prop} (f : α → β)
+    (H : ∀ a b : α, R a b → S (f a) (f b))
     {l : List α} (p : IsChain R (a :: l)) : IsChain S (f a :: map f l) :=
-(isChain_cons_map f).2 p.imp H
-
-/--
-theorem `isChain_pmap` / 定理 `isChain_pmap`
-
-English:
-theorem isChain_pmap
-  statement: {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β) {l : List α}
-  proof: by
-  induction l using twoStepInduction <;> grind
-
-中文:
-定理 isChain_pmap
-  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α}
-  证明: by
-  induction l using twoStepInduction <;> grind
-
-Depends on / 依赖: twoStepInduction
+  (isChain_cons_map f).2 <| p.imp H
+/-
+**List.isChain_pmap** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β)
+ {l : List α} (hl : forall a in l, p a) : IsChain S (pmap f l hl) ↔ IsChain (fun
+ a b => exists ha, exists hb, S (f a ha) (f b hb)) l
+参数：f : forall a, p a -> β；hl : forall a in l, p a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β) {l : List α}
-    (hl : forall a in l, p a) : IsChain S (pmap f l hl) ↔
-    IsChain (fun a b => exists ha, exists hb, S (f a ha) (f b hb)) l := by
+theorem isChain_pmap {S : β → β → Prop} {p : α → Prop} (f : ∀ a, p a → β) {l : List α}
+    (hl : ∀ a ∈ l, p a) : IsChain S (pmap f l hl) ↔
+    IsChain (fun a b => ∃ ha, ∃ hb, S (f a ha) (f b hb)) l := by
   induction l using twoStepInduction <;> grind
-
-/--
-theorem `isChain_pmap_of_isChain` / 定理 `isChain_pmap_of_isChain`
-
-English:
-theorem isChain_pmap_of_isChain
-  statement: {S : β -> β -> Prop} {p : α -> Prop} {f : forall a, p a -> β}
-  proof: (isChain_pmap f _).2
-  hl₁.imp_of_mem_imp (by grind)
-
-中文:
-定理 isChain_pmap_of_isChain
-  结论: {S : β -> β -> 命题} {p : α -> 命题} {f : 对任意 a, p a -> β}
-  证明: (isChain_pmap f _).2
-  hl₁.imp_of_mem_imp (by grind)
-
-Depends on / 依赖: isChain_pmap
+/-
+**List.isChain_pmap_of_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_pmap_of_isChain {S : β -> β -> Prop} {p : α -> Prop} {f : forall a
+, p a -> β} (H : forall a b ha hb, R a b -> S (f a ha) (f b hb)) {l : List α} (h
+l₁ : IsChain R l) (hl₂ : forall a in l, p a) : IsChain S (pmap f l hl₂)
+参数：H : forall a b ha hb, R a b -> S (f a ha) (f b hb)；hl₁ : IsChain R l；hl₂ : fo
+rall a in l, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_pmap`：isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f 
+: forall a, p a -> β) {l : List α} (hl : forall a in l, p a) : IsChain S (pmap f
+ l hl) …
+· 使用定理 `List.IsChain.imp_of_mem_imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : 
+List α},   (∀ (a b : α), a ∈ l → b ∈ l → R a b → S a b) → List.IsChain R l → Lis
+t.IsChain S l
 -/
-theorem isChain_pmap_of_isChain {S : β -> β -> Prop} {p : α -> Prop} {f : forall a, p a -> β}
-    (H : forall a b ha hb, R a b -> S (f a ha) (f b hb)) {l : List α} (hl₁ : IsChain R l)
-(hl₂ : forall a in l, p a) : IsChain S (pmap f l hl₂) := (isChain_pmap f _).2
+theorem isChain_pmap_of_isChain {S : β → β → Prop} {p : α → Prop} {f : ∀ a, p a → β}
+    (H : ∀ a b ha hb, R a b → S (f a ha) (f b hb)) {l : List α} (hl₁ : IsChain R l)
+    (hl₂ : ∀ a ∈ l, p a) : IsChain S (pmap f l hl₂) := (isChain_pmap f _).2 <|
   hl₁.imp_of_mem_imp (by grind)
-
-/--
-theorem `isChain_of_isChain_pmap` / 定理 `isChain_of_isChain_pmap`
-
-English:
-theorem isChain_of_isChain_pmap
-  statement: {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β) {l : List α}
-  proof: ((isChain_pmap f _).1 hl₂).imp (by grind)
-
-中文:
-定理 isChain_of_isChain_pmap
-  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α}
-  证明: ((isChain_pmap f _).1 hl₂).imp (by grind)
-
-Depends on / 依赖: isChain_pmap
+/-
+**List.isChain_of_isChain_pmap** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_of_isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f : forall a
+, p a -> β) {l : List α} (hl₁ : forall a in l, p a) (hl₂ : IsChain S (pmap f l h
+l₁)) (H : forall a b ha hb, S (f a ha) (f b hb) -> R a b) : IsChain R l
+参数：f : forall a, p a -> β；hl₁ : forall a in l, p a；hl₂ : IsChain S (pmap f l hl₁
+)；H : forall a b ha hb, S (f a ha) (f b hb) -> R a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_pmap`：isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f 
+: forall a, p a -> β) {l : List α} (hl : forall a in l, p a) : IsChain S (pmap f
+ l hl) …
 -/
-theorem isChain_of_isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β) {l : List α}
-    (hl₁ : forall a in l, p a) (hl₂ : IsChain S (pmap f l hl₁))
-    (H : forall a b ha hb, S (f a ha) (f b hb) -> R a b) : IsChain R l :=
+theorem isChain_of_isChain_pmap {S : β → β → Prop} {p : α → Prop} (f : ∀ a, p a → β) {l : List α}
+    (hl₁ : ∀ a ∈ l, p a) (hl₂ : IsChain S (pmap f l hl₁))
+    (H : ∀ a b ha hb, S (f a ha) (f b hb) → R a b) : IsChain R l :=
   ((isChain_pmap f _).1 hl₂).imp (by grind)
-
-/--
-theorem `isChain_cons_pmap` / 定理 `isChain_cons_pmap`
-
-English:
-theorem isChain_cons_pmap
-  statement: {p : β -> Prop} (f : forall b, p b -> α) {l : List β} (hl : forall b in l, p b)
-  proof: isChain_pmap (l := a :: _) f (by grind)
-
-中文:
-定理 isChain_cons_pmap
-  结论: {p : β -> 命题} (f : 对任意 b, p b -> α) {l : 列表 β} (hl : 对任意 b in l, p b)
-  证明: isChain_pmap (l := a :: _) f (by grind)
-
-Depends on / 依赖: isChain_pmap
+/-
+**List.isChain_cons_pmap** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_pmap {p : β -> Prop} (f : forall b, p b -> α) {l : List β} (h
+l : forall b in l, p b) {a} (ha) : IsChain R (f a ha :: pmap f l hl) ↔ IsChain (
+fun a b => exists ha, exists hb, R (f a ha) (f b hb)) (a :: l)
+参数：f : forall b, p b -> α；hl : forall b in l, p b；ha。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.isChain_pmap`：isChain_pmap {S : β -> β -> Prop} {p : α -> Prop} (f 
+: forall a, p a -> β) {l : List α} (hl : forall a in l, p a) : IsChain S (pmap f
+ l hl) …
 -/
-theorem isChain_cons_pmap {p : β -> Prop} (f : forall b, p b -> α) {l : List β} (hl : forall b in l, p b)
+theorem isChain_cons_pmap {p : β → Prop} (f : ∀ b, p b → α) {l : List β} (hl : ∀ b ∈ l, p b)
     {a} (ha) : IsChain R (f a ha :: pmap f l hl) ↔
-    IsChain (fun a b => exists ha, exists hb, R (f a ha) (f b hb)) (a :: l) :=
+    IsChain (fun a b => ∃ ha, ∃ hb, R (f a ha) (f b hb)) (a :: l) :=
   isChain_pmap (l := a :: _) f (by grind)
-
-/--
-theorem `isChain_cons_pmap_of_isChain_cons` / 定理 `isChain_cons_pmap_of_isChain_cons`
-
-English:
-theorem isChain_cons_pmap_of_isChain_cons
-  statement: {S : β -> β -> Prop} {p : α -> Prop} {f : forall a, p a -> β}
-  proof: (isChain_cons_pmap f _ _).2 hl₁.imp_of_mem_imp (by grind)
-
-中文:
-定理 isChain_cons_pmap_of_isChain_cons
-  结论: {S : β -> β -> 命题} {p : α -> 命题} {f : 对任意 a, p a -> β}
-  证明: (isChain_cons_pmap f _ _).2 hl₁.imp_of_mem_imp (by grind)
-
-Depends on / 依赖: imp_of_mem_imp, isChain_cons_pmap
+/-
+**List.isChain_cons_pmap_of_isChain_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_pmap_of_isChain_cons {S : β -> β -> Prop} {p : α -> Prop} {f 
+: forall a, p a -> β} (H : forall a b ha hb, R a b -> S (f a ha) (f b hb)) {l : 
+List α} {a} (ha) (hl₁ : IsChain R (a :: l)) (hl₂ : forall a in l, p a) : IsChain
+ S (f a ha :: pmap f l hl₂)
+参数：H : forall a b ha hb, R a b -> S (f a ha) (f b hb)；ha；hl₁ : IsChain R (a :: l
+)；hl₂ : forall a in l, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_cons_pmap`：isChain_cons_pmap {p : β -> Prop} (f : forall b,
+ p b -> α) {l : List β} (hl : forall b in l, p b) {a} (ha) : IsChain R (f a ha :
+: pmap f l h…
+· 使用定理 `List.IsChain.imp_of_mem_imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : 
+List α},   (∀ (a b : α), a ∈ l → b ∈ l → R a b → S a b) → List.IsChain R l → Lis
+t.IsChain S l
 -/
-theorem isChain_cons_pmap_of_isChain_cons {S : β -> β -> Prop} {p : α -> Prop} {f : forall a, p a -> β}
-    (H : forall a b ha hb, R a b -> S (f a ha) (f b hb)) {l : List α} {a} (ha)
-    (hl₁ : IsChain R (a :: l)) (hl₂ : forall a in l, p a) : IsChain S (f a ha :: pmap f l hl₂) :=
-(isChain_cons_pmap f _ _).2 hl₁.imp_of_mem_imp (by grind)
-
-/--
-theorem `isChain_cons_of_isChain_cons_pmap` / 定理 `isChain_cons_of_isChain_cons_pmap`
-
-English:
-theorem isChain_cons_of_isChain_cons_pmap
-  statement: {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β)
-  proof: ((isChain_cons_pmap f _ _).1 hl₂).imp (by grind)
-
-中文:
-定理 isChain_cons_of_isChain_cons_pmap
-  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β)
-  证明: ((isChain_cons_pmap f _ _).1 hl₂).imp (by grind)
-
-Depends on / 依赖: isChain_cons_pmap
+theorem isChain_cons_pmap_of_isChain_cons {S : β → β → Prop} {p : α → Prop} {f : ∀ a, p a → β}
+    (H : ∀ a b ha hb, R a b → S (f a ha) (f b hb)) {l : List α} {a} (ha)
+    (hl₁ : IsChain R (a :: l)) (hl₂ : ∀ a ∈ l, p a) : IsChain S (f a ha :: pmap f l hl₂) :=
+    (isChain_cons_pmap f _ _).2 <| hl₁.imp_of_mem_imp (by grind)
+/-
+**List.isChain_cons_of_isChain_cons_pmap** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_of_isChain_cons_pmap {S : β -> β -> Prop} {p : α -> Prop} (f 
+: forall a, p a -> β) {l : List α} (hl₁ : forall a in l, p a) {a} (ha) (hl₂ : Is
+Chain S (f a ha :: pmap f l hl₁)) (H : forall a b ha hb, S (f a ha) (f b hb) -> 
+R a b) : IsChain R (a :: l)
+参数：f : forall a, p a -> β；hl₁ : forall a in l, p a；ha；hl₂ : IsChain S (f a ha ::
+ pmap f l hl₁)；H : forall a b ha hb, S (f a ha) (f b hb) -> R a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_cons_pmap`：isChain_cons_pmap {p : β -> Prop} (f : forall b,
+ p b -> α) {l : List β} (hl : forall b in l, p b) {a} (ha) : IsChain R (f a ha :
+: pmap f l h…
 -/
-theorem isChain_cons_of_isChain_cons_pmap {S : β -> β -> Prop} {p : α -> Prop} (f : forall a, p a -> β)
-    {l : List α} (hl₁ : forall a in l, p a) {a} (ha) (hl₂ : IsChain S (f a ha :: pmap f l hl₁))
-    (H : forall a b ha hb, S (f a ha) (f b hb) -> R a b) : IsChain R (a :: l) :=
+theorem isChain_cons_of_isChain_cons_pmap {S : β → β → Prop} {p : α → Prop} (f : ∀ a, p a → β)
+    {l : List α} (hl₁ : ∀ a ∈ l, p a) {a} (ha) (hl₂ : IsChain S (f a ha :: pmap f l hl₁))
+    (H : ∀ a b ha hb, S (f a ha) (f b hb) → R a b) : IsChain R (a :: l) :=
   ((isChain_cons_pmap f _ _).1 hl₂).imp (by grind)
-
-/--
-theorem `IsChain.sublist` / 定理 `IsChain.sublist`
-
-English:
-theorem IsChain.sublist
-  given: [Trans R R R] (hl : l₂.IsChain R) (h : l₁ <+ l₂)
-  proof: by
-  rw [isChain_iff_pairwise] at hl ⊢
-  exact hl.sublist h
-
-中文:
-定理 IsChain.sublist
-  条件: [Trans R R R] (hl : l₂.IsChain R) (h : l₁ <+ l₂)
-  证明: by
-  rw [isChain_iff_pairwise] at hl ⊢
-  exact hl.sublist h
+/-
+**List.IsChain.sublist** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α} [Trans R R R],   List
+.IsChain R l₂ → l₁.Sublist l₂ → List.IsChain R l₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
+· 使用定理 `List.Pairwise.sublist`：∀ {α : Type u_1} {l₁ l₂ : List α} {R : α → α → Pr
+op}, l₁.Sublist l₂ → List.Pairwise R l₂ → List.Pairwise R l₁
 -/
 protected theorem IsChain.sublist [Trans R R R] (hl : l₂.IsChain R) (h : l₁ <+ l₂) :
     l₁.IsChain R := by
   rw [isChain_iff_pairwise] at hl ⊢
   exact hl.sublist h
-
-/--
-theorem `IsChain.rel_cons` / 定理 `IsChain.rel_cons`
-
-English:
-theorem IsChain.rel_cons
-  given: [Trans R R R] (hl : (a :: l).IsChain R) (hb : b in l)
-  proof: by
-  rw [isChain_iff_pairwise] at hl
-  exact rel_of_pairwise_cons hl hb
-
-中文:
-定理 IsChain.rel_cons
-  条件: [Trans R R R] (hl : (a :: l).IsChain R) (hb : b in l)
-  证明: by
-  rw [isChain_iff_pairwise] at hl
-  exact rel_of_pairwise_cons hl hb
+/-
+**List.IsChain.rel_cons** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α} {a b : α} [Trans R R R], 
+List.IsChain R (a :: l) → b ∈ l → R a b
+参数：a :: l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.rel_of_pairwise_cons`：∀ {α : Type u_1} {a : α} {l : List α} {R : α 
+→ α → Prop}, List.Pairwise R (a :: l) → ∀ {a' : α}, a' ∈ l → R a a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
 -/
-protected theorem IsChain.rel_cons [Trans R R R] (hl : (a :: l).IsChain R) (hb : b in l) :
+protected theorem IsChain.rel_cons [Trans R R R] (hl : (a :: l).IsChain R) (hb : b ∈ l) :
     R a b := by
   rw [isChain_iff_pairwise] at hl
   exact rel_of_pairwise_cons hl hb
-
-/--
-theorem `IsChain.tail` / 定理 `IsChain.tail`
-
-English:
-theorem IsChain.tail
-  given: {l : List α} (h : IsChain R l)
-  statement: IsChain R l.tail
-  proof: by
-  grind +splitIndPred
-
-@[deprecated (since := "2026-06-25")] alias IsChain.rel_head := IsChain.rel
-
-中文:
-定理 IsChain.tail
-  条件: {l : 列表 α} (h : IsChain R l)
-  结论: IsChain R l.tail
-  证明: by
-  grind +splitIndPred
-
-@[deprecated (since := "2026-06-25")] alias IsChain.rel_head := IsChain.rel
-
-Depends on / 依赖: splitIndPred
+/-
+**List.IsChain.tail** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, List.IsChain R l → List.
+IsChain R l.tail
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsChain.tail {l : List α} (h : IsChain R l) : IsChain R l.tail := by
   grind +splitIndPred
 
 @[deprecated (since := "2026-06-25")] alias IsChain.rel_head := IsChain.rel
-
-/--
-theorem `IsChain.rel_head?` / 定理 `IsChain.rel_head?`
-
-English:
-theorem IsChain.rel_head?
-  given: {x l} (h : IsChain R (x :: l)) ⦃y⦄ (hy : y in head? l)
-  statement: R x y
-  proof: by
-  rw [← cons_head?_tail hy] at h
-  exact h.rel
-
-中文:
-定理 IsChain.rel_head?
-  条件: {x l} (h : IsChain R (x :: l)) ⦃y⦄ (hy : y in head? l)
-  结论: R x y
-  证明: by
-  rw [← cons_head?_tail hy] at h
-  exact h.rel
-
-Depends on / 依赖: _tail, cons_head, h.rel
+/-
+**List.IsChain.rel_head** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l : List α}, List.IsChain R
+ (a :: b :: l) → R a b
+参数：a :: b :: l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.rel`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l : Lis
+t α}, List.IsChain R (a :: b :: l) → R a b
 -/
-theorem IsChain.rel_head? {x l} (h : IsChain R (x :: l)) ⦃y⦄ (hy : y in head? l) : R x y := by
+theorem IsChain.rel_head? {x l} (h : IsChain R (x :: l)) ⦃y⦄ (hy : y ∈ head? l) : R x y := by
   rw [← cons_head?_tail hy] at h
   exact h.rel
-
-/--
-theorem `IsChain.rel_getLast_dropLast` / 定理 `IsChain.rel_getLast_dropLast`
-
-English:
-theorem IsChain.rel_getLast_dropLast
-  given: {l : List α} (h : l.IsChain R) (hne : l.dropLast != [])
-  proof: match l with
-  | [_, _] => h.rel
-| _ :: _ :: _ :: _ => h.tail.rel_getLast_dropLast by simp
-
-中文:
-定理 IsChain.rel_getLast_dropLast
-  条件: {l : 列表 α} (h : l.IsChain R) (hne : l.dropLast != [])
-  证明: match l with
-  | [_, _] => h.rel
-| _ :: _ :: _ :: _ => h.tail.rel_getLast_dropLast by simp
-
-Depends on / 依赖: h.rel, h.tail.rel_getLast_dropLast, rel_getLast_dropLast
+/-
+**List.IsChain.rel_getLast_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α},   List.IsChain R l → ∀ (
+hne : l.dropLast ≠ []), R (l.dropLast.getLast hne) (l.getLast ⋯)
+参数：hne : l.dropLast ≠ []；l.dropLast.getLast hne；l.getLast ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
 -/
-theorem IsChain.rel_getLast_dropLast {l : List α} (h : l.IsChain R) (hne : l.dropLast != []) :
+theorem IsChain.rel_getLast_dropLast {l : List α} (h : l.IsChain R) (hne : l.dropLast ≠ []) :
     R (l.dropLast.getLast hne) (l.getLast <| by grind) :=
   match l with
   | [_, _] => h.rel
-| _ :: _ :: _ :: _ => h.tail.rel_getLast_dropLast by simp
-
-/--
-theorem `IsChain.cons` / 定理 `IsChain.cons`
-
-English:
-theorem IsChain.cons
-  given: {x}
-  statement: forall {l : List α}, IsChain R l -> (forall y in l.head?, R x y) ->
-
-中文:
-定理 IsChain.cons
-  条件: {x}
-  结论: 对任意 {l : 列表 α}, IsChain R l -> (对任意 y in l.head?, R x y) ->
+  | _ :: _ :: _ :: _ => h.tail.rel_getLast_dropLast <| by simp
+/-
+**List.IsChain.cons** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {x : α} {l : List α},   List.IsChain R
+ l → (∀ y ∈ l.head?, R x y) → List.IsChain R (x :: l)
+参数：∀ y ∈ l.head?, R x y；x :: l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsChain.cons {x} : forall {l : List α}, IsChain R l -> (forall y in l.head?, R x y) ->
+theorem IsChain.cons {x} : ∀ {l : List α}, IsChain R l → (∀ y ∈ l.head?, R x y) →
     IsChain R (x :: l)
   | [], _, _ => .singleton x
-| _ :: _, hl, H => hl.cons_cons H _ rfl
-
-/--
-lemma `IsChain.cons_of_ne_nil` / 引理 `IsChain.cons_of_ne_nil`
-
-English:
-lemma IsChain.cons_of_ne_nil
-  statement: {x : α} {l : List α} (l_ne_nil : l != [])
-  proof: by
-  grind +splitIndPred
-
-中文:
-引理 IsChain.cons_of_ne_nil
-  结论: {x : α} {l : 列表 α} (l_ne_nil : l != [])
-  证明: by
-  grind +splitIndPred
-
-Depends on / 依赖: splitIndPred
+  | _ :: _, hl, H => hl.cons_cons <| H _ rfl
+/-
+**List.IsChain.cons_of_ne_nil** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {x : α} {l : List α} (l_ne_nil : l ≠ [
+]),   List.IsChain R l → R x (l.head l_ne_nil) → List.IsChain R (x :: l)
+参数：l_ne_nil : l ≠ []；l.head l_ne_nil；x :: l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
 -/
-lemma IsChain.cons_of_ne_nil {x : α} {l : List α} (l_ne_nil : l != [])
+lemma IsChain.cons_of_ne_nil {x : α} {l : List α} (l_ne_nil : l ≠ [])
     (hl : IsChain R l) (h : R x (l.head l_ne_nil)) : IsChain R (x :: l) := by
   grind +splitIndPred
-
-/--
-theorem `isChain_cons` / 定理 `isChain_cons`
-
-English:
-theorem isChain_cons
-  given: {x l}
-  statement: IsChain R (x :: l) ↔ (forall y in head? l, R x y) ∧ IsChain R l
-  proof: ⟨fun h => ⟨h.rel_head?, h.tail⟩, fun ⟨h₁, h₂⟩ => h₂.cons h₁⟩
-
-中文:
-定理 isChain_cons
-  条件: {x l}
-  结论: IsChain R (x :: l) ↔ (对任意 y in head? l, R x y) ∧ IsChain R l
-  证明: ⟨fun h => ⟨h.rel_head?, h.tail⟩, fun ⟨h₁, h₂⟩ => h₂.cons h₁⟩
-
-Depends on / 依赖: h.rel_head, h.tail, rel_head
+/-
+**List.isChain_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons {x l} : IsChain R (x :: l) ↔ (forall y in head? l, R x y) ∧ I
+sChain R l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.rel_head?`：∀ {α : Type u_1} {R : α → α → Prop} {x : α} {l :
+ List α}, List.IsChain R (x :: l) → ∀ ⦃y : α⦄, y ∈ l.head? → R x y
+· 使用定理 `List.IsChain.tail`：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, Lis
+t.IsChain R l → List.IsChain R l.tail
+· 使用定理 `List.IsChain.cons`：∀ {α : Type u_1} {R : α → α → Prop} {x : α} {l : List
+ α},   List.IsChain R l → (∀ y ∈ l.head?, R x y) → List.IsChain R (x :: l)
 -/
-theorem isChain_cons {x l} : IsChain R (x :: l) ↔ (forall y in head? l, R x y) ∧ IsChain R l :=
+theorem isChain_cons {x l} : IsChain R (x :: l) ↔ (∀ y ∈ head? l, R x y) ∧ IsChain R l :=
   ⟨fun h => ⟨h.rel_head?, h.tail⟩, fun ⟨h₁, h₂⟩ => h₂.cons h₁⟩
-
-/--
-theorem `isChain_append` / 定理 `isChain_append`
-
-English:
-theorem isChain_append
-
-中文:
-定理 isChain_append
+/-
+**List.isChain_append** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α},   List.IsChain R (l₁
+ ++ l₂) ↔ List.IsChain R l₁ ∧ List.IsChain R l₂ ∧ ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.he
+ad?, R x y
+参数：l₁ ++ l₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isChain_append :
-    forall {l₁ l₂ : List α},
-      IsChain R (l₁ ++ l₂) ↔ IsChain R l₁ ∧ IsChain R l₂ ∧ forall x in l₁.getLast?, forall y in l₂.head?, R x y
+    ∀ {l₁ l₂ : List α},
+      IsChain R (l₁ ++ l₂) ↔ IsChain R l₁ ∧ IsChain R l₂ ∧ ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y
   | [], l => by simp
   | [a], l => by simp [isChain_cons, and_comm]
   | a :: b :: l₁, l₂ => by
-    rw [cons_append]; rw [cons_append]; rw [isChain_cons_cons]; rw [isChain_cons_cons]; rw [← cons_append]; rw [isChain_append]; rw [and_assoc]
+    rw [cons_append, cons_append, isChain_cons_cons, isChain_cons_cons,
+      ← cons_append, isChain_append, and_assoc]
     simp
-
-/--
-theorem `IsChain.append` / 定理 `IsChain.append`
-
-English:
-theorem IsChain.append
-  statement: (h₁ : IsChain R l₁) (h₂ : IsChain R l₂)
-  proof: isChain_append.2 ⟨h₁, h₂, h⟩
-
-中文:
-定理 IsChain.append
-  结论: (h₁ : IsChain R l₁) (h₂ : IsChain R l₂)
-  证明: isChain_append.2 ⟨h₁, h₂, h⟩
-
-Depends on / 依赖: isChain_append
+/-
+**List.IsChain.append** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α},   List.IsChain R l₁ 
+→ List.IsChain R l₂ → (∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y) → List.IsChain 
+R (l₁ ++ l₂)
+参数：∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y；l₁ ++ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α
+},   List.IsChain R (l₁ ++ l₂) ↔ List.IsChain R l₁ ∧ List.IsChain R l₂ ∧ ∀ x ∈ l
+₁.getLast…
 -/
 theorem IsChain.append (h₁ : IsChain R l₁) (h₂ : IsChain R l₂)
-    (h : forall x in l₁.getLast?, forall y in l₂.head?, R x y) : IsChain R (l₁ ++ l₂) :=
+    (h : ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y) : IsChain R (l₁ ++ l₂) :=
   isChain_append.2 ⟨h₁, h₂, h⟩
-
-/--
-theorem `IsChain.left_of_append` / 定理 `IsChain.left_of_append`
-
-English:
-theorem IsChain.left_of_append
-  given: (h : IsChain R (l₁ ++ l₂))
-  statement: IsChain R l₁
-  proof: (isChain_append.1 h).1
-
-中文:
-定理 IsChain.left_of_append
-  条件: (h : IsChain R (l₁ ++ l₂))
-  结论: IsChain R l₁
-  证明: (isChain_append.1 h).1
-
-Depends on / 依赖: isChain_append
+/-
+**List.IsChain.left_of_append** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α}, List.IsChain R (l₁ +
++ l₂) → List.IsChain R l₁
+参数：l₁ ++ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α
+},   List.IsChain R (l₁ ++ l₂) ↔ List.IsChain R l₁ ∧ List.IsChain R l₂ ∧ ∀ x ∈ l
+₁.getLast…
 -/
 theorem IsChain.left_of_append (h : IsChain R (l₁ ++ l₂)) : IsChain R l₁ :=
   (isChain_append.1 h).1
-
-/--
-theorem `IsChain.right_of_append` / 定理 `IsChain.right_of_append`
-
-English:
-theorem IsChain.right_of_append
-  given: (h : IsChain R (l₁ ++ l₂))
-  statement: IsChain R l₂
-  proof: (isChain_append.1 h).2.1
-
-中文:
-定理 IsChain.right_of_append
-  条件: (h : IsChain R (l₁ ++ l₂))
-  结论: IsChain R l₂
-  证明: (isChain_append.1 h).2.1
-
-Depends on / 依赖: isChain_append
+/-
+**List.IsChain.right_of_append** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α}, List.IsChain R (l₁ +
++ l₂) → List.IsChain R l₂
+参数：l₁ ++ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α
+},   List.IsChain R (l₁ ++ l₂) ↔ List.IsChain R l₁ ∧ List.IsChain R l₂ ∧ ∀ x ∈ l
+₁.getLast…
 -/
 theorem IsChain.right_of_append (h : IsChain R (l₁ ++ l₂)) : IsChain R l₂ :=
   (isChain_append.1 h).2.1
-
-/--
-theorem `IsChain.rel_getLast_head_of_append` / 定理 `IsChain.rel_getLast_head_of_append`
-
-English:
-theorem IsChain.rel_getLast_head_of_append
-  statement: {l₁ l₂ : List α} (h : (l₁ ++ l₂).IsChain R)
-  proof: match l₁, l₂ with
-  | [_], _ :: _ => h.rel
-  | _ :: _ :: _, _ :: _ => h.tail.rel_getLast_head_of_append (by simp) (by simp)
-
-中文:
-定理 IsChain.rel_getLast_head_of_append
-  结论: {l₁ l₂ : 列表 α} (h : (l₁ ++ l₂).IsChain R)
-  证明: match l₁, l₂ with
-  | [_], _ :: _ => h.rel
-  | _ :: _ :: _, _ :: _ => h.tail.rel_getLast_head_of_append (by simp) (by simp)
-
-Depends on / 依赖: h.rel, h.tail.rel_getLast_head_of_append, rel_getLast_head_of_append
+/-
+**List.IsChain.rel_getLast_head_of_append** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChai
+n`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α},   List.IsChain R (l₁
+ ++ l₂) → ∀ (h₁ : l₁ ≠ []) (h₂ : l₂ ≠ []), R (l₁.getLast h₁) (l₂.head h₂)
+参数：l₁ ++ l₂；h₁ : l₁ ≠ []；h₂ : l₂ ≠ []；l₁.getLast h₁；l₂.head h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
 -/
 theorem IsChain.rel_getLast_head_of_append {l₁ l₂ : List α} (h : (l₁ ++ l₂).IsChain R)
-    (h₁ : l₁ != []) (h₂ : l₂ != []) : R (l₁.getLast h₁) (l₂.head h₂) :=
+    (h₁ : l₁ ≠ []) (h₂ : l₂ ≠ []) : R (l₁.getLast h₁) (l₂.head h₂) :=
   match l₁, l₂ with
   | [_], _ :: _ => h.rel
   | _ :: _ :: _, _ :: _ => h.tail.rel_getLast_head_of_append (by simp) (by simp)
-
-/--
-theorem `IsChain.infix` / 定理 `IsChain.infix`
-
-English:
-theorem IsChain.infix
-  given: (h : IsChain R l) (h' : l₁ <:+: l)
-  statement: IsChain R l₁
-  proof: by
-  rcases h' with ⟨l₂, l₃, rfl⟩
-  exact h.left_of_append.right_of_append
-
-中文:
-定理 IsChain.infix
-  条件: (h : IsChain R l) (h' : l₁ <:+: l)
-  结论: IsChain R l₁
-  证明: by
-  rcases h' with ⟨l₂, l₃, rfl⟩
-  exact h.left_of_append.right_of_append
-
-Depends on / 依赖: h.left_of_append.right_of_append, left_of_append, right_of_append
+/-
+**List.IsChain.infix** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}, List.IsChain R l → l₁
+ <:+: l → List.IsChain R l₁
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.right_of_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂
+ : List α}, List.IsChain R (l₁ ++ l₂) → List.IsChain R l₂
+· 使用定理 `List.IsChain.left_of_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ 
+: List α}, List.IsChain R (l₁ ++ l₂) → List.IsChain R l₁
 -/
 theorem IsChain.infix (h : IsChain R l) (h' : l₁ <:+: l) : IsChain R l₁ := by
   rcases h' with ⟨l₂, l₃, rfl⟩
   exact h.left_of_append.right_of_append
-
-/--
-theorem `IsChain.suffix` / 定理 `IsChain.suffix`
-
-English:
-theorem IsChain.suffix
-  given: (h : IsChain R l) (h' : l₁ <:+ l)
-  statement: IsChain R l₁
-  proof: h.infix h'.isInfix
-
-中文:
-定理 IsChain.suffix
-  条件: (h : IsChain R l) (h' : l₁ <:+ l)
-  结论: IsChain R l₁
-  证明: h.infix h'.isInfix
-
-Depends on / 依赖: h.infix, isInfix
+/-
+**List.IsChain.suffix** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}, List.IsChain R l → l₁
+ <:+ l → List.IsChain R l₁
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.infix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α},
+ List.IsChain R l → l₁ <:+: l → List.IsChain R l₁
+· 使用定理 `List.IsSuffix.isInfix`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁ <:+ l₂ → l₁
+ <:+: l₂
 -/
 theorem IsChain.suffix (h : IsChain R l) (h' : l₁ <:+ l) : IsChain R l₁ :=
   h.infix h'.isInfix
-
-/--
-theorem `IsChain.prefix` / 定理 `IsChain.prefix`
-
-English:
-theorem IsChain.prefix
-  given: (h : IsChain R l) (h' : l₁ <+: l)
-  statement: IsChain R l₁
-  proof: h.infix h'.isInfix
-
-中文:
-定理 IsChain.prefix
-  条件: (h : IsChain R l) (h' : l₁ <+: l)
-  结论: IsChain R l₁
-  证明: h.infix h'.isInfix
-
-Depends on / 依赖: h.infix, isInfix
+/-
+**List.IsChain.prefix** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}, List.IsChain R l → l₁
+ <+: l → List.IsChain R l₁
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.infix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α},
+ List.IsChain R l → l₁ <:+: l → List.IsChain R l₁
+· 使用定理 `List.IsPrefix.isInfix`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁ <+: l₂ → l₁
+ <:+: l₂
 -/
 theorem IsChain.prefix (h : IsChain R l) (h' : l₁ <+: l) : IsChain R l₁ :=
   h.infix h'.isInfix
-
-/--
-theorem `IsChain.drop` / 定理 `IsChain.drop`
-
-English:
-theorem IsChain.drop
-  given: (h : IsChain R l) (n : Nat)
-  statement: IsChain R (drop n l)
-  proof: h.suffix (drop_suffix _ _)
-
-中文:
-定理 IsChain.drop
-  条件: (h : IsChain R l) (n : 自然数)
-  结论: IsChain R (drop n l)
-  证明: h.suffix (drop_suffix _ _)
-
-Depends on / 依赖: drop_suffix, h.suffix, suffix
+/-
+**List.IsChain.drop** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, List.IsChain R l → ∀ (n 
+: ℕ), List.IsChain R (List.drop n l)
+参数：n : ℕ；List.drop n l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.suffix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}
+, List.IsChain R l → l₁ <:+ l → List.IsChain R l₁
+· 使用定理 `List.drop_suffix`：∀ {α : Type u_1} (i : ℕ) (l : List α), List.drop i l <
+:+ l
 -/
-theorem IsChain.drop (h : IsChain R l) (n : Nat) : IsChain R (drop n l) :=
+theorem IsChain.drop (h : IsChain R l) (n : ℕ) : IsChain R (drop n l) :=
   h.suffix (drop_suffix _ _)
-
-/--
-theorem `IsChain.dropLast` / 定理 `IsChain.dropLast`
-
-English:
-theorem IsChain.dropLast
-  given: (h : IsChain R l)
-  statement: IsChain R l.dropLast
-  proof: h.prefix l.dropLast_prefix
-
-中文:
-定理 IsChain.dropLast
-  条件: (h : IsChain R l)
-  结论: IsChain R l.dropLast
-  证明: h.prefix l.dropLast_prefix
-
-Depends on / 依赖: dropLast_prefix, h.prefix, l.dropLast_prefix, prefix
+/-
+**List.IsChain.dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, List.IsChain R l → List.
+IsChain R l.dropLast
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.prefix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}
+, List.IsChain R l → l₁ <+: l → List.IsChain R l₁
+· 使用定理 `List.dropLast_prefix`：∀ {α : Type u_1} (l : List α), l.dropLast <+: l
 -/
 theorem IsChain.dropLast (h : IsChain R l) : IsChain R l.dropLast :=
   h.prefix l.dropLast_prefix
-
-/--
-theorem `IsChain.take` / 定理 `IsChain.take`
-
-English:
-theorem IsChain.take
-  given: (h : IsChain R l) (n : Nat)
-  statement: IsChain R (take n l)
-  proof: h.prefix (take_prefix _ _)
-
-中文:
-定理 IsChain.take
-  条件: (h : IsChain R l) (n : 自然数)
-  结论: IsChain R (take n l)
-  证明: h.prefix (take_prefix _ _)
-
-Depends on / 依赖: h.prefix, prefix, take_prefix
+/-
+**List.IsChain.take** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l : List α}, List.IsChain R l → ∀ (n 
+: ℕ), List.IsChain R (List.take n l)
+参数：n : ℕ；List.take n l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.prefix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α}
+, List.IsChain R l → l₁ <+: l → List.IsChain R l₁
+· 使用定理 `List.take_prefix`：∀ {α : Type u_1} (i : ℕ) (l : List α), List.take i l <
++: l
 -/
-theorem IsChain.take (h : IsChain R l) (n : Nat) : IsChain R (take n l) :=
+theorem IsChain.take (h : IsChain R l) (n : ℕ) : IsChain R (take n l) :=
   h.prefix (take_prefix _ _)
-
-/--
-theorem `IsChain.imp_head` / 定理 `IsChain.imp_head`
-
-English:
-theorem IsChain.imp_head
-  given: {x y} (h : forall {z}, R x z -> R y z) {l} (hl : IsChain R (x :: l))
-  proof: IsChain.cons_of_imp @h hl
-
-中文:
-定理 IsChain.imp_head
-  条件: {x y} (h : 对任意 {z}, R x z -> R y z) {l} (hl : IsChain R (x :: l))
-  证明: IsChain.cons_of_imp @h hl
-
-Depends on / 依赖: IsChain, IsChain.cons_of_imp, cons_of_imp
+/-
+**List.IsChain.imp_head** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {x y : α},   (∀ {z : α}, R x z → R y z
+) → ∀ {l : List α}, List.IsChain R (x :: l) → List.IsChain R (y :: l)
+参数：∀ {z : α}, R x z → R y z；x :: l；y :: l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.cons_of_imp`：∀ {α : Type u_1} {R : α → α → Prop} {a : α} {l
+ : List α} {b : α},   (∀ (c : α), R a c → R b c) → List.IsChain R (a :: l) → Lis
+t.IsChain R (b…
 -/
-theorem IsChain.imp_head {x y} (h : forall {z}, R x z -> R y z) {l} (hl : IsChain R (x :: l)) :
+theorem IsChain.imp_head {x y} (h : ∀ {z}, R x z → R y z) {l} (hl : IsChain R (x :: l)) :
     IsChain R (y :: l) :=
   IsChain.cons_of_imp @h hl
-
-/--
-theorem `exists_not_getElem_of_not_isChain` / 定理 `exists_not_getElem_of_not_isChain`
-
-English:
-theorem exists_not_getElem_of_not_isChain
-  given: (h : ¬List.IsChain R l)
-  proof: by simp_all [isChain_iff_getElem]
-
-中文:
-定理 存在_not_getElem_of_not_isChain
-  条件: (h : ¬列表.IsChain R l)
-  证明: by simp_all [isChain_iff_getElem]
-
-Depends on / 依赖: isChain_iff_getElem
+/-
+**List.exists_not_getElem_of_not_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：exists_not_getElem_of_not_isChain (h : ¬List.IsChain R l) : exists n : Nat
+, exists h : n + 1 < l.length, ¬R l[n] l[n + 1]
+参数：h : ¬List.IsChain R l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem exists_not_getElem_of_not_isChain (h : ¬List.IsChain R l) :
-    exists n : Nat, exists h : n + 1 < l.length, ¬R l[n] l[n + 1] := by simp_all [isChain_iff_getElem]
-
-/--
-theorem `isChain_reverse` / 定理 `isChain_reverse`
-
-English:
-theorem isChain_reverse
-  given: {l : List α}
-  statement: l.reverse.IsChain R ↔ l.IsChain (fun a b => R b a)
-  proof: by
-  induction l using twoStepInduction with
-  | nil => grind
-  | singleton a => grind
-  | cons_cons a b l IH IH2 =>
-    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm]; rw [isChain_pair]
-
-中文:
-定理 isChain_reverse
-  条件: {l : 列表 α}
-  结论: l.reverse.IsChain R ↔ l.IsChain (fun a b => R b a)
-  证明: by
-  induction l using twoStepInduction with
-  | nil => grind
-  | singleton a => grind
-  | cons_cons a b l IH IH2 =>
-    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm]; rw [isChain_pair]
-
-Depends on / 依赖: and_comm, append_assoc, cons_append, cons_cons, isChain_cons_cons, isChain_pair, isChain_split, nil_append, reverse_cons, singleton, twoStepInduction
+    ∃ n : ℕ, ∃ h : n + 1 < l.length, ¬R l[n] l[n + 1] := by simp_all [isChain_iff_getElem]
+/-
+**List.isChain_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_reverse {l : List α} : l.reverse.IsChain R ↔ l.IsChain (fun a b =>
+ R b a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `List.cons_append`：∀ {α : Type u} {a : α} {as bs : List α}, a :: as ++ bs
+ = a :: (as ++ bs)
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `List.isChain_split`：isChain_split {c : α} {l₁ l₂ : List α} : IsChain R (
+l₁ ++ c :: l₂) ↔ IsChain R (l₁ ++ [c]) ∧ IsChain R (c :: l₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `List.isChain_pair`：isChain_pair {x y} : IsChain R [x, y] ↔ R x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isChain_reverse {l : List α} : l.reverse.IsChain R ↔ l.IsChain (fun a b => R b a) := by
   induction l using twoStepInduction with
   | nil => grind
   | singleton a => grind
   | cons_cons a b l IH IH2 =>
-    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm]; rw [isChain_pair]
+    rw [isChain_cons_cons, reverse_cons, reverse_cons, append_assoc, cons_append, nil_append,
+      isChain_split, ← reverse_cons, IH2, and_comm, isChain_pair]
 
-/--
-theorem `IsChain.append_overlap` / 定理 `IsChain.append_overlap`
+/-- If `l₁ l₂` and `l₃` are lists and `l₁ ++ l₂` and `l₂ ++ l₃` both satisfy
+  `IsChain R`, then so does `l₁ ++ l₂ ++ l₃` provided `l₂ ≠ []` -/
+/-
+**List.IsChain.append_overlap** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ l₃ : List α},   List.IsChain R 
+(l₁ ++ l₂) → List.IsChain R (l₂ ++ l₃) → l₂ ≠ [] → List.IsChain R (l₁ ++ l₂ ++ l
+₃)
+参数：l₁ ++ l₂；l₂ ++ l₃；l₁ ++ l₂ ++ l₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α
+},   List.IsChain R l₁ → List.IsChain R l₂ → (∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?,
+ R x y) →…
+· 使用定理 `List.IsChain.right_of_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂
+ : List α}, List.IsChain R (l₁ ++ l₂) → List.IsChain R l₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.getLast?_append_of_ne_nil`：∀ {α : Type u} (l₁ : List α) {l₂ : List 
+α}, l₂ ≠ [] → (l₁ ++ l₂).getLast? = l₂.getLast?
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List α
+},   List.IsChain R (l₁ ++ l₂) ↔ List.IsChain R l₁ ∧ List.IsChain R l₂ ∧ ∀ x ∈ l
+₁.getLast…
 
-English:
-theorem IsChain.append_overlap
-  statement: {l₁ l₂ l₃ : List α} (h₁ : IsChain R (l₁ ++ l₂))
-  proof: h₁.append h₂.right_of_append by
-    simpa only [getLast?_append_of_ne_nil _ hn] using (isChain_append.1 h₂).2.2
-
-中文:
-定理 IsChain.append_overlap
-  结论: {l₁ l₂ l₃ : 列表 α} (h₁ : IsChain R (l₁ ++ l₂))
-  证明: h₁.append h₂.right_of_append by
-    simpa only [getLast?_append_of_ne_nil _ hn] using (isChain_append.1 h₂).2.2
-
-Depends on / 依赖: _append_of_ne_nil, append, getLast, isChain_append, right_of_append
+--- 原说明 ---
+If `l₁ l₂` and `l₃` are lists and `l₁ ++ l₂` and `l₂ ++ l₃` both satisfy
+  `IsChain R`, then so does `l₁ ++ l₂ ++ l₃` provided `l₂ ≠ []`
 -/
 theorem IsChain.append_overlap {l₁ l₂ l₃ : List α} (h₁ : IsChain R (l₁ ++ l₂))
-    (h₂ : IsChain R (l₂ ++ l₃)) (hn : l₂ != []) : IsChain R (l₁ ++ l₂ ++ l₃) :=
-h₁.append h₂.right_of_append by
+    (h₂ : IsChain R (l₂ ++ l₃)) (hn : l₂ ≠ []) : IsChain R (l₁ ++ l₂ ++ l₃) :=
+  h₁.append h₂.right_of_append <| by
     simpa only [getLast?_append_of_ne_nil _ hn] using (isChain_append.1 h₂).2.2
-
-/--
-lemma `isChain_flatten` / 引理 `isChain_flatten`
-
-English:
-lemma isChain_flatten
-  statement: forall {L : List (List α)}, [] ∉ L ->
-
-中文:
-引理 isChain_flatten
-  结论: 对任意 {L : 列表 (列表 α)}, [] ∉ L ->
+/-
+**List.isChain_flatten** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {R : α → α → Prop} {L : List (List α)},   [] ∉ L →     (L
+ist.IsChain R L.flatten ↔       (∀ l ∈ L, List.IsChain R l) ∧ List.IsChain (fun 
+l₁ l₂ => ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y) L)
+参数：List α；List.IsChain R L.flatten ↔       (∀ l ∈ L, List.IsChain R l) ∧ List.Is
+Chain (fun l₁ l₂ => ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y) L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isChain_flatten : forall {L : List (List α)}, [] ∉ L ->
-    (IsChain R L.flatten ↔ (forall l in L, IsChain R l) ∧
-    L.IsChain (fun l₁ l₂ => forallᵉ (x in l₁.getLast?) (y in l₂.head?), R x y))
+lemma isChain_flatten : ∀ {L : List (List α)}, [] ∉ L →
+    (IsChain R L.flatten ↔ (∀ l ∈ L, IsChain R l) ∧
+    L.IsChain (fun l₁ l₂ => ∀ᵉ (x ∈ l₁.getLast?) (y ∈ l₂.head?), R x y))
 | [], _ => by simp
 | [l], _ => by simp [flatten]
 | (l₁ :: l₂ :: L), hL => by
-    rw [mem_cons]; rw [not_or]; rw [← Ne] at hL
-    rw [flatten_cons]; rw [isChain_append]; rw [isChain_flatten hL.2]; rw [forall_mem_cons]; rw [isChain_cons_cons]
-    rw [mem_cons]; rw [not_or]; rw [← Ne] at hL
+    rw [mem_cons, not_or, ← Ne] at hL
+    rw [flatten_cons, isChain_append, isChain_flatten hL.2, forall_mem_cons, isChain_cons_cons]
+    rw [mem_cons, not_or, ← Ne] at hL
     simp only [forall_mem_cons, and_assoc, flatten_cons, head?_append_of_ne_nil _ hL.2.1.symm]
     exact Iff.rfl.and (Iff.rfl.and <| Iff.rfl.and and_comm)
-
-/--
-theorem `isChain_attachWith` / 定理 `isChain_attachWith`
-
-English:
-theorem isChain_attachWith
-  statement: {l : List α} {p : α -> Prop} (h : forall x in l, p x)
-  proof: by
-  induction l with grind +splitIndPred
-
-中文:
-定理 isChain_attachWith
-  结论: {l : 列表 α} {p : α -> 命题} (h : 对任意 x in l, p x)
-  证明: by
-  induction l with grind +splitIndPred
-
-Depends on / 依赖: splitIndPred
+/-
+**List.isChain_attachWith** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_attachWith {l : List α} {p : α -> Prop} (h : forall x in l, p x) {
+r : {a // p a} -> {a // p a} -> Prop} : (l.attachWith p h).IsChain r ↔ l.IsChain
+ fun a b => exists ha hb, r ⟨a, ha⟩ ⟨b, hb⟩
+参数：h : forall x in l, p x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_attachWith {l : List α} {p : α -> Prop} (h : forall x in l, p x)
-    {r : {a // p a} -> {a // p a} -> Prop} :
-    (l.attachWith p h).IsChain r ↔ l.IsChain fun a b => exists ha hb, r ⟨a, ha⟩ ⟨b, hb⟩ := by
+theorem isChain_attachWith {l : List α} {p : α → Prop} (h : ∀ x ∈ l, p x)
+    {r : {a // p a} → {a // p a} → Prop} :
+    (l.attachWith p h).IsChain r ↔ l.IsChain fun a b ↦ ∃ ha hb, r ⟨a, ha⟩ ⟨b, hb⟩ := by
   induction l with grind +splitIndPred
-
-/--
-theorem `isChain_attach` / 定理 `isChain_attach`
-
-English:
-theorem isChain_attach
-  given: {l : List α} {r : {a // a in l} -> {a // a in l} -> Prop}
-  proof: isChain_attachWith fun _ => id
-
-中文:
-定理 isChain_attach
-  条件: {l : 列表 α} {r : {a // a in l} -> {a // a in l} -> 命题}
-  证明: isChain_attachWith fun _ => id
-
-Depends on / 依赖: isChain_attachWith
+/-
+**List.isChain_attach** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_attach {l : List α} {r : {a // a in l} -> {a // a in l} -> Prop} :
+ l.attach.IsChain r ↔ l.IsChain fun a b => exists ha hb, r ⟨a, ha⟩ ⟨b, hb⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.isChain_attachWith`：isChain_attachWith {l : List α} {p : α -> Prop}
+ (h : forall x in l, p x) {r : {a // p a} -> {a // p a} -> Prop} : (l.attachWith
+ p h).IsChain…
 -/
-theorem isChain_attach {l : List α} {r : {a // a in l} -> {a // a in l} -> Prop} :
-    l.attach.IsChain r ↔ l.IsChain fun a b => exists ha hb, r ⟨a, ha⟩ ⟨b, hb⟩ :=
-  isChain_attachWith fun _ => id
+theorem isChain_attach {l : List α} {r : {a // a ∈ l} → {a // a ∈ l} → Prop} :
+    l.attach.IsChain r ↔ l.IsChain fun a b ↦ ∃ ha hb, r ⟨a, ha⟩ ⟨b, hb⟩ :=
+  isChain_attachWith fun _ ↦ id
 
-/--
-theorem `exists_isChain_cons_of_relationReflTransGen` / 定理 `exists_isChain_cons_of_relationReflTransGen`
+/-- If `a` and `b` are related by the reflexive transitive closure of `r`, then there is an
+`r`-chain starting from `a` and ending on `b`.
+-/
+/-
+**List.exists_isChain_cons_of_relationReflTransGen** 是 Mathlib 中的一个定理，位于命名空间 `Li
+st`。
+形式化陈述：exists_isChain_cons_of_relationReflTransGen (h : Relation.ReflTransGen r a
+ b) : exists l, IsChain r (a :: l) ∧ getLast (a :: l) (cons_ne_nil _ _) = b
+参数：h : Relation.ReflTransGen r a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.head_induction_on`：head_induction_on {motive : for
+all a : α, ReflTransGen r a b -> Prop} {a : α} (h : ReflTransGen r a b) (refl : 
+motive b refl) (head : forall…
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.getLast_cons_cons`：∀ {α : Type u_1} {b a : α} {l : List α}, (a :: b
+ :: l).getLast ⋯ = (b :: l).getLast ⋯
 
-English:
-theorem exists_isChain_cons_of_relationReflTransGen
-  given: (h : Relation.ReflTransGen r a b)
-  proof: by
-  refine Relation.ReflTransGen.head_induction_on h ?_ ?_
-  · exact ⟨[], .singleton _, rfl⟩
-  · intro c d e _ ih
-    obtain ⟨l, hl₁, hl₂⟩ := ih
-    refine ⟨d :: l, .cons_cons e hl₁, ?_⟩
-    rwa [getLast_cons_cons]
-
-中文:
-定理 存在_isChain_cons_of_relationReflTransGen
-  条件: (h : 关系.ReflTransGen r a b)
-  证明: by
-  refine Relation.ReflTransGen.head_induction_on h ?_ ?_
-  · exact ⟨[], .singleton _, rfl⟩
-  · intro c d e _ ih
-    obtain ⟨l, hl₁, hl₂⟩ := ih
-    refine ⟨d :: l, .cons_cons e hl₁, ?_⟩
-    rwa [getLast_cons_cons]
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.head_induction_on, cons_cons, getLast_cons_cons, head_induction_on, singleton
+--- 原说明 ---
+If `a` and `b` are related by the reflexive transitive closure of `r`, then ther
+e is an
+`r`-chain starting from `a` and ending on `b`.
 -/
 theorem exists_isChain_cons_of_relationReflTransGen (h : Relation.ReflTransGen r a b) :
-    exists l, IsChain r (a :: l) ∧ getLast (a :: l) (cons_ne_nil _ _) = b := by
+    ∃ l, IsChain r (a :: l) ∧ getLast (a :: l) (cons_ne_nil _ _) = b := by
   refine Relation.ReflTransGen.head_induction_on h ?_ ?_
   · exact ⟨[], .singleton _, rfl⟩
   · intro c d e _ ih
@@ -1305,178 +977,217 @@ theorem exists_isChain_cons_of_relationReflTransGen (h : Relation.ReflTransGen r
     refine ⟨d :: l, .cons_cons e hl₁, ?_⟩
     rwa [getLast_cons_cons]
 
-/--
-theorem `exists_isChain_ne_nil_of_relationReflTransGen` / 定理 `exists_isChain_ne_nil_of_relationReflTransGen`
+/-- If `a` and `b` are related by the reflexive transitive closure of `r`, then there is an
+`r`-chain starting from `a` and ending on `b`.
+-/
+/-
+**List.exists_isChain_ne_nil_of_relationReflTransGen** 是 Mathlib 中的一个定理，位于命名空间 `
+List`。
+形式化陈述：exists_isChain_ne_nil_of_relationReflTransGen (h : Relation.ReflTransGen r
+ a b) : exists l, exists (hl : l != []), IsChain r l ∧ l.head hl = a ∧ getLast l
+ hl = b
+参数：h : Relation.ReflTransGen r a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.exists_isChain_cons_of_relationReflTransGen`：exists_isChain_cons_of
+_relationReflTransGen (h : Relation.ReflTransGen r a b) : exists l, IsChain r (a
+ :: l) ∧ getLast (a :: l) (cons_ne_nil…
 
-English:
-theorem exists_isChain_ne_nil_of_relationReflTransGen
-  given: (h : Relation.ReflTransGen r a b)
-  proof: by
-  rcases exists_isChain_cons_of_relationReflTransGen h with ⟨l, _⟩; grind
-
-中文:
-定理 存在_isChain_ne_nil_of_relationReflTransGen
-  条件: (h : 关系.ReflTransGen r a b)
-  证明: by
-  rcases exists_isChain_cons_of_relationReflTransGen h with ⟨l, _⟩; grind
-
-Depends on / 依赖: exists_isChain_cons_of_relationReflTransGen
+--- 原说明 ---
+If `a` and `b` are related by the reflexive transitive closure of `r`, then ther
+e is an
+`r`-chain starting from `a` and ending on `b`.
 -/
 theorem exists_isChain_ne_nil_of_relationReflTransGen (h : Relation.ReflTransGen r a b) :
-    exists l, exists (hl : l != []), IsChain r l ∧ l.head hl = a ∧ getLast l hl = b := by
+    ∃ l, ∃ (hl : l ≠ []), IsChain r l ∧ l.head hl = a ∧ getLast l hl = b := by
   rcases exists_isChain_cons_of_relationReflTransGen h with ⟨l, _⟩; grind
 
-/--
-theorem `IsChain.induction` / 定理 `IsChain.induction`
+/-- Given a chain `l`, such that a predicate `p` holds for its head if it is nonempty,
+and if `r x y → p x → p y`, then the predicate is true everywhere in the chain.
+That is, we can propagate the predicate down the chain.
+-/
+/-
+**List.IsChain.induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Prop) (l : List α),   List.Is
+Chain r l → (∀ ⦃x y : α⦄, r x y → p x → p y) → (∀ (lne : l ≠ []), p (l.head lne)
+) → ∀ i ∈ l, p i
+参数：p : α → Prop；l : List α；∀ ⦃x y : α⦄, r x y → p x → p y；∀ (lne : l ≠ []), p (l
+.head lne)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
 
-English:
-theorem IsChain.induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r l)
-  proof: by
+--- 原说明 ---
+Given a chain `l`, such that a predicate `p` holds for its head if it is nonempt
+y,
+and if `r x y → p x → p y`, then the predicate is true everywhere in the chain.
+That is, we can propagate the predicate down the chain.
+-/
+theorem IsChain.induction (p : α → Prop) (l : List α) (h : IsChain r l)
+    (carries : ∀ ⦃x y : α⦄, r x y → p x → p y) (initial : (lne : l ≠ []) → p (l.head lne)) :
+    ∀ i ∈ l, p i := by
   induction l using twoStepInduction with grind
 
-中文:
-定理 IsChain.induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r l)
-  证明: by
-  induction l using twoStepInduction with grind
-
-Depends on / 依赖: twoStepInduction
+/-- Given a chain from `a` to `b`, and a predicate true at `a`, if `r x y → p x → p y` then
+the predicate is true everywhere in the chain.
+That is, we can propagate the predicate down the chain.
 -/
-theorem IsChain.induction (p : α -> Prop) (l : List α) (h : IsChain r l)
-    (carries : forall ⦃x y : α⦄, r x y -> p x -> p y) (initial : (lne : l != []) -> p (l.head lne)) :
-    forall i in l, p i := by
-  induction l using twoStepInduction with grind
+/-
+**List.IsChain.cons_induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a : α} (p : α → Prop) (l : List α),  
+ List.IsChain r (a :: l) → (∀ ⦃x y : α⦄, r x y → p x → p y) → p a → ∀ i ∈ l, p i
+参数：p : α → Prop；l : List α；a :: l；∀ ⦃x y : α⦄, r x y → p x → p y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.induction`：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Pro
+p) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p x → p y) → (∀ (lne
+ : l ≠ []), …
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
 
-/--
-theorem `IsChain.cons_induction` / 定理 `IsChain.cons_induction`
-
-English:
-theorem IsChain.cons_induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-  proof: fun _ hi =>
-  h.induction _ _ carries (fun _ => initial) _ (mem_cons_of_mem _ hi)
-
-中文:
-定理 IsChain.cons_induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
-  证明: fun _ hi =>
-  h.induction _ _ carries (fun _ => initial) _ (mem_cons_of_mem _ hi)
+--- 原说明 ---
+Given a chain from `a` to `b`, and a predicate true at `a`, if `r x y → p x → p 
+y` then
+the predicate is true everywhere in the chain.
+That is, we can propagate the predicate down the chain.
 -/
-theorem IsChain.cons_induction (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-    (carries : forall ⦃x y : α⦄, r x y -> p x -> p y) (initial : p a) : forall i in l, p i := fun _ hi =>
+theorem IsChain.cons_induction (p : α → Prop) (l : List α) (h : IsChain r (a :: l))
+    (carries : ∀ ⦃x y : α⦄, r x y → p x → p y) (initial : p a) : ∀ i ∈ l, p i := fun _ hi =>
   h.induction _ _ carries (fun _ => initial) _ (mem_cons_of_mem _ hi)
-
-/--
-theorem `IsChain.concat_induction` / 定理 `IsChain.concat_induction`
-
-English:
-theorem IsChain.concat_induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-  proof: h.induction _ _ carries (fun _ => hb ▸ initial)
-
-@[elab_as_elim]
-
-中文:
-定理 IsChain.concat_induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
-  证明: h.induction _ _ carries (fun _ => hb ▸ initial)
-
-@[elab_as_elim]
-
-Depends on / 依赖: carries, h.induction, initial
+/-
+**List.IsChain.concat_induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a b : α} (p : α → Prop) (l : List α),
+   List.IsChain r (l ++ [b]) → (l ++ [b]).head ⋯ = a → (∀ ⦃x y : α⦄, r x y → p x
+ → p y) → p a → ∀ i ∈ l ++ [b], p i
+参数：p : α → Prop；l : List α；l ++ [b]；l ++ [b]；∀ ⦃x y : α⦄, r x y → p x → p y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.concat_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), l ++ [a] ≠ []
+· 使用定理 `List.IsChain.induction`：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Pro
+p) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p x → p y) → (∀ (lne
+ : l ≠ []), …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsChain.concat_induction (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-    (hb : head (l ++ [b]) (concat_ne_nil _ _) = a) (carries : forall ⦃x y : α⦄, r x y -> p x -> p y)
-    (initial : p a) : forall i in l ++ [b], p i :=
+theorem IsChain.concat_induction (p : α → Prop) (l : List α) (h : IsChain r (l ++ [b]))
+    (hb : head (l ++ [b]) (concat_ne_nil _ _) = a) (carries : ∀ ⦃x y : α⦄, r x y → p x → p y)
+    (initial : p a) : ∀ i ∈ l ++ [b], p i :=
   h.induction _ _ carries (fun _ => hb ▸ initial)
 
 @[elab_as_elim]
-/--
-theorem `IsChain.concat_induction_head` / 定理 `IsChain.concat_induction_head`
-
-English:
-theorem IsChain.concat_induction_head
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-  proof: (IsChain.concat_induction p l h hb carries initial) _ mem_concat_self
-
-中文:
-定理 IsChain.concat_induction_head
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
-  证明: (IsChain.concat_induction p l h hb carries initial) _ mem_concat_self
-
-Depends on / 依赖: IsChain, IsChain.concat_induction, carries, concat_induction, initial, mem_concat_self
+/-
+**List.IsChain.concat_induction_head** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a b : α} (p : α → Prop) (l : List α),
+   List.IsChain r (l ++ [b]) → (l ++ [b]).head ⋯ = a → (∀ ⦃x y : α⦄, r x y → p x
+ → p y) → p a → p b
+参数：p : α → Prop；l : List α；l ++ [b]；l ++ [b]；∀ ⦃x y : α⦄, r x y → p x → p y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.concat_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), l ++ [a] ≠ []
+· 使用定理 `List.IsChain.concat_induction`：∀ {α : Type u_1} {r : α → α → Prop} {a b 
+: α} (p : α → Prop) (l : List α),   List.IsChain r (l ++ [b]) → (l ++ [b]).head 
+⋯ = a → (∀ ⦃x y : α…
+· 使用定理 `List.mem_concat_self`：∀ {α : Type u_1} {xs : List α} {a : α}, a ∈ xs ++ 
+[a]
 -/
-theorem IsChain.concat_induction_head (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-    (hb : head (l ++ [b]) (concat_ne_nil _ _) = a) (carries : forall ⦃x y : α⦄, r x y -> p x -> p y)
+theorem IsChain.concat_induction_head (p : α → Prop) (l : List α) (h : IsChain r (l ++ [b]))
+    (hb : head (l ++ [b]) (concat_ne_nil _ _) = a) (carries : ∀ ⦃x y : α⦄, r x y → p x → p y)
     (initial : p a) : p b :=
   (IsChain.concat_induction p l h hb carries initial) _ mem_concat_self
 
-/--
-theorem `IsChain.backwards_induction` / 定理 `IsChain.backwards_induction`
+/-- Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p x` then
+the predicate is true everywhere in the chain and at `a`.
+That is, we can propagate the predicate up the chain.
+-/
+/-
+**List.IsChain.backwards_induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Prop) (l : List α),   List.Is
+Chain r l → (∀ ⦃x y : α⦄, r x y → p y → p x) → (∀ (lne : l ≠ []), p (l.getLast l
+ne)) → ∀ i ∈ l, p i
+参数：p : α → Prop；l : List α；∀ ⦃x y : α⦄, r x y → p y → p x；∀ (lne : l ≠ []), p (l
+.getLast lne)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.IsChain.induction`：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Pro
+p) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p x → p y) → (∀ (lne
+ : l ≠ []), …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.isChain_reverse`：isChain_reverse {l : List α} : l.reverse.IsChain R
+ ↔ l.IsChain (fun a b => R b a)
 
-English:
-theorem IsChain.backwards_induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r l)
-  proof: by
+--- 原说明 ---
+Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p 
+x` then
+the predicate is true everywhere in the chain and at `a`.
+That is, we can propagate the predicate up the chain.
+-/
+theorem IsChain.backwards_induction (p : α → Prop) (l : List α) (h : IsChain r l)
+    (carries : ∀ ⦃x y : α⦄, r x y → p y → p x) (final : (lne : l ≠ []) → p (getLast l lne)) :
+    ∀ i ∈ l, p i := by
   have H : IsChain (flip (flip r)) l := h
-  replace H := (isChain_reverse.mpr H).induction _ _ (fun _ _ h => carries h)
+  replace H := (isChain_reverse.mpr H).induction _ _ (fun _ _ h ↦ carries h)
   grind
 
-中文:
-定理 IsChain.backwards_induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r l)
-  证明: by
-  have H : IsChain (flip (flip r)) l := h
-  replace H := (isChain_reverse.mpr H).induction _ _ (fun _ _ h => carries h)
-  grind
-
-Depends on / 依赖: IsChain, carries, isChain_reverse, isChain_reverse.mpr, replace
+/-- Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p x` then
+the predicate is true everywhere in the chain and at `a`.
+That is, we can propagate the predicate up the chain.
 -/
-theorem IsChain.backwards_induction (p : α -> Prop) (l : List α) (h : IsChain r l)
-    (carries : forall ⦃x y : α⦄, r x y -> p y -> p x) (final : (lne : l != []) -> p (getLast l lne)) :
-    forall i in l, p i := by
-  have H : IsChain (flip (flip r)) l := h
-  replace H := (isChain_reverse.mpr H).induction _ _ (fun _ _ h => carries h)
-  grind
+/-
+**List.IsChain.backwards_concat_induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChai
+n`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {b : α} (p : α → Prop) (l : List α),  
+ List.IsChain r (l ++ [b]) → (∀ ⦃x y : α⦄, r x y → p y → p x) → p b → ∀ i ∈ l, p
+ i
+参数：p : α → Prop；l : List α；l ++ [b]；∀ ⦃x y : α⦄, r x y → p y → p x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.backwards_induction`：∀ {α : Type u_1} {r : α → α → Prop} (p
+ : α → Prop) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p y → p x)
+ → (∀ (lne : l ≠ []), …
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getLast_concat`：∀ {α : Type u_1} {a : α} {l : List α}, (l ++ [a]).g
+etLast ⋯ = a
+· 使用定理 `List.mem_append_left`：∀ {α : Type u} {a : α} {as : List α} (bs : List α)
+, a ∈ as → a ∈ as ++ bs
 
-/--
-theorem `IsChain.backwards_concat_induction` / 定理 `IsChain.backwards_concat_induction`
-
-English:
-theorem IsChain.backwards_concat_induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-  proof: fun _ hi =>
-  h.backwards_induction _ _ carries (fun _ => getLast_concat ▸ final) _ (mem_append_left _ hi)
-
-中文:
-定理 IsChain.backwards_concat_induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
-  证明: fun _ hi =>
-  h.backwards_induction _ _ carries (fun _ => getLast_concat ▸ final) _ (mem_append_left _ hi)
+--- 原说明 ---
+Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p 
+x` then
+the predicate is true everywhere in the chain and at `a`.
+That is, we can propagate the predicate up the chain.
 -/
-theorem IsChain.backwards_concat_induction (p : α -> Prop) (l : List α) (h : IsChain r (l ++ [b]))
-    (carries : forall ⦃x y : α⦄, r x y -> p y -> p x) (final : p b) : forall i in l, p i := fun _ hi =>
+theorem IsChain.backwards_concat_induction (p : α → Prop) (l : List α) (h : IsChain r (l ++ [b]))
+    (carries : ∀ ⦃x y : α⦄, r x y → p y → p x) (final : p b) : ∀ i ∈ l, p i := fun _ hi =>
   h.backwards_induction _ _ carries (fun _ => getLast_concat ▸ final) _ (mem_append_left _ hi)
-
-/--
-theorem `IsChain.backwards_cons_induction` / 定理 `IsChain.backwards_cons_induction`
-
-English:
-theorem IsChain.backwards_cons_induction
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-  proof: h.backwards_induction _ _ carries (fun _ => hb ▸ final)
-
-中文:
-定理 IsChain.backwards_cons_induction
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
-  证明: h.backwards_induction _ _ carries (fun _ => hb ▸ final)
-
-Depends on / 依赖: backwards_induction, carries, h.backwards_induction
+/-
+**List.IsChain.backwards_cons_induction** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`
+。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a b : α} (p : α → Prop) (l : List α),
+   List.IsChain r (a :: l) → (a :: l).getLast ⋯ = b → (∀ ⦃x y : α⦄, r x y → p y 
+→ p x) → p b → ∀ i ∈ a :: l, p i
+参数：p : α → Prop；l : List α；a :: l；a :: l；∀ ⦃x y : α⦄, r x y → p y → p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.IsChain.backwards_induction`：∀ {α : Type u_1} {r : α → α → Prop} (p
+ : α → Prop) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p y → p x)
+ → (∀ (lne : l ≠ []), …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsChain.backwards_cons_induction (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-    (hb : getLast (a :: l) (cons_ne_nil _ _) = b) (carries : forall ⦃x y : α⦄, r x y -> p y -> p x)
-    (final : p b) : forall i in a :: l, p i :=
+theorem IsChain.backwards_cons_induction (p : α → Prop) (l : List α) (h : IsChain r (a :: l))
+    (hb : getLast (a :: l) (cons_ne_nil _ _) = b) (carries : ∀ ⦃x y : α⦄, r x y → p y → p x)
+    (final : p b) : ∀ i ∈ a :: l, p i :=
   h.backwards_induction _ _ carries (fun _ => hb ▸ final)
 
 /-- Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p x` then
@@ -1484,117 +1195,128 @@ the predicate is true at `a`.
 That is, we can propagate the predicate all the way up the chain.
 -/
 @[elab_as_elim]
-/--
-theorem `IsChain.backwards_cons_induction_head` / 定理 `IsChain.backwards_cons_induction_head`
+/-
+**List.IsChain.backwards_cons_induction_head** 是 Mathlib 中的一个定理，位于命名空间 `List.IsC
+hain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a b : α} (p : α → Prop) (l : List α),
+   List.IsChain r (a :: l) → (a :: l).getLast ⋯ = b → (∀ ⦃x y : α⦄, r x y → p y 
+→ p x) → p b → p a
+参数：p : α → Prop；l : List α；a :: l；a :: l；∀ ⦃x y : α⦄, r x y → p y → p x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.IsChain.backwards_cons_induction`：∀ {α : Type u_1} {r : α → α → Pro
+p} {a b : α} (p : α → Prop) (l : List α),   List.IsChain r (a :: l) → (a :: l).g
+etLast ⋯ = b → (∀ ⦃x y : α⦄…
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
 
-English:
-theorem IsChain.backwards_cons_induction_head
-  statement: (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-  proof: (IsChain.backwards_cons_induction p l h hb carries final) _ mem_cons_self
-
-中文:
-定理 IsChain.backwards_cons_induction_head
-  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
-  证明: (IsChain.backwards_cons_induction p l h hb carries final) _ mem_cons_self
-
-Depends on / 依赖: IsChain, IsChain.backwards_cons_induction, backwards_cons_induction, carries, mem_cons_self
+--- 原说明 ---
+Given a chain from `a` to `b`, and a predicate true at `b`, if `r x y → p y → p 
+x` then
+the predicate is true at `a`.
+That is, we can propagate the predicate all the way up the chain.
 -/
-theorem IsChain.backwards_cons_induction_head (p : α -> Prop) (l : List α) (h : IsChain r (a :: l))
-    (hb : getLast (a :: l) (cons_ne_nil _ _) = b) (carries : forall ⦃x y : α⦄, r x y -> p y -> p x)
+theorem IsChain.backwards_cons_induction_head (p : α → Prop) (l : List α) (h : IsChain r (a :: l))
+    (hb : getLast (a :: l) (cons_ne_nil _ _) = b) (carries : ∀ ⦃x y : α⦄, r x y → p y → p x)
     (final : p b) : p a :=
   (IsChain.backwards_cons_induction p l h hb carries final) _ mem_cons_self
 
 /--
-theorem `relationReflTransGen_of_exists_isChain` / 定理 `relationReflTransGen_of_exists_isChain`
-
-English:
-theorem relationReflTransGen_of_exists_isChain
-  given: (l : List α) (hl₁ : IsChain r l) (hne : l != [])
-  proof: IsChain.induction (Relation.ReflTransGen r (head l hne) ·) l hl₁
-  (fun _ _ h₁ h₂ => Trans.trans h₂ h₁) (fun _ => Relation.ReflTransGen.refl) _ (getLast_mem _)
-
-中文:
-定理 relationReflTransGen_of_存在_isChain
-  条件: (l : 列表 α) (hl₁ : IsChain r l) (hne : l != [])
-  证明: IsChain.induction (Relation.ReflTransGen r (head l hne) ·) l hl₁
-  (fun _ _ h₁ h₂ => Trans.trans h₂ h₁) (fun _ => Relation.ReflTransGen.refl) _ (getLast_mem _)
-
-Depends on / 依赖: IsChain, IsChain.induction, ReflTransGen, Relation, Relation.ReflTransGen, Relation.ReflTransGen.refl, Trans.trans, getLast_mem
+If there is a non-empty `r`-chain, its head and last element are related by the
+reflexive transitive closure of `r`.
 -/
-theorem relationReflTransGen_of_exists_isChain (l : List α) (hl₁ : IsChain r l) (hne : l != []) :
+/-
+**List.relationReflTransGen_of_exists_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：relationReflTransGen_of_exists_isChain (l : List α) (hl₁ : IsChain r l) (h
+ne : l != []) : Relation.ReflTransGen r (head l hne) (getLast l hne)
+参数：l : List α；hl₁ : IsChain r l；hne : l != []。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.induction`：∀ {α : Type u_1} {r : α → α → Prop} (p : α → Pro
+p) (l : List α),   List.IsChain r l → (∀ ⦃x y : α⦄, r x y → p x → p y) → (∀ (lne
+ : l ≠ []), …
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+
+--- 原说明 ---
+If there is a non-empty `r`-chain, its head and last element are related by the
+reflexive transitive closure of `r`.
+-/
+theorem relationReflTransGen_of_exists_isChain (l : List α) (hl₁ : IsChain r l) (hne : l ≠ []) :
     Relation.ReflTransGen r (head l hne) (getLast l hne) :=
   IsChain.induction (Relation.ReflTransGen r (head l hne) ·) l hl₁
   (fun _ _ h₁ h₂ => Trans.trans h₂ h₁) (fun _ => Relation.ReflTransGen.refl) _ (getLast_mem _)
 
 /--
-theorem `relationReflTransGen_of_exists_isChain_cons` / 定理 `relationReflTransGen_of_exists_isChain_cons`
+If there is an `r`-chain starting from `a` and ending at `b`, then `a` and `b` are related by the
+reflexive transitive closure of `r`.
+-/
+/-
+**List.relationReflTransGen_of_exists_isChain_cons** 是 Mathlib 中的一个定理，位于命名空间 `Li
+st`。
+形式化陈述：relationReflTransGen_of_exists_isChain_cons (l : List α) (hl₁ : IsChain r 
+(a :: l)) (hl₂ : getLast (a :: l) (cons_ne_nil _ _) = b) : Relation.ReflTransGen
+ r a b
+参数：l : List α；hl₁ : IsChain r (a :: l)；hl₂ : getLast (a :: l) (cons_ne_nil _ _) 
+= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.IsChain.backwards_cons_induction_head`：∀ {α : Type u_1} {r : α → α 
+→ Prop} {a b : α} (p : α → Prop) (l : List α),   List.IsChain r (a :: l) → (a ::
+ l).getLast ⋯ = b → (∀ ⦃x y : α⦄…
+· 使用定理 `Relation.ReflTransGen.head`：head (hab : r a b) (hbc : ReflTransGen r b c
+) : ReflTransGen r a c
 
-English:
-theorem relationReflTransGen_of_exists_isChain_cons
-  statement: (l : List α) (hl₁ : IsChain r (a :: l))
-  proof: IsChain.backwards_cons_induction_head _ l hl₁ hl₂ (fun _ _ => Relation.ReflTransGen.head)
-  Relation.ReflTransGen.refl
-
-中文:
-定理 relationReflTransGen_of_存在_isChain_cons
-  结论: (l : 列表 α) (hl₁ : IsChain r (a :: l))
-  证明: IsChain.backwards_cons_induction_head _ l hl₁ hl₂ (fun _ _ => Relation.ReflTransGen.head)
-  Relation.ReflTransGen.refl
-
-Depends on / 依赖: IsChain, IsChain.backwards_cons_induction_head, ReflTransGen, Relation, Relation.ReflTransGen.head, Relation.ReflTransGen.refl, backwards_cons_induction_head
+--- 原说明 ---
+If there is an `r`-chain starting from `a` and ending at `b`, then `a` and `b` a
+re related by the
+reflexive transitive closure of `r`.
 -/
 theorem relationReflTransGen_of_exists_isChain_cons (l : List α) (hl₁ : IsChain r (a :: l))
     (hl₂ : getLast (a :: l) (cons_ne_nil _ _) = b) : Relation.ReflTransGen r a b :=
   IsChain.backwards_cons_induction_head _ l hl₁ hl₂ (fun _ _ => Relation.ReflTransGen.head)
   Relation.ReflTransGen.refl
-
-/--
-theorem `IsChain.cons_of_le` / 定理 `IsChain.cons_of_le`
-
-English:
-theorem IsChain.cons_of_le
-  statement: [LinearOrder α] {a : α} {as m : List α}
-  proof: by
-  cases m with
-  | nil => grind
-  | cons b bs =>
-    apply hm.cons_cons
-    cases as with
-    | nil =>
-      simp only [le_iff_lt_or_eq, reduceCtorEq, or_false] at hmas
-      exact (List.not_lt_nil _ hmas).elim
-    | cons a' as =>
-      rw [List.isChain_cons_cons] at ha
-      refine lt_of_le_of_lt ?_ ha.1
-      rw [le_iff_lt_or_eq] at hmas
-      rcases hmas with hmas | hmas
-      · exact head_le_of_lt hmas
-      · simp_all only [List.cons.injEq, le_refl]
-
-中文:
-定理 IsChain.cons_of_le
-  结论: [线性序 α] {a : α} {as m : 列表 α}
-  证明: by
-  cases m with
-  | nil => grind
-  | cons b bs =>
-    apply hm.cons_cons
-    cases as with
-    | nil =>
-      simp only [le_iff_lt_or_eq, reduceCtorEq, or_false] at hmas
-      exact (List.not_lt_nil _ hmas).elim
-    | cons a' as =>
-      rw [List.isChain_cons_cons] at ha
-      refine lt_of_le_of_lt ?_ ha.1
-      rw [le_iff_lt_or_eq] at hmas
-      rcases hmas with hmas | hmas
-      · exact head_le_of_lt hmas
-      · simp_all only [List.cons.injEq, le_refl]
-
-Depends on / 依赖: List.cons.injEq, List.isChain_cons_cons, List.not_lt_nil, cons_cons, head_le_of_lt, hm.cons_cons, isChain_cons_cons, le_iff_lt_or_eq, le_refl, lt_of_le_of_lt, not_lt_nil, or_false, reduceCtorEq
+/-
+**List.IsChain.cons_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] {a : α} {as m : List α},   List.Is
+Chain (fun x1 x2 => x1 > x2) (a :: as) →     List.IsChain (fun x1 x2 => x1 > x2)
+ m → m ≤ as → List.IsChain (fun x1 x2 => x1 > x2) (a :: m)
+参数：fun x1 x2 => x1 > x2；a :: as；fun x1 x2 => x1 > x2；fun x1 x2 => x1 > x2；a :: m
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.not_lt_nil`：∀ {α : Type u_1} [inst : LT α] (l : List α), ¬l < []
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用引理 `le_iff_lt_or_eq`：le_iff_lt_or_eq : a <= b ↔ a < b ∨ a = b
+· 使用定理 `List.head_le_of_lt`：head_le_of_lt [Preorder α] {a a' : α} {l l' : List α
+} (h : (a' :: l') < (a :: l)) : a' <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
 -/
 theorem IsChain.cons_of_le [LinearOrder α] {a : α} {as m : List α}
-    (ha : List.IsChain (· > ·) (a :: as)) (hm : List.IsChain (· > ·) m) (hmas : m <= as) :
+    (ha : List.IsChain (· > ·) (a :: as)) (hm : List.IsChain (· > ·) m) (hmas : m ≤ as) :
     List.IsChain (· > ·) (a :: m) := by
   cases m with
   | nil => grind
@@ -1611,131 +1333,117 @@ theorem IsChain.cons_of_le [LinearOrder α] {a : α} {as m : List α}
       rcases hmas with hmas | hmas
       · exact head_le_of_lt hmas
       · simp_all only [List.cons.injEq, le_refl]
-
-/--
-lemma `IsChain.isChain_cons` / 引理 `IsChain.isChain_cons`
-
-English:
-lemma IsChain.isChain_cons
-  statement: {α : Type*} {R : α -> α -> Prop} {l : List α} {v : α}
-  proof: by
-  cases l <;> grind
-
-中文:
-引理 IsChain.isChain_cons
-  结论: {α : 类型} {R : α -> α -> 命题} {l : 列表 α} {v : α}
-  证明: by
-  cases l <;> grind
+/-
+**List.IsChain.isChain_cons** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_3} {R : α → α → Prop} {l : List α} {v : α},   List.IsChain R
+ l → (∀ (lne : l ≠ []), R v (l.head lne)) → List.IsChain R (v :: l)
+参数：∀ (lne : l ≠ []), R v (l.head lne)；v :: l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma IsChain.isChain_cons {α : Type*} {R : α -> α -> Prop} {l : List α} {v : α}
-    (hl : l.IsChain R) (hv : (lne : l != []) -> R v (l.head lne)) : (v :: l).IsChain R := by
+lemma IsChain.isChain_cons {α : Type*} {R : α → α → Prop} {l : List α} {v : α}
+    (hl : l.IsChain R) (hv : (lne : l ≠ []) → R v (l.head lne)) : (v :: l).IsChain R := by
   cases l <;> grind
-
-/--
-lemma `IsChain.iterate_eq_of_apply_eq` / 引理 `IsChain.iterate_eq_of_apply_eq`
-
-English:
-lemma IsChain.iterate_eq_of_apply_eq
-  statement: {α : Type*} {f : α -> α} {l : List α}
-  proof: by
-  induction i with
-  | zero => rfl
-  | succ i h =>
-    rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [h (by lia)]
-    rw [List.isChain_iff_getElem] at hl
-    apply hl
-
-中文:
-引理 IsChain.iterate_eq_of_apply_eq
-  结论: {α : 类型} {f : α -> α} {l : 列表 α}
-  证明: by
-  induction i with
-  | zero => rfl
-  | succ i h =>
-    rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [h (by lia)]
-    rw [List.isChain_iff_getElem] at hl
-    apply hl
-
-Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, List.isChain_iff_getElem, comp_apply, isChain_iff_getElem, iterate_succ
+/-
+**List.IsChain.iterate_eq_of_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `List.IsChain`。
+形式化陈述：∀ {α : Type u_3} {f : α → α} {l : List α},   List.IsChain (fun x y => f x 
+= y) l → ∀ (i : ℕ) (hi : i < l.length), f^[i] l[0] = l[i]
+参数：fun x y => f x = y；i : ℕ；hi : i < l.length。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_succ'`：iterate_succ' (n : Nat) : f^[n.succ] = f ∘ f^[n]
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `List.isChain_iff_getElem`：∀ {α : Type u_1} {R : α → α → Prop} {l : List 
+α}, List.IsChain R l ↔ ∀ (i : ℕ) (_hi : i + 1 < l.length), R l[i] l[i + 1]
 -/
-lemma IsChain.iterate_eq_of_apply_eq {α : Type*} {f : α -> α} {l : List α}
-    (hl : l.IsChain (fun x y => f x = y)) (i : Nat) (hi : i < l.length) :
+lemma IsChain.iterate_eq_of_apply_eq {α : Type*} {f : α → α} {l : List α}
+    (hl : l.IsChain (fun x y ↦ f x = y)) (i : ℕ) (hi : i < l.length) :
     f^[i] l[0] = l[i] := by
   induction i with
   | zero => rfl
   | succ i h =>
-    rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [h (by lia)]
+    rw [Function.iterate_succ', Function.comp_apply, h (by lia)]
     rw [List.isChain_iff_getElem] at hl
     apply hl
-
-/--
-theorem `isChain_replicate_of_rel` / 定理 `isChain_replicate_of_rel`
-
-English:
-theorem isChain_replicate_of_rel
-  given: (n : Nat) {a : α} (h : r a a)
-  statement: IsChain r (replicate n a)
-  proof: by
-  induction n using Nat.twoStepInduction <;> grind
-
-中文:
-定理 isChain_replicate_of_rel
-  条件: (n : 自然数) {a : α} (h : r a a)
-  结论: IsChain r (replicate n a)
-  证明: by
-  induction n using Nat.twoStepInduction <;> grind
-
-Depends on / 依赖: Nat.twoStepInduction, twoStepInduction
+/-
+**List.isChain_replicate_of_rel** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_replicate_of_rel (n : Nat) {a : α} (h : r a a) : IsChain r (replic
+ate n a)
+参数：n : Nat；h : r a a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_replicate_of_rel (n : Nat) {a : α} (h : r a a) : IsChain r (replicate n a) := by
+theorem isChain_replicate_of_rel (n : ℕ) {a : α} (h : r a a) : IsChain r (replicate n a) := by
   induction n using Nat.twoStepInduction <;> grind
-
-/--
-theorem `isChain_eq_iff_eq_replicate` / 定理 `isChain_eq_iff_eq_replicate`
-
-English:
-theorem isChain_eq_iff_eq_replicate
-  given: {l : List α}
-  proof: by
-  induction l using twoStepInduction with
-  | nil | singleton => simp
-  | cons_cons a b l IH IH2 =>
-    simp +contextual [isChain_cons_cons, eq_comm, IH2, replicate_succ]
-
-中文:
-定理 isChain_eq_iff_eq_replicate
-  条件: {l : 列表 α}
-  证明: by
-  induction l using twoStepInduction with
-  | nil | singleton => simp
-  | cons_cons a b l IH IH2 =>
-    simp +contextual [isChain_cons_cons, eq_comm, IH2, replicate_succ]
-
-Depends on / 依赖: cons_cons, contextual, eq_comm, isChain_cons_cons, replicate_succ, singleton, twoStepInduction
+/-
+**List.isChain_eq_iff_eq_replicate** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_eq_iff_eq_replicate {l : List α} : IsChain (· = ·) l ↔ forall a in
+ l.head?, l = replicate l.length a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 theorem isChain_eq_iff_eq_replicate {l : List α} :
-    IsChain (· = ·) l ↔ forall a in l.head?, l = replicate l.length a := by
+    IsChain (· = ·) l ↔ ∀ a ∈ l.head?, l = replicate l.length a := by
   induction l using twoStepInduction with
   | nil | singleton => simp
   | cons_cons a b l IH IH2 =>
     simp +contextual [isChain_cons_cons, eq_comm, IH2, replicate_succ]
-
-/--
-theorem `isChain_cons_eq_iff_eq_replicate` / 定理 `isChain_cons_eq_iff_eq_replicate`
-
-English:
-theorem isChain_cons_eq_iff_eq_replicate
-  given: {a : α} {l : List α}
-  proof: by
-  simp [isChain_eq_iff_eq_replicate, replicate_succ]
-
-中文:
-定理 isChain_cons_eq_iff_eq_replicate
-  条件: {a : α} {l : 列表 α}
-  证明: by
-  simp [isChain_eq_iff_eq_replicate, replicate_succ]
-
-Depends on / 依赖: isChain_eq_iff_eq_replicate, replicate_succ
+/-
+**List.isChain_cons_eq_iff_eq_replicate** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isChain_cons_eq_iff_eq_replicate {a : α} {l : List α} : IsChain (· = ·) (a
+ :: l) ↔ l = replicate l.length a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isChain_cons_eq_iff_eq_replicate {a : α} {l : List α} :
     IsChain (· = ·) (a :: l) ↔ l = replicate l.length a := by
@@ -1743,82 +1451,74 @@ theorem isChain_cons_eq_iff_eq_replicate {a : α} {l : List α} :
 
 end List
 
-/--
-theorem `WellFoundedRelation.asymmetricₙ` / 定理 `WellFoundedRelation.asymmetricₙ`
-
-English:
-theorem WellFoundedRelation.asymmetricₙ
-  statement: [WellFoundedRelation α] {l : List α} (hne : l != [])
-  proof: match l with
-  | [x] => irrefl x
-  | _ :: _ :: _ =>
-    fun hr => asymmetricₙ (List.cons_ne_nil _ _) (h.dropLast.cons_cons hr) (h.rel_getLast_dropLast _)
-termination_by l.head hne
-
-中文:
-定理 良基关系.asymmetricₙ
-  结论: [良基关系 α] {l : 列表 α} (hne : l != [])
-  证明: match l with
-  | [x] => irrefl x
-  | _ :: _ :: _ =>
-    fun hr => asymmetricₙ (List.cons_ne_nil _ _) (h.dropLast.cons_cons hr) (h.rel_getLast_dropLast _)
-termination_by l.head hne
-
-Depends on / 依赖: List.cons_ne_nil, cons_cons, cons_ne_nil, dropLast, h.dropLast.cons_cons, h.rel_getLast_dropLast, irrefl, l.head, rel_getLast_dropLast, termination_by
+/-
+**WellFoundedRelation.asymmetric** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFoundedRelation.asymmetric {α : Sort*} [WellFoundedRelation α] {a b : 
+α} : WellFoundedRelation.rel a b -> ¬ WellFoundedRelation.rel b a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFoundedRelation.asymmetric._unary`：∀ {α : Sort u_1} [inst : WellFoun
+dedRelation α]   (_x : (a : α) ×' (b : α) ×' (_ : WellFoundedRelation.rel a b) ×
+' WellFoundedRelation.rel b…
 -/
-theorem WellFoundedRelation.asymmetricₙ [WellFoundedRelation α] {l : List α} (hne : l != [])
+theorem WellFoundedRelation.asymmetricₙ [WellFoundedRelation α] {l : List α} (hne : l ≠ [])
     (h : l.IsChain WellFoundedRelation.rel) :
     ¬WellFoundedRelation.rel (l.getLast hne) (l.head hne) :=
   match l with
   | [x] => irrefl x
   | _ :: _ :: _ =>
-    fun hr => asymmetricₙ (List.cons_ne_nil _ _) (h.dropLast.cons_cons hr) (h.rel_getLast_dropLast _)
+    fun hr ↦ asymmetricₙ (List.cons_ne_nil _ _) (h.dropLast.cons_cons hr) (h.rel_getLast_dropLast _)
 termination_by l.head hne
-
-/--
-theorem `WellFounded.asymmetricₙ` / 定理 `WellFounded.asymmetricₙ`
-
-English:
-theorem WellFounded.asymmetricₙ
-  given: (wf : WellFounded r) (hne : l != []) (h : l.IsChain r)
-  proof: @WellFoundedRelation.asymmetricₙ α ⟨r, wf⟩ l hne h
-
-中文:
-定理 良基.asymmetricₙ
-  条件: (wf : 良基 r) (hne : l != []) (h : l.IsChain r)
-  证明: @WellFoundedRelation.asymmetricₙ α ⟨r, wf⟩ l hne h
-
-Depends on / 依赖: WellFoundedRelation, WellFoundedRelation.asymmetric
+/-
+**WellFounded.asymmetric** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.asymmetric {α : Sort*} {r : α -> α -> Prop} (h : WellFounded r
+) (a b) : r a b -> ¬r b a
+参数：h : WellFounded r；a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFoundedRelation.asymmetric`：WellFoundedRelation.asymmetric {α : Sort
+*} [WellFoundedRelation α] {a b : α} : WellFoundedRelation.rel a b -> ¬ WellFoun
+dedRelation.rel b a
 -/
-theorem WellFounded.asymmetricₙ (wf : WellFounded r) (hne : l != []) (h : l.IsChain r) :
+theorem WellFounded.asymmetricₙ (wf : WellFounded r) (hne : l ≠ []) (h : l.IsChain r) :
     ¬r (l.getLast hne) (l.head hne) :=
   @WellFoundedRelation.asymmetricₙ α ⟨r, wf⟩ l hne h
-
-/--
-theorem `WellFounded.listPairwise_reverse_compl` / 定理 `WellFounded.listPairwise_reverse_compl`
-
-English:
-theorem WellFounded.listPairwise_reverse_compl
-  given: (wf : WellFounded r) (h : l.IsChain r)
-  proof: by
-  refine List.pairwise_iff_forall_infix.mpr fun l' hne hsub => ?_
-have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
-  simpa
-
-中文:
-定理 良基.listPairwise_reverse_compl
-  条件: (wf : 良基 r) (h : l.IsChain r)
-  证明: by
-  refine List.pairwise_iff_forall_infix.mpr fun l' hne hsub => ?_
-have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
-  simpa
-
-Depends on / 依赖: List.pairwise_iff_forall_infix.mpr, h.infix, hsub.reverse, l.reverse_reverse, pairwise_iff_forall_infix, reverse, reverse_reverse, wf.asymmetric
+/-
+**WellFounded.listPairwise_reverse_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.listPairwise_reverse_compl (wf : WellFounded r) (h : l.IsChain
+ r) : l.reverse.Pairwise rᶜ
+参数：wf : WellFounded r；h : l.IsChain r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.pairwise_iff_forall_infix`：pairwise_iff_forall_infix {α : Type*} {l
+ : List α} {R : α -> α -> Prop} : l.Pairwise R ↔ forall l', (h : 1 < l'.length) 
+-> l' <:+: l -> R (l…
+· 使用定理 `WellFounded.asymmetricₙ`：WellFounded.asymmetricₙ (wf : WellFounded r) (h
+ne : l != []) (h : l.IsChain r) : ¬r (l.getLast hne) (l.head hne)
+· 使用定理 `List.IsChain.infix`：∀ {α : Type u_1} {R : α → α → Prop} {l l₁ : List α},
+ List.IsChain R l → l₁ <:+: l → List.IsChain R l₁
+· 使用定理 `List.IsInfix.reverse`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁ <:+: l₂ → l₁
+.reverse <:+: l₂.reverse
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.getLast_reverse`：∀ {α : Type u_1} {l : List α} (h : l.reverse ≠ [])
+, l.reverse.getLast h = l.head ⋯
+· 使用定理 `List.head_reverse`：∀ {α : Type u_1} {l : List α} (h : l.reverse ≠ []), l
+.reverse.head h = l.getLast ⋯
 -/
 theorem WellFounded.listPairwise_reverse_compl (wf : WellFounded r) (h : l.IsChain r) :
     l.reverse.Pairwise rᶜ := by
-  refine List.pairwise_iff_forall_infix.mpr fun l' hne hsub => ?_
-have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
+  refine List.pairwise_iff_forall_infix.mpr fun l' hne hsub ↦ ?_
+  have := wf.asymmetricₙ (by grind) <| h.infix <| l.reverse_reverse ▸ hsub.reverse
   simpa
 
 /-! In this section, we consider the type of `r`-decreasing chains (`List.IsChain (flip r)`)
@@ -1826,110 +1526,63 @@ have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
 
 variable (r)
 
-/--
-Definition of `List.chains` / `List.chains` 的定义
+/-- The type of `r`-decreasing chains -/
+/-
+**List.chains** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：List.chains
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation List.chains
-  body: { l : List α // l.IsChain (flip r) }
-
-中文:
-缩写 列表.chains
-  定义体: { l : List α // l.IsChain (flip r) }
-
-Depends on / 依赖: IsChain, l.IsChain
+--- 原说明 ---
+The type of `r`-decreasing chains
 -/
 abbrev List.chains := { l : List α // l.IsChain (flip r) }
 
-/--
-Definition of `List.lex_chains` / `List.lex_chains` 的定义
+/-- The lexicographic order on the `r`-decreasing chains -/
+/-
+**List.lex_chains** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：List.lex_chains (l m : List.chains r) : Prop
+参数：l m : List.chains r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation List.lex_chains
-  signature: (l m : List.chains r)
-  body: List.Lex r l.val m.val
-
-中文:
-缩写 列表.lex_chains
-  签名: (l m : 列表.chains r)
-  定义体: List.Lex r l.val m.val
-
-Depends on / 依赖: List.Lex, l.val, m.val
+--- 原说明 ---
+The lexicographic order on the `r`-decreasing chains
 -/
 abbrev List.lex_chains (l m : List.chains r) : Prop := List.Lex r l.val m.val
 
 variable {r}
 
-/--
-theorem `Acc.list_chain'` / 定理 `Acc.list_chain'`
+/-- If an `r`-decreasing chain `l` is empty or its head is accessible by `r`, then
+  `l` is accessible by the lexicographic order `List.Lex r`. -/
+/-
+**Acc.list_chain'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Acc.list_chain' {l : List.chains r} (acc : forall a in l.val.head?, Acc r 
+a) : Acc (List.lex_chains r) l
+参数：acc : forall a in l.val.head?, Acc r a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.isChain_cons`：isChain_cons {x l} : IsChain R (x :: l) ↔ (forall y i
+n head? l, R x y) ∧ IsChain R l
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `List.isChain_cons_cons`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α} {l
+ : List α},   List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `List.head?_cons`：∀ {α : Type u} {a : α} {l : List α}, (a :: l).head? = s
+ome a
+· 使用定理 `Option.mem_some_iff`：∀ {α : Type u_1} {a b : α}, a ∈ some b ↔ b = a
 
-English:
-theorem Acc.list_chain'
-  given: {l : List.chains r} (acc : forall a in l.val.head?, Acc r a)
-  proof: by
-  obtain ⟨_ | ⟨a, l⟩, hl⟩ := l
-  · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-  specialize acc a _
-  · rw [List.head?_cons, Option.mem_some_iff]
-  /- For an r-decreasing chain of the form a :: l, apply induction on a -/
-  induction acc generalizing l with
-  | intro a _ ih =>
-    /- Bundle l with a proof that it is r-decreasing to form l' -/
-    have hl' := (List.isChain_cons.1 hl).2
-    let l' : List.chains r := ⟨l, hl'⟩
-    have : Acc (List.lex_chains r) l' := by
-      rcases l with - | ⟨b, l⟩
-      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-      /- l' is accessible by induction hypothesis -/
-      · apply ih b (List.isChain_cons_cons.1 hl).1
-    /- make l' a free variable and induct on l' -/
-    revert hl
-    rw [(by rfl : l = l'.1)]
-    clear_value l'
-    induction this with
-    | intro l _ ihl =>
-      intro hl
-      apply Acc.intro
-      rintro ⟨_ | ⟨b, m⟩, hm⟩ (_ | hr | hr)
-      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-      · apply ih b hr
-      · apply ihl ⟨m, (List.isChain_cons.1 hm).2⟩ hr
-
-中文:
-定理 Acc.list_chain'
-  条件: {l : 列表.chains r} (acc : 对任意 a in l.val.head?, Acc r a)
-  证明: by
-  obtain ⟨_ | ⟨a, l⟩, hl⟩ := l
-  · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-  specialize acc a _
-  · rw [List.head?_cons, Option.mem_some_iff]
-  /- For an r-decreasing chain of the form a :: l, apply induction on a -/
-  induction acc generalizing l with
-  | intro a _ ih =>
-    /- Bundle l with a proof that it is r-decreasing to form l' -/
-    have hl' := (List.isChain_cons.1 hl).2
-    let l' : List.chains r := ⟨l, hl'⟩
-    have : Acc (List.lex_chains r) l' := by
-      rcases l with - | ⟨b, l⟩
-      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-      /- l' is accessible by induction hypothesis -/
-      · apply ih b (List.isChain_cons_cons.1 hl).1
-    /- make l' a free variable and induct on l' -/
-    revert hl
-    rw [(by rfl : l = l'.1)]
-    clear_value l'
-    induction this with
-    | intro l _ ihl =>
-      intro hl
-      apply Acc.intro
-      rintro ⟨_ | ⟨b, m⟩, hm⟩ (_ | hr | hr)
-      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
-      · apply ih b hr
-      · apply ihl ⟨m, (List.isChain_cons.1 hm).2⟩ hr
-
-Depends on / 依赖: Acc.intro, List.head, Option.mem_some_iff, _cons, mem_some_iff, specialize
+--- 原说明 ---
+If an `r`-decreasing chain `l` is empty or its head is accessible by `r`, then
+  `l` is accessible by the lexicographic order `List.Lex r`.
 -/
-theorem Acc.list_chain' {l : List.chains r} (acc : forall a in l.val.head?, Acc r a) :
+theorem Acc.list_chain' {l : List.chains r} (acc : ∀ a ∈ l.val.head?, Acc r a) :
     Acc (List.lex_chains r) l := by
   obtain ⟨_ | ⟨a, l⟩, hl⟩ := l
   · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
@@ -1959,39 +1612,29 @@ theorem Acc.list_chain' {l : List.chains r} (acc : forall a in l.val.head?, Acc 
       · apply ih b hr
       · apply ihl ⟨m, (List.isChain_cons.1 hm).2⟩ hr
 
-/--
-theorem `WellFounded.list_chain'` / 定理 `WellFounded.list_chain'`
+/-- If `r` is well-founded, the lexicographic order on `r`-decreasing chains is also. -/
+/-
+**WellFounded.list_chain'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WellFounded.list_chain' (hwf : WellFounded r) : WellFounded (List.lex_chai
+ns r)
+参数：hwf : WellFounded r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Acc.list_chain'`：Acc.list_chain' {l : List.chains r} (acc : forall a in 
+l.val.head?, Acc r a) : Acc (List.lex_chains r) l
+· 使用定理 `WellFounded.apply`：∀ {α : Sort u} {r : α → α → Prop}, WellFounded r → ∀ 
+(a : α), Acc r a
 
-English:
-theorem WellFounded.list_chain'
-  given: (hwf : WellFounded r)
-  proof: ⟨fun _ => Acc.list_chain' (fun _ _ => hwf.apply _)⟩
-
-中文:
-定理 良基.list_chain'
-  条件: (hwf : 良基 r)
-  证明: ⟨fun _ => Acc.list_chain' (fun _ _ => hwf.apply _)⟩
-
-Depends on / 依赖: Acc.list_chain, hwf.apply, list_chain
+--- 原说明 ---
+If `r` is well-founded, the lexicographic order on `r`-decreasing chains is also
+.
 -/
 theorem WellFounded.list_chain' (hwf : WellFounded r) :
     WellFounded (List.lex_chains r) :=
-  ⟨fun _ => Acc.list_chain' (fun _ _ => hwf.apply _)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [hwf
-  signature: : IsWellFounded α r] :
-  body: ⟨hwf.wf.list_chain'⟩
-
-中文:
-实例 [hwf
-  签名: : 是良基 α r] :
-  定义体: ⟨hwf.wf.list_chain'⟩
-
-Depends on / 依赖: hwf.wf.list_chain, list_chain
+  ⟨fun _ ↦ Acc.list_chain' (fun _ _ => hwf.apply _)⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [hwf : IsWellFounded α r] :
     IsWellFounded (List.chains r) (List.lex_chains r) :=

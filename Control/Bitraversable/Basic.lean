@@ -44,87 +44,71 @@ traversable bitraversable iterator functor bifunctor applicative
 
 universe u
 
-/--
-Definition of `Bitraversable` / `Bitraversable` 的定义
+/-- Lawless bitraversable bifunctor. This only holds data for the bimap and bitraverse. -/
+/-
+**Bitraversable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u → Type u → Type u) → Type (u + 1)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Bitraversable
-  parameters: (t : Type u -> Type u -> Type u)
-  extends: Bifunctor t
-  axioms and operations (1):
-    - bitraverse : forall {m : Type u -> Type u} [Applicative m] {α α' β β'}, (α -> m α') -> (β -> m β') -> t α β -> m (t α' β')
-
-中文:
-类 Bitraversable
-  参数: (t : 类型u -> 类型u -> 类型u)
-  继承: 双函子 t
-  公理与运算 (1 个):
-    - bitraverse : 对任意 {m : 类型u -> 类型u} [适用 m] {α α' β β'}, (α -> m α') -> (β -> m β') -> t α β -> m (t α' β')
+--- 原说明 ---
+Lawless bitraversable bifunctor. This only holds data for the bimap and bitraver
+se.
 -/
-class Bitraversable (t : Type u -> Type u -> Type u) extends Bifunctor t where
+class Bitraversable (t : Type u → Type u → Type u) extends Bifunctor t where
   bitraverse :
-    forall {m : Type u -> Type u} [Applicative m] {α α' β β'},
-      (α -> m α') -> (β -> m β') -> t α β -> m (t α' β')
+    ∀ {m : Type u → Type u} [Applicative m] {α α' β β'},
+      (α → m α') → (β → m β') → t α β → m (t α' β')
 
 export Bitraversable (bitraverse)
 
-/--
-Definition of `bisequence` / `bisequence` 的定义
+/-- A bitraversable functor commutes with all applicative functors. -/
+/-
+**bisequence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：bisequence {t m} [Bitraversable t] [Applicative m] {α β} : t (m α) (m β) -
+> m (t α β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bisequence
-  signature: {t m} [Bitraversable t] [Applicative m] {α β}
-  body: bitraverse id id
-
-中文:
-定义 bisequence
-  签名: {t m} [Bitraversable t] [适用 m] {α β}
-  定义体: bitraverse id id
-
-Depends on / 依赖: bitraverse
+--- 原说明 ---
+A bitraversable functor commutes with all applicative functors.
 -/
-def bisequence {t m} [Bitraversable t] [Applicative m] {α β} : t (m α) (m β) -> m (t α β) :=
+def bisequence {t m} [Bitraversable t] [Applicative m] {α β} : t (m α) (m β) → m (t α β) :=
   bitraverse id id
 
 open Functor
 
-/--
-Definition of `LawfulBitraversable` / `LawfulBitraversable` 的定义
+/-- Bifunctor. This typeclass asserts that a lawless bitraversable bifunctor is lawful. -/
+/-
+**LawfulBitraversable** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：LawfulBitraversable (t : Type u -> Type u -> Type u) [Bitraversable t] : P
+rop extends LawfulBifunctor t where id_bitraverse : forall {α β} (x : t α β), (b
+itraverse pure pure x : Id _) = pure x comp_bitraverse : forall {F G} [Applicati
+ve F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α α' β β' γ γ
+'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'
+), bitraverse (Comp.mk ∘ map f ∘ g) (Comp.mk ∘ map f' ∘ g') x = Comp.mk (bitrave
+rse f f' <$> bitraverse g 
+参数：t : Type u -> Type u -> Type u。
+继承自：LawfulBifunctor t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LawfulBitraversable
-  parameters: (t : Type u -> Type u -> Type u) [Bitraversable t]
-  extends: LawfulBifunctor t
-  axioms and operations (4):
-    - id_bitraverse : forall {α β} (x : t α β), (bitraverse pure pure x : Id _) = pure x
-    - comp_bitraverse : forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α α' β β' γ γ'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'), bitraverse (Comp.mk ∘ map f ∘ g) (Comp.mk ∘ map f' ∘ g') x = Comp.mk (bitraverse f f' <$> bitraverse g g' x)
-    - bitraverse_eq_bimap_id : forall {α α' β β'} (f : α -> β) (f' : α' -> β') (x : t α α'), bitraverse (m := Id) (pure ∘ f) (pure ∘ f') x = pure (bimap f f' x)
-    - binaturality : forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) {α α' β β'} (f : α -> F β) (f' : α' -> F β') (x : t α α'), η (bitraverse f f' x) = bitraverse (@η _ ∘ f) (@η _ ∘ f') x
-
-中文:
-类 LawfulBitraversable
-  参数: (t : 类型u -> 类型u -> 类型u) [Bitraversable t]
-  继承: LawfulBifunctor t
-  公理与运算 (4 个):
-    - id_bitraverse : 对任意 {α β} (x : t α β), (bitraverse pure pure x : Id _) = pure x
-    - comp_bitraverse : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] {α α' β β' γ γ'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'), bitraverse (复合.mk ∘ map f ∘ g) (复合.mk ∘ map f' ∘ g') x = 复合.mk (bitraverse f f' <$> bitraverse g g' x)
-    - bitraverse_eq_bimap_id : 对任意 {α α' β β'} (f : α -> β) (f' : α' -> β') (x : t α α'), bitraverse (m := Id) (pure ∘ f) (pure ∘ f') x = pure (bimap f f' x)
-    - binaturality : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] (η : ApplicativeTransformation F G) {α α' β β'} (f : α -> F β) (f' : α' -> F β') (x : t α α'), η (bitraverse f f' x) = bitraverse (@η _ ∘ f) (@η _ ∘ f') x
+--- 原说明 ---
+Bifunctor. This typeclass asserts that a lawless bitraversable bifunctor is lawf
+ul.
 -/
-class LawfulBitraversable (t : Type u -> Type u -> Type u) [Bitraversable t] : Prop
+class LawfulBitraversable (t : Type u → Type u → Type u) [Bitraversable t] : Prop
   extends LawfulBifunctor t where
-  id_bitraverse : forall {α β} (x : t α β), (bitraverse pure pure x : Id _) = pure x
+  id_bitraverse : ∀ {α β} (x : t α β), (bitraverse pure pure x : Id _) = pure x
   comp_bitraverse :
-    forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
-      {α α' β β' γ γ'} (f : β -> F γ) (f' : β' -> F γ') (g : α -> G β) (g' : α' -> G β') (x : t α α'),
+    ∀ {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
+      {α α' β β' γ γ'} (f : β → F γ) (f' : β' → F γ') (g : α → G β) (g' : α' → G β') (x : t α α'),
       bitraverse (Comp.mk ∘ map f ∘ g) (Comp.mk ∘ map f' ∘ g') x =
         Comp.mk (bitraverse f f' <$> bitraverse g g' x)
   bitraverse_eq_bimap_id :
-    forall {α α' β β'} (f : α -> β) (f' : α' -> β') (x : t α α'),
+    ∀ {α α' β β'} (f : α → β) (f' : α' → β') (x : t α α'),
       bitraverse (m := Id) (pure ∘ f) (pure ∘ f') x = pure (bimap f f' x)
   binaturality :
-    forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
-      (η : ApplicativeTransformation F G) {α α' β β'} (f : α -> F β) (f' : α' -> F β') (x : t α α'),
+    ∀ {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
+      (η : ApplicativeTransformation F G) {α α' β β'} (f : α → F β) (f' : α' → F β') (x : t α α'),
       η (bitraverse f f' x) = bitraverse (@η _ ∘ f) (@η _ ∘ f') x
 
 export LawfulBitraversable (id_bitraverse comp_bitraverse bitraverse_eq_bimap_id)

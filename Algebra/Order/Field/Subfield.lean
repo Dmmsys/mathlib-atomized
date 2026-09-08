@@ -17,22 +17,21 @@ public section
 namespace Subfield
 variable {K : Type*}
 
-/--
-Instance `toIsStrictOrderedRing` / 实例 `toIsStrictOrderedRing`
+/-- A subfield of an ordered field is an ordered field. -/
+/-
+**Subfield.toIsStrictOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+形式化陈述：toIsStrictOrderedRing [Field K] [LinearOrder K] [IsStrictOrderedRing K] (s
+ : Subfield K) : IsStrictOrderedRing s
+参数：s : Subfield K。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isStrictOrderedRing`：∀ {R : Type u_1} {S : Type u_2} 
+[inst : Semiring R] [inst_1 : PartialOrder R] [IsStrictOrderedRing R]   [inst_3 
+: Semiring S] [inst_4 : Part…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-instance toIsStrictOrderedRing
-  signature: [Field K] [LinearOrder K] [IsStrictOrderedRing K] (s : Subfield K)
-  body: Function.Injective.isStrictOrderedRing
-    Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
-
-中文:
-实例 toIsStrictOrderedRing
-  签名: [域 K] [线性序 K] [是StrictOrdered环 K] (s : 子域 K)
-  定义体: Function.Injective.isStrictOrderedRing
-    Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
-
-Depends on / 依赖: Function, Function.Injective.isStrictOrderedRing, Injective, Subtype, Subtype.val, isStrictOrderedRing
+--- 原说明 ---
+A subfield of an ordered field is an ordered field.
 -/
 instance toIsStrictOrderedRing [Field K] [LinearOrder K] [IsStrictOrderedRing K] (s : Subfield K) :
     IsStrictOrderedRing s :=
@@ -40,3 +39,4 @@ instance toIsStrictOrderedRing [Field K] [LinearOrder K] [IsStrictOrderedRing K]
     Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
 
 end Subfield
+

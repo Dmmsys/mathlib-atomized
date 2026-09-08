@@ -21,264 +21,150 @@ variable {α : Type u} {a : α} {s t u v : Set α}
 
 open scoped symmDiff
 
-/--
-theorem `mem_symmDiff` / 定理 `mem_symmDiff`
-
-English:
-theorem mem_symmDiff
-  statement: a in s ∆ t ↔ a in s ∧ a ∉ t ∨ a in t ∧ a ∉ s
-  proof: .rfl
-
-中文:
-定理 mem_symmDiff
-  结论: a in s ∆ t ↔ a in s ∧ a ∉ t ∨ a in t ∧ a ∉ s
-  证明: .rfl
+/-
+**Set.mem_symmDiff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {a : α} {s t : Set α}, a ∈ symmDiff s t ↔ a ∈ s ∧ a ∉ t ∨ a
+ ∈ t ∧ a ∉ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[grind =] theorem mem_symmDiff : a in s ∆ t ↔ a in s ∧ a ∉ t ∨ a in t ∧ a ∉ s := .rfl
-
-/--
-theorem `symmDiff_def` / 定理 `symmDiff_def`
-
-English:
-theorem symmDiff_def
-  given: (s t : Set α)
-  statement: s ∆ t = s \ t union t \ s
-  proof: rfl
-
-中文:
-定理 symmDiff_def
-  条件: (s t : 集合 α)
-  结论: s ∆ t = s \ t union t \ s
-  证明: rfl
+@[grind =] theorem mem_symmDiff : a ∈ s ∆ t ↔ a ∈ s ∧ a ∉ t ∨ a ∈ t ∧ a ∉ s := .rfl
+/-
+**Set.symmDiff_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} (s t : Set α), symmDiff s t = s \ t ∪ t \ s
+参数：s t : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem symmDiff_def (s t : Set α) : s ∆ t = s \ t union t \ s := rfl
-
-/--
-theorem `mem_bihimp_iff` / 定理 `mem_bihimp_iff`
-
-English:
-theorem mem_bihimp_iff
-  statement: a in s ⇔ t ↔ (a in s ↔ a in t)
-  proof: by simp [bihimp, iff_def']
-
-中文:
-定理 mem_bihimp_iff
-  结论: a in s ⇔ t ↔ (a in s ↔ a in t)
-  证明: by simp [bihimp, iff_def']
+protected theorem symmDiff_def (s t : Set α) : s ∆ t = s \ t ∪ t \ s := rfl
+/-
+**Set.mem_bihimp_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {a : α} {s t : Set α}, a ∈ bihimp s t ↔ (a ∈ s ↔ a ∈ t)
+参数：a ∈ s ↔ a ∈ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem mem_bihimp_iff : a in s ⇔ t ↔ (a in s ↔ a in t) := by simp [bihimp, iff_def']
-
-/--
-theorem `bihimp_def` / 定理 `bihimp_def`
-
-English:
-theorem bihimp_def
-  statement: s ⇔ t = (s union tᶜ) inter (t union sᶜ)
-  proof: bihimp_eq ..
-
-中文:
-定理 bihimp_def
-  结论: s ⇔ t = (s union tᶜ) inter (t union sᶜ)
-  证明: bihimp_eq ..
+@[simp] theorem mem_bihimp_iff : a ∈ s ⇔ t ↔ (a ∈ s ↔ a ∈ t) := by simp [bihimp, iff_def']
+/-
+**Set.bihimp_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, bihimp s t = (s ∪ tᶜ) ∩ (t ∪ sᶜ)
+参数：s ∪ tᶜ；t ∪ sᶜ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bihimp_eq`：bihimp_eq : a ⇔ b = (a ⊔ bᶜ) ⊓ (b ⊔ aᶜ)
 -/
-protected theorem bihimp_def : s ⇔ t = (s union tᶜ) inter (t union sᶜ) := bihimp_eq ..
-
-/--
-theorem `symmDiff_subset_union` / 定理 `symmDiff_subset_union`
-
-English:
-theorem symmDiff_subset_union
-  statement: s ∆ t subseteq s union t
-  proof: @symmDiff_le_sup (Set α) _ _ _
-
-@[simp]
-
-中文:
-定理 symmDiff_subset_union
-  结论: s ∆ t subseteq s union t
-  证明: @symmDiff_le_sup (Set α) _ _ _
-
-@[simp]
-
-Depends on / 依赖: symmDiff_le_sup
+protected theorem bihimp_def : s ⇔ t = (s ∪ tᶜ) ∩ (t ∪ sᶜ) := bihimp_eq ..
+/-
+**Set.symmDiff_subset_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：symmDiff_subset_union : s ∆ t subseteq s union t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `symmDiff_le_sup`：symmDiff_le_sup {a b : α} : a ∆ b <= a ⊔ b
 -/
-theorem symmDiff_subset_union : s ∆ t subseteq s union t :=
+theorem symmDiff_subset_union : s ∆ t ⊆ s ∪ t :=
   @symmDiff_le_sup (Set α) _ _ _
 
 @[simp]
-/--
-theorem `symmDiff_eq_empty` / 定理 `symmDiff_eq_empty`
-
-English:
-theorem symmDiff_eq_empty
-  statement: s ∆ t = ∅ ↔ s = t
-  proof: symmDiff_eq_bot
-
-@[simp]
-
-中文:
-定理 symmDiff_eq_empty
-  结论: s ∆ t = ∅ ↔ s = t
-  证明: symmDiff_eq_bot
-
-@[simp]
-
-Depends on / 依赖: symmDiff_eq_bot
+/-
+**Set.symmDiff_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：symmDiff_eq_empty : s ∆ t = ∅ ↔ s = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `symmDiff_eq_bot`：symmDiff_eq_bot {a b : α} : a ∆ b = ⊥ ↔ a = b
 -/
 theorem symmDiff_eq_empty : s ∆ t = ∅ ↔ s = t :=
   symmDiff_eq_bot
 
 @[simp]
-/--
-theorem `symmDiff_nonempty` / 定理 `symmDiff_nonempty`
-
-English:
-theorem symmDiff_nonempty
-  statement: (s ∆ t).Nonempty ↔ s != t
-  proof: nonempty_iff_ne_empty.trans symmDiff_eq_empty.not
-
-中文:
-定理 symmDiff_nonempty
-  结论: (s ∆ t).非空 ↔ s != t
-  证明: nonempty_iff_ne_empty.trans symmDiff_eq_empty.not
-
-Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans, symmDiff_eq_empty, symmDiff_eq_empty.not
+/-
+**Set.symmDiff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：symmDiff_nonempty : (s ∆ t).Nonempty ↔ s != t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Set.symmDiff_eq_empty`：symmDiff_eq_empty : s ∆ t = ∅ ↔ s = t
 -/
-theorem symmDiff_nonempty : (s ∆ t).Nonempty ↔ s != t :=
+theorem symmDiff_nonempty : (s ∆ t).Nonempty ↔ s ≠ t :=
   nonempty_iff_ne_empty.trans symmDiff_eq_empty.not
-
-/--
-theorem `inter_symmDiff_distrib_left` / 定理 `inter_symmDiff_distrib_left`
-
-English:
-theorem inter_symmDiff_distrib_left
-  given: (s t u : Set α)
-  statement: s inter t ∆ u = (s inter t) ∆ (s inter u)
-  proof: inf_symmDiff_distrib_left _ _ _
-
-中文:
-定理 inter_symmDiff_distrib_left
-  条件: (s t u : 集合 α)
-  结论: s inter t ∆ u = (s inter t) ∆ (s inter u)
-  证明: inf_symmDiff_distrib_left _ _ _
-
-Depends on / 依赖: inf_symmDiff_distrib_left
+/-
+**Set.inter_symmDiff_distrib_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_symmDiff_distrib_left (s t u : Set α) : s inter t ∆ u = (s inter t) 
+∆ (s inter u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_symmDiff_distrib_left`：inf_symmDiff_distrib_left : a ⊓ b ∆ c = (a ⊓ 
+b) ∆ (a ⊓ c)
 -/
-theorem inter_symmDiff_distrib_left (s t u : Set α) : s inter t ∆ u = (s inter t) ∆ (s inter u) :=
+theorem inter_symmDiff_distrib_left (s t u : Set α) : s ∩ t ∆ u = (s ∩ t) ∆ (s ∩ u) :=
   inf_symmDiff_distrib_left _ _ _
-
-/--
-theorem `inter_symmDiff_distrib_right` / 定理 `inter_symmDiff_distrib_right`
-
-English:
-theorem inter_symmDiff_distrib_right
-  given: (s t u : Set α)
-  statement: s ∆ t inter u = (s inter u) ∆ (t inter u)
-  proof: inf_symmDiff_distrib_right _ _ _
-
-中文:
-定理 inter_symmDiff_distrib_right
-  条件: (s t u : 集合 α)
-  结论: s ∆ t inter u = (s inter u) ∆ (t inter u)
-  证明: inf_symmDiff_distrib_right _ _ _
-
-Depends on / 依赖: inf_symmDiff_distrib_right
+/-
+**Set.inter_symmDiff_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_symmDiff_distrib_right (s t u : Set α) : s ∆ t inter u = (s inter u)
+ ∆ (t inter u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_symmDiff_distrib_right`：inf_symmDiff_distrib_right : a ∆ b ⊓ c = (a 
+⊓ c) ∆ (b ⊓ c)
 -/
-theorem inter_symmDiff_distrib_right (s t u : Set α) : s ∆ t inter u = (s inter u) ∆ (t inter u) :=
+theorem inter_symmDiff_distrib_right (s t u : Set α) : s ∆ t ∩ u = (s ∩ u) ∆ (t ∩ u) :=
   inf_symmDiff_distrib_right _ _ _
-
-/--
-theorem `subset_symmDiff_union_symmDiff_left` / 定理 `subset_symmDiff_union_symmDiff_left`
-
-English:
-theorem subset_symmDiff_union_symmDiff_left
-  given: (h : Disjoint s t)
-  statement: u subseteq s ∆ u union t ∆ u
-  proof: h.le_symmDiff_sup_symmDiff_left
-
-中文:
-定理 subset_symmDiff_union_symmDiff_left
-  条件: (h : Disjoint s t)
-  结论: u subseteq s ∆ u union t ∆ u
-  证明: h.le_symmDiff_sup_symmDiff_left
-
-Depends on / 依赖: h.le_symmDiff_sup_symmDiff_left, le_symmDiff_sup_symmDiff_left
+/-
+**Set.subset_symmDiff_union_symmDiff_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_symmDiff_union_symmDiff_left (h : Disjoint s t) : u subseteq s ∆ u 
+union t ∆ u
+参数：h : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.le_symmDiff_sup_symmDiff_left`：Disjoint.le_symmDiff_sup_symmDif
+f_left (h : Disjoint a b) : c <= a ∆ c ⊔ b ∆ c
 -/
-theorem subset_symmDiff_union_symmDiff_left (h : Disjoint s t) : u subseteq s ∆ u union t ∆ u :=
+theorem subset_symmDiff_union_symmDiff_left (h : Disjoint s t) : u ⊆ s ∆ u ∪ t ∆ u :=
   h.le_symmDiff_sup_symmDiff_left
-
-/--
-theorem `subset_symmDiff_union_symmDiff_right` / 定理 `subset_symmDiff_union_symmDiff_right`
-
-English:
-theorem subset_symmDiff_union_symmDiff_right
-  given: (h : Disjoint t u)
-  statement: s subseteq s ∆ t union s ∆ u
-  proof: h.le_symmDiff_sup_symmDiff_right
-
-中文:
-定理 subset_symmDiff_union_symmDiff_right
-  条件: (h : Disjoint t u)
-  结论: s subseteq s ∆ t union s ∆ u
-  证明: h.le_symmDiff_sup_symmDiff_right
-
-Depends on / 依赖: h.le_symmDiff_sup_symmDiff_right, le_symmDiff_sup_symmDiff_right
+/-
+**Set.subset_symmDiff_union_symmDiff_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_symmDiff_union_symmDiff_right (h : Disjoint t u) : s subseteq s ∆ t
+ union s ∆ u
+参数：h : Disjoint t u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.le_symmDiff_sup_symmDiff_right`：Disjoint.le_symmDiff_sup_symmDi
+ff_right (h : Disjoint b c) : a <= a ∆ b ⊔ a ∆ c
 -/
-theorem subset_symmDiff_union_symmDiff_right (h : Disjoint t u) : s subseteq s ∆ t union s ∆ u :=
+theorem subset_symmDiff_union_symmDiff_right (h : Disjoint t u) : s ⊆ s ∆ t ∪ s ∆ u :=
   h.le_symmDiff_sup_symmDiff_right
-
-/--
-lemma `union_symmDiff_subset` / 引理 `union_symmDiff_subset`
-
-English:
-lemma union_symmDiff_subset
-  statement: (s union t) ∆ u subseteq s ∆ u union t ∆ u
-  proof: by
-  grind
-
-中文:
-引理 union_symmDiff_subset
-  结论: (s union t) ∆ u subseteq s ∆ u union t ∆ u
-  证明: by
-  grind
+/-
+**Set.union_symmDiff_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：union_symmDiff_subset : (s union t) ∆ u subseteq s ∆ u union t ∆ u
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma union_symmDiff_subset : (s union t) ∆ u subseteq s ∆ u union t ∆ u := by
+lemma union_symmDiff_subset : (s ∪ t) ∆ u ⊆ s ∆ u ∪ t ∆ u := by
   grind
-
-/--
-lemma `symmDiff_union_subset` / 引理 `symmDiff_union_subset`
-
-English:
-lemma symmDiff_union_subset
-  statement: s ∆ (t union u) subseteq s ∆ t union s ∆ u
-  proof: by
-  grind
-
-中文:
-引理 symmDiff_union_subset
-  结论: s ∆ (t union u) subseteq s ∆ t union s ∆ u
-  证明: by
-  grind
+/-
+**Set.symmDiff_union_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：symmDiff_union_subset : s ∆ (t union u) subseteq s ∆ t union s ∆ u
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma symmDiff_union_subset : s ∆ (t union u) subseteq s ∆ t union s ∆ u := by
+lemma symmDiff_union_subset : s ∆ (t ∪ u) ⊆ s ∆ t ∪ s ∆ u := by
   grind
-
-/--
-lemma `union_symmDiff_union_subset` / 引理 `union_symmDiff_union_subset`
-
-English:
-lemma union_symmDiff_union_subset
-  statement: (s union t) ∆ (u union v) subseteq s ∆ u union t ∆ v
-  proof: by
-  grind
-
-中文:
-引理 union_symmDiff_union_subset
-  结论: (s union t) ∆ (u union v) subseteq s ∆ u union t ∆ v
-  证明: by
-  grind
+/-
+**Set.union_symmDiff_union_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：union_symmDiff_union_subset : (s union t) ∆ (u union v) subseteq s ∆ u uni
+on t ∆ v
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma union_symmDiff_union_subset : (s union t) ∆ (u union v) subseteq s ∆ u union t ∆ v := by
+lemma union_symmDiff_union_subset : (s ∪ t) ∆ (u ∪ v) ⊆ s ∆ u ∪ t ∆ v := by
   grind
 
 end Set
+

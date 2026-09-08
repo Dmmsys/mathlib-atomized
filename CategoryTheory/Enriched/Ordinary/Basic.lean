@@ -37,314 +37,378 @@ namespace CategoryTheory
 variable (V : Type u') [Category.{v'} V] [MonoidalCategory V]
   (C : Type u) [Category.{v} C]
 
-/--
-Definition of `EnrichedOrdinaryCategory` / `EnrichedOrdinaryCategory` 的定义
+/-- An enriched ordinary category is a category `C` that is also enriched
+over a category `V` in such a way that morphisms `X ⟶ Y` in `C` identify
+to morphisms `𝟙_ V ⟶ (X ⟶[V] Y)` in `V`. -/
+/-
+**CategoryTheory.EnrichedOrdinaryCategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：EnrichedOrdinaryCategory extends EnrichedCategory V C where /-- morphisms 
+`X ⟶ Y` in the category identify morphisms `𝟙_ V ⟶ (X ⟶[V] Y)` in `V` -/ homEqui
+v {X Y : C} : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y)) homEquiv_id (X : C) : homEquiv (𝟙 X)
+ = eId V X
+参数：X ⟶[V] Y。
+继承自：EnrichedCategory V C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class EnrichedOrdinaryCategory
-  parameters: extends EnrichedCategory V C
-  extends: EnrichedCategory V C
-  axioms and operations (3):
-    - homEquiv({X Y : C}) : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))
-    - homEquiv_id((X : C)) : homEquiv (𝟙 X) = eId V X  [default: by cat_disch]
-    - homEquiv_comp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : homEquiv (f ≫ g) = (fun_ _).inv ≫ (homEquiv f otimesₘ homEquiv g) ≫ eComp V X Y Z  [default: by cat_disch]
-
-中文:
-类 EnrichedOrdinary范畴
-  参数: extends Enriched范畴 V C
-  继承: Enriched范畴 V C
-  公理与运算 (3 个):
-    - homEquiv({X Y : C}) : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))
-    - homEquiv_id((X : C)) : homEquiv (𝟙 X) = eId V X  [默认: by cat_disch]
-    - homEquiv_comp({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)) : homEquiv (f ≫ g) = (fun_ _).inv ≫ (homEquiv f otimesₘ homEquiv g) ≫ eComp V X Y Z  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, fun_, homEquiv, homEquiv_comp
+--- 原说明 ---
+An enriched ordinary category is a category `C` that is also enriched
+over a category `V` in such a way that morphisms `X ⟶ Y` in `C` identify
+to morphisms `𝟙_ V ⟶ (X ⟶[V] Y)` in `V`.
 -/
 class EnrichedOrdinaryCategory extends EnrichedCategory V C where
   /-- morphisms `X ⟶ Y` in the category identify morphisms `𝟙_ V ⟶ (X ⟶[V] Y)` in `V` -/
   homEquiv {X Y : C} : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))
   homEquiv_id (X : C) : homEquiv (𝟙 X) = eId V X := by cat_disch
   homEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) :
-    homEquiv (f ≫ g) = (fun_ _).inv ≫ (homEquiv f otimesₘ homEquiv g) ≫
+    homEquiv (f ≫ g) = (λ_ _).inv ≫ (homEquiv f ⊗ₘ homEquiv g) ≫
       eComp V X Y Z := by cat_disch
 
 variable [EnrichedOrdinaryCategory V C] {C}
 
-/--
-Definition of `eHomEquiv` / `eHomEquiv` 的定义
+/-- The bijection `(X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))` given by a
+`EnrichedOrdinaryCategory` instance. -/
+/-
+**CategoryTheory.eHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomEquiv {X Y : C} : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eHomEquiv
-  signature: {X Y : C}
-  body: EnrichedOrdinaryCategory.homEquiv
-
-@[simp]
-
-中文:
-定义 eHomEquiv
-  签名: {X Y : C}
-  定义体: EnrichedOrdinaryCategory.homEquiv
-
-@[simp]
-
-Depends on / 依赖: EnrichedOrdinaryCategory, EnrichedOrdinaryCategory.homEquiv, homEquiv
+--- 原说明 ---
+The bijection `(X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y))` given by a
+`EnrichedOrdinaryCategory` instance.
 -/
 def eHomEquiv {X Y : C} : (X ⟶ Y) ≃ (𝟙_ V ⟶ (X ⟶[V] Y)) :=
   EnrichedOrdinaryCategory.homEquiv
 
 @[simp]
-/--
-lemma `eHomEquiv_id` / 引理 `eHomEquiv_id`
-
-English:
-lemma eHomEquiv_id
-  given: (X : C)
-  statement: eHomEquiv V (𝟙 X) = eId V X
-  proof: EnrichedOrdinaryCategory.homEquiv_id _
-
-@[reassoc]
-
-中文:
-引理 eHomEquiv_id
-  条件: (X : C)
-  结论: eHomEquiv V (𝟙 X) = eId V X
-  证明: EnrichedOrdinaryCategory.homEquiv_id _
-
-@[reassoc]
-
-Depends on / 依赖: EnrichedOrdinaryCategory, EnrichedOrdinaryCategory.homEquiv_id, homEquiv_id
+/-
+**CategoryTheory.eHomEquiv_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomEquiv_id (X : C) : eHomEquiv V (𝟙 X) = eId V X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnrichedOrdinaryCategory.homEquiv_id`：∀ {V : Type u'} {in
+st : CategoryTheory.Category.{v', u'} V} {inst_1 : CategoryTheory.MonoidalCatego
+ry V} {C : Type u}   {inst_2 : CategoryTh…
 -/
 lemma eHomEquiv_id (X : C) : eHomEquiv V (𝟙 X) = eId V X :=
   EnrichedOrdinaryCategory.homEquiv_id _
 
 @[reassoc]
-/--
-lemma `eHomEquiv_comp` / 引理 `eHomEquiv_comp`
-
-English:
-lemma eHomEquiv_comp
-  given: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: EnrichedOrdinaryCategory.homEquiv_comp _ _
-
-中文:
-引理 eHomEquiv_comp
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: EnrichedOrdinaryCategory.homEquiv_comp _ _
-
-Depends on / 依赖: EnrichedOrdinaryCategory, EnrichedOrdinaryCategory.homEquiv_comp, homEquiv_comp
+/-
+**CategoryTheory.eHomEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : eHomEquiv V (f ≫ g) =
+ (fun_ _).inv ≫ (eHomEquiv V f otimesₘ eHomEquiv V g) ≫ eComp V X Y Z
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnrichedOrdinaryCategory.homEquiv_comp`：∀ {V : Type u'} {
+inst : CategoryTheory.Category.{v', u'} V} {inst_1 : CategoryTheory.MonoidalCate
+gory V} {C : Type u}   {inst_2 : CategoryTh…
 -/
 lemma eHomEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) :
-    eHomEquiv V (f ≫ g) = (fun_ _).inv ≫ (eHomEquiv V f otimesₘ eHomEquiv V g) ≫ eComp V X Y Z :=
+    eHomEquiv V (f ≫ g) = (λ_ _).inv ≫ (eHomEquiv V f ⊗ₘ eHomEquiv V g) ≫ eComp V X Y Z :=
   EnrichedOrdinaryCategory.homEquiv_comp _ _
 
-/--
-Definition of `eHomWhiskerRight` / `eHomWhiskerRight` 的定义
+/-- The morphism `(X' ⟶[V] Y) ⟶ (X ⟶[V] Y)` induced by a morphism `X ⟶ X'`. -/
+/-
+**CategoryTheory.eHomWhiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomWhiskerRight {X X' : C} (f : X ⟶ X') (Y : C) : (X' ⟶[V] Y) ⟶ (X ⟶[V] Y
+)
+参数：f : X ⟶ X'；Y : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eHomWhiskerRight
-  signature: {X X' : C} (f : X ⟶ X') (Y : C)
-  body: (fun_ _).inv ≫ eHomEquiv V f ▷ _ ≫ eComp V X X' Y
-
-@[simp]
-
-中文:
-定义 eHomWhiskerRight
-  签名: {X X' : C} (f : X ⟶ X') (Y : C)
-  定义体: (fun_ _).inv ≫ eHomEquiv V f ▷ _ ≫ eComp V X X' Y
-
-@[simp]
-
-Depends on / 依赖: eHomEquiv, fun_
+--- 原说明 ---
+The morphism `(X' ⟶[V] Y) ⟶ (X ⟶[V] Y)` induced by a morphism `X ⟶ X'`.
 -/
 def eHomWhiskerRight {X X' : C} (f : X ⟶ X') (Y : C) :
     (X' ⟶[V] Y) ⟶ (X ⟶[V] Y) :=
-  (fun_ _).inv ≫ eHomEquiv V f ▷ _ ≫ eComp V X X' Y
+  (λ_ _).inv ≫ eHomEquiv V f ▷ _ ≫ eComp V X X' Y
 
 @[simp]
-/--
-lemma `eHomWhiskerRight_id` / 引理 `eHomWhiskerRight_id`
-
-English:
-lemma eHomWhiskerRight_id
-  given: (X Y : C)
-  statement: eHomWhiskerRight V (𝟙 X) Y = 𝟙 _
-  proof: by
-  simp [eHomWhiskerRight]
-
-@[simp, reassoc]
-
-中文:
-引理 eHomWhiskerRight_id
-  条件: (X Y : C)
-  结论: eHomWhiskerRight V (𝟙 X) Y = 𝟙 _
-  证明: by
-  simp [eHomWhiskerRight]
-
-@[simp, reassoc]
-
-Depends on / 依赖: eHomWhiskerRight
+/-
+**CategoryTheory.eHomWhiskerRight_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomWhiskerRight_id (X Y : C) : eHomWhiskerRight V (𝟙 X) Y = 𝟙 _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.eHomEquiv_id`：eHomEquiv_id (X : C) : eHomEquiv V (𝟙 X) = 
+eId V X
+· 使用定理 `CategoryTheory.e_id_comp`：e_id_comp (X Y : C) : (fun_ (X ⟶[V] Y)).inv ≫ 
+eId V X ▷ _ ≫ eComp V X X Y = 𝟙 (X ⟶[V] Y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eHomWhiskerRight_id (X Y : C) : eHomWhiskerRight V (𝟙 X) Y = 𝟙 _ := by
   simp [eHomWhiskerRight]
 
 @[simp, reassoc]
-/--
-lemma `eHomWhiskerRight_comp` / 引理 `eHomWhiskerRight_comp`
-
-English:
-lemma eHomWhiskerRight_comp
-  given: {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C)
-  proof: by
-  dsimp [eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_hom_id]; rw [id_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 eHomWhiskerRight_comp
-  条件: {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C)
-  证明: by
-  dsimp [eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_hom_id]; rw [id_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, associator_inv_naturality_left_assoc, comp_whiskerRight_assoc, eHomEquiv_comp, eHomWhiskerRight, e_assoc, id_whiskerLeft, id_whiskerRight_assoc, inv_hom_id, inv_hom_id_assoc, leftUnitor_inv_whiskerRight_assoc, tensorHom_def, whisker_exchange_as
+/-
+**CategoryTheory.eHomWhiskerRight_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：eHomWhiskerRight_comp {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C) 
+: eHomWhiskerRight V (f ≫ f') Y = eHomWhiskerRight V f' Y ≫ eHomWhiskerRight V f
+ Y
+参数：f : X ⟶ X'；f' : X' ⟶ X''；Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.eHomEquiv_comp`：eHomEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g
+ : Y ⟶ Z) : eHomEquiv V (f ≫ g) = (fun_ _).inv ≫ (eHomEquiv V f otimesₘ eHomEqui
+v V g) ≫ eComp V X …
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.e_assoc'`：e_assoc' (W X Y Z : C) : (α_ _ _ _).hom ≫ _ ◁ e
+Comp V X Y Z ≫ eComp V W X Z = eComp V W X Y ▷ _ ≫ eComp V W Y Z
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'`：tensorHom_def' {X₁ Y₁ X₂
+ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : f otimesₘ g = X₁ ◁ g ≫ f ▷ Y₂
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerLeft`：id_whiskerLeft {X Y : C}
+ (f : X ⟶ Y) : 𝟙_ C ◁ f = (fun_ X).hom ≫ f ≫ (fun_ Y).inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight_assoc`：∀ {C : Type u} {𝒞
+ : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] 
+(X Y : C) {Z : C}   (h : CategoryTheory.Mon…
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_whiskerRight_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mon
+oidalCategory C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left_assoc`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.
+MonoidalCategory C] {X X' : C}   (f : X ⟶ X') (Y Z : C) {Z…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerLeft_assoc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory
+ C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
 -/
 lemma eHomWhiskerRight_comp {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C) :
     eHomWhiskerRight V (f ≫ f') Y = eHomWhiskerRight V f' Y ≫ eHomWhiskerRight V f Y := by
   dsimp [eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_hom_id]; rw [id_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
+  rw [assoc, assoc, eHomEquiv_comp, comp_whiskerRight_assoc, comp_whiskerRight_assoc, ← e_assoc',
+    tensorHom_def', comp_whiskerRight_assoc, id_whiskerLeft, comp_whiskerRight_assoc,
+    ← comp_whiskerRight_assoc, Iso.inv_hom_id, id_whiskerRight_assoc,
+    comp_whiskerRight_assoc, leftUnitor_inv_whiskerRight_assoc,
+    ← associator_inv_naturality_left_assoc, Iso.inv_hom_id_assoc,
+    ← whisker_exchange_assoc, id_whiskerLeft_assoc, Iso.inv_hom_id_assoc]
 
 /-- Whiskering commutes with the enriched composition. -/
 @[reassoc]
-/--
-lemma `eComp_eHomWhiskerRight` / 引理 `eComp_eHomWhiskerRight`
+/-
+**CategoryTheory.eComp_eHomWhiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：eComp_eHomWhiskerRight {X X' : C} (f : X ⟶ X') (Y Z : C) : eComp V X' Y Z 
+≫ eHomWhiskerRight V f Z = eHomWhiskerRight V f Y ▷ _ ≫ eComp V X Y Z
+参数：f : X ⟶ X'；Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_naturality_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.e_assoc'`：e_assoc' (W X Y Z : C) : (α_ _ _ _).hom ≫ _ ◁ e
+Comp V X Y Z ≫ eComp V W X Z = eComp V W X Y ▷ _ ≫ eComp V W Y Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_whiskerRight`：leftUnitor_
+inv_whiskerRight (X Y : C) : (fun_ X).inv ▷ Y = (fun_ (X otimes Y)).inv ≫ (α_ (𝟙
+_ C) X Y).inv
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma eComp_eHomWhiskerRight
-  given: {X X' : C} (f : X ⟶ X') (Y Z : C)
-  proof: by
-  dsimp [eHomWhiskerRight]
-  rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]
-  simp [e_assoc']
-
-中文:
-引理 eComp_eHomWhiskerRight
-  条件: {X X' : C} (f : X ⟶ X') (Y Z : C)
-  证明: by
-  dsimp [eHomWhiskerRight]
-  rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]
-  simp [e_assoc']
-
-Depends on / 依赖: eHomWhiskerRight, e_assoc, leftUnitor_inv_naturality_assoc, whisker_exchange_assoc
+--- 原说明 ---
+Whiskering commutes with the enriched composition.
 -/
 lemma eComp_eHomWhiskerRight {X X' : C} (f : X ⟶ X') (Y Z : C) :
     eComp V X' Y Z ≫ eHomWhiskerRight V f Z =
       eHomWhiskerRight V f Y ▷ _ ≫ eComp V X Y Z := by
   dsimp [eHomWhiskerRight]
-  rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]
+  rw [leftUnitor_inv_naturality_assoc, whisker_exchange_assoc]
   simp [e_assoc']
 
-/--
-Definition of `eHomWhiskerLeft` / `eHomWhiskerLeft` 的定义
+/-- The morphism `(X ⟶[V] Y) ⟶ (X ⟶[V] Y')` induced by a morphism `Y ⟶ Y'`. -/
+/-
+**CategoryTheory.eHomWhiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomWhiskerLeft (X : C) {Y Y' : C} (g : Y ⟶ Y') : (X ⟶[V] Y) ⟶ (X ⟶[V] Y')
+参数：X : C；g : Y ⟶ Y'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eHomWhiskerLeft
-  signature: (X : C) {Y Y' : C} (g : Y ⟶ Y')
-  body: (ρ_ _).inv ≫ _ ◁ eHomEquiv V g ≫ eComp V X Y Y'
-
-@[simp]
-
-中文:
-定义 eHomWhiskerLeft
-  签名: (X : C) {Y Y' : C} (g : Y ⟶ Y')
-  定义体: (ρ_ _).inv ≫ _ ◁ eHomEquiv V g ≫ eComp V X Y Y'
-
-@[simp]
-
-Depends on / 依赖: eHomEquiv
+--- 原说明 ---
+The morphism `(X ⟶[V] Y) ⟶ (X ⟶[V] Y')` induced by a morphism `Y ⟶ Y'`.
 -/
 def eHomWhiskerLeft (X : C) {Y Y' : C} (g : Y ⟶ Y') :
     (X ⟶[V] Y) ⟶ (X ⟶[V] Y') :=
   (ρ_ _).inv ≫ _ ◁ eHomEquiv V g ≫ eComp V X Y Y'
 
 @[simp]
-/--
-lemma `eHomWhiskerLeft_id` / 引理 `eHomWhiskerLeft_id`
-
-English:
-lemma eHomWhiskerLeft_id
-  given: (X Y : C)
-  statement: eHomWhiskerLeft V X (𝟙 Y) = 𝟙 _
-  proof: by
-  simp [eHomWhiskerLeft]
-
-@[simp, reassoc]
-
-中文:
-引理 eHomWhiskerLeft_id
-  条件: (X Y : C)
-  结论: eHomWhiskerLeft V X (𝟙 Y) = 𝟙 _
-  证明: by
-  simp [eHomWhiskerLeft]
-
-@[simp, reassoc]
-
-Depends on / 依赖: eHomWhiskerLeft
+/-
+**CategoryTheory.eHomWhiskerLeft_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomWhiskerLeft_id (X Y : C) : eHomWhiskerLeft V X (𝟙 Y) = 𝟙 _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.eHomEquiv_id`：eHomEquiv_id (X : C) : eHomEquiv V (𝟙 X) = 
+eId V X
+· 使用定理 `CategoryTheory.e_comp_id`：e_comp_id (X Y : C) : (ρ_ (X ⟶[V] Y)).inv ≫ _ 
+◁ eId V Y ≫ eComp V X Y Y = 𝟙 (X ⟶[V] Y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eHomWhiskerLeft_id (X Y : C) : eHomWhiskerLeft V X (𝟙 Y) = 𝟙 _ := by
   simp [eHomWhiskerLeft]
 
 @[simp, reassoc]
-/--
-lemma `eHomWhiskerLeft_comp` / 引理 `eHomWhiskerLeft_comp`
-
-English:
-lemma eHomWhiskerLeft_comp
-  given: (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'')
-  proof: by
-  dsimp [eHomWhiskerLeft]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whiskerLeft_rightUnitor_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [triangle_assoc_comp_left_inv_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 eHomWhiskerLeft_comp
-  条件: (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'')
-  证明: by
-  dsimp [eHomWhiskerLeft]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whiskerLeft_rightUnitor_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [triangle_assoc_comp_left_inv_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerRight_id_assoc, eHomEquiv_comp, eHomWhiskerLeft, e_assoc, tensorHom_def, triangle_assoc_comp_left_inv_assoc, whiskerLeft_comp_assoc, whiskerLeft_rightUnitor_assoc, whiskerLeft_rightUnitor_inv_assoc, whiskerRight_id_assoc
+/-
+**CategoryTheory.eHomWhiskerLeft_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：eHomWhiskerLeft_comp (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'') :
+ eHomWhiskerLeft V X (g ≫ g') = eHomWhiskerLeft V X g ≫ eHomWhiskerLeft V X g'
+参数：X : C；g : Y ⟶ Y'；g' : Y' ⟶ Y''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.eHomEquiv_comp`：eHomEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g
+ : Y ⟶ Z) : eHomEquiv V (f ≫ g) = (fun_ _).inv ≫ (eHomEquiv V f otimesₘ eHomEqui
+v V g) ≫ eComp V X …
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] (W : C)   {X Y Z : C} (f : X ⟶ Y) (g :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.e_assoc`：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V
+ W X Y ▷ _ ≫ eComp V W Y Z = _ ◁ eComp V X Y Z ≫ eComp V W X Z
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id_assoc`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategor
+y C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor_assoc`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoida
+lCategory C] (X Y : C) {Z : C}   (h : CategoryTheor…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor_inv_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mon
+oidalCategory C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.triangle_assoc_comp_left_inv_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right_assoc`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.MonoidalCategory C] (X Y : C)   {Z Z' : C} (f : Z ⟶ Z') {Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
 -/
 lemma eHomWhiskerLeft_comp (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'') :
     eHomWhiskerLeft V X (g ≫ g') = eHomWhiskerLeft V X g ≫ eHomWhiskerLeft V X g' := by
   dsimp [eHomWhiskerLeft]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whiskerLeft_rightUnitor_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [triangle_assoc_comp_left_inv_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
+  rw [assoc, assoc, eHomEquiv_comp, MonoidalCategory.whiskerLeft_comp_assoc,
+    MonoidalCategory.whiskerLeft_comp_assoc, ← e_assoc, tensorHom_def,
+    MonoidalCategory.whiskerRight_id_assoc, MonoidalCategory.whiskerLeft_comp_assoc,
+    MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerLeft_comp_assoc,
+    whiskerLeft_rightUnitor_assoc, whiskerLeft_rightUnitor_inv_assoc,
+    triangle_assoc_comp_left_inv_assoc, MonoidalCategory.whiskerRight_id_assoc,
+    Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc,
+    associator_inv_naturality_right_assoc, Iso.hom_inv_id_assoc,
+    whisker_exchange_assoc, MonoidalCategory.whiskerRight_id_assoc, Iso.inv_hom_id_assoc]
 
 /-- Whiskering commutes with the enriched composition. -/
 @[reassoc]
-/--
-lemma `eComp_eHomWhiskerLeft` / 引理 `eComp_eHomWhiskerLeft`
+/-
+**CategoryTheory.eComp_eHomWhiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：eComp_eHomWhiskerLeft (X Y : C) {Z Z' : C} (g : Z ⟶ Z') : eComp V X Y Z ≫ 
+eHomWhiskerLeft V X g = _ ◁ eHomWhiskerLeft V Y g ≫ eComp V X Y Z'
+参数：X Y : C；g : Z ⟶ Z'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.rightUnitor_inv_naturality_assoc`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mono
+idalCategory C] {X X' : C}   (f : X ⟶ X') {Z : C}   (h…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.e_assoc`：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V
+ W X Y ▷ _ ≫ eComp V W Y Z = _ ◁ eComp V X Y Z ≫ eComp V W X Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor_inv`：whiskerLeft
+_rightUnitor_inv (X Y : C) : X ◁ (ρ_ Y).inv = (ρ_ (X otimes Y)).inv ≫ (α_ X Y (𝟙
+_ C)).hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma eComp_eHomWhiskerLeft
-  given: (X Y : C) {Z Z' : C} (g : Z ⟶ Z')
-  proof: by
-  dsimp [eHomWhiskerLeft]
-  rw [rightUnitor_inv_naturality_assoc]; rw [← whisker_exchange_assoc]
-  simp
-
-中文:
-引理 eComp_eHomWhiskerLeft
-  条件: (X Y : C) {Z Z' : C} (g : Z ⟶ Z')
-  证明: by
-  dsimp [eHomWhiskerLeft]
-  rw [rightUnitor_inv_naturality_assoc]; rw [← whisker_exchange_assoc]
-  simp
-
-Depends on / 依赖: eHomWhiskerLeft, rightUnitor_inv_naturality_assoc, whisker_exchange_assoc
+--- 原说明 ---
+Whiskering commutes with the enriched composition.
 -/
 lemma eComp_eHomWhiskerLeft (X Y : C) {Z Z' : C} (g : Z ⟶ Z') :
     eComp V X Y Z ≫ eHomWhiskerLeft V X g =
       _ ◁ eHomWhiskerLeft V Y g ≫ eComp V X Y Z' := by
   dsimp [eHomWhiskerLeft]
-  rw [rightUnitor_inv_naturality_assoc]; rw [← whisker_exchange_assoc]
+  rw [rightUnitor_inv_naturality_assoc, ← whisker_exchange_assoc]
   simp
 
 /-- Given an isomorphism `α : Y ≅ Y₁` in C, the enriched composition map
@@ -352,36 +416,53 @@ lemma eComp_eHomWhiskerLeft (X Y : C) {Z Z' : C} (g : Z ⟶ Z') :
 object `(X ⟶[V] Y₁) ⊗ (Y₁ ⟶[V] Z)` via the map defined by whiskering in the
 middle with `α.hom` and `α.inv`. -/
 @[reassoc]
-/--
-lemma `eHom_whisker_cancel` / 引理 `eHom_whisker_cancel`
+/-
+**CategoryTheory.eHom_whisker_cancel** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：eHom_whisker_cancel {X Y Y₁ Z : C} (α : Y ≅ Y₁) : eHomWhiskerLeft V X α.ho
+m ▷ _ ≫ _ ◁ eHomWhiskerRight V α.inv Z ≫ eComp V X Y₁ Z = eComp V X Y Z
+参数：α : Y ≅ Y₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] (W : C)   {X Y Z : C} (f : X ⟶ Y) (g :…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc_symm`：whisker_assoc_symm (
+X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : X ◁ f ▷ Z = (α_ X Y Z).inv ≫ (X ◁ f) ▷ 
+Z ≫ (α_ X Y' Z).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.e_assoc'`：e_assoc' (W X Y Z : C) : (α_ _ _ _).hom ≫ _ ◁ e
+Comp V X Y Z ≫ eComp V W X Z = eComp V W X Y ▷ _ ≫ eComp V W Y Z
+· 使用定理 `CategoryTheory.MonoidalCategory.triangle_assoc_comp_left_inv_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用引理 `CategoryTheory.eHomWhiskerLeft_id`：eHomWhiskerLeft_id (X Y : C) : eHomWh
+iskerLeft V X (𝟙 Y) = 𝟙 _
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma eHom_whisker_cancel
-  given: {X Y Y₁ Z : C} (α : Y ≅ Y₁)
-  proof: by
-  dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  simp only [MonoidalCategory.whiskerLeft_comp_assoc, whisker_assoc_symm,
-    triangle_assoc_comp_left_inv_assoc, e_assoc', assoc]
-  simp only [← comp_whiskerRight_assoc]
-  change (eHomWhiskerLeft V X α.hom ≫ eHomWhiskerLeft V X α.inv) ▷ _ ≫ _ = _
-  simp [← eHomWhiskerLeft_comp]
-
-@[reassoc]
-
-中文:
-引理 eHom_whisker_cancel
-  条件: {X Y Y₁ Z : C} (α : Y ≅ Y₁)
-  证明: by
-  dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  simp only [MonoidalCategory.whiskerLeft_comp_assoc, whisker_assoc_symm,
-    triangle_assoc_comp_left_inv_assoc, e_assoc', assoc]
-  simp only [← comp_whiskerRight_assoc]
-  change (eHomWhiskerLeft V X α.hom ≫ eHomWhiskerLeft V X α.inv) ▷ _ ≫ _ = _
-  simp [← eHomWhiskerLeft_comp]
-
-@[reassoc]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, comp_whiskerRight_assoc, eHomWhiskerLeft, eHomWhiskerLeft_comp, eHomWhiskerRight, e_assoc, triangle_assoc_comp_left_inv_assoc, whiskerLeft_comp_assoc, whisker_assoc_symm
+--- 原说明 ---
+Given an isomorphism `α : Y ≅ Y₁` in C, the enriched composition map
+`eComp V X Y Z : (X ⟶[V] Y) ⊗ (Y ⟶[V] Z) ⟶ (X ⟶[V] Z)` factors through the `V`
+object `(X ⟶[V] Y₁) ⊗ (Y₁ ⟶[V] Z)` via the map defined by whiskering in the
+middle with `α.hom` and `α.inv`.
 -/
 lemma eHom_whisker_cancel {X Y Y₁ Z : C} (α : Y ≅ Y₁) :
     eHomWhiskerLeft V X α.hom ▷ _ ≫ _ ◁ eHomWhiskerRight V α.inv Z ≫
@@ -394,80 +475,89 @@ lemma eHom_whisker_cancel {X Y Y₁ Z : C} (α : Y ≅ Y₁) :
   simp [← eHomWhiskerLeft_comp]
 
 @[reassoc]
-/--
-lemma `eHom_whisker_cancel_inv` / 引理 `eHom_whisker_cancel_inv`
-
-English:
-lemma eHom_whisker_cancel_inv
-  given: {X Y Y₁ Z : C} (α : Y ≅ Y₁)
-  proof: eHom_whisker_cancel V α.symm
-
-@[reassoc]
-
-中文:
-引理 eHom_whisker_cancel_inv
-  条件: {X Y Y₁ Z : C} (α : Y ≅ Y₁)
-  证明: eHom_whisker_cancel V α.symm
-
-@[reassoc]
-
-Depends on / 依赖: eHom_whisker_cancel
+/-
+**CategoryTheory.eHom_whisker_cancel_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：eHom_whisker_cancel_inv {X Y Y₁ Z : C} (α : Y ≅ Y₁) : eHomWhiskerLeft V X 
+α.inv ▷ _ ≫ _ ◁ eHomWhiskerRight V α.hom Z ≫ eComp V X Y Z = eComp V X Y₁ Z
+参数：α : Y ≅ Y₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.eHom_whisker_cancel`：eHom_whisker_cancel {X Y Y₁ Z : C} (
+α : Y ≅ Y₁) : eHomWhiskerLeft V X α.hom ▷ _ ≫ _ ◁ eHomWhiskerRight V α.inv Z ≫ e
+Comp V X Y₁ Z = eComp V …
 -/
 lemma eHom_whisker_cancel_inv {X Y Y₁ Z : C} (α : Y ≅ Y₁) :
     eHomWhiskerLeft V X α.inv ▷ _ ≫ _ ◁ eHomWhiskerRight V α.hom Z ≫
       eComp V X Y Z = eComp V X Y₁ Z := eHom_whisker_cancel V α.symm
 
 @[reassoc]
-/--
-lemma `eHom_whisker_exchange` / 引理 `eHom_whisker_exchange`
-
-English:
-lemma eHom_whisker_exchange
-  given: {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y')
-  proof: by
-  dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whiskerRight_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 eHom_whisker_exchange
-  条件: {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y')
-  证明: by
-  dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whiskerRight_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerRight_id_assoc, associator_inv_naturality_left_assoc, comp_whiskerRight_assoc, eHomWhiskerLeft, eHomWhiskerRight, e_assoc, hom_inv_id_assoc, inv_hom_id_assoc, leftUnitor_inv_naturality_assoc, leftUnitor_tensor_inv_assoc, whiskerRight_id_assoc, whisker_exchange_assoc
+/-
+**CategoryTheory.eHom_whisker_exchange** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：eHom_whisker_exchange {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y') : eHomWhis
+kerLeft V X' g ≫ eHomWhiskerRight V f Y' = eHomWhiskerRight V f Y ≫ eHomWhiskerL
+eft V X g
+参数：f : X ⟶ X'；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_naturality_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.e_assoc`：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V
+ W X Y ▷ _ ≫ eComp V W Y Z = _ ◁ eComp V X Y Z ≫ eComp V W X Z
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_tensor_inv_assoc`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalC
+ategory C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left_assoc`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.
+MonoidalCategory C] {X X' : C}   (f : X ⟶ X') (Y Z : C) {Z…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id_assoc`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategor
+y C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma eHom_whisker_exchange {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y') :
     eHomWhiskerLeft V X' g ≫ eHomWhiskerRight V f Y' =
       eHomWhiskerRight V f Y ≫ eHomWhiskerLeft V X g := by
   dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whiskerRight_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
+  rw [assoc, assoc, assoc, assoc, leftUnitor_inv_naturality_assoc,
+    whisker_exchange_assoc, ← e_assoc, leftUnitor_tensor_inv_assoc,
+    associator_inv_naturality_left_assoc, Iso.hom_inv_id_assoc,
+    ← comp_whiskerRight_assoc, whisker_exchange_assoc,
+    MonoidalCategory.whiskerRight_id_assoc, assoc, Iso.inv_hom_id_assoc,
+    whisker_exchange_assoc, MonoidalCategory.whiskerRight_id_assoc, Iso.inv_hom_id_assoc]
 
 attribute [local simp] eHom_whisker_exchange
 
 variable (C) in
 /-- The bifunctor `Cᵒᵖ ⥤ C ⥤ V` which sends `X : Cᵒᵖ` and `Y : C` to `X ⟶[V] Y`. -/
 @[simps]
-/--
-Definition of `eHomFunctor` / `eHomFunctor` 的定义
+/-
+**CategoryTheory.eHomFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eHomFunctor : Cᵒᵖ ⥤ C ⥤ V where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eHomFunctor
-  signature: : Cᵒᵖ ⥤ C ⥤ V where
-  body: { obj := fun Y => X.unop ⟶[V] Y
-      map := fun φ => eHomWhiskerLeft V X.unop φ }
-  map φ :=
-    { app := fun Y => eHomWhiskerRight V φ.unop Y }
-
-中文:
-定义 eHomFunctor
-  签名: : Cᵒᵖ ⥤ C ⥤ V where
-  定义体: { obj := fun Y => X.unop ⟶[V] Y
-      map := fun φ => eHomWhiskerLeft V X.unop φ }
-  map φ :=
-    { app := fun Y => eHomWhiskerRight V φ.unop Y }
-
-Depends on / 依赖: X.unop, eHomWhiskerLeft, eHomWhiskerRight
+--- 原说明 ---
+The bifunctor `Cᵒᵖ ⥤ C ⥤ V` which sends `X : Cᵒᵖ` and `Y : C` to `X ⟶[V] Y`.
 -/
 def eHomFunctor : Cᵒᵖ ⥤ C ⥤ V where
   obj X :=
@@ -475,27 +565,15 @@ def eHomFunctor : Cᵒᵖ ⥤ C ⥤ V where
       map := fun φ => eHomWhiskerLeft V X.unop φ }
   map φ :=
     { app := fun Y => eHomWhiskerRight V φ.unop Y }
-
-/--
-Instance `ForgetEnrichment.enrichedOrdinaryCategory` / 实例 `ForgetEnrichment.enrichedOrdinaryCategory`
-
-English:
-instance ForgetEnrichment.enrichedOrdinaryCategory
-  signature: {D : Type*} [EnrichedCategory V D]
-  body: inferInstanceAs (EnrichedCategory V D)
-  homEquiv := Equiv.refl _
-  homEquiv_id _ := Category.id_comp _
-  homEquiv_comp _ _ := Category.assoc _ _ _
-
-中文:
-实例 ForgetEnrichment.enrichedOrdinaryCategory
-  签名: {D : 类型} [Enriched范畴 V D]
-  定义体: inferInstanceAs (EnrichedCategory V D)
-  homEquiv := Equiv.refl _
-  homEquiv_id _ := Category.id_comp _
-  homEquiv_comp _ _ := Category.assoc _ _ _
-
-Depends on / 依赖: EnrichedCategory
+/-
+**CategoryTheory.ForgetEnrichment.enrichedOrdinaryCategory** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.ForgetEnrichment`。
+形式化陈述：(V : Type u') →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       {D : Type u_1} →         [inst_2 
+: CategoryTheory.EnrichedCategory V D] →           CategoryTheory.EnrichedOrdina
+ryCategory V (CategoryTheory.ForgetEnrichment V D)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 instance ForgetEnrichment.enrichedOrdinaryCategory {D : Type*} [EnrichedCategory V D] :
     EnrichedOrdinaryCategory V (ForgetEnrichment V D) where
@@ -507,22 +585,20 @@ instance ForgetEnrichment.enrichedOrdinaryCategory {D : Type*} [EnrichedCategory
 /-- If `D` is already an enriched ordinary category, there is a canonical functor from `D` to
 `ForgetEnrichment V D`. -/
 @[simps]
-/--
-Definition of `ForgetEnrichment.equivInverse` / `ForgetEnrichment.equivInverse` 的定义
+/-
+**CategoryTheory.ForgetEnrichment.equivInverse** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ForgetEnrichment`。
+形式化陈述：(V : Type u') →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       (D : Type u'') →         [inst_2 
+: CategoryTheory.Category.{v'', u''} D] →           [inst_3 : CategoryTheory.Enr
+ichedOrdinaryCategory V D] →             CategoryTheory.Functor D (CategoryTheor
+y.ForgetEnrichment V D)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.equivInverse
-  signature: (D : Type u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D]
-  body: .of V X
-  map f := ForgetEnrichment.homOf V (eHomEquiv V f)
-  map_comp f g := by simp [eHomEquiv_comp]
-
-中文:
-定义 ForgetEnrichment.equivInverse
-  签名: (D : 类型u'') [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
-  定义体: .of V X
-  map f := ForgetEnrichment.homOf V (eHomEquiv V f)
-  map_comp f g := by simp [eHomEquiv_comp]
+--- 原说明 ---
+If `D` is already an enriched ordinary category, there is a canonical functor fr
+om `D` to
+`ForgetEnrichment V D`.
 -/
 def ForgetEnrichment.equivInverse (D : Type u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D] :
     D ⥤ ForgetEnrichment V D where
@@ -533,30 +609,21 @@ def ForgetEnrichment.equivInverse (D : Type u'') [Category.{v''} D] [EnrichedOrd
 /-- If `D` is already an enriched ordinary category, there is a canonical functor from
 `ForgetEnrichment V D` to `D`. -/
 @[simps]
-/--
-Definition of `ForgetEnrichment.equivFunctor` / `ForgetEnrichment.equivFunctor` 的定义
+/-
+**CategoryTheory.ForgetEnrichment.equivFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ForgetEnrichment`。
+形式化陈述：(V : Type u') →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       (D : Type u'') →         [inst_2 
+: CategoryTheory.Category.{v'', u''} D] →           [inst_3 : CategoryTheory.Enr
+ichedOrdinaryCategory V D] →             CategoryTheory.Functor (CategoryTheory.
+ForgetEnrichment V D) D
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition ForgetEnrichment.equivFunctor
-  signature: (D : Type u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D]
-  body: ForgetEnrichment.to V X
-  map f := (eHomEquiv V).symm (ForgetEnrichment.homTo V f)
-  map_id X := by rw [ForgetEnrichment.homTo_id, ← eHomEquiv_id, Equiv.symm_apply_apply]
-  map_comp {X} {Y} {Z} f g := Equiv.injective
-    (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V Z))
-    (by simp [eHomEquiv_comp])
-
-中文:
-定义 ForgetEnrichment.equivFunctor
-  签名: (D : 类型u'') [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
-  定义体: ForgetEnrichment.to V X
-  map f := (eHomEquiv V).symm (ForgetEnrichment.homTo V f)
-  map_id X := by rw [ForgetEnrichment.homTo_id, ← eHomEquiv_id, Equiv.symm_apply_apply]
-  map_comp {X} {Y} {Z} f g := Equiv.injective
-    (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V Z))
-    (by simp [eHomEquiv_comp])
-
-Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.to
+--- 原说明 ---
+If `D` is already an enriched ordinary category, there is a canonical functor fr
+om
+`ForgetEnrichment V D` to `D`.
 -/
 def ForgetEnrichment.equivFunctor (D : Type u'') [Category.{v''} D] [EnrichedOrdinaryCategory V D] :
     ForgetEnrichment V D ⥤ D where
@@ -571,30 +638,18 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- If `D` is already an enriched ordinary category, it is equivalent to `ForgetEnrichment V D`. -/
 @[simps]
-/--
-Definition of `ForgetEnrichment.equiv` / `ForgetEnrichment.equiv` 的定义
+/-
+**CategoryTheory.ForgetEnrichment.equiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ForgetEnrichment`。
+形式化陈述：(V : Type u') →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       {D : Type u''} →         [inst_2 
+: CategoryTheory.Category.{v'', u''} D] →           [inst_3 : CategoryTheory.Enr
+ichedOrdinaryCategory V D] → CategoryTheory.ForgetEnrichment V D ≌ D
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.equiv
-  signature: {D : Type u''} [Category.{v''} D] [EnrichedOrdinaryCategory V D]
-  body: equivFunctor V D
-  inverse := equivInverse V D
-  unitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  counitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  functor_unitIso_comp X := Equiv.injective
-    (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V X)) (by simp)
-
-中文:
-定义 ForgetEnrichment.equiv
-  签名: {D : 类型u''} [范畴.{v''} D] [EnrichedOrdinary范畴 V D]
-  定义体: equivFunctor V D
-  inverse := equivInverse V D
-  unitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  counitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  functor_unitIso_comp X := Equiv.injective
-    (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V X)) (by simp)
-
-Depends on / 依赖: equivFunctor
+--- 原说明 ---
+If `D` is already an enriched ordinary category, it is equivalent to `ForgetEnri
+chment V D`.
 -/
 def ForgetEnrichment.equiv {D : Type u''} [Category.{v''} D] [EnrichedOrdinaryCategory V D] :
     ForgetEnrichment V D ≌ D where
@@ -605,20 +660,15 @@ def ForgetEnrichment.equiv {D : Type u''} [Category.{v''} D] [EnrichedOrdinaryCa
   functor_unitIso_comp X := Equiv.injective
     (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V X)) (by simp)
 
-/--
-Definition of `eCoyoneda` / `eCoyoneda` 的定义
+/-- enriched coyoneda functor `(X ⟶[V] _) : C ⥤ V`. -/
+/-
+**CategoryTheory.eCoyoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eCoyoneda (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation eCoyoneda
-  signature: (X : C)
-  body: (eHomFunctor V C).obj (op X)
-
-中文:
-缩写 eCoyoneda
-  签名: (X : C)
-  定义体: (eHomFunctor V C).obj (op X)
-
-Depends on / 依赖: eHomFunctor
+--- 原说明 ---
+enriched coyoneda functor `(X ⟶[V] _) : C ⥤ V`.
 -/
 abbrev eCoyoneda (X : C) := (eHomFunctor V C).obj (op X)
 
@@ -628,37 +678,30 @@ variable {V} {W : Type u''} [Category.{v''} W] [MonoidalCategory W]
   (F : V ⥤ W) [F.LaxMonoidal]
   (C)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (TransportEnrichment F C)
-  body: inferInstanceAs (Category C)
-
-中文:
-实例 :
-  签名: 范畴 (TransportEnrichment F C)
-  定义体: inferInstanceAs (Category C)
-
-Depends on / 依赖: Category
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (TransportEnrichment F C) := inferInstanceAs (Category C)
 
-/--
-Definition of `TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv` / `TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv` 的定义
+/-- If `C` is an ordinary enriched category, the category structure on `TransportEnrichment F C`
+is trivially equivalent to the one on `C` itself. -/
+/-
+**CategoryTheory.TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.TransportEnrichment`。
+形式化陈述：{V : Type u'} →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       (C : Type u) →         [inst_2 : 
+CategoryTheory.Category.{v, u} C] →           {W : Type u''} →             [inst
+_3 : CategoryTheory.Category.{v'', u''} W] →               [inst_4 : CategoryThe
+ory.MonoidalCategory W] →                 (F : CategoryTheory.Functor V W) → [in
+st_5 : F.LaxMonoidal] → CategoryTheory.TransportEnrichment F C ≌ C
+参数：C : Type u；F : CategoryTheory.Functor V W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv
-  signature: : TransportEnrichment F C ≌ C
-  body: Equivalence.refl
-
-中文:
-定义 TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv
-  签名: : TransportEnrichment F C ≌ C
-  定义体: Equivalence.refl
-
-Depends on / 依赖: Equivalence, Equivalence.refl
+--- 原说明 ---
+If `C` is an ordinary enriched category, the category structure on `TransportEnr
+ichment F C`
+is trivially equivalent to the one on `C` itself.
 -/
 def TransportEnrichment.ofOrdinaryEnrichedCategoryEquiv : TransportEnrichment F C ≌ C :=
   Equivalence.refl
@@ -671,139 +714,148 @@ set_option backward.isDefEq.respectTransparency false in
 then `F` induces the structure of a `W`-enriched ordinary category on `TransportEnrichment F C`,
 i.e. on the same underlying category `C`. -/
 @[instance_reducible]
-/--
-Definition of `TransportEnrichment.enrichedOrdinaryCategory` / `TransportEnrichment.enrichedOrdinaryCategory` 的定义
+/-
+**CategoryTheory.TransportEnrichment.enrichedOrdinaryCategory** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.TransportEnrichment`。
+形式化陈述：{V : Type u'} →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       (C : Type u) →         [inst_2 : 
+CategoryTheory.Category.{v, u} C] →           [CategoryTheory.EnrichedOrdinaryCa
+tegory V C] →             {W : Type u''} →               [inst_4 : CategoryTheor
+y.Category.{v'', u''} W] →                 [inst_5 : CategoryTheory.MonoidalCate
+gory W] →                   (F : CategoryTheory.Functor V W) →                  
+   [inst_6 : F.LaxMonoidal] →                       (e :                        
+   (v : V) →                             (CategoryTheory.MonoidalCategoryStruct.
+tensorUnit V ⟶ v) ≃                               (CategoryTheory.MonoidalCatego
+ryStruct.tensorUnit W ⟶ F.obj v)) →                         (∀ (v : V) (f : Cate
+goryTheory.MonoidalCategoryStruct.tensorUnit V ⟶ v),                            
+ (e v) f =                               CategoryTheory.CategoryStruct.comp (Cat
+egoryTheory.Functor.LaxMonoidal.ε F) (F.map f)) →                           Cate
+goryTheory.EnrichedOrdinaryCategory W (CategoryTheory.TransportEnrichment F C)
+参数：C : Type u；F : CategoryTheory.Functor V W；e :                           (v : 
+V) →                             (CategoryTheory.MonoidalCategoryStruct.tensorUn
+it V ⟶ v) ≃                               (CategoryTheory.MonoidalCategoryStruct
+.tensorUnit W ⟶ F.obj v)；∀ (v : V) (f : CategoryTheory.MonoidalCategoryStruct.te
+nsorUnit V ⟶ v),                             (e v) f =                          
+     CategoryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMonoidal.ε F)
+ (F.map f)；CategoryTheory.TransportEnrichment F C。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition TransportEnrichment.enrichedOrdinaryCategory
-  body: (eHomEquiv V (C := C)).trans (e (Hom (C := C) X Y))
-  homEquiv_id {X} := by simpa using! h _ (eId V _)
-  homEquiv_comp f g := by
-    dsimp +instances [instEnrichedCategoryTransportEnrichment]
-    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; rw [whiskerRight_id_assoc]; rw [unitors_inv_equal]; rw [Iso.inv_hom_id_assoc]; rw [Functor.LaxMonoidal.μ_natural_assoc]; rw [Functor.LaxMonoidal.right_unitality_inv_assoc]; rw [eHomEquiv_comp]; rw [← F.map_comp]; rw [← F.map_comp]; rw [unitors_inv_equal]
-
-中文:
-定义 TransportEnrichment.enrichedOrdinaryCategory
-  定义体: (eHomEquiv V (C := C)).trans (e (Hom (C := C) X Y))
-  homEquiv_id {X} := by simpa using! h _ (eId V _)
-  homEquiv_comp f g := by
-    dsimp +instances [instEnrichedCategoryTransportEnrichment]
-    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; rw [whiskerRight_id_assoc]; rw [unitors_inv_equal]; rw [Iso.inv_hom_id_assoc]; rw [Functor.LaxMonoidal.μ_natural_assoc]; rw [Functor.LaxMonoidal.right_unitality_inv_assoc]; rw [eHomEquiv_comp]; rw [← F.map_comp]; rw [← F.map_comp]; rw [unitors_inv_equal]
-
-Depends on / 依赖: eHomEquiv
+--- 原说明 ---
+If for a lax monoidal functor `F : V ⥤ W` the canonical function
+`(𝟙_ V ⟶ v) → (𝟙_ W ⟶ F.obj v)` is bijective, and `C` is an enriched ordinary ca
+tegory on `V`,
+then `F` induces the structure of a `W`-enriched ordinary category on `Transport
+Enrichment F C`,
+i.e. on the same underlying category `C`.
 -/
 def TransportEnrichment.enrichedOrdinaryCategory
-    (e : forall v : V, (𝟙_ V ⟶ v) ≃ (𝟙_ W ⟶ F.obj v))
-    (h : forall v : V, forall f : 𝟙_ V ⟶ v, e v f = Functor.LaxMonoidal.ε F ≫ F.map f) :
+    (e : ∀ v : V, (𝟙_ V ⟶ v) ≃ (𝟙_ W ⟶ F.obj v))
+    (h : ∀ v : V, ∀ f : 𝟙_ V ⟶ v, e v f = Functor.LaxMonoidal.ε F ≫ F.map f) :
     EnrichedOrdinaryCategory W (TransportEnrichment F C) where
   homEquiv {X Y} := (eHomEquiv V (C := C)).trans (e (Hom (C := C) X Y))
   homEquiv_id {X} := by simpa using! h _ (eId V _)
   homEquiv_comp f g := by
     dsimp +instances [instEnrichedCategoryTransportEnrichment]
-    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; rw [whiskerRight_id_assoc]; rw [unitors_inv_equal]; rw [Iso.inv_hom_id_assoc]; rw [Functor.LaxMonoidal.μ_natural_assoc]; rw [Functor.LaxMonoidal.right_unitality_inv_assoc]; rw [eHomEquiv_comp]; rw [← F.map_comp]; rw [← F.map_comp]; rw [unitors_inv_equal]
+    rw [h, h, h, ← tensorHom_comp_tensorHom_assoc, eComp_eq, tensorHom_def_assoc,
+      whiskerRight_id_assoc, unitors_inv_equal, Iso.inv_hom_id_assoc,
+      Functor.LaxMonoidal.μ_natural_assoc, Functor.LaxMonoidal.right_unitality_inv_assoc,
+      eHomEquiv_comp, ← F.map_comp, ← F.map_comp, unitors_inv_equal]
 
 section Equiv
 
 variable {W : Type u''} [Category.{v''} W] [MonoidalCategory W]
   (F : V ⥤ W) [F.LaxMonoidal]
   (D : Type u) [EnrichedCategory V D]
-  (e : forall v : V, (𝟙_ V ⟶ v) ≃ (𝟙_ W ⟶ F.obj v))
-  (h : forall (v : V) (f : 𝟙_ V ⟶ v), (e v) f = Functor.LaxMonoidal.ε F ≫ F.map f)
+  (e : ∀ v : V, (𝟙_ V ⟶ v) ≃ (𝟙_ W ⟶ F.obj v))
+  (h : ∀ (v : V) (f : 𝟙_ V ⟶ v), (e v) f = Functor.LaxMonoidal.ε F ≫ F.map f)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The functor that makes up `TransportEnrichment.forgetEnrichmentEquiv`. -/
 @[simps]
-/--
-Definition of `TransportEnrichment.forgetEnrichmentEquivFunctor` / `TransportEnrichment.forgetEnrichmentEquivFunctor` 的定义
+/-
+**CategoryTheory.TransportEnrichment.forgetEnrichmentEquivFunctor** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.TransportEnrichment`。
+形式化陈述：{V : Type u'} →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       {W : Type u''} →         [inst_2 
+: CategoryTheory.Category.{v'', u''} W] →           [inst_3 : CategoryTheory.Mon
+oidalCategory W] →             (F : CategoryTheory.Functor V W) →               
+[inst_4 : F.LaxMonoidal] →                 (D : Type u) →                   [ins
+t_5 : CategoryTheory.EnrichedCategory V D] →                     (e :           
+              (v : V) →                           (CategoryTheory.MonoidalCatego
+ryStruct.tensorUnit V ⟶ v) ≃                             (CategoryTheory.Monoida
+lCategoryStruct.tensorUnit W ⟶ F.obj v)) →                       (∀ (v : V) (f :
+ CategoryTheory.MonoidalCategoryStruct.tensorUnit V ⟶ v),                       
+    (e v) f =                             CategoryTheory.CategoryStruct.comp (Ca
+tegoryTheory.Functor.LaxMonoidal.ε F) (F.map f)) →                         Categ
+oryTheory.Functor                           (CategoryTheory.TransportEnrichment 
+F (CategoryTheory.ForgetEnrichment V D))                           (CategoryTheo
+ry.ForgetEnrichment W (CategoryTheory.TransportEnrichment F D))
+参数：F : CategoryTheory.Functor V W；D : Type u；e :                         (v : V)
+ →                           (CategoryTheory.MonoidalCategoryStruct.tensorUnit V
+ ⟶ v) ≃                             (CategoryTheory.MonoidalCategoryStruct.tenso
+rUnit W ⟶ F.obj v)；∀ (v : V) (f : CategoryTheory.MonoidalCategoryStruct.tensorUn
+it V ⟶ v),                           (e v) f =                             Categ
+oryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMonoidal.ε F) (F.map f)
+；CategoryTheory.TransportEnrichment F (CategoryTheory.ForgetEnrichment V D)；Cate
+goryTheory.ForgetEnrichment W (CategoryTheory.TransportEnrichment F D)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TransportEnrichment.forgetEnrichmentEquivFunctor
-  signature: :
-  body: ForgetEnrichment.of W X
-map {X} {Y} f := ForgetEnrichment.homOf W (e (Hom (C := ForgetEnrichment V D) X Y))
-    ForgetEnrichment.homTo V f
-  map_id X := by
-    rw [h]; rw [ForgetEnrichment.homTo_id]; rw [← TransportEnrichment.eId_eq]
-    simp [ForgetEnrichment.to]
-  map_comp f g := by
-    rw [h]; rw [h]; rw [h]; rw [ForgetEnrichment.homTo_comp]; rw [F.map_comp]; rw [F.map_comp]; rw [← Category.assoc]; rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural_assoc]; rw [← TransportEnrichment.eComp_eq]; rw [← ForgetEnrichment.homOf_comp]; rw [leftUnitor_inv_naturality_assoc]; rw [← tensorHom_def'_assoc]; rw [tensorHom_comp_tensorHom_assoc]
-    rfl
-
-中文:
-定义 TransportEnrichment.forgetEnrichmentEquivFunctor
-  签名: :
-  定义体: ForgetEnrichment.of W X
-map {X} {Y} f := ForgetEnrichment.homOf W (e (Hom (C := ForgetEnrichment V D) X Y))
-    ForgetEnrichment.homTo V f
-  map_id X := by
-    rw [h]; rw [ForgetEnrichment.homTo_id]; rw [← TransportEnrichment.eId_eq]
-    simp [ForgetEnrichment.to]
-  map_comp f g := by
-    rw [h]; rw [h]; rw [h]; rw [ForgetEnrichment.homTo_comp]; rw [F.map_comp]; rw [F.map_comp]; rw [← Category.assoc]; rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural_assoc]; rw [← TransportEnrichment.eComp_eq]; rw [← ForgetEnrichment.homOf_comp]; rw [leftUnitor_inv_naturality_assoc]; rw [← tensorHom_def'_assoc]; rw [tensorHom_comp_tensorHom_assoc]
-    rfl
-
-Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.of
+--- 原说明 ---
+The functor that makes up `TransportEnrichment.forgetEnrichmentEquiv`.
 -/
 def TransportEnrichment.forgetEnrichmentEquivFunctor :
     TransportEnrichment F (ForgetEnrichment V D) ⥤
       ForgetEnrichment W (TransportEnrichment F D) where
   obj X := ForgetEnrichment.of W X
-map {X} {Y} f := ForgetEnrichment.homOf W (e (Hom (C := ForgetEnrichment V D) X Y))
+  map {X} {Y} f := ForgetEnrichment.homOf W <| (e (Hom (C := ForgetEnrichment V D) X Y)) <|
     ForgetEnrichment.homTo V f
   map_id X := by
-    rw [h]; rw [ForgetEnrichment.homTo_id]; rw [← TransportEnrichment.eId_eq]
+    rw [h, ForgetEnrichment.homTo_id, ← TransportEnrichment.eId_eq]
     simp [ForgetEnrichment.to]
   map_comp f g := by
-    rw [h]; rw [h]; rw [h]; rw [ForgetEnrichment.homTo_comp]; rw [F.map_comp]; rw [F.map_comp]; rw [← Category.assoc]; rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural_assoc]; rw [← TransportEnrichment.eComp_eq]; rw [← ForgetEnrichment.homOf_comp]; rw [leftUnitor_inv_naturality_assoc]; rw [← tensorHom_def'_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+    rw [h, h, h, ForgetEnrichment.homTo_comp, F.map_comp, F.map_comp, ← Category.assoc,
+      ← Functor.LaxMonoidal.left_unitality_inv, Category.assoc, Category.assoc, Category.assoc,
+      Category.assoc, ← Functor.LaxMonoidal.μ_natural_assoc, ← TransportEnrichment.eComp_eq,
+      ← ForgetEnrichment.homOf_comp, leftUnitor_inv_naturality_assoc, ← tensorHom_def'_assoc,
+      tensorHom_comp_tensorHom_assoc]
     rfl
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The inverse functor that makes up `TransportEnrichment.forgetEnrichmentEquiv`. -/
 @[simps]
-/--
-Definition of `TransportEnrichment.forgetEnrichmentEquivInverse` / `TransportEnrichment.forgetEnrichmentEquivInverse` 的定义
+/-
+**CategoryTheory.TransportEnrichment.forgetEnrichmentEquivInverse** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.TransportEnrichment`。
+形式化陈述：{V : Type u'} →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       {W : Type u''} →         [inst_2 
+: CategoryTheory.Category.{v'', u''} W] →           [inst_3 : CategoryTheory.Mon
+oidalCategory W] →             (F : CategoryTheory.Functor V W) →               
+[inst_4 : F.LaxMonoidal] →                 (D : Type u) →                   [ins
+t_5 : CategoryTheory.EnrichedCategory V D] →                     (e :           
+              (v : V) →                           (CategoryTheory.MonoidalCatego
+ryStruct.tensorUnit V ⟶ v) ≃                             (CategoryTheory.Monoida
+lCategoryStruct.tensorUnit W ⟶ F.obj v)) →                       (∀ (v : V) (f :
+ CategoryTheory.MonoidalCategoryStruct.tensorUnit V ⟶ v),                       
+    (e v) f =                             CategoryTheory.CategoryStruct.comp (Ca
+tegoryTheory.Functor.LaxMonoidal.ε F) (F.map f)) →                         Categ
+oryTheory.Functor                           (CategoryTheory.ForgetEnrichment W (
+CategoryTheory.TransportEnrichment F D))                           (CategoryTheo
+ry.TransportEnrichment F (CategoryTheory.ForgetEnrichment V D))
+参数：F : CategoryTheory.Functor V W；D : Type u；e :                         (v : V)
+ →                           (CategoryTheory.MonoidalCategoryStruct.tensorUnit V
+ ⟶ v) ≃                             (CategoryTheory.MonoidalCategoryStruct.tenso
+rUnit W ⟶ F.obj v)；∀ (v : V) (f : CategoryTheory.MonoidalCategoryStruct.tensorUn
+it V ⟶ v),                           (e v) f =                             Categ
+oryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMonoidal.ε F) (F.map f)
+；CategoryTheory.ForgetEnrichment W (CategoryTheory.TransportEnrichment F D)；Cate
+goryTheory.TransportEnrichment F (CategoryTheory.ForgetEnrichment V D)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition TransportEnrichment.forgetEnrichmentEquivInverse
-  signature: :
-  body: ForgetEnrichment.of V (ForgetEnrichment.to (C := TransportEnrichment F D) W X)
-  map f := ForgetEnrichment.homOf V ((e _).symm (ForgetEnrichment.homTo W f))
-  map_id X := by
-    rw [← ForgetEnrichment.homOf_eId]
-    congr 1
-    apply Equiv.injective (e _)
-    rw [ForgetEnrichment.homTo_id]; rw [Equiv.apply_symm_apply]; rw [h]; rw [TransportEnrichment.eId_eq]
-  map_comp f g := by
-    rw [← ForgetEnrichment.homOf_comp]
-    congr
-    apply Equiv.injective (e _)
-    rw [Equiv.apply_symm_apply]; rw [h]
-    simp only [ForgetEnrichment.homTo_comp, eComp_eq, Category.assoc, Functor.map_comp]
-    slice_rhs 1 3 =>
-      rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural]; rw [← leftUnitor_inv_comp_tensorHom_assoc]; rw [tensorHom_comp_tensorHom_assoc]
-    simp [← h]
-
-中文:
-定义 TransportEnrichment.forgetEnrichmentEquivInverse
-  签名: :
-  定义体: ForgetEnrichment.of V (ForgetEnrichment.to (C := TransportEnrichment F D) W X)
-  map f := ForgetEnrichment.homOf V ((e _).symm (ForgetEnrichment.homTo W f))
-  map_id X := by
-    rw [← ForgetEnrichment.homOf_eId]
-    congr 1
-    apply Equiv.injective (e _)
-    rw [ForgetEnrichment.homTo_id]; rw [Equiv.apply_symm_apply]; rw [h]; rw [TransportEnrichment.eId_eq]
-  map_comp f g := by
-    rw [← ForgetEnrichment.homOf_comp]
-    congr
-    apply Equiv.injective (e _)
-    rw [Equiv.apply_symm_apply]; rw [h]
-    simp only [ForgetEnrichment.homTo_comp, eComp_eq, Category.assoc, Functor.map_comp]
-    slice_rhs 1 3 =>
-      rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural]; rw [← leftUnitor_inv_comp_tensorHom_assoc]; rw [tensorHom_comp_tensorHom_assoc]
-    simp [← h]
-
-Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.of, ForgetEnrichment.to, TransportEnrichment
+--- 原说明 ---
+The inverse functor that makes up `TransportEnrichment.forgetEnrichmentEquiv`.
 -/
 def TransportEnrichment.forgetEnrichmentEquivInverse :
     ForgetEnrichment W (TransportEnrichment F D) ⥤ TransportEnrichment F (ForgetEnrichment V D)
@@ -814,15 +866,17 @@ def TransportEnrichment.forgetEnrichmentEquivInverse :
     rw [← ForgetEnrichment.homOf_eId]
     congr 1
     apply Equiv.injective (e _)
-    rw [ForgetEnrichment.homTo_id]; rw [Equiv.apply_symm_apply]; rw [h]; rw [TransportEnrichment.eId_eq]
+    rw [ForgetEnrichment.homTo_id, Equiv.apply_symm_apply, h, TransportEnrichment.eId_eq]
   map_comp f g := by
     rw [← ForgetEnrichment.homOf_comp]
     congr
     apply Equiv.injective (e _)
-    rw [Equiv.apply_symm_apply]; rw [h]
+    rw [Equiv.apply_symm_apply, h]
     simp only [ForgetEnrichment.homTo_comp, eComp_eq, Category.assoc, Functor.map_comp]
     slice_rhs 1 3 =>
-      rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural]; rw [← leftUnitor_inv_comp_tensorHom_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+      rw [← Functor.LaxMonoidal.left_unitality_inv, Category.assoc, Category.assoc,
+        ← Functor.LaxMonoidal.μ_natural, ← leftUnitor_inv_comp_tensorHom_assoc,
+        tensorHom_comp_tensorHom_assoc]
     simp [← h]
 
 set_option backward.defeqAttrib.useBackward true in
@@ -832,40 +886,42 @@ enriched ordinary category along a functor `F : V ⥤ W`, for which
 `f ↦ Functor.LaxMonoidal.ε F ≫ F.map f` has an inverse, results in a category equivalent to
 transporting along `F` and then forgetting about the resulting `W`-enrichment. -/
 @[simps]
-/--
-Definition of `TransportEnrichment.forgetEnrichmentEquiv` / `TransportEnrichment.forgetEnrichmentEquiv` 的定义
+/-
+**CategoryTheory.TransportEnrichment.forgetEnrichmentEquiv** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.TransportEnrichment`。
+形式化陈述：{V : Type u'} →   [inst : CategoryTheory.Category.{v', u'} V] →     [inst_
+1 : CategoryTheory.MonoidalCategory V] →       {W : Type u''} →         [inst_2 
+: CategoryTheory.Category.{v'', u''} W] →           [inst_3 : CategoryTheory.Mon
+oidalCategory W] →             (F : CategoryTheory.Functor V W) →               
+[inst_4 : F.LaxMonoidal] →                 (D : Type u) →                   [ins
+t_5 : CategoryTheory.EnrichedCategory V D] →                     (e :           
+              (v : V) →                           (CategoryTheory.MonoidalCatego
+ryStruct.tensorUnit V ⟶ v) ≃                             (CategoryTheory.Monoida
+lCategoryStruct.tensorUnit W ⟶ F.obj v)) →                       (∀ (v : V) (f :
+ CategoryTheory.MonoidalCategoryStruct.tensorUnit V ⟶ v),                       
+    (e v) f =                             CategoryTheory.CategoryStruct.comp (Ca
+tegoryTheory.Functor.LaxMonoidal.ε F) (F.map f)) →                         (Cate
+goryTheory.TransportEnrichment F (CategoryTheory.ForgetEnrichment V D) ≌        
+                   CategoryTheory.ForgetEnrichment W (CategoryTheory.TransportEn
+richment F D))
+参数：F : CategoryTheory.Functor V W；D : Type u；e :                         (v : V)
+ →                           (CategoryTheory.MonoidalCategoryStruct.tensorUnit V
+ ⟶ v) ≃                             (CategoryTheory.MonoidalCategoryStruct.tenso
+rUnit W ⟶ F.obj v)；∀ (v : V) (f : CategoryTheory.MonoidalCategoryStruct.tensorUn
+it V ⟶ v),                           (e v) f =                             Categ
+oryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMonoidal.ε F) (F.map f)
+；CategoryTheory.TransportEnrichment F (CategoryTheory.ForgetEnrichment V D) ≌   
+                        CategoryTheory.ForgetEnrichment W (CategoryTheory.Transp
+ortEnrichment F D)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TransportEnrichment.forgetEnrichmentEquiv
-  signature: : TransportEnrichment F (ForgetEnrichment V D) ≌
-  body: forgetEnrichmentEquivFunctor _ _ e h
-  inverse := forgetEnrichmentEquivInverse _ _ e h
-  unitIso := NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
-  counitIso := NatIso.ofComponents (fun _ => Iso.refl _) fun f => by
-    simp [ForgetEnrichment.to, ForgetEnrichment.of]
-  functor_unitIso_comp X := by
-    simp only [Functor.id_obj, forgetEnrichmentEquivFunctor_obj, Functor.comp_obj,
-      forgetEnrichmentEquivInverse_obj, ForgetEnrichment.to_of, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, forgetEnrichmentEquivFunctor_map, h, Category.comp_id]
-    rw [← ForgetEnrichment.homOf_eId]; rw [TransportEnrichment.eId_eq]; rw [ForgetEnrichment.homTo_id]
-    rfl
-
-中文:
-定义 TransportEnrichment.forgetEnrichmentEquiv
-  签名: : TransportEnrichment F (ForgetEnrichment V D) ≌
-  定义体: forgetEnrichmentEquivFunctor _ _ e h
-  inverse := forgetEnrichmentEquivInverse _ _ e h
-  unitIso := NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
-  counitIso := NatIso.ofComponents (fun _ => Iso.refl _) fun f => by
-    simp [ForgetEnrichment.to, ForgetEnrichment.of]
-  functor_unitIso_comp X := by
-    simp only [Functor.id_obj, forgetEnrichmentEquivFunctor_obj, Functor.comp_obj,
-      forgetEnrichmentEquivInverse_obj, ForgetEnrichment.to_of, NatIso.ofComponents_hom_app,
-      Iso.refl_hom, forgetEnrichmentEquivFunctor_map, h, Category.comp_id]
-    rw [← ForgetEnrichment.homOf_eId]; rw [TransportEnrichment.eId_eq]; rw [ForgetEnrichment.homTo_id]
-    rfl
-
-Depends on / 依赖: forgetEnrichmentEquivFunctor
+--- 原说明 ---
+If `D` is a `V`-enriched category, then forgetting the enrichment and transporti
+ng the resulting
+enriched ordinary category along a functor `F : V ⥤ W`, for which
+`f ↦ Functor.LaxMonoidal.ε F ≫ F.map f` has an inverse, results in a category eq
+uivalent to
+transporting along `F` and then forgetting about the resulting `W`-enrichment.
 -/
 def TransportEnrichment.forgetEnrichmentEquiv : TransportEnrichment F (ForgetEnrichment V D) ≌
     ForgetEnrichment W (TransportEnrichment F D) where
@@ -878,7 +934,7 @@ def TransportEnrichment.forgetEnrichmentEquiv : TransportEnrichment F (ForgetEnr
     simp only [Functor.id_obj, forgetEnrichmentEquivFunctor_obj, Functor.comp_obj,
       forgetEnrichmentEquivInverse_obj, ForgetEnrichment.to_of, NatIso.ofComponents_hom_app,
       Iso.refl_hom, forgetEnrichmentEquivFunctor_map, h, Category.comp_id]
-    rw [← ForgetEnrichment.homOf_eId]; rw [TransportEnrichment.eId_eq]; rw [ForgetEnrichment.homTo_id]
+    rw [← ForgetEnrichment.homOf_eId, TransportEnrichment.eId_eq, ForgetEnrichment.homTo_id]
     rfl
 
 end Equiv
@@ -891,6 +947,14 @@ variable (V : Type u') [Category.{v'} V] [MonoidalCategory V]
   {C : Type u} [Category.{v} C] [EnrichedOrdinaryCategory V C]
 
 /-- A full subcategory of an enriched ordinary category is an enriched ordinary category. -/
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A full subcategory of an enriched ordinary category is an enriched ordinary cate
+gory.
+-/
 instance (P : ObjectProperty C) :
     EnrichedOrdinaryCategory V (ObjectProperty.FullSubcategory P) where
   Hom X Y := X.obj ⟶[V] Y.obj
@@ -904,9 +968,10 @@ instance (P : ObjectProperty C) :
   homEquiv_comp f g := by
     simp only [ObjectProperty.ι_obj]
     change (eHomEquiv V) (P.ι.map (f ≫ g)) = _
-    rw [Functor.map_comp]; rw [eHomEquiv_comp]
+    rw [Functor.map_comp, eHomEquiv_comp]
     rfl
 
 end full_subcategory
 
 end CategoryTheory
+

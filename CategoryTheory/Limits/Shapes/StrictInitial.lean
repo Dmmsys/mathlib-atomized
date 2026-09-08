@@ -52,23 +52,29 @@ variable (C : Type u) [Category.{v} C]
 
 section StrictInitial
 
-/--
-Definition of `HasStrictInitialObjects` / `HasStrictInitialObjects` 的定义
+/-- We say `C` has strict initial objects if every initial object is strict, i.e. given any morphism
+`f : A ⟶ I` where `I` is initial, then `f` is an isomorphism.
 
-English:
-class HasStrictInitialObjects
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : forall {I A : C} (f : A ⟶ I), IsInitial I -> IsIso f
+Strictly speaking, this says that *any* initial object must be strict, rather than that strict
+initial objects exist.
+-/
+/-
+**CategoryTheory.Limits.HasStrictInitialObjects** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有StrictInitialObjects
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : 对任意 {I A : C} (f : A ⟶ I), IsInitial I -> 是同构 f
+--- 原说明 ---
+We say `C` has strict initial objects if every initial object is strict, i.e. gi
+ven any morphism
+`f : A ⟶ I` where `I` is initial, then `f` is an isomorphism.
+
+Strictly speaking, this says that *any* initial object must be strict, rather th
+an that strict
+initial objects exist.
 -/
 class HasStrictInitialObjects : Prop where
-  out : forall {I A : C} (f : A ⟶ I), IsInitial I -> IsIso f
+  out : ∀ {I A : C} (f : A ⟶ I), IsInitial I → IsIso f
 
 variable {C}
 
@@ -76,145 +82,110 @@ section
 
 variable [HasStrictInitialObjects C] {I : C}
 
-/--
-theorem `IsInitial.isIso_to` / 定理 `IsInitial.isIso_to`
-
-English:
-theorem IsInitial.isIso_to
-  given: (hI : IsInitial I) {A : C} (f : A ⟶ I)
-  statement: IsIso f
-  proof: HasStrictInitialObjects.out f hI
-
-中文:
-定理 IsInitial.isIso_to
-  条件: (hI : IsInitial I) {A : C} (f : A ⟶ I)
-  结论: 是同构 f
-  证明: HasStrictInitialObjects.out f hI
-
-Depends on / 依赖: HasStrictInitialObjects, HasStrictInitialObjects.out
+/-
+**CategoryTheory.Limits.IsInitial.isIso_to** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictInitialObjects C] {I : C}   (hI : CategoryTheory.Limits.IsInitial
+ I) {A : C} (f : A ⟶ I), CategoryTheory.IsIso f
+参数：hI : CategoryTheory.Limits.IsInitial I；f : A ⟶ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasStrictInitialObjects.out`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasStrictIniti
+alObjects C]   {I A : C} (f : A ⟶ I) (a…
 -/
 theorem IsInitial.isIso_to (hI : IsInitial I) {A : C} (f : A ⟶ I) : IsIso f :=
   HasStrictInitialObjects.out f hI
-
-/--
-theorem `IsInitial.strict_hom_ext` / 定理 `IsInitial.strict_hom_ext`
-
-English:
-theorem IsInitial.strict_hom_ext
-  given: (hI : IsInitial I) {A : C} (f g : A ⟶ I)
-  statement: f = g
-  proof: by
-  have := hI.isIso_to f
-  have := hI.isIso_to g
-  exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
-
-中文:
-定理 IsInitial.strict_hom_ext
-  条件: (hI : IsInitial I) {A : C} (f g : A ⟶ I)
-  结论: f = g
-  证明: by
-  have := hI.isIso_to f
-  have := hI.isIso_to g
-  exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
-
-Depends on / 依赖: eq_of_inv_eq_inv, hI.hom_ext, hI.isIso_to, hom_ext, isIso_to
+/-
+**CategoryTheory.Limits.IsInitial.strict_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictInitialObjects C] {I : C}   (hI : CategoryTheory.Limits.IsInitial
+ I) {A : C} (f g : A ⟶ I), f = g
+参数：hI : CategoryTheory.Limits.IsInitial I；f g : A ⟶ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.isIso_to`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects C] {I 
+: C}   (hI : CategoryTheory.Li…
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem IsInitial.strict_hom_ext (hI : IsInitial I) {A : C} (f g : A ⟶ I) : f = g := by
   have := hI.isIso_to f
   have := hI.isIso_to g
   exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
-
-/--
-theorem `IsInitial.subsingleton_to` / 定理 `IsInitial.subsingleton_to`
-
-English:
-theorem IsInitial.subsingleton_to
-  given: (hI : IsInitial I) {A : C}
-  statement: Subsingleton (A ⟶ I)
-  proof: ⟨hI.strict_hom_ext⟩
-
-中文:
-定理 IsInitial.subsingleton_to
-  条件: (hI : IsInitial I) {A : C}
-  结论: 子单例 (A ⟶ I)
-  证明: ⟨hI.strict_hom_ext⟩
-
-Depends on / 依赖: P.arbitrary, P.prop_arbitrary, arbitrary, hI.strict_hom_ext, prop_arbitrary, strict_hom_ext
+/-
+**CategoryTheory.Limits.IsInitial.subsingleton_to** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictInitialObjects C] {I : C}   (hI : CategoryTheory.Limits.IsInitial
+ I) {A : C}, Subsingleton (A ⟶ I)
+参数：hI : CategoryTheory.Limits.IsInitial I；A ⟶ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.strict_hom_ext`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects 
+C] {I : C}   (hI : CategoryTheory.Li…
 -/
 theorem IsInitial.subsingleton_to (hI : IsInitial I) {A : C} : Subsingleton (A ⟶ I) :=
   ⟨hI.strict_hom_ext⟩
 
 /-- If `X ⟶ Y` with `Y` being a strict initial object, then `X` is also an initial object. -/
 noncomputable
-/--
-Definition of `IsInitial.ofStrict` / `IsInitial.ofStrict` 的定义
-
-English:
-definition IsInitial.ofStrict
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: letI := hY.isIso_to f
-  hY.ofIso (asIso f).symm
-
-中文:
-定义 IsInitial.ofStrict
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: letI := hY.isIso_to f
-  hY.ofIso (asIso f).symm
-
-Depends on / 依赖: P.arbitrary.unop, P.prop_arbitrary, arbitrary, hY.isIso_to, hY.ofIso, isIso_to, prop_arbitrary
+/-
+**CategoryTheory.Limits.IsInitial.ofStrict** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsInitial`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasStrictInitialObjects C] →       {X Y : C} → (X ⟶ Y) → CategoryT
+heory.Limits.IsInitial Y → CategoryTheory.Limits.IsInitial X
+参数：X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.isIso_to`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects C] {I 
+: C}   (hI : CategoryTheory.Li…
 -/
 def IsInitial.ofStrict {X Y : C} (f : X ⟶ Y)
     (hY : IsInitial Y) : IsInitial X :=
   letI := hY.isIso_to f
   hY.ofIso (asIso f).symm
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) initial_mono_of_strict_initial_objects : InitialMonoClass C where
   isInitial_mono_from := fun _ hI => { right_cancellation := fun _ _ _ => hI.strict_hom_ext _ _ }
 
 /-- If `I` is initial, then `X ⨯ I` is isomorphic to it. -/
 @[simps! hom]
-/--
-Definition of `mulIsInitial` / `mulIsInitial` 的定义
+/-
+**CategoryTheory.Limits.mulIsInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：mulIsInitial (X : C) [HasBinaryProduct X I] (hI : IsInitial I) : X ⨯ I ≅ I
+参数：X : C；hI : IsInitial I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulIsInitial
-  signature: (X : C) [HasBinaryProduct X I] (hI : IsInitial I)
-  body: by
-  have := hI.isIso_to (prod.snd : X ⨯ I ⟶ I)
-  exact asIso prod.snd
-
-@[simp]
-
-中文:
-定义 mulIsInitial
-  签名: (X : C) [HasBinaryProduct X I] (hI : IsInitial I)
-  定义体: by
-  have := hI.isIso_to (prod.snd : X ⨯ I ⟶ I)
-  exact asIso prod.snd
-
-@[simp]
-
-Depends on / 依赖: hI.isIso_to, isIso_to, prod.snd
+--- 原说明 ---
+If `I` is initial, then `X ⨯ I` is isomorphic to it.
 -/
 noncomputable def mulIsInitial (X : C) [HasBinaryProduct X I] (hI : IsInitial I) : X ⨯ I ≅ I := by
   have := hI.isIso_to (prod.snd : X ⨯ I ⟶ I)
   exact asIso prod.snd
 
 @[simp]
-/--
-theorem `mulIsInitial_inv` / 定理 `mulIsInitial_inv`
-
-English:
-theorem mulIsInitial_inv
-  given: (X : C) [HasBinaryProduct X I] (hI : IsInitial I)
-  proof: hI.hom_ext _ _
-
-中文:
-定理 mulIsInitial_inv
-  条件: (X : C) [HasBinaryProduct X I] (hI : IsInitial I)
-  证明: hI.hom_ext _ _
-
-Depends on / 依赖: hI.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.mulIsInitial_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：mulIsInitial_inv (X : C) [HasBinaryProduct X I] (hI : IsInitial I) : (mulI
+sInitial X hI).inv = hI.to _
+参数：X : C；hI : IsInitial I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem mulIsInitial_inv (X : C) [HasBinaryProduct X I] (hI : IsInitial I) :
     (mulIsInitial X hI).inv = hI.to _ :=
@@ -222,114 +193,79 @@ theorem mulIsInitial_inv (X : C) [HasBinaryProduct X I] (hI : IsInitial I) :
 
 /-- If `I` is initial, then `I ⨯ X` is isomorphic to it. -/
 @[simps! hom]
-/--
-Definition of `isInitialMul` / `isInitialMul` 的定义
+/-
+**CategoryTheory.Limits.isInitialMul** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：isInitialMul (X : C) [HasBinaryProduct I X] (hI : IsInitial I) : I ⨯ X ≅ I
+参数：X : C；hI : IsInitial I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialMul
-  signature: (X : C) [HasBinaryProduct I X] (hI : IsInitial I)
-  body: by
-  have := hI.isIso_to (prod.fst : I ⨯ X ⟶ I)
-  exact asIso prod.fst
-
-@[simp]
-
-中文:
-定义 isInitialMul
-  签名: (X : C) [HasBinaryProduct I X] (hI : IsInitial I)
-  定义体: by
-  have := hI.isIso_to (prod.fst : I ⨯ X ⟶ I)
-  exact asIso prod.fst
-
-@[simp]
-
-Depends on / 依赖: hI.isIso_to, isIso_to, prod.fst
+--- 原说明 ---
+If `I` is initial, then `I ⨯ X` is isomorphic to it.
 -/
 noncomputable def isInitialMul (X : C) [HasBinaryProduct I X] (hI : IsInitial I) : I ⨯ X ≅ I := by
   have := hI.isIso_to (prod.fst : I ⨯ X ⟶ I)
   exact asIso prod.fst
 
 @[simp]
-/--
-theorem `isInitialMul_inv` / 定理 `isInitialMul_inv`
-
-English:
-theorem isInitialMul_inv
-  given: (X : C) [HasBinaryProduct I X] (hI : IsInitial I)
-  proof: hI.hom_ext _ _
-
-中文:
-定理 isInitialMul_inv
-  条件: (X : C) [HasBinaryProduct I X] (hI : IsInitial I)
-  证明: hI.hom_ext _ _
-
-Depends on / 依赖: hI.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.isInitialMul_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：isInitialMul_inv (X : C) [HasBinaryProduct I X] (hI : IsInitial I) : (isIn
+itialMul X hI).inv = hI.to _
+参数：X : C；hI : IsInitial I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem isInitialMul_inv (X : C) [HasBinaryProduct I X] (hI : IsInitial I) :
     (isInitialMul X hI).inv = hI.to _ :=
   hI.hom_ext _ _
 
 variable [HasInitial C]
-
-/--
-Instance `initial_isIso_to` / 实例 `initial_isIso_to`
-
-English:
-instance initial_isIso_to
-  signature: {A : C} (f : A ⟶ ⊥_ C)
-  body: initialIsInitial.isIso_to _
-
-@[ext]
-
-中文:
-实例 initial_isIso_to
-  签名: {A : C} (f : A ⟶ ⊥_ C)
-  定义体: initialIsInitial.isIso_to _
-
-@[ext]
-
-Depends on / 依赖: initialIsInitial, initialIsInitial.isIso_to, isIso_to
+/-
+**CategoryTheory.Limits.initial_isIso_to** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：initial_isIso_to {A : C} (f : A ⟶ ⊥_ C) : IsIso f
+参数：f : A ⟶ ⊥_ C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.isIso_to`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects C] {I 
+: C}   (hI : CategoryTheory.Li…
 -/
 instance initial_isIso_to {A : C} (f : A ⟶ ⊥_ C) : IsIso f :=
   initialIsInitial.isIso_to _
 
 @[ext]
-/--
-theorem `initial.strict_hom_ext` / 定理 `initial.strict_hom_ext`
-
-English:
-theorem initial.strict_hom_ext
-  given: {A : C} (f g : A ⟶ ⊥_ C)
-  statement: f = g
-  proof: initialIsInitial.strict_hom_ext _ _
-
-中文:
-定理 initial.strict_hom_ext
-  条件: {A : C} (f g : A ⟶ ⊥_ C)
-  结论: f = g
-  证明: initialIsInitial.strict_hom_ext _ _
-
-Depends on / 依赖: initialIsInitial, initialIsInitial.strict_hom_ext, strict_hom_ext
+/-
+**CategoryTheory.Limits.initial.strict_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.initial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictInitialObjects C]   [inst_2 : CategoryTheory.Limits.HasInitial C]
+ {A : C} (f g : A ⟶ ⊥_ C), f = g
+参数：f g : A ⟶ ⊥_ C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.strict_hom_ext`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects 
+C] {I : C}   (hI : CategoryTheory.Li…
 -/
 theorem initial.strict_hom_ext {A : C} (f g : A ⟶ ⊥_ C) : f = g :=
   initialIsInitial.strict_hom_ext _ _
-
-/--
-theorem `initial.subsingleton_to` / 定理 `initial.subsingleton_to`
-
-English:
-theorem initial.subsingleton_to
-  given: {A : C}
-  statement: Subsingleton (A ⟶ ⊥_ C)
-  proof: initialIsInitial.subsingleton_to
-
-中文:
-定理 initial.subsingleton_to
-  条件: {A : C}
-  结论: 子单例 (A ⟶ ⊥_ C)
-  证明: initialIsInitial.subsingleton_to
-
-Depends on / 依赖: initialIsInitial, initialIsInitial.subsingleton_to, subsingleton_to
+/-
+**CategoryTheory.Limits.initial.subsingleton_to** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.initial`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictInitialObjects C]   [inst_2 : CategoryTheory.Limits.HasInitial C]
+ {A : C}, Subsingleton (A ⟶ ⊥_ C)
+参数：A ⟶ ⊥_ C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.subsingleton_to`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictInitialObjects
+ C] {I : C}   (hI : CategoryTheory.Li…
 -/
 theorem initial.subsingleton_to {A : C} : Subsingleton (A ⟶ ⊥_ C) :=
   initialIsInitial.subsingleton_to
@@ -339,45 +275,35 @@ initial.
 This is the generalisation of the fact that `X × Empty ≃ Empty` for types (or `n * 0 = 0`).
 -/
 @[simps! hom]
-/--
-Definition of `mulInitial` / `mulInitial` 的定义
+/-
+**CategoryTheory.Limits.mulInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：mulInitial (X : C) [HasBinaryProduct X (⊥_ C)] : X ⨯ ⊥_ C ≅ ⊥_ C
+参数：X : C；⊥_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulInitial
-  signature: (X : C) [HasBinaryProduct X (⊥_ C)]
-  body: mulIsInitial _ initialIsInitial
-
-@[simp]
-
-中文:
-定义 mulInitial
-  签名: (X : C) [HasBinaryProduct X (⊥_ C)]
-  定义体: mulIsInitial _ initialIsInitial
-
-@[simp]
-
-Depends on / 依赖: initialIsInitial, mulIsInitial
+--- 原说明 ---
+The product of `X` with an initial object in a category with strict initial obje
+cts is itself
+initial.
+This is the generalisation of the fact that `X × Empty ≃ Empty` for types (or `n
+ * 0 = 0`).
 -/
 noncomputable def mulInitial (X : C) [HasBinaryProduct X (⊥_ C)] : X ⨯ ⊥_ C ≅ ⊥_ C :=
   mulIsInitial _ initialIsInitial
 
 @[simp]
-/--
-theorem `mulInitial_inv` / 定理 `mulInitial_inv`
-
-English:
-theorem mulInitial_inv
-  given: (X : C) [HasBinaryProduct X (⊥_ C)]
-  statement: (mulInitial X).inv = initial.to _
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 mulInitial_inv
-  条件: (X : C) [HasBinaryProduct X (⊥_ C)]
-  结论: (mulInitial X).inv = initial.to _
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.Limits.mulInitial_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：mulInitial_inv (X : C) [HasBinaryProduct X (⊥_ C)] : (mulInitial X).inv = 
+initial.to _
+参数：X : C；⊥_ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem mulInitial_inv (X : C) [HasBinaryProduct X (⊥_ C)] : (mulInitial X).inv = initial.to _ :=
   Subsingleton.elim _ _
@@ -387,94 +313,76 @@ initial.
 This is the generalisation of the fact that `Empty × X ≃ Empty` for types (or `0 * n = 0`).
 -/
 @[simps! hom]
-/--
-Definition of `initialMul` / `initialMul` 的定义
+/-
+**CategoryTheory.Limits.initialMul** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：initialMul (X : C) [HasBinaryProduct (⊥_ C) X] : (⊥_ C) ⨯ X ≅ ⊥_ C
+参数：X : C；⊥_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialMul
-  signature: (X : C) [HasBinaryProduct (⊥_ C) X]
-  body: isInitialMul _ initialIsInitial
-
-@[simp]
-
-中文:
-定义 initialMul
-  签名: (X : C) [HasBinaryProduct (⊥_ C) X]
-  定义体: isInitialMul _ initialIsInitial
-
-@[simp]
-
-Depends on / 依赖: initialIsInitial, isInitialMul
+--- 原说明 ---
+The product of `X` with an initial object in a category with strict initial obje
+cts is itself
+initial.
+This is the generalisation of the fact that `Empty × X ≃ Empty` for types (or `0
+ * n = 0`).
 -/
 noncomputable def initialMul (X : C) [HasBinaryProduct (⊥_ C) X] : (⊥_ C) ⨯ X ≅ ⊥_ C :=
   isInitialMul _ initialIsInitial
 
 @[simp]
-/--
-theorem `initialMul_inv` / 定理 `initialMul_inv`
-
-English:
-theorem initialMul_inv
-  given: (X : C) [HasBinaryProduct (⊥_ C) X]
-  statement: (initialMul X).inv = initial.to _
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 initialMul_inv
-  条件: (X : C) [HasBinaryProduct (⊥_ C) X]
-  结论: (initialMul X).inv = initial.to _
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.Limits.initialMul_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：initialMul_inv (X : C) [HasBinaryProduct (⊥_ C) X] : (initialMul X).inv = 
+initial.to _
+参数：X : C；⊥_ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem initialMul_inv (X : C) [HasBinaryProduct (⊥_ C) X] : (initialMul X).inv = initial.to _ :=
   Subsingleton.elim _ _
 
 end
 
-/--
-theorem `hasStrictInitialObjects_of_initial_is_strict` / 定理 `hasStrictInitialObjects_of_initial_is_strict`
+/-- If `C` has an initial object such that every morphism *to* it is an isomorphism, then `C`
+has strict initial objects. -/
+/-
+**CategoryTheory.Limits.hasStrictInitialObjects_of_initial_is_strict** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasStrictInitialObjects_of_initial_is_strict [HasInitial C] (h : forall (A
+) (f : A ⟶ ⊥_ C), IsIso f) : HasStrictInitialObjects C
+参数：h : forall (A) (f : A ⟶ ⊥_ C), IsIso f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 
-English:
-theorem hasStrictInitialObjects_of_initial_is_strict
-  statement: [HasInitial C]
-  proof: { out := fun {I A} f hI =>
-      haveI := h A (f ≫ hI.to _)
-      ⟨⟨hI.to _ ≫ inv (f ≫ hI.to (⊥_ C)), by rw [← assoc, IsIso.hom_inv_id], hI.hom_ext _ _⟩⟩ }
-
-中文:
-定理 hasStrictInitialObjects_of_initial_is_strict
-  结论: [HasInitial C]
-  证明: { out := fun {I A} f hI =>
-      haveI := h A (f ≫ hI.to _)
-      ⟨⟨hI.to _ ≫ inv (f ≫ hI.to (⊥_ C)), by rw [← assoc, IsIso.hom_inv_id], hI.hom_ext _ _⟩⟩ }
-
-Depends on / 依赖: IsIso.hom_inv_id, hI.hom_ext, hI.to, hom_ext, hom_inv_id
+--- 原说明 ---
+If `C` has an initial object such that every morphism *to* it is an isomorphism,
+ then `C`
+has strict initial objects.
 -/
 theorem hasStrictInitialObjects_of_initial_is_strict [HasInitial C]
-    (h : forall (A) (f : A ⟶ ⊥_ C), IsIso f) : HasStrictInitialObjects C :=
+    (h : ∀ (A) (f : A ⟶ ⊥_ C), IsIso f) : HasStrictInitialObjects C :=
   { out := fun {I A} f hI =>
       haveI := h A (f ≫ hI.to _)
       ⟨⟨hI.to _ ≫ inv (f ≫ hI.to (⊥_ C)), by rw [← assoc, IsIso.hom_inv_id], hI.hom_ext _ _⟩⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Quiver.IsThin
-  signature: C] : HasStrictInitialObjects C where
-  body: by
-    rw [isIso_iff_of_thin]
-    exact ⟨hI.to _⟩
-
-中文:
-实例 [箭图.IsThin
-  签名: C] : 有StrictInitialObjects C where
-  定义体: by
-    rw [isIso_iff_of_thin]
-    exact ⟨hI.to _⟩
-
-Depends on / 依赖: hI.to, isIso_iff_of_thin
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Quiver.IsThin C] : HasStrictInitialObjects C where
   out {I A} f hI := by
@@ -485,23 +393,29 @@ end StrictInitial
 
 section StrictTerminal
 
-/--
-Definition of `HasStrictTerminalObjects` / `HasStrictTerminalObjects` 的定义
+/-- We say `C` has strict terminal objects if every terminal object is strict, i.e. given any
+morphism `f : I ⟶ A` where `I` is terminal, then `f` is an isomorphism.
 
-English:
-class HasStrictTerminalObjects
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : forall {I A : C} (f : I ⟶ A), IsTerminal I -> IsIso f
+Strictly speaking, this says that *any* terminal object must be strict, rather than that strict
+terminal objects exist.
+-/
+/-
+**CategoryTheory.Limits.HasStrictTerminalObjects** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有StrictTerminalObjects
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : 对任意 {I A : C} (f : I ⟶ A), 是终止 I -> 是同构 f
+--- 原说明 ---
+We say `C` has strict terminal objects if every terminal object is strict, i.e. 
+given any
+morphism `f : I ⟶ A` where `I` is terminal, then `f` is an isomorphism.
+
+Strictly speaking, this says that *any* terminal object must be strict, rather t
+han that strict
+terminal objects exist.
 -/
 class HasStrictTerminalObjects : Prop where
-  out : forall {I A : C} (f : I ⟶ A), IsTerminal I -> IsIso f
+  out : ∀ {I A : C} (f : I ⟶ A), IsTerminal I → IsIso f
 
 variable {C}
 
@@ -509,48 +423,36 @@ section
 
 variable [HasStrictTerminalObjects C] {I : C}
 
-/--
-theorem `IsTerminal.isIso_from` / 定理 `IsTerminal.isIso_from`
-
-English:
-theorem IsTerminal.isIso_from
-  given: (hI : IsTerminal I) {A : C} (f : I ⟶ A)
-  statement: IsIso f
-  proof: HasStrictTerminalObjects.out f hI
-
-中文:
-定理 是终止.isIso_from
-  条件: (hI : 是终止 I) {A : C} (f : I ⟶ A)
-  结论: 是同构 f
-  证明: HasStrictTerminalObjects.out f hI
-
-Depends on / 依赖: HasStrictTerminalObjects, HasStrictTerminalObjects.out
+/-
+**CategoryTheory.Limits.IsTerminal.isIso_from** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictTerminalObjects C] {I : C}   (hI : CategoryTheory.Limits.IsTermin
+al I) {A : C} (f : I ⟶ A), CategoryTheory.IsIso f
+参数：hI : CategoryTheory.Limits.IsTerminal I；f : I ⟶ A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasStrictTerminalObjects.out`：∀ {C : Type u} {inst
+ : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasStrictTerm
+inalObjects C]   {I A : C} (f : I ⟶ A) (…
 -/
 theorem IsTerminal.isIso_from (hI : IsTerminal I) {A : C} (f : I ⟶ A) : IsIso f :=
   HasStrictTerminalObjects.out f hI
-
-/--
-theorem `IsTerminal.strict_hom_ext` / 定理 `IsTerminal.strict_hom_ext`
-
-English:
-theorem IsTerminal.strict_hom_ext
-  given: (hI : IsTerminal I) {A : C} (f g : I ⟶ A)
-  statement: f = g
-  proof: by
-  have := hI.isIso_from f
-  have := hI.isIso_from g
-  exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
-
-中文:
-定理 是终止.strict_hom_ext
-  条件: (hI : 是终止 I) {A : C} (f g : I ⟶ A)
-  结论: f = g
-  证明: by
-  have := hI.isIso_from f
-  have := hI.isIso_from g
-  exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
-
-Depends on / 依赖: P.prop_of_iso, e.symm.unop, eq_of_inv_eq_inv, hI.hom_ext, hI.isIso_from, hom_ext, isIso_from, prop_of_iso
+/-
+**CategoryTheory.Limits.IsTerminal.strict_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictTerminalObjects C] {I : C}   (hI : CategoryTheory.Limits.IsTermin
+al I) {A : C} (f g : I ⟶ A), f = g
+参数：hI : CategoryTheory.Limits.IsTerminal I；f g : I ⟶ A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.isIso_from`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObjects C]
+ {I : C}   (hI : CategoryTheory.L…
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 -/
 theorem IsTerminal.strict_hom_ext (hI : IsTerminal I) {A : C} (f g : I ⟶ A) : f = g := by
   have := hI.isIso_from f
@@ -559,44 +461,33 @@ theorem IsTerminal.strict_hom_ext (hI : IsTerminal I) {A : C} (f g : I ⟶ A) : 
 
 /-- If `X ⟶ Y` with `Y` being a strict terminal object, then `X` is also a terminal object. -/
 noncomputable
-/--
-Definition of `IsTerminal.ofStrict` / `IsTerminal.ofStrict` 的定义
-
-English:
-definition IsTerminal.ofStrict
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: letI := hY.isIso_from f
-  hY.ofIso (asIso f)
-
-中文:
-定义 是终止.ofStrict
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: letI := hY.isIso_from f
-  hY.ofIso (asIso f)
-
-Depends on / 依赖: P.prop_of_iso, e.symm.op, hY.isIso_from, hY.ofIso, isIso_from, prop_of_iso
+/-
+**CategoryTheory.Limits.IsTerminal.ofStrict** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.IsTerminal`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasStrictTerminalObjects C] →       {X Y : C} → (X ⟶ Y) → Category
+Theory.Limits.IsTerminal X → CategoryTheory.Limits.IsTerminal Y
+参数：X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.isIso_from`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObjects C]
+ {I : C}   (hI : CategoryTheory.L…
 -/
 def IsTerminal.ofStrict {X Y : C} (f : X ⟶ Y)
     (hY : IsTerminal X) : IsTerminal Y :=
   letI := hY.isIso_from f
   hY.ofIso (asIso f)
-
-/--
-theorem `IsTerminal.subsingleton_to` / 定理 `IsTerminal.subsingleton_to`
-
-English:
-theorem IsTerminal.subsingleton_to
-  given: (hI : IsTerminal I) {A : C}
-  statement: Subsingleton (I ⟶ A)
-  proof: ⟨hI.strict_hom_ext⟩
-
-中文:
-定理 是终止.subsingleton_to
-  条件: (hI : 是终止 I) {A : C}
-  结论: 子单例 (I ⟶ A)
-  证明: ⟨hI.strict_hom_ext⟩
-
-Depends on / 依赖: hI.strict_hom_ext, strict_hom_ext
+/-
+**CategoryTheory.Limits.IsTerminal.subsingleton_to** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictTerminalObjects C] {I : C}   (hI : CategoryTheory.Limits.IsTermin
+al I) {A : C}, Subsingleton (I ⟶ A)
+参数：hI : CategoryTheory.Limits.IsTerminal I；I ⟶ A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.strict_hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObject
+s C] {I : C}   (hI : CategoryTheory.L…
 -/
 theorem IsTerminal.subsingleton_to (hI : IsTerminal I) {A : C} : Subsingleton (I ⟶ A) :=
   ⟨hI.strict_hom_ext⟩
@@ -605,79 +496,20 @@ variable {J : Type v} [SmallCategory J]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `limit_π_isIso_of_is_strict_terminal` / 定理 `limit_π_isIso_of_is_strict_terminal`
+/-- If all but one object in a diagram is strict terminal, then the limit is isomorphic to the
+said object via `limit.π`. -/
+/-
+**CategoryTheory.Limits.limit_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem limit_π_isIso_of_is_strict_terminal
-  statement: (F : J ⥤ C) [HasLimit F] (i : J)
-  proof: by
-  classical
-    refine ⟨⟨limit.lift _ ⟨_, ⟨?_, ?_⟩⟩, ?_, ?_⟩⟩
-    · exact fun j =>
-        dite (j = i)
-          (fun h => eqToHom (by cases h; rfl))
-          fun h => (H _ h).from _
-    · intro j k f
-      split_ifs with h h_1 h_1
-      · cases h
-        cases h_1
-        obtain rfl : f = 𝟙 _ := Subsingleton.elim _ _
-        simp
-      · cases h
-        have : IsIso (F.map f) := (H _ h_1).isIso_from _
-        rw [← IsIso.comp_inv_eq]
-        apply (H _ h_1).hom_ext
-      · cases h_1
-        apply (H _ h).hom_ext
-      · apply (H _ h).hom_ext
-    · ext
-      rw [assoc]; rw [limit.lift_π]
-      dsimp only
-      split_ifs with h
-      · cases h
-        rw [id_comp]; rw [eqToHom_refl]
-        exact comp_id _
-      · apply (H _ h).hom_ext
-    · simp
-
-中文:
-定理 limit_π_isIso_of_is_strict_terminal
-  结论: (F : J ⥤ C) [有极限 F] (i : J)
-  证明: by
-  classical
-    refine ⟨⟨limit.lift _ ⟨_, ⟨?_, ?_⟩⟩, ?_, ?_⟩⟩
-    · exact fun j =>
-        dite (j = i)
-          (fun h => eqToHom (by cases h; rfl))
-          fun h => (H _ h).from _
-    · intro j k f
-      split_ifs with h h_1 h_1
-      · cases h
-        cases h_1
-        obtain rfl : f = 𝟙 _ := Subsingleton.elim _ _
-        simp
-      · cases h
-        have : IsIso (F.map f) := (H _ h_1).isIso_from _
-        rw [← IsIso.comp_inv_eq]
-        apply (H _ h_1).hom_ext
-      · cases h_1
-        apply (H _ h).hom_ext
-      · apply (H _ h).hom_ext
-    · ext
-      rw [assoc]; rw [limit.lift_π]
-      dsimp only
-      split_ifs with h
-      · cases h
-        rw [id_comp]; rw [eqToHom_refl]
-        exact comp_id _
-      · apply (H _ h).hom_ext
-    · simp
-
-Depends on / 依赖: F.map, IsIso.comp_inv_eq, Subsingleton, Subsingleton.elim, classical, comp_inv_eq, eqToHom, hom_ext, isIso_from, limit.lift, limit.lift_, split_ifs
+--- 原说明 ---
+If all but one object in a diagram is strict terminal, then the limit is isomorp
+hic to the
+said object via `limit.π`.
 -/
 theorem limit_π_isIso_of_is_strict_terminal (F : J ⥤ C) [HasLimit F] (i : J)
-    (H : forall (j) (_ : j != i), IsTerminal (F.obj j)) [Subsingleton (i ⟶ i)] : IsIso (limit.π F i) := by
+    (H : ∀ (j) (_ : j ≠ i), IsTerminal (F.obj j)) [Subsingleton (i ⟶ i)] : IsIso (limit.π F i) := by
   classical
     refine ⟨⟨limit.lift _ ⟨_, ⟨?_, ?_⟩⟩, ?_, ?_⟩⟩
     · exact fun j =>
@@ -698,125 +530,96 @@ theorem limit_π_isIso_of_is_strict_terminal (F : J ⥤ C) [HasLimit F] (i : J)
         apply (H _ h).hom_ext
       · apply (H _ h).hom_ext
     · ext
-      rw [assoc]; rw [limit.lift_π]
+      rw [assoc, limit.lift_π]
       dsimp only
       split_ifs with h
       · cases h
-        rw [id_comp]; rw [eqToHom_refl]
+        rw [id_comp, eqToHom_refl]
         exact comp_id _
       · apply (H _ h).hom_ext
     · simp
 
 variable [HasTerminal C]
-
-/--
-Instance `terminal_isIso_from` / 实例 `terminal_isIso_from`
-
-English:
-instance terminal_isIso_from
-  signature: {A : C} (f : ⊤_ C ⟶ A)
-  body: terminalIsTerminal.isIso_from _
-
-@[ext]
-
-中文:
-实例 terminal_isIso_from
-  签名: {A : C} (f : ⊤_ C ⟶ A)
-  定义体: terminalIsTerminal.isIso_from _
-
-@[ext]
-
-Depends on / 依赖: isIso_from, terminalIsTerminal, terminalIsTerminal.isIso_from
+/-
+**CategoryTheory.Limits.terminal_isIso_from** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：terminal_isIso_from {A : C} (f : ⊤_ C ⟶ A) : IsIso f
+参数：f : ⊤_ C ⟶ A。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.isIso_from`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObjects C]
+ {I : C}   (hI : CategoryTheory.L…
 -/
 instance terminal_isIso_from {A : C} (f : ⊤_ C ⟶ A) : IsIso f :=
   terminalIsTerminal.isIso_from _
 
 @[ext]
-/--
-theorem `terminal.strict_hom_ext` / 定理 `terminal.strict_hom_ext`
-
-English:
-theorem terminal.strict_hom_ext
-  given: {A : C} (f g : ⊤_ C ⟶ A)
-  statement: f = g
-  proof: terminalIsTerminal.strict_hom_ext _ _
-
-中文:
-定理 terminal.strict_hom_ext
-  条件: {A : C} (f g : ⊤_ C ⟶ A)
-  结论: f = g
-  证明: terminalIsTerminal.strict_hom_ext _ _
-
-Depends on / 依赖: strict_hom_ext, terminalIsTerminal, terminalIsTerminal.strict_hom_ext
+/-
+**CategoryTheory.Limits.terminal.strict_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.terminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictTerminalObjects C]   [inst_2 : CategoryTheory.Limits.HasTerminal 
+C] {A : C} (f g : ⊤_ C ⟶ A), f = g
+参数：f g : ⊤_ C ⟶ A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.strict_hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObject
+s C] {I : C}   (hI : CategoryTheory.L…
 -/
 theorem terminal.strict_hom_ext {A : C} (f g : ⊤_ C ⟶ A) : f = g :=
   terminalIsTerminal.strict_hom_ext _ _
-
-/--
-theorem `terminal.subsingleton_to` / 定理 `terminal.subsingleton_to`
-
-English:
-theorem terminal.subsingleton_to
-  given: {A : C}
-  statement: Subsingleton (⊤_ C ⟶ A)
-  proof: terminalIsTerminal.subsingleton_to
-
-中文:
-定理 terminal.subsingleton_to
-  条件: {A : C}
-  结论: 子单例 (⊤_ C ⟶ A)
-  证明: terminalIsTerminal.subsingleton_to
-
-Depends on / 依赖: subsingleton_to, terminalIsTerminal, terminalIsTerminal.subsingleton_to
+/-
+**CategoryTheory.Limits.terminal.subsingleton_to** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits.terminal`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasStrictTerminalObjects C]   [inst_2 : CategoryTheory.Limits.HasTerminal 
+C] {A : C}, Subsingleton (⊤_ C ⟶ A)
+参数：⊤_ C ⟶ A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.subsingleton_to`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasStrictTerminalObjec
+ts C] {I : C}   (hI : CategoryTheory.L…
 -/
 theorem terminal.subsingleton_to {A : C} : Subsingleton (⊤_ C ⟶ A) :=
   terminalIsTerminal.subsingleton_to
 
 end
 
-/--
-theorem `hasStrictTerminalObjects_of_terminal_is_strict` / 定理 `hasStrictTerminalObjects_of_terminal_is_strict`
+/-- If `C` has an object such that every morphism *from* it is an isomorphism, then `C`
+has strict terminal objects. -/
+/-
+**CategoryTheory.Limits.hasStrictTerminalObjects_of_terminal_is_strict** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasStrictTerminalObjects_of_terminal_is_strict (I : C) (h : forall (A) (f 
+: I ⟶ A), IsIso f) : HasStrictTerminalObjects C
+参数：I : C；h : forall (A) (f : I ⟶ A), IsIso f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 
-English:
-theorem hasStrictTerminalObjects_of_terminal_is_strict
-  given: (I : C) (h : forall (A) (f : I ⟶ A), IsIso f)
-  proof: { out := fun {I' A} f hI' =>
-      haveI := h A (hI'.from _ ≫ f)
-      ⟨⟨inv (hI'.from I ≫ f) ≫ hI'.from I, hI'.hom_ext _ _, by rw [assoc, IsIso.inv_hom_id]⟩⟩ }
-
-中文:
-定理 hasStrictTerminalObjects_of_terminal_is_strict
-  条件: (I : C) (h : 对任意 (A) (f : I ⟶ A), 是同构 f)
-  证明: { out := fun {I' A} f hI' =>
-      haveI := h A (hI'.from _ ≫ f)
-      ⟨⟨inv (hI'.from I ≫ f) ≫ hI'.from I, hI'.hom_ext _ _, by rw [assoc, IsIso.inv_hom_id]⟩⟩ }
-
-Depends on / 依赖: IsIso.inv_hom_id, hom_ext, inv_hom_id
+--- 原说明 ---
+If `C` has an object such that every morphism *from* it is an isomorphism, then 
+`C`
+has strict terminal objects.
 -/
-theorem hasStrictTerminalObjects_of_terminal_is_strict (I : C) (h : forall (A) (f : I ⟶ A), IsIso f) :
+theorem hasStrictTerminalObjects_of_terminal_is_strict (I : C) (h : ∀ (A) (f : I ⟶ A), IsIso f) :
     HasStrictTerminalObjects C :=
   { out := fun {I' A} f hI' =>
       haveI := h A (hI'.from _ ≫ f)
       ⟨⟨inv (hI'.from I ≫ f) ≫ hI'.from I, hI'.hom_ext _ _, by rw [assoc, IsIso.inv_hom_id]⟩⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Quiver.IsThin
-  signature: C] : HasStrictTerminalObjects C where
-  body: by
-    rw [CategoryTheory.isIso_iff_of_thin]
-    exact ⟨hI.from _⟩
-
-中文:
-实例 [箭图.IsThin
-  签名: C] : 有StrictTerminalObjects C where
-  定义体: by
-    rw [CategoryTheory.isIso_iff_of_thin]
-    exact ⟨hI.from _⟩
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.isIso_iff_of_thin, hI.from, isIso_iff_of_thin
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Quiver.IsThin C] : HasStrictTerminalObjects C where
   out {I A} f hI := by
@@ -828,3 +631,4 @@ end StrictTerminal
 end Limits
 
 end CategoryTheory
+

@@ -47,20 +47,17 @@ variable [MonoidalLeftAction C D]
 `CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedAction`
 that takes value in the monoidal opposite of `D ⥤ D`. -/
 @[simps! obj_unmop_obj obj_unmop_map]
-/--
-Definition of `curriedActionMop` / `curriedActionMop` 的定义
+/-
+**CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedActionMop** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.MonoidalLeftAction`。
+形式化陈述：curriedActionMop : C ⥤ (D ⥤ D)ᴹᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedActionMop
-  signature: : C ⥤ (D ⥤ D)ᴹᵒᵖ
-  body: (curriedAction C D) ⋙ mopFunctor _
-
-中文:
-定义 curriedActionMop
-  签名: : C ⥤ (D ⥤ D)ᴹᵒᵖ
-  定义体: (curriedAction C D) ⋙ mopFunctor _
-
-Depends on / 依赖: curriedAction, mopFunctor
+--- 原说明 ---
+A variant of
+`CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedAction`
+that takes value in the monoidal opposite of `D ⥤ D`.
 -/
 def curriedActionMop : C ⥤ (D ⥤ D)ᴹᵒᵖ :=
   (curriedAction C D) ⋙ mopFunctor _
@@ -70,18 +67,15 @@ def curriedActionMop : C ⥤ (D ⥤ D)ᴹᵒᵖ :=
 -- the application of `Quiver.Hom.unmop`.
 variable {C D} in
 @[simp]
-/--
-lemma `curriedActionMop_map_unmop_app` / 引理 `curriedActionMop_map_unmop_app`
-
-English:
-lemma curriedActionMop_map_unmop_app
-  given: {c c' : C} (f : c ⟶ c') (d : D)
-  proof: rfl
-
-中文:
-引理 curriedActionMop_map_unmop_app
-  条件: {c c' : C} (f : c ⟶ c') (d : D)
-  证明: rfl
+/-
+**CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedActionMop_map_unmop_
+app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MonoidalCategory.MonoidalLeftActio
+n`。
+形式化陈述：curriedActionMop_map_unmop_app {c c' : C} (f : c ⟶ c') (d : D) : ((curried
+ActionMop C D).map f).unmop.app d = f ⊵ₗ d
+参数：f : c ⟶ c'；d : D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma curriedActionMop_map_unmop_app {c c' : C} (f : c ⟶ c') (d : D) :
     ((curriedActionMop C D).map f).unmop.app d = f ⊵ₗ d :=
@@ -94,64 +88,23 @@ open MonoidalOpposite in
 `curriedActionMop : C ⥤ (D ⥤ D)ᴹᵒᵖ` is monoidal, where `D ⥤ D` has the
 composition monoidal structure. -/
 @[simps!]
-/--
-Instance `curriedActionMopMonoidal` / 实例 `curriedActionMopMonoidal`
+/-
+**CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedActionMopMonoidal** 
+是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MonoidalCategory.MonoidalLeftAction`。
+形式化陈述：curriedActionMopMonoidal : (curriedActionMop C D).Monoidal where ε
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance curriedActionMopMonoidal
-  signature: : (curriedActionMop C D).Monoidal where
-  body: .mop (actionUnitNatIso C D).inv
-μ _ _ := .mop { app _ := αₗ _ _ _ |>.inv }
-δ _ _ := .mop { app _ := αₗ _ _ _ |>.hom }
-η := .mop (actionUnitNatIso C D).hom
-  associativity c₁ c₂ c₃ := by
-    apply (mopEquiv (D ⥤ D)).fullyFaithfulInverse.map_injective
-    ext d
-    simpa [-associator_actionHom] using
-      (IsIso.inv_eq_inv.mpr <| associator_actionHom c₁ c₂ c₃ d).symm =≫
-        (α_ c₁ c₂ c₃).hom ⊵ₗ d
-  oplax_right_unitality x := by
-    apply MonoidalOpposite.hom_ext
-    ext t
-    simpa [-rightUnitor_actionHom] using
-      (ρ_ x).inv ⊵ₗ t ≫= rightUnitor_actionHom x t
-  oplax_left_unitality x := by
-    apply MonoidalOpposite.hom_ext
-    ext t
-    simpa [-leftUnitor_actionHom] using
-      (fun_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
-
-中文:
-实例 curriedActionMopMonoidal
-  签名: : (curriedActionMop C D).幺半群 where
-  定义体: .mop (actionUnitNatIso C D).inv
-μ _ _ := .mop { app _ := αₗ _ _ _ |>.inv }
-δ _ _ := .mop { app _ := αₗ _ _ _ |>.hom }
-η := .mop (actionUnitNatIso C D).hom
-  associativity c₁ c₂ c₃ := by
-    apply (mopEquiv (D ⥤ D)).fullyFaithfulInverse.map_injective
-    ext d
-    simpa [-associator_actionHom] using
-      (IsIso.inv_eq_inv.mpr <| associator_actionHom c₁ c₂ c₃ d).symm =≫
-        (α_ c₁ c₂ c₃).hom ⊵ₗ d
-  oplax_right_unitality x := by
-    apply MonoidalOpposite.hom_ext
-    ext t
-    simpa [-rightUnitor_actionHom] using
-      (ρ_ x).inv ⊵ₗ t ≫= rightUnitor_actionHom x t
-  oplax_left_unitality x := by
-    apply MonoidalOpposite.hom_ext
-    ext t
-    simpa [-leftUnitor_actionHom] using
-      (fun_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
-
-Depends on / 依赖: actionUnitNatIso
+--- 原说明 ---
+When `C` acts on the left on `D`, the functor
+`curriedActionMop : C ⥤ (D ⥤ D)ᴹᵒᵖ` is monoidal, where `D ⥤ D` has the
+composition monoidal structure.
 -/
 instance curriedActionMopMonoidal : (curriedActionMop C D).Monoidal where
-ε := .mop (actionUnitNatIso C D).inv
-μ _ _ := .mop { app _ := αₗ _ _ _ |>.inv }
-δ _ _ := .mop { app _ := αₗ _ _ _ |>.hom }
-η := .mop (actionUnitNatIso C D).hom
+  ε := .mop <| (actionUnitNatIso C D).inv
+  μ _ _ := .mop <| { app _ := αₗ _ _ _ |>.inv }
+  δ _ _ := .mop <| { app _ := αₗ _ _ _ |>.hom }
+  η := .mop <| (actionUnitNatIso C D).hom
   associativity c₁ c₂ c₃ := by
     apply (mopEquiv (D ⥤ D)).fullyFaithfulInverse.map_injective
     ext d
@@ -167,7 +120,7 @@ instance curriedActionMopMonoidal : (curriedActionMop C D).Monoidal where
     apply MonoidalOpposite.hom_ext
     ext t
     simpa [-leftUnitor_actionHom] using
-      (fun_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
+      (λ_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
 
 end
 
@@ -176,134 +129,51 @@ variable {C D}
 /-- A monoidal functor `F : C ⥤ (D ⥤ D)ᴹᵒᵖ` can be thought of as a left action
 of `C` on `D`. -/
 @[simps!, instance_reducible]
-/--
-Definition of `actionOfMonoidalFunctorToEndofunctorMop` / `actionOfMonoidalFunctorToEndofunctorMop` 的定义
+/-
+**CategoryTheory.MonoidalCategory.MonoidalLeftAction.actionOfMonoidalFunctorToEn
+dofunctorMop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Monoidal
+LeftAction`。
+形式化陈述：actionOfMonoidalFunctorToEndofunctorMop (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.Monoidal] 
+: MonoidalLeftAction C D where actionObj c d
+参数：F : C ⥤ (D ⥤ D)ᴹᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actionOfMonoidalFunctorToEndofunctorMop
-  signature: (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.Monoidal]
-  body: (F.obj c).unmop.obj d
-  actionHomLeft f d := (F.map f).unmop.app d
-  actionHomRight c _ _ f := (F.obj c).unmop.map f
-.symm .unmop.app d actionAssocIso c c' d := Functor.Monoidal.μIso F c c'
-.symm .unmop.app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.unmop.app c₃)
-      Functor.OplaxMonoidal.δ_natural F f g
-    dsimp at e
-    simp [reassoc_of% e]
-  whiskerRight_actionHomLeft {x y} c f d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.LaxMonoidal.μ_natural_left F f c
-    dsimp at e
-    simp [e, ← NatTrans.comp_app, ← unmop_comp]
-  whiskerLeft_actionHomLeft c {x y} f d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.LaxMonoidal.μ_natural_right F c f
-    dsimp at e
-    simp [e, ← NatTrans.comp_app, ← unmop_comp]
-  associator_actionHom c₁ c₂ c₃ d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.OplaxMonoidal.associativity F c₁ c₂ c₃
-    dsimp at e
-    simp only [Category.comp_id] at e
-    simp [e]
-  leftUnitor_actionHom c d := by
-    have e := (F.map (fun_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
-        Functor.OplaxMonoidal.left_unitality F c)
-    dsimp at e
-    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
-      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
-    simp [e]
-  rightUnitor_actionHom c d := by
-    have e := (F.map (ρ_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
-        Functor.OplaxMonoidal.right_unitality F c)
-    dsimp at e
-    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
-      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
-    simp [e]
-
-中文:
-定义 actionOfMonoidalFunctorToEndofunctorMop
-  签名: (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.幺半群]
-  定义体: (F.obj c).unmop.obj d
-  actionHomLeft f d := (F.map f).unmop.app d
-  actionHomRight c _ _ f := (F.obj c).unmop.map f
-.symm .unmop.app d actionAssocIso c c' d := Functor.Monoidal.μIso F c c'
-.symm .unmop.app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.unmop.app c₃)
-      Functor.OplaxMonoidal.δ_natural F f g
-    dsimp at e
-    simp [reassoc_of% e]
-  whiskerRight_actionHomLeft {x y} c f d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.LaxMonoidal.μ_natural_left F f c
-    dsimp at e
-    simp [e, ← NatTrans.comp_app, ← unmop_comp]
-  whiskerLeft_actionHomLeft c {x y} f d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.LaxMonoidal.μ_natural_right F c f
-    dsimp at e
-    simp [e, ← NatTrans.comp_app, ← unmop_comp]
-  associator_actionHom c₁ c₂ c₃ d := by
-have e := congrArg (fun t => t.unmop.app d)
-      Functor.OplaxMonoidal.associativity F c₁ c₂ c₃
-    dsimp at e
-    simp only [Category.comp_id] at e
-    simp [e]
-  leftUnitor_actionHom c d := by
-    have e := (F.map (fun_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
-        Functor.OplaxMonoidal.left_unitality F c)
-    dsimp at e
-    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
-      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
-    simp [e]
-  rightUnitor_actionHom c d := by
-    have e := (F.map (ρ_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
-        Functor.OplaxMonoidal.right_unitality F c)
-    dsimp at e
-    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
-      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
-    simp [e]
-
-Depends on / 依赖: F.obj, unmop.obj
+--- 原说明 ---
+A monoidal functor `F : C ⥤ (D ⥤ D)ᴹᵒᵖ` can be thought of as a left action
+of `C` on `D`.
 -/
 def actionOfMonoidalFunctorToEndofunctorMop (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.Monoidal] :
     MonoidalLeftAction C D where
   actionObj c d := (F.obj c).unmop.obj d
   actionHomLeft f d := (F.map f).unmop.app d
   actionHomRight c _ _ f := (F.obj c).unmop.map f
-.symm .unmop.app d actionAssocIso c c' d := Functor.Monoidal.μIso F c c'
-.symm .unmop.app d actionUnitIso d := Functor.Monoidal.εIso F
+  actionAssocIso c c' d := Functor.Monoidal.μIso F c c' |>.unmop.app d |>.symm
+  actionUnitIso d := Functor.Monoidal.εIso F |>.unmop.app d |>.symm
   actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.unmop.app c₃)
+    have e := congrArg (fun t ↦ t.unmop.app c₃) <|
       Functor.OplaxMonoidal.δ_natural F f g
     dsimp at e
     simp [reassoc_of% e]
   whiskerRight_actionHomLeft {x y} c f d := by
-have e := congrArg (fun t => t.unmop.app d)
+    have e := congrArg (fun t ↦ t.unmop.app d) <|
       Functor.LaxMonoidal.μ_natural_left F f c
     dsimp at e
     simp [e, ← NatTrans.comp_app, ← unmop_comp]
   whiskerLeft_actionHomLeft c {x y} f d := by
-have e := congrArg (fun t => t.unmop.app d)
+    have e := congrArg (fun t ↦ t.unmop.app d) <|
       Functor.LaxMonoidal.μ_natural_right F c f
     dsimp at e
     simp [e, ← NatTrans.comp_app, ← unmop_comp]
   associator_actionHom c₁ c₂ c₃ d := by
-have e := congrArg (fun t => t.unmop.app d)
+    have e := congrArg (fun t ↦ t.unmop.app d) <|
       Functor.OplaxMonoidal.associativity F c₁ c₂ c₃
     dsimp at e
     simp only [Category.comp_id] at e
     simp [e]
   leftUnitor_actionHom c d := by
-    have e := (F.map (fun_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
+    have e := (F.map (λ_ c).hom).unmop.app d ≫=
+      (congrArg (fun t ↦ t.unmop.app d) <|
         Functor.OplaxMonoidal.left_unitality F c)
     dsimp at e
     simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
@@ -311,7 +181,7 @@ have e := congrArg (fun t => t.unmop.app d)
     simp [e]
   rightUnitor_actionHom c d := by
     have e := (F.map (ρ_ c).hom).unmop.app d ≫=
-      (congrArg (fun t => t.unmop.app d) <|
+      (congrArg (fun t ↦ t.unmop.app d) <|
         Functor.OplaxMonoidal.right_unitality F c)
     dsimp at e
     simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
@@ -322,22 +192,20 @@ have e := congrArg (fun t => t.unmop.app d)
 `C ⥤ (D ⥤ D)ᴹᵒᵖ`, then `curriedActionMop C D` is naturally isomorphic to that
 functor. -/
 @[simps!]
-/--
-Definition of `curriedActionActionOfMonoidalFunctorToEndofunctorMopIso` / `curriedActionActionOfMonoidalFunctorToEndofunctorMopIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.MonoidalLeftAction.curriedActionActionOfMonoid
+alFunctorToEndofunctorMopIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalC
+ategory.MonoidalLeftAction`。
+形式化陈述：curriedActionActionOfMonoidalFunctorToEndofunctorMopIso (F : C ⥤ (D ⥤ D)ᴹᵒ
+ᵖ) [F.Monoidal] : letI
+参数：F : C ⥤ (D ⥤ D)ᴹᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedActionActionOfMonoidalFunctorToEndofunctorMopIso
-  body: actionOfMonoidalFunctorToEndofunctorMop F
-    curriedActionMop C D ≅ F :=
-  .refl _
-
-中文:
-定义 curriedActionActionOfMonoidalFunctorToEndofunctorMopIso
-  定义体: actionOfMonoidalFunctorToEndofunctorMop F
-    curriedActionMop C D ≅ F :=
-  .refl _
-
-Depends on / 依赖: actionOfMonoidalFunctorToEndofunctorMop
+--- 原说明 ---
+If the (left) action of `C` on `D` comes from a monoidal functor
+`C ⥤ (D ⥤ D)ᴹᵒᵖ`, then `curriedActionMop C D` is naturally isomorphic to that
+functor.
 -/
 def curriedActionActionOfMonoidalFunctorToEndofunctorMopIso
     (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.Monoidal] :
@@ -356,52 +224,17 @@ open MonoidalOpposite in
 /-- When `C` acts on the right on `D`, the functor `curriedAction : C ⥤ (D ⥤ D)`
 is monoidal, where `D ⥤ D` has the composition monoidal structure. -/
 @[simps!]
-/--
-Instance `curriedActionMonoidal` / 实例 `curriedActionMonoidal`
+/-
+**CategoryTheory.MonoidalCategory.MonoidalRightAction.curriedActionMonoidal** 是 
+Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MonoidalCategory.MonoidalRightAction`。
+形式化陈述：curriedActionMonoidal [MonoidalRightAction C D] : (curriedAction C D).Mono
+idal where ε
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance curriedActionMonoidal
-  signature: [MonoidalRightAction C D]
-  body: (actionUnitNatIso C D).inv
-  μ _ _ := { app _ := αᵣ _ _ _ |>.inv }
-  δ _ _ := { app _ := αᵣ _ _ _ |>.hom }
-  η := (actionUnitNatIso C D).hom
-  associativity c₁ c₂ c₃ := by
-    ext d
-    simpa [-actionHom_associator] using
-      (IsIso.inv_eq_inv.mpr <| actionHom_associator c₁ c₂ c₃ d).symm =≫
-        d ⊴ᵣ (α_ c₁ c₂ c₃).hom
-  oplax_right_unitality x := by
-    ext t
-    simpa [-actionHom_rightUnitor] using
-      t ⊴ᵣ (ρ_ x).inv ≫= actionHom_rightUnitor x t
-  oplax_left_unitality x := by
-    ext t
-    simpa [-actionHom_leftUnitor] using
-      t ⊴ᵣ (fun_ x).inv ≫= actionHom_leftUnitor x t
-
-中文:
-实例 curriedActionMonoidal
-  签名: [MonoidalRight作用 C D]
-  定义体: (actionUnitNatIso C D).inv
-  μ _ _ := { app _ := αᵣ _ _ _ |>.inv }
-  δ _ _ := { app _ := αᵣ _ _ _ |>.hom }
-  η := (actionUnitNatIso C D).hom
-  associativity c₁ c₂ c₃ := by
-    ext d
-    simpa [-actionHom_associator] using
-      (IsIso.inv_eq_inv.mpr <| actionHom_associator c₁ c₂ c₃ d).symm =≫
-        d ⊴ᵣ (α_ c₁ c₂ c₃).hom
-  oplax_right_unitality x := by
-    ext t
-    simpa [-actionHom_rightUnitor] using
-      t ⊴ᵣ (ρ_ x).inv ≫= actionHom_rightUnitor x t
-  oplax_left_unitality x := by
-    ext t
-    simpa [-actionHom_leftUnitor] using
-      t ⊴ᵣ (fun_ x).inv ≫= actionHom_leftUnitor x t
-
-Depends on / 依赖: actionUnitNatIso
+--- 原说明 ---
+When `C` acts on the right on `D`, the functor `curriedAction : C ⥤ (D ⥤ D)`
+is monoidal, where `D ⥤ D` has the composition monoidal structure.
 -/
 instance curriedActionMonoidal [MonoidalRightAction C D] :
     (curriedAction C D).Monoidal where
@@ -421,53 +254,34 @@ instance curriedActionMonoidal [MonoidalRightAction C D] :
   oplax_left_unitality x := by
     ext t
     simpa [-actionHom_leftUnitor] using
-      t ⊴ᵣ (fun_ x).inv ≫= actionHom_leftUnitor x t
+      t ⊴ᵣ (λ_ x).inv ≫= actionHom_leftUnitor x t
 
 /-- A monoidal functor `F : C ⥤ D ⥤ D` can be thought of as a right action
 of `C` on `D`. -/
 @[simps!, instance_reducible]
-/--
-Definition of `actionOfMonoidalFunctorToEndofunctor` / `actionOfMonoidalFunctorToEndofunctor` 的定义
+/-
+**CategoryTheory.MonoidalCategory.MonoidalRightAction.actionOfMonoidalFunctorToE
+ndofunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.MonoidalRi
+ghtAction`。
+形式化陈述：actionOfMonoidalFunctorToEndofunctor (F : C ⥤ D ⥤ D) [F.Monoidal] : Monoid
+alRightAction C D where actionObj d c
+参数：F : C ⥤ D ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actionOfMonoidalFunctorToEndofunctor
-  signature: (F : C ⥤ D ⥤ D) [F.Monoidal]
-  body: (F.obj c).obj d
-  actionHomLeft f c := (F.obj c).map f
-  actionHomRight d _ _ f := (F.map f).app d
-.symm .app d actionAssocIso d c c' := Functor.Monoidal.μIso F c c'
-.symm .app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.app c₁)
-      Functor.OplaxMonoidal.δ_natural F g h
-    dsimp at e
-    simp [reassoc_of% e]
-
-中文:
-定义 actionOfMonoidalFunctorToEndofunctor
-  签名: (F : C ⥤ D ⥤ D) [F.幺半群]
-  定义体: (F.obj c).obj d
-  actionHomLeft f c := (F.obj c).map f
-  actionHomRight d _ _ f := (F.map f).app d
-.symm .app d actionAssocIso d c c' := Functor.Monoidal.μIso F c c'
-.symm .app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.app c₁)
-      Functor.OplaxMonoidal.δ_natural F g h
-    dsimp at e
-    simp [reassoc_of% e]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A monoidal functor `F : C ⥤ D ⥤ D` can be thought of as a right action
+of `C` on `D`.
 -/
 def actionOfMonoidalFunctorToEndofunctor (F : C ⥤ D ⥤ D) [F.Monoidal] :
     MonoidalRightAction C D where
   actionObj d c := (F.obj c).obj d
   actionHomLeft f c := (F.obj c).map f
   actionHomRight d _ _ f := (F.map f).app d
-.symm .app d actionAssocIso d c c' := Functor.Monoidal.μIso F c c'
-.symm .app d actionUnitIso d := Functor.Monoidal.εIso F
+  actionAssocIso d c c' := Functor.Monoidal.μIso F c c' |>.app d |>.symm
+  actionUnitIso d := Functor.Monoidal.εIso F |>.app d |>.symm
   actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := congrArg (fun t => t.app c₁)
+    have e := congrArg (fun t ↦ t.app c₁) <|
       Functor.OplaxMonoidal.δ_natural F g h
     dsimp at e
     simp [reassoc_of% e]
@@ -475,22 +289,19 @@ have e := congrArg (fun t => t.app c₁)
 /-- If the action of `C` on `D` comes from a monoidal functor `C ⥤ (D ⥤ D)`,
 then `curriedActionMop C D` is naturally isomorphic to that functor. -/
 @[simps!]
-/--
-Definition of `curriedActionActionOfMonoidalFunctorToEndofunctorIso` / `curriedActionActionOfMonoidalFunctorToEndofunctorIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.MonoidalRightAction.curriedActionActionOfMonoi
+dalFunctorToEndofunctorIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCat
+egory.MonoidalRightAction`。
+形式化陈述：curriedActionActionOfMonoidalFunctorToEndofunctorIso (F : C ⥤ (D ⥤ D)) [F.
+Monoidal] : letI
+参数：F : C ⥤ (D ⥤ D)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedActionActionOfMonoidalFunctorToEndofunctorIso
-  body: actionOfMonoidalFunctorToEndofunctor F
-    curriedAction C D ≅ F :=
-  .refl _
-
-中文:
-定义 curriedActionActionOfMonoidalFunctorToEndofunctorIso
-  定义体: actionOfMonoidalFunctorToEndofunctor F
-    curriedAction C D ≅ F :=
-  .refl _
-
-Depends on / 依赖: actionOfMonoidalFunctorToEndofunctor
+--- 原说明 ---
+If the action of `C` on `D` comes from a monoidal functor `C ⥤ (D ⥤ D)`,
+then `curriedActionMop C D` is naturally isomorphic to that functor.
 -/
 def curriedActionActionOfMonoidalFunctorToEndofunctorIso
     (F : C ⥤ (D ⥤ D)) [F.Monoidal] :
@@ -507,9 +318,25 @@ Note that in the literature, this is defined as a left action, but mathlib's
 monoidal structure on `C ⥤ C` is the monoidal opposite of the one usually
 considered in the literature. -/
 @[simps! actionObj actionHomLeft actionHomRight actionAssocIso actionUnitIso]
+/-
+**CategoryTheory.MonoidalCategory.endofunctorMonoidalCategory.evaluationRightAct
+ion** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.endofunctorMonoid
+alCategory`。
+形式化陈述：(C : Type u_1) →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.MonoidalCategory.MonoidalRightAction (CategoryTheory.Functor C C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Functor evaluation gives a right action of `C ⥤ C`.
+
+Note that in the literature, this is defined as a left action, but mathlib's
+monoidal structure on `C ⥤ C` is the monoidal opposite of the one usually
+considered in the literature.
+-/
 scoped instance evaluationRightAction : MonoidalRightAction (C ⥤ C) C :=
   MonoidalRightAction.actionOfMonoidalFunctorToEndofunctor (𝟭 (C ⥤ C))
 
 end endofunctorMonoidalCategory
 
 end CategoryTheory.MonoidalCategory
+

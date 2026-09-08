@@ -60,35 +60,40 @@ This means that the shape consists of some union of lines, rays, intervals, and 
 Below we define `c.next` and `c.prev` which provide these related elements.
 -/
 @[ext]
-/--
-Definition of `ComplexShape` / `ComplexShape` 的定义
+/-
+**ComplexShape** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：ComplexShape (ι : Type*) where /-- Nonzero differentials `X i ⟶ X j` shall
+ be allowed on homological complexes when `Rel i j` holds. -/ Rel : ι -> ι -> Pr
+op /-- There is at most one nonzero differential from `X i`. -/ next_eq : forall
+ {i j j'}, Rel i j -> Rel i j' -> j = j' /-- There is at most one nonzero differ
+ential to `X j`. -/ prev_eq : forall {i i' j}, Rel i j -> Rel i' j -> i = i'  at
+tribute [to_dual self (reorder
+参数：ι : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ComplexShape
-  parameters: (ι : Type*)
-  axioms and operations (3):
-    - Rel : ι -> ι -> Prop
-    - next_eq : forall {i j j'}, Rel i j -> Rel i j' -> j = j'
-    - prev_eq : forall {i i' j}, Rel i j -> Rel i' j -> i = i'
+--- 原说明 ---
+A `c : ComplexShape ι` describes the shape of a chain complex,
+with chain groups indexed by `ι`.
+Typically `ι` will be `ℕ`, `ℤ`, or `Fin n`.
 
-中文:
-结构 余mplexShape
-  参数: (ι : 类型)
-  公理与运算 (3 个):
-    - Rel : ι -> ι -> 命题
-    - next_eq : 对任意 {i j j'}, 关系 i j -> 关系 i j' -> j = j'
-    - prev_eq : 对任意 {i i' j}, 关系 i j -> 关系 i' j -> i = i'
+There is a relation `Rel : ι → ι → Prop`,
+and we will only allow a non-zero differential from `i` to `j` when `Rel i j`.
 
-Depends on / 依赖: ComplexShape, ComplexShape.Rel
+There are axioms which imply `{ j // c.Rel i j }` and `{ i // c.Rel i j }` are s
+ubsingletons.
+This means that the shape consists of some union of lines, rays, intervals, and 
+circles.
+
+Below we define `c.next` and `c.prev` which provide these related elements.
 -/
 structure ComplexShape (ι : Type*) where
   /-- Nonzero differentials `X i ⟶ X j` shall be allowed
   on homological complexes when `Rel i j` holds. -/
-  Rel : ι -> ι -> Prop
+  Rel : ι → ι → Prop
   /-- There is at most one nonzero differential from `X i`. -/
-  next_eq : forall {i j j'}, Rel i j -> Rel i j' -> j = j'
+  next_eq : ∀ {i j j'}, Rel i j → Rel i j' → j = j'
   /-- There is at most one nonzero differential to `X j`. -/
-  prev_eq : forall {i i' j}, Rel i j -> Rel i' j -> i = i'
+  prev_eq : ∀ {i i' j}, Rel i j → Rel i' j → i = i'
 
 attribute [to_dual self (reorder := 3 4)] ComplexShape.Rel
 attribute [to_dual existing] ComplexShape.next_eq
@@ -102,22 +107,19 @@ variable {ι : Type*}
 This is mostly only useful so we can describe the relation of "related in `k` steps" below.
 -/
 @[simps]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**ComplexShape.refl** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：refl (ι : Type*) : ComplexShape ι where Rel i j
+参数：ι : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (ι : Type*)
-  body: i = j
-  next_eq w w' := w.symm.trans w'
-  prev_eq w w' := w.trans w'.symm
+--- 原说明 ---
+The complex shape where only differentials from each `X.i` to itself are allowed
+.
 
-中文:
-定义 refl
-  签名: (ι : 类型)
-  定义体: i = j
-  next_eq w w' := w.symm.trans w'
-  prev_eq w w' := w.trans w'.symm
+This is mostly only useful so we can describe the relation of "related in `k` st
+eps" below.
 -/
 def refl (ι : Type*) : ComplexShape ι where
   Rel i j := i = j
@@ -127,24 +129,19 @@ def refl (ι : Type*) : ComplexShape ι where
 /-- The reverse of a `ComplexShape`.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**ComplexShape.symm** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：symm (c : ComplexShape ι) : ComplexShape ι where Rel i j
+参数：c : ComplexShape ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.prev_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i i' j :
+ ι}, self.Rel i j → self.Rel i' j → i = i'
+· 使用定理 `ComplexShape.next_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i j j' :
+ ι}, self.Rel i j → self.Rel i j' → j = j'
 
-English:
-definition symm
-  signature: (c : ComplexShape ι)
-  body: c.Rel j i
-  next_eq w w' := c.prev_eq w w'
-  prev_eq w w' := c.next_eq w w'
-
-中文:
-定义 symm
-  签名: (c : 余mplexShape ι)
-  定义体: c.Rel j i
-  next_eq w w' := c.prev_eq w w'
-  prev_eq w w' := c.next_eq w w'
-
-Depends on / 依赖: c.Rel
+--- 原说明 ---
+The reverse of a `ComplexShape`.
 -/
 def symm (c : ComplexShape ι) : ComplexShape ι where
   Rel i j := c.Rel j i
@@ -154,62 +151,44 @@ def symm (c : ComplexShape ι) : ComplexShape ι where
 /-- If `c : ComplexShape α` is such that `c.Rel` is decidable, it is also the
 case of `c.symm.Rel`. -/
 @[instance_reducible]
-/--
-Definition of `decidableRelSymm` / `decidableRelSymm` 的定义
+/-
+**ComplexShape.decidableRelSymm** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：decidableRelSymm {α : Type*} (c : ComplexShape α) [DecidableRel c.Rel] : D
+ecidableRel c.symm.Rel
+参数：c : ComplexShape α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decidableRelSymm
-  signature: {α : Type*} (c : ComplexShape α) [DecidableRel c.Rel]
-  body: fun a b => decidable_of_iff (c.Rel b a) Iff.rfl
-
-@[simp]
-
-中文:
-定义 decidableRelSymm
-  签名: {α : 类型} (c : 余mplexShape α) [DecidableRel c.关系]
-  定义体: fun a b => decidable_of_iff (c.Rel b a) Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl, c.Rel, decidable_of_iff
+--- 原说明 ---
+If `c : ComplexShape α` is such that `c.Rel` is decidable, it is also the
+case of `c.symm.Rel`.
 -/
 def decidableRelSymm {α : Type*} (c : ComplexShape α) [DecidableRel c.Rel] :
     DecidableRel c.symm.Rel :=
-  fun a b => decidable_of_iff (c.Rel b a) Iff.rfl
+  fun a b ↦ decidable_of_iff (c.Rel b a) Iff.rfl
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (c : ComplexShape ι)
-  statement: c.symm.symm = c
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (c : 余mplexShape ι)
-  结论: c.symm.symm = c
-  证明: rfl
+/-
+**ComplexShape.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `ComplexShape`。
+形式化陈述：symm_symm (c : ComplexShape ι) : c.symm.symm = c
+参数：c : ComplexShape ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (c : ComplexShape ι) : c.symm.symm = c := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, infer_instance, symm_symm
+/-
+**ComplexShape.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `ComplexShape`。
+形式化陈述：symm_bijective : Function.Bijective (ComplexShape.symm : ComplexShape ι ->
+ ComplexShape ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `ComplexShape.symm_symm`：symm_symm (c : ComplexShape ι) : c.symm.symm = c
 -/
 theorem symm_bijective :
-    Function.Bijective (ComplexShape.symm : ComplexShape ι -> ComplexShape ι) :=
+    Function.Bijective (ComplexShape.symm : ComplexShape ι → ComplexShape ι) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 /-- The "composition" of two `ComplexShape`s.
@@ -217,44 +196,17 @@ theorem symm_bijective :
 We need this to define "related in k steps" later.
 -/
 @[simp]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**ComplexShape.trans** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：trans (c₁ c₂ : ComplexShape ι) : ComplexShape ι where Rel
+参数：c₁ c₂ : ComplexShape ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (c₁ c₂ : ComplexShape ι)
-  body: Relation.Comp c₁.Rel c₂.Rel
-  next_eq w w' := by
-    obtain ⟨k, w₁, w₂⟩ := w
-    obtain ⟨k', w₁', w₂'⟩ := w'
-    rw [c₁.next_eq w₁ w₁'] at w₂
-    exact c₂.next_eq w₂ w₂'
-  prev_eq w w' := by
-    obtain ⟨k, w₁, w₂⟩ := w
-    obtain ⟨k', w₁', w₂'⟩ := w'
-    rw [c₂.prev_eq w₂ w₂'] at w₁
-    exact c₁.prev_eq w₁ w₁'
+--- 原说明 ---
+The "composition" of two `ComplexShape`s.
 
-@[to_dual]
-
-中文:
-定义 trans
-  签名: (c₁ c₂ : 余mplexShape ι)
-  定义体: Relation.Comp c₁.Rel c₂.Rel
-  next_eq w w' := by
-    obtain ⟨k, w₁, w₂⟩ := w
-    obtain ⟨k', w₁', w₂'⟩ := w'
-    rw [c₁.next_eq w₁ w₁'] at w₂
-    exact c₂.next_eq w₂ w₂'
-  prev_eq w w' := by
-    obtain ⟨k, w₁, w₂⟩ := w
-    obtain ⟨k', w₁', w₂'⟩ := w'
-    rw [c₂.prev_eq w₂ w₂'] at w₁
-    exact c₁.prev_eq w₁ w₁'
-
-@[to_dual]
-
-Depends on / 依赖: Relation, Relation.Comp, infer_instance
+We need this to define "related in k steps" later.
 -/
 def trans (c₁ c₂ : ComplexShape ι) : ComplexShape ι where
   Rel := Relation.Comp c₁.Rel c₂.Rel
@@ -270,28 +222,15 @@ def trans (c₁ c₂ : ComplexShape ι) : ComplexShape ι where
     exact c₁.prev_eq w₁ w₁'
 
 @[to_dual]
-/--
-Instance `subsingleton_next` / 实例 `subsingleton_next`
-
-English:
-instance subsingleton_next
-  signature: (c : ComplexShape ι) (i : ι)
-  body: by
-  constructor
-  rintro ⟨j, rij⟩ ⟨k, rik⟩
-  congr
-  exact c.next_eq rij rik
-
-中文:
-实例 subsingleton_next
-  签名: (c : 余mplexShape ι) (i : ι)
-  定义体: by
-  constructor
-  rintro ⟨j, rij⟩ ⟨k, rik⟩
-  congr
-  exact c.next_eq rij rik
-
-Depends on / 依赖: c.next_eq, next_eq
+/-
+**ComplexShape.subsingleton_next** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：subsingleton_next (c : ComplexShape ι) (i : ι) : Subsingleton { j // c.Rel
+ i j }
+参数：c : ComplexShape ι；i : ι。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i j j' :
+ ι}, self.Rel i j → self.Rel i j' → j = j'
 -/
 instance subsingleton_next (c : ComplexShape ι) (i : ι) : Subsingleton { j // c.Rel i j } := by
   constructor
@@ -307,57 +246,33 @@ Returns `i` otherwise.
 /-- An arbitrary choice of index `i` such that `Rel i j`, if such exists.
 Returns `j` otherwise.
 -/]
-/--
-Definition of `next` / `next` 的定义
-
-English:
-definition next
-  signature: (c : ComplexShape ι) (i : ι)
-  body: if h : exists j, c.Rel i j then h.choose else i
-
-@[to_dual]
-
-中文:
-定义 next
-  签名: (c : 余mplexShape ι) (i : ι)
-  定义体: if h : exists j, c.Rel i j then h.choose else i
-
-@[to_dual]
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.TStructure.t.IsGE, DerivedCategory.singleFunctor, TStructure, c.Rel, h.choose, infer_instance, singleFunctor
+/-
+**ComplexShape.next** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：next (c : ComplexShape ι) (i : ι) : ι
+参数：c : ComplexShape ι；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def next (c : ComplexShape ι) (i : ι) : ι :=
-  if h : exists j, c.Rel i j then h.choose else i
+  if h : ∃ j, c.Rel i j then h.choose else i
 
 @[to_dual]
-/--
-theorem `next_eq'` / 定理 `next_eq'`
-
-English:
-theorem next_eq'
-  given: (c : ComplexShape ι) {i j : ι} (h : c.Rel i j)
-  statement: c.next i = j
-  proof: by
-  apply c.next_eq _ h
-  rw [next]
-  rw [dif_pos]
-  exact Exists.choose_spec ⟨j, h⟩
-
-@[to_dual]
-
-中文:
-定理 next_eq'
-  条件: (c : 余mplexShape ι) {i j : ι} (h : c.关系 i j)
-  结论: c.next i = j
-  证明: by
-  apply c.next_eq _ h
-  rw [next]
-  rw [dif_pos]
-  exact Exists.choose_spec ⟨j, h⟩
-
-@[to_dual]
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.TStructure.t.IsLE, DerivedCategory.singleFunctor, Exists, Exists.choose_spec, TStructure, c.next_eq, choose_spec, dif_pos, infer_instance, next_eq, singleFunctor
+/-
+**ComplexShape.next_eq'** 是 Mathlib 中的一个定理，位于命名空间 `ComplexShape`。
+形式化陈述：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Rel i j) : c.next i = j
+参数：c : ComplexShape ι；h : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i j j' :
+ ι}, self.Rel i j → self.Rel i j' → j = j'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ComplexShape.next.eq_1`：∀ {ι : Type u_1} (c : ComplexShape ι) (i : ι), c
+.next i = if h : ∃ j, c.Rel i j then h.choose else i
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Rel i j) : c.next i = j := by
   apply c.next_eq _ h
@@ -366,65 +281,53 @@ theorem next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Rel i j) : c.next i = j
   exact Exists.choose_spec ⟨j, h⟩
 
 @[to_dual]
-/--
-lemma `next_eq_self'` / 引理 `next_eq_self'`
-
-English:
-lemma next_eq_self'
-  given: (c : ComplexShape ι) (j : ι) (hj : forall k, ¬c.Rel j k)
-  proof: dif_neg (by simpa using hj)
-
-@[to_dual]
-
-中文:
-引理 next_eq_self'
-  条件: (c : 余mplexShape ι) (j : ι) (hj : 对任意 k, ¬c.关系 j k)
-  证明: dif_neg (by simpa using hj)
-
-@[to_dual]
-
-Depends on / 依赖: dif_neg
+/-
+**ComplexShape.next_eq_self'** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：next_eq_self' (c : ComplexShape ι) (j : ι) (hj : forall k, ¬c.Rel j k) : c
+.next j = j
+参数：c : ComplexShape ι；j : ι；hj : forall k, ¬c.Rel j k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-lemma next_eq_self' (c : ComplexShape ι) (j : ι) (hj : forall k, ¬c.Rel j k) :
+lemma next_eq_self' (c : ComplexShape ι) (j : ι) (hj : ∀ k, ¬c.Rel j k) :
     c.next j = j :=
   dif_neg (by simpa using hj)
 
 @[to_dual]
-/--
-lemma `next_eq_self` / 引理 `next_eq_self`
-
-English:
-lemma next_eq_self
-  given: (c : ComplexShape ι) (j : ι) (hj : ¬c.Rel j (c.next j))
-  proof: c.next_eq_self' j (fun k hk' => hj (by simpa only [c.next_eq' hk'] using hk'))
-
-中文:
-引理 next_eq_self
-  条件: (c : 余mplexShape ι) (j : ι) (hj : ¬c.关系 j (c.next j))
-  证明: c.next_eq_self' j (fun k hk' => hj (by simpa only [c.next_eq' hk'] using hk'))
-
-Depends on / 依赖: c.next_eq, c.next_eq_self, next_eq, next_eq_self
+/-
+**ComplexShape.next_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：next_eq_self (c : ComplexShape ι) (j : ι) (hj : ¬c.Rel j (c.next j)) : c.n
+ext j = j
+参数：c : ComplexShape ι；j : ι；hj : ¬c.Rel j (c.next j)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.next_eq_self'`：next_eq_self' (c : ComplexShape ι) (j : ι) (
+hj : forall k, ¬c.Rel j k) : c.next j = j
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
 -/
 lemma next_eq_self (c : ComplexShape ι) (j : ι) (hj : ¬c.Rel j (c.next j)) :
     c.next j = j :=
   c.next_eq_self' j (fun k hk' => hj (by simpa only [c.next_eq' hk'] using hk'))
 
-/--
-Definition of `up'` / `up'` 的定义
+/-- The `ComplexShape` allowing differentials from `X i` to `X (i+a)`.
+(For example when `a = 1`, a cohomology theory indexed by `ℕ` or `ℤ`)
+-/
+/-
+**ComplexShape.up'** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：up' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α wher
+e Rel i j
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition up'
-  signature: {α : Type*} [Add α] [IsRightCancelAdd α] (a : α)
-  body: i + a = j
-  next_eq hi hj := hi.symm.trans hj
-  prev_eq hi hj := add_right_cancel (hi.trans hj.symm)
-
-中文:
-定义 up'
-  签名: {α : 类型} [加法 α] [是右消去加法 α] (a : α)
-  定义体: i + a = j
-  next_eq hi hj := hi.symm.trans hj
-  prev_eq hi hj := add_right_cancel (hi.trans hj.symm)
+--- 原说明 ---
+The `ComplexShape` allowing differentials from `X i` to `X (i+a)`.
+(For example when `a = 1`, a cohomology theory indexed by `ℕ` or `ℤ`)
 -/
 def up' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α where
   Rel i j := i + a = j
@@ -435,26 +338,17 @@ def up' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α w
 (For example when `a = 1`, a homology theory indexed by `ℕ` or `ℤ`)
 -/
 @[to_dual existing (attr := simps) up']
-/--
-Definition of `down'` / `down'` 的定义
+/-
+**ComplexShape.down'** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：down' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α wh
+ere Rel i j
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition down'
-  signature: {α : Type*} [Add α] [IsRightCancelAdd α] (a : α)
-  body: j + a = i
-  next_eq hi hj := add_right_cancel (hi.trans hj.symm)
-  prev_eq hi hj := hi.symm.trans hj
-
-@[to_dual (reorder := i j) down'_mk]
-
-中文:
-定义 down'
-  签名: {α : 类型} [加法 α] [是右消去加法 α] (a : α)
-  定义体: j + a = i
-  next_eq hi hj := add_right_cancel (hi.trans hj.symm)
-  prev_eq hi hj := hi.symm.trans hj
-
-@[to_dual (reorder := i j) down'_mk]
+--- 原说明 ---
+The `ComplexShape` allowing differentials from `X (j+a)` to `X j`.
+(For example when `a = 1`, a homology theory indexed by `ℕ` or `ℤ`)
 -/
 def down' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α where
   Rel i j := j + a = i
@@ -462,18 +356,12 @@ def down' {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) : ComplexShape α
   prev_eq hi hj := hi.symm.trans hj
 
 @[to_dual (reorder := i j) down'_mk]
-/--
-theorem `up'_mk` / 定理 `up'_mk`
-
-English:
-theorem up'_mk
-  given: {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) (i j : α) (h : i + a = j)
-  proof: h
-
-中文:
-定理 up'_mk
-  条件: {α : 类型} [加法 α] [是右消去加法 α] (a : α) (i j : α) (h : i + a = j)
-  证明: h
+/-
+**ComplexShape.up'_mk** 是 Mathlib 中的一个定理，位于命名空间 `ComplexShape`。
+形式化陈述：∀ {α : Type u_2} [inst : Add α] [inst_1 : IsRightCancelAdd α] (a i j : α),
+ i + a = j → (ComplexShape.up' a).Rel i j
+参数：a i j : α；ComplexShape.up' a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem up'_mk {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) (i j : α) (h : i + a = j) :
     (up' a).Rel i j := h
@@ -483,39 +371,26 @@ theorem up'_mk {α : Type*} [Add α] [IsRightCancelAdd α] (a : α) (i j : α) (
 @[to_dual (attr := simps!) down
 /-- The `ComplexShape` appropriate for homology, so `d : X i ⟶ X j` only when `i = j + 1`.
 -/]
-/--
-Definition of `up` / `up` 的定义
-
-English:
-definition up
-  signature: (α : Type*) [Add α] [IsRightCancelAdd α] [One α]
-  body: up' 1
-
-@[to_dual (reorder := i j) down_mk]
-
-中文:
-定义 up
-  签名: (α : 类型) [加法 α] [是右消去加法 α] [幺 α]
-  定义体: up' 1
-
-@[to_dual (reorder := i j) down_mk]
+/-
+**ComplexShape.up** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：up (α : Type*) [Add α] [IsRightCancelAdd α] [One α] : ComplexShape α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def up (α : Type*) [Add α] [IsRightCancelAdd α] [One α] : ComplexShape α :=
   up' 1
 
 @[to_dual (reorder := i j) down_mk]
-/--
-theorem `up_mk` / 定理 `up_mk`
-
-English:
-theorem up_mk
-  given: {α : Type*} [Add α] [IsRightCancelAdd α] [One α] (i j : α) (h : i + 1 = j)
-  proof: up'_mk (1 : α) i j h
-
-中文:
-定理 up_mk
-  条件: {α : 类型} [加法 α] [是右消去加法 α] [幺 α] (i j : α) (h : i + 1 = j)
-  证明: up'_mk (1 : α) i j h
+/-
+**ComplexShape.up_mk** 是 Mathlib 中的一个定理，位于命名空间 `ComplexShape`。
+形式化陈述：up_mk {α : Type*} [Add α] [IsRightCancelAdd α] [One α] (i j : α) (h : i + 
+1 = j) : (up α).Rel i j
+参数：i j : α；h : i + 1 = j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.up'_mk`：∀ {α : Type u_2} [inst : Add α] [inst_1 : IsRightCa
+ncelAdd α] (a i j : α), i + a = j → (ComplexShape.up' a).Rel i j
 -/
 theorem up_mk {α : Type*} [Add α] [IsRightCancelAdd α] [One α] (i j : α) (h : i + 1 = j) :
     (up α).Rel i j :=
@@ -531,47 +406,29 @@ variable (α : Type*) [AddRightCancelSemigroup α] [DecidableEq α]
 
 set_option backward.defeqAttrib.useBackward true in
 @[to_dual instDecidableRelRelDown']
-/--
-Instance `instDecidableRelRelUp'` / 实例 `instDecidableRelRelUp'`
-
-English:
-instance instDecidableRelRelUp'
-  signature: (a : α)
-  body: fun _ _ => by dsimp; infer_instance
-
-@[to_dual instDecidableRelRelDown]
-
-中文:
-实例 instDecidableRelRelUp'
-  签名: (a : α)
-  定义体: fun _ _ => by dsimp; infer_instance
-
-@[to_dual instDecidableRelRelDown]
-
-Depends on / 依赖: infer_instance
+/-
+**ComplexShape.instDecidableRelRelUp'** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：instDecidableRelRelUp' (a : α) : DecidableRel (ComplexShape.up' a).Rel
+参数：a : α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 instance instDecidableRelRelUp' (a : α) : DecidableRel (ComplexShape.up' a).Rel :=
   fun _ _ => by dsimp; infer_instance
 
 @[to_dual instDecidableRelRelDown]
-/--
-Instance `instDecidableRelRelUp` / 实例 `instDecidableRelRelUp`
-
-English:
-instance instDecidableRelRelUp
-  signature: [One α]
-  body: by
-  dsimp [ComplexShape.up]; infer_instance
-
-中文:
-实例 instDecidableRelRelUp
-  签名: [幺 α]
-  定义体: by
-  dsimp [ComplexShape.up]; infer_instance
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, infer_instance
+/-
+**ComplexShape.instDecidableRelRelUp** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：instDecidableRelRelUp [One α] : DecidableRel (ComplexShape.up α).Rel
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 instance instDecidableRelRelUp [One α] : DecidableRel (ComplexShape.up α).Rel := by
   dsimp [ComplexShape.up]; infer_instance
 
 end ComplexShape
+

@@ -38,90 +38,50 @@ variable (F α β) in
 /-- Coercion as a multiplicative homomorphism. -/
 @[to_additive
 /-- Coercion as an additive homomorphism. -/]
-/--
-Definition of `coeMulHom` / `coeMulHom` 的定义
-
-English:
-definition coeMulHom
-  signature: : F ->ₙ* α -> β where
-  body: f
-  map_mul' := coe_mul
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 coeMulHom
-  签名: : F ->ₙ* α -> β where
-  定义体: f
-  map_mul' := coe_mul
-
-@[to_additive (attr := simp)]
+/-
+**FunLike.coeMulHom** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：coeMulHom : F ->ₙ* α -> β where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FunLike.coe_mul`：coe_mul [Mul F] [Mul β] [IsMulApply F α β] (f g : F) : 
+↑(f * g) = (f : α -> β) * g
 -/
-def coeMulHom : F ->ₙ* α -> β where
+def coeMulHom : F →ₙ* α → β where
   toFun f := f
   map_mul' := coe_mul
 
 @[to_additive (attr := simp)]
-/--
-theorem `coeMulHom_apply` / 定理 `coeMulHom_apply`
-
-English:
-theorem coeMulHom_apply
-  given: (f : F)
-  statement: coeMulHom F α β f = f
-  proof: rfl
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-定理 coeMulHom_apply
-  条件: (f : F)
-  结论: coeMulHom F α β f = f
-  证明: rfl
-
-@[to_additive (attr := norm_cast)]
+/-
+**FunLike.coeMulHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coeMulHom_apply (f : F) : coeMulHom F α β f = f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeMulHom_apply (f : F) : coeMulHom F α β f = f := rfl
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_coeMulHom` / 定理 `coe_coeMulHom`
-
-English:
-theorem coe_coeMulHom
-  statement: (coeMulHom F α β : F -> α -> β) = DFunLike.coe
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_coeMulHom
-  结论: (coeMulHom F α β : F -> α -> β) = 依赖函数状.coe
-  证明: rfl
-
-@[to_additive]
+/-
+**FunLike.coe_coeMulHom** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coe_coeMulHom : (coeMulHom F α β : F -> α -> β) = DFunLike.coe
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeMulHom : (coeMulHom F α β : F -> α -> β) = DFunLike.coe := rfl
+theorem coe_coeMulHom : (coeMulHom F α β : F → α → β) = DFunLike.coe := rfl
 
 @[to_additive]
-/--
-theorem `coeMulHom_injective` / 定理 `coeMulHom_injective`
-
-English:
-theorem coeMulHom_injective
-  statement: Function.Injective (coeMulHom F α β)
-  proof: by
-  rw [coe_coeMulHom]
-  exact DFunLike.coe_injective
-
-中文:
-定理 coeMulHom_injective
-  结论: 函数.单射 (coeMulHom F α β)
-  证明: by
-  rw [coe_coeMulHom]
-  exact DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_coeMulHom, coe_injective
+/-
+**FunLike.coeMulHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coeMulHom_injective : Function.Injective (coeMulHom F α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FunLike.coe_coeMulHom`：coe_coeMulHom : (coeMulHom F α β : F -> α -> β) =
+ DFunLike.coe
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem coeMulHom_injective : Function.Injective (coeMulHom F α β) := by
   rw [coe_coeMulHom]
@@ -137,113 +97,61 @@ variable (F α β) in
 /-- Coercion as a monoid homomorphism. -/
 @[to_additive
 /-- Coercion as an additive monoid homomorphism. -/]
-/--
-Definition of `coeMonoidHom` / `coeMonoidHom` 的定义
-
-English:
-definition coeMonoidHom
-  signature: : F ->* α -> β where
-  body: f
-  map_one' := coe_one
-  map_mul' := coe_mul
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 coeMonoidHom
-  签名: : F ->* α -> β where
-  定义体: f
-  map_one' := coe_one
-  map_mul' := coe_mul
-
-@[to_additive (attr := simp)]
+/-
+**FunLike.coeMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：coeMonoidHom : F ->* α -> β where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def coeMonoidHom : F ->* α -> β where
+def coeMonoidHom : F →* α → β where
   toFun f := f
   map_one' := coe_one
   map_mul' := coe_mul
 
 @[to_additive (attr := simp)]
-/--
-theorem `coeMonoidHom_apply` / 定理 `coeMonoidHom_apply`
-
-English:
-theorem coeMonoidHom_apply
-  given: (f : F)
-  statement: coeMonoidHom F α β f = f
-  proof: rfl
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-定理 coeMonoidHom_apply
-  条件: (f : F)
-  结论: coeMonoidHom F α β f = f
-  证明: rfl
-
-@[to_additive (attr := norm_cast)]
+/-
+**FunLike.coeMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coeMonoidHom_apply (f : F) : coeMonoidHom F α β f = f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeMonoidHom_apply (f : F) : coeMonoidHom F α β f = f := rfl
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_coeMonoidHom` / 定理 `coe_coeMonoidHom`
-
-English:
-theorem coe_coeMonoidHom
-  statement: (coeMonoidHom F α β : F -> α -> β) = DFunLike.coe
-  proof: rfl
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-定理 coe_coeMonoidHom
-  结论: (coeMonoidHom F α β : F -> α -> β) = 依赖函数状.coe
-  证明: rfl
-
-@[to_additive (attr := norm_cast)]
+/-
+**FunLike.coe_coeMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coe_coeMonoidHom : (coeMonoidHom F α β : F -> α -> β) = DFunLike.coe
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeMonoidHom : (coeMonoidHom F α β : F -> α -> β) = DFunLike.coe := rfl
+theorem coe_coeMonoidHom : (coeMonoidHom F α β : F → α → β) = DFunLike.coe := rfl
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_coeMonoidHom'` / 定理 `coe_coeMonoidHom'`
-
-English:
-theorem coe_coeMonoidHom'
-  statement: (coeMonoidHom F α β : F ->ₙ* α -> β) = coeMulHom F α β
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_coeMonoidHom'
-  结论: (coeMonoidHom F α β : F ->ₙ* α -> β) = coeMulHom F α β
-  证明: rfl
-
-@[to_additive]
+/-
+**FunLike.coe_coeMonoidHom'** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coe_coeMonoidHom' : (coeMonoidHom F α β : F ->ₙ* α -> β) = coeMulHom F α β
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem coe_coeMonoidHom' : (coeMonoidHom F α β : F ->ₙ* α -> β) = coeMulHom F α β := rfl
+theorem coe_coeMonoidHom' : (coeMonoidHom F α β : F →ₙ* α → β) = coeMulHom F α β := rfl
 
 @[to_additive]
-/--
-theorem `coeMonoidHom_injective` / 定理 `coeMonoidHom_injective`
-
-English:
-theorem coeMonoidHom_injective
-  statement: Function.Injective (coeMonoidHom F α β)
-  proof: by
-  rw [coe_coeMonoidHom]
-  exact DFunLike.coe_injective
-
-中文:
-定理 coeMonoidHom_injective
-  结论: 函数.单射 (coeMonoidHom F α β)
-  证明: by
-  rw [coe_coeMonoidHom]
-  exact DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_coeMonoidHom, coe_injective
+/-
+**FunLike.coeMonoidHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：coeMonoidHom_injective : Function.Injective (coeMonoidHom F α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FunLike.coe_coeMonoidHom`：coe_coeMonoidHom : (coeMonoidHom F α β : F -> 
+α -> β) = DFunLike.coe
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem coeMonoidHom_injective : Function.Injective (coeMonoidHom F α β) := by
   rw [coe_coeMonoidHom]
@@ -260,299 +168,256 @@ variable [Mul F]
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` is a semigroup if `β` is a semigroup. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` is an additive semigroup
 if `β` is an additive semigroup. -/]
-/--
-Definition of `semigroup` / `semigroup` 的定义
-
-English:
-abbreviation semigroup
-  signature: [Semigroup β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.semigroup (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-缩写 semigroup
-  签名: [半群 β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.semigroup (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.semigroup** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] → [inst_1 : Mul F] → [inst_2 : Semigroup β] → [IsMulApply F α β] → S
+emigroup F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev semigroup [Semigroup β] [IsMulApply F α β] : Semigroup F :=
-  DFunLike.coe_injective.semigroup (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.semigroup (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` is a commutative semigroup if `β` is a
 commutative semigroup. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` is a commatative additive
 semigroup if `β` is a commatative additive semigroup. -/]
-/--
-Definition of `commSemigroup` / `commSemigroup` 的定义
-
-English:
-abbreviation commSemigroup
-  signature: [CommSemigroup β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.commSemigroup (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-缩写 commSemigroup
-  签名: [交换半群 β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.commSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.commSemigroup** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] → [inst_1 : Mul F] → [inst_2 : CommSemigroup β] → [IsMulApply F α β]
+ → CommSemigroup F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev commSemigroup [CommSemigroup β] [IsMulApply F α β] :
     CommSemigroup F :=
-  DFunLike.coe_injective.commSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.commSemigroup (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` has left cancellative multiplication if
 `β` has left cancellative multiplication. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` has left cancellative
 addition if `β` has left cancellative addition. -/]
-/--
-theorem `isLeftCancelMul` / 定理 `isLeftCancelMul`
-
-English:
-theorem isLeftCancelMul
-  given: [Mul β] [IsLeftCancelMul β] [IsMulApply F α β]
-  proof: DFunLike.coe_injective.isLeftCancelMul (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-定理 isLeftCancelMul
-  条件: [乘法 β] [左乘消去 β] [是MulApply F α β]
-  证明: DFunLike.coe_injective.isLeftCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.isLeftCancelMul** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : FunLike F α β] [ins
+t_1 : Mul F] [inst_2 : Mul β]   [IsLeftCancelMul β] [IsMulApply F α β], IsLeftCa
+ncelMul F
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isLeftCancelMul`：∀ {M₁ : Type u_1} {M₂ : Type u_2} [i
+nst : Mul M₁] [inst_1 : Mul M₂] [IsLeftCancelMul M₂] (f : M₁ → M₂),   Function.I
+njective f → (∀ (x y : M…
+· 使用定理 `Pi.instIsLeftCancelMul`：∀ {I : Type u} {f : I → Type v₁} [inst : (i : I)
+ → Mul (f i)] [∀ (i : I), IsLeftCancelMul (f i)],   IsLeftCancelMul ((i : I) → f
+ i)
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `FunLike.coe_mul`：coe_mul [Mul F] [Mul β] [IsMulApply F α β] (f g : F) : 
+↑(f * g) = (f : α -> β) * g
 -/
 protected theorem isLeftCancelMul [Mul β] [IsLeftCancelMul β] [IsMulApply F α β] :
     IsLeftCancelMul F :=
-  DFunLike.coe_injective.isLeftCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.isLeftCancelMul (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` has right cancellative multiplication if
 `β` has right cancellative multiplication. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` has right cancellative
 addition if `β` has right cancellative addition. -/]
-/--
-theorem `isRightCancelMul` / 定理 `isRightCancelMul`
-
-English:
-theorem isRightCancelMul
-  given: [Mul β] [IsRightCancelMul β] [IsMulApply F α β]
-  proof: DFunLike.coe_injective.isRightCancelMul (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-定理 isRightCancelMul
-  条件: [乘法 β] [右乘消去 β] [是MulApply F α β]
-  证明: DFunLike.coe_injective.isRightCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.isRightCancelMul** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : FunLike F α β] [ins
+t_1 : Mul F] [inst_2 : Mul β]   [IsRightCancelMul β] [IsMulApply F α β], IsRight
+CancelMul F
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isRightCancelMul`：∀ {M₁ : Type u_1} {M₂ : Type u_2} [
+inst : Mul M₁] [inst_1 : Mul M₂] [IsRightCancelMul M₂] (f : M₁ → M₂),   Function
+.Injective f → (∀ (x y : …
+· 使用定理 `Pi.instIsRightCancelMul`：∀ {I : Type u} {f : I → Type v₁} [inst : (i : I
+) → Mul (f i)] [∀ (i : I), IsRightCancelMul (f i)],   IsRightCancelMul ((i : I) 
+→ f i)
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `FunLike.coe_mul`：coe_mul [Mul F] [Mul β] [IsMulApply F α β] (f g : F) : 
+↑(f * g) = (f : α -> β) * g
 -/
 protected theorem isRightCancelMul [Mul β] [IsRightCancelMul β] [IsMulApply F α β] :
     IsRightCancelMul F :=
-  DFunLike.coe_injective.isRightCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.isRightCancelMul (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` has right multiplication if
 `β` has right multiplication. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` has right
 addition if `β` has cancellative addition. -/]
-/--
-theorem `isCancelMul` / 定理 `isCancelMul`
-
-English:
-theorem isCancelMul
-  given: [Mul β] [IsCancelMul β] [IsMulApply F α β]
-  proof: DFunLike.coe_injective.isCancelMul (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-定理 isCancelMul
-  条件: [乘法 β] [是消去乘法 β] [是MulApply F α β]
-  证明: DFunLike.coe_injective.isCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.isCancelMul** 是 Mathlib 中的一个定理，位于命名空间 `FunLike`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : FunLike F α β] [ins
+t_1 : Mul F] [inst_2 : Mul β] [IsCancelMul β]   [IsMulApply F α β], IsCancelMul 
+F
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isCancelMul`：∀ {M₁ : Type u_1} {M₂ : Type u_2} [inst 
+: Mul M₁] [inst_1 : Mul M₂] [IsCancelMul M₂] (f : M₁ → M₂),   Function.Injective
+ f → (∀ (x y : M₁), …
+· 使用定理 `Pi.instIsCancelMul`：∀ {I : Type u} {f : I → Type v₁} [inst : (i : I) → M
+ul (f i)] [∀ (i : I), IsCancelMul (f i)],   IsCancelMul ((i : I) → f i)
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `FunLike.coe_mul`：coe_mul [Mul F] [Mul β] [IsMulApply F α β] (f g : F) : 
+↑(f * g) = (f : α -> β) * g
 -/
 protected theorem isCancelMul [Mul β] [IsCancelMul β] [IsMulApply F α β] :
     IsCancelMul F :=
-  DFunLike.coe_injective.isCancelMul (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.isCancelMul (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` is a left cancel semigroup if `β` is a
 left cancel semigroup. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` is a left cancel additive
 semigroup if `β` is a left cancel additive semigroup. -/]
-/--
-Definition of `leftCancelSemigroup` / `leftCancelSemigroup` 的定义
-
-English:
-abbreviation leftCancelSemigroup
-  signature: [LeftCancelSemigroup β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.leftCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-缩写 leftCancelSemigroup
-  签名: [左消去半群 β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.leftCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.leftCancelSemigroup** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] → [inst_2 : LeftCancelSemigroup β] → [IsM
+ulApply F α β] → LeftCancelSemigroup F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev leftCancelSemigroup [LeftCancelSemigroup β] [IsMulApply F α β] :
     LeftCancelSemigroup F :=
-  DFunLike.coe_injective.leftCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.leftCancelSemigroup (fun (f : F) ↦ (f : α → β)) coe_mul
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x` is a right cancel semigroup if `β` is a
 right cancel semigroup. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x` is a right cancel additive
 semigroup if `β` is a right cancel additive semigroup. -/]
-/--
-Definition of `rightCancelSemigroup` / `rightCancelSemigroup` 的定义
-
-English:
-abbreviation rightCancelSemigroup
-  signature: [RightCancelSemigroup β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.rightCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
-
-中文:
-缩写 rightCancelSemigroup
-  签名: [右消去半群 β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.rightCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+/-
+**FunLike.rightCancelSemigroup** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] → [inst_2 : RightCancelSemigroup β] → [Is
+MulApply F α β] → RightCancelSemigroup F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev rightCancelSemigroup [RightCancelSemigroup β] [IsMulApply F α β] :
     RightCancelSemigroup F :=
-  DFunLike.coe_injective.rightCancelSemigroup (fun (f : F) => (f : α -> β)) coe_mul
+  DFunLike.coe_injective.rightCancelSemigroup (fun (f : F) ↦ (f : α → β)) coe_mul
 
 variable [One F]
 
 /-- A `FunLike` type with `1` and `*` is `MulOneClass` if `β` is a `MulOneClass`. -/
 @[to_additive /-- A `FunLike` type with `0` and `+` is `AddZeroClass` if `β` is a
 `AddZeroClass`. -/]
-/--
-Definition of `mulOneClass` / `mulOneClass` 的定义
-
-English:
-abbreviation mulOneClass
-  signature: [MulOneClass β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.mulOneClass (fun (f : F) => (f : α -> β)) coe_one coe_mul
-
-中文:
-缩写 mulOneClass
-  签名: [MulOne类 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.mulOneClass (fun (f : F) => (f : α -> β)) coe_one coe_mul
+/-
+**FunLike.mulOneClass** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] → [inst_3 : 
+MulOneClass β] → [IsOneApply F α β] → [IsMulApply F α β] → MulOneClass F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev mulOneClass [MulOneClass β] [IsOneApply F α β] [IsMulApply F α β] :
     MulOneClass F :=
-  DFunLike.coe_injective.mulOneClass (fun (f : F) => (f : α -> β)) coe_one coe_mul
+  DFunLike.coe_injective.mulOneClass (fun (f : F) ↦ (f : α → β)) coe_one coe_mul
 
-variable [Pow F Nat]
+variable [Pow F ℕ]
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a monoid if `β` is a monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is an additive monoid if `β` is an additive monoid. -/]
-/--
-Definition of `monoid` / `monoid` 的定义
-
-English:
-abbreviation monoid
-  signature: [Monoid β] [IsOneApply F α β] [IsMulApply F α β] [IsPowApply Nat F α β]
-  body: DFunLike.coe_injective.monoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 monoid
-  签名: [幺半群 β] [是OneApply F α β] [是MulApply F α β] [是PowApply 自然数 F α β]
-  定义体: DFunLike.coe_injective.monoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.monoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Monoid β] → [IsOneApply F α β] → 
+[IsMulApply F α β] → [IsPowApply ℕ F α β] → Monoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected abbrev monoid [Monoid β] [IsOneApply F α β] [IsMulApply F α β] [IsPowApply Nat F α β] :
+protected abbrev monoid [Monoid β] [IsOneApply F α β] [IsMulApply F α β] [IsPowApply ℕ F α β] :
     Monoid F :=
-  DFunLike.coe_injective.monoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+  DFunLike.coe_injective.monoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a left cancel monoid if `β` is a left cancel monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is a left cancel additive monoid if `β` is a left cancel additive monoid. -/]
-/--
-Definition of `leftCancelMonoid` / `leftCancelMonoid` 的定义
-
-English:
-abbreviation leftCancelMonoid
-  signature: [LeftCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.leftCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 leftCancelMonoid
-  签名: [左消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.leftCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.leftCancelMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : LeftCancelMonoid β] →            
+     [IsOneApply F α β] → [IsMulApply F α β] → [IsPowApply ℕ F α β] → LeftCancel
+Monoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev leftCancelMonoid [LeftCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsPowApply Nat F α β] : LeftCancelMonoid F :=
-  DFunLike.coe_injective.leftCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+    [IsPowApply ℕ F α β] : LeftCancelMonoid F :=
+  DFunLike.coe_injective.leftCancelMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a right cancel monoid if `β` is a right cancel monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is a right cancel additive monoid if `β` is a right cancel
 additive monoid. -/]
-/--
-Definition of `rightCancelMonoid` / `rightCancelMonoid` 的定义
-
-English:
-abbreviation rightCancelMonoid
-  signature: [RightCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.rightCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 rightCancelMonoid
-  签名: [右消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.rightCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.rightCancelMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : RightCancelMonoid β] →           
+      [IsOneApply F α β] → [IsMulApply F α β] → [IsPowApply ℕ F α β] → RightCanc
+elMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev rightCancelMonoid [RightCancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsPowApply Nat F α β] : RightCancelMonoid F :=
-  DFunLike.coe_injective.rightCancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+    [IsPowApply ℕ F α β] : RightCancelMonoid F :=
+  DFunLike.coe_injective.rightCancelMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a cancel monoid if `β` is a cancel monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is a cancel additive monoid if `β` is a cancel additive monoid. -/]
-/--
-Definition of `cancelMonoid` / `cancelMonoid` 的定义
-
-English:
-abbreviation cancelMonoid
-  signature: [CancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.cancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 cancelMonoid
-  签名: [消去幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.cancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.cancelMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : CancelMonoid β] →                
+ [IsOneApply F α β] → [IsMulApply F α β] → [IsPowApply ℕ F α β] → CancelMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev cancelMonoid [CancelMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsPowApply Nat F α β] : CancelMonoid F :=
-  DFunLike.coe_injective.cancelMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+    [IsPowApply ℕ F α β] : CancelMonoid F :=
+  DFunLike.coe_injective.cancelMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a commutative monoid if `β` is a commutative monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is a commutative additive monoid if `β` is a commutative additive monoid. -/]
-/--
-Definition of `commMonoid` / `commMonoid` 的定义
-
-English:
-abbreviation commMonoid
-  signature: [CommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.commMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 commMonoid
-  签名: [交换幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.commMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.commMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : CommMonoid β] → [IsOneApply F α β
+] → [IsMulApply F α β] → [IsPowApply ℕ F α β] → CommMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev commMonoid [CommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsPowApply Nat F α β] : CommMonoid F :=
-  DFunLike.coe_injective.commMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+    [IsPowApply ℕ F α β] : CommMonoid F :=
+  DFunLike.coe_injective.commMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 /-- A `FunLike` type that satisfies `(f * g) x = f x * g x`, `1 x = 1`, and `(f ^ n) x = f x ^ n`
 is a cancel commutative monoid if `β` is a cancel commutative monoid. -/
 @[to_additive /-- A `FunLike` type that satisfies `(f + g) x = f x + g x`, `0 x = 0`, and
 `(n • f) x = n • f x` is a cancel commutative additive monoid if `β` is a cancel commutative
 additive monoid. -/]
-/--
-Definition of `cancelCommMonoid` / `cancelCommMonoid` 的定义
-
-English:
-abbreviation cancelCommMonoid
-  signature: [CancelCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.cancelCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
-
-中文:
-缩写 cancelCommMonoid
-  签名: [消去交换幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.cancelCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+/-
+**FunLike.cancelCommMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : CancelCommMonoid β] →            
+     [IsOneApply F α β] → [IsMulApply F α β] → [IsPowApply ℕ F α β] → CancelComm
+Monoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev cancelCommMonoid [CancelCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsPowApply Nat F α β] : CancelCommMonoid F :=
-  DFunLike.coe_injective.cancelCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_pow
+    [IsPowApply ℕ F α β] : CancelCommMonoid F :=
+  DFunLike.coe_injective.cancelCommMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_pow
 
 variable [Inv F]
 
@@ -560,185 +425,165 @@ variable [Inv F]
 if `β` is an involutive inversion. -/
 @[to_additive /-- A `FunLike` type with negation that satisfies `(- f) x = - (f x)` is an involutive
 negation if `β` is an involutive negation. -/]
-/--
-Definition of `involutiveInv` / `involutiveInv` 的定义
-
-English:
-abbreviation involutiveInv
-  signature: [InvolutiveInv β] [IsInvApply F α β]
-  body: DFunLike.coe_injective.involutiveInv (fun (f : F) => (f : α -> β)) coe_inv
-
-中文:
-缩写 involutiveInv
-  签名: [InvolutiveInv β] [是InvApply F α β]
-  定义体: DFunLike.coe_injective.involutiveInv (fun (f : F) => (f : α -> β)) coe_inv
+/-
+**FunLike.involutiveInv** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] → [inst_1 : Inv F] → [inst_2 : InvolutiveInv β] → [IsInvApply F α β]
+ → InvolutiveInv F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev involutiveInv [InvolutiveInv β] [IsInvApply F α β] : InvolutiveInv F :=
-  DFunLike.coe_injective.involutiveInv (fun (f : F) => (f : α -> β)) coe_inv
+  DFunLike.coe_injective.involutiveInv (fun (f : F) ↦ (f : α → β)) coe_inv
 
 /-- A `FunLike` type with `1` and inverse is an `InvOneClass` if `β` is an `InvOneClass`. -/
 @[to_additive /-- A `FunLike` type with `0` and negation is a `NegZeroClass` if `β` is a
 `NegZeroClass`. -/]
-/--
-Definition of `invOneClass` / `invOneClass` 的定义
-
-English:
-abbreviation invOneClass
-  signature: [InvOneClass β] [IsOneApply F α β] [IsInvApply F α β]
-  body: DFunLike.coe_injective.invOneClass (fun (f : F) => (f : α -> β)) coe_one coe_inv
-
-中文:
-缩写 invOneClass
-  签名: [InvOne类 β] [是OneApply F α β] [是InvApply F α β]
-  定义体: DFunLike.coe_injective.invOneClass (fun (f : F) => (f : α -> β)) coe_one coe_inv
+/-
+**FunLike.invOneClass** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : One F] →           [inst_2 : Inv F] → [inst_3 : 
+InvOneClass β] → [IsOneApply F α β] → [IsInvApply F α β] → InvOneClass F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev invOneClass [InvOneClass β] [IsOneApply F α β] [IsInvApply F α β] :
     InvOneClass F :=
-  DFunLike.coe_injective.invOneClass (fun (f : F) => (f : α -> β)) coe_one coe_inv
+  DFunLike.coe_injective.invOneClass (fun (f : F) ↦ (f : α → β)) coe_one coe_inv
 
-variable [Div F] [Pow F Int]
+variable [Div F] [Pow F ℤ]
 
 /-- A `FunLike` type is a `DivInvMonoid` if `β` is a `DivInvMonoid`. -/
 @[to_additive subNegMonoid /-- A `FunLike` type is a `SubNegMonoid` if `β` is a `SubNegMonoid`. -/]
-/--
-Definition of `divInvMonoid` / `divInvMonoid` 的定义
+/-
+**FunLike.divInvMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+DivInvMonoid β] →                       [IsOneApply F α β] →                    
+     [IsMulApply F α β] →                           [IsInvApply F α β] →        
+                     [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApply ℤ F
+ α β] → DivInvMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation divInvMonoid
-  signature: [DivInvMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.divInvMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
-    coe_pow coe_pow
-
-中文:
-缩写 divInvMonoid
-  签名: [除逆幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.divInvMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
-    coe_pow coe_pow
+--- 原说明 ---
+A `FunLike` type is a `DivInvMonoid` if `β` is a `DivInvMonoid`.
 -/
 protected abbrev divInvMonoid [DivInvMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     DivInvMonoid F :=
-  DFunLike.coe_injective.divInvMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
+  DFunLike.coe_injective.divInvMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_inv coe_div
     coe_pow coe_pow
 
 /-- A `FunLike` type is a `DivInvOneMonoid` if `β` is a `DivInvOneMonoid`. -/
 @[to_additive
 /-- A `FunLike` type is a `SubNegOneMonoid` if `β` is a `SubNegOneMonoid`. -/]
-/--
-Definition of `divInvOneMonoid` / `divInvOneMonoid` 的定义
-
-English:
-abbreviation divInvOneMonoid
-  signature: [DivInvOneMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.divInvOneMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
-    coe_inv coe_div coe_pow coe_pow
-
-中文:
-缩写 divInvOneMonoid
-  签名: [DivInvOne幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.divInvOneMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
-    coe_inv coe_div coe_pow coe_pow
+/-
+**FunLike.divInvOneMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+DivInvOneMonoid β] →                       [IsOneApply F α β] →                 
+        [IsMulApply F α β] →                           [IsInvApply F α β] →     
+                        [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApply 
+ℤ F α β] → DivInvOneMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev divInvOneMonoid [DivInvOneMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     DivInvOneMonoid F :=
-  DFunLike.coe_injective.divInvOneMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
+  DFunLike.coe_injective.divInvOneMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul
     coe_inv coe_div coe_pow coe_pow
 
 /-- A `FunLike` type is a division monoid if `β` is a division monoid. -/
 @[to_additive /-- A `FunLike` type is a subtraction monoid if `β` is a subtraction monoid. -/]
-/--
-Definition of `divisionMonoid` / `divisionMonoid` 的定义
+/-
+**FunLike.divisionMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+DivisionMonoid β] →                       [IsOneApply F α β] →                  
+       [IsMulApply F α β] →                           [IsInvApply F α β] →      
+                       [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApply ℤ
+ F α β] → DivisionMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation divisionMonoid
-  signature: [DivisionMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.divisionMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
-    coe_inv coe_div coe_pow coe_pow
-
-中文:
-缩写 divisionMonoid
-  签名: [Division幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.divisionMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
-    coe_inv coe_div coe_pow coe_pow
+--- 原说明 ---
+A `FunLike` type is a division monoid if `β` is a division monoid.
 -/
 protected abbrev divisionMonoid [DivisionMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     DivisionMonoid F :=
-  DFunLike.coe_injective.divisionMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul
+  DFunLike.coe_injective.divisionMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul
     coe_inv coe_div coe_pow coe_pow
 
 /-- A `FunLike` type is a division commutative monoid if `β` is a division commutative monoid. -/
 @[to_additive subtractionCommMonoid /-- A `FunLike` type is a subtraction commutative monoid if `β`
 is a subtraction commutative monoid. -/]
-/--
-Definition of `divisionCommMonoid` / `divisionCommMonoid` 的定义
-
-English:
-abbreviation divisionCommMonoid
-  signature: [DivisionCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-  body: DFunLike.coe_injective.divisionCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv
-    coe_div coe_pow coe_pow
-
-中文:
-缩写 divisionCommMonoid
-  签名: [DivisionComm幺半群 β] [是OneApply F α β] [是MulApply F α β]
-  定义体: DFunLike.coe_injective.divisionCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv
-    coe_div coe_pow coe_pow
+/-
+**FunLike.divisionCommMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+DivisionCommMonoid β] →                       [IsOneApply F α β] →              
+           [IsMulApply F α β] →                           [IsInvApply F α β] →  
+                           [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApp
+ly ℤ F α β] → DivisionCommMonoid F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev divisionCommMonoid [DivisionCommMonoid β] [IsOneApply F α β] [IsMulApply F α β]
-    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsInvApply F α β] [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     DivisionCommMonoid F :=
-  DFunLike.coe_injective.divisionCommMonoid (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv
+  DFunLike.coe_injective.divisionCommMonoid (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_inv
     coe_div coe_pow coe_pow
 
 /-- A `FunLike` type is a group if `β` is a group. -/
 @[to_additive /-- A `FunLike` type is an additive group if `β` is an additive group. -/]
-/--
-Definition of `group` / `group` 的定义
+/-
+**FunLike.group** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+Group β] →                       [IsOneApply F α β] →                         [I
+sMulApply F α β] →                           [IsInvApply F α β] →               
+              [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApply ℤ F α β] →
+ Group F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation group
-  signature: [Group β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
-  body: DFunLike.coe_injective.group (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div coe_pow
-    coe_pow
-
-中文:
-缩写 group
-  签名: [群 β] [是OneApply F α β] [是MulApply F α β] [是InvApply F α β]
-  定义体: DFunLike.coe_injective.group (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div coe_pow
-    coe_pow
+--- 原说明 ---
+A `FunLike` type is a group if `β` is a group.
 -/
 protected abbrev group [Group β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
-    [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     Group F :=
-  DFunLike.coe_injective.group (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div coe_pow
+  DFunLike.coe_injective.group (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_inv coe_div coe_pow
     coe_pow
 
 /-- A `FunLike` type is a commutative group if `β` is a commutative group. -/
 @[to_additive /-- A `FunLike` type is an additive commutative group if `β` is an additive
 commutative group. -/]
-/--
-Definition of `commGroup` / `commGroup` 的定义
-
-English:
-abbreviation commGroup
-  signature: [CommGroup β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
-  body: DFunLike.coe_injective.commGroup (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
-    coe_pow coe_pow
-
-中文:
-缩写 commGroup
-  签名: [交换群 β] [是OneApply F α β] [是MulApply F α β] [是InvApply F α β]
-  定义体: DFunLike.coe_injective.commGroup (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
-    coe_pow coe_pow
+/-
+**FunLike.commGroup** 是 Mathlib 中的一个定义，位于命名空间 `FunLike`。
+形式化陈述：{F : Type u_1} →   {α : Type u_2} →     {β : Type u_3} →       [inst : Fun
+Like F α β] →         [inst_1 : Mul F] →           [inst_2 : One F] →           
+  [inst_3 : Pow F ℕ] →               [inst_4 : Inv F] →                 [inst_5 
+: Div F] →                   [inst_6 : Pow F ℤ] →                     [inst_7 : 
+CommGroup β] →                       [IsOneApply F α β] →                       
+  [IsMulApply F α β] →                           [IsInvApply F α β] →           
+                  [IsDivApply F α β] → [IsPowApply ℕ F α β] → [IsPowApply ℤ F α 
+β] → CommGroup F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev commGroup [CommGroup β] [IsOneApply F α β] [IsMulApply F α β] [IsInvApply F α β]
-    [IsDivApply F α β] [IsPowApply Nat F α β] [IsPowApply Int F α β] :
+    [IsDivApply F α β] [IsPowApply ℕ F α β] [IsPowApply ℤ F α β] :
     CommGroup F :=
-  DFunLike.coe_injective.commGroup (fun (f : F) => (f : α -> β)) coe_one coe_mul coe_inv coe_div
+  DFunLike.coe_injective.commGroup (fun (f : F) ↦ (f : α → β)) coe_one coe_mul coe_inv coe_div
     coe_pow coe_pow
 
 end GroupInstances
 
 end FunLike
+

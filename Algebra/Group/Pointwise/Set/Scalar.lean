@@ -68,18 +68,11 @@ section SMul
 /-- The dilation of set `x • s` is defined as `{x • y | y ∈ s}` in scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
 /-- The translation of set `x +ᵥ s` is defined as `{x +ᵥ y | y ∈ s}` in scope `Pointwise`. -/]
-/--
-Definition of `smulSet` / `smulSet` 的定义
-
-English:
-definition smulSet
-  signature: [SMul α β]
-  body: image (a • ·)
-
-中文:
-定义 smulSet
-  签名: [标量乘法 α β]
-  定义体: image (a • ·)
+/-
+**Set.smulSet** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [SMul α β] → SMul α (Set β)
+参数：Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def smulSet [SMul α β] : SMul α (Set β) where smul a := image (a • ·)
 
@@ -88,24 +81,11 @@ scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
 /-- The pointwise scalar addition of sets `s +ᵥ t` is defined as `{x +ᵥ y | x ∈ s, y ∈ t}` in locale
 `Pointwise`. -/]
-/--
-Definition of `smul` / `smul` 的定义
-
-English:
-definition smul
-  signature: [SMul α β]
-  body: image2 (· • ·)
-
-scoped[Pointwise] attribute [instance] Set.smulSet Set.smul
-scoped[Pointwise] attribute [instance] Set.vaddSet Set.vadd
-
-中文:
-定义 smul
-  签名: [标量乘法 α β]
-  定义体: image2 (· • ·)
-
-scoped[Pointwise] attribute [instance] Set.smulSet Set.smul
-scoped[Pointwise] attribute [instance] Set.vaddSet Set.vadd
+/-
+**Set.smul** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [SMul α β] → SMul (Set α) (Set β)
+参数：Set α；Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def smul [SMul α β] : SMul (Set α) (Set β) where smul := image2 (· • ·)
 
@@ -115,777 +95,442 @@ scoped[Pointwise] attribute [instance] Set.vaddSet Set.vadd
 open scoped Pointwise
 
 section SMul
-variable {ι : Sort*} {κ : ι -> Sort*} [SMul α β] {s s₁ s₂ : Set α} {t t₁ t₂ u : Set β} {a : α}
+variable {ι : Sort*} {κ : ι → Sort*} [SMul α β] {s s₁ s₂ : Set α} {t t₁ t₂ u : Set β} {a : α}
   {b : β}
 
-/--
-lemma `image2_smul` / 引理 `image2_smul`
-
-English:
-lemma image2_smul
-  statement: image2 (· • ·) s t = s • t
-  proof: rfl
-
-@[to_additive vadd_image_prod]
-
-中文:
-引理 image2_smul
-  结论: image2 (· • ·) s t = s • t
-  证明: rfl
-
-@[to_additive vadd_image_prod]
+/-
+**Set.image2_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β},
+ Set.image2 (fun x1 x2 => x1 • x2) s t = s • t
+参数：fun x1 x2 => x1 • x2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] lemma image2_smul : image2 (· • ·) s t = s • t := rfl
 
 @[to_additive vadd_image_prod]
-/--
-lemma `image_smul_prod` / 引理 `image_smul_prod`
-
-English:
-lemma image_smul_prod
-  statement: (fun x : α × β => x.fst • x.snd) '' s ×ˢ t = s • t
-  proof: image_prod _
-
-中文:
-引理 image_smul_prod
-  结论: (fun x : α × β => x.fst • x.snd) '' s ×ˢ t = s • t
-  证明: image_prod _
-
-Depends on / 依赖: image_prod
+/-
+**Set.image_smul_prod** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：image_smul_prod : (fun x : α × β => x.fst • x.snd) '' s ×ˢ t = s • t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_prod`：image_prod : (fun x : α × β => f x.1 x.2) '' s ×ˢ t = im
+age2 f s t
 -/
-lemma image_smul_prod : (fun x : α × β => x.fst • x.snd) '' s ×ˢ t = s • t := image_prod _
-
-/--
-lemma `mem_smul` / 引理 `mem_smul`
-
-English:
-lemma mem_smul
-  statement: b in s • t ↔ exists x in s, exists y in t, x • y = b
-  proof: Iff.rfl
-
-中文:
-引理 mem_smul
-  结论: b in s • t ↔ 存在 x in s, 存在 y in t, x • y = b
-  证明: Iff.rfl
+lemma image_smul_prod : (fun x : α × β ↦ x.fst • x.snd) '' s ×ˢ t = s • t := image_prod _
+/-
+**Set.mem_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β} 
+{b : β},   b ∈ s • t ↔ ∃ x ∈ s, ∃ y ∈ t, x • y = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_additive] lemma mem_smul : b in s • t ↔ exists x in s, exists y in t, x • y = b := Iff.rfl
-
-/--
-lemma `smul_mem_smul` / 引理 `smul_mem_smul`
-
-English:
-lemma smul_mem_smul
-  statement: a in s -> b in t -> a • b in s • t
-  proof: mem_image2_of_mem
-
-中文:
-引理 smul_mem_smul
-  结论: a in s -> b in t -> a • b in s • t
-  证明: mem_image2_of_mem
+@[to_additive] lemma mem_smul : b ∈ s • t ↔ ∃ x ∈ s, ∃ y ∈ t, x • y = b := Iff.rfl
+/-
+**Set.smul_mem_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β} 
+{a : α} {b : β}, a ∈ s → b ∈ t → a • b ∈ s • t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image2_of_mem`：mem_image2_of_mem (ha : a in s) (hb : b in t) : f
+ a b in image2 f s t
 -/
-@[to_additive] lemma smul_mem_smul : a in s -> b in t -> a • b in s • t := mem_image2_of_mem
-
-/--
-lemma `empty_smul` / 引理 `empty_smul`
-
-English:
-lemma empty_smul
-  statement: (∅ : Set α) • t = ∅
-  proof: image2_empty_left
-
-中文:
-引理 empty_smul
-  结论: (∅ : 集合 α) • t = ∅
-  证明: image2_empty_left
+@[to_additive] lemma smul_mem_smul : a ∈ s → b ∈ t → a • b ∈ s • t := mem_image2_of_mem
+/-
+**Set.empty_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {t : Set β}, ∅ • t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_empty_left`：image2_empty_left : image2 f ∅ t = ∅
 -/
 @[to_additive (attr := simp)] lemma empty_smul : (∅ : Set α) • t = ∅ := image2_empty_left
-/--
-lemma `smul_empty` / 引理 `smul_empty`
-
-English:
-lemma smul_empty
-  statement: s • (∅ : Set β) = ∅
-  proof: image2_empty_right
-
-中文:
-引理 smul_empty
-  结论: s • (∅ : 集合 β) = ∅
-  证明: image2_empty_right
+/-
+**Set.smul_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α}, s • ∅ = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_empty_right`：image2_empty_right : image2 f s ∅ = ∅
 -/
 @[to_additive (attr := simp)] lemma smul_empty : s • (∅ : Set β) = ∅ := image2_empty_right
-
-/--
-lemma `smul_eq_empty` / 引理 `smul_eq_empty`
-
-English:
-lemma smul_eq_empty
-  statement: s • t = ∅ ↔ s = ∅ ∨ t = ∅
-  proof: image2_eq_empty_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_eq_empty
-  结论: s • t = ∅ ↔ s = ∅ ∨ t = ∅
-  证明: image2_eq_empty_iff
-
-@[to_additive (attr := simp)]
+/-
+**Set.smul_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β},
+ s • t = ∅ ↔ s = ∅ ∨ t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_eq_empty_iff`：image2_eq_empty_iff : image2 f s t = ∅ ↔ s = ∅ 
+∨ t = ∅
 -/
 @[to_additive (attr := simp)] lemma smul_eq_empty : s • t = ∅ ↔ s = ∅ ∨ t = ∅ := image2_eq_empty_iff
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_nonempty` / 引理 `smul_nonempty`
-
-English:
-lemma smul_nonempty
-  statement: (s • t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
-  proof: image2_nonempty_iff
-
-中文:
-引理 smul_nonempty
-  结论: (s • t).非空 ↔ s.非空 ∧ t.非空
-  证明: image2_nonempty_iff
-
-Depends on / 依赖: image2_nonempty_iff
+/-
+**Set.smul_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_nonempty : (s • t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_nonempty_iff`：image2_nonempty_iff : (image2 f s t).Nonempty ↔
+ s.Nonempty ∧ t.Nonempty
 -/
 lemma smul_nonempty : (s • t).Nonempty ↔ s.Nonempty ∧ t.Nonempty := image2_nonempty_iff
-
-/--
-lemma `Nonempty.smul` / 引理 `Nonempty.smul`
-
-English:
-lemma Nonempty.smul
-  statement: s.Nonempty -> t.Nonempty -> (s • t).Nonempty
-  proof: .image2
-
-中文:
-引理 非空.smul
-  结论: s.非空 -> t.非空 -> (s • t).非空
-  证明: .image2
+/-
+**Set.Nonempty.smul** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β},
+ s.Nonempty → t.Nonempty → (s • t).Nonempty
+参数：s • t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.image2`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {f :
+ α → β → γ} {s : Set α} {t : Set β},   s.Nonempty → t.Nonempty → (Set.image2 f s
+ t).Nonem…
 -/
-@[to_additive] lemma Nonempty.smul : s.Nonempty -> t.Nonempty -> (s • t).Nonempty := .image2
-/--
-lemma `Nonempty.of_smul_left` / 引理 `Nonempty.of_smul_left`
-
-English:
-lemma Nonempty.of_smul_left
-  statement: (s • t).Nonempty -> s.Nonempty
-  proof: .of_image2_left
-
-中文:
-引理 非空.of_smul_left
-  结论: (s • t).非空 -> s.非空
-  证明: .of_image2_left
+@[to_additive] lemma Nonempty.smul : s.Nonempty → t.Nonempty → (s • t).Nonempty := .image2
+/-
+**Set.Nonempty.of_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β},
+ (s • t).Nonempty → s.Nonempty
+参数：s • t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_image2_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u
+_5} {f : α → β → γ} {s : Set α} {t : Set β},   (Set.image2 f s t).Nonempty → s.N
+onempty
 -/
-@[to_additive] lemma Nonempty.of_smul_left : (s • t).Nonempty -> s.Nonempty := .of_image2_left
-/--
-lemma `Nonempty.of_smul_right` / 引理 `Nonempty.of_smul_right`
-
-English:
-lemma Nonempty.of_smul_right
-  statement: (s • t).Nonempty -> t.Nonempty
-  proof: .of_image2_right
-
-@[to_additive (attr := simp low + 1)]
-
-中文:
-引理 非空.of_smul_right
-  结论: (s • t).非空 -> t.非空
-  证明: .of_image2_right
-
-@[to_additive (attr := simp low + 1)]
+@[to_additive] lemma Nonempty.of_smul_left : (s • t).Nonempty → s.Nonempty := .of_image2_left
+/-
+**Set.Nonempty.of_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t : Set β},
+ (s • t).Nonempty → t.Nonempty
+参数：s • t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_image2_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type 
+u_5} {f : α → β → γ} {s : Set α} {t : Set β},   (Set.image2 f s t).Nonempty → t.
+Nonempty
 -/
-@[to_additive] lemma Nonempty.of_smul_right : (s • t).Nonempty -> t.Nonempty := .of_image2_right
+@[to_additive] lemma Nonempty.of_smul_right : (s • t).Nonempty → t.Nonempty := .of_image2_right
 
 @[to_additive (attr := simp low + 1)]
-/--
-lemma `smul_singleton` / 引理 `smul_singleton`
-
-English:
-lemma smul_singleton
-  statement: s • ({b} : Set β) = (· • b) '' s
-  proof: image2_singleton_right
-
-@[to_additive (attr := simp low + 1)]
-
-中文:
-引理 smul_singleton
-  结论: s • ({b} : 集合 β) = (· • b) '' s
-  证明: image2_singleton_right
-
-@[to_additive (attr := simp low + 1)]
-
-Depends on / 依赖: image2_singleton_right
+/-
+**Set.smul_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_singleton : s • ({b} : Set β) = (· • b) '' s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton_right`：image2_singleton_right : image2 f s {b} = (f
+un a => f a b) '' s
 -/
 lemma smul_singleton : s • ({b} : Set β) = (· • b) '' s := image2_singleton_right
 
 @[to_additive (attr := simp low + 1)]
-/--
-lemma `singleton_smul` / 引理 `singleton_smul`
-
-English:
-lemma singleton_smul
-  statement: ({a} : Set α) • t = a • t
-  proof: image2_singleton_left
-
-@[to_additive (attr := simp high)]
-
-中文:
-引理 singleton_smul
-  结论: ({a} : 集合 α) • t = a • t
-  证明: image2_singleton_left
-
-@[to_additive (attr := simp high)]
-
-Depends on / 依赖: image2_singleton_left
+/-
+**Set.singleton_smul** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：singleton_smul : ({a} : Set α) • t = a • t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton_left`：image2_singleton_left : image2 f {a} t = f a 
+'' t
 -/
 lemma singleton_smul : ({a} : Set α) • t = a • t := image2_singleton_left
 
 @[to_additive (attr := simp high)]
-/--
-lemma `singleton_smul_singleton` / 引理 `singleton_smul_singleton`
-
-English:
-lemma singleton_smul_singleton
-  statement: ({a} : Set α) • ({b} : Set β) = {a • b}
-  proof: image2_singleton
-
-@[to_additive (attr := mono, gcongr)]
-
-中文:
-引理 singleton_smul_singleton
-  结论: ({a} : 集合 α) • ({b} : 集合 β) = {a • b}
-  证明: image2_singleton
-
-@[to_additive (attr := mono, gcongr)]
-
-Depends on / 依赖: image2_singleton
+/-
+**Set.singleton_smul_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：singleton_smul_singleton : ({a} : Set α) • ({b} : Set β) = {a • b}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton`：image2_singleton : image2 f {a} {b} = {f a b}
 -/
 lemma singleton_smul_singleton : ({a} : Set α) • ({b} : Set β) = {a • b} := image2_singleton
 
 @[to_additive (attr := mono, gcongr)]
-/--
-lemma `smul_subset_smul` / 引理 `smul_subset_smul`
-
-English:
-lemma smul_subset_smul
-  statement: s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ • t₁ subseteq s₂ • t₂
-  proof: image2_subset
-
-@[to_additive]
-
-中文:
-引理 smul_subset_smul
-  结论: s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ • t₁ subseteq s₂ • t₂
-  证明: image2_subset
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset
+/-
+**Set.smul_subset_smul** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_subset_smul : s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ • t₁ subseteq s₂
+ • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset`：image2_subset (hs : s subseteq s') (ht : t subseteq t
+') : image2 f s t subseteq image2 f s' t'
 -/
-lemma smul_subset_smul : s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ • t₁ subseteq s₂ • t₂ := image2_subset
+lemma smul_subset_smul : s₁ ⊆ s₂ → t₁ ⊆ t₂ → s₁ • t₁ ⊆ s₂ • t₂ := image2_subset
 
 @[to_additive]
-/--
-lemma `smul_subset_smul_left` / 引理 `smul_subset_smul_left`
-
-English:
-lemma smul_subset_smul_left
-  statement: t₁ subseteq t₂ -> s • t₁ subseteq s • t₂
-  proof: image2_subset_left
-
-@[to_additive]
-
-中文:
-引理 smul_subset_smul_left
-  结论: t₁ subseteq t₂ -> s • t₁ subseteq s • t₂
-  证明: image2_subset_left
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset_left
+/-
+**Set.smul_subset_smul_left** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_subset_smul_left : t₁ subseteq t₂ -> s • t₁ subseteq s • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_left`：image2_subset_left (ht : t subseteq t') : image2
+ f s t subseteq image2 f s t'
 -/
-lemma smul_subset_smul_left : t₁ subseteq t₂ -> s • t₁ subseteq s • t₂ := image2_subset_left
+lemma smul_subset_smul_left : t₁ ⊆ t₂ → s • t₁ ⊆ s • t₂ := image2_subset_left
 
 @[to_additive]
-/--
-lemma `smul_subset_smul_right` / 引理 `smul_subset_smul_right`
-
-English:
-lemma smul_subset_smul_right
-  statement: s₁ subseteq s₂ -> s₁ • t subseteq s₂ • t
-  proof: image2_subset_right
-
-中文:
-引理 smul_subset_smul_right
-  结论: s₁ subseteq s₂ -> s₁ • t subseteq s₂ • t
-  证明: image2_subset_right
-
-Depends on / 依赖: image2_subset_right
+/-
+**Set.smul_subset_smul_right** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_subset_smul_right : s₁ subseteq s₂ -> s₁ • t subseteq s₂ • t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_right`：image2_subset_right (hs : s subseteq s') : imag
+e2 f s t subseteq image2 f s' t
 -/
-lemma smul_subset_smul_right : s₁ subseteq s₂ -> s₁ • t subseteq s₂ • t := image2_subset_right
-
-/--
-lemma `smul_subset_iff` / 引理 `smul_subset_iff`
-
-English:
-lemma smul_subset_iff
-  statement: s • t subseteq u ↔ forall a in s, forall b in t, a • b in u
-  proof: image2_subset_iff
-
-中文:
-引理 smul_subset_iff
-  结论: s • t subseteq u ↔ 对任意 a in s, 对任意 b in t, a • b in u
-  证明: image2_subset_iff
+lemma smul_subset_smul_right : s₁ ⊆ s₂ → s₁ • t ⊆ s₂ • t := image2_subset_right
+/-
+**Set.smul_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t u : Set β
+}, s • t ⊆ u ↔ ∀ a ∈ s, ∀ b ∈ t, a • b ∈ u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_iff`：image2_subset_iff {u : Set γ} : image2 f s t subs
+eteq u ↔ forall x in s, forall y in t, f x y in u
 -/
-@[to_additive] lemma smul_subset_iff : s • t subseteq u ↔ forall a in s, forall b in t, a • b in u := image2_subset_iff
-
-/--
-lemma `union_smul` / 引理 `union_smul`
-
-English:
-lemma union_smul
-  statement: (s₁ union s₂) • t = s₁ • t union s₂ • t
-  proof: image2_union_left
-
-中文:
-引理 union_smul
-  结论: (s₁ union s₂) • t = s₁ • t union s₂ • t
-  证明: image2_union_left
+@[to_additive] lemma smul_subset_iff : s • t ⊆ u ↔ ∀ a ∈ s, ∀ b ∈ t, a • b ∈ u := image2_subset_iff
+/-
+**Set.union_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s₁ s₂ : Set α} {t : Set
+ β}, (s₁ ∪ s₂) • t = s₁ • t ∪ s₂ • t
+参数：s₁ ∪ s₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_left`：image2_union_left : image2 f (s union s') t = ima
+ge2 f s t union image2 f s' t
 -/
-@[to_additive] lemma union_smul : (s₁ union s₂) • t = s₁ • t union s₂ • t := image2_union_left
-/--
-lemma `smul_union` / 引理 `smul_union`
-
-English:
-lemma smul_union
-  statement: s • (t₁ union t₂) = s • t₁ union s • t₂
-  proof: image2_union_right
-
-@[to_additive]
-
-中文:
-引理 smul_union
-  结论: s • (t₁ union t₂) = s • t₁ union s • t₂
-  证明: image2_union_right
-
-@[to_additive]
+@[to_additive] lemma union_smul : (s₁ ∪ s₂) • t = s₁ • t ∪ s₂ • t := image2_union_left
+/-
+**Set.smul_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set α} {t₁ t₂ : Set
+ β}, s • (t₁ ∪ t₂) = s • t₁ ∪ s • t₂
+参数：t₁ ∪ t₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_right`：image2_union_right : image2 f s (t union t') = i
+mage2 f s t union image2 f s t'
 -/
-@[to_additive] lemma smul_union : s • (t₁ union t₂) = s • t₁ union s • t₂ := image2_union_right
+@[to_additive] lemma smul_union : s • (t₁ ∪ t₂) = s • t₁ ∪ s • t₂ := image2_union_right
 
 @[to_additive]
-/--
-lemma `inter_smul_subset` / 引理 `inter_smul_subset`
-
-English:
-lemma inter_smul_subset
-  statement: (s₁ inter s₂) • t subseteq s₁ • t inter s₂ • t
-  proof: image2_inter_subset_left
-
-@[to_additive]
-
-中文:
-引理 inter_smul_subset
-  结论: (s₁ inter s₂) • t subseteq s₁ • t inter s₂ • t
-  证明: image2_inter_subset_left
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_subset_left
+/-
+**Set.inter_smul_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：inter_smul_subset : (s₁ inter s₂) • t subseteq s₁ • t inter s₂ • t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_subset_left`：image2_inter_subset_left : image2 f (s int
+er s') t subseteq image2 f s t inter image2 f s' t
 -/
-lemma inter_smul_subset : (s₁ inter s₂) • t subseteq s₁ • t inter s₂ • t := image2_inter_subset_left
+lemma inter_smul_subset : (s₁ ∩ s₂) • t ⊆ s₁ • t ∩ s₂ • t := image2_inter_subset_left
 
 @[to_additive]
-/--
-lemma `smul_inter_subset` / 引理 `smul_inter_subset`
-
-English:
-lemma smul_inter_subset
-  statement: s • (t₁ inter t₂) subseteq s • t₁ inter s • t₂
-  proof: image2_inter_subset_right
-
-@[to_additive]
-
-中文:
-引理 smul_inter_subset
-  结论: s • (t₁ inter t₂) subseteq s • t₁ inter s • t₂
-  证明: image2_inter_subset_right
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_subset_right
+/-
+**Set.smul_inter_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_inter_subset : s • (t₁ inter t₂) subseteq s • t₁ inter s • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_subset_right`：image2_inter_subset_right : image2 f s (t
+ inter t') subseteq image2 f s t inter image2 f s t'
 -/
-lemma smul_inter_subset : s • (t₁ inter t₂) subseteq s • t₁ inter s • t₂ := image2_inter_subset_right
+lemma smul_inter_subset : s • (t₁ ∩ t₂) ⊆ s • t₁ ∩ s • t₂ := image2_inter_subset_right
 
 @[to_additive]
-/--
-lemma `inter_smul_union_subset_union` / 引理 `inter_smul_union_subset_union`
-
-English:
-lemma inter_smul_union_subset_union
-  statement: (s₁ inter s₂) • (t₁ union t₂) subseteq s₁ • t₁ union s₂ • t₂
-  proof: image2_inter_union_subset_union
-
-@[to_additive]
-
-中文:
-引理 inter_smul_union_subset_union
-  结论: (s₁ inter s₂) • (t₁ union t₂) subseteq s₁ • t₁ union s₂ • t₂
-  证明: image2_inter_union_subset_union
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_union_subset_union
+/-
+**Set.inter_smul_union_subset_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：inter_smul_union_subset_union : (s₁ inter s₂) • (t₁ union t₂) subseteq s₁ 
+• t₁ union s₂ • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_union_subset_union`：image2_inter_union_subset_union : i
+mage2 f (s inter s') (t union t') subseteq image2 f s t union image2 f s' t'
 -/
-lemma inter_smul_union_subset_union : (s₁ inter s₂) • (t₁ union t₂) subseteq s₁ • t₁ union s₂ • t₂ :=
+lemma inter_smul_union_subset_union : (s₁ ∩ s₂) • (t₁ ∪ t₂) ⊆ s₁ • t₁ ∪ s₂ • t₂ :=
   image2_inter_union_subset_union
 
 @[to_additive]
-/--
-lemma `union_smul_inter_subset_union` / 引理 `union_smul_inter_subset_union`
-
-English:
-lemma union_smul_inter_subset_union
-  statement: (s₁ union s₂) • (t₁ inter t₂) subseteq s₁ • t₁ union s₂ • t₂
-  proof: image2_union_inter_subset_union
-
-@[to_additive]
-
-中文:
-引理 union_smul_inter_subset_union
-  结论: (s₁ union s₂) • (t₁ inter t₂) subseteq s₁ • t₁ union s₂ • t₂
-  证明: image2_union_inter_subset_union
-
-@[to_additive]
-
-Depends on / 依赖: image2_union_inter_subset_union
+/-
+**Set.union_smul_inter_subset_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：union_smul_inter_subset_union : (s₁ union s₂) • (t₁ inter t₂) subseteq s₁ 
+• t₁ union s₂ • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_inter_subset_union`：image2_union_inter_subset_union : i
+mage2 f (s union s') (t inter t') subseteq image2 f s t union image2 f s' t'
 -/
-lemma union_smul_inter_subset_union : (s₁ union s₂) • (t₁ inter t₂) subseteq s₁ • t₁ union s₂ • t₂ :=
+lemma union_smul_inter_subset_union : (s₁ ∪ s₂) • (t₁ ∩ t₂) ⊆ s₁ • t₁ ∪ s₂ • t₂ :=
   image2_union_inter_subset_union
 
 @[to_additive]
-/--
-lemma `smul_set_subset_smul` / 引理 `smul_set_subset_smul`
-
-English:
-lemma smul_set_subset_smul
-  given: {s : Set α}
-  statement: a in s -> a • t subseteq s • t
-  proof: image_subset_image2_right
-
-中文:
-引理 smul_set_subset_smul
-  条件: {s : 集合 α}
-  结论: a in s -> a • t subseteq s • t
-  证明: image_subset_image2_right
-
-Depends on / 依赖: image_subset_image2_right
+/-
+**Set.smul_set_subset_smul** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_subset_smul {s : Set α} : a in s -> a • t subseteq s • t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_image2_right`：image_subset_image2_right (ha : a in s) :
+ f a '' t subseteq image2 f s t
 -/
-lemma smul_set_subset_smul {s : Set α} : a in s -> a • t subseteq s • t := image_subset_image2_right
+lemma smul_set_subset_smul {s : Set α} : a ∈ s → a • t ⊆ s • t := image_subset_image2_right
 
 end SMul
 
 section SMulSet
-variable {ι : Sort*} {κ : ι -> Sort*} [SMul α β] {s t t₁ t₂ : Set β} {a : α} {b : β} {x y : β}
+variable {ι : Sort*} {κ : ι → Sort*} [SMul α β] {s t t₁ t₂ : Set β} {a : α} {b : β} {x y : β}
 
-/--
-lemma `image_smul` / 引理 `image_smul`
-
-English:
-lemma image_smul
-  statement: (fun x => a • x) '' t = a • t
-  proof: rfl
+/-
+**Set.image_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {t : Set β} {a : α}, (fu
+n x => a • x) '' t = a • t
+参数：fun x => a • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[to_additive] lemma image_smul : (fun x ↦ a • x) '' t = a • t := rfl
 
 scoped[Pointwise] attribute [simp] Set.image_smul Set.image_vadd
-
-中文:
-引理 image_smul
-  结论: (fun x => a • x) '' t = a • t
-  证明: rfl
-
-scoped[Pointwise] attribute [simp] Set.image_smul Set.image_vadd
+/-
+**Set.mem_smul_set** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {t : Set β} {a : α} {x :
+ β}, x ∈ a • t ↔ ∃ y ∈ t, a • y = x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_additive] lemma image_smul : (fun x => a • x) '' t = a • t := rfl
-
-scoped[Pointwise] attribute [simp] Set.image_smul Set.image_vadd
-
-/--
-lemma `mem_smul_set` / 引理 `mem_smul_set`
-
-English:
-lemma mem_smul_set
-  statement: x in a • t ↔ exists y, y in t ∧ a • y = x
-  proof: Iff.rfl
-
-中文:
-引理 mem_smul_set
-  结论: x in a • t ↔ 存在 y, y in t ∧ a • y = x
-  证明: Iff.rfl
+@[to_additive] lemma mem_smul_set : x ∈ a • t ↔ ∃ y, y ∈ t ∧ a • y = x := Iff.rfl
+/-
+**Set.smul_mem_smul_set** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set β} {a : α} {b :
+ β}, b ∈ s → a • b ∈ a • s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-@[to_additive] lemma mem_smul_set : x in a • t ↔ exists y, y in t ∧ a • y = x := Iff.rfl
-
-/--
-lemma `smul_mem_smul_set` / 引理 `smul_mem_smul_set`
-
-English:
-lemma smul_mem_smul_set
-  statement: b in s -> a • b in a • s
-  proof: mem_image_of_mem _
-
-中文:
-引理 smul_mem_smul_set
-  结论: b in s -> a • b in a • s
-  证明: mem_image_of_mem _
--/
-@[to_additive] lemma smul_mem_smul_set : b in s -> a • b in a • s := mem_image_of_mem _
-
-/--
-lemma `smul_set_empty` / 引理 `smul_set_empty`
-
-English:
-lemma smul_set_empty
-  statement: a • (∅ : Set β) = ∅
-  proof: image_empty _
-
-中文:
-引理 smul_set_empty
-  结论: a • (∅ : 集合 β) = ∅
-  证明: image_empty _
+@[to_additive] lemma smul_mem_smul_set : b ∈ s → a • b ∈ a • s := mem_image_of_mem _
+/-
+**Set.smul_set_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a : α}, a • ∅ = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
 -/
 @[to_additive (attr := simp)] lemma smul_set_empty : a • (∅ : Set β) = ∅ := image_empty _
-/--
-lemma `smul_set_eq_empty` / 引理 `smul_set_eq_empty`
-
-English:
-lemma smul_set_eq_empty
-  statement: a • s = ∅ ↔ s = ∅
-  proof: image_eq_empty
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_set_eq_empty
-  结论: a • s = ∅ ↔ s = ∅
-  证明: image_eq_empty
-
-@[to_additive (attr := simp)]
+/-
+**Set.smul_set_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set β} {a : α}, a •
+ s = ∅ ↔ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_eq_empty`：image_eq_empty {α β} {f : α -> β} {s : Set α} : f ''
+ s = ∅ ↔ s = ∅
 -/
 @[to_additive (attr := simp)] lemma smul_set_eq_empty : a • s = ∅ ↔ s = ∅ := image_eq_empty
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_set_nonempty` / 引理 `smul_set_nonempty`
-
-English:
-lemma smul_set_nonempty
-  statement: (a • s).Nonempty ↔ s.Nonempty
-  proof: image_nonempty
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_set_nonempty
-  结论: (a • s).非空 ↔ s.非空
-  证明: image_nonempty
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image_nonempty
+/-
+**Set.smul_set_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_nonempty : (a • s).Nonempty ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_nonempty`：image_nonempty {f : α -> β} {s : Set α} : (f '' s).N
+onempty ↔ s.Nonempty
 -/
 lemma smul_set_nonempty : (a • s).Nonempty ↔ s.Nonempty := image_nonempty
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_set_singleton` / 引理 `smul_set_singleton`
-
-English:
-lemma smul_set_singleton
-  statement: a • ({b} : Set β) = {a • b}
-  proof: image_singleton
-
-中文:
-引理 smul_set_singleton
-  结论: a • ({b} : 集合 β) = {a • b}
-  证明: image_singleton
-
-Depends on / 依赖: image_singleton
+/-
+**Set.smul_set_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_singleton : a • ({b} : Set β) = {a • b}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
 -/
 lemma smul_set_singleton : a • ({b} : Set β) = {a • b} := image_singleton
-
-/--
-lemma `smul_set_mono` / 引理 `smul_set_mono`
-
-English:
-lemma smul_set_mono
-  statement: s subseteq t -> a • s subseteq a • t
-  proof: image_mono
-
-@[to_additive]
-
-中文:
-引理 smul_set_mono
-  结论: s subseteq t -> a • s subseteq a • t
-  证明: image_mono
-
-@[to_additive]
+/-
+**Set.smul_set_mono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s t : Set β} {a : α}, s
+ ⊆ t → a • s ⊆ a • t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-@[to_additive (attr := gcongr)] lemma smul_set_mono : s subseteq t -> a • s subseteq a • t := image_mono
+@[to_additive (attr := gcongr)] lemma smul_set_mono : s ⊆ t → a • s ⊆ a • t := image_mono
 
 @[to_additive]
-/--
-lemma `smul_set_subset_iff` / 引理 `smul_set_subset_iff`
-
-English:
-lemma smul_set_subset_iff
-  statement: a • s subseteq t ↔ forall ⦃b⦄, b in s -> a • b in t
-  proof: image_subset_iff
-
-@[to_additive]
-
-中文:
-引理 smul_set_subset_iff
-  结论: a • s subseteq t ↔ 对任意 ⦃b⦄, b in s -> a • b in t
-  证明: image_subset_iff
-
-@[to_additive]
-
-Depends on / 依赖: image_subset_iff
+/-
+**Set.smul_set_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_subset_iff : a • s subseteq t ↔ forall ⦃b⦄, b in s -> a • b in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
-lemma smul_set_subset_iff : a • s subseteq t ↔ forall ⦃b⦄, b in s -> a • b in t :=
+lemma smul_set_subset_iff : a • s ⊆ t ↔ ∀ ⦃b⦄, b ∈ s → a • b ∈ t :=
   image_subset_iff
 
 @[to_additive]
-/--
-lemma `smul_set_union` / 引理 `smul_set_union`
-
-English:
-lemma smul_set_union
-  statement: a • (t₁ union t₂) = a • t₁ union a • t₂
-  proof: image_union ..
-
-@[to_additive]
-
-中文:
-引理 smul_set_union
-  结论: a • (t₁ union t₂) = a • t₁ union a • t₂
-  证明: image_union ..
-
-@[to_additive]
-
-Depends on / 依赖: image_union
+/-
+**Set.smul_set_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_union : a • (t₁ union t₂) = a • t₁ union a • t₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
 -/
-lemma smul_set_union : a • (t₁ union t₂) = a • t₁ union a • t₂ :=
+lemma smul_set_union : a • (t₁ ∪ t₂) = a • t₁ ∪ a • t₂ :=
   image_union ..
 
 @[to_additive]
-/--
-lemma `smul_set_insert` / 引理 `smul_set_insert`
-
-English:
-lemma smul_set_insert
-  given: (a : α) (b : β) (s : Set β)
-  statement: a • insert b s = insert (a • b) (a • s)
-  proof: image_insert_eq ..
-
-@[to_additive]
-
-中文:
-引理 smul_set_insert
-  条件: (a : α) (b : β) (s : 集合 β)
-  结论: a • insert b s = insert (a • b) (a • s)
-  证明: image_insert_eq ..
-
-@[to_additive]
-
-Depends on / 依赖: image_insert_eq
+/-
+**Set.smul_set_insert** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_insert (a : α) (b : β) (s : Set β) : a • insert b s = insert (a •
+ b) (a • s)
+参数：a : α；b : β；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_insert_eq`：image_insert_eq {f : α -> β} {a : α} {s : Set α} : 
+f '' insert a s = insert (f a) (f '' s)
 -/
 lemma smul_set_insert (a : α) (b : β) (s : Set β) : a • insert b s = insert (a • b) (a • s) :=
   image_insert_eq ..
 
 @[to_additive]
-/--
-lemma `smul_set_inter_subset` / 引理 `smul_set_inter_subset`
-
-English:
-lemma smul_set_inter_subset
-  statement: a • (t₁ inter t₂) subseteq a • t₁ inter a • t₂
-  proof: image_inter_subset ..
-
-中文:
-引理 smul_set_inter_subset
-  结论: a • (t₁ inter t₂) subseteq a • t₁ inter a • t₂
-  证明: image_inter_subset ..
-
-Depends on / 依赖: image_inter_subset
+/-
+**Set.smul_set_inter_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_inter_subset : a • (t₁ inter t₂) subseteq a • t₁ inter a • t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_inter_subset`：image_inter_subset (f : α -> β) (s t : Set α) : 
+f '' (s inter t) subseteq f '' s inter f '' t
 -/
-lemma smul_set_inter_subset : a • (t₁ inter t₂) subseteq a • t₁ inter a • t₂ :=
+lemma smul_set_inter_subset : a • (t₁ ∩ t₂) ⊆ a • t₁ ∩ a • t₂ :=
   image_inter_subset ..
-
-/--
-lemma `Nonempty.smul_set` / 引理 `Nonempty.smul_set`
-
-English:
-lemma Nonempty.smul_set
-  statement: s.Nonempty -> (a • s).Nonempty
-  proof: Nonempty.image _
-
-中文:
-引理 非空.smul_set
-  结论: s.非空 -> (a • s).非空
-  证明: Nonempty.image _
+/-
+**Set.Nonempty.smul_set** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s : Set β} {a : α}, s.N
+onempty → (a • s).Nonempty
+参数：a • s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {s : Set
+ α}, s.Nonempty → (f '' s).Nonempty
 -/
-@[to_additive] lemma Nonempty.smul_set : s.Nonempty -> (a • s).Nonempty := Nonempty.image _
+@[to_additive] lemma Nonempty.smul_set : s.Nonempty → (a • s).Nonempty := Nonempty.image _
 
 end SMulSet
 
 section Pi
 
-variable {M ι : Type*} {π : ι -> Type*} [forall i, SMul M (π i)]
+variable {M ι : Type*} {π : ι → Type*} [∀ i, SMul M (π i)]
 
 @[to_additive]
-/--
-theorem `smul_set_pi_of_surjective` / 定理 `smul_set_pi_of_surjective`
-
-English:
-theorem smul_set_pi_of_surjective
-  statement: (c : M) (I : Set ι) (s : forall i, Set (π i))
-  proof: piMap_image_pi hsurj s
-
-@[to_additive]
-
-中文:
-定理 smul_set_pi_of_surjective
-  结论: (c : M) (I : 集合 ι) (s : 对任意 i, 集合 (π i))
-  证明: piMap_image_pi hsurj s
-
-@[to_additive]
-
-Depends on / 依赖: piMap_image_pi
+/-
+**Set.smul_set_pi_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：smul_set_pi_of_surjective (c : M) (I : Set ι) (s : forall i, Set (π i)) (h
+surj : forall i ∉ I, Function.Surjective (c • · : π i -> π i)) : c • I.pi s = I.
+pi (c • s)
+参数：c : M；I : Set ι；s : forall i, Set (π i)；hsurj : forall i ∉ I, Function.Surjec
+tive (c • · : π i -> π i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_pi`：piMap_image_pi {f : forall i, α i -> β i} (hf : fora
+ll i ∉ s, Surjective (f i)) (t : forall i, Set (α i)) : Pi.map f '' s.pi t = s.p
+i fun i …
 -/
-theorem smul_set_pi_of_surjective (c : M) (I : Set ι) (s : forall i, Set (π i))
-    (hsurj : forall i ∉ I, Function.Surjective (c • · : π i -> π i)) : c • I.pi s = I.pi (c • s) :=
+theorem smul_set_pi_of_surjective (c : M) (I : Set ι) (s : ∀ i, Set (π i))
+    (hsurj : ∀ i ∉ I, Function.Surjective (c • · : π i → π i)) : c • I.pi s = I.pi (c • s) :=
   piMap_image_pi hsurj s
 
 @[to_additive]
-/--
-theorem `smul_set_univ_pi` / 定理 `smul_set_univ_pi`
-
-English:
-theorem smul_set_univ_pi
-  given: (c : M) (s : forall i, Set (π i))
-  statement: c • univ.pi s = univ.pi (c • s)
-  proof: piMap_image_univ_pi _ s
-
-中文:
-定理 smul_set_univ_pi
-  条件: (c : M) (s : 对任意 i, 集合 (π i))
-  结论: c • univ.pi s = univ.pi (c • s)
-  证明: piMap_image_univ_pi _ s
-
-Depends on / 依赖: piMap_image_univ_pi
+/-
+**Set.smul_set_univ_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：smul_set_univ_pi (c : M) (s : forall i, Set (π i)) : c • univ.pi s = univ.
+pi (c • s)
+参数：c : M；s : forall i, Set (π i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_univ_pi`：piMap_image_univ_pi (f : forall i, α i -> β i) 
+(t : forall i, Set (α i)) : Pi.map f '' univ.pi t = univ.pi fun i => f i '' t i
 -/
-theorem smul_set_univ_pi (c : M) (s : forall i, Set (π i)) : c • univ.pi s = univ.pi (c • s) :=
+theorem smul_set_univ_pi (c : M) (s : ∀ i, Set (π i)) : c • univ.pi s = univ.pi (c • s) :=
   piMap_image_univ_pi _ s
 
 end Pi
@@ -893,649 +538,348 @@ end Pi
 variable {s : Set α} {t : Set β} {a : α} {b : β}
 
 @[to_additive]
-/--
-lemma `range_smul_range` / 引理 `range_smul_range`
-
-English:
-lemma range_smul_range
-  given: {ι κ : Type*} [SMul α β] (b : ι -> α) (c : κ -> β)
-  proof: image2_range ..
-
-@[to_additive]
-
-中文:
-引理 range_smul_range
-  条件: {ι κ : 类型} [标量乘法 α β] (b : ι -> α) (c : κ -> β)
-  证明: image2_range ..
-
-@[to_additive]
-
-Depends on / 依赖: image2_range
+/-
+**Set.range_smul_range** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：range_smul_range {ι κ : Type*} [SMul α β] (b : ι -> α) (c : κ -> β) : rang
+e b • range c = range fun p : ι × κ => b p.1 • c p.2
+参数：b : ι -> α；c : κ -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image2_range`：image2_range (f : α' -> β' -> γ) (g : α -> α') (h : β 
+-> β') : image2 f (range g) (range h) = range fun x : α × β => f (g x.1) (h x.2)
 -/
-lemma range_smul_range {ι κ : Type*} [SMul α β] (b : ι -> α) (c : κ -> β) :
-    range b • range c = range fun p : ι × κ => b p.1 • c p.2 :=
+lemma range_smul_range {ι κ : Type*} [SMul α β] (b : ι → α) (c : κ → β) :
+    range b • range c = range fun p : ι × κ ↦ b p.1 • c p.2 :=
   image2_range ..
 
 @[to_additive]
-/--
-lemma `smul_set_range` / 引理 `smul_set_range`
-
-English:
-lemma smul_set_range
-  given: [SMul α β] {ι : Sort*} (a : α) (f : ι -> β)
-  proof: (range_comp ..).symm
-
-中文:
-引理 smul_set_range
-  条件: [标量乘法 α β] {ι : 类型层*} (a : α) (f : ι -> β)
-  证明: (range_comp ..).symm
-
-Depends on / 依赖: range_comp
+/-
+**Set.smul_set_range** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：smul_set_range [SMul α β] {ι : Sort*} (a : α) (f : ι -> β) : a • range f =
+ range fun i => a • f i
+参数：a : α；f : ι -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-lemma smul_set_range [SMul α β] {ι : Sort*} (a : α) (f : ι -> β) :
-    a • range f = range fun i => a • f i :=
+lemma smul_set_range [SMul α β] {ι : Sort*} (a : α) (f : ι → β) :
+    a • range f = range fun i ↦ a • f i :=
   (range_comp ..).symm
-
-/--
-lemma `range_smul` / 引理 `range_smul`
-
-English:
-lemma range_smul
-  given: [SMul α β] {ι : Sort*} (a : α) (f : ι -> β)
-  proof: (smul_set_range ..).symm
-
-中文:
-引理 range_smul
-  条件: [标量乘法 α β] {ι : 类型层*} (a : α) (f : ι -> β)
-  证明: (smul_set_range ..).symm
+/-
+**Set.range_smul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {ι : Sort u_5} (a : α) (
+f : ι → β),   (Set.range fun i => a • f i) = a • Set.range f
+参数：a : α；f : ι → β；Set.range fun i => a • f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.smul_set_range`：smul_set_range [SMul α β] {ι : Sort*} (a : α) (f : ι
+ -> β) : a • range f = range fun i => a • f i
 -/
-@[to_additive] lemma range_smul [SMul α β] {ι : Sort*} (a : α) (f : ι -> β) :
-    range (fun i => a • f i) = a • range f := (smul_set_range ..).symm
+@[to_additive] lemma range_smul [SMul α β] {ι : Sort*} (a : α) (f : ι → β) :
+    range (fun i ↦ a • f i) = a • range f := (smul_set_range ..).symm
 
 end SMul
 
 section SDiv
-variable {ι : Sort*} {κ : ι -> Sort*} [SDiv α β] {s s₁ s₂ t t₁ t₂ : Set β} {u : Set α} {a : α}
+variable {ι : Sort*} {κ : ι → Sort*} [SDiv α β] {s s₁ s₂ t t₁ t₂ : Set β} {u : Set α} {a : α}
   {b c : β}
 
 @[to_additive]
-/--
-Instance `sdiv` / 实例 `sdiv`
-
-English:
-instance sdiv
-  signature: : SDiv (Set α) (Set β) where sdiv
-  body: image2 (· /ₛ ·)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 sdiv
-  签名: : SDiv (集合 α) (集合 β) where sdiv
-  定义体: image2 (· /ₛ ·)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image2
+/-
+**Set.sdiv** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：sdiv : SDiv (Set α) (Set β) where sdiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sdiv : SDiv (Set α) (Set β) where sdiv := image2 (· /ₛ ·)
 
 @[to_additive (attr := simp)]
-/--
-lemma `image2_sdiv` / 引理 `image2_sdiv`
-
-English:
-lemma image2_sdiv
-  statement: image2 (· /ₛ ·) s t = s /ₛ t
-  proof: rfl
-
-@[to_additive Set.image_vsub_prod]
-
-中文:
-引理 image2_sdiv
-  结论: image2 (· /ₛ ·) s t = s /ₛ t
-  证明: rfl
-
-@[to_additive Set.image_vsub_prod]
+/-
+**Set.image2_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：image2_sdiv : image2 (· /ₛ ·) s t = s /ₛ t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma image2_sdiv : image2 (· /ₛ ·) s t = s /ₛ t := rfl
 
 @[to_additive Set.image_vsub_prod]
-/--
-lemma `image_sdiv_prod` / 引理 `image_sdiv_prod`
-
-English:
-lemma image_sdiv_prod
-  statement: (fun x : β × β => x.fst /ₛ x.snd) '' s ×ˢ t = s /ₛ t
-  proof: image_prod _
-
-@[to_additive]
-
-中文:
-引理 image_sdiv_prod
-  结论: (fun x : β × β => x.fst /ₛ x.snd) '' s ×ˢ t = s /ₛ t
-  证明: image_prod _
-
-@[to_additive]
-
-Depends on / 依赖: image_prod
+/-
+**Set.image_sdiv_prod** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：image_sdiv_prod : (fun x : β × β => x.fst /ₛ x.snd) '' s ×ˢ t = s /ₛ t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_prod`：image_prod : (fun x : α × β => f x.1 x.2) '' s ×ˢ t = im
+age2 f s t
 -/
-lemma image_sdiv_prod : (fun x : β × β => x.fst /ₛ x.snd) '' s ×ˢ t = s /ₛ t := image_prod _
+lemma image_sdiv_prod : (fun x : β × β ↦ x.fst /ₛ x.snd) '' s ×ˢ t = s /ₛ t := image_prod _
 
 @[to_additive]
-/--
-lemma `mem_sdiv` / 引理 `mem_sdiv`
-
-English:
-lemma mem_sdiv
-  statement: a in s /ₛ t ↔ exists x in s, exists y in t, x /ₛ y = a
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-引理 mem_sdiv
-  结论: a in s /ₛ t ↔ 存在 x in s, 存在 y in t, x /ₛ y = a
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：mem_sdiv : a in s /ₛ t ↔ exists x in s, exists y in t, x /ₛ y = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_sdiv : a in s /ₛ t ↔ exists x in s, exists y in t, x /ₛ y = a := Iff.rfl
+lemma mem_sdiv : a ∈ s /ₛ t ↔ ∃ x ∈ s, ∃ y ∈ t, x /ₛ y = a := Iff.rfl
 
 @[to_additive]
-/--
-lemma `sdiv_mem_sdiv` / 引理 `sdiv_mem_sdiv`
-
-English:
-lemma sdiv_mem_sdiv
-  given: (hb : b in s) (hc : c in t)
-  statement: b /ₛ c in s /ₛ t
-  proof: mem_image2_of_mem hb hc
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 sdiv_mem_sdiv
-  条件: (hb : b in s) (hc : c in t)
-  结论: b /ₛ c in s /ₛ t
-  证明: mem_image2_of_mem hb hc
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mem_image2_of_mem
+/-
+**Set.sdiv_mem_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_mem_sdiv (hb : b in s) (hc : c in t) : b /ₛ c in s /ₛ t
+参数：hb : b in s；hc : c in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image2_of_mem`：mem_image2_of_mem (ha : a in s) (hb : b in t) : f
+ a b in image2 f s t
 -/
-lemma sdiv_mem_sdiv (hb : b in s) (hc : c in t) : b /ₛ c in s /ₛ t := mem_image2_of_mem hb hc
+lemma sdiv_mem_sdiv (hb : b ∈ s) (hc : c ∈ t) : b /ₛ c ∈ s /ₛ t := mem_image2_of_mem hb hc
 
 @[to_additive (attr := simp)]
-/--
-lemma `empty_sdiv` / 引理 `empty_sdiv`
-
-English:
-lemma empty_sdiv
-  given: (t : Set β)
-  statement: ∅ /ₛ t = ∅
-  proof: image2_empty_left
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 empty_sdiv
-  条件: (t : 集合 β)
-  结论: ∅ /ₛ t = ∅
-  证明: image2_empty_left
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image2_empty_left
+/-
+**Set.empty_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：empty_sdiv (t : Set β) : ∅ /ₛ t = ∅
+参数：t : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_empty_left`：image2_empty_left : image2 f ∅ t = ∅
 -/
 lemma empty_sdiv (t : Set β) : ∅ /ₛ t = ∅ := image2_empty_left
 
 @[to_additive (attr := simp)]
-/--
-lemma `sdiv_empty` / 引理 `sdiv_empty`
-
-English:
-lemma sdiv_empty
-  given: (s : Set β)
-  statement: s /ₛ ∅ = ∅
-  proof: image2_empty_right
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 sdiv_empty
-  条件: (s : 集合 β)
-  结论: s /ₛ ∅ = ∅
-  证明: image2_empty_right
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image2_empty_right
+/-
+**Set.sdiv_empty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_empty (s : Set β) : s /ₛ ∅ = ∅
+参数：s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_empty_right`：image2_empty_right : image2 f s ∅ = ∅
 -/
 lemma sdiv_empty (s : Set β) : s /ₛ ∅ = ∅ := image2_empty_right
 
 @[to_additive (attr := simp)]
-/--
-lemma `sdiv_eq_empty` / 引理 `sdiv_eq_empty`
-
-English:
-lemma sdiv_eq_empty
-  statement: s /ₛ t = ∅ ↔ s = ∅ ∨ t = ∅
-  proof: image2_eq_empty_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 sdiv_eq_empty
-  结论: s /ₛ t = ∅ ↔ s = ∅ ∨ t = ∅
-  证明: image2_eq_empty_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image2_eq_empty_iff
+/-
+**Set.sdiv_eq_empty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_eq_empty : s /ₛ t = ∅ ↔ s = ∅ ∨ t = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_eq_empty_iff`：image2_eq_empty_iff : image2 f s t = ∅ ↔ s = ∅ 
+∨ t = ∅
 -/
 lemma sdiv_eq_empty : s /ₛ t = ∅ ↔ s = ∅ ∨ t = ∅ := image2_eq_empty_iff
 
 @[to_additive (attr := simp)]
-/--
-lemma `sdiv_nonempty` / 引理 `sdiv_nonempty`
-
-English:
-lemma sdiv_nonempty
-  statement: (s /ₛ t : Set α).Nonempty ↔ s.Nonempty ∧ t.Nonempty
-  proof: image2_nonempty_iff
-
-@[to_additive]
-
-中文:
-引理 sdiv_nonempty
-  结论: (s /ₛ t : 集合 α).非空 ↔ s.非空 ∧ t.非空
-  证明: image2_nonempty_iff
-
-@[to_additive]
-
-Depends on / 依赖: image2_nonempty_iff
+/-
+**Set.sdiv_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_nonempty : (s /ₛ t : Set α).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_nonempty_iff`：image2_nonempty_iff : (image2 f s t).Nonempty ↔
+ s.Nonempty ∧ t.Nonempty
 -/
 lemma sdiv_nonempty : (s /ₛ t : Set α).Nonempty ↔ s.Nonempty ∧ t.Nonempty := image2_nonempty_iff
 
 @[to_additive]
-/--
-lemma `Nonempty.sdiv` / 引理 `Nonempty.sdiv`
-
-English:
-lemma Nonempty.sdiv
-  statement: s.Nonempty -> t.Nonempty -> (s /ₛ t : Set α).Nonempty
-  proof: .image2
-
-@[to_additive]
-
-中文:
-引理 非空.sdiv
-  结论: s.非空 -> t.非空 -> (s /ₛ t : 集合 α).非空
-  证明: .image2
-
-@[to_additive]
-
-Depends on / 依赖: image2
+/-
+**Set.Nonempty.sdiv** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SDiv α β] {s t : Set β}, s.Nonempt
+y → t.Nonempty → (s /ₛ t).Nonempty
+参数：s /ₛ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.image2`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {f :
+ α → β → γ} {s : Set α} {t : Set β},   s.Nonempty → t.Nonempty → (Set.image2 f s
+ t).Nonem…
 -/
-lemma Nonempty.sdiv : s.Nonempty -> t.Nonempty -> (s /ₛ t : Set α).Nonempty := .image2
+lemma Nonempty.sdiv : s.Nonempty → t.Nonempty → (s /ₛ t : Set α).Nonempty := .image2
 
 @[to_additive]
-/--
-lemma `Nonempty.of_sdiv_left` / 引理 `Nonempty.of_sdiv_left`
-
-English:
-lemma Nonempty.of_sdiv_left
-  statement: (s /ₛ t : Set α).Nonempty -> s.Nonempty
-  proof: .of_image2_left
-
-@[to_additive]
-
-中文:
-引理 非空.of_sdiv_left
-  结论: (s /ₛ t : 集合 α).非空 -> s.非空
-  证明: .of_image2_left
-
-@[to_additive]
-
-Depends on / 依赖: of_image2_left
+/-
+**Set.Nonempty.of_sdiv_left** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SDiv α β] {s t : Set β}, (s /ₛ t).
+Nonempty → s.Nonempty
+参数：s /ₛ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_image2_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u
+_5} {f : α → β → γ} {s : Set α} {t : Set β},   (Set.image2 f s t).Nonempty → s.N
+onempty
 -/
-lemma Nonempty.of_sdiv_left : (s /ₛ t : Set α).Nonempty -> s.Nonempty := .of_image2_left
+lemma Nonempty.of_sdiv_left : (s /ₛ t : Set α).Nonempty → s.Nonempty := .of_image2_left
 
 @[to_additive]
-/--
-lemma `Nonempty.of_sdiv_right` / 引理 `Nonempty.of_sdiv_right`
-
-English:
-lemma Nonempty.of_sdiv_right
-  statement: (s /ₛ t : Set α).Nonempty -> t.Nonempty
-  proof: .of_image2_right
-
-@[to_additive (attr := simp low + 1)]
-
-中文:
-引理 非空.of_sdiv_right
-  结论: (s /ₛ t : 集合 α).非空 -> t.非空
-  证明: .of_image2_right
-
-@[to_additive (attr := simp low + 1)]
-
-Depends on / 依赖: of_image2_right
+/-
+**Set.Nonempty.of_sdiv_right** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SDiv α β] {s t : Set β}, (s /ₛ t).
+Nonempty → t.Nonempty
+参数：s /ₛ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_image2_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type 
+u_5} {f : α → β → γ} {s : Set α} {t : Set β},   (Set.image2 f s t).Nonempty → t.
+Nonempty
 -/
-lemma Nonempty.of_sdiv_right : (s /ₛ t : Set α).Nonempty -> t.Nonempty := .of_image2_right
+lemma Nonempty.of_sdiv_right : (s /ₛ t : Set α).Nonempty → t.Nonempty := .of_image2_right
 
 @[to_additive (attr := simp low + 1)]
-/--
-lemma `sdiv_singleton` / 引理 `sdiv_singleton`
-
-English:
-lemma sdiv_singleton
-  given: (s : Set β) (b : β)
-  statement: s /ₛ {b} = (· /ₛ b) '' s
-  proof: image2_singleton_right
-
-@[to_additive (attr := simp low + 1)]
-
-中文:
-引理 sdiv_singleton
-  条件: (s : 集合 β) (b : β)
-  结论: s /ₛ {b} = (· /ₛ b) '' s
-  证明: image2_singleton_right
-
-@[to_additive (attr := simp low + 1)]
-
-Depends on / 依赖: image2_singleton_right
+/-
+**Set.sdiv_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_singleton (s : Set β) (b : β) : s /ₛ {b} = (· /ₛ b) '' s
+参数：s : Set β；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton_right`：image2_singleton_right : image2 f s {b} = (f
+un a => f a b) '' s
 -/
 lemma sdiv_singleton (s : Set β) (b : β) : s /ₛ {b} = (· /ₛ b) '' s := image2_singleton_right
 
 @[to_additive (attr := simp low + 1)]
-/--
-lemma `singleton_sdiv` / 引理 `singleton_sdiv`
-
-English:
-lemma singleton_sdiv
-  given: (t : Set β) (b : β)
-  statement: {b} /ₛ t = (b /ₛ ·) '' t
-  proof: image2_singleton_left
-
-@[to_additive (attr := simp high)]
-
-中文:
-引理 singleton_sdiv
-  条件: (t : 集合 β) (b : β)
-  结论: {b} /ₛ t = (b /ₛ ·) '' t
-  证明: image2_singleton_left
-
-@[to_additive (attr := simp high)]
-
-Depends on / 依赖: image2_singleton_left
+/-
+**Set.singleton_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：singleton_sdiv (t : Set β) (b : β) : {b} /ₛ t = (b /ₛ ·) '' t
+参数：t : Set β；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton_left`：image2_singleton_left : image2 f {a} t = f a 
+'' t
 -/
 lemma singleton_sdiv (t : Set β) (b : β) : {b} /ₛ t = (b /ₛ ·) '' t := image2_singleton_left
 
 @[to_additive (attr := simp high)]
-/--
-lemma `singleton_sdiv_singleton` / 引理 `singleton_sdiv_singleton`
-
-English:
-lemma singleton_sdiv_singleton
-  statement: ({b} : Set β) /ₛ {c} = {b /ₛ c}
-  proof: image2_singleton
-
-@[to_additive (attr := mono, gcongr)]
-
-中文:
-引理 singleton_sdiv_singleton
-  结论: ({b} : 集合 β) /ₛ {c} = {b /ₛ c}
-  证明: image2_singleton
-
-@[to_additive (attr := mono, gcongr)]
-
-Depends on / 依赖: image2_singleton
+/-
+**Set.singleton_sdiv_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：singleton_sdiv_singleton : ({b} : Set β) /ₛ {c} = {b /ₛ c}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_singleton`：image2_singleton : image2 f {a} {b} = {f a b}
 -/
 lemma singleton_sdiv_singleton : ({b} : Set β) /ₛ {c} = {b /ₛ c} := image2_singleton
 
 @[to_additive (attr := mono, gcongr)]
-/--
-lemma `sdiv_subset_sdiv` / 引理 `sdiv_subset_sdiv`
-
-English:
-lemma sdiv_subset_sdiv
-  statement: s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ /ₛ t₁ subseteq s₂ /ₛ t₂
-  proof: image2_subset
-
-@[to_additive]
-
-中文:
-引理 sdiv_subset_sdiv
-  结论: s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ /ₛ t₁ subseteq s₂ /ₛ t₂
-  证明: image2_subset
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset
+/-
+**Set.sdiv_subset_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_subset_sdiv : s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ /ₛ t₁ subseteq s
+₂ /ₛ t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset`：image2_subset (hs : s subseteq s') (ht : t subseteq t
+') : image2 f s t subseteq image2 f s' t'
 -/
-lemma sdiv_subset_sdiv : s₁ subseteq s₂ -> t₁ subseteq t₂ -> s₁ /ₛ t₁ subseteq s₂ /ₛ t₂ := image2_subset
+lemma sdiv_subset_sdiv : s₁ ⊆ s₂ → t₁ ⊆ t₂ → s₁ /ₛ t₁ ⊆ s₂ /ₛ t₂ := image2_subset
 
 @[to_additive]
-/--
-lemma `sdiv_subset_sdiv_left` / 引理 `sdiv_subset_sdiv_left`
-
-English:
-lemma sdiv_subset_sdiv_left
-  statement: t₁ subseteq t₂ -> s /ₛ t₁ subseteq s /ₛ t₂
-  proof: image2_subset_left
-
-@[to_additive]
-
-中文:
-引理 sdiv_subset_sdiv_left
-  结论: t₁ subseteq t₂ -> s /ₛ t₁ subseteq s /ₛ t₂
-  证明: image2_subset_left
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset_left
+/-
+**Set.sdiv_subset_sdiv_left** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_subset_sdiv_left : t₁ subseteq t₂ -> s /ₛ t₁ subseteq s /ₛ t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_left`：image2_subset_left (ht : t subseteq t') : image2
+ f s t subseteq image2 f s t'
 -/
-lemma sdiv_subset_sdiv_left : t₁ subseteq t₂ -> s /ₛ t₁ subseteq s /ₛ t₂ := image2_subset_left
+lemma sdiv_subset_sdiv_left : t₁ ⊆ t₂ → s /ₛ t₁ ⊆ s /ₛ t₂ := image2_subset_left
 
 @[to_additive]
-/--
-lemma `sdiv_subset_sdiv_right` / 引理 `sdiv_subset_sdiv_right`
-
-English:
-lemma sdiv_subset_sdiv_right
-  statement: s₁ subseteq s₂ -> s₁ /ₛ t subseteq s₂ /ₛ t
-  proof: image2_subset_right
-
-@[to_additive]
-
-中文:
-引理 sdiv_subset_sdiv_right
-  结论: s₁ subseteq s₂ -> s₁ /ₛ t subseteq s₂ /ₛ t
-  证明: image2_subset_right
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset_right
+/-
+**Set.sdiv_subset_sdiv_right** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_subset_sdiv_right : s₁ subseteq s₂ -> s₁ /ₛ t subseteq s₂ /ₛ t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_right`：image2_subset_right (hs : s subseteq s') : imag
+e2 f s t subseteq image2 f s' t
 -/
-lemma sdiv_subset_sdiv_right : s₁ subseteq s₂ -> s₁ /ₛ t subseteq s₂ /ₛ t := image2_subset_right
+lemma sdiv_subset_sdiv_right : s₁ ⊆ s₂ → s₁ /ₛ t ⊆ s₂ /ₛ t := image2_subset_right
 
 @[to_additive]
-/--
-lemma `sdiv_subset_iff` / 引理 `sdiv_subset_iff`
-
-English:
-lemma sdiv_subset_iff
-  statement: s /ₛ t subseteq u ↔ forall x in s, forall y in t, x /ₛ y in u
-  proof: image2_subset_iff
-
-@[to_additive]
-
-中文:
-引理 sdiv_subset_iff
-  结论: s /ₛ t subseteq u ↔ 对任意 x in s, 对任意 y in t, x /ₛ y in u
-  证明: image2_subset_iff
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset_iff
+/-
+**Set.sdiv_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_subset_iff : s /ₛ t subseteq u ↔ forall x in s, forall y in t, x /ₛ y
+ in u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_subset_iff`：image2_subset_iff {u : Set γ} : image2 f s t subs
+eteq u ↔ forall x in s, forall y in t, f x y in u
 -/
-lemma sdiv_subset_iff : s /ₛ t subseteq u ↔ forall x in s, forall y in t, x /ₛ y in u := image2_subset_iff
+lemma sdiv_subset_iff : s /ₛ t ⊆ u ↔ ∀ x ∈ s, ∀ y ∈ t, x /ₛ y ∈ u := image2_subset_iff
 
 @[to_additive]
-/--
-lemma `sdiv_self_mono` / 引理 `sdiv_self_mono`
-
-English:
-lemma sdiv_self_mono
-  given: (h : s subseteq t)
-  statement: s /ₛ s subseteq t /ₛ t
-  proof: sdiv_subset_sdiv h h
-
-@[to_additive]
-
-中文:
-引理 sdiv_self_mono
-  条件: (h : s subseteq t)
-  结论: s /ₛ s subseteq t /ₛ t
-  证明: sdiv_subset_sdiv h h
-
-@[to_additive]
-
-Depends on / 依赖: sdiv_subset_sdiv
+/-
+**Set.sdiv_self_mono** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_self_mono (h : s subseteq t) : s /ₛ s subseteq t /ₛ t
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.sdiv_subset_sdiv`：sdiv_subset_sdiv : s₁ subseteq s₂ -> t₁ subseteq t
+₂ -> s₁ /ₛ t₁ subseteq s₂ /ₛ t₂
 -/
-lemma sdiv_self_mono (h : s subseteq t) : s /ₛ s subseteq t /ₛ t := sdiv_subset_sdiv h h
+lemma sdiv_self_mono (h : s ⊆ t) : s /ₛ s ⊆ t /ₛ t := sdiv_subset_sdiv h h
 
 @[to_additive]
-/--
-lemma `union_sdiv` / 引理 `union_sdiv`
-
-English:
-lemma union_sdiv
-  statement: s₁ union s₂ /ₛ t = s₁ /ₛ t union (s₂ /ₛ t)
-  proof: image2_union_left
-
-@[to_additive]
-
-中文:
-引理 union_sdiv
-  结论: s₁ union s₂ /ₛ t = s₁ /ₛ t union (s₂ /ₛ t)
-  证明: image2_union_left
-
-@[to_additive]
-
-Depends on / 依赖: image2_union_left
+/-
+**Set.union_sdiv** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：union_sdiv : s₁ union s₂ /ₛ t = s₁ /ₛ t union (s₂ /ₛ t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_left`：image2_union_left : image2 f (s union s') t = ima
+ge2 f s t union image2 f s' t
 -/
-lemma union_sdiv : s₁ union s₂ /ₛ t = s₁ /ₛ t union (s₂ /ₛ t) := image2_union_left
+lemma union_sdiv : s₁ ∪ s₂ /ₛ t = s₁ /ₛ t ∪ (s₂ /ₛ t) := image2_union_left
 
 @[to_additive]
-/--
-lemma `sdiv_union` / 引理 `sdiv_union`
-
-English:
-lemma sdiv_union
-  statement: s /ₛ (t₁ union t₂) = s /ₛ t₁ union (s /ₛ t₂)
-  proof: image2_union_right
-
-@[to_additive]
-
-中文:
-引理 sdiv_union
-  结论: s /ₛ (t₁ union t₂) = s /ₛ t₁ union (s /ₛ t₂)
-  证明: image2_union_right
-
-@[to_additive]
-
-Depends on / 依赖: image2_union_right
+/-
+**Set.sdiv_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_union : s /ₛ (t₁ union t₂) = s /ₛ t₁ union (s /ₛ t₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_right`：image2_union_right : image2 f s (t union t') = i
+mage2 f s t union image2 f s t'
 -/
-lemma sdiv_union : s /ₛ (t₁ union t₂) = s /ₛ t₁ union (s /ₛ t₂) := image2_union_right
+lemma sdiv_union : s /ₛ (t₁ ∪ t₂) = s /ₛ t₁ ∪ (s /ₛ t₂) := image2_union_right
 
 @[to_additive]
-/--
-lemma `inter_sdiv_subset` / 引理 `inter_sdiv_subset`
-
-English:
-lemma inter_sdiv_subset
-  statement: s₁ inter s₂ /ₛ t subseteq (s₁ /ₛ t) inter (s₂ /ₛ t)
-  proof: image2_inter_subset_left
-
-@[to_additive]
-
-中文:
-引理 inter_sdiv_subset
-  结论: s₁ inter s₂ /ₛ t subseteq (s₁ /ₛ t) inter (s₂ /ₛ t)
-  证明: image2_inter_subset_left
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_subset_left
+/-
+**Set.inter_sdiv_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：inter_sdiv_subset : s₁ inter s₂ /ₛ t subseteq (s₁ /ₛ t) inter (s₂ /ₛ t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_subset_left`：image2_inter_subset_left : image2 f (s int
+er s') t subseteq image2 f s t inter image2 f s' t
 -/
-lemma inter_sdiv_subset : s₁ inter s₂ /ₛ t subseteq (s₁ /ₛ t) inter (s₂ /ₛ t) := image2_inter_subset_left
+lemma inter_sdiv_subset : s₁ ∩ s₂ /ₛ t ⊆ (s₁ /ₛ t) ∩ (s₂ /ₛ t) := image2_inter_subset_left
 
 @[to_additive]
-/--
-lemma `sdiv_inter_subset` / 引理 `sdiv_inter_subset`
-
-English:
-lemma sdiv_inter_subset
-  statement: s /ₛ t₁ inter t₂ subseteq (s /ₛ t₁) inter (s /ₛ t₂)
-  proof: image2_inter_subset_right
-
-@[to_additive]
-
-中文:
-引理 sdiv_inter_subset
-  结论: s /ₛ t₁ inter t₂ subseteq (s /ₛ t₁) inter (s /ₛ t₂)
-  证明: image2_inter_subset_right
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_subset_right
+/-
+**Set.sdiv_inter_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：sdiv_inter_subset : s /ₛ t₁ inter t₂ subseteq (s /ₛ t₁) inter (s /ₛ t₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_subset_right`：image2_inter_subset_right : image2 f s (t
+ inter t') subseteq image2 f s t inter image2 f s t'
 -/
-lemma sdiv_inter_subset : s /ₛ t₁ inter t₂ subseteq (s /ₛ t₁) inter (s /ₛ t₂) := image2_inter_subset_right
+lemma sdiv_inter_subset : s /ₛ t₁ ∩ t₂ ⊆ (s /ₛ t₁) ∩ (s /ₛ t₂) := image2_inter_subset_right
 
 @[to_additive]
-/--
-lemma `inter_sdiv_union_subset_union` / 引理 `inter_sdiv_union_subset_union`
-
-English:
-lemma inter_sdiv_union_subset_union
-  statement: s₁ inter s₂ /ₛ (t₁ union t₂) subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂)
-  proof: image2_inter_union_subset_union
-
-@[to_additive]
-
-中文:
-引理 inter_sdiv_union_subset_union
-  结论: s₁ inter s₂ /ₛ (t₁ union t₂) subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂)
-  证明: image2_inter_union_subset_union
-
-@[to_additive]
-
-Depends on / 依赖: image2_inter_union_subset_union
+/-
+**Set.inter_sdiv_union_subset_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：inter_sdiv_union_subset_union : s₁ inter s₂ /ₛ (t₁ union t₂) subseteq s₁ /
+ₛ t₁ union (s₂ /ₛ t₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_inter_union_subset_union`：image2_inter_union_subset_union : i
+mage2 f (s inter s') (t union t') subseteq image2 f s t union image2 f s' t'
 -/
-lemma inter_sdiv_union_subset_union : s₁ inter s₂ /ₛ (t₁ union t₂) subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂) :=
+lemma inter_sdiv_union_subset_union : s₁ ∩ s₂ /ₛ (t₁ ∪ t₂) ⊆ s₁ /ₛ t₁ ∪ (s₂ /ₛ t₂) :=
   image2_inter_union_subset_union
 
 @[to_additive]
-/--
-lemma `union_sdiv_inter_subset_union` / 引理 `union_sdiv_inter_subset_union`
-
-English:
-lemma union_sdiv_inter_subset_union
-  statement: s₁ union s₂ /ₛ t₁ inter t₂ subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂)
-  proof: image2_union_inter_subset_union
-
-中文:
-引理 union_sdiv_inter_subset_union
-  结论: s₁ union s₂ /ₛ t₁ inter t₂ subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂)
-  证明: image2_union_inter_subset_union
-
-Depends on / 依赖: image2_union_inter_subset_union
+/-
+**Set.union_sdiv_inter_subset_union** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：union_sdiv_inter_subset_union : s₁ union s₂ /ₛ t₁ inter t₂ subseteq s₁ /ₛ 
+t₁ union (s₂ /ₛ t₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_union_inter_subset_union`：image2_union_inter_subset_union : i
+mage2 f (s union s') (t inter t') subseteq image2 f s t union image2 f s' t'
 -/
-lemma union_sdiv_inter_subset_union : s₁ union s₂ /ₛ t₁ inter t₂ subseteq s₁ /ₛ t₁ union (s₂ /ₛ t₂) :=
+lemma union_sdiv_inter_subset_union : s₁ ∪ s₂ /ₛ t₁ ∩ t₂ ⊆ s₁ /ₛ t₁ ∪ (s₂ /ₛ t₂) :=
   image2_union_inter_subset_union
 
 end SDiv
@@ -1543,50 +887,52 @@ end SDiv
 open scoped Pointwise
 
 @[to_additive]
-/--
-lemma `image_smul_comm` / 引理 `image_smul_comm`
-
-English:
-lemma image_smul_comm
-  given: [SMul α β] [SMul α γ] (f : β -> γ) (a : α) (s : Set β)
-  proof: image_comm
-
-中文:
-引理 image_smul_comm
-  条件: [标量乘法 α β] [标量乘法 α γ] (f : β -> γ) (a : α) (s : 集合 β)
-  证明: image_comm
-
-Depends on / 依赖: image_comm
+/-
+**Set.image_smul_comm** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：image_smul_comm [SMul α β] [SMul α γ] (f : β -> γ) (a : α) (s : Set β) : (
+forall b, f (a • b) = a • f b) -> f '' (a • s) = a • f '' s
+参数：f : β -> γ；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_comm`：image_comm {β'} {f : β -> γ} {g : α -> β} {f' : α -> β'}
+ {g' : β' -> γ} (h_comm : forall a, f (g a) = g' (f' a)) : (s.image g).image f =
+ (s.…
 -/
-lemma image_smul_comm [SMul α β] [SMul α γ] (f : β -> γ) (a : α) (s : Set β) :
-    (forall b, f (a • b) = a • f b) -> f '' (a • s) = a • f '' s := image_comm
+lemma image_smul_comm [SMul α β] [SMul α γ] (f : β → γ) (a : α) (s : Set β) :
+    (∀ b, f (a • b) = a • f b) → f '' (a • s) = a • f '' s := image_comm
 
 section SMul
 variable [SMul αᵐᵒᵖ β] [SMul β γ] [SMul α γ]
 
 -- TODO: replace hypothesis and conclusion with a typeclass
 @[to_additive]
-/--
-lemma `op_smul_set_smul_eq_smul_smul_set` / 引理 `op_smul_set_smul_eq_smul_smul_set`
-
-English:
-lemma op_smul_set_smul_eq_smul_smul_set
-  statement: (a : α) (s : Set β) (t : Set γ)
-  proof: by
-  ext; simp [mem_smul, mem_smul_set, h]
-
-中文:
-引理 op_smul_set_smul_eq_smul_smul_set
-  结论: (a : α) (s : 集合 β) (t : 集合 γ)
-  证明: by
-  ext; simp [mem_smul, mem_smul_set, h]
-
-Depends on / 依赖: mem_smul, mem_smul_set
+/-
+**Set.op_smul_set_smul_eq_smul_smul_set** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：op_smul_set_smul_eq_smul_smul_set (a : α) (s : Set β) (t : Set γ) (h : for
+all (a : α) (b : β) (c : γ), (op a • b) • c = b • a • c) : (op a • s) • t = s • 
+a • t
+参数：a : α；s : Set β；t : Set γ；h : forall (a : α) (b : β) (c : γ), (op a • b) • c 
+= b • a • c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma op_smul_set_smul_eq_smul_smul_set (a : α) (s : Set β) (t : Set γ)
-    (h : forall (a : α) (b : β) (c : γ), (op a • b) • c = b • a • c) : (op a • s) • t = s • a • t := by
+    (h : ∀ (a : α) (b : β) (c : γ), (op a • b) • c = b • a • c) : (op a • s) • t = s • a • t := by
   ext; simp [mem_smul, mem_smul_set, h]
 
 end SMul
 
 end Set
+

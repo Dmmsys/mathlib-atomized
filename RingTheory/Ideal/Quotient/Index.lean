@@ -34,154 +34,171 @@ variable {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M]
 variable (I : Ideal R) {N : Submodule R M}
 
 open TensorProduct in
-/--
-lemma `Submodule.finite_quotient_smul` / 引理 `Submodule.finite_quotient_smul`
+/-- Let `N` be a finite index f.g. `R`-submodule, and `I` be a finite index ideal.
+Then `I • N` also has finite index. -/
+/-
+**Submodule.finite_quotient_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.finite_quotient_smul [Finite (R ⧸ I)] [Finite (M ⧸ N)] (hN : N.F
+G) : Finite (M ⧸ I • N)
+参数：R ⧸ I；M ⧸ N；hN : N.FG。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_comap_subtype`：map_comap_subtype : map p.subtype (comap p.
+subtype p') = p ⊓ p'
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `Submodule.map_smul''`：map_smul'' (f : M ->ₗ[R] M') : (I • N).map f = I •
+ N.map f
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Module.Finite.of_fg`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {N : Submodule R M}, 
+N.FG → Mo…
+· 使用定理 `Module.finite_of_finite`：∀ (R : Type u_1) {M : Type u_2} [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] [Finite R]   [Modul
+e.Finite R M]…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Nat.card_pos`：∀ {α : Type u_1} [Nonempty α] [Finite α], 0 < Nat.card α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddSubgroup.relIndex_mul_index`：∀ {G : Type u_1} [inst : AddGroup G] {H 
+K : AddSubgroup G}, H ≤ K → H.relIndex K * K.index = H.index
+· 使用定理 `Submodule.smul_le_right`：smul_le_right : I • N <= N
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `AddSubgroup.index_ne_zero_of_finite`：∀ {G : Type u_1} [inst : AddGroup G
+] {H : AddSubgroup G} [hH : Finite (G ⧸ H)], H.index ≠ 0
+· 使用定理 `AddSubgroup.finite_quotient_of_finiteIndex`：∀ {G : Type u_1} [inst : Add
+Group G] {H : AddSubgroup G} [H.FiniteIndex], Finite (G ⧸ H)
 
-English:
-lemma Submodule.finite_quotient_smul
-  given: [Finite (R ⧸ I)] [Finite (M ⧸ N)] (hN : N.FG)
-  proof: by
-  suffices (I • N).toAddSubgroup.FiniteIndex by
-    exact (I • N).toAddSubgroup.finite_quotient_of_finiteIndex
-  suffices Nat.card (N ⧸ (I • N).comap N.subtype) != 0 by
-    constructor
-    rw [← AddSubgroup.relIndex_mul_index
-      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
-    have inst : Finite (M ⧸ N.toAddSubgroup) := ‹_›
-    exact mul_ne_zero this AddSubgroup.index_ne_zero_of_finite
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
-    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
-      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
-        (quotTensorEquivQuotSMul N I).symm
-  rw [Nat.card_congr e.toEquiv]
-  have : Module.Finite R N := .of_fg hN
-  have : Finite ((R ⧸ I) otimes[R] N) := Module.finite_of_finite (R ⧸ I)
-  exact Nat.card_pos.ne'
-
-中文:
-引理 子模.finite_quotient_smul
-  条件: [有限 (R ⧸ I)] [有限 (M ⧸ N)] (hN : N.FG)
-  证明: by
-  suffices (I • N).toAddSubgroup.FiniteIndex by
-    exact (I • N).toAddSubgroup.finite_quotient_of_finiteIndex
-  suffices Nat.card (N ⧸ (I • N).comap N.subtype) != 0 by
-    constructor
-    rw [← AddSubgroup.relIndex_mul_index
-      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
-    have inst : Finite (M ⧸ N.toAddSubgroup) := ‹_›
-    exact mul_ne_zero this AddSubgroup.index_ne_zero_of_finite
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
-    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
-      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
-        (quotTensorEquivQuotSMul N I).symm
-  rw [Nat.card_congr e.toEquiv]
-  have : Module.Finite R N := .of_fg hN
-  have : Finite ((R ⧸ I) otimes[R] N) := Module.finite_of_finite (R ⧸ I)
-  exact Nat.card_pos.ne'
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.index_ne_zero_of_finite, AddSubgroup.relIndex_mul_index, Finite, FiniteIndex, N.subtype, N.toAddSubgroup, Nat.card, Submodule, Submodule.quotEquivOfEq, Submodule.smul_le_right, finite_quotient_of_finiteIndex, index_ne_zero_of_finite, mul_ne_zero, otimes, quotEquivOfEq, relIndex_mul_index, smul_le_right, subtype, toAddSubgroup
+--- 原说明 ---
+Let `N` be a finite index f.g. `R`-submodule, and `I` be a finite index ideal.
+Then `I • N` also has finite index.
 -/
 lemma Submodule.finite_quotient_smul [Finite (R ⧸ I)] [Finite (M ⧸ N)] (hN : N.FG) :
     Finite (M ⧸ I • N) := by
   suffices (I • N).toAddSubgroup.FiniteIndex by
     exact (I • N).toAddSubgroup.finite_quotient_of_finiteIndex
-  suffices Nat.card (N ⧸ (I • N).comap N.subtype) != 0 by
+  suffices Nat.card (N ⧸ (I • N).comap N.subtype) ≠ 0 by
     constructor
     rw [← AddSubgroup.relIndex_mul_index
       (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
     have inst : Finite (M ⧸ N.toAddSubgroup) := ‹_›
     exact mul_ne_zero this AddSubgroup.index_ne_zero_of_finite
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) ⊗[R] N :=
     Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
       N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
         (quotTensorEquivQuotSMul N I).symm
   rw [Nat.card_congr e.toEquiv]
   have : Module.Finite R N := .of_fg hN
-  have : Finite ((R ⧸ I) otimes[R] N) := Module.finite_of_finite (R ⧸ I)
+  have : Finite ((R ⧸ I) ⊗[R] N) := Module.finite_of_finite (R ⧸ I)
   exact Nat.card_pos.ne'
 
 -- We have `hs` and `N` instead of using `span R s` in the goal to make it easier to use.
 -- Usually we would like to bound the index of some abstract `I • N`, and we may construct `s` while
 -- applying this lemma instead of having to provide it beforehand.
 open TensorProduct in
-/--
-lemma `Submodule.index_smul_le` / 引理 `Submodule.index_smul_le`
-
-English:
-lemma Submodule.index_smul_le
-  statement: [Finite (R ⧸ I)]
-  proof: by
-  classical
-  cases nonempty_fintype (R ⧸ I)
-  rw [← AddSubgroup.relIndex_mul_index
-    (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
-  gcongr
-  change (Nat.card (N ⧸ (I • N).comap N.subtype)) <= Nat.card (R ⧸ I) ^ s.card
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
-    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
-      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
-      (quotTensorEquivQuotSMul N I).symm
-  rw [Nat.card_congr e.toEquiv]
-  have H : LinearMap.range (Finsupp.linearCombination R (α := s) (↑)) = N := by
-    rw [Finsupp.range_linearCombination]; rw [← hs]; rw [Subtype.range_val]
-  let f : (s ->₀ R) ->ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
-    (fun c => by rw [← H, LinearMap.mem_range]; exact exists_apply_eq_apply _ _)
-  have hf : Function.Surjective f := fun x => by
-    obtain ⟨y, hy⟩ := H.ge x.2; exact ⟨y, Subtype.ext hy⟩
-  have : Function.Surjective
-      (f.lTensor (R ⧸ I) ∘ₗ (finsuppScalarRight R R (R ⧸ I) s).symm.toLinearMap) :=
-    (LinearMap.lTensor_surjective (R ⧸ I) hf).comp (LinearEquiv.surjective _)
-  refine (Nat.card_le_card_of_surjective _ this).trans ?_
-  simp only [Nat.card_eq_fintype_card, Fintype.card_finsupp, Fintype.card_coe, le_rfl]
-
-中文:
-引理 子模.index_smul_le
-  结论: [有限 (R ⧸ I)]
-  证明: by
-  classical
-  cases nonempty_fintype (R ⧸ I)
-  rw [← AddSubgroup.relIndex_mul_index
-    (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
-  gcongr
-  change (Nat.card (N ⧸ (I • N).comap N.subtype)) <= Nat.card (R ⧸ I) ^ s.card
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
-    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
-      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
-      (quotTensorEquivQuotSMul N I).symm
-  rw [Nat.card_congr e.toEquiv]
-  have H : LinearMap.range (Finsupp.linearCombination R (α := s) (↑)) = N := by
-    rw [Finsupp.range_linearCombination]; rw [← hs]; rw [Subtype.range_val]
-  let f : (s ->₀ R) ->ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
-    (fun c => by rw [← H, LinearMap.mem_range]; exact exists_apply_eq_apply _ _)
-  have hf : Function.Surjective f := fun x => by
-    obtain ⟨y, hy⟩ := H.ge x.2; exact ⟨y, Subtype.ext hy⟩
-  have : Function.Surjective
-      (f.lTensor (R ⧸ I) ∘ₗ (finsuppScalarRight R R (R ⧸ I) s).symm.toLinearMap) :=
-    (LinearMap.lTensor_surjective (R ⧸ I) hf).comp (LinearEquiv.surjective _)
-  refine (Nat.card_le_card_of_surjective _ this).trans ?_
-  simp only [Nat.card_eq_fintype_card, Fintype.card_finsupp, Fintype.card_coe, le_rfl]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.relIndex_mul_index, N.injective_subtype, N.subtype, N.toAddSubgroup, Nat.card, Submodule, Submodule.map_injective_of_injective, Submodule.quotEquivOfEq, Submodule.smul_le_right, classical, injective_subtype, map_injective_of_injective, nonempty_fintype, otimes, quotEquivOfEq, quotTensorEquivQuotSMul, relIndex_mul_index, s.card, smul_le_right
+/-
+**Submodule.index_smul_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.index_smul_le [Finite (R ⧸ I)] (s : Finset M) (hs : Submodule.sp
+an R s = N) : (I • N).toAddSubgroup.index <= I.toAddSubgroup.index ^ s.card * N.
+toAddSubgroup.index
+参数：R ⧸ I；s : Finset M；hs : Submodule.span R s = N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddSubgroup.relIndex_mul_index`：∀ {G : Type u_1} [inst : AddGroup G] {H 
+K : AddSubgroup G}, H ≤ K → H.relIndex K * K.index = H.index
+· 使用定理 `Submodule.smul_le_right`：smul_le_right : I • N <= N
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.map_comap_subtype`：map_comap_subtype : map p.subtype (comap p.
+subtype p') = p ⊓ p'
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `Submodule.map_smul''`：map_smul'' (f : M ->ₗ[R] M') : (I • N).map f = I •
+ N.map f
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Finsupp.range_linearCombination`：range_linearCombination : LinearMap.ran
+ge (linearCombination R v) = span R (range v)
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `exists_apply_eq_apply`：∀ {α : Sort u_2} {β : Sort u_1} (f : α → β) (a' :
+ α), ∃ a, f a = f a'
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `LinearMap.lTensor_surjective`：LinearMap.lTensor_surjective (hg : Functio
+n.Surjective g) : Function.Surjective (lTensor Q g)
+（共 39 条，此处仅展示前 30 条）
 -/
 lemma Submodule.index_smul_le [Finite (R ⧸ I)]
     (s : Finset M) (hs : Submodule.span R s = N) :
-    (I • N).toAddSubgroup.index <= I.toAddSubgroup.index ^ s.card * N.toAddSubgroup.index := by
+    (I • N).toAddSubgroup.index ≤ I.toAddSubgroup.index ^ s.card * N.toAddSubgroup.index := by
   classical
   cases nonempty_fintype (R ⧸ I)
   rw [← AddSubgroup.relIndex_mul_index
     (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
   gcongr
-  change (Nat.card (N ⧸ (I • N).comap N.subtype)) <= Nat.card (R ⧸ I) ^ s.card
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+  change (Nat.card (N ⧸ (I • N).comap N.subtype)) ≤ Nat.card (R ⧸ I) ^ s.card
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) ⊗[R] N :=
     Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
       N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
       (quotTensorEquivQuotSMul N I).symm
   rw [Nat.card_congr e.toEquiv]
   have H : LinearMap.range (Finsupp.linearCombination R (α := s) (↑)) = N := by
-    rw [Finsupp.range_linearCombination]; rw [← hs]; rw [Subtype.range_val]
-  let f : (s ->₀ R) ->ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
+    rw [Finsupp.range_linearCombination, ← hs, Subtype.range_val]
+  let f : (s →₀ R) →ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
     (fun c => by rw [← H, LinearMap.mem_range]; exact exists_apply_eq_apply _ _)
-  have hf : Function.Surjective f := fun x => by
+  have hf : Function.Surjective f := fun x ↦ by
     obtain ⟨y, hy⟩ := H.ge x.2; exact ⟨y, Subtype.ext hy⟩
   have : Function.Surjective
       (f.lTensor (R ⧸ I) ∘ₗ (finsuppScalarRight R R (R ⧸ I) s).symm.toLinearMap) :=
@@ -190,77 +207,63 @@ lemma Submodule.index_smul_le [Finite (R ⧸ I)]
   simp only [Nat.card_eq_fintype_card, Fintype.card_finsupp, Fintype.card_coe, le_rfl]
 
 variable {I}
-
-/--
-lemma `Ideal.finite_quotient_prod` / 引理 `Ideal.finite_quotient_prod`
-
-English:
-lemma Ideal.finite_quotient_prod
-  statement: {ι : Type*} (I : ι -> Ideal R) (s : Finset ι)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp only [Finset.prod_empty, one_eq_top]; infer_instance
-  | insert a s has IH =>
-    rw [Finset.prod_insert has]; rw [mul_comm]
-    have := hI' a (by simp)
-    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (by simp [hi]))
-    exact Submodule.finite_quotient_smul _ (hI a (by simp))
-
-中文:
-引理 理想.finite_quotient_prod
-  结论: {ι : 类型} (I : ι -> 理想 R) (s : 有限集 ι)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp only [Finset.prod_empty, one_eq_top]; infer_instance
-  | insert a s has IH =>
-    rw [Finset.prod_insert has]; rw [mul_comm]
-    have := hI' a (by simp)
-    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (by simp [hi]))
-    exact Submodule.finite_quotient_smul _ (hI a (by simp))
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_empty, Finset.prod_insert, Submodule, Submodule.finite_quotient_smul, classical, finite_quotient_smul, induction_on, infer_instance, insert, isClosed_fiber, isCompact, isCompact_iff_compactSpace, mul_comm, one_eq_top, prod_empty, prod_insert, x.prop
+/-
+**Ideal.finite_quotient_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.finite_quotient_prod {ι : Type*} (I : ι -> Ideal R) (s : Finset ι) (
+hI : forall i in s, (I i).FG) (hI' : forall i in s, Finite (R ⧸ I i)) : Finite (
+R ⧸ (∏ i in s, I i))
+参数：I : ι -> Ideal R；s : Finset ι；hI : forall i in s, (I i).FG；hI' : forall i in 
+s, Finite (R ⧸ I i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.one_eq_top`：one_eq_top : (1 : Ideal R) = ⊤
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用引理 `Submodule.finite_quotient_smul`：Submodule.finite_quotient_smul [Finite (
+R ⧸ I)] [Finite (M ⧸ N)] (hN : N.FG) : Finite (M ⧸ I • N)
 -/
-lemma Ideal.finite_quotient_prod {ι : Type*} (I : ι -> Ideal R) (s : Finset ι)
-    (hI : forall i in s, (I i).FG) (hI' : forall i in s, Finite (R ⧸ I i)) : Finite (R ⧸ (∏ i in s, I i)) := by
+lemma Ideal.finite_quotient_prod {ι : Type*} (I : ι → Ideal R) (s : Finset ι)
+    (hI : ∀ i ∈ s, (I i).FG) (hI' : ∀ i ∈ s, Finite (R ⧸ I i)) : Finite (R ⧸ (∏ i ∈ s, I i)) := by
   classical
   induction s using Finset.induction_on with
   | empty => simp only [Finset.prod_empty, one_eq_top]; infer_instance
   | insert a s has IH =>
-    rw [Finset.prod_insert has]; rw [mul_comm]
+    rw [Finset.prod_insert has, mul_comm]
     have := hI' a (by simp)
-    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (by simp [hi]))
+    have := IH (fun i hi ↦ hI _ (by simp [hi])) (fun i hi ↦ hI' _ (by simp [hi]))
     exact Submodule.finite_quotient_smul _ (hI a (by simp))
-
-/--
-lemma `Ideal.finite_quotient_pow` / 引理 `Ideal.finite_quotient_pow`
-
-English:
-lemma Ideal.finite_quotient_pow
-  given: (hI : I.FG) [Finite (R ⧸ I)] (n)
-  statement: Finite (R ⧸ I ^ n)
-  proof: by
-  induction n with
-  | zero =>
-    simp only [pow_zero, Ideal.one_eq_top]
-    infer_instance
-  | succ n _ =>
-    exact Submodule.finite_quotient_smul (I ^ n) hI
-
-中文:
-引理 理想.finite_quotient_pow
-  条件: (hI : I.FG) [有限 (R ⧸ I)] (n)
-  结论: 有限 (R ⧸ I ^ n)
-  证明: by
-  induction n with
-  | zero =>
-    simp only [pow_zero, Ideal.one_eq_top]
-    infer_instance
-  | succ n _ =>
-    exact Submodule.finite_quotient_smul (I ^ n) hI
-
-Depends on / 依赖: Ideal.one_eq_top, Submodule, Submodule.finite_quotient_smul, finite_quotient_smul, infer_instance, one_eq_top, pow_zero
+/-
+**Ideal.finite_quotient_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.finite_quotient_pow (hI : I.FG) [Finite (R ⧸ I)] (n) : Finite (R ⧸ I
+ ^ n)
+参数：hI : I.FG；R ⧸ I；n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Ideal.one_eq_top`：one_eq_top : (1 : Ideal R) = ⊤
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `Submodule.finite_quotient_smul`：Submodule.finite_quotient_smul [Finite (
+R ⧸ I)] [Finite (M ⧸ N)] (hN : N.FG) : Finite (M ⧸ I • N)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 lemma Ideal.finite_quotient_pow (hI : I.FG) [Finite (R ⧸ I)] (n) : Finite (R ⧸ I ^ n) := by
   induction n with
@@ -269,39 +272,48 @@ lemma Ideal.finite_quotient_pow (hI : I.FG) [Finite (R ⧸ I)] (n) : Finite (R �
     infer_instance
   | succ n _ =>
     exact Submodule.finite_quotient_smul (I ^ n) hI
-
-/--
-lemma `Ideal.index_pow_le` / 引理 `Ideal.index_pow_le`
-
-English:
-lemma Ideal.index_pow_le
-  proof: by
-  have := Ideal.finite_quotient_pow ⟨s, hs⟩
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    refine (Submodule.index_smul_le (I ^ n) s hs).trans ?_
-    refine (Nat.mul_le_mul (Nat.pow_le_pow_left IH _) le_rfl).trans ?_
-    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_comm]
-
-中文:
-引理 理想.index_pow_le
-  证明: by
-  have := Ideal.finite_quotient_pow ⟨s, hs⟩
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    refine (Submodule.index_smul_le (I ^ n) s hs).trans ?_
-    refine (Nat.mul_le_mul (Nat.pow_le_pow_left IH _) le_rfl).trans ?_
-    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_comm]
-
-Depends on / 依赖: Ideal.finite_quotient_pow, Nat.mul_le_mul, Nat.pow_le_pow_left, Submodule, Submodule.index_smul_le, finite_quotient_pow, geom_sum_succ, index_smul_le, le_rfl, mul_comm, mul_le_mul, pow_le_pow_left, pow_mul, pow_succ
+/-
+**Ideal.index_pow_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.index_pow_le (s : Finset R) (hs : Ideal.span s = I) [Finite (R ⧸ I)]
+ (n) : (I ^ n).toAddSubgroup.index <= I.toAddSubgroup.index ^ ∑ i in Finset.rang
+e n, s.card ^ i
+参数：s : Finset R；hs : Ideal.span s = I；R ⧸ I；n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Ideal.finite_quotient_pow`：Ideal.finite_quotient_pow (hI : I.FG) [Finite
+ (R ⧸ I)] (n) : Finite (R ⧸ I ^ n)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Ideal.one_eq_top`：one_eq_top : (1 : Ideal R) = ⊤
+· 使用定理 `AddSubgroup.index_top`：∀ {G : Type u_1} [inst : AddGroup G], ⊤.index = 1
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Submodule.index_smul_le`：Submodule.index_smul_le [Finite (R ⧸ I)] (s : F
+inset M) (hs : Submodule.span R s = N) : (I • N).toAddSubgroup.index <= I.toAddS
+ubgroup.index…
+· 使用定理 `Nat.mul_le_mul`：∀ {n₁ m₁ n₂ m₂ : ℕ}, n₁ ≤ n₂ → m₁ ≤ m₂ → n₁ * m₁ ≤ n₂ * 
+m₂
+· 使用定理 `Nat.pow_le_pow_left`：∀ {n m : ℕ}, n ≤ m → ∀ (i : ℕ), n ^ i ≤ m ^ i
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用引理 `geom_sum_succ`：geom_sum_succ {x : R} {n : Nat} : ∑ i in range (n + 1), x
+ ^ i = (x * ∑ i in range n, x ^ i) + 1
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 lemma Ideal.index_pow_le
     (s : Finset R) (hs : Ideal.span s = I) [Finite (R ⧸ I)] (n) :
-    (I ^ n).toAddSubgroup.index <= I.toAddSubgroup.index ^ ∑ i in Finset.range n, s.card ^ i := by
+    (I ^ n).toAddSubgroup.index ≤ I.toAddSubgroup.index ^ ∑ i ∈ Finset.range n, s.card ^ i := by
   have := Ideal.finite_quotient_pow ⟨s, hs⟩
   induction n with
   | zero =>
@@ -309,4 +321,4 @@ lemma Ideal.index_pow_le
   | succ n IH =>
     refine (Submodule.index_smul_le (I ^ n) s hs).trans ?_
     refine (Nat.mul_le_mul (Nat.pow_le_pow_left IH _) le_rfl).trans ?_
-    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_comm]
+    rw [← pow_mul, ← pow_succ, geom_sum_succ, mul_comm]

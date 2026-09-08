@@ -80,39 +80,32 @@ variable {u : Level} {α : Q(Type u)} {rα : Q(CommRing $α)}
 
 namespace Mathlib.Tactic.Determinant
 
-/--
-Definition of `CertVal` / `CertVal` 的定义
+/-- The ring tactic normal-form value. -/
+/-
+**Mathlib.Tactic.Determinant.CertVal** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic
+.Determinant`。
+形式化陈述：CertVal {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) (e : Q($α))
+参数：Type u；rα : Q(CommRing $α)；e : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CertVal
-  signature: {u : Level} {α : Q(Type u)}
-  body: Common.ExSum RatCoeff (commSemiringOfCommRing rα) e
-
-中文:
-缩写 CertVal
-  签名: {u : Level} {α : Q(类型u)}
-  定义体: Common.ExSum RatCoeff (commSemiringOfCommRing rα) e
-
-Depends on / 依赖: Common, Common.ExSum, RatCoeff, commSemiringOfCommRing
+--- 原说明 ---
+The ring tactic normal-form value.
 -/
 abbrev CertVal {u : Level} {α : Q(Type u)}
     (rα : Q(CommRing $α)) (e : Q($α)) :=
   Common.ExSum RatCoeff (commSemiringOfCommRing rα) e
 
-/--
-Definition of `CertResult` / `CertResult` 的定义
+/-- The ring tactic result carried by a certificate. -/
+/-
+**Mathlib.Tactic.Determinant.CertResult** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tac
+tic.Determinant`。
+形式化陈述：CertResult {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) (subject : Q(
+$α))
+参数：Type u；rα : Q(CommRing $α)；subject : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CertResult
-  signature: {u : Level} {α : Q(Type u)}
-  body: Common.Result (CertVal rα) subject
-
-中文:
-缩写 CertResult
-  签名: {u : Level} {α : Q(类型u)}
-  定义体: Common.Result (CertVal rα) subject
-
-Depends on / 依赖: CertVal, Common, Common.Result, Result, subject
+--- 原说明 ---
+The ring tactic result carried by a certificate.
 -/
 abbrev CertResult {u : Level} {α : Q(Type u)}
     (rα : Q(CommRing $α)) (subject : Q($α)) :=
@@ -120,71 +113,51 @@ abbrev CertResult {u : Level} {α : Q(Type u)}
 
 namespace Ctx
 
-/--
-Definition of `iterStepEntry` / `iterStepEntry` 的定义
+/-- Return the expression `(stepEntry n A)^[t] (get n A)`. -/
+/-
+**Mathlib.Tactic.Determinant.Ctx.iterStepEntry** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Determinant.Ctx`。
+形式化陈述：iterStepEntry (ctx : Ctx rα) (t : Nat) : Q(Nat -> Nat -> $α)
+参数：ctx : Ctx rα；t : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterStepEntry
-  signature: (ctx : Ctx rα) (t : Nat)
-  body: let dim : Q(Nat) := ctx.dimensionLit
-  let A : Q(Array $α) := ctx.arrayExpr
-  q((BirdDet.stepEntry $dim $A)^[$t] (BirdDet.get $dim $A))
-
-中文:
-定义 iterStepEntry
-  签名: (ctx : Ctx rα) (t : 自然数)
-  定义体: let dim : Q(Nat) := ctx.dimensionLit
-  let A : Q(Array $α) := ctx.arrayExpr
-  q((BirdDet.stepEntry $dim $A)^[$t] (BirdDet.get $dim $A))
-
-Depends on / 依赖: BirdDet, BirdDet.get, BirdDet.stepEntry, arrayExpr, ctx.arrayExpr, ctx.dimensionLit, dimensionLit, stepEntry
+--- 原说明 ---
+Return the expression `(stepEntry n A)^[t] (get n A)`.
 -/
-def iterStepEntry (ctx : Ctx rα) (t : Nat) : Q(Nat -> Nat -> $α) :=
-  let dim : Q(Nat) := ctx.dimensionLit
+def iterStepEntry (ctx : Ctx rα) (t : ℕ) : Q(ℕ → ℕ → $α) :=
+  let dim : Q(ℕ) := ctx.dimensionLit
   let A : Q(Array $α) := ctx.arrayExpr
   q((BirdDet.stepEntry $dim $A)^[$t] (BirdDet.get $dim $A))
 
-/--
-Definition of `sumFrom` / `sumFrom` 的定义
+/-- Return an expression `sumFrom n lo f` -/
+/-
+**Mathlib.Tactic.Determinant.Ctx.sumFrom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Determinant.Ctx`。
+形式化陈述：sumFrom (ctx : Ctx rα) (lo : Nat) (f : Q(Nat -> $α)) : Q($α)
+参数：ctx : Ctx rα；lo : Nat；f : Q(Nat -> $α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumFrom
-  signature: (ctx : Ctx rα) (lo : Nat) (f : Q(Nat -> $α))
-  body: let dim : Q(Nat) := ctx.dimensionLit
-  q(BirdDet.sumFrom $dim $lo $f)
-
-中文:
-定义 sumFrom
-  签名: (ctx : Ctx rα) (lo : 自然数) (f : Q(自然数 -> $α))
-  定义体: let dim : Q(Nat) := ctx.dimensionLit
-  q(BirdDet.sumFrom $dim $lo $f)
-
-Depends on / 依赖: BirdDet, BirdDet.sumFrom, ctx.dimensionLit, dimensionLit, sumFrom
+--- 原说明 ---
+Return an expression `sumFrom n lo f`
 -/
-def sumFrom (ctx : Ctx rα) (lo : Nat) (f : Q(Nat -> $α)) : Q($α) :=
-  let dim : Q(Nat) := ctx.dimensionLit
+def sumFrom (ctx : Ctx rα) (lo : ℕ) (f : Q(ℕ → $α)) : Q($α) :=
+  let dim : Q(ℕ) := ctx.dimensionLit
   q(BirdDet.sumFrom $dim $lo $f)
 
 end Ctx
 
-/--
-Definition of `Cert` / `Cert` 的定义
+/-- A certificate that proves `subject = result.norm` via `result.proof` -/
+/-
+**Mathlib.Tactic.Determinant.Cert** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.De
+terminant`。
+形式化陈述：{u : Level} → {α : Q(Type u)} → Q(CommRing «$α») → Type
+参数：Type u；CommRing «$α»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cert
-  parameters: {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α))
-  axioms and operations (3):
-    - {subject : Q($α)}
-    - result : CertResult rα subject
-    - isZero : Bool
-
-中文:
-结构 Cert
-  参数: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
-  公理与运算 (3 个):
-    - {subject : Q($α)}
-    - result : CertResult rα subject
-    - isZero : 布尔值
+--- 原说明 ---
+A certificate that proves `subject = result.norm` via `result.proof`
 -/
 structure Cert {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) where
   /-- The expression being certified. -/
@@ -201,89 +174,72 @@ variable
   {α : Q(Type u)}
   {rα : Q(CommRing $α)}
 
-/--
-Definition of `norm` / `norm` 的定义
+/-- The ring tactic normal form of `c.subject` -/
+/-
+**Mathlib.Tactic.Determinant.Cert.norm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Determinant.Cert`。
+形式化陈述：norm (c : Cert rα) : Q($α)
+参数：c : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition norm
-  signature: (c : Cert rα)
-  body: c.result.expr
-
-中文:
-定义 norm
-  签名: (c : Cert rα)
-  定义体: c.result.expr
-
-Depends on / 依赖: c.result.expr, result
+--- 原说明 ---
+The ring tactic normal form of `c.subject`
 -/
 def norm (c : Cert rα) : Q($α) :=
   c.result.expr
 
-/--
-Definition of `val` / `val` 的定义
+/-- The internal ring tactic representation of `c.norm` -/
+/-
+**Mathlib.Tactic.Determinant.Cert.val** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Determinant.Cert`。
+形式化陈述：val (c : Cert rα) : CertVal rα c.norm
+参数：c : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition val
-  signature: (c : Cert rα)
-  body: c.result.val
-
-中文:
-定义 val
-  签名: (c : Cert rα)
-  定义体: c.result.val
-
-Depends on / 依赖: c.result.val, result
+--- 原说明 ---
+The internal ring tactic representation of `c.norm`
 -/
 def val (c : Cert rα) : CertVal rα c.norm :=
   c.result.val
 
-/--
-Definition of `proof` / `proof` 的定义
+/-- The proof that `c.subject = c.norm` -/
+/-
+**Mathlib.Tactic.Determinant.Cert.proof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Determinant.Cert`。
+形式化陈述：proof (c : Cert rα) : Q($c.subject = $c.norm)
+参数：c : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proof
-  signature: (c : Cert rα)
-  body: c.result.proof
-
-中文:
-定义 proof
-  签名: (c : Cert rα)
-  定义体: c.result.proof
-
-Depends on / 依赖: c.result.proof, result
+--- 原说明 ---
+The proof that `c.subject = c.norm`
 -/
 def proof (c : Cert rα) : Q($c.subject = $c.norm) :=
   c.result.proof
 
-/--
-Definition of `chainProof` / `chainProof` 的定义
+/-- Prepend an equality to an existing normalized certificate.
 
-English:
-definition chainProof
-  signature: {lhs rhs : Q($α)} (c : Cert rα) (h : Q($lhs = $rhs))
-  body: have : rhs =Q c.subject := ⟨⟩
-  let hProof : Q($lhs = $c.subject) := h
-  let proof : Q($lhs = $c.norm) := q(Eq.trans $hProof $c.proof)
-  { c with
-    subject := lhs
-    result.proof := proof
-  }
+Given `c.proof : s.subject = c.norm` and `h : lhs = s.subject` return a
+certificate with `proof : lhs = c.norm`.
+-/
+/-
+**Mathlib.Tactic.Determinant.Cert.chainProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Determinant.Cert`。
+形式化陈述：chainProof {lhs rhs : Q($α)} (c : Cert rα) (h : Q($lhs = $rhs)) : Cert rα
+参数：$α；c : Cert rα；h : Q($lhs = $rhs)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 chainProof
-  签名: {lhs rhs : Q($α)} (c : Cert rα) (h : Q($lhs = $rhs))
-  定义体: have : rhs =Q c.subject := ⟨⟩
-  let hProof : Q($lhs = $c.subject) := h
-  let proof : Q($lhs = $c.norm) := q(Eq.trans $hProof $c.proof)
-  { c with
-    subject := lhs
-    result.proof := proof
-  }
+--- 原说明 ---
+Prepend an equality to an existing normalized certificate.
 
-Depends on / 依赖: Eq.trans, c.norm, c.proof, c.subject, hProof, result, result.proof, subject
+Given `c.proof : s.subject = c.norm` and `h : lhs = s.subject` return a
+certificate with `proof : lhs = c.norm`.
 -/
 def chainProof {lhs rhs : Q($α)} (c : Cert rα) (h : Q($lhs = $rhs)) : Cert rα :=
-have : rhs =Q c.subject := ⟨⟩
+  have : $rhs =Q $c.subject := ⟨⟩
   let hProof : Q($lhs = $c.subject) := h
   let proof : Q($lhs = $c.norm) := q(Eq.trans $hProof $c.proof)
   { c with
@@ -293,112 +249,86 @@ have : rhs =Q c.subject := ⟨⟩
 
 end Cert
 
-/--
-Definition of `CertCache` / `CertCache` 的定义
+/-- Cache certificates that are reused by the recursive Bird evaluator. -/
+/-
+**Mathlib.Tactic.Determinant.CertCache** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic
+.Determinant`。
+形式化陈述：CertCache {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) where /-- Cach
+e for entry certificates, keyed by matrix indices. -/ entryCache : Std.HashMap (
+Nat × Nat) (Cert rα)
+参数：Type u；rα : Q(CommRing $α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CertCache
-  parameters: {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α))
-  axioms and operations (3):
-    - entryCache : Std.HashMap (Nat × Nat) (Cert rα)  [default: {}]
-    - iterStepEntryCache : Std.HashMap (Nat × Nat × Nat) (Cert rα)  [default: {}]
-    - diagCache : Std.HashMap (Nat × Nat) (Cert rα)  [default: {}]
-
-中文:
-结构 CertCache
-  参数: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
-  公理与运算 (3 个):
-    - entryCache : Std.HashMap (自然数 × 自然数) (Cert rα)  [默认: {}]
-    - iterStepEntryCache : Std.HashMap (自然数 × 自然数 × 自然数) (Cert rα)  [默认: {}]
-    - diagCache : Std.HashMap (自然数 × 自然数) (Cert rα)  [默认: {}]
+--- 原说明 ---
+Cache certificates that are reused by the recursive Bird evaluator.
 -/
 structure CertCache {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) where
   /-- Cache for entry certificates, keyed by matrix indices. -/
-  entryCache : Std.HashMap (Nat × Nat) (Cert rα) := {}
+  entryCache : Std.HashMap (ℕ × ℕ) (Cert rα) := {}
   /-- Cache for iterated `stepEntry` certificates, keyed by step and matrix indices. -/
-  iterStepEntryCache : Std.HashMap (Nat × Nat × Nat) (Cert rα) := {}
+  iterStepEntryCache : Std.HashMap (ℕ × ℕ × ℕ) (Cert rα) := {}
   /-- Cache for diagonal-tail certificates, keyed by recursion index and lower bound. -/
-  diagCache : Std.HashMap (Nat × Nat) (Cert rα) := {}
+  diagCache : Std.HashMap (ℕ × ℕ) (Cert rα) := {}
 
-/--
-Definition of `CertM` / `CertM` 的定义
+/-- The monad used by the certificate-chaining evaluator -/
+/-
+**Mathlib.Tactic.Determinant.CertM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.D
+eterminant`。
+形式化陈述：CertM {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α))
+参数：Type u；rα : Q(CommRing $α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CertM
-  signature: {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α))
-  body: StateT (CertCache rα) (ReaderT (Ctx rα) AtomM)
-
-中文:
-缩写 CertM
-  签名: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
-  定义体: StateT (CertCache rα) (ReaderT (Ctx rα) AtomM)
-
-Depends on / 依赖: CertCache, ReaderT, StateT
+--- 原说明 ---
+The monad used by the certificate-chaining evaluator
 -/
 abbrev CertM {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) :=
   StateT (CertCache rα) (ReaderT (Ctx rα) AtomM)
 
-/--
-Definition of `isZeroVal` / `isZeroVal` 的定义
+/-- Checks if `val` is zero according to the ring tactic -/
+/-
+**Mathlib.Tactic.Determinant.isZeroVal** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Determinant`。
+形式化陈述：isZeroVal {e : Q($α)} (val : CertVal rα e) : Bool
+参数：$α；val : CertVal rα e。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isZeroVal
-  signature: {e : Q($α)} (val : CertVal rα e)
-  body: match val with
-  | .zero => true
-  | .add .. => false
-
-中文:
-定义 isZeroVal
-  签名: {e : Q($α)} (val : CertVal rα e)
-  定义体: match val with
-  | .zero => true
-  | .add .. => false
+--- 原说明 ---
+Checks if `val` is zero according to the ring tactic
 -/
 def isZeroVal {e : Q($α)} (val : CertVal rα e) : Bool :=
   match val with
   | .zero => true
   | .add .. => false
 
-/--
-Definition of `toCert` / `toCert` 的定义
+/-- Construct a `Cert rα` from a ring tactic result -/
+/-
+**Mathlib.Tactic.Determinant.toCert** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.De
+terminant`。
+形式化陈述：toCert {e : Q($α)} (res : Common.Result (CertVal rα) e) : Cert rα
+参数：$α；res : Common.Result (CertVal rα) e。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCert
-  signature: {e : Q($α)} (res : Common.Result (CertVal rα) e)
-  body: { result := res
-    isZero := isZeroVal res.val }
-
-中文:
-定义 toCert
-  签名: {e : Q($α)} (res : Common.Result (CertVal rα) e)
-  定义体: { result := res
-    isZero := isZeroVal res.val }
-
-Depends on / 依赖: isZero, isZeroVal, res.val, result
+--- 原说明 ---
+Construct a `Cert rα` from a ring tactic result
 -/
 def toCert {e : Q($α)} (res : Common.Result (CertVal rα) e) : Cert rα :=
   { result := res
     isZero := isZeroVal res.val }
 
-/--
-Definition of `zeroCertOfProof` / `zeroCertOfProof` 的定义
+/-- Build a zero certificate from a proof `lhs = 0`. -/
+/-
+**Mathlib.Tactic.Determinant.zeroCertOfProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Determinant`。
+形式化陈述：zeroCertOfProof {lhs : Q($α)} (h : Q($lhs = 0)) : Cert rα where result.exp
+r
+参数：$α；h : Q($lhs = 0)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroCertOfProof
-  signature: {lhs : Q($α)} (h : Q($lhs = 0))
-  body: q(0)
-  result.val := .zero
-  result.proof := h
-  isZero := true
-
-中文:
-定义 zeroCertOfProof
-  签名: {lhs : Q($α)} (h : Q($lhs = 0))
-  定义体: q(0)
-  result.val := .zero
-  result.proof := h
-  isZero := true
+--- 原说明 ---
+Build a zero certificate from a proof `lhs = 0`.
 -/
 def zeroCertOfProof {lhs : Q($α)} (h : Q($lhs = 0)) : Cert rα where
   result.expr := q(0)
@@ -406,176 +336,130 @@ def zeroCertOfProof {lhs : Q($α)} (h : Q($lhs = 0)) : Cert rα where
   result.proof := h
   isZero := true
 
-/--
-Definition of `zeroProdCert` / `zeroProdCert` 的定义
+/-- If c.norm = 0, return a certificate with proof `x * c.subject = 0` without
+recursively certifying `x`. -/
+/-
+**Mathlib.Tactic.Determinant.zeroProdCert** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Determinant`。
+形式化陈述：zeroProdCert (x : Q($α)) (c : Cert rα) : MetaM (Cert rα)
+参数：x : Q($α)；c : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroProdCert
-  signature: (x : Q($α)) (c : Cert rα)
-  body: do
-  let zero : Q($α) := q(0)
-have : c.norm =Q zero := ⟨⟩
-  let h : Q($x * $c.subject = $x * $zero) :=
-    q(congrArg (fun y => $x * y) $c.proof)
-  return zeroCertOfProof q(Eq.trans $h (mul_zero $x))
-
-中文:
-定义 zeroProdCert
-  签名: (x : Q($α)) (c : Cert rα)
-  定义体: do
-  let zero : Q($α) := q(0)
-have : c.norm =Q zero := ⟨⟩
-  let h : Q($x * $c.subject = $x * $zero) :=
-    q(congrArg (fun y => $x * y) $c.proof)
-  return zeroCertOfProof q(Eq.trans $h (mul_zero $x))
+--- 原说明 ---
+If c.norm = 0, return a certificate with proof `x * c.subject = 0` without
+recursively certifying `x`.
 -/
 def zeroProdCert (x : Q($α)) (c : Cert rα) :
     MetaM (Cert rα) := do
   let zero : Q($α) := q(0)
-have : c.norm =Q zero := ⟨⟩
+  have : $c.norm =Q $zero := ⟨⟩
   let h : Q($x * $c.subject = $x * $zero) :=
     q(congrArg (fun y => $x * y) $c.proof)
   return zeroCertOfProof q(Eq.trans $h (mul_zero $x))
 
-/--
-Definition of `certEval` / `certEval` 的定义
+/-- Certify `e = norm` by evaluating `e` with the `ring` normalizer. -/
+/-
+**Mathlib.Tactic.Determinant.certEval** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Determinant`。
+形式化陈述：certEval (e : Q($α)) : CertM rα (Cert rα)
+参数：e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certEval
-  signature: (e : Q($α))
-  body: do
-  let ctx ← read
-  let res ← Common.eval rcNat ctx.rc ctx.cα e
-  return toCert res
-
-中文:
-定义 certEval
-  签名: (e : Q($α))
-  定义体: do
-  let ctx ← read
-  let res ← Common.eval rcNat ctx.rc ctx.cα e
-  return toCert res
+--- 原说明 ---
+Certify `e = norm` by evaluating `e` with the `ring` normalizer.
 -/
 def certEval (e : Q($α)) : CertM rα (Cert rα) := do
   let ctx ← read
-  let res ← Common.eval rcNat ctx.rc ctx.cα e
+  let res ← Common.eval rcℕ ctx.rc ctx.cα e
   return toCert res
 
-/--
-Definition of `certAdd` / `certAdd` 的定义
+/-- Certify `a.subject + b.subject` from certificates for `a` and `b`. -/
+/-
+**Mathlib.Tactic.Determinant.certAdd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.D
+eterminant`。
+形式化陈述：certAdd (a b : Cert rα) : CertM rα (Cert rα)
+参数：a b : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certAdd
-  signature: (a b : Cert rα)
-  body: do
-  let ctx ← read
-let c ← toCert < > Common.evalAdd ctx.rc rcNat a.val b.val
-  let h : Q($a.subject + $b.subject = $a.norm + $b.norm) :=
-    q(congr (congrArg (fun x y => x + y) $a.proof) $b.proof)
-  return c.chainProof h
-
-中文:
-定义 certAdd
-  签名: (a b : Cert rα)
-  定义体: do
-  let ctx ← read
-let c ← toCert < > Common.evalAdd ctx.rc rcNat a.val b.val
-  let h : Q($a.subject + $b.subject = $a.norm + $b.norm) :=
-    q(congr (congrArg (fun x y => x + y) $a.proof) $b.proof)
-  return c.chainProof h
+--- 原说明 ---
+Certify `a.subject + b.subject` from certificates for `a` and `b`.
 -/
 def certAdd (a b : Cert rα) : CertM rα (Cert rα) := do
   let ctx ← read
-let c ← toCert < > Common.evalAdd ctx.rc rcNat a.val b.val
+  let c ← toCert <$> Common.evalAdd ctx.rc rcℕ a.val b.val
   let h : Q($a.subject + $b.subject = $a.norm + $b.norm) :=
     q(congr (congrArg (fun x y => x + y) $a.proof) $b.proof)
   return c.chainProof h
 
-/--
-Definition of `certMul` / `certMul` 的定义
+/-- Certify `a.subject * b.subject` from certificates for `a` and `b`. -/
+/-
+**Mathlib.Tactic.Determinant.certMul** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.D
+eterminant`。
+形式化陈述：certMul (a b : Cert rα) : CertM rα (Cert rα)
+参数：a b : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certMul
-  signature: (a b : Cert rα)
-  body: do
-  let ctx ← read
-let c ← toCert < > Common.evalMul ctx.rc rcNat a.val b.val
-  let h : Q($a.subject * $b.subject = $a.norm * $b.norm) :=
-    q(congr (congrArg (fun x y => x * y) $a.proof) $b.proof)
-  return c.chainProof h
-
-中文:
-定义 certMul
-  签名: (a b : Cert rα)
-  定义体: do
-  let ctx ← read
-let c ← toCert < > Common.evalMul ctx.rc rcNat a.val b.val
-  let h : Q($a.subject * $b.subject = $a.norm * $b.norm) :=
-    q(congr (congrArg (fun x y => x * y) $a.proof) $b.proof)
-  return c.chainProof h
+--- 原说明 ---
+Certify `a.subject * b.subject` from certificates for `a` and `b`.
 -/
 def certMul (a b : Cert rα) : CertM rα (Cert rα) := do
   let ctx ← read
-let c ← toCert < > Common.evalMul ctx.rc rcNat a.val b.val
+  let c ← toCert <$> Common.evalMul ctx.rc rcℕ a.val b.val
   let h : Q($a.subject * $b.subject = $a.norm * $b.norm) :=
     q(congr (congrArg (fun x y => x * y) $a.proof) $b.proof)
   return c.chainProof h
 
-/--
-Definition of `certNeg` / `certNeg` 的定义
+/-- Certify `-a.subject` from a certificate for `a`. -/
+/-
+**Mathlib.Tactic.Determinant.certNeg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.D
+eterminant`。
+形式化陈述：certNeg (a : Cert rα) : CertM rα (Cert rα)
+参数：a : Cert rα。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certNeg
-  signature: (a : Cert rα)
-  body: do
-  let ctx ← read
-let c ← toCert < > Common.evalNeg ctx.rc rα a.val
-  let h : Q(-$a.subject = -$a.norm) :=
-    q(congrArg (fun x => -x) $a.proof)
-  return c.chainProof h
-
-中文:
-定义 certNeg
-  签名: (a : Cert rα)
-  定义体: do
-  let ctx ← read
-let c ← toCert < > Common.evalNeg ctx.rc rα a.val
-  let h : Q(-$a.subject = -$a.norm) :=
-    q(congrArg (fun x => -x) $a.proof)
-  return c.chainProof h
+--- 原说明 ---
+Certify `-a.subject` from a certificate for `a`.
 -/
 def certNeg (a : Cert rα) : CertM rα (Cert rα) := do
   let ctx ← read
-let c ← toCert < > Common.evalNeg ctx.rc rα a.val
+  let c ← toCert <$> Common.evalNeg ctx.rc rα a.val
   let h : Q(-$a.subject = -$a.norm) :=
     q(congrArg (fun x => -x) $a.proof)
   return c.chainProof h
 
-/--
-Definition of `certBirdSign` / `certBirdSign` 的定义
+/-- Certify the sign factor `(-1)^k` from `BirdDet.birdDet_eq`. -/
+/-
+**Mathlib.Tactic.Determinant.certBirdSign** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Determinant`。
+形式化陈述：certBirdSign (k : Nat) : CertM rα (Cert rα)
+参数：k : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certBirdSign
-  signature: (k : Nat)
-  body: do
-  certEval q((-1 : $α) ^ $k)
-
-中文:
-定义 certBirdSign
-  签名: (k : 自然数)
-  定义体: do
-  certEval q((-1 : $α) ^ $k)
+--- 原说明 ---
+Certify the sign factor `(-1)^k` from `BirdDet.birdDet_eq`.
 -/
-def certBirdSign (k : Nat) : CertM rα (Cert rα) := do
+def certBirdSign (k : ℕ) : CertM rα (Cert rα) := do
   certEval q((-1 : $α) ^ $k)
 
-/--
-Definition of `certEntry` / `certEntry` 的定义
+/-- Certify one matrix entry lookup `BirdDet.get n A i j`. -/
+/-
+**Mathlib.Tactic.Determinant.certEntry** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Determinant`。
+形式化陈述：certEntry (i j : Nat) : CertM rα (Cert rα)
+参数：i j : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certEntry
-  signature: (i j : Nat)
-  body: do
+--- 原说明 ---
+Certify one matrix entry lookup `BirdDet.get n A i j`.
+-/
+def certEntry (i j : ℕ) : CertM rα (Cert rα) := do
   if let some c := (← get).entryCache[(i, j)]? then
     return c
   let ctx ← read
@@ -587,222 +471,105 @@ definition certEntry
   let ce ← certEval entry
   let getD : Q($α) := q(Array.getD $A ($dimLit * $i + $j) 0)
   let hGet : Q($lhs = $getD) := q(BirdDet.get_eq $dimLit $A $i $j)
-have : getD =Q entry := ⟨⟩
+  have : $getD =Q $entry := ⟨⟩
   let hGetD : Q($getD = $entry) := q(rfl)
   let cert := ce.chainProof q(Eq.trans $hGet $hGetD)
   modify fun s => {s with entryCache := s.entryCache.insert (i, j) cert}
   return cert
 
-中文:
-定义 certEntry
-  签名: (i j : 自然数)
-  定义体: do
-  if let some c := (← get).entryCache[(i, j)]? then
-    return c
-  let ctx ← read
-  let {dimension := dim, dimensionLit := dimLit, arrayExpr := A, arrayEntries, ..} := ctx
-  let lhs : Q($α) := q(BirdDet.get $dimLit $A $i $j)
-  -- The index of the matrix entry (i, j) in arrayEntries
-  let idx := dim * i + j
-  let entry := arrayEntries.getD idx q(0)
-  let ce ← certEval entry
-  let getD : Q($α) := q(Array.getD $A ($dimLit * $i + $j) 0)
-  let hGet : Q($lhs = $getD) := q(BirdDet.get_eq $dimLit $A $i $j)
-have : getD =Q entry := ⟨⟩
-  let hGetD : Q($getD = $entry) := q(rfl)
-  let cert := ce.chainProof q(Eq.trans $hGet $hGetD)
-  modify fun s => {s with entryCache := s.entryCache.insert (i, j) cert}
-  return cert
+/-- Certify the stop branch of `BirdDet.sumFrom`.
+
+This corresponds to the `else 0` branch of:
+
+```
+sumFrom n lo f = if lo < n then f lo + sumFrom n (lo + 1) f else 0
+```
+
+Throws a meta-level error if called with `lo` such that `lo < ctx.dimension`.
 -/
-def certEntry (i j : Nat) : CertM rα (Cert rα) := do
-  if let some c := (← get).entryCache[(i, j)]? then
-    return c
-  let ctx ← read
-  let {dimension := dim, dimensionLit := dimLit, arrayExpr := A, arrayEntries, ..} := ctx
-  let lhs : Q($α) := q(BirdDet.get $dimLit $A $i $j)
-  -- The index of the matrix entry (i, j) in arrayEntries
-  let idx := dim * i + j
-  let entry := arrayEntries.getD idx q(0)
-  let ce ← certEval entry
-  let getD : Q($α) := q(Array.getD $A ($dimLit * $i + $j) 0)
-  let hGet : Q($lhs = $getD) := q(BirdDet.get_eq $dimLit $A $i $j)
-have : getD =Q entry := ⟨⟩
-  let hGetD : Q($getD = $entry) := q(rfl)
-  let cert := ce.chainProof q(Eq.trans $hGet $hGetD)
-  modify fun s => {s with entryCache := s.entryCache.insert (i, j) cert}
-  return cert
+/-
+**Mathlib.Tactic.Determinant.certSumFromStop** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Determinant`。
+形式化陈述：certSumFromStop (lo : Nat) (f : Q(Nat -> $α)) : CertM rα (Cert rα)
+参数：lo : Nat；f : Q(Nat -> $α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `certSumFromStop` / `certSumFromStop` 的定义
+--- 原说明 ---
+Certify the stop branch of `BirdDet.sumFrom`.
 
-English:
-definition certSumFromStop
-  signature: (lo : Nat) (f : Q(Nat -> $α))
-  body: do
-  let ctx ← read
-  if lo < ctx.dimension then
-    throwError "certSumFromStop called with {lo} such that {lo} < {ctx.dimension}"
-  have dimLit : Q(Nat) := ctx.dimensionLit
-  let hNot : Q(¬ $lo < $dimLit) ← mkDecideProofQ q(¬ $lo < $dimLit)
-  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $lo $f $hNot)
+This corresponds to the `else 0` branch of:
 
-中文:
-定义 certSumFromStop
-  签名: (lo : 自然数) (f : Q(自然数 -> $α))
-  定义体: do
-  let ctx ← read
-  if lo < ctx.dimension then
-    throwError "certSumFromStop called with {lo} such that {lo} < {ctx.dimension}"
-  have dimLit : Q(Nat) := ctx.dimensionLit
-  let hNot : Q(¬ $lo < $dimLit) ← mkDecideProofQ q(¬ $lo < $dimLit)
-  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $lo $f $hNot)
+```
+sumFrom n lo f = if lo < n then f lo + sumFrom n (lo + 1) f else 0
+```
+
+Throws a meta-level error if called with `lo` such that `lo < ctx.dimension`.
 -/
-def certSumFromStop (lo : Nat) (f : Q(Nat -> $α)) : CertM rα (Cert rα) := do
+def certSumFromStop (lo : ℕ) (f : Q(ℕ → $α)) : CertM rα (Cert rα) := do
   let ctx ← read
   if lo < ctx.dimension then
     throwError "certSumFromStop called with {lo} such that {lo} < {ctx.dimension}"
-  have dimLit : Q(Nat) := ctx.dimensionLit
+  have dimLit : Q(ℕ) := ctx.dimensionLit
   let hNot : Q(¬ $lo < $dimLit) ← mkDecideProofQ q(¬ $lo < $dimLit)
   return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $lo $f $hNot)
 
-/--
-Definition of `certSumFromStep` / `certSumFromStep` 的定义
+/-- Certify the step branch of `BirdDet.sumFrom`.
 
-English:
-definition certSumFromStep
-  body: do
-  let ctx ← read
-  unless lo < ctx.dimension do
-    throwError "certSumFromStep called with {lo} such that ¬ {lo} < {ctx.dimension}"
-  have dim : Q(Nat) := ctx.dimensionLit
-  let hLt : Q($lo < $dim) ← mkDecideProofQ q($lo < $dim)
-  let sumCert ← certAdd (← headCert) (← tailCert)
-  return sumCert.chainProof q(BirdDet.sumFrom_step $dim $lo $f $hLt)
+This corresponds to the `lo < n` branch of:
 
-mutual
+```
+sumFrom n lo f = if lo < n then f lo + sumFrom n (lo + 1) f else 0
+```
 
-中文:
-定义 certSumFromStep
-  定义体: do
-  let ctx ← read
-  unless lo < ctx.dimension do
-    throwError "certSumFromStep called with {lo} such that ¬ {lo} < {ctx.dimension}"
-  have dim : Q(Nat) := ctx.dimensionLit
-  let hLt : Q($lo < $dim) ← mkDecideProofQ q($lo < $dim)
-  let sumCert ← certAdd (← headCert) (← tailCert)
-  return sumCert.chainProof q(BirdDet.sumFrom_step $dim $lo $f $hLt)
+Throws a meta-level error if called with `lo` such that `¬ lo < ctx.dimension`.
+-/
+/-
+**Mathlib.Tactic.Determinant.certSumFromStep** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Determinant`。
+形式化陈述：certSumFromStep (lo : Nat) (f : Q(Nat -> $α)) (headCert tailCert : CertM r
+α (Cert rα)) : CertM rα (Cert rα)
+参数：lo : Nat；f : Q(Nat -> $α)；headCert tailCert : CertM rα (Cert rα)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-mutual
+--- 原说明 ---
+Certify the step branch of `BirdDet.sumFrom`.
+
+This corresponds to the `lo < n` branch of:
+
+```
+sumFrom n lo f = if lo < n then f lo + sumFrom n (lo + 1) f else 0
+```
+
+Throws a meta-level error if called with `lo` such that `¬ lo < ctx.dimension`.
 -/
 def certSumFromStep
-    (lo : Nat) (f : Q(Nat -> $α))
+    (lo : ℕ) (f : Q(ℕ → $α))
     (headCert tailCert : CertM rα (Cert rα)) : CertM rα (Cert rα) := do
   let ctx ← read
   unless lo < ctx.dimension do
     throwError "certSumFromStep called with {lo} such that ¬ {lo} < {ctx.dimension}"
-  have dim : Q(Nat) := ctx.dimensionLit
+  have dim : Q(ℕ) := ctx.dimensionLit
   let hLt : Q($lo < $dim) ← mkDecideProofQ q($lo < $dim)
   let sumCert ← certAdd (← headCert) (← tailCert)
   return sumCert.chainProof q(BirdDet.sumFrom_step $dim $lo $f $hLt)
 
 mutual
 
-/--
-Definition of `certIterStepEntry` / `certIterStepEntry` 的定义
+/-- Certify an entry of `(BirdDet.stepEntry n A)^[t] (BirdDet.get n A)`. -/
+/-
+**Mathlib.Tactic.Determinant.certIterStepEntry** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mat
+hlib.Tactic.Determinant`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     {rα : Q(CommRing «$α»)} → ℕ → ℕ → ℕ 
+→ Mathlib.Tactic.Determinant.CertM rα (Mathlib.Tactic.Determinant.Cert rα)
+参数：Type u；CommRing «$α»；Mathlib.Tactic.Determinant.Cert rα。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certIterStepEntry
-  signature: (t i j : Nat)
-  body: do
-  if let some c := (← get).iterStepEntryCache[(t, i, j)]? then
-    return c
-  let ctx ← read
-  let {dimensionLit := dimLit, arrayExpr := A, ..} := ctx
-  let cert ← match t with
-    -- The `t = 0` branch of `Function.iterate`.
-    | 0 => do
-      let ce ← certEntry i j
-      let hIter := q(Function.iterate_zero_apply
-        (BirdDet.stepEntry $dimLit $A) (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
-      pure (ce.chainProof h)
-    -- The `t = t' + 1` branch of `Function.iterate`.
-    | t' + 1 => do
-      -- First summand in one `BirdDet.stepEntry` application:
-      -- -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
-      let diagSummand := q(fun k => $(ctx.iterStepEntry t') k k)
-      let negDiagSum := q(-$(ctx.sumFrom (i + 1) diagSummand))
-      let entryCert ← certEntry i j
-      let diagProdCert ←
-        -- If `get n A i j = 0` then we can skip computation of
-        -- `-(sumFrom n (i + 1) fun k => F_t k k)`
-        if entryCert.isZero then
-          zeroProdCert negDiagSum entryCert
-        else do
-          let diagSumCert ← certDiag t' (i + 1)
-          let negDiagSumCert ← certNeg diagSumCert
-          certMul negDiagSumCert entryCert
-      -- Second summand in one `BirdDet.stepEntry` application:
-      -- sumFrom n (i + 1) fun k => F_t i k * get n A k j
-      let tailSumCert ← certTail t' i j (i + 1)
-      let rhsCert ← certAdd diagProdCert tailSumCert
-      let hStep := q(BirdDet.stepEntry_eq $dimLit $A $(ctx.iterStepEntry t') $i $j)
-      let stepCert := rhsCert.chainProof hStep
-      let hIter := q(Function.iterate_succ_apply'
-(BirdDet.stepEntry $dimLit $A) t' (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
-      pure (stepCert.chainProof h)
-  modify fun s =>
-    {s with iterStepEntryCache := s.iterStepEntryCache.insert (t, i, j) cert}
-  return cert
-
-中文:
-定义 certIterStepEntry
-  签名: (t i j : 自然数)
-  定义体: do
-  if let some c := (← get).iterStepEntryCache[(t, i, j)]? then
-    return c
-  let ctx ← read
-  let {dimensionLit := dimLit, arrayExpr := A, ..} := ctx
-  let cert ← match t with
-    -- The `t = 0` branch of `Function.iterate`.
-    | 0 => do
-      let ce ← certEntry i j
-      let hIter := q(Function.iterate_zero_apply
-        (BirdDet.stepEntry $dimLit $A) (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
-      pure (ce.chainProof h)
-    -- The `t = t' + 1` branch of `Function.iterate`.
-    | t' + 1 => do
-      -- First summand in one `BirdDet.stepEntry` application:
-      -- -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
-      let diagSummand := q(fun k => $(ctx.iterStepEntry t') k k)
-      let negDiagSum := q(-$(ctx.sumFrom (i + 1) diagSummand))
-      let entryCert ← certEntry i j
-      let diagProdCert ←
-        -- If `get n A i j = 0` then we can skip computation of
-        -- `-(sumFrom n (i + 1) fun k => F_t k k)`
-        if entryCert.isZero then
-          zeroProdCert negDiagSum entryCert
-        else do
-          let diagSumCert ← certDiag t' (i + 1)
-          let negDiagSumCert ← certNeg diagSumCert
-          certMul negDiagSumCert entryCert
-      -- Second summand in one `BirdDet.stepEntry` application:
-      -- sumFrom n (i + 1) fun k => F_t i k * get n A k j
-      let tailSumCert ← certTail t' i j (i + 1)
-      let rhsCert ← certAdd diagProdCert tailSumCert
-      let hStep := q(BirdDet.stepEntry_eq $dimLit $A $(ctx.iterStepEntry t') $i $j)
-      let stepCert := rhsCert.chainProof hStep
-      let hIter := q(Function.iterate_succ_apply'
-(BirdDet.stepEntry $dimLit $A) t' (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
-      pure (stepCert.chainProof h)
-  modify fun s =>
-    {s with iterStepEntryCache := s.iterStepEntryCache.insert (t, i, j) cert}
-  return cert
+--- 原说明 ---
+Certify an entry of `(BirdDet.stepEntry n A)^[t] (BirdDet.get n A)`.
 -/
-partial def certIterStepEntry (t i j : Nat) : CertM rα (Cert rα) := do
+partial def certIterStepEntry (t i j : ℕ) : CertM rα (Cert rα) := do
   if let some c := (← get).iterStepEntryCache[(t, i, j)]? then
     return c
   let ctx ← read
@@ -813,18 +580,18 @@ partial def certIterStepEntry (t i j : Nat) : CertM rα (Cert rα) := do
       let ce ← certEntry i j
       let hIter := q(Function.iterate_zero_apply
         (BirdDet.stepEntry $dimLit $A) (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+      let h := q(congrArg (fun F : ℕ → ℕ → $α => F $i $j) $hIter)
       pure (ce.chainProof h)
     -- The `t = t' + 1` branch of `Function.iterate`.
     | t' + 1 => do
       -- First summand in one `BirdDet.stepEntry` application:
-      -- -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
+      --   -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
       let diagSummand := q(fun k => $(ctx.iterStepEntry t') k k)
       let negDiagSum := q(-$(ctx.sumFrom (i + 1) diagSummand))
       let entryCert ← certEntry i j
       let diagProdCert ←
         -- If `get n A i j = 0` then we can skip computation of
-        -- `-(sumFrom n (i + 1) fun k => F_t k k)`
+        --  `-(sumFrom n (i + 1) fun k => F_t k k)`
         if entryCert.isZero then
           zeroProdCert negDiagSum entryCert
         else do
@@ -832,27 +599,42 @@ partial def certIterStepEntry (t i j : Nat) : CertM rα (Cert rα) := do
           let negDiagSumCert ← certNeg diagSumCert
           certMul negDiagSumCert entryCert
       -- Second summand in one `BirdDet.stepEntry` application:
-      -- sumFrom n (i + 1) fun k => F_t i k * get n A k j
+      --   sumFrom n (i + 1) fun k => F_t i k * get n A k j
       let tailSumCert ← certTail t' i j (i + 1)
       let rhsCert ← certAdd diagProdCert tailSumCert
       let hStep := q(BirdDet.stepEntry_eq $dimLit $A $(ctx.iterStepEntry t') $i $j)
       let stepCert := rhsCert.chainProof hStep
       let hIter := q(Function.iterate_succ_apply'
-(BirdDet.stepEntry $dimLit $A) t' (BirdDet.get $dimLit $A))
-      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+        (BirdDet.stepEntry $dimLit $A) $t' (BirdDet.get $dimLit $A))
+      let h := q(congrArg (fun F : ℕ → ℕ → $α ↦ F $i $j) $hIter)
       pure (stepCert.chainProof h)
   modify fun s =>
     {s with iterStepEntryCache := s.iterStepEntryCache.insert (t, i, j) cert}
   return cert
 
 
-/--
-Definition of `certDiag` / `certDiag` 的定义
+/-- Certify the diagonal tail sum in one `BirdDet.stepEntry` application:
 
-English:
-definition certDiag
-  signature: (t lo : Nat)
-  body: do
+```
+sumFrom n (i + 1) fun k => (stepEntry n A)^[t] F k k)
+```
+-/
+/-
+**Mathlib.Tactic.Determinant.certDiag** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tact
+ic.Determinant`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     {rα : Q(CommRing «$α»)} → ℕ → ℕ → Ma
+thlib.Tactic.Determinant.CertM rα (Mathlib.Tactic.Determinant.Cert rα)
+参数：Type u；CommRing «$α»；Mathlib.Tactic.Determinant.Cert rα。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Certify the diagonal tail sum in one `BirdDet.stepEntry` application:
+
+```
+sumFrom n (i + 1) fun k => (stepEntry n A)^[t] F k k)
+```
+-/
+partial def certDiag (t lo : ℕ) : CertM rα (Cert rα) := do
   if let some c := (← get).diagCache[(t, lo)]? then
     return c
   let ctx ← read
@@ -872,134 +654,41 @@ definition certDiag
   modify fun s => {s with diagCache := s.diagCache.insert (t, lo) cert}
   return cert
 
-中文:
-定义 certDiag
-  签名: (t lo : 自然数)
-  定义体: do
-  if let some c := (← get).diagCache[(t, lo)]? then
-    return c
-  let ctx ← read
-  let diagonalSummand := q(fun k => $(ctx.iterStepEntry t) k k)
-  let cert ←
-    if lo < ctx.dimension
-    then do
-      let headCert := certIterStepEntry t lo lo
-      let tailCert := certDiag t (lo + 1)
-      certSumFromStep
-        lo
-        diagonalSummand
-        headCert
-        tailCert
-    else
-      certSumFromStop lo diagonalSummand
-  modify fun s => {s with diagCache := s.diagCache.insert (t, lo) cert}
-  return cert
+/-- Certify the upper-tail sum in one `BirdDet.stepEntry` application:
+
+```
+sumFrom n (i + 1) fun k => (stepEntry n A)^[t] F i k * get n A k j
+```
 -/
-partial def certDiag (t lo : Nat) : CertM rα (Cert rα) := do
-  if let some c := (← get).diagCache[(t, lo)]? then
-    return c
-  let ctx ← read
-  let diagonalSummand := q(fun k => $(ctx.iterStepEntry t) k k)
-  let cert ←
-    if lo < ctx.dimension
-    then do
-      let headCert := certIterStepEntry t lo lo
-      let tailCert := certDiag t (lo + 1)
-      certSumFromStep
-        lo
-        diagonalSummand
-        headCert
-        tailCert
-    else
-      certSumFromStop lo diagonalSummand
-  modify fun s => {s with diagCache := s.diagCache.insert (t, lo) cert}
-  return cert
+/-
+**Mathlib.Tactic.Determinant.certTail** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tact
+ic.Determinant`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     {rα : Q(CommRing «$α»)} → ℕ → ℕ → ℕ 
+→ ℕ → Mathlib.Tactic.Determinant.CertM rα (Mathlib.Tactic.Determinant.Cert rα)
+参数：Type u；CommRing «$α»；Mathlib.Tactic.Determinant.Cert rα。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `certTail` / `certTail` 的定义
+--- 原说明 ---
+Certify the upper-tail sum in one `BirdDet.stepEntry` application:
 
-English:
-definition certTail
-  signature: (t i j lo : Nat)
-  body: do
-  let ctx ← read
-  let {dimensionLit := dimLit, arrayExpr := A, ..} := ctx
-  let tailSummand :=
-    q(fun k =>
- (ctx.iterStepEntry t) i k *
-BirdDet.get dimLit A k j)
-  if lo < ctx.dimension
-  then do
-    -- headCert certifies `(stepEntry n A)^[t] F i lo * get n A lo j`
-    let headCert := do
-      let entryCert ← certEntry lo j
-      -- If `get n A lo j = 0` then we can skip computation of
-      -- `(stepEntry n A)^[t] F i lo`
-      if entryCert.isZero
-      then
-        zeroProdCert
-          q($(ctx.iterStepEntry t) $i $lo)
-          entryCert
-      else do
-        let iterateCert ← certIterStepEntry t i lo
-        certMul iterateCert entryCert
-    let tailCert := certTail t i j (lo + 1)
-    certSumFromStep
-      lo
-      tailSummand
-      headCert
-      tailCert
-  else
-    certSumFromStop lo tailSummand
-
-中文:
-定义 certTail
-  签名: (t i j lo : 自然数)
-  定义体: do
-  let ctx ← read
-  let {dimensionLit := dimLit, arrayExpr := A, ..} := ctx
-  let tailSummand :=
-    q(fun k =>
- (ctx.iterStepEntry t) i k *
-BirdDet.get dimLit A k j)
-  if lo < ctx.dimension
-  then do
-    -- headCert certifies `(stepEntry n A)^[t] F i lo * get n A lo j`
-    let headCert := do
-      let entryCert ← certEntry lo j
-      -- If `get n A lo j = 0` then we can skip computation of
-      -- `(stepEntry n A)^[t] F i lo`
-      if entryCert.isZero
-      then
-        zeroProdCert
-          q($(ctx.iterStepEntry t) $i $lo)
-          entryCert
-      else do
-        let iterateCert ← certIterStepEntry t i lo
-        certMul iterateCert entryCert
-    let tailCert := certTail t i j (lo + 1)
-    certSumFromStep
-      lo
-      tailSummand
-      headCert
-      tailCert
-  else
-    certSumFromStop lo tailSummand
+```
+sumFrom n (i + 1) fun k => (stepEntry n A)^[t] F i k * get n A k j
+```
 -/
-partial def certTail (t i j lo : Nat) : CertM rα (Cert rα) := do
+partial def certTail (t i j lo : ℕ) : CertM rα (Cert rα) := do
   let ctx ← read
   let {dimensionLit := dimLit, arrayExpr := A, ..} := ctx
   let tailSummand :=
     q(fun k =>
- (ctx.iterStepEntry t) i k *
-BirdDet.get dimLit A k j)
+      $(ctx.iterStepEntry t) $i k *
+        BirdDet.get $dimLit $A k $j)
   if lo < ctx.dimension
   then do
     -- headCert certifies `(stepEntry n A)^[t] F i lo * get n A lo j`
     let headCert := do
       let entryCert ← certEntry lo j
       -- If `get n A lo j = 0` then we can skip computation of
-      -- `(stepEntry n A)^[t] F i lo`
+      --  `(stepEntry n A)^[t] F i lo`
       if entryCert.isZero
       then
         zeroProdCert
@@ -1019,60 +708,17 @@ BirdDet.get dimLit A k j)
 
 end
 
-/--
-Definition of `certBirdDet` / `certBirdDet` 的定义
+/-- Certify a `BirdDet.birdDet n A` call. -/
+/-
+**Mathlib.Tactic.Determinant.certBirdDet** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Determinant`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} → {rα : Q(CommRing «$α»)} → Mathlib.Tactic
+.Determinant.CertM rα (Mathlib.Tactic.Determinant.Cert rα)
+参数：Type u；CommRing «$α»；Mathlib.Tactic.Determinant.Cert rα。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition certBirdDet
-  signature: : CertM rα (Cert rα)
-  body: do
-  let ctx ← read
-  let {dimension := dim, dimensionLit := dimLit, arrayExpr, ..} := ctx
-  if dim == 0
-  then
-    let ce ← certEval q(1 : $α)
-have : dimLit =Q 0 := ⟨⟩
-    have A : Q(Array $α) := arrayExpr
-    let h := q(BirdDet.birdDet_zero $A)
-    return ce.chainProof h
-  else
-    -- The non-zero `BirdDet.birdDet_eq` branch matches `k + 1`
-    -- so we set k := `ctx.dimension - 1`.
-    let k := dim - 1
-    let cs ← certBirdSign k
-    let ci ← certIterStepEntry k 0 0
-    let cm ← certMul cs ci
-    have kLit := mkNatLitQ k
-have : dimLit =Q kLit + 1 := ⟨⟩
-    let hn : Q($dimLit = $kLit + 1) := q(rfl)
-    let h := q(BirdDet.birdDet_eq $dimLit $kLit $arrayExpr $hn)
-    return cm.chainProof h
-
-中文:
-定义 certBirdDet
-  签名: : CertM rα (Cert rα)
-  定义体: do
-  let ctx ← read
-  let {dimension := dim, dimensionLit := dimLit, arrayExpr, ..} := ctx
-  if dim == 0
-  then
-    let ce ← certEval q(1 : $α)
-have : dimLit =Q 0 := ⟨⟩
-    have A : Q(Array $α) := arrayExpr
-    let h := q(BirdDet.birdDet_zero $A)
-    return ce.chainProof h
-  else
-    -- The non-zero `BirdDet.birdDet_eq` branch matches `k + 1`
-    -- so we set k := `ctx.dimension - 1`.
-    let k := dim - 1
-    let cs ← certBirdSign k
-    let ci ← certIterStepEntry k 0 0
-    let cm ← certMul cs ci
-    have kLit := mkNatLitQ k
-have : dimLit =Q kLit + 1 := ⟨⟩
-    let hn : Q($dimLit = $kLit + 1) := q(rfl)
-    let h := q(BirdDet.birdDet_eq $dimLit $kLit $arrayExpr $hn)
-    return cm.chainProof h
+--- 原说明 ---
+Certify a `BirdDet.birdDet n A` call.
 -/
 def certBirdDet : CertM rα (Cert rα) := do
   let ctx ← read
@@ -1080,7 +726,7 @@ def certBirdDet : CertM rα (Cert rα) := do
   if dim == 0
   then
     let ce ← certEval q(1 : $α)
-have : dimLit =Q 0 := ⟨⟩
+    have : $dimLit =Q 0 := ⟨⟩
     have A : Q(Array $α) := arrayExpr
     let h := q(BirdDet.birdDet_zero $A)
     return ce.chainProof h
@@ -1092,7 +738,7 @@ have : dimLit =Q 0 := ⟨⟩
     let ci ← certIterStepEntry k 0 0
     let cm ← certMul cs ci
     have kLit := mkNatLitQ k
-have : dimLit =Q kLit + 1 := ⟨⟩
+    have : $dimLit =Q $kLit + 1 := ⟨⟩
     let hn : Q($dimLit = $kLit + 1) := q(rfl)
     let h := q(BirdDet.birdDet_eq $dimLit $kLit $arrayExpr $hn)
     return cm.chainProof h
@@ -1100,3 +746,4 @@ have : dimLit =Q kLit + 1 := ⟨⟩
 end Mathlib.Tactic.Determinant
 
 end
+

@@ -50,24 +50,21 @@ The field `app` provides the components of the natural transformation.
 Naturality is expressed by `α.naturality`.
 -/
 @[ext, to_dual self (reorder := F G), wikidata Q1442189]
-/--
-Definition of `NatTrans` / `NatTrans` 的定义
+/-
+**CategoryTheory.NatTrans** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：NatTrans (F G : C ⥤ D) : Type max u₁ v₂ where /-- The component of a natur
+al transformation. -/ app (X : C) : F.obj X ⟶ G.obj X /-- The naturality square 
+for a given morphism. -/ naturality ⦃X Y : C⦄ (f : X ⟶ Y) : F.map f ≫ app Y = ap
+p X ≫ G.map f
+参数：F G : C ⥤ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NatTrans
-  parameters: (F G : C ⥤ D)
-  axioms and operations (2):
-    - app((X : C)) : F.obj X ⟶ G.obj X
-    - naturality(⦃X Y) : C⦄ (f : X ⟶ Y) : F.map f ≫ app Y = app X ≫ G.map f  [default: by cat_disch]
+--- 原说明 ---
+`NatTrans F G` represents a natural transformation between functors `F` and `G`.
 
-中文:
-结构 自然变换
-  参数: (F G : C ⥤ D)
-  公理与运算 (2 个):
-    - app((X : C)) : F.obj X ⟶ G.obj X
-    - naturality(⦃X Y) : C⦄ (f : X ⟶ Y) : F.map f ≫ app Y = app X ≫ G.map f  [默认: by cat_disch]
+The field `app` provides the components of the natural transformation.
 
-Depends on / 依赖: cat_disch
+Naturality is expressed by `α.naturality`.
 -/
 structure NatTrans (F G : C ⥤ D) : Type max u₁ v₂ where
   /-- The component of a natural transformation. -/
@@ -76,22 +73,21 @@ structure NatTrans (F G : C ⥤ D) : Type max u₁ v₂ where
   naturality ⦃X Y : C⦄ (f : X ⟶ Y) : F.map f ≫ app Y = app X ≫ G.map f := by cat_disch
 
 @[to_dual existing naturality]
-/--
-lemma `NatTrans.naturality'` / 引理 `NatTrans.naturality'`
-
-English:
-lemma NatTrans.naturality'
-  given: {F G : C ⥤ D} (self : NatTrans G F) ⦃X Y
-  statement: C⦄ (f : Y ⟶ X) :
-  proof: (self.naturality f).symm
-
-中文:
-引理 自然变换.naturality'
-  条件: {F G : C ⥤ D} (self : 自然变换 G F) ⦃X Y
-  结论: C⦄ (f : Y ⟶ X) :
-  证明: (self.naturality f).symm
-
-Depends on / 依赖: naturality, self.naturality
+/-
+**CategoryTheory.NatTrans.naturality'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+NatTrans`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : CategoryTheory.Functor C 
+D} (self : CategoryTheory.NatTrans G F) ⦃X Y : C⦄ (f : Y ⟶ X),   CategoryTheory.
+CategoryStruct.comp (self.app Y) (F.map f) = CategoryTheory.CategoryStruct.comp 
+(G.map f) (self.app X)
+参数：self : CategoryTheory.NatTrans G F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma NatTrans.naturality' {F G : C ⥤ D} (self : NatTrans G F) ⦃X Y : C⦄ (f : Y ⟶ X) :
     self.app Y ≫ F.map f = G.map f ≫ self.app X := (self.naturality f).symm
@@ -99,21 +95,26 @@ lemma NatTrans.naturality' {F G : C ⥤ D} (self : NatTrans G F) ⦃X Y : C⦄ (
 /-- `NatTrans.mk'` is the dual of `NatTrans.mk`, which we need for `to_dual`.
 Please avoid using this directly. -/
 @[to_dual existing mk]
-/--
-Definition of `NatTrans.mk'` / `NatTrans.mk'` 的定义
+/-
+**CategoryTheory.NatTrans.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.NatTrans
+`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {F G : C
+ategoryTheory.Functor C D} →           (app : (X : C) → G.obj X ⟶ F.obj X) →    
+         (∀ ⦃X Y : C⦄ (f : Y ⟶ X),                 CategoryTheory.CategoryStruct
+.comp (app Y) (F.map f) =                   CategoryTheory.CategoryStruct.comp (
+G.map f) (app X)) →               CategoryTheory.NatTrans G F
+参数：app : (X : C) → G.obj X ⟶ F.obj X；∀ ⦃X Y : C⦄ (f : Y ⟶ X),                 Ca
+tegoryTheory.CategoryStruct.comp (app Y) (F.map f) =                   CategoryT
+heory.CategoryStruct.comp (G.map f) (app X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation NatTrans.mk'
-  signature: {F G : C ⥤ D} (app : (X : C) -> G.obj X ⟶ F.obj X)
-
-中文:
-缩写 自然变换.mk'
-  签名: {F G : C ⥤ D} (app : (X : C) -> G.obj X ⟶ F.obj X)
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, naturality
+--- 原说明 ---
+`NatTrans.mk'` is the dual of `NatTrans.mk`, which we need for `to_dual`.
+Please avoid using this directly.
 -/
-abbrev NatTrans.mk' {F G : C ⥤ D} (app : (X : C) -> G.obj X ⟶ F.obj X)
-    (naturality : forall ⦃X Y : C⦄ (f : Y ⟶ X), app Y ≫ F.map f = G.map f ≫ app X) : NatTrans G F where
+abbrev NatTrans.mk' {F G : C ⥤ D} (app : (X : C) → G.obj X ⟶ F.obj X)
+    (naturality : ∀ ⦃X Y : C⦄ (f : Y ⟶ X), app Y ≫ F.map f = G.map f ≫ app X) : NatTrans G F where
   app
 
 -- Rather arbitrarily, we say that the 'simpler' form is
@@ -123,24 +124,13 @@ attribute [reassoc (attr := simp)] NatTrans.naturality
 attribute [grind _=_] NatTrans.naturality
 
 @[to_dual self]
-/--
-theorem `congr_app` / 定理 `congr_app`
-
-English:
-theorem congr_app
-  given: {F G : C ⥤ D} {α β : NatTrans F G} (h : α = β) (X : C)
-  statement: α.app X = β.app X
-  proof: by
-  cat_disch
-
-中文:
-定理 congr_app
-  条件: {F G : C ⥤ D} {α β : 自然变换 F G} (h : α = β) (X : C)
-  结论: α.app X = β.app X
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.congr_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (h : α = β) (X : C) : α.app X
+ = β.app X
+参数：h : α = β；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congr_app {F G : C ⥤ D} {α β : NatTrans F G} (h : α = β) (X : C) : α.app X = β.app X := by
   cat_disch
@@ -149,43 +139,34 @@ namespace NatTrans
 
 /-- `NatTrans.id F` is the identity natural transformation on a functor `F`. -/
 @[implicit_reducible]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.NatTrans.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.NatTrans`
+。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → (F : CategoryThe
+ory.Functor C D) → CategoryTheory.NatTrans F F
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (F : C ⥤ D)
-  body: 𝟙 (F.obj X)
-
-@[simp]
-
-中文:
-定义 id
-  签名: (F : C ⥤ D)
-  定义体: 𝟙 (F.obj X)
-
-@[simp]
+--- 原说明 ---
+`NatTrans.id F` is the identity natural transformation on a functor `F`.
 -/
 protected def id (F : C ⥤ D) : NatTrans F F where app X := 𝟙 (F.obj X)
 
 @[simp]
-/--
-theorem `id_app'` / 定理 `id_app'`
-
-English:
-theorem id_app'
-  given: (F : C ⥤ D) (X : C)
-  statement: (NatTrans.id F).app X = 𝟙 (F.obj X)
-  proof: rfl
-
-中文:
-定理 id_app'
-  条件: (F : C ⥤ D) (X : C)
-  结论: (自然变换.id F).app X = 𝟙 (F.obj X)
-  证明: rfl
+/-
+**CategoryTheory.NatTrans.id_app'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.NatT
+rans`。
+形式化陈述：id_app' (F : C ⥤ D) (X : C) : (NatTrans.id F).app X = 𝟙 (F.obj X)
+参数：F : C ⥤ D；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_app' (F : C ⥤ D) (X : C) : (NatTrans.id F).app X = 𝟙 (F.obj X) := rfl
-
+/-
+**CategoryTheory.NatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.NatTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) : Inhabited (NatTrans F F) := ⟨NatTrans.id F⟩
 
 open Category
@@ -198,37 +179,31 @@ variable {F G H : C ⥤ D}
 
 /-- `vcomp α β` is the vertical compositions of natural transformations. -/
 @[to_dual self (reorder := F H, α β)]
-/--
-Definition of `vcomp` / `vcomp` 的定义
+/-
+**CategoryTheory.NatTrans.vcomp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.NatTra
+ns`。
+形式化陈述：vcomp (α : NatTrans F G) (β : NatTrans G H) : NatTrans F H where app X
+参数：α : NatTrans F G；β : NatTrans G H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vcomp
-  signature: (α : NatTrans F G) (β : NatTrans G H)
-  body: α.app X ≫ β.app X
-
-中文:
-定义 vcomp
-  签名: (α : 自然变换 F G) (β : 自然变换 G H)
-  定义体: α.app X ≫ β.app X
+--- 原说明 ---
+`vcomp α β` is the vertical compositions of natural transformations.
 -/
 def vcomp (α : NatTrans F G) (β : NatTrans G H) : NatTrans F H where
   app X := α.app X ≫ β.app X
 
 -- functor_category will rewrite (vcomp α β) to (α ≫ β), so this is not a
--- suitable simp lemma. We will declare the variant vcomp_app' there.
+-- suitable simp lemma.  We will declare the variant vcomp_app' there.
 @[to_dual self]
-/--
-theorem `vcomp_app` / 定理 `vcomp_app`
-
-English:
-theorem vcomp_app
-  given: (α : NatTrans F G) (β : NatTrans G H) (X : C)
-  proof: rfl
-
-中文:
-定理 vcomp_app
-  条件: (α : 自然变换 F G) (β : 自然变换 G H) (X : C)
-  证明: rfl
+/-
+**CategoryTheory.NatTrans.vcomp_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Na
+tTrans`。
+形式化陈述：vcomp_app (α : NatTrans F G) (β : NatTrans G H) (X : C) : (vcomp α β).app 
+X = α.app X ≫ β.app X
+参数：α : NatTrans F G；β : NatTrans G H；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem vcomp_app (α : NatTrans F G) (β : NatTrans G H) (X : C) :
     (vcomp α β).app X = α.app X ≫ β.app X := rfl
@@ -239,13 +214,30 @@ end
 
 /-- The diagram
 ```
-    F(f) F(g) F(h)
+    F(f)      F(g)      F(h)
 F X ----> F Y ----> F U ----> F V
- | | | |
- | α(X) | α(Y) | α(U) | α(V)
- v v v v
+ |         |         |         |
+ | α(X)    | α(Y)    | α(U)    | α(V)
+ v         v         v         v
 G X ----> G Y ----> G U ----> G V
-    G(f) G(g) G(h)
+    G(f)      G(g)      G(h)
+```
+commutes.
+-/
+/-
+**CategoryTheory.NatTrans.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.NatTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The diagram
+```
+    F(f)      F(g)      F(h)
+F X ----> F Y ----> F U ----> F V
+ |         |         |         |
+ | α(X)    | α(Y)    | α(U)    | α(V)
+ v         v         v         v
+G X ----> G Y ----> G U ----> G V
+    G(f)      G(g)      G(h)
 ```
 commutes.
 -/
@@ -256,3 +248,4 @@ example {F G : C ⥤ D} (α : NatTrans F G) {X Y U V : C} (f : X ⟶ Y) (g : Y �
 end NatTrans
 
 end CategoryTheory
+

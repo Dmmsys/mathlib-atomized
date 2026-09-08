@@ -36,48 +36,58 @@ section RCLike
 
 variable {𝕜 A : Type*} [RCLike 𝕜]
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) RCLike.instContinuousMapUniqueHom [TopologicalSpace A]
     [T2Space A] [Ring A] [StarRing A] [Algebra 𝕜 A] :
     ContinuousMap.UniqueHom 𝕜 A where
   eq_of_continuous_of_map_id s _ φ ψ hφ hψ h :=
-ContinuousMap.starAlgHom_ext_map_X hφ hψ by
+    ContinuousMap.starAlgHom_ext_map_X hφ hψ <| by
       convert! h using 1
       all_goals exact congr_arg _ (by ext; simp)
-
-/--
-Instance `Real.instContinuousMapUniqueHom` / 实例 `Real.instContinuousMapUniqueHom`
-
-English:
-instance Real.instContinuousMapUniqueHom
-  signature: [TopologicalSpace A]
-  body: inferInstance
-
-中文:
-实例 实数.instContinuousMapUniqueHom
-  签名: [拓扑空间 A]
-  定义体: inferInstance
+/-
+**Real.instContinuousMapUniqueHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Real.instContinuousMapUniqueHom [TopologicalSpace A] [T2Space A] [Ring A] 
+[StarRing A] [Algebra Real A] : ContinuousMap.UniqueHom Real A
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `RCLike.instContinuousMapUniqueHom`：∀ {𝕜 : Type u_1} {A : Type u_2} [inst
+ : RCLike 𝕜] [inst_1 : TopologicalSpace A] [T2Space A] [inst_3 : Ring A]   [inst
+_4 : StarRing A] [inst_…
 -/
 instance Real.instContinuousMapUniqueHom [TopologicalSpace A]
-    [T2Space A] [Ring A] [StarRing A] [Algebra Real A] :
-    ContinuousMap.UniqueHom Real A :=
+    [T2Space A] [Ring A] [StarRing A] [Algebra ℝ A] :
+    ContinuousMap.UniqueHom ℝ A :=
   inferInstance
-
-/--
-Instance `Complex.instContinuousMapUniqueHom` / 实例 `Complex.instContinuousMapUniqueHom`
-
-English:
-instance Complex.instContinuousMapUniqueHom
-  signature: [TopologicalSpace A]
-  body: inferInstance
-
-中文:
-实例 复形.instContinuousMapUniqueHom
-  签名: [拓扑空间 A]
-  定义体: inferInstance
+/-
+**Complex.instContinuousMapUniqueHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Complex.instContinuousMapUniqueHom [TopologicalSpace A] [T2Space A] [Ring 
+A] [StarRing A] [Algebra Complex A] : ContinuousMap.UniqueHom Complex A
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Complex.instContinuousStar`：ContinuousStar ℂ
+· 使用定理 `RCLike.instContinuousMapUniqueHom`：∀ {𝕜 : Type u_1} {A : Type u_2} [inst
+ : RCLike 𝕜] [inst_1 : TopologicalSpace A] [T2Space A] [inst_3 : Ring A]   [inst
+_4 : StarRing A] [inst_…
 -/
 instance Complex.instContinuousMapUniqueHom [TopologicalSpace A]
-    [T2Space A] [Ring A] [StarRing A] [Algebra Complex A] :
-    ContinuousMap.UniqueHom Complex A :=
+    [T2Space A] [Ring A] [StarRing A] [Algebra ℂ A] :
+    ContinuousMap.UniqueHom ℂ A :=
   inferInstance
 
 end RCLike
@@ -90,102 +100,147 @@ variable {X : Type*} [TopologicalSpace X]
 namespace ContinuousMap
 
 /-- This map sends `f : C(X, ℝ)` to `Real.toNNReal ∘ f`, bundled as a continuous map `C(X, ℝ≥0)`. -/
-.comp f noncomputable def toNNReal (f : C(X, Real)) : C(X, Real>=0) := .realToNNReal
+/-
+**ContinuousMap.toNNReal** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：{X : Type u_1} → [inst : TopologicalSpace X] → C(X, ℝ) → C(X, NNReal)
+参数：X, ℝ；X, NNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This map sends `f : C(X, ℝ)` to `Real.toNNReal ∘ f`, bundled as a continuous map
+ `C(X, ℝ≥0)`.
+-/
+noncomputable def toNNReal (f : C(X, ℝ)) : C(X, ℝ≥0) := .realToNNReal |>.comp f
 
 @[fun_prop]
-/--
-lemma `continuous_toNNReal` / 引理 `continuous_toNNReal`
-
-English:
-lemma continuous_toNNReal
-  statement: Continuous (toNNReal (X := X))
-  proof: continuous_postcomp _
-
-@[simp]
-
-中文:
-引理 continuous_toNN实数
-  结论: 连续 (toNN实数 (X := X))
-  证明: continuous_postcomp _
-
-@[simp]
-
-Depends on / 依赖: continuous_postcomp
+/-
+**ContinuousMap.continuous_toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：continuous_toNNReal : Continuous (toNNReal (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous_postcomp`：continuous_postcomp (g : C(Y, Z)) : C
+ontinuous (ContinuousMap.comp g : C(X, Y) -> C(X, Z))
 -/
 lemma continuous_toNNReal : Continuous (toNNReal (X := X)) := continuous_postcomp _
 
 @[simp]
-/--
-lemma `toNNReal_apply` / 引理 `toNNReal_apply`
-
-English:
-lemma toNNReal_apply
-  given: (f : C(X, Real)) (x : X)
-  statement: f.toNNReal x = (f x).toNNReal
-  proof: rfl
-
-中文:
-引理 toNN实数_apply
-  条件: (f : C(X, 实数)) (x : X)
-  结论: f.toNN实数 x = (f x).toNN实数
-  证明: rfl
+/-
+**ContinuousMap.toNNReal_apply** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：toNNReal_apply (f : C(X, Real)) (x : X) : f.toNNReal x = (f x).toNNReal
+参数：f : C(X, Real)；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toNNReal_apply (f : C(X, Real)) (x : X) : f.toNNReal x = (f x).toNNReal := rfl
-
-/--
-lemma `toNNReal_add_add_neg_add_neg_eq` / 引理 `toNNReal_add_add_neg_add_neg_eq`
-
-English:
-lemma toNNReal_add_add_neg_add_neg_eq
-  given: (f g : C(X, Real))
-  proof: by
-  ext x
-  simp [max_neg_zero, -neg_add_rev]
-  abel
-
-中文:
-引理 toNN实数_add_add_neg_add_neg_eq
-  条件: (f g : C(X, 实数))
-  证明: by
-  ext x
-  simp [max_neg_zero, -neg_add_rev]
-  abel
-
-Depends on / 依赖: max_neg_zero, neg_add_rev
+lemma toNNReal_apply (f : C(X, ℝ)) (x : X) : f.toNNReal x = (f x).toNNReal := rfl
+/-
+**ContinuousMap.toNNReal_add_add_neg_add_neg_eq** 是 Mathlib 中的一个引理，位于命名空间 `Conti
+nuousMap`。
+形式化陈述：toNNReal_add_add_neg_add_neg_eq (f g : C(X, Real)) : (f + g).toNNReal + (-
+f).toNNReal + (-g).toNNReal = (-(f + g)).toNNReal + f.toNNReal + g.toNNReal
+参数：f g : C(X, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_neg_zero`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder
+ α] [AddLeftMono α] (a : α), max (-a) 0 = -a + max a 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `_private.Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Uniq
+ue.0.ContinuousMap.toNNReal_add_add_neg_add_neg_eq._abel_1_1`：∀ {X : Type u_1} [
+inst : TopologicalSpace X] (f g : C(X, ℝ)) (x : X),   max (f x + g x) 0 + (-f x 
++ max (f x) 0) + (-g x + max (g x) 0) =   …
 -/
-lemma toNNReal_add_add_neg_add_neg_eq (f g : C(X, Real)) :
+lemma toNNReal_add_add_neg_add_neg_eq (f g : C(X, ℝ)) :
     (f + g).toNNReal + (-f).toNNReal + (-g).toNNReal =
       (-(f + g)).toNNReal + f.toNNReal + g.toNNReal := by
   ext x
   simp [max_neg_zero, -neg_add_rev]
   abel
-
-/--
-lemma `toNNReal_mul_add_neg_mul_add_mul_neg_eq` / 引理 `toNNReal_mul_add_neg_mul_add_mul_neg_eq`
-
-English:
-lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq
-  given: (f g : C(X, Real))
-  proof: by
-  ext x
-  simp [max_neg_zero, add_mul, mul_add]
-  abel
-
-@[simp]
-
-中文:
-引理 toNN实数_mul_add_neg_mul_add_mul_neg_eq
-  条件: (f g : C(X, 实数))
-  证明: by
-  ext x
-  simp [max_neg_zero, add_mul, mul_add]
-  abel
-
-@[simp]
-
-Depends on / 依赖: add_mul, max_neg_zero, mul_add
+/-
+**ContinuousMap.toNNReal_mul_add_neg_mul_add_mul_neg_eq** 是 Mathlib 中的一个引理，位于命名空
+间 `ContinuousMap`。
+形式化陈述：toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, Real)) : (f * g).toNNR
+eal + (-f).toNNReal * g.toNNReal + f.toNNReal * (-g).toNNReal = (-(f * g)).toNNR
+eal + f.toNNReal * g.toNNReal + (-f).toNNReal * (-g).toNNReal
+参数：f g : C(X, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `max_neg_zero`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder
+ α] [AddLeftMono α] (a : α), max (-a) 0 = -a + max a 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `_private.Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Uniq
+ue.0.ContinuousMap.toNNReal_mul_add_neg_mul_add_mul_neg_eq._abel_1_1`：∀ {X : Typ
+e u_1} [inst : TopologicalSpace X] (f g : C(X, ℝ)) (x : X),   max (f x * g x) 0 
++ (-(f x * max (g x) 0) + max (f x) 0 * max (g x) …
 -/
-lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, Real)) :
+lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, ℝ)) :
     (f * g).toNNReal + (-f).toNNReal * g.toNNReal + f.toNNReal * (-g).toNNReal =
       (-(f * g)).toNNReal + f.toNNReal * g.toNNReal + (-f).toNNReal * (-g).toNNReal := by
   ext x
@@ -193,97 +248,100 @@ lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, Real)) :
   abel
 
 @[simp]
-/--
-lemma `toNNReal_algebraMap` / 引理 `toNNReal_algebraMap`
-
-English:
-lemma toNNReal_algebraMap
-  given: (r : Real>=0)
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 toNN实数_algebraMap
-  条件: (r : 实数>=0)
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**ContinuousMap.toNNReal_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：toNNReal_algebraMap (r : Real>=0) : (algebraMap Real C(X, Real) r).toNNRea
+l = algebraMap Real>=0 C(X, Real>=0) r
+参数：r : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `algebraMap_apply`：algebraMap_apply (k : R) (a : α) : algebraMap R C(α, A
+) k a = k • (1 : A)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toNNReal_algebraMap (r : Real>=0) :
-    (algebraMap Real C(X, Real) r).toNNReal = algebraMap Real>=0 C(X, Real>=0) r := by
+lemma toNNReal_algebraMap (r : ℝ≥0) :
+    (algebraMap ℝ C(X, ℝ) r).toNNReal = algebraMap ℝ≥0 C(X, ℝ≥0) r := by
   ext; simp
 
 @[simp]
-/--
-lemma `toNNReal_neg_algebraMap` / 引理 `toNNReal_neg_algebraMap`
-
-English:
-lemma toNNReal_neg_algebraMap
-  given: (r : Real>=0)
-  statement: (- algebraMap Real C(X, Real) r).toNNReal = 0
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 toNN实数_neg_algebraMap
-  条件: (r : 实数>=0)
-  结论: (- algebraMap 实数 C(X, 实数) r).toNN实数 = 0
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**ContinuousMap.toNNReal_neg_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap
+`。
+形式化陈述：toNNReal_neg_algebraMap (r : Real>=0) : (- algebraMap Real C(X, Real) r).t
+oNNReal = 0
+参数：r : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `algebraMap_apply`：algebraMap_apply (k : R) (a : α) : algebraMap R C(α, A
+) k a = k • (1 : A)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toNNReal_neg_algebraMap (r : Real>=0) : (- algebraMap Real C(X, Real) r).toNNReal = 0 := by
+lemma toNNReal_neg_algebraMap (r : ℝ≥0) : (- algebraMap ℝ C(X, ℝ) r).toNNReal = 0 := by
   ext; simp
 
 @[simp]
-/--
-lemma `toNNReal_one` / 引理 `toNNReal_one`
-
-English:
-lemma toNNReal_one
-  statement: (1 : C(X, Real)).toNNReal = 1
-  proof: toNNReal_algebraMap 1
-
-@[simp]
-
-中文:
-引理 toNN实数_one
-  结论: (1 : C(X, 实数)).toNN实数 = 1
-  证明: toNNReal_algebraMap 1
-
-@[simp]
-
-Depends on / 依赖: toNNReal_algebraMap
+/-
+**ContinuousMap.toNNReal_one** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：toNNReal_one : (1 : C(X, Real)).toNNReal = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMap.toNNReal_algebraMap`：toNNReal_algebraMap (r : Real>=0) : (
+algebraMap Real C(X, Real) r).toNNReal = algebraMap Real>=0 C(X, Real>=0) r
 -/
-lemma toNNReal_one : (1 : C(X, Real)).toNNReal = 1 := toNNReal_algebraMap 1
+lemma toNNReal_one : (1 : C(X, ℝ)).toNNReal = 1 := toNNReal_algebraMap 1
 
 @[simp]
-/--
-lemma `toNNReal_neg_one` / 引理 `toNNReal_neg_one`
-
-English:
-lemma toNNReal_neg_one
-  statement: (-1 : C(X, Real)).toNNReal = 0
-  proof: toNNReal_neg_algebraMap 1
-
-中文:
-引理 toNN实数_neg_one
-  结论: (-1 : C(X, 实数)).toNN实数 = 0
-  证明: toNNReal_neg_algebraMap 1
-
-Depends on / 依赖: toNNReal_neg_algebraMap
+/-
+**ContinuousMap.toNNReal_neg_one** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：toNNReal_neg_one : (-1 : C(X, Real)).toNNReal = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMap.toNNReal_neg_algebraMap`：toNNReal_neg_algebraMap (r : Real
+>=0) : (- algebraMap Real C(X, Real) r).toNNReal = 0
 -/
-lemma toNNReal_neg_one : (-1 : C(X, Real)).toNNReal = 0 := toNNReal_neg_algebraMap 1
+lemma toNNReal_neg_one : (-1 : C(X, ℝ)).toNNReal = 0 := toNNReal_neg_algebraMap 1
 
 end ContinuousMap
 
-variable {A : Type*} [Ring A] [StarRing A] [Algebra Real A]
+variable {A : Type*} [Ring A] [StarRing A] [Algebra ℝ A]
 
 namespace StarAlgHom
 
@@ -294,77 +352,25 @@ variable [TopologicalSpace A] [IsSemitopologicalRing A]
 /-- Given a star `ℝ≥0`-algebra homomorphism `φ` from `C(X, ℝ≥0)` into an `ℝ`-algebra `A`, this is
 the unique extension of `φ` from `C(X, ℝ)` to `A` as a star `ℝ`-algebra homomorphism. -/
 @[simps]
-/--
-Definition of `realContinuousMapOfNNReal` / `realContinuousMapOfNNReal` 的定义
+/-
+**StarAlgHom.realContinuousMapOfNNReal** 是 Mathlib 中的一个定义，位于命名空间 `StarAlgHom`。
+形式化陈述：realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) : C(X, Real)
+ ->⋆ₐ[Real] A where toFun f
+参数：φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
 
-English:
-definition realContinuousMapOfNNReal
-  signature: (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A)
-  body: φ f.toNNReal - φ (-f).toNNReal
-  map_one' := by simp
-  map_zero' := by simp
-  map_mul' f g := by
-    have := congr(φ $(f.toNNReal_mul_add_neg_mul_add_mul_neg_eq g))
-    simp only [map_add, map_mul, sub_mul, mul_sub] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    convert! this using 1
-    abel
-  map_add' f g := by
-    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
-    simp only [map_add] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    convert! this using 1
-    abel
-  commutes' r := by
-    obtain (hr | hr) := le_total 0 r
-    · lift r to Real>=0 using hr
-      simpa only [ContinuousMap.toNNReal_algebraMap, ContinuousMap.toNNReal_neg_algebraMap,
-        map_zero, sub_zero] using! AlgHomClass.commutes φ r
-    · rw [← neg_neg r, ← map_neg, neg_neg (-r)]
-      rw [← neg_nonneg] at hr
-      lift -r to Real>=0 using hr with r
-      simpa only [map_neg, ContinuousMap.toNNReal_neg_algebraMap, map_zero,
-        ContinuousMap.toNNReal_algebraMap, zero_sub, neg_inj] using! AlgHomClass.commutes φ r
-  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
-
-@[fun_prop]
-
-中文:
-定义 realContinuousMapOfNN实数
-  签名: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
-  定义体: φ f.toNNReal - φ (-f).toNNReal
-  map_one' := by simp
-  map_zero' := by simp
-  map_mul' f g := by
-    have := congr(φ $(f.toNNReal_mul_add_neg_mul_add_mul_neg_eq g))
-    simp only [map_add, map_mul, sub_mul, mul_sub] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    convert! this using 1
-    abel
-  map_add' f g := by
-    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
-    simp only [map_add] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    convert! this using 1
-    abel
-  commutes' r := by
-    obtain (hr | hr) := le_total 0 r
-    · lift r to Real>=0 using hr
-      simpa only [ContinuousMap.toNNReal_algebraMap, ContinuousMap.toNNReal_neg_algebraMap,
-        map_zero, sub_zero] using! AlgHomClass.commutes φ r
-    · rw [← neg_neg r, ← map_neg, neg_neg (-r)]
-      rw [← neg_nonneg] at hr
-      lift -r to Real>=0 using hr with r
-      simpa only [map_neg, ContinuousMap.toNNReal_neg_algebraMap, map_zero,
-        ContinuousMap.toNNReal_algebraMap, zero_sub, neg_inj] using! AlgHomClass.commutes φ r
-  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
-
-@[fun_prop]
-
-Depends on / 依赖: f.toNNReal, toNNReal
+--- 原说明 ---
+Given a star `ℝ≥0`-algebra homomorphism `φ` from `C(X, ℝ≥0)` into an `ℝ`-algebra
+ `A`, this is
+the unique extension of `φ` from `C(X, ℝ)` to `A` as a star `ℝ`-algebra homomorp
+hism.
 -/
-noncomputable def realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) :
-    C(X, Real) ->⋆ₐ[Real] A where
+noncomputable def realContinuousMapOfNNReal (φ : C(X, ℝ≥0) →⋆ₐ[ℝ≥0] A) :
+    C(X, ℝ) →⋆ₐ[ℝ] A where
   toFun f := φ f.toNNReal - φ (-f).toNNReal
   map_one' := by simp
   map_zero' := by simp
@@ -382,37 +388,57 @@ noncomputable def realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0
     abel
   commutes' r := by
     obtain (hr | hr) := le_total 0 r
-    · lift r to Real>=0 using hr
+    · lift r to ℝ≥0 using hr
       simpa only [ContinuousMap.toNNReal_algebraMap, ContinuousMap.toNNReal_neg_algebraMap,
         map_zero, sub_zero] using! AlgHomClass.commutes φ r
     · rw [← neg_neg r, ← map_neg, neg_neg (-r)]
       rw [← neg_nonneg] at hr
-      lift -r to Real>=0 using hr with r
+      lift -r to ℝ≥0 using hr with r
       simpa only [map_neg, ContinuousMap.toNNReal_neg_algebraMap, map_zero,
         ContinuousMap.toNNReal_algebraMap, zero_sub, neg_inj] using! AlgHomClass.commutes φ r
   map_star' f := by simp only [star_trivial, star_sub, ← map_star]
 
 @[fun_prop]
-/--
-lemma `continuous_realContinuousMapOfNNReal` / 引理 `continuous_realContinuousMapOfNNReal`
-
-English:
-lemma continuous_realContinuousMapOfNNReal
-  statement: (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A)
-  proof: by
-  dsimp [realContinuousMapOfNNReal]
-  fun_prop
-
-中文:
-引理 continuous_realContinuousMapOfNN实数
-  结论: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
-  证明: by
-  dsimp [realContinuousMapOfNNReal]
-  fun_prop
-
-Depends on / 依赖: fun_prop, realContinuousMapOfNNReal
+/-
+**StarAlgHom.continuous_realContinuousMapOfNNReal** 是 Mathlib 中的一个引理，位于命名空间 `Sta
+rAlgHom`。
+形式化陈述：continuous_realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) (
+hφ : Continuous φ) : Continuous φ.realContinuousMapOfNNReal
+参数：φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A；hφ : Continuous φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用引理 `ContinuousMap.continuous_toNNReal`：continuous_toNNReal : Continuous (toN
+NReal (X
+· 使用定理 `Continuous.fun_neg`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Neg G]   [ContinuousNeg G] {f : 
+X → G}, …
+· 使用定理 `IsTopologicalAddGroup.toContinuousNeg`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousNeg 
+G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `ContinuousMap.instIsTopologicalAddGroup`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [inst_2 : AddCommGrou
+p β]   [inst_3 : IsTopologica…
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
 -/
-lemma continuous_realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A)
+lemma continuous_realContinuousMapOfNNReal (φ : C(X, ℝ≥0) →⋆ₐ[ℝ≥0] A)
     (hφ : Continuous φ) : Continuous φ.realContinuousMapOfNNReal := by
   dsimp [realContinuousMapOfNNReal]
   fun_prop
@@ -420,37 +446,63 @@ lemma continuous_realContinuousMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0]
 end IsTopologicalRing
 
 @[simp high]
-/--
-lemma `realContinuousMapOfNNReal_apply_comp_toReal` / 引理 `realContinuousMapOfNNReal_apply_comp_toReal`
-
-English:
-lemma realContinuousMapOfNNReal_apply_comp_toReal
-  statement: (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A)
-  proof: by
-  simp only [realContinuousMapOfNNReal_apply]
-  convert_to φ f - φ 0 = φ f using 2
-  on_goal -1 => rw [map_zero, sub_zero]
-  all_goals
-    congr
-    ext x
-    simp
-
-中文:
-引理 realContinuousMapOfNN实数_apply_comp_to实数
-  结论: (φ : C(X, 实数>=0) ->⋆ₐ[实数>=0] A)
-  证明: by
-  simp only [realContinuousMapOfNNReal_apply]
-  convert_to φ f - φ 0 = φ f using 2
-  on_goal -1 => rw [map_zero, sub_zero]
-  all_goals
-    congr
-    ext x
-    simp
-
-Depends on / 依赖: all_goals, convert_to, map_zero, on_goal, realContinuousMapOfNNReal_apply, sub_zero
+/-
+**StarAlgHom.realContinuousMapOfNNReal_apply_comp_toReal** 是 Mathlib 中的一个引理，位于命名
+空间 `StarAlgHom`。
+形式化陈述：realContinuousMapOfNNReal_apply_comp_toReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=
+0] A) (f : C(X, Real>=0)) : φ.realContinuousMapOfNNReal ((ContinuousMap.mk toRea
+l continuous_coe).comp f) = φ f
+参数：φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A；f : C(X, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `NNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Rea
+l)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarAlgHom.realContinuousMapOfNNReal_apply`：∀ {X : Type u_1} [inst : Top
+ologicalSpace X] {A : Type u_2} [inst_1 : Ring A] [inst_2 : StarRing A]   [inst_
+3 : Algebra ℝ A] (φ : C(X, NNRea…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
-lemma realContinuousMapOfNNReal_apply_comp_toReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A)
-    (f : C(X, Real>=0)) :
+lemma realContinuousMapOfNNReal_apply_comp_toReal (φ : C(X, ℝ≥0) →⋆ₐ[ℝ≥0] A)
+    (f : C(X, ℝ≥0)) :
     φ.realContinuousMapOfNNReal ((ContinuousMap.mk toReal continuous_coe).comp f) = φ f := by
   simp only [realContinuousMapOfNNReal_apply]
   convert_to φ f - φ 0 = φ f using 2
@@ -459,25 +511,31 @@ lemma realContinuousMapOfNNReal_apply_comp_toReal (φ : C(X, Real>=0) ->⋆ₐ[R
     congr
     ext x
     simp
-
-/--
-lemma `realContinuousMapOfNNReal_injective` / 引理 `realContinuousMapOfNNReal_injective`
-
-English:
-lemma realContinuousMapOfNNReal_injective
-  proof: by
-  intro φ ψ h
-  ext f
-  simpa using congr($(h) ((ContinuousMap.mk toReal continuous_coe).comp f))
-
-中文:
-引理 realContinuousMapOfNN实数_injective
-  证明: by
-  intro φ ψ h
-  ext f
-  simpa using congr($(h) ((ContinuousMap.mk toReal continuous_coe).comp f))
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.mk, continuous_coe, toReal
+/-
+**StarAlgHom.realContinuousMapOfNNReal_injective** 是 Mathlib 中的一个引理，位于命名空间 `Star
+AlgHom`。
+形式化陈述：realContinuousMapOfNNReal_injective : Function.Injective (realContinuousMa
+pOfNNReal (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `StarAlgHom.ext`：ext {f g : A ->⋆ₐ[R] B} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `NNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Rea
+l)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `StarAlgHom.realContinuousMapOfNNReal_apply_comp_toReal`：realContinuousMa
+pOfNNReal_apply_comp_toReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) (f : C(X, Real>=
+0)) : φ.realContinuousMapOfNNReal ((Continuo…
 -/
 lemma realContinuousMapOfNNReal_injective :
     Function.Injective (realContinuousMapOfNNReal (X := X) (A := A)) := by
@@ -489,81 +547,81 @@ end StarAlgHom
 
 variable [TopologicalSpace A] [IsSemitopologicalRing A]
 
-/--
-Instance `NNReal.instContinuousMap.UniqueHom` / 实例 `NNReal.instContinuousMap.UniqueHom`
-
-English:
-instance NNReal.instContinuousMap.UniqueHom
-  signature: [T2Space A]
-  body: by
-    let s' : Set Real := (↑) '' s
-    let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have (ξ : C(s, Real>=0) ->⋆ₐ[Real>=0] A) (hξ : Continuous ξ) :
-        (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' Real Real e
-        Continuous ξ' ∧ ξ' (.restrict s' <| .id Real) = ξ (.restrict s <| .id Real>=0)) := by
-      intro ξ'
-.comp refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ
-        ContinuousMap.continuous_precomp _, ?_⟩
-      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id Real>=0)
-    obtain ⟨hφ', hφ_id⟩ := this φ hφ
-    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
-    have hs' : CompactSpace s' := e.compactSpace
-    have h' := ContinuousMap.UniqueHom.eq_of_continuous_of_map_id s' _ _ hφ' hψ'
-      (hφ_id ▸ hψ_id ▸ h)
-    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s)))
-    have : (ContinuousMap.compStarAlgHom' Real Real (e : C(s, s'))).comp
-        (ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
-      ext1; simp
-    simp only [StarAlgHom.comp_assoc, this, StarAlgHom.comp_id] at h''
-    exact StarAlgHom.realContinuousMapOfNNReal_injective h''
-
-中文:
-实例 非负实数.instContinuousMap.唯一态射
-  签名: [T2空间 A]
-  定义体: by
-    let s' : Set Real := (↑) '' s
-    let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have (ξ : C(s, Real>=0) ->⋆ₐ[Real>=0] A) (hξ : Continuous ξ) :
-        (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' Real Real e
-        Continuous ξ' ∧ ξ' (.restrict s' <| .id Real) = ξ (.restrict s <| .id Real>=0)) := by
-      intro ξ'
-.comp refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ
-        ContinuousMap.continuous_precomp _, ?_⟩
-      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id Real>=0)
-    obtain ⟨hφ', hφ_id⟩ := this φ hφ
-    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
-    have hs' : CompactSpace s' := e.compactSpace
-    have h' := ContinuousMap.UniqueHom.eq_of_continuous_of_map_id s' _ _ hφ' hψ'
-      (hφ_id ▸ hψ_id ▸ h)
-    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s)))
-    have : (ContinuousMap.compStarAlgHom' Real Real (e : C(s, s'))).comp
-        (ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
-      ext1; simp
-    simp only [StarAlgHom.comp_assoc, this, StarAlgHom.comp_id] at h''
-    exact StarAlgHom.realContinuousMapOfNNReal_injective h''
-
-Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.compStarAlgHom, ContinuousMap.continuous_precomp, NNReal, NNReal.isEmbedding_coe.homeomorphImage, compStarAlgHom, continuous_precomp, continuous_realContinuousMapOfNNReal, homeomorphImage, isEmbedding_coe, realContinuousMapOfNNReal, realContinuousMapOfNNReal.comp, realContinuousMapOfNNReal_apply_comp_toReal, restrict
+/-
+**NNReal.instContinuousMap.UniqueHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNReal.instContinuousMap.UniqueHom [T2Space A] : ContinuousMap.UniqueHom R
+eal>=0 A where eq_of_continuous_of_map_id s hs φ ψ hφ hψ h
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `NNReal.isEmbedding_coe`：NNReal.isEmbedding_coe : Topology.IsEmbedding NN
+Real.toReal
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用引理 `StarAlgHom.continuous_realContinuousMapOfNNReal`：continuous_realContinuo
+usMapOfNNReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) (hφ : Continuous φ) : Continuo
+us φ.realContinuousMapOfNNReal
+· 使用定理 `ContinuousMap.continuous_precomp`：continuous_precomp (f : C(X, Y)) : Con
+tinuous (fun g => g.comp f : C(Y, Z) -> C(X, Z))
+· 使用引理 `StarAlgHom.realContinuousMapOfNNReal_apply_comp_toReal`：realContinuousMa
+pOfNNReal_apply_comp_toReal (φ : C(X, Real>=0) ->⋆ₐ[Real>=0] A) (f : C(X, Real>=
+0)) : φ.realContinuousMapOfNNReal ((Continuo…
+· 使用定理 `Homeomorph.compactSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] [CompactSpace X] (h : X ≃ₜ Y),   Comp
+actSpace Y
+· 使用定理 `ContinuousMap.UniqueHom.eq_of_continuous_of_map_id`：∀ {R : Type u_1} {A 
+: Type u_2} {inst : CommSemiring R} {inst_1 : StarRing R} {inst_2 : MetricSpace 
+R}   {inst_3 : IsTopologicalSemiring R} …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarAlgHom.ext`：ext {f g : A ->⋆ₐ[R] B} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ContinuousMap.compStarAlgHom'_apply`：∀ {X : Type u_1} {Y : Type u_2} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] (𝕜 : Type u_4)   [inst_2 
+: CommSemiring 𝕜] (A : Ty…
+· 使用定理 `Homeomorph.symm_comp_toContinuousMap`：symm_comp_toContinuousMap : (f.sym
+m : C(β, α)).comp (f : C(α, β)) = ContinuousMap.id α
+· 使用定理 `ContinuousMap.comp_id`：comp_id (f : C(α, β)) : f.comp (ContinuousMap.id 
+_) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `StarAlgHom.realContinuousMapOfNNReal_injective`：realContinuousMapOfNNRea
+l_injective : Function.Injective (realContinuousMapOfNNReal (X
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `StarAlgHom.comp_id`：comp_id (f : A ->⋆ₐ[R] B) : f.comp (StarAlgHom.id _ 
+_) = f
 -/
 instance NNReal.instContinuousMap.UniqueHom [T2Space A] :
-    ContinuousMap.UniqueHom Real>=0 A where
+    ContinuousMap.UniqueHom ℝ≥0 A where
   eq_of_continuous_of_map_id s hs φ ψ hφ hψ h := by
-    let s' : Set Real := (↑) '' s
+    let s' : Set ℝ := (↑) '' s
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have (ξ : C(s, Real>=0) ->⋆ₐ[Real>=0] A) (hξ : Continuous ξ) :
-        (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' Real Real e
-        Continuous ξ' ∧ ξ' (.restrict s' <| .id Real) = ξ (.restrict s <| .id Real>=0)) := by
+    have (ξ : C(s, ℝ≥0) →⋆ₐ[ℝ≥0] A) (hξ : Continuous ξ) :
+        (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' ℝ ℝ e
+        Continuous ξ' ∧ ξ' (.restrict s' <| .id ℝ) = ξ (.restrict s <| .id ℝ≥0)) := by
       intro ξ'
-.comp refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ
+      refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ |>.comp <|
         ContinuousMap.continuous_precomp _, ?_⟩
-      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id Real>=0)
+      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id ℝ≥0)
     obtain ⟨hφ', hφ_id⟩ := this φ hφ
     obtain ⟨hψ', hψ_id⟩ := this ψ hψ
     have hs' : CompactSpace s' := e.compactSpace
     have h' := ContinuousMap.UniqueHom.eq_of_continuous_of_map_id s' _ _ hφ' hψ'
       (hφ_id ▸ hψ_id ▸ h)
-    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s)))
-    have : (ContinuousMap.compStarAlgHom' Real Real (e : C(s, s'))).comp
-        (ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
+    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' ℝ ℝ (e.symm : C(s', s)))
+    have : (ContinuousMap.compStarAlgHom' ℝ ℝ (e : C(s, s'))).comp
+        (ContinuousMap.compStarAlgHom' ℝ ℝ (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
       ext1; simp
     simp only [StarAlgHom.comp_assoc, this, StarAlgHom.comp_id] at h''
     exact StarAlgHom.realContinuousMapOfNNReal_injective h''
@@ -579,38 +637,78 @@ section RCLike
 variable {𝕜 A : Type*} [RCLike 𝕜]
 
 open NonUnitalStarAlgebra in
-/--
-Instance `RCLike.uniqueNonUnitalContinuousFunctionalCalculus` / 实例 `RCLike.uniqueNonUnitalContinuousFunctionalCalculus`
-
-English:
-instance RCLike.uniqueNonUnitalContinuousFunctionalCalculus
-  body: by
-    rw [DFunLike.ext'_iff]; rw [← Set.eqOn_univ]; rw [← (ContinuousMapZero.adjoin_id_dense _).closure_eq]
-    refine Set.EqOn.closure (fun f hf => ?_) hφ hψ
-    rw [← NonUnitalStarAlgHom.mem_equalizer]
-    apply adjoin_le ?_ hf
-    rw [Set.singleton_subset_iff]
-    exact h
-
-中文:
-实例 RCLike.uniqueNonUnitalContinuousFunctionalCalculus
-  定义体: by
-    rw [DFunLike.ext'_iff]; rw [← Set.eqOn_univ]; rw [← (ContinuousMapZero.adjoin_id_dense _).closure_eq]
-    refine Set.EqOn.closure (fun f hf => ?_) hφ hψ
-    rw [← NonUnitalStarAlgHom.mem_equalizer]
-    apply adjoin_le ?_ hf
-    rw [Set.singleton_subset_iff]
-    exact h
-
-Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.adjoin_id_dense, DFunLike, DFunLike.ext, NonUnitalStarAlgHom, NonUnitalStarAlgHom.mem_equalizer, Set.EqOn.closure, Set.eqOn_univ, Set.singleton_subset_iff, _iff, adjoin_id_dense, adjoin_le, closure, closure_eq, eqOn_univ, mem_equalizer, singleton_subset_iff
+/-
+**RCLike.uniqueNonUnitalContinuousFunctionalCalculus** 是 Mathlib 中的一个实例，位于命名空间 `
+`。
+形式化陈述：RCLike.uniqueNonUnitalContinuousFunctionalCalculus [TopologicalSpace A] [T
+2Space A] [NonUnitalRing A] [StarRing A] [Module 𝕜 A] [IsScalarTower 𝕜 A A] [SMu
+lCommClass 𝕜 A A] : ContinuousMapZero.UniqueHom 𝕜 A where eq_of_continuous_of_ma
+p_id s hs h0 φ ψ hφ hψ h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `RCLike.instContinuousStar`：∀ {K : Type u_1} [inst : RCLike K], Continuou
+sStar K
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ext'_iff`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [i
+ : DFunLike F α β] {f g : F}, f = g ↔ ⇑f = ⇑g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eqOn_univ`：eqOn_univ (f₁ f₂ : α -> β) : EqOn f₁ f₂ univ ↔ f₁ = f₂
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Dense.closure_eq`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X}
+, Dense s → closure s = Set.univ
+· 使用引理 `ContinuousMapZero.adjoin_id_dense`：ContinuousMapZero.adjoin_id_dense (s 
+: Set 𝕜) [Fact (0 in s)] [CompactSpace s] : Dense (adjoin 𝕜 {(.id s : C(s, 𝕜)₀)}
+ : Set C(s, 𝕜)₀)
+· 使用定理 `Set.EqOn.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpa
+ce X] [inst_1 : TopologicalSpace Y] [T2Space X] {s : Set Y}   {f g : Y → X}, Set
+.EqOn …
+· 使用定理 `NonUnitalStarAlgHom.instNonUnitalAlgHomClass`：∀ {R : Type u_1} {A : Type
+ u_2} {B : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   
+[inst_2 : DistribMulAction R A] [i…
+· 使用定理 `NonUnitalStarAlgHom.instStarHomClass`：∀ {R : Type u_1} {A : Type u_2} {B
+ : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   [inst_2 
+: DistribMulAction R A] [i…
+· 使用定理 `NonUnitalStarAlgHom.mem_equalizer`：mem_equalizer (φ ψ : F) (x : A) : x i
+n NonUnitalStarAlgHom.equalizer φ ψ ↔ φ x = ψ x
+· 使用定理 `NonUnitalStarAlgebra.adjoin_le`：adjoin_le {S : NonUnitalStarSubalgebra R
+ A} {s : Set A} (hs : s subseteq S) : adjoin R s <= S
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
 -/
 instance RCLike.uniqueNonUnitalContinuousFunctionalCalculus
     [TopologicalSpace A] [T2Space A] [NonUnitalRing A] [StarRing A] [Module 𝕜 A]
     [IsScalarTower 𝕜 A A] [SMulCommClass 𝕜 A A] :
     ContinuousMapZero.UniqueHom 𝕜 A where
   eq_of_continuous_of_map_id s hs h0 φ ψ hφ hψ h := by
-    rw [DFunLike.ext'_iff]; rw [← Set.eqOn_univ]; rw [← (ContinuousMapZero.adjoin_id_dense _).closure_eq]
-    refine Set.EqOn.closure (fun f hf => ?_) hφ hψ
+    rw [DFunLike.ext'_iff, ← Set.eqOn_univ, ← (ContinuousMapZero.adjoin_id_dense _).closure_eq]
+    refine Set.EqOn.closure (fun f hf ↦ ?_) hφ hψ
     rw [← NonUnitalStarAlgHom.mem_equalizer]
     apply adjoin_le ?_ hf
     rw [Set.singleton_subset_iff]
@@ -626,202 +724,255 @@ variable {X : Type*} [TopologicalSpace X] [Zero X]
 namespace ContinuousMapZero
 
 /-- This map sends `f : C(X, ℝ)` to `Real.toNNReal ∘ f`, bundled as a continuous map `C(X, ℝ≥0)`. -/
-.comp f, by simp⟩ noncomputable def toNNReal (f : C(X, Real)₀) : C(X, Real>=0)₀ := ⟨.realToNNReal
+/-
+**ContinuousMapZero.toNNReal** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZero`。
+形式化陈述：{X : Type u_1} → [inst : TopologicalSpace X] → [inst_1 : Zero X] → Continu
+ousMapZero X ℝ → ContinuousMapZero X NNReal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This map sends `f : C(X, ℝ)` to `Real.toNNReal ∘ f`, bundled as a continuous map
+ `C(X, ℝ≥0)`.
+-/
+noncomputable def toNNReal (f : C(X, ℝ)₀) : C(X, ℝ≥0)₀ := ⟨.realToNNReal |>.comp f, by simp⟩
 
 @[simp]
-/--
-lemma `toNNReal_apply` / 引理 `toNNReal_apply`
-
-English:
-lemma toNNReal_apply
-  given: (f : C(X, Real)₀) (x : X)
-  statement: f.toNNReal x = Real.toNNReal (f x)
-  proof: rfl
-
-@[fun_prop]
-
-中文:
-引理 toNN实数_apply
-  条件: (f : C(X, 实数)₀) (x : X)
-  结论: f.toNN实数 x = 实数.toNN实数 (f x)
-  证明: rfl
-
-@[fun_prop]
+/-
+**ContinuousMapZero.toNNReal_apply** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`
+。
+形式化陈述：toNNReal_apply (f : C(X, Real)₀) (x : X) : f.toNNReal x = Real.toNNReal (f
+ x)
+参数：f : C(X, Real)₀；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toNNReal_apply (f : C(X, Real)₀) (x : X) : f.toNNReal x = Real.toNNReal (f x) := rfl
+lemma toNNReal_apply (f : C(X, ℝ)₀) (x : X) : f.toNNReal x = Real.toNNReal (f x) := rfl
 
 @[fun_prop]
-/--
-lemma `continuous_toNNReal` / 引理 `continuous_toNNReal`
-
-English:
-lemma continuous_toNNReal
-  statement: Continuous (toNNReal (X := X))
-  proof: by
-  rw [continuous_induced_rng]
-  convert_to! Continuous (ContinuousMap.toNNReal ∘ ((↑) : C(X, Real)₀ -> C(X, Real))) using 1
-.comp continuous_induced_dom exact ContinuousMap.continuous_postcomp _
-
-中文:
-引理 continuous_toNN实数
-  结论: 连续 (toNN实数 (X := X))
-  证明: by
-  rw [continuous_induced_rng]
-  convert_to! Continuous (ContinuousMap.toNNReal ∘ ((↑) : C(X, Real)₀ -> C(X, Real))) using 1
-.comp continuous_induced_dom exact ContinuousMap.continuous_postcomp _
-
-Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.continuous_postcomp, ContinuousMap.toNNReal, continuous_induced_dom, continuous_induced_rng, continuous_postcomp, convert_to, toNNReal
+/-
+**ContinuousMapZero.continuous_toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap
+Zero`。
+形式化陈述：continuous_toNNReal : Continuous (toNNReal (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousMap.continuous_postcomp`：continuous_postcomp (g : C(Y, Z)) : C
+ontinuous (ContinuousMap.comp g : C(X, Y) -> C(X, Z))
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
 -/
 lemma continuous_toNNReal : Continuous (toNNReal (X := X)) := by
   rw [continuous_induced_rng]
-  convert_to! Continuous (ContinuousMap.toNNReal ∘ ((↑) : C(X, Real)₀ -> C(X, Real))) using 1
-.comp continuous_induced_dom exact ContinuousMap.continuous_postcomp _
-
-/--
-lemma `toContinuousMapHom_toNNReal` / 引理 `toContinuousMapHom_toNNReal`
-
-English:
-lemma toContinuousMapHom_toNNReal
-  given: (f : C(X, Real)₀)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toContinuousMapHom_toNN实数
-  条件: (f : C(X, 实数)₀)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: toNNReal
+  convert_to! Continuous (ContinuousMap.toNNReal ∘ ((↑) : C(X, ℝ)₀ → C(X, ℝ))) using 1
+  exact ContinuousMap.continuous_postcomp _ |>.comp continuous_induced_dom
+/-
+**ContinuousMapZero.toContinuousMapHom_toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `Conti
+nuousMapZero`。
+形式化陈述：toContinuousMapHom_toNNReal (f : C(X, Real)₀) : (toContinuousMapHom (X
+参数：f : C(X, Real)₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
 -/
-lemma toContinuousMapHom_toNNReal (f : C(X, Real)₀) :
-    (toContinuousMapHom (X := X) (R := Real) f).toNNReal =
-      toContinuousMapHom (X := X) (R := Real>=0) f.toNNReal :=
+lemma toContinuousMapHom_toNNReal (f : C(X, ℝ)₀) :
+    (toContinuousMapHom (X := X) (R := ℝ) f).toNNReal =
+      toContinuousMapHom (X := X) (R := ℝ≥0) f.toNNReal :=
   rfl
 
 @[simp]
-/--
-lemma `toNNReal_smul` / 引理 `toNNReal_smul`
-
-English:
-lemma toNNReal_smul
-  given: (r : Real>=0) (f : C(X, Real)₀)
-  statement: (r • f).toNNReal = r • f.toNNReal
-  proof: by
+/-
+**ContinuousMapZero.toNNReal_smul** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：toNNReal_smul (r : Real>=0) (f : C(X, Real)₀) : (r • f).toNNReal = r • f.t
+oNNReal
+参数：r : Real>=0；f : C(X, Real)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_nonpos_of_nonneg_of_nonpos`：mul_nonpos_of_nonneg_of_nonpos [PosMulMo
+no α] (ha : 0 <= a) (hb : b <= 0) : a * b <= 0
+-/
+lemma toNNReal_smul (r : ℝ≥0) (f : C(X, ℝ)₀) : (r • f).toNNReal = r • f.toNNReal := by
   ext x
-  by_cases! h : 0 <= f x
+  by_cases! h : 0 ≤ f x
   · simpa [max_eq_left h, NNReal.smul_def] using mul_nonneg r.coe_nonneg h
   · simpa [max_eq_right h.le, NNReal.smul_def]
       using mul_nonpos_of_nonneg_of_nonpos r.coe_nonneg h.le
 
 @[simp]
-
-中文:
-引理 toNN实数_smul
-  条件: (r : 实数>=0) (f : C(X, 实数)₀)
-  结论: (r • f).toNN实数 = r • f.toNN实数
-  证明: by
-  ext x
-  by_cases! h : 0 <= f x
-  · simpa [max_eq_left h, NNReal.smul_def] using mul_nonneg r.coe_nonneg h
-  · simpa [max_eq_right h.le, NNReal.smul_def]
-      using mul_nonpos_of_nonneg_of_nonpos r.coe_nonneg h.le
-
-@[simp]
-
-Depends on / 依赖: NNReal, NNReal.smul_def, coe_nonneg, h.le, max_eq_left, max_eq_right, mul_nonneg, mul_nonpos_of_nonneg_of_nonpos, r.coe_nonneg, smul_def
+/-
+**ContinuousMapZero.toNNReal_neg_smul** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：toNNReal_neg_smul (r : Real>=0) (f : C(X, Real)₀) : (-(r • f)).toNNReal = 
+r • (-f).toNNReal
+参数：r : Real>=0；f : C(X, Real)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.smul_def`：smul_def {M : Type*} [SMul Real M] (c : Real>=0) (x : M
+) : c • x = (c : Real) • x
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `ContinuousMapZero.toNNReal_smul`：toNNReal_smul (r : Real>=0) (f : C(X, R
+eal)₀) : (r • f).toNNReal = r • f.toNNReal
 -/
-lemma toNNReal_smul (r : Real>=0) (f : C(X, Real)₀) : (r • f).toNNReal = r • f.toNNReal := by
-  ext x
-  by_cases! h : 0 <= f x
-  · simpa [max_eq_left h, NNReal.smul_def] using mul_nonneg r.coe_nonneg h
-  · simpa [max_eq_right h.le, NNReal.smul_def]
-      using mul_nonpos_of_nonneg_of_nonpos r.coe_nonneg h.le
-
-@[simp]
-/--
-lemma `toNNReal_neg_smul` / 引理 `toNNReal_neg_smul`
-
-English:
-lemma toNNReal_neg_smul
-  given: (r : Real>=0) (f : C(X, Real)₀)
-  statement: (-(r • f)).toNNReal = r • (-f).toNNReal
-  proof: by
-  rw [NNReal.smul_def]; rw [← smul_neg]; rw [← NNReal.smul_def]; rw [toNNReal_smul]
-
-中文:
-引理 toNN实数_neg_smul
-  条件: (r : 实数>=0) (f : C(X, 实数)₀)
-  结论: (-(r • f)).toNN实数 = r • (-f).toNN实数
-  证明: by
-  rw [NNReal.smul_def]; rw [← smul_neg]; rw [← NNReal.smul_def]; rw [toNNReal_smul]
-
-Depends on / 依赖: NNReal, NNReal.smul_def, smul_def, smul_neg, toNNReal_smul
+lemma toNNReal_neg_smul (r : ℝ≥0) (f : C(X, ℝ)₀) : (-(r • f)).toNNReal = r • (-f).toNNReal := by
+  rw [NNReal.smul_def, ← smul_neg, ← NNReal.smul_def, toNNReal_smul]
+/-
+**ContinuousMapZero.toNNReal_mul_add_neg_mul_add_mul_neg_eq** 是 Mathlib 中的一个引理，位
+于命名空间 `ContinuousMapZero`。
+形式化陈述：toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, Real)₀) : ((f * g).toN
+NReal + (-f).toNNReal * g.toNNReal + f.toNNReal * (-g).toNNReal) = ((-(f * g)).t
+oNNReal + f.toNNReal * g.toNNReal + (-f).toNNReal * (-g).toNNReal)
+参数：f g : C(X, Real)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.toContinuousMap_injective`：toContinuousMap_injective :
+ Injective ((↑) : C(X, R)₀ -> C(X, R))
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用引理 `ContinuousMap.toNNReal_mul_add_neg_mul_add_mul_neg_eq`：toNNReal_mul_add_
+neg_mul_add_mul_neg_eq (f g : C(X, Real)) : (f * g).toNNReal + (-f).toNNReal * g
+.toNNReal + f.toNNReal * (-g).toNNReal = (-…
 -/
-lemma toNNReal_neg_smul (r : Real>=0) (f : C(X, Real)₀) : (-(r • f)).toNNReal = r • (-f).toNNReal := by
-  rw [NNReal.smul_def]; rw [← smul_neg]; rw [← NNReal.smul_def]; rw [toNNReal_smul]
-
-/--
-lemma `toNNReal_mul_add_neg_mul_add_mul_neg_eq` / 引理 `toNNReal_mul_add_neg_mul_add_mul_neg_eq`
-
-English:
-lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq
-  given: (f g : C(X, Real)₀)
-  proof: by
-  apply toContinuousMap_injective
-  simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_mul_add_neg_mul_add_mul_neg_eq g
-
-中文:
-引理 toNN实数_mul_add_neg_mul_add_mul_neg_eq
-  条件: (f g : C(X, 实数)₀)
-  证明: by
-  apply toContinuousMap_injective
-  simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_mul_add_neg_mul_add_mul_neg_eq g
-
-Depends on / 依赖: map_add, map_mul, map_neg, toContinuousMapHom_toNNReal, toContinuousMap_injective, toNNReal_mul_add_neg_mul_add_mul_neg_eq
--/
-lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, Real)₀) :
+lemma toNNReal_mul_add_neg_mul_add_mul_neg_eq (f g : C(X, ℝ)₀) :
     ((f * g).toNNReal + (-f).toNNReal * g.toNNReal + f.toNNReal * (-g).toNNReal) =
     ((-(f * g)).toNNReal + f.toNNReal * g.toNNReal + (-f).toNNReal * (-g).toNNReal) := by
   apply toContinuousMap_injective
   simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_mul_add_neg_mul_add_mul_neg_eq g
-
-/--
-lemma `toNNReal_add_add_neg_add_neg_eq` / 引理 `toNNReal_add_add_neg_add_neg_eq`
-
-English:
-lemma toNNReal_add_add_neg_add_neg_eq
-  given: (f g : C(X, Real)₀)
-  proof: by
-  apply toContinuousMap_injective
-  simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_add_add_neg_add_neg_eq g
-
-中文:
-引理 toNN实数_add_add_neg_add_neg_eq
-  条件: (f g : C(X, 实数)₀)
-  证明: by
-  apply toContinuousMap_injective
-  simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_add_add_neg_add_neg_eq g
-
-Depends on / 依赖: map_add, map_mul, map_neg, toContinuousMapHom_toNNReal, toContinuousMap_injective, toNNReal_add_add_neg_add_neg_eq
+    using! (f : C(X, ℝ)).toNNReal_mul_add_neg_mul_add_mul_neg_eq g
+/-
+**ContinuousMapZero.toNNReal_add_add_neg_add_neg_eq** 是 Mathlib 中的一个引理，位于命名空间 `C
+ontinuousMapZero`。
+形式化陈述：toNNReal_add_add_neg_add_neg_eq (f g : C(X, Real)₀) : ((f + g).toNNReal + 
+(-f).toNNReal + (-g).toNNReal) = ((-(f + g)).toNNReal + f.toNNReal + g.toNNReal)
+参数：f g : C(X, Real)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.toContinuousMap_injective`：toContinuousMap_injective :
+ Injective ((↑) : C(X, R)₀ -> C(X, R))
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用引理 `ContinuousMap.toNNReal_add_add_neg_add_neg_eq`：toNNReal_add_add_neg_add_
+neg_eq (f g : C(X, Real)) : (f + g).toNNReal + (-f).toNNReal + (-g).toNNReal = (
+-(f + g)).toNNReal + f.toNNReal + g…
 -/
-lemma toNNReal_add_add_neg_add_neg_eq (f g : C(X, Real)₀) :
+lemma toNNReal_add_add_neg_add_neg_eq (f g : C(X, ℝ)₀) :
     ((f + g).toNNReal + (-f).toNNReal + (-g).toNNReal) =
       ((-(f + g)).toNNReal + f.toNNReal + g.toNNReal) := by
   apply toContinuousMap_injective
   simpa only [map_add, map_mul, map_neg, toContinuousMapHom_toNNReal]
-    using! (f : C(X, Real)).toNNReal_add_add_neg_add_neg_eq g
+    using! (f : C(X, ℝ)).toNNReal_add_add_neg_add_neg_eq g
 
 end ContinuousMapZero
 
-variable {A : Type*} [NonUnitalRing A] [StarRing A] [Module Real A]
+variable {A : Type*} [NonUnitalRing A] [StarRing A] [Module ℝ A]
 
 namespace NonUnitalStarAlgHom
 
@@ -836,77 +987,28 @@ set_option backward.isDefEq.respectTransparency false in
 `ℝ`-algebra `A`, this is the unique extension of `φ` from `C(X, ℝ)₀` to `A` as a non-unital
 star `ℝ`-algebra homomorphism. -/
 @[simps]
-/--
-Definition of `realContinuousMapZeroOfNNReal` / `realContinuousMapZeroOfNNReal` 的定义
+/-
+**NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal** 是 Mathlib 中的一个定义，位于命名空间 `N
+onUnitalStarAlgHom`。
+形式化陈述：realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) : C(X,
+ Real)₀ ->⋆ₙₐ[Real] A where toFun f
+参数：φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
 
-English:
-definition realContinuousMapZeroOfNNReal
-  signature: (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A)
-  body: φ f.toNNReal - φ (-f).toNNReal
-  map_zero' := by simp
-  map_mul' f g := by
-    have := congr(φ $(f.toNNReal_mul_add_neg_mul_add_mul_neg_eq g))
-    simp only [map_add, map_mul, sub_mul, mul_sub] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    rw [← this]
-    abel
-  map_add' f g := by
-    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
-    simp only [map_add] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    rw [← this]
-    abel
-  map_smul' r f := by
-    simp only [MonoidHom.id_apply]
-    by_cases! hr : 0 <= r
-    · lift r to Real>=0 using hr
-      simp only [← smul_def, toNNReal_smul, map_smul, toNNReal_neg_smul, smul_sub]
-    · rw [← neg_pos] at hr
-      rw [← neg_smul]
-      nth_rw 1 [← neg_neg r]
-      nth_rw 3 [← neg_neg r]
-      lift -r to Real>=0 using hr.le with r
-      simp only [neg_smul, ← smul_def, toNNReal_neg_smul, map_smul, toNNReal_smul, smul_sub,
-        sub_neg_eq_add]
-      rw [sub_eq_add_neg]; rw [add_comm]
-  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
-
-中文:
-定义 realContinuousMapZeroOfNN实数
-  签名: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
-  定义体: φ f.toNNReal - φ (-f).toNNReal
-  map_zero' := by simp
-  map_mul' f g := by
-    have := congr(φ $(f.toNNReal_mul_add_neg_mul_add_mul_neg_eq g))
-    simp only [map_add, map_mul, sub_mul, mul_sub] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    rw [← this]
-    abel
-  map_add' f g := by
-    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
-    simp only [map_add] at this ⊢
-    rw [← sub_eq_zero] at this ⊢
-    rw [← this]
-    abel
-  map_smul' r f := by
-    simp only [MonoidHom.id_apply]
-    by_cases! hr : 0 <= r
-    · lift r to Real>=0 using hr
-      simp only [← smul_def, toNNReal_smul, map_smul, toNNReal_neg_smul, smul_sub]
-    · rw [← neg_pos] at hr
-      rw [← neg_smul]
-      nth_rw 1 [← neg_neg r]
-      nth_rw 3 [← neg_neg r]
-      lift -r to Real>=0 using hr.le with r
-      simp only [neg_smul, ← smul_def, toNNReal_neg_smul, map_smul, toNNReal_smul, smul_sub,
-        sub_neg_eq_add]
-      rw [sub_eq_add_neg]; rw [add_comm]
-  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
-
-Depends on / 依赖: f.toNNReal, toNNReal
+--- 原说明 ---
+Given a non-unital star `ℝ≥0`-algebra homomorphism `φ` from `C(X, ℝ≥0)₀` into a 
+non-unital
+`ℝ`-algebra `A`, this is the unique extension of `φ` from `C(X, ℝ)₀` to `A` as a
+ non-unital
+star `ℝ`-algebra homomorphism.
 -/
-noncomputable def realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) :
-    C(X, Real)₀ ->⋆ₙₐ[Real] A where
+noncomputable def realContinuousMapZeroOfNNReal (φ : C(X, ℝ≥0)₀ →⋆ₙₐ[ℝ≥0] A) :
+    C(X, ℝ)₀ →⋆ₙₐ[ℝ] A where
   toFun f := φ f.toNNReal - φ (-f).toNNReal
   map_zero' := by simp
   map_mul' f g := by
@@ -923,41 +1025,72 @@ noncomputable def realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙ�
     abel
   map_smul' r f := by
     simp only [MonoidHom.id_apply]
-    by_cases! hr : 0 <= r
-    · lift r to Real>=0 using hr
+    by_cases! hr : 0 ≤ r
+    · lift r to ℝ≥0 using hr
       simp only [← smul_def, toNNReal_smul, map_smul, toNNReal_neg_smul, smul_sub]
     · rw [← neg_pos] at hr
       rw [← neg_smul]
       nth_rw 1 [← neg_neg r]
       nth_rw 3 [← neg_neg r]
-      lift -r to Real>=0 using hr.le with r
+      lift -r to ℝ≥0 using hr.le with r
       simp only [neg_smul, ← smul_def, toNNReal_neg_smul, map_smul, toNNReal_smul, smul_sub,
         sub_neg_eq_add]
-      rw [sub_eq_add_neg]; rw [add_comm]
+      rw [sub_eq_add_neg, add_comm]
   map_star' f := by simp only [star_trivial, star_sub, ← map_star]
 
 set_option backward.isDefEq.respectTransparency false in
 @[fun_prop]
-/--
-lemma `continuous_realContinuousMapZeroOfNNReal` / 引理 `continuous_realContinuousMapZeroOfNNReal`
-
-English:
-lemma continuous_realContinuousMapZeroOfNNReal
-  statement: (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A)
-  proof: by
-  dsimp [realContinuousMapZeroOfNNReal]
-  fun_prop
-
-中文:
-引理 continuous_realContinuousMapZeroOfNN实数
-  结论: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
-  证明: by
-  dsimp [realContinuousMapZeroOfNNReal]
-  fun_prop
-
-Depends on / 依赖: fun_prop, realContinuousMapZeroOfNNReal
+/-
+**NonUnitalStarAlgHom.continuous_realContinuousMapZeroOfNNReal** 是 Mathlib 中的一个引
+理，位于命名空间 `NonUnitalStarAlgHom`。
+形式化陈述：continuous_realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0
+] A) (hφ : Continuous φ) : Continuous φ.realContinuousMapZeroOfNNReal
+参数：φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A；hφ : Continuous φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用引理 `ContinuousMapZero.continuous_toNNReal`：continuous_toNNReal : Continuous 
+(toNNReal (X
+· 使用定理 `Continuous.fun_neg`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Neg G]   [ContinuousNeg G] {f : 
+X → G}, …
+· 使用定理 `ContinuousMapZero.instContinuousNeg`：∀ {X : Type u_3} {R : Type u_4} [in
+st : Zero X] [inst_1 : TopologicalSpace X] [inst_2 : CommRing R]   [inst_3 : Top
+ologicalSpace R] [inst_4 …
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
 -/
-lemma continuous_realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A)
+lemma continuous_realContinuousMapZeroOfNNReal (φ : C(X, ℝ≥0)₀ →⋆ₙₐ[ℝ≥0] A)
     (hφ : Continuous φ) : Continuous φ.realContinuousMapZeroOfNNReal := by
   dsimp [realContinuousMapZeroOfNNReal]
   fun_prop
@@ -966,37 +1099,78 @@ end IsTopologicalRing
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp high]
-/--
-lemma `realContinuousMapZeroOfNNReal_apply_comp_toReal` / 引理 `realContinuousMapZeroOfNNReal_apply_comp_toReal`
-
-English:
-lemma realContinuousMapZeroOfNNReal_apply_comp_toReal
-  statement: (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A)
-  proof: by
-  simp only [realContinuousMapZeroOfNNReal_apply]
-  convert_to φ f - φ 0 = φ f using 2
-  on_goal -1 => rw [map_zero, sub_zero]
-  all_goals
-    congr
-    ext x
-    simp
-
-中文:
-引理 realContinuousMapZeroOfNN实数_apply_comp_to实数
-  结论: (φ : C(X, 实数>=0)₀ ->⋆ₙₐ[实数>=0] A)
-  证明: by
-  simp only [realContinuousMapZeroOfNNReal_apply]
-  convert_to φ f - φ 0 = φ f using 2
-  on_goal -1 => rw [map_zero, sub_zero]
-  all_goals
-    congr
-    ext x
-    simp
-
-Depends on / 依赖: all_goals, convert_to, map_zero, on_goal, realContinuousMapZeroOfNNReal_apply, sub_zero
+/-
+**NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_apply_comp_toReal** 是 Mathli
+b 中的一个引理，位于命名空间 `NonUnitalStarAlgHom`。
+形式化陈述：realContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[
+Real>=0] A) (f : C(X, Real>=0)₀) : φ.realContinuousMapZeroOfNNReal ((ContinuousM
+apZero.mk ⟨toReal, continuous_coe⟩ rfl).comp f) = φ f
+参数：φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A；f : C(X, Real>=0)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `NNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Rea
+l)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_apply`：∀ {X : Type u_1
+} [inst : TopologicalSpace X] [inst_1 : Zero X] {A : Type u_2} [inst_2 : NonUnit
+alRing A]   [inst_3 : StarRing A] [inst_4 : _…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalStarAlgHom.instNonUnitalAlgHomClass`：∀ {R : Type u_1} {A : Type
+ u_2} {B : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   
+[inst_2 : DistribMulAction R A] [i…
+（共 31 条，此处仅展示前 30 条）
 -/
-lemma realContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A)
-    (f : C(X, Real>=0)₀) :
+lemma realContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, ℝ≥0)₀ →⋆ₙₐ[ℝ≥0] A)
+    (f : C(X, ℝ≥0)₀) :
     φ.realContinuousMapZeroOfNNReal ((ContinuousMapZero.mk ⟨toReal, continuous_coe⟩ rfl).comp f) =
       φ f := by
   simp only [realContinuousMapZeroOfNNReal_apply]
@@ -1006,25 +1180,46 @@ lemma realContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, Real>=0)₀ ->�
     congr
     ext x
     simp
-
-/--
-lemma `realContinuousMapZeroOfNNReal_injective` / 引理 `realContinuousMapZeroOfNNReal_injective`
-
-English:
-lemma realContinuousMapZeroOfNNReal_injective
-  proof: by
-  intro φ ψ h
-  ext f
-  simpa using congr($(h) ((ContinuousMapZero.mk ⟨toReal, continuous_coe⟩ rfl).comp f))
-
-中文:
-引理 realContinuousMapZeroOfNN实数_injective
-  证明: by
-  intro φ ψ h
-  ext f
-  simpa using congr($(h) ((ContinuousMapZero.mk ⟨toReal, continuous_coe⟩ rfl).comp f))
-
-Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.mk, continuous_coe, toReal
+/-
+**NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_injective** 是 Mathlib 中的一个引理
+，位于命名空间 `NonUnitalStarAlgHom`。
+形式化陈述：realContinuousMapZeroOfNNReal_injective : Function.Injective (realContinuo
+usMapZeroOfNNReal (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `NonUnitalStarAlgHom.ext`：ext {f g : A ->⋆ₙₐ[R] B} (h : forall x, f x = g
+ x) : f = g
+· 使用定理 `NNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Rea
+l)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_apply_comp_toReal`：rea
+lContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] 
+A) (f : C(X, Real>=0)₀) : φ.realContinuousMapZeroOfNNReal…
 -/
 lemma realContinuousMapZeroOfNNReal_injective :
     Function.Injective (realContinuousMapZeroOfNNReal (X := X) (A := A)) := by
@@ -1037,104 +1232,107 @@ end NonUnitalStarAlgHom
 open ContinuousMapZero
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `NNReal.instContinuousMapZero.UniqueHom` / 实例 `NNReal.instContinuousMapZero.UniqueHom`
-
-English:
-instance NNReal.instContinuousMapZero.UniqueHom
-  body: by
-    let s' : Set Real := (↑) '' s
-    let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have : Fact (0 in s') := ⟨0, Fact.out, coe_zero⟩
-    have e0 : e 0 = 0 := rfl
-    have e0' : e.symm 0 = 0 := e.symm_apply_eq.mpr e0
-    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous ξ) :
-        (let ξ' := ξ.realContinuousMapZeroOfNNReal.comp <|
-          ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨e, e0⟩;
-          Continuous ξ' ∧ ξ' (.id s') = ξ (.id s)) := by
-      intro ξ'
-.comp ?_, ?_⟩ refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ
-      · rw [continuous_induced_rng]
-.comp continuous_induced_dom exact ContinuousMap.continuous_precomp _
-      · exact ξ.realContinuousMapZeroOfNNReal_apply_comp_toReal (.id _)
-    obtain ⟨hφ', hφ_id⟩ := this φ hφ
-    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
-    have hs' : CompactSpace s' := e.compactSpace
-    have : ContinuousMapZero.UniqueHom Real A := inferInstance
-    have h' := ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id
-      s' _ _ hφ' hψ' (hφ_id ▸ hψ_id ▸ h)
-    have h'' := congr($(h').comp <|
-      ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩)
-    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e : C(s, s')), e0⟩).comp
-        (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩) =
-        NonUnitalStarAlgHom.id _ _ := by
-      ext; simp
-    simp only [NonUnitalStarAlgHom.comp_assoc, this, NonUnitalStarAlgHom.comp_id] at h''
-    exact NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_injective h''
-
-中文:
-实例 非负实数.instContinuousMapZero.唯一态射
-  定义体: by
-    let s' : Set Real := (↑) '' s
-    let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have : Fact (0 in s') := ⟨0, Fact.out, coe_zero⟩
-    have e0 : e 0 = 0 := rfl
-    have e0' : e.symm 0 = 0 := e.symm_apply_eq.mpr e0
-    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous ξ) :
-        (let ξ' := ξ.realContinuousMapZeroOfNNReal.comp <|
-          ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨e, e0⟩;
-          Continuous ξ' ∧ ξ' (.id s') = ξ (.id s)) := by
-      intro ξ'
-.comp ?_, ?_⟩ refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ
-      · rw [continuous_induced_rng]
-.comp continuous_induced_dom exact ContinuousMap.continuous_precomp _
-      · exact ξ.realContinuousMapZeroOfNNReal_apply_comp_toReal (.id _)
-    obtain ⟨hφ', hφ_id⟩ := this φ hφ
-    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
-    have hs' : CompactSpace s' := e.compactSpace
-    have : ContinuousMapZero.UniqueHom Real A := inferInstance
-    have h' := ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id
-      s' _ _ hφ' hψ' (hφ_id ▸ hψ_id ▸ h)
-    have h'' := congr($(h').comp <|
-      ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩)
-    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e : C(s, s')), e0⟩).comp
-        (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩) =
-        NonUnitalStarAlgHom.id _ _ := by
-      ext; simp
-    simp only [NonUnitalStarAlgHom.comp_assoc, this, NonUnitalStarAlgHom.comp_id] at h''
-    exact NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_injective h''
-
-Depends on / 依赖: Continuous, ContinuousMapZero, ContinuousMapZero.nonUnitalStarAlgHom_precomp, Fact.out, NNReal, NNReal.isEmbedding_coe.homeomorphImage, coe_zero, continuous_realContinuousMa, e.symm, e.symm_apply_eq.mpr, homeomorphImage, isEmbedding_coe, nonUnitalStarAlgHom_precomp, realContinuousMapZeroOfNNReal, realContinuousMapZeroOfNNReal.comp, symm_apply_eq
+/-
+**NNReal.instContinuousMapZero.UniqueHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNReal.instContinuousMapZero.UniqueHom [TopologicalSpace A] [IsSemitopolog
+icalRing A] [IsScalarTower Real A A] [SMulCommClass Real A A] [T2Space A] : Cont
+inuousMapZero.UniqueHom Real>=0 A where eq_of_continuous_of_map_id s hs h0 φ ψ h
+φ hψ h
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `NNReal.instIsScalarTowerOfReal`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+MulAction ℝ M] [inst_1 : MulAction ℝ N] [inst_2 : SMul M N]   [IsScalarTower ℝ M
+ N], IsScalarTower N…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `NNReal.isEmbedding_coe`：NNReal.isEmbedding_coe : Topology.IsEmbedding NN
+Real.toReal
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `NNReal.coe_zero`：↑0 = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Homeomorph.symm_apply_eq`：symm_apply_eq (h : X ≃ₜ Y) {x : X} {y : Y} : h
+.symm y = x ↔ y = h x
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用引理 `NonUnitalStarAlgHom.continuous_realContinuousMapZeroOfNNReal`：continuous
+_realContinuousMapZeroOfNNReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hφ : Conti
+nuous φ) : Continuous φ.realContinuousMapZeroOfNNR…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `ContinuousMap.continuous_precomp`：continuous_precomp (f : C(X, Y)) : Con
+tinuous (fun g => g.comp f : C(Y, Z) -> C(X, Z))
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
+· 使用引理 `NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_apply_comp_toReal`：rea
+lContinuousMapZeroOfNNReal_apply_comp_toReal (φ : C(X, Real>=0)₀ ->⋆ₙₐ[Real>=0] 
+A) (f : C(X, Real>=0)₀) : φ.realContinuousMapZeroOfNNReal…
+· 使用定理 `Homeomorph.compactSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] [CompactSpace X] (h : X ≃ₜ Y),   Comp
+actSpace Y
+· 使用定理 `ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id`：∀ {R : Type u_1}
+ {A : Type u_2} {inst : CommSemiring R} {inst_1 : StarRing R} {inst_2 : MetricSp
+ace R}   {inst_3 : IsTopologicalSemiring R} …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NonUnitalStarAlgHom.ext`：ext {f g : A ->⋆ₙₐ[R] B} (h : forall x, f x = g
+ x) : f = g
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+（共 37 条，此处仅展示前 30 条）
 -/
 instance NNReal.instContinuousMapZero.UniqueHom
-    [TopologicalSpace A] [IsSemitopologicalRing A] [IsScalarTower Real A A] [SMulCommClass Real A A]
+    [TopologicalSpace A] [IsSemitopologicalRing A] [IsScalarTower ℝ A A] [SMulCommClass ℝ A A]
     [T2Space A] :
-    ContinuousMapZero.UniqueHom Real>=0 A where
+    ContinuousMapZero.UniqueHom ℝ≥0 A where
   eq_of_continuous_of_map_id s hs h0 φ ψ hφ hψ h := by
-    let s' : Set Real := (↑) '' s
+    let s' : Set ℝ := (↑) '' s
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
-    have : Fact (0 in s') := ⟨0, Fact.out, coe_zero⟩
+    have : Fact (0 ∈ s') := ⟨0, Fact.out, coe_zero⟩
     have e0 : e 0 = 0 := rfl
     have e0' : e.symm 0 = 0 := e.symm_apply_eq.mpr e0
-    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous ξ) :
+    have (ξ : C(s, ℝ≥0)₀ →⋆ₙₐ[ℝ≥0] A) (hξ : Continuous ξ) :
         (let ξ' := ξ.realContinuousMapZeroOfNNReal.comp <|
-          ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨e, e0⟩;
+          ContinuousMapZero.nonUnitalStarAlgHom_precomp ℝ ⟨e, e0⟩;
           Continuous ξ' ∧ ξ' (.id s') = ξ (.id s)) := by
       intro ξ'
-.comp ?_, ?_⟩ refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ
+      refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ |>.comp <| ?_, ?_⟩
       · rw [continuous_induced_rng]
-.comp continuous_induced_dom exact ContinuousMap.continuous_precomp _
+        exact ContinuousMap.continuous_precomp _ |>.comp continuous_induced_dom
       · exact ξ.realContinuousMapZeroOfNNReal_apply_comp_toReal (.id _)
     obtain ⟨hφ', hφ_id⟩ := this φ hφ
     obtain ⟨hψ', hψ_id⟩ := this ψ hψ
     have hs' : CompactSpace s' := e.compactSpace
-    have : ContinuousMapZero.UniqueHom Real A := inferInstance
+    have : ContinuousMapZero.UniqueHom ℝ A := inferInstance
     have h' := ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id
       s' _ _ hφ' hψ' (hφ_id ▸ hψ_id ▸ h)
     have h'' := congr($(h').comp <|
-      ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩)
-    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e : C(s, s')), e0⟩).comp
-        (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩) =
+      ContinuousMapZero.nonUnitalStarAlgHom_precomp ℝ ⟨(e.symm : C(s', s)), e0'⟩)
+    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp ℝ ⟨(e : C(s, s')), e0⟩).comp
+        (ContinuousMapZero.nonUnitalStarAlgHom_precomp ℝ ⟨(e.symm : C(s', s)), e0'⟩) =
         NonUnitalStarAlgHom.id _ _ := by
       ext; simp
     simp only [NonUnitalStarAlgHom.comp_assoc, this, NonUnitalStarAlgHom.comp_id] at h''
@@ -1148,7 +1346,7 @@ section NonUnitalStarAlgHom
 
 open scoped ContinuousMapZero NonUnitalContinuousFunctionalCalculus
 
-variable {F R S A B : Type*} {p : A -> Prop} {q : B -> Prop}
+variable {F R S A B : Type*} {p : A → Prop} {q : B → Prop}
   [CommSemiring R] [Nontrivial R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R]
   [ContinuousStar R] [CommRing S] [Algebra R S]
   [NonUnitalRing A] [StarRing A] [TopologicalSpace A] [Module R A]
@@ -1162,64 +1360,22 @@ variable {F R S A B : Type*} {p : A -> Prop} {q : B -> Prop}
 
 set_option backward.isDefEq.respectTransparency false in
 include S in
-/--
-lemma `NonUnitalStarAlgHomClass.map_cfcₙ` / 引理 `NonUnitalStarAlgHomClass.map_cfcₙ`
+/-- Non-unital star algebra homomorphisms commute with the non-unital continuous functional
+calculus. -/
+/-
+**NonUnitalStarAlgHomClass.map_cfc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma NonUnitalStarAlgHomClass.map_cfcₙ
-  statement: (φ : F) (f : R -> R) (a : A)
-  proof: by
-  let ψ : A ->⋆ₙₐ[R] B := (φ : A ->⋆ₙₐ[S] B).restrictScalars R
-  have : Continuous ψ := hφ
-  have h_spec := NonUnitalAlgHom.quasispectrum_apply_subset' (R := R) S φ a
-  have hψa : q (ψ a) := hφa
-  let ι : C(quasispectrum R (ψ a), quasispectrum R a)₀ :=
-    ⟨⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩, rfl⟩
-  suffices ψ.comp (cfcₙHom ha) =
-      (cfcₙHom hψa).comp (ContinuousMapZero.nonUnitalStarAlgHom_precomp R ι) by
-    have hf' : ContinuousOn f (quasispectrum R (ψ a)) := hf.mono h_spec
-    rw [cfcₙ_apply ..]; rw [cfcₙ_apply ..]
-    exact DFunLike.congr_fun this _
-  refine ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
-  case apply_id =>
-    trans cfcₙHom hψa (.id (quasispectrum R (ψ a)))
-    · simp [cfcₙHom_id]
-    · congr
-  all_goals
-    dsimp [ContinuousMapZero.nonUnitalStarAlgHom_precomp]
-    fun_prop
-
-中文:
-引理 NonUnitalStarAlgHomClass.map_cfcₙ
-  结论: (φ : F) (f : R -> R) (a : A)
-  证明: by
-  let ψ : A ->⋆ₙₐ[R] B := (φ : A ->⋆ₙₐ[S] B).restrictScalars R
-  have : Continuous ψ := hφ
-  have h_spec := NonUnitalAlgHom.quasispectrum_apply_subset' (R := R) S φ a
-  have hψa : q (ψ a) := hφa
-  let ι : C(quasispectrum R (ψ a), quasispectrum R a)₀ :=
-    ⟨⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩, rfl⟩
-  suffices ψ.comp (cfcₙHom ha) =
-      (cfcₙHom hψa).comp (ContinuousMapZero.nonUnitalStarAlgHom_precomp R ι) by
-    have hf' : ContinuousOn f (quasispectrum R (ψ a)) := hf.mono h_spec
-    rw [cfcₙ_apply ..]; rw [cfcₙ_apply ..]
-    exact DFunLike.congr_fun this _
-  refine ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
-  case apply_id =>
-    trans cfcₙHom hψa (.id (quasispectrum R (ψ a)))
-    · simp [cfcₙHom_id]
-    · congr
-  all_goals
-    dsimp [ContinuousMapZero.nonUnitalStarAlgHom_precomp]
-    fun_prop
-
-Depends on / 依赖: Continuous, NonUnitalAlgHom, NonUnitalAlgHom.quasispectrum_apply_subset, Set.inclusion, cfc_cont_tac, cfc_tac, cfc_zero_tac, continuous_id, continuous_id.subtype_map, fun_prop, h_spec, inclusion, quasispectrum, quasispectrum_apply_subset, restrictScalars, subtype_map
+--- 原说明 ---
+Non-unital star algebra homomorphisms commute with the non-unital continuous fun
+ctional
+calculus.
 -/
-lemma NonUnitalStarAlgHomClass.map_cfcₙ (φ : F) (f : R -> R) (a : A)
+lemma NonUnitalStarAlgHomClass.map_cfcₙ (φ : F) (f : R → R) (a : A)
     (hf : ContinuousOn f (quasispectrum R a) := by cfc_cont_tac)
     (hf₀ : f 0 = 0 := by cfc_zero_tac) (hφ : Continuous φ := by fun_prop) (ha : p a := by cfc_tac)
     (hφa : q (φ a) := by cfc_tac) : φ (cfcₙ f a) = cfcₙ f (φ a) := by
-  let ψ : A ->⋆ₙₐ[R] B := (φ : A ->⋆ₙₐ[S] B).restrictScalars R
+  let ψ : A →⋆ₙₐ[R] B := (φ : A →⋆ₙₐ[S] B).restrictScalars R
   have : Continuous ψ := hφ
   have h_spec := NonUnitalAlgHom.quasispectrum_apply_subset' (R := R) S φ a
   have hψa : q (ψ a) := hφa
@@ -1228,7 +1384,7 @@ lemma NonUnitalStarAlgHomClass.map_cfcₙ (φ : F) (f : R -> R) (a : A)
   suffices ψ.comp (cfcₙHom ha) =
       (cfcₙHom hψa).comp (ContinuousMapZero.nonUnitalStarAlgHom_precomp R ι) by
     have hf' : ContinuousOn f (quasispectrum R (ψ a)) := hf.mono h_spec
-    rw [cfcₙ_apply ..]; rw [cfcₙ_apply ..]
+    rw [cfcₙ_apply .., cfcₙ_apply ..]
     exact DFunLike.congr_fun this _
   refine ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
   case apply_id =>
@@ -1239,22 +1395,19 @@ lemma NonUnitalStarAlgHomClass.map_cfcₙ (φ : F) (f : R -> R) (a : A)
     dsimp [ContinuousMapZero.nonUnitalStarAlgHom_precomp]
     fun_prop
 
-/--
-lemma `NonUnitalStarAlgHom.map_cfcₙ` / 引理 `NonUnitalStarAlgHom.map_cfcₙ`
+/-- Non-unital star algebra homomorphisms commute with the non-unital continuous functional
+calculus.  This version is specialized to `A →⋆ₙₐ[S] B` to allow for dot notation. -/
+/-
+**NonUnitalStarAlgHom.map_cfc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma NonUnitalStarAlgHom.map_cfcₙ
-  statement: (φ : A ->⋆ₙₐ[S] B) (f : R -> R) (a : A)
-  proof: NonUnitalStarAlgHomClass.map_cfcₙ φ f a
-
-中文:
-引理 非幺StarAlg态射.map_cfcₙ
-  结论: (φ : A ->⋆ₙₐ[S] B) (f : R -> R) (a : A)
-  证明: NonUnitalStarAlgHomClass.map_cfcₙ φ f a
-
-Depends on / 依赖: Continuous, NonUnitalStarAlgHomClass, NonUnitalStarAlgHomClass.map_cfc, cfc_cont_tac, cfc_tac, cfc_zero_tac, fun_prop
+--- 原说明 ---
+Non-unital star algebra homomorphisms commute with the non-unital continuous fun
+ctional
+calculus.  This version is specialized to `A →⋆ₙₐ[S] B` to allow for dot notatio
+n.
 -/
-lemma NonUnitalStarAlgHom.map_cfcₙ (φ : A ->⋆ₙₐ[S] B) (f : R -> R) (a : A)
+lemma NonUnitalStarAlgHom.map_cfcₙ (φ : A →⋆ₙₐ[S] B) (f : R → R) (a : A)
     (hf : ContinuousOn f (quasispectrum R a) := by cfc_cont_tac)
     (hf₀ : f 0 = 0 := by cfc_zero_tac) (hφ : Continuous φ := by fun_prop) (ha : p a := by cfc_tac)
     (hφa : q (φ a) := by cfc_tac) : φ (cfcₙ f a) = cfcₙ f (φ a) :=
@@ -1266,7 +1419,7 @@ section StarAlgHom
 
 open scoped ContinuousFunctionalCalculus
 
-variable {F R S A B : Type*} {p : A -> Prop} {q : B -> Prop}
+variable {F R S A B : Type*} {p : A → Prop} {q : B → Prop}
   [CommSemiring R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R] [ContinuousStar R]
   [Ring A] [StarRing A] [TopologicalSpace A] [Algebra R A]
   [Ring B] [StarRing B] [TopologicalSpace B] [Algebra R B]
@@ -1277,62 +1430,58 @@ variable {F R S A B : Type*} {p : A -> Prop} {q : B -> Prop}
 
 set_option backward.isDefEq.respectTransparency false in
 include S in
-/--
-lemma `StarAlgHomClass.map_cfc` / 引理 `StarAlgHomClass.map_cfc`
+/-- Star algebra homomorphisms commute with the continuous functional calculus. -/
+/-
+**StarAlgHomClass.map_cfc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StarAlgHomClass.map_cfc (φ : F) (f : R -> R) (a : A) (hf : ContinuousOn f 
+(spectrum R a)
+参数：φ : F；f : R -> R；a : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.spectrum_apply_subset`：spectrum_apply_subset (φ : F) (a : A) : σ 
+((φ : A -> B) a) subseteq σ a
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `Continuous.subtype_map`：Continuous.subtype_map {f : X -> Y} (h : Continu
+ous f) {q : Y -> Prop} (hpq : forall x, p x -> q (f x)) : Continuous (Subtype.ma
+p f hpq)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `ContinuousMap.UniqueHom.eq_of_continuous_of_map_id`：∀ {R : Type u_1} {A 
+: Type u_2} {inst : CommSemiring R} {inst_1 : StarRing R} {inst_2 : MetricSpace 
+R}   {inst_3 : IsTopologicalSemiring R} …
+· 使用定理 `ContinuousFunctionalCalculus.compactSpace_spectrum`：∀ {R : Type u_1} {A 
+: Type u_2} {p : outParam (A → Prop)} {inst : CommSemiring R} {inst_1 : StarRing
+ R}   {inst_2 : MetricSpace R} {inst_3 :…
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用引理 `cfcHom_continuous`：cfcHom_continuous : Continuous (cfcHom ha : C(spectru
+m R a, R) ->⋆ₐ[R] A)
+· 使用定理 `ContinuousMap.continuous_precomp`：continuous_precomp (f : C(X, Y)) : Con
+tinuous (fun g => g.comp f : C(Y, Z) -> C(X, Z))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `cfcHom_id`：cfcHom_id : cfcHom ha ((ContinuousMap.id R).restrict <| spect
+rum R a) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用引理 `cfc_apply`：cfc_apply : cfc f a = cfcHom (a
 
-English:
-lemma StarAlgHomClass.map_cfc
-  statement: (φ : F) (f : R -> R) (a : A)
-  proof: by
-  let ψ : A ->⋆ₐ[R] B := (φ : A ->⋆ₐ[S] B).restrictScalars R
-  have : Continuous ψ := hφ
-  have h_spec := AlgHom.spectrum_apply_subset ψ a
-  have hψa : q (ψ a) := hφa
-  let ι : C(spectrum R (ψ a), spectrum R a) :=
-    ⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩
-  suffices ψ.comp (cfcHom ha) = (cfcHom hψa).comp (ContinuousMap.compStarAlgHom' R R ι) by
-    have hf' : ContinuousOn f (spectrum R (ψ a)) := hf.mono h_spec
-    rw [cfc_apply ..]; rw [cfc_apply ..]
-    congrm($(this) ⟨_, hf.domRestrict⟩)
-  refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
-  case apply_id =>
-    trans cfcHom hψa (.restrict (spectrum R (ψ a)) (.id R))
-    · simp [cfcHom_id]
-    · congr
-  all_goals
-    dsimp [ContinuousMap.compStarAlgHom']
-    fun_prop
-
-中文:
-引理 StarAlgHomClass.map_cfc
-  结论: (φ : F) (f : R -> R) (a : A)
-  证明: by
-  let ψ : A ->⋆ₐ[R] B := (φ : A ->⋆ₐ[S] B).restrictScalars R
-  have : Continuous ψ := hφ
-  have h_spec := AlgHom.spectrum_apply_subset ψ a
-  have hψa : q (ψ a) := hφa
-  let ι : C(spectrum R (ψ a), spectrum R a) :=
-    ⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩
-  suffices ψ.comp (cfcHom ha) = (cfcHom hψa).comp (ContinuousMap.compStarAlgHom' R R ι) by
-    have hf' : ContinuousOn f (spectrum R (ψ a)) := hf.mono h_spec
-    rw [cfc_apply ..]; rw [cfc_apply ..]
-    congrm($(this) ⟨_, hf.domRestrict⟩)
-  refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
-  case apply_id =>
-    trans cfcHom hψa (.restrict (spectrum R (ψ a)) (.id R))
-    · simp [cfcHom_id]
-    · congr
-  all_goals
-    dsimp [ContinuousMap.compStarAlgHom']
-    fun_prop
-
-Depends on / 依赖: AlgHom, AlgHom.spectrum_apply_subset, Continuous, ContinuousMap, ContinuousMap.compStarAlgHom, Set.inclusion, cfcHom, cfc_cont_tac, cfc_tac, compStarAlgHom, continuous_id, continuous_id.subtype_map, fun_prop, h_spec, inclusion, restrictScalars, spectrum, spectrum_apply_subset, subtype_map
+--- 原说明 ---
+Star algebra homomorphisms commute with the continuous functional calculus.
 -/
-lemma StarAlgHomClass.map_cfc (φ : F) (f : R -> R) (a : A)
+lemma StarAlgHomClass.map_cfc (φ : F) (f : R → R) (a : A)
     (hf : ContinuousOn f (spectrum R a) := by cfc_cont_tac)
     (hφ : Continuous φ := by fun_prop) (ha : p a := by cfc_tac) (hφa : q (φ a) := by cfc_tac) :
     φ (cfc f a) = cfc f (φ a) := by
-  let ψ : A ->⋆ₐ[R] B := (φ : A ->⋆ₐ[S] B).restrictScalars R
+  let ψ : A →⋆ₐ[R] B := (φ : A →⋆ₐ[S] B).restrictScalars R
   have : Continuous ψ := hφ
   have h_spec := AlgHom.spectrum_apply_subset ψ a
   have hψa : q (ψ a) := hφa
@@ -1340,7 +1489,7 @@ lemma StarAlgHomClass.map_cfc (φ : F) (f : R -> R) (a : A)
     ⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩
   suffices ψ.comp (cfcHom ha) = (cfcHom hψa).comp (ContinuousMap.compStarAlgHom' R R ι) by
     have hf' : ContinuousOn f (spectrum R (ψ a)) := hf.mono h_spec
-    rw [cfc_apply ..]; rw [cfc_apply ..]
+    rw [cfc_apply .., cfc_apply ..]
     congrm($(this) ⟨_, hf.domRestrict⟩)
   refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
   case apply_id =>
@@ -1351,25 +1500,32 @@ lemma StarAlgHomClass.map_cfc (φ : F) (f : R -> R) (a : A)
     dsimp [ContinuousMap.compStarAlgHom']
     fun_prop
 
-/--
-lemma `StarAlgHom.map_cfc` / 引理 `StarAlgHom.map_cfc`
+/-- Star algebra homomorphisms commute with the continuous functional calculus.
+This version is specialized to `A →⋆ₐ[S] B` to allow for dot notation. -/
+/-
+**StarAlgHom.map_cfc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StarAlgHom.map_cfc (φ : A ->⋆ₐ[S] B) (f : R -> R) (a : A) (hf : Continuous
+On f (spectrum R a)
+参数：φ : A ->⋆ₐ[S] B；f : R -> R；a : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `StarAlgHomClass.map_cfc`：StarAlgHomClass.map_cfc (φ : F) (f : R -> R) (a
+ : A) (hf : ContinuousOn f (spectrum R a)
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `StarAlgHom.instStarHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u
+_4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst
+_3 : Star A] [ins…
 
-English:
-lemma StarAlgHom.map_cfc
-  statement: (φ : A ->⋆ₐ[S] B) (f : R -> R) (a : A)
-  proof: StarAlgHomClass.map_cfc φ f a
-
-中文:
-引理 StarAlg态射.map_cfc
-  结论: (φ : A ->⋆ₐ[S] B) (f : R -> R) (a : A)
-  证明: StarAlgHomClass.map_cfc φ f a
-
-Depends on / 依赖: Continuous, StarAlgHomClass, StarAlgHomClass.map_cfc, cfc_cont_tac, cfc_tac, fun_prop, map_cfc
+--- 原说明 ---
+Star algebra homomorphisms commute with the continuous functional calculus.
+This version is specialized to `A →⋆ₐ[S] B` to allow for dot notation.
 -/
-lemma StarAlgHom.map_cfc (φ : A ->⋆ₐ[S] B) (f : R -> R) (a : A)
+lemma StarAlgHom.map_cfc (φ : A →⋆ₐ[S] B) (f : R → R) (a : A)
     (hf : ContinuousOn f (spectrum R a) := by cfc_cont_tac) (hφ : Continuous φ := by fun_prop)
     (ha : p a := by cfc_tac) (hφa : q (φ a) := by cfc_tac) :
     φ (cfc f a) = cfc f (φ a) :=
   StarAlgHomClass.map_cfc φ f a
 
 end StarAlgHom
+

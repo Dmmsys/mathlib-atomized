@@ -38,19 +38,23 @@ namespace CategoryTheory
 namespace Bicategory
 
 /--
-Definition of `Adj` / `Adj` 的定义
+The bicategory that has the same objects as a bicategory `B`, in which `1`-morphisms
+are adjunctions (in the same direction as the left adjoints),
+and `2`-morphisms are tuples of mate maps between the left and right
+adjoints (where the map between right adjoints is in the opposite direction).
+-/
+/-
+**CategoryTheory.Bicategory.Adj** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Bica
+tegory`。
+形式化陈述：(B : Type u) → [CategoryTheory.Bicategory B] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Adj
-  parameters: (B : Type u) [Bicategory.{w, v} B]
-  axioms and operations (1):
-    - obj : B
-
-中文:
-结构 伴随
-  参数: (B : 类型u) [双范畴.{w, v} B]
-  公理与运算 (1 个):
-    - obj : B
+--- 原说明 ---
+The bicategory that has the same objects as a bicategory `B`, in which `1`-morph
+isms
+are adjunctions (in the same direction as the left adjoints),
+and `2`-morphisms are tuples of mate maps between the left and right
+adjoints (where the map between right adjoints is in the opposite direction).
 -/
 structure Adj (B : Type u) [Bicategory.{w, v} B] where
   /-- If `a : Adj B`, `a.obj : B` is the underlying object of the bicategory `B`. -/
@@ -60,20 +64,13 @@ variable {B : Type u} [Bicategory.{w, v} B]
 
 namespace Adj
 
-/--
-lemma `mk_obj` / 引理 `mk_obj`
-
-English:
-lemma mk_obj
-  given: (b : Adj B)
-  statement: mk b.obj = b
-  proof: rfl
-
-中文:
-引理 mk_obj
-  条件: (b : 伴随 B)
-  结论: mk b.obj = b
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.Adj.mk_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Bicategory.Adj`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] (b : CategoryTheory.Bi
+category.Adj B), { obj := b.obj } = b
+参数：b : CategoryTheory.Bicategory.Adj B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_obj (b : Adj B) : mk b.obj = b := rfl
 
@@ -82,23 +79,19 @@ section
 variable (a b : B)
 
 /--
-Definition of `Hom` / `Hom` 的定义
+Given two objects `a` and `b` in a bicategory,
+this is the type of adjunctions between `a` and `b`.
+-/
+/-
+**CategoryTheory.Bicategory.Adj.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Bicategory.Adj`。
+形式化陈述：{B : Type u} → [CategoryTheory.Bicategory B] → B → B → Type (max v w)
+参数：max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: where
-  axioms and operations (3):
-    - {l : a ⟶ b}
-    - {r : b ⟶ a}
-    - adj : l ⊣ r
-
-中文:
-结构 态射
-  参数: where
-  公理与运算 (3 个):
-    - {l : a ⟶ b}
-    - {r : b ⟶ a}
-    - adj : l ⊣ r
+--- 原说明 ---
+Given two objects `a` and `b` in a bicategory,
+this is the type of adjunctions between `a` and `b`.
 -/
 structure Hom where
   /-- the left adjoint -/
@@ -111,24 +104,10 @@ structure Hom where
 end
 
 @[simps! id_l id_r id_adj comp_l comp_r comp_adj]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryStruct (Adj B)
-  body: Hom a.obj b.obj
-  id a := .mk (Adjunction.id a.obj)
-  comp f g := .mk (f.adj.comp g.adj)
-
-中文:
-实例 :
-  签名: CategoryStruct (伴随 B)
-  定义体: Hom a.obj b.obj
-  id a := .mk (Adjunction.id a.obj)
-  comp f g := .mk (f.adj.comp g.adj)
-
-Depends on / 依赖: a.obj, b.obj
+/-
+**CategoryTheory.Bicategory.Adj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicat
+egory.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryStruct (Adj B) where
   Hom a b := Hom a.obj b.obj
@@ -139,26 +118,15 @@ variable {a b c d : Adj B}
 
 /-- A morphism between two adjunctions consists of a tuple of mate maps. -/
 @[ext]
-/--
-Definition of `Hom₂` / `Hom₂` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Bicategory.Adj`。
+形式化陈述：{B : Type u} → [CategoryTheory.Bicategory B] → B → B → Type (max v w)
+参数：max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom₂
-  parameters: (α β : a ⟶ b)
-  axioms and operations (3):
-    - τl : α.l ⟶ β.l
-    - τr : β.r ⟶ α.r
-    - conjugateEquiv_τl : conjugateEquiv β.adj α.adj τl = τr  [default: by cat_disch]
-
-中文:
-结构 Hom₂
-  参数: (α β : a ⟶ b)
-  公理与运算 (3 个):
-    - τl : α.l ⟶ β.l
-    - τr : β.r ⟶ α.r
-    - conjugateEquiv_τl : conjugateEquiv β.adj α.adj τl = τr  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism between two adjunctions consists of a tuple of mate maps.
 -/
 structure Hom₂ (α β : a ⟶ b) where
   /-- the morphism between left adjoints -/
@@ -166,63 +134,22 @@ structure Hom₂ (α β : a ⟶ b) where
   /-- the morphism in the opposite direction between right adjoints -/
   τr : β.r ⟶ α.r
   conjugateEquiv_τl : conjugateEquiv β.adj α.adj τl = τr := by cat_disch
-
-/--
-lemma `Hom₂.conjugateEquiv_symm_τr` / 引理 `Hom₂.conjugateEquiv_symm_τr`
-
-English:
-lemma Hom₂.conjugateEquiv_symm_τr
-  given: {α β : a ⟶ b} (p : Hom₂ α β)
-  proof: by
-  rw [← Hom₂.conjugateEquiv_τl]; rw [Equiv.symm_apply_apply]
-
-@[simps!]
-
-中文:
-引理 Hom₂.conjugateEquiv_symm_τr
-  条件: {α β : a ⟶ b} (p : Hom₂ α β)
-  证明: by
-  rw [← Hom₂.conjugateEquiv_τl]; rw [Equiv.symm_apply_apply]
-
-@[simps!]
-
-Depends on / 依赖: Equiv.symm_apply_apply, symm_apply_apply
+/-
+**CategoryTheory.Bicategory.Adj.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Bicategory.Adj`。
+形式化陈述：{B : Type u} → [CategoryTheory.Bicategory B] → B → B → Type (max v w)
+参数：max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom₂.conjugateEquiv_symm_τr {α β : a ⟶ b} (p : Hom₂ α β) :
     (conjugateEquiv β.adj α.adj).symm p.τr = p.τl := by
-  rw [← Hom₂.conjugateEquiv_τl]; rw [Equiv.symm_apply_apply]
+  rw [← Hom₂.conjugateEquiv_τl, Equiv.symm_apply_apply]
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryStruct (a ⟶ b)
-  body: Hom₂ α β
-  id α :=
-    { τl := 𝟙 _
-      τr := 𝟙 _ }
-  comp {a b c} x y :=
-    { τl := x.τl ≫ y.τl
-      τr := y.τr ≫ x.τr
-      conjugateEquiv_τl := by
-        simp [← conjugateEquiv_comp c.adj b.adj a.adj y.τl x.τl,
-          Hom₂.conjugateEquiv_τl] }
-
-中文:
-实例 :
-  签名: CategoryStruct (a ⟶ b)
-  定义体: Hom₂ α β
-  id α :=
-    { τl := 𝟙 _
-      τr := 𝟙 _ }
-  comp {a b c} x y :=
-    { τl := x.τl ≫ y.τl
-      τr := y.τr ≫ x.τr
-      conjugateEquiv_τl := by
-        simp [← conjugateEquiv_comp c.adj b.adj a.adj y.τl x.τl,
-          Hom₂.conjugateEquiv_τl] }
+/-
+**CategoryTheory.Bicategory.Adj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicat
+egory.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryStruct (a ⟶ b) where
   Hom α β := Hom₂ α β
@@ -239,67 +166,29 @@ instance : CategoryStruct (a ⟶ b) where
 attribute [reassoc] comp_τl comp_τr
 
 @[ext]
-/--
-lemma `hom₂_ext` / 引理 `hom₂_ext`
-
-English:
-lemma hom₂_ext
-  given: {α β : a ⟶ b} {x y : α ⟶ β} (hl : x.τl = y.τl)
-  statement: x = y
-  proof: Hom₂.ext hl (by simp only [← Hom₂.conjugateEquiv_τl, hl])
-
-中文:
-引理 hom₂_ext
-  条件: {α β : a ⟶ b} {x y : α ⟶ β} (hl : x.τl = y.τl)
-  结论: x = y
-  证明: Hom₂.ext hl (by simp only [← Hom₂.conjugateEquiv_τl, hl])
+/-
+**CategoryTheory.Bicategory.Adj.hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Bi
+category.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom₂_ext {α β : a ⟶ b} {x y : α ⟶ β} (hl : x.τl = y.τl) : x = y :=
   Hom₂.ext hl (by simp only [← Hom₂.conjugateEquiv_τl, hl])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (a ⟶ b)
-
-中文:
-实例 :
-  签名: 范畴 (a ⟶ b)
+/-
+**CategoryTheory.Bicategory.Adj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicat
+egory.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (a ⟶ b) where
 
 /-- Constructor for isomorphisms between 1-morphisms in the bicategory `Adj B`. -/
 @[simps]
-/--
-Definition of `iso₂Mk` / `iso₂Mk` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.iso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bi
+category.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso₂Mk
-  signature: {α β : a ⟶ b} (el : α.l ≅ β.l) (er : β.r ≅ α.r)
-  body: { τl := el.hom
-      τr := er.hom
-      conjugateEquiv_τl := h }
-  inv :=
-    { τl := el.inv
-      τr := er.inv
-      conjugateEquiv_τl := by
-        rw [← cancel_mono er.hom]; rw [Iso.inv_hom_id]; rw [← h]; rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_id] }
-
-中文:
-定义 iso₂Mk
-  签名: {α β : a ⟶ b} (el : α.l ≅ β.l) (er : β.r ≅ α.r)
-  定义体: { τl := el.hom
-      τr := er.hom
-      conjugateEquiv_τl := h }
-  inv :=
-    { τl := el.inv
-      τr := er.inv
-      conjugateEquiv_τl := by
-        rw [← cancel_mono er.hom]; rw [Iso.inv_hom_id]; rw [← h]; rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_id] }
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, cancel_mono, cat_disch, conjugateEquiv_comp, conjugateEquiv_id, el.hom, el.inv, er.hom, er.inv, hom_inv_id, inv_hom_id
+--- 原说明 ---
+Constructor for isomorphisms between 1-morphisms in the bicategory `Adj B`.
 -/
 def iso₂Mk {α β : a ⟶ b} (el : α.l ≅ β.l) (er : β.r ≅ α.r)
     (h : conjugateEquiv β.adj α.adj el.hom = er.hom := by cat_disch) :
@@ -312,27 +201,24 @@ def iso₂Mk {α β : a ⟶ b} (el : α.l ≅ β.l) (er : β.r ≅ α.r)
     { τl := el.inv
       τr := er.inv
       conjugateEquiv_τl := by
-        rw [← cancel_mono er.hom]; rw [Iso.inv_hom_id]; rw [← h]; rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_id] }
+        rw [← cancel_mono er.hom, Iso.inv_hom_id, ← h,
+          conjugateEquiv_comp, Iso.hom_inv_id, conjugateEquiv_id] }
 
 namespace Bicategory
 
 set_option linter.dupNamespace false in
 /-- The associator in the bicategory `Adj B`. -/
 @[simps!]
-/--
-Definition of `associator` / `associator` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Bicategory.associator** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Bicategory.Adj.Bicategory`。
+形式化陈述：associator (α : a ⟶ b) (β : b ⟶ c) (γ : c ⟶ d) : (α ≫ β) ≫ γ ≅ α ≫ β ≫ γ
+参数：α : a ⟶ b；β : b ⟶ c；γ : c ⟶ d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: (α : a ⟶ b) (β : b ⟶ c) (γ : c ⟶ d)
-  body: iso₂Mk (α_ _ _ _) (α_ _ _ _) (conjugateEquiv_associator_hom _ _ _)
-
-中文:
-定义 associator
-  签名: (α : a ⟶ b) (β : b ⟶ c) (γ : c ⟶ d)
-  定义体: iso₂Mk (α_ _ _ _) (α_ _ _ _) (conjugateEquiv_associator_hom _ _ _)
-
-Depends on / 依赖: conjugateEquiv_associator_hom
+--- 原说明 ---
+The associator in the bicategory `Adj B`.
 -/
 def associator (α : a ⟶ b) (β : b ⟶ c) (γ : c ⟶ d) : (α ≫ β) ≫ γ ≅ α ≫ β ≫ γ :=
   iso₂Mk (α_ _ _ _) (α_ _ _ _) (conjugateEquiv_associator_hom _ _ _)
@@ -340,72 +226,53 @@ def associator (α : a ⟶ b) (β : b ⟶ c) (γ : c ⟶ d) : (α ≫ β) ≫ γ
 set_option linter.dupNamespace false in
 /-- The left unitor in the bicategory `Adj B`. -/
 @[simps!]
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Bicategory.leftUnitor** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Bicategory.Adj.Bicategory`。
+形式化陈述：leftUnitor (α : a ⟶ b) : 𝟙 a ≫ α ≅ α
+参数：α : a ⟶ b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitor
-  signature: (α : a ⟶ b)
-  body: iso₂Mk (fun_ _) (ρ_ _).symm
-    (by simpa using conjugateEquiv_id_comp_right_apply α.adj α.adj (𝟙 _))
-
-中文:
-定义 leftUnitor
-  签名: (α : a ⟶ b)
-  定义体: iso₂Mk (fun_ _) (ρ_ _).symm
-    (by simpa using conjugateEquiv_id_comp_right_apply α.adj α.adj (𝟙 _))
-
-Depends on / 依赖: conjugateEquiv_id_comp_right_apply, fun_
+--- 原说明 ---
+The left unitor in the bicategory `Adj B`.
 -/
 def leftUnitor (α : a ⟶ b) : 𝟙 a ≫ α ≅ α :=
-  iso₂Mk (fun_ _) (ρ_ _).symm
+  iso₂Mk (λ_ _) (ρ_ _).symm
     (by simpa using conjugateEquiv_id_comp_right_apply α.adj α.adj (𝟙 _))
 
 set_option linter.dupNamespace false in
 /-- The right unitor in the bicategory `Adj B`. -/
 @[simps!]
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Bicategory.rightUnitor** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Bicategory.Adj.Bicategory`。
+形式化陈述：rightUnitor (α : a ⟶ b) : α ≫ 𝟙 b ≅ α
+参数：α : a ⟶ b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitor
-  signature: (α : a ⟶ b)
-  body: iso₂Mk (ρ_ _) (fun_ _).symm
-    (by simpa using conjugateEquiv_comp_id_right_apply α.adj α.adj (𝟙 _))
-
-中文:
-定义 rightUnitor
-  签名: (α : a ⟶ b)
-  定义体: iso₂Mk (ρ_ _) (fun_ _).symm
-    (by simpa using conjugateEquiv_comp_id_right_apply α.adj α.adj (𝟙 _))
-
-Depends on / 依赖: conjugateEquiv_comp_id_right_apply, fun_
+--- 原说明 ---
+The right unitor in the bicategory `Adj B`.
 -/
 def rightUnitor (α : a ⟶ b) : α ≫ 𝟙 b ≅ α :=
-  iso₂Mk (ρ_ _) (fun_ _).symm
+  iso₂Mk (ρ_ _) (λ_ _).symm
     (by simpa using conjugateEquiv_comp_id_right_apply α.adj α.adj (𝟙 _))
 
 set_option linter.dupNamespace false in
 /-- The left whiskering in the bicategory `Adj B`. -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Bicategory.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Bicategory.Adj.Bicategory`。
+形式化陈述：whiskerLeft (α : a ⟶ b) {β β' : b ⟶ c} (y : β ⟶ β') : α ≫ β ⟶ α ≫ β' where
+ τl
+参数：α : a ⟶ b；y : β ⟶ β'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (α : a ⟶ b) {β β' : b ⟶ c} (y : β ⟶ β')
-  body: _ ◁ y.τl
-  τr := y.τr ▷ _
-  conjugateEquiv_τl := by
-    simp [conjugateEquiv_whiskerLeft, Hom₂.conjugateEquiv_τl]
-
-中文:
-定义 whiskerLeft
-  签名: (α : a ⟶ b) {β β' : b ⟶ c} (y : β ⟶ β')
-  定义体: _ ◁ y.τl
-  τr := y.τr ▷ _
-  conjugateEquiv_τl := by
-    simp [conjugateEquiv_whiskerLeft, Hom₂.conjugateEquiv_τl]
+--- 原说明 ---
+The left whiskering in the bicategory `Adj B`.
 -/
 def whiskerLeft (α : a ⟶ b) {β β' : b ⟶ c} (y : β ⟶ β') : α ≫ β ⟶ α ≫ β' where
   τl := _ ◁ y.τl
@@ -416,24 +283,17 @@ def whiskerLeft (α : a ⟶ b) {β β' : b ⟶ c} (y : β ⟶ β') : α ≫ β �
 set_option linter.dupNamespace false in
 /-- The right whiskering in the bicategory `Adj B`. -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.Bicategory.whiskerRight** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Bicategory.Adj.Bicategory`。
+形式化陈述：whiskerRight {α α' : a ⟶ b} (x : α ⟶ α') (β : b ⟶ c) : α ≫ β ⟶ α' ≫ β wher
+e τl
+参数：x : α ⟶ α'；β : b ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {α α' : a ⟶ b} (x : α ⟶ α') (β : b ⟶ c)
-  body: x.τl ▷ _
-  τr := _ ◁ x.τr
-  conjugateEquiv_τl := by
-    simp [conjugateEquiv_whiskerRight, Hom₂.conjugateEquiv_τl]
-
-中文:
-定义 whiskerRight
-  签名: {α α' : a ⟶ b} (x : α ⟶ α') (β : b ⟶ c)
-  定义体: x.τl ▷ _
-  τr := _ ◁ x.τr
-  conjugateEquiv_τl := by
-    simp [conjugateEquiv_whiskerRight, Hom₂.conjugateEquiv_τl]
+--- 原说明 ---
+The right whiskering in the bicategory `Adj B`.
 -/
 def whiskerRight {α α' : a ⟶ b} (x : α ⟶ α') (β : b ⟶ c) : α ≫ β ⟶ α' ≫ β where
   τl := x.τl ▷ _
@@ -449,28 +309,10 @@ attribute [local simp] whisker_exchange
   associator_hom_τr associator_inv_τr associator_hom_τl associator_inv_τl
   leftUnitor_hom_τr leftUnitor_inv_τr leftUnitor_hom_τl leftUnitor_inv_τl
   rightUnitor_hom_τr rightUnitor_inv_τr rightUnitor_hom_τl rightUnitor_inv_τl]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bicategory (Adj B)
-  body: Bicategory.whiskerLeft
-  whiskerRight := Bicategory.whiskerRight
-  associator := Bicategory.associator
-  leftUnitor := Bicategory.leftUnitor
-  rightUnitor := Bicategory.rightUnitor
-
-中文:
-实例 :
-  签名: 双范畴 (伴随 B)
-  定义体: Bicategory.whiskerLeft
-  whiskerRight := Bicategory.whiskerRight
-  associator := Bicategory.associator
-  leftUnitor := Bicategory.leftUnitor
-  rightUnitor := Bicategory.rightUnitor
-
-Depends on / 依赖: Bicategory, Bicategory.whiskerLeft, whiskerLeft
+/-
+**CategoryTheory.Bicategory.Adj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicat
+egory.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bicategory (Adj B) where
   whiskerLeft := Bicategory.whiskerLeft
@@ -481,28 +323,13 @@ instance : Bicategory (Adj B) where
 
 /-- The forget pseudofunctor from `Adj B` to `B`. -/
 @[simps]
-/--
-Definition of `forget₁` / `forget₁` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Bicategory.Adj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₁
-  signature: : Adj B ⥤ᵖ B where
-  body: a.obj
-  map x := x.l
-  map₂ α := α.τl
-  mapId _ := Iso.refl _
-  mapComp _ _ := Iso.refl _
-
-中文:
-定义 forget₁
-  签名: : 伴随 B ⥤ᵖ B where
-  定义体: a.obj
-  map x := x.l
-  map₂ α := α.τl
-  mapId _ := Iso.refl _
-  mapComp _ _ := Iso.refl _
-
-Depends on / 依赖: a.obj
+--- 原说明 ---
+The forget pseudofunctor from `Adj B` to `B`.
 -/
 def forget₁ : Adj B ⥤ᵖ B where
   obj a := a.obj
@@ -516,26 +343,18 @@ def forget₁ : Adj B ⥤ᵖ B where
 /-- Given an isomorphism between two 1-morphisms in `Adj B`, this is the
 underlying isomorphism between the left adjoints. -/
 @[simps]
-/--
-Definition of `lIso` / `lIso` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.lIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+icategory.Adj`。
+形式化陈述：lIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.l ≅ adj₂.l
+ where hom
+参数：e : adj₁ ≅ adj₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lIso
-  signature: {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
-  body: e.hom.τl
-  inv := e.inv.τl
-  hom_inv_id := by rw [← comp_τl, e.hom_inv_id, id_τl]
-  inv_hom_id := by rw [← comp_τl, e.inv_hom_id, id_τl]
-
-中文:
-定义 lIso
-  签名: {a b : 伴随 B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
-  定义体: e.hom.τl
-  inv := e.inv.τl
-  hom_inv_id := by rw [← comp_τl, e.hom_inv_id, id_τl]
-  inv_hom_id := by rw [← comp_τl, e.inv_hom_id, id_τl]
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+Given an isomorphism between two 1-morphisms in `Adj B`, this is the
+underlying isomorphism between the left adjoints.
 -/
 def lIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.l ≅ adj₂.l where
   hom := e.hom.τl
@@ -546,26 +365,18 @@ def lIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj�
 /-- Given an isomorphism between two 1-morphisms in `Adj B`, this is the
 underlying isomorphism between the right adjoints. -/
 @[simps]
-/--
-Definition of `rIso` / `rIso` 的定义
+/-
+**CategoryTheory.Bicategory.Adj.rIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+icategory.Adj`。
+形式化陈述：rIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.r ≅ adj₂.r
+ where hom
+参数：e : adj₁ ≅ adj₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rIso
-  signature: {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
-  body: e.inv.τr
-  inv := e.hom.τr
-  hom_inv_id := by rw [← comp_τr, e.hom_inv_id, id_τr]
-  inv_hom_id := by rw [← comp_τr, e.inv_hom_id, id_τr]
-
-中文:
-定义 rIso
-  签名: {a b : 伴随 B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
-  定义体: e.inv.τr
-  inv := e.hom.τr
-  hom_inv_id := by rw [← comp_τr, e.hom_inv_id, id_τr]
-  inv_hom_id := by rw [← comp_τr, e.inv_hom_id, id_τr]
-
-Depends on / 依赖: e.inv
+--- 原说明 ---
+Given an isomorphism between two 1-morphisms in `Adj B`, this is the
+underlying isomorphism between the right adjoints.
 -/
 def rIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.r ≅ adj₂.r where
   hom := e.inv.τr
@@ -578,3 +389,4 @@ end Adj
 end Bicategory
 
 end CategoryTheory
+

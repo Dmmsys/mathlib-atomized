@@ -58,22 +58,37 @@ attribute [local simp] eqToHom_map
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `map_id_c_app` / 定理 `map_id_c_app`
-
-English:
-theorem map_id_c_app
-  given: (F : J ⥤ PresheafedSpace.{_, _, v} C) (j) (U)
-  proof: by
-  simp [PresheafedSpace.congr_app (F.map_id j)]
-
-中文:
-定理 map_id_c_app
-  条件: (F : J ⥤ Presheafed空间.{_, _, v} C) (j) (U)
-  证明: by
-  simp [PresheafedSpace.congr_app (F.map_id j)]
-
-Depends on / 依赖: F.map_id, PresheafedSpace, PresheafedSpace.congr_app, congr_app, map_id
+/-
+**AlgebraicGeometry.PresheafedSpace.map_id_c_app** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry.PresheafedSpace`。
+形式化陈述：map_id_c_app (F : J ⥤ PresheafedSpace.{_, _, v} C) (j) (U) : (F.map (𝟙 j))
+.c.app U = (Pushforward.id (F.obj j).presheaf).inv.app U ≫ (pushforwardEq (by si
+mp) (F.obj j).presheaf).hom.app U
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；j；U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.congr_app`：congr_app {X Y : Presheafed
+Space C} {α β : X ⟶ Y} (h : α = β) (U) : α.c.app U = β.c.app U ≫ X.presheaf.map 
+(eqToHom (by subst h; rfl))
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.id_c_app`：id_c_app (X : PresheafedSpac
+e C) (U) : (𝟙 X : X ⟶ X).c.app U = X.presheaf.map (𝟙 U)
+· 使用定理 `CategoryTheory.eqToHom_map`：eqToHom_map (F : C ⥤ D) {X Y : C} (p : X = Y
+) : F.map (eqToHom p) = eqToHom (congr_arg F.obj p)
+· 使用定理 `TopCat.Presheaf.pushforwardEq_hom_app`：pushforwardEq_hom_app {X Y : TopC
+at.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.Presheaf C) (U) : (pushforwardEq h ℱ).h
+om.app U = ℱ.map (eqToHom (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_id_c_app (F : J ⥤ PresheafedSpace.{_, _, v} C) (j) (U) :
     (F.map (𝟙 j)).c.app U =
@@ -84,22 +99,40 @@ theorem map_id_c_app (F : J ⥤ PresheafedSpace.{_, _, v} C) (j) (U) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `map_comp_c_app` / 定理 `map_comp_c_app`
-
-English:
-theorem map_comp_c_app
-  statement: (F : J ⥤ PresheafedSpace.{_, _, v} C) {j₁ j₂ j₃}
-  proof: by
-  simp [PresheafedSpace.congr_app (F.map_comp f g)]
-
-中文:
-定理 map_comp_c_app
-  结论: (F : J ⥤ Presheafed空间.{_, _, v} C) {j₁ j₂ j₃}
-  证明: by
-  simp [PresheafedSpace.congr_app (F.map_comp f g)]
-
-Depends on / 依赖: F.map_comp, PresheafedSpace, PresheafedSpace.congr_app, congr_app, map_comp
+/-
+**AlgebraicGeometry.PresheafedSpace.map_comp_c_app** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.PresheafedSpace`。
+形式化陈述：map_comp_c_app (F : J ⥤ PresheafedSpace.{_, _, v} C) {j₁ j₂ j₃} (f : j₁ ⟶ 
+j₂) (g : j₂ ⟶ j₃) (U) : (F.map (f ≫ g)).c.app U = (F.map g).c.app U ≫ ((pushforw
+ard C (F.map g).base).map (F.map f).c).app U ≫ (pushforwardEq (congr_arg Hom.bas
+e (F.map_comp f g).symm) _).hom.app U
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；f : j₁ ⟶ j₂；g : j₂ ⟶ j₃；U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.congr_app`：congr_app {X Y : Presheafed
+Space C} {α β : X ⟶ Y} (h : α = β) (U) : α.c.app U = β.c.app U ≫ X.presheaf.map 
+(eqToHom (by subst h; rfl))
+· 使用定理 `CategoryTheory.eqToHom_map`：eqToHom_map (F : C ⥤ D) {X Y : C} (p : X = Y
+) : F.map (eqToHom p) = eqToHom (congr_arg F.obj p)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `TopCat.Presheaf.pushforwardEq_hom_app`：pushforwardEq_hom_app {X Y : TopC
+at.{w}} {f g : X ⟶ Y} (h : f = g) (ℱ : X.Presheaf C) (U) : (pushforwardEq h ℱ).h
+om.app U = ℱ.map (eqToHom (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_comp_c_app (F : J ⥤ PresheafedSpace.{_, _, v} C) {j₁ j₂ j₃}
     (f : j₁ ⟶ j₂) (g : j₂ ⟶ j₃) (U) :
@@ -116,30 +149,21 @@ the colimit of the underlying spaces, and taking componentwise limit.
 This is the componentwise diagram for an open set `U` of the colimit of the underlying spaces.
 -/
 @[simps]
-/--
-Definition of `componentwiseDiagram` / `componentwiseDiagram` 的定义
+/-
+**AlgebraicGeometry.PresheafedSpace.componentwiseDiagram** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：componentwiseDiagram (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F] 
+(U : Opens (Limits.colimit F).carrier) : Jᵒᵖ ⥤ C where obj j
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；U : Opens (Limits.colimit F).carrier。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition componentwiseDiagram
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
-  body: (F.obj (unop j)).presheaf.obj (op ((Opens.map (colimit.ι F (unop j)).base).obj U))
-  map {j k} f := (F.map f.unop).c.app _ ≫
-    (F.obj (unop k)).presheaf.map (eqToHom (by rw [← colimit.w F f.unop, comp_base]; rfl))
-  map_comp {i j k} f g := by
-    simp only [assoc, CategoryTheory.NatTrans.naturality_assoc]
-    simp
-
-中文:
-定义 componentwiseDiagram
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) [有余极限 F]
-  定义体: (F.obj (unop j)).presheaf.obj (op ((Opens.map (colimit.ι F (unop j)).base).obj U))
-  map {j k} f := (F.map f.unop).c.app _ ≫
-    (F.obj (unop k)).presheaf.map (eqToHom (by rw [← colimit.w F f.unop, comp_base]; rfl))
-  map_comp {i j k} f g := by
-    simp only [assoc, CategoryTheory.NatTrans.naturality_assoc]
-    simp
-
-Depends on / 依赖: F.obj, Opens.map, colimit, presheaf, presheaf.obj
+--- 原说明 ---
+Given a diagram of `PresheafedSpace C`s, its colimit is computed by pushing the 
+sheaves onto
+the colimit of the underlying spaces, and taking componentwise limit.
+This is the componentwise diagram for an open set `U` of the colimit of the unde
+rlying spaces.
 -/
 def componentwiseDiagram (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
     (U : Opens (Limits.colimit F).carrier) : Jᵒᵖ ⥤ C where
@@ -159,76 +183,20 @@ we can push all the presheaves forward to the colimit `X` of the underlying topo
 obtaining a diagram in `(Presheaf C X)ᵒᵖ`.
 -/
 @[simps]
-/--
-Definition of `pushforwardDiagramToColimit` / `pushforwardDiagramToColimit` 的定义
+/-
+**AlgebraicGeometry.PresheafedSpace.pushforwardDiagramToColimit** 是 Mathlib 中的一个
+定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：pushforwardDiagramToColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) : J ⥤ (P
+resheaf C (colimit (F ⋙ PresheafedSpace.forget C)))ᵒᵖ where obj j
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardDiagramToColimit
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  body: op (colimit.ι (F ⋙ PresheafedSpace.forget C) j _* (F.obj j).presheaf)
-  map {j j'} f :=
-    ((pushforward C (colimit.ι (F ⋙ PresheafedSpace.forget C) j')).map (F.map f).c ≫
-      (Pushforward.comp ((F ⋙ PresheafedSpace.forget C).map f)
-        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).presheaf).inv ≫
-      (pushforwardEq (colimit.w (F ⋙ PresheafedSpace.forget C) f) (F.obj j).presheaf).hom).op
-  map_id j := by
-    apply (opEquiv _ _).injective
-    refine NatTrans.ext (funext fun U => ?_)
-    induction U with
-    | op U =>
-      simp [opEquiv]
-      rfl
-  map_comp {j₁ j₂ j₃} f g := by
-    apply (opEquiv _ _).injective
-    refine NatTrans.ext (funext fun U => ?_)
-    dsimp [opEquiv]
-    have :
-      op ((Opens.map (F.map g).base).obj
-          ((Opens.map (colimit.ι (F ⋙ forget C) j₃)).obj U.unop)) =
-        op ((Opens.map (colimit.ι (F ⋙ PresheafedSpace.forget C) j₂)).obj (unop U)) := by
-      apply unop_injective
-      rw [← Opens.map_comp_obj]
-      congr
-      exact colimit.w (F ⋙ PresheafedSpace.forget C) g
-    simp only [map_comp_c_app, pushforward_obj_obj, pushforward_map_app, comp_base,
-      pushforwardEq_hom_app, op_obj, Opens.map_comp_obj, id_comp, assoc, eqToHom_map_comp,
-      NatTrans.naturality_assoc, pushforward_obj_map, eqToHom_unop]
-    simp [NatTrans.congr (α := (F.map f).c) this]
-
-中文:
-定义 pushforwardDiagramToColimit
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  定义体: op (colimit.ι (F ⋙ PresheafedSpace.forget C) j _* (F.obj j).presheaf)
-  map {j j'} f :=
-    ((pushforward C (colimit.ι (F ⋙ PresheafedSpace.forget C) j')).map (F.map f).c ≫
-      (Pushforward.comp ((F ⋙ PresheafedSpace.forget C).map f)
-        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).presheaf).inv ≫
-      (pushforwardEq (colimit.w (F ⋙ PresheafedSpace.forget C) f) (F.obj j).presheaf).hom).op
-  map_id j := by
-    apply (opEquiv _ _).injective
-    refine NatTrans.ext (funext fun U => ?_)
-    induction U with
-    | op U =>
-      simp [opEquiv]
-      rfl
-  map_comp {j₁ j₂ j₃} f g := by
-    apply (opEquiv _ _).injective
-    refine NatTrans.ext (funext fun U => ?_)
-    dsimp [opEquiv]
-    have :
-      op ((Opens.map (F.map g).base).obj
-          ((Opens.map (colimit.ι (F ⋙ forget C) j₃)).obj U.unop)) =
-        op ((Opens.map (colimit.ι (F ⋙ PresheafedSpace.forget C) j₂)).obj (unop U)) := by
-      apply unop_injective
-      rw [← Opens.map_comp_obj]
-      congr
-      exact colimit.w (F ⋙ PresheafedSpace.forget C) g
-    simp only [map_comp_c_app, pushforward_obj_obj, pushforward_map_app, comp_base,
-      pushforwardEq_hom_app, op_obj, Opens.map_comp_obj, id_comp, assoc, eqToHom_map_comp,
-      NatTrans.naturality_assoc, pushforward_obj_map, eqToHom_unop]
-    simp [NatTrans.congr (α := (F.map f).c) this]
-
-Depends on / 依赖: F.obj, PresheafedSpace, PresheafedSpace.forget, colimit, forget, presheaf
+--- 原说明 ---
+Given a diagram of presheafed spaces,
+we can push all the presheaves forward to the colimit `X` of the underlying topo
+logical spaces,
+obtaining a diagram in `(Presheaf C X)ᵒᵖ`.
 -/
 def pushforwardDiagramToColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
     J ⥤ (Presheaf C (colimit (F ⋙ PresheafedSpace.forget C)))ᵒᵖ where
@@ -262,68 +230,49 @@ def pushforwardDiagramToColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
       NatTrans.naturality_assoc, pushforward_obj_map, eqToHom_unop]
     simp [NatTrans.congr (α := (F.map f).c) this]
 
-variable [forall X : TopCat.{v}, HasLimitsOfShape Jᵒᵖ (X.Presheaf C)]
+variable [∀ X : TopCat.{v}, HasLimitsOfShape Jᵒᵖ (X.Presheaf C)]
 
-/--
-Definition of `colimit` / `colimit` 的定义
+/-- Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.colimit** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.PresheafedSpace`。
+形式化陈述：colimit (F : J ⥤ PresheafedSpace.{_, _, v} C) : PresheafedSpace C where ca
+rrier
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  body: Limits.colimit (F ⋙ PresheafedSpace.forget C)
-  presheaf := limit (pushforwardDiagramToColimit F).leftOp
-
-@[simp]
-
-中文:
-定义 colimit
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  定义体: Limits.colimit (F ⋙ PresheafedSpace.forget C)
-  presheaf := limit (pushforwardDiagramToColimit F).leftOp
-
-@[simp]
-
-Depends on / 依赖: Limits, Limits.colimit, PresheafedSpace, PresheafedSpace.forget, colimit, forget
+--- 原说明 ---
+Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
 -/
 def colimit (F : J ⥤ PresheafedSpace.{_, _, v} C) : PresheafedSpace C where
   carrier := Limits.colimit (F ⋙ PresheafedSpace.forget C)
   presheaf := limit (pushforwardDiagramToColimit F).leftOp
 
 @[simp]
-/--
-theorem `colimit_carrier` / 定理 `colimit_carrier`
-
-English:
-theorem colimit_carrier
-  given: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 colimit_carrier
-  条件: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.PresheafedSpace.colimit_carrier** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.PresheafedSpace`。
+形式化陈述：colimit_carrier (F : J ⥤ PresheafedSpace.{_, _, v} C) : (colimit F).carrie
+r = Limits.colimit (F ⋙ PresheafedSpace.forget C)
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit_carrier (F : J ⥤ PresheafedSpace.{_, _, v} C) :
     (colimit F).carrier = Limits.colimit (F ⋙ PresheafedSpace.forget C) :=
   rfl
 
 @[simp]
-/--
-theorem `colimit_presheaf` / 定理 `colimit_presheaf`
-
-English:
-theorem colimit_presheaf
-  given: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  proof: rfl
-
-中文:
-定理 colimit_presheaf
-  条件: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.colimit_presheaf** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：colimit_presheaf (F : J ⥤ PresheafedSpace.{_, _, v} C) : (colimit F).presh
+eaf = limit (pushforwardDiagramToColimit F).leftOp
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit_presheaf (F : J ⥤ PresheafedSpace.{_, _, v} C) :
     (colimit F).presheaf = limit (pushforwardDiagramToColimit F).leftOp :=
@@ -334,40 +283,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
 -/
 @[simps]
-/--
-Definition of `colimitCocone` / `colimitCocone` 的定义
+/-
+**AlgebraicGeometry.PresheafedSpace.colimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.PresheafedSpace`。
+形式化陈述：colimitCocone (F : J ⥤ PresheafedSpace.{_, _, v} C) : Cocone F where pt
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitCocone
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  body: colimit F
-  ι :=
-    { app := fun j =>
-        { base := colimit.ι (F ⋙ PresheafedSpace.forget C) j
-          c := limit.π _ (op j) }
-      naturality := fun {j j'} f => by
-        ext1
-        · ext x
-          exact colimit.w_apply (F ⋙ PresheafedSpace.forget C) f x
-        · ext ⟨⟩
-          simp [← congr_arg NatTrans.app (limit.w (pushforwardDiagramToColimit F).leftOp f.op)] }
-
-中文:
-定义 colimitCocone
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  定义体: colimit F
-  ι :=
-    { app := fun j =>
-        { base := colimit.ι (F ⋙ PresheafedSpace.forget C) j
-          c := limit.π _ (op j) }
-      naturality := fun {j j'} f => by
-        ext1
-        · ext x
-          exact colimit.w_apply (F ⋙ PresheafedSpace.forget C) f x
-        · ext ⟨⟩
-          simp [← congr_arg NatTrans.app (limit.w (pushforwardDiagramToColimit F).leftOp f.op)] }
-
-Depends on / 依赖: colimit
+--- 原说明 ---
+Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
 -/
 def colimitCocone (F : J ⥤ PresheafedSpace.{_, _, v} C) : Cocone F where
   pt := colimit F
@@ -388,66 +313,22 @@ namespace ColimitCoconeIsColimit
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `descCApp` / `descCApp` 的定义
+/-- Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.colimitCoconeIsColimit`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.descCApp** 是 Mathlib 
+中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit`。
+形式化陈述：descCApp (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (U : (Opens 
+s.pt.carrier)ᵒᵖ) : s.pt.presheaf.obj U ⟶ (colimit.desc (F ⋙ PresheafedSpace.forg
+et C) ((PresheafedSpace.forget C).mapCocone s) _* limit (pushforwardDiagramToCol
+imit F).leftOp).obj U
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；s : Cocone F；U : (Opens s.pt.carrier)ᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition descCApp
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (U : (Opens s.pt.carrier)ᵒᵖ)
-  body: by
-  refine
-    limit.lift _
-        { pt := s.pt.presheaf.obj U
-          π :=
-            { app := fun j => ?_
-              naturality := fun j j' f => ?_ } } ≫
-      (limitObjIsoLimitCompEvaluation _ _).inv
-  -- We still need to construct the `app` and `naturality'` fields omitted above.
-  · refine (s.ι.app (unop j)).c.app U ≫ (F.obj (unop j)).presheaf.map (eqToHom ?_)
-    dsimp
-    rw [← Opens.map_comp_obj]
-    simp
-  · dsimp
-    rw [PresheafedSpace.congr_app (s.w f.unop).symm U]
-    have w :=
-      Functor.congr_obj
-        (congr_arg Opens.map (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j)))
-        (unop U)
-    simp only [Opens.map_comp_obj_unop] at w
-    replace w := congr_arg op w
-    have w' := NatTrans.congr (F.map f.unop).c w
-    rw [w']
-    simp
-
-中文:
-定义 descCApp
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F) (U : (Opens s.pt.carrier)ᵒᵖ)
-  定义体: by
-  refine
-    limit.lift _
-        { pt := s.pt.presheaf.obj U
-          π :=
-            { app := fun j => ?_
-              naturality := fun j j' f => ?_ } } ≫
-      (limitObjIsoLimitCompEvaluation _ _).inv
-  -- We still need to construct the `app` and `naturality'` fields omitted above.
-  · refine (s.ι.app (unop j)).c.app U ≫ (F.obj (unop j)).presheaf.map (eqToHom ?_)
-    dsimp
-    rw [← Opens.map_comp_obj]
-    simp
-  · dsimp
-    rw [PresheafedSpace.congr_app (s.w f.unop).symm U]
-    have w :=
-      Functor.congr_obj
-        (congr_arg Opens.map (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j)))
-        (unop U)
-    simp only [Opens.map_comp_obj_unop] at w
-    replace w := congr_arg op w
-    have w' := NatTrans.congr (F.map f.unop).c w
-    rw [w']
-    simp
-
-Depends on / 依赖: limit.lift, limitObjIsoLimitCompEvaluation, naturality, presheaf, s.pt.presheaf.obj
+--- 原说明 ---
+Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.colimitCoconeIsColim
+it`.
 -/
 def descCApp (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (U : (Opens s.pt.carrier)ᵒᵖ) :
     s.pt.presheaf.obj U ⟶
@@ -480,32 +361,84 @@ def descCApp (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (U : (Opens 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `desc_c_naturality` / 定理 `desc_c_naturality`
-
-English:
-theorem desc_c_naturality
-  statement: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
-  proof: by
-  dsimp [descCApp]
-  refine limit_obj_ext (fun j => ?_)
-  have w := Functor.congr_hom (congr_arg Opens.map
-    (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j))) i.unop
-  simp only [Opens.map_comp_map] at w
-  simp [congr_arg Quiver.Hom.op w]
-
-中文:
-定理 desc_c_naturality
-  结论: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F)
-  证明: by
-  dsimp [descCApp]
-  refine limit_obj_ext (fun j => ?_)
-  have w := Functor.congr_hom (congr_arg Opens.map
-    (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j))) i.unop
-  simp only [Opens.map_comp_map] at w
-  simp [congr_arg Quiver.Hom.op w]
-
-Depends on / 依赖: Functor, Functor.congr_hom, Opens.map, Opens.map_comp_map, PresheafedSpace, PresheafedSpace.forget, Quiver, Quiver.Hom.op, colimit, congr_arg, congr_hom, descCApp, forget, i.unop, limit_obj_ext, mapCocone, map_comp_map
+/-
+**AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc_c_naturality** 是
+ Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit
+`。
+形式化陈述：desc_c_naturality (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) {U 
+V : (Opens s.pt.carrier)ᵒᵖ} (i : U ⟶ V) : s.pt.presheaf.map i ≫ descCApp F s V =
+ descCApp F s U ≫ (colimit.desc (F ⋙ forget C) ((forget C).mapCocone s) _* (coli
+mitCocone F).pt.presheaf).map i
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；s : Cocone F；Opens s.pt.carrier；i : U ⟶ V
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.limit_obj_ext`：limit_obj_ext {H : J ⥤ K ⥤ C} [HasL
+imitsOfShape J C] {k : K} {W : C} {f g : W ⟶ (limit H).obj k} (w : forall j, f ≫
+ (Limits.limit.π H j).app…
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_inv_π_app`：limitObj
+IsoLimitCompEvaluation_inv_π_app [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J) 
+(k : K) : (limitObjIsoLimitCompEvaluation F k).inv ≫…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.eqToHom_map`：eqToHom_map (F : C ⥤ D) {X Y : C} (p : X = Y
+) : F.map (eqToHom p) = eqToHom (congr_arg F.obj p)
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_inv_π_app_assoc`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : C
+ategoryTheory.Category.{v₁, u₁} J]   {K : Type u₂} [inst_2…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem desc_c_naturality (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
     {U V : (Opens s.pt.carrier)ᵒᵖ} (i : U ⟶ V) :
@@ -520,26 +453,23 @@ theorem desc_c_naturality (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
   simp only [Opens.map_comp_map] at w
   simp [congr_arg Quiver.Hom.op w]
 
-/--
-Definition of `desc` / `desc` 的定义
+/-- Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.colimitCoconeIsColimit`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc** 是 Mathlib 中的一个
+定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit`。
+形式化陈述：desc (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) : colimit F ⟶ s.
+pt where base
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；s : Cocone F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc_c_naturali
+ty`：desc_c_naturality (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) {U V 
+: (Opens s.pt.carrier)ᵒᵖ} (i : U ⟶ V) : s.pt.presheaf.map i ≫ de…
 
-English:
-definition desc
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
-  body: colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s)
-  c :=
-    { app := fun U => descCApp F s U
-      naturality := fun _ _ i => desc_c_naturality F s i }
-
-中文:
-定义 desc
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F)
-  定义体: colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s)
-  c :=
-    { app := fun U => descCApp F s U
-      naturality := fun _ _ i => desc_c_naturality F s i }
-
-Depends on / 依赖: PresheafedSpace, PresheafedSpace.forget, colimit, colimit.desc, forget, mapCocone
+--- 原说明 ---
+Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.colimitCoconeIsColim
+it`.
 -/
 def desc (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) : colimit F ⟶ s.pt where
   base := colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s)
@@ -549,34 +479,65 @@ def desc (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) : colimit F ⟶ 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `desc_fac` / 定理 `desc_fac`
-
-English:
-theorem desc_fac
-  given: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J)
-  proof: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the original proof is just
-  -- `ext <;> dsimp [desc, descCApp] <;> simpa`,
-  -- but this has to be expanded a bit
-  ext U
-  · simp [desc]
-  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colimitCocone_ι_app_c, assoc]
-    rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]
-    simp
-
-中文:
-定理 desc_fac
-  条件: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F) (j : J)
-  证明: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the original proof is just
-  -- `ext <;> dsimp [desc, descCApp] <;> simpa`,
-  -- but this has to be expanded a bit
-  ext U
-  · simp [desc]
-  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colimitCocone_ι_app_c, assoc]
-    rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]
-    simp
+/-
+**AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc_fac** 是 Mathlib 
+中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit`。
+形式化陈述：desc_fac (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J) : (c
+olimitCocone F).ι.app j ≫ desc F s = s.ι.app j
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；s : Cocone F；j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.ext`：ext {X Y : PresheafedSpace C} (α 
+β : X ⟶ Y) (w : α.base = β.base) (h : α.c ≫ whiskerRight (eqToHom (by rw [w])) _
+ = β.c) : α = β
+· 使用引理 `TopCat.ext`：ext {X Y : TopCat.{u}} {f g : X ⟶ Y} (w : forall x : X, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `TopCat.Presheaf.ext`：ext {X : TopCat.{w}} {P Q : Presheaf C X} {f g : P 
+⟶ Q} (w : forall U : Opens X, f.app (op U) = g.app (op U)) : f = g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc_c_naturali
+ty`：desc_c_naturality (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) {U V 
+: (Opens s.pt.carrier)ᵒᵖ} (i : U ⟶ V) : s.pt.presheaf.map i ≫ de…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_inv_π_app_assoc`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : C
+ategoryTheory.Category.{v₁, u₁} J]   {K : Type u₂} [inst_2…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.eqToHom_app`：eqToHom_app {F G : C ⥤ D} (h : F = G) (X : C
+) : (eqToHom h : F ⟶ G).app X = eqToHom (Functor.congr_obj h X)
+· 使用定理 `CategoryTheory.eqToHom_map`：eqToHom_map (F : C ⥤ D) {X Y : C} (p : X = Y
+) : F.map (eqToHom p) = eqToHom (congr_arg F.obj p)
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem desc_fac (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J) :
     (colimitCocone F).ι.app j ≫ desc F s = s.ι.app j := by
@@ -595,56 +556,22 @@ open ColimitCoconeIsColimit
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `colimitCoconeIsColimit` / `colimitCoconeIsColimit` 的定义
+/-- Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.colimitCoconeIsColimit** 是 Mathlib 中的一个定义，位于
+命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：colimitCoconeIsColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) : IsColimit (
+colimitCocone F) where desc s
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.ColimitCoconeIsColimit.desc_fac`：desc_
+fac (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J) : (colimitCocon
+e F).ι.app j ≫ desc F s = s.ι.app j
 
-English:
-definition colimitCoconeIsColimit
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  body: desc F s
-  fac s := desc_fac F s
-  uniq s m w := by
-    -- We need to use the identity on the continuous maps twice, so we prepare that first:
-    have t :
-      m.base =
-        colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s) := by
-      dsimp
-      -- `colimit.hom_ext` used to be automatically applied by `ext` before https://github.com/leanprover-community/mathlib4/pull/21302
-      apply colimit.hom_ext fun j => ?_
-      ext
-      rw [colimit.ι_desc]; rw [mapCocone_ι_app]; rw [← w j]
-      simp
-    ext : 1
-    · exact t
-    · refine NatTrans.ext (funext fun U => limit_obj_ext fun j => ?_)
-      simp [desc, descCApp,
-        PresheafedSpace.congr_app (w (unop j)).symm U,
-        NatTrans.congr (limit.π (pushforwardDiagramToColimit F).leftOp j)
-        (congr_arg op (Functor.congr_obj (congr_arg Opens.map t) (unop U)))]
-
-中文:
-定义 colimitCoconeIsColimit
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  定义体: desc F s
-  fac s := desc_fac F s
-  uniq s m w := by
-    -- We need to use the identity on the continuous maps twice, so we prepare that first:
-    have t :
-      m.base =
-        colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s) := by
-      dsimp
-      -- `colimit.hom_ext` used to be automatically applied by `ext` before https://github.com/leanprover-community/mathlib4/pull/21302
-      apply colimit.hom_ext fun j => ?_
-      ext
-      rw [colimit.ι_desc]; rw [mapCocone_ι_app]; rw [← w j]
-      simp
-    ext : 1
-    · exact t
-    · refine NatTrans.ext (funext fun U => limit_obj_ext fun j => ?_)
-      simp [desc, descCApp,
-        PresheafedSpace.congr_app (w (unop j)).symm U,
-        NatTrans.congr (limit.π (pushforwardDiagramToColimit F).leftOp j)
-        (congr_arg op (Functor.congr_obj (congr_arg Opens.map t) (unop U)))]
+--- 原说明 ---
+Auxiliary definition for `AlgebraicGeometry.PresheafedSpace.instHasColimits`.
 -/
 def colimitCoconeIsColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
     IsColimit (colimitCocone F) where
@@ -659,7 +586,7 @@ def colimitCoconeIsColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
       -- `colimit.hom_ext` used to be automatically applied by `ext` before https://github.com/leanprover-community/mathlib4/pull/21302
       apply colimit.hom_ext fun j => ?_
       ext
-      rw [colimit.ι_desc]; rw [mapCocone_ι_app]; rw [← w j]
+      rw [colimit.ι_desc, mapCocone_ι_app, ← w j]
       simp
     ext : 1
     · exact t
@@ -668,93 +595,90 @@ def colimitCoconeIsColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
         PresheafedSpace.congr_app (w (unop j)).symm U,
         NatTrans.congr (limit.π (pushforwardDiagramToColimit F).leftOp j)
         (congr_arg op (Functor.congr_obj (congr_arg Opens.map t) (unop U)))]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimitsOfShape J (PresheafedSpace.{_, _, v} C)
-  body: ⟨colimitCocone F, colimitCoconeIsColimit F⟩
-
-中文:
-实例 :
-  签名: 有形状余极限 J (Presheafed空间.{_, _, v} C)
-  定义体: ⟨colimitCocone F, colimitCoconeIsColimit F⟩
-
-Depends on / 依赖: colimitCocone, colimitCoconeIsColimit
+/-
+**AlgebraicGeometry.PresheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.PresheafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimitsOfShape J (PresheafedSpace.{_, _, v} C) where
   has_colimit F := ⟨colimitCocone F, colimitCoconeIsColimit F⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimitsOfShape J (PresheafedSpace.forget.{v, u, v} C)
-  body: ⟨fun {F} => preservesColimit_of_preserves_colimit_cocone (colimitCoconeIsColimit F) by
-    apply IsColimit.ofIsoColimit (colimit.isColimit _)
-    fapply Cocone.ext
-    · rfl
-    · simp⟩
-
-中文:
-实例 :
-  签名: 保持形状余极限 J (Presheafed空间.forget.{v, u, v} C)
-  定义体: ⟨fun {F} => preservesColimit_of_preserves_colimit_cocone (colimitCoconeIsColimit F) by
-    apply IsColimit.ofIsoColimit (colimit.isColimit _)
-    fapply Cocone.ext
-    · rfl
-    · simp⟩
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, colimit, colimit.isColimit, colimitCoconeIsColimit, fapply, isColimit, ofIsoColimit, preservesColimit_of_preserves_colimit_cocone
+/-
+**AlgebraicGeometry.PresheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.PresheafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimitsOfShape J (PresheafedSpace.forget.{v, u, v} C) :=
-⟨fun {F} => preservesColimit_of_preserves_colimit_cocone (colimitCoconeIsColimit F) by
+  ⟨fun {F} => preservesColimit_of_preserves_colimit_cocone (colimitCoconeIsColimit F) <| by
     apply IsColimit.ofIsoColimit (colimit.isColimit _)
     fapply Cocone.ext
     · rfl
     · simp⟩
 
-/--
-Instance `instHasColimits` / 实例 `instHasColimits`
+/-- When `C` has limits, the category of presheafed spaces with values in `C` itself has colimits.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.instHasColimits** 是 Mathlib 中的一个实例，位于命名空间 `A
+lgebraicGeometry.PresheafedSpace`。
+形式化陈述：instHasColimits [HasLimits C] : HasColimits (PresheafedSpace.{_, _, v} C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `TopCat.instHasLimitsOfShapePresheaf`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {J : Type w} [inst_1 : CategoryTheory.Category.{v_1, w} J]
+   [CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-instance instHasColimits
-  signature: [HasLimits C]
-  body: ⟨fun {_ _} => ⟨fun {F} => ⟨colimitCocone F, colimitCoconeIsColimit F⟩⟩⟩
-
-中文:
-实例 instHasColimits
-  签名: [有极限 C]
-  定义体: ⟨fun {_ _} => ⟨fun {F} => ⟨colimitCocone F, colimitCoconeIsColimit F⟩⟩⟩
-
-Depends on / 依赖: colimitCocone, colimitCoconeIsColimit
+--- 原说明 ---
+When `C` has limits, the category of presheafed spaces with values in `C` itself
+ has colimits.
 -/
 instance instHasColimits [HasLimits C] : HasColimits (PresheafedSpace.{_, _, v} C) :=
   ⟨fun {_ _} => ⟨fun {F} => ⟨colimitCocone F, colimitCoconeIsColimit F⟩⟩⟩
 
-/--
-Instance `forget_preservesColimits` / 实例 `forget_preservesColimits`
+/-- The underlying topological space of a colimit of presheafed spaces is
+the colimit of the underlying topological spaces.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.forget_preservesColimits** 是 Mathlib 中的一个实例，
+位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：forget_preservesColimits [HasLimits C] : PreservesColimits (PresheafedSpac
+e.forget.{_, _, v} C) where preservesColimitsOfShape {J 𝒥}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `TopCat.instHasLimitsOfShapePresheaf`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {J : Type w} [inst_1 : CategoryTheory.Category.{v_1, w} J]
+   [CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.instHasColimitsOfShape`：∀ {J : Type u'
+} [inst : CategoryTheory.Category.{v', u'} J] {C : Type u} [inst_1 : CategoryThe
+ory.Category.{v, u} C]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.instPreservesColimitsOfShapeTopCatForg
+et`：∀ {J : Type u'} [inst : CategoryTheory.Category.{v', u'} J] {C : Type u} [in
+st_1 : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limit…
 
-English:
-instance forget_preservesColimits
-  signature: [HasLimits C]
-  body: { preservesColimit := fun {F} => preservesColimit_of_preserves_colimit_cocone
-          (colimitCoconeIsColimit F)
-          (IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext (Iso.refl _))) }
-
-中文:
-实例 forget_preservesColimits
-  签名: [有极限 C]
-  定义体: { preservesColimit := fun {F} => preservesColimit_of_preserves_colimit_cocone
-          (colimitCoconeIsColimit F)
-          (IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext (Iso.refl _))) }
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, colimit, colimit.isColimit, colimitCoconeIsColimit, isColimit, ofIsoColimit, preservesColimit, preservesColimit_of_preserves_colimit_cocone
+--- 原说明 ---
+The underlying topological space of a colimit of presheafed spaces is
+the colimit of the underlying topological spaces.
 -/
 instance forget_preservesColimits [HasLimits C] :
     PreservesColimits (PresheafedSpace.forget.{_, _, v} C) where
@@ -764,64 +688,22 @@ instance forget_preservesColimits [HasLimits C] :
           (IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext (Iso.refl _))) }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `colimitPresheafObjIsoComponentwiseLimit` / `colimitPresheafObjIsoComponentwiseLimit` 的定义
+/-- The components of the colimit of a diagram of `PresheafedSpace C` is obtained
+via taking componentwise limits.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit** 是 
+Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：colimitPresheafObjIsoComponentwiseLimit (F : J ⥤ PresheafedSpace.{_, _, v}
+ C) [HasColimit F] (U : Opens (Limits.colimit F).carrier) : (Limits.colimit F).p
+resheaf.obj (op U) ≅ limit (componentwiseDiagram F U)
+参数：F : J ⥤ PresheafedSpace.{_, _, v} C；U : Opens (Limits.colimit F).carrier。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitPresheafObjIsoComponentwiseLimit
-  signature: (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
-  body: by
-  refine
-    ((sheafIsoOfIso (colimit.isoColimitCocone ⟨_, colimitCoconeIsColimit F⟩).symm).app
-          (op U)).trans
-      ?_
-  refine (limitObjIsoLimitCompEvaluation _ _).trans (Limits.lim.mapIso ?_)
-  fapply NatIso.ofComponents
-  · intro X
-    refine (F.obj (unop X)).presheaf.mapIso (eqToIso ?_)
-    simp only [Functor.op_obj, op_inj_iff, Opens.map_coe, SetLike.ext'_iff,
-      Set.preimage_preimage]
-    refine congr_arg (Set.preimage · U.1) (funext fun x => ?_)
-    simp only [colimitCocone, colimit, ← TopCat.comp_app]
-    congr
-    exact ι_preservesColimitIso_inv (forget C) F (unop X)
-  · intro X Y f
-    change ((F.map f.unop).c.app _ ≫ _ ≫ _) ≫ (F.obj (unop Y)).presheaf.map _ = _ ≫ _
-    rw [TopCat.Presheaf.Pushforward.comp_inv_app]
-    erw [Category.id_comp]
-    rw [Category.assoc]
-    erw [← (F.obj (unop Y)).presheaf.map_comp, (F.map f.unop).c.naturality_assoc,
-      ← (F.obj (unop Y)).presheaf.map_comp]
-    rfl
-
-中文:
-定义 colimitPresheafObjIsoComponentwiseLimit
-  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) [有余极限 F]
-  定义体: by
-  refine
-    ((sheafIsoOfIso (colimit.isoColimitCocone ⟨_, colimitCoconeIsColimit F⟩).symm).app
-          (op U)).trans
-      ?_
-  refine (limitObjIsoLimitCompEvaluation _ _).trans (Limits.lim.mapIso ?_)
-  fapply NatIso.ofComponents
-  · intro X
-    refine (F.obj (unop X)).presheaf.mapIso (eqToIso ?_)
-    simp only [Functor.op_obj, op_inj_iff, Opens.map_coe, SetLike.ext'_iff,
-      Set.preimage_preimage]
-    refine congr_arg (Set.preimage · U.1) (funext fun x => ?_)
-    simp only [colimitCocone, colimit, ← TopCat.comp_app]
-    congr
-    exact ι_preservesColimitIso_inv (forget C) F (unop X)
-  · intro X Y f
-    change ((F.map f.unop).c.app _ ≫ _ ≫ _) ≫ (F.obj (unop Y)).presheaf.map _ = _ ≫ _
-    rw [TopCat.Presheaf.Pushforward.comp_inv_app]
-    erw [Category.id_comp]
-    rw [Category.assoc]
-    erw [← (F.obj (unop Y)).presheaf.map_comp, (F.map f.unop).c.naturality_assoc,
-      ← (F.obj (unop Y)).presheaf.map_comp]
-    rfl
-
-Depends on / 依赖: F.obj, Functor, Functor.op_obj, Limits, Limits.lim.mapIso, NatIso, NatIso.ofComponents, Opens.map_coe, Set.preimage, Set.preimage_preimage, SetLike, SetLike.ext, TopCat, TopCat.comp_app, _iff, colimit, colimit.isoColimitCocone, colimitCocone, colimitCoconeIsColimit, comp_app
+--- 原说明 ---
+The components of the colimit of a diagram of `PresheafedSpace C` is obtained
+via taking componentwise limits.
 -/
 def colimitPresheafObjIsoComponentwiseLimit (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
     (U : Opens (Limits.colimit F).carrier) :
@@ -852,66 +734,38 @@ def colimitPresheafObjIsoComponentwiseLimit (F : J ⥤ PresheafedSpace.{_, _, v}
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `colimitPresheafObjIsoComponentwiseLimit_inv_ι_app` / 定理 `colimitPresheafObjIsoComponentwiseLimit_inv_ι_app`
-
-English:
-theorem colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
-  statement: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  proof: by
-  delta colimitPresheafObjIsoComponentwiseLimit
-  rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
-  dsimp
-  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← comp_c_app_assoc]; rw [congr_app (colimit.isoColimitCocone_ι_hom _ _)]; rw [assoc]; rw [colimitCocone_ι_app_c]; rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]; rw [limMap_π_assoc]
-  simp
-
-中文:
-定理 colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
-  结论: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  证明: by
-  delta colimitPresheafObjIsoComponentwiseLimit
-  rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
-  dsimp
-  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← comp_c_app_assoc]; rw [congr_app (colimit.isoColimitCocone_ι_hom _ _)]; rw [assoc]; rw [colimitCocone_ι_app_c]; rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]; rw [limMap_π_assoc]
-  simp
-
-Depends on / 依赖: Iso.app_inv, Iso.symm_inv, Iso.trans_inv, NatTrans, NatTrans.naturality, app_inv, colimit, colimit.isoColimitCocone_, colimitPresheafObjIsoComponentwiseLimit, comp_c_app_assoc, comp_id, congr_app, map_id, naturality, pushforwardToOfIso_app, sheafIsoOfIso_inv, symm_inv, trans_inv
+/-
+**AlgebraicGeometry.PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_inv_
+** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimitPresheafObjIsoComponentwiseLimit_inv_ι_app (F : J ⥤ PresheafedSpace.{_, _, v} C)
     (U : Opens (Limits.colimit F).carrier) (j : J) :
     (colimitPresheafObjIsoComponentwiseLimit F U).inv ≫ (colimit.ι F j).c.app (op U) =
       limit.π _ (op j) := by
   delta colimitPresheafObjIsoComponentwiseLimit
-  rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
+  rw [Iso.trans_inv, Iso.trans_inv, Iso.app_inv, sheafIsoOfIso_inv, pushforwardToOfIso_app,
+    congr_app (Iso.symm_inv _)]
   dsimp
-  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← comp_c_app_assoc]; rw [congr_app (colimit.isoColimitCocone_ι_hom _ _)]; rw [assoc]; rw [colimitCocone_ι_app_c]; rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]; rw [limMap_π_assoc]
+  rw [map_id, comp_id, assoc, assoc, assoc, NatTrans.naturality,
+      ← comp_c_app_assoc, congr_app (colimit.isoColimitCocone_ι_hom _ _), assoc,
+      colimitCocone_ι_app_c, limitObjIsoLimitCompEvaluation_inv_π_app_assoc, limMap_π_assoc]
   simp
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `colimitPresheafObjIsoComponentwiseLimit_hom_π` / 定理 `colimitPresheafObjIsoComponentwiseLimit_hom_π`
-
-English:
-theorem colimitPresheafObjIsoComponentwiseLimit_hom_π
-  statement: (F : J ⥤ PresheafedSpace.{_, _, v} C)
-  proof: by
-  rw [← Iso.eq_inv_comp]; rw [colimitPresheafObjIsoComponentwiseLimit_inv_ι_app]
-
-中文:
-定理 colimitPresheafObjIsoComponentwiseLimit_hom_π
-  结论: (F : J ⥤ Presheafed空间.{_, _, v} C)
-  证明: by
-  rw [← Iso.eq_inv_comp]; rw [colimitPresheafObjIsoComponentwiseLimit_inv_ι_app]
-
-Depends on / 依赖: Iso.eq_inv_comp, eq_inv_comp
+/-
+**AlgebraicGeometry.PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_
+** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimitPresheafObjIsoComponentwiseLimit_hom_π (F : J ⥤ PresheafedSpace.{_, _, v} C)
     (U : Opens (Limits.colimit F).carrier) (j : J) :
     (colimitPresheafObjIsoComponentwiseLimit F U).hom ≫ limit.π _ (op j) =
       (colimit.ι F j).c.app (op U) := by
-  rw [← Iso.eq_inv_comp]; rw [colimitPresheafObjIsoComponentwiseLimit_inv_ι_app]
+  rw [← Iso.eq_inv_comp, colimitPresheafObjIsoComponentwiseLimit_inv_ι_app]
 
 end PresheafedSpace
 
 end AlgebraicGeometry
+

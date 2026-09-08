@@ -34,34 +34,20 @@ namespace Linear
 
 /-- The scalar multiplications on morphisms in `Quotient R`. -/
 @[instance_reducible]
-/--
-Definition of `smul` / `smul` 的定义
+/-
+**CategoryTheory.Quotient.Linear.smul** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Quotient.Linear`。
+形式化陈述：smul (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • 
+f₁) (a • f₂)) (X Y : Quotient r) : SMul R (X ⟶ Y) where smul a
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；X Y : Quotient r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smul
-  signature: (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  body: Quot.lift (fun g => Quot.mk _ (a • g)) (fun f₁ f₂ h₁₂ => by
-    simp only [HomRel.compClosure_eq_self] at h₁₂
-    apply Quot.sound
-    rw [HomRel.compClosure_eq_self]
-    exact hr _ _ _ h₁₂)
-
-@[simp]
-
-中文:
-定义 smul
-  签名: (hr : 对任意 (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  定义体: Quot.lift (fun g => Quot.mk _ (a • g)) (fun f₁ f₂ h₁₂ => by
-    simp only [HomRel.compClosure_eq_self] at h₁₂
-    apply Quot.sound
-    rw [HomRel.compClosure_eq_self]
-    exact hr _ _ _ h₁₂)
-
-@[simp]
-
-Depends on / 依赖: HomRel, HomRel.compClosure_eq_self, Quot.lift, Quot.mk, Quot.sound, compClosure_eq_self
+--- 原说明 ---
+The scalar multiplications on morphisms in `Quotient R`.
 -/
-def smul (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+def smul (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     (X Y : Quotient r) : SMul R (X ⟶ Y) where
   smul a := Quot.lift (fun g => Quot.mk _ (a • g)) (fun f₁ f₂ h₁₂ => by
     simp only [HomRel.compClosure_eq_self] at h₁₂
@@ -70,22 +56,17 @@ def smul (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f�
     exact hr _ _ _ h₁₂)
 
 @[simp]
-/--
-lemma `smul_eq` / 引理 `smul_eq`
-
-English:
-lemma smul_eq
-  statement: (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  proof: smul r hr
-    a • (functor r).map f = (functor r).map (a • f) := rfl
-
-中文:
-引理 smul_eq
-  结论: (hr : 对任意 (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  证明: smul r hr
-    a • (functor r).map f = (functor r).map (a • f) := rfl
+/-
+**CategoryTheory.Quotient.Linear.smul_eq** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Quotient.Linear`。
+形式化陈述：smul_eq (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a
+ • f₁) (a • f₂)) (a : R) {X Y : C} (f : X ⟶ Y) : letI
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；a : R；f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_eq (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+lemma smul_eq (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     (a : R) {X Y : C} (f : X ⟶ Y) :
     letI := smul r hr
     a • (functor r).map f = (functor r).map (a • f) := rfl
@@ -93,77 +74,30 @@ lemma smul_eq (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f�
 
 /-- Auxiliary definition for `Quotient.Linear.module`. -/
 @[instance_reducible]
-/--
-Definition of `module'` / `module'` 的定义
+/-
+**CategoryTheory.Quotient.Linear.module'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Quotient.Linear`。
+形式化陈述：module' (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a
+ • f₁) (a • f₂)) [Preadditive (Quotient r)] [(functor r).Additive] (X Y : C) : M
+odule R ((functor r).obj X ⟶ (functor r).obj Y)
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；Quotient r；functor r；X Y : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition module'
-  signature: (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  body: letI smul := smul r hr ((functor r).obj X) ((functor r).obj Y)
-  { smul_zero := fun a => by
-      rw [← (functor r).map_zero X Y]; rw [smul_eq]; rw [smul_zero]
-    zero_smul := fun f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [zero_smul]; rw [Functor.map_zero]
-    one_smul := fun f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [one_smul]
-    mul_smul := fun a b f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [mul_smul]
-    smul_add := fun a f g => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-      dsimp [smul]
-      rw [← (functor r).map_add]; rw [smul_eq]; rw [← (functor r).map_add]; rw [smul_add]
-    add_smul := fun a b f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [add_smul]; rw [Functor.map_add] }
-
-中文:
-定义 module'
-  签名: (hr : 对任意 (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  定义体: letI smul := smul r hr ((functor r).obj X) ((functor r).obj Y)
-  { smul_zero := fun a => by
-      rw [← (functor r).map_zero X Y]; rw [smul_eq]; rw [smul_zero]
-    zero_smul := fun f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [zero_smul]; rw [Functor.map_zero]
-    one_smul := fun f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [one_smul]
-    mul_smul := fun a b f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [mul_smul]
-    smul_add := fun a f g => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-      dsimp [smul]
-      rw [← (functor r).map_add]; rw [smul_eq]; rw [← (functor r).map_add]; rw [smul_add]
-    add_smul := fun a b f => by
-      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-      dsimp [smul]
-      rw [add_smul]; rw [Functor.map_add] }
-
-Depends on / 依赖: Functor, Functor.map_zero, functor, map_surjective, map_zero, mul_smul, one_smul, smul_add, smul_eq, smul_zero, zero_smul
+--- 原说明 ---
+Auxiliary definition for `Quotient.Linear.module`.
 -/
-def module' (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+def module' (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     [Preadditive (Quotient r)] [(functor r).Additive] (X Y : C) :
     Module R ((functor r).obj X ⟶ (functor r).obj Y) :=
   letI smul := smul r hr ((functor r).obj X) ((functor r).obj Y)
   { smul_zero := fun a => by
-      rw [← (functor r).map_zero X Y]; rw [smul_eq]; rw [smul_zero]
+      rw [← (functor r).map_zero X Y, smul_eq, smul_zero]
     zero_smul := fun f => by
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       dsimp [smul]
-      rw [zero_smul]; rw [Functor.map_zero]
+      rw [zero_smul, Functor.map_zero]
     one_smul := fun f => by
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       dsimp [smul]
@@ -176,30 +110,29 @@ def module' (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       obtain ⟨g, rfl⟩ := (functor r).map_surjective g
       dsimp [smul]
-      rw [← (functor r).map_add]; rw [smul_eq]; rw [← (functor r).map_add]; rw [smul_add]
+      rw [← (functor r).map_add, smul_eq, ← (functor r).map_add, smul_add]
     add_smul := fun a b f => by
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       dsimp [smul]
-      rw [add_smul]; rw [Functor.map_add] }
+      rw [add_smul, Functor.map_add] }
 
 /-- Auxiliary definition for `Quotient.linear`. -/
 @[instance_reducible]
-/--
-Definition of `module` / `module` 的定义
+/-
+**CategoryTheory.Quotient.Linear.module** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Quotient.Linear`。
+形式化陈述：module (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a 
+• f₁) (a • f₂)) [Preadditive (Quotient r)] [(functor r).Additive] (X Y : Quotien
+t r) : Module R (X ⟶ Y)
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；Quotient r；functor r；X Y : Quotient r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition module
-  signature: (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  body: module' r hr X.as Y.as
-
-中文:
-定义 module
-  签名: (hr : 对任意 (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  定义体: module' r hr X.as Y.as
-
-Depends on / 依赖: X.as, Y.as, module
+--- 原说明 ---
+Auxiliary definition for `Quotient.linear`.
 -/
-def module (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+def module (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     [Preadditive (Quotient r)] [(functor r).Additive] (X Y : Quotient r) :
     Module R (X ⟶ Y) := module' r hr X.as Y.as
 
@@ -213,46 +146,27 @@ such that `functor r : C ⥤ Quotient r` is additive, and that `C` has an `R`-li
 structure compatible with `r`, this is the induced `R`-linear category structure on
 `Quotient r`. -/
 @[instance_reducible]
-/--
-Definition of `linear` / `linear` 的定义
+/-
+**CategoryTheory.Quotient.linear** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Quoti
+ent`。
+形式化陈述：linear (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a 
+• f₁) (a • f₂)) [Preadditive (Quotient r)] [(functor r).Additive] : Linear R (Qu
+otient r)
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；Quotient r；functor r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linear
-  signature: (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  body: by
-  letI := Linear.module r hr
-  exact
-    { smul_comp := by
-        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ a f g
-        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.smul_comp]
-      comp_smul := by
-        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ f a g
-        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.comp_smul] }
-
-中文:
-定义 linear
-  签名: (hr : 对任意 (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
-  定义体: by
-  letI := Linear.module r hr
-  exact
-    { smul_comp := by
-        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ a f g
-        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.smul_comp]
-      comp_smul := by
-        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ f a g
-        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
-        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.comp_smul] }
-
-Depends on / 依赖: Functor, Functor.map_comp, Linear, Linear.module, Linear.smul_comp, Linear.smul_eq, comp_smul, functor, map_comp, map_surjective, module, smul_comp, smul_eq
+--- 原说明 ---
+Assuming `Quotient r` has already been endowed with a preadditive category struc
+ture
+such that `functor r : C ⥤ Quotient r` is additive, and that `C` has an `R`-line
+ar category
+structure compatible with `r`, this is the induced `R`-linear category structure
+ on
+`Quotient r`.
 -/
-def linear (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+def linear (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     [Preadditive (Quotient r)] [(functor r).Additive] : Linear R (Quotient r) := by
   letI := Linear.module r hr
   exact
@@ -260,30 +174,26 @@ def linear (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ 
         rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ a f g
         obtain ⟨f, rfl⟩ := (functor r).map_surjective f
         obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.smul_comp]
+        rw [Linear.smul_eq, ← Functor.map_comp, ← Functor.map_comp,
+          Linear.smul_eq, Linear.smul_comp]
       comp_smul := by
         rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ f a g
         obtain ⟨f, rfl⟩ := (functor r).map_surjective f
         obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.comp_smul] }
-
-/--
-Instance `linear_functor` / 实例 `linear_functor`
-
-English:
-instance linear_functor
-  body: linear R r hr; Functor.Linear R (functor r) := by
-  let := linear R r hr; exact { }
-
-中文:
-实例 linear_functor
-  定义体: linear R r hr; Functor.Linear R (functor r) := by
-  let := linear R r hr; exact { }
-
-Depends on / 依赖: Functor, Functor.Linear, Linear, functor, linear
+        rw [Linear.smul_eq, ← Functor.map_comp, ← Functor.map_comp,
+          Linear.smul_eq, Linear.comp_smul] }
+/-
+**CategoryTheory.Quotient.linear_functor** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Quotient`。
+形式化陈述：linear_functor (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂
+), r (a • f₁) (a • f₂)) [Preadditive (Quotient r)] [(functor r).Additive] : letI
+参数：hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • 
+f₂)；Quotient r；functor r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance linear_functor
-    (hr : forall (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
+    (hr : ∀ (a : R) ⦃X Y : C⦄ (f₁ f₂ : X ⟶ Y) (_ : r f₁ f₂), r (a • f₁) (a • f₂))
     [Preadditive (Quotient r)] [(functor r).Additive] :
     letI := linear R r hr; Functor.Linear R (functor r) := by
   let := linear R r hr; exact { }
@@ -291,3 +201,4 @@ instance linear_functor
 end Quotient
 
 end CategoryTheory
+

@@ -30,66 +30,29 @@ variable {R : Type u} [Ring R] {M N : ModuleCat.{v} R} (f : M ⟶ N)
 
 /-- In the category of modules, every monomorphism is normal. -/
 @[instance_reducible]
-/--
-Definition of `normalMono` / `normalMono` 的定义
+/-
+**ModuleCat.normalMono** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：normalMono (hf : Mono f) : NormalMono f where Z
+参数：hf : Mono f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.ker_eq_bot_of_mono`：ker_eq_bot_of_mono [Mono f] : LinearMap.ke
+r f.hom = ⊥
 
-English:
-definition normalMono
-  signature: (hf : Mono f)
-  body: of R (N ⧸ LinearMap.range f.hom)
-  g := ofHom (LinearMap.range f.hom).mkQ
-w := hom_ext LinearMap.range_mkQ_comp _
-  isLimit :=
-    /- The following [invalid Lean code](https://github.com/leanprover-community/lean/issues/341)
-        might help you understand what's going on here:
-        ```
-        calc
-        M ≃ₗ[R] f.ker.quotient : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
-        ... ≃ₗ[R] r.range.mkQ.ker : LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm
-        ```
-      -/
-        IsKernel.isoKernel _ _ (kernelIsLimit _)
-          (LinearEquiv.toModuleIso
-            ((Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm ≪≫ₗ
-              (LinearMap.quotKerEquivRange f.hom ≪≫ₗ
-              LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm))) <| by ext; rfl
-
-中文:
-定义 normalMono
-  签名: (hf : 单态射 f)
-  定义体: of R (N ⧸ LinearMap.range f.hom)
-  g := ofHom (LinearMap.range f.hom).mkQ
-w := hom_ext LinearMap.range_mkQ_comp _
-  isLimit :=
-    /- The following [invalid Lean code](https://github.com/leanprover-community/lean/issues/341)
-        might help you understand what's going on here:
-        ```
-        calc
-        M ≃ₗ[R] f.ker.quotient : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
-        ... ≃ₗ[R] r.range.mkQ.ker : LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm
-        ```
-      -/
-        IsKernel.isoKernel _ _ (kernelIsLimit _)
-          (LinearEquiv.toModuleIso
-            ((Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm ≪≫ₗ
-              (LinearMap.quotKerEquivRange f.hom ≪≫ₗ
-              LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm))) <| by ext; rfl
-
-Depends on / 依赖: LinearMap, LinearMap.range, f.hom
+--- 原说明 ---
+In the category of modules, every monomorphism is normal.
 -/
 def normalMono (hf : Mono f) : NormalMono f where
   Z := of R (N ⧸ LinearMap.range f.hom)
   g := ofHom (LinearMap.range f.hom).mkQ
-w := hom_ext LinearMap.range_mkQ_comp _
+  w := hom_ext <| LinearMap.range_mkQ_comp _
   isLimit :=
     /- The following [invalid Lean code](https://github.com/leanprover-community/lean/issues/341)
         might help you understand what's going on here:
         ```
         calc
-        M ≃ₗ[R] f.ker.quotient : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
+        M   ≃ₗ[R] f.ker.quotient  : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
+        ... ≃ₗ[R] f.range         : LinearMap.quotKerEquivRange f
         ... ≃ₗ[R] r.range.mkQ.ker : LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm
         ```
       -/
@@ -101,64 +64,29 @@ w := hom_ext LinearMap.range_mkQ_comp _
 
 /-- In the category of modules, every epimorphism is normal. -/
 @[instance_reducible]
-/--
-Definition of `normalEpi` / `normalEpi` 的定义
+/-
+**ModuleCat.normalEpi** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：normalEpi (hf : Epi f) : NormalEpi f where W
+参数：hf : Epi f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.range_eq_top_of_epi`：range_eq_top_of_epi [Epi f] : LinearMap.r
+ange f.hom = ⊤
 
-English:
-definition normalEpi
-  signature: (hf : Epi f)
-  body: of R (LinearMap.ker f.hom)
-  g := ofHom (LinearMap.ker f.hom).subtype
-w := hom_ext LinearMap.comp_ker_subtype _
-  isColimit :=
-    /- The following invalid Lean code might help you understand what's going on here:
-        ```
-        calc f.ker.subtype.range.quotient
-            ≃ₗ[R] f.ker.quotient : Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _)
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
-        ... ≃ₗ[R] N : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
-        ```
-      -/
-        IsCokernel.cokernelIso _ _ (cokernelIsColimit _)
-          (LinearEquiv.toModuleIso
-            (Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _) ≪≫ₗ
-                LinearMap.quotKerEquivRange f.hom ≪≫ₗ
-              LinearEquiv.ofTop _ (range_eq_top_of_epi _))) <| by ext; rfl
-
-中文:
-定义 normalEpi
-  签名: (hf : 满态射 f)
-  定义体: of R (LinearMap.ker f.hom)
-  g := ofHom (LinearMap.ker f.hom).subtype
-w := hom_ext LinearMap.comp_ker_subtype _
-  isColimit :=
-    /- The following invalid Lean code might help you understand what's going on here:
-        ```
-        calc f.ker.subtype.range.quotient
-            ≃ₗ[R] f.ker.quotient : Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _)
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
-        ... ≃ₗ[R] N : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
-        ```
-      -/
-        IsCokernel.cokernelIso _ _ (cokernelIsColimit _)
-          (LinearEquiv.toModuleIso
-            (Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _) ≪≫ₗ
-                LinearMap.quotKerEquivRange f.hom ≪≫ₗ
-              LinearEquiv.ofTop _ (range_eq_top_of_epi _))) <| by ext; rfl
-
-Depends on / 依赖: LinearMap, LinearMap.ker, f.hom
+--- 原说明 ---
+In the category of modules, every epimorphism is normal.
 -/
 def normalEpi (hf : Epi f) : NormalEpi f where
   W := of R (LinearMap.ker f.hom)
   g := ofHom (LinearMap.ker f.hom).subtype
-w := hom_ext LinearMap.comp_ker_subtype _
+  w := hom_ext <| LinearMap.comp_ker_subtype _
   isColimit :=
     /- The following invalid Lean code might help you understand what's going on here:
         ```
         calc f.ker.subtype.range.quotient
             ≃ₗ[R] f.ker.quotient : Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _)
-        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
-        ... ≃ₗ[R] N : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
+        ... ≃ₗ[R] f.range        : LinearMap.quotKerEquivRange f
+        ... ≃ₗ[R] N              : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
         ```
       -/
         IsCokernel.cokernelIso _ _ (cokernelIsColimit _)
@@ -167,24 +95,17 @@ w := hom_ext LinearMap.comp_ker_subtype _
                 LinearMap.quotKerEquivRange f.hom ≪≫ₗ
               LinearEquiv.ofTop _ (range_eq_top_of_epi _))) <| by ext; rfl
 
-/--
-Instance `abelian` / 实例 `abelian`
+/-- The category of R-modules is abelian. -/
+/-
+**ModuleCat.abelian** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：abelian : Abelian (ModuleCat.{v} R) where has_cokernels
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.hasCokernels_moduleCat`：hasCokernels_moduleCat : HasCokernels 
+(ModuleCat R)
 
-English:
-instance abelian
-  signature: : Abelian (ModuleCat.{v} R) where
-  body: hasCokernels_moduleCat
-  normalMonoOfMono f hf := ⟨normalMono f hf⟩
-  normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
-
-中文:
-实例 abelian
-  签名: : 交换 (模范畴.{v} R) where
-  定义体: hasCokernels_moduleCat
-  normalMonoOfMono f hf := ⟨normalMono f hf⟩
-  normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
-
-Depends on / 依赖: hasCokernels_moduleCat
+--- 原说明 ---
+The category of R-modules is abelian.
 -/
 instance abelian : Abelian (ModuleCat.{v} R) where
   has_cokernels := hasCokernels_moduleCat
@@ -193,94 +114,60 @@ instance abelian : Abelian (ModuleCat.{v} R) where
 
 section ReflectsLimits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Add this instance to help Lean with universe levels. -/
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasLimitsOfSize.{v, v} (ModuleCat.{max v w} R)
-  body: ModuleCat.hasLimitsOfSize.{v, v, max v w}
-
-中文:
-实例 :
-  签名: 有LimitsOfSize.{v, v} (模范畴.{最大值 v w} R)
-  定义体: ModuleCat.hasLimitsOfSize.{v, v, max v w}
-
-Depends on / 依赖: ModuleCat, ModuleCat.hasLimitsOfSize, hasLimitsOfSize
+--- 原说明 ---
+Add this instance to help Lean with universe levels.
 -/
 instance : HasLimitsOfSize.{v, v} (ModuleCat.{max v w} R) :=
   ModuleCat.hasLimitsOfSize.{v, v, max v w}
 
-/--
-Instance `forget_reflectsLimitsOfSize` / 实例 `forget_reflectsLimitsOfSize`
+/- We need to put this in this weird spot because we need to know that the category of modules
+    is balanced. -/
+/-
+**ModuleCat.forget_reflectsLimitsOfSize** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：forget_reflectsLimitsOfSize : ReflectsLimitsOfSize.{v, v} (forget (ModuleC
+at.{max v w} R))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsLimits_of_reflectsIsomorphisms`：reflectsLi
+mits_of_reflectsIsomorphisms {G : C ⥤ D} [G.ReflectsIsomorphisms] [HasLimitsOfSi
+ze.{w', w} C] [PreservesLimitsOfSize.{w', w} G] : …
+· 使用定理 `ModuleCat.instReflectsIsomorphismsForgetLinearMapIdCarrier`：∀ {R : Type 
+u} [inst : Ring R], (CategoryTheory.forget (ModuleCat R)).ReflectsIsomorphisms
+· 使用定理 `ModuleCat.instHasLimitsOfSize`：∀ {R : Type u} [inst : Ring R],   Categor
+yTheory.Limits.HasLimitsOfSize.{v, v, max v w, max (max (v + 1) (w + 1)) u} (Mod
+uleCat R)
 
-English:
-instance forget_reflectsLimitsOfSize
-  signature: :
-  body: reflectsLimits_of_reflectsIsomorphisms
-
-中文:
-实例 forget_reflectsLimitsOfSize
-  签名: :
-  定义体: reflectsLimits_of_reflectsIsomorphisms
-
-Depends on / 依赖: reflectsLimits_of_reflectsIsomorphisms
+--- 原说明 ---
+We need to put this in this weird spot because we need to know that the category
+ of modules
+    is balanced.
 -/
 instance forget_reflectsLimitsOfSize :
     ReflectsLimitsOfSize.{v, v} (forget (ModuleCat.{max v w} R)) :=
   reflectsLimits_of_reflectsIsomorphisms
-
-/--
-Instance `forget₂_reflectsLimitsOfSize` / 实例 `forget₂_reflectsLimitsOfSize`
-
-English:
-instance forget₂_reflectsLimitsOfSize
-  signature: :
-  body: reflectsLimits_of_reflectsIsomorphisms
-
-中文:
-实例 forget₂_reflectsLimitsOfSize
-  签名: :
-  定义体: reflectsLimits_of_reflectsIsomorphisms
-
-Depends on / 依赖: reflectsLimits_of_reflectsIsomorphisms
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget₂_reflectsLimitsOfSize :
     ReflectsLimitsOfSize.{v, v} (forget₂ (ModuleCat.{max v w} R) AddCommGrpCat.{max v w}) :=
   reflectsLimits_of_reflectsIsomorphisms
-
-/--
-Instance `forget_reflectsLimits` / 实例 `forget_reflectsLimits`
-
-English:
-instance forget_reflectsLimits
-  signature: : ReflectsLimits (forget (ModuleCat.{v} R))
-  body: ModuleCat.forget_reflectsLimitsOfSize.{v, v}
-
-中文:
-实例 forget_reflectsLimits
-  签名: : ReflectsLimits (forget (模范畴.{v} R))
-  定义体: ModuleCat.forget_reflectsLimitsOfSize.{v, v}
-
-Depends on / 依赖: ModuleCat, ModuleCat.forget_reflectsLimitsOfSize, forget_reflectsLimitsOfSize
+/-
+**ModuleCat.forget_reflectsLimits** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：forget_reflectsLimits : ReflectsLimits (forget (ModuleCat.{v} R))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget_reflectsLimits : ReflectsLimits (forget (ModuleCat.{v} R)) :=
   ModuleCat.forget_reflectsLimitsOfSize.{v, v}
-
-/--
-Instance `forget₂_reflectsLimits` / 实例 `forget₂_reflectsLimits`
-
-English:
-instance forget₂_reflectsLimits
-  signature: : ReflectsLimits (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v})
-  body: ModuleCat.forget₂_reflectsLimitsOfSize.{v, v}
-
-中文:
-实例 forget₂_reflectsLimits
-  签名: : ReflectsLimits (forget₂ (模范畴.{v} R) 加法交换群范畴.{v})
-  定义体: ModuleCat.forget₂_reflectsLimitsOfSize.{v, v}
-
-Depends on / 依赖: ModuleCat, ModuleCat.forget
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget₂_reflectsLimits : ReflectsLimits (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}) :=
   ModuleCat.forget₂_reflectsLimitsOfSize.{v, v}
@@ -288,3 +175,4 @@ instance forget₂_reflectsLimits : ReflectsLimits (forget₂ (ModuleCat.{v} R) 
 end ReflectsLimits
 
 end ModuleCat
+

@@ -24,30 +24,19 @@ public meta section
 open Lean Meta Server
 
 open Lean.SubExpr in
-/--
-Definition of `getGoalLocations` / `getGoalLocations` 的定义
+/-- Given a `Array GoalsLocation` return the array of `SubExpr.Pos` for all locations
+in the targets of the relevant goals. -/
+/-
+**getGoalLocations** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：getGoalLocations (locations : Array GoalsLocation) : Array SubExpr.Pos
+参数：locations : Array GoalsLocation。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getGoalLocations
-  signature: (locations : Array GoalsLocation)
-  body: Id.run do
-  let mut res := #[]
-  for location in locations do
-    if let .target pos := location.loc then
-      res := res.push pos
-  return res
-
-中文:
-定义 getGoalLocations
-  签名: (locations : 数组 GoalsLocation)
-  定义体: Id.run do
-  let mut res := #[]
-  for location in locations do
-    if let .target pos := location.loc then
-      res := res.push pos
-  return res
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Given a `Array GoalsLocation` return the array of `SubExpr.Pos` for all location
+s
+in the targets of the relevant goals.
 -/
 def getGoalLocations (locations : Array GoalsLocation) : Array SubExpr.Pos := Id.run do
   let mut res := #[]
@@ -56,76 +45,48 @@ def getGoalLocations (locations : Array GoalsLocation) : Array SubExpr.Pos := Id
       res := res.push pos
   return res
 
-/--
-Definition of `insertMetaVar` / `insertMetaVar` 的定义
+/-- Replace the sub-expression at the given position by a fresh meta-variable. -/
+/-
+**insertMetaVar** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：insertMetaVar (e : Expr) (pos : SubExpr.Pos) : MetaM Expr
+参数：e : Expr；pos : SubExpr.Pos。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insertMetaVar
-  signature: (e : Expr) (pos : SubExpr.Pos)
-  body: replaceSubexpr (fun _ => do mkFreshExprMVar none .synthetic) pos e
-
-中文:
-定义 insertMetaVar
-  签名: (e : Expr) (pos : SubExpr.Pos)
-  定义体: replaceSubexpr (fun _ => do mkFreshExprMVar none .synthetic) pos e
-
-Depends on / 依赖: mkFreshExprMVar, replaceSubexpr, synthetic
+--- 原说明 ---
+Replace the sub-expression at the given position by a fresh meta-variable.
 -/
 def insertMetaVar (e : Expr) (pos : SubExpr.Pos) : MetaM Expr :=
-  replaceSubexpr (fun _ => do mkFreshExprMVar none .synthetic) pos e
+  replaceSubexpr (fun _ ↦ do mkFreshExprMVar none .synthetic) pos e
 
-/--
-Definition of `String.renameMetaVar` / `String.renameMetaVar` 的定义
+/-- Replace all meta-variable names by `"?_"`. -/
+/-
+**String.renameMetaVar** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：String.renameMetaVar (s : String) : String
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition String.renameMetaVar
-  signature: (s : String)
-  body: match s.splitOn "?m." with
-  | [] => ""
-  | [s] => s
-  | head::tail => head ++ "?_" ++
-      "?_".toSlice.intercalate (tail.map fun s => s.dropWhile Char.isDigit)
-
-中文:
-定义 String.renameMetaVar
-  签名: (s : String)
-  定义体: match s.splitOn "?m." with
-  | [] => ""
-  | [s] => s
-  | head::tail => head ++ "?_" ++
-      "?_".toSlice.intercalate (tail.map fun s => s.dropWhile Char.isDigit)
-
-Depends on / 依赖: Char.isDigit, dropWhile, intercalate, isDigit, s.dropWhile, s.splitOn, splitOn, tail.map, toSlice, toSlice.intercalate
+--- 原说明 ---
+Replace all meta-variable names by `"?_"`.
 -/
 def String.renameMetaVar (s : String) : String :=
   match s.splitOn "?m." with
   | [] => ""
   | [s] => s
   | head::tail => head ++ "?_" ++
-      "?_".toSlice.intercalate (tail.map fun s => s.dropWhile Char.isDigit)
+      "?_".toSlice.intercalate (tail.map fun s ↦ s.dropWhile Char.isDigit)
 
 open ProofWidgets
 
-/--
-Definition of `SelectInsertParams` / `SelectInsertParams` 的定义
+/-- Structures providing parameters for a Select and insert widget. -/
+/-
+**SelectInsertParams** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SelectInsertParams
-  parameters: where
-  axioms and operations (4):
-    - pos : Lsp.Position
-    - goals : Array Widget.InteractiveGoal
-    - selectedLocations : Array SubExpr.GoalsLocation
-    - replaceRange : Lsp.Range
-
-中文:
-结构 SelectInsertParams
-  参数: where
-  公理与运算 (4 个):
-    - pos : Lsp.Position
-    - goals : 数组 Widget.整数eractiveGoal
-    - selectedLocations : 数组 SubExpr.GoalsLocation
-    - replaceRange : Lsp.值域
+--- 原说明 ---
+Structures providing parameters for a Select and insert widget.
 -/
 structure SelectInsertParams where
   /-- Cursor position in the file at which the widget is being displayed. -/
@@ -139,95 +100,67 @@ structure SelectInsertParams where
   deriving SelectInsertParamsClass, RpcEncodable
 
 open scoped Jsx in open SelectInsertParamsClass Lean.SubExpr in
-/--
-Definition of `mkSelectionPanelRPC` / `mkSelectionPanelRPC` 的定义
+/-- Helper function to create a widget allowing to select parts of the main goal
+and then display a link that will insert some tactic call.
 
-English:
-definition mkSelectionPanelRPC
-  signature: {Params : Type} [SelectInsertParamsClass Params]
-  body: fun params => RequestM.asTask do
-  let doc ← RequestM.readDoc
-  if h : 0 < (goals params).size then
-    let mainGoal := (goals params)[0]
-    let mainGoalName := mainGoal.mvarId.name
-    let all := if onlyOne then "The selected sub-expression" else "All selected sub-expressions"
-    let be_where := if onlyGoal then "in the main goal." else "in the main goal or its context."
-    let errorMsg := s!"{all} should be {be_where}"
-    let inner : Html ← (do
-      if onlyOne && (selectedLocations params).size > 1 then
-        return <span>{.text "You should select only one sub-expression"}</span>
-      for selectedLocation in selectedLocations params do
-        if selectedLocation.mvarId.name != mainGoalName then
-          return <span>{.text errorMsg}</span>
-        else if onlyGoal then
-          if !(selectedLocation.loc matches (.target _)) then
-            return <span>{.text errorMsg}</span>
-      if (selectedLocations params).isEmpty then
-        return <span>{.text helpMsg}</span>
-      mainGoal.ctx.val.runMetaM {} do
-        let md ← mainGoal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
-        Meta.withLCtx lctx md.localInstances do
-          let (linkText, newCode, range?) ← mkCmdStr (selectedLocations params) md.type.consumeMData
-            params
-          return .ofComponent
-            MakeEditLink
-            (.ofReplaceRange doc.meta (replaceRange params) newCode range?)
-            #[ .text linkText ])
-    return <details «open»={true}>
-        <summary className="mv2 pointer">{.text title}</summary>
-        <div className="ml1">{inner}</div>
-      </details>
-  else
-    return <span>{.text "There is no goal to solve!"}</span> -- This shouldn't happen.
+The main argument is `mkCmdStr` which is a function creating the link text and the tactic call text.
+The `helpMsg` argument is displayed when nothing is selected and `title` is used as a panel title.
+The `onlyGoal` argument says whether the selected has to be in the goal. Otherwise it
+can be in the local context.
+The `onlyOne` argument says whether one should select only one sub-expression.
+In every cases, all selected subexpressions should be in the main goal or its local context.
 
-中文:
-定义 mkSelectionPanelRPC
-  签名: {Params : 类型} [SelectInsertParams类 Params]
-  定义体: fun params => RequestM.asTask do
-  let doc ← RequestM.readDoc
-  if h : 0 < (goals params).size then
-    let mainGoal := (goals params)[0]
-    let mainGoalName := mainGoal.mvarId.name
-    let all := if onlyOne then "The selected sub-expression" else "All selected sub-expressions"
-    let be_where := if onlyGoal then "in the main goal." else "in the main goal or its context."
-    let errorMsg := s!"{all} should be {be_where}"
-    let inner : Html ← (do
-      if onlyOne && (selectedLocations params).size > 1 then
-        return <span>{.text "You should select only one sub-expression"}</span>
-      for selectedLocation in selectedLocations params do
-        if selectedLocation.mvarId.name != mainGoalName then
-          return <span>{.text errorMsg}</span>
-        else if onlyGoal then
-          if !(selectedLocation.loc matches (.target _)) then
-            return <span>{.text errorMsg}</span>
-      if (selectedLocations params).isEmpty then
-        return <span>{.text helpMsg}</span>
-      mainGoal.ctx.val.runMetaM {} do
-        let md ← mainGoal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
-        Meta.withLCtx lctx md.localInstances do
-          let (linkText, newCode, range?) ← mkCmdStr (selectedLocations params) md.type.consumeMData
-            params
-          return .ofComponent
-            MakeEditLink
-            (.ofReplaceRange doc.meta (replaceRange params) newCode range?)
-            #[ .text linkText ])
-    return <details «open»={true}>
-        <summary className="mv2 pointer">{.text title}</summary>
-        <div className="ml1">{inner}</div>
-      </details>
-  else
-    return <span>{.text "There is no goal to solve!"}</span> -- This shouldn't happen.
+The last arguments `params` should not be provided so that the output
+has type `Params → RequestM (RequestTask Html)` and can be fed to the `mk_rpc_widget%`
+elaborator.
 
-Depends on / 依赖: onlyOne
+Note that the `pos` and `goalType` arguments to `mkCmdStr` could be extracted for the `Params`
+argument but that extraction would happen in every example, hence it is factored out here.
+We also make sure `mkCmdStr` is executed in the right context.
+-/
+/-
+**mkSelectionPanelRPC** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mkSelectionPanelRPC {Params : Type} [SelectInsertParamsClass Params] (mkCm
+dStr : (pos : Array GoalsLocation) -> (goalType : Expr) -> Params -> MetaM (Stri
+ng × String × Option (String.Pos.Raw × String.Pos.Raw))) (helpMsg : String) (tit
+le : String) (onlyGoal
+参数：mkCmdStr : (pos : Array GoalsLocation) -> (goalType : Expr) -> Params -> Meta
+M (String × String × Option (String.Pos.Raw × String.Pos.Raw))；helpMsg : String；
+title : String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Helper function to create a widget allowing to select parts of the main goal
+and then display a link that will insert some tactic call.
+
+The main argument is `mkCmdStr` which is a function creating the link text and t
+he tactic call text.
+The `helpMsg` argument is displayed when nothing is selected and `title` is used
+ as a panel title.
+The `onlyGoal` argument says whether the selected has to be in the goal. Otherwi
+se it
+can be in the local context.
+The `onlyOne` argument says whether one should select only one sub-expression.
+In every cases, all selected subexpressions should be in the main goal or its lo
+cal context.
+
+The last arguments `params` should not be provided so that the output
+has type `Params → RequestM (RequestTask Html)` and can be fed to the `mk_rpc_wi
+dget%`
+elaborator.
+
+Note that the `pos` and `goalType` arguments to `mkCmdStr` could be extracted fo
+r the `Params`
+argument but that extraction would happen in every example, hence it is factored
+ out here.
+We also make sure `mkCmdStr` is executed in the right context.
 -/
 def mkSelectionPanelRPC {Params : Type} [SelectInsertParamsClass Params]
-    (mkCmdStr : (pos : Array GoalsLocation) -> (goalType : Expr) -> Params ->
+    (mkCmdStr : (pos : Array GoalsLocation) → (goalType : Expr) → Params →
     MetaM (String × String × Option (String.Pos.Raw × String.Pos.Raw)))
     (helpMsg : String) (title : String) (onlyGoal := true) (onlyOne := false) :
-    (params : Params) -> RequestM (RequestTask Html) :=
-  fun params => RequestM.asTask do
+    (params : Params) → RequestM (RequestTask Html) :=
+  fun params ↦ RequestM.asTask do
   let doc ← RequestM.readDoc
   if h : 0 < (goals params).size then
     let mainGoal := (goals params)[0]
@@ -248,7 +181,7 @@ def mkSelectionPanelRPC {Params : Type} [SelectInsertParamsClass Params]
         return <span>{.text helpMsg}</span>
       mainGoal.ctx.val.runMetaM {} do
         let md ← mainGoal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
+        let lctx := md.lctx |>.sanitizeNames.run' {options := (← getOptions)}
         Meta.withLCtx lctx md.localInstances do
           let (linkText, newCode, range?) ← mkCmdStr (selectedLocations params) md.type.consumeMData
             params

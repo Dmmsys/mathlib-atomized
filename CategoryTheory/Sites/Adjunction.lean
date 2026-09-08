@@ -30,23 +30,24 @@ variable {D : Type u₂} [Category.{v₂} D]
 variable {E : Type*} [Category* E]
 variable {F : D ⥤ E} {G : E ⥤ D}
 
-/--
-Definition of `sheafForget` / `sheafForget` 的定义
+/-- The forgetful functor from `Sheaf J D` to sheaves of types, for a concrete category `D`
+whose forgetful functor preserves the correct limits. -/
+/-
+**CategoryTheory.sheafForget** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafForget {FD : D -> D -> Type*} {CD : D -> Type*} [forall X Y, FunLike 
+(FD X Y) (CD X) (CD Y)] [ConcreteCategory D FD] [HasSheafCompose J (forget D)] :
+ Sheaf J D ⥤ Sheaf J (Type _)
+参数：FD X Y；CD X；CD Y；forget D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sheafForget
-  signature: {FD : D -> D -> Type*} {CD : D -> Type*}
-  body: sheafCompose J (forget D)
-
-中文:
-缩写 sheafForget
-  签名: {FD : D -> D -> 类型} {CD : D -> 类型}
-  定义体: sheafCompose J (forget D)
-
-Depends on / 依赖: forget, sheafCompose
+--- 原说明 ---
+The forgetful functor from `Sheaf J D` to sheaves of types, for a concrete categ
+ory `D`
+whose forgetful functor preserves the correct limits.
 -/
-abbrev sheafForget {FD : D -> D -> Type*} {CD : D -> Type*}
-    [forall X Y, FunLike (FD X Y) (CD X) (CD Y)] [ConcreteCategory D FD]
+abbrev sheafForget {FD : D → D → Type*} {CD : D → Type*}
+    [∀ X Y, FunLike (FD X Y) (CD X) (CD Y)] [ConcreteCategory D FD]
     [HasSheafCompose J (forget D)] : Sheaf J D ⥤ Sheaf J (Type _) :=
   sheafCompose J (forget D)
 
@@ -54,22 +55,24 @@ namespace Sheaf
 
 noncomputable section
 
-/--
-Definition of `adjunction` / `adjunction` 的定义
+/-- An adjunction `adj : G ⊣ F` with `F : D ⥤ E` and `G : E ⥤ D` induces an adjunction
+between `Sheaf J D` and `Sheaf J E`, in contexts where one can sheafify `D`-valued presheaves,
+and postcomposing with `F` preserves the property of being a sheaf. -/
+/-
+**CategoryTheory.Sheaf.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Shea
+f`。
+形式化陈述：adjunction [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F) : com
+poseAndSheafify J G ⊣ sheafCompose J F
+参数：adj : G ⊣ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunction
-  signature: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
-  body: Adjunction.restrictFullyFaithful ((adj.whiskerRight Cᵒᵖ).comp (sheafificationAdjunction J D))
-    (fullyFaithfulSheafToPresheaf J E) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
-
-中文:
-定义 adjunction
-  签名: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
-  定义体: Adjunction.restrictFullyFaithful ((adj.whiskerRight Cᵒᵖ).comp (sheafificationAdjunction J D))
-    (fullyFaithfulSheafToPresheaf J E) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: Adjunction, Adjunction.restrictFullyFaithful, FullyFaithful, Functor, Functor.FullyFaithful.id, Iso.refl, adj.whiskerRight, fullyFaithfulSheafToPresheaf, restrictFullyFaithful, sheafificationAdjunction, whiskerRight
+--- 原说明 ---
+An adjunction `adj : G ⊣ F` with `F : D ⥤ E` and `G : E ⥤ D` induces an adjuncti
+on
+between `Sheaf J D` and `Sheaf J E`, in contexts where one can sheafify `D`-valu
+ed presheaves,
+and postcomposing with `F` preserves the property of being a sheaf.
 -/
 def adjunction [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F) :
     composeAndSheafify J G ⊣ sheafCompose J F :=
@@ -79,38 +82,35 @@ def adjunction [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `adjunction_unit_app_hom` / 引理 `adjunction_unit_app_hom`
-
-English:
-lemma adjunction_unit_app_hom
-  statement: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
-  proof: by
-  change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
-  simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
-    Adjunction.map_restrictFullyFaithful_unit_app, Adjunction.comp_unit_app,
-    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, Iso.refl_hom, NatTrans.id_app,
-    Functor.comp_map, Functor.map_id, whiskerRight_id', Category.comp_id]
-  rfl
-
-@[deprecated (since := "2026-03-05")]
-alias adjunction_unit_app_val := adjunction_unit_app_hom
-
-中文:
-引理 adjunction_unit_app_hom
-  结论: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
-  证明: by
-  change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
-  simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
-    Adjunction.map_restrictFullyFaithful_unit_app, Adjunction.comp_unit_app,
-    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, Iso.refl_hom, NatTrans.id_app,
-    Functor.comp_map, Functor.map_id, whiskerRight_id', Category.comp_id]
-  rfl
-
-@[deprecated (since := "2026-03-05")]
-alias adjunction_unit_app_val := adjunction_unit_app_hom
-
-Depends on / 依赖: Adjunction, Adjunction.comp_unit_app, Adjunction.map_restrictFullyFaithful_unit_app, Category, Category.comp_id, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_id, Iso.refl_hom, NatTrans, NatTrans.id_app, adjunction, comp_id, comp_map, comp_obj, comp_unit_app, id_app, id_obj
+/-
+**CategoryTheory.Sheaf.adjunction_unit_app_hom** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Sheaf`。
+形式化陈述：adjunction_unit_app_hom [HasWeakSheafify J D] [HasSheafCompose J F] (adj :
+ G ⊣ F) (X : Sheaf J E) : ((adjunction J adj).unit.app X).hom = (adj.whiskerRigh
+t Cᵒᵖ).unit.app _ ≫ whiskerRight (toSheafify J (X.obj ⋙ G)) F
+参数：adj : G ⊣ F；X : Sheaf J E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.Adjunction.map_restrictFullyFaithful_unit_app`：map_restri
+ctFullyFaithful_unit_app (X : C) : iC.map ((adj.restrictFullyFaithful hiC hiD co
+mm1 comm2).unit.app X) = adj.unit.app (iC.obj X) ≫…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Adjunction.comp_unit_app`：comp_unit_app (X : C) : dsimp% 
+(adj₁.comp adj₂).unit.app X = adj₁.unit.app X ≫ G.map (adj₂.unit.app (F.obj X))
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma adjunction_unit_app_hom [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
     (X : Sheaf J E) : ((adjunction J adj).unit.app X).hom =
@@ -127,30 +127,55 @@ alias adjunction_unit_app_val := adjunction_unit_app_hom
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `adjunction_counit_app_hom` / 引理 `adjunction_counit_app_hom`
-
-English:
-lemma adjunction_counit_app_hom
-  statement: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
-  proof: ((sheafToPresheaf _ _).congr_map
-    (Adjunction.map_restrictFullyFaithful_counit_app _ _ (Functor.FullyFaithful.id _)
-      (L := composeAndSheafify J G) (R := sheafCompose J F) _ _ Y)).trans (by cat_disch)
-
-@[deprecated (since := "2026-03-05")]
-alias adjunction_counit_app_val := adjunction_counit_app_hom
-
-中文:
-引理 adjunction_counit_app_hom
-  结论: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
-  证明: ((sheafToPresheaf _ _).congr_map
-    (Adjunction.map_restrictFullyFaithful_counit_app _ _ (Functor.FullyFaithful.id _)
-      (L := composeAndSheafify J G) (R := sheafCompose J F) _ _ Y)).trans (by cat_disch)
-
-@[deprecated (since := "2026-03-05")]
-alias adjunction_counit_app_val := adjunction_counit_app_hom
-
-Depends on / 依赖: Adjunction, Adjunction.map_restrictFullyFaithful_counit_app, FullyFaithful, Functor, Functor.FullyFaithful.id, cat_disch, composeAndSheafify, congr_map, map_restrictFullyFaithful_counit_app, sheafCompose, sheafToPresheaf
+/-
+**CategoryTheory.Sheaf.adjunction_counit_app_hom** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Sheaf`。
+形式化陈述：adjunction_counit_app_hom [HasWeakSheafify J D] [HasSheafCompose J F] (adj
+ : G ⊣ F) (Y : Sheaf J D) : ((adjunction J adj).counit.app Y).hom = sheafifyLift
+ J (((adj.whiskerRight Cᵒᵖ).counit.app Y.obj)) Y.property
+参数：adj : G ⊣ F；Y : Sheaf J D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
+· 使用引理 `CategoryTheory.Adjunction.map_restrictFullyFaithful_counit_app`：map_rest
+rictFullyFaithful_counit_app (X : D) : iD.map ((adj.restrictFullyFaithful hiC hi
+D comm1 comm2).counit.app X) = comm1.inv.app (R.obj …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Adjunction.comp_counit_app`：comp_counit_app (X : E) : dsi
+mp% (adj₁.comp adj₂).counit.app X = H.map (adj₁.counit.app (I.obj X)) ≫ adj₂.cou
+nit.app X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.sheafificationAdjunction_counit_app_val`：sheafificationAd
+junction_counit_app_val (P : Sheaf J D) : ((sheafificationAdjunction J D).counit
+.app P).hom = sheafifyLift J (𝟙 P.obj) P.pro…
+· 使用定理 `CategoryTheory.sheafifyMap_sheafifyLift`：sheafifyMap_sheafifyLift {P Q R
+ : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (hR : Presheaf.IsSheaf J R) : sheafifyMap J 
+η ≫ sheafifyLift J γ hR = she…
+· 使用定理 `CategoryTheory.sheafifyLift.congr_simp`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Typ
+e u_1}   [inst_1 : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma adjunction_counit_app_hom [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
     (Y : Sheaf J D) : ((adjunction J adj).counit.app Y).hom =
@@ -161,89 +186,67 @@ lemma adjunction_counit_app_hom [HasWeakSheafify J D] [HasSheafCompose J F] (adj
 
 @[deprecated (since := "2026-03-05")]
 alias adjunction_counit_app_val := adjunction_counit_app_hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasWeakSheafify
-  signature: J D] [F.IsRightAdjoint] : (sheafCompose J F).IsRightAdjoint
-  body: (adjunction J (Adjunction.ofIsRightAdjoint F)).isRightAdjoint
-
-中文:
-实例 [HasWeakSheafify
-  签名: J D] [F.是右伴随] : (sheafCompose J F).是右伴随
-  定义体: (adjunction J (Adjunction.ofIsRightAdjoint F)).isRightAdjoint
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, adjunction, isRightAdjoint, ofIsRightAdjoint
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasWeakSheafify J D] [F.IsRightAdjoint] : (sheafCompose J F).IsRightAdjoint :=
   (adjunction J (Adjunction.ofIsRightAdjoint F)).isRightAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasWeakSheafify
-  signature: J D] [G.IsLeftAdjoint] : (composeAndSheafify J G).IsLeftAdjoint
-  body: (adjunction J (Adjunction.ofIsLeftAdjoint G)).isLeftAdjoint
-
-中文:
-实例 [HasWeakSheafify
-  签名: J D] [G.是左伴随] : (composeAndSheafify J G).是左伴随
-  定义体: (adjunction J (Adjunction.ofIsLeftAdjoint G)).isLeftAdjoint
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, adjunction, isLeftAdjoint, ofIsLeftAdjoint
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasWeakSheafify J D] [G.IsLeftAdjoint] : (composeAndSheafify J G).IsLeftAdjoint :=
   (adjunction J (Adjunction.ofIsLeftAdjoint G)).isLeftAdjoint
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `preservesSheafification_of_adjunction` / 引理 `preservesSheafification_of_adjunction`
-
-English:
-lemma preservesSheafification_of_adjunction
-  given: (adj : G ⊣ F)
-  proof: by
-    have := adj.isRightAdjoint
-    rw [MorphismProperty.inverseImage_iff]
-    dsimp
-    intro R hR
-    rw [← ((adj.whiskerRight Cᵒᵖ).homEquiv P R).comp_bijective]
-    convert!
-      (((adj.whiskerRight Cᵒᵖ).homEquiv Q R).trans
-          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).property)).bijective
-    ext g X
-    -- The rest of this proof was
-    -- `dsimp [Adjunction.whiskerRight, Adjunction.mkOfUnitCounit]; simp` before https://github.com/leanprover-community/mathlib4/pull/16317.
-    dsimp
-    rw [← NatTrans.comp_app]
-    congr
-    exact Adjunction.homEquiv_naturality_left _ _ _
-
-中文:
-引理 preservesSheafification_of_adjunction
-  条件: (adj : G ⊣ F)
-  证明: by
-    have := adj.isRightAdjoint
-    rw [MorphismProperty.inverseImage_iff]
-    dsimp
-    intro R hR
-    rw [← ((adj.whiskerRight Cᵒᵖ).homEquiv P R).comp_bijective]
-    convert!
-      (((adj.whiskerRight Cᵒᵖ).homEquiv Q R).trans
-          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).property)).bijective
-    ext g X
-    -- The rest of this proof was
-    -- `dsimp [Adjunction.whiskerRight, Adjunction.mkOfUnitCounit]; simp` before https://github.com/leanprover-community/mathlib4/pull/16317.
-    dsimp
-    rw [← NatTrans.comp_app]
-    congr
-    exact Adjunction.homEquiv_naturality_left _ _ _
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.inverseImage_iff, adj.isRightAdjoint, adj.whiskerRight, bijective, comp_bijective, convert, hf.homEquiv, homEquiv, inverseImage_iff, isRightAdjoint, property, sheafCompose, whiskerRight
+/-
+**CategoryTheory.Sheaf.preservesSheafification_of_adjunction** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Sheaf`。
+形式化陈述：preservesSheafification_of_adjunction (adj : G ⊣ F) : J.PreservesSheafific
+ation G where le P Q f hf
+参数：adj : G ⊣ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.isRightAdjoint`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.inverseImage_iff`：inverseImage_iff (P : 
+MorphismProperty D) (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) : P.inverseImage F f ↔ P (
+F.map f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.comp_bijective`：comp_bijective (f : α -> β) (e : β ≃ γ) : Bijectiv
+e (e ∘ f) ↔ Bijective f
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfShapeOfIsRightAdjoint`：∀ {J 
+: Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1, 
+u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `CategoryTheory.NatTrans.comp_app`：comp_app {F G H : C ⥤ D} (α : F ⟶ G) (
+β : G ⟶ H) (X : C) : (α ≫ β).app X = α.app X ≫ β.app X
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_left`：homEquiv_naturality_
+left (f : X' ⟶ X) (g : F.obj X ⟶ Y) : (adj.homEquiv X' Y) (F.map f ≫ g) = f ≫ (a
+dj.homEquiv X Y) g
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 lemma preservesSheafification_of_adjunction (adj : G ⊣ F) :
     J.PreservesSheafification G where
@@ -263,30 +266,22 @@ lemma preservesSheafification_of_adjunction (adj : G ⊣ F) :
     rw [← NatTrans.comp_app]
     congr
     exact Adjunction.homEquiv_naturality_left _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [G.IsLeftAdjoint]
-  signature: : J.PreservesSheafification G
-  body: preservesSheafification_of_adjunction J (Adjunction.ofIsLeftAdjoint G)
-
-中文:
-实例 [G.是左伴随]
-  签名: : J.保持层化 G
-  定义体: preservesSheafification_of_adjunction J (Adjunction.ofIsLeftAdjoint G)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, ofIsLeftAdjoint, preservesSheafification_of_adjunction
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [G.IsLeftAdjoint] : J.PreservesSheafification G :=
   preservesSheafification_of_adjunction J (Adjunction.ofIsLeftAdjoint G)
 
 section ForgetToType
 
-variable [HasWeakSheafify J D] {FD : D -> D -> Type*} {CD : D -> Type (max u₁ v₁)}
-    [forall X Y, FunLike (FD X Y) (CD X) (CD Y)] [ConcreteCategory D FD] [HasSheafCompose J (forget D)]
+variable [HasWeakSheafify J D] {FD : D → D → Type*} {CD : D → Type (max u₁ v₁)}
+    [∀ X Y, FunLike (FD X Y) (CD X) (CD Y)] [ConcreteCategory D FD] [HasSheafCompose J (forget D)]
 
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [(forget D).IsRightAdjoint] :
     (sheafForget.{_, _, _, _, _, max u₁ v₁} (D := D) J).IsRightAdjoint := by infer_instance
 
@@ -297,3 +292,4 @@ end
 end Sheaf
 
 end CategoryTheory
+

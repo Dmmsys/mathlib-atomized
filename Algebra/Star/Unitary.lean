@@ -29,40 +29,20 @@ unitary
 @[expose] public section
 
 
-/--
-Definition of `unitary` / `unitary` 的定义
+/-- In a \*-monoid, `unitary R` is the submonoid consisting of all the elements `U` of
+`R` such that `star U * U = 1` and `U * star U = 1`.
+-/
+/-
+**unitary** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：unitary (R : Type*) [Monoid R] [StarMul R] : Submonoid R where carrier
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitary
-  signature: (R : Type*) [Monoid R] [StarMul R]
-  body: { U | star U * U = 1 ∧ U * star U = 1 }
-  one_mem' := by simp only [mul_one, and_self_iff, Set.mem_ofPred_eq, star_one]
-  mul_mem' := @fun U B ⟨hA₁, hA₂⟩ ⟨hB₁, hB₂⟩ => by
-    refine ⟨?_, ?_⟩
-    · calc
-        star (U * B) * (U * B) = star B * star U * U * B := by simp only [mul_assoc, star_mul]
-        _ = star B * (star U * U) * B := by rw [← mul_assoc]
-        _ = 1 := by rw [hA₁, mul_one, hB₁]
-    · calc
-        U * B * star (U * B) = U * B * (star B * star U) := by rw [star_mul]
-        _ = U * (B * star B) * star U := by simp_rw [← mul_assoc]
-        _ = 1 := by rw [hB₂, mul_one, hA₂]
-
-中文:
-定义 unitary
-  签名: (R : 类型) [幺半群 R] [StarMul R]
-  定义体: { U | star U * U = 1 ∧ U * star U = 1 }
-  one_mem' := by simp only [mul_one, and_self_iff, Set.mem_ofPred_eq, star_one]
-  mul_mem' := @fun U B ⟨hA₁, hA₂⟩ ⟨hB₁, hB₂⟩ => by
-    refine ⟨?_, ?_⟩
-    · calc
-        star (U * B) * (U * B) = star B * star U * U * B := by simp only [mul_assoc, star_mul]
-        _ = star B * (star U * U) * B := by rw [← mul_assoc]
-        _ = 1 := by rw [hA₁, mul_one, hB₁]
-    · calc
-        U * B * star (U * B) = U * B * (star B * star U) := by rw [star_mul]
-        _ = U * (B * star B) * star U := by simp_rw [← mul_assoc]
-        _ = 1 := by rw [hB₂, mul_one, hA₂]
+--- 原说明 ---
+In a \*-monoid, `unitary R` is the submonoid consisting of all the elements `U` 
+of
+`R` such that `star U * U = 1` and `U * star U = 1`.
 -/
 def unitary (R : Type*) [Monoid R] [StarMul R] : Submonoid R where
   carrier := { U | star U * U = 1 ∧ U * star U = 1 }
@@ -86,810 +66,469 @@ section Monoid
 
 variable [Monoid R] [StarMul R]
 
-/--
-theorem `mem_iff` / 定理 `mem_iff`
-
-English:
-theorem mem_iff
-  given: {U : R}
-  statement: U in unitary R ↔ star U * U = 1 ∧ U * star U = 1
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_iff
-  条件: {U : R}
-  结论: U in unitary R ↔ star U * U = 1 ∧ U * star U = 1
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Unitary.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U * star U = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U * star U = 1 :=
+theorem mem_iff {U : R} : U ∈ unitary R ↔ star U * U = 1 ∧ U * star U = 1 :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `star_mul_self_of_mem` / 定理 `star_mul_self_of_mem`
-
-English:
-theorem star_mul_self_of_mem
-  given: {U : R} (hU : U in unitary R)
-  statement: star U * U = 1
-  proof: hU.1
-
-@[simp]
-
-中文:
-定理 star_mul_self_of_mem
-  条件: {U : R} (hU : U in unitary R)
-  结论: star U * U = 1
-  证明: hU.1
-
-@[simp]
+/-
+**Unitary.star_mul_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_mul_self_of_mem {U : R} (hU : U in unitary R) : star U * U = 1
+参数：hU : U in unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem star_mul_self_of_mem {U : R} (hU : U in unitary R) : star U * U = 1 :=
+theorem star_mul_self_of_mem {U : R} (hU : U ∈ unitary R) : star U * U = 1 :=
   hU.1
 
 @[simp]
-/--
-theorem `mul_star_self_of_mem` / 定理 `mul_star_self_of_mem`
-
-English:
-theorem mul_star_self_of_mem
-  given: {U : R} (hU : U in unitary R)
-  statement: U * star U = 1
-  proof: hU.2
-
-中文:
-定理 mul_star_self_of_mem
-  条件: {U : R} (hU : U in unitary R)
-  结论: U * star U = 1
-  证明: hU.2
+/-
+**Unitary.mul_star_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mul_star_self_of_mem {U : R} (hU : U in unitary R) : U * star U = 1
+参数：hU : U in unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mul_star_self_of_mem {U : R} (hU : U in unitary R) : U * star U = 1 :=
+theorem mul_star_self_of_mem {U : R} (hU : U ∈ unitary R) : U * star U = 1 :=
   hU.2
-
-/--
-theorem `star_mem` / 定理 `star_mem`
-
-English:
-theorem star_mem
-  given: {U : R} (hU : U in unitary R)
-  statement: star U in unitary R
-  proof: ⟨by rw [star_star, mul_star_self_of_mem hU], by rw [star_star, star_mul_self_of_mem hU]⟩
-
-@[simp]
-
-中文:
-定理 star_mem
-  条件: {U : R} (hU : U in unitary R)
-  结论: star U in unitary R
-  证明: ⟨by rw [star_star, mul_star_self_of_mem hU], by rw [star_star, star_mul_self_of_mem hU]⟩
-
-@[simp]
-
-Depends on / 依赖: mul_star_self_of_mem, star_mul_self_of_mem, star_star
+/-
+**Unitary.star_mem** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_mem {U : R} (hU : U in unitary R) : star U in unitary R
+参数：hU : U in unitary R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `Unitary.mul_star_self_of_mem`：mul_star_self_of_mem {U : R} (hU : U in un
+itary R) : U * star U = 1
+· 使用定理 `Unitary.star_mul_self_of_mem`：star_mul_self_of_mem {U : R} (hU : U in un
+itary R) : star U * U = 1
 -/
-theorem star_mem {U : R} (hU : U in unitary R) : star U in unitary R :=
+theorem star_mem {U : R} (hU : U ∈ unitary R) : star U ∈ unitary R :=
   ⟨by rw [star_star, mul_star_self_of_mem hU], by rw [star_star, star_mul_self_of_mem hU]⟩
 
 @[simp]
-/--
-theorem `star_mem_iff` / 定理 `star_mem_iff`
-
-English:
-theorem star_mem_iff
-  given: {U : R}
-  statement: star U in unitary R ↔ U in unitary R
-  proof: ⟨fun h => star_star U ▸ star_mem h, star_mem⟩
-
-中文:
-定理 star_mem_iff
-  条件: {U : R}
-  结论: star U in unitary R ↔ U in unitary R
-  证明: ⟨fun h => star_star U ▸ star_mem h, star_mem⟩
-
-Depends on / 依赖: star_mem, star_star
+/-
+**Unitary.star_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_mem_iff {U : R} : star U in unitary R ↔ U in unitary R
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.star_mem`：star_mem {U : R} (hU : U in unitary R) : star U in uni
+tary R
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
-theorem star_mem_iff {U : R} : star U in unitary R ↔ U in unitary R :=
+theorem star_mem_iff {U : R} : star U ∈ unitary R ↔ U ∈ unitary R :=
   ⟨fun h => star_star U ▸ star_mem h, star_mem⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (unitary R)
-  body: ⟨fun U => ⟨star U, star_mem U.prop⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 对合 (unitary R)
-  定义体: ⟨fun U => ⟨star U, star_mem U.prop⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: U.prop, star_mem
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Star (unitary R) :=
   ⟨fun U => ⟨star U, star_mem U.prop⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: {U : unitary R}
-  statement: ↑(star U) = (star U : R)
-  proof: rfl
-
-中文:
-定理 coe_star
-  条件: {U : unitary R}
-  结论: ↑(star U) = (star U : R)
-  证明: rfl
+/-
+**Unitary.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_star {U : unitary R} : ↑(star U) = (star U : R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star {U : unitary R} : ↑(star U) = (star U : R) :=
   rfl
-
-/--
-theorem `coe_star_mul_self` / 定理 `coe_star_mul_self`
-
-English:
-theorem coe_star_mul_self
-  given: (U : unitary R)
-  statement: (star U : R) * U = 1
-  proof: star_mul_self_of_mem U.prop
-
-中文:
-定理 coe_star_mul_self
-  条件: (U : unitary R)
-  结论: (star U : R) * U = 1
-  证明: star_mul_self_of_mem U.prop
-
-Depends on / 依赖: U.prop, star_mul_self_of_mem
+/-
+**Unitary.coe_star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_star_mul_self (U : unitary R) : (star U : R) * U = 1
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.star_mul_self_of_mem`：star_mul_self_of_mem {U : R} (hU : U in un
+itary R) : star U * U = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_star_mul_self (U : unitary R) : (star U : R) * U = 1 :=
   star_mul_self_of_mem U.prop
-
-/--
-theorem `coe_mul_star_self` / 定理 `coe_mul_star_self`
-
-English:
-theorem coe_mul_star_self
-  given: (U : unitary R)
-  statement: (U : R) * star U = 1
-  proof: mul_star_self_of_mem U.prop
-
-@[simp]
-
-中文:
-定理 coe_mul_star_self
-  条件: (U : unitary R)
-  结论: (U : R) * star U = 1
-  证明: mul_star_self_of_mem U.prop
-
-@[simp]
-
-Depends on / 依赖: U.prop, mul_star_self_of_mem
+/-
+**Unitary.coe_mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_mul_star_self (U : unitary R) : (U : R) * star U = 1
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.mul_star_self_of_mem`：mul_star_self_of_mem {U : R} (hU : U in un
+itary R) : U * star U = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem coe_mul_star_self (U : unitary R) : (U : R) * star U = 1 :=
   mul_star_self_of_mem U.prop
 
 @[simp]
-/--
-theorem `star_mul_self` / 定理 `star_mul_self`
-
-English:
-theorem star_mul_self
-  given: (U : unitary R)
-  statement: star U * U = 1
-  proof: Subtype.ext coe_star_mul_self U
-
-@[simp]
-
-中文:
-定理 star_mul_self
-  条件: (U : unitary R)
-  结论: star U * U = 1
-  证明: Subtype.ext coe_star_mul_self U
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_star_mul_self
+/-
+**Unitary.star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_mul_self (U : unitary R) : star U * U = 1
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Unitary.coe_star_mul_self`：coe_star_mul_self (U : unitary R) : (star U :
+ R) * U = 1
 -/
 theorem star_mul_self (U : unitary R) : star U * U = 1 :=
-Subtype.ext coe_star_mul_self U
+  Subtype.ext <| coe_star_mul_self U
 
 @[simp]
-/--
-theorem `mul_star_self` / 定理 `mul_star_self`
-
-English:
-theorem mul_star_self
-  given: (U : unitary R)
-  statement: U * star U = 1
-  proof: Subtype.ext coe_mul_star_self U
-
-中文:
-定理 mul_star_self
-  条件: (U : unitary R)
-  结论: U * star U = 1
-  证明: Subtype.ext coe_mul_star_self U
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_mul_star_self
+/-
+**Unitary.mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mul_star_self (U : unitary R) : U * star U = 1
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Unitary.coe_mul_star_self`：coe_mul_star_self (U : unitary R) : (U : R) *
+ star U = 1
 -/
 theorem mul_star_self (U : unitary R) : U * star U = 1 :=
-Subtype.ext coe_mul_star_self U
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (unitary R)
-  body: { Submonoid.toMonoid _ with
-    inv := star
-    inv_mul_cancel := star_mul_self }
-
-中文:
-实例 :
-  签名: 群 (unitary R)
-  定义体: { Submonoid.toMonoid _ with
-    inv := star
-    inv_mul_cancel := star_mul_self }
-
-Depends on / 依赖: Submonoid, Submonoid.toMonoid, inv_mul_cancel, star_mul_self, toMonoid
+  Subtype.ext <| coe_mul_star_self U
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (unitary R) :=
   { Submonoid.toMonoid _ with
     inv := star
     inv_mul_cancel := star_mul_self }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar (unitary R)
-  body: ⟨by
-    intro x
-    ext
-    rw [coe_star]; rw [coe_star]; rw [star_star]⟩
-
-中文:
-实例 :
-  签名: InvolutiveStar (unitary R)
-  定义体: ⟨by
-    intro x
-    ext
-    rw [coe_star]; rw [coe_star]; rw [star_star]⟩
-
-Depends on / 依赖: coe_star, star_star
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InvolutiveStar (unitary R) :=
   ⟨by
     intro x
     ext
-    rw [coe_star]; rw [coe_star]; rw [star_star]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (unitary R)
-  body: ⟨by
-    intro x y
-    ext
-    rw [coe_star]; rw [Submonoid.coe_mul]; rw [Submonoid.coe_mul]; rw [coe_star]; rw [coe_star]; rw [star_mul]⟩
-
-中文:
-实例 :
-  签名: StarMul (unitary R)
-  定义体: ⟨by
-    intro x y
-    ext
-    rw [coe_star]; rw [Submonoid.coe_mul]; rw [Submonoid.coe_mul]; rw [coe_star]; rw [coe_star]; rw [star_mul]⟩
-
-Depends on / 依赖: Submonoid, Submonoid.coe_mul, coe_mul, coe_star, star_mul
+    rw [coe_star, coe_star, star_star]⟩
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul (unitary R) :=
   ⟨by
     intro x y
     ext
-    rw [coe_star]; rw [Submonoid.coe_mul]; rw [Submonoid.coe_mul]; rw [coe_star]; rw [coe_star]; rw [star_mul]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (unitary R)
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 (unitary R)
-  定义体: ⟨1⟩
+    rw [coe_star, Submonoid.coe_mul, Submonoid.coe_mul, coe_star, coe_star, star_mul]⟩
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (unitary R) :=
   ⟨1⟩
-
-/--
-theorem `star_eq_inv` / 定理 `star_eq_inv`
-
-English:
-theorem star_eq_inv
-  given: (U : unitary R)
-  statement: star U = U⁻¹
-  proof: rfl
-
-中文:
-定理 star_eq_inv
-  条件: (U : unitary R)
-  结论: star U = U⁻¹
-  证明: rfl
+/-
+**Unitary.star_eq_inv** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_eq_inv (U : unitary R) : star U = U⁻¹
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_eq_inv (U : unitary R) : star U = U⁻¹ :=
   rfl
-
-/--
-theorem `star_eq_inv'` / 定理 `star_eq_inv'`
-
-English:
-theorem star_eq_inv'
-  statement: (star : unitary R -> unitary R) = Inv.inv
-  proof: rfl
-
-中文:
-定理 star_eq_inv'
-  结论: (star : unitary R -> unitary R) = 取逆.inv
-  证明: rfl
+/-
+**Unitary.star_eq_inv'** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：star_eq_inv' : (star : unitary R -> unitary R) = Inv.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_eq_inv' : (star : unitary R -> unitary R) = Inv.inv :=
+theorem star_eq_inv' : (star : unitary R → unitary R) = Inv.inv :=
   rfl
 
 /-- The unitary elements embed into the units. -/
 @[simps]
-/--
-Definition of `toUnits` / `toUnits` 的定义
+/-
+**Unitary.toUnits** 是 Mathlib 中的一个定义，位于命名空间 `Unitary`。
+形式化陈述：toUnits : unitary R ->* Rˣ where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.coe_mul_star_self`：coe_mul_star_self (U : unitary R) : (U : R) *
+ star U = 1
+· 使用定理 `Unitary.coe_star_mul_self`：coe_star_mul_self (U : unitary R) : (star U :
+ R) * U = 1
 
-English:
-definition toUnits
-  signature: : unitary R ->* Rˣ where
-  body: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _ _ := Units.ext rfl
-
-中文:
-定义 toUnits
-  签名: : unitary R ->* Rˣ where
-  定义体: ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
-  map_one' := Units.ext rfl
-  map_mul' _ _ := Units.ext rfl
-
-Depends on / 依赖: coe_mul_star_self, coe_star_mul_self
+--- 原说明 ---
+The unitary elements embed into the units.
 -/
-def toUnits : unitary R ->* Rˣ where
+def toUnits : unitary R →* Rˣ where
   toFun x := ⟨x, ↑x⁻¹, coe_mul_star_self x, coe_star_mul_self x⟩
   map_one' := Units.ext rfl
   map_mul' _ _ := Units.ext rfl
-
-/--
-theorem `toUnits_injective` / 定理 `toUnits_injective`
-
-English:
-theorem toUnits_injective
-  statement: Function.Injective (toUnits : unitary R -> Rˣ)
-  proof: fun _ _ h =>
-Subtype.ext Units.ext_iff.mp h
-
-中文:
-定理 toUnits_injective
-  结论: 函数.单射 (toUnits : unitary R -> Rˣ)
-  证明: fun _ _ h =>
-Subtype.ext Units.ext_iff.mp h
+/-
+**Unitary.toUnits_injective** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：toUnits_injective : Function.Injective (toUnits : unitary R -> Rˣ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
 -/
-theorem toUnits_injective : Function.Injective (toUnits : unitary R -> Rˣ) := fun _ _ h =>
-Subtype.ext Units.ext_iff.mp h
-
-/--
-theorem `_root_.IsUnit.mem_unitary_iff_star_mul_self` / 定理 `_root_.IsUnit.mem_unitary_iff_star_mul_self`
-
-English:
-theorem _root_.IsUnit.mem_unitary_iff_star_mul_self
-  given: {u : R} (hu : IsUnit u)
-  proof: by
-  rw [mem_iff]; rw [and_iff_left_of_imp fun h_mul => ?_]
-  lift u to Rˣ using hu
-  exact left_inv_eq_right_inv h_mul u.mul_inv ▸ u.mul_inv
-
-中文:
-定理 _root_.是单位.mem_unitary_iff_star_mul_self
-  条件: {u : R} (hu : 是单位 u)
-  证明: by
-  rw [mem_iff]; rw [and_iff_left_of_imp fun h_mul => ?_]
-  lift u to Rˣ using hu
-  exact left_inv_eq_right_inv h_mul u.mul_inv ▸ u.mul_inv
-
-Depends on / 依赖: and_iff_left_of_imp, h_mul, left_inv_eq_right_inv, mem_iff, mul_inv, u.mul_inv
+theorem toUnits_injective : Function.Injective (toUnits : unitary R → Rˣ) := fun _ _ h =>
+  Subtype.ext <| Units.ext_iff.mp h
+/-
+**Unitary._root_.IsUnit.mem_unitary_iff_star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 
+`Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsUnit.mem_unitary_iff_star_mul_self {u : R} (hu : IsUnit u) :
-    u in unitary R ↔ star u * u = 1 := by
-  rw [mem_iff]; rw [and_iff_left_of_imp fun h_mul => ?_]
+    u ∈ unitary R ↔ star u * u = 1 := by
+  rw [mem_iff, and_iff_left_of_imp fun h_mul => ?_]
   lift u to Rˣ using hu
   exact left_inv_eq_right_inv h_mul u.mul_inv ▸ u.mul_inv
-
-/--
-theorem `_root_.IsUnit.mem_unitary_iff_mul_star_self` / 定理 `_root_.IsUnit.mem_unitary_iff_mul_star_self`
-
-English:
-theorem _root_.IsUnit.mem_unitary_iff_mul_star_self
-  given: {u : R} (hu : IsUnit u)
-  proof: by
-  rw [← star_mem_iff]; rw [hu.star.mem_unitary_iff_star_mul_self]; rw [star_star]
-
-alias ⟨_, _root_.IsUnit.mem_unitary_of_star_mul_self⟩ := IsUnit.mem_unitary_iff_star_mul_self
-alias ⟨_, _root_.IsUnit.mem_unitary_of_mul_star_self⟩ := IsUnit.mem_unitary_iff_mul_star_self
-
-中文:
-定理 _root_.是单位.mem_unitary_iff_mul_star_self
-  条件: {u : R} (hu : 是单位 u)
-  证明: by
-  rw [← star_mem_iff]; rw [hu.star.mem_unitary_iff_star_mul_self]; rw [star_star]
-
-alias ⟨_, _root_.IsUnit.mem_unitary_of_star_mul_self⟩ := IsUnit.mem_unitary_iff_star_mul_self
-alias ⟨_, _root_.IsUnit.mem_unitary_of_mul_star_self⟩ := IsUnit.mem_unitary_iff_mul_star_self
-
-Depends on / 依赖: hu.star.mem_unitary_iff_star_mul_self, mem_unitary_iff_star_mul_self, star_mem_iff, star_star
+/-
+**Unitary._root_.IsUnit.mem_unitary_iff_mul_star_self** 是 Mathlib 中的一个定理，位于命名空间 
+`Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsUnit.mem_unitary_iff_mul_star_self {u : R} (hu : IsUnit u) :
-    u in unitary R ↔ u * star u = 1 := by
-  rw [← star_mem_iff]; rw [hu.star.mem_unitary_iff_star_mul_self]; rw [star_star]
+    u ∈ unitary R ↔ u * star u = 1 := by
+  rw [← star_mem_iff, hu.star.mem_unitary_iff_star_mul_self, star_star]
 
 alias ⟨_, _root_.IsUnit.mem_unitary_of_star_mul_self⟩ := IsUnit.mem_unitary_iff_star_mul_self
 alias ⟨_, _root_.IsUnit.mem_unitary_of_mul_star_self⟩ := IsUnit.mem_unitary_iff_mul_star_self
-
-/--
-theorem `isUnit_coe` / 定理 `isUnit_coe`
-
-English:
-theorem isUnit_coe
-  given: {U : unitary R}
-  statement: IsUnit (U : R)
-  proof: (Unitary.toUnits _).isUnit
-
-中文:
-定理 isUnit_coe
-  条件: {U : unitary R}
-  结论: 是单位 (U : R)
-  证明: (Unitary.toUnits _).isUnit
-
-Depends on / 依赖: Unitary, Unitary.toUnits, isUnit, toUnits
+/-
+**Unitary.isUnit_coe** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：isUnit_coe {U : unitary R} : IsUnit (U : R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem isUnit_coe {U : unitary R} : IsUnit (U : R) := (Unitary.toUnits _).isUnit
 
-/--
-theorem `mul_left_inj` / 定理 `mul_left_inj`
+/-- For unitary `U` in a star-monoid `R`, `x * U = y * U` if and only if `x = y`
+for all `x` and `y` in `R`. -/
+/-
+**Unitary.mul_left_inj** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul R] {x y : R} (U : ↥(u
+nitary R)), x * ↑U = y * ↑U ↔ x = y
+参数：U : ↥(unitary R)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.mul_left_inj`：mul_left_inj (a : αˣ) {b c : α} : b * a = c * a ↔ b 
+= c
+· 使用定理 `Unitary.val_toUnits_apply`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] (x : ↥(unitary R)), ↑(Unitary.toUnits x) = ↑x
 
-English:
-theorem mul_left_inj
-  given: {x y : R} (U : unitary R)
-  proof: val_toUnits_apply U ▸ Units.mul_left_inj _
-
-中文:
-定理 mul_left_inj
-  条件: {x y : R} (U : unitary R)
-  证明: val_toUnits_apply U ▸ Units.mul_left_inj _
+--- 原说明 ---
+For unitary `U` in a star-monoid `R`, `x * U = y * U` if and only if `x = y`
+for all `x` and `y` in `R`.
 -/
 protected theorem mul_left_inj {x y : R} (U : unitary R) :
     x * U = y * U ↔ x = y :=
   val_toUnits_apply U ▸ Units.mul_left_inj _
 
-/--
-theorem `mul_right_inj` / 定理 `mul_right_inj`
+/-- For unitary `U` in a star-monoid `R`, `U * x = U * y` if and only if `x = y`
+for all `x` and `y` in `R`. -/
+/-
+**Unitary.mul_right_inj** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul R] {x y : R} (U : ↥(u
+nitary R)), ↑U * x = ↑U * y ↔ x = y
+参数：U : ↥(unitary R)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.mul_right_inj`：mul_right_inj (a : αˣ) {b c : α} : (a : α) * b = a 
+* c ↔ b = c
+· 使用定理 `Unitary.val_toUnits_apply`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] (x : ↥(unitary R)), ↑(Unitary.toUnits x) = ↑x
 
-English:
-theorem mul_right_inj
-  given: {x y : R} (U : unitary R)
-  proof: val_toUnits_apply U ▸ Units.mul_right_inj _
-
-中文:
-定理 mul_right_inj
-  条件: {x y : R} (U : unitary R)
-  证明: val_toUnits_apply U ▸ Units.mul_right_inj _
+--- 原说明 ---
+For unitary `U` in a star-monoid `R`, `U * x = U * y` if and only if `x = y`
+for all `x` and `y` in `R`.
 -/
 protected theorem mul_right_inj {x y : R} (U : unitary R) :
     U * x = U * y ↔ x = y :=
   val_toUnits_apply U ▸ Units.mul_right_inj _
-
-/--
-lemma `mul_inv_mem_iff` / 引理 `mul_inv_mem_iff`
-
-English:
-lemma mul_inv_mem_iff
-  given: {G : Type*} [Group G] [StarMul G] (a b : G)
-  proof: by
-  rw [(Group.isUnit _).mem_unitary_iff_star_mul_self]; rw [star_mul]; rw [star_inv]; rw [mul_assoc]; rw [inv_mul_eq_iff_eq_mul]; rw [mul_one]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul]
-
-中文:
-引理 mul_inv_mem_iff
-  条件: {G : 类型} [群 G] [StarMul G] (a b : G)
-  证明: by
-  rw [(Group.isUnit _).mem_unitary_iff_star_mul_self]; rw [star_mul]; rw [star_inv]; rw [mul_assoc]; rw [inv_mul_eq_iff_eq_mul]; rw [mul_one]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul]
-
-Depends on / 依赖: Group.isUnit, inv_mul_eq_iff_eq_mul, isUnit, mem_unitary_iff_star_mul_self, mul_assoc, mul_inv_eq_iff_eq_mul, mul_one, star_inv, star_mul
+/-
+**Unitary.mul_inv_mem_iff** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：mul_inv_mem_iff {G : Type*} [Group G] [StarMul G] (a b : G) : a * b⁻¹ in u
+nitary G ↔ star a * a = star b * b
+参数：a b : G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsUnit.mem_unitary_iff_star_mul_self`：∀ {R : Type u_1} [inst : Monoid R]
+ [inst_1 : StarMul R] {u : R}, IsUnit u → (u ∈ unitary R ↔ star u * u = 1)
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `star_inv`：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_mul_eq_iff_eq_mul`：inv_mul_eq_iff_eq_mul : a⁻¹ * b = c ↔ b = a * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv_eq_iff_eq_mul`：mul_inv_eq_iff_eq_mul : a * b⁻¹ = c ↔ a = c * b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mul_inv_mem_iff {G : Type*} [Group G] [StarMul G] (a b : G) :
-    a * b⁻¹ in unitary G ↔ star a * a = star b * b := by
-  rw [(Group.isUnit _).mem_unitary_iff_star_mul_self]; rw [star_mul]; rw [star_inv]; rw [mul_assoc]; rw [inv_mul_eq_iff_eq_mul]; rw [mul_one]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul]
-
-/--
-lemma `inv_mul_mem_iff` / 引理 `inv_mul_mem_iff`
-
-English:
-lemma inv_mul_mem_iff
-  given: {G : Type*} [Group G] [StarMul G] (a b : G)
-  proof: by
-  simpa [← mul_inv_rev] using mul_inv_mem_iff a⁻¹ b⁻¹
-
-中文:
-引理 inv_mul_mem_iff
-  条件: {G : 类型} [群 G] [StarMul G] (a b : G)
-  证明: by
-  simpa [← mul_inv_rev] using mul_inv_mem_iff a⁻¹ b⁻¹
-
-Depends on / 依赖: mul_inv_mem_iff, mul_inv_rev
+    a * b⁻¹ ∈ unitary G ↔ star a * a = star b * b := by
+  rw [(Group.isUnit _).mem_unitary_iff_star_mul_self, star_mul, star_inv, mul_assoc,
+    inv_mul_eq_iff_eq_mul, mul_one, ← mul_assoc, mul_inv_eq_iff_eq_mul]
+/-
+**Unitary.inv_mul_mem_iff** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：inv_mul_mem_iff {G : Type*} [Group G] [StarMul G] (a b : G) : a⁻¹ * b in u
+nitary G ↔ a * star a = b * star b
+参数：a b : G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `star_inv`：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+· 使用引理 `Unitary.mul_inv_mem_iff`：mul_inv_mem_iff {G : Type*} [Group G] [StarMul 
+G] (a b : G) : a * b⁻¹ in unitary G ↔ star a * a = star b * b
 -/
 lemma inv_mul_mem_iff {G : Type*} [Group G] [StarMul G] (a b : G) :
-    a⁻¹ * b in unitary G ↔ a * star a = b * star b := by
+    a⁻¹ * b ∈ unitary G ↔ a * star a = b * star b := by
   simpa [← mul_inv_rev] using mul_inv_mem_iff a⁻¹ b⁻¹
-
-/--
-theorem `_root_.Units.unitary_eq` / 定理 `_root_.Units.unitary_eq`
-
-English:
-theorem _root_.Units.unitary_eq
-  statement: unitary Rˣ = (unitary R).comap (Units.coeHom R)
-  proof: by
-  ext
-  simp [mem_iff, Units.ext_iff]
-
-中文:
-定理 _root_.单位群.unitary_eq
-  结论: unitary Rˣ = (unitary R).comap (单位群.coeHom R)
-  证明: by
-  ext
-  simp [mem_iff, Units.ext_iff]
-
-Depends on / 依赖: Units.ext_iff, ext_iff, mem_iff
+/-
+**Unitary._root_.Units.unitary_eq** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Units.unitary_eq : unitary Rˣ = (unitary R).comap (Units.coeHom R) := by
   ext
   simp [mem_iff, Units.ext_iff]
 
-/--
-lemma `_root_.Units.mul_inv_mem_unitary` / 引理 `_root_.Units.mul_inv_mem_unitary`
+/-- In a star monoid, the product `a * b⁻¹` of units is unitary if `star a * a = star b * b`. -/
+/-
+**Unitary._root_.Units.mul_inv_mem_unitary** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Units.mul_inv_mem_unitary
-  given: (a b : Rˣ)
-  proof: by
-  simp [← mul_inv_mem_iff, Units.unitary_eq]
-
-中文:
-引理 _root_.单位群.mul_inv_mem_unitary
-  条件: (a b : Rˣ)
-  证明: by
-  simp [← mul_inv_mem_iff, Units.unitary_eq]
+--- 原说明 ---
+In a star monoid, the product `a * b⁻¹` of units is unitary if `star a * a = sta
+r b * b`.
 -/
 protected lemma _root_.Units.mul_inv_mem_unitary (a b : Rˣ) :
-    (a * b⁻¹ : R) in unitary R ↔ star a * a = star b * b := by
+    (a * b⁻¹ : R) ∈ unitary R ↔ star a * a = star b * b := by
   simp [← mul_inv_mem_iff, Units.unitary_eq]
 
-/--
-lemma `_root_.Units.inv_mul_mem_unitary` / 引理 `_root_.Units.inv_mul_mem_unitary`
+/-- In a star monoid, the product `a⁻¹ * b` of units is unitary if `a * star a = b * star b`. -/
+/-
+**Unitary._root_.Units.inv_mul_mem_unitary** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Units.inv_mul_mem_unitary
-  given: (a b : Rˣ)
-  proof: by
-  simp [← inv_mul_mem_iff, Units.unitary_eq]
-
-中文:
-引理 _root_.单位群.inv_mul_mem_unitary
-  条件: (a b : Rˣ)
-  证明: by
-  simp [← inv_mul_mem_iff, Units.unitary_eq]
+--- 原说明 ---
+In a star monoid, the product `a⁻¹ * b` of units is unitary if `a * star a = b *
+ star b`.
 -/
 protected lemma _root_.Units.inv_mul_mem_unitary (a b : Rˣ) :
-    (a⁻¹ * b : R) in unitary R ↔ a * star a = b * star b := by
+    (a⁻¹ * b : R) ∈ unitary R ↔ a * star a = b * star b := by
   simp [← inv_mul_mem_iff, Units.unitary_eq]
-
-/--
-Instance `instIsStarNormal` / 实例 `instIsStarNormal`
-
-English:
-instance instIsStarNormal
-  signature: (u : unitary R)
-  body: star_mul_self u
-
-中文:
-实例 instIsStarNormal
-  签名: (u : unitary R)
-  定义体: star_mul_self u
-
-Depends on / 依赖: star_mul_self
+/-
+**Unitary.instIsStarNormal** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+形式化陈述：instIsStarNormal (u : unitary R) : IsStarNormal u where .trans (mul_star_s
+elf u).symm star_comm_self
+参数：u : unitary R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Unitary.star_mul_self`：star_mul_self (U : unitary R) : star U * U = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Unitary.mul_star_self`：mul_star_self (U : unitary R) : U * star U = 1
 -/
 instance instIsStarNormal (u : unitary R) : IsStarNormal u where
-.trans (mul_star_self u).symm star_comm_self := star_mul_self u
-
-/--
-Instance `coe_isStarNormal` / 实例 `coe_isStarNormal`
-
-English:
-instance coe_isStarNormal
-  signature: (u : unitary R)
-  body: congr(Subtype.val $(star_comm_self' u))
-
-@[aesop 10% apply (rule_sets := [CStarAlgebra])]
-
-中文:
-实例 coe_isStarNormal
-  签名: (u : unitary R)
-  定义体: congr(Subtype.val $(star_comm_self' u))
-
-@[aesop 10% apply (rule_sets := [CStarAlgebra])]
-
-Depends on / 依赖: Subtype, Subtype.val, star_comm_self
+  star_comm_self := star_mul_self u |>.trans <| (mul_star_self u).symm
+/-
+**Unitary.coe_isStarNormal** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+形式化陈述：coe_isStarNormal (u : unitary R) : IsStarNormal (u : R) where star_comm_se
+lf
+参数：u : unitary R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_comm_self'`：star_comm_self' [Mul R] [Star R] (x : R) [IsStarNormal 
+x] : star x * x = x * star x
 -/
 instance coe_isStarNormal (u : unitary R) : IsStarNormal (u : R) where
   star_comm_self := congr(Subtype.val $(star_comm_self' u))
 
 @[aesop 10% apply (rule_sets := [CStarAlgebra])]
-/--
-lemma `_root_.isStarNormal_of_mem_unitary` / 引理 `_root_.isStarNormal_of_mem_unitary`
-
-English:
-lemma _root_.isStarNormal_of_mem_unitary
-  given: {u : R} (hu : u in unitary R)
-  statement: IsStarNormal u
-  proof: coe_isStarNormal ⟨u, hu⟩
-
-中文:
-引理 _root_.isStarNormal_of_mem_unitary
-  条件: {u : R} (hu : u in unitary R)
-  结论: 是StarNormal u
-  证明: coe_isStarNormal ⟨u, hu⟩
-
-Depends on / 依赖: coe_isStarNormal
+/-
+**Unitary._root_.isStarNormal_of_mem_unitary** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.isStarNormal_of_mem_unitary {u : R} (hu : u in unitary R) : IsStarNormal u :=
+lemma _root_.isStarNormal_of_mem_unitary {u : R} (hu : u ∈ unitary R) : IsStarNormal u :=
   coe_isStarNormal ⟨u, hu⟩
-
-/--
-lemma `commute_self_star` / 引理 `commute_self_star`
-
-English:
-lemma commute_self_star
-  given: (u : unitary R)
-  statement: Commute u (star u)
-  proof: by simp [commute_iff_eq]
-
-中文:
-引理 commute_self_star
-  条件: (u : unitary R)
-  结论: Commute u (star u)
-  证明: by simp [commute_iff_eq]
-
-Depends on / 依赖: commute_iff_eq
+/-
+**Unitary.commute_self_star** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：commute_self_star (u : unitary R) : Commute u (star u)
+参数：u : unitary R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitary.mul_star_self`：mul_star_self (U : unitary R) : U * star U = 1
+· 使用定理 `Unitary.star_mul_self`：star_mul_self (U : unitary R) : star U * U = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma commute_self_star (u : unitary R) : Commute u (star u) := by simp [commute_iff_eq]
-/--
-lemma `commute_star_self` / 引理 `commute_star_self`
-
-English:
-lemma commute_star_self
-  given: (u : unitary R)
-  statement: Commute (star u) u
-  proof: by simp [commute_iff_eq]
-
-中文:
-引理 commute_star_self
-  条件: (u : unitary R)
-  结论: Commute (star u) u
-  证明: by simp [commute_iff_eq]
-
-Depends on / 依赖: commute_iff_eq
+/-
+**Unitary.commute_star_self** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：commute_star_self (u : unitary R) : Commute (star u) u
+参数：u : unitary R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitary.star_mul_self`：star_mul_self (U : unitary R) : star U * U = 1
+· 使用定理 `Unitary.mul_star_self`：mul_star_self (U : unitary R) : U * star U = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma commute_star_self (u : unitary R) : Commute (star u) u := by simp [commute_iff_eq]
-
-/--
-lemma `_root_.commute_unitary_star_self` / 引理 `_root_.commute_unitary_star_self`
-
-English:
-lemma _root_.commute_unitary_star_self
-  given: {u : R} (hu : u in unitary R)
-  statement: Commute (star u) u
-  proof: .star_comm_self isStarNormal_of_mem_unitary hu
-
-中文:
-引理 _root_.commute_unitary_star_self
-  条件: {u : R} (hu : u in unitary R)
-  结论: Commute (star u) u
-  证明: .star_comm_self isStarNormal_of_mem_unitary hu
-
-Depends on / 依赖: isStarNormal_of_mem_unitary, star_comm_self
+/-
+**Unitary._root_.commute_unitary_star_self** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.commute_unitary_star_self {u : R} (hu : u in unitary R) : Commute (star u) u :=
-.star_comm_self isStarNormal_of_mem_unitary hu
-
-/--
-lemma `_root_.commute_unitary_self_star` / 引理 `_root_.commute_unitary_self_star`
-
-English:
-lemma _root_.commute_unitary_self_star
-  given: {u : R} (hu : u in unitary R)
-  statement: Commute u (star u)
-  proof: .symm commute_unitary_star_self hu
-
-中文:
-引理 _root_.commute_unitary_self_star
-  条件: {u : R} (hu : u in unitary R)
-  结论: Commute u (star u)
-  证明: .symm commute_unitary_star_self hu
-
-Depends on / 依赖: commute_unitary_star_self
+lemma _root_.commute_unitary_star_self {u : R} (hu : u ∈ unitary R) : Commute (star u) u :=
+  isStarNormal_of_mem_unitary hu |>.star_comm_self
+/-
+**Unitary._root_.commute_unitary_self_star** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.commute_unitary_self_star {u : R} (hu : u in unitary R) : Commute u (star u) :=
-.symm commute_unitary_star_self hu
-
-/--
-lemma `_root_.commute_unitary_iff_star_left_conjugate` / 引理 `_root_.commute_unitary_iff_star_left_conjugate`
-
-English:
-lemma _root_.commute_unitary_iff_star_left_conjugate
-  given: {x u : R} (hu : u in unitary R)
-  proof: by
-  simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_inv_mul_cancel
-
-中文:
-引理 _root_.commute_unitary_iff_star_left_conjugate
-  条件: {x u : R} (hu : u in unitary R)
-  证明: by
-  simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_inv_mul_cancel
-
-Depends on / 依赖: Unitary, Unitary.toUnits, commute_iff_inv_mul_cancel, toUnits
+lemma _root_.commute_unitary_self_star {u : R} (hu : u ∈ unitary R) : Commute u (star u) :=
+  commute_unitary_star_self hu |>.symm
+/-
+**Unitary._root_.commute_unitary_iff_star_left_conjugate** 是 Mathlib 中的一个引理，位于命名
+空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.commute_unitary_iff_star_left_conjugate {x u : R} (hu : u in unitary R) :
+lemma _root_.commute_unitary_iff_star_left_conjugate {x u : R} (hu : u ∈ unitary R) :
     Commute u x ↔ star u * x * u = x := by
   simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_inv_mul_cancel
-
-/--
-lemma `_root_.commute_unitary_iff_star_right_conjugate` / 引理 `_root_.commute_unitary_iff_star_right_conjugate`
-
-English:
-lemma _root_.commute_unitary_iff_star_right_conjugate
-  given: {x u : R} (hu : u in unitary R)
-  proof: by
-  simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_mul_inv_cancel
-
-中文:
-引理 _root_.commute_unitary_iff_star_right_conjugate
-  条件: {x u : R} (hu : u in unitary R)
-  证明: by
-  simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_mul_inv_cancel
-
-Depends on / 依赖: Unitary, Unitary.toUnits, commute_iff_mul_inv_cancel, toUnits
+/-
+**Unitary._root_.commute_unitary_iff_star_right_conjugate** 是 Mathlib 中的一个引理，位于命
+名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.commute_unitary_iff_star_right_conjugate {x u : R} (hu : u in unitary R) :
+lemma _root_.commute_unitary_iff_star_right_conjugate {x u : R} (hu : u ∈ unitary R) :
     Commute u x ↔ u * x * star u = x := by
   simpa using! (Unitary.toUnits ⟨u, hu⟩).commute_iff_mul_inv_cancel
 
@@ -901,107 +540,71 @@ section Group
 
 variable {G : Type*} [Group G] [StarMul G]
 
-/--
-theorem `Unitary.inv_mem` / 定理 `Unitary.inv_mem`
-
-English:
-theorem Unitary.inv_mem
-  given: {g : G} (hg : g in unitary G)
-  statement: g⁻¹ in unitary G
-  proof: by
-  simp_rw [mem_iff, star_inv, ← mul_inv_rev, inv_eq_one] at *
-  exact hg.symm
-
-中文:
-定理 酉.inv_mem
-  条件: {g : G} (hg : g in unitary G)
-  结论: g⁻¹ in unitary G
-  证明: by
-  simp_rw [mem_iff, star_inv, ← mul_inv_rev, inv_eq_one] at *
-  exact hg.symm
-
-Depends on / 依赖: hg.symm, inv_eq_one, mem_iff, mul_inv_rev, simp_rw, star_inv
+/-
+**Unitary.inv_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Unitary.inv_mem {g : G} (hg : g in unitary G) : g⁻¹ in unitary G
+参数：hg : g in unitary G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `star_inv`：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+· 使用定理 `And.symm`：∀ {a b : Prop}, a ∧ b → b ∧ a
 -/
-theorem Unitary.inv_mem {g : G} (hg : g in unitary G) : g⁻¹ in unitary G := by
+theorem Unitary.inv_mem {g : G} (hg : g ∈ unitary G) : g⁻¹ ∈ unitary G := by
   simp_rw [mem_iff, star_inv, ← mul_inv_rev, inv_eq_one] at *
   exact hg.symm
 
 variable (G) in
-/--
-Definition of `unitarySubgroup` / `unitarySubgroup` 的定义
+/-- `unitary` as a `Subgroup` of a group.
 
-English:
-definition unitarySubgroup
-  signature: : Subgroup G where
-  body: unitary G
-  inv_mem' := Unitary.inv_mem
+Note the group structure on this type is not defeq to the one on `unitary`.
+This situation naturally arises when considering the unitary elements as a
+subgroup of the group of units of a star monoid. -/
+/-
+**unitarySubgroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：unitarySubgroup : Subgroup G where toSubmonoid
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitary.inv_mem`：Unitary.inv_mem {g : G} (hg : g in unitary G) : g⁻¹ in 
+unitary G
 
-@[simp]
+--- 原说明 ---
+`unitary` as a `Subgroup` of a group.
 
-中文:
-定义 unitarySubgroup
-  签名: : 子群 G where
-  定义体: unitary G
-  inv_mem' := Unitary.inv_mem
-
-@[simp]
-
-Depends on / 依赖: unitary
+Note the group structure on this type is not defeq to the one on `unitary`.
+This situation naturally arises when considering the unitary elements as a
+subgroup of the group of units of a star monoid.
 -/
 def unitarySubgroup : Subgroup G where
   toSubmonoid := unitary G
   inv_mem' := Unitary.inv_mem
 
 @[simp]
-/--
-theorem `unitarySubgroup_toSubmonoid` / 定理 `unitarySubgroup_toSubmonoid`
-
-English:
-theorem unitarySubgroup_toSubmonoid
-  statement: (unitarySubgroup G).toSubmonoid = unitary G
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unitarySubgroup_toSubmonoid
-  结论: (unitarySubgroup G).toSubmonoid = unitary G
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: StructureSheaf, StructureSheaf.toOpen, basicOpen, modulesSpecToSheafIso, of_linearEquiv, powers, toLinearEquiv, toLinearEquiv.symm
+/-
+**unitarySubgroup_toSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：unitarySubgroup_toSubmonoid : (unitarySubgroup G).toSubmonoid = unitary G
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unitarySubgroup_toSubmonoid : (unitarySubgroup G).toSubmonoid = unitary G := rfl
 
 @[simp]
-/--
-theorem `mem_unitarySubgroup_iff` / 定理 `mem_unitarySubgroup_iff`
-
-English:
-theorem mem_unitarySubgroup_iff
-  given: {g : G}
-  statement: g in unitarySubgroup G ↔ g in unitary G
-  proof: Iff.rfl
-
-nonrec theorem Unitary.inv_mem_iff {g : G} : g⁻¹ in unitary G ↔ g in unitary G :=
-  inv_mem_iff (H := unitarySubgroup G)
-
-中文:
-定理 mem_unitarySubgroup_iff
-  条件: {g : G}
-  结论: g in unitarySubgroup G ↔ g in unitary G
-  证明: Iff.rfl
-
-nonrec theorem Unitary.inv_mem_iff {g : G} : g⁻¹ in unitary G ↔ g in unitary G :=
-  inv_mem_iff (H := unitarySubgroup G)
-
-Depends on / 依赖: Iff.rfl, Module, Presheaf, TopCat, TopCat.Presheaf.stalk, moduleStructurePresheaf, presheaf
+/-
+**mem_unitarySubgroup_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_unitarySubgroup_iff {g : G} : g in unitarySubgroup G ↔ g in unitary G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_unitarySubgroup_iff {g : G} : g in unitarySubgroup G ↔ g in unitary G :=
+theorem mem_unitarySubgroup_iff {g : G} : g ∈ unitarySubgroup G ↔ g ∈ unitary G :=
   Iff.rfl
 
-nonrec theorem Unitary.inv_mem_iff {g : G} : g⁻¹ in unitary G ↔ g in unitary G :=
+nonrec theorem Unitary.inv_mem_iff {g : G} : g⁻¹ ∈ unitary G ↔ g ∈ unitary G :=
   inv_mem_iff (H := unitarySubgroup G)
 
 end Group
@@ -1016,124 +619,83 @@ variable {A : Type*}
   [Monoid R] [Monoid A] [MulAction R A] [SMulCommClass R A A]
   [IsScalarTower R A A] [StarMul R] [StarMul A] [StarModule R A]
 
-/--
-lemma `smul_mem_of_mem` / 引理 `smul_mem_of_mem`
-
-English:
-lemma smul_mem_of_mem
-  given: {r : R} {a : A} (hr : r in unitary R) (ha : a in unitary A)
-  proof: by
-  simp [mem_iff, smul_smul, mul_smul_comm, smul_mul_assoc, hr, ha]
-
-中文:
-引理 smul_mem_of_mem
-  条件: {r : R} {a : A} (hr : r in unitary R) (ha : a in unitary A)
-  证明: by
-  simp [mem_iff, smul_smul, mul_smul_comm, smul_mul_assoc, hr, ha]
-
-Depends on / 依赖: mem_iff, mul_smul_comm, smul_mul_assoc, smul_smul
+/-
+**Unitary.smul_mem_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：smul_mem_of_mem {r : R} {a : A} (hr : r in unitary R) (ha : a in unitary A
+) : r • a in unitary A
+参数：hr : r in unitary R；ha : a in unitary A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `Unitary.star_mul_self_of_mem`：star_mul_self_of_mem {U : R} (hU : U in un
+itary R) : star U * U = 1
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Unitary.mul_star_self_of_mem`：mul_star_self_of_mem {U : R} (hU : U in un
+itary R) : U * star U = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma smul_mem_of_mem {r : R} {a : A} (hr : r in unitary R) (ha : a in unitary A) :
-    r • a in unitary A := by
+lemma smul_mem_of_mem {r : R} {a : A} (hr : r ∈ unitary R) (ha : a ∈ unitary A) :
+    r • a ∈ unitary A := by
   simp [mem_iff, smul_smul, mul_smul_comm, smul_mul_assoc, hr, ha]
-
-/--
-lemma `smul_mem` / 引理 `smul_mem`
-
-English:
-lemma smul_mem
-  given: (r : unitary R) {a : A} (ha : a in unitary A)
-  proof: smul_mem_of_mem (R := R) r.prop ha
-
-中文:
-引理 smul_mem
-  条件: (r : unitary R) {a : A} (ha : a in unitary A)
-  证明: smul_mem_of_mem (R := R) r.prop ha
-
-Depends on / 依赖: IsLocalizedModule, StructureSheaf, StructureSheaf.toStalk, asIdeal, primeCompl, r.prop, smul_mem_of_mem, x.asIdeal.primeCompl
+/-
+**Unitary.smul_mem** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：smul_mem (r : unitary R) {a : A} (ha : a in unitary A) : r • a in unitary 
+A
+参数：r : unitary R；ha : a in unitary A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Unitary.smul_mem_of_mem`：smul_mem_of_mem {r : R} {a : A} (hr : r in unit
+ary R) (ha : a in unitary A) : r • a in unitary A
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-lemma smul_mem (r : unitary R) {a : A} (ha : a in unitary A) :
-    r • a in unitary A :=
+lemma smul_mem (r : unitary R) {a : A} (ha : a ∈ unitary A) :
+    r • a ∈ unitary A :=
   smul_mem_of_mem (R := R) r.prop ha
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul (unitary R) (unitary A)
-  body: ⟨r • a, smul_mem r a.prop⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 标量乘法 (unitary R) (unitary A)
-  定义体: ⟨r • a, smul_mem r a.prop⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: a.prop, smul_mem
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul (unitary R) (unitary A) where
   smul r a := ⟨r • a, smul_mem r a.prop⟩
 
 @[simp, norm_cast]
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (r : unitary R) (a : unitary A)
-  statement: ↑(r • a) = r • (a : A)
-  proof: rfl
-
-中文:
-引理 coe_smul
-  条件: (r : unitary R) (a : unitary A)
-  结论: ↑(r • a) = r • (a : A)
-  证明: rfl
+/-
+**Unitary.coe_smul** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：coe_smul (r : unitary R) (a : unitary A) : ↑(r • a) = r • (a : A)
+参数：r : unitary R；a : unitary A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_smul (r : unitary R) (a : unitary A) : ↑(r • a) = r • (a : A) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction (unitary R) (unitary A)
-  body: Subtype.ext one_smul ..
-mul_smul _ _ _ := Subtype.ext mul_smul ..
-
-中文:
-实例 :
-  签名: 乘法作用 (unitary R) (unitary A)
-  定义体: Subtype.ext one_smul ..
-mul_smul _ _ _ := Subtype.ext mul_smul ..
-
-Depends on / 依赖: Subtype, Subtype.ext, one_smul
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction (unitary R) (unitary A) where
-one_smul _ := Subtype.ext one_smul ..
-mul_smul _ _ _ := Subtype.ext mul_smul ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule (unitary R) (unitary A)
-  body: Subtype.ext star_smul (_ : R) _
-
-中文:
-实例 :
-  签名: 对合模 (unitary R) (unitary A)
-  定义体: Subtype.ext star_smul (_ : R) _
-
-Depends on / 依赖: Subtype, Subtype.ext, star_smul
+  one_smul _ := Subtype.ext <| one_smul ..
+  mul_smul _ _ _ := Subtype.ext <| mul_smul ..
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarModule (unitary R) (unitary A) where
-star_smul _ _ := Subtype.ext star_smul (_ : R) _
+  star_smul _ _ := Subtype.ext <| star_smul (_ : R) _
 
 end
 
@@ -1146,42 +708,19 @@ variable {S A : Type*}
   [IsScalarTower R A A] [IsScalarTower S A A]
   [SMulCommClass R A A] [SMulCommClass S A A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: R S A] : SMulCommClass (unitary R) (unitary S) (unitary A) where
-  body: Subtype.ext smul_comm _ (_ : S) (_ : A)
-
-中文:
-实例 [标量交换类
-  签名: R S A] : 标量交换类 (unitary R) (unitary S) (unitary A) where
-  定义体: Subtype.ext smul_comm _ (_ : S) (_ : A)
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_comm
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass R S A] : SMulCommClass (unitary R) (unitary S) (unitary A) where
-smul_comm _ _ _ := Subtype.ext smul_comm _ (_ : S) (_ : A)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsScalarTower
-  signature: R S S] [SMulCommClass R S S] [IsScalarTower R S A] :
-  body: Subtype.ext smul_assoc _ (_ : S) (_ : A)
-
-中文:
-实例 [标量塔
-  签名: R S S] [标量交换类 R S S] [标量塔 R S A] :
-  定义体: Subtype.ext smul_assoc _ (_ : S) (_ : A)
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
+  smul_comm _ _ _ := Subtype.ext <| smul_comm _ (_ : S) (_ : A)
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsScalarTower R S S] [SMulCommClass R S S] [IsScalarTower R S A] :
     IsScalarTower (unitary R) (unitary S) (unitary A) where
-smul_assoc _ _ _ := Subtype.ext smul_assoc _ (_ : S) (_ : A)
+  smul_assoc _ _ _ := Subtype.ext <| smul_assoc _ (_ : S) (_ : A)
 
 end
 
@@ -1191,300 +730,202 @@ section Map
 
 variable {R S T : Type*} [Monoid R] [StarMul R] [Monoid S] [StarMul S] [Monoid T] [StarMul T]
 
-/--
-lemma `map_mem` / 引理 `map_mem`
-
-English:
-lemma map_mem
-  statement: {F : Type*} [FunLike F R S] [StarHomClass F R S] [MonoidHomClass F R S]
-  proof: by
-  rw [mem_iff] at hr
-  simpa [map_star, map_mul] using! And.intro congr(f $(hr.1)) congr(f $(hr.2))
-
-中文:
-引理 map_mem
-  结论: {F : 类型} [函数状 F R S] [对合态射类 F R S] [幺半群态射类 F R S]
-  证明: by
-  rw [mem_iff] at hr
-  simpa [map_star, map_mul] using! And.intro congr(f $(hr.1)) congr(f $(hr.2))
-
-Depends on / 依赖: And.intro, map_mul, map_star, mem_iff
+/-
+**Unitary.map_mem** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：map_mem {F : Type*} [FunLike F R S] [StarHomClass F R S] [MonoidHomClass F
+ R S] (f : F) {r : R} (hr : r in unitary R) : f r in unitary S
+参数：f : F；hr : r in unitary R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `StarHomClass.map_star`：∀ {F : Type u_1} {R : outParam (Type u_2)} {S : o
+utParam (Type u_3)} {inst : Star R} {inst_1 : Star S}   {inst_2 : FunLike F R S}
+ [self : St…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Unitary.mem_iff`：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U *
+ star U = 1
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma map_mem {F : Type*} [FunLike F R S] [StarHomClass F R S] [MonoidHomClass F R S]
-    (f : F) {r : R} (hr : r in unitary R) : f r in unitary S := by
+    (f : F) {r : R} (hr : r ∈ unitary R) : f r ∈ unitary S := by
   rw [mem_iff] at hr
   simpa [map_star, map_mul] using! And.intro congr(f $(hr.1)) congr(f $(hr.2))
 
 /-- The star monoid homomorphism between unitary subgroups induced by a star monoid homomorphism of
 the underlying star monoids. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**Unitary.map** 是 Mathlib 中的一个定义，位于命名空间 `Unitary`。
+形式化陈述：map (f : R ->⋆* S) : unitary R ->⋆* unitary S where toFun
+参数：f : R ->⋆* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : R ->⋆* S)
-  body: Subtype.map f (fun _ => map_mem f)
-map_one' := Subtype.ext map_one f
-map_mul' _ _ := Subtype.ext map_mul f _ _
-map_star' _ := Subtype.ext map_star f _
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : R ->⋆* S)
-  定义体: Subtype.map f (fun _ => map_mem f)
-map_one' := Subtype.ext map_one f
-map_mul' _ _ := Subtype.ext map_mul f _ _
-map_star' _ := Subtype.ext map_star f _
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.map, map_mem
+--- 原说明 ---
+The star monoid homomorphism between unitary subgroups induced by a star monoid 
+homomorphism of
+the underlying star monoids.
 -/
-def map (f : R ->⋆* S) : unitary R ->⋆* unitary S where
-  toFun := Subtype.map f (fun _ => map_mem f)
-map_one' := Subtype.ext map_one f
-map_mul' _ _ := Subtype.ext map_mul f _ _
-map_star' _ := Subtype.ext map_star f _
+def map (f : R →⋆* S) : unitary R →⋆* unitary S where
+  toFun := Subtype.map f (fun _ ↦ map_mem f)
+  map_one' := Subtype.ext <| map_one f
+  map_mul' _ _ := Subtype.ext <| map_mul f _ _
+  map_star' _ := Subtype.ext <| map_star f _
 
 @[simp]
-/--
-lemma `coe_map` / 引理 `coe_map`
-
-English:
-lemma coe_map
-  given: (f : R ->⋆* S) (x : unitary R)
-  statement: map f x = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_map
-  条件: (f : R ->⋆* S) (x : unitary R)
-  结论: map f x = f x
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.coe_map** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：coe_map (f : R ->⋆* S) (x : unitary R) : map f x = f x
+参数：f : R ->⋆* S；x : unitary R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_map (f : R ->⋆* S) (x : unitary R) : map f x = f x := rfl
+lemma coe_map (f : R →⋆* S) (x : unitary R) : map f x = f x := rfl
 
 @[simp]
-/--
-lemma `coe_map_star` / 引理 `coe_map_star`
-
-English:
-lemma coe_map_star
-  given: (f : R ->⋆* S) (x : unitary R)
-  statement: map f (star x) = f (star x)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_map_star
-  条件: (f : R ->⋆* S) (x : unitary R)
-  结论: map f (star x) = f (star x)
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.coe_map_star** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：coe_map_star (f : R ->⋆* S) (x : unitary R) : map f (star x) = f (star x)
+参数：f : R ->⋆* S；x : unitary R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_map_star (f : R ->⋆* S) (x : unitary R) : map f (star x) = f (star x) := rfl
+lemma coe_map_star (f : R →⋆* S) (x : unitary R) : map f (star x) = f (star x) := rfl
 
 @[simp]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  statement: map (.id R) = .id (unitary R)
-  proof: rfl
-
-中文:
-引理 map_id
-  结论: map (.id R) = .id (unitary R)
-  证明: rfl
+/-
+**Unitary.map_id** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：map_id : map (.id R) = .id (unitary R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_id : map (.id R) = .id (unitary R) := rfl
-
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (g : S ->⋆* T) (f : R ->⋆* S)
-  statement: map (g.comp f) = (map g).comp (map f)
-  proof: rfl
+/-
+**Unitary.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：map_comp (g : S ->⋆* T) (f : R ->⋆* S) : map (g.comp f) = (map g).comp (ma
+p f)
+参数：g : S ->⋆* T；f : R ->⋆* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma map_comp (g : S →⋆* T) (f : R →⋆* S) : map (g.comp f) = (map g).comp (map f) := rfl
 
 @[simp]
-
-中文:
-引理 map_comp
-  条件: (g : S ->⋆* T) (f : R ->⋆* S)
-  结论: map (g.comp f) = (map g).comp (map f)
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.map_injective** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：map_injective {f : R ->⋆* S} (hf : Function.Injective f) : Function.Inject
+ive (map f : unitary R -> unitary S)
+参数：hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.map_injective`：map_injective {p : α -> Prop} {q : β -> Prop} {f 
+: α -> β} (h : forall a, p a -> q (f a)) (hf : Injective f) : Injective (map f h
+)
+· 使用引理 `Unitary.map_mem`：map_mem {F : Type*} [FunLike F R S] [StarHomClass F R S
+] [MonoidHomClass F R S] (f : F) {r : R} (hr : r in unitary R) : f r in unitary 
+S
+· 使用定理 `StarMonoidHom.instStarHomClass`：∀ {A : Type u_2} {B : Type u_3} [inst : 
+Monoid A] [inst_1 : Star A] [inst_2 : Monoid B] [inst_3 : Star B],   StarHomClas
+s (A →⋆* B) A B
+· 使用定理 `StarMonoidHom.instMonoidHomClass`：∀ {A : Type u_2} {B : Type u_3} [inst 
+: Monoid A] [inst_1 : Star A] [inst_2 : Monoid B] [inst_3 : Star B],   MonoidHom
+Class (A →⋆* B) A B
 -/
-lemma map_comp (g : S ->⋆* T) (f : R ->⋆* S) : map (g.comp f) = (map g).comp (map f) := rfl
-
-@[simp]
-/--
-lemma `map_injective` / 引理 `map_injective`
-
-English:
-lemma map_injective
-  given: {f : R ->⋆* S} (hf : Function.Injective f)
-  proof: Subtype.map_injective (fun _ => map_mem f) hf
-
-中文:
-引理 map_injective
-  条件: {f : R ->⋆* S} (hf : 函数.单射 f)
-  证明: Subtype.map_injective (fun _ => map_mem f) hf
-
-Depends on / 依赖: Subtype, Subtype.map_injective, map_injective, map_mem
+lemma map_injective {f : R →⋆* S} (hf : Function.Injective f) :
+    Function.Injective (map f : unitary R → unitary S) :=
+  Subtype.map_injective (fun _ ↦ map_mem f) hf
+/-
+**Unitary.toUnits_comp_map** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：toUnits_comp_map (f : R ->⋆* S) : toUnits.comp (map f).toMonoidHom = (Unit
+s.map f.toMonoidHom).comp toUnits
+参数：f : R ->⋆* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
 -/
-lemma map_injective {f : R ->⋆* S} (hf : Function.Injective f) :
-    Function.Injective (map f : unitary R -> unitary S) :=
-  Subtype.map_injective (fun _ => map_mem f) hf
-
-/--
-lemma `toUnits_comp_map` / 引理 `toUnits_comp_map`
-
-English:
-lemma toUnits_comp_map
-  given: (f : R ->⋆* S)
-  proof: by
-  ext; rfl
-
-中文:
-引理 toUnits_comp_map
-  条件: (f : R ->⋆* S)
-  证明: by
-  ext; rfl
--/
-lemma toUnits_comp_map (f : R ->⋆* S) :
+lemma toUnits_comp_map (f : R →⋆* S) :
     toUnits.comp (map f).toMonoidHom = (Units.map f.toMonoidHom).comp toUnits := by
   ext; rfl
 
 /-- The star monoid isomorphism between unitary subgroups induced by a star monoid isomorphism of
 the underlying star monoids. -/
 @[simps]
-/--
-Definition of `mapEquiv` / `mapEquiv` 的定义
+/-
+**Unitary.mapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitary`。
+形式化陈述：mapEquiv (f : R ≃⋆* S) : unitary R ≃⋆* unitary S
+参数：f : R ≃⋆* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapEquiv
-  signature: (f : R ≃⋆* S)
-  body: { map f.toStarMonoidHom with
-    toFun := map f.toStarMonoidHom
-    invFun := map f.symm.toStarMonoidHom
-left_inv := fun _ => Subtype.ext f.left_inv _
-right_inv := fun _ => Subtype.ext f.right_inv _ }
-
-@[simp]
-
-中文:
-定义 mapEquiv
-  签名: (f : R ≃⋆* S)
-  定义体: { map f.toStarMonoidHom with
-    toFun := map f.toStarMonoidHom
-    invFun := map f.symm.toStarMonoidHom
-left_inv := fun _ => Subtype.ext f.left_inv _
-right_inv := fun _ => Subtype.ext f.right_inv _ }
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, f.left_inv, f.right_inv, f.symm.toStarMonoidHom, f.toStarMonoidHom, invFun, left_inv, right_inv, toStarMonoidHom
+--- 原说明 ---
+The star monoid isomorphism between unitary subgroups induced by a star monoid i
+somorphism of
+the underlying star monoids.
 -/
 def mapEquiv (f : R ≃⋆* S) : unitary R ≃⋆* unitary S :=
   { map f.toStarMonoidHom with
     toFun := map f.toStarMonoidHom
     invFun := map f.symm.toStarMonoidHom
-left_inv := fun _ => Subtype.ext f.left_inv _
-right_inv := fun _ => Subtype.ext f.right_inv _ }
+    left_inv := fun _ ↦ Subtype.ext <| f.left_inv _
+    right_inv := fun _ ↦ Subtype.ext <| f.right_inv _ }
 
 @[simp]
-/--
-lemma `mapEquiv_refl` / 引理 `mapEquiv_refl`
-
-English:
-lemma mapEquiv_refl
-  statement: mapEquiv (.refl R) = .refl (unitary R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapEquiv_refl
-  结论: mapEquiv (.refl R) = .refl (unitary R)
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.mapEquiv_refl** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：mapEquiv_refl : mapEquiv (.refl R) = .refl (unitary R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapEquiv_refl : mapEquiv (.refl R) = .refl (unitary R) := rfl
 
 @[simp]
-/--
-lemma `mapEquiv_symm` / 引理 `mapEquiv_symm`
-
-English:
-lemma mapEquiv_symm
-  given: (f : R ≃⋆* S)
-  statement: mapEquiv f.symm = (mapEquiv f).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapEquiv_symm
-  条件: (f : R ≃⋆* S)
-  结论: mapEquiv f.symm = (mapEquiv f).symm
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.mapEquiv_symm** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：mapEquiv_symm (f : R ≃⋆* S) : mapEquiv f.symm = (mapEquiv f).symm
+参数：f : R ≃⋆* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapEquiv_symm (f : R ≃⋆* S) : mapEquiv f.symm = (mapEquiv f).symm := rfl
 
 @[simp]
-/--
-lemma `mapEquiv_trans` / 引理 `mapEquiv_trans`
-
-English:
-lemma mapEquiv_trans
-  given: (f : R ≃⋆* S) (g : S ≃⋆* T)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapEquiv_trans
-  条件: (f : R ≃⋆* S) (g : S ≃⋆* T)
-  证明: rfl
-
-@[simp]
+/-
+**Unitary.mapEquiv_trans** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：mapEquiv_trans (f : R ≃⋆* S) (g : S ≃⋆* T) : mapEquiv (f.trans g) = (mapEq
+uiv f).trans (mapEquiv g)
+参数：f : R ≃⋆* S；g : S ≃⋆* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapEquiv_trans (f : R ≃⋆* S) (g : S ≃⋆* T) :
     mapEquiv (f.trans g) = (mapEquiv f).trans (mapEquiv g) :=
   rfl
 
 @[simp]
-/--
-lemma `toMonoidHom_mapEquiv` / 引理 `toMonoidHom_mapEquiv`
-
-English:
-lemma toMonoidHom_mapEquiv
-  given: (f : R ≃⋆* S)
-  proof: rfl
-
-中文:
-引理 toMonoidHom_mapEquiv
-  条件: (f : R ≃⋆* S)
-  证明: rfl
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.free
+/-
+**Unitary.toMonoidHom_mapEquiv** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：toMonoidHom_mapEquiv (f : R ≃⋆* S) : (mapEquiv f).toStarMonoidHom = map f.
+toStarMonoidHom
+参数：f : R ≃⋆* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toMonoidHom_mapEquiv (f : R ≃⋆* S) :
     (mapEquiv f).toStarMonoidHom = map f.toStarMonoidHom :=
@@ -1492,35 +933,20 @@ lemma toMonoidHom_mapEquiv (f : R ≃⋆* S) :
 
 /-- The unitary subgroup of the units is equivalent to the unitary elements of the monoid. -/
 @[simps!]
-/--
-Definition of `_root_.unitarySubgroupUnitsEquiv` / `_root_.unitarySubgroupUnitsEquiv` 的定义
+/-
+**Unitary._root_.unitarySubgroupUnitsEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.unitarySubgroupUnitsEquiv
-  signature: {M : Type*} [Monoid M] [StarMul M]
-  body: ⟨x.val, congr_arg Units.val x.prop.1, congr_arg Units.val x.prop.2⟩
-  invFun x := ⟨⟨x, star x, x.prop.2, x.prop.1⟩, Units.ext x.prop.1, Units.ext x.prop.2⟩
-  map_mul' _ _ := rfl
-left_inv _ := Subtype.ext Units.ext rfl
-  right_inv _ := rfl
-
-中文:
-定义 _root_.unitarySubgroupUnitsEquiv
-  签名: {M : 类型} [幺半群 M] [StarMul M]
-  定义体: ⟨x.val, congr_arg Units.val x.prop.1, congr_arg Units.val x.prop.2⟩
-  invFun x := ⟨⟨x, star x, x.prop.2, x.prop.1⟩, Units.ext x.prop.1, Units.ext x.prop.2⟩
-  map_mul' _ _ := rfl
-left_inv _ := Subtype.ext Units.ext rfl
-  right_inv _ := rfl
-
-Depends on / 依赖: Units.val, congr_arg, x.prop, x.val
+--- 原说明 ---
+The unitary subgroup of the units is equivalent to the unitary elements of the m
+onoid.
 -/
 def _root_.unitarySubgroupUnitsEquiv {M : Type*} [Monoid M] [StarMul M] :
     unitarySubgroup Mˣ ≃* unitary M where
   toFun x := ⟨x.val, congr_arg Units.val x.prop.1, congr_arg Units.val x.prop.2⟩
   invFun x := ⟨⟨x, star x, x.prop.2, x.prop.1⟩, Units.ext x.prop.1, Units.ext x.prop.2⟩
   map_mul' _ _ := rfl
-left_inv _ := Subtype.ext Units.ext rfl
+  left_inv _ := Subtype.ext <| Units.ext rfl
   right_inv _ := rfl
 
 end Map
@@ -1529,63 +955,38 @@ section CommMonoid
 
 variable [CommMonoid R] [StarMul R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommGroup (unitary R)
-  body: { (inferInstance : Group (unitary R)), Submonoid.toCommMonoid _ with }
-
-中文:
-实例 :
-  签名: 交换群 (unitary R)
-  定义体: { (inferInstance : Group (unitary R)), Submonoid.toCommMonoid _ with }
-
-Depends on / 依赖: Submonoid, Submonoid.toCommMonoid, toCommMonoid, unitary
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommGroup (unitary R) :=
   { (inferInstance : Group (unitary R)), Submonoid.toCommMonoid _ with }
-
-/--
-theorem `mem_iff_star_mul_self` / 定理 `mem_iff_star_mul_self`
-
-English:
-theorem mem_iff_star_mul_self
-  given: {U : R}
-  statement: U in unitary R ↔ star U * U = 1
-  proof: mem_iff.trans and_iff_left_of_imp fun h => mul_comm (star U) U ▸ h
-
-中文:
-定理 mem_iff_star_mul_self
-  条件: {U : R}
-  结论: U in unitary R ↔ star U * U = 1
-  证明: mem_iff.trans and_iff_left_of_imp fun h => mul_comm (star U) U ▸ h
-
-Depends on / 依赖: and_iff_left_of_imp, mem_iff, mem_iff.trans, mul_comm
+/-
+**Unitary.mem_iff_star_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mem_iff_star_mul_self {U : R} : U in unitary R ↔ star U * U = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Unitary.mem_iff`：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U *
+ star U = 1
+· 使用定理 `and_iff_left_of_imp`：∀ {a b : Prop}, (a → b) → (a ∧ b ↔ a)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem mem_iff_star_mul_self {U : R} : U in unitary R ↔ star U * U = 1 :=
-mem_iff.trans and_iff_left_of_imp fun h => mul_comm (star U) U ▸ h
-
-/--
-theorem `mem_iff_self_mul_star` / 定理 `mem_iff_self_mul_star`
-
-English:
-theorem mem_iff_self_mul_star
-  given: {U : R}
-  statement: U in unitary R ↔ U * star U = 1
-  proof: mem_iff.trans and_iff_right_of_imp fun h => mul_comm U (star U) ▸ h
-
-中文:
-定理 mem_iff_self_mul_star
-  条件: {U : R}
-  结论: U in unitary R ↔ U * star U = 1
-  证明: mem_iff.trans and_iff_right_of_imp fun h => mul_comm U (star U) ▸ h
-
-Depends on / 依赖: and_iff_right_of_imp, mem_iff, mem_iff.trans, mul_comm
+theorem mem_iff_star_mul_self {U : R} : U ∈ unitary R ↔ star U * U = 1 :=
+  mem_iff.trans <| and_iff_left_of_imp fun h => mul_comm (star U) U ▸ h
+/-
+**Unitary.mem_iff_self_mul_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mem_iff_self_mul_star {U : R} : U in unitary R ↔ U * star U = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Unitary.mem_iff`：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U *
+ star U = 1
+· 使用定理 `and_iff_right_of_imp`：∀ {b a : Prop}, (b → a) → (a ∧ b ↔ b)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem mem_iff_self_mul_star {U : R} : U in unitary R ↔ U * star U = 1 :=
-mem_iff.trans and_iff_right_of_imp fun h => mul_comm U (star U) ▸ h
+theorem mem_iff_self_mul_star {U : R} : U ∈ unitary R ↔ U * star U = 1 :=
+  mem_iff.trans <| and_iff_right_of_imp fun h => mul_comm U (star U) ▸ h
 
 end CommMonoid
 
@@ -1594,82 +995,63 @@ section GroupWithZero
 variable [GroupWithZero R] [StarMul R]
 
 @[norm_cast]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: (U : unitary R)
-  statement: ↑U⁻¹ = (U⁻¹ : R)
-  proof: eq_inv_of_mul_eq_one_right coe_mul_star_self _
-
-@[norm_cast]
-
-中文:
-定理 coe_inv
-  条件: (U : unitary R)
-  结论: ↑U⁻¹ = (U⁻¹ : R)
-  证明: eq_inv_of_mul_eq_one_right coe_mul_star_self _
-
-@[norm_cast]
-
-Depends on / 依赖: coe_mul_star_self, eq_inv_of_mul_eq_one_right
+/-
+**Unitary.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_inv (U : unitary R) : ↑U⁻¹ = (U⁻¹ : R)
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_inv_of_mul_eq_one_right`：eq_inv_of_mul_eq_one_right (h : a * b = 1) :
+ b = a⁻¹
+· 使用定理 `Unitary.coe_mul_star_self`：coe_mul_star_self (U : unitary R) : (U : R) *
+ star U = 1
 -/
 theorem coe_inv (U : unitary R) : ↑U⁻¹ = (U⁻¹ : R) :=
-eq_inv_of_mul_eq_one_right coe_mul_star_self _
+  eq_inv_of_mul_eq_one_right <| coe_mul_star_self _
 
 @[norm_cast]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: (U₁ U₂ : unitary R)
-  statement: ↑(U₁ / U₂) = (U₁ / U₂ : R)
-  proof: by
-  simp only [div_eq_mul_inv, coe_inv, Submonoid.coe_mul]
-
-@[norm_cast]
-
-中文:
-定理 coe_div
-  条件: (U₁ U₂ : unitary R)
-  结论: ↑(U₁ / U₂) = (U₁ / U₂ : R)
-  证明: by
-  simp only [div_eq_mul_inv, coe_inv, Submonoid.coe_mul]
-
-@[norm_cast]
-
-Depends on / 依赖: Submonoid, Submonoid.coe_mul, coe_inv, coe_mul, div_eq_mul_inv
+/-
+**Unitary.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_div (U₁ U₂ : unitary R) : ↑(U₁ / U₂) = (U₁ / U₂ : R)
+参数：U₁ U₂ : unitary R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Unitary.coe_inv`：coe_inv (U : unitary R) : ↑U⁻¹ = (U⁻¹ : R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_div (U₁ U₂ : unitary R) : ↑(U₁ / U₂) = (U₁ / U₂ : R) := by
   simp only [div_eq_mul_inv, coe_inv, Submonoid.coe_mul]
 
 @[norm_cast]
-/--
-theorem `coe_zpow` / 定理 `coe_zpow`
-
-English:
-theorem coe_zpow
-  given: (U : unitary R) (z : Int)
-  statement: ↑(U ^ z) = (U : R) ^ z
-  proof: by
-  cases z
-  · simp [SubmonoidClass.coe_pow]
-  · simp [coe_inv]
-
-中文:
-定理 coe_zpow
-  条件: (U : unitary R) (z : 整数)
-  结论: ↑(U ^ z) = (U : R) ^ z
-  证明: by
-  cases z
-  · simp [SubmonoidClass.coe_pow]
-  · simp [coe_inv]
-
-Depends on / 依赖: SubmonoidClass, SubmonoidClass.coe_pow, coe_inv, coe_pow
+/-
+**Unitary.coe_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_zpow (U : unitary R) (z : Int) : ↑(U ^ z) = (U : R) ^ z
+参数：U : unitary R；z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用定理 `Unitary.coe_inv`：coe_inv (U : unitary R) : ↑U⁻¹ = (U⁻¹ : R)
 -/
-theorem coe_zpow (U : unitary R) (z : Int) : ↑(U ^ z) = (U : R) ^ z := by
+theorem coe_zpow (U : unitary R) (z : ℤ) : ↑(U ^ z) = (U : R) ^ z := by
   cases z
   · simp [SubmonoidClass.coe_pow]
   · simp [coe_inv]
@@ -1680,62 +1062,27 @@ section Ring
 
 variable [Ring R] [StarRing R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (unitary R)
-  body: ⟨-U, by simp [mem_iff, star_neg]⟩
-
-@[norm_cast]
-
-中文:
-实例 :
-  签名: 取负 (unitary R)
-  定义体: ⟨-U, by simp [mem_iff, star_neg]⟩
-
-@[norm_cast]
-
-Depends on / 依赖: mem_iff, star_neg
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (unitary R) where
   neg U :=
     ⟨-U, by simp [mem_iff, star_neg]⟩
 
 @[norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (U : unitary R)
-  statement: ↑(-U) = (-U : R)
-  proof: rfl
-
-中文:
-定理 coe_neg
-  条件: (U : unitary R)
-  结论: ↑(-U) = (-U : R)
-  证明: rfl
+/-
+**Unitary.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：coe_neg (U : unitary R) : ↑(-U) = (-U : R)
+参数：U : unitary R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg (U : unitary R) : ↑(-U) = (-U : R) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasDistribNeg (unitary R)
-  body: Subtype.coe_injective.hasDistribNeg _ coe_neg (unitary R).coe_mul
-
-中文:
-实例 :
-  签名: 有DistribNeg (unitary R)
-  定义体: Subtype.coe_injective.hasDistribNeg _ coe_neg (unitary R).coe_mul
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.hasDistribNeg, coe_injective, coe_mul, coe_neg, hasDistribNeg, unitary
+/-
+**Unitary.** 是 Mathlib 中的一个实例，位于命名空间 `Unitary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasDistribNeg (unitary R) :=
   Subtype.coe_injective.hasDistribNeg _ coe_neg (unitary R).coe_mul
@@ -1750,20 +1097,17 @@ variable {R A : Type*} [CommSemiring R] [Ring A] [Algebra R A] [StarMul A]
 
 /-- Unitary conjugation preserves the spectrum, star on right. -/
 @[simp]
-/--
-lemma `spectrum_star_right_conjugate` / 引理 `spectrum_star_right_conjugate`
+/-
+**Unitary.spectrum_star_right_conjugate** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：spectrum_star_right_conjugate {a : A} {U : unitary A} : spectrum R (U * a 
+* (star U : A)) = spectrum R a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `spectrum.units_conjugate`：spectrum.units_conjugate {a : A} {u : Aˣ} : sp
+ectrum R (u * a * u⁻¹) = spectrum R a
 
-English:
-lemma spectrum_star_right_conjugate
-  given: {a : A} {U : unitary A}
-  proof: spectrum.units_conjugate (u := toUnits U)
-
-中文:
-引理 spectrum_star_right_conjugate
-  条件: {a : A} {U : unitary A}
-  证明: spectrum.units_conjugate (u := toUnits U)
-
-Depends on / 依赖: spectrum, spectrum.units_conjugate, toUnits, units_conjugate
+--- 原说明 ---
+Unitary conjugation preserves the spectrum, star on right.
 -/
 lemma spectrum_star_right_conjugate {a : A} {U : unitary A} :
     spectrum R (U * a * (star U : A)) = spectrum R a :=
@@ -1771,22 +1115,22 @@ lemma spectrum_star_right_conjugate {a : A} {U : unitary A} :
 
 /-- Unitary conjugation preserves the spectrum, star on left. -/
 @[simp]
-/--
-lemma `spectrum_star_left_conjugate` / 引理 `spectrum_star_left_conjugate`
+/-
+**Unitary.spectrum_star_left_conjugate** 是 Mathlib 中的一个引理，位于命名空间 `Unitary`。
+形式化陈述：spectrum_star_left_conjugate {a : A} {U : unitary A} : spectrum R ((star U
+ : A) * a * U) = spectrum R a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用引理 `Unitary.spectrum_star_right_conjugate`：spectrum_star_right_conjugate {a 
+: A} {U : unitary A} : spectrum R (U * a * (star U : A)) = spectrum R a
 
-English:
-lemma spectrum_star_left_conjugate
-  given: {a : A} {U : unitary A}
-  proof: by
-  simpa using spectrum_star_right_conjugate (U := star U)
-
-中文:
-引理 spectrum_star_left_conjugate
-  条件: {a : A} {U : unitary A}
-  证明: by
-  simpa using spectrum_star_right_conjugate (U := star U)
-
-Depends on / 依赖: spectrum_star_right_conjugate
+--- 原说明 ---
+Unitary conjugation preserves the spectrum, star on left.
 -/
 lemma spectrum_star_left_conjugate {a : A} {U : unitary A} :
     spectrum R ((star U : A) * a * U) = spectrum R a := by
@@ -1794,54 +1138,91 @@ lemma spectrum_star_left_conjugate {a : A} {U : unitary A} :
 
 end UnitaryConjugate
 
-/--
-theorem `mem_iff_eq_one_or_eq_neg_one` / 定理 `mem_iff_eq_one_or_eq_neg_one`
+/-- In a ring without zero divisors and with trivial star, the only unitary elements are `1`
+and `-1`. -/
+/-
+**Unitary.mem_iff_eq_one_or_eq_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Unitary`。
+形式化陈述：mem_iff_eq_one_or_eq_neg_one [Ring R] [StarRing R] [TrivialStar R] [NoZero
+Divisors R] {a : R} : a in unitary R ↔ a = 1 ∨ a = -1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `TrivialStar.star_trivial`：∀ {R : Type u} {inst : Star R} [self : Trivial
+Star R] (r : R), star r = r
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mem_iff_eq_one_or_eq_neg_one
-  statement: [Ring R] [StarRing R] [TrivialStar R] [NoZeroDivisors R]
-  proof: by
-  simp [mem_iff, mul_self_eq_one_iff]
-
-中文:
-定理 mem_iff_eq_one_or_eq_neg_one
-  结论: [环 R] [对合环 R] [TrivialStar R] [无零因子 R]
-  证明: by
-  simp [mem_iff, mul_self_eq_one_iff]
-
-Depends on / 依赖: mem_iff, mul_self_eq_one_iff
+--- 原说明 ---
+In a ring without zero divisors and with trivial star, the only unitary elements
+ are `1`
+and `-1`.
 -/
 theorem mem_iff_eq_one_or_eq_neg_one [Ring R] [StarRing R] [TrivialStar R] [NoZeroDivisors R]
-    {a : R} : a in unitary R ↔ a = 1 ∨ a = -1 := by
+    {a : R} : a ∈ unitary R ↔ a = 1 ∨ a = -1 := by
   simp [mem_iff, mul_self_eq_one_iff]
 
 end Unitary
 
-/--
-theorem `IsStarProjection.two_mul_sub_one_mem_unitary` / 定理 `IsStarProjection.two_mul_sub_one_mem_unitary`
-
-English:
-theorem IsStarProjection.two_mul_sub_one_mem_unitary
-  statement: {R : Type*} [Ring R] [StarRing R] {p : R}
-  proof: by
-  simp only [two_mul, Unitary.mem_iff, star_sub, star_add,
-    hp.isSelfAdjoint.star_eq, star_one, mul_sub, mul_add,
-    sub_mul, add_mul, hp.isIdempotentElem.eq, one_mul, add_sub_cancel_right,
-    mul_one, sub_sub_cancel, and_self]
-
-中文:
-定理 是StarProjection.two_mul_sub_one_mem_unitary
-  结论: {R : 类型} [环 R] [对合环 R] {p : R}
-  证明: by
-  simp only [two_mul, Unitary.mem_iff, star_sub, star_add,
-    hp.isSelfAdjoint.star_eq, star_one, mul_sub, mul_add,
-    sub_mul, add_mul, hp.isIdempotentElem.eq, one_mul, add_sub_cancel_right,
-    mul_one, sub_sub_cancel, and_self]
-
-Depends on / 依赖: Unitary, Unitary.mem_iff, add_mul, add_sub_cancel_right, and_self, hp.isIdempotentElem.eq, hp.isSelfAdjoint.star_eq, isIdempotentElem, isSelfAdjoint, mem_iff, mul_add, mul_one, mul_sub, one_mul, star_add, star_eq, star_one, star_sub, sub_mul, sub_sub_cancel
+/-
+**IsStarProjection.two_mul_sub_one_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsStarProjection.two_mul_sub_one_mem_unitary {R : Type*} [Ring R] [StarRin
+g R] {p : R} (hp : IsStarProjection p) : 2 * p - 1 in unitary R
+参数：hp : IsStarProjection p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `star_sub`：star_sub [AddGroup R] [StarAddMonoid R] (r s : R) : star (r - 
+s) = star r - star s
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `IsSelfAdjoint.star_eq`：star_eq [Star R] {x : R} (hx : IsSelfAdjoint x) :
+ star x = x
+· 使用定理 `IsStarProjection.isSelfAdjoint`：∀ {R : Type u_1} [inst : Mul R] [inst_1 
+: Star R] {p : R}, IsStarProjection p → IsSelfAdjoint p
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用引理 `IsIdempotentElem.eq`：eq (ha : IsIdempotentElem a) : a * a = a
+· 使用定理 `IsStarProjection.isIdempotentElem`：∀ {R : Type u_1} [inst : Mul R] [inst
+_1 : Star R] {p : R}, IsStarProjection p → IsIdempotentElem p
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem IsStarProjection.two_mul_sub_one_mem_unitary {R : Type*} [Ring R] [StarRing R] {p : R}
-    (hp : IsStarProjection p) : 2 * p - 1 in unitary R := by
+    (hp : IsStarProjection p) : 2 * p - 1 ∈ unitary R := by
   simp only [two_mul, Unitary.mem_iff, star_sub, star_add,
     hp.isSelfAdjoint.star_eq, star_one, mul_sub, mul_add,
     sub_mul, add_mul, hp.isIdempotentElem.eq, one_mul, add_sub_cancel_right,

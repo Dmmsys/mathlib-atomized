@@ -41,484 +41,308 @@ open Function Fin Set
 
 universe u v w w₁ w₁' w₂ w₃ w₄
 
-variable {R : Type u} {ι : Type v} {n : Nat} {M : Fin n.succ -> Type w} {M₁ : ι -> Type w₁}
-  {M₁' : ι -> Type w₁'} {M₂ : Type w₂} {M₃ : Type w₃} {M₄ : Type w₄}
+variable {R : Type u} {ι : Type v} {n : ℕ} {M : Fin n.succ → Type w} {M₁ : ι → Type w₁}
+  {M₁' : ι → Type w₁'} {M₂ : Type w₂} {M₃ : Type w₃} {M₄ : Type w₄}
 
-/--
-Definition of `ContinuousMultilinearMap` / `ContinuousMultilinearMap` 的定义
+/-- Continuous multilinear maps over the ring `R`, from `∀ i, M₁ i` to `M₂` where `M₁ i` and `M₂`
+are modules over `R` with a topological structure. In applications, there will be compatibility
+conditions between the algebraic and the topological structures, but this is not needed for the
+definition. -/
+/-
+**ContinuousMultilinearMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) →   {ι : Type v} →     (M₁ : ι → Type w₁) →       (M₂ : Type 
+w₂) →         [inst : Semiring R] →           [inst_1 : (i : ι) → AddCommMonoid 
+(M₁ i)] →             [inst_2 : AddCommMonoid M₂] →               [(i : ι) → _ro
+ot_.Module R (M₁ i)] →                 [_root_.Module R M₂] →                   
+[(i : ι) → TopologicalSpace (M₁ i)] → [TopologicalSpace M₂] → Type (max (max v w
+₁) w₂)
+参数：max v w₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContinuousMultilinearMap
-  parameters: (R : Type u) {ι : Type v} (M₁ : ι -> Type w₁) (M₂ : Type w₂)
-  extends: MultilinearMap R M₁ M₂
-  axioms and operations (1):
-    - cont : Continuous toFun
-
-中文:
-结构 连续多重线性映射
-  参数: (R : 类型u) {ι : 类型v} (M₁ : ι -> 类型 w₁) (M₂ : 类型 w₂)
-  继承: 多重线性映射 R M₁ M₂
-  公理与运算 (1 个):
-    - cont : 连续 toFun
+--- 原说明 ---
+Continuous multilinear maps over the ring `R`, from `∀ i, M₁ i` to `M₂` where `M
+₁ i` and `M₂`
+are modules over `R` with a topological structure. In applications, there will b
+e compatibility
+conditions between the algebraic and the topological structures, but this is not
+ needed for the
+definition.
 -/
-structure ContinuousMultilinearMap (R : Type u) {ι : Type v} (M₁ : ι -> Type w₁) (M₂ : Type w₂)
-  [Semiring R] [forall i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [forall i, Module R (M₁ i)] [Module R M₂]
-  [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] extends MultilinearMap R M₁ M₂ where
+structure ContinuousMultilinearMap (R : Type u) {ι : Type v} (M₁ : ι → Type w₁) (M₂ : Type w₂)
+  [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [∀ i, Module R (M₁ i)] [Module R M₂]
+  [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] extends MultilinearMap R M₁ M₂ where
   cont : Continuous toFun
 
 attribute [inherit_doc ContinuousMultilinearMap] ContinuousMultilinearMap.cont
 
 @[inherit_doc ContinuousMultilinearMap]
-notation3:25 M " [×" n "]->L[" R "] " M' => ContinuousMultilinearMap R (fun _i : Fin n => M) M'
+notation3:25 M " [×" n "]→L[" R "] " M' => ContinuousMultilinearMap R (fun _i : Fin n => M) M'
 
 namespace ContinuousMultilinearMap
 
 section Semiring
 
-variable [Semiring R] [forall i, AddCommMonoid (M i)] [forall i, AddCommMonoid (M₁ i)]
-  [forall i, AddCommMonoid (M₁' i)] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid M₄]
-  [forall i, Module R (M i)] [forall i, Module R (M₁ i)] [forall i, Module R (M₁' i)] [Module R M₂] [Module R M₃]
-  [Module R M₄] [forall i, TopologicalSpace (M i)] [forall i, TopologicalSpace (M₁ i)]
-  [forall i, TopologicalSpace (M₁' i)] [TopologicalSpace M₂] [TopologicalSpace M₃] [TopologicalSpace M₄]
+variable [Semiring R] [∀ i, AddCommMonoid (M i)] [∀ i, AddCommMonoid (M₁ i)]
+  [∀ i, AddCommMonoid (M₁' i)] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid M₄]
+  [∀ i, Module R (M i)] [∀ i, Module R (M₁ i)] [∀ i, Module R (M₁' i)] [Module R M₂] [Module R M₃]
+  [Module R M₄] [∀ i, TopologicalSpace (M i)] [∀ i, TopologicalSpace (M₁ i)]
+  [∀ i, TopologicalSpace (M₁' i)] [TopologicalSpace M₂] [TopologicalSpace M₃] [TopologicalSpace M₄]
   (f f' : ContinuousMultilinearMap R M₁ M₂)
 
-/--
-theorem `toMultilinearMap_injective` / 定理 `toMultilinearMap_injective`
-
-English:
-theorem toMultilinearMap_injective
-
-中文:
-定理 toMultilinearMap_injective
+/-
+**ContinuousMultilinearMap.toMultilinearMap_injective** 是 Mathlib 中的一个定理，位于命名空间 
+`ContinuousMultilinearMap`。
+形式化陈述：∀ {R : Type u} {ι : Type v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semi
+ring R]   [inst_1 : (i : ι) → AddCommMonoid (M₁ i)] [inst_2 : AddCommMonoid M₂] 
+[inst_3 : (i : ι) → _root_.Module R (M₁ i)]   [inst_4 : _root_.Module R M₂] [ins
+t_5 : (i : ι) → TopologicalSpace (M₁ i)] [inst_6 : TopologicalSpace M₂],   Funct
+ion.Injective ContinuousMultilinearMap.toMultilinearMap
+参数：i : ι；M₁ i；i : ι；M₁ i；i : ι；M₁ i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMultilinearMap_injective :
     Function.Injective
       (ContinuousMultilinearMap.toMultilinearMap :
-        ContinuousMultilinearMap R M₁ M₂ -> MultilinearMap R M₁ M₂)
+        ContinuousMultilinearMap R M₁ M₂ → MultilinearMap R M₁ M₂)
   | ⟨f, hf⟩, ⟨g, hg⟩, h => by subst h; rfl
-
-/--
-Instance `funLike` / 实例 `funLike`
-
-English:
-instance funLike
-  signature: : FunLike (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
-  body: f.toFun
-coe_injective _ _ h := toMultilinearMap_injective MultilinearMap.coe_injective h
-
-中文:
-实例 funLike
-  签名: : 函数状 (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂ where
-  定义体: f.toFun
-coe_injective _ _ h := toMultilinearMap_injective MultilinearMap.coe_injective h
-
-Depends on / 依赖: f.toFun
+/-
+**ContinuousMultilinearMap.funLike** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilin
+earMap`。
+形式化陈述：funLike : FunLike (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ w
+here coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance funLike : FunLike (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+instance funLike : FunLike (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   coe f := f.toFun
-coe_injective _ _ h := toMultilinearMap_injective MultilinearMap.coe_injective h
-
-/--
-Instance `continuousMapClass` / 实例 `continuousMapClass`
-
-English:
-instance continuousMapClass
-  signature: :
-  body: ContinuousMultilinearMap.cont
-
-中文:
-实例 continuousMapClass
-  签名: :
-  定义体: ContinuousMultilinearMap.cont
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.cont
+  coe_injective _ _ h := toMultilinearMap_injective <| MultilinearMap.coe_injective h
+/-
+**ContinuousMultilinearMap.continuousMapClass** 是 Mathlib 中的一个实例，位于命名空间 `Continu
+ousMultilinearMap`。
+形式化陈述：continuousMapClass : ContinuousMapClass (ContinuousMultilinearMap R M₁ M₂)
+ (forall i, M₁ i) M₂ where map_continuous
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.cont`：∀ {R : Type u} {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoid (M₁
+ i)] [inst_2 : AddC…
 -/
 instance continuousMapClass :
-    ContinuousMapClass (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+    ContinuousMapClass (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   map_continuous := ContinuousMultilinearMap.cont
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+  because it is a composition of multiple projections. -/
+/-
+**ContinuousMultilinearMap.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMult
+ilinearMap.Simps`。
+形式化陈述：{R : Type u} →   {ι : Type v} →     {M₁ : ι → Type w₁} →       {M₂ : Type 
+w₂} →         [inst : Semiring R] →           [inst_1 : (i : ι) → AddCommMonoid 
+(M₁ i)] →             [inst_2 : AddCommMonoid M₂] →               [inst_3 : (i :
+ ι) → _root_.Module R (M₁ i)] →                 [inst_4 : _root_.Module R M₂] → 
+                  [inst_5 : (i : ι) → TopologicalSpace (M₁ i)] →                
+     [inst_6 : TopologicalSpace M₂] → ContinuousMultilinearMap R M₁ M₂ → ((i : ι
+) → M₁ i) → M₂
+参数：i : ι；M₁ i；i : ι；M₁ i；i : ι；M₁ i；(i : ι) → M₁ i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (L₁ : ContinuousMultilinearMap R M₁ M₂) (v : forall i, M₁ i)
-  body: L₁ v
-
-initialize_simps_projections ContinuousMultilinearMap (-toMultilinearMap,
-  toMultilinearMap_toFun -> apply)
-
-@[continuity]
-
-中文:
-定义 Simps.apply
-  签名: (L₁ : 连续多重线性映射 R M₁ M₂) (v : 对任意 i, M₁ i)
-  定义体: L₁ v
-
-initialize_simps_projections ContinuousMultilinearMap (-toMultilinearMap,
-  toMultilinearMap_toFun -> apply)
-
-@[continuity]
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+  because it is a composition of multiple projections.
 -/
-def Simps.apply (L₁ : ContinuousMultilinearMap R M₁ M₂) (v : forall i, M₁ i) : M₂ :=
+def Simps.apply (L₁ : ContinuousMultilinearMap R M₁ M₂) (v : ∀ i, M₁ i) : M₂ :=
   L₁ v
 
 initialize_simps_projections ContinuousMultilinearMap (-toMultilinearMap,
-  toMultilinearMap_toFun -> apply)
+  toMultilinearMap_toFun → apply)
 
 @[continuity]
-/--
-theorem `coe_continuous` / 定理 `coe_continuous`
-
-English:
-theorem coe_continuous
-  statement: Continuous (f : (forall i, M₁ i) -> M₂)
-  proof: f.cont
-
-@[simp]
-
-中文:
-定理 coe_continuous
-  结论: 连续 (f : (对任意 i, M₁ i) -> M₂)
-  证明: f.cont
-
-@[simp]
-
-Depends on / 依赖: f.cont
+/-
+**ContinuousMultilinearMap.coe_continuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：coe_continuous : Continuous (f : (forall i, M₁ i) -> M₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.cont`：∀ {R : Type u} {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoid (M₁
+ i)] [inst_2 : AddC…
 -/
-theorem coe_continuous : Continuous (f : (forall i, M₁ i) -> M₂) :=
+theorem coe_continuous : Continuous (f : (∀ i, M₁ i) → M₂) :=
   f.cont
 
 @[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: (f.toMultilinearMap : (forall i, M₁ i) -> M₂) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_coe
-  结论: (f.toMultilinearMap : (对任意 i, M₁ i) -> M₂) = f
-  证明: rfl
-
-@[ext]
+/-
+**ContinuousMultilinearMap.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultilin
+earMap`。
+形式化陈述：coe_coe : (f.toMultilinearMap : (forall i, M₁ i) -> M₂) = f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coe : (f.toMultilinearMap : (forall i, M₁ i) -> M₂) = f :=
+theorem coe_coe : (f.toMultilinearMap : (∀ i, M₁ i) → M₂) = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f f' : ContinuousMultilinearMap R M₁ M₂} (H : forall x, f x = f' x)
-  statement: f = f'
-  proof: DFunLike.ext _ _ H
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {f f' : 连续多重线性映射 R M₁ M₂} (H : 对任意 x, f x = f' x)
-  结论: f = f'
-  证明: DFunLike.ext _ _ H
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContinuousMultilinearMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultilinearM
+ap`。
+形式化陈述：ext {f f' : ContinuousMultilinearMap R M₁ M₂} (H : forall x, f x = f' x) :
+ f = f'
+参数：H : forall x, f x = f' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f f' : ContinuousMultilinearMap R M₁ M₂} (H : forall x, f x = f' x) : f = f' :=
+theorem ext {f f' : ContinuousMultilinearMap R M₁ M₂} (H : ∀ x, f x = f' x) : f = f' :=
   DFunLike.ext _ _ H
 
 @[simp]
-/--
-theorem `map_update_add` / 定理 `map_update_add`
-
-English:
-theorem map_update_add
-  given: [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i)
-  proof: f.map_update_add' m i x y
-
-@[simp]
-
-中文:
-定理 map_update_add
-  条件: [DecidableEq ι] (m : 对任意 i, M₁ i) (i : ι) (x y : M₁ i)
-  证明: f.map_update_add' m i x y
-
-@[simp]
-
-Depends on / 依赖: f.map_update_add, map_update_add
+/-
+**ContinuousMultilinearMap.map_update_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：map_update_add [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i) :
+ f (update m i (x + y)) = f (update m i x) + f (update m i y)
+参数：m : forall i, M₁ i；i : ι；x y : M₁ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_update_add'`：∀ {R : Type uR} {ι : Type uι} {M₁ : ι → 
+Type v₁} {M₂ : Type v₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoid 
+(M₁ i)] [inst_2 : Ad…
 -/
-theorem map_update_add [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i) :
+theorem map_update_add [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (x y : M₁ i) :
     f (update m i (x + y)) = f (update m i x) + f (update m i y) :=
   f.map_update_add' m i x y
 
 @[simp]
-/--
-theorem `map_update_smul` / 定理 `map_update_smul`
-
-English:
-theorem map_update_smul
-  given: [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (c : R) (x : M₁ i)
-  proof: f.map_update_smul' m i c x
-
-中文:
-定理 map_update_smul
-  条件: [DecidableEq ι] (m : 对任意 i, M₁ i) (i : ι) (c : R) (x : M₁ i)
-  证明: f.map_update_smul' m i c x
-
-Depends on / 依赖: f.map_update_smul, map_update_smul
+/-
+**ContinuousMultilinearMap.map_update_smul** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+MultilinearMap`。
+形式化陈述：map_update_smul [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (c : R) (x : 
+M₁ i) : f (update m i (c • x)) = c • f (update m i x)
+参数：m : forall i, M₁ i；i : ι；c : R；x : M₁ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_update_smul'`：∀ {R : Type uR} {ι : Type uι} {M₁ : ι →
+ Type v₁} {M₂ : Type v₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoid
+ (M₁ i)] [inst_2 : Ad…
 -/
-theorem map_update_smul [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (c : R) (x : M₁ i) :
+theorem map_update_smul [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (c : R) (x : M₁ i) :
     f (update m i (c • x)) = c • f (update m i x) :=
   f.map_update_smul' m i c x
-
-/--
-theorem `map_coord_zero` / 定理 `map_coord_zero`
-
-English:
-theorem map_coord_zero
-  given: {m : forall i, M₁ i} (i : ι) (h : m i = 0)
-  statement: f m = 0
-  proof: f.toMultilinearMap.map_coord_zero i h
-
-@[simp]
-
-中文:
-定理 map_coord_zero
-  条件: {m : 对任意 i, M₁ i} (i : ι) (h : m i = 0)
-  结论: f m = 0
-  证明: f.toMultilinearMap.map_coord_zero i h
-
-@[simp]
-
-Depends on / 依赖: f.toMultilinearMap.map_coord_zero, map_coord_zero, toMultilinearMap
+/-
+**ContinuousMultilinearMap.map_coord_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：map_coord_zero {m : forall i, M₁ i} (i : ι) (h : m i = 0) : f m = 0
+参数：i : ι；h : m i = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_coord_zero`：map_coord_zero {m : forall i, M₁ i} (i : 
+ι) (h : m i = 0) : f m = 0
 -/
-theorem map_coord_zero {m : forall i, M₁ i} (i : ι) (h : m i = 0) : f m = 0 :=
+theorem map_coord_zero {m : ∀ i, M₁ i} (i : ι) (h : m i = 0) : f m = 0 :=
   f.toMultilinearMap.map_coord_zero i h
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: [Nonempty ι]
-  statement: f 0 = 0
-  proof: f.toMultilinearMap.map_zero
-
-中文:
-定理 map_zero
-  条件: [非空 ι]
-  结论: f 0 = 0
-  证明: f.toMultilinearMap.map_zero
-
-Depends on / 依赖: f.toMultilinearMap.map_zero, map_zero, toMultilinearMap
+/-
+**ContinuousMultilinearMap.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：map_zero [Nonempty ι] : f 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_zero`：map_zero [Nonempty ι] : f 0 = 0
 -/
 theorem map_zero [Nonempty ι] : f 0 = 0 :=
   f.toMultilinearMap.map_zero
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (ContinuousMultilinearMap R M₁ M₂)
-  body: ⟨{ (0 : MultilinearMap R M₁ M₂) with cont := continuous_const }⟩
-
-中文:
-实例 :
-  签名: 零 (连续多重线性映射 R M₁ M₂)
-  定义体: ⟨{ (0 : MultilinearMap R M₁ M₂) with cont := continuous_const }⟩
-
-Depends on / 依赖: MultilinearMap, continuous_const
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (ContinuousMultilinearMap R M₁ M₂) :=
   ⟨{ (0 : MultilinearMap R M₁ M₂) with cont := continuous_const }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (ContinuousMultilinearMap R M₁ M₂)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (连续多重线性映射 R M₁ M₂)
-  定义体: ⟨0⟩
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (ContinuousMultilinearMap R M₁ M₂) :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是ZeroApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
-
-@[simp]
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsZeroApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+instance : IsZeroApply (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   zero_apply _ := rfl
 
 @[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
 
 @[simp]
-/--
-theorem `toMultilinearMap_zero` / 定理 `toMultilinearMap_zero`
-
-English:
-theorem toMultilinearMap_zero
-  statement: (0 : ContinuousMultilinearMap R M₁ M₂).toMultilinearMap = 0
-  proof: rfl
-
-中文:
-定理 toMultilinearMap_zero
-  结论: (0 : 连续多重线性映射 R M₁ M₂).toMultilinearMap = 0
-  证明: rfl
+/-
+**ContinuousMultilinearMap.toMultilinearMap_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousMultilinearMap`。
+形式化陈述：toMultilinearMap_zero : (0 : ContinuousMultilinearMap R M₁ M₂).toMultiline
+arMap = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMultilinearMap_zero : (0 : ContinuousMultilinearMap R M₁ M₂).toMultilinearMap = 0 :=
   rfl
 
 section SMul
 
-variable {R' R'' A : Type*} [Semiring A] [forall i, Module A (M₁ i)]
+variable {R' R'' A : Type*} [Semiring A] [∀ i, Module A (M₁ i)]
   [Module A M₂] [DistribSMul R' M₂] [ContinuousConstSMul R' M₂] [SMulCommClass A R' M₂]
   [DistribSMul R'' M₂] [ContinuousConstSMul R'' M₂] [SMulCommClass A R'' M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul R' (ContinuousMultilinearMap A M₁ M₂)
-  body: ⟨fun c f => { c • f.toMultilinearMap with cont := f.cont.const_smul c }⟩
-
-中文:
-实例 :
-  签名: 标量乘法 R' (连续多重线性映射 A M₁ M₂)
-  定义体: ⟨fun c f => { c • f.toMultilinearMap with cont := f.cont.const_smul c }⟩
-
-Depends on / 依赖: const_smul, f.cont.const_smul, f.toMultilinearMap, toMultilinearMap
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul R' (ContinuousMultilinearMap A M₁ M₂) :=
   ⟨fun c f => { c • f.toMultilinearMap with cont := f.cont.const_smul c }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSMulApply R' (ContinuousMultilinearMap A M₁ M₂) (forall i, M₁ i) M₂
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是SMulApply R' (连续多重线性映射 A M₁ M₂) (对任意 i, M₁ i) M₂
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
-
-@[simp]
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSMulApply R' (ContinuousMultilinearMap A M₁ M₂) (forall i, M₁ i) M₂ where
+instance : IsSMulApply R' (ContinuousMultilinearMap A M₁ M₂) (∀ i, M₁ i) M₂ where
   smul_apply _ _ _ := rfl
 
 @[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
 
 @[simp]
-/--
-theorem `toMultilinearMap_smul` / 定理 `toMultilinearMap_smul`
-
-English:
-theorem toMultilinearMap_smul
-  given: (c : R') (f : ContinuousMultilinearMap A M₁ M₂)
-  proof: rfl
-
-中文:
-定理 toMultilinearMap_smul
-  条件: (c : R') (f : 连续多重线性映射 A M₁ M₂)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.toMultilinearMap_smul** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousMultilinearMap`。
+形式化陈述：toMultilinearMap_smul (c : R') (f : ContinuousMultilinearMap A M₁ M₂) : (c
+ • f).toMultilinearMap = c • f.toMultilinearMap
+参数：c : R'；f : ContinuousMultilinearMap A M₁ M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMultilinearMap_smul (c : R') (f : ContinuousMultilinearMap A M₁ M₂) :
     (c • f).toMultilinearMap = c • f.toMultilinearMap :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: R' R'' M₂] : SMulCommClass R' R'' (ContinuousMultilinearMap A M₁ M₂)
-  body: FunLike.smulCommClass
-
-中文:
-实例 [标量交换类
-  签名: R' R'' M₂] : 标量交换类 R' R'' (连续多重线性映射 A M₁ M₂)
-  定义体: FunLike.smulCommClass
-
-Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass R' R'' M₂] : SMulCommClass R' R'' (ContinuousMultilinearMap A M₁ M₂) :=
   FunLike.smulCommClass
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R' R''] [IsScalarTower R' R'' M₂] :
-  body: FunLike.isScalarTower
-
-中文:
-实例 [标量乘法
-  签名: R' R''] [标量塔 R' R'' M₂] :
-  定义体: FunLike.isScalarTower
-
-Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R' R''] [IsScalarTower R' R'' M₂] :
     IsScalarTower R' R'' (ContinuousMultilinearMap A M₁ M₂) := FunLike.isScalarTower
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: R'ᵐᵒᵖ M₂] [IsCentralScalar R' M₂] :
-  body: FunLike.isCentralScalar
-
-中文:
-实例 [分配标量乘法
-  签名: R'ᵐᵒᵖ M₂] [中心标量 R' M₂] :
-  定义体: FunLike.isCentralScalar
-
-Depends on / 依赖: FunLike, FunLike.isCentralScalar, isCentralScalar
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DistribSMul R'ᵐᵒᵖ M₂] [IsCentralScalar R' M₂] :
     IsCentralScalar R' (ContinuousMultilinearMap A M₁ M₂) := FunLike.isCentralScalar
@@ -527,25 +351,13 @@ end SMul
 
 section SMulMonoid
 
-variable {R' A : Type*} [Monoid R'] [Semiring A] [forall i, Module A (M₁ i)]
+variable {R' A : Type*} [Monoid R'] [Semiring A] [∀ i, Module A (M₁ i)]
   [Module A M₂] [DistribMulAction R' M₂] [ContinuousConstSMul R' M₂] [SMulCommClass A R' M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction R' (ContinuousMultilinearMap A M₁ M₂)
-  body: fast_instance%
-  Function.Injective.mulAction toMultilinearMap toMultilinearMap_injective fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 乘法作用 R' (连续多重线性映射 A M₁ M₂)
-  定义体: fast_instance%
-  Function.Injective.mulAction toMultilinearMap toMultilinearMap_injective fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction R' (ContinuousMultilinearMap A M₁ M₂) := fast_instance%
   Function.Injective.mulAction toMultilinearMap toMultilinearMap_injective fun _ _ => rfl
@@ -556,131 +368,69 @@ section ContinuousAdd
 
 variable [ContinuousAdd M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (ContinuousMultilinearMap R M₁ M₂)
-  body: ⟨fun f f' => ⟨f.toMultilinearMap + f'.toMultilinearMap, f.cont.add f'.cont⟩⟩
-
-中文:
-实例 :
-  签名: 加法 (连续多重线性映射 R M₁ M₂)
-  定义体: ⟨fun f f' => ⟨f.toMultilinearMap + f'.toMultilinearMap, f.cont.add f'.cont⟩⟩
-
-Depends on / 依赖: f.cont.add, f.toMultilinearMap, toMultilinearMap
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (ContinuousMultilinearMap R M₁ M₂) :=
   ⟨fun f f' => ⟨f.toMultilinearMap + f'.toMultilinearMap, f.cont.add f'.cont⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAddApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是加法Apply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
-
-@[simp]
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsAddApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+instance : IsAddApply (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   add_apply _ _ _ := rfl
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
 
 @[simp]
-/--
-theorem `toMultilinearMap_add` / 定理 `toMultilinearMap_add`
-
-English:
-theorem toMultilinearMap_add
-  given: (f g : ContinuousMultilinearMap R M₁ M₂)
-  proof: rfl
-
-中文:
-定理 toMultilinearMap_add
-  条件: (f g : 连续多重线性映射 R M₁ M₂)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.toMultilinearMap_add** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousMultilinearMap`。
+形式化陈述：toMultilinearMap_add (f g : ContinuousMultilinearMap R M₁ M₂) : (f + g).to
+MultilinearMap = f.toMultilinearMap + g.toMultilinearMap
+参数：f g : ContinuousMultilinearMap R M₁ M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMultilinearMap_add (f g : ContinuousMultilinearMap R M₁ M₂) :
     (f + g).toMultilinearMap = f.toMultilinearMap + g.toMultilinearMap :=
   rfl
 
 -- The `AddMonoid` instance exists to help speedup unification
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddMonoid (ContinuousMultilinearMap R M₁ M₂)
-  body: fast_instance%
-  toMultilinearMap_injective.addMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 加法幺半群 (连续多重线性映射 R M₁ M₂)
-  定义体: fast_instance%
-  toMultilinearMap_injective.addMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddMonoid (ContinuousMultilinearMap R M₁ M₂) := fast_instance%
   toMultilinearMap_injective.addMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: : AddCommMonoid (ContinuousMultilinearMap R M₁ M₂)
-  body: fast_instance%
-  toMultilinearMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 addCommMonoid
-  签名: : 加法交换幺半群 (连续多重线性映射 R M₁ M₂)
-  定义体: fast_instance%
-  toMultilinearMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ContinuousMultilinearMap.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMu
+ltilinearMap`。
+形式化陈述：addCommMonoid : AddCommMonoid (ContinuousMultilinearMap R M₁ M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoid : AddCommMonoid (ContinuousMultilinearMap R M₁ M₂) := fast_instance%
   toMultilinearMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
-/--
-Definition of `applyAddHom` / `applyAddHom` 的定义
+/-- Evaluation of a `ContinuousMultilinearMap` at a vector as an `AddMonoidHom`. -/
+/-
+**ContinuousMultilinearMap.applyAddHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMult
+ilinearMap`。
+形式化陈述：applyAddHom (m : forall i, M₁ i) : ContinuousMultilinearMap R M₁ M₂ ->+ M₂
+ where toFun f
+参数：m : forall i, M₁ i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyAddHom
-  signature: (m : forall i, M₁ i)
-  body: f m
-  map_zero' := rfl
-  map_add' _ _ := rfl
-
-@[deprecated (since := "2026-06-10")] protected alias sum_apply := sum_apply
-
-中文:
-定义 applyAddHom
-  签名: (m : 对任意 i, M₁ i)
-  定义体: f m
-  map_zero' := rfl
-  map_add' _ _ := rfl
-
-@[deprecated (since := "2026-06-10")] protected alias sum_apply := sum_apply
+--- 原说明 ---
+Evaluation of a `ContinuousMultilinearMap` at a vector as an `AddMonoidHom`.
 -/
-def applyAddHom (m : forall i, M₁ i) : ContinuousMultilinearMap R M₁ M₂ ->+ M₂ where
+def applyAddHom (m : ∀ i, M₁ i) : ContinuousMultilinearMap R M₁ M₂ →+ M₂ where
   toFun f := f m
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -690,145 +440,137 @@ def applyAddHom (m : forall i, M₁ i) : ContinuousMultilinearMap R M₁ M₂ ->
 end ContinuousAdd
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `toContinuousLinearMap` / `toContinuousLinearMap` 的定义
+/-- If `f` is a continuous multilinear map, then `f.toContinuousLinearMap m i` is the continuous
+linear map obtained by fixing all coordinates but `i` equal to those of `m`, and varying the
+`i`-th coordinate. -/
+/-
+**ContinuousMultilinearMap.toContinuousLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Cont
+inuousMultilinearMap`。
+形式化陈述：{R : Type u} →   {ι : Type v} →     {M₁ : ι → Type w₁} →       {M₂ : Type 
+w₂} →         [inst : Semiring R] →           [inst_1 : (i : ι) → AddCommMonoid 
+(M₁ i)] →             [inst_2 : AddCommMonoid M₂] →               [inst_3 : (i :
+ ι) → _root_.Module R (M₁ i)] →                 [inst_4 : _root_.Module R M₂] → 
+                  [inst_5 : (i : ι) → TopologicalSpace (M₁ i)] →                
+     [inst_6 : TopologicalSpace M₂] →                       ContinuousMultilinea
+rMap R M₁ M₂ → [DecidableEq ι] → ((i : ι) → M₁ i) → (i : ι) → M₁ i →L[R] M₂
+参数：i : ι；M₁ i；i : ι；M₁ i；i : ι；M₁ i；(i : ι) → M₁ i；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toContinuousLinearMap
-  signature: [DecidableEq ι] (m : forall i, M₁ i) (i : ι)
-  body: { f.toMultilinearMap.toLinearMap m i with }
-
-中文:
-定义 toContinuousLinearMap
-  签名: [DecidableEq ι] (m : 对任意 i, M₁ i) (i : ι)
-  定义体: { f.toMultilinearMap.toLinearMap m i with }
+--- 原说明 ---
+If `f` is a continuous multilinear map, then `f.toContinuousLinearMap m i` is th
+e continuous
+linear map obtained by fixing all coordinates but `i` equal to those of `m`, and
+ varying the
+`i`-th coordinate.
 -/
-@[simps!] def toContinuousLinearMap [DecidableEq ι] (m : forall i, M₁ i) (i : ι) : M₁ i ->L[R] M₂ :=
+@[simps!] def toContinuousLinearMap [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) : M₁ i →L[R] M₂ :=
   { f.toMultilinearMap.toLinearMap m i with }
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The Cartesian product of two continuous multilinear maps, as a continuous multilinear map. -/
+/-
+**ContinuousMultilinearMap.prod** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultilinear
+Map`。
+形式化陈述：prod (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap 
+R M₁ M₃) : ContinuousMultilinearMap R M₁ (M₂ × M₃)
+参数：f : ContinuousMultilinearMap R M₁ M₂；g : ContinuousMultilinearMap R M₁ M₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
-  body: { f.toMultilinearMap.prod g.toMultilinearMap with cont := f.cont.prodMk g.cont }
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: (f : 连续多重线性映射 R M₁ M₂) (g : 连续多重线性映射 R M₁ M₃)
-  定义体: { f.toMultilinearMap.prod g.toMultilinearMap with cont := f.cont.prodMk g.cont }
-
-@[simp]
-
-Depends on / 依赖: f.cont.prodMk, f.toMultilinearMap.prod, g.cont, g.toMultilinearMap, prodMk, toMultilinearMap
+--- 原说明 ---
+The Cartesian product of two continuous multilinear maps, as a continuous multil
+inear map.
 -/
 def prod (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃) :
     ContinuousMultilinearMap R M₁ (M₂ × M₃) :=
   { f.toMultilinearMap.prod g.toMultilinearMap with cont := f.cont.prodMk g.cont }
 
 @[simp]
-/--
-theorem `prod_apply` / 定理 `prod_apply`
-
-English:
-theorem prod_apply
-  statement: (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
-  proof: rfl
-
-中文:
-定理 prod_apply
-  结论: (f : 连续多重线性映射 R M₁ M₂) (g : 连续多重线性映射 R M₁ M₃)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMulti
+linearMap`。
+形式化陈述：prod_apply (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultiline
+arMap R M₁ M₃) (m : forall i, M₁ i) : (f.prod g) m = (f m, g m)
+参数：f : ContinuousMultilinearMap R M₁ M₂；g : ContinuousMultilinearMap R M₁ M₃；m :
+ forall i, M₁ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_apply (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
-    (m : forall i, M₁ i) : (f.prod g) m = (f m, g m) :=
+    (m : ∀ i, M₁ i) : (f.prod g) m = (f m, g m) :=
   rfl
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- Combine a family of continuous multilinear maps with the same domain and codomains `M' i` into a
+continuous multilinear map taking values in the space of functions `∀ i, M' i`. -/
+/-
+**ContinuousMultilinearMap.pi** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultilinearMa
+p`。
+形式化陈述：pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] [foral
+l i, TopologicalSpace (M' i)] [forall i, Module R (M' i)] (f : forall i, Continu
+ousMultilinearMap R M₁ (M' i)) : ContinuousMultilinearMap R M₁ (forall i, M' i) 
+where cont
+参数：M' i；M' i；M' i；f : forall i, ContinuousMultilinearMap R M₁ (M' i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] [forall i, TopologicalSpace (M' i)]
-  body: continuous_pi fun i => (f i).coe_continuous
-  toMultilinearMap := MultilinearMap.pi fun i => (f i).toMultilinearMap
-
-@[simp]
-
-中文:
-定义 pi
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)] [对任意 i, 拓扑空间 (M' i)]
-  定义体: continuous_pi fun i => (f i).coe_continuous
-  toMultilinearMap := MultilinearMap.pi fun i => (f i).toMultilinearMap
-
-@[simp]
-
-Depends on / 依赖: coe_continuous, continuous_pi
+--- 原说明 ---
+Combine a family of continuous multilinear maps with the same domain and codomai
+ns `M' i` into a
+continuous multilinear map taking values in the space of functions `∀ i, M' i`.
 -/
-def pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] [forall i, TopologicalSpace (M' i)]
-    [forall i, Module R (M' i)] (f : forall i, ContinuousMultilinearMap R M₁ (M' i)) :
-    ContinuousMultilinearMap R M₁ (forall i, M' i) where
+def pi {ι' : Type*} {M' : ι' → Type*} [∀ i, AddCommMonoid (M' i)] [∀ i, TopologicalSpace (M' i)]
+    [∀ i, Module R (M' i)] (f : ∀ i, ContinuousMultilinearMap R M₁ (M' i)) :
+    ContinuousMultilinearMap R M₁ (∀ i, M' i) where
   cont := continuous_pi fun i => (f i).coe_continuous
   toMultilinearMap := MultilinearMap.pi fun i => (f i).toMultilinearMap
 
 @[simp]
-/--
-theorem `coe_pi` / 定理 `coe_pi`
-
-English:
-theorem coe_pi
-  statement: {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-  proof: rfl
-
-中文:
-定理 coe_pi
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
-  证明: rfl
+/-
+**ContinuousMultilinearMap.coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultiline
+arMap`。
+形式化陈述：coe_pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] [f
+orall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)] (f : forall i, Con
+tinuousMultilinearMap R M₁ (M' i)) : ⇑(pi f) = fun m j => f j m
+参数：M' i；M' i；M' i；f : forall i, ContinuousMultilinearMap R M₁ (M' i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-    [forall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)]
-    (f : forall i, ContinuousMultilinearMap R M₁ (M' i)) : ⇑(pi f) = fun m j => f j m :=
+theorem coe_pi {ι' : Type*} {M' : ι' → Type*} [∀ i, AddCommMonoid (M' i)]
+    [∀ i, TopologicalSpace (M' i)] [∀ i, Module R (M' i)]
+    (f : ∀ i, ContinuousMultilinearMap R M₁ (M' i)) : ⇑(pi f) = fun m j => f j m :=
   rfl
-
-/--
-theorem `pi_apply` / 定理 `pi_apply`
-
-English:
-theorem pi_apply
-  statement: {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-  proof: rfl
-
-中文:
-定理 pi_apply
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
-  证明: rfl
+/-
+**ContinuousMultilinearMap.pi_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：pi_apply {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] 
+[forall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)] (f : forall i, C
+ontinuousMultilinearMap R M₁ (M' i)) (m : forall i, M₁ i) (j : ι') : pi f m j = 
+f j m
+参数：M' i；M' i；M' i；f : forall i, ContinuousMultilinearMap R M₁ (M' i)；m : forall 
+i, M₁ i；j : ι'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pi_apply {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-    [forall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)]
-    (f : forall i, ContinuousMultilinearMap R M₁ (M' i)) (m : forall i, M₁ i) (j : ι') : pi f m j = f j m :=
+theorem pi_apply {ι' : Type*} {M' : ι' → Type*} [∀ i, AddCommMonoid (M' i)]
+    [∀ i, TopologicalSpace (M' i)] [∀ i, Module R (M' i)]
+    (f : ∀ i, ContinuousMultilinearMap R M₁ (M' i)) (m : ∀ i, M₁ i) (j : ι') : pi f m j = f j m :=
   rfl
 
 /-- Restrict the codomain of a continuous multilinear map to a submodule. -/
 @[simps! toMultilinearMap apply_coe]
-/--
-Definition of `codRestrict` / `codRestrict` 的定义
+/-
+**ContinuousMultilinearMap.codRestrict** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMult
+ilinearMap`。
+形式化陈述：codRestrict (f : ContinuousMultilinearMap R M₁ M₂) (p : Submodule R M₂) (h
+ : forall v, f v in p) : ContinuousMultilinearMap R M₁ p
+参数：f : ContinuousMultilinearMap R M₁ M₂；p : Submodule R M₂；h : forall v, f v in 
+p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition codRestrict
-  signature: (f : ContinuousMultilinearMap R M₁ M₂) (p : Submodule R M₂) (h : forall v, f v in p)
-  body: ⟨f.1.codRestrict p h, f.cont.subtype_mk _⟩
-
-中文:
-定义 codRestrict
-  签名: (f : 连续多重线性映射 R M₁ M₂) (p : 子模 R M₂) (h : 对任意 v, f v in p)
-  定义体: ⟨f.1.codRestrict p h, f.cont.subtype_mk _⟩
-
-Depends on / 依赖: codRestrict, f.cont.subtype_mk, subtype_mk
+--- 原说明 ---
+Restrict the codomain of a continuous multilinear map to a submodule.
 -/
-def codRestrict (f : ContinuousMultilinearMap R M₁ M₂) (p : Submodule R M₂) (h : forall v, f v in p) :
+def codRestrict (f : ContinuousMultilinearMap R M₁ M₂) (p : Submodule R M₂) (h : ∀ v, f v ∈ p) :
     ContinuousMultilinearMap R M₁ p :=
   ⟨f.1.codRestrict p h, f.cont.subtype_mk _⟩
 
@@ -839,60 +581,44 @@ variable (R M₂ M₃)
 /-- The natural equivalence between continuous linear maps from `M₂` to `M₃`
 and continuous 1-multilinear maps from `M₂` to `M₃`. -/
 @[simps! apply_toMultilinearMap apply_apply symm_apply_apply]
-/--
-Definition of `ofSubsingleton` / `ofSubsingleton` 的定义
+/-
+**ContinuousMultilinearMap.ofSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：ofSubsingleton [Subsingleton ι] (i : ι) : (M₂ ->L[R] M₃) ≃ ContinuousMulti
+linearMap R (fun _ : ι => M₂) M₃ where toFun f
+参数：i : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition ofSubsingleton
-  signature: [Subsingleton ι] (i : ι)
-  body: ⟨MultilinearMap.ofSubsingleton R M₂ M₃ i f,
-    (map_continuous f).comp (continuous_apply i)⟩
-  invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
-(map_continuous f).comp continuous_pi fun _ => continuous_id⟩
-right_inv f := toMultilinearMap_injective
-    (MultilinearMap.ofSubsingleton R M₂ M₃ i).apply_symm_apply f.toMultilinearMap
-
-中文:
-定义 ofSubsingleton
-  签名: [子单例 ι] (i : ι)
-  定义体: ⟨MultilinearMap.ofSubsingleton R M₂ M₃ i f,
-    (map_continuous f).comp (continuous_apply i)⟩
-  invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
-(map_continuous f).comp continuous_pi fun _ => continuous_id⟩
-right_inv f := toMultilinearMap_injective
-    (MultilinearMap.ofSubsingleton R M₂ M₃ i).apply_symm_apply f.toMultilinearMap
-
-Depends on / 依赖: MultilinearMap, MultilinearMap.ofSubsingleton, ofSubsingleton
+--- 原说明 ---
+The natural equivalence between continuous linear maps from `M₂` to `M₃`
+and continuous 1-multilinear maps from `M₂` to `M₃`.
 -/
 def ofSubsingleton [Subsingleton ι] (i : ι) :
-    (M₂ ->L[R] M₃) ≃ ContinuousMultilinearMap R (fun _ : ι => M₂) M₃ where
+    (M₂ →L[R] M₃) ≃ ContinuousMultilinearMap R (fun _ : ι => M₂) M₃ where
   toFun f := ⟨MultilinearMap.ofSubsingleton R M₂ M₃ i f,
     (map_continuous f).comp (continuous_apply i)⟩
   invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
-(map_continuous f).comp continuous_pi fun _ => continuous_id⟩
-right_inv f := toMultilinearMap_injective
+    (map_continuous f).comp <| continuous_pi fun _ ↦ continuous_id⟩
+  right_inv f := toMultilinearMap_injective <|
     (MultilinearMap.ofSubsingleton R M₂ M₃ i).apply_symm_apply f.toMultilinearMap
 
 variable (M₁) {M₂}
 
 /-- The constant map is multilinear when `ι` is empty. -/
 @[simps! toMultilinearMap apply]
-/--
-Definition of `constOfIsEmpty` / `constOfIsEmpty` 的定义
+/-
+**ContinuousMultilinearMap.constOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：constOfIsEmpty [IsEmpty ι] (m : M₂) : ContinuousMultilinearMap R M₁ M₂ whe
+re toMultilinearMap
+参数：m : M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constOfIsEmpty
-  signature: [IsEmpty ι] (m : M₂)
-  body: MultilinearMap.constOfIsEmpty R _ m
-  cont := continuous_const
-
-中文:
-定义 constOfIsEmpty
-  签名: [是空 ι] (m : M₂)
-  定义体: MultilinearMap.constOfIsEmpty R _ m
-  cont := continuous_const
-
-Depends on / 依赖: MultilinearMap, MultilinearMap.constOfIsEmpty, constOfIsEmpty
+--- 原说明 ---
+The constant map is multilinear when `ι` is empty.
 -/
 def constOfIsEmpty [IsEmpty ι] (m : M₂) : ContinuousMultilinearMap R M₁ M₂ where
   toMultilinearMap := MultilinearMap.constOfIsEmpty R _ m
@@ -900,117 +626,87 @@ def constOfIsEmpty [IsEmpty ι] (m : M₂) : ContinuousMultilinearMap R M₁ M�
 
 end
 
-/--
-Definition of `compContinuousLinearMap` / `compContinuousLinearMap` 的定义
+/-- If `g` is continuous multilinear and `f` is a collection of continuous linear maps,
+then `g (f₁ m₁, ..., fₙ mₙ)` is again a continuous multilinear map, that we call
+`g.compContinuousLinearMap f`. -/
+/-
+**ContinuousMultilinearMap.compContinuousLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Co
+ntinuousMultilinearMap`。
+形式化陈述：compContinuousLinearMap (g : ContinuousMultilinearMap R M₁' M₄) (f : foral
+l i : ι, M₁ i ->L[R] M₁' i) : ContinuousMultilinearMap R M₁ M₄
+参数：g : ContinuousMultilinearMap R M₁' M₄；f : forall i : ι, M₁ i ->L[R] M₁' i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compContinuousLinearMap
-  signature: (g : ContinuousMultilinearMap R M₁' M₄)
-  body: { g.toMultilinearMap.compLinearMap fun i => (f i).toLinearMap with
-cont := g.cont.comp continuous_pi fun j => (f j).cont.comp continuous_apply _ }
-
-@[simp]
-
-中文:
-定义 compContinuousLinearMap
-  签名: (g : 连续多重线性映射 R M₁' M₄)
-  定义体: { g.toMultilinearMap.compLinearMap fun i => (f i).toLinearMap with
-cont := g.cont.comp continuous_pi fun j => (f j).cont.comp continuous_apply _ }
-
-@[simp]
-
-Depends on / 依赖: compLinearMap, cont.comp, continuous_apply, continuous_pi, g.cont.comp, g.toMultilinearMap.compLinearMap, toLinearMap, toMultilinearMap
+--- 原说明 ---
+If `g` is continuous multilinear and `f` is a collection of continuous linear ma
+ps,
+then `g (f₁ m₁, ..., fₙ mₙ)` is again a continuous multilinear map, that we call
+`g.compContinuousLinearMap f`.
 -/
 def compContinuousLinearMap (g : ContinuousMultilinearMap R M₁' M₄)
-    (f : forall i : ι, M₁ i ->L[R] M₁' i) : ContinuousMultilinearMap R M₁ M₄ :=
+    (f : ∀ i : ι, M₁ i →L[R] M₁' i) : ContinuousMultilinearMap R M₁ M₄ :=
   { g.toMultilinearMap.compLinearMap fun i => (f i).toLinearMap with
-cont := g.cont.comp continuous_pi fun j => (f j).cont.comp continuous_apply _ }
+    cont := g.cont.comp <| continuous_pi fun j => (f j).cont.comp <| continuous_apply _ }
 
 @[simp]
-/--
-theorem `compContinuousLinearMap_apply` / 定理 `compContinuousLinearMap_apply`
-
-English:
-theorem compContinuousLinearMap_apply
-  statement: (g : ContinuousMultilinearMap R M₁' M₄)
-  proof: rfl
-
-中文:
-定理 compContinuousLinearMap_apply
-  结论: (g : 连续多重线性映射 R M₁' M₄)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.compContinuousLinearMap_apply** 是 Mathlib 中的一个定理，位于命名
+空间 `ContinuousMultilinearMap`。
+形式化陈述：compContinuousLinearMap_apply (g : ContinuousMultilinearMap R M₁' M₄) (f :
+ forall i : ι, M₁ i ->L[R] M₁' i) (m : forall i, M₁ i) : g.compContinuousLinearM
+ap f m = g fun i => f i m i
+参数：g : ContinuousMultilinearMap R M₁' M₄；f : forall i : ι, M₁ i ->L[R] M₁' i；m :
+ forall i, M₁ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compContinuousLinearMap_apply (g : ContinuousMultilinearMap R M₁' M₄)
-    (f : forall i : ι, M₁ i ->L[R] M₁' i) (m : forall i, M₁ i) :
-g.compContinuousLinearMap f m = g fun i => f i m i :=
+    (f : ∀ i : ι, M₁ i →L[R] M₁' i) (m : ∀ i, M₁ i) :
+    g.compContinuousLinearMap f m = g fun i => f i <| m i :=
   rfl
 
-/--
-Definition of `_root_.ContinuousLinearMap.compContinuousMultilinearMap` / `_root_.ContinuousLinearMap.compContinuousMultilinearMap` 的定义
+/-- Composing a continuous multilinear map with a continuous linear map gives again a
+continuous multilinear map. -/
+/-
+**ContinuousMultilinearMap._root_.ContinuousLinearMap.compContinuousMultilinearM
+ap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultilinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.ContinuousLinearMap.compContinuousMultilinearMap
-  signature: (g : M₂ ->L[R] M₃)
-  body: { g.toLinearMap.compMultilinearMap f.toMultilinearMap with cont := g.cont.comp f.cont }
-
-@[simp]
-
-中文:
-定义 _root_.连续线性映射.compContinuousMultilinearMap
-  签名: (g : M₂ ->L[R] M₃)
-  定义体: { g.toLinearMap.compMultilinearMap f.toMultilinearMap with cont := g.cont.comp f.cont }
-
-@[simp]
-
-Depends on / 依赖: compMultilinearMap, f.cont, f.toMultilinearMap, g.cont.comp, g.toLinearMap.compMultilinearMap, toLinearMap, toMultilinearMap
+--- 原说明 ---
+Composing a continuous multilinear map with a continuous linear map gives again 
+a
+continuous multilinear map.
 -/
-def _root_.ContinuousLinearMap.compContinuousMultilinearMap (g : M₂ ->L[R] M₃)
+def _root_.ContinuousLinearMap.compContinuousMultilinearMap (g : M₂ →L[R] M₃)
     (f : ContinuousMultilinearMap R M₁ M₂) : ContinuousMultilinearMap R M₁ M₃ :=
   { g.toLinearMap.compMultilinearMap f.toMultilinearMap with cont := g.cont.comp f.cont }
 
 @[simp]
-/--
-theorem `_root_.ContinuousLinearMap.compContinuousMultilinearMap_coe` / 定理 `_root_.ContinuousLinearMap.compContinuousMultilinearMap_coe`
-
-English:
-theorem _root_.ContinuousLinearMap.compContinuousMultilinearMap_coe
-  statement: (g : M₂ ->L[R] M₃)
-  proof: by
-  ext m
-  rfl
-
-中文:
-定理 _root_.连续线性映射.compContinuousMultilinearMap_coe
-  结论: (g : M₂ ->L[R] M₃)
-  证明: by
-  ext m
-  rfl
+/-
+**ContinuousMultilinearMap._root_.ContinuousLinearMap.compContinuousMultilinearM
+ap_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultilinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousLinearMap.compContinuousMultilinearMap_coe (g : M₂ ->L[R] M₃)
+theorem _root_.ContinuousLinearMap.compContinuousMultilinearMap_coe (g : M₂ →L[R] M₃)
     (f : ContinuousMultilinearMap R M₁ M₂) :
-    (g.compContinuousMultilinearMap f : (forall i, M₁ i) -> M₃) =
-      (g : M₂ -> M₃) ∘ (f : (forall i, M₁ i) -> M₂) := by
+    (g.compContinuousMultilinearMap f : (∀ i, M₁ i) → M₃) =
+      (g : M₂ → M₃) ∘ (f : (∀ i, M₁ i) → M₂) := by
   ext m
   rfl
 
 /-- `ContinuousMultilinearMap.prod` as an `Equiv`. -/
 @[simps apply symm_apply_fst symm_apply_snd, simps -isSimp symm_apply]
-/--
-Definition of `prodEquiv` / `prodEquiv` 的定义
+/-
+**ContinuousMultilinearMap.prodEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultil
+inearMap`。
+形式化陈述：prodEquiv : (ContinuousMultilinearMap R M₁ M₂ × ContinuousMultilinearMap R
+ M₁ M₃) ≃ ContinuousMultilinearMap R M₁ (M₂ × M₃) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodEquiv
-  signature: :
-  body: f.1.prod f.2
-  invFun f := ((ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f,
-    (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f)
-
-中文:
-定义 prodEquiv
-  签名: :
-  定义体: f.1.prod f.2
-  invFun f := ((ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f,
-    (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f)
+--- 原说明 ---
+`ContinuousMultilinearMap.prod` as an `Equiv`.
 -/
 def prodEquiv :
     (ContinuousMultilinearMap R M₁ M₂ × ContinuousMultilinearMap R M₁ M₃) ≃
@@ -1018,50 +714,56 @@ def prodEquiv :
   toFun f := f.1.prod f.2
   invFun f := ((ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f,
     (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f)
-
-/--
-theorem `prod_ext_iff` / 定理 `prod_ext_iff`
-
-English:
-theorem prod_ext_iff
-  given: {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
-  proof: by
-  rw [← Prod.mk_inj]; rw [← prodEquiv_symm_apply]; rw [← prodEquiv_symm_apply]; rw [Equiv.apply_eq_iff_eq]
-
-@[ext]
-
-中文:
-定理 prod_ext_iff
-  条件: {f g : 连续多重线性映射 R M₁ (M₂ × M₃)}
-  证明: by
-  rw [← Prod.mk_inj]; rw [← prodEquiv_symm_apply]; rw [← prodEquiv_symm_apply]; rw [Equiv.apply_eq_iff_eq]
-
-@[ext]
-
-Depends on / 依赖: Equiv.apply_eq_iff_eq, Prod.mk_inj, apply_eq_iff_eq, mk_inj, prodEquiv_symm_apply
+/-
+**ContinuousMultilinearMap.prod_ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMul
+tilinearMap`。
+形式化陈述：prod_ext_iff {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)} : f = g ↔ (Co
+ntinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f = (ContinuousLinearM
+ap.fst _ _ _).compContinuousMultilinearMap g ∧ (ContinuousLinearMap.snd _ _ _).c
+ompContinuousMultilinearMap f = (ContinuousLinearMap.snd _ _ _).compContinuousMu
+ltilinearMap g
+参数：M₂ × M₃。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Prod.mk_inj`：mk_inj {a₁ a₂ : α} {b₁ b₂ : β} : (a₁, b₁) = (a₂, b₂) ↔ a₁ =
+ a₂ ∧ b₁ = b₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `ContinuousMultilinearMap.prodEquiv_symm_apply`：∀ {R : Type u} {ι : Type 
+v} {M₁ : ι → Type w₁} {M₂ : Type w₂} {M₃ : Type w₃} [inst : Semiring R]   [inst_
+1 : (i : ι) → AddCommMonoid (M₁ i)]…
+· 使用定理 `Equiv.apply_eq_iff_eq`：apply_eq_iff_eq (f : α ≃ β) {x y : α} : f x = f y
+ ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prod_ext_iff {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)} :
     f = g ↔ (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f =
       (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap g ∧
       (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f =
       (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap g := by
-  rw [← Prod.mk_inj]; rw [← prodEquiv_symm_apply]; rw [← prodEquiv_symm_apply]; rw [Equiv.apply_eq_iff_eq]
+  rw [← Prod.mk_inj, ← prodEquiv_symm_apply, ← prodEquiv_symm_apply, Equiv.apply_eq_iff_eq]
 
 @[ext]
-/--
-theorem `prod_ext` / 定理 `prod_ext`
-
-English:
-theorem prod_ext
-  statement: {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
-  proof: prod_ext_iff.mpr ⟨h₁, h₂⟩
-
-中文:
-定理 prod_ext
-  结论: {f g : 连续多重线性映射 R M₁ (M₂ × M₃)}
-  证明: prod_ext_iff.mpr ⟨h₁, h₂⟩
-
-Depends on / 依赖: prod_ext_iff, prod_ext_iff.mpr
+/-
+**ContinuousMultilinearMap.prod_ext** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：prod_ext {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)} (h₁ : (Continuous
+LinearMap.fst _ _ _).compContinuousMultilinearMap f = (ContinuousLinearMap.fst _
+ _ _).compContinuousMultilinearMap g) (h₂ : (ContinuousLinearMap.snd _ _ _).comp
+ContinuousMultilinearMap f = (ContinuousLinearMap.snd _ _ _).compContinuousMulti
+linearMap g) : f = g
+参数：M₂ × M₃；h₁ : (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f =
+ (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap g；h₂ : (Continuous
+LinearMap.snd _ _ _).compContinuousMultilinearMap f = (ContinuousLinearMap.snd _
+ _ _).compContinuousMultilinearMap g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ContinuousMultilinearMap.prod_ext_iff`：prod_ext_iff {f g : ContinuousMul
+tilinearMap R M₁ (M₂ × M₃)} : f = g ↔ (ContinuousLinearMap.fst _ _ _).compContin
+uousMultilinearMap f = (Con…
 -/
 theorem prod_ext {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
     (h₁ : (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f =
@@ -1069,62 +771,51 @@ theorem prod_ext {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
     (h₂ : (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f =
       (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap g) : f = g :=
   prod_ext_iff.mpr ⟨h₁, h₂⟩
-
-/--
-theorem `eq_prod_iff` / 定理 `eq_prod_iff`
-
-English:
-theorem eq_prod_iff
-  statement: {f : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
-  proof: prod_ext_iff
-
-中文:
-定理 eq_prod_iff
-  结论: {f : 连续多重线性映射 R M₁ (M₂ × M₃)}
-  证明: prod_ext_iff
-
-Depends on / 依赖: prod_ext_iff
+/-
+**ContinuousMultilinearMap.eq_prod_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMult
+ilinearMap`。
+形式化陈述：eq_prod_iff {f : ContinuousMultilinearMap R M₁ (M₂ × M₃)} {g : ContinuousM
+ultilinearMap R M₁ M₂} {h : ContinuousMultilinearMap R M₁ M₃} : f = g.prod h ↔ (
+ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f = g ∧ (ContinuousL
+inearMap.snd _ _ _).compContinuousMultilinearMap f = h
+参数：M₂ × M₃。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.prod_ext_iff`：prod_ext_iff {f g : ContinuousMul
+tilinearMap R M₁ (M₂ × M₃)} : f = g ↔ (ContinuousLinearMap.fst _ _ _).compContin
+uousMultilinearMap f = (Con…
 -/
 theorem eq_prod_iff {f : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
     {g : ContinuousMultilinearMap R M₁ M₂} {h : ContinuousMultilinearMap R M₁ M₃} :
     f = g.prod h ↔ (ContinuousLinearMap.fst _ _ _).compContinuousMultilinearMap f = g ∧
       (ContinuousLinearMap.snd _ _ _).compContinuousMultilinearMap f = h :=
   prod_ext_iff
-
-/--
-theorem `add_prod_add` / 定理 `add_prod_add`
-
-English:
-theorem add_prod_add
-  statement: [ContinuousAdd M₂] [ContinuousAdd M₃]
-  proof: rfl
-
-中文:
-定理 add_prod_add
-  结论: [连续加法 M₂] [连续加法 M₃]
-  证明: rfl
+/-
+**ContinuousMultilinearMap.add_prod_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMul
+tilinearMap`。
+形式化陈述：add_prod_add [ContinuousAdd M₂] [ContinuousAdd M₃] (f₁ f₂ : ContinuousMult
+ilinearMap R M₁ M₂) (g₁ g₂ : ContinuousMultilinearMap R M₁ M₃) : (f₁ + f₂).prod 
+(g₁ + g₂) = f₁.prod g₁ + f₂.prod g₂
+参数：f₁ f₂ : ContinuousMultilinearMap R M₁ M₂；g₁ g₂ : ContinuousMultilinearMap R M
+₁ M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_prod_add [ContinuousAdd M₂] [ContinuousAdd M₃]
     (f₁ f₂ : ContinuousMultilinearMap R M₁ M₂) (g₁ g₂ : ContinuousMultilinearMap R M₁ M₃) :
     (f₁ + f₂).prod (g₁ + g₂) = f₁.prod g₁ + f₂.prod g₂ :=
   rfl
-
-/--
-theorem `smul_prod_smul` / 定理 `smul_prod_smul`
-
-English:
-theorem smul_prod_smul
-  statement: {S : Type*} [Monoid S] [DistribMulAction S M₂] [DistribMulAction S M₃]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_prod_smul
-  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M₂] [分配乘法作用 S M₃]
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMultilinearMap.smul_prod_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：smul_prod_smul {S : Type*} [Monoid S] [DistribMulAction S M₂] [DistribMulA
+ction S M₃] [ContinuousConstSMul S M₂] [SMulCommClass R S M₂] [ContinuousConstSM
+ul S M₃] [SMulCommClass R S M₃] (c : S) (f : ContinuousMultilinearMap R M₁ M₂) (
+g : ContinuousMultilinearMap R M₁ M₃) : (c • f).prod (c • g) = c • f.prod g
+参数：c : S；f : ContinuousMultilinearMap R M₁ M₂；g : ContinuousMultilinearMap R M₁ 
+M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_prod_smul {S : Type*} [Monoid S] [DistribMulAction S M₂] [DistribMulAction S M₃]
     [ContinuousConstSMul S M₂] [SMulCommClass R S M₂]
@@ -1134,16 +825,13 @@ theorem smul_prod_smul {S : Type*} [Monoid S] [DistribMulAction S M₂] [Distrib
   rfl
 
 @[simp]
-/--
-theorem `zero_prod_zero` / 定理 `zero_prod_zero`
-
-English:
-theorem zero_prod_zero
-  proof: rfl
-
-中文:
-定理 zero_prod_zero
-  证明: rfl
+/-
+**ContinuousMultilinearMap.zero_prod_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：zero_prod_zero : (0 : ContinuousMultilinearMap R M₁ M₂).prod (0 : Continuo
+usMultilinearMap R M₁ M₃) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_prod_zero :
     (0 : ContinuousMultilinearMap R M₁ M₂).prod (0 : ContinuousMultilinearMap R M₁ M₃) = 0 :=
@@ -1151,28 +839,25 @@ theorem zero_prod_zero :
 
 /-- `ContinuousMultilinearMap.pi` as an `Equiv`. -/
 @[simps]
-/--
-Definition of `piEquiv` / `piEquiv` 的定义
+/-
+**ContinuousMultilinearMap.piEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultilin
+earMap`。
+形式化陈述：piEquiv {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)] [
+forall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)] : (forall i, Cont
+inuousMultilinearMap R M₁ (M' i)) ≃ ContinuousMultilinearMap R M₁ (forall i, M' 
+i) where toFun
+参数：M' i；M' i；M' i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquiv
-  signature: {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-  body: ContinuousMultilinearMap.pi
-  invFun f i := (ContinuousLinearMap.proj i : _ ->L[R] M' i).compContinuousMultilinearMap f
-
-中文:
-定义 piEquiv
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
-  定义体: ContinuousMultilinearMap.pi
-  invFun f i := (ContinuousLinearMap.proj i : _ ->L[R] M' i).compContinuousMultilinearMap f
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.pi
+--- 原说明 ---
+`ContinuousMultilinearMap.pi` as an `Equiv`.
 -/
-def piEquiv {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-    [forall i, TopologicalSpace (M' i)] [forall i, Module R (M' i)] :
-    (forall i, ContinuousMultilinearMap R M₁ (M' i)) ≃ ContinuousMultilinearMap R M₁ (forall i, M' i) where
+def piEquiv {ι' : Type*} {M' : ι' → Type*} [∀ i, AddCommMonoid (M' i)]
+    [∀ i, TopologicalSpace (M' i)] [∀ i, Module R (M' i)] :
+    (∀ i, ContinuousMultilinearMap R M₁ (M' i)) ≃ ContinuousMultilinearMap R M₁ (∀ i, M' i) where
   toFun := ContinuousMultilinearMap.pi
-  invFun f i := (ContinuousLinearMap.proj i : _ ->L[R] M' i).compContinuousMultilinearMap f
+  invFun f i := (ContinuousLinearMap.proj i : _ →L[R] M' i).compContinuousMultilinearMap f
 
 /-- An equivalence of the index set defines an equivalence between the spaces of continuous
 multilinear maps. This is the forward map of this equivalence. -/
@@ -1181,32 +866,29 @@ nonrec def domDomCongr {ι' : Type*} (e : ι ≃ ι')
     (f : ContinuousMultilinearMap R (fun _ : ι => M₂) M₃) :
     ContinuousMultilinearMap R (fun _ : ι' => M₂) M₃ where
   toMultilinearMap := f.domDomCongr e
-cont := f.cont.comp continuous_pi fun _ => continuous_apply _
+  cont := f.cont.comp <| continuous_pi fun _ => continuous_apply _
 
 /-- An equivalence of the index set defines an equivalence between the spaces of continuous
 multilinear maps. In case of normed spaces, this is a linear isometric equivalence, see
 `ContinuousMultilinearMap.domDomCongrₗᵢ`. -/
 @[simps]
-/--
-Definition of `domDomCongrEquiv` / `domDomCongrEquiv` 的定义
+/-
+**ContinuousMultilinearMap.domDomCongrEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Continuou
+sMultilinearMap`。
+形式化陈述：domDomCongrEquiv {ι' : Type*} (e : ι ≃ ι') : ContinuousMultilinearMap R (f
+un _ : ι => M₂) M₃ ≃ ContinuousMultilinearMap R (fun _ : ι' => M₂) M₃ where toFu
+n
+参数：e : ι ≃ ι'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition domDomCongrEquiv
-  signature: {ι' : Type*} (e : ι ≃ ι')
-  body: domDomCongr e
-  invFun := domDomCongr e.symm
-  left_inv _ := ext fun _ => by simp
-  right_inv _ := ext fun _ => by simp
-
-中文:
-定义 domDomCongrEquiv
-  签名: {ι' : 类型} (e : ι ≃ ι')
-  定义体: domDomCongr e
-  invFun := domDomCongr e.symm
-  left_inv _ := ext fun _ => by simp
-  right_inv _ := ext fun _ => by simp
-
-Depends on / 依赖: domDomCongr
+--- 原说明 ---
+An equivalence of the index set defines an equivalence between the spaces of con
+tinuous
+multilinear maps. In case of normed spaces, this is a linear isometric equivalen
+ce, see
+`ContinuousMultilinearMap.domDomCongrₗᵢ`.
 -/
 def domDomCongrEquiv {ι' : Type*} (e : ι ≃ ι') :
     ContinuousMultilinearMap R (fun _ : ι => M₂) M₃ ≃
@@ -1218,125 +900,142 @@ def domDomCongrEquiv {ι' : Type*} (e : ι ≃ ι') :
 
 section linearDeriv
 
-variable [ContinuousAdd M₂] [DecidableEq ι] [Fintype ι] (x y : forall i, M₁ i)
+variable [ContinuousAdd M₂] [DecidableEq ι] [Fintype ι] (x y : ∀ i, M₁ i)
 
-/--
-Definition of `linearDeriv` / `linearDeriv` 的定义
+/-- The derivative of a continuous multilinear map, as a continuous linear map
+from `∀ i, M₁ i` to `M₂`; see `ContinuousMultilinearMap.hasFDerivAt`. -/
+/-
+**ContinuousMultilinearMap.linearDeriv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMult
+ilinearMap`。
+形式化陈述：linearDeriv : (forall i, M₁ i) ->L[R] M₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearDeriv
-  signature: : (forall i, M₁ i) ->L[R] M₂
-  body: ∑ i : ι, (f.toContinuousLinearMap x i).comp (.proj i)
-
-@[simp]
-
-中文:
-定义 linearDeriv
-  签名: : (对任意 i, M₁ i) ->L[R] M₂
-  定义体: ∑ i : ι, (f.toContinuousLinearMap x i).comp (.proj i)
-
-@[simp]
-
-Depends on / 依赖: f.toContinuousLinearMap, toContinuousLinearMap
+--- 原说明 ---
+The derivative of a continuous multilinear map, as a continuous linear map
+from `∀ i, M₁ i` to `M₂`; see `ContinuousMultilinearMap.hasFDerivAt`.
 -/
-def linearDeriv : (forall i, M₁ i) ->L[R] M₂ := ∑ i : ι, (f.toContinuousLinearMap x i).comp (.proj i)
+def linearDeriv : (∀ i, M₁ i) →L[R] M₂ := ∑ i : ι, (f.toContinuousLinearMap x i).comp (.proj i)
 
 @[simp]
-/--
-lemma `linearDeriv_apply` / 引理 `linearDeriv_apply`
-
-English:
-lemma linearDeriv_apply
-  statement: f.linearDeriv x y = ∑ i, f (Function.update x i (y i))
-  proof: by
-  simp [linearDeriv, toContinuousLinearMap]
-
-中文:
-引理 linearDeriv_apply
-  结论: f.linearDeriv x y = ∑ i, f (函数.update x i (y i))
-  证明: by
-  simp [linearDeriv, toContinuousLinearMap]
-
-Depends on / 依赖: linearDeriv, toContinuousLinearMap
+/-
+**ContinuousMultilinearMap.linearDeriv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Continuo
+usMultilinearMap`。
+形式化陈述：linearDeriv_apply : f.linearDeriv x y = ∑ i, f (Function.update x i (y i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MultilinearMap.toLinearMap_apply`：∀ {R : Type uR} {ι : Type uι} {M₁ : ι 
+→ Type v₁} {M₂ : Type v₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoi
+d (M₁ i)] [inst_2 : Ad…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma linearDeriv_apply : f.linearDeriv x y = ∑ i, f (Function.update x i (y i)) := by
   simp [linearDeriv, toContinuousLinearMap]
 
 end linearDeriv
 
-/--
-theorem `cons_add` / 定理 `cons_add`
+/-- In the specific case of continuous multilinear maps on spaces indexed by `Fin (n+1)`, where one
+can build an element of `(i : Fin (n+1)) → M i` using `cons`, one can express directly the
+additivity of a multilinear map along the first variable. -/
+/-
+**ContinuousMultilinearMap.cons_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：cons_add (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i.
+succ) (x y : M 0) : f (cons (x + y) m) = f (cons x m) + f (cons y m)
+参数：f : ContinuousMultilinearMap R M M₂；m : forall i : Fin n, M i.succ；x y : M 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `MultilinearMap.cons_add`：cons_add (f : MultilinearMap R M M₂) (m : foral
+l i : Fin n, M i.succ) (x y : M 0) : f (cons (x + y) m) = f (cons x m) + f (cons
+ y m)
 
-English:
-theorem cons_add
-  given: (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i.succ) (x y : M 0)
-  proof: f.toMultilinearMap.cons_add m x y
-
-中文:
-定理 cons_add
-  条件: (f : 连续多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (x y : M 0)
-  证明: f.toMultilinearMap.cons_add m x y
-
-Depends on / 依赖: cons_add, f.toMultilinearMap.cons_add, toMultilinearMap
+--- 原说明 ---
+In the specific case of continuous multilinear maps on spaces indexed by `Fin (n
++1)`, where one
+can build an element of `(i : Fin (n+1)) → M i` using `cons`, one can express di
+rectly the
+additivity of a multilinear map along the first variable.
 -/
-theorem cons_add (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i.succ) (x y : M 0) :
+theorem cons_add (f : ContinuousMultilinearMap R M M₂) (m : ∀ i : Fin n, M i.succ) (x y : M 0) :
     f (cons (x + y) m) = f (cons x m) + f (cons y m) :=
   f.toMultilinearMap.cons_add m x y
 
-/--
-theorem `cons_smul` / 定理 `cons_smul`
+/-- In the specific case of continuous multilinear maps on spaces indexed by `Fin (n+1)`, where one
+can build an element of `(i : Fin (n+1)) → M i` using `cons`, one can express directly the
+multiplicativity of a multilinear map along the first variable. -/
+/-
+**ContinuousMultilinearMap.cons_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultil
+inearMap`。
+形式化陈述：cons_smul (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i
+.succ) (c : R) (x : M 0) : f (cons (c • x) m) = c • f (cons x m)
+参数：f : ContinuousMultilinearMap R M M₂；m : forall i : Fin n, M i.succ；c : R；x : 
+M 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `MultilinearMap.cons_smul`：cons_smul (f : MultilinearMap R M M₂) (m : for
+all i : Fin n, M i.succ) (c : R) (x : M 0) : f (cons (c • x) m) = c • f (cons x 
+m)
 
-English:
-theorem cons_smul
-  statement: (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i.succ) (c : R)
-  proof: f.toMultilinearMap.cons_smul m c x
-
-中文:
-定理 cons_smul
-  结论: (f : 连续多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (c : R)
-  证明: f.toMultilinearMap.cons_smul m c x
-
-Depends on / 依赖: cons_smul, f.toMultilinearMap.cons_smul, toMultilinearMap
+--- 原说明 ---
+In the specific case of continuous multilinear maps on spaces indexed by `Fin (n
++1)`, where one
+can build an element of `(i : Fin (n+1)) → M i` using `cons`, one can express di
+rectly the
+multiplicativity of a multilinear map along the first variable.
 -/
-theorem cons_smul (f : ContinuousMultilinearMap R M M₂) (m : forall i : Fin n, M i.succ) (c : R)
+theorem cons_smul (f : ContinuousMultilinearMap R M M₂) (m : ∀ i : Fin n, M i.succ) (c : R)
     (x : M 0) : f (cons (c • x) m) = c • f (cons x m) :=
   f.toMultilinearMap.cons_smul m c x
-
-/--
-theorem `map_piecewise_add` / 定理 `map_piecewise_add`
-
-English:
-theorem map_piecewise_add
-  given: [DecidableEq ι] (m m' : forall i, M₁ i) (t : Finset ι)
-  proof: f.toMultilinearMap.map_piecewise_add _ _ _
-
-中文:
-定理 map_piecewise_add
-  条件: [DecidableEq ι] (m m' : 对任意 i, M₁ i) (t : 有限集 ι)
-  证明: f.toMultilinearMap.map_piecewise_add _ _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_piecewise_add, map_piecewise_add, toMultilinearMap
+/-
+**ContinuousMultilinearMap.map_piecewise_add** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usMultilinearMap`。
+形式化陈述：map_piecewise_add [DecidableEq ι] (m m' : forall i, M₁ i) (t : Finset ι) :
+ f (t.piecewise (m + m') m') = ∑ s in t.powerset, f (s.piecewise m m')
+参数：m m' : forall i, M₁ i；t : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_piecewise_add`：map_piecewise_add [DecidableEq ι] (m m
+' : forall i, M₁ i) (t : Finset ι) : f (t.piecewise (m + m') m') = ∑ s in t.powe
+rset, f (s.piecewise m…
 -/
-theorem map_piecewise_add [DecidableEq ι] (m m' : forall i, M₁ i) (t : Finset ι) :
-    f (t.piecewise (m + m') m') = ∑ s in t.powerset, f (s.piecewise m m') :=
+theorem map_piecewise_add [DecidableEq ι] (m m' : ∀ i, M₁ i) (t : Finset ι) :
+    f (t.piecewise (m + m') m') = ∑ s ∈ t.powerset, f (s.piecewise m m') :=
   f.toMultilinearMap.map_piecewise_add _ _ _
 
-/--
-theorem `map_add_univ` / 定理 `map_add_univ`
+/-- Additivity of a continuous multilinear map along all coordinates at the same time,
+writing `f (m + m')` as the sum of `f (s.piecewise m m')` over all sets `s`. -/
+/-
+**ContinuousMultilinearMap.map_add_univ** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMul
+tilinearMap`。
+形式化陈述：map_add_univ [DecidableEq ι] [Fintype ι] (m m' : forall i, M₁ i) : f (m + 
+m') = ∑ s : Finset ι, f (s.piecewise m m')
+参数：m m' : forall i, M₁ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_add_univ`：map_add_univ [DecidableEq ι] [Fintype ι] (m
+ m' : forall i, M₁ i) : f (m + m') = ∑ s : Finset ι, f (s.piecewise m m')
 
-English:
-theorem map_add_univ
-  given: [DecidableEq ι] [Fintype ι] (m m' : forall i, M₁ i)
-  proof: f.toMultilinearMap.map_add_univ _ _
-
-中文:
-定理 map_add_univ
-  条件: [DecidableEq ι] [有限类型 ι] (m m' : 对任意 i, M₁ i)
-  证明: f.toMultilinearMap.map_add_univ _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_add_univ, map_add_univ, toMultilinearMap
+--- 原说明 ---
+Additivity of a continuous multilinear map along all coordinates at the same tim
+e,
+writing `f (m + m')` as the sum of `f (s.piecewise m m')` over all sets `s`.
 -/
-theorem map_add_univ [DecidableEq ι] [Fintype ι] (m m' : forall i, M₁ i) :
+theorem map_add_univ [DecidableEq ι] [Fintype ι] (m m' : ∀ i, M₁ i) :
     f (m + m') = ∑ s : Finset ι, f (s.piecewise m m') :=
   f.toMultilinearMap.map_add_univ _ _
 
@@ -1344,44 +1043,59 @@ section ApplySum
 
 open Fintype Finset
 
-variable {α : ι -> Type*} [Fintype ι] (g : forall i, α i -> M₁ i) (A : forall i, Finset (α i))
+variable {α : ι → Type*} [Fintype ι] (g : ∀ i, α i → M₁ i) (A : ∀ i, Finset (α i))
 
-/--
-theorem `map_sum_finset` / 定理 `map_sum_finset`
+/-- If `f` is continuous multilinear, then `f (Σ_{j₁ ∈ A₁} g₁ j₁, ..., Σ_{jₙ ∈ Aₙ} gₙ jₙ)` is the
+sum of `f (g₁ (r 1), ..., gₙ (r n))` where `r` ranges over all functions with `r 1 ∈ A₁`, ...,
+`r n ∈ Aₙ`. This follows from multilinearity by expanding successively with respect to each
+coordinate. -/
+/-
+**ContinuousMultilinearMap.map_sum_finset** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：map_sum_finset [DecidableEq ι] : (f fun i => ∑ j in A i, g i j) = ∑ r in p
+iFinset A, f fun i => g i (r i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_sum_finset`：map_sum_finset [DecidableEq ι] [Fintype ι
+] : (f fun i => ∑ j in A i, g i j) = ∑ r in piFinset A, f fun i => g i (r i)
 
-English:
-theorem map_sum_finset
-  given: [DecidableEq ι]
-  proof: f.toMultilinearMap.map_sum_finset _ _
-
-中文:
-定理 map_sum_finset
-  条件: [DecidableEq ι]
-  证明: f.toMultilinearMap.map_sum_finset _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_sum_finset, map_sum_finset, toMultilinearMap
+--- 原说明 ---
+If `f` is continuous multilinear, then `f (Σ_{j₁ ∈ A₁} g₁ j₁, ..., Σ_{jₙ ∈ Aₙ} g
+ₙ jₙ)` is the
+sum of `f (g₁ (r 1), ..., gₙ (r n))` where `r` ranges over all functions with `r
+ 1 ∈ A₁`, ...,
+`r n ∈ Aₙ`. This follows from multilinearity by expanding successively with resp
+ect to each
+coordinate.
 -/
 theorem map_sum_finset [DecidableEq ι] :
-    (f fun i => ∑ j in A i, g i j) = ∑ r in piFinset A, f fun i => g i (r i) :=
+    (f fun i => ∑ j ∈ A i, g i j) = ∑ r ∈ piFinset A, f fun i => g i (r i) :=
   f.toMultilinearMap.map_sum_finset _ _
 
-/--
-theorem `map_sum` / 定理 `map_sum`
+/-- If `f` is continuous multilinear, then `f (Σ_{j₁} g₁ j₁, ..., Σ_{jₙ} gₙ jₙ)` is the sum of
+`f (g₁ (r 1), ..., gₙ (r n))` where `r` ranges over all functions `r`. This follows from
+multilinearity by expanding successively with respect to each coordinate. -/
+/-
+**ContinuousMultilinearMap.map_sum** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultilin
+earMap`。
+形式化陈述：map_sum [DecidableEq ι] [forall i, Fintype (α i)] : (f fun i => ∑ j, g i j
+) = ∑ r : forall i, α i, f fun i => g i (r i)
+参数：α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_sum`：map_sum [DecidableEq ι] [Fintype ι] [forall i, F
+intype (α i)] : (f fun i => ∑ j, g i j) = ∑ r : forall i, α i, f fun i => g i (r
+ i)
 
-English:
-theorem map_sum
-  given: [DecidableEq ι] [forall i, Fintype (α i)]
-  proof: f.toMultilinearMap.map_sum _
-
-中文:
-定理 map_sum
-  条件: [DecidableEq ι] [对任意 i, 有限类型 (α i)]
-  证明: f.toMultilinearMap.map_sum _
-
-Depends on / 依赖: f.toMultilinearMap.map_sum, map_sum, toMultilinearMap
+--- 原说明 ---
+If `f` is continuous multilinear, then `f (Σ_{j₁} g₁ j₁, ..., Σ_{jₙ} gₙ jₙ)` is 
+the sum of
+`f (g₁ (r 1), ..., gₙ (r n))` where `r` ranges over all functions `r`. This foll
+ows from
+multilinearity by expanding successively with respect to each coordinate.
 -/
-theorem map_sum [DecidableEq ι] [forall i, Fintype (α i)] :
-    (f fun i => ∑ j, g i j) = ∑ r : forall i, α i, f fun i => g i (r i) :=
+theorem map_sum [DecidableEq ι] [∀ i, Fintype (α i)] :
+    (f fun i => ∑ j, g i j) = ∑ r : ∀ i, α i, f fun i => g i (r i) :=
   f.toMultilinearMap.map_sum _
 
 end ApplySum
@@ -1389,49 +1103,41 @@ end ApplySum
 section RestrictScalar
 
 variable (R)
-variable {A : Type*} [Semiring A] [SMul R A] [forall i : ι, Module A (M₁ i)] [Module A M₂]
-  [forall i, IsScalarTower R A (M₁ i)] [IsScalarTower R A M₂]
+variable {A : Type*} [Semiring A] [SMul R A] [∀ i : ι, Module A (M₁ i)] [Module A M₂]
+  [∀ i, IsScalarTower R A (M₁ i)] [IsScalarTower R A M₂]
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- Reinterpret an `A`-multilinear map as an `R`-multilinear map, if `A` is an algebra over `R`
+and their actions on all involved modules agree with the action of `R` on `A`. -/
+/-
+**ContinuousMultilinearMap.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `Continuous
+MultilinearMap`。
+形式化陈述：restrictScalars (f : ContinuousMultilinearMap A M₁ M₂) : ContinuousMultili
+nearMap R M₁ M₂ where toMultilinearMap
+参数：f : ContinuousMultilinearMap A M₁ M₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.cont`：∀ {R : Type u} {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : ι) → AddCommMonoid (M₁
+ i)] [inst_2 : AddC…
 
-English:
-definition restrictScalars
-  signature: (f : ContinuousMultilinearMap A M₁ M₂)
-  body: f.toMultilinearMap.restrictScalars R
-  cont := f.cont
-
-@[simp]
-
-中文:
-定义 restrictScalars
-  签名: (f : 连续多重线性映射 A M₁ M₂)
-  定义体: f.toMultilinearMap.restrictScalars R
-  cont := f.cont
-
-@[simp]
-
-Depends on / 依赖: f.toMultilinearMap.restrictScalars, restrictScalars, toMultilinearMap
+--- 原说明 ---
+Reinterpret an `A`-multilinear map as an `R`-multilinear map, if `A` is an algeb
+ra over `R`
+and their actions on all involved modules agree with the action of `R` on `A`.
 -/
 def restrictScalars (f : ContinuousMultilinearMap A M₁ M₂) : ContinuousMultilinearMap R M₁ M₂ where
   toMultilinearMap := f.toMultilinearMap.restrictScalars R
   cont := f.cont
 
 @[simp]
-/--
-theorem `coe_restrictScalars` / 定理 `coe_restrictScalars`
-
-English:
-theorem coe_restrictScalars
-  given: (f : ContinuousMultilinearMap A M₁ M₂)
-  statement: ⇑(f.restrictScalars R) = f
-  proof: rfl
-
-中文:
-定理 coe_restrictScalars
-  条件: (f : 连续多重线性映射 A M₁ M₂)
-  结论: ⇑(f.restrictScalars R) = f
-  证明: rfl
+/-
+**ContinuousMultilinearMap.coe_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousMultilinearMap`。
+形式化陈述：coe_restrictScalars (f : ContinuousMultilinearMap A M₁ M₂) : ⇑(f.restrictS
+calars R) = f
+参数：f : ContinuousMultilinearMap A M₁ M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_restrictScalars (f : ContinuousMultilinearMap A M₁ M₂) : ⇑(f.restrictScalars R) = f :=
   rfl
@@ -1442,26 +1148,23 @@ end Semiring
 
 section Ring
 
-variable [Ring R] [forall i, AddCommGroup (M₁ i)] [AddCommGroup M₂] [forall i, Module R (M₁ i)] [Module R M₂]
-  [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] (f f' : ContinuousMultilinearMap R M₁ M₂)
+variable [Ring R] [∀ i, AddCommGroup (M₁ i)] [AddCommGroup M₂] [∀ i, Module R (M₁ i)] [Module R M₂]
+  [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] (f f' : ContinuousMultilinearMap R M₁ M₂)
 
 @[simp]
-/--
-theorem `map_update_sub` / 定理 `map_update_sub`
-
-English:
-theorem map_update_sub
-  given: [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i)
-  proof: f.toMultilinearMap.map_update_sub _ _ _ _
-
-中文:
-定理 map_update_sub
-  条件: [DecidableEq ι] (m : 对任意 i, M₁ i) (i : ι) (x y : M₁ i)
-  证明: f.toMultilinearMap.map_update_sub _ _ _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_update_sub, map_update_sub, toMultilinearMap
+/-
+**ContinuousMultilinearMap.map_update_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：map_update_sub [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i) :
+ f (update m i (x - y)) = f (update m i x) - f (update m i y)
+参数：m : forall i, M₁ i；i : ι；x y : M₁ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_update_sub`：map_update_sub [DecidableEq ι] (m : foral
+l i, M₁ i) (i : ι) (x y : M₁ i) : f (update m i (x - y)) = f (update m i x) - f 
+(update m i y)
 -/
-theorem map_update_sub [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (x y : M₁ i) :
+theorem map_update_sub [DecidableEq ι] (m : ∀ i, M₁ i) (i : ι) (x y : M₁ i) :
     f (update m i (x - y)) = f (update m i x) - f (update m i y) :=
   f.toMultilinearMap.map_update_sub _ _ _ _
 
@@ -1469,139 +1172,70 @@ section IsTopologicalAddGroup
 
 variable [IsTopologicalAddGroup M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (ContinuousMultilinearMap R M₁ M₂)
-  body: ⟨fun f => { -f.toMultilinearMap with cont := f.cont.neg }⟩
-
-中文:
-实例 :
-  签名: 取负 (连续多重线性映射 R M₁ M₂)
-  定义体: ⟨fun f => { -f.toMultilinearMap with cont := f.cont.neg }⟩
-
-Depends on / 依赖: f.cont.neg, f.toMultilinearMap, toMultilinearMap
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (ContinuousMultilinearMap R M₁ M₂) :=
   ⟨fun f => { -f.toMultilinearMap with cont := f.cont.neg }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNegApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
-
-中文:
-实例 :
-  签名: 是NegApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsNegApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+instance : IsNegApply (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   neg_apply _ _ := rfl
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (ContinuousMultilinearMap R M₁ M₂)
-  body: ⟨fun f g => { f.toMultilinearMap - g.toMultilinearMap with cont := f.cont.sub g.cont }⟩
-
-中文:
-实例 :
-  签名: 减法 (连续多重线性映射 R M₁ M₂)
-  定义体: ⟨fun f g => { f.toMultilinearMap - g.toMultilinearMap with cont := f.cont.sub g.cont }⟩
-
-Depends on / 依赖: f.cont.sub, f.toMultilinearMap, g.cont, g.toMultilinearMap, toMultilinearMap
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (ContinuousMultilinearMap R M₁ M₂) :=
   ⟨fun f g => { f.toMultilinearMap - g.toMultilinearMap with cont := f.cont.sub g.cont }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSubApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
-
-中文:
-实例 :
-  签名: 是SubApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSubApply (ContinuousMultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
+instance : IsSubApply (ContinuousMultilinearMap R M₁ M₂) (∀ i, M₁ i) M₂ where
   sub_apply _ _ _ := rfl
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (ContinuousMultilinearMap R M₁ M₂)
-  body: fast_instance%
-  toMultilinearMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 加法交换群 (连续多重线性映射 R M₁ M₂)
-  定义体: fast_instance%
-  toMultilinearMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (ContinuousMultilinearMap R M₁ M₂) := fast_instance%
   toMultilinearMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-theorem `neg_prod_neg` / 定理 `neg_prod_neg`
-
-English:
-theorem neg_prod_neg
-  statement: [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
-  proof: rfl
-
-中文:
-定理 neg_prod_neg
-  结论: [加法交换群 M₃] [模 R M₃] [拓扑空间 M₃]
-  证明: rfl
+/-
+**ContinuousMultilinearMap.neg_prod_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMul
+tilinearMap`。
+形式化陈述：neg_prod_neg [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃] [IsTopo
+logicalAddGroup M₃] (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultil
+inearMap R M₁ M₃) : (-f).prod (-g) = - f.prod g
+参数：f : ContinuousMultilinearMap R M₁ M₂；g : ContinuousMultilinearMap R M₁ M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_prod_neg [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
     [IsTopologicalAddGroup M₃] (f : ContinuousMultilinearMap R M₁ M₂)
     (g : ContinuousMultilinearMap R M₁ M₃) : (-f).prod (-g) = - f.prod g :=
   rfl
-
-/--
-theorem `sub_prod_sub` / 定理 `sub_prod_sub`
-
-English:
-theorem sub_prod_sub
-  statement: [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
-  proof: rfl
-
-中文:
-定理 sub_prod_sub
-  结论: [加法交换群 M₃] [模 R M₃] [拓扑空间 M₃]
-  证明: rfl
+/-
+**ContinuousMultilinearMap.sub_prod_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMul
+tilinearMap`。
+形式化陈述：sub_prod_sub [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃] [IsTopo
+logicalAddGroup M₃] (f₁ f₂ : ContinuousMultilinearMap R M₁ M₂) (g₁ g₂ : Continuo
+usMultilinearMap R M₁ M₃) : (f₁ - f₂).prod (g₁ - g₂) = f₁.prod g₁ - f₂.prod g₂
+参数：f₁ f₂ : ContinuousMultilinearMap R M₁ M₂；g₁ g₂ : ContinuousMultilinearMap R M
+₁ M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_prod_sub [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
     [IsTopologicalAddGroup M₃] (f₁ f₂ : ContinuousMultilinearMap R M₁ M₂)
@@ -1615,45 +1249,45 @@ end Ring
 
 section CommSemiring
 
-variable [CommSemiring R] [forall i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [forall i, Module R (M₁ i)]
-  [Module R M₂] [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂]
+variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [∀ i, Module R (M₁ i)]
+  [Module R M₂] [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂]
   (f : ContinuousMultilinearMap R M₁ M₂)
 
-/--
-theorem `map_piecewise_smul` / 定理 `map_piecewise_smul`
-
-English:
-theorem map_piecewise_smul
-  given: [DecidableEq ι] (c : ι -> R) (m : forall i, M₁ i) (s : Finset ι)
-  proof: f.toMultilinearMap.map_piecewise_smul _ _ _
-
-中文:
-定理 map_piecewise_smul
-  条件: [DecidableEq ι] (c : ι -> R) (m : 对任意 i, M₁ i) (s : 有限集 ι)
-  证明: f.toMultilinearMap.map_piecewise_smul _ _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_piecewise_smul, map_piecewise_smul, toMultilinearMap
+/-
+**ContinuousMultilinearMap.map_piecewise_smul** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousMultilinearMap`。
+形式化陈述：map_piecewise_smul [DecidableEq ι] (c : ι -> R) (m : forall i, M₁ i) (s : 
+Finset ι) : f (s.piecewise (fun i => c i • m i) m) = (∏ i in s, c i) • f m
+参数：c : ι -> R；m : forall i, M₁ i；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_piecewise_smul`：map_piecewise_smul [DecidableEq ι] (c
+ : ι -> R) (m : forall i, M₁ i) (s : Finset ι) : f (s.piecewise (fun i => c i • 
+m i) m) = (∏ i in s, c …
 -/
-theorem map_piecewise_smul [DecidableEq ι] (c : ι -> R) (m : forall i, M₁ i) (s : Finset ι) :
-    f (s.piecewise (fun i => c i • m i) m) = (∏ i in s, c i) • f m :=
+theorem map_piecewise_smul [DecidableEq ι] (c : ι → R) (m : ∀ i, M₁ i) (s : Finset ι) :
+    f (s.piecewise (fun i => c i • m i) m) = (∏ i ∈ s, c i) • f m :=
   f.toMultilinearMap.map_piecewise_smul _ _ _
 
-/--
-theorem `map_smul_univ` / 定理 `map_smul_univ`
+/-- Multiplicativity of a continuous multilinear map along all coordinates at the same time,
+writing `f (fun i ↦ c i • m i)` as `(∏ i, c i) • f m`. -/
+/-
+**ContinuousMultilinearMap.map_smul_univ** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMu
+ltilinearMap`。
+形式化陈述：map_smul_univ [Fintype ι] (c : ι -> R) (m : forall i, M₁ i) : (f fun i => 
+c i • m i) = (∏ i, c i) • f m
+参数：c : ι -> R；m : forall i, M₁ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MultilinearMap.map_smul_univ`：map_smul_univ [Fintype ι] (c : ι -> R) (m 
+: forall i, M₁ i) : (f fun i => c i • m i) = (∏ i, c i) • f m
 
-English:
-theorem map_smul_univ
-  given: [Fintype ι] (c : ι -> R) (m : forall i, M₁ i)
-  proof: f.toMultilinearMap.map_smul_univ _ _
-
-中文:
-定理 map_smul_univ
-  条件: [有限类型 ι] (c : ι -> R) (m : 对任意 i, M₁ i)
-  证明: f.toMultilinearMap.map_smul_univ _ _
-
-Depends on / 依赖: f.toMultilinearMap.map_smul_univ, map_smul_univ, toMultilinearMap
+--- 原说明 ---
+Multiplicativity of a continuous multilinear map along all coordinates at the sa
+me time,
+writing `f (fun i ↦ c i • m i)` as `(∏ i, c i) • f m`.
 -/
-theorem map_smul_univ [Fintype ι] (c : ι -> R) (m : forall i, M₁ i) :
+theorem map_smul_univ [Fintype ι] (c : ι → R) (m : ∀ i, M₁ i) :
     (f fun i => c i • m i) = (∏ i, c i) • f m :=
   f.toMultilinearMap.map_smul_univ _ _
 
@@ -1661,61 +1295,43 @@ theorem map_smul_univ [Fintype ι] (c : ι -> R) (m : forall i, M₁ i) :
 
 This is the multilinear version of `ContinuousLinearMap.ext_ring`. -/
 @[ext]
-/--
-theorem `ext_ring` / 定理 `ext_ring`
+/-
+**ContinuousMultilinearMap.ext_ring** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：ext_ring [Finite ι] [TopologicalSpace R] ⦃f g : ContinuousMultilinearMap R
+ (fun _ : ι => R) M₂⦄ (h : f (fun _ => 1) = g (fun _ => 1)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.toMultilinearMap_injective`：∀ {R : Type u} {ι :
+ Type v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : 
+ι) → AddCommMonoid (M₁ i)] [inst_2 : AddC…
+· 使用定理 `MultilinearMap.ext_ring`：ext_ring [Finite ι] ⦃f g : MultilinearMap R (fu
+n _ : ι => R) M₂⦄ (h : f (fun _ => 1) = g (fun _ => 1)) : f = g
 
-English:
-theorem ext_ring
-  statement: [Finite ι] [TopologicalSpace R]
-  proof: toMultilinearMap_injective MultilinearMap.ext_ring h
+--- 原说明 ---
+If two continuous `R`-multilinear maps from `R` are equal on 1, then they are eq
+ual.
 
-中文:
-定理 ext_ring
-  结论: [有限 ι] [拓扑空间 R]
-  证明: toMultilinearMap_injective MultilinearMap.ext_ring h
-
-Depends on / 依赖: MultilinearMap, MultilinearMap.ext_ring, ext_ring, toMultilinearMap_injective
+This is the multilinear version of `ContinuousLinearMap.ext_ring`.
 -/
 theorem ext_ring [Finite ι] [TopologicalSpace R]
     ⦃f g : ContinuousMultilinearMap R (fun _ : ι => R) M₂⦄
-    (h : f (fun _ => 1) = g (fun _ => 1)) : f = g :=
-toMultilinearMap_injective MultilinearMap.ext_ring h
+    (h : f (fun _ ↦ 1) = g (fun _ ↦ 1)) : f = g :=
+  toMultilinearMap_injective <| MultilinearMap.ext_ring h
 
 end CommSemiring
 
 section DistribMulAction
 
-variable {R' R'' A : Type*} [Monoid R'] [Monoid R''] [Semiring A] [forall i, AddCommMonoid (M₁ i)]
-  [AddCommMonoid M₂] [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] [forall i, Module A (M₁ i)]
+variable {R' R'' A : Type*} [Monoid R'] [Monoid R''] [Semiring A] [∀ i, AddCommMonoid (M₁ i)]
+  [AddCommMonoid M₂] [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] [∀ i, Module A (M₁ i)]
   [Module A M₂] [DistribMulAction R' M₂] [ContinuousConstSMul R' M₂] [SMulCommClass A R' M₂]
   [DistribMulAction R'' M₂] [ContinuousConstSMul R'' M₂] [SMulCommClass A R'' M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ContinuousAdd
-  signature: M₂] : DistribMulAction R' (ContinuousMultilinearMap A M₁ M₂)
-  body: fast_instance%
-  Function.Injective.distribMulAction
-    { toFun := toMultilinearMap,
-      map_zero' := toMultilinearMap_zero,
-      map_add' := toMultilinearMap_add }
-    toMultilinearMap_injective
-    fun _ _ => rfl
-
-中文:
-实例 [连续加法
-  签名: M₂] : 分配乘法作用 R' (连续多重线性映射 A M₁ M₂)
-  定义体: fast_instance%
-  Function.Injective.distribMulAction
-    { toFun := toMultilinearMap,
-      map_zero' := toMultilinearMap_zero,
-      map_add' := toMultilinearMap_add }
-    toMultilinearMap_injective
-    fun _ _ => rfl
-
-Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, distribMulAction, fast_instance, map_add, map_zero, toMultilinearMap, toMultilinearMap_add, toMultilinearMap_injective, toMultilinearMap_zero
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ContinuousAdd M₂] : DistribMulAction R' (ContinuousMultilinearMap A M₁ M₂) :=
   fast_instance%
@@ -1730,34 +1346,21 @@ end DistribMulAction
 
 section Module
 
-variable {R' A : Type*} [Semiring R'] [Semiring A] [forall i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
-  [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] [ContinuousAdd M₂] [forall i, Module A (M₁ i)]
+variable {R' A : Type*} [Semiring R'] [Semiring A] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂]
+  [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂] [ContinuousAdd M₂] [∀ i, Module A (M₁ i)]
   [Module A M₂] [Module R' M₂] [ContinuousConstSMul R' M₂] [SMulCommClass A R' M₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The space of continuous multilinear maps over an algebra over `R` is a module over `R`, for the
+pointwise addition and scalar multiplication. -/
+/-
+**ContinuousMultilinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMultilinearMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Module R' (ContinuousMultilinearMap A M₁ M₂)
-  body: fast_instance%
-  Function.Injective.module _
-    { toFun := toMultilinearMap,
-      map_zero' := toMultilinearMap_zero,
-      map_add' := toMultilinearMap_add }
-    toMultilinearMap_injective fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 模 R' (连续多重线性映射 A M₁ M₂)
-  定义体: fast_instance%
-  Function.Injective.module _
-    { toFun := toMultilinearMap,
-      map_zero' := toMultilinearMap_zero,
-      map_add' := toMultilinearMap_add }
-    toMultilinearMap_injective fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+--- 原说明 ---
+The space of continuous multilinear maps over an algebra over `R` is a module ov
+er `R`, for the
+pointwise addition and scalar multiplication.
 -/
 instance : Module R' (ContinuousMultilinearMap A M₁ M₂) := fast_instance%
   Function.Injective.module _
@@ -1769,55 +1372,48 @@ instance : Module R' (ContinuousMultilinearMap A M₁ M₂) := fast_instance%
 /-- Linear map version of the map `toMultilinearMap` associating to a continuous multilinear map
 the corresponding multilinear map. -/
 @[simps]
-/--
-Definition of `toMultilinearMapLinear` / `toMultilinearMapLinear` 的定义
+/-
+**ContinuousMultilinearMap.toMultilinearMapLinear** 是 Mathlib 中的一个定义，位于命名空间 `Con
+tinuousMultilinearMap`。
+形式化陈述：toMultilinearMapLinear : ContinuousMultilinearMap A M₁ M₂ ->ₗ[R'] Multilin
+earMap A M₁ M₂ where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.toMultilinearMap_add`：toMultilinearMap_add (f g
+ : ContinuousMultilinearMap R M₁ M₂) : (f + g).toMultilinearMap = f.toMultilinea
+rMap + g.toMultilinearMap
 
-English:
-definition toMultilinearMapLinear
-  signature: : ContinuousMultilinearMap A M₁ M₂ ->ₗ[R'] MultilinearMap A M₁ M₂ where
-  body: toMultilinearMap
-  map_add' := toMultilinearMap_add
-  map_smul' := toMultilinearMap_smul
-
-中文:
-定义 toMultilinearMapLinear
-  签名: : 连续多重线性映射 A M₁ M₂ ->ₗ[R'] 多重线性映射 A M₁ M₂ where
-  定义体: toMultilinearMap
-  map_add' := toMultilinearMap_add
-  map_smul' := toMultilinearMap_smul
-
-Depends on / 依赖: toMultilinearMap
+--- 原说明 ---
+Linear map version of the map `toMultilinearMap` associating to a continuous mul
+tilinear map
+the corresponding multilinear map.
 -/
-def toMultilinearMapLinear : ContinuousMultilinearMap A M₁ M₂ ->ₗ[R'] MultilinearMap A M₁ M₂ where
+def toMultilinearMapLinear : ContinuousMultilinearMap A M₁ M₂ →ₗ[R'] MultilinearMap A M₁ M₂ where
   toFun := toMultilinearMap
   map_add' := toMultilinearMap_add
   map_smul' := toMultilinearMap_smul
 
 /-- `ContinuousMultilinearMap.pi` as a `LinearEquiv`. -/
 @[simps +simpRhs]
-/--
-Definition of `piLinearEquiv` / `piLinearEquiv` 的定义
+/-
+**ContinuousMultilinearMap.piLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMu
+ltilinearMap`。
+形式化陈述：piLinearEquiv {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M'
+ i)] [forall i, TopologicalSpace (M' i)] [forall i, ContinuousAdd (M' i)] [foral
+l i, Module R' (M' i)] [forall i, Module A (M' i)] [forall i, SMulCommClass A R'
+ (M' i)] [forall i, ContinuousConstSMul R' (M' i)] : (forall i, ContinuousMultil
+inearMap A M₁ (M' i)) ≃ₗ[R'] ContinuousMultilinearMap A M₁ (forall i, M' i)
+参数：M' i；M' i；M' i；M' i；M' i；M' i；M' i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piLinearEquiv
-  signature: {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-  body: { piEquiv with
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-中文:
-定义 piLinearEquiv
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
-  定义体: { piEquiv with
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-Depends on / 依赖: map_add, map_smul, piEquiv
+--- 原说明 ---
+`ContinuousMultilinearMap.pi` as a `LinearEquiv`.
 -/
-def piLinearEquiv {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
-    [forall i, TopologicalSpace (M' i)] [forall i, ContinuousAdd (M' i)] [forall i, Module R' (M' i)]
-    [forall i, Module A (M' i)] [forall i, SMulCommClass A R' (M' i)] [forall i, ContinuousConstSMul R' (M' i)] :
-    (forall i, ContinuousMultilinearMap A M₁ (M' i)) ≃ₗ[R'] ContinuousMultilinearMap A M₁ (forall i, M' i) :=
+def piLinearEquiv {ι' : Type*} {M' : ι' → Type*} [∀ i, AddCommMonoid (M' i)]
+    [∀ i, TopologicalSpace (M' i)] [∀ i, ContinuousAdd (M' i)] [∀ i, Module R' (M' i)]
+    [∀ i, Module A (M' i)] [∀ i, SMulCommClass A R' (M' i)] [∀ i, ContinuousConstSMul R' (M' i)] :
+    (∀ i, ContinuousMultilinearMap A M₁ (M' i)) ≃ₗ[R'] ContinuousMultilinearMap A M₁ (∀ i, M' i) :=
   { piEquiv with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -1830,28 +1426,26 @@ section Algebra
 variable (R n) (A : Type*) [CommSemiring R] [Semiring A] [Algebra R A] [TopologicalSpace A]
   [ContinuousMul A]
 
-/--
-Definition of `mkPiAlgebraFin` / `mkPiAlgebraFin` 的定义
+/-- The continuous multilinear map on `A^n`, where `A` is a normed algebra over `𝕜`, associating to
+`m` the product of all the `m i`.
 
-English:
-definition mkPiAlgebraFin
-  signature: : A [×n]->L[R] A where
-  body: by
-    change Continuous fun m => (List.ofFn m).prod
-    simp_rw [List.ofFn_eq_map]
-    exact continuous_list_prod _ fun i _ => continuous_apply _
-  toMultilinearMap := MultilinearMap.mkPiAlgebraFin R n A
+See also: `ContinuousMultilinearMap.mkPiAlgebra`. -/
+/-
+**ContinuousMultilinearMap.mkPiAlgebraFin** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：(R : Type u) →   (n : ℕ) →     (A : Type u_1) →       [inst : CommSemiring
+ R] →         [inst_1 : Semiring A] →           [inst_2 : Algebra R A] → [inst_3
+ : TopologicalSpace A] → [ContinuousMul A] → A [×n]→L[R] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkPiAlgebraFin
-  签名: : A [×n]->L[R] A where
-  定义体: by
-    change Continuous fun m => (List.ofFn m).prod
-    simp_rw [List.ofFn_eq_map]
-    exact continuous_list_prod _ fun i _ => continuous_apply _
-  toMultilinearMap := MultilinearMap.mkPiAlgebraFin R n A
+--- 原说明 ---
+The continuous multilinear map on `A^n`, where `A` is a normed algebra over `𝕜`,
+ associating to
+`m` the product of all the `m i`.
+
+See also: `ContinuousMultilinearMap.mkPiAlgebra`.
 -/
-protected def mkPiAlgebraFin : A [×n]->L[R] A where
+protected def mkPiAlgebraFin : A [×n]→L[R] A where
   cont := by
     change Continuous fun m => (List.ofFn m).prod
     simp_rw [List.ofFn_eq_map]
@@ -1861,20 +1455,16 @@ protected def mkPiAlgebraFin : A [×n]->L[R] A where
 variable {R n A}
 
 @[simp]
-/--
-theorem `mkPiAlgebraFin_apply` / 定理 `mkPiAlgebraFin_apply`
-
-English:
-theorem mkPiAlgebraFin_apply
-  given: (m : Fin n -> A)
-  proof: rfl
-
-中文:
-定理 mkPiAlgebraFin_apply
-  条件: (m : 有限集 n -> A)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.mkPiAlgebraFin_apply** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousMultilinearMap`。
+形式化陈述：mkPiAlgebraFin_apply (m : Fin n -> A) : ContinuousMultilinearMap.mkPiAlgeb
+raFin R n A m = (List.ofFn m).prod
+参数：m : Fin n -> A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkPiAlgebraFin_apply (m : Fin n -> A) :
+theorem mkPiAlgebraFin_apply (m : Fin n → A) :
     ContinuousMultilinearMap.mkPiAlgebraFin R n A m = (List.ofFn m).prod :=
   rfl
 
@@ -1885,70 +1475,60 @@ section CommAlgebra
 variable (R ι) (A : Type*) [Fintype ι] [CommSemiring R] [CommSemiring A] [Algebra R A]
   [TopologicalSpace A] [ContinuousMul A]
 
-/--
-Definition of `mkPiAlgebra` / `mkPiAlgebra` 的定义
+/-- The continuous multilinear map on `A^ι`, where `A` is a normed commutative algebra
+over `𝕜`, associating to `m` the product of all the `m i`.
 
-English:
-definition mkPiAlgebra
-  signature: : ContinuousMultilinearMap R (fun _ : ι => A) A where
-  body: continuous_finsetProd _ fun _ _ => continuous_apply _
-  toMultilinearMap := MultilinearMap.mkPiAlgebra R ι A
+See also `ContinuousMultilinearMap.mkPiAlgebraFin`. -/
+/-
+**ContinuousMultilinearMap.mkPiAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMult
+ilinearMap`。
+形式化陈述：(R : Type u) →   (ι : Type v) →     (A : Type u_1) →       [Fintype ι] →  
+       [inst : CommSemiring R] →           [inst_1 : CommSemiring A] →          
+   [inst_2 : Algebra R A] →               [inst_3 : TopologicalSpace A] → [Conti
+nuousMul A] → ContinuousMultilinearMap R (fun x => A) A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The continuous multilinear map on `A^ι`, where `A` is a normed commutative algeb
+ra
+over `𝕜`, associating to `m` the product of all the `m i`.
 
-中文:
-定义 mkPiAlgebra
-  签名: : 连续多重线性映射 R (fun _ : ι => A) A where
-  定义体: continuous_finsetProd _ fun _ _ => continuous_apply _
-  toMultilinearMap := MultilinearMap.mkPiAlgebra R ι A
-
-@[simp]
+See also `ContinuousMultilinearMap.mkPiAlgebraFin`.
 -/
 protected def mkPiAlgebra : ContinuousMultilinearMap R (fun _ : ι => A) A where
   cont := continuous_finsetProd _ fun _ _ => continuous_apply _
   toMultilinearMap := MultilinearMap.mkPiAlgebra R ι A
 
 @[simp]
-/--
-theorem `mkPiAlgebra_apply` / 定理 `mkPiAlgebra_apply`
-
-English:
-theorem mkPiAlgebra_apply
-  given: (m : ι -> A)
-  statement: ContinuousMultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i
-  proof: rfl
-
-中文:
-定理 mkPiAlgebra_apply
-  条件: (m : ι -> A)
-  结论: 连续多重线性映射.mkPiAlgebra R ι A m = ∏ i, m i
-  证明: rfl
+/-
+**ContinuousMultilinearMap.mkPiAlgebra_apply** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usMultilinearMap`。
+形式化陈述：mkPiAlgebra_apply (m : ι -> A) : ContinuousMultilinearMap.mkPiAlgebra R ι 
+A m = ∏ i, m i
+参数：m : ι -> A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkPiAlgebra_apply (m : ι -> A) : ContinuousMultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i :=
+theorem mkPiAlgebra_apply (m : ι → A) : ContinuousMultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i :=
   rfl
-
-/--
-theorem `mkPiAlgebra_eq_mkPiAlgebraFin` / 定理 `mkPiAlgebra_eq_mkPiAlgebraFin`
-
-English:
-theorem mkPiAlgebra_eq_mkPiAlgebraFin
-  given: {n : Nat}
-  statement: ContinuousMultilinearMap.mkPiAlgebra R (Fin n) A
-  proof: by
-  ext
-  simp [List.prod_ofFn]
-
-中文:
-定理 mkPiAlgebra_eq_mkPiAlgebraFin
-  条件: {n : 自然数}
-  结论: 连续多重线性映射.mkPiAlgebra R (有限集 n) A
-  证明: by
-  ext
-  simp [List.prod_ofFn]
-
-Depends on / 依赖: List.prod_ofFn, prod_ofFn
+/-
+**ContinuousMultilinearMap.mkPiAlgebra_eq_mkPiAlgebraFin** 是 Mathlib 中的一个定理，位于命名
+空间 `ContinuousMultilinearMap`。
+形式化陈述：mkPiAlgebra_eq_mkPiAlgebraFin {n : Nat} : ContinuousMultilinearMap.mkPiAlg
+ebra R (Fin n) A = ContinuousMultilinearMap.mkPiAlgebraFin R n A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.prod_ofFn`：prod_ofFn {n : Nat} {f : Fin n -> M} : (ofFn f).prod = ∏
+ i, f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mkPiAlgebra_eq_mkPiAlgebraFin {n : Nat} : ContinuousMultilinearMap.mkPiAlgebra R (Fin n) A
+theorem mkPiAlgebra_eq_mkPiAlgebraFin {n : ℕ} : ContinuousMultilinearMap.mkPiAlgebra R (Fin n) A
     = ContinuousMultilinearMap.mkPiAlgebraFin R n A := by
   ext
   simp [List.prod_ofFn]
@@ -1957,29 +1537,24 @@ end CommAlgebra
 
 section SMulRight
 
-variable [CommSemiring R] [forall i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [forall i, Module R (M₁ i)]
-  [Module R M₂] [TopologicalSpace R] [forall i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂]
+variable [CommSemiring R] [∀ i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [∀ i, Module R (M₁ i)]
+  [Module R M₂] [TopologicalSpace R] [∀ i, TopologicalSpace (M₁ i)] [TopologicalSpace M₂]
   [ContinuousSMul R M₂] (f : ContinuousMultilinearMap R M₁ R) (z : M₂)
 
 /-- Given a continuous `R`-multilinear map `f` taking values in `R`, `f.smulRight z` is the
 continuous multilinear map sending `m` to `f m • z`. -/
 @[simps! toMultilinearMap apply]
-/--
-Definition of `smulRight` / `smulRight` 的定义
+/-
+**ContinuousMultilinearMap.smulRight** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultil
+inearMap`。
+形式化陈述：smulRight : ContinuousMultilinearMap R M₁ M₂ where toMultilinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulRight
-  signature: : ContinuousMultilinearMap R M₁ M₂ where
-  body: f.toMultilinearMap.smulRight z
-  cont := f.cont.smul continuous_const
-
-中文:
-定义 smulRight
-  签名: : 连续多重线性映射 R M₁ M₂ where
-  定义体: f.toMultilinearMap.smulRight z
-  cont := f.cont.smul continuous_const
-
-Depends on / 依赖: f.toMultilinearMap.smulRight, smulRight, toMultilinearMap
+--- 原说明 ---
+Given a continuous `R`-multilinear map `f` taking values in `R`, `f.smulRight z`
+ is the
+continuous multilinear map sending `m` to `f m • z`.
 -/
 def smulRight : ContinuousMultilinearMap R M₁ M₂ where
   toMultilinearMap := f.toMultilinearMap.smulRight z
@@ -1994,133 +1569,128 @@ variable [TopologicalSpace R] [TopologicalSpace M]
 variable [ContinuousMul R] [ContinuousSMul R M]
 
 variable (R ι) in
-/--
-Definition of `mkPiRing` / `mkPiRing` 的定义
+/-- The canonical continuous multilinear map on `R^ι`, associating to `m` the product of all the
+`m i` (multiplied by a fixed reference element `z` in the target module) -/
+/-
+**ContinuousMultilinearMap.mkPiRing** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMultili
+nearMap`。
+形式化陈述：(R : Type u) →   (ι : Type v) →     {M : Type u_1} →       [Fintype ι] →  
+       [inst : CommRing R] →           [inst_1 : AddCommMonoid M] →             
+[inst_2 : _root_.Module R M] →               [inst_3 : TopologicalSpace R] →    
+             [inst_4 : TopologicalSpace M] →                   [ContinuousMul R]
+ → [ContinuousSMul R M] → M → ContinuousMultilinearMap R (fun x => R) M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkPiRing
-  signature: (z : M)
-  body: (ContinuousMultilinearMap.mkPiAlgebra R ι R).smulRight z
-
-
-@[simp]
-
-中文:
-定义 mkPiRing
-  签名: (z : M)
-  定义体: (ContinuousMultilinearMap.mkPiAlgebra R ι R).smulRight z
-
-
-@[simp]
+--- 原说明 ---
+The canonical continuous multilinear map on `R^ι`, associating to `m` the produc
+t of all the
+`m i` (multiplied by a fixed reference element `z` in the target module)
 -/
 protected def mkPiRing (z : M) : ContinuousMultilinearMap R (fun _ : ι => R) M :=
   (ContinuousMultilinearMap.mkPiAlgebra R ι R).smulRight z
 
 
 @[simp]
-/--
-theorem `mkPiRing_apply` / 定理 `mkPiRing_apply`
-
-English:
-theorem mkPiRing_apply
-  given: (z : M) (m : ι -> R)
-  proof: rfl
-
-中文:
-定理 mkPiRing_apply
-  条件: (z : M) (m : ι -> R)
-  证明: rfl
+/-
+**ContinuousMultilinearMap.mkPiRing_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ultilinearMap`。
+形式化陈述：mkPiRing_apply (z : M) (m : ι -> R) : (ContinuousMultilinearMap.mkPiRing R
+ ι z : (ι -> R) -> M) m = (∏ i, m i) • z
+参数：z : M；m : ι -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkPiRing_apply (z : M) (m : ι -> R) :
-    (ContinuousMultilinearMap.mkPiRing R ι z : (ι -> R) -> M) m = (∏ i, m i) • z :=
+theorem mkPiRing_apply (z : M) (m : ι → R) :
+    (ContinuousMultilinearMap.mkPiRing R ι z : (ι → R) → M) m = (∏ i, m i) • z :=
   rfl
-
-/--
-theorem `mkPiRing_apply_one_eq_self` / 定理 `mkPiRing_apply_one_eq_self`
-
-English:
-theorem mkPiRing_apply_one_eq_self
-  given: (f : ContinuousMultilinearMap R (fun _ : ι => R) M)
-  proof: toMultilinearMap_injective f.toMultilinearMap.mkPiRing_apply_one_eq_self
-
-中文:
-定理 mkPiRing_apply_one_eq_self
-  条件: (f : 连续多重线性映射 R (fun _ : ι => R) M)
-  证明: toMultilinearMap_injective f.toMultilinearMap.mkPiRing_apply_one_eq_self
-
-Depends on / 依赖: f.toMultilinearMap.mkPiRing_apply_one_eq_self, mkPiRing_apply_one_eq_self, toMultilinearMap, toMultilinearMap_injective
+/-
+**ContinuousMultilinearMap.mkPiRing_apply_one_eq_self** 是 Mathlib 中的一个定理，位于命名空间 
+`ContinuousMultilinearMap`。
+形式化陈述：mkPiRing_apply_one_eq_self (f : ContinuousMultilinearMap R (fun _ : ι => R
+) M) : ContinuousMultilinearMap.mkPiRing R ι (f fun _ => 1) = f
+参数：f : ContinuousMultilinearMap R (fun _ : ι => R) M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.toMultilinearMap_injective`：∀ {R : Type u} {ι :
+ Type v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : 
+ι) → AddCommMonoid (M₁ i)] [inst_2 : AddC…
+· 使用定理 `MultilinearMap.mkPiRing_apply_one_eq_self`：mkPiRing_apply_one_eq_self [F
+intype ι] (f : MultilinearMap R (fun _ : ι => R) M₂) : MultilinearMap.mkPiRing R
+ ι (f fun _ => 1) = f
 -/
 theorem mkPiRing_apply_one_eq_self (f : ContinuousMultilinearMap R (fun _ : ι => R) M) :
     ContinuousMultilinearMap.mkPiRing R ι (f fun _ => 1) = f :=
   toMultilinearMap_injective f.toMultilinearMap.mkPiRing_apply_one_eq_self
-
-/--
-theorem `mkPiRing_eq_iff` / 定理 `mkPiRing_eq_iff`
-
-English:
-theorem mkPiRing_eq_iff
-  given: {z₁ z₂ : M}
-  proof: by
-  rw [← toMultilinearMap_injective.eq_iff]
-  exact MultilinearMap.mkPiRing_eq_iff
-
-中文:
-定理 mkPiRing_eq_iff
-  条件: {z₁ z₂ : M}
-  证明: by
-  rw [← toMultilinearMap_injective.eq_iff]
-  exact MultilinearMap.mkPiRing_eq_iff
-
-Depends on / 依赖: MultilinearMap, MultilinearMap.mkPiRing_eq_iff, eq_iff, mkPiRing_eq_iff, toMultilinearMap_injective, toMultilinearMap_injective.eq_iff
+/-
+**ContinuousMultilinearMap.mkPiRing_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+MultilinearMap`。
+形式化陈述：mkPiRing_eq_iff {z₁ z₂ : M} : ContinuousMultilinearMap.mkPiRing R ι z₁ = C
+ontinuousMultilinearMap.mkPiRing R ι z₂ ↔ z₁ = z₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `ContinuousMultilinearMap.toMultilinearMap_injective`：∀ {R : Type u} {ι :
+ Type v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : 
+ι) → AddCommMonoid (M₁ i)] [inst_2 : AddC…
+· 使用定理 `MultilinearMap.mkPiRing_eq_iff`：mkPiRing_eq_iff [Fintype ι] {z₁ z₂ : M₂}
+ : MultilinearMap.mkPiRing R ι z₁ = MultilinearMap.mkPiRing R ι z₂ ↔ z₁ = z₂
 -/
 theorem mkPiRing_eq_iff {z₁ z₂ : M} :
     ContinuousMultilinearMap.mkPiRing R ι z₁ = ContinuousMultilinearMap.mkPiRing R ι z₂ ↔
       z₁ = z₂ := by
   rw [← toMultilinearMap_injective.eq_iff]
   exact MultilinearMap.mkPiRing_eq_iff
-
-/--
-theorem `mkPiRing_zero` / 定理 `mkPiRing_zero`
-
-English:
-theorem mkPiRing_zero
-  statement: ContinuousMultilinearMap.mkPiRing R ι (0 : M) = 0
-  proof: by
-  ext; rw [mkPiRing_apply, smul_zero, zero_apply]
-
-中文:
-定理 mkPiRing_zero
-  结论: 连续多重线性映射.mkPiRing R ι (0 : M) = 0
-  证明: by
-  ext; rw [mkPiRing_apply, smul_zero, zero_apply]
-
-Depends on / 依赖: mkPiRing_apply, smul_zero, zero_apply
+/-
+**ContinuousMultilinearMap.mkPiRing_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMu
+ltilinearMap`。
+形式化陈述：mkPiRing_zero : ContinuousMultilinearMap.mkPiRing R ι (0 : M) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.ext_ring`：ext_ring [Finite ι] [TopologicalSpace
+ R] ⦃f g : ContinuousMultilinearMap R (fun _ : ι => R) M₂⦄ (h : f (fun _ => 1) =
+ g (fun _ => 1)) : f = …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMultilinearMap.mkPiRing_apply`：mkPiRing_apply (z : M) (m : ι -
+> R) : (ContinuousMultilinearMap.mkPiRing R ι z : (ι -> R) -> M) m = (∏ i, m i) 
+• z
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousMultilinearMap.instIsZeroApplyForall`：∀ {R : Type u} {ι : Type
+ v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : ι) → 
+AddCommMonoid (M₁ i)] [inst_2 : AddC…
 -/
 theorem mkPiRing_zero : ContinuousMultilinearMap.mkPiRing R ι (0 : M) = 0 := by
   ext; rw [mkPiRing_apply, smul_zero, zero_apply]
-
-/--
-theorem `mkPiRing_eq_zero_iff` / 定理 `mkPiRing_eq_zero_iff`
-
-English:
-theorem mkPiRing_eq_zero_iff
-  given: (z : M)
-  statement: ContinuousMultilinearMap.mkPiRing R ι z = 0 ↔ z = 0
-  proof: by
-  rw [← mkPiRing_zero]; rw [mkPiRing_eq_iff]
-
-中文:
-定理 mkPiRing_eq_zero_iff
-  条件: (z : M)
-  结论: 连续多重线性映射.mkPiRing R ι z = 0 ↔ z = 0
-  证明: by
-  rw [← mkPiRing_zero]; rw [mkPiRing_eq_iff]
-
-Depends on / 依赖: mkPiRing_eq_iff, mkPiRing_zero
+/-
+**ContinuousMultilinearMap.mkPiRing_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousMultilinearMap`。
+形式化陈述：mkPiRing_eq_zero_iff (z : M) : ContinuousMultilinearMap.mkPiRing R ι z = 0
+ ↔ z = 0
+参数：z : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMultilinearMap.mkPiRing_zero`：mkPiRing_zero : ContinuousMultil
+inearMap.mkPiRing R ι (0 : M) = 0
+· 使用定理 `ContinuousMultilinearMap.mkPiRing_eq_iff`：mkPiRing_eq_iff {z₁ z₂ : M} : 
+ContinuousMultilinearMap.mkPiRing R ι z₁ = ContinuousMultilinearMap.mkPiRing R ι
+ z₂ ↔ z₁ = z₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mkPiRing_eq_zero_iff (z : M) : ContinuousMultilinearMap.mkPiRing R ι z = 0 ↔ z = 0 := by
-  rw [← mkPiRing_zero]; rw [mkPiRing_eq_iff]
+  rw [← mkPiRing_zero, mkPiRing_eq_iff]
 
 end CommRing
 
 end ContinuousMultilinearMap
+

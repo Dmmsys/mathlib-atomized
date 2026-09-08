@@ -59,7 +59,7 @@ open Set Filter Function
 open scoped Manifold Topology
 
 variable {𝕜 E M H E' M' H' : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
-  [NormedSpace 𝕜 E] [TopologicalSpace H] [TopologicalSpace M] {n : WithTop Nat∞}
+  [NormedSpace 𝕜 E] [TopologicalSpace H] [TopologicalSpace M] {n : WithTop ℕ∞}
   (f f' : OpenPartialHomeomorph M H)
   {I : ModelWithCorners 𝕜 E H} [NormedAddCommGroup E'] [NormedSpace 𝕜 E'] [TopologicalSpace H']
   [TopologicalSpace M'] {I' : ModelWithCorners 𝕜 E' H'} {s t : Set M}
@@ -72,1094 +72,1178 @@ variable (I) in
 /-- Given a chart `f` on a manifold with corners, `f.extend I` is the extended chart to the model
 vector space. -/
 @[simp, mfld_simps]
-/--
-Definition of `extend` / `extend` 的定义
+/-
+**OpenPartialHomeomorph.extend** 是 Mathlib 中的一个定义，位于命名空间 `OpenPartialHomeomorph`
+。
+形式化陈述：extend : PartialEquiv M E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extend
-  signature: : PartialEquiv M E
-  body: f.toPartialEquiv ≫ I.toPartialEquiv
-
-中文:
-定义 extend
-  签名: : 部分等价 M E
-  定义体: f.toPartialEquiv ≫ I.toPartialEquiv
-
-Depends on / 依赖: I.toPartialEquiv, f.toPartialEquiv, toPartialEquiv
+--- 原说明 ---
+Given a chart `f` on a manifold with corners, `f.extend I` is the extended chart
+ to the model
+vector space.
 -/
 def extend : PartialEquiv M E :=
   f.toPartialEquiv ≫ I.toPartialEquiv
-
-/--
-theorem `extend_coe` / 定理 `extend_coe`
-
-English:
-theorem extend_coe
-  statement: ⇑(f.extend I) = I ∘ f
-  proof: rfl
-
-中文:
-定理 extend_coe
-  结论: ⇑(f.extend I) = I ∘ f
-  证明: rfl
+/-
+**OpenPartialHomeomorph.extend_coe** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHomeomo
+rph`。
+形式化陈述：extend_coe : ⇑(f.extend I) = I ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extend_coe : ⇑(f.extend I) = I ∘ f :=
   rfl
-
-/--
-theorem `extend_coe_symm` / 定理 `extend_coe_symm`
-
-English:
-theorem extend_coe_symm
-  statement: ⇑(f.extend I).symm = f.symm ∘ I.symm
-  proof: rfl
-
-中文:
-定理 extend_coe_symm
-  结论: ⇑(f.extend I).symm = f.symm ∘ I.symm
-  证明: rfl
-
-Depends on / 依赖: Finite, IsReflexive, IsReflexive.of_finite_of_free, Module, Module.Finite, of_finite_of_free
+/-
+**OpenPartialHomeomorph.extend_coe_symm** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHo
+meomorph`。
+形式化陈述：extend_coe_symm : ⇑(f.extend I).symm = f.symm ∘ I.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extend_coe_symm : ⇑(f.extend I).symm = f.symm ∘ I.symm :=
   rfl
-
-/--
-theorem `extend_source` / 定理 `extend_source`
-
-English:
-theorem extend_source
-  statement: (f.extend I).source = f.source
-  proof: by
-  rw [extend]; rw [PartialEquiv.trans_source]; rw [I.source_eq]; rw [preimage_univ]; rw [inter_univ]
-
-中文:
-定理 extend_source
-  结论: (f.extend I).source = f.source
-  证明: by
-  rw [extend]; rw [PartialEquiv.trans_source]; rw [I.source_eq]; rw [preimage_univ]; rw [inter_univ]
-
-Depends on / 依赖: Finite, I.source_eq, IsReflexive, Module, Module.Finite, PartialEquiv, PartialEquiv.trans_source, Projective, extend, inter_univ, preimage_univ, source_eq, trans_source
+/-
+**OpenPartialHomeomorph.extend_source** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHome
+omorph`。
+形式化陈述：extend_source : (f.extend I).source = f.source
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} {M : 
+Type u_3} {H : Type u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAd
+dCommGroup E] [inst_2 :…
+· 使用定理 `PartialEquiv.trans_source`：trans_source : (e.trans e').source = e.source
+ inter e ⁻¹' e'.source
+· 使用定理 `ModelWithCorners.source_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
 -/
 theorem extend_source : (f.extend I).source = f.source := by
-  rw [extend]; rw [PartialEquiv.trans_source]; rw [I.source_eq]; rw [preimage_univ]; rw [inter_univ]
-
-/--
-theorem `isOpen_extend_source` / 定理 `isOpen_extend_source`
-
-English:
-theorem isOpen_extend_source
-  statement: IsOpen (f.extend I).source
-  proof: by
-  rw [extend_source]
-  exact f.open_source
-
-中文:
-定理 isOpen_extend_source
-  结论: 是开集 (f.extend I).source
-  证明: by
-  rw [extend_source]
-  exact f.open_source
-
-Depends on / 依赖: extend_source, f.open_source, open_source
+  rw [extend, PartialEquiv.trans_source, I.source_eq, preimage_univ, inter_univ]
+/-
+**OpenPartialHomeomorph.isOpen_extend_source** 是 Mathlib 中的一个定理，位于命名空间 `OpenPart
+ialHomeomorph`。
+形式化陈述：isOpen_extend_source : IsOpen (f.extend I).source
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+· 使用定理 `OpenPartialHomeomorph.open_source`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
 theorem isOpen_extend_source : IsOpen (f.extend I).source := by
   rw [extend_source]
   exact f.open_source
-
-/--
-theorem `extend_target` / 定理 `extend_target`
-
-English:
-theorem extend_target
-  statement: (f.extend I).target = I.symm ⁻¹' f.target inter range I
-  proof: by
-  simp_rw [extend, PartialEquiv.trans_target, I.target_eq, I.toPartialEquiv_coe_symm, inter_comm]
-
-中文:
-定理 extend_target
-  结论: (f.extend I).target = I.symm ⁻¹' f.target inter range I
-  证明: by
-  simp_rw [extend, PartialEquiv.trans_target, I.target_eq, I.toPartialEquiv_coe_symm, inter_comm]
-
-Depends on / 依赖: I.target_eq, I.toPartialEquiv_coe_symm, PartialEquiv, PartialEquiv.trans_target, extend, inter_comm, simp_rw, target_eq, toPartialEquiv_coe_symm, trans_target
+/-
+**OpenPartialHomeomorph.extend_target** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHome
+omorph`。
+形式化陈述：extend_target : (f.extend I).target = I.symm ⁻¹' f.target inter range I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem extend_target : (f.extend I).target = I.symm ⁻¹' f.target inter range I := by
+theorem extend_target : (f.extend I).target = I.symm ⁻¹' f.target ∩ range I := by
   simp_rw [extend, PartialEquiv.trans_target, I.target_eq, I.toPartialEquiv_coe_symm, inter_comm]
-
-/--
-theorem `extend_target'` / 定理 `extend_target'`
-
-English:
-theorem extend_target'
-  statement: (f.extend I).target = I '' f.target
-  proof: by
-  rw [extend]; rw [PartialEquiv.trans_target'']; rw [I.source_eq]; rw [univ_inter]; rw [I.toPartialEquiv_coe]
-
-中文:
-定理 extend_target'
-  结论: (f.extend I).target = I '' f.target
-  证明: by
-  rw [extend]; rw [PartialEquiv.trans_target'']; rw [I.source_eq]; rw [univ_inter]; rw [I.toPartialEquiv_coe]
-
-Depends on / 依赖: I.source_eq, I.toPartialEquiv_coe, PartialEquiv, PartialEquiv.trans_target, extend, instFiniteDimensionalOfIsReflexive, source_eq, toPartialEquiv_coe, trans_target, univ_inter
+/-
+**OpenPartialHomeomorph.extend_target'** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHom
+eomorph`。
+形式化陈述：extend_target' : (f.extend I).target = I '' f.target
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} {M : 
+Type u_3} {H : Type u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAd
+dCommGroup E] [inst_2 :…
+· 使用定理 `PartialEquiv.trans_target''`：trans_target'' : (e.trans e').target = e' '
+' (e'.source inter e.target)
+· 使用定理 `ModelWithCorners.source_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `ModelWithCorners.toPartialEquiv_coe`：toPartialEquiv_coe : (I.toPartialEq
+uiv : H -> E) = I
 -/
 theorem extend_target' : (f.extend I).target = I '' f.target := by
-  rw [extend]; rw [PartialEquiv.trans_target'']; rw [I.source_eq]; rw [univ_inter]; rw [I.toPartialEquiv_coe]
-
-/--
-theorem `extend_target_eq_image_source` / 定理 `extend_target_eq_image_source`
-
-English:
-theorem extend_target_eq_image_source
-  statement: (f.extend I).target = (f.extend I) '' f.source
-  proof: by
-  rw [f.extend_target']; rw [← f.image_source_eq_target]; rw [← image_comp]; rw [f.extend_coe]
-
-中文:
-定理 extend_target_eq_image_source
-  结论: (f.extend I).target = (f.extend I) '' f.source
-  证明: by
-  rw [f.extend_target']; rw [← f.image_source_eq_target]; rw [← image_comp]; rw [f.extend_coe]
-
-Depends on / 依赖: extend_coe, extend_target, f.extend_coe, f.extend_target, f.image_source_eq_target, image_comp, image_source_eq_target
+  rw [extend, PartialEquiv.trans_target'', I.source_eq, univ_inter, I.toPartialEquiv_coe]
+/-
+**OpenPartialHomeomorph.extend_target_eq_image_source** 是 Mathlib 中的一个定理，位于命名空间 
+`OpenPartialHomeomorph`。
+形式化陈述：extend_target_eq_image_source : (f.extend I).target = (f.extend I) '' f.so
+urce
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_target'`：extend_target' : (f.extend I).targ
+et = I '' f.target
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.image_source_eq_target`：image_source_eq_target : e
+ '' e.source = e.target
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `OpenPartialHomeomorph.extend_coe`：extend_coe : ⇑(f.extend I) = I ∘ f
 -/
 theorem extend_target_eq_image_source : (f.extend I).target = (f.extend I) '' f.source := by
-  rw [f.extend_target']; rw [← f.image_source_eq_target]; rw [← image_comp]; rw [f.extend_coe]
-
-/--
-lemma `isOpen_extend_target` / 引理 `isOpen_extend_target`
-
-English:
-lemma isOpen_extend_target
-  given: [I.Boundaryless]
-  statement: IsOpen (f.extend I).target
-  proof: by
-  rw [extend_target]; rw [I.range_eq_univ]; rw [inter_univ]
-  exact I.continuous_symm.isOpen_preimage _ f.open_target
-
-中文:
-引理 isOpen_extend_target
-  条件: [I.无边界]
-  结论: 是开集 (f.extend I).target
-  证明: by
-  rw [extend_target]; rw [I.range_eq_univ]; rw [inter_univ]
-  exact I.continuous_symm.isOpen_preimage _ f.open_target
-
-Depends on / 依赖: I.continuous_symm.isOpen_preimage, I.range_eq_univ, continuous_symm, extend_target, f.open_target, inter_univ, isOpen_preimage, open_target, range_eq_univ
+  rw [f.extend_target', ← f.image_source_eq_target, ← image_comp, f.extend_coe]
+/-
+**OpenPartialHomeomorph.isOpen_extend_target** 是 Mathlib 中的一个引理，位于命名空间 `OpenPart
+ialHomeomorph`。
+形式化陈述：isOpen_extend_target [I.Boundaryless] : IsOpen (f.extend I).target
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_target`：extend_target : (f.extend I).target
+ = I.symm ⁻¹' f.target inter range I
+· 使用定理 `ModelWithCorners.range_eq_univ`：ModelWithCorners.range_eq_univ {𝕜 : Type
+*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜
+ E] {H : Type*} [Top…
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
 lemma isOpen_extend_target [I.Boundaryless] : IsOpen (f.extend I).target := by
-  rw [extend_target]; rw [I.range_eq_univ]; rw [inter_univ]
+  rw [extend_target, I.range_eq_univ, inter_univ]
   exact I.continuous_symm.isOpen_preimage _ f.open_target
-
-/--
-theorem `mapsTo_extend` / 定理 `mapsTo_extend`
-
-English:
-theorem mapsTo_extend
-  given: (hs : s subseteq f.source)
-  proof: by
-  rw [mapsTo_iff_image_subset]; rw [extend_coe]; rw [extend_coe_symm]; rw [preimage_comp]; rw [← I.image_eq]; rw [image_comp]; rw [f.image_eq_target_inter_inv_preimage hs]
+/-
+**OpenPartialHomeomorph.mapsTo_extend** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHome
+omorph`。
+形式化陈述：mapsTo_extend (hs : s subseteq f.source) : MapsTo (f.extend I) s ((f.exten
+d I).symm ⁻¹' s inter range I)
+参数：hs : s subseteq f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mapsTo_iff_image_subset`：mapsTo_iff_image_subset : MapsTo f s t ↔ f 
+'' s subseteq t
+· 使用定理 `OpenPartialHomeomorph.extend_coe`：extend_coe : ⇑(f.extend I) = I ∘ f
+· 使用定理 `OpenPartialHomeomorph.extend_coe_symm`：extend_coe_symm : ⇑(f.extend I).s
+ymm = f.symm ∘ I.symm
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ModelWithCorners.image_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `OpenPartialHomeomorph.image_eq_target_inter_inv_preimage`：image_eq_targe
+t_inter_inv_preimage {s : Set X} (h : s subseteq e.source) : e '' s = e.target i
+nter e.symm ⁻¹' s
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+-/
+theorem mapsTo_extend (hs : s ⊆ f.source) :
+    MapsTo (f.extend I) s ((f.extend I).symm ⁻¹' s ∩ range I) := by
+  rw [mapsTo_iff_image_subset, extend_coe, extend_coe_symm, preimage_comp, ← I.image_eq, image_comp,
+    f.image_eq_target_inter_inv_preimage hs]
   exact image_mono inter_subset_right
-
-中文:
-定理 mapsTo_extend
-  条件: (hs : s subseteq f.source)
-  证明: by
-  rw [mapsTo_iff_image_subset]; rw [extend_coe]; rw [extend_coe_symm]; rw [preimage_comp]; rw [← I.image_eq]; rw [image_comp]; rw [f.image_eq_target_inter_inv_preimage hs]
-  exact image_mono inter_subset_right
-
-Depends on / 依赖: I.image_eq, extend_coe, extend_coe_symm, f.image_eq_target_inter_inv_preimage, image_comp, image_eq, image_eq_target_inter_inv_preimage, image_mono, inter_subset_right, mapsTo_iff_image_subset, preimage_comp
+/-
+**OpenPartialHomeomorph.extend_left_inv** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHo
+meomorph`。
+形式化陈述：extend_left_inv {x : M} (hxf : x in f.source) : (f.extend I).symm (f.exten
+d I x) = x
+参数：hxf : x in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
 -/
-theorem mapsTo_extend (hs : s subseteq f.source) :
-    MapsTo (f.extend I) s ((f.extend I).symm ⁻¹' s inter range I) := by
-  rw [mapsTo_iff_image_subset]; rw [extend_coe]; rw [extend_coe_symm]; rw [preimage_comp]; rw [← I.image_eq]; rw [image_comp]; rw [f.image_eq_target_inter_inv_preimage hs]
-  exact image_mono inter_subset_right
+theorem extend_left_inv {x : M} (hxf : x ∈ f.source) : (f.extend I).symm (f.extend I x) = x :=
+  (f.extend I).left_inv <| by rwa [f.extend_source]
 
-/--
-theorem `extend_left_inv` / 定理 `extend_left_inv`
+/-- Variant of `f.extend_left_inv I`, stated in terms of images. -/
+/-
+**OpenPartialHomeomorph.extend_left_inv'** 是 Mathlib 中的一个引理，位于命名空间 `OpenPartialH
+omeomorph`。
+形式化陈述：extend_left_inv' (ht : t subseteq f.source) : ((f.extend I).symm ∘ (f.exte
+nd I)) '' t = t
+参数：ht : t subseteq f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.image_eq_self`：∀ {α : Type u_1} {s : Set α} {f : α → α}, Set.Eq
+On f id s → f '' s = s
+· 使用定理 `OpenPartialHomeomorph.extend_left_inv`：extend_left_inv {x : M} (hxf : x 
+in f.source) : (f.extend I).symm (f.extend I x) = x
 
-English:
-theorem extend_left_inv
-  given: {x : M} (hxf : x in f.source)
-  statement: (f.extend I).symm (f.extend I x) = x
-  proof: (f.extend I).left_inv by rwa [f.extend_source]
-
-中文:
-定理 extend_left_inv
-  条件: {x : M} (hxf : x in f.source)
-  结论: (f.extend I).symm (f.extend I x) = x
-  证明: (f.extend I).left_inv by rwa [f.extend_source]
-
-Depends on / 依赖: extend, extend_source, f.extend, f.extend_source, left_inv
+--- 原说明 ---
+Variant of `f.extend_left_inv I`, stated in terms of images.
 -/
-theorem extend_left_inv {x : M} (hxf : x in f.source) : (f.extend I).symm (f.extend I x) = x :=
-(f.extend I).left_inv by rwa [f.extend_source]
-
-/--
-lemma `extend_left_inv'` / 引理 `extend_left_inv'`
-
-English:
-lemma extend_left_inv'
-  given: (ht : t subseteq f.source)
-  statement: ((f.extend I).symm ∘ (f.extend I)) '' t = t
-  proof: EqOn.image_eq_self (fun _ hx => f.extend_left_inv (ht hx))
-
-中文:
-引理 extend_left_inv'
-  条件: (ht : t subseteq f.source)
-  结论: ((f.extend I).symm ∘ (f.extend I)) '' t = t
-  证明: EqOn.image_eq_self (fun _ hx => f.extend_left_inv (ht hx))
-
-Depends on / 依赖: EqOn.image_eq_self, extend_left_inv, f.extend_left_inv, image_eq_self
+lemma extend_left_inv' (ht : t ⊆ f.source) : ((f.extend I).symm ∘ (f.extend I)) '' t = t :=
+  EqOn.image_eq_self (fun _ hx ↦ f.extend_left_inv (ht hx))
+/-
+**OpenPartialHomeomorph.extend_source_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `OpenPa
+rtialHomeomorph`。
+形式化陈述：extend_source_mem_nhds {x : M} (h : x in f.source) : (f.extend I).source i
+n 𝓝 x
+参数：h : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenPartialHomeomorph.isOpen_extend_source`：isOpen_extend_source : IsOpe
+n (f.extend I).source
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
 -/
-lemma extend_left_inv' (ht : t subseteq f.source) : ((f.extend I).symm ∘ (f.extend I)) '' t = t :=
-  EqOn.image_eq_self (fun _ hx => f.extend_left_inv (ht hx))
-
-/--
-theorem `extend_source_mem_nhds` / 定理 `extend_source_mem_nhds`
-
-English:
-theorem extend_source_mem_nhds
-  given: {x : M} (h : x in f.source)
-  statement: (f.extend I).source in 𝓝 x
-  proof: (isOpen_extend_source f).mem_nhds by rwa [f.extend_source]
-
-中文:
-定理 extend_source_mem_nhds
-  条件: {x : M} (h : x in f.source)
-  结论: (f.extend I).source in 𝓝 x
-  证明: (isOpen_extend_source f).mem_nhds by rwa [f.extend_source]
-
-Depends on / 依赖: extend_source, f.extend_source, isOpen_extend_source, mem_nhds
+theorem extend_source_mem_nhds {x : M} (h : x ∈ f.source) : (f.extend I).source ∈ 𝓝 x :=
+  (isOpen_extend_source f).mem_nhds <| by rwa [f.extend_source]
+/-
+**OpenPartialHomeomorph.extend_source_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 `
+OpenPartialHomeomorph`。
+形式化陈述：extend_source_mem_nhdsWithin {x : M} (h : x in f.source) : (f.extend I).so
+urce in 𝓝[s] x
+参数：h : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhds`：extend_source_mem_nhds {x 
+: M} (h : x in f.source) : (f.extend I).source in 𝓝 x
 -/
-theorem extend_source_mem_nhds {x : M} (h : x in f.source) : (f.extend I).source in 𝓝 x :=
-(isOpen_extend_source f).mem_nhds by rwa [f.extend_source]
-
-/--
-theorem `extend_source_mem_nhdsWithin` / 定理 `extend_source_mem_nhdsWithin`
-
-English:
-theorem extend_source_mem_nhdsWithin
-  given: {x : M} (h : x in f.source)
-  statement: (f.extend I).source in 𝓝[s] x
-  proof: mem_nhdsWithin_of_mem_nhds extend_source_mem_nhds f h
-
-中文:
-定理 extend_source_mem_nhdsWithin
-  条件: {x : M} (h : x in f.source)
-  结论: (f.extend I).source in 𝓝[s] x
-  证明: mem_nhdsWithin_of_mem_nhds extend_source_mem_nhds f h
-
-Depends on / 依赖: extend_source_mem_nhds, mem_nhdsWithin_of_mem_nhds
--/
-theorem extend_source_mem_nhdsWithin {x : M} (h : x in f.source) : (f.extend I).source in 𝓝[s] x :=
-mem_nhdsWithin_of_mem_nhds extend_source_mem_nhds f h
-
-/--
-theorem `continuousOn_extend` / 定理 `continuousOn_extend`
-
-English:
-theorem continuousOn_extend
-  statement: ContinuousOn (f.extend I) (f.extend I).source
-  proof: by
-  refine I.continuous.comp_continuousOn ?_
-  rw [extend_source]
-  exact f.continuousOn
-
-中文:
-定理 continuousOn_extend
-  结论: ContinuousOn (f.extend I) (f.extend I).source
-  证明: by
-  refine I.continuous.comp_continuousOn ?_
-  rw [extend_source]
-  exact f.continuousOn
-
-Depends on / 依赖: I.continuous.comp_continuousOn, comp_continuousOn, continuous, continuousOn, extend_source, f.continuousOn
+theorem extend_source_mem_nhdsWithin {x : M} (h : x ∈ f.source) : (f.extend I).source ∈ 𝓝[s] x :=
+  mem_nhdsWithin_of_mem_nhds <| extend_source_mem_nhds f h
+/-
+**OpenPartialHomeomorph.continuousOn_extend** 是 Mathlib 中的一个定理，位于命名空间 `OpenParti
+alHomeomorph`。
+形式化陈述：continuousOn_extend : ContinuousOn (f.extend I) (f.extend I).source
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp_continuousOn`：Continuous.comp_continuousOn {g : β -> γ} 
+{f : α -> β} {s : Set α} (hg : Continuous g) (hf : ContinuousOn f s) : Continuou
+sOn (g ∘ f) s
+· 使用定理 `ModelWithCorners.continuous`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormed
+Field 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {H : Type u_…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+· 使用定理 `OpenPartialHomeomorph.continuousOn`：∀ {X : Type u_1} {Y : Type u_3} [ins
+t : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (e : OpenPartialHomeomor
+ph X Y), ContinuousOn (↑…
 -/
 theorem continuousOn_extend : ContinuousOn (f.extend I) (f.extend I).source := by
   refine I.continuous.comp_continuousOn ?_
   rw [extend_source]
   exact f.continuousOn
-
-/--
-theorem `continuousAt_extend` / 定理 `continuousAt_extend`
-
-English:
-theorem continuousAt_extend
-  given: {x : M} (h : x in f.source)
-  statement: ContinuousAt (f.extend I) x
-  proof: (continuousOn_extend f).continuousAt extend_source_mem_nhds f h
-
-中文:
-定理 continuousAt_extend
-  条件: {x : M} (h : x in f.source)
-  结论: ContinuousAt (f.extend I) x
-  证明: (continuousOn_extend f).continuousAt extend_source_mem_nhds f h
-
-Depends on / 依赖: continuousAt, continuousOn_extend, extend_source_mem_nhds
+/-
+**OpenPartialHomeomorph.continuousAt_extend** 是 Mathlib 中的一个定理，位于命名空间 `OpenParti
+alHomeomorph`。
+形式化陈述：continuousAt_extend {x : M} (h : x in f.source) : ContinuousAt (f.extend I
+) x
+参数：h : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.continuousAt`：ContinuousOn.continuousAt (h : ContinuousOn f
+ s) (hx : s in 𝓝 x) : ContinuousAt f x
+· 使用定理 `OpenPartialHomeomorph.continuousOn_extend`：continuousOn_extend : Continu
+ousOn (f.extend I) (f.extend I).source
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhds`：extend_source_mem_nhds {x 
+: M} (h : x in f.source) : (f.extend I).source in 𝓝 x
 -/
-theorem continuousAt_extend {x : M} (h : x in f.source) : ContinuousAt (f.extend I) x :=
-(continuousOn_extend f).continuousAt extend_source_mem_nhds f h
-
-/--
-theorem `map_extend_nhds` / 定理 `map_extend_nhds`
-
-English:
-theorem map_extend_nhds
-  given: {x : M} (hy : x in f.source)
-  proof: by
-  rwa [extend_coe, comp_apply, ← I.map_nhds_eq, ← f.map_nhds_eq, map_map]
-
-中文:
-定理 map_extend_nhds
-  条件: {x : M} (hy : x in f.source)
-  证明: by
-  rwa [extend_coe, comp_apply, ← I.map_nhds_eq, ← f.map_nhds_eq, map_map]
-
-Depends on / 依赖: I.map_nhds_eq, comp_apply, extend_coe, f.map_nhds_eq, map_map, map_nhds_eq
+theorem continuousAt_extend {x : M} (h : x ∈ f.source) : ContinuousAt (f.extend I) x :=
+  (continuousOn_extend f).continuousAt <| extend_source_mem_nhds f h
+/-
+**OpenPartialHomeomorph.map_extend_nhds** 是 Mathlib 中的一个定理，位于命名空间 `OpenPartialHo
+meomorph`。
+形式化陈述：map_extend_nhds {x : M} (hy : x in f.source) : map (f.extend I) (𝓝 x) = 𝓝[
+range I] f.extend I x
+参数：hy : x in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_coe`：extend_coe : ⇑(f.extend I) = I ∘ f
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ModelWithCorners.map_nhds_eq`：map_nhds_eq (x : H) : map I (𝓝 x) = 𝓝[rang
+e I] I x
+· 使用定理 `OpenPartialHomeomorph.map_nhds_eq`：map_nhds_eq {x} (hx : x in e.source) 
+: map e (𝓝 x) = 𝓝 (e x)
+· 使用定理 `Filter.map_map`：map_map : Filter.map m' (Filter.map m f) = Filter.map (m
+' ∘ m) f
 -/
-theorem map_extend_nhds {x : M} (hy : x in f.source) :
+theorem map_extend_nhds {x : M} (hy : x ∈ f.source) :
     map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x := by
   rwa [extend_coe, comp_apply, ← I.map_nhds_eq, ← f.map_nhds_eq, map_map]
-
-/--
-theorem `map_extend_nhds_of_mem_interior_range` / 定理 `map_extend_nhds_of_mem_interior_range`
-
-English:
-theorem map_extend_nhds_of_mem_interior_range
-  statement: {x : M} (hx : x in f.source)
-  proof: by
-  rw [f.map_extend_nhds hx]; rw [nhdsWithin_eq_nhds]
-  exact mem_of_superset (isOpen_interior.mem_nhds h'x) interior_subset
-
-中文:
-定理 map_extend_nhds_of_mem_interior_range
-  结论: {x : M} (hx : x in f.source)
-  证明: by
-  rw [f.map_extend_nhds hx]; rw [nhdsWithin_eq_nhds]
-  exact mem_of_superset (isOpen_interior.mem_nhds h'x) interior_subset
-
-Depends on / 依赖: f.map_extend_nhds, interior_subset, isOpen_interior, isOpen_interior.mem_nhds, map_extend_nhds, mem_nhds, mem_of_superset, nhdsWithin_eq_nhds
+/-
+**OpenPartialHomeomorph.map_extend_nhds_of_mem_interior_range** 是 Mathlib 中的一个定理
+，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：map_extend_nhds_of_mem_interior_range {x : M} (hx : x in f.source) (h'x : 
+f.extend I x in interior (range I)) : map (f.extend I) (𝓝 x) = 𝓝 (f.extend I x)
+参数：hx : x in f.source；h'x : f.extend I x in interior (range I)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
+· 使用定理 `nhdsWithin_eq_nhds`：∀ {α : Type u_1} [inst : TopologicalSpace α] {a : α}
+ {s : Set α}, nhdsWithin a s = nhds a ↔ s ∈ nhds a
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
 -/
-theorem map_extend_nhds_of_mem_interior_range {x : M} (hx : x in f.source)
-    (h'x : f.extend I x in interior (range I)) :
+theorem map_extend_nhds_of_mem_interior_range {x : M} (hx : x ∈ f.source)
+    (h'x : f.extend I x ∈ interior (range I)) :
     map (f.extend I) (𝓝 x) = 𝓝 (f.extend I x) := by
-  rw [f.map_extend_nhds hx]; rw [nhdsWithin_eq_nhds]
+  rw [f.map_extend_nhds hx, nhdsWithin_eq_nhds]
   exact mem_of_superset (isOpen_interior.mem_nhds h'x) interior_subset
-
-/--
-theorem `map_extend_nhds_of_boundaryless` / 定理 `map_extend_nhds_of_boundaryless`
-
-English:
-theorem map_extend_nhds_of_boundaryless
-  given: [I.Boundaryless] {x : M} (hx : x in f.source)
-  proof: by
-  rw [f.map_extend_nhds hx]; rw [I.range_eq_univ]; rw [nhdsWithin_univ]
-
-中文:
-定理 map_extend_nhds_of_boundaryless
-  条件: [I.无边界] {x : M} (hx : x in f.source)
-  证明: by
-  rw [f.map_extend_nhds hx]; rw [I.range_eq_univ]; rw [nhdsWithin_univ]
-
-Depends on / 依赖: I.range_eq_univ, f.map_extend_nhds, map_extend_nhds, nhdsWithin_univ, range_eq_univ
+/-
+**OpenPartialHomeomorph.map_extend_nhds_of_boundaryless** 是 Mathlib 中的一个定理，位于命名空
+间 `OpenPartialHomeomorph`。
+形式化陈述：map_extend_nhds_of_boundaryless [I.Boundaryless] {x : M} (hx : x in f.sour
+ce) : map (f.extend I) (𝓝 x) = 𝓝 (f.extend I x)
+参数：hx : x in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
+· 使用定理 `ModelWithCorners.range_eq_univ`：ModelWithCorners.range_eq_univ {𝕜 : Type
+*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜
+ E] {H : Type*} [Top…
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
 -/
-theorem map_extend_nhds_of_boundaryless [I.Boundaryless] {x : M} (hx : x in f.source) :
+theorem map_extend_nhds_of_boundaryless [I.Boundaryless] {x : M} (hx : x ∈ f.source) :
     map (f.extend I) (𝓝 x) = 𝓝 (f.extend I x) := by
-  rw [f.map_extend_nhds hx]; rw [I.range_eq_univ]; rw [nhdsWithin_univ]
-
-/--
-theorem `extend_target_mem_nhdsWithin` / 定理 `extend_target_mem_nhdsWithin`
-
-English:
-theorem extend_target_mem_nhdsWithin
-  given: {y : M} (hy : y in f.source)
-  proof: by
-  rw [← PartialEquiv.image_source_eq_target]; rw [← map_extend_nhds f hy]
+  rw [f.map_extend_nhds hx, I.range_eq_univ, nhdsWithin_univ]
+/-
+**OpenPartialHomeomorph.extend_target_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 `
+OpenPartialHomeomorph`。
+形式化陈述：extend_target_mem_nhdsWithin {y : M} (hy : y in f.source) : (f.extend I).t
+arget in 𝓝[range I] f.extend I y
+参数：hy : y in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.image_source_eq_target`：image_source_eq_target : e '' e.sou
+rce = e.target
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
+· 使用定理 `Filter.image_mem_map`：image_mem_map (hs : s in f) : m '' s in map m f
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhds`：extend_source_mem_nhds {x 
+: M} (h : x in f.source) : (f.extend I).source in 𝓝 x
+-/
+theorem extend_target_mem_nhdsWithin {y : M} (hy : y ∈ f.source) :
+    (f.extend I).target ∈ 𝓝[range I] f.extend I y := by
+  rw [← PartialEquiv.image_source_eq_target, ← map_extend_nhds f hy]
   exact image_mem_map (extend_source_mem_nhds _ hy)
-
-中文:
-定理 extend_target_mem_nhdsWithin
-  条件: {y : M} (hy : y in f.source)
-  证明: by
-  rw [← PartialEquiv.image_source_eq_target]; rw [← map_extend_nhds f hy]
-  exact image_mem_map (extend_source_mem_nhds _ hy)
-
-Depends on / 依赖: PartialEquiv, PartialEquiv.image_source_eq_target, extend_source_mem_nhds, image_mem_map, image_source_eq_target, map_extend_nhds
+/-
+**OpenPartialHomeomorph.extend_image_target_mem_nhds** 是 Mathlib 中的一个引理，位于命名空间 `
+OpenPartialHomeomorph`。
+形式化陈述：extend_image_target_mem_nhds {x : M} (hx : x in f.source) : I '' f.target 
+in 𝓝[range I] (f.extend I) x
+参数：hx : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `OpenPartialHomeomorph.extend_coe`：extend_coe : ⇑(f.extend I) = I ∘ f
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `ModelWithCorners.preimage_image`：preimage_image (s : Set H) : I ⁻¹' I ''
+ s = s
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `OpenPartialHomeomorph.continuousAt`：∀ {X : Type u_1} {Y : Type u_3} [ins
+t : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (e : OpenPartialHomeomor
+ph X Y) {x : X}, x ∈ e.s…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
+· 使用定理 `OpenPartialHomeomorph.map_source`：map_source {x : X} (h : x in e.source)
+ : e x in e.target
 -/
-theorem extend_target_mem_nhdsWithin {y : M} (hy : y in f.source) :
-    (f.extend I).target in 𝓝[range I] f.extend I y := by
-  rw [← PartialEquiv.image_source_eq_target]; rw [← map_extend_nhds f hy]
-  exact image_mem_map (extend_source_mem_nhds _ hy)
-
-/--
-lemma `extend_image_target_mem_nhds` / 引理 `extend_image_target_mem_nhds`
-
-English:
-lemma extend_image_target_mem_nhds
-  given: {x : M} (hx : x in f.source)
-  proof: by
-  rw [← f.map_extend_nhds hx]; rw [Filter.mem_map]; rw [f.extend_coe]; rw [Set.preimage_comp]; rw [I.preimage_image f.target]
+lemma extend_image_target_mem_nhds {x : M} (hx : x ∈ f.source) :
+    I '' f.target ∈ 𝓝[range I] (f.extend I) x := by
+  rw [← f.map_extend_nhds hx, Filter.mem_map,
+    f.extend_coe, Set.preimage_comp, I.preimage_image f.target]
   exact (f.continuousAt hx).preimage_mem_nhds (f.open_target.mem_nhds (f.map_source hx))
-
-中文:
-引理 extend_image_target_mem_nhds
-  条件: {x : M} (hx : x in f.source)
-  证明: by
-  rw [← f.map_extend_nhds hx]; rw [Filter.mem_map]; rw [f.extend_coe]; rw [Set.preimage_comp]; rw [I.preimage_image f.target]
-  exact (f.continuousAt hx).preimage_mem_nhds (f.open_target.mem_nhds (f.map_source hx))
-
-Depends on / 依赖: Filter, Filter.mem_map, I.preimage_image, Set.preimage_comp, continuousAt, extend_coe, f.continuousAt, f.extend_coe, f.map_extend_nhds, f.map_source, f.open_target.mem_nhds, f.target, map_extend_nhds, map_source, mem_map, mem_nhds, open_target, preimage_comp, preimage_image, preimage_mem_nhds
+/-
+**OpenPartialHomeomorph.extend_image_nhds_mem_nhds_of_boundaryless** 是 Mathlib 中
+的一个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：extend_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless] {x} (hx : x in
+ f.source) {s : Set M} (h : s in 𝓝 x) : (f.extend I) '' s in 𝓝 ((f.extend I) x)
+参数：hx : x in f.source；h : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds_of_boundaryless`：map_extend_nhds_o
+f_boundaryless [I.Boundaryless] {x : M} (hx : x in f.source) : map (f.extend I) 
+(𝓝 x) = 𝓝 (f.extend I x)
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.subset_preimage_image`：subset_preimage_image (f : α -> β) (s : Set α
+) : s subseteq f ⁻¹' f '' s
 -/
-lemma extend_image_target_mem_nhds {x : M} (hx : x in f.source) :
-    I '' f.target in 𝓝[range I] (f.extend I) x := by
-  rw [← f.map_extend_nhds hx]; rw [Filter.mem_map]; rw [f.extend_coe]; rw [Set.preimage_comp]; rw [I.preimage_image f.target]
-  exact (f.continuousAt hx).preimage_mem_nhds (f.open_target.mem_nhds (f.map_source hx))
-
-/--
-theorem `extend_image_nhds_mem_nhds_of_boundaryless` / 定理 `extend_image_nhds_mem_nhds_of_boundaryless`
-
-English:
-theorem extend_image_nhds_mem_nhds_of_boundaryless
-  statement: [I.Boundaryless] {x} (hx : x in f.source)
-  proof: by
-  rw [← f.map_extend_nhds_of_boundaryless hx]; rw [Filter.mem_map]
+theorem extend_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless] {x} (hx : x ∈ f.source)
+    {s : Set M} (h : s ∈ 𝓝 x) : (f.extend I) '' s ∈ 𝓝 ((f.extend I) x) := by
+  rw [← f.map_extend_nhds_of_boundaryless hx, Filter.mem_map]
   filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-中文:
-定理 extend_image_nhds_mem_nhds_of_boundaryless
-  结论: [I.无边界] {x} (hx : x in f.source)
-  证明: by
-  rw [← f.map_extend_nhds_of_boundaryless hx]; rw [Filter.mem_map]
-  filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-Depends on / 依赖: Filter, Filter.mem_map, extend, f.extend, f.map_extend_nhds_of_boundaryless, filter_upwards, map_extend_nhds_of_boundaryless, mem_map, subset_preimage_image
+/-
+**OpenPartialHomeomorph.extend_image_nhds_mem_nhds_of_mem_interior_range** 是 Mat
+hlib 中的一个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：extend_image_nhds_mem_nhds_of_mem_interior_range {x} (hx : x in f.source) 
+(h'x : f.extend I x in interior (range I)) {s : Set M} (h : s in 𝓝 x) : (f.exten
+d I) '' s in 𝓝 ((f.extend I) x)
+参数：hx : x in f.source；h'x : f.extend I x in interior (range I)；h : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds_of_mem_interior_range`：map_extend_
+nhds_of_mem_interior_range {x : M} (hx : x in f.source) (h'x : f.extend I x in i
+nterior (range I)) : map (f.extend I) (𝓝 x) = 𝓝 (…
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.subset_preimage_image`：subset_preimage_image (f : α -> β) (s : Set α
+) : s subseteq f ⁻¹' f '' s
 -/
-theorem extend_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless] {x} (hx : x in f.source)
-    {s : Set M} (h : s in 𝓝 x) : (f.extend I) '' s in 𝓝 ((f.extend I) x) := by
-  rw [← f.map_extend_nhds_of_boundaryless hx]; rw [Filter.mem_map]
+theorem extend_image_nhds_mem_nhds_of_mem_interior_range {x} (hx : x ∈ f.source)
+    (h'x : f.extend I x ∈ interior (range I)) {s : Set M} (h : s ∈ 𝓝 x) :
+    (f.extend I) '' s ∈ 𝓝 ((f.extend I) x) := by
+  rw [← f.map_extend_nhds_of_mem_interior_range hx h'x, Filter.mem_map]
   filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-/--
-theorem `extend_image_nhds_mem_nhds_of_mem_interior_range` / 定理 `extend_image_nhds_mem_nhds_of_mem_interior_range`
-
-English:
-theorem extend_image_nhds_mem_nhds_of_mem_interior_range
-  statement: {x} (hx : x in f.source)
-  proof: by
-  rw [← f.map_extend_nhds_of_mem_interior_range hx h'x]; rw [Filter.mem_map]
-  filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-中文:
-定理 extend_image_nhds_mem_nhds_of_mem_interior_range
-  结论: {x} (hx : x in f.source)
-  证明: by
-  rw [← f.map_extend_nhds_of_mem_interior_range hx h'x]; rw [Filter.mem_map]
-  filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-Depends on / 依赖: Filter, Filter.mem_map, extend, f.extend, f.map_extend_nhds_of_mem_interior_range, filter_upwards, map_extend_nhds_of_mem_interior_range, mem_map, subset_preimage_image
+/-
+**OpenPartialHomeomorph.extend_target_subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Op
+enPartialHomeomorph`。
+形式化陈述：extend_target_subset_range : (f.extend I).target subseteq range I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
 -/
-theorem extend_image_nhds_mem_nhds_of_mem_interior_range {x} (hx : x in f.source)
-    (h'x : f.extend I x in interior (range I)) {s : Set M} (h : s in 𝓝 x) :
-    (f.extend I) '' s in 𝓝 ((f.extend I) x) := by
-  rw [← f.map_extend_nhds_of_mem_interior_range hx h'x]; rw [Filter.mem_map]
-  filter_upwards [h] using subset_preimage_image (f.extend I) s
-
-/--
-theorem `extend_target_subset_range` / 定理 `extend_target_subset_range`
-
-English:
-theorem extend_target_subset_range
-  statement: (f.extend I).target subseteq range I
-  proof: by simp only [mfld_simps]
-
-中文:
-定理 extend_target_subset_range
-  结论: (f.extend I).target subseteq range I
-  证明: by simp only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
--/
-theorem extend_target_subset_range : (f.extend I).target subseteq range I := by simp only [mfld_simps]
-
-/--
-lemma `interior_extend_target_subset_interior_range` / 引理 `interior_extend_target_subset_interior_range`
-
-English:
-lemma interior_extend_target_subset_interior_range
-  proof: by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]
-  exact inter_subset_right
-
-中文:
-引理 interior_extend_target_subset_interior_range
-  证明: by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]
-  exact inter_subset_right
-
-Depends on / 依赖: I.continuous_symm, continuous_symm, extend_target, f.extend_target, f.open_target.preimage, inter_subset_right, interior_eq, interior_inter, open_target, preimage
+theorem extend_target_subset_range : (f.extend I).target ⊆ range I := by simp only [mfld_simps]
+/-
+**OpenPartialHomeomorph.interior_extend_target_subset_interior_range** 是 Mathlib
+ 中的一个引理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：interior_extend_target_subset_interior_range : interior (f.extend I).targe
+t subseteq interior (range I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_target`：extend_target : (f.extend I).target
+ = I.symm ⁻¹' f.target inter range I
+· 使用定理 `interior_inter`：interior_inter : interior (s inter t) = interior s inter
+ interior t
+· 使用定理 `IsOpen.interior_eq`：IsOpen.interior_eq (h : IsOpen s) : interior s = s
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 lemma interior_extend_target_subset_interior_range :
-    interior (f.extend I).target subseteq interior (range I) := by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]
+    interior (f.extend I).target ⊆ interior (range I) := by
+  rw [f.extend_target, interior_inter, (f.open_target.preimage I.continuous_symm).interior_eq]
   exact inter_subset_right
 
-/--
-lemma `mem_interior_extend_target` / 引理 `mem_interior_extend_target`
+/-- If `y ∈ f.target` and `I y ∈ interior (range I)`,
+then `I y` is an interior point of `(I ∘ f).target`. -/
+/-
+**OpenPartialHomeomorph.mem_interior_extend_target** 是 Mathlib 中的一个引理，位于命名空间 `Op
+enPartialHomeomorph`。
+形式化陈述：mem_interior_extend_target {y : H} (hy : y in f.target) (hy' : I y in inte
+rior (range I)) : I y in interior (f.extend I).target
+参数：hy : y in f.target；hy' : I y in interior (range I)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_target`：extend_target : (f.extend I).target
+ = I.symm ⁻¹' f.target inter range I
+· 使用定理 `interior_inter`：interior_inter : interior (s inter t) = interior s inter
+ interior t
+· 使用定理 `IsOpen.interior_eq`：IsOpen.interior_eq (h : IsOpen s) : interior s = s
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
+· 使用定理 `Set.mem_inter_iff`：mem_inter_iff (x : α) (a b : Set α) : x in a inter b 
+↔ x in a ∧ x in b
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Set.mem_of_eq_of_mem`：mem_of_eq_of_mem {x y : α} {s : Set α} (hx : x = y
+) (h : y in s) : x in s
+· 使用定理 `ModelWithCorners.left_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
 
-English:
-lemma mem_interior_extend_target
-  statement: {y : H} (hy : y in f.target)
-  proof: by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]; rw [mem_inter_iff]; rw [mem_preimage]
-  exact ⟨mem_of_eq_of_mem (I.left_inv (y)) hy, hy'⟩
-
-中文:
-引理 mem_interior_extend_target
-  结论: {y : H} (hy : y in f.target)
-  证明: by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]; rw [mem_inter_iff]; rw [mem_preimage]
-  exact ⟨mem_of_eq_of_mem (I.left_inv (y)) hy, hy'⟩
-
-Depends on / 依赖: I.continuous_symm, I.left_inv, continuous_symm, extend_target, f.extend_target, f.open_target.preimage, interior_eq, interior_inter, left_inv, mem_inter_iff, mem_of_eq_of_mem, mem_preimage, open_target, preimage
+--- 原说明 ---
+If `y ∈ f.target` and `I y ∈ interior (range I)`,
+then `I y` is an interior point of `(I ∘ f).target`.
 -/
-lemma mem_interior_extend_target {y : H} (hy : y in f.target)
-    (hy' : I y in interior (range I)) : I y in interior (f.extend I).target := by
-  rw [f.extend_target]; rw [interior_inter]; rw [(f.open_target.preimage I.continuous_symm).interior_eq]; rw [mem_inter_iff]; rw [mem_preimage]
+lemma mem_interior_extend_target {y : H} (hy : y ∈ f.target)
+    (hy' : I y ∈ interior (range I)) : I y ∈ interior (f.extend I).target := by
+  rw [f.extend_target, interior_inter, (f.open_target.preimage I.continuous_symm).interior_eq,
+    mem_inter_iff, mem_preimage]
   exact ⟨mem_of_eq_of_mem (I.left_inv (y)) hy, hy'⟩
-
-/--
-theorem `nhdsWithin_extend_target_eq` / 定理 `nhdsWithin_extend_target_eq`
-
-English:
-theorem nhdsWithin_extend_target_eq
-  given: {y : M} (hy : y in f.source)
-  proof: (nhdsWithin_mono _ (extend_target_subset_range _)).antisymm
-    nhdsWithin_le_of_mem (extend_target_mem_nhdsWithin _ hy)
-
-中文:
-定理 nhdsWithin_extend_target_eq
-  条件: {y : M} (hy : y in f.source)
-  证明: (nhdsWithin_mono _ (extend_target_subset_range _)).antisymm
-    nhdsWithin_le_of_mem (extend_target_mem_nhdsWithin _ hy)
-
-Depends on / 依赖: antisymm, extend_target_mem_nhdsWithin, extend_target_subset_range, nhdsWithin_le_of_mem, nhdsWithin_mono
+/-
+**OpenPartialHomeomorph.nhdsWithin_extend_target_eq** 是 Mathlib 中的一个定理，位于命名空间 `O
+penPartialHomeomorph`。
+形式化陈述：nhdsWithin_extend_target_eq {y : M} (hy : y in f.source) : 𝓝[(f.extend I).
+target] f.extend I y = 𝓝[range I] f.extend I y
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `nhdsWithin_mono`：nhdsWithin_mono (x : X) {s t : Set X} (h : s subseteq t
+) : 𝓝[s] x <= 𝓝[t] x
+· 使用定理 `OpenPartialHomeomorph.extend_target_subset_range`：extend_target_subset_r
+ange : (f.extend I).target subseteq range I
+· 使用定理 `nhdsWithin_le_of_mem`：nhdsWithin_le_of_mem {a : α} {s t : Set α} (h : s 
+in 𝓝[t] a) : 𝓝[t] a <= 𝓝[s] a
+· 使用定理 `OpenPartialHomeomorph.extend_target_mem_nhdsWithin`：extend_target_mem_nh
+dsWithin {y : M} (hy : y in f.source) : (f.extend I).target in 𝓝[range I] f.exte
+nd I y
 -/
-theorem nhdsWithin_extend_target_eq {y : M} (hy : y in f.source) :
+theorem nhdsWithin_extend_target_eq {y : M} (hy : y ∈ f.source) :
     𝓝[(f.extend I).target] f.extend I y = 𝓝[range I] f.extend I y :=
-(nhdsWithin_mono _ (extend_target_subset_range _)).antisymm
+  (nhdsWithin_mono _ (extend_target_subset_range _)).antisymm <|
     nhdsWithin_le_of_mem (extend_target_mem_nhdsWithin _ hy)
-
-/--
-theorem `extend_target_eventuallyEq` / 定理 `extend_target_eventuallyEq`
-
-English:
-theorem extend_target_eventuallyEq
-  given: {y : M} (hy : y in f.source)
-  proof: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extend_target_eq _ hy)
-
-中文:
-定理 extend_target_eventuallyEq
-  条件: {y : M} (hy : y in f.source)
-  证明: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extend_target_eq _ hy)
-
-Depends on / 依赖: nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_extend_target_eq
+/-
+**OpenPartialHomeomorph.extend_target_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 `Op
+enPartialHomeomorph`。
+形式化陈述：extend_target_eventuallyEq {y : M} (hy : y in f.source) : (f.extend I).tar
+get =ᶠ[𝓝 (f.extend I y)] range I
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `OpenPartialHomeomorph.nhdsWithin_extend_target_eq`：nhdsWithin_extend_tar
+get_eq {y : M} (hy : y in f.source) : 𝓝[(f.extend I).target] f.extend I y = 𝓝[ra
+nge I] f.extend I y
 -/
-theorem extend_target_eventuallyEq {y : M} (hy : y in f.source) :
+theorem extend_target_eventuallyEq {y : M} (hy : y ∈ f.source) :
     (f.extend I).target =ᶠ[𝓝 (f.extend I y)] range I :=
   nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extend_target_eq _ hy)
-
-/--
-theorem `continuousAt_extend_symm'` / 定理 `continuousAt_extend_symm'`
-
-English:
-theorem continuousAt_extend_symm'
-  given: {x : E} (h : x in (f.extend I).target)
-  proof: (f.continuousAt_symm h.2).comp I.continuous_symm.continuousAt
-
-中文:
-定理 continuousAt_extend_symm'
-  条件: {x : E} (h : x in (f.extend I).target)
-  证明: (f.continuousAt_symm h.2).comp I.continuous_symm.continuousAt
-
-Depends on / 依赖: I.continuous_symm.continuousAt, continuousAt, continuousAt_symm, continuous_symm, f.continuousAt_symm
+/-
+**OpenPartialHomeomorph.continuousAt_extend_symm'** 是 Mathlib 中的一个定理，位于命名空间 `Ope
+nPartialHomeomorph`。
+形式化陈述：continuousAt_extend_symm' {x : E} (h : x in (f.extend I).target) : Continu
+ousAt (f.extend I).symm x
+参数：h : x in (f.extend I).target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace
+ Z] {f …
+· 使用定理 `OpenPartialHomeomorph.continuousAt_symm`：continuousAt_symm {x : Y} (h : 
+x in e.target) : ContinuousAt e.symm x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
 -/
-theorem continuousAt_extend_symm' {x : E} (h : x in (f.extend I).target) :
+theorem continuousAt_extend_symm' {x : E} (h : x ∈ (f.extend I).target) :
     ContinuousAt (f.extend I).symm x :=
   (f.continuousAt_symm h.2).comp I.continuous_symm.continuousAt
-
-/--
-theorem `continuousAt_extend_symm` / 定理 `continuousAt_extend_symm`
-
-English:
-theorem continuousAt_extend_symm
-  given: {x : M} (h : x in f.source)
-  proof: continuousAt_extend_symm' f (f.extend I).map_source by rwa [f.extend_source]
-
-中文:
-定理 continuousAt_extend_symm
-  条件: {x : M} (h : x in f.source)
-  证明: continuousAt_extend_symm' f (f.extend I).map_source by rwa [f.extend_source]
-
-Depends on / 依赖: continuousAt_extend_symm, extend, extend_source, f.extend, f.extend_source, map_source
+/-
+**OpenPartialHomeomorph.continuousAt_extend_symm** 是 Mathlib 中的一个定理，位于命名空间 `Open
+PartialHomeomorph`。
+形式化陈述：continuousAt_extend_symm {x : M} (h : x in f.source) : ContinuousAt (f.ext
+end I).symm (f.extend I x)
+参数：h : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm'`：continuousAt_extend_sym
+m' {x : E} (h : x in (f.extend I).target) : ContinuousAt (f.extend I).symm x
+· 使用定理 `PartialEquiv.map_source`：map_source {x : α} (h : x in e.source) : e x in
+ e.target
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
 -/
-theorem continuousAt_extend_symm {x : M} (h : x in f.source) :
+theorem continuousAt_extend_symm {x : M} (h : x ∈ f.source) :
     ContinuousAt (f.extend I).symm (f.extend I x) :=
-continuousAt_extend_symm' f (f.extend I).map_source by rwa [f.extend_source]
-
-/--
-theorem `continuousOn_extend_symm` / 定理 `continuousOn_extend_symm`
-
-English:
-theorem continuousOn_extend_symm
-  statement: ContinuousOn (f.extend I).symm (f.extend I).target
-  proof: fun _ h =>
-  (continuousAt_extend_symm' _ h).continuousWithinAt
-
-中文:
-定理 continuousOn_extend_symm
-  结论: ContinuousOn (f.extend I).symm (f.extend I).target
-  证明: fun _ h =>
-  (continuousAt_extend_symm' _ h).continuousWithinAt
+  continuousAt_extend_symm' f <| (f.extend I).map_source <| by rwa [f.extend_source]
+/-
+**OpenPartialHomeomorph.continuousOn_extend_symm** 是 Mathlib 中的一个定理，位于命名空间 `Open
+PartialHomeomorph`。
+形式化陈述：continuousOn_extend_symm : ContinuousOn (f.extend I).symm (f.extend I).tar
+get
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm'`：continuousAt_extend_sym
+m' {x : E} (h : x in (f.extend I).target) : ContinuousAt (f.extend I).symm x
 -/
 theorem continuousOn_extend_symm : ContinuousOn (f.extend I).symm (f.extend I).target := fun _ h =>
   (continuousAt_extend_symm' _ h).continuousWithinAt
-
-/--
-theorem `extend_symm_continuousWithinAt_comp_right_iff` / 定理 `extend_symm_continuousWithinAt_comp_right_iff`
-
-English:
-theorem extend_symm_continuousWithinAt_comp_right_iff
-  statement: {X} [TopologicalSpace X] {g : M -> X}
-  proof: by
-  rw [← I.symm_continuousWithinAt_comp_right_iff]; rfl
-
-中文:
-定理 extend_symm_continuousWithinAt_comp_right_iff
-  结论: {X} [拓扑空间 X] {g : M -> X}
-  证明: by
-  rw [← I.symm_continuousWithinAt_comp_right_iff]; rfl
-
-Depends on / 依赖: I.symm_continuousWithinAt_comp_right_iff, symm_continuousWithinAt_comp_right_iff
+/-
+**OpenPartialHomeomorph.extend_symm_continuousWithinAt_comp_right_iff** 是 Mathli
+b 中的一个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：extend_symm_continuousWithinAt_comp_right_iff {X} [TopologicalSpace X] {g 
+: M -> X} {s : Set M} {x : M} : ContinuousWithinAt (g ∘ (f.extend I).symm) ((f.e
+xtend I).symm ⁻¹' s inter range I) (f.extend I x) ↔ ContinuousWithinAt (g ∘ f.sy
+mm) (f.symm ⁻¹' s) (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ModelWithCorners.symm_continuousWithinAt_comp_right_iff`：symm_continuous
+WithinAt_comp_right_iff {X} [TopologicalSpace X] {f : H -> X} {s : Set H} {x : H
+} : ContinuousWithinAt (f ∘ I.symm) (I.symm ⁻…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem extend_symm_continuousWithinAt_comp_right_iff {X} [TopologicalSpace X] {g : M -> X}
+theorem extend_symm_continuousWithinAt_comp_right_iff {X} [TopologicalSpace X] {g : M → X}
     {s : Set M} {x : M} :
-    ContinuousWithinAt (g ∘ (f.extend I).symm) ((f.extend I).symm ⁻¹' s inter range I) (f.extend I x) ↔
+    ContinuousWithinAt (g ∘ (f.extend I).symm) ((f.extend I).symm ⁻¹' s ∩ range I) (f.extend I x) ↔
       ContinuousWithinAt (g ∘ f.symm) (f.symm ⁻¹' s) (f x) := by
   rw [← I.symm_continuousWithinAt_comp_right_iff]; rfl
-
-/--
-theorem `isOpen_extend_preimage'` / 定理 `isOpen_extend_preimage'`
-
-English:
-theorem isOpen_extend_preimage'
-  given: {s : Set E} (hs : IsOpen s)
-  proof: (continuousOn_extend f).isOpen_inter_preimage (isOpen_extend_source _) hs
-
-中文:
-定理 isOpen_extend_preimage'
-  条件: {s : 集合 E} (hs : 是开集 s)
-  证明: (continuousOn_extend f).isOpen_inter_preimage (isOpen_extend_source _) hs
-
-Depends on / 依赖: continuousOn_extend, isOpen_extend_source, isOpen_inter_preimage
+/-
+**OpenPartialHomeomorph.isOpen_extend_preimage'** 是 Mathlib 中的一个定理，位于命名空间 `OpenP
+artialHomeomorph`。
+形式化陈述：isOpen_extend_preimage' {s : Set E} (hs : IsOpen s) : IsOpen ((f.extend I)
+.source inter f.extend I ⁻¹' s)
+参数：hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.isOpen_inter_preimage`：ContinuousOn.isOpen_inter_preimage {
+t : Set β} (hf : ContinuousOn f s) (hs : IsOpen s) (ht : IsOpen t) : IsOpen (s i
+nter f ⁻¹' t)
+· 使用定理 `OpenPartialHomeomorph.continuousOn_extend`：continuousOn_extend : Continu
+ousOn (f.extend I) (f.extend I).source
+· 使用定理 `OpenPartialHomeomorph.isOpen_extend_source`：isOpen_extend_source : IsOpe
+n (f.extend I).source
 -/
 theorem isOpen_extend_preimage' {s : Set E} (hs : IsOpen s) :
-    IsOpen ((f.extend I).source inter f.extend I ⁻¹' s) :=
+    IsOpen ((f.extend I).source ∩ f.extend I ⁻¹' s) :=
   (continuousOn_extend f).isOpen_inter_preimage (isOpen_extend_source _) hs
-
-/--
-theorem `isOpen_extend_preimage` / 定理 `isOpen_extend_preimage`
-
-English:
-theorem isOpen_extend_preimage
-  given: {s : Set E} (hs : IsOpen s)
-  proof: by
-  rw [← extend_source f (I := I)]; exact isOpen_extend_preimage' f hs
-
-中文:
-定理 isOpen_extend_preimage
-  条件: {s : 集合 E} (hs : 是开集 s)
-  证明: by
-  rw [← extend_source f (I := I)]; exact isOpen_extend_preimage' f hs
-
-Depends on / 依赖: extend_source, isOpen_extend_preimage
+/-
+**OpenPartialHomeomorph.isOpen_extend_preimage** 是 Mathlib 中的一个定理，位于命名空间 `OpenPa
+rtialHomeomorph`。
+形式化陈述：isOpen_extend_preimage {s : Set E} (hs : IsOpen s) : IsOpen (f.source inte
+r f.extend I ⁻¹' s)
+参数：hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+· 使用定理 `OpenPartialHomeomorph.isOpen_extend_preimage'`：isOpen_extend_preimage' {
+s : Set E} (hs : IsOpen s) : IsOpen ((f.extend I).source inter f.extend I ⁻¹' s)
 -/
 theorem isOpen_extend_preimage {s : Set E} (hs : IsOpen s) :
-    IsOpen (f.source inter f.extend I ⁻¹' s) := by
+    IsOpen (f.source ∩ f.extend I ⁻¹' s) := by
   rw [← extend_source f (I := I)]; exact isOpen_extend_preimage' f hs
-
-/--
-theorem `map_extend_nhdsWithin_eq_image` / 定理 `map_extend_nhdsWithin_eq_image`
-
-English:
-theorem map_extend_nhdsWithin_eq_image
-  given: {y : M} (hy : y in f.source)
-  proof: by
-  set e := f.extend I
-  calc
-    map e (𝓝[s] y) = map e (𝓝[e.source inter s] y) :=
-      congr_arg (map e) (nhdsWithin_inter_of_mem (extend_source_mem_nhdsWithin f hy)).symm
-    _ = 𝓝[e '' (e.source inter s)] e y :=
-      ((f.extend I).leftInvOn.mono inter_subset_left).map_nhdsWithin_eq
-        ((f.extend I).left_inv <| by rwa [f.extend_source])
-        (continuousAt_extend_symm f hy).continuousWithinAt
-        (continuousAt_extend f hy).continuousWithinAt
-
-中文:
-定理 map_extend_nhdsWithin_eq_image
-  条件: {y : M} (hy : y in f.source)
-  证明: by
-  set e := f.extend I
-  calc
-    map e (𝓝[s] y) = map e (𝓝[e.source inter s] y) :=
-      congr_arg (map e) (nhdsWithin_inter_of_mem (extend_source_mem_nhdsWithin f hy)).symm
-    _ = 𝓝[e '' (e.source inter s)] e y :=
-      ((f.extend I).leftInvOn.mono inter_subset_left).map_nhdsWithin_eq
-        ((f.extend I).left_inv <| by rwa [f.extend_source])
-        (continuousAt_extend_symm f hy).continuousWithinAt
-        (continuousAt_extend f hy).continuousWithinAt
-
-Depends on / 依赖: congr_arg, continuousAt_extend, continuousAt_extend_symm, continuousWithinAt, e.source, extend, extend_source, extend_source_mem_nhdsWithin, f.extend, f.extend_source, inter_subset_left, leftInvOn, leftInvOn.mono, left_inv, map_nhdsWithin_eq, nhdsWithin_inter_of_mem, source
+/-
+**OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image** 是 Mathlib 中的一个定理，位于命名空间
+ `OpenPartialHomeomorph`。
+形式化陈述：map_extend_nhdsWithin_eq_image {y : M} (hy : y in f.source) : map (f.exten
+d I) (𝓝[s] y) = 𝓝[f.extend I '' ((f.extend I).source inter s)] f.extend I y
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_inter_of_mem`：nhdsWithin_inter_of_mem {a : α} {s t : Set α} (
+h : s in 𝓝[t] a) : 𝓝[s inter t] a = 𝓝[t] a
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhdsWithin`：extend_source_mem_nh
+dsWithin {x : M} (h : x in f.source) : (f.extend I).source in 𝓝[s] x
+· 使用定理 `Set.LeftInvOn.map_nhdsWithin_eq`：Set.LeftInvOn.map_nhdsWithin_eq {f : α 
+-> β} {g : β -> α} {x : β} {s : Set β} (h : LeftInvOn f g s) (hx : f (g x) = x) 
+(hf : ContinuousWithi…
+· 使用定理 `Set.LeftInvOn.mono`：mono (hf : LeftInvOn f' f s) (ht : s₁ subseteq s) : 
+LeftInvOn f' f s₁
+· 使用定理 `PartialEquiv.leftInvOn`：∀ {α : Type u_1} {β : Type u_2} (e : PartialEqui
+v α β), Set.LeftInvOn (↑e.symm) (↑e) e.source
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm`：continuousAt_extend_symm
+ {x : M} (h : x in f.source) : ContinuousAt (f.extend I).symm (f.extend I x)
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend`：continuousAt_extend {x : M} (
+h : x in f.source) : ContinuousAt (f.extend I) x
 -/
-theorem map_extend_nhdsWithin_eq_image {y : M} (hy : y in f.source) :
-    map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I '' ((f.extend I).source inter s)] f.extend I y := by
+theorem map_extend_nhdsWithin_eq_image {y : M} (hy : y ∈ f.source) :
+    map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I '' ((f.extend I).source ∩ s)] f.extend I y := by
   set e := f.extend I
   calc
-    map e (𝓝[s] y) = map e (𝓝[e.source inter s] y) :=
+    map e (𝓝[s] y) = map e (𝓝[e.source ∩ s] y) :=
       congr_arg (map e) (nhdsWithin_inter_of_mem (extend_source_mem_nhdsWithin f hy)).symm
-    _ = 𝓝[e '' (e.source inter s)] e y :=
+    _ = 𝓝[e '' (e.source ∩ s)] e y :=
       ((f.extend I).leftInvOn.mono inter_subset_left).map_nhdsWithin_eq
         ((f.extend I).left_inv <| by rwa [f.extend_source])
         (continuousAt_extend_symm f hy).continuousWithinAt
         (continuousAt_extend f hy).continuousWithinAt
-
-/--
-theorem `map_extend_nhdsWithin_eq_image_of_subset` / 定理 `map_extend_nhdsWithin_eq_image_of_subset`
-
-English:
-theorem map_extend_nhdsWithin_eq_image_of_subset
-  given: {y : M} (hy : y in f.source) (hs : s subseteq f.source)
-  proof: by
-  rw [map_extend_nhdsWithin_eq_image _ hy]; rw [inter_eq_self_of_subset_right]
-  rwa [extend_source]
-
-中文:
-定理 map_extend_nhdsWithin_eq_image_of_subset
-  条件: {y : M} (hy : y in f.source) (hs : s subseteq f.source)
-  证明: by
-  rw [map_extend_nhdsWithin_eq_image _ hy]; rw [inter_eq_self_of_subset_right]
-  rwa [extend_source]
-
-Depends on / 依赖: extend_source, inter_eq_self_of_subset_right, map_extend_nhdsWithin_eq_image
+/-
+**OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image_of_subset** 是 Mathlib 中的一
+个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：map_extend_nhdsWithin_eq_image_of_subset {y : M} (hy : y in f.source) (hs 
+: s subseteq f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I '' s] f.extend
+ I y
+参数：hy : y in f.source；hs : s subseteq f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image`：map_extend_nhdsWit
+hin_eq_image {y : M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.exte
+nd I '' ((f.extend I).source inter s)] f.e…
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
 -/
-theorem map_extend_nhdsWithin_eq_image_of_subset {y : M} (hy : y in f.source) (hs : s subseteq f.source) :
+theorem map_extend_nhdsWithin_eq_image_of_subset {y : M} (hy : y ∈ f.source) (hs : s ⊆ f.source) :
     map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I '' s] f.extend I y := by
-  rw [map_extend_nhdsWithin_eq_image _ hy]; rw [inter_eq_self_of_subset_right]
+  rw [map_extend_nhdsWithin_eq_image _ hy, inter_eq_self_of_subset_right]
   rwa [extend_source]
-
-/--
-theorem `map_extend_nhdsWithin` / 定理 `map_extend_nhdsWithin`
-
-English:
-theorem map_extend_nhdsWithin
-  given: {y : M} (hy : y in f.source)
-  proof: by
-  rw [map_extend_nhdsWithin_eq_image f hy]; rw [nhdsWithin_inter]; rw [←
-    nhdsWithin_extend_target_eq _ hy]; rw [← nhdsWithin_inter]; rw [(f.extend I).image_source_inter_eq']; rw [inter_comm]
-
-中文:
-定理 map_extend_nhdsWithin
-  条件: {y : M} (hy : y in f.source)
-  证明: by
-  rw [map_extend_nhdsWithin_eq_image f hy]; rw [nhdsWithin_inter]; rw [←
-    nhdsWithin_extend_target_eq _ hy]; rw [← nhdsWithin_inter]; rw [(f.extend I).image_source_inter_eq']; rw [inter_comm]
-
-Depends on / 依赖: extend, f.extend, image_source_inter_eq, inter_comm, map_extend_nhdsWithin_eq_image, nhdsWithin_extend_target_eq, nhdsWithin_inter
+/-
+**OpenPartialHomeomorph.map_extend_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 `OpenPar
+tialHomeomorph`。
+形式化陈述：map_extend_nhdsWithin {y : M} (hy : y in f.source) : map (f.extend I) (𝓝[s
+] y) = 𝓝[(f.extend I).symm ⁻¹' s inter range I] f.extend I y
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image`：map_extend_nhdsWit
+hin_eq_image {y : M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.exte
+nd I '' ((f.extend I).source inter s)] f.e…
+· 使用定理 `nhdsWithin_inter`：nhdsWithin_inter (a : α) (s t : Set α) : 𝓝[s inter t] 
+a = 𝓝[s] a ⊓ 𝓝[t] a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.nhdsWithin_extend_target_eq`：nhdsWithin_extend_tar
+get_eq {y : M} (hy : y in f.source) : 𝓝[(f.extend I).target] f.extend I y = 𝓝[ra
+nge I] f.extend I y
+· 使用定理 `PartialEquiv.image_source_inter_eq'`：image_source_inter_eq' (s : Set α) 
+: e '' (e.source inter s) = e.target inter e.symm ⁻¹' s
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
-theorem map_extend_nhdsWithin {y : M} (hy : y in f.source) :
-    map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s inter range I] f.extend I y := by
-  rw [map_extend_nhdsWithin_eq_image f hy]; rw [nhdsWithin_inter]; rw [←
-    nhdsWithin_extend_target_eq _ hy]; rw [← nhdsWithin_inter]; rw [(f.extend I).image_source_inter_eq']; rw [inter_comm]
-
-/--
-theorem `map_extend_symm_nhdsWithin` / 定理 `map_extend_symm_nhdsWithin`
-
-English:
-theorem map_extend_symm_nhdsWithin
-  given: {y : M} (hy : y in f.source)
-  proof: by
-  rw [← map_extend_nhdsWithin f hy]; rw [map_map]; rw [Filter.map_congr]; rw [map_id]
-  exact (f.extend I).leftInvOn.eqOn.eventuallyEq_of_mem (extend_source_mem_nhdsWithin _ hy)
-
-中文:
-定理 map_extend_symm_nhdsWithin
-  条件: {y : M} (hy : y in f.source)
-  证明: by
-  rw [← map_extend_nhdsWithin f hy]; rw [map_map]; rw [Filter.map_congr]; rw [map_id]
-  exact (f.extend I).leftInvOn.eqOn.eventuallyEq_of_mem (extend_source_mem_nhdsWithin _ hy)
-
-Depends on / 依赖: Filter, Filter.map_congr, eventuallyEq_of_mem, extend, extend_source_mem_nhdsWithin, f.extend, leftInvOn, leftInvOn.eqOn.eventuallyEq_of_mem, map_congr, map_extend_nhdsWithin, map_id, map_map
+theorem map_extend_nhdsWithin {y : M} (hy : y ∈ f.source) :
+    map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s ∩ range I] f.extend I y := by
+  rw [map_extend_nhdsWithin_eq_image f hy, nhdsWithin_inter, ←
+    nhdsWithin_extend_target_eq _ hy, ← nhdsWithin_inter, (f.extend I).image_source_inter_eq',
+    inter_comm]
+/-
+**OpenPartialHomeomorph.map_extend_symm_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 `Op
+enPartialHomeomorph`。
+形式化陈述：map_extend_symm_nhdsWithin {y : M} (hy : y in f.source) : map (f.extend I)
+.symm (𝓝[(f.extend I).symm ⁻¹' s inter range I] f.extend I y) = 𝓝[s] y
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin`：map_extend_nhdsWithin {y : 
+M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s 
+inter range I] f.extend I y
+· 使用定理 `Filter.map_map`：map_map : Filter.map m' (Filter.map m f) = Filter.map (m
+' ∘ m) f
+· 使用定理 `Filter.map_congr`：map_congr {m₁ m₂ : α -> β} {f : Filter α} (h : m₁ =ᶠ[f
+] m₂) : map m₁ f = map m₂ f
+· 使用定理 `Set.EqOn.eventuallyEq_of_mem`：Set.EqOn.eventuallyEq_of_mem {α β} {s : Se
+t α} {l : Filter α} {f g : α -> β} (h : EqOn f g s) (hl : s in l) : f =ᶠ[l] g
+· 使用定理 `Set.LeftInvOn.eqOn`：eqOn (h : LeftInvOn f' f s) : EqOn (f' ∘ f) id s
+· 使用定理 `PartialEquiv.leftInvOn`：∀ {α : Type u_1} {β : Type u_2} (e : PartialEqui
+v α β), Set.LeftInvOn (↑e.symm) (↑e) e.source
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhdsWithin`：extend_source_mem_nh
+dsWithin {x : M} (h : x in f.source) : (f.extend I).source in 𝓝[s] x
+· 使用定理 `Filter.map_id`：map_id : Filter.map id f = f
 -/
-theorem map_extend_symm_nhdsWithin {y : M} (hy : y in f.source) :
-    map (f.extend I).symm (𝓝[(f.extend I).symm ⁻¹' s inter range I] f.extend I y) = 𝓝[s] y := by
-  rw [← map_extend_nhdsWithin f hy]; rw [map_map]; rw [Filter.map_congr]; rw [map_id]
+theorem map_extend_symm_nhdsWithin {y : M} (hy : y ∈ f.source) :
+    map (f.extend I).symm (𝓝[(f.extend I).symm ⁻¹' s ∩ range I] f.extend I y) = 𝓝[s] y := by
+  rw [← map_extend_nhdsWithin f hy, map_map, Filter.map_congr, map_id]
   exact (f.extend I).leftInvOn.eqOn.eventuallyEq_of_mem (extend_source_mem_nhdsWithin _ hy)
-
-/--
-theorem `map_extend_symm_nhdsWithin_range` / 定理 `map_extend_symm_nhdsWithin_range`
-
-English:
-theorem map_extend_symm_nhdsWithin_range
-  given: {y : M} (hy : y in f.source)
-  proof: by
-  rw [← nhdsWithin_univ]; rw [← map_extend_symm_nhdsWithin f (I := I) hy]; rw [preimage_univ]; rw [univ_inter]
-
-中文:
-定理 map_extend_symm_nhdsWithin_range
-  条件: {y : M} (hy : y in f.source)
-  证明: by
-  rw [← nhdsWithin_univ]; rw [← map_extend_symm_nhdsWithin f (I := I) hy]; rw [preimage_univ]; rw [univ_inter]
-
-Depends on / 依赖: map_extend_symm_nhdsWithin, nhdsWithin_univ, preimage_univ, univ_inter
+/-
+**OpenPartialHomeomorph.map_extend_symm_nhdsWithin_range** 是 Mathlib 中的一个定理，位于命名
+空间 `OpenPartialHomeomorph`。
+形式化陈述：map_extend_symm_nhdsWithin_range {y : M} (hy : y in f.source) : map (f.ext
+end I).symm (𝓝[range I] f.extend I y) = 𝓝 y
+参数：hy : y in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
+· 使用定理 `OpenPartialHomeomorph.map_extend_symm_nhdsWithin`：map_extend_symm_nhdsWi
+thin {y : M} (hy : y in f.source) : map (f.extend I).symm (𝓝[(f.extend I).symm ⁻
+¹' s inter range I] f.extend I y) = 𝓝[…
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
 -/
-theorem map_extend_symm_nhdsWithin_range {y : M} (hy : y in f.source) :
+theorem map_extend_symm_nhdsWithin_range {y : M} (hy : y ∈ f.source) :
     map (f.extend I).symm (𝓝[range I] f.extend I y) = 𝓝 y := by
-  rw [← nhdsWithin_univ]; rw [← map_extend_symm_nhdsWithin f (I := I) hy]; rw [preimage_univ]; rw [univ_inter]
-
-/--
-theorem `tendsto_extend_comp_iff` / 定理 `tendsto_extend_comp_iff`
-
-English:
-theorem tendsto_extend_comp_iff
-  statement: {α : Type*} {l : Filter α} {g : α -> M}
-  proof: by
-  refine ⟨fun h u hu => mem_map.2 ?_, (continuousAt_extend _ hy).tendsto.comp⟩
-  have := (f.continuousAt_extend_symm hy).tendsto.comp h
-  rw [extend_left_inv _ hy] at this
-  filter_upwards [hg, mem_map.1 (this hu)] with z hz hzu
-  simpa only [(· ∘ ·), extend_left_inv _ hz, mem_preimage] using hzu
-
-中文:
-定理 tendsto_extend_comp_iff
-  结论: {α : 类型} {l : 滤子 α} {g : α -> M}
-  证明: by
-  refine ⟨fun h u hu => mem_map.2 ?_, (continuousAt_extend _ hy).tendsto.comp⟩
-  have := (f.continuousAt_extend_symm hy).tendsto.comp h
-  rw [extend_left_inv _ hy] at this
-  filter_upwards [hg, mem_map.1 (this hu)] with z hz hzu
-  simpa only [(· ∘ ·), extend_left_inv _ hz, mem_preimage] using hzu
-
-Depends on / 依赖: continuousAt_extend, continuousAt_extend_symm, extend_left_inv, f.continuousAt_extend_symm, filter_upwards, mem_map, mem_preimage, tendsto, tendsto.comp
+  rw [← nhdsWithin_univ, ← map_extend_symm_nhdsWithin f (I := I) hy, preimage_univ, univ_inter]
+/-
+**OpenPartialHomeomorph.tendsto_extend_comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `OpenP
+artialHomeomorph`。
+形式化陈述：tendsto_extend_comp_iff {α : Type*} {l : Filter α} {g : α -> M} (hg : fora
+llᶠ z in l, g z in f.source) {y : M} (hy : y in f.source) : Tendsto (f.extend I 
+∘ g) l (𝓝 (f.extend I y)) ↔ Tendsto g l (𝓝 y)
+参数：hg : forallᶠ z in l, g z in f.source；hy : y in f.source。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ContinuousAt.tendsto`：ContinuousAt.tendsto (h : ContinuousAt f x) : Tend
+sto f (𝓝 x) (𝓝 (f x))
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm`：continuousAt_extend_symm
+ {x : M} (h : x in f.source) : ContinuousAt (f.extend I).symm (f.extend I x)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_left_inv`：extend_left_inv {x : M} (hxf : x 
+in f.source) : (f.extend I).symm (f.extend I x) = x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend`：continuousAt_extend {x : M} (
+h : x in f.source) : ContinuousAt (f.extend I) x
 -/
-theorem tendsto_extend_comp_iff {α : Type*} {l : Filter α} {g : α -> M}
-    (hg : forallᶠ z in l, g z in f.source) {y : M} (hy : y in f.source) :
+theorem tendsto_extend_comp_iff {α : Type*} {l : Filter α} {g : α → M}
+    (hg : ∀ᶠ z in l, g z ∈ f.source) {y : M} (hy : y ∈ f.source) :
     Tendsto (f.extend I ∘ g) l (𝓝 (f.extend I y)) ↔ Tendsto g l (𝓝 y) := by
-  refine ⟨fun h u hu => mem_map.2 ?_, (continuousAt_extend _ hy).tendsto.comp⟩
+  refine ⟨fun h u hu ↦ mem_map.2 ?_, (continuousAt_extend _ hy).tendsto.comp⟩
   have := (f.continuousAt_extend_symm hy).tendsto.comp h
   rw [extend_left_inv _ hy] at this
   filter_upwards [hg, mem_map.1 (this hu)] with z hz hzu
   simpa only [(· ∘ ·), extend_left_inv _ hz, mem_preimage] using hzu
-
-/--
-theorem `continuousWithinAt_writtenInExtend_iff` / 定理 `continuousWithinAt_writtenInExtend_iff`
-
-English:
-theorem continuousWithinAt_writtenInExtend_iff
-  statement: {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-  proof: by
-  unfold ContinuousWithinAt
-  simp only [comp_apply]
-  rw [extend_left_inv _ hy]; rw [f'.tendsto_extend_comp_iff _ hgy]; rw [← f.map_extend_symm_nhdsWithin (I := I) hy]; rw [tendsto_map'_iff]
-  rw [← f.map_extend_nhdsWithin (I := I) hy]; rw [eventually_map]
-  filter_upwards [inter_mem_nhdsWithin _ (f.open_source.mem_nhds hy)] with z hz
-  rw [comp_apply]; rw [extend_left_inv _ hz.2]
-  exact hmaps hz.1
-
-中文:
-定理 continuousWithinAt_writtenInExtend_iff
-  结论: {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-  证明: by
-  unfold ContinuousWithinAt
-  simp only [comp_apply]
-  rw [extend_left_inv _ hy]; rw [f'.tendsto_extend_comp_iff _ hgy]; rw [← f.map_extend_symm_nhdsWithin (I := I) hy]; rw [tendsto_map'_iff]
-  rw [← f.map_extend_nhdsWithin (I := I) hy]; rw [eventually_map]
-  filter_upwards [inter_mem_nhdsWithin _ (f.open_source.mem_nhds hy)] with z hz
-  rw [comp_apply]; rw [extend_left_inv _ hz.2]
-  exact hmaps hz.1
-
-Depends on / 依赖: ContinuousWithinAt, _iff, comp_apply, eventually_map, extend_left_inv, f.map_extend_nhdsWithin, f.map_extend_symm_nhdsWithin, f.open_source.mem_nhds, filter_upwards, inter_mem_nhdsWithin, map_extend_nhdsWithin, map_extend_symm_nhdsWithin, mem_nhds, open_source, tendsto_extend_comp_iff, tendsto_map
+/-
+**OpenPartialHomeomorph.continuousWithinAt_writtenInExtend_iff** 是 Mathlib 中的一个定
+理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：continuousWithinAt_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} 
+{g : M -> M'} {y : M} (hy : y in f.source) (hgy : g y in f'.source) (hmaps : Map
+sTo g s f'.source) : ContinuousWithinAt (f'.extend I' ∘ g ∘ (f.extend I).symm) (
+(f.extend I).symm ⁻¹' s inter range I) (f.extend I y) ↔ ContinuousWithinAt g s y
+参数：hy : y in f.source；hgy : g y in f'.source；hmaps : MapsTo g s f'.source。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.extend_left_inv`：extend_left_inv {x : M} (hxf : x 
+in f.source) : (f.extend I).symm (f.extend I x) = x
+· 使用定理 `OpenPartialHomeomorph.tendsto_extend_comp_iff`：tendsto_extend_comp_iff {
+α : Type*} {l : Filter α} {g : α -> M} (hg : forallᶠ z in l, g z in f.source) {y
+ : M} (hy : y in f.source) : Tendst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin`：map_extend_nhdsWithin {y : 
+M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s 
+inter range I] f.extend I y
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `inter_mem_nhdsWithin`：inter_mem_nhdsWithin (s : Set α) {t : Set α} {a : 
+α} (h : t in 𝓝 a) : s inter t in 𝓝[s] a
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenPartialHomeomorph.open_source`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `OpenPartialHomeomorph.map_extend_symm_nhdsWithin`：map_extend_symm_nhdsWi
+thin {y : M} (hy : y in f.source) : map (f.extend I).symm (𝓝[(f.extend I).symm ⁻
+¹' s inter range I] f.extend I y) = 𝓝[…
+· 使用定理 `Filter.tendsto_map'_iff`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{f : β → γ} {g : α → β} {x : Filter α} {y : Filter γ},   Filter.Tendsto f (Filte
+r.map g x) y …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem continuousWithinAt_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-    {y : M} (hy : y in f.source) (hgy : g y in f'.source) (hmaps : MapsTo g s f'.source) :
+theorem continuousWithinAt_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M → M'}
+    {y : M} (hy : y ∈ f.source) (hgy : g y ∈ f'.source) (hmaps : MapsTo g s f'.source) :
     ContinuousWithinAt (f'.extend I' ∘ g ∘ (f.extend I).symm)
-      ((f.extend I).symm ⁻¹' s inter range I) (f.extend I y) ↔ ContinuousWithinAt g s y := by
+      ((f.extend I).symm ⁻¹' s ∩ range I) (f.extend I y) ↔ ContinuousWithinAt g s y := by
   unfold ContinuousWithinAt
   simp only [comp_apply]
-  rw [extend_left_inv _ hy]; rw [f'.tendsto_extend_comp_iff _ hgy]; rw [← f.map_extend_symm_nhdsWithin (I := I) hy]; rw [tendsto_map'_iff]
-  rw [← f.map_extend_nhdsWithin (I := I) hy]; rw [eventually_map]
+  rw [extend_left_inv _ hy, f'.tendsto_extend_comp_iff _ hgy,
+    ← f.map_extend_symm_nhdsWithin (I := I) hy, tendsto_map'_iff]
+  rw [← f.map_extend_nhdsWithin (I := I) hy, eventually_map]
   filter_upwards [inter_mem_nhdsWithin _ (f.open_source.mem_nhds hy)] with z hz
-  rw [comp_apply]; rw [extend_left_inv _ hz.2]
+  rw [comp_apply, extend_left_inv _ hz.2]
   exact hmaps hz.1
 
-/--
-theorem `continuousOn_writtenInExtend_iff` / 定理 `continuousOn_writtenInExtend_iff`
+/-- If `s ⊆ f.source` and `g x ∈ f'.source` whenever `x ∈ s`, then `g` is continuous on `s` if and
+only if `g` written in charts `f.extend I` and `f'.extend I'` is continuous on `f.extend I '' s`. -/
+/-
+**OpenPartialHomeomorph.continuousOn_writtenInExtend_iff** 是 Mathlib 中的一个定理，位于命名
+空间 `OpenPartialHomeomorph`。
+形式化陈述：continuousOn_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M
+ -> M'} (hs : s subseteq f.source) (hmaps : MapsTo g s f'.source) : ContinuousOn
+ (f'.extend I' ∘ g ∘ (f.extend I).symm) (f.extend I '' s) ↔ ContinuousOn g s
+参数：hs : s subseteq f.source；hmaps : MapsTo g s f'.source。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `continuousWithinAt_congr_set`：continuousWithinAt_congr_set (h : s =ᶠ[𝓝 x
+] t) : ContinuousWithinAt f s x ↔ ContinuousWithinAt f t x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image_of_subset`：map_exte
+nd_nhdsWithin_eq_image_of_subset {y : M} (hy : y in f.source) (hs : s subseteq f
+.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I …
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin`：map_extend_nhdsWithin {y : 
+M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s 
+inter range I] f.extend I y
+· 使用定理 `OpenPartialHomeomorph.continuousWithinAt_writtenInExtend_iff`：continuous
+WithinAt_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M -> M'} {y
+ : M} (hy : y in f.source) (hgy : g y in f'.source…
 
-English:
-theorem continuousOn_writtenInExtend_iff
-  statement: {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-  proof: by
-refine forall_mem_image.trans forall₂_congr fun x hx => ?_
-  refine (continuousWithinAt_congr_set ?_).trans
-    (continuousWithinAt_writtenInExtend_iff _ (hs hx) (hmaps hx) hmaps)
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin]
-  exacts [hs hx, hs hx, hs]
-
-中文:
-定理 continuousOn_writtenInExtend_iff
-  结论: {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-  证明: by
-refine forall_mem_image.trans forall₂_congr fun x hx => ?_
-  refine (continuousWithinAt_congr_set ?_).trans
-    (continuousWithinAt_writtenInExtend_iff _ (hs hx) (hmaps hx) hmaps)
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin]
-  exacts [hs hx, hs hx, hs]
-
-Depends on / 依赖: continuousWithinAt_congr_set, continuousWithinAt_writtenInExtend_iff, exacts, forall_mem_image, forall_mem_image.trans, map_extend_nhdsWithin, map_extend_nhdsWithin_eq_image_of_subset, nhdsWithin_eq_iff_eventuallyEq
+--- 原说明 ---
+If `s ⊆ f.source` and `g x ∈ f'.source` whenever `x ∈ s`, then `g` is continuous
+ on `s` if and
+only if `g` written in charts `f.extend I` and `f'.extend I'` is continuous on `
+f.extend I '' s`.
 -/
-theorem continuousOn_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M -> M'}
-    (hs : s subseteq f.source) (hmaps : MapsTo g s f'.source) :
+theorem continuousOn_writtenInExtend_iff {f' : OpenPartialHomeomorph M' H'} {g : M → M'}
+    (hs : s ⊆ f.source) (hmaps : MapsTo g s f'.source) :
     ContinuousOn (f'.extend I' ∘ g ∘ (f.extend I).symm) (f.extend I '' s) ↔ ContinuousOn g s := by
-refine forall_mem_image.trans forall₂_congr fun x hx => ?_
+  refine forall_mem_image.trans <| forall₂_congr fun x hx ↦ ?_
   refine (continuousWithinAt_congr_set ?_).trans
     (continuousWithinAt_writtenInExtend_iff _ (hs hx) (hmaps hx) hmaps)
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin]
+  rw [← nhdsWithin_eq_iff_eventuallyEq, ← map_extend_nhdsWithin_eq_image_of_subset,
+    ← map_extend_nhdsWithin]
   exacts [hs hx, hs hx, hs]
-
-/--
-theorem `extend_preimage_mem_nhds_of_mem_nhdsWithin` / 定理 `extend_preimage_mem_nhds_of_mem_nhdsWithin`
-
-English:
-theorem extend_preimage_mem_nhds_of_mem_nhdsWithin
-  statement: {s : Set E} {x : M} (hx : x in f.source)
-  proof: by
-  rwa [← map_extend_nhds (I := I) f hx] at hs
-
-中文:
-定理 extend_preimage_mem_nhds_of_mem_nhdsWithin
-  结论: {s : 集合 E} {x : M} (hx : x in f.source)
-  证明: by
-  rwa [← map_extend_nhds (I := I) f hx] at hs
-
-Depends on / 依赖: map_extend_nhds
+/-
+**OpenPartialHomeomorph.extend_preimage_mem_nhds_of_mem_nhdsWithin** 是 Mathlib 中
+的一个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：extend_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x : M} (hx : x in 
+f.source) (hs : s in 𝓝[range I] (f.extend I x)) : (f.extend I) ⁻¹' s in 𝓝 x
+参数：hx : x in f.source；hs : s in 𝓝[range I] (f.extend I x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
 -/
-theorem extend_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x : M} (hx : x in f.source)
-    (hs : s in 𝓝[range I] (f.extend I x)) :
-    (f.extend I) ⁻¹' s in 𝓝 x := by
+theorem extend_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x : M} (hx : x ∈ f.source)
+    (hs : s ∈ 𝓝[range I] (f.extend I x)) :
+    (f.extend I) ⁻¹' s ∈ 𝓝 x := by
   rwa [← map_extend_nhds (I := I) f hx] at hs
 
-/--
-theorem `extend_preimage_mem_nhdsWithin` / 定理 `extend_preimage_mem_nhdsWithin`
+/-- Technical lemma ensuring that the preimage under an extended chart of a neighborhood of a point
+in the source is a neighborhood of the preimage, within a set. -/
+/-
+**OpenPartialHomeomorph.extend_preimage_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间
+ `OpenPartialHomeomorph`。
+形式化陈述：extend_preimage_mem_nhdsWithin {x : M} (h : x in f.source) (ht : t in 𝓝[s]
+ x) : (f.extend I).symm ⁻¹' t in 𝓝[(f.extend I).symm ⁻¹' s inter range I] f.exte
+nd I x
+参数：h : x in f.source；ht : t in 𝓝[s] x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.map_extend_symm_nhdsWithin`：map_extend_symm_nhdsWi
+thin {y : M} (hy : y in f.source) : map (f.extend I).symm (𝓝[(f.extend I).symm ⁻
+¹' s inter range I] f.extend I y) = 𝓝[…
 
-English:
-theorem extend_preimage_mem_nhdsWithin
-  given: {x : M} (h : x in f.source) (ht : t in 𝓝[s] x)
-  proof: by
-  rwa [← map_extend_symm_nhdsWithin f (I := I) h, mem_map] at ht
-
-中文:
-定理 extend_preimage_mem_nhdsWithin
-  条件: {x : M} (h : x in f.source) (ht : t in 𝓝[s] x)
-  证明: by
-  rwa [← map_extend_symm_nhdsWithin f (I := I) h, mem_map] at ht
-
-Depends on / 依赖: map_extend_symm_nhdsWithin, mem_map
+--- 原说明 ---
+Technical lemma ensuring that the preimage under an extended chart of a neighbor
+hood of a point
+in the source is a neighborhood of the preimage, within a set.
 -/
-theorem extend_preimage_mem_nhdsWithin {x : M} (h : x in f.source) (ht : t in 𝓝[s] x) :
-    (f.extend I).symm ⁻¹' t in 𝓝[(f.extend I).symm ⁻¹' s inter range I] f.extend I x := by
+theorem extend_preimage_mem_nhdsWithin {x : M} (h : x ∈ f.source) (ht : t ∈ 𝓝[s] x) :
+    (f.extend I).symm ⁻¹' t ∈ 𝓝[(f.extend I).symm ⁻¹' s ∩ range I] f.extend I x := by
   rwa [← map_extend_symm_nhdsWithin f (I := I) h, mem_map] at ht
-
-/--
-theorem `extend_preimage_mem_nhds` / 定理 `extend_preimage_mem_nhds`
-
-English:
-theorem extend_preimage_mem_nhds
-  given: {x : M} (h : x in f.source) (ht : t in 𝓝 x)
-  proof: by
+/-
+**OpenPartialHomeomorph.extend_preimage_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Open
+PartialHomeomorph`。
+形式化陈述：extend_preimage_mem_nhds {x : M} (h : x in f.source) (ht : t in 𝓝 x) : (f.
+extend I).symm ⁻¹' t in 𝓝 (f.extend I x)
+参数：h : x in f.source；ht : t in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm`：continuousAt_extend_symm
+ {x : M} (h : x in f.source) : ContinuousAt (f.extend I).symm (f.extend I x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+-/
+theorem extend_preimage_mem_nhds {x : M} (h : x ∈ f.source) (ht : t ∈ 𝓝 x) :
+    (f.extend I).symm ⁻¹' t ∈ 𝓝 (f.extend I x) := by
   apply (continuousAt_extend_symm f h).preimage_mem_nhds
   rwa [(f.extend I).left_inv]
   rwa [f.extend_source]
 
-中文:
-定理 extend_preimage_mem_nhds
-  条件: {x : M} (h : x in f.source) (ht : t in 𝓝 x)
-  证明: by
-  apply (continuousAt_extend_symm f h).preimage_mem_nhds
-  rwa [(f.extend I).left_inv]
-  rwa [f.extend_source]
+/-- Technical lemma to rewrite suitably the preimage of an intersection under an extended chart, to
+bring it into a convenient form to apply derivative lemmas. -/
+/-
+**OpenPartialHomeomorph.extend_preimage_inter_eq** 是 Mathlib 中的一个定理，位于命名空间 `Open
+PartialHomeomorph`。
+形式化陈述：extend_preimage_inter_eq : (f.extend I).symm ⁻¹' (s inter t) inter range I
+ = (f.extend I).symm ⁻¹' s inter range I inter (f.extend I).symm ⁻¹' t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-Depends on / 依赖: continuousAt_extend_symm, extend, extend_source, f.extend, f.extend_source, left_inv, preimage_mem_nhds
--/
-theorem extend_preimage_mem_nhds {x : M} (h : x in f.source) (ht : t in 𝓝 x) :
-    (f.extend I).symm ⁻¹' t in 𝓝 (f.extend I x) := by
-  apply (continuousAt_extend_symm f h).preimage_mem_nhds
-  rwa [(f.extend I).left_inv]
-  rwa [f.extend_source]
-
-/--
-theorem `extend_preimage_inter_eq` / 定理 `extend_preimage_inter_eq`
-
-English:
-theorem extend_preimage_inter_eq
-  proof: by
-  mfld_set_tac
-
-中文:
-定理 extend_preimage_inter_eq
-  证明: by
-  mfld_set_tac
-
-Depends on / 依赖: mfld_set_tac
+--- 原说明 ---
+Technical lemma to rewrite suitably the preimage of an intersection under an ext
+ended chart, to
+bring it into a convenient form to apply derivative lemmas.
 -/
 theorem extend_preimage_inter_eq :
-    (f.extend I).symm ⁻¹' (s inter t) inter range I =
-      (f.extend I).symm ⁻¹' s inter range I inter (f.extend I).symm ⁻¹' t := by
+    (f.extend I).symm ⁻¹' (s ∩ t) ∩ range I =
+      (f.extend I).symm ⁻¹' s ∩ range I ∩ (f.extend I).symm ⁻¹' t := by
   mfld_set_tac
-
-/--
-theorem `extend_symm_preimage_inter_range_eventuallyEq` / 定理 `extend_symm_preimage_inter_range_eventuallyEq`
-
-English:
-theorem extend_symm_preimage_inter_range_eventuallyEq
-  statement: {s : Set M} {x : M} (hs : s subseteq f.source)
-  proof: by
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin _ hx]; rw [map_extend_nhdsWithin_eq_image_of_subset _ hx hs]
-
-中文:
-定理 extend_symm_preimage_inter_range_eventuallyEq
-  结论: {s : 集合 M} {x : M} (hs : s subseteq f.source)
-  证明: by
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin _ hx]; rw [map_extend_nhdsWithin_eq_image_of_subset _ hx hs]
-
-Depends on / 依赖: map_extend_nhdsWithin, map_extend_nhdsWithin_eq_image_of_subset, nhdsWithin_eq_iff_eventuallyEq
+/-
+**OpenPartialHomeomorph.extend_symm_preimage_inter_range_eventuallyEq** 是 Mathli
+b 中的一个定理，位于命名空间 `OpenPartialHomeomorph`。
+形式化陈述：extend_symm_preimage_inter_range_eventuallyEq {s : Set M} {x : M} (hs : s 
+subseteq f.source) (hx : x in f.source) : ((f.extend I).symm ⁻¹' s inter range I
+ : Set _) =ᶠ[𝓝 (f.extend I x)] f.extend I '' s
+参数：hs : s subseteq f.source；hx : x in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin`：map_extend_nhdsWithin {y : 
+M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s 
+inter range I] f.extend I y
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image_of_subset`：map_exte
+nd_nhdsWithin_eq_image_of_subset {y : M} (hy : y in f.source) (hs : s subseteq f
+.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.extend I …
 -/
-theorem extend_symm_preimage_inter_range_eventuallyEq {s : Set M} {x : M} (hs : s subseteq f.source)
-    (hx : x in f.source) :
-    ((f.extend I).symm ⁻¹' s inter range I : Set _) =ᶠ[𝓝 (f.extend I x)] f.extend I '' s := by
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin _ hx]; rw [map_extend_nhdsWithin_eq_image_of_subset _ hx hs]
-
-/--
-lemma `extend_prod` / 引理 `extend_prod`
-
-English:
-lemma extend_prod
-  given: (f' : OpenPartialHomeomorph M' H')
-  proof: by simp
-
-中文:
-引理 extend_prod
-  条件: (f' : OpenPartialHomeomorph M' H')
-  证明: by simp
+theorem extend_symm_preimage_inter_range_eventuallyEq {s : Set M} {x : M} (hs : s ⊆ f.source)
+    (hx : x ∈ f.source) :
+    ((f.extend I).symm ⁻¹' s ∩ range I : Set _) =ᶠ[𝓝 (f.extend I x)] f.extend I '' s := by
+  rw [← nhdsWithin_eq_iff_eventuallyEq, ← map_extend_nhdsWithin _ hx,
+    map_extend_nhdsWithin_eq_image_of_subset _ hx hs]
+/-
+**OpenPartialHomeomorph.extend_prod** 是 Mathlib 中的一个引理，位于命名空间 `OpenPartialHomeom
+orph`。
+形式化陈述：extend_prod (f' : OpenPartialHomeomorph M' H') : (f.prod f').extend (I.pro
+d I') = (f.extend I).prod (f'.extend I')
+参数：f' : OpenPartialHomeomorph M' H'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.prod_toPartialHomeomorph`：∀ {X : Type u_1} {X' : T
+ype u_2} {Y : Type u_3} {Y' : Type u_4} [inst : TopologicalSpace X]   [inst_1 : 
+TopologicalSpace X'] [inst_2 : Topol…
+· 使用定理 `PartialEquiv.prod_trans`：prod_trans {η : Type*} {ε : Type*} (e : Partial
+Equiv α β) (f : PartialEquiv β γ) (e' : PartialEquiv δ η) (f' : PartialEquiv η ε
+) : (e.prod e…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma extend_prod (f' : OpenPartialHomeomorph M' H') :
     (f.prod f').extend (I.prod I') = (f.extend I).prod (f'.extend I') := by simp
@@ -1168,381 +1252,364 @@ end OpenPartialHomeomorph
 
 namespace ModelWithCorners
 
-/--
-Definition of `extendCoordChange` / `extendCoordChange` 的定义
+/-- The change of charts from `e` to `e'` in the model vector space `E`. -/
+/-
+**ModelWithCorners.extendCoordChange** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModelWithCorne
+rs`。
+形式化陈述：extendCoordChange (e e' : OpenPartialHomeomorph M H) : PartialEquiv E E
+参数：e e' : OpenPartialHomeomorph M H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation extendCoordChange
-  signature: (e e' : OpenPartialHomeomorph M H)
-  body: (e.extend I).symm ≫ e'.extend I
-
-中文:
-缩写 extendCoordChange
-  签名: (e e' : OpenPartialHomeomorph M H)
-  定义体: (e.extend I).symm ≫ e'.extend I
-
-Depends on / 依赖: e.extend, extend
+--- 原说明 ---
+The change of charts from `e` to `e'` in the model vector space `E`.
 -/
 abbrev extendCoordChange (e e' : OpenPartialHomeomorph M H) : PartialEquiv E E :=
   (e.extend I).symm ≫ e'.extend I
 
 variable {e e' : OpenPartialHomeomorph M H}
-
-/--
-lemma `extendCoordChange_symm` / 引理 `extendCoordChange_symm`
-
-English:
-lemma extendCoordChange_symm
-  statement: (I.extendCoordChange e e').symm = I.extendCoordChange e' e
-  proof: by
-  rfl
-
-中文:
-引理 extendCoordChange_symm
-  结论: (I.extendCoordChange e e').symm = I.extendCoordChange e' e
-  证明: by
-  rfl
+/-
+**ModelWithCorners.extendCoordChange_symm** 是 Mathlib 中的一个引理，位于命名空间 `ModelWithCo
+rners`。
+形式化陈述：extendCoordChange_symm : (I.extendCoordChange e e').symm = I.extendCoordCh
+ange e' e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma extendCoordChange_symm : (I.extendCoordChange e e').symm = I.extendCoordChange e' e := by
   rfl
-
-/--
-lemma `extendCoordChange_source` / 引理 `extendCoordChange_source`
-
-English:
-lemma extendCoordChange_source
-  proof: by
-  simp_rw [extendCoordChange, PartialEquiv.trans_source, I.image_eq, e'.extend_source,
-    PartialEquiv.symm_source, e.extend_target, inter_right_comm _ (range I)]
-  simp [Set.preimage_comp]
-
-中文:
-引理 extendCoordChange_source
-  证明: by
-  simp_rw [extendCoordChange, PartialEquiv.trans_source, I.image_eq, e'.extend_source,
-    PartialEquiv.symm_source, e.extend_target, inter_right_comm _ (range I)]
-  simp [Set.preimage_comp]
-
-Depends on / 依赖: I.image_eq, PartialEquiv, PartialEquiv.symm_source, PartialEquiv.trans_source, Set.preimage_comp, e.extend_target, extendCoordChange, extend_source, extend_target, image_eq, inter_right_comm, preimage_comp, simp_rw, symm_source, trans_source
+/-
+**ModelWithCorners.extendCoordChange_source** 是 Mathlib 中的一个引理，位于命名空间 `ModelWith
+Corners`。
+形式化陈述：extendCoordChange_source : (I.extendCoordChange e e').source = I '' (e.sym
+m ≫ₕ e').source
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.image_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
+· 使用定理 `OpenPartialHomeomorph.extend_target`：extend_target : (f.extend I).target
+ = I.symm ⁻¹' f.target inter range I
+· 使用定理 `Set.inter_right_comm`：inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ inter s₂ 
+inter s₃ = s₁ inter s₃ inter s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma extendCoordChange_source :
     (I.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source := by
   simp_rw [extendCoordChange, PartialEquiv.trans_source, I.image_eq, e'.extend_source,
     PartialEquiv.symm_source, e.extend_target, inter_right_comm _ (range I)]
   simp [Set.preimage_comp]
-
-/--
-lemma `extendCoordChange_target` / 引理 `extendCoordChange_target`
-
-English:
-lemma extendCoordChange_target
-  proof: by
-  rw [← PartialEquiv.symm_source]; rw [← OpenPartialHomeomorph.symm_source]
-  exact I.extendCoordChange_source
-
-中文:
-引理 extendCoordChange_target
-  证明: by
-  rw [← PartialEquiv.symm_source]; rw [← OpenPartialHomeomorph.symm_source]
-  exact I.extendCoordChange_source
-
-Depends on / 依赖: I.extendCoordChange_source, OpenPartialHomeomorph, OpenPartialHomeomorph.symm_source, PartialEquiv, PartialEquiv.symm_source, extendCoordChange_source, symm_source
+/-
+**ModelWithCorners.extendCoordChange_target** 是 Mathlib 中的一个引理，位于命名空间 `ModelWith
+Corners`。
+形式化陈述：extendCoordChange_target : (I.extendCoordChange e e').target = I '' (e.sym
+m ≫ₕ e').target
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.symm_source`：symm_source : e.symm.source = e.target
+· 使用定理 `OpenPartialHomeomorph.symm_source`：symm_source : e.symm.source = e.targe
+t
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
 -/
 lemma extendCoordChange_target :
     (I.extendCoordChange e e').target = I '' (e.symm ≫ₕ e').target := by
-  rw [← PartialEquiv.symm_source]; rw [← OpenPartialHomeomorph.symm_source]
+  rw [← PartialEquiv.symm_source, ← OpenPartialHomeomorph.symm_source]
   exact I.extendCoordChange_source
-
-/--
-lemma `_root_.OpenPartialHomeomorph.extend_image_source_inter` / 引理 `_root_.OpenPartialHomeomorph.extend_image_source_inter`
-
-English:
-lemma _root_.OpenPartialHomeomorph.extend_image_source_inter
-  proof: by
-  simp_rw [I.extendCoordChange_source, f.extend_coe, image_comp I f,
-    OpenPartialHomeomorph.trans_source'', OpenPartialHomeomorph.symm_symm,
-    OpenPartialHomeomorph.symm_target]
-
-中文:
-引理 _root_.OpenPartialHomeomorph.extend_image_source_inter
-  证明: by
-  simp_rw [I.extendCoordChange_source, f.extend_coe, image_comp I f,
-    OpenPartialHomeomorph.trans_source'', OpenPartialHomeomorph.symm_symm,
-    OpenPartialHomeomorph.symm_target]
-
-Depends on / 依赖: I.extendCoordChange_source, OpenPartialHomeomorph, OpenPartialHomeomorph.symm_symm, OpenPartialHomeomorph.symm_target, OpenPartialHomeomorph.trans_source, extendCoordChange_source, extend_coe, f.extend_coe, image_comp, simp_rw, symm_symm, symm_target, trans_source
+/-
+**ModelWithCorners._root_.OpenPartialHomeomorph.extend_image_source_inter** 是 Ma
+thlib 中的一个引理，位于命名空间 `ModelWithCorners`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.OpenPartialHomeomorph.extend_image_source_inter :
-    f.extend I '' (f.source inter f'.source) = (I.extendCoordChange f f').source := by
+    f.extend I '' (f.source ∩ f'.source) = (I.extendCoordChange f f').source := by
   simp_rw [I.extendCoordChange_source, f.extend_coe, image_comp I f,
     OpenPartialHomeomorph.trans_source'', OpenPartialHomeomorph.symm_symm,
     OpenPartialHomeomorph.symm_target]
-
-/--
-lemma `extendCoordChange_source_mem_nhdsWithin` / 引理 `extendCoordChange_source_mem_nhdsWithin`
-
-English:
-lemma extendCoordChange_source_mem_nhdsWithin
-  statement: {x : E}
-  proof: by
-  rw [I.extendCoordChange_source] at hx ⊢
-  obtain ⟨x, hx, rfl⟩ := hx
-  refine I.image_mem_nhdsWithin ?_
-  exact (OpenPartialHomeomorph.open_source _).mem_nhds hx
-
-中文:
-引理 extendCoordChange_source_mem_nhdsWithin
-  结论: {x : E}
-  证明: by
-  rw [I.extendCoordChange_source] at hx ⊢
-  obtain ⟨x, hx, rfl⟩ := hx
-  refine I.image_mem_nhdsWithin ?_
-  exact (OpenPartialHomeomorph.open_source _).mem_nhds hx
-
-Depends on / 依赖: I.extendCoordChange_source, I.image_mem_nhdsWithin, OpenPartialHomeomorph, OpenPartialHomeomorph.open_source, extendCoordChange_source, image_mem_nhdsWithin, mem_nhds, open_source
+/-
+**ModelWithCorners.extendCoordChange_source_mem_nhdsWithin** 是 Mathlib 中的一个引理，位于
+命名空间 `ModelWithCorners`。
+形式化陈述：extendCoordChange_source_mem_nhdsWithin {x : E} (hx : x in (I.extendCoordC
+hange e e').source) : (I.extendCoordChange e e').source in 𝓝[range I] x
+参数：hx : x in (I.extendCoordChange e e').source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
+· 使用定理 `ModelWithCorners.image_mem_nhdsWithin`：image_mem_nhdsWithin {x : H} {s :
+ Set H} (hs : s in 𝓝 x) : I '' s in 𝓝[range I] I x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenPartialHomeomorph.open_source`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
 lemma extendCoordChange_source_mem_nhdsWithin {x : E}
-    (hx : x in (I.extendCoordChange e e').source) :
-    (I.extendCoordChange e e').source in 𝓝[range I] x := by
+    (hx : x ∈ (I.extendCoordChange e e').source) :
+    (I.extendCoordChange e e').source ∈ 𝓝[range I] x := by
   rw [I.extendCoordChange_source] at hx ⊢
   obtain ⟨x, hx, rfl⟩ := hx
   refine I.image_mem_nhdsWithin ?_
   exact (OpenPartialHomeomorph.open_source _).mem_nhds hx
-
-/--
-lemma `extendCoordChange_source_mem_nhdsWithin'` / 引理 `extendCoordChange_source_mem_nhdsWithin'`
-
-English:
-lemma extendCoordChange_source_mem_nhdsWithin'
-  statement: {x : M} (hxe : x in e.source)
-  proof: by
-  apply extendCoordChange_source_mem_nhdsWithin
-  rw [← OpenPartialHomeomorph.extend_image_source_inter]
-  exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-中文:
-引理 extendCoordChange_source_mem_nhdsWithin'
-  结论: {x : M} (hxe : x in e.source)
-  证明: by
-  apply extendCoordChange_source_mem_nhdsWithin
-  rw [← OpenPartialHomeomorph.extend_image_source_inter]
-  exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.extend_image_source_inter, extendCoordChange_source_mem_nhdsWithin, extend_image_source_inter, mem_image_of_mem
+/-
+**ModelWithCorners.extendCoordChange_source_mem_nhdsWithin'** 是 Mathlib 中的一个引理，位
+于命名空间 `ModelWithCorners`。
+形式化陈述：extendCoordChange_source_mem_nhdsWithin' {x : M} (hxe : x in e.source) (hx
+e' : x in e'.source) : (I.extendCoordChange e e').source in 𝓝[range I] e.extend 
+I x
+参数：hxe : x in e.source；hxe' : x in e'.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.extendCoordChange_source_mem_nhdsWithin`：extendCoordCha
+nge_source_mem_nhdsWithin {x : E} (hx : x in (I.extendCoordChange e e').source) 
+: (I.extendCoordChange e e').source in 𝓝[range…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.extend_image_source_inter`：∀ {𝕜 : Type u_1} {E : T
+ype u_2} {M : Type u_3} {H : Type u_4} [inst : NontriviallyNormedField 𝕜]   [ins
+t_1 : NormedAddCommGroup E] [inst_2 :…
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-lemma extendCoordChange_source_mem_nhdsWithin' {x : M} (hxe : x in e.source)
-    (hxe' : x in e'.source) :
-    (I.extendCoordChange e e').source in 𝓝[range I] e.extend I x := by
+lemma extendCoordChange_source_mem_nhdsWithin' {x : M} (hxe : x ∈ e.source)
+    (hxe' : x ∈ e'.source) :
+    (I.extendCoordChange e e').source ∈ 𝓝[range I] e.extend I x := by
   apply extendCoordChange_source_mem_nhdsWithin
   rw [← OpenPartialHomeomorph.extend_image_source_inter]
   exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-/--
-lemma `uniqueDiffOn_extendCoordChange_source` / 引理 `uniqueDiffOn_extendCoordChange_source`
-
-English:
-lemma uniqueDiffOn_extendCoordChange_source
-  statement: UniqueDiffOn 𝕜 (I.extendCoordChange e e').source
-  proof: by
-  rw [extendCoordChange_source]; rw [I.image_eq]
-exact I.uniqueDiffOn_preimage e.isOpen_inter_preimage_symm e'.open_source
-
-中文:
-引理 uniqueDiffOn_extendCoordChange_source
-  结论: UniqueDiffOn 𝕜 (I.extendCoordChange e e').source
-  证明: by
-  rw [extendCoordChange_source]; rw [I.image_eq]
-exact I.uniqueDiffOn_preimage e.isOpen_inter_preimage_symm e'.open_source
-
-Depends on / 依赖: I.image_eq, I.uniqueDiffOn_preimage, e.isOpen_inter_preimage_symm, extendCoordChange_source, image_eq, isOpen_inter_preimage_symm, open_source, uniqueDiffOn_preimage
+/-
+**ModelWithCorners.uniqueDiffOn_extendCoordChange_source** 是 Mathlib 中的一个引理，位于命名
+空间 `ModelWithCorners`。
+形式化陈述：uniqueDiffOn_extendCoordChange_source : UniqueDiffOn 𝕜 (I.extendCoordChang
+e e e').source
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
+· 使用定理 `ModelWithCorners.image_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `ModelWithCorners.uniqueDiffOn_preimage`：uniqueDiffOn_preimage {s : Set H
+} (hs : IsOpen s) : UniqueDiffOn 𝕜 (I.symm ⁻¹' s inter range I)
+· 使用定理 `OpenPartialHomeomorph.isOpen_inter_preimage_symm`：isOpen_inter_preimage_
+symm {s : Set X} (hs : IsOpen s) : IsOpen (e.target inter e.symm ⁻¹' s)
+· 使用定理 `OpenPartialHomeomorph.open_source`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
 lemma uniqueDiffOn_extendCoordChange_source : UniqueDiffOn 𝕜 (I.extendCoordChange e e').source := by
-  rw [extendCoordChange_source]; rw [I.image_eq]
-exact I.uniqueDiffOn_preimage e.isOpen_inter_preimage_symm e'.open_source
-
-/--
-lemma `uniqueDiffOn_extendCoordChange_target` / 引理 `uniqueDiffOn_extendCoordChange_target`
-
-English:
-lemma uniqueDiffOn_extendCoordChange_target
-  statement: UniqueDiffOn 𝕜 (I.extendCoordChange e e').target
-  proof: by
-  rw [← extendCoordChange_symm]; rw [PartialEquiv.symm_target]
-  exact uniqueDiffOn_extendCoordChange_source
-
-中文:
-引理 uniqueDiffOn_extendCoordChange_target
-  结论: UniqueDiffOn 𝕜 (I.extendCoordChange e e').target
-  证明: by
-  rw [← extendCoordChange_symm]; rw [PartialEquiv.symm_target]
-  exact uniqueDiffOn_extendCoordChange_source
-
-Depends on / 依赖: PartialEquiv, PartialEquiv.symm_target, extendCoordChange_symm, symm_target, uniqueDiffOn_extendCoordChange_source
+  rw [extendCoordChange_source, I.image_eq]
+  exact I.uniqueDiffOn_preimage <| e.isOpen_inter_preimage_symm e'.open_source
+/-
+**ModelWithCorners.uniqueDiffOn_extendCoordChange_target** 是 Mathlib 中的一个引理，位于命名
+空间 `ModelWithCorners`。
+形式化陈述：uniqueDiffOn_extendCoordChange_target : UniqueDiffOn 𝕜 (I.extendCoordChang
+e e e').target
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ModelWithCorners.extendCoordChange_symm`：extendCoordChange_symm : (I.ext
+endCoordChange e e').symm = I.extendCoordChange e' e
+· 使用定理 `PartialEquiv.symm_target`：symm_target : e.symm.target = e.source
+· 使用引理 `ModelWithCorners.uniqueDiffOn_extendCoordChange_source`：uniqueDiffOn_ext
+endCoordChange_source : UniqueDiffOn 𝕜 (I.extendCoordChange e e').source
 -/
 lemma uniqueDiffOn_extendCoordChange_target : UniqueDiffOn 𝕜 (I.extendCoordChange e e').target := by
-  rw [← extendCoordChange_symm]; rw [PartialEquiv.symm_target]
+  rw [← extendCoordChange_symm, PartialEquiv.symm_target]
   exact uniqueDiffOn_extendCoordChange_source
 
 open IsManifold
 
 variable [ChartedSpace H M]
-
-/--
-lemma `contDiffOn_extendCoordChange` / 引理 `contDiffOn_extendCoordChange`
-
-English:
-lemma contDiffOn_extendCoordChange
-  given: (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M)
-  proof: by
-  rw [I.extendCoordChange_source]; rw [I.image_eq]
-  exact (StructureGroupoid.compatible_of_mem_maximalAtlas he he').1
-
-中文:
-引理 contDiffOn_extendCoordChange
-  条件: (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M)
-  证明: by
-  rw [I.extendCoordChange_source]; rw [I.image_eq]
-  exact (StructureGroupoid.compatible_of_mem_maximalAtlas he he').1
-
-Depends on / 依赖: I.extendCoordChange_source, I.image_eq, StructureGroupoid, StructureGroupoid.compatible_of_mem_maximalAtlas, compatible_of_mem_maximalAtlas, extendCoordChange_source, image_eq
+/-
+**ModelWithCorners.contDiffOn_extendCoordChange** 是 Mathlib 中的一个引理，位于命名空间 `Model
+WithCorners`。
+形式化陈述：contDiffOn_extendCoordChange (he : e in maximalAtlas I n M) (he' : e' in m
+aximalAtlas I n M) : ContDiffOn 𝕜 n (I.extendCoordChange e e') (I.extendCoordCha
+nge e e').source
+参数：he : e in maximalAtlas I n M；he' : e' in maximalAtlas I n M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
+· 使用定理 `ModelWithCorners.image_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `StructureGroupoid.compatible_of_mem_maximalAtlas`：StructureGroupoid.comp
+atible_of_mem_maximalAtlas {e e' : OpenPartialHomeomorph M H} (he : e in G.maxim
+alAtlas M) (he' : e' in G.maximalAtlas…
 -/
-lemma contDiffOn_extendCoordChange (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) :
+lemma contDiffOn_extendCoordChange (he : e ∈ maximalAtlas I n M) (he' : e' ∈ maximalAtlas I n M) :
     ContDiffOn 𝕜 n (I.extendCoordChange e e') (I.extendCoordChange e e').source := by
-  rw [I.extendCoordChange_source]; rw [I.image_eq]
+  rw [I.extendCoordChange_source, I.image_eq]
   exact (StructureGroupoid.compatible_of_mem_maximalAtlas he he').1
-
-/--
-lemma `contDiffWithinAt_extendCoordChange` / 引理 `contDiffWithinAt_extendCoordChange`
-
-English:
-lemma contDiffWithinAt_extendCoordChange
-  statement: (he : e in maximalAtlas I n M)
-  proof: by
-  apply (I.contDiffOn_extendCoordChange he he' x hx).mono_of_mem_nhdsWithin
-  rw [I.extendCoordChange_source] at hx ⊢
-  obtain ⟨z, hz, rfl⟩ := hx
-  exact I.image_mem_nhdsWithin ((OpenPartialHomeomorph.open_source _).mem_nhds hz)
-
-中文:
-引理 contDiffWithinAt_extendCoordChange
-  结论: (he : e in maximalAtlas I n M)
-  证明: by
-  apply (I.contDiffOn_extendCoordChange he he' x hx).mono_of_mem_nhdsWithin
-  rw [I.extendCoordChange_source] at hx ⊢
-  obtain ⟨z, hz, rfl⟩ := hx
-  exact I.image_mem_nhdsWithin ((OpenPartialHomeomorph.open_source _).mem_nhds hz)
-
-Depends on / 依赖: I.contDiffOn_extendCoordChange, I.extendCoordChange_source, I.image_mem_nhdsWithin, OpenPartialHomeomorph, OpenPartialHomeomorph.open_source, contDiffOn_extendCoordChange, extendCoordChange_source, image_mem_nhdsWithin, mem_nhds, mono_of_mem_nhdsWithin, open_source
+/-
+**ModelWithCorners.contDiffWithinAt_extendCoordChange** 是 Mathlib 中的一个引理，位于命名空间 
+`ModelWithCorners`。
+形式化陈述：contDiffWithinAt_extendCoordChange (he : e in maximalAtlas I n M) (he' : e
+' in maximalAtlas I n M) {x : E} (hx : x in (I.extendCoordChange e e').source) :
+ ContDiffWithinAt 𝕜 n (I.extendCoordChange e e') (range I) x
+参数：he : e in maximalAtlas I n M；he' : e' in maximalAtlas I n M；hx : x in (I.exte
+ndCoordChange e e').source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffWithinAt.mono_of_mem_nhdsWithin`：ContDiffWithinAt.mono_of_mem_nh
+dsWithin (h : ContDiffWithinAt 𝕜 n f s x) {t : Set E} (hst : s in 𝓝[t] x) : Cont
+DiffWithinAt 𝕜 n f t x
+· 使用引理 `ModelWithCorners.contDiffOn_extendCoordChange`：contDiffOn_extendCoordCha
+nge (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) : ContDiffOn
+ 𝕜 n (I.extendCoordChange e e') (I.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
+· 使用定理 `ModelWithCorners.image_mem_nhdsWithin`：image_mem_nhdsWithin {x : H} {s :
+ Set H} (hs : s in 𝓝 x) : I '' s in 𝓝[range I] I x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenPartialHomeomorph.open_source`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
-lemma contDiffWithinAt_extendCoordChange (he : e in maximalAtlas I n M)
-    (he' : e' in maximalAtlas I n M) {x : E} (hx : x in (I.extendCoordChange e e').source) :
+lemma contDiffWithinAt_extendCoordChange (he : e ∈ maximalAtlas I n M)
+    (he' : e' ∈ maximalAtlas I n M) {x : E} (hx : x ∈ (I.extendCoordChange e e').source) :
     ContDiffWithinAt 𝕜 n (I.extendCoordChange e e') (range I) x := by
   apply (I.contDiffOn_extendCoordChange he he' x hx).mono_of_mem_nhdsWithin
   rw [I.extendCoordChange_source] at hx ⊢
   obtain ⟨z, hz, rfl⟩ := hx
   exact I.image_mem_nhdsWithin ((OpenPartialHomeomorph.open_source _).mem_nhds hz)
-
-/--
-lemma `contDiffWithinAt_extendCoordChange'` / 引理 `contDiffWithinAt_extendCoordChange'`
-
-English:
-lemma contDiffWithinAt_extendCoordChange'
-  statement: (he : e in maximalAtlas I n M)
-  proof: by
-  refine I.contDiffWithinAt_extendCoordChange he he' ?_
-  rw [← OpenPartialHomeomorph.extend_image_source_inter]
-  exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-中文:
-引理 contDiffWithinAt_extendCoordChange'
-  结论: (he : e in maximalAtlas I n M)
-  证明: by
-  refine I.contDiffWithinAt_extendCoordChange he he' ?_
-  rw [← OpenPartialHomeomorph.extend_image_source_inter]
-  exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-Depends on / 依赖: I.contDiffWithinAt_extendCoordChange, OpenPartialHomeomorph, OpenPartialHomeomorph.extend_image_source_inter, contDiffWithinAt_extendCoordChange, extend_image_source_inter, mem_image_of_mem
+/-
+**ModelWithCorners.contDiffWithinAt_extendCoordChange'** 是 Mathlib 中的一个引理，位于命名空间
+ `ModelWithCorners`。
+形式化陈述：contDiffWithinAt_extendCoordChange' (he : e in maximalAtlas I n M) (he' : 
+e' in maximalAtlas I n M) {x : M} (hxe : x in e.source) (hxe' : x in e'.source) 
+: ContDiffWithinAt 𝕜 n (I.extendCoordChange e e') (range I) (e.extend I x)
+参数：he : e in maximalAtlas I n M；he' : e' in maximalAtlas I n M；hxe : x in e.sour
+ce；hxe' : x in e'.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.contDiffWithinAt_extendCoordChange`：contDiffWithinAt_ex
+tendCoordChange (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) 
+{x : E} (hx : x in (I.extendCoordChange e…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OpenPartialHomeomorph.extend_image_source_inter`：∀ {𝕜 : Type u_1} {E : T
+ype u_2} {M : Type u_3} {H : Type u_4} [inst : NontriviallyNormedField 𝕜]   [ins
+t_1 : NormedAddCommGroup E] [inst_2 :…
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-lemma contDiffWithinAt_extendCoordChange' (he : e in maximalAtlas I n M)
-    (he' : e' in maximalAtlas I n M) {x : M} (hxe : x in e.source) (hxe' : x in e'.source) :
+lemma contDiffWithinAt_extendCoordChange' (he : e ∈ maximalAtlas I n M)
+    (he' : e' ∈ maximalAtlas I n M) {x : M} (hxe : x ∈ e.source) (hxe' : x ∈ e'.source) :
     ContDiffWithinAt 𝕜 n (I.extendCoordChange e e') (range I) (e.extend I x) := by
   refine I.contDiffWithinAt_extendCoordChange he he' ?_
   rw [← OpenPartialHomeomorph.extend_image_source_inter]
   exact mem_image_of_mem _ ⟨hxe, hxe'⟩
-
-/--
-lemma `contDiffOn_extendCoordChange_symm` / 引理 `contDiffOn_extendCoordChange_symm`
-
-English:
-lemma contDiffOn_extendCoordChange_symm
-  statement: (he : e in maximalAtlas I n M)
-  proof: I.contDiffOn_extendCoordChange he' he
-
-中文:
-引理 contDiffOn_extendCoordChange_symm
-  结论: (he : e in maximalAtlas I n M)
-  证明: I.contDiffOn_extendCoordChange he' he
-
-Depends on / 依赖: I.contDiffOn_extendCoordChange, contDiffOn_extendCoordChange
+/-
+**ModelWithCorners.contDiffOn_extendCoordChange_symm** 是 Mathlib 中的一个引理，位于命名空间 `
+ModelWithCorners`。
+形式化陈述：contDiffOn_extendCoordChange_symm (he : e in maximalAtlas I n M) (he' : e'
+ in maximalAtlas I n M) : ContDiffOn 𝕜 n (I.extendCoordChange e e').symm (I.exte
+ndCoordChange e e').target
+参数：he : e in maximalAtlas I n M；he' : e' in maximalAtlas I n M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.contDiffOn_extendCoordChange`：contDiffOn_extendCoordCha
+nge (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) : ContDiffOn
+ 𝕜 n (I.extendCoordChange e e') (I.…
 -/
-lemma contDiffOn_extendCoordChange_symm (he : e in maximalAtlas I n M)
-    (he' : e' in maximalAtlas I n M) :
+lemma contDiffOn_extendCoordChange_symm (he : e ∈ maximalAtlas I n M)
+    (he' : e' ∈ maximalAtlas I n M) :
     ContDiffOn 𝕜 n (I.extendCoordChange e e').symm (I.extendCoordChange e e').target :=
   I.contDiffOn_extendCoordChange he' he
-
-/--
-lemma `isInvertible_fderivWithin_extendCoordChange` / 引理 `isInvertible_fderivWithin_extendCoordChange`
-
-English:
-lemma isInvertible_fderivWithin_extendCoordChange
-  statement: (hn : n != 0)
-  proof: by
-  set φ := I.extendCoordChange e e'
-  have hφ : ContDiffOn 𝕜 n φ φ.source := I.contDiffOn_extendCoordChange he he'
-  have hφ' : ContDiffOn 𝕜 n φ.symm φ.target := I.contDiffOn_extendCoordChange_symm he he'
-  refine .of_inverse (g := (fderivWithin 𝕜 φ.symm φ.target (φ x))) ?_ ?_
-  · rw [← φ.left_inv hx, φ.right_inv (φ.map_source hx), ← fderivWithin_comp,
-      fderivWithin_congr' φ.rightInvOn.eqOn (φ.map_source hx), fderivWithin_id]
-    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
-    · exact (φ.left_inv hx ▸ ((hφ _ hx).differentiableWithinAt hn) :)
-    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
-    · exact φ.mapsTo_symm
-    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
-  · rw [← fderivWithin_comp, fderivWithin_congr' φ.leftInvOn.eqOn hx, fderivWithin_id]
-    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
-    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
-    · exact (hφ _ hx).differentiableWithinAt hn
-    · exact φ.mapsTo
-    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
-
-中文:
-引理 isInvertible_fderivWithin_extendCoordChange
-  结论: (hn : n != 0)
-  证明: by
-  set φ := I.extendCoordChange e e'
-  have hφ : ContDiffOn 𝕜 n φ φ.source := I.contDiffOn_extendCoordChange he he'
-  have hφ' : ContDiffOn 𝕜 n φ.symm φ.target := I.contDiffOn_extendCoordChange_symm he he'
-  refine .of_inverse (g := (fderivWithin 𝕜 φ.symm φ.target (φ x))) ?_ ?_
-  · rw [← φ.left_inv hx, φ.right_inv (φ.map_source hx), ← fderivWithin_comp,
-      fderivWithin_congr' φ.rightInvOn.eqOn (φ.map_source hx), fderivWithin_id]
-    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
-    · exact (φ.left_inv hx ▸ ((hφ _ hx).differentiableWithinAt hn) :)
-    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
-    · exact φ.mapsTo_symm
-    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
-  · rw [← fderivWithin_comp, fderivWithin_congr' φ.leftInvOn.eqOn hx, fderivWithin_id]
-    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
-    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
-    · exact (hφ _ hx).differentiableWithinAt hn
-    · exact φ.mapsTo
-    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
-
-Depends on / 依赖: ContDiffOn, I.contDiffOn_extendCoordChange, I.contDiffOn_extendCoordChange_symm, I.extendCoordChange, I.uniqueDiffOn_extendCoordChange_source, contDiffOn_extendCoordChange, contDiffOn_extendCoordChange_symm, extendCoordChange, fderivWithin, fderivWithin_comp, fderivWithin_congr, fderivWithin_id, left_inv, map_source, of_inverse, rightInvOn, rightInvOn.eqOn, right_inv, source, target
+/-
+**ModelWithCorners.isInvertible_fderivWithin_extendCoordChange** 是 Mathlib 中的一个引
+理，位于命名空间 `ModelWithCorners`。
+形式化陈述：isInvertible_fderivWithin_extendCoordChange (hn : n != 0) (he : e in maxim
+alAtlas I n M) (he' : e' in maximalAtlas I n M) {x : E} (hx : x in (I.extendCoor
+dChange e e').source) : ContinuousLinearMap.IsInvertible fderivWithin 𝕜 (I.exten
+dCoordChange e e') (I.extendCoordChange e e').source x
+参数：hn : n != 0；he : e in maximalAtlas I n M；he' : e' in maximalAtlas I n M；hx : 
+x in (I.extendCoordChange e e').source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModelWithCorners.contDiffOn_extendCoordChange`：contDiffOn_extendCoordCha
+nge (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) : ContDiffOn
+ 𝕜 n (I.extendCoordChange e e') (I.…
+· 使用引理 `ModelWithCorners.contDiffOn_extendCoordChange_symm`：contDiffOn_extendCoo
+rdChange_symm (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) : 
+ContDiffOn 𝕜 n (I.extendCoordChange e e'…
+· 使用定理 `ContinuousLinearMap.IsInvertible.of_inverse`：∀ {R : Type u_1} {M : Type 
+u_2} {M₂ : Type u_3} [inst : TopologicalSpace M] [inst_1 : TopologicalSpace M₂] 
+  [inst_2 : Semiring R] [inst_3 :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `PartialEquiv.right_inv`：right_inv {x : β} (h : x in e.target) : e (e.sym
+m x) = x
+· 使用定理 `PartialEquiv.map_source`：map_source {x : α} (h : x in e.source) : e x in
+ e.target
+· 使用定理 `fderivWithin_comp`：fderivWithin_comp {g : F -> G} {t : Set F} (hg : Diff
+erentiableWithinAt 𝕜 g t (f x)) (hf : DifferentiableWithinAt 𝕜 f s x) (h : MapsT
+o f s t…
+· 使用定理 `ContDiffWithinAt.differentiableWithinAt`：ContDiffWithinAt.differentiable
+WithinAt (h : ContDiffWithinAt 𝕜 n f s x) (hn : n != 0) : DifferentiableWithinAt
+ 𝕜 f s x
+· 使用定理 `PartialEquiv.mapsTo_symm`：mapsTo_symm : MapsTo e.symm e.target e.source
+· 使用引理 `ModelWithCorners.uniqueDiffOn_extendCoordChange_source`：uniqueDiffOn_ext
+endCoordChange_source : UniqueDiffOn 𝕜 (I.extendCoordChange e e').source
+· 使用定理 `fderivWithin_congr'`：fderivWithin_congr' (hs : EqOn f₁ f s) (hx : x in s
+) : fderivWithin 𝕜 f₁ s x = fderivWithin 𝕜 f s x
+· 使用定理 `Set.RightInvOn.eqOn`：eqOn (h : RightInvOn f' f t) : EqOn (f ∘ f') id t
+· 使用定理 `PartialEquiv.rightInvOn`：∀ {α : Type u_1} {β : Type u_2} (e : PartialEqu
+iv α β), Set.RightInvOn (↑e.symm) (↑e) e.target
+· 使用定理 `fderivWithin_id`：fderivWithin_id [ContinuousAdd E] [ContinuousSMul 𝕜 E] 
+[T2Space E] (hxs : UniqueDiffWithinAt 𝕜 s x) : fderivWithin 𝕜 id s x = .id 𝕜 E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `PartialEquiv.mapsTo`：∀ {α : Type u_1} {β : Type u_2} (e : PartialEquiv α
+ β), Set.MapsTo (↑e) e.source e.target
+· 使用定理 `Set.LeftInvOn.eqOn`：eqOn (h : LeftInvOn f' f s) : EqOn (f' ∘ f) id s
+· 使用定理 `PartialEquiv.leftInvOn`：∀ {α : Type u_1} {β : Type u_2} (e : PartialEqui
+v α β), Set.LeftInvOn (↑e.symm) (↑e) e.source
 -/
-lemma isInvertible_fderivWithin_extendCoordChange (hn : n != 0)
-    (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M)
-    {x : E} (hx : x in (I.extendCoordChange e e').source) :
-ContinuousLinearMap.IsInvertible
+lemma isInvertible_fderivWithin_extendCoordChange (hn : n ≠ 0)
+    (he : e ∈ maximalAtlas I n M) (he' : e' ∈ maximalAtlas I n M)
+    {x : E} (hx : x ∈ (I.extendCoordChange e e').source) :
+    ContinuousLinearMap.IsInvertible <|
       fderivWithin 𝕜 (I.extendCoordChange e e') (I.extendCoordChange e e').source x := by
   set φ := I.extendCoordChange e e'
   have hφ : ContDiffOn 𝕜 n φ φ.source := I.contDiffOn_extendCoordChange he he'
@@ -1596,1418 +1663,1338 @@ variable (I) in
 /-- The preferred extended chart on a manifold with corners around a point `x`, from a neighborhood
 of `x` to the model vector space. -/
 @[simp, mfld_simps]
-/--
-Definition of `extChartAt` / `extChartAt` 的定义
+/-
+**extChartAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：extChartAt (x : M) : PartialEquiv M E
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extChartAt
-  signature: (x : M)
-  body: (chartAt H x).extend I
-
-中文:
-定义 extChartAt
-  签名: (x : M)
-  定义体: (chartAt H x).extend I
-
-Depends on / 依赖: chartAt, extend
+--- 原说明 ---
+The preferred extended chart on a manifold with corners around a point `x`, from
+ a neighborhood
+of `x` to the model vector space.
 -/
 def extChartAt (x : M) : PartialEquiv M E :=
   (chartAt H x).extend I
-
-/--
-theorem `extChartAt_coe` / 定理 `extChartAt_coe`
-
-English:
-theorem extChartAt_coe
-  given: (x : M)
-  statement: ⇑(extChartAt I x) = I ∘ chartAt H x
-  proof: rfl
-
-中文:
-定理 extChartAt_coe
-  条件: (x : M)
-  结论: ⇑(extChartAt I x) = I ∘ chartAt H x
-  证明: rfl
+/-
+**extChartAt_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_coe (x : M) : ⇑(extChartAt I x) = I ∘ chartAt H x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extChartAt_coe (x : M) : ⇑(extChartAt I x) = I ∘ chartAt H x :=
   rfl
-
-/--
-theorem `extChartAt_coe_symm` / 定理 `extChartAt_coe_symm`
-
-English:
-theorem extChartAt_coe_symm
-  given: (x : M)
-  statement: ⇑(extChartAt I x).symm = (chartAt H x).symm ∘ I.symm
-  proof: rfl
-
-中文:
-定理 extChartAt_coe_symm
-  条件: (x : M)
-  结论: ⇑(extChartAt I x).symm = (chartAt H x).symm ∘ I.symm
-  证明: rfl
+/-
+**extChartAt_coe_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_coe_symm (x : M) : ⇑(extChartAt I x).symm = (chartAt H x).symm 
+∘ I.symm
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extChartAt_coe_symm (x : M) : ⇑(extChartAt I x).symm = (chartAt H x).symm ∘ I.symm :=
   rfl
 
 variable (I) in
-/--
-theorem `extChartAt_source` / 定理 `extChartAt_source`
-
-English:
-theorem extChartAt_source
-  given: (x : M)
-  statement: (extChartAt I x).source = (chartAt H x).source
-  proof: extend_source _
-
-中文:
-定理 extChartAt_source
-  条件: (x : M)
-  结论: (extChartAt I x).source = (chartAt H x).source
-  证明: extend_source _
-
-Depends on / 依赖: extend_source
+/-
+**extChartAt_source** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_source (x : M) : (extChartAt I x).source = (chartAt H x).source
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_source`：extend_source : (f.extend I).source
+ = f.source
 -/
 theorem extChartAt_source (x : M) : (extChartAt I x).source = (chartAt H x).source :=
   extend_source _
-
-/--
-theorem `isOpen_extChartAt_source` / 定理 `isOpen_extChartAt_source`
-
-English:
-theorem isOpen_extChartAt_source
-  given: (x : M)
-  statement: IsOpen (extChartAt I x).source
-  proof: isOpen_extend_source _
-
-中文:
-定理 isOpen_extChartAt_source
-  条件: (x : M)
-  结论: 是开集 (extChartAt I x).source
-  证明: isOpen_extend_source _
-
-Depends on / 依赖: isOpen_extend_source
+/-
+**isOpen_extChartAt_source** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_extChartAt_source (x : M) : IsOpen (extChartAt I x).source
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.isOpen_extend_source`：isOpen_extend_source : IsOpe
+n (f.extend I).source
 -/
 theorem isOpen_extChartAt_source (x : M) : IsOpen (extChartAt I x).source :=
   isOpen_extend_source _
-
-/--
-theorem `mem_extChartAt_source` / 定理 `mem_extChartAt_source`
-
-English:
-theorem mem_extChartAt_source
-  given: (x : M)
-  statement: x in (extChartAt I x).source
-  proof: by
-  simp only [extChartAt_source, mem_chart_source]
-
-中文:
-定理 mem_extChartAt_source
-  条件: (x : M)
-  结论: x in (extChartAt I x).source
-  证明: by
-  simp only [extChartAt_source, mem_chart_source]
-
-Depends on / 依赖: extChartAt_source, mem_chart_source
+/-
+**mem_extChartAt_source** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_extChartAt_source (x : M) : x in (extChartAt I x).source
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem mem_extChartAt_source (x : M) : x in (extChartAt I x).source := by
+theorem mem_extChartAt_source (x : M) : x ∈ (extChartAt I x).source := by
   simp only [extChartAt_source, mem_chart_source]
-
-/--
-theorem `mem_extChartAt_target` / 定理 `mem_extChartAt_target`
-
-English:
-theorem mem_extChartAt_target
-  given: (x : M)
-  statement: extChartAt I x x in (extChartAt I x).target
-  proof: (extChartAt I x).map_source mem_extChartAt_source _
-
-中文:
-定理 mem_extChartAt_target
-  条件: (x : M)
-  结论: extChartAt I x x in (extChartAt I x).target
-  证明: (extChartAt I x).map_source mem_extChartAt_source _
-
-Depends on / 依赖: extChartAt, map_source, mem_extChartAt_source
+/-
+**mem_extChartAt_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_extChartAt_target (x : M) : extChartAt I x x in (extChartAt I x).targe
+t
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.map_source`：map_source {x : α} (h : x in e.source) : e x in
+ e.target
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
-theorem mem_extChartAt_target (x : M) : extChartAt I x x in (extChartAt I x).target :=
-(extChartAt I x).map_source mem_extChartAt_source _
+theorem mem_extChartAt_target (x : M) : extChartAt I x x ∈ (extChartAt I x).target :=
+  (extChartAt I x).map_source <| mem_extChartAt_source _
 
 variable (I) in
-/--
-theorem `extChartAt_target` / 定理 `extChartAt_target`
-
-English:
-theorem extChartAt_target
-  given: (x : M)
-  proof: extend_target _
-
-中文:
-定理 extChartAt_target
-  条件: (x : M)
-  证明: extend_target _
-
-Depends on / 依赖: extend_target
+/-
+**extChartAt_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target (x : M) : (extChartAt I x).target = I.symm ⁻¹' (chartAt 
+H x).target inter range I
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_target`：extend_target : (f.extend I).target
+ = I.symm ⁻¹' f.target inter range I
 -/
 theorem extChartAt_target (x : M) :
-    (extChartAt I x).target = I.symm ⁻¹' (chartAt H x).target inter range I :=
+    (extChartAt I x).target = I.symm ⁻¹' (chartAt H x).target ∩ range I :=
   extend_target _
-
-/--
-theorem `uniqueDiffOn_extChartAt_target` / 定理 `uniqueDiffOn_extChartAt_target`
-
-English:
-theorem uniqueDiffOn_extChartAt_target
-  given: (x : M)
-  statement: UniqueDiffOn 𝕜 (extChartAt I x).target
-  proof: by
-  rw [extChartAt_target]
-  exact I.uniqueDiffOn_preimage (chartAt H x).open_target
-
-中文:
-定理 uniqueDiffOn_extChartAt_target
-  条件: (x : M)
-  结论: UniqueDiffOn 𝕜 (extChartAt I x).target
-  证明: by
-  rw [extChartAt_target]
-  exact I.uniqueDiffOn_preimage (chartAt H x).open_target
-
-Depends on / 依赖: I.uniqueDiffOn_preimage, chartAt, extChartAt_target, open_target, uniqueDiffOn_preimage
+/-
+**uniqueDiffOn_extChartAt_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueDiffOn_extChartAt_target (x : M) : UniqueDiffOn 𝕜 (extChartAt I x).t
+arget
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt_target`：extChartAt_target (x : M) : (extChartAt I x).target =
+ I.symm ⁻¹' (chartAt H x).target inter range I
+· 使用定理 `ModelWithCorners.uniqueDiffOn_preimage`：uniqueDiffOn_preimage {s : Set H
+} (hs : IsOpen s) : UniqueDiffOn 𝕜 (I.symm ⁻¹' s inter range I)
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 -/
 theorem uniqueDiffOn_extChartAt_target (x : M) : UniqueDiffOn 𝕜 (extChartAt I x).target := by
   rw [extChartAt_target]
   exact I.uniqueDiffOn_preimage (chartAt H x).open_target
-
-/--
-theorem `uniqueDiffWithinAt_extChartAt_target` / 定理 `uniqueDiffWithinAt_extChartAt_target`
-
-English:
-theorem uniqueDiffWithinAt_extChartAt_target
-  given: (x : M)
-  proof: uniqueDiffOn_extChartAt_target x _ mem_extChartAt_target x
-
-中文:
-定理 uniqueDiffWithinAt_extChartAt_target
-  条件: (x : M)
-  证明: uniqueDiffOn_extChartAt_target x _ mem_extChartAt_target x
-
-Depends on / 依赖: mem_extChartAt_target, uniqueDiffOn_extChartAt_target
+/-
+**uniqueDiffWithinAt_extChartAt_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueDiffWithinAt_extChartAt_target (x : M) : UniqueDiffWithinAt 𝕜 (extCh
+artAt I x).target (extChartAt I x x)
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniqueDiffOn_extChartAt_target`：uniqueDiffOn_extChartAt_target (x : M) :
+ UniqueDiffOn 𝕜 (extChartAt I x).target
+· 使用定理 `mem_extChartAt_target`：mem_extChartAt_target (x : M) : extChartAt I x x 
+in (extChartAt I x).target
 -/
 theorem uniqueDiffWithinAt_extChartAt_target (x : M) :
     UniqueDiffWithinAt 𝕜 (extChartAt I x).target (extChartAt I x x) :=
-uniqueDiffOn_extChartAt_target x _ mem_extChartAt_target x
-
-/--
-theorem `extChartAt_to_inv` / 定理 `extChartAt_to_inv`
-
-English:
-theorem extChartAt_to_inv
-  given: (x : M)
-  statement: (extChartAt I x).symm ((extChartAt I x) x) = x
-  proof: (extChartAt I x).left_inv (mem_extChartAt_source x)
-
-中文:
-定理 extChartAt_to_inv
-  条件: (x : M)
-  结论: (extChartAt I x).symm ((extChartAt I x) x) = x
-  证明: (extChartAt I x).left_inv (mem_extChartAt_source x)
-
-Depends on / 依赖: extChartAt, left_inv, mem_extChartAt_source
+  uniqueDiffOn_extChartAt_target x _ <| mem_extChartAt_target x
+/-
+**extChartAt_to_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_to_inv (x : M) : (extChartAt I x).symm ((extChartAt I x) x) = x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem extChartAt_to_inv (x : M) : (extChartAt I x).symm ((extChartAt I x) x) = x :=
   (extChartAt I x).left_inv (mem_extChartAt_source x)
-
-/--
-theorem `mapsTo_extChartAt` / 定理 `mapsTo_extChartAt`
-
-English:
-theorem mapsTo_extChartAt
-  given: {x : M} (hs : s subseteq (chartAt H x).source)
-  proof: mapsTo_extend _ hs
-
-中文:
-定理 mapsTo_extChartAt
-  条件: {x : M} (hs : s subseteq (chartAt H x).source)
-  证明: mapsTo_extend _ hs
-
-Depends on / 依赖: mapsTo_extend
+/-
+**mapsTo_extChartAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mapsTo_extChartAt {x : M} (hs : s subseteq (chartAt H x).source) : MapsTo 
+(extChartAt I x) s ((extChartAt I x).symm ⁻¹' s inter range I)
+参数：hs : s subseteq (chartAt H x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.mapsTo_extend`：mapsTo_extend (hs : s subseteq f.so
+urce) : MapsTo (f.extend I) s ((f.extend I).symm ⁻¹' s inter range I)
 -/
-theorem mapsTo_extChartAt {x : M} (hs : s subseteq (chartAt H x).source) :
-    MapsTo (extChartAt I x) s ((extChartAt I x).symm ⁻¹' s inter range I) :=
+theorem mapsTo_extChartAt {x : M} (hs : s ⊆ (chartAt H x).source) :
+    MapsTo (extChartAt I x) s ((extChartAt I x).symm ⁻¹' s ∩ range I) :=
   mapsTo_extend _ hs
-
-/--
-theorem `extChartAt_source_mem_nhds'` / 定理 `extChartAt_source_mem_nhds'`
-
-English:
-theorem extChartAt_source_mem_nhds'
-  given: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: extend_source_mem_nhds _ by rwa [← extChartAt_source I]
-
-中文:
-定理 extChartAt_source_mem_nhds'
-  条件: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: extend_source_mem_nhds _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, extend_source_mem_nhds
+/-
+**extChartAt_source_mem_nhds'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_source_mem_nhds' {x x' : M} (h : x' in (extChartAt I x).source)
+ : (extChartAt I x).source in 𝓝 x'
+参数：h : x' in (extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_source_mem_nhds`：extend_source_mem_nhds {x 
+: M} (h : x in f.source) : (f.extend I).source in 𝓝 x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem extChartAt_source_mem_nhds' {x x' : M} (h : x' in (extChartAt I x).source) :
-    (extChartAt I x).source in 𝓝 x' :=
-extend_source_mem_nhds _ by rwa [← extChartAt_source I]
-
-/--
-theorem `extChartAt_source_mem_nhds` / 定理 `extChartAt_source_mem_nhds`
-
-English:
-theorem extChartAt_source_mem_nhds
-  given: (x : M)
-  statement: (extChartAt I x).source in 𝓝 x
-  proof: extChartAt_source_mem_nhds' (mem_extChartAt_source x)
-
-中文:
-定理 extChartAt_source_mem_nhds
-  条件: (x : M)
-  结论: (extChartAt I x).source in 𝓝 x
-  证明: extChartAt_source_mem_nhds' (mem_extChartAt_source x)
-
-Depends on / 依赖: extChartAt_source_mem_nhds, mem_extChartAt_source
+theorem extChartAt_source_mem_nhds' {x x' : M} (h : x' ∈ (extChartAt I x).source) :
+    (extChartAt I x).source ∈ 𝓝 x' :=
+  extend_source_mem_nhds _ <| by rwa [← extChartAt_source I]
+/-
+**extChartAt_source_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_source_mem_nhds (x : M) : (extChartAt I x).source in 𝓝 x
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `extChartAt_source_mem_nhds'`：extChartAt_source_mem_nhds' {x x' : M} (h :
+ x' in (extChartAt I x).source) : (extChartAt I x).source in 𝓝 x'
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
-theorem extChartAt_source_mem_nhds (x : M) : (extChartAt I x).source in 𝓝 x :=
+theorem extChartAt_source_mem_nhds (x : M) : (extChartAt I x).source ∈ 𝓝 x :=
   extChartAt_source_mem_nhds' (mem_extChartAt_source x)
-
-/--
-theorem `extChartAt_source_mem_nhdsWithin'` / 定理 `extChartAt_source_mem_nhdsWithin'`
-
-English:
-theorem extChartAt_source_mem_nhdsWithin'
-  given: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds' h)
-
-中文:
-定理 extChartAt_source_mem_nhdsWithin'
-  条件: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds' h)
-
-Depends on / 依赖: extChartAt_source_mem_nhds, mem_nhdsWithin_of_mem_nhds
+/-
+**extChartAt_source_mem_nhdsWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_source_mem_nhdsWithin' {x x' : M} (h : x' in (extChartAt I x).s
+ource) : (extChartAt I x).source in 𝓝[s] x'
+参数：h : x' in (extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `extChartAt_source_mem_nhds'`：extChartAt_source_mem_nhds' {x x' : M} (h :
+ x' in (extChartAt I x).source) : (extChartAt I x).source in 𝓝 x'
 -/
-theorem extChartAt_source_mem_nhdsWithin' {x x' : M} (h : x' in (extChartAt I x).source) :
-    (extChartAt I x).source in 𝓝[s] x' :=
+theorem extChartAt_source_mem_nhdsWithin' {x x' : M} (h : x' ∈ (extChartAt I x).source) :
+    (extChartAt I x).source ∈ 𝓝[s] x' :=
   mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds' h)
-
-/--
-theorem `extChartAt_source_mem_nhdsWithin` / 定理 `extChartAt_source_mem_nhdsWithin`
-
-English:
-theorem extChartAt_source_mem_nhdsWithin
-  given: (x : M)
-  statement: (extChartAt I x).source in 𝓝[s] x
-  proof: mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds x)
-
-中文:
-定理 extChartAt_source_mem_nhdsWithin
-  条件: (x : M)
-  结论: (extChartAt I x).source in 𝓝[s] x
-  证明: mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds x)
-
-Depends on / 依赖: extChartAt_source_mem_nhds, mem_nhdsWithin_of_mem_nhds
+/-
+**extChartAt_source_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_source_mem_nhdsWithin (x : M) : (extChartAt I x).source in 𝓝[s]
+ x
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `extChartAt_source_mem_nhds`：extChartAt_source_mem_nhds (x : M) : (extCha
+rtAt I x).source in 𝓝 x
 -/
-theorem extChartAt_source_mem_nhdsWithin (x : M) : (extChartAt I x).source in 𝓝[s] x :=
+theorem extChartAt_source_mem_nhdsWithin (x : M) : (extChartAt I x).source ∈ 𝓝[s] x :=
   mem_nhdsWithin_of_mem_nhds (extChartAt_source_mem_nhds x)
-
-/--
-theorem `continuousOn_extChartAt` / 定理 `continuousOn_extChartAt`
-
-English:
-theorem continuousOn_extChartAt
-  given: (x : M)
-  statement: ContinuousOn (extChartAt I x) (extChartAt I x).source
-  proof: continuousOn_extend _
-
-中文:
-定理 continuousOn_extChartAt
-  条件: (x : M)
-  结论: ContinuousOn (extChartAt I x) (extChartAt I x).source
-  证明: continuousOn_extend _
-
-Depends on / 依赖: continuousOn_extend
+/-
+**continuousOn_extChartAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousOn_extChartAt (x : M) : ContinuousOn (extChartAt I x) (extChartA
+t I x).source
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.continuousOn_extend`：continuousOn_extend : Continu
+ousOn (f.extend I) (f.extend I).source
 -/
 theorem continuousOn_extChartAt (x : M) : ContinuousOn (extChartAt I x) (extChartAt I x).source :=
   continuousOn_extend _
-
-/--
-theorem `continuousAt_extChartAt'` / 定理 `continuousAt_extChartAt'`
-
-English:
-theorem continuousAt_extChartAt'
-  given: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: continuousAt_extend _ by rwa [← extChartAt_source I]
-
-中文:
-定理 continuousAt_extChartAt'
-  条件: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: continuousAt_extend _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: continuousAt_extend, extChartAt_source
+/-
+**continuousAt_extChartAt'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_extChartAt' {x x' : M} (h : x' in (extChartAt I x).source) : 
+ContinuousAt (extChartAt I x) x'
+参数：h : x' in (extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend`：continuousAt_extend {x : M} (
+h : x in f.source) : ContinuousAt (f.extend I) x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem continuousAt_extChartAt' {x x' : M} (h : x' in (extChartAt I x).source) :
+theorem continuousAt_extChartAt' {x x' : M} (h : x' ∈ (extChartAt I x).source) :
     ContinuousAt (extChartAt I x) x' :=
-continuousAt_extend _ by rwa [← extChartAt_source I]
-
-/--
-theorem `continuousAt_extChartAt` / 定理 `continuousAt_extChartAt`
-
-English:
-theorem continuousAt_extChartAt
-  given: (x : M)
-  statement: ContinuousAt (extChartAt I x) x
-  proof: continuousAt_extChartAt' (mem_extChartAt_source x)
-
-中文:
-定理 continuousAt_extChartAt
-  条件: (x : M)
-  结论: ContinuousAt (extChartAt I x) x
-  证明: continuousAt_extChartAt' (mem_extChartAt_source x)
-
-Depends on / 依赖: continuousAt_extChartAt, mem_extChartAt_source
+  continuousAt_extend _ <| by rwa [← extChartAt_source I]
+/-
+**continuousAt_extChartAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_extChartAt (x : M) : ContinuousAt (extChartAt I x) x
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_extChartAt'`：continuousAt_extChartAt' {x x' : M} (h : x' in
+ (extChartAt I x).source) : ContinuousAt (extChartAt I x) x'
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem continuousAt_extChartAt (x : M) : ContinuousAt (extChartAt I x) x :=
   continuousAt_extChartAt' (mem_extChartAt_source x)
-
-/--
-theorem `map_extChartAt_nhds'` / 定理 `map_extChartAt_nhds'`
-
-English:
-theorem map_extChartAt_nhds'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: map_extend_nhds _ by rwa [← extChartAt_source I]
-
-中文:
-定理 map_extChartAt_nhds'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: map_extend_nhds _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, map_extend_nhds
+/-
+**map_extChartAt_nhds'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhds' {x y : M} (hy : y in (extChartAt I x).source) : map (
+extChartAt I x) (𝓝 y) = 𝓝[range I] extChartAt I x y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds`：map_extend_nhds {x : M} (hy : x i
+n f.source) : map (f.extend I) (𝓝 x) = 𝓝[range I] f.extend I x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem map_extChartAt_nhds' {x y : M} (hy : y in (extChartAt I x).source) :
+theorem map_extChartAt_nhds' {x y : M} (hy : y ∈ (extChartAt I x).source) :
     map (extChartAt I x) (𝓝 y) = 𝓝[range I] extChartAt I x y :=
-map_extend_nhds _ by rwa [← extChartAt_source I]
-
-/--
-theorem `map_extChartAt_nhds` / 定理 `map_extChartAt_nhds`
-
-English:
-theorem map_extChartAt_nhds
-  given: (x : M)
-  statement: map (extChartAt I x) (𝓝 x) = 𝓝[range I] extChartAt I x x
-  proof: map_extChartAt_nhds' mem_extChartAt_source x
-
-中文:
-定理 map_extChartAt_nhds
-  条件: (x : M)
-  结论: map (extChartAt I x) (𝓝 x) = 𝓝[range I] extChartAt I x x
-  证明: map_extChartAt_nhds' mem_extChartAt_source x
-
-Depends on / 依赖: map_extChartAt_nhds, mem_extChartAt_source
+  map_extend_nhds _ <| by rwa [← extChartAt_source I]
+/-
+**map_extChartAt_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhds (x : M) : map (extChartAt I x) (𝓝 x) = 𝓝[range I] extC
+hartAt I x x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_extChartAt_nhds'`：map_extChartAt_nhds' {x y : M} (hy : y in (extChar
+tAt I x).source) : map (extChartAt I x) (𝓝 y) = 𝓝[range I] extChartAt I x y
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem map_extChartAt_nhds (x : M) : map (extChartAt I x) (𝓝 x) = 𝓝[range I] extChartAt I x x :=
-map_extChartAt_nhds' mem_extChartAt_source x
-
-/--
-theorem `map_extChartAt_nhds_of_boundaryless` / 定理 `map_extChartAt_nhds_of_boundaryless`
-
-English:
-theorem map_extChartAt_nhds_of_boundaryless
-  given: [I.Boundaryless] (x : M)
-  proof: by
-  rw [extChartAt]
-  exact map_extend_nhds_of_boundaryless (chartAt H x) (mem_chart_source H x)
-
-中文:
-定理 map_extChartAt_nhds_of_boundaryless
-  条件: [I.无边界] (x : M)
-  证明: by
-  rw [extChartAt]
-  exact map_extend_nhds_of_boundaryless (chartAt H x) (mem_chart_source H x)
-
-Depends on / 依赖: chartAt, extChartAt, map_extend_nhds_of_boundaryless, mem_chart_source
+  map_extChartAt_nhds' <| mem_extChartAt_source x
+/-
+**map_extChartAt_nhds_of_boundaryless** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhds_of_boundaryless [I.Boundaryless] (x : M) : map (extCha
+rtAt I x) (𝓝 x) = 𝓝 (extChartAt I x x)
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} {M : Type u_3} {H : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhds_of_boundaryless`：map_extend_nhds_o
+f_boundaryless [I.Boundaryless] {x : M} (hx : x in f.source) : map (f.extend I) 
+(𝓝 x) = 𝓝 (f.extend I x)
+· 使用引理 `mem_chart_source`：mem_chart_source (H : Type*) {M : Type*} [TopologicalS
+pace H] [TopologicalSpace M] [ChartedSpace H M] (x : M) : x in (chartAt H x).sou
+rce
 -/
 theorem map_extChartAt_nhds_of_boundaryless [I.Boundaryless] (x : M) :
     map (extChartAt I x) (𝓝 x) = 𝓝 (extChartAt I x x) := by
   rw [extChartAt]
   exact map_extend_nhds_of_boundaryless (chartAt H x) (mem_chart_source H x)
-
-/--
-theorem `extChartAt_image_nhds_mem_nhds_of_mem_interior_range` / 定理 `extChartAt_image_nhds_mem_nhds_of_mem_interior_range`
-
-English:
-theorem extChartAt_image_nhds_mem_nhds_of_mem_interior_range
-  statement: {x y}
-  proof: by
-  rw [extChartAt]
-  exact extend_image_nhds_mem_nhds_of_mem_interior_range _ (by simpa using hx) h'x h
-
-中文:
-定理 extChartAt_image_nhds_mem_nhds_of_mem_interior_range
-  结论: {x y}
-  证明: by
-  rw [extChartAt]
-  exact extend_image_nhds_mem_nhds_of_mem_interior_range _ (by simpa using hx) h'x h
-
-Depends on / 依赖: extChartAt, extend_image_nhds_mem_nhds_of_mem_interior_range
+/-
+**extChartAt_image_nhds_mem_nhds_of_mem_interior_range** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：extChartAt_image_nhds_mem_nhds_of_mem_interior_range {x y} (hx : y in (ext
+ChartAt I x).source) (h'x : extChartAt I x y in interior (range I)) {s : Set M} 
+(h : s in 𝓝 y) : (extChartAt I x) '' s in 𝓝 (extChartAt I x y)
+参数：hx : y in (extChartAt I x).source；h'x : extChartAt I x y in interior (range I
+)；h : s in 𝓝 y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} {M : Type u_3} {H : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `OpenPartialHomeomorph.extend_image_nhds_mem_nhds_of_mem_interior_range`：
+extend_image_nhds_mem_nhds_of_mem_interior_range {x} (hx : x in f.source) (h'x :
+ f.extend I x in interior (range I)) {s : Set M} (h : s in 𝓝…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ModelWithCorners.source_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
 -/
 theorem extChartAt_image_nhds_mem_nhds_of_mem_interior_range {x y}
-    (hx : y in (extChartAt I x).source)
-    (h'x : extChartAt I x y in interior (range I)) {s : Set M} (h : s in 𝓝 y) :
-    (extChartAt I x) '' s in 𝓝 (extChartAt I x y) := by
+    (hx : y ∈ (extChartAt I x).source)
+    (h'x : extChartAt I x y ∈ interior (range I)) {s : Set M} (h : s ∈ 𝓝 y) :
+    (extChartAt I x) '' s ∈ 𝓝 (extChartAt I x y) := by
   rw [extChartAt]
   exact extend_image_nhds_mem_nhds_of_mem_interior_range _ (by simpa using hx) h'x h
 
 variable {x} in
-/--
-theorem `extChartAt_image_nhds_mem_nhds_of_boundaryless` / 定理 `extChartAt_image_nhds_mem_nhds_of_boundaryless`
-
-English:
-theorem extChartAt_image_nhds_mem_nhds_of_boundaryless
-  statement: [I.Boundaryless]
-  proof: by
-  rw [extChartAt]
-  exact extend_image_nhds_mem_nhds_of_boundaryless _ (mem_chart_source H x) hx
-
-中文:
-定理 extChartAt_image_nhds_mem_nhds_of_boundaryless
-  结论: [I.无边界]
-  证明: by
-  rw [extChartAt]
-  exact extend_image_nhds_mem_nhds_of_boundaryless _ (mem_chart_source H x) hx
-
-Depends on / 依赖: extChartAt, extend_image_nhds_mem_nhds_of_boundaryless, mem_chart_source
+/-
+**extChartAt_image_nhds_mem_nhds_of_boundaryless** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless] {x : M} (h
+x : s in 𝓝 x) : extChartAt I x '' s in 𝓝 (extChartAt I x x)
+参数：hx : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt.eq_1`：∀ {𝕜 : Type u_1} {E : Type u_2} {M : Type u_3} {H : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `OpenPartialHomeomorph.extend_image_nhds_mem_nhds_of_boundaryless`：extend
+_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless] {x} (hx : x in f.source) {
+s : Set M} (h : s in 𝓝 x) : (f.extend I) '' s in 𝓝 ((f…
+· 使用引理 `mem_chart_source`：mem_chart_source (H : Type*) {M : Type*} [TopologicalS
+pace H] [TopologicalSpace M] [ChartedSpace H M] (x : M) : x in (chartAt H x).sou
+rce
 -/
 theorem extChartAt_image_nhds_mem_nhds_of_boundaryless [I.Boundaryless]
-    {x : M} (hx : s in 𝓝 x) : extChartAt I x '' s in 𝓝 (extChartAt I x x) := by
+    {x : M} (hx : s ∈ 𝓝 x) : extChartAt I x '' s ∈ 𝓝 (extChartAt I x x) := by
   rw [extChartAt]
   exact extend_image_nhds_mem_nhds_of_boundaryless _ (mem_chart_source H x) hx
-
-/--
-theorem `extChartAt_target_mem_nhdsWithin'` / 定理 `extChartAt_target_mem_nhdsWithin'`
-
-English:
-theorem extChartAt_target_mem_nhdsWithin'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: extend_target_mem_nhdsWithin _ by rwa [← extChartAt_source I]
-
-中文:
-定理 extChartAt_target_mem_nhdsWithin'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: extend_target_mem_nhdsWithin _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, extend_target_mem_nhdsWithin
+/-
+**extChartAt_target_mem_nhdsWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_mem_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).so
+urce) : (extChartAt I x).target in 𝓝[range I] extChartAt I x y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_target_mem_nhdsWithin`：extend_target_mem_nh
+dsWithin {y : M} (hy : y in f.source) : (f.extend I).target in 𝓝[range I] f.exte
+nd I y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem extChartAt_target_mem_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).source) :
-    (extChartAt I x).target in 𝓝[range I] extChartAt I x y :=
-extend_target_mem_nhdsWithin _ by rwa [← extChartAt_source I]
-
-/--
-theorem `extChartAt_target_mem_nhdsWithin` / 定理 `extChartAt_target_mem_nhdsWithin`
-
-English:
-theorem extChartAt_target_mem_nhdsWithin
-  given: (x : M)
-  proof: extChartAt_target_mem_nhdsWithin' (mem_extChartAt_source x)
-
-中文:
-定理 extChartAt_target_mem_nhdsWithin
-  条件: (x : M)
-  证明: extChartAt_target_mem_nhdsWithin' (mem_extChartAt_source x)
-
-Depends on / 依赖: extChartAt_target_mem_nhdsWithin, mem_extChartAt_source
+theorem extChartAt_target_mem_nhdsWithin' {x y : M} (hy : y ∈ (extChartAt I x).source) :
+    (extChartAt I x).target ∈ 𝓝[range I] extChartAt I x y :=
+  extend_target_mem_nhdsWithin _ <| by rwa [← extChartAt_source I]
+/-
+**extChartAt_target_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_mem_nhdsWithin (x : M) : (extChartAt I x).target in 𝓝[ra
+nge I] extChartAt I x x
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `extChartAt_target_mem_nhdsWithin'`：extChartAt_target_mem_nhdsWithin' {x 
+y : M} (hy : y in (extChartAt I x).source) : (extChartAt I x).target in 𝓝[range 
+I] extChartAt I x y
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem extChartAt_target_mem_nhdsWithin (x : M) :
-    (extChartAt I x).target in 𝓝[range I] extChartAt I x x :=
+    (extChartAt I x).target ∈ 𝓝[range I] extChartAt I x x :=
   extChartAt_target_mem_nhdsWithin' (mem_extChartAt_source x)
-
-/--
-theorem `extChartAt_target_mem_nhdsWithin_of_mem` / 定理 `extChartAt_target_mem_nhdsWithin_of_mem`
-
-English:
-theorem extChartAt_target_mem_nhdsWithin_of_mem
-  given: {x : M} {y : E} (hy : y in (extChartAt I x).target)
-  proof: by
-  rw [← (extChartAt I x).right_inv hy]
-  apply extChartAt_target_mem_nhdsWithin'
-  exact (extChartAt I x).map_target hy
-
-中文:
-定理 extChartAt_target_mem_nhdsWithin_of_mem
-  条件: {x : M} {y : E} (hy : y in (extChartAt I x).target)
-  证明: by
-  rw [← (extChartAt I x).right_inv hy]
-  apply extChartAt_target_mem_nhdsWithin'
-  exact (extChartAt I x).map_target hy
-
-Depends on / 依赖: extChartAt, extChartAt_target_mem_nhdsWithin, map_target, right_inv
+/-
+**extChartAt_target_mem_nhdsWithin_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_mem_nhdsWithin_of_mem {x : M} {y : E} (hy : y in (extCha
+rtAt I x).target) : (extChartAt I x).target in 𝓝[range I] y
+参数：hy : y in (extChartAt I x).target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.right_inv`：right_inv {x : β} (h : x in e.target) : e (e.sym
+m x) = x
+· 使用定理 `extChartAt_target_mem_nhdsWithin'`：extChartAt_target_mem_nhdsWithin' {x 
+y : M} (hy : y in (extChartAt I x).source) : (extChartAt I x).target in 𝓝[range 
+I] extChartAt I x y
+· 使用定理 `PartialEquiv.map_target`：map_target {x : β} (h : x in e.target) : e.symm
+ x in e.source
 -/
-theorem extChartAt_target_mem_nhdsWithin_of_mem {x : M} {y : E} (hy : y in (extChartAt I x).target) :
-    (extChartAt I x).target in 𝓝[range I] y := by
+theorem extChartAt_target_mem_nhdsWithin_of_mem {x : M} {y : E} (hy : y ∈ (extChartAt I x).target) :
+    (extChartAt I x).target ∈ 𝓝[range I] y := by
   rw [← (extChartAt I x).right_inv hy]
   apply extChartAt_target_mem_nhdsWithin'
   exact (extChartAt I x).map_target hy
-
-/--
-theorem `extChartAt_target_union_compl_range_mem_nhds_of_mem` / 定理 `extChartAt_target_union_compl_range_mem_nhds_of_mem`
-
-English:
-theorem extChartAt_target_union_compl_range_mem_nhds_of_mem
-  statement: {y : E} {x : M}
-  proof: by
-  rw [← nhdsWithin_univ]; rw [← union_compl_self (range I)]; rw [nhdsWithin_union]
-  exact Filter.union_mem_sup (extChartAt_target_mem_nhdsWithin_of_mem hy) self_mem_nhdsWithin
-
-中文:
-定理 extChartAt_target_union_compl_range_mem_nhds_of_mem
-  结论: {y : E} {x : M}
-  证明: by
-  rw [← nhdsWithin_univ]; rw [← union_compl_self (range I)]; rw [nhdsWithin_union]
-  exact Filter.union_mem_sup (extChartAt_target_mem_nhdsWithin_of_mem hy) self_mem_nhdsWithin
-
-Depends on / 依赖: Filter, Filter.union_mem_sup, extChartAt_target_mem_nhdsWithin_of_mem, nhdsWithin_union, nhdsWithin_univ, self_mem_nhdsWithin, union_compl_self, union_mem_sup
+/-
+**extChartAt_target_union_compl_range_mem_nhds_of_mem** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：extChartAt_target_union_compl_range_mem_nhds_of_mem {y : E} {x : M} (hy : 
+y in (extChartAt I x).target) : (extChartAt I x).target union (range I)ᶜ in 𝓝 y
+参数：hy : y in (extChartAt I x).target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
+· 使用定理 `nhdsWithin_union`：nhdsWithin_union (a : α) (s t : Set α) : 𝓝[s union t] 
+a = 𝓝[s] a ⊔ 𝓝[t] a
+· 使用定理 `Filter.union_mem_sup`：union_mem_sup {f g : Filter α} {s t : Set α} (hs :
+ s in f) (ht : t in g) : s union t in f ⊔ g
+· 使用定理 `extChartAt_target_mem_nhdsWithin_of_mem`：extChartAt_target_mem_nhdsWithi
+n_of_mem {x : M} {y : E} (hy : y in (extChartAt I x).target) : (extChartAt I x).
+target in 𝓝[range I] y
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
 -/
 theorem extChartAt_target_union_compl_range_mem_nhds_of_mem {y : E} {x : M}
-    (hy : y in (extChartAt I x).target) : (extChartAt I x).target union (range I)ᶜ in 𝓝 y := by
-  rw [← nhdsWithin_univ]; rw [← union_compl_self (range I)]; rw [nhdsWithin_union]
+    (hy : y ∈ (extChartAt I x).target) : (extChartAt I x).target ∪ (range I)ᶜ ∈ 𝓝 y := by
+  rw [← nhdsWithin_univ, ← union_compl_self (range I), nhdsWithin_union]
   exact Filter.union_mem_sup (extChartAt_target_mem_nhdsWithin_of_mem hy) self_mem_nhdsWithin
 
-/--
-theorem `isOpen_extChartAt_target` / 定理 `isOpen_extChartAt_target`
+/-- If we're boundaryless, `extChartAt` has open target -/
+/-
+**isOpen_extChartAt_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_extChartAt_target [I.Boundaryless] (x : M) : IsOpen (extChartAt I x
+).target
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `extChartAt_target`：extChartAt_target (x : M) : (extChartAt I x).target =
+ I.symm ⁻¹' (chartAt H x).target inter range I
+· 使用定理 `ModelWithCorners.range_eq_univ`：ModelWithCorners.range_eq_univ {𝕜 : Type
+*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜
+ E] {H : Type*} [Top…
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
 
-English:
-theorem isOpen_extChartAt_target
-  given: [I.Boundaryless] (x : M)
-  statement: IsOpen (extChartAt I x).target
-  proof: by
-  simp_rw [extChartAt_target, I.range_eq_univ, inter_univ]
-  exact (OpenPartialHomeomorph.open_target _).preimage I.continuous_symm
-
-中文:
-定理 isOpen_extChartAt_target
-  条件: [I.无边界] (x : M)
-  结论: 是开集 (extChartAt I x).target
-  证明: by
-  simp_rw [extChartAt_target, I.range_eq_univ, inter_univ]
-  exact (OpenPartialHomeomorph.open_target _).preimage I.continuous_symm
-
-Depends on / 依赖: I.continuous_symm, I.range_eq_univ, OpenPartialHomeomorph, OpenPartialHomeomorph.open_target, continuous_symm, extChartAt_target, inter_univ, open_target, preimage, range_eq_univ, simp_rw
+--- 原说明 ---
+If we're boundaryless, `extChartAt` has open target
 -/
 theorem isOpen_extChartAt_target [I.Boundaryless] (x : M) : IsOpen (extChartAt I x).target := by
   simp_rw [extChartAt_target, I.range_eq_univ, inter_univ]
   exact (OpenPartialHomeomorph.open_target _).preimage I.continuous_symm
 
-/--
-theorem `extChartAt_target_mem_nhds` / 定理 `extChartAt_target_mem_nhds`
+/-- If we're boundaryless, `(extChartAt I x).target` is a neighborhood of the key point -/
+/-
+**extChartAt_target_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_mem_nhds [I.Boundaryless] (x : M) : (extChartAt I x).tar
+get in 𝓝 (extChartAt I x x)
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.range_eq_univ`：ModelWithCorners.range_eq_univ {𝕜 : Type
+*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜
+ E] {H : Type*} [Top…
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `extChartAt_target_mem_nhdsWithin`：extChartAt_target_mem_nhdsWithin (x : 
+M) : (extChartAt I x).target in 𝓝[range I] extChartAt I x x
 
-English:
-theorem extChartAt_target_mem_nhds
-  given: [I.Boundaryless] (x : M)
-  proof: by
-  convert! extChartAt_target_mem_nhdsWithin x
-  simp only [I.range_eq_univ, nhdsWithin_univ]
-
-中文:
-定理 extChartAt_target_mem_nhds
-  条件: [I.无边界] (x : M)
-  证明: by
-  convert! extChartAt_target_mem_nhdsWithin x
-  simp only [I.range_eq_univ, nhdsWithin_univ]
-
-Depends on / 依赖: I.range_eq_univ, convert, extChartAt_target_mem_nhdsWithin, nhdsWithin_univ, range_eq_univ
+--- 原说明 ---
+If we're boundaryless, `(extChartAt I x).target` is a neighborhood of the key po
+int
 -/
 theorem extChartAt_target_mem_nhds [I.Boundaryless] (x : M) :
-    (extChartAt I x).target in 𝓝 (extChartAt I x x) := by
+    (extChartAt I x).target ∈ 𝓝 (extChartAt I x x) := by
   convert! extChartAt_target_mem_nhdsWithin x
   simp only [I.range_eq_univ, nhdsWithin_univ]
 
-/--
-theorem `extChartAt_target_mem_nhds'` / 定理 `extChartAt_target_mem_nhds'`
+/-- If we're boundaryless, `(extChartAt I x).target` is a neighborhood of any of its points -/
+/-
+**extChartAt_target_mem_nhds'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_mem_nhds' [I.Boundaryless] {x : M} {y : E} (m : y in (ex
+tChartAt I x).target) : (extChartAt I x).target in 𝓝 y
+参数：m : y in (extChartAt I x).target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_extChartAt_target`：isOpen_extChartAt_target [I.Boundaryless] (x :
+ M) : IsOpen (extChartAt I x).target
 
-English:
-theorem extChartAt_target_mem_nhds'
-  statement: [I.Boundaryless] {x : M} {y : E}
-  proof: (isOpen_extChartAt_target x).mem_nhds m
-
-中文:
-定理 extChartAt_target_mem_nhds'
-  结论: [I.无边界] {x : M} {y : E}
-  证明: (isOpen_extChartAt_target x).mem_nhds m
-
-Depends on / 依赖: isOpen_extChartAt_target, mem_nhds
+--- 原说明 ---
+If we're boundaryless, `(extChartAt I x).target` is a neighborhood of any of its
+ points
 -/
 theorem extChartAt_target_mem_nhds' [I.Boundaryless] {x : M} {y : E}
-    (m : y in (extChartAt I x).target) : (extChartAt I x).target in 𝓝 y :=
+    (m : y ∈ (extChartAt I x).target) : (extChartAt I x).target ∈ 𝓝 y :=
   (isOpen_extChartAt_target x).mem_nhds m
-
-/--
-theorem `extChartAt_target_subset_range` / 定理 `extChartAt_target_subset_range`
-
-English:
-theorem extChartAt_target_subset_range
-  given: (x : M)
-  statement: (extChartAt I x).target subseteq range I
-  proof: by
-  simp only [mfld_simps]
-
-中文:
-定理 extChartAt_target_subset_range
-  条件: (x : M)
-  结论: (extChartAt I x).target subseteq range I
-  证明: by
-  simp only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+/-
+**extChartAt_target_subset_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_subset_range (x : M) : (extChartAt I x).target subseteq 
+range I
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
 -/
-theorem extChartAt_target_subset_range (x : M) : (extChartAt I x).target subseteq range I := by
+theorem extChartAt_target_subset_range (x : M) : (extChartAt I x).target ⊆ range I := by
   simp only [mfld_simps]
 
-/--
-theorem `nhdsWithin_extChartAt_target_eq'` / 定理 `nhdsWithin_extChartAt_target_eq'`
+/-- Around the image of a point in the source, the neighborhoods are the same
+within `(extChartAt I x).target` and within `range I`. -/
+/-
+**nhdsWithin_extChartAt_target_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsWithin_extChartAt_target_eq' {x y : M} (hy : y in (extChartAt I x).sou
+rce) : 𝓝[(extChartAt I x).target] extChartAt I x y = 𝓝[range I] extChartAt I x y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.nhdsWithin_extend_target_eq`：nhdsWithin_extend_tar
+get_eq {y : M} (hy : y in f.source) : 𝓝[(f.extend I).target] f.extend I y = 𝓝[ra
+nge I] f.extend I y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 
-English:
-theorem nhdsWithin_extChartAt_target_eq'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: nhdsWithin_extend_target_eq _ by rwa [← extChartAt_source I]
-
-中文:
-定理 nhdsWithin_extChartAt_target_eq'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: nhdsWithin_extend_target_eq _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, nhdsWithin_extend_target_eq
+--- 原说明 ---
+Around the image of a point in the source, the neighborhoods are the same
+within `(extChartAt I x).target` and within `range I`.
 -/
-theorem nhdsWithin_extChartAt_target_eq' {x y : M} (hy : y in (extChartAt I x).source) :
+theorem nhdsWithin_extChartAt_target_eq' {x y : M} (hy : y ∈ (extChartAt I x).source) :
     𝓝[(extChartAt I x).target] extChartAt I x y = 𝓝[range I] extChartAt I x y :=
-nhdsWithin_extend_target_eq _ by rwa [← extChartAt_source I]
+  nhdsWithin_extend_target_eq _ <| by rwa [← extChartAt_source I]
 
-/--
-theorem `nhdsWithin_extChartAt_target_eq_of_mem` / 定理 `nhdsWithin_extChartAt_target_eq_of_mem`
+/-- Around a point in the target, the neighborhoods are the same within `(extChartAt I x).target`
+and within `range I`. -/
+/-
+**nhdsWithin_extChartAt_target_eq_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsWithin_extChartAt_target_eq_of_mem {x : M} {z : E} (hz : z in (extChar
+tAt I x).target) : 𝓝[(extChartAt I x).target] z = 𝓝[range I] z
+参数：hz : z in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.right_inv`：right_inv {x : β} (h : x in e.target) : e (e.sym
+m x) = x
+· 使用定理 `nhdsWithin_extChartAt_target_eq'`：nhdsWithin_extChartAt_target_eq' {x y 
+: M} (hy : y in (extChartAt I x).source) : 𝓝[(extChartAt I x).target] extChartAt
+ I x y = 𝓝[range I] ex…
+· 使用定理 `PartialEquiv.map_target`：map_target {x : β} (h : x in e.target) : e.symm
+ x in e.source
 
-English:
-theorem nhdsWithin_extChartAt_target_eq_of_mem
-  given: {x : M} {z : E} (hz : z in (extChartAt I x).target)
-  proof: by
-  rw [← PartialEquiv.right_inv (extChartAt I x) hz]
-  exact nhdsWithin_extChartAt_target_eq' ((extChartAt I x).map_target hz)
-
-中文:
-定理 nhdsWithin_extChartAt_target_eq_of_mem
-  条件: {x : M} {z : E} (hz : z in (extChartAt I x).target)
-  证明: by
-  rw [← PartialEquiv.right_inv (extChartAt I x) hz]
-  exact nhdsWithin_extChartAt_target_eq' ((extChartAt I x).map_target hz)
-
-Depends on / 依赖: PartialEquiv, PartialEquiv.right_inv, extChartAt, map_target, nhdsWithin_extChartAt_target_eq, right_inv
+--- 原说明 ---
+Around a point in the target, the neighborhoods are the same within `(extChartAt
+ I x).target`
+and within `range I`.
 -/
-theorem nhdsWithin_extChartAt_target_eq_of_mem {x : M} {z : E} (hz : z in (extChartAt I x).target) :
+theorem nhdsWithin_extChartAt_target_eq_of_mem {x : M} {z : E} (hz : z ∈ (extChartAt I x).target) :
     𝓝[(extChartAt I x).target] z = 𝓝[range I] z := by
   rw [← PartialEquiv.right_inv (extChartAt I x) hz]
   exact nhdsWithin_extChartAt_target_eq' ((extChartAt I x).map_target hz)
 
-/--
-theorem `nhdsWithin_extChartAt_target_eq` / 定理 `nhdsWithin_extChartAt_target_eq`
+/-- Around the image of the base point, the neighborhoods are the same
+within `(extChartAt I x).target` and within `range I`. -/
+/-
+**nhdsWithin_extChartAt_target_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsWithin_extChartAt_target_eq (x : M) : 𝓝[(extChartAt I x).target] (extC
+hartAt I x) x = 𝓝[range I] (extChartAt I x) x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhdsWithin_extChartAt_target_eq'`：nhdsWithin_extChartAt_target_eq' {x y 
+: M} (hy : y in (extChartAt I x).source) : 𝓝[(extChartAt I x).target] extChartAt
+ I x y = 𝓝[range I] ex…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 
-English:
-theorem nhdsWithin_extChartAt_target_eq
-  given: (x : M)
-  proof: nhdsWithin_extChartAt_target_eq' (mem_extChartAt_source x)
-
-中文:
-定理 nhdsWithin_extChartAt_target_eq
-  条件: (x : M)
-  证明: nhdsWithin_extChartAt_target_eq' (mem_extChartAt_source x)
-
-Depends on / 依赖: mem_extChartAt_source, nhdsWithin_extChartAt_target_eq
+--- 原说明 ---
+Around the image of the base point, the neighborhoods are the same
+within `(extChartAt I x).target` and within `range I`.
 -/
 theorem nhdsWithin_extChartAt_target_eq (x : M) :
     𝓝[(extChartAt I x).target] (extChartAt I x) x = 𝓝[range I] (extChartAt I x) x :=
   nhdsWithin_extChartAt_target_eq' (mem_extChartAt_source x)
 
-/--
-theorem `extChartAt_target_eventuallyEq'` / 定理 `extChartAt_target_eventuallyEq'`
+/-- Around the image of a point in the source, `(extChartAt I x).target` and `range I`
+coincide locally. -/
+/-
+**extChartAt_target_eventuallyEq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_eventuallyEq' {x y : M} (hy : y in (extChartAt I x).sour
+ce) : (extChartAt I x).target =ᶠ[𝓝 (extChartAt I x y)] range I
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `nhdsWithin_extChartAt_target_eq'`：nhdsWithin_extChartAt_target_eq' {x y 
+: M} (hy : y in (extChartAt I x).source) : 𝓝[(extChartAt I x).target] extChartAt
+ I x y = 𝓝[range I] ex…
 
-English:
-theorem extChartAt_target_eventuallyEq'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq' hy)
-
-中文:
-定理 extChartAt_target_eventuallyEq'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq' hy)
-
-Depends on / 依赖: nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_extChartAt_target_eq
+--- 原说明 ---
+Around the image of a point in the source, `(extChartAt I x).target` and `range 
+I`
+coincide locally.
 -/
-theorem extChartAt_target_eventuallyEq' {x y : M} (hy : y in (extChartAt I x).source) :
+theorem extChartAt_target_eventuallyEq' {x y : M} (hy : y ∈ (extChartAt I x).source) :
     (extChartAt I x).target =ᶠ[𝓝 (extChartAt I x y)] range I :=
   nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq' hy)
 
-/--
-theorem `extChartAt_target_eventuallyEq_of_mem` / 定理 `extChartAt_target_eventuallyEq_of_mem`
+/-- Around a point in the target, `(extChartAt I x).target` and `range I` coincide locally. -/
+/-
+**extChartAt_target_eventuallyEq_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_eventuallyEq_of_mem {x : M} {z : E} (hz : z in (extChart
+At I x).target) : (extChartAt I x).target =ᶠ[𝓝 z] range I
+参数：hz : z in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `nhdsWithin_extChartAt_target_eq_of_mem`：nhdsWithin_extChartAt_target_eq_
+of_mem {x : M} {z : E} (hz : z in (extChartAt I x).target) : 𝓝[(extChartAt I x).
+target] z = 𝓝[range I] z
 
-English:
-theorem extChartAt_target_eventuallyEq_of_mem
-  given: {x : M} {z : E} (hz : z in (extChartAt I x).target)
-  proof: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq_of_mem hz)
-
-中文:
-定理 extChartAt_target_eventuallyEq_of_mem
-  条件: {x : M} {z : E} (hz : z in (extChartAt I x).target)
-  证明: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq_of_mem hz)
-
-Depends on / 依赖: nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_extChartAt_target_eq_of_mem
+--- 原说明 ---
+Around a point in the target, `(extChartAt I x).target` and `range I` coincide l
+ocally.
 -/
-theorem extChartAt_target_eventuallyEq_of_mem {x : M} {z : E} (hz : z in (extChartAt I x).target) :
+theorem extChartAt_target_eventuallyEq_of_mem {x : M} {z : E} (hz : z ∈ (extChartAt I x).target) :
     (extChartAt I x).target =ᶠ[𝓝 z] range I :=
   nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq_of_mem hz)
 
-/--
-theorem `extChartAt_target_eventuallyEq` / 定理 `extChartAt_target_eventuallyEq`
+/-- Around the image of the base point, `(extChartAt I x).target` and `range I` coincide locally. -/
+/-
+**extChartAt_target_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_target_eventuallyEq {x : M} : (extChartAt I x).target =ᶠ[𝓝 (ext
+ChartAt I x x)] range I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `nhdsWithin_extChartAt_target_eq`：nhdsWithin_extChartAt_target_eq (x : M)
+ : 𝓝[(extChartAt I x).target] (extChartAt I x) x = 𝓝[range I] (extChartAt I x) x
 
-English:
-theorem extChartAt_target_eventuallyEq
-  given: {x : M}
-  proof: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq x)
-
-中文:
-定理 extChartAt_target_eventuallyEq
-  条件: {x : M}
-  证明: nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq x)
-
-Depends on / 依赖: nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_extChartAt_target_eq
+--- 原说明 ---
+Around the image of the base point, `(extChartAt I x).target` and `range I` coin
+cide locally.
 -/
 theorem extChartAt_target_eventuallyEq {x : M} :
     (extChartAt I x).target =ᶠ[𝓝 (extChartAt I x x)] range I :=
   nhdsWithin_eq_iff_eventuallyEq.1 (nhdsWithin_extChartAt_target_eq x)
-
-/--
-theorem `continuousAt_extChartAt_symm''` / 定理 `continuousAt_extChartAt_symm''`
-
-English:
-theorem continuousAt_extChartAt_symm''
-  given: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  proof: continuousAt_extend_symm' _ h
-
-中文:
-定理 continuousAt_extChartAt_symm''
-  条件: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  证明: continuousAt_extend_symm' _ h
-
-Depends on / 依赖: continuousAt_extend_symm
+/-
+**continuousAt_extChartAt_symm''** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_extChartAt_symm'' {x : M} {y : E} (h : y in (extChartAt I x).
+target) : ContinuousAt (extChartAt I x).symm y
+参数：h : y in (extChartAt I x).target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.continuousAt_extend_symm'`：continuousAt_extend_sym
+m' {x : E} (h : x in (f.extend I).target) : ContinuousAt (f.extend I).symm x
 -/
-theorem continuousAt_extChartAt_symm'' {x : M} {y : E} (h : y in (extChartAt I x).target) :
+theorem continuousAt_extChartAt_symm'' {x : M} {y : E} (h : y ∈ (extChartAt I x).target) :
     ContinuousAt (extChartAt I x).symm y :=
   continuousAt_extend_symm' _ h
-
-/--
-theorem `continuousAt_extChartAt_symm'` / 定理 `continuousAt_extChartAt_symm'`
-
-English:
-theorem continuousAt_extChartAt_symm'
-  given: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: continuousAt_extChartAt_symm'' (extChartAt I x).map_source h
-
-中文:
-定理 continuousAt_extChartAt_symm'
-  条件: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: continuousAt_extChartAt_symm'' (extChartAt I x).map_source h
-
-Depends on / 依赖: continuousAt_extChartAt_symm, extChartAt, map_source
+/-
+**continuousAt_extChartAt_symm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_extChartAt_symm' {x x' : M} (h : x' in (extChartAt I x).sourc
+e) : ContinuousAt (extChartAt I x).symm (extChartAt I x x')
+参数：h : x' in (extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_extChartAt_symm''`：continuousAt_extChartAt_symm'' {x : M} {
+y : E} (h : y in (extChartAt I x).target) : ContinuousAt (extChartAt I x).symm y
+· 使用定理 `PartialEquiv.map_source`：map_source {x : α} (h : x in e.source) : e x in
+ e.target
 -/
-theorem continuousAt_extChartAt_symm' {x x' : M} (h : x' in (extChartAt I x).source) :
+theorem continuousAt_extChartAt_symm' {x x' : M} (h : x' ∈ (extChartAt I x).source) :
     ContinuousAt (extChartAt I x).symm (extChartAt I x x') :=
-continuousAt_extChartAt_symm'' (extChartAt I x).map_source h
-
-/--
-theorem `continuousAt_extChartAt_symm` / 定理 `continuousAt_extChartAt_symm`
-
-English:
-theorem continuousAt_extChartAt_symm
-  given: (x : M)
-  proof: continuousAt_extChartAt_symm' (mem_extChartAt_source x)
-
-中文:
-定理 continuousAt_extChartAt_symm
-  条件: (x : M)
-  证明: continuousAt_extChartAt_symm' (mem_extChartAt_source x)
-
-Depends on / 依赖: continuousAt_extChartAt_symm, mem_extChartAt_source
+  continuousAt_extChartAt_symm'' <| (extChartAt I x).map_source h
+/-
+**continuousAt_extChartAt_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_extChartAt_symm (x : M) : ContinuousAt (extChartAt I x).symm 
+((extChartAt I x) x)
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_extChartAt_symm'`：continuousAt_extChartAt_symm' {x x' : M} 
+(h : x' in (extChartAt I x).source) : ContinuousAt (extChartAt I x).symm (extCha
+rtAt I x x')
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem continuousAt_extChartAt_symm (x : M) :
     ContinuousAt (extChartAt I x).symm ((extChartAt I x) x) :=
   continuousAt_extChartAt_symm' (mem_extChartAt_source x)
-
-/--
-theorem `continuousOn_extChartAt_symm` / 定理 `continuousOn_extChartAt_symm`
-
-English:
-theorem continuousOn_extChartAt_symm
-  given: (x : M)
-  proof: fun _y hy => (continuousAt_extChartAt_symm'' hy).continuousWithinAt
-
-中文:
-定理 continuousOn_extChartAt_symm
-  条件: (x : M)
-  证明: fun _y hy => (continuousAt_extChartAt_symm'' hy).continuousWithinAt
-
-Depends on / 依赖: continuousAt_extChartAt_symm, continuousWithinAt
+/-
+**continuousOn_extChartAt_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousOn_extChartAt_symm (x : M) : ContinuousOn (extChartAt I x).symm 
+(extChartAt I x).target
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `continuousAt_extChartAt_symm''`：continuousAt_extChartAt_symm'' {x : M} {
+y : E} (h : y in (extChartAt I x).target) : ContinuousAt (extChartAt I x).symm y
 -/
 theorem continuousOn_extChartAt_symm (x : M) :
     ContinuousOn (extChartAt I x).symm (extChartAt I x).target :=
   fun _y hy => (continuousAt_extChartAt_symm'' hy).continuousWithinAt
-
-/--
-lemma `extChartAt_target_subset_closure_interior` / 引理 `extChartAt_target_subset_closure_interior`
-
-English:
-lemma extChartAt_target_subset_closure_interior
-  given: {x : M}
-  proof: by
-  intro y hy
-  rw [mem_closure_iff_nhds]
-  intro t ht
-  have A : t inter ((extChartAt I x).target union (range I)ᶜ) in 𝓝 y :=
-    inter_mem ht (extChartAt_target_union_compl_range_mem_nhds_of_mem hy)
-  have B : y in closure (interior (range I)) := by
-    apply I.range_subset_closure_interior (extChartAt_target_subset_range x hy)
-  obtain ⟨z, ⟨tz, h'z⟩, hz⟩ :
-      (t inter ((extChartAt I x).target union (range ↑I)ᶜ) inter interior (range I)).Nonempty :=
-    mem_closure_iff_nhds.1 B _ A
-  refine ⟨z, ⟨tz, ?_⟩⟩
-  have h''z : z in (extChartAt I x).target := by simpa [interior_subset hz] using h'z
-  exact (extChartAt_target_eventuallyEq_of_mem h''z).symm.mem_interior hz
-
-中文:
-引理 extChartAt_target_subset_closure_interior
-  条件: {x : M}
-  证明: by
-  intro y hy
-  rw [mem_closure_iff_nhds]
-  intro t ht
-  have A : t inter ((extChartAt I x).target union (range I)ᶜ) in 𝓝 y :=
-    inter_mem ht (extChartAt_target_union_compl_range_mem_nhds_of_mem hy)
-  have B : y in closure (interior (range I)) := by
-    apply I.range_subset_closure_interior (extChartAt_target_subset_range x hy)
-  obtain ⟨z, ⟨tz, h'z⟩, hz⟩ :
-      (t inter ((extChartAt I x).target union (range ↑I)ᶜ) inter interior (range I)).Nonempty :=
-    mem_closure_iff_nhds.1 B _ A
-  refine ⟨z, ⟨tz, ?_⟩⟩
-  have h''z : z in (extChartAt I x).target := by simpa [interior_subset hz] using h'z
-  exact (extChartAt_target_eventuallyEq_of_mem h''z).symm.mem_interior hz
-
-Depends on / 依赖: I.range_subset_closure_interior, Nonempty, closure, extChartAt, extChartAt_target_subset_range, extChartAt_target_union_compl_range_mem_nhds_of_mem, inter_mem, interior, mem_closure_iff_nhds, range_subset_closure_interior, target
+/-
+**extChartAt_target_subset_closure_interior** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：extChartAt_target_subset_closure_interior {x : M} : (extChartAt I x).targe
+t subseteq closure (interior (extChartAt I x).target)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closure_iff_nhds`：mem_closure_iff_nhds : x in closure s ↔ forall t i
+n 𝓝 x, (t inter s).Nonempty
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `extChartAt_target_union_compl_range_mem_nhds_of_mem`：extChartAt_target_u
+nion_compl_range_mem_nhds_of_mem {y : E} {x : M} (hy : y in (extChartAt I x).tar
+get) : (extChartAt I x).target union (ran…
+· 使用定理 `ModelWithCorners.range_subset_closure_interior`：range_subset_closure_int
+erior : range I subseteq closure (interior (range I))
+· 使用定理 `extChartAt_target_subset_range`：extChartAt_target_subset_range (x : M) :
+ (extChartAt I x).target subseteq range I
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用引理 `Filter.EventuallyEq.mem_interior`：Filter.EventuallyEq.mem_interior {x : 
+α} {s t : Set α} (hst : s =ᶠ[𝓝 x] t) (h : x in interior s) : x in interior t
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `extChartAt_target_eventuallyEq_of_mem`：extChartAt_target_eventuallyEq_of
+_mem {x : M} {z : E} (hz : z in (extChartAt I x).target) : (extChartAt I x).targ
+et =ᶠ[𝓝 z] range I
 -/
 lemma extChartAt_target_subset_closure_interior {x : M} :
-    (extChartAt I x).target subseteq closure (interior (extChartAt I x).target) := by
+    (extChartAt I x).target ⊆ closure (interior (extChartAt I x).target) := by
   intro y hy
   rw [mem_closure_iff_nhds]
   intro t ht
-  have A : t inter ((extChartAt I x).target union (range I)ᶜ) in 𝓝 y :=
+  have A : t ∩ ((extChartAt I x).target ∪ (range I)ᶜ) ∈ 𝓝 y :=
     inter_mem ht (extChartAt_target_union_compl_range_mem_nhds_of_mem hy)
-  have B : y in closure (interior (range I)) := by
+  have B : y ∈ closure (interior (range I)) := by
     apply I.range_subset_closure_interior (extChartAt_target_subset_range x hy)
   obtain ⟨z, ⟨tz, h'z⟩, hz⟩ :
-      (t inter ((extChartAt I x).target union (range ↑I)ᶜ) inter interior (range I)).Nonempty :=
+      (t ∩ ((extChartAt I x).target ∪ (range ↑I)ᶜ) ∩ interior (range I)).Nonempty :=
     mem_closure_iff_nhds.1 B _ A
   refine ⟨z, ⟨tz, ?_⟩⟩
-  have h''z : z in (extChartAt I x).target := by simpa [interior_subset hz] using h'z
+  have h''z : z ∈ (extChartAt I x).target := by simpa [interior_subset hz] using h'z
   exact (extChartAt_target_eventuallyEq_of_mem h''z).symm.mem_interior hz
 
 variable (I) in
-/--
-theorem `interior_extChartAt_target_nonempty` / 定理 `interior_extChartAt_target_nonempty`
-
-English:
-theorem interior_extChartAt_target_nonempty
-  given: (x : M)
-  proof: by
-  by_contra! H
-  have := extChartAt_target_subset_closure_interior (mem_extChartAt_target (I := I) x)
-  simp only [H, closure_empty, mem_empty_iff_false] at this
-
-中文:
-定理 interior_extChartAt_target_nonempty
-  条件: (x : M)
-  证明: by
-  by_contra! H
-  have := extChartAt_target_subset_closure_interior (mem_extChartAt_target (I := I) x)
-  simp only [H, closure_empty, mem_empty_iff_false] at this
-
-Depends on / 依赖: closure_empty, extChartAt_target_subset_closure_interior, mem_empty_iff_false, mem_extChartAt_target
+/-
+**interior_extChartAt_target_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：interior_extChartAt_target_nonempty (x : M) : (interior (extChartAt I x).t
+arget).Nonempty
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `extChartAt_target_subset_closure_interior`：extChartAt_target_subset_clos
+ure_interior {x : M} : (extChartAt I x).target subseteq closure (interior (extCh
+artAt I x).target)
+· 使用定理 `mem_extChartAt_target`：mem_extChartAt_target (x : M) : extChartAt I x x 
+in (extChartAt I x).target
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `closure_empty`：closure_empty : closure (∅ : Set X) = ∅
 -/
 theorem interior_extChartAt_target_nonempty (x : M) :
     (interior (extChartAt I x).target).Nonempty := by
   by_contra! H
   have := extChartAt_target_subset_closure_interior (mem_extChartAt_target (I := I) x)
   simp only [H, closure_empty, mem_empty_iff_false] at this
-
-/--
-lemma `extChartAt_mem_closure_interior` / 引理 `extChartAt_mem_closure_interior`
-
-English:
-lemma extChartAt_mem_closure_interior
-  statement: {x₀ x : M}
-  proof: by
-  simp_rw [mem_closure_iff, interior_inter, ← inter_assoc]
-  intro o o_open ho
-  obtain ⟨y, ⟨yo, hy⟩, ys⟩ :
-      ((extChartAt I x₀) ⁻¹' o inter (extChartAt I x₀).source inter interior s).Nonempty := by
-    have : (extChartAt I x₀) ⁻¹' o in 𝓝 x := by
-      apply (continuousAt_extChartAt' h'x).preimage_mem_nhds (o_open.mem_nhds ho)
-    refine (mem_closure_iff_nhds.1 hx) _ (inter_mem this ?_)
-    apply (isOpen_extChartAt_source x₀).mem_nhds h'x
-  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) in 𝓝 (extChartAt I x₀ y) := by
-    simp only [interior_mem_nhds]
-    apply (continuousAt_extChartAt_symm' hy).preimage_mem_nhds
-    simp only [hy, PartialEquiv.left_inv]
-    exact mem_interior_iff_mem_nhds.mp ys
-  have B : (extChartAt I x₀) y in closure (interior (extChartAt I x₀).target) := by
-    apply extChartAt_target_subset_closure_interior (x := x₀)
-    exact (extChartAt I x₀).map_source hy
-  exact mem_closure_iff_nhds.1 B _ (inter_mem (o_open.mem_nhds yo) A)
-
-中文:
-引理 extChartAt_mem_closure_interior
-  结论: {x₀ x : M}
-  证明: by
-  simp_rw [mem_closure_iff, interior_inter, ← inter_assoc]
-  intro o o_open ho
-  obtain ⟨y, ⟨yo, hy⟩, ys⟩ :
-      ((extChartAt I x₀) ⁻¹' o inter (extChartAt I x₀).source inter interior s).Nonempty := by
-    have : (extChartAt I x₀) ⁻¹' o in 𝓝 x := by
-      apply (continuousAt_extChartAt' h'x).preimage_mem_nhds (o_open.mem_nhds ho)
-    refine (mem_closure_iff_nhds.1 hx) _ (inter_mem this ?_)
-    apply (isOpen_extChartAt_source x₀).mem_nhds h'x
-  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) in 𝓝 (extChartAt I x₀ y) := by
-    simp only [interior_mem_nhds]
-    apply (continuousAt_extChartAt_symm' hy).preimage_mem_nhds
-    simp only [hy, PartialEquiv.left_inv]
-    exact mem_interior_iff_mem_nhds.mp ys
-  have B : (extChartAt I x₀) y in closure (interior (extChartAt I x₀).target) := by
-    apply extChartAt_target_subset_closure_interior (x := x₀)
-    exact (extChartAt I x₀).map_source hy
-  exact mem_closure_iff_nhds.1 B _ (inter_mem (o_open.mem_nhds yo) A)
-
-Depends on / 依赖: Nonempty, continuousAt_extChartAt, extChartAt, inter_assoc, inter_mem, interior, interior_inter, isOpen_extChartAt_source, mem_closure_iff, mem_closure_iff_nhds, mem_nhds, o_open, o_open.mem_nhds, preimage_mem_nhds, simp_rw, source
+/-
+**extChartAt_mem_closure_interior** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：extChartAt_mem_closure_interior {x₀ x : M} (hx : x in closure (interior s)
+) (h'x : x in (extChartAt I x₀).source) : extChartAt I x₀ x in closure (interior
+ ((extChartAt I x₀).symm ⁻¹' s inter (extChartAt I x₀).target))
+参数：hx : x in closure (interior s)；h'x : x in (extChartAt I x₀).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `interior_inter`：interior_inter : interior (s inter t) = interior s inter
+ interior t
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `continuousAt_extChartAt'`：continuousAt_extChartAt' {x x' : M} (h : x' in
+ (extChartAt I x).source) : ContinuousAt (extChartAt I x) x'
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_closure_iff_nhds`：mem_closure_iff_nhds : x in closure s ↔ forall t i
+n 𝓝 x, (t inter s).Nonempty
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `isOpen_extChartAt_source`：isOpen_extChartAt_source (x : M) : IsOpen (ext
+ChartAt I x).source
+· 使用定理 `continuousAt_extChartAt_symm'`：continuousAt_extChartAt_symm' {x x' : M} 
+(h : x' in (extChartAt I x).source) : ContinuousAt (extChartAt I x).symm (extCha
+rtAt I x x')
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `mem_interior_iff_mem_nhds`：mem_interior_iff_mem_nhds : x in interior s ↔
+ s in 𝓝 x
+· 使用引理 `extChartAt_target_subset_closure_interior`：extChartAt_target_subset_clos
+ure_interior {x : M} : (extChartAt I x).target subseteq closure (interior (extCh
+artAt I x).target)
+· 使用定理 `PartialEquiv.map_source`：map_source {x : α} (h : x in e.source) : e x in
+ e.target
 -/
 lemma extChartAt_mem_closure_interior {x₀ x : M}
-    (hx : x in closure (interior s)) (h'x : x in (extChartAt I x₀).source) :
-    extChartAt I x₀ x in
-      closure (interior ((extChartAt I x₀).symm ⁻¹' s inter (extChartAt I x₀).target)) := by
+    (hx : x ∈ closure (interior s)) (h'x : x ∈ (extChartAt I x₀).source) :
+    extChartAt I x₀ x ∈
+      closure (interior ((extChartAt I x₀).symm ⁻¹' s ∩ (extChartAt I x₀).target)) := by
   simp_rw [mem_closure_iff, interior_inter, ← inter_assoc]
   intro o o_open ho
   obtain ⟨y, ⟨yo, hy⟩, ys⟩ :
-      ((extChartAt I x₀) ⁻¹' o inter (extChartAt I x₀).source inter interior s).Nonempty := by
-    have : (extChartAt I x₀) ⁻¹' o in 𝓝 x := by
+      ((extChartAt I x₀) ⁻¹' o ∩ (extChartAt I x₀).source ∩ interior s).Nonempty := by
+    have : (extChartAt I x₀) ⁻¹' o ∈ 𝓝 x := by
       apply (continuousAt_extChartAt' h'x).preimage_mem_nhds (o_open.mem_nhds ho)
     refine (mem_closure_iff_nhds.1 hx) _ (inter_mem this ?_)
     apply (isOpen_extChartAt_source x₀).mem_nhds h'x
-  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) in 𝓝 (extChartAt I x₀ y) := by
+  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) ∈ 𝓝 (extChartAt I x₀ y) := by
     simp only [interior_mem_nhds]
     apply (continuousAt_extChartAt_symm' hy).preimage_mem_nhds
     simp only [hy, PartialEquiv.left_inv]
     exact mem_interior_iff_mem_nhds.mp ys
-  have B : (extChartAt I x₀) y in closure (interior (extChartAt I x₀).target) := by
+  have B : (extChartAt I x₀) y ∈ closure (interior (extChartAt I x₀).target) := by
     apply extChartAt_target_subset_closure_interior (x := x₀)
     exact (extChartAt I x₀).map_source hy
   exact mem_closure_iff_nhds.1 B _ (inter_mem (o_open.mem_nhds yo) A)
-
-/--
-theorem `isOpen_extChartAt_preimage'` / 定理 `isOpen_extChartAt_preimage'`
-
-English:
-theorem isOpen_extChartAt_preimage'
-  given: (x : M) {s : Set E} (hs : IsOpen s)
-  proof: isOpen_extend_preimage' _ hs
-
-中文:
-定理 isOpen_extChartAt_preimage'
-  条件: (x : M) {s : 集合 E} (hs : 是开集 s)
-  证明: isOpen_extend_preimage' _ hs
-
-Depends on / 依赖: isOpen_extend_preimage
+/-
+**isOpen_extChartAt_preimage'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_extChartAt_preimage' (x : M) {s : Set E} (hs : IsOpen s) : IsOpen (
+(extChartAt I x).source inter extChartAt I x ⁻¹' s)
+参数：x : M；hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.isOpen_extend_preimage'`：isOpen_extend_preimage' {
+s : Set E} (hs : IsOpen s) : IsOpen ((f.extend I).source inter f.extend I ⁻¹' s)
 -/
 theorem isOpen_extChartAt_preimage' (x : M) {s : Set E} (hs : IsOpen s) :
-    IsOpen ((extChartAt I x).source inter extChartAt I x ⁻¹' s) :=
+    IsOpen ((extChartAt I x).source ∩ extChartAt I x ⁻¹' s) :=
   isOpen_extend_preimage' _ hs
-
-/--
-theorem `isOpen_extChartAt_preimage` / 定理 `isOpen_extChartAt_preimage`
-
-English:
-theorem isOpen_extChartAt_preimage
-  given: (x : M) {s : Set E} (hs : IsOpen s)
-  proof: by
-  rw [← extChartAt_source I]
-  exact isOpen_extChartAt_preimage' x hs
-
-中文:
-定理 isOpen_extChartAt_preimage
-  条件: (x : M) {s : 集合 E} (hs : 是开集 s)
-  证明: by
-  rw [← extChartAt_source I]
-  exact isOpen_extChartAt_preimage' x hs
-
-Depends on / 依赖: extChartAt_source, isOpen_extChartAt_preimage
+/-
+**isOpen_extChartAt_preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_extChartAt_preimage (x : M) {s : Set E} (hs : IsOpen s) : IsOpen ((
+chartAt H x).source inter extChartAt I x ⁻¹' s)
+参数：x : M；hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
+· 使用定理 `isOpen_extChartAt_preimage'`：isOpen_extChartAt_preimage' (x : M) {s : Se
+t E} (hs : IsOpen s) : IsOpen ((extChartAt I x).source inter extChartAt I x ⁻¹' 
+s)
 -/
 theorem isOpen_extChartAt_preimage (x : M) {s : Set E} (hs : IsOpen s) :
-    IsOpen ((chartAt H x).source inter extChartAt I x ⁻¹' s) := by
+    IsOpen ((chartAt H x).source ∩ extChartAt I x ⁻¹' s) := by
   rw [← extChartAt_source I]
   exact isOpen_extChartAt_preimage' x hs
-
-/--
-theorem `map_extChartAt_nhdsWithin_eq_image'` / 定理 `map_extChartAt_nhdsWithin_eq_image'`
-
-English:
-theorem map_extChartAt_nhdsWithin_eq_image'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: map_extend_nhdsWithin_eq_image _ by rwa [← extChartAt_source I]
-
-中文:
-定理 map_extChartAt_nhdsWithin_eq_image'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: map_extend_nhdsWithin_eq_image _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, map_extend_nhdsWithin_eq_image
+/-
+**map_extChartAt_nhdsWithin_eq_image'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhdsWithin_eq_image' {x y : M} (hy : y in (extChartAt I x).
+source) : map (extChartAt I x) (𝓝[s] y) = 𝓝[extChartAt I x '' ((extChartAt I x).
+source inter s)] extChartAt I x y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin_eq_image`：map_extend_nhdsWit
+hin_eq_image {y : M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[f.exte
+nd I '' ((f.extend I).source inter s)] f.e…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem map_extChartAt_nhdsWithin_eq_image' {x y : M} (hy : y in (extChartAt I x).source) :
+theorem map_extChartAt_nhdsWithin_eq_image' {x y : M} (hy : y ∈ (extChartAt I x).source) :
     map (extChartAt I x) (𝓝[s] y) =
-      𝓝[extChartAt I x '' ((extChartAt I x).source inter s)] extChartAt I x y :=
-map_extend_nhdsWithin_eq_image _ by rwa [← extChartAt_source I]
-
-/--
-theorem `map_extChartAt_nhdsWithin_eq_image` / 定理 `map_extChartAt_nhdsWithin_eq_image`
-
-English:
-theorem map_extChartAt_nhdsWithin_eq_image
-  given: (x : M)
-  proof: map_extChartAt_nhdsWithin_eq_image' (mem_extChartAt_source x)
-
-中文:
-定理 map_extChartAt_nhdsWithin_eq_image
-  条件: (x : M)
-  证明: map_extChartAt_nhdsWithin_eq_image' (mem_extChartAt_source x)
-
-Depends on / 依赖: map_extChartAt_nhdsWithin_eq_image, mem_extChartAt_source
+      𝓝[extChartAt I x '' ((extChartAt I x).source ∩ s)] extChartAt I x y :=
+  map_extend_nhdsWithin_eq_image _ <| by rwa [← extChartAt_source I]
+/-
+**map_extChartAt_nhdsWithin_eq_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhdsWithin_eq_image (x : M) : map (extChartAt I x) (𝓝[s] x)
+ = 𝓝[extChartAt I x '' ((extChartAt I x).source inter s)] extChartAt I x x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_extChartAt_nhdsWithin_eq_image'`：map_extChartAt_nhdsWithin_eq_image'
+ {x y : M} (hy : y in (extChartAt I x).source) : map (extChartAt I x) (𝓝[s] y) =
+ 𝓝[extChartAt I x '' ((ex…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem map_extChartAt_nhdsWithin_eq_image (x : M) :
     map (extChartAt I x) (𝓝[s] x) =
-      𝓝[extChartAt I x '' ((extChartAt I x).source inter s)] extChartAt I x x :=
+      𝓝[extChartAt I x '' ((extChartAt I x).source ∩ s)] extChartAt I x x :=
   map_extChartAt_nhdsWithin_eq_image' (mem_extChartAt_source x)
-
-/--
-theorem `map_extChartAt_nhdsWithin'` / 定理 `map_extChartAt_nhdsWithin'`
-
-English:
-theorem map_extChartAt_nhdsWithin'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: map_extend_nhdsWithin _ by rwa [← extChartAt_source I]
-
-中文:
-定理 map_extChartAt_nhdsWithin'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: map_extend_nhdsWithin _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, map_extend_nhdsWithin
+/-
+**map_extChartAt_nhdsWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).source) :
+ map (extChartAt I x) (𝓝[s] y) = 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] ex
+tChartAt I x y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_extend_nhdsWithin`：map_extend_nhdsWithin {y : 
+M} (hy : y in f.source) : map (f.extend I) (𝓝[s] y) = 𝓝[(f.extend I).symm ⁻¹' s 
+inter range I] f.extend I y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem map_extChartAt_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).source) :
-    map (extChartAt I x) (𝓝[s] y) = 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] extChartAt I x y :=
-map_extend_nhdsWithin _ by rwa [← extChartAt_source I]
-
-/--
-theorem `map_extChartAt_nhdsWithin` / 定理 `map_extChartAt_nhdsWithin`
-
-English:
-theorem map_extChartAt_nhdsWithin
-  given: (x : M)
-  proof: map_extChartAt_nhdsWithin' (mem_extChartAt_source x)
-
-中文:
-定理 map_extChartAt_nhdsWithin
-  条件: (x : M)
-  证明: map_extChartAt_nhdsWithin' (mem_extChartAt_source x)
-
-Depends on / 依赖: map_extChartAt_nhdsWithin, mem_extChartAt_source
+theorem map_extChartAt_nhdsWithin' {x y : M} (hy : y ∈ (extChartAt I x).source) :
+    map (extChartAt I x) (𝓝[s] y) = 𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] extChartAt I x y :=
+  map_extend_nhdsWithin _ <| by rwa [← extChartAt_source I]
+/-
+**map_extChartAt_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_nhdsWithin (x : M) : map (extChartAt I x) (𝓝[s] x) = 𝓝[(ext
+ChartAt I x).symm ⁻¹' s inter range I] extChartAt I x x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_extChartAt_nhdsWithin'`：map_extChartAt_nhdsWithin' {x y : M} (hy : y
+ in (extChartAt I x).source) : map (extChartAt I x) (𝓝[s] y) = 𝓝[(extChartAt I x
+).symm ⁻¹' s int…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem map_extChartAt_nhdsWithin (x : M) :
-    map (extChartAt I x) (𝓝[s] x) = 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] extChartAt I x x :=
+    map (extChartAt I x) (𝓝[s] x) = 𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] extChartAt I x x :=
   map_extChartAt_nhdsWithin' (mem_extChartAt_source x)
-
-/--
-theorem `map_extChartAt_symm_nhdsWithin'` / 定理 `map_extChartAt_symm_nhdsWithin'`
-
-English:
-theorem map_extChartAt_symm_nhdsWithin'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: map_extend_symm_nhdsWithin _ by rwa [← extChartAt_source I]
-
-中文:
-定理 map_extChartAt_symm_nhdsWithin'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: map_extend_symm_nhdsWithin _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, map_extend_symm_nhdsWithin
+/-
+**map_extChartAt_symm_nhdsWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_symm_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).sour
+ce) : map (extChartAt I x).symm (𝓝[(extChartAt I x).symm ⁻¹' s inter range I] ex
+tChartAt I x y) = 𝓝[s] y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_extend_symm_nhdsWithin`：map_extend_symm_nhdsWi
+thin {y : M} (hy : y in f.source) : map (f.extend I).symm (𝓝[(f.extend I).symm ⁻
+¹' s inter range I] f.extend I y) = 𝓝[…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem map_extChartAt_symm_nhdsWithin' {x y : M} (hy : y in (extChartAt I x).source) :
-    map (extChartAt I x).symm (𝓝[(extChartAt I x).symm ⁻¹' s inter range I] extChartAt I x y) =
+theorem map_extChartAt_symm_nhdsWithin' {x y : M} (hy : y ∈ (extChartAt I x).source) :
+    map (extChartAt I x).symm (𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] extChartAt I x y) =
       𝓝[s] y :=
-map_extend_symm_nhdsWithin _ by rwa [← extChartAt_source I]
-
-/--
-theorem `map_extChartAt_symm_nhdsWithin_range'` / 定理 `map_extChartAt_symm_nhdsWithin_range'`
-
-English:
-theorem map_extChartAt_symm_nhdsWithin_range'
-  given: {x y : M} (hy : y in (extChartAt I x).source)
-  proof: map_extend_symm_nhdsWithin_range _ by rwa [← extChartAt_source I]
-
-中文:
-定理 map_extChartAt_symm_nhdsWithin_range'
-  条件: {x y : M} (hy : y in (extChartAt I x).source)
-  证明: map_extend_symm_nhdsWithin_range _ by rwa [← extChartAt_source I]
-
-Depends on / 依赖: extChartAt_source, map_extend_symm_nhdsWithin_range
+  map_extend_symm_nhdsWithin _ <| by rwa [← extChartAt_source I]
+/-
+**map_extChartAt_symm_nhdsWithin_range'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_symm_nhdsWithin_range' {x y : M} (hy : y in (extChartAt I x
+).source) : map (extChartAt I x).symm (𝓝[range I] extChartAt I x y) = 𝓝 y
+参数：hy : y in (extChartAt I x).source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_extend_symm_nhdsWithin_range`：map_extend_symm_
+nhdsWithin_range {y : M} (hy : y in f.source) : map (f.extend I).symm (𝓝[range I
+] f.extend I y) = 𝓝 y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem map_extChartAt_symm_nhdsWithin_range' {x y : M} (hy : y in (extChartAt I x).source) :
+theorem map_extChartAt_symm_nhdsWithin_range' {x y : M} (hy : y ∈ (extChartAt I x).source) :
     map (extChartAt I x).symm (𝓝[range I] extChartAt I x y) = 𝓝 y :=
-map_extend_symm_nhdsWithin_range _ by rwa [← extChartAt_source I]
-
-/--
-theorem `map_extChartAt_symm_nhdsWithin` / 定理 `map_extChartAt_symm_nhdsWithin`
-
-English:
-theorem map_extChartAt_symm_nhdsWithin
-  given: (x : M)
-  proof: map_extChartAt_symm_nhdsWithin' (mem_extChartAt_source x)
-
-中文:
-定理 map_extChartAt_symm_nhdsWithin
-  条件: (x : M)
-  证明: map_extChartAt_symm_nhdsWithin' (mem_extChartAt_source x)
-
-Depends on / 依赖: map_extChartAt_symm_nhdsWithin, mem_extChartAt_source
+  map_extend_symm_nhdsWithin_range _ <| by rwa [← extChartAt_source I]
+/-
+**map_extChartAt_symm_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_symm_nhdsWithin (x : M) : map (extChartAt I x).symm (𝓝[(ext
+ChartAt I x).symm ⁻¹' s inter range I] extChartAt I x x) = 𝓝[s] x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_extChartAt_symm_nhdsWithin'`：map_extChartAt_symm_nhdsWithin' {x y : 
+M} (hy : y in (extChartAt I x).source) : map (extChartAt I x).symm (𝓝[(extChartA
+t I x).symm ⁻¹' s int…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem map_extChartAt_symm_nhdsWithin (x : M) :
-    map (extChartAt I x).symm (𝓝[(extChartAt I x).symm ⁻¹' s inter range I] extChartAt I x x) =
+    map (extChartAt I x).symm (𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] extChartAt I x x) =
       𝓝[s] x :=
   map_extChartAt_symm_nhdsWithin' (mem_extChartAt_source x)
-
-/--
-theorem `map_extChartAt_symm_nhdsWithin_range` / 定理 `map_extChartAt_symm_nhdsWithin_range`
-
-English:
-theorem map_extChartAt_symm_nhdsWithin_range
-  given: (x : M)
-  proof: map_extChartAt_symm_nhdsWithin_range' (mem_extChartAt_source x)
-
-中文:
-定理 map_extChartAt_symm_nhdsWithin_range
-  条件: (x : M)
-  证明: map_extChartAt_symm_nhdsWithin_range' (mem_extChartAt_source x)
-
-Depends on / 依赖: map_extChartAt_symm_nhdsWithin_range, mem_extChartAt_source
+/-
+**map_extChartAt_symm_nhdsWithin_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_extChartAt_symm_nhdsWithin_range (x : M) : map (extChartAt I x).symm (
+𝓝[range I] extChartAt I x x) = 𝓝 x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_extChartAt_symm_nhdsWithin_range'`：map_extChartAt_symm_nhdsWithin_ra
+nge' {x y : M} (hy : y in (extChartAt I x).source) : map (extChartAt I x).symm (
+𝓝[range I] extChartAt I x y…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 -/
 theorem map_extChartAt_symm_nhdsWithin_range (x : M) :
     map (extChartAt I x).symm (𝓝[range I] extChartAt I x x) = 𝓝 x :=
   map_extChartAt_symm_nhdsWithin_range' (mem_extChartAt_source x)
-
-/--
-theorem `extChartAt_preimage_mem_nhds_of_mem_nhdsWithin` / 定理 `extChartAt_preimage_mem_nhds_of_mem_nhdsWithin`
-
-English:
-theorem extChartAt_preimage_mem_nhds_of_mem_nhdsWithin
-  statement: {s : Set E} {x x' : M}
-  proof: extend_preimage_mem_nhds_of_mem_nhdsWithin _ (by simpa using hx) hs
-
-中文:
-定理 extChartAt_preimage_mem_nhds_of_mem_nhdsWithin
-  结论: {s : 集合 E} {x x' : M}
-  证明: extend_preimage_mem_nhds_of_mem_nhdsWithin _ (by simpa using hx) hs
-
-Depends on / 依赖: extend_preimage_mem_nhds_of_mem_nhdsWithin
+/-
+**extChartAt_preimage_mem_nhds_of_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x x' : M} (hx 
+: x' in (extChartAt I x).source) (hs : s in 𝓝[range I] (extChartAt I x x')) : (e
+xtChartAt I x) ⁻¹' s in 𝓝 x'
+参数：hx : x' in (extChartAt I x).source；hs : s in 𝓝[range I] (extChartAt I x x')。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_preimage_mem_nhds_of_mem_nhdsWithin`：extend
+_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x : M} (hx : x in f.source) (h
+s : s in 𝓝[range I] (f.extend I x)) : (f.extend I) ⁻¹'…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ModelWithCorners.source_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
 -/
 theorem extChartAt_preimage_mem_nhds_of_mem_nhdsWithin {s : Set E} {x x' : M}
-    (hx : x' in (extChartAt I x).source)
-    (hs : s in 𝓝[range I] (extChartAt I x x')) :
-    (extChartAt I x) ⁻¹' s in 𝓝 x' :=
+    (hx : x' ∈ (extChartAt I x).source)
+    (hs : s ∈ 𝓝[range I] (extChartAt I x x')) :
+    (extChartAt I x) ⁻¹' s ∈ 𝓝 x' :=
   extend_preimage_mem_nhds_of_mem_nhdsWithin _ (by simpa using hx) hs
 
-/--
-theorem `extChartAt_preimage_mem_nhdsWithin'` / 定理 `extChartAt_preimage_mem_nhdsWithin'`
+/-- Technical lemma ensuring that the preimage under an extended chart of a neighborhood of a point
+in the source is a neighborhood of the preimage, within a set. -/
+/-
+**extChartAt_preimage_mem_nhdsWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_mem_nhdsWithin' {x x' : M} (h : x' in (extChartAt I x)
+.source) (ht : t in 𝓝[s] x') : (extChartAt I x).symm ⁻¹' t in 𝓝[(extChartAt I x)
+.symm ⁻¹' s inter range I] (extChartAt I x) x'
+参数：h : x' in (extChartAt I x).source；ht : t in 𝓝[s] x'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_extChartAt_symm_nhdsWithin'`：map_extChartAt_symm_nhdsWithin' {x y : 
+M} (hy : y in (extChartAt I x).source) : map (extChartAt I x).symm (𝓝[(extChartA
+t I x).symm ⁻¹' s int…
 
-English:
-theorem extChartAt_preimage_mem_nhdsWithin'
-  statement: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: by
-  rwa [← map_extChartAt_symm_nhdsWithin' h, mem_map] at ht
-
-中文:
-定理 extChartAt_preimage_mem_nhdsWithin'
-  结论: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: by
-  rwa [← map_extChartAt_symm_nhdsWithin' h, mem_map] at ht
-
-Depends on / 依赖: map_extChartAt_symm_nhdsWithin, mem_map
+--- 原说明 ---
+Technical lemma ensuring that the preimage under an extended chart of a neighbor
+hood of a point
+in the source is a neighborhood of the preimage, within a set.
 -/
-theorem extChartAt_preimage_mem_nhdsWithin' {x x' : M} (h : x' in (extChartAt I x).source)
-    (ht : t in 𝓝[s] x') :
-    (extChartAt I x).symm ⁻¹' t in 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x' := by
+theorem extChartAt_preimage_mem_nhdsWithin' {x x' : M} (h : x' ∈ (extChartAt I x).source)
+    (ht : t ∈ 𝓝[s] x') :
+    (extChartAt I x).symm ⁻¹' t ∈ 𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] (extChartAt I x) x' := by
   rwa [← map_extChartAt_symm_nhdsWithin' h, mem_map] at ht
 
-/--
-theorem `extChartAt_preimage_mem_nhdsWithin` / 定理 `extChartAt_preimage_mem_nhdsWithin`
+/-- Technical lemma ensuring that the preimage under an extended chart of a neighborhood of the
+base point is a neighborhood of the preimage, within a set. -/
+/-
+**extChartAt_preimage_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_mem_nhdsWithin {x : M} (ht : t in 𝓝[s] x) : (extChartA
+t I x).symm ⁻¹' t in 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I 
+x) x
+参数：ht : t in 𝓝[s] x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `extChartAt_preimage_mem_nhdsWithin'`：extChartAt_preimage_mem_nhdsWithin'
+ {x x' : M} (h : x' in (extChartAt I x).source) (ht : t in 𝓝[s] x') : (extChartA
+t I x).symm ⁻¹' t in 𝓝[(e…
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 
-English:
-theorem extChartAt_preimage_mem_nhdsWithin
-  given: {x : M} (ht : t in 𝓝[s] x)
-  proof: extChartAt_preimage_mem_nhdsWithin' (mem_extChartAt_source x) ht
-
-中文:
-定理 extChartAt_preimage_mem_nhdsWithin
-  条件: {x : M} (ht : t in 𝓝[s] x)
-  证明: extChartAt_preimage_mem_nhdsWithin' (mem_extChartAt_source x) ht
-
-Depends on / 依赖: extChartAt_preimage_mem_nhdsWithin, mem_extChartAt_source
+--- 原说明 ---
+Technical lemma ensuring that the preimage under an extended chart of a neighbor
+hood of the
+base point is a neighborhood of the preimage, within a set.
 -/
-theorem extChartAt_preimage_mem_nhdsWithin {x : M} (ht : t in 𝓝[s] x) :
-    (extChartAt I x).symm ⁻¹' t in 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x :=
+theorem extChartAt_preimage_mem_nhdsWithin {x : M} (ht : t ∈ 𝓝[s] x) :
+    (extChartAt I x).symm ⁻¹' t ∈ 𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] (extChartAt I x) x :=
   extChartAt_preimage_mem_nhdsWithin' (mem_extChartAt_source x) ht
-
-/--
-theorem `extChartAt_preimage_mem_nhds'` / 定理 `extChartAt_preimage_mem_nhds'`
-
-English:
-theorem extChartAt_preimage_mem_nhds'
-  statement: {x x' : M} (h : x' in (extChartAt I x).source)
-  proof: extend_preimage_mem_nhds _ (by rwa [← extChartAt_source I]) ht
-
-中文:
-定理 extChartAt_preimage_mem_nhds'
-  结论: {x x' : M} (h : x' in (extChartAt I x).source)
-  证明: extend_preimage_mem_nhds _ (by rwa [← extChartAt_source I]) ht
-
-Depends on / 依赖: extChartAt_source, extend_preimage_mem_nhds
+/-
+**extChartAt_preimage_mem_nhds'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_mem_nhds' {x x' : M} (h : x' in (extChartAt I x).sourc
+e) (ht : t in 𝓝 x') : (extChartAt I x).symm ⁻¹' t in 𝓝 (extChartAt I x x')
+参数：h : x' in (extChartAt I x).source；ht : t in 𝓝 x'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.extend_preimage_mem_nhds`：extend_preimage_mem_nhds
+ {x : M} (h : x in f.source) (ht : t in 𝓝 x) : (f.extend I).symm ⁻¹' t in 𝓝 (f.e
+xtend I x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `extChartAt_source`：extChartAt_source (x : M) : (extChartAt I x).source =
+ (chartAt H x).source
 -/
-theorem extChartAt_preimage_mem_nhds' {x x' : M} (h : x' in (extChartAt I x).source)
-    (ht : t in 𝓝 x') : (extChartAt I x).symm ⁻¹' t in 𝓝 (extChartAt I x x') :=
+theorem extChartAt_preimage_mem_nhds' {x x' : M} (h : x' ∈ (extChartAt I x).source)
+    (ht : t ∈ 𝓝 x') : (extChartAt I x).symm ⁻¹' t ∈ 𝓝 (extChartAt I x x') :=
   extend_preimage_mem_nhds _ (by rwa [← extChartAt_source I]) ht
 
-/--
-theorem `extChartAt_preimage_mem_nhds` / 定理 `extChartAt_preimage_mem_nhds`
+/-- Technical lemma ensuring that the preimage under an extended chart of a neighborhood of a point
+is a neighborhood of the preimage. -/
+/-
+**extChartAt_preimage_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_mem_nhds {x : M} (ht : t in 𝓝 x) : (extChartAt I x).sy
+mm ⁻¹' t in 𝓝 ((extChartAt I x) x)
+参数：ht : t in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `continuousAt_extChartAt_symm`：continuousAt_extChartAt_symm (x : M) : Con
+tinuousAt (extChartAt I x).symm ((extChartAt I x) x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `mem_extChartAt_source`：mem_extChartAt_source (x : M) : x in (extChartAt 
+I x).source
 
-English:
-theorem extChartAt_preimage_mem_nhds
-  given: {x : M} (ht : t in 𝓝 x)
-  proof: by
-  apply (continuousAt_extChartAt_symm x).preimage_mem_nhds
-  rwa [(extChartAt I x).left_inv (mem_extChartAt_source _)]
-
-中文:
-定理 extChartAt_preimage_mem_nhds
-  条件: {x : M} (ht : t in 𝓝 x)
-  证明: by
-  apply (continuousAt_extChartAt_symm x).preimage_mem_nhds
-  rwa [(extChartAt I x).left_inv (mem_extChartAt_source _)]
-
-Depends on / 依赖: continuousAt_extChartAt_symm, extChartAt, left_inv, mem_extChartAt_source, preimage_mem_nhds
+--- 原说明 ---
+Technical lemma ensuring that the preimage under an extended chart of a neighbor
+hood of a point
+is a neighborhood of the preimage.
 -/
-theorem extChartAt_preimage_mem_nhds {x : M} (ht : t in 𝓝 x) :
-    (extChartAt I x).symm ⁻¹' t in 𝓝 ((extChartAt I x) x) := by
+theorem extChartAt_preimage_mem_nhds {x : M} (ht : t ∈ 𝓝 x) :
+    (extChartAt I x).symm ⁻¹' t ∈ 𝓝 ((extChartAt I x) x) := by
   apply (continuousAt_extChartAt_symm x).preimage_mem_nhds
   rwa [(extChartAt I x).left_inv (mem_extChartAt_source _)]
 
-/--
-theorem `extChartAt_preimage_inter_eq` / 定理 `extChartAt_preimage_inter_eq`
+/-- Technical lemma to rewrite suitably the preimage of an intersection under an extended chart, to
+bring it into a convenient form to apply derivative lemmas. -/
+/-
+**extChartAt_preimage_inter_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_preimage_inter_eq (x : M) : (extChartAt I x).symm ⁻¹' (s inter 
+t) inter range I = (extChartAt I x).symm ⁻¹' s inter range I inter (extChartAt I
+ x).symm ⁻¹' t
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-theorem extChartAt_preimage_inter_eq
-  given: (x : M)
-  proof: by
-  mfld_set_tac
-
-中文:
-定理 extChartAt_preimage_inter_eq
-  条件: (x : M)
-  证明: by
-  mfld_set_tac
-
-Depends on / 依赖: mfld_set_tac
+--- 原说明 ---
+Technical lemma to rewrite suitably the preimage of an intersection under an ext
+ended chart, to
+bring it into a convenient form to apply derivative lemmas.
 -/
 theorem extChartAt_preimage_inter_eq (x : M) :
-    (extChartAt I x).symm ⁻¹' (s inter t) inter range I =
-      (extChartAt I x).symm ⁻¹' s inter range I inter (extChartAt I x).symm ⁻¹' t := by
+    (extChartAt I x).symm ⁻¹' (s ∩ t) ∩ range I =
+      (extChartAt I x).symm ⁻¹' s ∩ range I ∩ (extChartAt I x).symm ⁻¹' t := by
   mfld_set_tac
-
-/--
-theorem `ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range` / 定理 `ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range`
-
-English:
-theorem ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range
-  proof: by
-  rw [← (extChartAt I x).image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image]; rw [← map_extChartAt_nhdsWithin]; rw [nhdsWithin_inter_of_mem']
-  exact hc (extChartAt_source_mem_nhds _)
-
-中文:
-定理 ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range
-  证明: by
-  rw [← (extChartAt I x).image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image]; rw [← map_extChartAt_nhdsWithin]; rw [nhdsWithin_inter_of_mem']
-  exact hc (extChartAt_source_mem_nhds _)
-
-Depends on / 依赖: extChartAt, extChartAt_source_mem_nhds, image_source_inter_eq, map_extChartAt_nhdsWithin, map_extChartAt_nhdsWithin_eq_image, nhdsWithin_inter_of_mem
+/-
+**ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range** 是 Mathlib
+ 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range {f : M 
+-> M'} {x : M} (hc : ContinuousWithinAt f s x) : 𝓝[(extChartAt I x).symm ⁻¹' s i
+nter range I] (extChartAt I x x) = 𝓝[(extChartAt I x).target inter (extChartAt I
+ x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source)] (extChartAt I x x)
+参数：hc : ContinuousWithinAt f s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.image_source_inter_eq'`：image_source_inter_eq' (s : Set α) 
+: e '' (e.source inter s) = e.target inter e.symm ⁻¹' s
+· 使用定理 `map_extChartAt_nhdsWithin_eq_image`：map_extChartAt_nhdsWithin_eq_image (
+x : M) : map (extChartAt I x) (𝓝[s] x) = 𝓝[extChartAt I x '' ((extChartAt I x).s
+ource inter s)] extChart…
+· 使用定理 `map_extChartAt_nhdsWithin`：map_extChartAt_nhdsWithin (x : M) : map (extC
+hartAt I x) (𝓝[s] x) = 𝓝[(extChartAt I x).symm ⁻¹' s inter range I] extChartAt I
+ x x
+· 使用定理 `nhdsWithin_inter_of_mem'`：nhdsWithin_inter_of_mem' {a : α} {s t : Set α}
+ (h : t in 𝓝[s] a) : 𝓝[s inter t] a = 𝓝[s] a
+· 使用定理 `extChartAt_source_mem_nhds`：extChartAt_source_mem_nhds (x : M) : (extCha
+rtAt I x).source in 𝓝 x
 -/
 theorem ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range
-    {f : M -> M'} {x : M} (hc : ContinuousWithinAt f s x) :
-    𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x x) =
-      𝓝[(extChartAt I x).target inter
-        (extChartAt I x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source)] (extChartAt I x x) := by
-  rw [← (extChartAt I x).image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image]; rw [← map_extChartAt_nhdsWithin]; rw [nhdsWithin_inter_of_mem']
+    {f : M → M'} {x : M} (hc : ContinuousWithinAt f s x) :
+    𝓝[(extChartAt I x).symm ⁻¹' s ∩ range I] (extChartAt I x x) =
+      𝓝[(extChartAt I x).target ∩
+        (extChartAt I x).symm ⁻¹' (s ∩ f ⁻¹' (extChartAt I' (f x)).source)] (extChartAt I x x) := by
+  rw [← (extChartAt I x).image_source_inter_eq', ← map_extChartAt_nhdsWithin_eq_image,
+    ← map_extChartAt_nhdsWithin, nhdsWithin_inter_of_mem']
   exact hc (extChartAt_source_mem_nhds _)
-
-/--
-theorem `ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq` / 定理 `ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq`
-
-English:
-theorem ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq
-  proof: by
-  rw [← nhdsWithin_eq_iff_eventuallyEq]
-  exact hc.nhdsWithin_extChartAt_symm_preimage_inter_range
-
-中文:
-定理 ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq
-  证明: by
-  rw [← nhdsWithin_eq_iff_eventuallyEq]
-  exact hc.nhdsWithin_extChartAt_symm_preimage_inter_range
-
-Depends on / 依赖: hc.nhdsWithin_extChartAt_symm_preimage_inter_range, nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_extChartAt_symm_preimage_inter_range
+/-
+**ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq** 是 Mathl
+ib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq {f : 
+M -> M'} {x : M} (hc : ContinuousWithinAt f s x) : ((extChartAt I x).symm ⁻¹' s 
+inter range I : Set E) =ᶠ[𝓝 (extChartAt I x x)] ((extChartAt I x).target inter (
+extChartAt I x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source) : Set E)
+参数：hc : ContinuousWithinAt f s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `ContinuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range`：Cont
+inuousWithinAt.nhdsWithin_extChartAt_symm_preimage_inter_range {f : M -> M'} {x 
+: M} (hc : ContinuousWithinAt f s x) : 𝓝[(extChartAt I x…
 -/
 theorem ContinuousWithinAt.extChartAt_symm_preimage_inter_range_eventuallyEq
-    {f : M -> M'} {x : M} (hc : ContinuousWithinAt f s x) :
-    ((extChartAt I x).symm ⁻¹' s inter range I : Set E) =ᶠ[𝓝 (extChartAt I x x)]
-      ((extChartAt I x).target inter
-        (extChartAt I x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source) : Set E) := by
+    {f : M → M'} {x : M} (hc : ContinuousWithinAt f s x) :
+    ((extChartAt I x).symm ⁻¹' s ∩ range I : Set E) =ᶠ[𝓝 (extChartAt I x x)]
+      ((extChartAt I x).target ∩
+        (extChartAt I x).symm ⁻¹' (s ∩ f ⁻¹' (extChartAt I' (f x)).source) : Set E) := by
   rw [← nhdsWithin_eq_iff_eventuallyEq]
   exact hc.nhdsWithin_extChartAt_symm_preimage_inter_range
 
+/-! We use the name `ext_coord_change` for `(extChartAt I x').symm ≫ extChartAt I x`. -/
 
-/--
-theorem `ext_coord_change_source` / 定理 `ext_coord_change_source`
+/-
+**ext_coord_change_source** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ext_coord_change_source (x x' : M) : ((extChartAt I x').symm ≫ extChartAt 
+I x).source = I '' ((chartAt H x').symm ≫ₕ chartAt H x).source
+参数：x x' : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.extendCoordChange_source`：extendCoordChange_source : (I
+.extendCoordChange e e').source = I '' (e.symm ≫ₕ e').source
 
-English:
-theorem ext_coord_change_source
-  given: (x x' : M)
-  proof: I.extendCoordChange_source
-
-中文:
-定理 ext_coord_change_source
-  条件: (x x' : M)
-  证明: I.extendCoordChange_source
-
-Depends on / 依赖: I.extendCoordChange_source, extendCoordChange_source
+--- 原说明 ---
+We use the name `ext_coord_change` for `(extChartAt I x').symm ≫ extChartAt I x`
+.
 -/
 theorem ext_coord_change_source (x x' : M) :
     ((extChartAt I x').symm ≫ extChartAt I x).source =
@@ -3015,44 +3002,40 @@ theorem ext_coord_change_source (x x' : M) :
   I.extendCoordChange_source
 
 open IsManifold
-
-/--
-theorem `contDiffOn_ext_coord_change` / 定理 `contDiffOn_ext_coord_change`
-
-English:
-theorem contDiffOn_ext_coord_change
-  given: [IsManifold I n M] (x x' : M)
-  proof: I.contDiffOn_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x)
-
-中文:
-定理 contDiffOn_ext_coord_change
-  条件: [是流形 I n M] (x x' : M)
-  证明: I.contDiffOn_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x)
-
-Depends on / 依赖: I.contDiffOn_extendCoordChange, chart_mem_maximalAtlas, contDiffOn_extendCoordChange
+/-
+**contDiffOn_ext_coord_change** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffOn_ext_coord_change [IsManifold I n M] (x x' : M) : ContDiffOn 𝕜 n
+ (extChartAt I x ∘ (extChartAt I x').symm) ((extChartAt I x').symm ≫ extChartAt 
+I x).source
+参数：x x' : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.contDiffOn_extendCoordChange`：contDiffOn_extendCoordCha
+nge (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) : ContDiffOn
+ 𝕜 n (I.extendCoordChange e e') (I.…
+· 使用定理 `IsManifold.chart_mem_maximalAtlas`：chart_mem_maximalAtlas [IsManifold I 
+n M] (x : M) : chartAt H x in maximalAtlas I n M
 -/
 theorem contDiffOn_ext_coord_change [IsManifold I n M] (x x' : M) :
     ContDiffOn 𝕜 n (extChartAt I x ∘ (extChartAt I x').symm)
       ((extChartAt I x').symm ≫ extChartAt I x).source :=
   I.contDiffOn_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x)
-
-/--
-theorem `contDiffWithinAt_ext_coord_change` / 定理 `contDiffWithinAt_ext_coord_change`
-
-English:
-theorem contDiffWithinAt_ext_coord_change
-  statement: [IsManifold I n M] (x x' : M) {y : E}
-  proof: I.contDiffWithinAt_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x) hy
-
-中文:
-定理 contDiffWithinAt_ext_coord_change
-  结论: [是流形 I n M] (x x' : M) {y : E}
-  证明: I.contDiffWithinAt_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x) hy
-
-Depends on / 依赖: I.contDiffWithinAt_extendCoordChange, chart_mem_maximalAtlas, contDiffWithinAt_extendCoordChange
+/-
+**contDiffWithinAt_ext_coord_change** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffWithinAt_ext_coord_change [IsManifold I n M] (x x' : M) {y : E} (h
+y : y in ((extChartAt I x').symm ≫ extChartAt I x).source) : ContDiffWithinAt 𝕜 
+n (extChartAt I x ∘ (extChartAt I x').symm) (range I) y
+参数：x x' : M；hy : y in ((extChartAt I x').symm ≫ extChartAt I x).source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModelWithCorners.contDiffWithinAt_extendCoordChange`：contDiffWithinAt_ex
+tendCoordChange (he : e in maximalAtlas I n M) (he' : e' in maximalAtlas I n M) 
+{x : E} (hx : x in (I.extendCoordChange e…
+· 使用定理 `IsManifold.chart_mem_maximalAtlas`：chart_mem_maximalAtlas [IsManifold I 
+n M] (x : M) : chartAt H x in maximalAtlas I n M
 -/
 theorem contDiffWithinAt_ext_coord_change [IsManifold I n M] (x x' : M) {y : E}
-    (hy : y in ((extChartAt I x').symm ≫ extChartAt I x).source) :
+    (hy : y ∈ ((extChartAt I x').symm ≫ extChartAt I x).source) :
     ContDiffWithinAt 𝕜 n (extChartAt I x ∘ (extChartAt I x').symm) (range I) y :=
   I.contDiffWithinAt_extendCoordChange (chart_mem_maximalAtlas x') (chart_mem_maximalAtlas x) hy
 
@@ -3060,131 +3043,170 @@ variable (I I') in
 /-- Conjugating a function to write it in the preferred charts around `x`.
 The manifold derivative of `f` will just be the derivative of this conjugated function. -/
 @[simp, mfld_simps]
-/--
-Definition of `writtenInExtChartAt` / `writtenInExtChartAt` 的定义
+/-
+**writtenInExtChartAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt (x : M) (f : M -> M') : E -> E'
+参数：x : M；f : M -> M'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition writtenInExtChartAt
-  signature: (x : M) (f : M -> M')
-  body: extChartAt I' (f x) ∘ f ∘ (extChartAt I x).symm
-
-中文:
-定义 writtenInExtChartAt
-  签名: (x : M) (f : M -> M')
-  定义体: extChartAt I' (f x) ∘ f ∘ (extChartAt I x).symm
-
-Depends on / 依赖: extChartAt
+--- 原说明 ---
+Conjugating a function to write it in the preferred charts around `x`.
+The manifold derivative of `f` will just be the derivative of this conjugated fu
+nction.
 -/
-def writtenInExtChartAt (x : M) (f : M -> M') : E -> E' :=
+def writtenInExtChartAt (x : M) (f : M → M') : E → E' :=
   extChartAt I' (f x) ∘ f ∘ (extChartAt I x).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `writtenInExtChartAt_chartAt` / 定理 `writtenInExtChartAt_chartAt`
-
-English:
-theorem writtenInExtChartAt_chartAt
-  given: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  proof: by simp_all only [mfld_simps]
-
-中文:
-定理 writtenInExtChartAt_chartAt
-  条件: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  证明: by simp_all only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+/-
+**writtenInExtChartAt_chartAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_chartAt {x : M} {y : E} (h : y in (extChartAt I x).tar
+get) : writtenInExtChartAt I I x (chartAt H x) y = y
+参数：h : y in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.refl_trans`：refl_trans : (PartialEquiv.refl α).trans e = e
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem writtenInExtChartAt_chartAt {x : M} {y : E} (h : y in (extChartAt I x).target) :
+theorem writtenInExtChartAt_chartAt {x : M} {y : E} (h : y ∈ (extChartAt I x).target) :
     writtenInExtChartAt I I x (chartAt H x) y = y := by simp_all only [mfld_simps]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `writtenInExtChartAt_chartAt_symm` / 定理 `writtenInExtChartAt_chartAt_symm`
-
-English:
-theorem writtenInExtChartAt_chartAt_symm
-  given: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  proof: by
-  simp_all only [mfld_simps]
-
-中文:
-定理 writtenInExtChartAt_chartAt_symm
-  条件: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  证明: by
-  simp_all only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+/-
+**writtenInExtChartAt_chartAt_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_chartAt_symm {x : M} {y : E} (h : y in (extChartAt I x
+).target) : writtenInExtChartAt I I (chartAt H x x) (chartAt H x).symm y = y
+参数：h : y in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OpenPartialHomeomorph.left_inv`：left_inv {x : X} (h : x in e.source) : e
+.symm (e x) = x
+· 使用定理 `PartialEquiv.refl_trans`：refl_trans : (PartialEquiv.refl α).trans e = e
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem writtenInExtChartAt_chartAt_symm {x : M} {y : E} (h : y in (extChartAt I x).target) :
+theorem writtenInExtChartAt_chartAt_symm {x : M} {y : E} (h : y ∈ (extChartAt I x).target) :
     writtenInExtChartAt I I (chartAt H x x) (chartAt H x).symm y = y := by
   simp_all only [mfld_simps]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `writtenInExtChartAt_extChartAt` / 定理 `writtenInExtChartAt_extChartAt`
-
-English:
-theorem writtenInExtChartAt_extChartAt
-  given: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  proof: by
-  simp_all only [mfld_simps]
-
-中文:
-定理 writtenInExtChartAt_extChartAt
-  条件: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  证明: by
-  simp_all only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+/-
+**writtenInExtChartAt_extChartAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_extChartAt {x : M} {y : E} (h : y in (extChartAt I x).
+target) : writtenInExtChartAt I 𝓘(𝕜, E) x (extChartAt I x) y = y
+参数：h : y in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem writtenInExtChartAt_extChartAt {x : M} {y : E} (h : y in (extChartAt I x).target) :
+theorem writtenInExtChartAt_extChartAt {x : M} {y : E} (h : y ∈ (extChartAt I x).target) :
     writtenInExtChartAt I 𝓘(𝕜, E) x (extChartAt I x) y = y := by
   simp_all only [mfld_simps]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `writtenInExtChartAt_extChartAt_symm` / 定理 `writtenInExtChartAt_extChartAt_symm`
-
-English:
-theorem writtenInExtChartAt_extChartAt_symm
-  given: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  proof: by
-  simp_all only [mfld_simps]
-
-中文:
-定理 writtenInExtChartAt_extChartAt_symm
-  条件: {x : M} {y : E} (h : y in (extChartAt I x).target)
-  证明: by
-  simp_all only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+/-
+**writtenInExtChartAt_extChartAt_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_extChartAt_symm {x : M} {y : E} (h : y in (extChartAt 
+I x).target) : writtenInExtChartAt 𝓘(𝕜, E) I (extChartAt I x x) (extChartAt I x)
+.symm y = y
+参数：h : y in (extChartAt I x).target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ModelWithCorners.left_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `OpenPartialHomeomorph.left_inv`：left_inv {x : X} (h : x in e.source) : e
+.symm (e x) = x
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem writtenInExtChartAt_extChartAt_symm {x : M} {y : E} (h : y in (extChartAt I x).target) :
+theorem writtenInExtChartAt_extChartAt_symm {x : M} {y : E} (h : y ∈ (extChartAt I x).target) :
     writtenInExtChartAt 𝓘(𝕜, E) I (extChartAt I x x) (extChartAt I x).symm y = y := by
   simp_all only [mfld_simps]
-
-/--
-theorem `writtenInExtChartAt_mapsTo` / 定理 `writtenInExtChartAt_mapsTo`
-
-English:
-theorem writtenInExtChartAt_mapsTo
-  given: {x : M} {f : M -> M'}
-  proof: by
-  intro x' hx'
-  simpa using (chartAt H' (f x)).mapsTo (by simpa using hx'.2)
-
-中文:
-定理 writtenInExtChartAt_mapsTo
-  条件: {x : M} {f : M -> M'}
-  证明: by
-  intro x' hx'
-  simpa using (chartAt H' (f x)).mapsTo (by simpa using hx'.2)
-
-Depends on / 依赖: chartAt, mapsTo
+/-
+**writtenInExtChartAt_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_mapsTo {x : M} {f : M -> M'} : MapsTo (writtenInExtCha
+rtAt I I' x f) ((extChartAt I x).target inter f ∘ (extChartAt I x).symm ⁻¹' (ext
+ChartAt I' (f x)).source) (extChartAt I' (f x)).target
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ModelWithCorners.left_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `OpenPartialHomeomorph.mapsTo`：∀ {X : Type u_1} {Y : Type u_3} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y]   (e : OpenPartialHomeomorph X Y
+), Set.MapsTo (↑e)…
+· 使用定理 `ModelWithCorners.source_eq`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem writtenInExtChartAt_mapsTo {x : M} {f : M -> M'} :
+theorem writtenInExtChartAt_mapsTo {x : M} {f : M → M'} :
     MapsTo (writtenInExtChartAt I I' x f)
-      ((extChartAt I x).target inter f ∘ (extChartAt I x).symm ⁻¹' (extChartAt I' (f x)).source)
+      ((extChartAt I x).target ∩ f ∘ (extChartAt I x).symm ⁻¹' (extChartAt I' (f x)).source)
       (extChartAt I' (f x)).target := by
   intro x' hx'
   simpa using (chartAt H' (f x)).mapsTo (by simpa using hx'.2)
@@ -3197,30 +3219,33 @@ variable {G G' F F' N N' : Type*}
   {J : ModelWithCorners 𝕜 F G} {J' : ModelWithCorners 𝕜 F' G'}
   [ChartedSpace G N] [ChartedSpace G' N']
 
-/--
-lemma `writtenInExtChartAt_prod` / 引理 `writtenInExtChartAt_prod`
-
-English:
-lemma writtenInExtChartAt_prod
-  given: {f : M -> N} {g : M' -> N'} {x : M} {x' : M'}
-  proof: by
-  ext p <;>
-  simp [writtenInExtChartAt, I.toPartialEquiv.prod_symm, (chartAt H x).toPartialEquiv.prod_symm]
-
-@[deprecated (since := "2026-02-18")] alias writtenInExtChart_prod := writtenInExtChartAt_prod
-
-中文:
-引理 writtenInExtChartAt_prod
-  条件: {f : M -> N} {g : M' -> N'} {x : M} {x' : M'}
-  证明: by
-  ext p <;>
-  simp [writtenInExtChartAt, I.toPartialEquiv.prod_symm, (chartAt H x).toPartialEquiv.prod_symm]
-
-@[deprecated (since := "2026-02-18")] alias writtenInExtChart_prod := writtenInExtChartAt_prod
-
-Depends on / 依赖: I.toPartialEquiv.prod_symm, chartAt, prod_symm, toPartialEquiv, toPartialEquiv.prod_symm, writtenInExtChartAt
+/-
+**writtenInExtChartAt_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_prod {f : M -> N} {g : M' -> N'} {x : M} {x' : M'} : (
+writtenInExtChartAt (I.prod I') (J.prod J') (x, x') (Prod.map f g)) = Prod.map (
+writtenInExtChartAt I J x f) (writtenInExtChartAt I' J' x' g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OpenPartialHomeomorph.prod_toPartialHomeomorph`：∀ {X : Type u_1} {X' : T
+ype u_2} {Y : Type u_3} {Y' : Type u_4} [inst : TopologicalSpace X]   [inst_1 : 
+TopologicalSpace X'] [inst_2 : Topol…
+· 使用定理 `PartialEquiv.prod_symm`：prod_symm (e : PartialEquiv α β) (e' : PartialEq
+uiv γ δ) : (e.prod e').symm = e.symm.prod e'.symm
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma writtenInExtChartAt_prod {f : M -> N} {g : M' -> N'} {x : M} {x' : M'} :
+lemma writtenInExtChartAt_prod {f : M → N} {g : M' → N'} {x : M} {x' : M'} :
     (writtenInExtChartAt (I.prod I') (J.prod J') (x, x') (Prod.map f g)) =
       Prod.map (writtenInExtChartAt I J x f) (writtenInExtChartAt I' J' x' g) := by
   ext p <;>
@@ -3232,175 +3257,147 @@ end
 
 variable (𝕜)
 
-/--
-theorem `extChartAt_self_eq` / 定理 `extChartAt_self_eq`
-
-English:
-theorem extChartAt_self_eq
-  given: {x : H}
-  statement: ⇑(extChartAt I x) = I
-  proof: rfl
-
-中文:
-定理 extChartAt_self_eq
-  条件: {x : H}
-  结论: ⇑(extChartAt I x) = I
-  证明: rfl
+/-
+**extChartAt_self_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_self_eq {x : H} : ⇑(extChartAt I x) = I
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extChartAt_self_eq {x : H} : ⇑(extChartAt I x) = I :=
   rfl
-
-/--
-theorem `extChartAt_self_apply` / 定理 `extChartAt_self_apply`
-
-English:
-theorem extChartAt_self_apply
-  given: {x y : H}
-  statement: extChartAt I x y = I y
-  proof: rfl
-
-中文:
-定理 extChartAt_self_apply
-  条件: {x y : H}
-  结论: extChartAt I x y = I y
-  证明: rfl
+/-
+**extChartAt_self_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_self_apply {x y : H} : extChartAt I x y = I y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extChartAt_self_apply {x y : H} : extChartAt I x y = I y :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `extChartAt_model_space_eq_id` / 定理 `extChartAt_model_space_eq_id`
+/-- In the case of the manifold structure on a vector space, the extended charts are just the
+identity. -/
+/-
+**extChartAt_model_space_eq_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_model_space_eq_id (x : E) : extChartAt 𝓘(𝕜, E) x = PartialEquiv
+.refl E
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem extChartAt_model_space_eq_id
-  given: (x : E)
-  statement: extChartAt 𝓘(𝕜, E) x = PartialEquiv.refl E
-  proof: by
-  simp only [mfld_simps]
-
-中文:
-定理 extChartAt_model_space_eq_id
-  条件: (x : E)
-  结论: extChartAt 𝓘(𝕜, E) x = 部分等价.refl E
-  证明: by
-  simp only [mfld_simps]
-
-Depends on / 依赖: mfld_simps
+--- 原说明 ---
+In the case of the manifold structure on a vector space, the extended charts are
+ just the
+identity.
 -/
 theorem extChartAt_model_space_eq_id (x : E) : extChartAt 𝓘(𝕜, E) x = PartialEquiv.refl E := by
   simp only [mfld_simps]
-
-/--
-theorem `ext_chart_model_space_apply` / 定理 `ext_chart_model_space_apply`
-
-English:
-theorem ext_chart_model_space_apply
-  given: {x y : E}
-  statement: extChartAt 𝓘(𝕜, E) x y = y
-  proof: rfl
-
-中文:
-定理 ext_chart_model_space_apply
-  条件: {x y : E}
-  结论: extChartAt 𝓘(𝕜, E) x y = y
-  证明: rfl
+/-
+**ext_chart_model_space_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ext_chart_model_space_apply {x y : E} : extChartAt 𝓘(𝕜, E) x y = y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ext_chart_model_space_apply {x y : E} : extChartAt 𝓘(𝕜, E) x y = y :=
   rfl
 
 variable {𝕜}
-
-/--
-theorem `extChartAt_prod` / 定理 `extChartAt_prod`
-
-English:
-theorem extChartAt_prod
-  given: (x : M × M')
-  proof: by
-  simp only [mfld_simps]
-  rw [PartialEquiv.prod_trans]
-
-中文:
-定理 extChartAt_prod
-  条件: (x : M × M')
-  证明: by
-  simp only [mfld_simps]
-  rw [PartialEquiv.prod_trans]
-
-Depends on / 依赖: PartialEquiv, PartialEquiv.prod_trans, mfld_simps, prod_trans
+/-
+**extChartAt_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_prod (x : M × M') : extChartAt (I.prod I') x = (extChartAt I x.
+1).prod (extChartAt I' x.2)
+参数：x : M × M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.prod_toPartialHomeomorph`：∀ {X : Type u_1} {X' : T
+ype u_2} {Y : Type u_3} {Y' : Type u_4} [inst : TopologicalSpace X]   [inst_1 : 
+TopologicalSpace X'] [inst_2 : Topol…
+· 使用定理 `PartialEquiv.prod_trans`：prod_trans {η : Type*} {ε : Type*} (e : Partial
+Equiv α β) (f : PartialEquiv β γ) (e' : PartialEquiv δ η) (f' : PartialEquiv η ε
+) : (e.prod e…
 -/
 theorem extChartAt_prod (x : M × M') :
     extChartAt (I.prod I') x = (extChartAt I x.1).prod (extChartAt I' x.2) := by
   simp only [mfld_simps]
   rw [PartialEquiv.prod_trans]
-
-/--
-theorem `extChartAt_comp` / 定理 `extChartAt_comp`
-
-English:
-theorem extChartAt_comp
-  given: [ChartedSpace H H'] (x : M')
-  proof: PartialEquiv.trans_assoc ..
-
-中文:
-定理 extChartAt_comp
-  条件: [Charted空间 H H'] (x : M')
-  证明: PartialEquiv.trans_assoc ..
-
-Depends on / 依赖: ChartedSpace, ChartedSpace.comp, extChartAt
+/-
+**extChartAt_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extChartAt_comp [ChartedSpace H H'] (x : M') : (letI
+参数：x : M'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.trans_assoc`：trans_assoc (e'' : PartialEquiv γ δ) : (e.tran
+s e').trans e'' = e.trans (e'.trans e'')
 -/
 theorem extChartAt_comp [ChartedSpace H H'] (x : M') :
     (letI := ChartedSpace.comp H H' M'; extChartAt I x) =
       (chartAt H' x).toPartialEquiv ≫ extChartAt I (chartAt H' x x) :=
   PartialEquiv.trans_assoc ..
-
-/--
-theorem `writtenInExtChartAt_chartAt_comp` / 定理 `writtenInExtChartAt_chartAt_comp`
-
-English:
-theorem writtenInExtChartAt_chartAt_comp
-  statement: [ChartedSpace H H'] (x : M') {y}
-  proof: by
-  let := ChartedSpace.comp H H' M'
-  simp_all only [mfld_simps, chartAt_comp]
-
-中文:
-定理 writtenInExtChartAt_chartAt_comp
-  结论: [Charted空间 H H'] (x : M') {y}
-  证明: by
-  let := ChartedSpace.comp H H' M'
-  simp_all only [mfld_simps, chartAt_comp]
-
-Depends on / 依赖: ChartedSpace, ChartedSpace.comp, extChartAt, target
+/-
+**writtenInExtChartAt_chartAt_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_chartAt_comp [ChartedSpace H H'] (x : M') {y} (hy : y 
+in letI
+参数：x : M'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem writtenInExtChartAt_chartAt_comp [ChartedSpace H H'] (x : M') {y}
-    (hy : y in letI := ChartedSpace.comp H H' M'; (extChartAt I x).target) :
+    (hy : y ∈ letI := ChartedSpace.comp H H' M'; (extChartAt I x).target) :
     (letI := ChartedSpace.comp H H' M'; writtenInExtChartAt I I x (chartAt H' x) y) = y := by
   let := ChartedSpace.comp H H' M'
   simp_all only [mfld_simps, chartAt_comp]
-
-/--
-theorem `writtenInExtChartAt_chartAt_symm_comp` / 定理 `writtenInExtChartAt_chartAt_symm_comp`
-
-English:
-theorem writtenInExtChartAt_chartAt_symm_comp
-  statement: [ChartedSpace H H'] (x : M') {y}
-  proof: by
-  let := ChartedSpace.comp H H' M'
-  simp_all only [mfld_simps, chartAt_comp]
-
-中文:
-定理 writtenInExtChartAt_chartAt_symm_comp
-  结论: [Charted空间 H H'] (x : M') {y}
-  证明: by
-  let := ChartedSpace.comp H H' M'
-  simp_all only [mfld_simps, chartAt_comp]
-
-Depends on / 依赖: ChartedSpace, ChartedSpace.comp, extChartAt, target
+/-
+**writtenInExtChartAt_chartAt_symm_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_chartAt_symm_comp [ChartedSpace H H'] (x : M') {y} (hy
+ : y in letI
+参数：x : M'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OpenPartialHomeomorph.left_inv`：left_inv {x : X} (h : x in e.source) : e
+.symm (e x) = x
+· 使用定理 `OpenPartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) :
+ e (e.symm x) = x
+· 使用定理 `ModelWithCorners.target_eq`：target_eq : I.target = range (I : H -> E)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ModelWithCorners.right_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem writtenInExtChartAt_chartAt_symm_comp [ChartedSpace H H'] (x : M') {y}
-    (hy : y in letI := ChartedSpace.comp H H' M'; (extChartAt I x).target) :
+    (hy : y ∈ letI := ChartedSpace.comp H H' M'; (extChartAt I x).target) :
     (letI := ChartedSpace.comp H H' M'
      writtenInExtChartAt I I (chartAt H' x x) (chartAt H' x).symm y) = y := by
   let := ChartedSpace.comp H H' M'
@@ -3416,24 +3413,28 @@ variable
   [NormedAddCommGroup E] [NormedSpace 𝕜 E] {H : Type*} [TopologicalSpace H]
   {M : Type*} [TopologicalSpace M] [ChartedSpace H M]
 
-/--
-lemma `Manifold.locallyCompact_of_finiteDimensional` / 引理 `Manifold.locallyCompact_of_finiteDimensional`
+/-- A finite-dimensional manifold modelled on a locally compact field
+(such as ℝ, ℂ or the `p`-adic numbers) is locally compact. -/
+/-
+**Manifold.locallyCompact_of_finiteDimensional** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Manifold.locallyCompact_of_finiteDimensional (I : ModelWithCorners 𝕜 E H) 
+[LocallyCompactSpace 𝕜] [FiniteDimensional 𝕜 E] : LocallyCompactSpace M
+参数：I : ModelWithCorners 𝕜 E H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.proper`：FiniteDimensional.proper [FiniteDimensional 𝕜 
+E] : ProperSpace E
+· 使用定理 `ModelWithCorners.locallyCompactSpace`：∀ {𝕜 : Type u_1} [inst : Nontrivia
+llyNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Nor
+medSpace 𝕜 E] {H : Type u_…
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `ChartedSpace.locallyCompactSpace`：ChartedSpace.locallyCompactSpace [Loca
+llyCompactSpace H] : LocallyCompactSpace M
 
-English:
-lemma Manifold.locallyCompact_of_finiteDimensional
-  proof: by
-  have : ProperSpace E := FiniteDimensional.proper 𝕜 E
-  have : LocallyCompactSpace H := I.locallyCompactSpace
-  exact ChartedSpace.locallyCompactSpace H M
-
-中文:
-引理 流形.locallyCompact_of_finiteDimensional
-  证明: by
-  have : ProperSpace E := FiniteDimensional.proper 𝕜 E
-  have : LocallyCompactSpace H := I.locallyCompactSpace
-  exact ChartedSpace.locallyCompactSpace H M
-
-Depends on / 依赖: ChartedSpace, ChartedSpace.locallyCompactSpace, FiniteDimensional, FiniteDimensional.proper, I.locallyCompactSpace, LocallyCompactSpace, ProperSpace, locallyCompactSpace, proper
+--- 原说明 ---
+A finite-dimensional manifold modelled on a locally compact field
+(such as ℝ, ℂ or the `p`-adic numbers) is locally compact.
 -/
 lemma Manifold.locallyCompact_of_finiteDimensional
     (I : ModelWithCorners 𝕜 E H) [LocallyCompactSpace 𝕜] [FiniteDimensional 𝕜 E] :
@@ -3444,60 +3445,64 @@ lemma Manifold.locallyCompact_of_finiteDimensional
 
 variable (M)
 
-/--
-lemma `LocallyCompactSpace.of_locallyCompact_manifold` / 引理 `LocallyCompactSpace.of_locallyCompact_manifold`
+/-- A locally compact manifold must be modelled on a locally compact space. -/
+/-
+**LocallyCompactSpace.of_locallyCompact_manifold** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LocallyCompactSpace.of_locallyCompact_manifold (I : ModelWithCorners 𝕜 E H
+) [h : Nonempty M] [LocallyCompactSpace M] : LocallyCompactSpace E
+参数：I : ModelWithCorners 𝕜 E H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `interior_extChartAt_target_nonempty`：interior_extChartAt_target_nonempty
+ (x : M) : (interior (extChartAt I x).target).Nonempty
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `LocallyCompactSpace.local_compact_nhds`：∀ {X : Type u_3} {inst : Topolog
+icalSpace X} [self : LocallyCompactSpace X] (x : X),   ∀ n ∈ nhds x, ∃ s ∈ nhds 
+x, s ⊆ n ∧ IsCompact s
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_extChartAt_source`：isOpen_extChartAt_source (x : M) : IsOpen (ext
+ChartAt I x).source
+· 使用定理 `PartialEquiv.map_target`：map_target {x : β} (h : x in e.target) : e.symm
+ x in e.source
+· 使用定理 `IsCompact.image_of_continuousOn`：IsCompact.image_of_continuousOn {f : X 
+-> Y} (hs : IsCompact s) (hf : ContinuousOn f s) : IsCompact (f '' s)
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `continuousOn_extChartAt`：continuousOn_extChartAt (x : M) : ContinuousOn 
+(extChartAt I x) (extChartAt I x).source
+· 使用定理 `IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup`：∀ {G : Type w} [i
+nst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G] {K : S
+et G},   IsCompact K → ∀ {x : G}, K ∈ nhds …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.right_inv`：right_inv {x : β} (h : x in e.target) : e (e.sym
+m x) = x
+· 使用定理 `extChartAt_image_nhds_mem_nhds_of_mem_interior_range`：extChartAt_image_n
+hds_mem_nhds_of_mem_interior_range {x y} (hx : y in (extChartAt I x).source) (h'
+x : extChartAt I x y in interior (range I)…
+· 使用定理 `interior_mono`：interior_mono (h : s subseteq t) : interior s subseteq in
+terior t
+· 使用定理 `extChartAt_target_subset_range`：extChartAt_target_subset_range (x : M) :
+ (extChartAt I x).target subseteq range I
 
-English:
-lemma LocallyCompactSpace.of_locallyCompact_manifold
-  statement: (I : ModelWithCorners 𝕜 E H)
-  proof: by
-  rcases h with ⟨x⟩
-  obtain ⟨y, hy⟩ := interior_extChartAt_target_nonempty I x
-  have h'y : y in (extChartAt I x).target := interior_subset hy
-  obtain ⟨s, hmem, hss, hcom⟩ :=
-    LocallyCompactSpace.local_compact_nhds ((extChartAt I x).symm y) (extChartAt I x).source
-      ((isOpen_extChartAt_source x).mem_nhds ((extChartAt I x).map_target h'y))
-have : IsCompact (extChartAt I x) '' s :=
-hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
-  apply this.locallyCompactSpace_of_mem_nhds_of_addGroup (x := y)
-  rw [← (extChartAt I x).right_inv h'y]
-  apply extChartAt_image_nhds_mem_nhds_of_mem_interior_range
-    (PartialEquiv.map_target (extChartAt I x) h'y) _ hmem
-  simp only [(extChartAt I x).right_inv h'y]
-  exact interior_mono (extChartAt_target_subset_range x) hy
-
-中文:
-引理 局部紧空间.of_locallyCompact_manifold
-  结论: (I : 带角模型 𝕜 E H)
-  证明: by
-  rcases h with ⟨x⟩
-  obtain ⟨y, hy⟩ := interior_extChartAt_target_nonempty I x
-  have h'y : y in (extChartAt I x).target := interior_subset hy
-  obtain ⟨s, hmem, hss, hcom⟩ :=
-    LocallyCompactSpace.local_compact_nhds ((extChartAt I x).symm y) (extChartAt I x).source
-      ((isOpen_extChartAt_source x).mem_nhds ((extChartAt I x).map_target h'y))
-have : IsCompact (extChartAt I x) '' s :=
-hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
-  apply this.locallyCompactSpace_of_mem_nhds_of_addGroup (x := y)
-  rw [← (extChartAt I x).right_inv h'y]
-  apply extChartAt_image_nhds_mem_nhds_of_mem_interior_range
-    (PartialEquiv.map_target (extChartAt I x) h'y) _ hmem
-  simp only [(extChartAt I x).right_inv h'y]
-  exact interior_mono (extChartAt_target_subset_range x) hy
-
-Depends on / 依赖: IsCompact, LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, continuousOn_extChartAt, extChartAt, hcom.image_of_continuousOn, image_of_continuousOn, interior_extChartAt_target_nonempty, interior_subset, isOpen_extChartAt_source, local_compact_nhds, locallyCompactSpace_of_mem_nhds_of_addGroup, map_target, mem_nhds, source, target, this.locallyCompactSpace_of_mem_nhds_of_addGroup
+--- 原说明 ---
+A locally compact manifold must be modelled on a locally compact space.
 -/
 lemma LocallyCompactSpace.of_locallyCompact_manifold (I : ModelWithCorners 𝕜 E H)
     [h : Nonempty M] [LocallyCompactSpace M] :
     LocallyCompactSpace E := by
   rcases h with ⟨x⟩
   obtain ⟨y, hy⟩ := interior_extChartAt_target_nonempty I x
-  have h'y : y in (extChartAt I x).target := interior_subset hy
+  have h'y : y ∈ (extChartAt I x).target := interior_subset hy
   obtain ⟨s, hmem, hss, hcom⟩ :=
     LocallyCompactSpace.local_compact_nhds ((extChartAt I x).symm y) (extChartAt I x).source
       ((isOpen_extChartAt_source x).mem_nhds ((extChartAt I x).map_target h'y))
-have : IsCompact (extChartAt I x) '' s :=
-hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
+  have : IsCompact <| (extChartAt I x) '' s :=
+    hcom.image_of_continuousOn <| (continuousOn_extChartAt x).mono hss
   apply this.locallyCompactSpace_of_mem_nhds_of_addGroup (x := y)
   rw [← (extChartAt I x).right_inv h'y]
   apply extChartAt_image_nhds_mem_nhds_of_mem_interior_range
@@ -3505,22 +3510,37 @@ hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
   simp only [(extChartAt I x).right_inv h'y]
   exact interior_mono (extChartAt_target_subset_range x) hy
 
-/--
-theorem `FiniteDimensional.of_locallyCompact_manifold` / 定理 `FiniteDimensional.of_locallyCompact_manifold`
+/-- Riesz's theorem applied to manifolds: a locally compact manifold must be modelled on a
+finite-dimensional space. This is the converse to `Manifold.locallyCompact_of_finiteDimensional`. -/
+/-
+**FiniteDimensional.of_locallyCompact_manifold** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteDimensional.of_locallyCompact_manifold [CompleteSpace 𝕜] (I : ModelW
+ithCorners 𝕜 E H) [Nonempty M] [LocallyCompactSpace M] : FiniteDimensional 𝕜 E
+参数：I : ModelWithCorners 𝕜 E H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LocallyCompactSpace.of_locallyCompact_manifold`：LocallyCompactSpace.of_l
+ocallyCompact_manifold (I : ModelWithCorners 𝕜 E H) [h : Nonempty M] [LocallyCom
+pactSpace M] : LocallyCompactSpace E
+· 使用定理 `FiniteDimensional.of_locallyCompactSpace`：FiniteDimensional.of_locallyCo
+mpactSpace [WeaklyLocallyCompactSpace E] : FiniteDimensional 𝕜 E
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
 
-English:
-theorem FiniteDimensional.of_locallyCompact_manifold
-  proof: by
-  have := LocallyCompactSpace.of_locallyCompact_manifold M I
-  exact FiniteDimensional.of_locallyCompactSpace 𝕜
-
-中文:
-定理 有限维.of_locallyCompact_manifold
-  证明: by
-  have := LocallyCompactSpace.of_locallyCompact_manifold M I
-  exact FiniteDimensional.of_locallyCompactSpace 𝕜
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_locallyCompactSpace, LocallyCompactSpace, LocallyCompactSpace.of_locallyCompact_manifold, of_locallyCompactSpace, of_locallyCompact_manifold
+--- 原说明 ---
+Riesz's theorem applied to manifolds: a locally compact manifold must be modelle
+d on a
+finite-dimensional space. This is the converse to `Manifold.locallyCompact_of_fi
+niteDimensional`.
 -/
 theorem FiniteDimensional.of_locallyCompact_manifold
     [CompleteSpace 𝕜] (I : ModelWithCorners 𝕜 E H) [Nonempty M] [LocallyCompactSpace M] :
@@ -3529,3 +3549,4 @@ theorem FiniteDimensional.of_locallyCompact_manifold
   exact FiniteDimensional.of_locallyCompactSpace 𝕜
 
 end Topology
+

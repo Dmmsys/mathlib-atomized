@@ -45,327 +45,288 @@ noncomputable section
 
 open Function Set Subalgebra MvPolynomial Algebra
 
-variable {ι ι' : Type*} (R : Type*) {K A A' : Type*} (x : ι -> A)
+variable {ι ι' : Type*} (R : Type*) {K A A' : Type*} (x : ι → A)
 variable [CommRing R] [CommRing A] [CommRing A'] [Algebra R A] [Algebra R A']
 
-/--
-Definition of `AlgebraicIndependent` / `AlgebraicIndependent` 的定义
+/-- `AlgebraicIndependent R x` states the family of elements `x`
+  is algebraically independent over `R`, meaning that the canonical
+  map out of the multivariable polynomial ring is injective. -/
+/-
+**AlgebraicIndependent** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   (R : Type u_3) → {A : Type u_5} → (ι → A) → [inst : Com
+mRing R] → [inst_1 : CommRing A] → [Algebra R A] → Prop
+参数：R : Type u_3；ι → A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlgebraicIndependent
-  signature: : Prop
-  body: Injective (MvPolynomial.aeval x : MvPolynomial ι R ->ₐ[R] A)
-
-中文:
-定义 AlgebraicIndependent
-  签名: : 命题
-  定义体: Injective (MvPolynomial.aeval x : MvPolynomial ι R ->ₐ[R] A)
+--- 原说明 ---
+`AlgebraicIndependent R x` states the family of elements `x`
+  is algebraically independent over `R`, meaning that the canonical
+  map out of the multivariable polynomial ring is injective.
 -/
 @[stacks 030E "(1)"] def AlgebraicIndependent : Prop :=
-  Injective (MvPolynomial.aeval x : MvPolynomial ι R ->ₐ[R] A)
+  Injective (MvPolynomial.aeval x : MvPolynomial ι R →ₐ[R] A)
 
-/--
-Definition of `AlgebraicIndepOn` / `AlgebraicIndepOn` 的定义
+/-- `AlgebraicIndepOn R v s` states that the elements in the family `v` that are indexed by the
+elements of `s` are algebraically independent over `R`. -/
+/-
+**AlgebraicIndepOn** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：AlgebraicIndepOn (s : Set ι) : Prop
+参数：s : Set ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AlgebraicIndepOn
-  signature: (s : Set ι)
-  body: AlgebraicIndependent R fun i : s => x i
-
-中文:
-缩写 AlgebraicIndepOn
-  签名: (s : 集合 ι)
-  定义体: AlgebraicIndependent R fun i : s => x i
-
-Depends on / 依赖: AlgebraicIndependent
+--- 原说明 ---
+`AlgebraicIndepOn R v s` states that the elements in the family `v` that are ind
+exed by the
+elements of `s` are algebraically independent over `R`.
 -/
-abbrev AlgebraicIndepOn (s : Set ι) : Prop := AlgebraicIndependent R fun i : s => x i
+abbrev AlgebraicIndepOn (s : Set ι) : Prop := AlgebraicIndependent R fun i : s ↦ x i
 
 variable {R} {x}
-
-/--
-theorem `algebraicIndependent_iff` / 定理 `algebraicIndependent_iff`
-
-English:
-theorem algebraicIndependent_iff
-  proof: injective_iff_map_eq_zero _
-
-中文:
-定理 algebraicIndependent_iff
-  证明: injective_iff_map_eq_zero _
-
-Depends on / 依赖: injective_iff_map_eq_zero
+/-
+**algebraicIndependent_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_iff : AlgebraicIndependent R x ↔ forall p : MvPolynom
+ial ι R, MvPolynomial.aeval (x : ι -> A) p = 0 -> p = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
 -/
 theorem algebraicIndependent_iff :
     AlgebraicIndependent R x ↔
-      forall p : MvPolynomial ι R, MvPolynomial.aeval (x : ι -> A) p = 0 -> p = 0 :=
+      ∀ p : MvPolynomial ι R, MvPolynomial.aeval (x : ι → A) p = 0 → p = 0 :=
   injective_iff_map_eq_zero _
-
-/--
-theorem `AlgebraicIndependent.eq_zero_of_aeval_eq_zero` / 定理 `AlgebraicIndependent.eq_zero_of_aeval_eq_zero`
-
-English:
-theorem AlgebraicIndependent.eq_zero_of_aeval_eq_zero
-  given: (h : AlgebraicIndependent R x)
-  proof: algebraicIndependent_iff.1 h
-
-中文:
-定理 AlgebraicIndependent.eq_zero_of_aeval_eq_zero
-  条件: (h : AlgebraicIndependent R x)
-  证明: algebraicIndependent_iff.1 h
-
-Depends on / 依赖: algebraicIndependent_iff
+/-
+**AlgebraicIndependent.eq_zero_of_aeval_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AlgebraicIndependent.eq_zero_of_aeval_eq_zero (h : AlgebraicIndependent R 
+x) : forall p : MvPolynomial ι R, MvPolynomial.aeval (x : ι -> A) p = 0 -> p = 0
+参数：h : AlgebraicIndependent R x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `algebraicIndependent_iff`：algebraicIndependent_iff : AlgebraicIndependen
+t R x ↔ forall p : MvPolynomial ι R, MvPolynomial.aeval (x : ι -> A) p = 0 -> p 
+= 0
 -/
 theorem AlgebraicIndependent.eq_zero_of_aeval_eq_zero (h : AlgebraicIndependent R x) :
-    forall p : MvPolynomial ι R, MvPolynomial.aeval (x : ι -> A) p = 0 -> p = 0 :=
+    ∀ p : MvPolynomial ι R, MvPolynomial.aeval (x : ι → A) p = 0 → p = 0 :=
   algebraicIndependent_iff.1 h
-
-/--
-theorem `algebraicIndependent_iff_injective_aeval` / 定理 `algebraicIndependent_iff_injective_aeval`
-
-English:
-theorem algebraicIndependent_iff_injective_aeval
-  proof: Iff.rfl
-
-中文:
-定理 algebraicIndependent_iff_injective_aeval
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**algebraicIndependent_iff_injective_aeval** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_iff_injective_aeval : AlgebraicIndependent R x ↔ Inje
+ctive (MvPolynomial.aeval x : MvPolynomial ι R ->ₐ[R] A)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem algebraicIndependent_iff_injective_aeval :
-    AlgebraicIndependent R x ↔ Injective (MvPolynomial.aeval x : MvPolynomial ι R ->ₐ[R] A) :=
+    AlgebraicIndependent R x ↔ Injective (MvPolynomial.aeval x : MvPolynomial ι R →ₐ[R] A) :=
   Iff.rfl
 
 namespace AlgebraicIndependent
 
-/--
-theorem `of_comp` / 定理 `of_comp`
-
-English:
-theorem of_comp
-  given: (f : A ->ₐ[R] A') (hfv : AlgebraicIndependent R (f ∘ x))
-  proof: by
-  have : aeval (f ∘ x) = f.comp (aeval x) := by ext; simp
-  rw [AlgebraicIndependent]; rw [this]; rw [AlgHom.coe_comp] at hfv
-  exact hfv.of_comp
-
-中文:
-定理 of_comp
-  条件: (f : A ->ₐ[R] A') (hfv : AlgebraicIndependent R (f ∘ x))
-  证明: by
-  have : aeval (f ∘ x) = f.comp (aeval x) := by ext; simp
-  rw [AlgebraicIndependent]; rw [this]; rw [AlgHom.coe_comp] at hfv
-  exact hfv.of_comp
-
-Depends on / 依赖: AlgHom, AlgHom.coe_comp, AlgebraicIndependent, coe_comp, f.comp, hfv.of_comp, of_comp
+/-
+**AlgebraicIndependent.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndependent`。
+形式化陈述：of_comp (f : A ->ₐ[R] A') (hfv : AlgebraicIndependent R (f ∘ x)) : Algebra
+icIndependent R x
+参数：f : A ->ₐ[R] A'；hfv : AlgebraicIndependent R (f ∘ x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `AlgHom.coe_comp`：coe_comp (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) : ⇑(φ₁.com
+p φ₂) = φ₁ ∘ φ₂
+· 使用定理 `AlgebraicIndependent.eq_1`：∀ {ι : Type u_1} (R : Type u_3) {A : Type u_5
+} (x : ι → A) [inst : CommRing R] [inst_1 : CommRing A]   [inst_2 : Algebra R A]
+, AlgebraicInde…
 -/
-theorem of_comp (f : A ->ₐ[R] A') (hfv : AlgebraicIndependent R (f ∘ x)) :
+theorem of_comp (f : A →ₐ[R] A') (hfv : AlgebraicIndependent R (f ∘ x)) :
     AlgebraicIndependent R x := by
   have : aeval (f ∘ x) = f.comp (aeval x) := by ext; simp
-  rw [AlgebraicIndependent]; rw [this]; rw [AlgHom.coe_comp] at hfv
+  rw [AlgebraicIndependent, this, AlgHom.coe_comp] at hfv
   exact hfv.of_comp
 
 variable (hx : AlgebraicIndependent R x)
 include hx
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: (f : ι' -> ι) (hf : Function.Injective f)
-  statement: AlgebraicIndependent R (x ∘ f)
-  proof: by
-  intro p q
-  simpa [aeval_rename, (rename_injective f hf).eq_iff] using @hx (rename f p) (rename f q)
-
-中文:
-定理 comp
-  条件: (f : ι' -> ι) (hf : 函数.单射 f)
-  结论: AlgebraicIndependent R (x ∘ f)
-  证明: by
-  intro p q
-  simpa [aeval_rename, (rename_injective f hf).eq_iff] using @hx (rename f p) (rename f q)
-
-Depends on / 依赖: aeval_rename, eq_iff, rename_injective
+/-
+**AlgebraicIndependent.comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndependent`。
+形式化陈述：comp (f : ι' -> ι) (hf : Function.Injective f) : AlgebraicIndependent R (x
+ ∘ f)
+参数：f : ι' -> ι；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.aeval_rename`：aeval_rename [Algebra R S] : aeval g (rename 
+k p) = aeval (g ∘ k) p
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `MvPolynomial.rename_injective`：rename_injective (f : σ -> τ) (hf : Funct
+ion.Injective f) : Function.Injective (rename f : MvPolynomial σ R -> MvPolynomi
+al τ R)
 -/
-theorem comp (f : ι' -> ι) (hf : Function.Injective f) : AlgebraicIndependent R (x ∘ f) := by
+theorem comp (f : ι' → ι) (hf : Function.Injective f) : AlgebraicIndependent R (x ∘ f) := by
   intro p q
   simpa [aeval_rename, (rename_injective f hf).eq_iff] using @hx (rename f p) (rename f q)
-
-/--
-theorem `coe_range` / 定理 `coe_range`
-
-English:
-theorem coe_range
-  statement: AlgebraicIndependent R ((↑) : range x -> A)
-  proof: by
-  simpa using hx.comp _ (rangeSplitting_injective x)
-
-中文:
-定理 coe_range
-  结论: AlgebraicIndependent R ((↑) : range x -> A)
-  证明: by
-  simpa using hx.comp _ (rangeSplitting_injective x)
-
-Depends on / 依赖: hx.comp, rangeSplitting_injective
+/-
+**AlgebraicIndependent.coe_range** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndependent
+`。
+形式化陈述：coe_range : AlgebraicIndependent R ((↑) : range x -> A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.comp_rangeSplitting`：comp_rangeSplitting (f : α -> β) : f ∘ rangeSpl
+itting f = Subtype.val
+· 使用定理 `AlgebraicIndependent.comp`：comp (f : ι' -> ι) (hf : Function.Injective f
+) : AlgebraicIndependent R (x ∘ f)
+· 使用定理 `Set.rangeSplitting_injective`：rangeSplitting_injective (f : α -> β) : In
+jective (rangeSplitting f)
 -/
-theorem coe_range : AlgebraicIndependent R ((↑) : range x -> A) := by
+theorem coe_range : AlgebraicIndependent R ((↑) : range x → A) := by
   simpa using hx.comp _ (rangeSplitting_injective x)
 
 end AlgebraicIndependent
 
 open AlgebraicIndependent
 
-/--
-theorem `algebraicIndependent_equiv` / 定理 `algebraicIndependent_equiv`
-
-English:
-theorem algebraicIndependent_equiv
-  given: (e : ι ≃ ι') {f : ι' -> A}
-  proof: ⟨fun h => Function.comp_id f ▸ e.self_comp_symm ▸ h.comp _ e.symm.injective,
-    fun h => h.comp _ e.injective⟩
-
-中文:
-定理 algebraicIndependent_equiv
-  条件: (e : ι ≃ ι') {f : ι' -> A}
-  证明: ⟨fun h => Function.comp_id f ▸ e.self_comp_symm ▸ h.comp _ e.symm.injective,
-    fun h => h.comp _ e.injective⟩
-
-Depends on / 依赖: Function, Function.comp_id, comp_id, e.injective, e.self_comp_symm, e.symm.injective, h.comp, injective, self_comp_symm
+/-
+**algebraicIndependent_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_equiv (e : ι ≃ ι') {f : ι' -> A} : AlgebraicIndepende
+nt R (f ∘ e) ↔ AlgebraicIndependent R f
+参数：e : ι ≃ ι'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `AlgebraicIndependent.comp`：comp (f : ι' -> ι) (hf : Function.Injective f
+) : AlgebraicIndependent R (x ∘ f)
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.self_comp_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.s
+ymm = id
+· 使用定理 `Function.comp_id`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β), f ∘ id = 
+f
 -/
-theorem algebraicIndependent_equiv (e : ι ≃ ι') {f : ι' -> A} :
+theorem algebraicIndependent_equiv (e : ι ≃ ι') {f : ι' → A} :
     AlgebraicIndependent R (f ∘ e) ↔ AlgebraicIndependent R f :=
   ⟨fun h => Function.comp_id f ▸ e.self_comp_symm ▸ h.comp _ e.symm.injective,
     fun h => h.comp _ e.injective⟩
-
-/--
-theorem `algebraicIndependent_equiv'` / 定理 `algebraicIndependent_equiv'`
-
-English:
-theorem algebraicIndependent_equiv'
-  given: (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g)
-  proof: h ▸ algebraicIndependent_equiv e
-
-中文:
-定理 algebraicIndependent_equiv'
-  条件: (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g)
-  证明: h ▸ algebraicIndependent_equiv e
-
-Depends on / 依赖: algebraicIndependent_equiv
+/-
+**algebraicIndependent_equiv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_equiv' (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f
+ ∘ e = g) : AlgebraicIndependent R g ↔ AlgebraicIndependent R f
+参数：e : ι ≃ ι'；h : f ∘ e = g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraicIndependent_equiv`：algebraicIndependent_equiv (e : ι ≃ ι') {f :
+ ι' -> A} : AlgebraicIndependent R (f ∘ e) ↔ AlgebraicIndependent R f
 -/
-theorem algebraicIndependent_equiv' (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g) :
+theorem algebraicIndependent_equiv' (e : ι ≃ ι') {f : ι' → A} {g : ι → A} (h : f ∘ e = g) :
     AlgebraicIndependent R g ↔ AlgebraicIndependent R f :=
   h ▸ algebraicIndependent_equiv e
-
-/--
-theorem `algebraicIndependent_subtype_range` / 定理 `algebraicIndependent_subtype_range`
-
-English:
-theorem algebraicIndependent_subtype_range
-  given: {ι} {f : ι -> A} (hf : Injective f)
-  proof: Iff.symm algebraicIndependent_equiv' (Equiv.ofInjective f hf) rfl
-
-alias ⟨AlgebraicIndependent.of_subtype_range, _⟩ := algebraicIndependent_subtype_range
-
-中文:
-定理 algebraicIndependent_subtype_range
-  条件: {ι} {f : ι -> A} (hf : 单射 f)
-  证明: Iff.symm algebraicIndependent_equiv' (Equiv.ofInjective f hf) rfl
-
-alias ⟨AlgebraicIndependent.of_subtype_range, _⟩ := algebraicIndependent_subtype_range
-
-Depends on / 依赖: Equiv.ofInjective, Iff.symm, algebraicIndependent_equiv, ofInjective
+/-
+**algebraicIndependent_subtype_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_subtype_range {ι} {f : ι -> A} (hf : Injective f) : A
+lgebraicIndependent R ((↑) : range f -> A) ↔ AlgebraicIndependent R f
+参数：hf : Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `algebraicIndependent_equiv'`：algebraicIndependent_equiv' (e : ι ≃ ι') {f
+ : ι' -> A} {g : ι -> A} (h : f ∘ e = g) : AlgebraicIndependent R g ↔ AlgebraicI
+ndependent R f
 -/
-theorem algebraicIndependent_subtype_range {ι} {f : ι -> A} (hf : Injective f) :
-    AlgebraicIndependent R ((↑) : range f -> A) ↔ AlgebraicIndependent R f :=
-Iff.symm algebraicIndependent_equiv' (Equiv.ofInjective f hf) rfl
+theorem algebraicIndependent_subtype_range {ι} {f : ι → A} (hf : Injective f) :
+    AlgebraicIndependent R ((↑) : range f → A) ↔ AlgebraicIndependent R f :=
+  Iff.symm <| algebraicIndependent_equiv' (Equiv.ofInjective f hf) rfl
 
 alias ⟨AlgebraicIndependent.of_subtype_range, _⟩ := algebraicIndependent_subtype_range
-
-/--
-theorem `algebraicIndependent_image` / 定理 `algebraicIndependent_image`
-
-English:
-theorem algebraicIndependent_image
-  given: {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s)
-  proof: algebraicIndependent_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
-
-中文:
-定理 algebraicIndependent_image
-  条件: {ι} {s : 集合 ι} {f : ι -> A} (hf : 集合.单射限制 f s)
-  证明: algebraicIndependent_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
-
-Depends on / 依赖: Equiv.Set.imageOfInjOn, algebraicIndependent_equiv, imageOfInjOn
+/-
+**algebraicIndependent_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraicIndependent_image {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f 
+s) : (AlgebraicIndependent R fun x : s => f x) ↔ AlgebraicIndependent R fun x : 
+f '' s => (x : A)
+参数：hf : Set.InjOn f s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraicIndependent_equiv'`：algebraicIndependent_equiv' (e : ι ≃ ι') {f
+ : ι' -> A} {g : ι -> A} (h : f ∘ e = g) : AlgebraicIndependent R g ↔ AlgebraicI
+ndependent R f
 -/
-theorem algebraicIndependent_image {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s) :
+theorem algebraicIndependent_image {ι} {s : Set ι} {f : ι → A} (hf : Set.InjOn f s) :
     (AlgebraicIndependent R fun x : s => f x) ↔ AlgebraicIndependent R fun x : f '' s => (x : A) :=
   algebraicIndependent_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
-
-/--
-lemma `AlgebraicIndepOn.mono` / 引理 `AlgebraicIndepOn.mono`
-
-English:
-lemma AlgebraicIndepOn.mono
-  given: {s t : Set ι} (H : AlgebraicIndepOn R x t) (hst : s subseteq t)
-  proof: by
-  simpa [Function.comp] using! H.comp (Set.inclusion hst) (Set.inclusion_injective hst)
-
-@[simp]
-
-中文:
-引理 AlgebraicIndepOn.mono
-  条件: {s t : 集合 ι} (H : AlgebraicIndepOn R x t) (hst : s subseteq t)
-  证明: by
-  simpa [Function.comp] using! H.comp (Set.inclusion hst) (Set.inclusion_injective hst)
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp, H.comp, Set.inclusion, Set.inclusion_injective, inclusion, inclusion_injective
+/-
+**AlgebraicIndepOn.mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgebraicIndepOn.mono {s t : Set ι} (H : AlgebraicIndepOn R x t) (hst : s 
+subseteq t) : AlgebraicIndepOn R x s
+参数：H : AlgebraicIndepOn R x t；hst : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicIndependent.comp`：comp (f : ι' -> ι) (hf : Function.Injective f
+) : AlgebraicIndependent R (x ∘ f)
+· 使用定理 `Set.inclusion_injective`：inclusion_injective (h : s subseteq t) : (inclu
+sion h).Injective
 -/
-lemma AlgebraicIndepOn.mono {s t : Set ι} (H : AlgebraicIndepOn R x t) (hst : s subseteq t) :
+lemma AlgebraicIndepOn.mono {s t : Set ι} (H : AlgebraicIndepOn R x t) (hst : s ⊆ t) :
     AlgebraicIndepOn R x s := by
   simpa [Function.comp] using! H.comp (Set.inclusion hst) (Set.inclusion_injective hst)
 
 @[simp]
-/--
-lemma `AlgebraicIndepOn.univ` / 引理 `AlgebraicIndepOn.univ`
-
-English:
-lemma AlgebraicIndepOn.univ
-  statement: AlgebraicIndepOn R x .univ ↔ AlgebraicIndependent R x
-  proof: algebraicIndependent_equiv (Equiv.Set.univ ι)
-
-中文:
-引理 AlgebraicIndepOn.univ
-  结论: AlgebraicIndepOn R x .univ ↔ AlgebraicIndependent R x
-  证明: algebraicIndependent_equiv (Equiv.Set.univ ι)
-
-Depends on / 依赖: Equiv.Set.univ, algebraicIndependent_equiv
+/-
+**AlgebraicIndepOn.univ** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgebraicIndepOn.univ : AlgebraicIndepOn R x .univ ↔ AlgebraicIndependent 
+R x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraicIndependent_equiv`：algebraicIndependent_equiv (e : ι ≃ ι') {f :
+ ι' -> A} : AlgebraicIndependent R (f ∘ e) ↔ AlgebraicIndependent R f
 -/
 lemma AlgebraicIndepOn.univ : AlgebraicIndepOn R x .univ ↔ AlgebraicIndependent R x :=
   algebraicIndependent_equiv (Equiv.Set.univ ι)
 
 namespace AlgebraicIndependent
 
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  statement: {t s : Set A} (h : t subseteq s)
-  proof: AlgebraicIndepOn.mono (x := id) hx h
-
-中文:
-定理 mono
-  结论: {t s : 集合 A} (h : t subseteq s)
-  证明: AlgebraicIndepOn.mono (x := id) hx h
-
-Depends on / 依赖: AlgebraicIndepOn, AlgebraicIndepOn.mono
+/-
+**AlgebraicIndependent.mono** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndependent`。
+形式化陈述：mono {t s : Set A} (h : t subseteq s) (hx : AlgebraicIndependent R ((↑) : 
+s -> A)) : AlgebraicIndependent R ((↑) : t -> A)
+参数：h : t subseteq s；hx : AlgebraicIndependent R ((↑) : s -> A)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicIndepOn.mono`：AlgebraicIndepOn.mono {s t : Set ι} (H : Algebrai
+cIndepOn R x t) (hst : s subseteq t) : AlgebraicIndepOn R x s
 -/
-theorem mono {t s : Set A} (h : t subseteq s)
-    (hx : AlgebraicIndependent R ((↑) : s -> A)) : AlgebraicIndependent R ((↑) : t -> A) :=
+theorem mono {t s : Set A} (h : t ⊆ s)
+    (hx : AlgebraicIndependent R ((↑) : s → A)) : AlgebraicIndependent R ((↑) : t → A) :=
   AlgebraicIndepOn.mono (x := id) hx h
 
 section repr
@@ -376,121 +337,91 @@ include hx
 /-- Canonical isomorphism between polynomials and the subalgebra generated by
   algebraically independent elements. -/
 @[simps! apply_coe]
-/--
-Definition of `aevalEquiv` / `aevalEquiv` 的定义
+/-
+**AlgebraicIndependent.aevalEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicIndependen
+t`。
+形式化陈述：aevalEquiv : MvPolynomial ι R ≃ₐ[R] Algebra.adjoin R (range x)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition aevalEquiv
-  signature: : MvPolynomial ι R ≃ₐ[R] Algebra.adjoin R (range x)
-  body: (AlgEquiv.ofInjective (aeval x) (algebraicIndependent_iff_injective_aeval.1 hx)).trans
-    (Subalgebra.equivOfEq _ _ (Algebra.adjoin_range_eq_range_aeval R x).symm)
-
-中文:
-定义 aevalEquiv
-  签名: : 多元多项式 ι R ≃ₐ[R] 代数.adjoin R (range x)
-  定义体: (AlgEquiv.ofInjective (aeval x) (algebraicIndependent_iff_injective_aeval.1 hx)).trans
-    (Subalgebra.equivOfEq _ _ (Algebra.adjoin_range_eq_range_aeval R x).symm)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, Algebra, Algebra.adjoin_range_eq_range_aeval, Subalgebra, Subalgebra.equivOfEq, adjoin_range_eq_range_aeval, algebraicIndependent_iff_injective_aeval, equivOfEq, ofInjective
+--- 原说明 ---
+Canonical isomorphism between polynomials and the subalgebra generated by
+  algebraically independent elements.
 -/
 def aevalEquiv : MvPolynomial ι R ≃ₐ[R] Algebra.adjoin R (range x) :=
   (AlgEquiv.ofInjective (aeval x) (algebraicIndependent_iff_injective_aeval.1 hx)).trans
     (Subalgebra.equivOfEq _ _ (Algebra.adjoin_range_eq_range_aeval R x).symm)
-
-/--
-theorem `algebraMap_aevalEquiv` / 定理 `algebraMap_aevalEquiv`
-
-English:
-theorem algebraMap_aevalEquiv
-  given: (p : MvPolynomial ι R)
-  proof: rfl
-
-中文:
-定理 algebraMap_aevalEquiv
-  条件: (p : 多元多项式 ι R)
-  证明: rfl
+/-
+**AlgebraicIndependent.algebraMap_aevalEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cIndependent`。
+形式化陈述：algebraMap_aevalEquiv (p : MvPolynomial ι R) : algebraMap (Algebra.adjoin 
+R (range x)) A (hx.aevalEquiv p) = aeval x p
+参数：p : MvPolynomial ι R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_aevalEquiv (p : MvPolynomial ι R) :
     algebraMap (Algebra.adjoin R (range x)) A (hx.aevalEquiv p) = aeval x p :=
   rfl
 
-/--
-Definition of `repr` / `repr` 的定义
+/-- The canonical map from the subalgebra generated by an algebraic independent family
+  into the polynomial ring. -/
+/-
+**AlgebraicIndependent.repr** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicIndependent`。
+形式化陈述：repr : Algebra.adjoin R (range x) ->ₐ[R] MvPolynomial ι R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition repr
-  signature: : Algebra.adjoin R (range x) ->ₐ[R] MvPolynomial ι R
-  body: hx.aevalEquiv.symm
-
-@[simp]
-
-中文:
-定义 repr
-  签名: : 代数.adjoin R (range x) ->ₐ[R] 多元多项式 ι R
-  定义体: hx.aevalEquiv.symm
-
-@[simp]
-
-Depends on / 依赖: aevalEquiv, hx.aevalEquiv.symm
+--- 原说明 ---
+The canonical map from the subalgebra generated by an algebraic independent fami
+ly
+  into the polynomial ring.
 -/
-def repr : Algebra.adjoin R (range x) ->ₐ[R] MvPolynomial ι R :=
+def repr : Algebra.adjoin R (range x) →ₐ[R] MvPolynomial ι R :=
   hx.aevalEquiv.symm
 
 @[simp]
-/--
-theorem `aeval_repr` / 定理 `aeval_repr`
-
-English:
-theorem aeval_repr
-  given: (p)
-  statement: aeval x (hx.repr p) = p
-  proof: Subtype.ext_iff.1 (AlgEquiv.apply_symm_apply hx.aevalEquiv p)
-
-中文:
-定理 aeval_repr
-  条件: (p)
-  结论: aeval x (hx.repr p) = p
-  证明: Subtype.ext_iff.1 (AlgEquiv.apply_symm_apply hx.aevalEquiv p)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, Subtype, Subtype.ext_iff, aevalEquiv, apply_symm_apply, ext_iff, hx.aevalEquiv
+/-
+**AlgebraicIndependent.aeval_repr** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndependen
+t`。
+形式化陈述：aeval_repr (p) : aeval x (hx.repr p) = p
+参数：p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
 -/
 theorem aeval_repr (p) : aeval x (hx.repr p) = p :=
   Subtype.ext_iff.1 (AlgEquiv.apply_symm_apply hx.aevalEquiv p)
-
-/--
-theorem `aeval_comp_repr` / 定理 `aeval_comp_repr`
-
-English:
-theorem aeval_comp_repr
-  statement: (aeval x).comp hx.repr = Subalgebra.val _
-  proof: AlgHom.ext hx.aeval_repr
-
-中文:
-定理 aeval_comp_repr
-  结论: (aeval x).comp hx.repr = 子代数.val _
-  证明: AlgHom.ext hx.aeval_repr
-
-Depends on / 依赖: AlgHom, AlgHom.ext, aeval_repr, hx.aeval_repr
+/-
+**AlgebraicIndependent.aeval_comp_repr** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicIndep
+endent`。
+形式化陈述：aeval_comp_repr : (aeval x).comp hx.repr = Subalgebra.val _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `AlgebraicIndependent.aeval_repr`：aeval_repr (p) : aeval x (hx.repr p) = 
+p
 -/
 theorem aeval_comp_repr : (aeval x).comp hx.repr = Subalgebra.val _ :=
   AlgHom.ext hx.aeval_repr
 
-/--
-Definition of `_root_.AlgebraicIndepOn.aevalEquiv` / `_root_.AlgebraicIndepOn.aevalEquiv` 的定义
+/-- Canonical isomorphism between polynomials and the subalgebra generated by
+  algebraically independent elements.
+  `AlgebraicIndepOn` version of `AlgebraicIndependent.aevalEquiv`. -/
+/-
+**AlgebraicIndependent._root_.AlgebraicIndepOn.aevalEquiv** 是 Mathlib 中的一个定义，位于命
+名空间 `AlgebraicIndependent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.AlgebraicIndepOn.aevalEquiv
-  signature: {s : Set ι} (hx : AlgebraicIndepOn R x s)
-  body: (AlgebraicIndependent.aevalEquiv hx).trans
-    (Subalgebra.equivOfEq _ _ congr(Algebra.adjoin _ $(by aesop)))
-
-中文:
-定义 _root_.AlgebraicIndepOn.aevalEquiv
-  签名: {s : 集合 ι} (hx : AlgebraicIndepOn R x s)
-  定义体: (AlgebraicIndependent.aevalEquiv hx).trans
-    (Subalgebra.equivOfEq _ _ congr(Algebra.adjoin _ $(by aesop)))
-
-Depends on / 依赖: Algebra, Algebra.adjoin, AlgebraicIndependent, AlgebraicIndependent.aevalEquiv, Subalgebra, Subalgebra.equivOfEq, adjoin, aevalEquiv, equivOfEq
+--- 原说明 ---
+Canonical isomorphism between polynomials and the subalgebra generated by
+  algebraically independent elements.
+  `AlgebraicIndepOn` version of `AlgebraicIndependent.aevalEquiv`.
 -/
 def _root_.AlgebraicIndepOn.aevalEquiv {s : Set ι} (hx : AlgebraicIndepOn R x s) :
     MvPolynomial s R ≃ₐ[R] Algebra.adjoin R (x '' s) :=
@@ -502,132 +433,110 @@ end repr
 end AlgebraicIndependent
 
 variable (R) in
-/--
-Definition of `IsTranscendenceBasis` / `IsTranscendenceBasis` 的定义
+/-- A family is a transcendence basis if it is a maximal algebraically independent subset. -/
+/-
+**IsTranscendenceBasis** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   (R : Type u_3) → {A : Type u_5} → [inst : CommRing R] →
+ [inst_1 : CommRing A] → [Algebra R A] → (ι → A) → Prop
+参数：R : Type u_3；ι → A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTranscendenceBasis
-  signature: (x : ι -> A)
-  body: AlgebraicIndependent R x ∧
-    forall (s : Set A) (_ : AlgebraicIndepOn R id s) (_ : range x subseteq s), range x = s
-
-中文:
-定义 IsTranscendenceBasis
-  签名: (x : ι -> A)
-  定义体: AlgebraicIndependent R x ∧
-    forall (s : Set A) (_ : AlgebraicIndepOn R id s) (_ : range x subseteq s), range x = s
+--- 原说明 ---
+A family is a transcendence basis if it is a maximal algebraically independent s
+ubset.
 -/
-@[stacks 030E "(4)"] def IsTranscendenceBasis (x : ι -> A) : Prop :=
+@[stacks 030E "(4)"] def IsTranscendenceBasis (x : ι → A) : Prop :=
   AlgebraicIndependent R x ∧
-    forall (s : Set A) (_ : AlgebraicIndepOn R id s) (_ : range x subseteq s), range x = s
-
-/--
-theorem `isTranscendenceBasis_iff_maximal` / 定理 `isTranscendenceBasis_iff_maximal`
-
-English:
-theorem isTranscendenceBasis_iff_maximal
-  given: {s : Set A}
-  proof: by
-  rw [IsTranscendenceBasis]; rw [maximal_iff]; rw [Subtype.range_val]; rfl
-
-中文:
-定理 isTranscendenceBasis_iff_maximal
-  条件: {s : 集合 A}
-  证明: by
-  rw [IsTranscendenceBasis]; rw [maximal_iff]; rw [Subtype.range_val]; rfl
-
-Depends on / 依赖: IsTranscendenceBasis, Subtype, Subtype.range_val, maximal_iff, range_val
+    ∀ (s : Set A) (_ : AlgebraicIndepOn R id s) (_ : range x ⊆ s), range x = s
+/-
+**isTranscendenceBasis_iff_maximal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTranscendenceBasis_iff_maximal {s : Set A} : IsTranscendenceBasis R ((↑)
+ : s -> A) ↔ Maximal (AlgebraicIndepOn R id) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsTranscendenceBasis.eq_1`：∀ {ι : Type u_1} (R : Type u_3) {A : Type u_5
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   (x : ι → A)
+,   IsTranscend…
+· 使用定理 `maximal_iff`：∀ {α : Type u_2} {P : α → Prop} {x : α} [inst : PartialOrde
+r α], Maximal P x ↔ P x ∧ ∀ ⦃y : α⦄, P y → x ≤ y → x = y
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isTranscendenceBasis_iff_maximal {s : Set A} :
-    IsTranscendenceBasis R ((↑) : s -> A) ↔ Maximal (AlgebraicIndepOn R id) s := by
-  rw [IsTranscendenceBasis]; rw [maximal_iff]; rw [Subtype.range_val]; rfl
-
-/--
-theorem `isTranscendenceBasis_equiv` / 定理 `isTranscendenceBasis_equiv`
-
-English:
-theorem isTranscendenceBasis_equiv
-  given: (e : ι ≃ ι') {f : ι' -> A}
-  proof: by
-  simp_rw [IsTranscendenceBasis, algebraicIndependent_equiv, EquivLike.range_comp]
-
-alias ⟨_, IsTranscendenceBasis.comp_equiv⟩ := isTranscendenceBasis_equiv
-
-中文:
-定理 isTranscendenceBasis_equiv
-  条件: (e : ι ≃ ι') {f : ι' -> A}
-  证明: by
-  simp_rw [IsTranscendenceBasis, algebraicIndependent_equiv, EquivLike.range_comp]
-
-alias ⟨_, IsTranscendenceBasis.comp_equiv⟩ := isTranscendenceBasis_equiv
-
-Depends on / 依赖: EquivLike, EquivLike.range_comp, IsTranscendenceBasis, algebraicIndependent_equiv, range_comp, simp_rw
+    IsTranscendenceBasis R ((↑) : s → A) ↔ Maximal (AlgebraicIndepOn R id) s := by
+  rw [IsTranscendenceBasis, maximal_iff, Subtype.range_val]; rfl
+/-
+**isTranscendenceBasis_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTranscendenceBasis_equiv (e : ι ≃ ι') {f : ι' -> A} : IsTranscendenceBas
+is R (f ∘ e) ↔ IsTranscendenceBasis R f
+参数：e : ι ≃ ι'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `EquivLike.range_comp`：∀ {ι : Sort u_1} {ι' : Sort u_2} {E : Type u_3} [i
+nst : EquivLike E ι ι'] {α : Type u_4} (f : ι' → α) (e : E),   Set.range (f ∘ ⇑e
+) = Set.ra…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isTranscendenceBasis_equiv (e : ι ≃ ι') {f : ι' -> A} :
+theorem isTranscendenceBasis_equiv (e : ι ≃ ι') {f : ι' → A} :
     IsTranscendenceBasis R (f ∘ e) ↔ IsTranscendenceBasis R f := by
   simp_rw [IsTranscendenceBasis, algebraicIndependent_equiv, EquivLike.range_comp]
 
 alias ⟨_, IsTranscendenceBasis.comp_equiv⟩ := isTranscendenceBasis_equiv
-
-/--
-theorem `isTranscendenceBasis_equiv'` / 定理 `isTranscendenceBasis_equiv'`
-
-English:
-theorem isTranscendenceBasis_equiv'
-  given: (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g)
-  proof: h ▸ isTranscendenceBasis_equiv e
-
-中文:
-定理 isTranscendenceBasis_equiv'
-  条件: (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g)
-  证明: h ▸ isTranscendenceBasis_equiv e
-
-Depends on / 依赖: isTranscendenceBasis_equiv
+/-
+**isTranscendenceBasis_equiv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTranscendenceBasis_equiv' (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f
+ ∘ e = g) : IsTranscendenceBasis R g ↔ IsTranscendenceBasis R f
+参数：e : ι ≃ ι'；h : f ∘ e = g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isTranscendenceBasis_equiv`：isTranscendenceBasis_equiv (e : ι ≃ ι') {f :
+ ι' -> A} : IsTranscendenceBasis R (f ∘ e) ↔ IsTranscendenceBasis R f
 -/
-theorem isTranscendenceBasis_equiv' (e : ι ≃ ι') {f : ι' -> A} {g : ι -> A} (h : f ∘ e = g) :
+theorem isTranscendenceBasis_equiv' (e : ι ≃ ι') {f : ι' → A} {g : ι → A} (h : f ∘ e = g) :
     IsTranscendenceBasis R g ↔ IsTranscendenceBasis R f :=
   h ▸ isTranscendenceBasis_equiv e
-
-/--
-theorem `isTranscendenceBasis_subtype_range` / 定理 `isTranscendenceBasis_subtype_range`
-
-English:
-theorem isTranscendenceBasis_subtype_range
-  given: {ι} {f : ι -> A} (hf : Injective f)
-  proof: .symm isTranscendenceBasis_equiv' (Equiv.ofInjective f hf) rfl
-
-alias ⟨IsTranscendenceBasis.of_subtype_range, _⟩ := isTranscendenceBasis_subtype_range
-
-中文:
-定理 isTranscendenceBasis_subtype_range
-  条件: {ι} {f : ι -> A} (hf : 单射 f)
-  证明: .symm isTranscendenceBasis_equiv' (Equiv.ofInjective f hf) rfl
-
-alias ⟨IsTranscendenceBasis.of_subtype_range, _⟩ := isTranscendenceBasis_subtype_range
-
-Depends on / 依赖: Equiv.ofInjective, isTranscendenceBasis_equiv, ofInjective
+/-
+**isTranscendenceBasis_subtype_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTranscendenceBasis_subtype_range {ι} {f : ι -> A} (hf : Injective f) : I
+sTranscendenceBasis R ((↑) : range f -> A) ↔ IsTranscendenceBasis R f
+参数：hf : Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isTranscendenceBasis_equiv'`：isTranscendenceBasis_equiv' (e : ι ≃ ι') {f
+ : ι' -> A} {g : ι -> A} (h : f ∘ e = g) : IsTranscendenceBasis R g ↔ IsTranscen
+denceBasis R f
 -/
-theorem isTranscendenceBasis_subtype_range {ι} {f : ι -> A} (hf : Injective f) :
-    IsTranscendenceBasis R ((↑) : range f -> A) ↔ IsTranscendenceBasis R f :=
-.symm isTranscendenceBasis_equiv' (Equiv.ofInjective f hf) rfl
+theorem isTranscendenceBasis_subtype_range {ι} {f : ι → A} (hf : Injective f) :
+    IsTranscendenceBasis R ((↑) : range f → A) ↔ IsTranscendenceBasis R f :=
+  .symm <| isTranscendenceBasis_equiv' (Equiv.ofInjective f hf) rfl
 
 alias ⟨IsTranscendenceBasis.of_subtype_range, _⟩ := isTranscendenceBasis_subtype_range
-
-/--
-theorem `isTranscendenceBasis_image` / 定理 `isTranscendenceBasis_image`
-
-English:
-theorem isTranscendenceBasis_image
-  given: {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s)
-  proof: isTranscendenceBasis_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
-
-中文:
-定理 isTranscendenceBasis_image
-  条件: {ι} {s : 集合 ι} {f : ι -> A} (hf : 集合.单射限制 f s)
-  证明: isTranscendenceBasis_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl
-
-Depends on / 依赖: Equiv.Set.imageOfInjOn, imageOfInjOn, isTranscendenceBasis_equiv
+/-
+**isTranscendenceBasis_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTranscendenceBasis_image {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f 
+s) : IsTranscendenceBasis R (fun x : s => f x) ↔ IsTranscendenceBasis R fun x : 
+f '' s => (x : A)
+参数：hf : Set.InjOn f s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isTranscendenceBasis_equiv'`：isTranscendenceBasis_equiv' (e : ι ≃ ι') {f
+ : ι' -> A} {g : ι -> A} (h : f ∘ e = g) : IsTranscendenceBasis R g ↔ IsTranscen
+denceBasis R f
 -/
-theorem isTranscendenceBasis_image {ι} {s : Set ι} {f : ι -> A} (hf : Set.InjOn f s) :
-    IsTranscendenceBasis R (fun x : s => f x) ↔ IsTranscendenceBasis R fun x : f '' s => (x : A) :=
+theorem isTranscendenceBasis_image {ι} {s : Set ι} {f : ι → A} (hf : Set.InjOn f s) :
+    IsTranscendenceBasis R (fun x : s ↦ f x) ↔ IsTranscendenceBasis R fun x : f '' s ↦ (x : A) :=
   isTranscendenceBasis_equiv' (Equiv.Set.imageOfInjOn _ _ hf) rfl

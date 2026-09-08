@@ -23,87 +23,62 @@ universe u v w
 open CategoryTheory Limits
 
 /--
-Definition of `LightCondensed` / `LightCondensed` 的定义
+`LightCondensed.{u} C` is the category of light condensed objects in a category `C`, which are
+defined as sheaves on `LightProfinite.{u}` with respect to the coherent Grothendieck topology.
+-/
+/-
+**LightCondensed** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondensed (C : Type w) [Category.{v} C]
+参数：C : Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightCondensed
-  signature: (C : Type w) [Category.{v} C]
-  body: Sheaf (coherentTopology LightProfinite.{u}) C
-
-中文:
-缩写 LightCondensed
-  签名: (C : 类型 w) [范畴.{v} C]
-  定义体: Sheaf (coherentTopology LightProfinite.{u}) C
-
-Depends on / 依赖: LightProfinite, coherentTopology
+--- 原说明 ---
+`LightCondensed.{u} C` is the category of light condensed objects in a category 
+`C`, which are
+defined as sheaves on `LightProfinite.{u}` with respect to the coherent Grothend
+ieck topology.
 -/
 abbrev LightCondensed (C : Type w) [Category.{v} C] :=
   Sheaf (coherentTopology LightProfinite.{u}) C
 
 /--
-Definition of `LightCondSet` / `LightCondSet` 的定义
-
-English:
-abbreviation LightCondSet
-  body: LightCondensed.{u} Type u
-
-中文:
-缩写 LightCondSet
-  定义体: LightCondensed.{u} Type u
-
-Depends on / 依赖: LightCondensed
+Light condensed sets. Because `LightProfinite` is an essentially small category, we don't need the
+same universe bump as in `CondensedSet`.
 -/
-abbrev LightCondSet := LightCondensed.{u} Type u
+/-
+**LightCondSet** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondSet
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Light condensed sets. Because `LightProfinite` is an essentially small category,
+ we don't need the
+same universe bump as in `CondensedSet`.
+-/
+abbrev LightCondSet := LightCondensed.{u} <| Type u
 
 namespace LightCondensed
 
 variable {C : Type w} [Category.{v} C]
 
 @[deprecated ObjectProperty.FullSubcategory.id_hom (since := "2026-04-08")]
-/--
-lemma `id_hom` / 引理 `id_hom`
-
-English:
-lemma id_hom
-  given: (X : LightCondensed.{u} C)
-  statement: (𝟙 X : X ⟶ X).hom = 𝟙 _
-  proof: rfl
-
-@[deprecated ObjectProperty.FullSubcategory.comp_hom (since := "2026-04-08")]
-
-中文:
-引理 id_hom
-  条件: (X : LightCondensed.{u} C)
-  结论: (𝟙 X : X ⟶ X).hom = 𝟙 _
-  证明: rfl
-
-@[deprecated ObjectProperty.FullSubcategory.comp_hom (since := "2026-04-08")]
+/-
+**LightCondensed.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `LightCondensed`。
+形式化陈述：id_hom (X : LightCondensed.{u} C) : (𝟙 X : X ⟶ X).hom = 𝟙 _
+参数：X : LightCondensed.{u} C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom (X : LightCondensed.{u} C) : (𝟙 X : X ⟶ X).hom = 𝟙 _ := rfl
 
 @[deprecated ObjectProperty.FullSubcategory.comp_hom (since := "2026-04-08")]
-/--
-lemma `comp_hom` / 引理 `comp_hom`
-
-English:
-lemma comp_hom
-  given: {X Y Z : LightCondensed.{u} C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[deprecated (since := "2026-03-05")] alias id_val := id_hom
-@[deprecated (since := "2026-03-05")] alias comp_val := comp_hom
-
-@[ext]
-
-中文:
-引理 comp_hom
-  条件: {X Y Z : LightCondensed.{u} C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[deprecated (since := "2026-03-05")] alias id_val := id_hom
-@[deprecated (since := "2026-03-05")] alias comp_val := comp_hom
-
-@[ext]
+/-
+**LightCondensed.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `LightCondensed`。
+形式化陈述：comp_hom {X Y Z : LightCondensed.{u} C} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).
+hom = f.hom ≫ g.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom {X Y Z : LightCondensed.{u} C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = f.hom ≫ g.hom :=
@@ -113,28 +88,22 @@ lemma comp_hom {X Y Z : LightCondensed.{u} C} (f : X ⟶ Y) (g : Y ⟶ Z) :
 @[deprecated (since := "2026-03-05")] alias comp_val := comp_hom
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : LightCondensed.{u} C} (f g : X ⟶ Y) (h : forall S, f.hom.app S = g.hom.app S)
-  proof: by
-  apply Sheaf.hom_ext
-  ext
-  exact h _
-
-中文:
-引理 hom_ext
-  条件: {X Y : LightCondensed.{u} C} (f g : X ⟶ Y) (h : 对任意 S, f.hom.app S = g.hom.app S)
-  证明: by
-  apply Sheaf.hom_ext
-  ext
-  exact h _
-
-Depends on / 依赖: Sheaf.hom_ext, hom_ext
+/-
+**LightCondensed.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `LightCondensed`。
+形式化陈述：hom_ext {X Y : LightCondensed.{u} C} (f g : X ⟶ Y) (h : forall S, f.hom.ap
+p S = g.hom.app S) : f = g
+参数：f g : X ⟶ Y；h : forall S, f.hom.app S = g.hom.app S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sheaf.hom_ext`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {J : CategoryTheory.GrothendieckTopology C} {A : Type u₂}   [i
+nst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma hom_ext {X Y : LightCondensed.{u} C} (f g : X ⟶ Y) (h : forall S, f.hom.app S = g.hom.app S) :
+lemma hom_ext {X Y : LightCondensed.{u} C} (f g : X ⟶ Y) (h : ∀ S, f.hom.app S = g.hom.app S) :
     f = g := by
   apply Sheaf.hom_ext
   ext
@@ -145,23 +114,28 @@ end LightCondensed
 namespace LightCondSet
 
 @[deprecated NatTrans.naturality_apply (since := "2026-03-19")]
-/--
-lemma `hom_naturality_apply` / 引理 `hom_naturality_apply`
-
-English:
-lemma hom_naturality_apply
-  statement: {X Y : LightCondSet.{u}} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
-  proof: by
-  simp
-
-中文:
-引理 hom_naturality_apply
-  结论: {X Y : LightCondSet.{u}} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
-  证明: by
-  simp
+/-
+**LightCondSet.hom_naturality_apply** 是 Mathlib 中的一个引理，位于命名空间 `LightCondSet`。
+形式化陈述：hom_naturality_apply {X Y : LightCondSet.{u}} (f : X ⟶ Y) {S T : LightProf
+initeᵒᵖ} (g : S ⟶ T) (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.map
+ g (f.hom.app S x)
+参数：f : X ⟶ Y；g : S ⟶ T；x : X.obj.obj S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_naturality_apply {X Y : LightCondSet.{u}} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
     (g : S ⟶ T) (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.map g (f.hom.app S x) := by
   simp
 
 end LightCondSet
+

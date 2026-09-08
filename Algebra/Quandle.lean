@@ -14,7 +14,7 @@ public import Mathlib.Tactic.Ring
 
 This file defines racks and quandles, algebraic structures for sets
 that bijectively act on themselves with a self-distributivity
-property. If `R` is a rack and `act : R → (R ≃ R)` is the self-action,
+property.  If `R` is a rack and `act : R → (R ≃ R)` is the self-action,
 then the self-distributivity is, equivalently, that
 ```
 act (act x y) = act x * act y * (act x)⁻¹
@@ -26,11 +26,11 @@ One example of a quandle (not yet in mathlib) is the action of a Lie
 algebra on itself, defined by `act x y = Ad (exp x) y`.
 
 Quandles and racks were independently developed by multiple
-mathematicians. David Joyce introduced quandles in his thesis
+mathematicians.  David Joyce introduced quandles in his thesis
 [Joyce1982] to define an algebraic invariant of knot and link
 complements that is analogous to the fundamental group of the
 exterior, and he showed that the quandle associated to an oriented
-knot is invariant up to orientation-reversed mirror image. Racks were
+knot is invariant up to orientation-reversed mirror image.  Racks were
 used by Fenn and Rourke for framed codimension-2 knots and
 links in [FennRourke1992]. Unital shelves are discussed in [crans2017].
 
@@ -75,7 +75,7 @@ Use `open quandles` to use these.
 * Alexander quandle with `a ◃ b = t * b + (1 - t) * b`, with `a` and `b` elements
   of a module over `Z[t,t⁻¹]`.
 * If `G` is a group, `H` a subgroup, and `z` in `H`, then there is a quandle `(G/H;z)` defined by
-  `yH ◃ xH = yzy⁻¹xH`. Every homogeneous quandle (i.e., a quandle `Q` whose automorphism group acts
+  `yH ◃ xH = yzy⁻¹xH`.  Every homogeneous quandle (i.e., a quandle `Q` whose automorphism group acts
   transitively on `Q` as a set) is isomorphic to such a quandle.
   There is a generalization to this arbitrary quandles in [Joyce's paper (Theorem 7.2)][Joyce1982].
 
@@ -91,51 +91,41 @@ open MulOpposite
 
 universe u v
 
-/--
-Definition of `Shelf` / `Shelf` 的定义
+/-- A *Shelf* is a structure with a self-distributive binary operation.
+The binary operation is regarded as a left action of the type on itself.
+-/
+/-
+**Shelf** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Shelf
-  parameters: (α : Type u)
-  axioms and operations (2):
-    - act : α -> α -> α
-    - self_distrib : forall {x y z : α}, act x (act y z) = act (act x y) (act x z)
-
-中文:
-类 Shelf
-  参数: (α : 类型u)
-  公理与运算 (2 个):
-    - act : α -> α -> α
-    - self_distrib : 对任意 {x y z : α}, act x (act y z) = act (act x y) (act x z)
+--- 原说明 ---
+A *Shelf* is a structure with a self-distributive binary operation.
+The binary operation is regarded as a left action of the type on itself.
 -/
 class Shelf (α : Type u) where
   /-- The action of the `Shelf` over `α` -/
-  act : α -> α -> α
+  act : α → α → α
   /-- A verification that `act` is self-distributive -/
-  self_distrib : forall {x y z : α}, act x (act y z) = act (act x y) (act x z)
+  self_distrib : ∀ {x y z : α}, act x (act y z) = act (act x y) (act x z)
 
 /--
-Definition of `UnitalShelf` / `UnitalShelf` 的定义
+A *unital shelf* is a shelf equipped with an element `1` such that, for all elements `x`,
+we have both `x ◃ 1` and `1 ◃ x` equal `x`.
+-/
+/-
+**UnitalShelf** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class UnitalShelf
-  parameters: (α : Type u)
-  extends: Shelf α, One α
-  axioms and operations (2):
-    - one_act : forall a : α, act 1 a = a
-    - act_one : forall a : α, act a 1 = a
-
-中文:
-类 UnitalShelf
-  参数: (α : 类型u)
-  继承: Shelf α, 幺 α
-  公理与运算 (2 个):
-    - one_act : 对任意 a : α, act 1 a = a
-    - act_one : 对任意 a : α, act a 1 = a
+--- 原说明 ---
+A *unital shelf* is a shelf equipped with an element `1` such that, for all elem
+ents `x`,
+we have both `x ◃ 1` and `1 ◃ x` equal `x`.
 -/
 class UnitalShelf (α : Type u) extends Shelf α, One α where
-  one_act : forall a : α, act 1 a = a
-  act_one : forall a : α, act a 1 = a
+  one_act : ∀ a : α, act 1 a = a
+  act_one : ∀ a : α, act a 1 = a
 
 attribute [instance 100] UnitalShelf.toOne
 
@@ -143,57 +133,49 @@ attribute [instance 100] UnitalShelf.toOne
 This is also the notion of rack and quandle homomorphisms.
 -/
 @[ext]
-/--
-Definition of `ShelfHom` / `ShelfHom` 的定义
+/-
+**ShelfHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S₁ : Type u_1) → (S₂ : Type u_2) → [Shelf S₁] → [Shelf S₂] → Type (max u_
+1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ShelfHom
-  parameters: (S₁ : Type*) (S₂ : Type*) [Shelf S₁] [Shelf S₂]
-  axioms and operations (2):
-    - toFun : S₁ -> S₂
-    - map_act' : forall {x y : S₁}, toFun (Shelf.act x y) = Shelf.act (toFun x) (toFun y)
-
-中文:
-结构 Shelf态射
-  参数: (S₁ : 类型) (S₂ : 类型) [Shelf S₁] [Shelf S₂]
-  公理与运算 (2 个):
-    - toFun : S₁ -> S₂
-    - map_act' : 对任意 {x y : S₁}, toFun (Shelf.act x y) = Shelf.act (toFun x) (toFun y)
+--- 原说明 ---
+The type of homomorphisms between shelves.
+This is also the notion of rack and quandle homomorphisms.
 -/
 structure ShelfHom (S₁ : Type*) (S₂ : Type*) [Shelf S₁] [Shelf S₂] where
   /-- The function under the Shelf Homomorphism -/
-  toFun : S₁ -> S₂
+  toFun : S₁ → S₂
   /-- The homomorphism property of a Shelf Homomorphism -/
-  map_act' : forall {x y : S₁}, toFun (Shelf.act x y) = Shelf.act (toFun x) (toFun y)
+  map_act' : ∀ {x y : S₁}, toFun (Shelf.act x y) = Shelf.act (toFun x) (toFun y)
 
-/--
-Definition of `Rack` / `Rack` 的定义
+/-- A *rack* is an automorphic set (a set with an action on itself by
+bijections) that is self-distributive.  It is a shelf such that each
+element's action is invertible.
 
-English:
-class Rack
-  parameters: (α : Type u)
-  extends: Shelf α
-  axioms and operations (3):
-    - invAct : α -> α -> α
-    - left_inv : forall x, Function.LeftInverse (invAct x) (act x)
-    - right_inv : forall x, Function.RightInverse (invAct x) (act x)
+The notations `x ◃ y` and `x ◃⁻¹ y` denote the action and the
+inverse action, respectively, and they are right associative.
+-/
+/-
+**Rack** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Rack
-  参数: (α : 类型u)
-  继承: Shelf α
-  公理与运算 (3 个):
-    - invAct : α -> α -> α
-    - left_inv : 对任意 x, 函数.左逆 (invAct x) (act x)
-    - right_inv : 对任意 x, 函数.右逆 (invAct x) (act x)
+--- 原说明 ---
+A *rack* is an automorphic set (a set with an action on itself by
+bijections) that is self-distributive.  It is a shelf such that each
+element's action is invertible.
+
+The notations `x ◃ y` and `x ◃⁻¹ y` denote the action and the
+inverse action, respectively, and they are right associative.
 -/
 class Rack (α : Type u) extends Shelf α where
   /-- The inverse actions of the elements -/
-  invAct : α -> α -> α
+  invAct : α → α → α
   /-- Proof of left inverse -/
-  left_inv : forall x, Function.LeftInverse (invAct x) (act x)
+  left_inv : ∀ x, Function.LeftInverse (invAct x) (act x)
   /-- Proof of right inverse -/
-  right_inv : forall x, Function.RightInverse (invAct x) (act x)
+  right_inv : ∀ x, Function.RightInverse (invAct x) (act x)
 
 /-- Action of a Shelf -/
 scoped[Quandles] infixr:65 " ◃ " => Shelf.act
@@ -202,7 +184,7 @@ scoped[Quandles] infixr:65 " ◃ " => Shelf.act
 scoped[Quandles] infixr:65 " ◃⁻¹ " => Rack.invAct
 
 /-- Shelf Homomorphism -/
-scoped[Quandles] infixr:25 " ->◃ " => ShelfHom
+scoped[Quandles] infixr:25 " →◃ " => ShelfHom
 
 open Quandles
 
@@ -212,95 +194,90 @@ open Shelf
 variable {S : Type*} [UnitalShelf S]
 
 /--
-lemma `act_act_self_eq` / 引理 `act_act_self_eq`
+A monoid is *graphic* if, for all `x` and `y`, the *graphic identity*
+`(x * y) * x = x * y` holds.  For a unital shelf, this graphic
+identity holds.
+-/
+/-
+**UnitalShelf.act_act_self_eq** 是 Mathlib 中的一个引理，位于命名空间 `UnitalShelf`。
+形式化陈述：act_act_self_eq (x y : S) : (x ◃ y) ◃ x = x ◃ y
+参数：x y : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UnitalShelf.act_one`：∀ {α : Type u} [self : UnitalShelf α] (a : α), Shel
+f.act a 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
 
-English:
-lemma act_act_self_eq
-  given: (x y : S)
-  statement: (x ◃ y) ◃ x = x ◃ y
-  proof: by
-  have h : (x ◃ y) ◃ x = (x ◃ y) ◃ (x ◃ 1) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [act_one]
-
-中文:
-引理 act_act_self_eq
-  条件: (x y : S)
-  结论: (x ◃ y) ◃ x = x ◃ y
-  证明: by
-  have h : (x ◃ y) ◃ x = (x ◃ y) ◃ (x ◃ 1) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [act_one]
-
-Depends on / 依赖: Shelf.self_distrib, act_one, self_distrib
+--- 原说明 ---
+A monoid is *graphic* if, for all `x` and `y`, the *graphic identity*
+`(x * y) * x = x * y` holds.  For a unital shelf, this graphic
+identity holds.
 -/
 lemma act_act_self_eq (x y : S) : (x ◃ y) ◃ x = x ◃ y := by
   have h : (x ◃ y) ◃ x = (x ◃ y) ◃ (x ◃ 1) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [act_one]
-
-/--
-lemma `act_idem` / 引理 `act_idem`
-
-English:
-lemma act_idem
-  given: (x : S)
-  statement: (x ◃ x) = x
-  proof: by rw [← act_one x, ← Shelf.self_distrib, act_one]
-
-中文:
-引理 act_idem
-  条件: (x : S)
-  结论: (x ◃ x) = x
-  证明: by rw [← act_one x, ← Shelf.self_distrib, act_one]
-
-Depends on / 依赖: Shelf.self_distrib, act_one, self_distrib
+  rw [h, ← Shelf.self_distrib, act_one]
+/-
+**UnitalShelf.act_idem** 是 Mathlib 中的一个引理，位于命名空间 `UnitalShelf`。
+形式化陈述：act_idem (x : S) : (x ◃ x) = x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `UnitalShelf.act_one`：∀ {α : Type u} [self : UnitalShelf α] (a : α), Shel
+f.act a 1 = a
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
 -/
 lemma act_idem (x : S) : (x ◃ x) = x := by rw [← act_one x, ← Shelf.self_distrib, act_one]
-
-/--
-lemma `act_self_act_eq` / 引理 `act_self_act_eq`
-
-English:
-lemma act_self_act_eq
-  given: (x y : S)
-  statement: x ◃ (x ◃ y) = x ◃ y
-  proof: by
-  have h : x ◃ (x ◃ y) = (x ◃ 1) ◃ (x ◃ y) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [one_act]
-
-中文:
-引理 act_self_act_eq
-  条件: (x y : S)
-  结论: x ◃ (x ◃ y) = x ◃ y
-  证明: by
-  have h : x ◃ (x ◃ y) = (x ◃ 1) ◃ (x ◃ y) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [one_act]
-
-Depends on / 依赖: Shelf.self_distrib, act_one, one_act, self_distrib
+/-
+**UnitalShelf.act_self_act_eq** 是 Mathlib 中的一个引理，位于命名空间 `UnitalShelf`。
+形式化陈述：act_self_act_eq (x y : S) : x ◃ (x ◃ y) = x ◃ y
+参数：x y : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UnitalShelf.act_one`：∀ {α : Type u} [self : UnitalShelf α] (a : α), Shel
+f.act a 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
+· 使用定理 `UnitalShelf.one_act`：∀ {α : Type u} [self : UnitalShelf α] (a : α), Shel
+f.act 1 a = a
 -/
 lemma act_self_act_eq (x y : S) : x ◃ (x ◃ y) = x ◃ y := by
   have h : x ◃ (x ◃ y) = (x ◃ 1) ◃ (x ◃ y) := by rw [act_one]
-  rw [h]; rw [← Shelf.self_distrib]; rw [one_act]
+  rw [h, ← Shelf.self_distrib, one_act]
 
 /--
-lemma `assoc` / 引理 `assoc`
+The associativity of a unital shelf comes for free.
+-/
+/-
+**UnitalShelf.assoc** 是 Mathlib 中的一个引理，位于命名空间 `UnitalShelf`。
+形式化陈述：assoc (x y z : S) : (x ◃ y) ◃ z = x ◃ y ◃ z
+参数：x y z : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
+· 使用引理 `UnitalShelf.act_act_self_eq`：act_act_self_eq (x y : S) : (x ◃ y) ◃ x = x
+ ◃ y
+· 使用引理 `UnitalShelf.act_self_act_eq`：act_self_act_eq (x y : S) : x ◃ (x ◃ y) = x
+ ◃ y
 
-English:
-lemma assoc
-  given: (x y z : S)
-  statement: (x ◃ y) ◃ z = x ◃ y ◃ z
-  proof: by
-  rw [self_distrib]; rw [self_distrib]; rw [act_act_self_eq]; rw [act_self_act_eq]
-
-中文:
-引理 assoc
-  条件: (x y z : S)
-  结论: (x ◃ y) ◃ z = x ◃ y ◃ z
-  证明: by
-  rw [self_distrib]; rw [self_distrib]; rw [act_act_self_eq]; rw [act_self_act_eq]
-
-Depends on / 依赖: act_act_self_eq, act_self_act_eq, self_distrib
+--- 原说明 ---
+The associativity of a unital shelf comes for free.
 -/
 lemma assoc (x y z : S) : (x ◃ y) ◃ z = x ◃ y ◃ z := by
-  rw [self_distrib]; rw [self_distrib]; rw [act_act_self_eq]; rw [act_self_act_eq]
+  rw [self_distrib, self_distrib, act_act_self_eq, act_self_act_eq]
 
 end UnitalShelf
 
@@ -310,30 +287,20 @@ variable {R : Type*} [Rack R]
 
 export Shelf (self_distrib)
 
-/--
-Definition of `act'` / `act'` 的定义
+/-- A rack acts on itself by equivalences. -/
+/-
+**Rack.act'** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：act' (x : R) : R ≃ R where toFun
+参数：x : R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.left_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.LeftInve
+rse (Rack.invAct x) (Shelf.act x)
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
 
-English:
-definition act'
-  signature: (x : R)
-  body: Shelf.act x
-  invFun := invAct x
-  left_inv := left_inv x
-  right_inv := right_inv x
-
-@[simp]
-
-中文:
-定义 act'
-  签名: (x : R)
-  定义体: Shelf.act x
-  invFun := invAct x
-  left_inv := left_inv x
-  right_inv := right_inv x
-
-@[simp]
-
-Depends on / 依赖: Shelf.act
+--- 原说明 ---
+A rack acts on itself by equivalences.
 -/
 def act' (x : R) : R ≃ R where
   toFun := Shelf.act x
@@ -342,270 +309,157 @@ def act' (x : R) : R ≃ R where
   right_inv := right_inv x
 
 @[simp]
-/--
-theorem `act'_apply` / 定理 `act'_apply`
-
-English:
-theorem act'_apply
-  given: (x y : R)
-  statement: act' x y = x ◃ y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 act'_apply
-  条件: (x y : R)
-  结论: act' x y = x ◃ y
-  证明: rfl
-
-@[simp]
+/-
+**Rack.act'_apply** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：∀ {R : Type u_1} [inst : Rack R] (x y : R), (Rack.act' x) y = Shelf.act x 
+y
+参数：x y : R；Rack.act' x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem act'_apply (x y : R) : act' x y = x ◃ y :=
   rfl
 
 @[simp]
-/--
-theorem `act'_symm_apply` / 定理 `act'_symm_apply`
-
-English:
-theorem act'_symm_apply
-  given: (x y : R)
-  statement: (act' x).symm y = x ◃⁻¹ y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 act'_symm_apply
-  条件: (x y : R)
-  结论: (act' x).symm y = x ◃⁻¹ y
-  证明: rfl
-
-@[simp]
+/-
+**Rack.act'_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：∀ {R : Type u_1} [inst : Rack R] (x y : R), (Rack.act' x).symm y = Rack.in
+vAct x y
+参数：x y : R；Rack.act' x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem act'_symm_apply (x y : R) : (act' x).symm y = x ◃⁻¹ y :=
   rfl
 
 @[simp]
-/--
-theorem `invAct_apply` / 定理 `invAct_apply`
-
-English:
-theorem invAct_apply
-  given: (x y : R)
-  statement: (act' x)⁻¹ y = x ◃⁻¹ y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invAct_apply
-  条件: (x y : R)
-  结论: (act' x)⁻¹ y = x ◃⁻¹ y
-  证明: rfl
-
-@[simp]
+/-
+**Rack.invAct_apply** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：invAct_apply (x y : R) : (act' x)⁻¹ y = x ◃⁻¹ y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invAct_apply (x y : R) : (act' x)⁻¹ y = x ◃⁻¹ y :=
   rfl
 
 @[simp]
-/--
-theorem `invAct_act_eq` / 定理 `invAct_act_eq`
-
-English:
-theorem invAct_act_eq
-  given: (x y : R)
-  statement: x ◃⁻¹ x ◃ y = y
-  proof: left_inv x y
-
-@[simp]
-
-中文:
-定理 invAct_act_eq
-  条件: (x y : R)
-  结论: x ◃⁻¹ x ◃ y = y
-  证明: left_inv x y
-
-@[simp]
-
-Depends on / 依赖: left_inv
+/-
+**Rack.invAct_act_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：invAct_act_eq (x y : R) : x ◃⁻¹ x ◃ y = y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.left_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.LeftInve
+rse (Rack.invAct x) (Shelf.act x)
 -/
 theorem invAct_act_eq (x y : R) : x ◃⁻¹ x ◃ y = y :=
   left_inv x y
 
 @[simp]
-/--
-theorem `act_invAct_eq` / 定理 `act_invAct_eq`
-
-English:
-theorem act_invAct_eq
-  given: (x y : R)
-  statement: x ◃ x ◃⁻¹ y = y
-  proof: right_inv x y
-
-中文:
-定理 act_invAct_eq
-  条件: (x y : R)
-  结论: x ◃ x ◃⁻¹ y = y
-  证明: right_inv x y
-
-Depends on / 依赖: right_inv
+/-
+**Rack.act_invAct_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：act_invAct_eq (x y : R) : x ◃ x ◃⁻¹ y = y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
 -/
 theorem act_invAct_eq (x y : R) : x ◃ x ◃⁻¹ y = y :=
   right_inv x y
-
-/--
-theorem `left_cancel` / 定理 `left_cancel`
-
-English:
-theorem left_cancel
-  given: (x : R) {y y' : R}
-  statement: x ◃ y = x ◃ y' ↔ y = y'
-  proof: by
-  constructor
-  · apply (act' x).injective
-  rintro rfl
-  rfl
-
-中文:
-定理 left_cancel
-  条件: (x : R) {y y' : R}
-  结论: x ◃ y = x ◃ y' ↔ y = y'
-  证明: by
-  constructor
-  · apply (act' x).injective
-  rintro rfl
-  rfl
-
-Depends on / 依赖: injective
+/-
+**Rack.left_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = y'
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 theorem left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = y' := by
   constructor
   · apply (act' x).injective
   rintro rfl
   rfl
-
-/--
-theorem `left_cancel_inv` / 定理 `left_cancel_inv`
-
-English:
-theorem left_cancel_inv
-  given: (x : R) {y y' : R}
-  statement: x ◃⁻¹ y = x ◃⁻¹ y' ↔ y = y'
-  proof: by
-  constructor
-  · apply (act' x).symm.injective
-  rintro rfl
-  rfl
-
-中文:
-定理 left_cancel_inv
-  条件: (x : R) {y y' : R}
-  结论: x ◃⁻¹ y = x ◃⁻¹ y' ↔ y = y'
-  证明: by
-  constructor
-  · apply (act' x).symm.injective
-  rintro rfl
-  rfl
-
-Depends on / 依赖: injective, symm.injective
+/-
+**Rack.left_cancel_inv** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：left_cancel_inv (x : R) {y y' : R} : x ◃⁻¹ y = x ◃⁻¹ y' ↔ y = y'
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem left_cancel_inv (x : R) {y y' : R} : x ◃⁻¹ y = x ◃⁻¹ y' ↔ y = y' := by
   constructor
   · apply (act' x).symm.injective
   rintro rfl
   rfl
-
-/--
-theorem `self_distrib_inv` / 定理 `self_distrib_inv`
-
-English:
-theorem self_distrib_inv
-  given: {x y z : R}
-  statement: x ◃⁻¹ y ◃⁻¹ z = (x ◃⁻¹ y) ◃⁻¹ x ◃⁻¹ z
-  proof: by
-  rw [← left_cancel (x ◃⁻¹ y)]; rw [right_inv]; rw [← left_cancel x]; rw [right_inv]; rw [self_distrib]
-  repeat' rw [right_inv]
-
-中文:
-定理 self_distrib_inv
-  条件: {x y z : R}
-  结论: x ◃⁻¹ y ◃⁻¹ z = (x ◃⁻¹ y) ◃⁻¹ x ◃⁻¹ z
-  证明: by
-  rw [← left_cancel (x ◃⁻¹ y)]; rw [right_inv]; rw [← left_cancel x]; rw [right_inv]; rw [self_distrib]
-  repeat' rw [right_inv]
-
-Depends on / 依赖: left_cancel, repeat, right_inv, self_distrib
+/-
+**Rack.self_distrib_inv** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_distrib_inv {x y z : R} : x ◃⁻¹ y ◃⁻¹ z = (x ◃⁻¹ y) ◃⁻¹ x ◃⁻¹ z
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
 -/
 theorem self_distrib_inv {x y z : R} : x ◃⁻¹ y ◃⁻¹ z = (x ◃⁻¹ y) ◃⁻¹ x ◃⁻¹ z := by
-  rw [← left_cancel (x ◃⁻¹ y)]; rw [right_inv]; rw [← left_cancel x]; rw [right_inv]; rw [self_distrib]
+  rw [← left_cancel (x ◃⁻¹ y), right_inv, ← left_cancel x, right_inv, self_distrib]
   repeat' rw [right_inv]
 
-/--
-theorem `ad_conj` / 定理 `ad_conj`
+/-- The *adjoint action* of a rack on itself is `op'`, and the adjoint
+action of `x ◃ y` is the conjugate of the action of `y` by the action
+of `x`. It is another way to understand the self-distributivity axiom.
 
-English:
-theorem ad_conj
-  given: {R : Type*} [Rack R] (x y : R)
-  statement: act' (x ◃ y) = act' x * act' y * (act' x)⁻¹
-  proof: by
-  rw [eq_mul_inv_iff_mul_eq]; ext z
-  apply self_distrib.symm
+This is used in the natural rack homomorphism `toConj` from `R` to
+`Conj (R ≃ R)` defined by `op'`.
+-/
+/-
+**Rack.ad_conj** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：ad_conj {R : Type*} [Rack R] (x y : R) : act' (x ◃ y) = act' x * act' y * 
+(act' x)⁻¹
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq : a = b * c⁻¹ ↔ a * c = b
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
 
-中文:
-定理 ad_conj
-  条件: {R : 类型} [Rack R] (x y : R)
-  结论: act' (x ◃ y) = act' x * act' y * (act' x)⁻¹
-  证明: by
-  rw [eq_mul_inv_iff_mul_eq]; ext z
-  apply self_distrib.symm
+--- 原说明 ---
+The *adjoint action* of a rack on itself is `op'`, and the adjoint
+action of `x ◃ y` is the conjugate of the action of `y` by the action
+of `x`. It is another way to understand the self-distributivity axiom.
 
-Depends on / 依赖: eq_mul_inv_iff_mul_eq, self_distrib, self_distrib.symm
+This is used in the natural rack homomorphism `toConj` from `R` to
+`Conj (R ≃ R)` defined by `op'`.
 -/
 theorem ad_conj {R : Type*} [Rack R] (x y : R) : act' (x ◃ y) = act' x * act' y * (act' x)⁻¹ := by
   rw [eq_mul_inv_iff_mul_eq]; ext z
   apply self_distrib.symm
 
-/--
-Instance `oppositeRack` / 实例 `oppositeRack`
+/-- The opposite rack, swapping the roles of `◃` and `◃⁻¹`.
+-/
+/-
+**Rack.oppositeRack** 是 Mathlib 中的一个实例，位于命名空间 `Rack`。
+形式化陈述：oppositeRack : Rack Rᵐᵒᵖ where act x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance oppositeRack
-  signature: : Rack Rᵐᵒᵖ where
-  body: op (invAct (unop x) (unop y))
-  self_distrib := by
-    intro x y z
-    induction x
-    induction y
-    induction z
-    simp only [op_inj, unop_op]
-    rw [self_distrib_inv]
-  invAct x y := op (Shelf.act (unop x) (unop y))
-  left_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-  right_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-
-@[simp]
-
-中文:
-实例 oppositeRack
-  签名: : Rack Rᵐᵒᵖ where
-  定义体: op (invAct (unop x) (unop y))
-  self_distrib := by
-    intro x y z
-    induction x
-    induction y
-    induction z
-    simp only [op_inj, unop_op]
-    rw [self_distrib_inv]
-  invAct x y := op (Shelf.act (unop x) (unop y))
-  left_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-  right_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-
-@[simp]
-
-Depends on / 依赖: invAct
+--- 原说明 ---
+The opposite rack, swapping the roles of `◃` and `◃⁻¹`.
 -/
 instance oppositeRack : Rack Rᵐᵒᵖ where
   act x y := op (invAct (unop x) (unop y))
@@ -621,134 +475,67 @@ instance oppositeRack : Rack Rᵐᵒᵖ where
   right_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
 
 @[simp]
-/--
-theorem `op_act_op_eq` / 定理 `op_act_op_eq`
-
-English:
-theorem op_act_op_eq
-  given: {x y : R}
-  statement: op x ◃ op y = op (x ◃⁻¹ y)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_act_op_eq
-  条件: {x y : R}
-  结论: op x ◃ op y = op (x ◃⁻¹ y)
-  证明: rfl
-
-@[simp]
+/-
+**Rack.op_act_op_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：op_act_op_eq {x y : R} : op x ◃ op y = op (x ◃⁻¹ y)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_act_op_eq {x y : R} : op x ◃ op y = op (x ◃⁻¹ y) :=
   rfl
 
 @[simp]
-/--
-theorem `op_invAct_op_eq` / 定理 `op_invAct_op_eq`
-
-English:
-theorem op_invAct_op_eq
-  given: {x y : R}
-  statement: op x ◃⁻¹ op y = op (x ◃ y)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_invAct_op_eq
-  条件: {x y : R}
-  结论: op x ◃⁻¹ op y = op (x ◃ y)
-  证明: rfl
-
-@[simp]
+/-
+**Rack.op_invAct_op_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：op_invAct_op_eq {x y : R} : op x ◃⁻¹ op y = op (x ◃ y)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_invAct_op_eq {x y : R} : op x ◃⁻¹ op y = op (x ◃ y) :=
   rfl
 
 @[simp]
-/--
-theorem `self_act_act_eq` / 定理 `self_act_act_eq`
-
-English:
-theorem self_act_act_eq
-  given: {x y : R}
-  statement: (x ◃ x) ◃ y = x ◃ y
-  proof: by rw [← right_inv x y, ← self_distrib]
-
-@[simp]
-
-中文:
-定理 self_act_act_eq
-  条件: {x y : R}
-  结论: (x ◃ x) ◃ y = x ◃ y
-  证明: by rw [← right_inv x y, ← self_distrib]
-
-@[simp]
-
-Depends on / 依赖: right_inv, self_distrib
+/-
+**Rack.self_act_act_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_act_act_eq {x y : R} : (x ◃ x) ◃ y = x ◃ y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
 -/
 theorem self_act_act_eq {x y : R} : (x ◃ x) ◃ y = x ◃ y := by rw [← right_inv x y, ← self_distrib]
 
 @[simp]
-/--
-theorem `self_invAct_invAct_eq` / 定理 `self_invAct_invAct_eq`
-
-English:
-theorem self_invAct_invAct_eq
-  given: {x y : R}
-  statement: (x ◃⁻¹ x) ◃⁻¹ y = x ◃⁻¹ y
-  proof: by
-  have h := @self_act_act_eq _ _ (op x) (op y)
-  simpa using h
-
-@[simp]
-
-中文:
-定理 self_invAct_invAct_eq
-  条件: {x y : R}
-  结论: (x ◃⁻¹ x) ◃⁻¹ y = x ◃⁻¹ y
-  证明: by
-  have h := @self_act_act_eq _ _ (op x) (op y)
-  simpa using h
-
-@[simp]
-
-Depends on / 依赖: self_act_act_eq
+/-
+**Rack.self_invAct_invAct_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_invAct_invAct_eq {x y : R} : (x ◃⁻¹ x) ◃⁻¹ y = x ◃⁻¹ y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.self_act_act_eq`：self_act_act_eq {x y : R} : (x ◃ x) ◃ y = x ◃ y
 -/
 theorem self_invAct_invAct_eq {x y : R} : (x ◃⁻¹ x) ◃⁻¹ y = x ◃⁻¹ y := by
   have h := @self_act_act_eq _ _ (op x) (op y)
   simpa using h
 
 @[simp]
-/--
-theorem `self_act_invAct_eq` / 定理 `self_act_invAct_eq`
-
-English:
-theorem self_act_invAct_eq
-  given: {x y : R}
-  statement: (x ◃ x) ◃⁻¹ y = x ◃⁻¹ y
-  proof: by
-  rw [← left_cancel (x ◃ x)]
-  rw [right_inv]
-  rw [self_act_act_eq]
-  rw [right_inv]
-
-@[simp]
-
-中文:
-定理 self_act_invAct_eq
-  条件: {x y : R}
-  结论: (x ◃ x) ◃⁻¹ y = x ◃⁻¹ y
-  证明: by
-  rw [← left_cancel (x ◃ x)]
-  rw [right_inv]
-  rw [self_act_act_eq]
-  rw [right_inv]
-
-@[simp]
-
-Depends on / 依赖: left_cancel, right_inv, self_act_act_eq
+/-
+**Rack.self_act_invAct_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_act_invAct_eq {x y : R} : (x ◃ x) ◃⁻¹ y = x ◃⁻¹ y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
+· 使用定理 `Rack.self_act_act_eq`：self_act_act_eq {x y : R} : (x ◃ x) ◃ y = x ◃ y
 -/
 theorem self_act_invAct_eq {x y : R} : (x ◃ x) ◃⁻¹ y = x ◃⁻¹ y := by
   rw [← left_cancel (x ◃ x)]
@@ -757,59 +544,30 @@ theorem self_act_invAct_eq {x y : R} : (x ◃ x) ◃⁻¹ y = x ◃⁻¹ y := by
   rw [right_inv]
 
 @[simp]
-/--
-theorem `self_invAct_act_eq` / 定理 `self_invAct_act_eq`
-
-English:
-theorem self_invAct_act_eq
-  given: {x y : R}
-  statement: (x ◃⁻¹ x) ◃ y = x ◃ y
-  proof: by
-  have h := @self_act_invAct_eq _ _ (op x) (op y)
-  simpa using h
-
-中文:
-定理 self_invAct_act_eq
-  条件: {x y : R}
-  结论: (x ◃⁻¹ x) ◃ y = x ◃ y
-  证明: by
-  have h := @self_act_invAct_eq _ _ (op x) (op y)
-  simpa using h
-
-Depends on / 依赖: self_act_invAct_eq
+/-
+**Rack.self_invAct_act_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_invAct_act_eq {x y : R} : (x ◃⁻¹ x) ◃ y = x ◃ y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.self_act_invAct_eq`：self_act_invAct_eq {x y : R} : (x ◃ x) ◃⁻¹ y = 
+x ◃⁻¹ y
 -/
 theorem self_invAct_act_eq {x y : R} : (x ◃⁻¹ x) ◃ y = x ◃ y := by
   have h := @self_act_invAct_eq _ _ (op x) (op y)
   simpa using h
-
-/--
-theorem `self_act_eq_iff_eq` / 定理 `self_act_eq_iff_eq`
-
-English:
-theorem self_act_eq_iff_eq
-  given: {x y : R}
-  statement: x ◃ x = y ◃ y ↔ x = y
-  proof: by
-  constructor; swap
-  · rintro rfl; rfl
-  intro h
-  trans (x ◃ x) ◃⁻¹ x ◃ x
-  · rw [← left_cancel (x ◃ x), right_inv, self_act_act_eq]
-  · rw [h, ← left_cancel (y ◃ y), right_inv, self_act_act_eq]
-
-中文:
-定理 self_act_eq_iff_eq
-  条件: {x y : R}
-  结论: x ◃ x = y ◃ y ↔ x = y
-  证明: by
-  constructor; swap
-  · rintro rfl; rfl
-  intro h
-  trans (x ◃ x) ◃⁻¹ x ◃ x
-  · rw [← left_cancel (x ◃ x), right_inv, self_act_act_eq]
-  · rw [h, ← left_cancel (y ◃ y), right_inv, self_act_act_eq]
-
-Depends on / 依赖: left_cancel, right_inv, self_act_act_eq
+/-
+**Rack.self_act_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_act_eq_iff_eq {x y : R} : x ◃ x = y ◃ y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
+· 使用定理 `Rack.self_act_act_eq`：self_act_act_eq {x y : R} : (x ◃ x) ◃ y = x ◃ y
 -/
 theorem self_act_eq_iff_eq {x y : R} : x ◃ x = y ◃ y ↔ x = y := by
   constructor; swap
@@ -818,50 +576,35 @@ theorem self_act_eq_iff_eq {x y : R} : x ◃ x = y ◃ y ↔ x = y := by
   trans (x ◃ x) ◃⁻¹ x ◃ x
   · rw [← left_cancel (x ◃ x), right_inv, self_act_act_eq]
   · rw [h, ← left_cancel (y ◃ y), right_inv, self_act_act_eq]
-
-/--
-theorem `self_invAct_eq_iff_eq` / 定理 `self_invAct_eq_iff_eq`
-
-English:
-theorem self_invAct_eq_iff_eq
-  given: {x y : R}
-  statement: x ◃⁻¹ x = y ◃⁻¹ y ↔ x = y
-  proof: by
-  have h := @self_act_eq_iff_eq _ _ (op x) (op y)
-  simpa using h
-
-中文:
-定理 self_invAct_eq_iff_eq
-  条件: {x y : R}
-  结论: x ◃⁻¹ x = y ◃⁻¹ y ↔ x = y
-  证明: by
-  have h := @self_act_eq_iff_eq _ _ (op x) (op y)
-  simpa using h
-
-Depends on / 依赖: self_act_eq_iff_eq
+/-
+**Rack.self_invAct_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：self_invAct_eq_iff_eq {x y : R} : x ◃⁻¹ x = y ◃⁻¹ y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.self_act_eq_iff_eq`：self_act_eq_iff_eq {x y : R} : x ◃ x = y ◃ y ↔ 
+x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem self_invAct_eq_iff_eq {x y : R} : x ◃⁻¹ x = y ◃⁻¹ y ↔ x = y := by
   have h := @self_act_eq_iff_eq _ _ (op x) (op y)
   simpa using h
 
-/--
-Definition of `selfApplyEquiv` / `selfApplyEquiv` 的定义
+/-- The map `x ↦ x ◃ x` is a bijection.  (This has applications for the
+regular isotopy version of the Reidemeister I move for knot diagrams.)
+-/
+/-
+**Rack.selfApplyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：selfApplyEquiv (R : Type*) [Rack R] : R ≃ R where toFun x
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition selfApplyEquiv
-  signature: (R : Type*) [Rack R]
-  body: x ◃ x
-  invFun x := x ◃⁻¹ x
-  left_inv x := by simp
-  right_inv x := by simp
-
-中文:
-定义 selfApplyEquiv
-  签名: (R : 类型) [Rack R]
-  定义体: x ◃ x
-  invFun x := x ◃⁻¹ x
-  left_inv x := by simp
-  right_inv x := by simp
+--- 原说明 ---
+The map `x ↦ x ◃ x` is a bijection.  (This has applications for the
+regular isotopy version of the Reidemeister I move for knot diagrams.)
 -/
 def selfApplyEquiv (R : Type*) [Rack R] : R ≃ R where
   toFun x := x ◃ x
@@ -869,81 +612,73 @@ def selfApplyEquiv (R : Type*) [Rack R] : R ≃ R where
   left_inv x := by simp
   right_inv x := by simp
 
-/--
-Definition of `IsInvolutory` / `IsInvolutory` 的定义
+/-- An involutory rack is one for which `Rack.oppositeRack R x` is an involution for every x.
+-/
+/-
+**Rack.IsInvolutory** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：IsInvolutory (R : Type*) [Rack R] : Prop
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInvolutory
-  signature: (R : Type*) [Rack R]
-  body: forall x : R, Function.Involutive (Shelf.act x)
-
-中文:
-定义 IsInvolutory
-  签名: (R : 类型) [Rack R]
-  定义体: forall x : R, Function.Involutive (Shelf.act x)
-
-Depends on / 依赖: Function, Function.Involutive, Involutive, Shelf.act
+--- 原说明 ---
+An involutory rack is one for which `Rack.oppositeRack R x` is an involution for
+ every x.
 -/
 def IsInvolutory (R : Type*) [Rack R] : Prop :=
-  forall x : R, Function.Involutive (Shelf.act x)
-
-/--
-theorem `involutory_invAct_eq_act` / 定理 `involutory_invAct_eq_act`
-
-English:
-theorem involutory_invAct_eq_act
-  given: {R : Type*} [Rack R] (h : IsInvolutory R) (x y : R)
-  proof: by
-  rw [← left_cancel x]; rw [right_inv]; rw [h x]
-
-中文:
-定理 involutory_invAct_eq_act
-  条件: {R : 类型} [Rack R] (h : IsInvolutory R) (x y : R)
-  证明: by
-  rw [← left_cancel x]; rw [right_inv]; rw [h x]
-
-Depends on / 依赖: left_cancel, right_inv
+  ∀ x : R, Function.Involutive (Shelf.act x)
+/-
+**Rack.involutory_invAct_eq_act** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：involutory_invAct_eq_act {R : Type*} [Rack R] (h : IsInvolutory R) (x y : 
+R) : x ◃⁻¹ y = x ◃ y
+参数：h : IsInvolutory R；x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `Rack.right_inv`：∀ {α : Type u} [self : Rack α] (x : α), Function.RightIn
+verse (Rack.invAct x) (Shelf.act x)
 -/
 theorem involutory_invAct_eq_act {R : Type*} [Rack R] (h : IsInvolutory R) (x y : R) :
     x ◃⁻¹ y = x ◃ y := by
-  rw [← left_cancel x]; rw [right_inv]; rw [h x]
+  rw [← left_cancel x, right_inv, h x]
 
-/--
-Definition of `IsAbelian` / `IsAbelian` 的定义
+/-- An abelian rack is one for which the mediality axiom holds.
+-/
+/-
+**Rack.IsAbelian** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：IsAbelian (R : Type*) [Rack R] : Prop
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsAbelian
-  signature: (R : Type*) [Rack R]
-  body: forall x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
-
-中文:
-定义 是交换
-  签名: (R : 类型) [Rack R]
-  定义体: forall x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
+--- 原说明 ---
+An abelian rack is one for which the mediality axiom holds.
 -/
 def IsAbelian (R : Type*) [Rack R] : Prop :=
-  forall x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
+  ∀ x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
 
-/--
-theorem `assoc_iff_id` / 定理 `assoc_iff_id`
+/-- Associative racks are uninteresting.
+-/
+/-
+**Rack.assoc_iff_id** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：assoc_iff_id {R : Type*} [Rack R] {x y z : R} : x ◃ y ◃ z = (x ◃ y) ◃ z ↔ 
+x ◃ z = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Shelf.self_distrib`：∀ {α : Type u} [self : Shelf α] {x y z : α}, Shelf.a
+ct x (Shelf.act y z) = Shelf.act (Shelf.act x y) (Shelf.act x z)
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem assoc_iff_id
-  given: {R : Type*} [Rack R] {x y z : R}
-  statement: x ◃ y ◃ z = (x ◃ y) ◃ z ↔ x ◃ z = z
-  proof: by
-  rw [self_distrib]
-  rw [left_cancel]
-
-中文:
-定理 assoc_iff_id
-  条件: {R : 类型} [Rack R] {x y z : R}
-  结论: x ◃ y ◃ z = (x ◃ y) ◃ z ↔ x ◃ z = z
-  证明: by
-  rw [self_distrib]
-  rw [left_cancel]
-
-Depends on / 依赖: left_cancel, self_distrib
+--- 原说明 ---
+Associative racks are uninteresting.
 -/
 theorem assoc_iff_id {R : Type*} [Rack R] {x y z : R} : x ◃ y ◃ z = (x ◃ y) ◃ z ↔ x ◃ z = z := by
   rw [self_distrib]
@@ -955,168 +690,102 @@ namespace ShelfHom
 
 variable {S₁ : Type*} {S₂ : Type*} {S₃ : Type*} [Shelf S₁] [Shelf S₂] [Shelf S₃]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (S₁ ->◃ S₂) S₁ S₂
-  body: toFun
-  coe_injective | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
-
-中文:
-实例 :
-  签名: 函数状 (S₁ ->◃ S₂) S₁ S₂
-  定义体: toFun
-  coe_injective | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
+/-
+**ShelfHom.** 是 Mathlib 中的一个实例，位于命名空间 `ShelfHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (S₁ ->◃ S₂) S₁ S₂ where
+instance : FunLike (S₁ →◃ S₂) S₁ S₂ where
   coe := toFun
   coe_injective | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: (f : S₁ ->◃ S₂)
-  statement: f.toFun = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : S₁ ->◃ S₂)
-  结论: f.toFun = f
-  证明: rfl
-
-@[simp]
+/-
+**ShelfHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `ShelfHom`。
+形式化陈述：∀ {S₁ : Type u_1} {S₂ : Type u_2} [inst : Shelf S₁] [inst_1 : Shelf S₂] (f
+ : ShelfHom S₁ S₂), f.toFun = ⇑f
+参数：f : ShelfHom S₁ S₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem toFun_eq_coe (f : S₁ ->◃ S₂) : f.toFun = f := rfl
+@[simp] theorem toFun_eq_coe (f : S₁ →◃ S₂) : f.toFun = f := rfl
 
 @[simp]
-/--
-theorem `map_act` / 定理 `map_act`
-
-English:
-theorem map_act
-  given: (f : S₁ ->◃ S₂) {x y : S₁}
-  statement: f (x ◃ y) = f x ◃ f y
-  proof: map_act' f
-
-中文:
-定理 map_act
-  条件: (f : S₁ ->◃ S₂) {x y : S₁}
-  结论: f (x ◃ y) = f x ◃ f y
-  证明: map_act' f
-
-Depends on / 依赖: map_act
+/-
+**ShelfHom.map_act** 是 Mathlib 中的一个定理，位于命名空间 `ShelfHom`。
+形式化陈述：map_act (f : S₁ ->◃ S₂) {x y : S₁} : f (x ◃ y) = f x ◃ f y
+参数：f : S₁ ->◃ S₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ShelfHom.map_act'`：∀ {S₁ : Type u_1} {S₂ : Type u_2} [inst : Shelf S₁] [
+inst_1 : Shelf S₂] (self : ShelfHom S₁ S₂) {x y : S₁},   self.toFun (Shelf.act x
+ y) = S…
 -/
-theorem map_act (f : S₁ ->◃ S₂) {x y : S₁} : f (x ◃ y) = f x ◃ f y :=
+theorem map_act (f : S₁ →◃ S₂) {x y : S₁} : f (x ◃ y) = f x ◃ f y :=
   map_act' f
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity homomorphism -/
+/-
+**ShelfHom.id** 是 Mathlib 中的一个定义，位于命名空间 `ShelfHom`。
+形式化陈述：id (S : Type*) [Shelf S] : S ->◃ S where toFun
+参数：S : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (S : Type*) [Shelf S]
-  body: fun x => x
-  map_act' := by simp
-
-中文:
-定义 id
-  签名: (S : 类型) [Shelf S]
-  定义体: fun x => x
-  map_act' := by simp
+--- 原说明 ---
+The identity homomorphism
 -/
-def id (S : Type*) [Shelf S] : S ->◃ S where
+def id (S : Type*) [Shelf S] : S →◃ S where
   toFun := fun x => x
   map_act' := by simp
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: (S : Type*) [Shelf S]
-  body: ⟨id S⟩
-
-中文:
-实例 inhabited
-  签名: (S : 类型) [Shelf S]
-  定义体: ⟨id S⟩
+/-
+**ShelfHom.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `ShelfHom`。
+形式化陈述：inhabited (S : Type*) [Shelf S] : Inhabited (S ->◃ S)
+参数：S : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance inhabited (S : Type*) [Shelf S] : Inhabited (S ->◃ S) :=
+instance inhabited (S : Type*) [Shelf S] : Inhabited (S →◃ S) :=
   ⟨id S⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of shelf homomorphisms -/
+/-
+**ShelfHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `ShelfHom`。
+形式化陈述：comp (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) : S₁ ->◃ S₃ where toFun
+参数：g : S₂ ->◃ S₃；f : S₁ ->◃ S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂)
-  body: g.toFun ∘ f.toFun
-  map_act' := by simp
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂)
-  定义体: g.toFun ∘ f.toFun
-  map_act' := by simp
-
-@[simp]
-
-Depends on / 依赖: f.toFun, g.toFun
+--- 原说明 ---
+The composition of shelf homomorphisms
 -/
-def comp (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) : S₁ ->◃ S₃ where
+def comp (g : S₂ →◃ S₃) (f : S₁ →◃ S₂) : S₁ →◃ S₃ where
   toFun := g.toFun ∘ f.toFun
   map_act' := by simp
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) (x : S₁)
-  statement: (g.comp f) x = g (f x)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) (x : S₁)
-  结论: (g.comp f) x = g (f x)
-  证明: rfl
+/-
+**ShelfHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ShelfHom`。
+形式化陈述：comp_apply (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) (x : S₁) : (g.comp f) x = g (f 
+x)
+参数：g : S₂ ->◃ S₃；f : S₁ ->◃ S₂；x : S₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (g : S₂ ->◃ S₃) (f : S₁ ->◃ S₂) (x : S₁) : (g.comp f) x = g (f x) :=
+theorem comp_apply (g : S₂ →◃ S₃) (f : S₁ →◃ S₂) (x : S₁) : (g.comp f) x = g (f x) :=
   rfl
 
 end ShelfHom
 
-/--
-Definition of `Quandle` / `Quandle` 的定义
+/-- A quandle is a rack such that each automorphism fixes its corresponding element.
+-/
+/-
+**Quandle** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Quandle
-  parameters: (α : Type*)
-  extends: Rack α
-  axioms and operations (1):
-    - fix : forall {x : α}, act x x = x
-
-中文:
-类 Quandle
-  参数: (α : 类型)
-  继承: Rack α
-  公理与运算 (1 个):
-    - fix : 对任意 {x : α}, act x x = x
+--- 原说明 ---
+A quandle is a rack such that each automorphism fixes its corresponding element.
 -/
 class Quandle (α : Type*) extends Rack α where
   /-- The fixing property of a Quandle -/
-  fix : forall {x : α}, act x x = x
+  fix : ∀ {x : α}, act x x = x
 
 namespace Quandle
 
@@ -1127,49 +796,33 @@ variable {Q : Type*} [Quandle Q]
 attribute [simp] fix
 
 @[simp]
-/--
-theorem `fix_inv` / 定理 `fix_inv`
-
-English:
-theorem fix_inv
-  given: {x : Q}
-  statement: x ◃⁻¹ x = x
-  proof: by
-  rw [← left_cancel x]
-  simp
-
-中文:
-定理 fix_inv
-  条件: {x : Q}
-  结论: x ◃⁻¹ x = x
-  证明: by
-  rw [← left_cancel x]
-  simp
-
-Depends on / 依赖: left_cancel
+/-
+**Quandle.fix_inv** 是 Mathlib 中的一个定理，位于命名空间 `Quandle`。
+形式化陈述：fix_inv {x : Q} : x ◃⁻¹ x = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rack.left_cancel`：left_cancel (x : R) {y y' : R} : x ◃ y = x ◃ y' ↔ y = 
+y'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Rack.act_invAct_eq`：act_invAct_eq (x y : R) : x ◃ x ◃⁻¹ y = y
+· 使用定理 `Quandle.fix`：∀ {α : Type u_1} [self : Quandle α] {x : α}, Shelf.act x x 
+= x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fix_inv {x : Q} : x ◃⁻¹ x = x := by
   rw [← left_cancel x]
   simp
-
-/--
-Instance `oppositeQuandle` / 实例 `oppositeQuandle`
-
-English:
-instance oppositeQuandle
-  signature: : Quandle Qᵐᵒᵖ where
-  body: by
-    intro x
-    induction x
-    simp
-
-中文:
-实例 oppositeQuandle
-  签名: : Quandle Qᵐᵒᵖ where
-  定义体: by
-    intro x
-    induction x
-    simp
+/-
+**Quandle.oppositeQuandle** 是 Mathlib 中的一个实例，位于命名空间 `Quandle`。
+形式化陈述：oppositeQuandle : Quandle Qᵐᵒᵖ where fix
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance oppositeQuandle : Quandle Qᵐᵒᵖ where
   fix := by
@@ -1177,59 +830,23 @@ instance oppositeQuandle : Quandle Qᵐᵒᵖ where
     induction x
     simp
 
-/--
-Definition of `Conj` / `Conj` 的定义
+/-- The conjugation quandle of a group.  Each element of the group acts by
+the corresponding inner automorphism. -/
+/-
+**Quandle.Conj** 是 Mathlib 中的一个缩写定义，位于命名空间 `Quandle`。
+形式化陈述：Conj (G : Type*)
+参数：G : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Conj
-  signature: (G : Type*)
-  body: G
-
-中文:
-缩写 Conj
-  签名: (G : 类型)
-  定义体: G
+--- 原说明 ---
+The conjugation quandle of a group.  Each element of the group acts by
+the corresponding inner automorphism.
 -/
 abbrev Conj (G : Type*) := G
-
-/--
-Instance `Conj.quandle` / 实例 `Conj.quandle`
-
-English:
-instance Conj.quandle
-  signature: (G : Type*) [Group G]
-  body: @MulAut.conj G _ x
-  self_distrib := by
-    intro x y z
-    dsimp only [MulAut.conj_apply]
-    simp [mul_assoc]
-  invAct x := (@MulAut.conj G _ x).symm
-  left_inv x y := by
-    simp [mul_assoc]
-  right_inv x y := by
-    simp [mul_assoc]
-  fix := by simp
-
-@[simp, grind =]
-
-中文:
-实例 Conj.quandle
-  签名: (G : 类型) [群 G]
-  定义体: @MulAut.conj G _ x
-  self_distrib := by
-    intro x y z
-    dsimp only [MulAut.conj_apply]
-    simp [mul_assoc]
-  invAct x := (@MulAut.conj G _ x).symm
-  left_inv x y := by
-    simp [mul_assoc]
-  right_inv x y := by
-    simp [mul_assoc]
-  fix := by simp
-
-@[simp, grind =]
-
-Depends on / 依赖: MulAut, MulAut.conj
+/-
+**Quandle.Conj.quandle** 是 Mathlib 中的一个定义，位于命名空间 `Quandle.Conj`。
+形式化陈述：(G : Type u_2) → [Group G] → Quandle (Quandle.Conj G)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Conj.quandle (G : Type*) [Group G] : Quandle (Conj G) where
   act x := @MulAut.conj G _ x
@@ -1245,129 +862,101 @@ instance Conj.quandle (G : Type*) [Group G] : Quandle (Conj G) where
   fix := by simp
 
 @[simp, grind =]
-/--
-theorem `conj_act_eq_conj` / 定理 `conj_act_eq_conj`
-
-English:
-theorem conj_act_eq_conj
-  given: {G : Type*} [Group G] (x y : Conj G)
-  proof: rfl
-
-中文:
-定理 conj_act_eq_conj
-  条件: {G : 类型} [群 G] (x y : Conj G)
-  证明: rfl
+/-
+**Quandle.conj_act_eq_conj** 是 Mathlib 中的一个定理，位于命名空间 `Quandle`。
+形式化陈述：conj_act_eq_conj {G : Type*} [Group G] (x y : Conj G) : x ◃ y = ((x : G) *
+ (y : G) * (x : G)⁻¹ : G)
+参数：x y : Conj G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem conj_act_eq_conj {G : Type*} [Group G] (x y : Conj G) :
     x ◃ y = ((x : G) * (y : G) * (x : G)⁻¹ : G) :=
   rfl
-
-/--
-theorem `conj_swap` / 定理 `conj_swap`
-
-English:
-theorem conj_swap
-  given: {G : Type*} [Group G] (x y : Conj G)
-  statement: x ◃ y = y ↔ y ◃ x = x
-  proof: by
-  grind [eq_mul_inv_iff_mul_eq]
-
-中文:
-定理 conj_swap
-  条件: {G : 类型} [群 G] (x y : Conj G)
-  结论: x ◃ y = y ↔ y ◃ x = x
-  证明: by
-  grind [eq_mul_inv_iff_mul_eq]
-
-Depends on / 依赖: eq_mul_inv_iff_mul_eq
+/-
+**Quandle.conj_swap** 是 Mathlib 中的一个定理，位于命名空间 `Quandle`。
+形式化陈述：conj_swap {G : Type*} [Group G] (x y : Conj G) : x ◃ y = y ↔ y ◃ x = x
+参数：x y : Conj G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem conj_swap {G : Type*} [Group G] (x y : Conj G) : x ◃ y = y ↔ y ◃ x = x := by
   grind [eq_mul_inv_iff_mul_eq]
 
-/--
-Definition of `Conj.map` / `Conj.map` 的定义
-
-English:
-definition Conj.map
-  signature: {G : Type*} {H : Type*} [Group G] [Group H] (f : G ->* H)
-  body: f
-  map_act' := by simp
-
-中文:
-定义 Conj.map
-  签名: {G : 类型} {H : 类型} [群 G] [群 H] (f : G ->* H)
-  定义体: f
-  map_act' := by simp
-
-Depends on / 依赖: Monoid, NonUnitalNonAssocSemiring
+/-- `Conj` is functorial
 -/
-def Conj.map {G : Type*} {H : Type*} [Group G] [Group H] (f : G ->* H) : Conj G ->◃ Conj H where
+/-
+**Quandle.Conj.map** 是 Mathlib 中的一个定义，位于命名空间 `Quandle.Conj`。
+形式化陈述：{G : Type u_2} →   {H : Type u_3} → [inst : Group G] → [inst_1 : Group H] 
+→ (G →* H) → ShelfHom (Quandle.Conj G) (Quandle.Conj H)
+参数：G →* H；Quandle.Conj G；Quandle.Conj H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Conj` is functorial
+-/
+def Conj.map {G : Type*} {H : Type*} [Group G] [Group H] (f : G →* H) : Conj G →◃ Conj H where
   toFun := f
   map_act' := by simp
 
-/--
-Definition of `Dihedral` / `Dihedral` 的定义
+/-- The dihedral quandle. This is the conjugation quandle of the dihedral group restricted to flips.
 
-English:
-definition Dihedral
-  signature: (n : Nat)
-  body: ZMod n
+Used for Fox n-colorings of knots. -/
+/-
+**Quandle.Dihedral** 是 Mathlib 中的一个定义，位于命名空间 `Quandle`。
+形式化陈述：Dihedral (n : Nat)
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Dihedral
-  签名: (n : 自然数)
-  定义体: ZMod n
+--- 原说明 ---
+The dihedral quandle. This is the conjugation quandle of the dihedral group rest
+ricted to flips.
 
-Depends on / 依赖: CommSemiring, Semiring
+Used for Fox n-colorings of knots.
 -/
-def Dihedral (n : Nat) :=
+def Dihedral (n : ℕ) :=
   ZMod n
 
-/--
-Definition of `dihedralAct` / `dihedralAct` 的定义
+/-- The operation for the dihedral quandle.  It does not need to be an equivalence
+because it is an involution (see `dihedralAct.inv`). -/
+/-
+**Quandle.dihedralAct** 是 Mathlib 中的一个定义，位于命名空间 `Quandle`。
+形式化陈述：dihedralAct (n : Nat) (a : ZMod n) : ZMod n -> ZMod n
+参数：n : Nat；a : ZMod n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dihedralAct
-  signature: (n : Nat) (a : ZMod n)
-  body: fun b => 2 * a - b
-
-中文:
-定义 dihedralAct
-  签名: (n : 自然数) (a : ZMod n)
-  定义体: fun b => 2 * a - b
+--- 原说明 ---
+The operation for the dihedral quandle.  It does not need to be an equivalence
+because it is an involution (see `dihedralAct.inv`).
 -/
-def dihedralAct (n : Nat) (a : ZMod n) : ZMod n -> ZMod n := fun b => 2 * a - b
-
-/--
-theorem `dihedralAct.inv` / 定理 `dihedralAct.inv`
-
-English:
-theorem dihedralAct.inv
-  given: (n : Nat) (a : ZMod n)
-  statement: Function.Involutive (dihedralAct n a)
-  proof: by
-  intro b
-  dsimp only [dihedralAct]
-  simp
-
-中文:
-定理 dihedralAct.inv
-  条件: (n : 自然数) (a : ZMod n)
-  结论: 函数.对合 (dihedralAct n a)
-  证明: by
-  intro b
-  dsimp only [dihedralAct]
-  simp
-
-Depends on / 依赖: dihedralAct
+def dihedralAct (n : ℕ) (a : ZMod n) : ZMod n → ZMod n := fun b => 2 * a - b
+/-
+**Quandle.dihedralAct.inv** 是 Mathlib 中的一个定理，位于命名空间 `Quandle.dihedralAct`。
+形式化陈述：∀ (n : ℕ) (a : ZMod n), Function.Involutive (Quandle.dihedralAct n a)
+参数：n : ℕ；a : ZMod n；Quandle.dihedralAct n a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dihedralAct.inv (n : Nat) (a : ZMod n) : Function.Involutive (dihedralAct n a) := by
+theorem dihedralAct.inv (n : ℕ) (a : ZMod n) : Function.Involutive (dihedralAct n a) := by
   intro b
   dsimp only [dihedralAct]
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-instance (n : Nat) : Quandle (Dihedral n) where
+/-
+**Quandle.** 是 Mathlib 中的一个实例，位于命名空间 `Quandle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) : Quandle (Dihedral n) where
   act := dihedralAct n
   self_distrib := by
     intro x y z
@@ -1385,26 +974,21 @@ end Quandle
 
 namespace Rack
 
-/--
-Definition of `toConj` / `toConj` 的定义
+/-- This is the natural rack homomorphism to the conjugation quandle of the group `R ≃ R`
+that acts on the rack. -/
+/-
+**Rack.toConj** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：toConj (R : Type*) [Rack R] : R ->◃ Quandle.Conj (R ≃ R) where toFun
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toConj
-  signature: (R : Type*) [Rack R]
-  body: act'
-  map_act' := by
-    intro x y
-    exact ad_conj x y
-
-中文:
-定义 toConj
-  签名: (R : 类型) [Rack R]
-  定义体: act'
-  map_act' := by
-    intro x y
-    exact ad_conj x y
+--- 原说明 ---
+This is the natural rack homomorphism to the conjugation quandle of the group `R
+ ≃ R`
+that acts on the rack.
 -/
-def toConj (R : Type*) [Rack R] : R ->◃ Quandle.Conj (R ≃ R) where
+def toConj (R : Type*) [Rack R] : R →◃ Quandle.Conj (R ≃ R) where
   toFun := act'
   map_act' := by
     intro x y
@@ -1423,15 +1007,15 @@ For quandles, Joyce called this group `AdConj R`.
 The `EnvelGroup` functor is left adjoint to the `Conj` forgetful
 functor, and the way we construct the enveloping group is via a
 technique that should work for left adjoints of forgetful functors in
-general. It involves thinking a little about 2-categories, but the
+general.  It involves thinking a little about 2-categories, but the
 payoff is that the map `EnvelGroup R →* G` has a nice description.
 
-Let's think of a group as being a one-object category. The first step
+Let's think of a group as being a one-object category.  The first step
 is to define `PreEnvelGroup`, which gives formal expressions for all
 the 1-morphisms and includes the unit element, elements of `R`,
-multiplication, and inverses. To introduce relations, the second step
+multiplication, and inverses.  To introduce relations, the second step
 is to define `PreEnvelGroupRel'`, which gives formal expressions
-for all 2-morphisms between the 1-morphisms. The 2-morphisms include
+for all 2-morphisms between the 1-morphisms.  The 2-morphisms include
 associativity, multiplication by the unit, multiplication by inverses,
 compatibility with multiplication and inverses (`congr_mul` and
 `congr_inv`), the axioms for an equivalence relation, and,
@@ -1439,10 +1023,10 @@ importantly, the relationship between conjugation and the rack action
 (see `Rack.ad_conj`).
 
 None of this forms a 2-category yet, for example due to lack of
-associativity of `trans`. The `PreEnvelGroupRel` relation is a
+associativity of `trans`.  The `PreEnvelGroupRel` relation is a
 `Prop`-valued version of `PreEnvelGroupRel'`, and making it
 `Prop`-valued essentially introduces enough 3-isomorphisms so that
-every pair of compatible 2-morphisms is isomorphic. Now, while
+every pair of compatible 2-morphisms is isomorphic.  Now, while
 composition in `PreEnvelGroup` does not strictly satisfy the category
 axioms, `PreEnvelGroup` and `PreEnvelGroupRel'` do form a weak
 2-category.
@@ -1452,106 +1036,70 @@ Since we just want a 1-category, the last step is to quotient
 group `EnvelGroup`.
 
 For a homomorphism `f : R →◃ Conj G`, how does
-`EnvelGroup.map f : EnvelGroup R →* G` work? Let's think of `G` as
+`EnvelGroup.map f : EnvelGroup R →* G` work?  Let's think of `G` as
 being a 2-category with one object, a 1-morphism per element of `G`,
-and a single 2-morphism called `Eq.refl` for each 1-morphism. We
+and a single 2-morphism called `Eq.refl` for each 1-morphism.  We
 define the map using a "higher `Quotient.lift`" -- not only do we
 evaluate elements of `PreEnvelGroup` as expressions in `G` (this is
 `toEnvelGroup.mapAux`), but we evaluate elements of
 `PreEnvelGroup'` as expressions of 2-morphisms of `G` (this is
-`toEnvelGroup.mapAux.well_def`). That is to say,
+`toEnvelGroup.mapAux.well_def`).  That is to say,
 `toEnvelGroup.mapAux.well_def` recursively evaluates formal
-expressions of 2-morphisms as equality proofs in `G`. Now that all
+expressions of 2-morphisms as equality proofs in `G`.  Now that all
 morphisms are accounted for, the map descends to a homomorphism
 `EnvelGroup R →* G`.
 
-Note: `Type`-valued relations are not common. The fact it is
+Note: `Type`-valued relations are not common.  The fact it is
 `Type`-valued is what makes `toEnvelGroup.mapAux.well_def` have
 well-founded recursion.
 -/
 
 
-/--
-Inductive type `PreEnvelGroup` / 归纳类型 `PreEnvelGroup`
+/-- Free generators of the enveloping group.
+-/
+/-
+**Rack.PreEnvelGroup** 是 Mathlib 中的一个归纳类型，位于命名空间 `Rack`。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive PreEnvelGroup
-  parameters: (R : Type u)
-  constructors (4):
-    - unit: PreEnvelGroup R
-    - incl: (x : R) : PreEnvelGroup R
-    - mul: (a b : PreEnvelGroup R) : PreEnvelGroup R
-    - inv: (a : PreEnvelGroup R) : PreEnvelGroup R
-
-中文:
-归纳类型 PreEnvel群
-  参数: (R : 类型u)
-  构造子 (4 个):
-    - unit: PreEnvel群 R
-    - incl: (x : R) : PreEnvel群 R
-    - mul: (a b : PreEnvel群 R) : PreEnvel群 R
-    - inv: (a : PreEnvel群 R) : PreEnvel群 R
+--- 原说明 ---
+Free generators of the enveloping group.
 -/
 inductive PreEnvelGroup (R : Type u) : Type u
   | unit : PreEnvelGroup R
   | incl (x : R) : PreEnvelGroup R
   | mul (a b : PreEnvelGroup R) : PreEnvelGroup R
   | inv (a : PreEnvelGroup R) : PreEnvelGroup R
-
-/--
-Instance `PreEnvelGroup.inhabited` / 实例 `PreEnvelGroup.inhabited`
-
-English:
-instance PreEnvelGroup.inhabited
-  signature: (R : Type u)
-  body: ⟨PreEnvelGroup.unit⟩
-
-中文:
-实例 PreEnvel群.inhabited
-  签名: (R : 类型u)
-  定义体: ⟨PreEnvelGroup.unit⟩
-
-Depends on / 依赖: PreEnvelGroup, PreEnvelGroup.unit
+/-
+**Rack.PreEnvelGroup.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Rack.PreEnvelGroup`。
+形式化陈述：(R : Type u) → Inhabited (Rack.PreEnvelGroup R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance PreEnvelGroup.inhabited (R : Type u) : Inhabited (PreEnvelGroup R) :=
   ⟨PreEnvelGroup.unit⟩
 
 open PreEnvelGroup
 
-/--
-Inductive type `PreEnvelGroupRel'` / 归纳类型 `PreEnvelGroupRel'`
-
-English:
-inductive PreEnvelGroupRel'
-  parameters: (R : Type u) [Rack R]
-  constructors (10):
-    - refl: {a : PreEnvelGroup R} : PreEnvelGroupRel' R a a
-    - symm: {a b : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b) : PreEnvelGroupRel' R b a
-    - trans: {a b c : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b) (hbc : PreEnvelGroupRel' R b c) : PreEnvelGroupRel' R a c
-    - congr_mul: {a b a' b' : PreEnvelGroup R} (ha : PreEnvelGroupRel' R a a') (hb : PreEnvelGroupRel' R b b') : PreEnvelGroupRel' R (mul a b) (mul a' b')
-    - congr_inv: {a a' : PreEnvelGroup R} (ha : PreEnvelGroupRel' R a a') : PreEnvelGroupRel' R (inv a) (inv a')
-    - assoc: (a b c : PreEnvelGroup R) : PreEnvelGroupRel' R (mul (mul a b) c) (mul a (mul b c))
-    - one_mul: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul unit a) a
-    - mul_one: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul a unit) a
-    - inv_mul_cancel: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul (inv a) a) unit
-    - act_incl: (x y : R) : PreEnvelGroupRel' R (mul (mul (incl x) (incl y)) (inv (incl x))) (incl (x ◃ y))
-
-中文:
-归纳类型 PreEnvelGroupRel'
-  参数: (R : 类型u) [Rack R]
-  构造子 (10 个):
-    - refl: {a : PreEnvel群 R} : PreEnvelGroupRel' R a a
-    - symm: {a b : PreEnvel群 R} (hab : PreEnvelGroupRel' R a b) : PreEnvelGroupRel' R b a
-    - trans: {a b c : PreEnvel群 R} (hab : PreEnvelGroupRel' R a b) (hbc : PreEnvelGroupRel' R b c) : PreEnvelGroupRel' R a c
-    - congr_mul: {a b a' b' : PreEnvel群 R} (ha : PreEnvelGroupRel' R a a') (hb : PreEnvelGroupRel' R b b') : PreEnvelGroupRel' R (mul a b) (mul a' b')
-    - congr_inv: {a a' : PreEnvel群 R} (ha : PreEnvelGroupRel' R a a') : PreEnvelGroupRel' R (inv a) (inv a')
-    - assoc: (a b c : PreEnvel群 R) : PreEnvelGroupRel' R (mul (mul a b) c) (mul a (mul b c))
-    - one_mul: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul unit a) a
-    - mul_one: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul a unit) a
-    - inv_mul_cancel: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul (inv a) a) unit
-    - act_incl: (x y : R) : PreEnvelGroupRel' R (mul (mul (incl x) (incl y)) (inv (incl x))) (incl (x ◃ y))
+/-- Relations for the enveloping group. This is a type-valued relation because
+`toEnvelGroup.mapAux.well_def` inducts on it to show `toEnvelGroup.map`
+is well-defined.  The relation `PreEnvelGroupRel` is the `Prop`-valued version,
+which is used to define `EnvelGroup` itself.
 -/
-inductive PreEnvelGroupRel' (R : Type u) [Rack R] : PreEnvelGroup R -> PreEnvelGroup R -> Type u
+/-
+**Rack.PreEnvelGroupRel'** 是 Mathlib 中的一个实例，位于命名空间 `Rack`。
+形式化陈述：PreEnvelGroupRel'.inhabited (R : Type u) [Rack R] : Inhabited (PreEnvelGro
+upRel' R unit unit)
+参数：R : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Relations for the enveloping group. This is a type-valued relation because
+`toEnvelGroup.mapAux.well_def` inducts on it to show `toEnvelGroup.map`
+is well-defined.  The relation `PreEnvelGroupRel` is the `Prop`-valued version,
+which is used to define `EnvelGroup` itself.
+-/
+inductive PreEnvelGroupRel' (R : Type u) [Rack R] : PreEnvelGroup R → PreEnvelGroup R → Type u
   | refl {a : PreEnvelGroup R} : PreEnvelGroupRel' R a a
   | symm {a b : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b) : PreEnvelGroupRel' R b a
   | trans {a b c : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b)
@@ -1566,146 +1114,90 @@ inductive PreEnvelGroupRel' (R : Type u) [Rack R] : PreEnvelGroup R -> PreEnvelG
   | inv_mul_cancel (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul (inv a) a) unit
   | act_incl (x y : R) :
     PreEnvelGroupRel' R (mul (mul (incl x) (incl y)) (inv (incl x))) (incl (x ◃ y))
-
-/--
-Instance `PreEnvelGroupRel'.inhabited` / 实例 `PreEnvelGroupRel'.inhabited`
-
-English:
-instance PreEnvelGroupRel'.inhabited
-  signature: (R : Type u) [Rack R]
-  body: ⟨PreEnvelGroupRel'.refl⟩
-
-中文:
-实例 PreEnvelGroupRel'.inhabited
-  签名: (R : 类型u) [Rack R]
-  定义体: ⟨PreEnvelGroupRel'.refl⟩
-
-Depends on / 依赖: PreEnvelGroupRel
+/-
+**Rack.PreEnvelGroupRel'.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Rack.PreEnvelGroup
+Rel'`。
+形式化陈述：(R : Type u) → [inst : Rack R] → Inhabited (Rack.PreEnvelGroupRel' R Rack.
+PreEnvelGroup.unit Rack.PreEnvelGroup.unit)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance PreEnvelGroupRel'.inhabited (R : Type u) [Rack R] :
     Inhabited (PreEnvelGroupRel' R unit unit) :=
   ⟨PreEnvelGroupRel'.refl⟩
 
 /--
-Inductive type `PreEnvelGroupRel` / 归纳类型 `PreEnvelGroupRel`
-
-English:
-inductive PreEnvelGroupRel
-  parameters: (R : Type u) [Rack R]
-  constructors (1):
-    - rel: {a b : PreEnvelGroup R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
-
-中文:
-归纳类型 PreEnvelGroupRel
-  参数: (R : 类型u) [Rack R]
-  构造子 (1 个):
-    - rel: {a b : PreEnvel群 R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
+The `PreEnvelGroupRel` relation as a `Prop`.  Used as the relation for `PreEnvelGroup.setoid`.
 -/
-inductive PreEnvelGroupRel (R : Type u) [Rack R] : PreEnvelGroup R -> PreEnvelGroup R -> Prop
+/-
+**Rack.PreEnvelGroupRel** 是 Mathlib 中的一个归纳类型，位于命名空间 `Rack`。
+形式化陈述：(R : Type u) → [Rack R] → Rack.PreEnvelGroup R → Rack.PreEnvelGroup R → Pr
+op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The `PreEnvelGroupRel` relation as a `Prop`.  Used as the relation for `PreEnvel
+Group.setoid`.
+-/
+inductive PreEnvelGroupRel (R : Type u) [Rack R] : PreEnvelGroup R → PreEnvelGroup R → Prop
   | rel {a b : PreEnvelGroup R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
 
-/--
-theorem `PreEnvelGroupRel'.rel` / 定理 `PreEnvelGroupRel'.rel`
+/-- A quick way to convert a `PreEnvelGroupRel'` to a `PreEnvelGroupRel`.
+-/
+/-
+**Rack.PreEnvelGroupRel'.rel** 是 Mathlib 中的一个定理，位于命名空间 `Rack.PreEnvelGroupRel'`。
+形式化陈述：∀ {R : Type u} [inst : Rack R] {a b : Rack.PreEnvelGroup R} (a_1 : Rack.Pr
+eEnvelGroupRel' R a b),   Rack.PreEnvelGroupRel R a b
+参数：a_1 : Rack.PreEnvelGroupRel' R a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem PreEnvelGroupRel'.rel
-  given: {R : Type u} [Rack R] {a b : PreEnvelGroup R}
-  proof: PreEnvelGroupRel.rel
-
-@[refl]
-
-中文:
-定理 PreEnvelGroupRel'.rel
-  条件: {R : 类型u} [Rack R] {a b : PreEnvel群 R}
-  证明: PreEnvelGroupRel.rel
-
-@[refl]
+--- 原说明 ---
+A quick way to convert a `PreEnvelGroupRel'` to a `PreEnvelGroupRel`.
 -/
 theorem PreEnvelGroupRel'.rel {R : Type u} [Rack R] {a b : PreEnvelGroup R} :
-    PreEnvelGroupRel' R a b -> PreEnvelGroupRel R a b := PreEnvelGroupRel.rel
+    PreEnvelGroupRel' R a b → PreEnvelGroupRel R a b := PreEnvelGroupRel.rel
 
 @[refl]
-/--
-theorem `PreEnvelGroupRel.refl` / 定理 `PreEnvelGroupRel.refl`
-
-English:
-theorem PreEnvelGroupRel.refl
-  given: {R : Type u} [Rack R] {a : PreEnvelGroup R}
-  proof: PreEnvelGroupRel.rel PreEnvelGroupRel'.refl
-
-@[symm]
-
-中文:
-定理 PreEnvelGroupRel.refl
-  条件: {R : 类型u} [Rack R] {a : PreEnvel群 R}
-  证明: PreEnvelGroupRel.rel PreEnvelGroupRel'.refl
-
-@[symm]
-
-Depends on / 依赖: PreEnvelGroupRel, PreEnvelGroupRel.rel
+/-
+**Rack.PreEnvelGroupRel.refl** 是 Mathlib 中的一个定理，位于命名空间 `Rack.PreEnvelGroupRel`。
+形式化陈述：∀ {R : Type u} [inst : Rack R] {a : Rack.PreEnvelGroup R}, Rack.PreEnvelGr
+oupRel R a a
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem PreEnvelGroupRel.refl {R : Type u} [Rack R] {a : PreEnvelGroup R} :
     PreEnvelGroupRel R a a :=
   PreEnvelGroupRel.rel PreEnvelGroupRel'.refl
 
 @[symm]
-/--
-theorem `PreEnvelGroupRel.symm` / 定理 `PreEnvelGroupRel.symm`
-
-English:
-theorem PreEnvelGroupRel.symm
-  given: {R : Type u} [Rack R] {a b : PreEnvelGroup R}
-
-中文:
-定理 PreEnvelGroupRel.symm
-  条件: {R : 类型u} [Rack R] {a b : PreEnvel群 R}
+/-
+**Rack.PreEnvelGroupRel.symm** 是 Mathlib 中的一个定理，位于命名空间 `Rack.PreEnvelGroupRel`。
+形式化陈述：∀ {R : Type u} [inst : Rack R] {a b : Rack.PreEnvelGroup R}, Rack.PreEnvel
+GroupRel R a b → Rack.PreEnvelGroupRel R b a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.PreEnvelGroupRel'.rel`：∀ {R : Type u} [inst : Rack R] {a b : Rack.P
+reEnvelGroup R} (a_1 : Rack.PreEnvelGroupRel' R a b),   Rack.PreEnvelGroupRel R 
+a b
 -/
 theorem PreEnvelGroupRel.symm {R : Type u} [Rack R] {a b : PreEnvelGroup R} :
-    PreEnvelGroupRel R a b -> PreEnvelGroupRel R b a
+    PreEnvelGroupRel R a b → PreEnvelGroupRel R b a
   | ⟨r⟩ => r.symm.rel
 
 @[trans]
-/--
-theorem `PreEnvelGroupRel.trans` / 定理 `PreEnvelGroupRel.trans`
-
-English:
-theorem PreEnvelGroupRel.trans
-  given: {R : Type u} [Rack R] {a b c : PreEnvelGroup R}
-
-中文:
-定理 PreEnvelGroupRel.trans
-  条件: {R : 类型u} [Rack R] {a b c : PreEnvel群 R}
-
-Depends on / 依赖: e.symm
+/-
+**Rack.PreEnvelGroupRel.trans** 是 Mathlib 中的一个定理，位于命名空间 `Rack.PreEnvelGroupRel`。
+形式化陈述：∀ {R : Type u} [inst : Rack R] {a b c : Rack.PreEnvelGroup R},   Rack.PreE
+nvelGroupRel R a b → Rack.PreEnvelGroupRel R b c → Rack.PreEnvelGroupRel R a c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rack.PreEnvelGroupRel'.rel`：∀ {R : Type u} [inst : Rack R] {a b : Rack.P
+reEnvelGroup R} (a_1 : Rack.PreEnvelGroupRel' R a b),   Rack.PreEnvelGroupRel R 
+a b
 -/
 theorem PreEnvelGroupRel.trans {R : Type u} [Rack R] {a b c : PreEnvelGroup R} :
-    PreEnvelGroupRel R a b -> PreEnvelGroupRel R b c -> PreEnvelGroupRel R a c
+    PreEnvelGroupRel R a b → PreEnvelGroupRel R b c → PreEnvelGroupRel R a c
   | ⟨rab⟩, ⟨rbc⟩ => (rab.trans rbc).rel
-
-/--
-Instance `PreEnvelGroup.setoid` / 实例 `PreEnvelGroup.setoid`
-
-English:
-instance PreEnvelGroup.setoid
-  signature: (R : Type*) [Rack R]
-  body: PreEnvelGroupRel R
-  iseqv := by
-    constructor
-    · apply PreEnvelGroupRel.refl
-    · apply PreEnvelGroupRel.symm
-    · apply PreEnvelGroupRel.trans
-
-中文:
-实例 PreEnvel群.setoid
-  签名: (R : 类型) [Rack R]
-  定义体: PreEnvelGroupRel R
-  iseqv := by
-    constructor
-    · apply PreEnvelGroupRel.refl
-    · apply PreEnvelGroupRel.symm
-    · apply PreEnvelGroupRel.trans
-
-Depends on / 依赖: PreEnvelGroupRel
+/-
+**Rack.PreEnvelGroup.setoid** 是 Mathlib 中的一个定义，位于命名空间 `Rack.PreEnvelGroup`。
+形式化陈述：(R : Type u_1) → [Rack R] → Setoid (Rack.PreEnvelGroup R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance PreEnvelGroup.setoid (R : Type*) [Rack R] : Setoid (PreEnvelGroup R) where
   r := PreEnvelGroupRel R
@@ -1714,26 +1206,26 @@ instance PreEnvelGroup.setoid (R : Type*) [Rack R] : Setoid (PreEnvelGroup R) wh
     · apply PreEnvelGroupRel.refl
     · apply PreEnvelGroupRel.symm
     · apply PreEnvelGroupRel.trans
-/--
-Definition of `EnvelGroup` / `EnvelGroup` 的定义
+/-- The universal enveloping group for the rack R.
+-/
+/-
+**Rack.EnvelGroup** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：EnvelGroup (R : Type*) [Rack R]
+参数：R : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EnvelGroup
-  signature: (R : Type*) [Rack R]
-  body: Quotient (PreEnvelGroup.setoid R)
-
-中文:
-定义 EnvelGroup
-  签名: (R : 类型) [Rack R]
-  定义体: Quotient (PreEnvelGroup.setoid R)
-
-Depends on / 依赖: PreEnvelGroup, PreEnvelGroup.setoid, Quotient, setoid
+--- 原说明 ---
+The universal enveloping group for the rack R.
 -/
 def EnvelGroup (R : Type*) [Rack R] :=
   Quotient (PreEnvelGroup.setoid R)
 
 -- Define the `Group` instances in two steps so `inv` can be inferred correctly.
 -- TODO: is there a non-invasive way of defining the instance directly?
+/-
+**Rack.** 是 Mathlib 中的一个实例，位于命名空间 `Rack`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type*) [Rack R] : DivInvMonoid (EnvelGroup R) where
   mul a b :=
     Quotient.liftOn₂ a b (fun a b => ⟦PreEnvelGroup.mul a b⟧) fun _ _ _ _ ⟨ha⟩ ⟨hb⟩ =>
@@ -1746,59 +1238,57 @@ instance (R : Type*) [Rack R] : DivInvMonoid (EnvelGroup R) where
     Quotient.inductionOn₃ a b c fun a b c => Quotient.sound (PreEnvelGroupRel'.assoc a b c).rel
   one_mul a := Quotient.inductionOn a fun a => Quotient.sound (PreEnvelGroupRel'.one_mul a).rel
   mul_one a := Quotient.inductionOn a fun a => Quotient.sound (PreEnvelGroupRel'.mul_one a).rel
-
+/-
+**Rack.** 是 Mathlib 中的一个实例，位于命名空间 `Rack`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type*) [Rack R] : Group (EnvelGroup R) :=
   { inv_mul_cancel := fun a =>
       Quotient.inductionOn a fun a => Quotient.sound (PreEnvelGroupRel'.inv_mul_cancel a).rel }
-
-/--
-Instance `EnvelGroup.inhabited` / 实例 `EnvelGroup.inhabited`
-
-English:
-instance EnvelGroup.inhabited
-  signature: (R : Type*) [Rack R]
-  body: ⟨1⟩
-
-中文:
-实例 EnvelGroup.inhabited
-  签名: (R : 类型) [Rack R]
-  定义体: ⟨1⟩
+/-
+**Rack.EnvelGroup.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Rack.EnvelGroup`。
+形式化陈述：(R : Type u_1) → [inst : Rack R] → Inhabited (Rack.EnvelGroup R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance EnvelGroup.inhabited (R : Type*) [Rack R] : Inhabited (EnvelGroup R) :=
   ⟨1⟩
 
-/--
-Definition of `toEnvelGroup` / `toEnvelGroup` 的定义
-
-English:
-definition toEnvelGroup
-  signature: (R : Type*) [Rack R]
-  body: ⟦incl x⟧
-  map_act' := @fun x y => Quotient.sound (PreEnvelGroupRel'.act_incl x y).symm.rel
-
-中文:
-定义 toEnvelGroup
-  签名: (R : 类型) [Rack R]
-  定义体: ⟦incl x⟧
-  map_act' := @fun x y => Quotient.sound (PreEnvelGroupRel'.act_incl x y).symm.rel
+/-- The canonical homomorphism from a rack to its enveloping group.
+Satisfies universal properties given by `toEnvelGroup.map` and `toEnvelGroup.univ`.
 -/
-def toEnvelGroup (R : Type*) [Rack R] : R ->◃ Quandle.Conj (EnvelGroup R) where
+/-
+**Rack.toEnvelGroup** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：toEnvelGroup (R : Type*) [Rack R] : R ->◃ Quandle.Conj (EnvelGroup R) wher
+e toFun x
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The canonical homomorphism from a rack to its enveloping group.
+Satisfies universal properties given by `toEnvelGroup.map` and `toEnvelGroup.uni
+v`.
+-/
+def toEnvelGroup (R : Type*) [Rack R] : R →◃ Quandle.Conj (EnvelGroup R) where
   toFun x := ⟦incl x⟧
   map_act' := @fun x y => Quotient.sound (PreEnvelGroupRel'.act_incl x y).symm.rel
 
-/--
-Definition of `toEnvelGroup.mapAux` / `toEnvelGroup.mapAux` 的定义
-
-English:
-definition toEnvelGroup.mapAux
-  signature: {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G)
-
-中文:
-定义 toEnvelGroup.mapAux
-  签名: {R : 类型} [Rack R] {G : 类型} [群 G] (f : R ->◃ Quandle.Conj G)
+/-- The preliminary definition of the induced map from the enveloping group.
+See `toEnvelGroup.map`.
 -/
-def toEnvelGroup.mapAux {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G) :
-    PreEnvelGroup R -> G
+/-
+**Rack.toEnvelGroup.mapAux** 是 Mathlib 中的一个定义，位于命名空间 `Rack.toEnvelGroup`。
+形式化陈述：{R : Type u_1} →   [inst : Rack R] → {G : Type u_2} → [inst_1 : Group G] →
+ ShelfHom R (Quandle.Conj G) → Rack.PreEnvelGroup R → G
+参数：Quandle.Conj G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The preliminary definition of the induced map from the enveloping group.
+See `toEnvelGroup.map`.
+-/
+def toEnvelGroup.mapAux {R : Type*} [Rack R] {G : Type*} [Group G] (f : R →◃ Quandle.Conj G) :
+    PreEnvelGroup R → G
   | .unit => 1
   | .incl x => f x
   | .mul a b => toEnvelGroup.mapAux f a * toEnvelGroup.mapAux f b
@@ -1808,20 +1298,23 @@ namespace toEnvelGroup.mapAux
 
 open PreEnvelGroupRel'
 
-/--
-theorem `well_def` / 定理 `well_def`
-
-English:
-theorem well_def
-  given: {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G)
-
-中文:
-定理 well_def
-  条件: {R : 类型} [Rack R] {G : 类型} [群 G] (f : R ->◃ Quandle.Conj G)
+/-- Show that `toEnvelGroup.mapAux` sends equivalent expressions to equal terms.
 -/
-theorem well_def {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G) :
-    forall {a b : PreEnvelGroup R},
-      PreEnvelGroupRel' R a b -> toEnvelGroup.mapAux f a = toEnvelGroup.mapAux f b
+/-
+**Rack.toEnvelGroup.mapAux.well_def** 是 Mathlib 中的一个定理，位于命名空间 `Rack.toEnvelGroup
+.mapAux`。
+形式化陈述：∀ {R : Type u_1} [inst : Rack R] {G : Type u_2} [inst_1 : Group G] (f : Sh
+elfHom R (Quandle.Conj G))   {a b : Rack.PreEnvelGroup R} (a_1 : Rack.PreEnvelGr
+oupRel' R a b),   Rack.toEnvelGroup.mapAux f a = Rack.toEnvelGroup.mapAux f b
+参数：f : ShelfHom R (Quandle.Conj G)；a_1 : Rack.PreEnvelGroupRel' R a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Show that `toEnvelGroup.mapAux` sends equivalent expressions to equal terms.
+-/
+theorem well_def {R : Type*} [Rack R] {G : Type*} [Group G] (f : R →◃ Quandle.Conj G) :
+    ∀ {a b : PreEnvelGroup R},
+      PreEnvelGroupRel' R a b → toEnvelGroup.mapAux f a = toEnvelGroup.mapAux f b
   | _, _, PreEnvelGroupRel'.refl => rfl
   | _, _, PreEnvelGroupRel'.symm h => (well_def f h).symm
   | _, _, PreEnvelGroupRel'.trans hac hcb => Eq.trans (well_def f hac) (well_def f hcb)
@@ -1837,75 +1330,23 @@ theorem well_def {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle
 end toEnvelGroup.mapAux
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toEnvelGroup.map` / `toEnvelGroup.map` 的定义
+/-- Given a map from a rack to a group, lift it to being a map from the enveloping group.
+More precisely, the `EnvelGroup` functor is left adjoint to `Quandle.Conj`.
+-/
+/-
+**Rack.toEnvelGroup.map** 是 Mathlib 中的一个定义，位于命名空间 `Rack.toEnvelGroup`。
+形式化陈述：{R : Type u_1} →   [inst : Rack R] → {G : Type u_2} → [inst_1 : Group G] →
+ ShelfHom R (Quandle.Conj G) ≃ (Rack.EnvelGroup R →* G)
+参数：Quandle.Conj G；Rack.EnvelGroup R →* G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEnvelGroup.map
-  signature: {R : Type*} [Rack R] {G : Type*} [Group G]
-  body: { toFun := fun x =>
-        Quotient.liftOn x (toEnvelGroup.mapAux f) fun _ _ ⟨hab⟩ =>
-          toEnvelGroup.mapAux.well_def f hab
-      map_one' := by
-        change Quotient.liftOn ⟦Rack.PreEnvelGroup.unit⟧ (toEnvelGroup.mapAux f) _ = 1
-        simp only [Quotient.lift_mk, mapAux]
-      map_mul' := fun x y =>
-        Quotient.inductionOn₂ x y fun x y => by
-          change Quotient.liftOn ⟦mul x y⟧ (toEnvelGroup.mapAux f) _ = _
-          simp [toEnvelGroup.mapAux] }
-  invFun F := (Quandle.Conj.map F).comp (toEnvelGroup R)
-  right_inv F :=
-    MonoidHom.ext fun x =>
-      Quotient.inductionOn x fun x => by
-        induction x with
-        | unit => exact F.map_one.symm
-        | incl => rfl
-        | mul x y ih_x ih_y =>
-          have hm : ⟦x.mul y⟧ = @Mul.mul (EnvelGroup R) _ ⟦x⟧ ⟦y⟧ := rfl
-          simp only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-          suffices forall x y, F (Mul.mul x y) = F (x) * F (y) by
-            simp_all only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-            rw [← ih_x]; rw [← ih_y]; rw [mapAux]
-          exact F.map_mul
-        | inv x ih_x =>
-          have hm : ⟦x.inv⟧ = @Inv.inv (EnvelGroup R) _ ⟦x⟧ := rfl
-          rw [hm]; rw [map_inv]; rw [map_inv]; rw [ih_x]
-
-中文:
-定义 toEnvelGroup.map
-  签名: {R : 类型} [Rack R] {G : 类型} [群 G]
-  定义体: { toFun := fun x =>
-        Quotient.liftOn x (toEnvelGroup.mapAux f) fun _ _ ⟨hab⟩ =>
-          toEnvelGroup.mapAux.well_def f hab
-      map_one' := by
-        change Quotient.liftOn ⟦Rack.PreEnvelGroup.unit⟧ (toEnvelGroup.mapAux f) _ = 1
-        simp only [Quotient.lift_mk, mapAux]
-      map_mul' := fun x y =>
-        Quotient.inductionOn₂ x y fun x y => by
-          change Quotient.liftOn ⟦mul x y⟧ (toEnvelGroup.mapAux f) _ = _
-          simp [toEnvelGroup.mapAux] }
-  invFun F := (Quandle.Conj.map F).comp (toEnvelGroup R)
-  right_inv F :=
-    MonoidHom.ext fun x =>
-      Quotient.inductionOn x fun x => by
-        induction x with
-        | unit => exact F.map_one.symm
-        | incl => rfl
-        | mul x y ih_x ih_y =>
-          have hm : ⟦x.mul y⟧ = @Mul.mul (EnvelGroup R) _ ⟦x⟧ ⟦y⟧ := rfl
-          simp only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-          suffices forall x y, F (Mul.mul x y) = F (x) * F (y) by
-            simp_all only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-            rw [← ih_x]; rw [← ih_y]; rw [mapAux]
-          exact F.map_mul
-        | inv x ih_x =>
-          have hm : ⟦x.inv⟧ = @Inv.inv (EnvelGroup R) _ ⟦x⟧ := rfl
-          rw [hm]; rw [map_inv]; rw [map_inv]; rw [ih_x]
-
-Depends on / 依赖: MonoidHom, MonoidHom.ext, PreEnvelGroup, Quandle, Quandle.Conj.map, Quotien, Quotient, Quotient.inductionOn, Quotient.liftOn, Quotient.lift_mk, Rack.PreEnvelGroup.unit, invFun, liftOn, lift_mk, mapAux, map_mul, map_one, right_inv, toEnvelGroup, toEnvelGroup.mapAux
+--- 原说明 ---
+Given a map from a rack to a group, lift it to being a map from the enveloping g
+roup.
+More precisely, the `EnvelGroup` functor is left adjoint to `Quandle.Conj`.
 -/
 def toEnvelGroup.map {R : Type*} [Rack R] {G : Type*} [Group G] :
-    (R ->◃ Quandle.Conj G) ≃ (EnvelGroup R ->* G) where
+    (R →◃ Quandle.Conj G) ≃ (EnvelGroup R →* G) where
   toFun f :=
     { toFun := fun x =>
         Quotient.liftOn x (toEnvelGroup.mapAux f) fun _ _ ⟨hab⟩ =>
@@ -1927,88 +1368,90 @@ def toEnvelGroup.map {R : Type*} [Rack R] {G : Type*} [Group G] :
         | mul x y ih_x ih_y =>
           have hm : ⟦x.mul y⟧ = @Mul.mul (EnvelGroup R) _ ⟦x⟧ ⟦y⟧ := rfl
           simp only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-          suffices forall x y, F (Mul.mul x y) = F (x) * F (y) by
+          suffices ∀ x y, F (Mul.mul x y) = F (x) * F (y) by
             simp_all only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
-            rw [← ih_x]; rw [← ih_y]; rw [mapAux]
+            rw [← ih_x, ← ih_y, mapAux]
           exact F.map_mul
         | inv x ih_x =>
           have hm : ⟦x.inv⟧ = @Inv.inv (EnvelGroup R) _ ⟦x⟧ := rfl
-          rw [hm]; rw [map_inv]; rw [map_inv]; rw [ih_x]
+          rw [hm, map_inv, map_inv, ih_x]
 
-/--
-theorem `toEnvelGroup.univ` / 定理 `toEnvelGroup.univ`
-
-English:
-theorem toEnvelGroup.univ
-  given: (R : Type*) [Rack R] (G : Type*) [Group G] (f : R ->◃ Quandle.Conj G)
-  proof: toEnvelGroup.map.symm_apply_apply f
-
-中文:
-定理 toEnvelGroup.univ
-  条件: (R : 类型) [Rack R] (G : 类型) [群 G] (f : R ->◃ Quandle.Conj G)
-  证明: toEnvelGroup.map.symm_apply_apply f
-
-Depends on / 依赖: symm_apply_apply, toEnvelGroup, toEnvelGroup.map.symm_apply_apply
+/-- Given a homomorphism from a rack to a group, it factors through the enveloping group.
 -/
-theorem toEnvelGroup.univ (R : Type*) [Rack R] (G : Type*) [Group G] (f : R ->◃ Quandle.Conj G) :
+/-
+**Rack.toEnvelGroup.univ** 是 Mathlib 中的一个定理，位于命名空间 `Rack.toEnvelGroup`。
+形式化陈述：∀ (R : Type u_1) [inst : Rack R] (G : Type u_2) [inst_1 : Group G] (f : Sh
+elfHom R (Quandle.Conj G)),   (Quandle.Conj.map (Rack.toEnvelGroup.map f)).comp 
+(Rack.toEnvelGroup R) = f
+参数：R : Type u_1；G : Type u_2；f : ShelfHom R (Quandle.Conj G)；Quandle.Conj.map (R
+ack.toEnvelGroup.map f)；Rack.toEnvelGroup R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+
+--- 原说明 ---
+Given a homomorphism from a rack to a group, it factors through the enveloping g
+roup.
+-/
+theorem toEnvelGroup.univ (R : Type*) [Rack R] (G : Type*) [Group G] (f : R →◃ Quandle.Conj G) :
     (Quandle.Conj.map (toEnvelGroup.map f)).comp (toEnvelGroup R) = f :=
   toEnvelGroup.map.symm_apply_apply f
 
-/--
-theorem `toEnvelGroup.univ_uniq` / 定理 `toEnvelGroup.univ_uniq`
+/-- The homomorphism `toEnvelGroup.map f` is the unique map that fits into the commutative
+triangle in `toEnvelGroup.univ`.
+-/
+/-
+**Rack.toEnvelGroup.univ_uniq** 是 Mathlib 中的一个定理，位于命名空间 `Rack.toEnvelGroup`。
+形式化陈述：∀ (R : Type u_1) [inst : Rack R] (G : Type u_2) [inst_1 : Group G] (f : Sh
+elfHom R (Quandle.Conj G))   (g : Rack.EnvelGroup R →* G), f = (Quandle.Conj.map
+ g).comp (Rack.toEnvelGroup R) → g = Rack.toEnvelGroup.map f
+参数：R : Type u_1；G : Type u_2；f : ShelfHom R (Quandle.Conj G)；g : Rack.EnvelGroup
+ R →* G；Quandle.Conj.map g；Rack.toEnvelGroup R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 
-English:
-theorem toEnvelGroup.univ_uniq
-  statement: (R : Type*) [Rack R] (G : Type*) [Group G]
-  proof: h.symm ▸ (toEnvelGroup.map.apply_symm_apply g).symm
-
-中文:
-定理 toEnvelGroup.univ_uniq
-  结论: (R : 类型) [Rack R] (G : 类型) [群 G]
-  证明: h.symm ▸ (toEnvelGroup.map.apply_symm_apply g).symm
-
-Depends on / 依赖: apply_symm_apply, h.symm, toEnvelGroup, toEnvelGroup.map.apply_symm_apply
+--- 原说明 ---
+The homomorphism `toEnvelGroup.map f` is the unique map that fits into the commu
+tative
+triangle in `toEnvelGroup.univ`.
 -/
 theorem toEnvelGroup.univ_uniq (R : Type*) [Rack R] (G : Type*) [Group G]
-    (f : R ->◃ Quandle.Conj G) (g : EnvelGroup R ->* G)
+    (f : R →◃ Quandle.Conj G) (g : EnvelGroup R →* G)
     (h : f = (Quandle.Conj.map g).comp (toEnvelGroup R)) : g = toEnvelGroup.map f :=
   h.symm ▸ (toEnvelGroup.map.apply_symm_apply g).symm
 
-/--
-Definition of `envelAction` / `envelAction` 的定义
+/-- The induced group homomorphism from the enveloping group into bijections of the rack,
+using `Rack.toConj`. Satisfies the property `envelAction_prop`.
 
-English:
-definition envelAction
-  signature: {R : Type*} [Rack R]
-  body: toEnvelGroup.map (toConj R)
-
-@[simp]
-
-中文:
-定义 envelAction
-  签名: {R : 类型} [Rack R]
-  定义体: toEnvelGroup.map (toConj R)
-
-@[simp]
-
-Depends on / 依赖: toConj, toEnvelGroup, toEnvelGroup.map
+This gives the rack `R` the structure of an augmented rack over `EnvelGroup R`.
 -/
-def envelAction {R : Type*} [Rack R] : EnvelGroup R ->* R ≃ R :=
+/-
+**Rack.envelAction** 是 Mathlib 中的一个定义，位于命名空间 `Rack`。
+形式化陈述：envelAction {R : Type*} [Rack R] : EnvelGroup R ->* R ≃ R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The induced group homomorphism from the enveloping group into bijections of the 
+rack,
+using `Rack.toConj`. Satisfies the property `envelAction_prop`.
+
+This gives the rack `R` the structure of an augmented rack over `EnvelGroup R`.
+-/
+def envelAction {R : Type*} [Rack R] : EnvelGroup R →* R ≃ R :=
   toEnvelGroup.map (toConj R)
 
 @[simp]
-/--
-theorem `envelAction_prop` / 定理 `envelAction_prop`
-
-English:
-theorem envelAction_prop
-  given: {R : Type*} [Rack R] (x y : R)
-  proof: rfl
-
-中文:
-定理 envelAction_prop
-  条件: {R : 类型} [Rack R] (x y : R)
-  证明: rfl
+/-
+**Rack.envelAction_prop** 是 Mathlib 中的一个定理，位于命名空间 `Rack`。
+形式化陈述：envelAction_prop {R : Type*} [Rack R] (x y : R) : envelAction (toEnvelGrou
+p R x) y = x ◃ y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem envelAction_prop {R : Type*} [Rack R] (x y : R) :
     envelAction (toEnvelGroup R x) y = x ◃ y :=
@@ -2017,3 +1460,4 @@ theorem envelAction_prop {R : Type*} [Rack R] (x y : R) :
 end EnvelGroup
 
 end Rack
+

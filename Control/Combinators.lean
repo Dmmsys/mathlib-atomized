@@ -14,39 +14,37 @@ public import Mathlib.Init
 
 universe u v w
 
-/--
-Definition of `joinM` / `joinM` 的定义
+/-- Collapses two layers of monadic structure into one,
+passing the effects of the inner monad through the outer. -/
+/-
+**joinM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：joinM {m : Type u -> Type u} [Monad m] {α : Type u} (a : m (m α)) : m α
+参数：a : m (m α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition joinM
-  signature: {m : Type u -> Type u} [Monad m] {α : Type u} (a : m (m α))
-  body: bind a id
-
-中文:
-定义 joinM
-  签名: {m : 类型u -> 类型u} [单子 m] {α : 类型u} (a : m (m α))
-  定义体: bind a id
+--- 原说明 ---
+Collapses two layers of monadic structure into one,
+passing the effects of the inner monad through the outer.
 -/
-def joinM {m : Type u -> Type u} [Monad m] {α : Type u} (a : m (m α)) : m α :=
+def joinM {m : Type u → Type u} [Monad m] {α : Type u} (a : m (m α)) : m α :=
   bind a id
 
-/--
-Definition of `condM` / `condM` 的定义
+/-- Executes `tm` or `fm` depending on whether the result of `mbool` is `true` or `false`
+respectively. -/
+/-
+**condM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：condM {m : Type -> Type} [Monad m] {α : Type} (mbool : m Bool) (tm fm : m 
+α) : m α
+参数：mbool : m Bool；tm fm : m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition condM
-  signature: {m : Type -> Type} [Monad m] {α : Type} (mbool : m Bool) (tm fm : m α)
-  body: do
-  let b ← mbool
-  cond b tm fm
-
-中文:
-定义 condM
-  签名: {m : 类型 -> 类型} [单子 m] {α : 类型} (mbool : m 布尔值) (tm fm : m α)
-  定义体: do
-  let b ← mbool
-  cond b tm fm
+--- 原说明 ---
+Executes `tm` or `fm` depending on whether the result of `mbool` is `true` or `f
+alse`
+respectively.
 -/
-def condM {m : Type -> Type} [Monad m] {α : Type} (mbool : m Bool) (tm fm : m α) : m α := do
+def condM {m : Type → Type} [Monad m] {α : Type} (mbool : m Bool) (tm fm : m α) : m α := do
   let b ← mbool
   cond b tm fm

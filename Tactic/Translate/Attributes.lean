@@ -21,26 +21,30 @@ namespace Mathlib.Tactic
 open Lean
 
 /-- Attributes that generate new declarations when applied. -/
-initialize generatingAttrs : IO.Ref (NameMap (Name -> Syntax -> AttributeKind -> AttrM (Array Name))) ←
+initialize generatingAttrs : IO.Ref (NameMap (Name → Syntax → AttributeKind → AttrM (Array Name))) ←
   IO.mkRef {}
 
-/--
-Definition of `registerGeneratingAttr` / `registerGeneratingAttr` 的定义
+/-- For an attribute that generates new declarations,
+register the implementation that returns the generated declarations.
+This will be used by translation attributes for translating between generated declarations. -/
+/-
+**Mathlib.Tactic.registerGeneratingAttr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c`。
+形式化陈述：registerGeneratingAttr (attr : Name) (impl : Name -> Syntax -> AttributeKi
+nd -> AttrM (Array Name)) : IO Unit
+参数：attr : Name；impl : Name -> Syntax -> AttributeKind -> AttrM (Array Name)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition registerGeneratingAttr
-  signature: (attr : Name)
-  body: generatingAttrs.modify (·.insert attr impl)
-
-中文:
-定义 registerGeneratingAttr
-  签名: (attr : Name)
-  定义体: generatingAttrs.modify (·.insert attr impl)
-
-Depends on / 依赖: generatingAttrs, generatingAttrs.modify, insert, modify
+--- 原说明 ---
+For an attribute that generates new declarations,
+register the implementation that returns the generated declarations.
+This will be used by translation attributes for translating between generated de
+clarations.
 -/
 def registerGeneratingAttr (attr : Name)
-    (impl : Name -> Syntax -> AttributeKind -> AttrM (Array Name)) : IO Unit :=
+    (impl : Name → Syntax → AttributeKind → AttrM (Array Name)) : IO Unit :=
   generatingAttrs.modify (·.insert attr impl)
 
 end Mathlib.Tactic
+

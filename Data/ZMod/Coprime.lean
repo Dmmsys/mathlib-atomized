@@ -23,65 +23,88 @@ assert_not_exists TwoSidedIdeal
 
 namespace ZMod
 
-/--
-theorem `eq_zero_iff_gcd_ne_one` / 定理 `eq_zero_iff_gcd_ne_one`
+/-- If `p` is a prime and `a` is an integer, then `a : ZMod p` is zero if and only if
+`gcd a p ≠ 1`. -/
+/-
+**ZMod.eq_zero_iff_gcd_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `ZMod`。
+形式化陈述：eq_zero_iff_gcd_ne_one {a : Int} {p : Nat} [pp : Fact p.Prime] : (a : ZMod
+ p) = 0 ↔ a.gcd p != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Int.gcd_comm`：∀ (a b : ℤ), a.gcd b = b.gcd a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.isCoprime_iff_gcd_eq_one`：Int.isCoprime_iff_gcd_eq_one {m n : Int} :
+ IsCoprime m n ↔ Int.gcd m n = 1
+· 使用定理 `Prime.coprime_iff_not_dvd`：Prime.coprime_iff_not_dvd {p n : Nat} (pp : P
+rime p) : Coprime p n ↔ ¬p ∣ n
+· 使用定理 `IsBezout.of_isPrincipalIdealRing`：∀ (R : Type u) [inst : Semiring R] [Is
+PrincipalIdealRing R], IsBezout R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem eq_zero_iff_gcd_ne_one
-  given: {a : Int} {p : Nat} [pp : Fact p.Prime]
-  proof: by
-  rw [Ne]; rw [Int.gcd_comm]; rw [← Int.isCoprime_iff_gcd_eq_one]; rw [(Nat.prime_iff_prime_int.1 pp.1).coprime_iff_not_dvd]; rw [Classical.not_not]; rw [intCast_zmod_eq_zero_iff_dvd]
-
-中文:
-定理 eq_zero_iff_gcd_ne_one
-  条件: {a : 整数} {p : 自然数} [pp : Fact p.素]
-  证明: by
-  rw [Ne]; rw [Int.gcd_comm]; rw [← Int.isCoprime_iff_gcd_eq_one]; rw [(Nat.prime_iff_prime_int.1 pp.1).coprime_iff_not_dvd]; rw [Classical.not_not]; rw [intCast_zmod_eq_zero_iff_dvd]
-
-Depends on / 依赖: Classical, Classical.not_not, Int.gcd_comm, Int.isCoprime_iff_gcd_eq_one, Nat.prime_iff_prime_int, coprime_iff_not_dvd, gcd_comm, intCast_zmod_eq_zero_iff_dvd, isCoprime_iff_gcd_eq_one, not_not, prime_iff_prime_int
+--- 原说明 ---
+If `p` is a prime and `a` is an integer, then `a : ZMod p` is zero if and only i
+f
+`gcd a p ≠ 1`.
 -/
-theorem eq_zero_iff_gcd_ne_one {a : Int} {p : Nat} [pp : Fact p.Prime] :
-    (a : ZMod p) = 0 ↔ a.gcd p != 1 := by
-  rw [Ne]; rw [Int.gcd_comm]; rw [← Int.isCoprime_iff_gcd_eq_one]; rw [(Nat.prime_iff_prime_int.1 pp.1).coprime_iff_not_dvd]; rw [Classical.not_not]; rw [intCast_zmod_eq_zero_iff_dvd]
+theorem eq_zero_iff_gcd_ne_one {a : ℤ} {p : ℕ} [pp : Fact p.Prime] :
+    (a : ZMod p) = 0 ↔ a.gcd p ≠ 1 := by
+  rw [Ne, Int.gcd_comm, ← Int.isCoprime_iff_gcd_eq_one,
+    (Nat.prime_iff_prime_int.1 pp.1).coprime_iff_not_dvd, Classical.not_not,
+    intCast_zmod_eq_zero_iff_dvd]
 
-/--
-theorem `ne_zero_of_gcd_eq_one` / 定理 `ne_zero_of_gcd_eq_one`
+/-- If an integer `a` and a prime `p` satisfy `gcd a p = 1`, then `a : ZMod p` is nonzero. -/
+/-
+**ZMod.ne_zero_of_gcd_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `ZMod`。
+形式化陈述：ne_zero_of_gcd_eq_one {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p = 1)
+ : (a : ZMod p) != 0
+参数：pp : p.Prime；h : a.gcd p = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ZMod.eq_zero_iff_gcd_ne_one`：eq_zero_iff_gcd_ne_one {a : Int} {p : Nat} 
+[pp : Fact p.Prime] : (a : ZMod p) = 0 ↔ a.gcd p != 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 
-English:
-theorem ne_zero_of_gcd_eq_one
-  given: {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p = 1)
-  statement: (a : ZMod p) != 0
-  proof: mt (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mp (Classical.not_not.mpr h)
-
-中文:
-定理 ne_zero_of_gcd_eq_one
-  条件: {a : 整数} {p : 自然数} (pp : p.素) (h : a.最大公约数 p = 1)
-  结论: (a : ZMod p) != 0
-  证明: mt (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mp (Classical.not_not.mpr h)
-
-Depends on / 依赖: Classical, Classical.not_not.mpr, eq_zero_iff_gcd_ne_one, not_not
+--- 原说明 ---
+If an integer `a` and a prime `p` satisfy `gcd a p = 1`, then `a : ZMod p` is no
+nzero.
 -/
-theorem ne_zero_of_gcd_eq_one {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p = 1) : (a : ZMod p) != 0 :=
+theorem ne_zero_of_gcd_eq_one {a : ℤ} {p : ℕ} (pp : p.Prime) (h : a.gcd p = 1) : (a : ZMod p) ≠ 0 :=
   mt (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mp (Classical.not_not.mpr h)
 
-/--
-theorem `eq_zero_of_gcd_ne_one` / 定理 `eq_zero_of_gcd_ne_one`
+/-- If an integer `a` and a prime `p` satisfy `gcd a p ≠ 1`, then `a : ZMod p` is zero. -/
+/-
+**ZMod.eq_zero_of_gcd_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `ZMod`。
+形式化陈述：eq_zero_of_gcd_ne_one {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p != 1
+) : (a : ZMod p) = 0
+参数：pp : p.Prime；h : a.gcd p != 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ZMod.eq_zero_iff_gcd_ne_one`：eq_zero_iff_gcd_ne_one {a : Int} {p : Nat} 
+[pp : Fact p.Prime] : (a : ZMod p) = 0 ↔ a.gcd p != 1
 
-English:
-theorem eq_zero_of_gcd_ne_one
-  given: {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p != 1)
-  statement: (a : ZMod p) = 0
-  proof: (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mpr h
-
-中文:
-定理 eq_zero_of_gcd_ne_one
-  条件: {a : 整数} {p : 自然数} (pp : p.素) (h : a.最大公约数 p != 1)
-  结论: (a : ZMod p) = 0
-  证明: (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mpr h
-
-Depends on / 依赖: eq_zero_iff_gcd_ne_one
+--- 原说明 ---
+If an integer `a` and a prime `p` satisfy `gcd a p ≠ 1`, then `a : ZMod p` is ze
+ro.
 -/
-theorem eq_zero_of_gcd_ne_one {a : Int} {p : Nat} (pp : p.Prime) (h : a.gcd p != 1) : (a : ZMod p) = 0 :=
+theorem eq_zero_of_gcd_ne_one {a : ℤ} {p : ℕ} (pp : p.Prime) (h : a.gcd p ≠ 1) : (a : ZMod p) = 0 :=
   (@eq_zero_iff_gcd_ne_one a p ⟨pp⟩).mpr h
 
 end ZMod
+

@@ -55,38 +55,20 @@ open Filter Set Function
 /-- A completion of `α` is the data of a complete separated uniform space
 and a map from `α` with dense range and inducing the original uniform structure on `α`. -/
 @[pp_with_univ]
-/--
-Definition of `AbstractCompletion.` / `AbstractCompletion.` 的定义
+/-
+**AbstractCompletion.** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AbstractCompletion.{v,
-  parameters: u} (α
-  axioms and operations (7):
-    - space : Type v
-    - coe : α -> space
-    - uniformStruct : UniformSpace space
-    - complete : CompleteSpace space
-    - separation : T0Space space
-    - isUniformInducing : IsUniformInducing coe
-    - dense : DenseRange coe
-
-中文:
-结构 AbstractCompletion.{v,
-  参数: u} (α
-  公理与运算 (7 个):
-    - space : 类型v
-    - coe : α -> space
-    - uniformStruct : 一致空间 space
-    - complete : 完备空间 space
-    - separation : T0空间 space
-    - isUniformInducing : 是UniformInducing coe
-    - dense : DenseRange coe
+--- 原说明 ---
+A completion of `α` is the data of a complete separated uniform space
+and a map from `α` with dense range and inducing the original uniform structure 
+on `α`.
 -/
 structure AbstractCompletion.{v, u} (α : Type u) [UniformSpace α] where
   /-- The underlying space of the completion. -/
   space : Type v
   /-- A map from a space to its completion. -/
-  coe : α -> space
+  coe : α → space
   /-- The completion carries a uniform structure. -/
   uniformStruct : UniformSpace space
   /-- The completion is complete. -/
@@ -111,233 +93,198 @@ local notation "hatα" => pkg.space
 
 local notation "ι" => pkg.coe
 
-/--
-Definition of `ofComplete` / `ofComplete` 的定义
+/-- If `α` is complete, then it is an abstract completion of itself. -/
+/-
+**AbstractCompletion.ofComplete** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：ofComplete [T0Space α] [CompleteSpace α] : AbstractCompletion α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.id`：IsUniformInducing.id : IsUniformInducing (@id α)
 
-English:
-definition ofComplete
-  signature: [T0Space α] [CompleteSpace α]
-  body: mk α id inferInstance inferInstance inferInstance .id denseRange_id
-
-中文:
-定义 ofComplete
-  签名: [T0空间 α] [完备空间 α]
-  定义体: mk α id inferInstance inferInstance inferInstance .id denseRange_id
-
-Depends on / 依赖: denseRange_id
+--- 原说明 ---
+If `α` is complete, then it is an abstract completion of itself.
 -/
 def ofComplete [T0Space α] [CompleteSpace α] : AbstractCompletion α :=
   mk α id inferInstance inferInstance inferInstance .id denseRange_id
-
-/--
-theorem `closure_range` / 定理 `closure_range`
-
-English:
-theorem closure_range
-  statement: closure (range ι) = univ
-  proof: pkg.dense.closure_range
-
-中文:
-定理 closure_range
-  结论: closure (range ι) = univ
-  证明: pkg.dense.closure_range
-
-Depends on / 依赖: closure_range, pkg.dense.closure_range
+/-
+**AbstractCompletion.closure_range** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion
+`。
+形式化陈述：closure_range : closure (range ι) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DenseRange.closure_range`：DenseRange.closure_range (h : DenseRange f) : 
+closure (range f) = univ
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 -/
 theorem closure_range : closure (range ι) = univ :=
   pkg.dense.closure_range
-
-/--
-theorem `isDenseInducing` / 定理 `isDenseInducing`
-
-English:
-theorem isDenseInducing
-  statement: IsDenseInducing ι
-  proof: ⟨pkg.isUniformInducing.isInducing, pkg.dense⟩
-
-@[fun_prop]
-
-中文:
-定理 isDenseInducing
-  结论: 是DenseInducing ι
-  证明: ⟨pkg.isUniformInducing.isInducing, pkg.dense⟩
-
-@[fun_prop]
-
-Depends on / 依赖: isInducing, isUniformInducing, pkg.dense, pkg.isUniformInducing.isInducing
+/-
+**AbstractCompletion.isDenseInducing** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompleti
+on`。
+形式化陈述：isDenseInducing : IsDenseInducing ι
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.isInducing`：IsUniformInducing.isInducing {f : α -> β} 
+(h : IsUniformInducing f) : IsInducing f
+· 使用定理 `AbstractCompletion.isUniformInducing`：∀ {α : Type u} [inst : UniformSpac
+e α] (self : AbstractCompletion.{v, u} α), IsUniformInducing self.coe
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 -/
 theorem isDenseInducing : IsDenseInducing ι :=
   ⟨pkg.isUniformInducing.isInducing, pkg.dense⟩
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_coe` / 定理 `uniformContinuous_coe`
-
-English:
-theorem uniformContinuous_coe
-  statement: UniformContinuous ι
-  proof: IsUniformInducing.uniformContinuous pkg.isUniformInducing
-
-中文:
-定理 uniformContinuous_coe
-  结论: 一致连续 ι
-  证明: IsUniformInducing.uniformContinuous pkg.isUniformInducing
-
-Depends on / 依赖: IsUniformInducing, IsUniformInducing.uniformContinuous, isUniformInducing, pkg.isUniformInducing, uniformContinuous
+/-
+**AbstractCompletion.uniformContinuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCo
+mpletion`。
+形式化陈述：uniformContinuous_coe : UniformContinuous ι
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
+· 使用定理 `AbstractCompletion.isUniformInducing`：∀ {α : Type u} [inst : UniformSpac
+e α] (self : AbstractCompletion.{v, u} α), IsUniformInducing self.coe
 -/
 theorem uniformContinuous_coe : UniformContinuous ι :=
   IsUniformInducing.uniformContinuous pkg.isUniformInducing
-
-/--
-theorem `continuous_coe` / 定理 `continuous_coe`
-
-English:
-theorem continuous_coe
-  statement: Continuous ι
-  proof: pkg.uniformContinuous_coe.continuous
-
-@[elab_as_elim]
-
-中文:
-定理 continuous_coe
-  结论: 连续 ι
-  证明: pkg.uniformContinuous_coe.continuous
-
-@[elab_as_elim]
-
-Depends on / 依赖: continuous, pkg.uniformContinuous_coe.continuous, uniformContinuous_coe
+/-
+**AbstractCompletion.continuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletio
+n`。
+形式化陈述：continuous_coe : Continuous ι
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
 theorem continuous_coe : Continuous ι :=
   pkg.uniformContinuous_coe.continuous
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  given: {p : hatα -> Prop} (a : hatα) (hp : IsClosed { a | p a }) (ih : forall a, p (ι a))
-  proof: isClosed_property pkg.dense hp ih a
-
-中文:
-定理 induction_on
-  条件: {p : hatα -> 命题} (a : hatα) (hp : 是闭集 { a | p a }) (ih : 对任意 a, p (ι a))
-  证明: isClosed_property pkg.dense hp ih a
-
-Depends on / 依赖: isClosed_property, pkg.dense
+/-
+**AbstractCompletion.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`
+。
+形式化陈述：induction_on {p : hatα -> Prop} (a : hatα) (hp : IsClosed { a | p a }) (ih
+ : forall a, p (ι a)) : p a
+参数：a : hatα；hp : IsClosed { a | p a }；ih : forall a, p (ι a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_property`：isClosed_property [TopologicalSpace β] {e : α -> β} {
+p : β -> Prop} (he : DenseRange e) (hp : IsClosed { x | p x }) (h : forall a, p 
+(e a)) …
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 -/
-theorem induction_on {p : hatα -> Prop} (a : hatα) (hp : IsClosed { a | p a }) (ih : forall a, p (ι a)) :
+theorem induction_on {p : hatα → Prop} (a : hatα) (hp : IsClosed { a | p a }) (ih : ∀ a, p (ι a)) :
     p a :=
   isClosed_property pkg.dense hp ih a
 
 variable {β : Type uβ}
-
-/--
-theorem `funext` / 定理 `funext`
-
-English:
-theorem funext
-  statement: [TopologicalSpace β] [T2Space β] {f g : hatα -> β} (hf : Continuous f)
-  proof: funext fun a => pkg.induction_on a (isClosed_eq hf hg) h
-
-中文:
-定理 funext
-  结论: [拓扑空间 β] [T2空间 β] {f g : hatα -> β} (hf : 连续 f)
-  证明: funext fun a => pkg.induction_on a (isClosed_eq hf hg) h
+/-
+**AbstractCompletion.funext** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：∀ {α : Type uα} [inst : UniformSpace α] (pkg : AbstractCompletion.{vα, uα}
+ α) {β : Type uβ}   [inst_1 : TopologicalSpace β] [T2Space β] {f g : pkg.space →
+ β},   Continuous f → Continuous g → (∀ (a : α), f (pkg.coe a) = g (pkg.coe a)) 
+→ f = g
+参数：pkg : AbstractCompletion.{vα, uα} α；∀ (a : α), f (pkg.coe a) = g (pkg.coe a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AbstractCompletion.induction_on`：induction_on {p : hatα -> Prop} (a : ha
+tα) (hp : IsClosed { a | p a }) (ih : forall a, p (ι a)) : p a
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
 -/
-protected theorem funext [TopologicalSpace β] [T2Space β] {f g : hatα -> β} (hf : Continuous f)
-    (hg : Continuous g) (h : forall a, f (ι a) = g (ι a)) : f = g :=
+protected theorem funext [TopologicalSpace β] [T2Space β] {f g : hatα → β} (hf : Continuous f)
+    (hg : Continuous g) (h : ∀ a, f (ι a) = g (ι a)) : f = g :=
   funext fun a => pkg.induction_on a (isClosed_eq hf hg) h
 
 variable [UniformSpace β]
 
 section Extend
 
-/--
-Definition of `extend` / `extend` 的定义
+/-- Extension of maps to completions -/
+/-
+**AbstractCompletion.extend** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     (pkg : AbstractCompletion.
+{vα, uα} α) → {β : Type uβ} → [UniformSpace β] → (α → β) → pkg.space → β
+参数：pkg : AbstractCompletion.{vα, uα} α；α → β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 
-English:
-definition extend
-  signature: (f : α -> β)
-  body: open scoped Classical in
-  if UniformContinuous f then pkg.isDenseInducing.extend f else fun x => f (pkg.dense.some x)
-
-中文:
-定义 extend
-  签名: (f : α -> β)
-  定义体: open scoped Classical in
-  if UniformContinuous f then pkg.isDenseInducing.extend f else fun x => f (pkg.dense.some x)
+--- 原说明 ---
+Extension of maps to completions
 -/
-protected def extend (f : α -> β) : hatα -> β :=
+protected def extend (f : α → β) : hatα → β :=
   open scoped Classical in
   if UniformContinuous f then pkg.isDenseInducing.extend f else fun x => f (pkg.dense.some x)
 
-variable {f : α -> β}
-
-/--
-theorem `extend_def` / 定理 `extend_def`
-
-English:
-theorem extend_def
-  given: (hf : UniformContinuous f)
-  statement: pkg.extend f = pkg.isDenseInducing.extend f
-  proof: if_pos hf
-
-中文:
-定理 extend_def
-  条件: (hf : 一致连续 f)
-  结论: pkg.extend f = pkg.isDenseInducing.extend f
-  证明: if_pos hf
-
-Depends on / 依赖: if_pos
+variable {f : α → β}
+/-
+**AbstractCompletion.extend_def** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：extend_def (hf : UniformContinuous f) : pkg.extend f = pkg.isDenseInducing
+.extend f
+参数：hf : UniformContinuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 -/
 theorem extend_def (hf : UniformContinuous f) : pkg.extend f = pkg.isDenseInducing.extend f :=
   if_pos hf
-
-/--
-theorem `inseparable_extend_coe` / 定理 `inseparable_extend_coe`
-
-English:
-theorem inseparable_extend_coe
-  given: (hf : UniformContinuous f) (x : α)
-  proof: by
-  rw [extend_def _ hf]
-  exact pkg.isDenseInducing.inseparable_extend hf.continuous.continuousAt
-
-中文:
-定理 inseparable_extend_coe
-  条件: (hf : 一致连续 f) (x : α)
-  证明: by
-  rw [extend_def _ hf]
-  exact pkg.isDenseInducing.inseparable_extend hf.continuous.continuousAt
-
-Depends on / 依赖: continuous, continuousAt, extend_def, hf.continuous.continuousAt, inseparable_extend, isDenseInducing, pkg.isDenseInducing.inseparable_extend
+/-
+**AbstractCompletion.inseparable_extend_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractC
+ompletion`。
+形式化陈述：inseparable_extend_coe (hf : UniformContinuous f) (x : α) : Inseparable (p
+kg.extend f (ι x)) (f x)
+参数：hf : UniformContinuous f；x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_def`：extend_def (hf : UniformContinuous f) : p
+kg.extend f = pkg.isDenseInducing.extend f
+· 使用定理 `IsDenseInducing.inseparable_extend`：inseparable_extend [R1Space γ] (di :
+ IsDenseInducing i) {f : α -> γ} {a : α} (hf : ContinuousAt f a) : Inseparable (
+di.extend f (i a)) (f a)
+· 使用定理 `instR1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [RegularSpace 
+X], R1Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
 -/
 theorem inseparable_extend_coe (hf : UniformContinuous f) (x : α) :
     Inseparable (pkg.extend f (ι x)) (f x) := by
   rw [extend_def _ hf]
   exact pkg.isDenseInducing.inseparable_extend hf.continuous.continuousAt
-
-/--
-theorem `extend_coe` / 定理 `extend_coe`
-
-English:
-theorem extend_coe
-  given: [T2Space β] (hf : UniformContinuous f) (a : α)
-  statement: (pkg.extend f) (ι a) = f a
-  proof: by
-  rw [pkg.extend_def hf]
-  exact pkg.isDenseInducing.extend_eq hf.continuous a
-
-中文:
-定理 extend_coe
-  条件: [T2空间 β] (hf : 一致连续 f) (a : α)
-  结论: (pkg.extend f) (ι a) = f a
-  证明: by
-  rw [pkg.extend_def hf]
-  exact pkg.isDenseInducing.extend_eq hf.continuous a
-
-Depends on / 依赖: continuous, extend_def, extend_eq, hf.continuous, isDenseInducing, pkg.extend_def, pkg.isDenseInducing.extend_eq
+/-
+**AbstractCompletion.extend_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：extend_coe [T2Space β] (hf : UniformContinuous f) (a : α) : (pkg.extend f)
+ (ι a) = f a
+参数：hf : UniformContinuous f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_def`：extend_def (hf : UniformContinuous f) : p
+kg.extend f = pkg.isDenseInducing.extend f
+· 使用定理 `IsDenseInducing.extend_eq`：extend_eq [T2Space γ] (di : IsDenseInducing i
+) {f : α -> γ} (hf : Continuous f) (a : α) : di.extend f (i a) = f a
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
 -/
 theorem extend_coe [T2Space β] (hf : UniformContinuous f) (a : α) : (pkg.extend f) (ι a) = f a := by
   rw [pkg.extend_def hf]
@@ -346,32 +293,27 @@ theorem extend_coe [T2Space β] (hf : UniformContinuous f) (a : α) : (pkg.exten
 variable [CompleteSpace β]
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_extend` / 定理 `uniformContinuous_extend`
-
-English:
-theorem uniformContinuous_extend
-  statement: UniformContinuous (pkg.extend f)
-  proof: by
-  by_cases hf : UniformContinuous f
-  · rw [pkg.extend_def hf]
-    exact uniformContinuous_uniformly_extend pkg.isUniformInducing pkg.dense hf
-  · unfold AbstractCompletion.extend
-    rw [if_neg hf]
-    exact uniformContinuous_of_const fun a b => by congr 1
-
-中文:
-定理 uniformContinuous_extend
-  结论: 一致连续 (pkg.extend f)
-  证明: by
-  by_cases hf : UniformContinuous f
-  · rw [pkg.extend_def hf]
-    exact uniformContinuous_uniformly_extend pkg.isUniformInducing pkg.dense hf
-  · unfold AbstractCompletion.extend
-    rw [if_neg hf]
-    exact uniformContinuous_of_const fun a b => by congr 1
-
-Depends on / 依赖: AbstractCompletion, AbstractCompletion.extend, UniformContinuous, extend, extend_def, if_neg, isUniformInducing, pkg.dense, pkg.extend_def, pkg.isUniformInducing, uniformContinuous_of_const, uniformContinuous_uniformly_extend
+/-
+**AbstractCompletion.uniformContinuous_extend** 是 Mathlib 中的一个定理，位于命名空间 `Abstrac
+tCompletion`。
+形式化陈述：uniformContinuous_extend : UniformContinuous (pkg.extend f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_def`：extend_def (hf : UniformContinuous f) : p
+kg.extend f = pkg.isDenseInducing.extend f
+· 使用定理 `uniformContinuous_uniformly_extend`：uniformContinuous_uniformly_extend [
+CompleteSpace γ] : UniformContinuous ψ
+· 使用定理 `AbstractCompletion.isUniformInducing`：∀ {α : Type u} [inst : UniformSpac
+e α] (self : AbstractCompletion.{v, u} α), IsUniformInducing self.coe
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `uniformContinuous_of_const`：uniformContinuous_of_const {c : α -> β} (h :
+ forall a b, c a = c b) : UniformContinuous c
 -/
 theorem uniformContinuous_extend : UniformContinuous (pkg.extend f) := by
   by_cases hf : UniformContinuous f
@@ -380,48 +322,43 @@ theorem uniformContinuous_extend : UniformContinuous (pkg.extend f) := by
   · unfold AbstractCompletion.extend
     rw [if_neg hf]
     exact uniformContinuous_of_const fun a b => by congr 1
-
-/--
-theorem `continuous_extend` / 定理 `continuous_extend`
-
-English:
-theorem continuous_extend
-  statement: Continuous (pkg.extend f)
-  proof: pkg.uniformContinuous_extend.continuous
-
-@[fun_prop]
-
-中文:
-定理 continuous_extend
-  结论: 连续 (pkg.extend f)
-  证明: pkg.uniformContinuous_extend.continuous
-
-@[fun_prop]
-
-Depends on / 依赖: continuous, pkg.uniformContinuous_extend.continuous, uniformContinuous_extend
+/-
+**AbstractCompletion.continuous_extend** 是 Mathlib 中的一个定理，位于命名空间 `AbstractComple
+tion`。
+形式化陈述：continuous_extend : Continuous (pkg.extend f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `AbstractCompletion.uniformContinuous_extend`：uniformContinuous_extend : 
+UniformContinuous (pkg.extend f)
 -/
 theorem continuous_extend : Continuous (pkg.extend f) :=
   pkg.uniformContinuous_extend.continuous
 
 @[fun_prop]
-/--
-lemma `isUniformInducing_extend` / 引理 `isUniformInducing_extend`
-
-English:
-lemma isUniformInducing_extend
-  given: (h : IsUniformInducing f)
-  proof: by
-  rw [extend_def _ h.uniformContinuous]
-  exact pkg.isDenseInducing.isUniformInducing_extend pkg.isUniformInducing h
-
-中文:
-引理 isUniformInducing_extend
-  条件: (h : 是UniformInducing f)
-  证明: by
-  rw [extend_def _ h.uniformContinuous]
-  exact pkg.isDenseInducing.isUniformInducing_extend pkg.isUniformInducing h
-
-Depends on / 依赖: extend_def, h.uniformContinuous, isDenseInducing, isUniformInducing, isUniformInducing_extend, pkg.isDenseInducing.isUniformInducing_extend, pkg.isUniformInducing, uniformContinuous
+/-
+**AbstractCompletion.isUniformInducing_extend** 是 Mathlib 中的一个引理，位于命名空间 `Abstrac
+tCompletion`。
+形式化陈述：isUniformInducing_extend (h : IsUniformInducing f) : IsUniformInducing (pk
+g.extend f)
+参数：h : IsUniformInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_def`：extend_def (hf : UniformContinuous f) : p
+kg.extend f = pkg.isDenseInducing.extend f
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
+· 使用引理 `IsDenseInducing.isUniformInducing_extend`：IsDenseInducing.isUniformInduc
+ing_extend {γ : Type*} [UniformSpace γ] [CompleteSpace β] [CompleteSpace γ] {i :
+ α -> β} {f : α -> γ} (hid : I…
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
+· 使用定理 `AbstractCompletion.isUniformInducing`：∀ {α : Type u} [inst : UniformSpac
+e α] (self : AbstractCompletion.{v, u} α), IsUniformInducing self.coe
 -/
 lemma isUniformInducing_extend (h : IsUniformInducing f) :
     IsUniformInducing (pkg.extend f) := by
@@ -429,58 +366,80 @@ lemma isUniformInducing_extend (h : IsUniformInducing f) :
   exact pkg.isDenseInducing.isUniformInducing_extend pkg.isUniformInducing h
 
 variable [T0Space β]
-
-/--
-theorem `extend_unique` / 定理 `extend_unique`
-
-English:
-theorem extend_unique
-  statement: (hf : UniformContinuous f) {g : hatα -> β} (hg : UniformContinuous g)
-  proof: by
-  apply pkg.funext pkg.continuous_extend hg.continuous
-  simpa only [pkg.extend_coe hf] using h
-
-@[simp]
-
-中文:
-定理 extend_unique
-  结论: (hf : 一致连续 f) {g : hatα -> β} (hg : 一致连续 g)
-  证明: by
-  apply pkg.funext pkg.continuous_extend hg.continuous
-  simpa only [pkg.extend_coe hf] using h
-
-@[simp]
-
-Depends on / 依赖: continuous, continuous_extend, extend_coe, hg.continuous, pkg.continuous_extend, pkg.extend_coe, pkg.funext
+/-
+**AbstractCompletion.extend_unique** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion
+`。
+形式化陈述：extend_unique (hf : UniformContinuous f) {g : hatα -> β} (hg : UniformCont
+inuous g) (h : forall a : α, f a = g (ι a)) : pkg.extend f = g
+参数：hf : UniformContinuous f；hg : UniformContinuous g；h : forall a : α, f a = g (
+ι a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.funext`：∀ {α : Type uα} [inst : UniformSpace α] (pkg 
+: AbstractCompletion.{vα, uα} α) {β : Type uβ}   [inst_1 : TopologicalSpace β] [
+T2Space β] {f g…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `AbstractCompletion.continuous_extend`：continuous_extend : Continuous (pk
+g.extend f)
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
 -/
-theorem extend_unique (hf : UniformContinuous f) {g : hatα -> β} (hg : UniformContinuous g)
-    (h : forall a : α, f a = g (ι a)) : pkg.extend f = g := by
+theorem extend_unique (hf : UniformContinuous f) {g : hatα → β} (hg : UniformContinuous g)
+    (h : ∀ a : α, f a = g (ι a)) : pkg.extend f = g := by
   apply pkg.funext pkg.continuous_extend hg.continuous
   simpa only [pkg.extend_coe hf] using h
 
 @[simp]
-/--
-theorem `extend_comp_coe` / 定理 `extend_comp_coe`
-
-English:
-theorem extend_comp_coe
-  given: {f : hatα -> β} (hf : UniformContinuous f)
-  statement: pkg.extend (f ∘ ι) = f
-  proof: funext fun x =>
-    pkg.induction_on x (isClosed_eq pkg.continuous_extend hf.continuous) fun y =>
-      pkg.extend_coe (hf.comp <| pkg.uniformContinuous_coe) y
-
-中文:
-定理 extend_comp_coe
-  条件: {f : hatα -> β} (hf : 一致连续 f)
-  结论: pkg.extend (f ∘ ι) = f
-  证明: funext fun x =>
-    pkg.induction_on x (isClosed_eq pkg.continuous_extend hf.continuous) fun y =>
-      pkg.extend_coe (hf.comp <| pkg.uniformContinuous_coe) y
-
-Depends on / 依赖: continuous, continuous_extend, extend_coe, hf.comp, hf.continuous, induction_on, isClosed_eq, pkg.continuous_extend, pkg.extend_coe, pkg.induction_on, pkg.uniformContinuous_coe, uniformContinuous_coe
+/-
+**AbstractCompletion.extend_comp_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompleti
+on`。
+形式化陈述：extend_comp_coe {f : hatα -> β} (hf : UniformContinuous f) : pkg.extend (f
+ ∘ ι) = f
+参数：hf : UniformContinuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AbstractCompletion.induction_on`：induction_on {p : hatα -> Prop} (a : ha
+tα) (hp : IsClosed { a | p a }) (ih : forall a, p (ι a)) : p a
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `AbstractCompletion.continuous_extend`：continuous_extend : Continuous (pk
+g.extend f)
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
-theorem extend_comp_coe {f : hatα -> β} (hf : UniformContinuous f) : pkg.extend (f ∘ ι) = f :=
+theorem extend_comp_coe {f : hatα → β} (hf : UniformContinuous f) : pkg.extend (f ∘ ι) = f :=
   funext fun x =>
     pkg.induction_on x (isClosed_eq pkg.continuous_extend hf.continuous) fun y =>
       pkg.extend_coe (hf.comp <| pkg.uniformContinuous_coe) y
@@ -495,68 +454,52 @@ local notation "hatβ" => pkg'.space
 
 local notation "ι'" => pkg'.coe
 
-/--
-Definition of `map` / `map` 的定义
+/-- Lifting maps to completions -/
+/-
+**AbstractCompletion.map** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     (pkg : AbstractCompletion.
+{vα, uα} α) →       {β : Type uβ} →         [inst_1 : UniformSpace β] → (pkg' : 
+AbstractCompletion.{vβ, uβ} β) → (α → β) → pkg.space → pkg'.space
+参数：pkg : AbstractCompletion.{vα, uα} α；pkg' : AbstractCompletion.{vβ, uβ} β；α → 
+β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β)
-  body: pkg.extend (ι' ∘ f)
-
-local notation "map" => pkg.map pkg'
-
-中文:
-定义 map
-  签名: (f : α -> β)
-  定义体: pkg.extend (ι' ∘ f)
-
-local notation "map" => pkg.map pkg'
+--- 原说明 ---
+Lifting maps to completions
 -/
-protected def map (f : α -> β) : hatα -> hatβ :=
+protected def map (f : α → β) : hatα → hatβ :=
   pkg.extend (ι' ∘ f)
 
 local notation "map" => pkg.map pkg'
 
-variable (f : α -> β)
+variable (f : α → β)
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_map` / 定理 `uniformContinuous_map`
-
-English:
-theorem uniformContinuous_map
-  statement: UniformContinuous (map f)
-  proof: pkg.uniformContinuous_extend
-
-@[continuity]
-
-中文:
-定理 uniformContinuous_map
-  结论: 一致连续 (map f)
-  证明: pkg.uniformContinuous_extend
-
-@[continuity]
-
-Depends on / 依赖: pkg.uniformContinuous_extend, uniformContinuous_extend
+/-
+**AbstractCompletion.uniformContinuous_map** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCo
+mpletion`。
+形式化陈述：uniformContinuous_map : UniformContinuous (map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_extend`：uniformContinuous_extend : 
+UniformContinuous (pkg.extend f)
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
 -/
 theorem uniformContinuous_map : UniformContinuous (map f) :=
   pkg.uniformContinuous_extend
 
 @[continuity]
-/--
-theorem `continuous_map` / 定理 `continuous_map`
-
-English:
-theorem continuous_map
-  statement: Continuous (map f)
-  proof: pkg.continuous_extend
-
-中文:
-定理 continuous_map
-  结论: 连续 (map f)
-  证明: pkg.continuous_extend
-
-Depends on / 依赖: continuous_extend, pkg.continuous_extend
+/-
+**AbstractCompletion.continuous_map** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletio
+n`。
+形式化陈述：continuous_map : Continuous (map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.continuous_extend`：continuous_extend : Continuous (pk
+g.extend f)
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
 -/
 theorem continuous_map : Continuous (map f) :=
   pkg.continuous_extend
@@ -564,213 +507,211 @@ theorem continuous_map : Continuous (map f) :=
 variable {f}
 
 @[simp]
-/--
-theorem `map_coe` / 定理 `map_coe`
-
-English:
-theorem map_coe
-  given: (hf : UniformContinuous f) (a : α)
-  statement: map f (ι a) = ι' (f a)
-  proof: pkg.extend_coe (pkg'.uniformContinuous_coe.comp hf) a
-
-中文:
-定理 map_coe
-  条件: (hf : 一致连续 f) (a : α)
-  结论: map f (ι a) = ι' (f a)
-  证明: pkg.extend_coe (pkg'.uniformContinuous_coe.comp hf) a
-
-Depends on / 依赖: extend_coe, pkg.extend_coe, uniformContinuous_coe, uniformContinuous_coe.comp
+/-
+**AbstractCompletion.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：map_coe (hf : UniformContinuous f) (a : α) : map f (ι a) = ι' (f a)
+参数：hf : UniformContinuous f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `AbstractCompletion.separation`：∀ {α : Type u} [inst : UniformSpace α] (s
+elf : AbstractCompletion.{v, u} α), T0Space self.space
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
 theorem map_coe (hf : UniformContinuous f) (a : α) : map f (ι a) = ι' (f a) :=
   pkg.extend_coe (pkg'.uniformContinuous_coe.comp hf) a
-
-/--
-theorem `map_unique` / 定理 `map_unique`
-
-English:
-theorem map_unique
-  statement: {f : α -> β} {g : hatα -> hatβ} (hg : UniformContinuous g)
-  proof: pkg.funext (pkg.continuous_map _ _) hg.continuous by
-    intro a
-    change pkg.extend (ι' ∘ f) _ = _
-    simp_rw [Function.comp_def, h, ← comp_apply (f := g)]
-    rw [pkg.extend_coe (hg.comp pkg.uniformContinuous_coe)]
-
-@[simp]
-
-中文:
-定理 map_unique
-  结论: {f : α -> β} {g : hatα -> hatβ} (hg : 一致连续 g)
-  证明: pkg.funext (pkg.continuous_map _ _) hg.continuous by
-    intro a
-    change pkg.extend (ι' ∘ f) _ = _
-    simp_rw [Function.comp_def, h, ← comp_apply (f := g)]
-    rw [pkg.extend_coe (hg.comp pkg.uniformContinuous_coe)]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, comp_apply, comp_def, continuous, continuous_map, extend, extend_coe, hg.comp, hg.continuous, pkg.continuous_map, pkg.extend, pkg.extend_coe, pkg.funext, pkg.uniformContinuous_coe, simp_rw, uniformContinuous_coe
+/-
+**AbstractCompletion.map_unique** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：map_unique {f : α -> β} {g : hatα -> hatβ} (hg : UniformContinuous g) (h :
+ forall a, ι' (f a) = g (ι a)) : map f = g
+参数：hg : UniformContinuous g；h : forall a, ι' (f a) = g (ι a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.funext`：∀ {α : Type uα} [inst : UniformSpace α] (pkg 
+: AbstractCompletion.{vα, uα} α) {β : Type uβ}   [inst_1 : TopologicalSpace β] [
+T2Space β] {f g…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `AbstractCompletion.separation`：∀ {α : Type u} [inst : UniformSpace α] (s
+elf : AbstractCompletion.{v, u} α), T0Space self.space
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `AbstractCompletion.continuous_map`：continuous_map : Continuous (map f)
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
-theorem map_unique {f : α -> β} {g : hatα -> hatβ} (hg : UniformContinuous g)
-    (h : forall a, ι' (f a) = g (ι a)) : map f = g :=
-pkg.funext (pkg.continuous_map _ _) hg.continuous by
+theorem map_unique {f : α → β} {g : hatα → hatβ} (hg : UniformContinuous g)
+    (h : ∀ a, ι' (f a) = g (ι a)) : map f = g :=
+  pkg.funext (pkg.continuous_map _ _) hg.continuous <| by
     intro a
     change pkg.extend (ι' ∘ f) _ = _
     simp_rw [Function.comp_def, h, ← comp_apply (f := g)]
     rw [pkg.extend_coe (hg.comp pkg.uniformContinuous_coe)]
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: pkg.map pkg id = id
-  proof: pkg.map_unique pkg uniformContinuous_id fun _ => rfl
-
-中文:
-定理 map_id
-  结论: pkg.map pkg id = id
-  证明: pkg.map_unique pkg uniformContinuous_id fun _ => rfl
-
-Depends on / 依赖: map_unique, pkg.map_unique, uniformContinuous_id
+/-
+**AbstractCompletion.map_id** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：map_id : pkg.map pkg id = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.map_unique`：map_unique {f : α -> β} {g : hatα -> hatβ
+} (hg : UniformContinuous g) (h : forall a, ι' (f a) = g (ι a)) : map f = g
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
 -/
 theorem map_id : pkg.map pkg id = id :=
   pkg.map_unique pkg uniformContinuous_id fun _ => rfl
 
 variable {γ : Type uγ} [UniformSpace γ]
-
-/--
-theorem `extend_map` / 定理 `extend_map`
-
-English:
-theorem extend_map
-  statement: [CompleteSpace γ] [T0Space γ] {f : β -> γ} {g : α -> β}
-  proof: pkg.funext (pkg'.continuous_extend.comp (pkg.continuous_map pkg' _)) pkg.continuous_extend
-    fun a => by
-    rw [pkg.extend_coe (hf.comp hg)]; rw [comp_apply]; rw [pkg.map_coe pkg' hg]; rw [pkg'.extend_coe hf]
-    rfl
-
-中文:
-定理 extend_map
-  结论: [完备空间 γ] [T0空间 γ] {f : β -> γ} {g : α -> β}
-  证明: pkg.funext (pkg'.continuous_extend.comp (pkg.continuous_map pkg' _)) pkg.continuous_extend
-    fun a => by
-    rw [pkg.extend_coe (hf.comp hg)]; rw [comp_apply]; rw [pkg.map_coe pkg' hg]; rw [pkg'.extend_coe hf]
-    rfl
-
-Depends on / 依赖: comp_apply, continuous_extend, continuous_extend.comp, continuous_map, extend_coe, hf.comp, map_coe, pkg.continuous_extend, pkg.continuous_map, pkg.extend_coe, pkg.funext, pkg.map_coe
+/-
+**AbstractCompletion.extend_map** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：extend_map [CompleteSpace γ] [T0Space γ] {f : β -> γ} {g : α -> β} (hf : U
+niformContinuous f) (hg : UniformContinuous g) : pkg'.extend f ∘ map g = pkg.ext
+end (f ∘ g)
+参数：hf : UniformContinuous f；hg : UniformContinuous g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.funext`：∀ {α : Type uα} [inst : UniformSpace α] (pkg 
+: AbstractCompletion.{vα, uα} α) {β : Type uβ}   [inst_1 : TopologicalSpace β] [
+T2Space β] {f g…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `AbstractCompletion.continuous_extend`：continuous_extend : Continuous (pk
+g.extend f)
+· 使用定理 `AbstractCompletion.continuous_map`：continuous_map : Continuous (map f)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `AbstractCompletion.map_coe`：map_coe (hf : UniformContinuous f) (a : α) :
+ map f (ι a) = ι' (f a)
 -/
-theorem extend_map [CompleteSpace γ] [T0Space γ] {f : β -> γ} {g : α -> β}
+theorem extend_map [CompleteSpace γ] [T0Space γ] {f : β → γ} {g : α → β}
     (hf : UniformContinuous f) (hg : UniformContinuous g) :
     pkg'.extend f ∘ map g = pkg.extend (f ∘ g) :=
   pkg.funext (pkg'.continuous_extend.comp (pkg.continuous_map pkg' _)) pkg.continuous_extend
     fun a => by
-    rw [pkg.extend_coe (hf.comp hg)]; rw [comp_apply]; rw [pkg.map_coe pkg' hg]; rw [pkg'.extend_coe hf]
+    rw [pkg.extend_coe (hf.comp hg), comp_apply, pkg.map_coe pkg' hg, pkg'.extend_coe hf]
     rfl
 
 variable (pkg'' : AbstractCompletion.{vγ} γ)
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: {g : β -> γ} {f : α -> β} (hg : UniformContinuous g) (hf : UniformContinuous f)
-  proof: pkg.extend_map pkg' (pkg''.uniformContinuous_coe.comp hg) hf
-
-中文:
-定理 map_comp
-  条件: {g : β -> γ} {f : α -> β} (hg : 一致连续 g) (hf : 一致连续 f)
-  证明: pkg.extend_map pkg' (pkg''.uniformContinuous_coe.comp hg) hf
-
-Depends on / 依赖: extend_map, pkg.extend_map, uniformContinuous_coe, uniformContinuous_coe.comp
+/-
+**AbstractCompletion.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：map_comp {g : β -> γ} {f : α -> β} (hg : UniformContinuous g) (hf : Unifor
+mContinuous f) : pkg'.map pkg'' g ∘ pkg.map pkg' f = pkg.map pkg'' (g ∘ f)
+参数：hg : UniformContinuous g；hf : UniformContinuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.extend_map`：extend_map [CompleteSpace γ] [T0Space γ] 
+{f : β -> γ} {g : α -> β} (hf : UniformContinuous f) (hg : UniformContinuous g) 
+: pkg'.extend f ∘ m…
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
+· 使用定理 `AbstractCompletion.separation`：∀ {α : Type u} [inst : UniformSpace α] (s
+elf : AbstractCompletion.{v, u} α), T0Space self.space
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
-theorem map_comp {g : β -> γ} {f : α -> β} (hg : UniformContinuous g) (hf : UniformContinuous f) :
+theorem map_comp {g : β → γ} {f : α → β} (hg : UniformContinuous g) (hf : UniformContinuous f) :
     pkg'.map pkg'' g ∘ pkg.map pkg' f = pkg.map pkg'' (g ∘ f) :=
   pkg.extend_map pkg' (pkg''.uniformContinuous_coe.comp hg) hf
 
-/--
-Definition of `mapEquiv` / `mapEquiv` 的定义
+/-- The uniform isomorphism between two completions of isomorphic uniform spaces. -/
+/-
+**AbstractCompletion.mapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：mapEquiv (e : α ≃ᵤ β) : hatα ≃ᵤ hatβ where toFun
+参数：e : α ≃ᵤ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapEquiv
-  signature: (e : α ≃ᵤ β)
-  body: pkg.map pkg' e
-  invFun := pkg'.map pkg e.symm
-  uniformContinuous_toFun := uniformContinuous_map ..
-  uniformContinuous_invFun := uniformContinuous_map ..
-left_inv := Function.leftInverse_iff_comp.2 by
-    simp [map_comp _ _ _ e.symm.uniformContinuous e.uniformContinuous]
-right_inv := Function.rightInverse_iff_comp.2 by
-    simp [map_comp _ _ _ e.uniformContinuous e.symm.uniformContinuous]
-
-@[simp]
-
-中文:
-定义 mapEquiv
-  签名: (e : α ≃ᵤ β)
-  定义体: pkg.map pkg' e
-  invFun := pkg'.map pkg e.symm
-  uniformContinuous_toFun := uniformContinuous_map ..
-  uniformContinuous_invFun := uniformContinuous_map ..
-left_inv := Function.leftInverse_iff_comp.2 by
-    simp [map_comp _ _ _ e.symm.uniformContinuous e.uniformContinuous]
-right_inv := Function.rightInverse_iff_comp.2 by
-    simp [map_comp _ _ _ e.uniformContinuous e.symm.uniformContinuous]
-
-@[simp]
-
-Depends on / 依赖: pkg.map
+--- 原说明 ---
+The uniform isomorphism between two completions of isomorphic uniform spaces.
 -/
 def mapEquiv (e : α ≃ᵤ β) : hatα ≃ᵤ hatβ where
   toFun := pkg.map pkg' e
   invFun := pkg'.map pkg e.symm
   uniformContinuous_toFun := uniformContinuous_map ..
   uniformContinuous_invFun := uniformContinuous_map ..
-left_inv := Function.leftInverse_iff_comp.2 by
+  left_inv := Function.leftInverse_iff_comp.2 <| by
     simp [map_comp _ _ _ e.symm.uniformContinuous e.uniformContinuous]
-right_inv := Function.rightInverse_iff_comp.2 by
+  right_inv := Function.rightInverse_iff_comp.2 <| by
     simp [map_comp _ _ _ e.uniformContinuous e.symm.uniformContinuous]
 
 @[simp]
-/--
-theorem `mapEquiv_symm` / 定理 `mapEquiv_symm`
-
-English:
-theorem mapEquiv_symm
-  given: (e : α ≃ᵤ β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapEquiv_symm
-  条件: (e : α ≃ᵤ β)
-  证明: rfl
-
-@[simp]
+/-
+**AbstractCompletion.mapEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion
+`。
+形式化陈述：mapEquiv_symm (e : α ≃ᵤ β) : (pkg.mapEquiv pkg' e).symm = pkg'.mapEquiv pk
+g e.symm
+参数：e : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapEquiv_symm (e : α ≃ᵤ β) :
     (pkg.mapEquiv pkg' e).symm = pkg'.mapEquiv pkg e.symm := rfl
 
 @[simp]
-/--
-theorem `mapEquiv_coe` / 定理 `mapEquiv_coe`
-
-English:
-theorem mapEquiv_coe
-  given: (e : α ≃ᵤ β) (a : α)
-  statement: pkg.mapEquiv pkg' e (ι a) = ι' (e a)
-  proof: pkg.map_coe pkg' e.uniformContinuous _
-
-中文:
-定理 mapEquiv_coe
-  条件: (e : α ≃ᵤ β) (a : α)
-  结论: pkg.mapEquiv pkg' e (ι a) = ι' (e a)
-  证明: pkg.map_coe pkg' e.uniformContinuous _
-
-Depends on / 依赖: e.uniformContinuous, map_coe, pkg.map_coe, uniformContinuous
+/-
+**AbstractCompletion.mapEquiv_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`
+。
+形式化陈述：mapEquiv_coe (e : α ≃ᵤ β) (a : α) : pkg.mapEquiv pkg' e (ι a) = ι' (e a)
+参数：e : α ≃ᵤ β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.map_coe`：map_coe (hf : UniformContinuous f) (a : α) :
+ map f (ι a) = ι' (f a)
+· 使用定理 `UniformEquiv.uniformContinuous`：∀ {α : Type u} {β : Type u_1} [inst : Un
+iformSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), UniformContinuous ⇑h
 -/
 theorem mapEquiv_coe (e : α ≃ᵤ β) (a : α) : pkg.mapEquiv pkg' e (ι a) = ι' (e a) :=
   pkg.map_coe pkg' e.uniformContinuous _
@@ -782,130 +723,110 @@ section Compare
 -- We can now compare two completion packages for the same uniform space
 variable (pkg' : AbstractCompletion.{vα'} α)
 
-/--
-Definition of `compare` / `compare` 的定义
+/-- The comparison map between two completions of the same uniform space. -/
+/-
+**AbstractCompletion.compare** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：compare : pkg.space -> pkg'.space
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compare
-  signature: : pkg.space -> pkg'.space
-  body: pkg.extend pkg'.coe
-
-@[fun_prop]
-
-中文:
-定义 compare
-  签名: : pkg.space -> pkg'.space
-  定义体: pkg.extend pkg'.coe
-
-@[fun_prop]
-
-Depends on / 依赖: extend, pkg.extend
+--- 原说明 ---
+The comparison map between two completions of the same uniform space.
 -/
-def compare : pkg.space -> pkg'.space :=
+def compare : pkg.space → pkg'.space :=
   pkg.extend pkg'.coe
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_compare` / 定理 `uniformContinuous_compare`
-
-English:
-theorem uniformContinuous_compare
-  statement: UniformContinuous (pkg.compare pkg')
-  proof: pkg.uniformContinuous_extend
-
-中文:
-定理 uniformContinuous_compare
-  结论: 一致连续 (pkg.compare pkg')
-  证明: pkg.uniformContinuous_extend
-
-Depends on / 依赖: pkg.uniformContinuous_extend, uniformContinuous_extend
+/-
+**AbstractCompletion.uniformContinuous_compare** 是 Mathlib 中的一个定理，位于命名空间 `Abstra
+ctCompletion`。
+形式化陈述：uniformContinuous_compare : UniformContinuous (pkg.compare pkg')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_extend`：uniformContinuous_extend : 
+UniformContinuous (pkg.extend f)
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
 -/
 theorem uniformContinuous_compare : UniformContinuous (pkg.compare pkg') :=
   pkg.uniformContinuous_extend
-
-/--
-theorem `compare_coe` / 定理 `compare_coe`
-
-English:
-theorem compare_coe
-  given: (a : α)
-  statement: pkg.compare pkg' (pkg.coe a) = pkg'.coe a
-  proof: pkg.extend_coe pkg'.uniformContinuous_coe a
-
-中文:
-定理 compare_coe
-  条件: (a : α)
-  结论: pkg.compare pkg' (pkg.coe a) = pkg'.coe a
-  证明: pkg.extend_coe pkg'.uniformContinuous_coe a
-
-Depends on / 依赖: extend_coe, pkg.extend_coe, uniformContinuous_coe
+/-
+**AbstractCompletion.compare_coe** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+形式化陈述：compare_coe (a : α) : pkg.compare pkg' (pkg.coe a) = pkg'.coe a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.extend_coe`：extend_coe [T2Space β] (hf : UniformConti
+nuous f) (a : α) : (pkg.extend f) (ι a) = f a
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `AbstractCompletion.separation`：∀ {α : Type u} [inst : UniformSpace α] (s
+elf : AbstractCompletion.{v, u} α), T0Space self.space
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `AbstractCompletion.uniformContinuous_coe`：uniformContinuous_coe : Unifor
+mContinuous ι
 -/
 theorem compare_coe (a : α) : pkg.compare pkg' (pkg.coe a) = pkg'.coe a :=
   pkg.extend_coe pkg'.uniformContinuous_coe a
-
-/--
-theorem `inverse_compare` / 定理 `inverse_compare`
-
-English:
-theorem inverse_compare
-  statement: pkg.compare pkg' ∘ pkg'.compare pkg = id
-  proof: by
-  have uc := pkg.uniformContinuous_compare pkg'
-  have uc' := pkg'.uniformContinuous_compare pkg
-  apply pkg'.funext (uc.comp uc').continuous continuous_id
-  intro a
-  rw [comp_apply]; rw [pkg'.compare_coe pkg]; rw [pkg.compare_coe pkg']
-  rfl
-
-中文:
-定理 inverse_compare
-  结论: pkg.compare pkg' ∘ pkg'.compare pkg = id
-  证明: by
-  have uc := pkg.uniformContinuous_compare pkg'
-  have uc' := pkg'.uniformContinuous_compare pkg
-  apply pkg'.funext (uc.comp uc').continuous continuous_id
-  intro a
-  rw [comp_apply]; rw [pkg'.compare_coe pkg]; rw [pkg.compare_coe pkg']
-  rfl
-
-Depends on / 依赖: comp_apply, compare_coe, continuous, continuous_id, pkg.compare_coe, pkg.uniformContinuous_compare, uc.comp, uniformContinuous_compare
+/-
+**AbstractCompletion.inverse_compare** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompleti
+on`。
+形式化陈述：inverse_compare : pkg.compare pkg' ∘ pkg'.compare pkg = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compare`：uniformContinuous_compare 
+: UniformContinuous (pkg.compare pkg')
+· 使用定理 `AbstractCompletion.funext`：∀ {α : Type uα} [inst : UniformSpace α] (pkg 
+: AbstractCompletion.{vα, uα} α) {β : Type uβ}   [inst_1 : TopologicalSpace β] [
+T2Space β] {f g…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `AbstractCompletion.separation`：∀ {α : Type u} [inst : UniformSpace α] (s
+elf : AbstractCompletion.{v, u} α), T0Space self.space
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `AbstractCompletion.compare_coe`：compare_coe (a : α) : pkg.compare pkg' (
+pkg.coe a) = pkg'.coe a
 -/
 theorem inverse_compare : pkg.compare pkg' ∘ pkg'.compare pkg = id := by
   have uc := pkg.uniformContinuous_compare pkg'
   have uc' := pkg'.uniformContinuous_compare pkg
   apply pkg'.funext (uc.comp uc').continuous continuous_id
   intro a
-  rw [comp_apply]; rw [pkg'.compare_coe pkg]; rw [pkg.compare_coe pkg']
+  rw [comp_apply, pkg'.compare_coe pkg, pkg.compare_coe pkg']
   rfl
 
-/--
-Definition of `compareEquiv` / `compareEquiv` 的定义
+/-- The uniform bijection between two completions of the same uniform space. -/
+/-
+**AbstractCompletion.compareEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`
+。
+形式化陈述：compareEquiv : pkg.space ≃ᵤ pkg'.space where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compare`：uniformContinuous_compare 
+: UniformContinuous (pkg.compare pkg')
 
-English:
-definition compareEquiv
-  signature: : pkg.space ≃ᵤ pkg'.space where
-  body: pkg.compare pkg'
-  invFun := pkg'.compare pkg
-  left_inv := congr_fun (pkg'.inverse_compare pkg)
-  right_inv := congr_fun (pkg.inverse_compare pkg')
-  uniformContinuous_toFun := uniformContinuous_compare _ _
-  uniformContinuous_invFun := uniformContinuous_compare _ _
-
-@[fun_prop]
-
-中文:
-定义 compareEquiv
-  签名: : pkg.space ≃ᵤ pkg'.space where
-  定义体: pkg.compare pkg'
-  invFun := pkg'.compare pkg
-  left_inv := congr_fun (pkg'.inverse_compare pkg)
-  right_inv := congr_fun (pkg.inverse_compare pkg')
-  uniformContinuous_toFun := uniformContinuous_compare _ _
-  uniformContinuous_invFun := uniformContinuous_compare _ _
-
-@[fun_prop]
-
-Depends on / 依赖: compare, pkg.compare
+--- 原说明 ---
+The uniform bijection between two completions of the same uniform space.
 -/
 def compareEquiv : pkg.space ≃ᵤ pkg'.space where
   toFun := pkg.compare pkg'
@@ -916,43 +837,28 @@ def compareEquiv : pkg.space ≃ᵤ pkg'.space where
   uniformContinuous_invFun := uniformContinuous_compare _ _
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_compareEquiv` / 定理 `uniformContinuous_compareEquiv`
-
-English:
-theorem uniformContinuous_compareEquiv
-  statement: UniformContinuous (pkg.compareEquiv pkg')
-  proof: pkg.uniformContinuous_compare pkg'
-
-@[fun_prop]
-
-中文:
-定理 uniformContinuous_compareEquiv
-  结论: 一致连续 (pkg.compareEquiv pkg')
-  证明: pkg.uniformContinuous_compare pkg'
-
-@[fun_prop]
-
-Depends on / 依赖: pkg.uniformContinuous_compare, uniformContinuous_compare
+/-
+**AbstractCompletion.uniformContinuous_compareEquiv** 是 Mathlib 中的一个定理，位于命名空间 `A
+bstractCompletion`。
+形式化陈述：uniformContinuous_compareEquiv : UniformContinuous (pkg.compareEquiv pkg')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compare`：uniformContinuous_compare 
+: UniformContinuous (pkg.compare pkg')
 -/
 theorem uniformContinuous_compareEquiv : UniformContinuous (pkg.compareEquiv pkg') :=
   pkg.uniformContinuous_compare pkg'
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_compareEquiv_symm` / 定理 `uniformContinuous_compareEquiv_symm`
-
-English:
-theorem uniformContinuous_compareEquiv_symm
-  statement: UniformContinuous (pkg.compareEquiv pkg').symm
-  proof: pkg'.uniformContinuous_compare pkg
-
-中文:
-定理 uniformContinuous_compareEquiv_symm
-  结论: 一致连续 (pkg.compareEquiv pkg').symm
-  证明: pkg'.uniformContinuous_compare pkg
-
-Depends on / 依赖: uniformContinuous_compare
+/-
+**AbstractCompletion.uniformContinuous_compareEquiv_symm** 是 Mathlib 中的一个定理，位于命名
+空间 `AbstractCompletion`。
+形式化陈述：uniformContinuous_compareEquiv_symm : UniformContinuous (pkg.compareEquiv 
+pkg').symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compare`：uniformContinuous_compare 
+: UniformContinuous (pkg.compare pkg')
 -/
 theorem uniformContinuous_compareEquiv_symm : UniformContinuous (pkg.compareEquiv pkg').symm :=
   pkg'.uniformContinuous_compare pkg
@@ -960,49 +866,97 @@ theorem uniformContinuous_compareEquiv_symm : UniformContinuous (pkg.compareEqui
 
 open scoped Topology
 
-/--
-theorem `compare_comp_eq_compare` / 定理 `compare_comp_eq_compare`
+/-Let `f : α → γ` be a continuous function between a uniform space `α` and a regular topological
+space `γ`, and let `pkg, pkg'` be two abstract completions of `α`. Then
+if for every point `a : pkg` the filter `f.map (coe⁻¹ (𝓝 a))` obtained by pushing forward with `f`
+the preimage in `α` of `𝓝 a` tends to `𝓝 (f.extend a : β)`, then the comparison map
+between `pkg` and `pkg'` composed with the extension of `f` to `pkg`` coincides with the
+extension of `f` to `pkg'`. The situation is described in the following diagram, where the
+two diagonal arrows are the extensions of `f` to the two different completions `pkg` and `pkg'`;
+the statement of `compare_comp_eq_compare` is the commutativity of the right triangle.
 
-English:
-theorem compare_comp_eq_compare
-  statement: (γ : Type uγ) [TopologicalSpace γ]
-  proof: pkg.uniformStruct.toTopologicalSpace
-    letI := pkg'.uniformStruct.toTopologicalSpace
-    (forall a : pkg.space,
-      Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) ->
-      pkg.isDenseInducing.extend f ∘ pkg'.compare pkg = pkg'.isDenseInducing.extend f := by
-  intro h
-  have (x : α) : (pkg.isDenseInducing.extend f ∘ pkg'.compare pkg) (pkg'.coe x) = f x := by
-    simp only [Function.comp_apply, compare_coe, IsDenseInducing.extend_eq _ cont_f]
-  apply (IsDenseInducing.extend_unique (AbstractCompletion.isDenseInducing _) this
-    (Continuous.comp _ (uniformContinuous_compare pkg' pkg).continuous)).symm
-  apply IsDenseInducing.continuous_extend
-  exact fun a => ⟨(pkg.isDenseInducing.extend f) a, h a⟩
+```
+`α^`=`pkg` ≅ `α^'`=`pkg'`   *here `≅` is `compare`*
+  ∧     \        /
+  |      \      /
+  |       \    /
+  |        V  ∨
+ α ---f---> γ
+```
+-/
+/-
+**AbstractCompletion.compare_comp_eq_compare** 是 Mathlib 中的一个定理，位于命名空间 `Abstract
+Completion`。
+形式化陈述：compare_comp_eq_compare (γ : Type uγ) [TopologicalSpace γ] [T3Space γ] {f 
+: α -> γ} (cont_f : Continuous f) : letI
+参数：γ : Type uγ；cont_f : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsDenseInducing.extend.congr_simp`：∀ {α : Type u_1} {β : Type u_2} {γ : 
+Type u_3} [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] {i i_1 : α →
+ β}   (e_i : i = i_1) […
+· 使用定理 `AbstractCompletion.compare_coe`：compare_coe (a : α) : pkg.compare pkg' (
+pkg.coe a) = pkg'.coe a
+· 使用定理 `IsDenseInducing.extend_eq`：extend_eq [T2Space γ] (di : IsDenseInducing i
+) {f : α -> γ} (hf : Continuous f) (a : α) : di.extend f (i a) = f a
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsDenseInducing.extend_unique`：extend_unique [T2Space γ] {f : α -> γ} {g
+ : β -> γ} (di : IsDenseInducing i) (hf : forall x, g (i x) = f x) (hg : Continu
+ous g) : di.extend …
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `IsDenseInducing.continuous_extend`：continuous_extend [T3Space γ] {f : α 
+-> γ} (di : IsDenseInducing i) (hf : forall b, exists c, Tendsto f (comap i (𝓝 b
+)) (𝓝 c)) : Continuous …
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `AbstractCompletion.uniformContinuous_compare`：uniformContinuous_compare 
+: UniformContinuous (pkg.compare pkg')
 
-中文:
-定理 compare_comp_eq_compare
-  结论: (γ : 类型uγ) [拓扑空间 γ]
-  证明: pkg.uniformStruct.toTopologicalSpace
-    letI := pkg'.uniformStruct.toTopologicalSpace
-    (forall a : pkg.space,
-      Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) ->
-      pkg.isDenseInducing.extend f ∘ pkg'.compare pkg = pkg'.isDenseInducing.extend f := by
-  intro h
-  have (x : α) : (pkg.isDenseInducing.extend f ∘ pkg'.compare pkg) (pkg'.coe x) = f x := by
-    simp only [Function.comp_apply, compare_coe, IsDenseInducing.extend_eq _ cont_f]
-  apply (IsDenseInducing.extend_unique (AbstractCompletion.isDenseInducing _) this
-    (Continuous.comp _ (uniformContinuous_compare pkg' pkg).continuous)).symm
-  apply IsDenseInducing.continuous_extend
-  exact fun a => ⟨(pkg.isDenseInducing.extend f) a, h a⟩
+--- 原说明 ---
+Let `f : α → γ` be a continuous function between a uniform space `α` and a regul
+ar topological
+space `γ`, and let `pkg, pkg'` be two abstract completions of `α`. Then
+if for every point `a : pkg` the filter `f.map (coe⁻¹ (𝓝 a))` obtained by pushin
+g forward with `f`
+the preimage in `α` of `𝓝 a` tends to `𝓝 (f.extend a : β)`, then the comparison 
+map
+between `pkg` and `pkg'` composed with the extension of `f` to `pkg`` coincides 
+with the
+extension of `f` to `pkg'`. The situation is described in the following diagram,
+ where the
+two diagonal arrows are the extensions of `f` to the two different completions `
+pkg` and `pkg'`;
+the statement of `compare_comp_eq_compare` is the commutativity of the right tri
+angle.
 
-Depends on / 依赖: pkg.uniformStruct.toTopologicalSpace, toTopologicalSpace, uniformStruct
+```
+`α^`=`pkg` ≅ `α^'`=`pkg'`   *here `≅` is `compare`*
+  ∧     \        /
+  |      \      /
+  |       \    /
+  |        V  ∨
+ α ---f---> γ
+```
 -/
 theorem compare_comp_eq_compare (γ : Type uγ) [TopologicalSpace γ]
-    [T3Space γ] {f : α -> γ} (cont_f : Continuous f) :
+    [T3Space γ] {f : α → γ} (cont_f : Continuous f) :
     letI := pkg.uniformStruct.toTopologicalSpace
     letI := pkg'.uniformStruct.toTopologicalSpace
-    (forall a : pkg.space,
-      Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) ->
+    (∀ a : pkg.space,
+      Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) →
       pkg.isDenseInducing.extend f ∘ pkg'.compare pkg = pkg'.isDenseInducing.extend f := by
   intro h
   have (x : α) : (pkg.isDenseInducing.extend f ∘ pkg'.compare pkg) (pkg'.coe x) = f x := by
@@ -1010,7 +964,7 @@ theorem compare_comp_eq_compare (γ : Type uγ) [TopologicalSpace γ]
   apply (IsDenseInducing.extend_unique (AbstractCompletion.isDenseInducing _) this
     (Continuous.comp _ (uniformContinuous_compare pkg' pkg).continuous)).symm
   apply IsDenseInducing.continuous_extend
-  exact fun a => ⟨(pkg.isDenseInducing.extend f) a, h a⟩
+  exact fun a ↦ ⟨(pkg.isDenseInducing.extend f) a, h a⟩
 
 end Compare
 
@@ -1022,30 +976,17 @@ local notation "hatβ" => pkg'.space
 
 local notation "ι'" => pkg'.coe
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- Products of completions -/
+/-
+**AbstractCompletion.prod** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     AbstractCompletion.{vα, uα
+} α →       {β : Type uβ} →         [inst_1 : UniformSpace β] → AbstractCompleti
+on.{vβ, uβ} β → AbstractCompletion.{max vβ vα, max uβ uα} (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : AbstractCompletion (α × β) where
-  body: hatα × hatβ
-  coe p := ⟨ι p.1, ι' p.2⟩
-  uniformStruct := inferInstance
-  complete := inferInstance
-  separation := inferInstance
-  isUniformInducing := IsUniformInducing.prod pkg.isUniformInducing pkg'.isUniformInducing
-  dense := pkg.dense.prodMap pkg'.dense
-
-中文:
-定义 乘积
-  签名: : AbstractCompletion (α × β) where
-  定义体: hatα × hatβ
-  coe p := ⟨ι p.1, ι' p.2⟩
-  uniformStruct := inferInstance
-  complete := inferInstance
-  separation := inferInstance
-  isUniformInducing := IsUniformInducing.prod pkg.isUniformInducing pkg'.isUniformInducing
-  dense := pkg.dense.prodMap pkg'.dense
+--- 原说明 ---
+Products of completions
 -/
 protected def prod : AbstractCompletion (α × β) where
   space := hatα × hatβ
@@ -1070,42 +1011,30 @@ variable {γ : Type uγ} [UniformSpace γ]
 
 open Function
 
-/--
-Definition of `extend₂` / `extend₂` 的定义
+/-- Extend two variable map to completions. -/
+/-
+**AbstractCompletion.extend** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     (pkg : AbstractCompletion.
+{vα, uα} α) → {β : Type uβ} → [UniformSpace β] → (α → β) → pkg.space → β
+参数：pkg : AbstractCompletion.{vα, uα} α；α → β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.isDenseInducing`：isDenseInducing : IsDenseInducing ι
+· 使用定理 `AbstractCompletion.dense`：∀ {α : Type u} [inst : UniformSpace α] (self :
+ AbstractCompletion.{v, u} α), DenseRange self.coe
 
-English:
-definition extend₂
-  signature: (f : α -> β -> γ)
-  body: curry (pkg.prod pkg').extend (uncurry f)
-
-中文:
-定义 extend₂
-  签名: (f : α -> β -> γ)
-  定义体: curry (pkg.prod pkg').extend (uncurry f)
+--- 原说明 ---
+Extend two variable map to completions.
 -/
-protected def extend₂ (f : α -> β -> γ) : hatα -> hatβ -> γ :=
-curry (pkg.prod pkg').extend (uncurry f)
+protected def extend₂ (f : α → β → γ) : hatα → hatβ → γ :=
+  curry <| (pkg.prod pkg').extend (uncurry f)
 
 section T0Space
 
-variable [T0Space γ] {f : α -> β -> γ}
+variable [T0Space γ] {f : α → β → γ}
 
-/--
-theorem `extension₂_coe_coe` / 定理 `extension₂_coe_coe`
-
-English:
-theorem extension₂_coe_coe
-  given: (hf : UniformContinuous <| uncurry f) (a : α) (b : β)
-  proof: show (pkg.prod pkg').extend (uncurry f) ((pkg.prod pkg').coe (a, b)) = uncurry f (a, b) from
-    (pkg.prod pkg').extend_coe hf _
-
-中文:
-定理 extension₂_coe_coe
-  条件: (hf : 一致连续 <| uncurry f) (a : α) (b : β)
-  证明: show (pkg.prod pkg').extend (uncurry f) ((pkg.prod pkg').coe (a, b)) = uncurry f (a, b) from
-    (pkg.prod pkg').extend_coe hf _
-
-Depends on / 依赖: extend, extend_coe, pkg.prod, uncurry
+/-
+**AbstractCompletion.extension** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extension₂_coe_coe (hf : UniformContinuous <| uncurry f) (a : α) (b : β) :
     pkg.extend₂ pkg' f (ι a) (ι' b) = f a b :=
@@ -1114,32 +1043,18 @@ theorem extension₂_coe_coe (hf : UniformContinuous <| uncurry f) (a : α) (b :
 
 end T0Space
 
-variable {f : α -> β -> γ}
+variable {f : α → β → γ}
 variable [CompleteSpace γ] (f)
 
 set_option backward.isDefEq.respectTransparency false in
 @[fun_prop]
-/--
-theorem `uniformContinuous_extension₂` / 定理 `uniformContinuous_extension₂`
-
-English:
-theorem uniformContinuous_extension₂
-  statement: UniformContinuous₂ (pkg.extend₂ pkg' f)
-  proof: by
-  rw [uniformContinuous₂_def]; rw [AbstractCompletion.extend₂]; rw [uncurry_curry]
-  apply uniformContinuous_extend
-
-中文:
-定理 uniformContinuous_extension₂
-  结论: UniformContinuous₂ (pkg.extend₂ pkg' f)
-  证明: by
-  rw [uniformContinuous₂_def]; rw [AbstractCompletion.extend₂]; rw [uncurry_curry]
-  apply uniformContinuous_extend
-
-Depends on / 依赖: AbstractCompletion, AbstractCompletion.extend, uncurry_curry, uniformContinuous_extend
+/-
+**AbstractCompletion.uniformContinuous_extension** 是 Mathlib 中的一个定理，位于命名空间 `Abst
+ractCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniformContinuous_extension₂ : UniformContinuous₂ (pkg.extend₂ pkg' f) := by
-  rw [uniformContinuous₂_def]; rw [AbstractCompletion.extend₂]; rw [uncurry_curry]
+  rw [uniformContinuous₂_def, AbstractCompletion.extend₂, uncurry_curry]
   apply uniformContinuous_extend
 
 end Extension₂
@@ -1160,86 +1075,65 @@ local notation "ι''" => pkg''.coe
 
 local notation f " ∘₂ " g => bicompr f g
 
-/--
-Definition of `map₂` / `map₂` 的定义
+/-- Lift two variable maps to completions. -/
+/-
+**AbstractCompletion.map** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     (pkg : AbstractCompletion.
+{vα, uα} α) →       {β : Type uβ} →         [inst_1 : UniformSpace β] → (pkg' : 
+AbstractCompletion.{vβ, uβ} β) → (α → β) → pkg.space → pkg'.space
+参数：pkg : AbstractCompletion.{vα, uα} α；pkg' : AbstractCompletion.{vβ, uβ} β；α → 
+β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (f : α -> β -> γ)
-  body: pkg.extend₂ pkg' (pkg''.coe ∘₂ f)
-
-@[fun_prop]
-
-中文:
-定义 map₂
-  签名: (f : α -> β -> γ)
-  定义体: pkg.extend₂ pkg' (pkg''.coe ∘₂ f)
-
-@[fun_prop]
+--- 原说明 ---
+Lift two variable maps to completions.
 -/
-protected def map₂ (f : α -> β -> γ) : hatα -> hatβ -> hatγ :=
+protected def map₂ (f : α → β → γ) : hatα → hatβ → hatγ :=
   pkg.extend₂ pkg' (pkg''.coe ∘₂ f)
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_map₂` / 定理 `uniformContinuous_map₂`
-
-English:
-theorem uniformContinuous_map₂
-  given: (f : α -> β -> γ)
-  statement: UniformContinuous₂ (pkg.map₂ pkg' pkg'' f)
-  proof: AbstractCompletion.uniformContinuous_extension₂ pkg pkg' _
-
-中文:
-定理 uniformContinuous_map₂
-  条件: (f : α -> β -> γ)
-  结论: UniformContinuous₂ (pkg.map₂ pkg' pkg'' f)
-  证明: AbstractCompletion.uniformContinuous_extension₂ pkg pkg' _
-
-Depends on / 依赖: AbstractCompletion, AbstractCompletion.uniformContinuous_extension
+/-
+**AbstractCompletion.uniformContinuous_map** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCo
+mpletion`。
+形式化陈述：uniformContinuous_map : UniformContinuous (map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_extend`：uniformContinuous_extend : 
+UniformContinuous (pkg.extend f)
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
 -/
-theorem uniformContinuous_map₂ (f : α -> β -> γ) : UniformContinuous₂ (pkg.map₂ pkg' pkg'' f) :=
+theorem uniformContinuous_map₂ (f : α → β → γ) : UniformContinuous₂ (pkg.map₂ pkg' pkg'' f) :=
   AbstractCompletion.uniformContinuous_extension₂ pkg pkg' _
-
-/--
-theorem `continuous_map₂` / 定理 `continuous_map₂`
-
-English:
-theorem continuous_map₂
-  statement: {δ} [TopologicalSpace δ] {f : α -> β -> γ} {a : δ -> hatα} {b : δ -> hatβ}
-  proof: (pkg.uniformContinuous_map₂ pkg' pkg'' f).continuous.comp₂ ha hb
-
-中文:
-定理 continuous_map₂
-  结论: {δ} [拓扑空间 δ] {f : α -> β -> γ} {a : δ -> hatα} {b : δ -> hatβ}
-  证明: (pkg.uniformContinuous_map₂ pkg' pkg'' f).continuous.comp₂ ha hb
-
-Depends on / 依赖: continuous, continuous.comp, pkg.uniformContinuous_map
+/-
+**AbstractCompletion.continuous_map** 是 Mathlib 中的一个定理，位于命名空间 `AbstractCompletio
+n`。
+形式化陈述：continuous_map : Continuous (map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.continuous_extend`：continuous_extend : Continuous (pk
+g.extend f)
+· 使用定理 `AbstractCompletion.complete`：∀ {α : Type u} [inst : UniformSpace α] (sel
+f : AbstractCompletion.{v, u} α), CompleteSpace self.space
 -/
-theorem continuous_map₂ {δ} [TopologicalSpace δ] {f : α -> β -> γ} {a : δ -> hatα} {b : δ -> hatβ}
+theorem continuous_map₂ {δ} [TopologicalSpace δ] {f : α → β → γ} {a : δ → hatα} {b : δ → hatβ}
     (ha : Continuous a) (hb : Continuous b) :
     Continuous fun d : δ => pkg.map₂ pkg' pkg'' f (a d) (b d) :=
   (pkg.uniformContinuous_map₂ pkg' pkg'' f).continuous.comp₂ ha hb
-
-/--
-theorem `map₂_coe_coe` / 定理 `map₂_coe_coe`
-
-English:
-theorem map₂_coe_coe
-  given: (a : α) (b : β) (f : α -> β -> γ) (hf : UniformContinuous₂ f)
-  proof: pkg.extension₂_coe_coe (f := pkg''.coe ∘₂ f) pkg' (pkg''.uniformContinuous_coe.comp hf) a b
-
-中文:
-定理 map₂_coe_coe
-  条件: (a : α) (b : β) (f : α -> β -> γ) (hf : UniformContinuous₂ f)
-  证明: pkg.extension₂_coe_coe (f := pkg''.coe ∘₂ f) pkg' (pkg''.uniformContinuous_coe.comp hf) a b
-
-Depends on / 依赖: pkg.extension, uniformContinuous_coe, uniformContinuous_coe.comp
+/-
+**AbstractCompletion.map** 是 Mathlib 中的一个定义，位于命名空间 `AbstractCompletion`。
+形式化陈述：{α : Type uα} →   [inst : UniformSpace α] →     (pkg : AbstractCompletion.
+{vα, uα} α) →       {β : Type uβ} →         [inst_1 : UniformSpace β] → (pkg' : 
+AbstractCompletion.{vβ, uβ} β) → (α → β) → pkg.space → pkg'.space
+参数：pkg : AbstractCompletion.{vα, uα} α；pkg' : AbstractCompletion.{vβ, uβ} β；α → 
+β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂_coe_coe (a : α) (b : β) (f : α -> β -> γ) (hf : UniformContinuous₂ f) :
+theorem map₂_coe_coe (a : α) (b : β) (f : α → β → γ) (hf : UniformContinuous₂ f) :
     pkg.map₂ pkg' pkg'' f (ι a) (ι' b) = ι'' (f a b) :=
   pkg.extension₂_coe_coe (f := pkg''.coe ∘₂ f) pkg' (pkg''.uniformContinuous_coe.comp hf) a b
 
 end Map₂
 
 end AbstractCompletion
+

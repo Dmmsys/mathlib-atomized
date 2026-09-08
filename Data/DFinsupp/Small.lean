@@ -22,52 +22,40 @@ public section
 
 universe u v w
 
-variable {ι : Type u} {π : ι -> Type v} [forall i, Zero (π i)]
+variable {ι : Type u} {π : ι → Type v} [∀ i, Zero (π i)]
 
 section Small
 
-/--
-Instance `DFinsupp.small` / 实例 `DFinsupp.small`
-
-English:
-instance DFinsupp.small
-  signature: [Small.{w} ι] [forall (i : ι), Small.{w} (π i)]
-  body: small_of_injective (f := fun x j => x j) (fun f f' eq => by ext j; exact congr_fun eq j)
-
-中文:
-实例 直和有限支撑.small
-  签名: [Small.{w} ι] [对任意 (i : ι), Small.{w} (π i)]
-  定义体: small_of_injective (f := fun x j => x j) (fun f f' eq => by ext j; exact congr_fun eq j)
-
-Depends on / 依赖: congr_fun, small_of_injective
+/-
+**DFinsupp.small** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：DFinsupp.small [Small.{w} ι] [forall (i : ι), Small.{w} (π i)] : Small.{w}
+ (DFinsupp π)
+参数：i : ι；π i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective`：small_of_injective {α : Type v} {β : Type w} [Small.
+{u} β] {f : α -> β} (hf : Function.Injective f) : Small.{u} α
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 -/
-instance DFinsupp.small [Small.{w} ι] [forall (i : ι), Small.{w} (π i)] :
+instance DFinsupp.small [Small.{w} ι] [∀ (i : ι), Small.{w} (π i)] :
     Small.{w} (DFinsupp π) :=
-  small_of_injective (f := fun x j => x j) (fun f f' eq => by ext j; exact congr_fun eq j)
-
-/--
-Instance `Finsupp.small` / 实例 `Finsupp.small`
-
-English:
-instance Finsupp.small
-  signature: {σ : Type*} {R : Type*} [Zero R]
-  body: by
-  classical
-  exact small_map finsuppEquivDFinsupp
-
-中文:
-实例 有限支撑.small
-  签名: {σ : 类型} {R : 类型} [零 R]
-  定义体: by
-  classical
-  exact small_map finsuppEquivDFinsupp
-
-Depends on / 依赖: classical, finsuppEquivDFinsupp, small_map
+  small_of_injective (f := fun x j ↦ x j) (fun f f' eq ↦ by ext j; exact congr_fun eq j)
+/-
+**Finsupp.small** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Finsupp.small {σ : Type*} {R : Type*} [Zero R] [Small.{u} R] [Small.{u} σ]
+ : Small.{u} (σ ->₀ R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
 -/
 instance Finsupp.small {σ : Type*} {R : Type*} [Zero R]
     [Small.{u} R] [Small.{u} σ] :
-    Small.{u} (σ ->₀ R) := by
+    Small.{u} (σ →₀ R) := by
   classical
   exact small_map finsuppEquivDFinsupp
 
 end Small
+

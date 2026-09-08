@@ -50,63 +50,51 @@ variable {α β : Type u} [LinearOrder α] [LinearOrder β] {δ : Sort v}
 /-- Equivalence relation on linear orders on arbitrary types in universe `u`, given by order
 isomorphism. -/
 @[instance_reducible]
-/--
-Definition of `OrderType.instSetoid` / `OrderType.instSetoid` 的定义
+/-
+**OrderType.instSetoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderType.instSetoid : Setoid LinOrd where r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderType.instSetoid
-  signature: : Setoid LinOrd where
-  body: fun lin_ord₁ lin_ord₂ => Nonempty (lin_ord₁ ≃o lin_ord₂)
-  iseqv := ⟨fun _ => ⟨.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
-
-中文:
-定义 序型.instSetoid
-  签名: : 集合等价关系 线性序 where
-  定义体: fun lin_ord₁ lin_ord₂ => Nonempty (lin_ord₁ ≃o lin_ord₂)
-  iseqv := ⟨fun _ => ⟨.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+Equivalence relation on linear orders on arbitrary types in universe `u`, given 
+by order
+isomorphism.
 -/
 def OrderType.instSetoid : Setoid LinOrd where
-  r := fun lin_ord₁ lin_ord₂ => Nonempty (lin_ord₁ ≃o lin_ord₂)
-  iseqv := ⟨fun _ => ⟨.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
+  r := fun lin_ord₁ lin_ord₂ ↦ Nonempty (lin_ord₁ ≃o lin_ord₂)
+  iseqv := ⟨fun _ ↦ ⟨.refl _⟩, fun ⟨e⟩ ↦ ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ ↦ ⟨e₁.trans e₂⟩⟩
 
 /-- `OrderType.{u}` is the type of linear orders in `Type u`, up to order isomorphism. -/
 @[pp_with_univ]
-/--
-Definition of `OrderType` / `OrderType` 的定义
+/-
+**OrderType** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderType : Type (u + 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderType
-  signature: : Type (u + 1)
-  body: Quotient OrderType.instSetoid
-
-中文:
-定义 序型
-  签名: : 类型 (u + 1)
-  定义体: Quotient OrderType.instSetoid
-
-Depends on / 依赖: OrderType, OrderType.instSetoid, Quotient, instSetoid
+--- 原说明 ---
+`OrderType.{u}` is the type of linear orders in `Type u`, up to order isomorphis
+m.
 -/
 def OrderType : Type (u + 1) :=
   Quotient OrderType.instSetoid
 
 namespace OrderType
 
-/--
-Definition of `ToType` / `ToType` 的定义
+/-- A "canonical" type order-isomorphic to the order type `o`, living in the same universe.
+This is defined through the axiom of choice. -/
+/-
+**OrderType.ToType** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：ToType (o : OrderType) : Type u
+参数：o : OrderType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ToType
-  signature: (o : OrderType)
-  body: o.out.carrier
-
-中文:
-定义 ToType
-  签名: (o : 序型)
-  定义体: o.out.carrier
-
-Depends on / 依赖: carrier, o.out.carrier
+--- 原说明 ---
+A "canonical" type order-isomorphic to the order type `o`, living in the same un
+iverse.
+This is defined through the axiom of choice.
 -/
 def ToType (o : OrderType) : Type u :=
   o.out.carrier
@@ -114,143 +102,84 @@ def ToType (o : OrderType) : Type u :=
 /-- The instance for some arbitrary linear order on `Type u` , order isomorphic within
 order type `o`. -/
 @[no_expose]
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The instance for some arbitrary linear order on `Type u` , order isomorphic with
+in
+order type `o`.
+-/
 instance (o : OrderType) : LinearOrder o.ToType :=
   o.out.str
 
 /-! ### Basic properties of the order type -/
 
-/--
-Definition of `type` / `type` 的定义
+/-- The order type of the linear order on `α`. -/
+/-
+**OrderType.type** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：type (α : Type u) [LinearOrder α] : OrderType
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition type
-  signature: (α : Type u) [LinearOrder α]
-  body: ⟦⟨α⟩⟧
-
-中文:
-定义 type
-  签名: (α : 类型u) [线性序 α]
-  定义体: ⟦⟨α⟩⟧
+--- 原说明 ---
+The order type of the linear order on `α`.
 -/
 def type (α : Type u) [LinearOrder α] : OrderType :=
   ⟦⟨α⟩⟧
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero OrderType
-  body: type PEmpty
-
-中文:
-实例 :
-  签名: 零 序型
-  定义体: type PEmpty
-
-Depends on / 依赖: PEmpty
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero OrderType where
   zero := type PEmpty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited OrderType
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 序型
-  定义体: ⟨0⟩
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited OrderType :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One OrderType
-  body: type PUnit
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 序型
-  定义体: type PUnit
-
-@[simp]
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One OrderType where
   one := type PUnit
 
 @[simp]
-/--
-theorem `type_toType` / 定理 `type_toType`
-
-English:
-theorem type_toType
-  given: (o : OrderType)
-  statement: type o.ToType = o
-  proof: surjInv_eq Quot.exists_rep o
-
-中文:
-定理 type_toType
-  条件: (o : 序型)
-  结论: type o.ToType = o
-  证明: surjInv_eq Quot.exists_rep o
-
-Depends on / 依赖: Quot.exists_rep, exists_rep, surjInv_eq
+/-
+**OrderType.type_toType** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_toType (o : OrderType) : type o.ToType = o
+参数：o : OrderType。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.surjInv_eq`：surjInv_eq (h : Surjective f) (b) : f (surjInv h b)
+ = b
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
 theorem type_toType (o : OrderType) : type o.ToType = o := surjInv_eq Quot.exists_rep o
-
-/--
-theorem `type_eq_type` / 定理 `type_eq_type`
-
-English:
-theorem type_eq_type
-  statement: type α = type β ↔ Nonempty (α ≃o β)
-  proof: Quotient.eq'
-
-中文:
-定理 type_eq_type
-  结论: type α = type β ↔ 非空 (α ≃o β)
-  证明: Quotient.eq'
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**OrderType.type_eq_type** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_eq_type : type α = type β ↔ Nonempty (α ≃o β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq'`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a
+ = Quotient.mk' b ↔ s₁ a b
 -/
 theorem type_eq_type : type α = type β ↔ Nonempty (α ≃o β) :=
   Quotient.eq'
-
-/--
-theorem `type_congr` / 定理 `type_congr`
-
-English:
-theorem type_congr
-  given: (h : α ≃o β)
-  statement: type α = type β
-  proof: type_eq_type.2 ⟨h⟩
-
-alias _root_.OrderIso.type_congr := type_congr
-
-@[simp]
-
-中文:
-定理 type_congr
-  条件: (h : α ≃o β)
-  结论: type α = type β
-  证明: type_eq_type.2 ⟨h⟩
-
-alias _root_.OrderIso.type_congr := type_congr
-
-@[simp]
-
-Depends on / 依赖: type_eq_type
+/-
+**OrderType.type_congr** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_congr (h : α ≃o β) : type α = type β
+参数：h : α ≃o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderType.type_eq_type`：type_eq_type : type α = type β ↔ Nonempty (α ≃o 
+β)
 -/
 theorem type_congr (h : α ≃o β) : type α = type β :=
   type_eq_type.2 ⟨h⟩
@@ -258,370 +187,241 @@ theorem type_congr (h : α ≃o β) : type α = type β :=
 alias _root_.OrderIso.type_congr := type_congr
 
 @[simp]
-/--
-theorem `type_of_isEmpty` / 定理 `type_of_isEmpty`
-
-English:
-theorem type_of_isEmpty
-  given: [IsEmpty α]
-  statement: type α = 0
-  proof: type_congr .ofIsEmpty α PEmpty
-
-中文:
-定理 type_of_isEmpty
-  条件: [是空 α]
-  结论: type α = 0
-  证明: type_congr .ofIsEmpty α PEmpty
-
-Depends on / 依赖: PEmpty, ofIsEmpty, type_congr
+/-
+**OrderType.type_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_of_isEmpty [IsEmpty α] : type α = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.type_congr`：type_congr (h : α ≃o β) : type α = type β
 -/
 theorem type_of_isEmpty [IsEmpty α] : type α = 0 :=
-type_congr .ofIsEmpty α PEmpty
-
-/--
-theorem `type_eq_zero` / 定理 `type_eq_zero`
-
-English:
-theorem type_eq_zero
-  statement: type α = 0 ↔ IsEmpty α where
-  proof: let ⟨s⟩ := type_eq_type.1 h
-    s.toEquiv.isEmpty
-  mpr := @type_of_isEmpty α _
-
-中文:
-定理 type_eq_zero
-  结论: type α = 0 ↔ 是空 α where
-  证明: let ⟨s⟩ := type_eq_type.1 h
-    s.toEquiv.isEmpty
-  mpr := @type_of_isEmpty α _
-
-Depends on / 依赖: isEmpty, s.toEquiv.isEmpty, toEquiv, type_eq_type, type_of_isEmpty
+  type_congr <| .ofIsEmpty α PEmpty
+/-
+**OrderType.type_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_eq_zero : type α = 0 ↔ IsEmpty α where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `OrderType.type_eq_type`：type_eq_type : type α = type β ↔ Nonempty (α ≃o 
+β)
+· 使用定理 `Equiv.isEmpty`：∀ {α : Sort u_1} {β : Sort u_4} (e : α ≃ β) [IsEmpty β], 
+IsEmpty α
+· 使用定理 `OrderType.type_of_isEmpty`：type_of_isEmpty [IsEmpty α] : type α = 0
 -/
 theorem type_eq_zero : type α = 0 ↔ IsEmpty α where
   mp h :=
     let ⟨s⟩ := type_eq_type.1 h
     s.toEquiv.isEmpty
   mpr := @type_of_isEmpty α _
-
-/--
-theorem `type_ne_zero_iff` / 定理 `type_ne_zero_iff`
-
-English:
-theorem type_ne_zero_iff
-  statement: type α != 0 ↔ Nonempty α
-  proof: by simp [type_eq_zero]
-
-@[simp]
-
-中文:
-定理 type_ne_zero_iff
-  结论: type α != 0 ↔ 非空 α
-  证明: by simp [type_eq_zero]
-
-@[simp]
-
-Depends on / 依赖: type_eq_zero
+/-
+**OrderType.type_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_ne_zero_iff : type α != 0 ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem type_ne_zero_iff : type α != 0 ↔ Nonempty α := by simp [type_eq_zero]
+theorem type_ne_zero_iff : type α ≠ 0 ↔ Nonempty α := by simp [type_eq_zero]
 
 @[simp]
-/--
-theorem `type_ne_zero` / 定理 `type_ne_zero`
-
-English:
-theorem type_ne_zero
-  given: [h : Nonempty α]
-  statement: type α != 0
-  proof: type_ne_zero_iff.2 h
-
-@[simp]
-
-中文:
-定理 type_ne_zero
-  条件: [h : 非空 α]
-  结论: type α != 0
-  证明: type_ne_zero_iff.2 h
-
-@[simp]
-
-Depends on / 依赖: type_ne_zero_iff
+/-
+**OrderType.type_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_ne_zero [h : Nonempty α] : type α != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderType.type_ne_zero_iff`：type_ne_zero_iff : type α != 0 ↔ Nonempty α
 -/
-theorem type_ne_zero [h : Nonempty α] : type α != 0 :=
+theorem type_ne_zero [h : Nonempty α] : type α ≠ 0 :=
   type_ne_zero_iff.2 h
 
 @[simp]
-/--
-theorem `type_of_unique` / 定理 `type_of_unique`
-
-English:
-theorem type_of_unique
-  given: [Nonempty α] [Subsingleton α]
-  statement: type α = 1
-  proof: by
-  cases nonempty_unique α
-  exact (OrderIso.ofUnique α _).type_congr
-
-中文:
-定理 type_of_unique
-  条件: [非空 α] [子单例 α]
-  结论: type α = 1
-  证明: by
-  cases nonempty_unique α
-  exact (OrderIso.ofUnique α _).type_congr
-
-Depends on / 依赖: OrderIso, OrderIso.ofUnique, nonempty_unique, ofUnique, type_congr
+/-
+**OrderType.type_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_of_unique [Nonempty α] [Subsingleton α] : type α = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
+· 使用定理 `OrderIso.type_congr`：∀ {α β : Type u} [inst : LinearOrder α] [inst_1 : L
+inearOrder β] (h : α ≃o β), OrderType.type α = OrderType.type β
 -/
 theorem type_of_unique [Nonempty α] [Subsingleton α] : type α = 1 := by
   cases nonempty_unique α
   exact (OrderIso.ofUnique α _).type_congr
-
-/--
-theorem `type_eq_one` / 定理 `type_eq_one`
-
-English:
-theorem type_eq_one
-  statement: type α = 1 ↔ Nonempty (Unique α)
-  proof: ⟨fun h => let ⟨s⟩ := type_eq_type.1 h; ⟨s.toEquiv.unique⟩,
-    fun ⟨_⟩ => type_of_unique⟩
-
-@[simp]
-
-中文:
-定理 type_eq_one
-  结论: type α = 1 ↔ 非空 (唯一 α)
-  证明: ⟨fun h => let ⟨s⟩ := type_eq_type.1 h; ⟨s.toEquiv.unique⟩,
-    fun ⟨_⟩ => type_of_unique⟩
-
-@[simp]
-
-Depends on / 依赖: s.toEquiv.unique, toEquiv, type_eq_type, type_of_unique, unique
+/-
+**OrderType.type_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_eq_one : type α = 1 ↔ Nonempty (Unique α)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `OrderType.type_eq_type`：type_eq_type : type α = type β ↔ Nonempty (α ≃o 
+β)
+· 使用定理 `OrderType.type_of_unique`：type_of_unique [Nonempty α] [Subsingleton α] :
+ type α = 1
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem type_eq_one : type α = 1 ↔ Nonempty (Unique α) :=
-  ⟨fun h => let ⟨s⟩ := type_eq_type.1 h; ⟨s.toEquiv.unique⟩,
-    fun ⟨_⟩ => type_of_unique⟩
+  ⟨fun h ↦ let ⟨s⟩ := type_eq_type.1 h; ⟨s.toEquiv.unique⟩,
+    fun ⟨_⟩ ↦ type_of_unique⟩
 
 @[simp]
-/--
-theorem `isEmpty_toType_iff` / 定理 `isEmpty_toType_iff`
-
-English:
-theorem isEmpty_toType_iff
-  given: {o : OrderType}
-  statement: IsEmpty o.ToType ↔ o = 0
-  proof: by
-  rw [← @type_eq_zero o.ToType]; rw [type_toType]
-
-@[simp]
-
-中文:
-定理 isEmpty_toType_iff
-  条件: {o : 序型}
-  结论: 是空 o.ToType ↔ o = 0
-  证明: by
-  rw [← @type_eq_zero o.ToType]; rw [type_toType]
-
-@[simp]
+/-
+**OrderType.isEmpty_toType_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem isEmpty_toType_iff {o : OrderType} : IsEmpty o.ToType ↔ o = 0 := by
-  rw [← @type_eq_zero o.ToType]; rw [type_toType]
+  rw [← @type_eq_zero o.ToType, type_toType]
 
 @[simp]
-/--
-theorem `nonempty_toType_iff` / 定理 `nonempty_toType_iff`
-
-English:
-theorem nonempty_toType_iff
-  given: {o : OrderType}
-  statement: Nonempty o.ToType ↔ o != 0
-  proof: by
-  rw [← @type_ne_zero_iff o.ToType]; rw [type_toType]
-
-中文:
-定理 nonempty_toType_iff
-  条件: {o : 序型}
-  结论: 非空 o.ToType ↔ o != 0
-  证明: by
-  rw [← @type_ne_zero_iff o.ToType]; rw [type_toType]
+/-
+**OrderType.nonempty_toType_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem nonempty_toType_iff {o : OrderType} : Nonempty o.ToType ↔ o != 0 := by
-  rw [← @type_ne_zero_iff o.ToType]; rw [type_toType]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nontrivial OrderType.{u}
-  body: ⟨⟨1, 0, type_ne_zero⟩⟩
-
-中文:
-实例 :
-  签名: 非平凡 序型.{u}
-  定义体: ⟨⟨1, 0, type_ne_zero⟩⟩
-
-Depends on / 依赖: type_ne_zero
+private theorem nonempty_toType_iff {o : OrderType} : Nonempty o.ToType ↔ o ≠ 0 := by
+  rw [← @type_ne_zero_iff o.ToType, type_toType]
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nontrivial OrderType.{u} :=
   ⟨⟨1, 0, type_ne_zero⟩⟩
 
 /-- `Quotient.inductionOn` specialized to `OrderType`. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn` / 定理 `inductionOn`
+/-
+**OrderType.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：inductionOn {C : OrderType -> Prop} (o : OrderType) (H : forall α [LinearO
+rder α], C (type α)) : C o
+参数：o : OrderType；H : forall α [LinearOrder α], C (type α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 
-English:
-theorem inductionOn
-  statement: {C : OrderType -> Prop} (o : OrderType)
-  proof: Quot.inductionOn o (fun α => H α)
-
-中文:
-定理 inductionOn
-  结论: {C : 序型 -> 命题} (o : 序型)
-  证明: Quot.inductionOn o (fun α => H α)
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+--- 原说明 ---
+`Quotient.inductionOn` specialized to `OrderType`.
 -/
-theorem inductionOn {C : OrderType -> Prop} (o : OrderType)
-    (H : forall α [LinearOrder α], C (type α)) : C o :=
-  Quot.inductionOn o (fun α => H α)
+theorem inductionOn {C : OrderType → Prop} (o : OrderType)
+    (H : ∀ α [LinearOrder α], C (type α)) : C o :=
+  Quot.inductionOn o (fun α ↦ H α)
 
 /-- `Quotient.inductionOn₂` specialized to `OrderType`. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn₂` / 定理 `inductionOn₂`
+/-
+**OrderType.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：inductionOn {C : OrderType -> Prop} (o : OrderType) (H : forall α [LinearO
+rder α], C (type α)) : C o
+参数：o : OrderType；H : forall α [LinearOrder α], C (type α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 
-English:
-theorem inductionOn₂
-  statement: {C : OrderType -> OrderType -> Prop} (o₁ o₂ : OrderType)
-  proof: Quotient.inductionOn₂ o₁ o₂ fun α β => H α β
-
-中文:
-定理 inductionOn₂
-  结论: {C : 序型 -> 序型 -> 命题} (o₁ o₂ : 序型)
-  证明: Quotient.inductionOn₂ o₁ o₂ fun α β => H α β
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+--- 原说明 ---
+`Quotient.inductionOn₂` specialized to `OrderType`.
 -/
-theorem inductionOn₂ {C : OrderType -> OrderType -> Prop} (o₁ o₂ : OrderType)
-    (H : forall α [LinearOrder α] β [LinearOrder β], C (type α) (type β)) : C o₁ o₂ :=
-  Quotient.inductionOn₂ o₁ o₂ fun α β => H α β
+theorem inductionOn₂ {C : OrderType → OrderType → Prop} (o₁ o₂ : OrderType)
+    (H : ∀ α [LinearOrder α] β [LinearOrder β], C (type α) (type β)) : C o₁ o₂ :=
+  Quotient.inductionOn₂ o₁ o₂ fun α β ↦ H α β
 
 /-- `Quotient.inductionOn₃` specialized to `OrderType`. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn₃` / 定理 `inductionOn₃`
+/-
+**OrderType.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：inductionOn {C : OrderType -> Prop} (o : OrderType) (H : forall α [LinearO
+rder α], C (type α)) : C o
+参数：o : OrderType；H : forall α [LinearOrder α], C (type α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 
-English:
-theorem inductionOn₃
-  statement: {C : OrderType -> OrderType -> OrderType -> Prop} (o₁ o₂ o₃ : OrderType)
-  proof: Quotient.inductionOn₃ o₁ o₂ o₃ fun α β γ =>
-    H α β γ
-
-中文:
-定理 inductionOn₃
-  结论: {C : 序型 -> 序型 -> 序型 -> 命题} (o₁ o₂ o₃ : 序型)
-  证明: Quotient.inductionOn₃ o₁ o₂ o₃ fun α β γ =>
-    H α β γ
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+--- 原说明 ---
+`Quotient.inductionOn₃` specialized to `OrderType`.
 -/
-theorem inductionOn₃ {C : OrderType -> OrderType -> OrderType -> Prop} (o₁ o₂ o₃ : OrderType)
-    (H : forall α [LinearOrder α] β [LinearOrder β] γ [LinearOrder γ],
+theorem inductionOn₃ {C : OrderType → OrderType → OrderType → Prop} (o₁ o₂ o₃ : OrderType)
+    (H : ∀ α [LinearOrder α] β [LinearOrder β] γ [LinearOrder γ],
       C (type α) (type β) (type γ)) : C o₁ o₂ o₃ :=
-  Quotient.inductionOn₃ o₁ o₂ o₃ fun α β γ =>
+  Quotient.inductionOn₃ o₁ o₂ o₃ fun α β γ ↦
     H α β γ
 
-/--
-Definition of `liftOn` / `liftOn` 的定义
-
-English:
-definition liftOn
-  signature: (o : OrderType) (f : forall (α) [LinearOrder α], δ)
-  body: Quotient.liftOn o (fun w => f w)
-    fun w₁ w₂ h => c w₁ w₂ (Quotient.sound h)
-
-中文:
-定义 liftOn
-  签名: (o : 序型) (f : 对任意 (α) [线性序 α], δ)
-  定义体: Quotient.liftOn o (fun w => f w)
-    fun w₁ w₂ h => c w₁ w₂ (Quotient.sound h)
-
-Depends on / 依赖: Quotient, Quotient.liftOn, Quotient.sound, liftOn
+/-- To define a function on `OrderType`, it suffices to define it on all linear orders.
 -/
-def liftOn (o : OrderType) (f : forall (α) [LinearOrder α], δ)
-    (c : forall (α) [LinearOrder α] (β) [LinearOrder β],
-      type α = type β -> f α = f β) : δ :=
-  Quotient.liftOn o (fun w => f w)
-    fun w₁ w₂ h => c w₁ w₂ (Quotient.sound h)
+/-
+**OrderType.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：liftOn (o : OrderType) (f : forall (α) [LinearOrder α], δ) (c : forall (α)
+ [LinearOrder α] (β) [LinearOrder β], type α = type β -> f α = f β) : δ
+参数：o : OrderType；f : forall (α) [LinearOrder α], δ；c : forall (α) [LinearOrder α
+] (β) [LinearOrder β], type α = type β -> f α = f β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `liftOn₂` / `liftOn₂` 的定义
-
-English:
-definition liftOn₂
-  signature: (o₁ o₂ : OrderType) (f : forall (α) [LinearOrder α] (β) [LinearOrder β], δ)
-  body: Quotient.liftOn₂ o₁ o₂ (fun w v => f w v)
-    fun w₁ w₂ v₁ v₂ hw hv => c w₁ w₂ v₁ v₂ (Quotient.sound hw) (Quotient.sound hv)
-
-@[simp]
-
-中文:
-定义 liftOn₂
-  签名: (o₁ o₂ : 序型) (f : 对任意 (α) [线性序 α] (β) [线性序 β], δ)
-  定义体: Quotient.liftOn₂ o₁ o₂ (fun w v => f w v)
-    fun w₁ w₂ v₁ v₂ hw hv => c w₁ w₂ v₁ v₂ (Quotient.sound hw) (Quotient.sound hv)
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.liftOn, Quotient.sound
+--- 原说明 ---
+To define a function on `OrderType`, it suffices to define it on all linear orde
+rs.
 -/
-def liftOn₂ (o₁ o₂ : OrderType) (f : forall (α) [LinearOrder α] (β) [LinearOrder β], δ)
-    (c : forall (α₁) [LinearOrder α₁] (β₁) [LinearOrder β₁] (α₂) [LinearOrder α₂] (β₂) [LinearOrder β₂],
-      type α₁ = type α₂ -> type β₁ = type β₂ -> f α₁ β₁ = f α₂ β₂) : δ :=
-  Quotient.liftOn₂ o₁ o₂ (fun w v => f w v)
-    fun w₁ w₂ v₁ v₂ hw hv => c w₁ w₂ v₁ v₂ (Quotient.sound hw) (Quotient.sound hv)
+def liftOn (o : OrderType) (f : ∀ (α) [LinearOrder α], δ)
+    (c : ∀ (α) [LinearOrder α] (β) [LinearOrder β],
+      type α = type β → f α = f β) : δ :=
+  Quotient.liftOn o (fun w ↦ f w)
+    fun w₁ w₂ h ↦ c w₁ w₂ (Quotient.sound h)
 
-@[simp]
-/--
-theorem `liftOn_type` / 定理 `liftOn_type`
+/-- `Quotient.liftOn₂` specialized to `OrderType`. -/
+/-
+**OrderType.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：liftOn (o : OrderType) (f : forall (α) [LinearOrder α], δ) (c : forall (α)
+ [LinearOrder α] (β) [LinearOrder β], type α = type β -> f α = f β) : δ
+参数：o : OrderType；f : forall (α) [LinearOrder α], δ；c : forall (α) [LinearOrder α
+] (β) [LinearOrder β], type α = type β -> f α = f β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem liftOn_type
-  statement: (f : forall (α) [LinearOrder α], δ)
-  proof: by rfl
-
-@[simp]
-
-中文:
-定理 liftOn_type
-  结论: (f : 对任意 (α) [线性序 α], δ)
-  证明: by rfl
-
-@[simp]
+--- 原说明 ---
+`Quotient.liftOn₂` specialized to `OrderType`.
 -/
-theorem liftOn_type (f : forall (α) [LinearOrder α], δ)
-    (c : forall (α) [LinearOrder α] (β) [LinearOrder β],
-      type α = type β -> f α = f β) {γ} [LinearOrder γ] :
+def liftOn₂ (o₁ o₂ : OrderType) (f : ∀ (α) [LinearOrder α] (β) [LinearOrder β], δ)
+    (c : ∀ (α₁) [LinearOrder α₁] (β₁) [LinearOrder β₁] (α₂) [LinearOrder α₂] (β₂) [LinearOrder β₂],
+      type α₁ = type α₂ → type β₁ = type β₂ → f α₁ β₁ = f α₂ β₂) : δ :=
+  Quotient.liftOn₂ o₁ o₂ (fun w v ↦ f w v)
+    fun w₁ w₂ v₁ v₂ hw hv ↦ c w₁ w₂ v₁ v₂ (Quotient.sound hw) (Quotient.sound hv)
+
+@[simp]
+/-
+**OrderType.liftOn_type** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：liftOn_type (f : forall (α) [LinearOrder α], δ) (c : forall (α) [LinearOrd
+er α] (β) [LinearOrder β], type α = type β -> f α = f β) {γ} [LinearOrder γ] : l
+iftOn (type γ) f c = f γ
+参数：f : forall (α) [LinearOrder α], δ；c : forall (α) [LinearOrder α] (β) [LinearO
+rder β], type α = type β -> f α = f β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem liftOn_type (f : ∀ (α) [LinearOrder α], δ)
+    (c : ∀ (α) [LinearOrder α] (β) [LinearOrder β],
+      type α = type β → f α = f β) {γ} [LinearOrder γ] :
     liftOn (type γ) f c = f γ := by rfl
 
 @[simp]
-/--
-theorem `liftOn₂_type` / 定理 `liftOn₂_type`
-
-English:
-theorem liftOn₂_type
-  statement: {α : Type u} {β : Type v} {δ : Type*} [LinearOrder α] [LinearOrder β]
-  proof: by rfl
-
-中文:
-定理 liftOn₂_type
-  结论: {α : 类型u} {β : 类型v} {δ : 类型} [线性序 α] [线性序 β]
-  证明: by rfl
+/-
+**OrderType.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：liftOn (o : OrderType) (f : forall (α) [LinearOrder α], δ) (c : forall (α)
+ [LinearOrder α] (β) [LinearOrder β], type α = type β -> f α = f β) : δ
+参数：o : OrderType；f : forall (α) [LinearOrder α], δ；c : forall (α) [LinearOrder α
+] (β) [LinearOrder β], type α = type β -> f α = f β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem liftOn₂_type {α : Type u} {β : Type v} {δ : Type*} [LinearOrder α] [LinearOrder β]
-     (f : forall (α) [LinearOrder α] (β) [LinearOrder β], δ)
-     (c : forall (α₁) [LinearOrder α₁] (β₁) [LinearOrder β₁] (α₂) [LinearOrder α₂] (β₂) [LinearOrder β₂],
-       type α₁ = type α₂ -> type β₁ = type β₂ -> f α₁ β₁ = f α₂ β₂) :
+     (f : ∀ (α) [LinearOrder α] (β) [LinearOrder β], δ)
+     (c : ∀ (α₁) [LinearOrder α₁] (β₁) [LinearOrder β₁] (α₂) [LinearOrder α₂] (β₂) [LinearOrder β₂],
+       type α₁ = type α₂ → type β₁ = type β₂ → f α₁ β₁ = f α₂ β₂) :
     liftOn₂ (type α) (type β) f c = f α β := by rfl
 
 /-! ### The order on `OrderType` -/
@@ -630,116 +430,54 @@ theorem liftOn₂_type {α : Type u} {β : Type v} {δ : Type*} [LinearOrder α]
 The order is defined so that `type α ≤ type β` iff there exists an order embedding `α ↪o β`.
 -/
 @[no_expose]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Preorder OrderType
-  body: Quotient.liftOn₂ o₁ o₂ (fun r s => Nonempty (r ↪o s))
-    fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
-      ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
-        ⟨(f.toOrderEmbedding.trans h).trans g.symm.toOrderEmbedding⟩⟩
-  le_refl o := inductionOn o fun α _ => ⟨(OrderIso.refl _).toOrderEmbedding⟩
-  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
-
-中文:
-实例 :
-  签名: 预序 序型
-  定义体: Quotient.liftOn₂ o₁ o₂ (fun r s => Nonempty (r ↪o s))
-    fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
-      ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
-        ⟨(f.toOrderEmbedding.trans h).trans g.symm.toOrderEmbedding⟩⟩
-  le_refl o := inductionOn o fun α _ => ⟨(OrderIso.refl _).toOrderEmbedding⟩
-  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
-
-Depends on / 依赖: Nonempty, OrderIso, OrderIso.refl, Quotient, Quotient.liftOn, f.symm.toOrderEmbedding.trans, f.toOrderEmbedding.trans, f.trans, g.symm.toOrderEmbedding, g.toOrderEmbedding, inductionOn, le_refl, le_trans, propext, toOrderEmbedding
+--- 原说明 ---
+The order is defined so that `type α ≤ type β` iff there exists an order embeddi
+ng `α ↪o β`.
 -/
 instance : Preorder OrderType where
   le o₁ o₂ :=
-    Quotient.liftOn₂ o₁ o₂ (fun r s => Nonempty (r ↪o s))
-    fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
-      ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
+    Quotient.liftOn₂ o₁ o₂ (fun r s ↦ Nonempty (r ↪o s))
+    fun _ _ _ _ ⟨f⟩ ⟨g⟩ ↦ propext
+      ⟨fun ⟨h⟩ ↦ ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ ↦
         ⟨(f.toOrderEmbedding.trans h).trans g.symm.toOrderEmbedding⟩⟩
-  le_refl o := inductionOn o fun α _ => ⟨(OrderIso.refl _).toOrderEmbedding⟩
-  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NeZero (1 : OrderType)
-  body: ⟨type_ne_zero⟩
-
-中文:
-实例 :
-  签名: NeZero (1 : 序型)
-  定义体: ⟨type_ne_zero⟩
-
-Depends on / 依赖: type_ne_zero
+  le_refl o := inductionOn o fun α _ ↦ ⟨(OrderIso.refl _).toOrderEmbedding⟩
+  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ ↦ ⟨f.trans g⟩
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NeZero (1 : OrderType) :=
   ⟨type_ne_zero⟩
-
-/--
-theorem `type_le_type_iff` / 定理 `type_le_type_iff`
-
-English:
-theorem type_le_type_iff
-  statement: type α <= type β ↔ Nonempty (α ↪o β)
-  proof: .rfl
-
-中文:
-定理 type_le_type_iff
-  结论: type α <= type β ↔ 非空 (α ↪o β)
-  证明: .rfl
+/-
+**OrderType.type_le_type_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_le_type_iff : type α <= type β ↔ Nonempty (α ↪o β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem type_le_type_iff : type α <= type β ↔ Nonempty (α ↪o β) :=
+theorem type_le_type_iff : type α ≤ type β ↔ Nonempty (α ↪o β) :=
   .rfl
-
-/--
-theorem `type_le_type` / 定理 `type_le_type`
-
-English:
-theorem type_le_type
-  given: (h : α ↪o β)
-  statement: type α <= type β
-  proof: ⟨h⟩
-
-中文:
-定理 type_le_type
-  条件: (h : α ↪o β)
-  结论: type α <= type β
-  证明: ⟨h⟩
+/-
+**OrderType.type_le_type** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_le_type (h : α ↪o β) : type α <= type β
+参数：h : α ↪o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem type_le_type (h : α ↪o β) : type α <= type β :=
+theorem type_le_type (h : α ↪o β) : type α ≤ type β :=
   ⟨h⟩
-
-/--
-theorem `type_lt_type` / 定理 `type_lt_type`
-
-English:
-theorem type_lt_type
-  given: (h : α ↪o β) (hne : IsEmpty (β ↪o α))
-  statement: type α < type β
-  proof: ⟨⟨h⟩, not_nonempty_iff.mpr hne⟩
-
-alias _root_.OrderEmbedding.type_le_type := type_le_type
-
-@[simp]
-
-中文:
-定理 type_lt_type
-  条件: (h : α ↪o β) (hne : 是空 (β ↪o α))
-  结论: type α < type β
-  证明: ⟨⟨h⟩, not_nonempty_iff.mpr hne⟩
-
-alias _root_.OrderEmbedding.type_le_type := type_le_type
-
-@[simp]
-
-Depends on / 依赖: not_nonempty_iff, not_nonempty_iff.mpr
+/-
+**OrderType.type_lt_type** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_lt_type (h : α ↪o β) (hne : IsEmpty (β ↪o α)) : type α < type β
+参数：h : α ↪o β；hne : IsEmpty (β ↪o α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_nonempty_iff`：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
 -/
 theorem type_lt_type (h : α ↪o β) (hne : IsEmpty (β ↪o α)) : type α < type β :=
   ⟨⟨h⟩, not_nonempty_iff.mpr hne⟩
@@ -747,367 +485,235 @@ theorem type_lt_type (h : α ↪o β) (hne : IsEmpty (β ↪o α)) : type α < t
 alias _root_.OrderEmbedding.type_le_type := type_le_type
 
 @[simp]
-/--
-theorem `zero_le` / 定理 `zero_le`
-
-English:
-theorem zero_le
-  given: (o : OrderType)
-  statement: 0 <= o
-  proof: inductionOn o fun _ => OrderEmbedding.ofIsEmpty.type_le_type
-
-中文:
-定理 zero_le
-  条件: (o : 序型)
-  结论: 0 <= o
-  证明: inductionOn o fun _ => OrderEmbedding.ofIsEmpty.type_le_type
+/-
+**OrderType.zero_le** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：∀ (o : OrderType.{u_1}), 0 ≤ o
+参数：o : OrderType.{u_1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.inductionOn`：inductionOn {C : OrderType -> Prop} (o : OrderTyp
+e) (H : forall α [LinearOrder α], C (type α)) : C o
+· 使用定理 `OrderEmbedding.type_le_type`：∀ {α β : Type u} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] (h : α ↪o β), OrderType.type α ≤ OrderType.type β
 -/
-protected theorem zero_le (o : OrderType) : 0 <= o :=
-  inductionOn o fun _ => OrderEmbedding.ofIsEmpty.type_le_type
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot OrderType
-  body: 0
-  bot_le := OrderType.zero_le
-
-@[simp]
-
-中文:
-实例 :
-  签名: 有底序 序型
-  定义体: 0
-  bot_le := OrderType.zero_le
-
-@[simp]
+protected theorem zero_le (o : OrderType) : 0 ≤ o :=
+  inductionOn o fun _ ↦ OrderEmbedding.ofIsEmpty.type_le_type
+/-
+**OrderType.** 是 Mathlib 中的一个实例，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderBot OrderType where
   bot := 0
   bot_le := OrderType.zero_le
 
 @[simp]
-/--
-theorem `bot_eq_zero` / 定理 `bot_eq_zero`
-
-English:
-theorem bot_eq_zero
-  statement: (⊥ : OrderType) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bot_eq_zero
-  结论: (⊥ : 序型) = 0
-  证明: rfl
-
-@[simp]
+/-
+**OrderType.bot_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：bot_eq_zero : (⊥ : OrderType) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_eq_zero : (⊥ : OrderType) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `not_lt_zero` / 定理 `not_lt_zero`
-
-English:
-theorem not_lt_zero
-  given: {o : OrderType}
-  statement: ¬o < 0
-  proof: not_lt_bot
-
-@[simp]
-
-中文:
-定理 not_lt_zero
-  条件: {o : 序型}
-  结论: ¬o < 0
-  证明: not_lt_bot
-
-@[simp]
+/-
+**OrderType.not_lt_zero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：∀ {o : OrderType.{u_1}}, ¬o < 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_lt_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {a 
+: α}, ¬a < ⊥
 -/
 protected theorem not_lt_zero {o : OrderType} : ¬o < 0 :=
   not_lt_bot
 
 @[simp]
-/--
-theorem `pos_iff_ne_zero` / 定理 `pos_iff_ne_zero`
-
-English:
-theorem pos_iff_ne_zero
-  given: {o : OrderType}
-  statement: 0 < o ↔ o != 0 where
-  proof: ne_bot_of_gt
-  mpr ho := by
-    have := nonempty_toType_iff.2 ho
-    rw [← type_toType o]
-    exact ⟨⟨Function.Embedding.ofIsEmpty, nofun⟩, fun ⟨f⟩ => IsEmpty.elim inferInstance f.toFun⟩
-
-中文:
-定理 pos_iff_ne_zero
-  条件: {o : 序型}
-  结论: 0 < o ↔ o != 0 where
-  证明: ne_bot_of_gt
-  mpr ho := by
-    have := nonempty_toType_iff.2 ho
-    rw [← type_toType o]
-    exact ⟨⟨Function.Embedding.ofIsEmpty, nofun⟩, fun ⟨f⟩ => IsEmpty.elim inferInstance f.toFun⟩
-
-Depends on / 依赖: ne_bot_of_gt
+/-
+**OrderType.pos_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：pos_iff_ne_zero {o : OrderType} : 0 < o ↔ o != 0 where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_bot_of_gt`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {
+a b : α}, b < a → a ≠ ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Order.Types.Defs.0.OrderType.nonempty_toType_iff`：∀ {o 
+: OrderType.{u_1}}, Nonempty o.ToType ↔ o ≠ 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderType.type_toType`：type_toType (o : OrderType) : type o.ToType = o
+· 使用定理 `instIsEmptyForallOfNonempty`：∀ {α : Sort u} {p : α → Sort v} [∀ (x : α),
+ IsEmpty (p x)] [h : Nonempty α], IsEmpty ((x : α) → p x)
 -/
-theorem pos_iff_ne_zero {o : OrderType} : 0 < o ↔ o != 0 where
+theorem pos_iff_ne_zero {o : OrderType} : 0 < o ↔ o ≠ 0 where
   mp := ne_bot_of_gt
   mpr ho := by
     have := nonempty_toType_iff.2 ho
     rw [← type_toType o]
-    exact ⟨⟨Function.Embedding.ofIsEmpty, nofun⟩, fun ⟨f⟩ => IsEmpty.elim inferInstance f.toFun⟩
+    exact ⟨⟨Function.Embedding.ofIsEmpty, nofun⟩, fun ⟨f⟩ ↦ IsEmpty.elim inferInstance f.toFun⟩
 
 /-- The universe lift operation on order types. You can specify the universes explicitly with
   `lift.{u, v} : OrderType.{v} → OrderType.{max v u}` -/
 @[pp_with_univ]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**OrderType.lift** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：lift (o : OrderType.{v}) : OrderType.{max v u}
+参数：o : OrderType.{v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (o : OrderType.{v})
-  body: o.liftOn (fun α _ => type (ULift α)) fun _α _ _β _ e =>
-    ((ULift.orderIso.trans (type_eq_type.mp e).some).trans ULift.orderIso.symm).type_congr
-
-@[simp]
-
-中文:
-定义 lift
-  签名: (o : 序型.{v})
-  定义体: o.liftOn (fun α _ => type (ULift α)) fun _α _ _β _ e =>
-    ((ULift.orderIso.trans (type_eq_type.mp e).some).trans ULift.orderIso.symm).type_congr
-
-@[simp]
-
-Depends on / 依赖: ULift.orderIso.symm, ULift.orderIso.trans, liftOn, o.liftOn, orderIso, type_congr, type_eq_type, type_eq_type.mp
+--- 原说明 ---
+The universe lift operation on order types. You can specify the universes explic
+itly with
+  `lift.{u, v} : OrderType.{v} → OrderType.{max v u}`
 -/
 def lift (o : OrderType.{v}) : OrderType.{max v u} :=
-  o.liftOn (fun α _ => type (ULift α)) fun _α _ _β _ e =>
+  o.liftOn (fun α _ ↦ type (ULift α)) fun _α _ _β _ e ↦
     ((ULift.orderIso.trans (type_eq_type.mp e).some).trans ULift.orderIso.symm).type_congr
 
 @[simp]
-/--
-theorem `type_ulift` / 定理 `type_ulift`
-
-English:
-theorem type_ulift
-  statement: type (ULift.{v, u} α) = lift.{v} (type α)
-  proof: (rfl)
-
-中文:
-定理 type_ulift
-  结论: type (类型层提升.{v, u} α) = lift.{v} (type α)
-  证明: (rfl)
+/-
+**OrderType.type_ulift** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_ulift : type (ULift.{v, u} α) = lift.{v} (type α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem type_ulift : type (ULift.{v, u} α) = lift.{v} (type α) := (rfl)
 
-/--
-theorem `lift_id'` / 定理 `lift_id'`
+/-- An order type lifted to a lower or equal universe equals itself. -/
+/-
+**OrderType.lift_id'** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：lift_id' (o : OrderType.{max u v}) : lift.{u} o = o
+参数：o : OrderType.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.inductionOn`：inductionOn {C : OrderType -> Prop} (o : OrderTyp
+e) (H : forall α [LinearOrder α], C (type α)) : C o
+· 使用定理 `OrderType.type_congr`：type_congr (h : α ≃o β) : type α = type β
 
-English:
-theorem lift_id'
-  given: (o : OrderType.{max u v})
-  statement: lift.{u} o = o
-  proof: inductionOn o fun _ => type_congr ULift.orderIso
-
-中文:
-定理 lift_id'
-  条件: (o : 序型.{最大值 u v})
-  结论: lift.{u} o = o
-  证明: inductionOn o fun _ => type_congr ULift.orderIso
-
-Depends on / 依赖: ULift.orderIso, inductionOn, orderIso, type_congr
+--- 原说明 ---
+An order type lifted to a lower or equal universe equals itself.
 -/
 theorem lift_id' (o : OrderType.{max u v}) : lift.{u} o = o :=
-  inductionOn o fun _ => type_congr ULift.orderIso
+  inductionOn o fun _ ↦ type_congr ULift.orderIso
 
 /-- An order type lifted to the same universe equals itself. -/
 @[simp]
-/--
-theorem `lift_id` / 定理 `lift_id`
+/-
+**OrderType.lift_id** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：lift_id (o : OrderType) : lift.{u, u} o = o
+参数：o : OrderType。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.lift_id'`：lift_id' (o : OrderType.{max u v}) : lift.{u} o = o
 
-English:
-theorem lift_id
-  given: (o : OrderType)
-  statement: lift.{u, u} o = o
-  proof: lift_id'.{u, u} o
-
-中文:
-定理 lift_id
-  条件: (o : 序型)
-  结论: lift.{u, u} o = o
-  证明: lift_id'.{u, u} o
-
-Depends on / 依赖: lift_id
+--- 原说明 ---
+An order type lifted to the same universe equals itself.
 -/
 theorem lift_id (o : OrderType) : lift.{u, u} o = o :=
   lift_id'.{u, u} o
 
 /-- An order type lifted to the zero universe equals itself. -/
 @[simp]
-/--
-theorem `lift_uzero` / 定理 `lift_uzero`
+/-
+**OrderType.lift_uzero** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：lift_uzero (o : OrderType.{u}) : lift.{0} o = o
+参数：o : OrderType.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.lift_id'`：lift_id' (o : OrderType.{max u v}) : lift.{u} o = o
 
-English:
-theorem lift_uzero
-  given: (o : OrderType.{u})
-  statement: lift.{0} o = o
-  proof: lift_id'.{0, u} o
-
-@[simp]
-
-中文:
-定理 lift_uzero
-  条件: (o : 序型.{u})
-  结论: lift.{0} o = o
-  证明: lift_id'.{0, u} o
-
-@[simp]
-
-Depends on / 依赖: lift_id
+--- 原说明 ---
+An order type lifted to the zero universe equals itself.
 -/
 theorem lift_uzero (o : OrderType.{u}) : lift.{0} o = o :=
   lift_id'.{0, u} o
 
 @[simp]
-/--
-theorem `lift_lift.` / 定理 `lift_lift.`
-
-English:
-theorem lift_lift.{u_1}
-  given: (o : OrderType.{u_1})
-  statement: lift.{u} (lift.{v} o) = lift.{max v u} o
-  proof: inductionOn o fun _ =>
-    (ULift.orderIso.trans <| ULift.orderIso.trans ULift.orderIso.symm).type_congr
-
-中文:
-定理 lift_lift.{u_1}
-  条件: (o : 序型.{u_1})
-  结论: lift.{u} (lift.{v} o) = lift.{最大值 v u} o
-  证明: inductionOn o fun _ =>
-    (ULift.orderIso.trans <| ULift.orderIso.trans ULift.orderIso.symm).type_congr
-
-Depends on / 依赖: ULift.orderIso.symm, ULift.orderIso.trans, inductionOn, orderIso, type_congr
+/-
+**OrderType.lift_lift.** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_lift.{u_1} (o : OrderType.{u_1}) : lift.{u} (lift.{v} o) = lift.{max v u} o :=
-  inductionOn o fun _ =>
+  inductionOn o fun _ ↦
     (ULift.orderIso.trans <| ULift.orderIso.trans ULift.orderIso.symm).type_congr
-
-/--
-theorem `lift_type_eq_iff` / 定理 `lift_type_eq_iff`
-
-English:
-theorem lift_type_eq_iff
-  statement: lift (type α) = lift (type β) ↔ Nonempty (α ≃o β)
-  proof: by
-refine ⟨fun h => ?_, fun ⟨h⟩ => congrArg lift type_congr h⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_eq_type] at h
-  exact ⟨(ULift.orderIso.symm.trans h.some).trans ULift.orderIso⟩
-
-中文:
-定理 lift_type_eq_iff
-  结论: lift (type α) = lift (type β) ↔ 非空 (α ≃o β)
-  证明: by
-refine ⟨fun h => ?_, fun ⟨h⟩ => congrArg lift type_congr h⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_eq_type] at h
-  exact ⟨(ULift.orderIso.symm.trans h.some).trans ULift.orderIso⟩
-
-Depends on / 依赖: ULift.orderIso, ULift.orderIso.symm.trans, h.some, orderIso, type_congr, type_eq_type, type_ulift
+/-
+**OrderType.lift_type_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：lift_type_eq_iff : lift (type α) = lift (type β) ↔ Nonempty (α ≃o β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderType.type_eq_type`：type_eq_type : type α = type β ↔ Nonempty (α ≃o 
+β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderType.type_ulift`：type_ulift : type (ULift.{v, u} α) = lift.{v} (typ
+e α)
+· 使用定理 `OrderType.type_congr`：type_congr (h : α ≃o β) : type α = type β
 -/
 theorem lift_type_eq_iff : lift (type α) = lift (type β) ↔ Nonempty (α ≃o β) := by
-refine ⟨fun h => ?_, fun ⟨h⟩ => congrArg lift type_congr h⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_eq_type] at h
+  refine ⟨fun h ↦ ?_, fun ⟨h⟩ ↦ congrArg lift <| type_congr h⟩
+  rw [← type_ulift, ← type_ulift, type_eq_type] at h
   exact ⟨(ULift.orderIso.symm.trans h.some).trans ULift.orderIso⟩
-
-/--
-theorem `lift_type_le_iff` / 定理 `lift_type_le_iff`
-
-English:
-theorem lift_type_le_iff
-  statement: lift (type α) <= lift (type β) ↔ Nonempty (α ↪o β)
-  proof: by
-refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
-    ULift.orderIso.symm.toOrderEmbedding⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_le_type_iff] at h
-  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedding⟩
-
-中文:
-定理 lift_type_le_iff
-  结论: lift (type α) <= lift (type β) ↔ 非空 (α ↪o β)
-  证明: by
-refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
-    ULift.orderIso.symm.toOrderEmbedding⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_le_type_iff] at h
-  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedding⟩
-
-Depends on / 依赖: ULift.orderIso.symm.toOrderEmbedding, ULift.orderIso.symm.toOrderEmbedding.trans, ULift.orderIso.toOrderEmbedding, ULift.orderIso.toOrderEmbedding.trans, h.some, orderIso, toOrderEmbedding, type_le_type, type_le_type_iff, type_ulift
+/-
+**OrderType.lift_type_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：lift_type_le_iff : lift (type α) <= lift (type β) ↔ Nonempty (α ↪o β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderType.type_le_type_iff`：type_le_type_iff : type α <= type β ↔ Nonemp
+ty (α ↪o β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderType.type_ulift`：type_ulift : type (ULift.{v, u} α) = lift.{v} (typ
+e α)
+· 使用定理 `OrderType.type_le_type`：type_le_type (h : α ↪o β) : type α <= type β
 -/
-theorem lift_type_le_iff : lift (type α) <= lift (type β) ↔ Nonempty (α ↪o β) := by
-refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
+theorem lift_type_le_iff : lift (type α) ≤ lift (type β) ↔ Nonempty (α ↪o β) := by
+  refine ⟨fun h ↦ ?_, fun ⟨h⟩ ↦ type_le_type <| (ULift.orderIso.toOrderEmbedding.trans h).trans
     ULift.orderIso.symm.toOrderEmbedding⟩
-  rw [← type_ulift]; rw [← type_ulift]; rw [type_le_type_iff] at h
+  rw [← type_ulift, ← type_ulift, type_le_type_iff] at h
   exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedding⟩
 
 /-- `ω` is the first infinite order type, defined as the order type of `ℕ`. -/
 @[expose]
-/--
-Definition of `omega0` / `omega0` 的定义
+/-
+**OrderType.omega0** 是 Mathlib 中的一个定义，位于命名空间 `OrderType`。
+形式化陈述：omega0 : OrderType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition omega0
-  signature: : OrderType
-  body: lift type Nat
-
-@[inherit_doc]
-scoped notation "ω" => OrderType.omega0
-recommended_spelling "omega0" for "ω" in [omega0, «termω»]
-
-@[simp]
-
-中文:
-定义 omega0
-  签名: : 序型
-  定义体: lift type Nat
-
-@[inherit_doc]
-scoped notation "ω" => OrderType.omega0
-recommended_spelling "omega0" for "ω" in [omega0, «termω»]
-
-@[simp]
+--- 原说明 ---
+`ω` is the first infinite order type, defined as the order type of `ℕ`.
 -/
-def omega0 : OrderType := lift type Nat
+def omega0 : OrderType := lift <| type ℕ
 
 @[inherit_doc]
 scoped notation "ω" => OrderType.omega0
 recommended_spelling "omega0" for "ω" in [omega0, «termω»]
 
 @[simp]
-/--
-theorem `type_nat` / 定理 `type_nat`
-
-English:
-theorem type_nat
-  statement: type Nat = omega0
-  proof: type_congr ⟨Equiv.ulift.symm, @fun _ _ => by
-  simp only [ulift_symm_apply, ULift.up_le]⟩
-
-中文:
-定理 type_nat
-  结论: type 自然数 = omega0
-  证明: type_congr ⟨Equiv.ulift.symm, @fun _ _ => by
-  simp only [ulift_symm_apply, ULift.up_le]⟩
-
-Depends on / 依赖: Equiv.ulift.symm, ULift.up_le, type_congr, ulift_symm_apply, up_le
+/-
+**OrderType.type_nat** 是 Mathlib 中的一个定理，位于命名空间 `OrderType`。
+形式化陈述：type_nat : type Nat = omega0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderType.type_congr`：type_congr (h : α ≃o β) : type α = type β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.ulift_symm_apply`：∀ {α : Type v}, ⇑Equiv.ulift.symm = ULift.up
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem type_nat : type Nat = omega0 := type_congr ⟨Equiv.ulift.symm, @fun _ _ => by
+theorem type_nat : type ℕ = omega0 := type_congr ⟨Equiv.ulift.symm, @fun _ _ ↦ by
   simp only [ulift_symm_apply, ULift.up_le]⟩
 
 end OrderType
+

@@ -63,31 +63,23 @@ universe w v₁ v₂ u₁ u₂
 
 variable (C : Type u₁) [Category.{v₁} C] [Preadditive C]
 
-/--
-Definition of `Mat_` / `Mat_` 的定义
+/-- An object in `Mat_ C` is a finite tuple of objects in `C`.
+-/
+/-
+**CategoryTheory.Mat_** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：Type u₁ → Type (max 1 u₁)
+参数：max 1 u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Mat_
-  parameters: where
-  axioms and operations (3):
-    - ι : Type
-    - [fintype : Fintype ι]
-    - X : ι -> C
-
-中文:
-结构 Mat_
-  参数: where
-  公理与运算 (3 个):
-    - ι : 类型
-    - [fintype : 有限类型 ι]
-    - X : ι -> C
+--- 原说明 ---
+An object in `Mat_ C` is a finite tuple of objects in `C`.
 -/
 structure Mat_ where
   /-- The index type `ι` -/
   ι : Type
   [fintype : Fintype ι]
   /-- The map from `ι` to objects in `C` -/
-  X : ι -> C
+  X : ι → C
 
 attribute [instance] Mat_.fintype
 
@@ -95,20 +87,16 @@ namespace Mat_
 
 variable {C}
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- A morphism in `Mat_ C` is a dependently typed matrix of morphisms. -/
+/-
+**CategoryTheory.Mat_.Hom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：Hom (M N : Mat_ C) : Type v₁
+参数：M N : Mat_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: (M N : Mat_ C)
-  body: DMatrix M.ι N.ι fun i j => M.X i ⟶ N.X j
-
-中文:
-定义 态射
-  签名: (M N : Mat_ C)
-  定义体: DMatrix M.ι N.ι fun i j => M.X i ⟶ N.X j
-
-Depends on / 依赖: DMatrix
+--- 原说明 ---
+A morphism in `Mat_ C` is a dependently typed matrix of morphisms.
 -/
 def Hom (M N : Mat_ C) : Type v₁ :=
   DMatrix M.ι N.ι fun i j => M.X i ⟶ N.X j
@@ -116,37 +104,32 @@ def Hom (M N : Mat_ C) : Type v₁ :=
 namespace Hom
 
 open scoped Classical in
-/--
-Definition of `id` / `id` 的定义
+/-- The identity matrix consists of identity morphisms on the diagonal, and zeros elsewhere. -/
+/-
+**CategoryTheory.Mat_.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_.Hom`
+。
+形式化陈述：id (M : Mat_ C) : Hom M M
+参数：M : Mat_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (M : Mat_ C)
-  body: fun i j => if h : i = j then eqToHom (congr_arg M.X h) else 0
-
-中文:
-定义 id
-  签名: (M : Mat_ C)
-  定义体: fun i j => if h : i = j then eqToHom (congr_arg M.X h) else 0
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, congr_arg, eqToHom, equivTreesOfNumNodesEq, ofEquiv
+--- 原说明 ---
+The identity matrix consists of identity morphisms on the diagonal, and zeros el
+sewhere.
 -/
 def id (M : Mat_ C) : Hom M M := fun i j => if h : i = j then eqToHom (congr_arg M.X h) else 0
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of matrices using matrix multiplication. -/
+/-
+**CategoryTheory.Mat_.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_.Ho
+m`。
+形式化陈述：comp {M N K : Mat_ C} (f : Hom M N) (g : Hom N K) : Hom M K
+参数：f : Hom M N；g : Hom N K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {M N K : Mat_ C} (f : Hom M N) (g : Hom N K)
-  body: fun i k =>
-  ∑ j : N.ι, f i j ≫ g j k
-
-中文:
-定义 comp
-  签名: {M N K : Mat_ C} (f : 态射 M N) (g : 态射 N K)
-  定义体: fun i k =>
-  ∑ j : N.ι, f i j ≫ g j k
+--- 原说明 ---
+Composition of matrices using matrix multiplication.
 -/
 def comp {M N K : Mat_ C} (f : Hom M N) (g : Hom N K) : Hom M K := fun i k =>
   ∑ j : N.ι, f i j ≫ g j k
@@ -158,48 +141,9 @@ section
 attribute [local simp] Hom.id Hom.comp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{v₁} (Mat_ C)
-  body: Hom
-  id := Hom.id
-  comp f g := f.comp g
-  id_comp f := by
-    classical
-    simp +unfoldPartialApp [dite_comp]
-  comp_id f := by
-    classical
-    simp +unfoldPartialApp [comp_dite]
-  assoc f g h := by
-    apply DMatrix.ext
-    intros
-    simp_rw [Hom.comp, sum_comp, comp_sum, Category.assoc]
-    rw [Finset.sum_comm]
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴.{v₁} (Mat_ C)
-  定义体: Hom
-  id := Hom.id
-  comp f g := f.comp g
-  id_comp f := by
-    classical
-    simp +unfoldPartialApp [dite_comp]
-  comp_id f := by
-    classical
-    simp +unfoldPartialApp [comp_dite]
-  assoc f g h := by
-    apply DMatrix.ext
-    intros
-    simp_rw [Hom.comp, sum_comp, comp_sum, Category.assoc]
-    rw [Finset.sum_comm]
-
-@[ext]
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{v₁} (Mat_ C) where
   Hom := Hom
@@ -218,195 +162,145 @@ instance : Category.{v₁} (Mat_ C) where
     rw [Finset.sum_comm]
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {M N : Mat_ C} (f g : M ⟶ N) (H : forall i j, f i j = g i j)
-  statement: f = g
-  proof: DMatrix.ext_iff.mp H
-
-中文:
-定理 hom_ext
-  条件: {M N : Mat_ C} (f g : M ⟶ N) (H : 对任意 i j, f i j = g i j)
-  结论: f = g
-  证明: DMatrix.ext_iff.mp H
-
-Depends on / 依赖: DMatrix, DMatrix.ext_iff.mp, ext_iff
+/-
+**CategoryTheory.Mat_.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：hom_ext {M N : Mat_ C} (f g : M ⟶ N) (H : forall i j, f i j = g i j) : f =
+ g
+参数：f g : M ⟶ N；H : forall i j, f i j = g i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DMatrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
-theorem hom_ext {M N : Mat_ C} (f g : M ⟶ N) (H : forall i j, f i j = g i j) : f = g :=
+theorem hom_ext {M N : Mat_ C} (f g : M ⟶ N) (H : ∀ i j, f i j = g i j) : f = g :=
   DMatrix.ext_iff.mp H
 
 open scoped Classical in
-/--
-theorem `id_def` / 定理 `id_def`
-
-English:
-theorem id_def
-  given: (M : Mat_ C)
-  proof: rfl
-
-中文:
-定理 id_def
-  条件: (M : Mat_ C)
-  证明: rfl
+/-
+**CategoryTheory.Mat_.id_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：id_def (M : Mat_ C) : (𝟙 M : Hom M M) = fun i j => if h : i = j then eqToH
+om (congr_arg M.X h) else 0
+参数：M : Mat_ C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_def (M : Mat_ C) :
     (𝟙 M : Hom M M) = fun i j => if h : i = j then eqToHom (congr_arg M.X h) else 0 :=
   rfl
 
 open scoped Classical in
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (M : Mat_ C) (i j : M.ι)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_apply
-  条件: (M : Mat_ C) (i j : M.ι)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Mat_.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：id_apply (M : Mat_ C) (i j : M.ι) : (𝟙 M : Hom M M) i j = if h : i = j the
+n eqToHom (congr_arg M.X h) else 0
+参数：M : Mat_ C；i j : M.ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (M : Mat_ C) (i j : M.ι) :
     (𝟙 M : Hom M M) i j = if h : i = j then eqToHom (congr_arg M.X h) else 0 :=
   rfl
 
 @[simp]
-/--
-theorem `id_apply_self` / 定理 `id_apply_self`
-
-English:
-theorem id_apply_self
-  given: (M : Mat_ C) (i : M.ι)
-  statement: (𝟙 M : Hom M M) i i = 𝟙 _
-  proof: by simp [id_apply]
-
-@[simp]
-
-中文:
-定理 id_apply_self
-  条件: (M : Mat_ C) (i : M.ι)
-  结论: (𝟙 M : 态射 M M) i i = 𝟙 _
-  证明: by simp [id_apply]
-
-@[simp]
-
-Depends on / 依赖: id_apply
+/-
+**CategoryTheory.Mat_.id_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Ma
+t_`。
+形式化陈述：id_apply_self (M : Mat_ C) (i : M.ι) : (𝟙 M : Hom M M) i i = 𝟙 _
+参数：M : Mat_ C；i : M.ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_apply_self (M : Mat_ C) (i : M.ι) : (𝟙 M : Hom M M) i i = 𝟙 _ := by simp [id_apply]
 
 @[simp]
-/--
-theorem `id_apply_of_ne` / 定理 `id_apply_of_ne`
-
-English:
-theorem id_apply_of_ne
-  given: (M : Mat_ C) (i j : M.ι) (h : i != j)
-  statement: (𝟙 M : Hom M M) i j = 0
-  proof: by
-  simp [id_apply, h]
-
-中文:
-定理 id_apply_of_ne
-  条件: (M : Mat_ C) (i j : M.ι) (h : i != j)
-  结论: (𝟙 M : 态射 M M) i j = 0
-  证明: by
-  simp [id_apply, h]
-
-Depends on / 依赖: id_apply
+/-
+**CategoryTheory.Mat_.id_apply_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.M
+at_`。
+形式化陈述：id_apply_of_ne (M : Mat_ C) (i j : M.ι) (h : i != j) : (𝟙 M : Hom M M) i j
+ = 0
+参数：M : Mat_ C；i j : M.ι；h : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem id_apply_of_ne (M : Mat_ C) (i j : M.ι) (h : i != j) : (𝟙 M : Hom M M) i j = 0 := by
+theorem id_apply_of_ne (M : Mat_ C) (i j : M.ι) (h : i ≠ j) : (𝟙 M : Hom M M) i j = 0 := by
   simp [id_apply, h]
-
-/--
-theorem `comp_def` / 定理 `comp_def`
-
-English:
-theorem comp_def
-  given: {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_def
-  条件: {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Mat_.comp_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：comp_def {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) : f ≫ g = fun i k => ∑ j
+ : N.ι, f i j ≫ g j k
+参数：f : M ⟶ N；g : N ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_def {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) :
     f ≫ g = fun i k => ∑ j : N.ι, f i j ≫ g j k :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) (i k)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) (i k)
-  证明: rfl
+/-
+**CategoryTheory.Mat_.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`
+。
+形式化陈述：comp_apply {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) (i k) : (f ≫ g) i k = 
+∑ j : N.ι, f i j ≫ g j k
+参数：f : M ⟶ N；g : N ⟶ K；i k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply {M N K : Mat_ C} (f : M ⟶ N) (g : N ⟶ K) (i k) :
     (f ≫ g) i k = ∑ j : N.ι, f i j ≫ g j k :=
   rfl
-
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M N : Mat_ C) : Inhabited (M ⟶ N) :=
   ⟨fun i j => (0 : M.X i ⟶ N.X j)⟩
 
 end
 
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M N : Mat_ C) : AddCommGroup (M ⟶ N) :=
-inferInstanceAs AddCommGroup (DMatrix M.ι N.ι _)
+  inferInstanceAs <| AddCommGroup (DMatrix M.ι N.ι _)
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: {M N : Mat_ C} (f g : M ⟶ N) (i j)
-  statement: (f + g) i j = f i j + g i j
-  proof: rfl
-
-中文:
-定理 add_apply
-  条件: {M N : Mat_ C} (f g : M ⟶ N) (i j)
-  结论: (f + g) i j = f i j + g i j
-  证明: rfl
+/-
+**CategoryTheory.Mat_.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：add_apply {M N : Mat_ C} (f g : M ⟶ N) (i j) : (f + g) i j = f i j + g i j
+参数：f g : M ⟶ N；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply {M N : Mat_ C} (f g : M ⟶ N) (i j) : (f + g) i j = f i j + g i j :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (Mat_ C)
-  body: by ext; simp [Finset.sum_add_distrib]
-  comp_add M N K f g g' := by ext; simp [Finset.sum_add_distrib]
-
-中文:
-实例 :
-  签名: 预加性 (Mat_ C)
-  定义体: by ext; simp [Finset.sum_add_distrib]
-  comp_add M N K f g g' := by ext; simp [Finset.sum_add_distrib]
-
-Depends on / 依赖: Finset, Finset.sum_add_distrib, comp_add, sum_add_distrib
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (Mat_ C) where
   add_comp M N K f f' g := by ext; simp [Finset.sum_add_distrib]
@@ -416,146 +310,93 @@ open CategoryTheory.Limits
 
 set_option backward.isDefEq.respectTransparency false in
 open scoped Classical in
-/--
-Instance `hasFiniteBiproducts` / 实例 `hasFiniteBiproducts`
+/-- We now prove that `Mat_ C` has finite biproducts.
 
-English:
-instance hasFiniteBiproducts
-  signature: : HasFiniteBiproducts (Mat_ C) where
-  body: { has_biproduct := fun f =>
-        hasBiproduct_of_total
-          { pt := ⟨Σ j, (f j).ι, fun p => (f p.1).X p.2⟩
-            π := fun j x y => by
-              refine if h : x.1 = j then ?_ else 0
-              refine if h' : @Eq.ndrec (Fin n) x.1 (fun j => (f j).ι) x.2 _ h = y then ?_ else 0
-              apply eqToHom
-              subst h h'
-              rfl
-            -- Notice we were careful not to use `subst` until we had a goal in `Prop`.
-            ι := fun j x y => by
-              refine if h : y.1 = j then ?_ else 0
-              refine if h' : @Eq.ndrec _ y.1 (fun j => (f j).ι) y.2 _ h = x then ?_ else 0
-              apply eqToHom
-              subst h h'
-              rfl
-            ι_π := fun j j' => by
-              ext x y
-              dsimp
-              simp_rw [dite_comp, comp_dite]
-              simp only [ite_self, dite_eq_ite, Limits.comp_zero, Limits.zero_comp,
-                eqToHom_trans]
-              rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]
-              dsimp +instances
-              simp only [if_true, Finset.sum_dite_irrel, Finset.mem_univ,
-                Finset.sum_const_zero, Finset.sum_dite_eq']
-              split_ifs with h h'
-              · subst h h'
-                simp only [CategoryTheory.eqToHom_refl, CategoryTheory.Mat_.id_apply_self]
-              · subst h
-                rw [eqToHom_refl]; rw [id_apply_of_ne _ _ _ h']
-              · rfl }
-          (by
-            dsimp
-            ext1 ⟨i, j⟩
-            rintro ⟨i', j'⟩
-            rw [Finset.sum_apply]; rw [Finset.sum_apply]
-            dsimp
-            rw [Finset.sum_eq_single i]; rotate_left
-            · intro b _ hb
-              apply Finset.sum_eq_zero
-              intro x _
-              rw [dif_neg hb.symm]; rw [zero_comp]
-            · intro hi
-              simp at hi
-            rw [Finset.sum_eq_single j]; rotate_left
-            · intro b _ hb
-              rw [dif_pos rfl]; rw [dif_neg]; rw [zero_comp]
-              simp only
-              tauto
-            · intro hj
-              simp at hj
-            simp only [eqToHom_refl, dite_eq_ite, ite_true, Category.id_comp,
-              Sigma.mk.inj_iff, id_def]
-            by_cases h : i' = i
-            · subst h
-              rw [dif_pos rfl]
-              simp only [heq_eq_eq, true_and]
-              by_cases h : j' = j
-              · subst h
-                simp
-              · rw [dif_neg h, dif_neg (Ne.symm h)]
-            · rw [dif_neg h, dif_neg]
-              tauto) }
+Be warned, however, that `Mat_ C` is not necessarily Krull-Schmidt,
+and so the internal indexing of a biproduct may have nothing to do with the external indexing,
+even though the construction we give uses a sigma type.
+See however `isoBiproductEmbedding`.
+-/
+/-
+**CategoryTheory.Mat_.hasFiniteBiproducts** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Mat_`。
+形式化陈述：hasFiniteBiproducts : HasFiniteBiproducts (Mat_ C) where out n
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasBiproduct_of_total`：hasBiproduct_of_total {f : 
+J -> C} (b : Bicone f) (total : ∑ j : J, b.π j ≫ b.ι j = 𝟙 b.pt) : HasBiproduct 
+f
+· 使用定理 `CategoryTheory.Mat_.hom_ext`：hom_ext {M N : Mat_ C} (f g : M ⟶ N) (H : f
+orall i j, f i j = g i j) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.dite_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {P : Prop} [inst_1 : Decidable P] {X Y Z : C} (g : P → (Z ⟶ Y))   (g'
+ : ¬P → (Z ⟶ Y…
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `CategoryTheory.comp_dite`：comp_dite {P : Prop} [Decidable P] {X Y Z : C}
+ (f : X ⟶ Y) (g : P -> (Y ⟶ Z)) (g' : ¬P -> (Y ⟶ Z)) : (f ≫ if h : P then g h el
+se g' h) = if …
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.univ_sigma_univ`：∀ {ι : Type u_1} {κ : ι → Type u_3} [inst : (i :
+ ι) → Fintype (κ i)] [inst_1 : Fintype ι],   (Finset.univ.sigma fun x => Finset.
+univ) = Fins…
+· 使用定理 `Finset.sum_sigma`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid 
+β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : Sigma σ
+ → β),…
+· 使用定理 `Finset.sum_dite_irrel`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMo
+noid M] (p : Prop) [inst_1 : Decidable p] (s : Finset ι)   (f : p → ι → M) (g : 
+¬p → ι → M)…
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `Finset.sum_dite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMono
+id M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι)   (b : (x : ι) → x = a → M
+), (∑ x ∈…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `if_true`：∀ {α : Sort u_1} {x : Decidable True} (t e : α), (if True then 
+t else e) = t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Mat_.id_apply_self`：id_apply_self (M : Mat_ C) (i : M.ι) 
+: (𝟙 M : Hom M M) i i = 𝟙 _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Mat_.id_apply_of_ne`：id_apply_of_ne (M : Mat_ C) (i j : M
+.ι) (h : i != j) : (𝟙 M : Hom M M) i j = 0
+（共 40 条，此处仅展示前 30 条）
 
-中文:
-实例 hasFiniteBiproducts
-  签名: : 有FiniteBiproducts (Mat_ C) where
-  定义体: { has_biproduct := fun f =>
-        hasBiproduct_of_total
-          { pt := ⟨Σ j, (f j).ι, fun p => (f p.1).X p.2⟩
-            π := fun j x y => by
-              refine if h : x.1 = j then ?_ else 0
-              refine if h' : @Eq.ndrec (Fin n) x.1 (fun j => (f j).ι) x.2 _ h = y then ?_ else 0
-              apply eqToHom
-              subst h h'
-              rfl
-            -- Notice we were careful not to use `subst` until we had a goal in `Prop`.
-            ι := fun j x y => by
-              refine if h : y.1 = j then ?_ else 0
-              refine if h' : @Eq.ndrec _ y.1 (fun j => (f j).ι) y.2 _ h = x then ?_ else 0
-              apply eqToHom
-              subst h h'
-              rfl
-            ι_π := fun j j' => by
-              ext x y
-              dsimp
-              simp_rw [dite_comp, comp_dite]
-              simp only [ite_self, dite_eq_ite, Limits.comp_zero, Limits.zero_comp,
-                eqToHom_trans]
-              rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]
-              dsimp +instances
-              simp only [if_true, Finset.sum_dite_irrel, Finset.mem_univ,
-                Finset.sum_const_zero, Finset.sum_dite_eq']
-              split_ifs with h h'
-              · subst h h'
-                simp only [CategoryTheory.eqToHom_refl, CategoryTheory.Mat_.id_apply_self]
-              · subst h
-                rw [eqToHom_refl]; rw [id_apply_of_ne _ _ _ h']
-              · rfl }
-          (by
-            dsimp
-            ext1 ⟨i, j⟩
-            rintro ⟨i', j'⟩
-            rw [Finset.sum_apply]; rw [Finset.sum_apply]
-            dsimp
-            rw [Finset.sum_eq_single i]; rotate_left
-            · intro b _ hb
-              apply Finset.sum_eq_zero
-              intro x _
-              rw [dif_neg hb.symm]; rw [zero_comp]
-            · intro hi
-              simp at hi
-            rw [Finset.sum_eq_single j]; rotate_left
-            · intro b _ hb
-              rw [dif_pos rfl]; rw [dif_neg]; rw [zero_comp]
-              simp only
-              tauto
-            · intro hj
-              simp at hj
-            simp only [eqToHom_refl, dite_eq_ite, ite_true, Category.id_comp,
-              Sigma.mk.inj_iff, id_def]
-            by_cases h : i' = i
-            · subst h
-              rw [dif_pos rfl]
-              simp only [heq_eq_eq, true_and]
-              by_cases h : j' = j
-              · subst h
-                simp
-              · rw [dif_neg h, dif_neg (Ne.symm h)]
-            · rw [dif_neg h, dif_neg]
-              tauto) }
+--- 原说明 ---
+We now prove that `Mat_ C` has finite biproducts.
 
-Depends on / 依赖: Eq.ndrec, eqToHom, hasBiproduct_of_total, has_biproduct
+Be warned, however, that `Mat_ C` is not necessarily Krull-Schmidt,
+and so the internal indexing of a biproduct may have nothing to do with the exte
+rnal indexing,
+even though the construction we give uses a sigma type.
+See however `isoBiproductEmbedding`.
 -/
 instance hasFiniteBiproducts : HasFiniteBiproducts (Mat_ C) where
   out n :=
@@ -581,7 +422,7 @@ instance hasFiniteBiproducts : HasFiniteBiproducts (Mat_ C) where
               simp_rw [dite_comp, comp_dite]
               simp only [ite_self, dite_eq_ite, Limits.comp_zero, Limits.zero_comp,
                 eqToHom_trans]
-              rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]
+              rw [← Finset.univ_sigma_univ, Finset.sum_sigma]
               dsimp +instances
               simp only [if_true, Finset.sum_dite_irrel, Finset.mem_univ,
                 Finset.sum_const_zero, Finset.sum_dite_eq']
@@ -589,24 +430,24 @@ instance hasFiniteBiproducts : HasFiniteBiproducts (Mat_ C) where
               · subst h h'
                 simp only [CategoryTheory.eqToHom_refl, CategoryTheory.Mat_.id_apply_self]
               · subst h
-                rw [eqToHom_refl]; rw [id_apply_of_ne _ _ _ h']
+                rw [eqToHom_refl, id_apply_of_ne _ _ _ h']
               · rfl }
           (by
             dsimp
             ext1 ⟨i, j⟩
             rintro ⟨i', j'⟩
-            rw [Finset.sum_apply]; rw [Finset.sum_apply]
+            rw [Finset.sum_apply, Finset.sum_apply]
             dsimp
             rw [Finset.sum_eq_single i]; rotate_left
             · intro b _ hb
               apply Finset.sum_eq_zero
               intro x _
-              rw [dif_neg hb.symm]; rw [zero_comp]
+              rw [dif_neg hb.symm, zero_comp]
             · intro hi
               simp at hi
             rw [Finset.sum_eq_single j]; rotate_left
             · intro b _ hb
-              rw [dif_pos rfl]; rw [dif_neg]; rw [zero_comp]
+              rw [dif_pos rfl, dif_neg, zero_comp]
               simp only
               tauto
             · intro hj
@@ -635,22 +476,16 @@ attribute [local simp] Mat_.id_apply eqToHom_map
 /-- A functor induces a functor of matrix categories.
 -/
 @[simps]
-/--
-Definition of `mapMat_` / `mapMat_` 的定义
+/-
+**CategoryTheory.Functor.mapMat_** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：mapMat_ (F : C ⥤ D) [Functor.Additive F] : Mat_ C ⥤ Mat_ D where obj M
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapMat_
-  signature: (F : C ⥤ D) [Functor.Additive F]
-  body: ⟨M.ι, fun i => F.obj (M.X i)⟩
-  map f i j := F.map (f i j)
-
-中文:
-定义 mapMat_
-  签名: (F : C ⥤ D) [函子.加性 F]
-  定义体: ⟨M.ι, fun i => F.obj (M.X i)⟩
-  map f i j := F.map (f i j)
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A functor induces a functor of matrix categories.
 -/
 def mapMat_ (F : C ⥤ D) [Functor.Additive F] : Mat_ C ⥤ Mat_ D where
   obj M := ⟨M.ι, fun i => F.obj (M.X i)⟩
@@ -660,28 +495,18 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The identity functor induces the identity functor on matrix categories.
 -/
 @[simps!]
-/--
-Definition of `mapMatId` / `mapMatId` 的定义
+/-
+**CategoryTheory.Functor.mapMatId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：mapMatId : (𝟭 C).mapMat_ ≅ 𝟭 (Mat_ C)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instAdditiveId`：∀ {C : Type u_1} [inst : Category
+Theory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C],   (Catego
+ryTheory.Functor.id C).Addi…
 
-English:
-definition mapMatId
-  signature: : (𝟭 C).mapMat_ ≅ 𝟭 (Mat_ C)
-  body: NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
-    classical
-    ext
-    cases M; cases N
-    simp [comp_dite, dite_comp]
-
-中文:
-定义 mapMatId
-  签名: : (𝟭 C).mapMat_ ≅ 𝟭 (Mat_ C)
-  定义体: NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
-    classical
-    ext
-    cases M; cases N
-    simp [comp_dite, dite_comp]
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, classical, comp_dite, dite_comp, eqToIso, ofComponents
+--- 原说明 ---
+The identity functor induces the identity functor on matrix categories.
 -/
 def mapMatId : (𝟭 C).mapMat_ ≅ 𝟭 (Mat_ C) :=
   NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
@@ -694,28 +519,21 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Composite functors induce composite functors on matrix categories.
 -/
 @[simps!]
-/--
-Definition of `mapMatComp` / `mapMatComp` 的定义
+/-
+**CategoryTheory.Functor.mapMatComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：mapMatComp {E : Type*} [Category.{v₁} E] [Preadditive E] (F : C ⥤ D) [Func
+tor.Additive F] (G : D ⥤ E) [Functor.Additive G] : (F ⋙ G).mapMat_ ≅ F.mapMat_ ⋙
+ G.mapMat_
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instAdditiveComp`：∀ {C : Type u_1} {D : Type u_2}
+ [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Catego
+ry.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-definition mapMatComp
-  signature: {E : Type*} [Category.{v₁} E] [Preadditive E] (F : C ⥤ D) [Functor.Additive F]
-  body: NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
-    classical
-    ext
-    cases M; cases N
-    simp [comp_dite, dite_comp]
-
-中文:
-定义 mapMatComp
-  签名: {E : 类型} [范畴.{v₁} E] [预加性 E] (F : C ⥤ D) [函子.加性 F]
-  定义体: NatIso.ofComponents (fun M => eqToIso (by cases M; rfl)) fun {M N} f => by
-    classical
-    ext
-    cases M; cases N
-    simp [comp_dite, dite_comp]
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, classical, comp_dite, dite_comp, eqToIso, ofComponents
+--- 原说明 ---
+Composite functors induce composite functors on matrix categories.
 -/
 def mapMatComp {E : Type*} [Category.{v₁} E] [Preadditive E] (F : C ⥤ D) [Functor.Additive F]
     (G : D ⥤ E) [Functor.Additive G] : (F ⋙ G).mapMat_ ≅ F.mapMat_ ⋙ G.mapMat_ :=
@@ -733,24 +551,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The embedding of `C` into `Mat_ C` as one-by-one matrices.
 (We index the summands by `PUnit`.) -/
 @[simps]
-/--
-Definition of `embedding` / `embedding` 的定义
+/-
+**CategoryTheory.Mat_.embedding** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：embedding : C ⥤ Mat_ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embedding
-  signature: : C ⥤ Mat_ C where
-  body: ⟨PUnit, fun _ => X⟩
-  map f _ _ := f
-  map_id _ := by ext ⟨⟩; simp
-  map_comp _ _ := by ext ⟨⟩; simp
-
-中文:
-定义 embedding
-  签名: : C ⥤ Mat_ C where
-  定义体: ⟨PUnit, fun _ => X⟩
-  map f _ _ := f
-  map_id _ := by ext ⟨⟩; simp
-  map_comp _ _ := by ext ⟨⟩; simp
+--- 原说明 ---
+The embedding of `C` into `Mat_ C` as one-by-one matrices.
+(We index the summands by `PUnit`.)
 -/
 def embedding : C ⥤ Mat_ C where
   obj X := ⟨PUnit, fun _ => X⟩
@@ -760,70 +569,31 @@ def embedding : C ⥤ Mat_ C where
 
 namespace Embedding
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (embedding C).Faithful
-  body: congr_fun (congr_fun h PUnit.unit) PUnit.unit
-
-中文:
-实例 :
-  签名: (embedding C).忠实
-  定义体: congr_fun (congr_fun h PUnit.unit) PUnit.unit
-
-Depends on / 依赖: PUnit.unit, congr_fun
+/-
+**CategoryTheory.Mat_.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_.
+Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (embedding C).Faithful where
   map_injective h := congr_fun (congr_fun h PUnit.unit) PUnit.unit
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (embedding C).Full
-  body: ⟨f PUnit.unit PUnit.unit, rfl⟩
-
-中文:
-实例 :
-  签名: (embedding C).满
-  定义体: ⟨f PUnit.unit PUnit.unit, rfl⟩
-
-Depends on / 依赖: PUnit.unit
+/-
+**CategoryTheory.Mat_.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_.
+Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (embedding C).Full where map_surjective f := ⟨f PUnit.unit PUnit.unit, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor.Additive (embedding C)
-
-中文:
-实例 :
-  签名: 函子.加性 (embedding C)
+/-
+**CategoryTheory.Mat_.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_.
+Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor.Additive (embedding C) where
 
 end Embedding
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: C] : Inhabited (Mat_ C)
-  body: ⟨(embedding C).obj default⟩
-
-中文:
-实例 [可居
-  签名: C] : 可居 (Mat_ C)
-  定义体: ⟨(embedding C).obj default⟩
-
-Depends on / 依赖: embedding
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited C] : Inhabited (Mat_ C) :=
   ⟨(embedding C).obj default⟩
@@ -838,72 +608,17 @@ open scoped Classical in
 /-- Every object in `Mat_ C` is isomorphic to the biproduct of its summands.
 -/
 @[simps]
-/--
-Definition of `isoBiproductEmbedding` / `isoBiproductEmbedding` 的定义
+/-
+**CategoryTheory.Mat_.isoBiproductEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Mat_`。
+形式化陈述：isoBiproductEmbedding (M : Mat_ C) : M ≅ ⨁ fun i => (embedding C).obj (M.X
+ i) where hom
+参数：M : Mat_ C。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoBiproductEmbedding
-  signature: (M : Mat_ C)
-  body: biproduct.lift fun i j _ => if h : j = i then eqToHom (congr_arg M.X h) else 0
-  inv := biproduct.desc fun i _ k => if h : i = k then eqToHom (congr_arg M.X h) else 0
-  hom_inv_id := by
-    simp only [biproduct.lift_desc]
-    funext i j
-    dsimp [id_def]
-    rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_eq_single i]; rotate_left
-    · intro b _ hb
-      dsimp
-      rw [Fintype.univ_ofSubsingleton]; rw [Finset.sum_singleton]; rw [dif_neg hb.symm]; rw [zero_comp]
-    · intro h
-      simp at h
-    simp
-  inv_hom_id := by
-    apply biproduct.hom_ext
-    intro i
-    apply biproduct.hom_ext'
-    intro j
-    simp only [Category.id_comp, Category.assoc, biproduct.lift_π, biproduct.ι_desc_assoc,
-      biproduct.ι_π]
-    ext ⟨⟩ ⟨⟩
-    simp only [embedding, comp_apply, comp_dite, dite_comp, comp_zero, zero_comp,
-      Finset.sum_dite_eq', Finset.mem_univ, ite_true, eqToHom_refl, Category.comp_id]
-    split_ifs with h
-    · subst h
-      simp
-    · rfl
-
-中文:
-定义 isoBiproductEmbedding
-  签名: (M : Mat_ C)
-  定义体: biproduct.lift fun i j _ => if h : j = i then eqToHom (congr_arg M.X h) else 0
-  inv := biproduct.desc fun i _ k => if h : i = k then eqToHom (congr_arg M.X h) else 0
-  hom_inv_id := by
-    simp only [biproduct.lift_desc]
-    funext i j
-    dsimp [id_def]
-    rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_eq_single i]; rotate_left
-    · intro b _ hb
-      dsimp
-      rw [Fintype.univ_ofSubsingleton]; rw [Finset.sum_singleton]; rw [dif_neg hb.symm]; rw [zero_comp]
-    · intro h
-      simp at h
-    simp
-  inv_hom_id := by
-    apply biproduct.hom_ext
-    intro i
-    apply biproduct.hom_ext'
-    intro j
-    simp only [Category.id_comp, Category.assoc, biproduct.lift_π, biproduct.ι_desc_assoc,
-      biproduct.ι_π]
-    ext ⟨⟩ ⟨⟩
-    simp only [embedding, comp_apply, comp_dite, dite_comp, comp_zero, zero_comp,
-      Finset.sum_dite_eq', Finset.mem_univ, ite_true, eqToHom_refl, Category.comp_id]
-    split_ifs with h
-    · subst h
-      simp
-    · rfl
-
-Depends on / 依赖: biproduct, biproduct.lift, congr_arg, eqToHom
+--- 原说明 ---
+Every object in `Mat_ C` is isomorphic to the biproduct of its summands.
 -/
 def isoBiproductEmbedding (M : Mat_ C) : M ≅ ⨁ fun i => (embedding C).obj (M.X i) where
   hom := biproduct.lift fun i j _ => if h : j = i then eqToHom (congr_arg M.X h) else 0
@@ -912,10 +627,10 @@ def isoBiproductEmbedding (M : Mat_ C) : M ≅ ⨁ fun i => (embedding C).obj (M
     simp only [biproduct.lift_desc]
     funext i j
     dsimp [id_def]
-    rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_eq_single i]; rotate_left
+    rw [Finset.sum_apply, Finset.sum_apply, Finset.sum_eq_single i]; rotate_left
     · intro b _ hb
       dsimp
-      rw [Fintype.univ_ofSubsingleton]; rw [Finset.sum_singleton]; rw [dif_neg hb.symm]; rw [zero_comp]
+      rw [Fintype.univ_ofSubsingleton, Finset.sum_singleton, dif_neg hb.symm, zero_comp]
     · intro h
       simp at h
     simp
@@ -938,24 +653,34 @@ variable {D : Type u₁} [Category.{v₁} D] [Preadditive D]
 
 /-- This instance can be found using `Functor.hasBiproduct_of_preserves'`, but it is faster
 to keep it here. -/
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This instance can be found using `Functor.hasBiproduct_of_preserves'`, but it is
+ faster
+to keep it here.
+-/
 instance (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) :
     HasBiproduct (fun i => F.obj ((embedding C).obj (M.X i))) :=
   F.hasBiproduct_of_preserves _
 
-/--
-Definition of `additiveObjIsoBiproduct` / `additiveObjIsoBiproduct` 的定义
+/-- Every `M` is a direct sum of objects from `C`, and `F` preserves biproducts. -/
+/-
+**CategoryTheory.Mat_.additiveObjIsoBiproduct** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Mat_`。
+形式化陈述：additiveObjIsoBiproduct (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C)
+ : F.obj M ≅ ⨁ fun i => F.obj ((embedding C).obj (M.X i))
+参数：F : Mat_ C ⥤ D；M : Mat_ C。
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Mat_.instHasBiproductιObjEmbeddingXOfAdditive`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Pread
+ditive C] {D : Type u₁}   [inst_2 : CategoryTheory…
 
-English:
-definition additiveObjIsoBiproduct
-  signature: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C)
-  body: F.mapIso (isoBiproductEmbedding M) ≪≫ F.mapBiproduct _
-
-中文:
-定义 additiveObjIsoBiproduct
-  签名: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C)
-  定义体: F.mapIso (isoBiproductEmbedding M) ≪≫ F.mapBiproduct _
-
-Depends on / 依赖: F.mapBiproduct, F.mapIso, isoBiproductEmbedding, mapBiproduct, mapIso
+--- 原说明 ---
+Every `M` is a direct sum of objects from `C`, and `F` preserves biproducts.
 -/
 def additiveObjIsoBiproduct (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) :
     F.obj M ≅ ⨁ fun i => F.obj ((embedding C).obj (M.X i)) :=
@@ -964,58 +689,25 @@ def additiveObjIsoBiproduct (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `additiveObjIsoBiproduct_hom_π` / 引理 `additiveObjIsoBiproduct_hom_π`
-
-English:
-lemma additiveObjIsoBiproduct_hom_π
-  given: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι)
-  proof: by
-  dsimp [additiveObjIsoBiproduct]
-  rw [biproduct.lift_π]; rw [Category.assoc]
-  erw [biproduct.lift_π, ← F.map_comp]
-  simp
-
-中文:
-引理 additiveObjIsoBiproduct_hom_π
-  条件: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C) (i : M.ι)
-  证明: by
-  dsimp [additiveObjIsoBiproduct]
-  rw [biproduct.lift_π]; rw [Category.assoc]
-  erw [biproduct.lift_π, ← F.map_comp]
-  simp
-
-Depends on / 依赖: Category, Category.assoc, F.map_comp, additiveObjIsoBiproduct, biproduct, biproduct.lift_, map_comp
+/-
+**CategoryTheory.Mat_.additiveObjIsoBiproduct_hom_** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma additiveObjIsoBiproduct_hom_π (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι) :
     (additiveObjIsoBiproduct F M).hom ≫ biproduct.π _ i =
       F.map (M.isoBiproductEmbedding.hom ≫ biproduct.π _ i) := by
   dsimp [additiveObjIsoBiproduct]
-  rw [biproduct.lift_π]; rw [Category.assoc]
+  rw [biproduct.lift_π, Category.assoc]
   erw [biproduct.lift_π, ← F.map_comp]
   simp
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_additiveObjIsoBiproduct_inv` / 引理 `ι_additiveObjIsoBiproduct_inv`
-
-English:
-lemma ι_additiveObjIsoBiproduct_inv
-  given: (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι)
-  proof: by
-  dsimp [additiveObjIsoBiproduct, Functor.mapBiproduct, Functor.mapBicone]
-  simp only [biproduct.ι_desc, biproduct.ι_desc_assoc, ← F.map_comp]
-
-中文:
-引理 ι_additiveObjIsoBiproduct_inv
-  条件: (F : Mat_ C ⥤ D) [函子.加性 F] (M : Mat_ C) (i : M.ι)
-  证明: by
-  dsimp [additiveObjIsoBiproduct, Functor.mapBiproduct, Functor.mapBicone]
-  simp only [biproduct.ι_desc, biproduct.ι_desc_assoc, ← F.map_comp]
-
-Depends on / 依赖: F.map_comp, Functor, Functor.mapBicone, Functor.mapBiproduct, additiveObjIsoBiproduct, biproduct, mapBicone, mapBiproduct, map_comp
+/-
+**CategoryTheory.Mat_.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Mat_`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_additiveObjIsoBiproduct_inv (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι) :
     biproduct.ι _ i ≫ (additiveObjIsoBiproduct F M).inv =
@@ -1027,46 +719,91 @@ variable [HasFiniteBiproducts D]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-theorem `additiveObjIsoBiproduct_naturality` / 定理 `additiveObjIsoBiproduct_naturality`
-
-English:
-theorem additiveObjIsoBiproduct_naturality
-  statement: (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
-  proof: by
-  classical
-  ext i : 1
-  simp only [Category.assoc, additiveObjIsoBiproduct_hom_π, isoBiproductEmbedding_hom,
-    biproduct.lift_π, biproduct.matrix_π,
-    ← cancel_epi (additiveObjIsoBiproduct F M).inv, Iso.inv_hom_id_assoc]
-  ext j : 1
-  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBiproductEmbedding_inv,
-    biproduct.ι_desc, ← F.map_comp]
-  congr 1
-  funext ⟨⟩ ⟨⟩
-  simp [comp_apply, dite_comp, comp_dite]
-
-@[reassoc]
-
-中文:
-定理 additiveObjIsoBiproduct_naturality
-  结论: (F : Mat_ C ⥤ D) [函子.加性 F] {M N : Mat_ C}
-  证明: by
-  classical
-  ext i : 1
-  simp only [Category.assoc, additiveObjIsoBiproduct_hom_π, isoBiproductEmbedding_hom,
-    biproduct.lift_π, biproduct.matrix_π,
-    ← cancel_epi (additiveObjIsoBiproduct F M).inv, Iso.inv_hom_id_assoc]
-  ext j : 1
-  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBiproductEmbedding_inv,
-    biproduct.ι_desc, ← F.map_comp]
-  congr 1
-  funext ⟨⟩ ⟨⟩
-  simp [comp_apply, dite_comp, comp_dite]
-
-@[reassoc]
-
-Depends on / 依赖: Category, Category.assoc, F.map_comp, Iso.inv_hom_id_assoc, additiveObjIsoBiproduct, biproduct, biproduct.lift_, biproduct.matrix_, cancel_epi, classical, comp_apply, comp_dite, dite_comp, inv_hom_id_assoc, isoBiproductEmbedding_hom, isoBiproductEmbedding_inv, map_comp
+/-
+**CategoryTheory.Mat_.additiveObjIsoBiproduct_naturality** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Mat_`。
+形式化陈述：additiveObjIsoBiproduct_naturality (F : Mat_ C ⥤ D) [Functor.Additive F] {
+M N : Mat_ C} (f : M ⟶ N) : F.map f ≫ (additiveObjIsoBiproduct F N).hom = (addit
+iveObjIsoBiproduct F M).hom ≫ biproduct.matrix fun i j => F.map ((embedding C).m
+ap (f i j))
+参数：F : Mat_ C ⥤ D；f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.biproduct.hom_ext`：∀ {J : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C] {f : J → C} [ins…
+· 使用定理 `CategoryTheory.Mat_.instHasBiproductιObjEmbeddingXOfAdditive`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Pread
+ditive C] {D : Type u₁}   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.HasBiproductsOfShape.has_biproduct`：∀ {J : Type w}
+ {C : Type uC} {inst : CategoryTheory.Category.{uC', uC} C}   {inst_1 : Category
+Theory.Limits.HasZeroMorphisms C} [self : Cate…
+· 使用定理 `CategoryTheory.Limits.hasBiproductsOfShape_finite`：∀ {J : Type w} (C : T
+ype uC) [inst : CategoryTheory.Category.{uC', uC} C]   [inst_1 : CategoryTheory.
+Limits.HasZeroMorphisms C] [CategoryThe…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Mat_.additiveObjIsoBiproduct_hom_π`：additiveObjIsoBiprodu
+ct_hom_π (F : Mat_ C ⥤ D) [Functor.Additive F] (M : Mat_ C) (i : M.ι) : (additiv
+eObjIsoBiproduct F M).hom ≫ biproduct.π…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Mat_.isoBiproductEmbedding_hom`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Preadditive C]   (M 
+: CategoryTheory.Mat_ C),   M.isoBi…
+· 使用定理 `CategoryTheory.Limits.biproduct.lift_π`：∀ {J : Type w} {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C] {f : J → C} [ins…
+· 使用定理 `CategoryTheory.Limits.biproduct.matrix_π`：∀ {J : Type} [inst : Finite J]
+ {K : Type} [inst_1 : Finite K] {C : Type u} [inst_2 : CategoryTheory.Category.{
+v, u} C]   [inst_3 : CategoryT…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Limits.biproduct.hom_ext'`：∀ {J : Type w} {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C] {f : J → C} [ins…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Mat_.ι_additiveObjIsoBiproduct_inv_assoc`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Preadditiv
+e C] {D : Type u₁}   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.Mat_.isoBiproductEmbedding_inv`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Preadditive C]   (M 
+: CategoryTheory.Mat_ C),   M.isoBi…
+· 使用定理 `CategoryTheory.Limits.biproduct.ι_desc`：∀ {J : Type w} {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C] {f : J → C} [ins…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `CategoryTheory.comp_dite`：comp_dite {P : Prop} [Decidable P] {X Y Z : C}
+ (f : X ⟶ Y) (g : P -> (Y ⟶ Z)) (g' : ¬P -> (Y ⟶ Z)) : (f ≫ if h : P then g h el
+se g' h) = if …
+（共 41 条，此处仅展示前 30 条）
 -/
 theorem additiveObjIsoBiproduct_naturality (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
     (f : M ⟶ N) :
@@ -1086,61 +823,62 @@ theorem additiveObjIsoBiproduct_naturality (F : Mat_ C ⥤ D) [Functor.Additive 
   simp [comp_apply, dite_comp, comp_dite]
 
 @[reassoc]
-/--
-theorem `additiveObjIsoBiproduct_naturality'` / 定理 `additiveObjIsoBiproduct_naturality'`
-
-English:
-theorem additiveObjIsoBiproduct_naturality'
-  statement: (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
-  proof: by
-  rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [additiveObjIsoBiproduct_naturality]
-
-中文:
-定理 additiveObjIsoBiproduct_naturality'
-  结论: (F : Mat_ C ⥤ D) [函子.加性 F] {M N : Mat_ C}
-  证明: by
-  rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [additiveObjIsoBiproduct_naturality]
-
-Depends on / 依赖: Category, Category.assoc, Iso.eq_comp_inv, Iso.inv_comp_eq, additiveObjIsoBiproduct_naturality, eq_comp_inv, inv_comp_eq
+/-
+**CategoryTheory.Mat_.additiveObjIsoBiproduct_naturality'** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Mat_`。
+形式化陈述：additiveObjIsoBiproduct_naturality' (F : Mat_ C ⥤ D) [Functor.Additive F] 
+{M N : Mat_ C} (f : M ⟶ N) : (additiveObjIsoBiproduct F M).inv ≫ F.map f = bipro
+duct.matrix (fun i j => F.map ((embedding C).map (f i j)) :) ≫ (additiveObjIsoBi
+product F N).inv
+参数：F : Mat_ C ⥤ D；f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Mat_.instHasBiproductιObjEmbeddingXOfAdditive`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Pread
+ditive C] {D : Type u₁}   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.HasBiproductsOfShape.has_biproduct`：∀ {J : Type w}
+ {C : Type uC} {inst : CategoryTheory.Category.{uC', uC} C}   {inst_1 : Category
+Theory.Limits.HasZeroMorphisms C} [self : Cate…
+· 使用定理 `CategoryTheory.Limits.hasBiproductsOfShape_finite`：∀ {J : Type w} (C : T
+ype uC) [inst : CategoryTheory.Category.{uC', uC} C]   [inst_1 : CategoryTheory.
+Limits.HasZeroMorphisms C] [CategoryThe…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `CategoryTheory.Mat_.additiveObjIsoBiproduct_naturality`：additiveObjIsoBi
+product_naturality (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C} (f : M ⟶
+ N) : F.map f ≫ (additiveObjIsoBiproduct F N…
 -/
 theorem additiveObjIsoBiproduct_naturality' (F : Mat_ C ⥤ D) [Functor.Additive F] {M N : Mat_ C}
     (f : M ⟶ N) :
     (additiveObjIsoBiproduct F M).inv ≫ F.map f =
       biproduct.matrix (fun i j => F.map ((embedding C).map (f i j)) :) ≫
         (additiveObjIsoBiproduct F N).inv := by
-  rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [additiveObjIsoBiproduct_naturality]
+  rw [Iso.inv_comp_eq, ← Category.assoc, Iso.eq_comp_inv, additiveObjIsoBiproduct_naturality]
 
 attribute [local simp] biproduct.lift_desc
 
 /-- Any additive functor `C ⥤ D` to a category `D` with finite biproducts extends to
 a functor `Mat_ C ⥤ D`. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.Mat_.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：lift (F : C ⥤ D) [Functor.Additive F] : Mat_ C ⥤ D where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (F : C ⥤ D) [Functor.Additive F]
-  body: ⨁ fun i => F.obj (X.X i)
-  map f := biproduct.matrix fun i j => F.map (f i j)
-  map_id X := by
-    ext i j
-    by_cases h : j = i
-    · subst h; simp
-    · simp [h]
-
-中文:
-定义 lift
-  签名: (F : C ⥤ D) [函子.加性 F]
-  定义体: ⨁ fun i => F.obj (X.X i)
-  map f := biproduct.matrix fun i j => F.map (f i j)
-  map_id X := by
-    ext i j
-    by_cases h : j = i
-    · subst h; simp
-    · simp [h]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+Any additive functor `C ⥤ D` to a category `D` with finite biproducts extends to
+a functor `Mat_ C ⥤ D`.
 -/
 def lift (F : C ⥤ D) [Functor.Additive F] : Mat_ C ⥤ D where
   obj X := ⨁ fun i => F.obj (X.X i)
@@ -1153,16 +891,53 @@ def lift (F : C ⥤ D) [Functor.Additive F] : Mat_ C ⥤ D where
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `lift_additive` / 实例 `lift_additive`
-
-English:
-instance lift_additive
-  signature: (F : C ⥤ D) [Functor.Additive F]
-
-中文:
-实例 lift_additive
-  签名: (F : C ⥤ D) [函子.加性 F]
+/-
+**CategoryTheory.Mat_.lift_additive** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Ma
+t_`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.Preadditive C] {D : Type u₁}   [inst_2 : CategoryTheory.Category.{v₁,
+ u₁} D] [inst_3 : CategoryTheory.Preadditive D]   [inst_4 : CategoryTheory.Limit
+s.HasFiniteBiproducts D] (F : CategoryTheory.Functor C D) [inst_5 : F.Additive],
+   (CategoryTheory.Mat_.lift F).Additive
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Mat_.lift F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasBiproductsOfShape.has_biproduct`：∀ {J : Type w}
+ {C : Type uC} {inst : CategoryTheory.Category.{uC', uC} C}   {inst_1 : Category
+Theory.Limits.HasZeroMorphisms C} [self : Cate…
+· 使用定理 `CategoryTheory.Limits.hasBiproductsOfShape_finite`：∀ {J : Type w} (C : T
+ype uC) [inst : CategoryTheory.Category.{uC', uC} C]   [inst_1 : CategoryTheory.
+Limits.HasZeroMorphisms C] [CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Functor.map_add`：map_add {X Y : C} {f g : X ⟶ Y} : F.map 
+(f + g) = F.map f + F.map g
+· 使用定理 `CategoryTheory.Limits.biproduct.hom_ext`：∀ {J : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C] {f : J → C} [ins…
+· 使用定理 `CategoryTheory.Limits.biproduct.hom_ext'`：∀ {J : Type w} {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C] {f : J → C} [ins…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.biproduct.matrix_π`：∀ {J : Type} [inst : Finite J]
+ {K : Type} [inst_1 : Finite K] {C : Type u} [inst_2 : CategoryTheory.Category.{
+v, u} C]   [inst_3 : CategoryT…
+· 使用定理 `CategoryTheory.Limits.biproduct.ι_desc`：∀ {J : Type w} {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C]   [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C] {f : J → C} [ins…
+· 使用定理 `CategoryTheory.Preadditive.add_comp`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C)   (f f' 
+: P ⟶ Q) (g : Q ⟶ R),   C…
+· 使用定理 `CategoryTheory.Preadditive.comp_add`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C) (f : P ⟶
+ Q)   (g g' : Q ⟶ R),   C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance lift_additive (F : C ⥤ D) [Functor.Additive F] : Functor.Additive (lift F) where
 
@@ -1170,26 +945,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- An additive functor `C ⥤ D` factors through its lift to `Mat_ C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `embeddingLiftIso` / `embeddingLiftIso` 的定义
+/-
+**CategoryTheory.Mat_.embeddingLiftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Mat_`。
+形式化陈述：embeddingLiftIso (F : C ⥤ D) [Functor.Additive F] : embedding C ⋙ lift F ≅
+ F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embeddingLiftIso
-  signature: (F : C ⥤ D) [Functor.Additive F]
-  body: NatIso.ofComponents
-    (fun X =>
-      { hom := biproduct.desc fun _ => 𝟙 (F.obj X)
-        inv := biproduct.lift fun _ => 𝟙 (F.obj X) })
-
-中文:
-定义 embeddingLiftIso
-  签名: (F : C ⥤ D) [函子.加性 F]
-  定义体: NatIso.ofComponents
-    (fun X =>
-      { hom := biproduct.desc fun _ => 𝟙 (F.obj X)
-        inv := biproduct.lift fun _ => 𝟙 (F.obj X) })
-
-Depends on / 依赖: F.obj, NatIso, NatIso.ofComponents, biproduct, biproduct.desc, biproduct.lift, ofComponents
+--- 原说明 ---
+An additive functor `C ⥤ D` factors through its lift to `Mat_ C ⥤ D`.
 -/
 def embeddingLiftIso (F : C ⥤ D) [Functor.Additive F] : embedding C ⋙ lift F ≅ F :=
   NatIso.ofComponents
@@ -1199,54 +965,26 @@ def embeddingLiftIso (F : C ⥤ D) [Functor.Additive F] : embedding C ⋙ lift F
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `liftUnique` / `liftUnique` 的定义
+/-- `Mat_.lift F` is the unique additive functor `L : Mat_ C ⥤ D` such that `F ≅ embedding C ⋙ L`.
+-/
+/-
+**CategoryTheory.Mat_.liftUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_`
+。
+形式化陈述：liftUnique (F : C ⥤ D) [Functor.Additive F] (L : Mat_ C ⥤ D) [Functor.Addi
+tive L] (α : embedding C ⋙ L ≅ F) : L ≅ lift F
+参数：F : C ⥤ D；L : Mat_ C ⥤ D；α : embedding C ⋙ L ≅ F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Mat_.instHasBiproductιObjEmbeddingXOfAdditive`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Pread
+ditive C] {D : Type u₁}   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.Mat_.lift_additive`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Preadditive C] {D : Type u₁}   [
+inst_2 : CategoryTheory…
 
-English:
-definition liftUnique
-  signature: (F : C ⥤ D) [Functor.Additive F] (L : Mat_ C ⥤ D) [Functor.Additive L]
-  body: NatIso.ofComponents
-    (fun M =>
-      additiveObjIsoBiproduct L M ≪≫
-        (biproduct.mapIso fun i => α.app (M.X i)) ≪≫
-          (biproduct.mapIso fun i => (embeddingLiftIso F).symm.app (M.X i)) ≪≫
-            (additiveObjIsoBiproduct (lift F) M).symm)
-    fun f => by
-      dsimp only [Iso.trans_hom, Iso.symm_hom, biproduct.mapIso_hom]
-      simp only [additiveObjIsoBiproduct_naturality_assoc]
-      simp only [biproduct.matrix_map_assoc, Category.assoc]
-      simp only [additiveObjIsoBiproduct_naturality']
-      simp only [biproduct.map_matrix_assoc]
-      congr 3
-      ext j k
-      apply biproduct.hom_ext
-      rintro ⟨⟩
-      dsimp
-      simpa using α.hom.naturality (f j k)
-
-中文:
-定义 liftUnique
-  签名: (F : C ⥤ D) [函子.加性 F] (L : Mat_ C ⥤ D) [函子.加性 L]
-  定义体: NatIso.ofComponents
-    (fun M =>
-      additiveObjIsoBiproduct L M ≪≫
-        (biproduct.mapIso fun i => α.app (M.X i)) ≪≫
-          (biproduct.mapIso fun i => (embeddingLiftIso F).symm.app (M.X i)) ≪≫
-            (additiveObjIsoBiproduct (lift F) M).symm)
-    fun f => by
-      dsimp only [Iso.trans_hom, Iso.symm_hom, biproduct.mapIso_hom]
-      simp only [additiveObjIsoBiproduct_naturality_assoc]
-      simp only [biproduct.matrix_map_assoc, Category.assoc]
-      simp only [additiveObjIsoBiproduct_naturality']
-      simp only [biproduct.map_matrix_assoc]
-      congr 3
-      ext j k
-      apply biproduct.hom_ext
-      rintro ⟨⟩
-      dsimp
-      simpa using α.hom.naturality (f j k)
-
-Depends on / 依赖: Category, Category.assoc, Iso.symm_hom, Iso.trans_hom, NatIso, NatIso.ofComponents, additiveObjIsoBiproduct, additiveObjIsoBiproduct_naturality, additiveObjIsoBiproduct_naturality_assoc, biproduct, biproduct.mapIso, biproduct.mapIso_hom, biproduct.map_matrix_assoc, biproduct.matrix_map_assoc, embeddingLiftIso, mapIso, mapIso_hom, map_matrix_assoc, matrix_map_assoc, ofComponents
+--- 原说明 ---
+`Mat_.lift F` is the unique additive functor `L : Mat_ C ⥤ D` such that `F ≅ emb
+edding C ⋙ L`.
 -/
 def liftUnique (F : C ⥤ D) [Functor.Additive F] (L : Mat_ C ⥤ D) [Functor.Additive L]
     (α : embedding C ⋙ L ≅ F) : L ≅ lift F :=
@@ -1270,43 +1008,41 @@ def liftUnique (F : C ⥤ D) [Functor.Additive F] (L : Mat_ C ⥤ D) [Functor.Ad
       simpa using α.hom.naturality (f j k)
 
 -- TODO is there some uniqueness statement for the natural isomorphism in `liftUnique`?
-/--
-Definition of `ext` / `ext` 的定义
+/-- Two additive functors `Mat_ C ⥤ D` are naturally isomorphic if
+their precompositions with `embedding C` are naturally isomorphic as functors `C ⥤ D`. -/
+/-
+**CategoryTheory.Mat_.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：ext {F G : Mat_ C ⥤ D} [Functor.Additive F] [Functor.Additive G] (α : embe
+dding C ⋙ F ≅ embedding C ⋙ G) : F ≅ G
+参数：α : embedding C ⋙ F ≅ embedding C ⋙ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ext
-  signature: {F G : Mat_ C ⥤ D} [Functor.Additive F] [Functor.Additive G]
-  body: liftUnique (embedding C ⋙ G) _ α ≪≫ (liftUnique _ _ (Iso.refl _)).symm
-
-中文:
-定义 ext
-  签名: {F G : Mat_ C ⥤ D} [函子.加性 F] [函子.加性 G]
-  定义体: liftUnique (embedding C ⋙ G) _ α ≪≫ (liftUnique _ _ (Iso.refl _)).symm
-
-Depends on / 依赖: Iso.refl, embedding, liftUnique
+--- 原说明 ---
+Two additive functors `Mat_ C ⥤ D` are naturally isomorphic if
+their precompositions with `embedding C` are naturally isomorphic as functors `C
+ ⥤ D`.
 -/
 def ext {F G : Mat_ C ⥤ D} [Functor.Additive F] [Functor.Additive G]
     (α : embedding C ⋙ F ≅ embedding C ⋙ G) : F ≅ G :=
   liftUnique (embedding C ⋙ G) _ α ≪≫ (liftUnique _ _ (Iso.refl _)).symm
 
-/--
-Definition of `equivalenceSelfOfHasFiniteBiproductsAux` / `equivalenceSelfOfHasFiniteBiproductsAux` 的定义
+/-- Natural isomorphism needed in the construction of `equivalenceSelfOfHasFiniteBiproducts`.
+-/
+/-
+**CategoryTheory.Mat_.equivalenceSelfOfHasFiniteBiproductsAux** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：equivalenceSelfOfHasFiniteBiproductsAux [HasFiniteBiproducts C] : embeddin
+g C ⋙ 𝟭 (Mat_ C) ≅ embedding C ⋙ lift (𝟭 C) ⋙ embedding C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instAdditiveId`：∀ {C : Type u_1} [inst : Category
+Theory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C],   (Catego
+ryTheory.Functor.id C).Addi…
 
-English:
-definition equivalenceSelfOfHasFiniteBiproductsAux
-  signature: [HasFiniteBiproducts C]
-  body: Functor.rightUnitor _ ≪≫
-    (Functor.leftUnitor _).symm ≪≫
-      Functor.isoWhiskerRight (embeddingLiftIso _).symm _ ≪≫ Functor.associator _ _ _
-
-中文:
-定义 equivalenceSelfOfHasFiniteBiproductsAux
-  签名: [有FiniteBiproducts C]
-  定义体: Functor.rightUnitor _ ≪≫
-    (Functor.leftUnitor _).symm ≪≫
-      Functor.isoWhiskerRight (embeddingLiftIso _).symm _ ≪≫ Functor.associator _ _ _
-
-Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerRight, Functor.leftUnitor, Functor.rightUnitor, associator, embeddingLiftIso, isoWhiskerRight, leftUnitor, rightUnitor
+--- 原说明 ---
+Natural isomorphism needed in the construction of `equivalenceSelfOfHasFiniteBip
+roducts`.
 -/
 def equivalenceSelfOfHasFiniteBiproductsAux [HasFiniteBiproducts C] :
     embedding C ⋙ 𝟭 (Mat_ C) ≅ embedding C ⋙ lift (𝟭 C) ⋙ embedding C :=
@@ -1315,31 +1051,29 @@ def equivalenceSelfOfHasFiniteBiproductsAux [HasFiniteBiproducts C] :
       Functor.isoWhiskerRight (embeddingLiftIso _).symm _ ≪≫ Functor.associator _ _ _
 
 /--
-Definition of `equivalenceSelfOfHasFiniteBiproducts` / `equivalenceSelfOfHasFiniteBiproducts` 的定义
+A preadditive category that already has finite biproducts is equivalent to its additive envelope.
 
-English:
-definition equivalenceSelfOfHasFiniteBiproducts
-  signature: (C : Type (u₁ + 1)) [LargeCategory C] [Preadditive C]
-  body: Equivalence.mk
-    (-- I suspect this is already an adjoint equivalence, but it seems painful to verify.
-      lift
-      (𝟭 C))
-    (embedding C) (ext equivalenceSelfOfHasFiniteBiproductsAux) (embeddingLiftIso (𝟭 C))
+Note that we only prove this for a large category;
+otherwise there are universe issues that I haven't attempted to sort out.
+-/
+/-
+**CategoryTheory.Mat_.equivalenceSelfOfHasFiniteBiproducts** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Mat_`。
+形式化陈述：equivalenceSelfOfHasFiniteBiproducts (C : Type (u₁ + 1)) [LargeCategory C]
+ [Preadditive C] [HasFiniteBiproducts C] : Mat_ C ≌ C
+参数：C : Type (u₁ + 1)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instAdditiveId`：∀ {C : Type u_1} [inst : Category
+Theory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C],   (Catego
+ryTheory.Functor.id C).Addi…
 
-@[simp]
+--- 原说明 ---
+A preadditive category that already has finite biproducts is equivalent to its a
+dditive envelope.
 
-中文:
-定义 equivalenceSelfOfHasFiniteBiproducts
-  签名: (C : 类型 (u₁ + 1)) [大范畴 C] [预加性 C]
-  定义体: Equivalence.mk
-    (-- I suspect this is already an adjoint equivalence, but it seems painful to verify.
-      lift
-      (𝟭 C))
-    (embedding C) (ext equivalenceSelfOfHasFiniteBiproductsAux) (embeddingLiftIso (𝟭 C))
-
-@[simp]
-
-Depends on / 依赖: Equivalence, Equivalence.mk, adjoint, already, embedding, embeddingLiftIso, equivalence, equivalenceSelfOfHasFiniteBiproductsAux, painful, suspect, verify
+Note that we only prove this for a large category;
+otherwise there are universe issues that I haven't attempted to sort out.
 -/
 def equivalenceSelfOfHasFiniteBiproducts (C : Type (u₁ + 1)) [LargeCategory C] [Preadditive C]
     [HasFiniteBiproducts C] : Mat_ C ≌ C :=
@@ -1350,22 +1084,15 @@ def equivalenceSelfOfHasFiniteBiproducts (C : Type (u₁ + 1)) [LargeCategory C]
     (embedding C) (ext equivalenceSelfOfHasFiniteBiproductsAux) (embeddingLiftIso (𝟭 C))
 
 @[simp]
-/--
-theorem `equivalenceSelfOfHasFiniteBiproducts_functor` / 定理 `equivalenceSelfOfHasFiniteBiproducts_functor`
-
-English:
-theorem equivalenceSelfOfHasFiniteBiproducts_functor
-  statement: {C : Type (u₁ + 1)} [LargeCategory C]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivalenceSelfOfHasFiniteBiproducts_functor
-  结论: {C : 类型 (u₁ + 1)} [大范畴 C]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Mat_.equivalenceSelfOfHasFiniteBiproducts_functor** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：equivalenceSelfOfHasFiniteBiproducts_functor {C : Type (u₁ + 1)} [LargeCat
+egory C] [Preadditive C] [HasFiniteBiproducts C] : (equivalenceSelfOfHasFiniteBi
+products C).functor = lift (𝟭 C)
+参数：u₁ + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalenceSelfOfHasFiniteBiproducts_functor {C : Type (u₁ + 1)} [LargeCategory C]
     [Preadditive C] [HasFiniteBiproducts C] :
@@ -1373,18 +1100,15 @@ theorem equivalenceSelfOfHasFiniteBiproducts_functor {C : Type (u₁ + 1)} [Larg
   rfl
 
 @[simp]
-/--
-theorem `equivalenceSelfOfHasFiniteBiproducts_inverse` / 定理 `equivalenceSelfOfHasFiniteBiproducts_inverse`
-
-English:
-theorem equivalenceSelfOfHasFiniteBiproducts_inverse
-  statement: {C : Type (u₁ + 1)} [LargeCategory C]
-  proof: rfl
-
-中文:
-定理 equivalenceSelfOfHasFiniteBiproducts_inverse
-  结论: {C : 类型 (u₁ + 1)} [大范畴 C]
-  证明: rfl
+/-
+**CategoryTheory.Mat_.equivalenceSelfOfHasFiniteBiproducts_inverse** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Mat_`。
+形式化陈述：equivalenceSelfOfHasFiniteBiproducts_inverse {C : Type (u₁ + 1)} [LargeCat
+egory C] [Preadditive C] [HasFiniteBiproducts C] : (equivalenceSelfOfHasFiniteBi
+products C).inverse = embedding C
+参数：u₁ + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivalenceSelfOfHasFiniteBiproducts_inverse {C : Type (u₁ + 1)} [LargeCategory C]
     [Preadditive C] [HasFiniteBiproducts C] :
@@ -1398,27 +1122,23 @@ universe u
 /-- A type synonym for `Fintype`, which we will equip with a category structure
 where the morphisms are matrices with components in `R`. -/
 @[nolint unusedArguments]
-/--
-Definition of `Mat` / `Mat` 的定义
+/-
+**CategoryTheory.Mat** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Mat (_ : Type u)
+参数：_ : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mat
-  signature: (_ : Type u)
-  body: FintypeCat.{u}
-deriving Inhabited
-
-中文:
-定义 Mat
-  签名: (_ : 类型u)
-  定义体: FintypeCat.{u}
-deriving Inhabited
-
-Depends on / 依赖: FintypeCat
+--- 原说明 ---
+A type synonym for `Fintype`, which we will equip with a category structure
+where the morphisms are matrices with components in `R`.
 -/
 def Mat (_ : Type u) :=
   FintypeCat.{u}
 deriving Inhabited
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type u) : CoeSort (Mat R) (Type u) :=
   FintypeCat.instCoeSort
 
@@ -1427,6 +1147,10 @@ open Matrix
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local instance] FintypeCat.fintype in
 open scoped Classical in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type u) [Semiring R] : Category (Mat R) where
   Hom X Y := Matrix X Y R
   id X := (1 : Matrix X X R)
@@ -1440,131 +1164,96 @@ section
 variable {R : Type u} [Semiring R]
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {X Y : Mat R} (f g : X ⟶ Y) (h : forall i j, f i j = g i j)
-  statement: f = g
-  proof: Matrix.ext_iff.mp h
-
-中文:
-定理 hom_ext
-  条件: {X Y : Mat R} (f g : X ⟶ Y) (h : 对任意 i j, f i j = g i j)
-  结论: f = g
-  证明: Matrix.ext_iff.mp h
-
-Depends on / 依赖: Matrix, Matrix.ext_iff.mp, ext_iff
+/-
+**CategoryTheory.Mat.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：hom_ext {X Y : Mat R} (f g : X ⟶ Y) (h : forall i j, f i j = g i j) : f = 
+g
+参数：f g : X ⟶ Y；h : forall i j, f i j = g i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Matrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
-theorem hom_ext {X Y : Mat R} (f g : X ⟶ Y) (h : forall i j, f i j = g i j) : f = g :=
+theorem hom_ext {X Y : Mat R} (f g : X ⟶ Y) (h : ∀ i j, f i j = g i j) : f = g :=
   Matrix.ext_iff.mp h
 
 variable (R)
 
 open scoped Classical in
-/--
-theorem `id_def` / 定理 `id_def`
-
-English:
-theorem id_def
-  given: (M : Mat R)
-  statement: 𝟙 M = fun i j => if i = j then 1 else 0
-  proof: rfl
-
-中文:
-定理 id_def
-  条件: (M : Mat R)
-  结论: 𝟙 M = fun i j => if i = j then 1 else 0
-  证明: rfl
+/-
+**CategoryTheory.Mat.id_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：id_def (M : Mat R) : 𝟙 M = fun i j => if i = j then 1 else 0
+参数：M : Mat R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_def (M : Mat R) : 𝟙 M = fun i j => if i = j then 1 else 0 :=
   rfl
 
 open scoped Classical in
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (M : Mat R) (i j : M)
-  statement: (𝟙 M : Matrix M M R) i j = if i = j then 1 else 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_apply
-  条件: (M : Mat R) (i j : M)
-  结论: (𝟙 M : 矩阵 M M R) i j = if i = j then 1 else 0
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Mat.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：id_apply (M : Mat R) (i j : M) : (𝟙 M : Matrix M M R) i j = if i = j then 
+1 else 0
+参数：M : Mat R；i j : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (M : Mat R) (i j : M) : (𝟙 M : Matrix M M R) i j = if i = j then 1 else 0 :=
   rfl
 
 @[simp]
-/--
-theorem `id_apply_self` / 定理 `id_apply_self`
-
-English:
-theorem id_apply_self
-  given: (M : Mat R) (i : M)
-  statement: (𝟙 M : Matrix M M R) i i = 1
-  proof: by simp [id_apply]
-
-@[simp]
-
-中文:
-定理 id_apply_self
-  条件: (M : Mat R) (i : M)
-  结论: (𝟙 M : 矩阵 M M R) i i = 1
-  证明: by simp [id_apply]
-
-@[simp]
-
-Depends on / 依赖: id_apply
+/-
+**CategoryTheory.Mat.id_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat
+`。
+形式化陈述：id_apply_self (M : Mat R) (i : M) : (𝟙 M : Matrix M M R) i i = 1
+参数：M : Mat R；i : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_apply_self (M : Mat R) (i : M) : (𝟙 M : Matrix M M R) i i = 1 := by simp [id_apply]
 
 @[simp]
-/--
-theorem `id_apply_of_ne` / 定理 `id_apply_of_ne`
-
-English:
-theorem id_apply_of_ne
-  given: (M : Mat R) (i j : M) (h : i != j)
-  statement: (𝟙 M : Matrix M M R) i j = 0
-  proof: by
-  simp [id_apply, h]
-
-中文:
-定理 id_apply_of_ne
-  条件: (M : Mat R) (i j : M) (h : i != j)
-  结论: (𝟙 M : 矩阵 M M R) i j = 0
-  证明: by
-  simp [id_apply, h]
-
-Depends on / 依赖: id_apply
+/-
+**CategoryTheory.Mat.id_apply_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Ma
+t`。
+形式化陈述：id_apply_of_ne (M : Mat R) (i j : M) (h : i != j) : (𝟙 M : Matrix M M R) i
+ j = 0
+参数：M : Mat R；i j : M；h : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem id_apply_of_ne (M : Mat R) (i j : M) (h : i != j) : (𝟙 M : Matrix M M R) i j = 0 := by
+theorem id_apply_of_ne (M : Mat R) (i j : M) (h : i ≠ j) : (𝟙 M : Matrix M M R) i j = 0 := by
   simp [id_apply, h]
 
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local instance] FintypeCat.fintype in
-/--
-theorem `comp_def` / 定理 `comp_def`
-
-English:
-theorem comp_def
-  given: {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K)
-  proof: rfl
-
-中文:
-定理 comp_def
-  条件: {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K)
-  证明: rfl
+/-
+**CategoryTheory.Mat.comp_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：comp_def {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) : f ≫ g = fun i k => ∑ j 
+: N, f i j * g j k
+参数：f : M ⟶ N；g : N ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_def {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) :
     f ≫ g = fun i k => ∑ j : N, f i j * g j k :=
@@ -1573,23 +1262,21 @@ theorem comp_def {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) :
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local instance] FintypeCat.fintype in
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) (i k)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) (i k)
-  证明: rfl
+/-
+**CategoryTheory.Mat.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：comp_apply {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) (i k) : (f ≫ g) i k = ∑
+ j : N, f i j * g j k
+参数：f : M ⟶ N；g : N ⟶ K；i k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply {M N K : Mat R} (f : M ⟶ N) (g : N ⟶ K) (i k) :
     (f ≫ g) i k = ∑ j : N, f i j * g j k :=
   rfl
-
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M N : Mat R) : Inhabited (M ⟶ N) :=
   ⟨fun (_ : M) (_ : N) => (0 : R)⟩
 
@@ -1602,40 +1289,15 @@ open Opposite
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `CategoryTheory.Mat.equivalenceSingleObj`. -/
 @[simps]
-/--
-Definition of `equivalenceSingleObjInverse` / `equivalenceSingleObjInverse` 的定义
+/-
+**CategoryTheory.Mat.equivalenceSingleObjInverse** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Mat`。
+形式化陈述：equivalenceSingleObjInverse : Mat_ (SingleObj Rᵐᵒᵖ) ⥤ Mat R where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceSingleObjInverse
-  signature: : Mat_ (SingleObj Rᵐᵒᵖ) ⥤ Mat R where
-  body: FintypeCat.of X.ι
-  map f i j := MulOpposite.unop (f i j)
-  map_id X := by
-    ext
-    simp only [Mat_.id_def, id_def]
-    split_ifs <;> rfl
-  map_comp f g := by
-    -- Porting note: this proof was automatic in mathlib3
-    ext
-    simp only [Mat_.comp_apply, comp_apply]
-    convert! Finset.unop_sum _ _
-
-中文:
-定义 equivalenceSingleObjInverse
-  签名: : Mat_ (SingleObj Rᵐᵒᵖ) ⥤ Mat R where
-  定义体: FintypeCat.of X.ι
-  map f i j := MulOpposite.unop (f i j)
-  map_id X := by
-    ext
-    simp only [Mat_.id_def, id_def]
-    split_ifs <;> rfl
-  map_comp f g := by
-    -- Porting note: this proof was automatic in mathlib3
-    ext
-    simp only [Mat_.comp_apply, comp_apply]
-    convert! Finset.unop_sum _ _
-
-Depends on / 依赖: FintypeCat, FintypeCat.of
+--- 原说明 ---
+Auxiliary definition for `CategoryTheory.Mat.equivalenceSingleObj`.
 -/
 def equivalenceSingleObjInverse : Mat_ (SingleObj Rᵐᵒᵖ) ⥤ Mat R where
   obj X := FintypeCat.of X.ι
@@ -1649,143 +1311,81 @@ def equivalenceSingleObjInverse : Mat_ (SingleObj Rᵐᵒᵖ) ⥤ Mat R where
     ext
     simp only [Mat_.comp_apply, comp_apply]
     convert! Finset.unop_sum _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (equivalenceSingleObjInverse R).Faithful
-  body: by
-    ext
-    apply_fun MulOpposite.unop using MulOpposite.unop_injective
-    exact congr_fun (congr_fun w _) _
-
-中文:
-实例 :
-  签名: (equivalenceSingleObjInverse R).忠实
-  定义体: by
-    ext
-    apply_fun MulOpposite.unop using MulOpposite.unop_injective
-    exact congr_fun (congr_fun w _) _
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop, MulOpposite.unop_injective, apply_fun, congr_fun, unop_injective
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (equivalenceSingleObjInverse R).Faithful where
   map_injective w := by
     ext
     apply_fun MulOpposite.unop using MulOpposite.unop_injective
     exact congr_fun (congr_fun w _) _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (equivalenceSingleObjInverse R).Full
-  body: ⟨fun i j => MulOpposite.op (f i j), rfl⟩
-
-中文:
-实例 :
-  签名: (equivalenceSingleObjInverse R).满
-  定义体: ⟨fun i j => MulOpposite.op (f i j), rfl⟩
-
-Depends on / 依赖: MulOpposite, MulOpposite.op
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (equivalenceSingleObjInverse R).Full where
   map_surjective f := ⟨fun i j => MulOpposite.op (f i j), rfl⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local instance] FintypeCat.fintype in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (equivalenceSingleObjInverse R).EssSurj
-  body: ⟨{ ι := X
-        X := fun _ => PUnit.unit }, ⟨eqToIso (by cases X; congr)⟩⟩
-
-中文:
-实例 :
-  签名: (equivalenceSingleObjInverse R).本质满射
-  定义体: ⟨{ ι := X
-        X := fun _ => PUnit.unit }, ⟨eqToIso (by cases X; congr)⟩⟩
-
-Depends on / 依赖: PUnit.unit, eqToIso
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (equivalenceSingleObjInverse R).EssSurj where
   mem_essImage X :=
-    ⟨{ ι := X
+    ⟨{  ι := X
         X := fun _ => PUnit.unit }, ⟨eqToIso (by cases X; congr)⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (equivalenceSingleObjInverse R).IsEquivalence
-
-中文:
-实例 :
-  签名: (equivalenceSingleObjInverse R).是等价
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (equivalenceSingleObjInverse R).IsEquivalence where
 
-/--
-Definition of `equivalenceSingleObj` / `equivalenceSingleObj` 的定义
+/-- The categorical equivalence between the category of matrices over a ring,
+and the category of matrices over that ring considered as a single-object category. -/
+/-
+**CategoryTheory.Mat.equivalenceSingleObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Mat`。
+形式化陈述：equivalenceSingleObj : Mat R ≌ Mat_ (SingleObj Rᵐᵒᵖ)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Mat.instIsEquivalenceMat_SingleObjMulOppositeEquivalenceS
+ingleObjInverse`：∀ (R : Type) [inst : Ring R], (CategoryTheory.Mat.equivalenceSi
+ngleObjInverse R).IsEquivalence
 
-English:
-definition equivalenceSingleObj
-  signature: : Mat R ≌ Mat_ (SingleObj Rᵐᵒᵖ)
-  body: (equivalenceSingleObjInverse R).asEquivalence.symm
-
-中文:
-定义 equivalenceSingleObj
-  签名: : Mat R ≌ Mat_ (SingleObj Rᵐᵒᵖ)
-  定义体: (equivalenceSingleObjInverse R).asEquivalence.symm
-
-Depends on / 依赖: asEquivalence, asEquivalence.symm, equivalenceSingleObjInverse
+--- 原说明 ---
+The categorical equivalence between the category of matrices over a ring,
+and the category of matrices over that ring considered as a single-object catego
+ry.
 -/
 def equivalenceSingleObj : Mat R ≌ Mat_ (SingleObj Rᵐᵒᵖ) :=
   (equivalenceSingleObjInverse R).asEquivalence.symm
-
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : Mat R) : AddCommGroup (X ⟶ Y) :=
-inferInstanceAs AddCommGroup (Matrix X Y R)
+  inferInstanceAs <| AddCommGroup (Matrix X Y R)
 
 variable {R}
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: {M N : Mat R} (f g : M ⟶ N) (i j)
-  statement: (f + g) i j = f i j + g i j
-  proof: rfl
-
-中文:
-定理 add_apply
-  条件: {M N : Mat R} (f g : M ⟶ N) (i j)
-  结论: (f + g) i j = f i j + g i j
-  证明: rfl
+/-
+**CategoryTheory.Mat.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mat`。
+形式化陈述：add_apply {M N : Mat R} (f g : M ⟶ N) (i j) : (f + g) i j = f i j + g i j
+参数：f g : M ⟶ N；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply {M N : Mat R} (f g : M ⟶ N) (i j) : (f + g) i j = f i j + g i j :=
   rfl
 
 attribute [local simp] add_mul mul_add Finset.sum_add_distrib
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (Mat R)
-
-中文:
-实例 :
-  签名: 预加性 (Mat R)
+/-
+**CategoryTheory.Mat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (Mat R) where
 
@@ -1793,3 +1393,4 @@ instance : Preadditive (Mat R) where
 end Mat
 
 end CategoryTheory
+

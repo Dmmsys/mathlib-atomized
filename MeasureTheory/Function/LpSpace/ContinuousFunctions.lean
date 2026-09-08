@@ -23,348 +23,401 @@ as `BoundedContinuousFunction.toLp`.
 open BoundedContinuousFunction MeasureTheory Filter
 open scoped ENNReal
 
-variable {α E : Type*} {m m0 : MeasurableSpace α} {p : Real>=0∞} {μ : Measure α}
+variable {α E : Type*} {m m0 : MeasurableSpace α} {p : ℝ≥0∞} {μ : Measure α}
   [TopologicalSpace α] [BorelSpace α] [NormedAddCommGroup E] [SecondCountableTopologyEither α E]
 
 variable (E p μ) in
-/--
-Definition of `MeasureTheory.Lp.boundedContinuousFunction` / `MeasureTheory.Lp.boundedContinuousFunction` 的定义
+/-- An additive subgroup of `Lp E p μ`, consisting of the equivalence classes which contain a
+bounded continuous representative. -/
+/-
+**MeasureTheory.Lp.boundedContinuousFunction** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MeasureTheory.Lp.boundedContinuousFunction : AddSubgroup (Lp E p μ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MeasureTheory.Lp.boundedContinuousFunction
-  signature: : AddSubgroup (Lp E p μ)
-  body: AddSubgroup.addSubgroupOf
-    ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E)).range (Lp E p μ)
-
-中文:
-定义 测度论.Lp.boundedContinuousFunction
-  签名: : 加法子群 (Lp E p μ)
-  定义体: AddSubgroup.addSubgroupOf
-    ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E)).range (Lp E p μ)
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.addSubgroupOf, ContinuousMap, ContinuousMap.toAEEqFunAddHom, addSubgroupOf, toAEEqFunAddHom, toContinuousMapAddMonoidHom
+--- 原说明 ---
+An additive subgroup of `Lp E p μ`, consisting of the equivalence classes which 
+contain a
+bounded continuous representative.
 -/
 noncomputable def MeasureTheory.Lp.boundedContinuousFunction : AddSubgroup (Lp E p μ) :=
   AddSubgroup.addSubgroupOf
     ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E)).range (Lp E p μ)
 
-/--
-theorem `MeasureTheory.Lp.mem_boundedContinuousFunction_iff` / 定理 `MeasureTheory.Lp.mem_boundedContinuousFunction_iff`
+/-- By definition, the elements of `Lp.boundedContinuousFunction E p μ` are the elements of
+`Lp E p μ` which contain a bounded continuous representative. -/
+/-
+**MeasureTheory.Lp.mem_boundedContinuousFunction_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：MeasureTheory.Lp.mem_boundedContinuousFunction_iff {f : Lp E p μ} : f in M
+easureTheory.Lp.boundedContinuousFunction E p μ ↔ exists f₀ : α ->ᵇ E, f₀.toCont
+inuousMap.toAEEqFun μ = (f : α ->ₘ[μ] E)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `AddSubgroup.mem_addSubgroupOf`：∀ {G : Type u_1} [inst : AddGroup G] {H K
+ : AddSubgroup G} {h : ↥K}, h ∈ H.addSubgroupOf K ↔ ↑h ∈ H
 
-English:
-theorem MeasureTheory.Lp.mem_boundedContinuousFunction_iff
-  given: {f : Lp E p μ}
-  proof: AddSubgroup.mem_addSubgroupOf
-
-中文:
-定理 测度论.Lp.mem_boundedContinuousFunction_iff
-  条件: {f : Lp E p μ}
-  证明: AddSubgroup.mem_addSubgroupOf
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.mem_addSubgroupOf, mem_addSubgroupOf
+--- 原说明 ---
+By definition, the elements of `Lp.boundedContinuousFunction E p μ` are the elem
+ents of
+`Lp E p μ` which contain a bounded continuous representative.
 -/
 theorem MeasureTheory.Lp.mem_boundedContinuousFunction_iff {f : Lp E p μ} :
-    f in MeasureTheory.Lp.boundedContinuousFunction E p μ ↔
-      exists f₀ : α ->ᵇ E, f₀.toContinuousMap.toAEEqFun μ = (f : α ->ₘ[μ] E) :=
+    f ∈ MeasureTheory.Lp.boundedContinuousFunction E p μ ↔
+      ∃ f₀ : α →ᵇ E, f₀.toContinuousMap.toAEEqFun μ = (f : α →ₘ[μ] E) :=
   AddSubgroup.mem_addSubgroupOf
 
 namespace BoundedContinuousFunction
 
-/--
-theorem `memLp_top` / 定理 `memLp_top`
+/-- A bounded continuous function is in `L∞`. -/
+/-
+**BoundedContinuousFunction.memLp_top** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：memLp_top (f : α ->ᵇ E) : MemLp f ⊤ μ
+参数：f : α ->ᵇ E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   {f
+ : α → β} [inst_1 : T…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `BoundedContinuousMapClass.toContinuousMapClass`：∀ {F : Type u_2} {α : ou
+tParam (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α}   {inst
+_1 : PseudoMetricSpace β} {inst_2 : …
+· 使用定理 `MeasureTheory.eLpNormEssSup_lt_top_of_ae_bound`：eLpNormEssSup_lt_top_of_
+ae_bound {f : α -> F} {C : Real} (hfC : forallᵐ x ∂μ, ‖f x‖ <= C) : eLpNormEssSu
+p f μ < ∞
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 
-English:
-theorem memLp_top
-  given: (f : α ->ᵇ E)
-  statement: MemLp f ⊤ μ
-  proof: ⟨by fun_prop, eLpNormEssSup_lt_top_of_ae_bound univ_mem' (id norm_coe_le_norm f)⟩
-
-中文:
-定理 memLp_top
-  条件: (f : α ->ᵇ E)
-  结论: MemLp f ⊤ μ
-  证明: ⟨by fun_prop, eLpNormEssSup_lt_top_of_ae_bound univ_mem' (id norm_coe_le_norm f)⟩
-
-Depends on / 依赖: eLpNormEssSup_lt_top_of_ae_bound, fun_prop, norm_coe_le_norm, univ_mem
+--- 原说明 ---
+A bounded continuous function is in `L∞`.
 -/
-theorem memLp_top (f : α ->ᵇ E) : MemLp f ⊤ μ :=
-⟨by fun_prop, eLpNormEssSup_lt_top_of_ae_bound univ_mem' (id norm_coe_le_norm f)⟩
+theorem memLp_top (f : α →ᵇ E) : MemLp f ⊤ μ :=
+  ⟨by fun_prop, eLpNormEssSup_lt_top_of_ae_bound <| univ_mem' (id norm_coe_le_norm f)⟩
 
 variable [IsFiniteMeasure μ]
 
-/--
-theorem `mem_Lp` / 定理 `mem_Lp`
+/-- A bounded continuous function on a finite-measure space is in `Lp`. -/
+/-
+**BoundedContinuousFunction.mem_Lp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuousF
+unction`。
+形式化陈述：mem_Lp (f : α ->ᵇ E) : f.toContinuousMap.toAEEqFun μ in Lp E p μ
+参数：f : α ->ᵇ E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Lp.mem_Lp_of_ae_bound`：mem_Lp_of_ae_bound [IsFiniteMeasure
+ μ] {f : α ->ₘ[μ] E} (C : Real) (hfC : forallᵐ x ∂μ, ‖f x‖ <= C) : f in Lp E p μ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ContinuousMap.coeFn_toAEEqFun`：coeFn_toAEEqFun (f : C(α, β)) : f.toAEEqF
+un μ =ᵐ[μ] f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 
-English:
-theorem mem_Lp
-  given: (f : α ->ᵇ E)
-  statement: f.toContinuousMap.toAEEqFun μ in Lp E p μ
-  proof: by
-  refine Lp.mem_Lp_of_ae_bound ‖f‖ ?_
-  filter_upwards [f.toContinuousMap.coeFn_toAEEqFun μ] with x _
-  convert! f.norm_coe_le_norm x using 2
-
-中文:
-定理 mem_Lp
-  条件: (f : α ->ᵇ E)
-  结论: f.toContinuousMap.toAEEqFun μ in Lp E p μ
-  证明: by
-  refine Lp.mem_Lp_of_ae_bound ‖f‖ ?_
-  filter_upwards [f.toContinuousMap.coeFn_toAEEqFun μ] with x _
-  convert! f.norm_coe_le_norm x using 2
-
-Depends on / 依赖: Lp.mem_Lp_of_ae_bound, coeFn_toAEEqFun, convert, f.norm_coe_le_norm, f.toContinuousMap.coeFn_toAEEqFun, filter_upwards, mem_Lp_of_ae_bound, norm_coe_le_norm, toContinuousMap
+--- 原说明 ---
+A bounded continuous function on a finite-measure space is in `Lp`.
 -/
-theorem mem_Lp (f : α ->ᵇ E) : f.toContinuousMap.toAEEqFun μ in Lp E p μ := by
+theorem mem_Lp (f : α →ᵇ E) : f.toContinuousMap.toAEEqFun μ ∈ Lp E p μ := by
   refine Lp.mem_Lp_of_ae_bound ‖f‖ ?_
   filter_upwards [f.toContinuousMap.coeFn_toAEEqFun μ] with x _
   convert! f.norm_coe_le_norm x using 2
 
-/--
-theorem `Lp_nnnorm_le` / 定理 `Lp_nnnorm_le`
+/-- The `Lp`-norm of a bounded continuous function is at most a constant (depending on the measure
+of the whole space) times its sup-norm. -/
+/-
+**BoundedContinuousFunction.Lp_nnnorm_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedConti
+nuousFunction`。
+形式化陈述：Lp_nnnorm_le (f : α ->ᵇ E) : ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ :
+ Lp E p μ)‖₊ <= measureUnivNNReal μ ^ p.toReal⁻¹ * ‖f‖₊
+参数：f : α ->ᵇ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Lp.nnnorm_le_of_ae_bound`：nnnorm_le_of_ae_bound [IsFiniteM
+easure μ] {f : Lp E p μ} {C : Real>=0} (hfC : forallᵐ x ∂μ, ‖f x‖₊ <= C) : ‖f‖₊ 
+<= measureUnivNNReal μ ^ p.t…
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `BoundedContinuousFunction.mem_Lp`：mem_Lp (f : α ->ᵇ E) : f.toContinuousM
+ap.toAEEqFun μ in Lp E p μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ContinuousMap.coeFn_toAEEqFun`：coeFn_toAEEqFun (f : C(α, β)) : f.toAEEqF
+un μ =ᵐ[μ] f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `coe_nnnorm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ↑‖a‖
+₊ = ‖a‖
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 
-English:
-theorem Lp_nnnorm_le
-  given: (f : α ->ᵇ E)
-  proof: by
-  apply Lp.nnnorm_le_of_ae_bound
-  refine (f.toContinuousMap.coeFn_toAEEqFun μ).mono ?_
-  intro x hx
-  rw [← NNReal.coe_le_coe]; rw [coe_nnnorm]; rw [coe_nnnorm]
-  convert! f.norm_coe_le_norm x using 2
-
-中文:
-定理 Lp_nnnorm_le
-  条件: (f : α ->ᵇ E)
-  证明: by
-  apply Lp.nnnorm_le_of_ae_bound
-  refine (f.toContinuousMap.coeFn_toAEEqFun μ).mono ?_
-  intro x hx
-  rw [← NNReal.coe_le_coe]; rw [coe_nnnorm]; rw [coe_nnnorm]
-  convert! f.norm_coe_le_norm x using 2
-
-Depends on / 依赖: Lp.nnnorm_le_of_ae_bound, NNReal, NNReal.coe_le_coe, coeFn_toAEEqFun, coe_le_coe, coe_nnnorm, convert, f.norm_coe_le_norm, f.toContinuousMap.coeFn_toAEEqFun, nnnorm_le_of_ae_bound, norm_coe_le_norm, toContinuousMap
+--- 原说明 ---
+The `Lp`-norm of a bounded continuous function is at most a constant (depending 
+on the measure
+of the whole space) times its sup-norm.
 -/
-theorem Lp_nnnorm_le (f : α ->ᵇ E) :
-    ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖₊ <=
+theorem Lp_nnnorm_le (f : α →ᵇ E) :
+    ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖₊ ≤
       measureUnivNNReal μ ^ p.toReal⁻¹ * ‖f‖₊ := by
   apply Lp.nnnorm_le_of_ae_bound
   refine (f.toContinuousMap.coeFn_toAEEqFun μ).mono ?_
   intro x hx
-  rw [← NNReal.coe_le_coe]; rw [coe_nnnorm]; rw [coe_nnnorm]
+  rw [← NNReal.coe_le_coe, coe_nnnorm, coe_nnnorm]
   convert! f.norm_coe_le_norm x using 2
 
-/--
-theorem `Lp_norm_le` / 定理 `Lp_norm_le`
+/-- The `Lp`-norm of a bounded continuous function is at most a constant (depending on the measure
+of the whole space) times its sup-norm. -/
+/-
+**BoundedContinuousFunction.Lp_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinu
+ousFunction`。
+形式化陈述：Lp_norm_le (f : α ->ᵇ E) : ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : L
+p E p μ)‖ <= measureUnivNNReal μ ^ p.toReal⁻¹ * ‖f‖
+参数：f : α ->ᵇ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.Lp_nnnorm_le`：Lp_nnnorm_le (f : α ->ᵇ E) : ‖(⟨
+f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖₊ <= measureUnivNNReal μ ^ 
+p.toReal⁻¹ * ‖f‖₊
 
-English:
-theorem Lp_norm_le
-  given: (f : α ->ᵇ E)
-  proof: Lp_nnnorm_le f
-
-中文:
-定理 Lp_norm_le
-  条件: (f : α ->ᵇ E)
-  证明: Lp_nnnorm_le f
-
-Depends on / 依赖: Lp_nnnorm_le
+--- 原说明 ---
+The `Lp`-norm of a bounded continuous function is at most a constant (depending 
+on the measure
+of the whole space) times its sup-norm.
 -/
-theorem Lp_norm_le (f : α ->ᵇ E) :
-    ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖ <=
+theorem Lp_norm_le (f : α →ᵇ E) :
+    ‖(⟨f.toContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖ ≤
       measureUnivNNReal μ ^ p.toReal⁻¹ * ‖f‖ :=
   Lp_nnnorm_le f
 
 variable (p μ)
 
-/--
-Definition of `toLpHom` / `toLpHom` 的定义
+/-- The normed group homomorphism of considering a bounded continuous function on a finite-measure
+space as an element of `Lp`. -/
+/-
+**BoundedContinuousFunction.toLpHom** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：toLpHom [Fact (1 <= p)] : NormedAddGroupHom (α ->ᵇ E) (Lp E p μ)
+参数：1 <= p。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.mem_Lp`：mem_Lp (f : α ->ᵇ E) : f.toContinuousM
+ap.toAEEqFun μ in Lp E p μ
 
-English:
-definition toLpHom
-  signature: [Fact (1 <= p)]
-  body: { AddMonoidHom.codRestrict ((ContinuousMap.toAEEqFunAddHom μ).comp
-    (toContinuousMapAddMonoidHom α E)) (Lp E p μ) mem_Lp with
-    bound' := ⟨_, Lp_norm_le⟩ }
-
-中文:
-定义 toLpHom
-  签名: [Fact (1 <= p)]
-  定义体: { AddMonoidHom.codRestrict ((ContinuousMap.toAEEqFunAddHom μ).comp
-    (toContinuousMapAddMonoidHom α E)) (Lp E p μ) mem_Lp with
-    bound' := ⟨_, Lp_norm_le⟩ }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.codRestrict, ContinuousMap, ContinuousMap.toAEEqFunAddHom, Lp_norm_le, codRestrict, mem_Lp, toAEEqFunAddHom, toContinuousMapAddMonoidHom
+--- 原说明 ---
+The normed group homomorphism of considering a bounded continuous function on a 
+finite-measure
+space as an element of `Lp`.
 -/
-def toLpHom [Fact (1 <= p)] : NormedAddGroupHom (α ->ᵇ E) (Lp E p μ) :=
+def toLpHom [Fact (1 ≤ p)] : NormedAddGroupHom (α →ᵇ E) (Lp E p μ) :=
   { AddMonoidHom.codRestrict ((ContinuousMap.toAEEqFunAddHom μ).comp
     (toContinuousMapAddMonoidHom α E)) (Lp E p μ) mem_Lp with
     bound' := ⟨_, Lp_norm_le⟩ }
-
-/--
-theorem `range_toLpHom` / 定理 `range_toLpHom`
-
-English:
-theorem range_toLpHom
-  given: [Fact (1 <= p)]
-  proof: by
-  symm
-  exact AddMonoidHom.addSubgroupOf_range_eq_of_le
-      ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E))
-      (by rintro - ⟨f, rfl⟩; exact mem_Lp f : _ <= Lp E p μ)
-
-中文:
-定理 range_toLpHom
-  条件: [Fact (1 <= p)]
-  证明: by
-  symm
-  exact AddMonoidHom.addSubgroupOf_range_eq_of_le
-      ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E))
-      (by rintro - ⟨f, rfl⟩; exact mem_Lp f : _ <= Lp E p μ)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.addSubgroupOf_range_eq_of_le, ContinuousMap, ContinuousMap.toAEEqFunAddHom, addSubgroupOf_range_eq_of_le, mem_Lp, toAEEqFunAddHom, toContinuousMapAddMonoidHom
+/-
+**BoundedContinuousFunction.range_toLpHom** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：range_toLpHom [Fact (1 <= p)] : ((toLpHom p μ).range : AddSubgroup (Lp E p
+ μ)) = MeasureTheory.Lp.boundedContinuousFunction E p μ
+参数：1 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `AddMonoidHom.addSubgroupOf_range_eq_of_le`：∀ {G₁ : Type u_7} {G₂ : Type 
+u_8} [inst : AddGroup G₁] [inst_1 : AddGroup G₂] {K : AddSubgroup G₂} (f : G₁ →+
+ G₂)   (h : f.range ≤ K), f.ran…
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `BoundedContinuousFunction.mem_Lp`：mem_Lp (f : α ->ᵇ E) : f.toContinuousM
+ap.toAEEqFun μ in Lp E p μ
 -/
-theorem range_toLpHom [Fact (1 <= p)] :
+theorem range_toLpHom [Fact (1 ≤ p)] :
     ((toLpHom p μ).range : AddSubgroup (Lp E p μ)) =
       MeasureTheory.Lp.boundedContinuousFunction E p μ := by
   symm
   exact AddMonoidHom.addSubgroupOf_range_eq_of_le
       ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E))
-      (by rintro - ⟨f, rfl⟩; exact mem_Lp f : _ <= Lp E p μ)
+      (by rintro - ⟨f, rfl⟩; exact mem_Lp f : _ ≤ Lp E p μ)
 
-variable (𝕜 : Type*) [Fact (1 <= p)] [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E]
+variable (𝕜 : Type*) [Fact (1 ≤ p)] [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E]
 
-/--
-Definition of `toLp` / `toLp` 的定义
+/-- The bounded linear map of considering a bounded continuous function on a finite-measure space
+as an element of `Lp`. -/
+/-
+**BoundedContinuousFunction.toLp** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuousFun
+ction`。
+形式化陈述：toLp : (α ->ᵇ E) ->L[𝕜] Lp E p μ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.mem_Lp`：mem_Lp (f : α ->ᵇ E) : f.toContinuousM
+ap.toAEEqFun μ in Lp E p μ
+· 使用定理 `BoundedContinuousFunction.Lp_norm_le`：Lp_norm_le (f : α ->ᵇ E) : ‖(⟨f.to
+ContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖ <= measureUnivNNReal μ ^ p.toR
+eal⁻¹ * ‖f‖
 
-English:
-definition toLp
-  signature: : (α ->ᵇ E) ->L[𝕜] Lp E p μ
-  body: LinearMap.mkContinuous
-    (LinearMap.codRestrict (Lp.LpSubmodule 𝕜 E p μ)
-      ((ContinuousMap.toAEEqFunLinearMap μ).comp (toContinuousMapLinearMap α E 𝕜)) mem_Lp)
-    _ Lp_norm_le
-
-中文:
-定义 toLp
-  签名: : (α ->ᵇ E) ->L[𝕜] Lp E p μ
-  定义体: LinearMap.mkContinuous
-    (LinearMap.codRestrict (Lp.LpSubmodule 𝕜 E p μ)
-      ((ContinuousMap.toAEEqFunLinearMap μ).comp (toContinuousMapLinearMap α E 𝕜)) mem_Lp)
-    _ Lp_norm_le
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.toAEEqFunLinearMap, LinearMap, LinearMap.codRestrict, LinearMap.mkContinuous, Lp.LpSubmodule, LpSubmodule, Lp_norm_le, codRestrict, mem_Lp, mkContinuous, toAEEqFunLinearMap, toContinuousMapLinearMap
+--- 原说明 ---
+The bounded linear map of considering a bounded continuous function on a finite-
+measure space
+as an element of `Lp`.
 -/
-noncomputable def toLp : (α ->ᵇ E) ->L[𝕜] Lp E p μ :=
+noncomputable def toLp : (α →ᵇ E) →L[𝕜] Lp E p μ :=
   LinearMap.mkContinuous
     (LinearMap.codRestrict (Lp.LpSubmodule 𝕜 E p μ)
       ((ContinuousMap.toAEEqFunLinearMap μ).comp (toContinuousMapLinearMap α E 𝕜)) mem_Lp)
     _ Lp_norm_le
-
-/--
-theorem `coeFn_toLp` / 定理 `coeFn_toLp`
-
-English:
-theorem coeFn_toLp
-  given: (f : α ->ᵇ E)
-  proof: AEEqFun.coeFn_mk f _
-
-中文:
-定理 coeFn_toLp
-  条件: (f : α ->ᵇ E)
-  证明: AEEqFun.coeFn_mk f _
+/-
+**BoundedContinuousFunction.coeFn_toLp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinu
+ousFunction`。
+形式化陈述：coeFn_toLp (f : α ->ᵇ E) : toLp (E
+参数：f : α ->ᵇ E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_toLp (f : α ->ᵇ E) :
+theorem coeFn_toLp (f : α →ᵇ E) :
     toLp (E := E) p μ 𝕜 f =ᵐ[μ] f :=
   AEEqFun.coeFn_mk f _
 
 variable {𝕜}
-
-/--
-theorem `range_toLp` / 定理 `range_toLp`
-
-English:
-theorem range_toLp
-  proof: range_toLpHom p μ
-
-中文:
-定理 range_toLp
-  证明: range_toLpHom p μ
-
-Depends on / 依赖: range_toLpHom
+/-
+**BoundedContinuousFunction.range_toLp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinu
+ousFunction`。
+形式化陈述：range_toLp : (toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ).range.toAddSubgroup 
+= MeasureTheory.Lp.boundedContinuousFunction E p μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.range_toLpHom`：range_toLpHom [Fact (1 <= p)] :
+ ((toLpHom p μ).range : AddSubgroup (Lp E p μ)) = MeasureTheory.Lp.boundedContin
+uousFunction E p μ
 -/
 theorem range_toLp :
-    (toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ).range.toAddSubgroup =
+    (toLp p μ 𝕜 : (α →ᵇ E) →L[𝕜] Lp E p μ).range.toAddSubgroup =
       MeasureTheory.Lp.boundedContinuousFunction E p μ :=
   range_toLpHom p μ
 
 variable {p}
-
-/--
-theorem `toLp_norm_le` / 定理 `toLp_norm_le`
-
-English:
-theorem toLp_norm_le
-  given: {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
-  proof: LinearMap.mkContinuous_norm_le _ (measureUnivNNReal μ ^ p.toReal⁻¹).coe_nonneg _
-
-中文:
-定理 toLp_norm_le
-  条件: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [赋范空间 𝕜 E]
-  证明: LinearMap.mkContinuous_norm_le _ (measureUnivNNReal μ ^ p.toReal⁻¹).coe_nonneg _
-
-Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, coe_nonneg, measureUnivNNReal, mkContinuous_norm_le, p.toReal, toReal
+/-
+**BoundedContinuousFunction.toLp_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedConti
+nuousFunction`。
+形式化陈述：toLp_norm_le {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E] : ‖
+(toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ)‖ <= measureUnivNNReal μ ^ p.toReal⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.mkContinuous_norm_le`：mkContinuous_norm_le (f : E ->ₛₗ[σ₁₂] F)
+ {C : Real} (hC : 0 <= C) (h : forall x, ‖f x‖ <= C * ‖x‖) : ‖f.mkContinuous C h
+‖ <= C
+· 使用定理 `BoundedContinuousFunction.mem_Lp`：mem_Lp (f : α ->ᵇ E) : f.toContinuousM
+ap.toAEEqFun μ in Lp E p μ
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+· 使用定理 `BoundedContinuousFunction.Lp_norm_le`：Lp_norm_le (f : α ->ᵇ E) : ‖(⟨f.to
+ContinuousMap.toAEEqFun μ, mem_Lp f⟩ : Lp E p μ)‖ <= measureUnivNNReal μ ^ p.toR
+eal⁻¹ * ‖f‖
 -/
 theorem toLp_norm_le {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E] :
-    ‖(toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ)‖ <= measureUnivNNReal μ ^ p.toReal⁻¹ :=
+    ‖(toLp p μ 𝕜 : (α →ᵇ E) →L[𝕜] Lp E p μ)‖ ≤ measureUnivNNReal μ ^ p.toReal⁻¹ :=
   LinearMap.mkContinuous_norm_le _ (measureUnivNNReal μ ^ p.toReal⁻¹).coe_nonneg _
-
-/--
-theorem `toLp_inj` / 定理 `toLp_inj`
-
-English:
-theorem toLp_inj
-  given: {f g : α ->ᵇ E} [μ.IsOpenPosMeasure]
-  proof: by
-  refine ⟨fun h => ?_, by tauto⟩
-  rw [← DFunLike.coe_fn_eq]; rw [← (map_continuous f).ae_eq_iff_eq μ (map_continuous g)]
-  refine (coeFn_toLp p μ 𝕜 f).symm.trans (EventuallyEq.trans ?_ <| coeFn_toLp p μ 𝕜 g)
-  rw [h]
-
-中文:
-定理 toLp_inj
-  条件: {f g : α ->ᵇ E} [μ.是OpenPosMeasure]
-  证明: by
-  refine ⟨fun h => ?_, by tauto⟩
-  rw [← DFunLike.coe_fn_eq]; rw [← (map_continuous f).ae_eq_iff_eq μ (map_continuous g)]
-  refine (coeFn_toLp p μ 𝕜 f).symm.trans (EventuallyEq.trans ?_ <| coeFn_toLp p μ 𝕜 g)
-  rw [h]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_fn_eq, EventuallyEq, EventuallyEq.trans, ae_eq_iff_eq, coeFn_toLp, coe_fn_eq, map_continuous, symm.trans
+/-
+**BoundedContinuousFunction.toLp_inj** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuou
+sFunction`。
+形式化陈述：toLp_inj {f g : α ->ᵇ E} [μ.IsOpenPosMeasure] : toLp (E
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DFunLike.coe_fn_eq`：coe_fn_eq {f g : F} : (f : forall a : α, β a) = (g :
+ forall a : α, β a) ↔ f = g
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Continuous.ae_eq_iff_eq`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] {m : MeasurableSpace X} [inst_1 : TopologicalSpace Y]   [T2Space Y]
+ (μ : Measure…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `BoundedContinuousMapClass.toContinuousMapClass`：∀ {F : Type u_2} {α : ou
+tParam (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α}   {inst
+_1 : PseudoMetricSpace β} {inst_2 : …
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `BoundedContinuousFunction.coeFn_toLp`：coeFn_toLp (f : α ->ᵇ E) : toLp (E
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
-theorem toLp_inj {f g : α ->ᵇ E} [μ.IsOpenPosMeasure] :
+theorem toLp_inj {f g : α →ᵇ E} [μ.IsOpenPosMeasure] :
     toLp (E := E) p μ 𝕜 f = toLp (E := E) p μ 𝕜 g ↔ f = g := by
   refine ⟨fun h => ?_, by tauto⟩
-  rw [← DFunLike.coe_fn_eq]; rw [← (map_continuous f).ae_eq_iff_eq μ (map_continuous g)]
+  rw [← DFunLike.coe_fn_eq, ← (map_continuous f).ae_eq_iff_eq μ (map_continuous g)]
   refine (coeFn_toLp p μ 𝕜 f).symm.trans (EventuallyEq.trans ?_ <| coeFn_toLp p μ 𝕜 g)
   rw [h]
-
-/--
-theorem `toLp_injective` / 定理 `toLp_injective`
-
-English:
-theorem toLp_injective
-  given: [μ.IsOpenPosMeasure]
-  proof: fun _f _g hfg => (toLp_inj μ).mp hfg
-
-中文:
-定理 toLp_injective
-  条件: [μ.是OpenPosMeasure]
-  证明: fun _f _g hfg => (toLp_inj μ).mp hfg
-
-Depends on / 依赖: toLp_inj
+/-
+**BoundedContinuousFunction.toLp_injective** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCon
+tinuousFunction`。
+形式化陈述：toLp_injective [μ.IsOpenPosMeasure] : Function.Injective (⇑(toLp p μ 𝕜 : (
+α ->ᵇ E) ->L[𝕜] Lp E p μ))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `BoundedContinuousFunction.toLp_inj`：toLp_inj {f g : α ->ᵇ E} [μ.IsOpenPo
+sMeasure] : toLp (E
 -/
 theorem toLp_injective [μ.IsOpenPosMeasure] :
-    Function.Injective (⇑(toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ)) :=
+    Function.Injective (⇑(toLp p μ 𝕜 : (α →ᵇ E) →L[𝕜] Lp E p μ)) :=
   fun _f _g hfg => (toLp_inj μ).mp hfg
 
 end BoundedContinuousFunction
@@ -372,96 +425,115 @@ end BoundedContinuousFunction
 namespace ContinuousMap
 
 variable [CompactSpace α] [IsFiniteMeasure μ]
-variable (𝕜 : Type*) (p μ) [Fact (1 <= p)]
+variable (𝕜 : Type*) (p μ) [Fact (1 ≤ p)]
   [NormedRing 𝕜] [Module 𝕜 E] [IsBoundedSMul 𝕜 E]
 
-/--
-Definition of `toLp` / `toLp` 的定义
+/-- The bounded linear map of considering a continuous function on a compact finite-measure
+space `α` as an element of `Lp`.  By definition, the norm on `C(α, E)` is the sup-norm, transferred
+from the space `α →ᵇ E` of bounded continuous functions, so this construction is just a matter of
+transferring the structure from `BoundedContinuousFunction.toLp` along the isometry. -/
+/-
+**ContinuousMap.toLp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：toLp : C(α, E) ->L[𝕜] Lp E p μ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLp
-  signature: : C(α, E) ->L[𝕜] Lp E p μ
-  body: (BoundedContinuousFunction.toLp p μ 𝕜).comp
-    (linearIsometryBoundedOfCompact α E 𝕜).toContinuousLinearEquiv.toContinuousLinearMap
-
-中文:
-定义 toLp
-  签名: : C(α, E) ->L[𝕜] Lp E p μ
-  定义体: (BoundedContinuousFunction.toLp p μ 𝕜).comp
-    (linearIsometryBoundedOfCompact α E 𝕜).toContinuousLinearEquiv.toContinuousLinearMap
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.toLp, linearIsometryBoundedOfCompact, toContinuousLinearEquiv, toContinuousLinearEquiv.toContinuousLinearMap, toContinuousLinearMap
+--- 原说明 ---
+The bounded linear map of considering a continuous function on a compact finite-
+measure
+space `α` as an element of `Lp`.  By definition, the norm on `C(α, E)` is the su
+p-norm, transferred
+from the space `α →ᵇ E` of bounded continuous functions, so this construction is
+ just a matter of
+transferring the structure from `BoundedContinuousFunction.toLp` along the isome
+try.
 -/
-noncomputable def toLp : C(α, E) ->L[𝕜] Lp E p μ :=
+noncomputable def toLp : C(α, E) →L[𝕜] Lp E p μ :=
   (BoundedContinuousFunction.toLp p μ 𝕜).comp
     (linearIsometryBoundedOfCompact α E 𝕜).toContinuousLinearEquiv.toContinuousLinearMap
 
 variable {𝕜}
-
-/--
-theorem `range_toLp` / 定理 `range_toLp`
-
-English:
-theorem range_toLp
-  proof: by
-  refine SetLike.ext' ?_
-  have := (linearIsometryBoundedOfCompact α E 𝕜).surjective
-  convert! Function.Surjective.range_comp this (BoundedContinuousFunction.toLp (E := E) p μ 𝕜)
-  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range]; rw [ContinuousLinearMap.coe_coe]
-
-中文:
-定理 range_toLp
-  证明: by
-  refine SetLike.ext' ?_
-  have := (linearIsometryBoundedOfCompact α E 𝕜).surjective
-  convert! Function.Surjective.range_comp this (BoundedContinuousFunction.toLp (E := E) p μ 𝕜)
-  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range]; rw [ContinuousLinearMap.coe_coe]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.range_toLp, BoundedContinuousFunction.toLp, ContinuousLinearMap, ContinuousLinearMap.coe_coe, Function, Function.Surjective.range_comp, LinearMap, LinearMap.coe_range, SetLike, SetLike.ext, Submodule, Submodule.coe_toAddSubgroup, Surjective, coe_coe, coe_range, coe_toAddSubgroup, convert, linearIsometryBoundedOfCompact, range_comp
+/-
+**ContinuousMap.range_toLp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：range_toLp : (toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ).range.toAddSubgroup = 
+MeasureTheory.Lp.boundedContinuousFunction E p μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `LinearIsometryEquiv.surjective`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Ty
+pe u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+
+* R₂} {σ₂₁ : R₂ →+* …
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.range_toLp`：range_toLp : (toLp p μ 𝕜 : (α ->ᵇ 
+E) ->L[𝕜] Lp E p μ).range.toAddSubgroup = MeasureTheory.Lp.boundedContinuousFunc
+tion E p μ
+· 使用定理 `Submodule.coe_toAddSubgroup`：coe_toAddSubgroup : (p.toAddSubgroup : Set 
+M) = p
+· 使用定理 `LinearMap.coe_range`：coe_range [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] 
+M₂) : (range f : Set M₂) = Set.range f
+· 使用定理 `ContinuousLinearMap.coe_coe`：coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->
+ₛₗ[σ₁₂] M₂) = f
+· 使用定理 `Function.Surjective.range_comp`：∀ {α : Type u_1} {ι : Sort u_3} {ι' : So
+rt u_4} {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α), Set.range (g ∘ f
+) = Set.range g
 -/
 theorem range_toLp :
-    (toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ).range.toAddSubgroup =
+    (toLp p μ 𝕜 : C(α, E) →L[𝕜] Lp E p μ).range.toAddSubgroup =
       MeasureTheory.Lp.boundedContinuousFunction E p μ := by
   refine SetLike.ext' ?_
   have := (linearIsometryBoundedOfCompact α E 𝕜).surjective
   convert! Function.Surjective.range_comp this (BoundedContinuousFunction.toLp (E := E) p μ 𝕜)
-  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range]; rw [ContinuousLinearMap.coe_coe]
+  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜), Submodule.coe_toAddSubgroup,
+    LinearMap.coe_range, ContinuousLinearMap.coe_coe]
 
 variable {p}
-
-/--
-theorem `coeFn_toLp` / 定理 `coeFn_toLp`
-
-English:
-theorem coeFn_toLp
-  given: (f : C(α, E))
-  proof: AEEqFun.coeFn_mk f _
-
-中文:
-定理 coeFn_toLp
-  条件: (f : C(α, E))
-  证明: AEEqFun.coeFn_mk f _
+/-
+**ContinuousMap.coeFn_toLp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coeFn_toLp (f : C(α, E)) : toLp (E
+参数：f : C(α, E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
 theorem coeFn_toLp (f : C(α, E)) :
     toLp (E := E) p μ 𝕜 f =ᵐ[μ] f :=
   AEEqFun.coeFn_mk f _
-
-/--
-theorem `toLp_def` / 定理 `toLp_def`
-
-English:
-theorem toLp_def
-  given: (f : C(α, E))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLp_def
-  条件: (f : C(α, E))
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.toLp_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：toLp_def (f : C(α, E)) : toLp (E
+参数：f : C(α, E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 theorem toLp_def (f : C(α, E)) :
     toLp (E := E) p μ 𝕜 f =
@@ -469,80 +541,105 @@ theorem toLp_def (f : C(α, E)) :
   rfl
 
 @[simp]
-/--
-theorem `toLp_comp_toContinuousMap` / 定理 `toLp_comp_toContinuousMap`
-
-English:
-theorem toLp_comp_toContinuousMap
-  given: (f : α ->ᵇ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLp_comp_toContinuousMap
-  条件: (f : α ->ᵇ E)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.toLp, f.toContinuousMap, toContinuousMap
+/-
+**ContinuousMap.toLp_comp_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ap`。
+形式化陈述：toLp_comp_toContinuousMap (f : α ->ᵇ E) : toLp (E
+参数：f : α ->ᵇ E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem toLp_comp_toContinuousMap (f : α ->ᵇ E) :
+theorem toLp_comp_toContinuousMap (f : α →ᵇ E) :
     toLp (E := E) p μ 𝕜 f.toContinuousMap = BoundedContinuousFunction.toLp (E := E) p μ 𝕜 f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toLp` / 定理 `coe_toLp`
-
-English:
-theorem coe_toLp
-  given: (f : C(α, E))
-  proof: rfl
-
-中文:
-定理 coe_toLp
-  条件: (f : C(α, E))
-  证明: rfl
-
-Depends on / 依赖: f.toAEEqFun, toAEEqFun
+/-
+**ContinuousMap.coe_toLp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_toLp (f : C(α, E)) : (toLp (E
+参数：f : C(α, E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 theorem coe_toLp (f : C(α, E)) :
-    (toLp (E := E) p μ 𝕜 f : α ->ₘ[μ] E) = f.toAEEqFun μ :=
+    (toLp (E := E) p μ 𝕜 f : α →ₘ[μ] E) = f.toAEEqFun μ :=
   rfl
-
-/--
-theorem `toLp_injective` / 定理 `toLp_injective`
-
-English:
-theorem toLp_injective
-  given: [μ.IsOpenPosMeasure]
-  proof: (BoundedContinuousFunction.toLp_injective _).comp (linearIsometryBoundedOfCompact α E 𝕜).injective
-
-中文:
-定理 toLp_injective
-  条件: [μ.是OpenPosMeasure]
-  证明: (BoundedContinuousFunction.toLp_injective _).comp (linearIsometryBoundedOfCompact α E 𝕜).injective
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.toLp_injective, injective, linearIsometryBoundedOfCompact, toLp_injective
+/-
+**ContinuousMap.toLp_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：toLp_injective [μ.IsOpenPosMeasure] : Function.Injective (⇑(toLp p μ 𝕜 : C
+(α, E) ->L[𝕜] Lp E p μ))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `BoundedContinuousFunction.toLp_injective`：toLp_injective [μ.IsOpenPosMea
+sure] : Function.Injective (⇑(toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ))
+· 使用定理 `LinearIsometryEquiv.injective`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Typ
+e u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+*
+ R₂} {σ₂₁ : R₂ →+* …
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
 theorem toLp_injective [μ.IsOpenPosMeasure] :
-    Function.Injective (⇑(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)) :=
+    Function.Injective (⇑(toLp p μ 𝕜 : C(α, E) →L[𝕜] Lp E p μ)) :=
   (BoundedContinuousFunction.toLp_injective _).comp (linearIsometryBoundedOfCompact α E 𝕜).injective
-
-/--
-theorem `toLp_inj` / 定理 `toLp_inj`
-
-English:
-theorem toLp_inj
-  given: {f g : C(α, E)} [μ.IsOpenPosMeasure]
-  proof: (toLp_injective μ).eq_iff
-
-中文:
-定理 toLp_inj
-  条件: {f g : C(α, E)} [μ.是OpenPosMeasure]
-  证明: (toLp_injective μ).eq_iff
+/-
+**ContinuousMap.toLp_inj** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：toLp_inj {f g : C(α, E)} [μ.IsOpenPosMeasure] : toLp (E
+参数：α, E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousMap.toLp_injective`：toLp_injective [μ.IsOpenPosMeasure] : Func
+tion.Injective (⇑(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ))
 -/
 theorem toLp_inj {f g : C(α, E)} [μ.IsOpenPosMeasure] :
     toLp (E := E) p μ 𝕜 f = toLp (E := E) p μ 𝕜 g ↔ f = g :=
@@ -550,91 +647,143 @@ theorem toLp_inj {f g : C(α, E)} [μ.IsOpenPosMeasure] :
 
 variable {μ}
 
-/--
-theorem `hasSum_of_hasSum_Lp` / 定理 `hasSum_of_hasSum_Lp`
+/-- If a sum of continuous functions `g n` is convergent, and the same sum converges in `Lᵖ` to `h`,
+then in fact `g n` converges uniformly to `h`. -/
+/-
+**ContinuousMap.hasSum_of_hasSum_Lp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：hasSum_of_hasSum_Lp {β : Type*} [μ.IsOpenPosMeasure] {g : β -> C(α, E)} {f
+ : C(α, E)} (hg : Summable g) (hg2 : HasSum (toLp (E
+参数：α, E；α, E；hg : Summable g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.toLp_injective`：toLp_injective [μ.IsOpenPosMeasure] : Func
+tion.Injective (⇑(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ))
+· 使用定理 `HasSum.unique`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] 
+[inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} [T2Space α] 
+[L.…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `ContinuousLinearMap.hasSum`：∀ {ι : Type u_5} {R : Type u_7} {R₂ : Type u
+_8} {M : Type u_9} {M₂ : Type u_10} [inst : Semiring R]   [inst_1 : Semiring R₂]
+ [inst_2 : AddCo…
+· 使用定理 `Summable.hasSum`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α
+] [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α}, Summable 
+f L →…
 
-English:
-theorem hasSum_of_hasSum_Lp
-  statement: {β : Type*} [μ.IsOpenPosMeasure]
-  proof: by
-  convert! Summable.hasSum hg
-  exact toLp_injective μ (hg2.unique ((toLp p μ 𝕜).hasSum <| Summable.hasSum hg))
-
-中文:
-定理 hasSum_of_hasSum_Lp
-  结论: {β : 类型} [μ.是OpenPosMeasure]
-  证明: by
-  convert! Summable.hasSum hg
-  exact toLp_injective μ (hg2.unique ((toLp p μ 𝕜).hasSum <| Summable.hasSum hg))
-
-Depends on / 依赖: HasSum, Summable, Summable.hasSum, convert, hasSum, hg2.unique, toLp_injective, unique
+--- 原说明 ---
+If a sum of continuous functions `g n` is convergent, and the same sum converges
+ in `Lᵖ` to `h`,
+then in fact `g n` converges uniformly to `h`.
 -/
 theorem hasSum_of_hasSum_Lp {β : Type*} [μ.IsOpenPosMeasure]
-    {g : β -> C(α, E)} {f : C(α, E)} (hg : Summable g)
+    {g : β → C(α, E)} {f : C(α, E)} (hg : Summable g)
     (hg2 : HasSum (toLp (E := E) p μ 𝕜 ∘ g) (toLp (E := E) p μ 𝕜 f)) : HasSum g f := by
   convert! Summable.hasSum hg
   exact toLp_injective μ (hg2.unique ((toLp p μ 𝕜).hasSum <| Summable.hasSum hg))
 
 variable (μ) {𝕜 : Type*} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
-
-/--
-theorem `toLp_norm_eq_toLp_norm_coe` / 定理 `toLp_norm_eq_toLp_norm_coe`
-
-English:
-theorem toLp_norm_eq_toLp_norm_coe
-  proof: ContinuousLinearMap.opNorm_comp_linearIsometryEquiv _ _
-
-中文:
-定理 toLp_norm_eq_toLp_norm_coe
-  证明: ContinuousLinearMap.opNorm_comp_linearIsometryEquiv _ _
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_comp_linearIsometryEquiv, opNorm_comp_linearIsometryEquiv
+/-
+**ContinuousMap.toLp_norm_eq_toLp_norm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+Map`。
+形式化陈述：toLp_norm_eq_toLp_norm_coe : ‖(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)‖ = ‖(
+BoundedContinuousFunction.toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ)‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.opNorm_comp_linearIsometryEquiv`：opNorm_comp_linearI
+sometryEquiv [RingHomIsometric σ₂₃] (f : F ->SL[σ₂₃] G) (e : E ≃ₛₗᵢ[σ₁₂] F) : ‖f
+.comp (e : E ->SL[σ₁₂] F)‖ = ‖f‖
 -/
 theorem toLp_norm_eq_toLp_norm_coe :
-    ‖(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)‖ =
-      ‖(BoundedContinuousFunction.toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p μ)‖ :=
+    ‖(toLp p μ 𝕜 : C(α, E) →L[𝕜] Lp E p μ)‖ =
+      ‖(BoundedContinuousFunction.toLp p μ 𝕜 : (α →ᵇ E) →L[𝕜] Lp E p μ)‖ :=
   ContinuousLinearMap.opNorm_comp_linearIsometryEquiv _ _
 
-/--
-theorem `toLp_norm_le` / 定理 `toLp_norm_le`
+/-- Bound for the operator norm of `ContinuousMap.toLp`. -/
+/-
+**ContinuousMap.toLp_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：toLp_norm_le : ‖(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)‖ <= measureUnivNNRe
+al μ ^ p.toReal⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.toLp_norm_eq_toLp_norm_coe`：toLp_norm_eq_toLp_norm_coe : ‖
+(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)‖ = ‖(BoundedContinuousFunction.toLp p μ 𝕜
+ : (α ->ᵇ E) ->L[𝕜] Lp E p μ)‖
+· 使用定理 `BoundedContinuousFunction.toLp_norm_le`：toLp_norm_le {𝕜 : Type*} [Nontri
+viallyNormedField 𝕜] [NormedSpace 𝕜 E] : ‖(toLp p μ 𝕜 : (α ->ᵇ E) ->L[𝕜] Lp E p 
+μ)‖ <= measureUnivNNReal μ ^…
 
-English:
-theorem toLp_norm_le
-  proof: by
-  rw [toLp_norm_eq_toLp_norm_coe]
-  exact BoundedContinuousFunction.toLp_norm_le μ
-
-中文:
-定理 toLp_norm_le
-  证明: by
-  rw [toLp_norm_eq_toLp_norm_coe]
-  exact BoundedContinuousFunction.toLp_norm_le μ
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.toLp_norm_le, toLp_norm_eq_toLp_norm_coe, toLp_norm_le
+--- 原说明 ---
+Bound for the operator norm of `ContinuousMap.toLp`.
 -/
 theorem toLp_norm_le :
-    ‖(toLp p μ 𝕜 : C(α, E) ->L[𝕜] Lp E p μ)‖ <= measureUnivNNReal μ ^ p.toReal⁻¹ := by
+    ‖(toLp p μ 𝕜 : C(α, E) →L[𝕜] Lp E p μ)‖ ≤ measureUnivNNReal μ ^ p.toReal⁻¹ := by
   rw [toLp_norm_eq_toLp_norm_coe]
   exact BoundedContinuousFunction.toLp_norm_le μ
-
-/--
-lemma `memLp` / 引理 `memLp`
-
-English:
-lemma memLp
-  given: (𝕜' : Type*) [NormedField 𝕜'] [NormedSpace 𝕜' E] (f : C(α, E))
-  proof: by
-  have := Lp.mem_Lp_iff_memLp.mp (Subtype.val_prop (f.toLp p μ 𝕜'))
-  rwa [coe_toLp, memLp_congr_ae (coeFn_toAEEqFun _ _)] at this
-
-中文:
-引理 memLp
-  条件: (𝕜' : 类型) [赋范域 𝕜'] [赋范空间 𝕜' E] (f : C(α, E))
-  证明: by
-  have := Lp.mem_Lp_iff_memLp.mp (Subtype.val_prop (f.toLp p μ 𝕜'))
-  rwa [coe_toLp, memLp_congr_ae (coeFn_toAEEqFun _ _)] at this
-
-Depends on / 依赖: Lp.mem_Lp_iff_memLp.mp, Subtype, Subtype.val_prop, coeFn_toAEEqFun, coe_toLp, f.toLp, memLp_congr_ae, mem_Lp_iff_memLp, val_prop
+/-
+**ContinuousMap.memLp** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：memLp (𝕜' : Type*) [NormedField 𝕜'] [NormedSpace 𝕜' E] (f : C(α, E)) : Mem
+Lp f p μ
+参数：𝕜' : Type*；f : C(α, E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.Lp.mem_Lp_iff_memLp`：mem_Lp_iff_memLp {f : α ->ₘ[μ] E} : f
+ in Lp E p μ ↔ MemLp f p μ
+· 使用定理 `Subtype.val_prop`：val_prop {S : Set α} (a : { a // a in S }) : a.val in 
+S
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.memLp_congr_ae`：memLp_congr_ae [TopologicalSpace ε] {f g :
+ α -> ε} (hfg : f =ᵐ[μ] g) : MemLp f p μ ↔ MemLp g p μ
+· 使用定理 `ContinuousMap.coeFn_toAEEqFun`：coeFn_toAEEqFun (f : C(α, β)) : f.toAEEqF
+un μ =ᵐ[μ] f
+· 使用定理 `ContinuousMap.coe_toLp`：coe_toLp (f : C(α, E)) : (toLp (E
 -/
 lemma memLp (𝕜' : Type*) [NormedField 𝕜'] [NormedSpace 𝕜' E] (f : C(α, E)) :
     MemLp f p μ := by
@@ -642,3 +791,4 @@ lemma memLp (𝕜' : Type*) [NormedField 𝕜'] [NormedSpace 𝕜' E] (f : C(α,
   rwa [coe_toLp, memLp_congr_ae (coeFn_toAEEqFun _ _)] at this
 
 end ContinuousMap
+

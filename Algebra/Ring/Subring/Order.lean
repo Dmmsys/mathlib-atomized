@@ -27,83 +27,72 @@ namespace Subring
 
 variable {R S : Type*} [Ring R] [PartialOrder R] [SetLike S R] [SubringClass S R]
 
-/--
-Instance `toIsOrderedRing` / 实例 `toIsOrderedRing`
+/-- A subring of an ordered ring is an ordered ring. -/
+/-
+**Subring.toIsOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Subring`。
+形式化陈述：toIsOrderedRing [IsOrderedRing R] (s : S) : IsOrderedRing s
+参数：s : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isOrderedRing`：∀ {R : Type u_1} {S : Type u_2} [inst 
+: Semiring R] [inst_1 : PartialOrder R] [IsOrderedRing R] [inst_3 : Semiring S] 
+  [inst_4 : PartialOrd…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-instance toIsOrderedRing
-  signature: [IsOrderedRing R] (s : S)
-  body: Function.Injective.isOrderedRing Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl
-
-中文:
-实例 toIsOrderedRing
-  签名: [是Ordered环 R] (s : S)
-  定义体: Function.Injective.isOrderedRing Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl
-
-Depends on / 依赖: Function, Function.Injective.isOrderedRing, Injective, Subtype, Subtype.val, U.unop, isOrderedRing, sectionsSubmodule, toAddCommGroup, toAddSubgroup, toAddSubgroup.toAddCommGroup
+--- 原说明 ---
+A subring of an ordered ring is an ordered ring.
 -/
 instance toIsOrderedRing [IsOrderedRing R] (s : S) : IsOrderedRing s :=
   Function.Injective.isOrderedRing Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl
 
-/--
-Instance `toIsStrictOrderedRing` / 实例 `toIsStrictOrderedRing`
+/-- A subring of a strict ordered ring is a strict ordered ring. -/
+/-
+**Subring.toIsStrictOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Subring`。
+形式化陈述：toIsStrictOrderedRing [IsStrictOrderedRing R] (s : S) : IsStrictOrderedRin
+g s
+参数：s : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isStrictOrderedRing`：∀ {R : Type u_1} {S : Type u_2} 
+[inst : Semiring R] [inst_1 : PartialOrder R] [IsStrictOrderedRing R]   [inst_3 
+: Semiring S] [inst_4 : Part…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-instance toIsStrictOrderedRing
-  signature: [IsStrictOrderedRing R] (s : S)
-  body: Function.Injective.isStrictOrderedRing Subtype.val
-    rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
-
-中文:
-实例 toIsStrictOrderedRing
-  签名: [是StrictOrdered环 R] (s : S)
-  定义体: Function.Injective.isStrictOrderedRing Subtype.val
-    rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
-
-Depends on / 依赖: Function, Function.Injective.isStrictOrderedRing, Injective, Subtype, Subtype.val, U.unop, isStrictOrderedRing, module, sectionsSubmodule
+--- 原说明 ---
+A subring of a strict ordered ring is a strict ordered ring.
 -/
 instance toIsStrictOrderedRing [IsStrictOrderedRing R] (s : S) : IsStrictOrderedRing s :=
   Function.Injective.isStrictOrderedRing Subtype.val
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
 
-/--
-Definition of `orderedSubtype` / `orderedSubtype` 的定义
+/-- The inclusion `S → R` of a subring, as an ordered ring homomorphism. -/
+/-
+**Subring.orderedSubtype** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：orderedSubtype (s : Subring R) : s ->+*o R where __
+参数：s : Subring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderedSubtype
-  signature: (s : Subring R)
-  body: s.subtype
-  monotone' := fun _ _ h => h
-
-中文:
-定义 orderedSubtype
-  签名: (s : 子环 R)
-  定义体: s.subtype
-  monotone' := fun _ _ h => h
-
-Depends on / 依赖: U.unop, s.subtype, sectionsSubalgebra, subtype, toCommRing
+--- 原说明 ---
+The inclusion `S → R` of a subring, as an ordered ring homomorphism.
 -/
-def orderedSubtype (s : Subring R) : s ->+*o R where
+def orderedSubtype (s : Subring R) : s →+*o R where
   __ := s.subtype
-  monotone' := fun _ _ h => h
-
-/--
-lemma `orderedSubtype_coe` / 引理 `orderedSubtype_coe`
-
-English:
-lemma orderedSubtype_coe
-  given: (s : Subring R)
-  statement: Subring.orderedSubtype s = Subring.subtype s
-  proof: rfl
-
-中文:
-引理 orderedSubtype_coe
-  条件: (s : 子环 R)
-  结论: 子环.orderedSubtype s = 子环.subtype s
-  证明: rfl
-
-Depends on / 依赖: U.unop, algebra, sectionsSubalgebra
+  monotone' := fun _ _ h ↦ h
+/-
+**Subring.orderedSubtype_coe** 是 Mathlib 中的一个引理，位于命名空间 `Subring`。
+形式化陈述：orderedSubtype_coe (s : Subring R) : Subring.orderedSubtype s = Subring.su
+btype s
+参数：s : Subring R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subring.instSubringClass`：∀ {R : Type u} [inst : NonAssocRing R], Subrin
+gClass (Subring R) R
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
 -/
 lemma orderedSubtype_coe (s : Subring R) : Subring.orderedSubtype s = Subring.subtype s := rfl
 
 end Subring
+

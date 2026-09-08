@@ -31,38 +31,13 @@ open Limits GrothendieckTopology Sieve
 variable (C : Type*) [Category* C]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Precoherent
-  signature: C] [HasFiniteCoproducts C] : Preregular C where
-  body: by
-    have hp := Precoherent.pullback f PUnit (fun () => Z) (fun () => g)
-    simp only [exists_const] at hp
-    rw [← effectiveEpi_iff_effectiveEpiFamily g] at hp
-    obtain ⟨β, _, X₂, π₂, h, ι, hι⟩ := hp inferInstance
-    refine ⟨∐ X₂, Sigma.desc π₂, inferInstance, Sigma.desc ι, ?_⟩
-    ext b
-    simpa using hι b
-
-中文:
-实例 [Precoherent
-  签名: C] [有FiniteCoproducts C] : Preregular C where
-  定义体: by
-    have hp := Precoherent.pullback f PUnit (fun () => Z) (fun () => g)
-    simp only [exists_const] at hp
-    rw [← effectiveEpi_iff_effectiveEpiFamily g] at hp
-    obtain ⟨β, _, X₂, π₂, h, ι, hι⟩ := hp inferInstance
-    refine ⟨∐ X₂, Sigma.desc π₂, inferInstance, Sigma.desc ι, ?_⟩
-    ext b
-    simpa using hι b
-
-Depends on / 依赖: Precoherent, Precoherent.pullback, Sigma.desc, effectiveEpi_iff_effectiveEpiFamily, exists_const, pullback
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Precoherent C] [HasFiniteCoproducts C] : Preregular C where
   exists_fac {X Y Z} f g _ := by
-    have hp := Precoherent.pullback f PUnit (fun () => Z) (fun () => g)
+    have hp := Precoherent.pullback f PUnit (fun () ↦ Z) (fun () ↦ g)
     simp only [exists_const] at hp
     rw [← effectiveEpi_iff_effectiveEpiFamily g] at hp
     obtain ⟨β, _, X₂, π₂, h, ι, hι⟩ := hp inferInstance
@@ -71,180 +46,124 @@ instance [Precoherent C] [HasFiniteCoproducts C] : Preregular C where
     simpa using hι b
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FinitaryPreExtensive
-  signature: C] [Preregular C] : Precoherent C where
-  body: by
-    refine ⟨α, inferInstance, ?_⟩
-    obtain ⟨Y, g, _, g', hg⟩ := Preregular.exists_fac f (Sigma.desc π₁)
-    let X₂ := fun a => pullback g' (Sigma.ι X₁ a)
-    let π₂ := fun a => pullback.fst g' (Sigma.ι X₁ a) ≫ g
-    let π' := fun a => pullback.fst g' (Sigma.ι X₁ a)
-    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X₁ a) g' inferInstance
-    refine ⟨X₂, π₂, ?_, ?_⟩
-    · have : (Sigma.desc π' ≫ g) = Sigma.desc π₂ := by ext; simp [π₂, π']
-      rw [← effectiveEpi_desc_iff_effectiveEpiFamily]; rw [← this]
-      infer_instance
-    · refine ⟨id, fun b => pullback.snd _ _, fun b => ?_⟩
-      simp only [X₂, π₂, id_eq, Category.assoc, ← hg]
-      rw [← Category.assoc]; rw [pullback.condition]
-      simp
-
-中文:
-实例 [有限预广延
-  签名: C] [Preregular C] : Precoherent C where
-  定义体: by
-    refine ⟨α, inferInstance, ?_⟩
-    obtain ⟨Y, g, _, g', hg⟩ := Preregular.exists_fac f (Sigma.desc π₁)
-    let X₂ := fun a => pullback g' (Sigma.ι X₁ a)
-    let π₂ := fun a => pullback.fst g' (Sigma.ι X₁ a) ≫ g
-    let π' := fun a => pullback.fst g' (Sigma.ι X₁ a)
-    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X₁ a) g' inferInstance
-    refine ⟨X₂, π₂, ?_, ?_⟩
-    · have : (Sigma.desc π' ≫ g) = Sigma.desc π₂ := by ext; simp [π₂, π']
-      rw [← effectiveEpi_desc_iff_effectiveEpiFamily]; rw [← this]
-      infer_instance
-    · refine ⟨id, fun b => pullback.snd _ _, fun b => ?_⟩
-      simp only [X₂, π₂, id_eq, Category.assoc, ← hg]
-      rw [← Category.assoc]; rw [pullback.condition]
-      simp
-
-Depends on / 依赖: FinitaryPreExtensive, FinitaryPreExtensive.isIso_sigmaDesc_fst, Preregular, Preregular.exists_fac, Sigma.desc, effectiveEpi_desc_iff_effectiveEpiFamily, exists_fac, isIso_sigmaDesc_fst, pullback, pullback.fst
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [FinitaryPreExtensive C] [Preregular C] : Precoherent C where
   pullback {B₁ B₂} f α _ X₁ π₁ h := by
     refine ⟨α, inferInstance, ?_⟩
     obtain ⟨Y, g, _, g', hg⟩ := Preregular.exists_fac f (Sigma.desc π₁)
-    let X₂ := fun a => pullback g' (Sigma.ι X₁ a)
-    let π₂ := fun a => pullback.fst g' (Sigma.ι X₁ a) ≫ g
-    let π' := fun a => pullback.fst g' (Sigma.ι X₁ a)
-    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X₁ a) g' inferInstance
+    let X₂ := fun a ↦ pullback g' (Sigma.ι X₁ a)
+    let π₂ := fun a ↦ pullback.fst g' (Sigma.ι X₁ a) ≫ g
+    let π' := fun a ↦ pullback.fst g' (Sigma.ι X₁ a)
+    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a ↦ Sigma.ι X₁ a) g' inferInstance
     refine ⟨X₂, π₂, ?_, ?_⟩
     · have : (Sigma.desc π' ≫ g) = Sigma.desc π₂ := by ext; simp [π₂, π']
-      rw [← effectiveEpi_desc_iff_effectiveEpiFamily]; rw [← this]
+      rw [← effectiveEpi_desc_iff_effectiveEpiFamily, ← this]
       infer_instance
-    · refine ⟨id, fun b => pullback.snd _ _, fun b => ?_⟩
+    · refine ⟨id, fun b ↦ pullback.snd _ _, fun b ↦ ?_⟩
       simp only [X₂, π₂, id_eq, Category.assoc, ← hg]
-      rw [← Category.assoc]; rw [pullback.condition]
+      rw [← Category.assoc, pullback.condition]
       simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `extensive_regular_generate_coherent` / 定理 `extensive_regular_generate_coherent`
+/-- The union of the extensive and regular coverages generates the coherent topology on `C`. -/
+/-
+**CategoryTheory.extensive_regular_generate_coherent** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：extensive_regular_generate_coherent [Preregular C] [FinitaryPreExtensive C
+] : ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck = (coherentTopo
+logy C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.ext`：ext {J₁ J₂ : GrothendieckTopolo
+gy C} (h : (J₁ : forall X : C, Set (Sieve X)) = J₂) : J₁ = J₂
+· 使用定理 `CategoryTheory.instPrecoherentOfFinitaryPreExtensiveOfPreregular`：∀ (C :
+ Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTheory.Finitar
+yPreExtensive C]   [CategoryTheory.Preregular C], Cate…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `CategoryTheory.instEffectiveEpiFamilyOfIsIsoDesc`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {B : C} {α : Type u_2} (X : α → C)   (π
+ : (a : α) → X a ⟶ B) [inst_1 : Catego…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.FinitaryPreExtensive.hasFiniteCoproducts`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.FinitaryPreExte
+nsive C],   CategoryTheory.Limits.HasFiniteCo…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.instEffectiveEpiFamily`：∀ {C : Type u_1} [inst : Category
+Theory.Category.{v_1, u_1} C] {B X : C} (f : X ⟶ B) [CategoryTheory.EffectiveEpi
+ f],   CategoryTheory.Effec…
+· 使用定理 `CategoryTheory.instEffectiveEpiDescOfEffectiveEpiFamily`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] {B : C} {α : Type u_2} (X : α → 
+C)   (π : (a : α) → X a ⟶ B) [inst_1 : Catego…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Sieve.pullback_comp`：pullback_comp {f : Y ⟶ X} {g : Z ⟶ Y
+} (S : Sieve X) : S.pullback (g ≫ f) = (S.pullback f).pullback g
+· 使用定理 `CategoryTheory.GrothendieckTopology.pullback_stable`：pullback_stable (f 
+: Y ⟶ X) (hS : S in J X) : S.pullback f in J Y
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Coverage.saturate_of_superset`：saturate_of_superset (K : 
+Coverage C) {X : C} {S T : Sieve X} (h : S <= T) (hS : Saturate K X S) : Saturat
+e K X T
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 
-English:
-theorem extensive_regular_generate_coherent
-  given: [Preregular C] [FinitaryPreExtensive C]
-  proof: by
-  ext B S
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · induction h with
-    | of Y T hT =>
-      apply Coverage.Saturate.of
-      simp only [Coverage.sup_covering, Set.mem_union] at hT
-      exact Or.elim hT
-        (fun ⟨α, x, X, π, ⟨h, _⟩⟩ => ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
-        (fun ⟨Z, f, ⟨h, _⟩⟩ => ⟨Unit, inferInstance, fun _ => Z, fun _ => f, ⟨h, inferInstance⟩⟩)
-    | top => apply Coverage.Saturate.top
-    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
-  · induction h with
-    | of Y T hT =>
-      obtain ⟨I, _, X, f, rfl, hT⟩ := hT
-      apply Coverage.Saturate.transitive Y (generate (Presieve.ofArrows
-        (fun (_ : Unit) => (∐ fun (i : I) => X i)) (fun (_ : Unit) => Sigma.desc f)))
-      · apply Coverage.Saturate.of
-        simp only [Coverage.sup_covering, extensiveCoverage, regularCoverage, Set.mem_union,
-          Set.mem_ofPred_eq]
-        exact Or.inr ⟨_, Sigma.desc f, ⟨rfl, inferInstance⟩⟩
-      · rintro R g ⟨W, ψ, σ, ⟨⟩, rfl⟩
-        change _ in ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
-        rw [Sieve.pullback_comp]
-        apply pullback_stable
-        have : generate (Presieve.ofArrows X fun (i : I) => Sigma.ι X i) <=
-            (generate (Presieve.ofArrows X f)).pullback (Sigma.desc f) := by
-          rintro Q q ⟨E, e, r, ⟨hq, rfl⟩⟩
-          exact ⟨E, e, r ≫ (Sigma.desc f), by cases hq; simpa using Presieve.ofArrows.mk _, by simp⟩
-        apply Coverage.saturate_of_superset _ this
-        apply Coverage.Saturate.of
-        refine Or.inl ⟨I, inferInstance, _, _, ⟨rfl, ?_⟩⟩
-        convert! IsIso.id _
-        aesop
-    | top => apply Coverage.Saturate.top
-    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
-
-中文:
-定理 extensive_regular_generate_coherent
-  条件: [Preregular C] [有限预广延 C]
-  证明: by
-  ext B S
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · induction h with
-    | of Y T hT =>
-      apply Coverage.Saturate.of
-      simp only [Coverage.sup_covering, Set.mem_union] at hT
-      exact Or.elim hT
-        (fun ⟨α, x, X, π, ⟨h, _⟩⟩ => ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
-        (fun ⟨Z, f, ⟨h, _⟩⟩ => ⟨Unit, inferInstance, fun _ => Z, fun _ => f, ⟨h, inferInstance⟩⟩)
-    | top => apply Coverage.Saturate.top
-    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
-  · induction h with
-    | of Y T hT =>
-      obtain ⟨I, _, X, f, rfl, hT⟩ := hT
-      apply Coverage.Saturate.transitive Y (generate (Presieve.ofArrows
-        (fun (_ : Unit) => (∐ fun (i : I) => X i)) (fun (_ : Unit) => Sigma.desc f)))
-      · apply Coverage.Saturate.of
-        simp only [Coverage.sup_covering, extensiveCoverage, regularCoverage, Set.mem_union,
-          Set.mem_ofPred_eq]
-        exact Or.inr ⟨_, Sigma.desc f, ⟨rfl, inferInstance⟩⟩
-      · rintro R g ⟨W, ψ, σ, ⟨⟩, rfl⟩
-        change _ in ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
-        rw [Sieve.pullback_comp]
-        apply pullback_stable
-        have : generate (Presieve.ofArrows X fun (i : I) => Sigma.ι X i) <=
-            (generate (Presieve.ofArrows X f)).pullback (Sigma.desc f) := by
-          rintro Q q ⟨E, e, r, ⟨hq, rfl⟩⟩
-          exact ⟨E, e, r ≫ (Sigma.desc f), by cases hq; simpa using Presieve.ofArrows.mk _, by simp⟩
-        apply Coverage.saturate_of_superset _ this
-        apply Coverage.Saturate.of
-        refine Or.inl ⟨I, inferInstance, _, _, ⟨rfl, ?_⟩⟩
-        convert! IsIso.id _
-        aesop
-    | top => apply Coverage.Saturate.top
-    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
-
-Depends on / 依赖: Coverage, Coverage.Saturate.of, Coverage.Saturate.top, Coverage.Saturate.transitive, Coverage.sup_covering, Or.elim, Saturate, Set.mem_union, mem_union, sup_covering, transitive
+--- 原说明 ---
+The union of the extensive and regular coverages generates the coherent topology
+ on `C`.
 -/
 theorem extensive_regular_generate_coherent [Preregular C] [FinitaryPreExtensive C] :
     ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck =
     (coherentTopology C) := by
   ext B S
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · induction h with
     | of Y T hT =>
       apply Coverage.Saturate.of
       simp only [Coverage.sup_covering, Set.mem_union] at hT
       exact Or.elim hT
-        (fun ⟨α, x, X, π, ⟨h, _⟩⟩ => ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
-        (fun ⟨Z, f, ⟨h, _⟩⟩ => ⟨Unit, inferInstance, fun _ => Z, fun _ => f, ⟨h, inferInstance⟩⟩)
+        (fun ⟨α, x, X, π, ⟨h, _⟩⟩ ↦ ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
+        (fun ⟨Z, f, ⟨h, _⟩⟩ ↦ ⟨Unit, inferInstance, fun _ ↦ Z, fun _ ↦ f, ⟨h, inferInstance⟩⟩)
     | top => apply Coverage.Saturate.top
     | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
   · induction h with
     | of Y T hT =>
       obtain ⟨I, _, X, f, rfl, hT⟩ := hT
       apply Coverage.Saturate.transitive Y (generate (Presieve.ofArrows
-        (fun (_ : Unit) => (∐ fun (i : I) => X i)) (fun (_ : Unit) => Sigma.desc f)))
+        (fun (_ : Unit) ↦ (∐ fun (i : I) => X i)) (fun (_ : Unit) ↦ Sigma.desc f)))
       · apply Coverage.Saturate.of
         simp only [Coverage.sup_covering, extensiveCoverage, regularCoverage, Set.mem_union,
           Set.mem_ofPred_eq]
         exact Or.inr ⟨_, Sigma.desc f, ⟨rfl, inferInstance⟩⟩
       · rintro R g ⟨W, ψ, σ, ⟨⟩, rfl⟩
-        change _ in ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
+        change _ ∈ ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
         rw [Sieve.pullback_comp]
         apply pullback_stable
-        have : generate (Presieve.ofArrows X fun (i : I) => Sigma.ι X i) <=
+        have : generate (Presieve.ofArrows X fun (i : I) ↦ Sigma.ι X i) ≤
             (generate (Presieve.ofArrows X f)).pullback (Sigma.desc f) := by
           rintro Q q ⟨E, e, r, ⟨hq, rfl⟩⟩
           exact ⟨E, e, r ≫ (Sigma.desc f), by cases hq; simpa using Presieve.ofArrows.mk _, by simp⟩
@@ -257,3 +176,4 @@ theorem extensive_regular_generate_coherent [Preregular C] [FinitaryPreExtensive
     | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
 
 end CategoryTheory
+

@@ -21,22 +21,12 @@ open CategoryTheory
 
 namespace SSet
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRegularEpiCategory SSet.{u}
-  body: inferInstanceAs (IsRegularEpiCategory (_ ⥤ _))
-
-中文:
-实例 :
-  签名: 是正则满态射范畴 SSet.{u}
-  定义体: inferInstanceAs (IsRegularEpiCategory (_ ⥤ _))
-
-Depends on / 依赖: IsRegularEpiCategory
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsRegularEpiCategory SSet.{u} :=
   inferInstanceAs (IsRegularEpiCategory (_ ⥤ _))
 
 end SSet
+

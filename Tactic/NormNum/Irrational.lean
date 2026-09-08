@@ -38,203 +38,95 @@ open Qq Lean Elab.Tactic Mathlib.Meta.NormNum
 
 section lemmas
 
-/--
-theorem `irrational_rpow_rat_of_not_power` / 定理 `irrational_rpow_rat_of_not_power`
-
-English:
-theorem irrational_rpow_rat_of_not_power
-  statement: {q : Rat} {a b : Nat}
-  proof: by
-  simp only [Irrational, Rat.cast_div, Rat.cast_natCast, Real.rpow_eq_pow, Set.mem_range,
-    not_exists]
-  intro x hx
-  absurd h x
-  rify
-  rw [hx]; rw [← Real.rpow_mul_natCast (by simpa)]; rw [div_mul_cancel₀ _ (by simp; lia)]
-  simp
-
-中文:
-定理 irrational_rpow_rat_of_not_power
-  结论: {q : 有理数} {a b : 自然数}
-  证明: by
-  simp only [Irrational, Rat.cast_div, Rat.cast_natCast, Real.rpow_eq_pow, Set.mem_range,
-    not_exists]
-  intro x hx
-  absurd h x
-  rify
-  rw [hx]; rw [← Real.rpow_mul_natCast (by simpa)]; rw [div_mul_cancel₀ _ (by simp; lia)]
-  simp
+/-
+**Mathlib.Meta.NormNum.irrational_rpow_rat_of_not_power** 是 Mathlib 中的一个定理，位于命名空
+间 `Mathlib.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem irrational_rpow_rat_of_not_power {q : Rat} {a b : Nat}
-    (h : forall p : Rat, q ^ a != p ^ b) (hb : 0 < b) (hq : 0 <= q) :
-    Irrational (Real.rpow q (a / b : Rat)) := by
+private theorem irrational_rpow_rat_of_not_power {q : ℚ} {a b : ℕ}
+    (h : ∀ p : ℚ, q ^ a ≠ p ^ b) (hb : 0 < b) (hq : 0 ≤ q) :
+    Irrational (Real.rpow q (a / b : ℚ)) := by
   simp only [Irrational, Rat.cast_div, Rat.cast_natCast, Real.rpow_eq_pow, Set.mem_range,
     not_exists]
   intro x hx
   absurd h x
   rify
-  rw [hx]; rw [← Real.rpow_mul_natCast (by simpa)]; rw [div_mul_cancel₀ _ (by simp; lia)]
+  rw [hx, ← Real.rpow_mul_natCast (by simpa), div_mul_cancel₀ _ (by simp; lia)]
   simp
-
-/--
-theorem `not_power_nat_pow` / 定理 `not_power_nat_pow`
-
-English:
-theorem not_power_nat_pow
-  statement: {n p q : Nat} (h_coprime : p.Coprime q) (hq : 0 < q)
-  proof: by
+/-
+**Mathlib.Meta.NormNum.not_power_nat_pow** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta
+.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+private theorem not_power_nat_pow {n p q : ℕ} (h_coprime : p.Coprime q) (hq : 0 < q)
+    (h : ∀ m, n ≠ m ^ q) (m : ℕ) : n ^ p ≠ m ^ q := by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simpa [hq.ne'] using h 0
   contrapose! h
-let f := n.factorization.mapRange (· / q) by simp
+  let f := n.factorization.mapRange (· / q) <| by simp
   suffices hf : n.factorization = q • f by
     have hf0 : f 0 = 0 := by simpa [hq.ne'] using congr($hf 0)
     refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by simp [hf0]) ?_⟩
     rwa [Nat.factorization_pow, n.factorization_prod_pow_eq_self_of_le_factorization ?_]
     exact hf ▸ le_self_nsmul zero_le (by lia)
   ext z
-  rw [Finsupp.smul_apply]; rw [smul_eq_mul]; rw [Finsupp.mapRange_apply]; rw [Nat.mul_div_cancel']
+  rw [Finsupp.smul_apply, smul_eq_mul, Finsupp.mapRange_apply, Nat.mul_div_cancel']
   simpa using h_coprime.symm.dvd_of_dvd_mul_left ⟨_, by simpa using congr(Nat.factorization $h z)⟩
-
-中文:
-定理 not_power_nat_pow
-  结论: {n p q : 自然数} (h_coprime : p.Coprime q) (hq : 0 < q)
-  证明: by
-  rcases eq_or_ne n 0 with (rfl | hn)
-  · simpa [hq.ne'] using h 0
-  contrapose! h
-let f := n.factorization.mapRange (· / q) by simp
-  suffices hf : n.factorization = q • f by
-    have hf0 : f 0 = 0 := by simpa [hq.ne'] using congr($hf 0)
-    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by simp [hf0]) ?_⟩
-    rwa [Nat.factorization_pow, n.factorization_prod_pow_eq_self_of_le_factorization ?_]
-    exact hf ▸ le_self_nsmul zero_le (by lia)
-  ext z
-  rw [Finsupp.smul_apply]; rw [smul_eq_mul]; rw [Finsupp.mapRange_apply]; rw [Nat.mul_div_cancel']
-  simpa using h_coprime.symm.dvd_of_dvd_mul_left ⟨_, by simpa using congr(Nat.factorization $h z)⟩
+/-
+**Mathlib.Meta.NormNum.not_power_nat_of_bounds** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem not_power_nat_pow {n p q : Nat} (h_coprime : p.Coprime q) (hq : 0 < q)
-    (h : forall m, n != m ^ q) (m : Nat) : n ^ p != m ^ q := by
-  rcases eq_or_ne n 0 with (rfl | hn)
-  · simpa [hq.ne'] using h 0
-  contrapose! h
-let f := n.factorization.mapRange (· / q) by simp
-  suffices hf : n.factorization = q • f by
-    have hf0 : f 0 = 0 := by simpa [hq.ne'] using congr($hf 0)
-    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by simp [hf0]) ?_⟩
-    rwa [Nat.factorization_pow, n.factorization_prod_pow_eq_self_of_le_factorization ?_]
-    exact hf ▸ le_self_nsmul zero_le (by lia)
-  ext z
-  rw [Finsupp.smul_apply]; rw [smul_eq_mul]; rw [Finsupp.mapRange_apply]; rw [Nat.mul_div_cancel']
-  simpa using h_coprime.symm.dvd_of_dvd_mul_left ⟨_, by simpa using congr(Nat.factorization $h z)⟩
-
-/--
-theorem `not_power_nat_of_bounds` / 定理 `not_power_nat_of_bounds`
-
-English:
-theorem not_power_nat_of_bounds
-  statement: {n k d : Nat}
-  proof: by
+private theorem not_power_nat_of_bounds {n k d : ℕ}
+    (h_left : k ^ d < n) (h_right : n < (k + 1) ^ d) {m : ℕ} :
+    n ≠ m ^ d := by
   intro h
   rw [h] at h_left h_right
   have : k < m := lt_of_pow_lt_pow_left' d h_left
   have : m < k + 1 := lt_of_pow_lt_pow_left' d h_right
   lia
-
-中文:
-定理 not_power_nat_of_bounds
-  结论: {n k d : 自然数}
-  证明: by
-  intro h
-  rw [h] at h_left h_right
-  have : k < m := lt_of_pow_lt_pow_left' d h_left
-  have : m < k + 1 := lt_of_pow_lt_pow_left' d h_right
-  lia
+/-
+**Mathlib.Meta.NormNum.not_power_nat_pow_of_bounds** 是 Mathlib 中的一个定理，位于命名空间 `Ma
+thlib.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem not_power_nat_of_bounds {n k d : Nat}
-    (h_left : k ^ d < n) (h_right : n < (k + 1) ^ d) {m : Nat} :
-    n != m ^ d := by
-  intro h
-  rw [h] at h_left h_right
-  have : k < m := lt_of_pow_lt_pow_left' d h_left
-  have : m < k + 1 := lt_of_pow_lt_pow_left' d h_right
-  lia
-
-/--
-theorem `not_power_nat_pow_of_bounds` / 定理 `not_power_nat_pow_of_bounds`
-
-English:
-theorem not_power_nat_pow_of_bounds
-  statement: {n k p q : Nat}
-  proof: by
-  apply not_power_nat_pow h_coprime hq
-  intro m
-  apply not_power_nat_of_bounds h_left h_right
-
-中文:
-定理 not_power_nat_pow_of_bounds
-  结论: {n k p q : 自然数}
-  证明: by
-  apply not_power_nat_pow h_coprime hq
-  intro m
-  apply not_power_nat_of_bounds h_left h_right
--/
-private theorem not_power_nat_pow_of_bounds {n k p q : Nat}
+private theorem not_power_nat_pow_of_bounds {n k p q : ℕ}
     (hq : 0 < q) (h_coprime : p.Coprime q) (h_left : k ^ q < n) (h_right : n < (k + 1) ^ q)
-    (m : Nat) :
-    n ^ p != m ^ q := by
+    (m : ℕ) :
+    n ^ p ≠ m ^ q := by
   apply not_power_nat_pow h_coprime hq
   intro m
   apply not_power_nat_of_bounds h_left h_right
-
-/--
-lemma `eq_of_mul_eq_mul_of_coprime_aux` / 引理 `eq_of_mul_eq_mul_of_coprime_aux`
-
-English:
-lemma eq_of_mul_eq_mul_of_coprime_aux
-  statement: {a b x y : Nat} (hab : a.Coprime b)
-  proof: Nat.Coprime.dvd_of_dvd_mul_left hab (Dvd.intro x h)
-
-中文:
-引理 eq_of_mul_eq_mul_of_coprime_aux
-  结论: {a b x y : 自然数} (hab : a.Coprime b)
-  证明: Nat.Coprime.dvd_of_dvd_mul_left hab (Dvd.intro x h)
+/-
+**Mathlib.Meta.NormNum.eq_of_mul_eq_mul_of_coprime_aux** 是 Mathlib 中的一个引理，位于命名空间
+ `Mathlib.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma eq_of_mul_eq_mul_of_coprime_aux {a b x y : Nat} (hab : a.Coprime b)
+private lemma eq_of_mul_eq_mul_of_coprime_aux {a b x y : ℕ} (hab : a.Coprime b)
     (h : a * x = b * y) : a ∣ y := Nat.Coprime.dvd_of_dvd_mul_left hab (Dvd.intro x h)
-
-/--
-lemma `eq_of_mul_eq_mul_of_coprime` / 引理 `eq_of_mul_eq_mul_of_coprime`
-
-English:
-lemma eq_of_mul_eq_mul_of_coprime
-  statement: {a b x y : Nat} (hab : a.Coprime b) (hxy : x.Coprime y)
-  proof: by
-  apply Nat.dvd_antisymm
-  · exact eq_of_mul_eq_mul_of_coprime_aux hab h
-  · exact eq_of_mul_eq_mul_of_coprime_aux (x := b) hxy.symm (by rw [mul_comm, ← h, mul_comm])
-
-中文:
-引理 eq_of_mul_eq_mul_of_coprime
-  结论: {a b x y : 自然数} (hab : a.Coprime b) (hxy : x.Coprime y)
-  证明: by
-  apply Nat.dvd_antisymm
-  · exact eq_of_mul_eq_mul_of_coprime_aux hab h
-  · exact eq_of_mul_eq_mul_of_coprime_aux (x := b) hxy.symm (by rw [mul_comm, ← h, mul_comm])
+/-
+**Mathlib.Meta.NormNum.eq_of_mul_eq_mul_of_coprime** 是 Mathlib 中的一个引理，位于命名空间 `Ma
+thlib.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma eq_of_mul_eq_mul_of_coprime {a b x y : Nat} (hab : a.Coprime b) (hxy : x.Coprime y)
+private lemma eq_of_mul_eq_mul_of_coprime {a b x y : ℕ} (hab : a.Coprime b) (hxy : x.Coprime y)
     (h : a * x = b * y) : a = y := by
   apply Nat.dvd_antisymm
   · exact eq_of_mul_eq_mul_of_coprime_aux hab h
   · exact eq_of_mul_eq_mul_of_coprime_aux (x := b) hxy.symm (by rw [mul_comm, ← h, mul_comm])
 
-/--
-theorem `not_power_rat_of_num_aux` / 定理 `not_power_rat_of_num_aux`
+/-- Weaker version of `not_power_rat_of_num` with extra `q ≥ 0` assumption. -/
+/-
+**Mathlib.Meta.NormNum.not_power_rat_of_num_aux** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem not_power_rat_of_num_aux
-  statement: {a b d : Nat}
-  proof: by
+--- 原说明 ---
+Weaker version of `not_power_rat_of_num` with extra `q ≥ 0` assumption.
+-/
+private theorem not_power_rat_of_num_aux {a b d : ℕ}
+    (h_coprime : a.Coprime b) (ha : ∀ x, a ≠ x ^ d) {q : ℚ} (hq : 0 ≤ q) :
+    (a / b : ℚ) ≠ q ^ d := by
   by_cases hb_zero : b = 0
   · subst hb_zero
     contrapose! ha
@@ -246,7 +138,7 @@ theorem not_power_rat_of_num_aux
   rw [← Rat.num_div_den q] at h
   set x' := q.num
   set y := q.den
-  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' by rwa [Rat.num_nonneg])
+  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 ≤ x' by rwa [Rat.num_nonneg])
   rw [hx'] at h
   specialize ha x
   simp only [Int.cast_natCast, div_pow] at h
@@ -264,173 +156,79 @@ theorem not_power_rat_of_num_aux
   apply Nat.Coprime.pow_right
   apply Nat.Coprime.symm
   simpa [hx'] using (show x'.natAbs.Coprime y from Rat.reduced q)
-
-中文:
-定理 not_power_rat_of_num_aux
-  结论: {a b d : 自然数}
-  证明: by
-  by_cases hb_zero : b = 0
-  · subst hb_zero
-    contrapose! ha
-    simp only [Nat.coprime_zero_right] at h_coprime
-    subst h_coprime
-    use 1
-    simp
-  by_contra! h
-  rw [← Rat.num_div_den q] at h
-  set x' := q.num
-  set y := q.den
-  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' by rwa [Rat.num_nonneg])
-  rw [hx'] at h
-  specialize ha x
-  simp only [Int.cast_natCast, div_pow] at h
-  rw [div_eq_div_iff] at h
-  rotate_left
-  · simpa
-  · simp [y]
-  replace h : a * y ^ d = x ^ d * b := by
-    qify
-    assumption
-  apply ha
-  conv at h => rhs; rw [mul_comm]
-  apply eq_of_mul_eq_mul_of_coprime h_coprime _ h
-  apply Nat.Coprime.pow_left
-  apply Nat.Coprime.pow_right
-  apply Nat.Coprime.symm
-  simpa [hx'] using (show x'.natAbs.Coprime y from Rat.reduced q)
+/-
+**Mathlib.Meta.NormNum.not_power_rat_of_num** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.M
+eta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem not_power_rat_of_num_aux {a b d : Nat}
-    (h_coprime : a.Coprime b) (ha : forall x, a != x ^ d) {q : Rat} (hq : 0 <= q) :
-    (a / b : Rat) != q ^ d := by
-  by_cases hb_zero : b = 0
-  · subst hb_zero
-    contrapose! ha
-    simp only [Nat.coprime_zero_right] at h_coprime
-    subst h_coprime
-    use 1
-    simp
-  by_contra! h
-  rw [← Rat.num_div_den q] at h
-  set x' := q.num
-  set y := q.den
-  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' by rwa [Rat.num_nonneg])
-  rw [hx'] at h
-  specialize ha x
-  simp only [Int.cast_natCast, div_pow] at h
-  rw [div_eq_div_iff] at h
-  rotate_left
-  · simpa
-  · simp [y]
-  replace h : a * y ^ d = x ^ d * b := by
-    qify
-    assumption
-  apply ha
-  conv at h => rhs; rw [mul_comm]
-  apply eq_of_mul_eq_mul_of_coprime h_coprime _ h
-  apply Nat.Coprime.pow_left
-  apply Nat.Coprime.pow_right
-  apply Nat.Coprime.symm
-  simpa [hx'] using (show x'.natAbs.Coprime y from Rat.reduced q)
-
-/--
-theorem `not_power_rat_of_num` / 定理 `not_power_rat_of_num`
-
-English:
-theorem not_power_rat_of_num
-  statement: {a b d : Nat}
-  proof: by
-  by_cases hq : 0 <= q
+private theorem not_power_rat_of_num {a b d : ℕ}
+    (h_coprime : a.Coprime b) (ha : ∀ x, a ≠ x ^ d) (q : ℚ) :
+    (a / b : ℚ) ≠ q ^ d := by
+  by_cases hq : 0 ≤ q
   · apply not_power_rat_of_num_aux h_coprime ha hq
   rcases d.even_or_odd with (h_even | h_odd)
   · have := not_power_rat_of_num_aux h_coprime (q := -q) ha (by linarith)
     rwa [h_even.neg_pow] at this
   · contrapose hq
-    rw [← h_odd.pow_nonneg_iff]; rw [← hq]
+    rw [← h_odd.pow_nonneg_iff, ← hq]
     positivity
-
-中文:
-定理 not_power_rat_of_num
-  结论: {a b d : 自然数}
-  证明: by
-  by_cases hq : 0 <= q
-  · apply not_power_rat_of_num_aux h_coprime ha hq
-  rcases d.even_or_odd with (h_even | h_odd)
-  · have := not_power_rat_of_num_aux h_coprime (q := -q) ha (by linarith)
-    rwa [h_even.neg_pow] at this
-  · contrapose hq
-    rw [← h_odd.pow_nonneg_iff]; rw [← hq]
-    positivity
+/-
+**Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_num** 是 Mathlib 中的一个定理，位于命名空间 
+`Mathlib.Meta.NormNum`。
+形式化陈述：irrational_rpow_rat_rat_of_num {x y : Real} {x_num x_den y_num y_den k_num
+ : Nat} (hx_isNNRat : IsNNRat x x_num x_den) (hy_isNNRat : IsNNRat y y_num y_den
+) (hx_coprime : Nat.Coprime x_num x_den) (hy_coprime : Nat.Coprime y_num y_den) 
+(hn1 : k_num ^ y_den < x_num) (hn2 : x_num < (k_num + 1) ^ y_den) : Irrational (
+x ^ y)
+参数：hx_isNNRat : IsNNRat x x_num x_den；hy_isNNRat : IsNNRat y y_num y_den；hx_copr
+ime : Nat.Coprime x_num x_den；hy_coprime : Nat.Coprime y_num y_den；hn1 : k_num ^
+ y_den < x_num；hn2 : x_num < (k_num + 1) ^ y_den。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `Rat.cast_div`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p / q) = ↑p / ↑q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `_private.Mathlib.Tactic.NormNum.Irrational.0.Mathlib.Meta.NormNum.irrati
+onal_rpow_rat_of_not_power`：∀ {q : ℚ} {a b : ℕ}, (∀ (p : ℚ), q ^ a ≠ p ^ b) → 0 
+< b → 0 ≤ q → Irrational ((↑q).rpow ↑(↑a / ↑b))
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用引理 `div_pow`：div_pow (a b : α) (n : Nat) : (a / b) ^ n = a ^ n / b ^ n
+· 使用定理 `_private.Mathlib.Tactic.NormNum.Irrational.0.Mathlib.Meta.NormNum.not_po
+wer_rat_of_num`：∀ {a b d : ℕ}, a.Coprime b → (∀ (x : ℕ), a ≠ x ^ d) → ∀ (q : ℚ),
+ ↑a / ↑b ≠ q ^ d
+· 使用定理 `Nat.Coprime.pow`：∀ {k l : ℕ} (m n : ℕ), k.Coprime l → (k ^ m).Coprime (l
+ ^ n)
+· 使用定理 `_private.Mathlib.Tactic.NormNum.Irrational.0.Mathlib.Meta.NormNum.not_po
+wer_nat_pow_of_bounds`：∀ {n k p q : ℕ}, 0 < q → p.Coprime q → k ^ q < n → n < (k
+ + 1) ^ q → ∀ (m : ℕ), n ^ p ≠ m ^ q
+· 使用引理 `div_nonneg`：div_nonneg (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
 -/
-private theorem not_power_rat_of_num {a b d : Nat}
-    (h_coprime : a.Coprime b) (ha : forall x, a != x ^ d) (q : Rat) :
-    (a / b : Rat) != q ^ d := by
-  by_cases hq : 0 <= q
-  · apply not_power_rat_of_num_aux h_coprime ha hq
-  rcases d.even_or_odd with (h_even | h_odd)
-  · have := not_power_rat_of_num_aux h_coprime (q := -q) ha (by linarith)
-    rwa [h_even.neg_pow] at this
-  · contrapose hq
-    rw [← h_odd.pow_nonneg_iff]; rw [← hq]
-    positivity
-
-/--
-theorem `irrational_rpow_rat_rat_of_num` / 定理 `irrational_rpow_rat_rat_of_num`
-
-English:
-theorem irrational_rpow_rat_rat_of_num
-  statement: {x y : Real} {x_num x_den y_num y_den k_num : Nat}
-  proof: by
-  have hy_den_pos : 0 < y_den := by
-    by_contra! h
-    simp only [nonpos_iff_eq_zero] at h
-    simp only [h, pow_zero, Nat.lt_one_iff] at hn1 hn2
-    lia
-  rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
-  rcases hy_isNNRat with ⟨hy_inv, hy_eq⟩
-  rw [hy_eq]; rw [hx_eq]
-  have h1 : (y_num * ⅟(y_den : Real) : Real) = ((y_num / y_den : Rat) : Real) := by
-    simp
-    rfl
-  have h2 : (x_num * ⅟(x_den : Real) : Real) = ((x_num / x_den : Rat) : Real) := by
-    simp
-    rfl
-  rw [h1]; rw [h2]
-  refine irrational_rpow_rat_of_not_power ?_ hy_den_pos ?_
-  · simp only [div_pow, ← Nat.cast_pow]
-    apply not_power_rat_of_num
-    · apply Nat.Coprime.pow _ _ hx_coprime
-    · apply not_power_nat_pow_of_bounds hy_den_pos hy_coprime hn1 hn2
-  · positivity
-
-中文:
-定理 irrational_rpow_rat_rat_of_num
-  结论: {x y : 实数} {x_num x_den y_num y_den k_num : 自然数}
-  证明: by
-  have hy_den_pos : 0 < y_den := by
-    by_contra! h
-    simp only [nonpos_iff_eq_zero] at h
-    simp only [h, pow_zero, Nat.lt_one_iff] at hn1 hn2
-    lia
-  rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
-  rcases hy_isNNRat with ⟨hy_inv, hy_eq⟩
-  rw [hy_eq]; rw [hx_eq]
-  have h1 : (y_num * ⅟(y_den : Real) : Real) = ((y_num / y_den : Rat) : Real) := by
-    simp
-    rfl
-  have h2 : (x_num * ⅟(x_den : Real) : Real) = ((x_num / x_den : Rat) : Real) := by
-    simp
-    rfl
-  rw [h1]; rw [h2]
-  refine irrational_rpow_rat_of_not_power ?_ hy_den_pos ?_
-  · simp only [div_pow, ← Nat.cast_pow]
-    apply not_power_rat_of_num
-    · apply Nat.Coprime.pow _ _ hx_coprime
-    · apply not_power_nat_pow_of_bounds hy_den_pos hy_coprime hn1 hn2
-  · positivity
-
-Depends on / 依赖: Nat.lt_one_iff, hx_eq, hx_inv, hx_isNNRat, hy_den_pos, hy_eq, hy_inv, hy_isNNRat, irrational_rpow_rat_of_not_power, lt_one_iff, nonpos_iff_eq_zero, pow_zero, x_den, x_num, y_den, y_num
--/
-theorem irrational_rpow_rat_rat_of_num {x y : Real} {x_num x_den y_num y_den k_num : Nat}
+theorem irrational_rpow_rat_rat_of_num {x y : ℝ} {x_num x_den y_num y_den k_num : ℕ}
     (hx_isNNRat : IsNNRat x x_num x_den)
     (hy_isNNRat : IsNNRat y y_num y_den)
     (hx_coprime : Nat.Coprime x_num x_den)
@@ -445,51 +243,78 @@ theorem irrational_rpow_rat_rat_of_num {x y : Real} {x_num x_den y_num y_den k_n
     lia
   rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
   rcases hy_isNNRat with ⟨hy_inv, hy_eq⟩
-  rw [hy_eq]; rw [hx_eq]
-  have h1 : (y_num * ⅟(y_den : Real) : Real) = ((y_num / y_den : Rat) : Real) := by
+  rw [hy_eq, hx_eq]
+  have h1 : (y_num * ⅟(y_den : ℝ) : ℝ) = ((y_num / y_den : ℚ) : ℝ) := by
     simp
     rfl
-  have h2 : (x_num * ⅟(x_den : Real) : Real) = ((x_num / x_den : Rat) : Real) := by
+  have h2 : (x_num * ⅟(x_den : ℝ) : ℝ) = ((x_num / x_den : ℚ) : ℝ) := by
     simp
     rfl
-  rw [h1]; rw [h2]
+  rw [h1, h2]
   refine irrational_rpow_rat_of_not_power ?_ hy_den_pos ?_
   · simp only [div_pow, ← Nat.cast_pow]
     apply not_power_rat_of_num
     · apply Nat.Coprime.pow _ _ hx_coprime
     · apply not_power_nat_pow_of_bounds hy_den_pos hy_coprime hn1 hn2
   · positivity
-
-/--
-theorem `irrational_rpow_rat_rat_of_den` / 定理 `irrational_rpow_rat_rat_of_den`
-
-English:
-theorem irrational_rpow_rat_rat_of_den
-  statement: {x y : Real} {x_num x_den y_num y_den k_den : Nat}
-  proof: by
-  rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
-  apply Irrational.of_inv
-  rw [← Real.inv_rpow (by simp only [hx_eq]; rw [invOf_eq_inv]; positivity)]
-  apply irrational_rpow_rat_rat_of_num (x_num := x_den) (x_den := x_num) _ hy_isNNRat
-    (Nat.coprime_comm.mp hx_coprime) hy_coprime hd1 hd2
-  refine ⟨invertibleOfNonzero (fun _ => ?_), by simp [hx_eq]⟩
-  simp_all
-
-中文:
-定理 irrational_rpow_rat_rat_of_den
-  结论: {x y : 实数} {x_num x_den y_num y_den k_den : 自然数}
-  证明: by
-  rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
-  apply Irrational.of_inv
-  rw [← Real.inv_rpow (by simp only [hx_eq]; rw [invOf_eq_inv]; positivity)]
-  apply irrational_rpow_rat_rat_of_num (x_num := x_den) (x_den := x_num) _ hy_isNNRat
-    (Nat.coprime_comm.mp hx_coprime) hy_coprime hd1 hd2
-  refine ⟨invertibleOfNonzero (fun _ => ?_), by simp [hx_eq]⟩
-  simp_all
-
-Depends on / 依赖: Irrational, Irrational.of_inv, Nat.coprime_comm.mp, Real.inv_rpow, coprime_comm, hx_coprime, hx_eq, hx_inv, hx_isNNRat, hy_coprime, hy_isNNRat, invOf_eq_inv, inv_rpow, invertibleOfNonzero, irrational_rpow_rat_rat_of_num, of_inv, x_den, x_num
+/-
+**Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_den** 是 Mathlib 中的一个定理，位于命名空间 
+`Mathlib.Meta.NormNum`。
+形式化陈述：irrational_rpow_rat_rat_of_den {x y : Real} {x_num x_den y_num y_den k_den
+ : Nat} (hx_isNNRat : IsNNRat x x_num x_den) (hy_isNNRat : IsNNRat y y_num y_den
+) (hx_coprime : Nat.Coprime x_num x_den) (hy_coprime : Nat.Coprime y_num y_den) 
+(hd1 : k_den ^ y_den < x_den) (hd2 : x_den < (k_den + 1) ^ y_den) : Irrational (
+x ^ y)
+参数：hx_isNNRat : IsNNRat x x_num x_den；hy_isNNRat : IsNNRat y y_num y_den；hx_copr
+ime : Nat.Coprime x_num x_den；hy_coprime : Nat.Coprime y_num y_den；hd1 : k_den ^
+ y_den < x_den；hd2 : x_den < (k_den + 1) ^ y_den。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irrational.of_inv`：of_inv (h : Irrational x⁻¹) : Irrational x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.inv_rpow`：inv_rpow (hx : 0 <= x) (y : Real) : x⁻¹ ^ y = (x ^ y)⁻¹
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `inv_nonneg_of_nonneg`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_
+1 : PartialOrder G₀] [PosMulReflectLT G₀] {a : G₀}, 0 ≤ a → 0 ≤ a⁻¹
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_num`：irrational_rpow_rat
+_rat_of_num {x y : Real} {x_num x_den y_num y_den k_num : Nat} (hx_isNNRat : IsN
+NRat x x_num x_den) (hy_isNNRat : IsNNRat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.coprime_comm`：∀ {n m : ℕ}, n.Coprime m ↔ m.Coprime n
 -/
-theorem irrational_rpow_rat_rat_of_den {x y : Real} {x_num x_den y_num y_den k_den : Nat}
+theorem irrational_rpow_rat_rat_of_den {x y : ℝ} {x_num x_den y_num y_den k_den : ℕ}
     (hx_isNNRat : IsNNRat x x_num x_den)
     (hy_isNNRat : IsNNRat y y_num y_den)
     (hx_coprime : Nat.Coprime x_num x_den)
@@ -499,28 +324,32 @@ theorem irrational_rpow_rat_rat_of_den {x y : Real} {x_num x_den y_num y_den k_d
     Irrational (x ^ y) := by
   rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
   apply Irrational.of_inv
-  rw [← Real.inv_rpow (by simp only [hx_eq]; rw [invOf_eq_inv]; positivity)]
+  rw [← Real.inv_rpow (by simp only [hx_eq, invOf_eq_inv]; positivity)]
   apply irrational_rpow_rat_rat_of_num (x_num := x_den) (x_den := x_num) _ hy_isNNRat
     (Nat.coprime_comm.mp hx_coprime) hy_coprime hd1 hd2
-  refine ⟨invertibleOfNonzero (fun _ => ?_), by simp [hx_eq]⟩
+  refine ⟨invertibleOfNonzero (fun _ ↦ ?_), by simp [hx_eq]⟩
   simp_all
-
-/--
-theorem `irrational_rpow_nat_rat` / 定理 `irrational_rpow_nat_rat`
-
-English:
-theorem irrational_rpow_nat_rat
-  statement: {x y : Real} {x_num y_num y_den k : Nat}
-  proof: irrational_rpow_rat_rat_of_num hx_isNat.to_isNNRat hy_isNNRat (by simp) hy_coprime hn1 hn2
-
-中文:
-定理 irrational_rpow_nat_rat
-  结论: {x y : 实数} {x_num y_num y_den k : 自然数}
-  证明: irrational_rpow_rat_rat_of_num hx_isNat.to_isNNRat hy_isNNRat (by simp) hy_coprime hn1 hn2
-
-Depends on / 依赖: hx_isNat, hx_isNat.to_isNNRat, hy_coprime, hy_isNNRat, irrational_rpow_rat_rat_of_num, to_isNNRat
+/-
+**Mathlib.Meta.NormNum.irrational_rpow_nat_rat** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Meta.NormNum`。
+形式化陈述：irrational_rpow_nat_rat {x y : Real} {x_num y_num y_den k : Nat} (hx_isNat
+ : IsNat x x_num) (hy_isNNRat : IsNNRat y y_num y_den) (hy_coprime : Nat.Coprime
+ y_num y_den) (hn1 : k ^ y_den < x_num) (hn2 : x_num < (k + 1) ^ y_den) : Irrati
+onal (x ^ y)
+参数：hx_isNat : IsNat x x_num；hy_isNNRat : IsNNRat y y_num y_den；hy_coprime : Nat.
+Coprime y_num y_den；hn1 : k ^ y_den < x_num；hn2 : x_num < (k + 1) ^ y_den。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_num`：irrational_rpow_rat
+_rat_of_num {x y : Real} {x_num x_den y_num y_den k_num : Nat} (hx_isNNRat : IsN
+NRat x x_num x_den) (hy_isNNRat : IsNNRat…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.coprime_one_right_eq_true`：∀ (n : ℕ), n.Coprime 1 = True
 -/
-theorem irrational_rpow_nat_rat {x y : Real} {x_num y_num y_den k : Nat}
+theorem irrational_rpow_nat_rat {x y : ℝ} {x_num y_num y_den k : ℕ}
     (hx_isNat : IsNat x x_num)
     (hy_isNNRat : IsNNRat y y_num y_den)
     (hy_coprime : Nat.Coprime y_num y_den)
@@ -528,31 +357,41 @@ theorem irrational_rpow_nat_rat {x y : Real} {x_num y_num y_den k : Nat}
     (hn2 : x_num < (k + 1) ^ y_den) :
     Irrational (x ^ y) :=
   irrational_rpow_rat_rat_of_num hx_isNat.to_isNNRat hy_isNNRat (by simp) hy_coprime hn1 hn2
-
-/--
-theorem `irrational_sqrt_rat_of_num` / 定理 `irrational_sqrt_rat_of_num`
-
-English:
-theorem irrational_sqrt_rat_of_num
-  statement: {x : Real} {num den num_k : Nat}
-  proof: by
-  rw [Real.sqrt_eq_rpow]
-  apply irrational_rpow_rat_rat_of_num hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
-    hn1 hn2
-  exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-中文:
-定理 irrational_sqrt_rat_of_num
-  结论: {x : 实数} {num den num_k : 自然数}
-  证明: by
-  rw [Real.sqrt_eq_rpow]
-  apply irrational_rpow_rat_rat_of_num hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
-    hn1 hn2
-  exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-Depends on / 依赖: Invertible, Invertible.mk, Real.sqrt_eq_rpow, hx_coprime, hx_isNNRat, irrational_rpow_rat_rat_of_num, sqrt_eq_rpow, y_den, y_num
+/-
+**Mathlib.Meta.NormNum.irrational_sqrt_rat_of_num** 是 Mathlib 中的一个定理，位于命名空间 `Mat
+hlib.Meta.NormNum`。
+形式化陈述：irrational_sqrt_rat_of_num {x : Real} {num den num_k : Nat} (hx_isNNRat : 
+IsNNRat x num den) (hx_coprime : Nat.Coprime num den) (hn1 : num_k ^ 2 < num) (h
+n2 : num < (num_k + 1) ^ 2) : Irrational (Real.sqrt x)
+参数：hx_isNNRat : IsNNRat x num den；hx_coprime : Nat.Coprime num den；hn1 : num_k ^
+ 2 < num；hn2 : num < (num_k + 1) ^ 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sqrt_eq_rpow`：sqrt_eq_rpow (x : Real) : √x = x ^ (1 / (2 : Real))
+· 使用定理 `Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_num`：irrational_rpow_rat
+_rat_of_num {x y : Real} {x_num x_den y_num y_den k_num : Nat} (hx_isNNRat : IsN
+NRat x x_num x_den) (hy_isNNRat : IsNNRat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem irrational_sqrt_rat_of_num {x : Real} {num den num_k : Nat}
+theorem irrational_sqrt_rat_of_num {x : ℝ} {num den num_k : ℕ}
     (hx_isNNRat : IsNNRat x num den)
     (hx_coprime : Nat.Coprime num den)
     (hn1 : num_k ^ 2 < num)
@@ -562,31 +401,41 @@ theorem irrational_sqrt_rat_of_num {x : Real} {num den num_k : Nat}
   apply irrational_rpow_rat_rat_of_num hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
     hn1 hn2
   exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-/--
-theorem `irrational_sqrt_rat_of_den` / 定理 `irrational_sqrt_rat_of_den`
-
-English:
-theorem irrational_sqrt_rat_of_den
-  statement: {x : Real} {num den den_k : Nat}
-  proof: by
-  rw [Real.sqrt_eq_rpow]
-  apply irrational_rpow_rat_rat_of_den hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
-    hd1 hd2
-  exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-中文:
-定理 irrational_sqrt_rat_of_den
-  结论: {x : 实数} {num den den_k : 自然数}
-  证明: by
-  rw [Real.sqrt_eq_rpow]
-  apply irrational_rpow_rat_rat_of_den hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
-    hd1 hd2
-  exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-Depends on / 依赖: Invertible, Invertible.mk, Real.sqrt_eq_rpow, hx_coprime, hx_isNNRat, irrational_rpow_rat_rat_of_den, sqrt_eq_rpow, y_den, y_num
+/-
+**Mathlib.Meta.NormNum.irrational_sqrt_rat_of_den** 是 Mathlib 中的一个定理，位于命名空间 `Mat
+hlib.Meta.NormNum`。
+形式化陈述：irrational_sqrt_rat_of_den {x : Real} {num den den_k : Nat} (hx_isNNRat : 
+IsNNRat x num den) (hx_coprime : Nat.Coprime num den) (hd1 : den_k ^ 2 < den) (h
+d2 : den < (den_k + 1) ^ 2) : Irrational (Real.sqrt x)
+参数：hx_isNNRat : IsNNRat x num den；hx_coprime : Nat.Coprime num den；hd1 : den_k ^
+ 2 < den；hd2 : den < (den_k + 1) ^ 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sqrt_eq_rpow`：sqrt_eq_rpow (x : Real) : √x = x ^ (1 / (2 : Real))
+· 使用定理 `Mathlib.Meta.NormNum.irrational_rpow_rat_rat_of_den`：irrational_rpow_rat
+_rat_of_den {x y : Real} {x_num x_den y_num y_den k_den : Nat} (hx_isNNRat : IsN
+NRat x x_num x_den) (hy_isNNRat : IsNNRat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem irrational_sqrt_rat_of_den {x : Real} {num den den_k : Nat}
+theorem irrational_sqrt_rat_of_den {x : ℝ} {num den den_k : ℕ}
     (hx_isNNRat : IsNNRat x num den)
     (hx_coprime : Nat.Coprime num den)
     (hd1 : den_k ^ 2 < den)
@@ -596,23 +445,24 @@ theorem irrational_sqrt_rat_of_den {x : Real} {num den den_k : Nat}
   apply irrational_rpow_rat_rat_of_den hx_isNNRat (y_num := 1) (y_den := 2) _ hx_coprime (by simp)
     hd1 hd2
   exact ⟨Invertible.mk (1/2) (by simp) (by simp), by simp⟩
-
-/--
-theorem `irrational_sqrt_nat` / 定理 `irrational_sqrt_nat`
-
-English:
-theorem irrational_sqrt_nat
-  statement: {x : Real} {n k : Nat}
-  proof: irrational_sqrt_rat_of_num hx_isNat.to_isNNRat (by simp) hn1 hn2
-
-中文:
-定理 irrational_sqrt_nat
-  结论: {x : 实数} {n k : 自然数}
-  证明: irrational_sqrt_rat_of_num hx_isNat.to_isNNRat (by simp) hn1 hn2
-
-Depends on / 依赖: hx_isNat, hx_isNat.to_isNNRat, irrational_sqrt_rat_of_num, to_isNNRat
+/-
+**Mathlib.Meta.NormNum.irrational_sqrt_nat** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Me
+ta.NormNum`。
+形式化陈述：irrational_sqrt_nat {x : Real} {n k : Nat} (hx_isNat : IsNat x n) (hn1 : k
+ ^ 2 < n) (hn2 : n < (k + 1) ^ 2) : Irrational (Real.sqrt x)
+参数：hx_isNat : IsNat x n；hn1 : k ^ 2 < n；hn2 : n < (k + 1) ^ 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Meta.NormNum.irrational_sqrt_rat_of_num`：irrational_sqrt_rat_of_
+num {x : Real} {num den num_k : Nat} (hx_isNNRat : IsNNRat x num den) (hx_coprim
+e : Nat.Coprime num den) (hn1 : num_k…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.coprime_one_right_eq_true`：∀ (n : ℕ), n.Coprime 1 = True
 -/
-theorem irrational_sqrt_nat {x : Real} {n k : Nat}
+theorem irrational_sqrt_nat {x : ℝ} {n k : ℕ}
     (hx_isNat : IsNat x n)
     (hn1 : k ^ 2 < n)
     (hn2 : n < (k + 1) ^ 2) :
@@ -621,76 +471,47 @@ theorem irrational_sqrt_nat {x : Real} {n k : Nat}
 
 end lemmas
 
-/--
-Definition of `NotPowerCertificate` / `NotPowerCertificate` 的定义
+/-- To prove that `m` is not `n`-power (and thus `m ^ (1/n)` is irrational), we find `k` such that
+`k ^ n < m < (k + 1) ^ n`. -/
+/-
+**Mathlib.Meta.NormNum.NotPowerCertificate** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Meta.NormNum`。
+形式化陈述：Q(ℕ) → Q(ℕ) → Type
+参数：ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NotPowerCertificate
-  parameters: (m n : Q(Nat))
-  axioms and operations (3):
-    - k : Q(Nat)
-    - pf_left : Q($k ^ $n < $m)
-    - pf_right : Q($m < ($k + 1) ^ $n)
-
-中文:
-结构 NotPowerCertificate
-  参数: (m n : Q(自然数))
-  公理与运算 (3 个):
-    - k : Q(自然数)
-    - pf_left : Q($k ^ $n < $m)
-    - pf_right : Q($m < ($k + 1) ^ $n)
+--- 原说明 ---
+To prove that `m` is not `n`-power (and thus `m ^ (1/n)` is irrational), we find
+ `k` such that
+`k ^ n < m < (k + 1) ^ n`.
 -/
-structure NotPowerCertificate (m n : Q(Nat)) where
+structure NotPowerCertificate (m n : Q(ℕ)) where
   /-- Natural `k` such that `k ^ n < m < (k + 1) ^ n`. -/
-  k : Q(Nat)
+  k : Q(ℕ)
   /-- Proof of `k ^ n < m`. -/
   pf_left : Q($k ^ $n < $m)
   /-- Proof of `m < (k + 1) ^ n`. -/
   pf_right : Q($m < ($k + 1) ^ $n)
 
-/--
-Definition of `findNotPowerCertificateCore` / `findNotPowerCertificateCore` 的定义
+/-- Finds `k` such that `k ^ n < m < (k + 1) ^ n` using bisection method. It assumes `n > 0`. -/
+/-
+**Mathlib.Meta.NormNum.findNotPowerCertificateCore** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Meta.NormNum`。
+形式化陈述：findNotPowerCertificateCore (m n : Nat) : Option Nat
+参数：m n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findNotPowerCertificateCore
-  signature: (m n : Nat)
-  body: Id.run do
-  let mut left := 0
-  let mut right := m + 1
-  while right - left > 1 do
-    let middle := (left + right) / 2
-    if middle ^ n <= m then
-      left := middle
-    else
-      right := middle
-  if left ^ n < m then
-    return some left
-  return none
-
-中文:
-定义 findNotPowerCertificateCore
-  签名: (m n : 自然数)
-  定义体: Id.run do
-  let mut left := 0
-  let mut right := m + 1
-  while right - left > 1 do
-    let middle := (left + right) / 2
-    if middle ^ n <= m then
-      left := middle
-    else
-      right := middle
-  if left ^ n < m then
-    return some left
-  return none
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Finds `k` such that `k ^ n < m < (k + 1) ^ n` using bisection method. It assumes
+ `n > 0`.
 -/
-def findNotPowerCertificateCore (m n : Nat) : Option Nat := Id.run do
+def findNotPowerCertificateCore (m n : ℕ) : Option ℕ := Id.run do
   let mut left := 0
   let mut right := m + 1
   while right - left > 1 do
     let middle := (left + right) / 2
-    if middle ^ n <= m then
+    if middle ^ n ≤ m then
       left := middle
     else
       right := middle
@@ -698,38 +519,21 @@ def findNotPowerCertificateCore (m n : Nat) : Option Nat := Id.run do
     return some left
   return none
 
-/--
-Definition of `findNotPowerCertificate` / `findNotPowerCertificate` 的定义
+/-- Finds `NotPowerCertificate` showing that `m` is not `n`-power. -/
+/-
+**Mathlib.Meta.NormNum.findNotPowerCertificate** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Meta.NormNum`。
+形式化陈述：findNotPowerCertificate (m n : Q(Nat)) : MetaM (NotPowerCertificate m n)
+参数：m n : Q(Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findNotPowerCertificate
-  signature: (m n : Q(Nat))
-  body: do
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) m _ ← derive m | failure
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) n _ ← derive n | failure
-  let mVal := m.natLit!
-  let nVal := n.natLit!
-  let some k := findNotPowerCertificateCore mVal nVal | failure
-  let .isBool true pf_left ← derive q($k ^ $n < $m) | failure
-  let .isBool true pf_right ← derive q($m < ($k + 1) ^ $n) | failure
-  return ⟨q($k), pf_left, pf_right⟩
-
-中文:
-定义 findNotPowerCertificate
-  签名: (m n : Q(自然数))
-  定义体: do
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) m _ ← derive m | failure
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) n _ ← derive n | failure
-  let mVal := m.natLit!
-  let nVal := n.natLit!
-  let some k := findNotPowerCertificateCore mVal nVal | failure
-  let .isBool true pf_left ← derive q($k ^ $n < $m) | failure
-  let .isBool true pf_right ← derive q($m < ($k + 1) ^ $n) | failure
-  return ⟨q($k), pf_left, pf_right⟩
+--- 原说明 ---
+Finds `NotPowerCertificate` showing that `m` is not `n`-power.
 -/
-def findNotPowerCertificate (m n : Q(Nat)) : MetaM (NotPowerCertificate m n) := do
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) m _ ← derive m | failure
-  let .isNat (_ : Q(AddMonoidWithOne Nat)) n _ ← derive n | failure
+def findNotPowerCertificate (m n : Q(ℕ)) : MetaM (NotPowerCertificate m n) := do
+  let .isNat (_ : Q(AddMonoidWithOne ℕ)) m _ ← derive m | failure
+  let .isNat (_ : Q(AddMonoidWithOne ℕ)) n _ ← derive n | failure
   let mVal := m.natLit!
   let nVal := n.natLit!
   let some k := findNotPowerCertificateCore mVal nVal | failure
@@ -739,185 +543,74 @@ def findNotPowerCertificate (m n : Q(Nat)) : MetaM (NotPowerCertificate m n) := 
 
 /-- `norm_num` extension that proves `Irrational x ^ y` for rational `y`. `x` may be
 natural or rational. -/
-@[norm_num Irrational (_ ^ (_ : Real))]
-/--
-Definition of `evalIrrationalRpow` / `evalIrrationalRpow` 的定义
+@[norm_num Irrational (_ ^ (_ : ℝ))]
+/-
+**Mathlib.Meta.NormNum.evalIrrationalRpow** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.NormNum`。
+形式化陈述：evalIrrationalRpow : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalIrrationalRpow
-  signature: : NormNumExt where eval {u α} e
-  body: match u, α, e with
-  | 0, ~q(Prop), ~q(Irrational (($x : Real) ^ ($y : Real))) => do
-    let .isNNRat sReal _ y_num y_den y_isNNRat ← derive y | failure
-    let ⟨gy, hy_coprime⟩ := proveNatGCD y_num y_den
-    if gy.natLit! != 1 then failure
-let _ : gy =Q 1 := ⟨⟩
-    match ← derive x with
-    | .isNat sReal ex x_isNat =>
-      let cert ← findNotPowerCertificate q($ex) y_den
-      assumeInstancesCommute
-      return .isTrue q(irrational_rpow_nat_rat $x_isNat $y_isNNRat $hy_coprime
- cert.pf_left cert.pf_right)
-    | .isNNRat sReal _ x_num x_den x_isNNRat =>
-      let ⟨gx, hx_coprime⟩ := proveNatGCD x_num x_den
-      if gx.natLit! != 1 then failure
-let _ : gx =Q 1 := ⟨⟩
-      let hx_isNNRat' : Q(IsNNRat $x $x_num $x_den) := x_isNNRat
-      let hy_isNNRat' : Q(IsNNRat $y $y_num $y_den) := y_isNNRat
-      try
-        let numCert ← findNotPowerCertificate q($x_num) y_den
-        assumeInstancesCommute
-        return Result.isTrue q(irrational_rpow_rat_rat_of_num $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime numCert.pf_left numCert.pf_right)
-      catch _ =>
-        let denCert ← findNotPowerCertificate q($x_den) y_den
-        assumeInstancesCommute
-        return Result.isTrue q(irrational_rpow_rat_rat_of_den $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime denCert.pf_left denCert.pf_right)
-    | _ => failure
-  | _, _, _ => failure
-
-中文:
-定义 evalIrrationalRpow
-  签名: : NormNumExt where eval {u α} e
-  定义体: match u, α, e with
-  | 0, ~q(Prop), ~q(Irrational (($x : Real) ^ ($y : Real))) => do
-    let .isNNRat sReal _ y_num y_den y_isNNRat ← derive y | failure
-    let ⟨gy, hy_coprime⟩ := proveNatGCD y_num y_den
-    if gy.natLit! != 1 then failure
-let _ : gy =Q 1 := ⟨⟩
-    match ← derive x with
-    | .isNat sReal ex x_isNat =>
-      let cert ← findNotPowerCertificate q($ex) y_den
-      assumeInstancesCommute
-      return .isTrue q(irrational_rpow_nat_rat $x_isNat $y_isNNRat $hy_coprime
- cert.pf_left cert.pf_right)
-    | .isNNRat sReal _ x_num x_den x_isNNRat =>
-      let ⟨gx, hx_coprime⟩ := proveNatGCD x_num x_den
-      if gx.natLit! != 1 then failure
-let _ : gx =Q 1 := ⟨⟩
-      let hx_isNNRat' : Q(IsNNRat $x $x_num $x_den) := x_isNNRat
-      let hy_isNNRat' : Q(IsNNRat $y $y_num $y_den) := y_isNNRat
-      try
-        let numCert ← findNotPowerCertificate q($x_num) y_den
-        assumeInstancesCommute
-        return Result.isTrue q(irrational_rpow_rat_rat_of_num $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime numCert.pf_left numCert.pf_right)
-      catch _ =>
-        let denCert ← findNotPowerCertificate q($x_den) y_den
-        assumeInstancesCommute
-        return Result.isTrue q(irrational_rpow_rat_rat_of_den $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime denCert.pf_left denCert.pf_right)
-    | _ => failure
-  | _, _, _ => failure
-
-Depends on / 依赖: Irrational, assumeInstancesCommute, cert.pf_left, cert.pf_right, derive, failure, findNotPowerCertificate, gy.natLit, hy_coprime, irrational_rpow_nat_rat, isNNRat, isTrue, natLit, pf_left, pf_right, proveNatGCD, return, x_isNat, x_num, y_den
+--- 原说明 ---
+`norm_num` extension that proves `Irrational x ^ y` for rational `y`. `x` may be
+natural or rational.
 -/
 def evalIrrationalRpow : NormNumExt where eval {u α} e :=
   match u, α, e with
-  | 0, ~q(Prop), ~q(Irrational (($x : Real) ^ ($y : Real))) => do
-    let .isNNRat sReal _ y_num y_den y_isNNRat ← derive y | failure
+  | 0, ~q(Prop), ~q(Irrational (($x : ℝ) ^ ($y : ℝ))) => do
+    let .isNNRat sℝ _ y_num y_den y_isNNRat ← derive y | failure
     let ⟨gy, hy_coprime⟩ := proveNatGCD y_num y_den
     if gy.natLit! != 1 then failure
-let _ : gy =Q 1 := ⟨⟩
+    let _ : $gy =Q 1 := ⟨⟩
     match ← derive x with
-    | .isNat sReal ex x_isNat =>
+    | .isNat sℝ ex x_isNat =>
       let cert ← findNotPowerCertificate q($ex) y_den
       assumeInstancesCommute
       return .isTrue q(irrational_rpow_nat_rat $x_isNat $y_isNNRat $hy_coprime
- cert.pf_left cert.pf_right)
-    | .isNNRat sReal _ x_num x_den x_isNNRat =>
+        $cert.pf_left $cert.pf_right)
+    | .isNNRat sℝ _ x_num x_den x_isNNRat =>
       let ⟨gx, hx_coprime⟩ := proveNatGCD x_num x_den
       if gx.natLit! != 1 then failure
-let _ : gx =Q 1 := ⟨⟩
+      let _ : $gx =Q 1 := ⟨⟩
       let hx_isNNRat' : Q(IsNNRat $x $x_num $x_den) := x_isNNRat
       let hy_isNNRat' : Q(IsNNRat $y $y_num $y_den) := y_isNNRat
       try
         let numCert ← findNotPowerCertificate q($x_num) y_den
         assumeInstancesCommute
         return Result.isTrue q(irrational_rpow_rat_rat_of_num $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime numCert.pf_left numCert.pf_right)
+          $hx_coprime $hy_coprime $numCert.pf_left $numCert.pf_right)
       catch _ =>
         let denCert ← findNotPowerCertificate q($x_den) y_den
         assumeInstancesCommute
         return Result.isTrue q(irrational_rpow_rat_rat_of_den $hx_isNNRat' $hy_isNNRat'
- hx_coprime hy_coprime denCert.pf_left denCert.pf_right)
+          $hx_coprime $hy_coprime $denCert.pf_left $denCert.pf_right)
     | _ => failure
   | _, _, _ => failure
 
 /-- `norm_num` extension that proves `Irrational √x` for rational `x`. -/
 @[norm_num Irrational (Real.sqrt _)]
-/--
-Definition of `evalIrrationalSqrt` / `evalIrrationalSqrt` 的定义
+/-
+**Mathlib.Meta.NormNum.evalIrrationalSqrt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.NormNum`。
+形式化陈述：evalIrrationalSqrt : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalIrrationalSqrt
-  signature: : NormNumExt where eval {u α} e
-  body: do
-  match u, α, e with
-  | 0, ~q(Prop), ~q(Irrational (√$x)) => do
-    match ← derive x with
-    | .isNat sReal ex pf =>
-      let cert ← findNotPowerCertificate ex q(nat_lit 2)
-      assumeInstancesCommute
-      return .isTrue q(irrational_sqrt_nat $pf $cert.pf_left $cert.pf_right)
-    | .isNNRat sReal eq en ed pf =>
-      let ⟨g, pf_coprime⟩ := proveNatGCD en ed
-      if g.natLit! != 1 then failure
-let _ : g =Q 1 := ⟨⟩
-      try
-        let numCert ← findNotPowerCertificate en q(nat_lit 2)
-        assumeInstancesCommute
-        return Result.isTrue
-          q(irrational_sqrt_rat_of_num $pf $pf_coprime $numCert.pf_left $numCert.pf_right)
-      catch _ =>
-        let denCert ← findNotPowerCertificate ed q(nat_lit 2)
-        assumeInstancesCommute
-        return Result.isTrue
-          q(irrational_sqrt_rat_of_den $pf $pf_coprime $denCert.pf_left $denCert.pf_right)
-    | _ => failure
-  | _, _, _ => failure
-
-中文:
-定义 evalIrrationalSqrt
-  签名: : NormNumExt where eval {u α} e
-  定义体: do
-  match u, α, e with
-  | 0, ~q(Prop), ~q(Irrational (√$x)) => do
-    match ← derive x with
-    | .isNat sReal ex pf =>
-      let cert ← findNotPowerCertificate ex q(nat_lit 2)
-      assumeInstancesCommute
-      return .isTrue q(irrational_sqrt_nat $pf $cert.pf_left $cert.pf_right)
-    | .isNNRat sReal eq en ed pf =>
-      let ⟨g, pf_coprime⟩ := proveNatGCD en ed
-      if g.natLit! != 1 then failure
-let _ : g =Q 1 := ⟨⟩
-      try
-        let numCert ← findNotPowerCertificate en q(nat_lit 2)
-        assumeInstancesCommute
-        return Result.isTrue
-          q(irrational_sqrt_rat_of_num $pf $pf_coprime $numCert.pf_left $numCert.pf_right)
-      catch _ =>
-        let denCert ← findNotPowerCertificate ed q(nat_lit 2)
-        assumeInstancesCommute
-        return Result.isTrue
-          q(irrational_sqrt_rat_of_den $pf $pf_coprime $denCert.pf_left $denCert.pf_right)
-    | _ => failure
-  | _, _, _ => failure
+--- 原说明 ---
+`norm_num` extension that proves `Irrational √x` for rational `x`.
 -/
 def evalIrrationalSqrt : NormNumExt where eval {u α} e := do
   match u, α, e with
   | 0, ~q(Prop), ~q(Irrational (√$x)) => do
     match ← derive x with
-    | .isNat sReal ex pf =>
+    | .isNat sℝ ex pf =>
       let cert ← findNotPowerCertificate ex q(nat_lit 2)
       assumeInstancesCommute
       return .isTrue q(irrational_sqrt_nat $pf $cert.pf_left $cert.pf_right)
-    | .isNNRat sReal eq en ed pf =>
+    | .isNNRat sℝ eq en ed pf =>
       let ⟨g, pf_coprime⟩ := proveNatGCD en ed
       if g.natLit! != 1 then failure
-let _ : g =Q 1 := ⟨⟩
+      let _ : $g =Q 1 := ⟨⟩
       try
         let numCert ← findNotPowerCertificate en q(nat_lit 2)
         assumeInstancesCommute
@@ -934,3 +627,4 @@ let _ : g =Q 1 := ⟨⟩
 end NormNum
 
 end Mathlib.Meta
+

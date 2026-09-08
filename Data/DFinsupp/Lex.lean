@@ -19,596 +19,469 @@ This file defines the lexicographic order on `DFinsupp`.
 @[expose] public section
 
 
-variable {ι : Type*} {α : ι -> Type*}
+variable {ι : Type*} {α : ι → Type*}
 
 namespace DFinsupp
 
 section Zero
 
-variable [forall i, Zero (α i)]
+variable [∀ i, Zero (α i)]
 
-/--
-Definition of `Lex` / `Lex` 的定义
+/-- `DFinsupp.Lex r s` is the lexicographic relation on `Π₀ i, α i`, where `ι` is ordered by `r`,
+and `α i` is ordered by `s i`.
 
-English:
-definition Lex
-  signature: (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) (x y : Π₀ i, α i)
-  body: Pi.Lex r (s _) x y
-
-中文:
-定义 Lex
-  签名: (r : ι -> ι -> 命题) (s : 对任意 i, α i -> α i -> 命题) (x y : Π₀ i, α i)
-  定义体: Pi.Lex r (s _) x y
+The type synonym `Lex (Π₀ i, α i)` has an order given by `DFinsupp.Lex (· < ·) (· < ·)`, whereas
+`Colex (Π₀ i, α i)` has an order given by `DFinsupp.Lex (· > ·) (· < ·)`.
 -/
-protected def Lex (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) (x y : Π₀ i, α i) : Prop :=
+/-
+**DFinsupp.Lex** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       (ι → ι → Prop) → ((i : ι) → α i → α i → Prop) → (Π₀ (i : ι), α i) → (Π₀ 
+(i : ι), α i) → Prop
+参数：i : ι；α i；ι → ι → Prop；(i : ι) → α i → α i → Prop；Π₀ (i : ι), α i；Π₀ (i : ι),
+ α i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`DFinsupp.Lex r s` is the lexicographic relation on `Π₀ i, α i`, where `ι` is or
+dered by `r`,
+and `α i` is ordered by `s i`.
+
+The type synonym `Lex (Π₀ i, α i)` has an order given by `DFinsupp.Lex (· < ·) (
+· < ·)`, whereas
+`Colex (Π₀ i, α i)` has an order given by `DFinsupp.Lex (· > ·) (· < ·)`.
+-/
+protected def Lex (r : ι → ι → Prop) (s : ∀ i, α i → α i → Prop) (x y : Π₀ i, α i) : Prop :=
   Pi.Lex r (s _) x y
-
-/--
-theorem `_root_.Pi.lex_eq_dfinsupp_lex` / 定理 `_root_.Pi.lex_eq_dfinsupp_lex`
-
-English:
-theorem _root_.Pi.lex_eq_dfinsupp_lex
-  statement: {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop}
-  proof: rfl
-
-中文:
-定理 _root_.依赖函数类型.lex_eq_dfinsupp_lex
-  结论: {r : ι -> ι -> 命题} {s : 对任意 i, α i -> α i -> 命题}
-  证明: rfl
+/-
+**DFinsupp._root_.Pi.lex_eq_dfinsupp_lex** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Pi.lex_eq_dfinsupp_lex {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop}
-    (a b : Π₀ i, α i) : Pi.Lex r (s _) (a : forall i, α i) b = DFinsupp.Lex r s a b :=
+theorem _root_.Pi.lex_eq_dfinsupp_lex {r : ι → ι → Prop} {s : ∀ i, α i → α i → Prop}
+    (a b : Π₀ i, α i) : Pi.Lex r (s _) (a : ∀ i, α i) b = DFinsupp.Lex r s a b :=
   rfl
-
-/--
-theorem `lex_def` / 定理 `lex_def`
-
-English:
-theorem lex_def
-  given: {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop} {a b : Π₀ i, α i}
-  proof: .rfl
-
-中文:
-定理 lex_def
-  条件: {r : ι -> ι -> 命题} {s : 对任意 i, α i -> α i -> 命题} {a b : Π₀ i, α i}
-  证明: .rfl
+/-
+**DFinsupp.lex_def** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：lex_def {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop} {a b : Π₀ 
+i, α i} : DFinsupp.Lex r s a b ↔ exists j, (forall d, r d j -> a d = b d) ∧ s j 
+(a j) (b j)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lex_def {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop} {a b : Π₀ i, α i} :
-    DFinsupp.Lex r s a b ↔ exists j, (forall d, r d j -> a d = b d) ∧ s j (a j) (b j) :=
+theorem lex_def {r : ι → ι → Prop} {s : ∀ i, α i → α i → Prop} {a b : Π₀ i, α i} :
+    DFinsupp.Lex r s a b ↔ ∃ j, (∀ d, r d j → a d = b d) ∧ s j (a j) (b j) :=
   .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: ι] [forall i, LT (α i)] : LT (Lex (Π₀ i, α i))
-  body: ⟨fun f g => DFinsupp.Lex (· < ·) (fun _ => (· < ·)) (ofLex f) (ofLex g)⟩
-
-中文:
-实例 [LT
-  签名: ι] [对任意 i, LT (α i)] : LT (Lex (Π₀ i, α i))
-  定义体: ⟨fun f g => DFinsupp.Lex (· < ·) (fun _ => (· < ·)) (ofLex f) (ofLex g)⟩
-
-Depends on / 依赖: DFinsupp, DFinsupp.Lex
+/-
+**DFinsupp.** 是 Mathlib 中的一个实例，位于命名空间 `DFinsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [LT ι] [forall i, LT (α i)] : LT (Lex (Π₀ i, α i)) :=
-  ⟨fun f g => DFinsupp.Lex (· < ·) (fun _ => (· < ·)) (ofLex f) (ofLex g)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: ι] [forall i, LT (α i)] : LT (Colex (Π₀ i, α i))
-  body: ⟨fun f g => DFinsupp.Lex (· > ·) (fun _ => (· < ·)) (ofColex f) (ofColex g)⟩
-
-中文:
-实例 [LT
-  签名: ι] [对任意 i, LT (α i)] : LT (Colex (Π₀ i, α i))
-  定义体: ⟨fun f g => DFinsupp.Lex (· > ·) (fun _ => (· < ·)) (ofColex f) (ofColex g)⟩
-
-Depends on / 依赖: DFinsupp, DFinsupp.Lex, ofColex
+instance [LT ι] [∀ i, LT (α i)] : LT (Lex (Π₀ i, α i)) :=
+  ⟨fun f g ↦ DFinsupp.Lex (· < ·) (fun _ ↦ (· < ·)) (ofLex f) (ofLex g)⟩
+/-
+**DFinsupp.** 是 Mathlib 中的一个实例，位于命名空间 `DFinsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [LT ι] [forall i, LT (α i)] : LT (Colex (Π₀ i, α i)) :=
-  ⟨fun f g => DFinsupp.Lex (· > ·) (fun _ => (· < ·)) (ofColex f) (ofColex g)⟩
+instance [LT ι] [∀ i, LT (α i)] : LT (Colex (Π₀ i, α i)) :=
+  ⟨fun f g ↦ DFinsupp.Lex (· > ·) (fun _ ↦ (· < ·)) (ofColex f) (ofColex g)⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Lex.lt_iff` / 定理 `Lex.lt_iff`
-
-English:
-theorem Lex.lt_iff
-  given: [LT ι] [forall i, LT (α i)] {a b : Lex (Π₀ i, α i)}
-  proof: .rfl
-
-中文:
-定理 Lex.lt_iff
-  条件: [LT ι] [对任意 i, LT (α i)] {a b : Lex (Π₀ i, α i)}
-  证明: .rfl
+/-
+**DFinsupp.Lex.lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LT ι] [inst_2 : (i : ι) → LT (α i)]   {a b : Lex (Π₀ (i : ι), α i)}, a < b ↔ ∃
+ i, (∀ j < i, (ofLex a) j = (ofLex b) j) ∧ (ofLex a) i < (ofLex b) i
+参数：i : ι；α i；i : ι；α i；Π₀ (i : ι), α i；∀ j < i, (ofLex a) j = (ofLex b) j；ofLex 
+a；ofLex b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Lex.lt_iff [LT ι] [forall i, LT (α i)] {a b : Lex (Π₀ i, α i)} :
-    a < b ↔ exists i, (forall j, j < i -> a j = b j) ∧ a i < b i :=
+theorem Lex.lt_iff [LT ι] [∀ i, LT (α i)] {a b : Lex (Π₀ i, α i)} :
+    a < b ↔ ∃ i, (∀ j, j < i → a j = b j) ∧ a i < b i :=
   .rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Colex.lt_iff` / 定理 `Colex.lt_iff`
-
-English:
-theorem Colex.lt_iff
-  given: [LT ι] [forall i, LT (α i)] {a b : Colex (Π₀ i, α i)}
-  proof: .rfl
-
-中文:
-定理 Colex.lt_iff
-  条件: [LT ι] [对任意 i, LT (α i)] {a b : Colex (Π₀ i, α i)}
-  证明: .rfl
+/-
+**DFinsupp.Colex.lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LT ι] [inst_2 : (i : ι) → LT (α i)]   {a b : Colex (Π₀ (i : ι), α i)},   a < b
+ ↔ ∃ i, (∀ (j : ι), i < j → (ofColex a) j = (ofColex b) j) ∧ (ofColex a) i < (of
+Colex b) i
+参数：i : ι；α i；i : ι；α i；Π₀ (i : ι), α i；∀ (j : ι), i < j → (ofColex a) j = (ofCol
+ex b) j；ofColex a；ofColex b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Colex.lt_iff [LT ι] [forall i, LT (α i)] {a b : Colex (Π₀ i, α i)} :
-    a < b ↔ exists i, (forall j, i < j -> a j = b j) ∧ a i < b i :=
+theorem Colex.lt_iff [LT ι] [∀ i, LT (α i)] {a b : Colex (Π₀ i, α i)} :
+    a < b ↔ ∃ i, (∀ j, i < j → a j = b j) ∧ a i < b i :=
   .rfl
-
-/--
-theorem `lex_lt_of_lt_of_preorder` / 定理 `lex_lt_of_lt_of_preorder`
-
-English:
-theorem lex_lt_of_lt_of_preorder
-  statement: [forall i, Preorder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
-  proof: by
-  obtain ⟨hle, j, hlt⟩ := Pi.lt_def.1 hlt
-  classical
-  have : (x.neLocus y : Set ι).WellFoundedOn r := (x.neLocus y).finite_toSet.wellFoundedOn
-  obtain ⟨i, hi, hl⟩ := this.has_min { i | x i < y i } ⟨⟨j, mem_neLocus.2 hlt.ne⟩, hlt⟩
-  refine ⟨i, fun k hk => ⟨hle k, ?_⟩, hi⟩
-  exact of_not_not fun h => hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
-
-中文:
-定理 lex_lt_of_lt_of_preorder
-  结论: [对任意 i, 预序 (α i)] (r) [是Strict序 ι r] {x y : Π₀ i, α i}
-  证明: by
-  obtain ⟨hle, j, hlt⟩ := Pi.lt_def.1 hlt
-  classical
-  have : (x.neLocus y : Set ι).WellFoundedOn r := (x.neLocus y).finite_toSet.wellFoundedOn
-  obtain ⟨i, hi, hl⟩ := this.has_min { i | x i < y i } ⟨⟨j, mem_neLocus.2 hlt.ne⟩, hlt⟩
-  refine ⟨i, fun k hk => ⟨hle k, ?_⟩, hi⟩
-  exact of_not_not fun h => hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
-
-Depends on / 依赖: Pi.lt_def, WellFoundedOn, classical, finite_toSet, finite_toSet.wellFoundedOn, has_min, hlt.ne, lt_def, lt_of_not_ge, mem_neLocus, neLocus, ne_of_not_le, of_not_not, this.has_min, wellFoundedOn, x.neLocus
+/-
+**DFinsupp.lex_lt_of_lt_of_preorder** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：lex_lt_of_lt_of_preorder [forall i, Preorder (α i)] (r) [IsStrictOrder ι r
+] {x y : Π₀ i, α i} (hlt : x < y) : exists i, (forall j, r j i -> x j <= y j ∧ y
+ j <= x j) ∧ x i < y i
+参数：α i；r；hlt : x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Pi.lt_def`：Pi.lt_def [forall i, Preorder (π i)] {x y : forall i, π i} : 
+x < y ↔ x <= y ∧ exists i, x i < y i
+· 使用定理 `Set.Finite.wellFoundedOn`：∀ {α : Type u_2} {r : α → α → Prop} [IsStrictO
+rder α r] {s : Set α}, s.Finite → s.WellFoundedOn r
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `WellFounded.has_min`：∀ {α : Type u_4} {r : α → α → Prop}, WellFounded r 
+→ ∀ (s : Set α), s.Nonempty → ∃ a ∈ s, ∀ x ∈ s, ¬r x a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `DFinsupp.mem_neLocus`：mem_neLocus {f g : Π₀ a, N a} {a : α} : a in f.neL
+ocus g ↔ f a != g a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `of_not_not`：of_not_not {a : Prop} : ¬¬a -> a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ne_of_not_le`：ne_of_not_le (h : ¬a <= b) : a != b
+· 使用定理 `LE.le.lt_of_not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ 
+b → ¬b ≤ a → a < b
 -/
-theorem lex_lt_of_lt_of_preorder [forall i, Preorder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
-    (hlt : x < y) : exists i, (forall j, r j i -> x j <= y j ∧ y j <= x j) ∧ x i < y i := by
+theorem lex_lt_of_lt_of_preorder [∀ i, Preorder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
+    (hlt : x < y) : ∃ i, (∀ j, r j i → x j ≤ y j ∧ y j ≤ x j) ∧ x i < y i := by
   obtain ⟨hle, j, hlt⟩ := Pi.lt_def.1 hlt
   classical
   have : (x.neLocus y : Set ι).WellFoundedOn r := (x.neLocus y).finite_toSet.wellFoundedOn
   obtain ⟨i, hi, hl⟩ := this.has_min { i | x i < y i } ⟨⟨j, mem_neLocus.2 hlt.ne⟩, hlt⟩
-  refine ⟨i, fun k hk => ⟨hle k, ?_⟩, hi⟩
-  exact of_not_not fun h => hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
-
-/--
-theorem `lex_lt_of_lt` / 定理 `lex_lt_of_lt`
-
-English:
-theorem lex_lt_of_lt
-  statement: [forall i, PartialOrder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
-  proof: by
-  simp_rw [Pi.Lex, le_antisymm_iff]
-  exact lex_lt_of_lt_of_preorder r hlt
-
-中文:
-定理 lex_lt_of_lt
-  结论: [对任意 i, 偏序 (α i)] (r) [是Strict序 ι r] {x y : Π₀ i, α i}
-  证明: by
-  simp_rw [Pi.Lex, le_antisymm_iff]
-  exact lex_lt_of_lt_of_preorder r hlt
-
-Depends on / 依赖: Pi.Lex, le_antisymm_iff, lex_lt_of_lt_of_preorder, simp_rw
+  refine ⟨i, fun k hk ↦ ⟨hle k, ?_⟩, hi⟩
+  exact of_not_not fun h ↦ hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
+/-
+**DFinsupp.lex_lt_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：lex_lt_of_lt [forall i, PartialOrder (α i)] (r) [IsStrictOrder ι r] {x y :
+ Π₀ i, α i} (hlt : x < y) : Pi.Lex r (· < ·) x y
+参数：α i；r；hlt : x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `DFinsupp.lex_lt_of_lt_of_preorder`：lex_lt_of_lt_of_preorder [forall i, P
+reorder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i} (hlt : x < y) : exists 
+i, (forall j, r j i -> …
 -/
-theorem lex_lt_of_lt [forall i, PartialOrder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
+theorem lex_lt_of_lt [∀ i, PartialOrder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
     (hlt : x < y) : Pi.Lex r (· < ·) x y := by
   simp_rw [Pi.Lex, le_antisymm_iff]
   exact lex_lt_of_lt_of_preorder r hlt
-
-/--
-theorem `lex_iff_of_unique` / 定理 `lex_iff_of_unique`
-
-English:
-theorem lex_iff_of_unique
-  given: [Unique ι] [forall i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i}
-  proof: Pi.lex_iff_of_unique
-
-中文:
-定理 lex_iff_of_unique
-  条件: [唯一 ι] [对任意 i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i}
-  证明: Pi.lex_iff_of_unique
-
-Depends on / 依赖: Pi.lex_iff_of_unique, lex_iff_of_unique
+/-
+**DFinsupp.lex_iff_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：lex_iff_of_unique [Unique ι] [forall i, LT (α i)] {r} [Std.Irrefl r] {x y 
+: Π₀ i, α i} : DFinsupp.Lex r (fun _ => (· < ·)) x y ↔ x default < y default
+参数：α i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.lex_iff_of_unique`：lex_iff_of_unique [Unique ι] [forall i, LT (β i)] 
+{r} [Std.Irrefl r] {x y : forall i, β i} : Pi.Lex r (· < ·) x y ↔ x default < y 
+default
 -/
-theorem lex_iff_of_unique [Unique ι] [forall i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i} :
-    DFinsupp.Lex r (fun _ => (· < ·)) x y ↔ x default < y default :=
+theorem lex_iff_of_unique [Unique ι] [∀ i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i} :
+    DFinsupp.Lex r (fun _ ↦ (· < ·)) x y ↔ x default < y default :=
   Pi.lex_iff_of_unique
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Lex.lt_iff_of_unique` / 定理 `Lex.lt_iff_of_unique`
-
-English:
-theorem Lex.lt_iff_of_unique
-  given: [Unique ι] [forall i, LT (α i)] [Preorder ι] {x y : Lex (Π₀ i, α i)}
-  proof: lex_iff_of_unique
-
-中文:
-定理 Lex.lt_iff_of_unique
-  条件: [唯一 ι] [对任意 i, LT (α i)] [预序 ι] {x y : Lex (Π₀ i, α i)}
-  证明: lex_iff_of_unique
-
-Depends on / 依赖: lex_iff_of_unique
+/-
+**DFinsupp.Lex.lt_iff_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: Unique ι] [inst_2 : (i : ι) → LT (α i)]   [inst_3 : Preorder ι] {x y : Lex (Π₀
+ (i : ι), α i)}, x < y ↔ (ofLex x) default < (ofLex y) default
+参数：i : ι；α i；i : ι；α i；Π₀ (i : ι), α i；ofLex x；ofLex y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.lex_iff_of_unique`：lex_iff_of_unique [Unique ι] [forall i, LT (
+α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i} : DFinsupp.Lex r (fun _ => (· < ·)) x
+ y ↔ x default <…
 -/
-theorem Lex.lt_iff_of_unique [Unique ι] [forall i, LT (α i)] [Preorder ι] {x y : Lex (Π₀ i, α i)} :
+theorem Lex.lt_iff_of_unique [Unique ι] [∀ i, LT (α i)] [Preorder ι] {x y : Lex (Π₀ i, α i)} :
     x < y ↔ x default < y default :=
   lex_iff_of_unique
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `colex_lt_iff_of_unique` / 定理 `colex_lt_iff_of_unique`
-
-English:
-theorem colex_lt_iff_of_unique
-  given: [Unique ι] [forall i, LT (α i)] [Preorder ι] {x y : Colex (Π₀ i, α i)}
-  proof: lex_iff_of_unique
-
-中文:
-定理 colex_lt_iff_of_unique
-  条件: [唯一 ι] [对任意 i, LT (α i)] [预序 ι] {x y : Colex (Π₀ i, α i)}
-  证明: lex_iff_of_unique
-
-Depends on / 依赖: lex_iff_of_unique
+/-
+**DFinsupp.colex_lt_iff_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：colex_lt_iff_of_unique [Unique ι] [forall i, LT (α i)] [Preorder ι] {x y :
+ Colex (Π₀ i, α i)} : x < y ↔ x default < y default
+参数：α i；Π₀ i, α i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.lex_iff_of_unique`：lex_iff_of_unique [Unique ι] [forall i, LT (
+α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i} : DFinsupp.Lex r (fun _ => (· < ·)) x
+ y ↔ x default <…
+· 使用定理 `instIrreflGt`：∀ {α : Type u} [inst : Preorder α], Std.Irrefl fun x1 x2 =
+> x2 < x1
 -/
-theorem colex_lt_iff_of_unique [Unique ι] [forall i, LT (α i)] [Preorder ι] {x y : Colex (Π₀ i, α i)} :
+theorem colex_lt_iff_of_unique [Unique ι] [∀ i, LT (α i)] [Preorder ι] {x y : Colex (Π₀ i, α i)} :
     x < y ↔ x default < y default :=
   lex_iff_of_unique
 
 variable [LinearOrder ι]
-
-/--
-Instance `Lex.isStrictOrder` / 实例 `Lex.isStrictOrder`
-
-English:
-instance Lex.isStrictOrder
-  signature: [forall i, PartialOrder (α i)]
-  body: lt_irrefl (α := Lex (forall i, α i)) _
-  trans _ _ _ := lt_trans (α := Lex (forall i, α i))
-
-中文:
-实例 Lex.isStrictOrder
-  签名: [对任意 i, 偏序 (α i)]
-  定义体: lt_irrefl (α := Lex (forall i, α i)) _
-  trans _ _ _ := lt_trans (α := Lex (forall i, α i))
-
-Depends on / 依赖: lt_irrefl
+/-
+**DFinsupp.Lex.isStrictOrder** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι]   [inst_2 : (i : ι) → PartialOrder (α i)], IsStrictOrder (Lex (
+Π₀ (i : ι), α i)) fun x1 x2 => x1 < x2
+参数：i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
 -/
-instance Lex.isStrictOrder [forall i, PartialOrder (α i)] :
+instance Lex.isStrictOrder [∀ i, PartialOrder (α i)] :
     IsStrictOrder (Lex (Π₀ i, α i)) (· < ·) where
-  irrefl _ := lt_irrefl (α := Lex (forall i, α i)) _
-  trans _ _ _ := lt_trans (α := Lex (forall i, α i))
+  irrefl _ := lt_irrefl (α := Lex (∀ i, α i)) _
+  trans _ _ _ := lt_trans (α := Lex (∀ i, α i))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.isStrictOrder` / 实例 `Colex.isStrictOrder`
-
-English:
-instance Colex.isStrictOrder
-  signature: [forall i, PartialOrder (α i)]
-  body: Lex.isStrictOrder (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.isStrictOrder
-  签名: [对任意 i, 偏序 (α i)]
-  定义体: Lex.isStrictOrder (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.isStrictOrder, isStrictOrder
+/-
+**DFinsupp.Colex.isStrictOrder** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι]   [inst_2 : (i : ι) → PartialOrder (α i)], IsStrictOrder (Colex
+ (Π₀ (i : ι), α i)) fun x1 x2 => x1 < x2
+参数：i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.isStrictOrder`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : 
+(i : ι) → Zero (α i)] [inst_1 : LinearOrder ι]   [inst_2 : (i : ι) → PartialOrde
+r (α i)], IsStri…
 -/
-instance Colex.isStrictOrder [forall i, PartialOrder (α i)] :
+instance Colex.isStrictOrder [∀ i, PartialOrder (α i)] :
     IsStrictOrder (Colex (Π₀ i, α i)) (· < ·) :=
   Lex.isStrictOrder (ι := ιᵒᵈ)
 
-/--
-Instance `Lex.partialOrder` / 实例 `Lex.partialOrder`
+/-- The partial order on `DFinsupp`s obtained by the lexicographic ordering.
+See `DFinsupp.Lex.linearOrder` for a proof that this partial order is in fact linear. -/
+/-
+**DFinsupp.Lex.partialOrder** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [LinearOrder ι] → [(i : ι) → PartialOrder (α i)] → PartialOrder (Lex (Π₀
+ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Lex.partialOrder
-  signature: [forall i, PartialOrder (α i)]
-  body: ⇑(ofLex x) = ⇑(ofLex y) ∨ x < y
-  toLT := instLTLex
-  __ := PartialOrder.lift (fun x : Lex (Π₀ i, α i) => toLex (⇑(ofLex x)))
-    (DFunLike.coe_injective (F := DFinsupp α))
-
-中文:
-实例 Lex.partialOrder
-  签名: [对任意 i, 偏序 (α i)]
-  定义体: ⇑(ofLex x) = ⇑(ofLex y) ∨ x < y
-  toLT := instLTLex
-  __ := PartialOrder.lift (fun x : Lex (Π₀ i, α i) => toLex (⇑(ofLex x)))
-    (DFunLike.coe_injective (F := DFinsupp α))
+--- 原说明 ---
+The partial order on `DFinsupp`s obtained by the lexicographic ordering.
+See `DFinsupp.Lex.linearOrder` for a proof that this partial order is in fact li
+near.
 -/
-instance Lex.partialOrder [forall i, PartialOrder (α i)] : PartialOrder (Lex (Π₀ i, α i)) where
+instance Lex.partialOrder [∀ i, PartialOrder (α i)] : PartialOrder (Lex (Π₀ i, α i)) where
   le x y := ⇑(ofLex x) = ⇑(ofLex y) ∨ x < y
   toLT := instLTLex
-  __ := PartialOrder.lift (fun x : Lex (Π₀ i, α i) => toLex (⇑(ofLex x)))
+  __ := PartialOrder.lift (fun x : Lex (Π₀ i, α i) ↦ toLex (⇑(ofLex x)))
     (DFunLike.coe_injective (F := DFinsupp α))
 
-/--
-Instance `Colex.partialOrder` / 实例 `Colex.partialOrder`
+/-- The partial order on `DFinsupp`s obtained by the colexicographic ordering.
+See `DFinsupp.Colex.linearOrder` for a proof that this partial order is in fact linear. -/
+/-
+**DFinsupp.Colex.partialOrder** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [LinearOrder ι] → [(i : ι) → PartialOrder (α i)] → PartialOrder (Colex (
+Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Colex.partialOrder
-  signature: [forall i, PartialOrder (α i)]
-  body: ⇑(ofColex x) = ⇑(ofColex y) ∨ x < y
-  toLT := instLTColex
-  __ := PartialOrder.lift (fun x : Colex (Π₀ i, α i) => toColex (⇑(ofColex x)))
-    (DFunLike.coe_injective (F := DFinsupp α))
-
-中文:
-实例 Colex.partialOrder
-  签名: [对任意 i, 偏序 (α i)]
-  定义体: ⇑(ofColex x) = ⇑(ofColex y) ∨ x < y
-  toLT := instLTColex
-  __ := PartialOrder.lift (fun x : Colex (Π₀ i, α i) => toColex (⇑(ofColex x)))
-    (DFunLike.coe_injective (F := DFinsupp α))
-
-Depends on / 依赖: ofColex
+--- 原说明 ---
+The partial order on `DFinsupp`s obtained by the colexicographic ordering.
+See `DFinsupp.Colex.linearOrder` for a proof that this partial order is in fact 
+linear.
 -/
-instance Colex.partialOrder [forall i, PartialOrder (α i)] : PartialOrder (Colex (Π₀ i, α i)) where
+instance Colex.partialOrder [∀ i, PartialOrder (α i)] : PartialOrder (Colex (Π₀ i, α i)) where
   le x y := ⇑(ofColex x) = ⇑(ofColex y) ∨ x < y
   toLT := instLTColex
-  __ := PartialOrder.lift (fun x : Colex (Π₀ i, α i) => toColex (⇑(ofColex x)))
+  __ := PartialOrder.lift (fun x : Colex (Π₀ i, α i) ↦ toColex (⇑(ofColex x)))
     (DFunLike.coe_injective (F := DFinsupp α))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Lex.le_iff_of_unique` / 定理 `Lex.le_iff_of_unique`
-
-English:
-theorem Lex.le_iff_of_unique
-  given: [Unique ι] [forall i, PartialOrder (α i)] {x y : Lex (Π₀ i, α i)}
-  proof: Pi.lex_le_iff_of_unique
-
-中文:
-定理 Lex.le_iff_of_unique
-  条件: [唯一 ι] [对任意 i, 偏序 (α i)] {x y : Lex (Π₀ i, α i)}
-  证明: Pi.lex_le_iff_of_unique
-
-Depends on / 依赖: Pi.lex_le_iff_of_unique, lex_le_iff_of_unique
+/-
+**DFinsupp.Lex.le_iff_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι] [inst_2 : Unique ι]   [inst_3 : (i : ι) → PartialOrder (α i)] {
+x y : Lex (Π₀ (i : ι), α i)}, x ≤ y ↔ (ofLex x) default ≤ (ofLex y) default
+参数：i : ι；α i；i : ι；α i；Π₀ (i : ι), α i；ofLex x；ofLex y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.lex_le_iff_of_unique`：lex_le_iff_of_unique [Unique ι] [LinearOrder ι]
+ [forall i, PartialOrder (β i)] {x y : Lex (forall i, β i)} : x <= y ↔ x default
+ <= y default
 -/
-theorem Lex.le_iff_of_unique [Unique ι] [forall i, PartialOrder (α i)] {x y : Lex (Π₀ i, α i)} :
-    x <= y ↔ x default <= y default :=
+theorem Lex.le_iff_of_unique [Unique ι] [∀ i, PartialOrder (α i)] {x y : Lex (Π₀ i, α i)} :
+    x ≤ y ↔ x default ≤ y default :=
   Pi.lex_le_iff_of_unique
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Colex.le_iff_of_unique` / 定理 `Colex.le_iff_of_unique`
-
-English:
-theorem Colex.le_iff_of_unique
-  given: [Unique ι] [forall i, PartialOrder (α i)] {x y : Colex (Π₀ i, α i)}
-  proof: Lex.le_iff_of_unique (ι := ιᵒᵈ)
-
-中文:
-定理 Colex.le_iff_of_unique
-  条件: [唯一 ι] [对任意 i, 偏序 (α i)] {x y : Colex (Π₀ i, α i)}
-  证明: Lex.le_iff_of_unique (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.le_iff_of_unique, le_iff_of_unique
+/-
+**DFinsupp.Colex.le_iff_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι] [inst_2 : Unique ι]   [inst_3 : (i : ι) → PartialOrder (α i)] {
+x y : Colex (Π₀ (i : ι), α i)},   x ≤ y ↔ (ofColex x) default ≤ (ofColex y) defa
+ult
+参数：i : ι；α i；i : ι；α i；Π₀ (i : ι), α i；ofColex x；ofColex y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.le_iff_of_unique`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst
+ : (i : ι) → Zero (α i)] [inst_1 : LinearOrder ι] [inst_2 : Unique ι]   [inst_3 
+: (i : ι) → Partial…
 -/
-theorem Colex.le_iff_of_unique [Unique ι] [forall i, PartialOrder (α i)] {x y : Colex (Π₀ i, α i)} :
-    x <= y ↔ x default <= y default :=
+theorem Colex.le_iff_of_unique [Unique ι] [∀ i, PartialOrder (α i)] {x y : Colex (Π₀ i, α i)} :
+    x ≤ y ↔ x default ≤ y default :=
   Lex.le_iff_of_unique (ι := ιᵒᵈ)
 
 section LinearOrder
 
-variable [forall i, LinearOrder (α i)]
+variable [∀ i, LinearOrder (α i)]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `lt_trichotomy_rec` / `lt_trichotomy_rec` 的定义
+/-- Auxiliary helper to case split computably. There is no need for this to be public, as it
+can be written with `Or.by_cases` on `lt_trichotomy` once the instances below are constructed. -/
+/-
+**DFinsupp.lt_trichotomy_rec** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lt_trichotomy_rec
-  signature: {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> Sort*}
-  body: Lex.rec fun f => Lex.rec fun g => match (motive := forall y, (f.neLocus g).min = y -> _) _, rfl with
-  | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
-  | (wit : ι), h => by
-    apply (mem_neLocus.mp <| Finset.mem_of_min h).lt_or_gt.by_cases <;> intro hwit
-    · exact h_lt ⟨wit, fun j hj => notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
-    · exact h_gt ⟨wit, fun j hj =>
-        notMem_neLocus.mp (Finset.notMem_of_lt_min hj <| by rwa [neLocus_comm]), hwit⟩
-
-中文:
-定义 lt_trichotomy_rec
-  签名: {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> 类型层*}
-  定义体: Lex.rec fun f => Lex.rec fun g => match (motive := forall y, (f.neLocus g).min = y -> _) _, rfl with
-  | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
-  | (wit : ι), h => by
-    apply (mem_neLocus.mp <| Finset.mem_of_min h).lt_or_gt.by_cases <;> intro hwit
-    · exact h_lt ⟨wit, fun j hj => notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
-    · exact h_gt ⟨wit, fun j hj =>
-        notMem_neLocus.mp (Finset.notMem_of_lt_min hj <| by rwa [neLocus_comm]), hwit⟩
+--- 原说明 ---
+Auxiliary helper to case split computably. There is no need for this to be publi
+c, as it
+can be written with `Or.by_cases` on `lt_trichotomy` once the instances below ar
+e constructed.
 -/
-private def lt_trichotomy_rec {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> Sort*}
-    (h_lt : forall {f g}, toLex f < toLex g -> P (toLex f) (toLex g))
-    (h_eq : forall {f g}, toLex f = toLex g -> P (toLex f) (toLex g))
-    (h_gt : forall {f g}, toLex g < toLex f -> P (toLex f) (toLex g)) : forall f g, P f g :=
-  Lex.rec fun f => Lex.rec fun g => match (motive := forall y, (f.neLocus g).min = y -> _) _, rfl with
+private def lt_trichotomy_rec {P : Lex (Π₀ i, α i) → Lex (Π₀ i, α i) → Sort*}
+    (h_lt : ∀ {f g}, toLex f < toLex g → P (toLex f) (toLex g))
+    (h_eq : ∀ {f g}, toLex f = toLex g → P (toLex f) (toLex g))
+    (h_gt : ∀ {f g}, toLex g < toLex f → P (toLex f) (toLex g)) : ∀ f g, P f g :=
+  Lex.rec fun f ↦ Lex.rec fun g ↦ match (motive := ∀ y, (f.neLocus g).min = y → _) _, rfl with
   | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
   | (wit : ι), h => by
     apply (mem_neLocus.mp <| Finset.mem_of_min h).lt_or_gt.by_cases <;> intro hwit
-    · exact h_lt ⟨wit, fun j hj => notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
-    · exact h_gt ⟨wit, fun j hj =>
+    · exact h_lt ⟨wit, fun j hj ↦ notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
+    · exact h_gt ⟨wit, fun j hj ↦
         notMem_neLocus.mp (Finset.notMem_of_lt_min hj <| by rwa [neLocus_comm]), hwit⟩
-
-/--
-Instance `Lex.total_le` / 实例 `Lex.total_le`
-
-English:
-instance Lex.total_le
-  signature: : @Std.Total (Lex (Π₀ i, α i)) (· <= ·) where
-  body: lt_trichotomy_rec (fun h => Or.inl h.le) (fun h => Or.inl h.le) fun h => Or.inr h.le
-
-中文:
-实例 Lex.total_le
-  签名: : @Std.全 (Lex (Π₀ i, α i)) (· <= ·) where
-  定义体: lt_trichotomy_rec (fun h => Or.inl h.le) (fun h => Or.inl h.le) fun h => Or.inr h.le
-
-Depends on / 依赖: Or.inl, Or.inr, h.le, lt_trichotomy_rec
+/-
+**DFinsupp.Lex.total_le** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι]   [inst_2 : (i : ι) → LinearOrder (α i)], Std.Total fun x1 x2 =
+> x1 ≤ x2
+参数：i : ι；α i；i : ι；α i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-instance Lex.total_le : @Std.Total (Lex (Π₀ i, α i)) (· <= ·) where
-  total := lt_trichotomy_rec (fun h => Or.inl h.le) (fun h => Or.inl h.le) fun h => Or.inr h.le
+instance Lex.total_le : @Std.Total (Lex (Π₀ i, α i)) (· ≤ ·) where
+  total := lt_trichotomy_rec (fun h ↦ Or.inl h.le) (fun h ↦ Or.inl h.le) fun h ↦ Or.inr h.le
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.total_le` / 实例 `Colex.total_le`
-
-English:
-instance Colex.total_le
-  signature: : @Std.Total (Colex (Π₀ i, α i)) (· <= ·)
-  body: Lex.total_le (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.total_le
-  签名: : @Std.全 (Colex (Π₀ i, α i)) (· <= ·)
-  定义体: Lex.total_le (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.total_le, total_le
+/-
+**DFinsupp.Colex.total_le** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → Zero (α i)] [inst_1 
+: LinearOrder ι]   [inst_2 : (i : ι) → LinearOrder (α i)], Std.Total fun x1 x2 =
+> x1 ≤ x2
+参数：i : ι；α i；i : ι；α i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.total_le`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : 
+ι) → Zero (α i)] [inst_1 : LinearOrder ι]   [inst_2 : (i : ι) → LinearOrder (α i
+)], Std.Tot…
 -/
-instance Colex.total_le : @Std.Total (Colex (Π₀ i, α i)) (· <= ·) :=
+instance Colex.total_le : @Std.Total (Colex (Π₀ i, α i)) (· ≤ ·) :=
   Lex.total_le (ι := ιᵒᵈ)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `Lex.decidableLE` / 实例 `Lex.decidableLE`
+/-- The less-or-equal relation for the lexicographic ordering is decidable. -/
+/-
+**DFinsupp.Lex.decidableLE** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [inst_1 : LinearOrder ι] → [inst_2 : (i : ι) → LinearOrder (α i)] → Deci
+dableLE (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Lex.decidableLE
-  signature: : DecidableLE (Lex (Π₀ i, α i))
-  body: lt_trichotomy_rec (fun h => isTrue <| Or.inr h)
-    (fun h => isTrue <| Or.inl <| congr_arg _ h)
-    fun h => isFalse fun h' => lt_irrefl _ (h.trans_le h')
-
-中文:
-实例 Lex.decidableLE
-  签名: : DecidableLE (Lex (Π₀ i, α i))
-  定义体: lt_trichotomy_rec (fun h => isTrue <| Or.inr h)
-    (fun h => isTrue <| Or.inl <| congr_arg _ h)
-    fun h => isFalse fun h' => lt_irrefl _ (h.trans_le h')
-
-Depends on / 依赖: Or.inl, Or.inr, congr_arg, h.trans_le, isFalse, isTrue, lt_irrefl, lt_trichotomy_rec, trans_le
+--- 原说明 ---
+The less-or-equal relation for the lexicographic ordering is decidable.
 -/
 instance Lex.decidableLE : DecidableLE (Lex (Π₀ i, α i)) :=
-  lt_trichotomy_rec (fun h => isTrue <| Or.inr h)
-    (fun h => isTrue <| Or.inl <| congr_arg _ h)
-    fun h => isFalse fun h' => lt_irrefl _ (h.trans_le h')
+  lt_trichotomy_rec (fun h ↦ isTrue <| Or.inr h)
+    (fun h ↦ isTrue <| Or.inl <| congr_arg _ h)
+    fun h ↦ isFalse fun h' ↦ lt_irrefl _ (h.trans_le h')
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.decidableLE` / 实例 `Colex.decidableLE`
+/-- The less-or-equal relation for the colexicographic ordering is decidable. -/
+/-
+**DFinsupp.Colex.decidableLE** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [inst_1 : LinearOrder ι] → [inst_2 : (i : ι) → LinearOrder (α i)] → Deci
+dableLE (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Colex.decidableLE
-  signature: : DecidableLE (Colex (Π₀ i, α i))
-  body: Lex.decidableLE (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.decidableLE
-  签名: : DecidableLE (Colex (Π₀ i, α i))
-  定义体: Lex.decidableLE (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.decidableLE, decidableLE
+--- 原说明 ---
+The less-or-equal relation for the colexicographic ordering is decidable.
 -/
 instance Colex.decidableLE : DecidableLE (Colex (Π₀ i, α i)) :=
   Lex.decidableLE (ι := ιᵒᵈ)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `Lex.decidableLT` / 实例 `Lex.decidableLT`
+/-- The less-than relation for the lexicographic ordering is decidable. -/
+/-
+**DFinsupp.Lex.decidableLT** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [inst_1 : LinearOrder ι] → [inst_2 : (i : ι) → LinearOrder (α i)] → Deci
+dableLT (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Lex.decidableLT
-  signature: : DecidableLT (Lex (Π₀ i, α i))
-  body: lt_trichotomy_rec (fun h => isTrue h) (fun h => isFalse h.not_lt) fun h => isFalse h.asymm
-
-中文:
-实例 Lex.decidableLT
-  签名: : DecidableLT (Lex (Π₀ i, α i))
-  定义体: lt_trichotomy_rec (fun h => isTrue h) (fun h => isFalse h.not_lt) fun h => isFalse h.asymm
-
-Depends on / 依赖: h.asymm, h.not_lt, isFalse, isTrue, lt_trichotomy_rec, not_lt
+--- 原说明 ---
+The less-than relation for the lexicographic ordering is decidable.
 -/
 instance Lex.decidableLT : DecidableLT (Lex (Π₀ i, α i)) :=
-  lt_trichotomy_rec (fun h => isTrue h) (fun h => isFalse h.not_lt) fun h => isFalse h.asymm
+  lt_trichotomy_rec (fun h ↦ isTrue h) (fun h ↦ isFalse h.not_lt) fun h ↦ isFalse h.asymm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.decidableLT` / 实例 `Colex.decidableLT`
+/-- The less-than relation for the colexicographic ordering is decidable. -/
+/-
+**DFinsupp.Colex.decidableLT** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [inst_1 : LinearOrder ι] → [inst_2 : (i : ι) → LinearOrder (α i)] → Deci
+dableLT (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Colex.decidableLT
-  signature: : DecidableLT (Colex (Π₀ i, α i))
-  body: Lex.decidableLT (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.decidableLT
-  签名: : DecidableLT (Colex (Π₀ i, α i))
-  定义体: Lex.decidableLT (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.decidableLT, decidableLT
+--- 原说明 ---
+The less-than relation for the colexicographic ordering is decidable.
 -/
 instance Colex.decidableLT : DecidableLT (Colex (Π₀ i, α i)) :=
   Lex.decidableLT (ι := ιᵒᵈ)
 
-/--
-Instance `Lex.linearOrder` / 实例 `Lex.linearOrder`
+/-- The linear order on `DFinsupp`s obtained by the lexicographic ordering. -/
+/-
+**DFinsupp.Lex.linearOrder** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [LinearOrder ι] → [(i : ι) → LinearOrder (α i)] → LinearOrder (Lex (Π₀ (
+i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Lex.linearOrder
-  signature: : LinearOrder (Lex (Π₀ i, α i)) where
-  body: total_of _
-  toDecidableLT := decidableLT
-  toDecidableLE := decidableLE
-
-中文:
-实例 Lex.linearOrder
-  签名: : 线性序 (Lex (Π₀ i, α i)) where
-  定义体: total_of _
-  toDecidableLT := decidableLT
-  toDecidableLE := decidableLE
-
-Depends on / 依赖: total_of
+--- 原说明 ---
+The linear order on `DFinsupp`s obtained by the lexicographic ordering.
 -/
 instance Lex.linearOrder : LinearOrder (Lex (Π₀ i, α i)) where
   le_total := total_of _
   toDecidableLT := decidableLT
   toDecidableLE := decidableLE
 
-/--
-Instance `Colex.linearOrder` / 实例 `Colex.linearOrder`
+/-- The linear order on `DFinsupp`s obtained by the colexicographic ordering. -/
+/-
+**DFinsupp.Colex.linearOrder** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → Zero (α i)] 
+→       [LinearOrder ι] → [(i : ι) → LinearOrder (α i)] → LinearOrder (Colex (Π₀
+ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Colex.linearOrder
-  signature: : LinearOrder (Colex (Π₀ i, α i)) where
-  body: total_of _
-  toDecidableLT := decidableLT
-  toDecidableLE := decidableLE
-
-中文:
-实例 Colex.linearOrder
-  签名: : 线性序 (Colex (Π₀ i, α i)) where
-  定义体: total_of _
-  toDecidableLT := decidableLT
-  toDecidableLE := decidableLE
-
-Depends on / 依赖: total_of
+--- 原说明 ---
+The linear order on `DFinsupp`s obtained by the colexicographic ordering.
 -/
 instance Colex.linearOrder : LinearOrder (Colex (Π₀ i, α i)) where
   le_total := total_of _
@@ -617,58 +490,49 @@ instance Colex.linearOrder : LinearOrder (Colex (Π₀ i, α i)) where
 
 end LinearOrder
 
-variable [forall i, PartialOrder (α i)]
+variable [∀ i, PartialOrder (α i)]
 
-/--
-theorem `toLex_monotone` / 定理 `toLex_monotone`
-
-English:
-theorem toLex_monotone
-  statement: Monotone (@toLex (Π₀ i, α i))
-  proof: by
-  intro a b h
-  refine le_of_lt_or_eq (or_iff_not_imp_right.2 fun hne => ?_)
-  classical
-  exact ⟨Finset.min' _ (nonempty_neLocus_iff.2 hne),
-    fun j hj => notMem_neLocus.1 fun h => (Finset.min'_le _ _ h).not_gt hj,
-    (h _).lt_of_ne (mem_neLocus.1 <| Finset.min'_mem _ _)⟩
-
-中文:
-定理 toLex_monotone
-  结论: 递增 (@toLex (Π₀ i, α i))
-  证明: by
-  intro a b h
-  refine le_of_lt_or_eq (or_iff_not_imp_right.2 fun hne => ?_)
-  classical
-  exact ⟨Finset.min' _ (nonempty_neLocus_iff.2 hne),
-    fun j hj => notMem_neLocus.1 fun h => (Finset.min'_le _ _ h).not_gt hj,
-    (h _).lt_of_ne (mem_neLocus.1 <| Finset.min'_mem _ _)⟩
-
-Depends on / 依赖: Finset, Finset.min, _mem, classical, le_of_lt_or_eq, lt_of_ne, mem_neLocus, nonempty_neLocus_iff, notMem_neLocus, not_gt, or_iff_not_imp_right
+/-
+**DFinsupp.toLex_monotone** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toLex_monotone : Monotone (@toLex (Π₀ i, α i))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_lt_or_eq`：le_of_lt_or_eq (h : a < b ∨ a = b) : a <= b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_right`：∀ {a b : Prop}, a ∨ b ↔ ¬b → a
+· 使用引理 `Finset.min'`：min'_one [LinearOrder α] : (1 : Finset α).min' one_nonempty
+ = 1
+· 使用定理 `DFinsupp.nonempty_neLocus_iff`：nonempty_neLocus_iff {f g : Π₀ a, N a} : 
+(f.neLocus g).Nonempty ↔ f != g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFinsupp.notMem_neLocus`：notMem_neLocus {f g : Π₀ a, N a} {a : α} : a ∉ 
+f.neLocus g ↔ f a = g a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Finset.min'_le`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) (
+x : α) (H2 : x ∈ s), s.min' ⋯ ≤ x
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `DFinsupp.mem_neLocus`：mem_neLocus {f g : Π₀ a, N a} {a : α} : a in f.neL
+ocus g ↔ f a != g a
+· 使用定理 `Finset.min'_mem`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) 
+(H : s.Nonempty), s.min' H ∈ s
 -/
 theorem toLex_monotone : Monotone (@toLex (Π₀ i, α i)) := by
   intro a b h
-  refine le_of_lt_or_eq (or_iff_not_imp_right.2 fun hne => ?_)
+  refine le_of_lt_or_eq (or_iff_not_imp_right.2 fun hne ↦ ?_)
   classical
   exact ⟨Finset.min' _ (nonempty_neLocus_iff.2 hne),
-    fun j hj => notMem_neLocus.1 fun h => (Finset.min'_le _ _ h).not_gt hj,
+    fun j hj ↦ notMem_neLocus.1 fun h ↦ (Finset.min'_le _ _ h).not_gt hj,
     (h _).lt_of_ne (mem_neLocus.1 <| Finset.min'_mem _ _)⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toColex_monotone` / 定理 `toColex_monotone`
-
-English:
-theorem toColex_monotone
-  statement: Monotone (@toColex (Π₀ i, α i))
-  proof: toLex_monotone (ι := ιᵒᵈ)
-
-中文:
-定理 toColex_monotone
-  结论: 递增 (@toColex (Π₀ i, α i))
-  证明: toLex_monotone (ι := ιᵒᵈ)
-
-Depends on / 依赖: toLex_monotone
+/-
+**DFinsupp.toColex_monotone** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toColex_monotone : Monotone (@toColex (Π₀ i, α i))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.toLex_monotone`：toLex_monotone : Monotone (@toLex (Π₀ i, α i))
 -/
 theorem toColex_monotone : Monotone (@toColex (Π₀ i, α i)) :=
   toLex_monotone (ι := ιᵒᵈ)
@@ -677,89 +541,76 @@ end Zero
 
 section Covariants
 
-variable [LinearOrder ι] [forall i, AddMonoid (α i)] [forall i, LinearOrder (α i)]
+variable [LinearOrder ι] [∀ i, AddMonoid (α i)] [∀ i, LinearOrder (α i)]
 
-/-! We are about to sneak in a hypothesis that might appear to be too strong.
+/-!  We are about to sneak in a hypothesis that might appear to be too strong.
 We assume `AddLeftStrictMono` (covariant with *strict* inequality `<`) also when proving the one
 with the *weak* inequality `≤`. This is actually necessary: addition on `Lex (Π₀ i, α i)` may fail
 to be monotone, when it is "just" monotone on `α i`. -/
 
 section Left
 
-variable [forall i, AddLeftStrictMono (α i)]
+variable [∀ i, AddLeftStrictMono (α i)]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `Lex.addLeftStrictMono` / 实例 `Lex.addLeftStrictMono`
-
-English:
-instance Lex.addLeftStrictMono
-  signature: : AddLeftStrictMono (Lex (Π₀ i, α i))
-  body: ⟨fun _ _ _ ⟨a, lta, ha⟩ => ⟨a, fun j ja => congr_arg _ (lta j ja), by dsimp; gcongr⟩⟩
-
-中文:
-实例 Lex.addLeftStrictMono
-  签名: : AddLeftStrictMono (Lex (Π₀ i, α i))
-  定义体: ⟨fun _ _ _ ⟨a, lta, ha⟩ => ⟨a, fun j ja => congr_arg _ (lta j ja), by dsimp; gcongr⟩⟩
-
-Depends on / 依赖: congr_arg
+/-
+**DFinsupp.Lex.addLeftStrictMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddLe
+ftStrictMono (α i)], AddLeftStrictMono (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
 -/
 instance Lex.addLeftStrictMono : AddLeftStrictMono (Lex (Π₀ i, α i)) :=
-  ⟨fun _ _ _ ⟨a, lta, ha⟩ => ⟨a, fun j ja => congr_arg _ (lta j ja), by dsimp; gcongr⟩⟩
+  ⟨fun _ _ _ ⟨a, lta, ha⟩ ↦ ⟨a, fun j ja ↦ congr_arg _ (lta j ja), by dsimp; gcongr⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.addLeftStrictMono` / 实例 `Colex.addLeftStrictMono`
-
-English:
-instance Colex.addLeftStrictMono
-  signature: : AddLeftStrictMono (Colex (Π₀ i, α i))
-  body: Lex.addLeftStrictMono (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.addLeftStrictMono
-  签名: : AddLeftStrictMono (Colex (Π₀ i, α i))
-  定义体: Lex.addLeftStrictMono (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.addLeftStrictMono, addLeftStrictMono
+/-
+**DFinsupp.Colex.addLeftStrictMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddLe
+ftStrictMono (α i)],   AddLeftStrictMono (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.addLeftStrictMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [ins
+t : LinearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → Li
+nearOrder (α i)] [∀ …
 -/
 instance Colex.addLeftStrictMono : AddLeftStrictMono (Colex (Π₀ i, α i)) :=
   Lex.addLeftStrictMono (ι := ιᵒᵈ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Lex.addLeftMono` / 实例 `Lex.addLeftMono`
-
-English:
-instance Lex.addLeftMono
-  signature: : AddLeftMono (Lex (Π₀ i, α i))
-  body: addLeftMono_of_addLeftStrictMono _
-
-中文:
-实例 Lex.addLeftMono
-  签名: : AddLeftMono (Lex (Π₀ i, α i))
-  定义体: addLeftMono_of_addLeftStrictMono _
-
-Depends on / 依赖: addLeftMono_of_addLeftStrictMono
+/-
+**DFinsupp.Lex.addLeftMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddLe
+ftStrictMono (α i)], AddLeftMono (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `addLeftMono_of_addLeftStrictMono`：∀ (M : Type u_3) [inst : Add M] [inst_
+1 : PartialOrder M] [AddLeftStrictMono M], AddLeftMono M
+· 使用定理 `DFinsupp.Lex.addLeftStrictMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [ins
+t : LinearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → Li
+nearOrder (α i)] [∀ …
 -/
 instance Lex.addLeftMono : AddLeftMono (Lex (Π₀ i, α i)) :=
   addLeftMono_of_addLeftStrictMono _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.addLeftMono` / 实例 `Colex.addLeftMono`
-
-English:
-instance Colex.addLeftMono
-  signature: : AddLeftMono (Colex (Π₀ i, α i))
-  body: Lex.addLeftMono (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.addLeftMono
-  签名: : AddLeftMono (Colex (Π₀ i, α i))
-  定义体: Lex.addLeftMono (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.addLeftMono, addLeftMono
+/-
+**DFinsupp.Colex.addLeftMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddLe
+ftStrictMono (α i)], AddLeftMono (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.addLeftMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : Li
+nearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOr
+der (α i)] [∀ …
 -/
 instance Colex.addLeftMono : AddLeftMono (Colex (Π₀ i, α i)) :=
   Lex.addLeftMono (ι := ιᵒᵈ)
@@ -768,83 +619,68 @@ end Left
 
 section Right
 
-variable [forall i, AddRightStrictMono (α i)]
+variable [∀ i, AddRightStrictMono (α i)]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `Lex.addRightStrictMono` / 实例 `Lex.addRightStrictMono`
-
-English:
-instance Lex.addRightStrictMono
-  signature: : AddRightStrictMono (Lex (Π₀ i, α i))
-  body: ⟨fun f _ _ ⟨a, lta, ha⟩ =>
-    ⟨a, fun j ja => congr_arg (· + ofLex f j) (lta j ja), by dsimp; gcongr⟩⟩
-
-中文:
-实例 Lex.addRightStrictMono
-  签名: : AddRightStrictMono (Lex (Π₀ i, α i))
-  定义体: ⟨fun f _ _ ⟨a, lta, ha⟩ =>
-    ⟨a, fun j ja => congr_arg (· + ofLex f j) (lta j ja), by dsimp; gcongr⟩⟩
-
-Depends on / 依赖: congr_arg
+/-
+**DFinsupp.Lex.addRightStrictMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddRi
+ghtStrictMono (α i)],   AddRightStrictMono (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `add_lt_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [i : Ad
+dRightStrictMono α] {b c : α}, b < c → ∀ (a : α), b + a < c + a
 -/
 instance Lex.addRightStrictMono : AddRightStrictMono (Lex (Π₀ i, α i)) :=
-  ⟨fun f _ _ ⟨a, lta, ha⟩ =>
-    ⟨a, fun j ja => congr_arg (· + ofLex f j) (lta j ja), by dsimp; gcongr⟩⟩
+  ⟨fun f _ _ ⟨a, lta, ha⟩ ↦
+    ⟨a, fun j ja ↦ congr_arg (· + ofLex f j) (lta j ja), by dsimp; gcongr⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.addRightStrictMono` / 实例 `Colex.addRightStrictMono`
-
-English:
-instance Colex.addRightStrictMono
-  signature: : AddRightStrictMono (Colex (Π₀ i, α i))
-  body: Lex.addRightStrictMono (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.addRightStrictMono
-  签名: : AddRightStrictMono (Colex (Π₀ i, α i))
-  定义体: Lex.addRightStrictMono (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.addRightStrictMono, addRightStrictMono
+/-
+**DFinsupp.Colex.addRightStrictMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddRi
+ghtStrictMono (α i)],   AddRightStrictMono (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.addRightStrictMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [in
+st : LinearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → L
+inearOrder (α i)] [∀ …
 -/
 instance Colex.addRightStrictMono : AddRightStrictMono (Colex (Π₀ i, α i)) :=
   Lex.addRightStrictMono (ι := ιᵒᵈ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Lex.addRightMono` / 实例 `Lex.addRightMono`
-
-English:
-instance Lex.addRightMono
-  signature: : AddRightMono (Lex (Π₀ i, α i))
-  body: addRightMono_of_addRightStrictMono _
-
-中文:
-实例 Lex.addRightMono
-  签名: : AddRightMono (Lex (Π₀ i, α i))
-  定义体: addRightMono_of_addRightStrictMono _
-
-Depends on / 依赖: addRightMono_of_addRightStrictMono
+/-
+**DFinsupp.Lex.addRightMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddRi
+ghtStrictMono (α i)], AddRightMono (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `addRightMono_of_addRightStrictMono`：∀ (M : Type u_3) [inst : Add M] [ins
+t_1 : PartialOrder M] [AddRightStrictMono M], AddRightMono M
+· 使用定理 `DFinsupp.Lex.addRightStrictMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [in
+st : LinearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → L
+inearOrder (α i)] [∀ …
 -/
 instance Lex.addRightMono : AddRightMono (Lex (Π₀ i, α i)) :=
   addRightMono_of_addRightStrictMono _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.addRightMono` / 实例 `Colex.addRightMono`
-
-English:
-instance Colex.addRightMono
-  signature: : AddRightMono (Colex (Π₀ i, α i))
-  body: Lex.addRightMono (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.addRightMono
-  签名: : AddRightMono (Colex (Π₀ i, α i))
-  定义体: Lex.addRightMono (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.addRightMono, addRightMono
+/-
+**DFinsupp.Colex.addRightMono** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearOrder (α i)] [∀ (i : ι), AddRi
+ghtStrictMono (α i)], AddRightMono (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.addRightMono`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : L
+inearOrder ι] [inst_1 : (i : ι) → AddMonoid (α i)]   [inst_2 : (i : ι) → LinearO
+rder (α i)] [∀ …
 -/
 instance Colex.addRightMono : AddRightMono (Colex (Π₀ i, α i)) :=
   Lex.addRightMono (ι := ιᵒᵈ)
@@ -857,173 +693,172 @@ section OrderedAddMonoid
 
 variable [LinearOrder ι]
 
-/--
-Instance `Lex.orderBot` / 实例 `Lex.orderBot`
-
-English:
-instance Lex.orderBot
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: 0
-  bot_le _ := DFinsupp.toLex_monotone bot_le
-
-中文:
-实例 Lex.orderBot
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: 0
-  bot_le _ := DFinsupp.toLex_monotone bot_le
+/-
+**DFinsupp.Lex.orderBot** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : LinearOrder ι] →      
+ [inst_1 : (i : ι) → AddCommMonoid (α i)] →         [inst_2 : (i : ι) → PartialO
+rder (α i)] → [∀ (i : ι), IsBotZeroClass (α i)] → OrderBot (Lex (Π₀ (i : ι), α i
+))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Lex.orderBot [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsBotZeroClass (α i)] :
+instance Lex.orderBot [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsBotZeroClass (α i)] :
     OrderBot (Lex (Π₀ i, α i)) where
   bot := 0
   bot_le _ := DFinsupp.toLex_monotone bot_le
-
-/--
-Instance `Lex.isBotZeroClass` / 实例 `Lex.isBotZeroClass`
-
-English:
-instance Lex.isBotZeroClass
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: isBot_bot
-
-中文:
-实例 Lex.isBotZeroClass
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: isBot_bot
-
-Depends on / 依赖: isBot_bot
+/-
+**DFinsupp.Lex.isBotZeroClass** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommMonoid (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), 
+IsBotZeroClass (α i)], IsBotZeroClass (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isBot_bot`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α], IsBot ⊥
 -/
-instance Lex.isBotZeroClass [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsBotZeroClass (α i)] :
+instance Lex.isBotZeroClass [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsBotZeroClass (α i)] :
     IsBotZeroClass (Lex (Π₀ i, α i)) where
   isBot_zero := isBot_bot
-
-/--
-Instance `Colex.orderBot` / 实例 `Colex.orderBot`
-
-English:
-instance Colex.orderBot
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: 0
-  bot_le _ := DFinsupp.toColex_monotone bot_le
-
-中文:
-实例 Colex.orderBot
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: 0
-  bot_le _ := DFinsupp.toColex_monotone bot_le
+/-
+**DFinsupp.Colex.orderBot** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : LinearOrder ι] →      
+ [inst_1 : (i : ι) → AddCommMonoid (α i)] →         [inst_2 : (i : ι) → PartialO
+rder (α i)] → [∀ (i : ι), IsBotZeroClass (α i)] → OrderBot (Colex (Π₀ (i : ι), α
+ i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Colex.orderBot [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsBotZeroClass (α i)] :
+instance Colex.orderBot [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsBotZeroClass (α i)] :
     OrderBot (Colex (Π₀ i, α i)) where
   bot := 0
   bot_le _ := DFinsupp.toColex_monotone bot_le
-
-/--
-Instance `Colex.isBotZeroClass` / 实例 `Colex.isBotZeroClass`
-
-English:
-instance Colex.isBotZeroClass
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: isBot_bot
-
-中文:
-实例 Colex.isBotZeroClass
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: isBot_bot
-
-Depends on / 依赖: isBot_bot
+/-
+**DFinsupp.Colex.isBotZeroClass** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommMonoid (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), 
+IsBotZeroClass (α i)], IsBotZeroClass (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isBot_bot`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α], IsBot ⊥
 -/
-instance Colex.isBotZeroClass [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsBotZeroClass (α i)] :
+instance Colex.isBotZeroClass [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsBotZeroClass (α i)] :
     IsBotZeroClass (Colex (Π₀ i, α i)) where
   isBot_zero := isBot_bot
-
-/--
-Instance `Lex.isOrderedCancelAddMonoid` / 实例 `Lex.isOrderedCancelAddMonoid`
-
-English:
-instance Lex.isOrderedCancelAddMonoid
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: add_le_add_left (α := Lex (forall i, α i)) h _
-  le_of_add_le_add_left _ _ _ := le_of_add_le_add_left (α := Lex (forall i, α i))
-
-中文:
-实例 Lex.isOrderedCancelAddMonoid
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: add_le_add_left (α := Lex (forall i, α i)) h _
-  le_of_add_le_add_left _ _ _ := le_of_add_le_add_left (α := Lex (forall i, α i))
-
-Depends on / 依赖: add_le_add_left
+/-
+**DFinsupp.Lex.isOrderedCancelAddMonoid** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`
+。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommMonoid (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), 
+IsOrderedCancelAddMonoid (α i)],   IsOrderedCancelAddMonoid (Lex (Π₀ (i : ι), α 
+i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `Pi.Lex.isOrderedAddCancelMonoid`：∀ {ι : Type u_1} {α : ι → Type u_2} [in
+st : LinearOrder ι] [inst_1 : (i : ι) → AddCommMonoid (α i)]   [inst_2 : (i : ι)
+ → PartialOrder (α i)…
+· 使用定理 `le_of_add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [
+AddLeftReflectLE α] {a b c : α}, a + b ≤ a + c → b ≤ c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `Lex.instIsLeftCancelAdd`：∀ {α : Type u_1} [inst : Add α] [IsLeftCancelAd
+d α], IsLeftCancelAdd (Lex α)
+· 使用定理 `Pi.instIsLeftCancelAdd`：∀ {I : Type u} {f : I → Type v₁} [inst : (i : I)
+ → Add (f i)] [∀ (i : I), IsLeftCancelAdd (f i)],   IsLeftCancelAdd ((i : I) → f
+ i)
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
 -/
-instance Lex.isOrderedCancelAddMonoid [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsOrderedCancelAddMonoid (α i)] :
+instance Lex.isOrderedCancelAddMonoid [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsOrderedCancelAddMonoid (α i)] :
     IsOrderedCancelAddMonoid (Lex (Π₀ i, α i)) where
-  add_le_add_left _ _ h _ := add_le_add_left (α := Lex (forall i, α i)) h _
-  le_of_add_le_add_left _ _ _ := le_of_add_le_add_left (α := Lex (forall i, α i))
+  add_le_add_left _ _ h _ := add_le_add_left (α := Lex (∀ i, α i)) h _
+  le_of_add_le_add_left _ _ _ := le_of_add_le_add_left (α := Lex (∀ i, α i))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.isOrderedCancelAddMonoid` / 实例 `Colex.isOrderedCancelAddMonoid`
-
-English:
-instance Colex.isOrderedCancelAddMonoid
-  signature: [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-  body: Lex.isOrderedCancelAddMonoid (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.isOrderedCancelAddMonoid
-  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: Lex.isOrderedCancelAddMonoid (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.isOrderedCancelAddMonoid, isOrderedCancelAddMonoid
+/-
+**DFinsupp.Colex.isOrderedCancelAddMonoid** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Co
+lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommMonoid (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), 
+IsOrderedCancelAddMonoid (α i)],   IsOrderedCancelAddMonoid (Colex (Π₀ (i : ι), 
+α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.isOrderedCancelAddMonoid`：∀ {ι : Type u_1} {α : ι → Type u_
+2} [inst : LinearOrder ι] [inst_1 : (i : ι) → AddCommMonoid (α i)]   [inst_2 : (
+i : ι) → PartialOrder (α i)…
 -/
-instance Colex.isOrderedCancelAddMonoid [forall i, AddCommMonoid (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsOrderedCancelAddMonoid (α i)] :
+instance Colex.isOrderedCancelAddMonoid [∀ i, AddCommMonoid (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsOrderedCancelAddMonoid (α i)] :
     IsOrderedCancelAddMonoid (Colex (Π₀ i, α i)) :=
   Lex.isOrderedCancelAddMonoid (ι := ιᵒᵈ)
-
-/--
-Instance `Lex.isOrderedAddMonoid` / 实例 `Lex.isOrderedAddMonoid`
-
-English:
-instance Lex.isOrderedAddMonoid
-  signature: [forall i, AddCommGroup (α i)] [forall i, PartialOrder (α i)]
-  body: add_le_add_left
-
-中文:
-实例 Lex.isOrderedAddMonoid
-  签名: [对任意 i, 加法交换群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: add_le_add_left
-
-Depends on / 依赖: add_le_add_left
+/-
+**DFinsupp.Lex.isOrderedAddMonoid** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommGroup (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), I
+sOrderedAddMonoid (α i)],   IsOrderedAddMonoid (Lex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Lex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `DFinsupp.Lex.isOrderedCancelAddMonoid`：∀ {ι : Type u_1} {α : ι → Type u_
+2} [inst : LinearOrder ι] [inst_1 : (i : ι) → AddCommMonoid (α i)]   [inst_2 : (
+i : ι) → PartialOrder (α i)…
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
 -/
-instance Lex.isOrderedAddMonoid [forall i, AddCommGroup (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsOrderedAddMonoid (α i)] :
+instance Lex.isOrderedAddMonoid [∀ i, AddCommGroup (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsOrderedAddMonoid (α i)] :
     IsOrderedAddMonoid (Lex (Π₀ i, α i)) where
   add_le_add_left _ _ := add_le_add_left
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Colex.isOrderedAddMonoid` / 实例 `Colex.isOrderedAddMonoid`
-
-English:
-instance Colex.isOrderedAddMonoid
-  signature: [forall i, AddCommGroup (α i)] [forall i, PartialOrder (α i)]
-  body: Lex.isOrderedAddMonoid (ι := ιᵒᵈ)
-
-中文:
-实例 Colex.isOrderedAddMonoid
-  签名: [对任意 i, 加法交换群 (α i)] [对任意 i, 偏序 (α i)]
-  定义体: Lex.isOrderedAddMonoid (ι := ιᵒᵈ)
-
-Depends on / 依赖: Lex.isOrderedAddMonoid, isOrderedAddMonoid
+/-
+**DFinsupp.Colex.isOrderedAddMonoid** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp.Colex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : LinearOrder ι] [inst_1 : (i : 
+ι) → AddCommGroup (α i)]   [inst_2 : (i : ι) → PartialOrder (α i)] [∀ (i : ι), I
+sOrderedAddMonoid (α i)],   IsOrderedAddMonoid (Colex (Π₀ (i : ι), α i))
+参数：i : ι；α i；i : ι；α i；i : ι；α i；Colex (Π₀ (i : ι), α i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.Lex.isOrderedAddMonoid`：∀ {ι : Type u_1} {α : ι → Type u_2} [in
+st : LinearOrder ι] [inst_1 : (i : ι) → AddCommGroup (α i)]   [inst_2 : (i : ι) 
+→ PartialOrder (α i)]…
 -/
-instance Colex.isOrderedAddMonoid [forall i, AddCommGroup (α i)] [forall i, PartialOrder (α i)]
-    [forall i, IsOrderedAddMonoid (α i)] :
+instance Colex.isOrderedAddMonoid [∀ i, AddCommGroup (α i)] [∀ i, PartialOrder (α i)]
+    [∀ i, IsOrderedAddMonoid (α i)] :
     IsOrderedAddMonoid (Colex (Π₀ i, α i)) :=
   Lex.isOrderedAddMonoid (ι := ιᵒᵈ)
 
 end OrderedAddMonoid
 
 end DFinsupp
+

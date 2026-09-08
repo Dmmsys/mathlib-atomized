@@ -33,23 +33,19 @@ variable {C : Type u₁} {D : Type u₂} {E : Type u₃}
 variable [Category.{v₁} C] [Category.{v₂} D] [Category.{v₃} E]
 
 /--
-Definition of `Reflective` / `Reflective` 的定义
+A functor is *reflective*, or *a reflective inclusion*, if it is fully faithful and right adjoint.
+-/
+/-
+**CategoryTheory.Reflective** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor D C → Type (max (max (max u₁ u₂) v₁) v₂)
+参数：max (max (max u₁ u₂) v₁) v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Reflective
-  parameters: (R : D ⥤ C)
-  extends: R.Full, R.Faithful
-  axioms and operations (2):
-    - L : C ⥤ D
-    - adj : L ⊣ R
-
-中文:
-类 反射
-  参数: (R : D ⥤ C)
-  继承: R.满, R.忠实
-  公理与运算 (2 个):
-    - L : C ⥤ D
-    - adj : L ⊣ R
+--- 原说明 ---
+A functor is *reflective*, or *a reflective inclusion*, if it is fully faithful 
+and right adjoint.
 -/
 class Reflective (R : D ⥤ C) extends R.Full, R.Faithful where
   /-- a choice of a left adjoint to `R` -/
@@ -59,116 +55,125 @@ class Reflective (R : D ⥤ C) extends R.Full, R.Faithful where
 
 variable (i : D ⥤ C)
 
-/--
-Definition of `reflector` / `reflector` 的定义
+/-- The reflector `C ⥤ D` when `R : D ⥤ C` is reflective. -/
+/-
+**CategoryTheory.reflector** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：reflector [Reflective i] : C ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reflector
-  signature: [Reflective i]
-  body: Reflective.L (R := i)
-
-中文:
-定义 reflector
-  签名: [反射 i]
-  定义体: Reflective.L (R := i)
-
-Depends on / 依赖: Reflective, Reflective.L
+--- 原说明 ---
+The reflector `C ⥤ D` when `R : D ⥤ C` is reflective.
 -/
 def reflector [Reflective i] : C ⥤ D := Reflective.L (R := i)
 
-/--
-Definition of `reflectorAdjunction` / `reflectorAdjunction` 的定义
+/-- The adjunction `reflector i ⊣ i` when `i` is reflective. -/
+/-
+**CategoryTheory.reflectorAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：reflectorAdjunction [Reflective i] : reflector i ⊣ i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reflectorAdjunction
-  signature: [Reflective i]
-  body: Reflective.adj
-
-中文:
-定义 reflectorAdjunction
-  签名: [反射 i]
-  定义体: Reflective.adj
-
-Depends on / 依赖: Reflective, Reflective.adj
+--- 原说明 ---
+The adjunction `reflector i ⊣ i` when `i` is reflective.
 -/
 def reflectorAdjunction [Reflective i] : reflector i ⊣ i := Reflective.adj
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Reflective
-  signature: i] : i.IsRightAdjoint
-  body: ⟨_, ⟨reflectorAdjunction i⟩⟩
-
-中文:
-实例 [反射
-  签名: i] : i.是右伴随
-  定义体: ⟨_, ⟨reflectorAdjunction i⟩⟩
-
-Depends on / 依赖: reflectorAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Reflective i] : i.IsRightAdjoint := ⟨_, ⟨reflectorAdjunction i⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Reflective
-  signature: i] : (reflector i).IsLeftAdjoint
-  body: ⟨_, ⟨reflectorAdjunction i⟩⟩
-
-中文:
-实例 [反射
-  签名: i] : (reflector i).是左伴随
-  定义体: ⟨_, ⟨reflectorAdjunction i⟩⟩
-
-Depends on / 依赖: reflectorAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Reflective i] : (reflector i).IsLeftAdjoint := ⟨_, ⟨reflectorAdjunction i⟩⟩
 
-/--
-Definition of `Functor.fullyFaithfulOfReflective` / `Functor.fullyFaithfulOfReflective` 的定义
+/-- A reflective functor is fully faithful. -/
+/-
+**CategoryTheory.Functor.fullyFaithfulOfReflective** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (i : Cat
+egoryTheory.Functor D C) → [CategoryTheory.Reflective i] → i.FullyFaithful
+参数：i : CategoryTheory.Functor D C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.fullyFaithfulOfReflective
-  signature: [Reflective i]
-  body: (reflectorAdjunction i).fullyFaithfulROfIsIsoCounit
-
-中文:
-定义 函子.fullyFaithfulOfReflective
-  签名: [反射 i]
-  定义体: (reflectorAdjunction i).fullyFaithfulROfIsIsoCounit
-
-Depends on / 依赖: fullyFaithfulROfIsIsoCounit, reflectorAdjunction
+--- 原说明 ---
+A reflective functor is fully faithful.
 -/
 def Functor.fullyFaithfulOfReflective [Reflective i] : i.FullyFaithful :=
   (reflectorAdjunction i).fullyFaithfulROfIsIsoCounit
 
 -- TODO: This holds more generally for idempotent adjunctions, not just reflective adjunctions.
-/--
-theorem `unit_obj_eq_map_unit` / 定理 `unit_obj_eq_map_unit`
+/-- For a reflective functor `i` (with left adjoint `L`), with unit `η`, we have `η_iL = iL η`.
+-/
+/-
+**CategoryTheory.unit_obj_eq_map_unit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：unit_obj_eq_map_unit [Reflective i] (X : C) : (reflectorAdjunction i).unit
+.app (i.obj ((reflector i).obj X)) = i.map ((reflector i).map ((reflectorAdjunct
+ion i).unit.app X))
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Functor.map_mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preservesMonomorphisms_of_isRightAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instIsRightAdjointOfReflective`：∀ {C : Type u₁} {D : Type
+ u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   (i : CategoryTheor…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppCounitOfFullOfFaithful`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Reflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst : 
+CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Reflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {ins
+t : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u
+₂} D}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem unit_obj_eq_map_unit
-  given: [Reflective i] (X : C)
-  proof: by
-  rw [← cancel_mono (i.map ((reflectorAdjunction i).counit.app ((reflector i).obj X)))]; rw [← i.map_comp]
-  simp
-
-中文:
-定理 unit_obj_eq_map_unit
-  条件: [反射 i] (X : C)
-  证明: by
-  rw [← cancel_mono (i.map ((reflectorAdjunction i).counit.app ((reflector i).obj X)))]; rw [← i.map_comp]
-  simp
-
-Depends on / 依赖: cancel_mono, counit, counit.app, i.map, i.map_comp, map_comp, reflector, reflectorAdjunction
+--- 原说明 ---
+For a reflective functor `i` (with left adjoint `L`), with unit `η`, we have `η_
+iL = iL η`.
 -/
 theorem unit_obj_eq_map_unit [Reflective i] (X : C) :
     (reflectorAdjunction i).unit.app (i.obj ((reflector i).obj X)) =
       i.map ((reflector i).map ((reflectorAdjunction i).unit.app X)) := by
-  rw [← cancel_mono (i.map ((reflectorAdjunction i).counit.app ((reflector i).obj X)))]; rw [← i.map_comp]
+  rw [← cancel_mono (i.map ((reflectorAdjunction i).counit.app ((reflector i).obj X))),
+    ← i.map_comp]
   simp
 
 /--
@@ -177,64 +182,108 @@ When restricted to objects in `D` given by `i : D ⥤ C`, the unit is an isomorp
 More generally this applies to objects essentially in the reflective subcategory, see
 `Functor.essImage.unit_isIso`.
 -/
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+When restricted to objects in `D` given by `i : D ⥤ C`, the unit is an isomorphi
+sm. In other words,
+`η_iX` is an isomorphism for any `X` in `D`.
+More generally this applies to objects essentially in the reflective subcategory
+, see
+`Functor.essImage.unit_isIso`.
+-/
 example [Reflective i] {B : D} : IsIso ((reflectorAdjunction i).unit.app (i.obj B)) :=
   inferInstance
 
 variable {i}
 
-/--
-theorem `Functor.essImage.unit_isIso` / 定理 `Functor.essImage.unit_isIso`
+/-- If `A` is essentially in the image of a reflective functor `i`, then `η_A` is an isomorphism.
+This gives that the "witness" for `A` being in the essential image can instead be given as the
+reflection of `A`, with the isomorphism as `η_A`.
 
-English:
-theorem Functor.essImage.unit_isIso
-  given: [Reflective i] {A : C} (h : i.essImage A)
-  proof: by
-  rwa [isIso_unit_app_iff_mem_essImage]
+(For any `B` in the reflective subcategory, we automatically have that `ε_B` is an iso.)
+-/
+/-
+**CategoryTheory.Functor.essImage.unit_isIso** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.essImage`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {i : CategoryTheory.Functor D C}
+ [inst_2 : CategoryTheory.Reflective i] {A : C},   i.essImage A → CategoryTheory
+.IsIso ((CategoryTheory.reflectorAdjunction i).unit.app A)
+参数：(CategoryTheory.reflectorAdjunction i).unit.app A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.isIso_unit_app_iff_mem_essImage`：isIso_unit_ap
+p_iff_mem_essImage [R.Faithful] [R.Full] {Y : C} : IsIso (h.unit.app Y) ↔ R.essI
+mage Y
+· 使用定理 `CategoryTheory.Reflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {ins
+t : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u
+₂} D}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Reflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst : 
+CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {R : CategoryTheor…
 
-中文:
-定理 函子.essImage.unit_isIso
-  条件: [反射 i] {A : C} (h : i.essImage A)
-  证明: by
-  rwa [isIso_unit_app_iff_mem_essImage]
+--- 原说明 ---
+If `A` is essentially in the image of a reflective functor `i`, then `η_A` is an
+ isomorphism.
+This gives that the "witness" for `A` being in the essential image can instead b
+e given as the
+reflection of `A`, with the isomorphism as `η_A`.
 
-Depends on / 依赖: isIso_unit_app_iff_mem_essImage
+(For any `B` in the reflective subcategory, we automatically have that `ε_B` is 
+an iso.)
 -/
 theorem Functor.essImage.unit_isIso [Reflective i] {A : C} (h : i.essImage A) :
     IsIso ((reflectorAdjunction i).unit.app A) := by
   rwa [isIso_unit_app_iff_mem_essImage]
 
-/--
-theorem `mem_essImage_of_unit_isSplitMono` / 定理 `mem_essImage_of_unit_isSplitMono`
+/-- If `η_A` is a split monomorphism, then `A` is in the reflective subcategory. -/
+/-
+**CategoryTheory.mem_essImage_of_unit_isSplitMono** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：mem_essImage_of_unit_isSplitMono [Reflective i] {A : C} [IsSplitMono ((ref
+lectorAdjunction i).unit.app A)] : i.essImage A
+参数：(reflectorAdjunction i).unit.app A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.essImage.unit_isIso`：∀ {C : Type u₁} {D : Type u₂
+} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {i : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.obj_mem_essImage`：obj_mem_essImage (F : D ⥤ C) (Y
+ : D) : essImage F (F.obj Y)
+· 使用定理 `CategoryTheory.epi_of_epi`：epi_of_epi (f : X ⟶ Y) (g : Y ⟶ Z) [Epi (f ≫ 
+g)] : Epi g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.IsSplitEpi.epi`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   C
+ategoryTheory.Epi f
+· 使用定理 `CategoryTheory.instIsSplitEpiMap`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {X Y : C} (f : X ⟶…
+· 使用定理 `CategoryTheory.retraction_isSplitEpi`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X)   [inst_1 : CategoryTheory.IsSpl
+itMono f], CategoryTheory.…
+· 使用定理 `CategoryTheory.isIso_of_epi_of_isSplitMono`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.Epi f]   [
+CategoryTheory.IsSplitMono f], C…
+· 使用定理 `CategoryTheory.Adjunction.mem_essImage_of_unit_isIso`：mem_essImage_of_un
+it_isIso (A : C) [IsIso (h.unit.app A)] : R.essImage A
 
-English:
-theorem mem_essImage_of_unit_isSplitMono
-  statement: [Reflective i] {A : C}
-  proof: by
-  let η : 𝟭 C ⟶ reflector i ⋙ i := (reflectorAdjunction i).unit
-  have : IsIso (η.app (i.obj ((reflector i).obj A))) :=
-    Functor.essImage.unit_isIso ((i.obj_mem_essImage _))
-  have : Epi (η.app A) := by
-    refine @epi_of_epi _ _ _ _ _ (retraction (η.app A)) (η.app A) ?_
-    rw [show retraction _ ≫ η.app A = _ from η.naturality (retraction (η.app A))]
-    apply epi_comp (η.app (i.obj ((reflector i).obj A)))
-  have := isIso_of_epi_of_isSplitMono (η.app A)
-  exact (reflectorAdjunction i).mem_essImage_of_unit_isIso A
-
-中文:
-定理 mem_essImage_of_unit_isSplitMono
-  结论: [反射 i] {A : C}
-  证明: by
-  let η : 𝟭 C ⟶ reflector i ⋙ i := (reflectorAdjunction i).unit
-  have : IsIso (η.app (i.obj ((reflector i).obj A))) :=
-    Functor.essImage.unit_isIso ((i.obj_mem_essImage _))
-  have : Epi (η.app A) := by
-    refine @epi_of_epi _ _ _ _ _ (retraction (η.app A)) (η.app A) ?_
-    rw [show retraction _ ≫ η.app A = _ from η.naturality (retraction (η.app A))]
-    apply epi_comp (η.app (i.obj ((reflector i).obj A)))
-  have := isIso_of_epi_of_isSplitMono (η.app A)
-  exact (reflectorAdjunction i).mem_essImage_of_unit_isIso A
-
-Depends on / 依赖: Functor, Functor.essImage.unit_isIso, epi_comp, epi_of_epi, essImage, i.obj, i.obj_mem_essImage, isIso_of_epi_of_isSplitMono, mem_essImage_of_unit_isIso, naturality, obj_mem_essImage, reflector, reflectorAdjunction, retraction, unit_isIso
+--- 原说明 ---
+If `η_A` is a split monomorphism, then `A` is in the reflective subcategory.
 -/
 theorem mem_essImage_of_unit_isSplitMono [Reflective i] {A : C}
     [IsSplitMono ((reflectorAdjunction i).unit.app A)] : i.essImage A := by
@@ -248,94 +297,133 @@ theorem mem_essImage_of_unit_isSplitMono [Reflective i] {A : C}
   have := isIso_of_epi_of_isSplitMono (η.app A)
   exact (reflectorAdjunction i).mem_essImage_of_unit_isIso A
 
-/--
-Instance `Reflective.comp` / 实例 `Reflective.comp`
+/-- Composition of reflective functors. -/
+/-
+**CategoryTheory.Reflective.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Refle
+ctive`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     {E : Type u₃} →       [inst : Catego
+ryTheory.Category.{v₁, u₁} C] →         [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D] →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             (F
+ : CategoryTheory.Functor C D) →               (G : CategoryTheory.Functor D E) 
+→                 [CategoryTheory.Reflective F] → [CategoryTheory.Reflective G] 
+→ CategoryTheory.Reflective (F.comp G)
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Reflective.comp
-  signature: (F : C ⥤ D) (G : D ⥤ E) [Reflective F] [Reflective G]
-  body: reflector G ⋙ reflector F
-  adj := (reflectorAdjunction G).comp (reflectorAdjunction F)
-
-中文:
-实例 反射.comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [反射 F] [反射 G]
-  定义体: reflector G ⋙ reflector F
-  adj := (reflectorAdjunction G).comp (reflectorAdjunction F)
-
-Depends on / 依赖: reflector
+--- 原说明 ---
+Composition of reflective functors.
 -/
 instance Reflective.comp (F : C ⥤ D) (G : D ⥤ E) [Reflective F] [Reflective G] :
     Reflective (F ⋙ G) where
   L := reflector G ⋙ reflector F
   adj := (reflectorAdjunction G).comp (reflectorAdjunction F)
 
-/--
-Definition of `unitCompPartialBijectiveAux` / `unitCompPartialBijectiveAux` 的定义
+/-- (Implementation) Auxiliary definition for `unitCompPartialBijective`. -/
+/-
+**CategoryTheory.unitCompPartialBijectiveAux** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+形式化陈述：unitCompPartialBijectiveAux [Reflective i] (A : C) (B : D) : (A ⟶ i.obj B)
+ ≃ (i.obj ((reflector i).obj A) ⟶ i.obj B)
+参数：A : C；B : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Reflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst : 
+CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Reflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {ins
+t : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u
+₂} D}   {R : CategoryTheor…
 
-English:
-definition unitCompPartialBijectiveAux
-  signature: [Reflective i] (A : C) (B : D)
-  body: ((reflectorAdjunction i).homEquiv _ _).symm.trans
-    (Functor.FullyFaithful.ofFullyFaithful i).homEquiv
-
-中文:
-定义 unitCompPartialBijectiveAux
-  签名: [反射 i] (A : C) (B : D)
-  定义体: ((reflectorAdjunction i).homEquiv _ _).symm.trans
-    (Functor.FullyFaithful.ofFullyFaithful i).homEquiv
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, homEquiv, ofFullyFaithful, reflectorAdjunction, symm.trans
+--- 原说明 ---
+(Implementation) Auxiliary definition for `unitCompPartialBijective`.
 -/
 def unitCompPartialBijectiveAux [Reflective i] (A : C) (B : D) :
     (A ⟶ i.obj B) ≃ (i.obj ((reflector i).obj A) ⟶ i.obj B) :=
   ((reflectorAdjunction i).homEquiv _ _).symm.trans
     (Functor.FullyFaithful.ofFullyFaithful i).homEquiv
 
-/--
-theorem `unitCompPartialBijectiveAux_symm_apply` / 定理 `unitCompPartialBijectiveAux_symm_apply`
+/-- The description of the inverse of the bijection `unitCompPartialBijectiveAux`. -/
+/-
+**CategoryTheory.unitCompPartialBijectiveAux_symm_apply** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory`。
+形式化陈述：unitCompPartialBijectiveAux_symm_apply [Reflective i] {A : C} {B : D} (f :
+ i.obj ((reflector i).obj A) ⟶ i.obj B) : (unitCompPartialBijectiveAux _ _).symm
+ f = (reflectorAdjunction i).unit.app A ≫ f
+参数：f : i.obj ((reflector i).obj A) ⟶ i.obj B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Reflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst : 
+CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Reflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {ins
+t : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u
+₂} D}   {R : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.homEquiv_symm_apply`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem unitCompPartialBijectiveAux_symm_apply
-  statement: [Reflective i] {A : C} {B : D}
-  proof: by
-  simp [unitCompPartialBijectiveAux, Adjunction.homEquiv_unit]
-
-中文:
-定理 unitCompPartialBijectiveAux_symm_apply
-  结论: [反射 i] {A : C} {B : D}
-  证明: by
-  simp [unitCompPartialBijectiveAux, Adjunction.homEquiv_unit]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_unit, homEquiv_unit, unitCompPartialBijectiveAux
+--- 原说明 ---
+The description of the inverse of the bijection `unitCompPartialBijectiveAux`.
 -/
 theorem unitCompPartialBijectiveAux_symm_apply [Reflective i] {A : C} {B : D}
     (f : i.obj ((reflector i).obj A) ⟶ i.obj B) :
     (unitCompPartialBijectiveAux _ _).symm f = (reflectorAdjunction i).unit.app A ≫ f := by
   simp [unitCompPartialBijectiveAux, Adjunction.homEquiv_unit]
 
-/--
-Definition of `unitCompPartialBijective` / `unitCompPartialBijective` 的定义
+/-- If `i` has a reflector `L`, then the function `(i.obj (L.obj A) ⟶ B) → (A ⟶ B)` given by
+precomposing with `η.app A` is a bijection provided `B` is in the essential image of `i`.
+That is, the function `fun (f : i.obj (L.obj A) ⟶ B) ↦ η.app A ≫ f` is bijective,
+as long as `B` is in the essential image of `i`.
+This definition gives an equivalence: the key property that the inverse can be described
+nicely is shown in `unitCompPartialBijective_symm_apply`.
 
-English:
-definition unitCompPartialBijective
-  signature: [Reflective i] (A : C) {B : C} (hB : i.essImage B)
-  body: calc
-    (A ⟶ B) ≃ (A ⟶ i.obj (Functor.essImage.witness hB)) := Iso.homCongr (Iso.refl _) hB.getIso.symm
-    _ ≃ (i.obj _ ⟶ i.obj (Functor.essImage.witness hB)) := unitCompPartialBijectiveAux _ _
-    _ ≃ (i.obj ((reflector i).obj A) ⟶ B) :=
-      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB)
+This establishes there is a natural bijection `(A ⟶ B) ≃ (i.obj (L.obj A) ⟶ B)`. In other words,
+from the point of view of objects in `D`, `A` and `i.obj (L.obj A)` look the same: specifically
+that `η.app A` is an isomorphism.
+-/
+/-
+**CategoryTheory.unitCompPartialBijective** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：unitCompPartialBijective [Reflective i] (A : C) {B : C} (hB : i.essImage B
+) : (A ⟶ B) ≃ (i.obj ((reflector i).obj A) ⟶ B)
+参数：A : C；hB : i.essImage B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 unitCompPartialBijective
-  签名: [反射 i] (A : C) {B : C} (hB : i.essImage B)
-  定义体: calc
-    (A ⟶ B) ≃ (A ⟶ i.obj (Functor.essImage.witness hB)) := Iso.homCongr (Iso.refl _) hB.getIso.symm
-    _ ≃ (i.obj _ ⟶ i.obj (Functor.essImage.witness hB)) := unitCompPartialBijectiveAux _ _
-    _ ≃ (i.obj ((reflector i).obj A) ⟶ B) :=
-      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB)
+--- 原说明 ---
+If `i` has a reflector `L`, then the function `(i.obj (L.obj A) ⟶ B) → (A ⟶ B)` 
+given by
+precomposing with `η.app A` is a bijection provided `B` is in the essential imag
+e of `i`.
+That is, the function `fun (f : i.obj (L.obj A) ⟶ B) ↦ η.app A ≫ f` is bijective
+,
+as long as `B` is in the essential image of `i`.
+This definition gives an equivalence: the key property that the inverse can be d
+escribed
+nicely is shown in `unitCompPartialBijective_symm_apply`.
 
-Depends on / 依赖: Functor, Functor.essImage.getIso, Functor.essImage.witness, Iso.homCongr, Iso.refl, essImage, getIso, hB.getIso.symm, homCongr, i.obj, reflector, unitCompPartialBijectiveAux, witness
+This establishes there is a natural bijection `(A ⟶ B) ≃ (i.obj (L.obj A) ⟶ B)`.
+ In other words,
+from the point of view of objects in `D`, `A` and `i.obj (L.obj A)` look the sam
+e: specifically
+that `η.app A` is an isomorphism.
 -/
 def unitCompPartialBijective [Reflective i] (A : C) {B : C} (hB : i.essImage B) :
     (A ⟶ B) ≃ (i.obj ((reflector i).obj A) ⟶ B) :=
@@ -347,84 +435,106 @@ def unitCompPartialBijective [Reflective i] (A : C) {B : C} (hB : i.essImage B) 
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `unitCompPartialBijective_symm_apply` / 定理 `unitCompPartialBijective_symm_apply`
-
-English:
-theorem unitCompPartialBijective_symm_apply
-  statement: [Reflective i] (A : C) {B : C} (hB : i.essImage B)
-  proof: by
-  simp [unitCompPartialBijective, unitCompPartialBijectiveAux_symm_apply]
-
-中文:
-定理 unitCompPartialBijective_symm_apply
-  结论: [反射 i] (A : C) {B : C} (hB : i.essImage B)
-  证明: by
-  simp [unitCompPartialBijective, unitCompPartialBijectiveAux_symm_apply]
-
-Depends on / 依赖: unitCompPartialBijective, unitCompPartialBijectiveAux_symm_apply
+/-
+**CategoryTheory.unitCompPartialBijective_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：unitCompPartialBijective_symm_apply [Reflective i] (A : C) {B : C} (hB : i
+.essImage B) (f) : (unitCompPartialBijective A hB).symm f = (reflectorAdjunction
+ i).unit.app A ≫ f
+参数：A : C；hB : i.essImage B；f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.unitCompPartialBijectiveAux_symm_apply`：unitCompPartialBi
+jectiveAux_symm_apply [Reflective i] {A : C} {B : D} (f : i.obj ((reflector i).o
+bj A) ⟶ i.obj B) : (unitCompPartialBijectiv…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unitCompPartialBijective_symm_apply [Reflective i] (A : C) {B : C} (hB : i.essImage B)
     (f) : (unitCompPartialBijective A hB).symm f = (reflectorAdjunction i).unit.app A ≫ f := by
   simp [unitCompPartialBijective, unitCompPartialBijectiveAux_symm_apply]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `unitCompPartialBijective_symm_natural` / 定理 `unitCompPartialBijective_symm_natural`
-
-English:
-theorem unitCompPartialBijective_symm_natural
-  statement: [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
-  proof: by
-  simp
-
-中文:
-定理 unitCompPartialBijective_symm_natural
-  结论: [反射 i] (A : C) {B B' : C} (h : B ⟶ B')
-  证明: by
-  simp
+/-
+**CategoryTheory.unitCompPartialBijective_symm_natural** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory`。
+形式化陈述：unitCompPartialBijective_symm_natural [Reflective i] (A : C) {B B' : C} (h
+ : B ⟶ B') (hB : i.essImage B) (hB' : i.essImage B') (f : i.obj ((reflector i).o
+bj A) ⟶ B) : (unitCompPartialBijective A hB').symm (f ≫ h) = (unitCompPartialBij
+ective A hB).symm f ≫ h
+参数：A : C；h : B ⟶ B'；hB : i.essImage B；hB' : i.essImage B'；f : i.obj ((reflector 
+i).obj A) ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.unitCompPartialBijective_symm_apply`：unitCompPartialBijec
+tive_symm_apply [Reflective i] (A : C) {B : C} (hB : i.essImage B) (f) : (unitCo
+mpPartialBijective A hB).symm f = (refle…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unitCompPartialBijective_symm_natural [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
     (hB : i.essImage B) (hB' : i.essImage B') (f : i.obj ((reflector i).obj A) ⟶ B) :
     (unitCompPartialBijective A hB').symm (f ≫ h) = (unitCompPartialBijective A hB).symm f ≫ h := by
   simp
-
-/--
-theorem `unitCompPartialBijective_natural` / 定理 `unitCompPartialBijective_natural`
-
-English:
-theorem unitCompPartialBijective_natural
-  statement: [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
-  proof: by
-  rw [← Equiv.eq_symm_apply]; rw [unitCompPartialBijective_symm_natural A h hB]; rw [Equiv.symm_apply_apply]
-
-中文:
-定理 unitCompPartialBijective_natural
-  结论: [反射 i] (A : C) {B B' : C} (h : B ⟶ B')
-  证明: by
-  rw [← Equiv.eq_symm_apply]; rw [unitCompPartialBijective_symm_natural A h hB]; rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.eq_symm_apply, Equiv.symm_apply_apply, eq_symm_apply, symm_apply_apply, unitCompPartialBijective_symm_natural
+/-
+**CategoryTheory.unitCompPartialBijective_natural** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：unitCompPartialBijective_natural [Reflective i] (A : C) {B B' : C} (h : B 
+⟶ B') (hB : i.essImage B) (hB' : i.essImage B') (f : A ⟶ B) : (unitCompPartialBi
+jective A hB') (f ≫ h) = unitCompPartialBijective A hB f ≫ h
+参数：A : C；h : B ⟶ B'；hB : i.essImage B；hB' : i.essImage B'；f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `CategoryTheory.unitCompPartialBijective_symm_natural`：unitCompPartialBij
+ective_symm_natural [Reflective i] (A : C) {B B' : C} (h : B ⟶ B') (hB : i.essIm
+age B) (hB' : i.essImage B') (f : i.obj ((…
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 theorem unitCompPartialBijective_natural [Reflective i] (A : C) {B B' : C} (h : B ⟶ B')
     (hB : i.essImage B) (hB' : i.essImage B') (f : A ⟶ B) :
     (unitCompPartialBijective A hB') (f ≫ h) = unitCompPartialBijective A hB f ≫ h := by
-  rw [← Equiv.eq_symm_apply]; rw [unitCompPartialBijective_symm_natural A h hB]; rw [Equiv.symm_apply_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Reflective
-  signature: i] (X
-  body: Functor.essImage.unit_isIso X.property
-
-中文:
-实例 [反射
-  签名: i] (X
-  定义体: Functor.essImage.unit_isIso X.property
-
-Depends on / 依赖: Functor, Functor.essImage.unit_isIso, X.property, essImage, property, unit_isIso
+  rw [← Equiv.eq_symm_apply, unitCompPartialBijective_symm_natural A h hB, Equiv.symm_apply_apply]
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Reflective i] (X : Functor.EssImageSubcategory i) :
     IsIso (NatTrans.app (reflectorAdjunction i).unit X.obj) :=
@@ -440,54 +550,45 @@ attribute [local ext] Functor.essImage_ext in
 /-- If `i : D ⥤ C` is reflective, the inverse functor of `i ≌ F.essImage` can be explicitly
 defined by the reflector. -/
 @[simps]
-/--
-Definition of `equivEssImageOfReflective` / `equivEssImageOfReflective` 的定义
+/-
+**CategoryTheory.equivEssImageOfReflective** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：equivEssImageOfReflective [Reflective i] : D ≌ i.EssImageSubcategory where
+ functor
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instIsIsoAppUnitReflectorAdjunctionObjEssImage`：∀ {C : Ty
+pe u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   {i : CategoryTheor…
 
-English:
-definition equivEssImageOfReflective
-  signature: [Reflective i]
-  body: i.toEssImage
-  inverse := i.essImage.ι ⋙ reflector i
-  unitIso := (asIso <| (reflectorAdjunction i).counit).symm
-counitIso := Functor.fullyFaithfulCancelRight i.essImage.ι
-    NatIso.ofComponents (fun X => (asIso ((reflectorAdjunction i).unit.app X.obj)).symm)
-
-中文:
-定义 equivEssImageOfReflective
-  签名: [反射 i]
-  定义体: i.toEssImage
-  inverse := i.essImage.ι ⋙ reflector i
-  unitIso := (asIso <| (reflectorAdjunction i).counit).symm
-counitIso := Functor.fullyFaithfulCancelRight i.essImage.ι
-    NatIso.ofComponents (fun X => (asIso ((reflectorAdjunction i).unit.app X.obj)).symm)
-
-Depends on / 依赖: i.toEssImage, toEssImage
+--- 原说明 ---
+If `i : D ⥤ C` is reflective, the inverse functor of `i ≌ F.essImage` can be exp
+licitly
+defined by the reflector.
 -/
 def equivEssImageOfReflective [Reflective i] : D ≌ i.EssImageSubcategory where
   functor := i.toEssImage
   inverse := i.essImage.ι ⋙ reflector i
   unitIso := (asIso <| (reflectorAdjunction i).counit).symm
-counitIso := Functor.fullyFaithfulCancelRight i.essImage.ι
-    NatIso.ofComponents (fun X => (asIso ((reflectorAdjunction i).unit.app X.obj)).symm)
+  counitIso := Functor.fullyFaithfulCancelRight i.essImage.ι <|
+    NatIso.ofComponents (fun X ↦ (asIso ((reflectorAdjunction i).unit.app X.obj)).symm)
 
 /--
-Definition of `Coreflective` / `Coreflective` 的定义
+A functor is *coreflective*, or *a coreflective inclusion*, if it is fully faithful and left
+adjoint.
+-/
+/-
+**CategoryTheory.Coreflective** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor C D → Type (max (max (max u₁ u₂) v₁) v₂)
+参数：max (max (max u₁ u₂) v₁) v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Coreflective
-  parameters: (L : C ⥤ D)
-  extends: L.Full, L.Faithful
-  axioms and operations (2):
-    - R : D ⥤ C
-    - adj : L ⊣ R
-
-中文:
-类 余反射
-  参数: (L : C ⥤ D)
-  继承: L.满, L.忠实
-  公理与运算 (2 个):
-    - R : D ⥤ C
-    - adj : L ⊣ R
+--- 原说明 ---
+A functor is *coreflective*, or *a coreflective inclusion*, if it is fully faith
+ful and left
+adjoint.
 -/
 class Coreflective (L : C ⥤ D) extends L.Full, L.Faithful where
   /-- a choice of a right adjoint to `L` -/
@@ -497,181 +598,188 @@ class Coreflective (L : C ⥤ D) extends L.Full, L.Faithful where
 
 variable (j : C ⥤ D)
 
-/--
-Definition of `coreflector` / `coreflector` 的定义
+/-- The coreflector `D ⥤ C` when `L : C ⥤ D` is coreflective. -/
+/-
+**CategoryTheory.coreflector** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coreflector [Coreflective j] : D ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreflector
-  signature: [Coreflective j]
-  body: Coreflective.R (L := j)
-
-中文:
-定义 coreflector
-  签名: [余反射 j]
-  定义体: Coreflective.R (L := j)
-
-Depends on / 依赖: Coreflective, Coreflective.R
+--- 原说明 ---
+The coreflector `D ⥤ C` when `L : C ⥤ D` is coreflective.
 -/
 def coreflector [Coreflective j] : D ⥤ C := Coreflective.R (L := j)
 
-/--
-Definition of `coreflectorAdjunction` / `coreflectorAdjunction` 的定义
+/-- The adjunction `j ⊣ coreflector j` when `j` is coreflective. -/
+/-
+**CategoryTheory.coreflectorAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：coreflectorAdjunction [Coreflective j] : j ⊣ coreflector j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreflectorAdjunction
-  signature: [Coreflective j]
-  body: Coreflective.adj
-
-中文:
-定义 coreflectorAdjunction
-  签名: [余反射 j]
-  定义体: Coreflective.adj
-
-Depends on / 依赖: Coreflective, Coreflective.adj
+--- 原说明 ---
+The adjunction `j ⊣ coreflector j` when `j` is coreflective.
 -/
 def coreflectorAdjunction [Coreflective j] : j ⊣ coreflector j := Coreflective.adj
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Coreflective
-  signature: j] : j.IsLeftAdjoint
-  body: ⟨_, ⟨coreflectorAdjunction j⟩⟩
-
-中文:
-实例 [余反射
-  签名: j] : j.是左伴随
-  定义体: ⟨_, ⟨coreflectorAdjunction j⟩⟩
-
-Depends on / 依赖: coreflectorAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Coreflective j] : j.IsLeftAdjoint := ⟨_, ⟨coreflectorAdjunction j⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Coreflective
-  signature: j] : (coreflector j).IsRightAdjoint
-  body: ⟨_, ⟨coreflectorAdjunction j⟩⟩
-
-中文:
-实例 [余反射
-  签名: j] : (coreflector j).是右伴随
-  定义体: ⟨_, ⟨coreflectorAdjunction j⟩⟩
-
-Depends on / 依赖: coreflectorAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Coreflective j] : (coreflector j).IsRightAdjoint := ⟨_, ⟨coreflectorAdjunction j⟩⟩
 
-/--
-Definition of `Functor.fullyFaithfulOfCoreflective` / `Functor.fullyFaithfulOfCoreflective` 的定义
+/-- A coreflective functor is fully faithful. -/
+/-
+**CategoryTheory.Functor.fullyFaithfulOfCoreflective** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (j : Cat
+egoryTheory.Functor C D) → [CategoryTheory.Coreflective j] → j.FullyFaithful
+参数：j : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.fullyFaithfulOfCoreflective
-  signature: [Coreflective j]
-  body: (coreflectorAdjunction j).fullyFaithfulLOfIsIsoUnit
-
-中文:
-定义 函子.fullyFaithfulOfCoreflective
-  签名: [余反射 j]
-  定义体: (coreflectorAdjunction j).fullyFaithfulLOfIsIsoUnit
-
-Depends on / 依赖: coreflectorAdjunction, fullyFaithfulLOfIsIsoUnit
+--- 原说明 ---
+A coreflective functor is fully faithful.
 -/
 def Functor.fullyFaithfulOfCoreflective [Coreflective j] : j.FullyFaithful :=
   (coreflectorAdjunction j).fullyFaithfulLOfIsIsoUnit
-
-/--
-lemma `counit_obj_eq_map_counit` / 引理 `counit_obj_eq_map_counit`
-
-English:
-lemma counit_obj_eq_map_counit
-  given: [Coreflective j] (X : D)
-  proof: by
-  rw [← cancel_epi (j.map ((coreflectorAdjunction j).unit.app ((coreflector j).obj X)))]; rw [← j.map_comp]
-  simp
-
-example [Coreflective j] {B : C} : IsIso ((coreflectorAdjunction j).counit.app (j.obj B)) :=
-  inferInstance
-
-中文:
-引理 counit_obj_eq_map_counit
-  条件: [余反射 j] (X : D)
-  证明: by
-  rw [← cancel_epi (j.map ((coreflectorAdjunction j).unit.app ((coreflector j).obj X)))]; rw [← j.map_comp]
-  simp
-
-example [Coreflective j] {B : C} : IsIso ((coreflectorAdjunction j).counit.app (j.obj B)) :=
-  inferInstance
-
-Depends on / 依赖: cancel_epi, coreflector, coreflectorAdjunction, j.map, j.map_comp, map_comp, unit.app
+/-
+**CategoryTheory.counit_obj_eq_map_counit** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：counit_obj_eq_map_counit [Coreflective j] (X : D) : (coreflectorAdjunction
+ j).counit.app (j.obj ((coreflector j).obj X)) = j.map ((coreflector j).map ((co
+reflectorAdjunction j).counit.app X))
+参数：X : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Functor.preservesEpimorphisms_of_isLeftAdjoint`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instIsLeftAdjointOfCoreflective`：∀ {C : Type u₁} {D : Typ
+e u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (j : CategoryTheor…
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppUnitOfFullOfFaithful`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Coreflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst 
+: CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Coreflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {i
+nst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D}   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma counit_obj_eq_map_counit [Coreflective j] (X : D) :
     (coreflectorAdjunction j).counit.app (j.obj ((coreflector j).obj X)) =
       j.map ((coreflector j).map ((coreflectorAdjunction j).counit.app X)) := by
-  rw [← cancel_epi (j.map ((coreflectorAdjunction j).unit.app ((coreflector j).obj X)))]; rw [← j.map_comp]
+  rw [← cancel_epi (j.map ((coreflectorAdjunction j).unit.app ((coreflector j).obj X))),
+    ← j.map_comp]
   simp
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [Coreflective j] {B : C} : IsIso ((coreflectorAdjunction j).counit.app (j.obj B)) :=
   inferInstance
 
 variable {j}
-
-/--
-lemma `Functor.essImage.counit_isIso` / 引理 `Functor.essImage.counit_isIso`
-
-English:
-lemma Functor.essImage.counit_isIso
-  given: [Coreflective j] {A : D} (h : j.essImage A)
-  proof: by
-  rwa [isIso_counit_app_iff_mem_essImage]
-
-中文:
-引理 函子.essImage.counit_isIso
-  条件: [余反射 j] {A : D} (h : j.essImage A)
-  证明: by
-  rwa [isIso_counit_app_iff_mem_essImage]
-
-Depends on / 依赖: isIso_counit_app_iff_mem_essImage
+/-
+**CategoryTheory.Functor.essImage.counit_isIso** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor.essImage`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {j : CategoryTheory.Functor C D}
+ [inst_2 : CategoryTheory.Coreflective j] {A : D},   j.essImage A → CategoryTheo
+ry.IsIso ((CategoryTheory.coreflectorAdjunction j).counit.app A)
+参数：(CategoryTheory.coreflectorAdjunction j).counit.app A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.isIso_counit_app_iff_mem_essImage`：isIso_couni
+t_app_iff_mem_essImage [L.Faithful] [L.Full] {X : D} : IsIso (h.counit.app X) ↔ 
+L.essImage X
+· 使用定理 `CategoryTheory.Coreflective.toFaithful`：∀ {C : Type u₁} {D : Type u₂} {i
+nst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D}   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Coreflective.toFull`：∀ {C : Type u₁} {D : Type u₂} {inst 
+: CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {L : CategoryTheor…
 -/
 lemma Functor.essImage.counit_isIso [Coreflective j] {A : D} (h : j.essImage A) :
     IsIso ((coreflectorAdjunction j).counit.app A) := by
   rwa [isIso_counit_app_iff_mem_essImage]
-
-/--
-lemma `mem_essImage_of_counit_isSplitEpi` / 引理 `mem_essImage_of_counit_isSplitEpi`
-
-English:
-lemma mem_essImage_of_counit_isSplitEpi
-  statement: [Coreflective j] {A : D}
-  proof: by
-  let ε : coreflector j ⋙ j ⟶ 𝟭 D := (coreflectorAdjunction j).counit
-  have : IsIso (ε.app (j.obj ((coreflector j).obj A))) :=
-    Functor.essImage.counit_isIso ((j.obj_mem_essImage _))
-  have : Mono (ε.app A) := by
-    refine @mono_of_mono _ _ _ _ _ (ε.app A) (section_ (ε.app A)) ?_
-    rw [show ε.app A ≫ section_ _ = _ from (ε.naturality (section_ (ε.app A))).symm]
-    apply mono_comp _ (ε.app (j.obj ((coreflector j).obj A)))
-  have := isIso_of_mono_of_isSplitEpi (ε.app A)
-  exact (coreflectorAdjunction j).mem_essImage_of_counit_isIso A
-
-中文:
-引理 mem_essImage_of_counit_isSplitEpi
-  结论: [余反射 j] {A : D}
-  证明: by
-  let ε : coreflector j ⋙ j ⟶ 𝟭 D := (coreflectorAdjunction j).counit
-  have : IsIso (ε.app (j.obj ((coreflector j).obj A))) :=
-    Functor.essImage.counit_isIso ((j.obj_mem_essImage _))
-  have : Mono (ε.app A) := by
-    refine @mono_of_mono _ _ _ _ _ (ε.app A) (section_ (ε.app A)) ?_
-    rw [show ε.app A ≫ section_ _ = _ from (ε.naturality (section_ (ε.app A))).symm]
-    apply mono_comp _ (ε.app (j.obj ((coreflector j).obj A)))
-  have := isIso_of_mono_of_isSplitEpi (ε.app A)
-  exact (coreflectorAdjunction j).mem_essImage_of_counit_isIso A
-
-Depends on / 依赖: Functor, Functor.essImage.counit_isIso, coreflector, coreflectorAdjunction, counit, counit_isIso, essImage, isIso_of_mono_of_isSplitEpi, j.obj, j.obj_mem_essImage, mem_essI, mono_comp, mono_of_mono, naturality, obj_mem_essImage, section_
+/-
+**CategoryTheory.mem_essImage_of_counit_isSplitEpi** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：mem_essImage_of_counit_isSplitEpi [Coreflective j] {A : D} [IsSplitEpi ((c
+oreflectorAdjunction j).counit.app A)] : j.essImage A
+参数：(coreflectorAdjunction j).counit.app A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.essImage.counit_isIso`：∀ {C : Type u₁} {D : Type 
+u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {j : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.obj_mem_essImage`：obj_mem_essImage (F : D ⥤ C) (Y
+ : D) : essImage F (F.obj Y)
+· 使用定理 `CategoryTheory.mono_of_mono`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X)   [CategoryTheory.Mono (Catego
+ryTheory.Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.IsSplitMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [hf : CategoryTheory.IsSplitMono f], 
+  CategoryTheory.Mono…
+· 使用定理 `CategoryTheory.instIsSplitMonoMap`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {X Y : C} (f : Y ⟶…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.isIso_of_mono_of_isSplitEpi`：isIso_of_mono_of_isSplitEpi 
+{X Y : C} (f : X ⟶ Y) [Mono f] [IsSplitEpi f] : IsIso f
+· 使用引理 `CategoryTheory.Adjunction.mem_essImage_of_counit_isIso`：mem_essImage_of_
+counit_isIso (A : D) [IsIso (h.counit.app A)] : L.essImage A
 -/
 lemma mem_essImage_of_counit_isSplitEpi [Coreflective j] {A : D}
     [IsSplitEpi ((coreflectorAdjunction j).counit.app A)] : j.essImage A := by
@@ -684,23 +792,17 @@ lemma mem_essImage_of_counit_isSplitEpi [Coreflective j] {A : D}
     apply mono_comp _ (ε.app (j.obj ((coreflector j).obj A)))
   have := isIso_of_mono_of_isSplitEpi (ε.app A)
   exact (coreflectorAdjunction j).mem_essImage_of_counit_isIso A
-
-/--
-Instance `Coreflective.comp` / 实例 `Coreflective.comp`
-
-English:
-instance Coreflective.comp
-  signature: (F : C ⥤ D) (G : D ⥤ E) [Coreflective F] [Coreflective G]
-  body: coreflector G ⋙ coreflector F
-  adj := (coreflectorAdjunction F).comp (coreflectorAdjunction G)
-
-中文:
-实例 余反射.comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [余反射 F] [余反射 G]
-  定义体: coreflector G ⋙ coreflector F
-  adj := (coreflectorAdjunction F).comp (coreflectorAdjunction G)
-
-Depends on / 依赖: coreflector
+/-
+**CategoryTheory.Coreflective.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Cor
+eflective`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     {E : Type u₃} →       [inst : Catego
+ryTheory.Category.{v₁, u₁} C] →         [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D] →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             (F
+ : CategoryTheory.Functor C D) →               (G : CategoryTheory.Functor D E) 
+→                 [CategoryTheory.Coreflective F] →                   [CategoryT
+heory.Coreflective G] → CategoryTheory.Coreflective (F.comp G)
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Coreflective.comp (F : C ⥤ D) (G : D ⥤ E) [Coreflective F] [Coreflective G] :
     Coreflective (F ⋙ G) where
@@ -708,3 +810,4 @@ instance Coreflective.comp (F : C ⥤ D) (G : D ⥤ E) [Coreflective F] [Corefle
   adj := (coreflectorAdjunction F).comp (coreflectorAdjunction G)
 
 end CategoryTheory
+

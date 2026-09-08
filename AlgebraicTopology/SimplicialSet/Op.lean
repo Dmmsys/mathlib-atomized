@@ -35,89 +35,67 @@ open CategoryTheory Simplicial
 
 namespace SSet
 
-/--
-Definition of `opFunctor` / `opFunctor` 的定义
+/-- The covariant involution of the category of simplicial sets that
+is induced by `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`.
+This functor is purposely not made `implicit_reducible` so as to avoid
+confusion between `X.op _⦋n⦌` and `X _⦋n⦌`: use the bijection `opObjEquiv`. -/
+/-
+**SSet.opFunctor** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：opFunctor : SSet.{u} ⥤ SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctor
-  signature: : SSet.{u} ⥤ SSet.{u}
-  body: SimplicialObject.opFunctor
-
-中文:
-定义 opFunctor
-  签名: : SSet.{u} ⥤ SSet.{u}
-  定义体: SimplicialObject.opFunctor
-
-Depends on / 依赖: SimplicialObject, SimplicialObject.opFunctor, opFunctor
+--- 原说明 ---
+The covariant involution of the category of simplicial sets that
+is induced by `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`.
+This functor is purposely not made `implicit_reducible` so as to avoid
+confusion between `X.op _⦋n⦌` and `X _⦋n⦌`: use the bijection `opObjEquiv`.
 -/
 def opFunctor : SSet.{u} ⥤ SSet.{u} := SimplicialObject.opFunctor
 
-/--
-Definition of `op` / `op` 的定义
+/-- The image of a simplicial set by the involution `opFunctor : SSet ⥤ SSet`. -/
+/-
+**SSet.op** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：_root_.SSet → _root_.SSet
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation op
-  signature: (X : SSet.{u})
-  body: opFunctor.obj X
-
-中文:
-缩写 op
-  签名: (X : SSet.{u})
-  定义体: opFunctor.obj X
+--- 原说明 ---
+The image of a simplicial set by the involution `opFunctor : SSet ⥤ SSet`.
 -/
 protected abbrev op (X : SSet.{u}) : SSet.{u} := opFunctor.obj X
 
-/--
-Definition of `opObjEquiv` / `opObjEquiv` 的定义
+/-- The type of `n`-simplices of `X.op` identify to type of `n`-simplices of `X`. -/
+/-
+**SSet.opObjEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：opObjEquiv {X : SSet.{u}} {n : SimplexCategoryᵒᵖ} : X.op.obj n ≃ X.obj n
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition opObjEquiv
-  signature: {X : SSet.{u}} {n : SimplexCategoryᵒᵖ}
-  body: Equiv.refl _
-
-中文:
-定义 opObjEquiv
-  签名: {X : SSet.{u}} {n : SimplexCategoryᵒᵖ}
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The type of `n`-simplices of `X.op` identify to type of `n`-simplices of `X`.
 -/
 def opObjEquiv {X : SSet.{u}} {n : SimplexCategoryᵒᵖ} :
     X.op.obj n ≃ X.obj n := Equiv.refl _
-
-/--
-lemma `opFunctor_map` / 引理 `opFunctor_map`
-
-English:
-lemma opFunctor_map
-  given: {X Y : SSet.{u}} (f : X ⟶ Y) {n : SimplexCategoryᵒᵖ} (x : X.op.obj n)
-  proof: rfl
-
-中文:
-引理 opFunctor_map
-  条件: {X Y : SSet.{u}} (f : X ⟶ Y) {n : SimplexCategoryᵒᵖ} (x : X.op.obj n)
-  证明: rfl
+/-
+**SSet.opFunctor_map** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：opFunctor_map {X Y : SSet.{u}} (f : X ⟶ Y) {n : SimplexCategoryᵒᵖ} (x : X.
+op.obj n) : (opFunctor.map f).app n x = opObjEquiv.symm (f.app _ (opObjEquiv x))
+参数：f : X ⟶ Y；x : X.op.obj n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma opFunctor_map {X Y : SSet.{u}} (f : X ⟶ Y) {n : SimplexCategoryᵒᵖ} (x : X.op.obj n) :
     (opFunctor.map f).app n x = opObjEquiv.symm (f.app _ (opObjEquiv x)) :=
   rfl
-
-/--
-lemma `op_map` / 引理 `op_map`
-
-English:
-lemma op_map
-  given: (X : SSet.{u}) {n m : SimplexCategoryᵒᵖ} (f : n ⟶ m) (x : X.op.obj n)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 op_map
-  条件: (X : SSet.{u}) {n m : SimplexCategoryᵒᵖ} (f : n ⟶ m) (x : X.op.obj n)
-  证明: rfl
-
-@[simp]
+/-
+**SSet.op_map** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：op_map (X : SSet.{u}) {n m : SimplexCategoryᵒᵖ} (f : n ⟶ m) (x : X.op.obj 
+n) : X.op.map f x = opObjEquiv.symm (X.map (SimplexCategory.rev.map f.unop).op (
+opObjEquiv x))
+参数：X : SSet.{u}；f : n ⟶ m；x : X.op.obj n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma op_map (X : SSet.{u}) {n m : SimplexCategoryᵒᵖ} (f : n ⟶ m) (x : X.op.obj n) :
     X.op.map f x =
@@ -125,138 +103,67 @@ lemma op_map (X : SSet.{u}) {n m : SimplexCategoryᵒᵖ} (f : n ⟶ m) (x : X.o
   rfl
 
 @[simp]
-/--
-lemma `op_δ` / 引理 `op_δ`
-
-English:
-lemma op_δ
-  given: (X : SSet.{u}) {n : Nat} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌)
-  proof: by
-  simp [SimplicialObject.δ, op_map]
-
-@[simp]
-
-中文:
-引理 op_δ
-  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 2)) (x : X.op _⦋n + 1⦌)
-  证明: by
-  simp [SimplicialObject.δ, op_map]
-
-@[simp]
-
-Depends on / 依赖: SimplicialObject, op_map
+/-
+**SSet.op_** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma op_δ (X : SSet.{u}) {n : Nat} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌) :
+lemma op_δ (X : SSet.{u}) {n : ℕ} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌) :
     X.op.δ i x = opObjEquiv.symm (X.δ i.rev (opObjEquiv x)) := by
   simp [SimplicialObject.δ, op_map]
 
 @[simp]
-/--
-lemma `op_σ` / 引理 `op_σ`
-
-English:
-lemma op_σ
-  given: (X : SSet.{u}) {n : Nat} (i : Fin (n + 1)) (x : X.op _⦋n⦌)
-  proof: by
-  simp [SimplicialObject.σ, op_map]
-
-中文:
-引理 op_σ
-  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 1)) (x : X.op _⦋n⦌)
-  证明: by
-  simp [SimplicialObject.σ, op_map]
-
-Depends on / 依赖: SimplicialObject, op_map
+/-
+**SSet.op_** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma op_σ (X : SSet.{u}) {n : Nat} (i : Fin (n + 1)) (x : X.op _⦋n⦌) :
+lemma op_σ (X : SSet.{u}) {n : ℕ} (i : Fin (n + 1)) (x : X.op _⦋n⦌) :
     X.op.σ i x = opObjEquiv.symm (X.σ i.rev (opObjEquiv x)) := by
   simp [SimplicialObject.σ, op_map]
-
-/--
-lemma `δ_opObjEquiv` / 引理 `δ_opObjEquiv`
-
-English:
-lemma δ_opObjEquiv
-  given: (X : SSet.{u}) {n : Nat} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌)
-  proof: by
-  simp
-
-中文:
-引理 δ_opObjEquiv
-  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 2)) (x : X.op _⦋n + 1⦌)
-  证明: by
-  simp
+/-
+**SSet.** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_opObjEquiv (X : SSet.{u}) {n : Nat} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌) :
+lemma δ_opObjEquiv (X : SSet.{u}) {n : ℕ} (i : Fin (n + 2)) (x : X.op _⦋n + 1⦌) :
     X.δ i (opObjEquiv x) = opObjEquiv (X.op.δ i.rev x) := by
   simp
-
-/--
-lemma `σ_opObjEquiv` / 引理 `σ_opObjEquiv`
-
-English:
-lemma σ_opObjEquiv
-  given: (X : SSet.{u}) {n : Nat} (i : Fin (n + 1)) (x : X.op _⦋n⦌)
-  proof: by
-  simp
-
-中文:
-引理 σ_opObjEquiv
-  条件: (X : SSet.{u}) {n : 自然数} (i : 有限集 (n + 1)) (x : X.op _⦋n⦌)
-  证明: by
-  simp
+/-
+**SSet.** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma σ_opObjEquiv (X : SSet.{u}) {n : Nat} (i : Fin (n + 1)) (x : X.op _⦋n⦌) :
+lemma σ_opObjEquiv (X : SSet.{u}) {n : ℕ} (i : Fin (n + 1)) (x : X.op _⦋n⦌) :
     X.σ i (opObjEquiv x) = opObjEquiv (X.op.σ i.rev x) := by
   simp
 
 attribute [local simp] op_map in
 /-- The functor `opFunctor : SSet ⥤ SSet` is an involution. -/
 @[simps!]
-/--
-Definition of `opFunctorCompOpFunctorIso` / `opFunctorCompOpFunctorIso` 的定义
+/-
+**SSet.opFunctorCompOpFunctorIso** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：opFunctorCompOpFunctorIso : opFunctor.{u} ⋙ opFunctor ≅ 𝟭 _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition opFunctorCompOpFunctorIso
-  signature: : opFunctor.{u} ⋙ opFunctor ≅ 𝟭 _
-  body: dsimp% NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun n => Equiv.toIso (opObjEquiv.trans opObjEquiv)))
-
-中文:
-定义 opFunctorCompOpFunctorIso
-  签名: : opFunctor.{u} ⋙ opFunctor ≅ 𝟭 _
-  定义体: dsimp% NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun n => Equiv.toIso (opObjEquiv.trans opObjEquiv)))
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, ofComponents, opObjEquiv, opObjEquiv.trans
+--- 原说明 ---
+The functor `opFunctor : SSet ⥤ SSet` is an involution.
 -/
 def opFunctorCompOpFunctorIso : opFunctor.{u} ⋙ opFunctor ≅ 𝟭 _ :=
-  dsimp% NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun n => Equiv.toIso (opObjEquiv.trans opObjEquiv)))
+  dsimp% NatIso.ofComponents (fun X ↦ NatIso.ofComponents
+    (fun n ↦ Equiv.toIso (opObjEquiv.trans opObjEquiv)))
 
 /-- The covariant involution `opFunctor : SSet ⥤ SSet`,
 as an equivalence of categories. -/
 @[simps]
-/--
-Definition of `opEquivalence` / `opEquivalence` 的定义
+/-
+**SSet.opEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：opEquivalence : SSet.{u} ≌ SSet.{u} where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquivalence
-  signature: : SSet.{u} ≌ SSet.{u} where
-  body: opFunctor
-  inverse := opFunctor
-  unitIso := opFunctorCompOpFunctorIso.symm
-  counitIso := opFunctorCompOpFunctorIso
-
-中文:
-定义 opEquivalence
-  签名: : SSet.{u} ≌ SSet.{u} where
-  定义体: opFunctor
-  inverse := opFunctor
-  unitIso := opFunctorCompOpFunctorIso.symm
-  counitIso := opFunctorCompOpFunctorIso
-
-Depends on / 依赖: opFunctor
+--- 原说明 ---
+The covariant involution `opFunctor : SSet ⥤ SSet`,
+as an equivalence of categories.
 -/
 def opEquivalence : SSet.{u} ≌ SSet.{u} where
   functor := opFunctor
@@ -265,3 +172,4 @@ def opEquivalence : SSet.{u} ≌ SSet.{u} where
   counitIso := opFunctorCompOpFunctorIso
 
 end SSet
+

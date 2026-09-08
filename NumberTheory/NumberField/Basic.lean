@@ -41,26 +41,18 @@ number field, ring of integers
 /-- A number field is a field which has characteristic zero and is finite
 dimensional over ℚ. -/
 @[stacks 09GA, wikidata Q616608]
-/--
-Definition of `NumberField` / `NumberField` 的定义
+/-
+**NumberField** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(K : Type u_1) → [Field K] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NumberField
-  parameters: (K : Type*) [Field K]
-  axioms and operations (2):
-    - [to_charZero : CharZero K]
-    - [to_finiteDimensional : FiniteDimensional Rat K]
-
-中文:
-类 数域
-  参数: (K : 类型) [域 K]
-  公理与运算 (2 个):
-    - [to_charZero : 特征零 K]
-    - [to_finiteDimensional : 有限维 有理数 K]
+--- 原说明 ---
+A number field is a field which has characteristic zero and is finite
+dimensional over ℚ.
 -/
 class NumberField (K : Type*) [Field K] : Prop where
   [to_charZero : CharZero K]
-  [to_finiteDimensional : FiniteDimensional Rat K]
+  [to_finiteDimensional : FiniteDimensional ℚ K]
 
 open Function Module
 
@@ -73,64 +65,54 @@ variable (K L : Type*) [Field K] [Field L]
 -- See note [lower instance priority]
 attribute [instance] NumberField.to_charZero NumberField.to_finiteDimensional
 
-/--
-theorem `isAlgebraic` / 定理 `isAlgebraic`
-
-English:
-theorem isAlgebraic
-  given: [NumberField K]
-  statement: Algebra.IsAlgebraic Rat K
-  proof: Algebra.IsAlgebraic.of_finite _ _
-
-中文:
-定理 isAlgebraic
-  条件: [数域 K]
-  结论: 代数.是代数 有理数 K
-  证明: Algebra.IsAlgebraic.of_finite _ _
+/-
+**NumberField.isAlgebraic** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] [inst_1 : NumberField K], Algebra.IsAlge
+braic ℚ K
+参数：K : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
 -/
-protected theorem isAlgebraic [NumberField K] : Algebra.IsAlgebraic Rat K :=
+protected theorem isAlgebraic [NumberField K] : Algebra.IsAlgebraic ℚ K :=
   Algebra.IsAlgebraic.of_finite _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: K] [NumberField L] [Algebra K L] : FiniteDimensional K L
-  body: Module.Finite.of_restrictScalars_finite Rat K L
-
-中文:
-实例 [数域
-  签名: K] [数域 L] [代数 K L] : 有限维 K L
-  定义体: Module.Finite.of_restrictScalars_finite Rat K L
-
-Depends on / 依赖: Finite, Module, Module.Finite.of_restrictScalars_finite, of_restrictScalars_finite
+/-
+**NumberField.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField K] [NumberField L] [Algebra K L] : FiniteDimensional K L :=
-  Module.Finite.of_restrictScalars_finite Rat K L
+  Module.Finite.of_restrictScalars_finite ℚ K L
 
-/--
-theorem `of_module_finite` / 定理 `of_module_finite`
+/-- A finite extension of a number field is a number field. -/
+/-
+**NumberField.of_module_finite** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：of_module_finite [NumberField K] [Algebra K L] [Module.Finite K L] : Numbe
+rField L where to_charZero
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `charZero_of_injective_algebraMap`：charZero_of_injective_algebraMap [Comm
+Semiring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A))
+ [CharZero R] : CharZe…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Module.Finite.trans`：∀ {R : Type u_6} (A : Type u_7) (M : Type u_8) [ins
+t : Semiring R] [inst_1 : Semiring A] [inst_2 : _root_.Module R A]   [inst_3 : A
+ddCommMon…
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
 
-English:
-theorem of_module_finite
-  given: [NumberField K] [Algebra K L] [Module.Finite K L]
-  statement: NumberField L where
-  proof: charZero_of_injective_algebraMap (algebraMap K L).injective
-  to_finiteDimensional :=
-    letI := charZero_of_injective_algebraMap (algebraMap K L).injective
-    Module.Finite.trans K L
-
-中文:
-定理 of_module_finite
-  条件: [数域 K] [代数 K L] [模.有限 K L]
-  结论: 数域 L where
-  证明: charZero_of_injective_algebraMap (algebraMap K L).injective
-  to_finiteDimensional :=
-    letI := charZero_of_injective_algebraMap (algebraMap K L).injective
-    Module.Finite.trans K L
-
-Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective
+--- 原说明 ---
+A finite extension of a number field is a number field.
 -/
 theorem of_module_finite [NumberField K] [Algebra K L] [Module.Finite K L] : NumberField L where
   to_charZero := charZero_of_injective_algebraMap (algebraMap K L).injective
@@ -139,96 +121,151 @@ theorem of_module_finite [NumberField K] [Algebra K L] [Module.Finite K L] : Num
     Module.Finite.trans K L
 
 variable {K} {L} in
-/--
-Instance `of_intermediateField` / 实例 `of_intermediateField`
-
-English:
-instance of_intermediateField
-  signature: [NumberField K] [NumberField L] [Algebra K L]
-  body: of_module_finite K E
-
-中文:
-实例 of_intermediateField
-  签名: [数域 K] [数域 L] [代数 K L]
-  定义体: of_module_finite K E
-
-Depends on / 依赖: of_module_finite
+/-
+**NumberField.of_intermediateField** 是 Mathlib 中的一个实例，位于命名空间 `NumberField`。
+形式化陈述：of_intermediateField [NumberField K] [NumberField L] [Algebra K L] (E : In
+termediateField K L) : NumberField E
+参数：E : IntermediateField K L。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.of_module_finite`：of_module_finite [NumberField K] [Algebra 
+K L] [Module.Finite K L] : NumberField L where to_charZero
+· 使用定理 `NumberField.instFiniteDimensional`：∀ (K : Type u_1) (L : Type u_2) [inst
+ : Field K] [inst_1 : Field L] [NumberField K] [NumberField L]   [inst_4 : Algeb
+ra K L], FiniteDimensio…
 -/
 instance of_intermediateField [NumberField K] [NumberField L] [Algebra K L]
     (E : IntermediateField K L) : NumberField E :=
   of_module_finite K E
 
 variable {K} in
-/--
-Instance `of_subfield` / 实例 `of_subfield`
-
-English:
-instance of_subfield
-  signature: [NumberField K] (E : Subfield K)
-  body: FiniteDimensional.left Rat E K
-
-中文:
-实例 of_subfield
-  签名: [数域 K] (E : 子域 K)
-  定义体: FiniteDimensional.left Rat E K
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.left
+/-
+**NumberField.of_subfield** 是 Mathlib 中的一个实例，位于命名空间 `NumberField`。
+形式化陈述：of_subfield [NumberField K] (E : Subfield K) : NumberField E where to_fini
+teDimensional
+参数：E : Subfield K。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `FiniteDimensional.left`：∀ (F : Type u) (K : Type v) (A : Type w) [inst :
+ Ring F] [inst_1 : Ring K] [inst_2 : _root_.Module F K]   [inst_3 : AddCommGroup
+ A] [inst_4 …
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `IsDedekindRing.toIsNoetherian`：∀ {A : Type u_2} {inst : CommRing A} [sel
+f : IsDedekindRing A], IsNoetherian A A
+· 使用定理 `IsDedekindDomain.toIsDedekindRing`：∀ {A : Type u_2} {inst : CommRing A} 
+[self : IsDedekindDomain A], IsDedekindRing A
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 instance of_subfield [NumberField K] (E : Subfield K) : NumberField E where
-  to_finiteDimensional := FiniteDimensional.left Rat E K
-
-/--
-theorem `of_tower` / 定理 `of_tower`
-
-English:
-theorem of_tower
-  statement: [NumberField K] [NumberField L] [Algebra K L] (E : Type*) [Field E]
-  proof: letI := Module.Finite.left K E L
-  of_module_finite K E
-
-中文:
-定理 of_tower
-  结论: [数域 K] [数域 L] [代数 K L] (E : 类型) [域 E]
-  证明: letI := Module.Finite.left K E L
-  of_module_finite K E
-
-Depends on / 依赖: Finite, Module, Module.Finite.left, of_module_finite
+  to_finiteDimensional := FiniteDimensional.left ℚ E K
+/-
+**NumberField.of_tower** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：of_tower [NumberField K] [NumberField L] [Algebra K L] (E : Type*) [Field 
+E] [Algebra K E] [Algebra E L] [IsScalarTower K E L] : NumberField E
+参数：E : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.of_module_finite`：of_module_finite [NumberField K] [Algebra 
+K L] [Module.Finite K L] : NumberField L where to_charZero
+· 使用定理 `Module.Finite.left`：left [IsDomain K] [Nontrivial A] : Module.Finite F K
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `IsDedekindRing.toIsNoetherian`：∀ {A : Type u_2} {inst : CommRing A} [sel
+f : IsDedekindRing A], IsNoetherian A A
+· 使用定理 `IsDedekindDomain.toIsDedekindRing`：∀ {A : Type u_2} {inst : CommRing A} 
+[self : IsDedekindDomain A], IsDedekindRing A
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `NumberField.instFiniteDimensional`：∀ (K : Type u_1) (L : Type u_2) [inst
+ : Field K] [inst_1 : Field L] [NumberField K] [NumberField L]   [inst_4 : Algeb
+ra K L], FiniteDimensio…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 theorem of_tower [NumberField K] [NumberField L] [Algebra K L] (E : Type*) [Field E]
     [Algebra K E] [Algebra E L] [IsScalarTower K E L] : NumberField E :=
   letI := Module.Finite.left K E L
   of_module_finite K E
-
-/--
-theorem `of_ringEquiv` / 定理 `of_ringEquiv`
-
-English:
-theorem of_ringEquiv
-  given: (e : K ≃+* L) [NumberField K]
-  statement: NumberField L
-  proof: letI := CharZero.of_addMonoidHom e.toAddMonoidHom (by simp) e.injective
-  {
-    to_charZero := inferInstance
-    to_finiteDimensional := (SemilinearEquivClass.semilinearEquiv e : K ≃ₗ[Rat] L).finiteDimensional
-  }
-
-中文:
-定理 of_ringEquiv
-  条件: (e : K ≃+* L) [数域 K]
-  结论: 数域 L
-  证明: letI := CharZero.of_addMonoidHom e.toAddMonoidHom (by simp) e.injective
-  {
-    to_charZero := inferInstance
-    to_finiteDimensional := (SemilinearEquivClass.semilinearEquiv e : K ≃ₗ[Rat] L).finiteDimensional
-  }
-
-Depends on / 依赖: CharZero, CharZero.of_addMonoidHom, SemilinearEquivClass, SemilinearEquivClass.semilinearEquiv, e.injective, e.toAddMonoidHom, finiteDimensional, injective, of_addMonoidHom, semilinearEquiv, toAddMonoidHom, to_charZero, to_finiteDimensional
+/-
+**NumberField.of_ringEquiv** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：of_ringEquiv (e : K ≃+* L) [NumberField K] : NumberField L
+参数：e : K ≃+* L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CharZero.of_addMonoidHom`：CharZero.of_addMonoidHom {M N : Type*} [AddCom
+mMonoidWithOne M] [AddCommMonoidWithOne N] [CharZero M] (e : M ->+ N) (he : e 1 
+= 1) (he' : Fu…
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
+· 使用定理 `LinearEquiv.finiteDimensional`：∀ {K : Type u} {V : Type v} [inst : Divis
+ionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   {V₂ : Type v
+'} [inst_3 : AddCom…
+· 使用定理 `RingEquivClass.toLinearEquivClassRat`：∀ {F : Type u_1} {R : Type u_2} {S
+ : Type u_3} [inst : DivisionRing R] [inst_1 : CharZero R] [inst_2 : DivisionRin
+g S]   [inst_3 : CharZero …
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
 -/
 theorem of_ringEquiv (e : K ≃+* L) [NumberField K] : NumberField L :=
   letI := CharZero.of_addMonoidHom e.toAddMonoidHom (by simp) e.injective
   {
     to_charZero := inferInstance
-    to_finiteDimensional := (SemilinearEquivClass.semilinearEquiv e : K ≃ₗ[Rat] L).finiteDimensional
+    to_finiteDimensional := (SemilinearEquivClass.semilinearEquiv e : K ≃ₗ[ℚ] L).finiteDimensional
   }
 
 /-- The ring of integers (or number ring) corresponding to a number field
@@ -241,100 +278,87 @@ much more effective use of the discrimination tree than instances of the form
 The drawback is we have to copy over instances manually.
 -/
 @[wikidata Q1358313]
-/--
-Definition of `RingOfIntegers` / `RingOfIntegers` 的定义
+/-
+**NumberField.RingOfIntegers** 是 Mathlib 中的一个定义，位于命名空间 `NumberField`。
+形式化陈述：RingOfIntegers : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingOfIntegers
-  signature: : Type _
-  body: integralClosure Int K
-deriving CommRing, IsDomain, Nontrivial
+--- 原说明 ---
+The ring of integers (or number ring) corresponding to a number field
+is the integral closure of ℤ in the number field.
 
-@[inherit_doc] scoped notation "𝓞" => NumberField.RingOfIntegers
-
-中文:
-定义 RingOf整数egers
-  签名: : 类型 _
-  定义体: integralClosure Int K
-deriving CommRing, IsDomain, Nontrivial
-
-@[inherit_doc] scoped notation "𝓞" => NumberField.RingOfIntegers
-
-Depends on / 依赖: integralClosure
+This is defined as its own type, rather than a `Subalgebra`, for performance rea
+sons:
+looking for instances of the form `SMul (RingOfIntegers _) (RingOfIntegers _)` m
+akes
+much more effective use of the discrimination tree than instances of the form
+`SMul (Subtype _) (Subtype _)`.
+The drawback is we have to copy over instances manually.
 -/
 def RingOfIntegers : Type _ :=
-  integralClosure Int K
+  integralClosure ℤ K
 deriving CommRing, IsDomain, Nontrivial
 
 @[inherit_doc] scoped notation "𝓞" => NumberField.RingOfIntegers
 
 namespace RingOfIntegers
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: K] : CharZero (𝓞 K)
-  body: inferInstanceAs (CharZero (integralClosure _ _))
-
-中文:
-实例 [数域
-  签名: K] : 特征零 (𝓞 K)
-  定义体: inferInstanceAs (CharZero (integralClosure _ _))
-
-Depends on / 依赖: CharZero, integralClosure
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField K] : CharZero (𝓞 K) :=
   inferInstanceAs (CharZero (integralClosure _ _))
-
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {L : Type*} [Ring L] [Algebra K L] : Algebra (𝓞 K) L :=
   inferInstanceAs (Algebra (integralClosure _ _) L)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra (𝓞 K) K
-  body: inferInstanceAs _
-
-中文:
-实例 :
-  签名: 代数 (𝓞 K) K
-  定义体: inferInstanceAs _
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra (𝓞 K) K := inferInstanceAs _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree (𝓞 K) K
-  body: inferInstanceAs (IsTorsionFree (integralClosure _ _) _)
-
-中文:
-实例 :
-  签名: 是无挠 (𝓞 K) K
-  定义体: inferInstanceAs (IsTorsionFree (integralClosure _ _) _)
-
-Depends on / 依赖: IsTorsionFree, integralClosure
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree (𝓞 K) K :=
   inferInstanceAs (IsTorsionFree (integralClosure _ _) _)
-
-
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {L : Type*} [Ring L] [Algebra K L] : IsScalarTower (𝓞 K) K L :=
   inferInstanceAs (IsScalarTower (integralClosure _ _) K L)
-
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type*} [Group G] [MulSemiringAction G K] : MulSemiringAction G (𝓞 K) :=
-  inferInstanceAs (MulSemiringAction G (integralClosure Int K))
-
+  inferInstanceAs (MulSemiringAction G (integralClosure ℤ K))
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type*} [Group G] [MulSemiringAction G K] : SMulDistribClass G (𝓞 K) K :=
-  inferInstanceAs (SMulDistribClass G (integralClosure Int K) K)
+  inferInstanceAs (SMulDistribClass G (integralClosure ℤ K) K)
 
 -- verify that the two algebra instances agree
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个示例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : instAlgebra (L := K) (K := K) = instAlgebra_1 (K := K) := by
   with_reducible_and_instances rfl
 
@@ -342,282 +366,205 @@ variable {K}
 
 /-- The canonical coercion from `𝓞 K` to `K`. -/
 @[coe]
-/--
-Definition of `val` / `val` 的定义
+/-
+**NumberField.RingOfIntegers.val** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberField.RingOf
+Integers`。
+形式化陈述：val (x : 𝓞 K) : K
+参数：x : 𝓞 K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation val
-  signature: (x : 𝓞 K)
-  body: algebraMap _ _ x
-
-中文:
-缩写 val
-  签名: (x : 𝓞 K)
-  定义体: algebraMap _ _ x
-
-Depends on / 依赖: algebraMap
+--- 原说明 ---
+The canonical coercion from `𝓞 K` to `K`.
 -/
 abbrev val (x : 𝓞 K) : K := algebraMap _ _ x
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- This instance has to be `CoeHead` because we only want to apply it from `𝓞 K` to `K`. -/
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeHead (𝓞 K) K
-  body: ⟨val⟩
-
-中文:
-实例 :
-  签名: CoeHead (𝓞 K) K
-  定义体: ⟨val⟩
+--- 原说明 ---
+This instance has to be `CoeHead` because we only want to apply it from `𝓞 K` to
+ `K`.
 -/
 instance : CoeHead (𝓞 K) K := ⟨val⟩
-
-/--
-lemma `coe_eq_algebraMap` / 引理 `coe_eq_algebraMap`
-
-English:
-lemma coe_eq_algebraMap
-  given: (x : 𝓞 K)
-  statement: (x : K) = algebraMap _ _ x
-  proof: rfl
-
-中文:
-引理 coe_eq_algebraMap
-  条件: (x : 𝓞 K)
-  结论: (x : K) = algebraMap _ _ x
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.coe_eq_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `Number
+Field.RingOfIntegers`。
+形式化陈述：coe_eq_algebraMap (x : 𝓞 K) : (x : K) = algebraMap _ _ x
+参数：x : 𝓞 K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_eq_algebraMap (x : 𝓞 K) : (x : K) = algebraMap _ _ x := rfl
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {x y : 𝓞 K} (h : (x : K) = (y : K))
-  statement: x = y
-  proof: Subtype.ext h
-
-@[norm_cast]
-
-中文:
-定理 ext
-  条件: {x y : 𝓞 K} (h : (x : K) = (y : K))
-  结论: x = y
-  证明: Subtype.ext h
-
-@[norm_cast]
+/-
+**NumberField.RingOfIntegers.ext** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingOfIn
+tegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {x y : NumberField.RingOfIntegers K}, ↑x
+ = ↑y → x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
 @[ext] theorem ext {x y : 𝓞 K} (h : (x : K) = (y : K)) : x = y :=
   Subtype.ext h
 
 @[norm_cast]
-/--
-theorem `eq_iff` / 定理 `eq_iff`
-
-English:
-theorem eq_iff
-  given: {x y : 𝓞 K}
-  statement: (x : K) = (y : K) ↔ x = y
-  proof: NumberField.RingOfIntegers.ext_iff.symm
-
-中文:
-定理 eq_iff
-  条件: {x y : 𝓞 K}
-  结论: (x : K) = (y : K) ↔ x = y
-  证明: NumberField.RingOfIntegers.ext_iff.symm
-
-Depends on / 依赖: NumberField, NumberField.RingOfIntegers.ext_iff.symm, RingOfIntegers, ext_iff
+/-
+**NumberField.RingOfIntegers.eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingO
+fIntegers`。
+形式化陈述：eq_iff {x y : 𝓞 K} : (x : K) = (y : K) ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `NumberField.RingOfIntegers.ext_iff`：∀ {K : Type u_1} [inst : Field K] {x
+ y : NumberField.RingOfIntegers K}, x = y ↔ ↑x = ↑y
 -/
 theorem eq_iff {x y : 𝓞 K} : (x : K) = (y : K) ↔ x = y :=
   NumberField.RingOfIntegers.ext_iff.symm
-
-/--
-lemma `map_mk` / 引理 `map_mk`
-
-English:
-lemma map_mk
-  given: (x : K) (hx)
-  statement: algebraMap (𝓞 K) K ⟨x, hx⟩ = x
-  proof: rfl
-
-中文:
-引理 map_mk
-  条件: (x : K) (hx)
-  结论: algebraMap (𝓞 K) K ⟨x, hx⟩ = x
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingO
+fIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] (x : K) (hx : x ∈ integralClosure ℤ K), 
+  (algebraMap (NumberField.RingOfIntegers K) K) ⟨x, hx⟩ = x
+参数：x : K；hx : x ∈ integralClosure ℤ K；algebraMap (NumberField.RingOfIntegers K) 
+K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma map_mk (x : K) (hx) : algebraMap (𝓞 K) K ⟨x, hx⟩ = x := rfl
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: {x : K} (hx)
-  statement: ((⟨x, hx⟩ : 𝓞 K) : K) = x
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: {x : K} (hx)
-  结论: ((⟨x, hx⟩ : 𝓞 K) : K) = x
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `NumberField.RingO
+fIntegers`。
+形式化陈述：coe_mk {x : K} (hx) : ((⟨x, hx⟩ : 𝓞 K) : K) = x
+参数：hx。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk {x : K} (hx) : ((⟨x, hx⟩ : 𝓞 K) : K) = x := rfl
-
-/--
-lemma `mk_eq_mk` / 引理 `mk_eq_mk`
-
-English:
-lemma mk_eq_mk
-  given: (x y : K) (hx hy)
-  statement: (⟨x, hx⟩ : 𝓞 K) = ⟨y, hy⟩ ↔ x = y
-  proof: by simp
-
-中文:
-引理 mk_eq_mk
-  条件: (x y : K) (hx hy)
-  结论: (⟨x, hx⟩ : 𝓞 K) = ⟨y, hy⟩ ↔ x = y
-  证明: by simp
+/-
+**NumberField.RingOfIntegers.mk_eq_mk** 是 Mathlib 中的一个引理，位于命名空间 `NumberField.Rin
+gOfIntegers`。
+形式化陈述：mk_eq_mk (x y : K) (hx hy) : (⟨x, hx⟩ : 𝓞 K) = ⟨y, hy⟩ ↔ x = y
+参数：x y : K；hx hy。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mk_eq_mk (x y : K) (hx hy) : (⟨x, hx⟩ : 𝓞 K) = ⟨y, hy⟩ ↔ x = y := by simp
-
-/--
-lemma `mk_one` / 引理 `mk_one`
-
-English:
-lemma mk_one
-  statement: (⟨1, one_mem _⟩ : 𝓞 K) = 1
-  proof: rfl
-
-中文:
-引理 mk_one
-  结论: (⟨1, one_mem _⟩ : 𝓞 K) = 1
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingO
+fIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K], ⟨1, ⋯⟩ = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
 -/
 @[simp] lemma mk_one : (⟨1, one_mem _⟩ : 𝓞 K) = 1 :=
   rfl
-
-/--
-lemma `mk_zero` / 引理 `mk_zero`
-
-English:
-lemma mk_zero
-  statement: (⟨0, zero_mem _⟩ : 𝓞 K) = 0
-  proof: rfl
-
-中文:
-引理 mk_zero
-  结论: (⟨0, zero_mem _⟩ : 𝓞 K) = 0
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Ring
+OfIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K], ⟨0, ⋯⟩ = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
 -/
 @[simp] lemma mk_zero : (⟨0, zero_mem _⟩ : 𝓞 K) = 0 :=
   rfl
 -- TODO: these lemmas don't seem to fire?
-/--
-lemma `mk_add_mk` / 引理 `mk_add_mk`
-
-English:
-lemma mk_add_mk
-  given: (x y : K) (hx hy)
-  statement: (⟨x, hx⟩ : 𝓞 K) + ⟨y, hy⟩ = ⟨x + y, add_mem hx hy⟩
-  proof: rfl
-
-中文:
-引理 mk_add_mk
-  条件: (x y : K) (hx hy)
-  结论: (⟨x, hx⟩ : 𝓞 K) + ⟨y, hy⟩ = ⟨x + y, add_mem hx hy⟩
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mk_add_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Ri
+ngOfIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] (x y : K) (hx : x ∈ integralClosure ℤ K)
+ (hy : y ∈ integralClosure ℤ K),   ⟨x, hx⟩ + ⟨y, hy⟩ = ⟨x + y, ⋯⟩
+参数：x y : K；hx : x ∈ integralClosure ℤ K；hy : y ∈ integralClosure ℤ K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_add_mk (x y : K) (hx hy) : (⟨x, hx⟩ : 𝓞 K) + ⟨y, hy⟩ = ⟨x + y, add_mem hx hy⟩ :=
   rfl
-
-/--
-lemma `mk_mul_mk` / 引理 `mk_mul_mk`
-
-English:
-lemma mk_mul_mk
-  given: (x y : K) (hx hy)
-  statement: (⟨x, hx⟩ : 𝓞 K) * ⟨y, hy⟩ = ⟨x * y, mul_mem hx hy⟩
-  proof: rfl
-
-中文:
-引理 mk_mul_mk
-  条件: (x y : K) (hx hy)
-  结论: (⟨x, hx⟩ : 𝓞 K) * ⟨y, hy⟩ = ⟨x * y, mul_mem hx hy⟩
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Ri
+ngOfIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] (x y : K) (hx : x ∈ integralClosure ℤ K)
+ (hy : y ∈ integralClosure ℤ K),   ⟨x, hx⟩ * ⟨y, hy⟩ = ⟨x * y, ⋯⟩
+参数：x y : K；hx : x ∈ integralClosure ℤ K；hy : y ∈ integralClosure ℤ K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_mul_mk (x y : K) (hx hy) : (⟨x, hx⟩ : 𝓞 K) * ⟨y, hy⟩ = ⟨x * y, mul_mem hx hy⟩ :=
   rfl
-
-/--
-lemma `mk_sub_mk` / 引理 `mk_sub_mk`
-
-English:
-lemma mk_sub_mk
-  given: (x y : K) (hx hy)
-  statement: (⟨x, hx⟩ : 𝓞 K) - ⟨y, hy⟩ = ⟨x - y, sub_mem hx hy⟩
-  proof: rfl
-
-中文:
-引理 mk_sub_mk
-  条件: (x y : K) (hx hy)
-  结论: (⟨x, hx⟩ : 𝓞 K) - ⟨y, hy⟩ = ⟨x - y, sub_mem hx hy⟩
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mk_sub_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Ri
+ngOfIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] (x y : K) (hx : x ∈ integralClosure ℤ K)
+ (hy : y ∈ integralClosure ℤ K),   ⟨x, hx⟩ - ⟨y, hy⟩ = ⟨x - y, ⋯⟩
+参数：x y : K；hx : x ∈ integralClosure ℤ K；hy : y ∈ integralClosure ℤ K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `Subalgebra.instSubringClass`：∀ {R : Type u_1} {A : Type u_2} [inst : Com
+mRing R] [inst_1 : Ring A] [inst_2 : Algebra R A],   SubringClass (Subalgebra R 
+A) A
 -/
 @[simp] lemma mk_sub_mk (x y : K) (hx hy) : (⟨x, hx⟩ : 𝓞 K) - ⟨y, hy⟩ = ⟨x - y, sub_mem hx hy⟩ :=
   rfl
-
-/--
-lemma `neg_mk` / 引理 `neg_mk`
-
-English:
-lemma neg_mk
-  given: (x : K) (hx)
-  statement: (-⟨x, hx⟩ : 𝓞 K) = ⟨-x, neg_mem hx⟩
-  proof: rfl
-
-中文:
-引理 neg_mk
-  条件: (x : K) (hx)
-  结论: (-⟨x, hx⟩ : 𝓞 K) = ⟨-x, neg_mem hx⟩
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.neg_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingO
+fIntegers`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] (x : K) (hx : x ∈ integralClosure ℤ K), 
+-⟨x, hx⟩ = ⟨-x, ⋯⟩
+参数：x : K；hx : x ∈ integralClosure ℤ K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma neg_mk (x : K) (hx) : (-⟨x, hx⟩ : 𝓞 K) = ⟨-x, neg_mem hx⟩ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `mapRingHom` / `mapRingHom` 的定义
+/-- The ring homomorphism `(𝓞 K) →+* (𝓞 L)` given by restricting a ring homomorphism
+  `f : K →+* L` to `𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.mapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.R
+ingOfIntegers`。
+形式化陈述：mapRingHom {K L : Type*} [Field K] [Field L] (f : K ->+* L) : (𝓞 K) ->+* (
+𝓞 L) where toFun k
+参数：f : K ->+* L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRingHom
-  signature: {K L : Type*} [Field K] [Field L] (f : K ->+* L)
-  body: ⟨f k.val, map_isIntegral_int f k.2⟩
-  map_zero' := by ext; simp only [map_mk, map_zero]
-  map_one' := by ext; simp only [map_mk, map_one]
-  map_add' x y := by ext; simp only [map_mk, map_add]
-  map_mul' x y := by ext; simp only [map_mk, map_mul]
-
-@[simp]
-
-中文:
-定义 mapRingHom
-  签名: {K L : 类型} [域 K] [域 L] (f : K ->+* L)
-  定义体: ⟨f k.val, map_isIntegral_int f k.2⟩
-  map_zero' := by ext; simp only [map_mk, map_zero]
-  map_one' := by ext; simp only [map_mk, map_one]
-  map_add' x y := by ext; simp only [map_mk, map_add]
-  map_mul' x y := by ext; simp only [map_mk, map_mul]
-
-@[simp]
-
-Depends on / 依赖: k.val, map_isIntegral_int
+--- 原说明 ---
+The ring homomorphism `(𝓞 K) →+* (𝓞 L)` given by restricting a ring homomorphism
+  `f : K →+* L` to `𝓞 K`.
 -/
-def mapRingHom {K L : Type*} [Field K] [Field L] (f : K ->+* L) : (𝓞 K) ->+* (𝓞 L) where
+def mapRingHom {K L : Type*} [Field K] [Field L] (f : K →+* L) : (𝓞 K) →+* (𝓞 L) where
   toFun k := ⟨f k.val, map_isIntegral_int f k.2⟩
   map_zero' := by ext; simp only [map_mk, map_zero]
   map_one' := by ext; simp only [map_mk, map_one]
@@ -625,44 +572,32 @@ def mapRingHom {K L : Type*} [Field K] [Field L] (f : K ->+* L) : (𝓞 K) ->+* 
   map_mul' x y := by ext; simp only [map_mk, map_mul]
 
 @[simp]
-/--
-theorem `mapRingHom_apply` / 定理 `mapRingHom_apply`
-
-English:
-theorem mapRingHom_apply
-  given: {K L : Type*} [Field K] [Field L] (f : K ->+* L) (x : 𝓞 K)
-  proof: rfl
-
-中文:
-定理 mapRingHom_apply
-  条件: {K L : 类型} [域 K] [域 L] (f : K ->+* L) (x : 𝓞 K)
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mapRingHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.RingOfIntegers`。
+形式化陈述：mapRingHom_apply {K L : Type*} [Field K] [Field L] (f : K ->+* L) (x : 𝓞 K
+) : (mapRingHom f x : L) = f (x : K)
+参数：f : K ->+* L；x : 𝓞 K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapRingHom_apply {K L : Type*} [Field K] [Field L] (f : K ->+* L) (x : 𝓞 K) :
+theorem mapRingHom_apply {K L : Type*} [Field K] [Field L] (f : K →+* L) (x : 𝓞 K) :
     (mapRingHom f x : L) = f (x : K) := rfl
 
-/--
-Definition of `mapRingEquiv` / `mapRingEquiv` 的定义
+/-- The ring isomorphism `(𝓞 K) ≃+* (𝓞 L)` given by restricting
+  a ring isomorphism `e : K ≃+* L` to `𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.mapRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField
+.RingOfIntegers`。
+形式化陈述：mapRingEquiv {K L : Type*} [Field K] [Field L] (e : K ≃+* L) : (𝓞 K) ≃+* (
+𝓞 L)
+参数：e : K ≃+* L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRingEquiv
-  signature: {K L : Type*} [Field K] [Field L] (e : K ≃+* L)
-  body: RingEquiv.ofRingHom (mapRingHom e) (mapRingHom e.symm)
-    (RingHom.ext fun x => ext (EquivLike.right_inv e x.1))
-      (RingHom.ext fun x => ext (EquivLike.left_inv e x.1))
-
-@[simp]
-
-中文:
-定义 mapRingEquiv
-  签名: {K L : 类型} [域 K] [域 L] (e : K ≃+* L)
-  定义体: RingEquiv.ofRingHom (mapRingHom e) (mapRingHom e.symm)
-    (RingHom.ext fun x => ext (EquivLike.right_inv e x.1))
-      (RingHom.ext fun x => ext (EquivLike.left_inv e x.1))
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.left_inv, EquivLike.right_inv, RingEquiv, RingEquiv.ofRingHom, RingHom, RingHom.ext, e.symm, left_inv, mapRingHom, ofRingHom, right_inv
+--- 原说明 ---
+The ring isomorphism `(𝓞 K) ≃+* (𝓞 L)` given by restricting
+  a ring isomorphism `e : K ≃+* L` to `𝓞 K`.
 -/
 def mapRingEquiv {K L : Type*} [Field K] [Field L] (e : K ≃+* L) : (𝓞 K) ≃+* (𝓞 L) :=
   RingEquiv.ofRingHom (mapRingHom e) (mapRingHom e.symm)
@@ -670,132 +605,115 @@ def mapRingEquiv {K L : Type*} [Field K] [Field L] (e : K ≃+* L) : (𝓞 K) �
       (RingHom.ext fun x => ext (EquivLike.left_inv e x.1))
 
 @[simp]
-/--
-theorem `mapRingEquiv_apply` / 定理 `mapRingEquiv_apply`
-
-English:
-theorem mapRingEquiv_apply
-  given: {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 K)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapRingEquiv_apply
-  条件: {K L : 类型} [域 K] [域 L] (e : K ≃+* L) (x : 𝓞 K)
-  证明: rfl
-
-@[simp]
+/-
+**NumberField.RingOfIntegers.mapRingEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.RingOfIntegers`。
+形式化陈述：mapRingEquiv_apply {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 
+K) : (mapRingEquiv e x : L) = e (x : K)
+参数：e : K ≃+* L；x : 𝓞 K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapRingEquiv_apply {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 K) :
     (mapRingEquiv e x : L) = e (x : K) := rfl
 
 @[simp]
-/--
-theorem `mapRingEquiv_symm_apply` / 定理 `mapRingEquiv_symm_apply`
-
-English:
-theorem mapRingEquiv_symm_apply
-  given: {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 L)
-  proof: rfl
-
-中文:
-定理 mapRingEquiv_symm_apply
-  条件: {K L : 类型} [域 K] [域 L] (e : K ≃+* L) (x : 𝓞 L)
-  证明: rfl
+/-
+**NumberField.RingOfIntegers.mapRingEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.RingOfIntegers`。
+形式化陈述：mapRingEquiv_symm_apply {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x
+ : 𝓞 L) : ((mapRingEquiv e).symm x : K) = e.symm (x : L)
+参数：e : K ≃+* L；x : 𝓞 L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapRingEquiv_symm_apply {K L : Type*} [Field K] [Field L] (e : K ≃+* L) (x : 𝓞 L) :
     ((mapRingEquiv e).symm x : K) = e.symm (x : L) := rfl
 
 end RingOfIntegers
 
-/--
-Instance `inst_ringOfIntegersAlgebra` / 实例 `inst_ringOfIntegersAlgebra`
+/-- Given an algebra structure between two fields, this instance creates an algebra structure
+between their two rings of integers. -/
+/-
+**NumberField.inst_ringOfIntegersAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `NumberField`
+。
+形式化陈述：inst_ringOfIntegersAlgebra [Algebra K L] : Algebra (𝓞 K) (𝓞 L)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance inst_ringOfIntegersAlgebra
-  signature: [Algebra K L]
-  body: (RingOfIntegers.mapRingHom (algebraMap K L)).toAlgebra
-
-中文:
-实例 inst_ringOf整数egersAlgebra
-  签名: [代数 K L]
-  定义体: (RingOfIntegers.mapRingHom (algebraMap K L)).toAlgebra
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.mapRingHom, algebraMap, mapRingHom, toAlgebra
+--- 原说明 ---
+Given an algebra structure between two fields, this instance creates an algebra 
+structure
+between their two rings of integers.
 -/
 instance inst_ringOfIntegersAlgebra [Algebra K L] : Algebra (𝓞 K) (𝓞 L) :=
   (RingOfIntegers.mapRingHom (algebraMap K L)).toAlgebra
 
 -- diamond at `reducible_and_instances` https://github.com/leanprover-community/mathlib4/issues/10906
+/-
+**NumberField.** 是 Mathlib 中的一个示例，位于命名空间 `NumberField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Algebra.id (𝓞 K) = inst_ringOfIntegersAlgebra K K := rfl
 
 namespace RingOfIntegers
 
-/--
-Definition of `mapAlgHom` / `mapAlgHom` 的定义
+/-- The algebra homomorphism `(𝓞 K) →ₐ[𝓞 k] (𝓞 L)` given by restricting an algebra homomorphism
+  `f : K →ₐ[k] L` to `𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.mapAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Ri
+ngOfIntegers`。
+形式化陈述：mapAlgHom {k K L F : Type*} [Field k] [Field K] [Field L] [Algebra k K] [A
+lgebra k L] [FunLike F K L] [AlgHomClass F k K L] (f : F) : (𝓞 K) ->ₐ[𝓞 k] (𝓞 L)
+ where toRingHom
+参数：f : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapAlgHom
-  signature: {k K L F : Type*} [Field k] [Field K] [Field L] [Algebra k K]
-  body: mapRingHom f
-  commutes' x := SetCoe.ext (AlgHomClass.commutes
-    ((AlgHomClass.toAlgHom f).restrictScalars (𝓞 k)) x)
-
-中文:
-定义 mapAlgHom
-  签名: {k K L F : 类型} [域 k] [域 K] [域 L] [代数 k K]
-  定义体: mapRingHom f
-  commutes' x := SetCoe.ext (AlgHomClass.commutes
-    ((AlgHomClass.toAlgHom f).restrictScalars (𝓞 k)) x)
-
-Depends on / 依赖: mapRingHom
+--- 原说明 ---
+The algebra homomorphism `(𝓞 K) →ₐ[𝓞 k] (𝓞 L)` given by restricting an algebra h
+omomorphism
+  `f : K →ₐ[k] L` to `𝓞 K`.
 -/
 def mapAlgHom {k K L F : Type*} [Field k] [Field K] [Field L] [Algebra k K]
-    [Algebra k L] [FunLike F K L] [AlgHomClass F k K L] (f : F) : (𝓞 K) ->ₐ[𝓞 k] (𝓞 L) where
+    [Algebra k L] [FunLike F K L] [AlgHomClass F k K L] (f : F) : (𝓞 K) →ₐ[𝓞 k] (𝓞 L) where
   toRingHom := mapRingHom f
   commutes' x := SetCoe.ext (AlgHomClass.commutes
     ((AlgHomClass.toAlgHom f).restrictScalars (𝓞 k)) x)
 
-/--
-Definition of `mapAlgEquiv` / `mapAlgEquiv` 的定义
+/-- The isomorphism of algebras `(𝓞 K) ≃ₐ[𝓞 k] (𝓞 L)` given by restricting
+  an isomorphism of algebras `e : K ≃ₐ[k] L` to `𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.mapAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.
+RingOfIntegers`。
+形式化陈述：mapAlgEquiv {k K L E : Type*} [Field k] [Field K] [Field L] [Algebra k K] 
+[Algebra k L] [EquivLike E K L] [AlgEquivClass E k K L] (e : E) : (𝓞 K) ≃ₐ[𝓞 k] 
+(𝓞 L)
+参数：e : E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapAlgEquiv
-  signature: {k K L E : Type*} [Field k] [Field K] [Field L] [Algebra k K]
-  body: AlgEquiv.ofAlgHom (mapAlgHom e) (mapAlgHom (AlgEquivClass.toAlgEquiv e : K ≃ₐ[k] L).symm)
-    (AlgHom.ext fun x => ext (EquivLike.right_inv e x.1))
-      (AlgHom.ext fun x => ext (EquivLike.left_inv e x.1))
-
-中文:
-定义 mapAlgEquiv
-  签名: {k K L E : 类型} [域 k] [域 K] [域 L] [代数 k K]
-  定义体: AlgEquiv.ofAlgHom (mapAlgHom e) (mapAlgHom (AlgEquivClass.toAlgEquiv e : K ≃ₐ[k] L).symm)
-    (AlgHom.ext fun x => ext (EquivLike.right_inv e x.1))
-      (AlgHom.ext fun x => ext (EquivLike.left_inv e x.1))
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgEquivClass, AlgEquivClass.toAlgEquiv, AlgHom, AlgHom.ext, EquivLike, EquivLike.left_inv, EquivLike.right_inv, left_inv, mapAlgHom, ofAlgHom, right_inv, toAlgEquiv
+--- 原说明 ---
+The isomorphism of algebras `(𝓞 K) ≃ₐ[𝓞 k] (𝓞 L)` given by restricting
+  an isomorphism of algebras `e : K ≃ₐ[k] L` to `𝓞 K`.
 -/
 def mapAlgEquiv {k K L E : Type*} [Field k] [Field K] [Field L] [Algebra k K]
     [Algebra k L] [EquivLike E K L] [AlgEquivClass E k K L] (e : E) : (𝓞 K) ≃ₐ[𝓞 k] (𝓞 L) :=
   AlgEquiv.ofAlgHom (mapAlgHom e) (mapAlgHom (AlgEquivClass.toAlgEquiv e : K ≃ₐ[k] L).symm)
     (AlgHom.ext fun x => ext (EquivLike.right_inv e x.1))
       (AlgHom.ext fun x => ext (EquivLike.left_inv e x.1))
-
-/--
-Instance `inst_isScalarTower` / 实例 `inst_isScalarTower`
-
-English:
-instance inst_isScalarTower
-  signature: (k K L : Type*) [Field k] [Field K] [Field L]
-  body: IsScalarTower.of_algHom (mapAlgHom (IsScalarTower.toAlgHom k K L))
-
-中文:
-实例 inst_isScalarTower
-  签名: (k K L : 类型) [域 k] [域 K] [域 L]
-  定义体: IsScalarTower.of_algHom (mapAlgHom (IsScalarTower.toAlgHom k K L))
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_algHom, IsScalarTower.toAlgHom, mapAlgHom, of_algHom, toAlgHom
+/-
+**NumberField.RingOfIntegers.inst_isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Numbe
+rField.RingOfIntegers`。
+形式化陈述：inst_isScalarTower (k K L : Type*) [Field k] [Field K] [Field L] [Algebra 
+k K] [Algebra k L] [Algebra K L] [IsScalarTower k K L] : IsScalarTower (𝓞 k) (𝓞 
+K) (𝓞 L)
+参数：k K L : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
 -/
 instance inst_isScalarTower (k K L : Type*) [Field k] [Field K] [Field L]
     [Algebra k K] [Algebra k L] [Algebra K L] [IsScalarTower k K L] :
@@ -804,442 +722,362 @@ instance inst_isScalarTower (k K L : Type*) [Field k] [Field K] [Field L]
 
 variable {K}
 
-/--
-lemma `coe_injective` / 引理 `coe_injective`
+/-- The canonical map from `𝓞 K` to `K` is injective.
 
-English:
-lemma coe_injective
-  statement: Function.Injective (algebraMap (𝓞 K) K)
-  proof: FaithfulSMul.algebraMap_injective _ _
+This is a convenient abbreviation for `FaithfulSMul.algebraMap_injective`.
+-/
+/-
+**NumberField.RingOfIntegers.coe_injective** 是 Mathlib 中的一个引理，位于命名空间 `NumberFiel
+d.RingOfIntegers`。
+形式化陈述：coe_injective : Function.Injective (algebraMap (𝓞 K) K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.RingOfIntegers.instIsTorsionFree`：∀ (K : Type u_1) [inst : F
+ield K], Module.IsTorsionFree (NumberField.RingOfIntegers K) K
 
-中文:
-引理 coe_injective
-  结论: 函数.单射 (algebraMap (𝓞 K) K)
-  证明: FaithfulSMul.algebraMap_injective _ _
+--- 原说明 ---
+The canonical map from `𝓞 K` to `K` is injective.
 
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective
+This is a convenient abbreviation for `FaithfulSMul.algebraMap_injective`.
 -/
 lemma coe_injective : Function.Injective (algebraMap (𝓞 K) K) :=
   FaithfulSMul.algebraMap_injective _ _
 
-/--
-lemma `coe_eq_zero_iff` / 引理 `coe_eq_zero_iff`
+/-- The canonical map from `𝓞 K` to `K` is injective.
 
-English:
-lemma coe_eq_zero_iff
-  given: {x : 𝓞 K}
-  statement: algebraMap _ K x = 0 ↔ x = 0
-  proof: map_eq_zero_iff _ coe_injective
+This is a convenient abbreviation for `map_eq_zero_iff` applied to
+`FaithfulSMul.algebraMap_injective`.
+-/
+/-
+**NumberField.RingOfIntegers.coe_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `NumberFi
+eld.RingOfIntegers`。
+形式化陈述：coe_eq_zero_iff {x : 𝓞 K} : algebraMap _ K x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : 
+Zero M] [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F
+), Fu…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `NumberField.RingOfIntegers.coe_injective`：coe_injective : Function.Injec
+tive (algebraMap (𝓞 K) K)
 
-中文:
-引理 coe_eq_zero_iff
-  条件: {x : 𝓞 K}
-  结论: algebraMap _ K x = 0 ↔ x = 0
-  证明: map_eq_zero_iff _ coe_injective
+--- 原说明 ---
+The canonical map from `𝓞 K` to `K` is injective.
 
-Depends on / 依赖: coe_injective, map_eq_zero_iff
+This is a convenient abbreviation for `map_eq_zero_iff` applied to
+`FaithfulSMul.algebraMap_injective`.
 -/
 lemma coe_eq_zero_iff {x : 𝓞 K} : algebraMap _ K x = 0 ↔ x = 0 :=
   map_eq_zero_iff _ coe_injective
 
-/--
-lemma `coe_ne_zero_iff` / 引理 `coe_ne_zero_iff`
+/-- The canonical map from `𝓞 K` to `K` is injective.
 
-English:
-lemma coe_ne_zero_iff
-  given: {x : 𝓞 K}
-  statement: algebraMap _ K x != 0 ↔ x != 0
-  proof: map_ne_zero_iff _ coe_injective
-
-中文:
-引理 coe_ne_zero_iff
-  条件: {x : 𝓞 K}
-  结论: algebraMap _ K x != 0 ↔ x != 0
-  证明: map_ne_zero_iff _ coe_injective
-
-Depends on / 依赖: coe_injective, map_ne_zero_iff
+This is a convenient abbreviation for `map_ne_zero_iff` applied to
+`FaithfulSMul.algebraMap_injective`.
 -/
-lemma coe_ne_zero_iff {x : 𝓞 K} : algebraMap _ K x != 0 ↔ x != 0 :=
+/-
+**NumberField.RingOfIntegers.coe_ne_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `NumberFi
+eld.RingOfIntegers`。
+形式化陈述：coe_ne_zero_iff {x : 𝓞 K} : algebraMap _ K x != 0 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_ne_zero_iff`：∀ {R : Type u_10} {S : Type u_11} {F : Type u_12} [inst
+ : Zero R] [inst_1 : Zero S] [inst_2 : FunLike F R S]   [ZeroHomClass F R S] (f 
+: F),…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `NumberField.RingOfIntegers.coe_injective`：coe_injective : Function.Injec
+tive (algebraMap (𝓞 K) K)
+
+--- 原说明 ---
+The canonical map from `𝓞 K` to `K` is injective.
+
+This is a convenient abbreviation for `map_ne_zero_iff` applied to
+`FaithfulSMul.algebraMap_injective`.
+-/
+lemma coe_ne_zero_iff {x : 𝓞 K} : algebraMap _ K x ≠ 0 ↔ x ≠ 0 :=
   map_ne_zero_iff _ coe_injective
-
-/--
-theorem `minpoly_coe` / 定理 `minpoly_coe`
-
-English:
-theorem minpoly_coe
-  given: (x : 𝓞 K)
-  proof: minpoly.algebraMap_eq RingOfIntegers.coe_injective x
-
-中文:
-定理 minpoly_coe
-  条件: (x : 𝓞 K)
-  证明: minpoly.algebraMap_eq RingOfIntegers.coe_injective x
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.coe_injective, algebraMap_eq, coe_injective, minpoly, minpoly.algebraMap_eq
+/-
+**NumberField.RingOfIntegers.minpoly_coe** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+RingOfIntegers`。
+形式化陈述：minpoly_coe (x : 𝓞 K) : minpoly Int (x : K) = minpoly Int x
+参数：x : 𝓞 K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `minpoly.algebraMap_eq`：algebraMap_eq {B} [CommRing B] [Algebra A B] [Alg
+ebra B B'] [IsScalarTower A B B'] (h : Function.Injective (algebraMap B B')) (x 
+: B) : minp…
+· 使用引理 `NumberField.RingOfIntegers.coe_injective`：coe_injective : Function.Injec
+tive (algebraMap (𝓞 K) K)
 -/
 theorem minpoly_coe (x : 𝓞 K) :
-    minpoly Int (x : K) = minpoly Int x :=
+    minpoly ℤ (x : K) = minpoly ℤ x :=
   minpoly.algebraMap_eq RingOfIntegers.coe_injective x
-
-/--
-theorem `isIntegral_coe` / 定理 `isIntegral_coe`
-
-English:
-theorem isIntegral_coe
-  given: (x : 𝓞 K)
-  statement: IsIntegral Int (algebraMap _ K x)
-  proof: x.2
-
-中文:
-定理 is整数egral_coe
-  条件: (x : 𝓞 K)
-  结论: 是整 整数 (algebraMap _ K x)
-  证明: x.2
+/-
+**NumberField.RingOfIntegers.isIntegral_coe** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.RingOfIntegers`。
+形式化陈述：isIntegral_coe (x : 𝓞 K) : IsIntegral Int (algebraMap _ K x)
+参数：x : 𝓞 K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem isIntegral_coe (x : 𝓞 K) : IsIntegral Int (algebraMap _ K x) :=
+theorem isIntegral_coe (x : 𝓞 K) : IsIntegral ℤ (algebraMap _ K x) :=
   x.2
-
-/--
-theorem `isIntegral` / 定理 `isIntegral`
-
-English:
-theorem isIntegral
-  given: (x : 𝓞 K)
-  statement: IsIntegral Int x
-  proof: by
-  obtain ⟨P, hPm, hP⟩ := x.isIntegral_coe
-  refine ⟨P, hPm, ?_⟩
-  rwa [IsScalarTower.algebraMap_eq (S := 𝓞 K), ← Polynomial.hom_eval₂, coe_eq_zero_iff] at hP
-
-中文:
-定理 is整数egral
-  条件: (x : 𝓞 K)
-  结论: 是整 整数 x
-  证明: by
-  obtain ⟨P, hPm, hP⟩ := x.isIntegral_coe
-  refine ⟨P, hPm, ?_⟩
-  rwa [IsScalarTower.algebraMap_eq (S := 𝓞 K), ← Polynomial.hom_eval₂, coe_eq_zero_iff] at hP
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, Polynomial, Polynomial.hom_eval, algebraMap_eq, coe_eq_zero_iff, isIntegral_coe, x.isIntegral_coe
+/-
+**NumberField.RingOfIntegers.isIntegral** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.R
+ingOfIntegers`。
+形式化陈述：isIntegral (x : 𝓞 K) : IsIntegral Int x
+参数：x : 𝓞 K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.isIntegral_coe`：isIntegral_coe (x : 𝓞 K) : Is
+Integral Int (algebraMap _ K x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NumberField.RingOfIntegers.coe_eq_zero_iff`：coe_eq_zero_iff {x : 𝓞 K} : 
+algebraMap _ K x = 0 ↔ x = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.hom_eval₂`：hom_eval₂ (x : S) : g (p.eval₂ f x) = p.eval₂ (g.c
+omp f) (g x)
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
 -/
-theorem isIntegral (x : 𝓞 K) : IsIntegral Int x := by
+theorem isIntegral (x : 𝓞 K) : IsIntegral ℤ x := by
   obtain ⟨P, hPm, hP⟩ := x.isIntegral_coe
   refine ⟨P, hPm, ?_⟩
   rwa [IsScalarTower.algebraMap_eq (S := 𝓞 K), ← Polynomial.hom_eval₂, coe_eq_zero_iff] at hP
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: K] : IsFractionRing (𝓞 K) K
-  body: integralClosure.isFractionRing_of_finite_extension Rat _
-
-中文:
-实例 [数域
-  签名: K] : IsFractionRing (𝓞 K) K
-  定义体: integralClosure.isFractionRing_of_finite_extension Rat _
-
-Depends on / 依赖: integralClosure, integralClosure.isFractionRing_of_finite_extension, isFractionRing_of_finite_extension
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField K] : IsFractionRing (𝓞 K) K :=
-  integralClosure.isFractionRing_of_finite_extension Rat _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIntegralClosure (𝓞 K) Int K
-  body: integralClosure.isIntegralClosure _ _
-
-中文:
-实例 :
-  签名: 是整闭包 (𝓞 K) 整数 K
-  定义体: integralClosure.isIntegralClosure _ _
-
-Depends on / 依赖: integralClosure, integralClosure.isIntegralClosure, isIntegralClosure
+  integralClosure.isFractionRing_of_finite_extension ℚ _
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsIntegralClosure (𝓞 K) Int K :=
+instance : IsIntegralClosure (𝓞 K) ℤ K :=
   integralClosure.isIntegralClosure _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra.IsIntegral Int (𝓞 K)
-  body: IsIntegralClosure.isIntegral_algebra Int K
-
-中文:
-实例 :
-  签名: 代数.是整 整数 (𝓞 K)
-  定义体: IsIntegralClosure.isIntegral_algebra Int K
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isIntegral_algebra, isIntegral_algebra
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Algebra.IsIntegral Int (𝓞 K) :=
-  IsIntegralClosure.isIntegral_algebra Int K
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: K] : IsIntegrallyClosed (𝓞 K)
-  body: integralClosure.isIntegrallyClosedOfFiniteExtension Rat
-
-中文:
-实例 [数域
-  签名: K] : 是整闭 (𝓞 K)
-  定义体: integralClosure.isIntegrallyClosedOfFiniteExtension Rat
-
-Depends on / 依赖: integralClosure, integralClosure.isIntegrallyClosedOfFiniteExtension, isIntegrallyClosedOfFiniteExtension
+instance : Algebra.IsIntegral ℤ (𝓞 K) :=
+  IsIntegralClosure.isIntegral_algebra ℤ K
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField K] : IsIntegrallyClosed (𝓞 K) :=
-  integralClosure.isIntegrallyClosedOfFiniteExtension Rat
+  integralClosure.isIntegrallyClosedOfFiniteExtension ℚ
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The ring of integers of `K` are equivalent to any integral closure of `ℤ` in `K` -/
+/-
+**NumberField.RingOfIntegers.equiv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.RingOf
+Integers`。
+形式化陈述：{K : Type u_1} →   [inst : Field K] →     (R : Type u_3) →       [inst_1 :
+ CommRing R] → [inst_2 : Algebra R K] → [IsIntegralClosure R ℤ K] → NumberField.
+RingOfIntegers K ≃+* R
+参数：R : Type u_3。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosureInt`：∀ {K : Type u_1} [i
+nst : Field K], IsIntegralClosure (NumberField.RingOfIntegers K) ℤ K
 
-English:
-definition noncomputable
-  signature: def equiv (R : Type*) [CommRing R] [Algebra R K]
-  body: (IsIntegralClosure.equiv Int R K _).symm.toRingEquiv
-
-中文:
-定义 noncomputable
-  签名: def equiv (R : 类型) [交换环 R] [代数 R K]
-  定义体: (IsIntegralClosure.equiv Int R K _).symm.toRingEquiv
+--- 原说明 ---
+The ring of integers of `K` are equivalent to any integral closure of `ℤ` in `K`
 -/
 protected noncomputable def equiv (R : Type*) [CommRing R] [Algebra R K]
-    [IsIntegralClosure R Int K] : 𝓞 K ≃+* R :=
-  (IsIntegralClosure.equiv Int R K _).symm.toRingEquiv
+    [IsIntegralClosure R ℤ K] : 𝓞 K ≃+* R :=
+  (IsIntegralClosure.equiv ℤ R K _).symm.toRingEquiv
 
 variable (K)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: K] : CharZero (𝓞 K)
-  body: .of_module K
-
-中文:
-实例 [特征零
-  签名: K] : 特征零 (𝓞 K)
-  定义体: .of_module K
-
-Depends on / 依赖: of_module
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero K] : CharZero (𝓞 K) := .of_module K
 
 variable [NumberField K]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNoetherian Int (𝓞 K)
-  body: IsIntegralClosure.isNoetherian _ Rat K _
-
-中文:
-实例 :
-  签名: 是Noether 整数 (𝓞 K)
-  定义体: IsIntegralClosure.isNoetherian _ Rat K _
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsNoetherian Int (𝓞 K) :=
-  IsIntegralClosure.isNoetherian _ Rat K _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddGroup.FG (𝓞 K)
-  body: Finite.iff_addGroup_fg.mp IsNoetherian.finite Int (𝓞 K)
-
-中文:
-实例 :
-  签名: 加法群.FG (𝓞 K)
-  定义体: Finite.iff_addGroup_fg.mp IsNoetherian.finite Int (𝓞 K)
-
-Depends on / 依赖: Finite, Finite.iff_addGroup_fg.mp, IsNoetherian, IsNoetherian.finite, finite, iff_addGroup_fg
+instance : IsNoetherian ℤ (𝓞 K) :=
+  IsIntegralClosure.isNoetherian _ ℚ K _
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddGroup.FG (𝓞 K) :=
-Finite.iff_addGroup_fg.mp IsNoetherian.finite Int (𝓞 K)
+  Finite.iff_addGroup_fg.mp <| IsNoetherian.finite ℤ (𝓞 K)
 
-/--
-theorem `not_isField` / 定理 `not_isField`
+/-- The ring of integers of a number field is not a field. -/
+/-
+**NumberField.RingOfIntegers.not_isField** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+RingOfIntegers`。
+形式化陈述：not_isField : ¬IsField (𝓞 K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.injective_int`：RingHom.injective_int {α : Type*} [NonAssocRing α
+] (f : Int ->+* α) [CharZero α] : Function.Injective f
+· 使用定理 `NumberField.RingOfIntegers.instCharZero_1`：∀ (K : Type u_1) [inst : Fiel
+d K] [CharZero K], CharZero (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Int.not_isField`：¬IsField ℤ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.IsIntegral.isField_iff_isField`：Algebra.IsIntegral.isField_iff_i
+sField [IsDomain S] (hRS : Function.Injective (algebraMap R S)) : IsField R ↔ Is
+Field S
+· 使用定理 `IsIntegralClosure.isIntegral_algebra`：isIntegral_algebra [Algebra R A] [
+IsScalarTower R A B] : Algebra.IsIntegral R A
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosureInt`：∀ {K : Type u_1} [i
+nst : Field K], IsIntegralClosure (NumberField.RingOfIntegers K) ℤ K
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
 
-English:
-theorem not_isField
-  statement: ¬IsField (𝓞 K)
-  proof: by
-  have h_inj : Function.Injective (algebraMap Int (𝓞 K)) := RingHom.injective_int (algebraMap Int (𝓞 K))
-  intro hf
-  exact Int.not_isField
-    (((IsIntegralClosure.isIntegral_algebra Int K).isField_iff_isField h_inj).mpr hf)
-
-中文:
-定理 not_isField
-  结论: ¬是域 (𝓞 K)
-  证明: by
-  have h_inj : Function.Injective (algebraMap Int (𝓞 K)) := RingHom.injective_int (algebraMap Int (𝓞 K))
-  intro hf
-  exact Int.not_isField
-    (((IsIntegralClosure.isIntegral_algebra Int K).isField_iff_isField h_inj).mpr hf)
-
-Depends on / 依赖: Function, Function.Injective, Injective, Int.not_isField, IsIntegralClosure, IsIntegralClosure.isIntegral_algebra, RingHom, RingHom.injective_int, algebraMap, h_inj, injective_int, isField_iff_isField, isIntegral_algebra, not_isField
+--- 原说明 ---
+The ring of integers of a number field is not a field.
 -/
 theorem not_isField : ¬IsField (𝓞 K) := by
-  have h_inj : Function.Injective (algebraMap Int (𝓞 K)) := RingHom.injective_int (algebraMap Int (𝓞 K))
+  have h_inj : Function.Injective (algebraMap ℤ (𝓞 K)) := RingHom.injective_int (algebraMap ℤ (𝓞 K))
   intro hf
   exact Int.not_isField
-    (((IsIntegralClosure.isIntegral_algebra Int K).isField_iff_isField h_inj).mpr hf)
-
+    (((IsIntegralClosure.isIntegral_algebra ℤ K).isField_iff_isField h_inj).mpr hf)
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {I : Ideal (𝓞 K)} [hI : I.IsMaximal] : NeZero I :=
-⟨Ring.ne_bot_of_isMaximal_of_not_isField hI RingOfIntegers.not_isField K⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDedekindDomain (𝓞 K)
-  body: IsIntegralClosure.isDedekindDomain Int Rat K _
-
-中文:
-实例 :
-  签名: 是Dedekind整环 (𝓞 K)
-  定义体: IsIntegralClosure.isDedekindDomain Int Rat K _
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isDedekindDomain, isDedekindDomain
+  ⟨Ring.ne_bot_of_isMaximal_of_not_isField hI <| RingOfIntegers.not_isField K⟩
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsDedekindDomain (𝓞 K) :=
-  IsIntegralClosure.isDedekindDomain Int Rat K _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Free Int (𝓞 K)
-  body: IsIntegralClosure.module_free Int Rat K (𝓞 K)
-
-中文:
-实例 :
-  签名: 自由 整数 (𝓞 K)
-  定义体: IsIntegralClosure.module_free Int Rat K (𝓞 K)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.module_free, module_free
+  IsIntegralClosure.isDedekindDomain ℤ ℚ K _
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Free Int (𝓞 K) :=
-  IsIntegralClosure.module_free Int Rat K (𝓞 K)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLocalization (Algebra.algebraMapSubmonoid (𝓞 K) Int⁰) K
-  body: IsIntegralClosure.isLocalization_of_isSeparable Int Rat K (𝓞 K)
-
-中文:
-实例 :
-  签名: 是Localization (代数.algebraMapSubmonoid (𝓞 K) 整数⁰) K
-  定义体: IsIntegralClosure.isLocalization_of_isSeparable Int Rat K (𝓞 K)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isLocalization_of_isSeparable, isLocalization_of_isSeparable
+instance : Free ℤ (𝓞 K) :=
+  IsIntegralClosure.module_free ℤ ℚ K (𝓞 K)
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsLocalization (Algebra.algebraMapSubmonoid (𝓞 K) Int⁰) K :=
-  IsIntegralClosure.isLocalization_of_isSeparable Int Rat K (𝓞 K)
+instance : IsLocalization (Algebra.algebraMapSubmonoid (𝓞 K) ℤ⁰) K :=
+  IsIntegralClosure.isLocalization_of_isSeparable ℤ ℚ K (𝓞 K)
 
-/--
-Definition of `basis` / `basis` 的定义
+/-- A ℤ-basis of the ring of integers of `K`. -/
+/-
+**NumberField.RingOfIntegers.basis** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.RingOf
+Integers`。
+形式化陈述：basis : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Int (𝓞 K)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition basis
-  signature: : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Int (𝓞 K)
-  body: Free.chooseBasis Int (𝓞 K)
-
-中文:
-定义 basis
-  签名: : 基 (自由.ChooseBasisIndex 整数 (𝓞 K)) 整数 (𝓞 K)
-  定义体: Free.chooseBasis Int (𝓞 K)
-
-Depends on / 依赖: Free.chooseBasis, chooseBasis
+--- 原说明 ---
+A ℤ-basis of the ring of integers of `K`.
 -/
-noncomputable def basis : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Int (𝓞 K) :=
-  Free.chooseBasis Int (𝓞 K)
+noncomputable def basis : Basis (Free.ChooseBasisIndex ℤ (𝓞 K)) ℤ (𝓞 K) :=
+  Free.chooseBasis ℤ (𝓞 K)
 
 variable {K} {M : Type*}
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- Given `f : M → K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding function
+`M → 𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.restrict** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Rin
+gOfIntegers`。
+形式化陈述：restrict (f : M -> K) (h : forall x, IsIntegral Int (f x)) (x : M) : 𝓞 K
+参数：f : M -> K；h : forall x, IsIntegral Int (f x)；x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (f : M -> K) (h : forall x, IsIntegral Int (f x)) (x : M)
-  body: ⟨f x, h x⟩
-
-中文:
-定义 restrict
-  签名: (f : M -> K) (h : 对任意 x, 是整 整数 (f x)) (x : M)
-  定义体: ⟨f x, h x⟩
+--- 原说明 ---
+Given `f : M → K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding functio
+n
+`M → 𝓞 K`.
 -/
-def restrict (f : M -> K) (h : forall x, IsIntegral Int (f x)) (x : M) : 𝓞 K :=
+def restrict (f : M → K) (h : ∀ x, IsIntegral ℤ (f x)) (x : M) : 𝓞 K :=
   ⟨f x, h x⟩
 
-/--
-Definition of `restrict_addMonoidHom` / `restrict_addMonoidHom` 的定义
+/-- Given `f : M →+ K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding function
+`M →+ 𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.restrict_addMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Nu
+mberField.RingOfIntegers`。
+形式化陈述：restrict_addMonoidHom [AddZeroClass M] (f : M ->+ K) (h : forall x, IsInte
+gral Int (f x)) : M ->+ 𝓞 K where toFun
+参数：f : M ->+ K；h : forall x, IsIntegral Int (f x)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict_addMonoidHom
-  signature: [AddZeroClass M] (f : M ->+ K) (h : forall x, IsIntegral Int (f x))
-  body: restrict f h
-  map_zero' := by simp only [restrict, map_zero]; rfl
-  map_add' x y := by simp only [restrict, map_add]; rfl
-
-中文:
-定义 restrict_addMonoidHom
-  签名: [加法零类 M] (f : M ->+ K) (h : 对任意 x, 是整 整数 (f x))
-  定义体: restrict f h
-  map_zero' := by simp only [restrict, map_zero]; rfl
-  map_add' x y := by simp only [restrict, map_add]; rfl
-
-Depends on / 依赖: restrict
+--- 原说明 ---
+Given `f : M →+ K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding functi
+on
+`M →+ 𝓞 K`.
 -/
-def restrict_addMonoidHom [AddZeroClass M] (f : M ->+ K) (h : forall x, IsIntegral Int (f x)) :
-    M ->+ 𝓞 K where
+def restrict_addMonoidHom [AddZeroClass M] (f : M →+ K) (h : ∀ x, IsIntegral ℤ (f x)) :
+    M →+ 𝓞 K where
   toFun := restrict f h
   map_zero' := by simp only [restrict, map_zero]; rfl
   map_add' x y := by simp only [restrict, map_add]; rfl
 
-/--
-Definition of `restrict_monoidHom` / `restrict_monoidHom` 的定义
+/-- Given `f : M →* K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding function
+`M →* 𝓞 K`. -/
+/-
+**NumberField.RingOfIntegers.restrict_monoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Numbe
+rField.RingOfIntegers`。
+形式化陈述：restrict_monoidHom [MulOneClass M] (f : M ->* K) (h : forall x, IsIntegral
+ Int (f x)) : M ->* 𝓞 K where toFun
+参数：f : M ->* K；h : forall x, IsIntegral Int (f x)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict_monoidHom
-  signature: [MulOneClass M] (f : M ->* K) (h : forall x, IsIntegral Int (f x))
-  body: restrict f h
-  map_one' := by simp only [restrict, map_one]; rfl
-  map_mul' x y := by simp only [restrict, map_mul]; rfl
-
-中文:
-定义 restrict_monoidHom
-  签名: [MulOne类 M] (f : M ->* K) (h : 对任意 x, 是整 整数 (f x))
-  定义体: restrict f h
-  map_one' := by simp only [restrict, map_one]; rfl
-  map_mul' x y := by simp only [restrict, map_mul]; rfl
-
-Depends on / 依赖: restrict
+--- 原说明 ---
+Given `f : M →* K` such that `∀ x, IsIntegral ℤ (f x)`, the corresponding functi
+on
+`M →* 𝓞 K`.
 -/
-def restrict_monoidHom [MulOneClass M] (f : M ->* K) (h : forall x, IsIntegral Int (f x)) : M ->* 𝓞 K where
+def restrict_monoidHom [MulOneClass M] (f : M →* K) (h : ∀ x, IsIntegral ℤ (f x)) : M →* 𝓞 K where
   toFun := restrict f h
   map_one' := by simp only [restrict, map_one]; rfl
   map_mul' x y := by simp only [restrict, map_mul]; rfl
@@ -1248,172 +1086,182 @@ section extension
 
 variable (K L : Type*) [Field K] [Field L] [Algebra K L]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower (𝓞 K) (𝓞 L) L
-  body: IsScalarTower.of_algebraMap_eq' rfl
-
-中文:
-实例 :
-  签名: 标量塔 (𝓞 K) (𝓞 L) L
-  定义体: IsScalarTower.of_algebraMap_eq' rfl
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower (𝓞 K) (𝓞 L) L :=
   IsScalarTower.of_algebraMap_eq' rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIntegralClosure (𝓞 L) (𝓞 K) L
-  body: IsIntegralClosure.tower_top (R := Int)
-
-中文:
-实例 :
-  签名: 是整闭包 (𝓞 L) (𝓞 K) L
-  定义体: IsIntegralClosure.tower_top (R := Int)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.tower_top, tower_top
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIntegralClosure (𝓞 L) (𝓞 K) L :=
-  IsIntegralClosure.tower_top (R := Int)
+  IsIntegralClosure.tower_top (R := ℤ)
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The ring of integers of `L` is isomorphic to any integral closure of `𝓞 K` in `L` -/
+/-
+**NumberField.RingOfIntegers.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Rin
+gOfIntegers`。
+形式化陈述：(K : Type u_4) →   (L : Type u_5) →     [inst : Field K] →       [inst_1 :
+ Field L] →         [inst_2 : Algebra K L] →           (R : Type u_6) →         
+    [inst_3 : CommRing R] →               [inst_4 : Algebra (NumberField.RingOfI
+ntegers K) R] →                 [inst_5 : Algebra R L] →                   [IsSc
+alarTower (NumberField.RingOfIntegers K) R L] →                     [IsIntegralC
+losure R (NumberField.RingOfIntegers K) L] →                       NumberField.R
+ingOfIntegers L ≃ₐ[NumberField.RingOfIntegers K] R
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosure`：∀ (K : Type u_4) (L : 
+Type u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsIntegr
+alClosure (NumberField.RingOfIntegers …
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower_1`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsScalarTo
+wer (NumberField.RingOfIntegers K) (…
 
-English:
-definition noncomputable
-  signature: def algEquiv (R : Type*) [CommRing R] [Algebra (𝓞 K) R] [Algebra R L]
-  body: (IsIntegralClosure.equiv (𝓞 K) R L _).symm
-
-中文:
-定义 noncomputable
-  签名: def algEquiv (R : 类型) [交换环 R] [代数 (𝓞 K) R] [代数 R L]
-  定义体: (IsIntegralClosure.equiv (𝓞 K) R L _).symm
+--- 原说明 ---
+The ring of integers of `L` is isomorphic to any integral closure of `𝓞 K` in `L
+`
 -/
 protected noncomputable def algEquiv (R : Type*) [CommRing R] [Algebra (𝓞 K) R] [Algebra R L]
     [IsScalarTower (𝓞 K) R L] [IsIntegralClosure R (𝓞 K) L] : 𝓞 L ≃ₐ[𝓞 K] R :=
   (IsIntegralClosure.equiv (𝓞 K) R L _).symm
 
-/--
-Instance `extension_algebra_isIntegral` / 实例 `extension_algebra_isIntegral`
+/-- Any extension between ring of integers is integral. -/
+/-
+**NumberField.RingOfIntegers.extension_algebra_isIntegral** 是 Mathlib 中的一个实例，位于命
+名空间 `NumberField.RingOfIntegers`。
+形式化陈述：extension_algebra_isIntegral : Algebra.IsIntegral (𝓞 K) (𝓞 L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegralClosure.isIntegral_algebra`：isIntegral_algebra [Algebra R A] [
+IsScalarTower R A B] : Algebra.IsIntegral R A
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosure`：∀ (K : Type u_4) (L : 
+Type u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsIntegr
+alClosure (NumberField.RingOfIntegers …
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower_1`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsScalarTo
+wer (NumberField.RingOfIntegers K) (…
 
-English:
-instance extension_algebra_isIntegral
-  signature: : Algebra.IsIntegral (𝓞 K) (𝓞 L)
-  body: IsIntegralClosure.isIntegral_algebra (𝓞 K) L
-
-中文:
-实例 extension_algebra_is整数egral
-  签名: : 代数.是整 (𝓞 K) (𝓞 L)
-  定义体: IsIntegralClosure.isIntegral_algebra (𝓞 K) L
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isIntegral_algebra, isIntegral_algebra
+--- 原说明 ---
+Any extension between ring of integers is integral.
 -/
 instance extension_algebra_isIntegral : Algebra.IsIntegral (𝓞 K) (𝓞 L) :=
   IsIntegralClosure.isIntegral_algebra (𝓞 K) L
 
-/--
-Instance `extension_isNoetherian` / 实例 `extension_isNoetherian`
+/-- Any extension between ring of integers of number fields is Noetherian. -/
+/-
+**NumberField.RingOfIntegers.extension_isNoetherian** 是 Mathlib 中的一个实例，位于命名空间 `N
+umberField.RingOfIntegers`。
+形式化陈述：extension_isNoetherian [NumberField K] [NumberField L] : IsNoetherian (𝓞 K
+) (𝓞 L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegralClosure.isNoetherian`：IsIntegralClosure.isNoetherian [IsIntegr
+allyClosed A] [IsNoetherianRing A] : IsNoetherian A C
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower`：∀ (K : Type u_1) [inst : F
+ield K] {L : Type u_3} [inst_1 : Ring L] [inst_2 : Algebra K L],   IsScalarTower
+ (NumberField.RingOfIntegers K) K …
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosure`：∀ (K : Type u_4) (L : 
+Type u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsIntegr
+alClosure (NumberField.RingOfIntegers …
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower_1`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsScalarTo
+wer (NumberField.RingOfIntegers K) (…
+· 使用定理 `NumberField.instFiniteDimensional`：∀ (K : Type u_1) (L : Type u_2) [inst
+ : Field K] [inst_1 : Field L] [NumberField K] [NumberField L]   [inst_4 : Algeb
+ra K L], FiniteDimensio…
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegrallyClosed`：∀ {K : Type u_1} [ins
+t : Field K] [NumberField K], IsIntegrallyClosed (NumberField.RingOfIntegers K)
+· 使用定理 `IsDedekindRing.toIsNoetherian`：∀ {A : Type u_2} {inst : CommRing A} [sel
+f : IsDedekindRing A], IsNoetherian A A
+· 使用定理 `IsDedekindDomain.toIsDedekindRing`：∀ {A : Type u_2} {inst : CommRing A} 
+[self : IsDedekindDomain A], IsDedekindRing A
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
 
-English:
-instance extension_isNoetherian
-  signature: [NumberField K] [NumberField L]
-  body: IsIntegralClosure.isNoetherian (𝓞 K) K L (𝓞 L)
-
-中文:
-实例 extension_isNoetherian
-  签名: [数域 K] [数域 L]
-  定义体: IsIntegralClosure.isNoetherian (𝓞 K) K L (𝓞 L)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian
+--- 原说明 ---
+Any extension between ring of integers of number fields is Noetherian.
 -/
 instance extension_isNoetherian [NumberField K] [NumberField L] : IsNoetherian (𝓞 K) (𝓞 L) :=
   IsIntegralClosure.isNoetherian (𝓞 K) K L (𝓞 L)
 
-/--
-theorem `ker_algebraMap_eq_bot` / 定理 `ker_algebraMap_eq_bot`
+/-- The kernel of the algebraMap between ring of integers is `⊥`. -/
+/-
+**NumberField.RingOfIntegers.ker_algebraMap_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.RingOfIntegers`。
+形式化陈述：ker_algebraMap_eq_bot : RingHom.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RingHom.ker_eq_bot_iff_eq_zero`：ker_eq_bot_iff_eq_zero : ker f = ⊥ ↔ for
+all x, f x = 0 -> x = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 
-English:
-theorem ker_algebraMap_eq_bot
-  statement: RingHom.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
-  proof: (RingHom.ker_eq_bot_iff_eq_zero (algebraMap (𝓞 K) (𝓞 L))).mpr fun x hx => by
-  have h : (algebraMap K L) x = (algebraMap (𝓞 K) (𝓞 L)) x := rfl
-  simp only [hx, map_zero, map_eq_zero, RingOfIntegers.coe_eq_zero_iff] at h
-  exact h
-
-中文:
-定理 ker_algebraMap_eq_bot
-  结论: 环态射.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
-  证明: (RingHom.ker_eq_bot_iff_eq_zero (algebraMap (𝓞 K) (𝓞 L))).mpr fun x hx => by
-  have h : (algebraMap K L) x = (algebraMap (𝓞 K) (𝓞 L)) x := rfl
-  simp only [hx, map_zero, map_eq_zero, RingOfIntegers.coe_eq_zero_iff] at h
-  exact h
-
-Depends on / 依赖: RingHom, RingHom.ker_eq_bot_iff_eq_zero, RingOfIntegers, RingOfIntegers.coe_eq_zero_iff, algebraMap, coe_eq_zero_iff, ker_eq_bot_iff_eq_zero, map_eq_zero, map_zero
+--- 原说明 ---
+The kernel of the algebraMap between ring of integers is `⊥`.
 -/
 theorem ker_algebraMap_eq_bot : RingHom.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥ :=
-(RingHom.ker_eq_bot_iff_eq_zero (algebraMap (𝓞 K) (𝓞 L))).mpr fun x hx => by
+  (RingHom.ker_eq_bot_iff_eq_zero (algebraMap (𝓞 K) (𝓞 L))).mpr <| fun x hx => by
   have h : (algebraMap K L) x = (algebraMap (𝓞 K) (𝓞 L)) x := rfl
   simp only [hx, map_zero, map_eq_zero, RingOfIntegers.coe_eq_zero_iff] at h
   exact h
 
-/--
-theorem `algebraMap.injective` / 定理 `algebraMap.injective`
+/-- The algebraMap between ring of integers is injective. -/
+/-
+**NumberField.RingOfIntegers.algebraMap.injective** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.RingOfIntegers.algebraMap`。
+形式化陈述：∀ (K : Type u_4) (L : Type u_5) [inst : Field K] [inst_1 : Field L] [inst_
+2 : Algebra K L],   Function.Injective ⇑(algebraMap (NumberField.RingOfIntegers 
+K) (NumberField.RingOfIntegers L))
+参数：K : Type u_4；L : Type u_5；algebraMap (NumberField.RingOfIntegers K) (NumberFi
+eld.RingOfIntegers L)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RingHom.injective_iff_ker_eq_bot`：injective_iff_ker_eq_bot : Function.In
+jective f ↔ ker f = ⊥
+· 使用定理 `NumberField.RingOfIntegers.ker_algebraMap_eq_bot`：ker_algebraMap_eq_bot 
+: RingHom.ker (algebraMap (𝓞 K) (𝓞 L)) = ⊥
 
-English:
-theorem algebraMap.injective
-  statement: Function.Injective (algebraMap (𝓞 K) (𝓞 L))
-  proof: (RingHom.injective_iff_ker_eq_bot (algebraMap (𝓞 K) (𝓞 L))).mpr (ker_algebraMap_eq_bot K L)
-
-中文:
-定理 algebraMap.injective
-  结论: 函数.单射 (algebraMap (𝓞 K) (𝓞 L))
-  证明: (RingHom.injective_iff_ker_eq_bot (algebraMap (𝓞 K) (𝓞 L))).mpr (ker_algebraMap_eq_bot K L)
-
-Depends on / 依赖: RingHom, RingHom.injective_iff_ker_eq_bot, algebraMap, injective_iff_ker_eq_bot, ker_algebraMap_eq_bot
+--- 原说明 ---
+The algebraMap between ring of integers is injective.
 -/
 theorem algebraMap.injective : Function.Injective (algebraMap (𝓞 K) (𝓞 L)) :=
   (RingHom.injective_iff_ker_eq_bot (algebraMap (𝓞 K) (𝓞 L))).mpr (ker_algebraMap_eq_bot K L)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree (𝓞 K) (𝓞 L)
-  body: isTorsionFree_iff_algebraMap_injective.mpr algebraMap.injective K L
-
-中文:
-实例 :
-  签名: 是无挠 (𝓞 K) (𝓞 L)
-  定义体: isTorsionFree_iff_algebraMap_injective.mpr algebraMap.injective K L
-
-Depends on / 依赖: algebraMap, algebraMap.injective, injective, isTorsionFree_iff_algebraMap_injective, isTorsionFree_iff_algebraMap_injective.mpr
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree (𝓞 K) (𝓞 L) :=
-isTorsionFree_iff_algebraMap_injective.mpr algebraMap.injective K L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree (𝓞 K) L
-  body: .trans_faithfulSMul (𝓞 K) (𝓞 L) L
-
-中文:
-实例 :
-  签名: 是无挠 (𝓞 K) L
-  定义体: .trans_faithfulSMul (𝓞 K) (𝓞 L) L
-
-Depends on / 依赖: trans_faithfulSMul
+  isTorsionFree_iff_algebraMap_injective.mpr <| algebraMap.injective K L
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree (𝓞 K) L := .trans_faithfulSMul (𝓞 K) (𝓞 L) L
 
@@ -1423,111 +1271,136 @@ end RingOfIntegers
 
 variable [NumberField K]
 
-/--
-Definition of `integralBasis` / `integralBasis` 的定义
+/-- A basis of `K` over `ℚ` that is also a basis of `𝓞 K` over `ℤ`. -/
+/-
+**NumberField.integralBasis** 是 Mathlib 中的一个定义，位于命名空间 `NumberField`。
+形式化陈述：integralBasis : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Rat K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.RingOfIntegers.instIsLocalizationAlgebraMapSubmonoidIntNonZe
+roDivisors`：∀ (K : Type u_1) [inst : Field K] [NumberField K],   IsLocalization 
+(Algebra.algebraMapSubmonoid (NumberField.RingOfIntegers K) (nonZeroDivi…
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition integralBasis
-  signature: : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Rat K
-  body: Basis.localizationLocalization Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K)
-
-@[simp]
-
-中文:
-定义 integralBasis
-  签名: : 基 (自由.ChooseBasisIndex 整数 (𝓞 K)) 有理数 K
-  定义体: Basis.localizationLocalization Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K)
-
-@[simp]
-
-Depends on / 依赖: Basis.localizationLocalization, RingOfIntegers, RingOfIntegers.basis, localizationLocalization, nonZeroDivisors
+--- 原说明 ---
+A basis of `K` over `ℚ` that is also a basis of `𝓞 K` over `ℤ`.
 -/
-noncomputable def integralBasis : Basis (Free.ChooseBasisIndex Int (𝓞 K)) Rat K :=
-  Basis.localizationLocalization Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K)
+noncomputable def integralBasis : Basis (Free.ChooseBasisIndex ℤ (𝓞 K)) ℚ K :=
+  Basis.localizationLocalization ℚ (nonZeroDivisors ℤ) K (RingOfIntegers.basis K)
 
 @[simp]
-/--
-theorem `integralBasis_apply` / 定理 `integralBasis_apply`
-
-English:
-theorem integralBasis_apply
-  given: (i : Free.ChooseBasisIndex Int (𝓞 K))
-  proof: Basis.localizationLocalization_apply Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K) i
-
-@[simp]
-
-中文:
-定理 integralBasis_apply
-  条件: (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
-  证明: Basis.localizationLocalization_apply Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K) i
-
-@[simp]
-
-Depends on / 依赖: Basis.localizationLocalization_apply, RingOfIntegers, RingOfIntegers.basis, localizationLocalization_apply, nonZeroDivisors
+/-
+**NumberField.integralBasis_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：integralBasis_apply (i : Free.ChooseBasisIndex Int (𝓞 K)) : integralBasis 
+K i = algebraMap (𝓞 K) K (RingOfIntegers.basis K i)
+参数：i : Free.ChooseBasisIndex Int (𝓞 K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Module.Basis.localizationLocalization_apply`：localizationLocalization_ap
+ply {ι : Type*} (b : Basis ι R A) (i) : b.localizationLocalization Rₛ S Aₛ i = a
+lgebraMap A Aₛ (b i)
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.RingOfIntegers.instIsLocalizationAlgebraMapSubmonoidIntNonZe
+roDivisors`：∀ (K : Type u_1) [inst : Field K] [NumberField K],   IsLocalization 
+(Algebra.algebraMapSubmonoid (NumberField.RingOfIntegers K) (nonZeroDivi…
 -/
-theorem integralBasis_apply (i : Free.ChooseBasisIndex Int (𝓞 K)) :
+theorem integralBasis_apply (i : Free.ChooseBasisIndex ℤ (𝓞 K)) :
     integralBasis K i = algebraMap (𝓞 K) K (RingOfIntegers.basis K i) :=
-  Basis.localizationLocalization_apply Rat (nonZeroDivisors Int) K (RingOfIntegers.basis K) i
+  Basis.localizationLocalization_apply ℚ (nonZeroDivisors ℤ) K (RingOfIntegers.basis K) i
 
 @[simp]
-/--
-theorem `integralBasis_repr_apply` / 定理 `integralBasis_repr_apply`
-
-English:
-theorem integralBasis_repr_apply
-  given: (x : (𝓞 K)) (i : Free.ChooseBasisIndex Int (𝓞 K))
-  proof: Basis.localizationLocalization_repr_algebraMap Rat (nonZeroDivisors Int) K _ x i
-
-中文:
-定理 integralBasis_repr_apply
-  条件: (x : (𝓞 K)) (i : 自由.ChooseBasisIndex 整数 (𝓞 K))
-  证明: Basis.localizationLocalization_repr_algebraMap Rat (nonZeroDivisors Int) K _ x i
-
-Depends on / 依赖: Basis.localizationLocalization_repr_algebraMap, localizationLocalization_repr_algebraMap, nonZeroDivisors
+/-
+**NumberField.integralBasis_repr_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：integralBasis_repr_apply (x : (𝓞 K)) (i : Free.ChooseBasisIndex Int (𝓞 K))
+ : (integralBasis K).repr (algebraMap _ _ x) i = (algebraMap Int Rat) ((RingOfIn
+tegers.basis K).repr x i)
+参数：x : (𝓞 K)；i : Free.ChooseBasisIndex Int (𝓞 K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Module.Basis.localizationLocalization_repr_algebraMap`：localizationLocal
+ization_repr_algebraMap {ι : Type*} (b : Basis ι R A) (x i) : (b.localizationLoc
+alization Rₛ S Aₛ).repr (algebraMap A Aₛ x)…
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.RingOfIntegers.instIsLocalizationAlgebraMapSubmonoidIntNonZe
+roDivisors`：∀ (K : Type u_1) [inst : Field K] [NumberField K],   IsLocalization 
+(Algebra.algebraMapSubmonoid (NumberField.RingOfIntegers K) (nonZeroDivi…
 -/
-theorem integralBasis_repr_apply (x : (𝓞 K)) (i : Free.ChooseBasisIndex Int (𝓞 K)) :
+theorem integralBasis_repr_apply (x : (𝓞 K)) (i : Free.ChooseBasisIndex ℤ (𝓞 K)) :
     (integralBasis K).repr (algebraMap _ _ x) i =
-      (algebraMap Int Rat) ((RingOfIntegers.basis K).repr x i) :=
-  Basis.localizationLocalization_repr_algebraMap Rat (nonZeroDivisors Int) K _ x i
-
-/--
-theorem `mem_span_integralBasis` / 定理 `mem_span_integralBasis`
-
-English:
-theorem mem_span_integralBasis
-  given: {x : K}
-  proof: by
-  simp [integralBasis, Basis.localizationLocalization_span]
-
-中文:
-定理 mem_span_integralBasis
-  条件: {x : K}
-  证明: by
-  simp [integralBasis, Basis.localizationLocalization_span]
-
-Depends on / 依赖: Basis.localizationLocalization_span, integralBasis, localizationLocalization_span
+      (algebraMap ℤ ℚ) ((RingOfIntegers.basis K).repr x i) :=
+  Basis.localizationLocalization_repr_algebraMap ℚ (nonZeroDivisors ℤ) K _ x i
+/-
+**NumberField.mem_span_integralBasis** 是 Mathlib 中的一个定理，位于命名空间 `NumberField`。
+形式化陈述：mem_span_integralBasis {x : K} : x in Submodule.span Int (Set.range (integ
+ralBasis K)) ↔ x in (algebraMap (𝓞 K) K).range
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.Basis.localizationLocalization_span`：localizationLocalization_spa
+n {ι : Type*} (b : Basis ι R A) : Submodule.span R (Set.range (b.localizationLoc
+alization Rₛ S Aₛ)) = LinearMap.…
+· 使用定理 `NumberField.RingOfIntegers.instIsLocalizationAlgebraMapSubmonoidIntNonZe
+roDivisors`：∀ (K : Type u_1) [inst : Field K] [NumberField K],   IsLocalization 
+(Algebra.algebraMapSubmonoid (NumberField.RingOfIntegers K) (nonZeroDivi…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_span_integralBasis {x : K} :
-    x in Submodule.span Int (Set.range (integralBasis K)) ↔ x in (algebraMap (𝓞 K) K).range := by
+    x ∈ Submodule.span ℤ (Set.range (integralBasis K)) ↔ x ∈ (algebraMap (𝓞 K) K).range := by
   simp [integralBasis, Basis.localizationLocalization_span]
-
-/--
-theorem `RingOfIntegers.rank` / 定理 `RingOfIntegers.rank`
-
-English:
-theorem RingOfIntegers.rank
-  statement: Module.finrank Int (𝓞 K) = Module.finrank Rat K
-  proof: IsIntegralClosure.rank Int Rat K (𝓞 K)
-
-中文:
-定理 RingOf整数egers.rank
-  结论: 模.finrank 整数 (𝓞 K) = 模.finrank 有理数 K
-  证明: IsIntegralClosure.rank Int Rat K (𝓞 K)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.rank
+/-
+**NumberField.RingOfIntegers.rank** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.RingOfI
+ntegers`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] [inst_1 : NumberField K],   Module.finra
+nk ℤ (NumberField.RingOfIntegers K) = Module.finrank ℚ K
+参数：K : Type u_1；NumberField.RingOfIntegers K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegralClosure.rank`：IsIntegralClosure.rank [IsPrincipalIdealRing A] 
+[IsTorsionFree A L] : Module.finrank A C = Module.finrank K L
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosureInt`：∀ {K : Type u_1} [i
+nst : Field K], IsIntegralClosure (NumberField.RingOfIntegers K) ℤ K
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `IsAddTorsionFree.of_isCancelMulZero_charZero`：∀ {R : Type u_2} [inst : S
+emiring R] [CharZero R] [IsCancelMulZero R], IsAddTorsionFree R
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
-theorem RingOfIntegers.rank : Module.finrank Int (𝓞 K) = Module.finrank Rat K :=
-  IsIntegralClosure.rank Int Rat K (𝓞 K)
+theorem RingOfIntegers.rank : Module.finrank ℤ (𝓞 K) = Module.finrank ℚ K :=
+  IsIntegralClosure.rank ℤ ℚ K (𝓞 K)
 
 end NumberField
 
@@ -1535,83 +1408,78 @@ namespace Rat
 
 open NumberField
 
-/--
-Instance `numberField` / 实例 `numberField`
-
-English:
-instance numberField
-  signature: : NumberField Rat where
-
-中文:
-实例 numberField
-  签名: : 数域 有理数 where
+/-
+**Rat.numberField** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：NumberField ℚ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance numberField : NumberField Rat where
+instance numberField : NumberField ℚ where
 
-/--
-Definition of `ringOfIntegersEquiv` / `ringOfIntegersEquiv` 的定义
+/-- The ring of integers of `ℚ` as a number field is just `ℤ`. -/
+/-
+**Rat.ringOfIntegersEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rat`。
+形式化陈述：ringOfIntegersEquiv : 𝓞 Rat ≃+* Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringOfIntegersEquiv
-  signature: : 𝓞 Rat ≃+* Int
-  body: RingOfIntegers.equiv Int
+--- 原说明 ---
+The ring of integers of `ℚ` as a number field is just `ℤ`.
+-/
+noncomputable def ringOfIntegersEquiv : 𝓞 ℚ ≃+* ℤ :=
+  RingOfIntegers.equiv ℤ
 
 @[simp]
-
-中文:
-定义 ringOf整数egersEquiv
-  签名: : 𝓞 有理数 ≃+* 整数
-  定义体: RingOfIntegers.equiv Int
-
-@[simp]
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.equiv
+/-
+**Rat.ringOfIntegersEquiv_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：ringOfIntegersEquiv_apply_coe (z : 𝓞 Rat) : (Rat.ringOfIntegersEquiv z : R
+at) = algebraMap (𝓞 Rat) Rat z
+参数：z : 𝓞 Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.surjective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [in
+st_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Surjec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-noncomputable def ringOfIntegersEquiv : 𝓞 Rat ≃+* Int :=
-  RingOfIntegers.equiv Int
-
-@[simp]
-/--
-theorem `ringOfIntegersEquiv_apply_coe` / 定理 `ringOfIntegersEquiv_apply_coe`
-
-English:
-theorem ringOfIntegersEquiv_apply_coe
-  given: (z : 𝓞 Rat)
-  proof: by
+theorem ringOfIntegersEquiv_apply_coe (z : 𝓞 ℚ) :
+    (Rat.ringOfIntegersEquiv z : ℚ) = algebraMap (𝓞 ℚ) ℚ z := by
   obtain ⟨z, rfl⟩ := Rat.ringOfIntegersEquiv.symm.surjective z
   simp
-
-中文:
-定理 ringOf整数egersEquiv_apply_coe
-  条件: (z : 𝓞 有理数)
-  证明: by
-  obtain ⟨z, rfl⟩ := Rat.ringOfIntegersEquiv.symm.surjective z
-  simp
-
-Depends on / 依赖: Rat.ringOfIntegersEquiv.symm.surjective, ringOfIntegersEquiv, surjective
+/-
+**Rat.ringOfIntegersEquiv_symm_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：ringOfIntegersEquiv_symm_apply_coe (x : Int) : (ringOfIntegersEquiv.symm x
+ : Rat) = ↑x
+参数：x : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
-theorem ringOfIntegersEquiv_apply_coe (z : 𝓞 Rat) :
-    (Rat.ringOfIntegersEquiv z : Rat) = algebraMap (𝓞 Rat) Rat z := by
-  obtain ⟨z, rfl⟩ := Rat.ringOfIntegersEquiv.symm.surjective z
-  simp
-
-/--
-theorem `ringOfIntegersEquiv_symm_apply_coe` / 定理 `ringOfIntegersEquiv_symm_apply_coe`
-
-English:
-theorem ringOfIntegersEquiv_symm_apply_coe
-  given: (x : Int)
-  proof: eq_intCast ringOfIntegersEquiv.symm _ ▸ rfl
-
-中文:
-定理 ringOf整数egersEquiv_symm_apply_coe
-  条件: (x : 整数)
-  证明: eq_intCast ringOfIntegersEquiv.symm _ ▸ rfl
-
-Depends on / 依赖: eq_intCast, ringOfIntegersEquiv, ringOfIntegersEquiv.symm
--/
-theorem ringOfIntegersEquiv_symm_apply_coe (x : Int) :
-    (ringOfIntegersEquiv.symm x : Rat) = ↑x :=
+theorem ringOfIntegersEquiv_symm_apply_coe (x : ℤ) :
+    (ringOfIntegersEquiv.symm x : ℚ) = ↑x :=
   eq_intCast ringOfIntegersEquiv.symm _ ▸ rfl
 
 end Rat
@@ -1620,8 +1488,18 @@ namespace AdjoinRoot
 
 /-- The quotient of `ℚ[X]` by the ideal generated by an irreducible polynomial of `ℚ[X]`
 is a number field. -/
-instance {f : Polynomial Rat} [hf : Fact (Irreducible f)] : NumberField (AdjoinRoot f) where
-  to_charZero := charZero_of_injective_algebraMap (algebraMap Rat _).injective
+/-
+**AdjoinRoot.** 是 Mathlib 中的一个实例，位于命名空间 `AdjoinRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The quotient of `ℚ[X]` by the ideal generated by an irreducible polynomial of `ℚ
+[X]`
+is a number field.
+-/
+instance {f : Polynomial ℚ} [hf : Fact (Irreducible f)] : NumberField (AdjoinRoot f) where
+  to_charZero := charZero_of_injective_algebraMap (algebraMap ℚ _).injective
   to_finiteDimensional := by convert! (AdjoinRoot.powerBasis hf.out.ne_zero).finite
 
 end AdjoinRoot
+

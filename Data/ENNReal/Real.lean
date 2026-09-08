@@ -36,1942 +36,1435 @@ namespace ENNReal
 
 section Real
 
-variable {a b c d : Real>=0∞} {r p q : Real>=0}
+variable {a b c d : ℝ≥0∞} {r p q : ℝ≥0}
 
-/--
-theorem `toReal_add` / 定理 `toReal_add`
-
-English:
-theorem toReal_add
-  given: (ha : a != ∞) (hb : b != ∞)
-  statement: (a + b).toReal = a.toReal + b.toReal
-  proof: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  rfl
-
-中文:
-定理 to实数_add
-  条件: (ha : a != ∞) (hb : b != ∞)
-  结论: (a + b).to实数 = a.to实数 + b.to实数
-  证明: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  rfl
+/-
+**ENNReal.toReal_add** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_add (ha : a != ∞) (hb : b != ∞) : (a + b).toReal = a.toReal + b.toR
+eal
+参数：ha : a != ∞；hb : b != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
 -/
-theorem toReal_add (ha : a != ∞) (hb : b != ∞) : (a + b).toReal = a.toReal + b.toReal := by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
+theorem toReal_add (ha : a ≠ ∞) (hb : b ≠ ∞) : (a + b).toReal = a.toReal + b.toReal := by
+  lift a to ℝ≥0 using ha
+  lift b to ℝ≥0 using hb
   rfl
-
-/--
-theorem `toReal_add_le` / 定理 `toReal_add_le`
-
-English:
-theorem toReal_add_le
-  statement: (a + b).toReal <= a.toReal + b.toReal
-  proof: if ha : a = ∞ then by simp only [ha, top_add, toReal_top, zero_add, toReal_nonneg]
-  else
-    if hb : b = ∞ then by simp only [hb, add_top, toReal_top, add_zero, toReal_nonneg]
-    else le_of_eq (toReal_add ha hb)
-
-中文:
-定理 to实数_add_le
-  结论: (a + b).to实数 <= a.to实数 + b.to实数
-  证明: if ha : a = ∞ then by simp only [ha, top_add, toReal_top, zero_add, toReal_nonneg]
-  else
-    if hb : b = ∞ then by simp only [hb, add_top, toReal_top, add_zero, toReal_nonneg]
-    else le_of_eq (toReal_add ha hb)
-
-Depends on / 依赖: add_top, add_zero, le_of_eq, toReal_add, toReal_nonneg, toReal_top, top_add, zero_add
+/-
+**ENNReal.toReal_add_le** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_add_le : (a + b).toReal <= a.toReal + b.toReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `top_add`：top_add (a : α) : ⊤ + a = ⊤
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_top`：add_top (a : α) : a + ⊤ = ⊤
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `ENNReal.toReal_add`：toReal_add (ha : a != ∞) (hb : b != ∞) : (a + b).toR
+eal = a.toReal + b.toReal
 -/
-theorem toReal_add_le : (a + b).toReal <= a.toReal + b.toReal :=
+theorem toReal_add_le : (a + b).toReal ≤ a.toReal + b.toReal :=
   if ha : a = ∞ then by simp only [ha, top_add, toReal_top, zero_add, toReal_nonneg]
   else
     if hb : b = ∞ then by simp only [hb, add_top, toReal_top, add_zero, toReal_nonneg]
     else le_of_eq (toReal_add ha hb)
-
-/--
-theorem `ofReal_add` / 定理 `ofReal_add`
-
-English:
-theorem ofReal_add
-  given: {p q : Real} (hp : 0 <= p) (hq : 0 <= q)
-  proof: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← coe_add]; rw [coe_inj]; rw [Real.toNNReal_add hp hq]
-
-中文:
-定理 of实数_add
-  条件: {p q : 实数} (hp : 0 <= p) (hq : 0 <= q)
-  证明: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← coe_add]; rw [coe_inj]; rw [Real.toNNReal_add hp hq]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_add, coe_add, coe_inj, ofReal, toNNReal_add
+/-
+**ENNReal.ofReal_add** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_add {p q : Real} (hp : 0 <= p) (hq : 0 <= q) : ENNReal.ofReal (p + 
+q) = ENNReal.ofReal p + ENNReal.ofReal q
+参数：hp : 0 <= p；hq : 0 <= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal.eq_1`：∀ (r : ℝ), ENNReal.ofReal r = ↑r.toNNReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.coe_add`：∀ (x y : NNReal), ↑(x + y) = ↑x + ↑y
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
+· 使用定理 `Real.toNNReal_add`：toNNReal_add {r p : Real} (hr : 0 <= r) (hp : 0 <= p)
+ : Real.toNNReal (r + p) = Real.toNNReal r + Real.toNNReal p
 -/
-theorem ofReal_add {p q : Real} (hp : 0 <= p) (hq : 0 <= q) :
+theorem ofReal_add {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) :
     ENNReal.ofReal (p + q) = ENNReal.ofReal p + ENNReal.ofReal q := by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← coe_add]; rw [coe_inj]; rw [Real.toNNReal_add hp hq]
-
-/--
-theorem `ofReal_add_le` / 定理 `ofReal_add_le`
-
-English:
-theorem ofReal_add_le
-  given: {p q : Real}
-  statement: ENNReal.ofReal (p + q) <= ENNReal.ofReal p + ENNReal.ofReal q
-  proof: coe_le_coe.2 Real.toNNReal_add_le
-
-@[simp]
-
-中文:
-定理 of实数_add_le
-  条件: {p q : 实数}
-  结论: 广义非负实数.of实数 (p + q) <= 广义非负实数.of实数 p + 广义非负实数.of实数 q
-  证明: coe_le_coe.2 Real.toNNReal_add_le
-
-@[simp]
-
-Depends on / 依赖: Real.toNNReal_add_le, coe_le_coe, toNNReal_add_le
+  rw [ENNReal.ofReal, ENNReal.ofReal, ENNReal.ofReal, ← coe_add, coe_inj,
+    Real.toNNReal_add hp hq]
+/-
+**ENNReal.ofReal_add_le** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_add_le {p q : Real} : ENNReal.ofReal (p + q) <= ENNReal.ofReal p + 
+ENNReal.ofReal q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用定理 `Real.toNNReal_add_le`：toNNReal_add_le {r p : Real} : Real.toNNReal (r + 
+p) <= Real.toNNReal r + Real.toNNReal p
 -/
-theorem ofReal_add_le {p q : Real} : ENNReal.ofReal (p + q) <= ENNReal.ofReal p + ENNReal.ofReal q :=
+theorem ofReal_add_le {p q : ℝ} : ENNReal.ofReal (p + q) ≤ ENNReal.ofReal p + ENNReal.ofReal q :=
   coe_le_coe.2 Real.toNNReal_add_le
 
 @[simp]
-/--
-theorem `toReal_le_toReal` / 定理 `toReal_le_toReal`
-
-English:
-theorem toReal_le_toReal
-  given: (ha : a != ∞) (hb : b != ∞)
-  statement: a.toReal <= b.toReal ↔ a <= b
-  proof: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  norm_cast
-
-@[gcongr]
-
-中文:
-定理 to实数_le_to实数
-  条件: (ha : a != ∞) (hb : b != ∞)
-  结论: a.to实数 <= b.to实数 ↔ a <= b
-  证明: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  norm_cast
-
-@[gcongr]
+/-
+**ENNReal.toReal_le_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_le_toReal (ha : a != ∞) (hb : b != ∞) : a.toReal <= b.toReal ↔ a <=
+ b
+参数：ha : a != ∞；hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toReal_le_toReal (ha : a != ∞) (hb : b != ∞) : a.toReal <= b.toReal ↔ a <= b := by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
+theorem toReal_le_toReal (ha : a ≠ ∞) (hb : b ≠ ∞) : a.toReal ≤ b.toReal ↔ a ≤ b := by
+  lift a to ℝ≥0 using ha
+  lift b to ℝ≥0 using hb
   norm_cast
 
 @[gcongr]
-/--
-theorem `toReal_mono` / 定理 `toReal_mono`
-
-English:
-theorem toReal_mono
-  given: (hb : b != ∞) (h : a <= b)
-  statement: a.toReal <= b.toReal
-  proof: (toReal_le_toReal (ne_top_of_le_ne_top hb h) hb).2 h
-
-中文:
-定理 to实数_mono
-  条件: (hb : b != ∞) (h : a <= b)
-  结论: a.to实数 <= b.to实数
-  证明: (toReal_le_toReal (ne_top_of_le_ne_top hb h) hb).2 h
-
-Depends on / 依赖: ne_top_of_le_ne_top, toReal_le_toReal
+/-
+**ENNReal.toReal_mono** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <= b.toReal
+参数：hb : b != ∞；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.toReal_le_toReal`：toReal_le_toReal (ha : a != ∞) (hb : b != ∞) :
+ a.toReal <= b.toReal ↔ a <= b
+· 使用定理 `ne_top_of_le_ne_top`：ne_top_of_le_ne_top (hb : b != ⊤) (hab : a <= b) : 
+a != ⊤
 -/
-theorem toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <= b.toReal :=
+theorem toReal_mono (hb : b ≠ ∞) (h : a ≤ b) : a.toReal ≤ b.toReal :=
   (toReal_le_toReal (ne_top_of_le_ne_top hb h) hb).2 h
-
-/--
-theorem `toReal_mono'` / 定理 `toReal_mono'`
-
-English:
-theorem toReal_mono'
-  given: (h : a <= b) (ht : b = ∞ -> a = ∞)
-  statement: a.toReal <= b.toReal
-  proof: by
+/-
+**ENNReal.toReal_mono'** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_mono' (h : a <= b) (ht : b = ∞ -> a = ∞) : a.toReal <= b.toReal
+参数：h : a <= b；ht : b = ∞ -> a = ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `ENNReal.toReal_nonneg`：∀ {a : ENNReal}, 0 ≤ a.toReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+-/
+theorem toReal_mono' (h : a ≤ b) (ht : b = ∞ → a = ∞) : a.toReal ≤ b.toReal := by
   rcases eq_or_ne a ∞ with rfl | ha
   · exact toReal_nonneg
   · exact toReal_mono (mt ht ha) h
 
 @[simp]
-
-中文:
-定理 to实数_mono'
-  条件: (h : a <= b) (ht : b = ∞ -> a = ∞)
-  结论: a.to实数 <= b.to实数
-  证明: by
-  rcases eq_or_ne a ∞ with rfl | ha
-  · exact toReal_nonneg
-  · exact toReal_mono (mt ht ha) h
-
-@[simp]
-
-Depends on / 依赖: eq_or_ne, toReal_mono, toReal_nonneg
+/-
+**ENNReal.toReal_lt_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_lt_toReal (ha : a != ∞) (hb : b != ∞) : a.toReal < b.toReal ↔ a < b
+参数：ha : a != ∞；hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toReal_mono' (h : a <= b) (ht : b = ∞ -> a = ∞) : a.toReal <= b.toReal := by
-  rcases eq_or_ne a ∞ with rfl | ha
-  · exact toReal_nonneg
-  · exact toReal_mono (mt ht ha) h
-
-@[simp]
-/--
-theorem `toReal_lt_toReal` / 定理 `toReal_lt_toReal`
-
-English:
-theorem toReal_lt_toReal
-  given: (ha : a != ∞) (hb : b != ∞)
-  statement: a.toReal < b.toReal ↔ a < b
-  proof: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
+theorem toReal_lt_toReal (ha : a ≠ ∞) (hb : b ≠ ∞) : a.toReal < b.toReal ↔ a < b := by
+  lift a to ℝ≥0 using ha
+  lift b to ℝ≥0 using hb
   norm_cast
 
 @[gcongr]
-
-中文:
-定理 to实数_lt_to实数
-  条件: (ha : a != ∞) (hb : b != ∞)
-  结论: a.to实数 < b.to实数 ↔ a < b
-  证明: by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  norm_cast
-
-@[gcongr]
+/-
+**ENNReal.toReal_strict_mono** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_strict_mono (hb : b != ∞) (h : a < b) : a.toReal < b.toReal
+参数：hb : b != ∞；h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.toReal_lt_toReal`：toReal_lt_toReal (ha : a != ∞) (hb : b != ∞) :
+ a.toReal < b.toReal ↔ a < b
+· 使用定理 `LT.lt.ne_top`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderTop α] {
+a b : α}, a < b → a ≠ ⊤
 -/
-theorem toReal_lt_toReal (ha : a != ∞) (hb : b != ∞) : a.toReal < b.toReal ↔ a < b := by
-  lift a to Real>=0 using ha
-  lift b to Real>=0 using hb
-  norm_cast
-
-@[gcongr]
-/--
-theorem `toReal_strict_mono` / 定理 `toReal_strict_mono`
-
-English:
-theorem toReal_strict_mono
-  given: (hb : b != ∞) (h : a < b)
-  statement: a.toReal < b.toReal
-  proof: (toReal_lt_toReal h.ne_top hb).2 h
-
-@[gcongr]
-
-中文:
-定理 to实数_strict_mono
-  条件: (hb : b != ∞) (h : a < b)
-  结论: a.to实数 < b.to实数
-  证明: (toReal_lt_toReal h.ne_top hb).2 h
-
-@[gcongr]
-
-Depends on / 依赖: h.ne_top, ne_top, toReal_lt_toReal
--/
-theorem toReal_strict_mono (hb : b != ∞) (h : a < b) : a.toReal < b.toReal :=
+theorem toReal_strict_mono (hb : b ≠ ∞) (h : a < b) : a.toReal < b.toReal :=
   (toReal_lt_toReal h.ne_top hb).2 h
 
 @[gcongr]
-/--
-theorem `toNNReal_mono` / 定理 `toNNReal_mono`
-
-English:
-theorem toNNReal_mono
-  given: (hb : b != ∞) (h : a <= b)
-  statement: a.toNNReal <= b.toNNReal
-  proof: toReal_mono hb h
-
-中文:
-定理 toNN实数_mono
-  条件: (hb : b != ∞) (h : a <= b)
-  结论: a.toNN实数 <= b.toNN实数
-  证明: toReal_mono hb h
-
-Depends on / 依赖: toReal_mono
+/-
+**ENNReal.toNNReal_mono** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_mono (hb : b != ∞) (h : a <= b) : a.toNNReal <= b.toNNReal
+参数：hb : b != ∞；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
 -/
-theorem toNNReal_mono (hb : b != ∞) (h : a <= b) : a.toNNReal <= b.toNNReal :=
+theorem toNNReal_mono (hb : b ≠ ∞) (h : a ≤ b) : a.toNNReal ≤ b.toNNReal :=
   toReal_mono hb h
-
-/--
-theorem `le_toNNReal_of_coe_le` / 定理 `le_toNNReal_of_coe_le`
-
-English:
-theorem le_toNNReal_of_coe_le
-  given: (h : p <= a) (ha : a != ∞)
-  statement: p <= a.toNNReal
-  proof: @toNNReal_coe p ▸ toNNReal_mono ha h
-
-@[simp]
-
-中文:
-定理 le_toNN实数_of_coe_le
-  条件: (h : p <= a) (ha : a != ∞)
-  结论: p <= a.toNN实数
-  证明: @toNNReal_coe p ▸ toNNReal_mono ha h
-
-@[simp]
-
-Depends on / 依赖: toNNReal_coe, toNNReal_mono
+/-
+**ENNReal.le_toNNReal_of_coe_le** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：le_toNNReal_of_coe_le (h : p <= a) (ha : a != ∞) : p <= a.toNNReal
+参数：h : p <= a；ha : a != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toNNReal_mono`：toNNReal_mono (hb : b != ∞) (h : a <= b) : a.toNN
+Real <= b.toNNReal
+· 使用定理 `ENNReal.toNNReal_coe`：∀ (r : NNReal), (↑r).toNNReal = r
 -/
-theorem le_toNNReal_of_coe_le (h : p <= a) (ha : a != ∞) : p <= a.toNNReal :=
+theorem le_toNNReal_of_coe_le (h : p ≤ a) (ha : a ≠ ∞) : p ≤ a.toNNReal :=
   @toNNReal_coe p ▸ toNNReal_mono ha h
 
 @[simp]
-/--
-theorem `toNNReal_le_toNNReal` / 定理 `toNNReal_le_toNNReal`
-
-English:
-theorem toNNReal_le_toNNReal
-  given: (ha : a != ∞) (hb : b != ∞)
-  statement: a.toNNReal <= b.toNNReal ↔ a <= b
-  proof: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_le_coe], toNNReal_mono hb⟩
-
-@[gcongr]
-
-中文:
-定理 toNN实数_le_toNN实数
-  条件: (ha : a != ∞) (hb : b != ∞)
-  结论: a.toNN实数 <= b.toNN实数 ↔ a <= b
-  证明: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_le_coe], toNNReal_mono hb⟩
-
-@[gcongr]
-
-Depends on / 依赖: coe_le_coe, coe_toNNReal, toNNReal_mono
+/-
+**ENNReal.toNNReal_le_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_le_toNNReal (ha : a != ∞) (hb : b != ∞) : a.toNNReal <= b.toNNRea
+l ↔ a <= b
+参数：ha : a != ∞；hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用定理 `ENNReal.toNNReal_mono`：toNNReal_mono (hb : b != ∞) (h : a <= b) : a.toNN
+Real <= b.toNNReal
 -/
-theorem toNNReal_le_toNNReal (ha : a != ∞) (hb : b != ∞) : a.toNNReal <= b.toNNReal ↔ a <= b :=
+theorem toNNReal_le_toNNReal (ha : a ≠ ∞) (hb : b ≠ ∞) : a.toNNReal ≤ b.toNNReal ↔ a ≤ b :=
   ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_le_coe], toNNReal_mono hb⟩
 
 @[gcongr]
-/--
-theorem `toNNReal_strict_mono` / 定理 `toNNReal_strict_mono`
-
-English:
-theorem toNNReal_strict_mono
-  given: (hb : b != ∞) (h : a < b)
-  statement: a.toNNReal < b.toNNReal
-  proof: by
-  simpa [← ENNReal.coe_lt_coe, hb, h.ne_top]
-
-@[simp]
-
-中文:
-定理 toNN实数_strict_mono
-  条件: (hb : b != ∞) (h : a < b)
-  结论: a.toNN实数 < b.toNN实数
-  证明: by
-  simpa [← ENNReal.coe_lt_coe, hb, h.ne_top]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, coe_lt_coe, h.ne_top, ne_top
+/-
+**ENNReal.toNNReal_strict_mono** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_strict_mono (hb : b != ∞) (h : a < b) : a.toNNReal < b.toNNReal
+参数：hb : b != ∞；h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne_top`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderTop α] {
+a b : α}, a < b → a ≠ ⊤
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem toNNReal_strict_mono (hb : b != ∞) (h : a < b) : a.toNNReal < b.toNNReal := by
+theorem toNNReal_strict_mono (hb : b ≠ ∞) (h : a < b) : a.toNNReal < b.toNNReal := by
   simpa [← ENNReal.coe_lt_coe, hb, h.ne_top]
 
 @[simp]
-/--
-theorem `toNNReal_lt_toNNReal` / 定理 `toNNReal_lt_toNNReal`
-
-English:
-theorem toNNReal_lt_toNNReal
-  given: (ha : a != ∞) (hb : b != ∞)
-  statement: a.toNNReal < b.toNNReal ↔ a < b
-  proof: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_lt_coe], toNNReal_strict_mono hb⟩
-
-中文:
-定理 toNN实数_lt_toNN实数
-  条件: (ha : a != ∞) (hb : b != ∞)
-  结论: a.toNN实数 < b.toNN实数 ↔ a < b
-  证明: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_lt_coe], toNNReal_strict_mono hb⟩
-
-Depends on / 依赖: coe_lt_coe, coe_toNNReal, toNNReal_strict_mono
+/-
+**ENNReal.toNNReal_lt_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_lt_toNNReal (ha : a != ∞) (hb : b != ∞) : a.toNNReal < b.toNNReal
+ ↔ a < b
+参数：ha : a != ∞；hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用定理 `ENNReal.toNNReal_strict_mono`：toNNReal_strict_mono (hb : b != ∞) (h : a 
+< b) : a.toNNReal < b.toNNReal
 -/
-theorem toNNReal_lt_toNNReal (ha : a != ∞) (hb : b != ∞) : a.toNNReal < b.toNNReal ↔ a < b :=
+theorem toNNReal_lt_toNNReal (ha : a ≠ ∞) (hb : b ≠ ∞) : a.toNNReal < b.toNNReal ↔ a < b :=
   ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_lt_coe], toNNReal_strict_mono hb⟩
-
-/--
-theorem `toNNReal_lt_of_lt_coe` / 定理 `toNNReal_lt_of_lt_coe`
-
-English:
-theorem toNNReal_lt_of_lt_coe
-  given: (h : a < p)
-  statement: a.toNNReal < p
-  proof: @toNNReal_coe p ▸ toNNReal_strict_mono coe_ne_top h
-
-中文:
-定理 toNN实数_lt_of_lt_coe
-  条件: (h : a < p)
-  结论: a.toNN实数 < p
-  证明: @toNNReal_coe p ▸ toNNReal_strict_mono coe_ne_top h
-
-Depends on / 依赖: coe_ne_top, toNNReal_coe, toNNReal_strict_mono
+/-
+**ENNReal.toNNReal_lt_of_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_lt_of_lt_coe (h : a < p) : a.toNNReal < p
+参数：h : a < p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toNNReal_strict_mono`：toNNReal_strict_mono (hb : b != ∞) (h : a 
+< b) : a.toNNReal < b.toNNReal
+· 使用定理 `ENNReal.coe_ne_top`：coe_ne_top : (r : Real>=0∞) != ∞
+· 使用定理 `ENNReal.toNNReal_coe`：∀ (r : NNReal), (↑r).toNNReal = r
 -/
 theorem toNNReal_lt_of_lt_coe (h : a < p) : a.toNNReal < p :=
   @toNNReal_coe p ▸ toNNReal_strict_mono coe_ne_top h
-
-/--
-theorem `toReal_max` / 定理 `toReal_max`
-
-English:
-theorem toReal_max
-  given: (hr : a != ∞) (hp : b != ∞)
-  proof: (le_total a b).elim
-    (fun h => by simp only [h, ENNReal.toReal_mono hp h, max_eq_right]) fun h => by
-    simp only [h, ENNReal.toReal_mono hr h, max_eq_left]
-
-中文:
-定理 to实数_max
-  条件: (hr : a != ∞) (hp : b != ∞)
-  证明: (le_total a b).elim
-    (fun h => by simp only [h, ENNReal.toReal_mono hp h, max_eq_right]) fun h => by
-    simp only [h, ENNReal.toReal_mono hr h, max_eq_left]
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_mono, le_total, max_eq_left, max_eq_right, toReal_mono
+/-
+**ENNReal.toReal_max** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_max (hr : a != ∞) (hp : b != ∞) : ENNReal.toReal (max a b) = max (E
+NNReal.toReal a) (ENNReal.toReal b)
+参数：hr : a != ∞；hp : b != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
 -/
-theorem toReal_max (hr : a != ∞) (hp : b != ∞) :
+theorem toReal_max (hr : a ≠ ∞) (hp : b ≠ ∞) :
     ENNReal.toReal (max a b) = max (ENNReal.toReal a) (ENNReal.toReal b) :=
   (le_total a b).elim
     (fun h => by simp only [h, ENNReal.toReal_mono hp h, max_eq_right]) fun h => by
     simp only [h, ENNReal.toReal_mono hr h, max_eq_left]
-
-/--
-theorem `toReal_min` / 定理 `toReal_min`
-
-English:
-theorem toReal_min
-  given: {a b : Real>=0∞} (hr : a != ∞) (hp : b != ∞)
-  proof: (le_total a b).elim (fun h => by simp only [h, ENNReal.toReal_mono hp h, min_eq_left])
-    fun h => by simp only [h, ENNReal.toReal_mono hr h, min_eq_right]
-
-中文:
-定理 to实数_min
-  条件: {a b : 实数>=0∞} (hr : a != ∞) (hp : b != ∞)
-  证明: (le_total a b).elim (fun h => by simp only [h, ENNReal.toReal_mono hp h, min_eq_left])
-    fun h => by simp only [h, ENNReal.toReal_mono hr h, min_eq_right]
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_mono, le_total, min_eq_left, min_eq_right, toReal_mono
+/-
+**ENNReal.toReal_min** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_min {a b : Real>=0∞} (hr : a != ∞) (hp : b != ∞) : ENNReal.toReal (
+min a b) = min (ENNReal.toReal a) (ENNReal.toReal b)
+参数：hr : a != ∞；hp : b != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `min_eq_right`：min_eq_right (h : b <= a) : min a b = b
 -/
-theorem toReal_min {a b : Real>=0∞} (hr : a != ∞) (hp : b != ∞) :
+theorem toReal_min {a b : ℝ≥0∞} (hr : a ≠ ∞) (hp : b ≠ ∞) :
     ENNReal.toReal (min a b) = min (ENNReal.toReal a) (ENNReal.toReal b) :=
   (le_total a b).elim (fun h => by simp only [h, ENNReal.toReal_mono hp h, min_eq_left])
     fun h => by simp only [h, ENNReal.toReal_mono hr h, min_eq_right]
-
-/--
-theorem `toReal_sup` / 定理 `toReal_sup`
-
-English:
-theorem toReal_sup
-  given: {a b : Real>=0∞}
-  statement: a != ∞ -> b != ∞ -> (a ⊔ b).toReal = a.toReal ⊔ b.toReal
-  proof: toReal_max
-
-中文:
-定理 to实数_sup
-  条件: {a b : 实数>=0∞}
-  结论: a != ∞ -> b != ∞ -> (a ⊔ b).to实数 = a.to实数 ⊔ b.to实数
-  证明: toReal_max
-
-Depends on / 依赖: toReal_max
+/-
+**ENNReal.toReal_sup** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_sup {a b : Real>=0∞} : a != ∞ -> b != ∞ -> (a ⊔ b).toReal = a.toRea
+l ⊔ b.toReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_max`：toReal_max (hr : a != ∞) (hp : b != ∞) : ENNReal.toR
+eal (max a b) = max (ENNReal.toReal a) (ENNReal.toReal b)
 -/
-theorem toReal_sup {a b : Real>=0∞} : a != ∞ -> b != ∞ -> (a ⊔ b).toReal = a.toReal ⊔ b.toReal :=
+theorem toReal_sup {a b : ℝ≥0∞} : a ≠ ∞ → b ≠ ∞ → (a ⊔ b).toReal = a.toReal ⊔ b.toReal :=
   toReal_max
-
-/--
-theorem `toReal_inf` / 定理 `toReal_inf`
-
-English:
-theorem toReal_inf
-  given: {a b : Real>=0∞}
-  statement: a != ∞ -> b != ∞ -> (a ⊓ b).toReal = a.toReal ⊓ b.toReal
-  proof: toReal_min
-
-中文:
-定理 to实数_inf
-  条件: {a b : 实数>=0∞}
-  结论: a != ∞ -> b != ∞ -> (a ⊓ b).to实数 = a.to实数 ⊓ b.to实数
-  证明: toReal_min
-
-Depends on / 依赖: toReal_min
+/-
+**ENNReal.toReal_inf** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_inf {a b : Real>=0∞} : a != ∞ -> b != ∞ -> (a ⊓ b).toReal = a.toRea
+l ⊓ b.toReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_min`：toReal_min {a b : Real>=0∞} (hr : a != ∞) (hp : b !=
+ ∞) : ENNReal.toReal (min a b) = min (ENNReal.toReal a) (ENNReal.toReal b)
 -/
-theorem toReal_inf {a b : Real>=0∞} : a != ∞ -> b != ∞ -> (a ⊓ b).toReal = a.toReal ⊓ b.toReal :=
+theorem toReal_inf {a b : ℝ≥0∞} : a ≠ ∞ → b ≠ ∞ → (a ⊓ b).toReal = a.toReal ⊓ b.toReal :=
   toReal_min
-
-/--
-theorem `toNNReal_pos_iff` / 定理 `toNNReal_pos_iff`
-
-English:
-theorem toNNReal_pos_iff
-  statement: 0 < a.toNNReal ↔ 0 < a ∧ a < ∞
-  proof: by
-  induction a <;> simp
-
-中文:
-定理 toNN实数_pos_iff
-  结论: 0 < a.toNN实数 ↔ 0 < a ∧ a < ∞
-  证明: by
-  induction a <;> simp
+/-
+**ENNReal.toNNReal_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_pos_iff : 0 < a.toNNReal ↔ 0 < a ∧ a < ∞
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 theorem toNNReal_pos_iff : 0 < a.toNNReal ↔ 0 < a ∧ a < ∞ := by
   induction a <;> simp
-
-/--
-theorem `toNNReal_pos` / 定理 `toNNReal_pos`
-
-English:
-theorem toNNReal_pos
-  given: {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
-  statement: 0 < a.toNNReal
-  proof: toNNReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
-
-中文:
-定理 toNN实数_pos
-  条件: {a : 实数>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
-  结论: 0 < a.toNN实数
-  证明: toNNReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
-
-Depends on / 依赖: bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, ha_top, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, toNNReal_pos_iff, toNNReal_pos_iff.mpr
+/-
+**ENNReal.toNNReal_pos** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞) : 0 < a.toNNR
+eal
+参数：ha₀ : a != 0；ha_top : a != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.toNNReal_pos_iff`：toNNReal_pos_iff : 0 < a.toNNReal ↔ 0 < a ∧ a 
+< ∞
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
 -/
-theorem toNNReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞) : 0 < a.toNNReal :=
+theorem toNNReal_pos {a : ℝ≥0∞} (ha₀ : a ≠ 0) (ha_top : a ≠ ∞) : 0 < a.toNNReal :=
   toNNReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
-
-/--
-theorem `toReal_pos_iff` / 定理 `toReal_pos_iff`
-
-English:
-theorem toReal_pos_iff
-  statement: 0 < a.toReal ↔ 0 < a ∧ a < ∞
-  proof: NNReal.coe_pos.trans toNNReal_pos_iff
-
-中文:
-定理 to实数_pos_iff
-  结论: 0 < a.to实数 ↔ 0 < a ∧ a < ∞
-  证明: NNReal.coe_pos.trans toNNReal_pos_iff
-
-Depends on / 依赖: NNReal, NNReal.coe_pos.trans, coe_pos, toNNReal_pos_iff
+/-
+**ENNReal.toReal_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `NNReal.coe_pos`：∀ {r : NNReal}, 0 < ↑r ↔ 0 < r
+· 使用定理 `ENNReal.toNNReal_pos_iff`：toNNReal_pos_iff : 0 < a.toNNReal ↔ 0 < a ∧ a 
+< ∞
 -/
 theorem toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞ :=
   NNReal.coe_pos.trans toNNReal_pos_iff
-
-/--
-theorem `toReal_pos` / 定理 `toReal_pos`
-
-English:
-theorem toReal_pos
-  given: {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
-  statement: 0 < a.toReal
-  proof: toReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
-
-@[gcongr, bound]
-
-中文:
-定理 to实数_pos
-  条件: {a : 实数>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
-  结论: 0 < a.to实数
-  证明: toReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
-
-@[gcongr, bound]
-
-Depends on / 依赖: bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, ha_top, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, toReal_pos_iff, toReal_pos_iff.mpr
+/-
+**ENNReal.toReal_pos** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞) : 0 < a.toReal
+参数：ha₀ : a != 0；ha_top : a != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.toReal_pos_iff`：toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
 -/
-theorem toReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a != ∞) : 0 < a.toReal :=
+theorem toReal_pos {a : ℝ≥0∞} (ha₀ : a ≠ 0) (ha_top : a ≠ ∞) : 0 < a.toReal :=
   toReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
 
 @[gcongr, bound]
-/--
-theorem `ofReal_le_ofReal` / 定理 `ofReal_le_ofReal`
-
-English:
-theorem ofReal_le_ofReal
-  given: {p q : Real} (h : p <= q)
-  statement: ENNReal.ofReal p <= ENNReal.ofReal q
-  proof: by
-  simp [ENNReal.ofReal, Real.toNNReal_le_toNNReal h]
-
-中文:
-定理 of实数_le_of实数
-  条件: {p q : 实数} (h : p <= q)
-  结论: 广义非负实数.of实数 p <= 广义非负实数.of实数 q
-  证明: by
-  simp [ENNReal.ofReal, Real.toNNReal_le_toNNReal h]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_le_toNNReal, ofReal, toNNReal_le_toNNReal
+/-
+**ENNReal.ofReal_le_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_ofReal {p q : Real} (h : p <= q) : ENNReal.ofReal p <= ENNReal.o
+fReal q
+参数：h : p <= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Real.toNNReal_le_toNNReal`：toNNReal_le_toNNReal {r p : Real} (h : r <= p
+) : Real.toNNReal r <= Real.toNNReal p
 -/
-theorem ofReal_le_ofReal {p q : Real} (h : p <= q) : ENNReal.ofReal p <= ENNReal.ofReal q := by
+theorem ofReal_le_ofReal {p q : ℝ} (h : p ≤ q) : ENNReal.ofReal p ≤ ENNReal.ofReal q := by
   simp [ENNReal.ofReal, Real.toNNReal_le_toNNReal h]
-
-/--
-lemma `ofReal_mono` / 引理 `ofReal_mono`
-
-English:
-lemma ofReal_mono
-  statement: Monotone ENNReal.ofReal
-  proof: fun _ _ => ENNReal.ofReal_le_ofReal
-
-中文:
-引理 of实数_mono
-  结论: 递增 广义非负实数.of实数
-  证明: fun _ _ => ENNReal.ofReal_le_ofReal
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, ofReal_le_ofReal
+/-
+**ENNReal.ofReal_mono** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_mono : Monotone ENNReal.ofReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
 -/
-lemma ofReal_mono : Monotone ENNReal.ofReal := fun _ _ => ENNReal.ofReal_le_ofReal
-
-/--
-theorem `ofReal_le_of_le_toReal` / 定理 `ofReal_le_of_le_toReal`
-
-English:
-theorem ofReal_le_of_le_toReal
-  given: {a : Real} {b : Real>=0∞} (h : a <= ENNReal.toReal b)
-  proof: (ofReal_le_ofReal h).trans ofReal_toReal_le
-
-@[simp]
-
-中文:
-定理 of实数_le_of_le_to实数
-  条件: {a : 实数} {b : 实数>=0∞} (h : a <= 广义非负实数.to实数 b)
-  证明: (ofReal_le_ofReal h).trans ofReal_toReal_le
-
-@[simp]
-
-Depends on / 依赖: ofReal_le_ofReal, ofReal_toReal_le
+lemma ofReal_mono : Monotone ENNReal.ofReal := fun _ _ ↦ ENNReal.ofReal_le_ofReal
+/-
+**ENNReal.ofReal_le_of_le_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_of_le_toReal {a : Real} {b : Real>=0∞} (h : a <= ENNReal.toReal 
+b) : ENNReal.ofReal a <= b
+参数：h : a <= ENNReal.toReal b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
+· 使用定理 `ENNReal.ofReal_toReal_le`：ofReal_toReal_le {a : Real>=0∞} : ENNReal.ofRe
+al a.toReal <= a
 -/
-theorem ofReal_le_of_le_toReal {a : Real} {b : Real>=0∞} (h : a <= ENNReal.toReal b) :
-    ENNReal.ofReal a <= b :=
+theorem ofReal_le_of_le_toReal {a : ℝ} {b : ℝ≥0∞} (h : a ≤ ENNReal.toReal b) :
+    ENNReal.ofReal a ≤ b :=
   (ofReal_le_ofReal h).trans ofReal_toReal_le
 
 @[simp]
-/--
-theorem `ofReal_le_ofReal_iff` / 定理 `ofReal_le_ofReal_iff`
-
-English:
-theorem ofReal_le_ofReal_iff
-  given: {p q : Real} (h : 0 <= q)
-  proof: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_le_coe]; rw [Real.toNNReal_le_toNNReal_iff h]
-
-中文:
-定理 of实数_le_of实数_iff
-  条件: {p q : 实数} (h : 0 <= q)
-  证明: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_le_coe]; rw [Real.toNNReal_le_toNNReal_iff h]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_le_toNNReal_iff, coe_le_coe, ofReal, toNNReal_le_toNNReal_iff
+/-
+**ENNReal.ofReal_le_ofReal_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_ofReal_iff {p q : Real} (h : 0 <= q) : ENNReal.ofReal p <= ENNRe
+al.ofReal q ↔ p <= q
+参数：h : 0 <= q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal.eq_1`：∀ (r : ℝ), ENNReal.ofReal r = ↑r.toNNReal
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用定理 `Real.toNNReal_le_toNNReal_iff`：toNNReal_le_toNNReal_iff {r p : Real} (hp
+ : 0 <= p) : toNNReal r <= toNNReal p ↔ r <= p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofReal_le_ofReal_iff {p q : Real} (h : 0 <= q) :
-    ENNReal.ofReal p <= ENNReal.ofReal q ↔ p <= q := by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_le_coe]; rw [Real.toNNReal_le_toNNReal_iff h]
-
-/--
-lemma `ofReal_le_ofReal_iff'` / 引理 `ofReal_le_ofReal_iff'`
-
-English:
-lemma ofReal_le_ofReal_iff'
-  given: {p q : Real}
-  statement: ENNReal.ofReal p <= .ofReal q ↔ p <= q ∨ p <= 0
-  proof: coe_le_coe.trans Real.toNNReal_le_toNNReal_iff'
-
-@[simp, norm_cast]
-
-中文:
-引理 of实数_le_of实数_iff'
-  条件: {p q : 实数}
-  结论: 广义非负实数.of实数 p <= .of实数 q ↔ p <= q ∨ p <= 0
-  证明: coe_le_coe.trans Real.toNNReal_le_toNNReal_iff'
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Real.toNNReal_le_toNNReal_iff, coe_le_coe, coe_le_coe.trans, toNNReal_le_toNNReal_iff
+theorem ofReal_le_ofReal_iff {p q : ℝ} (h : 0 ≤ q) :
+    ENNReal.ofReal p ≤ ENNReal.ofReal q ↔ p ≤ q := by
+  rw [ENNReal.ofReal, ENNReal.ofReal, coe_le_coe, Real.toNNReal_le_toNNReal_iff h]
+/-
+**ENNReal.ofReal_le_ofReal_iff'** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_ofReal_iff' {p q : Real} : ENNReal.ofReal p <= .ofReal q ↔ p <= 
+q ∨ p <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用引理 `Real.toNNReal_le_toNNReal_iff'`：toNNReal_le_toNNReal_iff' {r p : Real} :
+ r.toNNReal <= p.toNNReal ↔ r <= p ∨ r <= 0
 -/
-lemma ofReal_le_ofReal_iff' {p q : Real} : ENNReal.ofReal p <= .ofReal q ↔ p <= q ∨ p <= 0 :=
+lemma ofReal_le_ofReal_iff' {p q : ℝ} : ENNReal.ofReal p ≤ .ofReal q ↔ p ≤ q ∨ p ≤ 0 :=
   coe_le_coe.trans Real.toNNReal_le_toNNReal_iff'
 
 @[simp, norm_cast]
-/--
-lemma `ofReal_le_coe` / 引理 `ofReal_le_coe`
-
-English:
-lemma ofReal_le_coe
-  given: {a : Real} {b : Real>=0}
-  statement: ENNReal.ofReal a <= b ↔ a <= b
-  proof: by
-  simp [← ofReal_le_ofReal_iff]
-
-中文:
-引理 of实数_le_coe
-  条件: {a : 实数} {b : 实数>=0}
-  结论: 广义非负实数.of实数 a <= b ↔ a <= b
-  证明: by
-  simp [← ofReal_le_ofReal_iff]
-
-Depends on / 依赖: ofReal_le_ofReal_iff
+/-
+**ENNReal.ofReal_le_coe** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_coe {a : Real} {b : Real>=0} : ENNReal.ofReal a <= b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ENNReal.ofReal_zero`：ENNReal.ofReal 0 = 0
+· 使用定理 `ENNReal.ofReal_coe_nnreal`：∀ {p : NNReal}, ENNReal.ofReal ↑p = ↑p
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ofReal_le_coe {a : Real} {b : Real>=0} : ENNReal.ofReal a <= b ↔ a <= b := by
+lemma ofReal_le_coe {a : ℝ} {b : ℝ≥0} : ENNReal.ofReal a ≤ b ↔ a ≤ b := by
   simp [← ofReal_le_ofReal_iff]
-
-/--
-lemma `ofReal_lt_ofReal_iff'` / 引理 `ofReal_lt_ofReal_iff'`
-
-English:
-lemma ofReal_lt_ofReal_iff'
-  given: {p q : Real}
-  statement: ENNReal.ofReal p < .ofReal q ↔ p < q ∧ 0 < q
-  proof: coe_lt_coe.trans Real.toNNReal_lt_toNNReal_iff'
-
-@[simp]
-
-中文:
-引理 of实数_lt_of实数_iff'
-  条件: {p q : 实数}
-  结论: 广义非负实数.of实数 p < .of实数 q ↔ p < q ∧ 0 < q
-  证明: coe_lt_coe.trans Real.toNNReal_lt_toNNReal_iff'
-
-@[simp]
-
-Depends on / 依赖: Real.toNNReal_lt_toNNReal_iff, coe_lt_coe, coe_lt_coe.trans, toNNReal_lt_toNNReal_iff
+/-
+**ENNReal.ofReal_lt_ofReal_iff'** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_ofReal_iff' {p q : Real} : ENNReal.ofReal p < .ofReal q ↔ p < q 
+∧ 0 < q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用定理 `Real.toNNReal_lt_toNNReal_iff'`：toNNReal_lt_toNNReal_iff' {r p : Real} :
+ Real.toNNReal r < Real.toNNReal p ↔ r < p ∧ 0 < p
 -/
-lemma ofReal_lt_ofReal_iff' {p q : Real} : ENNReal.ofReal p < .ofReal q ↔ p < q ∧ 0 < q :=
+lemma ofReal_lt_ofReal_iff' {p q : ℝ} : ENNReal.ofReal p < .ofReal q ↔ p < q ∧ 0 < q :=
   coe_lt_coe.trans Real.toNNReal_lt_toNNReal_iff'
 
 @[simp]
-/--
-theorem `ofReal_eq_ofReal_iff` / 定理 `ofReal_eq_ofReal_iff`
-
-English:
-theorem ofReal_eq_ofReal_iff
-  given: {p q : Real} (hp : 0 <= p) (hq : 0 <= q)
-  proof: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_inj]; rw [Real.toNNReal_eq_toNNReal_iff hp hq]
-
-@[simp]
-
-中文:
-定理 of实数_eq_of实数_iff
-  条件: {p q : 实数} (hp : 0 <= p) (hq : 0 <= q)
-  证明: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_inj]; rw [Real.toNNReal_eq_toNNReal_iff hp hq]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_eq_toNNReal_iff, coe_inj, ofReal, toNNReal_eq_toNNReal_iff
+/-
+**ENNReal.ofReal_eq_ofReal_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_eq_ofReal_iff {p q : Real} (hp : 0 <= p) (hq : 0 <= q) : ENNReal.of
+Real p = ENNReal.ofReal q ↔ p = q
+参数：hp : 0 <= p；hq : 0 <= q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal.eq_1`：∀ (r : ℝ), ENNReal.ofReal r = ↑r.toNNReal
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
+· 使用定理 `Real.toNNReal_eq_toNNReal_iff`：toNNReal_eq_toNNReal_iff {r p : Real} (hr
+ : 0 <= r) (hp : 0 <= p) : toNNReal r = toNNReal p ↔ r = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofReal_eq_ofReal_iff {p q : Real} (hp : 0 <= p) (hq : 0 <= q) :
+theorem ofReal_eq_ofReal_iff {p q : ℝ} (hp : 0 ≤ p) (hq : 0 ≤ q) :
     ENNReal.ofReal p = ENNReal.ofReal q ↔ p = q := by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_inj]; rw [Real.toNNReal_eq_toNNReal_iff hp hq]
+  rw [ENNReal.ofReal, ENNReal.ofReal, coe_inj, Real.toNNReal_eq_toNNReal_iff hp hq]
 
 @[simp]
-/--
-theorem `ofReal_lt_ofReal_iff` / 定理 `ofReal_lt_ofReal_iff`
-
-English:
-theorem ofReal_lt_ofReal_iff
-  given: {p q : Real} (h : 0 < q)
-  proof: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff h]
-
-中文:
-定理 of实数_lt_of实数_iff
-  条件: {p q : 实数} (h : 0 < q)
-  证明: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff h]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_lt_toNNReal_iff, coe_lt_coe, ofReal, toNNReal_lt_toNNReal_iff
+/-
+**ENNReal.ofReal_lt_ofReal_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_ofReal_iff {p q : Real} (h : 0 < q) : ENNReal.ofReal p < ENNReal
+.ofReal q ↔ p < q
+参数：h : 0 < q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal.eq_1`：∀ (r : ℝ), ENNReal.ofReal r = ↑r.toNNReal
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用定理 `Real.toNNReal_lt_toNNReal_iff`：toNNReal_lt_toNNReal_iff {r p : Real} (h 
+: 0 < p) : Real.toNNReal r < Real.toNNReal p ↔ r < p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofReal_lt_ofReal_iff {p q : Real} (h : 0 < q) :
+theorem ofReal_lt_ofReal_iff {p q : ℝ} (h : 0 < q) :
     ENNReal.ofReal p < ENNReal.ofReal q ↔ p < q := by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff h]
-
-/--
-theorem `ofReal_lt_ofReal_iff_of_nonneg` / 定理 `ofReal_lt_ofReal_iff_of_nonneg`
-
-English:
-theorem ofReal_lt_ofReal_iff_of_nonneg
-  given: {p q : Real} (hp : 0 <= p)
-  proof: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff_of_nonneg hp]
-
-@[simp]
-
-中文:
-定理 of实数_lt_of实数_iff_of_nonneg
-  条件: {p q : 实数} (hp : 0 <= p)
-  证明: by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff_of_nonneg hp]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_lt_toNNReal_iff_of_nonneg, coe_lt_coe, ofReal, toNNReal_lt_toNNReal_iff_of_nonneg
+  rw [ENNReal.ofReal, ENNReal.ofReal, coe_lt_coe, Real.toNNReal_lt_toNNReal_iff h]
+/-
+**ENNReal.ofReal_lt_ofReal_iff_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_ofReal_iff_of_nonneg {p q : Real} (hp : 0 <= p) : ENNReal.ofReal
+ p < ENNReal.ofReal q ↔ p < q
+参数：hp : 0 <= p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal.eq_1`：∀ (r : ℝ), ENNReal.ofReal r = ↑r.toNNReal
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用定理 `Real.toNNReal_lt_toNNReal_iff_of_nonneg`：toNNReal_lt_toNNReal_iff_of_non
+neg {r p : Real} (hr : 0 <= r) : Real.toNNReal r < Real.toNNReal p ↔ r < p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofReal_lt_ofReal_iff_of_nonneg {p q : Real} (hp : 0 <= p) :
+theorem ofReal_lt_ofReal_iff_of_nonneg {p q : ℝ} (hp : 0 ≤ p) :
     ENNReal.ofReal p < ENNReal.ofReal q ↔ p < q := by
-  rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff_of_nonneg hp]
+  rw [ENNReal.ofReal, ENNReal.ofReal, coe_lt_coe, Real.toNNReal_lt_toNNReal_iff_of_nonneg hp]
 
 @[simp]
-/--
-theorem `ofReal_pos` / 定理 `ofReal_pos`
-
-English:
-theorem ofReal_pos
-  given: {p : Real}
-  statement: 0 < ENNReal.ofReal p ↔ 0 < p
-  proof: by simp [ENNReal.ofReal]
+/-
+**ENNReal.ofReal_pos** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_pos {p : Real} : 0 < ENNReal.ofReal p ↔ 0 < p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem ofReal_pos {p : ℝ} : 0 < ENNReal.ofReal p ↔ 0 < p := by simp [ENNReal.ofReal]
 
 @[bound] private alias ⟨_, Bound.ofReal_pos_of_pos⟩ := ofReal_pos
 
 @[simp]
-
-中文:
-定理 of实数_pos
-  条件: {p : 实数}
-  结论: 0 < 广义非负实数.of实数 p ↔ 0 < p
-  证明: by simp [ENNReal.ofReal]
-
-@[bound] private alias ⟨_, Bound.ofReal_pos_of_pos⟩ := ofReal_pos
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ofReal
+/-
+**ENNReal.ofReal_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_eq_zero {p : Real} : ENNReal.ofReal p = 0 ↔ p <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ofReal_pos {p : Real} : 0 < ENNReal.ofReal p ↔ 0 < p := by simp [ENNReal.ofReal]
-
-@[bound] private alias ⟨_, Bound.ofReal_pos_of_pos⟩ := ofReal_pos
-
-@[simp]
-/--
-theorem `ofReal_eq_zero` / 定理 `ofReal_eq_zero`
-
-English:
-theorem ofReal_eq_zero
-  given: {p : Real}
-  statement: ENNReal.ofReal p = 0 ↔ p <= 0
-  proof: by simp [ENNReal.ofReal]
-
-中文:
-定理 of实数_eq_zero
-  条件: {p : 实数}
-  结论: 广义非负实数.of实数 p = 0 ↔ p <= 0
-  证明: by simp [ENNReal.ofReal]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ofReal
+theorem ofReal_eq_zero {p : ℝ} : ENNReal.ofReal p = 0 ↔ p ≤ 0 := by simp [ENNReal.ofReal]
+/-
+**ENNReal.ofReal_min** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ (x y : ℝ), ENNReal.ofReal (min x y) = min (ENNReal.ofReal x) (ENNReal.of
+Real y)
+参数：x y : ℝ；min x y；ENNReal.ofReal x；ENNReal.ofReal y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用引理 `ENNReal.ofReal_mono`：ofReal_mono : Monotone ENNReal.ofReal
 -/
-theorem ofReal_eq_zero {p : Real} : ENNReal.ofReal p = 0 ↔ p <= 0 := by simp [ENNReal.ofReal]
-
-/--
-lemma `ofReal_min` / 引理 `ofReal_min`
-
-English:
-lemma ofReal_min
-  given: (x y : Real)
-  statement: ENNReal.ofReal (min x y) = min (.ofReal x) (.ofReal y)
-  proof: ofReal_mono.map_min
-
-中文:
-引理 of实数_min
-  条件: (x y : 实数)
-  结论: 广义非负实数.of实数 (最小值 x y) = 最小值 (.of实数 x) (.of实数 y)
-  证明: ofReal_mono.map_min
--/
-@[simp] lemma ofReal_min (x y : Real) : ENNReal.ofReal (min x y) = min (.ofReal x) (.ofReal y) :=
+@[simp] lemma ofReal_min (x y : ℝ) : ENNReal.ofReal (min x y) = min (.ofReal x) (.ofReal y) :=
   ofReal_mono.map_min
-
-/--
-lemma `ofReal_max` / 引理 `ofReal_max`
-
-English:
-lemma ofReal_max
-  given: (x y : Real)
-  statement: ENNReal.ofReal (max x y) = max (.ofReal x) (.ofReal y)
-  proof: ofReal_mono.map_max
-
-中文:
-引理 of实数_max
-  条件: (x y : 实数)
-  结论: 广义非负实数.of实数 (最大值 x y) = 最大值 (.of实数 x) (.of实数 y)
-  证明: ofReal_mono.map_max
+/-
+**ENNReal.ofReal_max** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ (x y : ℝ), ENNReal.ofReal (max x y) = max (ENNReal.ofReal x) (ENNReal.of
+Real y)
+参数：x y : ℝ；max x y；ENNReal.ofReal x；ENNReal.ofReal y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用引理 `ENNReal.ofReal_mono`：ofReal_mono : Monotone ENNReal.ofReal
 -/
-@[simp] lemma ofReal_max (x y : Real) : ENNReal.ofReal (max x y) = max (.ofReal x) (.ofReal y) :=
+@[simp] lemma ofReal_max (x y : ℝ) : ENNReal.ofReal (max x y) = max (.ofReal x) (.ofReal y) :=
   ofReal_mono.map_max
-
-/--
-theorem `ofReal_ne_zero_iff` / 定理 `ofReal_ne_zero_iff`
-
-English:
-theorem ofReal_ne_zero_iff
-  given: {r : Real}
-  statement: ENNReal.ofReal r != 0 ↔ 0 < r
-  proof: by
-  rw [← pos_iff_ne_zero]; rw [ENNReal.ofReal_pos]
-
-@[simp]
-
-中文:
-定理 of实数_ne_zero_iff
-  条件: {r : 实数}
-  结论: 广义非负实数.of实数 r != 0 ↔ 0 < r
-  证明: by
-  rw [← pos_iff_ne_zero]; rw [ENNReal.ofReal_pos]
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_pos, ofReal_pos, pos_iff_ne_zero
+/-
+**ENNReal.ofReal_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_ne_zero_iff {r : Real} : ENNReal.ofReal r != 0 ↔ 0 < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `ENNReal.ofReal_pos`：ofReal_pos {p : Real} : 0 < ENNReal.ofReal p ↔ 0 < p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofReal_ne_zero_iff {r : Real} : ENNReal.ofReal r != 0 ↔ 0 < r := by
-  rw [← pos_iff_ne_zero]; rw [ENNReal.ofReal_pos]
+theorem ofReal_ne_zero_iff {r : ℝ} : ENNReal.ofReal r ≠ 0 ↔ 0 < r := by
+  rw [← pos_iff_ne_zero, ENNReal.ofReal_pos]
 
 @[simp]
-/--
-theorem `zero_eq_ofReal` / 定理 `zero_eq_ofReal`
-
-English:
-theorem zero_eq_ofReal
-  given: {p : Real}
-  statement: 0 = ENNReal.ofReal p ↔ p <= 0
-  proof: eq_comm.trans ofReal_eq_zero
-
-alias ⟨_, ofReal_of_nonpos⟩ := ofReal_eq_zero
-
-@[simp]
-
-中文:
-定理 zero_eq_of实数
-  条件: {p : 实数}
-  结论: 0 = 广义非负实数.of实数 p ↔ p <= 0
-  证明: eq_comm.trans ofReal_eq_zero
-
-alias ⟨_, ofReal_of_nonpos⟩ := ofReal_eq_zero
-
-@[simp]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mk, RingEquiv, RingEquiv.injective, compRingEquiv, comp_one, eq_comm, eq_comm.trans, injective, map_mul, ofReal_eq_zero, of_injective
+/-
+**ENNReal.zero_eq_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：zero_eq_ofReal {p : Real} : 0 = ENNReal.ofReal p ↔ p <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `ENNReal.ofReal_eq_zero`：ofReal_eq_zero {p : Real} : ENNReal.ofReal p = 0
+ ↔ p <= 0
 -/
-theorem zero_eq_ofReal {p : Real} : 0 = ENNReal.ofReal p ↔ p <= 0 :=
+theorem zero_eq_ofReal {p : ℝ} : 0 = ENNReal.ofReal p ↔ p ≤ 0 :=
   eq_comm.trans ofReal_eq_zero
 
 alias ⟨_, ofReal_of_nonpos⟩ := ofReal_eq_zero
 
 @[simp]
-/--
-lemma `ofReal_lt_natCast` / 引理 `ofReal_lt_natCast`
-
-English:
-lemma ofReal_lt_natCast
-  given: {p : Real} {n : Nat} (hn : n != 0)
-  statement: ENNReal.ofReal p < n ↔ p < n
-  proof: by
+/-
+**ENNReal.ofReal_lt_natCast** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_natCast {p : Real} {n : Nat} (hn : n != 0) : ENNReal.ofReal p < 
+n ↔ p < n
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal_natCast`：∀ (n : ℕ), ENNReal.ofReal ↑n = ↑n
+· 使用定理 `ENNReal.ofReal_lt_ofReal_iff`：ofReal_lt_ofReal_iff {p q : Real} (h : 0 <
+ q) : ENNReal.ofReal p < ENNReal.ofReal q ↔ p < q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
+-/
+lemma ofReal_lt_natCast {p : ℝ} {n : ℕ} (hn : n ≠ 0) : ENNReal.ofReal p < n ↔ p < n := by
   exact mod_cast ofReal_lt_ofReal_iff (Nat.cast_pos.2 hn.bot_lt)
 
 @[simp]
-
-中文:
-引理 of实数_lt_natCast
-  条件: {p : 实数} {n : 自然数} (hn : n != 0)
-  结论: 广义非负实数.of实数 p < n ↔ p < n
-  证明: by
-  exact mod_cast ofReal_lt_ofReal_iff (Nat.cast_pos.2 hn.bot_lt)
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_pos, bot_lt, cast_pos, hn.bot_lt, mod_cast, ofReal_lt_ofReal_iff
+/-
+**ENNReal.ofReal_lt_one** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_one {p : Real} : ENNReal.ofReal p < 1 ↔ p < 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ENNReal.ofReal_lt_natCast`：ofReal_lt_natCast {p : Real} {n : Nat} (hn : 
+n != 0) : ENNReal.ofReal p < n ↔ p < n
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma ofReal_lt_natCast {p : Real} {n : Nat} (hn : n != 0) : ENNReal.ofReal p < n ↔ p < n := by
-  exact mod_cast ofReal_lt_ofReal_iff (Nat.cast_pos.2 hn.bot_lt)
-
-@[simp]
-/--
-lemma `ofReal_lt_one` / 引理 `ofReal_lt_one`
-
-English:
-lemma ofReal_lt_one
-  given: {p : Real}
-  statement: ENNReal.ofReal p < 1 ↔ p < 1
-  proof: by
+lemma ofReal_lt_one {p : ℝ} : ENNReal.ofReal p < 1 ↔ p < 1 := by
   exact mod_cast ofReal_lt_natCast one_ne_zero
 
 @[simp]
-
-中文:
-引理 of实数_lt_one
-  条件: {p : 实数}
-  结论: 广义非负实数.of实数 p < 1 ↔ p < 1
-  证明: by
-  exact mod_cast ofReal_lt_natCast one_ne_zero
-
-@[simp]
-
-Depends on / 依赖: mod_cast, ofReal_lt_natCast, one_ne_zero
+/-
+**ENNReal.ofReal_lt_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_ofNat {p : Real} {n : Nat} [n.AtLeastTwo] : ENNReal.ofReal p < o
+fNat(n) ↔ p < OfNat.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.ofReal_lt_natCast`：ofReal_lt_natCast {p : Real} {n : Nat} (hn : 
+n != 0) : ENNReal.ofReal p < n ↔ p < n
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Nat.AtLeastTwo.toNeZero`：∀ (n : ℕ) [n.AtLeastTwo], NeZero n
 -/
-lemma ofReal_lt_one {p : Real} : ENNReal.ofReal p < 1 ↔ p < 1 := by
-  exact mod_cast ofReal_lt_natCast one_ne_zero
-
-@[simp]
-/--
-lemma `ofReal_lt_ofNat` / 引理 `ofReal_lt_ofNat`
-
-English:
-lemma ofReal_lt_ofNat
-  given: {p : Real} {n : Nat} [n.AtLeastTwo]
-  proof: ofReal_lt_natCast (NeZero.ne n)
-
-@[simp]
-
-中文:
-引理 of实数_lt_of自然数
-  条件: {p : 实数} {n : 自然数} [n.AtLeastTwo]
-  证明: ofReal_lt_natCast (NeZero.ne n)
-
-@[simp]
-
-Depends on / 依赖: NeZero, NeZero.ne, ofReal_lt_natCast
--/
-lemma ofReal_lt_ofNat {p : Real} {n : Nat} [n.AtLeastTwo] :
+lemma ofReal_lt_ofNat {p : ℝ} {n : ℕ} [n.AtLeastTwo] :
     ENNReal.ofReal p < ofNat(n) ↔ p < OfNat.ofNat n :=
   ofReal_lt_natCast (NeZero.ne n)
 
 @[simp]
-/--
-lemma `natCast_le_ofReal` / 引理 `natCast_le_ofReal`
-
-English:
-lemma natCast_le_ofReal
-  given: {n : Nat} {p : Real} (hn : n != 0)
-  statement: n <= ENNReal.ofReal p ↔ n <= p
-  proof: by
+/-
+**ENNReal.natCast_le_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：natCast_le_ofReal {n : Nat} {p : Real} (hn : n != 0) : n <= ENNReal.ofReal
+ p ↔ n <= p
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ENNReal.ofReal_lt_natCast`：ofReal_lt_natCast {p : Real} {n : Nat} (hn : 
+n != 0) : ENNReal.ofReal p < n ↔ p < n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma natCast_le_ofReal {n : ℕ} {p : ℝ} (hn : n ≠ 0) : n ≤ ENNReal.ofReal p ↔ n ≤ p := by
   simp only [← not_lt, ofReal_lt_natCast hn]
 
 @[simp]
-
-中文:
-引理 natCast_le_of实数
-  条件: {n : 自然数} {p : 实数} (hn : n != 0)
-  结论: n <= 广义非负实数.of实数 p ↔ n <= p
-  证明: by
-  simp only [← not_lt, ofReal_lt_natCast hn]
-
-@[simp]
-
-Depends on / 依赖: not_lt, ofReal_lt_natCast
+/-
+**ENNReal.one_le_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：one_le_ofReal {p : Real} : 1 <= ENNReal.ofReal p ↔ 1 <= p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ENNReal.natCast_le_ofReal`：natCast_le_ofReal {n : Nat} {p : Real} (hn : 
+n != 0) : n <= ENNReal.ofReal p ↔ n <= p
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma natCast_le_ofReal {n : Nat} {p : Real} (hn : n != 0) : n <= ENNReal.ofReal p ↔ n <= p := by
-  simp only [← not_lt, ofReal_lt_natCast hn]
-
-@[simp]
-/--
-lemma `one_le_ofReal` / 引理 `one_le_ofReal`
-
-English:
-lemma one_le_ofReal
-  given: {p : Real}
-  statement: 1 <= ENNReal.ofReal p ↔ 1 <= p
-  proof: by
+lemma one_le_ofReal {p : ℝ} : 1 ≤ ENNReal.ofReal p ↔ 1 ≤ p := by
   exact mod_cast natCast_le_ofReal one_ne_zero
 
 @[simp]
-
-中文:
-引理 one_le_of实数
-  条件: {p : 实数}
-  结论: 1 <= 广义非负实数.of实数 p ↔ 1 <= p
-  证明: by
-  exact mod_cast natCast_le_ofReal one_ne_zero
-
-@[simp]
-
-Depends on / 依赖: mod_cast, natCast_le_ofReal, one_ne_zero
+/-
+**ENNReal.ofNat_le_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofNat_le_ofReal {n : Nat} [n.AtLeastTwo] {p : Real} : ofNat(n) <= ENNReal.
+ofReal p ↔ OfNat.ofNat n <= p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.natCast_le_ofReal`：natCast_le_ofReal {n : Nat} {p : Real} (hn : 
+n != 0) : n <= ENNReal.ofReal p ↔ n <= p
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Nat.AtLeastTwo.toNeZero`：∀ (n : ℕ) [n.AtLeastTwo], NeZero n
 -/
-lemma one_le_ofReal {p : Real} : 1 <= ENNReal.ofReal p ↔ 1 <= p := by
-  exact mod_cast natCast_le_ofReal one_ne_zero
-
-@[simp]
-/--
-lemma `ofNat_le_ofReal` / 引理 `ofNat_le_ofReal`
-
-English:
-lemma ofNat_le_ofReal
-  given: {n : Nat} [n.AtLeastTwo] {p : Real}
-  proof: natCast_le_ofReal (NeZero.ne n)
-
-@[simp, norm_cast]
-
-中文:
-引理 of自然数_le_of实数
-  条件: {n : 自然数} [n.AtLeastTwo] {p : 实数}
-  证明: natCast_le_ofReal (NeZero.ne n)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: NeZero, NeZero.ne, natCast_le_ofReal
--/
-lemma ofNat_le_ofReal {n : Nat} [n.AtLeastTwo] {p : Real} :
-    ofNat(n) <= ENNReal.ofReal p ↔ OfNat.ofNat n <= p :=
+lemma ofNat_le_ofReal {n : ℕ} [n.AtLeastTwo] {p : ℝ} :
+    ofNat(n) ≤ ENNReal.ofReal p ↔ OfNat.ofNat n ≤ p :=
   natCast_le_ofReal (NeZero.ne n)
 
 @[simp, norm_cast]
-/--
-lemma `ofReal_le_natCast` / 引理 `ofReal_le_natCast`
-
-English:
-lemma ofReal_le_natCast
-  given: {r : Real} {n : Nat}
-  statement: ENNReal.ofReal r <= n ↔ r <= n
-  proof: coe_le_coe.trans Real.toNNReal_le_natCast
-
-@[simp]
-
-中文:
-引理 of实数_le_natCast
-  条件: {r : 实数} {n : 自然数}
-  结论: 广义非负实数.of实数 r <= n ↔ r <= n
-  证明: coe_le_coe.trans Real.toNNReal_le_natCast
-
-@[simp]
-
-Depends on / 依赖: Real.toNNReal_le_natCast, coe_le_coe, coe_le_coe.trans, toNNReal_le_natCast
+/-
+**ENNReal.ofReal_le_natCast** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_natCast {r : Real} {n : Nat} : ENNReal.ofReal r <= n ↔ r <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用引理 `Real.toNNReal_le_natCast`：toNNReal_le_natCast {r : Real} {n : Nat} : r.t
+oNNReal <= n ↔ r <= n
 -/
-lemma ofReal_le_natCast {r : Real} {n : Nat} : ENNReal.ofReal r <= n ↔ r <= n :=
+lemma ofReal_le_natCast {r : ℝ} {n : ℕ} : ENNReal.ofReal r ≤ n ↔ r ≤ n :=
   coe_le_coe.trans Real.toNNReal_le_natCast
 
 @[simp]
-/--
-lemma `ofReal_le_one` / 引理 `ofReal_le_one`
-
-English:
-lemma ofReal_le_one
-  given: {r : Real}
-  statement: ENNReal.ofReal r <= 1 ↔ r <= 1
-  proof: coe_le_coe.trans Real.toNNReal_le_one
-
-@[simp]
-
-中文:
-引理 of实数_le_one
-  条件: {r : 实数}
-  结论: 广义非负实数.of实数 r <= 1 ↔ r <= 1
-  证明: coe_le_coe.trans Real.toNNReal_le_one
-
-@[simp]
-
-Depends on / 依赖: Real.toNNReal_le_one, coe_le_coe, coe_le_coe.trans, toNNReal_le_one
+/-
+**ENNReal.ofReal_le_one** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_one {r : Real} : ENNReal.ofReal r <= 1 ↔ r <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用引理 `Real.toNNReal_le_one`：toNNReal_le_one {r : Real} : r.toNNReal <= 1 ↔ r <
+= 1
 -/
-lemma ofReal_le_one {r : Real} : ENNReal.ofReal r <= 1 ↔ r <= 1 :=
+lemma ofReal_le_one {r : ℝ} : ENNReal.ofReal r ≤ 1 ↔ r ≤ 1 :=
   coe_le_coe.trans Real.toNNReal_le_one
 
 @[simp]
-/--
-lemma `ofReal_le_ofNat` / 引理 `ofReal_le_ofNat`
-
-English:
-lemma ofReal_le_ofNat
-  given: {r : Real} {n : Nat} [n.AtLeastTwo]
-  proof: ofReal_le_natCast
-
-@[simp]
-
-中文:
-引理 of实数_le_of自然数
-  条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
-  证明: ofReal_le_natCast
-
-@[simp]
-
-Depends on / 依赖: ofReal_le_natCast
+/-
+**ENNReal.ofReal_le_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_ofNat {r : Real} {n : Nat} [n.AtLeastTwo] : ENNReal.ofReal r <= 
+ofNat(n) ↔ r <= OfNat.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.ofReal_le_natCast`：ofReal_le_natCast {r : Real} {n : Nat} : ENNR
+eal.ofReal r <= n ↔ r <= n
 -/
-lemma ofReal_le_ofNat {r : Real} {n : Nat} [n.AtLeastTwo] :
-    ENNReal.ofReal r <= ofNat(n) ↔ r <= OfNat.ofNat n :=
+lemma ofReal_le_ofNat {r : ℝ} {n : ℕ} [n.AtLeastTwo] :
+    ENNReal.ofReal r ≤ ofNat(n) ↔ r ≤ OfNat.ofNat n :=
   ofReal_le_natCast
 
 @[simp]
-/--
-lemma `natCast_lt_ofReal` / 引理 `natCast_lt_ofReal`
-
-English:
-lemma natCast_lt_ofReal
-  given: {n : Nat} {r : Real}
-  statement: n < ENNReal.ofReal r ↔ n < r
-  proof: coe_lt_coe.trans Real.natCast_lt_toNNReal
-
-@[simp]
-
-中文:
-引理 natCast_lt_of实数
-  条件: {n : 自然数} {r : 实数}
-  结论: n < 广义非负实数.of实数 r ↔ n < r
-  证明: coe_lt_coe.trans Real.natCast_lt_toNNReal
-
-@[simp]
-
-Depends on / 依赖: Real.natCast_lt_toNNReal, coe_lt_coe, coe_lt_coe.trans, natCast_lt_toNNReal
+/-
+**ENNReal.natCast_lt_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：natCast_lt_ofReal {n : Nat} {r : Real} : n < ENNReal.ofReal r ↔ n < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用引理 `Real.natCast_lt_toNNReal`：natCast_lt_toNNReal {r : Real} {n : Nat} : n <
+ r.toNNReal ↔ n < r
 -/
-lemma natCast_lt_ofReal {n : Nat} {r : Real} : n < ENNReal.ofReal r ↔ n < r :=
+lemma natCast_lt_ofReal {n : ℕ} {r : ℝ} : n < ENNReal.ofReal r ↔ n < r :=
   coe_lt_coe.trans Real.natCast_lt_toNNReal
 
 @[simp]
-/--
-lemma `one_lt_ofReal` / 引理 `one_lt_ofReal`
-
-English:
-lemma one_lt_ofReal
-  given: {r : Real}
-  statement: 1 < ENNReal.ofReal r ↔ 1 < r
-  proof: coe_lt_coe.trans Real.one_lt_toNNReal
-
-@[simp]
-
-中文:
-引理 one_lt_of实数
-  条件: {r : 实数}
-  结论: 1 < 广义非负实数.of实数 r ↔ 1 < r
-  证明: coe_lt_coe.trans Real.one_lt_toNNReal
-
-@[simp]
-
-Depends on / 依赖: Real.one_lt_toNNReal, coe_lt_coe, coe_lt_coe.trans, one_lt_toNNReal
+/-
+**ENNReal.one_lt_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：one_lt_ofReal {r : Real} : 1 < ENNReal.ofReal r ↔ 1 < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_lt_coe`：∀ {r q : NNReal}, ↑r < ↑q ↔ r < q
+· 使用引理 `Real.one_lt_toNNReal`：one_lt_toNNReal {r : Real} : 1 < r.toNNReal ↔ 1 < 
+r
 -/
-lemma one_lt_ofReal {r : Real} : 1 < ENNReal.ofReal r ↔ 1 < r := coe_lt_coe.trans Real.one_lt_toNNReal
+lemma one_lt_ofReal {r : ℝ} : 1 < ENNReal.ofReal r ↔ 1 < r := coe_lt_coe.trans Real.one_lt_toNNReal
 
 @[simp]
-/--
-lemma `ofNat_lt_ofReal` / 引理 `ofNat_lt_ofReal`
-
-English:
-lemma ofNat_lt_ofReal
-  given: {n : Nat} [n.AtLeastTwo] {r : Real}
-  proof: natCast_lt_ofReal
-
-@[simp]
-
-中文:
-引理 of自然数_lt_of实数
-  条件: {n : 自然数} [n.AtLeastTwo] {r : 实数}
-  证明: natCast_lt_ofReal
-
-@[simp]
-
-Depends on / 依赖: natCast_lt_ofReal
+/-
+**ENNReal.ofNat_lt_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofNat_lt_ofReal {n : Nat} [n.AtLeastTwo] {r : Real} : ofNat(n) < ENNReal.o
+fReal r ↔ OfNat.ofNat n < r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.natCast_lt_ofReal`：natCast_lt_ofReal {n : Nat} {r : Real} : n < 
+ENNReal.ofReal r ↔ n < r
 -/
-lemma ofNat_lt_ofReal {n : Nat} [n.AtLeastTwo] {r : Real} :
+lemma ofNat_lt_ofReal {n : ℕ} [n.AtLeastTwo] {r : ℝ} :
     ofNat(n) < ENNReal.ofReal r ↔ OfNat.ofNat n < r :=
   natCast_lt_ofReal
 
 @[simp]
-/--
-lemma `ofReal_eq_natCast` / 引理 `ofReal_eq_natCast`
-
-English:
-lemma ofReal_eq_natCast
-  given: {r : Real} {n : Nat} (h : n != 0)
-  statement: ENNReal.ofReal r = n ↔ r = n
-  proof: ENNReal.coe_inj.trans Real.toNNReal_eq_natCast h
-
-@[simp]
-
-中文:
-引理 of实数_eq_natCast
-  条件: {r : 实数} {n : 自然数} (h : n != 0)
-  结论: 广义非负实数.of实数 r = n ↔ r = n
-  证明: ENNReal.coe_inj.trans Real.toNNReal_eq_natCast h
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inj.trans, Real.toNNReal_eq_natCast, coe_inj, toNNReal_eq_natCast
+/-
+**ENNReal.ofReal_eq_natCast** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_eq_natCast {r : Real} {n : Nat} (h : n != 0) : ENNReal.ofReal r = n
+ ↔ r = n
+参数：h : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
+· 使用引理 `Real.toNNReal_eq_natCast`：toNNReal_eq_natCast {r : Real} {n : Nat} (hn :
+ n != 0) : r.toNNReal = n ↔ r = n
 -/
-lemma ofReal_eq_natCast {r : Real} {n : Nat} (h : n != 0) : ENNReal.ofReal r = n ↔ r = n :=
-ENNReal.coe_inj.trans Real.toNNReal_eq_natCast h
+lemma ofReal_eq_natCast {r : ℝ} {n : ℕ} (h : n ≠ 0) : ENNReal.ofReal r = n ↔ r = n :=
+  ENNReal.coe_inj.trans <| Real.toNNReal_eq_natCast h
 
 @[simp]
-/--
-lemma `ofReal_eq_one` / 引理 `ofReal_eq_one`
-
-English:
-lemma ofReal_eq_one
-  given: {r : Real}
-  statement: ENNReal.ofReal r = 1 ↔ r = 1
-  proof: ENNReal.coe_inj.trans Real.toNNReal_eq_one
-
-@[simp]
-
-中文:
-引理 of实数_eq_one
-  条件: {r : 实数}
-  结论: 广义非负实数.of实数 r = 1 ↔ r = 1
-  证明: ENNReal.coe_inj.trans Real.toNNReal_eq_one
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inj.trans, Real.toNNReal_eq_one, coe_inj, toNNReal_eq_one
+/-
+**ENNReal.ofReal_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_eq_one {r : Real} : ENNReal.ofReal r = 1 ↔ r = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
+· 使用引理 `Real.toNNReal_eq_one`：toNNReal_eq_one {r : Real} : r.toNNReal = 1 ↔ r = 
+1
 -/
-lemma ofReal_eq_one {r : Real} : ENNReal.ofReal r = 1 ↔ r = 1 :=
+lemma ofReal_eq_one {r : ℝ} : ENNReal.ofReal r = 1 ↔ r = 1 :=
   ENNReal.coe_inj.trans Real.toNNReal_eq_one
 
 @[simp]
-/--
-lemma `ofReal_eq_ofNat` / 引理 `ofReal_eq_ofNat`
-
-English:
-lemma ofReal_eq_ofNat
-  given: {r : Real} {n : Nat} [n.AtLeastTwo]
-  proof: ofReal_eq_natCast (NeZero.ne n)
-
-中文:
-引理 of实数_eq_of自然数
-  条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
-  证明: ofReal_eq_natCast (NeZero.ne n)
-
-Depends on / 依赖: NeZero, NeZero.ne, ofReal_eq_natCast
+/-
+**ENNReal.ofReal_eq_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_eq_ofNat {r : Real} {n : Nat} [n.AtLeastTwo] : ENNReal.ofReal r = o
+fNat(n) ↔ r = OfNat.ofNat n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.ofReal_eq_natCast`：ofReal_eq_natCast {r : Real} {n : Nat} (h : n
+ != 0) : ENNReal.ofReal r = n ↔ r = n
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Nat.AtLeastTwo.toNeZero`：∀ (n : ℕ) [n.AtLeastTwo], NeZero n
 -/
-lemma ofReal_eq_ofNat {r : Real} {n : Nat} [n.AtLeastTwo] :
+lemma ofReal_eq_ofNat {r : ℝ} {n : ℕ} [n.AtLeastTwo] :
     ENNReal.ofReal r = ofNat(n) ↔ r = OfNat.ofNat n :=
   ofReal_eq_natCast (NeZero.ne n)
-
-/--
-theorem `ofReal_le_iff_le_toReal` / 定理 `ofReal_le_iff_le_toReal`
-
-English:
-theorem ofReal_le_iff_le_toReal
-  given: {a : Real} {b : Real>=0∞} (hb : b != ∞)
-  proof: by
-  lift b to Real>=0 using hb
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_le_iff_le_coe
-
-中文:
-定理 of实数_le_iff_le_to实数
-  条件: {a : 实数} {b : 实数>=0∞} (hb : b != ∞)
-  证明: by
-  lift b to Real>=0 using hb
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_le_iff_le_coe
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal, Real.toNNReal_le_iff_le_coe, ofReal, toNNReal_le_iff_le_coe, toReal
+/-
+**ENNReal.ofReal_le_iff_le_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_le_iff_le_toReal {a : Real} {b : Real>=0∞} (hb : b != ∞) : ENNReal.
+ofReal a <= b ↔ a <= ENNReal.toReal b
+参数：hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_le_iff_le_coe`：toNNReal_le_iff_le_coe {r : Real} {p : Real
+>=0} : toNNReal r <= p ↔ r <= ↑p
 -/
-theorem ofReal_le_iff_le_toReal {a : Real} {b : Real>=0∞} (hb : b != ∞) :
-    ENNReal.ofReal a <= b ↔ a <= ENNReal.toReal b := by
-  lift b to Real>=0 using hb
+theorem ofReal_le_iff_le_toReal {a : ℝ} {b : ℝ≥0∞} (hb : b ≠ ∞) :
+    ENNReal.ofReal a ≤ b ↔ a ≤ ENNReal.toReal b := by
+  lift b to ℝ≥0 using hb
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_le_iff_le_coe
-
-/--
-theorem `ofReal_lt_iff_lt_toReal` / 定理 `ofReal_lt_iff_lt_toReal`
-
-English:
-theorem ofReal_lt_iff_lt_toReal
-  given: {a : Real} {b : Real>=0∞} (ha : 0 <= a) (hb : b != ∞)
-  proof: by
-  lift b to Real>=0 using hb
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_lt_iff_lt_coe ha
-
-中文:
-定理 of实数_lt_iff_lt_to实数
-  条件: {a : 实数} {b : 实数>=0∞} (ha : 0 <= a) (hb : b != ∞)
-  证明: by
-  lift b to Real>=0 using hb
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_lt_iff_lt_coe ha
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal, Real.toNNReal_lt_iff_lt_coe, ofReal, toNNReal_lt_iff_lt_coe, toReal
+/-
+**ENNReal.ofReal_lt_iff_lt_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_iff_lt_toReal {a : Real} {b : Real>=0∞} (ha : 0 <= a) (hb : b !=
+ ∞) : ENNReal.ofReal a < b ↔ a < ENNReal.toReal b
+参数：ha : 0 <= a；hb : b != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_lt_iff_lt_coe`：toNNReal_lt_iff_lt_coe {r : Real} {p : Real
+>=0} (ha : 0 <= r) : Real.toNNReal r < p ↔ r < ↑p
 -/
-theorem ofReal_lt_iff_lt_toReal {a : Real} {b : Real>=0∞} (ha : 0 <= a) (hb : b != ∞) :
+theorem ofReal_lt_iff_lt_toReal {a : ℝ} {b : ℝ≥0∞} (ha : 0 ≤ a) (hb : b ≠ ∞) :
     ENNReal.ofReal a < b ↔ a < ENNReal.toReal b := by
-  lift b to Real>=0 using hb
+  lift b to ℝ≥0 using hb
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_lt_iff_lt_coe ha
-
-/--
-lemma `coe_lt_ofReal` / 引理 `coe_lt_ofReal`
-
-English:
-lemma coe_lt_ofReal
-  given: {a : Real>=0} {b : Real}
-  statement: a < ENNReal.ofReal b ↔ a < b
-  proof: by
+/-
+**ENNReal.coe_lt_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ {a : NNReal} {b : ℝ}, ↑a < ENNReal.ofReal b ↔ ↑a < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+@[simp] lemma coe_lt_ofReal {a : ℝ≥0} {b : ℝ} : a < ENNReal.ofReal b ↔ a < b := by
   simp [ENNReal.ofReal, Real.lt_toNNReal_iff_coe_lt]
-
-中文:
-引理 coe_lt_of实数
-  条件: {a : 实数>=0} {b : 实数}
-  结论: a < 广义非负实数.of实数 b ↔ a < b
-  证明: by
-  simp [ENNReal.ofReal, Real.lt_toNNReal_iff_coe_lt]
+/-
+**ENNReal.ofReal_lt_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_lt_coe_iff {a : Real} {b : Real>=0} (ha : 0 <= a) : ENNReal.ofReal 
+a < b ↔ a < b
+参数：ha : 0 <= a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ENNReal.ofReal_lt_iff_lt_toReal`：ofReal_lt_iff_lt_toReal {a : Real} {b :
+ Real>=0∞} (ha : 0 <= a) (hb : b != ∞) : ENNReal.ofReal a < b ↔ a < ENNReal.toRe
+al b
+· 使用定理 `ENNReal.coe_ne_top`：coe_ne_top : (r : Real>=0∞) != ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_toReal`：∀ (r : NNReal), (↑r).toReal = ↑r
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma coe_lt_ofReal {a : Real>=0} {b : Real} : a < ENNReal.ofReal b ↔ a < b := by
-  simp [ENNReal.ofReal, Real.lt_toNNReal_iff_coe_lt]
-
-/--
-theorem `ofReal_lt_coe_iff` / 定理 `ofReal_lt_coe_iff`
-
-English:
-theorem ofReal_lt_coe_iff
-  given: {a : Real} {b : Real>=0} (ha : 0 <= a)
-  statement: ENNReal.ofReal a < b ↔ a < b
-  proof: (ofReal_lt_iff_lt_toReal ha coe_ne_top).trans by rw [coe_toReal]
-
-中文:
-定理 of实数_lt_coe_iff
-  条件: {a : 实数} {b : 实数>=0} (ha : 0 <= a)
-  结论: 广义非负实数.of实数 a < b ↔ a < b
-  证明: (ofReal_lt_iff_lt_toReal ha coe_ne_top).trans by rw [coe_toReal]
-
-Depends on / 依赖: coe_ne_top, coe_toReal, ofReal_lt_iff_lt_toReal
+theorem ofReal_lt_coe_iff {a : ℝ} {b : ℝ≥0} (ha : 0 ≤ a) : ENNReal.ofReal a < b ↔ a < b :=
+  (ofReal_lt_iff_lt_toReal ha coe_ne_top).trans <| by rw [coe_toReal]
+/-
+**ENNReal.le_ofReal_iff_toReal_le** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：le_ofReal_iff_toReal_le {a : Real>=0∞} {b : Real} (ha : a != ∞) (hb : 0 <=
+ b) : a <= ENNReal.ofReal b ↔ ENNReal.toReal a <= b
+参数：ha : a != ∞；hb : 0 <= b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.le_toNNReal_iff_coe_le`：le_toNNReal_iff_coe_le {r : Real>=0} {p : R
+eal} (hp : 0 <= p) : r <= Real.toNNReal p ↔ ↑r <= p
 -/
-theorem ofReal_lt_coe_iff {a : Real} {b : Real>=0} (ha : 0 <= a) : ENNReal.ofReal a < b ↔ a < b :=
-(ofReal_lt_iff_lt_toReal ha coe_ne_top).trans by rw [coe_toReal]
-
-/--
-theorem `le_ofReal_iff_toReal_le` / 定理 `le_ofReal_iff_toReal_le`
-
-English:
-theorem le_ofReal_iff_toReal_le
-  given: {a : Real>=0∞} {b : Real} (ha : a != ∞) (hb : 0 <= b)
-  proof: by
-  lift a to Real>=0 using ha
+theorem le_ofReal_iff_toReal_le {a : ℝ≥0∞} {b : ℝ} (ha : a ≠ ∞) (hb : 0 ≤ b) :
+    a ≤ ENNReal.ofReal b ↔ ENNReal.toReal a ≤ b := by
+  lift a to ℝ≥0 using ha
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.le_toNNReal_iff_coe_le hb
-
-中文:
-定理 le_of实数_iff_to实数_le
-  条件: {a : 实数>=0∞} {b : 实数} (ha : a != ∞) (hb : 0 <= b)
-  证明: by
-  lift a to Real>=0 using ha
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.le_toNNReal_iff_coe_le hb
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal, Real.le_toNNReal_iff_coe_le, le_toNNReal_iff_coe_le, ofReal, toReal
+/-
+**ENNReal.toReal_le_of_le_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_le_of_le_ofReal {a : Real>=0∞} {b : Real} (hb : 0 <= b) (h : a <= E
+NNReal.ofReal b) : ENNReal.toReal a <= b
+参数：hb : 0 <= b；h : a <= ENNReal.ofReal b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_top_of_le_ne_top`：ne_top_of_le_ne_top (hb : b != ⊤) (hab : a <= b) : 
+a != ⊤
+· 使用定理 `ENNReal.ofReal_ne_top`：ofReal_ne_top {r : Real} : ENNReal.ofReal r != ∞
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ENNReal.le_ofReal_iff_toReal_le`：le_ofReal_iff_toReal_le {a : Real>=0∞} 
+{b : Real} (ha : a != ∞) (hb : 0 <= b) : a <= ENNReal.ofReal b ↔ ENNReal.toReal 
+a <= b
 -/
-theorem le_ofReal_iff_toReal_le {a : Real>=0∞} {b : Real} (ha : a != ∞) (hb : 0 <= b) :
-    a <= ENNReal.ofReal b ↔ ENNReal.toReal a <= b := by
-  lift a to Real>=0 using ha
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.le_toNNReal_iff_coe_le hb
-
-/--
-theorem `toReal_le_of_le_ofReal` / 定理 `toReal_le_of_le_ofReal`
-
-English:
-theorem toReal_le_of_le_ofReal
-  given: {a : Real>=0∞} {b : Real} (hb : 0 <= b) (h : a <= ENNReal.ofReal b)
-  proof: have ha : a != ∞ := ne_top_of_le_ne_top ofReal_ne_top h
+theorem toReal_le_of_le_ofReal {a : ℝ≥0∞} {b : ℝ} (hb : 0 ≤ b) (h : a ≤ ENNReal.ofReal b) :
+    ENNReal.toReal a ≤ b :=
+  have ha : a ≠ ∞ := ne_top_of_le_ne_top ofReal_ne_top h
   (le_ofReal_iff_toReal_le ha hb).1 h
-
-中文:
-定理 to实数_le_of_le_of实数
-  条件: {a : 实数>=0∞} {b : 实数} (hb : 0 <= b) (h : a <= 广义非负实数.of实数 b)
-  证明: have ha : a != ∞ := ne_top_of_le_ne_top ofReal_ne_top h
-  (le_ofReal_iff_toReal_le ha hb).1 h
-
-Depends on / 依赖: le_ofReal_iff_toReal_le, ne_top_of_le_ne_top, ofReal_ne_top
+/-
+**ENNReal.lt_ofReal_iff_toReal_lt** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：lt_ofReal_iff_toReal_lt {a : Real>=0∞} {b : Real} (ha : a != ∞) : a < ENNR
+eal.ofReal b ↔ ENNReal.toReal a < b
+参数：ha : a != ∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.lt_toNNReal_iff_coe_lt`：lt_toNNReal_iff_coe_lt {r : Real>=0} {p : R
+eal} : r < Real.toNNReal p ↔ ↑r < p
 -/
-theorem toReal_le_of_le_ofReal {a : Real>=0∞} {b : Real} (hb : 0 <= b) (h : a <= ENNReal.ofReal b) :
-    ENNReal.toReal a <= b :=
-  have ha : a != ∞ := ne_top_of_le_ne_top ofReal_ne_top h
-  (le_ofReal_iff_toReal_le ha hb).1 h
-
-/--
-theorem `lt_ofReal_iff_toReal_lt` / 定理 `lt_ofReal_iff_toReal_lt`
-
-English:
-theorem lt_ofReal_iff_toReal_lt
-  given: {a : Real>=0∞} {b : Real} (ha : a != ∞)
-  proof: by
-  lift a to Real>=0 using ha
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.lt_toNNReal_iff_coe_lt
-
-中文:
-定理 lt_of实数_iff_to实数_lt
-  条件: {a : 实数>=0∞} {b : 实数} (ha : a != ∞)
-  证明: by
-  lift a to Real>=0 using ha
-  simpa [ENNReal.ofReal, ENNReal.toReal] using Real.lt_toNNReal_iff_coe_lt
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal, Real.lt_toNNReal_iff_coe_lt, lt_toNNReal_iff_coe_lt, ofReal, toReal
--/
-theorem lt_ofReal_iff_toReal_lt {a : Real>=0∞} {b : Real} (ha : a != ∞) :
+theorem lt_ofReal_iff_toReal_lt {a : ℝ≥0∞} {b : ℝ} (ha : a ≠ ∞) :
     a < ENNReal.ofReal b ↔ ENNReal.toReal a < b := by
-  lift a to Real>=0 using ha
+  lift a to ℝ≥0 using ha
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.lt_toNNReal_iff_coe_lt
-
-/--
-theorem `toReal_lt_of_lt_ofReal` / 定理 `toReal_lt_of_lt_ofReal`
-
-English:
-theorem toReal_lt_of_lt_ofReal
-  given: {b : Real} (h : a < ENNReal.ofReal b)
-  statement: ENNReal.toReal a < b
-  proof: (lt_ofReal_iff_toReal_lt h.ne_top).1 h
-
-@[simp]
-
-中文:
-定理 to实数_lt_of_lt_of实数
-  条件: {b : 实数} (h : a < 广义非负实数.of实数 b)
-  结论: 广义非负实数.to实数 a < b
-  证明: (lt_ofReal_iff_toReal_lt h.ne_top).1 h
-
-@[simp]
-
-Depends on / 依赖: h.ne_top, lt_ofReal_iff_toReal_lt, ne_top
+/-
+**ENNReal.toReal_lt_of_lt_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_lt_of_lt_ofReal {b : Real} (h : a < ENNReal.ofReal b) : ENNReal.toR
+eal a < b
+参数：h : a < ENNReal.ofReal b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ENNReal.lt_ofReal_iff_toReal_lt`：lt_ofReal_iff_toReal_lt {a : Real>=0∞} 
+{b : Real} (ha : a != ∞) : a < ENNReal.ofReal b ↔ ENNReal.toReal a < b
+· 使用定理 `LT.lt.ne_top`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderTop α] {
+a b : α}, a < b → a ≠ ⊤
 -/
-theorem toReal_lt_of_lt_ofReal {b : Real} (h : a < ENNReal.ofReal b) : ENNReal.toReal a < b :=
+theorem toReal_lt_of_lt_ofReal {b : ℝ} (h : a < ENNReal.ofReal b) : ENNReal.toReal a < b :=
   (lt_ofReal_iff_toReal_lt h.ne_top).1 h
 
 @[simp]
-/--
-theorem `ofReal_mul` / 定理 `ofReal_mul`
-
-English:
-theorem ofReal_mul
-  given: {p q : Real} (hp : 0 <= p)
-  proof: by
-  simp only [ENNReal.ofReal, ← coe_mul, Real.toNNReal_mul hp]
-
-中文:
-定理 of实数_mul
-  条件: {p q : 实数} (hp : 0 <= p)
-  证明: by
-  simp only [ENNReal.ofReal, ← coe_mul, Real.toNNReal_mul hp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.toNNReal_mul, coe_mul, ofReal, toNNReal_mul
+/-
+**ENNReal.ofReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_mul {p q : Real} (hp : 0 <= p) : ENNReal.ofReal (p * q) = ENNReal.o
+fReal p * ENNReal.ofReal q
+参数：hp : 0 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_mul`：toNNReal_mul {p q : Real} (hp : 0 <= p) : Real.toNNRe
+al (p * q) = Real.toNNReal p * Real.toNNReal q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofReal_mul {p q : Real} (hp : 0 <= p) :
+theorem ofReal_mul {p q : ℝ} (hp : 0 ≤ p) :
     ENNReal.ofReal (p * q) = ENNReal.ofReal p * ENNReal.ofReal q := by
   simp only [ENNReal.ofReal, ← coe_mul, Real.toNNReal_mul hp]
-
-/--
-theorem `ofReal_mul'` / 定理 `ofReal_mul'`
-
-English:
-theorem ofReal_mul'
-  given: {p q : Real} (hq : 0 <= q)
-  proof: by
-  rw [mul_comm]; rw [ofReal_mul hq]; rw [mul_comm]
-
-@[simp]
-
-中文:
-定理 of实数_mul'
-  条件: {p q : 实数} (hq : 0 <= q)
-  证明: by
-  rw [mul_comm]; rw [ofReal_mul hq]; rw [mul_comm]
-
-@[simp]
-
-Depends on / 依赖: mul_comm, ofReal_mul
+/-
+**ENNReal.ofReal_mul'** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_mul' {p q : Real} (hq : 0 <= q) : ENNReal.ofReal (p * q) = ENNReal.
+ofReal p * ENNReal.ofReal q
+参数：hq : 0 <= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `ENNReal.ofReal_mul`：ofReal_mul {p q : Real} (hp : 0 <= p) : ENNReal.ofRe
+al (p * q) = ENNReal.ofReal p * ENNReal.ofReal q
 -/
-theorem ofReal_mul' {p q : Real} (hq : 0 <= q) :
+theorem ofReal_mul' {p q : ℝ} (hq : 0 ≤ q) :
     ENNReal.ofReal (p * q) = ENNReal.ofReal p * ENNReal.ofReal q := by
-  rw [mul_comm]; rw [ofReal_mul hq]; rw [mul_comm]
+  rw [mul_comm, ofReal_mul hq, mul_comm]
 
 @[simp]
-/--
-theorem `ofReal_pow` / 定理 `ofReal_pow`
-
-English:
-theorem ofReal_pow
-  given: {p : Real} (hp : 0 <= p) (n : Nat)
-  proof: by
-  rw [ofReal_eq_coe_nnreal hp]; rw [← coe_pow]; rw [← ofReal_coe_nnreal]; rw [NNReal.coe_pow]; rw [NNReal.coe_mk]
-
-中文:
-定理 of实数_pow
-  条件: {p : 实数} (hp : 0 <= p) (n : 自然数)
-  证明: by
-  rw [ofReal_eq_coe_nnreal hp]; rw [← coe_pow]; rw [← ofReal_coe_nnreal]; rw [NNReal.coe_pow]; rw [NNReal.coe_mk]
-
-Depends on / 依赖: NNReal, NNReal.coe_mk, NNReal.coe_pow, coe_mk, coe_pow, ofReal_coe_nnreal, ofReal_eq_coe_nnreal
+/-
+**ENNReal.ofReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_pow {p : Real} (hp : 0 <= p) (n : Nat) : ENNReal.ofReal (p ^ n) = E
+NNReal.ofReal p ^ n
+参数：hp : 0 <= p；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal_eq_coe_nnreal`：ofReal_eq_coe_nnreal {x : Real} (h : 0 <= 
+x) : ENNReal.ofReal x = ofNNReal (NNReal.mk x h)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.coe_pow`：∀ (x : NNReal) (n : ℕ), ↑(x ^ n) = ↑x ^ n
+· 使用定理 `ENNReal.ofReal_coe_nnreal`：∀ {p : NNReal}, ENNReal.ofReal ↑p = ↑p
+· 使用定理 `NNReal.coe_pow`：coe_pow (r : Real>=0) (n : Nat) : ((r ^ n : Real>=0) : R
+eal) = (r : Real) ^ n
+· 使用定理 `NNReal.coe_mk`：∀ (a : ℝ) (ha : 0 ≤ a), ↑(NNReal.mk a ha) = a
 -/
-theorem ofReal_pow {p : Real} (hp : 0 <= p) (n : Nat) :
+theorem ofReal_pow {p : ℝ} (hp : 0 ≤ p) (n : ℕ) :
     ENNReal.ofReal (p ^ n) = ENNReal.ofReal p ^ n := by
-  rw [ofReal_eq_coe_nnreal hp]; rw [← coe_pow]; rw [← ofReal_coe_nnreal]; rw [NNReal.coe_pow]; rw [NNReal.coe_mk]
-
-/--
-theorem `ofReal_nsmul` / 定理 `ofReal_nsmul`
-
-English:
-theorem ofReal_nsmul
-  given: {x : Real} {n : Nat}
-  statement: ENNReal.ofReal (n • x) = n • ENNReal.ofReal x
-  proof: by
-  simp only [nsmul_eq_mul, ← ofReal_natCast n, ← ofReal_mul n.cast_nonneg]
-
-@[simp]
-
-中文:
-定理 of实数_nsmul
-  条件: {x : 实数} {n : 自然数}
-  结论: 广义非负实数.of实数 (n • x) = n • 广义非负实数.of实数 x
-  证明: by
-  simp only [nsmul_eq_mul, ← ofReal_natCast n, ← ofReal_mul n.cast_nonneg]
-
-@[simp]
-
-Depends on / 依赖: cast_nonneg, n.cast_nonneg, nsmul_eq_mul, ofReal_mul, ofReal_natCast
+  rw [ofReal_eq_coe_nnreal hp, ← coe_pow, ← ofReal_coe_nnreal, NNReal.coe_pow, NNReal.coe_mk]
+/-
+**ENNReal.ofReal_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：ofReal_nsmul {x : Real} {n : Nat} : ENNReal.ofReal (n • x) = n • ENNReal.o
+fReal x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.ofReal_natCast`：∀ (n : ℕ), ENNReal.ofReal ↑n = ↑n
+· 使用定理 `ENNReal.ofReal_mul`：ofReal_mul {p q : Real} (hp : 0 <= p) : ENNReal.ofRe
+al (p * q) = ENNReal.ofReal p * ENNReal.ofReal q
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofReal_nsmul {x : Real} {n : Nat} : ENNReal.ofReal (n • x) = n • ENNReal.ofReal x := by
+theorem ofReal_nsmul {x : ℝ} {n : ℕ} : ENNReal.ofReal (n • x) = n • ENNReal.ofReal x := by
   simp only [nsmul_eq_mul, ← ofReal_natCast n, ← ofReal_mul n.cast_nonneg]
 
 @[simp]
-/--
-theorem `toNNReal_mul` / 定理 `toNNReal_mul`
-
-English:
-theorem toNNReal_mul
-  given: {a b : Real>=0∞}
-  statement: (a * b).toNNReal = a.toNNReal * b.toNNReal
-  proof: WithTop.untopD_zero_mul a b
-
-中文:
-定理 toNN实数_mul
-  条件: {a b : 实数>=0∞}
-  结论: (a * b).toNN实数 = a.toNN实数 * b.toNN实数
-  证明: WithTop.untopD_zero_mul a b
-
-Depends on / 依赖: WithTop, WithTop.untopD_zero_mul, untopD_zero_mul
+/-
+**ENNReal.toNNReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_mul {a b : Real>=0∞} : (a * b).toNNReal = a.toNNReal * b.toNNReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithTop.untopD_zero_mul`：untopD_zero_mul (a b : WithTop α) : (a * b).unt
+opD 0 = a.untopD 0 * b.untopD 0
 -/
-theorem toNNReal_mul {a b : Real>=0∞} : (a * b).toNNReal = a.toNNReal * b.toNNReal :=
+theorem toNNReal_mul {a b : ℝ≥0∞} : (a * b).toNNReal = a.toNNReal * b.toNNReal :=
   WithTop.untopD_zero_mul a b
-
-/--
-theorem `toNNReal_mul_top` / 定理 `toNNReal_mul_top`
-
-English:
-theorem toNNReal_mul_top
-  given: (a : Real>=0∞)
-  statement: ENNReal.toNNReal (a * ∞) = 0
-  proof: by simp
-
-中文:
-定理 toNN实数_mul_top
-  条件: (a : 实数>=0∞)
-  结论: 广义非负实数.toNN实数 (a * ∞) = 0
-  证明: by simp
+/-
+**ENNReal.toNNReal_mul_top** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_mul_top (a : Real>=0∞) : ENNReal.toNNReal (a * ∞) = 0
+参数：a : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toNNReal_mul`：toNNReal_mul {a b : Real>=0∞} : (a * b).toNNReal =
+ a.toNNReal * b.toNNReal
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toNNReal_mul_top (a : Real>=0∞) : ENNReal.toNNReal (a * ∞) = 0 := by simp
-
-/--
-theorem `toNNReal_top_mul` / 定理 `toNNReal_top_mul`
-
-English:
-theorem toNNReal_top_mul
-  given: (a : Real>=0∞)
-  statement: ENNReal.toNNReal (∞ * a) = 0
-  proof: by simp
-
-中文:
-定理 toNN实数_top_mul
-  条件: (a : 实数>=0∞)
-  结论: 广义非负实数.toNN实数 (∞ * a) = 0
-  证明: by simp
+theorem toNNReal_mul_top (a : ℝ≥0∞) : ENNReal.toNNReal (a * ∞) = 0 := by simp
+/-
+**ENNReal.toNNReal_top_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_top_mul (a : Real>=0∞) : ENNReal.toNNReal (∞ * a) = 0
+参数：a : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toNNReal_mul`：toNNReal_mul {a b : Real>=0∞} : (a * b).toNNReal =
+ a.toNNReal * b.toNNReal
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toNNReal_top_mul (a : Real>=0∞) : ENNReal.toNNReal (∞ * a) = 0 := by simp
+theorem toNNReal_top_mul (a : ℝ≥0∞) : ENNReal.toNNReal (∞ * a) = 0 := by simp
 
-/--
-Definition of `toNNRealHom` / `toNNRealHom` 的定义
+/-- `ENNReal.toNNReal` as a `MonoidHom`. -/
+/-
+**ENNReal.toNNRealHom** 是 Mathlib 中的一个定义，位于命名空间 `ENNReal`。
+形式化陈述：toNNRealHom : Real>=0∞ ->*₀ Real>=0 where toFun
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toNNReal_zero`：ENNReal.toNNReal 0 = 0
+· 使用定理 `ENNReal.toNNReal_mul`：toNNReal_mul {a b : Real>=0∞} : (a * b).toNNReal =
+ a.toNNReal * b.toNNReal
 
-English:
-definition toNNRealHom
-  signature: : Real>=0∞ ->*₀ Real>=0 where
-  body: ENNReal.toNNReal
-  map_one' := toNNReal_coe _
-  map_mul' _ _ := toNNReal_mul
-  map_zero' := toNNReal_zero
-
-@[simp]
-
-中文:
-定义 toNN实数Hom
-  签名: : 实数>=0∞ ->*₀ 实数>=0 where
-  定义体: ENNReal.toNNReal
-  map_one' := toNNReal_coe _
-  map_mul' _ _ := toNNReal_mul
-  map_zero' := toNNReal_zero
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.toNNReal, toNNReal
+--- 原说明 ---
+`ENNReal.toNNReal` as a `MonoidHom`.
 -/
-noncomputable def toNNRealHom : Real>=0∞ ->*₀ Real>=0 where
+noncomputable def toNNRealHom : ℝ≥0∞ →*₀ ℝ≥0 where
   toFun := ENNReal.toNNReal
   map_one' := toNNReal_coe _
   map_mul' _ _ := toNNReal_mul
   map_zero' := toNNReal_zero
 
 @[simp]
-/--
-theorem `toNNReal_pow` / 定理 `toNNReal_pow`
-
-English:
-theorem toNNReal_pow
-  given: (a : Real>=0∞) (n : Nat)
-  statement: (a ^ n).toNNReal = a.toNNReal ^ n
-  proof: toNNRealHom.map_pow a n
-
-中文:
-定理 toNN实数_pow
-  条件: (a : 实数>=0∞) (n : 自然数)
-  结论: (a ^ n).toNN实数 = a.toNN实数 ^ n
-  证明: toNNRealHom.map_pow a n
-
-Depends on / 依赖: map_pow, toNNRealHom, toNNRealHom.map_pow
+/-
+**ENNReal.toNNReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toNNReal_pow (a : Real>=0∞) (n : Nat) : (a ^ n).toNNReal = a.toNNReal ^ n
+参数：a : Real>=0∞；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
 -/
-theorem toNNReal_pow (a : Real>=0∞) (n : Nat) : (a ^ n).toNNReal = a.toNNReal ^ n :=
+theorem toNNReal_pow (a : ℝ≥0∞) (n : ℕ) : (a ^ n).toNNReal = a.toNNReal ^ n :=
   toNNRealHom.map_pow a n
 
-/--
-Definition of `toRealHom` / `toRealHom` 的定义
+/-- `ENNReal.toReal` as a `MonoidHom`. -/
+/-
+**ENNReal.toRealHom** 是 Mathlib 中的一个定义，位于命名空间 `ENNReal`。
+形式化陈述：toRealHom : Real>=0∞ ->*₀ Real
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRealHom
-  signature: : Real>=0∞ ->*₀ Real
-  body: (.ofClass NNReal.toRealHom : Real>=0 ->*₀ Real).comp toNNRealHom
-
-@[simp]
-
-中文:
-定义 to实数Hom
-  签名: : 实数>=0∞ ->*₀ 实数
-  定义体: (.ofClass NNReal.toRealHom : Real>=0 ->*₀ Real).comp toNNRealHom
-
-@[simp]
-
-Depends on / 依赖: NNReal, NNReal.toRealHom, ofClass, toNNRealHom, toRealHom
+--- 原说明 ---
+`ENNReal.toReal` as a `MonoidHom`.
 -/
-noncomputable def toRealHom : Real>=0∞ ->*₀ Real :=
-  (.ofClass NNReal.toRealHom : Real>=0 ->*₀ Real).comp toNNRealHom
+noncomputable def toRealHom : ℝ≥0∞ →*₀ ℝ :=
+  (.ofClass NNReal.toRealHom : ℝ≥0 →*₀ ℝ).comp toNNRealHom
 
 @[simp]
-/--
-theorem `toReal_mul` / 定理 `toReal_mul`
-
-English:
-theorem toReal_mul
-  statement: (a * b).toReal = a.toReal * b.toReal
-  proof: toRealHom.map_mul a b
-
-中文:
-定理 to实数_mul
-  结论: (a * b).to实数 = a.to实数 * b.to实数
-  证明: toRealHom.map_mul a b
-
-Depends on / 依赖: map_mul, toRealHom, toRealHom.map_mul
+/-
+**ENNReal.toReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_mul : (a * b).toReal = a.toReal * b.toReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_mul`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZe
+roOneClass α] [inst_1 : MulZeroOneClass β] (f : α →*₀ β) (a b : α),   f (a * b) 
+= f a * f b
 -/
 theorem toReal_mul : (a * b).toReal = a.toReal * b.toReal :=
   toRealHom.map_mul a b
-
-/--
-theorem `toReal_nsmul` / 定理 `toReal_nsmul`
-
-English:
-theorem toReal_nsmul
-  given: (a : Real>=0∞) (n : Nat)
-  statement: (n • a).toReal = n • a.toReal
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 to实数_nsmul
-  条件: (a : 实数>=0∞) (n : 自然数)
-  结论: (n • a).to实数 = n • a.to实数
-  证明: by simp
-
-@[simp]
+/-
+**ENNReal.toReal_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_nsmul (a : Real>=0∞) (n : Nat) : (n • a).toReal = n • a.toReal
+参数：a : Real>=0∞；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `ENNReal.toReal_mul`：toReal_mul : (a * b).toReal = a.toReal * b.toReal
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ENNReal.toReal_natCast`：toReal_natCast (n : Nat) : (n : Real>=0∞).toReal
+ = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toReal_nsmul (a : Real>=0∞) (n : Nat) : (n • a).toReal = n • a.toReal := by simp
+theorem toReal_nsmul (a : ℝ≥0∞) (n : ℕ) : (n • a).toReal = n • a.toReal := by simp
 
 @[simp]
-/--
-theorem `toReal_pow` / 定理 `toReal_pow`
-
-English:
-theorem toReal_pow
-  given: (a : Real>=0∞) (n : Nat)
-  statement: (a ^ n).toReal = a.toReal ^ n
-  proof: toRealHom.map_pow a n
-
-中文:
-定理 to实数_pow
-  条件: (a : 实数>=0∞) (n : 自然数)
-  结论: (a ^ n).to实数 = a.to实数 ^ n
-  证明: toRealHom.map_pow a n
-
-Depends on / 依赖: map_pow, toRealHom, toRealHom.map_pow
+/-
+**ENNReal.toReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_pow (a : Real>=0∞) (n : Nat) : (a ^ n).toReal = a.toReal ^ n
+参数：a : Real>=0∞；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
 -/
-theorem toReal_pow (a : Real>=0∞) (n : Nat) : (a ^ n).toReal = a.toReal ^ n :=
+theorem toReal_pow (a : ℝ≥0∞) (n : ℕ) : (a ^ n).toReal = a.toReal ^ n :=
   toRealHom.map_pow a n
-
-/--
-theorem `toReal_ofReal_mul` / 定理 `toReal_ofReal_mul`
-
-English:
-theorem toReal_ofReal_mul
-  given: (c : Real) (a : Real>=0∞) (h : 0 <= c)
-  proof: by
-  rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal h]
-
-中文:
-定理 to实数_of实数_mul
-  条件: (c : 实数) (a : 实数>=0∞) (h : 0 <= c)
-  证明: by
-  rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal h]
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_mul, ENNReal.toReal_ofReal, toReal_mul, toReal_ofReal
+/-
+**ENNReal.toReal_ofReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_ofReal_mul (c : Real) (a : Real>=0∞) (h : 0 <= c) : ENNReal.toReal 
+(ENNReal.ofReal c * a) = c * ENNReal.toReal a
+参数：c : Real；a : Real>=0∞；h : 0 <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_mul`：toReal_mul : (a * b).toReal = a.toReal * b.toReal
+· 使用定理 `ENNReal.toReal_ofReal`：toReal_ofReal {r : Real} (h : 0 <= r) : (ENNReal.
+ofReal r).toReal = r
 -/
-theorem toReal_ofReal_mul (c : Real) (a : Real>=0∞) (h : 0 <= c) :
+theorem toReal_ofReal_mul (c : ℝ) (a : ℝ≥0∞) (h : 0 ≤ c) :
     ENNReal.toReal (ENNReal.ofReal c * a) = c * ENNReal.toReal a := by
-  rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal h]
-
-/--
-theorem `toReal_mul_top` / 定理 `toReal_mul_top`
-
-English:
-theorem toReal_mul_top
-  given: (a : Real>=0∞)
-  statement: ENNReal.toReal (a * ∞) = 0
-  proof: by
-  rw [toReal_mul]; rw [toReal_top]; rw [mul_zero]
-
-中文:
-定理 to实数_mul_top
-  条件: (a : 实数>=0∞)
-  结论: 广义非负实数.to实数 (a * ∞) = 0
-  证明: by
-  rw [toReal_mul]; rw [toReal_top]; rw [mul_zero]
-
-Depends on / 依赖: mul_zero, toReal_mul, toReal_top
+  rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal h]
+/-
+**ENNReal.toReal_mul_top** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_mul_top (a : Real>=0∞) : ENNReal.toReal (a * ∞) = 0
+参数：a : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_mul`：toReal_mul : (a * b).toReal = a.toReal * b.toReal
+· 使用定理 `ENNReal.toReal_top`：⊤.toReal = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem toReal_mul_top (a : Real>=0∞) : ENNReal.toReal (a * ∞) = 0 := by
-  rw [toReal_mul]; rw [toReal_top]; rw [mul_zero]
-
-/--
-theorem `toReal_top_mul` / 定理 `toReal_top_mul`
-
-English:
-theorem toReal_top_mul
-  given: (a : Real>=0∞)
-  statement: ENNReal.toReal (∞ * a) = 0
-  proof: by
+theorem toReal_mul_top (a : ℝ≥0∞) : ENNReal.toReal (a * ∞) = 0 := by
+  rw [toReal_mul, toReal_top, mul_zero]
+/-
+**ENNReal.toReal_top_mul** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_top_mul (a : Real>=0∞) : ENNReal.toReal (∞ * a) = 0
+参数：a : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `ENNReal.toReal_mul_top`：toReal_mul_top (a : Real>=0∞) : ENNReal.toReal (
+a * ∞) = 0
+-/
+theorem toReal_top_mul (a : ℝ≥0∞) : ENNReal.toReal (∞ * a) = 0 := by
   rw [mul_comm]
   exact toReal_mul_top _
-
-中文:
-定理 to实数_top_mul
-  条件: (a : 实数>=0∞)
-  结论: 广义非负实数.to实数 (∞ * a) = 0
-  证明: by
-  rw [mul_comm]
-  exact toReal_mul_top _
-
-Depends on / 依赖: mul_comm, toReal_mul_top
+/-
+**ENNReal.trichotomy** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ (p : ENNReal), p = 0 ∨ p = ⊤ ∨ 0 < p.toReal
+参数：p : ENNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_pos`：toReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a
+ != ∞) : 0 < a.toReal
 -/
-theorem toReal_top_mul (a : Real>=0∞) : ENNReal.toReal (∞ * a) = 0 := by
-  rw [mul_comm]
-  exact toReal_mul_top _
-
-/--
-theorem `trichotomy` / 定理 `trichotomy`
-
-English:
-theorem trichotomy
-  given: (p : Real>=0∞)
-  statement: p = 0 ∨ p = ∞ ∨ 0 < p.toReal
-  proof: by
+protected theorem trichotomy (p : ℝ≥0∞) : p = 0 ∨ p = ∞ ∨ 0 < p.toReal := by
   simpa only [or_iff_not_imp_left] using toReal_pos
-
-中文:
-定理 trichotomy
-  条件: (p : 实数>=0∞)
-  结论: p = 0 ∨ p = ∞ ∨ 0 < p.to实数
-  证明: by
-  simpa only [or_iff_not_imp_left] using toReal_pos
+/-
+**ENNReal.trichotomy** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ (p : ENNReal), p = 0 ∨ p = ⊤ ∨ 0 < p.toReal
+参数：p : ENNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_pos`：toReal_pos {a : Real>=0∞} (ha₀ : a != 0) (ha_top : a
+ != ∞) : 0 < a.toReal
 -/
-protected theorem trichotomy (p : Real>=0∞) : p = 0 ∨ p = ∞ ∨ 0 < p.toReal := by
-  simpa only [or_iff_not_imp_left] using toReal_pos
-
-/--
-theorem `trichotomy₂` / 定理 `trichotomy₂`
-
-English:
-theorem trichotomy₂
-  given: {p q : Real>=0∞} (hpq : p <= q)
-  proof: by
-  rcases eq_or_lt_of_le (bot_le : 0 <= p) with ((rfl : 0 = p) | (hp : 0 < p))
-  · simpa using q.trichotomy
-  rcases eq_or_lt_of_le (le_top : q <= ∞) with (rfl | hq)
-  · simpa using p.trichotomy
-  have hq' : 0 < q := lt_of_lt_of_le hp hpq
-  have hp' : p < ∞ := lt_of_le_of_lt hpq hq
-  simp [ENNReal.toReal_mono hq.ne hpq, ENNReal.toReal_pos_iff, hp, hp', hq', hq]
-
-中文:
-定理 trichotomy₂
-  条件: {p q : 实数>=0∞} (hpq : p <= q)
-  证明: by
-  rcases eq_or_lt_of_le (bot_le : 0 <= p) with ((rfl : 0 = p) | (hp : 0 < p))
-  · simpa using q.trichotomy
-  rcases eq_or_lt_of_le (le_top : q <= ∞) with (rfl | hq)
-  · simpa using p.trichotomy
-  have hq' : 0 < q := lt_of_lt_of_le hp hpq
-  have hp' : p < ∞ := lt_of_le_of_lt hpq hq
-  simp [ENNReal.toReal_mono hq.ne hpq, ENNReal.toReal_pos_iff, hp, hp', hq', hq]
--/
-protected theorem trichotomy₂ {p q : Real>=0∞} (hpq : p <= q) :
+protected theorem trichotomy₂ {p q : ℝ≥0∞} (hpq : p ≤ q) :
     p = 0 ∧ q = 0 ∨
       p = 0 ∧ q = ∞ ∨
         p = 0 ∧ 0 < q.toReal ∨
           p = ∞ ∧ q = ∞ ∨
-            0 < p.toReal ∧ q = ∞ ∨ 0 < p.toReal ∧ 0 < q.toReal ∧ p.toReal <= q.toReal := by
-  rcases eq_or_lt_of_le (bot_le : 0 <= p) with ((rfl : 0 = p) | (hp : 0 < p))
+            0 < p.toReal ∧ q = ∞ ∨ 0 < p.toReal ∧ 0 < q.toReal ∧ p.toReal ≤ q.toReal := by
+  rcases eq_or_lt_of_le (bot_le : 0 ≤ p) with ((rfl : 0 = p) | (hp : 0 < p))
   · simpa using q.trichotomy
-  rcases eq_or_lt_of_le (le_top : q <= ∞) with (rfl | hq)
+  rcases eq_or_lt_of_le (le_top : q ≤ ∞) with (rfl | hq)
   · simpa using p.trichotomy
   have hq' : 0 < q := lt_of_lt_of_le hp hpq
   have hp' : p < ∞ := lt_of_le_of_lt hpq hq
   simp [ENNReal.toReal_mono hq.ne hpq, ENNReal.toReal_pos_iff, hp, hp', hq', hq]
-
-/--
-theorem `dichotomy` / 定理 `dichotomy`
-
-English:
-theorem dichotomy
-  given: (p : Real>=0∞) [Fact (1 <= p)]
-  statement: p = ∞ ∨ 1 <= p.toReal
-  proof: haveI : p = ⊤ ∨ 0 < p.toReal ∧ 1 <= p.toReal := by
-    simpa using ENNReal.trichotomy₂ (Fact.out : 1 <= p)
-  this.imp_right fun h => h.2
-
-中文:
-定理 dichotomy
-  条件: (p : 实数>=0∞) [Fact (1 <= p)]
-  结论: p = ∞ ∨ 1 <= p.to实数
-  证明: haveI : p = ⊤ ∨ 0 < p.toReal ∧ 1 <= p.toReal := by
-    simpa using ENNReal.trichotomy₂ (Fact.out : 1 <= p)
-  this.imp_right fun h => h.2
+/-
+**ENNReal.dichotomy** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：∀ (p : ENNReal) [Fact (1 ≤ p)], p = ⊤ ∨ 1 ≤ p.toReal
+参数：p : ENNReal；1 ≤ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `ENNReal.trichotomy₂`：∀ {p q : ENNReal},   p ≤ q →     p = 0 ∧ q = 0 ∨   
+    p = 0 ∧ q = ⊤ ∨         p = 0 ∧ 0 < q.toReal ∨ p = ⊤ ∧ q = ⊤ ∨ 0 < p.toReal 
+∧ q = ⊤ ∨…
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
-protected theorem dichotomy (p : Real>=0∞) [Fact (1 <= p)] : p = ∞ ∨ 1 <= p.toReal :=
-  haveI : p = ⊤ ∨ 0 < p.toReal ∧ 1 <= p.toReal := by
-    simpa using ENNReal.trichotomy₂ (Fact.out : 1 <= p)
+protected theorem dichotomy (p : ℝ≥0∞) [Fact (1 ≤ p)] : p = ∞ ∨ 1 ≤ p.toReal :=
+  haveI : p = ⊤ ∨ 0 < p.toReal ∧ 1 ≤ p.toReal := by
+    simpa using ENNReal.trichotomy₂ (Fact.out : 1 ≤ p)
   this.imp_right fun h => h.2
-
-/--
-theorem `toReal_pos_iff_ne_top` / 定理 `toReal_pos_iff_ne_top`
-
-English:
-theorem toReal_pos_iff_ne_top
-  given: (p : Real>=0∞) [Fact (1 <= p)]
-  statement: 0 < p.toReal ↔ p != ∞
-  proof: ⟨fun h hp =>
-    have : (0 : Real) != 0 := toReal_top ▸ (hp ▸ h.ne : 0 != ∞.toReal)
-    this rfl,
-    fun h => zero_lt_one.trans_le (p.dichotomy.resolve_left h)⟩
-
-中文:
-定理 to实数_pos_iff_ne_top
-  条件: (p : 实数>=0∞) [Fact (1 <= p)]
-  结论: 0 < p.to实数 ↔ p != ∞
-  证明: ⟨fun h hp =>
-    have : (0 : Real) != 0 := toReal_top ▸ (hp ▸ h.ne : 0 != ∞.toReal)
-    this rfl,
-    fun h => zero_lt_one.trans_le (p.dichotomy.resolve_left h)⟩
-
-Depends on / 依赖: dichotomy, h.ne, p.dichotomy.resolve_left, resolve_left, toReal, toReal_top, trans_le, zero_lt_one, zero_lt_one.trans_le
+/-
+**ENNReal.toReal_pos_iff_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：toReal_pos_iff_ne_top (p : Real>=0∞) [Fact (1 <= p)] : 0 < p.toReal ↔ p !=
+ ∞
+参数：p : Real>=0∞；1 <= p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `ENNReal.toReal_top`：⊤.toReal = 0
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `ENNReal.dichotomy`：∀ (p : ENNReal) [Fact (1 ≤ p)], p = ⊤ ∨ 1 ≤ p.toReal
 -/
-theorem toReal_pos_iff_ne_top (p : Real>=0∞) [Fact (1 <= p)] : 0 < p.toReal ↔ p != ∞ :=
+theorem toReal_pos_iff_ne_top (p : ℝ≥0∞) [Fact (1 ≤ p)] : 0 < p.toReal ↔ p ≠ ∞ :=
   ⟨fun h hp =>
-    have : (0 : Real) != 0 := toReal_top ▸ (hp ▸ h.ne : 0 != ∞.toReal)
+    have : (0 : ℝ) ≠ 0 := toReal_top ▸ (hp ▸ h.ne : 0 ≠ ∞.toReal)
     this rfl,
     fun h => zero_lt_one.trans_le (p.dichotomy.resolve_left h)⟩
 
@@ -1988,7 +1481,7 @@ open Lean Meta Qq
 meta def evalENNRealOfReal : PositivityExt where eval {u α} _zα pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Real>=0∞), ~q(ENNReal.ofReal $a) =>
+  | 0, ~q(ℝ≥0∞), ~q(ENNReal.ofReal $a) =>
     assertInstancesCommute
     let ra ← core q(inferInstance) (some q(inferInstance)) a
     match ra with
@@ -1996,3 +1489,4 @@ meta def evalENNRealOfReal : PositivityExt where eval {u α} _zα pα? e :=
     | _ => pure .none
   | _, _, _ => throwError "not ENNReal.ofReal"
 end Mathlib.Meta.Positivity
+

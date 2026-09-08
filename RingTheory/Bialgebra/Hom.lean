@@ -32,48 +32,51 @@ open TensorProduct Bialgebra Coalgebra Function
 
 universe u v w
 
-/--
-Definition of `BialgHom` / `BialgHom` 的定义
+/-- Given `R`-algebras `A, B` with comultiplication maps `Δ_A, Δ_B` and counit maps
+`ε_A, ε_B`, an `R`-bialgebra homomorphism `A →ₐc[R] B` is an `R`-algebra map `f` such that
+`ε_B ∘ f = ε_A` and `(f ⊗ f) ∘ Δ_A = Δ_B ∘ f`. -/
+/-
+**BialgHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) →     (B : Type u_3) →       [inst : Com
+mSemiring R] →         [inst_1 : Semiring A] →           [inst_2 : Algebra R A] 
+→             [inst_3 : Semiring B] →               [inst_4 : Algebra R B] → [Co
+algebraStruct R A] → [CoalgebraStruct R B] → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BialgHom
-  parameters: (R A B : Type*) [CommSemiring R]
-  extends: A ->ₗc[R] B, A ->* B
-  (no additional axioms)
-
-中文:
-结构 Bialg态射
-  参数: (R A B : 类型) [交换半环 R]
-  继承: A ->ₗc[R] B, A ->* B
-  (无附加公理)
+--- 原说明 ---
+Given `R`-algebras `A, B` with comultiplication maps `Δ_A, Δ_B` and counit maps
+`ε_A, ε_B`, an `R`-bialgebra homomorphism `A →ₐc[R] B` is an `R`-algebra map `f`
+ such that
+`ε_B ∘ f = ε_A` and `(f ⊗ f) ∘ Δ_A = Δ_B ∘ f`.
 -/
 structure BialgHom (R A B : Type*) [CommSemiring R]
     [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
-    [CoalgebraStruct R A] [CoalgebraStruct R B] extends A ->ₗc[R] B, A ->* B
+    [CoalgebraStruct R A] [CoalgebraStruct R B] extends A →ₗc[R] B, A →* B
 
 /-- Reinterpret a `BialgHom` as a `MonoidHom` -/
 add_decl_doc BialgHom.toMonoidHom
 
 @[inherit_doc BialgHom]
-infixr:25 " ->ₐc " => BialgHom _
+infixr:25 " →ₐc " => BialgHom _
 
 @[inherit_doc]
-notation:25 A " ->ₐc[" R "] " B => BialgHom R A B
+notation:25 A " →ₐc[" R "] " B => BialgHom R A B
 
-/--
-Definition of `BialgHomClass` / `BialgHomClass` 的定义
+/-- `BialgHomClass F R A B` asserts `F` is a type of bundled bialgebra homomorphisms
+from `A` to `B`. -/
+/-
+**BialgHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (R : outParam (Type u_2)) →     (A : outParam (Type u_3
+)) →       (B : outParam (Type u_4)) →         [inst : CommSemiring R] →        
+   [inst_1 : Semiring A] →             [inst_2 : Algebra R A] →               [i
+nst_3 : Semiring B] →                 [inst_4 : Algebra R B] → [CoalgebraStruct 
+R A] → [CoalgebraStruct R B] → [FunLike F A B] → Prop
+参数：Type u_2；Type u_3；Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BialgHomClass
-  parameters: (F : Type*) (R A B : outParam Type*)
-  extends: CoalgHomClass F R A B, MonoidHomClass F A B
-  (no additional axioms)
-
-中文:
-类 Bialg态射类
-  参数: (F : 类型) (R A B : outParam 类型)
-  继承: 余alg态射类 F R A B, 幺半群态射类 F A B
-  (无附加公理)
+--- 原说明 ---
+`BialgHomClass F R A B` asserts `F` is a type of bundled bialgebra homomorphisms
+from `A` to `B`.
 -/
 class BialgHomClass (F : Type*) (R A B : outParam Type*)
     [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
@@ -91,6 +94,10 @@ variable [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
   [BialgHomClass F R A B]
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**BialgHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `BialgHomClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toAlgHomClass : AlgHomClass F R A B where
   map_mul := map_mul
   map_one := map_one
@@ -102,44 +109,34 @@ instance (priority := 100) toAlgHomClass : AlgHomClass F R A B where
 /-- Turn an element of a type `F` satisfying `BialgHomClass F R A B` into an actual
 `BialgHom`. This is declared as the default coercion from `F` to `A →ₐc[R] B`. -/
 @[coe]
-/--
-Definition of `toBialgHom` / `toBialgHom` 的定义
+/-
+**BialgHomClass.toBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `BialgHomClass`。
+形式化陈述：toBialgHom (f : F) : A ->ₐc[R] B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
+· 使用定理 `BialgHomClass.toAlgHomClass`：∀ {R : Type u_1} {A : Type u_2} {B : Type u
+_3} {F : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Alg
+ebra R A] [inst_3…
 
-English:
-definition toBialgHom
-  signature: (f : F)
-  body: { CoalgHomClass.toCoalgHom f, AlgHomClass.toAlgHom f with
-    toFun := f }
-
-中文:
-定义 toBialgHom
-  签名: (f : F)
-  定义体: { CoalgHomClass.toCoalgHom f, AlgHomClass.toAlgHom f with
-    toFun := f }
-
-Depends on / 依赖: AlgHomClass, AlgHomClass.toAlgHom, CoalgHomClass, CoalgHomClass.toCoalgHom, toAlgHom, toCoalgHom
+--- 原说明 ---
+Turn an element of a type `F` satisfying `BialgHomClass F R A B` into an actual
+`BialgHom`. This is declared as the default coercion from `F` to `A →ₐc[R] B`.
 -/
-def toBialgHom (f : F) : A ->ₐc[R] B :=
+def toBialgHom (f : F) : A →ₐc[R] B :=
   { CoalgHomClass.toCoalgHom f, AlgHomClass.toAlgHom f with
     toFun := f }
-
-/--
-Instance `instCoeToBialgHom` / 实例 `instCoeToBialgHom`
-
-English:
-instance instCoeToBialgHom
-  signature: :
-  body: ⟨BialgHomClass.toBialgHom⟩
-
-中文:
-实例 instCoeToBialgHom
-  签名: :
-  定义体: ⟨BialgHomClass.toBialgHom⟩
-
-Depends on / 依赖: BialgHomClass, BialgHomClass.toBialgHom, toBialgHom
+/-
+**BialgHomClass.instCoeToBialgHom** 是 Mathlib 中的一个实例，位于命名空间 `BialgHomClass`。
+形式化陈述：instCoeToBialgHom : CoeHead F (A ->ₐc[R] B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoeToBialgHom :
-    CoeHead F (A ->ₐc[R] B) :=
+    CoeHead F (A →ₐc[R] B) :=
   ⟨BialgHomClass.toBialgHom⟩
 
 end
@@ -148,44 +145,52 @@ variable [CommSemiring R] [Semiring A] [Bialgebra R A] [Semiring B] [Bialgebra R
   [FunLike F A B] [BialgHomClass F R A B]
 
 @[simp]
-/--
-theorem `counitAlgHom_comp` / 定理 `counitAlgHom_comp`
-
-English:
-theorem counitAlgHom_comp
-  given: (f : F)
-  proof: AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
-
-@[simp]
-
-中文:
-定理 counitAlgHom_comp
-  条件: (f : F)
-  证明: AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, CoalgHomClass, CoalgHomClass.counit_comp, counit_comp, toLinearMap_injective
+/-
+**BialgHomClass.counitAlgHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `BialgHomClass`。
+形式化陈述：counitAlgHom_comp (f : F) : (counitAlgHom R B).comp (AlgHomClass.toAlgHom 
+f) = counitAlgHom R A
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.toLinearMap_injective`：toLinearMap_injective : Function.Injective
+ (toLinearMap : _ -> A ->ₗ[R] B)
+· 使用定理 `BialgHomClass.toAlgHomClass`：∀ {R : Type u_1} {A : Type u_2} {B : Type u
+_3} {F : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Alg
+ebra R A] [inst_3…
+· 使用定理 `CoalgHomClass.counit_comp`：∀ {F : Type u_1} {R : outParam (Type u_2)} {A
+ : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {ins
+t_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
 theorem counitAlgHom_comp (f : F) :
     (counitAlgHom R B).comp (AlgHomClass.toAlgHom f) = counitAlgHom R A :=
   AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
 
 @[simp]
-/--
-theorem `map_comp_comulAlgHom` / 定理 `map_comp_comulAlgHom`
-
-English:
-theorem map_comp_comulAlgHom
-  given: (f : F)
-  proof: AlgHom.toLinearMap_injective (CoalgHomClass.map_comp_comul f)
-
-中文:
-定理 map_comp_comulAlgHom
-  条件: (f : F)
-  证明: AlgHom.toLinearMap_injective (CoalgHomClass.map_comp_comul f)
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, CoalgHomClass, CoalgHomClass.map_comp_comul, map_comp_comul, toLinearMap_injective
+/-
+**BialgHomClass.map_comp_comulAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHomClass`。
+形式化陈述：map_comp_comulAlgHom (f : F) : (Algebra.TensorProduct.map (AlgHomClass.toA
+lgHom f) (AlgHomClass.toAlgHom f)).comp (comulAlgHom R A) = (comulAlgHom R B).co
+mp (AlgHomClass.toAlgHom f)
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.toLinearMap_injective`：toLinearMap_injective : Function.Injective
+ (toLinearMap : _ -> A ->ₗ[R] B)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `BialgHomClass.toAlgHomClass`：∀ {R : Type u_1} {A : Type u_2} {B : Type u
+_3} {F : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Alg
+ebra R A] [inst_3…
+· 使用定理 `CoalgHomClass.map_comp_comul`：∀ {F : Type u_1} {R : outParam (Type u_2)}
+ {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {
+inst_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
 theorem map_comp_comulAlgHom (f : F) :
     (Algebra.TensorProduct.map (AlgHomClass.toAlgHom f) (AlgHomClass.toAlgHom f)).comp
@@ -204,62 +209,43 @@ section AlgebraCoalgebra
 variable [Algebra R A] [Algebra R B] [Algebra R C] [Algebra R D]
   [CoalgebraStruct R A] [CoalgebraStruct R B] [CoalgebraStruct R C] [CoalgebraStruct R D]
 
-/--
-Instance `funLike` / 实例 `funLike`
-
-English:
-instance funLike
-  signature: : FunLike (A ->ₐc[R] B) A B where
-  body: f.toFun
-  coe_injective f g h := by
-    rcases f with ⟨_, _⟩
-    rcases g with ⟨_, _⟩
-    simp_all
-
-中文:
-实例 funLike
-  签名: : 函数状 (A ->ₐc[R] B) A B where
-  定义体: f.toFun
-  coe_injective f g h := by
-    rcases f with ⟨_, _⟩
-    rcases g with ⟨_, _⟩
-    simp_all
-
-Depends on / 依赖: f.toFun
+/-
+**BialgHom.funLike** 是 Mathlib 中的一个实例，位于命名空间 `BialgHom`。
+形式化陈述：funLike : FunLike (A ->ₐc[R] B) A B where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance funLike : FunLike (A ->ₐc[R] B) A B where
+instance funLike : FunLike (A →ₐc[R] B) A B where
   coe f := f.toFun
   coe_injective f g h := by
     rcases f with ⟨_, _⟩
     rcases g with ⟨_, _⟩
     simp_all
-
-/--
-Instance `bialgHomClass` / 实例 `bialgHomClass`
-
-English:
-instance bialgHomClass
-  signature: : BialgHomClass (A ->ₐc[R] B) R A B where
-  body: fun f => f.map_add'
-  map_smulₛₗ := fun f => f.map_smul'
-  counit_comp := fun f => f.counit_comp
-  map_comp_comul := fun f => f.map_comp_comul
-  map_mul := fun f => f.map_mul'
-  map_one := fun f => f.map_one'
-
-中文:
-实例 bialgHomClass
-  签名: : Bialg态射类 (A ->ₐc[R] B) R A B where
-  定义体: fun f => f.map_add'
-  map_smulₛₗ := fun f => f.map_smul'
-  counit_comp := fun f => f.counit_comp
-  map_comp_comul := fun f => f.map_comp_comul
-  map_mul := fun f => f.map_mul'
-  map_one := fun f => f.map_one'
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**BialgHom.bialgHomClass** 是 Mathlib 中的一个实例，位于命名空间 `BialgHom`。
+形式化陈述：bialgHomClass : BialgHomClass (A ->ₐc[R] B) R A B where map_add
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [inst_
+1 : Add N] (self : M →ₙ+ N) (x y : M),   self.toFun (x + y) = self.toFun x + sel
+f.toF…
+· 使用定理 `LinearMap.map_smul'`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring 
+R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [inst_
+2 : AddCo…
+· 使用定理 `CoalgHom.counit_comp`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [in
+st : CommSemiring R] [inst_1 : AddCommMonoid A]   [inst_2 : _root_.Module R A] [
+inst_3 : A…
+· 使用定理 `CoalgHom.map_comp_comul`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : AddCommMonoid A]   [inst_2 : _root_.Module R A
+] [inst_3 : A…
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
+· 使用定理 `BialgHom.map_one'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
 -/
-instance bialgHomClass : BialgHomClass (A ->ₐc[R] B) R A B where
+instance bialgHomClass : BialgHomClass (A →ₐc[R] B) R A B where
   map_add := fun f => f.map_add'
   map_smulₛₗ := fun f => f.map_smul'
   counit_comp := fun f => f.counit_comp
@@ -267,824 +253,544 @@ instance bialgHomClass : BialgHomClass (A ->ₐc[R] B) R A B where
   map_mul := fun f => f.map_mul'
   map_one := fun f => f.map_one'
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**BialgHom.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom.Simps`。
+形式化陈述：{R : Type u_6} →   {α : Type u_7} →     {β : Type u_8} →       [inst : Com
+mSemiring R] →         [inst_1 : Semiring α] →           [inst_2 : Algebra R α] 
+→             [inst_3 : Semiring β] →               [inst_4 : Algebra R β] →    
+             [inst_5 : CoalgebraStruct R α] → [inst_6 : CoalgebraStruct R β] → (
+α →ₐc[R] β) → α → β
+参数：α →ₐc[R] β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: {R α β : Type*} [CommSemiring R]
-  body: f
-
-initialize_simps_projections BialgHom (toFun -> apply, as_prefix toCoalgHom)
-
-@[simp]
-
-中文:
-定义 Simps.apply
-  签名: {R α β : 类型} [交换半环 R]
-  定义体: f
-
-initialize_simps_projections BialgHom (toFun -> apply, as_prefix toCoalgHom)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.apply {R α β : Type*} [CommSemiring R]
     [Semiring α] [Algebra R α] [Semiring β]
     [Algebra R β] [CoalgebraStruct R α] [CoalgebraStruct R β]
-    (f : α ->ₐc[R] β) : α -> β := f
+    (f : α →ₐc[R] β) : α → β := f
 
-initialize_simps_projections BialgHom (toFun -> apply, as_prefix toCoalgHom)
-
-@[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  given: {F : Type*} [FunLike F A B] [BialgHomClass F R A B] (f : F)
-  proof: rfl
+initialize_simps_projections BialgHom (toFun → apply, as_prefix toCoalgHom)
 
 @[simp]
-
-中文:
-定理 coe_coe
-  条件: {F : 类型} [函数状 F A B] [Bialg态射类 F R A B] (f : F)
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Alge
+bra R B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   {F : Ty
+pe u_6} [inst_7 : FunLike F A B] [inst_8 : BialgHomClass F R A B] (f : F), ⇑↑f =
+ ⇑f
+参数：f : F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_coe {F : Type*} [FunLike F A B] [BialgHomClass F R A B] (f : F) :
-    ⇑(f : A ->ₐc[R] B) = f :=
+    ⇑(f : A →ₐc[R] B) = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: {f : A ->ₗc[R] B} (h h₁)
-  statement: ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A -> B) = f
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_mk
-  条件: {f : A ->ₗc[R] B} (h h₁)
-  结论: ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A -> B) = f
-  证明: rfl
-
-@[norm_cast]
+/-
+**BialgHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_mk {f : A ->ₗc[R] B} (h h₁) : ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A -> B) = 
+f
+参数：h h₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk {f : A ->ₗc[R] B} (h h₁) : ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A -> B) = f :=
+theorem coe_mk {f : A →ₗc[R] B} (h h₁) : ((⟨f, h, h₁⟩ : A →ₐc[R] B) : A → B) = f :=
   rfl
 
 @[norm_cast]
-/--
-theorem `coe_mks` / 定理 `coe_mks`
-
-English:
-theorem coe_mks
-  given: {f : A -> B} (h₀ h₁ h₂ h₃ h₄ h₅)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mks
-  条件: {f : A -> B} (h₀ h₁ h₂ h₃ h₄ h₅)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**BialgHom.coe_mks** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_mks {f : A -> B} (h₀ h₁ h₂ h₃ h₄ h₅) : ⇑(⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, h₄,
+ h₅⟩ : A ->ₐc[R] B) = f
+参数：h₀ h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mks {f : A -> B} (h₀ h₁ h₂ h₃ h₄ h₅) :
-    ⇑(⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, h₄, h₅⟩ : A ->ₐc[R] B) = f :=
+theorem coe_mks {f : A → B} (h₀ h₁ h₂ h₃ h₄ h₅) :
+    ⇑(⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, h₄, h₅⟩ : A →ₐc[R] B) = f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_coalgHom_mk` / 定理 `coe_coalgHom_mk`
-
-English:
-theorem coe_coalgHom_mk
-  given: {f : A ->ₗc[R] B} (h h₁)
-  proof: by
+/-
+**BialgHom.coe_coalgHom_mk** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_coalgHom_mk {f : A ->ₗc[R] B} (h h₁) : ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A
+ ->ₗc[R] B) = f
+参数：h h₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
+-/
+theorem coe_coalgHom_mk {f : A →ₗc[R] B} (h h₁) :
+    ((⟨f, h, h₁⟩ : A →ₐc[R] B) : A →ₗc[R] B) = f := by
   rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 coe_coalgHom_mk
-  条件: {f : A ->ₗc[R] B} (h h₁)
-  证明: by
+/-
+**BialgHom.coe_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_toCoalgHom (f : A ->ₐc[R] B) : ⇑(f : A ->ₗc[R] B) = f
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
+-/
+theorem coe_toCoalgHom (f : A →ₐc[R] B) : ⇑(f : A →ₗc[R] B) = f :=
   rfl
-
-@[simp, norm_cast]
+/-
+**BialgHom.toCoalgHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `BialgHom`。
+形式化陈述：toCoalgHom_apply (f : A ->ₐc[R] B) (a : A) : f.toCoalgHom a = f a
+参数：f : A ->ₐc[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coalgHom_mk {f : A ->ₗc[R] B} (h h₁) :
-    ((⟨f, h, h₁⟩ : A ->ₐc[R] B) : A ->ₗc[R] B) = f := by
-  rfl
+lemma toCoalgHom_apply (f : A →ₐc[R] B) (a : A) : f.toCoalgHom a = f a := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_toCoalgHom` / 定理 `coe_toCoalgHom`
-
-English:
-theorem coe_toCoalgHom
-  given: (f : A ->ₐc[R] B)
-  statement: ⇑(f : A ->ₗc[R] B) = f
-  proof: rfl
-
-中文:
-定理 coe_toCoalgHom
-  条件: (f : A ->ₐc[R] B)
-  结论: ⇑(f : A ->ₗc[R] B) = f
-  证明: rfl
+/-
+**BialgHom.coe_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_toLinearMap (f : A ->ₐc[R] B) : ⇑(f : A ->ₗ[R] B) = f
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-theorem coe_toCoalgHom (f : A ->ₐc[R] B) : ⇑(f : A ->ₗc[R] B) = f :=
-  rfl
-
-/--
-lemma `toCoalgHom_apply` / 引理 `toCoalgHom_apply`
-
-English:
-lemma toCoalgHom_apply
-  given: (f : A ->ₐc[R] B) (a : A)
-  statement: f.toCoalgHom a = f a
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 toCoalgHom_apply
-  条件: (f : A ->ₐc[R] B) (a : A)
-  结论: f.toCoalgHom a = f a
-  证明: rfl
-
-@[simp, norm_cast]
--/
-lemma toCoalgHom_apply (f : A ->ₐc[R] B) (a : A) : f.toCoalgHom a = f a := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_toLinearMap` / 定理 `coe_toLinearMap`
-
-English:
-theorem coe_toLinearMap
-  given: (f : A ->ₐc[R] B)
-  statement: ⇑(f : A ->ₗ[R] B) = f
-  proof: rfl
-
-中文:
-定理 coe_toLinearMap
-  条件: (f : A ->ₐc[R] B)
-  结论: ⇑(f : A ->ₗ[R] B) = f
-  证明: rfl
--/
-theorem coe_toLinearMap (f : A ->ₐc[R] B) : ⇑(f : A ->ₗ[R] B) = f :=
+theorem coe_toLinearMap (f : A →ₐc[R] B) : ⇑(f : A →ₗ[R] B) = f :=
   rfl
 
 /-- Turn a bialgebra homomorphism into an algebra homomorphism. -/
 @[coe]
-/--
-Definition of `toAlgHom` / `toAlgHom` 的定义
+/-
+**BialgHom.toAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom`。
+形式化陈述：toAlgHom (f : A ->ₐc[R] B) : A ->ₐ[R] B where __
+参数：f : A ->ₐc[R] B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.map_one'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
 
-English:
-definition toAlgHom
-  signature: (f : A ->ₐc[R] B)
-  body: f
-  map_zero' := f.map_zero
-  commutes' := by
-    simp [Algebra.algebraMap_eq_smul_one, toCoalgHom_apply]
-
-中文:
-定义 toAlgHom
-  签名: (f : A ->ₐc[R] B)
-  定义体: f
-  map_zero' := f.map_zero
-  commutes' := by
-    simp [Algebra.algebraMap_eq_smul_one, toCoalgHom_apply]
+--- 原说明 ---
+Turn a bialgebra homomorphism into an algebra homomorphism.
 -/
-def toAlgHom (f : A ->ₐc[R] B) : A ->ₐ[R] B where
+def toAlgHom (f : A →ₐc[R] B) : A →ₐ[R] B where
   __ := f
   map_zero' := f.map_zero
   commutes' := by
     simp [Algebra.algebraMap_eq_smul_one, toCoalgHom_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (A ->ₐc[R] B) (A ->ₐ[R] B)
-  body: ⟨toAlgHom⟩
+/-
+**BialgHom.** 是 Mathlib 中的一个实例，位于命名空间 `BialgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Coe (A →ₐc[R] B) (A →ₐ[R] B) := ⟨toAlgHom⟩
 
 @[simp, norm_cast]
-
-中文:
-实例 :
-  签名: Coe (A ->ₐc[R] B) (A ->ₐ[R] B)
-  定义体: ⟨toAlgHom⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: toAlgHom
+/-
+**BialgHom.coe_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_toAlgHom (f : A ->ₐc[R] B) : ⇑(f : A ->ₐ[R] B) = f
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe (A ->ₐc[R] B) (A ->ₐ[R] B) := ⟨toAlgHom⟩
-
-@[simp, norm_cast]
-/--
-theorem `coe_toAlgHom` / 定理 `coe_toAlgHom`
-
-English:
-theorem coe_toAlgHom
-  given: (f : A ->ₐc[R] B)
-  statement: ⇑(f : A ->ₐ[R] B) = f
-  proof: rfl
-
-中文:
-定理 coe_toAlgHom
-  条件: (f : A ->ₐc[R] B)
-  结论: ⇑(f : A ->ₐ[R] B) = f
-  证明: rfl
+theorem coe_toAlgHom (f : A →ₐc[R] B) : ⇑(f : A →ₐ[R] B) = f :=
+  rfl
+/-
+**BialgHom.toAlgHom_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：toAlgHom_toLinearMap (f : A ->ₐc[R] B) : ((f : A ->ₐ[R] B) : A ->ₗ[R] B) =
+ f
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
 -/
-theorem coe_toAlgHom (f : A ->ₐc[R] B) : ⇑(f : A ->ₐ[R] B) = f :=
+theorem toAlgHom_toLinearMap (f : A →ₐc[R] B) :
+    ((f : A →ₐ[R] B) : A →ₗ[R] B) = f := by
   rfl
 
-/--
-theorem `toAlgHom_toLinearMap` / 定理 `toAlgHom_toLinearMap`
-
-English:
-theorem toAlgHom_toLinearMap
-  given: (f : A ->ₐc[R] B)
-  proof: by
-  rfl
-
-中文:
-定理 toAlgHom_toLinearMap
-  条件: (f : A ->ₐc[R] B)
-  证明: by
-  rfl
+variable (φ : A →ₐc[R] B)
+/-
+**BialgHom.coe_fn_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_fn_injective : @Function.Injective (A ->ₐc[R] B) (A -> B) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toAlgHom_toLinearMap (f : A ->ₐc[R] B) :
-    ((f : A ->ₐ[R] B) : A ->ₗ[R] B) = f := by
-  rfl
-
-variable (φ : A ->ₐc[R] B)
-
-/--
-theorem `coe_fn_injective` / 定理 `coe_fn_injective`
-
-English:
-theorem coe_fn_injective
-  statement: @Function.Injective (A ->ₐc[R] B) (A -> B) (↑)
-  proof: DFunLike.coe_injective
-
-中文:
-定理 coe_fn_injective
-  结论: @函数.单射 (A ->ₐc[R] B) (A -> B) (↑)
-  证明: DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
--/
-theorem coe_fn_injective : @Function.Injective (A ->ₐc[R] B) (A -> B) (↑) :=
+theorem coe_fn_injective : @Function.Injective (A →ₐc[R] B) (A → B) (↑) :=
   DFunLike.coe_injective
-
-/--
-theorem `coe_fn_inj` / 定理 `coe_fn_inj`
-
-English:
-theorem coe_fn_inj
-  given: {φ₁ φ₂ : A ->ₐc[R] B}
-  statement: (φ₁ : A -> B) = φ₂ ↔ φ₁ = φ₂
-  proof: DFunLike.coe_fn_eq
-
-中文:
-定理 coe_fn_inj
-  条件: {φ₁ φ₂ : A ->ₐc[R] B}
-  结论: (φ₁ : A -> B) = φ₂ ↔ φ₁ = φ₂
-  证明: DFunLike.coe_fn_eq
-
-Depends on / 依赖: DFunLike, DFunLike.coe_fn_eq, coe_fn_eq
+/-
+**BialgHom.coe_fn_inj** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_fn_inj {φ₁ φ₂ : A ->ₐc[R] B} : (φ₁ : A -> B) = φ₂ ↔ φ₁ = φ₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_fn_eq`：coe_fn_eq {f g : F} : (f : forall a : α, β a) = (g :
+ forall a : α, β a) ↔ f = g
 -/
-theorem coe_fn_inj {φ₁ φ₂ : A ->ₐc[R] B} : (φ₁ : A -> B) = φ₂ ↔ φ₁ = φ₂ :=
+theorem coe_fn_inj {φ₁ φ₂ : A →ₐc[R] B} : (φ₁ : A → B) = φ₂ ↔ φ₁ = φ₂ :=
   DFunLike.coe_fn_eq
-
-/--
-theorem `coe_coalgHom_injective` / 定理 `coe_coalgHom_injective`
-
-English:
-theorem coe_coalgHom_injective
-  statement: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
-  proof: fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₗc[R] B) : A -> B) = ((φ₂ : A ->ₗc[R] B) : A -> B) from congr_arg _ H
-
-中文:
-定理 coe_coalgHom_injective
-  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
-  证明: fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₗc[R] B) : A -> B) = ((φ₂ : A ->ₗc[R] B) : A -> B) from congr_arg _ H
-
-Depends on / 依赖: coe_fn_injective, congr_arg
+/-
+**BialgHom.coe_coalgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_coalgHom_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗc
+[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
+· 使用定理 `BialgHom.coe_fn_injective`：coe_fn_injective : @Function.Injective (A ->ₐ
+c[R] B) (A -> B) (↑)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem coe_coalgHom_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B) :=
-fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₗc[R] B) : A -> B) = ((φ₂ : A ->ₗc[R] B) : A -> B) from congr_arg _ H
-
-/--
-theorem `coe_toAlgHom_injective` / 定理 `coe_toAlgHom_injective`
-
-English:
-theorem coe_toAlgHom_injective
-  statement: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
-  proof: fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₐ[R] B) : A -> B) = ((φ₂ : A ->ₐ[R] B) : A -> B) from congr_arg _ H
+theorem coe_coalgHom_injective : Function.Injective ((↑) : (A →ₐc[R] B) → A →ₗc[R] B) :=
+  fun φ₁ φ₂ H => coe_fn_injective <|
+    show ((φ₁ : A →ₗc[R] B) : A → B) = ((φ₂ : A →ₗc[R] B) : A → B) from congr_arg _ H
+/-
+**BialgHom.coe_toAlgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_toAlgHom_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₐ[
+R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_fn_injective`：coe_fn_injective : @Function.Injective (A ->ₐ
+c[R] B) (A -> B) (↑)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+-/
+theorem coe_toAlgHom_injective : Function.Injective ((↑) : (A →ₐc[R] B) → A →ₐ[R] B) :=
+  fun φ₁ φ₂ H => coe_fn_injective <|
+    show ((φ₁ : A →ₐ[R] B) : A → B) = ((φ₂ : A →ₐ[R] B) : A → B) from congr_arg _ H
 
 @[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
-
-中文:
-定理 coe_toAlgHom_injective
-  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
-  证明: fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₐ[R] B) : A -> B) = ((φ₂ : A ->ₐ[R] B) : A -> B) from congr_arg _ H
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
-
-Depends on / 依赖: coe_fn_injective, congr_arg
+/-
+**BialgHom.coe_linearMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_linearMap_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗ
+[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
+· 使用定理 `CoalgHom.coe_linearMap_injective`：coe_linearMap_injective : Function.Inj
+ective ((↑) : (A ->ₗc[R] B) -> A ->ₗ[R] B)
+· 使用定理 `BialgHom.coe_coalgHom_injective`：coe_coalgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
 -/
-theorem coe_toAlgHom_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B) :=
-fun φ₁ φ₂ H => coe_fn_injective
-    show ((φ₁ : A ->ₐ[R] B) : A -> B) = ((φ₂ : A ->ₐ[R] B) : A -> B) from congr_arg _ H
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
-
-/--
-theorem `coe_linearMap_injective` / 定理 `coe_linearMap_injective`
-
-English:
-theorem coe_linearMap_injective
-  statement: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B)
-  proof: CoalgHom.coe_linearMap_injective.comp coe_coalgHom_injective
-
-中文:
-定理 coe_linearMap_injective
-  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B)
-  证明: CoalgHom.coe_linearMap_injective.comp coe_coalgHom_injective
-
-Depends on / 依赖: CoalgHom, CoalgHom.coe_linearMap_injective.comp, coe_coalgHom_injective, coe_linearMap_injective
--/
-theorem coe_linearMap_injective : Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B) :=
+theorem coe_linearMap_injective : Function.Injective ((↑) : (A →ₐc[R] B) → A →ₗ[R] B) :=
   CoalgHom.coe_linearMap_injective.comp coe_coalgHom_injective
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {φ₁ φ₂ : A ->ₐc[R] B} (H : φ₁ = φ₂) (x : A)
-  statement: φ₁ x = φ₂ x
-  proof: DFunLike.congr_fun H x
-
-中文:
-定理 congr_fun
-  条件: {φ₁ φ₂ : A ->ₐc[R] B} (H : φ₁ = φ₂) (x : A)
-  结论: φ₁ x = φ₂ x
-  证明: DFunLike.congr_fun H x
+/-
+**BialgHom.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Alge
+bra R B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   {φ₁ φ₂ 
+: A →ₐc[R] B}, φ₁ = φ₂ → ∀ (x : A), φ₁ x = φ₂ x
+参数：x : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-protected theorem congr_fun {φ₁ φ₂ : A ->ₐc[R] B} (H : φ₁ = φ₂) (x : A) : φ₁ x = φ₂ x :=
+protected theorem congr_fun {φ₁ φ₂ : A →ₐc[R] B} (H : φ₁ = φ₂) (x : A) : φ₁ x = φ₂ x :=
   DFunLike.congr_fun H x
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: (φ : A ->ₐc[R] B) {x y : A} (h : x = y)
-  statement: φ x = φ y
-  proof: DFunLike.congr_arg φ h
-
-@[ext]
-
-中文:
-定理 congr_arg
-  条件: (φ : A ->ₐc[R] B) {x y : A} (h : x = y)
-  结论: φ x = φ y
-  证明: DFunLike.congr_arg φ h
-
-@[ext]
+/-
+**BialgHom.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Alge
+bra R B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (φ : A 
+→ₐc[R] B) {x y : A}, x = y → φ x = φ y
+参数：φ : A →ₐc[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg (φ : A ->ₐc[R] B) {x y : A} (h : x = y) : φ x = φ y :=
+protected theorem congr_arg (φ : A →ₐc[R] B) {x y : A} (h : x = y) : φ x = φ y :=
   DFunLike.congr_arg φ h
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x)
-  statement: φ₁ = φ₂
-  proof: DFunLike.ext _ _ H
-
-@[ext high]
-
-中文:
-定理 ext
-  条件: {φ₁ φ₂ : A ->ₐc[R] B} (H : 对任意 x, φ₁ x = φ₂ x)
-  结论: φ₁ = φ₂
-  证明: DFunLike.ext _ _ H
-
-@[ext high]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BialgHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = φ₂
+参数：H : forall x, φ₁ x = φ₂ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = φ₂ :=
+theorem ext {φ₁ φ₂ : A →ₐc[R] B} (H : ∀ x, φ₁ x = φ₂ x) : φ₁ = φ₂ :=
   DFunLike.ext _ _ H
 
 @[ext high]
-/--
-theorem `ext_of_ring` / 定理 `ext_of_ring`
-
-English:
-theorem ext_of_ring
-  given: {f g : R ->ₐc[R] A} (h : f 1 = g 1)
-  statement: f = g
-  proof: coe_linearMap_injective (by ext; assumption)
-
-@[simp]
-
-中文:
-定理 ext_of_ring
-  条件: {f g : R ->ₐc[R] A} (h : f 1 = g 1)
-  结论: f = g
-  证明: coe_linearMap_injective (by ext; assumption)
-
-@[simp]
-
-Depends on / 依赖: coe_linearMap_injective
+/-
+**BialgHom.ext_of_ring** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：ext_of_ring {f g : R ->ₐc[R] A} (h : f 1 = g 1) : f = g
+参数：h : f 1 = g 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_linearMap_injective`：coe_linearMap_injective : Function.Inj
+ective ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B)
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-theorem ext_of_ring {f g : R ->ₐc[R] A} (h : f 1 = g 1) : f = g :=
+theorem ext_of_ring {f g : R →ₐc[R] A} (h : f 1 = g 1) : f = g :=
   coe_linearMap_injective (by ext; assumption)
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: {f : A ->ₐc[R] B} (h₀ h₁ h₂ h₃ h₄ h₅)
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: {f : A ->ₐc[R] B} (h₀ h₁ h₂ h₃ h₄ h₅)
-  证明: rfl
+/-
+**BialgHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：mk_coe {f : A ->ₐc[R] B} (h₀ h₁ h₂ h₃ h₄ h₅) : (⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, 
+h₄, h₅⟩ : A ->ₐc[R] B) = f
+参数：h₀ h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_coe {f : A ->ₐc[R] B} (h₀ h₁ h₂ h₃ h₄ h₅) :
-    (⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, h₄, h₅⟩ : A ->ₐc[R] B) = f :=
+theorem mk_coe {f : A →ₐc[R] B} (h₀ h₁ h₂ h₃ h₄ h₅) :
+    (⟨⟨⟨⟨f, h₀⟩, h₁⟩, h₂, h₃⟩, h₄, h₅⟩ : A →ₐc[R] B) = f :=
   rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `BialgHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**BialgHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom`。
+形式化陈述：{R : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       [inst : Com
+mSemiring R] →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →
+             [inst_3 : Algebra R A] →               [inst_4 : Algebra R B] →    
+             [inst_5 : CoalgebraStruct R A] →                   [inst_6 : Coalge
+braStruct R B] → (f : A →ₐc[R] B) → (f' : A → B) → f' = ⇑f → A →ₐc[R] B
+参数：f : A →ₐc[R] B；f' : A → B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : A ->ₐc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  body: { toCoalgHom := (f : A ->ₗc[R] B).copy f' h
-    map_one' := by simp_all
-    map_mul' := by intros; simp_all }
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : A ->ₐc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  定义体: { toCoalgHom := (f : A ->ₗc[R] B).copy f' h
-    map_one' := by simp_all
-    map_mul' := by intros; simp_all }
-
-@[simp]
+--- 原说明 ---
+Copy of a `BialgHom` with a new `toFun` equal to the old one. Useful to fix defi
+nitional
+equalities.
 -/
-protected def copy (f : A ->ₐc[R] B) (f' : A -> B) (h : f' = ⇑f) : A ->ₐc[R] B :=
-  { toCoalgHom := (f : A ->ₗc[R] B).copy f' h
+protected def copy (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f) : A →ₐc[R] B :=
+  { toCoalgHom := (f : A →ₗc[R] B).copy f' h
     map_one' := by simp_all
     map_mul' := by intros; simp_all }
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**BialgHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_copy (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f) : ⇑(f.copy f' h) = 
+f'
+参数：f : A ->ₗc[R] B；f' : A -> B；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : A →ₗc[R] B) (f' : A → B) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BialgHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：copy_eq (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f) : f.copy f' h = f
+参数：f : A ->ₗc[R] B；f' : A -> B；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : A ->ₗc[R] B) (f' : A -> B) (h : f' = ⇑f) : f.copy f' h = f :=
+theorem copy_eq (f : A →ₗc[R] B) (f' : A → B) (h : f' = ⇑f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 section
 
 variable (R A)
 
-/--
-Definition of `id` / `id` 的定义
+/-- Identity map as a `BialgHom`. -/
+/-
+**BialgHom.id** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom`。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) →     [inst : CommSemiring R] →       [i
+nst_1 : Semiring A] → [inst_2 : Algebra R A] → [inst_3 : CoalgebraStruct R A] → 
+A →ₐc[R] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : A ->ₐc[R] A
-  body: { CoalgHom.id R A, AlgHom.id R A with }
-
-中文:
-定义 id
-  签名: : A ->ₐc[R] A
-  定义体: { CoalgHom.id R A, AlgHom.id R A with }
+--- 原说明 ---
+Identity map as a `BialgHom`.
 -/
-@[simps!] protected def id : A ->ₐc[R] A :=
+@[simps!] protected def id : A →ₐc[R] A :=
   { CoalgHom.id R A, AlgHom.id R A with }
 
 variable {R A}
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(BialgHom.id R A) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_id
-  结论: ⇑(Bialg态射.id R A) = id
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_id : ⇑(BialgHom.id R A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(BialgHom.id R A) = id :=
   rfl
 
 @[simp]
-/--
-theorem `id_toCoalgHom` / 定理 `id_toCoalgHom`
-
-English:
-theorem id_toCoalgHom
-  statement: BialgHom.id R A = CoalgHom.id R A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_toCoalgHom
-  结论: Bialg态射.id R A = 余alg态射.id R A
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.id_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：id_toCoalgHom : BialgHom.id R A = CoalgHom.id R A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
 theorem id_toCoalgHom : BialgHom.id R A = CoalgHom.id R A :=
   rfl
 
 @[simp]
-/--
-theorem `id_toAlgHom` / 定理 `id_toAlgHom`
-
-English:
-theorem id_toAlgHom
-  statement: BialgHom.id R A = AlgHom.id R A
-  proof: rfl
-
-中文:
-定理 id_toAlgHom
-  结论: Bialg态射.id R A = 代数态射.id R A
-  证明: rfl
+/-
+**BialgHom.id_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：id_toAlgHom : BialgHom.id R A = AlgHom.id R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_toAlgHom : BialgHom.id R A = AlgHom.id R A :=
   rfl
 
 end
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of bialgebra homomorphisms. -/
+/-
+**BialgHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom`。
+形式化陈述：{R : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       {C : Type u
+_4} →         [inst : CommSemiring R] →           [inst_1 : Semiring A] →       
+      [inst_2 : Semiring B] →               [inst_3 : Semiring C] →             
+    [inst_4 : Algebra R A] →                   [inst_5 : Algebra R B] →         
+            [inst_6 : Algebra R C] →                       [inst_7 : CoalgebraSt
+ruct R A] →                         [inst_8 : CoalgebraStruct R B] →            
+               [inst_9 : CoalgebraStruct R C] → (B →ₐc[R] C) → (A →ₐc[R] B) → A 
+→ₐc[R] C
+参数：B →ₐc[R] C；A →ₐc[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  body: { (φ₁ : B ->ₗc[R] C).comp (φ₂ : A ->ₗc[R] B), (φ₁ : B ->ₐ[R] C).comp (φ₂ : A ->ₐ[R] B) with }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  定义体: { (φ₁ : B ->ₗc[R] C).comp (φ₂ : A ->ₗc[R] B), (φ₁ : B ->ₐ[R] C).comp (φ₂ : A ->ₐ[R] B) with }
-
-@[simp]
+--- 原说明 ---
+Composition of bialgebra homomorphisms.
 -/
-@[simps!] def comp (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) : A ->ₐc[R] C :=
-  { (φ₁ : B ->ₗc[R] C).comp (φ₂ : A ->ₗc[R] B), (φ₁ : B ->ₐ[R] C).comp (φ₂ : A ->ₐ[R] B) with }
+@[simps!] def comp (φ₁ : B →ₐc[R] C) (φ₂ : A →ₐc[R] B) : A →ₐc[R] C :=
+  { (φ₁ : B →ₗc[R] C).comp (φ₂ : A →ₗc[R] B), (φ₁ : B →ₐ[R] C).comp (φ₂ : A →ₐ[R] B) with }
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  statement: ⇑(φ₁.comp φ₂) = φ₁ ∘ φ₂
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  结论: ⇑(φ₁.comp φ₂) = φ₁ ∘ φ₂
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：coe_comp (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) : ⇑(φ₁.comp φ₂) = φ₁ ∘ φ₂
+参数：φ₁ : B ->ₐc[R] C；φ₂ : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) : ⇑(φ₁.comp φ₂) = φ₁ ∘ φ₂ :=
+theorem coe_comp (φ₁ : B →ₐc[R] C) (φ₂ : A →ₐc[R] B) : ⇑(φ₁.comp φ₂) = φ₁ ∘ φ₂ :=
   rfl
 
 @[simp]
-/--
-theorem `comp_toCoalgHom` / 定理 `comp_toCoalgHom`
-
-English:
-theorem comp_toCoalgHom
-  given: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_toCoalgHom
-  条件: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.comp_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：comp_toCoalgHom (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) : φ₁.comp φ₂ = (φ₁ :
+ B ->ₗc[R] C).comp (φ₂ : A ->ₗc[R] B)
+参数：φ₁ : B ->ₐc[R] C；φ₂ : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-theorem comp_toCoalgHom (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) :
-    φ₁.comp φ₂ = (φ₁ : B ->ₗc[R] C).comp (φ₂ : A ->ₗc[R] B) :=
+theorem comp_toCoalgHom (φ₁ : B →ₐc[R] C) (φ₂ : A →ₐc[R] B) :
+    φ₁.comp φ₂ = (φ₁ : B →ₗc[R] C).comp (φ₂ : A →ₗc[R] B) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_toAlgHom` / 定理 `comp_toAlgHom`
-
-English:
-theorem comp_toAlgHom
-  given: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_toAlgHom
-  条件: (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B)
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.comp_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：comp_toAlgHom (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) : φ₁.comp φ₂ = (φ₁ : B
+ ->ₐ[R] C).comp (φ₂ : A ->ₐ[R] B)
+参数：φ₁ : B ->ₐc[R] C；φ₂ : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_toAlgHom (φ₁ : B ->ₐc[R] C) (φ₂ : A ->ₐc[R] B) :
-    φ₁.comp φ₂ = (φ₁ : B ->ₐ[R] C).comp (φ₂ : A ->ₐ[R] B) :=
+theorem comp_toAlgHom (φ₁ : B →ₐc[R] C) (φ₂ : A →ₐc[R] B) :
+    φ₁.comp φ₂ = (φ₁ : B →ₐ[R] C).comp (φ₂ : A →ₐ[R] B) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  statement: φ.comp (BialgHom.id R A) = φ
-  proof: ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  结论: φ.comp (Bialg态射.id R A) = φ
-  证明: ext fun _x => rfl
-
-@[simp]
+/-
+**BialgHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：comp_id : φ.comp (BialgHom.id R A) = φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.ext`：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁
+ = φ₂
 -/
 theorem comp_id : φ.comp (BialgHom.id R A) = φ :=
   ext fun _x => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  statement: (BialgHom.id R B).comp φ = φ
-  proof: ext fun _x => rfl
-
-中文:
-定理 id_comp
-  结论: (Bialg态射.id R B).comp φ = φ
-  证明: ext fun _x => rfl
+/-
+**BialgHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：id_comp : (BialgHom.id R B).comp φ = φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.ext`：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁
+ = φ₂
 -/
 theorem id_comp : (BialgHom.id R B).comp φ = φ :=
   ext fun _x => rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (φ₁ : C ->ₐc[R] D) (φ₂ : B ->ₐc[R] C) (φ₃ : A ->ₐc[R] B)
-  proof: ext fun _x => rfl
-
-中文:
-定理 comp_assoc
-  条件: (φ₁ : C ->ₐc[R] D) (φ₂ : B ->ₐc[R] C) (φ₃ : A ->ₐc[R] B)
-  证明: ext fun _x => rfl
+/-
+**BialgHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：comp_assoc (φ₁ : C ->ₐc[R] D) (φ₂ : B ->ₐc[R] C) (φ₃ : A ->ₐc[R] B) : (φ₁.
+comp φ₂).comp φ₃ = φ₁.comp (φ₂.comp φ₃)
+参数：φ₁ : C ->ₐc[R] D；φ₂ : B ->ₐc[R] C；φ₃ : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.ext`：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁
+ = φ₂
 -/
-theorem comp_assoc (φ₁ : C ->ₐc[R] D) (φ₂ : B ->ₐc[R] C) (φ₃ : A ->ₐc[R] B) :
+theorem comp_assoc (φ₁ : C →ₐc[R] D) (φ₂ : B →ₐc[R] C) (φ₃ : A →ₐc[R] B) :
     (φ₁.comp φ₂).comp φ₃ = φ₁.comp (φ₂.comp φ₃) :=
   ext fun _x => rfl
-
-/--
-theorem `map_smul_of_tower` / 定理 `map_smul_of_tower`
-
-English:
-theorem map_smul_of_tower
-  statement: {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A B R' R] (r : R')
-  proof: φ.toLinearMap.map_smul_of_tower r x
-
-@[simps -isSimp toSemigroup_toMul_mul toOne_one]
-
-中文:
-定理 map_smul_of_tower
-  结论: {R'} [标量乘法 R' A] [标量乘法 R' B] [线性映射.余mpatibleSMul A B R' R] (r : R')
-  证明: φ.toLinearMap.map_smul_of_tower r x
-
-@[simps -isSimp toSemigroup_toMul_mul toOne_one]
-
-Depends on / 依赖: map_smul_of_tower, toLinearMap, toLinearMap.map_smul_of_tower
+/-
+**BialgHom.map_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：map_smul_of_tower {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A
+ B R' R] (r : R') (x : A) : φ (r • x) = r • φ x
+参数：r : R'；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
 -/
 theorem map_smul_of_tower {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A B R' R] (r : R')
     (x : A) : φ (r • x) = r • φ x :=
   φ.toLinearMap.map_smul_of_tower r x
 
 @[simps -isSimp toSemigroup_toMul_mul toOne_one]
-/--
-Instance `End` / 实例 `End`
-
-English:
-instance End
-  signature: : Monoid (A ->ₐc[R] A) where
-  body: comp
-  mul_assoc _ _ _ := rfl
-  one := BialgHom.id R A
-  one_mul _ := ext fun _ => rfl
-  mul_one _ := ext fun _ => rfl
-
-@[simp]
-
-中文:
-实例 End
-  签名: : 幺半群 (A ->ₐc[R] A) where
-  定义体: comp
-  mul_assoc _ _ _ := rfl
-  one := BialgHom.id R A
-  one_mul _ := ext fun _ => rfl
-  mul_one _ := ext fun _ => rfl
-
-@[simp]
+/-
+**BialgHom.End** 是 Mathlib 中的一个实例，位于命名空间 `BialgHom`。
+形式化陈述：End : Monoid (A ->ₐc[R] A) where mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance End : Monoid (A ->ₐc[R] A) where
+instance End : Monoid (A →ₐc[R] A) where
   mul := comp
   mul_assoc _ _ _ := rfl
   one := BialgHom.id R A
@@ -1092,45 +798,25 @@ instance End : Monoid (A ->ₐc[R] A) where
   mul_one _ := ext fun _ => rfl
 
 @[simp]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (x : A)
-  statement: (1 : A ->ₐc[R] A) x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 one_apply
-  条件: (x : A)
-  结论: (1 : A ->ₐc[R] A) x = x
-  证明: rfl
-
-@[simp]
+/-
+**BialgHom.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：one_apply (x : A) : (1 : A ->ₐc[R] A) x = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_apply (x : A) : (1 : A ->ₐc[R] A) x = x :=
+theorem one_apply (x : A) : (1 : A →ₐc[R] A) x = x :=
   rfl
 
 @[simp]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: (φ ψ : A ->ₐc[R] A) (x : A)
-  statement: (φ * ψ) x = φ (ψ x)
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: (φ ψ : A ->ₐc[R] A) (x : A)
-  结论: (φ * ψ) x = φ (ψ x)
-  证明: rfl
+/-
+**BialgHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：mul_apply (φ ψ : A ->ₐc[R] A) (x : A) : (φ * ψ) x = φ (ψ x)
+参数：φ ψ : A ->ₐc[R] A；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_apply (φ ψ : A ->ₐc[R] A) (x : A) : (φ * ψ) x = φ (ψ x) :=
+theorem mul_apply (φ ψ : A →ₐc[R] A) (x : A) : (φ * ψ) x = φ (ψ x) :=
   rfl
 
 end AlgebraCoalgebra
@@ -1139,79 +825,72 @@ variable [Bialgebra R A] [Bialgebra R B]
 
 /-- Construct a bialgebra hom from an algebra hom respecting counit and comultiplication. -/
 @[simps!]
-/--
-Definition of `ofAlgHom` / `ofAlgHom` 的定义
+/-
+**BialgHom.ofAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `BialgHom`。
+形式化陈述：ofAlgHom (f : A ->ₐ[R] B) (counit_comp : (counitAlgHom R B).comp f = couni
+tAlgHom R A) (map_comp_comul : (Algebra.TensorProduct.map f f).comp (comulAlgHom
+ _ _) = (comulAlgHom _ _).comp f) : A ->ₐc[R] B where __
+参数：f : A ->ₐ[R] B；counit_comp : (counitAlgHom R B).comp f = counitAlgHom R A；map
+_comp_comul : (Algebra.TensorProduct.map f f).comp (comulAlgHom _ _) = (comulAlg
+Hom _ _).comp f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAlgHom
-  signature: (f : A ->ₐ[R] B) (counit_comp : (counitAlgHom R B).comp f = counitAlgHom R A)
-  body: f
-  map_smul' := map_smul f
-  counit_comp := congr(($counit_comp).toLinearMap)
-  map_comp_comul := congr(($map_comp_comul).toLinearMap)
-
-@[simp]
-
-中文:
-定义 ofAlgHom
-  签名: (f : A ->ₐ[R] B) (counit_comp : (counitAlgHom R B).comp f = counitAlgHom R A)
-  定义体: f
-  map_smul' := map_smul f
-  counit_comp := congr(($counit_comp).toLinearMap)
-  map_comp_comul := congr(($map_comp_comul).toLinearMap)
-
-@[simp]
+--- 原说明 ---
+Construct a bialgebra hom from an algebra hom respecting counit and comultiplica
+tion.
 -/
-def ofAlgHom (f : A ->ₐ[R] B) (counit_comp : (counitAlgHom R B).comp f = counitAlgHom R A)
+def ofAlgHom (f : A →ₐ[R] B) (counit_comp : (counitAlgHom R B).comp f = counitAlgHom R A)
     (map_comp_comul :
       (Algebra.TensorProduct.map f f).comp (comulAlgHom _ _) = (comulAlgHom _ _).comp f) :
-    A ->ₐc[R] B where
+    A →ₐc[R] B where
   __ := f
   map_smul' := map_smul f
   counit_comp := congr(($counit_comp).toLinearMap)
   map_comp_comul := congr(($map_comp_comul).toLinearMap)
 
 @[simp]
-/--
-theorem `counitAlgHom_comp` / 定理 `counitAlgHom_comp`
-
-English:
-theorem counitAlgHom_comp
-  given: (f : A ->ₐc[R] B)
-  proof: AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
-
-@[simp]
-
-中文:
-定理 counitAlgHom_comp
-  条件: (f : A ->ₐc[R] B)
-  证明: AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, CoalgHomClass, CoalgHomClass.counit_comp, counit_comp, toLinearMap_injective
+/-
+**BialgHom.counitAlgHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：counitAlgHom_comp (f : A ->ₐc[R] B) : (counitAlgHom R B).comp f = counitAl
+gHom R A
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.toLinearMap_injective`：toLinearMap_injective : Function.Injective
+ (toLinearMap : _ -> A ->ₗ[R] B)
+· 使用定理 `CoalgHomClass.counit_comp`：∀ {F : Type u_1} {R : outParam (Type u_2)} {A
+ : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {ins
+t_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-theorem counitAlgHom_comp (f : A ->ₐc[R] B) :
+theorem counitAlgHom_comp (f : A →ₐc[R] B) :
     (counitAlgHom R B).comp f = counitAlgHom R A :=
   AlgHom.toLinearMap_injective (CoalgHomClass.counit_comp f)
 
 @[simp]
-/--
-theorem `map_comp_comulAlgHom` / 定理 `map_comp_comulAlgHom`
-
-English:
-theorem map_comp_comulAlgHom
-  given: (f : A ->ₐc[R] B)
-  proof: AlgHom.toLinearMap_injective (CoalgHomClass.map_comp_comul f)
-
-中文:
-定理 map_comp_comulAlgHom
-  条件: (f : A ->ₐc[R] B)
-  证明: AlgHom.toLinearMap_injective (CoalgHomClass.map_comp_comul f)
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, CoalgHomClass, CoalgHomClass.map_comp_comul, map_comp_comul, toLinearMap_injective
+/-
+**BialgHom.map_comp_comulAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgHom`。
+形式化陈述：map_comp_comulAlgHom (f : A ->ₐc[R] B) : (Algebra.TensorProduct.map f f).c
+omp (comulAlgHom R A) = (comulAlgHom R B).comp f
+参数：f : A ->ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.toLinearMap_injective`：toLinearMap_injective : Function.Injective
+ (toLinearMap : _ -> A ->ₗ[R] B)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `CoalgHomClass.map_comp_comul`：∀ {F : Type u_1} {R : outParam (Type u_2)}
+ {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {
+inst_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-theorem map_comp_comulAlgHom (f : A ->ₐc[R] B) :
+theorem map_comp_comulAlgHom (f : A →ₐc[R] B) :
     (Algebra.TensorProduct.map f f).comp (comulAlgHom R A) = (comulAlgHom R B).comp f :=
   AlgHom.toLinearMap_injective (CoalgHomClass.map_comp_comul f)
 
@@ -1221,138 +900,89 @@ namespace Bialgebra
 variable {R A : Type*} [CommSemiring R] [Semiring A] [Bialgebra R A]
 
 variable (R A) in
-/--
-Definition of `unitBialgHom` / `unitBialgHom` 的定义
+/-- The unit of a bialgebra as a `BialgHom`. -/
+/-
+**Bialgebra.unitBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `Bialgebra`。
+形式化陈述：unitBialgHom : R ->ₐc[R] A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitBialgHom
-  signature: : R ->ₐc[R] A
-  body: .ofAlgHom (Algebra.ofId R A) (by ext) (by ext)
-
-中文:
-定义 unitBialgHom
-  签名: : R ->ₐc[R] A
-  定义体: .ofAlgHom (Algebra.ofId R A) (by ext) (by ext)
-
-Depends on / 依赖: Algebra, Algebra.ofId, ofAlgHom
+--- 原说明 ---
+The unit of a bialgebra as a `BialgHom`.
 -/
-noncomputable def unitBialgHom : R ->ₐc[R] A :=
+noncomputable def unitBialgHom : R →ₐc[R] A :=
   .ofAlgHom (Algebra.ofId R A) (by ext) (by ext)
 
 variable (R A) in
-/--
-Definition of `counitBialgHom` / `counitBialgHom` 的定义
+/-- The counit of a bialgebra as a `BialgHom`. -/
+/-
+**Bialgebra.counitBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `Bialgebra`。
+形式化陈述：counitBialgHom : A ->ₐc[R] R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitBialgHom
-  signature: : A ->ₐc[R] R
-  body: { Coalgebra.counitCoalgHom R A, counitAlgHom R A with }
-
-@[simp]
-
-中文:
-定义 counitBialgHom
-  签名: : A ->ₐc[R] R
-  定义体: { Coalgebra.counitCoalgHom R A, counitAlgHom R A with }
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.counitCoalgHom, counitAlgHom, counitCoalgHom
+--- 原说明 ---
+The counit of a bialgebra as a `BialgHom`.
 -/
-noncomputable def counitBialgHom : A ->ₐc[R] R :=
+noncomputable def counitBialgHom : A →ₐc[R] R :=
   { Coalgebra.counitCoalgHom R A, counitAlgHom R A with }
 
 @[simp]
-/--
-theorem `counitBialgHom_apply` / 定理 `counitBialgHom_apply`
-
-English:
-theorem counitBialgHom_apply
-  given: (x : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 counitBialgHom_apply
-  条件: (x : A)
-  证明: rfl
-
-@[simp]
+/-
+**Bialgebra.counitBialgHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：counitBialgHom_apply (x : A) : counitBialgHom R A x = Coalgebra.counit x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem counitBialgHom_apply (x : A) :
     counitBialgHom R A x = Coalgebra.counit x := rfl
 
 @[simp]
-/--
-theorem `counitBialgHom_toCoalgHom` / 定理 `counitBialgHom_toCoalgHom`
-
-English:
-theorem counitBialgHom_toCoalgHom
-  proof: rfl
-
-中文:
-定理 counitBialgHom_toCoalgHom
-  证明: rfl
+/-
+**Bialgebra.counitBialgHom_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：counitBialgHom_toCoalgHom : counitBialgHom R A = Coalgebra.counitCoalgHom 
+R A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
 theorem counitBialgHom_toCoalgHom :
     counitBialgHom R A = Coalgebra.counitCoalgHom R A := rfl
-
-/--
-lemma `counitBialgHom_self` / 引理 `counitBialgHom_self`
-
-English:
-lemma counitBialgHom_self
-  statement: counitBialgHom R R = .id R R
-  proof: rfl
-
-中文:
-引理 counitBialgHom_self
-  结论: counitBialgHom R R = .id R R
-  证明: rfl
+/-
+**Bialgebra.counitBialgHom_self** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R], Bialgebra.counitBialgHom R R = B
+ialgHom.id R R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma counitBialgHom_self : counitBialgHom R R = .id R R := rfl
-
-/--
-Instance `subsingleton_to_ring` / 实例 `subsingleton_to_ring`
-
-English:
-instance subsingleton_to_ring
-  signature: : Subsingleton (A ->ₐc[R] R)
-  body: ⟨fun _ _ => BialgHom.coe_coalgHom_injective (Subsingleton.elim _ _)⟩
-
-@[ext high]
-
-中文:
-实例 subsingleton_to_ring
-  签名: : 子单例 (A ->ₐc[R] R)
-  定义体: ⟨fun _ _ => BialgHom.coe_coalgHom_injective (Subsingleton.elim _ _)⟩
-
-@[ext high]
-
-Depends on / 依赖: BialgHom, BialgHom.coe_coalgHom_injective, Subsingleton, Subsingleton.elim, coe_coalgHom_injective
+/-
+**Bialgebra.subsingleton_to_ring** 是 Mathlib 中的一个实例，位于命名空间 `Bialgebra`。
+形式化陈述：subsingleton_to_ring : Subsingleton (A ->ₐc[R] R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_coalgHom_injective`：coe_coalgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
 -/
-instance subsingleton_to_ring : Subsingleton (A ->ₐc[R] R) :=
+instance subsingleton_to_ring : Subsingleton (A →ₐc[R] R) :=
   ⟨fun _ _ => BialgHom.coe_coalgHom_injective (Subsingleton.elim _ _)⟩
 
 @[ext high]
-/--
-theorem `ext_to_ring` / 定理 `ext_to_ring`
-
-English:
-theorem ext_to_ring
-  given: (f g : A ->ₐc[R] R)
-  statement: f = g
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 ext_to_ring
-  条件: (f g : A ->ₐc[R] R)
-  结论: f = g
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Bialgebra.ext_to_ring** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：ext_to_ring (f g : A ->ₐc[R] R) : f = g
+参数：f g : A ->ₐc[R] R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem ext_to_ring (f g : A ->ₐc[R] R) : f = g := Subsingleton.elim _ _
+theorem ext_to_ring (f g : A →ₐc[R] R) : f = g := Subsingleton.elim _ _
 
 end Bialgebra
+

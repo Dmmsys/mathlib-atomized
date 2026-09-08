@@ -35,38 +35,35 @@ assert_not_exists Field
 
 namespace FinVec
 
-variable {m : Nat} {α β : Type*}
+variable {m : ℕ} {α β : Type*}
 
-/--
-Definition of `seq` / `seq` 的定义
+/-- Evaluate `FinVec.seq f v = ![(f 0) (v 0), (f 1) (v 1), ...]` -/
+/-
+**FinVec.seq** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → {m : ℕ} → (Fin m → α → β) → (Fin m → α) 
+→ Fin m → β
+参数：Fin m → α → β；Fin m → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition seq
-  signature: : forall {m}, (Fin m -> α -> β) -> (Fin m -> α) -> Fin m -> β
-
-中文:
-定义 seq
-  签名: : 对任意 {m}, (有限集 m -> α -> β) -> (有限集 m -> α) -> 有限集 m -> β
+--- 原说明 ---
+Evaluate `FinVec.seq f v = ![(f 0) (v 0), (f 1) (v 1), ...]`
 -/
-def seq : forall {m}, (Fin m -> α -> β) -> (Fin m -> α) -> Fin m -> β
+def seq : ∀ {m}, (Fin m → α → β) → (Fin m → α) → Fin m → β
   | 0, _, _ => ![]
   | _ + 1, f, v => Matrix.vecCons (f 0 (v 0)) (seq (Matrix.vecTail f) (Matrix.vecTail v))
 
 @[simp]
-/--
-theorem `seq_eq` / 定理 `seq_eq`
-
-English:
-theorem seq_eq
-  statement: forall {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v = fun i => f i (v i)
-  proof: rfl
-
-中文:
-定理 seq_eq
-  结论: 对任意 {m} (f : 有限集 m -> α -> β) (v : 有限集 m -> α), seq f v = fun i => f i (v i)
-  证明: rfl
+/-
+**FinVec.seq_eq** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：seq_eq : forall {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v = fun 
+i => f i (v i) | 0, _, _ => Subsingleton.elim _ _ | n + 1, f, v => funext fun i 
+=> by simp_rw [seq, seq_eq] refine i.cases ?_ fun i => ?_ · rfl · rw [Matrix.con
+s_val_succ] rfl  example {f₁ f₂ : α -> β} (a₁ a₂ : α) : seq ![f₁, f₂] ![a₁, a₂] 
+= ![f₁ a₁, f₂ a₂]
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem seq_eq : forall {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v = fun i => f i (v i)
+theorem seq_eq : ∀ {m} (f : Fin m → α → β) (v : Fin m → α), seq f v = fun i => f i (v i)
   | 0, _, _ => Subsingleton.elim _ _
   | n + 1, f, v =>
     funext fun i => by
@@ -75,23 +72,24 @@ theorem seq_eq : forall {m} (f : Fin m -> α -> β) (v : Fin m -> α), seq f v =
       · rfl
       · rw [Matrix.cons_val_succ]
         rfl
-
-example {f₁ f₂ : α -> β} (a₁ a₂ : α) : seq ![f₁, f₂] ![a₁, a₂] = ![f₁ a₁, f₂ a₂] := rfl
-
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (f : α -> β) {m}
-  body: seq fun _ => f
-
-中文:
-定义 map
-  签名: (f : α -> β) {m}
-  定义体: seq fun _ => f
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def map (f : α -> β) {m} : (Fin m -> α) -> Fin m -> β :=
+example {f₁ f₂ : α → β} (a₁ a₂ : α) : seq ![f₁, f₂] ![a₁, a₂] = ![f₁ a₁, f₂ a₂] := rfl
+
+/-- `FinVec.map f v = ![f (v 0), f (v 1), ...]` -/
+/-
+**FinVec.map** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：map (f : α -> β) {m} : (Fin m -> α) -> Fin m -> β
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`FinVec.map f v = ![f (v 0), f (v 1), ...]`
+-/
+def map (f : α → β) {m} : (Fin m → α) → Fin m → β :=
   seq fun _ => f
 
 /-- This can be used to prove
@@ -101,49 +99,44 @@ example {f : α → β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a�
 ```
 -/
 @[simp]
-/--
-theorem `map_eq` / 定理 `map_eq`
+/-
+**FinVec.map_eq** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：map_eq (f : α -> β) {m} (v : Fin m -> α) : map f v = f ∘ v
+参数：f : α -> β；v : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FinVec.seq_eq`：seq_eq : forall {m} (f : Fin m -> α -> β) (v : Fin m -> α
+), seq f v = fun i => f i (v i) | 0, _, _ => Subsingleton.elim _ _ | n + 1, f, v
+ =>…
 
-English:
-theorem map_eq
-  given: (f : α -> β) {m} (v : Fin m -> α)
-  statement: map f v = f ∘ v
-  proof: seq_eq _ _
-
-example {f : α -> β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂] :=
+--- 原说明 ---
+This can be used to prove
+```lean
+example {f : α → β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂] :=
   (map_eq _ _).symm
-
-中文:
-定理 map_eq
-  条件: (f : α -> β) {m} (v : 有限集 m -> α)
-  结论: map f v = f ∘ v
-  证明: seq_eq _ _
-
-example {f : α -> β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂] :=
-  (map_eq _ _).symm
-
-Depends on / 依赖: seq_eq
+```
 -/
-theorem map_eq (f : α -> β) {m} (v : Fin m -> α) : map f v = f ∘ v :=
+theorem map_eq (f : α → β) {m} (v : Fin m → α) : map f v = f ∘ v :=
   seq_eq _ _
-
-example {f : α -> β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂] :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example {f : α → β} (a₁ a₂ : α) : f ∘ ![a₁, a₂] = ![f a₁, f a₂] :=
   (map_eq _ _).symm
 
-/--
-Definition of `etaExpand` / `etaExpand` 的定义
+/-- Expand `v` to `![v 0, v 1, ...]` -/
+/-
+**FinVec.etaExpand** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：etaExpand {m} (v : Fin m -> α) : Fin m -> α
+参数：v : Fin m -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition etaExpand
-  signature: {m} (v : Fin m -> α)
-  body: map id v
-
-中文:
-定义 etaExpand
-  签名: {m} (v : 有限集 m -> α)
-  定义体: map id v
+--- 原说明 ---
+Expand `v` to `![v 0, v 1, ...]`
 -/
-def etaExpand {m} (v : Fin m -> α) : Fin m -> α :=
+def etaExpand {m} (v : Fin m → α) : Fin m → α :=
   map id v
 
 /-- This can be used to prove
@@ -153,51 +146,47 @@ example (a : Fin 2 → α) : a = ![a 0, a 1] :=
 ```
 -/
 @[simp]
-/--
-theorem `etaExpand_eq` / 定理 `etaExpand_eq`
+/-
+**FinVec.etaExpand_eq** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：etaExpand_eq {m} (v : Fin m -> α) : etaExpand v = v
+参数：v : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FinVec.map_eq`：map_eq (f : α -> β) {m} (v : Fin m -> α) : map f v = f ∘ 
+v
 
-English:
-theorem etaExpand_eq
-  given: {m} (v : Fin m -> α)
-  statement: etaExpand v = v
-  proof: map_eq id v
-
-example (a : Fin 2 -> α) : a = ![a 0, a 1] :=
+--- 原说明 ---
+This can be used to prove
+```lean
+example (a : Fin 2 → α) : a = ![a 0, a 1] :=
   (etaExpand_eq _).symm
-
-中文:
-定理 etaExpand_eq
-  条件: {m} (v : 有限集 m -> α)
-  结论: etaExpand v = v
-  证明: map_eq id v
-
-example (a : Fin 2 -> α) : a = ![a 0, a 1] :=
-  (etaExpand_eq _).symm
-
-Depends on / 依赖: map_eq
+```
 -/
-theorem etaExpand_eq {m} (v : Fin m -> α) : etaExpand v = v :=
+theorem etaExpand_eq {m} (v : Fin m → α) : etaExpand v = v :=
   map_eq id v
-
-example (a : Fin 2 -> α) : a = ![a 0, a 1] :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (a : Fin 2 → α) : a = ![a 0, a 1] :=
   (etaExpand_eq _).symm
 
-/--
-Definition of `Forall` / `Forall` 的定义
+/-- `∀` with better defeq for `∀ x : Fin m → α, P x`. -/
+/-
+**FinVec.Forall** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：Forall : forall {m} (_ : (Fin m -> α) -> Prop), Prop | 0, P => P ![] | _ +
+ 1, P => forall x : α, Forall fun v => P (Matrix.vecCons x v)  /-- This can be u
+sed to prove ```lean example (P : (Fin 2 → α) → Prop) : (∀ f, P f) ↔ ∀ a₀ a₁, P 
+![a₀, a₁]
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Forall
-  signature: : forall {m} (_ : (Fin m -> α) -> Prop), Prop
-
-中文:
-定义 任意
-  签名: : 对任意 {m} (_ : (有限集 m -> α) -> 命题), 命题
-
-Depends on / 依赖: forall_iff
+--- 原说明 ---
+`∀` with better defeq for `∀ x : Fin m → α, P x`. -/
 -/
-def Forall : forall {m} (_ : (Fin m -> α) -> Prop), Prop
+def Forall : ∀ {m} (_ : (Fin m → α) → Prop), Prop
   | 0, P => P ![]
-  | _ + 1, P => forall x : α, Forall fun v => P (Matrix.vecCons x v)
+  | _ + 1, P => ∀ x : α, Forall fun v => P (Matrix.vecCons x v)
 
 /-- This can be used to prove
 ```lean
@@ -206,83 +195,97 @@ example (P : (Fin 2 → α) → Prop) : (∀ f, P f) ↔ ∀ a₀ a₁, P ![a₀
 ```
 -/
 @[simp]
-/--
-theorem `forall_iff` / 定理 `forall_iff`
+/-
+**FinVec.forall_iff** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：forall_iff : forall {m} (P : (Fin m -> α) -> Prop), Forall P ↔ forall x, P
+ x | 0, P => by simp only [Forall, Fin.forall_fin_zero_pi] rfl | .succ n, P => b
+y simp only [Forall, forall_iff, Fin.forall_fin_succ_pi, Matrix.vecCons]  exampl
+e (P : (Fin 2 -> α) -> Prop) : (forall f, P f) ↔ forall a₀ a₁, P ![a₀, a₁]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem forall_iff
-  statement: forall {m} (P : (Fin m -> α) -> Prop), Forall P ↔ forall x, P x
-  proof: (forall_iff _).symm
-
-中文:
-定理 对任意_iff
-  结论: 对任意 {m} (P : (有限集 m -> α) -> 命题), 任意 P ↔ 对任意 x, P x
-  证明: (forall_iff _).symm
-
-Depends on / 依赖: forall_iff
+--- 原说明 ---
+This can be used to prove
+```lean
+example (P : (Fin 2 → α) → Prop) : (∀ f, P f) ↔ ∀ a₀ a₁, P ![a₀, a₁] :=
+  (forall_iff _).symm
+```
 -/
-theorem forall_iff : forall {m} (P : (Fin m -> α) -> Prop), Forall P ↔ forall x, P x
+theorem forall_iff : ∀ {m} (P : (Fin m → α) → Prop), Forall P ↔ ∀ x, P x
   | 0, P => by
     simp only [Forall, Fin.forall_fin_zero_pi]
     rfl
   | .succ n, P => by simp only [Forall, forall_iff, Fin.forall_fin_succ_pi, Matrix.vecCons]
-
-example (P : (Fin 2 -> α) -> Prop) : (forall f, P f) ↔ forall a₀ a₁, P ![a₀, a₁] :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (P : (Fin 2 → α) → Prop) : (∀ f, P f) ↔ ∀ a₀ a₁, P ![a₀, a₁] :=
   (forall_iff _).symm
 
-/--
-Definition of `Exists` / `Exists` 的定义
+/-- `∃` with better defeq for `∃ x : Fin m → α, P x`. -/
+/-
+**FinVec.Exists** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：Exists : forall {m} (_ : (Fin m -> α) -> Prop), Prop | 0, P => P ![] | _ +
+ 1, P => exists x : α, Exists fun v => P (Matrix.vecCons x v)  /-- This can be u
+sed to prove ```lean example (P : (Fin 2 → α) → Prop) : (∃ f, P f) ↔ ∃ a₀ a₁, P 
+![a₀, a₁]
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Exists
-  signature: : forall {m} (_ : (Fin m -> α) -> Prop), Prop
-
-中文:
-定义 存在
-  签名: : 对任意 {m} (_ : (有限集 m -> α) -> 命题), 命题
-
-Depends on / 依赖: exists_iff
+--- 原说明 ---
+`∃` with better defeq for `∃ x : Fin m → α, P x`. -/
 -/
-def Exists : forall {m} (_ : (Fin m -> α) -> Prop), Prop
+def Exists : ∀ {m} (_ : (Fin m → α) → Prop), Prop
   | 0, P => P ![]
-  | _ + 1, P => exists x : α, Exists fun v => P (Matrix.vecCons x v)
+  | _ + 1, P => ∃ x : α, Exists fun v => P (Matrix.vecCons x v)
 
-/--
-theorem `exists_iff` / 定理 `exists_iff`
-
-English:
-theorem exists_iff
-  statement: forall {m} (P : (Fin m -> α) -> Prop), Exists P ↔ exists x, P x
-  proof: (exists_iff _).symm
-
-中文:
-定理 存在_iff
-  结论: 对任意 {m} (P : (有限集 m -> α) -> 命题), 存在 P ↔ 存在 x, P x
-  证明: (exists_iff _).symm
-
-Depends on / 依赖: exists_iff
+/-- This can be used to prove
+```lean
+example (P : (Fin 2 → α) → Prop) : (∃ f, P f) ↔ ∃ a₀ a₁, P ![a₀, a₁] :=
+  (exists_iff _).symm
+```
 -/
-theorem exists_iff : forall {m} (P : (Fin m -> α) -> Prop), Exists P ↔ exists x, P x
+/-
+**FinVec.exists_iff** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：exists_iff : forall {m} (P : (Fin m -> α) -> Prop), Exists P ↔ exists x, P
+ x | 0, P => by simp only [Exists, Fin.exists_fin_zero_pi, Matrix.vecEmpty] rfl 
+| .succ n, P => by simp only [Exists, exists_iff, Fin.exists_fin_succ_pi, Matrix
+.vecCons]  example (P : (Fin 2 -> α) -> Prop) : (exists f, P f) ↔ exists a₀ a₁, 
+P ![a₀, a₁]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This can be used to prove
+```lean
+example (P : (Fin 2 → α) → Prop) : (∃ f, P f) ↔ ∃ a₀ a₁, P ![a₀, a₁] :=
+  (exists_iff _).symm
+```
+-/
+theorem exists_iff : ∀ {m} (P : (Fin m → α) → Prop), Exists P ↔ ∃ x, P x
   | 0, P => by
     simp only [Exists, Fin.exists_fin_zero_pi, Matrix.vecEmpty]
     rfl
   | .succ n, P => by simp only [Exists, exists_iff, Fin.exists_fin_succ_pi, Matrix.vecCons]
-
-example (P : (Fin 2 -> α) -> Prop) : (exists f, P f) ↔ exists a₀ a₁, P ![a₀, a₁] :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (P : (Fin 2 → α) → Prop) : (∃ f, P f) ↔ ∃ a₀ a₁, P ![a₀, a₁] :=
   (exists_iff _).symm
 
-/--
-Definition of `sum` / `sum` 的定义
+/-- `Finset.univ.sum` with better defeq for `Fin`. -/
+/-
+**FinVec.sum** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：{α : Type u_1} → [Add α] → [Zero α] → {m : ℕ} → (Fin m → α) → α
+参数：Fin m → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sum
-  signature: [Add α] [Zero α]
-
-中文:
-定义 求和
-  签名: [加法 α] [零 α]
+--- 原说明 ---
+`Finset.univ.sum` with better defeq for `Fin`.
 -/
-def sum [Add α] [Zero α] : forall {m} (_ : Fin m -> α), α
+def sum [Add α] [Zero α] : ∀ {m} (_ : Fin m → α), α
   | 0, _ => 0
   | 1, v => v 0
   | _ + 2, v => sum (fun i => v (Fin.castSucc i)) + v (Fin.last _)
@@ -291,20 +294,19 @@ def sum [Add α] [Zero α] : forall {m} (_ : Fin m -> α), α
 -- https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/to_additive.20complains.20about.20equation.20lemmas/near/508910537
 /-- `Finset.univ.prod` with better defeq for `Fin`. -/
 @[to_additive existing]
-/--
-Definition of `prod` / `prod` 的定义
+/-
+**FinVec.prod** 是 Mathlib 中的一个定义，位于命名空间 `FinVec`。
+形式化陈述：prod [Mul α] [One α] : forall {m} (_ : Fin m -> α), α | 0, _ => 1 | 1, v =
+> v 0 | _ + 2, v => prod (fun i => v (Fin.castSucc i)) * v (Fin.last _)  /-- Thi
+s can be used to prove ```lean example [CommMonoid α] (a : Fin 3 → α) : ∏ i, a i
+ = a 0 * a 1 * a 2
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: [Mul α] [One α]
-
-中文:
-定义 乘积
-  签名: [乘法 α] [幺 α]
-
-Depends on / 依赖: prod_eq, to_additive
+--- 原说明 ---
+`Finset.univ.prod` with better defeq for `Fin`. -/
 -/
-def prod [Mul α] [One α] : forall {m} (_ : Fin m -> α), α
+def prod [Mul α] [One α] : ∀ {m} (_ : Fin m → α), α
   | 0, _ => 1
   | 1, v => v 0
   | _ + 2, v => prod (fun i => v (Fin.castSucc i)) * v (Fin.last _)
@@ -321,38 +323,30 @@ example [CommMonoid α] (a : Fin 3 → α) : ∏ i, a i = a 0 * a 1 * a 2 :=
 example [AddCommMonoid α] (a : Fin 3 → α) : ∑ i, a i = a 0 + a 1 + a 2 :=
   (sum_eq _).symm
 ``` -/]
-/--
-theorem `prod_eq` / 定理 `prod_eq`
-
-English:
-theorem prod_eq
-  given: [CommMonoid α]
-  statement: forall {m} (a : Fin m -> α), prod a = ∏ i, a i
-  proof: (prod_eq _).symm
-
-example [AddCommMonoid α] (a : Fin 3 -> α) : ∑ i, a i = a 0 + a 1 + a 2 :=
-  (sum_eq _).symm
-
-中文:
-定理 prod_eq
-  条件: [交换幺半群 α]
-  结论: 对任意 {m} (a : 有限集 m -> α), 乘积 a = ∏ i, a i
-  证明: (prod_eq _).symm
-
-example [AddCommMonoid α] (a : Fin 3 -> α) : ∑ i, a i = a 0 + a 1 + a 2 :=
-  (sum_eq _).symm
-
-Depends on / 依赖: prod_eq
+/-
+**FinVec.prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `FinVec`。
+形式化陈述：prod_eq [CommMonoid α] : forall {m} (a : Fin m -> α), prod a = ∏ i, a i | 
+0, _ => rfl | 1, a => (Fintype.prod_unique a).symm | n + 2, a => by rw [Fin.prod
+_univ_castSucc, prod, prod_eq]  example [CommMonoid α] (a : Fin 3 -> α) : ∏ i, a
+ i = a 0 * a 1 * a 2
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_eq [CommMonoid α] : forall {m} (a : Fin m -> α), prod a = ∏ i, a i
+theorem prod_eq [CommMonoid α] : ∀ {m} (a : Fin m → α), prod a = ∏ i, a i
   | 0, _ => rfl
   | 1, a => (Fintype.prod_unique a).symm
   | n + 2, a => by rw [Fin.prod_univ_castSucc, prod, prod_eq]
-
-example [CommMonoid α] (a : Fin 3 -> α) : ∏ i, a i = a 0 * a 1 * a 2 :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example [CommMonoid α] (a : Fin 3 → α) : ∏ i, a i = a 0 * a 1 * a 2 :=
   (prod_eq _).symm
-
-example [AddCommMonoid α] (a : Fin 3 -> α) : ∑ i, a i = a 0 + a 1 + a 2 :=
+/-
+**FinVec.** 是 Mathlib 中的一个示例，位于命名空间 `FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example [AddCommMonoid α] (a : Fin 3 → α) : ∑ i, a i = a 0 + a 1 + a 2 :=
   (sum_eq _).symm
 
 section Meta
@@ -361,47 +355,47 @@ open Lean Meta Qq
 /-- Produce a term of the form `f 0 * f 1 * ... * f (n - 1)` and an application of `FinVec.prod_eq`
 that shows it is equal to `∏ i, f i`. -/
 meta def mkProdEqQ {u : Level} {α : Q(Type u)}
-    (inst : Q(CommMonoid $α)) (n : Nat) (f : Q(Fin $n -> $α)) :
-MetaM (val : Q($α)) × Q(∏ i, $f i = $val) :=
+    (inst : Q(CommMonoid $α)) (n : ℕ) (f : Q(Fin $n → $α)) :
+    MetaM <| (val : Q($α)) × Q(∏ i, $f i = $val) :=
   match n with
   | 0 => do return ⟨q((1 : $α)), q(Fin.prod_univ_zero $f)⟩
   | m + 1 => do
     let nezero : Q(NeZero ($m + 1)) := q(⟨Nat.succ_ne_zero _⟩)
     let val ← makeRHS (m + 1) f nezero (m + 1)
-let _ : val =Q FinVec.prod f := ⟨⟩
+    let _ : $val =Q FinVec.prod $f := ⟨⟩
     return ⟨q($val), q(FinVec.prod_eq $f |>.symm)⟩
 where
   /-- Creates the expression `f 0 * f 1 * ... * f (n - 1)`. -/
-  makeRHS (n : Nat) (f : Q(Fin $n -> $α)) (nezero : Q(NeZero $n)) (k : Nat) : MetaM Q($α) := do
+  makeRHS (n : ℕ) (f : Q(Fin $n → $α)) (nezero : Q(NeZero $n)) (k : ℕ) : MetaM Q($α) := do
   match k with
   | 0 => failure
   | 1 => pure q($f 0)
   | m + 1 =>
     let pre ← makeRHS n f nezero m
-    let mRaw : Q(Nat) := mkRawNatLit m
+    let mRaw : Q(ℕ) := mkRawNatLit m
     pure q($pre * $f (OfNat.ofNat $mRaw))
 
 /-- Produce a term of the form `f 0 + f 1 + ... + f (n - 1)` and an application of `FinVec.sum_eq`
 that shows it is equal to `∑ i, f i`. -/
 meta def mkSumEqQ {u : Level} {α : Q(Type u)}
-    (inst : Q(AddCommMonoid $α)) (n : Nat) (f : Q(Fin $n -> $α)) :
-MetaM (val : Q($α)) × Q(∑ i, $f i = $val) :=
+    (inst : Q(AddCommMonoid $α)) (n : ℕ) (f : Q(Fin $n → $α)) :
+    MetaM <| (val : Q($α)) × Q(∑ i, $f i = $val) :=
   match n with
   | 0 => return ⟨q((0 : $α)), q(Fin.sum_univ_zero $f)⟩
   | m + 1 => do
     let nezero : Q(NeZero ($m + 1)) := q(⟨Nat.succ_ne_zero _⟩)
     let val ← makeRHS (m + 1) f nezero (m + 1)
-let _ : val =Q FinVec.sum f := ⟨⟩
+    let _ : $val =Q FinVec.sum $f := ⟨⟩
     return ⟨q($val), q(FinVec.sum_eq $f |>.symm)⟩
 where
   /-- Creates the expression `f 0 + f 1 + ... + f (n - 1)`. -/
-  makeRHS (n : Nat) (f : Q(Fin $n -> $α)) (nezero : Q(NeZero $n)) (k : Nat) : MetaM Q($α) := do
+  makeRHS (n : ℕ) (f : Q(Fin $n → $α)) (nezero : Q(NeZero $n)) (k : ℕ) : MetaM Q($α) := do
   match k with
   | 0 => failure
   | 1 => pure q($f 0)
   | m + 1 =>
     let pre ← makeRHS n f nezero m
-    let mRaw : Q(Nat) := mkRawNatLit m
+    let mRaw : Q(ℕ) := mkRawNatLit m
     pure q($pre + $f (OfNat.ofNat $mRaw))
 
 end Meta
@@ -421,8 +415,8 @@ simproc_decl prod_univ_ofNat (∏ _ : Fin _, _) := .ofQ fun u _ e => do
     | some nVal =>
       let ⟨res, pf⟩ ← mkProdEqQ inst nVal f
       let ⟨_⟩ ← assertDefEqQ q($instF) q(Fin.fintype _)
-have _ : n =Q nVal := ⟨⟩
-return .visit .mk q($res) some q($pf)
+      have _ : $n =Q $nVal := ⟨⟩
+      return .visit <| .mk q($res) <| some q($pf)
   | _, _ => return .continue
 
 /-- Rewrites `∑ i : Fin n, f i` as `f 0 + f 1 + ... + f (n - 1)` when `n` is a numeral. -/
@@ -435,8 +429,9 @@ simproc_decl sum_univ_ofNat (∑ _ : Fin _, _) := .ofQ fun u _ e => do
     | some nVal =>
       let ⟨res, pf⟩ ← mkSumEqQ inst nVal f
       let ⟨_⟩ ← assertDefEqQ q($instF) q(Fin.fintype _)
-have _ : n =Q nVal := ⟨⟩
-return .visit .mk q($res) some q($pf)
+      have _ : $n =Q $nVal := ⟨⟩
+      return .visit <| .mk q($res) <| some q($pf)
   | _, _ => return .continue
 
 end Fin
+

@@ -32,44 +32,42 @@ variable {C : Type u₁} [Category.{v₁} C]
 variable {D : Type u₂} [Category.{v₂} D]
 variable (F : C ⥤ D)
 
-/--
-lemma `isFiltered_of_representablyCoflat` / 引理 `isFiltered_of_representablyCoflat`
-
-English:
-lemma isFiltered_of_representablyCoflat
-  given: [IsFiltered D] [RepresentablyCoflat F]
-  statement: IsFiltered C
-  proof: isFiltered_of_isFiltered_costructuredArrow F (𝟭 _)
-
-中文:
-引理 isFiltered_of_representablyCoflat
-  条件: [是Filtered D] [RepresentablyCoflat F]
-  结论: 是Filtered C
-  证明: isFiltered_of_isFiltered_costructuredArrow F (𝟭 _)
-
-Depends on / 依赖: isFiltered_of_isFiltered_costructuredArrow
+/-
+**CategoryTheory.isFiltered_of_representablyCoflat** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：isFiltered_of_representablyCoflat [IsFiltered D] [RepresentablyCoflat F] :
+ IsFiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isFiltered_of_isFiltered_costructuredArrow`：isFiltered_of
+_isFiltered_costructuredArrow (L : A ⥤ T) (R : B ⥤ T) [IsFiltered B] [Final R] [
+forall b, IsFiltered (CostructuredArrow L (R.ob…
+· 使用定理 `CategoryTheory.Functor.final_of_isRightAdjoint`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.RepresentablyCoflat.filtered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 lemma isFiltered_of_representablyCoflat [IsFiltered D] [RepresentablyCoflat F] : IsFiltered C :=
   isFiltered_of_isFiltered_costructuredArrow F (𝟭 _)
-
-/--
-lemma `isCofiltered_of_representablyFlat` / 引理 `isCofiltered_of_representablyFlat`
-
-English:
-lemma isCofiltered_of_representablyFlat
-  given: [IsCofiltered D] [RepresentablyFlat F]
-  proof: by
-  have := isFiltered_of_representablyCoflat F.op
-  exact isCofiltered_of_isFiltered_op C
-
-中文:
-引理 isCofiltered_of_representablyFlat
-  条件: [是余filtered D] [RepresentablyFlat F]
-  证明: by
-  have := isFiltered_of_representablyCoflat F.op
-  exact isCofiltered_of_isFiltered_op C
-
-Depends on / 依赖: F.op, isCofiltered_of_isFiltered_op, isFiltered_of_representablyCoflat
+/-
+**CategoryTheory.isCofiltered_of_representablyFlat** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：isCofiltered_of_representablyFlat [IsCofiltered D] [RepresentablyFlat F] :
+ IsCofiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isFiltered_of_representablyCoflat`：isFiltered_of_represen
+tablyCoflat [IsFiltered D] [RepresentablyCoflat F] : IsFiltered C
+· 使用定理 `CategoryTheory.instRepresentablyCoflatOppositeOpOfRepresentablyFlat`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用引理 `CategoryTheory.isCofiltered_of_isFiltered_op`：isCofiltered_of_isFiltered
+_op [IsFiltered Cᵒᵖ] : IsCofiltered C
 -/
 lemma isCofiltered_of_representablyFlat [IsCofiltered D] [RepresentablyFlat F] :
     IsCofiltered C := by
@@ -77,3 +75,4 @@ lemma isCofiltered_of_representablyFlat [IsCofiltered D] [RepresentablyFlat F] :
   exact isCofiltered_of_isFiltered_op C
 
 end CategoryTheory
+

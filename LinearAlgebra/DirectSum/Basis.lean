@@ -25,25 +25,22 @@ open DirectSum
 
 section Semiring
 
-variable (R : Type*) [Semiring R] {ι : Type*} (M : ι -> Type*) [forall i : ι, AddCommMonoid (M i)]
-variable [forall i : ι, Module R (M i)]
+variable (R : Type*) [Semiring R] {ι : Type*} (M : ι → Type*) [∀ i : ι, AddCommMonoid (M i)]
+variable [∀ i : ι, Module R (M i)]
 
-/--
-Instance `Module.Free.directSum` / 实例 `Module.Free.directSum`
-
-English:
-instance Module.Free.directSum
-  signature: [forall i : ι, Module.Free R (M i)]
-  body: Module.Free.dfinsupp R M
-
-中文:
-实例 模.自由.directSum
-  签名: [对任意 i : ι, 模.自由 R (M i)]
-  定义体: Module.Free.dfinsupp R M
-
-Depends on / 依赖: Module, Module.Free.dfinsupp, dfinsupp
+/-
+**Module.Free.directSum** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Free.directSum [forall i : ι, Module.Free R (M i)] : Module.Free R 
+(⨁ i, M i)
+参数：M i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Free.dfinsupp`：∀ {ι : Type u_1} (R : Type u_2) (M : ι → Type u_3)
+ [inst : Semiring R] [inst_1 : (i : ι) → AddCommMonoid (M i)]   [inst_2 : (i : ι
+) → _root_…
 -/
-instance Module.Free.directSum [forall i : ι, Module.Free R (M i)] : Module.Free R (⨁ i, M i) :=
+instance Module.Free.directSum [∀ i : ι, Module.Free R (M i)] : Module.Free R (⨁ i, M i) :=
   Module.Free.dfinsupp R M
 
 end Semiring
+

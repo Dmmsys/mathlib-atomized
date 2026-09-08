@@ -45,25 +45,20 @@ variable {M : Type*} [TopologicalSpace M]
 /-- The induced charted space structure on the quotient of a charted space by a free, properly
 discontinuous group action. -/
 @[to_additive]
-/--
-Instance `instChartedSpaceQuotient` / 实例 `instChartedSpaceQuotient`
+/-
+**MulAction.instChartedSpaceQuotient** 是 Mathlib 中的一个实例，位于命名空间 `MulAction`。
+形式化陈述：instChartedSpaceQuotient : ChartedSpace H (orbitRel.Quotient G M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instChartedSpaceQuotient
-  signature: : ChartedSpace H (orbitRel.Quotient G M)
-  body: isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul.isCoveringMap
-.isLocalHomeomorph.chartedSpace Quotient.mk_surjective
-
-中文:
-实例 instChartedSpaceQuotient
-  签名: : Charted空间 H (orbitRel.商 G M)
-  定义体: isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul.isCoveringMap
-.isLocalHomeomorph.chartedSpace Quotient.mk_surjective
-
-Depends on / 依赖: Quotient, Quotient.mk_surjective, chartedSpace, isCoveringMap, isLocalHomeomorph, isLocalHomeomorph.chartedSpace, isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul, isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul.isCoveringMap, mk_surjective
+--- 原说明 ---
+The induced charted space structure on the quotient of a charted space by a free
+, properly
+discontinuous group action.
 -/
 instance instChartedSpaceQuotient : ChartedSpace H (orbitRel.Quotient G M) :=
   isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul.isCoveringMap
-.isLocalHomeomorph.chartedSpace Quotient.mk_surjective
+    |>.isLocalHomeomorph.chartedSpace Quotient.mk_surjective
 
 end MulAction
+

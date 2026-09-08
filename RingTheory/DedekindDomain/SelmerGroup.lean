@@ -66,7 +66,7 @@ class group, selmer group, unit group
 @[expose] public section
 
 set_option quotPrecheck false
-local notation K "/" n => Kˣ ⧸ (powMonoidHom n : Kˣ ->* Kˣ).range
+local notation K "/" n => Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range
 
 namespace IsDedekindDomain
 
@@ -85,226 +85,202 @@ variable {R : Type u} [CommRing R] [IsDedekindDomain R] {K : Type v} [Field K]
 
 namespace HeightOneSpectrum
 
-/--
-Definition of `valuationOfNeZeroToFun` / `valuationOfNeZeroToFun` 的定义
+/-- The multiplicative `v`-adic valuation on `Kˣ`. -/
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuationOfNeZeroToFun** 是 Mathlib 中的一个定义，位
+于命名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuationOfNeZeroToFun (x : Kˣ) : Multiplicative Int
+参数：x : Kˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valuationOfNeZeroToFun
-  signature: (x : Kˣ)
-  body: let hx := IsLocalization.sec R⁰ (x : K)
-Multiplicative.ofAdd
-    (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {hx.fst}).factors : Int) -
-      (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {(hx.snd : R)}).factors : Int)
-
-中文:
-定义 valuationOfNeZeroToFun
-  签名: (x : Kˣ)
-  定义体: let hx := IsLocalization.sec R⁰ (x : K)
-Multiplicative.ofAdd
-    (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {hx.fst}).factors : Int) -
-      (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {(hx.snd : R)}).factors : Int)
-
-Depends on / 依赖: Associates, Associates.mk, Ideal.span, IsLocalization, IsLocalization.sec, Multiplicative, Multiplicative.ofAdd, asIdeal, factors, hx.fst, hx.snd, v.asIdeal
+--- 原说明 ---
+The multiplicative `v`-adic valuation on `Kˣ`.
 -/
-def valuationOfNeZeroToFun (x : Kˣ) : Multiplicative Int :=
+def valuationOfNeZeroToFun (x : Kˣ) : Multiplicative ℤ :=
   let hx := IsLocalization.sec R⁰ (x : K)
-Multiplicative.ofAdd
-    (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {hx.fst}).factors : Int) -
-      (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {(hx.snd : R)}).factors : Int)
+  Multiplicative.ofAdd <|
+    (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {hx.fst}).factors : ℤ) -
+      (-(Associates.mk v.asIdeal).count (Associates.mk <| Ideal.span {(hx.snd : R)}).factors : ℤ)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `valuationOfNeZeroToFun_eq` / 定理 `valuationOfNeZeroToFun_eq`
-
-English:
-theorem valuationOfNeZeroToFun_eq
-  given: (x : Kˣ)
-  proof: by
-  classical
-  rw [show v.valuation K x = _ * _ by rw [valuation_def]; rfl]
-  rw [Units.val_inv_eq_inv_val]
-  change _ = ite _ _ _ * (ite _ _ _)⁻¹
-  simp_rw [IsLocalization.toLocalizationMap_sec, SubmonoidClass.coe_subtype,
-if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
-    if_neg (nonZeroDivisors.coe_ne_zero _),
-    ← exp_neg, ← exp_add, valuationOfNeZeroToFun, ← sub_eq_add_neg, exp]
-
-中文:
-定理 valuationOfNeZeroToFun_eq
-  条件: (x : Kˣ)
-  证明: by
-  classical
-  rw [show v.valuation K x = _ * _ by rw [valuation_def]; rfl]
-  rw [Units.val_inv_eq_inv_val]
-  change _ = ite _ _ _ * (ite _ _ _)⁻¹
-  simp_rw [IsLocalization.toLocalizationMap_sec, SubmonoidClass.coe_subtype,
-if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
-    if_neg (nonZeroDivisors.coe_ne_zero _),
-    ← exp_neg, ← exp_add, valuationOfNeZeroToFun, ← sub_eq_add_neg, exp]
-
-Depends on / 依赖: IsLocalization, IsLocalization.sec_fst_ne_zero, IsLocalization.toLocalizationMap_sec, SubmonoidClass, SubmonoidClass.coe_subtype, Units.val_inv_eq_inv_val, classical, coe_ne_zero, coe_subtype, exp_add, exp_neg, if_neg, ne_zero, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, sec_fst_ne_zero, simp_rw, sub_eq_add_neg, toLocalizationMap_sec, v.valuation
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuationOfNeZeroToFun_eq** 是 Mathlib 中的一个定
+理，位于命名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuationOfNeZeroToFun_eq (x : Kˣ) : (v.valuationOfNeZeroToFun x : Intᵐ⁰) 
+= v.valuation K x
+参数：x : Kˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Set.mem_compl`：mem_compl {s : Set α} {x : α} (h : x ∉ s) : x in sᶜ
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.intValuation_ne_zero'`：intValuation_n
+e_zero' (x : nonZeroDivisors R) : v.intValuation x != 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_def`：valuation_def (x : K) 
+: v.valuation K x = v.intValuation.extendToLocalization (fun r hr => Set.mem_com
+pl (v.intValuation_ne_zero' ⟨r, hr⟩)) …
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `IsLocalization.sec_fst_ne_zero`：sec_fst_ne_zero {x : S} (hx : x != 0) : 
+(sec M x).fst != 0
+· 使用定理 `Units.ne_zero`：ne_zero [Nontrivial M₀] (u : M₀ˣ) : (u : M₀) != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `nonZeroDivisors.coe_ne_zero`：nonZeroDivisors.coe_ne_zero (x : M₀⁰) : (x 
+: M₀) != 0
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsDedekindDomain.toIsDomain`：∀ {A : Type u_2} {inst : CommRing A} [self 
+: IsDedekindDomain A], IsDomain A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem valuationOfNeZeroToFun_eq (x : Kˣ) :
-    (v.valuationOfNeZeroToFun x : Intᵐ⁰) = v.valuation K x := by
+    (v.valuationOfNeZeroToFun x : ℤᵐ⁰) = v.valuation K x := by
   classical
   rw [show v.valuation K x = _ * _ by rw [valuation_def]; rfl]
   rw [Units.val_inv_eq_inv_val]
   change _ = ite _ _ _ * (ite _ _ _)⁻¹
   simp_rw [IsLocalization.toLocalizationMap_sec, SubmonoidClass.coe_subtype,
-if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
+    if_neg <| IsLocalization.sec_fst_ne_zero x.ne_zero,
     if_neg (nonZeroDivisors.coe_ne_zero _),
     ← exp_neg, ← exp_add, valuationOfNeZeroToFun, ← sub_eq_add_neg, exp]
 
-/--
-Definition of `valuationOfNeZero` / `valuationOfNeZero` 的定义
+/-- The multiplicative `v`-adic valuation on `Kˣ`. -/
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuationOfNeZero** 是 Mathlib 中的一个定义，位于命名空间
+ `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuationOfNeZero : Kˣ ->* Multiplicative Int where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valuationOfNeZero
-  signature: : Kˣ ->* Multiplicative Int where
-  body: v.valuationOfNeZeroToFun
-  map_one' := by rw [← WithZero.coe_inj, valuationOfNeZeroToFun_eq]; exact map_one _
-  map_mul' _ _ := by
-    rw [← WithZero.coe_inj]; rw [WithZero.coe_mul]
-    simp only [valuationOfNeZeroToFun_eq]; exact map_mul _ _ _
-
-@[simp]
-
-中文:
-定义 valuationOfNeZero
-  签名: : Kˣ ->* Multiplicative 整数 where
-  定义体: v.valuationOfNeZeroToFun
-  map_one' := by rw [← WithZero.coe_inj, valuationOfNeZeroToFun_eq]; exact map_one _
-  map_mul' _ _ := by
-    rw [← WithZero.coe_inj]; rw [WithZero.coe_mul]
-    simp only [valuationOfNeZeroToFun_eq]; exact map_mul _ _ _
-
-@[simp]
-
-Depends on / 依赖: v.valuationOfNeZeroToFun, valuationOfNeZeroToFun
+--- 原说明 ---
+The multiplicative `v`-adic valuation on `Kˣ`.
 -/
-def valuationOfNeZero : Kˣ ->* Multiplicative Int where
+def valuationOfNeZero : Kˣ →* Multiplicative ℤ where
   toFun := v.valuationOfNeZeroToFun
   map_one' := by rw [← WithZero.coe_inj, valuationOfNeZeroToFun_eq]; exact map_one _
   map_mul' _ _ := by
-    rw [← WithZero.coe_inj]; rw [WithZero.coe_mul]
+    rw [← WithZero.coe_inj, WithZero.coe_mul]
     simp only [valuationOfNeZeroToFun_eq]; exact map_mul _ _ _
 
 @[simp]
-/--
-theorem `valuationOfNeZero_eq` / 定理 `valuationOfNeZero_eq`
-
-English:
-theorem valuationOfNeZero_eq
-  given: (x : Kˣ)
-  statement: (v.valuationOfNeZero x : Intᵐ⁰) = v.valuation K x
-  proof: valuationOfNeZeroToFun_eq v x
-
-@[simp]
-
-中文:
-定理 valuationOfNeZero_eq
-  条件: (x : Kˣ)
-  结论: (v.valuationOfNeZero x : 整数ᵐ⁰) = v.valuation K x
-  证明: valuationOfNeZeroToFun_eq v x
-
-@[simp]
-
-Depends on / 依赖: valuationOfNeZeroToFun_eq
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuationOfNeZero_eq** 是 Mathlib 中的一个定理，位于命
+名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuationOfNeZero_eq (x : Kˣ) : (v.valuationOfNeZero x : Intᵐ⁰) = v.valuat
+ion K x
+参数：x : Kˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuationOfNeZeroToFun_eq`：valuationO
+fNeZeroToFun_eq (x : Kˣ) : (v.valuationOfNeZeroToFun x : Intᵐ⁰) = v.valuation K 
+x
 -/
-theorem valuationOfNeZero_eq (x : Kˣ) : (v.valuationOfNeZero x : Intᵐ⁰) = v.valuation K x :=
+theorem valuationOfNeZero_eq (x : Kˣ) : (v.valuationOfNeZero x : ℤᵐ⁰) = v.valuation K x :=
   valuationOfNeZeroToFun_eq v x
 
 @[simp]
-/--
-theorem `valuation_of_unit_eq` / 定理 `valuation_of_unit_eq`
-
-English:
-theorem valuation_of_unit_eq
-  given: (x : Rˣ)
-  proof: by
-  rw [← WithZero.coe_inj]; rw [valuationOfNeZero_eq]; rw [Units.coe_map]; rw [eq_iff_le_not_lt]
-  constructor
-  · exact v.valuation_le_one x
-  · obtain ⟨x, _, hx, _⟩ := x
-    change ¬v.valuation K (algebraMap R K x) < 1
-    apply_fun v.intValuation at hx
-    rw [map_one]; rw [map_mul] at hx
-    rw [not_lt]; rw [← hx]; rw [← mul_one <| v.valuation _ _]; rw [valuation_of_algebraMap]
-    gcongr
-    exact v.intValuation_le_one _
-
-中文:
-定理 valuation_of_unit_eq
-  条件: (x : Rˣ)
-  证明: by
-  rw [← WithZero.coe_inj]; rw [valuationOfNeZero_eq]; rw [Units.coe_map]; rw [eq_iff_le_not_lt]
-  constructor
-  · exact v.valuation_le_one x
-  · obtain ⟨x, _, hx, _⟩ := x
-    change ¬v.valuation K (algebraMap R K x) < 1
-    apply_fun v.intValuation at hx
-    rw [map_one]; rw [map_mul] at hx
-    rw [not_lt]; rw [← hx]; rw [← mul_one <| v.valuation _ _]; rw [valuation_of_algebraMap]
-    gcongr
-    exact v.intValuation_le_one _
-
-Depends on / 依赖: Units.coe_map, WithZero, WithZero.coe_inj, algebraMap, apply_fun, coe_inj, coe_map, eq_iff_le_not_lt, intValuation, intValuation_le_one, map_mul, map_one, mul_one, not_lt, v.intValuation, v.intValuation_le_one, v.valuation, v.valuation_le_one, valuation, valuationOfNeZero_eq
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuation_of_unit_eq** 是 Mathlib 中的一个定理，位于命
+名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuation_of_unit_eq (x : Rˣ) : v.valuationOfNeZero (Units.map (algebraMap
+ R K : R ->* K) x) = 1
+参数：x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithZero.coe_inj`：∀ {α : Type u} {a b : α}, ↑a = ↑b ↔ a = b
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuationOfNeZero_eq`：valuationOfNeZe
+ro_eq (x : Kˣ) : (v.valuationOfNeZero x : Intᵐ⁰) = v.valuation K x
+· 使用定理 `Units.coe_map`：coe_map (f : M ->* N) (x : Mˣ) : ↑(map f x) = f x
+· 使用定理 `eq_iff_le_not_lt`：eq_iff_le_not_lt : a = b ↔ a <= b ∧ ¬a < b
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_le_one`：valuation_le_one (r
+ : R) : v.valuation K r <= 1
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap`：valuation_of
+_algebraMap (r : R) : v.valuation K r = v.intValuation r
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.intValuation_le_one`：intValuation_le_
+one (x : R) : v.intValuation x <= 1
 -/
 theorem valuation_of_unit_eq (x : Rˣ) :
-    v.valuationOfNeZero (Units.map (algebraMap R K : R ->* K) x) = 1 := by
-  rw [← WithZero.coe_inj]; rw [valuationOfNeZero_eq]; rw [Units.coe_map]; rw [eq_iff_le_not_lt]
+    v.valuationOfNeZero (Units.map (algebraMap R K : R →* K) x) = 1 := by
+  rw [← WithZero.coe_inj, valuationOfNeZero_eq, Units.coe_map, eq_iff_le_not_lt]
   constructor
   · exact v.valuation_le_one x
   · obtain ⟨x, _, hx, _⟩ := x
     change ¬v.valuation K (algebraMap R K x) < 1
     apply_fun v.intValuation at hx
-    rw [map_one]; rw [map_mul] at hx
-    rw [not_lt]; rw [← hx]; rw [← mul_one <| v.valuation _ _]; rw [valuation_of_algebraMap]
+    rw [map_one, map_mul] at hx
+    rw [not_lt, ← hx, ← mul_one <| v.valuation _ _, valuation_of_algebraMap]
     gcongr
     exact v.intValuation_le_one _
 
-/--
-Definition of `valuationOfNeZeroMod` / `valuationOfNeZeroMod` 的定义
+/-- The multiplicative `v`-adic valuation on `Kˣ` modulo `n`-th powers. -/
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuationOfNeZeroMod** 是 Mathlib 中的一个定义，位于命
+名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuationOfNeZeroMod (n : Nat) : (K / n) ->* Multiplicative (ZMod n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valuationOfNeZeroMod
-  signature: (n : Nat)
-  body: -- TODO: this definition does a lot of defeq abuse between `Multiplicative` and `Additive`,
-  -- so we need `erw` below.
-(Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp
-    QuotientGroup.map (powMonoidHom n : Kˣ ->* Kˣ).range
-      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : Int)))
-      v.valuationOfNeZero
-      (by
-        rintro _ ⟨x, rfl⟩
-        exact
-          ⟨v.valuationOfNeZero x, by simp only [powMonoidHom_apply, map_pow, Int.toAdd_pow]; rfl⟩)
-
-@[simp]
-
-中文:
-定义 valuationOfNeZeroMod
-  签名: (n : 自然数)
-  定义体: -- TODO: this definition does a lot of defeq abuse between `Multiplicative` and `Additive`,
-  -- so we need `erw` below.
-(Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp
-    QuotientGroup.map (powMonoidHom n : Kˣ ->* Kˣ).range
-      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : Int)))
-      v.valuationOfNeZero
-      (by
-        rintro _ ⟨x, rfl⟩
-        exact
-          ⟨v.valuationOfNeZero x, by simp only [powMonoidHom_apply, map_pow, Int.toAdd_pow]; rfl⟩)
-
-@[simp]
+--- 原说明 ---
+The multiplicative `v`-adic valuation on `Kˣ` modulo `n`-th powers.
 -/
-def valuationOfNeZeroMod (n : Nat) : (K / n) ->* Multiplicative (ZMod n) :=
+def valuationOfNeZeroMod (n : ℕ) : (K / n) →* Multiplicative (ZMod n) :=
   -- TODO: this definition does a lot of defeq abuse between `Multiplicative` and `Additive`,
   -- so we need `erw` below.
-(Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp
-    QuotientGroup.map (powMonoidHom n : Kˣ ->* Kˣ).range
-      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : Int)))
+  (Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp <|
+    QuotientGroup.map (powMonoidHom n : Kˣ →* Kˣ).range
+      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : ℤ)))
       v.valuationOfNeZero
       (by
         rintro _ ⟨x, rfl⟩
@@ -312,29 +288,45 @@ def valuationOfNeZeroMod (n : Nat) : (K / n) ->* Multiplicative (ZMod n) :=
           ⟨v.valuationOfNeZero x, by simp only [powMonoidHom_apply, map_pow, Int.toAdd_pow]; rfl⟩)
 
 @[simp]
-/--
-theorem `valuation_of_unit_mod_eq` / 定理 `valuation_of_unit_mod_eq`
-
-English:
-theorem valuation_of_unit_mod_eq
-  given: (n : Nat) (x : Rˣ)
-  proof: by
-  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-  erw [valuationOfNeZeroMod, MonoidHom.comp_apply, ← QuotientGroup.coe_mk',
-    QuotientGroup.map_mk' (G := Kˣ) (N := MonoidHom.range (powMonoidHom n)),
-    valuation_of_unit_eq, QuotientGroup.mk_one, map_one]
-
-中文:
-定理 valuation_of_unit_mod_eq
-  条件: (n : 自然数) (x : Rˣ)
-  证明: by
-  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-  erw [valuationOfNeZeroMod, MonoidHom.comp_apply, ← QuotientGroup.coe_mk',
-    QuotientGroup.map_mk' (G := Kˣ) (N := MonoidHom.range (powMonoidHom n)),
-    valuation_of_unit_eq, QuotientGroup.mk_one, map_one]
+/-
+**IsDedekindDomain.HeightOneSpectrum.valuation_of_unit_mod_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `IsDedekindDomain.HeightOneSpectrum`。
+形式化陈述：valuation_of_unit_mod_eq (n : Nat) (x : Rˣ) : v.valuationOfNeZeroMod n (Un
+its.map (algebraMap R K : R ->* K) x : K / n) = 1
+参数：n : Nat；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuationOfNeZeroMod.eq_1`：∀ {R : Typ
+e u} [inst : CommRing R] [inst_1 : IsDedekindDomain R] {K : Type v} [inst_2 : Fi
+eld K] [inst_3 : Algebra R K]   [inst_4 : IsFracti…
+· 使用定理 `MonoidHom.comp_apply`：MonoidHom.comp_apply [MulOne M] [MulOne N] [MulOne
+ P] (g : N ->* P) (f : M ->* N) (x : M) : g.comp f x = g (f x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.coe_mk'`：coe_mk' : (mk' N : G -> G ⧸ N) = mk
+· 使用定理 `QuotientGroup.map_mk'`：map_mk' (M : Subgroup H) [M.Normal] (f : G ->* H)
+ (h : N <= M.comap f) (x : G) : map N M f h (mk' _ x) = ↑(f x)
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_unit_eq`：valuation_of_un
+it_eq (x : Rˣ) : v.valuationOfNeZero (Units.map (algebraMap R K : R ->* K) x) = 
+1
+· 使用定理 `instIsAddCyclicInt`：IsAddCyclic ℤ
+· 使用定理 `QuotientGroup.mk_one`：mk_one : ((1 : G) : Q) = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem valuation_of_unit_mod_eq (n : Nat) (x : Rˣ) :
-    v.valuationOfNeZeroMod n (Units.map (algebraMap R K : R ->* K) x : K / n) = 1 := by
+theorem valuation_of_unit_mod_eq (n : ℕ) (x : Rˣ) :
+    v.valuationOfNeZeroMod n (Units.map (algebraMap R K : R →* K) x : K / n) = 1 := by
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
   erw [valuationOfNeZeroMod, MonoidHom.comp_apply, ← QuotientGroup.coe_mk',
     QuotientGroup.map_mk' (G := Kˣ) (N := MonoidHom.range (powMonoidHom n)),
@@ -345,31 +337,20 @@ end HeightOneSpectrum
 /-! ### Selmer groups -/
 
 
-variable {S S' : Set <| HeightOneSpectrum R} {n : Nat}
+variable {S S' : Set <| HeightOneSpectrum R} {n : ℕ}
 
-/--
-Definition of `selmerGroup` / `selmerGroup` 的定义
+/-- The Selmer group `K⟮S, n⟯`. -/
+/-
+**IsDedekindDomain.selmerGroup** 是 Mathlib 中的一个定义，位于命名空间 `IsDedekindDomain`。
+形式化陈述：selmerGroup : Subgroup K / n where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition selmerGroup
-  signature: : Subgroup K / n where
-  body: {x : K/n | forall (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuationOfNeZeroMod n x = 1}
-  one_mem' _ _ := by rw [map_one]
-  mul_mem' hx hy v hv := by rw [map_mul, hx v hv, hy v hv, one_mul]
-  inv_mem' hx v hv := by rw [map_inv, hx v hv, inv_one]
-
-中文:
-定义 selmerGroup
-  签名: : 子群 K / n where
-  定义体: {x : K/n | forall (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuationOfNeZeroMod n x = 1}
-  one_mem' _ _ := by rw [map_one]
-  mul_mem' hx hy v hv := by rw [map_mul, hx v hv, hy v hv, one_mul]
-  inv_mem' hx v hv := by rw [map_inv, hx v hv, inv_one]
-
-Depends on / 依赖: HeightOneSpectrum, valuationOfNeZeroMod
+--- 原说明 ---
+The Selmer group `K⟮S, n⟯`.
 -/
-def selmerGroup : Subgroup K / n where
-  carrier := {x : K/n | forall (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuationOfNeZeroMod n x = 1}
+def selmerGroup : Subgroup <| K / n where
+  carrier := {x : K/n | ∀ (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuationOfNeZeroMod n x = 1}
   one_mem' _ _ := by rw [map_one]
   mul_mem' hx hy v hv := by rw [map_mul, hx v hv, hy v hv, one_mul]
   inv_mem' hx v hv := by rw [map_inv, hx v hv, inv_one]
@@ -379,180 +360,160 @@ local notation K "⟮" S "," n "⟯" => @selmerGroup _ _ _ K _ _ _ S n
 
 namespace selmerGroup
 
-/--
-theorem `monotone` / 定理 `monotone`
-
-English:
-theorem monotone
-  given: (hS : S <= S')
-  statement: K⟮S,n⟯ <= K⟮S',n⟯
-  proof: fun _ hx v => hx v ∘ mt (@hS v)
-
-中文:
-定理 monotone
-  条件: (hS : S <= S')
-  结论: K⟮S,n⟯ <= K⟮S',n⟯
-  证明: fun _ hx v => hx v ∘ mt (@hS v)
+/-
+**IsDedekindDomain.selmerGroup.monotone** 是 Mathlib 中的一个定理，位于命名空间 `IsDedekindDom
+ain.selmerGroup`。
+形式化陈述：monotone (hS : S <= S') : K⟮S,n⟯ <= K⟮S',n⟯
+参数：hS : S <= S'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
 -/
-theorem monotone (hS : S <= S') : K⟮S,n⟯ <= K⟮S',n⟯ := fun _ hx v => hx v ∘ mt (@hS v)
+theorem monotone (hS : S ≤ S') : K⟮S,n⟯ ≤ K⟮S',n⟯ := fun _ hx v => hx v ∘ mt (@hS v)
 
-/--
-Definition of `valuation` / `valuation` 的定义
+/-- The multiplicative `v`-adic valuations on `K⟮S, n⟯` for all `v ∈ S`. -/
+/-
+**IsDedekindDomain.selmerGroup.valuation** 是 Mathlib 中的一个定义，位于命名空间 `IsDedekindDo
+main.selmerGroup`。
+形式化陈述：valuation : K⟮S,n⟯ ->* S -> Multiplicative (ZMod n) where toFun x v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valuation
-  signature: : K⟮S,n⟯ ->* S -> Multiplicative (ZMod n) where
-  body: (v : HeightOneSpectrum R).valuationOfNeZeroMod n (x : K / n)
-  map_one' := funext fun _ => map_one _
-  map_mul' x y := by simp only [Subgroup.coe_mul, map_mul]; rfl
-
-中文:
-定义 valuation
-  签名: : K⟮S,n⟯ ->* S -> Multiplicative (ZMod n) where
-  定义体: (v : HeightOneSpectrum R).valuationOfNeZeroMod n (x : K / n)
-  map_one' := funext fun _ => map_one _
-  map_mul' x y := by simp only [Subgroup.coe_mul, map_mul]; rfl
-
-Depends on / 依赖: HeightOneSpectrum, valuationOfNeZeroMod
+--- 原说明 ---
+The multiplicative `v`-adic valuations on `K⟮S, n⟯` for all `v ∈ S`.
 -/
-def valuation : K⟮S,n⟯ ->* S -> Multiplicative (ZMod n) where
+def valuation : K⟮S,n⟯ →* S → Multiplicative (ZMod n) where
   toFun x v := (v : HeightOneSpectrum R).valuationOfNeZeroMod n (x : K / n)
   map_one' := funext fun _ => map_one _
   map_mul' x y := by simp only [Subgroup.coe_mul, map_mul]; rfl
-
-/--
-theorem `valuation_ker_eq` / 定理 `valuation_ker_eq`
-
-English:
-theorem valuation_ker_eq
-  proof: by
-  ext ⟨_, hx⟩
-  constructor
-  · intro hx' v _
-    by_cases hv : v in S
-    · exact congr_fun hx' ⟨v, hv⟩
-    · exact hx v hv
-· exact fun hx' => funext fun v => hx' v Set.notMem_empty v
-
-中文:
-定理 valuation_ker_eq
-  证明: by
-  ext ⟨_, hx⟩
-  constructor
-  · intro hx' v _
-    by_cases hv : v in S
-    · exact congr_fun hx' ⟨v, hv⟩
-    · exact hx v hv
-· exact fun hx' => funext fun v => hx' v Set.notMem_empty v
-
-Depends on / 依赖: Set.notMem_empty, congr_fun, notMem_empty
+/-
+**IsDedekindDomain.selmerGroup.valuation_ker_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsDed
+ekindDomain.selmerGroup`。
+形式化陈述：valuation_ker_eq : valuation.ker = K⟮(∅ : Set <| HeightOneSpectrum R),n⟯.s
+ubgroupOf (K⟮S,n⟯)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
 -/
 theorem valuation_ker_eq :
     valuation.ker = K⟮(∅ : Set <| HeightOneSpectrum R),n⟯.subgroupOf (K⟮S,n⟯) := by
   ext ⟨_, hx⟩
   constructor
   · intro hx' v _
-    by_cases hv : v in S
+    by_cases hv : v ∈ S
     · exact congr_fun hx' ⟨v, hv⟩
     · exact hx v hv
-· exact fun hx' => funext fun v => hx' v Set.notMem_empty v
+  · exact fun hx' => funext fun v => hx' v <| Set.notMem_empty v
 
-/--
-Definition of `fromUnit` / `fromUnit` 的定义
+/-- The natural homomorphism from `Rˣ` to `K⟮∅, n⟯`. -/
+/-
+**IsDedekindDomain.selmerGroup.fromUnit** 是 Mathlib 中的一个定义，位于命名空间 `IsDedekindDom
+ain.selmerGroup`。
+形式化陈述：fromUnit {n : Nat} : Rˣ ->* K⟮(∅ : Set <| HeightOneSpectrum R),n⟯ where to
+Fun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_unit_mod_eq`：valuation_o
+f_unit_mod_eq (n : Nat) (x : Rˣ) : v.valuationOfNeZeroMod n (Units.map (algebraM
+ap R K : R ->* K) x : K / n) = 1
 
-English:
-definition fromUnit
-  signature: {n : Nat}
-  body: ⟨QuotientGroup.mk Units.map (algebraMap R K).toMonoidHom x, fun v _ =>
-      v.valuation_of_unit_mod_eq n x⟩
-  map_one' := by simp only [map_one, QuotientGroup.mk_one, Subgroup.mk_eq_one]
-  map_mul' _ _ := by simp only [RingHom.toMonoidHom_eq_coe, map_mul, QuotientGroup.mk_mul,
-    MulMemClass.mk_mul_mk]
-
-中文:
-定义 fromUnit
-  签名: {n : 自然数}
-  定义体: ⟨QuotientGroup.mk Units.map (algebraMap R K).toMonoidHom x, fun v _ =>
-      v.valuation_of_unit_mod_eq n x⟩
-  map_one' := by simp only [map_one, QuotientGroup.mk_one, Subgroup.mk_eq_one]
-  map_mul' _ _ := by simp only [RingHom.toMonoidHom_eq_coe, map_mul, QuotientGroup.mk_mul,
-    MulMemClass.mk_mul_mk]
-
-Depends on / 依赖: MulMemClass, MulMemClass.mk_mul_mk, QuotientGroup, QuotientGroup.mk, QuotientGroup.mk_mul, QuotientGroup.mk_one, RingHom, RingHom.toMonoidHom_eq_coe, Subgroup, Subgroup.mk_eq_one, Units.map, algebraMap, map_mul, map_one, mk_eq_one, mk_mul, mk_mul_mk, mk_one, toMonoidHom, toMonoidHom_eq_coe
+--- 原说明 ---
+The natural homomorphism from `Rˣ` to `K⟮∅, n⟯`.
 -/
-def fromUnit {n : Nat} : Rˣ ->* K⟮(∅ : Set <| HeightOneSpectrum R),n⟯ where
+def fromUnit {n : ℕ} : Rˣ →* K⟮(∅ : Set <| HeightOneSpectrum R),n⟯ where
   toFun x :=
-⟨QuotientGroup.mk Units.map (algebraMap R K).toMonoidHom x, fun v _ =>
+    ⟨QuotientGroup.mk <| Units.map (algebraMap R K).toMonoidHom x, fun v _ =>
       v.valuation_of_unit_mod_eq n x⟩
   map_one' := by simp only [map_one, QuotientGroup.mk_one, Subgroup.mk_eq_one]
   map_mul' _ _ := by simp only [RingHom.toMonoidHom_eq_coe, map_mul, QuotientGroup.mk_mul,
     MulMemClass.mk_mul_mk]
-
-/--
-theorem `fromUnit_ker` / 定理 `fromUnit_ker`
-
-English:
-theorem fromUnit_ker
-  given: [hn : Fact <| 0 < n]
-  proof: by
-  ext ⟨_, _, _, _⟩
-  constructor
-  · intro hx
-    rcases (QuotientGroup.eq_one_iff _).mp (Subtype.mk.inj hx) with ⟨⟨v, i, vi, iv⟩, hx⟩
-    have hv : ↑(_ ^ n : Kˣ) = algebraMap R K _ := congr_arg Units.val hx
-    have hi : ↑(_ ^ n : Kˣ)⁻¹ = algebraMap R K _ := congr_arg Units.inv hx
-    rw [Units.val_pow_eq_pow_val] at hv
-    rw [← inv_pow]; rw [Units.inv_mk]; rw [Units.val_pow_eq_pow_val] at hi
-    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := v) hn.out
-        (hv.symm ▸ isIntegral_algebraMap) with
-      ⟨v', rfl⟩
-    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := i) hn.out
-        (hi.symm ▸ isIntegral_algebraMap) with
-      ⟨i', rfl⟩
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
-    rw [Units.val_mk]; rw [← map_pow] at hv
-    exact ⟨⟨v', i', vi, iv⟩, by
-      simpa only [Units.ext_iff, powMonoidHom_apply, Units.val_pow_eq_pow_val] using
-         FaithfulSMul.algebraMap_injective R K hv⟩
-  · rintro ⟨x, hx⟩
-    rw [← hx]
-exact Subtype.mk_eq_mk.mpr (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
-      by simp only [powMonoidHom_apply, RingHom.toMonoidHom_eq_coe, map_pow]⟩
-
-中文:
-定理 fromUnit_ker
-  条件: [hn : Fact <| 0 < n]
-  证明: by
-  ext ⟨_, _, _, _⟩
-  constructor
-  · intro hx
-    rcases (QuotientGroup.eq_one_iff _).mp (Subtype.mk.inj hx) with ⟨⟨v, i, vi, iv⟩, hx⟩
-    have hv : ↑(_ ^ n : Kˣ) = algebraMap R K _ := congr_arg Units.val hx
-    have hi : ↑(_ ^ n : Kˣ)⁻¹ = algebraMap R K _ := congr_arg Units.inv hx
-    rw [Units.val_pow_eq_pow_val] at hv
-    rw [← inv_pow]; rw [Units.inv_mk]; rw [Units.val_pow_eq_pow_val] at hi
-    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := v) hn.out
-        (hv.symm ▸ isIntegral_algebraMap) with
-      ⟨v', rfl⟩
-    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := i) hn.out
-        (hi.symm ▸ isIntegral_algebraMap) with
-      ⟨i', rfl⟩
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
-    rw [Units.val_mk]; rw [← map_pow] at hv
-    exact ⟨⟨v', i', vi, iv⟩, by
-      simpa only [Units.ext_iff, powMonoidHom_apply, Units.val_pow_eq_pow_val] using
-         FaithfulSMul.algebraMap_injective R K hv⟩
-  · rintro ⟨x, hx⟩
-    rw [← hx]
-exact Subtype.mk_eq_mk.mpr (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
-      by simp only [powMonoidHom_apply, RingHom.toMonoidHom_eq_coe, map_pow]⟩
-
-Depends on / 依赖: IsIntegrallyClosed, IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow, QuotientGroup, QuotientGroup.eq_one_iff, Subtype, Subtype.mk.inj, Units.inv, Units.inv_mk, Units.val, Units.val_pow_eq_pow_val, algebraMap, congr_arg, eq_one_iff, exists_algebraMap_eq_of_isIntegral_pow, hn.out, hv.symm, inv_mk, inv_pow, isIntegral_algebraMap, val_pow_eq_pow_val
+/-
+**IsDedekindDomain.selmerGroup.fromUnit_ker** 是 Mathlib 中的一个定理，位于命名空间 `IsDedekin
+dDomain.selmerGroup`。
+形式化陈述：fromUnit_ker [hn : Fact <| 0 < n] : (@fromUnit R _ _ K _ _ _ n).ker = (pow
+MonoidHom n : Rˣ ->* Rˣ).range
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `Subtype.mk.inj`：∀ {α : Sort u} {p : α → Prop} {val : α} {property : p va
+l} {val_1 : α} {property_1 : p val_1},   ⟨val, property⟩ = ⟨val_1, property_1⟩ →
+ val…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_unit_mod_eq`：valuation_o
+f_unit_mod_eq (n : Nat) (x : Rˣ) : v.valuationOfNeZeroMod n (Units.map (algebraM
+ap R K : R ->* K) x : K / n) = 1
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow`：exists_algebr
+aMap_eq_of_isIntegral_pow [IsIntegrallyClosed R] {x : K} {n : Nat} (hn : 0 < n) 
+(hx : IsIntegral R <| x ^ n) : exists y : R, al…
+· 使用定理 `IsDedekindDomain.toIsDomain`：∀ {A : Type u_2} {inst : CommRing A} [self 
+: IsDedekindDomain A], IsDomain A
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `isIntegral_algebraMap`：isIntegral_algebraMap {x : R} : IsIntegral R (alg
+ebraMap R A x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Units.val_pow_eq_pow_val`：val_pow_eq_pow_val (n : Nat) : ↑(a ^ n) = (a ^
+ n : α)
+· 使用定理 `map_eq_one_iff`：map_eq_one_iff [OneHomClass F M N] (f : F) (hf : Functio
+n.Injective f) {x : M} : f x = 1 ↔ x = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `powMonoidHom_apply`：∀ {α : Type u_1} [inst : CommMonoid α] (n : ℕ) (x : 
+α), (powMonoidHom n) x = x ^ n
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+（共 43 条，此处仅展示前 30 条）
 -/
 theorem fromUnit_ker [hn : Fact <| 0 < n] :
-    (@fromUnit R _ _ K _ _ _ n).ker = (powMonoidHom n : Rˣ ->* Rˣ).range := by
+    (@fromUnit R _ _ K _ _ _ n).ker = (powMonoidHom n : Rˣ →* Rˣ).range := by
   ext ⟨_, _, _, _⟩
   constructor
   · intro hx
@@ -560,66 +521,62 @@ theorem fromUnit_ker [hn : Fact <| 0 < n] :
     have hv : ↑(_ ^ n : Kˣ) = algebraMap R K _ := congr_arg Units.val hx
     have hi : ↑(_ ^ n : Kˣ)⁻¹ = algebraMap R K _ := congr_arg Units.inv hx
     rw [Units.val_pow_eq_pow_val] at hv
-    rw [← inv_pow]; rw [Units.inv_mk]; rw [Units.val_pow_eq_pow_val] at hi
+    rw [← inv_pow, Units.inv_mk, Units.val_pow_eq_pow_val] at hi
     rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := v) hn.out
         (hv.symm ▸ isIntegral_algebraMap) with
       ⟨v', rfl⟩
     rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := i) hn.out
         (hi.symm ▸ isIntegral_algebraMap) with
       ⟨i', rfl⟩
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
-    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
-    rw [Units.val_mk]; rw [← map_pow] at hv
+    rw [← map_mul, map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
+    rw [← map_mul, map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
+    rw [Units.val_mk, ← map_pow] at hv
     exact ⟨⟨v', i', vi, iv⟩, by
       simpa only [Units.ext_iff, powMonoidHom_apply, Units.val_pow_eq_pow_val] using
          FaithfulSMul.algebraMap_injective R K hv⟩
   · rintro ⟨x, hx⟩
     rw [← hx]
-exact Subtype.mk_eq_mk.mpr (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
+    exact Subtype.mk_eq_mk.mpr <| (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
       by simp only [powMonoidHom_apply, RingHom.toMonoidHom_eq_coe, map_pow]⟩
 
-/--
-Definition of `fromUnitLift` / `fromUnitLift` 的定义
+/-- The injection induced by the natural homomorphism from `Rˣ` to `K⟮∅, n⟯`. -/
+/-
+**IsDedekindDomain.selmerGroup.fromUnitLift** 是 Mathlib 中的一个定义，位于命名空间 `IsDedekin
+dDomain.selmerGroup`。
+形式化陈述：fromUnitLift [Fact <| 0 < n] : (R / n) ->* K⟮(∅ : Set <| HeightOneSpectrum
+ R),n⟯
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDedekindDomain.selmerGroup.fromUnit_ker`：fromUnit_ker [hn : Fact <| 0 
+< n] : (@fromUnit R _ _ K _ _ _ n).ker = (powMonoidHom n : Rˣ ->* Rˣ).range
 
-English:
-definition fromUnitLift
-  signature: [Fact <| 0 < n]
-  body: (QuotientGroup.kerLift _).comp
-    (QuotientGroup.quotientMulEquivOfEq (fromUnit_ker (R := R))).symm.toMonoidHom
-
-中文:
-定义 fromUnitLift
-  签名: [Fact <| 0 < n]
-  定义体: (QuotientGroup.kerLift _).comp
-    (QuotientGroup.quotientMulEquivOfEq (fromUnit_ker (R := R))).symm.toMonoidHom
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.kerLift, QuotientGroup.quotientMulEquivOfEq, fromUnit_ker, kerLift, quotientMulEquivOfEq, symm.toMonoidHom, toMonoidHom
+--- 原说明 ---
+The injection induced by the natural homomorphism from `Rˣ` to `K⟮∅, n⟯`.
 -/
-def fromUnitLift [Fact <| 0 < n] : (R / n) ->* K⟮(∅ : Set <| HeightOneSpectrum R),n⟯ :=
+def fromUnitLift [Fact <| 0 < n] : (R / n) →* K⟮(∅ : Set <| HeightOneSpectrum R),n⟯ :=
   (QuotientGroup.kerLift _).comp
     (QuotientGroup.quotientMulEquivOfEq (fromUnit_ker (R := R))).symm.toMonoidHom
-
-/--
-theorem `fromUnitLift_injective` / 定理 `fromUnitLift_injective`
-
-English:
-theorem fromUnitLift_injective
-  given: [Fact <| 0 < n]
-  proof: by
-  dsimp only [fromUnitLift, MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
-  exact Function.Injective.comp (QuotientGroup.kerLift_injective _) (MulEquiv.injective _)
-
-中文:
-定理 fromUnitLift_injective
-  条件: [Fact <| 0 < n]
-  证明: by
-  dsimp only [fromUnitLift, MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
-  exact Function.Injective.comp (QuotientGroup.kerLift_injective _) (MulEquiv.injective _)
-
-Depends on / 依赖: Function, Function.Injective.comp, Injective, MonoidHom, MonoidHom.coe_comp, MulEquiv, MulEquiv.coe_toMonoidHom, MulEquiv.injective, QuotientGroup, QuotientGroup.kerLift_injective, coe_comp, coe_toMonoidHom, fromUnitLift, injective, kerLift_injective
+/-
+**IsDedekindDomain.selmerGroup.fromUnitLift_injective** 是 Mathlib 中的一个定理，位于命名空间 
+`IsDedekindDomain.selmerGroup`。
+形式化陈述：fromUnitLift_injective [Fact <| 0 < n] : Function.Injective @fromUnitLift 
+R _ _ K _ _ _ n _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `IsDedekindDomain.selmerGroup.fromUnit_ker`：fromUnit_ker [hn : Fact <| 0 
+< n] : (@fromUnit R _ _ K _ _ _ n).ker = (powMonoidHom n : Rˣ ->* Rˣ).range
+· 使用定理 `QuotientGroup.kerLift_injective`：kerLift_injective : Injective (kerLift 
+φ)
+· 使用定理 `MulEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [inst
+_1 : Mul N] (e : M ≃* N), Function.Injective ⇑e
 -/
 theorem fromUnitLift_injective [Fact <| 0 < n] :
-Function.Injective @fromUnitLift R _ _ K _ _ _ n _ := by
+    Function.Injective <| @fromUnitLift R _ _ K _ _ _ n _ := by
   dsimp only [fromUnitLift, MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
   exact Function.Injective.comp (QuotientGroup.kerLift_injective _) (MulEquiv.injective _)
 
@@ -628,3 +585,4 @@ end selmerGroup
 end
 
 end IsDedekindDomain
+

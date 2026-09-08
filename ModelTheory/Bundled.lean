@@ -30,18 +30,13 @@ universe u v w w' x
 
 variable {L : FirstOrder.Language.{u, v}}
 
-/--
-Instance `CategoryTheory.Bundled.structure` / 实例 `CategoryTheory.Bundled.structure`
-
-English:
-instance CategoryTheory.Bundled.structure
-  signature: {L : FirstOrder.Language.{u, v}}
-  body: M.str
-
-中文:
-实例 范畴论.打包.structure
-  签名: {L : FirstOrder.Language.{u, v}}
-  定义体: M.str
+/-
+**CategoryTheory.Bundled.structure** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bun
+dled`。
+形式化陈述：{L : FirstOrder.Language} → (M : CategoryTheory.Bundled L.Structure) → L.S
+tructure ↑M
+参数：M : CategoryTheory.Bundled L.Structure。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance CategoryTheory.Bundled.structure {L : FirstOrder.Language.{u, v}}
     (M : CategoryTheory.Bundled.{w} L.Structure) : L.Structure M :=
@@ -56,20 +51,14 @@ variable [L.Structure M] {N : Type w'} (g : M ≃ N)
 
 /-- A type bundled with the structure induced by an equivalence. -/
 @[simps]
-/--
-Definition of `bundledInduced` / `bundledInduced` 的定义
+/-
+**Equiv.bundledInduced** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：bundledInduced : CategoryTheory.Bundled.{w'} L.Structure
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bundledInduced
-  signature: : CategoryTheory.Bundled.{w'} L.Structure
-  body: ⟨N, g.inducedStructure⟩
-
-中文:
-定义 bundledInduced
-  签名: : 范畴论.打包.{w'} L.结构
-  定义体: ⟨N, g.inducedStructure⟩
-
-Depends on / 依赖: g.inducedStructure, inducedStructure
+--- 原说明 ---
+A type bundled with the structure induced by an equivalence.
 -/
 def bundledInduced : CategoryTheory.Bundled.{w'} L.Structure :=
   ⟨N, g.inducedStructure⟩
@@ -77,20 +66,15 @@ def bundledInduced : CategoryTheory.Bundled.{w'} L.Structure :=
 /-- An equivalence of types as a first-order equivalence to the bundled structure on the codomain.
 -/
 @[simp]
-/--
-Definition of `bundledInducedEquiv` / `bundledInducedEquiv` 的定义
+/-
+**Equiv.bundledInducedEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：bundledInducedEquiv : M ≃[L] g.bundledInduced L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bundledInducedEquiv
-  signature: : M ≃[L] g.bundledInduced L
-  body: g.inducedStructureEquiv
-
-中文:
-定义 bundledInducedEquiv
-  签名: : M ≃[L] g.bundledInduced L
-  定义体: g.inducedStructureEquiv
-
-Depends on / 依赖: g.inducedStructureEquiv, inducedStructureEquiv
+--- 原说明 ---
+An equivalence of types as a first-order equivalence to the bundled structure on
+ the codomain.
 -/
 def bundledInducedEquiv : M ≃[L] g.bundledInduced L :=
   g.inducedStructureEquiv
@@ -101,26 +85,17 @@ namespace FirstOrder
 
 namespace Language
 
-/--
-Instance `equivSetoid` / 实例 `equivSetoid`
+/-- The equivalence relation on bundled `L.Structure`s indicating that they are isomorphic. -/
+/-
+**FirstOrder.Language.equivSetoid** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Language
+`。
+形式化陈述：equivSetoid : Setoid (CategoryTheory.Bundled L.Structure) where r M N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance equivSetoid
-  signature: : Setoid (CategoryTheory.Bundled L.Structure) where
-  body: Nonempty (M ≃[L] N)
-  iseqv :=
-    ⟨fun M => ⟨Equiv.refl L M⟩, fun {_ _} => Nonempty.map Equiv.symm, fun {_ _} _ =>
-      Nonempty.map2 fun MN NP => NP.comp MN⟩
-
-中文:
-实例 equivSetoid
-  签名: : 集合等价关系 (范畴论.打包 L.结构) where
-  定义体: Nonempty (M ≃[L] N)
-  iseqv :=
-    ⟨fun M => ⟨Equiv.refl L M⟩, fun {_ _} => Nonempty.map Equiv.symm, fun {_ _} _ =>
-      Nonempty.map2 fun MN NP => NP.comp MN⟩
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+The equivalence relation on bundled `L.Structure`s indicating that they are isom
+orphic.
 -/
 instance equivSetoid : Setoid (CategoryTheory.Bundled L.Structure) where
   r M N := Nonempty (M ≃[L] N)
@@ -132,28 +107,16 @@ variable (T : L.Theory)
 
 namespace Theory
 
-/--
-Definition of `ModelType` / `ModelType` 的定义
+/-- The type of nonempty models of a first-order theory. -/
+/-
+**FirstOrder.Language.Theory.ModelType** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.L
+anguage.Theory`。
+形式化陈述：{L : FirstOrder.Language} → L.Theory → Type (max (max u v) (w + 1))
+参数：max (max u v) (w + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ModelType
-  parameters: where
-  axioms and operations (4):
-    - Carrier : Type w
-    - [struc : L.Structure Carrier]
-    - [is_model : T.Model Carrier]
-    - [nonempty' : Nonempty Carrier]
-
-中文:
-结构 ModelType
-  参数: where
-  公理与运算 (4 个):
-    - Carrier : 类型 w
-    - [struc : L.结构 Carrier]
-    - [is_model : T.Model Carrier]
-    - [nonempty' : 非空 Carrier]
-
-Depends on / 依赖: _assoc, lift_lift, monotone_principal, monotone_principal.comp
+--- 原说明 ---
+The type of nonempty models of a first-order theory.
 -/
 structure ModelType where
   /-- The underlying type for the models -/
@@ -170,81 +133,55 @@ namespace ModelType
 
 attribute [coe] ModelType.Carrier
 
-/--
-Instance `instCoeSort` / 实例 `instCoeSort`
-
-English:
-instance instCoeSort
-  signature: : CoeSort T.ModelType (Type w)
-  body: ⟨ModelType.Carrier⟩
-
-中文:
-实例 instCoeSort
-  签名: : CoeSort T.ModelType (类型 w)
-  定义体: ⟨ModelType.Carrier⟩
-
-Depends on / 依赖: Carrier, ModelType, ModelType.Carrier, lift_assoc
+/-
+**FirstOrder.Language.Theory.ModelType.instCoeSort** 是 Mathlib 中的一个实例，位于命名空间 `Fi
+rstOrder.Language.Theory.ModelType`。
+形式化陈述：instCoeSort : CoeSort T.ModelType (Type w)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoeSort : CoeSort T.ModelType (Type w) :=
   ⟨ModelType.Carrier⟩
 
-/--
-Definition of `of` / `of` 的定义
+/-- The object in the category of R-algebras associated to a type equipped with the appropriate
+typeclasses. -/
+/-
+**FirstOrder.Language.Theory.ModelType.of** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.
+Language.Theory.ModelType`。
+形式化陈述：of (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M] : T.ModelType
+参数：M : Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M]
-  body: ⟨M⟩
-
-@[simp]
-
-中文:
-定义 of
-  签名: (M : 类型 w) [L.结构 M] [M ⊨ T] [非空 M]
-  定义体: ⟨M⟩
-
-@[simp]
-
-Depends on / 依赖: lift_lift_same_le_lift
+--- 原说明 ---
+The object in the category of R-algebras associated to a type equipped with the 
+appropriate
+typeclasses.
 -/
 def of (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M] : T.ModelType :=
   ⟨M⟩
 
 @[simp]
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M]
-  statement: (of T M : Type w) = M
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (M : 类型 w) [L.结构 M] [M ⊨ T] [非空 M]
-  结论: (of T M : 类型 w) = M
-  证明: rfl
-
-Depends on / 依赖: lift_lift_same_eq_lift, monotone_principal, monotone_principal.comp
+/-
+**FirstOrder.Language.Theory.ModelType.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Theory.ModelType`。
+形式化陈述：coe_of (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M] : (of T M : Type 
+w) = M
+参数：M : Type w。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M] : (of T M : Type w) = M :=
   rfl
-
-/--
-Instance `instNonempty` / 实例 `instNonempty`
-
-English:
-instance instNonempty
-  signature: (M : T.ModelType)
-  body: inferInstance
-
-中文:
-实例 instNonempty
-  签名: (M : T.ModelType)
-  定义体: inferInstance
-
-Depends on / 依赖: Filter, Filter.lift, iInf_inf, iInf_subtype, inf_principal
+/-
+**FirstOrder.Language.Theory.ModelType.instNonempty** 是 Mathlib 中的一个实例，位于命名空间 `F
+irstOrder.Language.Theory.ModelType`。
+形式化陈述：instNonempty (M : T.ModelType) : Nonempty M
+参数：M : T.ModelType。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.ModelType.nonempty'`：∀ {L : FirstOrder.Langua
+ge} {T : L.Theory} (self : T.ModelType), Nonempty ↑self
 -/
 instance instNonempty (M : T.ModelType) : Nonempty M :=
   inferInstance
@@ -253,20 +190,13 @@ section Inhabited
 
 attribute [local instance] Inhabited.trivialStructure
 
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (ModelType.{u, v, w} (∅ : L.Theory))
-  body: ⟨ModelType.of _ PUnit⟩
-
-中文:
-实例 instInhabited
-  签名: : 可居 (ModelType.{u, v, w} (∅ : L.Theory))
-  定义体: ⟨ModelType.of _ PUnit⟩
-
-Depends on / 依赖: ModelType, ModelType.of, Nonempty, f.lift, lift_neBot_iff, monotone_principal, monotone_principal.comp, principal_neBot_iff
+/-
+**FirstOrder.Language.Theory.ModelType.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `
+FirstOrder.Language.Theory.ModelType`。
+形式化陈述：instInhabited : Inhabited (ModelType.{u, v, w} (∅ : L.Theory))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 instance instInhabited : Inhabited (ModelType.{u, v, w} (∅ : L.Theory)) :=
   ⟨ModelType.of _ PUnit⟩
@@ -275,28 +205,18 @@ end Inhabited
 
 variable {T}
 
-/--
-Definition of `equivInduced` / `equivInduced` 的定义
+/-- Maps a bundled model along a bijection. -/
+/-
+**FirstOrder.Language.Theory.ModelType.equivInduced** 是 Mathlib 中的一个定义，位于命名空间 `F
+irstOrder.Language.Theory.ModelType`。
+形式化陈述：equivInduced {M : ModelType.{u, v, w} T} {N : Type w'} (e : M ≃ N) : Model
+Type.{u, v, w'} T where Carrier
+参数：e : M ≃ N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivInduced
-  signature: {M : ModelType.{u, v, w} T} {N : Type w'} (e : M ≃ N)
-  body: N
-  struc := e.inducedStructure
-  is_model := @StrongHomClass.theory_model L M N _ e.inducedStructure T
-    _ _ _ e.inducedStructureEquiv _
-  nonempty' := e.symm.nonempty
-
-中文:
-定义 equivInduced
-  签名: {M : ModelType.{u, v, w} T} {N : 类型 w'} (e : M ≃ N)
-  定义体: N
-  struc := e.inducedStructure
-  is_model := @StrongHomClass.theory_model L M N _ e.inducedStructure T
-    _ _ _ e.inducedStructureEquiv _
-  nonempty' := e.symm.nonempty
-
-Depends on / 依赖: lift_principal2
+--- 原说明 ---
+Maps a bundled model along a bijection.
 -/
 def equivInduced {M : ModelType.{u, v, w} T} {N : Type w'} (e : M ≃ N) :
     ModelType.{u, v, w'} T where
@@ -305,86 +225,65 @@ def equivInduced {M : ModelType.{u, v, w} T} {N : Type w'} (e : M ≃ N) :
   is_model := @StrongHomClass.theory_model L M N _ e.inducedStructure T
     _ _ _ e.inducedStructureEquiv _
   nonempty' := e.symm.nonempty
-
-/--
-Instance `of_small` / 实例 `of_small`
-
-English:
-instance of_small
-  signature: (M : Type w) [Nonempty M] [L.Structure M] [M ⊨ T] [h : Small.{w'} M]
-  body: h
-
-中文:
-实例 of_small
-  签名: (M : 类型 w) [非空 M] [L.结构 M] [M ⊨ T] [h : Small.{w'} M]
-  定义体: h
-
-Depends on / 依赖: inf_principal, lift_iInf
+/-
+**FirstOrder.Language.Theory.ModelType.of_small** 是 Mathlib 中的一个实例，位于命名空间 `First
+Order.Language.Theory.ModelType`。
+形式化陈述：of_small (M : Type w) [Nonempty M] [L.Structure M] [M ⊨ T] [h : Small.{w'}
+ M] : Small.{w'} (ModelType.of T M)
+参数：M : Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance of_small (M : Type w) [Nonempty M] [L.Structure M] [M ⊨ T] [h : Small.{w'} M] :
     Small.{w'} (ModelType.of T M) :=
   h
 
-/--
-Definition of `shrink` / `shrink` 的定义
+/-- Shrinks a small model to a particular universe. -/
+/-
+**FirstOrder.Language.Theory.ModelType.shrink** 是 Mathlib 中的一个定义，位于命名空间 `FirstOr
+der.Language.Theory.ModelType`。
+形式化陈述：shrink (M : ModelType.{u, v, w} T) [Small.{w'} M] : ModelType.{u, v, w'} T
+参数：M : ModelType.{u, v, w} T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shrink
-  signature: (M : ModelType.{u, v, w} T) [Small.{w'} M]
-  body: equivInduced (equivShrink M)
-
-中文:
-定义 shrink
-  签名: (M : ModelType.{u, v, w} T) [Small.{w'} M]
-  定义体: equivInduced (equivShrink M)
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, equivInduced, equivShrink, inf_principal, lift_iInf_of_map_univ, principal_univ
+--- 原说明 ---
+Shrinks a small model to a particular universe.
 -/
 noncomputable def shrink (M : ModelType.{u, v, w} T) [Small.{w'} M] : ModelType.{u, v, w'} T :=
   equivInduced (equivShrink M)
 
-/--
-Definition of `ulift` / `ulift` 的定义
+/-- Lifts a model to a particular universe. -/
+/-
+**FirstOrder.Language.Theory.ModelType.ulift** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrd
+er.Language.Theory.ModelType`。
+形式化陈述：ulift (M : ModelType.{u, v, w} T) : ModelType.{u, v, max w w'} T
+参数：M : ModelType.{u, v, w} T。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition ulift
-  signature: (M : ModelType.{u, v, w} T)
-  body: equivInduced (Equiv.ulift.{w', w}.symm : M ≃ _)
-
-中文:
-定义 ulift
-  签名: (M : ModelType.{u, v, w} T)
-  定义体: equivInduced (Equiv.ulift.{w', w}.symm : M ≃ _)
-
-Depends on / 依赖: Equiv.ulift, _iInf, equivInduced, iInf_congr, inf_eq_iInf
+--- 原说明 ---
+Lifts a model to a particular universe.
 -/
 def ulift (M : ModelType.{u, v, w} T) : ModelType.{u, v, max w w'} T :=
   equivInduced (Equiv.ulift.{w', w}.symm : M ≃ _)
 
 /-- The reduct of any model of `φ.onTheory T` is a model of `T`. -/
 @[simps]
-/--
-Definition of `reduct` / `reduct` 的定义
+/-
+**FirstOrder.Language.Theory.ModelType.reduct** 是 Mathlib 中的一个定义，位于命名空间 `FirstOr
+der.Language.Theory.ModelType`。
+形式化陈述：reduct {L' : Language} (φ : L ->ᴸ L') (M : (φ.onTheory T).ModelType) : T.M
+odelType where Carrier
+参数：φ : L ->ᴸ L'；M : (φ.onTheory T).ModelType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduct
-  signature: {L' : Language} (φ : L ->ᴸ L') (M : (φ.onTheory T).ModelType)
-  body: M
-  struc := φ.reduct M
-  nonempty' := M.nonempty'
-  is_model := (@LHom.onTheory_model L L' M (φ.reduct M) _ φ _ T).1 M.is_model
-
-中文:
-定义 reduct
-  签名: {L' : Language} (φ : L ->ᴸ L') (M : (φ.onTheory T).ModelType)
-  定义体: M
-  struc := φ.reduct M
-  nonempty' := M.nonempty'
-  is_model := (@LHom.onTheory_model L L' M (φ.reduct M) _ φ _ T).1 M.is_model
-
-Depends on / 依赖: _mono, inf_le_left, inf_le_right, le_inf, le_rfl
+--- 原说明 ---
+The reduct of any model of `φ.onTheory T` is a model of `T`.
 -/
-def reduct {L' : Language} (φ : L ->ᴸ L') (M : (φ.onTheory T).ModelType) : T.ModelType where
+def reduct {L' : Language} (φ : L →ᴸ L') (M : (φ.onTheory T).ModelType) : T.ModelType where
   Carrier := M
   struc := φ.reduct M
   nonempty' := M.nonempty'
@@ -393,32 +292,30 @@ def reduct {L' : Language} (φ : L ->ᴸ L') (M : (φ.onTheory T).ModelType) : T
 /-- When `φ` is injective, `defaultExpansion` expands a model of `T` to a model of `φ.onTheory T`
   arbitrarily. -/
 @[simps]
-/--
-Definition of `defaultExpansion` / `defaultExpansion` 的定义
+/-
+**FirstOrder.Language.Theory.ModelType.defaultExpansion** 是 Mathlib 中的一个定义，位于命名空
+间 `FirstOrder.Language.Theory.ModelType`。
+形式化陈述：defaultExpansion {L' : Language} {φ : L ->ᴸ L'} (h : φ.Injective) [forall 
+(n) (f : L'.Functions n), Decidable (f in Set.range fun f : L.Functions n => φ.o
+nFunction f)] [forall (n) (r : L'.Relations n), Decidable (r in Set.range fun r 
+: L.Relations n => φ.onRelation r)] (M : T.ModelType) [Inhabited M] : (φ.onTheor
+y T).ModelType where Carrier
+参数：h : φ.Injective；n；f : L'.Functions n；f in Set.range fun f : L.Functions n => 
+φ.onFunction f；n；r : L'.Relations n；r in Set.range fun r : L.Relations n => φ.on
+Relation r；M : T.ModelType。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.ModelType.nonempty'`：∀ {L : FirstOrder.Langua
+ge} {T : L.Theory} (self : T.ModelType), Nonempty ↑self
 
-English:
-definition defaultExpansion
-  signature: {L' : Language} {φ : L ->ᴸ L'} (h : φ.Injective)
-  body: M
-  struc := φ.defaultExpansion M
-  nonempty' := M.nonempty'
-  is_model :=
-    (@LHom.onTheory_model L L' M _ (φ.defaultExpansion M) φ (h.isExpansionOn_default M) T).2
-      M.is_model
-
-中文:
-定义 defaultExpansion
-  签名: {L' : Language} {φ : L ->ᴸ L'} (h : φ.单射)
-  定义体: M
-  struc := φ.defaultExpansion M
-  nonempty' := M.nonempty'
-  is_model :=
-    (@LHom.onTheory_model L L' M _ (φ.defaultExpansion M) φ (h.isExpansionOn_default M) T).2
-      M.is_model
+--- 原说明 ---
+When `φ` is injective, `defaultExpansion` expands a model of `T` to a model of `
+φ.onTheory T`
+  arbitrarily.
 -/
-noncomputable def defaultExpansion {L' : Language} {φ : L ->ᴸ L'} (h : φ.Injective)
-    [forall (n) (f : L'.Functions n), Decidable (f in Set.range fun f : L.Functions n => φ.onFunction f)]
-    [forall (n) (r : L'.Relations n), Decidable (r in Set.range fun r : L.Relations n => φ.onRelation r)]
+noncomputable def defaultExpansion {L' : Language} {φ : L →ᴸ L'} (h : φ.Injective)
+    [∀ (n) (f : L'.Functions n), Decidable (f ∈ Set.range fun f : L.Functions n => φ.onFunction f)]
+    [∀ (n) (r : L'.Relations n), Decidable (r ∈ Set.range fun r : L.Relations n => φ.onRelation r)]
     (M : T.ModelType) [Inhabited M] : (φ.onTheory T).ModelType where
   Carrier := M
   struc := φ.defaultExpansion M
@@ -426,81 +323,61 @@ noncomputable def defaultExpansion {L' : Language} {φ : L ->ᴸ L'} (h : φ.Inj
   is_model :=
     (@LHom.onTheory_model L L' M _ (φ.defaultExpansion M) φ (h.isExpansionOn_default M) T).2
       M.is_model
-
-/--
-Instance `leftStructure` / 实例 `leftStructure`
-
-English:
-instance leftStructure
-  signature: {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType)
-  body: (LHom.sumInl : L ->ᴸ L.sum L').reduct M
-
-中文:
-实例 leftStructure
-  签名: {L' : Language} {T : (L.求和 L').Theory} (M : T.ModelType)
-  定义体: (LHom.sumInl : L ->ᴸ L.sum L').reduct M
-
-Depends on / 依赖: L.sum, LHom.sumInl, reduct, sumInl
+/-
+**FirstOrder.Language.Theory.ModelType.leftStructure** 是 Mathlib 中的一个实例，位于命名空间 `
+FirstOrder.Language.Theory.ModelType`。
+形式化陈述：leftStructure {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType) : 
+L.Structure M
+参数：L.sum L'；M : T.ModelType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance leftStructure {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType) : L.Structure M :=
-  (LHom.sumInl : L ->ᴸ L.sum L').reduct M
-
-/--
-Instance `rightStructure` / 实例 `rightStructure`
-
-English:
-instance rightStructure
-  signature: {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType)
-  body: (LHom.sumInr : L' ->ᴸ L.sum L').reduct M
-
-中文:
-实例 rightStructure
-  签名: {L' : Language} {T : (L.求和 L').Theory} (M : T.ModelType)
-  定义体: (LHom.sumInr : L' ->ᴸ L.sum L').reduct M
-
-Depends on / 依赖: L.sum, LHom.sumInr, reduct, sumInr
+  (LHom.sumInl : L →ᴸ L.sum L').reduct M
+/-
+**FirstOrder.Language.Theory.ModelType.rightStructure** 是 Mathlib 中的一个实例，位于命名空间 
+`FirstOrder.Language.Theory.ModelType`。
+形式化陈述：rightStructure {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType) :
+ L'.Structure M
+参数：L.sum L'；M : T.ModelType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightStructure {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType) :
     L'.Structure M :=
-  (LHom.sumInr : L' ->ᴸ L.sum L').reduct M
+  (LHom.sumInr : L' →ᴸ L.sum L').reduct M
 
 /-- A model of a theory is also a model of any subtheory. -/
 @[simps]
-/--
-Definition of `subtheoryModel` / `subtheoryModel` 的定义
+/-
+**FirstOrder.Language.Theory.ModelType.subtheoryModel** 是 Mathlib 中的一个定义，位于命名空间 
+`FirstOrder.Language.Theory.ModelType`。
+形式化陈述：subtheoryModel (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T) : T'.
+ModelType where Carrier
+参数：M : T.ModelType；h : T' subseteq T。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.ModelType.nonempty'`：∀ {L : FirstOrder.Langua
+ge} {T : L.Theory} (self : T.ModelType), Nonempty ↑self
 
-English:
-definition subtheoryModel
-  signature: (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T)
-  body: M
-  is_model := ⟨fun _φ hφ => realize_sentence_of_mem T (h hφ)⟩
-
-中文:
-定义 subtheoryModel
-  签名: (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T)
-  定义体: M
-  is_model := ⟨fun _φ hφ => realize_sentence_of_mem T (h hφ)⟩
+--- 原说明 ---
+A model of a theory is also a model of any subtheory.
 -/
-def subtheoryModel (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T) : T'.ModelType where
+def subtheoryModel (M : T.ModelType) {T' : L.Theory} (h : T' ⊆ T) : T'.ModelType where
   Carrier := M
   is_model := ⟨fun _φ hφ => realize_sentence_of_mem T (h hφ)⟩
-
-/--
-Instance `subtheoryModel_models` / 实例 `subtheoryModel_models`
-
-English:
-instance subtheoryModel_models
-  signature: (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T)
-  body: M.is_model
-
-中文:
-实例 subtheoryModel_models
-  签名: (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T)
-  定义体: M.is_model
-
-Depends on / 依赖: M.is_model, is_model
+/-
+**FirstOrder.Language.Theory.ModelType.subtheoryModel_models** 是 Mathlib 中的一个实例，
+位于命名空间 `FirstOrder.Language.Theory.ModelType`。
+形式化陈述：subtheoryModel_models (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T
+) : M.subtheoryModel h ⊨ T
+参数：M : T.ModelType；h : T' subseteq T。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.ModelType.is_model`：∀ {L : FirstOrder.Languag
+e} {T : L.Theory} (self : T.ModelType), ↑self ⊨ T
 -/
-instance subtheoryModel_models (M : T.ModelType) {T' : L.Theory} (h : T' subseteq T) :
+instance subtheoryModel_models (M : T.ModelType) {T' : L.Theory} (h : T' ⊆ T) :
     M.subtheoryModel h ⊨ T :=
   M.is_model
 
@@ -508,67 +385,47 @@ end ModelType
 
 variable {T}
 
-/--
-Definition of `Model.bundled` / `Model.bundled` 的定义
+/-- Bundles `M ⊨ T` as a `T.ModelType`. -/
+/-
+**FirstOrder.Language.Theory.Model.bundled** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder
+.Language.Theory.Model`。
+形式化陈述：{L : FirstOrder.Language} →   {T : L.Theory} → {M : Type w} → [LM : L.Stru
+cture M] → [ne : Nonempty M] → M ⊨ T → T.ModelType
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Model.bundled
-  signature: {M : Type w} [LM : L.Structure M] [ne : Nonempty M] (h : M ⊨ T)
-  body: @ModelType.of L T M LM h ne
-
-@[simp]
-
-中文:
-定义 Model.bundled
-  签名: {M : 类型 w} [LM : L.结构 M] [ne : 非空 M] (h : M ⊨ T)
-  定义体: @ModelType.of L T M LM h ne
-
-@[simp]
-
-Depends on / 依赖: ModelType, ModelType.of
+--- 原说明 ---
+Bundles `M ⊨ T` as a `T.ModelType`.
 -/
 def Model.bundled {M : Type w} [LM : L.Structure M] [ne : Nonempty M] (h : M ⊨ T) : T.ModelType :=
   @ModelType.of L T M LM h ne
 
 @[simp]
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: {M : Type w} [L.Structure M] [Nonempty M] (h : M ⊨ T)
-  statement: (h.bundled : Type w) = M
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: {M : 类型 w} [L.结构 M] [非空 M] (h : M ⊨ T)
-  结论: (h.bundled : 类型 w) = M
-  证明: rfl
+/-
+**FirstOrder.Language.Theory.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Langua
+ge.Theory`。
+形式化陈述：coe_of {M : Type w} [L.Structure M] [Nonempty M] (h : M ⊨ T) : (h.bundled 
+: Type w) = M
+参数：h : M ⊨ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of {M : Type w} [L.Structure M] [Nonempty M] (h : M ⊨ T) : (h.bundled : Type w) = M :=
   rfl
 
 end Theory
 
-/--
-Definition of `ElementarilyEquivalent.toModel` / `ElementarilyEquivalent.toModel` 的定义
+/-- A structure that is elementarily equivalent to a model, bundled as a model. -/
+/-
+**FirstOrder.Language.ElementarilyEquivalent.toModel** 是 Mathlib 中的一个定义，位于命名空间 `
+FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：{L : FirstOrder.Language} →   (T : L.Theory) →     {M : T.ModelType} → {N 
+: Type u_1} → [LN : L.Structure N] → L.ElementarilyEquivalent (↑M) N → T.ModelTy
+pe
+参数：T : L.Theory；↑M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ElementarilyEquivalent.toModel
-  signature: {M : T.ModelType} {N : Type*} [LN : L.Structure N]
-  body: N
-  struc := LN
-  nonempty' := h.nonempty
-  is_model := h.theory_model
-
-中文:
-定义 ElementarilyEquivalent.toModel
-  签名: {M : T.ModelType} {N : 类型} [LN : L.结构 N]
-  定义体: N
-  struc := LN
-  nonempty' := h.nonempty
-  is_model := h.theory_model
+--- 原说明 ---
+A structure that is elementarily equivalent to a model, bundled as a model.
 -/
 def ElementarilyEquivalent.toModel {M : T.ModelType} {N : Type*} [LN : L.Structure N]
     (h : M ≅[L] N) : T.ModelType where
@@ -577,37 +434,30 @@ def ElementarilyEquivalent.toModel {M : T.ModelType} {N : Type*} [LN : L.Structu
   nonempty' := h.nonempty
   is_model := h.theory_model
 
-/--
-Definition of `ElementarySubstructure.toModel` / `ElementarySubstructure.toModel` 的定义
+/-- An elementary substructure of a bundled model as a bundled model. -/
+/-
+**FirstOrder.Language.ElementarySubstructure.toModel** 是 Mathlib 中的一个定义，位于命名空间 `
+FirstOrder.Language.ElementarySubstructure`。
+形式化陈述：{L : FirstOrder.Language} → (T : L.Theory) → {M : T.ModelType} → L.Element
+arySubstructure ↑M → T.ModelType
+参数：T : L.Theory。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ElementarySubstructure.toModel
-  signature: {M : T.ModelType} (S : L.ElementarySubstructure M)
-  body: S.elementarilyEquivalent.symm.toModel T
-
-中文:
-定义 ElementarySubstructure.toModel
-  签名: {M : T.ModelType} (S : L.ElementarySubstructure M)
-  定义体: S.elementarilyEquivalent.symm.toModel T
-
-Depends on / 依赖: S.elementarilyEquivalent.symm.toModel, elementarilyEquivalent, toModel
+--- 原说明 ---
+An elementary substructure of a bundled model as a bundled model.
 -/
 def ElementarySubstructure.toModel {M : T.ModelType} (S : L.ElementarySubstructure M) :
     T.ModelType :=
   S.elementarilyEquivalent.symm.toModel T
-
-/--
-Instance `ElementarySubstructure.toModel.instSmall` / 实例 `ElementarySubstructure.toModel.instSmall`
-
-English:
-instance ElementarySubstructure.toModel.instSmall
-  signature: {M : T.ModelType}
-  body: h
-
-中文:
-实例 ElementarySubstructure.toModel.instSmall
-  签名: {M : T.ModelType}
-  定义体: h
+/-
+**FirstOrder.Language.ElementarySubstructure.toModel.instSmall** 是 Mathlib 中的一个定
+理，位于命名空间 `FirstOrder.Language.ElementarySubstructure.toModel`。
+形式化陈述：∀ {L : FirstOrder.Language} (T : L.Theory) {M : T.ModelType} (S : L.Elemen
+tarySubstructure ↑M) [h : Small.{w, x} ↥S],   Small.{w, x} ↑(FirstOrder.Language
+.ElementarySubstructure.toModel T S)
+参数：T : L.Theory；S : L.ElementarySubstructure ↑M；FirstOrder.Language.ElementarySu
+bstructure.toModel T S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ElementarySubstructure.toModel.instSmall {M : T.ModelType}
     (S : L.ElementarySubstructure M) [h : Small.{w, x} S] : Small.{w, x} (S.toModel T) :=
@@ -616,3 +466,4 @@ instance ElementarySubstructure.toModel.instSmall {M : T.ModelType}
 end Language
 
 end FirstOrder
+

@@ -8,7 +8,7 @@ module
 
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-import Mathlib.Tactic.Linter.Header -- shake: keep
+import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Meta.AppBuilder
 public import Lean.Meta.Match.MatcherInfo
 public import Lean.Meta.Transform
@@ -30,18 +30,16 @@ namespace BinderInfo
 
 /-! ### Declarations about `BinderInfo` -/
 
-/--
-Definition of `brackets` / `brackets` 的定义
+/-- The brackets corresponding to a given `BinderInfo`. -/
+/-
+**Lean.BinderInfo.brackets** 是 Mathlib 中的一个定义，位于命名空间 `Lean.BinderInfo`。
+形式化陈述：BinderInfo → String × String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition brackets
-  signature: : BinderInfo -> String × String
-
-中文:
-定义 brackets
-  签名: : BinderInfo -> String × String
+--- 原说明 ---
+The brackets corresponding to a given `BinderInfo`.
 -/
-def brackets : BinderInfo -> String × String
+def brackets : BinderInfo → String × String
   | BinderInfo.implicit => ("{", "}")
   | BinderInfo.strictImplicit => ("{{", "}}")
   | BinderInfo.instImplicit => ("[", "]")
@@ -53,141 +51,109 @@ namespace Name
 
 /-! ### Declarations about `name` -/
 
-/--
-Definition of `mapPrefix` / `mapPrefix` 的定义
+/-- Find the largest prefix `n` of a `Name` such that `f n != none`, then replace this prefix
+with the value of `f n`. -/
+/-
+**Lean.Name.mapPrefix** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：(Name → Option Name) → Name → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPrefix
-  signature: (f : Name -> Option Name) (n : Name)
-  body: Id.run do
+--- 原说明 ---
+Find the largest prefix `n` of a `Name` such that `f n != none`, then replace th
+is prefix
+with the value of `f n`.
+-/
+@[specialize] def mapPrefix (f : Name → Option Name) (n : Name) : Name := Id.run do
   if let some n' := f n then return n'
   match n with
   | anonymous => anonymous
   | str n' s => mkStr (mapPrefix f n') s
   | num n' i => mkNum (mapPrefix f n') i
 
-中文:
-定义 mapPrefix
-  签名: (f : Name -> 选项类型 Name) (n : Name)
-  定义体: Id.run do
-  if let some n' := f n then return n'
-  match n with
-  | anonymous => anonymous
-  | str n' s => mkStr (mapPrefix f n') s
-  | num n' i => mkNum (mapPrefix f n') i
+/-- Build a name from components.
+For example, ``from_components [`foo, `bar]`` becomes ``` `foo.bar```.
+It is the inverse of `Name.components` on list of names that have single components. -/
+/-
+**Lean.Name.fromComponents** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：fromComponents : List Name -> Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Build a name from components.
+For example, ``from_components [`foo, `bar]`` becomes ``` `foo.bar```.
+It is the inverse of `Name.components` on list of names that have single compone
+nts.
 -/
-@[specialize] def mapPrefix (f : Name -> Option Name) (n : Name) : Name := Id.run do
-  if let some n' := f n then return n'
-  match n with
-  | anonymous => anonymous
-  | str n' s => mkStr (mapPrefix f n') s
-  | num n' i => mkNum (mapPrefix f n') i
-
-/--
-Definition of `fromComponents` / `fromComponents` 的定义
-
-English:
-definition fromComponents
-  signature: : List Name -> Name
-  body: go .anonymous where
+def fromComponents : List Name → Name := go .anonymous where
   /-- Auxiliary for `Name.fromComponents` -/
-  go : Name -> List Name -> Name
-  | n, [] => n
+  go : Name → List Name → Name
+  | n, []        => n
   | n, s :: rest => go (s.updatePrefix n) rest
 
-中文:
-定义 fromComponents
-  签名: : 列表 Name -> Name
-  定义体: go .anonymous where
-  /-- Auxiliary for `Name.fromComponents` -/
-  go : Name -> List Name -> Name
-  | n, [] => n
-  | n, s :: rest => go (s.updatePrefix n) rest
+/-- Update the last component of a name. -/
+/-
+**Lean.Name.updateLast** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：(String → String) → Name → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: anonymous
+--- 原说明 ---
+Update the last component of a name.
 -/
-def fromComponents : List Name -> Name := go .anonymous where
-  /-- Auxiliary for `Name.fromComponents` -/
-  go : Name -> List Name -> Name
-  | n, [] => n
-  | n, s :: rest => go (s.updatePrefix n) rest
-
-/--
-Definition of `updateLast` / `updateLast` 的定义
-
-English:
-definition updateLast
-  signature: (f : String -> String)
-
-中文:
-定义 updateLast
-  签名: (f : String -> String)
--/
-def updateLast (f : String -> String) : Name -> Name
+def updateLast (f : String → String) : Name → Name
   | .str n s => .str n (f s)
-  | n => n
+  | n        => n
 
-/--
-Definition of `lastComponentAsString` / `lastComponentAsString` 的定义
+/-- Get the last field of a name as a string.
+Doesn't raise an error when the last component is a numeric field. -/
+/-
+**Lean.Name.lastComponentAsString** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：Name → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lastComponentAsString
-  signature: : Name -> String
-
-中文:
-定义 lastComponentAsString
-  签名: : Name -> String
+--- 原说明 ---
+Get the last field of a name as a string.
+Doesn't raise an error when the last component is a numeric field.
 -/
-def lastComponentAsString : Name -> String
+def lastComponentAsString : Name → String
   | .str _ s => s
   | .num _ n => toString n
   | .anonymous => ""
 
-/--
-Definition of `splitAt` / `splitAt` 的定义
+/-- `nm.splitAt n` splits a name `nm` in two parts, such that the *second* part has depth `n`,
+i.e. `(nm.splitAt n).2.getNumParts = n` (assuming `nm.getNumParts ≥ n`).
+Example: ``splitAt `foo.bar.baz.back.bat 1 = (`foo.bar.baz.back, `bat)``. -/
+/-
+**Lean.Name.splitAt** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：splitAt (nm : Name) (n : Nat) : Name × Name
+参数：nm : Name；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitAt
-  signature: (nm : Name) (n : Nat)
-  body: let (nm2, nm1) := nm.componentsRev.splitAt n
-  (.fromComponents <| nm1.reverse, .fromComponents <| nm2.reverse)
-
-中文:
-定义 splitAt
-  签名: (nm : Name) (n : 自然数)
-  定义体: let (nm2, nm1) := nm.componentsRev.splitAt n
-  (.fromComponents <| nm1.reverse, .fromComponents <| nm2.reverse)
-
-Depends on / 依赖: componentsRev, fromComponents, nm.componentsRev.splitAt, nm1.reverse, nm2.reverse, reverse, splitAt
+--- 原说明 ---
+`nm.splitAt n` splits a name `nm` in two parts, such that the *second* part has 
+depth `n`,
+i.e. `(nm.splitAt n).2.getNumParts = n` (assuming `nm.getNumParts ≥ n`).
+Example: ``splitAt `foo.bar.baz.back.bat 1 = (`foo.bar.baz.back, `bat)``.
 -/
 def splitAt (nm : Name) (n : Nat) : Name × Name :=
   let (nm2, nm1) := nm.componentsRev.splitAt n
   (.fromComponents <| nm1.reverse, .fromComponents <| nm2.reverse)
 
-/--
-Definition of `isPrefixOf?` / `isPrefixOf?` 的定义
+/-- `isPrefixOf? pre nm` returns `some post` if `nm = pre ++ post`.
+Note that this includes the case where `nm` has multiple more namespaces.
+If `pre` is not a prefix of `nm`, it returns `none`. -/
+/-
+**Lean.Name.isPrefixOf** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：isPrefixOf? (pre nm : Name) : Option Name
+参数：pre nm : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isPrefixOf?
-  signature: (pre nm : Name)
-  body: if pre == nm then
-    some anonymous
-  else match nm with
-  | anonymous => none
-  | num p' a => (isPrefixOf? pre p').map (·.num a)
-  | str p' s => (isPrefixOf? pre p').map (·.str s)
-
-中文:
-定义 isPrefixOf?
-  签名: (pre nm : Name)
-  定义体: if pre == nm then
-    some anonymous
-  else match nm with
-  | anonymous => none
-  | num p' a => (isPrefixOf? pre p').map (·.num a)
-  | str p' s => (isPrefixOf? pre p').map (·.str s)
-
-Depends on / 依赖: anonymous, isPrefixOf
+--- 原说明 ---
+`isPrefixOf? pre nm` returns `some post` if `nm = pre ++ post`.
+Note that this includes the case where `nm` has multiple more namespaces.
+If `pre` is not a prefix of `nm`, it returns `none`.
 -/
 def isPrefixOf? (pre nm : Name) : Option Name :=
   if pre == nm then
@@ -200,318 +166,272 @@ def isPrefixOf? (pre nm : Name) : Option Name :=
 open Meta
 
 -- from Lean.Server.Completion
-/--
-Definition of `isBlackListed` / `isBlackListed` 的定义
-
-English:
-definition isBlackListed
-  signature: {m} [Monad m] [MonadEnv m] (declName : Name)
-  body: do
-  if declName == ``sorryAx then return true
-  if declName matches .str _ "inj" then return true
-  if declName matches .str _ "noConfusionType" then return true
-  let env ← getEnv
-pure declName.isInternalDetail
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName isMatcher declName
-
-中文:
-定义 isBlackListed
-  签名: {m} [单子 m] [MonadEnv m] (declName : Name)
-  定义体: do
-  if declName == ``sorryAx then return true
-  if declName matches .str _ "inj" then return true
-  if declName matches .str _ "noConfusionType" then return true
-  let env ← getEnv
-pure declName.isInternalDetail
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName isMatcher declName
+/-
+**Lean.Name.isBlackListed** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Name`。
+形式化陈述：isBlackListed {m} [Monad m] [MonadEnv m] (declName : Name) : m Bool
+参数：declName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def isBlackListed {m} [Monad m] [MonadEnv m] (declName : Name) : m Bool := do
   if declName == ``sorryAx then return true
   if declName matches .str _ "inj" then return true
   if declName matches .str _ "noConfusionType" then return true
   let env ← getEnv
-pure declName.isInternalDetail
+  pure <| declName.isInternalDetail
    || isAuxRecursor env declName
    || isNoConfusion env declName
- isRec declName isMatcher declName
+  <||> isRec declName <||> isMatcher declName
 
 end Name
 
 namespace ConstantInfo
 
-/--
-Definition of `isDef` / `isDef` 的定义
+/-- Checks whether this `ConstantInfo` is a definition. -/
+/-
+**Lean.ConstantInfo.isDef** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：ConstantInfo → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isDef
-  signature: : ConstantInfo -> Bool
-
-中文:
-定义 isDef
-  签名: : ConstantInfo -> 布尔值
+--- 原说明 ---
+Checks whether this `ConstantInfo` is a definition.
 -/
-def isDef : ConstantInfo -> Bool
+def isDef : ConstantInfo → Bool
   | defnInfo _ => true
-  | _ => false
+  | _          => false
 
-/--
-Definition of `isThm` / `isThm` 的定义
+/-- Checks whether this `ConstantInfo` is a theorem. -/
+/-
+**Lean.ConstantInfo.isThm** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：ConstantInfo → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isThm
-  signature: : ConstantInfo -> Bool
-
-中文:
-定义 isThm
-  签名: : ConstantInfo -> 布尔值
+--- 原说明 ---
+Checks whether this `ConstantInfo` is a theorem.
 -/
-def isThm : ConstantInfo -> Bool
+def isThm : ConstantInfo → Bool
   | thmInfo _ => true
-  | _ => false
+  | _          => false
 
-/--
-Definition of `updateConstantVal` / `updateConstantVal` 的定义
+/-- Update `ConstantVal` (the data common to all constructors of `ConstantInfo`)
+in a `ConstantInfo`. -/
+/-
+**Lean.ConstantInfo.updateConstantVal** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantIn
+fo`。
+形式化陈述：updateConstantVal : ConstantInfo -> ConstantVal -> ConstantInfo | defnInfo
+ info, v => defnInfo {info with toConstantVal
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateConstantVal
-  signature: : ConstantInfo -> ConstantVal -> ConstantInfo
-
-中文:
-定义 updateConstantVal
-  签名: : ConstantInfo -> ConstantVal -> ConstantInfo
+--- 原说明 ---
+Update `ConstantVal` (the data common to all constructors of `ConstantInfo`)
+in a `ConstantInfo`.
 -/
-def updateConstantVal : ConstantInfo -> ConstantVal -> ConstantInfo
-  | defnInfo info, v => defnInfo {info with toConstantVal := v}
-  | axiomInfo info, v => axiomInfo {info with toConstantVal := v}
-  | thmInfo info, v => thmInfo {info with toConstantVal := v}
+def updateConstantVal : ConstantInfo → ConstantVal → ConstantInfo
+  | defnInfo   info, v => defnInfo   {info with toConstantVal := v}
+  | axiomInfo  info, v => axiomInfo  {info with toConstantVal := v}
+  | thmInfo    info, v => thmInfo    {info with toConstantVal := v}
   | opaqueInfo info, v => opaqueInfo {info with toConstantVal := v}
-  | quotInfo info, v => quotInfo {info with toConstantVal := v}
+  | quotInfo   info, v => quotInfo   {info with toConstantVal := v}
   | inductInfo info, v => inductInfo {info with toConstantVal := v}
-  | ctorInfo info, v => ctorInfo {info with toConstantVal := v}
-  | recInfo info, v => recInfo {info with toConstantVal := v}
+  | ctorInfo   info, v => ctorInfo   {info with toConstantVal := v}
+  | recInfo    info, v => recInfo    {info with toConstantVal := v}
 
-/--
-Definition of `updateName` / `updateName` 的定义
+/-- Update the name of a `ConstantInfo`. -/
+/-
+**Lean.ConstantInfo.updateName** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：updateName (c : ConstantInfo) (name : Name) : ConstantInfo
+参数：c : ConstantInfo；name : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateName
-  signature: (c : ConstantInfo) (name : Name)
-  body: c.updateConstantVal {c.toConstantVal with name}
-
-中文:
-定义 updateName
-  签名: (c : ConstantInfo) (name : Name)
-  定义体: c.updateConstantVal {c.toConstantVal with name}
-
-Depends on / 依赖: c.toConstantVal, c.updateConstantVal, toConstantVal, updateConstantVal
+--- 原说明 ---
+Update the name of a `ConstantInfo`.
 -/
 def updateName (c : ConstantInfo) (name : Name) : ConstantInfo :=
   c.updateConstantVal {c.toConstantVal with name}
 
-/--
-Definition of `updateType` / `updateType` 的定义
+/-- Update the type of a `ConstantInfo`. -/
+/-
+**Lean.ConstantInfo.updateType** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：updateType (c : ConstantInfo) (type : Expr) : ConstantInfo
+参数：c : ConstantInfo；type : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateType
-  signature: (c : ConstantInfo) (type : Expr)
-  body: c.updateConstantVal {c.toConstantVal with type}
-
-中文:
-定义 updateType
-  签名: (c : ConstantInfo) (type : Expr)
-  定义体: c.updateConstantVal {c.toConstantVal with type}
-
-Depends on / 依赖: c.toConstantVal, c.updateConstantVal, toConstantVal, updateConstantVal
+--- 原说明 ---
+Update the type of a `ConstantInfo`.
 -/
 def updateType (c : ConstantInfo) (type : Expr) : ConstantInfo :=
   c.updateConstantVal {c.toConstantVal with type}
 
-/--
-Definition of `updateLevelParams` / `updateLevelParams` 的定义
+/-- Update the level parameters of a `ConstantInfo`. -/
+/-
+**Lean.ConstantInfo.updateLevelParams** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantIn
+fo`。
+形式化陈述：updateLevelParams (c : ConstantInfo) (levelParams : List Name) : ConstantI
+nfo
+参数：c : ConstantInfo；levelParams : List Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateLevelParams
-  signature: (c : ConstantInfo) (levelParams : List Name)
-  body: c.updateConstantVal {c.toConstantVal with levelParams}
-
-中文:
-定义 updateLevelParams
-  签名: (c : ConstantInfo) (levelParams : 列表 Name)
-  定义体: c.updateConstantVal {c.toConstantVal with levelParams}
-
-Depends on / 依赖: c.toConstantVal, c.updateConstantVal, levelParams, toConstantVal, updateConstantVal
+--- 原说明 ---
+Update the level parameters of a `ConstantInfo`.
 -/
 def updateLevelParams (c : ConstantInfo) (levelParams : List Name) :
     ConstantInfo :=
   c.updateConstantVal {c.toConstantVal with levelParams}
 
 /--
-Definition of `updateAll` / `updateAll` 的定义
+Update the mutual-block `all` field of a `ConstantInfo`.
 
-English:
-definition updateAll
-  signature: : ConstantInfo -> List Name -> ConstantInfo
-
-中文:
-定义 updateAll
-  签名: : ConstantInfo -> 列表 Name -> ConstantInfo
+This applies to declaration kinds where `ConstantInfo.all` is stored directly.
 -/
-def updateAll : ConstantInfo -> List Name -> ConstantInfo
+/-
+**Lean.ConstantInfo.updateAll** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：ConstantInfo → List Name → ConstantInfo
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Update the mutual-block `all` field of a `ConstantInfo`.
+
+This applies to declaration kinds where `ConstantInfo.all` is stored directly.
+-/
+def updateAll : ConstantInfo → List Name → ConstantInfo
   | .defnInfo info, all => .defnInfo {info with all}
   | .thmInfo info, all => .thmInfo {info with all}
   | .opaqueInfo info, all => .opaqueInfo {info with all}
   | .inductInfo info, all => .inductInfo {info with all}
   | ci, _ => ci
 
-/--
-Definition of `updateValue` / `updateValue` 的定义
+/-- Update the value of a `ConstantInfo`, if it has one. -/
+/-
+**Lean.ConstantInfo.updateValue** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+形式化陈述：updateValue : ConstantInfo -> Expr -> ConstantInfo | defnInfo info, v => d
+efnInfo {info with value
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateValue
-  signature: : ConstantInfo -> Expr -> ConstantInfo
-
-中文:
-定义 updateValue
-  签名: : ConstantInfo -> Expr -> ConstantInfo
+--- 原说明 ---
+Update the value of a `ConstantInfo`, if it has one.
 -/
-def updateValue : ConstantInfo -> Expr -> ConstantInfo
-  | defnInfo info, v => defnInfo {info with value := v}
-  | thmInfo info, v => thmInfo {info with value := v}
+def updateValue : ConstantInfo → Expr → ConstantInfo
+  | defnInfo   info, v => defnInfo   {info with value := v}
+  | thmInfo    info, v => thmInfo    {info with value := v}
   | opaqueInfo info, v => opaqueInfo {info with value := v}
   | d, _ => d
 
-/--
-Definition of `toDeclaration!` / `toDeclaration!` 的定义
+/-- Turn a `ConstantInfo` into a declaration. -/
+/-
+**Lean.ConstantInfo.toDeclaration** 是 Mathlib 中的一个定义，位于命名空间 `Lean.ConstantInfo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDeclaration!
-  signature: : ConstantInfo -> Declaration
-
-中文:
-定义 toDeclaration!
-  签名: : ConstantInfo -> Declaration
+--- 原说明 ---
+Turn a `ConstantInfo` into a declaration.
 -/
-def toDeclaration! : ConstantInfo -> Declaration
-  | defnInfo info => Declaration.defnDecl info
-  | thmInfo info => Declaration.thmDecl info
-  | axiomInfo info => Declaration.axiomDecl info
-  | opaqueInfo info => Declaration.opaqueDecl info
-  | quotInfo _ => panic! "toDeclaration for quotInfo not implemented"
+def toDeclaration! : ConstantInfo → Declaration
+  | defnInfo   info => Declaration.defnDecl info
+  | thmInfo    info => Declaration.thmDecl     info
+  | axiomInfo  info => Declaration.axiomDecl   info
+  | opaqueInfo info => Declaration.opaqueDecl  info
+  | quotInfo   _ => panic! "toDeclaration for quotInfo not implemented"
   | inductInfo _ => panic! "toDeclaration for inductInfo not implemented"
-  | ctorInfo _ => panic! "toDeclaration for ctorInfo not implemented"
-  | recInfo _ => panic! "toDeclaration for recInfo not implemented"
+  | ctorInfo   _ => panic! "toDeclaration for ctorInfo not implemented"
+  | recInfo    _ => panic! "toDeclaration for recInfo not implemented"
 
 end ConstantInfo
 
 open Meta
 
-/--
-Definition of `mkConst'` / `mkConst'` 的定义
+/-- Same as `mkConst`, but with fresh level metavariables. -/
+/-
+**Lean.mkConst'** 是 Mathlib 中的一个定义，位于命名空间 `Lean`。
+形式化陈述：mkConst' (constName : Name) : MetaM Expr
+参数：constName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkConst'
-  signature: (constName : Name)
-  body: do
-  return mkConst constName (← (← getConstInfo constName).levelParams.mapM fun _ => mkFreshLevelMVar)
-
-中文:
-定义 mkConst'
-  签名: (constName : Name)
-  定义体: do
-  return mkConst constName (← (← getConstInfo constName).levelParams.mapM fun _ => mkFreshLevelMVar)
+--- 原说明 ---
+Same as `mkConst`, but with fresh level metavariables.
 -/
 def mkConst' (constName : Name) : MetaM Expr := do
   return mkConst constName (← (← getConstInfo constName).levelParams.mapM fun _ => mkFreshLevelMVar)
 
 namespace Expr
 
+/-! ### Declarations about `Expr` -/
 
-/--
-Definition of `bvarIdx?` / `bvarIdx?` 的定义
+/-
+**Lean.Expr.bvarIdx** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bvarIdx?
-  signature: : Expr -> Option Nat
-
-中文:
-定义 bvarIdx?
-  签名: : Expr -> 选项类型 自然数
+--- 原说明 ---
+### Declarations about `Expr`
 -/
-def bvarIdx? : Expr -> Option Nat
+def bvarIdx? : Expr → Option Nat
   | bvar idx => some idx
-  | _ => none
+  | _        => none
 
-/--
-Definition of `getAppAppsAux` / `getAppAppsAux` 的定义
+/-- Invariant: `i : ℕ` should be less than the size of `as : Array Expr`. -/
+/-
+**Lean.Expr.getAppAppsAux** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAppAppsAux
-  signature: : Expr -> Array Expr -> Nat -> Array Expr
-
-中文:
-定义 getAppAppsAux
-  签名: : Expr -> 数组 Expr -> 自然数 -> 数组 Expr
+--- 原说明 ---
+Invariant: `i : ℕ` should be less than the size of `as : Array Expr`.
 -/
-private def getAppAppsAux : Expr -> Array Expr -> Nat -> Array Expr
+private def getAppAppsAux : Expr → Array Expr → Nat → Array Expr
   | .app f a, as, i => getAppAppsAux f (as.set! i (.app f a)) (i-1)
-  | _, as, _ => as
+  | _,       as, _ => as
 
 /-- Given `f a b c`, return `#[f a, f a b, f a b c]`.
 Each entry in the array is an `Expr.app`,
 and this array has the same length as the one returned by `Lean.Expr.getAppArgs`. -/
 @[inline]
-/--
-Definition of `getAppApps` / `getAppApps` 的定义
+/-
+**Lean.Expr.getAppApps** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：getAppApps (e : Expr) : Array Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAppApps
-  signature: (e : Expr)
-  body: let dummy := mkSort .zero
-  let nargs := e.getAppNumArgs
-  getAppAppsAux e (.replicate nargs dummy) (nargs-1)
-
-中文:
-定义 getAppApps
-  签名: (e : Expr)
-  定义体: let dummy := mkSort .zero
-  let nargs := e.getAppNumArgs
-  getAppAppsAux e (.replicate nargs dummy) (nargs-1)
-
-Depends on / 依赖: e.getAppNumArgs, getAppAppsAux, getAppNumArgs, mkSort, replicate
+--- 原说明 ---
+Given `f a b c`, return `#[f a, f a b, f a b c]`.
+Each entry in the array is an `Expr.app`,
+and this array has the same length as the one returned by `Lean.Expr.getAppArgs`
+.
 -/
 def getAppApps (e : Expr) : Array Expr :=
   let dummy := mkSort .zero
   let nargs := e.getAppNumArgs
   getAppAppsAux e (.replicate nargs dummy) (nargs-1)
 
-/--
-Definition of `eraseProofs` / `eraseProofs` 的定义
+/-- Erase proofs in an expression by replacing them with `sorry`s.
 
-English:
-definition eraseProofs
-  signature: (e : Expr)
-  body: Meta.transform (skipConstInApp := true) e
-    (pre := fun e => do
-      if (← Meta.isProof e) then
-        return .continue (← mkSorry (← inferType e) true)
-      else
-        return .continue)
+This function replaces all proofs in the expression
+and in the types that appear in the expression
+by `sorryAx`s.
+The resulting expression has the same type as the old one.
 
-中文:
-定义 eraseProofs
-  签名: (e : Expr)
-  定义体: Meta.transform (skipConstInApp := true) e
-    (pre := fun e => do
-      if (← Meta.isProof e) then
-        return .continue (← mkSorry (← inferType e) true)
-      else
-        return .continue)
+It is useful, e.g., to verify if the proof-irrelevant part of a definition depends on a variable.
+-/
+/-
+**Lean.Expr.eraseProofs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：eraseProofs (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Meta.isProof, Meta.transform, continue, inferType, isProof, mkSorry, return, skipConstInApp, transform
+--- 原说明 ---
+Erase proofs in an expression by replacing them with `sorry`s.
+
+This function replaces all proofs in the expression
+and in the types that appear in the expression
+by `sorryAx`s.
+The resulting expression has the same type as the old one.
+
+It is useful, e.g., to verify if the proof-irrelevant part of a definition depen
+ds on a variable.
 -/
 def eraseProofs (e : Expr) : MetaM Expr :=
   Meta.transform (skipConstInApp := true) e
@@ -521,18 +441,15 @@ def eraseProofs (e : Expr) : MetaM Expr :=
       else
         return .continue)
 
-/--
-Definition of `type?` / `type?` 的定义
+/-- If an `Expr` has the form `Type u`, then return `some u`, otherwise `none`. -/
+/-
+**Lean.Expr.type** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition type?
-  signature: : Expr -> Option Level
-
-中文:
-定义 type?
-  签名: : Expr -> 选项类型 Level
+--- 原说明 ---
+If an `Expr` has the form `Type u`, then return `some u`, otherwise `none`.
 -/
-def type? : Expr -> Option Level
+def type? : Expr → Option Level
   | .sort u => u.dec
   | _ => none
 
@@ -540,86 +457,119 @@ def type? : Expr -> Option Level
 `(fun x₁ ⋯ xₙ => H) y₁ ⋯ yₙ` where `H` does not contain the variable `xₙ`. In other words,
 it does a syntactic check that the expression does not depend on `yₙ`. -/
 @[deprecated "This function was implemented incorrectly" (since := "2026-02-13")]
-/--
-Definition of `isConstantApplication` / `isConstantApplication` 的定义
+/-
+**Lean.Expr.isConstantApplication** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：isConstantApplication (e : Expr)
+参数：e : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isConstantApplication
-  signature: (e : Expr)
-  body: e.isApp && aux e.getAppNumArgs'.pred e.getAppFn' e.getAppNumArgs'
-
-中文:
-定义 isConstantApplication
-  签名: (e : Expr)
-  定义体: e.isApp && aux e.getAppNumArgs'.pred e.getAppFn' e.getAppNumArgs'
-
-Depends on / 依赖: e.getAppFn, e.getAppNumArgs, e.isApp, getAppFn, getAppNumArgs
+--- 原说明 ---
+`isConstantApplication e` checks whether `e` is syntactically an application of 
+the form
+`(fun x₁ ⋯ xₙ => H) y₁ ⋯ yₙ` where `H` does not contain the variable `xₙ`. In ot
+her words,
+it does a syntactic check that the expression does not depend on `yₙ`.
 -/
 def isConstantApplication (e : Expr) :=
   e.isApp && aux e.getAppNumArgs'.pred e.getAppFn' e.getAppNumArgs'
 where
   /-- `aux depth e n` checks whether the body of the `n`-th lambda of `e` has loose bvar
     `depth - 1`. -/
-  aux (depth : Nat) : Expr -> Nat -> Bool
-    | .lam _ _ b _, n + 1 => aux depth b n
-    | e, 0 => !e.hasLooseBVar (depth - 1)
+  aux (depth : Nat) : Expr → Nat → Bool
+    | .lam _ _ b _, n + 1  => aux depth b n
+    | e, 0  => !e.hasLooseBVar (depth - 1)
     | _, _ => false
 
 /--
-Definition of `isAppOrForallOfConstP` / `isAppOrForallOfConstP` 的定义
+Returns `true` if `type` is an application of a constant `decl` for which `p decl` is true, or a
+forall with return type of the same form (i.e. of the form `∀ (x₀ : X₀) (x₁ : X₁) ⋯, decl ..` where
+`p decl`).
 
-English:
-definition isAppOrForallOfConstP
-  signature: (p : Name -> Bool) (type : Expr)
-  body: match type.cleanupAnnotations.getAppFn' with
-  | .const n _ => p n
-  | .forallE _ _ body _ => isAppOrForallOfConstP p body
-  | _ => false
-
-中文:
-定义 isAppOrForallOfConstP
-  签名: (p : Name -> 布尔值) (type : Expr)
-  定义体: match type.cleanupAnnotations.getAppFn' with
-  | .const n _ => p n
-  | .forallE _ _ body _ => isAppOrForallOfConstP p body
-  | _ => false
+Runs `cleanupAnnotations` on `type` and `forallE` bodies, and ignores metadata in applications.
 -/
-@[inline] partial def isAppOrForallOfConstP (p : Name -> Bool) (type : Expr) : Bool :=
+/-
+**Lean.Expr.isAppOrForallOfConstP** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Expr`。
+形式化陈述：(Name → Bool) → Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Returns `true` if `type` is an application of a constant `decl` for which `p dec
+l` is true, or a
+forall with return type of the same form (i.e. of the form `∀ (x₀ : X₀) (x₁ : X₁
+) ⋯, decl ..` where
+`p decl`).
+
+Runs `cleanupAnnotations` on `type` and `forallE` bodies, and ignores metadata i
+n applications.
+-/
+@[inline] partial def isAppOrForallOfConstP (p : Name → Bool) (type : Expr) : Bool :=
   match type.cleanupAnnotations.getAppFn' with
   | .const n _ => p n
   | .forallE _ _ body _ => isAppOrForallOfConstP p body
   | _ => false
 
 /--
-Definition of `isAppOrForallOfConst` / `isAppOrForallOfConst` 的定义
+Returns `true` if `type` is an application of a constant `declName`, or a
+forall with return type of the same form (i.e. of the form `∀ (x₀ : X₀) (x₁ : X₁) ⋯, declName ..`).
 
-English:
-definition isAppOrForallOfConst
-  signature: (declName : Name) (type : Expr)
-  body: isAppOrForallOfConstP (· == declName) type
+Runs `cleanupAnnotations` on `type` and `forallE` bodies, and ignores metadata in applications.
+-/
+/-
+**Lean.Expr.isAppOrForallOfConst** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Name → Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isAppOrForallOfConst
-  签名: (declName : Name) (type : Expr)
-  定义体: isAppOrForallOfConstP (· == declName) type
+--- 原说明 ---
+Returns `true` if `type` is an application of a constant `declName`, or a
+forall with return type of the same form (i.e. of the form `∀ (x₀ : X₀) (x₁ : X₁
+) ⋯, declName ..`).
+
+Runs `cleanupAnnotations` on `type` and `forallE` bodies, and ignores metadata i
+n applications.
 -/
 @[inline] partial def isAppOrForallOfConst (declName : Name) (type : Expr) : Bool :=
   isAppOrForallOfConstP (· == declName) type
 
 /--
-Definition of `getUnusedForallInstanceBinderIdxsWhere` / `getUnusedForallInstanceBinderIdxsWhere` 的定义
+Gets the indices `i` (in ascending order) of the binders of a nested `.forallE`,
+`(x₀ : A₀) → (x₁ : A₁) → ⋯ → X`, such that
+- the binder `[xᵢ : Aᵢ]` has `instImplicit` `binderInfo`
+-  `p Aᵢ` is `true`
+- The rest of the type `(xᵢ₊₁ : Aᵢ₊₁) → ⋯ → X` does not depend on `xᵢ`. (It's in this sense that
+  `xᵢ : Aᵢ` is "unused".)
 
-English:
-definition getUnusedForallInstanceBinderIdxsWhere
-  signature: (p : Expr -> Bool) (e : Expr)
-  body: go e 0 #[]
+Note that the argument to `p` may have loose bvars. This is a performance optimization.
 
-中文:
-定义 getUnusedForallInstanceBinderIdxsWhere
-  签名: (p : Expr -> 布尔值) (e : Expr)
-  定义体: go e 0 #[]
+This function runs `cleanupAnnotations` on each expression before examining it.
+
+We see through `let`s, and do not increment the index when doing so. This behavior is compatible
+with `forallBoundedTelescope`.
 -/
-partial def getUnusedForallInstanceBinderIdxsWhere (p : Expr -> Bool) (e : Expr) :
+/-
+**Lean.Expr.getUnusedForallInstanceBinderIdxsWhere** 是 Mathlib 中的一个定义，位于命名空间 `Le
+an.Expr`。
+形式化陈述：(Expr → Bool) → Expr → Array ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Gets the indices `i` (in ascending order) of the binders of a nested `.forallE`,
+`(x₀ : A₀) → (x₁ : A₁) → ⋯ → X`, such that
+- the binder `[xᵢ : Aᵢ]` has `instImplicit` `binderInfo`
+-  `p Aᵢ` is `true`
+- The rest of the type `(xᵢ₊₁ : Aᵢ₊₁) → ⋯ → X` does not depend on `xᵢ`. (It's in
+ this sense that
+  `xᵢ : Aᵢ` is "unused".)
+
+Note that the argument to `p` may have loose bvars. This is a performance optimi
+zation.
+
+This function runs `cleanupAnnotations` on each expression before examining it.
+
+We see through `let`s, and do not increment the index when doing so. This behavi
+or is compatible
+with `forallBoundedTelescope`.
+-/
+partial def getUnusedForallInstanceBinderIdxsWhere (p : Expr → Bool) (e : Expr) :
     Array Nat :=
   go e 0 #[]
 where
@@ -628,7 +578,7 @@ where
   the accumulated array. -/
   go (body : Expr) (current : Nat) (acc : Array Nat) : Array Nat :=
     match body.cleanupAnnotations with
-| .forallE _ type body bi => go body (current+1)
+    | .forallE _ type body bi => go body (current+1) <|
       if bi.isInstImplicit && p type && !(body.hasLooseBVar 0) then
         acc.push current
       else
@@ -639,139 +589,105 @@ where
     | _ => acc
 
 /--
-Definition of `hasInstanceBinderOf` / `hasInstanceBinderOf` 的定义
+Returns `true` if `e` includes a `forallE` instance binder that satisfies `p`.
 
-English:
-definition hasInstanceBinderOf
-  signature: (p : Expr -> Bool) (e : Expr)
-  body: match e.cleanupAnnotations with
-  | .forallE _ type body bi => (bi.isInstImplicit && p type) || hasInstanceBinderOf p body
-  | .letE _ _ _ body _ => hasInstanceBinderOf p body
-  | _ => false
-
-中文:
-定义 hasInstanceBinderOf
-  签名: (p : Expr -> 布尔值) (e : Expr)
-  定义体: match e.cleanupAnnotations with
-  | .forallE _ type body bi => (bi.isInstImplicit && p type) || hasInstanceBinderOf p body
-  | .letE _ _ _ body _ => hasInstanceBinderOf p body
-  | _ => false
+Cleans up annotations before traversing nested `forallE`s, and sees through `let`s.
 -/
-partial def hasInstanceBinderOf (p : Expr -> Bool) (e : Expr) : Bool :=
+/-
+**Lean.Expr.hasInstanceBinderOf** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Expr`。
+形式化陈述：(Expr → Bool) → Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Returns `true` if `e` includes a `forallE` instance binder that satisfies `p`.
+
+Cleans up annotations before traversing nested `forallE`s, and sees through `let
+`s.
+-/
+partial def hasInstanceBinderOf (p : Expr → Bool) (e : Expr) : Bool :=
   match e.cleanupAnnotations with
   | .forallE _ type body bi => (bi.isInstImplicit && p type) || hasInstanceBinderOf p body
   | .letE _ _ _ body _ => hasInstanceBinderOf p body
   | _ => false
 
-/--
-Definition of `letDepth` / `letDepth` 的定义
+/-- Counts the immediate depth of a nested `let` expression. -/
+/-
+**Lean.Expr.letDepth** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition letDepth
-  signature: : Expr -> Nat
-
-中文:
-定义 letDepth
-  签名: : Expr -> 自然数
+--- 原说明 ---
+Counts the immediate depth of a nested `let` expression.
 -/
-def letDepth : Expr -> Nat
+def letDepth : Expr → Nat
   | .letE _ _ _ b _ => b.letDepth + 1
   | _ => 0
 
 open Meta
 
+/-- Check that an expression contains no metavariables (after instantiation). -/
 -- There is a `TacticM` level version of this, but it's useful to have in `MetaM`.
-/--
-Definition of `ensureHasNoMVars` / `ensureHasNoMVars` 的定义
-
-English:
-definition ensureHasNoMVars
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  if e.hasExprMVar then
-    throwError "tactic failed, resulting expression contains metavariables{indentExpr e}"
-
-中文:
-定义 ensureHasNoMVars
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  if e.hasExprMVar then
-    throwError "tactic failed, resulting expression contains metavariables{indentExpr e}"
+/-
+**Lean.Expr.ensureHasNoMVars** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：ensureHasNoMVars (e : Expr) : MetaM Unit
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ensureHasNoMVars (e : Expr) : MetaM Unit := do
   let e ← instantiateMVars e
   if e.hasExprMVar then
     throwError "tactic failed, resulting expression contains metavariables{indentExpr e}"
 
-/--
-Definition of `ofNat` / `ofNat` 的定义
+/-- Construct the term of type `α` for a given natural number
+(doing typeclass search for the `OfNat` instance required). -/
+/-
+**Lean.Expr.ofNat** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：ofNat (α : Expr) (n : Nat) : MetaM Expr
+参数：α : Expr；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNat
-  signature: (α : Expr) (n : Nat)
-  body: do
-  mkAppOptM ``OfNat.ofNat #[α, mkRawNatLit n, none]
-
-中文:
-定义 of自然数
-  签名: (α : Expr) (n : 自然数)
-  定义体: do
-  mkAppOptM ``OfNat.ofNat #[α, mkRawNatLit n, none]
+--- 原说明 ---
+Construct the term of type `α` for a given natural number
+(doing typeclass search for the `OfNat` instance required).
 -/
 def ofNat (α : Expr) (n : Nat) : MetaM Expr := do
   mkAppOptM ``OfNat.ofNat #[α, mkRawNatLit n, none]
 
-/--
-Definition of `ofInt` / `ofInt` 的定义
+/-- Construct the term of type `α` for a given integer
+(doing typeclass search for the `OfNat` and `Neg` instances required). -/
+/-
+**Lean.Expr.ofInt** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → ℤ → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInt
-  signature: (α : Expr)
-
-中文:
-定义 of整数
-  签名: (α : Expr)
+--- 原说明 ---
+Construct the term of type `α` for a given integer
+(doing typeclass search for the `OfNat` and `Neg` instances required).
 -/
-def ofInt (α : Expr) : Int -> MetaM Expr
+def ofInt (α : Expr) : Int → MetaM Expr
   | Int.ofNat n => Expr.ofNat α n
   | Int.negSucc n => do mkAppM ``Neg.neg #[← Expr.ofNat α (n + 1)]
 
 section recognizers
 
 /--
-Definition of `numeral?` / `numeral?` 的定义
+Return `some n` if `e` is one of the following
+- a nat literal (numeral)
+- `Nat.zero`
+- `Nat.succ x` where `isNumeral x`
+- `OfNat.ofNat _ x _` where `isNumeral x` -/
+/-
+**Lean.Expr.numeral** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition numeral?
-  signature: (e : Expr)
-  body: if let some n := e.rawNatLit? then n
-  else
-    let e := e.consumeMData -- `OfNat` numerals may have `no_index` around them from `ofNat()`
-    let f := e.getAppFn
-    if !f.isConst then none
-    else
-      let fName := f.constName!
-      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? e.appArg!).map Nat.succ
-      else if fName == ``OfNat.ofNat && e.getAppNumArgs == 3 then numeral? (e.getArg! 1)
-      else if fName == ``Nat.zero && e.getAppNumArgs == 0 then some 0
-      else none
-
-中文:
-定义 numeral?
-  签名: (e : Expr)
-  定义体: if let some n := e.rawNatLit? then n
-  else
-    let e := e.consumeMData -- `OfNat` numerals may have `no_index` around them from `ofNat()`
-    let f := e.getAppFn
-    if !f.isConst then none
-    else
-      let fName := f.constName!
-      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? e.appArg!).map Nat.succ
-      else if fName == ``OfNat.ofNat && e.getAppNumArgs == 3 then numeral? (e.getArg! 1)
-      else if fName == ``Nat.zero && e.getAppNumArgs == 0 then some 0
-      else none
+--- 原说明 ---
+Return `some n` if `e` is one of the following
+- a nat literal (numeral)
+- `Nat.zero`
+- `Nat.succ x` where `isNumeral x`
+- `OfNat.ofNat _ x _` where `isNumeral x`
 -/
 partial def numeral? (e : Expr) : Option Nat :=
   if let some n := e.rawNatLit? then n
@@ -786,114 +702,92 @@ partial def numeral? (e : Expr) : Option Nat :=
       else if fName == ``Nat.zero && e.getAppNumArgs == 0 then some 0
       else none
 
-/--
-Definition of `zero?` / `zero?` 的定义
+/-- Test if an expression is either `Nat.zero`, or `OfNat.ofNat 0`. -/
+/-
+**Lean.Expr.zero** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：zero? (e : Expr) : Bool
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zero?
-  signature: (e : Expr)
-  body: match e.numeral? with
-  | some 0 => true
-  | _ => false
-
-中文:
-定义 zero?
-  签名: (e : Expr)
-  定义体: match e.numeral? with
-  | some 0 => true
-  | _ => false
-
-Depends on / 依赖: e.numeral, numeral
+--- 原说明 ---
+Test if an expression is either `Nat.zero`, or `OfNat.ofNat 0`.
 -/
 def zero? (e : Expr) : Bool :=
   match e.numeral? with
   | some 0 => true
   | _ => false
 
-/--
-Definition of `ne?'` / `ne?'` 的定义
+/-- Tests is if an expression matches either `x ≠ y` or `¬ (x = y)`.
+If it matches, returns `some (type, x, y)`. -/
+/-
+**Lean.Expr.ne** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：ne?' (e : Expr) : Option (Expr × Expr × Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ne?'
-  signature: (e : Expr)
-  body: e.ne? > (e.not? >>= Expr.eq?)
-
-中文:
-定义 ne?'
-  签名: (e : Expr)
-  定义体: e.ne? > (e.not? >>= Expr.eq?)
-
-Depends on / 依赖: Expr.eq, e.ne, e.not
+--- 原说明 ---
+Tests is if an expression matches either `x ≠ y` or `¬ (x = y)`.
+If it matches, returns `some (type, x, y)`.
 -/
 def ne?' (e : Expr) : Option (Expr × Expr × Expr) :=
-e.ne? > (e.not? >>= Expr.eq?)
+  e.ne? <|> (e.not? >>= Expr.eq?)
 
-/--
-Definition of `le?` / `le?` 的定义
+/-- `Lean.Expr.le? e` takes `e : Expr` as input.
+If `e` represents `a ≤ b`, then it returns `some (t, a, b)`, where `t` is the Type of `a`,
+otherwise, it returns `none`. -/
+/-
+**Lean.Expr.le** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition le?
-  signature: (p : Expr)
-  body: do
-  let (type, _, lhs, rhs) ← p.app4? ``LE.le
-  return (type, lhs, rhs)
-
-中文:
-定义 le?
-  签名: (p : Expr)
-  定义体: do
-  let (type, _, lhs, rhs) ← p.app4? ``LE.le
-  return (type, lhs, rhs)
+--- 原说明 ---
+`Lean.Expr.le? e` takes `e : Expr` as input.
+If `e` represents `a ≤ b`, then it returns `some (t, a, b)`, where `t` is the Ty
+pe of `a`,
+otherwise, it returns `none`.
 -/
 @[inline] def le? (p : Expr) : Option (Expr × Expr × Expr) := do
   let (type, _, lhs, rhs) ← p.app4? ``LE.le
   return (type, lhs, rhs)
 
-/--
-Definition of `lt?` / `lt?` 的定义
+/-- `Lean.Expr.lt? e` takes `e : Expr` as input.
+If `e` represents `a < b`, then it returns `some (t, a, b)`, where `t` is the Type of `a`,
+otherwise, it returns `none`. -/
+/-
+**Lean.Expr.lt** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lt?
-  signature: (p : Expr)
-  body: do
-  let (type, _, lhs, rhs) ← p.app4? ``LT.lt
-  return (type, lhs, rhs)
-
-中文:
-定义 lt?
-  签名: (p : Expr)
-  定义体: do
-  let (type, _, lhs, rhs) ← p.app4? ``LT.lt
-  return (type, lhs, rhs)
+--- 原说明 ---
+`Lean.Expr.lt? e` takes `e : Expr` as input.
+If `e` represents `a < b`, then it returns `some (t, a, b)`, where `t` is the Ty
+pe of `a`,
+otherwise, it returns `none`.
 -/
 @[inline] def lt? (p : Expr) : Option (Expr × Expr × Expr) := do
   let (type, _, lhs, rhs) ← p.app4? ``LT.lt
   return (type, lhs, rhs)
 
-/--
-Definition of `sides?` / `sides?` 的定义
+/-- Given a proposition `ty` that is an `Eq`, `Iff`, or `HEq`, returns `(tyLhs, lhs, tyRhs, rhs)`,
+where `lhs : tyLhs` and `rhs : tyRhs`,
+and where `lhs` is related to `rhs` by the respective relation.
 
-English:
-definition sides?
-  signature: (ty : Expr)
-  body: if let some (lhs, rhs) := ty.iff? then
-    some (.sort .zero, lhs, .sort .zero, rhs)
-  else if let some (ty, lhs, rhs) := ty.eq? then
-    some (ty, lhs, ty, rhs)
-  else
-    ty.heq?
+See also `Lean.Expr.iff?`, `Lean.Expr.eq?`, and `Lean.Expr.heq?`. -/
+/-
+**Lean.Expr.sides** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：sides? (ty : Expr) : Option (Expr × Expr × Expr × Expr)
+参数：ty : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 sides?
-  签名: (ty : Expr)
-  定义体: if let some (lhs, rhs) := ty.iff? then
-    some (.sort .zero, lhs, .sort .zero, rhs)
-  else if let some (ty, lhs, rhs) := ty.eq? then
-    some (ty, lhs, ty, rhs)
-  else
-    ty.heq?
+--- 原说明 ---
+Given a proposition `ty` that is an `Eq`, `Iff`, or `HEq`, returns `(tyLhs, lhs,
+ tyRhs, rhs)`,
+where `lhs : tyLhs` and `rhs : tyRhs`,
+and where `lhs` is related to `rhs` by the respective relation.
 
-Depends on / 依赖: ty.eq, ty.heq, ty.iff
+See also `Lean.Expr.iff?`, `Lean.Expr.eq?`, and `Lean.Expr.heq?`.
 -/
 def sides? (ty : Expr) : Option (Expr × Expr × Expr × Expr) :=
   if let some (lhs, rhs) := ty.iff? then
@@ -903,18 +797,25 @@ def sides? (ty : Expr) : Option (Expr × Expr × Expr × Expr) :=
   else
     ty.heq?
 
-/--
-Definition of `isSorryAx` / `isSorryAx` 的定义
+/-- Returns `true` if the provided `Expr` is exactly of the form `sorryAx _ _`.
+This is the form produced by the `sorry` term/tactic.
 
-English:
-definition isSorryAx
-  signature: : Expr -> Bool
+Contrast with `Lean.Expr.isSorry`, which additionally returns `true` for any function application of
+`sorry`/`sorryAx` (including e.g. `sorryAx α true x y z`). -/
+/-
+**Lean.Expr.isSorryAx** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isSorryAx
-  签名: : Expr -> 布尔值
+--- 原说明 ---
+Returns `true` if the provided `Expr` is exactly of the form `sorryAx _ _`.
+This is the form produced by the `sorry` term/tactic.
+
+Contrast with `Lean.Expr.isSorry`, which additionally returns `true` for any fun
+ction application of
+`sorry`/`sorryAx` (including e.g. `sorryAx α true x y z`).
 -/
-def isSorryAx : Expr -> Bool
+def isSorryAx : Expr → Bool
   | .app (.app f _ ) _ => f.isConstOf ``sorryAx
   | _ => false
 
@@ -922,163 +823,108 @@ end recognizers
 
 universe u
 
-/--
-Definition of `modifyAppArgM` / `modifyAppArgM` 的定义
-
-English:
-definition modifyAppArgM
-  signature: {M : Type -> Type u} [Functor M] [Pure M]
-
-中文:
-定义 modifyAppArgM
-  签名: {M : 类型 -> 类型u} [函子 M] [Pure M]
+/-
+**Lean.Expr.modifyAppArgM** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：{M : Type → Type u} → [Functor M] → [Pure M] → (Expr → M Expr) → Expr → M 
+Expr
+参数：Expr → M Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def modifyAppArgM {M : Type -> Type u} [Functor M] [Pure M]
-    (modifier : Expr -> M Expr) : Expr -> M Expr
-| app f a => mkApp f < > modifier a
+def modifyAppArgM {M : Type → Type u} [Functor M] [Pure M]
+    (modifier : Expr → M Expr) : Expr → M Expr
+  | app f a => mkApp f <$> modifier a
   | e => pure e
-
-/--
-Definition of `modifyRevArg` / `modifyRevArg` 的定义
-
-English:
-definition modifyRevArg
-  signature: (modifier : Expr -> Expr)
-
-中文:
-定义 modifyRevArg
-  签名: (modifier : Expr -> Expr)
+/-
+**Lean.Expr.modifyRevArg** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：(Expr → Expr) → ℕ → Expr → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def modifyRevArg (modifier : Expr -> Expr) : Nat -> Expr -> Expr
-  | 0, (.app f x) => .app f (modifier x)
+def modifyRevArg (modifier : Expr → Expr) : Nat → Expr → Expr
+  | 0,     (.app f x) => .app f (modifier x)
   | (i+1), (.app f x) => .app (modifyRevArg modifier i f) x
   | _, e => e
 
-/--
-Definition of `modifyArg` / `modifyArg` 的定义
+/-- Given `f a₀ a₁ ... aₙ₋₁`, runs `modifier` on the `i`th argument or
+returns the original expression if out of bounds. -/
+/-
+**Lean.Expr.modifyArg** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：modifyArg (modifier : Expr -> Expr) (e : Expr) (i : Nat) (n
+参数：modifier : Expr -> Expr；e : Expr；i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition modifyArg
-  signature: (modifier : Expr -> Expr) (e : Expr) (i : Nat) (n := e.getAppNumArgs)
-  body: modifyRevArg modifier (n - i - 1) e
-
-中文:
-定义 modifyArg
-  签名: (modifier : Expr -> Expr) (e : Expr) (i : 自然数) (n := e.getAppNumArgs)
-  定义体: modifyRevArg modifier (n - i - 1) e
-
-Depends on / 依赖: e.getAppNumArgs, getAppNumArgs
+--- 原说明 ---
+Given `f a₀ a₁ ... aₙ₋₁`, runs `modifier` on the `i`th argument or
+returns the original expression if out of bounds.
 -/
-def modifyArg (modifier : Expr -> Expr) (e : Expr) (i : Nat) (n := e.getAppNumArgs) : Expr :=
+def modifyArg (modifier : Expr → Expr) (e : Expr) (i : Nat) (n := e.getAppNumArgs) : Expr :=
   modifyRevArg modifier (n - i - 1) e
 
-/--
-Definition of `setArg` / `setArg` 的定义
+/-- Given `f a₀ a₁ ... aₙ₋₁`, sets the argument on the `i`th argument to `x` or
+returns the original expression if out of bounds. -/
+/-
+**Lean.Expr.setArg** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：setArg (e : Expr) (i : Nat) (x : Expr) (n
+参数：e : Expr；i : Nat；x : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setArg
-  signature: (e : Expr) (i : Nat) (x : Expr) (n := e.getAppNumArgs)
-  body: e.modifyArg (fun _ => x) i n
-
-中文:
-定义 setArg
-  签名: (e : Expr) (i : 自然数) (x : Expr) (n := e.getAppNumArgs)
-  定义体: e.modifyArg (fun _ => x) i n
-
-Depends on / 依赖: e.getAppNumArgs, getAppNumArgs
+--- 原说明 ---
+Given `f a₀ a₁ ... aₙ₋₁`, sets the argument on the `i`th argument to `x` or
+returns the original expression if out of bounds.
 -/
 def setArg (e : Expr) (i : Nat) (x : Expr) (n := e.getAppNumArgs) : Expr :=
   e.modifyArg (fun _ => x) i n
-
-/--
-Definition of `getRevArg?` / `getRevArg?` 的定义
-
-English:
-definition getRevArg?
-  signature: : Expr -> Nat -> Option Expr
-
-中文:
-定义 getRevArg?
-  签名: : Expr -> 自然数 -> 选项类型 Expr
+/-
+**Lean.Expr.getRevArg** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def getRevArg? : Expr -> Nat -> Option Expr
-  | app _ a, 0 => a
+def getRevArg? : Expr → Nat → Option Expr
+  | app _ a, 0   => a
   | app f _, i+1 => getRevArg! f i
-  | _, _ => none
+  | _,       _   => none
 
-/--
-Definition of `getArg?` / `getArg?` 的定义
+/-- Given `f a₀ a₁ ... aₙ₋₁`, returns the `i`th argument or none if out of bounds. -/
+/-
+**Lean.Expr.getArg** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：getArg? (e : Expr) (i : Nat) (n
+参数：e : Expr；i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getArg?
-  signature: (e : Expr) (i : Nat) (n := e.getAppNumArgs)
-  body: getRevArg? e (n - i - 1)
-
-中文:
-定义 getArg?
-  签名: (e : Expr) (i : 自然数) (n := e.getAppNumArgs)
-  定义体: getRevArg? e (n - i - 1)
-
-Depends on / 依赖: e.getAppNumArgs, getAppNumArgs
+--- 原说明 ---
+Given `f a₀ a₁ ... aₙ₋₁`, returns the `i`th argument or none if out of bounds.
 -/
 def getArg? (e : Expr) (i : Nat) (n := e.getAppNumArgs) : Option Expr :=
   getRevArg? e (n - i - 1)
 
-/--
-Definition of `modifyArgM` / `modifyArgM` 的定义
+/-- Given `f a₀ a₁ ... aₙ₋₁`, runs `modifier` on the `i`th argument.
+An argument `n` may be provided which says how many arguments we are expecting `e` to have. -/
+/-
+**Lean.Expr.modifyArgM** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：modifyArgM {M : Type -> Type u} [Monad M] (modifier : Expr -> M Expr) (e :
+ Expr) (i : Nat) (n
+参数：modifier : Expr -> M Expr；e : Expr；i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition modifyArgM
-  signature: {M : Type -> Type u} [Monad M] (modifier : Expr -> M Expr)
-  body: do
-  let some a := getArg? e i | return e
-  let a ← modifier a
-  return modifyArg (fun _ => a) e i n
-
-中文:
-定义 modifyArgM
-  签名: {M : 类型 -> 类型u} [单子 M] (modifier : Expr -> M Expr)
-  定义体: do
-  let some a := getArg? e i | return e
-  let a ← modifier a
-  return modifyArg (fun _ => a) e i n
-
-Depends on / 依赖: e.getAppNumArgs, getAppNumArgs
+--- 原说明 ---
+Given `f a₀ a₁ ... aₙ₋₁`, runs `modifier` on the `i`th argument.
+An argument `n` may be provided which says how many arguments we are expecting `
+e` to have.
 -/
-def modifyArgM {M : Type -> Type u} [Monad M] (modifier : Expr -> M Expr)
+def modifyArgM {M : Type → Type u} [Monad M] (modifier : Expr → M Expr)
     (e : Expr) (i : Nat) (n := e.getAppNumArgs) : M Expr := do
   let some a := getArg? e i | return e
   let a ← modifier a
-  return modifyArg (fun _ => a) e i n
+  return modifyArg (fun _ ↦ a) e i n
 
-/--
-Definition of `renameBVar` / `renameBVar` 的定义
+/-- Traverses an expression `e` and renames bound variables named `old` to `new`. -/
+/-
+**Lean.Expr.renameBVar** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：renameBVar (e : Expr) (old new : Name) : Expr
+参数：e : Expr；old new : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition renameBVar
-  signature: (e : Expr) (old new : Name)
-  body: match e with
-  | app fn arg => app (fn.renameBVar old new) (arg.renameBVar old new)
-  | lam n ty bd bi =>
-    lam (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
-  | forallE n ty bd bi =>
-    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
-  | mdata d e' => mdata d (e'.renameBVar old new)
-  | e => e
-
-中文:
-定义 renameBVar
-  签名: (e : Expr) (old new : Name)
-  定义体: match e with
-  | app fn arg => app (fn.renameBVar old new) (arg.renameBVar old new)
-  | lam n ty bd bi =>
-    lam (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
-  | forallE n ty bd bi =>
-    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
-  | mdata d e' => mdata d (e'.renameBVar old new)
-  | e => e
-
-Depends on / 依赖: arg.renameBVar, bd.renameBVar, fn.renameBVar, forallE, renameBVar, ty.renameBVar
+--- 原说明 ---
+Traverses an expression `e` and renames bound variables named `old` to `new`.
 -/
 def renameBVar (e : Expr) (old new : Name) : Expr :=
   match e with
@@ -1091,67 +937,52 @@ def renameBVar (e : Expr) (old new : Name) : Expr :=
   | e => e
 
 open Lean.Meta in
-/--
-Definition of `getBinderName` / `getBinderName` 的定义
+/-- `getBinderName e` returns `some n` if `e` is an expression of the form `∀ n, ...`
+and `none` otherwise. -/
+/-
+**Lean.Expr.getBinderName** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：getBinderName (e : Expr) : MetaM (Option Name)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getBinderName
-  signature: (e : Expr)
-  body: do
-  match ← withReducible (whnf e) with
-  | .forallE (binderName := n) .. | .lam (binderName := n) .. => pure (some n)
-  | _ => pure none
-
-中文:
-定义 getBinderName
-  签名: (e : Expr)
-  定义体: do
-  match ← withReducible (whnf e) with
-  | .forallE (binderName := n) .. | .lam (binderName := n) .. => pure (some n)
-  | _ => pure none
+--- 原说明 ---
+`getBinderName e` returns `some n` if `e` is an expression of the form `∀ n, ...
+`
+and `none` otherwise.
 -/
 def getBinderName (e : Expr) : MetaM (Option Name) := do
   match ← withReducible (whnf e) with
   | .forallE (binderName := n) .. | .lam (binderName := n) .. => pure (some n)
   | _ => pure none
 
-/--
-Definition of `mapForallBinderNames` / `mapForallBinderNames` 的定义
+/-- Map binder names in a nested forall `(a₁ : α₁) → ... → (aₙ : αₙ) → _` -/
+/-
+**Lean.Expr.mapForallBinderNames** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → (Name → Name) → Expr
+参数：Name → Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapForallBinderNames
-  signature: : Expr -> (Name -> Name) -> Expr
-
-中文:
-定义 mapForallBinderNames
-  签名: : Expr -> (Name -> Name) -> Expr
+--- 原说明 ---
+Map binder names in a nested forall `(a₁ : α₁) → ... → (aₙ : αₙ) → _`
 -/
-def mapForallBinderNames : Expr -> (Name -> Name) -> Expr
+def mapForallBinderNames : Expr → (Name → Name) → Expr
   | .forallE n d b bi, f => .forallE (f n) d (mapForallBinderNames b f) bi
   | e, _ => e
 
-/--
-Definition of `mkDirectProjection` / `mkDirectProjection` 的定义
+/-- If `e` has a structure as type with field `fieldName`, `mkDirectProjection e fieldName` creates
+the projection expression `e.fieldName` -/
+/-
+**Lean.Expr.mkDirectProjection** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：mkDirectProjection (e : Expr) (fieldName : Name) : MetaM Expr
+参数：e : Expr；fieldName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkDirectProjection
-  signature: (e : Expr) (fieldName : Name)
-  body: do
-  let type ← whnf (← inferType e)
-  let .const structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
-  let some projName := getProjFnForField? (← getEnv) structName fieldName |
-    throwError "{structName} doesn't have field {fieldName}"
-  return mkAppN (.const projName us) (type.getAppArgs.push e)
-
-中文:
-定义 mkDirectProjection
-  签名: (e : Expr) (fieldName : Name)
-  定义体: do
-  let type ← whnf (← inferType e)
-  let .const structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
-  let some projName := getProjFnForField? (← getEnv) structName fieldName |
-    throwError "{structName} doesn't have field {fieldName}"
-  return mkAppN (.const projName us) (type.getAppArgs.push e)
+--- 原说明 ---
+If `e` has a structure as type with field `fieldName`, `mkDirectProjection e fie
+ldName` creates
+the projection expression `e.fieldName`
 -/
 def mkDirectProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
   let type ← whnf (← inferType e)
@@ -1160,38 +991,20 @@ def mkDirectProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
     throwError "{structName} doesn't have field {fieldName}"
   return mkAppN (.const projName us) (type.getAppArgs.push e)
 
-/--
-Definition of `mkProjection` / `mkProjection` 的定义
+/-- If `e` has a structure as type with field `fieldName` (either directly or in a parent
+structure), `mkProjection e fieldName` creates the projection expression `e.fieldName` -/
+/-
+**Lean.Expr.mkProjection** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：mkProjection (e : Expr) (fieldName : Name) : MetaM Expr
+参数：e : Expr；fieldName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkProjection
-  signature: (e : Expr) (fieldName : Name)
-  body: do
-  let .const structName _ := (← whnf (← inferType e)).getAppFn |
-    throwError "{e} doesn't have a structure as type"
-  let some baseStruct := findField? (← getEnv) structName fieldName |
-    throwError "No parent of {structName} has field {fieldName}"
-  let mut e := e
-  for projName in (getPathToBaseStructure? (← getEnv) baseStruct structName).get! do
-    let type ← whnf (← inferType e)
-    let .const _structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
-    e := mkAppN (.const projName us) (type.getAppArgs.push e)
-  mkDirectProjection e fieldName
-
-中文:
-定义 mkProjection
-  签名: (e : Expr) (fieldName : Name)
-  定义体: do
-  let .const structName _ := (← whnf (← inferType e)).getAppFn |
-    throwError "{e} doesn't have a structure as type"
-  let some baseStruct := findField? (← getEnv) structName fieldName |
-    throwError "No parent of {structName} has field {fieldName}"
-  let mut e := e
-  for projName in (getPathToBaseStructure? (← getEnv) baseStruct structName).get! do
-    let type ← whnf (← inferType e)
-    let .const _structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
-    e := mkAppN (.const projName us) (type.getAppArgs.push e)
-  mkDirectProjection e fieldName
+--- 原说明 ---
+If `e` has a structure as type with field `fieldName` (either directly or in a p
+arent
+structure), `mkProjection e fieldName` creates the projection expression `e.fiel
+dName`
 -/
 def mkProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
   let .const structName _ := (← whnf (← inferType e)).getAppFn |
@@ -1205,56 +1018,21 @@ def mkProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
     e := mkAppN (.const projName us) (type.getAppArgs.push e)
   mkDirectProjection e fieldName
 
-/--
-Definition of `reduceProjStruct?` / `reduceProjStruct?` 的定义
+/-- If `e` is a projection of the structure constructor, reduce the projection.
+Otherwise returns `none`. If this function detects that expression is ill-typed, throws an error.
+For example, given `Prod.fst (x, y)`, returns `some x`. -/
+/-
+**Lean.Expr.reduceProjStruct** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：reduceProjStruct? (e : Expr) : MetaM (Option Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduceProjStruct?
-  signature: (e : Expr)
-  body: do
-  let .const cname _ := e.getAppFn | return none
-  let some pinfo ← getProjectionFnInfo? cname | return none
-  let args := e.getAppArgs
-  if ha : args.size = pinfo.numParams + 1 then
-    -- The last argument of a projection is the structure.
-    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numParams.lt_succ_self)
-    -- Check that the structure is a constructor expression.
-    unless sarg.getAppFn.isConstOf pinfo.ctorName do
-      return none
-    let sfields := sarg.getAppArgs
-    -- The ith projection extracts the ith field of the constructor
-    let sidx := pinfo.numParams + pinfo.i
-    if hs : sidx < sfields.size then
-      return some (sfields[sidx]'hs)
-    else
-      throwError m!"ill-formed expression, {cname} is the {pinfo.i + 1}-th projection function \
-        but {sarg} does not have enough arguments"
-  else
-    return none
-
-中文:
-定义 reduceProjStruct?
-  签名: (e : Expr)
-  定义体: do
-  let .const cname _ := e.getAppFn | return none
-  let some pinfo ← getProjectionFnInfo? cname | return none
-  let args := e.getAppArgs
-  if ha : args.size = pinfo.numParams + 1 then
-    -- The last argument of a projection is the structure.
-    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numParams.lt_succ_self)
-    -- Check that the structure is a constructor expression.
-    unless sarg.getAppFn.isConstOf pinfo.ctorName do
-      return none
-    let sfields := sarg.getAppArgs
-    -- The ith projection extracts the ith field of the constructor
-    let sidx := pinfo.numParams + pinfo.i
-    if hs : sidx < sfields.size then
-      return some (sfields[sidx]'hs)
-    else
-      throwError m!"ill-formed expression, {cname} is the {pinfo.i + 1}-th projection function \
-        but {sarg} does not have enough arguments"
-  else
-    return none
+--- 原说明 ---
+If `e` is a projection of the structure constructor, reduce the projection.
+Otherwise returns `none`. If this function detects that expression is ill-typed,
+ throws an error.
+For example, given `Prod.fst (x, y)`, returns `some x`.
 -/
 def reduceProjStruct? (e : Expr) : MetaM (Option Expr) := do
   let .const cname _ := e.getAppFn | return none
@@ -1279,40 +1057,34 @@ def reduceProjStruct? (e : Expr) : MetaM (Option Expr) := do
 
 /-- Returns true if `e` contains a name `n` where `p n` is true. -/
 @[specialize]
-/--
-Definition of `containsConst` / `containsConst` 的定义
+/-
+**Lean.Expr.containsConst** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：containsConst (e : Expr) (p : Name -> Bool) : Bool
+参数：e : Expr；p : Name -> Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition containsConst
-  signature: (e : Expr) (p : Name -> Bool)
-  body: Option.isSome e.find? fun | .const n _ => p n | _ => false
-
-中文:
-定义 containsConst
-  签名: (e : Expr) (p : Name -> 布尔值)
-  定义体: Option.isSome e.find? fun | .const n _ => p n | _ => false
-
-Depends on / 依赖: Option.isSome, e.find, isSome
+--- 原说明 ---
+Returns true if `e` contains a name `n` where `p n` is true.
 -/
-def containsConst (e : Expr) (p : Name -> Bool) : Bool :=
-Option.isSome e.find? fun | .const n _ => p n | _ => false
+def containsConst (e : Expr) (p : Name → Bool) : Bool :=
+  Option.isSome <| e.find? fun | .const n _ => p n | _ => false
 
-/--
-Definition of `forallNot_of_notExists` / `forallNot_of_notExists` 的定义
+/-- Given `(hNotEx : Not ex)` where `ex` is of the form `Exists x, p x`,
+return a `forall x, Not (p x)` and a proof for it.
 
-English:
-definition forallNot_of_notExists
-  signature: (ex hNotEx : Expr)
-  body: do
-  let .app (.app (.const ``Exists [lvl]) A) p := ex | failure
-  go lvl A p hNotEx
+This function handles nested existentials. -/
+/-
+**Lean.Expr.forallNot_of_notExists** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → Expr → MetaM (Expr × Expr)
+参数：Expr × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 对任意Not_of_notExists
-  签名: (ex hNotEx : Expr)
-  定义体: do
-  let .app (.app (.const ``Exists [lvl]) A) p := ex | failure
-  go lvl A p hNotEx
+--- 原说明 ---
+Given `(hNotEx : Not ex)` where `ex` is of the form `Exists x, p x`,
+return a `forall x, Not (p x)` and a proof for it.
+
+This function handles nested existentials.
 -/
 partial def forallNot_of_notExists (ex hNotEx : Expr) : MetaM (Expr × Expr) := do
   let .app (.app (.const ``Exists [lvl]) A) p := ex | failure
@@ -1342,25 +1114,25 @@ where
 
 end Expr
 
-/--
-Definition of `getFieldsToParents` / `getFieldsToParents` 的定义
+/-- Get the projections that are projections to parent structures. Similar to `getParentStructures`,
+except that this returns the (last component of the) projection names instead of the parent names.
+-/
+/-
+**Lean.getFieldsToParents** 是 Mathlib 中的一个定义，位于命名空间 `Lean`。
+形式化陈述：getFieldsToParents (env : Environment) (structName : Name) : Array Name
+参数：env : Environment；structName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getFieldsToParents
-  signature: (env : Environment) (structName : Name)
-  body: .filter fun fieldName => getStructureFields env structName
-.isSome isSubobjectField? env structName fieldName
-
-中文:
-定义 getFieldsToParents
-  签名: (env : Environment) (structName : Name)
-  定义体: .filter fun fieldName => getStructureFields env structName
-.isSome isSubobjectField? env structName fieldName
-
-Depends on / 依赖: fieldName, filter, getStructureFields, isSome, isSubobjectField, structName
+--- 原说明 ---
+Get the projections that are projections to parent structures. Similar to `getPa
+rentStructures`,
+except that this returns the (last component of the) projection names instead of
+ the parent names.
 -/
 def getFieldsToParents (env : Environment) (structName : Name) : Array Name :=
-.filter fun fieldName => getStructureFields env structName
-.isSome isSubobjectField? env structName fieldName
+  getStructureFields env structName |>.filter fun fieldName =>
+    isSubobjectField? env structName fieldName |>.isSome
 
 end Lean
+

@@ -21,24 +21,9 @@ variable {R : Type*}
 
 namespace MulOpposite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵐᵒᵖ where
-  body: zero_le_one (α := R)
-  mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
-  mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
-
-中文:
-实例 [半环
-  签名: R] [偏序 R] [是Ordered环 R] : 是Ordered环 Rᵐᵒᵖ where
-  定义体: zero_le_one (α := R)
-  mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
-  mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
-
-Depends on / 依赖: zero_le_one
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵐᵒᵖ where
   zero_le_one := zero_le_one (α := R)
@@ -49,24 +34,9 @@ end MulOpposite
 
 namespace AddOpposite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵃᵒᵖ where
-  body: zero_le_one (α := R)
-  mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
-  mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
-
-中文:
-实例 [半环
-  签名: R] [偏序 R] [是Ordered环 R] : 是Ordered环 Rᵃᵒᵖ where
-  定义体: zero_le_one (α := R)
-  mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
-  mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
-
-Depends on / 依赖: zero_le_one
+/-
+**AddOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵃᵒᵖ where
   zero_le_one := zero_le_one (α := R)
@@ -74,3 +44,4 @@ instance [Semiring R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵃᵒ
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
 
 end AddOpposite
+

@@ -40,239 +40,48 @@ variable [LieRingModule L V] [LieModule R L V]
 variable [LieRingModule A V] [LieModule R A V]
 variable [IsLieTower L A V] [IsLieTower A L V]
 
-variable (χ : A -> R)
+variable (χ : A → R)
 
 open Module (finrank)
 open LieModule
 
 local notation "π" => LieModule.toEnd R _ V
 
-/--
-Definition of `T` / `T` 的定义
-
-English:
-abbreviation T
-  signature: (w : A)
-  body: (π w) - χ w • 1
-
-中文:
-缩写 T
-  签名: (w : A)
-  定义体: (π w) - χ w • 1
+/-
+**LieModule.T** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private abbrev T (w : A) : Module.End R V := (π w) - χ w • 1
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.privateInPublic true in
-/--
-lemma `weightSpaceOfIsLieTower_aux` / 引理 `weightSpaceOfIsLieTower_aux`
+/-- An auxiliary lemma used only in the definition `LieModule.weightSpaceOfIsLieTower` below. -/
+/-
+**LieModule.weightSpaceOfIsLieTower_aux** 是 Mathlib 中的一个引理，位于命名空间 `LieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma weightSpaceOfIsLieTower_aux
-  given: (z : L) (v : V) (hv : v in weightSpace V χ)
-  proof: by
-  rw [mem_weightSpace] at hv ⊢
-  intro a
-  rcases eq_or_ne v 0 with (rfl | hv')
-  · simp only [lie_zero, smul_zero]
-  suffices χ ⁅z, a⁆ = 0 by
-    rw [leibniz_lie]; rw [hv a]; rw [lie_smul]; rw [lie_swap_lie]; rw [hv]; rw [this]; rw [zero_smul]; rw [neg_zero]; rw [zero_add]
-  let U' : Nat ->o Submodule R V :=
-  { toFun n := Submodule.span R {((π z)^i) v | i < n},
-    monotone' i j h := Submodule.span_mono (fun _ ⟨c, hc, hw⟩ => ⟨c, lt_of_lt_of_le hc h, hw⟩) }
-  have map_U'_le (n : Nat) : Submodule.map (π z) (U' n) <= U' (n + 1) := by
-    simp only [OrderHom.coe_mk, Submodule.map_span, toEnd_apply_apply, U']
-    apply Submodule.span_mono
-    suffices forall a < n, exists b < n + 1, ((π z) ^ b) v = ((π z) ^ (a + 1)) v by simpa [pow_succ']
-    aesop
-  have T_apply_succ (w : A) (n : Nat) :
-      Submodule.map (T χ w) (U' (n + 1)) <= U' n := by
-    simp only [OrderHom.coe_mk, U', Submodule.map_span, Submodule.span_le, Set.image_subset_iff]
-    simp only [Set.subset_def, Set.mem_ofPred_eq, Set.mem_preimage, SetLike.mem_coe,
-      forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
-    induction n generalizing w
-    · simp only [zero_add, Nat.lt_one_iff, LinearMap.sub_apply, LieModule.toEnd_apply_apply,
-        LinearMap.smul_apply, Module.End.one_apply, forall_eq, pow_zero, hv w, sub_self, zero_mem]
-    · next n hn =>
-      intro m hm
-      obtain (hm | rfl) : m < n + 1 ∨ m = n + 1 := by lia
-      · exact U'.mono (Nat.le_succ n) (hn w m hm)
-      have H : forall w, ⁅w, (π z ^ n) v⁆ = (T χ w) ((π z ^ n) v) + χ w • ((π z ^ n) v) := by simp
-      rw [T]; rw [LinearMap.sub_apply]; rw [pow_succ']; rw [Module.End.mul_apply]; rw [LieModule.toEnd_apply_apply]; rw [LieModule.toEnd_apply_apply]; rw [LinearMap.smul_apply]; rw [Module.End.one_apply]; rw [leibniz_lie]; rw [lie_swap_lie w z]; rw [H]; rw [H]; rw [lie_add]; rw [lie_smul]; rw [add_sub_assoc]; rw [add_sub_assoc]; rw [sub_self]; rw [add_zero]
-      refine add_mem (neg_mem <| add_mem ?_ ?_) ?_
-      · exact U'.mono n.le_succ (hn _ n n.lt_succ_self)
-      · exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨n, n.lt_succ_self, rfl⟩)
-· exact map_U'_le _ Submodule.mem_map_of_mem hn w n n.lt_succ_self
-  set U : LieSubmodule R A V :=
-  { toSubmodule := ⨆ k : Nat, U' k
-    lie_mem {w} x hx := by
-      rw [show ⁅w]; rw [x⁆ = (T χ w) x + χ w • x by simp]
-      apply add_mem _ (Submodule.smul_mem _ _ hx)
-      set U := ⨆ k : Nat, U' k
-suffices Submodule.map (T χ w) U <= U from this Submodule.mem_map_of_mem hx
-      rw [Submodule.map_iSup]; rw [iSup_le_iff]
-      rintro (_ | i)
-      · simp [U']
-      · exact (T_apply_succ w i).trans (le_iSup _ _) }
-  have hzU (x : V) (hx : x in U) : (π z) x in U := by
-suffices Submodule.map (π z) U <= U from this Submodule.mem_map_of_mem hx
-    simp only [U, Submodule.map_iSup, iSup_le_iff]
-    exact fun i => (map_U'_le i).trans (le_iSup _ _)
-  have trace_za_zero : (LieModule.toEnd R A _ ⁅z, a⁆).trace R U = 0 := by
-    have hres : LieModule.toEnd R A U ⁅z, a⁆ = ⁅(π z).restrict hzU, LieModule.toEnd R A U a⁆ := by
-      ext ⟨x, hx⟩
-      change ⁅⁅z, a⁆, x⁆ = ⁅z, ⁅a, x⁆⁆ - ⁅a, ⁅z, x⁆⁆
-      simp only [leibniz_lie z a, add_sub_cancel_right]
-    rw [hres]; rw [LinearMap.trace_lie]
-  have trace_T_U_zero (w : A) : (T χ w).trace R U = 0 := by
-    have key (i : Nat) (hi : i != 0) : exists j < i, Submodule.map (T χ w) (U' i) <= U' j := by
-      obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hi
-      exact ⟨j, j.lt_succ_self, T_apply_succ w j⟩
-    apply IsNilpotent.eq_zero
-    apply LinearMap.isNilpotent_trace_of_isNilpotent
-    rw [Module.End.isNilpotent_iff_of_finite]
-    suffices ⨆ i, U' i <= Module.End.maxGenEigenspace (T χ w) 0 by
-      intro x
-      specialize this x.2
-      simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero] at this
-      peel this with n hn
-      ext
-      simp only [ZeroMemClass.coe_zero, ← hn]; clear hn
-      induction n <;> simp_all [pow_succ']
-    apply iSup_le
-    intro i x hx
-    simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero]
-    induction i using Nat.strong_induction_on generalizing x
-    next i ih =>
-    obtain rfl | hi := eq_or_ne i 0
-    · simp_all [U']
-    obtain ⟨j, hj, hj'⟩ := key i hi
-    obtain ⟨k, hk⟩ := ih j hj (hj' <| Submodule.mem_map_of_mem hx)
-    use k + 1
-    rw [pow_succ]; rw [Module.End.mul_apply]; rw [hk]
-  have trace_za : (toEnd R A _ ⁅z, a⁆).trace R U = χ ⁅z, a⁆ • (finrank R U) := by
-    simpa [T, sub_eq_zero] using trace_T_U_zero ⁅z, a⁆
-  suffices finrank R U != 0 by simp_all
-  suffices Nontrivial U from Module.finrank_pos.ne'
-  have hvU : v in U := by
-    apply Submodule.mem_iSup_of_mem 1
-    apply Submodule.subset_span
-    use 0, zero_lt_one
-    rw [pow_zero]; rw [Module.End.one_apply]
-exact nontrivial_of_ne ⟨v, hvU⟩ 0 by simp [hv']
-
-中文:
-引理 weightSpaceOfIsLieTower_aux
-  条件: (z : L) (v : V) (hv : v in weightSpace V χ)
-  证明: by
-  rw [mem_weightSpace] at hv ⊢
-  intro a
-  rcases eq_or_ne v 0 with (rfl | hv')
-  · simp only [lie_zero, smul_zero]
-  suffices χ ⁅z, a⁆ = 0 by
-    rw [leibniz_lie]; rw [hv a]; rw [lie_smul]; rw [lie_swap_lie]; rw [hv]; rw [this]; rw [zero_smul]; rw [neg_zero]; rw [zero_add]
-  let U' : Nat ->o Submodule R V :=
-  { toFun n := Submodule.span R {((π z)^i) v | i < n},
-    monotone' i j h := Submodule.span_mono (fun _ ⟨c, hc, hw⟩ => ⟨c, lt_of_lt_of_le hc h, hw⟩) }
-  have map_U'_le (n : Nat) : Submodule.map (π z) (U' n) <= U' (n + 1) := by
-    simp only [OrderHom.coe_mk, Submodule.map_span, toEnd_apply_apply, U']
-    apply Submodule.span_mono
-    suffices forall a < n, exists b < n + 1, ((π z) ^ b) v = ((π z) ^ (a + 1)) v by simpa [pow_succ']
-    aesop
-  have T_apply_succ (w : A) (n : Nat) :
-      Submodule.map (T χ w) (U' (n + 1)) <= U' n := by
-    simp only [OrderHom.coe_mk, U', Submodule.map_span, Submodule.span_le, Set.image_subset_iff]
-    simp only [Set.subset_def, Set.mem_ofPred_eq, Set.mem_preimage, SetLike.mem_coe,
-      forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
-    induction n generalizing w
-    · simp only [zero_add, Nat.lt_one_iff, LinearMap.sub_apply, LieModule.toEnd_apply_apply,
-        LinearMap.smul_apply, Module.End.one_apply, forall_eq, pow_zero, hv w, sub_self, zero_mem]
-    · next n hn =>
-      intro m hm
-      obtain (hm | rfl) : m < n + 1 ∨ m = n + 1 := by lia
-      · exact U'.mono (Nat.le_succ n) (hn w m hm)
-      have H : forall w, ⁅w, (π z ^ n) v⁆ = (T χ w) ((π z ^ n) v) + χ w • ((π z ^ n) v) := by simp
-      rw [T]; rw [LinearMap.sub_apply]; rw [pow_succ']; rw [Module.End.mul_apply]; rw [LieModule.toEnd_apply_apply]; rw [LieModule.toEnd_apply_apply]; rw [LinearMap.smul_apply]; rw [Module.End.one_apply]; rw [leibniz_lie]; rw [lie_swap_lie w z]; rw [H]; rw [H]; rw [lie_add]; rw [lie_smul]; rw [add_sub_assoc]; rw [add_sub_assoc]; rw [sub_self]; rw [add_zero]
-      refine add_mem (neg_mem <| add_mem ?_ ?_) ?_
-      · exact U'.mono n.le_succ (hn _ n n.lt_succ_self)
-      · exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨n, n.lt_succ_self, rfl⟩)
-· exact map_U'_le _ Submodule.mem_map_of_mem hn w n n.lt_succ_self
-  set U : LieSubmodule R A V :=
-  { toSubmodule := ⨆ k : Nat, U' k
-    lie_mem {w} x hx := by
-      rw [show ⁅w]; rw [x⁆ = (T χ w) x + χ w • x by simp]
-      apply add_mem _ (Submodule.smul_mem _ _ hx)
-      set U := ⨆ k : Nat, U' k
-suffices Submodule.map (T χ w) U <= U from this Submodule.mem_map_of_mem hx
-      rw [Submodule.map_iSup]; rw [iSup_le_iff]
-      rintro (_ | i)
-      · simp [U']
-      · exact (T_apply_succ w i).trans (le_iSup _ _) }
-  have hzU (x : V) (hx : x in U) : (π z) x in U := by
-suffices Submodule.map (π z) U <= U from this Submodule.mem_map_of_mem hx
-    simp only [U, Submodule.map_iSup, iSup_le_iff]
-    exact fun i => (map_U'_le i).trans (le_iSup _ _)
-  have trace_za_zero : (LieModule.toEnd R A _ ⁅z, a⁆).trace R U = 0 := by
-    have hres : LieModule.toEnd R A U ⁅z, a⁆ = ⁅(π z).restrict hzU, LieModule.toEnd R A U a⁆ := by
-      ext ⟨x, hx⟩
-      change ⁅⁅z, a⁆, x⁆ = ⁅z, ⁅a, x⁆⁆ - ⁅a, ⁅z, x⁆⁆
-      simp only [leibniz_lie z a, add_sub_cancel_right]
-    rw [hres]; rw [LinearMap.trace_lie]
-  have trace_T_U_zero (w : A) : (T χ w).trace R U = 0 := by
-    have key (i : Nat) (hi : i != 0) : exists j < i, Submodule.map (T χ w) (U' i) <= U' j := by
-      obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hi
-      exact ⟨j, j.lt_succ_self, T_apply_succ w j⟩
-    apply IsNilpotent.eq_zero
-    apply LinearMap.isNilpotent_trace_of_isNilpotent
-    rw [Module.End.isNilpotent_iff_of_finite]
-    suffices ⨆ i, U' i <= Module.End.maxGenEigenspace (T χ w) 0 by
-      intro x
-      specialize this x.2
-      simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero] at this
-      peel this with n hn
-      ext
-      simp only [ZeroMemClass.coe_zero, ← hn]; clear hn
-      induction n <;> simp_all [pow_succ']
-    apply iSup_le
-    intro i x hx
-    simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero]
-    induction i using Nat.strong_induction_on generalizing x
-    next i ih =>
-    obtain rfl | hi := eq_or_ne i 0
-    · simp_all [U']
-    obtain ⟨j, hj, hj'⟩ := key i hi
-    obtain ⟨k, hk⟩ := ih j hj (hj' <| Submodule.mem_map_of_mem hx)
-    use k + 1
-    rw [pow_succ]; rw [Module.End.mul_apply]; rw [hk]
-  have trace_za : (toEnd R A _ ⁅z, a⁆).trace R U = χ ⁅z, a⁆ • (finrank R U) := by
-    simpa [T, sub_eq_zero] using trace_T_U_zero ⁅z, a⁆
-  suffices finrank R U != 0 by simp_all
-  suffices Nontrivial U from Module.finrank_pos.ne'
-  have hvU : v in U := by
-    apply Submodule.mem_iSup_of_mem 1
-    apply Submodule.subset_span
-    use 0, zero_lt_one
-    rw [pow_zero]; rw [Module.End.one_apply]
-exact nontrivial_of_ne ⟨v, hvU⟩ 0 by simp [hv']
+--- 原说明 ---
+An auxiliary lemma used only in the definition `LieModule.weightSpaceOfIsLieTowe
+r` below.
 -/
-private lemma weightSpaceOfIsLieTower_aux (z : L) (v : V) (hv : v in weightSpace V χ) :
-    ⁅z, v⁆ in weightSpace V χ := by
+private lemma weightSpaceOfIsLieTower_aux (z : L) (v : V) (hv : v ∈ weightSpace V χ) :
+    ⁅z, v⁆ ∈ weightSpace V χ := by
   rw [mem_weightSpace] at hv ⊢
   intro a
   rcases eq_or_ne v 0 with (rfl | hv')
   · simp only [lie_zero, smul_zero]
   suffices χ ⁅z, a⁆ = 0 by
-    rw [leibniz_lie]; rw [hv a]; rw [lie_smul]; rw [lie_swap_lie]; rw [hv]; rw [this]; rw [zero_smul]; rw [neg_zero]; rw [zero_add]
-  let U' : Nat ->o Submodule R V :=
+    rw [leibniz_lie, hv a, lie_smul, lie_swap_lie, hv, this, zero_smul, neg_zero, zero_add]
+  let U' : ℕ →o Submodule R V :=
   { toFun n := Submodule.span R {((π z)^i) v | i < n},
-    monotone' i j h := Submodule.span_mono (fun _ ⟨c, hc, hw⟩ => ⟨c, lt_of_lt_of_le hc h, hw⟩) }
-  have map_U'_le (n : Nat) : Submodule.map (π z) (U' n) <= U' (n + 1) := by
+    monotone' i j h := Submodule.span_mono (fun _ ⟨c, hc, hw⟩ ↦ ⟨c, lt_of_lt_of_le hc h, hw⟩) }
+  have map_U'_le (n : ℕ) : Submodule.map (π z) (U' n) ≤ U' (n + 1) := by
     simp only [OrderHom.coe_mk, Submodule.map_span, toEnd_apply_apply, U']
     apply Submodule.span_mono
-    suffices forall a < n, exists b < n + 1, ((π z) ^ b) v = ((π z) ^ (a + 1)) v by simpa [pow_succ']
+    suffices ∀ a < n, ∃ b < n + 1, ((π z) ^ b) v = ((π z) ^ (a + 1)) v by simpa [pow_succ']
     aesop
-  have T_apply_succ (w : A) (n : Nat) :
-      Submodule.map (T χ w) (U' (n + 1)) <= U' n := by
+  have T_apply_succ (w : A) (n : ℕ) :
+      Submodule.map (T χ w) (U' (n + 1)) ≤ U' n := by
     simp only [OrderHom.coe_mk, U', Submodule.map_span, Submodule.span_le, Set.image_subset_iff]
     simp only [Set.subset_def, Set.mem_ofPred_eq, Set.mem_preimage, SetLike.mem_coe,
       forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
@@ -283,41 +92,43 @@ private lemma weightSpaceOfIsLieTower_aux (z : L) (v : V) (hv : v in weightSpace
       intro m hm
       obtain (hm | rfl) : m < n + 1 ∨ m = n + 1 := by lia
       · exact U'.mono (Nat.le_succ n) (hn w m hm)
-      have H : forall w, ⁅w, (π z ^ n) v⁆ = (T χ w) ((π z ^ n) v) + χ w • ((π z ^ n) v) := by simp
-      rw [T]; rw [LinearMap.sub_apply]; rw [pow_succ']; rw [Module.End.mul_apply]; rw [LieModule.toEnd_apply_apply]; rw [LieModule.toEnd_apply_apply]; rw [LinearMap.smul_apply]; rw [Module.End.one_apply]; rw [leibniz_lie]; rw [lie_swap_lie w z]; rw [H]; rw [H]; rw [lie_add]; rw [lie_smul]; rw [add_sub_assoc]; rw [add_sub_assoc]; rw [sub_self]; rw [add_zero]
+      have H : ∀ w, ⁅w, (π z ^ n) v⁆ = (T χ w) ((π z ^ n) v) + χ w • ((π z ^ n) v) := by simp
+      rw [T, LinearMap.sub_apply, pow_succ', Module.End.mul_apply, LieModule.toEnd_apply_apply,
+        LieModule.toEnd_apply_apply, LinearMap.smul_apply, Module.End.one_apply, leibniz_lie,
+        lie_swap_lie w z, H, H, lie_add, lie_smul, add_sub_assoc, add_sub_assoc, sub_self, add_zero]
       refine add_mem (neg_mem <| add_mem ?_ ?_) ?_
       · exact U'.mono n.le_succ (hn _ n n.lt_succ_self)
       · exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨n, n.lt_succ_self, rfl⟩)
-· exact map_U'_le _ Submodule.mem_map_of_mem hn w n n.lt_succ_self
+      · exact map_U'_le _ <| Submodule.mem_map_of_mem <| hn w n n.lt_succ_self
   set U : LieSubmodule R A V :=
-  { toSubmodule := ⨆ k : Nat, U' k
+  { toSubmodule := ⨆ k : ℕ, U' k
     lie_mem {w} x hx := by
-      rw [show ⁅w]; rw [x⁆ = (T χ w) x + χ w • x by simp]
+      rw [show ⁅w, x⁆ = (T χ w) x + χ w • x by simp]
       apply add_mem _ (Submodule.smul_mem _ _ hx)
-      set U := ⨆ k : Nat, U' k
-suffices Submodule.map (T χ w) U <= U from this Submodule.mem_map_of_mem hx
-      rw [Submodule.map_iSup]; rw [iSup_le_iff]
+      set U := ⨆ k : ℕ, U' k
+      suffices Submodule.map (T χ w) U ≤ U from this <| Submodule.mem_map_of_mem hx
+      rw [Submodule.map_iSup, iSup_le_iff]
       rintro (_ | i)
       · simp [U']
       · exact (T_apply_succ w i).trans (le_iSup _ _) }
-  have hzU (x : V) (hx : x in U) : (π z) x in U := by
-suffices Submodule.map (π z) U <= U from this Submodule.mem_map_of_mem hx
+  have hzU (x : V) (hx : x ∈ U) : (π z) x ∈ U := by
+    suffices Submodule.map (π z) U ≤ U from this <| Submodule.mem_map_of_mem hx
     simp only [U, Submodule.map_iSup, iSup_le_iff]
-    exact fun i => (map_U'_le i).trans (le_iSup _ _)
+    exact fun i ↦ (map_U'_le i).trans (le_iSup _ _)
   have trace_za_zero : (LieModule.toEnd R A _ ⁅z, a⁆).trace R U = 0 := by
     have hres : LieModule.toEnd R A U ⁅z, a⁆ = ⁅(π z).restrict hzU, LieModule.toEnd R A U a⁆ := by
       ext ⟨x, hx⟩
       change ⁅⁅z, a⁆, x⁆ = ⁅z, ⁅a, x⁆⁆ - ⁅a, ⁅z, x⁆⁆
       simp only [leibniz_lie z a, add_sub_cancel_right]
-    rw [hres]; rw [LinearMap.trace_lie]
+    rw [hres, LinearMap.trace_lie]
   have trace_T_U_zero (w : A) : (T χ w).trace R U = 0 := by
-    have key (i : Nat) (hi : i != 0) : exists j < i, Submodule.map (T χ w) (U' i) <= U' j := by
+    have key (i : ℕ) (hi : i ≠ 0) : ∃ j < i, Submodule.map (T χ w) (U' i) ≤ U' j := by
       obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hi
       exact ⟨j, j.lt_succ_self, T_apply_succ w j⟩
     apply IsNilpotent.eq_zero
     apply LinearMap.isNilpotent_trace_of_isNilpotent
     rw [Module.End.isNilpotent_iff_of_finite]
-    suffices ⨆ i, U' i <= Module.End.maxGenEigenspace (T χ w) 0 by
+    suffices ⨆ i, U' i ≤ Module.End.maxGenEigenspace (T χ w) 0 by
       intro x
       specialize this x.2
       simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero] at this
@@ -335,39 +146,39 @@ suffices Submodule.map (π z) U <= U from this Submodule.mem_map_of_mem hx
     obtain ⟨j, hj, hj'⟩ := key i hi
     obtain ⟨k, hk⟩ := ih j hj (hj' <| Submodule.mem_map_of_mem hx)
     use k + 1
-    rw [pow_succ]; rw [Module.End.mul_apply]; rw [hk]
+    rw [pow_succ, Module.End.mul_apply, hk]
   have trace_za : (toEnd R A _ ⁅z, a⁆).trace R U = χ ⁅z, a⁆ • (finrank R U) := by
     simpa [T, sub_eq_zero] using trace_T_U_zero ⁅z, a⁆
-  suffices finrank R U != 0 by simp_all
+  suffices finrank R U ≠ 0 by simp_all
   suffices Nontrivial U from Module.finrank_pos.ne'
-  have hvU : v in U := by
+  have hvU : v ∈ U := by
     apply Submodule.mem_iSup_of_mem 1
     apply Submodule.subset_span
     use 0, zero_lt_one
-    rw [pow_zero]; rw [Module.End.one_apply]
-exact nontrivial_of_ne ⟨v, hvU⟩ 0 by simp [hv']
+    rw [pow_zero, Module.End.one_apply]
+  exact nontrivial_of_ne ⟨v, hvU⟩ 0 <| by simp [hv']
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 variable (R V) in
-/--
-Definition of `weightSpaceOfIsLieTower` / `weightSpaceOfIsLieTower` 的定义
+/-- The weight space of `V` with respect to `χ : A → R`, a priori a Lie submodule for `A`, is also a
+Lie submodule for `L`. -/
+/-
+**LieModule.weightSpaceOfIsLieTower** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：weightSpaceOfIsLieTower (χ : A -> R) : LieSubmodule R L V
+参数：χ : A -> R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Algebra.Lie.LieTheorem.0.LieModule.weightSpaceOfIsLieTo
+wer_aux`：∀ {R : Type u_1} {L : Type u_2} {A : Type u_3} {V : Type u_4} [inst : C
+ommRing R] [IsPrincipalIdealRing R] [IsDomain R]   [CharZero R] [inst…
 
-English:
-definition weightSpaceOfIsLieTower
-  signature: (χ : A -> R)
-  body: { toSubmodule := weightSpace V χ
-    lie_mem {z v} hv := weightSpaceOfIsLieTower_aux χ z v hv }
-
-中文:
-定义 weightSpaceOfIsLieTower
-  签名: (χ : A -> R)
-  定义体: { toSubmodule := weightSpace V χ
-    lie_mem {z v} hv := weightSpaceOfIsLieTower_aux χ z v hv }
-
-Depends on / 依赖: lie_mem, toSubmodule, weightSpace, weightSpaceOfIsLieTower_aux
+--- 原说明 ---
+The weight space of `V` with respect to `χ : A → R`, a priori a Lie submodule fo
+r `A`, is also a
+Lie submodule for `L`.
 -/
-def weightSpaceOfIsLieTower (χ : A -> R) : LieSubmodule R L V :=
+def weightSpaceOfIsLieTower (χ : A → R) : LieSubmodule R L V :=
   { toSubmodule := weightSpace V χ
     lie_mem {z v} hv := weightSpaceOfIsLieTower_aux χ z v hv }
 
@@ -383,96 +194,97 @@ variable [CharZero k] [Module.Finite k V]
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 open Submodule in
-/--
-theorem `exists_nontrivial_weightSpace_of_lieIdeal` / 定理 `exists_nontrivial_weightSpace_of_lieIdeal`
-
-English:
-theorem exists_nontrivial_weightSpace_of_lieIdeal
-  statement: [LieModule.IsTriangularizable k L V]
-  proof: by
-  obtain ⟨z, -, hz⟩ := SetLike.exists_of_lt (hA.lt_top)
-  let e : (k ∙ z) ≃ₗ[k] k := (LinearEquiv.toSpanNonzeroSingleton k L z <| by aesop).symm
-  have he : forall x, e x • z = x := by simp [e]
-  have hA : IsCompl A.toSubmodule (k ∙ z) := isCompl_span_singleton_of_isCoatom_of_notMem hA hz
-  let π₁ : L ->ₗ[k] A := A.toSubmodule.projectionOnto (k ∙ z) hA
-  let π₂ : L ->ₗ[k] (k ∙ z) := (k ∙ z).projectionOnto ↑A hA.symm
-  set W : LieSubmodule k L V := weightSpaceOfIsLieTower k V χ₀
-  obtain ⟨c, hc⟩ : exists c, (toEnd k _ W z).HasEigenvalue c := by
-    have : Nontrivial W := inferInstanceAs (Nontrivial (weightSpace V χ₀))
-    apply Module.End.exists_hasEigenvalue_of_genEigenspace_eq_top
-    exact LieModule.IsTriangularizable.maxGenEigenspace_eq_top z
-  obtain ⟨⟨v, hv⟩, hvc⟩ := hc.exists_hasEigenvector
-  have hv' : forall (x : ↥A), ⁅x, v⁆ = χ₀ x • v := by
-    simpa [W, weightSpaceOfIsLieTower, mem_weightSpace] using hv
-  use (χ₀.comp π₁) + c • (e.comp π₂)
-  refine nontrivial_of_ne ⟨v, ?_⟩ 0 ?_
-  · rw [mem_weightSpace]
-    intro x
-    have hπ : (π₁ x : L) + π₂ x = x := projection_add_projection_eq_self hA x
-    suffices ⁅projection _ _ hA.symm x, v⁆ = (c • e (π₂ x)) • v by
-      calc ⁅x, v⁆
-          = ⁅π₁ x, v⁆ + ⁅projection _ _ hA.symm x, v⁆ := congr(⁅$hπ.symm, v⁆) ▸ add_lie _ _ _
-        _ = χ₀ (π₁ x) • v + (c • e (π₂ x)) • v := by rw [hv' (π₁ x), this]
-        _ = _ := by simp [add_smul]
-    calc ⁅projection _ _ hA.symm x, v⁆
-        = e (π₂ x) • ↑(c • ⟨v, hv⟩ : W) := by
-          rw [projection_apply]; rw [← he]; rw [smul_lie]; rw [← hvc.apply_eq_smul]; rfl
-      _ = (c • e (π₂ x)) • v := by rw [smul_assoc, smul_comm]; rfl
-  · simpa [ne_eq, LieSubmodule.mk_eq_zero] using hvc.right
-
-中文:
-定理 存在_nontrivial_weightSpace_of_lieIdeal
-  结论: [Lie模.是Triangularizable k L V]
-  证明: by
-  obtain ⟨z, -, hz⟩ := SetLike.exists_of_lt (hA.lt_top)
-  let e : (k ∙ z) ≃ₗ[k] k := (LinearEquiv.toSpanNonzeroSingleton k L z <| by aesop).symm
-  have he : forall x, e x • z = x := by simp [e]
-  have hA : IsCompl A.toSubmodule (k ∙ z) := isCompl_span_singleton_of_isCoatom_of_notMem hA hz
-  let π₁ : L ->ₗ[k] A := A.toSubmodule.projectionOnto (k ∙ z) hA
-  let π₂ : L ->ₗ[k] (k ∙ z) := (k ∙ z).projectionOnto ↑A hA.symm
-  set W : LieSubmodule k L V := weightSpaceOfIsLieTower k V χ₀
-  obtain ⟨c, hc⟩ : exists c, (toEnd k _ W z).HasEigenvalue c := by
-    have : Nontrivial W := inferInstanceAs (Nontrivial (weightSpace V χ₀))
-    apply Module.End.exists_hasEigenvalue_of_genEigenspace_eq_top
-    exact LieModule.IsTriangularizable.maxGenEigenspace_eq_top z
-  obtain ⟨⟨v, hv⟩, hvc⟩ := hc.exists_hasEigenvector
-  have hv' : forall (x : ↥A), ⁅x, v⁆ = χ₀ x • v := by
-    simpa [W, weightSpaceOfIsLieTower, mem_weightSpace] using hv
-  use (χ₀.comp π₁) + c • (e.comp π₂)
-  refine nontrivial_of_ne ⟨v, ?_⟩ 0 ?_
-  · rw [mem_weightSpace]
-    intro x
-    have hπ : (π₁ x : L) + π₂ x = x := projection_add_projection_eq_self hA x
-    suffices ⁅projection _ _ hA.symm x, v⁆ = (c • e (π₂ x)) • v by
-      calc ⁅x, v⁆
-          = ⁅π₁ x, v⁆ + ⁅projection _ _ hA.symm x, v⁆ := congr(⁅$hπ.symm, v⁆) ▸ add_lie _ _ _
-        _ = χ₀ (π₁ x) • v + (c • e (π₂ x)) • v := by rw [hv' (π₁ x), this]
-        _ = _ := by simp [add_smul]
-    calc ⁅projection _ _ hA.symm x, v⁆
-        = e (π₂ x) • ↑(c • ⟨v, hv⟩ : W) := by
-          rw [projection_apply]; rw [← he]; rw [smul_lie]; rw [← hvc.apply_eq_smul]; rfl
-      _ = (c • e (π₂ x)) • v := by rw [smul_assoc, smul_comm]; rfl
-  · simpa [ne_eq, LieSubmodule.mk_eq_zero] using hvc.right
-
-Depends on / 依赖: A.toSubmodule, A.toSubmodule.projectionOnto, IsCompl, LieSubmodule, LinearEquiv, LinearEquiv.toSpanNonzeroSingleton, SetLike, SetLike.exists_of_lt, exists_of_lt, hA.lt_top, hA.symm, isCompl_span_singleton_of_isCoatom_of_notMem, lt_top, projectionOnto, toSpanNonzeroSingleton, toSubmodule, weightSpaceOfIsLieTower
+/-
+**LieModule.exists_nontrivial_weightSpace_of_lieIdeal** 是 Mathlib 中的一个定理，位于命名空间 
+`LieModule`。
+形式化陈述：exists_nontrivial_weightSpace_of_lieIdeal [LieModule.IsTriangularizable k 
+L V] (A : LieIdeal k L) (hA : IsCoatom A.toSubmodule) (χ₀ : Module.Dual k A) [No
+ntrivial (weightSpace V χ₀)] : exists (χ : Module.Dual k L), Nontrivial (weightS
+pace V χ)
+参数：A : LieIdeal k L；hA : IsCoatom A.toSubmodule；χ₀ : Module.Dual k A；weightSpace
+ V χ₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.exists_of_lt`：exists_of_lt : p < q -> exists x in q, x ∉ p
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用引理 `IsCoatom.lt_top`：IsCoatom.lt_top (h : IsCoatom a) : a < ⊤
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `LinearEquiv.toSpanNonzeroSingleton_symm_apply_smul`：toSpanNonzeroSinglet
+on_symm_apply_smul (m : R ∙ x) : (toSpanNonzeroSingleton R M x h).symm m • x = m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用引理 `Submodule.isCompl_span_singleton_of_isCoatom_of_notMem`：isCompl_span_sin
+gleton_of_isCoatom_of_notMem (hs : IsCoatom s) (hx : x ∉ s) : IsCompl s (K ∙ x)
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `instIsPrincipalIdealRingOfIsSemisimpleRing`：∀ {R : Type u_2} [inst : Rin
+g R] [IsSemisimpleRing R], IsPrincipalIdealRing R
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `instIsLieTowerSubtypeMemLieIdeal_1`：∀ (R : Type u) (L : Type v) (M : Typ
+e w) [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_
+3 : LieRingModule L M] […
+· 使用定理 `instIsLieTowerSubtypeMemLieIdeal`：∀ (R : Type u) (L : Type v) (M : Type 
+w) [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 
+: LieRingModule L M] […
+· 使用定理 `Module.End.exists_hasEigenvalue_of_genEigenspace_eq_top`：exists_hasEigen
+value_of_genEigenspace_eq_top [Nontrivial M] {f : End R M} (k : Nat∞) (hf : ⨆ μ,
+ f.genEigenspace μ k = ⊤) : exists μ, f.HasEi…
+· 使用定理 `LieModule.IsTriangularizable.maxGenEigenspace_eq_top`：∀ {R : Type u_2} {
+L : Type u_3} {M : Type u_4} {inst : CommRing R} {inst_1 : LieRing L} {inst_2 : 
+LieAlgebra R L}   {inst_3 : AddCommGroup M…
+· 使用定理 `LieModule.instIsTriangularizableSubtypeMemLieSubmodule`：∀ (K : Type u_1)
+ (L : Type u_3) (M : Type u_4) [inst : LieRing L] [inst_1 : AddCommGroup M] [ins
+t_2 : LieRingModule L M]   [inst_3 : Field K…
+（共 46 条，此处仅展示前 30 条）
 -/
 theorem exists_nontrivial_weightSpace_of_lieIdeal [LieModule.IsTriangularizable k L V]
     (A : LieIdeal k L) (hA : IsCoatom A.toSubmodule)
     (χ₀ : Module.Dual k A) [Nontrivial (weightSpace V χ₀)] :
-    exists (χ : Module.Dual k L), Nontrivial (weightSpace V χ) := by
+    ∃ (χ : Module.Dual k L), Nontrivial (weightSpace V χ) := by
   obtain ⟨z, -, hz⟩ := SetLike.exists_of_lt (hA.lt_top)
   let e : (k ∙ z) ≃ₗ[k] k := (LinearEquiv.toSpanNonzeroSingleton k L z <| by aesop).symm
-  have he : forall x, e x • z = x := by simp [e]
+  have he : ∀ x, e x • z = x := by simp [e]
   have hA : IsCompl A.toSubmodule (k ∙ z) := isCompl_span_singleton_of_isCoatom_of_notMem hA hz
-  let π₁ : L ->ₗ[k] A := A.toSubmodule.projectionOnto (k ∙ z) hA
-  let π₂ : L ->ₗ[k] (k ∙ z) := (k ∙ z).projectionOnto ↑A hA.symm
+  let π₁ : L →ₗ[k] A       := A.toSubmodule.projectionOnto (k ∙ z) hA
+  let π₂ : L →ₗ[k] (k ∙ z) := (k ∙ z).projectionOnto ↑A hA.symm
   set W : LieSubmodule k L V := weightSpaceOfIsLieTower k V χ₀
-  obtain ⟨c, hc⟩ : exists c, (toEnd k _ W z).HasEigenvalue c := by
+  obtain ⟨c, hc⟩ : ∃ c, (toEnd k _ W z).HasEigenvalue c := by
     have : Nontrivial W := inferInstanceAs (Nontrivial (weightSpace V χ₀))
     apply Module.End.exists_hasEigenvalue_of_genEigenspace_eq_top
     exact LieModule.IsTriangularizable.maxGenEigenspace_eq_top z
   obtain ⟨⟨v, hv⟩, hvc⟩ := hc.exists_hasEigenvector
-  have hv' : forall (x : ↥A), ⁅x, v⁆ = χ₀ x • v := by
+  have hv' : ∀ (x : ↥A), ⁅x, v⁆ = χ₀ x • v := by
     simpa [W, weightSpaceOfIsLieTower, mem_weightSpace] using hv
   use (χ₀.comp π₁) + c • (e.comp π₂)
   refine nontrivial_of_ne ⟨v, ?_⟩ 0 ?_
@@ -482,12 +294,12 @@ theorem exists_nontrivial_weightSpace_of_lieIdeal [LieModule.IsTriangularizable 
     suffices ⁅projection _ _ hA.symm x, v⁆ = (c • e (π₂ x)) • v by
       calc ⁅x, v⁆
           = ⁅π₁ x, v⁆ + ⁅projection _ _ hA.symm x, v⁆ := congr(⁅$hπ.symm, v⁆) ▸ add_lie _ _ _
-        _ = χ₀ (π₁ x) • v + (c • e (π₂ x)) • v := by rw [hv' (π₁ x), this]
+        _ = χ₀ (π₁ x) • v + (c • e (π₂ x)) • v    := by rw [hv' (π₁ x), this]
         _ = _ := by simp [add_smul]
     calc ⁅projection _ _ hA.symm x, v⁆
         = e (π₂ x) • ↑(c • ⟨v, hv⟩ : W) := by
-          rw [projection_apply]; rw [← he]; rw [smul_lie]; rw [← hvc.apply_eq_smul]; rfl
-      _ = (c • e (π₂ x)) • v := by rw [smul_assoc, smul_comm]; rfl
+          rw [projection_apply, ← he, smul_lie, ← hvc.apply_eq_smul]; rfl
+      _ = (c • e (π₂ x)) • v            := by rw [smul_assoc, smul_comm]; rfl
   · simpa [ne_eq, LieSubmodule.mk_eq_zero] using hvc.right
 
 variable (k L V)
@@ -498,53 +310,15 @@ open LieAlgebra
 -- This lemma is the central inductive argument in the proof of Lie's theorem below.
 -- The statement is identical to `LieModule.exists_forall_lie_eq_smul_of_isSolvable`
 -- except that it additionally assumes a finiteness hypothesis.
-/--
-lemma `exists_forall_lie_eq_smul_of_isSolvable_of_finite` / 引理 `exists_forall_lie_eq_smul_of_isSolvable_of_finite`
-
-English:
-lemma exists_forall_lie_eq_smul_of_isSolvable_of_finite
-  proof: by
-  obtain H | ⟨A, hA, hAL⟩ := eq_top_or_exists_le_coatom (derivedSeries k L 1).toSubmodule
-  · obtain _ | _ := subsingleton_or_nontrivial L
-    · use 0
-      simpa [trivial_lie_zero, mem_weightSpace, nontrivial_iff] using exists_pair_ne V
-    · rw [LieSubmodule.toSubmodule_eq_top] at H
-      exact ((derivedSeries_lt_top_of_solvable k L).ne H).elim
-  lift A to LieIdeal k L
-  · intros
-exact hAL LieSubmodule.lie_mem_lie (LieSubmodule.mem_top _) (LieSubmodule.mem_top _)
-  obtain ⟨χ', _⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite A
-  exact exists_nontrivial_weightSpace_of_lieIdeal A hA χ'
-termination_by Module.finrank k L
-decreasing_by
-  rw [← finrank_top k L]
-  apply Submodule.finrank_lt_finrank_of_lt
-  exact hA.lt_top
-
-中文:
-引理 存在_对任意_lie_eq_smul_of_isSolvable_of_finite
-  证明: by
-  obtain H | ⟨A, hA, hAL⟩ := eq_top_or_exists_le_coatom (derivedSeries k L 1).toSubmodule
-  · obtain _ | _ := subsingleton_or_nontrivial L
-    · use 0
-      simpa [trivial_lie_zero, mem_weightSpace, nontrivial_iff] using exists_pair_ne V
-    · rw [LieSubmodule.toSubmodule_eq_top] at H
-      exact ((derivedSeries_lt_top_of_solvable k L).ne H).elim
-  lift A to LieIdeal k L
-  · intros
-exact hAL LieSubmodule.lie_mem_lie (LieSubmodule.mem_top _) (LieSubmodule.mem_top _)
-  obtain ⟨χ', _⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite A
-  exact exists_nontrivial_weightSpace_of_lieIdeal A hA χ'
-termination_by Module.finrank k L
-decreasing_by
-  rw [← finrank_top k L]
-  apply Submodule.finrank_lt_finrank_of_lt
-  exact hA.lt_top
+/-
+**LieModule.exists_forall_lie_eq_smul_of_isSolvable_of_finite** 是 Mathlib 中的一个引理
+，位于命名空间 `LieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma exists_forall_lie_eq_smul_of_isSolvable_of_finite
     (L : Type*) [LieRing L] [LieAlgebra k L] [LieRingModule L V] [LieModule k L V]
     [IsSolvable L] [LieModule.IsTriangularizable k L V] [Module.Finite k L] :
-    exists χ : Module.Dual k L, Nontrivial (weightSpace V χ) := by
+    ∃ χ : Module.Dual k L, Nontrivial (weightSpace V χ) := by
   obtain H | ⟨A, hA, hAL⟩ := eq_top_or_exists_le_coatom (derivedSeries k L 1).toSubmodule
   · obtain _ | _ := subsingleton_or_nontrivial L
     · use 0
@@ -553,7 +327,7 @@ private lemma exists_forall_lie_eq_smul_of_isSolvable_of_finite
       exact ((derivedSeries_lt_top_of_solvable k L).ne H).elim
   lift A to LieIdeal k L
   · intros
-exact hAL LieSubmodule.lie_mem_lie (LieSubmodule.mem_top _) (LieSubmodule.mem_top _)
+    exact hAL <| LieSubmodule.lie_mem_lie (LieSubmodule.mem_top _) (LieSubmodule.mem_top _)
   obtain ⟨χ', _⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite A
   exact exists_nontrivial_weightSpace_of_lieIdeal A hA χ'
 termination_by Module.finrank k L
@@ -565,47 +339,74 @@ decreasing_by
 attribute [local instance 100] LieRing.ofAssociativeRing
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exists_nontrivial_weightSpace_of_isSolvable` / 定理 `exists_nontrivial_weightSpace_of_isSolvable`
+/-- **Lie's theorem**: Lie modules of solvable Lie algebras over fields of characteristic 0
+have a common eigenvector for the action of all elements of the Lie algebra.
 
-English:
-theorem exists_nontrivial_weightSpace_of_isSolvable
-  proof: by
-  let imL := (toEnd k L V).range
-  let toEndo : L ->ₗ[k] imL := LinearMap.codRestrict imL.toSubmodule (toEnd k L V)
-      (fun x => LinearMap.mem_range.mpr ⟨x, rfl⟩ : forall x : L, (toEnd k L V) x in imL)
-  have ⟨χ, h⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite k V imL
-  use χ.comp toEndo
-  obtain ⟨⟨v, hv⟩, hv0⟩ := exists_ne (0 : weightSpace V χ)
-  refine nontrivial_of_ne ⟨v, ?_⟩ 0 ?_
-  · rw [mem_weightSpace] at hv ⊢
-    intro x
-    apply hv (toEndo x)
-  · simpa using hv0
+See `LieModule.exists_nontrivial_weightSpace_of_isNilpotent` for the variant that
+assumes that `L` is nilpotent and drops the condition that `k` is of characteristic zero. -/
+/-
+**LieModule.exists_nontrivial_weightSpace_of_isSolvable** 是 Mathlib 中的一个定理，位于命名空
+间 `LieModule`。
+形式化陈述：exists_nontrivial_weightSpace_of_isSolvable [IsSolvable L] [LieModule.IsTr
+iangularizable k L V] : exists χ : Module.Dual k L, Nontrivial (weightSpace V χ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instIsScalarTower`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `_private.Mathlib.Algebra.Lie.LieTheorem.0.LieModule.exists_forall_lie_eq
+_smul_of_isSolvable_of_finite`：∀ (k : Type u_1) [inst : Field k] (V : Type u_3) 
+[inst_1 : AddCommGroup V] [inst_2 : _root_.Module k V] [CharZero k]   [Module.Fi
+nite k V] […
+· 使用定理 `LieModule.instIsTriangularizableSubtypeEndMemLieSubalgebraRangeToEnd`：∀ 
+(R : Type u_2) (L : Type u_3) (M : Type u_4) [inst : CommRing R] [inst_1 : LieRi
+ng L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M…
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
+· 使用定理 `LieSubalgebra.instIsNoetherianSubtypeMem`：∀ (R : Type u) (L : Type v) [i
+nst : CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalg
+ebra R L)   [IsNoetherian R L]…
+· 使用定理 `IsSimpleModule.instIsNoetherian`：∀ (R : Type u_2) [inst : Ring R] {M : T
+ype u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimpleModul
+e R M], IsNoetherian …
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `nontrivial_of_ne`：nontrivial_of_ne (x y : α) (h : x != y) : Nontrivial α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieModule.mem_weightSpace`：mem_weightSpace (χ : L -> R) (m : M) : m in w
+eightSpace M χ ↔ forall x, ⁅x, m⁆ = χ x • m
 
-中文:
-定理 存在_nontrivial_weightSpace_of_isSolvable
-  证明: by
-  let imL := (toEnd k L V).range
-  let toEndo : L ->ₗ[k] imL := LinearMap.codRestrict imL.toSubmodule (toEnd k L V)
-      (fun x => LinearMap.mem_range.mpr ⟨x, rfl⟩ : forall x : L, (toEnd k L V) x in imL)
-  have ⟨χ, h⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite k V imL
-  use χ.comp toEndo
-  obtain ⟨⟨v, hv⟩, hv0⟩ := exists_ne (0 : weightSpace V χ)
-  refine nontrivial_of_ne ⟨v, ?_⟩ 0 ?_
-  · rw [mem_weightSpace] at hv ⊢
-    intro x
-    apply hv (toEndo x)
-  · simpa using hv0
+--- 原说明 ---
+**Lie's theorem**: Lie modules of solvable Lie algebras over fields of character
+istic 0
+have a common eigenvector for the action of all elements of the Lie algebra.
 
-Depends on / 依赖: LinearMap, LinearMap.codRestrict, LinearMap.mem_range.mpr, codRestrict, exists_forall_lie_eq_smul_of_isSolvable_of_finite, exists_ne, imL.toSubmodule, mem_range, mem_weightSpace, nontrivial_of_ne, toEndo, toSubmodule, weightSpace
+See `LieModule.exists_nontrivial_weightSpace_of_isNilpotent` for the variant tha
+t
+assumes that `L` is nilpotent and drops the condition that `k` is of characteris
+tic zero.
 -/
 theorem exists_nontrivial_weightSpace_of_isSolvable
     [IsSolvable L] [LieModule.IsTriangularizable k L V] :
-    exists χ : Module.Dual k L, Nontrivial (weightSpace V χ) := by
+    ∃ χ : Module.Dual k L, Nontrivial (weightSpace V χ) := by
   let imL := (toEnd k L V).range
-  let toEndo : L ->ₗ[k] imL := LinearMap.codRestrict imL.toSubmodule (toEnd k L V)
-      (fun x => LinearMap.mem_range.mpr ⟨x, rfl⟩ : forall x : L, (toEnd k L V) x in imL)
+  let toEndo : L →ₗ[k] imL := LinearMap.codRestrict imL.toSubmodule (toEnd k L V)
+      (fun x ↦ LinearMap.mem_range.mpr ⟨x, rfl⟩ : ∀ x : L, (toEnd k L V) x ∈ imL)
   have ⟨χ, h⟩ := exists_forall_lie_eq_smul_of_isSolvable_of_finite k V imL
   use χ.comp toEndo
   obtain ⟨⟨v, hv⟩, hv0⟩ := exists_ne (0 : weightSpace V χ)
@@ -618,3 +419,4 @@ theorem exists_nontrivial_weightSpace_of_isSolvable
 end
 
 end LieModule
+

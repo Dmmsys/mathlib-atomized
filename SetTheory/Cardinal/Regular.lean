@@ -38,518 +38,350 @@ variable {c : Cardinal}
 
 /-- A cardinal is regular if it is infinite and it equals its own cofinality. -/
 @[mk_iff]
-/--
-Definition of `IsRegular` / `IsRegular` 的定义
+/-
+**Cardinal.IsRegular** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cardinal`。
+形式化陈述：Cardinal.{u_1} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsRegular
-  parameters: (c : Cardinal)
-  axioms and operations (2):
-    - aleph0_le : ℵ₀ <= c
-    - le_cof_ord : c <= c.ord.cof
-
-中文:
-结构 是正则
-  参数: (c : 基数)
-  公理与运算 (2 个):
-    - aleph0_le : ℵ₀ <= c
-    - le_cof_ord : c <= c.ord.cof
+--- 原说明 ---
+A cardinal is regular if it is infinite and it equals its own cofinality.
 -/
 structure IsRegular (c : Cardinal) : Prop where
   /-- A regular cardinal is infinite. -/
-  aleph0_le : ℵ₀ <= c
+  aleph0_le : ℵ₀ ≤ c
   /-- A cardinal equals its own cofinality. See `IsRegular.cof_eq`. -/
-  le_cof_ord : c <= c.ord.cof
-
-/--
-theorem `IsRegular.cof_ord` / 定理 `IsRegular.cof_ord`
-
-English:
-theorem IsRegular.cof_ord
-  given: (H : c.IsRegular)
-  statement: c.ord.cof = c
-  proof: (cof_ord_le c).antisymm H.2
-
-@[deprecated (since := "2026-03-22")] alias IsRegular.cof_eq := IsRegular.cof_ord
-
-中文:
-定理 是正则.cof_ord
-  条件: (H : c.是正则)
-  结论: c.ord.cof = c
-  证明: (cof_ord_le c).antisymm H.2
-
-@[deprecated (since := "2026-03-22")] alias IsRegular.cof_eq := IsRegular.cof_ord
-
-Depends on / 依赖: antisymm, cof_ord_le
+  le_cof_ord : c ≤ c.ord.cof
+/-
+**Cardinal.IsRegular.cof_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.cof = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.cof_ord_le`：cof_ord_le (c : Cardinal) : c.ord.cof <= c
+· 使用定理 `Cardinal.IsRegular.le_cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c ≤
+ c.ord.cof
 -/
 theorem IsRegular.cof_ord (H : c.IsRegular) : c.ord.cof = c :=
   (cof_ord_le c).antisymm H.2
 
 @[deprecated (since := "2026-03-22")] alias IsRegular.cof_eq := IsRegular.cof_ord
-
-/--
-theorem `IsRegular.cof_omega_eq` / 定理 `IsRegular.cof_omega_eq`
-
-English:
-theorem IsRegular.cof_omega_eq
-  given: {o : Ordinal} (H : (ℵ_ o).IsRegular)
-  statement: (ω_ o).cof = ℵ_ o
-  proof: by
-  rw [← ord_aleph]; rw [H.cof_ord]
-
-中文:
-定理 是正则.cof_omega_eq
-  条件: {o : 序数} (H : (ℵ_ o).是正则)
-  结论: (ω_ o).cof = ℵ_ o
-  证明: by
-  rw [← ord_aleph]; rw [H.cof_ord]
-
-Depends on / 依赖: H.cof_ord, cof_ord, ord_aleph
+/-
+**Cardinal.IsRegular.cof_omega_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`
+。
+形式化陈述：∀ {o : Ordinal.{u_1}}, (Cardinal.aleph o).IsRegular → (Ordinal.omega o).co
+f = Cardinal.aleph o
+参数：Cardinal.aleph o；Ordinal.omega o。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.ord_aleph`：ord_aleph (o : Ordinal) : (ℵ_ o).ord = ω_ o
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
 theorem IsRegular.cof_omega_eq {o : Ordinal} (H : (ℵ_ o).IsRegular) : (ω_ o).cof = ℵ_ o := by
-  rw [← ord_aleph]; rw [H.cof_ord]
-
-/--
-theorem `IsRegular.pos` / 定理 `IsRegular.pos`
-
-English:
-theorem IsRegular.pos
-  given: (H : c.IsRegular)
-  statement: 0 < c
-  proof: aleph0_pos.trans_le H.1
-
-中文:
-定理 是正则.pos
-  条件: (H : c.是正则)
-  结论: 0 < c
-  证明: aleph0_pos.trans_le H.1
-
-Depends on / 依赖: aleph0_pos, aleph0_pos.trans_le, trans_le
+  rw [← ord_aleph, H.cof_ord]
+/-
+**Cardinal.IsRegular.pos** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → 0 < c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Cardinal.aleph0_pos`：aleph0_pos : 0 < ℵ₀
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
 -/
 theorem IsRegular.pos (H : c.IsRegular) : 0 < c :=
   aleph0_pos.trans_le H.1
-
-/--
-theorem `IsRegular.nat_lt` / 定理 `IsRegular.nat_lt`
-
-English:
-theorem IsRegular.nat_lt
-  given: (H : c.IsRegular) (n : Nat)
-  statement: n < c
-  proof: lt_of_lt_of_le natCast_lt_aleph0 H.aleph0_le
-
-中文:
-定理 是正则.nat_lt
-  条件: (H : c.是正则) (n : 自然数)
-  结论: n < c
-  证明: lt_of_lt_of_le natCast_lt_aleph0 H.aleph0_le
-
-Depends on / 依赖: H.aleph0_le, aleph0_le, lt_of_lt_of_le, natCast_lt_aleph0
+/-
+**Cardinal.IsRegular.nat_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → ∀ (n : ℕ), ↑n < c
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
 -/
-theorem IsRegular.nat_lt (H : c.IsRegular) (n : Nat) : n < c :=
+theorem IsRegular.nat_lt (H : c.IsRegular) (n : ℕ) : n < c :=
   lt_of_lt_of_le natCast_lt_aleph0 H.aleph0_le
-
-/--
-theorem `IsRegular.ord_pos` / 定理 `IsRegular.ord_pos`
-
-English:
-theorem IsRegular.ord_pos
-  given: (H : c.IsRegular)
-  statement: 0 < c.ord
-  proof: by
-  rw [Cardinal.lt_ord]; rw [card_zero]
-  exact H.pos
-
-中文:
-定理 是正则.ord_pos
-  条件: (H : c.是正则)
-  结论: 0 < c.ord
-  证明: by
-  rw [Cardinal.lt_ord]; rw [card_zero]
-  exact H.pos
-
-Depends on / 依赖: Cardinal, Cardinal.lt_ord, H.pos, card_zero, lt_ord
+/-
+**Cardinal.IsRegular.ord_pos** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → 0 < c.ord
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lt_ord`：lt_ord {c o} : o < ord c ↔ o.card < c
+· 使用定理 `Ordinal.card_zero`：card_zero : card 0 = 0
+· 使用定理 `Cardinal.IsRegular.pos`：∀ {c : Cardinal.{u_1}}, c.IsRegular → 0 < c
 -/
 theorem IsRegular.ord_pos (H : c.IsRegular) : 0 < c.ord := by
-  rw [Cardinal.lt_ord]; rw [card_zero]
+  rw [Cardinal.lt_ord, card_zero]
   exact H.pos
-
-/--
-theorem `isRegular_cof` / 定理 `isRegular_cof`
-
-English:
-theorem isRegular_cof
-  given: {o : Ordinal} (h : IsSuccLimit o)
-  statement: IsRegular o.cof
-  proof: by
-  refine ⟨?_, (cof_ord_cof o).ge⟩
-  rwa [aleph0_le_cof_iff, one_lt_cof_iff]
-
-中文:
-定理 isRegular_cof
-  条件: {o : 序数} (h : 是SuccLimit o)
-  结论: 是正则 o.cof
-  证明: by
-  refine ⟨?_, (cof_ord_cof o).ge⟩
-  rwa [aleph0_le_cof_iff, one_lt_cof_iff]
-
-Depends on / 依赖: aleph0_le_cof_iff, cof_ord_cof, one_lt_cof_iff
+/-
+**Cardinal.isRegular_cof** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_cof {o : Ordinal} (h : IsSuccLimit o) : IsRegular o.cof
+参数：h : IsSuccLimit o。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.aleph0_le_cof_iff`：aleph0_le_cof_iff {o : Ordinal} : ℵ₀ <= cof o
+ ↔ 1 < cof o
+· 使用定理 `Ordinal.one_lt_cof_iff`：one_lt_cof_iff {o : Ordinal} : 1 < cof o ↔ IsSuc
+cLimit o
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Ordinal.cof_ord_cof`：cof_ord_cof (o : Ordinal) : o.cof.ord.cof = o.cof
 -/
 theorem isRegular_cof {o : Ordinal} (h : IsSuccLimit o) : IsRegular o.cof := by
   refine ⟨?_, (cof_ord_cof o).ge⟩
   rwa [aleph0_le_cof_iff, one_lt_cof_iff]
 
-/--
-lemma `IsRegular.ne_zero` / 引理 `IsRegular.ne_zero`
+/-- If `c` is a regular cardinal, then `c.ord.ToType` has a least element. -/
+/-
+**Cardinal.IsRegular.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → c ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Cardinal.IsRegular.pos`：∀ {c : Cardinal.{u_1}}, c.IsRegular → 0 < c
 
-English:
-lemma IsRegular.ne_zero
-  given: (H : c.IsRegular)
-  statement: c != 0
-  proof: H.pos.ne'
-
-中文:
-引理 是正则.ne_zero
-  条件: (H : c.是正则)
-  结论: c != 0
-  证明: H.pos.ne'
+--- 原说明 ---
+If `c` is a regular cardinal, then `c.ord.ToType` has a least element.
 -/
-lemma IsRegular.ne_zero (H : c.IsRegular) : c != 0 :=
+lemma IsRegular.ne_zero (H : c.IsRegular) : c ≠ 0 :=
   H.pos.ne'
-
-/--
-theorem `isRegular_aleph0` / 定理 `isRegular_aleph0`
-
-English:
-theorem isRegular_aleph0
-  statement: IsRegular ℵ₀
-  proof: ⟨le_rfl, by simp⟩
-
-中文:
-定理 isRegular_aleph0
-  结论: 是正则 ℵ₀
-  证明: ⟨le_rfl, by simp⟩
-
-Depends on / 依赖: Quotient, Quotient.ind, dist_smul_pair, le_rfl
+/-
+**Cardinal.isRegular_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_aleph0 : IsRegular ℵ₀
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_aleph0`：ord_aleph0 : ord.{u} ℵ₀ = ω
+· 使用定理 `Ordinal.cof_omega0`：cof_omega0 : cof ω = ℵ₀
 -/
 theorem isRegular_aleph0 : IsRegular ℵ₀ :=
   ⟨le_rfl, by simp⟩
-
-/--
-lemma `fact_isRegular_aleph0` / 引理 `fact_isRegular_aleph0`
-
-English:
-lemma fact_isRegular_aleph0
-  statement: Fact (IsRegular ℵ₀) where
-  proof: isRegular_aleph0
-
-中文:
-引理 fact_isRegular_aleph0
-  结论: Fact (是正则 ℵ₀) where
-  证明: isRegular_aleph0
-
-Depends on / 依赖: isRegular_aleph0
+/-
+**Cardinal.fact_isRegular_aleph0** 是 Mathlib 中的一个引理，位于命名空间 `Cardinal`。
+形式化陈述：fact_isRegular_aleph0 : Fact (IsRegular ℵ₀) where out
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_aleph0`：isRegular_aleph0 : IsRegular ℵ₀
 -/
 lemma fact_isRegular_aleph0 : Fact (IsRegular ℵ₀) where
   out := isRegular_aleph0
-
-/--
-theorem `isRegular_succ` / 定理 `isRegular_succ`
-
-English:
-theorem isRegular_succ
-  given: {c : Cardinal} (hc : ℵ₀ <= c)
-  statement: IsRegular (succ c)
-  proof: by
-  have hc₀ := hc.trans (le_succ c)
-  use hc₀
-  by_contra! hc'
-  obtain ⟨f, hf⟩ := exists_isFundamentalSeq (o := (succ c).ord) rfl
-  apply hf.iSup_add_one_eq.not_lt
-  rw [← card_le_iff]
-  refine card_iSup_Iio_le ?_ fun i => ?_
-  · simpa using hc'
-  · rw [card_le_iff]
-    exact (isSuccLimit_ord hc₀).add_one_lt (f i).2
-
-中文:
-定理 isRegular_succ
-  条件: {c : 基数} (hc : ℵ₀ <= c)
-  结论: 是正则 (succ c)
-  证明: by
-  have hc₀ := hc.trans (le_succ c)
-  use hc₀
-  by_contra! hc'
-  obtain ⟨f, hf⟩ := exists_isFundamentalSeq (o := (succ c).ord) rfl
-  apply hf.iSup_add_one_eq.not_lt
-  rw [← card_le_iff]
-  refine card_iSup_Iio_le ?_ fun i => ?_
-  · simpa using hc'
-  · rw [card_le_iff]
-    exact (isSuccLimit_ord hc₀).add_one_lt (f i).2
-
-Depends on / 依赖: add_one_lt, card_iSup_Iio_le, card_le_iff, exists_isFundamentalSeq, hc.trans, hf.iSup_add_one_eq.not_lt, iSup_add_one_eq, isSuccLimit_ord, le_succ, not_lt
+/-
+**Cardinal.isRegular_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : IsRegular (succ c)
+参数：hc : ℵ₀ <= c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Ordinal.exists_isFundamentalSeq`：exists_isFundamentalSeq (ha : o.cof.ord
+ = a) : exists f : Iio a -> Iio o, IsFundamentalSeq f
+· 使用定理 `Eq.not_lt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬a < 
+b
+· 使用定理 `Ordinal.IsFundamentalSeq.iSup_add_one_eq`：iSup_add_one_eq (hf : IsFundam
+entalSeq f) : ⨆ i, (f i).1 + 1 = o
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.card_le_iff`：card_le_iff {o : Ordinal} {c : Cardinal} : o.card 
+<= c ↔ o < (succ c).ord
+· 使用定理 `Ordinal.card_iSup_Iio_le`：card_iSup_Iio_le {o : Ordinal} {c : Cardinal} 
+{f : Iio o -> Ordinal} (hι : o.card <= c) (hf : forall i, (f i).card <= c) : (⨆ 
+i, f i).card <…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Cardinal.card_ord`：card_ord (c) : (ord c).card = c
+· 使用定理 `Cardinal.instNoMaxOrder`：NoMaxOrder Cardinal.{u}
+· 使用定理 `Order.IsSuccLimit.add_one_lt`：∀ {α : Type u_1} {x y : α} [inst : Partial
+Order α] [inst_1 : Add α] [inst_2 : One α] [SuccAddOrder α],   Order.IsSuccLimit
+ x → y < x → y + 1…
+· 使用定理 `Cardinal.isSuccLimit_ord`：isSuccLimit_ord {c} (hc : ℵ₀ <= c) : IsSuccLim
+it (ord c)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : IsRegular (succ c) := by
+theorem isRegular_succ {c : Cardinal} (hc : ℵ₀ ≤ c) : IsRegular (succ c) := by
   have hc₀ := hc.trans (le_succ c)
   use hc₀
   by_contra! hc'
   obtain ⟨f, hf⟩ := exists_isFundamentalSeq (o := (succ c).ord) rfl
   apply hf.iSup_add_one_eq.not_lt
   rw [← card_le_iff]
-  refine card_iSup_Iio_le ?_ fun i => ?_
+  refine card_iSup_Iio_le ?_ fun i ↦ ?_
   · simpa using hc'
   · rw [card_le_iff]
     exact (isSuccLimit_ord hc₀).add_one_lt (f i).2
-
-/--
-theorem `isRegular_aleph_one` / 定理 `isRegular_aleph_one`
-
-English:
-theorem isRegular_aleph_one
-  statement: IsRegular ℵ₁
-  proof: by
-  rw [← succ_aleph0]
-  exact isRegular_succ le_rfl
-
-@[simp]
-
-中文:
-定理 isRegular_aleph_one
-  结论: 是正则 ℵ₁
-  证明: by
-  rw [← succ_aleph0]
-  exact isRegular_succ le_rfl
-
-@[simp]
-
-Depends on / 依赖: isRegular_succ, le_rfl, succ_aleph0
+/-
+**Cardinal.isRegular_aleph_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_aleph_one : IsRegular ℵ₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.succ_aleph0`：succ_aleph0 : succ ℵ₀ = ℵ₁
+· 使用定理 `Cardinal.isRegular_succ`：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : 
+IsRegular (succ c)
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem isRegular_aleph_one : IsRegular ℵ₁ := by
   rw [← succ_aleph0]
   exact isRegular_succ le_rfl
 
 @[simp]
-/--
-theorem `cof_omega_one` / 定理 `cof_omega_one`
-
-English:
-theorem cof_omega_one
-  statement: cof ω₁ = ℵ₁
-  proof: by
-  simpa using isRegular_aleph_one.cof_omega_eq
-
-中文:
-定理 cof_omega_one
-  结论: cof ω₁ = ℵ₁
-  证明: by
-  simpa using isRegular_aleph_one.cof_omega_eq
-
-Depends on / 依赖: cof_omega_eq, isRegular_aleph_one, isRegular_aleph_one.cof_omega_eq
+/-
+**Cardinal.cof_omega_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：cof_omega_one : cof ω₁ = ℵ₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsRegular.cof_omega_eq`：∀ {o : Ordinal.{u_1}}, (Cardinal.aleph 
+o).IsRegular → (Ordinal.omega o).cof = Cardinal.aleph o
+· 使用定理 `Cardinal.isRegular_aleph_one`：isRegular_aleph_one : IsRegular ℵ₁
 -/
 theorem cof_omega_one : cof ω₁ = ℵ₁ := by
   simpa using isRegular_aleph_one.cof_omega_eq
 
-/--
-theorem `_root_.Ordinal.iSup_lt_omega_one` / 定理 `_root_.Ordinal.iSup_lt_omega_one`
+/-- A countable supremum of countable ordinals is countable. -/
+/-
+**Cardinal._root_.Ordinal.iSup_lt_omega_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Ordinal.iSup_lt_omega_one
-  given: {α : Type*} [Countable α] {f : α -> Ordinal}
-  proof: Ordinal.lift_iSup_lt_of_lt_cof (by simp)
-
-@[deprecated (since := "2026-03-23")]
-alias iSup_sequence_lt_omega_one := Ordinal.iSup_lt_omega_one
-
-中文:
-定理 _root_.序数.iSup_lt_omega_one
-  条件: {α : 类型} [可数 α] {f : α -> 序数}
-  证明: Ordinal.lift_iSup_lt_of_lt_cof (by simp)
-
-@[deprecated (since := "2026-03-23")]
-alias iSup_sequence_lt_omega_one := Ordinal.iSup_lt_omega_one
-
-Depends on / 依赖: Ordinal, Ordinal.lift_iSup_lt_of_lt_cof, lift_iSup_lt_of_lt_cof
+--- 原说明 ---
+A countable supremum of countable ordinals is countable.
 -/
-theorem _root_.Ordinal.iSup_lt_omega_one {α : Type*} [Countable α] {f : α -> Ordinal} :
-    (forall i, f i < ω₁) -> ⨆ i, f i < ω₁ :=
+theorem _root_.Ordinal.iSup_lt_omega_one {α : Type*} [Countable α] {f : α → Ordinal} :
+    (∀ i, f i < ω₁) → ⨆ i, f i < ω₁ :=
   Ordinal.lift_iSup_lt_of_lt_cof (by simp)
 
 @[deprecated (since := "2026-03-23")]
 alias iSup_sequence_lt_omega_one := Ordinal.iSup_lt_omega_one
-
-/--
-theorem `isRegular_preAleph_add_one` / 定理 `isRegular_preAleph_add_one`
-
-English:
-theorem isRegular_preAleph_add_one
-  given: {o : Ordinal} (h : ω <= o)
-  statement: IsRegular (preAleph (o + 1))
-  proof: by
-  rw [← succ_preAleph]
-  exact isRegular_succ (aleph0_le_preAleph.2 h)
-
-@[deprecated isRegular_preAleph_add_one (since := "2026-03-23")]
-
-中文:
-定理 isRegular_preAleph_add_one
-  条件: {o : 序数} (h : ω <= o)
-  结论: 是正则 (preAleph (o + 1))
-  证明: by
-  rw [← succ_preAleph]
-  exact isRegular_succ (aleph0_le_preAleph.2 h)
-
-@[deprecated isRegular_preAleph_add_one (since := "2026-03-23")]
-
-Depends on / 依赖: aleph0_le_preAleph, isRegular_succ, succ_preAleph
+/-
+**Cardinal.isRegular_preAleph_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_preAleph_add_one {o : Ordinal} (h : ω <= o) : IsRegular (preAlep
+h (o + 1))
+参数：h : ω <= o。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.succ_preAleph`：succ_preAleph (o : Ordinal) : succ (preAleph o) 
+= preAleph (o + 1)
+· 使用定理 `Cardinal.isRegular_succ`：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : 
+IsRegular (succ c)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.aleph0_le_preAleph`：aleph0_le_preAleph {o : Ordinal} : ℵ₀ <= pr
+eAleph o ↔ ω <= o
 -/
-theorem isRegular_preAleph_add_one {o : Ordinal} (h : ω <= o) : IsRegular (preAleph (o + 1)) := by
+theorem isRegular_preAleph_add_one {o : Ordinal} (h : ω ≤ o) : IsRegular (preAleph (o + 1)) := by
   rw [← succ_preAleph]
   exact isRegular_succ (aleph0_le_preAleph.2 h)
 
 @[deprecated isRegular_preAleph_add_one (since := "2026-03-23")]
-/--
-theorem `isRegular_preAleph_succ` / 定理 `isRegular_preAleph_succ`
-
-English:
-theorem isRegular_preAleph_succ
-  given: {o : Ordinal} (h : ω <= o)
-  statement: IsRegular (preAleph (succ o))
-  proof: isRegular_preAleph_add_one h
-
-中文:
-定理 isRegular_preAleph_succ
-  条件: {o : 序数} (h : ω <= o)
-  结论: 是正则 (preAleph (succ o))
-  证明: isRegular_preAleph_add_one h
-
-Depends on / 依赖: isRegular_preAleph_add_one
+/-
+**Cardinal.isRegular_preAleph_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_preAleph_succ {o : Ordinal} (h : ω <= o) : IsRegular (preAleph (
+succ o))
+参数：h : ω <= o。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_preAleph_add_one`：isRegular_preAleph_add_one {o : Ord
+inal} (h : ω <= o) : IsRegular (preAleph (o + 1))
 -/
-theorem isRegular_preAleph_succ {o : Ordinal} (h : ω <= o) : IsRegular (preAleph (succ o)) :=
+theorem isRegular_preAleph_succ {o : Ordinal} (h : ω ≤ o) : IsRegular (preAleph (succ o)) :=
   isRegular_preAleph_add_one h
-
-/--
-theorem `cof_preOmega_add_one` / 定理 `cof_preOmega_add_one`
-
-English:
-theorem cof_preOmega_add_one
-  given: {o : Ordinal} (h : ω <= o)
-  proof: by
-  rw [← ord_preAleph]; rw [(isRegular_preAleph_add_one h).cof_ord]
-
-中文:
-定理 cof_preOmega_add_one
-  条件: {o : 序数} (h : ω <= o)
-  证明: by
-  rw [← ord_preAleph]; rw [(isRegular_preAleph_add_one h).cof_ord]
-
-Depends on / 依赖: cof_ord, isRegular_preAleph_add_one, ord_preAleph
+/-
+**Cardinal.cof_preOmega_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：cof_preOmega_add_one {o : Ordinal} (h : ω <= o) : (preOmega (o + 1)).cof =
+ preAleph (o + 1)
+参数：h : ω <= o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.ord_preAleph`：ord_preAleph (o : Ordinal) : (preAleph o).ord = p
+reOmega o
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用定理 `Cardinal.isRegular_preAleph_add_one`：isRegular_preAleph_add_one {o : Ord
+inal} (h : ω <= o) : IsRegular (preAleph (o + 1))
 -/
-theorem cof_preOmega_add_one {o : Ordinal} (h : ω <= o) :
+theorem cof_preOmega_add_one {o : Ordinal} (h : ω ≤ o) :
     (preOmega (o + 1)).cof = preAleph (o + 1) := by
-  rw [← ord_preAleph]; rw [(isRegular_preAleph_add_one h).cof_ord]
-
-/--
-theorem `isRegular_aleph_add_one` / 定理 `isRegular_aleph_add_one`
-
-English:
-theorem isRegular_aleph_add_one
-  given: (o : Ordinal)
-  statement: IsRegular (ℵ_ (o + 1))
-  proof: by
-  rw [← succ_aleph]
-  exact isRegular_succ (aleph0_le_aleph o)
-
-@[deprecated isRegular_aleph_add_one (since := "2026-03-23")]
-
-中文:
-定理 isRegular_aleph_add_one
-  条件: (o : 序数)
-  结论: 是正则 (ℵ_ (o + 1))
-  证明: by
-  rw [← succ_aleph]
-  exact isRegular_succ (aleph0_le_aleph o)
-
-@[deprecated isRegular_aleph_add_one (since := "2026-03-23")]
-
-Depends on / 依赖: aleph0_le_aleph, isRegular_succ, succ_aleph
+  rw [← ord_preAleph, (isRegular_preAleph_add_one h).cof_ord]
+/-
+**Cardinal.isRegular_aleph_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_aleph_add_one (o : Ordinal) : IsRegular (ℵ_ (o + 1))
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.succ_aleph`：succ_aleph (o : Ordinal) : succ (ℵ_ o) = ℵ_ (o + 1)
+· 使用定理 `Cardinal.isRegular_succ`：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : 
+IsRegular (succ c)
+· 使用定理 `Cardinal.aleph0_le_aleph`：aleph0_le_aleph (o : Ordinal) : ℵ₀ <= ℵ_ o
 -/
 theorem isRegular_aleph_add_one (o : Ordinal) : IsRegular (ℵ_ (o + 1)) := by
   rw [← succ_aleph]
   exact isRegular_succ (aleph0_le_aleph o)
 
 @[deprecated isRegular_aleph_add_one (since := "2026-03-23")]
-/--
-theorem `isRegular_aleph_succ` / 定理 `isRegular_aleph_succ`
-
-English:
-theorem isRegular_aleph_succ
-  given: (o : Ordinal)
-  statement: IsRegular (ℵ_ (succ o))
-  proof: isRegular_aleph_add_one o
-
-@[simp]
-
-中文:
-定理 isRegular_aleph_succ
-  条件: (o : 序数)
-  结论: 是正则 (ℵ_ (succ o))
-  证明: isRegular_aleph_add_one o
-
-@[simp]
-
-Depends on / 依赖: isRegular_aleph_add_one
+/-
+**Cardinal.isRegular_aleph_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_aleph_succ (o : Ordinal) : IsRegular (ℵ_ (succ o))
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_aleph_add_one`：isRegular_aleph_add_one (o : Ordinal) 
+: IsRegular (ℵ_ (o + 1))
 -/
 theorem isRegular_aleph_succ (o : Ordinal) : IsRegular (ℵ_ (succ o)) :=
   isRegular_aleph_add_one o
 
 @[simp]
-/--
-theorem `cof_omega_add_one` / 定理 `cof_omega_add_one`
-
-English:
-theorem cof_omega_add_one
-  given: (o : Ordinal)
-  statement: (ω_ (o + 1)).cof = ℵ_ (o + 1)
-  proof: (isRegular_aleph_add_one o).cof_omega_eq
-
-中文:
-定理 cof_omega_add_one
-  条件: (o : 序数)
-  结论: (ω_ (o + 1)).cof = ℵ_ (o + 1)
-  证明: (isRegular_aleph_add_one o).cof_omega_eq
-
-Depends on / 依赖: cof_omega_eq, isRegular_aleph_add_one
+/-
+**Cardinal.cof_omega_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：cof_omega_add_one (o : Ordinal) : (ω_ (o + 1)).cof = ℵ_ (o + 1)
+参数：o : Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsRegular.cof_omega_eq`：∀ {o : Ordinal.{u_1}}, (Cardinal.aleph 
+o).IsRegular → (Ordinal.omega o).cof = Cardinal.aleph o
+· 使用定理 `Cardinal.isRegular_aleph_add_one`：isRegular_aleph_add_one (o : Ordinal) 
+: IsRegular (ℵ_ (o + 1))
 -/
 theorem cof_omega_add_one (o : Ordinal) : (ω_ (o + 1)).cof = ℵ_ (o + 1) :=
   (isRegular_aleph_add_one o).cof_omega_eq
-
-/--
-lemma `IsRegular.lift` / 引理 `IsRegular.lift`
-
-English:
-lemma IsRegular.lift
-  given: {κ : Cardinal.{v}} (h : κ.IsRegular)
-  proof: by
-  obtain ⟨h₁, h₂⟩ := h
-  constructor
-  · simpa
-  · rwa [← Cardinal.lift_ord, ← Ordinal.lift_cof, lift_le]
-
-@[simp]
-
-中文:
-引理 是正则.lift
-  条件: {κ : 基数.{v}} (h : κ.是正则)
-  证明: by
-  obtain ⟨h₁, h₂⟩ := h
-  constructor
-  · simpa
-  · rwa [← Cardinal.lift_ord, ← Ordinal.lift_cof, lift_le]
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_ord, Ordinal, Ordinal.lift_cof, lift_cof, lift_le, lift_ord
+/-
+**Cardinal.IsRegular.lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegular`。
+形式化陈述：∀ {κ : Cardinal.{v}}, κ.IsRegular → (Cardinal.lift.{u, v} κ).IsRegular
+参数：Cardinal.lift.{u, v} κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_ord`：lift_ord (c) : Ordinal.lift.{u, v} (ord c) = ord (lif
+t.{u, v} c)
+· 使用定理 `Ordinal.lift_cof`：lift_cof (o : Ordinal.{u}) : Cardinal.lift.{v} (cof o)
+ = cof (Ordinal.lift.{v} o)
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
 -/
 lemma IsRegular.lift {κ : Cardinal.{v}} (h : κ.IsRegular) :
     (Cardinal.lift.{u} κ).IsRegular := by
@@ -559,565 +391,531 @@ lemma IsRegular.lift {κ : Cardinal.{v}} (h : κ.IsRegular) :
   · rwa [← Cardinal.lift_ord, ← Ordinal.lift_cof, lift_le]
 
 @[simp]
-/--
-lemma `isRegular_lift_iff` / 引理 `isRegular_lift_iff`
-
-English:
-lemma isRegular_lift_iff
-  given: {κ : Cardinal.{v}}
-  proof: ⟨fun ⟨h₁, h₂⟩ => ⟨by simpa using h₁, by simpa [← lift_le.{u, v}]⟩, fun h => h.lift⟩
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-引理 isRegular_lift_iff
-  条件: {κ : 基数.{v}}
-  证明: ⟨fun ⟨h₁, h₂⟩ => ⟨by simpa using h₁, by simpa [← lift_le.{u, v}]⟩, fun h => h.lift⟩
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: h.lift, lift_le
+/-
+**Cardinal.isRegular_lift_iff** 是 Mathlib 中的一个引理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_lift_iff {κ : Cardinal.{v}} : (Cardinal.lift.{u} κ).IsRegular ↔ 
+κ.IsRegular
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lift_cof`：lift_cof (o : Ordinal.{u}) : Cardinal.lift.{v} (cof o)
+ = cof (Ordinal.lift.{v} o)
+· 使用定理 `Cardinal.lift_ord`：lift_ord (c) : Ordinal.lift.{u, v} (ord c) = ord (lif
+t.{u, v} c)
+· 使用定理 `Cardinal.IsRegular.lift`：∀ {κ : Cardinal.{v}}, κ.IsRegular → (Cardinal.l
+ift.{u, v} κ).IsRegular
 -/
 lemma isRegular_lift_iff {κ : Cardinal.{v}} :
     (Cardinal.lift.{u} κ).IsRegular ↔ κ.IsRegular :=
-  ⟨fun ⟨h₁, h₂⟩ => ⟨by simpa using h₁, by simpa [← lift_le.{u, v}]⟩, fun h => h.lift⟩
+  ⟨fun ⟨h₁, h₂⟩ ↦ ⟨by simpa using h₁, by simpa [← lift_le.{u, v}]⟩, fun h ↦ h.lift⟩
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `lsub_lt_ord_lift_of_isRegular` / 定理 `lsub_lt_ord_lift_of_isRegular`
-
-English:
-theorem lsub_lt_ord_lift_of_isRegular
-  statement: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
-  proof: by
-  apply lift_iSup_add_one_lt_of_lt_cof _ hf
-  rwa [lift_umax, c.ord.lift_id', hc.cof_ord]
-
-@[deprecated iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 lsub_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> 序数} {c} (hc : 是正则 c)
-  证明: by
-  apply lift_iSup_add_one_lt_of_lt_cof _ hf
-  rwa [lift_umax, c.ord.lift_id', hc.cof_ord]
-
-@[deprecated iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: c.ord.lift_id, cof_ord, hc.cof_ord, lift_iSup_add_one_lt_of_lt_cof, lift_id, lift_umax
+/-
+**Cardinal.lsub_lt_ord_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lsub_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c
+) (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c.ord) : Ordinal.lsub
+.{u, v} f < c.ord
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} #ι < c；hf : forall i, f i < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lift_iSup_add_one_lt_of_lt_cof`：lift_iSup_add_one_lt_of_lt_cof {
+f : β -> Ordinal.{u}} {a : Ordinal.{u}} (ha : Cardinal.lift.{u} #β < (lift.{v} a
+).cof) (hf : forall i, f i <…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `Ordinal.lift_id'`：lift_id' (a : Ordinal) : lift a = a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem lsub_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
-    (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c.ord) : Ordinal.lsub.{u, v} f < c.ord := by
+theorem lsub_lt_ord_lift_of_isRegular {ι} {f : ι → Ordinal} {c} (hc : IsRegular c)
+    (hι : Cardinal.lift.{v, u} #ι < c) (hf : ∀ i, f i < c.ord) : Ordinal.lsub.{u, v} f < c.ord := by
   apply lift_iSup_add_one_lt_of_lt_cof _ hf
   rwa [lift_umax, c.ord.lift_id', hc.cof_ord]
 
 @[deprecated iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `lsub_lt_ord_of_isRegular` / 定理 `lsub_lt_ord_of_isRegular`
-
-English:
-theorem lsub_lt_ord_of_isRegular
-  given: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
-  proof: iSup_add_one_lt_of_lt_cof (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 lsub_lt_ord_of_isRegular
-  条件: {ι} {f : ι -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
-  证明: iSup_add_one_lt_of_lt_cof (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: cof_ord, hc.cof_ord, iSup_add_one_lt_of_lt_cof
+/-
+**Cardinal.lsub_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lsub_lt_ord_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι
+ : #ι < c) : (forall i, f i < c.ord) -> Ordinal.lsub f < c.ord
+参数：hc : IsRegular c；hι : #ι < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_add_one_lt_of_lt_cof`：iSup_add_one_lt_of_lt_cof {f : α -> O
+rdinal.{u}} {a : Ordinal.{u}} (ha : #α < a.cof) (hf : forall i, f i < a) : ⨆ i, 
+f i + 1 < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem lsub_lt_ord_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c) :
-    (forall i, f i < c.ord) -> Ordinal.lsub f < c.ord :=
+theorem lsub_lt_ord_of_isRegular {ι} {f : ι → Ordinal} {c} (hc : IsRegular c) (hι : #ι < c) :
+    (∀ i, f i < c.ord) → Ordinal.lsub f < c.ord :=
   iSup_add_one_lt_of_lt_cof (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `iSup_lt_ord_lift_of_isRegular` / 定理 `iSup_lt_ord_lift_of_isRegular`
-
-English:
-theorem iSup_lt_ord_lift_of_isRegular
-  statement: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
-  proof: by
-  apply Ordinal.lift_iSup_lt_of_lt_cof _ hf
-  rwa [lift_umax, Ordinal.lift_id', hc.cof_ord]
-
-@[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 iSup_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> 序数} {c} (hc : 是正则 c)
-  证明: by
-  apply Ordinal.lift_iSup_lt_of_lt_cof _ hf
-  rwa [lift_umax, Ordinal.lift_id', hc.cof_ord]
-
-@[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: Ordinal, Ordinal.lift_iSup_lt_of_lt_cof, Ordinal.lift_id, cof_ord, hc.cof_ord, lift_iSup_lt_of_lt_cof, lift_id, lift_umax
+/-
+**Cardinal.iSup_lt_ord_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：iSup_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c
+) (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c.ord) : iSup f < c.o
+rd
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} #ι < c；hf : forall i, f i < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lift_iSup_lt_of_lt_cof`：lift_iSup_lt_of_lt_cof {f : β -> Ordinal
+.{u}} {a : Ordinal.{u}} (ha : Cardinal.lift.{u} #β < (lift.{v} a).cof) (hf : for
+all i, f i < a) : ⨆ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `Ordinal.lift_id'`：lift_id' (a : Ordinal) : lift a = a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem iSup_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
-    (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c.ord) : iSup f < c.ord := by
+theorem iSup_lt_ord_lift_of_isRegular {ι} {f : ι → Ordinal} {c} (hc : IsRegular c)
+    (hι : Cardinal.lift.{v, u} #ι < c) (hf : ∀ i, f i < c.ord) : iSup f < c.ord := by
   apply Ordinal.lift_iSup_lt_of_lt_cof _ hf
   rwa [lift_umax, Ordinal.lift_id', hc.cof_ord]
 
 @[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `iSup_lt_ord_of_isRegular` / 定理 `iSup_lt_ord_of_isRegular`
-
-English:
-theorem iSup_lt_ord_of_isRegular
-  given: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
-  proof: Ordinal.iSup_lt_of_lt_cof (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 iSup_lt_ord_of_isRegular
-  条件: {ι} {f : ι -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
-  证明: Ordinal.iSup_lt_of_lt_cof (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_lt_of_lt_cof, cof_ord, hc.cof_ord, iSup_lt_of_lt_cof
+/-
+**Cardinal.iSup_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：iSup_lt_ord_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι
+ : #ι < c) : (forall i, f i < c.ord) -> iSup f < c.ord
+参数：hc : IsRegular c；hι : #ι < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_lt_of_lt_cof`：iSup_lt_of_lt_cof {f : α -> Ordinal.{u}} {a :
+ Ordinal.{u}} (ha : #α < a.cof) (hf : forall i, f i < a) : ⨆ i, f i < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem iSup_lt_ord_of_isRegular {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c) :
-    (forall i, f i < c.ord) -> iSup f < c.ord :=
+theorem iSup_lt_ord_of_isRegular {ι} {f : ι → Ordinal} {c} (hc : IsRegular c) (hι : #ι < c) :
+    (∀ i, f i < c.ord) → iSup f < c.ord :=
   Ordinal.iSup_lt_of_lt_cof (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `blsub_lt_ord_lift_of_isRegular` / 定理 `blsub_lt_ord_lift_of_isRegular`
-
-English:
-theorem blsub_lt_ord_lift_of_isRegular
-  statement: {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-  proof: blsub_lt_ord_lift (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 blsub_lt_ord_lift_of_isRegular
-  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
-  证明: blsub_lt_ord_lift (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: blsub_lt_ord_lift, cof_ord, hc.cof_ord
+/-
+**Cardinal.blsub_lt_ord_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：blsub_lt_ord_lift_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {
+c} (hc : IsRegular c) (ho : Cardinal.lift.{v, u} o.card < c) : (forall i hi, f i
+ hi < c.ord) -> Ordinal.blsub.{u, v} o f < c.ord
+参数：hc : IsRegular c；ho : Cardinal.lift.{v, u} o.card < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.blsub_lt_ord_lift`：blsub_lt_ord_lift {o : Ordinal.{u}} {f : fora
+ll a < o, Ordinal} {c : Ordinal} (ho : Cardinal.lift.{v, u} o.card < c.cof) (hf 
+: forall i hi, …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem blsub_lt_ord_lift_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
+theorem blsub_lt_ord_lift_of_isRegular {o : Ordinal} {f : ∀ a < o, Ordinal} {c} (hc : IsRegular c)
     (ho : Cardinal.lift.{v, u} o.card < c) :
-    (forall i hi, f i hi < c.ord) -> Ordinal.blsub.{u, v} o f < c.ord :=
+    (∀ i hi, f i hi < c.ord) → Ordinal.blsub.{u, v} o f < c.ord :=
   blsub_lt_ord_lift (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `blsub_lt_ord_of_isRegular` / 定理 `blsub_lt_ord_of_isRegular`
-
-English:
-theorem blsub_lt_ord_of_isRegular
-  statement: {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-  proof: blsub_lt_ord (by rwa [hc.cof_ord])
-
-@[deprecated iSup_lt_ord_lift_of_isRegular (since := "2026-03-22")]
-
-中文:
-定理 blsub_lt_ord_of_isRegular
-  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
-  证明: blsub_lt_ord (by rwa [hc.cof_ord])
-
-@[deprecated iSup_lt_ord_lift_of_isRegular (since := "2026-03-22")]
-
-Depends on / 依赖: blsub_lt_ord, cof_ord, hc.cof_ord
+/-
+**Cardinal.blsub_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：blsub_lt_ord_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (h
+c : IsRegular c) (ho : o.card < c) : (forall i hi, f i hi < c.ord) -> Ordinal.bl
+sub o f < c.ord
+参数：hc : IsRegular c；ho : o.card < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.blsub_lt_ord`：blsub_lt_ord {o : Ordinal} {f : forall a < o, Ordi
+nal} {c : Ordinal} (ho : o.card < c.cof) (hf : forall i hi, f i hi < c) : blsub.
+{u, u} o f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem blsub_lt_ord_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-    (ho : o.card < c) : (forall i hi, f i hi < c.ord) -> Ordinal.blsub o f < c.ord :=
+theorem blsub_lt_ord_of_isRegular {o : Ordinal} {f : ∀ a < o, Ordinal} {c} (hc : IsRegular c)
+    (ho : o.card < c) : (∀ i hi, f i hi < c.ord) → Ordinal.blsub o f < c.ord :=
   blsub_lt_ord (by rwa [hc.cof_ord])
 
 @[deprecated iSup_lt_ord_lift_of_isRegular (since := "2026-03-22")]
-/--
-theorem `bsup_lt_ord_lift_of_isRegular` / 定理 `bsup_lt_ord_lift_of_isRegular`
-
-English:
-theorem bsup_lt_ord_lift_of_isRegular
-  statement: {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-  proof: bsup_lt_ord_lift (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 bsup_lt_ord_lift_of_isRegular
-  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
-  证明: bsup_lt_ord_lift (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: bsup_lt_ord_lift, cof_ord, hc.cof_ord
+/-
+**Cardinal.bsup_lt_ord_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：bsup_lt_ord_lift_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c
+} (hc : IsRegular c) (hι : Cardinal.lift.{v, u} o.card < c) : (forall i hi, f i 
+hi < c.ord) -> Ordinal.bsup.{u, v} o f < c.ord
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} o.card < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_lt_ord_lift`：bsup_lt_ord_lift {o : Ordinal} {f : forall a <
+ o, Ordinal} {c : Ordinal} (ho : Cardinal.lift.{v, u} o.card < c.cof) (hf : fora
+ll i hi, f i h…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem bsup_lt_ord_lift_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
+theorem bsup_lt_ord_lift_of_isRegular {o : Ordinal} {f : ∀ a < o, Ordinal} {c} (hc : IsRegular c)
     (hι : Cardinal.lift.{v, u} o.card < c) :
-    (forall i hi, f i hi < c.ord) -> Ordinal.bsup.{u, v} o f < c.ord :=
+    (∀ i hi, f i hi < c.ord) → Ordinal.bsup.{u, v} o f < c.ord :=
   bsup_lt_ord_lift (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `bsup_lt_ord_of_isRegular` / 定理 `bsup_lt_ord_of_isRegular`
-
-English:
-theorem bsup_lt_ord_of_isRegular
-  statement: {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-  proof: bsup_lt_ord (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof_ord (since := "2026-03-22")]
-
-中文:
-定理 bsup_lt_ord_of_isRegular
-  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
-  证明: bsup_lt_ord (by rwa [hc.cof_ord])
-
-@[deprecated lift_iSup_lt_of_lt_cof_ord (since := "2026-03-22")]
-
-Depends on / 依赖: bsup_lt_ord, cof_ord, hc.cof_ord
+/-
+**Cardinal.bsup_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：bsup_lt_ord_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc
+ : IsRegular c) (hι : o.card < c) : (forall i hi, f i hi < c.ord) -> Ordinal.bsu
+p o f < c.ord
+参数：hc : IsRegular c；hι : o.card < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_lt_ord`：bsup_lt_ord {o : Ordinal} {f : forall a < o, Ordina
+l} {c : Ordinal} (ho : o.card < c.cof) : (forall i hi, f i hi < c) -> bsup.{u, u
+} o f < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem bsup_lt_ord_of_isRegular {o : Ordinal} {f : forall a < o, Ordinal} {c} (hc : IsRegular c)
-    (hι : o.card < c) : (forall i hi, f i hi < c.ord) -> Ordinal.bsup o f < c.ord :=
+theorem bsup_lt_ord_of_isRegular {o : Ordinal} {f : ∀ a < o, Ordinal} {c} (hc : IsRegular c)
+    (hι : o.card < c) : (∀ i hi, f i hi < c.ord) → Ordinal.bsup o f < c.ord :=
   bsup_lt_ord (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof_ord (since := "2026-03-22")]
-/--
-theorem `iSup_lt_lift_of_isRegular` / 定理 `iSup_lt_lift_of_isRegular`
-
-English:
-theorem iSup_lt_lift_of_isRegular
-  statement: {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c)
-  proof: by
-  apply lift_iSup_lt_of_lt_cof_ord _ hf
-  rwa [lift_umax, c.lift_id', hc.cof_ord]
-
-@[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-中文:
-定理 iSup_lt_lift_of_isRegular
-  结论: {ι} {f : ι -> 基数} {c} (hc : 是正则 c)
-  证明: by
-  apply lift_iSup_lt_of_lt_cof_ord _ hf
-  rwa [lift_umax, c.lift_id', hc.cof_ord]
-
-@[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-
-Depends on / 依赖: c.lift_id, cof_ord, hc.cof_ord, lift_iSup_lt_of_lt_cof_ord, lift_id, lift_umax
+/-
+**Cardinal.iSup_lt_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：iSup_lt_lift_of_isRegular {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c) (
+hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c) : iSup f < c
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} #ι < c；hf : forall i, f i < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lift_iSup_lt_of_lt_cof_ord`：∀ {β : Type v} {f : β → Cardinal.{u
+}} {a : Cardinal.{u}},   Cardinal.lift.{u, v} (Cardinal.mk β) < (Cardinal.lift.{
+v, u} a).ord.cof → (∀ (i …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem iSup_lt_lift_of_isRegular {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c)
-    (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c) : iSup f < c := by
+theorem iSup_lt_lift_of_isRegular {ι} {f : ι → Cardinal} {c} (hc : IsRegular c)
+    (hι : Cardinal.lift.{v, u} #ι < c) (hf : ∀ i, f i < c) : iSup f < c := by
   apply lift_iSup_lt_of_lt_cof_ord _ hf
   rwa [lift_umax, c.lift_id', hc.cof_ord]
 
 @[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
-/--
-theorem `iSup_lt_of_isRegular` / 定理 `iSup_lt_of_isRegular`
-
-English:
-theorem iSup_lt_of_isRegular
-  given: {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c) (hι : #ι < c)
-  proof: iSup_lt_of_lt_cof_ord (by rwa [hc.cof_ord])
-
-中文:
-定理 iSup_lt_of_isRegular
-  条件: {ι} {f : ι -> 基数} {c} (hc : 是正则 c) (hι : #ι < c)
-  证明: iSup_lt_of_lt_cof_ord (by rwa [hc.cof_ord])
-
-Depends on / 依赖: cof_ord, hc.cof_ord, iSup_lt_of_lt_cof_ord
+/-
+**Cardinal.iSup_lt_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：iSup_lt_of_isRegular {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c) (hι : 
+#ι < c) : (forall i, f i < c) -> iSup f < c
+参数：hc : IsRegular c；hι : #ι < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.iSup_lt_of_lt_cof_ord`：∀ {α : Type u} {f : α → Cardinal.{u}} {a
+ : Cardinal.{u}},   Cardinal.mk α < a.ord.cof → (∀ (i : α), f i < a) → ⨆ i, f i 
+< a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem iSup_lt_of_isRegular {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c) (hι : #ι < c) :
-    (forall i, f i < c) -> iSup f < c :=
+theorem iSup_lt_of_isRegular {ι} {f : ι → Cardinal} {c} (hc : IsRegular c) (hι : #ι < c) :
+    (∀ i, f i < c) → iSup f < c :=
   iSup_lt_of_lt_cof_ord (by rwa [hc.cof_ord])
-
-/--
-theorem `sum_lt_lift_of_isRegular` / 定理 `sum_lt_lift_of_isRegular`
-
-English:
-theorem sum_lt_lift_of_isRegular
-  statement: {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular c)
-  proof: by
-apply (sum_le_lift_mk_mul_iSup _).trans_lt
-    mul_lt_of_lt hc.1 hι (lift_iSup_lt_of_lt_cof_ord _ hf)
-  rwa [lift_umax, c.lift_id', hc.cof_ord]
-
-中文:
-定理 sum_lt_lift_of_isRegular
-  结论: {ι : 类型u} {f : ι -> 基数} (hc : 是正则 c)
-  证明: by
-apply (sum_le_lift_mk_mul_iSup _).trans_lt
-    mul_lt_of_lt hc.1 hι (lift_iSup_lt_of_lt_cof_ord _ hf)
-  rwa [lift_umax, c.lift_id', hc.cof_ord]
-
-Depends on / 依赖: c.lift_id, cof_ord, hc.cof_ord, lift_iSup_lt_of_lt_cof_ord, lift_id, lift_umax, mul_lt_of_lt, sum_le_lift_mk_mul_iSup, trans_lt
+/-
+**Cardinal.sum_lt_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：sum_lt_lift_of_isRegular {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular 
+c) (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c) : sum f < c
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} #ι < c；hf : forall i, f i < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Cardinal.sum_le_lift_mk_mul_iSup`：sum_le_lift_mk_mul_iSup {ι : Type u} (
+f : ι -> Cardinal.{max u v}) : sum f <= lift #ι * ⨆ i, f i
+· 使用定理 `Cardinal.mul_lt_of_lt`：mul_lt_of_lt {a b c : Cardinal} (hc : ℵ₀ <= c) (h
+a : a < c) (hb : b < c) : a * b < c
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `Cardinal.lift_iSup_lt_of_lt_cof_ord`：∀ {β : Type v} {f : β → Cardinal.{u
+}} {a : Cardinal.{u}},   Cardinal.lift.{u, v} (Cardinal.mk β) < (Cardinal.lift.{
+v, u} a).ord.cof → (∀ (i …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
 -/
-theorem sum_lt_lift_of_isRegular {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular c)
-    (hι : Cardinal.lift.{v, u} #ι < c) (hf : forall i, f i < c) : sum f < c := by
-apply (sum_le_lift_mk_mul_iSup _).trans_lt
+theorem sum_lt_lift_of_isRegular {ι : Type u} {f : ι → Cardinal} (hc : IsRegular c)
+    (hι : Cardinal.lift.{v, u} #ι < c) (hf : ∀ i, f i < c) : sum f < c := by
+  apply (sum_le_lift_mk_mul_iSup _).trans_lt <|
     mul_lt_of_lt hc.1 hι (lift_iSup_lt_of_lt_cof_ord _ hf)
   rwa [lift_umax, c.lift_id', hc.cof_ord]
-
-/--
-theorem `sum_lt_of_isRegular` / 定理 `sum_lt_of_isRegular`
-
-English:
-theorem sum_lt_of_isRegular
-  statement: {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular c)
-  proof: sum_lt_lift_of_isRegular.{u, u} hc (by rwa [lift_id])
-
-@[simp]
-
-中文:
-定理 sum_lt_of_isRegular
-  结论: {ι : 类型u} {f : ι -> 基数} (hc : 是正则 c)
-  证明: sum_lt_lift_of_isRegular.{u, u} hc (by rwa [lift_id])
-
-@[simp]
-
-Depends on / 依赖: lift_id, sum_lt_lift_of_isRegular
+/-
+**Cardinal.sum_lt_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：sum_lt_of_isRegular {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular c) (h
+ι : #ι < c) : (forall i, f i < c) -> sum f < c
+参数：hc : IsRegular c；hι : #ι < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.sum_lt_lift_of_isRegular`：sum_lt_lift_of_isRegular {ι : Type u}
+ {f : ι -> Cardinal} (hc : IsRegular c) (hι : Cardinal.lift.{v, u} #ι < c) (hf :
+ forall i, f i < c) : s…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
-theorem sum_lt_of_isRegular {ι : Type u} {f : ι -> Cardinal} (hc : IsRegular c)
-    (hι : #ι < c) : (forall i, f i < c) -> sum f < c :=
+theorem sum_lt_of_isRegular {ι : Type u} {f : ι → Cardinal} (hc : IsRegular c)
+    (hι : #ι < c) : (∀ i, f i < c) → sum f < c :=
   sum_lt_lift_of_isRegular.{u, u} hc (by rwa [lift_id])
 
 @[simp]
-/--
-theorem `card_lt_of_card_iUnion_lt` / 定理 `card_lt_of_card_iUnion_lt`
-
-English:
-theorem card_lt_of_card_iUnion_lt
-  statement: {ι : Type u} {α : Type u} {t : ι -> Set α} {c : Cardinal}
-  proof: lt_of_le_of_lt (Cardinal.mk_le_mk_of_subset <| subset_iUnion _ _) h
-
-@[simp]
-
-中文:
-定理 card_lt_of_card_iUnion_lt
-  结论: {ι : 类型u} {α : 类型u} {t : ι -> 集合 α} {c : 基数}
-  证明: lt_of_le_of_lt (Cardinal.mk_le_mk_of_subset <| subset_iUnion _ _) h
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.mk_le_mk_of_subset, lt_of_le_of_lt, mk_le_mk_of_subset, subset_iUnion
+/-
+**Cardinal.card_lt_of_card_iUnion_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：card_lt_of_card_iUnion_lt {ι : Type u} {α : Type u} {t : ι -> Set α} {c : 
+Cardinal} (h : #(⋃ i, t i) < c) (i : ι) : #(t i) < c
+参数：h : #(⋃ i, t i) < c；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Cardinal.mk_le_mk_of_subset`：mk_le_mk_of_subset {α} {s t : Set α} (h : s
+ subseteq t) : #s <= #t
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
 -/
-theorem card_lt_of_card_iUnion_lt {ι : Type u} {α : Type u} {t : ι -> Set α} {c : Cardinal}
+theorem card_lt_of_card_iUnion_lt {ι : Type u} {α : Type u} {t : ι → Set α} {c : Cardinal}
     (h : #(⋃ i, t i) < c) (i : ι) : #(t i) < c :=
   lt_of_le_of_lt (Cardinal.mk_le_mk_of_subset <| subset_iUnion _ _) h
 
 @[simp]
-/--
-theorem `card_iUnion_lt_iff_forall_of_isRegular` / 定理 `card_iUnion_lt_iff_forall_of_isRegular`
-
-English:
-theorem card_iUnion_lt_iff_forall_of_isRegular
-  statement: {ι : Type u} {α : Type u} {t : ι -> Set α}
-  proof: by
-  refine ⟨card_lt_of_card_iUnion_lt, fun h => ?_⟩
+/-
+**Cardinal.card_iUnion_lt_iff_forall_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Car
+dinal`。
+形式化陈述：card_iUnion_lt_iff_forall_of_isRegular {ι : Type u} {α : Type u} {t : ι ->
+ Set α} (hc : c.IsRegular) (hι : #ι < c) : #(⋃ i, t i) < c ↔ forall i, #(t i) < 
+c
+参数：hc : c.IsRegular；hι : #ι < c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.card_lt_of_card_iUnion_lt`：card_lt_of_card_iUnion_lt {ι : Type 
+u} {α : Type u} {t : ι -> Set α} {c : Cardinal} (h : #(⋃ i, t i) < c) (i : ι) : 
+#(t i) < c
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Cardinal.mk_sUnion_le`：mk_sUnion_le {α : Type u} (A : Set (Set α)) : #(⋃
+₀ A) <= #A * ⨆ s : A, #s
+· 使用定理 `Cardinal.mul_lt_of_lt`：mul_lt_of_lt {a b c : Cardinal} (hc : ℵ₀ <= c) (h
+a : a < c) (hb : b < c) : a * b < c
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Cardinal.mk_range_le`：mk_range_le {α β : Type u} {f : α -> β} : #(range 
+f) <= #α
+· 使用定理 `Cardinal.iSup_lt_of_lt_cof_ord`：∀ {α : Type u} {f : α → Cardinal.{u}} {a
+ : Cardinal.{u}},   Cardinal.mk α < a.ord.cof → (∀ (i : α), f i < a) → ⨆ i, f i 
+< a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+-/
+theorem card_iUnion_lt_iff_forall_of_isRegular {ι : Type u} {α : Type u} {t : ι → Set α}
+    (hc : c.IsRegular) (hι : #ι < c) : #(⋃ i, t i) < c ↔ ∀ i, #(t i) < c := by
+  refine ⟨card_lt_of_card_iUnion_lt, fun h ↦ ?_⟩
   apply lt_of_le_of_lt (Cardinal.mk_sUnion_le _)
   apply Cardinal.mul_lt_of_lt hc.aleph0_le (mk_range_le.trans_lt hι)
   apply Cardinal.iSup_lt_of_lt_cof_ord (mk_range_le.trans_lt _)
   · simpa
   · rwa [hc.cof_ord]
-
-中文:
-定理 card_iUnion_lt_iff_对任意_of_isRegular
-  结论: {ι : 类型u} {α : 类型u} {t : ι -> 集合 α}
-  证明: by
-  refine ⟨card_lt_of_card_iUnion_lt, fun h => ?_⟩
-  apply lt_of_le_of_lt (Cardinal.mk_sUnion_le _)
-  apply Cardinal.mul_lt_of_lt hc.aleph0_le (mk_range_le.trans_lt hι)
-  apply Cardinal.iSup_lt_of_lt_cof_ord (mk_range_le.trans_lt _)
-  · simpa
-  · rwa [hc.cof_ord]
-
-Depends on / 依赖: Cardinal, Cardinal.iSup_lt_of_lt_cof_ord, Cardinal.mk_sUnion_le, Cardinal.mul_lt_of_lt, aleph0_le, card_lt_of_card_iUnion_lt, cof_ord, hc.aleph0_le, hc.cof_ord, iSup_lt_of_lt_cof_ord, lt_of_le_of_lt, mk_range_le, mk_range_le.trans_lt, mk_sUnion_le, mul_lt_of_lt, trans_lt
+/-
+**Cardinal.card_lt_of_card_biUnion_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：card_lt_of_card_biUnion_lt {α β : Type u} {s : Set α} {t : forall a in s, 
+Set β} {c : Cardinal} (h : #(⋃ a in s, t a ‹_›) < c) (a : α) (ha : a in s) : #(t
+ a ha) < c
+参数：h : #(⋃ a in s, t a ‹_›) < c；a : α；ha : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Cardinal.card_lt_of_card_iUnion_lt`：card_lt_of_card_iUnion_lt {ι : Type 
+u} {α : Type u} {t : ι -> Set α} {c : Cardinal} (h : #(⋃ i, t i) < c) (i : ι) : 
+#(t i) < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem card_iUnion_lt_iff_forall_of_isRegular {ι : Type u} {α : Type u} {t : ι -> Set α}
-    (hc : c.IsRegular) (hι : #ι < c) : #(⋃ i, t i) < c ↔ forall i, #(t i) < c := by
-  refine ⟨card_lt_of_card_iUnion_lt, fun h => ?_⟩
-  apply lt_of_le_of_lt (Cardinal.mk_sUnion_le _)
-  apply Cardinal.mul_lt_of_lt hc.aleph0_le (mk_range_le.trans_lt hι)
-  apply Cardinal.iSup_lt_of_lt_cof_ord (mk_range_le.trans_lt _)
-  · simpa
-  · rwa [hc.cof_ord]
-
-/--
-theorem `card_lt_of_card_biUnion_lt` / 定理 `card_lt_of_card_biUnion_lt`
-
-English:
-theorem card_lt_of_card_biUnion_lt
-  statement: {α β : Type u} {s : Set α} {t : forall a in s, Set β} {c : Cardinal}
-  proof: by
+theorem card_lt_of_card_biUnion_lt {α β : Type u} {s : Set α} {t : ∀ a ∈ s, Set β} {c : Cardinal}
+    (h : #(⋃ a ∈ s, t a ‹_›) < c) (a : α) (ha : a ∈ s) : #(t a ha) < c := by
   rw [biUnion_eq_iUnion] at h
   have := card_lt_of_card_iUnion_lt h
   simp_all only [iUnion_coe_set, Subtype.forall]
-
-中文:
-定理 card_lt_of_card_biUnion_lt
-  结论: {α β : 类型u} {s : 集合 α} {t : 对任意 a in s, 集合 β} {c : 基数}
-  证明: by
-  rw [biUnion_eq_iUnion] at h
-  have := card_lt_of_card_iUnion_lt h
-  simp_all only [iUnion_coe_set, Subtype.forall]
-
-Depends on / 依赖: Subtype, Subtype.forall, biUnion_eq_iUnion, card_lt_of_card_iUnion_lt, iUnion_coe_set
+/-
+**Cardinal.card_biUnion_lt_iff_forall_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+rdinal`。
+形式化陈述：card_biUnion_lt_iff_forall_of_isRegular {α β : Type u} {s : Set α} {t : fo
+rall a in s, Set β} (hc : c.IsRegular) (hs : #s < c) : #(⋃ a in s, t a ‹_›) < c 
+↔ forall a (ha : a in s), #(t a ha) < c
+参数：hc : c.IsRegular；hs : #s < c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
+· 使用定理 `Cardinal.card_iUnion_lt_iff_forall_of_isRegular`：card_iUnion_lt_iff_fora
+ll_of_isRegular {ι : Type u} {α : Type u} {t : ι -> Set α} (hc : c.IsRegular) (h
+ι : #ι < c) : #(⋃ i, t i) < c ↔ foral…
+· 使用定理 `SetCoe.forall'`：SetCoe.forall' {s : Set α} {p : forall x, x in s -> Prop
+} : (forall (x) (h : x in s), p x h) ↔ forall x : s, p x.1 x.2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem card_lt_of_card_biUnion_lt {α β : Type u} {s : Set α} {t : forall a in s, Set β} {c : Cardinal}
-    (h : #(⋃ a in s, t a ‹_›) < c) (a : α) (ha : a in s) : #(t a ha) < c := by
-  rw [biUnion_eq_iUnion] at h
-  have := card_lt_of_card_iUnion_lt h
-  simp_all only [iUnion_coe_set, Subtype.forall]
-
-/--
-theorem `card_biUnion_lt_iff_forall_of_isRegular` / 定理 `card_biUnion_lt_iff_forall_of_isRegular`
-
-English:
-theorem card_biUnion_lt_iff_forall_of_isRegular
-  statement: {α β : Type u} {s : Set α} {t : forall a in s, Set β}
-  proof: by
-  rw [biUnion_eq_iUnion]; rw [card_iUnion_lt_iff_forall_of_isRegular hc hs]; rw [SetCoe.forall']
-
-中文:
-定理 card_biUnion_lt_iff_对任意_of_isRegular
-  结论: {α β : 类型u} {s : 集合 α} {t : 对任意 a in s, 集合 β}
-  证明: by
-  rw [biUnion_eq_iUnion]; rw [card_iUnion_lt_iff_forall_of_isRegular hc hs]; rw [SetCoe.forall']
-
-Depends on / 依赖: SetCoe, SetCoe.forall, biUnion_eq_iUnion, card_iUnion_lt_iff_forall_of_isRegular
--/
-theorem card_biUnion_lt_iff_forall_of_isRegular {α β : Type u} {s : Set α} {t : forall a in s, Set β}
+theorem card_biUnion_lt_iff_forall_of_isRegular {α β : Type u} {s : Set α} {t : ∀ a ∈ s, Set β}
     (hc : c.IsRegular) (hs : #s < c) :
-    #(⋃ a in s, t a ‹_›) < c ↔ forall a (ha : a in s), #(t a ha) < c := by
-  rw [biUnion_eq_iUnion]; rw [card_iUnion_lt_iff_forall_of_isRegular hc hs]; rw [SetCoe.forall']
-
-/--
-theorem `nfpFamily_lt_ord_lift_of_isRegular` / 定理 `nfpFamily_lt_ord_lift_of_isRegular`
-
-English:
-theorem nfpFamily_lt_ord_lift_of_isRegular
-  statement: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-  proof: by
-  apply nfpFamily_lt_ord_lift _ _ hf ha <;> rw [hc.cof_ord]
-  · exact lt_of_le_of_ne hc.1 hc'.symm
-  · exact hι
-
-中文:
-定理 nfpFamily_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
-  证明: by
-  apply nfpFamily_lt_ord_lift _ _ hf ha <;> rw [hc.cof_ord]
-  · exact lt_of_le_of_ne hc.1 hc'.symm
-  · exact hι
-
-Depends on / 依赖: cof_ord, hc.cof_ord, lt_of_le_of_ne, nfpFamily_lt_ord_lift
+    #(⋃ a ∈ s, t a ‹_›) < c ↔ ∀ a (ha : a ∈ s), #(t a ha) < c := by
+  rw [biUnion_eq_iUnion, card_iUnion_lt_iff_forall_of_isRegular hc hs, SetCoe.forall']
+/-
+**Cardinal.nfpFamily_lt_ord_lift_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardina
+l`。
+形式化陈述：nfpFamily_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal -> Ordinal} {c} (
+hc : IsRegular c) (hι : Cardinal.lift.{v, u} #ι < c) (hc' : c != ℵ₀) (hf : foral
+l (i), forall b < c.ord, f i b < c.ord) {a} (ha : a < c.ord) : nfpFamily f a < c
+.ord
+参数：hc : IsRegular c；hι : Cardinal.lift.{v, u} #ι < c；hc' : c != ℵ₀；hf : forall (
+i), forall b < c.ord, f i b < c.ord；ha : a < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.nfpFamily_lt_ord_lift`：nfpFamily_lt_ord_lift {ι} {f : ι -> Ordin
+al -> Ordinal} {c} (hc : ℵ₀ < cof c) (hc' : Cardinal.lift.{v, u} #ι < cof c) (hf
+ : forall (i), fora…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem nfpFamily_lt_ord_lift_of_isRegular {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-    (hι : Cardinal.lift.{v, u} #ι < c) (hc' : c != ℵ₀) (hf : forall (i), forall b < c.ord, f i b < c.ord) {a}
+theorem nfpFamily_lt_ord_lift_of_isRegular {ι} {f : ι → Ordinal → Ordinal} {c} (hc : IsRegular c)
+    (hι : Cardinal.lift.{v, u} #ι < c) (hc' : c ≠ ℵ₀) (hf : ∀ (i), ∀ b < c.ord, f i b < c.ord) {a}
     (ha : a < c.ord) : nfpFamily f a < c.ord := by
   apply nfpFamily_lt_ord_lift _ _ hf ha <;> rw [hc.cof_ord]
   · exact lt_of_le_of_ne hc.1 hc'.symm
   · exact hι
-
-/--
-theorem `nfpFamily_lt_ord_of_isRegular` / 定理 `nfpFamily_lt_ord_of_isRegular`
-
-English:
-theorem nfpFamily_lt_ord_of_isRegular
-  statement: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-  proof: nfpFamily_lt_ord_lift_of_isRegular hc (by rwa [lift_id]) hc' hf
-
-中文:
-定理 nfpFamily_lt_ord_of_isRegular
-  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
-  证明: nfpFamily_lt_ord_lift_of_isRegular hc (by rwa [lift_id]) hc' hf
-
-Depends on / 依赖: lift_id, nfpFamily_lt_ord_lift_of_isRegular
+/-
+**Cardinal.nfpFamily_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nfpFamily_lt_ord_of_isRegular {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : 
+IsRegular c) (hι : #ι < c) (hc' : c != ℵ₀) {a} (hf : forall (i), forall b < c.or
+d, f i b < c.ord) : a < c.ord -> nfpFamily.{u, u} f a < c.ord
+参数：hc : IsRegular c；hι : #ι < c；hc' : c != ℵ₀；hf : forall (i), forall b < c.ord,
+ f i b < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nfpFamily_lt_ord_lift_of_isRegular`：nfpFamily_lt_ord_lift_of_is
+Regular {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : Cardinal.
+lift.{v, u} #ι < c) (hc' : c != ℵ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
-theorem nfpFamily_lt_ord_of_isRegular {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-    (hι : #ι < c) (hc' : c != ℵ₀) {a} (hf : forall (i), forall b < c.ord, f i b < c.ord) :
-    a < c.ord -> nfpFamily.{u, u} f a < c.ord :=
+theorem nfpFamily_lt_ord_of_isRegular {ι} {f : ι → Ordinal → Ordinal} {c} (hc : IsRegular c)
+    (hι : #ι < c) (hc' : c ≠ ℵ₀) {a} (hf : ∀ (i), ∀ b < c.ord, f i b < c.ord) :
+    a < c.ord → nfpFamily.{u, u} f a < c.ord :=
   nfpFamily_lt_ord_lift_of_isRegular hc (by rwa [lift_id]) hc' hf
-
-/--
-theorem `nfp_lt_ord_of_isRegular` / 定理 `nfp_lt_ord_of_isRegular`
-
-English:
-theorem nfp_lt_ord_of_isRegular
-  statement: {f : Ordinal -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
-  proof: nfp_lt_ord (by rw [hc.cof_ord]; exact lt_of_le_of_ne hc.1 hc'.symm) hf
-
-中文:
-定理 nfp_lt_ord_of_isRegular
-  结论: {f : 序数 -> 序数} {c} (hc : 是正则 c) (hc' : c != ℵ₀)
-  证明: nfp_lt_ord (by rw [hc.cof_ord]; exact lt_of_le_of_ne hc.1 hc'.symm) hf
-
-Depends on / 依赖: MetricSpace, T0Space, _root_, _root_.MetricSpace.instT0Space, cof_ord, hc.cof_ord, instT0Space, lt_of_le_of_ne, nfp_lt_ord
+/-
+**Cardinal.nfp_lt_ord_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nfp_lt_ord_of_isRegular {f : Ordinal -> Ordinal} {c} (hc : IsRegular c) (h
+c' : c != ℵ₀) (hf : forall i < c.ord, f i < c.ord) {a} : a < c.ord -> nfp f a < 
+c.ord
+参数：hc : IsRegular c；hc' : c != ℵ₀；hf : forall i < c.ord, f i < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.nfp_lt_ord`：nfp_lt_ord {f : Ordinal -> Ordinal} {c} (hc : ℵ₀ < c
+of c) (hf : forall i < c, f i < c) {a} : a < c -> nfp f a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem nfp_lt_ord_of_isRegular {f : Ordinal -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
-    (hf : forall i < c.ord, f i < c.ord) {a} : a < c.ord -> nfp f a < c.ord :=
+theorem nfp_lt_ord_of_isRegular {f : Ordinal → Ordinal} {c} (hc : IsRegular c) (hc' : c ≠ ℵ₀)
+    (hf : ∀ i < c.ord, f i < c.ord) {a} : a < c.ord → nfp f a < c.ord :=
   nfp_lt_ord (by rw [hc.cof_ord]; exact lt_of_le_of_ne hc.1 hc'.symm) hf
-
-/--
-theorem `derivFamily_lt_ord_lift` / 定理 `derivFamily_lt_ord_lift`
-
-English:
-theorem derivFamily_lt_ord_lift
-  statement: {ι : Type u} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-  proof: by
-  have hω : ℵ₀ < c.ord.cof := by
-    rw [hc.cof_ord]
-    exact lt_of_le_of_ne hc.1 hc'.symm
-  induction a using limitRecOn with
-  | zero =>
-    rw [derivFamily_zero]
-    exact nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
-  | add_one b hb =>
-    intro hb'
-    rw [derivFamily_add_one]
-    exact
-      nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
-        ((isSuccLimit_ord hc.1).succ_lt (hb ((lt_succ b).trans hb')))
-  | limit b hb H =>
-    intro hb'
-    rw [derivFamily_limit f hb]
-    apply Ordinal.lift_iSup_lt_of_lt_cof
-    · rwa [← lift_cof, hc.cof_ord, mk_Iio_ordinal, lift_lift, lift_lt, ← lt_ord]
-· exact fun i => H i.1 i.2 i.2.trans hb'
-
-中文:
-定理 derivFamily_lt_ord_lift
-  结论: {ι : 类型u} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
-  证明: by
-  have hω : ℵ₀ < c.ord.cof := by
-    rw [hc.cof_ord]
-    exact lt_of_le_of_ne hc.1 hc'.symm
-  induction a using limitRecOn with
-  | zero =>
-    rw [derivFamily_zero]
-    exact nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
-  | add_one b hb =>
-    intro hb'
-    rw [derivFamily_add_one]
-    exact
-      nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
-        ((isSuccLimit_ord hc.1).succ_lt (hb ((lt_succ b).trans hb')))
-  | limit b hb H =>
-    intro hb'
-    rw [derivFamily_limit f hb]
-    apply Ordinal.lift_iSup_lt_of_lt_cof
-    · rwa [← lift_cof, hc.cof_ord, mk_Iio_ordinal, lift_lift, lift_lt, ← lt_ord]
-· exact fun i => H i.1 i.2 i.2.trans hb'
-
-Depends on / 依赖: Ordinal, Ordinal.lift_iSup_lt_of_lt_cof, add_one, c.ord.cof, cof_ord, derivFamily_add_one, derivFamily_limit, derivFamily_zero, hc.cof_ord, isSuccLimit_ord, lift_cof, lift_iSup_lt_of_lt_cof, limitRecOn, lt_of_le_of_ne, lt_succ, nfpFamily_lt_ord_lift, succ_lt
+/-
+**Cardinal.derivFamily_lt_ord_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：derivFamily_lt_ord_lift {ι : Type u} {f : ι -> Ordinal -> Ordinal} {c} (hc
+ : IsRegular c) (hι : lift.{v} #ι < c) (hc' : c != ℵ₀) (hf : forall i, forall b 
+< c.ord, f i b < c.ord) {a} : a < c.ord -> derivFamily f a < c.ord
+参数：hc : IsRegular c；hι : lift.{v} #ι < c；hc' : c != ℵ₀；hf : forall i, forall b <
+ c.ord, f i b < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Ordinal.derivFamily_zero`：derivFamily_zero (f : ι -> Ordinal -> Ordinal)
+ : derivFamily f 0 = nfpFamily f 0
+· 使用定理 `Ordinal.nfpFamily_lt_ord_lift`：nfpFamily_lt_ord_lift {ι} {f : ι -> Ordin
+al -> Ordinal} {c} (hc : ℵ₀ < cof c) (hc' : Cardinal.lift.{v, u} #ι < cof c) (hf
+ : forall (i), fora…
+· 使用定理 `Ordinal.derivFamily_add_one`：derivFamily_add_one (f : ι -> Ordinal -> Or
+dinal) (o) : derivFamily f (o + 1) = nfpFamily f (derivFamily f o + 1)
+· 使用定理 `Order.IsSuccLimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : PartialOrd
+er α] [inst_1 : SuccOrder α],   Order.IsSuccLimit b → a < b → Order.succ a < b
+· 使用定理 `Cardinal.isSuccLimit_ord`：isSuccLimit_ord {c} (hc : ℵ₀ <= c) : IsSuccLim
+it (ord c)
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.derivFamily_limit`：derivFamily_limit (f : ι -> Ordinal -> Ordina
+l) {o} : IsSuccLimit o -> derivFamily f o = ⨆ b : Set.Iio o, derivFamily f b
+· 使用定理 `Ordinal.lift_iSup_lt_of_lt_cof`：lift_iSup_lt_of_lt_cof {f : β -> Ordinal
+.{u}} {a : Ordinal.{u}} (ha : Cardinal.lift.{u} #β < (lift.{v} a).cof) (hf : for
+all i, f i < a) : ⨆ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.lift_cof`：lift_cof (o : Ordinal.{u}) : Cardinal.lift.{v} (cof o)
+ = cof (Ordinal.lift.{v} o)
+· 使用定理 `Cardinal.mk_Iio_ordinal`：∀ (o : Ordinal.{u}), Cardinal.mk ↑(Set.Iio o) =
+ Cardinal.lift.{u + 1, u} o.card
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Cardinal.lt_ord`：lt_ord {c o} : o < ord c ↔ o.card < c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem derivFamily_lt_ord_lift {ι : Type u} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
-    (hι : lift.{v} #ι < c) (hc' : c != ℵ₀) (hf : forall i, forall b < c.ord, f i b < c.ord) {a} :
-    a < c.ord -> derivFamily f a < c.ord := by
+theorem derivFamily_lt_ord_lift {ι : Type u} {f : ι → Ordinal → Ordinal} {c} (hc : IsRegular c)
+    (hι : lift.{v} #ι < c) (hc' : c ≠ ℵ₀) (hf : ∀ i, ∀ b < c.ord, f i b < c.ord) {a} :
+    a < c.ord → derivFamily f a < c.ord := by
   have hω : ℵ₀ < c.ord.cof := by
     rw [hc.cof_ord]
     exact lt_of_le_of_ne hc.1 hc'.symm
@@ -1136,47 +934,58 @@ theorem derivFamily_lt_ord_lift {ι : Type u} {f : ι -> Ordinal -> Ordinal} {c}
     rw [derivFamily_limit f hb]
     apply Ordinal.lift_iSup_lt_of_lt_cof
     · rwa [← lift_cof, hc.cof_ord, mk_Iio_ordinal, lift_lift, lift_lt, ← lt_ord]
-· exact fun i => H i.1 i.2 i.2.trans hb'
-
-/--
-theorem `derivFamily_lt_ord` / 定理 `derivFamily_lt_ord`
-
-English:
-theorem derivFamily_lt_ord
-  statement: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
-  proof: derivFamily_lt_ord_lift hc (by rwa [lift_id]) hc' hf
-
-中文:
-定理 derivFamily_lt_ord
-  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
-  证明: derivFamily_lt_ord_lift hc (by rwa [lift_id]) hc' hf
-
-Depends on / 依赖: derivFamily_lt_ord_lift, lift_id
+    · exact fun i ↦ H i.1 i.2 <| i.2.trans hb'
+/-
+**Cardinal.derivFamily_lt_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：derivFamily_lt_ord {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c
+) (hι : #ι < c) (hc' : c != ℵ₀) (hf : forall (i), forall b < c.ord, f i b < c.or
+d) {a} : a < c.ord -> derivFamily.{u, u} f a < c.ord
+参数：hc : IsRegular c；hι : #ι < c；hc' : c != ℵ₀；hf : forall (i), forall b < c.ord,
+ f i b < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.derivFamily_lt_ord_lift`：derivFamily_lt_ord_lift {ι : Type u} {
+f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : lift.{v} #ι < c) (hc' 
+: c != ℵ₀) (hf : foral…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
-theorem derivFamily_lt_ord {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
-    (hc' : c != ℵ₀) (hf : forall (i), forall b < c.ord, f i b < c.ord) {a} :
-    a < c.ord -> derivFamily.{u, u} f a < c.ord :=
+theorem derivFamily_lt_ord {ι} {f : ι → Ordinal → Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
+    (hc' : c ≠ ℵ₀) (hf : ∀ (i), ∀ b < c.ord, f i b < c.ord) {a} :
+    a < c.ord → derivFamily.{u, u} f a < c.ord :=
   derivFamily_lt_ord_lift hc (by rwa [lift_id]) hc' hf
-
-/--
-theorem `deriv_lt_ord` / 定理 `deriv_lt_ord`
-
-English:
-theorem deriv_lt_ord
-  statement: {f : Ordinal.{u} -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
-  proof: derivFamily_lt_ord_lift hc
-    (by simpa using Cardinal.one_lt_aleph0.trans (lt_of_le_of_ne hc.1 hc'.symm)) hc' fun _ => hf
-
-中文:
-定理 deriv_lt_ord
-  结论: {f : 序数.{u} -> 序数} {c} (hc : 是正则 c) (hc' : c != ℵ₀)
-  证明: derivFamily_lt_ord_lift hc
-    (by simpa using Cardinal.one_lt_aleph0.trans (lt_of_le_of_ne hc.1 hc'.symm)) hc' fun _ => hf
-
-Depends on / 依赖: Cardinal, Cardinal.one_lt_aleph0.trans, EMetricSpace, MetricSpace, _root_, _root_.MetricSpace.toEMetricSpace, derivFamily_lt_ord_lift, lt_of_le_of_ne, one_lt_aleph0, toEMetricSpace
+/-
+**Cardinal.deriv_lt_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：deriv_lt_ord {f : Ordinal.{u} -> Ordinal} {c} (hc : IsRegular c) (hc' : c 
+!= ℵ₀) (hf : forall i < c.ord, f i < c.ord) {a} : a < c.ord -> deriv f a < c.ord
+参数：hc : IsRegular c；hc' : c != ℵ₀；hf : forall i < c.ord, f i < c.ord。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.derivFamily_lt_ord_lift`：derivFamily_lt_ord_lift {ι : Type u} {
+f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : lift.{v} #ι < c) (hc' 
+: c != ℵ₀) (hf : foral…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Cardinal.lift_one`：lift_one : lift 1 = 1
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Cardinal.one_lt_aleph0`：one_lt_aleph0 : 1 < ℵ₀
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem deriv_lt_ord {f : Ordinal.{u} -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
-    (hf : forall i < c.ord, f i < c.ord) {a} : a < c.ord -> deriv f a < c.ord :=
+theorem deriv_lt_ord {f : Ordinal.{u} → Ordinal} {c} (hc : IsRegular c) (hc' : c ≠ ℵ₀)
+    (hf : ∀ i < c.ord, f i < c.ord) {a} : a < c.ord → deriv f a < c.ord :=
   derivFamily_lt_ord_lift hc
     (by simpa using Cardinal.one_lt_aleph0.trans (lt_of_le_of_ne hc.1 hc'.symm)) hc' fun _ => hf
 
@@ -1184,392 +993,282 @@ theorem deriv_lt_ord {f : Ordinal.{u} -> Ordinal} {c} (hc : IsRegular c) (hc' : 
 
 /-- A cardinal is singular if it is infinite and not regular. -/
 @[mk_iff]
-/--
-Definition of `IsSingular` / `IsSingular` 的定义
+/-
+**Cardinal.IsSingular** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cardinal`。
+形式化陈述：Cardinal.{u_1} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSingular
-  parameters: (c : Cardinal)
-  axioms and operations (2):
-    - aleph0_le : ℵ₀ <= c
-    - cof_ord_ne : c.ord.cof != c
-
-中文:
-结构 是奇异
-  参数: (c : 基数)
-  公理与运算 (2 个):
-    - aleph0_le : ℵ₀ <= c
-    - cof_ord_ne : c.ord.cof != c
+--- 原说明 ---
+A cardinal is singular if it is infinite and not regular.
 -/
 structure IsSingular (c : Cardinal) : Prop where
   /-- A singular cardinal is infinite. -/
-  aleph0_le : ℵ₀ <= c
+  aleph0_le : ℵ₀ ≤ c
   /-- A singular cardinal is not regular, see `IsSingular.not_isRegular`. -/
-  cof_ord_ne : c.ord.cof != c
-
-/--
-theorem `IsSingular.cof_ord_lt` / 定理 `IsSingular.cof_ord_lt`
-
-English:
-theorem IsSingular.cof_ord_lt
-  given: (hc : c.IsSingular)
-  statement: c.ord.cof < c
-  proof: (cof_ord_le c).lt_of_ne hc.cof_ord_ne
-
-中文:
-定理 是奇异.cof_ord_lt
-  条件: (hc : c.是奇异)
-  结论: c.ord.cof < c
-  证明: (cof_ord_le c).lt_of_ne hc.cof_ord_ne
-
-Depends on / 依赖: cof_ord_le, cof_ord_ne, hc.cof_ord_ne, lt_of_ne
+  cof_ord_ne : c.ord.cof ≠ c
+/-
+**Cardinal.IsSingular.cof_ord_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSingular`
+。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → c.ord.cof < c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Ordinal.cof_ord_le`：cof_ord_le (c : Cardinal) : c.ord.cof <= c
+· 使用定理 `Cardinal.IsSingular.cof_ord_ne`：∀ {c : Cardinal.{u_1}}, c.IsSingular → c
+.ord.cof ≠ c
 -/
 theorem IsSingular.cof_ord_lt (hc : c.IsSingular) : c.ord.cof < c :=
   (cof_ord_le c).lt_of_ne hc.cof_ord_ne
-
-/--
-theorem `IsSingular.natCast_lt` / 定理 `IsSingular.natCast_lt`
-
-English:
-theorem IsSingular.natCast_lt
-  given: (hc : c.IsSingular) (n : Nat)
-  statement: n < c
-  proof: natCast_lt_aleph0.trans_le hc.aleph0_le
-
-中文:
-定理 是奇异.natCast_lt
-  条件: (hc : c.是奇异) (n : 自然数)
-  结论: n < c
-  证明: natCast_lt_aleph0.trans_le hc.aleph0_le
-
-Depends on / 依赖: aleph0_le, hc.aleph0_le, natCast_lt_aleph0, natCast_lt_aleph0.trans_le, trans_le
+/-
+**Cardinal.IsSingular.natCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSingular`
+。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → ∀ (n : ℕ), ↑n < c
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Cardinal.IsSingular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsSingular → Ca
+rdinal.aleph0 ≤ c
 -/
-theorem IsSingular.natCast_lt (hc : c.IsSingular) (n : Nat) : n < c :=
+theorem IsSingular.natCast_lt (hc : c.IsSingular) (n : ℕ) : n < c :=
   natCast_lt_aleph0.trans_le hc.aleph0_le
-
-/--
-theorem `IsSingular.pos` / 定理 `IsSingular.pos`
-
-English:
-theorem IsSingular.pos
-  given: (hc : c.IsSingular)
-  statement: 0 < c
-  proof: hc.natCast_lt 0
-
-中文:
-定理 是奇异.pos
-  条件: (hc : c.是奇异)
-  结论: 0 < c
-  证明: hc.natCast_lt 0
-
-Depends on / 依赖: hc.natCast_lt, natCast_lt
+/-
+**Cardinal.IsSingular.pos** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSingular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → 0 < c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsSingular.natCast_lt`：∀ {c : Cardinal.{u_1}}, c.IsSingular → ∀
+ (n : ℕ), ↑n < c
 -/
 theorem IsSingular.pos (hc : c.IsSingular) : 0 < c :=
   hc.natCast_lt 0
-
-/--
-theorem `IsSingular.not_isRegular` / 定理 `IsSingular.not_isRegular`
-
-English:
-theorem IsSingular.not_isRegular
-  given: (hc : c.IsSingular)
-  statement: ¬ c.IsRegular
-  proof: fun hc' => hc'.le_cof_ord.not_gt hc.cof_ord_lt
-
-中文:
-定理 是奇异.not_isRegular
-  条件: (hc : c.是奇异)
-  结论: ¬ c.是正则
-  证明: fun hc' => hc'.le_cof_ord.not_gt hc.cof_ord_lt
-
-Depends on / 依赖: cof_ord_lt, hc.cof_ord_lt, le_cof_ord, le_cof_ord.not_gt, not_gt
+/-
+**Cardinal.IsSingular.not_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSingul
+ar`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → ¬c.IsRegular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Cardinal.IsRegular.le_cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c ≤
+ c.ord.cof
+· 使用定理 `Cardinal.IsSingular.cof_ord_lt`：∀ {c : Cardinal.{u_1}}, c.IsSingular → c
+.ord.cof < c
 -/
 theorem IsSingular.not_isRegular (hc : c.IsSingular) : ¬ c.IsRegular :=
-  fun hc' => hc'.le_cof_ord.not_gt hc.cof_ord_lt
-
-/--
-theorem `IsRegular.not_isSingular` / 定理 `IsRegular.not_isSingular`
-
-English:
-theorem IsRegular.not_isSingular
-  given: (hc : c.IsRegular)
-  statement: ¬ c.IsSingular
-  proof: imp_not_comm.1 IsSingular.not_isRegular hc
-
-@[simp]
-
-中文:
-定理 是正则.not_isSingular
-  条件: (hc : c.是正则)
-  结论: ¬ c.是奇异
-  证明: imp_not_comm.1 IsSingular.not_isRegular hc
-
-@[simp]
-
-Depends on / 依赖: IsSingular, IsSingular.not_isRegular, imp_not_comm, not_isRegular
+  fun hc' ↦ hc'.le_cof_ord.not_gt hc.cof_ord_lt
+/-
+**Cardinal.IsRegular.not_isSingular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsRegula
+r`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsRegular → ¬c.IsSingular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `imp_not_comm`：∀ {a b : Prop}, a → ¬b ↔ b → ¬a
+· 使用定理 `Cardinal.IsSingular.not_isRegular`：∀ {c : Cardinal.{u_1}}, c.IsSingular 
+→ ¬c.IsRegular
 -/
 theorem IsRegular.not_isSingular (hc : c.IsRegular) : ¬ c.IsSingular :=
   imp_not_comm.1 IsSingular.not_isRegular hc
 
 @[simp]
-/--
-theorem `not_isSingular_aleph0` / 定理 `not_isSingular_aleph0`
-
-English:
-theorem not_isSingular_aleph0
-  statement: ¬ IsSingular ℵ₀
-  proof: isRegular_aleph0.not_isSingular
-
-@[simp]
-
-中文:
-定理 not_isSingular_aleph0
-  结论: ¬ 是奇异 ℵ₀
-  证明: isRegular_aleph0.not_isSingular
-
-@[simp]
-
-Depends on / 依赖: isRegular_aleph0, isRegular_aleph0.not_isSingular, not_isSingular
+/-
+**Cardinal.not_isSingular_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：not_isSingular_aleph0 : ¬ IsSingular ℵ₀
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsRegular.not_isSingular`：∀ {c : Cardinal.{u_1}}, c.IsRegular →
+ ¬c.IsSingular
+· 使用定理 `Cardinal.isRegular_aleph0`：isRegular_aleph0 : IsRegular ℵ₀
 -/
 theorem not_isSingular_aleph0 : ¬ IsSingular ℵ₀ :=
   isRegular_aleph0.not_isSingular
 
 @[simp]
-/--
-theorem `not_isSingular_aleph_one` / 定理 `not_isSingular_aleph_one`
-
-English:
-theorem not_isSingular_aleph_one
-  statement: ¬ IsSingular ℵ₁
-  proof: isRegular_aleph_one.not_isSingular
-
-@[simp]
-
-中文:
-定理 not_isSingular_aleph_one
-  结论: ¬ 是奇异 ℵ₁
-  证明: isRegular_aleph_one.not_isSingular
-
-@[simp]
-
-Depends on / 依赖: isRegular_aleph_one, isRegular_aleph_one.not_isSingular, not_isSingular
+/-
+**Cardinal.not_isSingular_aleph_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：not_isSingular_aleph_one : ¬ IsSingular ℵ₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsRegular.not_isSingular`：∀ {c : Cardinal.{u_1}}, c.IsRegular →
+ ¬c.IsSingular
+· 使用定理 `Cardinal.isRegular_aleph_one`：isRegular_aleph_one : IsRegular ℵ₁
 -/
 theorem not_isSingular_aleph_one : ¬ IsSingular ℵ₁ :=
   isRegular_aleph_one.not_isSingular
 
 @[simp]
-/--
-theorem `not_isSingular_succ` / 定理 `not_isSingular_succ`
-
-English:
-theorem not_isSingular_succ
-  given: (c : Cardinal)
-  statement: ¬ IsSingular (succ c)
-  proof: by
-  obtain hc | hc := lt_or_ge c ℵ₀
-  · obtain ⟨n, rfl⟩ := lt_aleph0.1 hc
-    refine fun h => h.aleph0_le.not_gt ?_
-    rw [succ_natCast]; rw [← Nat.cast_add_one]
-    exact natCast_lt_aleph0
-  · exact (isRegular_succ hc).not_isSingular
-
-@[simp]
-
-中文:
-定理 not_isSingular_succ
-  条件: (c : 基数)
-  结论: ¬ 是奇异 (succ c)
-  证明: by
-  obtain hc | hc := lt_or_ge c ℵ₀
-  · obtain ⟨n, rfl⟩ := lt_aleph0.1 hc
-    refine fun h => h.aleph0_le.not_gt ?_
-    rw [succ_natCast]; rw [← Nat.cast_add_one]
-    exact natCast_lt_aleph0
-  · exact (isRegular_succ hc).not_isSingular
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_add_one, aleph0_le, cast_add_one, h.aleph0_le.not_gt, isRegular_succ, lt_aleph0, lt_or_ge, natCast_lt_aleph0, not_gt, not_isSingular, succ_natCast
+/-
+**Cardinal.not_isSingular_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：not_isSingular_succ (c : Cardinal) : ¬ IsSingular (succ c)
+参数：c : Cardinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.lt_aleph0`：lt_aleph0 {c : Cardinal} : c < ℵ₀ ↔ exists n : Nat, 
+c = n
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Cardinal.IsSingular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsSingular → Ca
+rdinal.aleph0 ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Cardinal.succ_natCast`：succ_natCast (n : Nat) : Order.succ (n : Cardinal
+) = n + 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_add_one`：cast_add_one (n : Nat) : ((n + 1 : Nat) : R) = n + 1
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Cardinal.IsRegular.not_isSingular`：∀ {c : Cardinal.{u_1}}, c.IsRegular →
+ ¬c.IsSingular
+· 使用定理 `Cardinal.isRegular_succ`：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : 
+IsRegular (succ c)
 -/
 theorem not_isSingular_succ (c : Cardinal) : ¬ IsSingular (succ c) := by
   obtain hc | hc := lt_or_ge c ℵ₀
   · obtain ⟨n, rfl⟩ := lt_aleph0.1 hc
-    refine fun h => h.aleph0_le.not_gt ?_
-    rw [succ_natCast]; rw [← Nat.cast_add_one]
+    refine fun h ↦ h.aleph0_le.not_gt ?_
+    rw [succ_natCast, ← Nat.cast_add_one]
     exact natCast_lt_aleph0
   · exact (isRegular_succ hc).not_isSingular
 
 @[simp]
-/--
-theorem `not_isRegular_aleph_add_one` / 定理 `not_isRegular_aleph_add_one`
-
-English:
-theorem not_isRegular_aleph_add_one
-  given: (o : Ordinal)
-  statement: ¬ IsSingular (ℵ_ (o + 1))
-  proof: by
-  simp [← succ_aleph]
-
-中文:
-定理 not_isRegular_aleph_add_one
-  条件: (o : 序数)
-  结论: ¬ 是奇异 (ℵ_ (o + 1))
-  证明: by
-  simp [← succ_aleph]
-
-Depends on / 依赖: succ_aleph
+/-
+**Cardinal.not_isRegular_aleph_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：not_isRegular_aleph_add_one (o : Ordinal) : ¬ IsSingular (ℵ_ (o + 1))
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem not_isRegular_aleph_add_one (o : Ordinal) : ¬ IsSingular (ℵ_ (o + 1)) := by
   simp [← succ_aleph]
-
-/--
-theorem `IsSingular.isSuccLimit` / 定理 `IsSingular.isSuccLimit`
-
-English:
-theorem IsSingular.isSuccLimit
-  given: (hc : IsSingular c)
-  statement: IsSuccLimit c
-  proof: by
-  rw [Cardinal.isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_ne]
-  refine ⟨hc.pos.ne', ?_⟩
-  rintro c rfl
-  exact not_isSingular_succ c hc
-
-中文:
-定理 是奇异.isSuccLimit
-  条件: (hc : 是奇异 c)
-  结论: 是SuccLimit c
-  证明: by
-  rw [Cardinal.isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_ne]
-  refine ⟨hc.pos.ne', ?_⟩
-  rintro c rfl
-  exact not_isSingular_succ c hc
-
-Depends on / 依赖: Cardinal, Cardinal.isSuccLimit_iff, hc.pos.ne, isSuccLimit_iff, isSuccPrelimit_iff_succ_ne, not_isSingular_succ
+/-
+**Cardinal.IsSingular.isSuccLimit** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSingular
+`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → Order.IsSuccLimit c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.isSuccLimit_iff`：∀ {c : Cardinal.{u_1}}, Order.IsSuccLimit c ↔ 
+c ≠ 0 ∧ Order.IsSuccPrelimit c
+· 使用定理 `Order.isSuccPrelimit_iff_succ_ne`：isSuccPrelimit_iff_succ_ne : IsSuccPre
+limit a ↔ forall b, succ b != a
+· 使用定理 `Cardinal.instNoMaxOrder`：NoMaxOrder Cardinal.{u}
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Cardinal.IsSingular.pos`：∀ {c : Cardinal.{u_1}}, c.IsSingular → 0 < c
+· 使用定理 `Cardinal.not_isSingular_succ`：not_isSingular_succ (c : Cardinal) : ¬ IsS
+ingular (succ c)
 -/
 theorem IsSingular.isSuccLimit (hc : IsSingular c) : IsSuccLimit c := by
-  rw [Cardinal.isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_ne]
+  rw [Cardinal.isSuccLimit_iff, isSuccPrelimit_iff_succ_ne]
   refine ⟨hc.pos.ne', ?_⟩
   rintro c rfl
   exact not_isSingular_succ c hc
-
-/--
-theorem `isRegular_or_isSingular` / 定理 `isRegular_or_isSingular`
-
-English:
-theorem isRegular_or_isSingular
-  given: (h : ℵ₀ <= c)
-  statement: c.IsRegular ∨ c.IsSingular
-  proof: by
-  rw [isSingular_iff]; rw [← (cof_ord_le c).lt_iff_ne]; rw [← not_le]
-  tauto
-
-中文:
-定理 isRegular_or_isSingular
-  条件: (h : ℵ₀ <= c)
-  结论: c.是正则 ∨ c.是奇异
-  证明: by
-  rw [isSingular_iff]; rw [← (cof_ord_le c).lt_iff_ne]; rw [← not_le]
-  tauto
-
-Depends on / 依赖: MetricSpace, Subtype, cof_ord_le, isSingular_iff, lt_iff_ne, not_le
+/-
+**Cardinal.isRegular_or_isSingular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isRegular_or_isSingular (h : ℵ₀ <= c) : c.IsRegular ∨ c.IsSingular
+参数：h : ℵ₀ <= c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.isSingular_iff`：∀ (c : Cardinal.{u_1}), c.IsSingular ↔ Cardinal
+.aleph0 ≤ c ∧ c.ord.cof ≠ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.lt_iff_ne`：lt_iff_ne (h : a <= b) : a < b ↔ a != b
+· 使用定理 `Ordinal.cof_ord_le`：cof_ord_le (c : Cardinal) : c.ord.cof <= c
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
 -/
-theorem isRegular_or_isSingular (h : ℵ₀ <= c) : c.IsRegular ∨ c.IsSingular := by
-  rw [isSingular_iff]; rw [← (cof_ord_le c).lt_iff_ne]; rw [← not_le]
+theorem isRegular_or_isSingular (h : ℵ₀ ≤ c) : c.IsRegular ∨ c.IsSingular := by
+  rw [isSingular_iff, ← (cof_ord_le c).lt_iff_ne, ← not_le]
   tauto
-
-/--
-theorem `lt_aleph0_or_isRegular_or_isSingular` / 定理 `lt_aleph0_or_isRegular_or_isSingular`
-
-English:
-theorem lt_aleph0_or_isRegular_or_isSingular
-  statement: c < ℵ₀ ∨ c.IsRegular ∨ c.IsSingular
-  proof: by
-  have := isRegular_or_isSingular (c := c)
-  rw [← not_le]
-  tauto
-
-中文:
-定理 lt_aleph0_or_isRegular_or_isSingular
-  结论: c < ℵ₀ ∨ c.是正则 ∨ c.是奇异
-  证明: by
-  have := isRegular_or_isSingular (c := c)
-  rw [← not_le]
-  tauto
-
-Depends on / 依赖: isRegular_or_isSingular, not_le
+/-
+**Cardinal.lt_aleph0_or_isRegular_or_isSingular** 是 Mathlib 中的一个定理，位于命名空间 `Cardi
+nal`。
+形式化陈述：lt_aleph0_or_isRegular_or_isSingular : c < ℵ₀ ∨ c.IsRegular ∨ c.IsSingular
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_or_isSingular`：isRegular_or_isSingular (h : ℵ₀ <= c) 
+: c.IsRegular ∨ c.IsSingular
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 -/
 theorem lt_aleph0_or_isRegular_or_isSingular : c < ℵ₀ ∨ c.IsRegular ∨ c.IsSingular := by
   have := isRegular_or_isSingular (c := c)
   rw [← not_le]
   tauto
-
-/--
-theorem `IsSingular.of_not_isRegular` / 定理 `IsSingular.of_not_isRegular`
-
-English:
-theorem IsSingular.of_not_isRegular
-  given: (h₀ : ℵ₀ <= c) (hc : ¬ IsRegular c)
-  statement: IsSingular c
-  proof: (isRegular_or_isSingular h₀).resolve_left hc
-
-中文:
-定理 是奇异.of_not_isRegular
-  条件: (h₀ : ℵ₀ <= c) (hc : ¬ 是正则 c)
-  结论: 是奇异 c
-  证明: (isRegular_or_isSingular h₀).resolve_left hc
-
-Depends on / 依赖: isRegular_or_isSingular, resolve_left
+/-
+**Cardinal.IsSingular.of_not_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSin
+gular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, Cardinal.aleph0 ≤ c → ¬c.IsRegular → c.IsSingular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Cardinal.isRegular_or_isSingular`：isRegular_or_isSingular (h : ℵ₀ <= c) 
+: c.IsRegular ∨ c.IsSingular
 -/
-theorem IsSingular.of_not_isRegular (h₀ : ℵ₀ <= c) (hc : ¬ IsRegular c) : IsSingular c :=
+theorem IsSingular.of_not_isRegular (h₀ : ℵ₀ ≤ c) (hc : ¬ IsRegular c) : IsSingular c :=
   (isRegular_or_isSingular h₀).resolve_left hc
-
-/--
-theorem `IsRegular.of_not_isSingular` / 定理 `IsRegular.of_not_isSingular`
-
-English:
-theorem IsRegular.of_not_isSingular
-  given: (h₀ : ℵ₀ <= c) (hc : ¬ IsSingular c)
-  statement: IsRegular c
-  proof: (isRegular_or_isSingular h₀).resolve_right hc
-
-中文:
-定理 是正则.of_not_isSingular
-  条件: (h₀ : ℵ₀ <= c) (hc : ¬ 是奇异 c)
-  结论: 是正则 c
-  证明: (isRegular_or_isSingular h₀).resolve_right hc
-
-Depends on / 依赖: isRegular_or_isSingular, resolve_right
+/-
+**Cardinal.IsRegular.of_not_isSingular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsReg
+ular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, Cardinal.aleph0 ≤ c → ¬c.IsSingular → c.IsRegular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `Cardinal.isRegular_or_isSingular`：isRegular_or_isSingular (h : ℵ₀ <= c) 
+: c.IsRegular ∨ c.IsSingular
 -/
-theorem IsRegular.of_not_isSingular (h₀ : ℵ₀ <= c) (hc : ¬ IsSingular c) : IsRegular c :=
+theorem IsRegular.of_not_isSingular (h₀ : ℵ₀ ≤ c) (hc : ¬ IsSingular c) : IsRegular c :=
   (isRegular_or_isSingular h₀).resolve_right hc
-
-/--
-theorem `isSingular_aleph_iff` / 定理 `isSingular_aleph_iff`
-
-English:
-theorem isSingular_aleph_iff
-  given: {o : Ordinal}
-  statement: (ℵ_ o).IsSingular ↔ IsSuccLimit o ∧ o.cof < ℵ_ o
-  proof: by
-  obtain rfl | ⟨a, rfl⟩ | ho := zero_or_succ_or_isSuccLimit o
-  · simp
-  · simp
-  · rw [isSingular_iff, ← (cof_ord_le _).lt_iff_ne]
-    simp [ho]
-
-中文:
-定理 isSingular_aleph_iff
-  条件: {o : 序数}
-  结论: (ℵ_ o).是奇异 ↔ 是SuccLimit o ∧ o.cof < ℵ_ o
-  证明: by
-  obtain rfl | ⟨a, rfl⟩ | ho := zero_or_succ_or_isSuccLimit o
-  · simp
-  · simp
-  · rw [isSingular_iff, ← (cof_ord_le _).lt_iff_ne]
-    simp [ho]
-
-Depends on / 依赖: cof_ord_le, isSingular_iff, lt_iff_ne, zero_or_succ_or_isSuccLimit
+/-
+**Cardinal.isSingular_aleph_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isSingular_aleph_iff {o : Ordinal} : (ℵ_ o).IsSingular ↔ IsSuccLimit o ∧ o
+.cof < ℵ_ o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.zero_or_succ_or_isSuccLimit`：zero_or_succ_or_isSuccLimit (o : Or
+dinal) : o = 0 ∨ o in range succ ∨ IsSuccLimit o
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.aleph_zero`：aleph_zero : ℵ_ 0 = ℵ₀
+· 使用定理 `Ordinal.cof_zero`：cof_zero : cof 0 = 0
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.cof_add`：cof_add (a : Ordinal) {b : Ordinal} (hb : b != 0) : cof
+ (a + b) = cof b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Ordinal.cof_one`：cof_one : cof 1 = 1
+· 使用定理 `Cardinal.isSingular_iff`：∀ (c : Cardinal.{u_1}), c.IsSingular ↔ Cardinal
+.aleph0 ≤ c ∧ c.ord.cof ≠ c
+· 使用定理 `LE.le.lt_iff_ne`：lt_iff_ne (h : a <= b) : a < b ↔ a != b
+· 使用定理 `Ordinal.cof_ord_le`：cof_ord_le (c : Cardinal) : c.ord.cof <= c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Cardinal.ord_aleph`：ord_aleph (o : Ordinal) : (ℵ_ o).ord = ω_ o
+· 使用定理 `Ordinal.cof_omega`：cof_omega {o : Ordinal} (ho : IsSuccLimit o) : (ω_ o)
+.cof = o.cof
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem isSingular_aleph_iff {o : Ordinal} : (ℵ_ o).IsSingular ↔ IsSuccLimit o ∧ o.cof < ℵ_ o := by
   obtain rfl | ⟨a, rfl⟩ | ho := zero_or_succ_or_isSuccLimit o
@@ -1577,70 +1276,57 @@ theorem isSingular_aleph_iff {o : Ordinal} : (ℵ_ o).IsSingular ↔ IsSuccLimit
   · simp
   · rw [isSingular_iff, ← (cof_ord_le _).lt_iff_ne]
     simp [ho]
-
-/--
-theorem `IsSingular.isSuccLimit_of_aleph` / 定理 `IsSingular.isSuccLimit_of_aleph`
-
-English:
-theorem IsSingular.isSuccLimit_of_aleph
-  given: {o : Ordinal} (hc : IsSingular (ℵ_ o))
-  statement: IsSuccLimit o
-  proof: (isSingular_aleph_iff.1 hc).1
-
-中文:
-定理 是奇异.isSuccLimit_of_aleph
-  条件: {o : 序数} (hc : 是奇异 (ℵ_ o))
-  结论: 是SuccLimit o
-  证明: (isSingular_aleph_iff.1 hc).1
-
-Depends on / 依赖: isSingular_aleph_iff
+/-
+**Cardinal.IsSingular.isSuccLimit_of_aleph** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.I
+sSingular`。
+形式化陈述：∀ {o : Ordinal.{u_1}}, (Cardinal.aleph o).IsSingular → Order.IsSuccLimit o
+参数：Cardinal.aleph o。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.isSingular_aleph_iff`：isSingular_aleph_iff {o : Ordinal} : (ℵ_ 
+o).IsSingular ↔ IsSuccLimit o ∧ o.cof < ℵ_ o
 -/
 theorem IsSingular.isSuccLimit_of_aleph {o : Ordinal} (hc : IsSingular (ℵ_ o)) : IsSuccLimit o :=
   (isSingular_aleph_iff.1 hc).1
-
-/--
-theorem `isSingular_aleph_omega0` / 定理 `isSingular_aleph_omega0`
-
-English:
-theorem isSingular_aleph_omega0
-  statement: (ℵ_ ω).IsSingular
-  proof: by simp [isSingular_aleph_iff]
-
-中文:
-定理 isSingular_aleph_omega0
-  结论: (ℵ_ ω).是奇异
-  证明: by simp [isSingular_aleph_iff]
-
-Depends on / 依赖: isSingular_aleph_iff
+/-
+**Cardinal.isSingular_aleph_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isSingular_aleph_omega0 : (ℵ_ ω).IsSingular
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ordinal.cof_omega0`：cof_omega0 : cof ω = ℵ₀
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem isSingular_aleph_omega0 : (ℵ_ ω).IsSingular := by simp [isSingular_aleph_iff]
-
-/--
-theorem `IsSingular.aleph_omega0_le` / 定理 `IsSingular.aleph_omega0_le`
-
-English:
-theorem IsSingular.aleph_omega0_le
-  given: (hc : IsSingular c)
-  statement: ℵ_ ω <= c
-  proof: by
-  obtain ⟨o, rfl⟩ := mem_range_aleph_iff.2 hc.aleph0_le
-  rw [isSingular_aleph_iff] at hc
-  rw [aleph_le_aleph]
-  exact omega0_le_of_isSuccLimit hc.1
-
-中文:
-定理 是奇异.aleph_omega0_le
-  条件: (hc : 是奇异 c)
-  结论: ℵ_ ω <= c
-  证明: by
-  obtain ⟨o, rfl⟩ := mem_range_aleph_iff.2 hc.aleph0_le
-  rw [isSingular_aleph_iff] at hc
-  rw [aleph_le_aleph]
-  exact omega0_le_of_isSuccLimit hc.1
-
-Depends on / 依赖: aleph0_le, aleph_le_aleph, hc.aleph0_le, isSingular_aleph_iff, mem_range_aleph_iff, omega0_le_of_isSuccLimit
+/-
+**Cardinal.IsSingular.aleph_omega0_le** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsSing
+ular`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsSingular → Cardinal.aleph Ordinal.omega0 ≤ c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.mem_range_aleph_iff`：mem_range_aleph_iff {c : Cardinal} : c in 
+range aleph ↔ ℵ₀ <= c
+· 使用定理 `Cardinal.IsSingular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsSingular → Ca
+rdinal.aleph0 ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.aleph_le_aleph`：aleph_le_aleph {o₁ o₂ : Ordinal} : ℵ_ o₁ <= ℵ_ 
+o₂ ↔ o₁ <= o₂
+· 使用定理 `Ordinal.omega0_le_of_isSuccLimit`：omega0_le_of_isSuccLimit {o} (h : IsSu
+ccLimit o) : ω <= o
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Cardinal.isSingular_aleph_iff`：isSingular_aleph_iff {o : Ordinal} : (ℵ_ 
+o).IsSingular ↔ IsSuccLimit o ∧ o.cof < ℵ_ o
 -/
-theorem IsSingular.aleph_omega0_le (hc : IsSingular c) : ℵ_ ω <= c := by
+theorem IsSingular.aleph_omega0_le (hc : IsSingular c) : ℵ_ ω ≤ c := by
   obtain ⟨o, rfl⟩ := mem_range_aleph_iff.2 hc.aleph0_le
   rw [isSingular_aleph_iff] at hc
   rw [aleph_le_aleph]
@@ -1648,548 +1334,430 @@ theorem IsSingular.aleph_omega0_le (hc : IsSingular c) : ℵ_ ω <= c := by
 
 /-! ### Inaccessible cardinals -/
 
-/--
-Definition of `IsInaccessible` / `IsInaccessible` 的定义
+/-- A cardinal is inaccessible if it is an uncountable regular strong limit cardinal. -/
+/-
+**Cardinal.IsInaccessible** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cardinal`。
+形式化陈述：Cardinal.{u_1} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsInaccessible
-  parameters: (c : Cardinal)
-  axioms and operations (3):
-    - aleph0_lt : ℵ₀ < c
-    - le_cof_ord : c <= c.ord.cof
-    - isStrongPrelimit : IsStrongPrelimit c
-
-中文:
-结构 是Inaccessible
-  参数: (c : 基数)
-  公理与运算 (3 个):
-    - aleph0_lt : ℵ₀ < c
-    - le_cof_ord : c <= c.ord.cof
-    - isStrongPrelimit : IsStrongPrelimit c
+--- 原说明 ---
+A cardinal is inaccessible if it is an uncountable regular strong limit cardinal
+.
 -/
 structure IsInaccessible (c : Cardinal) : Prop where
   /-- An inaccessible cardinal is uncountable. -/
   aleph0_lt : ℵ₀ < c
   /-- An inaccessible cardinal is equal to its own cofinality, see `IsInaccessible.isRegular`. -/
-  le_cof_ord : c <= c.ord.cof
+  le_cof_ord : c ≤ c.ord.cof
   /-- An inaccessible cardinal is a strong limit, see `IsInaccessible.isStrongLimit`. -/
   protected isStrongPrelimit : IsStrongPrelimit c
-
-/--
-theorem `IsInaccessible.nat_lt` / 定理 `IsInaccessible.nat_lt`
-
-English:
-theorem IsInaccessible.nat_lt
-  given: (h : IsInaccessible c) (n : Nat)
-  statement: n < c
-  proof: natCast_lt_aleph0.trans h.1
-
-中文:
-定理 是Inaccessible.nat_lt
-  条件: (h : 是Inaccessible c) (n : 自然数)
-  结论: n < c
-  证明: natCast_lt_aleph0.trans h.1
-
-Depends on / 依赖: natCast_lt_aleph0, natCast_lt_aleph0.trans
+/-
+**Cardinal.IsInaccessible.nat_lt** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInaccessi
+ble`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → ∀ (n : ℕ), ↑n < c
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
 -/
-theorem IsInaccessible.nat_lt (h : IsInaccessible c) (n : Nat) : n < c :=
+theorem IsInaccessible.nat_lt (h : IsInaccessible c) (n : ℕ) : n < c :=
   natCast_lt_aleph0.trans h.1
-
-/--
-theorem `IsInaccessible.pos` / 定理 `IsInaccessible.pos`
-
-English:
-theorem IsInaccessible.pos
-  given: (h : IsInaccessible c)
-  statement: 0 < c
-  proof: aleph0_pos.trans h.1
-
-中文:
-定理 是Inaccessible.pos
-  条件: (h : 是Inaccessible c)
-  结论: 0 < c
-  证明: aleph0_pos.trans h.1
-
-Depends on / 依赖: aleph0_pos, aleph0_pos.trans
+/-
+**Cardinal.IsInaccessible.pos** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInaccessible
+`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → 0 < c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Cardinal.aleph0_pos`：aleph0_pos : 0 < ℵ₀
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
 -/
 theorem IsInaccessible.pos (h : IsInaccessible c) : 0 < c :=
   aleph0_pos.trans h.1
-
-/--
-theorem `IsInaccessible.ne_zero` / 定理 `IsInaccessible.ne_zero`
-
-English:
-theorem IsInaccessible.ne_zero
-  given: (h : IsInaccessible c)
-  statement: c != 0
-  proof: h.pos.ne'
-
-中文:
-定理 是Inaccessible.ne_zero
-  条件: (h : 是Inaccessible c)
-  结论: c != 0
-  证明: h.pos.ne'
-
-Depends on / 依赖: h.pos.ne
+/-
+**Cardinal.IsInaccessible.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInaccess
+ible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → c ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Cardinal.IsInaccessible.pos`：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → 
+0 < c
 -/
-theorem IsInaccessible.ne_zero (h : IsInaccessible c) : c != 0 :=
+theorem IsInaccessible.ne_zero (h : IsInaccessible c) : c ≠ 0 :=
   h.pos.ne'
-
-/--
-theorem `IsInaccessible.isRegular` / 定理 `IsInaccessible.isRegular`
-
-English:
-theorem IsInaccessible.isRegular
-  given: (h : IsInaccessible c)
-  statement: IsRegular c
-  proof: ⟨h.aleph0_lt.le, h.le_cof_ord⟩
-
-中文:
-定理 是Inaccessible.isRegular
-  条件: (h : 是Inaccessible c)
-  结论: 是正则 c
-  证明: ⟨h.aleph0_lt.le, h.le_cof_ord⟩
-
-Depends on / 依赖: aleph0_lt, h.aleph0_lt.le, h.le_cof_ord, le_cof_ord
+/-
+**Cardinal.IsInaccessible.isRegular** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInacce
+ssible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → c.IsRegular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
+· 使用定理 `Cardinal.IsInaccessible.le_cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsInaccess
+ible → c ≤ c.ord.cof
 -/
 theorem IsInaccessible.isRegular (h : IsInaccessible c) : IsRegular c :=
   ⟨h.aleph0_lt.le, h.le_cof_ord⟩
-
-/--
-theorem `IsInaccessible.isStrongLimit` / 定理 `IsInaccessible.isStrongLimit`
-
-English:
-theorem IsInaccessible.isStrongLimit
-  given: {c : Cardinal} (h : IsInaccessible c)
-  statement: IsStrongLimit c
-  proof: ⟨h.ne_zero, h.isStrongPrelimit⟩
-
-中文:
-定理 是Inaccessible.isStrongLimit
-  条件: {c : 基数} (h : 是Inaccessible c)
-  结论: 是StrongLimit c
-  证明: ⟨h.ne_zero, h.isStrongPrelimit⟩
-
-Depends on / 依赖: h.isStrongPrelimit, h.ne_zero, isStrongPrelimit, ne_zero
+/-
+**Cardinal.IsInaccessible.isStrongLimit** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsIn
+accessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → c.IsStrongLimit
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsInaccessible.ne_zero`：∀ {c : Cardinal.{u_1}}, c.IsInaccessibl
+e → c ≠ 0
+· 使用定理 `Cardinal.IsInaccessible.isStrongPrelimit`：∀ {c : Cardinal.{u_1}}, c.IsIn
+accessible → c.IsStrongPrelimit
 -/
 theorem IsInaccessible.isStrongLimit {c : Cardinal} (h : IsInaccessible c) : IsStrongLimit c :=
   ⟨h.ne_zero, h.isStrongPrelimit⟩
-
-/--
-theorem `IsInaccessible.isSuccLimit` / 定理 `IsInaccessible.isSuccLimit`
-
-English:
-theorem IsInaccessible.isSuccLimit
-  given: {c : Cardinal} (h : IsInaccessible c)
-  statement: IsSuccLimit c
-  proof: h.isStrongLimit.isSuccLimit
-
-中文:
-定理 是Inaccessible.isSuccLimit
-  条件: {c : 基数} (h : 是Inaccessible c)
-  结论: 是SuccLimit c
-  证明: h.isStrongLimit.isSuccLimit
-
-Depends on / 依赖: h.isStrongLimit.isSuccLimit, isStrongLimit, isSuccLimit
+/-
+**Cardinal.IsInaccessible.isSuccLimit** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInac
+cessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Order.IsSuccLimit c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsStrongLimit.isSuccLimit`：∀ {c : Cardinal.{u_1}}, c.IsStrongLi
+mit → Order.IsSuccLimit c
+· 使用定理 `Cardinal.IsInaccessible.isStrongLimit`：∀ {c : Cardinal.{u_1}}, c.IsInacc
+essible → c.IsStrongLimit
 -/
 theorem IsInaccessible.isSuccLimit {c : Cardinal} (h : IsInaccessible c) : IsSuccLimit c :=
   h.isStrongLimit.isSuccLimit
-
-/--
-theorem `isInaccessible_def` / 定理 `isInaccessible_def`
-
-English:
-theorem isInaccessible_def
-  statement: IsInaccessible c ↔ ℵ₀ < c ∧ IsRegular c ∧ IsStrongLimit c where
-  proof: ⟨h.aleph0_lt, h.isRegular, h.isStrongLimit⟩
-  mpr := fun ⟨h₁, h₂, h₃⟩ => ⟨h₁, h₂.2, h₃.isStrongPrelimit⟩
-
-中文:
-定理 isInaccessible_def
-  结论: 是Inaccessible c ↔ ℵ₀ < c ∧ 是正则 c ∧ 是StrongLimit c where
-  证明: ⟨h.aleph0_lt, h.isRegular, h.isStrongLimit⟩
-  mpr := fun ⟨h₁, h₂, h₃⟩ => ⟨h₁, h₂.2, h₃.isStrongPrelimit⟩
-
-Depends on / 依赖: aleph0_lt, h.aleph0_lt, h.isRegular, h.isStrongLimit, isRegular, isStrongLimit
+/-
+**Cardinal.isInaccessible_def** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：isInaccessible_def : IsInaccessible c ↔ ℵ₀ < c ∧ IsRegular c ∧ IsStrongLim
+it c where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
+· 使用定理 `Cardinal.IsInaccessible.isRegular`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → c.IsRegular
+· 使用定理 `Cardinal.IsInaccessible.isStrongLimit`：∀ {c : Cardinal.{u_1}}, c.IsInacc
+essible → c.IsStrongLimit
+· 使用定理 `Cardinal.IsRegular.le_cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c ≤
+ c.ord.cof
+· 使用定理 `Cardinal.IsStrongLimit.isStrongPrelimit`：∀ {c : Cardinal.{u_1}}, c.IsStr
+ongLimit → c.IsStrongPrelimit
 -/
 theorem isInaccessible_def : IsInaccessible c ↔ ℵ₀ < c ∧ IsRegular c ∧ IsStrongLimit c where
   mp h := ⟨h.aleph0_lt, h.isRegular, h.isStrongLimit⟩
-  mpr := fun ⟨h₁, h₂, h₃⟩ => ⟨h₁, h₂.2, h₃.isStrongPrelimit⟩
+  mpr := fun ⟨h₁, h₂, h₃⟩ ↦ ⟨h₁, h₂.2, h₃.isStrongPrelimit⟩
 
-/--
-theorem `IsInaccessible.univ` / 定理 `IsInaccessible.univ`
+/-- Lean's foundations prove the existence of `v` inaccessibles in universe `v`. -/
+/-
+**Cardinal.IsInaccessible.univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInaccessibl
+e`。
+形式化陈述：Cardinal.univ.{u, v}.IsInaccessible
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.aleph0_lt_univ`：aleph0_lt_univ : ℵ₀ < univ.{u, v}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_univ`：ord_univ : ord univ.{u, v} = Ordinal.univ.{u, v}
+· 使用定理 `Ordinal.cof_univ`：cof_univ : cof univ.{u, v} = Cardinal.univ.{u, v}
+· 使用定理 `Cardinal.IsStrongLimit.isStrongPrelimit`：∀ {c : Cardinal.{u_1}}, c.IsStr
+ongLimit → c.IsStrongPrelimit
+· 使用定理 `Cardinal.IsStrongLimit.univ`：Cardinal.univ.{u, v}.IsStrongLimit
 
-English:
-theorem IsInaccessible.univ
-  statement: IsInaccessible univ.{u, v}
-  proof: ⟨aleph0_lt_univ, by simp, IsStrongLimit.univ.isStrongPrelimit⟩
-
-中文:
-定理 是Inaccessible.univ
-  结论: 是Inaccessible univ.{u, v}
-  证明: ⟨aleph0_lt_univ, by simp, IsStrongLimit.univ.isStrongPrelimit⟩
-
-Depends on / 依赖: IsStrongLimit, IsStrongLimit.univ.isStrongPrelimit, aleph0_lt_univ, isStrongPrelimit
+--- 原说明 ---
+Lean's foundations prove the existence of `v` inaccessibles in universe `v`.
 -/
 theorem IsInaccessible.univ : IsInaccessible univ.{u, v} :=
   ⟨aleph0_lt_univ, by simp, IsStrongLimit.univ.isStrongPrelimit⟩
-
-/--
-theorem `IsInaccessible.preBeth_ord` / 定理 `IsInaccessible.preBeth_ord`
-
-English:
-theorem IsInaccessible.preBeth_ord
-  given: (hc : IsInaccessible c)
-  statement: preBeth c.ord = c
-  proof: by
-  apply (preBeth_strictMono.comp ord_strictMono).le_apply.antisymm'
-  apply (isNormal_preBeth.le_iff_forall_le (isSuccLimit_ord hc.aleph0_lt.le)).2
-  refine fun a ha => le_of_lt ?_
-  induction a using WellFoundedLT.induction with | ind a IH
-  rw [preBeth]
-  apply lift_iSup_lt_of_lt_cof_ord _ _
-  · rwa [mk_Iio_ordinal, lift_lift, hc.isRegular.lift.cof_ord, lift_lt, ← lt_ord]
-  · rintro ⟨b, hb⟩
-exact hc.isStrongPrelimit IH _ hb (hb.trans ha)
-
-中文:
-定理 是Inaccessible.preBeth_ord
-  条件: (hc : 是Inaccessible c)
-  结论: preBeth c.ord = c
-  证明: by
-  apply (preBeth_strictMono.comp ord_strictMono).le_apply.antisymm'
-  apply (isNormal_preBeth.le_iff_forall_le (isSuccLimit_ord hc.aleph0_lt.le)).2
-  refine fun a ha => le_of_lt ?_
-  induction a using WellFoundedLT.induction with | ind a IH
-  rw [preBeth]
-  apply lift_iSup_lt_of_lt_cof_ord _ _
-  · rwa [mk_Iio_ordinal, lift_lift, hc.isRegular.lift.cof_ord, lift_lt, ← lt_ord]
-  · rintro ⟨b, hb⟩
-exact hc.isStrongPrelimit IH _ hb (hb.trans ha)
-
-Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, aleph0_lt, antisymm, cof_ord, hb.trans, hc.aleph0_lt.le, hc.isRegular.lift.cof_ord, hc.isStrongPrelimit, isNormal_preBeth, isNormal_preBeth.le_iff_forall_le, isRegular, isStrongPrelimit, isSuccLimit_ord, le_apply, le_apply.antisymm, le_iff_forall_le, le_of_lt, lift_iSup_lt_of_lt_cof_ord, lift_lift
+/-
+**Cardinal.IsInaccessible.preBeth_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInac
+cessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Cardinal.preBeth c.ord = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Cardinal.instWellFoundedLT`：WellFoundedLT Cardinal.{u}
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Cardinal.preBeth_strictMono`：preBeth_strictMono : StrictMono preBeth
+· 使用定理 `Cardinal.ord_strictMono`：ord_strictMono : StrictMono ord
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.IsNormal.le_iff_forall_le`：le_iff_forall_le (hf : IsNormal f) (ha 
+: IsSuccLimit a) {b : β} : f a <= b ↔ forall a' < a, f a' <= b
+· 使用定理 `Cardinal.isNormal_preBeth`：isNormal_preBeth : Order.IsNormal preBeth
+· 使用定理 `Cardinal.isSuccLimit_ord`：isSuccLimit_ord {c} (hc : ℵ₀ <= c) : IsSuccLim
+it (ord c)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.preBeth.eq_1`：∀ (o : Ordinal.{u}), Cardinal.preBeth o = ⨆ a, 2 
+^ Cardinal.preBeth ↑a
+· 使用定理 `Cardinal.lift_iSup_lt_of_lt_cof_ord`：∀ {β : Type v} {f : β → Cardinal.{u
+}} {a : Cardinal.{u}},   Cardinal.lift.{u, v} (Cardinal.mk β) < (Cardinal.lift.{
+v, u} a).ord.cof → (∀ (i …
+· 使用定理 `Cardinal.mk_Iio_ordinal`：∀ (o : Ordinal.{u}), Cardinal.mk ↑(Set.Iio o) =
+ Cardinal.lift.{u + 1, u} o.card
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用定理 `Cardinal.IsRegular.lift`：∀ {κ : Cardinal.{v}}, κ.IsRegular → (Cardinal.l
+ift.{u, v} κ).IsRegular
+· 使用定理 `Cardinal.IsInaccessible.isRegular`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → c.IsRegular
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lt_ord`：lt_ord {c o} : o < ord c ↔ o.card < c
+· 使用定理 `Cardinal.IsInaccessible.isStrongPrelimit`：∀ {c : Cardinal.{u_1}}, c.IsIn
+accessible → c.IsStrongPrelimit
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
 -/
 theorem IsInaccessible.preBeth_ord (hc : IsInaccessible c) : preBeth c.ord = c := by
   apply (preBeth_strictMono.comp ord_strictMono).le_apply.antisymm'
   apply (isNormal_preBeth.le_iff_forall_le (isSuccLimit_ord hc.aleph0_lt.le)).2
-  refine fun a ha => le_of_lt ?_
+  refine fun a ha ↦ le_of_lt ?_
   induction a using WellFoundedLT.induction with | ind a IH
   rw [preBeth]
   apply lift_iSup_lt_of_lt_cof_ord _ _
   · rwa [mk_Iio_ordinal, lift_lift, hc.isRegular.lift.cof_ord, lift_lt, ← lt_ord]
   · rintro ⟨b, hb⟩
-exact hc.isStrongPrelimit IH _ hb (hb.trans ha)
-
-/--
-theorem `IsInaccessible.beth_ord` / 定理 `IsInaccessible.beth_ord`
-
-English:
-theorem IsInaccessible.beth_ord
-  given: (hc : IsInaccessible c)
-  statement: ℶ_ c.ord = c
-  proof: by
-  rw [← preBeth_of_omega0_sq_le (le_of_lt _)]; rw [hc.preBeth_ord]
-  rw [lt_ord]; rw [pow_two]; rw [card_mul]; rw [card_omega0]; rw [aleph0_mul_aleph0]
-  exact hc.aleph0_lt
-
-中文:
-定理 是Inaccessible.beth_ord
-  条件: (hc : 是Inaccessible c)
-  结论: ℶ_ c.ord = c
-  证明: by
-  rw [← preBeth_of_omega0_sq_le (le_of_lt _)]; rw [hc.preBeth_ord]
-  rw [lt_ord]; rw [pow_two]; rw [card_mul]; rw [card_omega0]; rw [aleph0_mul_aleph0]
-  exact hc.aleph0_lt
-
-Depends on / 依赖: aleph0_lt, aleph0_mul_aleph0, card_mul, card_omega0, hc.aleph0_lt, hc.preBeth_ord, le_of_lt, lt_ord, pow_two, preBeth_of_omega0_sq_le, preBeth_ord
+    exact hc.isStrongPrelimit <| IH _ hb (hb.trans ha)
+/-
+**Cardinal.IsInaccessible.beth_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInacces
+sible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Cardinal.beth c.ord = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.preBeth_of_omega0_sq_le`：preBeth_of_omega0_sq_le {o : Ordinal} 
+(ho : ω ^ 2 <= o) : preBeth o = ℶ_ o
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.lt_ord`：lt_ord {c o} : o < ord c ↔ o.card < c
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Ordinal.card_mul`：card_mul (a b) : card (a * b) = card a * card b
+· 使用定理 `Ordinal.card_omega0`：card_omega0 : card ω = ℵ₀
+· 使用定理 `Cardinal.aleph0_mul_aleph0`：aleph0_mul_aleph0 : ℵ₀ * ℵ₀ = ℵ₀
+· 使用定理 `Cardinal.IsInaccessible.aleph0_lt`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph0 < c
+· 使用定理 `Cardinal.IsInaccessible.preBeth_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacces
+sible → Cardinal.preBeth c.ord = c
 -/
 theorem IsInaccessible.beth_ord (hc : IsInaccessible c) : ℶ_ c.ord = c := by
-  rw [← preBeth_of_omega0_sq_le (le_of_lt _)]; rw [hc.preBeth_ord]
-  rw [lt_ord]; rw [pow_two]; rw [card_mul]; rw [card_omega0]; rw [aleph0_mul_aleph0]
+  rw [← preBeth_of_omega0_sq_le (le_of_lt _), hc.preBeth_ord]
+  rw [lt_ord, pow_two, card_mul, card_omega0, aleph0_mul_aleph0]
   exact hc.aleph0_lt
-
-/--
-theorem `IsInaccessible.preAleph_ord` / 定理 `IsInaccessible.preAleph_ord`
-
-English:
-theorem IsInaccessible.preAleph_ord
-  given: (hc : IsInaccessible c)
-  statement: preAleph c.ord = c
-  proof: ((preAleph_le_preBeth _).trans hc.preBeth_ord.le).antisymm
-    (preAleph.strictMono.comp ord_strictMono).le_apply
-
-中文:
-定理 是Inaccessible.preAleph_ord
-  条件: (hc : 是Inaccessible c)
-  结论: preAleph c.ord = c
-  证明: ((preAleph_le_preBeth _).trans hc.preBeth_ord.le).antisymm
-    (preAleph.strictMono.comp ord_strictMono).le_apply
-
-Depends on / 依赖: UniformSpace, antisymm, hc.preBeth_ord.le, le_apply, ord_strictMono, preAleph, preAleph.strictMono.comp, preAleph_le_preBeth, preBeth_ord, strictMono
+/-
+**Cardinal.IsInaccessible.preAleph_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsIna
+ccessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Cardinal.preAleph c.ord = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Cardinal.preAleph_le_preBeth`：preAleph_le_preBeth (o : Ordinal) : preAle
+ph o <= preBeth o
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Cardinal.IsInaccessible.preBeth_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacces
+sible → Cardinal.preBeth c.ord = c
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Cardinal.instWellFoundedLT`：WellFoundedLT Cardinal.{u}
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
+· 使用定理 `Cardinal.ord_strictMono`：ord_strictMono : StrictMono ord
 -/
 theorem IsInaccessible.preAleph_ord (hc : IsInaccessible c) : preAleph c.ord = c :=
   ((preAleph_le_preBeth _).trans hc.preBeth_ord.le).antisymm
     (preAleph.strictMono.comp ord_strictMono).le_apply
-
-/--
-theorem `IsInaccessible.preAleph_symm_eq_ord` / 定理 `IsInaccessible.preAleph_symm_eq_ord`
-
-English:
-theorem IsInaccessible.preAleph_symm_eq_ord
-  given: (hc : IsInaccessible c)
-  statement: preAleph.symm c = c.ord
-  proof: by
-  rw [OrderIso.symm_apply_eq]; rw [hc.preAleph_ord]
-
-中文:
-定理 是Inaccessible.preAleph_symm_eq_ord
-  条件: (hc : 是Inaccessible c)
-  结论: preAleph.symm c = c.ord
-  证明: by
-  rw [OrderIso.symm_apply_eq]; rw [hc.preAleph_ord]
-
-Depends on / 依赖: OrderIso, OrderIso.symm_apply_eq, UniformSpace, hc.preAleph_ord, preAleph_ord, symm_apply_eq
+/-
+**Cardinal.IsInaccessible.preAleph_symm_eq_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardin
+al.IsInaccessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Cardinal.preAleph.symm c = c.or
+d
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.symm_apply_eq`：symm_apply_eq (e : α ≃o β) {x : α} {y : β} : e.s
+ymm y = x ↔ y = e x
+· 使用定理 `Cardinal.IsInaccessible.preAleph_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacce
+ssible → Cardinal.preAleph c.ord = c
 -/
 theorem IsInaccessible.preAleph_symm_eq_ord (hc : IsInaccessible c) : preAleph.symm c = c.ord := by
-  rw [OrderIso.symm_apply_eq]; rw [hc.preAleph_ord]
-
-/--
-theorem `IsInaccessible.aleph_ord` / 定理 `IsInaccessible.aleph_ord`
-
-English:
-theorem IsInaccessible.aleph_ord
-  given: (hc : IsInaccessible c)
-  statement: ℵ_ c.ord = c
-  proof: ((aleph_le_beth _).trans hc.beth_ord.le).antisymm (aleph.strictMono.comp ord_strictMono).le_apply
-
-中文:
-定理 是Inaccessible.aleph_ord
-  条件: (hc : 是Inaccessible c)
-  结论: ℵ_ c.ord = c
-  证明: ((aleph_le_beth _).trans hc.beth_ord.le).antisymm (aleph.strictMono.comp ord_strictMono).le_apply
-
-Depends on / 依赖: aleph.strictMono.comp, aleph_le_beth, antisymm, beth_ord, hc.beth_ord.le, le_apply, ord_strictMono, strictMono
+  rw [OrderIso.symm_apply_eq, hc.preAleph_ord]
+/-
+**Cardinal.IsInaccessible.aleph_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInacce
+ssible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Cardinal.aleph c.ord = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Cardinal.aleph_le_beth`：aleph_le_beth (o : Ordinal) : ℵ_ o <= ℶ_ o
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Cardinal.IsInaccessible.beth_ord`：∀ {c : Cardinal.{u_1}}, c.IsInaccessib
+le → Cardinal.beth c.ord = c
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Cardinal.instWellFoundedLT`：WellFoundedLT Cardinal.{u}
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `OrderEmbedding.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preor
+der α] [inst_1 : Preorder β] (f : α ↪o β), StrictMono ⇑f
+· 使用定理 `Cardinal.ord_strictMono`：ord_strictMono : StrictMono ord
 -/
 theorem IsInaccessible.aleph_ord (hc : IsInaccessible c) : ℵ_ c.ord = c :=
   ((aleph_le_beth _).trans hc.beth_ord.le).antisymm (aleph.strictMono.comp ord_strictMono).le_apply
-
-/--
-theorem `IsInaccessible.preOmega_ord` / 定理 `IsInaccessible.preOmega_ord`
-
-English:
-theorem IsInaccessible.preOmega_ord
-  given: (hc : IsInaccessible c)
-  statement: preOmega c.ord = c.ord
-  proof: by
-  rw [← ord_preAleph]; rw [hc.preAleph_ord]
-
-中文:
-定理 是Inaccessible.preOmega_ord
-  条件: (hc : 是Inaccessible c)
-  结论: preOmega c.ord = c.ord
-  证明: by
-  rw [← ord_preAleph]; rw [hc.preAleph_ord]
-
-Depends on / 依赖: hc.preAleph_ord, ord_preAleph, preAleph_ord
+/-
+**Cardinal.IsInaccessible.preOmega_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsIna
+ccessible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Ordinal.preOmega c.ord = c.ord
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.ord_preAleph`：ord_preAleph (o : Ordinal) : (preAleph o).ord = p
+reOmega o
+· 使用定理 `Cardinal.IsInaccessible.preAleph_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacce
+ssible → Cardinal.preAleph c.ord = c
 -/
 theorem IsInaccessible.preOmega_ord (hc : IsInaccessible c) : preOmega c.ord = c.ord := by
-  rw [← ord_preAleph]; rw [hc.preAleph_ord]
-
-/--
-theorem `IsInaccessible.omega_ord` / 定理 `IsInaccessible.omega_ord`
-
-English:
-theorem IsInaccessible.omega_ord
-  given: (hc : IsInaccessible c)
-  statement: ω_ c.ord = c.ord
-  proof: by
-  rw [← ord_aleph]; rw [hc.aleph_ord]
-
-@[simp]
-
-中文:
-定理 是Inaccessible.omega_ord
-  条件: (hc : 是Inaccessible c)
-  结论: ω_ c.ord = c.ord
-  证明: by
-  rw [← ord_aleph]; rw [hc.aleph_ord]
-
-@[simp]
-
-Depends on / 依赖: Bornology, aleph_ord, hc.aleph_ord, ord_aleph
+  rw [← ord_preAleph, hc.preAleph_ord]
+/-
+**Cardinal.IsInaccessible.omega_ord** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal.IsInacce
+ssible`。
+形式化陈述：∀ {c : Cardinal.{u_1}}, c.IsInaccessible → Ordinal.omega c.ord = c.ord
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.ord_aleph`：ord_aleph (o : Ordinal) : (ℵ_ o).ord = ω_ o
+· 使用定理 `Cardinal.IsInaccessible.aleph_ord`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph c.ord = c
 -/
 theorem IsInaccessible.omega_ord (hc : IsInaccessible c) : ω_ c.ord = c.ord := by
-  rw [← ord_aleph]; rw [hc.aleph_ord]
+  rw [← ord_aleph, hc.aleph_ord]
 
 @[simp]
-/--
-theorem `preBeth_univ` / 定理 `preBeth_univ`
-
-English:
-theorem preBeth_univ
-  statement: preBeth Ordinal.univ.{u, v} = univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.preBeth_ord
-
-@[simp]
-
-中文:
-定理 preBeth_univ
-  结论: preBeth 序数.univ.{u, v} = univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.preBeth_ord
-
-@[simp]
-
-Depends on / 依赖: Bornology, Bornology.induced, IsInaccessible, IsInaccessible.univ.preBeth_ord, induced, preBeth_ord
+/-
+**Cardinal.preBeth_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：preBeth_univ : preBeth Ordinal.univ.{u, v} = univ.{u, v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_univ`：ord_univ : ord univ.{u, v} = Ordinal.univ.{u, v}
+· 使用定理 `Cardinal.IsInaccessible.preBeth_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacces
+sible → Cardinal.preBeth c.ord = c
+· 使用定理 `Cardinal.IsInaccessible.univ`：Cardinal.univ.{u, v}.IsInaccessible
 -/
 theorem preBeth_univ : preBeth Ordinal.univ.{u, v} = univ.{u, v} := by
   simpa using IsInaccessible.univ.preBeth_ord
 
 @[simp]
-/--
-theorem `beth_univ` / 定理 `beth_univ`
-
-English:
-theorem beth_univ
-  statement: ℶ_ Ordinal.univ.{u, v} = univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.beth_ord
-
-@[simp]
-
-中文:
-定理 beth_univ
-  结论: ℶ_ 序数.univ.{u, v} = univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.beth_ord
-
-@[simp]
-
-Depends on / 依赖: IsInaccessible, IsInaccessible.univ.beth_ord, beth_ord
+/-
+**Cardinal.beth_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：beth_univ : ℶ_ Ordinal.univ.{u, v} = univ.{u, v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_univ`：ord_univ : ord univ.{u, v} = Ordinal.univ.{u, v}
+· 使用定理 `Cardinal.IsInaccessible.beth_ord`：∀ {c : Cardinal.{u_1}}, c.IsInaccessib
+le → Cardinal.beth c.ord = c
+· 使用定理 `Cardinal.IsInaccessible.univ`：Cardinal.univ.{u, v}.IsInaccessible
 -/
 theorem beth_univ : ℶ_ Ordinal.univ.{u, v} = univ.{u, v} := by
   simpa using IsInaccessible.univ.beth_ord
 
 @[simp]
-/--
-theorem `preAleph_univ` / 定理 `preAleph_univ`
-
-English:
-theorem preAleph_univ
-  statement: preAleph Ordinal.univ.{u, v} = univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.preAleph_ord
-
-@[simp]
-
-中文:
-定理 preAleph_univ
-  结论: preAleph 序数.univ.{u, v} = univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.preAleph_ord
-
-@[simp]
-
-Depends on / 依赖: IsInaccessible, IsInaccessible.univ.preAleph_ord, preAleph_ord
+/-
+**Cardinal.preAleph_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：preAleph_univ : preAleph Ordinal.univ.{u, v} = univ.{u, v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_univ`：ord_univ : ord univ.{u, v} = Ordinal.univ.{u, v}
+· 使用定理 `Cardinal.IsInaccessible.preAleph_ord`：∀ {c : Cardinal.{u_1}}, c.IsInacce
+ssible → Cardinal.preAleph c.ord = c
+· 使用定理 `Cardinal.IsInaccessible.univ`：Cardinal.univ.{u, v}.IsInaccessible
 -/
 theorem preAleph_univ : preAleph Ordinal.univ.{u, v} = univ.{u, v} := by
   simpa using IsInaccessible.univ.preAleph_ord
 
 @[simp]
-/--
-theorem `preAleph_symm_univ` / 定理 `preAleph_symm_univ`
-
-English:
-theorem preAleph_symm_univ
-  statement: preAleph.symm univ.{u, v} = Ordinal.univ.{u, v}
-  proof: by
-  simp [OrderIso.symm_apply_eq]
-
-@[simp]
-
-中文:
-定理 preAleph_symm_univ
-  结论: preAleph.symm univ.{u, v} = 序数.univ.{u, v}
-  证明: by
-  simp [OrderIso.symm_apply_eq]
-
-@[simp]
-
-Depends on / 依赖: OrderIso, OrderIso.symm_apply_eq, symm_apply_eq
+/-
+**Cardinal.preAleph_symm_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：preAleph_symm_univ : preAleph.symm univ.{u, v} = Ordinal.univ.{u, v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.preAleph_univ`：preAleph_univ : preAleph Ordinal.univ.{u, v} = u
+niv.{u, v}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preAleph_symm_univ : preAleph.symm univ.{u, v} = Ordinal.univ.{u, v} := by
   simp [OrderIso.symm_apply_eq]
 
 @[simp]
-/--
-theorem `aleph_univ` / 定理 `aleph_univ`
-
-English:
-theorem aleph_univ
-  statement: ℵ_ Ordinal.univ.{u, v} = univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.aleph_ord
-
-@[simp]
-
-中文:
-定理 aleph_univ
-  结论: ℵ_ 序数.univ.{u, v} = univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.aleph_ord
-
-@[simp]
-
-Depends on / 依赖: IsInaccessible, IsInaccessible.univ.aleph_ord, aleph_ord
+/-
+**Cardinal.aleph_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph_univ : ℵ_ Ordinal.univ.{u, v} = univ.{u, v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_univ`：ord_univ : ord univ.{u, v} = Ordinal.univ.{u, v}
+· 使用定理 `Cardinal.IsInaccessible.aleph_ord`：∀ {c : Cardinal.{u_1}}, c.IsInaccessi
+ble → Cardinal.aleph c.ord = c
+· 使用定理 `Cardinal.IsInaccessible.univ`：Cardinal.univ.{u, v}.IsInaccessible
 -/
 theorem aleph_univ : ℵ_ Ordinal.univ.{u, v} = univ.{u, v} := by
   simpa using IsInaccessible.univ.aleph_ord
 
 @[simp]
-/--
-theorem `_root_.Ordinal.preOmega_univ` / 定理 `_root_.Ordinal.preOmega_univ`
-
-English:
-theorem _root_.Ordinal.preOmega_univ
-  statement: preOmega Ordinal.univ.{u, v} = Ordinal.univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.preOmega_ord
-
-@[simp]
-
-中文:
-定理 _root_.序数.preOmega_univ
-  结论: preOmega 序数.univ.{u, v} = 序数.univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.preOmega_ord
-
-@[simp]
-
-Depends on / 依赖: IsInaccessible, IsInaccessible.univ.preOmega_ord, preOmega_ord
+/-
+**Cardinal._root_.Ordinal.preOmega_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Ordinal.preOmega_univ : preOmega Ordinal.univ.{u, v} = Ordinal.univ.{u, v} := by
   simpa using IsInaccessible.univ.preOmega_ord
 
 @[simp]
-/--
-theorem `_root_.Ordinal.omega_univ` / 定理 `_root_.Ordinal.omega_univ`
-
-English:
-theorem _root_.Ordinal.omega_univ
-  statement: ω_ Ordinal.univ.{u, v} = Ordinal.univ.{u, v}
-  proof: by
-  simpa using IsInaccessible.univ.omega_ord
-
-中文:
-定理 _root_.序数.omega_univ
-  结论: ω_ 序数.univ.{u, v} = 序数.univ.{u, v}
-  证明: by
-  simpa using IsInaccessible.univ.omega_ord
-
-Depends on / 依赖: IsInaccessible, IsInaccessible.univ.omega_ord, omega_ord
+/-
+**Cardinal._root_.Ordinal.omega_univ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Ordinal.omega_univ : ω_ Ordinal.univ.{u, v} = Ordinal.univ.{u, v} := by
   simpa using IsInaccessible.univ.omega_ord
 
 end Cardinal
+

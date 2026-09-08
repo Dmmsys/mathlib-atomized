@@ -42,82 +42,83 @@ namespace DirectSum
 section AddCommMonoid
 
 variable [DecidableEq ι] [AddCommMonoid M]
-variable [SetLike σ M] [AddSubmonoidClass σ M] (ℳ : ι -> σ)
+variable [SetLike σ M] [AddSubmonoidClass σ M] (ℳ : ι → σ)
 
-/--
-Definition of `Decomposition` / `Decomposition` 的定义
+/-- A decomposition is an equivalence between an additive monoid `M` and a direct sum of additive
+submonoids `ℳ i` of that `M`, such that the "recomposition" is canonical. This definition also
+works for additive groups and modules.
 
-English:
-class Decomposition
-  parameters: where
-  axioms and operations (3):
-    - decompose' : M -> ⨁ i, ℳ i
-    - left_inv : Function.LeftInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
-    - right_inv : Function.RightInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
+This is a version of `DirectSum.IsInternal` which comes with a constructive inverse to the
+canonical "recomposition" rather than just a proof that the "recomposition" is bijective.
 
-中文:
-类 分解
-  参数: where
-  公理与运算 (3 个):
-    - decompose' : M -> ⨁ i, ℳ i
-    - left_inv : 函数.左逆 (直和.coeAddMonoidHom ℳ) decompose'
-    - right_inv : 函数.右逆 (直和.coeAddMonoidHom ℳ) decompose'
+Often it is easier to construct a term of this type via `Decomposition.ofAddHom` or
+`Decomposition.ofLinearMap`. -/
+/-
+**DirectSum.Decomposition** 是 Mathlib 中的一个归纳类型，位于命名空间 `DirectSum`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {σ : Type u_4} →       [DecidableE
+q ι] →         [inst : AddCommMonoid M] → [inst_1 : SetLike σ M] → [AddSubmonoid
+Class σ M] → (ι → σ) → Type (max u_1 u_3)
+参数：ι → σ；max u_1 u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A decomposition is an equivalence between an additive monoid `M` and a direct su
+m of additive
+submonoids `ℳ i` of that `M`, such that the "recomposition" is canonical. This d
+efinition also
+works for additive groups and modules.
+
+This is a version of `DirectSum.IsInternal` which comes with a constructive inve
+rse to the
+canonical "recomposition" rather than just a proof that the "recomposition" is b
+ijective.
+
+Often it is easier to construct a term of this type via `Decomposition.ofAddHom`
+ or
+`Decomposition.ofLinearMap`.
 -/
 class Decomposition where
-  decompose' : M -> ⨁ i, ℳ i
+  decompose' : M → ⨁ i, ℳ i
   left_inv : Function.LeftInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
   right_inv : Function.RightInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `DirectSum.Decomposition` instances, while carrying data, are always equal. -/
+/-
+**DirectSum.** 是 Mathlib 中的一个实例，位于命名空间 `DirectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Subsingleton (Decomposition ℳ)
-  body: ⟨fun x y => by
-    obtain ⟨_, _, xr⟩ := x
-    obtain ⟨_, yl, _⟩ := y
-    congr
-    exact Function.LeftInverse.eq_rightInverse xr yl⟩
-
-中文:
-实例 :
-  签名: 子单例 (分解 ℳ)
-  定义体: ⟨fun x y => by
-    obtain ⟨_, _, xr⟩ := x
-    obtain ⟨_, yl, _⟩ := y
-    congr
-    exact Function.LeftInverse.eq_rightInverse xr yl⟩
-
-Depends on / 依赖: Function, Function.LeftInverse.eq_rightInverse, LeftInverse, eq_rightInverse
+--- 原说明 ---
+`DirectSum.Decomposition` instances, while carrying data, are always equal.
 -/
 instance : Subsingleton (Decomposition ℳ) :=
-  ⟨fun x y => by
+  ⟨fun x y ↦ by
     obtain ⟨_, _, xr⟩ := x
     obtain ⟨_, yl, _⟩ := y
     congr
     exact Function.LeftInverse.eq_rightInverse xr yl⟩
 
-/--
-Definition of `Decomposition.ofAddHom` / `Decomposition.ofAddHom` 的定义
+/-- A convenience method to construct a decomposition from an `AddMonoidHom`, such that the proofs
+of left and right inverse can be constructed via `ext`. -/
+/-
+**DirectSum.Decomposition.ofAddHom** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum.Decompos
+ition`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {σ : Type u_4} →       [inst : Dec
+idableEq ι] →         [inst_1 : AddCommMonoid M] →           [inst_2 : SetLike σ
+ M] →             [inst_3 : AddSubmonoidClass σ M] →               (ℳ : ι → σ) →
+                 (decompose : M →+ DirectSum ι fun i => ↥(ℳ i)) →               
+    (DirectSum.coeAddMonoidHom ℳ).comp decompose = AddMonoidHom.id M →          
+           decompose.comp (DirectSum.coeAddMonoidHom ℳ) = AddMonoidHom.id (Direc
+tSum ι fun i => ↥(ℳ i)) →                       DirectSum.Decomposition ℳ
+参数：ℳ : ι → σ；decompose : M →+ DirectSum ι fun i => ↥(ℳ i)；DirectSum.coeAddMonoid
+Hom ℳ；DirectSum.coeAddMonoidHom ℳ；DirectSum ι fun i => ↥(ℳ i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Decomposition.ofAddHom
-  signature: (decompose : M ->+ ⨁ i, ℳ i)
-  body: decompose
-  left_inv := DFunLike.congr_fun h_left_inv
-  right_inv := DFunLike.congr_fun h_right_inv
-
-中文:
-缩写 分解.ofAddHom
-  签名: (decompose : M ->+ ⨁ i, ℳ i)
-  定义体: decompose
-  left_inv := DFunLike.congr_fun h_left_inv
-  right_inv := DFunLike.congr_fun h_right_inv
-
-Depends on / 依赖: decompose
+--- 原说明 ---
+A convenience method to construct a decomposition from an `AddMonoidHom`, such t
+hat the proofs
+of left and right inverse can be constructed via `ext`.
 -/
-abbrev Decomposition.ofAddHom (decompose : M ->+ ⨁ i, ℳ i)
+abbrev Decomposition.ofAddHom (decompose : M →+ ⨁ i, ℳ i)
     (h_left_inv : (DirectSum.coeAddMonoidHom ℳ).comp decompose = .id _)
     (h_right_inv : decompose.comp (DirectSum.coeAddMonoidHom ℳ) = .id _) : Decomposition ℳ where
   decompose' := decompose
@@ -126,24 +127,20 @@ abbrev Decomposition.ofAddHom (decompose : M ->+ ⨁ i, ℳ i)
 
 /-- Noncomputably conjure a decomposition instance from a `DirectSum.IsInternal` proof. -/
 @[instance_reducible]
-/--
-Definition of `IsInternal.chooseDecomposition` / `IsInternal.chooseDecomposition` 的定义
+/-
+**DirectSum.IsInternal.chooseDecomposition** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum.
+IsInternal`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {σ : Type u_4} →       [inst : Dec
+idableEq ι] →         [inst_1 : AddCommMonoid M] →           [inst_2 : SetLike σ
+ M] →             [inst_3 : AddSubmonoidClass σ M] → (ℳ : ι → σ) → DirectSum.IsI
+nternal ℳ → DirectSum.Decomposition ℳ
+参数：ℳ : ι → σ。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition IsInternal.chooseDecomposition
-  signature: (h : IsInternal ℳ)
-  body: (Equiv.ofBijective _ h).symm
-  left_inv := (Equiv.ofBijective _ h).right_inv
-  right_inv := (Equiv.ofBijective _ h).left_inv
-
-中文:
-定义 Is整数ernal.chooseDecomposition
-  签名: (h : Is整数ernal ℳ)
-  定义体: (Equiv.ofBijective _ h).symm
-  left_inv := (Equiv.ofBijective _ h).right_inv
-  right_inv := (Equiv.ofBijective _ h).left_inv
-
-Depends on / 依赖: Equiv.ofBijective, ofBijective
+--- 原说明 ---
+Noncomputably conjure a decomposition instance from a `DirectSum.IsInternal` pro
+of.
 -/
 noncomputable def IsInternal.chooseDecomposition (h : IsInternal ℳ) :
     DirectSum.Decomposition ℳ where
@@ -152,47 +149,47 @@ noncomputable def IsInternal.chooseDecomposition (h : IsInternal ℳ) :
   right_inv := (Equiv.ofBijective _ h).left_inv
 
 variable [Decomposition ℳ]
-
-/--
-theorem `Decomposition.isInternal` / 定理 `Decomposition.isInternal`
-
-English:
-theorem Decomposition.isInternal
-  statement: DirectSum.IsInternal ℳ
-  proof: ⟨Decomposition.right_inv.injective, Decomposition.left_inv.surjective⟩
-
-中文:
-定理 分解.is整数ernal
-  结论: 直和.Is整数ernal ℳ
-  证明: ⟨Decomposition.right_inv.injective, Decomposition.left_inv.surjective⟩
+/-
+**DirectSum.Decomposition.isInternal** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum.Decomp
+osition`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [ins
+t_1 : AddCommMonoid M] [inst_2 : SetLike σ M]   [inst_3 : AddSubmonoidClass σ M]
+ (ℳ : ι → σ) [DirectSum.Decomposition ℳ], DirectSum.IsInternal ℳ
+参数：ℳ : ι → σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.RightInverse f g → Function.Injective f
+· 使用定理 `DirectSum.Decomposition.right_inv`：∀ {ι : Type u_1} {M : Type u_3} {σ : 
+Type u_4} {inst : DecidableEq ι} {inst_1 : AddCommMonoid M} {inst_2 : SetLike σ 
+M}   {inst_3 : AddSubmo…
+· 使用定理 `Function.LeftInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → Function.Surjective f
+· 使用定理 `DirectSum.Decomposition.left_inv`：∀ {ι : Type u_1} {M : Type u_3} {σ : T
+ype u_4} {inst : DecidableEq ι} {inst_1 : AddCommMonoid M} {inst_2 : SetLike σ M
+}   {inst_3 : AddSubmo…
 -/
 protected theorem Decomposition.isInternal : DirectSum.IsInternal ℳ :=
   ⟨Decomposition.right_inv.injective, Decomposition.left_inv.surjective⟩
 
-/--
-Definition of `decompose` / `decompose` 的定义
+/-- If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic as
+to a direct sum of components. This is the canonical spelling of the `decompose'` field. -/
+/-
+**DirectSum.decompose** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：decompose : M ≃ ⨁ i, ℳ i where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.Decomposition.left_inv`：∀ {ι : Type u_1} {M : Type u_3} {σ : T
+ype u_4} {inst : DecidableEq ι} {inst_1 : AddCommMonoid M} {inst_2 : SetLike σ M
+}   {inst_3 : AddSubmo…
+· 使用定理 `DirectSum.Decomposition.right_inv`：∀ {ι : Type u_1} {M : Type u_3} {σ : 
+Type u_4} {inst : DecidableEq ι} {inst_1 : AddCommMonoid M} {inst_2 : SetLike σ 
+M}   {inst_3 : AddSubmo…
 
-English:
-definition decompose
-  signature: : M ≃ ⨁ i, ℳ i where
-  body: Decomposition.decompose'
-  invFun := DirectSum.coeAddMonoidHom ℳ
-  left_inv := Decomposition.left_inv
-  right_inv := Decomposition.right_inv
-
-omit [AddSubmonoidClass σ M] in
-
-中文:
-定义 decompose
-  签名: : M ≃ ⨁ i, ℳ i where
-  定义体: Decomposition.decompose'
-  invFun := DirectSum.coeAddMonoidHom ℳ
-  left_inv := Decomposition.left_inv
-  right_inv := Decomposition.right_inv
-
-omit [AddSubmonoidClass σ M] in
-
-Depends on / 依赖: Decomposition, Decomposition.decompose, decompose
+--- 原说明 ---
+If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic a
+s
+to a direct sum of components. This is the canonical spelling of the `decompose'
+` field.
 -/
 def decompose : M ≃ ⨁ i, ℳ i where
   toFun := Decomposition.decompose'
@@ -201,233 +198,196 @@ def decompose : M ≃ ⨁ i, ℳ i where
   right_inv := Decomposition.right_inv
 
 omit [AddSubmonoidClass σ M] in
-/--
-Definition of `SetLike.IsHomogeneous` / `SetLike.IsHomogeneous` 的定义
+/-- A substructure `p ⊆ M` is homogeneous if for every `m ∈ p`, all homogeneous components
+  of `m` are in `p`. -/
+/-
+**DirectSum.SetLike.IsHomogeneous** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum.SetLike`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {σ : Type u_4} →       [inst : Dec
+idableEq ι] →         [inst_1 : AddCommMonoid M] →           [inst_2 : SetLike σ
+ M] →             [inst_3 : AddSubmonoidClass σ M] →               (ℳ : ι → σ) →
+ [DirectSum.Decomposition ℳ] → {P : Type u_5} → [SetLike P M] → P → Prop
+参数：ℳ : ι → σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SetLike.IsHomogeneous
-  signature: {P : Type*} [SetLike P M] (p : P)
-  body: forall (i : ι) ⦃m : M⦄, m in p -> (DirectSum.decompose ℳ m i : M) in p
-
-@[elab_as_elim]
-
-中文:
-定义 集合状.IsHomogeneous
-  签名: {P : 类型} [集合状 P M] (p : P)
-  定义体: forall (i : ι) ⦃m : M⦄, m in p -> (DirectSum.decompose ℳ m i : M) in p
-
-@[elab_as_elim]
-
-Depends on / 依赖: DirectSum, DirectSum.decompose, decompose
+--- 原说明 ---
+A substructure `p ⊆ M` is homogeneous if for every `m ∈ p`, all homogeneous comp
+onents
+  of `m` are in `p`.
 -/
 def SetLike.IsHomogeneous {P : Type*} [SetLike P M] (p : P) : Prop :=
-  forall (i : ι) ⦃m : M⦄, m in p -> (DirectSum.decompose ℳ m i : M) in p
+  ∀ (i : ι) ⦃m : M⦄, m ∈ p → (DirectSum.decompose ℳ m i : M) ∈ p
 
 @[elab_as_elim]
-/--
-theorem `Decomposition.inductionOn` / 定理 `Decomposition.inductionOn`
-
-English:
-theorem Decomposition.inductionOn
-  statement: {motive : M -> Prop} (zero : motive 0)
-  proof: by
-  let ℳ' : ι -> AddSubmonoid M := fun i =>
-    (⟨⟨ℳ i, fun x y => AddMemClass.add_mem x y⟩, (ZeroMemClass.zero_mem _)⟩ : AddSubmonoid M)
-  have t : DirectSum.Decomposition ℳ' :=
-    { decompose' := DirectSum.decompose ℳ
-      left_inv := fun _ => (decompose ℳ).left_inv _
-      right_inv := fun _ => (decompose ℳ).right_inv _ }
-  have mem : forall m, m in iSup ℳ' := fun _m =>
-    (DirectSum.IsInternal.addSubmonoid_iSup_eq_top ℳ' (Decomposition.isInternal ℳ')).symm ▸ trivial
-  -- Porting note: needs to use @ even though no implicit argument is provided
-  exact fun m => @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
-    (fun i m h => homogeneous ⟨m, h⟩) zero add
-
-中文:
-定理 分解.inductionOn
-  结论: {motive : M -> 命题} (zero : motive 0)
-  证明: by
-  let ℳ' : ι -> AddSubmonoid M := fun i =>
-    (⟨⟨ℳ i, fun x y => AddMemClass.add_mem x y⟩, (ZeroMemClass.zero_mem _)⟩ : AddSubmonoid M)
-  have t : DirectSum.Decomposition ℳ' :=
-    { decompose' := DirectSum.decompose ℳ
-      left_inv := fun _ => (decompose ℳ).left_inv _
-      right_inv := fun _ => (decompose ℳ).right_inv _ }
-  have mem : forall m, m in iSup ℳ' := fun _m =>
-    (DirectSum.IsInternal.addSubmonoid_iSup_eq_top ℳ' (Decomposition.isInternal ℳ')).symm ▸ trivial
-  -- Porting note: needs to use @ even though no implicit argument is provided
-  exact fun m => @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
-    (fun i m h => homogeneous ⟨m, h⟩) zero add
+/-
+**DirectSum.Decomposition.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum.Decom
+position`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [ins
+t_1 : AddCommMonoid M] [inst_2 : SetLike σ M]   [inst_3 : AddSubmonoidClass σ M]
+ (ℳ : ι → σ) [DirectSum.Decomposition ℳ] {motive : M → Prop},   motive 0 →     (
+∀ {i : ι} (m : ↥(ℳ i)), motive ↑m) → (∀ (m m' : M), motive m → motive m' → motiv
+e (m + m')) → ∀ (m : M), motive m
+参数：ℳ : ι → σ；∀ {i : ι} (m : ↥(ℳ i)), motive ↑m；∀ (m m' : M), motive m → motive m
+' → motive (m + m')；m : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.IsInternal.addSubmonoid_iSup_eq_top`：∀ {ι : Type v} {M : Type 
+u_1} [inst : DecidableEq ι] [inst_1 : AddCommMonoid M] (A : ι → AddSubmonoid M),
+   DirectSum.IsInternal A → iSup A …
+· 使用定理 `DirectSum.Decomposition.isInternal`：∀ {ι : Type u_1} {M : Type u_3} {σ :
+ Type u_4} [inst : DecidableEq ι] [inst_1 : AddCommMonoid M] [inst_2 : SetLike σ
+ M]   [inst_3 : AddSubmo…
+· 使用定理 `AddSubmonoid.iSup_induction`：∀ {M : Type u_1} [inst : AddZeroClass M] {ι
+ : Sort u_4} (S : ι → AddSubmonoid M) {motive : M → Prop} {x : M},   x ∈ ⨆ i, S 
+i →     (∀ (i : ι…
 -/
-protected theorem Decomposition.inductionOn {motive : M -> Prop} (zero : motive 0)
-    (homogeneous : forall {i} (m : ℳ i), motive (m : M))
-    (add : forall m m' : M, motive m -> motive m' -> motive (m + m')) : forall m, motive m := by
-  let ℳ' : ι -> AddSubmonoid M := fun i =>
-    (⟨⟨ℳ i, fun x y => AddMemClass.add_mem x y⟩, (ZeroMemClass.zero_mem _)⟩ : AddSubmonoid M)
+protected theorem Decomposition.inductionOn {motive : M → Prop} (zero : motive 0)
+    (homogeneous : ∀ {i} (m : ℳ i), motive (m : M))
+    (add : ∀ m m' : M, motive m → motive m' → motive (m + m')) : ∀ m, motive m := by
+  let ℳ' : ι → AddSubmonoid M := fun i ↦
+    (⟨⟨ℳ i, fun x y ↦ AddMemClass.add_mem x y⟩, (ZeroMemClass.zero_mem _)⟩ : AddSubmonoid M)
   have t : DirectSum.Decomposition ℳ' :=
     { decompose' := DirectSum.decompose ℳ
-      left_inv := fun _ => (decompose ℳ).left_inv _
-      right_inv := fun _ => (decompose ℳ).right_inv _ }
-  have mem : forall m, m in iSup ℳ' := fun _m =>
+      left_inv := fun _ ↦ (decompose ℳ).left_inv _
+      right_inv := fun _ ↦ (decompose ℳ).right_inv _ }
+  have mem : ∀ m, m ∈ iSup ℳ' := fun _m ↦
     (DirectSum.IsInternal.addSubmonoid_iSup_eq_top ℳ' (Decomposition.isInternal ℳ')).symm ▸ trivial
   -- Porting note: needs to use @ even though no implicit argument is provided
-  exact fun m => @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
-    (fun i m h => homogeneous ⟨m, h⟩) zero add
--- exact fun m ↦
--- AddSubmonoid.iSup_induction ℳ' (mem m) (fun i m h ↦ h_homogeneous ⟨m, h⟩) h_zero h_add
+  exact fun m ↦ @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
+    (fun i m h ↦ homogeneous ⟨m, h⟩) zero add
+--  exact fun m ↦
+--    AddSubmonoid.iSup_induction ℳ' (mem m) (fun i m h ↦ h_homogeneous ⟨m, h⟩) h_zero h_add
 
 @[simp]
-/--
-theorem `Decomposition.decompose'_eq` / 定理 `Decomposition.decompose'_eq`
-
-English:
-theorem Decomposition.decompose'_eq
-  statement: Decomposition.decompose' = decompose ℳ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 分解.decompose'_eq
-  结论: 分解.decompose' = decompose ℳ
-  证明: rfl
-
-@[simp]
+/-
+**DirectSum.Decomposition.decompose'_eq** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum.Dec
+omposition`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [ins
+t_1 : AddCommMonoid M] [inst_2 : SetLike σ M]   [inst_3 : AddSubmonoidClass σ M]
+ (ℳ : ι → σ) [inst_4 : DirectSum.Decomposition ℳ],   DirectSum.Decomposition.dec
+ompose' = ⇑(DirectSum.decompose ℳ)
+参数：ℳ : ι → σ；DirectSum.decompose ℳ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Decomposition.decompose'_eq : Decomposition.decompose' = decompose ℳ := rfl
 
 @[simp]
-/--
-theorem `decompose_symm_of` / 定理 `decompose_symm_of`
-
-English:
-theorem decompose_symm_of
-  given: {i : ι} (x : ℳ i)
-  statement: (decompose ℳ).symm (DirectSum.of _ i x) = x
-  proof: DirectSum.coeAddMonoidHom_of ℳ _ _
-
-@[simp]
-
-中文:
-定理 decompose_symm_of
-  条件: {i : ι} (x : ℳ i)
-  结论: (decompose ℳ).symm (直和.of _ i x) = x
-  证明: DirectSum.coeAddMonoidHom_of ℳ _ _
-
-@[simp]
-
-Depends on / 依赖: DirectSum, DirectSum.coeAddMonoidHom_of, coeAddMonoidHom_of
+/-
+**DirectSum.decompose_symm_of** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_of {i : ι} (x : ℳ i) : (decompose ℳ).symm (DirectSum.of _ i
+ x) = x
+参数：x : ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coeAddMonoidHom_of`：coeAddMonoidHom_of {M S : Type*} [Decidabl
+eEq ι] [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M] (A : ι -> S) (i :
+ ι) (x : A i) : Di…
 -/
 theorem decompose_symm_of {i : ι} (x : ℳ i) : (decompose ℳ).symm (DirectSum.of _ i x) = x :=
   DirectSum.coeAddMonoidHom_of ℳ _ _
 
 @[simp]
-/--
-theorem `decompose_coe` / 定理 `decompose_coe`
-
-English:
-theorem decompose_coe
-  given: {i : ι} (x : ℳ i)
-  statement: decompose ℳ (x : M) = DirectSum.of _ i x
-  proof: by
-  rw [← decompose_symm_of _]; rw [Equiv.apply_symm_apply]
-
-中文:
-定理 decompose_coe
-  条件: {i : ι} (x : ℳ i)
-  结论: decompose ℳ (x : M) = 直和.of _ i x
-  证明: by
-  rw [← decompose_symm_of _]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, decompose_symm_of
+/-
+**DirectSum.decompose_coe** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_coe {i : ι} (x : ℳ i) : decompose ℳ (x : M) = DirectSum.of _ i x
+参数：x : ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.decompose_symm_of`：decompose_symm_of {i : ι} (x : ℳ i) : (deco
+mpose ℳ).symm (DirectSum.of _ i x) = x
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem decompose_coe {i : ι} (x : ℳ i) : decompose ℳ (x : M) = DirectSum.of _ i x := by
-  rw [← decompose_symm_of _]; rw [Equiv.apply_symm_apply]
-
-/--
-theorem `decompose_of_mem` / 定理 `decompose_of_mem`
-
-English:
-theorem decompose_of_mem
-  given: {x : M} {i : ι} (hx : x in ℳ i)
-  proof: decompose_coe _ ⟨x, hx⟩
-
-中文:
-定理 decompose_of_mem
-  条件: {x : M} {i : ι} (hx : x in ℳ i)
-  证明: decompose_coe _ ⟨x, hx⟩
-
-Depends on / 依赖: decompose_coe
+  rw [← decompose_symm_of _, Equiv.apply_symm_apply]
+/-
+**DirectSum.decompose_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_of_mem {x : M} {i : ι} (hx : x in ℳ i) : decompose ℳ x = DirectS
+um.of (fun i => ℳ i) i ⟨x, hx⟩
+参数：hx : x in ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.decompose_coe`：decompose_coe {i : ι} (x : ℳ i) : decompose ℳ (
+x : M) = DirectSum.of _ i x
 -/
-theorem decompose_of_mem {x : M} {i : ι} (hx : x in ℳ i) :
-    decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩ :=
+theorem decompose_of_mem {x : M} {i : ι} (hx : x ∈ ℳ i) :
+    decompose ℳ x = DirectSum.of (fun i ↦ ℳ i) i ⟨x, hx⟩ :=
   decompose_coe _ ⟨x, hx⟩
-
-/--
-theorem `decompose_of_mem_same` / 定理 `decompose_of_mem_same`
-
-English:
-theorem decompose_of_mem_same
-  given: {x : M} {i : ι} (hx : x in ℳ i)
-  statement: (decompose ℳ x i : M) = x
-  proof: by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_same]; rw [Subtype.coe_mk]
-
-中文:
-定理 decompose_of_mem_same
-  条件: {x : M} {i : ι} (hx : x in ℳ i)
-  结论: (decompose ℳ x i : M) = x
-  证明: by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_same]; rw [Subtype.coe_mk]
-
-Depends on / 依赖: DirectSum, DirectSum.of_eq_same, Subtype, Subtype.coe_mk, coe_mk, decompose_of_mem, of_eq_same
+/-
+**DirectSum.decompose_of_mem_same** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_of_mem_same {x : M} {i : ι} (hx : x in ℳ i) : (decompose ℳ x i :
+ M) = x
+参数：hx : x in ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用定理 `DirectSum.of_eq_same`：of_eq_same (i : ι) (x : β i) : (of _ i x) i = x
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
 -/
-theorem decompose_of_mem_same {x : M} {i : ι} (hx : x in ℳ i) : (decompose ℳ x i : M) = x := by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_same]; rw [Subtype.coe_mk]
-
-/--
-theorem `decompose_of_mem_ne` / 定理 `decompose_of_mem_ne`
-
-English:
-theorem decompose_of_mem_ne
-  given: {x : M} {i j : ι} (hx : x in ℳ i) (hij : i != j)
-  proof: by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ hij.symm]; rw [ZeroMemClass.coe_zero]
-
-中文:
-定理 decompose_of_mem_ne
-  条件: {x : M} {i j : ι} (hx : x in ℳ i) (hij : i != j)
-  证明: by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ hij.symm]; rw [ZeroMemClass.coe_zero]
-
-Depends on / 依赖: DirectSum, DirectSum.of_eq_of_ne, ZeroMemClass, ZeroMemClass.coe_zero, coe_zero, decompose_of_mem, hij.symm, of_eq_of_ne
+theorem decompose_of_mem_same {x : M} {i : ι} (hx : x ∈ ℳ i) : (decompose ℳ x i : M) = x := by
+  rw [decompose_of_mem _ hx, DirectSum.of_eq_same, Subtype.coe_mk]
+/-
+**DirectSum.decompose_of_mem_ne** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_of_mem_ne {x : M} {i j : ι} (hx : x in ℳ i) (hij : i != j) : (de
+compose ℳ x j : M) = 0
+参数：hx : x in ℳ i；hij : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用定理 `DirectSum.of_eq_of_ne`：of_eq_of_ne (i j : ι) (x : β i) (h : j != i) : (o
+f _ i x) j = 0
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ZeroMemClass.coe_zero`：∀ {A : Type u_3} {M₁ : Type u_4} [inst : SetLike 
+A M₁] [inst_1 : Zero M₁] [hA : ZeroMemClass A M₁] (S' : A), ↑0 = 0
 -/
-theorem decompose_of_mem_ne {x : M} {i j : ι} (hx : x in ℳ i) (hij : i != j) :
+theorem decompose_of_mem_ne {x : M} {i j : ι} (hx : x ∈ ℳ i) (hij : i ≠ j) :
     (decompose ℳ x j : M) = 0 := by
-  rw [decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ hij.symm]; rw [ZeroMemClass.coe_zero]
-
-/--
-theorem `degree_eq_of_mem_mem` / 定理 `degree_eq_of_mem_mem`
-
-English:
-theorem degree_eq_of_mem_mem
-  given: {x : M} {i j : ι} (hxi : x in ℳ i) (hxj : x in ℳ j) (hx : x != 0)
-  proof: by
-  contrapose! hx; rw [← decompose_of_mem_same ℳ hxj, decompose_of_mem_ne ℳ hxi hx]
-
-#adaptation_note
-
-中文:
-定理 degree_eq_of_mem_mem
-  条件: {x : M} {i j : ι} (hxi : x in ℳ i) (hxj : x in ℳ j) (hx : x != 0)
-  证明: by
-  contrapose! hx; rw [← decompose_of_mem_same ℳ hxj, decompose_of_mem_ne ℳ hxi hx]
-
-#adaptation_note
-
-Depends on / 依赖: contrapose, decompose_of_mem_ne, decompose_of_mem_same
+  rw [decompose_of_mem _ hx, DirectSum.of_eq_of_ne _ _ _ hij.symm, ZeroMemClass.coe_zero]
+/-
+**DirectSum.degree_eq_of_mem_mem** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：degree_eq_of_mem_mem {x : M} {i j : ι} (hxi : x in ℳ i) (hxj : x in ℳ j) (
+hx : x != 0) : i = j
+参数：hxi : x in ℳ i；hxj : x in ℳ j；hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.decompose_of_mem_same`：decompose_of_mem_same {x : M} {i : ι} (
+hx : x in ℳ i) : (decompose ℳ x i : M) = x
+· 使用定理 `DirectSum.decompose_of_mem_ne`：decompose_of_mem_ne {x : M} {i j : ι} (hx
+ : x in ℳ i) (hij : i != j) : (decompose ℳ x j : M) = 0
 -/
-theorem degree_eq_of_mem_mem {x : M} {i j : ι} (hxi : x in ℳ i) (hxj : x in ℳ j) (hx : x != 0) :
+theorem degree_eq_of_mem_mem {x : M} {i j : ι} (hxi : x ∈ ℳ i) (hxj : x ∈ ℳ j) (hx : x ≠ 0) :
     i = j := by
   contrapose! hx; rw [← decompose_of_mem_same ℳ hxj, decompose_of_mem_ne ℳ hxi hx]
 
@@ -441,356 +401,337 @@ but some downstream declarations will break.
 /-- If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic as
 an additive monoid to a direct sum of components. -/
 @[simps!]
-/--
-Definition of `decomposeAddEquiv` / `decomposeAddEquiv` 的定义
+/-
+**DirectSum.decomposeAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：decomposeAddEquiv : M ≃+ ⨁ i, ℳ i
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition decomposeAddEquiv
-  signature: : M ≃+ ⨁ i, ℳ i
-  body: AddEquiv.symm { (decompose ℳ).symm with
-map_add' := id map_add (DirectSum.coeAddMonoidHom ℳ) }
-
-@[simp]
-
-中文:
-定义 decomposeAddEquiv
-  签名: : M ≃+ ⨁ i, ℳ i
-  定义体: AddEquiv.symm { (decompose ℳ).symm with
-map_add' := id map_add (DirectSum.coeAddMonoidHom ℳ) }
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.symm, DirectSum, DirectSum.coeAddMonoidHom, coeAddMonoidHom, decompose, map_add
+--- 原说明 ---
+If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic a
+s
+an additive monoid to a direct sum of components.
 -/
 def decomposeAddEquiv : M ≃+ ⨁ i, ℳ i :=
   AddEquiv.symm { (decompose ℳ).symm with
-map_add' := id map_add (DirectSum.coeAddMonoidHom ℳ) }
+    map_add' := id <| map_add (DirectSum.coeAddMonoidHom ℳ) }
 
 @[simp]
-/--
-theorem `decompose_zero` / 定理 `decompose_zero`
-
-English:
-theorem decompose_zero
-  statement: decompose ℳ (0 : M) = 0
-  proof: map_zero (decomposeAddEquiv ℳ)
-
-@[simp]
-
-中文:
-定理 decompose_zero
-  结论: decompose ℳ (0 : M) = 0
-  证明: map_zero (decomposeAddEquiv ℳ)
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_zero
+/-
+**DirectSum.decompose_zero** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_zero : decompose ℳ (0 : M) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_zero : decompose ℳ (0 : M) = 0 :=
   map_zero (decomposeAddEquiv ℳ)
 
 @[simp]
-/--
-theorem `decompose_symm_zero` / 定理 `decompose_symm_zero`
-
-English:
-theorem decompose_symm_zero
-  statement: (decompose ℳ).symm 0 = (0 : M)
-  proof: map_zero (decomposeAddEquiv ℳ).symm
-
-@[simp]
-
-中文:
-定理 decompose_symm_zero
-  结论: (decompose ℳ).symm 0 = (0 : M)
-  证明: map_zero (decomposeAddEquiv ℳ).symm
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_zero
+/-
+**DirectSum.decompose_symm_zero** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_zero : (decompose ℳ).symm 0 = (0 : M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_symm_zero : (decompose ℳ).symm 0 = (0 : M) :=
   map_zero (decomposeAddEquiv ℳ).symm
 
 @[simp]
-/--
-theorem `decompose_add` / 定理 `decompose_add`
-
-English:
-theorem decompose_add
-  given: (x y : M)
-  statement: decompose ℳ (x + y) = decompose ℳ x + decompose ℳ y
-  proof: map_add (decomposeAddEquiv ℳ) x y
-
-@[simp]
-
-中文:
-定理 decompose_add
-  条件: (x y : M)
-  结论: decompose ℳ (x + y) = decompose ℳ x + decompose ℳ y
-  证明: map_add (decomposeAddEquiv ℳ) x y
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_add
+/-
+**DirectSum.decompose_add** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_add (x y : M) : decompose ℳ (x + y) = decompose ℳ x + decompose 
+ℳ y
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_add (x y : M) : decompose ℳ (x + y) = decompose ℳ x + decompose ℳ y :=
   map_add (decomposeAddEquiv ℳ) x y
 
 @[simp]
-/--
-theorem `decompose_symm_add` / 定理 `decompose_symm_add`
-
-English:
-theorem decompose_symm_add
-  given: (x y : ⨁ i, ℳ i)
-  proof: map_add (decomposeAddEquiv ℳ).symm x y
-
-@[simp]
-
-中文:
-定理 decompose_symm_add
-  条件: (x y : ⨁ i, ℳ i)
-  证明: map_add (decomposeAddEquiv ℳ).symm x y
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_add
+/-
+**DirectSum.decompose_symm_add** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_add (x y : ⨁ i, ℳ i) : (decompose ℳ).symm (x + y) = (decomp
+ose ℳ).symm x + (decompose ℳ).symm y
+参数：x y : ⨁ i, ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_symm_add (x y : ⨁ i, ℳ i) :
     (decompose ℳ).symm (x + y) = (decompose ℳ).symm x + (decompose ℳ).symm y :=
   map_add (decomposeAddEquiv ℳ).symm x y
 
 @[simp]
-/--
-theorem `decompose_sum` / 定理 `decompose_sum`
-
-English:
-theorem decompose_sum
-  given: {ι'} (s : Finset ι') (f : ι' -> M)
-  proof: map_sum (decomposeAddEquiv ℳ) f s
-
-@[simp]
-
-中文:
-定理 decompose_sum
-  条件: {ι'} (s : 有限集 ι') (f : ι' -> M)
-  证明: map_sum (decomposeAddEquiv ℳ) f s
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_sum
+/-
+**DirectSum.decompose_sum** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_sum {ι'} (s : Finset ι') (f : ι' -> M) : decompose ℳ (∑ i in s, 
+f i) = ∑ i in s, decompose ℳ (f i)
+参数：s : Finset ι'；f : ι' -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-theorem decompose_sum {ι'} (s : Finset ι') (f : ι' -> M) :
-    decompose ℳ (∑ i in s, f i) = ∑ i in s, decompose ℳ (f i) :=
+theorem decompose_sum {ι'} (s : Finset ι') (f : ι' → M) :
+    decompose ℳ (∑ i ∈ s, f i) = ∑ i ∈ s, decompose ℳ (f i) :=
   map_sum (decomposeAddEquiv ℳ) f s
 
 @[simp]
-/--
-theorem `decompose_symm_sum` / 定理 `decompose_symm_sum`
-
-English:
-theorem decompose_symm_sum
-  given: {ι'} (s : Finset ι') (f : ι' -> ⨁ i, ℳ i)
-  proof: map_sum (decomposeAddEquiv ℳ).symm f s
-
-中文:
-定理 decompose_symm_sum
-  条件: {ι'} (s : 有限集 ι') (f : ι' -> ⨁ i, ℳ i)
-  证明: map_sum (decomposeAddEquiv ℳ).symm f s
-
-Depends on / 依赖: decomposeAddEquiv, map_sum
+/-
+**DirectSum.decompose_symm_sum** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_sum {ι'} (s : Finset ι') (f : ι' -> ⨁ i, ℳ i) : (decompose 
+ℳ).symm (∑ i in s, f i) = ∑ i in s, (decompose ℳ).symm (f i)
+参数：s : Finset ι'；f : ι' -> ⨁ i, ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-theorem decompose_symm_sum {ι'} (s : Finset ι') (f : ι' -> ⨁ i, ℳ i) :
-    (decompose ℳ).symm (∑ i in s, f i) = ∑ i in s, (decompose ℳ).symm (f i) :=
+theorem decompose_symm_sum {ι'} (s : Finset ι') (f : ι' → ⨁ i, ℳ i) :
+    (decompose ℳ).symm (∑ i ∈ s, f i) = ∑ i ∈ s, (decompose ℳ).symm (f i) :=
   map_sum (decomposeAddEquiv ℳ).symm f s
-
-/--
-theorem `sum_support_decompose` / 定理 `sum_support_decompose`
-
-English:
-theorem sum_support_decompose
-  given: [forall (i) (x : ℳ i), Decidable (x != 0)] (r : M)
-  proof: by
-  conv_rhs =>
-    rw [← (decompose ℳ).symm_apply_apply r]; rw [← sum_support_of (decompose ℳ r)]
-  rw [decompose_symm_sum]
-  simp_rw [decompose_symm_of]
-
-中文:
-定理 sum_support_decompose
-  条件: [对任意 (i) (x : ℳ i), 可判定 (x != 0)] (r : M)
-  证明: by
-  conv_rhs =>
-    rw [← (decompose ℳ).symm_apply_apply r]; rw [← sum_support_of (decompose ℳ r)]
-  rw [decompose_symm_sum]
-  simp_rw [decompose_symm_of]
-
-Depends on / 依赖: conv_rhs, decompose, decompose_symm_of, decompose_symm_sum, simp_rw, sum_support_of, symm_apply_apply
+/-
+**DirectSum.sum_support_decompose** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：sum_support_decompose [forall (i) (x : ℳ i), Decidable (x != 0)] (r : M) :
+ (∑ i in (decompose ℳ r).support, (decompose ℳ r i : M)) = r
+参数：i；x : ℳ i；x != 0；r : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `DirectSum.sum_support_of`：sum_support_of [forall (i : ι) (x : β i), Deci
+dable (x != 0)] (x : ⨁ i, β i) : (∑ i in x.support, of β i (x i)) = x
+· 使用定理 `DirectSum.decompose_symm_sum`：decompose_symm_sum {ι'} (s : Finset ι') (f
+ : ι' -> ⨁ i, ℳ i) : (decompose ℳ).symm (∑ i in s, f i) = ∑ i in s, (decompose ℳ
+).symm (f i)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `DirectSum.decompose_symm_of`：decompose_symm_of {i : ι} (x : ℳ i) : (deco
+mpose ℳ).symm (DirectSum.of _ i x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_support_decompose [forall (i) (x : ℳ i), Decidable (x != 0)] (r : M) :
-    (∑ i in (decompose ℳ r).support, (decompose ℳ r i : M)) = r := by
+theorem sum_support_decompose [∀ (i) (x : ℳ i), Decidable (x ≠ 0)] (r : M) :
+    (∑ i ∈ (decompose ℳ r).support, (decompose ℳ r i : M)) = r := by
   conv_rhs =>
-    rw [← (decompose ℳ).symm_apply_apply r]; rw [← sum_support_of (decompose ℳ r)]
+    rw [← (decompose ℳ).symm_apply_apply r, ← sum_support_of (decompose ℳ r)]
   rw [decompose_symm_sum]
   simp_rw [decompose_symm_of]
-
-/--
-theorem `AddSubmonoidClass.IsHomogeneous.mem_iff` / 定理 `AddSubmonoidClass.IsHomogeneous.mem_iff`
-
-English:
-theorem AddSubmonoidClass.IsHomogeneous.mem_iff
-  proof: by
-  classical
-  refine ⟨fun hx i => hp i hx, fun hx => ?_⟩
-  rw [← DirectSum.sum_support_decompose ℳ x]
-  exact sum_mem (fun i _ => hx i)
-
-中文:
-定理 加法子幺半群类.IsHomogeneous.mem_iff
-  证明: by
-  classical
-  refine ⟨fun hx i => hp i hx, fun hx => ?_⟩
-  rw [← DirectSum.sum_support_decompose ℳ x]
-  exact sum_mem (fun i _ => hx i)
-
-Depends on / 依赖: DirectSum, DirectSum.sum_support_decompose, classical, sum_mem, sum_support_decompose
+/-
+**DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `D
+irectSum.AddSubmonoidClass.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [ins
+t_1 : AddCommMonoid M] [inst_2 : SetLike σ M]   [inst_3 : AddSubmonoidClass σ M]
+ (ℳ : ι → σ) [inst_4 : DirectSum.Decomposition ℳ] {P : Type u_5}   [inst_5 : Set
+Like P M] [AddSubmonoidClass P M] (p : P),   DirectSum.SetLike.IsHomogeneous ℳ p
+ → ∀ {x : M}, x ∈ p ↔ ∀ (i : ι), ↑(((DirectSum.decompose ℳ) x) i) ∈ p
+参数：ℳ : ι → σ；p : P；i : ι；((DirectSum.decompose ℳ) x) i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
 -/
 theorem AddSubmonoidClass.IsHomogeneous.mem_iff
     {P : Type*} [SetLike P M] [AddSubmonoidClass P M] (p : P)
     (hp : SetLike.IsHomogeneous ℳ p) {x} :
-    x in p ↔ forall i, (decompose ℳ x i : M) in p := by
+    x ∈ p ↔ ∀ i, (decompose ℳ x i : M) ∈ p := by
   classical
-  refine ⟨fun hx i => hp i hx, fun hx => ?_⟩
+  refine ⟨fun hx i ↦ hp i hx, fun hx ↦ ?_⟩
   rw [← DirectSum.sum_support_decompose ℳ x]
-  exact sum_mem (fun i _ => hx i)
-
-/--
-theorem `AddSubmonoidClass.IsHomogeneous.ext` / 定理 `AddSubmonoidClass.IsHomogeneous.ext`
-
-English:
-theorem AddSubmonoidClass.IsHomogeneous.ext
-  proof: by
-  refine SetLike.ext fun m => ?_
-  rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ p hp]; rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ q hq]
-  exact forall_congr' fun i => hpq i _ (decompose ℳ _ i).2
-
-中文:
-定理 加法子幺半群类.IsHomogeneous.ext
-  证明: by
-  refine SetLike.ext fun m => ?_
-  rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ p hp]; rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ q hq]
-  exact forall_congr' fun i => hpq i _ (decompose ℳ _ i).2
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.IsHomogeneous.mem_iff, IsHomogeneous, SetLike, SetLike.ext, decompose, forall_congr, mem_iff
+  exact sum_mem (fun i _ ↦ hx i)
+/-
+**DirectSum.AddSubmonoidClass.IsHomogeneous.ext** 是 Mathlib 中的一个定理，位于命名空间 `Direc
+tSum.AddSubmonoidClass.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [ins
+t_1 : AddCommMonoid M] [inst_2 : SetLike σ M]   [inst_3 : AddSubmonoidClass σ M]
+ {ℳ : ι → σ} [inst_4 : DirectSum.Decomposition ℳ] {P : Type u_5}   [inst_5 : Set
+Like P M] [AddSubmonoidClass P M] {p q : P},   DirectSum.SetLike.IsHomogeneous ℳ
+ p →     DirectSum.SetLike.IsHomogeneous ℳ q → (∀ (i : ι), ∀ m ∈ ℳ i, m ∈ p ↔ m 
+∈ q) → p = q
+参数：∀ (i : ι), ∀ m ∈ ℳ i, m ∈ p ↔ m ∈ q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff`：∀ {ι : Type u_1} {M :
+ Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [inst_1 : AddCommMonoid M] [ins
+t_2 : SetLike σ M]   [inst_3 : AddSubmo…
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem AddSubmonoidClass.IsHomogeneous.ext
-    {ℳ : ι -> σ} [Decomposition ℳ] {P : Type*} [SetLike P M] [AddSubmonoidClass P M]
+    {ℳ : ι → σ} [Decomposition ℳ] {P : Type*} [SetLike P M] [AddSubmonoidClass P M]
     {p q : P} (hp : SetLike.IsHomogeneous ℳ p) (hq : SetLike.IsHomogeneous ℳ q)
-    (hpq : forall i, forall m in ℳ i, m in p ↔ m in q) :
+    (hpq : ∀ i, ∀ m ∈ ℳ i, m ∈ p ↔ m ∈ q) :
     p = q := by
-  refine SetLike.ext fun m => ?_
-  rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ p hp]; rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ q hq]
-  exact forall_congr' fun i => hpq i _ (decompose ℳ _ i).2
+  refine SetLike.ext fun m ↦ ?_
+  rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ p hp,
+    AddSubmonoidClass.IsHomogeneous.mem_iff ℳ q hq]
+  exact forall_congr' fun i ↦ hpq i _ (decompose ℳ _ i).2
 
 end AddCommMonoid
 
 section AddCommGroup
 
 variable [DecidableEq ι] [AddCommGroup M]
-variable [SetLike σ M] [AddSubgroupClass σ M] (ℳ : ι -> σ)
+variable [SetLike σ M] [AddSubgroupClass σ M] (ℳ : ι → σ)
 variable [Decomposition ℳ]
 
 @[simp]
-/--
-theorem `decompose_neg` / 定理 `decompose_neg`
-
-English:
-theorem decompose_neg
-  given: (x : M)
-  statement: decompose ℳ (-x) = -decompose ℳ x
-  proof: map_neg (decomposeAddEquiv ℳ) x
-
-@[simp]
-
-中文:
-定理 decompose_neg
-  条件: (x : M)
-  结论: decompose ℳ (-x) = -decompose ℳ x
-  证明: map_neg (decomposeAddEquiv ℳ) x
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_neg
+/-
+**DirectSum.decompose_neg** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_neg (x : M) : decompose ℳ (-x) = -decompose ℳ x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_neg (x : M) : decompose ℳ (-x) = -decompose ℳ x :=
   map_neg (decomposeAddEquiv ℳ) x
 
 @[simp]
-/--
-theorem `decompose_symm_neg` / 定理 `decompose_symm_neg`
-
-English:
-theorem decompose_symm_neg
-  given: (x : ⨁ i, ℳ i)
-  statement: (decompose ℳ).symm (-x) = -(decompose ℳ).symm x
-  proof: map_neg (decomposeAddEquiv ℳ).symm x
-
-@[simp]
-
-中文:
-定理 decompose_symm_neg
-  条件: (x : ⨁ i, ℳ i)
-  结论: (decompose ℳ).symm (-x) = -(decompose ℳ).symm x
-  证明: map_neg (decomposeAddEquiv ℳ).symm x
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_neg
+/-
+**DirectSum.decompose_symm_neg** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_neg (x : ⨁ i, ℳ i) : (decompose ℳ).symm (-x) = -(decompose 
+ℳ).symm x
+参数：x : ⨁ i, ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_symm_neg (x : ⨁ i, ℳ i) : (decompose ℳ).symm (-x) = -(decompose ℳ).symm x :=
   map_neg (decomposeAddEquiv ℳ).symm x
 
 @[simp]
-/--
-theorem `decompose_sub` / 定理 `decompose_sub`
-
-English:
-theorem decompose_sub
-  given: (x y : M)
-  statement: decompose ℳ (x - y) = decompose ℳ x - decompose ℳ y
-  proof: map_sub (decomposeAddEquiv ℳ) x y
-
-@[simp]
-
-中文:
-定理 decompose_sub
-  条件: (x y : M)
-  结论: decompose ℳ (x - y) = decompose ℳ x - decompose ℳ y
-  证明: map_sub (decomposeAddEquiv ℳ) x y
-
-@[simp]
-
-Depends on / 依赖: decomposeAddEquiv, map_sub
+/-
+**DirectSum.decompose_sub** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_sub (x y : M) : decompose ℳ (x - y) = decompose ℳ x - decompose 
+ℳ y
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_sub (x y : M) : decompose ℳ (x - y) = decompose ℳ x - decompose ℳ y :=
   map_sub (decomposeAddEquiv ℳ) x y
 
 @[simp]
-/--
-theorem `decompose_symm_sub` / 定理 `decompose_symm_sub`
-
-English:
-theorem decompose_symm_sub
-  given: (x y : ⨁ i, ℳ i)
-  proof: map_sub (decomposeAddEquiv ℳ).symm x y
-
-中文:
-定理 decompose_symm_sub
-  条件: (x y : ⨁ i, ℳ i)
-  证明: map_sub (decomposeAddEquiv ℳ).symm x y
-
-Depends on / 依赖: decomposeAddEquiv, map_sub
+/-
+**DirectSum.decompose_symm_sub** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_symm_sub (x y : ⨁ i, ℳ i) : (decompose ℳ).symm (x - y) = (decomp
+ose ℳ).symm x - (decompose ℳ).symm y
+参数：x y : ⨁ i, ℳ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem decompose_symm_sub (x y : ⨁ i, ℳ i) :
     (decompose ℳ).symm (x - y) = (decompose ℳ).symm x - (decompose ℳ).symm y :=
@@ -801,28 +742,29 @@ end AddCommGroup
 section Module
 
 variable [DecidableEq ι] [Semiring R] [AddCommMonoid M] [Module R M]
-variable (ℳ : ι -> Submodule R M)
+variable (ℳ : ι → Submodule R M)
 
-/--
-Definition of `Decomposition.ofLinearMap` / `Decomposition.ofLinearMap` 的定义
+/-- A convenience method to construct a decomposition from an `LinearMap`, such that the proofs
+of left and right inverse can be constructed via `ext`. -/
+/-
+**DirectSum.Decomposition.ofLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum.Decom
+position`。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     {M : Type u_3} →       [inst : Dec
+idableEq ι] →         [inst_1 : Semiring R] →           [inst_2 : AddCommMonoid 
+M] →             [inst_3 : _root_.Module R M] →               (ℳ : ι → Submodule
+ R M) →                 (decompose : M →ₗ[R] DirectSum ι fun i => ↥(ℳ i)) →     
+              DirectSum.coeLinearMap ℳ ∘ₗ decompose = LinearMap.id →            
+         decompose ∘ₗ DirectSum.coeLinearMap ℳ = LinearMap.id → DirectSum.Decomp
+osition ℳ
+参数：ℳ : ι → Submodule R M；decompose : M →ₗ[R] DirectSum ι fun i => ↥(ℳ i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Decomposition.ofLinearMap
-  signature: (decompose : M ->ₗ[R] ⨁ i, ℳ i)
-  body: decompose
-  left_inv := DFunLike.congr_fun h_left_inv
-  right_inv := DFunLike.congr_fun h_right_inv
-
-中文:
-缩写 分解.ofLinearMap
-  签名: (decompose : M ->ₗ[R] ⨁ i, ℳ i)
-  定义体: decompose
-  left_inv := DFunLike.congr_fun h_left_inv
-  right_inv := DFunLike.congr_fun h_right_inv
-
-Depends on / 依赖: decompose
+--- 原说明 ---
+A convenience method to construct a decomposition from an `LinearMap`, such that
+ the proofs
+of left and right inverse can be constructed via `ext`.
 -/
-abbrev Decomposition.ofLinearMap (decompose : M ->ₗ[R] ⨁ i, ℳ i)
+abbrev Decomposition.ofLinearMap (decompose : M →ₗ[R] ⨁ i, ℳ i)
     (h_left_inv : DirectSum.coeLinearMap ℳ ∘ₗ decompose = .id)
     (h_right_inv : decompose ∘ₗ DirectSum.coeLinearMap ℳ = .id) : Decomposition ℳ where
   decompose' := decompose
@@ -831,167 +773,174 @@ abbrev Decomposition.ofLinearMap (decompose : M ->ₗ[R] ⨁ i, ℳ i)
 
 variable [Decomposition ℳ]
 
-/--
-Definition of `decomposeLinearEquiv` / `decomposeLinearEquiv` 的定义
+/-- If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic as
+a module to a direct sum of components. -/
+/-
+**DirectSum.decomposeLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：decomposeLinearEquiv : M ≃ₗ[R] ⨁ i, ℳ i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decomposeLinearEquiv
-  signature: : M ≃ₗ[R] ⨁ i, ℳ i
-  body: LinearEquiv.symm
-    { (decomposeAddEquiv ℳ).symm with map_smul' := map_smul (DirectSum.coeLinearMap ℳ) }
-
-中文:
-定义 decomposeLinearEquiv
-  签名: : M ≃ₗ[R] ⨁ i, ℳ i
-  定义体: LinearEquiv.symm
-    { (decomposeAddEquiv ℳ).symm with map_smul' := map_smul (DirectSum.coeLinearMap ℳ) }
-
-Depends on / 依赖: DirectSum, DirectSum.coeLinearMap, LinearEquiv, LinearEquiv.symm, coeLinearMap, decomposeAddEquiv, map_smul
+--- 原说明 ---
+If `M` is graded by `ι` with degree `i` component `ℳ i`, then it is isomorphic a
+s
+a module to a direct sum of components.
 -/
 def decomposeLinearEquiv : M ≃ₗ[R] ⨁ i, ℳ i :=
   LinearEquiv.symm
     { (decomposeAddEquiv ℳ).symm with map_smul' := map_smul (DirectSum.coeLinearMap ℳ) }
-
-/--
-theorem `decomposeLinearEquiv_apply` / 定理 `decomposeLinearEquiv_apply`
-
-English:
-theorem decomposeLinearEquiv_apply
-  given: (m : M)
-  proof: rfl
-
-中文:
-定理 decomposeLinearEquiv_apply
-  条件: (m : M)
-  证明: rfl
+/-
+**DirectSum.decomposeLinearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decomposeLinearEquiv_apply (m : M) : decomposeLinearEquiv ℳ m = decompose 
+ℳ m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem decomposeLinearEquiv_apply (m : M) :
     decomposeLinearEquiv ℳ m = decompose ℳ m := rfl
-
-/--
-theorem `decomposeLinearEquiv_symm_apply` / 定理 `decomposeLinearEquiv_symm_apply`
-
-English:
-theorem decomposeLinearEquiv_symm_apply
-  given: (m : ⨁ i, ℳ i)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 decomposeLinearEquiv_symm_apply
-  条件: (m : ⨁ i, ℳ i)
-  证明: rfl
-
-@[simp]
+/-
+**DirectSum.decomposeLinearEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum
+`。
+形式化陈述：decomposeLinearEquiv_symm_apply (m : ⨁ i, ℳ i) : (decomposeLinearEquiv ℳ).
+symm m = (decompose ℳ).symm m
+参数：m : ⨁ i, ℳ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem decomposeLinearEquiv_symm_apply (m : ⨁ i, ℳ i) :
     (decomposeLinearEquiv ℳ).symm m = (decompose ℳ).symm m := rfl
 
 @[simp]
-/--
-theorem `decompose_smul` / 定理 `decompose_smul`
-
-English:
-theorem decompose_smul
-  given: (r : R) (x : M)
-  statement: decompose ℳ (r • x) = r • decompose ℳ x
-  proof: map_smul (decomposeLinearEquiv ℳ) r x
-
-中文:
-定理 decompose_smul
-  条件: (r : R) (x : M)
-  结论: decompose ℳ (r • x) = r • decompose ℳ x
-  证明: map_smul (decomposeLinearEquiv ℳ) r x
-
-Depends on / 依赖: decomposeLinearEquiv, map_smul
+/-
+**DirectSum.decompose_smul** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_smul (r : R) (x : M) : decompose ℳ (r • x) = r • decompose ℳ x
+参数：r : R；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 theorem decompose_smul (r : R) (x : M) : decompose ℳ (r • x) = r • decompose ℳ x :=
   map_smul (decomposeLinearEquiv ℳ) r x
-
-/--
-theorem `decomposeLinearEquiv_symm_comp_lof` / 定理 `decomposeLinearEquiv_symm_comp_lof`
-
-English:
-theorem decomposeLinearEquiv_symm_comp_lof
-  given: (i : ι)
-  proof: LinearMap.ext decompose_symm_of _
-
-中文:
-定理 decomposeLinearEquiv_symm_comp_lof
-  条件: (i : ι)
-  证明: LinearMap.ext decompose_symm_of _
+/-
+**DirectSum.decomposeLinearEquiv_symm_comp_lof** 是 Mathlib 中的一个定理，位于命名空间 `Direct
+Sum`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} [inst : DecidableEq ι] [ins
+t_1 : Semiring R] [inst_2 : AddCommMonoid M]   [inst_3 : _root_.Module R M] (ℳ :
+ ι → Submodule R M) [inst_4 : DirectSum.Decomposition ℳ] (i : ι),   ↑(DirectSum.
+decomposeLinearEquiv ℳ).symm ∘ₗ DirectSum.lof R ι (fun x => ↥(ℳ x)) i = (ℳ i).su
+btype
+参数：ℳ : ι → Submodule R M；i : ι；DirectSum.decomposeLinearEquiv ℳ；fun x => ↥(ℳ x)；
+ℳ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `DirectSum.decompose_symm_of`：decompose_symm_of {i : ι} (x : ℳ i) : (deco
+mpose ℳ).symm (DirectSum.of _ i x) = x
 -/
 @[simp] theorem decomposeLinearEquiv_symm_comp_lof (i : ι) :
     (decomposeLinearEquiv ℳ).symm ∘ₗ lof R ι (ℳ ·) i = (ℳ i).subtype :=
-LinearMap.ext decompose_symm_of _
-
-/--
-lemma `decomposeLinearEquiv_symm_lof` / 引理 `decomposeLinearEquiv_symm_lof`
-
-English:
-lemma decomposeLinearEquiv_symm_lof
-  given: (i : ι) (x : ℳ i)
-  proof: congr($(decomposeLinearEquiv_symm_comp_lof ℳ i) x)
-
-中文:
-引理 decomposeLinearEquiv_symm_lof
-  条件: (i : ι) (x : ℳ i)
-  证明: congr($(decomposeLinearEquiv_symm_comp_lof ℳ i) x)
+  LinearMap.ext <| decompose_symm_of _
+/-
+**DirectSum.decomposeLinearEquiv_symm_lof** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} [inst : DecidableEq ι] [ins
+t_1 : Semiring R] [inst_2 : AddCommMonoid M]   [inst_3 : _root_.Module R M] (ℳ :
+ ι → Submodule R M) [inst_4 : DirectSum.Decomposition ℳ] (i : ι) (x : ↥(ℳ i)),  
+ (DirectSum.decomposeLinearEquiv ℳ).symm ((DirectSum.lof R ι (fun i => ↥(ℳ i)) i
+) x) = ↑x
+参数：ℳ : ι → Submodule R M；i : ι；x : ↥(ℳ i)；DirectSum.decomposeLinearEquiv ℳ；(Dire
+ctSum.lof R ι (fun i => ↥(ℳ i)) i) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.decomposeLinearEquiv_symm_comp_lof`：∀ {ι : Type u_1} {R : Type
+ u_2} {M : Type u_3} [inst : DecidableEq ι] [inst_1 : Semiring R] [inst_2 : AddC
+ommMonoid M]   [inst_3 : _root_.Mo…
 -/
 @[simp] lemma decomposeLinearEquiv_symm_lof (i : ι) (x : ℳ i) :
     (decomposeLinearEquiv ℳ).symm (lof R _ _ i x) = x :=
   congr($(decomposeLinearEquiv_symm_comp_lof ℳ i) x)
-
-/--
-lemma `decomposeLinearEquiv_apply_coe` / 引理 `decomposeLinearEquiv_apply_coe`
-
-English:
-lemma decomposeLinearEquiv_apply_coe
-  given: (i : ι) (x : ℳ i)
-  proof: (LinearEquiv.eq_symm_apply _).mp (decomposeLinearEquiv_symm_lof ..).symm
-
-中文:
-引理 decomposeLinearEquiv_apply_coe
-  条件: (i : ι) (x : ℳ i)
-  证明: (LinearEquiv.eq_symm_apply _).mp (decomposeLinearEquiv_symm_lof ..).symm
+/-
+**DirectSum.decomposeLinearEquiv_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`
+。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} [inst : DecidableEq ι] [ins
+t_1 : Semiring R] [inst_2 : AddCommMonoid M]   [inst_3 : _root_.Module R M] (ℳ :
+ ι → Submodule R M) [inst_4 : DirectSum.Decomposition ℳ] (i : ι) (x : ↥(ℳ i)),  
+ (DirectSum.decomposeLinearEquiv ℳ) ↑x = (DirectSum.lof R ι (fun i => ↥(ℳ i)) i)
+ x
+参数：ℳ : ι → Submodule R M；i : ι；x : ↥(ℳ i)；DirectSum.decomposeLinearEquiv ℳ；Direc
+tSum.lof R ι (fun i => ↥(ℳ i)) i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearEquiv.eq_symm_apply`：eq_symm_apply {x y} : y = e.symm x ↔ e y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.decomposeLinearEquiv_symm_lof`：∀ {ι : Type u_1} {R : Type u_2}
+ {M : Type u_3} [inst : DecidableEq ι] [inst_1 : Semiring R] [inst_2 : AddCommMo
+noid M]   [inst_3 : _root_.Mo…
 -/
 @[simp] lemma decomposeLinearEquiv_apply_coe (i : ι) (x : ℳ i) :
     decomposeLinearEquiv ℳ x = lof R _ _ i x :=
   (LinearEquiv.eq_symm_apply _).mp (decomposeLinearEquiv_symm_lof ..).symm
 
-/--
-theorem `decompose_lhom_ext` / 定理 `decompose_lhom_ext`
+/-- Two linear maps from a module with a decomposition agree if they agree on every piece.
 
-English:
-theorem decompose_lhom_ext
-  given: {N} [AddCommMonoid N] [Module R N] ⦃f g
-  statement: M ->ₗ[R] N⦄
-  proof: LinearMap.ext (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr
-    suffices f ∘ₗ (decomposeLinearEquiv ℳ).symm
-           = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) ->ₗ[R] N) from
-      DFunLike.congr_fun this
-    linearMap_ext _ fun i => by
-      simp_rw [LinearMap.comp_assoc, decomposeLinearEquiv_symm_comp_lof ℳ i, h]
+Note this cannot be `@[ext]` as `ℳ` cannot be inferred. -/
+/-
+**DirectSum.decompose_lhom_ext** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：decompose_lhom_ext {N} [AddCommMonoid N] [Module R N] ⦃f g : M ->ₗ[R] N⦄ (
+h : forall i, f ∘ₗ (ℳ i).subtype = g ∘ₗ (ℳ i).subtype) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `DirectSum.linearMap_ext`：linearMap_ext ⦃ψ ψ' : (⨁ i, M i) ->ₗ[R] N⦄ (H :
+ forall i, ψ.comp (lof R ι M i) = ψ'.comp (lof R ι M i)) : ψ = ψ'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `DirectSum.decomposeLinearEquiv_symm_comp_lof`：∀ {ι : Type u_1} {R : Type
+ u_2} {M : Type u_3} [inst : DecidableEq ι] [inst_1 : Semiring R] [inst_2 : AddC
+ommMonoid M]   [inst_3 : _root_.Mo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-中文:
-定理 decompose_lhom_ext
-  条件: {N} [加法交换幺半群 N] [模 R N] ⦃f g
-  结论: M ->ₗ[R] N⦄
-  证明: LinearMap.ext (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr
-    suffices f ∘ₗ (decomposeLinearEquiv ℳ).symm
-           = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) ->ₗ[R] N) from
-      DFunLike.congr_fun this
-    linearMap_ext _ fun i => by
-      simp_rw [LinearMap.comp_assoc, decomposeLinearEquiv_symm_comp_lof ℳ i, h]
+--- 原说明 ---
+Two linear maps from a module with a decomposition agree if they agree on every 
+piece.
 
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.comp_assoc, LinearMap.ext, comp_assoc, congr_fun, decomposeLinearEquiv, decomposeLinearEquiv_symm_comp_lof, linearMap_ext, simp_rw, surjective, symm.surjective.forall.mpr
+Note this cannot be `@[ext]` as `ℳ` cannot be inferred.
 -/
-theorem decompose_lhom_ext {N} [AddCommMonoid N] [Module R N] ⦃f g : M ->ₗ[R] N⦄
-    (h : forall i, f ∘ₗ (ℳ i).subtype = g ∘ₗ (ℳ i).subtype) : f = g :=
-LinearMap.ext (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr
+theorem decompose_lhom_ext {N} [AddCommMonoid N] [Module R N] ⦃f g : M →ₗ[R] N⦄
+    (h : ∀ i, f ∘ₗ (ℳ i).subtype = g ∘ₗ (ℳ i).subtype) : f = g :=
+  LinearMap.ext <| (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr <|
     suffices f ∘ₗ (decomposeLinearEquiv ℳ).symm
-           = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) ->ₗ[R] N) from
+           = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) →ₗ[R] N) from
       DFunLike.congr_fun this
     linearMap_ext _ fun i => by
       simp_rw [LinearMap.comp_assoc, decomposeLinearEquiv_symm_comp_lof ℳ i, h]
@@ -999,3 +948,4 @@ LinearMap.ext (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr
 end Module
 
 end DirectSum
+

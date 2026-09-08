@@ -16,62 +16,43 @@ public import Mathlib.GroupTheory.Congruence.Basic
 
 variable (R S M N : Type*)
 
-/--
-Definition of `VAddCon` / `VAddCon` 的定义
+/-- A congruence relation that preserves additive action. -/
+/-
+**VAddCon** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_2) → (M : Type u_3) → [VAdd S M] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure VAddCon
-  parameters: [VAdd S M]
-  extends: Setoid M
-  axioms and operations (1):
-    - vadd((s : S) {x y}) : r x y -> r (s +ᵥ x) (s +ᵥ y)
-
-中文:
-结构 VAddCon
-  参数: [向量加法 S M]
-  继承: 集合等价关系 M
-  公理与运算 (1 个):
-    - vadd((s : S) {x y}) : r x y -> r (s +ᵥ x) (s +ᵥ y)
+--- 原说明 ---
+A congruence relation that preserves additive action.
 -/
 structure VAddCon [VAdd S M] extends Setoid M where
   /-- A `VAddCon` is closed under additive action. -/
-  vadd (s : S) {x y} : r x y -> r (s +ᵥ x) (s +ᵥ y)
+  vadd (s : S) {x y} : r x y → r (s +ᵥ x) (s +ᵥ y)
 
-/--
-Definition of `SMulCon` / `SMulCon` 的定义
+/-- A congruence relation that preserves scalar multiplication. -/
+/-
+**SMulCon** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_2) → (M : Type u_3) → [SMul S M] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SMulCon
-  parameters: [SMul S M]
-  extends: Setoid M
-  axioms and operations (1):
-    - smul((s : S) {x y}) : r x y -> r (s • x) (s • y)
-
-中文:
-结构 SMulCon
-  参数: [标量乘法 S M]
-  继承: 集合等价关系 M
-  公理与运算 (1 个):
-    - smul((s : S) {x y}) : r x y -> r (s • x) (s • y)
+--- 原说明 ---
+A congruence relation that preserves scalar multiplication.
 -/
 @[to_additive] structure SMulCon [SMul S M] extends Setoid M where
   /-- A `SMulCon` is closed under scalar multiplication. -/
-  smul (s : S) {x y} : r x y -> r (s • x) (s • y)
+  smul (s : S) {x y} : r x y → r (s • x) (s • y)
 
-/--
-Definition of `ModuleCon` / `ModuleCon` 的定义
+/-- A congruence relation that preserves addition and scalar multiplication.
+The quotient by a `ModuleCon` inherits `DistribSMul`, `DistribMulAction`, and `Module` instances. -/
+/-
+**ModuleCon** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_2) → (M : Type u_3) → [Add M] → [SMul S M] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ModuleCon
-  parameters: [Add M] [SMul S M]
-  extends: AddCon M, SMulCon S M
-  (no additional axioms)
-
-中文:
-结构 ModuleCon
-  参数: [加法 M] [标量乘法 S M]
-  继承: 加法Con M, SMulCon S M
-  (无附加公理)
+--- 原说明 ---
+A congruence relation that preserves addition and scalar multiplication.
+The quotient by a `ModuleCon` inherits `DistribSMul`, `DistribMulAction`, and `M
+odule` instances.
 -/
 structure ModuleCon [Add M] [SMul S M] extends AddCon M, SMulCon S M
 
@@ -84,146 +65,80 @@ namespace SMulCon
 
 /-- The quotient by a congruence relation preserving scalar multiplication. -/
 @[to_additive /-- The quotient by a congruence relation preserving additive action. -/]
-/--
-Definition of `Quotient` / `Quotient` 的定义
+/-
+**SMulCon.Quotient** 是 Mathlib 中的一个定义，位于命名空间 `SMulCon`。
+形式化陈述：{S : Type u_2} → (M : Type u_3) → [inst : SMul S M] → SMulCon S M → Type u
+_3
+参数：M : Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient
-  signature: [SMul S M] (c : SMulCon S M)
-  body: Quotient c.toSetoid
-
-中文:
-定义 商
-  签名: [标量乘法 S M] (c : SMulCon S M)
-  定义体: Quotient c.toSetoid
+--- 原说明 ---
+The quotient by a congruence relation preserving scalar multiplication.
 -/
 protected def Quotient [SMul S M] (c : SMulCon S M) : Type _ := Quotient c.toSetoid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] (c
-  body: Quotient.map (s • ·) (@c.smul s)
-
-中文:
-实例 [标量乘法
-  签名: S M] (c
-  定义体: Quotient.map (s • ·) (@c.smul s)
+/-
+**SMulCon.** 是 Mathlib 中的一个实例，位于命名空间 `SMulCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [SMul S M] (c : SMulCon S M) : SMul S c.Quotient where
   smul s := Quotient.map (s • ·) (@c.smul s)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [Zero M] (c
-  body: ⟦0⟧
-
-中文:
-实例 [标量乘法
-  签名: S M] [零 M] (c
-  定义体: ⟦0⟧
+/-
+**SMulCon.** 是 Mathlib 中的一个实例，位于命名空间 `SMulCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [Zero M] (c : SMulCon S M) : Zero c.Quotient where
   zero := ⟦0⟧
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M] [SMulZeroClass S M] (c
-  body: congr_arg _ (smul_zero s)
-
-中文:
-实例 [零
-  签名: M] [SMulZero类 S M] (c
-  定义体: congr_arg _ (smul_zero s)
-
-Depends on / 依赖: congr_arg, smul_zero
+/-
+**SMulCon.** 是 Mathlib 中的一个实例，位于命名空间 `SMulCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M] [SMulZeroClass S M] (c : SMulCon S M) : SMulZeroClass S c.Quotient where
   smul_zero s := congr_arg _ (smul_zero s)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: S] [Zero M] [SMulWithZero S M] (c
-  body: fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ => rfl
-
-中文:
-实例 [零
-  签名: S] [零 M] [带零标量乘法 S M] (c
-  定义体: fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ => rfl
-
-Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.smulWithZero, fast_instance, smulWithZero
+/-
+**SMulCon.** 是 Mathlib 中的一个实例，位于命名空间 `SMulCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero S] [Zero M] [SMulWithZero S M] (c : SMulCon S M) : SMulWithZero S c.Quotient :=
-  fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [MulAction S M] (c
-  body: fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: S] [乘法作用 S M] (c
-  定义体: fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ => rfl
+  fast_instance% Quotient.mk''_surjective.smulWithZero ⟨_, rfl⟩ fun _ _ ↦ rfl
+/-
+**SMulCon.** 是 Mathlib 中的一个实例，位于命名空间 `SMulCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Monoid S] [MulAction S M] (c : SMulCon S M) : MulAction S c.Quotient :=
-  fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ => rfl
+  fast_instance% Quotient.mk''_surjective.mulAction (⟦·⟧) fun _ _ ↦ rfl
 
 section addConGen
 
 variable {M} [AddZeroClass M] [DistribSMul S M]
 
-/--
-Definition of `addConGen'` / `addConGen'` 的定义
+/-- The `AddCon` generated by a relation respecting scalar multiplication is a `ModuleCon`. -/
+/-
+**SMulCon.addConGen'** 是 Mathlib 中的一个定义，位于命名空间 `SMulCon`。
+形式化陈述：addConGen' (r : M -> M -> Prop) (hr : forall (s : S) {m m'}, r m m' -> r (
+s • m) (s • m')) : ModuleCon S M where toAddCon
+参数：r : M -> M -> Prop；hr : forall (s : S) {m m'}, r m m' -> r (s • m) (s • m')。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addConGen'
-  signature: (r : M -> M -> Prop) (hr : forall (s : S) {m m'}, r m m' -> r (s • m) (s • m'))
-  body: addConGen r
-  smul s _ _ h := ((addConGen r).comap (DistribSMul.toAddMonoidHom M s) <| by simp).addConGen_le.2
-    (fun _ _ h => .of _ _ (hr s h)) h
-
-中文:
-定义 addConGen'
-  签名: (r : M -> M -> 命题) (hr : 对任意 (s : S) {m m'}, r m m' -> r (s • m) (s • m'))
-  定义体: addConGen r
-  smul s _ _ h := ((addConGen r).comap (DistribSMul.toAddMonoidHom M s) <| by simp).addConGen_le.2
-    (fun _ _ h => .of _ _ (hr s h)) h
-
-Depends on / 依赖: addConGen
+--- 原说明 ---
+The `AddCon` generated by a relation respecting scalar multiplication is a `Modu
+leCon`.
 -/
-def addConGen' (r : M -> M -> Prop) (hr : forall (s : S) {m m'}, r m m' -> r (s • m) (s • m')) :
+def addConGen' (r : M → M → Prop) (hr : ∀ (s : S) {m m'}, r m m' → r (s • m) (s • m')) :
     ModuleCon S M where
   toAddCon := addConGen r
   smul s _ _ h := ((addConGen r).comap (DistribSMul.toAddMonoidHom M s) <| by simp).addConGen_le.2
-    (fun _ _ h => .of _ _ (hr s h)) h
+    (fun _ _ h ↦ .of _ _ (hr s h)) h
 
-/--
-Definition of `addConGen` / `addConGen` 的定义
+/-- The `AddCon` generated by a `SMulCon` is a `ModuleCon`. -/
+/-
+**SMulCon.addConGen** 是 Mathlib 中的一个定义，位于命名空间 `SMulCon`。
+形式化陈述：{S : Type u_2} → {M : Type u_3} → [inst : AddZeroClass M] → [inst_1 : Dist
+ribSMul S M] → SMulCon S M → ModuleCon S M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation addConGen
-  signature: (c : SMulCon S M)
-  body: addConGen' c.r c.smul
-
-中文:
-缩写 addConGen
-  签名: (c : SMulCon S M)
-  定义体: addConGen' c.r c.smul
+--- 原说明 ---
+The `AddCon` generated by a `SMulCon` is a `ModuleCon`.
 -/
 protected abbrev addConGen (c : SMulCon S M) : ModuleCon S M := addConGen' c.r c.smul
 
@@ -233,328 +148,123 @@ end SMulCon
 
 namespace ModuleCon
 
-/--
-Definition of `Quotient` / `Quotient` 的定义
+/-- The quotient by a congruence relation preserving addition and scalar multiplication. -/
+/-
+**ModuleCon.Quotient** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCon`。
+形式化陈述：{S : Type u_2} → (M : Type u_3) → [inst : Add M] → [inst_1 : SMul S M] → M
+oduleCon S M → Type u_3
+参数：M : Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient
-  signature: [Add M] [SMul S M] (c : ModuleCon S M)
-  body: Quotient c.toSetoid
-
-中文:
-定义 商
-  签名: [加法 M] [标量乘法 S M] (c : ModuleCon S M)
-  定义体: Quotient c.toSetoid
+--- 原说明 ---
+The quotient by a congruence relation preserving addition and scalar multiplicat
+ion.
 -/
 protected def Quotient [Add M] [SMul S M] (c : ModuleCon S M) : Type _ := Quotient c.toSetoid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [Add M] (c
-  body: inferInstanceAs (SMul S c.toSMulCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法 M] (c
-  定义体: inferInstanceAs (SMul S c.toSMulCon.Quotient)
-
-Depends on / 依赖: Quotient, c.toSMulCon.Quotient, toSMulCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [Add M] (c : ModuleCon S M) : SMul S c.Quotient :=
   inferInstanceAs (SMul S c.toSMulCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [Zero M] [Add M] (c
-  body: ⟦0⟧
-
-中文:
-实例 [标量乘法
-  签名: S M] [零 M] [加法 M] (c
-  定义体: ⟦0⟧
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [Zero M] [Add M] (c : ModuleCon S M) : Zero c.Quotient where
   zero := ⟦0⟧
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [Add M] (c
-  body: inferInstanceAs (Add c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法 M] (c
-  定义体: inferInstanceAs (Add c.toAddCon.Quotient)
-
-Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [Add M] (c : ModuleCon S M) : Add c.Quotient :=
   inferInstanceAs (Add c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddZeroClass M] (c
-  body: inferInstanceAs (AddZeroClass c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法零类 M] (c
-  定义体: inferInstanceAs (AddZeroClass c.toAddCon.Quotient)
-
-Depends on / 依赖: AddZeroClass, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddZeroClass M] (c : ModuleCon S M) : AddZeroClass c.Quotient :=
   inferInstanceAs (AddZeroClass c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddCommMagma M] (c
-  body: inferInstanceAs (AddCommMagma c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法交换原群 M] (c
-  定义体: inferInstanceAs (AddCommMagma c.toAddCon.Quotient)
-
-Depends on / 依赖: AddCommMagma, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddCommMagma M] (c : ModuleCon S M) : AddCommMagma c.Quotient :=
   inferInstanceAs (AddCommMagma c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddSemigroup M] (c
-  body: inferInstanceAs (AddSemigroup c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法半群 M] (c
-  定义体: inferInstanceAs (AddSemigroup c.toAddCon.Quotient)
-
-Depends on / 依赖: AddSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddSemigroup M] (c : ModuleCon S M) : AddSemigroup c.Quotient :=
   inferInstanceAs (AddSemigroup c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddCommSemigroup M] (c
-  body: inferInstanceAs (AddCommSemigroup c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法交换半群 M] (c
-  定义体: inferInstanceAs (AddCommSemigroup c.toAddCon.Quotient)
-
-Depends on / 依赖: AddCommSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddCommSemigroup M] (c : ModuleCon S M) : AddCommSemigroup c.Quotient :=
   inferInstanceAs (AddCommSemigroup c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddMonoid M] (c
-  body: inferInstanceAs (AddMonoid c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法幺半群 M] (c
-  定义体: inferInstanceAs (AddMonoid c.toAddCon.Quotient)
-
-Depends on / 依赖: AddMonoid, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddMonoid M] (c : ModuleCon S M) : AddMonoid c.Quotient :=
   inferInstanceAs (AddMonoid c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddCommMonoid M] (c
-  body: inferInstanceAs (AddCommMonoid c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法交换幺半群 M] (c
-  定义体: inferInstanceAs (AddCommMonoid c.toAddCon.Quotient)
-
-Depends on / 依赖: AddCommMonoid, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddCommMonoid M] (c : ModuleCon S M) : AddCommMonoid c.Quotient :=
   inferInstanceAs (AddCommMonoid c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddGroup M] (c
-  body: inferInstanceAs (AddGroup c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法群 M] (c
-  定义体: inferInstanceAs (AddGroup c.toAddCon.Quotient)
-
-Depends on / 依赖: AddGroup, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddGroup M] (c : ModuleCon S M) : AddGroup c.Quotient :=
   inferInstanceAs (AddGroup c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S M] [AddCommGroup M] (c
-  body: inferInstanceAs (AddCommGroup c.toAddCon.Quotient)
-
-中文:
-实例 [标量乘法
-  签名: S M] [加法交换群 M] (c
-  定义体: inferInstanceAs (AddCommGroup c.toAddCon.Quotient)
-
-Depends on / 依赖: AddCommGroup, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S M] [AddCommGroup M] (c : ModuleCon S M) : AddCommGroup c.Quotient :=
   inferInstanceAs (AddCommGroup c.toAddCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M] [Add M] [SMulZeroClass S M] (c
-  body: inferInstanceAs (SMulZeroClass S c.toSMulCon.Quotient)
-
-中文:
-实例 [零
-  签名: M] [加法 M] [SMulZero类 S M] (c
-  定义体: inferInstanceAs (SMulZeroClass S c.toSMulCon.Quotient)
-
-Depends on / 依赖: Quotient, SMulZeroClass, c.toSMulCon.Quotient, toSMulCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M] [Add M] [SMulZeroClass S M] (c : ModuleCon S M) : SMulZeroClass S c.Quotient :=
   inferInstanceAs (SMulZeroClass S c.toSMulCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: S] [Zero M] [Add M] [SMulWithZero S M] (c
-  body: inferInstanceAs (SMulWithZero S c.toSMulCon.Quotient)
-
-中文:
-实例 [零
-  签名: S] [零 M] [加法 M] [带零标量乘法 S M] (c
-  定义体: inferInstanceAs (SMulWithZero S c.toSMulCon.Quotient)
-
-Depends on / 依赖: Quotient, SMulWithZero, c.toSMulCon.Quotient, toSMulCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero S] [Zero M] [Add M] [SMulWithZero S M] (c : ModuleCon S M) :
     SMulWithZero S c.Quotient :=
   inferInstanceAs (SMulWithZero S c.toSMulCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [Add M] [MulAction S M] (c
-  body: inferInstanceAs (MulAction S c.toSMulCon.Quotient)
-
-中文:
-实例 [幺半群
-  签名: S] [加法 M] [乘法作用 S M] (c
-  定义体: inferInstanceAs (MulAction S c.toSMulCon.Quotient)
-
-Depends on / 依赖: MulAction, Quotient, c.toSMulCon.Quotient, toSMulCon
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid S] [Add M] [MulAction S M] (c : ModuleCon S M) : MulAction S c.Quotient :=
   inferInstanceAs (MulAction S c.toSMulCon.Quotient)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: M] [DistribSMul S M] (c
-  body: fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ => rfl
-
-中文:
-实例 [加法零类
-  签名: M] [分配标量乘法 S M] (c
-  定义体: fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ => rfl
-
-Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.distribSMul, c.mk, distribSMul, fast_instance
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass M] [DistribSMul S M] (c : ModuleCon S M) : DistribSMul S c.Quotient :=
-  fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [AddMonoid M] [DistribMulAction S M] (c
-  body: fast_instance%
-  Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: S] [加法幺半群 M] [分配乘法作用 S M] (c
-  定义体: fast_instance%
-  Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+  fast_instance% Quotient.mk''_surjective.distribSMul c.mk' fun _ _ ↦ rfl
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid S] [AddMonoid M] [DistribMulAction S M] (c : ModuleCon S M) :
     DistribMulAction S c.Quotient := fast_instance%
-  Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: S] [AddCommMonoid M] [Module S M] (c
-  body: fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ => rfl
-
-中文:
-实例 [半环
-  签名: S] [加法交换幺半群 M] [模 S M] (c
-  定义体: fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ => rfl
-
-Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.module, c.mk, fast_instance, module
+  Quotient.mk''_surjective.distribMulAction c.mk' fun _ _ ↦ rfl
+/-
+**ModuleCon.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring S] [AddCommMonoid M] [Module S M] (c : ModuleCon S M) : Module S c.Quotient :=
-  fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ => rfl
+  fast_instance% Quotient.mk''_surjective.module _ c.mk' fun _ _ ↦ rfl
 
 end ModuleCon
 
@@ -564,70 +274,58 @@ variable {R M N}
 
 /-- The kernel of a `MulActionHom` as a congruence relation. -/
 @[to_additive /-- The kernel of an `AddActionHom` as a congruence relation. -/]
-/--
-Definition of `SMulCon.ker` / `SMulCon.ker` 的定义
+/-
+**SMulCon.ker** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SMulCon.ker [SMul R M] [SMul S N] {φ : R -> S} (f : M ->ₑ[φ] N) : SMulCon 
+R M where __
+参数：f : M ->ₑ[φ] N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SMulCon.ker
-  signature: [SMul R M] [SMul S N] {φ : R -> S} (f : M ->ₑ[φ] N)
-  body: Setoid.ker f
-  smul r _ _ h := by rw [Setoid.ker_def] at h ⊢; simp_rw [map_smulₛₗ, h]
-
-中文:
-定义 SMulCon.ker
-  签名: [标量乘法 R M] [标量乘法 S N] {φ : R -> S} (f : M ->ₑ[φ] N)
-  定义体: Setoid.ker f
-  smul r _ _ h := by rw [Setoid.ker_def] at h ⊢; simp_rw [map_smulₛₗ, h]
-
-Depends on / 依赖: Setoid, Setoid.ker
+--- 原说明 ---
+The kernel of a `MulActionHom` as a congruence relation.
 -/
-def SMulCon.ker [SMul R M] [SMul S N] {φ : R -> S} (f : M ->ₑ[φ] N) : SMulCon R M where
+def SMulCon.ker [SMul R M] [SMul S N] {φ : R → S} (f : M →ₑ[φ] N) : SMulCon R M where
   __ := Setoid.ker f
   smul r _ _ h := by rw [Setoid.ker_def] at h ⊢; simp_rw [map_smulₛₗ, h]
 
-/--
-Definition of `ModuleCon.ker` / `ModuleCon.ker` 的定义
+/-- The kernel of a `DistribMulActionHom` as a congruence relation. -/
+/-
+**ModuleCon.ker** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ModuleCon.ker [Monoid R] [Monoid S] [AddMonoid M] [AddMonoid N] [DistribMu
+lAction R M] [DistribMulAction S N] {φ : R ->* S} (f : M ->ₑ+[φ] N) : ModuleCon 
+R M where __
+参数：f : M ->ₑ+[φ] N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ModuleCon.ker
-  signature: [Monoid R] [Monoid S] [AddMonoid M] [AddMonoid N] [DistribMulAction R M]
-  body: SMulCon.ker f.toMulActionHom
-  __ := AddCon.ker f
-
-中文:
-定义 ModuleCon.ker
-  签名: [幺半群 R] [幺半群 S] [加法幺半群 M] [加法幺半群 N] [分配乘法作用 R M]
-  定义体: SMulCon.ker f.toMulActionHom
-  __ := AddCon.ker f
-
-Depends on / 依赖: SMulCon, SMulCon.ker, f.toMulActionHom, toMulActionHom
+--- 原说明 ---
+The kernel of a `DistribMulActionHom` as a congruence relation.
 -/
 def ModuleCon.ker [Monoid R] [Monoid S] [AddMonoid M] [AddMonoid N] [DistribMulAction R M]
-    [DistribMulAction S N] {φ : R ->* S} (f : M ->ₑ+[φ] N) : ModuleCon R M where
+    [DistribMulAction S N] {φ : R →* S} (f : M →ₑ+[φ] N) : ModuleCon R M where
   __ := SMulCon.ker f.toMulActionHom
   __ := AddCon.ker f
 
-/--
-Definition of `ModuleCon.quotientKerEquivOfSurjective` / `ModuleCon.quotientKerEquivOfSurjective` 的定义
+/-- The first isomorphism theorem for semimodules in the case of a surjective homomorphism. -/
+/-
+**ModuleCon.quotientKerEquivOfSurjective** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ModuleCon.quotientKerEquivOfSurjective [Semiring S] [AddCommMonoid M] [Add
+CommMonoid N] [Module S M] [Module S N] (f : M ->ₗ[S] N) (hf : Function.Surjecti
+ve f) : (ker f.toDistribMulActionHom).Quotient ≃ₗ[S] N where __
+参数：f : M ->ₗ[S] N；hf : Function.Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ModuleCon.quotientKerEquivOfSurjective
-  signature: [Semiring S] [AddCommMonoid M]
-  body: AddCon.quotientKerEquivOfSurjective f.toAddMonoidHom hf
-  map_smul' s := by rintro ⟨⟩; apply map_smul f
-
-中文:
-定义 ModuleCon.quotientKerEquivOfSurjective
-  签名: [半环 S] [加法交换幺半群 M]
-  定义体: AddCon.quotientKerEquivOfSurjective f.toAddMonoidHom hf
-  map_smul' s := by rintro ⟨⟩; apply map_smul f
-
-Depends on / 依赖: AddCon, AddCon.quotientKerEquivOfSurjective, f.toAddMonoidHom, quotientKerEquivOfSurjective, toAddMonoidHom
+--- 原说明 ---
+The first isomorphism theorem for semimodules in the case of a surjective homomo
+rphism.
 -/
 noncomputable def ModuleCon.quotientKerEquivOfSurjective [Semiring S] [AddCommMonoid M]
-    [AddCommMonoid N] [Module S M] [Module S N] (f : M ->ₗ[S] N) (hf : Function.Surjective f) :
+    [AddCommMonoid N] [Module S M] [Module S N] (f : M →ₗ[S] N) (hf : Function.Surjective f) :
     (ker f.toDistribMulActionHom).Quotient ≃ₗ[S] N where
   __ := AddCon.quotientKerEquivOfSurjective f.toAddMonoidHom hf
   map_smul' s := by rintro ⟨⟩; apply map_smul f
 
 end ker
+

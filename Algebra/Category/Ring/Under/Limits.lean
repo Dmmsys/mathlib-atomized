@@ -38,138 +38,88 @@ variable [Algebra R S]
 
 section Pi
 
-variable {ι : Type u} (P : ι -> Under R)
+variable {ι : Type u} (P : ι → Under R)
 
-/--
-Definition of `piFan` / `piFan` 的定义
+/-- The canonical fan on `P : ι → Under R` given by `∀ i, P i`. -/
+/-
+**CommRingCat.Under.piFan** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Under`。
+形式化陈述：piFan : Fan P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piFan
-  signature: : Fan P
-  body: Fan.mk (Under.mk <| ofHom <| RingHom.pi (fun i => (P i).hom.hom))
-    (fun i => Under.homMk (ofHom <| Pi.evalRingHom _ i))
-
-中文:
-定义 piFan
-  签名: : Fan P
-  定义体: Fan.mk (Under.mk <| ofHom <| RingHom.pi (fun i => (P i).hom.hom))
-    (fun i => Under.homMk (ofHom <| Pi.evalRingHom _ i))
-
-Depends on / 依赖: Fan.mk, Pi.evalRingHom, RingHom, RingHom.pi, Under.homMk, Under.mk, evalRingHom, hom.hom
+--- 原说明 ---
+The canonical fan on `P : ι → Under R` given by `∀ i, P i`.
 -/
 def piFan : Fan P :=
-  Fan.mk (Under.mk <| ofHom <| RingHom.pi (fun i => (P i).hom.hom))
-    (fun i => Under.homMk (ofHom <| Pi.evalRingHom _ i))
+  Fan.mk (Under.mk <| ofHom <| RingHom.pi (fun i ↦ (P i).hom.hom))
+    (fun i ↦ Under.homMk (ofHom <| Pi.evalRingHom _ i))
 
-/--
-Definition of `piFanIsLimit` / `piFanIsLimit` 的定义
+/-- The canonical fan is limiting. -/
+/-
+**CommRingCat.Under.piFanIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Under`。
+形式化陈述：piFanIsLimit : IsLimit (piFan P)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition piFanIsLimit
-  signature: : IsLimit (piFan P)
-  body: isLimitOfReflects (Under.forget R)
-(isLimitMapConeFanMkEquiv (Under.forget R) P _).symm
-      CommRingCat.piFanIsLimit (fun i => (P i).right)
-
-中文:
-定义 piFanIsLimit
-  签名: : 是极限 (piFan P)
-  定义体: isLimitOfReflects (Under.forget R)
-(isLimitMapConeFanMkEquiv (Under.forget R) P _).symm
-      CommRingCat.piFanIsLimit (fun i => (P i).right)
-
-Depends on / 依赖: CommRingCat, CommRingCat.piFanIsLimit, Under.forget, forget, isLimitMapConeFanMkEquiv, isLimitOfReflects, piFanIsLimit
+--- 原说明 ---
+The canonical fan is limiting.
 -/
 def piFanIsLimit : IsLimit (piFan P) :=
-isLimitOfReflects (Under.forget R)
-(isLimitMapConeFanMkEquiv (Under.forget R) P _).symm
-      CommRingCat.piFanIsLimit (fun i => (P i).right)
+  isLimitOfReflects (Under.forget R) <|
+    (isLimitMapConeFanMkEquiv (Under.forget R) P _).symm <|
+      CommRingCat.piFanIsLimit (fun i ↦ (P i).right)
 
 variable (S) in
-/--
-Definition of `tensorProductFan` / `tensorProductFan` 的定义
+/-- The fan on `i ↦ S ⊗[R] P i` given by `S ⊗[R] ∀ i, P i` -/
+/-
+**CommRingCat.Under.tensorProductFan** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Unde
+r`。
+形式化陈述：tensorProductFan : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorProductFan
-  signature: : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
-  body: Fan.mk (mkUnder S <| S otimes[R] forall i, (P i).right)
-    (fun i => AlgHom.toUnder <|
-      Algebra.TensorProduct.map (AlgHom.id S S) (Pi.evalAlgHom R (fun j => (P j).right) i))
-
-中文:
-定义 tensorProductFan
-  签名: : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
-  定义体: Fan.mk (mkUnder S <| S otimes[R] forall i, (P i).right)
-    (fun i => AlgHom.toUnder <|
-      Algebra.TensorProduct.map (AlgHom.id S S) (Pi.evalAlgHom R (fun j => (P j).right) i))
-
-Depends on / 依赖: AlgHom, AlgHom.id, AlgHom.toUnder, Algebra, Algebra.TensorProduct.map, Fan.mk, Pi.evalAlgHom, TensorProduct, evalAlgHom, mkUnder, otimes, toUnder
+--- 原说明 ---
+The fan on `i ↦ S ⊗[R] P i` given by `S ⊗[R] ∀ i, P i`
 -/
-def tensorProductFan : Fan (fun i => mkUnder S (S otimes[R] (P i).right)) :=
-  Fan.mk (mkUnder S <| S otimes[R] forall i, (P i).right)
-    (fun i => AlgHom.toUnder <|
-      Algebra.TensorProduct.map (AlgHom.id S S) (Pi.evalAlgHom R (fun j => (P j).right) i))
+def tensorProductFan : Fan (fun i ↦ mkUnder S (S ⊗[R] (P i).right)) :=
+  Fan.mk (mkUnder S <| S ⊗[R] ∀ i, (P i).right)
+    (fun i ↦ AlgHom.toUnder <|
+      Algebra.TensorProduct.map (AlgHom.id S S) (Pi.evalAlgHom R (fun j ↦ (P j).right) i))
 
 variable (S) in
-/--
-Definition of `tensorProductFan'` / `tensorProductFan'` 的定义
+/-- The fan on `i ↦ S ⊗[R] P i` given by `∀ i, S ⊗[R] P i` -/
+/-
+**CommRingCat.Under.tensorProductFan'** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Und
+er`。
+形式化陈述：tensorProductFan' : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorProductFan'
-  signature: : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
-  body: Fan.mk (mkUnder S <| forall i, S otimes[R] (P i).right)
-    (fun i => AlgHom.toUnder <| Pi.evalAlgHom S _ i)
-
-中文:
-定义 tensorProductFan'
-  签名: : Fan (fun i => mkUnder S (S otimes[R] (P i).right))
-  定义体: Fan.mk (mkUnder S <| forall i, S otimes[R] (P i).right)
-    (fun i => AlgHom.toUnder <| Pi.evalAlgHom S _ i)
-
-Depends on / 依赖: AlgHom, AlgHom.toUnder, Fan.mk, Pi.evalAlgHom, evalAlgHom, mkUnder, otimes, toUnder
+--- 原说明 ---
+The fan on `i ↦ S ⊗[R] P i` given by `∀ i, S ⊗[R] P i`
 -/
-def tensorProductFan' : Fan (fun i => mkUnder S (S otimes[R] (P i).right)) :=
-  Fan.mk (mkUnder S <| forall i, S otimes[R] (P i).right)
-    (fun i => AlgHom.toUnder <| Pi.evalAlgHom S _ i)
+def tensorProductFan' : Fan (fun i ↦ mkUnder S (S ⊗[R] (P i).right)) :=
+  Fan.mk (mkUnder S <| ∀ i, S ⊗[R] (P i).right)
+    (fun i ↦ AlgHom.toUnder <| Pi.evalAlgHom S _ i)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `tensorProductFanIso` / `tensorProductFanIso` 的定义
+/-- The two fans on `i ↦ S ⊗[R] P i` agree if `ι` is finite. -/
+/-
+**CommRingCat.Under.tensorProductFanIso** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.U
+nder`。
+形式化陈述：tensorProductFanIso [Fintype ι] [DecidableEq ι] : tensorProductFan S P ≅ t
+ensorProductFan' S P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorProductFanIso
-  signature: [Fintype ι] [DecidableEq ι]
-  body: Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder fun i => by
-    dsimp only [tensorProductFan, Fan.mk_pt, fan_mk_proj, tensorProductFan']
-    apply CommRingCat.mkUnder_ext
-    intro c
-    induction c
-    · simp only [map_zero, Under.comp_right]
-    · simp only [AlgHom.toUnder_right, Algebra.TensorProduct.map_tmul, AlgHom.coe_id, id_eq,
-        Pi.evalAlgHom_apply, Under.comp_right, comp_apply, AlgEquiv.toUnder_hom_right_apply,
-        Algebra.TensorProduct.piRight_tmul]
-    · simp_all
-
-中文:
-定义 tensorProductFanIso
-  签名: [有限类型 ι] [DecidableEq ι]
-  定义体: Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder fun i => by
-    dsimp only [tensorProductFan, Fan.mk_pt, fan_mk_proj, tensorProductFan']
-    apply CommRingCat.mkUnder_ext
-    intro c
-    induction c
-    · simp only [map_zero, Under.comp_right]
-    · simp only [AlgHom.toUnder_right, Algebra.TensorProduct.map_tmul, AlgHom.coe_id, id_eq,
-        Pi.evalAlgHom_apply, Under.comp_right, comp_apply, AlgEquiv.toUnder_hom_right_apply,
-        Algebra.TensorProduct.piRight_tmul]
-    · simp_all
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.toUnder_hom_right_apply, AlgHom, AlgHom.coe_id, AlgHom.toUnder_right, Algebra, Algebra.TensorProduct.map_tmul, Algebra.TensorProduct.piRight, Algebra.TensorProduct.piRight_tmul, CommRingCat, CommRingCat.mkUnder_ext, Fan.ext, Fan.mk_pt, Pi.evalAlgHom_apply, TensorProduct, Under.comp_right, coe_id, comp_apply, comp_right, evalAlgHom_apply
+--- 原说明 ---
+The two fans on `i ↦ S ⊗[R] P i` agree if `ι` is finite.
 -/
 def tensorProductFanIso [Fintype ι] [DecidableEq ι] :
     tensorProductFan S P ≅ tensorProductFan' S P :=
-Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder fun i => by
+  Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder <| fun i ↦ by
     dsimp only [tensorProductFan, Fan.mk_pt, fan_mk_proj, tensorProductFan']
     apply CommRingCat.mkUnder_ext
     intro c
@@ -181,22 +131,18 @@ Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder fun i => by
     · simp_all
 
 open scoped Classical in
-/--
-Definition of `tensorProductFanIsLimit` / `tensorProductFanIsLimit` 的定义
+/-- The fan on `i ↦ S ⊗[R] P i` given by `S ⊗[R] ∀ i, P i` is limiting if `ι` is finite. -/
+/-
+**CommRingCat.Under.tensorProductFanIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CommRingC
+at.Under`。
+形式化陈述：tensorProductFanIsLimit [Finite ι] : IsLimit (tensorProductFan S P)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition tensorProductFanIsLimit
-  signature: [Finite ι]
-  body: letI : Fintype ι := Fintype.ofFinite ι
-  (IsLimit.equivIsoLimit (tensorProductFanIso P)).symm (Under.piFanIsLimit _)
-
-中文:
-定义 tensorProductFanIsLimit
-  签名: [有限 ι]
-  定义体: letI : Fintype ι := Fintype.ofFinite ι
-  (IsLimit.equivIsoLimit (tensorProductFanIso P)).symm (Under.piFanIsLimit _)
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, IsLimit, IsLimit.equivIsoLimit, Under.piFanIsLimit, equivIsoLimit, ofFinite, piFanIsLimit, tensorProductFanIso
+--- 原说明 ---
+The fan on `i ↦ S ⊗[R] P i` given by `S ⊗[R] ∀ i, P i` is limiting if `ι` is fin
+ite.
 -/
 def tensorProductFanIsLimit [Finite ι] : IsLimit (tensorProductFan S P) :=
   letI : Fintype ι := Fintype.ofFinite ι
@@ -204,50 +150,29 @@ def tensorProductFanIsLimit [Finite ι] : IsLimit (tensorProductFan S P) :=
 
 /-- `tensorProd R S` preserves the limit of the canonical fan on `P`. -/
 noncomputable -- marked noncomputable for performance (only)
-/--
-Definition of `piFanTensorProductIsLimit` / `piFanTensorProductIsLimit` 的定义
-
-English:
-definition piFanTensorProductIsLimit
-  signature: [Finite ι]
-  body: (isLimitMapConeFanMkEquiv (tensorProd R S) P _).symm tensorProductFanIsLimit P
-
-中文:
-定义 piFanTensorProductIsLimit
-  签名: [有限 ι]
-  定义体: (isLimitMapConeFanMkEquiv (tensorProd R S) P _).symm tensorProductFanIsLimit P
-
-Depends on / 依赖: isLimitMapConeFanMkEquiv, tensorProd, tensorProductFanIsLimit
+/-
+**CommRingCat.Under.piFanTensorProductIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CommRin
+gCat.Under`。
+形式化陈述：piFanTensorProductIsLimit [Finite ι] : IsLimit ((tensorProd R S).mapCone (
+Under.piFan P))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def piFanTensorProductIsLimit [Finite ι] : IsLimit ((tensorProd R S).mapCone (Under.piFan P)) :=
-(isLimitMapConeFanMkEquiv (tensorProd R S) P _).symm tensorProductFanIsLimit P
-
-instance (J : Type u) [Finite J] (f : J -> Under R) :
+  (isLimitMapConeFanMkEquiv (tensorProd R S) P _).symm <| tensorProductFanIsLimit P
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (J : Type u) [Finite J] (f : J → Under R) :
     PreservesLimit (Discrete.functor f) (tensorProd R S) :=
   let c : Fan _ := Under.piFan f
   have hc : IsLimit c := Under.piFanIsLimit f
   preservesLimit_of_preserves_limit_cone hc (piFanTensorProductIsLimit f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteProducts (tensorProd R S)
-  body: let J : Type u := ULift.{u} (Fin n)
-    have : PreservesLimitsOfShape (Discrete J) (tensorProd R S) :=
-      preservesLimitsOfShape_of_discrete (tensorProd R S)
-    preservesLimitsOfShape_of_equiv (Discrete.equivalence Equiv.ulift) (R.tensorProd S)
-
-中文:
-实例 :
-  签名: 保持FiniteProducts (tensorProd R S)
-  定义体: let J : Type u := ULift.{u} (Fin n)
-    have : PreservesLimitsOfShape (Discrete J) (tensorProd R S) :=
-      preservesLimitsOfShape_of_discrete (tensorProd R S)
-    preservesLimitsOfShape_of_equiv (Discrete.equivalence Equiv.ulift) (R.tensorProd S)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.ulift, PreservesLimitsOfShape, R.tensorProd, equivalence, preservesLimitsOfShape_of_discrete, preservesLimitsOfShape_of_equiv, tensorProd
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteProducts (tensorProd R S) where
   preserves n :=
@@ -260,24 +185,20 @@ end Pi
 
 section Equalizer
 
-/--
-lemma `equalizer_comp` / 引理 `equalizer_comp`
-
-English:
-lemma equalizer_comp
-  given: {A B : Under R} (f g : A ⟶ B)
-  proof: by
-  ext (a : AlgHom.equalizer (toAlgHom f) (toAlgHom g))
-  exact a.property
-
-中文:
-引理 equalizer_comp
-  条件: {A B : Under R} (f g : A ⟶ B)
-  证明: by
-  ext (a : AlgHom.equalizer (toAlgHom f) (toAlgHom g))
-  exact a.property
-
-Depends on / 依赖: AlgHom, AlgHom.equalizer, a.property, equalizer, property, toAlgHom
+/-
+**CommRingCat.Under.equalizer_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat.Under`
+。
+形式化陈述：equalizer_comp {A B : Under R} (f g : A ⟶ B) : (AlgHom.equalizer (toAlgHom
+ f) (toAlgHom g)).val.toUnder ≫ f = (AlgHom.equalizer (toAlgHom f) (toAlgHom g))
+.val.toUnder ≫ g
+参数：f g : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.mkUnder_ext`：mkUnder_ext {A : Type u} [CommRing A] [Algebra 
+R A] {B : Under R} {f g : mkUnder R A ⟶ B} (h : forall a : A, f.right a = g.righ
+t a) : f = g
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma equalizer_comp {A B : Under R} (f g : A ⟶ B) :
     (AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder ≫ f =
@@ -286,26 +207,16 @@ lemma equalizer_comp {A B : Under R} (f g : A ⟶ B) :
   exact a.property
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `equalizerFork` / `equalizerFork` 的定义
+/-- The canonical fork on `f g : A ⟶ B` given by the equalizer. -/
+/-
+**CommRingCat.Under.equalizerFork** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Under`。
+形式化陈述：equalizerFork {A B : Under R} (f g : A ⟶ B) : Fork f g
+参数：f g : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizerFork
-  signature: {A B : Under R} (f g : A ⟶ B)
-  body: Fork.ofι ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)
-    (by rw [equalizer_comp])
-
-@[simp]
-
-中文:
-定义 equalizerFork
-  签名: {A B : Under R} (f g : A ⟶ B)
-  定义体: Fork.ofι ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)
-    (by rw [equalizer_comp])
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.equalizer, Fork.of, equalizer, equalizer_comp, toAlgHom, toUnder, val.toUnder
+--- 原说明 ---
+The canonical fork on `f g : A ⟶ B` given by the equalizer.
 -/
 def equalizerFork {A B : Under R} (f g : A ⟶ B) :
     Fork f g :=
@@ -313,236 +224,156 @@ def equalizerFork {A B : Under R} (f g : A ⟶ B) :
     (by rw [equalizer_comp])
 
 @[simp]
-/--
-lemma `equalizerFork_ι` / 引理 `equalizerFork_ι`
-
-English:
-lemma equalizerFork_ι
-  given: {A B : Under R} (f g : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 equalizerFork_ι
-  条件: {A B : Under R} (f g : A ⟶ B)
-  证明: rfl
+/-
+**CommRingCat.Under.equalizerFork_** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat.Under`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equalizerFork_ι {A B : Under R} (f g : A ⟶ B) :
     (Under.equalizerFork f g).ι = (AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder := rfl
 
-/--
-Definition of `equalizerFork'` / `equalizerFork'` 的定义
+/-- Variant of `Under.equalizerFork'` for algebra maps. This is definitionally equal to
+`Under.equalizerFork` but this is costly in applications. -/
+/-
+**CommRingCat.Under.equalizerFork'** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Under`
+。
+形式化陈述：equalizerFork' {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Alg
+ebra R B] (f g : A ->ₐ[R] B) : Fork f.toUnder g.toUnder
+参数：f g : A ->ₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizerFork'
-  signature: {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
-  body: Fork.ofι ((AlgHom.equalizer f g).val.toUnder) by ext a; exact a.property
-
-@[simp]
-
-中文:
-定义 equalizerFork'
-  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
-  定义体: Fork.ofι ((AlgHom.equalizer f g).val.toUnder) by ext a; exact a.property
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.equalizer, Fork.of, a.property, equalizer, property, toUnder, val.toUnder
+--- 原说明 ---
+Variant of `Under.equalizerFork'` for algebra maps. This is definitionally equal
+ to
+`Under.equalizerFork` but this is costly in applications.
 -/
 def equalizerFork' {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
-    (f g : A ->ₐ[R] B) :
+    (f g : A →ₐ[R] B) :
     Fork f.toUnder g.toUnder :=
-Fork.ofι ((AlgHom.equalizer f g).val.toUnder) by ext a; exact a.property
+  Fork.ofι ((AlgHom.equalizer f g).val.toUnder) <| by ext a; exact a.property
 
 @[simp]
-/--
-lemma `equalizerFork'_ι` / 引理 `equalizerFork'_ι`
-
-English:
-lemma equalizerFork'_ι
-  statement: {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
-  proof: rfl
-
-中文:
-引理 equalizerFork'_ι
-  结论: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
-  证明: rfl
+/-
+**CommRingCat.Under.equalizerFork'_** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat.Under
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equalizerFork'_ι {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
-    (f g : A ->ₐ[R] B) :
+    (f g : A →ₐ[R] B) :
     (Under.equalizerFork' f g).ι = (AlgHom.equalizer f g).val.toUnder := rfl
 
+/-- The canonical fork on `f g : A ⟶ B` is limiting. -/
 -- marked noncomputable for performance (only)
-/--
-Definition of `equalizerForkIsLimit` / `equalizerForkIsLimit` 的定义
-
-English:
-definition equalizerForkIsLimit
-  signature: {A B : Under R} (f g : A ⟶ B)
-  body: isLimitOfReflects (Under.forget R)
-(isLimitMapConeForkEquiv (Under.forget R) (equalizer_comp f g)).invFun
-      CommRingCat.equalizerForkIsLimit f.right g.right
-
-中文:
-定义 equalizerForkIsLimit
-  签名: {A B : Under R} (f g : A ⟶ B)
-  定义体: isLimitOfReflects (Under.forget R)
-(isLimitMapConeForkEquiv (Under.forget R) (equalizer_comp f g)).invFun
-      CommRingCat.equalizerForkIsLimit f.right g.right
-
-Depends on / 依赖: CommRingCat, CommRingCat.equalizerForkIsLimit, MonCat, Under.forget, equalizerForkIsLimit, equalizer_comp, f.right, forget, g.right, invFun, isLimitMapConeForkEquiv, isLimitOfReflects
+/-
+**CommRingCat.Under.equalizerForkIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.
+Under`。
+形式化陈述：equalizerForkIsLimit {A B : Under R} (f g : A ⟶ B) : IsLimit (Under.equali
+zerFork f g)
+参数：f g : A ⟶ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.Under.equalizer_comp`：equalizer_comp {A B : Under R} (f g : 
+A ⟶ B) : (AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder ≫ f = (AlgHom.
+equalizer (toAlgHom f)…
 -/
 noncomputable def equalizerForkIsLimit {A B : Under R} (f g : A ⟶ B) :
     IsLimit (Under.equalizerFork f g) :=
-isLimitOfReflects (Under.forget R)
-(isLimitMapConeForkEquiv (Under.forget R) (equalizer_comp f g)).invFun
+  isLimitOfReflects (Under.forget R) <|
+    (isLimitMapConeForkEquiv (Under.forget R) (equalizer_comp f g)).invFun <|
       CommRingCat.equalizerForkIsLimit f.right g.right
 
-/--
-Definition of `equalizerFork'IsLimit` / `equalizerFork'IsLimit` 的定义
+/-- Variant of `Under.equalizerForkIsLimit` for algebra maps. -/
+/-
+**CommRingCat.Under.equalizerFork'IsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat
+.Under`。
+形式化陈述：{R : CommRingCat} →   {A B : Type u} →     [inst : CommRing A] →       [in
+st_1 : CommRing B] →         [inst_2 : Algebra (↑R) A] →           [inst_3 : Alg
+ebra (↑R) B] →             (f g : A →ₐ[↑R] B) → CategoryTheory.Limits.IsLimit (C
+ommRingCat.Under.equalizerFork' f g)
+参数：↑R；↑R；f g : A →ₐ[↑R] B；CommRingCat.Under.equalizerFork' f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizerFork'IsLimit
-  signature: {A B : Type u} [CommRing A] [CommRing B] [Algebra R A]
-  body: Under.equalizerForkIsLimit f.toUnder g.toUnder
-
-中文:
-定义 equalizerFork'是极限
-  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A]
-  定义体: Under.equalizerForkIsLimit f.toUnder g.toUnder
-
-Depends on / 依赖: MonCat, forget
+--- 原说明 ---
+Variant of `Under.equalizerForkIsLimit` for algebra maps.
 -/
 def equalizerFork'IsLimit {A B : Type u} [CommRing A] [CommRing B] [Algebra R A]
-    [Algebra R B] (f g : A ->ₐ[R] B) :
+    [Algebra R B] (f g : A →ₐ[R] B) :
     IsLimit (Under.equalizerFork' f g) :=
   Under.equalizerForkIsLimit f.toUnder g.toUnder
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `tensorProdEqualizer` / `tensorProdEqualizer` 的定义
+/-- The fork on `𝟙 ⊗[R] f` and `𝟙 ⊗[R] g` given by `S ⊗[R] eq(f, g)`. -/
+/-
+**CommRingCat.Under.tensorProdEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.U
+nder`。
+形式化陈述：tensorProdEqualizer {A B : Under R} (f g : A ⟶ B) : Fork ((tensorProd R S)
+.map f) ((tensorProd R S).map g)
+参数：f g : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorProdEqualizer
-  signature: {A B : Under R} (f g : A ⟶ B)
-  body: Fork.ofι
-((tensorProd R S).map ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)) by
-    rw [← Functor.map_comp]; rw [equalizer_comp]; rw [Functor.map_comp]
-
-@[simp]
-
-中文:
-定义 tensorProdEqualizer
-  签名: {A B : Under R} (f g : A ⟶ B)
-  定义体: Fork.ofι
-((tensorProd R S).map ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)) by
-    rw [← Functor.map_comp]; rw [equalizer_comp]; rw [Functor.map_comp]
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.equalizer, FilteredColimit, Fork.of, Functor, Functor.map_comp, MonCat, Quot.eqvGen_sound, Types.FilteredColimit.eqvGen_colimitTypeRel_of_rel, equalizer, equalizer_comp, eqvGen_colimitTypeRel_of_rel, eqvGen_sound, forget, map_comp, tensorProd, toAlgHom, toUnder, val.toUnder
+--- 原说明 ---
+The fork on `𝟙 ⊗[R] f` and `𝟙 ⊗[R] g` given by `S ⊗[R] eq(f, g)`.
 -/
 def tensorProdEqualizer {A B : Under R} (f g : A ⟶ B) :
     Fork ((tensorProd R S).map f) ((tensorProd R S).map g) :=
   Fork.ofι
-((tensorProd R S).map ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)) by
-    rw [← Functor.map_comp]; rw [equalizer_comp]; rw [Functor.map_comp]
+    ((tensorProd R S).map ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder)) <| by
+    rw [← Functor.map_comp, equalizer_comp, Functor.map_comp]
 
 @[simp]
-/--
-lemma `tensorProdEqualizer_ι` / 引理 `tensorProdEqualizer_ι`
-
-English:
-lemma tensorProdEqualizer_ι
-  given: {A B : Under R} (f g : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 tensorProdEqualizer_ι
-  条件: {A B : Under R} (f g : A ⟶ B)
-  证明: rfl
+/-
+**CommRingCat.Under.tensorProdEqualizer_** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat.
+Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorProdEqualizer_ι {A B : Under R} (f g : A ⟶ B) :
     (tensorProdEqualizer f g).ι = (tensorProd R S).map
       ((AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder) :=
   rfl
 
+/-- If `S` is `R`-flat, `S ⊗[R] eq(f, g)` is isomorphic to `eq(𝟙 ⊗[R] f, 𝟙 ⊗[R] g)`. -/
 -- marked noncomputable for performance (only)
-/--
-Definition of `equalizerForkTensorProdIso` / `equalizerForkTensorProdIso` 的定义
-
-English:
-definition equalizerForkTensorProdIso
-  signature: [Module.Flat R S] {A B : Under R} (f g : A ⟶ B)
-  body: Fork.ext (AlgHom.tensorEqualizerEquiv S S (toAlgHom f) (toAlgHom g)).toUnder by
-    ext
-    apply AlgHom.coe_tensorEqualizer
-
-中文:
-定义 equalizerForkTensorProdIso
-  签名: [模.平坦 R S] {A B : Under R} (f g : A ⟶ B)
-  定义体: Fork.ext (AlgHom.tensorEqualizerEquiv S S (toAlgHom f) (toAlgHom g)).toUnder by
-    ext
-    apply AlgHom.coe_tensorEqualizer
-
-Depends on / 依赖: AlgHom, AlgHom.coe_tensorEqualizer, AlgHom.tensorEqualizerEquiv, Fork.ext, coe_tensorEqualizer, tensorEqualizerEquiv, toAlgHom, toUnder
+/-
+**CommRingCat.Under.equalizerForkTensorProdIso** 是 Mathlib 中的一个定义，位于命名空间 `CommRi
+ngCat.Under`。
+形式化陈述：equalizerForkTensorProdIso [Module.Flat R S] {A B : Under R} (f g : A ⟶ B)
+ : tensorProdEqualizer f g ≅ Under.equalizerFork' (Algebra.TensorProduct.map (Al
+gHom.id S S) (toAlgHom f)) (Algebra.TensorProduct.map (AlgHom.id S S) (toAlgHom 
+g))
+参数：f g : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def equalizerForkTensorProdIso [Module.Flat R S] {A B : Under R} (f g : A ⟶ B) :
     tensorProdEqualizer f g ≅ Under.equalizerFork'
         (Algebra.TensorProduct.map (AlgHom.id S S) (toAlgHom f))
         (Algebra.TensorProduct.map (AlgHom.id S S) (toAlgHom g)) :=
-Fork.ext (AlgHom.tensorEqualizerEquiv S S (toAlgHom f) (toAlgHom g)).toUnder by
+  Fork.ext (AlgHom.tensorEqualizerEquiv S S (toAlgHom f) (toAlgHom g)).toUnder <| by
     ext
     apply AlgHom.coe_tensorEqualizer
 
 /-- If `S` is `R`-flat, `tensorProd R S` preserves the equalizer of `f` and `g`. -/
 noncomputable -- marked noncomputable for performance (only)
-/--
-Definition of `tensorProdMapEqualizerForkIsLimit` / `tensorProdMapEqualizerForkIsLimit` 的定义
-
-English:
-definition tensorProdMapEqualizerForkIsLimit
-  signature: [Module.Flat R S] {A B : Under R} (f g : A ⟶ B)
-  body: (isLimitMapConeForkEquiv (tensorProd R S) _).symm
-(IsLimit.equivIsoLimit (equalizerForkTensorProdIso f g).symm)
-    Under.equalizerFork'IsLimit _ _
-
-中文:
-定义 tensorProdMapEqualizerForkIsLimit
-  签名: [模.平坦 R S] {A B : Under R} (f g : A ⟶ B)
-  定义体: (isLimitMapConeForkEquiv (tensorProd R S) _).symm
-(IsLimit.equivIsoLimit (equalizerForkTensorProdIso f g).symm)
-    Under.equalizerFork'IsLimit _ _
-
-Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, Under.equalizerFork, equalizerFork, equalizerForkTensorProdIso, equivIsoLimit, isLimitMapConeForkEquiv, tensorProd
+/-
+**CommRingCat.Under.tensorProdMapEqualizerForkIsLimit** 是 Mathlib 中的一个定义，位于命名空间 
+`CommRingCat.Under`。
+形式化陈述：tensorProdMapEqualizerForkIsLimit [Module.Flat R S] {A B : Under R} (f g :
+ A ⟶ B) : IsLimit ((tensorProd R S).mapCone <| Under.equalizerFork f g)
+参数：f g : A ⟶ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def tensorProdMapEqualizerForkIsLimit [Module.Flat R S] {A B : Under R} (f g : A ⟶ B) :
     IsLimit ((tensorProd R S).mapCone <| Under.equalizerFork f g) :=
-(isLimitMapConeForkEquiv (tensorProd R S) _).symm
-(IsLimit.equivIsoLimit (equalizerForkTensorProdIso f g).symm)
+  (isLimitMapConeForkEquiv (tensorProd R S) _).symm <|
+    (IsLimit.equivIsoLimit (equalizerForkTensorProdIso f g).symm) <|
     Under.equalizerFork'IsLimit _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Flat
-  signature: R S] {A B
-  body: let c : Fork f g := Under.equalizerFork f g
-  let hc : IsLimit c := Under.equalizerForkIsLimit f g
-  let hc' : IsLimit ((tensorProd R S).mapCone c) :=
-    tensorProdMapEqualizerForkIsLimit f g
-  preservesLimit_of_preserves_limit_cone hc hc'
-
-中文:
-实例 [模.平坦
-  签名: R S] {A B
-  定义体: let c : Fork f g := Under.equalizerFork f g
-  let hc : IsLimit c := Under.equalizerForkIsLimit f g
-  let hc' : IsLimit ((tensorProd R S).mapCone c) :=
-    tensorProdMapEqualizerForkIsLimit f g
-  preservesLimit_of_preserves_limit_cone hc hc'
-
-Depends on / 依赖: IsLimit, Under.equalizerFork, Under.equalizerForkIsLimit, equalizerFork, equalizerForkIsLimit, mapCone, preservesLimit_of_preserves_limit_cone, tensorProd, tensorProdMapEqualizerForkIsLimit
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Flat R S] {A B : Under R} (f g : A ⟶ B) :
     PreservesLimit (parallelPair f g) (tensorProd R S) :=
@@ -551,40 +382,16 @@ instance [Module.Flat R S] {A B : Under R} (f g : A ⟶ B) :
   let hc' : IsLimit ((tensorProd R S).mapCone c) :=
     tensorProdMapEqualizerForkIsLimit f g
   preservesLimit_of_preserves_limit_cone hc hc'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Flat
-  signature: R S] : PreservesLimitsOfShape WalkingParallelPair (tensorProd R S) where
-  body: preservesLimit_of_iso_diagram _ (diagramIsoParallelPair K).symm
-
-中文:
-实例 [模.平坦
-  签名: R S] : 保持形状极限 WalkingParallelPair (tensorProd R S) where
-  定义体: preservesLimit_of_iso_diagram _ (diagramIsoParallelPair K).symm
-
-Depends on / 依赖: diagramIsoParallelPair, preservesLimit_of_iso_diagram
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Flat R S] : PreservesLimitsOfShape WalkingParallelPair (tensorProd R S) where
   preservesLimit {K} :=
     preservesLimit_of_iso_diagram _ (diagramIsoParallelPair K).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Flat
-  signature: R S] : PreservesFiniteLimits (tensorProd R S)
-  body: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts (tensorProd R S)
-
-中文:
-实例 [模.平坦
-  签名: R S] : 保持FiniteLimits (tensorProd R S)
-  定义体: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts (tensorProd R S)
-
-Depends on / 依赖: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts, tensorProd
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Flat R S] : PreservesFiniteLimits (tensorProd R S) :=
   preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts (tensorProd R S)
@@ -595,46 +402,50 @@ end Algebra
 
 variable (f : R ⟶ S)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `Under.pushout f` preserves finite products. -/
+/-
+**CommRingCat.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesFiniteProducts (Under.pushout f)
-  body: letI : Algebra R S := f.hom.toAlgebra
-    preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
-
-中文:
-实例 :
-  签名: 保持FiniteProducts (Under.pushout f)
-  定义体: letI : Algebra R S := f.hom.toAlgebra
-    preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
-
-Depends on / 依赖: Algebra, f.hom.toAlgebra, preservesLimitsOfShape_of_natIso, tensorProdIsoPushout, toAlgebra
+--- 原说明 ---
+`Under.pushout f` preserves finite products.
 -/
 instance : PreservesFiniteProducts (Under.pushout f) where
   preserves _ :=
     letI : Algebra R S := f.hom.toAlgebra
     preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
 
-/--
-lemma `preservesFiniteLimits_of_flat` / 引理 `preservesFiniteLimits_of_flat`
+/-- `Under.pushout f` preserves finite limits if `f` is flat. -/
+/-
+**CommRingCat.Under.preservesFiniteLimits_of_flat** 是 Mathlib 中的一个引理，位于命名空间 `Com
+mRingCat.Under`。
+形式化陈述：preservesFiniteLimits_of_flat (hf : RingHom.Flat f.hom) : PreservesFiniteL
+imits (Under.pushout f) where preservesFiniteLimits _
+参数：hf : RingHom.Flat f.hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePushouts_of_has_finite_limits`：∀ (C :
+ Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFin
+iteColimits C],   CategoryTheory.Limits.HasFiniteWideP…
+· 使用定理 `CategoryTheory.Limits.hasFiniteColimits_of_hasColimits`：∀ (C : Type u) [
+inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C], 
+  CategoryTheory.Limits.HasFiniteColimits C
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_natIso`：preservesLimitsO
+fShape_of_natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfShape J F] : Preser
+vesLimitsOfShape J G where preservesLimit {K…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CommRingCat.Under.instPreservesFiniteLimitsUnderTensorProdOfFlatCarrier`
+：∀ {R S : CommRingCat} [inst : Algebra ↑R ↑S] [Module.Flat ↑R ↑S],   CategoryThe
+ory.Limits.PreservesFiniteLimits (R.tensorProd S)
 
-English:
-lemma preservesFiniteLimits_of_flat
-  given: (hf : RingHom.Flat f.hom)
-  proof: letI : Algebra R S := f.hom.toAlgebra
-    haveI : Module.Flat R S := hf
-    preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
-
-中文:
-引理 preservesFiniteLimits_of_flat
-  条件: (hf : 环态射.平坦 f.hom)
-  证明: letI : Algebra R S := f.hom.toAlgebra
-    haveI : Module.Flat R S := hf
-    preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
-
-Depends on / 依赖: Algebra, Module, Module.Flat, f.hom.toAlgebra, preservesLimitsOfShape_of_natIso, tensorProdIsoPushout, toAlgebra
+--- 原说明 ---
+`Under.pushout f` preserves finite limits if `f` is flat.
 -/
 lemma preservesFiniteLimits_of_flat (hf : RingHom.Flat f.hom) :
     PreservesFiniteLimits (Under.pushout f) where
@@ -644,3 +455,4 @@ lemma preservesFiniteLimits_of_flat (hf : RingHom.Flat f.hom) :
     preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
 
 end CommRingCat.Under
+

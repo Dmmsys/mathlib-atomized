@@ -45,93 +45,67 @@ namespace Measure
 
 variable {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
 
-/--
-Instance `instMeasurableSpace` / 实例 `instMeasurableSpace`
+/-- Measurability structure on `Measure`: Measures are measurable w.r.t. all projections -/
+/-
+**MeasureTheory.Measure.instMeasurableSpace** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTh
+eory.Measure`。
+形式化陈述：instMeasurableSpace : MeasurableSpace (Measure α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instMeasurableSpace
-  signature: : MeasurableSpace (Measure α)
-  body: ⨆ (s : Set α) (_ : MeasurableSet s), (borel Real>=0∞).comap fun μ => μ s
-
-中文:
-实例 instMeasurableSpace
-  签名: : 可测空间 (测度 α)
-  定义体: ⨆ (s : Set α) (_ : MeasurableSet s), (borel Real>=0∞).comap fun μ => μ s
-
-Depends on / 依赖: IsEmpty, IsWellOrder, MeasurableSet
+--- 原说明 ---
+Measurability structure on `Measure`: Measures are measurable w.r.t. all project
+ions
 -/
 instance instMeasurableSpace : MeasurableSpace (Measure α) :=
-  ⨆ (s : Set α) (_ : MeasurableSet s), (borel Real>=0∞).comap fun μ => μ s
-
-/--
-theorem `measurable_coe` / 定理 `measurable_coe`
-
-English:
-theorem measurable_coe
-  given: {s : Set α} (hs : MeasurableSet s)
-  statement: Measurable fun μ : Measure α => μ s
-  proof: Measurable.of_comap_le le_iSup_of_le s le_iSup_of_le hs le_rfl
-
-中文:
-定理 measurable_coe
-  条件: {s : 集合 α} (hs : 可测集 s)
-  结论: 可测 fun μ : 测度 α => μ s
-  证明: Measurable.of_comap_le le_iSup_of_le s le_iSup_of_le hs le_rfl
-
-Depends on / 依赖: Measurable, Measurable.of_comap_le, le_iSup_of_le, le_rfl, of_comap_le
+  ⨆ (s : Set α) (_ : MeasurableSet s), (borel ℝ≥0∞).comap fun μ => μ s
+/-
+**MeasureTheory.Measure.measurable_coe** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：measurable_coe {s : Set α} (hs : MeasurableSet s) : Measurable fun μ : Mea
+sure α => μ s
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.of_comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : Measurable
+Space α} {m₂ : MeasurableSpace β} {f : α → β},   MeasurableSpace.comap f m₂ ≤ m₁
+ → Measurabl…
+· 使用定理 `le_iSup_of_le`：le_iSup_of_le (i : ι) (h : a <= f i) : a <= iSup f
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem measurable_coe {s : Set α} (hs : MeasurableSet s) : Measurable fun μ : Measure α => μ s :=
-Measurable.of_comap_le le_iSup_of_le s le_iSup_of_le hs le_rfl
-
-/--
-theorem `measurable_of_measurable_coe` / 定理 `measurable_of_measurable_coe`
-
-English:
-theorem measurable_of_measurable_coe
-  statement: (f : β -> Measure α)
-  proof: Measurable.of_le_map
-    iSup₂_le fun s hs =>
-MeasurableSpace.comap_le_iff_le_map.2 by rw [MeasurableSpace.map_comp]; exact h s hs
-
-中文:
-定理 measurable_of_measurable_coe
-  结论: (f : β -> 测度 α)
-  证明: Measurable.of_le_map
-    iSup₂_le fun s hs =>
-MeasurableSpace.comap_le_iff_le_map.2 by rw [MeasurableSpace.map_comp]; exact h s hs
-
-Depends on / 依赖: Measurable, Measurable.of_le_map, MeasurableSpace, MeasurableSpace.comap_le_iff_le_map, MeasurableSpace.map_comp, comap_le_iff_le_map, map_comp, of_le_map
+  Measurable.of_comap_le <| le_iSup_of_le s <| le_iSup_of_le hs <| le_rfl
+/-
+**MeasureTheory.Measure.measurable_of_measurable_coe** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.Measure`。
+形式化陈述：measurable_of_measurable_coe (f : β -> Measure α) (h : forall (s : Set α),
+ MeasurableSet s -> Measurable fun b => f b s) : Measurable f
+参数：f : β -> Measure α；h : forall (s : Set α), MeasurableSet s -> Measurable fun 
+b => f b s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.of_le_map`：∀ {α : Type u_1} {β : Type u_2} {m₁ : MeasurableSp
+ace α} {m₂ : MeasurableSpace β} {f : α → β},   m₂ ≤ MeasurableSpace.map f m₁ → M
+easurable …
+· 使用定理 `iSup₂_le`：iSup₂_le {f : forall i, κ i -> α} (h : forall i j, f i j <= a)
+ : ⨆ (i) (j), f i j <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasurableSpace.comap_le_iff_le_map`：comap_le_iff_le_map {f : α -> β} : 
+m'.comap f <= m ↔ m' <= m.map f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.map_comp`：map_comp {f : α -> β} {g : β -> γ} : (m.map f)
+.map g = m.map (g ∘ f)
 -/
-theorem measurable_of_measurable_coe (f : β -> Measure α)
-    (h : forall (s : Set α), MeasurableSet s -> Measurable fun b => f b s) : Measurable f :=
-Measurable.of_le_map
+theorem measurable_of_measurable_coe (f : β → Measure α)
+    (h : ∀ (s : Set α), MeasurableSet s → Measurable fun b => f b s) : Measurable f :=
+  Measurable.of_le_map <|
     iSup₂_le fun s hs =>
-MeasurableSpace.comap_le_iff_le_map.2 by rw [MeasurableSpace.map_comp]; exact h s hs
-
-/--
-Instance `instMeasurableAdd₂` / 实例 `instMeasurableAdd₂`
-
-English:
-instance instMeasurableAdd₂
-  signature: {α : Type*} {m : MeasurableSpace α}
-  body: by
-  refine ⟨Measure.measurable_of_measurable_coe _ fun s hs => ?_⟩
-  simp_rw [Measure.coe_add, Pi.add_apply]
-  refine Measurable.add ?_ ?_
-  · exact (Measure.measurable_coe hs).comp measurable_fst
-  · exact (Measure.measurable_coe hs).comp measurable_snd
-
-中文:
-实例 instMeasurableAdd₂
-  签名: {α : 类型} {m : 可测空间 α}
-  定义体: by
-  refine ⟨Measure.measurable_of_measurable_coe _ fun s hs => ?_⟩
-  simp_rw [Measure.coe_add, Pi.add_apply]
-  refine Measurable.add ?_ ?_
-  · exact (Measure.measurable_coe hs).comp measurable_fst
-  · exact (Measure.measurable_coe hs).comp measurable_snd
-
-Depends on / 依赖: InvImage, InvImage.wf, IsWellFounded, IsWellFounded.wf, Measurable, Measurable.add, Measure, Measure.coe_add, Measure.measurable_coe, Measure.measurable_of_measurable_coe, Pi.add_apply, add_apply, coe_add, measurable_coe, measurable_fst, measurable_of_measurable_coe, measurable_snd, simp_rw
+      MeasurableSpace.comap_le_iff_le_map.2 <| by rw [MeasurableSpace.map_comp]; exact h s hs
+/-
+**MeasureTheory.Measure.instMeasurableAdd** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheo
+ry.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMeasurableAdd₂ {α : Type*} {m : MeasurableSpace α} : MeasurableAdd₂ (Measure α) := by
   refine ⟨Measure.measurable_of_measurable_coe _ fun s hs => ?_⟩
@@ -143,90 +117,43 @@ instance instMeasurableAdd₂ {α : Type*} {m : MeasurableSpace α} : Measurable
 -- There is no typeclass for measurability of `SMul` only on that side, otherwise we could
 -- turn that into an instance.
 @[fun_prop]
-/--
-lemma `_root_.Measurable.smul_measure` / 引理 `_root_.Measurable.smul_measure`
-
-English:
-lemma _root_.Measurable.smul_measure
-  given: {f : α -> Real>=0∞} (hf : Measurable f) (μ : Measure β)
-  proof: by
-  refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
-  simp only [Measure.smul_apply, smul_eq_mul]
-  fun_prop
-
-中文:
-引理 _root_.可测.smul_measure
-  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (μ : 测度 β)
-  证明: by
-  refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
-  simp only [Measure.smul_apply, smul_eq_mul]
-  fun_prop
-
-Depends on / 依赖: Measure, Measure.measurable_of_measurable_coe, Measure.smul_apply, fun_prop, measurable_of_measurable_coe, measure, smul_apply, smul_eq_mul
+/-
+**MeasureTheory.Measure._root_.Measurable.smul_measure** 是 Mathlib 中的一个引理，位于命名空间
+ `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Measurable.smul_measure {f : α -> Real>=0∞} (hf : Measurable f) (μ : Measure β) :
-    Measurable (fun x => f x • μ) := by
-  refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
+lemma _root_.Measurable.smul_measure {f : α → ℝ≥0∞} (hf : Measurable f) (μ : Measure β) :
+    Measurable (fun x ↦ f x • μ) := by
+  refine Measure.measurable_of_measurable_coe _ fun s hs ↦ ?_
   simp only [Measure.smul_apply, smul_eq_mul]
   fun_prop
-
-/--
-theorem `measurable_measure` / 定理 `measurable_measure`
-
-English:
-theorem measurable_measure
-  given: {μ : α -> Measure β}
-  proof: ⟨fun hμ _s hs => (measurable_coe hs).comp hμ, measurable_of_measurable_coe μ⟩
-
-中文:
-定理 measurable_measure
-  条件: {μ : α -> 测度 β}
-  证明: ⟨fun hμ _s hs => (measurable_coe hs).comp hμ, measurable_of_measurable_coe μ⟩
-
-Depends on / 依赖: measurable_coe, measurable_of_measurable_coe
+/-
+**MeasureTheory.Measure.measurable_measure** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.Measure`。
+形式化陈述：measurable_measure {μ : α -> Measure β} : Measurable μ ↔ forall (s : Set β
+), MeasurableSet s -> Measurable fun b => μ b s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `MeasureTheory.Measure.measurable_of_measurable_coe`：measurable_of_measur
+able_coe (f : β -> Measure α) (h : forall (s : Set α), MeasurableSet s -> Measur
+able fun b => f b s) : Measurable f
 -/
-theorem measurable_measure {μ : α -> Measure β} :
-    Measurable μ ↔ forall (s : Set β), MeasurableSet s -> Measurable fun b => μ b s :=
+theorem measurable_measure {μ : α → Measure β} :
+    Measurable μ ↔ ∀ (s : Set β), MeasurableSet s → Measurable fun b => μ b s :=
   ⟨fun hμ _s hs => (measurable_coe hs).comp hμ, measurable_of_measurable_coe μ⟩
-
-/--
-theorem `_root_.Measurable.measure_of_isPiSystem` / 定理 `_root_.Measurable.measure_of_isPiSystem`
-
-English:
-theorem _root_.Measurable.measure_of_isPiSystem
-  statement: {μ : α -> Measure β} [forall a, IsFiniteMeasure (μ a)]
-  proof: by
-  rw [measurable_measure]
-  intro s hs
-  induction s, hs using MeasurableSpace.induction_on_inter hgen hpi with
-  | empty => simp
-  | basic s hs => exact h_basic s hs
-  | compl s hsm ihs =>
-    simp only [measure_compl hsm (measure_ne_top _ _)]
-    exact h_univ.sub ihs
-  | iUnion f hfd hfm ihf =>
-    simpa only [measure_iUnion hfd hfm] using .tsum ihf
-
-中文:
-定理 _root_.可测.measure_of_isPiSystem
-  结论: {μ : α -> 测度 β} [对任意 a, 是有限测度 (μ a)]
-  证明: by
-  rw [measurable_measure]
-  intro s hs
-  induction s, hs using MeasurableSpace.induction_on_inter hgen hpi with
-  | empty => simp
-  | basic s hs => exact h_basic s hs
-  | compl s hsm ihs =>
-    simp only [measure_compl hsm (measure_ne_top _ _)]
-    exact h_univ.sub ihs
-  | iUnion f hfd hfm ihf =>
-    simpa only [measure_iUnion hfd hfm] using .tsum ihf
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.induction_on_inter, h_basic, h_univ, h_univ.sub, iUnion, induction_on_inter, measurable_measure, measure_compl, measure_iUnion, measure_ne_top
+/-
+**MeasureTheory.Measure._root_.Measurable.measure_of_isPiSystem** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Measurable.measure_of_isPiSystem {μ : α -> Measure β} [forall a, IsFiniteMeasure (μ a)]
+theorem _root_.Measurable.measure_of_isPiSystem {μ : α → Measure β} [∀ a, IsFiniteMeasure (μ a)]
     {S : Set (Set β)} (hgen : ‹MeasurableSpace β› = .generateFrom S) (hpi : IsPiSystem S)
-    (h_basic : forall s in S, Measurable fun a => μ a s) (h_univ : Measurable fun a => μ a univ) :
+    (h_basic : ∀ s ∈ S, Measurable fun a ↦ μ a s) (h_univ : Measurable fun a ↦ μ a univ) :
     Measurable μ := by
   rw [measurable_measure]
   intro s hs
@@ -238,156 +165,126 @@ theorem _root_.Measurable.measure_of_isPiSystem {μ : α -> Measure β} [forall 
     exact h_univ.sub ihs
   | iUnion f hfd hfm ihf =>
     simpa only [measure_iUnion hfd hfm] using .tsum ihf
-
-/--
-theorem `_root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure` / 定理 `_root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure`
-
-English:
-theorem _root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure
-  statement: {μ : α -> Measure β}
-  proof: .measure_of_isPiSystem hgen hpi h_basic by simp
-
-@[fun_prop]
-
-中文:
-定理 _root_.可测.measure_of_isPiSystem_of_isProbabilityMeasure
-  结论: {μ : α -> 测度 β}
-  证明: .measure_of_isPiSystem hgen hpi h_basic by simp
-
-@[fun_prop]
-
-Depends on / 依赖: h_basic, measure_of_isPiSystem
+/-
+**MeasureTheory.Measure._root_.Measurable.measure_of_isPiSystem_of_isProbability
+Measure** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure {μ : α -> Measure β}
-    [forall a, IsProbabilityMeasure (μ a)]
+theorem _root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure {μ : α → Measure β}
+    [∀ a, IsProbabilityMeasure (μ a)]
     {S : Set (Set β)} (hgen : ‹MeasurableSpace β› = .generateFrom S) (hpi : IsPiSystem S)
-    (h_basic : forall s in S, Measurable fun a => μ a s) : Measurable μ :=
-.measure_of_isPiSystem hgen hpi h_basic by simp
+    (h_basic : ∀ s ∈ S, Measurable fun a ↦ μ a s) : Measurable μ :=
+  .measure_of_isPiSystem hgen hpi h_basic <| by simp
 
 @[fun_prop]
-/--
-theorem `measurable_map` / 定理 `measurable_map`
-
-English:
-theorem measurable_map
-  given: (f : α -> β) (hf : Measurable f)
-  proof: by
-  refine measurable_of_measurable_coe _ fun s hs => ?_
-  simp_rw [map_apply hf hs]
-  exact measurable_coe (hf hs)
-
-@[fun_prop]
-
-中文:
-定理 measurable_map
-  条件: (f : α -> β) (hf : 可测 f)
-  证明: by
-  refine measurable_of_measurable_coe _ fun s hs => ?_
-  simp_rw [map_apply hf hs]
-  exact measurable_coe (hf hs)
-
-@[fun_prop]
-
-Depends on / 依赖: map_apply, measurable_coe, measurable_of_measurable_coe, simp_rw
+/-
+**MeasureTheory.Measure.measurable_map** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：measurable_map (f : α -> β) (hf : Measurable f) : Measurable fun μ : Measu
+re α => map f μ
+参数：f : α -> β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.measurable_of_measurable_coe`：measurable_of_measur
+able_coe (f : β -> Measure α) (h : forall (s : Set α), MeasurableSet s -> Measur
+able fun b => f b s) : Measurable f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
 -/
-theorem measurable_map (f : α -> β) (hf : Measurable f) :
+theorem measurable_map (f : α → β) (hf : Measurable f) :
     Measurable fun μ : Measure α => map f μ := by
   refine measurable_of_measurable_coe _ fun s hs => ?_
   simp_rw [map_apply hf hs]
   exact measurable_coe (hf hs)
 
 @[fun_prop]
-/--
-theorem `measurable_dirac` / 定理 `measurable_dirac`
-
-English:
-theorem measurable_dirac
-  statement: Measurable (Measure.dirac : α -> Measure α)
-  proof: by
-  refine measurable_of_measurable_coe _ fun s hs => ?_
-  simp_rw [dirac_apply' _ hs]
-  exact measurable_one.indicator hs
-
-@[fun_prop]
-
-中文:
-定理 measurable_dirac
-  结论: 可测 (测度.dirac : α -> 测度 α)
-  证明: by
-  refine measurable_of_measurable_coe _ fun s hs => ?_
-  simp_rw [dirac_apply' _ hs]
-  exact measurable_one.indicator hs
-
-@[fun_prop]
-
-Depends on / 依赖: dirac_apply, indicator, measurable_of_measurable_coe, measurable_one, measurable_one.indicator, simp_rw
+/-
+**MeasureTheory.Measure.measurable_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：measurable_dirac : Measurable (Measure.dirac : α -> Measure α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.measurable_of_measurable_coe`：measurable_of_measur
+able_coe (f : β -> Measure α) (h : forall (s : Set α), MeasurableSet s -> Measur
+able fun b => f b s) : Measurable f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Measurable.indicator`：Measurable.indicator [Zero β] (hf : Measurable f) 
+(hs : MeasurableSet s) : Measurable (s.indicator f)
+· 使用定理 `measurable_one`：measurable_one [One α] : Measurable (1 : β -> α)
 -/
-theorem measurable_dirac : Measurable (Measure.dirac : α -> Measure α) := by
+theorem measurable_dirac : Measurable (Measure.dirac : α → Measure α) := by
   refine measurable_of_measurable_coe _ fun s hs => ?_
   simp_rw [dirac_apply' _ hs]
   exact measurable_one.indicator hs
 
 @[fun_prop]
-/--
-theorem `measurable_lintegral` / 定理 `measurable_lintegral`
-
-English:
-theorem measurable_lintegral
-  given: {f : α -> Real>=0∞} (hf : Measurable f)
-  proof: by
-  simp only [lintegral_eq_iSup_eapprox_lintegral, hf, SimpleFunc.lintegral]
-  refine .iSup fun n => Finset.measurable_fun_sum _ fun i _ => ?_
-  refine Measurable.const_mul ?_ _
-  exact measurable_coe ((SimpleFunc.eapprox f n).measurableSet_preimage _)
-
-中文:
-定理 measurable_lintegral
-  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
-  证明: by
-  simp only [lintegral_eq_iSup_eapprox_lintegral, hf, SimpleFunc.lintegral]
-  refine .iSup fun n => Finset.measurable_fun_sum _ fun i _ => ?_
-  refine Measurable.const_mul ?_ _
-  exact measurable_coe ((SimpleFunc.eapprox f n).measurableSet_preimage _)
-
-Depends on / 依赖: Finset, Finset.measurable_fun_sum, Measurable, Measurable.const_mul, SimpleFunc, SimpleFunc.eapprox, SimpleFunc.lintegral, const_mul, eapprox, lintegral, lintegral_eq_iSup_eapprox_lintegral, measurableSet_preimage, measurable_coe, measurable_fun_sum
+/-
+**MeasureTheory.Measure.measurable_lintegral** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：measurable_lintegral {f : α -> Real>=0∞} (hf : Measurable f) : Measurable 
+fun μ : Measure α => ∫⁻ x, f x ∂μ
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.lintegral_eq_iSup_eapprox_lintegral`：lintegral_eq_iSup_eap
+prox_lintegral {f : α -> Real>=0∞} (hf : Measurable f) : ∫⁻ a, f a ∂μ = ⨆ n, (ea
+pprox f n).lintegral μ
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Finset.measurable_fun_sum`：∀ {M : Type u_2} {ι : Type u_3} {α : Type u_4
+} [inst : AddCommMonoid M] [inst_1 : MeasurableSpace M] [MeasurableAdd₂ M]   {m 
+: MeasurableSpa…
+· 使用定理 `ContinuousAdd.measurableMul₂`：∀ {γ : Type u_3} [inst : TopologicalSpace 
+γ] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [SecondCountableTopology γ]   [in
+st_4 : Add γ] [Con…
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `Measurable.const_mul`：Measurable.const_mul [MeasurableMul M] (hf : Measu
+rable f) (c : M) : Measurable fun x => c * f x
+· 使用定理 `MeasurableMul₂.toMeasurableMul`：∀ {M : Type u_2} [inst : MeasurableSpace
+ M] [inst_1 : Mul M] [MeasurableMul₂ M], MeasurableMul M
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `MeasureTheory.SimpleFunc.measurableSet_preimage`：measurableSet_preimage 
+(f : α ->ₛ β) (s) : MeasurableSet (f ⁻¹' s)
 -/
-theorem measurable_lintegral {f : α -> Real>=0∞} (hf : Measurable f) :
+theorem measurable_lintegral {f : α → ℝ≥0∞} (hf : Measurable f) :
     Measurable fun μ : Measure α => ∫⁻ x, f x ∂μ := by
   simp only [lintegral_eq_iSup_eapprox_lintegral, hf, SimpleFunc.lintegral]
   refine .iSup fun n => Finset.measurable_fun_sum _ fun i _ => ?_
   refine Measurable.const_mul ?_ _
   exact measurable_coe ((SimpleFunc.eapprox f n).measurableSet_preimage _)
 
-/--
-Definition of `join` / `join` 的定义
+/-- Monadic join on `Measure` in the category of measurable spaces and measurable
+functions. -/
+/-
+**MeasureTheory.Measure.join** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：join (m : Measure (Measure α)) : Measure α
+参数：m : Measure (Measure α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition join
-  signature: (m : Measure (Measure α))
-  body: Measure.ofMeasurable (fun s _ => ∫⁻ μ, μ s ∂m)
-    (by simp only [measure_empty, lintegral_const, zero_mul])
-    (by
-      intro f hf h
-      simp_rw [measure_iUnion h hf]
-      apply lintegral_tsum
-      intro i; exact (measurable_coe (hf i)).aemeasurable)
-
-@[simp]
-
-中文:
-定义 join
-  签名: (m : 测度 (测度 α))
-  定义体: Measure.ofMeasurable (fun s _ => ∫⁻ μ, μ s ∂m)
-    (by simp only [measure_empty, lintegral_const, zero_mul])
-    (by
-      intro f hf h
-      simp_rw [measure_iUnion h hf]
-      apply lintegral_tsum
-      intro i; exact (measurable_coe (hf i)).aemeasurable)
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.ofMeasurable, aemeasurable, lintegral_const, lintegral_tsum, measurable_coe, measure_empty, measure_iUnion, ofMeasurable, simp_rw, zero_mul
+--- 原说明 ---
+Monadic join on `Measure` in the category of measurable spaces and measurable
+functions.
 -/
 def join (m : Measure (Measure α)) : Measure α :=
   Measure.ofMeasurable (fun s _ => ∫⁻ μ, μ s ∂m)
@@ -399,361 +296,357 @@ def join (m : Measure (Measure α)) : Measure α :=
       intro i; exact (measurable_coe (hf i)).aemeasurable)
 
 @[simp]
-/--
-theorem `join_apply` / 定理 `join_apply`
-
-English:
-theorem join_apply
-  given: {m : Measure (Measure α)} {s : Set α} (hs : MeasurableSet s)
-  proof: Measure.ofMeasurable_apply s hs
-
-中文:
-定理 join_apply
-  条件: {m : 测度 (测度 α)} {s : 集合 α} (hs : 可测集 s)
-  证明: Measure.ofMeasurable_apply s hs
-
-Depends on / 依赖: Measure, Measure.ofMeasurable_apply, ofMeasurable_apply
+/-
+**MeasureTheory.Measure.join_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：join_apply {m : Measure (Measure α)} {s : Set α} (hs : MeasurableSet s) : 
+join m s = ∫⁻ μ, μ s ∂m
+参数：Measure α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ofMeasurable_apply`：ofMeasurable_apply {m : forall
+ s : Set α, MeasurableSet s -> Real>=0∞} {m0 : m ∅ MeasurableSet.empty = 0} {mU 
+: forall ⦃f : Nat -> Set α⦄ (h…
 -/
 theorem join_apply {m : Measure (Measure α)} {s : Set α} (hs : MeasurableSet s) :
     join m s = ∫⁻ μ, μ s ∂m :=
   Measure.ofMeasurable_apply s hs
-
-/--
-theorem `le_join_apply` / 定理 `le_join_apply`
-
-English:
-theorem le_join_apply
-  given: (m : Measure (Measure α)) (s : Set α)
-  statement: ∫⁻ μ, μ s ∂m <= join m s
-  proof: by
-  rw [measure_eq_iInf]
-  exact le_iInf₂ fun t hst => le_iInf fun htm => join_apply htm ▸ by gcongr
-
-@[simp]
-
-中文:
-定理 le_join_apply
-  条件: (m : 测度 (测度 α)) (s : 集合 α)
-  结论: ∫⁻ μ, μ s ∂m <= join m s
-  证明: by
-  rw [measure_eq_iInf]
-  exact le_iInf₂ fun t hst => le_iInf fun htm => join_apply htm ▸ by gcongr
-
-@[simp]
-
-Depends on / 依赖: join_apply, le_iInf, measure_eq_iInf
+/-
+**MeasureTheory.Measure.le_join_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：le_join_apply (m : Measure (Measure α)) (s : Set α) : ∫⁻ μ, μ s ∂m <= join
+ m s
+参数：m : Measure (Measure α)；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.measure_eq_iInf`：measure_eq_iInf (s : Set α) : μ s = ⨅ (t)
+ (_ : s subseteq t) (_ : MeasurableSet t), μ t
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `MeasureTheory.lintegral_mono_fn'`：∀ {α : Type u_1} {m : MeasurableSpace 
+α} {μ ν : MeasureTheory.Measure α},   μ ≤ ν → ∀ ⦃f g : α → ENNReal⦄, (∀ (x : α),
+ f x ≤ g x) → ∫⁻ (a : …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
 -/
-theorem le_join_apply (m : Measure (Measure α)) (s : Set α) : ∫⁻ μ, μ s ∂m <= join m s := by
+theorem le_join_apply (m : Measure (Measure α)) (s : Set α) : ∫⁻ μ, μ s ∂m ≤ join m s := by
   rw [measure_eq_iInf]
-  exact le_iInf₂ fun t hst => le_iInf fun htm => join_apply htm ▸ by gcongr
+  exact le_iInf₂ fun t hst ↦ le_iInf fun htm ↦ join_apply htm ▸ by gcongr
 
 @[simp]
-/--
-theorem `join_smul` / 定理 `join_smul`
-
-English:
-theorem join_smul
-  statement: {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R)
-  proof: by
-  ext s hs
-  simp [hs]
-
-中文:
-定理 join_smul
-  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R)
-  证明: by
-  ext s hs
-  simp [hs]
+/-
+**MeasureTheory.Measure.join_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：join_smul {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞
+] (c : R) (m : Measure (Measure α)) : (c • m).join = c • m.join
+参数：c : R；m : Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.lintegral_smul_measure`：lintegral_smul_measure {R : Type*}
+ [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) (f : α -> Real>=0
+∞) : ∫⁻ a, f a ∂c • μ = c …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem join_smul {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R)
+theorem join_smul {R : Type*} [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞] (c : R)
     (m : Measure (Measure α)) : (c • m).join = c • m.join := by
   ext s hs
   simp [hs]
-
-/--
-lemma `join_sum` / 引理 `join_sum`
-
-English:
-lemma join_sum
-  given: {ι : Type*} (m : ι -> Measure (Measure α))
-  proof: by
-  ext s hs
-  simp_rw [sum_apply _ hs, join_apply hs, lintegral_sum_measure]
-
-@[simp]
-
-中文:
-引理 join_sum
-  条件: {ι : 类型} (m : ι -> 测度 (测度 α))
-  证明: by
-  ext s hs
-  simp_rw [sum_apply _ hs, join_apply hs, lintegral_sum_measure]
-
-@[simp]
-
-Depends on / 依赖: join_apply, lintegral_sum_measure, simp_rw, sum_apply
+/-
+**MeasureTheory.Measure.join_sum** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.Measur
+e`。
+形式化陈述：join_sum {ι : Type*} (m : ι -> Measure (Measure α)) : (sum m).join = sum f
+un (i : ι) => (m i).join
+参数：m : ι -> Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.lintegral_sum_measure`：lintegral_sum_measure {m : Measurab
+leSpace α} {ι} (f : α -> Real>=0∞) (μ : ι -> Measure α) : ∫⁻ a, f a ∂Measure.sum
+ μ = ∑' i, ∫⁻ a, f a ∂μ i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma join_sum {ι : Type*} (m : ι -> Measure (Measure α)) :
-    (sum m).join = sum fun (i : ι) => (m i).join := by
+lemma join_sum {ι : Type*} (m : ι → Measure (Measure α)) :
+    (sum m).join = sum fun (i : ι) ↦ (m i).join := by
   ext s hs
   simp_rw [sum_apply _ hs, join_apply hs, lintegral_sum_measure]
 
 @[simp]
-/--
-theorem `join_dirac` / 定理 `join_dirac`
-
-English:
-theorem join_dirac
-  given: (μ : Measure α)
-  statement: join (dirac μ) = μ
-  proof: by
-  ext s hs
-  simp [hs, lintegral_dirac', measurable_coe]
-
-中文:
-定理 join_dirac
-  条件: (μ : 测度 α)
-  结论: join (dirac μ) = μ
-  证明: by
-  ext s hs
-  simp [hs, lintegral_dirac', measurable_coe]
-
-Depends on / 依赖: lintegral_dirac, measurable_coe
+/-
+**MeasureTheory.Measure.join_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：join_dirac (μ : Measure α) : join (dirac μ) = μ
+参数：μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.lintegral_dirac'`：lintegral_dirac' (a : α) {f : α -> Real>
+=0∞} (hf : Measurable f) : ∫⁻ a, f a ∂dirac a = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem join_dirac (μ : Measure α) : join (dirac μ) = μ := by
   ext s hs
   simp [hs, lintegral_dirac', measurable_coe]
-
-/--
-theorem `le_ae_join` / 定理 `le_ae_join`
-
-English:
-theorem le_ae_join
-  given: (m : Measure (Measure α))
-  statement: (ae m).bind ae <= ae m.join
-  proof: by
-  intro s hs
-  rcases exists_measurable_superset_of_null hs with ⟨t, hst, htm, ht⟩
-  rw [join_apply htm]; rw [lintegral_eq_zero_iff (measurable_coe htm)] at ht
-  rw [mem_bind']
-  exact ht.mono fun _ => measure_mono_null hst
-
-中文:
-定理 le_ae_join
-  条件: (m : 测度 (测度 α))
-  结论: (ae m).bind ae <= ae m.join
-  证明: by
-  intro s hs
-  rcases exists_measurable_superset_of_null hs with ⟨t, hst, htm, ht⟩
-  rw [join_apply htm]; rw [lintegral_eq_zero_iff (measurable_coe htm)] at ht
-  rw [mem_bind']
-  exact ht.mono fun _ => measure_mono_null hst
-
-Depends on / 依赖: exists_measurable_superset_of_null, ht.mono, join_apply, lintegral_eq_zero_iff, measurable_coe, measure_mono_null, mem_bind
+/-
+**MeasureTheory.Measure.le_ae_join** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：le_ae_join (m : Measure (Measure α)) : (ae m).bind ae <= ae m.join
+参数：m : Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.exists_measurable_superset_of_null`：exists_measurable_supe
+rset_of_null (h : μ s = 0) : exists t, s subseteq t ∧ MeasurableSet t ∧ μ t = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_bind'`：mem_bind' {s : Set β} {f : Filter α} {m : α -> Filter 
+β} : s in bind f m ↔ { a | s in m a } in f
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.lintegral_eq_zero_iff`：lintegral_eq_zero_iff {f : α -> Rea
+l>=0∞} (hf : Measurable f) : ∫⁻ a, f a ∂μ = 0 ↔ f =ᵐ[μ] 0
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
 -/
-theorem le_ae_join (m : Measure (Measure α)) : (ae m).bind ae <= ae m.join := by
+theorem le_ae_join (m : Measure (Measure α)) : (ae m).bind ae ≤ ae m.join := by
   intro s hs
   rcases exists_measurable_superset_of_null hs with ⟨t, hst, htm, ht⟩
-  rw [join_apply htm]; rw [lintegral_eq_zero_iff (measurable_coe htm)] at ht
+  rw [join_apply htm, lintegral_eq_zero_iff (measurable_coe htm)] at ht
   rw [mem_bind']
-  exact ht.mono fun _ => measure_mono_null hst
-
-/--
-theorem `ae_ae_of_ae_join` / 定理 `ae_ae_of_ae_join`
-
-English:
-theorem ae_ae_of_ae_join
-  given: {m : Measure (Measure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a)
-  proof: le_ae_join m h
-
-中文:
-定理 ae_ae_of_ae_join
-  条件: {m : 测度 (测度 α)} {p : α -> 命题} (h : 对任意ᵐ a ∂m.join, p a)
-  证明: le_ae_join m h
-
-Depends on / 依赖: le_ae_join
+  exact ht.mono fun _ ↦ measure_mono_null hst
+/-
+**MeasureTheory.Measure.ae_ae_of_ae_join** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：ae_ae_of_ae_join {m : Measure (Measure α)} {p : α -> Prop} (h : forallᵐ a 
+∂m.join, p a) : forallᵐ μ ∂m, forallᵐ a ∂μ, p a
+参数：Measure α；h : forallᵐ a ∂m.join, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.le_ae_join`：le_ae_join (m : Measure (Measure α)) :
+ (ae m).bind ae <= ae m.join
 -/
-theorem ae_ae_of_ae_join {m : Measure (Measure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a) :
-    forallᵐ μ ∂m, forallᵐ a ∂μ, p a :=
+theorem ae_ae_of_ae_join {m : Measure (Measure α)} {p : α → Prop} (h : ∀ᵐ a ∂m.join, p a) :
+    ∀ᵐ μ ∂m, ∀ᵐ a ∂μ, p a :=
   le_ae_join m h
-
-/--
-theorem `_root_.AEMeasurable.ae_of_join` / 定理 `_root_.AEMeasurable.ae_of_join`
-
-English:
-theorem _root_.AEMeasurable.ae_of_join
-  statement: {m : Measure (Measure α)} {f : α -> β}
-  proof: let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ => ⟨g, hgm, hμ⟩
-
-中文:
-定理 _root_.几乎处处可测.ae_of_join
-  结论: {m : 测度 (测度 α)} {f : α -> β}
-  证明: let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ => ⟨g, hgm, hμ⟩
-
-Depends on / 依赖: ae_ae_of_ae_join
+/-
+**MeasureTheory.Measure._root_.AEMeasurable.ae_of_join** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.AEMeasurable.ae_of_join {m : Measure (Measure α)} {f : α -> β}
-    (h : AEMeasurable f m.join) : forallᵐ μ ∂m, AEMeasurable f μ :=
-  let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ => ⟨g, hgm, hμ⟩
-
-/--
-theorem `aemeasurable_lintegral` / 定理 `aemeasurable_lintegral`
-
-English:
-theorem aemeasurable_lintegral
-  statement: {m : Measure (Measure α)} {f : α -> Real>=0∞}
-  proof: let ⟨g, hgm, hfg⟩ := h
-  ⟨fun μ => ∫⁻ a, g a ∂μ, measurable_lintegral hgm,
-    (ae_ae_of_ae_join hfg).mono fun _ => lintegral_congr_ae⟩
-
-@[simp]
-
-中文:
-定理 aemeasurable_lintegral
-  结论: {m : 测度 (测度 α)} {f : α -> 实数>=0∞}
-  证明: let ⟨g, hgm, hfg⟩ := h
-  ⟨fun μ => ∫⁻ a, g a ∂μ, measurable_lintegral hgm,
-    (ae_ae_of_ae_join hfg).mono fun _ => lintegral_congr_ae⟩
-
-@[simp]
-
-Depends on / 依赖: ae_ae_of_ae_join, lintegral_congr_ae, measurable_lintegral
+theorem _root_.AEMeasurable.ae_of_join {m : Measure (Measure α)} {f : α → β}
+    (h : AEMeasurable f m.join) : ∀ᵐ μ ∂m, AEMeasurable f μ :=
+  let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ ↦ ⟨g, hgm, hμ⟩
+/-
+**MeasureTheory.Measure.aemeasurable_lintegral** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.Measure`。
+形式化陈述：aemeasurable_lintegral {m : Measure (Measure α)} {f : α -> Real>=0∞} (h : 
+AEMeasurable f m.join) : AEMeasurable (fun μ => ∫⁻ a, f a ∂μ) m
+参数：Measure α；h : AEMeasurable f m.join。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.measurable_lintegral`：measurable_lintegral {f : α 
+-> Real>=0∞} (hf : Measurable f) : Measurable fun μ : Measure α => ∫⁻ x, f x ∂μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.ae_ae_of_ae_join`：ae_ae_of_ae_join {m : Measure (M
+easure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a) : forallᵐ μ ∂m, forallᵐ 
+a ∂μ, p a
+· 使用定理 `MeasureTheory.lintegral_congr_ae`：lintegral_congr_ae {f g : α -> Real>=0
+∞} (h : f =ᵐ[μ] g) : ∫⁻ a, f a ∂μ = ∫⁻ a, g a ∂μ
 -/
-theorem aemeasurable_lintegral {m : Measure (Measure α)} {f : α -> Real>=0∞}
-    (h : AEMeasurable f m.join) : AEMeasurable (fun μ => ∫⁻ a, f a ∂μ) m :=
+theorem aemeasurable_lintegral {m : Measure (Measure α)} {f : α → ℝ≥0∞}
+    (h : AEMeasurable f m.join) : AEMeasurable (fun μ ↦ ∫⁻ a, f a ∂μ) m :=
   let ⟨g, hgm, hfg⟩ := h
-  ⟨fun μ => ∫⁻ a, g a ∂μ, measurable_lintegral hgm,
-    (ae_ae_of_ae_join hfg).mono fun _ => lintegral_congr_ae⟩
+  ⟨fun μ ↦ ∫⁻ a, g a ∂μ, measurable_lintegral hgm,
+    (ae_ae_of_ae_join hfg).mono fun _ ↦ lintegral_congr_ae⟩
 
 @[simp]
-/--
-theorem `join_zero` / 定理 `join_zero`
-
-English:
-theorem join_zero
-  statement: (0 : Measure (Measure α)).join = 0
-  proof: by
-  ext1 s hs
-  simp [hs]
-
-@[fun_prop]
-
-中文:
-定理 join_zero
-  结论: (0 : 测度 (测度 α)).join = 0
-  证明: by
-  ext1 s hs
-  simp [hs]
-
-@[fun_prop]
+/-
+**MeasureTheory.Measure.join_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：join_zero : (0 : Measure (Measure α)).join = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem join_zero : (0 : Measure (Measure α)).join = 0 := by
   ext1 s hs
   simp [hs]
 
 @[fun_prop]
-/--
-theorem `measurable_join` / 定理 `measurable_join`
-
-English:
-theorem measurable_join
-  statement: Measurable (join : Measure (Measure α) -> Measure α)
-  proof: measurable_of_measurable_coe _ fun s hs => by
-    simp only [join_apply hs, measurable_lintegral (measurable_coe hs)]
-
-中文:
-定理 measurable_join
-  结论: 可测 (join : 测度 (测度 α) -> 测度 α)
-  证明: measurable_of_measurable_coe _ fun s hs => by
-    simp only [join_apply hs, measurable_lintegral (measurable_coe hs)]
-
-Depends on / 依赖: join_apply, measurable_coe, measurable_lintegral, measurable_of_measurable_coe, right_iff_left_not_left_of
+/-
+**MeasureTheory.Measure.measurable_join** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.Measure`。
+形式化陈述：measurable_join : Measurable (join : Measure (Measure α) -> Measure α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.measurable_of_measurable_coe`：measurable_of_measur
+able_coe (f : β -> Measure α) (h : forall (s : Set α), MeasurableSet s -> Measur
+able fun b => f b s) : Measurable f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.Measure.measurable_lintegral`：measurable_lintegral {f : α 
+-> Real>=0∞} (hf : Measurable f) : Measurable fun μ : Measure α => ∫⁻ x, f x ∂μ
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
 -/
-theorem measurable_join : Measurable (join : Measure (Measure α) -> Measure α) :=
+theorem measurable_join : Measurable (join : Measure (Measure α) → Measure α) :=
   measurable_of_measurable_coe _ fun s hs => by
     simp only [join_apply hs, measurable_lintegral (measurable_coe hs)]
-
-/--
-theorem `lintegral_join` / 定理 `lintegral_join`
-
-English:
-theorem lintegral_join
-  given: {m : Measure (Measure α)} {f : α -> Real>=0∞} (hf : AEMeasurable f (join m))
-  proof: by
-  wlog hfm : Measurable f generalizing f
-  · rcases hf with ⟨g, hgm, hfg⟩
-    rw [lintegral_congr_ae hfg]; rw [this hgm.aemeasurable hgm]
-exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
-.symm lintegral_congr_ae hμ
-  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lintegral,
-    join_apply (SimpleFunc.measurableSet_preimage _ _)]
-  clear hf
-  suffices
-    forall (s : Nat -> Finset Real>=0∞) (f : Nat -> Real>=0∞ -> Measure α -> Real>=0∞), (forall n r, Measurable (f n r)) ->
-      Monotone (fun n μ => ∑ r in s n, r * f n r μ) ->
-      ⨆ n, ∑ r in s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r in s n, r * f n r μ ∂m by
-    refine
-      this (fun n => SimpleFunc.range (SimpleFunc.eapprox f n))
-        (fun n r μ => μ (SimpleFunc.eapprox f n ⁻¹' {r})) ?_ ?_
-    · exact fun n r => measurable_coe (SimpleFunc.measurableSet_preimage _ _)
-    · exact fun n m h μ => SimpleFunc.lintegral_mono (SimpleFunc.monotone_eapprox _ h) le_rfl
-  intro s f hf hm
-  rw [lintegral_iSup _ hm]
-  swap
-  · fun_prop
-  congr
-  funext n
-  rw [lintegral_finsetSum (s n)]
-  · simp_rw [lintegral_const_mul _ (hf _ _)]
-  · exact fun r _ => (hf _ _).const_mul _
-
-中文:
-定理 lintegral_join
-  条件: {m : 测度 (测度 α)} {f : α -> 实数>=0∞} (hf : 几乎处处可测 f (join m))
-  证明: by
-  wlog hfm : Measurable f generalizing f
-  · rcases hf with ⟨g, hgm, hfg⟩
-    rw [lintegral_congr_ae hfg]; rw [this hgm.aemeasurable hgm]
-exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
-.symm lintegral_congr_ae hμ
-  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lintegral,
-    join_apply (SimpleFunc.measurableSet_preimage _ _)]
-  clear hf
-  suffices
-    forall (s : Nat -> Finset Real>=0∞) (f : Nat -> Real>=0∞ -> Measure α -> Real>=0∞), (forall n r, Measurable (f n r)) ->
-      Monotone (fun n μ => ∑ r in s n, r * f n r μ) ->
-      ⨆ n, ∑ r in s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r in s n, r * f n r μ ∂m by
-    refine
-      this (fun n => SimpleFunc.range (SimpleFunc.eapprox f n))
-        (fun n r μ => μ (SimpleFunc.eapprox f n ⁻¹' {r})) ?_ ?_
-    · exact fun n r => measurable_coe (SimpleFunc.measurableSet_preimage _ _)
-    · exact fun n m h μ => SimpleFunc.lintegral_mono (SimpleFunc.monotone_eapprox _ h) le_rfl
-  intro s f hf hm
-  rw [lintegral_iSup _ hm]
-  swap
-  · fun_prop
-  congr
-  funext n
-  rw [lintegral_finsetSum (s n)]
-  · simp_rw [lintegral_const_mul _ (hf _ _)]
-  · exact fun r _ => (hf _ _).const_mul _
-
-Depends on / 依赖: Finset, Measurable, Measure, Monotone, SimpleFunc, SimpleFunc.lintegral, SimpleFunc.measurableSet_preimage, ae_ae_of_ae_join, aemeasurable, generalizing, hgm.aemeasurable, join_apply, lintegral, lintegral_congr_ae, lintegral_eq_iSup_eapprox_lintegral, measurableSet_preimage, simp_rw
+/-
+**MeasureTheory.Measure.lintegral_join** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：lintegral_join {m : Measure (Measure α)} {f : α -> Real>=0∞} (hf : AEMeasu
+rable f (join m)) : ∫⁻ x, f x ∂join m = ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m
+参数：Measure α；hf : AEMeasurable f (join m)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.lintegral_eq_iSup_eapprox_lintegral`：lintegral_eq_iSup_eap
+prox_lintegral {f : α -> Real>=0∞} (hf : Measurable f) : ∫⁻ a, f a ∂μ = ⨆ n, (ea
+pprox f n).lintegral μ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.SimpleFunc.measurableSet_preimage`：measurableSet_preimage 
+(f : α ->ₛ β) (s) : MeasurableSet (f ⁻¹' s)
+· 使用定理 `MeasureTheory.lintegral_iSup`：lintegral_iSup {f : Nat -> α -> Real>=0∞} 
+(hf : forall n, Measurable (f n)) (h_mono : Monotone f) : ∫⁻ a, ⨆ n, f n a ∂μ = 
+⨆ n, ∫⁻ a, f n a ∂…
+· 使用定理 `Finset.measurable_sum`：∀ {M : Type u_2} {ι : Type u_3} {α : Type u_4} [i
+nst : AddCommMonoid M] [inst_1 : MeasurableSpace M] [MeasurableAdd₂ M]   {m : Me
+asurableSpa…
+· 使用定理 `ContinuousAdd.measurableMul₂`：∀ {γ : Type u_3} [inst : TopologicalSpace 
+γ] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [SecondCountableTopology γ]   [in
+st_4 : Add γ] [Con…
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `Measurable.const_mul`：Measurable.const_mul [MeasurableMul M] (hf : Measu
+rable f) (c : M) : Measurable fun x => c * f x
+· 使用定理 `MeasurableMul₂.toMeasurableMul`：∀ {M : Type u_2} [inst : MeasurableSpace
+ M] [inst_1 : Mul M] [MeasurableMul₂ M], MeasurableMul M
+· 使用定理 `MeasureTheory.lintegral_finsetSum`：lintegral_finsetSum (s : Finset β) {f
+ : β -> α -> Real>=0∞} (hf : forall b in s, Measurable (f b)) : ∫⁻ a, ∑ b in s, 
+f b a ∂μ = ∑ b in s, ∫⁻…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.lintegral_const_mul`：lintegral_const_mul (r : Real>=0∞) {f
+ : α -> Real>=0∞} (hf : Measurable f) : ∫⁻ a, r * f a ∂μ = r * ∫⁻ a, f a ∂μ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `MeasureTheory.SimpleFunc.lintegral_mono`：lintegral_mono {f g : α ->ₛ Rea
+l>=0∞} (hfg : f <= g) (hμν : μ <= ν) : f.lintegral μ <= g.lintegral ν
+· 使用定理 `MeasureTheory.SimpleFunc.monotone_eapprox`：monotone_eapprox (f : α -> Re
+al>=0∞) : Monotone (eapprox f)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.lintegral_congr_ae`：lintegral_congr_ae {f g : α -> Real>=0
+∞} (h : f =ᵐ[μ] g) : ∫⁻ a, f a ∂μ = ∫⁻ a, g a ∂μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.ae_ae_of_ae_join`：ae_ae_of_ae_join {m : Measure (M
+easure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a) : forallᵐ μ ∂m, forallᵐ 
+a ∂μ, p a
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem lintegral_join {m : Measure (Measure α)} {f : α -> Real>=0∞} (hf : AEMeasurable f (join m)) :
+theorem lintegral_join {m : Measure (Measure α)} {f : α → ℝ≥0∞} (hf : AEMeasurable f (join m)) :
     ∫⁻ x, f x ∂join m = ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m := by
   wlog hfm : Measurable f generalizing f
   · rcases hf with ⟨g, hgm, hfg⟩
-    rw [lintegral_congr_ae hfg]; rw [this hgm.aemeasurable hgm]
-exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
-.symm lintegral_congr_ae hμ
+    rw [lintegral_congr_ae hfg, this hgm.aemeasurable hgm]
+    exact lintegral_congr_ae <| (ae_ae_of_ae_join hfg).mono fun μ hμ ↦
+      .symm <| lintegral_congr_ae hμ
   simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lintegral,
     join_apply (SimpleFunc.measurableSet_preimage _ _)]
   clear hf
   suffices
-    forall (s : Nat -> Finset Real>=0∞) (f : Nat -> Real>=0∞ -> Measure α -> Real>=0∞), (forall n r, Measurable (f n r)) ->
-      Monotone (fun n μ => ∑ r in s n, r * f n r μ) ->
-      ⨆ n, ∑ r in s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r in s n, r * f n r μ ∂m by
+    ∀ (s : ℕ → Finset ℝ≥0∞) (f : ℕ → ℝ≥0∞ → Measure α → ℝ≥0∞), (∀ n r, Measurable (f n r)) →
+      Monotone (fun n μ => ∑ r ∈ s n, r * f n r μ) →
+      ⨆ n, ∑ r ∈ s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r ∈ s n, r * f n r μ ∂m by
     refine
       this (fun n => SimpleFunc.range (SimpleFunc.eapprox f n))
         (fun n r μ => μ (SimpleFunc.eapprox f n ⁻¹' {r})) ?_ ?_
@@ -768,468 +661,482 @@ exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
   rw [lintegral_finsetSum (s n)]
   · simp_rw [lintegral_const_mul _ (hf _ _)]
   · exact fun r _ => (hf _ _).const_mul _
-
-/--
-theorem `lintegral_join_le` / 定理 `lintegral_join_le`
-
-English:
-theorem lintegral_join_le
-  given: (f : α -> Real>=0∞) (m : Measure (Measure α))
-  proof: by
-  rcases exists_measurable_le_lintegral_eq (join m) f with ⟨g, hgm, hgf, hfg_int⟩
-  rw [hfg_int]; rw [lintegral_join hgm.aemeasurable]
-  gcongr
-  apply hgf
-
-中文:
-定理 lintegral_join_le
-  条件: (f : α -> 实数>=0∞) (m : 测度 (测度 α))
-  证明: by
-  rcases exists_measurable_le_lintegral_eq (join m) f with ⟨g, hgm, hgf, hfg_int⟩
-  rw [hfg_int]; rw [lintegral_join hgm.aemeasurable]
-  gcongr
-  apply hgf
-
-Depends on / 依赖: aemeasurable, exists_measurable_le_lintegral_eq, hfg_int, hgm.aemeasurable, lintegral_join
+/-
+**MeasureTheory.Measure.lintegral_join_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：lintegral_join_le (f : α -> Real>=0∞) (m : Measure (Measure α)) : ∫⁻ x, f 
+x ∂join m <= ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m
+参数：f : α -> Real>=0∞；m : Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.exists_measurable_le_lintegral_eq`：exists_measurable_le_li
+ntegral_eq (f : α -> Real>=0∞) : exists g : α -> Real>=0∞, Measurable g ∧ g <= f
+ ∧ ∫⁻ a, f a ∂μ = ∫⁻ a, g a ∂μ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.lintegral_join`：lintegral_join {m : Measure (Measu
+re α)} {f : α -> Real>=0∞} (hf : AEMeasurable f (join m)) : ∫⁻ x, f x ∂join m = 
+∫⁻ μ, ∫⁻ x, f x ∂μ ∂m
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasureTheory.lintegral_mono_fn'`：∀ {α : Type u_1} {m : MeasurableSpace 
+α} {μ ν : MeasureTheory.Measure α},   μ ≤ ν → ∀ ⦃f g : α → ENNReal⦄, (∀ (x : α),
+ f x ≤ g x) → ∫⁻ (a : …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem lintegral_join_le (f : α -> Real>=0∞) (m : Measure (Measure α)) :
-    ∫⁻ x, f x ∂join m <= ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m := by
+theorem lintegral_join_le (f : α → ℝ≥0∞) (m : Measure (Measure α)) :
+    ∫⁻ x, f x ∂join m ≤ ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m := by
   rcases exists_measurable_le_lintegral_eq (join m) f with ⟨g, hgm, hgf, hfg_int⟩
-  rw [hfg_int]; rw [lintegral_join hgm.aemeasurable]
+  rw [hfg_int, lintegral_join hgm.aemeasurable]
   gcongr
   apply hgf
 
-/--
-Definition of `bind` / `bind` 的定义
+/-- Monadic bind on `Measure`, only works in the category of measurable spaces and measurable
+functions. When the function `f` is not measurable the result is not well defined. -/
+/-
+**MeasureTheory.Measure.bind** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：bind (m : Measure α) (f : α -> Measure β) : Measure β
+参数：m : Measure α；f : α -> Measure β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bind
-  signature: (m : Measure α) (f : α -> Measure β)
-  body: join (map f m)
-
-@[simp]
-
-中文:
-定义 bind
-  签名: (m : 测度 α) (f : α -> 测度 β)
-  定义体: join (map f m)
-
-@[simp]
+--- 原说明 ---
+Monadic bind on `Measure`, only works in the category of measurable spaces and m
+easurable
+functions. When the function `f` is not measurable the result is not well define
+d.
 -/
-def bind (m : Measure α) (f : α -> Measure β) : Measure β :=
+def bind (m : Measure α) (f : α → Measure β) : Measure β :=
   join (map f m)
 
 @[simp]
-/--
-theorem `bind_zero_left` / 定理 `bind_zero_left`
-
-English:
-theorem bind_zero_left
-  given: (f : α -> Measure β)
-  statement: bind (0 : Measure α) f = 0
-  proof: by simp [bind]
-
-@[simp]
-
-中文:
-定理 bind_zero_left
-  条件: (f : α -> 测度 β)
-  结论: bind (0 : 测度 α) f = 0
-  证明: by simp [bind]
-
-@[simp]
+/-
+**MeasureTheory.Measure.bind_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：bind_zero_left (f : α -> Measure β) : bind (0 : Measure α) f = 0
+参数：f : α -> Measure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_zero`：∀ {α : Type u_1} {β : Type u_2} {mα : Me
+asurableSpace α} {mβ : MeasurableSpace β} (f : α → β),   MeasureTheory.Measure.m
+ap f 0 = 0
+· 使用定理 `MeasureTheory.Measure.join_zero`：join_zero : (0 : Measure (Measure α)).j
+oin = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem bind_zero_left (f : α -> Measure β) : bind (0 : Measure α) f = 0 := by simp [bind]
+theorem bind_zero_left (f : α → Measure β) : bind (0 : Measure α) f = 0 := by simp [bind]
 
 @[simp]
-/--
-theorem `bind_apply` / 定理 `bind_apply`
-
-English:
-theorem bind_apply
-  statement: {m : Measure α} {f : α -> Measure β} {s : Set β} (hs : MeasurableSet s)
-  proof: by
-  rw [bind]; rw [join_apply hs]; rw [lintegral_map' (measurable_coe hs).aemeasurable hf]
-
-中文:
-定理 bind_apply
-  结论: {m : 测度 α} {f : α -> 测度 β} {s : 集合 β} (hs : 可测集 s)
-  证明: by
-  rw [bind]; rw [join_apply hs]; rw [lintegral_map' (measurable_coe hs).aemeasurable hf]
-
-Depends on / 依赖: aemeasurable, join_apply, lintegral_map, measurable_coe
+/-
+**MeasureTheory.Measure.bind_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：bind_apply {m : Measure α} {f : α -> Measure β} {s : Set β} (hs : Measurab
+leSet s) (hf : AEMeasurable f m) : bind m f s = ∫⁻ a, f a s ∂m
+参数：hs : MeasurableSet s；hf : AEMeasurable f m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.bind.eq_1`：∀ {α : Type u_1} {β : Type u_2} {mα : M
+easurableSpace α} {mβ : MeasurableSpace β} (m : MeasureTheory.Measure α)   (f : 
+α → MeasureTheory.Mea…
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.lintegral_map'`：lintegral_map' {f : β -> Real>=0∞} {g : α 
+-> β} (hf : AEMeasurable f (Measure.map g μ)) (hg : AEMeasurable g μ) : ∫⁻ a, f 
+a ∂Measure.map g μ…
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
 -/
-theorem bind_apply {m : Measure α} {f : α -> Measure β} {s : Set β} (hs : MeasurableSet s)
+theorem bind_apply {m : Measure α} {f : α → Measure β} {s : Set β} (hs : MeasurableSet s)
     (hf : AEMeasurable f m) : bind m f s = ∫⁻ a, f a s ∂m := by
-  rw [bind]; rw [join_apply hs]; rw [lintegral_map' (measurable_coe hs).aemeasurable hf]
-
-/--
-theorem `bind_apply_le` / 定理 `bind_apply_le`
-
-English:
-theorem bind_apply_le
-  given: {m : Measure α} (f : α -> Measure β) {s : Set β} (hs : MeasurableSet s)
-  proof: by
-  rw [bind]; rw [join_apply hs]
-  apply lintegral_map_le
-
-中文:
-定理 bind_apply_le
-  条件: {m : 测度 α} (f : α -> 测度 β) {s : 集合 β} (hs : 可测集 s)
-  证明: by
-  rw [bind]; rw [join_apply hs]
-  apply lintegral_map_le
-
-Depends on / 依赖: join_apply, lintegral_map_le
+  rw [bind, join_apply hs, lintegral_map' (measurable_coe hs).aemeasurable hf]
+/-
+**MeasureTheory.Measure.bind_apply_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：bind_apply_le {m : Measure α} (f : α -> Measure β) {s : Set β} (hs : Measu
+rableSet s) : bind m f s <= ∫⁻ a, f a s ∂m
+参数：f : α -> Measure β；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.bind.eq_1`：∀ {α : Type u_1} {β : Type u_2} {mα : M
+easurableSpace α} {mβ : MeasurableSpace β} (m : MeasureTheory.Measure α)   (f : 
+α → MeasureTheory.Mea…
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.lintegral_map_le`：lintegral_map_le (f : β -> Real>=0∞) (g 
+: α -> β) : ∫⁻ a, f a ∂Measure.map g μ <= ∫⁻ a, f (g a) ∂μ
 -/
-theorem bind_apply_le {m : Measure α} (f : α -> Measure β) {s : Set β} (hs : MeasurableSet s) :
-    bind m f s <= ∫⁻ a, f a s ∂m := by
-  rw [bind]; rw [join_apply hs]
+theorem bind_apply_le {m : Measure α} (f : α → Measure β) {s : Set β} (hs : MeasurableSet s) :
+    bind m f s ≤ ∫⁻ a, f a s ∂m := by
+  rw [bind, join_apply hs]
   apply lintegral_map_le
-
-/--
-theorem `ae_ae_of_ae_bind` / 定理 `ae_ae_of_ae_bind`
-
-English:
-theorem ae_ae_of_ae_bind
-  statement: {m : Measure α} {f : α -> Measure β} {p : β -> Prop} (hf : AEMeasurable f m)
-  proof: ae_of_ae_map hf ae_ae_of_ae_join h
-
-中文:
-定理 ae_ae_of_ae_bind
-  结论: {m : 测度 α} {f : α -> 测度 β} {p : β -> 命题} (hf : 几乎处处可测 f m)
-  证明: ae_of_ae_map hf ae_ae_of_ae_join h
-
-Depends on / 依赖: ae_ae_of_ae_join, ae_of_ae_map
+/-
+**MeasureTheory.Measure.ae_ae_of_ae_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：ae_ae_of_ae_bind {m : Measure α} {f : α -> Measure β} {p : β -> Prop} (hf 
+: AEMeasurable f m) (h : forallᵐ b ∂m.bind f, p b) : forallᵐ a ∂m, forallᵐ b ∂f 
+a, p b
+参数：hf : AEMeasurable f m；h : forallᵐ b ∂m.bind f, p b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_of_ae_map`：ae_of_ae_map {f : α -> β} (hf : AEMeasurable
+ f μ) {p : β -> Prop} (h : forallᵐ y ∂μ.map f, p y) : forallᵐ x ∂μ, p (f x)
+· 使用定理 `MeasureTheory.Measure.ae_ae_of_ae_join`：ae_ae_of_ae_join {m : Measure (M
+easure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a) : forallᵐ μ ∂m, forallᵐ 
+a ∂μ, p a
 -/
-theorem ae_ae_of_ae_bind {m : Measure α} {f : α -> Measure β} {p : β -> Prop} (hf : AEMeasurable f m)
-    (h : forallᵐ b ∂m.bind f, p b) : forallᵐ a ∂m, forallᵐ b ∂f a, p b :=
-ae_of_ae_map hf ae_ae_of_ae_join h
-
-/--
-theorem `_root_.AEMeasurable.ae_of_bind` / 定理 `_root_.AEMeasurable.ae_of_bind`
-
-English:
-theorem _root_.AEMeasurable.ae_of_bind
-  statement: {γ : Type*} {_ : MeasurableSpace γ} {m : Measure α}
-  proof: ae_of_ae_map hf hg.ae_of_join
-
-中文:
-定理 _root_.几乎处处可测.ae_of_bind
-  结论: {γ : 类型} {_ : 可测空间 γ} {m : 测度 α}
-  证明: ae_of_ae_map hf hg.ae_of_join
-
-Depends on / 依赖: ae_of_ae_map, ae_of_join, hg.ae_of_join
+theorem ae_ae_of_ae_bind {m : Measure α} {f : α → Measure β} {p : β → Prop} (hf : AEMeasurable f m)
+    (h : ∀ᵐ b ∂m.bind f, p b) : ∀ᵐ a ∂m, ∀ᵐ b ∂f a, p b :=
+  ae_of_ae_map hf <| ae_ae_of_ae_join h
+/-
+**MeasureTheory.Measure._root_.AEMeasurable.ae_of_bind** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AEMeasurable.ae_of_bind {γ : Type*} {_ : MeasurableSpace γ} {m : Measure α}
-    {f : α -> Measure β} {g : β -> γ} (hf : AEMeasurable f m) (hg : AEMeasurable g (m.bind f)) :
-    forallᵐ a ∂m, AEMeasurable g (f a) :=
+    {f : α → Measure β} {g : β → γ} (hf : AEMeasurable f m) (hg : AEMeasurable g (m.bind f)) :
+    ∀ᵐ a ∂m, AEMeasurable g (f a) :=
   ae_of_ae_map hf hg.ae_of_join
-
-/--
-theorem `bind_congr_right` / 定理 `bind_congr_right`
-
-English:
-theorem bind_congr_right
-  given: {μ : Measure α} {f g : α -> Measure β} (h : f =ᵐ[μ] g)
-  proof: congrArg join map_congr h
-
-@[simp]
-
-中文:
-定理 bind_congr_right
-  条件: {μ : 测度 α} {f g : α -> 测度 β} (h : f =ᵐ[μ] g)
-  证明: congrArg join map_congr h
-
-@[simp]
-
-Depends on / 依赖: map_congr
+/-
+**MeasureTheory.Measure.bind_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：bind_congr_right {μ : Measure α} {f g : α -> Measure β} (h : f =ᵐ[μ] g) : 
+μ.bind f = μ.bind g
+参数：h : f =ᵐ[μ] g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_congr`：map_congr {f g : α -> β} (h : f =ᵐ[μ] g
+) : Measure.map f μ = Measure.map g μ
 -/
-theorem bind_congr_right {μ : Measure α} {f g : α -> Measure β} (h : f =ᵐ[μ] g) :
+theorem bind_congr_right {μ : Measure α} {f g : α → Measure β} (h : f =ᵐ[μ] g) :
     μ.bind f = μ.bind g :=
-congrArg join map_congr h
+  congrArg join <| map_congr h
 
 @[simp]
-/--
-lemma `bind_const` / 引理 `bind_const`
-
-English:
-lemma bind_const
-  given: {m : Measure α} {ν : Measure β}
-  statement: m.bind (fun _ => ν) = m Set.univ • ν
-  proof: by
-  simp [bind]
-
-中文:
-引理 bind_const
-  条件: {m : 测度 α} {ν : 测度 β}
-  结论: m.bind (fun _ => ν) = m 集合.univ • ν
-  证明: by
-  simp [bind]
+/-
+**MeasureTheory.Measure.bind_const** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：bind_const {m : Measure α} {ν : Measure β} : m.bind (fun _ => ν) = m Set.u
+niv • ν
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.map_const`：map_const (μ : Measure α) (c : β) : μ.m
+ap (fun _ => c) = (μ Set.univ) • dirac c
+· 使用定理 `MeasureTheory.Measure.join_smul`：join_smul {R : Type*} [SMul R Real>=0∞]
+ [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) (m : Measure (Measure α)) : (c • m)
+.join = c • m.join
+· 使用定理 `MeasureTheory.Measure.join_dirac`：join_dirac (μ : Measure α) : join (dir
+ac μ) = μ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma bind_const {m : Measure α} {ν : Measure β} : m.bind (fun _ => ν) = m Set.univ • ν := by
+lemma bind_const {m : Measure α} {ν : Measure β} : m.bind (fun _ ↦ ν) = m Set.univ • ν := by
   simp [bind]
-
-/--
-theorem `bind_zero_right'` / 定理 `bind_zero_right'`
-
-English:
-theorem bind_zero_right'
-  given: (m : Measure α)
-  statement: bind m (fun _ => 0 : α -> Measure β) = 0
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 bind_zero_right'
-  条件: (m : 测度 α)
-  结论: bind m (fun _ => 0 : α -> 测度 β) = 0
-  证明: by simp
-
-@[simp]
+/-
+**MeasureTheory.Measure.bind_zero_right'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：bind_zero_right' (m : Measure α) : bind m (fun _ => 0 : α -> Measure β) = 
+0
+参数：m : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `MeasureTheory.Measure.bind_const`：bind_const {m : Measure α} {ν : Measur
+e β} : m.bind (fun _ => ν) = m Set.univ • ν
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem bind_zero_right' (m : Measure α) : bind m (fun _ => 0 : α -> Measure β) = 0 := by simp
+theorem bind_zero_right' (m : Measure α) : bind m (fun _ => 0 : α → Measure β) = 0 := by simp
 
 @[simp]
-/--
-theorem `bind_zero_right` / 定理 `bind_zero_right`
-
-English:
-theorem bind_zero_right
-  given: (m : Measure α)
-  statement: bind m (0 : α -> Measure β) = 0
-  proof: bind_zero_right' m
+/-
+**MeasureTheory.Measure.bind_zero_right** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.Measure`。
+形式化陈述：bind_zero_right (m : Measure α) : bind m (0 : α -> Measure β) = 0
+参数：m : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.bind_zero_right'`：bind_zero_right' (m : Measure α)
+ : bind m (fun _ => 0 : α -> Measure β) = 0
+-/
+theorem bind_zero_right (m : Measure α) : bind m (0 : α → Measure β) = 0 := bind_zero_right' m
 
 @[fun_prop]
-
-中文:
-定理 bind_zero_right
-  条件: (m : 测度 α)
-  结论: bind m (0 : α -> 测度 β) = 0
-  证明: bind_zero_right' m
-
-@[fun_prop]
-
-Depends on / 依赖: bind_zero_right
+/-
+**MeasureTheory.Measure.measurable_bind'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：measurable_bind' {g : α -> Measure β} (hg : Measurable g) : Measurable fun
+ m : Measure α => bind m g
+参数：hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `MeasureTheory.Measure.measurable_join`：measurable_join : Measurable (joi
+n : Measure (Measure α) -> Measure α)
+· 使用定理 `MeasureTheory.Measure.measurable_map`：measurable_map (f : α -> β) (hf : 
+Measurable f) : Measurable fun μ : Measure α => map f μ
 -/
-theorem bind_zero_right (m : Measure α) : bind m (0 : α -> Measure β) = 0 := bind_zero_right' m
-
-@[fun_prop]
-/--
-theorem `measurable_bind'` / 定理 `measurable_bind'`
-
-English:
-theorem measurable_bind'
-  given: {g : α -> Measure β} (hg : Measurable g)
-  proof: measurable_join.comp (measurable_map _ hg)
-
-中文:
-定理 measurable_bind'
-  条件: {g : α -> 测度 β} (hg : 可测 g)
-  证明: measurable_join.comp (measurable_map _ hg)
-
-Depends on / 依赖: measurable_join, measurable_join.comp, measurable_map
--/
-theorem measurable_bind' {g : α -> Measure β} (hg : Measurable g) :
+theorem measurable_bind' {g : α → Measure β} (hg : Measurable g) :
     Measurable fun m : Measure α => bind m g :=
   measurable_join.comp (measurable_map _ hg)
-
-/--
-theorem `aemeasurable_bind` / 定理 `aemeasurable_bind`
-
-English:
-theorem aemeasurable_bind
-  statement: {g : α -> Measure β} {m : Measure (Measure α)}
-  proof: let ⟨f, hfm, hf⟩ := hg
-  ⟨(bind · f), measurable_bind' hfm, (ae_ae_of_ae_join hf).mono fun _ => bind_congr_right⟩
-
-中文:
-定理 aemeasurable_bind
-  结论: {g : α -> 测度 β} {m : 测度 (测度 α)}
-  证明: let ⟨f, hfm, hf⟩ := hg
-  ⟨(bind · f), measurable_bind' hfm, (ae_ae_of_ae_join hf).mono fun _ => bind_congr_right⟩
-
-Depends on / 依赖: ae_ae_of_ae_join, bind_congr_right, measurable_bind
+/-
+**MeasureTheory.Measure.aemeasurable_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：aemeasurable_bind {g : α -> Measure β} {m : Measure (Measure α)} (hg : AEM
+easurable g m.join) : AEMeasurable (bind · g) m
+参数：Measure α；hg : AEMeasurable g m.join。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.measurable_bind'`：measurable_bind' {g : α -> Measu
+re β} (hg : Measurable g) : Measurable fun m : Measure α => bind m g
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.ae_ae_of_ae_join`：ae_ae_of_ae_join {m : Measure (M
+easure α)} {p : α -> Prop} (h : forallᵐ a ∂m.join, p a) : forallᵐ μ ∂m, forallᵐ 
+a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.bind_congr_right`：bind_congr_right {μ : Measure α}
+ {f g : α -> Measure β} (h : f =ᵐ[μ] g) : μ.bind f = μ.bind g
 -/
-theorem aemeasurable_bind {g : α -> Measure β} {m : Measure (Measure α)}
+theorem aemeasurable_bind {g : α → Measure β} {m : Measure (Measure α)}
     (hg : AEMeasurable g m.join) : AEMeasurable (bind · g) m :=
   let ⟨f, hfm, hf⟩ := hg
-  ⟨(bind · f), measurable_bind' hfm, (ae_ae_of_ae_join hf).mono fun _ => bind_congr_right⟩
-
-/--
-theorem `bind_sum` / 定理 `bind_sum`
-
-English:
-theorem bind_sum
-  statement: {ι : Type*} (m : ι -> Measure α) (f : α -> Measure β)
-  proof: by
-  simp_rw [bind, map_sum h, join_sum]
-
-中文:
-定理 bind_sum
-  结论: {ι : 类型} (m : ι -> 测度 α) (f : α -> 测度 β)
-  证明: by
-  simp_rw [bind, map_sum h, join_sum]
-
-Depends on / 依赖: join_sum, map_sum, simp_rw
+  ⟨(bind · f), measurable_bind' hfm, (ae_ae_of_ae_join hf).mono fun _ ↦ bind_congr_right⟩
+/-
+**MeasureTheory.Measure.bind_sum** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measur
+e`。
+形式化陈述：bind_sum {ι : Type*} (m : ι -> Measure α) (f : α -> Measure β) (h : AEMeas
+urable f (sum fun i => m i)) : (sum fun (i : ι) => m i).bind f = sum fun (i : ι)
+ => (m i).bind f
+参数：m : ι -> Measure α；f : α -> Measure β；h : AEMeasurable f (sum fun i => m i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.map_sum`：map_sum {ι : Type*} {m : ι -> Measure α} 
+{f : α -> β} (hf : AEMeasurable f (Measure.sum m)) : Measure.map f (Measure.sum 
+m) = Measure.sum (f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `MeasureTheory.Measure.join_sum`：join_sum {ι : Type*} (m : ι -> Measure (
+Measure α)) : (sum m).join = sum fun (i : ι) => (m i).join
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem bind_sum {ι : Type*} (m : ι -> Measure α) (f : α -> Measure β)
+theorem bind_sum {ι : Type*} (m : ι → Measure α) (f : α → Measure β)
     (h : AEMeasurable f (sum fun i => m i)) :
-    (sum fun (i : ι) => m i).bind f = sum fun (i : ι) => (m i).bind f := by
+    (sum fun (i : ι) ↦ m i).bind f = sum fun (i : ι) ↦ (m i).bind f := by
   simp_rw [bind, map_sum h, join_sum]
-
-/--
-lemma `bind_smul` / 引理 `bind_smul`
-
-English:
-lemma bind_smul
-  statement: {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) (m : Measure α)
-  proof: by
-  simp_rw [bind, Measure.map_smul, join_smul]
-
-中文:
-引理 bind_smul
-  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R) (m : 测度 α)
-  证明: by
-  simp_rw [bind, Measure.map_smul, join_smul]
-
-Depends on / 依赖: Measure, Measure.map_smul, join_smul, map_smul, simp_rw
+/-
+**MeasureTheory.Measure.bind_smul** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：bind_smul {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞
+] (c : R) (m : Measure α) (f : α -> Measure β) : (c • m).bind f = c • (m.bind f)
+参数：c : R；m : Measure α；f : α -> Measure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_smul`：∀ {α : Type u_1} {β : Type u_2} {mα : Me
+asurableSpace α} {mβ : MeasurableSpace β} {R : Type u_4} [inst : SMul R ENNReal]
+   [inst_1 : IsScala…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.Measure.join_smul`：join_smul {R : Type*} [SMul R Real>=0∞]
+ [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) (m : Measure (Measure α)) : (c • m)
+.join = c • m.join
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma bind_smul {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) (m : Measure α)
-    (f : α -> Measure β) : (c • m).bind f = c • (m.bind f) := by
+lemma bind_smul {R : Type*} [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞] (c : R) (m : Measure α)
+    (f : α → Measure β) : (c • m).bind f = c • (m.bind f) := by
   simp_rw [bind, Measure.map_smul, join_smul]
-
-/--
-theorem `lintegral_bind` / 定理 `lintegral_bind`
-
-English:
-theorem lintegral_bind
-  statement: {m : Measure α} {μ : α -> Measure β} {f : β -> Real>=0∞} (hμ : AEMeasurable μ m)
-  proof: (lintegral_join hf).trans (lintegral_map' (aemeasurable_lintegral hf) hμ)
-
-中文:
-定理 lintegral_bind
-  结论: {m : 测度 α} {μ : α -> 测度 β} {f : β -> 实数>=0∞} (hμ : 几乎处处可测 μ m)
-  证明: (lintegral_join hf).trans (lintegral_map' (aemeasurable_lintegral hf) hμ)
-
-Depends on / 依赖: LinearOrder, WellFoundedLT, aemeasurable_lintegral, isWellOrder_lt, lintegral_join, lintegral_map
+/-
+**MeasureTheory.Measure.lintegral_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：lintegral_bind {m : Measure α} {μ : α -> Measure β} {f : β -> Real>=0∞} (h
+μ : AEMeasurable μ m) (hf : AEMeasurable f (bind m μ)) : ∫⁻ x, f x ∂bind m μ = ∫
+⁻ a, ∫⁻ x, f x ∂μ a ∂m
+参数：hμ : AEMeasurable μ m；hf : AEMeasurable f (bind m μ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.Measure.lintegral_join`：lintegral_join {m : Measure (Measu
+re α)} {f : α -> Real>=0∞} (hf : AEMeasurable f (join m)) : ∫⁻ x, f x ∂join m = 
+∫⁻ μ, ∫⁻ x, f x ∂μ ∂m
+· 使用定理 `MeasureTheory.lintegral_map'`：lintegral_map' {f : β -> Real>=0∞} {g : α 
+-> β} (hf : AEMeasurable f (Measure.map g μ)) (hg : AEMeasurable g μ) : ∫⁻ a, f 
+a ∂Measure.map g μ…
+· 使用定理 `MeasureTheory.Measure.aemeasurable_lintegral`：aemeasurable_lintegral {m 
+: Measure (Measure α)} {f : α -> Real>=0∞} (h : AEMeasurable f m.join) : AEMeasu
+rable (fun μ => ∫⁻ a, f a ∂μ) m
 -/
-theorem lintegral_bind {m : Measure α} {μ : α -> Measure β} {f : β -> Real>=0∞} (hμ : AEMeasurable μ m)
+theorem lintegral_bind {m : Measure α} {μ : α → Measure β} {f : β → ℝ≥0∞} (hμ : AEMeasurable μ m)
     (hf : AEMeasurable f (bind m μ)) : ∫⁻ x, f x ∂bind m μ = ∫⁻ a, ∫⁻ x, f x ∂μ a ∂m :=
   (lintegral_join hf).trans (lintegral_map' (aemeasurable_lintegral hf) hμ)
-
-/--
-theorem `lintegral_bind_le` / 定理 `lintegral_bind_le`
-
-English:
-theorem lintegral_bind_le
-  given: (f : β -> Real>=0∞) (m : Measure α) (μ : α -> Measure β)
-  proof: (lintegral_join_le _ _).trans (lintegral_map_le _ _)
-
-中文:
-定理 lintegral_bind_le
-  条件: (f : β -> 实数>=0∞) (m : 测度 α) (μ : α -> 测度 β)
-  证明: (lintegral_join_le _ _).trans (lintegral_map_le _ _)
-
-Depends on / 依赖: lintegral_join_le, lintegral_map_le
+/-
+**MeasureTheory.Measure.lintegral_bind_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：lintegral_bind_le (f : β -> Real>=0∞) (m : Measure α) (μ : α -> Measure β)
+ : ∫⁻ x, f x ∂bind m μ <= ∫⁻ a, ∫⁻ x, f x ∂μ a ∂m
+参数：f : β -> Real>=0∞；m : Measure α；μ : α -> Measure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.Measure.lintegral_join_le`：lintegral_join_le (f : α -> Rea
+l>=0∞) (m : Measure (Measure α)) : ∫⁻ x, f x ∂join m <= ∫⁻ μ, ∫⁻ x, f x ∂μ ∂m
+· 使用定理 `MeasureTheory.lintegral_map_le`：lintegral_map_le (f : β -> Real>=0∞) (g 
+: α -> β) : ∫⁻ a, f a ∂Measure.map g μ <= ∫⁻ a, f (g a) ∂μ
 -/
-theorem lintegral_bind_le (f : β -> Real>=0∞) (m : Measure α) (μ : α -> Measure β) :
-    ∫⁻ x, f x ∂bind m μ <= ∫⁻ a, ∫⁻ x, f x ∂μ a ∂m :=
+theorem lintegral_bind_le (f : β → ℝ≥0∞) (m : Measure α) (μ : α → Measure β) :
+    ∫⁻ x, f x ∂bind m μ ≤ ∫⁻ a, ∫⁻ x, f x ∂μ a ∂m :=
   (lintegral_join_le _ _).trans (lintegral_map_le _ _)
-
-/--
-theorem `bind_bind` / 定理 `bind_bind`
-
-English:
-theorem bind_bind
-  statement: {γ} [MeasurableSpace γ] {m : Measure α} {f : α -> Measure β} {g : β -> Measure γ}
-  proof: by
-  ext1 s hs
-  rw [bind_apply hs hg]; rw [lintegral_bind hf]; rw [bind_apply hs]
-· exact lintegral_congr_ae (hf.ae_of_bind hg).mono fun a ha => .symm bind_apply hs ha
-  · exact (aemeasurable_bind hg).comp_aemeasurable hf
-  · exact (measurable_coe hs).comp_aemeasurable hg
-
-@[simp]
-
-中文:
-定理 bind_bind
-  结论: {γ} [可测空间 γ] {m : 测度 α} {f : α -> 测度 β} {g : β -> 测度 γ}
-  证明: by
-  ext1 s hs
-  rw [bind_apply hs hg]; rw [lintegral_bind hf]; rw [bind_apply hs]
-· exact lintegral_congr_ae (hf.ae_of_bind hg).mono fun a ha => .symm bind_apply hs ha
-  · exact (aemeasurable_bind hg).comp_aemeasurable hf
-  · exact (measurable_coe hs).comp_aemeasurable hg
-
-@[simp]
-
-Depends on / 依赖: ae_of_bind, aemeasurable_bind, bind_apply, comp_aemeasurable, hf.ae_of_bind, lintegral_bind, lintegral_congr_ae, measurable_coe
+/-
+**MeasureTheory.Measure.bind_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：bind_bind {γ} [MeasurableSpace γ] {m : Measure α} {f : α -> Measure β} {g 
+: β -> Measure γ} (hf : AEMeasurable f m) (hg : AEMeasurable g (m.bind f)) : bin
+d (bind m f) g = bind m fun a => bind (f a) g
+参数：hf : AEMeasurable f m；hg : AEMeasurable g (m.bind f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.bind_apply`：bind_apply {m : Measure α} {f : α -> M
+easure β} {s : Set β} (hs : MeasurableSet s) (hf : AEMeasurable f m) : bind m f 
+s = ∫⁻ a, f a s ∂m
+· 使用定理 `MeasureTheory.Measure.lintegral_bind`：lintegral_bind {m : Measure α} {μ 
+: α -> Measure β} {f : β -> Real>=0∞} (hμ : AEMeasurable μ m) (hf : AEMeasurable
+ f (bind m μ)) : ∫⁻ x, f x…
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `AEMeasurable.comp_aemeasurable`：comp_aemeasurable {f : α -> δ} {g : δ ->
+ β} (hg : AEMeasurable g (μ.map f)) (hf : AEMeasurable f μ) : AEMeasurable (g ∘ 
+f) μ
+· 使用定理 `MeasureTheory.Measure.aemeasurable_bind`：aemeasurable_bind {g : α -> Mea
+sure β} {m : Measure (Measure α)} (hg : AEMeasurable g m.join) : AEMeasurable (b
+ind · g) m
+· 使用定理 `MeasureTheory.lintegral_congr_ae`：lintegral_congr_ae {f g : α -> Real>=0
+∞} (h : f =ᵐ[μ] g) : ∫⁻ a, f a ∂μ = ∫⁻ a, g a ∂μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `AEMeasurable.ae_of_bind`：∀ {α : Type u_1} {β : Type u_2} {mα : Measurabl
+eSpace α} {mβ : MeasurableSpace β} {γ : Type u_3} {x : MeasurableSpace γ}   {m :
+ MeasureTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem bind_bind {γ} [MeasurableSpace γ] {m : Measure α} {f : α -> Measure β} {g : β -> Measure γ}
+theorem bind_bind {γ} [MeasurableSpace γ] {m : Measure α} {f : α → Measure β} {g : β → Measure γ}
     (hf : AEMeasurable f m) (hg : AEMeasurable g (m.bind f)) :
     bind (bind m f) g = bind m fun a => bind (f a) g := by
   ext1 s hs
-  rw [bind_apply hs hg]; rw [lintegral_bind hf]; rw [bind_apply hs]
-· exact lintegral_congr_ae (hf.ae_of_bind hg).mono fun a ha => .symm bind_apply hs ha
+  rw [bind_apply hs hg, lintegral_bind hf, bind_apply hs]
+  · exact lintegral_congr_ae <| (hf.ae_of_bind hg).mono fun a ha ↦ .symm <| bind_apply hs ha
   · exact (aemeasurable_bind hg).comp_aemeasurable hf
   · exact (measurable_coe hs).comp_aemeasurable hg
 
 @[simp]
-/--
-theorem `dirac_bind` / 定理 `dirac_bind`
-
-English:
-theorem dirac_bind
-  given: {f : α -> Measure β} (hf : Measurable f) (a : α)
-  statement: bind (dirac a) f = f a
-  proof: by
-  simp [bind, map_dirac' hf]
-
-@[simp]
-
-中文:
-定理 dirac_bind
-  条件: {f : α -> 测度 β} (hf : 可测 f) (a : α)
-  结论: bind (dirac a) f = f a
-  证明: by
-  simp [bind, map_dirac' hf]
-
-@[simp]
-
-Depends on / 依赖: map_dirac
+/-
+**MeasureTheory.Measure.dirac_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：dirac_bind {f : α -> Measure β} (hf : Measurable f) (a : α) : bind (dirac 
+a) f = f a
+参数：hf : Measurable f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_dirac'`：map_dirac' {f : α -> β} (hf : Measurab
+le f) (a : α) : (dirac a).map f = dirac (f a)
+· 使用定理 `MeasureTheory.Measure.join_dirac`：join_dirac (μ : Measure α) : join (dir
+ac μ) = μ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dirac_bind {f : α -> Measure β} (hf : Measurable f) (a : α) : bind (dirac a) f = f a := by
+theorem dirac_bind {f : α → Measure β} (hf : Measurable f) (a : α) : bind (dirac a) f = f a := by
   simp [bind, map_dirac' hf]
 
 @[simp]
-/--
-theorem `bind_dirac` / 定理 `bind_dirac`
-
-English:
-theorem bind_dirac
-  given: {m : Measure α}
-  statement: bind m dirac = m
-  proof: by
-  ext1 s hs
-  simp only [bind_apply hs measurable_dirac.aemeasurable, dirac_apply' _ hs, lintegral_indicator hs,
-    Pi.one_apply, lintegral_one, restrict_apply, MeasurableSet.univ, univ_inter]
-
-@[simp]
-
-中文:
-定理 bind_dirac
-  条件: {m : 测度 α}
-  结论: bind m dirac = m
-  证明: by
-  ext1 s hs
-  simp only [bind_apply hs measurable_dirac.aemeasurable, dirac_apply' _ hs, lintegral_indicator hs,
-    Pi.one_apply, lintegral_one, restrict_apply, MeasurableSet.univ, univ_inter]
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, Pi.one_apply, aemeasurable, bind_apply, dirac_apply, lintegral_indicator, lintegral_one, measurable_dirac, measurable_dirac.aemeasurable, one_apply, restrict_apply, univ_inter
+/-
+**MeasureTheory.Measure.bind_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：bind_dirac {m : Measure α} : bind m dirac = m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.bind_apply`：bind_apply {m : Measure α} {f : α -> M
+easure β} {s : Set β} (hs : MeasurableSet s) (hf : AEMeasurable f m) : bind m f 
+s = ∫⁻ a, f a s ∂m
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasureTheory.Measure.measurable_dirac`：measurable_dirac : Measurable (M
+easure.dirac : α -> Measure α)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasureTheory.lintegral_indicator`：lintegral_indicator {s : Set α} (hs :
+ MeasurableSet s) (f : α -> Real>=0∞) : ∫⁻ a, s.indicator f a ∂μ = ∫⁻ a in s, f 
+a ∂μ
+· 使用定理 `MeasureTheory.lintegral_one`：lintegral_one : ∫⁻ _, (1 : Real>=0∞) ∂μ = μ
+ univ
+· 使用定理 `MeasureTheory.Measure.restrict_apply`：restrict_apply (ht : MeasurableSet
+ t) : μ.restrict s t = μ (t inter s)
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem bind_dirac {m : Measure α} : bind m dirac = m := by
   ext1 s hs
@@ -1237,129 +1144,125 @@ theorem bind_dirac {m : Measure α} : bind m dirac = m := by
     Pi.one_apply, lintegral_one, restrict_apply, MeasurableSet.univ, univ_inter]
 
 @[simp]
-/--
-lemma `bind_dirac_eq_map` / 引理 `bind_dirac_eq_map`
-
-English:
-lemma bind_dirac_eq_map
-  given: (m : Measure α) {f : α -> β} (hf : Measurable f)
-  proof: by
-  rw [← bind_dirac (m := m.map f)]; rw [bind]; rw [bind]; rw [map_map]; rw [Function.comp_def]
-  exacts [measurable_dirac, hf]
-
-中文:
-引理 bind_dirac_eq_map
-  条件: (m : 测度 α) {f : α -> β} (hf : 可测 f)
-  证明: by
-  rw [← bind_dirac (m := m.map f)]; rw [bind]; rw [bind]; rw [map_map]; rw [Function.comp_def]
-  exacts [measurable_dirac, hf]
-
-Depends on / 依赖: Function, Function.comp_def, bind_dirac, comp_def, exacts, m.map, map_map, measurable_dirac
+/-
+**MeasureTheory.Measure.bind_dirac_eq_map** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：bind_dirac_eq_map (m : Measure α) {f : α -> β} (hf : Measurable f) : m.bin
+d (fun x => Measure.dirac (f x)) = m.map f
+参数：m : Measure α；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.bind_dirac`：bind_dirac {m : Measure α} : bind m di
+rac = m
+· 使用定理 `MeasureTheory.Measure.bind.eq_1`：∀ {α : Type u_1} {β : Type u_2} {mα : M
+easurableSpace α} {mβ : MeasurableSpace β} (m : MeasureTheory.Measure α)   (f : 
+α → MeasureTheory.Mea…
+· 使用定理 `MeasureTheory.Measure.map_map`：map_map {g : β -> γ} {f : α -> β} (hg : M
+easurable g) (hf : Measurable f) : (μ.map f).map g = μ.map (g ∘ f)
+· 使用定理 `MeasureTheory.Measure.measurable_dirac`：measurable_dirac : Measurable (M
+easure.dirac : α -> Measure α)
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
 -/
-lemma bind_dirac_eq_map (m : Measure α) {f : α -> β} (hf : Measurable f) :
-    m.bind (fun x => Measure.dirac (f x)) = m.map f := by
-  rw [← bind_dirac (m := m.map f)]; rw [bind]; rw [bind]; rw [map_map]; rw [Function.comp_def]
+lemma bind_dirac_eq_map (m : Measure α) {f : α → β} (hf : Measurable f) :
+    m.bind (fun x ↦ Measure.dirac (f x)) = m.map f := by
+  rw [← bind_dirac (m := m.map f), bind, bind, map_map, Function.comp_def]
   exacts [measurable_dirac, hf]
-
-/--
-theorem `join_eq_bind` / 定理 `join_eq_bind`
-
-English:
-theorem join_eq_bind
-  given: (μ : Measure (Measure α))
-  statement: join μ = bind μ id
-  proof: by rw [bind, map_id]
-
-中文:
-定理 join_eq_bind
-  条件: (μ : 测度 (测度 α))
-  结论: join μ = bind μ id
-  证明: by rw [bind, map_id]
-
-Depends on / 依赖: map_id
+/-
+**MeasureTheory.Measure.join_eq_bind** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Me
+asure`。
+形式化陈述：join_eq_bind (μ : Measure (Measure α)) : join μ = bind μ id
+参数：μ : Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.bind.eq_1`：∀ {α : Type u_1} {β : Type u_2} {mα : M
+easurableSpace α} {mβ : MeasurableSpace β} (m : MeasureTheory.Measure α)   (f : 
+α → MeasureTheory.Mea…
+· 使用定理 `MeasureTheory.Measure.map_id`：map_id : map id μ = μ
 -/
 theorem join_eq_bind (μ : Measure (Measure α)) : join μ = bind μ id := by rw [bind, map_id]
-
-/--
-theorem `join_map_map` / 定理 `join_map_map`
-
-English:
-theorem join_map_map
-  given: {f : α -> β} (hf : Measurable f) (μ : Measure (Measure α))
-  proof: by
-  ext1 s hs
-  rw [join_apply hs]; rw [map_apply hf hs]; rw [join_apply (hf hs)]; rw [lintegral_map (measurable_coe hs) (measurable_map f hf)]
-  simp_rw [map_apply hf hs]
-
-中文:
-定理 join_map_map
-  条件: {f : α -> β} (hf : 可测 f) (μ : 测度 (测度 α))
-  证明: by
-  ext1 s hs
-  rw [join_apply hs]; rw [map_apply hf hs]; rw [join_apply (hf hs)]; rw [lintegral_map (measurable_coe hs) (measurable_map f hf)]
-  simp_rw [map_apply hf hs]
-
-Depends on / 依赖: join_apply, lintegral_map, map_apply, measurable_coe, measurable_map, simp_rw
+/-
+**MeasureTheory.Measure.join_map_map** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Me
+asure`。
+形式化陈述：join_map_map {f : α -> β} (hf : Measurable f) (μ : Measure (Measure α)) : 
+join (map (map f) μ) = map f (join μ)
+参数：hf : Measurable f；μ : Measure (Measure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.join_apply`：join_apply {m : Measure (Measure α)} {
+s : Set α} (hs : MeasurableSet s) : join m s = ∫⁻ μ, μ s ∂m
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasureTheory.lintegral_map`：lintegral_map {f : β -> Real>=0∞} {g : α ->
+ β} (hf : Measurable f) (hg : Measurable g) : ∫⁻ a, f a ∂map g μ = ∫⁻ a, f (g a)
+ ∂μ
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用定理 `MeasureTheory.Measure.measurable_map`：measurable_map (f : α -> β) (hf : 
+Measurable f) : Measurable fun μ : Measure α => map f μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem join_map_map {f : α -> β} (hf : Measurable f) (μ : Measure (Measure α)) :
+theorem join_map_map {f : α → β} (hf : Measurable f) (μ : Measure (Measure α)) :
     join (map (map f) μ) = map f (join μ) := by
   ext1 s hs
-  rw [join_apply hs]; rw [map_apply hf hs]; rw [join_apply (hf hs)]; rw [lintegral_map (measurable_coe hs) (measurable_map f hf)]
+  rw [join_apply hs, map_apply hf hs, join_apply (hf hs),
+    lintegral_map (measurable_coe hs) (measurable_map f hf)]
   simp_rw [map_apply hf hs]
-
-/--
-theorem `join_map_join` / 定理 `join_map_join`
-
-English:
-theorem join_map_join
-  given: (μ : Measure (Measure (Measure α)))
-  statement: join (map join μ) = join (join μ)
-  proof: by
-  change bind μ join = join (join μ)
-  rw [join_eq_bind]; rw [join_eq_bind]; rw [bind_bind aemeasurable_id aemeasurable_id]
-  apply congr_arg (bind μ)
-  funext ν
-  exact join_eq_bind ν
-
-中文:
-定理 join_map_join
-  条件: (μ : 测度 (测度 (测度 α)))
-  结论: join (map join μ) = join (join μ)
-  证明: by
-  change bind μ join = join (join μ)
-  rw [join_eq_bind]; rw [join_eq_bind]; rw [bind_bind aemeasurable_id aemeasurable_id]
-  apply congr_arg (bind μ)
-  funext ν
-  exact join_eq_bind ν
-
-Depends on / 依赖: aemeasurable_id, bind_bind, congr_arg, join_eq_bind
+/-
+**MeasureTheory.Measure.join_map_join** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：join_map_join (μ : Measure (Measure (Measure α))) : join (map join μ) = jo
+in (join μ)
+参数：μ : Measure (Measure (Measure α))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.join_eq_bind`：join_eq_bind (μ : Measure (Measure α
+)) : join μ = bind μ id
+· 使用定理 `MeasureTheory.Measure.bind_bind`：bind_bind {γ} [MeasurableSpace γ] {m : 
+Measure α} {f : α -> Measure β} {g : β -> Measure γ} (hf : AEMeasurable f m) (hg
+ : AEMeasurable g (m.…
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem join_map_join (μ : Measure (Measure (Measure α))) : join (map join μ) = join (join μ) := by
   change bind μ join = join (join μ)
-  rw [join_eq_bind]; rw [join_eq_bind]; rw [bind_bind aemeasurable_id aemeasurable_id]
+  rw [join_eq_bind, join_eq_bind, bind_bind aemeasurable_id aemeasurable_id]
   apply congr_arg (bind μ)
   funext ν
   exact join_eq_bind ν
-
-/--
-theorem `join_map_dirac` / 定理 `join_map_dirac`
-
-English:
-theorem join_map_dirac
-  given: (μ : Measure α)
-  statement: join (map dirac μ) = μ
-  proof: bind_dirac
-
-中文:
-定理 join_map_dirac
-  条件: (μ : 测度 α)
-  结论: join (map dirac μ) = μ
-  证明: bind_dirac
-
-Depends on / 依赖: bind_dirac
+/-
+**MeasureTheory.Measure.join_map_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：join_map_dirac (μ : Measure α) : join (map dirac μ) = μ
+参数：μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.bind_dirac`：bind_dirac {m : Measure α} : bind m di
+rac = m
 -/
 theorem join_map_dirac (μ : Measure α) : join (map dirac μ) = μ := bind_dirac
 
 end Measure
 
 end MeasureTheory
+

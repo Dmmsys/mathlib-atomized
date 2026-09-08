@@ -45,201 +45,148 @@ section toSimpleGraph
 /-! ### Orientation-forgetting maps on digraphs -/
 
 /--
-Definition of `toSimpleGraphInclusive` / `toSimpleGraphInclusive` 的定义
+Orientation-forgetting map from `Digraph` to `SimpleGraph` that gives an unoriented edge if
+either orientation is present.
+-/
+/-
+**Digraph.toSimpleGraphInclusive** 是 Mathlib 中的一个定义，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphInclusive (G : Digraph V) : SimpleGraph V
+参数：G : Digraph V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSimpleGraphInclusive
-  signature: (G : Digraph V)
-  body: SimpleGraph.fromRel G.Adj
-
-中文:
-定义 toSimpleGraphInclusive
-  签名: (G : 有向图 V)
-  定义体: SimpleGraph.fromRel G.Adj
-
-Depends on / 依赖: G.Adj, SimpleGraph, SimpleGraph.fromRel, fromRel
+--- 原说明 ---
+Orientation-forgetting map from `Digraph` to `SimpleGraph` that gives an unorien
+ted edge if
+either orientation is present.
 -/
 def toSimpleGraphInclusive (G : Digraph V) : SimpleGraph V := SimpleGraph.fromRel G.Adj
 
 /--
-Definition of `toSimpleGraphStrict` / `toSimpleGraphStrict` 的定义
+Orientation-forgetting map from `Digraph` to `SimpleGraph` that gives an unoriented edge if
+both orientations are present.
+-/
+/-
+**Digraph.toSimpleGraphStrict** 是 Mathlib 中的一个定义，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphStrict (G : Digraph V) : SimpleGraph V where Adj v w
+参数：G : Digraph V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSimpleGraphStrict
-  signature: (G : Digraph V)
-  body: v != w ∧ G.Adj v w ∧ G.Adj w v
-
-中文:
-定义 toSimpleGraphStrict
-  签名: (G : 有向图 V)
-  定义体: v != w ∧ G.Adj v w ∧ G.Adj w v
-
-Depends on / 依赖: G.Adj
+--- 原说明 ---
+Orientation-forgetting map from `Digraph` to `SimpleGraph` that gives an unorien
+ted edge if
+both orientations are present.
 -/
 def toSimpleGraphStrict (G : Digraph V) : SimpleGraph V where
-  Adj v w := v != w ∧ G.Adj v w ∧ G.Adj w v
-
-/--
-lemma `toSimpleGraphStrict_subgraph_toSimpleGraphInclusive` / 引理 `toSimpleGraphStrict_subgraph_toSimpleGraphInclusive`
-
-English:
-lemma toSimpleGraphStrict_subgraph_toSimpleGraphInclusive
-  given: (G : Digraph V)
-  proof: fun _ _ h => ⟨h.1, Or.inl h.2.1⟩
-
-@[gcongr, mono]
-
-中文:
-引理 toSimpleGraphStrict_subgraph_toSimpleGraphInclusive
-  条件: (G : 有向图 V)
-  证明: fun _ _ h => ⟨h.1, Or.inl h.2.1⟩
-
-@[gcongr, mono]
-
-Depends on / 依赖: Or.inl
+  Adj v w := v ≠ w ∧ G.Adj v w ∧ G.Adj w v
+/-
+**Digraph.toSimpleGraphStrict_subgraph_toSimpleGraphInclusive** 是 Mathlib 中的一个引理
+，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphStrict_subgraph_toSimpleGraphInclusive (G : Digraph V) : G.to
+SimpleGraphStrict <= G.toSimpleGraphInclusive
+参数：G : Digraph V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma toSimpleGraphStrict_subgraph_toSimpleGraphInclusive (G : Digraph V) :
-    G.toSimpleGraphStrict <= G.toSimpleGraphInclusive :=
-  fun _ _ h => ⟨h.1, Or.inl h.2.1⟩
+    G.toSimpleGraphStrict ≤ G.toSimpleGraphInclusive :=
+  fun _ _ h ↦ ⟨h.1, Or.inl h.2.1⟩
 
 @[gcongr, mono]
-/--
-lemma `toSimpleGraphInclusive_mono` / 引理 `toSimpleGraphInclusive_mono`
-
-English:
-lemma toSimpleGraphInclusive_mono
-  statement: Monotone (toSimpleGraphInclusive : _ -> SimpleGraph V)
-  proof: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₂.2.imp (@h₁ _ _) (@h₁ _ _)⟩
-
-@[gcongr, mono]
-
-中文:
-引理 toSimpleGraphInclusive_mono
-  结论: 递增 (toSimpleGraphInclusive : _ -> 简单图 V)
-  证明: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₂.2.imp (@h₁ _ _) (@h₁ _ _)⟩
-
-@[gcongr, mono]
+/-
+**Digraph.toSimpleGraphInclusive_mono** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphInclusive_mono : Monotone (toSimpleGraphInclusive : _ -> Simp
+leGraph V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma toSimpleGraphInclusive_mono : Monotone (toSimpleGraphInclusive : _ -> SimpleGraph V) :=
-  fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₂.2.imp (@h₁ _ _) (@h₁ _ _)⟩
+lemma toSimpleGraphInclusive_mono : Monotone (toSimpleGraphInclusive : _ → SimpleGraph V) :=
+  fun _ _ h₁ _ _ h₂ ↦ ⟨h₂.1, h₂.2.imp (@h₁ _ _) (@h₁ _ _)⟩
 
 @[gcongr, mono]
-/--
-lemma `toSimpleGraphStrict_mono` / 引理 `toSimpleGraphStrict_mono`
-
-English:
-lemma toSimpleGraphStrict_mono
-  statement: Monotone (toSimpleGraphStrict : _ -> SimpleGraph V)
-  proof: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₁ h₂.2.1, h₁ h₂.2.2⟩
-
-@[simp]
-
-中文:
-引理 toSimpleGraphStrict_mono
-  结论: 递增 (toSimpleGraphStrict : _ -> 简单图 V)
-  证明: fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₁ h₂.2.1, h₁ h₂.2.2⟩
-
-@[simp]
+/-
+**Digraph.toSimpleGraphStrict_mono** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphStrict_mono : Monotone (toSimpleGraphStrict : _ -> SimpleGrap
+h V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma toSimpleGraphStrict_mono : Monotone (toSimpleGraphStrict : _ -> SimpleGraph V) :=
-  fun _ _ h₁ _ _ h₂ => ⟨h₂.1, h₁ h₂.2.1, h₁ h₂.2.2⟩
+lemma toSimpleGraphStrict_mono : Monotone (toSimpleGraphStrict : _ → SimpleGraph V) :=
+  fun _ _ h₁ _ _ h₂ ↦ ⟨h₂.1, h₁ h₂.2.1, h₁ h₂.2.2⟩
 
 @[simp]
-/--
-lemma `toSimpleGraphInclusive_top` / 引理 `toSimpleGraphInclusive_top`
-
-English:
-lemma toSimpleGraphInclusive_top
-  statement: (⊤ : Digraph V).toSimpleGraphInclusive = ⊤
-  proof: by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, Or.inl trivial⟩⟩
-
-@[simp]
-
-中文:
-引理 toSimpleGraphInclusive_top
-  结论: (⊤ : 有向图 V).toSimpleGraphInclusive = ⊤
-  证明: by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, Or.inl trivial⟩⟩
-
-@[simp]
-
-Depends on / 依赖: And.left, Or.inl, h.ne
+/-
+**Digraph.toSimpleGraphInclusive_top** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphInclusive_top : (⊤ : Digraph V).toSimpleGraphInclusive = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `trivial`：True
 -/
 lemma toSimpleGraphInclusive_top : (⊤ : Digraph V).toSimpleGraphInclusive = ⊤ := by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, Or.inl trivial⟩⟩
+  ext; exact ⟨And.left, fun h ↦ ⟨h.ne, Or.inl trivial⟩⟩
 
 @[simp]
-/--
-lemma `toSimpleGraphStrict_top` / 引理 `toSimpleGraphStrict_top`
-
-English:
-lemma toSimpleGraphStrict_top
-  statement: (⊤ : Digraph V).toSimpleGraphStrict = ⊤
-  proof: by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, trivial, trivial⟩⟩
-
-@[simp]
-
-中文:
-引理 toSimpleGraphStrict_top
-  结论: (⊤ : 有向图 V).toSimpleGraphStrict = ⊤
-  证明: by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, trivial, trivial⟩⟩
-
-@[simp]
-
-Depends on / 依赖: And.left, h.ne
+/-
+**Digraph.toSimpleGraphStrict_top** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphStrict_top : (⊤ : Digraph V).toSimpleGraphStrict = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `trivial`：True
 -/
 lemma toSimpleGraphStrict_top : (⊤ : Digraph V).toSimpleGraphStrict = ⊤ := by
-  ext; exact ⟨And.left, fun h => ⟨h.ne, trivial, trivial⟩⟩
+  ext; exact ⟨And.left, fun h ↦ ⟨h.ne, trivial, trivial⟩⟩
 
 @[simp]
-/--
-lemma `toSimpleGraphInclusive_bot` / 引理 `toSimpleGraphInclusive_bot`
-
-English:
-lemma toSimpleGraphInclusive_bot
-  statement: (⊥ : Digraph V).toSimpleGraphInclusive = ⊥
-  proof: by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
-
-@[simp]
-
-中文:
-引理 toSimpleGraphInclusive_bot
-  结论: (⊥ : 有向图 V).toSimpleGraphInclusive = ⊥
-  证明: by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**Digraph.toSimpleGraphInclusive_bot** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphInclusive_bot : (⊥ : Digraph V).toSimpleGraphInclusive = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma toSimpleGraphInclusive_bot : (⊥ : Digraph V).toSimpleGraphInclusive = ⊥ := by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
+  ext; exact ⟨fun ⟨_, h⟩ ↦ by tauto, False.elim⟩
 
 @[simp]
-/--
-lemma `toSimpleGraphStrict_bot` / 引理 `toSimpleGraphStrict_bot`
-
-English:
-lemma toSimpleGraphStrict_bot
-  statement: (⊥ : Digraph V).toSimpleGraphStrict = ⊥
-  proof: by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
-
-中文:
-引理 toSimpleGraphStrict_bot
-  结论: (⊥ : 有向图 V).toSimpleGraphStrict = ⊥
-  证明: by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
-
-Depends on / 依赖: False.elim
+/-
+**Digraph.toSimpleGraphStrict_bot** 是 Mathlib 中的一个引理，位于命名空间 `Digraph`。
+形式化陈述：toSimpleGraphStrict_bot : (⊥ : Digraph V).toSimpleGraphStrict = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma toSimpleGraphStrict_bot : (⊥ : Digraph V).toSimpleGraphStrict = ⊥ := by
-  ext; exact ⟨fun ⟨_, h⟩ => by tauto, False.elim⟩
+  ext; exact ⟨fun ⟨_, h⟩ ↦ by tauto, False.elim⟩
 
 end toSimpleGraph
 
 end Digraph
+

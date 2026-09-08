@@ -44,296 +44,238 @@ section Lattice
 
 variable [DecidableEq α] {s s₁ s₂ t t₁ t₂ u v : Finset α} {a b : α}
 
-/--
-theorem `disjoint_iff_inter_eq_empty` / 定理 `disjoint_iff_inter_eq_empty`
-
-English:
-theorem disjoint_iff_inter_eq_empty
-  statement: Disjoint s t ↔ s inter t = ∅
-  proof: disjoint_iff
-
-中文:
-定理 disjoint_iff_inter_eq_empty
-  结论: Disjoint s t ↔ s inter t = ∅
-  证明: disjoint_iff
-
-Depends on / 依赖: disjoint_iff
+/-
+**Finset.disjoint_iff_inter_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_iff_inter_eq_empty : Disjoint s t ↔ s inter t = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
 -/
-theorem disjoint_iff_inter_eq_empty : Disjoint s t ↔ s inter t = ∅ :=
+theorem disjoint_iff_inter_eq_empty : Disjoint s t ↔ s ∩ t = ∅ :=
   disjoint_iff
 
 /-! #### union -/
 
 @[simp]
-/--
-theorem `union_empty` / 定理 `union_empty`
+/-
+**Finset.union_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_empty (s : Finset α) : s union ∅ = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.mem_union`：mem_union : a in s union t ↔ a in s ∨ a in t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem union_empty
-  given: (s : Finset α)
-  statement: s union ∅ = s
-  proof: ext fun x => mem_union.trans by simp
+--- 原说明 ---
+#### union
+-/
+theorem union_empty (s : Finset α) : s ∪ ∅ = s :=
+  ext fun x => mem_union.trans <| by simp
 
 @[simp]
-
-中文:
-定理 union_empty
-  条件: (s : 有限集 α)
-  结论: s union ∅ = s
-  证明: ext fun x => mem_union.trans by simp
-
-@[simp]
-
-Depends on / 依赖: mem_union, mem_union.trans
+/-
+**Finset.empty_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_union (s : Finset α) : ∅ union s = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.mem_union`：mem_union : a in s union t ↔ a in s ∨ a in t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem union_empty (s : Finset α) : s union ∅ = s :=
-ext fun x => mem_union.trans by simp
-
-@[simp]
-/--
-theorem `empty_union` / 定理 `empty_union`
-
-English:
-theorem empty_union
-  given: (s : Finset α)
-  statement: ∅ union s = s
-  proof: ext fun x => mem_union.trans by simp
+theorem empty_union (s : Finset α) : ∅ ∪ s = s :=
+  ext fun x => mem_union.trans <| by simp
 
 @[aesop unsafe apply (rule_sets := [finsetNonempty])]
-
-中文:
-定理 empty_union
-  条件: (s : 有限集 α)
-  结论: ∅ union s = s
-  证明: ext fun x => mem_union.trans by simp
-
-@[aesop unsafe apply (rule_sets := [finsetNonempty])]
-
-Depends on / 依赖: mem_union, mem_union.trans
+/-
+**Finset.Nonempty.inl** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Finset α}, s.Nonempty → (s 
+∪ t).Nonempty
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.mono`：∀ {α : Type u_1} {s t : Finset α}, s ⊆ t → s.Nonem
+pty → t.Nonempty
+· 使用定理 `Finset.subset_union_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s₂
+ : Finset α}, s₁ ⊆ s₁ ∪ s₂
 -/
-theorem empty_union (s : Finset α) : ∅ union s = s :=
-ext fun x => mem_union.trans by simp
-
-@[aesop unsafe apply (rule_sets := [finsetNonempty])]
-/--
-theorem `Nonempty.inl` / 定理 `Nonempty.inl`
-
-English:
-theorem Nonempty.inl
-  given: {s t : Finset α} (h : s.Nonempty)
-  statement: (s union t).Nonempty
-  proof: h.mono subset_union_left
-
-@[aesop unsafe apply (rule_sets := [finsetNonempty])]
-
-中文:
-定理 非空.inl
-  条件: {s t : 有限集 α} (h : s.非空)
-  结论: (s union t).非空
-  证明: h.mono subset_union_left
-
-@[aesop unsafe apply (rule_sets := [finsetNonempty])]
-
-Depends on / 依赖: h.mono, subset_union_left
--/
-theorem Nonempty.inl {s t : Finset α} (h : s.Nonempty) : (s union t).Nonempty :=
+theorem Nonempty.inl {s t : Finset α} (h : s.Nonempty) : (s ∪ t).Nonempty :=
   h.mono subset_union_left
 
 @[aesop unsafe apply (rule_sets := [finsetNonempty])]
-/--
-theorem `Nonempty.inr` / 定理 `Nonempty.inr`
-
-English:
-theorem Nonempty.inr
-  given: {s t : Finset α} (h : t.Nonempty)
-  statement: (s union t).Nonempty
-  proof: h.mono subset_union_right
-
-中文:
-定理 非空.inr
-  条件: {s t : 有限集 α} (h : t.非空)
-  结论: (s union t).非空
-  证明: h.mono subset_union_right
-
-Depends on / 依赖: h.mono, subset_union_right
+/-
+**Finset.Nonempty.inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Finset α}, t.Nonempty → (s 
+∪ t).Nonempty
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.mono`：∀ {α : Type u_1} {s t : Finset α}, s ⊆ t → s.Nonem
+pty → t.Nonempty
+· 使用定理 `Finset.subset_union_right`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s
+₂ : Finset α}, s₂ ⊆ s₁ ∪ s₂
 -/
-theorem Nonempty.inr {s t : Finset α} (h : t.Nonempty) : (s union t).Nonempty :=
+theorem Nonempty.inr {s t : Finset α} (h : t.Nonempty) : (s ∪ t).Nonempty :=
   h.mono subset_union_right
-
-/--
-theorem `insert_eq` / 定理 `insert_eq`
-
-English:
-theorem insert_eq
-  given: (a : α) (s : Finset α)
-  statement: insert a s = {a} union s
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 insert_eq
-  条件: (a : α) (s : 有限集 α)
-  结论: insert a s = {a} union s
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finset.insert_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_eq (a : α) (s : Finset α) : insert a s = {a} union s
+参数：a : α；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem insert_eq (a : α) (s : Finset α) : insert a s = {a} union s :=
+theorem insert_eq (a : α) (s : Finset α) : insert a s = {a} ∪ s :=
   rfl
 
 @[simp, grind =]
-/--
-lemma `singleton_union` / 引理 `singleton_union`
-
-English:
-lemma singleton_union
-  given: (x : α) (s : Finset α)
-  statement: {x} union s = insert x s
-  proof: rfl
-
-中文:
-引理 singleton_union
-  条件: (x : α) (s : 有限集 α)
-  结论: {x} union s = insert x s
-  证明: rfl
+/-
+**Finset.singleton_union** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：singleton_union (x : α) (s : Finset α) : {x} union s = insert x s
+参数：x : α；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma singleton_union (x : α) (s : Finset α) : {x} union s = insert x s :=
+lemma singleton_union (x : α) (s : Finset α) : {x} ∪ s = insert x s :=
   rfl
 
 /- We lower the simp-priority of `union_singleton` to ensure that `{x} ∪ {y}`
 simplifies to `{x, y}` and not `{y, x}`. -/
 
 @[simp 900, grind =]
-/--
-lemma `union_singleton` / 引理 `union_singleton`
+/-
+**Finset.union_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：union_singleton (x : α) (s : Finset α) : s union {x} = insert x s
+参数：x : α；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用引理 `Finset.singleton_union`：singleton_union (x : α) (s : Finset α) : {x} uni
+on s = insert x s
 
-English:
-lemma union_singleton
-  given: (x : α) (s : Finset α)
-  statement: s union {x} = insert x s
-  proof: by
-  rw [Finset.union_comm]; rw [singleton_union]
-
-@[simp, grind =]
-
-中文:
-引理 union_singleton
-  条件: (x : α) (s : 有限集 α)
-  结论: s union {x} = insert x s
-  证明: by
-  rw [Finset.union_comm]; rw [singleton_union]
-
-@[simp, grind =]
-
-Depends on / 依赖: Finset, Finset.union_comm, singleton_union, union_comm
+--- 原说明 ---
+We lower the simp-priority of `union_singleton` to ensure that `{x} ∪ {y}`
+simplifies to `{x, y}` and not `{y, x}`.
 -/
-lemma union_singleton (x : α) (s : Finset α) : s union {x} = insert x s := by
-  rw [Finset.union_comm]; rw [singleton_union]
+lemma union_singleton (x : α) (s : Finset α) : s ∪ {x} = insert x s := by
+  rw [Finset.union_comm, singleton_union]
 
 @[simp, grind =]
-/--
-theorem `insert_union` / 定理 `insert_union`
-
-English:
-theorem insert_union
-  given: (a : α) (s t : Finset α)
-  statement: insert a s union t = insert a (s union t)
-  proof: by
+/-
+**Finset.insert_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_union (a : α) (s t : Finset α) : insert a s union t = insert a (s u
+nion t)
+参数：a : α；s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem insert_union (a : α) (s t : Finset α) : insert a s ∪ t = insert a (s ∪ t) := by
   simp only [insert_eq, union_assoc]
 
 @[simp, grind =]
-
-中文:
-定理 insert_union
-  条件: (a : α) (s t : 有限集 α)
-  结论: insert a s union t = insert a (s union t)
-  证明: by
-  simp only [insert_eq, union_assoc]
-
-@[simp, grind =]
-
-Depends on / 依赖: insert_eq, union_assoc
+/-
+**Finset.union_insert** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_insert (a : α) (s t : Finset α) : s union insert a t = insert a (s u
+nion t)
+参数：a : α；s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_left_comm`：union_left_comm (s t u : Finset α) : s union (t 
+union u) = t union (s union u)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem insert_union (a : α) (s t : Finset α) : insert a s union t = insert a (s union t) := by
-  simp only [insert_eq, union_assoc]
-
-@[simp, grind =]
-/--
-theorem `union_insert` / 定理 `union_insert`
-
-English:
-theorem union_insert
-  given: (a : α) (s t : Finset α)
-  statement: s union insert a t = insert a (s union t)
-  proof: by
+theorem union_insert (a : α) (s t : Finset α) : s ∪ insert a t = insert a (s ∪ t) := by
   simp only [insert_eq, union_left_comm]
-
-中文:
-定理 union_insert
-  条件: (a : α) (s t : 有限集 α)
-  结论: s union insert a t = insert a (s union t)
-  证明: by
-  simp only [insert_eq, union_left_comm]
-
-Depends on / 依赖: insert_eq, union_left_comm
--/
-theorem union_insert (a : α) (s t : Finset α) : s union insert a t = insert a (s union t) := by
-  simp only [insert_eq, union_left_comm]
-
-/--
-theorem `insert_union_distrib` / 定理 `insert_union_distrib`
-
-English:
-theorem insert_union_distrib
-  given: (a : α) (s t : Finset α)
-  proof: by
-  simp only [insert_union, union_insert, insert_idem]
-
-中文:
-定理 insert_union_distrib
-  条件: (a : α) (s t : 有限集 α)
-  证明: by
-  simp only [insert_union, union_insert, insert_idem]
-
-Depends on / 依赖: insert_idem, insert_union, union_insert
+/-
+**Finset.insert_union_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_union_distrib (a : α) (s t : Finset α) : insert a (s union t) = ins
+ert a s union insert a t
+参数：a : α；s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_insert`：union_insert (a : α) (s t : Finset α) : s union ins
+ert a t = insert a (s union t)
+· 使用定理 `Finset.insert_union`：insert_union (a : α) (s t : Finset α) : insert a s 
+union t = insert a (s union t)
+· 使用定理 `Finset.insert_idem`：insert_idem (a : α) (s : Finset α) : insert a (inser
+t a s) = insert a s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem insert_union_distrib (a : α) (s t : Finset α) :
-    insert a (s union t) = insert a s union insert a t := by
+    insert a (s ∪ t) = insert a s ∪ insert a t := by
   simp only [insert_union, union_insert, insert_idem]
 
-/--
-theorem `induction_on_union` / 定理 `induction_on_union`
-
-English:
-theorem induction_on_union
-  statement: (P : Finset α -> Finset α -> Prop) (symm : forall {a b}, P a b -> P b a)
-  proof: by
-  intro a b
-  refine Finset.induction_on b empty_right fun x s _xs hi => symm ?_
-  rw [Finset.insert_eq]
-  apply union_of _ (symm hi)
-  refine Finset.induction_on a empty_right fun a t _ta hi => symm ?_
-  rw [Finset.insert_eq]
-  exact union_of singletons (symm hi)
-
-中文:
-定理 induction_on_union
-  结论: (P : 有限集 α -> 有限集 α -> 命题) (symm : 对任意 {a b}, P a b -> P b a)
-  证明: by
-  intro a b
-  refine Finset.induction_on b empty_right fun x s _xs hi => symm ?_
-  rw [Finset.insert_eq]
-  apply union_of _ (symm hi)
-  refine Finset.induction_on a empty_right fun a t _ta hi => symm ?_
-  rw [Finset.insert_eq]
-  exact union_of singletons (symm hi)
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.insert_eq, empty_right, induction_on, insert_eq, singletons, union_of
+/-- To prove a relation on pairs of `Finset X`, it suffices to show that it is
+  * symmetric,
+  * it holds when one of the `Finset`s is empty,
+  * it holds for pairs of singletons,
+  * if it holds for `[a, c]` and for `[b, c]`, then it holds for `[a ∪ b, c]`.
 -/
-theorem induction_on_union (P : Finset α -> Finset α -> Prop) (symm : forall {a b}, P a b -> P b a)
-    (empty_right : forall {a}, P a ∅) (singletons : forall {a b}, P {a} {b})
-    (union_of : forall {a b c}, P a c -> P b c -> P (a union b) c) : forall a b, P a b := by
+/-
+**Finset.induction_on_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：induction_on_union (P : Finset α -> Finset α -> Prop) (symm : forall {a b}
+, P a b -> P b a) (empty_right : forall {a}, P a ∅) (singletons : forall {a b}, 
+P {a} {b}) (union_of : forall {a b c}, P a c -> P b c -> P (a union b) c) : fora
+ll a b, P a b
+参数：P : Finset α -> Finset α -> Prop；symm : forall {a b}, P a b -> P b a；empty_ri
+ght : forall {a}, P a ∅；singletons : forall {a b}, P {a} {b}；union_of : forall {
+a b c}, P a c -> P b c -> P (a union b) c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.insert_eq`：insert_eq (a : α) (s : Finset α) : insert a s = {a} un
+ion s
+
+--- 原说明 ---
+To prove a relation on pairs of `Finset X`, it suffices to show that it is
+  * symmetric,
+  * it holds when one of the `Finset`s is empty,
+  * it holds for pairs of singletons,
+  * if it holds for `[a, c]` and for `[b, c]`, then it holds for `[a ∪ b, c]`.
+-/
+theorem induction_on_union (P : Finset α → Finset α → Prop) (symm : ∀ {a b}, P a b → P b a)
+    (empty_right : ∀ {a}, P a ∅) (singletons : ∀ {a b}, P {a} {b})
+    (union_of : ∀ {a b c}, P a c → P b c → P (a ∪ b) c) : ∀ a b, P a b := by
   intro a b
   refine Finset.induction_on b empty_right fun x s _xs hi => symm ?_
   rw [Finset.insert_eq]
@@ -345,414 +287,377 @@ theorem induction_on_union (P : Finset α -> Finset α -> Prop) (symm : forall {
 /-! #### inter -/
 
 @[simp]
-/--
-theorem `inter_empty` / 定理 `inter_empty`
+/-
+**Finset.inter_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_empty (s : Finset α) : s inter ∅ = ∅
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.mem_inter`：mem_inter {a : α} {s₁ s₂ : Finset α} : a in s₁ inter s
+₂ ↔ a in s₁ ∧ a in s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem inter_empty
-  given: (s : Finset α)
-  statement: s inter ∅ = ∅
-  proof: ext fun _ => mem_inter.trans by simp
-
-@[simp]
-
-中文:
-定理 inter_empty
-  条件: (s : 有限集 α)
-  结论: s inter ∅ = ∅
-  证明: ext fun _ => mem_inter.trans by simp
-
-@[simp]
-
-Depends on / 依赖: mem_inter, mem_inter.trans
+--- 原说明 ---
+#### inter
 -/
-theorem inter_empty (s : Finset α) : s inter ∅ = ∅ :=
-ext fun _ => mem_inter.trans by simp
+theorem inter_empty (s : Finset α) : s ∩ ∅ = ∅ :=
+  ext fun _ => mem_inter.trans <| by simp
 
 @[simp]
-/--
-theorem `empty_inter` / 定理 `empty_inter`
-
-English:
-theorem empty_inter
-  given: (s : Finset α)
-  statement: ∅ inter s = ∅
-  proof: ext fun _ => mem_inter.trans by simp
-
-@[simp]
-
-中文:
-定理 empty_inter
-  条件: (s : 有限集 α)
-  结论: ∅ inter s = ∅
-  证明: ext fun _ => mem_inter.trans by simp
-
-@[simp]
-
-Depends on / 依赖: mem_inter, mem_inter.trans
+/-
+**Finset.empty_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_inter (s : Finset α) : ∅ inter s = ∅
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.mem_inter`：mem_inter {a : α} {s₁ s₂ : Finset α} : a in s₁ inter s
+₂ ↔ a in s₁ ∧ a in s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem empty_inter (s : Finset α) : ∅ inter s = ∅ :=
-ext fun _ => mem_inter.trans by simp
+theorem empty_inter (s : Finset α) : ∅ ∩ s = ∅ :=
+  ext fun _ => mem_inter.trans <| by simp
 
 @[simp]
-/--
-theorem `insert_inter_of_mem` / 定理 `insert_inter_of_mem`
-
-English:
-theorem insert_inter_of_mem
-  given: {s₁ s₂ : Finset α} {a : α} (h : a in s₂)
-  proof: ext fun x => by
-have : x = a ∨ x in s₂ ↔ x in s₂ := or_iff_right_of_imp by rintro rfl; exact h
-    simp only [mem_inter, mem_insert, or_and_left, this]
-
-@[simp]
-
-中文:
-定理 insert_inter_of_mem
-  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a in s₂)
-  证明: ext fun x => by
-have : x = a ∨ x in s₂ ↔ x in s₂ := or_iff_right_of_imp by rintro rfl; exact h
-    simp only [mem_inter, mem_insert, or_and_left, this]
-
-@[simp]
-
-Depends on / 依赖: mem_insert, mem_inter, or_and_left, or_iff_right_of_imp
+/-
+**Finset.insert_inter_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_inter_of_mem {s₁ s₂ : Finset α} {a : α} (h : a in s₂) : insert a s₁
+ inter s₂ = insert a (s₁ inter s₂)
+参数：h : a in s₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `or_iff_right_of_imp`：∀ {a b : Prop}, (a → b) → (a ∨ b ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem insert_inter_of_mem {s₁ s₂ : Finset α} {a : α} (h : a in s₂) :
-    insert a s₁ inter s₂ = insert a (s₁ inter s₂) :=
+theorem insert_inter_of_mem {s₁ s₂ : Finset α} {a : α} (h : a ∈ s₂) :
+    insert a s₁ ∩ s₂ = insert a (s₁ ∩ s₂) :=
   ext fun x => by
-have : x = a ∨ x in s₂ ↔ x in s₂ := or_iff_right_of_imp by rintro rfl; exact h
+    have : x = a ∨ x ∈ s₂ ↔ x ∈ s₂ := or_iff_right_of_imp <| by rintro rfl; exact h
     simp only [mem_inter, mem_insert, or_and_left, this]
 
 @[simp]
-/--
-theorem `inter_insert_of_mem` / 定理 `inter_insert_of_mem`
-
-English:
-theorem inter_insert_of_mem
-  given: {s₁ s₂ : Finset α} {a : α} (h : a in s₁)
-  proof: by rw [inter_comm, insert_inter_of_mem h, inter_comm]
-
-@[simp]
-
-中文:
-定理 inter_insert_of_mem
-  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a in s₁)
-  证明: by rw [inter_comm, insert_inter_of_mem h, inter_comm]
-
-@[simp]
-
-Depends on / 依赖: insert_inter_of_mem, inter_comm
+/-
+**Finset.inter_insert_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_insert_of_mem {s₁ s₂ : Finset α} {a : α} (h : a in s₁) : s₁ inter in
+sert a s₂ = insert a (s₁ inter s₂)
+参数：h : a in s₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inter_comm`：inter_comm (s₁ s₂ : Finset α) : s₁ inter s₂ = s₂ inte
+r s₁
+· 使用定理 `Finset.insert_inter_of_mem`：insert_inter_of_mem {s₁ s₂ : Finset α} {a : 
+α} (h : a in s₂) : insert a s₁ inter s₂ = insert a (s₁ inter s₂)
 -/
-theorem inter_insert_of_mem {s₁ s₂ : Finset α} {a : α} (h : a in s₁) :
-    s₁ inter insert a s₂ = insert a (s₁ inter s₂) := by rw [inter_comm, insert_inter_of_mem h, inter_comm]
+theorem inter_insert_of_mem {s₁ s₂ : Finset α} {a : α} (h : a ∈ s₁) :
+    s₁ ∩ insert a s₂ = insert a (s₁ ∩ s₂) := by rw [inter_comm, insert_inter_of_mem h, inter_comm]
 
 @[simp]
-/--
-theorem `insert_inter_of_notMem` / 定理 `insert_inter_of_notMem`
-
-English:
-theorem insert_inter_of_notMem
-  given: {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₂)
-  proof: ext fun x => by
-    have : ¬(x = a ∧ x in s₂) := by rintro ⟨rfl, H⟩; exact h H
-    simp only [mem_inter, mem_insert, or_and_right, this, false_or]
-
-@[simp]
-
-中文:
-定理 insert_inter_of_notMem
-  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a ∉ s₂)
-  证明: ext fun x => by
-    have : ¬(x = a ∧ x in s₂) := by rintro ⟨rfl, H⟩; exact h H
-    simp only [mem_inter, mem_insert, or_and_right, this, false_or]
-
-@[simp]
-
-Depends on / 依赖: false_or, mem_insert, mem_inter, or_and_right
+/-
+**Finset.insert_inter_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_inter_of_notMem {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₂) : insert a 
+s₁ inter s₂ = s₁ inter s₂
+参数：h : a ∉ s₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem insert_inter_of_notMem {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₂) :
-    insert a s₁ inter s₂ = s₁ inter s₂ :=
+    insert a s₁ ∩ s₂ = s₁ ∩ s₂ :=
   ext fun x => by
-    have : ¬(x = a ∧ x in s₂) := by rintro ⟨rfl, H⟩; exact h H
+    have : ¬(x = a ∧ x ∈ s₂) := by rintro ⟨rfl, H⟩; exact h H
     simp only [mem_inter, mem_insert, or_and_right, this, false_or]
 
 @[simp]
-/--
-theorem `inter_insert_of_notMem` / 定理 `inter_insert_of_notMem`
-
-English:
-theorem inter_insert_of_notMem
-  given: {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₁)
-  proof: by rw [inter_comm, insert_inter_of_notMem h, inter_comm]
-
-@[grind =]
-
-中文:
-定理 inter_insert_of_notMem
-  条件: {s₁ s₂ : 有限集 α} {a : α} (h : a ∉ s₁)
-  证明: by rw [inter_comm, insert_inter_of_notMem h, inter_comm]
-
-@[grind =]
-
-Depends on / 依赖: insert_inter_of_notMem, inter_comm
+/-
+**Finset.inter_insert_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_insert_of_notMem {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₁) : s₁ inter 
+insert a s₂ = s₁ inter s₂
+参数：h : a ∉ s₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inter_comm`：inter_comm (s₁ s₂ : Finset α) : s₁ inter s₂ = s₂ inte
+r s₁
+· 使用定理 `Finset.insert_inter_of_notMem`：insert_inter_of_notMem {s₁ s₂ : Finset α}
+ {a : α} (h : a ∉ s₂) : insert a s₁ inter s₂ = s₁ inter s₂
 -/
 theorem inter_insert_of_notMem {s₁ s₂ : Finset α} {a : α} (h : a ∉ s₁) :
-    s₁ inter insert a s₂ = s₁ inter s₂ := by rw [inter_comm, insert_inter_of_notMem h, inter_comm]
+    s₁ ∩ insert a s₂ = s₁ ∩ s₂ := by rw [inter_comm, insert_inter_of_notMem h, inter_comm]
 
 @[grind =]
-/--
-theorem `inter_insert` / 定理 `inter_insert`
-
-English:
-theorem inter_insert
-  given: {s₁ s₂ : Finset α} {a : α}
-  proof: by
-  split_ifs <;> simp [*]
-
-@[grind =]
-
-中文:
-定理 inter_insert
-  条件: {s₁ s₂ : 有限集 α} {a : α}
-  证明: by
-  split_ifs <;> simp [*]
-
-@[grind =]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.inter_insert** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_insert {s₁ s₂ : Finset α} {a : α} : insert a s₁ inter s₂ = if a in s
+₂ then insert a (s₁ inter s₂) else s₁ inter s₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.insert_inter_of_mem`：insert_inter_of_mem {s₁ s₂ : Finset α} {a : 
+α} (h : a in s₂) : insert a s₁ inter s₂ = insert a (s₁ inter s₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.insert_inter_of_notMem`：insert_inter_of_notMem {s₁ s₂ : Finset α}
+ {a : α} (h : a ∉ s₂) : insert a s₁ inter s₂ = s₁ inter s₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem inter_insert {s₁ s₂ : Finset α} {a : α} :
-    insert a s₁ inter s₂ = if a in s₂ then insert a (s₁ inter s₂) else s₁ inter s₂ := by
+    insert a s₁ ∩ s₂ = if a ∈ s₂ then insert a (s₁ ∩ s₂) else s₁ ∩ s₂ := by
   split_ifs <;> simp [*]
 
 @[grind =]
-/--
-theorem `insert_inter` / 定理 `insert_inter`
-
-English:
-theorem insert_inter
-  given: {s₁ s₂ : Finset α} {a : α}
-  proof: by
-  split_ifs <;> simp [*]
-
-@[simp]
-
-中文:
-定理 insert_inter
-  条件: {s₁ s₂ : 有限集 α} {a : α}
-  证明: by
-  split_ifs <;> simp [*]
-
-@[simp]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.insert_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_inter {s₁ s₂ : Finset α} {a : α} : s₁ inter insert a s₂ = if a in s
+₁ then insert a (s₁ inter s₂) else s₁ inter s₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.inter_insert_of_mem`：inter_insert_of_mem {s₁ s₂ : Finset α} {a : 
+α} (h : a in s₁) : s₁ inter insert a s₂ = insert a (s₁ inter s₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.inter_insert_of_notMem`：inter_insert_of_notMem {s₁ s₂ : Finset α}
+ {a : α} (h : a ∉ s₁) : s₁ inter insert a s₂ = s₁ inter s₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem insert_inter {s₁ s₂ : Finset α} {a : α} :
-    s₁ inter insert a s₂ = if a in s₁ then insert a (s₁ inter s₂) else s₁ inter s₂ := by
+    s₁ ∩ insert a s₂ = if a ∈ s₁ then insert a (s₁ ∩ s₂) else s₁ ∩ s₂ := by
   split_ifs <;> simp [*]
 
 @[simp]
-/--
-theorem `singleton_inter_of_mem` / 定理 `singleton_inter_of_mem`
-
-English:
-theorem singleton_inter_of_mem
-  given: {a : α} {s : Finset α} (H : a in s)
-  statement: {a} inter s = {a}
-  proof: show insert a ∅ inter s = insert a ∅ by rw [insert_inter_of_mem H, empty_inter]
-
-@[simp]
-
-中文:
-定理 singleton_inter_of_mem
-  条件: {a : α} {s : 有限集 α} (H : a in s)
-  结论: {a} inter s = {a}
-  证明: show insert a ∅ inter s = insert a ∅ by rw [insert_inter_of_mem H, empty_inter]
-
-@[simp]
-
-Depends on / 依赖: empty_inter, insert, insert_inter_of_mem
+/-
+**Finset.singleton_inter_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：singleton_inter_of_mem {a : α} {s : Finset α} (H : a in s) : {a} inter s =
+ {a}
+参数：H : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.insert_inter_of_mem`：insert_inter_of_mem {s₁ s₂ : Finset α} {a : 
+α} (h : a in s₂) : insert a s₁ inter s₂ = insert a (s₁ inter s₂)
+· 使用定理 `Finset.empty_inter`：empty_inter (s : Finset α) : ∅ inter s = ∅
 -/
-theorem singleton_inter_of_mem {a : α} {s : Finset α} (H : a in s) : {a} inter s = {a} :=
-  show insert a ∅ inter s = insert a ∅ by rw [insert_inter_of_mem H, empty_inter]
+theorem singleton_inter_of_mem {a : α} {s : Finset α} (H : a ∈ s) : {a} ∩ s = {a} :=
+  show insert a ∅ ∩ s = insert a ∅ by rw [insert_inter_of_mem H, empty_inter]
 
 @[simp]
-/--
-theorem `singleton_inter_of_notMem` / 定理 `singleton_inter_of_notMem`
-
-English:
-theorem singleton_inter_of_notMem
-  given: {a : α} {s : Finset α} (H : a ∉ s)
-  statement: {a} inter s = ∅
-  proof: eq_empty_of_forall_notMem by
-    simp only [mem_inter, mem_singleton]; rintro x ⟨rfl, h⟩; exact H h
-
-@[grind =]
-
-中文:
-定理 singleton_inter_of_notMem
-  条件: {a : α} {s : 有限集 α} (H : a ∉ s)
-  结论: {a} inter s = ∅
-  证明: eq_empty_of_forall_notMem by
-    simp only [mem_inter, mem_singleton]; rintro x ⟨rfl, h⟩; exact H h
-
-@[grind =]
-
-Depends on / 依赖: eq_empty_of_forall_notMem, mem_inter, mem_singleton
+/-
+**Finset.singleton_inter_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：singleton_inter_of_notMem {a : α} {s : Finset α} (H : a ∉ s) : {a} inter s
+ = ∅
+参数：H : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem {s : Finset 
+α} (H : forall x, x ∉ s) : s = ∅
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem singleton_inter_of_notMem {a : α} {s : Finset α} (H : a ∉ s) : {a} inter s = ∅ :=
-eq_empty_of_forall_notMem by
+theorem singleton_inter_of_notMem {a : α} {s : Finset α} (H : a ∉ s) : {a} ∩ s = ∅ :=
+  eq_empty_of_forall_notMem <| by
     simp only [mem_inter, mem_singleton]; rintro x ⟨rfl, h⟩; exact H h
 
 @[grind =]
-/--
-lemma `singleton_inter` / 引理 `singleton_inter`
-
-English:
-lemma singleton_inter
-  given: {a : α} {s : Finset α}
-  proof: by
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-中文:
-引理 singleton_inter
-  条件: {a : α} {s : 有限集 α}
-  证明: by
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.singleton_inter** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：singleton_inter {a : α} {s : Finset α} : {a} inter s = if a in s then {a} 
+else ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.singleton_inter_of_mem`：singleton_inter_of_mem {a : α} {s : Finse
+t α} (H : a in s) : {a} inter s = {a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.singleton_inter_of_notMem`：singleton_inter_of_notMem {a : α} {s :
+ Finset α} (H : a ∉ s) : {a} inter s = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma singleton_inter {a : α} {s : Finset α} :
-    {a} inter s = if a in s then {a} else ∅ := by
+    {a} ∩ s = if a ∈ s then {a} else ∅ := by
   split_ifs with h <;> simp [h]
 
 @[simp]
-/--
-theorem `inter_singleton_of_mem` / 定理 `inter_singleton_of_mem`
-
-English:
-theorem inter_singleton_of_mem
-  given: {a : α} {s : Finset α} (h : a in s)
-  statement: s inter {a} = {a}
-  proof: by
-  rw [inter_comm]; rw [singleton_inter_of_mem h]
-
-@[simp]
-
-中文:
-定理 inter_singleton_of_mem
-  条件: {a : α} {s : 有限集 α} (h : a in s)
-  结论: s inter {a} = {a}
-  证明: by
-  rw [inter_comm]; rw [singleton_inter_of_mem h]
-
-@[simp]
-
-Depends on / 依赖: inter_comm, singleton_inter_of_mem
+/-
+**Finset.inter_singleton_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_singleton_of_mem {a : α} {s : Finset α} (h : a in s) : s inter {a} =
+ {a}
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inter_comm`：inter_comm (s₁ s₂ : Finset α) : s₁ inter s₂ = s₂ inte
+r s₁
+· 使用定理 `Finset.singleton_inter_of_mem`：singleton_inter_of_mem {a : α} {s : Finse
+t α} (H : a in s) : {a} inter s = {a}
 -/
-theorem inter_singleton_of_mem {a : α} {s : Finset α} (h : a in s) : s inter {a} = {a} := by
-  rw [inter_comm]; rw [singleton_inter_of_mem h]
+theorem inter_singleton_of_mem {a : α} {s : Finset α} (h : a ∈ s) : s ∩ {a} = {a} := by
+  rw [inter_comm, singleton_inter_of_mem h]
 
 @[simp]
-/--
-theorem `inter_singleton_of_notMem` / 定理 `inter_singleton_of_notMem`
-
-English:
-theorem inter_singleton_of_notMem
-  given: {a : α} {s : Finset α} (h : a ∉ s)
-  statement: s inter {a} = ∅
-  proof: by
-  rw [inter_comm]; rw [singleton_inter_of_notMem h]
-
-中文:
-定理 inter_singleton_of_notMem
-  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
-  结论: s inter {a} = ∅
-  证明: by
-  rw [inter_comm]; rw [singleton_inter_of_notMem h]
-
-Depends on / 依赖: inter_comm, singleton_inter_of_notMem
+/-
+**Finset.inter_singleton_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_singleton_of_notMem {a : α} {s : Finset α} (h : a ∉ s) : s inter {a}
+ = ∅
+参数：h : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inter_comm`：inter_comm (s₁ s₂ : Finset α) : s₁ inter s₂ = s₂ inte
+r s₁
+· 使用定理 `Finset.singleton_inter_of_notMem`：singleton_inter_of_notMem {a : α} {s :
+ Finset α} (H : a ∉ s) : {a} inter s = ∅
 -/
-theorem inter_singleton_of_notMem {a : α} {s : Finset α} (h : a ∉ s) : s inter {a} = ∅ := by
-  rw [inter_comm]; rw [singleton_inter_of_notMem h]
-
-/--
-lemma `inter_singleton` / 引理 `inter_singleton`
-
-English:
-lemma inter_singleton
-  given: {a : α} {s : Finset α}
-  proof: by
-  split_ifs with h <;> simp [h]
-
-中文:
-引理 inter_singleton
-  条件: {a : α} {s : 有限集 α}
-  证明: by
-  split_ifs with h <;> simp [h]
-
-Depends on / 依赖: split_ifs
+theorem inter_singleton_of_notMem {a : α} {s : Finset α} (h : a ∉ s) : s ∩ {a} = ∅ := by
+  rw [inter_comm, singleton_inter_of_notMem h]
+/-
+**Finset.inter_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：inter_singleton {a : α} {s : Finset α} : s inter {a} = if a in s then {a} 
+else ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.inter_singleton_of_mem`：inter_singleton_of_mem {a : α} {s : Finse
+t α} (h : a in s) : s inter {a} = {a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.inter_singleton_of_notMem`：inter_singleton_of_notMem {a : α} {s :
+ Finset α} (h : a ∉ s) : s inter {a} = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma inter_singleton {a : α} {s : Finset α} :
-    s inter {a} = if a in s then {a} else ∅ := by
+    s ∩ {a} = if a ∈ s then {a} else ∅ := by
   split_ifs with h <;> simp [h]
-
-/--
-lemma `union_eq_empty` / 引理 `union_eq_empty`
-
-English:
-lemma union_eq_empty
-  statement: s union t = ∅ ↔ s = ∅ ∧ t = ∅
-  proof: sup_eq_bot_iff
-
-中文:
-引理 union_eq_empty
-  结论: s union t = ∅ ↔ s = ∅ ∧ t = ∅
-  证明: sup_eq_bot_iff
+/-
+**Finset.union_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Finset α}, s ∪ t = ∅ ↔ s = 
+∅ ∧ t = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_bot_iff`：sup_eq_bot_iff : a ⊔ b = ⊥ ↔ a = ⊥ ∧ b = ⊥
 -/
-@[simp] lemma union_eq_empty : s union t = ∅ ↔ s = ∅ ∧ t = ∅ := sup_eq_bot_iff
-/--
-lemma `union_nonempty` / 引理 `union_nonempty`
-
-English:
-lemma union_nonempty
-  statement: (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty
-  proof: mod_cast Set.union_nonempty (α := α) (s := s) (t := t)
-
-中文:
-引理 union_nonempty
-  结论: (s union t).非空 ↔ s.非空 ∨ t.非空
-  证明: mod_cast Set.union_nonempty (α := α) (s := s) (t := t)
+@[simp] lemma union_eq_empty : s ∪ t = ∅ ↔ s = ∅ ∧ t = ∅ := sup_eq_bot_iff
+/-
+**Finset.union_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Finset α}, (s ∪ t).Nonempty
+ ↔ s.Nonempty ∨ t.Nonempty
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.union_nonempty`：union_nonempty : (s union t).Nonempty ↔ s.Nonempty ∨
+ t.Nonempty
 -/
-@[simp] lemma union_nonempty : (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty :=
+@[simp] lemma union_nonempty : (s ∪ t).Nonempty ↔ s.Nonempty ∨ t.Nonempty :=
   mod_cast Set.union_nonempty (α := α) (s := s) (t := t)
-
-/--
-theorem `insert_union_comm` / 定理 `insert_union_comm`
-
-English:
-theorem insert_union_comm
-  given: (s t : Finset α) (a : α)
-  statement: insert a s union t = s union insert a t
-  proof: by
-  rw [insert_union]; rw [union_insert]
-
-中文:
-定理 insert_union_comm
-  条件: (s t : 有限集 α) (a : α)
-  结论: insert a s union t = s union insert a t
-  证明: by
-  rw [insert_union]; rw [union_insert]
-
-Depends on / 依赖: insert_union, union_insert
+/-
+**Finset.insert_union_comm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_union_comm (s t : Finset α) (a : α) : insert a s union t = s union 
+insert a t
+参数：s t : Finset α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.insert_union`：insert_union (a : α) (s t : Finset α) : insert a s 
+union t = insert a (s union t)
+· 使用定理 `Finset.union_insert`：union_insert (a : α) (s t : Finset α) : s union ins
+ert a t = insert a (s union t)
 -/
-theorem insert_union_comm (s t : Finset α) (a : α) : insert a s union t = s union insert a t := by
-  rw [insert_union]; rw [union_insert]
+theorem insert_union_comm (s t : Finset α) (a : α) : insert a s ∪ t = s ∪ insert a t := by
+  rw [insert_union, union_insert]
 
 end Lattice
 
@@ -763,28 +668,30 @@ namespace List
 variable [DecidableEq α] {l l' : List α}
 
 @[simp]
-/--
-theorem `toFinset_append` / 定理 `toFinset_append`
-
-English:
-theorem toFinset_append
-  statement: toFinset (l ++ l') = l.toFinset union l'.toFinset
-  proof: by
-  induction l with
-  | nil => simp
-  | cons hd tl hl => simp [hl]
-
-中文:
-定理 toFinset_append
-  结论: toFinset (l ++ l') = l.toFinset union l'.toFinset
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl hl => simp [hl]
+/-
+**List.toFinset_append** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：toFinset_append : toFinset (l ++ l') = l.toFinset union l'.toFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.empty_union`：empty_union (s : Finset α) : ∅ union s = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.toFinset_cons`：toFinset_cons : toFinset (a :: l) = insert a (toFins
+et l)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.insert_union`：insert_union (a : α) (s t : Finset α) : insert a s 
+union t = insert a (s union t)
 -/
-theorem toFinset_append : toFinset (l ++ l') = l.toFinset union l'.toFinset := by
+theorem toFinset_append : toFinset (l ++ l') = l.toFinset ∪ l'.toFinset := by
   induction l with
   | nil => simp
   | cons hd tl hl => simp [hl]
 
 end List
+

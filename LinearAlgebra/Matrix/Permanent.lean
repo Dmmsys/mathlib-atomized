@@ -27,143 +27,144 @@ namespace Matrix
 variable {n : Type*} [DecidableEq n] [Fintype n]
 variable {R : Type*} [CommSemiring R]
 
-/--
-Definition of `permanent` / `permanent` 的定义
+/-- The permanent of a square matrix defined as a sum over all permutations. This is analogous to
+the determinant but without alternating signs. -/
+/-
+**Matrix.permanent** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：permanent (M : Matrix n n R) : R
+参数：M : Matrix n n R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permanent
-  signature: (M : Matrix n n R)
-  body: ∑ σ : Perm n, ∏ i, M (σ i) i
-
-@[simp]
-
-中文:
-定义 permanent
-  签名: (M : 矩阵 n n R)
-  定义体: ∑ σ : Perm n, ∏ i, M (σ i) i
-
-@[simp]
+--- 原说明 ---
+The permanent of a square matrix defined as a sum over all permutations. This is
+ analogous to
+the determinant but without alternating signs.
 -/
 def permanent (M : Matrix n n R) : R := ∑ σ : Perm n, ∏ i, M (σ i) i
 
 @[simp]
-/--
-theorem `permanent_diagonal` / 定理 `permanent_diagonal`
-
-English:
-theorem permanent_diagonal
-  given: {d : n -> R}
-  statement: permanent (diagonal d) = ∏ i, d i
-  proof: by
-  refine (sum_eq_single 1 (fun σ _ hσ => ?_) (fun h => (h <| mem_univ _).elim)).trans ?_
-  · match not_forall.mp (mt Equiv.ext hσ) with
-    | ⟨x, hx⟩ => exact Finset.prod_eq_zero (mem_univ x) (if_neg hx)
-  · simp only [Perm.one_apply, diagonal_apply_eq]
-
-@[simp]
-
-中文:
-定理 permanent_diagonal
-  条件: {d : n -> R}
-  结论: permanent (diagonal d) = ∏ i, d i
-  证明: by
-  refine (sum_eq_single 1 (fun σ _ hσ => ?_) (fun h => (h <| mem_univ _).elim)).trans ?_
-  · match not_forall.mp (mt Equiv.ext hσ) with
-    | ⟨x, hx⟩ => exact Finset.prod_eq_zero (mem_univ x) (if_neg hx)
-  · simp only [Perm.one_apply, diagonal_apply_eq]
-
-@[simp]
-
-Depends on / 依赖: Equiv.ext, Finset, Finset.prod_eq_zero, Perm.one_apply, diagonal_apply_eq, if_neg, mem_univ, not_forall, not_forall.mp, one_apply, prod_eq_zero, sum_eq_single
+/-
+**Matrix.permanent_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_diagonal {d : n -> R} : permanent (diagonal d) = ∏ i, d i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用引理 `Finset.prod_eq_zero`：prod_eq_zero (hi : i in s) (h : f i = 0) : ∏ j in s
+, f j = 0
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem permanent_diagonal {d : n -> R} : permanent (diagonal d) = ∏ i, d i := by
-  refine (sum_eq_single 1 (fun σ _ hσ => ?_) (fun h => (h <| mem_univ _).elim)).trans ?_
+theorem permanent_diagonal {d : n → R} : permanent (diagonal d) = ∏ i, d i := by
+  refine (sum_eq_single 1 (fun σ _ hσ ↦ ?_) (fun h ↦ (h <| mem_univ _).elim)).trans ?_
   · match not_forall.mp (mt Equiv.ext hσ) with
     | ⟨x, hx⟩ => exact Finset.prod_eq_zero (mem_univ x) (if_neg hx)
   · simp only [Perm.one_apply, diagonal_apply_eq]
 
 @[simp]
-/--
-theorem `permanent_zero` / 定理 `permanent_zero`
-
-English:
-theorem permanent_zero
-  given: [Nonempty n]
-  statement: permanent (0 : Matrix n n R) = 0
-  proof: by simp [permanent]
-
-@[simp]
-
-中文:
-定理 permanent_zero
-  条件: [非空 n]
-  结论: permanent (0 : 矩阵 n n R) = 0
-  证明: by simp [permanent]
-
-@[simp]
-
-Depends on / 依赖: permanent
+/-
+**Matrix.permanent_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_zero [Nonempty n] : permanent (0 : Matrix n n R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_const`：prod_const (b : M) : ∏ _x in s, b = b ^ #s
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem permanent_zero [Nonempty n] : permanent (0 : Matrix n n R) = 0 := by simp [permanent]
 
 @[simp]
-/--
-theorem `permanent_one` / 定理 `permanent_one`
-
-English:
-theorem permanent_one
-  statement: permanent (1 : Matrix n n R) = 1
-  proof: by
-  rw [← diagonal_one]; simp [-diagonal_one]
-
-中文:
-定理 permanent_one
-  结论: permanent (1 : 矩阵 n n R) = 1
-  证明: by
-  rw [← diagonal_one]; simp [-diagonal_one]
-
-Depends on / 依赖: Countable, CountablyGenerated, MeasurableSpace, diagonal_one
+/-
+**Matrix.permanent_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_one : permanent (1 : Matrix n n R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_one`：diagonal_one : (diagonal fun _ => 1 : Matrix n n α)
+ = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.permanent_diagonal`：permanent_diagonal {d : n -> R} : permanent (
+diagonal d) = ∏ i, d i
+· 使用定理 `Finset.prod_const_one`：prod_const_one : (∏ _x in s, (1 : M)) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem permanent_one : permanent (1 : Matrix n n R) = 1 := by
   rw [← diagonal_one]; simp [-diagonal_one]
-
-/--
-theorem `permanent_isEmpty` / 定理 `permanent_isEmpty`
-
-English:
-theorem permanent_isEmpty
-  given: [IsEmpty n] {A : Matrix n n R}
-  statement: permanent A = 1
-  proof: by simp [permanent]
-
-中文:
-定理 permanent_isEmpty
-  条件: [是空 n] {A : 矩阵 n n R}
-  结论: permanent A = 1
-  证明: by simp [permanent]
-
-Depends on / 依赖: permanent
+/-
+**Matrix.permanent_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_isEmpty [IsEmpty n] {A : Matrix n n R} : permanent A = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.univ_eq_empty`：univ_eq_empty [IsEmpty α] : (univ : Finset α) = ∅
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem permanent_isEmpty [IsEmpty n] {A : Matrix n n R} : permanent A = 1 := by simp [permanent]
-
-/--
-theorem `permanent_eq_one_of_card_eq_zero` / 定理 `permanent_eq_one_of_card_eq_zero`
-
-English:
-theorem permanent_eq_one_of_card_eq_zero
-  given: {A : Matrix n n R} (h : card n = 0)
-  statement: permanent A = 1
-  proof: haveI : IsEmpty n := card_eq_zero_iff.mp h
-  permanent_isEmpty
-
-中文:
-定理 permanent_eq_one_of_card_eq_zero
-  条件: {A : 矩阵 n n R} (h : card n = 0)
-  结论: permanent A = 1
-  证明: haveI : IsEmpty n := card_eq_zero_iff.mp h
-  permanent_isEmpty
-
-Depends on / 依赖: IsEmpty, card_eq_zero_iff, card_eq_zero_iff.mp, permanent_isEmpty
+/-
+**Matrix.permanent_eq_one_of_card_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_eq_one_of_card_eq_zero {A : Matrix n n R} (h : card n = 0) : per
+manent A = 1
+参数：h : card n = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.permanent_isEmpty`：permanent_isEmpty [IsEmpty n] {A : Matrix n n 
+R} : permanent A = 1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.card_eq_zero_iff`：card_eq_zero_iff : card α = 0 ↔ IsEmpty α
 -/
 theorem permanent_eq_one_of_card_eq_zero {A : Matrix n n R} (h : card n = 0) : permanent A = 1 :=
   haveI : IsEmpty n := card_eq_zero_iff.mp h
@@ -173,64 +174,72 @@ theorem permanent_eq_one_of_card_eq_zero {A : Matrix n n R} (h : card n = 0) : p
 Although `Unique` implies `DecidableEq` and `Fintype`, the instances might
 not be syntactically equal. Thus, we need to fill in the args explicitly. -/
 @[simp]
-/--
-theorem `permanent_unique` / 定理 `permanent_unique`
+/-
+**Matrix.permanent_unique** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_unique {n : Type*} [Unique n] [DecidableEq n] [Fintype n] (A : M
+atrix n n R) : permanent A = A default default
+参数：A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.prod_singleton`：prod_singleton (f : ι -> M) (a : ι) : ∏ x in sing
+leton a, f x = f a
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem permanent_unique
-  given: {n : Type*} [Unique n] [DecidableEq n] [Fintype n] (A : Matrix n n R)
-  proof: by simp [permanent, univ_unique]
-
-中文:
-定理 permanent_unique
-  条件: {n : 类型} [唯一 n] [DecidableEq n] [有限类型 n] (A : 矩阵 n n R)
-  证明: by simp [permanent, univ_unique]
-
-Depends on / 依赖: permanent, univ_unique
+--- 原说明 ---
+If `n` has only one element, the permanent of an `n` by `n` matrix is just that 
+element.
+Although `Unique` implies `DecidableEq` and `Fintype`, the instances might
+not be syntactically equal. Thus, we need to fill in the args explicitly.
 -/
 theorem permanent_unique {n : Type*} [Unique n] [DecidableEq n] [Fintype n] (A : Matrix n n R) :
     permanent A = A default default := by simp [permanent, univ_unique]
-
-/--
-theorem `permanent_eq_elem_of_subsingleton` / 定理 `permanent_eq_elem_of_subsingleton`
-
-English:
-theorem permanent_eq_elem_of_subsingleton
-  given: [Subsingleton n] (A : Matrix n n R) (k : n)
-  proof: by
-  have := uniqueOfSubsingleton k
-  convert! permanent_unique A
-
-中文:
-定理 permanent_eq_elem_of_subsingleton
-  条件: [子单例 n] (A : 矩阵 n n R) (k : n)
-  证明: by
-  have := uniqueOfSubsingleton k
-  convert! permanent_unique A
-
-Depends on / 依赖: convert, permanent_unique, uniqueOfSubsingleton
+/-
+**Matrix.permanent_eq_elem_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_eq_elem_of_subsingleton [Subsingleton n] (A : Matrix n n R) (k :
+ n) : permanent A = A k k
+参数：A : Matrix n n R；k : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Matrix.permanent_unique`：permanent_unique {n : Type*} [Unique n] [Decida
+bleEq n] [Fintype n] (A : Matrix n n R) : permanent A = A default default
 -/
 theorem permanent_eq_elem_of_subsingleton [Subsingleton n] (A : Matrix n n R) (k : n) :
     permanent A = A k k := by
   have := uniqueOfSubsingleton k
   convert! permanent_unique A
-
-/--
-theorem `permanent_eq_elem_of_card_eq_one` / 定理 `permanent_eq_elem_of_card_eq_one`
-
-English:
-theorem permanent_eq_elem_of_card_eq_one
-  given: {A : Matrix n n R} (h : card n = 1) (k : n)
-  proof: haveI : Subsingleton n := card_le_one_iff_subsingleton.mp h.le
-  permanent_eq_elem_of_subsingleton _ _
-
-中文:
-定理 permanent_eq_elem_of_card_eq_one
-  条件: {A : 矩阵 n n R} (h : card n = 1) (k : n)
-  证明: haveI : Subsingleton n := card_le_one_iff_subsingleton.mp h.le
-  permanent_eq_elem_of_subsingleton _ _
-
-Depends on / 依赖: Subsingleton, card_le_one_iff_subsingleton, card_le_one_iff_subsingleton.mp, h.le, permanent_eq_elem_of_subsingleton
+/-
+**Matrix.permanent_eq_elem_of_card_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_eq_elem_of_card_eq_one {A : Matrix n n R} (h : card n = 1) (k : 
+n) : permanent A = A k k
+参数：h : card n = 1；k : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.permanent_eq_elem_of_subsingleton`：permanent_eq_elem_of_subsingle
+ton [Subsingleton n] (A : Matrix n n R) (k : n) : permanent A = A k k
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.card_le_one_iff_subsingleton`：card_le_one_iff_subsingleton : car
+d α <= 1 ↔ Subsingleton α
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem permanent_eq_elem_of_card_eq_one {A : Matrix n n R} (h : card n = 1) (k : n) :
     permanent A = A k k :=
@@ -239,30 +248,35 @@ theorem permanent_eq_elem_of_card_eq_one {A : Matrix n n R} (h : card n = 1) (k 
 
 /-- Transposing a matrix preserves the permanent. -/
 @[simp]
-/--
-theorem `permanent_transpose` / 定理 `permanent_transpose`
+/-
+**Matrix.permanent_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_transpose (M : Matrix n n R) : Mᵀ.permanent = M.permanent
+参数：M : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.sum_bijective`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [i
+nst : Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι → κ), 
+Function.Bi…
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用定理 `inv_involutive`：inv_involutive : Function.Involutive (Inv.inv : G -> G)
+· 使用引理 `Fintype.prod_equiv`：prod_equiv (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h 
+: forall x, f x = g (e x)) : ∏ x, f x = ∏ x, g x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem permanent_transpose
-  given: (M : Matrix n n R)
-  statement: Mᵀ.permanent = M.permanent
-  proof: by
-  refine sum_bijective _ inv_involutive.bijective _ _ ?_
-  intro σ
-  apply Fintype.prod_equiv σ
-  simp
-
-中文:
-定理 permanent_transpose
-  条件: (M : 矩阵 n n R)
-  结论: Mᵀ.permanent = M.permanent
-  证明: by
-  refine sum_bijective _ inv_involutive.bijective _ _ ?_
-  intro σ
-  apply Fintype.prod_equiv σ
-  simp
-
-Depends on / 依赖: Fintype, Fintype.prod_equiv, bijective, inv_involutive, inv_involutive.bijective, prod_equiv, sum_bijective
+--- 原说明 ---
+Transposing a matrix preserves the permanent.
 -/
 theorem permanent_transpose (M : Matrix n n R) : Mᵀ.permanent = M.permanent := by
   refine sum_bijective _ inv_involutive.bijective _ _ ?_
@@ -270,81 +284,80 @@ theorem permanent_transpose (M : Matrix n n R) : Mᵀ.permanent = M.permanent :=
   apply Fintype.prod_equiv σ
   simp
 
-/--
-theorem `permanent_permute_cols` / 定理 `permanent_permute_cols`
+/-- Permuting the columns does not change the permanent. -/
+/-
+**Matrix.permanent_permute_cols** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_permute_cols (σ : Perm n) (M : Matrix n n R) : (M.submatrix σ id
+).permanent = M.permanent
+参数：σ : Perm n；M : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u
+_3} [inst : Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   {e : ι 
+→ κ}, Function.Bi…
+· 使用定理 `Group.mulLeft_bijective`：∀ {G : Type u_5} [inst : Group G] (a : G), Func
+tion.Bijective fun x => a * x
 
-English:
-theorem permanent_permute_cols
-  given: (σ : Perm n) (M : Matrix n n R)
-  proof: (Group.mulLeft_bijective σ).sum_comp fun τ => ∏ i : n, M (τ i) i
-
-中文:
-定理 permanent_permute_cols
-  条件: (σ : 置换 n) (M : 矩阵 n n R)
-  证明: (Group.mulLeft_bijective σ).sum_comp fun τ => ∏ i : n, M (τ i) i
-
-Depends on / 依赖: Group.mulLeft_bijective, mulLeft_bijective, sum_comp
+--- 原说明 ---
+Permuting the columns does not change the permanent.
 -/
 theorem permanent_permute_cols (σ : Perm n) (M : Matrix n n R) :
     (M.submatrix σ id).permanent = M.permanent :=
-  (Group.mulLeft_bijective σ).sum_comp fun τ => ∏ i : n, M (τ i) i
+  (Group.mulLeft_bijective σ).sum_comp fun τ ↦ ∏ i : n, M (τ i) i
 
-/--
-theorem `permanent_permute_rows` / 定理 `permanent_permute_rows`
+/-- Permuting the rows does not change the permanent. -/
+/-
+**Matrix.permanent_permute_rows** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_permute_rows (σ : Perm n) (M : Matrix n n R) : (M.submatrix id σ
+).permanent = M.permanent
+参数：σ : Perm n；M : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.permanent_transpose`：permanent_transpose (M : Matrix n n R) : Mᵀ.
+permanent = M.permanent
+· 使用定理 `Matrix.transpose_submatrix`：transpose_submatrix (A : Matrix m n α) (r : 
+l -> m) (c : o -> n) : (A.submatrix r c)ᵀ = Aᵀ.submatrix c r
+· 使用定理 `Matrix.permanent_permute_cols`：permanent_permute_cols (σ : Perm n) (M : 
+Matrix n n R) : (M.submatrix σ id).permanent = M.permanent
 
-English:
-theorem permanent_permute_rows
-  given: (σ : Perm n) (M : Matrix n n R)
-  proof: by
-  rw [← permanent_transpose]; rw [transpose_submatrix]; rw [permanent_permute_cols]; rw [permanent_transpose]
-
-@[simp]
-
-中文:
-定理 permanent_permute_rows
-  条件: (σ : 置换 n) (M : 矩阵 n n R)
-  证明: by
-  rw [← permanent_transpose]; rw [transpose_submatrix]; rw [permanent_permute_cols]; rw [permanent_transpose]
-
-@[simp]
-
-Depends on / 依赖: permanent_permute_cols, permanent_transpose, transpose_submatrix
+--- 原说明 ---
+Permuting the rows does not change the permanent.
 -/
 theorem permanent_permute_rows (σ : Perm n) (M : Matrix n n R) :
     (M.submatrix id σ).permanent = M.permanent := by
-  rw [← permanent_transpose]; rw [transpose_submatrix]; rw [permanent_permute_cols]; rw [permanent_transpose]
+  rw [← permanent_transpose, transpose_submatrix, permanent_permute_cols, permanent_transpose]
 
 @[simp]
-/--
-theorem `permanent_smul` / 定理 `permanent_smul`
-
-English:
-theorem permanent_smul
-  given: (M : Matrix n n R) (c : R)
-  proof: by
-  simp only [permanent, smul_apply, smul_eq_mul, Finset.mul_sum]
-  congr
-  ext
-  rw [mul_comm]
-  conv in ∏ _, c * _ => simp [mul_comm c];
-  exact prod_mul_pow_card.symm
-
-@[simp]
-
-中文:
-定理 permanent_smul
-  条件: (M : 矩阵 n n R) (c : R)
-  证明: by
-  simp only [permanent, smul_apply, smul_eq_mul, Finset.mul_sum]
-  congr
-  ext
-  rw [mul_comm]
-  conv in ∏ _, c * _ => simp [mul_comm c];
-  exact prod_mul_pow_card.symm
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.mul_sum, mul_comm, mul_sum, permanent, prod_mul_pow_card, prod_mul_pow_card.symm, smul_apply, smul_eq_mul
+/-
+**Matrix.permanent_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_smul (M : Matrix n n R) (c : R) : permanent (c • M) = c ^ Fintyp
+e.card n * permanent M
+参数：M : Matrix n n R；c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_mul_pow_card`：prod_mul_pow_card {b : M} : (∏ a in s, f a) * 
+b ^ #s = ∏ a in s, f a * b
 -/
 theorem permanent_smul (M : Matrix n n R) (c : R) :
     permanent (c • M) = c ^ Fintype.card n * permanent M := by
@@ -356,63 +369,74 @@ theorem permanent_smul (M : Matrix n n R) (c : R) :
   exact prod_mul_pow_card.symm
 
 @[simp]
-/--
-theorem `permanent_updateCol_smul` / 定理 `permanent_updateCol_smul`
-
-English:
-theorem permanent_updateCol_smul
-  given: (M : Matrix n n R) (j : n) (c : R) (u : n -> R)
-  proof: by
-  simp only [permanent, ← mul_prod_erase _ _ (mem_univ j), updateCol_self, Pi.smul_apply,
-    smul_eq_mul, mul_sum, ← mul_assoc]
-  congr 1 with p
-  rw [Finset.prod_congr rfl (fun i hi => ?_)]
-  simp only [ne_eq, ne_of_mem_erase hi, not_false_eq_true, updateCol_ne]
-
-@[simp]
-
-中文:
-定理 permanent_updateCol_smul
-  条件: (M : 矩阵 n n R) (j : n) (c : R) (u : n -> R)
-  证明: by
-  simp only [permanent, ← mul_prod_erase _ _ (mem_univ j), updateCol_self, Pi.smul_apply,
-    smul_eq_mul, mul_sum, ← mul_assoc]
-  congr 1 with p
-  rw [Finset.prod_congr rfl (fun i hi => ?_)]
-  simp only [ne_eq, ne_of_mem_erase hi, not_false_eq_true, updateCol_ne]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.prod_congr, Pi.smul_apply, mem_univ, mul_assoc, mul_prod_erase, mul_sum, ne_eq, ne_of_mem_erase, not_false_eq_true, permanent, prod_congr, smul_apply, smul_eq_mul, updateCol_ne, updateCol_self
+/-
+**Matrix.permanent_updateCol_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_updateCol_smul (M : Matrix n n R) (j : n) (c : R) (u : n -> R) :
+ permanent (updateCol M j <| c • u) = c * permanent (updateCol M j u)
+参数：M : Matrix n n R；j : n；c : R；u : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mul_prod_erase`：mul_prod_erase [DecidableEq ι] (s : Finset ι) (f 
+: ι -> M) {a : ι} (h : a in s) : (f a * ∏ x in s.erase a, f x) = ∏ x in s, f x
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.updateCol_self`：updateCol_self [DecidableEq n] : updateCol M j c 
+i j = c i
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Matrix.updateCol_ne`：updateCol_ne [DecidableEq n] {j' : n} (j_ne : j' !=
+ j) : updateCol M j c i j' = M i j'
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.ne_of_mem_erase`：ne_of_mem_erase : b in erase s a -> b != a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem permanent_updateCol_smul (M : Matrix n n R) (j : n) (c : R) (u : n -> R) :
+theorem permanent_updateCol_smul (M : Matrix n n R) (j : n) (c : R) (u : n → R) :
     permanent (updateCol M j <| c • u) = c * permanent (updateCol M j u) := by
   simp only [permanent, ← mul_prod_erase _ _ (mem_univ j), updateCol_self, Pi.smul_apply,
     smul_eq_mul, mul_sum, ← mul_assoc]
   congr 1 with p
-  rw [Finset.prod_congr rfl (fun i hi => ?_)]
+  rw [Finset.prod_congr rfl (fun i hi ↦ ?_)]
   simp only [ne_eq, ne_of_mem_erase hi, not_false_eq_true, updateCol_ne]
 
 @[simp]
-/--
-theorem `permanent_updateRow_smul` / 定理 `permanent_updateRow_smul`
-
-English:
-theorem permanent_updateRow_smul
-  given: (M : Matrix n n R) (j : n) (c : R) (u : n -> R)
-  proof: by
-  rw [← permanent_transpose]; rw [← updateCol_transpose]; rw [permanent_updateCol_smul]; rw [updateCol_transpose]; rw [permanent_transpose]
-
-中文:
-定理 permanent_updateRow_smul
-  条件: (M : 矩阵 n n R) (j : n) (c : R) (u : n -> R)
-  证明: by
-  rw [← permanent_transpose]; rw [← updateCol_transpose]; rw [permanent_updateCol_smul]; rw [updateCol_transpose]; rw [permanent_transpose]
-
-Depends on / 依赖: permanent_transpose, permanent_updateCol_smul, updateCol_transpose
+/-
+**Matrix.permanent_updateRow_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：permanent_updateRow_smul (M : Matrix n n R) (j : n) (c : R) (u : n -> R) :
+ permanent (updateRow M j <| c • u) = c * permanent (updateRow M j u)
+参数：M : Matrix n n R；j : n；c : R；u : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.permanent_transpose`：permanent_transpose (M : Matrix n n R) : Mᵀ.
+permanent = M.permanent
+· 使用定理 `Matrix.updateCol_transpose`：updateCol_transpose [DecidableEq m] : update
+Col Mᵀ i b = (updateRow M i b)ᵀ
+· 使用定理 `Matrix.permanent_updateCol_smul`：permanent_updateCol_smul (M : Matrix n 
+n R) (j : n) (c : R) (u : n -> R) : permanent (updateCol M j <| c • u) = c * per
+manent (updateCol M j…
 -/
-theorem permanent_updateRow_smul (M : Matrix n n R) (j : n) (c : R) (u : n -> R) :
+theorem permanent_updateRow_smul (M : Matrix n n R) (j : n) (c : R) (u : n → R) :
     permanent (updateRow M j <| c • u) = c * permanent (updateRow M j u) := by
-  rw [← permanent_transpose]; rw [← updateCol_transpose]; rw [permanent_updateCol_smul]; rw [updateCol_transpose]; rw [permanent_transpose]
+  rw [← permanent_transpose, ← updateCol_transpose, permanent_updateCol_smul,
+    updateCol_transpose, permanent_transpose]
 
 end Matrix
+

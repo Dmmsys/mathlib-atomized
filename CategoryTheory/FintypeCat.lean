@@ -27,431 +27,253 @@ We prove that `FintypeCat.Skeleton` is a skeleton of `FintypeCat` in `FintypeCat
 
 open CategoryTheory
 
-/--
-Definition of `FintypeCat` / `FintypeCat` 的定义
+/-- The category of finite types. -/
+/-
+**FintypeCat** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：FintypeCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FintypeCat
-  body: ObjectProperty.FullSubcategory (C := Type*) Finite
-
-中文:
-缩写 FintypeCat
-  定义体: ObjectProperty.FullSubcategory (C := Type*) Finite
-
-Depends on / 依赖: Finite, FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory
+--- 原说明 ---
+The category of finite types.
 -/
 abbrev FintypeCat := ObjectProperty.FullSubcategory (C := Type*) Finite
 
 namespace FintypeCat
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a term of `FintypeCat` from a type endowed with a `Finite` instance. -/
+/-
+**FintypeCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `FintypeCat`。
+形式化陈述：of (X : Type*) [Finite X] : FintypeCat
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type*) [Finite X]
-  body: ⟨X, inferInstance⟩
-
-中文:
-缩写 of
-  签名: (X : 类型) [有限 X]
-  定义体: ⟨X, inferInstance⟩
+--- 原说明 ---
+Construct a term of `FintypeCat` from a type endowed with a `Finite` instance.
 -/
 abbrev of (X : Type*) [Finite X] : FintypeCat :=
   ⟨X, inferInstance⟩
-
-/--
-Instance `instCoeSort` / 实例 `instCoeSort`
-
-English:
-instance instCoeSort
-  signature: : CoeSort FintypeCat Type*
-  body: ⟨fun X => X.obj⟩
-
-中文:
-实例 instCoeSort
-  签名: : CoeSort FintypeCat 类型
-  定义体: ⟨fun X => X.obj⟩
-
-Depends on / 依赖: X.obj
+/-
+**FintypeCat.instCoeSort** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+形式化陈述：instCoeSort : CoeSort FintypeCat Type*
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoeSort : CoeSort FintypeCat Type* :=
-  ⟨fun X => X.obj⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited FintypeCat
-  body: ⟨of PEmpty⟩
-
-中文:
-实例 :
-  签名: 可居 FintypeCat
-  定义体: ⟨of PEmpty⟩
-
-Depends on / 依赖: PEmpty
+  ⟨fun X ↦ X.obj⟩
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited FintypeCat :=
   ⟨of PEmpty⟩
-
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : FintypeCat} : Finite X :=
   X.property
 
 /-- A `Fintype` instance on objects on `FintypeCat`, that should be turned on as needed.
 Prefer the `Finite` instance if possible. -/
 @[instance_reducible]
-/--
-Definition of `fintype` / `fintype` 的定义
+/-
+**FintypeCat.fintype** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：fintype {X : FintypeCat} : Fintype X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.instFiniteObj`：∀ {X : FintypeCat}, Finite X.obj
 
-English:
-definition fintype
-  signature: {X : FintypeCat}
-  body: Fintype.ofFinite X.obj
-
-中文:
-定义 fintype
-  签名: {X : FintypeCat}
-  定义体: Fintype.ofFinite X.obj
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, X.obj, ofFinite
+--- 原说明 ---
+A `Fintype` instance on objects on `FintypeCat`, that should be turned on as nee
+ded.
+Prefer the `Finite` instance if possible.
 -/
 noncomputable def fintype {X : FintypeCat} : Fintype X :=
   Fintype.ofFinite X.obj
 
 /-- The fully faithful embedding of `FintypeCat` into the category of types. -/
 @[simps!]
-/--
-Definition of `incl` / `incl` 的定义
+/-
+**FintypeCat.incl** 是 Mathlib 中的一个缩写定义，位于命名空间 `FintypeCat`。
+形式化陈述：incl : FintypeCat ⥤ Type*
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation incl
-  signature: : FintypeCat ⥤ Type*
-  body: ObjectProperty.ι _
-
-中文:
-缩写 incl
-  签名: : FintypeCat ⥤ 类型
-  定义体: ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty
+--- 原说明 ---
+The fully faithful embedding of `FintypeCat` into the category of types.
 -/
 abbrev incl : FintypeCat ⥤ Type* := ObjectProperty.ι _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.Full
-  body: ObjectProperty.full_ι _
-
-中文:
-实例 :
-  签名: incl.满
-  定义体: ObjectProperty.full_ι _
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.full_
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : incl.Full := ObjectProperty.full_ι _
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.Faithful
-  body: ObjectProperty.faithful_ι _
-
-example : ConcreteCategory FintypeCat
-    (fun X Y => TypeCat.Fun X.obj Y.obj) :=
-  inferInstance
-
-中文:
-实例 :
-  签名: incl.忠实
-  定义体: ObjectProperty.faithful_ι _
-
-example : ConcreteCategory FintypeCat
-    (fun X Y => TypeCat.Fun X.obj Y.obj) :=
-  inferInstance
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.faithful_
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : incl.Faithful := ObjectProperty.faithful_ι _
-
+/-
+**FintypeCat.** 是 Mathlib 中的一个示例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : ConcreteCategory FintypeCat
-    (fun X Y => TypeCat.Fun X.obj Y.obj) :=
+    (fun X Y ↦ TypeCat.Fun X.obj Y.obj) :=
   inferInstance
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Help typeclass inference infer fullness of forgetful functor. -/
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (forget FintypeCat).Full
-  body: inferInstanceAs FintypeCat.incl.Full
-
-@[simp]
-
-中文:
-实例 :
-  签名: (forget FintypeCat).满
-  定义体: inferInstanceAs FintypeCat.incl.Full
-
-@[simp]
-
-Depends on / 依赖: FintypeCat, FintypeCat.incl.Full
+--- 原说明 ---
+Help typeclass inference infer fullness of forgetful functor.
 -/
-instance : (forget FintypeCat).Full := inferInstanceAs FintypeCat.incl.Full
+instance : (forget FintypeCat).Full := inferInstanceAs <| FintypeCat.incl.Full
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (X : FintypeCat) (x : X)
-  statement: (𝟙 X : X -> X) x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_apply
-  条件: (X : FintypeCat) (x : X)
-  结论: (𝟙 X : X -> X) x = x
-  证明: rfl
-
-@[simp]
+/-
+**FintypeCat.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `FintypeCat`。
+形式化陈述：id_apply (X : FintypeCat) (x : X) : (𝟙 X : X -> X) x = x
+参数：X : FintypeCat；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_apply (X : FintypeCat) (x : X) : (𝟙 X : X -> X) x = x :=
+theorem id_apply (X : FintypeCat) (x : X) : (𝟙 X : X → X) x = x :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  statement: (f ≫ g) x = g (f x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  结论: (f ≫ g) x = g (f x)
-  证明: rfl
-
-@[simp]
+/-
+**FintypeCat.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `FintypeCat`。
+形式化陈述：comp_apply {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) 
+x = g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x) :=
   rfl
 
 @[simp]
-/--
-lemma `hom_apply` / 引理 `hom_apply`
-
-English:
-lemma hom_apply
-  given: {X Y : FintypeCat} (f : X ⟶ Y) (x : X)
-  proof: rfl
-
-中文:
-引理 hom_apply
-  条件: {X Y : FintypeCat} (f : X ⟶ Y) (x : X)
-  证明: rfl
+/-
+**FintypeCat.hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：hom_apply {X Y : FintypeCat} (f : X ⟶ Y) (x : X) : f.hom x = f x
+参数：f : X ⟶ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_apply {X Y : FintypeCat} (f : X ⟶ Y) (x : X) :
     f.hom x = f x := rfl
 
 -- Isn't `@[simp]` because `simp` can prove it after importing `Mathlib.CategoryTheory.Elementwise`.
-/--
-lemma `hom_inv_id_apply` / 引理 `hom_inv_id_apply`
-
-English:
-lemma hom_inv_id_apply
-  given: {X Y : FintypeCat} (f : X ≅ Y) (x : X)
-  statement: f.inv (f.hom x) = x
-  proof: ConcreteCategory.congr_hom f.hom_inv_id x
-
-中文:
-引理 hom_inv_id_apply
-  条件: {X Y : FintypeCat} (f : X ≅ Y) (x : X)
-  结论: f.inv (f.hom x) = x
-  证明: ConcreteCategory.congr_hom f.hom_inv_id x
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, f.hom_inv_id, hom_inv_id
+/-
+**FintypeCat.hom_inv_id_apply** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：hom_inv_id_apply {X Y : FintypeCat} (f : X ≅ Y) (x : X) : f.inv (f.hom x) 
+= x
+参数：f : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
 -/
 lemma hom_inv_id_apply {X Y : FintypeCat} (f : X ≅ Y) (x : X) : f.inv (f.hom x) = x :=
   ConcreteCategory.congr_hom f.hom_inv_id x
 
 -- Isn't `@[simp]` because `simp` can prove it after importing `Mathlib.CategoryTheory.Elementwise`.
-/--
-lemma `inv_hom_id_apply` / 引理 `inv_hom_id_apply`
-
-English:
-lemma inv_hom_id_apply
-  given: {X Y : FintypeCat} (f : X ≅ Y) (y : Y)
-  statement: f.hom (f.inv y) = y
-  proof: ConcreteCategory.congr_hom f.inv_hom_id y
-
-@[ext]
-
-中文:
-引理 inv_hom_id_apply
-  条件: {X Y : FintypeCat} (f : X ≅ Y) (y : Y)
-  结论: f.hom (f.inv y) = y
-  证明: ConcreteCategory.congr_hom f.inv_hom_id y
-
-@[ext]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, f.inv_hom_id, inv_hom_id
+/-
+**FintypeCat.inv_hom_id_apply** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：inv_hom_id_apply {X Y : FintypeCat} (f : X ≅ Y) (y : Y) : f.hom (f.inv y) 
+= y
+参数：f : X ≅ Y；y : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
 -/
 lemma inv_hom_id_apply {X Y : FintypeCat} (f : X ≅ Y) (y : Y) : f.hom (f.inv y) = y :=
   ConcreteCategory.congr_hom f.inv_hom_id y
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : FintypeCat} (f g : X ⟶ Y) (h : forall x, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ h
-
-中文:
-引理 hom_ext
-  条件: {X Y : FintypeCat} (f g : X ⟶ Y) (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ h
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**FintypeCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：hom_ext {X Y : FintypeCat} (f g : X ⟶ Y) (h : forall x, f x = g x) : f = g
+参数：f g : X ⟶ Y；h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma hom_ext {X Y : FintypeCat} (f g : X ⟶ Y) (h : forall x, f x = g x) : f = g :=
+lemma hom_ext {X Y : FintypeCat} (f g : X ⟶ Y) (h : ∀ x, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ h
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- Constructor for morphisms in `FintypeCat`. -/
+/-
+**FintypeCat.homMk** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：homMk {X Y : FintypeCat} (f : X -> Y) : X ⟶ Y where hom
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {X Y : FintypeCat} (f : X -> Y)
-  body: ↾f
-
-@[simp]
-
-中文:
-定义 homMk
-  签名: {X Y : FintypeCat} (f : X -> Y)
-  定义体: ↾f
-
-@[simp]
+--- 原说明 ---
+Constructor for morphisms in `FintypeCat`.
 -/
-def homMk {X Y : FintypeCat} (f : X -> Y) : X ⟶ Y where
+def homMk {X Y : FintypeCat} (f : X → Y) : X ⟶ Y where
   hom := ↾f
 
 @[simp]
-/--
-lemma `homMk_apply` / 引理 `homMk_apply`
-
-English:
-lemma homMk_apply
-  given: {X Y : FintypeCat} (f : X -> Y) (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homMk_apply
-  条件: {X Y : FintypeCat} (f : X -> Y) (x : X)
-  证明: rfl
-
-@[simp]
+/-
+**FintypeCat.homMk_apply** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：homMk_apply {X Y : FintypeCat} (f : X -> Y) (x : X) : homMk f x = f x
+参数：f : X -> Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homMk_apply {X Y : FintypeCat} (f : X -> Y) (x : X) :
+lemma homMk_apply {X Y : FintypeCat} (f : X → Y) (x : X) :
     homMk f x = f x := rfl
 
 @[simp]
-/--
-lemma `id_hom` / 引理 `id_hom`
-
-English:
-lemma id_hom
-  given: (X : FintypeCat)
-  statement: 𝟙 X.obj = ↾id
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-引理 id_hom
-  条件: (X : FintypeCat)
-  结论: 𝟙 X.obj = ↾id
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**FintypeCat.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：id_hom (X : FintypeCat) : 𝟙 X.obj = ↾id
+参数：X : FintypeCat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom (X : FintypeCat) : 𝟙 X.obj = ↾id := rfl
 
 @[simp, reassoc]
-/--
-lemma `comp_hom` / 引理 `comp_hom`
-
-English:
-lemma comp_hom
-  given: {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comp_hom
-  条件: {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**FintypeCat.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：comp_hom {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) : f.hom ≫ g.hom = ↾(
+g.hom ∘ f.hom)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom {X Y Z : FintypeCat} (f : X ⟶ Y) (g : Y ⟶ Z) :
     f.hom ≫ g.hom = ↾(g.hom ∘ f.hom) := rfl
 
 @[simp]
-/--
-lemma `homMk_eq_id_iff` / 引理 `homMk_eq_id_iff`
-
-English:
-lemma homMk_eq_id_iff
-  given: {X : FintypeCat} (f : X -> X)
-  proof: by
-  constructor
-  · intro h
-    ext x
-    exact ConcreteCategory.congr_hom h x
-  · rintro rfl
-    rfl
-
-@[simp]
-
-中文:
-引理 homMk_eq_id_iff
-  条件: {X : FintypeCat} (f : X -> X)
-  证明: by
-  constructor
-  · intro h
-    ext x
-    exact ConcreteCategory.congr_hom h x
-  · rintro rfl
-    rfl
-
-@[simp]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
+/-
+**FintypeCat.homMk_eq_id_iff** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：homMk_eq_id_iff {X : FintypeCat} (f : X -> X) : homMk f = 𝟙 X ↔ f = id
+参数：f : X -> X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma homMk_eq_id_iff {X : FintypeCat} (f : X -> X) :
+lemma homMk_eq_id_iff {X : FintypeCat} (f : X → X) :
     homMk f = 𝟙 X ↔ f = id := by
   constructor
   · intro h
@@ -461,34 +283,20 @@ lemma homMk_eq_id_iff {X : FintypeCat} (f : X -> X) :
     rfl
 
 @[simp]
-/--
-lemma `homMk_eq_comp_iff` / 引理 `homMk_eq_comp_iff`
-
-English:
-lemma homMk_eq_comp_iff
-  given: {X Y Z : FintypeCat} (f : X -> Y) (g : Y -> Z) (h : X -> Z)
-  proof: by
-  constructor
-  · intro h
-    ext x
-    exact ConcreteCategory.congr_hom h x
-  · rintro rfl
-    rfl
-
-中文:
-引理 homMk_eq_comp_iff
-  条件: {X Y Z : FintypeCat} (f : X -> Y) (g : Y -> Z) (h : X -> Z)
-  证明: by
-  constructor
-  · intro h
-    ext x
-    exact ConcreteCategory.congr_hom h x
-  · rintro rfl
-    rfl
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
+/-
+**FintypeCat.homMk_eq_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：homMk_eq_comp_iff {X Y Z : FintypeCat} (f : X -> Y) (g : Y -> Z) (h : X ->
+ Z) : homMk h = homMk f ≫ homMk g ↔ h = g ∘ f
+参数：f : X -> Y；g : Y -> Z；h : X -> Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma homMk_eq_comp_iff {X Y Z : FintypeCat} (f : X -> Y) (g : Y -> Z) (h : X -> Z) :
+lemma homMk_eq_comp_iff {X Y Z : FintypeCat} (f : X → Y) (g : Y → Z) (h : X → Z) :
     homMk h = homMk f ≫ homMk g ↔ h = g ∘ f := by
   constructor
   · intro h
@@ -500,36 +308,15 @@ lemma homMk_eq_comp_iff {X Y Z : FintypeCat} (f : X -> Y) (g : Y -> Z) (h : X ->
 -- See `equivEquivIso` in the root namespace for the analogue in `Type`.
 /-- Equivalences between finite types are the same as isomorphisms in `FintypeCat`. -/
 @[simps]
-/--
-Definition of `equivEquivIso` / `equivEquivIso` 的定义
+/-
+**FintypeCat.equivEquivIso** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：equivEquivIso {A B : FintypeCat} : A ≃ B ≃ (A ≅ B) where toFun e
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivEquivIso
-  signature: {A B : FintypeCat}
-  body: { hom := homMk e
-      inv := homMk e.symm }
-  invFun i :=
-    { toFun := i.hom
-      invFun := i.inv
-      left_inv := ConcreteCategory.congr_hom i.hom_inv_id
-      right_inv := ConcreteCategory.congr_hom i.inv_hom_id }
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-中文:
-定义 equivEquivIso
-  签名: {A B : FintypeCat}
-  定义体: { hom := homMk e
-      inv := homMk e.symm }
-  invFun i :=
-    { toFun := i.hom
-      invFun := i.inv
-      left_inv := ConcreteCategory.congr_hom i.hom_inv_id
-      right_inv := ConcreteCategory.congr_hom i.inv_hom_id }
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, cat_disch, congr_hom, e.symm, hom_inv_id, i.hom, i.hom_inv_id, i.inv, i.inv_hom_id, invFun, inv_hom_id, left_inv, right_inv
+--- 原说明 ---
+Equivalences between finite types are the same as isomorphisms in `FintypeCat`.
 -/
 def equivEquivIso {A B : FintypeCat} : A ≃ B ≃ (A ≅ B) where
   toFun e :=
@@ -542,193 +329,138 @@ def equivEquivIso {A B : FintypeCat} : A ≃ B ≃ (A ≅ B) where
       right_inv := ConcreteCategory.congr_hom i.inv_hom_id }
   left_inv := by cat_disch
   right_inv := by cat_disch
-
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : FintypeCat) : Finite (X ⟶ Y) :=
-  Finite.of_equiv _ (show (X ⟶ Y) ≃ (X -> Y) from
+  Finite.of_equiv _ (show (X ⟶ Y) ≃ (X → Y) from
     InducedCategory.homEquiv.trans TypeCat.homEquiv).symm
-
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : FintypeCat) : Finite (X ≅ Y) :=
-  Finite.of_injective _ (fun _ _ h => Iso.ext h)
-
+  Finite.of_injective _ (fun _ _ h ↦ Iso.ext h)
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : FintypeCat) : Finite (Aut X) :=
-inferInstanceAs Finite (X ≅ X)
+  inferInstanceAs <| Finite (X ≅ X)
 
 universe u
 
 /--
-Definition of `Skeleton` / `Skeleton` 的定义
+The "standard" skeleton for `FintypeCat`. This is the full subcategory of `FintypeCat`
+spanned by objects of the form `ULift (Fin n)` for `n : ℕ`. We parameterize the objects
+of `FintypeCat.Skeleton` directly as `ULift ℕ`, as the type `ULift (Fin m) ≃ ULift (Fin n)`
+is nonempty if and only if `n = m`. Specifying universes, `Skeleton : Type u` is a small
+skeletal category equivalent to `FintypeCat.{u}`.
+-/
+/-
+**FintypeCat.Skeleton** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：Skeleton : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Skeleton
-  signature: : Type u
-  body: ULift Nat
-
-中文:
-定义 Skeleton
-  签名: : 类型u
-  定义体: ULift Nat
+--- 原说明 ---
+The "standard" skeleton for `FintypeCat`. This is the full subcategory of `Finty
+peCat`
+spanned by objects of the form `ULift (Fin n)` for `n : ℕ`. We parameterize the 
+objects
+of `FintypeCat.Skeleton` directly as `ULift ℕ`, as the type `ULift (Fin m) ≃ ULi
+ft (Fin n)`
+is nonempty if and only if `n = m`. Specifying universes, `Skeleton : Type u` is
+ a small
+skeletal category equivalent to `FintypeCat.{u}`.
 -/
 def Skeleton : Type u :=
-  ULift Nat
+  ULift ℕ
 
 namespace Skeleton
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Given any natural number `n`, this creates the associated object of `FintypeCat.Skeleton`. -/
+/-
+**FintypeCat.Skeleton.mk** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat.Skeleton`。
+形式化陈述：mk : Nat -> Skeleton
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: : Nat -> Skeleton
-  body: ULift.up
-
-中文:
-定义 mk
-  签名: : 自然数 -> Skeleton
-  定义体: ULift.up
-
-Depends on / 依赖: ULift.up
+--- 原说明 ---
+Given any natural number `n`, this creates the associated object of `FintypeCat.
+Skeleton`.
 -/
-def mk : Nat -> Skeleton :=
+def mk : ℕ → Skeleton :=
   ULift.up
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Skeleton
-  body: ⟨mk 0⟩
-
-中文:
-实例 :
-  签名: 可居 Skeleton
-  定义体: ⟨mk 0⟩
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Skeleton :=
   ⟨mk 0⟩
 
-/--
-Definition of `len` / `len` 的定义
+/-- Given any object of `FintypeCat.Skeleton`, this returns the associated natural number. -/
+/-
+**FintypeCat.Skeleton.len** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat.Skeleton`。
+形式化陈述：len : Skeleton -> Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition len
-  signature: : Skeleton -> Nat
-  body: ULift.down
-
-@[ext]
-
-中文:
-定义 len
-  签名: : Skeleton -> 自然数
-  定义体: ULift.down
-
-@[ext]
-
-Depends on / 依赖: ULift.down
+--- 原说明 ---
+Given any object of `FintypeCat.Skeleton`, this returns the associated natural n
+umber.
 -/
-def len : Skeleton -> Nat :=
+def len : Skeleton → ℕ :=
   ULift.down
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (X Y : Skeleton)
-  statement: X.len = Y.len -> X = Y
-  proof: ULift.ext _ _
-
-中文:
-定理 ext
-  条件: (X Y : Skeleton)
-  结论: X.len = Y.len -> X = Y
-  证明: ULift.ext _ _
-
-Depends on / 依赖: ULift.ext
+/-
+**FintypeCat.Skeleton.ext** 是 Mathlib 中的一个定理，位于命名空间 `FintypeCat.Skeleton`。
+形式化陈述：ext (X Y : Skeleton) : X.len = Y.len -> X = Y
+参数：X Y : Skeleton。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ULift.ext`：ext (x y : ULift α) (h : x.down = y.down) : x = y
 -/
-theorem ext (X Y : Skeleton) : X.len = Y.len -> X = Y :=
+theorem ext (X Y : Skeleton) : X.len = Y.len → X = Y :=
   ULift.ext _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SmallCategory Skeleton.{u}
-  body: ULift.{u} (Fin X.len) -> ULift.{u} (Fin Y.len)
-  id _ := id
-  comp f g := g ∘ f
-
-中文:
-实例 :
-  签名: 小范畴 Skeleton.{u}
-  定义体: ULift.{u} (Fin X.len) -> ULift.{u} (Fin Y.len)
-  id _ := id
-  comp f g := g ∘ f
-
-Depends on / 依赖: X.len, Y.len
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SmallCategory Skeleton.{u} where
-  Hom X Y := ULift.{u} (Fin X.len) -> ULift.{u} (Fin Y.len)
+  Hom X Y := ULift.{u} (Fin X.len) → ULift.{u} (Fin Y.len)
   id _ := id
   comp f g := g ∘ f
-
-/--
-theorem `is_skeletal` / 定理 `is_skeletal`
-
-English:
-theorem is_skeletal
-  statement: Skeletal Skeleton.{u}
-  proof: fun X Y ⟨h⟩ =>
-ext _ _
-Fin.equiv_iff_eq.mp
-Nonempty.intro
-        { toFun := fun x => (h.hom ⟨x⟩).down
-          invFun := fun x => (h.inv ⟨x⟩).down
-          left_inv := by
-            intro a
-            change ULift.down _ = _
-            rw [ULift.up_down]
-            change ((h.hom ≫ h.inv) _).down = _
-            simp
-            rfl
-          right_inv := by
-            intro a
-            change ULift.down _ = _
-            rw [ULift.up_down]
-            change ((h.inv ≫ h.hom) _).down = _
-            simp
-            rfl }
-
-中文:
-定理 is_skeletal
-  结论: Skeletal Skeleton.{u}
-  证明: fun X Y ⟨h⟩ =>
-ext _ _
-Fin.equiv_iff_eq.mp
-Nonempty.intro
-        { toFun := fun x => (h.hom ⟨x⟩).down
-          invFun := fun x => (h.inv ⟨x⟩).down
-          left_inv := by
-            intro a
-            change ULift.down _ = _
-            rw [ULift.up_down]
-            change ((h.hom ≫ h.inv) _).down = _
-            simp
-            rfl
-          right_inv := by
-            intro a
-            change ULift.down _ = _
-            rw [ULift.up_down]
-            change ((h.inv ≫ h.hom) _).down = _
-            simp
-            rfl }
+/-
+**FintypeCat.Skeleton.is_skeletal** 是 Mathlib 中的一个定理，位于命名空间 `FintypeCat.Skeleton
+`。
+形式化陈述：is_skeletal : Skeletal Skeleton.{u}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.Skeleton.ext`：ext (X Y : Skeleton) : X.len = Y.len -> X = Y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Fin.equiv_iff_eq`：equiv_iff_eq : Nonempty (Fin m ≃ Fin n) ↔ m = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ULift.up_down`：∀ {α : Type u} (b : ULift.{v, u} α), { down := b.down } =
+ b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
 -/
 theorem is_skeletal : Skeletal Skeleton.{u} := fun X Y ⟨h⟩ =>
-ext _ _
-Fin.equiv_iff_eq.mp
-Nonempty.intro
+  ext _ _ <|
+    Fin.equiv_iff_eq.mp <|
+      Nonempty.intro <|
         { toFun := fun x => (h.hom ⟨x⟩).down
           invFun := fun x => (h.inv ⟨x⟩).down
           left_inv := by
@@ -746,90 +478,37 @@ Nonempty.intro
             simp
             rfl }
 
-/--
-Definition of `incl` / `incl` 的定义
+/-- The canonical fully faithful embedding of `FintypeCat.Skeleton` into `FintypeCat`. -/
+/-
+**FintypeCat.Skeleton.incl** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat.Skeleton`。
+形式化陈述：incl : Skeleton.{u} ⥤ FintypeCat.{u} where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: : Skeleton.{u} ⥤ FintypeCat.{u} where
-  body: FintypeCat.of (ULift (Fin X.len))
-  map f := homMk f
-
-中文:
-定义 incl
-  签名: : Skeleton.{u} ⥤ FintypeCat.{u} where
-  定义体: FintypeCat.of (ULift (Fin X.len))
-  map f := homMk f
-
-Depends on / 依赖: FintypeCat, FintypeCat.of, X.len
+--- 原说明 ---
+The canonical fully faithful embedding of `FintypeCat.Skeleton` into `FintypeCat
+`.
 -/
 def incl : Skeleton.{u} ⥤ FintypeCat.{u} where
   obj X := FintypeCat.of (ULift (Fin X.len))
   map f := homMk f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.Full
-  body: ⟨_, rfl⟩
-
-中文:
-实例 :
-  签名: incl.满
-  定义体: ⟨_, rfl⟩
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : incl.Full where map_surjective _ := ⟨_, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.Faithful
-  body: by
-    simpa using TypeCat.homEquiv.symm.injective (InducedCategory.homEquiv.symm.injective h)
-
-中文:
-实例 :
-  签名: incl.忠实
-  定义体: by
-    simpa using TypeCat.homEquiv.symm.injective (InducedCategory.homEquiv.symm.injective h)
-
-Depends on / 依赖: InducedCategory, InducedCategory.homEquiv.symm.injective, TypeCat, TypeCat.homEquiv.symm.injective, homEquiv, injective
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : incl.Faithful where
   map_injective h := by
     simpa using TypeCat.homEquiv.symm.injective (InducedCategory.homEquiv.symm.injective h)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.EssSurj
-  body: Functor.EssSurj.mk fun X =>
-    letI := X.fintype
-    let F := Fintype.equivFin X
-    ⟨mk (Fintype.card X),
-      Nonempty.intro
-        { hom := homMk (F.symm ∘ ULift.down)
-          inv := homMk (ULift.up ∘ F) }⟩
-
-中文:
-实例 :
-  签名: incl.本质满射
-  定义体: Functor.EssSurj.mk fun X =>
-    letI := X.fintype
-    let F := Fintype.equivFin X
-    ⟨mk (Fintype.card X),
-      Nonempty.intro
-        { hom := homMk (F.symm ∘ ULift.down)
-          inv := homMk (ULift.up ∘ F) }⟩
-
-Depends on / 依赖: EssSurj, F.symm, Fintype, Fintype.card, Fintype.equivFin, Functor, Functor.EssSurj.mk, Nonempty, Nonempty.intro, ULift.down, ULift.up, X.fintype, equivFin, fintype
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : incl.EssSurj :=
   Functor.EssSurj.mk fun X =>
@@ -839,62 +518,47 @@ instance : incl.EssSurj :=
       Nonempty.intro
         { hom := homMk (F.symm ∘ ULift.down)
           inv := homMk (ULift.up ∘ F) }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: incl.IsEquivalence
-
-中文:
-实例 :
-  签名: incl.是等价
+/-
+**FintypeCat.Skeleton.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat.Skeleton`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : incl.IsEquivalence where
 
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-- The equivalence between `FintypeCat.Skeleton` and `FintypeCat`. -/
+/-
+**FintypeCat.Skeleton.equivalence** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat.Skeleton
+`。
+形式化陈述：equivalence : Skeleton ≌ FintypeCat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.Skeleton.instIsEquivalenceIncl`：FintypeCat.Skeleton.incl.IsEq
+uivalence
 
-English:
-definition equivalence
-  signature: : Skeleton ≌ FintypeCat
-  body: incl.asEquivalence
-
-中文:
-定义 equivalence
-  签名: : Skeleton ≌ FintypeCat
-  定义体: incl.asEquivalence
-
-Depends on / 依赖: asEquivalence, incl.asEquivalence
+--- 原说明 ---
+The equivalence between `FintypeCat.Skeleton` and `FintypeCat`.
 -/
 noncomputable def equivalence : Skeleton ≌ FintypeCat :=
   incl.asEquivalence
 
 attribute [local instance] FintypeCat.fintype in
 @[simp]
-/--
-theorem `incl_mk_nat_card` / 定理 `incl_mk_nat_card`
-
-English:
-theorem incl_mk_nat_card
-  given: (n : Nat)
-  proof: by
-  convert! Finset.card_fin n
-  dsimp [incl, mk, len]
-  convert! (Fintype.ofEquiv_card Equiv.ulift).symm
-
-中文:
-定理 incl_mk_nat_card
-  条件: (n : 自然数)
-  证明: by
-  convert! Finset.card_fin n
-  dsimp [incl, mk, len]
-  convert! (Fintype.ofEquiv_card Equiv.ulift).symm
-
-Depends on / 依赖: Equiv.ulift, Finset, Finset.card_fin, Fintype, Fintype.ofEquiv_card, card_fin, convert, ofEquiv_card
+/-
+**FintypeCat.Skeleton.incl_mk_nat_card** 是 Mathlib 中的一个定理，位于命名空间 `FintypeCat.Ske
+leton`。
+形式化陈述：incl_mk_nat_card (n : Nat) : Fintype.card (incl.obj (mk n)) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `Fintype.ofEquiv_card`：ofEquiv_card [Fintype α] (f : α ≃ β) : @card β (of
+Equiv α f) = card α
+· 使用定理 `Finset.card_fin`：Finset.card_fin (n : Nat) : #(univ : Finset (Fin n)) = 
+n
 -/
-theorem incl_mk_nat_card (n : Nat) :
+theorem incl_mk_nat_card (n : ℕ) :
     Fintype.card (incl.obj (mk n)) = n := by
   convert! Finset.card_fin n
   dsimp [incl, mk, len]
@@ -902,22 +566,18 @@ theorem incl_mk_nat_card (n : Nat) :
 
 end Skeleton
 
-/--
-lemma `isSkeleton` / 引理 `isSkeleton`
+/-- `FintypeCat.Skeleton` is a skeleton of `FintypeCat`. -/
+/-
+**FintypeCat.isSkeleton** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：isSkeleton : IsSkeletonOf FintypeCat Skeleton Skeleton.incl where skel
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.Skeleton.is_skeletal`：is_skeletal : Skeletal Skeleton.{u}
+· 使用定理 `FintypeCat.Skeleton.instIsEquivalenceIncl`：FintypeCat.Skeleton.incl.IsEq
+uivalence
 
-English:
-lemma isSkeleton
-  statement: IsSkeletonOf FintypeCat Skeleton Skeleton.incl where
-  proof: Skeleton.is_skeletal
-  eqv := by infer_instance
-
-中文:
-引理 isSkeleton
-  结论: 是SkeletonOf FintypeCat Skeleton Skeleton.incl where
-  证明: Skeleton.is_skeletal
-  eqv := by infer_instance
-
-Depends on / 依赖: Skeleton, Skeleton.is_skeletal, is_skeletal
+--- 原说明 ---
+`FintypeCat.Skeleton` is a skeleton of `FintypeCat`.
 -/
 lemma isSkeleton : IsSkeletonOf FintypeCat Skeleton Skeleton.incl where
   skel := Skeleton.is_skeletal
@@ -928,71 +588,73 @@ section Universes
 universe v
 
 attribute [local instance] FintypeCat.fintype in
-/--
-Definition of `uSwitch` / `uSwitch` 的定义
+/-- If `u` and `v` are two arbitrary universes, we may construct a functor
+`uSwitch.{u, v} : FintypeCat.{u} ⥤ FintypeCat.{v}` by sending
+`X : FintypeCat.{u}` to `ULift.{v} (Fin (Fintype.card X))`. -/
+/-
+**FintypeCat.uSwitch** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：uSwitch : FintypeCat.{u} ⥤ FintypeCat.{v} where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uSwitch
-  signature: : FintypeCat.{u} ⥤ FintypeCat.{v} where
-  body: FintypeCat.of ULift.{v} (Fin (Fintype.card X))
-  map {X Y} f :=
-    homMk (ULift.up ∘ Fintype.equivFin Y ∘ f.hom ∘ (Fintype.equivFin X).symm ∘ ULift.down)
-
-中文:
-定义 uSwitch
-  签名: : FintypeCat.{u} ⥤ FintypeCat.{v} where
-  定义体: FintypeCat.of ULift.{v} (Fin (Fintype.card X))
-  map {X Y} f :=
-    homMk (ULift.up ∘ Fintype.equivFin Y ∘ f.hom ∘ (Fintype.equivFin X).symm ∘ ULift.down)
-
-Depends on / 依赖: Fintype, Fintype.card, FintypeCat, FintypeCat.of
+--- 原说明 ---
+If `u` and `v` are two arbitrary universes, we may construct a functor
+`uSwitch.{u, v} : FintypeCat.{u} ⥤ FintypeCat.{v}` by sending
+`X : FintypeCat.{u}` to `ULift.{v} (Fin (Fintype.card X))`.
 -/
 noncomputable def uSwitch : FintypeCat.{u} ⥤ FintypeCat.{v} where
-obj X := FintypeCat.of ULift.{v} (Fin (Fintype.card X))
+  obj X := FintypeCat.of <| ULift.{v} (Fin (Fintype.card X))
   map {X Y} f :=
     homMk (ULift.up ∘ Fintype.equivFin Y ∘ f.hom ∘ (Fintype.equivFin X).symm ∘ ULift.down)
 
 attribute [local instance] FintypeCat.fintype in
-/--
-Definition of `uSwitchEquiv` / `uSwitchEquiv` 的定义
+/-- Switching the universe of an object `X : FintypeCat.{u}` does not change `X` up to equivalence
+of types. This is natural in the sense that it commutes with `uSwitch.map f` for
+any `f : X ⟶ Y` in `FintypeCat.{u}`. -/
+/-
+**FintypeCat.uSwitchEquiv** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：uSwitchEquiv (X : FintypeCat.{u}) : uSwitch.{u, v}.obj X ≃ X
+参数：X : FintypeCat.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uSwitchEquiv
-  signature: (X : FintypeCat.{u})
-  body: Equiv.ulift.trans (Fintype.equivFin X).symm
-
-中文:
-定义 uSwitchEquiv
-  签名: (X : FintypeCat.{u})
-  定义体: Equiv.ulift.trans (Fintype.equivFin X).symm
-
-Depends on / 依赖: Equiv.ulift.trans, Fintype, Fintype.equivFin, equivFin
+--- 原说明 ---
+Switching the universe of an object `X : FintypeCat.{u}` does not change `X` up 
+to equivalence
+of types. This is natural in the sense that it commutes with `uSwitch.map f` for
+any `f : X ⟶ Y` in `FintypeCat.{u}`.
 -/
 noncomputable def uSwitchEquiv (X : FintypeCat.{u}) :
     uSwitch.{u, v}.obj X ≃ X :=
   Equiv.ulift.trans (Fintype.equivFin X).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `uSwitchEquiv_naturality` / 引理 `uSwitchEquiv_naturality`
-
-English:
-lemma uSwitchEquiv_naturality
-  statement: {X Y : FintypeCat.{u}} (f : X ⟶ Y)
-  proof: by
-  simp only [uSwitch, uSwitchEquiv, Equiv.trans_apply, Equiv.ulift_apply]
-  rw [homMk_apply]
-  aesop
-
-中文:
-引理 uSwitchEquiv_naturality
-  结论: {X Y : FintypeCat.{u}} (f : X ⟶ Y)
-  证明: by
-  simp only [uSwitch, uSwitchEquiv, Equiv.trans_apply, Equiv.ulift_apply]
-  rw [homMk_apply]
-  aesop
-
-Depends on / 依赖: Equiv.trans_apply, Equiv.ulift_apply, homMk_apply, trans_apply, uSwitch, uSwitchEquiv, ulift_apply
+/-
+**FintypeCat.uSwitchEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：uSwitchEquiv_naturality {X Y : FintypeCat.{u}} (f : X ⟶ Y) (x : uSwitch.{u
+, v}.obj X) : f (X.uSwitchEquiv x) = Y.uSwitchEquiv (uSwitch.map f x)
+参数：f : X ⟶ Y；x : uSwitch.{u, v}.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.ulift_apply`：∀ {α : Type v}, ⇑Equiv.ulift = ULift.down
+· 使用引理 `FintypeCat.homMk_apply`：homMk_apply {X Y : FintypeCat} (f : X -> Y) (x :
+ X) : homMk f x = f x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uSwitchEquiv_naturality {X Y : FintypeCat.{u}} (f : X ⟶ Y)
     (x : uSwitch.{u, v}.obj X) :
@@ -1000,40 +662,38 @@ lemma uSwitchEquiv_naturality {X Y : FintypeCat.{u}} (f : X ⟶ Y)
   simp only [uSwitch, uSwitchEquiv, Equiv.trans_apply, Equiv.ulift_apply]
   rw [homMk_apply]
   aesop
-
-/--
-lemma `uSwitchEquiv_symm_naturality` / 引理 `uSwitchEquiv_symm_naturality`
-
-English:
-lemma uSwitchEquiv_symm_naturality
-  given: {X Y : FintypeCat.{u}} (f : X ⟶ Y) (x : X)
-  proof: by
-  rw [Equiv.eq_symm_apply]; rw [← uSwitchEquiv_naturality f]; rw [Equiv.apply_symm_apply]
-
-中文:
-引理 uSwitchEquiv_symm_naturality
-  条件: {X Y : FintypeCat.{u}} (f : X ⟶ Y) (x : X)
-  证明: by
-  rw [Equiv.eq_symm_apply]; rw [← uSwitchEquiv_naturality f]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: Equiv.apply_symm_apply, Equiv.eq_symm_apply, apply_symm_apply, eq_symm_apply, uSwitchEquiv_naturality
+/-
+**FintypeCat.uSwitchEquiv_symm_naturality** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`
+。
+形式化陈述：uSwitchEquiv_symm_naturality {X Y : FintypeCat.{u}} (f : X ⟶ Y) (x : X) : 
+uSwitch.map f (X.uSwitchEquiv.symm x) = Y.uSwitchEquiv.symm (f x)
+参数：f : X ⟶ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `FintypeCat.uSwitchEquiv_naturality`：uSwitchEquiv_naturality {X Y : Finty
+peCat.{u}} (f : X ⟶ Y) (x : uSwitch.{u, v}.obj X) : f (X.uSwitchEquiv x) = Y.uSw
+itchEquiv (uSwitch.map f…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma uSwitchEquiv_symm_naturality {X Y : FintypeCat.{u}} (f : X ⟶ Y) (x : X) :
     uSwitch.map f (X.uSwitchEquiv.symm x) = Y.uSwitchEquiv.symm (f x) := by
-  rw [Equiv.eq_symm_apply]; rw [← uSwitchEquiv_naturality f]; rw [Equiv.apply_symm_apply]
-
-/--
-lemma `uSwitch_map_uSwitch_map` / 引理 `uSwitch_map_uSwitch_map`
-
-English:
-lemma uSwitch_map_uSwitch_map
-  given: {X Y : FintypeCat.{u}} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 uSwitch_map_uSwitch_map
-  条件: {X Y : FintypeCat.{u}} (f : X ⟶ Y)
-  证明: rfl
+  rw [Equiv.eq_symm_apply, ← uSwitchEquiv_naturality f, Equiv.apply_symm_apply]
+/-
+**FintypeCat.uSwitch_map_uSwitch_map** 是 Mathlib 中的一个引理，位于命名空间 `FintypeCat`。
+形式化陈述：uSwitch_map_uSwitch_map {X Y : FintypeCat.{u}} (f : X ⟶ Y) : uSwitch.map (
+uSwitch.map f) = (equivEquivIso ((uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEqu
+iv)).hom ≫ f ≫ (equivEquivIso ((uSwitch.obj Y).uSwitchEquiv.trans Y.uSwitchEquiv
+)).inv
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma uSwitch_map_uSwitch_map {X Y : FintypeCat.{u}} (f : X ⟶ Y) :
     uSwitch.map (uSwitch.map f) =
@@ -1043,62 +703,32 @@ lemma uSwitch_map_uSwitch_map {X Y : FintypeCat.{u}} (f : X ⟶ Y) :
 
 set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] uSwitch_map_uSwitch_map in
-/--
-Definition of `uSwitchEquivalence` / `uSwitchEquivalence` 的定义
+/-- `uSwitch.{u, v}` is an equivalence of categories with quasi-inverse `uSwitch.{v, u}`. -/
+/-
+**FintypeCat.uSwitchEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `FintypeCat`。
+形式化陈述：uSwitchEquivalence : FintypeCat.{u} ≌ FintypeCat.{v} where functor
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition uSwitchEquivalence
-  signature: : FintypeCat.{u} ≌ FintypeCat.{v} where
-  body: uSwitch
-  inverse := uSwitch
-  unitIso := NatIso.ofComponents (fun X => (equivEquivIso <|
-    (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv).symm)
-  counitIso := NatIso.ofComponents (fun X => equivEquivIso <|
-    (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv)
-  functor_unitIso_comp X := by
-    ext x
-    simp [← uSwitchEquiv_naturality]
-
-中文:
-定义 uSwitchEquivalence
-  签名: : FintypeCat.{u} ≌ FintypeCat.{v} where
-  定义体: uSwitch
-  inverse := uSwitch
-  unitIso := NatIso.ofComponents (fun X => (equivEquivIso <|
-    (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv).symm)
-  counitIso := NatIso.ofComponents (fun X => equivEquivIso <|
-    (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv)
-  functor_unitIso_comp X := by
-    ext x
-    simp [← uSwitchEquiv_naturality]
-
-Depends on / 依赖: uSwitch
+--- 原说明 ---
+`uSwitch.{u, v}` is an equivalence of categories with quasi-inverse `uSwitch.{v,
+ u}`.
 -/
 noncomputable def uSwitchEquivalence : FintypeCat.{u} ≌ FintypeCat.{v} where
   functor := uSwitch
   inverse := uSwitch
-  unitIso := NatIso.ofComponents (fun X => (equivEquivIso <|
+  unitIso := NatIso.ofComponents (fun X ↦ (equivEquivIso <|
     (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv).symm)
-  counitIso := NatIso.ofComponents (fun X => equivEquivIso <|
+  counitIso := NatIso.ofComponents (fun X ↦ equivEquivIso <|
     (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv)
   functor_unitIso_comp X := by
     ext x
     simp [← uSwitchEquiv_naturality]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uSwitch.IsEquivalence
-  body: uSwitchEquivalence.isEquivalence_functor
-
-中文:
-实例 :
-  签名: uSwitch.是等价
-  定义体: uSwitchEquivalence.isEquivalence_functor
-
-Depends on / 依赖: isEquivalence_functor, uSwitchEquivalence, uSwitchEquivalence.isEquivalence_functor
+/-
+**FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uSwitch.IsEquivalence :=
   uSwitchEquivalence.isEquivalence_functor
@@ -1113,23 +743,21 @@ universe u v w
 
 variable {C : Type u} [Category.{v} C] (F G : C ⥤ FintypeCat.{w}) {X Y : C}
 
-/--
-lemma `naturality` / 引理 `naturality`
-
-English:
-lemma naturality
-  given: (σ : F ⟶ G) (f : X ⟶ Y) (x : F.obj X)
-  proof: (σ.naturality_apply f) x
-
-中文:
-引理 naturality
-  条件: (σ : F ⟶ G) (f : X ⟶ Y) (x : F.obj X)
-  证明: (σ.naturality_apply f) x
-
-Depends on / 依赖: naturality_apply
+/-
+**FunctorToFintypeCat.naturality** 是 Mathlib 中的一个引理，位于命名空间 `FunctorToFintypeCat`
+。
+形式化陈述：naturality (σ : F ⟶ G) (f : X ⟶ Y) (x : F.obj X) : σ.app Y (F.map f x) = G
+.map f (σ.app X x)
+参数：σ : F ⟶ G；f : X ⟶ Y；x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
 -/
 lemma naturality (σ : F ⟶ G) (f : X ⟶ Y) (x : F.obj X) :
     σ.app Y (F.map f x) = G.map f (σ.app X x) :=
   (σ.naturality_apply f) x
 
 end FunctorToFintypeCat
+

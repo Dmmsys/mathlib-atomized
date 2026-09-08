@@ -28,27 +28,21 @@ variable [Semiring A] [Monoid G] [AddCommMonoid W] [Module A W]
 which is stable under the `G`-action.
 -/
 @[ext]
-/--
-Definition of `Subrepresentation` / `Subrepresentation` 的定义
+/-
+**Subrepresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{A : Type u_1} →   {G : Type u_2} →     {W : Type u_3} →       [inst : Sem
+iring A] →         [inst_1 : Monoid G] →           [inst_2 : AddCommMonoid W] → 
+[inst_3 : _root_.Module A W] → Representation A G W → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Subrepresentation
-  parameters: where
-  axioms and operations (2):
-    - toSubmodule : Submodule A W
-    - apply_mem_toSubmodule((g : G) ⦃v) : W⦄ : v in toSubmodule -> ρ g v in toSubmodule
-
-中文:
-结构 子表示
-  参数: where
-  公理与运算 (2 个):
-    - toSubmodule : 子模 A W
-    - apply_mem_toSubmodule((g : G) ⦃v) : W⦄ : v in toSubmodule -> ρ g v in toSubmodule
+--- 原说明 ---
+A subrepresentation of `G` of the `A`-module `W` is a submodule of `W`
+which is stable under the `G`-action.
 -/
 structure Subrepresentation where
   /-- A subrepresentation is a submodule. -/
   toSubmodule : Submodule A W
-  apply_mem_toSubmodule (g : G) ⦃v : W⦄ : v in toSubmodule -> ρ g v in toSubmodule
+  apply_mem_toSubmodule (g : G) ⦃v : W⦄ : v ∈ toSubmodule → ρ g v ∈ toSubmodule
 
 namespace Subrepresentation
 
@@ -57,273 +51,135 @@ section non_comm
 variable [Semiring A] [Monoid G] [AddCommMonoid W] [Module A W] {ρ : Representation A G W}
   [AddCommMonoid M] [Module A[G] M]
 
-/--
-lemma `toSubmodule_injective` / 引理 `toSubmodule_injective`
-
-English:
-lemma toSubmodule_injective
-  proof: by
-  rintro ⟨_, _⟩
-  congr!
-
-中文:
-引理 toSubmodule_injective
-  证明: by
-  rintro ⟨_, _⟩
-  congr!
+/-
+**Subrepresentation.toSubmodule_injective** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresen
+tation`。
+形式化陈述：toSubmodule_injective : Function.Injective (toSubmodule : Subrepresentatio
+n ρ -> Submodule A W)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subrepresentation.apply_mem_toSubmodule`：∀ {A : Type u_1} {G : Type u_2}
+ {W : Type u_3} [inst : Semiring A] [inst_1 : Monoid G] [inst_2 : AddCommMonoid 
+W]   [inst_3 : _root_.Module …
 -/
 lemma toSubmodule_injective :
-    Function.Injective (toSubmodule : Subrepresentation ρ -> Submodule A W) := by
+    Function.Injective (toSubmodule : Subrepresentation ρ → Submodule A W) := by
   rintro ⟨_, _⟩
   congr!
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Subrepresentation ρ) W
-  body: ρ'.toSubmodule
-  coe_injective := SetLike.coe_injective.comp toSubmodule_injective
-
-中文:
-实例 :
-  签名: 集合状 (子表示 ρ) W
-  定义体: ρ'.toSubmodule
-  coe_injective := SetLike.coe_injective.comp toSubmodule_injective
-
-Depends on / 依赖: toSubmodule
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Subrepresentation ρ) W where
   coe ρ' := ρ'.toSubmodule
   coe_injective := SetLike.coe_injective.comp toSubmodule_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Subrepresentation ρ)
-  body: .ofSetLike (Subrepresentation ρ) W
-
-中文:
-实例 :
-  签名: 偏序 (子表示 ρ)
-  定义体: .ofSetLike (Subrepresentation ρ) W
-
-Depends on / 依赖: Subrepresentation, ofSetLike
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Subrepresentation ρ) := .ofSetLike (Subrepresentation ρ) W
 
-/--
-Definition of `toRepresentation` / `toRepresentation` 的定义
+/-- A subrepresentation is a representation. -/
+/-
+**Subrepresentation.toRepresentation** 是 Mathlib 中的一个定义，位于命名空间 `Subrepresentatio
+n`。
+形式化陈述：toRepresentation (ρ' : Subrepresentation ρ) : Representation A G ρ'.toSubm
+odule where toFun g
+参数：ρ' : Subrepresentation ρ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrepresentation.apply_mem_toSubmodule`：∀ {A : Type u_1} {G : Type u_2}
+ {W : Type u_3} [inst : Semiring A] [inst_1 : Monoid G] [inst_2 : AddCommMonoid 
+W]   [inst_3 : _root_.Module …
 
-English:
-definition toRepresentation
-  signature: (ρ' : Subrepresentation ρ)
-  body: (ρ g).restrict (ρ'.apply_mem_toSubmodule g)
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-中文:
-定义 toRepresentation
-  签名: (ρ' : 子表示 ρ)
-  定义体: (ρ g).restrict (ρ'.apply_mem_toSubmodule g)
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-Depends on / 依赖: apply_mem_toSubmodule, restrict
+--- 原说明 ---
+A subrepresentation is a representation.
 -/
 def toRepresentation (ρ' : Subrepresentation ρ) : Representation A G ρ'.toSubmodule where
   toFun g := (ρ g).restrict (ρ'.apply_mem_toSubmodule g)
   map_one' := by ext; simp
   map_mul' x y := by ext; simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (Subrepresentation ρ)
-  body: .mk (ρ₁.toSubmodule ⊔ ρ₂.toSubmodule) by
-      simp only [Submodule.forall_mem_sup, map_add]
-      intro g x₁ hx₁ x₂ hx₂
-      exact Submodule.mem_sup.mpr
-        ⟨ρ g x₁, ρ₁.apply_mem_toSubmodule g hx₁, ρ g x₂, ρ₂.apply_mem_toSubmodule g hx₂, rfl⟩
-
-中文:
-实例 :
-  签名: 最大值 (子表示 ρ)
-  定义体: .mk (ρ₁.toSubmodule ⊔ ρ₂.toSubmodule) by
-      simp only [Submodule.forall_mem_sup, map_add]
-      intro g x₁ hx₁ x₂ hx₂
-      exact Submodule.mem_sup.mpr
-        ⟨ρ g x₁, ρ₁.apply_mem_toSubmodule g hx₁, ρ g x₂, ρ₂.apply_mem_toSubmodule g hx₂, rfl⟩
-
-Depends on / 依赖: Submodule, Submodule.forall_mem_sup, Submodule.mem_sup.mpr, apply_mem_toSubmodule, forall_mem_sup, map_add, mem_sup, toSubmodule
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (Subrepresentation ρ) where
-max ρ₁ ρ₂ := .mk (ρ₁.toSubmodule ⊔ ρ₂.toSubmodule) by
+  max ρ₁ ρ₂ := .mk (ρ₁.toSubmodule ⊔ ρ₂.toSubmodule) <| by
       simp only [Submodule.forall_mem_sup, map_add]
       intro g x₁ hx₁ x₂ hx₂
       exact Submodule.mem_sup.mpr
         ⟨ρ g x₁, ρ₁.apply_mem_toSubmodule g hx₁, ρ g x₂, ρ₂.apply_mem_toSubmodule g hx₂, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Subrepresentation ρ)
-  body: .mk (ρ₁.toSubmodule ⊓ ρ₂.toSubmodule) by
-      simp only [Submodule.mem_inf, and_imp]
-      rintro g x hx₁ hx₂
-      exact ⟨ρ₁.apply_mem_toSubmodule g hx₁, ρ₂.apply_mem_toSubmodule g hx₂⟩
-
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 最小值 (子表示 ρ)
-  定义体: .mk (ρ₁.toSubmodule ⊓ ρ₂.toSubmodule) by
-      simp only [Submodule.mem_inf, and_imp]
-      rintro g x hx₁ hx₂
-      exact ⟨ρ₁.apply_mem_toSubmodule g hx₁, ρ₂.apply_mem_toSubmodule g hx₂⟩
-
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Submodule, Submodule.mem_inf, and_imp, apply_mem_toSubmodule, mem_inf, toSubmodule
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (Subrepresentation ρ) where
-min ρ₁ ρ₂ := .mk (ρ₁.toSubmodule ⊓ ρ₂.toSubmodule) by
+  min ρ₁ ρ₂ := .mk (ρ₁.toSubmodule ⊓ ρ₂.toSubmodule) <| by
       simp only [Submodule.mem_inf, and_imp]
       rintro g x hx₁ hx₂
       exact ⟨ρ₁.apply_mem_toSubmodule g hx₁, ρ₂.apply_mem_toSubmodule g hx₂⟩
 
 
 @[simp, norm_cast]
-/--
-lemma `coe_sup` / 引理 `coe_sup`
-
-English:
-lemma coe_sup
-  given: (ρ₁ ρ₂ : Subrepresentation ρ)
-  statement: ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : Set W) + (ρ₂ : Set W)
-  proof: Submodule.coe_sup ρ₁.toSubmodule ρ₂.toSubmodule
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_sup
-  条件: (ρ₁ ρ₂ : 子表示 ρ)
-  结论: ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : 集合 W) + (ρ₂ : 集合 W)
-  证明: Submodule.coe_sup ρ₁.toSubmodule ρ₂.toSubmodule
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Submodule, Submodule.coe_sup, coe_sup, toSubmodule
+/-
+**Subrepresentation.coe_sup** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresentation`。
+形式化陈述：coe_sup (ρ₁ ρ₂ : Subrepresentation ρ) : ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : Set W) + (ρ₂ : 
+Set W)
+参数：ρ₁ ρ₂ : Subrepresentation ρ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.coe_sup`：coe_sup : ↑(p ⊔ p') = (p + p' : Set M)
 -/
 lemma coe_sup (ρ₁ ρ₂ : Subrepresentation ρ) : ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : Set W) + (ρ₂ : Set W) :=
   Submodule.coe_sup ρ₁.toSubmodule ρ₂.toSubmodule
 
 @[simp, norm_cast]
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (ρ₁ ρ₂ : Subrepresentation ρ)
-  statement: ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : Set W)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_inf
-  条件: (ρ₁ ρ₂ : 子表示 ρ)
-  结论: ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : 集合 W)
-  证明: rfl
-
-@[simp]
+/-
+**Subrepresentation.coe_inf** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresentation`。
+形式化陈述：coe_inf (ρ₁ ρ₂ : Subrepresentation ρ) : ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : Set W)
+参数：ρ₁ ρ₂ : Subrepresentation ρ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_inf (ρ₁ ρ₂ : Subrepresentation ρ) : ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : Set W) := rfl
+lemma coe_inf (ρ₁ ρ₂ : Subrepresentation ρ) : ↑(ρ₁ ⊓ ρ₂) = (ρ₁ ∩ ρ₂ : Set W) := rfl
 
 @[simp]
-/--
-lemma `toSubmodule_sup` / 引理 `toSubmodule_sup`
-
-English:
-lemma toSubmodule_sup
-  given: (ρ₁ ρ₂ : Subrepresentation ρ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toSubmodule_sup
-  条件: (ρ₁ ρ₂ : 子表示 ρ)
-  证明: rfl
-
-@[simp]
+/-
+**Subrepresentation.toSubmodule_sup** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresentation
+`。
+形式化陈述：toSubmodule_sup (ρ₁ ρ₂ : Subrepresentation ρ) : (ρ₁ ⊔ ρ₂).toSubmodule = ρ₁
+.toSubmodule ⊔ ρ₂.toSubmodule
+参数：ρ₁ ρ₂ : Subrepresentation ρ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSubmodule_sup (ρ₁ ρ₂ : Subrepresentation ρ) :
   (ρ₁ ⊔ ρ₂).toSubmodule = ρ₁.toSubmodule ⊔ ρ₂.toSubmodule := rfl
 
 @[simp]
-/--
-lemma `toSubmodule_inf` / 引理 `toSubmodule_inf`
-
-English:
-lemma toSubmodule_inf
-  given: (ρ₁ ρ₂ : Subrepresentation ρ)
-  proof: rfl
-
-中文:
-引理 toSubmodule_inf
-  条件: (ρ₁ ρ₂ : 子表示 ρ)
-  证明: rfl
+/-
+**Subrepresentation.toSubmodule_inf** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresentation
+`。
+形式化陈述：toSubmodule_inf (ρ₁ ρ₂ : Subrepresentation ρ) : (ρ₁ ⊓ ρ₂).toSubmodule = ρ₁
+.toSubmodule ⊓ ρ₂.toSubmodule
+参数：ρ₁ ρ₂ : Subrepresentation ρ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSubmodule_inf (ρ₁ ρ₂ : Subrepresentation ρ) :
   (ρ₁ ⊓ ρ₂).toSubmodule = ρ₁.toSubmodule ⊓ ρ₂.toSubmodule := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (Subrepresentation ρ)
-  body: toSubmodule_injective.lattice _ .rfl .rfl toSubmodule_sup toSubmodule_inf
-
-中文:
-实例 :
-  签名: 格 (子表示 ρ)
-  定义体: toSubmodule_injective.lattice _ .rfl .rfl toSubmodule_sup toSubmodule_inf
-
-Depends on / 依赖: lattice, toSubmodule_inf, toSubmodule_injective, toSubmodule_injective.lattice, toSubmodule_sup
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (Subrepresentation ρ) :=
   toSubmodule_injective.lattice _ .rfl .rfl toSubmodule_sup toSubmodule_inf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedOrder (Subrepresentation ρ)
-  body: ⟨⊤, by simp⟩
-  le_top _ := le_top (α := Submodule A W)
-  bot := ⟨⊥, by simp⟩
-  bot_le _ := bot_le (α := Submodule A W)
-
-中文:
-实例 :
-  签名: 有界序 (子表示 ρ)
-  定义体: ⟨⊤, by simp⟩
-  le_top _ := le_top (α := Submodule A W)
-  bot := ⟨⊥, by simp⟩
-  bot_le _ := bot_le (α := Submodule A W)
+/-
+**Subrepresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Subrepresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedOrder (Subrepresentation ρ) where
   top := ⟨⊤, by simp⟩
@@ -337,38 +193,18 @@ variable [CommSemiring A] [Monoid G] [AddCommMonoid W] [Module A W]
   {ρ : Representation A G W} [AddCommMonoid M] [Module A[G] M]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `asSubmodule` / `asSubmodule` 的定义
+/-- A subrepresentation of `ρ` can be thought of as an `A[G]` submodule of `ρ.asModule`.
+-/
+/-
+**Subrepresentation.asSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `Subrepresentation`。
+形式化陈述：asSubmodule (σ : Subrepresentation ρ) : Submodule A[G] ρ.asModule where __
+参数：σ : Subrepresentation ρ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asSubmodule
-  signature: (σ : Subrepresentation ρ)
-  body: σ.toSubmodule
-  smul_mem' c v hv := by
-    induction c using MonoidAlgebra.induction_linear with
-    | zero => simp [zero_smul]
-    | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
-    | single g a =>
-      rw [Representation.single_smul]
-      exact σ.toSubmodule.smul_mem' a (σ.apply_mem_toSubmodule g hv)
-
-@[simp]
-
-中文:
-定义 asSubmodule
-  签名: (σ : 子表示 ρ)
-  定义体: σ.toSubmodule
-  smul_mem' c v hv := by
-    induction c using MonoidAlgebra.induction_linear with
-    | zero => simp [zero_smul]
-    | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
-    | single g a =>
-      rw [Representation.single_smul]
-      exact σ.toSubmodule.smul_mem' a (σ.apply_mem_toSubmodule g hv)
-
-@[simp]
-
-Depends on / 依赖: toSubmodule
+--- 原说明 ---
+A subrepresentation of `ρ` can be thought of as an `A[G]` submodule of `ρ.asModu
+le`.
 -/
 def asSubmodule (σ : Subrepresentation ρ) : Submodule A[G] ρ.asModule where
   __ := σ.toSubmodule
@@ -381,55 +217,27 @@ def asSubmodule (σ : Subrepresentation ρ) : Submodule A[G] ρ.asModule where
       exact σ.toSubmodule.smul_mem' a (σ.apply_mem_toSubmodule g hv)
 
 @[simp]
-/--
-lemma `mem_asSubmodule_iff` / 引理 `mem_asSubmodule_iff`
-
-English:
-lemma mem_asSubmodule_iff
-  given: {σ : Subrepresentation ρ} {v : W}
-  statement: v in asSubmodule σ ↔ v in σ
-  proof: by rfl
-
-中文:
-引理 mem_asSubmodule_iff
-  条件: {σ : 子表示 ρ} {v : W}
-  结论: v in asSubmodule σ ↔ v in σ
-  证明: by rfl
+/-
+**Subrepresentation.mem_asSubmodule_iff** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresenta
+tion`。
+形式化陈述：mem_asSubmodule_iff {σ : Subrepresentation ρ} {v : W} : v in asSubmodule σ
+ ↔ v in σ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_asSubmodule_iff {σ : Subrepresentation ρ} {v : W} : v in asSubmodule σ ↔ v in σ := by rfl
+lemma mem_asSubmodule_iff {σ : Subrepresentation ρ} {v : W} : v ∈ asSubmodule σ ↔ v ∈ σ := by rfl
 
-/--
-Definition of `asSubmodule'` / `asSubmodule'` 的定义
+/-- A subrepresentation of `ofModule M` can be thought of as an `A[G]` submodule of `M`.
+-/
+/-
+**Subrepresentation.asSubmodule'** 是 Mathlib 中的一个定义，位于命名空间 `Subrepresentation`。
+形式化陈述：asSubmodule' (σ : Subrepresentation (Representation.ofModule (k
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asSubmodule'
-  signature: (σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M))
-  body: σ.toSubmodule
-  smul_mem' c m hm := by
-    induction c using MonoidAlgebra.induction_linear with
-    | zero => rw [zero_smul]; exact σ.toSubmodule.zero_mem'
-    | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
-    | single g a =>
-      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [Algebra.smul_def]; rw [mul_smul]
-exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) by
-        simpa [Representation.ofModule, RestrictScalars.lsmul] using! σ.apply_mem_toSubmodule g hm
-
-@[simp]
-
-中文:
-定义 asSubmodule'
-  签名: (σ : 子表示 (Representation.ofModule (k := A) (G := G) M))
-  定义体: σ.toSubmodule
-  smul_mem' c m hm := by
-    induction c using MonoidAlgebra.induction_linear with
-    | zero => rw [zero_smul]; exact σ.toSubmodule.zero_mem'
-    | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
-    | single g a =>
-      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [Algebra.smul_def]; rw [mul_smul]
-exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) by
-        simpa [Representation.ofModule, RestrictScalars.lsmul] using! σ.apply_mem_toSubmodule g hm
-
-@[simp]
+--- 原说明 ---
+A subrepresentation of `ofModule M` can be thought of as an `A[G]` submodule of 
+`M`.
 -/
 def asSubmodule' (σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)) :
     Submodule A[G] M where
@@ -439,51 +247,38 @@ def asSubmodule' (σ : Subrepresentation (Representation.ofModule (k := A) (G :=
     | zero => rw [zero_smul]; exact σ.toSubmodule.zero_mem'
     | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
     | single g a =>
-      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [Algebra.smul_def]; rw [mul_smul]
-exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) by
+      rw [← mul_one a, ← smul_eq_mul, ← MonoidAlgebra.smul_single, Algebra.smul_def, mul_smul]
+      exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) <| by
         simpa [Representation.ofModule, RestrictScalars.lsmul] using! σ.apply_mem_toSubmodule g hm
 
 @[simp]
-/--
-lemma `mem_asSubmodule'_iff` / 引理 `mem_asSubmodule'_iff`
-
-English:
-lemma mem_asSubmodule'_iff
-  statement: {σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)}
-  proof: by rfl
-
-中文:
-引理 mem_asSubmodule'_iff
-  结论: {σ : 子表示 (Representation.ofModule (k := A) (G := G) M)}
-  证明: by rfl
+/-
+**Subrepresentation.mem_asSubmodule'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subrepresent
+ation`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {M : Type u_4} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid M]   [inst_3 : _root_.Module (MonoidAlg
+ebra A G) M] {σ : Subrepresentation (Representation.ofModule M)} {m : M},   m ∈ 
+σ.asSubmodule' ↔ m ∈ σ
+参数：MonoidAlgebra A G；Representation.ofModule M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_asSubmodule'_iff {σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)}
-    {m : M} : m in asSubmodule' σ ↔ m in σ := by rfl
+    {m : M} : m ∈ asSubmodule' σ ↔ m ∈ σ := by rfl
 
-/--
-Definition of `ofSubmodule` / `ofSubmodule` 的定义
+/-- A submodule of an `A[G]`-module `M` can be thought of as a subrepresentation of `ofModule M`.
+-/
+/-
+**Subrepresentation.ofSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `Subrepresentation`。
+形式化陈述：ofSubmodule (N : Submodule A[G] M) : Subrepresentation (Representation.ofM
+odule (k
+参数：N : Submodule A[G] M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubmodule
-  signature: (N : Submodule A[G] M)
-  body: { N with
-    smul_mem' a m hm := N.smul_mem' (algebraMap A A[G] a) hm }
-  apply_mem_toSubmodule g v hv := by
-    simpa [Representation.ofModule, RestrictScalars.lsmul] using!
-      Submodule.smul_of_tower_mem N (MonoidAlgebra.single g 1) hv
-
-@[simp]
-
-中文:
-定义 ofSubmodule
-  签名: (N : 子模 A[G] M)
-  定义体: { N with
-    smul_mem' a m hm := N.smul_mem' (algebraMap A A[G] a) hm }
-  apply_mem_toSubmodule g v hv := by
-    simpa [Representation.ofModule, RestrictScalars.lsmul] using!
-      Submodule.smul_of_tower_mem N (MonoidAlgebra.single g 1) hv
-
-@[simp]
+--- 原说明 ---
+A submodule of an `A[G]`-module `M` can be thought of as a subrepresentation of 
+`ofModule M`.
 -/
 def ofSubmodule (N : Submodule A[G] M) :
     Subrepresentation (Representation.ofModule (k := A) (G := G) M) where
@@ -494,109 +289,72 @@ def ofSubmodule (N : Submodule A[G] M) :
       Submodule.smul_of_tower_mem N (MonoidAlgebra.single g 1) hv
 
 @[simp]
-/--
-lemma `mem_ofSubmodule_iff` / 引理 `mem_ofSubmodule_iff`
-
-English:
-lemma mem_ofSubmodule_iff
-  given: {N : Submodule A[G] M} {m : M}
-  statement: m in ofSubmodule N ↔ m in N
-  proof: by rfl
-
-中文:
-引理 mem_ofSubmodule_iff
-  条件: {N : 子模 A[G] M} {m : M}
-  结论: m in ofSubmodule N ↔ m in N
-  证明: by rfl
+/-
+**Subrepresentation.mem_ofSubmodule_iff** 是 Mathlib 中的一个引理，位于命名空间 `Subrepresenta
+tion`。
+形式化陈述：mem_ofSubmodule_iff {N : Submodule A[G] M} {m : M} : m in ofSubmodule N ↔ 
+m in N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_ofSubmodule_iff {N : Submodule A[G] M} {m : M} : m in ofSubmodule N ↔ m in N := by rfl
+lemma mem_ofSubmodule_iff {N : Submodule A[G] M} {m : M} : m ∈ ofSubmodule N ↔ m ∈ N := by rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `ofSubmodule'` / `ofSubmodule'` 的定义
+/-- An `A[G]`-submodule of `ρ.asModule` can be thought of as a subrepresentation of `ρ`.
+-/
+/-
+**Subrepresentation.ofSubmodule'** 是 Mathlib 中的一个定义，位于命名空间 `Subrepresentation`。
+形式化陈述：ofSubmodule' (N : Submodule A[G] ρ.asModule) : Subrepresentation ρ where t
+oSubmodule
+参数：N : Submodule A[G] ρ.asModule。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubmodule'
-  signature: (N : Submodule A[G] ρ.asModule)
-  body: { N with
-    smul_mem' a w hw := by simpa using! (N.smul_mem (algebraMap A A[G] a) hw) }
-  apply_mem_toSubmodule g w hw := by
-    let _ : Module A[G] W := ρ.instModuleMonoidAlgebraAsModule
-    have h : (MonoidAlgebra.single g (1 : A)) • w in N :=
-      Submodule.smul_of_tower_mem N _ hw
-    rw [Representation.single_smul]; rw [one_smul] at h
-    exact h
-
-@[simp]
-
-中文:
-定义 ofSubmodule'
-  签名: (N : 子模 A[G] ρ.asModule)
-  定义体: { N with
-    smul_mem' a w hw := by simpa using! (N.smul_mem (algebraMap A A[G] a) hw) }
-  apply_mem_toSubmodule g w hw := by
-    let _ : Module A[G] W := ρ.instModuleMonoidAlgebraAsModule
-    have h : (MonoidAlgebra.single g (1 : A)) • w in N :=
-      Submodule.smul_of_tower_mem N _ hw
-    rw [Representation.single_smul]; rw [one_smul] at h
-    exact h
-
-@[simp]
+--- 原说明 ---
+An `A[G]`-submodule of `ρ.asModule` can be thought of as a subrepresentation of 
+`ρ`.
 -/
 def ofSubmodule' (N : Submodule A[G] ρ.asModule) : Subrepresentation ρ where
   toSubmodule := { N with
     smul_mem' a w hw := by simpa using! (N.smul_mem (algebraMap A A[G] a) hw) }
   apply_mem_toSubmodule g w hw := by
     let _ : Module A[G] W := ρ.instModuleMonoidAlgebraAsModule
-    have h : (MonoidAlgebra.single g (1 : A)) • w in N :=
+    have h : (MonoidAlgebra.single g (1 : A)) • w ∈ N :=
       Submodule.smul_of_tower_mem N _ hw
-    rw [Representation.single_smul]; rw [one_smul] at h
+    rw [Representation.single_smul, one_smul] at h
     exact h
 
 @[simp]
-/--
-lemma `mem_ofSubmodule'_iff` / 引理 `mem_ofSubmodule'_iff`
-
-English:
-lemma mem_ofSubmodule'_iff
-  given: {N : Submodule A[G] ρ.asModule} {w : W}
-  statement: w in ofSubmodule' N ↔ w in N
-  proof: .rfl
-
-中文:
-引理 mem_ofSubmodule'_iff
-  条件: {N : 子模 A[G] ρ.asModule} {w : W}
-  结论: w in ofSubmodule' N ↔ w in N
-  证明: .rfl
+/-
+**Subrepresentation.mem_ofSubmodule'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subrepresent
+ation`。
+形式化陈述：∀ {A : Type u_1} {G : Type u_2} {W : Type u_3} [inst : CommSemiring A] [in
+st_1 : Monoid G] [inst_2 : AddCommMonoid W]   [inst_3 : _root_.Module A W] {ρ : 
+Representation A G W} {N : Submodule (MonoidAlgebra A G) ρ.asModule} {w : W},   
+w ∈ Subrepresentation.ofSubmodule' N ↔ w ∈ N
+参数：MonoidAlgebra A G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_ofSubmodule'_iff {N : Submodule A[G] ρ.asModule} {w : W} : w in ofSubmodule' N ↔ w in N :=
+lemma mem_ofSubmodule'_iff {N : Submodule A[G] ρ.asModule} {w : W} : w ∈ ofSubmodule' N ↔ w ∈ N :=
   .rfl
 
 /-- An order-preserving equivalence between subrepresentations of `ρ` and submodules of
 `ρ.asModule`. -/
 @[simps]
-/--
-Definition of `subrepresentationSubmoduleOrderIso` / `subrepresentationSubmoduleOrderIso` 的定义
+/-
+**Subrepresentation.subrepresentationSubmoduleOrderIso** 是 Mathlib 中的一个定义，位于命名空间
+ `Subrepresentation`。
+形式化陈述：subrepresentationSubmoduleOrderIso : Subrepresentation ρ ≃o Submodule A[G]
+ ρ.asModule where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subrepresentationSubmoduleOrderIso
-  signature: : Subrepresentation ρ ≃o Submodule A[G] ρ.asModule where
-  body: asSubmodule
-  invFun := ofSubmodule'
-  left_inv σ := rfl
-  right_inv N := rfl
-  map_rel_iff' := by rfl
-
-中文:
-定义 subrepresentationSubmoduleOrderIso
-  签名: : 子表示 ρ ≃o 子模 A[G] ρ.asModule where
-  定义体: asSubmodule
-  invFun := ofSubmodule'
-  left_inv σ := rfl
-  right_inv N := rfl
-  map_rel_iff' := by rfl
-
-Depends on / 依赖: asSubmodule
+--- 原说明 ---
+An order-preserving equivalence between subrepresentations of `ρ` and submodules
+ of
+`ρ.asModule`.
 -/
 def subrepresentationSubmoduleOrderIso : Subrepresentation ρ ≃o Submodule A[G] ρ.asModule where
   toFun := asSubmodule
@@ -608,26 +366,18 @@ def subrepresentationSubmoduleOrderIso : Subrepresentation ρ ≃o Submodule A[G
 /-- An order-preserving equivalence between `A[G]`-submodules of an `A[G]`-module M and
 subrepresentations of `ρ`. -/
 @[simps]
-/--
-Definition of `submoduleSubrepresentationOrderIso` / `submoduleSubrepresentationOrderIso` 的定义
+/-
+**Subrepresentation.submoduleSubrepresentationOrderIso** 是 Mathlib 中的一个定义，位于命名空间
+ `Subrepresentation`。
+形式化陈述：submoduleSubrepresentationOrderIso : Submodule A[G] M ≃o Subrepresentation
+ (Representation.ofModule (k
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition submoduleSubrepresentationOrderIso
-  signature: : Submodule A[G] M ≃o
-  body: ofSubmodule
-  invFun := asSubmodule'
-  left_inv N := rfl
-  right_inv σ := rfl
-  map_rel_iff' := by rfl
-
-中文:
-定义 submoduleSubrepresentationOrderIso
-  签名: : 子模 A[G] M ≃o
-  定义体: ofSubmodule
-  invFun := asSubmodule'
-  left_inv N := rfl
-  right_inv σ := rfl
-  map_rel_iff' := by rfl
+--- 原说明 ---
+An order-preserving equivalence between `A[G]`-submodules of an `A[G]`-module M 
+and
+subrepresentations of `ρ`.
 -/
 def submoduleSubrepresentationOrderIso : Submodule A[G] M ≃o
     Subrepresentation (Representation.ofModule (k := A) (G := G) M) where
@@ -638,3 +388,4 @@ def submoduleSubrepresentationOrderIso : Submodule A[G] M ≃o
   map_rel_iff' := by rfl
 
 end Subrepresentation
+

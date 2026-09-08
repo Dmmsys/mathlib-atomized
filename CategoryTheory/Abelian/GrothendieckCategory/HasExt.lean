@@ -33,18 +33,19 @@ namespace CategoryTheory
 
 universe w v u
 
-/--
-Instance `IsGrothendieckAbelian.hasExt` / 实例 `IsGrothendieckAbelian.hasExt`
-
-English:
-instance IsGrothendieckAbelian.hasExt
-  body: hasExt_of_enoughInjectives _
-
-中文:
-实例 是GrothendieckAbelian.hasExt
-  定义体: hasExt_of_enoughInjectives _
-
-Depends on / 依赖: hasExt_of_enoughInjectives
+/-
+**CategoryTheory.IsGrothendieckAbelian.hasExt** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsGrothendieckAbelian`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Abelian C]   [CategoryTheory.IsGrothendieckAbelian.{w, v, u} C], Categor
+yTheory.HasExt C
+参数：C : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.hasExt_of_enoughInjectives`：hasExt_of_enoughInjectives [L
+ocallySmall.{w} C] [EnoughInjectives C] : HasExt.{w} C
+· 使用定理 `CategoryTheory.IsGrothendieckAbelian.locallySmall`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Abelian C}   [self 
+: CategoryTheory.IsGrothendieckAbelian.…
 -/
 instance IsGrothendieckAbelian.hasExt
     (C : Type u) [Category.{v} C] [Abelian C] [IsGrothendieckAbelian.{w} C] :
@@ -52,3 +53,4 @@ instance IsGrothendieckAbelian.hasExt
   hasExt_of_enoughInjectives _
 
 end CategoryTheory
+

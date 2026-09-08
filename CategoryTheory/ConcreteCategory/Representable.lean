@@ -22,40 +22,41 @@ namespace CategoryTheory.Functor.RepresentableBy
 open Opposite
 
 variable {C D : Type*} [Category* C] [Category* D] {F : Cᵒᵖ ⥤ D}
-    {CD : D -> Type*} {FD : D -> D -> Type*} [forall X Y, FunLike (FD X Y) (CD X) (CD Y)]
+    {CD : D → Type*} {FD : D → D → Type*} [∀ X Y, FunLike (FD X Y) (CD X) (CD Y)]
     [ConcreteCategory D FD] {Y : C} (α : (F ⋙ forget D).RepresentableBy Y)
 
-/--
-Definition of `homEquiv'` / `homEquiv'` 的定义
+/-- The natural bijection `(X ⟶ Y) ≃ F.obj (op X)`. -/
+/-
+**CategoryTheory.Functor.RepresentableBy.homEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor.RepresentableBy`。
+形式化陈述：homEquiv' {X : C} : (X ⟶ Y) ≃ ToType (F.obj (op X))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquiv'
-  signature: {X : C}
-  body: α.homEquiv
-
-中文:
-定义 homEquiv'
-  签名: {X : C}
-  定义体: α.homEquiv
-
-Depends on / 依赖: homEquiv
+--- 原说明 ---
+The natural bijection `(X ⟶ Y) ≃ F.obj (op X)`.
 -/
 def homEquiv' {X : C} : (X ⟶ Y) ≃ ToType (F.obj (op X)) := α.homEquiv
-
-/--
-lemma `homEquiv'_comp` / 引理 `homEquiv'_comp`
-
-English:
-lemma homEquiv'_comp
-  given: {X X' : C} (f : X ⟶ X') (g : X' ⟶ Y)
-  proof: α.homEquiv_comp _ _
-
-中文:
-引理 homEquiv'_comp
-  条件: {X X' : C} (f : X ⟶ X') (g : X' ⟶ Y)
-  证明: α.homEquiv_comp _ _
+/-
+**CategoryTheory.Functor.RepresentableBy.homEquiv'_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {F : CategoryTheory.Functo
+r Cᵒᵖ D} {CD : D → Type u_3}   {FD : D → D → Type u_4} [inst_2 : (X Y : D) → Fun
+Like (FD X Y) (CD X) (CD Y)]   [inst_3 : CategoryTheory.ConcreteCategory D FD] {
+Y : C} (α : (F.comp (CategoryTheory.forget D)).RepresentableBy Y)   {X X' : C} (
+f : X ⟶ X') (g : X' ⟶ Y),   α.homEquiv' (CategoryTheory.CategoryStruct.comp f g)
+ =     (CategoryTheory.ConcreteCategory.hom (F.map f.op)) (α.homEquiv' g)
+参数：X Y : D；FD X Y；CD X；CD Y；α : (F.comp (CategoryTheory.forget D)).Representable
+By Y；f : X ⟶ X'；g : X' ⟶ Y；CategoryTheory.CategoryStruct.comp f g；CategoryTheory
+.ConcreteCategory.hom (F.map f.op)；α.homEquiv' g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
 -/
 lemma homEquiv'_comp {X X' : C} (f : X ⟶ X') (g : X' ⟶ Y) :
     α.homEquiv' (f ≫ g) = F.map f.op (α.homEquiv' g) := α.homEquiv_comp _ _
 
 end CategoryTheory.Functor.RepresentableBy
+

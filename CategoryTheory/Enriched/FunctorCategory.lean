@@ -48,35 +48,29 @@ variable (F₁ F₂ F₃ F₄ : J ⥤ C)
 ordinary category `C`, this is the diagram `Jᵒᵖ ⥤ J ⥤ V` whose end shall be
 the `V`-morphisms in `J ⥤ V` from `F₁` to `F₂`. -/
 @[simps!]
-/--
-Definition of `diagram` / `diagram` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.diagram** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Enriched.FunctorCategory`。
+形式化陈述：diagram : Jᵒᵖ ⥤ J ⥤ V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagram
-  signature: : Jᵒᵖ ⥤ J ⥤ V
-  body: F₁.op ⋙ eHomFunctor V C ⋙ (whiskeringLeft J C V).obj F₂
-
-中文:
-定义 diagram
-  签名: : Jᵒᵖ ⥤ J ⥤ V
-  定义体: F₁.op ⋙ eHomFunctor V C ⋙ (whiskeringLeft J C V).obj F₂
-
-Depends on / 依赖: eHomFunctor, whiskeringLeft
+--- 原说明 ---
+Given two functors `F₁` and `F₂` from a category `J` to a `V`-enriched
+ordinary category `C`, this is the diagram `Jᵒᵖ ⥤ J ⥤ V` whose end shall be
+the `V`-morphisms in `J ⥤ V` from `F₁` to `F₂`.
 -/
 def diagram : Jᵒᵖ ⥤ J ⥤ V := F₁.op ⋙ eHomFunctor V C ⋙ (whiskeringLeft J C V).obj F₂
 
-/--
-Definition of `HasEnrichedHom` / `HasEnrichedHom` 的定义
+/-- The condition that the end `diagram V F₁ F₂` exists, see `enrichedHom`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.HasEnrichedHom** 是 Mathlib 中的一个缩写定义，位于
+命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：HasEnrichedHom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasEnrichedHom
-  body: HasEnd (diagram V F₁ F₂)
-
-中文:
-缩写 HasEnrichedHom
-  定义体: HasEnd (diagram V F₁ F₂)
-
-Depends on / 依赖: HasEnd, diagram
+--- 原说明 ---
+The condition that the end `diagram V F₁ F₂` exists, see `enrichedHom`.
 -/
 abbrev HasEnrichedHom := HasEnd (diagram V F₁ F₂)
 
@@ -84,64 +78,52 @@ section
 
 variable [HasEnrichedHom V F₁ F₂]
 
-/--
-Definition of `enrichedHom` / `enrichedHom` 的定义
+/-- The `V`-enriched hom from `F₁` to `F₂` when `F₁` and `F₂` are functors `J ⥤ C`
+and `C` is a `V`-enriched category. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedHom** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedHom : V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation enrichedHom
-  signature: : V
-  body: end_ (diagram V F₁ F₂)
-
-中文:
-缩写 enrichedHom
-  签名: : V
-  定义体: end_ (diagram V F₁ F₂)
-
-Depends on / 依赖: diagram, end_
+--- 原说明 ---
+The `V`-enriched hom from `F₁` to `F₂` when `F₁` and `F₂` are functors `J ⥤ C`
+and `C` is a `V`-enriched category.
 -/
 noncomputable abbrev enrichedHom : V := end_ (diagram V F₁ F₂)
 
-/--
-Definition of `enrichedHomπ` / `enrichedHomπ` 的定义
+/-- The projection `enrichedHom V F₁ F₂ ⟶ F₁.obj j ⟶[V] F₂.obj j` in the category `V`
+for any `j : J` when `F₁` and `F₂` are functors `J ⥤ C` and `C` is a `V`-enriched category. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedHom** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedHom : V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation enrichedHomπ
-  signature: (j : J)
-  body: end_.π _ j
-
-@[reassoc]
-
-中文:
-缩写 enrichedHomπ
-  签名: (j : J)
-  定义体: end_.π _ j
-
-@[reassoc]
-
-Depends on / 依赖: end_
+--- 原说明 ---
+The projection `enrichedHom V F₁ F₂ ⟶ F₁.obj j ⟶[V] F₂.obj j` in the category `V
+`
+for any `j : J` when `F₁` and `F₂` are functors `J ⥤ C` and `C` is a `V`-enriche
+d category.
 -/
 noncomputable abbrev enrichedHomπ (j : J) : enrichedHom V F₁ F₂ ⟶ F₁.obj j ⟶[V] F₂.obj j :=
   end_.π _ j
 
 @[reassoc]
-/--
-lemma `enrichedHom_condition` / 引理 `enrichedHom_condition`
-
-English:
-lemma enrichedHom_condition
-  given: {i j : J} (f : i ⟶ j)
-  proof: end_.condition (diagram V F₁ F₂) f
-
-@[reassoc]
-
-中文:
-引理 enrichedHom_condition
-  条件: {i j : J} (f : i ⟶ j)
-  证明: end_.condition (diagram V F₁ F₂) f
-
-@[reassoc]
-
-Depends on / 依赖: condition, diagram, end_, end_.condition
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedHom_condition** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedHom_condition {i j : J} (f : i ⟶ j) : enrichedHomπ V F₁ F₂ i ≫ eHo
+mWhiskerLeft V (F₁.obj i) (F₂.map f) = enrichedHomπ V F₁ F₂ j ≫ eHomWhiskerRight
+ V (F₁.map f) (F₂.obj j)
+参数：f : i ⟶ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.condition`：∀ {J : Type u} [inst : CategoryThe
+ory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} 
+C]   (F : CategoryTheory.F…
 -/
 lemma enrichedHom_condition {i j : J} (f : i ⟶ j) :
     enrichedHomπ V F₁ F₂ i ≫ eHomWhiskerLeft V (F₁.obj i) (F₂.map f) =
@@ -149,25 +131,23 @@ lemma enrichedHom_condition {i j : J} (f : i ⟶ j) :
   end_.condition (diagram V F₁ F₂) f
 
 @[reassoc]
-/--
-lemma `enrichedHom_condition'` / 引理 `enrichedHom_condition'`
-
-English:
-lemma enrichedHom_condition'
-  given: {i j : J} (f : i ⟶ j)
-  proof: end_.condition (diagram V F₁ F₂) f
-
-中文:
-引理 enrichedHom_condition'
-  条件: {i j : J} (f : i ⟶ j)
-  证明: end_.condition (diagram V F₁ F₂) f
-
-Depends on / 依赖: condition, diagram, end_, end_.condition
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedHom_condition'** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedHom_condition' {i j : J} (f : i ⟶ j) : enrichedHomπ V F₁ F₂ i ≫ (ρ
+_ _).inv ≫ _ ◁ (eHomEquiv V) (F₂.map f) ≫ eComp V _ _ _ = enrichedHomπ V F₁ F₂ j
+ ≫ (fun_ _).inv ≫ (eHomEquiv V) (F₁.map f) ▷ _ ≫ eComp V _ _ _
+参数：f : i ⟶ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.condition`：∀ {J : Type u} [inst : CategoryThe
+ory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} 
+C]   (F : CategoryTheory.F…
 -/
 lemma enrichedHom_condition' {i j : J} (f : i ⟶ j) :
     enrichedHomπ V F₁ F₂ i ≫ (ρ_ _).inv ≫
       _ ◁ (eHomEquiv V) (F₂.map f) ≫ eComp V _ _ _ =
-    enrichedHomπ V F₁ F₂ j ≫ (fun_ _).inv ≫
+    enrichedHomπ V F₁ F₂ j ≫ (λ_ _).inv ≫
       (eHomEquiv V) (F₁.map f) ▷ _ ≫ eComp V _ _ _ :=
   end_.condition (diagram V F₁ F₂) f
 
@@ -175,57 +155,23 @@ variable {F₁ F₂}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-- Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a `V`-enriched ordinary category,
+this is the bijection `(F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂)`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Enriched.FunctorCategory`。
+形式化陈述：homEquiv : (F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂) where toFun τ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homEquiv
-  signature: : (F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂) where
-  body: end_.lift (fun j => eHomEquiv V (τ.app j)) (fun i j f => by
-    trans eHomEquiv V (τ.app i ≫ F₂.map f)
-    · dsimp
-      simp only [eHomEquiv_comp, tensorHom_def_assoc, MonoidalCategory.whiskerRight_id,
-        ← unitors_equal, assoc, Iso.inv_hom_id_assoc, eHomWhiskerLeft]
-    · dsimp
-      simp only [← NatTrans.naturality, eHomEquiv_comp, tensorHom_def', id_whiskerLeft,
-        assoc, Iso.inv_hom_id_assoc, eHomWhiskerRight])
-  invFun g :=
-    { app := fun j => (eHomEquiv V).symm (g ≫ end_.π _ j)
-      naturality := fun i j f => (eHomEquiv V).injective (by
-        simp only [eHomEquiv_comp, Equiv.apply_symm_apply, Iso.cancel_iso_inv_left]
-        conv_rhs =>
-          rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [enrichedHom_condition' V F₁ F₂ f]
-        conv_lhs =>
-          rw [tensorHom_def'_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [id_whiskerLeft_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]; rw [unitors_equal]) }
-  left_inv τ := by aesop
-  right_inv g := by aesop
-
-中文:
-定义 homEquiv
-  签名: : (F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂) where
-  定义体: end_.lift (fun j => eHomEquiv V (τ.app j)) (fun i j f => by
-    trans eHomEquiv V (τ.app i ≫ F₂.map f)
-    · dsimp
-      simp only [eHomEquiv_comp, tensorHom_def_assoc, MonoidalCategory.whiskerRight_id,
-        ← unitors_equal, assoc, Iso.inv_hom_id_assoc, eHomWhiskerLeft]
-    · dsimp
-      simp only [← NatTrans.naturality, eHomEquiv_comp, tensorHom_def', id_whiskerLeft,
-        assoc, Iso.inv_hom_id_assoc, eHomWhiskerRight])
-  invFun g :=
-    { app := fun j => (eHomEquiv V).symm (g ≫ end_.π _ j)
-      naturality := fun i j f => (eHomEquiv V).injective (by
-        simp only [eHomEquiv_comp, Equiv.apply_symm_apply, Iso.cancel_iso_inv_left]
-        conv_rhs =>
-          rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [enrichedHom_condition' V F₁ F₂ f]
-        conv_lhs =>
-          rw [tensorHom_def'_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [id_whiskerLeft_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]; rw [unitors_equal]) }
-  left_inv τ := by aesop
-  right_inv g := by aesop
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerRight_id, NatTrans, NatTrans.naturality, eHomEquiv, eHomEquiv_comp, eHomWhiskerLeft, eHomWhiskerRight, end_, end_.lift, id_whiskerLeft, invFun, inv_hom_id_assoc, naturality, tensorHom_def, tensorHom_def_assoc, unitors_equal, whiskerRight_id
+--- 原说明 ---
+Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a `V`-enriched ordinary ca
+tegory,
+this is the bijection `(F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂)`.
 -/
 noncomputable def homEquiv : (F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁ F₂) where
-  toFun τ := end_.lift (fun j => eHomEquiv V (τ.app j)) (fun i j f => by
+  toFun τ := end_.lift (fun j ↦ eHomEquiv V (τ.app j)) (fun i j f ↦ by
     trans eHomEquiv V (τ.app i ≫ F₂.map f)
     · dsimp
       simp only [eHomEquiv_comp, tensorHom_def_assoc, MonoidalCategory.whiskerRight_id,
@@ -234,34 +180,24 @@ noncomputable def homEquiv : (F₁ ⟶ F₂) ≃ (𝟙_ V ⟶ enrichedHom V F₁
       simp only [← NatTrans.naturality, eHomEquiv_comp, tensorHom_def', id_whiskerLeft,
         assoc, Iso.inv_hom_id_assoc, eHomWhiskerRight])
   invFun g :=
-    { app := fun j => (eHomEquiv V).symm (g ≫ end_.π _ j)
-      naturality := fun i j f => (eHomEquiv V).injective (by
+    { app := fun j ↦ (eHomEquiv V).symm (g ≫ end_.π _ j)
+      naturality := fun i j f ↦ (eHomEquiv V).injective (by
         simp only [eHomEquiv_comp, Equiv.apply_symm_apply, Iso.cancel_iso_inv_left]
         conv_rhs =>
-          rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [enrichedHom_condition' V F₁ F₂ f]
+          rw [tensorHom_def_assoc, MonoidalCategory.whiskerRight_id_assoc, assoc,
+            enrichedHom_condition' V F₁ F₂ f]
         conv_lhs =>
-          rw [tensorHom_def'_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [id_whiskerLeft_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]; rw [unitors_equal]) }
+          rw [tensorHom_def'_assoc, MonoidalCategory.whiskerLeft_comp_assoc,
+            id_whiskerLeft_assoc, id_whiskerLeft_assoc, Iso.inv_hom_id_assoc, unitors_equal]) }
   left_inv τ := by aesop
   right_inv g := by aesop
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `homEquiv_apply_π` / 引理 `homEquiv_apply_π`
-
-English:
-lemma homEquiv_apply_π
-  given: (τ : F₁ ⟶ F₂) (j : J)
-  proof: by
-  simp [homEquiv]
-
-中文:
-引理 homEquiv_apply_π
-  条件: (τ : F₁ ⟶ F₂) (j : J)
-  证明: by
-  simp [homEquiv]
-
-Depends on / 依赖: homEquiv
+/-
+**CategoryTheory.Enriched.FunctorCategory.homEquiv_apply_** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Enriched.FunctorCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homEquiv_apply_π (τ : F₁ ⟶ F₂) (j : J) :
     homEquiv V τ ≫ enrichedHomπ V _ _ j = eHomEquiv V (τ.app j) := by
@@ -273,67 +209,35 @@ section
 
 variable [HasEnrichedHom V F₁ F₁]
 
-/--
-Definition of `enrichedId` / `enrichedId` 的定义
+/-- The identity for the `V`-enrichment of the category `J ⥤ C`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedId** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedId : 𝟙_ V ⟶ enrichedHom V F₁ F₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedId
-  signature: : 𝟙_ V ⟶ enrichedHom V F₁ F₁
-  body: homEquiv _ (𝟙 F₁)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 enrichedId
-  签名: : 𝟙_ V ⟶ enrichedHom V F₁ F₁
-  定义体: homEquiv _ (𝟙 F₁)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: homEquiv
+--- 原说明 ---
+The identity for the `V`-enrichment of the category `J ⥤ C`.
 -/
 noncomputable def enrichedId : 𝟙_ V ⟶ enrichedHom V F₁ F₁ := homEquiv _ (𝟙 F₁)
 
 @[reassoc (attr := simp)]
-/--
-lemma `enrichedId_π` / 引理 `enrichedId_π`
-
-English:
-lemma enrichedId_π
-  given: (j : J)
-  statement: enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j)
-  proof: by
-  simp [enrichedId]
-
-@[simp]
-
-中文:
-引理 enrichedId_π
-  条件: (j : J)
-  结论: enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j)
-  证明: by
-  simp [enrichedId]
-
-@[simp]
-
-Depends on / 依赖: enrichedId
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedId_** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Enriched.FunctorCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma enrichedId_π (j : J) : enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j) := by
   simp [enrichedId]
 
 @[simp]
-/--
-lemma `homEquiv_id` / 引理 `homEquiv_id`
-
-English:
-lemma homEquiv_id
-  statement: homEquiv V (𝟙 F₁) = enrichedId V F₁
-  proof: rfl
-
-中文:
-引理 homEquiv_id
-  结论: homEquiv V (𝟙 F₁) = enrichedId V F₁
-  证明: rfl
+/-
+**CategoryTheory.Enriched.FunctorCategory.homEquiv_id** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：homEquiv_id : homEquiv V (𝟙 F₁) = enrichedId V F₁
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homEquiv_id : homEquiv V (𝟙 F₁) = enrichedId V F₁ := rfl
 
@@ -344,117 +248,102 @@ section
 variable [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₃] [HasEnrichedHom V F₁ F₃]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `enrichedComp` / `enrichedComp` 的定义
+/-- The composition for the `V`-enrichment of the category `J ⥤ C`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedComp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedComp : enrichedHom V F₁ F₂ otimes enrichedHom V F₂ F₃ ⟶ enrichedHo
+m V F₁ F₃
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedComp
-  signature: : enrichedHom V F₁ F₂ otimes enrichedHom V F₂ F₃ ⟶ enrichedHom V F₁ F₃
-  body: end_.lift (fun j => (end_.π _ j otimesₘ end_.π _ j) ≫ eComp V _ _ _) (fun i j f => by
-    dsimp
-    trans (end_.π (diagram V F₁ F₂) i otimesₘ end_.π (diagram V F₂ F₃) j) ≫
-      (ρ_ _).inv ▷ _ ≫ (_ ◁ (eHomEquiv V (F₂.map f))) ▷ _ ≫ eComp V _ (F₂.obj i) _ ▷ _ ≫
-        eComp V _ (F₂.obj j) _
-    · have := end_.condition (diagram V F₂ F₃) f
-      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
-      conv_lhs => rw [assoc, tensorHom_def_assoc]
-      conv_rhs =>
-        rw [tensorHom_def_assoc]; rw [whisker_assoc_assoc]; rw [e_assoc]; rw [triangle_assoc_comp_right_inv_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [assoc]; rw [assoc]; rw [← this]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-    · have := end_.condition (diagram V F₁ F₂) f
-      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
-      conv_lhs =>
-        rw [tensorHom_def'_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [assoc]; rw [assoc]; rw [this]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [← e_assoc']; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
-      conv_rhs => rw [assoc, tensorHom_def'_assoc])
-
-中文:
-定义 enrichedComp
-  签名: : enrichedHom V F₁ F₂ otimes enrichedHom V F₂ F₃ ⟶ enrichedHom V F₁ F₃
-  定义体: end_.lift (fun j => (end_.π _ j otimesₘ end_.π _ j) ≫ eComp V _ _ _) (fun i j f => by
-    dsimp
-    trans (end_.π (diagram V F₁ F₂) i otimesₘ end_.π (diagram V F₂ F₃) j) ≫
-      (ρ_ _).inv ▷ _ ≫ (_ ◁ (eHomEquiv V (F₂.map f))) ▷ _ ≫ eComp V _ (F₂.obj i) _ ▷ _ ≫
-        eComp V _ (F₂.obj j) _
-    · have := end_.condition (diagram V F₂ F₃) f
-      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
-      conv_lhs => rw [assoc, tensorHom_def_assoc]
-      conv_rhs =>
-        rw [tensorHom_def_assoc]; rw [whisker_assoc_assoc]; rw [e_assoc]; rw [triangle_assoc_comp_right_inv_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [assoc]; rw [assoc]; rw [← this]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
-    · have := end_.condition (diagram V F₁ F₂) f
-      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
-      conv_lhs =>
-        rw [tensorHom_def'_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [assoc]; rw [assoc]; rw [this]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [← e_assoc']; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
-      conv_rhs => rw [assoc, tensorHom_def'_assoc])
-
-Depends on / 依赖: condition, conv_lhs, conv_rhs, diagram, eHomEquiv, eHomWhiskerLeft, eHomWhiskerRight, e_assoc, end_, end_.condition, end_.lift, tensorHom_def_assoc, triangl, whisker_assoc_assoc
+--- 原说明 ---
+The composition for the `V`-enrichment of the category `J ⥤ C`.
 -/
-noncomputable def enrichedComp : enrichedHom V F₁ F₂ otimes enrichedHom V F₂ F₃ ⟶ enrichedHom V F₁ F₃ :=
-  end_.lift (fun j => (end_.π _ j otimesₘ end_.π _ j) ≫ eComp V _ _ _) (fun i j f => by
+noncomputable def enrichedComp : enrichedHom V F₁ F₂ ⊗ enrichedHom V F₂ F₃ ⟶ enrichedHom V F₁ F₃ :=
+  end_.lift (fun j ↦ (end_.π _ j ⊗ₘ end_.π _ j) ≫ eComp V _ _ _) (fun i j f ↦ by
     dsimp
-    trans (end_.π (diagram V F₁ F₂) i otimesₘ end_.π (diagram V F₂ F₃) j) ≫
+    trans (end_.π (diagram V F₁ F₂) i ⊗ₘ end_.π (diagram V F₂ F₃) j) ≫
       (ρ_ _).inv ▷ _ ≫ (_ ◁ (eHomEquiv V (F₂.map f))) ▷ _ ≫ eComp V _ (F₂.obj i) _ ▷ _ ≫
         eComp V _ (F₂.obj j) _
     · have := end_.condition (diagram V F₂ F₃) f
       dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
       conv_lhs => rw [assoc, tensorHom_def_assoc]
       conv_rhs =>
-        rw [tensorHom_def_assoc]; rw [whisker_assoc_assoc]; rw [e_assoc]; rw [triangle_assoc_comp_right_inv_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [assoc]; rw [assoc]; rw [← this]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
+        rw [tensorHom_def_assoc, whisker_assoc_assoc, e_assoc,
+          triangle_assoc_comp_right_inv_assoc, ← MonoidalCategory.whiskerLeft_comp_assoc,
+          ← MonoidalCategory.whiskerLeft_comp_assoc, ← MonoidalCategory.whiskerLeft_comp_assoc,
+          assoc, assoc, ← this, MonoidalCategory.whiskerLeft_comp_assoc,
+          MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerLeft_comp_assoc,
+          ← e_assoc, whiskerLeft_rightUnitor_inv_assoc, associator_inv_naturality_right_assoc,
+          Iso.hom_inv_id_assoc, whisker_exchange_assoc, MonoidalCategory.whiskerRight_id_assoc,
+          Iso.inv_hom_id_assoc]
     · have := end_.condition (diagram V F₁ F₂) f
       dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
       conv_lhs =>
-        rw [tensorHom_def'_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [assoc]; rw [assoc]; rw [this]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [← e_assoc']; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
+        rw [tensorHom_def'_assoc, ← comp_whiskerRight_assoc,
+          ← comp_whiskerRight_assoc, ← comp_whiskerRight_assoc,
+          assoc, assoc, this, comp_whiskerRight_assoc, comp_whiskerRight_assoc,
+          comp_whiskerRight_assoc, leftUnitor_inv_whiskerRight_assoc,
+          ← associator_inv_naturality_left_assoc, ← e_assoc',
+          Iso.inv_hom_id_assoc, ← whisker_exchange_assoc, id_whiskerLeft_assoc,
+          Iso.inv_hom_id_assoc]
       conv_rhs => rw [assoc, tensorHom_def'_assoc])
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `enrichedComp_π` / 引理 `enrichedComp_π`
-
-English:
-lemma enrichedComp_π
-  given: (j : J)
-  proof: by
-  simp [enrichedComp]
-
-中文:
-引理 enrichedComp_π
-  条件: (j : J)
-  证明: by
-  simp [enrichedComp]
-
-Depends on / 依赖: enrichedComp
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedComp_** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Enriched.FunctorCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma enrichedComp_π (j : J) :
     enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j =
-      (end_.π (diagram V F₁ F₂) j otimesₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ _ _ := by
+      (end_.π (diagram V F₁ F₂) j ⊗ₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ _ _ := by
   simp [enrichedComp]
 
 variable {F₁ F₂ F₃}
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `homEquiv_comp` / 引理 `homEquiv_comp`
-
-English:
-lemma homEquiv_comp
-  given: (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃)
-  proof: by
-  ext j
-  simp only [homEquiv_apply_π, NatTrans.comp_app, eHomEquiv_comp, assoc,
-    enrichedComp_π, Functor.op_obj, tensorHom_comp_tensorHom_assoc]
-
-中文:
-引理 homEquiv_comp
-  条件: (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃)
-  证明: by
-  ext j
-  simp only [homEquiv_apply_π, NatTrans.comp_app, eHomEquiv_comp, assoc,
-    enrichedComp_π, Functor.op_obj, tensorHom_comp_tensorHom_assoc]
-
-Depends on / 依赖: Functor, Functor.op_obj, NatTrans, NatTrans.comp_app, comp_app, eHomEquiv_comp, op_obj, tensorHom_comp_tensorHom_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.homEquiv_comp** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：homEquiv_comp (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃) : (homEquiv V) (f ≫ g) = (fun_ (
+𝟙_ V)).inv ≫ ((homEquiv V) f otimesₘ (homEquiv V) g) ≫ enrichedComp V F₁ F₂ F₃
+参数：f : F₁ ⟶ F₂；g : F₂ ⟶ F₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.homEquiv_apply_π`：homEquiv_apply
+_π (τ : F₁ ⟶ F₂) (j : J) : homEquiv V τ ≫ enrichedHomπ V _ _ j = eHomEquiv V (τ.
+app j)
+· 使用引理 `CategoryTheory.eHomEquiv_comp`：eHomEquiv_comp {X Y Z : C} (f : X ⟶ Y) (g
+ : Y ⟶ Z) : eHomEquiv V (f ≫ g) = (fun_ _).inv ≫ (eHomEquiv V f otimesₘ eHomEqui
+v V g) ≫ eComp V X …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedComp_π`：enrichedComp_π (
+j : J) : enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j = (end_.π (diagram V F₁ F₂) j otim
+esₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ …
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_comp_tensorHom_assoc`：∀ {C : T
+ype u} {𝒞 : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCat
+egory C] {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : C}   (f₁ : X₁ ⟶ Y₁) (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homEquiv_comp (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃) :
-    (homEquiv V) (f ≫ g) = (fun_ (𝟙_ V)).inv ≫ ((homEquiv V) f otimesₘ (homEquiv V) g) ≫
+    (homEquiv V) (f ≫ g) = (λ_ (𝟙_ V)).inv ≫ ((homEquiv V) f ⊗ₘ (homEquiv V) g) ≫
     enrichedComp V F₁ F₂ F₃ := by
   ext j
   simp only [homEquiv_apply_π, NatTrans.comp_app, eHomEquiv_comp, assoc,
@@ -464,100 +353,163 @@ end
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `enriched_id_comp` / 引理 `enriched_id_comp`
-
-English:
-lemma enriched_id_comp
-  given: [HasEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₂]
-  proof: by
-  ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def]; rw [assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedId_π]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
-  dsimp
-  rw [e_id_comp]; rw [comp_id]
-
-中文:
-引理 enriched_id_comp
-  条件: [HasEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₂]
-  证明: by
-  ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def]; rw [assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedId_π]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
-  dsimp
-  rw [e_id_comp]; rw [comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, comp_id, comp_whiskerRight_assoc, e_id_comp, id_comp, id_whiskerLeft, inv_hom_id_assoc, tensorHom_def, whisker_exchange_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.enriched_id_comp** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enriched_id_comp [HasEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₂] : (fun_
+ (enrichedHom V F₁ F₂)).inv ≫ enrichedId V F₁ ▷ enrichedHom V F₁ F₂ ≫ enrichedCo
+mp V F₁ F₁ F₂ = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedComp_π`：enrichedComp_π (
+j : J) : enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j = (end_.π (diagram V F₁ F₂) j otim
+esₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedId_π`：enrichedId_π (j : 
+J) : enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j)
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerLeft`：id_whiskerLeft {X Y : C}
+ (f : X ⟶ Y) : 𝟙_ C ◁ f = (fun_ X).hom ≫ f ≫ (fun_ Y).inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.e_id_comp`：e_id_comp (X Y : C) : (fun_ (X ⟶[V] Y)).inv ≫ 
+eId V X ▷ _ ≫ eComp V X X Y = 𝟙 (X ⟶[V] Y)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma enriched_id_comp [HasEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₂] :
-    (fun_ (enrichedHom V F₁ F₂)).inv ≫ enrichedId V F₁ ▷ enrichedHom V F₁ F₂ ≫
+    (λ_ (enrichedHom V F₁ F₂)).inv ≫ enrichedId V F₁ ▷ enrichedHom V F₁ F₂ ≫
       enrichedComp V F₁ F₁ F₂ = 𝟙 _ := by
   ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def]; rw [assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedId_π]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
+  rw [assoc, assoc, enrichedComp_π, id_comp, tensorHom_def, assoc,
+    ← comp_whiskerRight_assoc, enrichedId_π, ← whisker_exchange_assoc,
+    id_whiskerLeft, assoc, assoc, Iso.inv_hom_id_assoc]
   dsimp
-  rw [e_id_comp]; rw [comp_id]
+  rw [e_id_comp, comp_id]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `enriched_comp_id` / 引理 `enriched_comp_id`
-
-English:
-lemma enriched_comp_id
-  given: [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₂]
-  proof: by
-  ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def']; rw [assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedId_π]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
-  dsimp
-  rw [e_comp_id]; rw [comp_id]
-
-中文:
-引理 enriched_comp_id
-  条件: [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₂]
-  证明: by
-  ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def']; rw [assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedId_π]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
-  dsimp
-  rw [e_comp_id]; rw [comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerRight_id, comp_id, e_comp_id, id_comp, inv_hom_id_assoc, tensorHom_def, whiskerLeft_comp_assoc, whiskerRight_id, whisker_exchange_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.enriched_comp_id** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enriched_comp_id [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₂] : (ρ_ (
+enrichedHom V F₁ F₂)).inv ≫ enrichedHom V F₁ F₂ ◁ enrichedId V F₂ ≫ enrichedComp
+ V F₁ F₂ F₂ = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedComp_π`：enrichedComp_π (
+j : J) : enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j = (end_.π (diagram V F₁ F₂) j otim
+esₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'`：tensorHom_def' {X₁ Y₁ X₂
+ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : f otimesₘ g = X₁ ◁ g ≫ f ▷ Y₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] (W : C)   {X Y Z : C} (f : X ⟶ Y) (g :…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedId_π`：enrichedId_π (j : 
+J) : enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j)
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id`：whiskerRight_id {X Y : 
+C} (f : X ⟶ Y) : f ▷ 𝟙_ C = (ρ_ X).hom ≫ f ≫ (ρ_ Y).inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.e_comp_id`：e_comp_id (X Y : C) : (ρ_ (X ⟶[V] Y)).inv ≫ _ 
+◁ eId V Y ≫ eComp V X Y Y = 𝟙 (X ⟶[V] Y)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma enriched_comp_id [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₂] :
     (ρ_ (enrichedHom V F₁ F₂)).inv ≫ enrichedHom V F₁ F₂ ◁ enrichedId V F₂ ≫
       enrichedComp V F₁ F₂ F₂ = 𝟙 _ := by
   ext j
-  rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def']; rw [assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedId_π]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
+  rw [assoc, assoc, enrichedComp_π, id_comp, tensorHom_def', assoc,
+    ← MonoidalCategory.whiskerLeft_comp_assoc, enrichedId_π,
+    whisker_exchange_assoc, MonoidalCategory.whiskerRight_id, assoc, assoc,
+    Iso.inv_hom_id_assoc]
   dsimp
-  rw [e_comp_id]; rw [comp_id]
+  rw [e_comp_id, comp_id]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `enriched_assoc` / 引理 `enriched_assoc`
-
-English:
-lemma enriched_assoc
-  statement: [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [HasEnrichedHom V F₁ F₄]
-  proof: by
-  ext j
-  conv_lhs =>
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_naturality_assoc]
-  conv_rhs =>
-    rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def'_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedComp_π]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]; rw [whisker_exchange_assoc]; rw [← tensorHom_def_assoc]
-  dsimp
-  rw [e_assoc]
-
-中文:
-引理 enriched_assoc
-  结论: [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [HasEnrichedHom V F₁ F₄]
-  证明: by
-  ext j
-  conv_lhs =>
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_naturality_assoc]
-  conv_rhs =>
-    rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def'_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedComp_π]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]; rw [whisker_exchange_assoc]; rw [← tensorHom_def_assoc]
-  dsimp
-  rw [e_assoc]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, _assoc, associator_inv_naturality_assoc, comp_whiskerRight_assoc, conv_lhs, conv_rhs, tensorHom_def, tensorHom_def_assoc, whiskerLeft_comp_assoc, whisker_exchange_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.enriched_assoc** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enriched_assoc [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [HasEnric
+hedHom V F₁ F₄] [HasEnrichedHom V F₂ F₃] [HasEnrichedHom V F₂ F₄] [HasEnrichedHo
+m V F₃ F₄] : (α_ (enrichedHom V F₁ F₂) (enrichedHom V F₂ F₃) (enrichedHom V F₃ F
+₄)).inv ≫ enrichedComp V F₁ F₂ F₃ ▷ enrichedHom V F₃ F₄ ≫ enrichedComp V F₁ F₃ F
+₄ = enrichedHom V F₁ F₂ ◁ enrichedComp V F₂ F₃ F₄ ≫ enrichedComp V F₁ F₂ F₄
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedComp_π`：enrichedComp_π (
+j : J) : enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j = (end_.π (diagram V F₁ F₂) j otim
+esₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ …
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def_assoc`：∀ {C : Type u} {𝒞 :
+ CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X
+₁ Y₁ X₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'_assoc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory
+ C] {X₁ Y₁ X₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g :…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C]   {X Y Z X' Y' Z' : C} (f : X ⟶ X') (g…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] (W : C)   {X Y Z : C} (f : X ⟶ Y) (g :…
+· 使用定理 `CategoryTheory.e_assoc`：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V
+ W X Y ▷ _ ≫ eComp V W Y Z = _ ◁ eComp V X Y Z ≫ eComp V W X Z
 -/
 lemma enriched_assoc [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [HasEnrichedHom V F₁ F₄]
     [HasEnrichedHom V F₂ F₃] [HasEnrichedHom V F₂ F₄] [HasEnrichedHom V F₃ F₄] :
@@ -566,9 +518,14 @@ lemma enriched_assoc [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [
       enrichedHom V F₁ F₂ ◁ enrichedComp V F₂ F₃ F₄ ≫ enrichedComp V F₁ F₂ F₄ := by
   ext j
   conv_lhs =>
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_naturality_assoc]
+    rw [assoc, assoc, enrichedComp_π,
+      tensorHom_def_assoc, ← comp_whiskerRight_assoc, enrichedComp_π,
+      comp_whiskerRight_assoc, ← whisker_exchange_assoc,
+      ← whisker_exchange_assoc, ← tensorHom_def'_assoc, ← associator_inv_naturality_assoc]
   conv_rhs =>
-    rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def'_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedComp_π]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]; rw [whisker_exchange_assoc]; rw [← tensorHom_def_assoc]
+    rw [assoc, enrichedComp_π, tensorHom_def'_assoc, ← MonoidalCategory.whiskerLeft_comp_assoc,
+      enrichedComp_π, MonoidalCategory.whiskerLeft_comp_assoc, whisker_exchange_assoc,
+      whisker_exchange_assoc, ← tensorHom_def_assoc]
   dsimp
   rw [e_assoc]
 
@@ -577,34 +534,20 @@ variable (J C)
 /-- If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
 then `J ⥤ C` is also a `V`-enriched ordinary category. -/
 @[instance_reducible]
-/--
-Definition of `enrichedOrdinaryCategory` / `enrichedOrdinaryCategory` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.enrichedOrdinaryCategory** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：enrichedOrdinaryCategory [forall (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] 
+: EnrichedOrdinaryCategory V (J ⥤ C) where Hom F₁ F₂
+参数：F₁ F₂ : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedOrdinaryCategory
-  signature: [forall (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂]
-  body: enrichedHom V F₁ F₂
-  id F := enrichedId V F
-  comp F₁ F₂ F₃ := enrichedComp V F₁ F₂ F₃
-  assoc _ _ _ _ := enriched_assoc _ _ _ _ _
-  homEquiv := homEquiv V
-  homEquiv_id _ := homEquiv_id V _
-  homEquiv_comp f g := homEquiv_comp V f g
-
-中文:
-定义 enrichedOrdinaryCategory
-  签名: [对任意 (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂]
-  定义体: enrichedHom V F₁ F₂
-  id F := enrichedId V F
-  comp F₁ F₂ F₃ := enrichedComp V F₁ F₂ F₃
-  assoc _ _ _ _ := enriched_assoc _ _ _ _ _
-  homEquiv := homEquiv V
-  homEquiv_id _ := homEquiv_id V _
-  homEquiv_comp f g := homEquiv_comp V f g
-
-Depends on / 依赖: enrichedHom
+--- 原说明 ---
+If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
+then `J ⥤ C` is also a `V`-enriched ordinary category.
 -/
-noncomputable def enrichedOrdinaryCategory [forall (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] :
+noncomputable def enrichedOrdinaryCategory [∀ (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] :
     EnrichedOrdinaryCategory V (J ⥤ C) where
   Hom F₁ F₂ := enrichedHom V F₁ F₂
   id F := enrichedId V F
@@ -621,59 +564,61 @@ section
 variable (G : K ⥤ J) [HasEnrichedHom V F₁ F₂]
 
 variable {F₁ F₂} in
-/--
-Definition of `precompEnrichedHom'` / `precompEnrichedHom'` 的定义
+/-- If `F₁` and `F₂` are functors `J ⥤ C`, `G : K ⥤ J`, and
+`F₁'` and `F₂'` are functors `K ⥤ C` that are respectively
+isomorphic to `G ⋙ F₁` and `G ⋙ F₂`, then this is the
+induced morphism `enrichedHom V F₁ F₂ ⟶ enrichedHom V F₁' F₂'` in `V`
+when `C` is a category enriched in `V`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.precompEnrichedHom'** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：precompEnrichedHom' {F₁' F₂' : K ⥤ C} [HasEnrichedHom V F₁' F₂'] (e₁ : G ⋙
+ F₁ ≅ F₁') (e₂ : G ⋙ F₂ ≅ F₂') : enrichedHom V F₁ F₂ ⟶ enrichedHom V F₁' F₂'
+参数：e₁ : G ⋙ F₁ ≅ F₁'；e₂ : G ⋙ F₂ ≅ F₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation precompEnrichedHom'
-  signature: {F₁' F₂' : K ⥤ C}
-  body: end_.lift (fun x => enrichedHomπ V F₁ F₂ (G.obj x) ≫
-    (eHomWhiskerRight _ (e₁.inv.app x) _ ≫ eHomWhiskerLeft _ _ (e₂.hom.app x)))
-    (fun i j f => by
-      dsimp
-      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturality f]; rw [eHomWhiskerLeft_comp_assoc]
-      dsimp
-      rw [enrichedHom_condition_assoc]; rw [eHom_whisker_exchange]; rw [eHom_whisker_exchange]; rw [← eHomWhiskerRight_comp_assoc]; rw [← eHomWhiskerRight_comp_assoc]; rw [NatTrans.naturality]
-      dsimp)
-
-中文:
-缩写 precompEnrichedHom'
-  签名: {F₁' F₂' : K ⥤ C}
-  定义体: end_.lift (fun x => enrichedHomπ V F₁ F₂ (G.obj x) ≫
-    (eHomWhiskerRight _ (e₁.inv.app x) _ ≫ eHomWhiskerLeft _ _ (e₂.hom.app x)))
-    (fun i j f => by
-      dsimp
-      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturality f]; rw [eHomWhiskerLeft_comp_assoc]
-      dsimp
-      rw [enrichedHom_condition_assoc]; rw [eHom_whisker_exchange]; rw [eHom_whisker_exchange]; rw [← eHomWhiskerRight_comp_assoc]; rw [← eHomWhiskerRight_comp_assoc]; rw [NatTrans.naturality]
-      dsimp)
-
-Depends on / 依赖: G.obj, NatTrans, eHomWhiskerLeft, eHomWhiskerLeft_comp, eHomWhiskerLeft_comp_assoc, eHomWhiskerRight, eHomWhiskerRight_comp_assoc, eHom_whisker_exchange, end_, end_.lift, enrichedHom_condition_assoc, hom.app, hom.naturality, inv.app, naturality
+--- 原说明 ---
+If `F₁` and `F₂` are functors `J ⥤ C`, `G : K ⥤ J`, and
+`F₁'` and `F₂'` are functors `K ⥤ C` that are respectively
+isomorphic to `G ⋙ F₁` and `G ⋙ F₂`, then this is the
+induced morphism `enrichedHom V F₁ F₂ ⟶ enrichedHom V F₁' F₂'` in `V`
+when `C` is a category enriched in `V`.
 -/
 noncomputable abbrev precompEnrichedHom' {F₁' F₂' : K ⥤ C}
     [HasEnrichedHom V F₁' F₂'] (e₁ : G ⋙ F₁ ≅ F₁') (e₂ : G ⋙ F₂ ≅ F₂') :
     enrichedHom V F₁ F₂ ⟶ enrichedHom V F₁' F₂' :=
-  end_.lift (fun x => enrichedHomπ V F₁ F₂ (G.obj x) ≫
+  end_.lift (fun x ↦ enrichedHomπ V F₁ F₂ (G.obj x) ≫
     (eHomWhiskerRight _ (e₁.inv.app x) _ ≫ eHomWhiskerLeft _ _ (e₂.hom.app x)))
-    (fun i j f => by
+    (fun i j f ↦ by
       dsimp
-      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturality f]; rw [eHomWhiskerLeft_comp_assoc]
+      rw [assoc, assoc, assoc, assoc, ← eHomWhiskerLeft_comp,
+        ← eHom_whisker_exchange, ← e₂.hom.naturality f,
+        eHomWhiskerLeft_comp_assoc]
       dsimp
-      rw [enrichedHom_condition_assoc]; rw [eHom_whisker_exchange]; rw [eHom_whisker_exchange]; rw [← eHomWhiskerRight_comp_assoc]; rw [← eHomWhiskerRight_comp_assoc]; rw [NatTrans.naturality]
+      rw [enrichedHom_condition_assoc, eHom_whisker_exchange,
+        eHom_whisker_exchange, ← eHomWhiskerRight_comp_assoc,
+        ← eHomWhiskerRight_comp_assoc, NatTrans.naturality]
       dsimp)
 
-/--
-Definition of `precompEnrichedHom` / `precompEnrichedHom` 的定义
+/-- If `F₁` and `F₂` are functors `J ⥤ C`, and `G : K ⥤ J`,
+then this is the induced morphism
+`enrichedHom V F₁ F₂ ⟶ enrichedHom V (G ⋙ F₁) (G ⋙ F₂)` in `V`
+when `C` is a category enriched in `V`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.precompEnrichedHom** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：precompEnrichedHom [HasEnrichedHom V (G ⋙ F₁) (G ⋙ F₂)] : enrichedHom V F₁
+ F₂ ⟶ enrichedHom V (G ⋙ F₁) (G ⋙ F₂)
+参数：G ⋙ F₁；G ⋙ F₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation precompEnrichedHom
-  body: precompEnrichedHom' V G (Iso.refl _) (Iso.refl _)
-
-中文:
-缩写 precompEnrichedHom
-  定义体: precompEnrichedHom' V G (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, precompEnrichedHom
+--- 原说明 ---
+If `F₁` and `F₂` are functors `J ⥤ C`, and `G : K ⥤ J`,
+then this is the induced morphism
+`enrichedHom V F₁ F₂ ⟶ enrichedHom V (G ⋙ F₁) (G ⋙ F₂)` in `V`
+when `C` is a category enriched in `V`.
 -/
 noncomputable abbrev precompEnrichedHom
     [HasEnrichedHom V (G ⋙ F₁) (G ⋙ F₂)] :
@@ -685,24 +630,28 @@ end
 
 section
 
-/--
-Definition of `HasFunctorEnrichedHom` / `HasFunctorEnrichedHom` 的定义
+/-- Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a category enriched in `V`,
+this condition allows the definition of `functorEnrichedHom V F₁ F₂ : J ⥤ V`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.HasFunctorEnrichedHom** 是 Mathlib 中的一个
+缩写定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：HasFunctorEnrichedHom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasFunctorEnrichedHom
-  body: forall (j : J), HasEnrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-
-中文:
-缩写 HasFunctorEnrichedHom
-  定义体: forall (j : J), HasEnrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-
-Depends on / 依赖: HasEnrichedHom, Under.forget, forget
+--- 原说明 ---
+Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a category enriched in `V`
+,
+this condition allows the definition of `functorEnrichedHom V F₁ F₂ : J ⥤ V`.
 -/
 abbrev HasFunctorEnrichedHom :=
-  forall (j : J), HasEnrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
+  ∀ (j : J), HasEnrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
 
 variable [HasFunctorEnrichedHom V F₁ F₂]
-
+/-
+**CategoryTheory.Enriched.FunctorCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Enriched.FunctorCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {j j' : J} (f : j ⟶ j') :
     HasEnrichedHom V (Under.map f ⋙ Under.forget j ⋙ F₁)
       (Under.map f ⋙ Under.forget j ⋙ F₂) :=
@@ -712,56 +661,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a category enriched in `V`,
 this is the enriched hom functor from `F₁` to `F₂` in `J ⥤ V`. -/
 @[simps!]
-/--
-Definition of `functorEnrichedHom` / `functorEnrichedHom` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnrichedHom** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnrichedHom : J ⥤ V where obj j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedHom
-  signature: : J ⥤ V where
-  body: enrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-  map f := precompEnrichedHom' V (Under.map f) (Iso.refl _) (Iso.refl _)
-  map_id X := by
-    ext j
-    -- this was produced by `simp?`
-    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-      eHomWhiskerLeft_id, comp_id, id_comp]
-    congr 1
-    simp [Under.map, Comma.mapLeft]
-    rfl
-  map_comp f g := by
-    ext j
-    -- this was produced by `simp?`
-    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-      eHomWhiskerLeft_id, comp_id, assoc]
-    congr 1
-    simp [Under.map, Comma.mapLeft]
-
-中文:
-定义 functorEnrichedHom
-  签名: : J ⥤ V where
-  定义体: enrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-  map f := precompEnrichedHom' V (Under.map f) (Iso.refl _) (Iso.refl _)
-  map_id X := by
-    ext j
-    -- this was produced by `simp?`
-    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-      eHomWhiskerLeft_id, comp_id, id_comp]
-    congr 1
-    simp [Under.map, Comma.mapLeft]
-    rfl
-  map_comp f g := by
-    ext j
-    -- this was produced by `simp?`
-    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-      eHomWhiskerLeft_id, comp_id, assoc]
-    congr 1
-    simp [Under.map, Comma.mapLeft]
-
-Depends on / 依赖: F.isColimitOfIsWellOrderContinuous, Under.forget, enrichedHom, forget, isColimitOfIsWellOrderContinuous, isColimitOfPreserves, preservesColimitsOfShape_of_preservesWellOrderContinuousOfShape
+--- 原说明 ---
+Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a category enriched in `V`
+,
+this is the enriched hom functor from `F₁` to `F₂` in `J ⥤ V`.
 -/
 noncomputable def functorEnrichedHom : J ⥤ V where
   obj j := enrichedHom V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
@@ -790,77 +700,43 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The (limit) cone expressing that the limit of `functorEnrichedHom V F₁ F₂`
 is `enrichedHom V F₁ F₂`. -/
 @[simps]
-/--
-Definition of `coneFunctorEnrichedHom` / `coneFunctorEnrichedHom` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.coneFunctorEnrichedHom** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：coneFunctorEnrichedHom : Cone (functorEnrichedHom V F₁ F₂) where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneFunctorEnrichedHom
-  signature: : Cone (functorEnrichedHom V F₁ F₂) where
-  body: enrichedHom V F₁ F₂
-  π := { app := fun j => precompEnrichedHom V F₁ F₂ (Under.forget j) }
-
-中文:
-定义 coneFunctorEnrichedHom
-  签名: : 锥 (functorEnrichedHom V F₁ F₂) where
-  定义体: enrichedHom V F₁ F₂
-  π := { app := fun j => precompEnrichedHom V F₁ F₂ (Under.forget j) }
-
-Depends on / 依赖: enrichedHom, infer_instance, preservesColimitsOfShape_of_preservesWellOrderContinuousOfShape
+--- 原说明 ---
+The (limit) cone expressing that the limit of `functorEnrichedHom V F₁ F₂`
+is `enrichedHom V F₁ F₂`.
 -/
 noncomputable def coneFunctorEnrichedHom : Cone (functorEnrichedHom V F₁ F₂) where
   pt := enrichedHom V F₁ F₂
-  π := { app := fun j => precompEnrichedHom V F₁ F₂ (Under.forget j) }
+  π := { app := fun j ↦ precompEnrichedHom V F₁ F₂ (Under.forget j) }
 
 namespace isLimitConeFunctorEnrichedHom
 
 variable {V F₁ F₂} (s : Cone (functorEnrichedHom V F₁ F₂))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `lift` / `lift` 的定义
+/-- Auxiliary definition for `Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom.lift** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory.isLimitConeFunct
+orEnrichedHom`。
+形式化陈述：lift : s.pt ⟶ enrichedHom V F₁ F₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : s.pt ⟶ enrichedHom V F₁ F₂
-  body: end_.lift (fun j => s.π.app j ≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))) (fun j j' f => by
-    dsimp
-    rw [← s.w f]; rw [assoc]; rw [assoc]; rw [assoc]
-    -- this was produced by `simp?`
-    simp only [functorEnrichedHom_obj, functorEnrichedHom_map, end_.lift_π_assoc, diagram_obj_obj,
-      Functor.comp_obj, Under.forget_obj, Under.mk_right, Under.map_obj_right, Iso.refl_inv,
-      NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom, eHomWhiskerLeft_id, comp_id]
-    have := enrichedHom_condition V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-      (Under.homMk f : Under.mk (𝟙 j) ⟶ Under.mk f)
-    dsimp at this
-    rw [this]
-    congr 3
-    simp [Under.map, Comma.mapLeft]
-    rfl)
-
-中文:
-定义 lift
-  签名: : s.pt ⟶ enrichedHom V F₁ F₂
-  定义体: end_.lift (fun j => s.π.app j ≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))) (fun j j' f => by
-    dsimp
-    rw [← s.w f]; rw [assoc]; rw [assoc]; rw [assoc]
-    -- this was produced by `simp?`
-    simp only [functorEnrichedHom_obj, functorEnrichedHom_map, end_.lift_π_assoc, diagram_obj_obj,
-      Functor.comp_obj, Under.forget_obj, Under.mk_right, Under.map_obj_right, Iso.refl_inv,
-      NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom, eHomWhiskerLeft_id, comp_id]
-    have := enrichedHom_condition V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
-      (Under.homMk f : Under.mk (𝟙 j) ⟶ Under.mk f)
-    dsimp at this
-    rw [this]
-    congr 3
-    simp [Under.map, Comma.mapLeft]
-    rfl)
-
-Depends on / 依赖: Under.mk, end_, end_.lift
+--- 原说明 ---
+Auxiliary definition for `Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom
+`.
 -/
 noncomputable def lift : s.pt ⟶ enrichedHom V F₁ F₂ :=
-  end_.lift (fun j => s.π.app j ≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))) (fun j j' f => by
+  end_.lift (fun j ↦ s.π.app j ≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))) (fun j j' f ↦ by
     dsimp
-    rw [← s.w f]; rw [assoc]; rw [assoc]; rw [assoc]
+    rw [← s.w f, assoc, assoc, assoc]
     -- this was produced by `simp?`
     simp only [functorEnrichedHom_obj, functorEnrichedHom_map, end_.lift_π_assoc, diagram_obj_obj,
       Functor.comp_obj, Under.forget_obj, Under.mk_right, Under.map_obj_right, Iso.refl_inv,
@@ -874,44 +750,44 @@ noncomputable def lift : s.pt ⟶ enrichedHom V F₁ F₂ :=
     rfl)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `fac` / 引理 `fac`
-
-English:
-lemma fac
-  given: (j : J)
-  statement: lift s ≫ (coneFunctorEnrichedHom V F₁ F₂).π.app j = s.π.app j
-  proof: by
-  dsimp [coneFunctorEnrichedHom]
-  ext k
-  have := s.w k.hom
-  dsimp at this
-  -- this was produced by `simp? [lift, ← this]`
-  simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, lift, functorEnrichedHom_obj,
-    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-    eHomWhiskerLeft_id, comp_id, ← this, Under.map_obj_right, Under.mk_right]
-  congr
-  simp [Under.map, Comma.mapLeft]
-  rfl
-
-中文:
-引理 fac
-  条件: (j : J)
-  结论: lift s ≫ (coneFunctorEnrichedHom V F₁ F₂).π.app j = s.π.app j
-  证明: by
-  dsimp [coneFunctorEnrichedHom]
-  ext k
-  have := s.w k.hom
-  dsimp at this
-  -- this was produced by `simp? [lift, ← this]`
-  simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, lift, functorEnrichedHom_obj,
-    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
-    eHomWhiskerLeft_id, comp_id, ← this, Under.map_obj_right, Under.mk_right]
-  congr
-  simp [Under.map, Comma.mapLeft]
-  rfl
-
-Depends on / 依赖: coneFunctorEnrichedHom, k.hom
+/-
+**CategoryTheory.Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom.fac** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory.isLimitConeFuncto
+rEnrichedHom`。
+形式化陈述：fac (j : J) : lift s ≫ (coneFunctorEnrichedHom V F₁ F₂).π.app j = s.π.app 
+j
+参数：j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.end_.lift_π`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C] 
+  {F : CategoryTheory.F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.eHomWhiskerRight_id`：eHomWhiskerRight_id (X Y : C) : eHom
+WhiskerRight V (𝟙 X) Y = 𝟙 _
+· 使用引理 `CategoryTheory.eHomWhiskerLeft_id`：eHomWhiskerLeft_id (X Y : C) : eHomWh
+iskerLeft V X (𝟙 Y) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
 -/
 lemma fac (j : J) : lift s ≫ (coneFunctorEnrichedHom V F₁ F₂).π.app j = s.π.app j := by
   dsimp [coneFunctorEnrichedHom]
@@ -930,28 +806,19 @@ end isLimitConeFunctorEnrichedHom
 
 set_option backward.isDefEq.respectTransparency false in
 open isLimitConeFunctorEnrichedHom in
-/--
-Definition of `isLimitConeFunctorEnrichedHom` / `isLimitConeFunctorEnrichedHom` 的定义
+/-- The limit of `functorEnrichedHom V F₁ F₂` is `enrichedHom V F₁ F₂`. -/
+/-
+**CategoryTheory.Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：isLimitConeFunctorEnrichedHom : IsLimit (coneFunctorEnrichedHom V F₁ F₂) w
+here lift
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.isLimitConeFunctorEnrichedHom.fa
+c`：fac (j : J) : lift s ≫ (coneFunctorEnrichedHom V F₁ F₂).π.app j = s.π.app j
 
-English:
-definition isLimitConeFunctorEnrichedHom
-  signature: :
-  body: lift
-  fac := fac
-  uniq s m hm := by
-    dsimp
-    ext j
-    simpa using ((hm j).trans (fac s j).symm) =≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))
-
-中文:
-定义 isLimitConeFunctorEnrichedHom
-  签名: :
-  定义体: lift
-  fac := fac
-  uniq s m hm := by
-    dsimp
-    ext j
-    simpa using ((hm j).trans (fac s j).symm) =≫ enrichedHomπ V _ _ (Under.mk (𝟙 j))
+--- 原说明 ---
+The limit of `functorEnrichedHom V F₁ F₂` is `enrichedHom V F₁ F₂`.
 -/
 noncomputable def isLimitConeFunctorEnrichedHom :
     IsLimit (coneFunctorEnrichedHom V F₁ F₂) where
@@ -967,20 +834,16 @@ end
 set_option backward.isDefEq.respectTransparency false in
 /-- The identity for the `J ⥤ V`-enrichment of the category `J ⥤ C`. -/
 @[simps]
-/--
-Definition of `functorEnrichedId` / `functorEnrichedId` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnrichedId** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnrichedId [HasFunctorEnrichedHom V F₁ F₁] : 𝟙_ (J ⥤ V) ⟶ functorEn
+richedHom V F₁ F₁ where app j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedId
-  signature: [HasFunctorEnrichedHom V F₁ F₁]
-  body: enrichedId V _
-
-中文:
-定义 functorEnrichedId
-  签名: [HasFunctorEnrichedHom V F₁ F₁]
-  定义体: enrichedId V _
-
-Depends on / 依赖: enrichedId
+--- 原说明 ---
+The identity for the `J ⥤ V`-enrichment of the category `J ⥤ C`.
 -/
 noncomputable def functorEnrichedId [HasFunctorEnrichedHom V F₁ F₁] :
     𝟙_ (J ⥤ V) ⟶ functorEnrichedHom V F₁ F₁ where
@@ -989,98 +852,85 @@ noncomputable def functorEnrichedId [HasFunctorEnrichedHom V F₁ F₁] :
 set_option backward.isDefEq.respectTransparency false in
 /-- The composition for the `J ⥤ V`-enrichment of the category `J ⥤ C`. -/
 @[simps]
-/--
-Definition of `functorEnrichedComp` / `functorEnrichedComp` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnrichedComp** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnrichedComp [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom
+ V F₂ F₃] [HasFunctorEnrichedHom V F₁ F₃] : functorEnrichedHom V F₁ F₂ otimes fu
+nctorEnrichedHom V F₂ F₃ ⟶ functorEnrichedHom V F₁ F₃ where app j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedComp
-  signature: [HasFunctorEnrichedHom V F₁ F₂]
-  body: enrichedComp V _ _ _
-  naturality j j' f := by
-    dsimp
-    ext k
-    dsimp
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]
-    dsimp
-    rw [tensorHom_comp_tensorHom_assoc]
-    simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 functorEnrichedComp
-  签名: [HasFunctorEnrichedHom V F₁ F₂]
-  定义体: enrichedComp V _ _ _
-  naturality j j' f := by
-    dsimp
-    ext k
-    dsimp
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]
-    dsimp
-    rw [tensorHom_comp_tensorHom_assoc]
-    simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: enrichedComp
+--- 原说明 ---
+The composition for the `J ⥤ V`-enrichment of the category `J ⥤ C`.
 -/
 noncomputable def functorEnrichedComp [HasFunctorEnrichedHom V F₁ F₂]
     [HasFunctorEnrichedHom V F₂ F₃] [HasFunctorEnrichedHom V F₁ F₃] :
-    functorEnrichedHom V F₁ F₂ otimes functorEnrichedHom V F₂ F₃ ⟶ functorEnrichedHom V F₁ F₃ where
+    functorEnrichedHom V F₁ F₂ ⊗ functorEnrichedHom V F₂ F₃ ⟶ functorEnrichedHom V F₁ F₃ where
   app j := enrichedComp V _ _ _
   naturality j j' f := by
     dsimp
     ext k
     dsimp
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]
+    rw [assoc, assoc, enrichedComp_π]
     dsimp
     rw [tensorHom_comp_tensorHom_assoc]
     simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `functorEnriched_id_comp` / 引理 `functorEnriched_id_comp`
-
-English:
-lemma functorEnriched_id_comp
-  given: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₁ F₁]
-  proof: by cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 functorEnriched_id_comp
-  条件: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₁ F₁]
-  证明: by cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnriched_id_comp** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnriched_id_comp [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnriche
+dHom V F₁ F₁] : (fun_ (functorEnrichedHom V F₁ F₂)).inv ≫ functorEnrichedId V F₁
+ ▷ functorEnrichedHom V F₁ F₂ ≫ functorEnrichedComp V F₁ F₁ F₂ = 𝟙 (functorEnric
+hedHom V F₁ F₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enriched_id_comp`：enriched_id_co
+mp [HasEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₂] : (fun_ (enrichedHom V F₁ F
+₂)).inv ≫ enrichedId V F₁ ▷ enrichedHom V F₁ F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorEnriched_id_comp [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₁ F₁] :
-    (fun_ (functorEnrichedHom V F₁ F₂)).inv ≫
+    (λ_ (functorEnrichedHom V F₁ F₂)).inv ≫
       functorEnrichedId V F₁ ▷ functorEnrichedHom V F₁ F₂ ≫
         functorEnrichedComp V F₁ F₁ F₂ = 𝟙 (functorEnrichedHom V F₁ F₂) := by cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `functorEnriched_comp_id` / 引理 `functorEnriched_comp_id`
-
-English:
-lemma functorEnriched_comp_id
-  given: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₂]
-  proof: by cat_disch
-
-@[reassoc]
-
-中文:
-引理 functorEnriched_comp_id
-  条件: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₂]
-  证明: by cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnriched_comp_id** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnriched_comp_id [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnriche
+dHom V F₂ F₂] : (ρ_ (functorEnrichedHom V F₁ F₂)).inv ≫ functorEnrichedHom V F₁ 
+F₂ ◁ functorEnrichedId V F₂ ≫ functorEnrichedComp V F₁ F₂ F₂ = 𝟙 (functorEnriche
+dHom V F₁ F₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enriched_comp_id`：enriched_comp_
+id [HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₂ F₂] : (ρ_ (enrichedHom V F₁ F₂)
+).inv ≫ enrichedHom V F₁ F₂ ◁ enrichedId V F₂ …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorEnriched_comp_id [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₂] :
     (ρ_ (functorEnrichedHom V F₁ F₂)).inv ≫
@@ -1088,26 +938,26 @@ lemma functorEnriched_comp_id [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnr
         functorEnrichedComp V F₁ F₂ F₂ = 𝟙 (functorEnrichedHom V F₁ F₂) := by cat_disch
 
 @[reassoc]
-/--
-lemma `functorEnriched_assoc` / 引理 `functorEnriched_assoc`
-
-English:
-lemma functorEnriched_assoc
-  statement: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₃]
-  proof: by
-  ext j
-  dsimp
-  rw [enriched_assoc]
-
-中文:
-引理 functorEnriched_assoc
-  结论: [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₃]
-  证明: by
-  ext j
-  dsimp
-  rw [enriched_assoc]
-
-Depends on / 依赖: enriched_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnriched_assoc** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnriched_assoc [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedH
+om V F₂ F₃] [HasFunctorEnrichedHom V F₃ F₄] [HasFunctorEnrichedHom V F₁ F₃] [Has
+FunctorEnrichedHom V F₂ F₄] [HasFunctorEnrichedHom V F₁ F₄] : (α_ _ _ _).inv ≫ f
+unctorEnrichedComp V F₁ F₂ F₃ ▷ functorEnrichedHom V F₃ F₄ ≫ functorEnrichedComp
+ V F₁ F₃ F₄ = functorEnrichedHom V F₁ F₂ ◁ functorEnrichedComp V F₂ F₃ F₄ ≫ func
+torEnrichedComp V F₁ F₂ F₄
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enriched_assoc`：enriched_assoc [
+HasEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₃] [HasEnrichedHom V F₁ F₄] [HasEn
+richedHom V F₂ F₃] [HasEnrichedHom V F₂ F₄] …
 -/
 lemma functorEnriched_assoc [HasFunctorEnrichedHom V F₁ F₂] [HasFunctorEnrichedHom V F₂ F₃]
     [HasFunctorEnrichedHom V F₃ F₄] [HasFunctorEnrichedHom V F₁ F₃]
@@ -1124,27 +974,21 @@ variable (J C) in
 /-- If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
 then `J ⥤ C` is also a `J ⥤ V`-enriched ordinary category. -/
 @[instance_reducible]
-/--
-Definition of `functorEnrichedCategory` / `functorEnrichedCategory` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnrichedCategory** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnrichedCategory [forall (F₁ F₂ : J ⥤ C), HasFunctorEnrichedHom V F
+₁ F₂] : EnrichedCategory (J ⥤ V) (J ⥤ C) where Hom F₁ F₂
+参数：F₁ F₂ : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedCategory
-  body: functorEnrichedHom V F₁ F₂
-  id F := functorEnrichedId V F
-  comp F₁ F₂ F₃ := functorEnrichedComp V F₁ F₂ F₃
-  assoc F₁ F₂ F₃ F₄ := functorEnriched_assoc V F₁ F₂ F₃ F₄
-
-中文:
-定义 functorEnrichedCategory
-  定义体: functorEnrichedHom V F₁ F₂
-  id F := functorEnrichedId V F
-  comp F₁ F₂ F₃ := functorEnrichedComp V F₁ F₂ F₃
-  assoc F₁ F₂ F₃ F₄ := functorEnriched_assoc V F₁ F₂ F₃ F₄
-
-Depends on / 依赖: functorEnrichedHom
+--- 原说明 ---
+If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
+then `J ⥤ C` is also a `J ⥤ V`-enriched ordinary category.
 -/
 noncomputable def functorEnrichedCategory
-    [forall (F₁ F₂ : J ⥤ C), HasFunctorEnrichedHom V F₁ F₂] :
+    [∀ (F₁ F₂ : J ⥤ C), HasFunctorEnrichedHom V F₁ F₂] :
     EnrichedCategory (J ⥤ V) (J ⥤ C) where
   Hom F₁ F₂ := functorEnrichedHom V F₁ F₂
   id F := functorEnrichedId V F
@@ -1155,81 +999,131 @@ variable {F₁ F₂} in
 /-- Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a `V`-enriched ordinary category,
 this is the bijection `(F₁ ⟶ F₂) ≃ (𝟙_ (J ⥤ V) ⟶ functorEnrichedHom V F₁ F₂)`. -/
 @[simps! apply_app]
-/--
-Definition of `functorHomEquiv` / `functorHomEquiv` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorHomEquiv** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorHomEquiv [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂] :
+ (F₁ ⟶ F₂) ≃ (𝟙_ (J ⥤ V) ⟶ functorEnrichedHom V F₁ F₂)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition functorHomEquiv
-  signature: [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂]
-  body: (homEquiv V).trans (isLimitConeFunctorEnrichedHom V F₁ F₂).homEquiv
-
-中文:
-定义 functorHomEquiv
-  签名: [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂]
-  定义体: (homEquiv V).trans (isLimitConeFunctorEnrichedHom V F₁ F₂).homEquiv
-
-Depends on / 依赖: homEquiv, isLimitConeFunctorEnrichedHom
+--- 原说明 ---
+Given functors `F₁` and `F₂` in `J ⥤ C`, where `C` is a `V`-enriched ordinary ca
+tegory,
+this is the bijection `(F₁ ⟶ F₂) ≃ (𝟙_ (J ⥤ V) ⟶ functorEnrichedHom V F₁ F₂)`.
 -/
 noncomputable def functorHomEquiv [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂] :
     (F₁ ⟶ F₂) ≃ (𝟙_ (J ⥤ V) ⟶ functorEnrichedHom V F₁ F₂) :=
   (homEquiv V).trans (isLimitConeFunctorEnrichedHom V F₁ F₂).homEquiv
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `functorHomEquiv_id` / 引理 `functorHomEquiv_id`
-
-English:
-lemma functorHomEquiv_id
-  given: [HasFunctorEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₁]
-  proof: by cat_disch
-
-中文:
-引理 functorHomEquiv_id
-  条件: [HasFunctorEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₁]
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorHomEquiv_id** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorHomEquiv_id [HasFunctorEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₁
+] : (functorHomEquiv V) (𝟙 F₁) = functorEnrichedId V F₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.end_.lift_π`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C] 
+  {F : CategoryTheory.F…
+· 使用引理 `CategoryTheory.eHomWhiskerRight_id`：eHomWhiskerRight_id (X Y : C) : eHom
+WhiskerRight V (𝟙 X) Y = 𝟙 _
+· 使用引理 `CategoryTheory.eHomWhiskerLeft_id`：eHomWhiskerLeft_id (X Y : C) : eHomWh
+iskerLeft V X (𝟙 Y) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedId_π`：enrichedId_π (j : 
+J) : enrichedId V F₁ ≫ end_.π _ j = eId V (F₁.obj j)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorHomEquiv_id [HasFunctorEnrichedHom V F₁ F₁] [HasEnrichedHom V F₁ F₁] :
     (functorHomEquiv V) (𝟙 F₁) = functorEnrichedId V F₁ := by cat_disch
 
 set_option backward.isDefEq.respectTransparency false in
 variable {F₁ F₂ F₃} in
-/--
-lemma `functorHomEquiv_comp` / 引理 `functorHomEquiv_comp`
-
-English:
-lemma functorHomEquiv_comp
-  statement: [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂]
-  proof: by
-  ext j
-  dsimp
-  ext k
-  rw [homEquiv_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [end_.lift_π]; rw [enrichedComp_π]
-  simp [tensorHom_comp_tensorHom_assoc]
-
-中文:
-引理 functorHomEquiv_comp
-  结论: [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂]
-  证明: by
-  ext j
-  dsimp
-  ext k
-  rw [homEquiv_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [end_.lift_π]; rw [enrichedComp_π]
-  simp [tensorHom_comp_tensorHom_assoc]
-
-Depends on / 依赖: end_, end_.lift_, homEquiv_comp, tensorHom_comp_tensorHom_assoc
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorHomEquiv_comp** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorHomEquiv_comp [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ 
+F₂] [HasFunctorEnrichedHom V F₂ F₃] [HasEnrichedHom V F₂ F₃] [HasFunctorEnriched
+Hom V F₁ F₃] [HasEnrichedHom V F₁ F₃] (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃) : (functorHomE
+quiv V) (f ≫ g) = (fun_ (𝟙_ (J ⥤ V))).inv ≫ ((functorHomEquiv V) f otimesₘ (func
+torHomEquiv V) g) ≫ functorEnrichedComp V F₁ F₂ F₃
+参数：f : F₁ ⟶ F₂；g : F₂ ⟶ F₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Limits.end_.hom_ext`：∀ {J : Type u} [inst : CategoryTheor
+y.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.homEquiv_comp`：homEquiv_comp (f 
+: F₁ ⟶ F₂) (g : F₂ ⟶ F₃) : (homEquiv V) (f ≫ g) = (fun_ (𝟙_ V)).inv ≫ ((homEquiv
+ V) f otimesₘ (homEquiv V) g) ≫ enrichedCom…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.end_.lift_π`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C] 
+  {F : CategoryTheory.F…
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.enrichedComp_π`：enrichedComp_π (
+j : J) : enrichedComp V F₁ F₂ F₃ ≫ end_.π _ j = (end_.π (diagram V F₁ F₂) j otim
+esₘ end_.π (diagram V F₂ F₃) j) ≫ eComp V _ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.eHomWhiskerRight_id`：eHomWhiskerRight_id (X Y : C) : eHom
+WhiskerRight V (𝟙 X) Y = 𝟙 _
+· 使用引理 `CategoryTheory.eHomWhiskerLeft_id`：eHomWhiskerLeft_id (X Y : C) : eHomWh
+iskerLeft V X (𝟙 Y) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_comp_tensorHom_assoc`：∀ {C : T
+ype u} {𝒞 : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCat
+egory C] {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : C}   (f₁ : X₁ ⟶ Y₁) (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Enriched.FunctorCategory.homEquiv_apply_π`：homEquiv_apply
+_π (τ : F₁ ⟶ F₂) (j : J) : homEquiv V τ ≫ enrichedHomπ V _ _ j = eHomEquiv V (τ.
+app j)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorHomEquiv_comp [HasFunctorEnrichedHom V F₁ F₂] [HasEnrichedHom V F₁ F₂]
     [HasFunctorEnrichedHom V F₂ F₃] [HasEnrichedHom V F₂ F₃]
     [HasFunctorEnrichedHom V F₁ F₃] [HasEnrichedHom V F₁ F₃]
     (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃) :
-    (functorHomEquiv V) (f ≫ g) = (fun_ (𝟙_ (J ⥤ V))).inv ≫
-      ((functorHomEquiv V) f otimesₘ (functorHomEquiv V) g) ≫ functorEnrichedComp V F₁ F₂ F₃ := by
+    (functorHomEquiv V) (f ≫ g) = (λ_ (𝟙_ (J ⥤ V))).inv ≫
+      ((functorHomEquiv V) f ⊗ₘ (functorHomEquiv V) g) ≫ functorEnrichedComp V F₁ F₂ F₃ := by
   ext j
   dsimp
   ext k
-  rw [homEquiv_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [end_.lift_π]; rw [enrichedComp_π]
+  rw [homEquiv_comp, assoc, assoc, assoc, assoc, assoc, end_.lift_π, enrichedComp_π]
   simp [tensorHom_comp_tensorHom_assoc]
 
 attribute [local instance] functorEnrichedCategory
@@ -1238,29 +1132,27 @@ variable (J C) in
 /-- If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
 then `J ⥤ C` is also a `J ⥤ V`-enriched ordinary category. -/
 @[instance_reducible]
-/--
-Definition of `functorEnrichedOrdinaryCategory` / `functorEnrichedOrdinaryCategory` 的定义
+/-
+**CategoryTheory.Enriched.FunctorCategory.functorEnrichedOrdinaryCategory** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Enriched.FunctorCategory`。
+形式化陈述：functorEnrichedOrdinaryCategory [forall (F₁ F₂ : J ⥤ C), HasFunctorEnriche
+dHom V F₁ F₂] [forall (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] : EnrichedOrdinar
+yCategory (J ⥤ V) (J ⥤ C) where homEquiv
+参数：F₁ F₂ : J ⥤ C；F₁ F₂ : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedOrdinaryCategory
-  body: functorHomEquiv V
-  homEquiv_id F := functorHomEquiv_id V F
-  homEquiv_comp f g := functorHomEquiv_comp V f g
-
-中文:
-定义 functorEnrichedOrdinaryCategory
-  定义体: functorHomEquiv V
-  homEquiv_id F := functorHomEquiv_id V F
-  homEquiv_comp f g := functorHomEquiv_comp V f g
-
-Depends on / 依赖: Groupoid, Groupoid.invEquivalence, Groupoid.ofIsGroupoid, functorHomEquiv, invEquivalence, ofIsGroupoid, preservesLimitsOfShape_of_equiv
+--- 原说明 ---
+If `C` is a `V`-enriched ordinary category, and `C` has suitable limits,
+then `J ⥤ C` is also a `J ⥤ V`-enriched ordinary category.
 -/
 noncomputable def functorEnrichedOrdinaryCategory
-    [forall (F₁ F₂ : J ⥤ C), HasFunctorEnrichedHom V F₁ F₂]
-    [forall (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] :
+    [∀ (F₁ F₂ : J ⥤ C), HasFunctorEnrichedHom V F₁ F₂]
+    [∀ (F₁ F₂ : J ⥤ C), HasEnrichedHom V F₁ F₂] :
     EnrichedOrdinaryCategory (J ⥤ V) (J ⥤ C) where
   homEquiv := functorHomEquiv V
   homEquiv_id F := functorHomEquiv_id V F
   homEquiv_comp f g := functorHomEquiv_comp V f g
 
 end CategoryTheory.Enriched.FunctorCategory
+

@@ -39,284 +39,287 @@ open ENNReal
 
 variable {α : Type*} {m : MeasurableSpace α} {s : Set α}
 
-/--
-Definition of `PreErgodic` / `PreErgodic` 的定义
+/-- A map `f : α → α` is said to be pre-ergodic with respect to a measure `μ` if any measurable
+strictly invariant set is either almost empty or full. -/
+/-
+**PreErgodic** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：PreErgodic (f : α -> α) (μ : Measure α
+参数：f : α -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PreErgodic
-  parameters: (f : α -> α) (μ : Measure α := by volume_tac)
-  axioms and operations (1):
-    - aeconst_set(⦃s) : Set α⦄ : MeasurableSet s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
-
-中文:
-结构 预遍历
-  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
-  公理与运算 (1 个):
-    - aeconst_set(⦃s) : 集合 α⦄ : 可测集 s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
-
-Depends on / 依赖: EventuallyConst, MeasurableSet, aeconst_set, volume_tac
+--- 原说明 ---
+A map `f : α → α` is said to be pre-ergodic with respect to a measure `μ` if any
+ measurable
+strictly invariant set is either almost empty or full.
 -/
-structure PreErgodic (f : α -> α) (μ : Measure α := by volume_tac) : Prop where
-  aeconst_set ⦃s : Set α⦄ : MeasurableSet s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
+structure PreErgodic (f : α → α) (μ : Measure α := by volume_tac) : Prop where
+  aeconst_set ⦃s : Set α⦄ : MeasurableSet s → f ⁻¹' s = s → EventuallyConst s (ae μ)
 
-/--
-Definition of `Ergodic` / `Ergodic` 的定义
+/-- A map `f : α → α` is said to be ergodic with respect to a measure `μ` if it is measure
+preserving and pre-ergodic. -/
+/-
+**Ergodic** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Ergodic (f : α -> α) (μ : Measure α
+参数：f : α -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Ergodic
-  parameters: (f : α -> α) (μ : Measure α := by volume_tac)
-  (no additional axioms)
-
-中文:
-结构 遍历
-  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
-  (无附加公理)
-
-Depends on / 依赖: MeasurePreserving, PreErgodic, extends, volume_tac
+--- 原说明 ---
+A map `f : α → α` is said to be ergodic with respect to a measure `μ` if it is m
+easure
+preserving and pre-ergodic.
 -/
-structure Ergodic (f : α -> α) (μ : Measure α := by volume_tac) : Prop extends
+structure Ergodic (f : α → α) (μ : Measure α := by volume_tac) : Prop extends
   MeasurePreserving f μ μ, PreErgodic f μ
 
-/--
-Definition of `QuasiErgodic` / `QuasiErgodic` 的定义
+/-- A map `f : α → α` is said to be quasi-ergodic with respect to a measure `μ` if it is
+quasi-measure-preserving and pre-ergodic. -/
+/-
+**QuasiErgodic** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：QuasiErgodic (f : α -> α) (μ : Measure α
+参数：f : α -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure QuasiErgodic
-  parameters: (f : α -> α) (μ : Measure α := by volume_tac)
-  (no additional axioms)
-
-中文:
-结构 拟遍历
-  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
-  (无附加公理)
-
-Depends on / 依赖: PreErgodic, QuasiMeasurePreserving, extends, volume_tac
+--- 原说明 ---
+A map `f : α → α` is said to be quasi-ergodic with respect to a measure `μ` if i
+t is
+quasi-measure-preserving and pre-ergodic.
 -/
-structure QuasiErgodic (f : α -> α) (μ : Measure α := by volume_tac) : Prop extends
+structure QuasiErgodic (f : α → α) (μ : Measure α := by volume_tac) : Prop extends
   QuasiMeasurePreserving f μ μ, PreErgodic f μ
 
-variable {f : α -> α} {μ : Measure α}
+variable {f : α → α} {μ : Measure α}
 
 namespace PreErgodic
 
-/--
-theorem `ae_empty_or_univ` / 定理 `ae_empty_or_univ`
-
-English:
-theorem ae_empty_or_univ
-  given: (hf : PreErgodic f μ) (hs : MeasurableSet s) (hfs : f ⁻¹' s = s)
-  proof: by
-  simpa only [eventuallyConst_set'] using hf.aeconst_set hs hfs
-
-中文:
-定理 ae_empty_or_univ
-  条件: (hf : 预遍历 f μ) (hs : 可测集 s) (hfs : f ⁻¹' s = s)
-  证明: by
-  simpa only [eventuallyConst_set'] using hf.aeconst_set hs hfs
-
-Depends on / 依赖: aeconst_set, eventuallyConst_set, hf.aeconst_set
+/-
+**PreErgodic.ae_empty_or_univ** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：ae_empty_or_univ (hf : PreErgodic f μ) (hs : MeasurableSet s) (hfs : f ⁻¹'
+ s = s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ
+参数：hf : PreErgodic f μ；hs : MeasurableSet s；hfs : f ⁻¹' s = s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
 -/
 theorem ae_empty_or_univ (hf : PreErgodic f μ) (hs : MeasurableSet s) (hfs : f ⁻¹' s = s) :
     s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
   simpa only [eventuallyConst_set'] using hf.aeconst_set hs hfs
-
-/--
-theorem `measure_self_or_compl_eq_zero` / 定理 `measure_self_or_compl_eq_zero`
-
-English:
-theorem measure_self_or_compl_eq_zero
-  statement: (hf : PreErgodic f μ) (hs : MeasurableSet s)
-  proof: by
-  simpa using hf.ae_empty_or_univ hs hs'
-
-中文:
-定理 measure_self_or_compl_eq_zero
-  结论: (hf : 预遍历 f μ) (hs : 可测集 s)
-  证明: by
-  simpa using hf.ae_empty_or_univ hs hs'
-
-Depends on / 依赖: ae_empty_or_univ, hf.ae_empty_or_univ
+/-
+**PreErgodic.measure_self_or_compl_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic
+`。
+形式化陈述：measure_self_or_compl_eq_zero (hf : PreErgodic f μ) (hs : MeasurableSet s)
+ (hs' : f ⁻¹' s = s) : μ s = 0 ∨ μ sᶜ = 0
+参数：hf : PreErgodic f μ；hs : MeasurableSet s；hs' : f ⁻¹' s = s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PreErgodic.ae_empty_or_univ`：ae_empty_or_univ (hf : PreErgodic f μ) (hs 
+: MeasurableSet s) (hfs : f ⁻¹' s = s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ
 -/
 theorem measure_self_or_compl_eq_zero (hf : PreErgodic f μ) (hs : MeasurableSet s)
     (hs' : f ⁻¹' s = s) : μ s = 0 ∨ μ sᶜ = 0 := by
   simpa using hf.ae_empty_or_univ hs hs'
-
-/--
-theorem `ae_mem_or_ae_notMem` / 定理 `ae_mem_or_ae_notMem`
-
-English:
-theorem ae_mem_or_ae_notMem
-  given: (hf : PreErgodic f μ) (hsm : MeasurableSet s) (hs : f ⁻¹' s = s)
-  proof: eventuallyConst_set.1 hf.aeconst_set hsm hs
-
-中文:
-定理 ae_mem_or_ae_notMem
-  条件: (hf : 预遍历 f μ) (hsm : 可测集 s) (hs : f ⁻¹' s = s)
-  证明: eventuallyConst_set.1 hf.aeconst_set hsm hs
-
-Depends on / 依赖: aeconst_set, eventuallyConst_set, hf.aeconst_set
+/-
+**PreErgodic.ae_mem_or_ae_notMem** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：ae_mem_or_ae_notMem (hf : PreErgodic f μ) (hsm : MeasurableSet s) (hs : f 
+⁻¹' s = s) : (forallᵐ x ∂μ, x in s) ∨ forallᵐ x ∂μ, x ∉ s
+参数：hf : PreErgodic f μ；hsm : MeasurableSet s；hs : f ⁻¹' s = s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.eventuallyConst_set`：eventuallyConst_set {s : Set α} : Eventually
+Const s l ↔ (forallᶠ x in l, x in s) ∨ (forallᶠ x in l, x ∉ s)
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
 -/
 theorem ae_mem_or_ae_notMem (hf : PreErgodic f μ) (hsm : MeasurableSet s) (hs : f ⁻¹' s = s) :
-    (forallᵐ x ∂μ, x in s) ∨ forallᵐ x ∂μ, x ∉ s :=
-eventuallyConst_set.1 hf.aeconst_set hsm hs
+    (∀ᵐ x ∂μ, x ∈ s) ∨ ∀ᵐ x ∂μ, x ∉ s :=
+  eventuallyConst_set.1 <| hf.aeconst_set hsm hs
 
-/--
-theorem `prob_eq_zero_or_one` / 定理 `prob_eq_zero_or_one`
+/-- On a probability space, the (pre)ergodicity condition is a zero-one law. -/
+/-
+**PreErgodic.prob_eq_zero_or_one** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：prob_eq_zero_or_one [IsProbabilityMeasure μ] (hf : PreErgodic f μ) (hs : M
+easurableSet s) (hs' : f ⁻¹' s = s) : μ s = 0 ∨ μ s = 1
+参数：hf : PreErgodic f μ；hs : MeasurableSet s；hs' : f ⁻¹' s = s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `PreErgodic.measure_self_or_compl_eq_zero`：measure_self_or_compl_eq_zero 
+(hf : PreErgodic f μ) (hs : MeasurableSet s) (hs' : f ⁻¹' s = s) : μ s = 0 ∨ μ s
+ᶜ = 0
 
-English:
-theorem prob_eq_zero_or_one
-  statement: [IsProbabilityMeasure μ] (hf : PreErgodic f μ) (hs : MeasurableSet s)
-  proof: by
-  simpa [hs] using hf.measure_self_or_compl_eq_zero hs hs'
-
-中文:
-定理 prob_eq_zero_or_one
-  结论: [是概率测度 μ] (hf : 预遍历 f μ) (hs : 可测集 s)
-  证明: by
-  simpa [hs] using hf.measure_self_or_compl_eq_zero hs hs'
-
-Depends on / 依赖: hf.measure_self_or_compl_eq_zero, measure_self_or_compl_eq_zero
+--- 原说明 ---
+On a probability space, the (pre)ergodicity condition is a zero-one law.
 -/
 theorem prob_eq_zero_or_one [IsProbabilityMeasure μ] (hf : PreErgodic f μ) (hs : MeasurableSet s)
     (hs' : f ⁻¹' s = s) : μ s = 0 ∨ μ s = 1 := by
   simpa [hs] using hf.measure_self_or_compl_eq_zero hs hs'
-
-/--
-theorem `of_iterate` / 定理 `of_iterate`
-
-English:
-theorem of_iterate
-  given: (n : Nat) (hf : PreErgodic f^[n] μ)
-  statement: PreErgodic f μ
-  proof: ⟨fun _ hs hs' => hf.aeconst_set hs IsFixedPt.preimage_iterate hs' n⟩
-
-中文:
-定理 of_iterate
-  条件: (n : 自然数) (hf : 预遍历 f^[n] μ)
-  结论: 预遍历 f μ
-  证明: ⟨fun _ hs hs' => hf.aeconst_set hs IsFixedPt.preimage_iterate hs' n⟩
-
-Depends on / 依赖: IsFixedPt, IsFixedPt.preimage_iterate, aeconst_set, hf.aeconst_set, preimage_iterate
+/-
+**PreErgodic.of_iterate** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：of_iterate (n : Nat) (hf : PreErgodic f^[n] μ) : PreErgodic f μ
+参数：n : Nat；hf : PreErgodic f^[n] μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
+· 使用定理 `Function.IsFixedPt.preimage_iterate`：preimage_iterate {s : Set α} (h : I
+sFixedPt (Set.preimage f) s) (n : Nat) : IsFixedPt (Set.preimage f^[n]) s
 -/
-theorem of_iterate (n : Nat) (hf : PreErgodic f^[n] μ) : PreErgodic f μ :=
-⟨fun _ hs hs' => hf.aeconst_set hs IsFixedPt.preimage_iterate hs' n⟩
-
-/--
-theorem `smul_measure` / 定理 `smul_measure`
-
-English:
-theorem smul_measure
-  statement: {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
-  proof: (hf.aeconst_set hs hfs).anti ae_smul_measure_le _
-
-中文:
-定理 smul_measure
-  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
-  证明: (hf.aeconst_set hs hfs).anti ae_smul_measure_le _
-
-Depends on / 依赖: ae_smul_measure_le, aeconst_set, hf.aeconst_set
+theorem of_iterate (n : ℕ) (hf : PreErgodic f^[n] μ) : PreErgodic f μ :=
+  ⟨fun _ hs hs' => hf.aeconst_set hs <| IsFixedPt.preimage_iterate hs' n⟩
+/-
+**PreErgodic.smul_measure** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>
+=0∞] (hf : PreErgodic f μ) (c : R) : PreErgodic f (c • μ) where aeconst_set _s h
+s hfs
+参数：hf : PreErgodic f μ；c : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyConst.anti`：∀ {α : Type u_1} {β : Type u_2} {l : Filter
+ α} {f : α → β} {l' : Filter α},   Filter.EventuallyConst f l → l' ≤ l → Filter.
+EventuallyConst f…
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
+· 使用定理 `MeasureTheory.Measure.ae_smul_measure_le`：ae_smul_measure_le [SMul R Rea
+l>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (c : R) : ae (c • μ) <= ae μ
 -/
-theorem smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
+theorem smul_measure {R : Type*} [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞]
     (hf : PreErgodic f μ) (c : R) : PreErgodic f (c • μ) where
-aeconst_set _s hs hfs := (hf.aeconst_set hs hfs).anti ae_smul_measure_le _
+  aeconst_set _s hs hfs := (hf.aeconst_set hs hfs).anti <| ae_smul_measure_le _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `zero_measure` / 定理 `zero_measure`
-
-English:
-theorem zero_measure
-  given: (f : α -> α)
-  statement: @PreErgodic α m f 0 where
-  proof: by simp
-
-中文:
-定理 zero_measure
-  条件: (f : α -> α)
-  结论: @预遍历 α m f 0 where
-  证明: by simp
+/-
+**PreErgodic.zero_measure** 是 Mathlib 中的一个定理，位于命名空间 `PreErgodic`。
+形式化陈述：zero_measure (f : α -> α) : @PreErgodic α m f 0 where aeconst_set _ _ _
+参数：f : α -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
-theorem zero_measure (f : α -> α) : @PreErgodic α m f 0 where
+theorem zero_measure (f : α → α) : @PreErgodic α m f 0 where
   aeconst_set _ _ _ := by simp
 
 end PreErgodic
 
 namespace MeasureTheory.MeasurePreserving
 
-variable {β : Type*} {m' : MeasurableSpace β} {μ' : Measure β} {g : α -> β}
+variable {β : Type*} {m' : MeasurableSpace β} {μ' : Measure β} {g : α → β}
 
-/--
-theorem `preErgodic_of_preErgodic_semiconj` / 定理 `preErgodic_of_preErgodic_semiconj`
-
-English:
-theorem preErgodic_of_preErgodic_semiconj
-  statement: (hg : MeasurePreserving g μ μ') (hf : PreErgodic f μ)
-  proof: by
-    rw [← hg.aeconst_preimage hs₀.nullMeasurableSet]
-    apply hf.aeconst_set (hg.measurable hs₀)
-    rw [← preimage_comp]; rw [h_comm.comp_eq]; rw [preimage_comp]; rw [hs₁]
-
-中文:
-定理 preErgodic_of_preErgodic_semiconj
-  结论: (hg : 保测 g μ μ') (hf : 预遍历 f μ)
-  证明: by
-    rw [← hg.aeconst_preimage hs₀.nullMeasurableSet]
-    apply hf.aeconst_set (hg.measurable hs₀)
-    rw [← preimage_comp]; rw [h_comm.comp_eq]; rw [preimage_comp]; rw [hs₁]
-
-Depends on / 依赖: aeconst_preimage, aeconst_set, comp_eq, h_comm, h_comm.comp_eq, hf.aeconst_set, hg.aeconst_preimage, hg.measurable, measurable, nullMeasurableSet, preimage_comp
+/-
+**MeasureTheory.MeasurePreserving.preErgodic_of_preErgodic_semiconj** 是 Mathlib 
+中的一个定理，位于命名空间 `MeasureTheory.MeasurePreserving`。
+形式化陈述：preErgodic_of_preErgodic_semiconj (hg : MeasurePreserving g μ μ') (hf : Pr
+eErgodic f μ) {f' : β -> β} (h_comm : Semiconj g f f') : PreErgodic f' μ' where 
+aeconst_set s hs₀ hs₁
+参数：hg : MeasurePreserving g μ μ'；hf : PreErgodic f μ；h_comm : Semiconj g f f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.MeasurePreserving.aeconst_preimage`：aeconst_preimage {f : 
+α -> β} (hf : MeasurePreserving f μa μb) {s : Set β} (hs : NullMeasurableSet s μ
+b) : Filter.EventuallyConst (f ⁻¹' s) …
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
+· 使用定理 `MeasureTheory.MeasurePreserving.measurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β}   {μa : 
+autoParam (MeasureTheory.Measure…
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `Function.Semiconj.comp_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+ga : α → α} {gb : β → β}, Function.Semiconj f ga gb → f ∘ ga = gb ∘ f
 -/
 theorem preErgodic_of_preErgodic_semiconj (hg : MeasurePreserving g μ μ') (hf : PreErgodic f μ)
-    {f' : β -> β} (h_comm : Semiconj g f f') : PreErgodic f' μ' where
+    {f' : β → β} (h_comm : Semiconj g f f') : PreErgodic f' μ' where
   aeconst_set s hs₀ hs₁ := by
     rw [← hg.aeconst_preimage hs₀.nullMeasurableSet]
     apply hf.aeconst_set (hg.measurable hs₀)
-    rw [← preimage_comp]; rw [h_comm.comp_eq]; rw [preimage_comp]; rw [hs₁]
-
-/--
-theorem `ergodic_of_ergodic_semiconj` / 定理 `ergodic_of_ergodic_semiconj`
-
-English:
-theorem ergodic_of_ergodic_semiconj
-  statement: (hg : MeasurePreserving g μ μ') (hf : Ergodic f μ)
-  proof: ⟨hg.of_semiconj hf.toMeasurePreserving h_comm hf',
-   hg.preErgodic_of_preErgodic_semiconj hf.toPreErgodic h_comm⟩
-
-中文:
-定理 ergodic_of_ergodic_semiconj
-  结论: (hg : 保测 g μ μ') (hf : 遍历 f μ)
-  证明: ⟨hg.of_semiconj hf.toMeasurePreserving h_comm hf',
-   hg.preErgodic_of_preErgodic_semiconj hf.toPreErgodic h_comm⟩
-
-Depends on / 依赖: h_comm, hf.toMeasurePreserving, hf.toPreErgodic, hg.of_semiconj, hg.preErgodic_of_preErgodic_semiconj, of_semiconj, preErgodic_of_preErgodic_semiconj, toMeasurePreserving, toPreErgodic
+    rw [← preimage_comp, h_comm.comp_eq, preimage_comp, hs₁]
+/-
+**MeasureTheory.MeasurePreserving.ergodic_of_ergodic_semiconj** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory.MeasurePreserving`。
+形式化陈述：ergodic_of_ergodic_semiconj (hg : MeasurePreserving g μ μ') (hf : Ergodic 
+f μ) {f' : β -> β} (hf' : Measurable f') (h_comm : Semiconj g f f') : Ergodic f'
+ μ'
+参数：hg : MeasurePreserving g μ μ'；hf : Ergodic f μ；hf' : Measurable f'；h_comm : S
+emiconj g f f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.of_semiconj`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : MeasureTheory
+.Measure α}   {μb : MeasureTheory…
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `MeasureTheory.MeasurePreserving.preErgodic_of_preErgodic_semiconj`：preEr
+godic_of_preErgodic_semiconj (hg : MeasurePreserving g μ μ') (hf : PreErgodic f 
+μ) {f' : β -> β} (h_comm : Semiconj g f f') : PreErgodi…
+· 使用定理 `Ergodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α → 
+α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f μ → Pr
+eErgodic f…
 -/
 theorem ergodic_of_ergodic_semiconj (hg : MeasurePreserving g μ μ') (hf : Ergodic f μ)
-    {f' : β -> β} (hf' : Measurable f') (h_comm : Semiconj g f f') : Ergodic f' μ' :=
+    {f' : β → β} (hf' : Measurable f') (h_comm : Semiconj g f f') : Ergodic f' μ' :=
   ⟨hg.of_semiconj hf.toMeasurePreserving h_comm hf',
    hg.preErgodic_of_preErgodic_semiconj hf.toPreErgodic h_comm⟩
-
-/--
-theorem `preErgodic_conjugate_iff` / 定理 `preErgodic_conjugate_iff`
-
-English:
-theorem preErgodic_conjugate_iff
-  given: {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ')
-  proof: by
-  refine ⟨fun hf => preErgodic_of_preErgodic_semiconj (h.symm e) hf ?_,
-      fun hf => preErgodic_of_preErgodic_semiconj h hf ?_⟩
-  · simp [Semiconj]
-  · simp [Semiconj]
-
-中文:
-定理 preErgodic_conjugate_iff
-  条件: {e : α ≃ᵐ β} (h : 保测 e μ μ')
-  证明: by
-  refine ⟨fun hf => preErgodic_of_preErgodic_semiconj (h.symm e) hf ?_,
-      fun hf => preErgodic_of_preErgodic_semiconj h hf ?_⟩
-  · simp [Semiconj]
-  · simp [Semiconj]
-
-Depends on / 依赖: Semiconj, h.symm, preErgodic_of_preErgodic_semiconj
+/-
+**MeasureTheory.MeasurePreserving.preErgodic_conjugate_iff** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.MeasurePreserving`。
+形式化陈述：preErgodic_conjugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ') : Pre
+Ergodic (e ∘ f ∘ e.symm) μ' ↔ PreErgodic f μ
+参数：h : MeasurePreserving e μ μ'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.preErgodic_of_preErgodic_semiconj`：preEr
+godic_of_preErgodic_semiconj (hg : MeasurePreserving g μ μ') (hf : PreErgodic f 
+μ) {f' : β -> β} (h_comm : Semiconj g f f') : PreErgodi…
+· 使用定理 `MeasureTheory.MeasurePreserving.symm`：symm (e : α ≃ᵐ β) {μa : Measure α}
+ {μb : Measure β} (h : MeasurePreserving e μa μb) : MeasurePreserving e.symm μb 
+μa
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableEquiv.symm_apply_apply`：symm_apply_apply (e : α ≃ᵐ β) (x : α) 
+: e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem preErgodic_conjugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ') :
     PreErgodic (e ∘ f ∘ e.symm) μ' ↔ PreErgodic f μ := by
@@ -324,36 +327,42 @@ theorem preErgodic_conjugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ 
       fun hf => preErgodic_of_preErgodic_semiconj h hf ?_⟩
   · simp [Semiconj]
   · simp [Semiconj]
-
-/--
-theorem `ergodic_conjugate_iff` / 定理 `ergodic_conjugate_iff`
-
-English:
-theorem ergodic_conjugate_iff
-  given: {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ')
-  proof: by
-  have : MeasurePreserving (e ∘ f ∘ e.symm) μ' μ' ↔ MeasurePreserving f μ μ := by
-    rw [h.comp_left_iff]; rw [(MeasurePreserving.symm e h).comp_right_iff]
-  replace h : PreErgodic (e ∘ f ∘ e.symm) μ' ↔ PreErgodic f μ := h.preErgodic_conjugate_iff
-  exact ⟨fun hf => { this.mp hf.toMeasurePreserving, h.mp hf.toPreErgodic with },
-    fun hf => { this.mpr hf.toMeasurePreserving, h.mpr hf.toPreErgodic with }⟩
-
-中文:
-定理 ergodic_conjugate_iff
-  条件: {e : α ≃ᵐ β} (h : 保测 e μ μ')
-  证明: by
-  have : MeasurePreserving (e ∘ f ∘ e.symm) μ' μ' ↔ MeasurePreserving f μ μ := by
-    rw [h.comp_left_iff]; rw [(MeasurePreserving.symm e h).comp_right_iff]
-  replace h : PreErgodic (e ∘ f ∘ e.symm) μ' ↔ PreErgodic f μ := h.preErgodic_conjugate_iff
-  exact ⟨fun hf => { this.mp hf.toMeasurePreserving, h.mp hf.toPreErgodic with },
-    fun hf => { this.mpr hf.toMeasurePreserving, h.mpr hf.toPreErgodic with }⟩
-
-Depends on / 依赖: MeasurePreserving, MeasurePreserving.symm, PreErgodic, comp_left_iff, comp_right_iff, e.symm, h.comp_left_iff, h.mp, h.mpr, h.preErgodic_conjugate_iff, hf.toMeasurePreserving, hf.toPreErgodic, preErgodic_conjugate_iff, replace, this.mp, this.mpr, toMeasurePreserving, toPreErgodic
+/-
+**MeasureTheory.MeasurePreserving.ergodic_conjugate_iff** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.MeasurePreserving`。
+形式化陈述：ergodic_conjugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ') : Ergodi
+c (e ∘ f ∘ e.symm) μ' ↔ Ergodic f μ
+参数：h : MeasurePreserving e μ μ'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.MeasurePreserving.comp_left_iff`：∀ {α : Type u_1} {β : Typ
+e u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   
+[inst_2 : MeasurableSpace γ] {μa : …
+· 使用定理 `MeasureTheory.MeasurePreserving.comp_right_iff`：∀ {α : Type u_1} {β : Ty
+pe u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]  
+ [inst_2 : MeasurableSpace γ] {μa : …
+· 使用定理 `MeasureTheory.MeasurePreserving.symm`：symm (e : α ≃ᵐ β) {μa : Measure α}
+ {μb : Measure β} (h : MeasurePreserving e μa μb) : MeasurePreserving e.symm μb 
+μa
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `MeasureTheory.MeasurePreserving.preErgodic_conjugate_iff`：preErgodic_con
+jugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ') : PreErgodic (e ∘ f ∘ e.s
+ymm) μ' ↔ PreErgodic f μ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `Ergodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α → 
+α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f μ → Pr
+eErgodic f…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem ergodic_conjugate_iff {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ') :
     Ergodic (e ∘ f ∘ e.symm) μ' ↔ Ergodic f μ := by
   have : MeasurePreserving (e ∘ f ∘ e.symm) μ' μ' ↔ MeasurePreserving f μ μ := by
-    rw [h.comp_left_iff]; rw [(MeasurePreserving.symm e h).comp_right_iff]
+    rw [h.comp_left_iff, (MeasurePreserving.symm e h).comp_right_iff]
   replace h : PreErgodic (e ∘ f ∘ e.symm) μ' ↔ PreErgodic f μ := h.preErgodic_conjugate_iff
   exact ⟨fun hf => { this.mp hf.toMeasurePreserving, h.mp hf.toPreErgodic with },
     fun hf => { this.mpr hf.toMeasurePreserving, h.mpr hf.toPreErgodic with }⟩
@@ -362,107 +371,90 @@ end MeasureTheory.MeasurePreserving
 
 namespace QuasiErgodic
 
-/--
-theorem `aeconst_set₀` / 定理 `aeconst_set₀`
-
-English:
-theorem aeconst_set₀
-  given: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s)
-  proof: let ⟨_t, h₀, h₁, h₂⟩ := hf.toQuasiMeasurePreserving.exists_preimage_eq_of_preimage_ae hsm hs
-  (hf.aeconst_set h₀ h₂).congr h₁
-
-中文:
-定理 aeconst_set₀
-  条件: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s)
-  证明: let ⟨_t, h₀, h₁, h₂⟩ := hf.toQuasiMeasurePreserving.exists_preimage_eq_of_preimage_ae hsm hs
-  (hf.aeconst_set h₀ h₂).congr h₁
-
-Depends on / 依赖: aeconst_set, exists_preimage_eq_of_preimage_ae, hf.aeconst_set, hf.toQuasiMeasurePreserving.exists_preimage_eq_of_preimage_ae, toQuasiMeasurePreserving
+/-
+**QuasiErgodic.aeconst_set** 是 Mathlib 中的一个定理，位于命名空间 `QuasiErgodic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem aeconst_set₀ (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s) :
     EventuallyConst s (ae μ) :=
   let ⟨_t, h₀, h₁, h₂⟩ := hf.toQuasiMeasurePreserving.exists_preimage_eq_of_preimage_ae hsm hs
   (hf.aeconst_set h₀ h₂).congr h₁
 
-/--
-theorem `ae_empty_or_univ₀` / 定理 `ae_empty_or_univ₀`
+/-- For a quasi-ergodic map, sets that are almost invariant (rather than strictly invariant) are
+still either almost empty or full. -/
+/-
+**QuasiErgodic.ae_empty_or_univ** 是 Mathlib 中的一个定理，位于命名空间 `QuasiErgodic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ae_empty_or_univ₀
-  statement: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
-  proof: eventuallyConst_set'.mp hf.aeconst_set₀ hsm hs
-
-中文:
-定理 ae_empty_or_univ₀
-  结论: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ)
-  证明: eventuallyConst_set'.mp hf.aeconst_set₀ hsm hs
-
-Depends on / 依赖: eventuallyConst_set, hf.aeconst_set
+--- 原说明 ---
+For a quasi-ergodic map, sets that are almost invariant (rather than strictly in
+variant) are
+still either almost empty or full.
 -/
 theorem ae_empty_or_univ₀ (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
     (hs : f ⁻¹' s =ᵐ[μ] s) :
     s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
-eventuallyConst_set'.mp hf.aeconst_set₀ hsm hs
+  eventuallyConst_set'.mp <| hf.aeconst_set₀ hsm hs
 
-/--
-theorem `ae_mem_or_ae_notMem₀` / 定理 `ae_mem_or_ae_notMem₀`
+/-- For a quasi-ergodic map, sets that are almost invariant (rather than strictly invariant) are
+still either almost empty or full. -/
+/-
+**QuasiErgodic.ae_mem_or_ae_notMem** 是 Mathlib 中的一个定理，位于命名空间 `QuasiErgodic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ae_mem_or_ae_notMem₀
-  statement: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
-  proof: eventuallyConst_set.mp hf.aeconst_set₀ hsm hs
-
-中文:
-定理 ae_mem_or_ae_notMem₀
-  结论: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ)
-  证明: eventuallyConst_set.mp hf.aeconst_set₀ hsm hs
-
-Depends on / 依赖: eventuallyConst_set, eventuallyConst_set.mp, hf.aeconst_set
+--- 原说明 ---
+For a quasi-ergodic map, sets that are almost invariant (rather than strictly in
+variant) are
+still either almost empty or full.
 -/
 theorem ae_mem_or_ae_notMem₀ (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
     (hs : f ⁻¹' s =ᵐ[μ] s) :
-    (forallᵐ x ∂μ, x in s) ∨ forallᵐ x ∂μ, x ∉ s :=
-eventuallyConst_set.mp hf.aeconst_set₀ hsm hs
-
-/--
-theorem `smul_measure` / 定理 `smul_measure`
-
-English:
-theorem smul_measure
-  statement: {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
-  proof: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-中文:
-定理 smul_measure
-  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
-  证明: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-Depends on / 依赖: smul_measure
+    (∀ᵐ x ∂μ, x ∈ s) ∨ ∀ᵐ x ∂μ, x ∉ s :=
+  eventuallyConst_set.mp <| hf.aeconst_set₀ hsm hs
+/-
+**QuasiErgodic.smul_measure** 是 Mathlib 中的一个定理，位于命名空间 `QuasiErgodic`。
+形式化陈述：smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>
+=0∞] (hf : QuasiErgodic f μ) (c : R) : QuasiErgodic f (c • μ)
+参数：hf : QuasiErgodic f μ；c : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.smul_measure`：smul_measure 
+{R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (hf : QuasiMea
+surePreserving f μa μb) (c : R) : QuasiMeasureP…
+· 使用定理 `QuasiErgodic.toQuasiMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableS
+pace α} {f : α → α} {μ : autoParam (MeasureTheory.Measure α) QuasiErgodic._auto_
+1},   QuasiErgodic f μ → Me…
+· 使用定理 `PreErgodic.smul_measure`：smul_measure {R : Type*} [SMul R Real>=0∞] [IsS
+calarTower R Real>=0∞ Real>=0∞] (hf : PreErgodic f μ) (c : R) : PreErgodic f (c 
+• μ) where ae…
+· 使用定理 `QuasiErgodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f :
+ α → α} {μ : autoParam (MeasureTheory.Measure α) QuasiErgodic._auto_1},   QuasiE
+rgodic f μ → Pr…
 -/
-theorem smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
+theorem smul_measure {R : Type*} [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞]
     (hf : QuasiErgodic f μ) (c : R) : QuasiErgodic f (c • μ) :=
   ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-/--
-theorem `zero_measure` / 定理 `zero_measure`
-
-English:
-theorem zero_measure
-  given: {f : α -> α} (hf : Measurable f)
-  statement: @QuasiErgodic α m f 0 where
-  proof: hf
-  absolutelyContinuous := by simp
-  toPreErgodic := .zero_measure f
-
-中文:
-定理 zero_measure
-  条件: {f : α -> α} (hf : 可测 f)
-  结论: @拟遍历 α m f 0 where
-  证明: hf
-  absolutelyContinuous := by simp
-  toPreErgodic := .zero_measure f
+/-
+**QuasiErgodic.zero_measure** 是 Mathlib 中的一个定理，位于命名空间 `QuasiErgodic`。
+形式化陈述：zero_measure {f : α -> α} (hf : Measurable f) : @QuasiErgodic α m f 0 wher
+e measurable
+参数：hf : Measurable f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PreErgodic.zero_measure`：zero_measure (f : α -> α) : @PreErgodic α m f 0
+ where aeconst_set _ _ _
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_zero`：∀ {α : Type u_1} {β : Type u_2} {mα : Me
+asurableSpace α} {mβ : MeasurableSpace β} (f : α → β),   MeasureTheory.Measure.m
+ap f 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_measure {f : α -> α} (hf : Measurable f) : @QuasiErgodic α m f 0 where
+theorem zero_measure {f : α → α} (hf : Measurable f) : @QuasiErgodic α m f 0 where
   measurable := hf
   absolutelyContinuous := by simp
   toPreErgodic := .zero_measure f
@@ -471,192 +463,244 @@ end QuasiErgodic
 
 namespace Ergodic
 
-/--
-theorem `quasiErgodic` / 定理 `quasiErgodic`
+/-- An ergodic map is quasi-ergodic. -/
+/-
+**Ergodic.quasiErgodic** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：quasiErgodic (hf : Ergodic f μ) : QuasiErgodic f μ
+参数：hf : Ergodic f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ergodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α → 
+α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f μ → Pr
+eErgodic f…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
 
-English:
-theorem quasiErgodic
-  given: (hf : Ergodic f μ)
-  statement: QuasiErgodic f μ
-  proof: { hf.toPreErgodic, hf.toMeasurePreserving.quasiMeasurePreserving with }
-
-中文:
-定理 quasiErgodic
-  条件: (hf : 遍历 f μ)
-  结论: 拟遍历 f μ
-  证明: { hf.toPreErgodic, hf.toMeasurePreserving.quasiMeasurePreserving with }
-
-Depends on / 依赖: hf.toMeasurePreserving.quasiMeasurePreserving, hf.toPreErgodic, quasiMeasurePreserving, toMeasurePreserving, toPreErgodic
+--- 原说明 ---
+An ergodic map is quasi-ergodic.
 -/
 theorem quasiErgodic (hf : Ergodic f μ) : QuasiErgodic f μ :=
   { hf.toPreErgodic, hf.toMeasurePreserving.quasiMeasurePreserving with }
 
-/--
-theorem `ae_empty_or_univ_of_preimage_ae_le'` / 定理 `ae_empty_or_univ_of_preimage_ae_le'`
+/-- See also `Ergodic.ae_empty_or_univ_of_preimage_ae_le`. -/
+/-
+**Ergodic.ae_empty_or_univ_of_preimage_ae_le'** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic
+`。
+形式化陈述：ae_empty_or_univ_of_preimage_ae_le' (hf : Ergodic f μ) (hs : NullMeasurabl
+eSet s μ) (hs' : f ⁻¹' s <=ᵐ[μ] s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s 
+=ᵐ[μ] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : f ⁻¹' s <=ᵐ[μ] s；h_fin : μ 
+s != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `QuasiErgodic.ae_empty_or_univ₀`：ae_empty_or_univ₀ (hf : QuasiErgodic f μ
+) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s
+ =ᵐ[μ] univ
+· 使用定理 `Ergodic.quasiErgodic`：quasiErgodic (hf : Ergodic f μ) : QuasiErgodic f μ
+· 使用定理 `MeasureTheory.ae_eq_of_ae_subset_of_measure_ge`：ae_eq_of_ae_subset_of_me
+asure_ge (h₁ : s <=ᵐ[μ] t) (h₂ : μ t <= μ s) (hsm : NullMeasurableSet s μ) (ht :
+ μ t != ∞) : s =ᵐ[μ] t
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.MeasurePreserving.measure_preimage`：measure_preimage {f : 
+α -> β} (hf : MeasurePreserving f μa μb) {s : Set β} (hs : NullMeasurableSet s μ
+b) : μa (f ⁻¹' s) = μb s
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `MeasureTheory.NullMeasurableSet.preimage`：∀ {α : Type u_1} {β : Type u_2
+} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {μa : MeasureTheory.Measure 
+α}   {μb : MeasureTheory.Measu…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 
-English:
-theorem ae_empty_or_univ_of_preimage_ae_le'
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: by
-  refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
-  refine ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).ge ?_ h_fin
-  exact hs.preimage hf.quasiMeasurePreserving
-
-中文:
-定理 ae_empty_or_univ_of_preimage_ae_le'
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: by
-  refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
-  refine ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).ge ?_ h_fin
-  exact hs.preimage hf.quasiMeasurePreserving
-
-Depends on / 依赖: ae_eq_of_ae_subset_of_measure_ge, h_fin, hf.measure_preimage, hf.quasiErgodic.ae_empty_or_univ, hf.quasiMeasurePreserving, hs.preimage, measure_preimage, preimage, quasiErgodic, quasiMeasurePreserving
+--- 原说明 ---
+See also `Ergodic.ae_empty_or_univ_of_preimage_ae_le`.
 -/
 theorem ae_empty_or_univ_of_preimage_ae_le' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : f ⁻¹' s <=ᵐ[μ] s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
+    (hs' : f ⁻¹' s ≤ᵐ[μ] s) (h_fin : μ s ≠ ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
   refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
   refine ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).ge ?_ h_fin
   exact hs.preimage hf.quasiMeasurePreserving
 
-/--
-theorem `ae_empty_or_univ_of_ae_le_preimage'` / 定理 `ae_empty_or_univ_of_ae_le_preimage'`
+/-- See also `Ergodic.ae_empty_or_univ_of_ae_le_preimage`. -/
+/-
+**Ergodic.ae_empty_or_univ_of_ae_le_preimage'** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic
+`。
+形式化陈述：ae_empty_or_univ_of_ae_le_preimage' (hf : Ergodic f μ) (hs : NullMeasurabl
+eSet s μ) (hs' : s <=ᵐ[μ] f ⁻¹' s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s 
+=ᵐ[μ] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : s <=ᵐ[μ] f ⁻¹' s；h_fin : μ 
+s != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.MeasurePreserving.measure_preimage`：measure_preimage {f : 
+α -> β} (hf : MeasurePreserving f μa μb) {s : Set β} (hs : NullMeasurableSet s μ
+b) : μa (f ⁻¹' s) = μb s
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `QuasiErgodic.ae_empty_or_univ₀`：ae_empty_or_univ₀ (hf : QuasiErgodic f μ
+) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s
+ =ᵐ[μ] univ
+· 使用定理 `Ergodic.quasiErgodic`：quasiErgodic (hf : Ergodic f μ) : QuasiErgodic f μ
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.ae_eq_of_ae_subset_of_measure_ge`：ae_eq_of_ae_subset_of_me
+asure_ge (h₁ : s <=ᵐ[μ] t) (h₂ : μ t <= μ s) (hsm : NullMeasurableSet s μ) (ht :
+ μ t != ∞) : s =ᵐ[μ] t
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 
-English:
-theorem ae_empty_or_univ_of_ae_le_preimage'
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: by
-  replace h_fin : μ (f ⁻¹' s) != ∞ := by rwa [hf.measure_preimage hs]
-  refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
-  exact (ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).le hs h_fin).symm
-
-中文:
-定理 ae_empty_or_univ_of_ae_le_preimage'
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: by
-  replace h_fin : μ (f ⁻¹' s) != ∞ := by rwa [hf.measure_preimage hs]
-  refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
-  exact (ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).le hs h_fin).symm
-
-Depends on / 依赖: ae_eq_of_ae_subset_of_measure_ge, h_fin, hf.measure_preimage, hf.quasiErgodic.ae_empty_or_univ, measure_preimage, quasiErgodic, replace
+--- 原说明 ---
+See also `Ergodic.ae_empty_or_univ_of_ae_le_preimage`.
 -/
 theorem ae_empty_or_univ_of_ae_le_preimage' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : s <=ᵐ[μ] f ⁻¹' s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
-  replace h_fin : μ (f ⁻¹' s) != ∞ := by rwa [hf.measure_preimage hs]
+    (hs' : s ≤ᵐ[μ] f ⁻¹' s) (h_fin : μ s ≠ ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
+  replace h_fin : μ (f ⁻¹' s) ≠ ∞ := by rwa [hf.measure_preimage hs]
   refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
   exact (ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).le hs h_fin).symm
 
-/--
-theorem `ae_empty_or_univ_of_image_ae_le'` / 定理 `ae_empty_or_univ_of_image_ae_le'`
+/-- See also `Ergodic.ae_empty_or_univ_of_image_ae_le`. -/
+/-
+**Ergodic.ae_empty_or_univ_of_image_ae_le'** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：ae_empty_or_univ_of_image_ae_le' (hf : Ergodic f μ) (hs : NullMeasurableSe
+t s μ) (hs' : f '' s <=ᵐ[μ] s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ
+] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : f '' s <=ᵐ[μ] s；h_fin : μ s
+ != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.EventuallyLE.trans`：∀ {α : Type u} {β : Type v} [inst : Preorder 
+β] {l : Filter α} {f g h : α → β}, f ≤ᶠ[l] g → g ≤ᶠ[l] h → f ≤ᶠ[l] h
+· 使用定理 `LE.le.eventuallyLE`：LE.le.eventuallyLE {α} {l : Filter α} {s t : Set α} 
+(h : s subseteq t) : s <=ᶠ[l] t
+· 使用定理 `Set.subset_preimage_image`：subset_preimage_image (f : α -> β) (s : Set α
+) : s subseteq f ⁻¹' f '' s
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.preimage_mono_ae`：preimage_
+mono_ae {s t : Set β} (hf : QuasiMeasurePreserving f μa μb) (h : s <=ᵐ[μb] t) : 
+f ⁻¹' s <=ᵐ[μa] f ⁻¹' t
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `Ergodic.ae_empty_or_univ_of_ae_le_preimage'`：ae_empty_or_univ_of_ae_le_p
+reimage' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ) (hs' : s <=ᵐ[μ] f ⁻¹' s
+) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅…
 
-English:
-theorem ae_empty_or_univ_of_image_ae_le'
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: by
-  replace hs' : s <=ᵐ[μ] f ⁻¹' s :=
-    (LE.le.eventuallyLE (subset_preimage_image f s)).trans
-      (hf.quasiMeasurePreserving.preimage_mono_ae hs')
-  exact ae_empty_or_univ_of_ae_le_preimage' hf hs hs' h_fin
-
-中文:
-定理 ae_empty_or_univ_of_image_ae_le'
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: by
-  replace hs' : s <=ᵐ[μ] f ⁻¹' s :=
-    (LE.le.eventuallyLE (subset_preimage_image f s)).trans
-      (hf.quasiMeasurePreserving.preimage_mono_ae hs')
-  exact ae_empty_or_univ_of_ae_le_preimage' hf hs hs' h_fin
-
-Depends on / 依赖: LE.le.eventuallyLE, ae_empty_or_univ_of_ae_le_preimage, eventuallyLE, h_fin, hf.quasiMeasurePreserving.preimage_mono_ae, preimage_mono_ae, quasiMeasurePreserving, replace, subset_preimage_image
+--- 原说明 ---
+See also `Ergodic.ae_empty_or_univ_of_image_ae_le`.
 -/
 theorem ae_empty_or_univ_of_image_ae_le' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : f '' s <=ᵐ[μ] s) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
-  replace hs' : s <=ᵐ[μ] f ⁻¹' s :=
+    (hs' : f '' s ≤ᵐ[μ] s) (h_fin : μ s ≠ ∞) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ := by
+  replace hs' : s ≤ᵐ[μ] f ⁻¹' s :=
     (LE.le.eventuallyLE (subset_preimage_image f s)).trans
       (hf.quasiMeasurePreserving.preimage_mono_ae hs')
   exact ae_empty_or_univ_of_ae_le_preimage' hf hs hs' h_fin
 
-/--
-theorem `symm` / 定理 `symm`
+/-- If a measurable equivalence is ergodic, then so is the inverse map. -/
+/-
+**Ergodic.symm** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：symm {e : α ≃ᵐ α} (he : Ergodic e μ) : Ergodic e.symm μ where toMeasurePre
+serving
+参数：he : Ergodic e μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.symm`：symm (e : α ≃ᵐ β) {μa : Measure α}
+ {μb : Measure β} (h : MeasurePreserving e μa μb) : MeasurePreserving e.symm μb 
+μa
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `PreErgodic.aeconst_set`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α 
+→ α} {μ : autoParam (MeasureTheory.Measure α) PreErgodic._auto_1},   PreErgodic 
+f μ → ∀ ⦃s :…
+· 使用定理 `Ergodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α → 
+α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f μ → Pr
+eErgodic f…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableEquiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ᵐ
+ β) (s : Set α) : e '' s = e.symm ⁻¹' s
+· 使用引理 `MeasurableEquiv.preimage_image`：preimage_image (e : α ≃ᵐ β) (s : Set α) 
+: e ⁻¹' e '' s = s
 
-English:
-theorem symm
-  given: {e : α ≃ᵐ α} (he : Ergodic e μ)
-  statement: Ergodic e.symm μ where
-  proof: he.toMeasurePreserving.symm
-aeconst_set s hsm hs := he.aeconst_set hsm by
-    conv_lhs => rw [← hs, ← e.image_eq_preimage_symm, e.preimage_image]
-
-中文:
-定理 symm
-  条件: {e : α ≃ᵐ α} (he : 遍历 e μ)
-  结论: 遍历 e.symm μ where
-  证明: he.toMeasurePreserving.symm
-aeconst_set s hsm hs := he.aeconst_set hsm by
-    conv_lhs => rw [← hs, ← e.image_eq_preimage_symm, e.preimage_image]
-
-Depends on / 依赖: he.toMeasurePreserving.symm, toMeasurePreserving
+--- 原说明 ---
+If a measurable equivalence is ergodic, then so is the inverse map.
 -/
 theorem symm {e : α ≃ᵐ α} (he : Ergodic e μ) : Ergodic e.symm μ where
   toMeasurePreserving := he.toMeasurePreserving.symm
-aeconst_set s hsm hs := he.aeconst_set hsm by
+  aeconst_set s hsm hs := he.aeconst_set hsm <| by
     conv_lhs => rw [← hs, ← e.image_eq_preimage_symm, e.preimage_image]
-
-/--
-theorem `symm_iff` / 定理 `symm_iff`
-
-English:
-theorem symm_iff
-  given: {e : α ≃ᵐ α}
-  statement: Ergodic e.symm μ ↔ Ergodic e μ
-  proof: ⟨.symm, .symm⟩
-
-中文:
-定理 symm_iff
-  条件: {e : α ≃ᵐ α}
-  结论: 遍历 e.symm μ ↔ 遍历 e μ
-  证明: ⟨.symm, .symm⟩
+/-
+**Ergodic.symm_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：∀ {α : Type u_1} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} {e 
+: α ≃ᵐ α},   Ergodic (⇑e.symm) μ ↔ Ergodic (⇑e) μ
+参数：⇑e.symm；⇑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ergodic.symm`：symm {e : α ≃ᵐ α} (he : Ergodic e μ) : Ergodic e.symm μ wh
+ere toMeasurePreserving
 -/
 @[simp] theorem symm_iff {e : α ≃ᵐ α} : Ergodic e.symm μ ↔ Ergodic e μ := ⟨.symm, .symm⟩
-
-/--
-theorem `smul_measure` / 定理 `smul_measure`
-
-English:
-theorem smul_measure
-  statement: {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
-  proof: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-中文:
-定理 smul_measure
-  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
-  证明: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-Depends on / 依赖: smul_measure
+/-
+**Ergodic.smul_measure** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>
+=0∞] (hf : Ergodic f μ) (c : R) : Ergodic f (c • μ)
+参数：hf : Ergodic f μ；c : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.smul_measure`：smul_measure {R : Type*} [
+SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] {f : α -> β} (hf : MeasureP
+reserving f μa μb) (c : R) : Measu…
+· 使用定理 `Ergodic.toMeasurePreserving`：∀ {α : Type u_1} {m : MeasurableSpace α} {f
+ : α → α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f
+ μ → MeasureTheor…
+· 使用定理 `PreErgodic.smul_measure`：smul_measure {R : Type*} [SMul R Real>=0∞] [IsS
+calarTower R Real>=0∞ Real>=0∞] (hf : PreErgodic f μ) (c : R) : PreErgodic f (c 
+• μ) where ae…
+· 使用定理 `Ergodic.toPreErgodic`：∀ {α : Type u_1} {m : MeasurableSpace α} {f : α → 
+α} {μ : autoParam (MeasureTheory.Measure α) Ergodic._auto_1},   Ergodic f μ → Pr
+eErgodic f…
 -/
-theorem smul_measure {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
+theorem smul_measure {R : Type*} [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞]
     (hf : Ergodic f μ) (c : R) : Ergodic f (c • μ) :=
   ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
-
-/--
-theorem `zero_measure` / 定理 `zero_measure`
-
-English:
-theorem zero_measure
-  given: {f : α -> α} (hf : Measurable f)
-  statement: @Ergodic α m f 0 where
-  proof: hf
-  map_eq := by simp
-  toPreErgodic := .zero_measure f
-
-中文:
-定理 zero_measure
-  条件: {f : α -> α} (hf : 可测 f)
-  结论: @遍历 α m f 0 where
-  证明: hf
-  map_eq := by simp
-  toPreErgodic := .zero_measure f
+/-
+**Ergodic.zero_measure** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：zero_measure {f : α -> α} (hf : Measurable f) : @Ergodic α m f 0 where mea
+surable
+参数：hf : Measurable f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PreErgodic.zero_measure`：zero_measure (f : α -> α) : @PreErgodic α m f 0
+ where aeconst_set _ _ _
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_zero`：∀ {α : Type u_1} {β : Type u_2} {mα : Me
+asurableSpace α} {mβ : MeasurableSpace β} (f : α → β),   MeasureTheory.Measure.m
+ap f 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_measure {f : α -> α} (hf : Measurable f) : @Ergodic α m f 0 where
+theorem zero_measure {f : α → α} (hf : Measurable f) : @Ergodic α m f 0 where
   measurable := hf
   map_eq := by simp
   toPreErgodic := .zero_measure f
@@ -665,63 +709,64 @@ section IsFiniteMeasure
 
 variable [IsFiniteMeasure μ]
 
-/--
-theorem `ae_empty_or_univ_of_preimage_ae_le` / 定理 `ae_empty_or_univ_of_preimage_ae_le`
-
-English:
-theorem ae_empty_or_univ_of_preimage_ae_le
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: ae_empty_or_univ_of_preimage_ae_le' hf hs hs' measure_ne_top μ s
-
-中文:
-定理 ae_empty_or_univ_of_preimage_ae_le
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: ae_empty_or_univ_of_preimage_ae_le' hf hs hs' measure_ne_top μ s
-
-Depends on / 依赖: ae_empty_or_univ_of_preimage_ae_le, measure_ne_top
+/-
+**Ergodic.ae_empty_or_univ_of_preimage_ae_le** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`
+。
+形式化陈述：ae_empty_or_univ_of_preimage_ae_le (hf : Ergodic f μ) (hs : NullMeasurable
+Set s μ) (hs' : f ⁻¹' s <=ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : f ⁻¹' s <=ᵐ[μ] s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Ergodic.ae_empty_or_univ_of_preimage_ae_le'`：ae_empty_or_univ_of_preimag
+e_ae_le' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ) (hs' : f ⁻¹' s <=ᵐ[μ] s
+) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅…
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 theorem ae_empty_or_univ_of_preimage_ae_le (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : f ⁻¹' s <=ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
-ae_empty_or_univ_of_preimage_ae_le' hf hs hs' measure_ne_top μ s
-
-/--
-theorem `ae_empty_or_univ_of_ae_le_preimage` / 定理 `ae_empty_or_univ_of_ae_le_preimage`
-
-English:
-theorem ae_empty_or_univ_of_ae_le_preimage
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: ae_empty_or_univ_of_ae_le_preimage' hf hs hs' measure_ne_top μ s
-
-中文:
-定理 ae_empty_or_univ_of_ae_le_preimage
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: ae_empty_or_univ_of_ae_le_preimage' hf hs hs' measure_ne_top μ s
-
-Depends on / 依赖: ae_empty_or_univ_of_ae_le_preimage, measure_ne_top
+    (hs' : f ⁻¹' s ≤ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
+  ae_empty_or_univ_of_preimage_ae_le' hf hs hs' <| measure_ne_top μ s
+/-
+**Ergodic.ae_empty_or_univ_of_ae_le_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`
+。
+形式化陈述：ae_empty_or_univ_of_ae_le_preimage (hf : Ergodic f μ) (hs : NullMeasurable
+Set s μ) (hs' : s <=ᵐ[μ] f ⁻¹' s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : s <=ᵐ[μ] f ⁻¹' s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Ergodic.ae_empty_or_univ_of_ae_le_preimage'`：ae_empty_or_univ_of_ae_le_p
+reimage' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ) (hs' : s <=ᵐ[μ] f ⁻¹' s
+) (h_fin : μ s != ∞) : s =ᵐ[μ] (∅…
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 theorem ae_empty_or_univ_of_ae_le_preimage (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : s <=ᵐ[μ] f ⁻¹' s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
-ae_empty_or_univ_of_ae_le_preimage' hf hs hs' measure_ne_top μ s
-
-/--
-theorem `ae_empty_or_univ_of_image_ae_le` / 定理 `ae_empty_or_univ_of_image_ae_le`
-
-English:
-theorem ae_empty_or_univ_of_image_ae_le
-  statement: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-  proof: ae_empty_or_univ_of_image_ae_le' hf hs hs' measure_ne_top μ s
-
-中文:
-定理 ae_empty_or_univ_of_image_ae_le
-  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
-  证明: ae_empty_or_univ_of_image_ae_le' hf hs hs' measure_ne_top μ s
-
-Depends on / 依赖: ae_empty_or_univ_of_image_ae_le, measure_ne_top
+    (hs' : s ≤ᵐ[μ] f ⁻¹' s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
+  ae_empty_or_univ_of_ae_le_preimage' hf hs hs' <| measure_ne_top μ s
+/-
+**Ergodic.ae_empty_or_univ_of_image_ae_le** 是 Mathlib 中的一个定理，位于命名空间 `Ergodic`。
+形式化陈述：ae_empty_or_univ_of_image_ae_le (hf : Ergodic f μ) (hs : NullMeasurableSet
+ s μ) (hs' : f '' s <=ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ
+参数：hf : Ergodic f μ；hs : NullMeasurableSet s μ；hs' : f '' s <=ᵐ[μ] s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Ergodic.ae_empty_or_univ_of_image_ae_le'`：ae_empty_or_univ_of_image_ae_l
+e' (hf : Ergodic f μ) (hs : NullMeasurableSet s μ) (hs' : f '' s <=ᵐ[μ] s) (h_fi
+n : μ s != ∞) : s =ᵐ[μ] (∅ : S…
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 theorem ae_empty_or_univ_of_image_ae_le (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
-    (hs' : f '' s <=ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
-ae_empty_or_univ_of_image_ae_le' hf hs hs' measure_ne_top μ s
+    (hs' : f '' s ≤ᵐ[μ] s) : s =ᵐ[μ] (∅ : Set α) ∨ s =ᵐ[μ] univ :=
+  ae_empty_or_univ_of_image_ae_le' hf hs hs' <| measure_ne_top μ s
 
 end IsFiniteMeasure
 
 end Ergodic
+

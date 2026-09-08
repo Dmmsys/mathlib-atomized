@@ -40,111 +40,53 @@ open Set
 
 variable (R : Type u) (L : Type v) [CommRing R] [LieRing L] [LieAlgebra R L]
 
-/--
-Definition of `LieSubalgebra` / `LieSubalgebra` 的定义
+/-- A Lie subalgebra of a Lie algebra is submodule that is closed under the Lie bracket.
+This is a sufficient condition for the subset itself to form a Lie algebra. -/
+/-
+**LieSubalgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (L : Type v) → [inst : CommRing R] → [inst_1 : LieRing L] →
+ [LieAlgebra R L] → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LieSubalgebra
-  parameters: extends Submodule R L
-  extends: Submodule R L
-  axioms and operations (1):
-    - lie_mem' : forall {x y}, x in carrier -> y in carrier -> ⁅x, y⁆ in carrier
-
-中文:
-结构 Lie子代数
-  参数: extends 子模 R L
-  继承: 子模 R L
-  公理与运算 (1 个):
-    - lie_mem' : 对任意 {x y}, x in carrier -> y in carrier -> ⁅x, y⁆ in carrier
+--- 原说明 ---
+A Lie subalgebra of a Lie algebra is submodule that is closed under the Lie brac
+ket.
+This is a sufficient condition for the subset itself to form a Lie algebra.
 -/
 structure LieSubalgebra extends Submodule R L where
   /-- A Lie subalgebra is closed under Lie bracket. -/
-  lie_mem' : forall {x y}, x in carrier -> y in carrier -> ⁅x, y⁆ in carrier
+  lie_mem' : ∀ {x y}, x ∈ carrier → y ∈ carrier → ⁅x, y⁆ ∈ carrier
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The zero algebra is a subalgebra of any Lie algebra. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Zero (LieSubalgebra R L)
-  body: ⟨⟨0, @fun x y hx _hy => by
-    rw [(Submodule.mem_bot R).1 hx]; rw [zero_lie]
-    exact Submodule.zero_mem 0⟩⟩
-
-中文:
-实例 :
-  签名: 零 (Lie子代数 R L)
-  定义体: ⟨⟨0, @fun x y hx _hy => by
-    rw [(Submodule.mem_bot R).1 hx]; rw [zero_lie]
-    exact Submodule.zero_mem 0⟩⟩
-
-Depends on / 依赖: Submodule, Submodule.mem_bot, Submodule.zero_mem, mem_bot, zero_lie, zero_mem
+--- 原说明 ---
+The zero algebra is a subalgebra of any Lie algebra.
 -/
 instance : Zero (LieSubalgebra R L) :=
-  ⟨⟨0, @fun x y hx _hy => by
-    rw [(Submodule.mem_bot R).1 hx]; rw [zero_lie]
+  ⟨⟨0, @fun x y hx _hy ↦ by
+    rw [(Submodule.mem_bot R).1 hx, zero_lie]
     exact Submodule.zero_mem 0⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (LieSubalgebra R L)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (Lie子代数 R L)
-  定义体: ⟨0⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (LieSubalgebra R L) :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (LieSubalgebra R L) (Submodule R L)
-  body: ⟨LieSubalgebra.toSubmodule⟩
-
-中文:
-实例 :
-  签名: Coe (Lie子代数 R L) (子模 R L)
-  定义体: ⟨LieSubalgebra.toSubmodule⟩
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.toSubmodule, toSubmodule
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (LieSubalgebra R L) (Submodule R L) :=
   ⟨LieSubalgebra.toSubmodule⟩
 
 namespace LieSubalgebra
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (LieSubalgebra R L) L
-  body: L'.carrier
-  coe_injective L' L'' h := by
-    rcases L' with ⟨⟨⟩⟩
-    rcases L'' with ⟨⟨⟩⟩
-    congr
-    exact SetLike.coe_injective h
-
-中文:
-实例 :
-  签名: 集合状 (Lie子代数 R L) L
-  定义体: L'.carrier
-  coe_injective L' L'' h := by
-    rcases L' with ⟨⟨⟩⟩
-    rcases L'' with ⟨⟨⟩⟩
-    congr
-    exact SetLike.coe_injective h
-
-Depends on / 依赖: carrier
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (LieSubalgebra R L) L where
   coe L' := L'.carrier
@@ -153,112 +95,39 @@ instance : SetLike (LieSubalgebra R L) L where
     rcases L'' with ⟨⟨⟩⟩
     congr
     exact SetLike.coe_injective h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (LieSubalgebra R L)
-  body: .ofSetLike (LieSubalgebra R L) L
-
-中文:
-实例 :
-  签名: 偏序 (Lie子代数 R L)
-  定义体: .ofSetLike (LieSubalgebra R L) L
-
-Depends on / 依赖: LieSubalgebra, ofSetLike
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (LieSubalgebra R L) := .ofSetLike (LieSubalgebra R L) L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddSubgroupClass (LieSubalgebra R L) L
-  body: Submodule.add_mem _
-  zero_mem L' := L'.zero_mem'
-  neg_mem {L'} x hx := show -x in (L' : Submodule R L) from neg_mem hx
-
-中文:
-实例 :
-  签名: 加法子群类 (Lie子代数 R L) L
-  定义体: Submodule.add_mem _
-  zero_mem L' := L'.zero_mem'
-  neg_mem {L'} x hx := show -x in (L' : Submodule R L) from neg_mem hx
-
-Depends on / 依赖: Submodule, Submodule.add_mem, add_mem
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddSubgroupClass (LieSubalgebra R L) L where
   add_mem := Submodule.add_mem _
   zero_mem L' := L'.zero_mem'
-  neg_mem {L'} x hx := show -x in (L' : Submodule R L) from neg_mem hx
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulMemClass (LieSubalgebra R L) R L
-  body: SMulMemClass.smul_mem (s := s.toSubmodule)
-
-中文:
-实例 :
-  签名: SMulMem类 (Lie子代数 R L) R L
-  定义体: SMulMemClass.smul_mem (s := s.toSubmodule)
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, s.toSubmodule, smul_mem, toSubmodule
+  neg_mem {L'} x hx := show -x ∈ (L' : Submodule R L) from neg_mem hx
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulMemClass (LieSubalgebra R L) R L where
   smul_mem {s} := SMulMemClass.smul_mem (s := s.toSubmodule)
 
-/--
-Instance `lieRing` / 实例 `lieRing`
+/-- A Lie subalgebra forms a new Lie ring. -/
+/-
+**LieSubalgebra.lieRing** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieRing (L' : LieSubalgebra R L) : LieRing L' where bracket x y
+参数：L' : LieSubalgebra R L。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
 
-English:
-instance lieRing
-  signature: (L' : LieSubalgebra R L)
-  body: ⟨⁅x.val, y.val⁆, L'.lie_mem' x.property y.property⟩
-  lie_add := by
-    intros
-    apply SetCoe.ext
-    apply lie_add
-  add_lie := by
-    intros
-    apply SetCoe.ext
-    apply add_lie
-  lie_self := by
-    intros
-    apply SetCoe.ext
-    apply lie_self
-  leibniz_lie := by
-    intros
-    apply SetCoe.ext
-    apply leibniz_lie
-
-中文:
-实例 lieRing
-  签名: (L' : Lie子代数 R L)
-  定义体: ⟨⁅x.val, y.val⁆, L'.lie_mem' x.property y.property⟩
-  lie_add := by
-    intros
-    apply SetCoe.ext
-    apply lie_add
-  add_lie := by
-    intros
-    apply SetCoe.ext
-    apply add_lie
-  lie_self := by
-    intros
-    apply SetCoe.ext
-    apply lie_self
-  leibniz_lie := by
-    intros
-    apply SetCoe.ext
-    apply leibniz_lie
-
-Depends on / 依赖: lie_mem, property, x.property, x.val, y.property, y.val
+--- 原说明 ---
+A Lie subalgebra forms a new Lie ring.
 -/
 instance lieRing (L' : LieSubalgebra R L) : LieRing L' where
   bracket x y := ⟨⁅x.val, y.val⁆, L'.lie_mem' x.property y.property⟩
@@ -283,91 +152,56 @@ section
 
 variable {R₁ : Type*} [Semiring R₁]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A Lie subalgebra inherits module structures from `L`. -/
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [SMul
-  signature: R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L'
-  body: L'.toSubmodule.module'
-
-中文:
-实例 [标量乘法
-  签名: R₁ R] [模 R₁ L] [标量塔 R₁ R L] (L'
-  定义体: L'.toSubmodule.module'
-
-Depends on / 依赖: module, toSubmodule, toSubmodule.module
+--- 原说明 ---
+A Lie subalgebra inherits module structures from `L`.
 -/
 instance [SMul R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L' : LieSubalgebra R L) : Module R₁ L' :=
   L'.toSubmodule.module'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R₁ R] [SMul R₁ᵐᵒᵖ R] [Module R₁ L] [Module R₁ᵐᵒᵖ L] [IsScalarTower R₁ R L]
-  body: L'.toSubmodule.isCentralScalar
-
-中文:
-实例 [标量乘法
-  签名: R₁ R] [标量乘法 R₁ᵐᵒᵖ R] [模 R₁ L] [模 R₁ᵐᵒᵖ L] [标量塔 R₁ R L]
-  定义体: L'.toSubmodule.isCentralScalar
-
-Depends on / 依赖: isCentralScalar, toSubmodule, toSubmodule.isCentralScalar
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R₁ R] [SMul R₁ᵐᵒᵖ R] [Module R₁ L] [Module R₁ᵐᵒᵖ L] [IsScalarTower R₁ R L]
     [IsScalarTower R₁ᵐᵒᵖ R L] [IsCentralScalar R₁ L] (L' : LieSubalgebra R L) :
     IsCentralScalar R₁ L' :=
   L'.toSubmodule.isCentralScalar
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L'
-  body: L'.toSubmodule.isScalarTower
-
-中文:
-实例 [标量乘法
-  签名: R₁ R] [模 R₁ L] [标量塔 R₁ R L] (L'
-  定义体: L'.toSubmodule.isScalarTower
-
-Depends on / 依赖: isScalarTower, toSubmodule, toSubmodule.isScalarTower
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R₁ R] [Module R₁ L] [IsScalarTower R₁ R L] (L' : LieSubalgebra R L) :
     IsScalarTower R₁ R L' :=
   L'.toSubmodule.isScalarTower
-
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L' : LieSubalgebra R L) [IsNoetherian R L] : IsNoetherian R L' :=
   isNoetherian_submodule' _
-
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L' : LieSubalgebra R L) [IsArtinian R L] : IsArtinian R L' :=
   isArtinian_submodule' _
 
 end
 
-/--
-Instance `lieAlgebra` / 实例 `lieAlgebra`
+/-- A Lie subalgebra forms a new Lie algebra. -/
+/-
+**LieSubalgebra.lieAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieAlgebra (L' : LieSubalgebra R L) : LieAlgebra R L' where lie_smul
+参数：L' : LieSubalgebra R L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lieAlgebra
-  signature: (L' : LieSubalgebra R L)
-  body: by
-    { intros
-      apply SetCoe.ext
-      apply lie_smul }
-
-中文:
-实例 lieAlgebra
-  签名: (L' : Lie子代数 R L)
-  定义体: by
-    { intros
-      apply SetCoe.ext
-      apply lie_smul }
-
-Depends on / 依赖: SetCoe, SetCoe.ext, intros, lie_smul
+--- 原说明 ---
+A Lie subalgebra forms a new Lie algebra.
 -/
 instance lieAlgebra (L' : LieSubalgebra R L) : LieAlgebra R L' where
   lie_smul := by
@@ -377,459 +211,297 @@ instance lieAlgebra (L' : LieSubalgebra R L) : LieAlgebra R L' where
 
 variable {R L}
 variable (L' : LieSubalgebra R L)
-
-/--
-theorem `zero_mem` / 定理 `zero_mem`
-
-English:
-theorem zero_mem
-  statement: (0 : L) in L'
-  proof: zero_mem L'
-
-中文:
-定理 zero_mem
-  结论: (0 : L) in L'
-  证明: zero_mem L'
+/-
+**LieSubalgebra.zero_mem** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (L' : LieSubalgebra R L),   0 ∈ L'
+参数：L' : LieSubalgebra R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
 -/
-protected theorem zero_mem : (0 : L) in L' :=
+protected theorem zero_mem : (0 : L) ∈ L' :=
   zero_mem L'
-
-/--
-theorem `add_mem` / 定理 `add_mem`
-
-English:
-theorem add_mem
-  given: {x y : L}
-  statement: x in L' -> y in L' -> (x + y : L) in L'
-  proof: add_mem
-
-中文:
-定理 add_mem
-  条件: {x y : L}
-  结论: x in L' -> y in L' -> (x + y : L) in L'
-  证明: add_mem
+/-
+**LieSubalgebra.add_mem** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   {x y : L}, x ∈ L' → y ∈ L' → x +
+ y ∈ L'
+参数：L' : LieSubalgebra R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
 -/
-protected theorem add_mem {x y : L} : x in L' -> y in L' -> (x + y : L) in L' :=
+protected theorem add_mem {x y : L} : x ∈ L' → y ∈ L' → (x + y : L) ∈ L' :=
   add_mem
-
-/--
-theorem `sub_mem` / 定理 `sub_mem`
-
-English:
-theorem sub_mem
-  given: {x y : L}
-  statement: x in L' -> y in L' -> (x - y : L) in L'
-  proof: sub_mem
-
-中文:
-定理 sub_mem
-  条件: {x y : L}
-  结论: x in L' -> y in L' -> (x - y : L) in L'
-  证明: sub_mem
+/-
+**LieSubalgebra.sub_mem** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   {x y : L}, x ∈ L' → y ∈ L' → x -
+ y ∈ L'
+参数：L' : LieSubalgebra R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : SubNegMonoid M] [inst_1
+ : SetLike S M] [hSM : AddSubgroupClass S M] {H : S}   {x y : M}, x ∈ H → y ∈…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
 -/
-protected theorem sub_mem {x y : L} : x in L' -> y in L' -> (x - y : L) in L' :=
+protected theorem sub_mem {x y : L} : x ∈ L' → y ∈ L' → (x - y : L) ∈ L' :=
   sub_mem
-
-/--
-theorem `smul_mem` / 定理 `smul_mem`
-
-English:
-theorem smul_mem
-  given: (t : R) {x : L} (h : x in L')
-  statement: t • x in L'
-  proof: SMulMemClass.smul_mem _ h
-
-中文:
-定理 smul_mem
-  条件: (t : R) {x : L} (h : x in L')
-  结论: t • x in L'
-  证明: SMulMemClass.smul_mem _ h
+/-
+**LieSubalgebra.smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   (t : R) {x : L}, x ∈ L' → t • x 
+∈ L'
+参数：L' : LieSubalgebra R L；t : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
+· 使用定理 `LieSubalgebra.instSMulMemClass`：∀ (R : Type u) (L : Type v) [inst : Comm
+Ring R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   SMulMemClass (LieSubal
+gebra R L) R L
 -/
-protected theorem smul_mem (t : R) {x : L} (h : x in L') : t • x in L' :=
+protected theorem smul_mem (t : R) {x : L} (h : x ∈ L') : t • x ∈ L' :=
   SMulMemClass.smul_mem _ h
-
-/--
-theorem `lie_mem` / 定理 `lie_mem`
-
-English:
-theorem lie_mem
-  given: {x y : L} (hx : x in L') (hy : y in L')
-  statement: (⁅x, y⁆ : L) in L'
-  proof: L'.lie_mem' hx hy
-
-中文:
-定理 lie_mem
-  条件: {x y : L} (hx : x in L') (hy : y in L')
-  结论: (⁅x, y⁆ : L) in L'
-  证明: L'.lie_mem' hx hy
-
-Depends on / 依赖: lie_mem
+/-
+**LieSubalgebra.lie_mem** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：lie_mem {x y : L} (hx : x in L') (hy : y in L') : (⁅x, y⁆ : L) in L'
+参数：hx : x in L'；hy : y in L'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.lie_mem'`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   (self : LieSubalgebra R L) {x y
+ : L}, x ∈ s…
 -/
-theorem lie_mem {x y : L} (hx : x in L') (hy : y in L') : (⁅x, y⁆ : L) in L' :=
+theorem lie_mem {x y : L} (hx : x ∈ L') (hy : y ∈ L') : (⁅x, y⁆ : L) ∈ L' :=
   L'.lie_mem' hx hy
-
-/--
-theorem `mem_carrier` / 定理 `mem_carrier`
-
-English:
-theorem mem_carrier
-  given: {x : L}
-  statement: x in L'.carrier ↔ x in (L' : Set L)
-  proof: Iff.rfl
-
-中文:
-定理 mem_carrier
-  条件: {x : L}
-  结论: x in L'.carrier ↔ x in (L' : 集合 L)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_carrier** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_carrier {x : L} : x in L'.carrier ↔ x in (L' : Set L)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_carrier {x : L} : x in L'.carrier ↔ x in (L' : Set L) :=
+theorem mem_carrier {x : L} : x ∈ L'.carrier ↔ x ∈ (L' : Set L) :=
   Iff.rfl
-
-/--
-theorem `mem_mk_iff` / 定理 `mem_mk_iff`
-
-English:
-theorem mem_mk_iff
-  given: (S : Set L) (h₁ h₂ h₃ h₄) {x : L}
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_mk_iff
-  条件: (S : 集合 L) (h₁ h₂ h₃ h₄) {x : L}
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_mk_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_mk_iff (S : Set L) (h₁ h₂ h₃ h₄) {x : L} : x in (⟨⟨⟨⟨S, h₁⟩, h₂⟩, h₃⟩,
+ h₄⟩ : LieSubalgebra R L) ↔ x in S
+参数：S : Set L；h₁ h₂ h₃ h₄。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_mk_iff (S : Set L) (h₁ h₂ h₃ h₄) {x : L} :
-    x in (⟨⟨⟨⟨S, h₁⟩, h₂⟩, h₃⟩, h₄⟩ : LieSubalgebra R L) ↔ x in S :=
+    x ∈ (⟨⟨⟨⟨S, h₁⟩, h₂⟩, h₃⟩, h₄⟩ : LieSubalgebra R L) ↔ x ∈ S :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_toSubmodule` / 定理 `mem_toSubmodule`
-
-English:
-theorem mem_toSubmodule
-  given: {x : L}
-  statement: x in (L' : Submodule R L) ↔ x in L'
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_toSubmodule
-  条件: {x : L}
-  结论: x in (L' : 子模 R L) ↔ x in L'
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_toSubmodule {x : L} : x in (L' : Submodule R L) ↔ x in L'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toSubmodule {x : L} : x in (L' : Submodule R L) ↔ x in L' :=
+theorem mem_toSubmodule {x : L} : x ∈ (L' : Submodule R L) ↔ x ∈ L' :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_mk_iff'` / 定理 `mem_mk_iff'`
-
-English:
-theorem mem_mk_iff'
-  given: (p : Submodule R L) (h) {x : L}
-  proof: Iff.rfl
-
-中文:
-定理 mem_mk_iff'
-  条件: (p : 子模 R L) (h) {x : L}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_mk_iff'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_mk_iff' (p : Submodule R L) (h) {x : L} : x in (⟨p, h⟩ : LieSubalgebra
+ R L) ↔ x in p
+参数：p : Submodule R L；h。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_mk_iff' (p : Submodule R L) (h) {x : L} :
-    x in (⟨p, h⟩ : LieSubalgebra R L) ↔ x in p :=
+    x ∈ (⟨p, h⟩ : LieSubalgebra R L) ↔ x ∈ p :=
   Iff.rfl
-
-/--
-theorem `mem_coe` / 定理 `mem_coe`
-
-English:
-theorem mem_coe
-  given: {x : L}
-  statement: x in (L' : Set L) ↔ x in L'
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_coe
-  条件: {x : L}
-  结论: x in (L' : 集合 L) ↔ x in L'
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_coe {x : L} : x in (L' : Set L) ↔ x in L'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe {x : L} : x in (L' : Set L) ↔ x in L' :=
+theorem mem_coe {x : L} : x ∈ (L' : Set L) ↔ x ∈ L' :=
   Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_bracket` / 定理 `coe_bracket`
-
-English:
-theorem coe_bracket
-  given: (x y : L')
-  statement: (↑⁅x, y⁆ : L) = ⁅(↑x : L), ↑y⁆
-  proof: rfl
-
-中文:
-定理 coe_bracket
-  条件: (x y : L')
-  结论: (↑⁅x, y⁆ : L) = ⁅(↑x : L), ↑y⁆
-  证明: rfl
+/-
+**LieSubalgebra.coe_bracket** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_bracket (x y : L') : (↑⁅x, y⁆ : L) = ⁅(↑x : L), ↑y⁆
+参数：x y : L'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bracket (x y : L') : (↑⁅x, y⁆ : L) = ⁅(↑x : L), ↑y⁆ :=
   rfl
-
-/--
-theorem `ext_iff` / 定理 `ext_iff`
-
-English:
-theorem ext_iff
-  given: (x y : L')
-  statement: x = y ↔ (x : L) = y
-  proof: Subtype.ext_iff
-
-中文:
-定理 ext_iff
-  条件: (x y : L')
-  结论: x = y ↔ (x : L) = y
-  证明: Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**LieSubalgebra.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：ext_iff (x y : L') : x = y ↔ (x : L) = y
+参数：x y : L'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem ext_iff (x y : L') : x = y ↔ (x : L) = y :=
   Subtype.ext_iff
-
-/--
-theorem `coe_zero_iff_zero` / 定理 `coe_zero_iff_zero`
-
-English:
-theorem coe_zero_iff_zero
-  given: (x : L')
-  statement: (x : L) = 0 ↔ x = 0
-  proof: (ext_iff L' x 0).symm
-
-@[ext]
-
-中文:
-定理 coe_zero_iff_zero
-  条件: (x : L')
-  结论: (x : L) = 0 ↔ x = 0
-  证明: (ext_iff L' x 0).symm
-
-@[ext]
-
-Depends on / 依赖: ext_iff
+/-
+**LieSubalgebra.coe_zero_iff_zero** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_zero_iff_zero (x : L') : (x : L) = 0 ↔ x = 0
+参数：x : L'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `LieSubalgebra.ext_iff`：ext_iff (x y : L') : x = y ↔ (x : L) = y
 -/
 theorem coe_zero_iff_zero (x : L') : (x : L) = 0 ↔ x = 0 :=
   (ext_iff L' x 0).symm
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in L₁' ↔ x in L₂')
-  statement: L₁' = L₂'
-  proof: SetLike.ext h
-
-中文:
-定理 ext
-  条件: (L₁' L₂' : Lie子代数 R L) (h : 对任意 x, x in L₁' ↔ x in L₂')
-  结论: L₁' = L₂'
-  证明: SetLike.ext h
-
-Depends on / 依赖: SetLike, SetLike.ext
+/-
+**LieSubalgebra.ext** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：ext (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in L₁' ↔ x in L₂') : L₁
+' = L₂'
+参数：L₁' L₂' : LieSubalgebra R L；h : forall x, x in L₁' ↔ x in L₂'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 -/
-theorem ext (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in L₁' ↔ x in L₂') : L₁' = L₂' :=
+theorem ext (L₁' L₂' : LieSubalgebra R L) (h : ∀ x, x ∈ L₁' ↔ x ∈ L₂') : L₁' = L₂' :=
   SetLike.ext h
-
-/--
-theorem `ext_iff'` / 定理 `ext_iff'`
-
-English:
-theorem ext_iff'
-  given: (L₁' L₂' : LieSubalgebra R L)
-  statement: L₁' = L₂' ↔ forall x, x in L₁' ↔ x in L₂'
-  proof: SetLike.ext_iff
-
-@[simp]
-
-中文:
-定理 ext_iff'
-  条件: (L₁' L₂' : Lie子代数 R L)
-  结论: L₁' = L₂' ↔ 对任意 x, x in L₁' ↔ x in L₂'
-  证明: SetLike.ext_iff
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.ext_iff, ext_iff
+/-
+**LieSubalgebra.ext_iff'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：ext_iff' (L₁' L₂' : LieSubalgebra R L) : L₁' = L₂' ↔ forall x, x in L₁' ↔ 
+x in L₂'
+参数：L₁' L₂' : LieSubalgebra R L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
 -/
-theorem ext_iff' (L₁' L₂' : LieSubalgebra R L) : L₁' = L₂' ↔ forall x, x in L₁' ↔ x in L₂' :=
+theorem ext_iff' (L₁' L₂' : LieSubalgebra R L) : L₁' = L₂' ↔ ∀ x, x ∈ L₁' ↔ x ∈ L₂' :=
   SetLike.ext_iff
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (S : Set L) (h₁ h₂ h₃ h₄)
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: (S : 集合 L) (h₁ h₂ h₃ h₄)
-  证明: rfl
+/-
+**LieSubalgebra.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mk_coe (S : Set L) (h₁ h₂ h₃ h₄) : ((⟨⟨⟨⟨S, h₁⟩, h₂⟩, h₃⟩, h₄⟩ : LieSubalg
+ebra R L) : Set L) = S
+参数：S : Set L；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_coe (S : Set L) (h₁ h₂ h₃ h₄) :
     ((⟨⟨⟨⟨S, h₁⟩, h₂⟩, h₃⟩, h₄⟩ : LieSubalgebra R L) : Set L) = S :=
   rfl
-
-/--
-theorem `toSubmodule_mk` / 定理 `toSubmodule_mk`
-
-English:
-theorem toSubmodule_mk
-  given: (p : Submodule R L) (h)
-  proof: rfl
-
-中文:
-定理 toSubmodule_mk
-  条件: (p : 子模 R L) (h)
-  证明: rfl
-
-Depends on / 依赖: LieSubalgebra, Submodule
+/-
+**LieSubalgebra.toSubmodule_mk** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：toSubmodule_mk (p : Submodule R L) (h) : (({ p with lie_mem'
+参数：p : Submodule R L；h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubmodule_mk (p : Submodule R L) (h) :
     (({ p with lie_mem' := h } : LieSubalgebra R L) : Submodule R L) = p := rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective ((↑) : LieSubalgebra R L -> Set L)
-  proof: SetLike.coe_injective
-
-@[norm_cast]
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 ((↑) : Lie子代数 R L -> 集合 L)
-  证明: SetLike.coe_injective
-
-@[norm_cast]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**LieSubalgebra.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_injective : Function.Injective ((↑) : LieSubalgebra R L -> Set L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
-theorem coe_injective : Function.Injective ((↑) : LieSubalgebra R L -> Set L) :=
+theorem coe_injective : Function.Injective ((↑) : LieSubalgebra R L → Set L) :=
   SetLike.coe_injective
 
 @[norm_cast]
-/--
-theorem `coe_set_eq` / 定理 `coe_set_eq`
-
-English:
-theorem coe_set_eq
-  given: (L₁' L₂' : LieSubalgebra R L)
-  statement: (L₁' : Set L) = L₂' ↔ L₁' = L₂'
-  proof: SetLike.coe_set_eq
-
-中文:
-定理 coe_set_eq
-  条件: (L₁' L₂' : Lie子代数 R L)
-  结论: (L₁' : 集合 L) = L₂' ↔ L₁' = L₂'
-  证明: SetLike.coe_set_eq
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
+/-
+**LieSubalgebra.coe_set_eq** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_set_eq (L₁' L₂' : LieSubalgebra R L) : (L₁' : Set L) = L₂' ↔ L₁' = L₂'
+参数：L₁' L₂' : LieSubalgebra R L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_set_eq`：coe_set_eq : (p : Set B) = q ↔ p = q
 -/
 theorem coe_set_eq (L₁' L₂' : LieSubalgebra R L) : (L₁' : Set L) = L₂' ↔ L₁' = L₂' :=
   SetLike.coe_set_eq
-
-/--
-theorem `toSubmodule_injective` / 定理 `toSubmodule_injective`
-
-English:
-theorem toSubmodule_injective
-  statement: Function.Injective ((↑) : LieSubalgebra R L -> Submodule R L)
-  proof: fun L₁' L₂' h => by
-  rw [SetLike.ext'_iff] at h
-  rw [← coe_set_eq]
-  exact h
-
-@[simp]
-
-中文:
-定理 toSubmodule_injective
-  结论: 函数.单射 ((↑) : Lie子代数 R L -> 子模 R L)
-  证明: fun L₁' L₂' h => by
-  rw [SetLike.ext'_iff] at h
-  rw [← coe_set_eq]
-  exact h
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.ext, _iff, coe_set_eq
+/-
+**LieSubalgebra.toSubmodule_injective** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：toSubmodule_injective : Function.Injective ((↑) : LieSubalgebra R L -> Sub
+module R L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.coe_set_eq`：coe_set_eq (L₁' L₂' : LieSubalgebra R L) : (L₁
+' : Set L) = L₂' ↔ L₁' = L₂'
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
 -/
-theorem toSubmodule_injective : Function.Injective ((↑) : LieSubalgebra R L -> Submodule R L) :=
-  fun L₁' L₂' h => by
+theorem toSubmodule_injective : Function.Injective ((↑) : LieSubalgebra R L → Submodule R L) :=
+  fun L₁' L₂' h ↦ by
   rw [SetLike.ext'_iff] at h
   rw [← coe_set_eq]
   exact h
 
 @[simp]
-/--
-theorem `toSubmodule_inj` / 定理 `toSubmodule_inj`
-
-English:
-theorem toSubmodule_inj
-  given: (L₁' L₂' : LieSubalgebra R L)
-  proof: toSubmodule_injective.eq_iff
-
-中文:
-定理 toSubmodule_inj
-  条件: (L₁' L₂' : Lie子代数 R L)
-  证明: toSubmodule_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toSubmodule_injective, toSubmodule_injective.eq_iff
+/-
+**LieSubalgebra.toSubmodule_inj** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：toSubmodule_inj (L₁' L₂' : LieSubalgebra R L) : (L₁' : Submodule R L) = (L
+₂' : Submodule R L) ↔ L₁' = L₂'
+参数：L₁' L₂' : LieSubalgebra R L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `LieSubalgebra.toSubmodule_injective`：toSubmodule_injective : Function.In
+jective ((↑) : LieSubalgebra R L -> Submodule R L)
 -/
 theorem toSubmodule_inj (L₁' L₂' : LieSubalgebra R L) :
     (L₁' : Submodule R L) = (L₂' : Submodule R L) ↔ L₁' = L₂' :=
   toSubmodule_injective.eq_iff
-
-/--
-theorem `coe_toSubmodule` / 定理 `coe_toSubmodule`
-
-English:
-theorem coe_toSubmodule
-  statement: ((L' : Submodule R L) : Set L) = L'
-  proof: rfl
-
-中文:
-定理 coe_toSubmodule
-  结论: ((L' : 子模 R L) : 集合 L) = L'
-  证明: rfl
+/-
+**LieSubalgebra.coe_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_toSubmodule : ((L' : Submodule R L) : Set L) = L'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toSubmodule : ((L' : Submodule R L) : Set L) = L' :=
   rfl
@@ -839,81 +511,42 @@ section LieModule
 variable {M : Type w} [AddCommGroup M] [LieRingModule L M]
 variable {N : Type w₁} [AddCommGroup N] [LieRingModule L N] [Module R N]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bracket L' M
-  body: ⁅(x : L), m⁆
-
-@[simp]
-
-中文:
-实例 :
-  签名: Bracket L' M
-  定义体: ⁅(x : L), m⁆
-
-@[simp]
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bracket L' M where
   bracket x m := ⁅(x : L), m⁆
 
 @[simp]
-/--
-theorem `coe_bracket_of_module` / 定理 `coe_bracket_of_module`
-
-English:
-theorem coe_bracket_of_module
-  given: (x : L') (m : M)
-  statement: ⁅x, m⁆ = ⁅(x : L), m⁆
-  proof: rfl
-
-中文:
-定理 coe_bracket_of_module
-  条件: (x : L') (m : M)
-  结论: ⁅x, m⁆ = ⁅(x : L), m⁆
-  证明: rfl
+/-
+**LieSubalgebra.coe_bracket_of_module** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_bracket_of_module (x : L') (m : M) : ⁅x, m⁆ = ⁅(x : L), m⁆
+参数：x : L'；m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bracket_of_module (x : L') (m : M) : ⁅x, m⁆ = ⁅(x : L), m⁆ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLieTower L' L M
-  body: leibniz_lie x.val y m
-
-中文:
-实例 :
-  签名: 是LieTower L' L M
-  定义体: leibniz_lie x.val y m
-
-Depends on / 依赖: leibniz_lie, x.val
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLieTower L' L M where
   leibniz_lie x y m := leibniz_lie x.val y m
 
-/--
-Instance `lieRingModule` / 实例 `lieRingModule`
+/-- Given a Lie algebra `L` containing a Lie subalgebra `L' ⊆ L`, together with a Lie ring module
+`M` of `L`, we may regard `M` as a Lie ring module of `L'` by restriction. -/
+/-
+**LieSubalgebra.lieRingModule** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieRingModule : LieRingModule L' M where add_lie x y m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lieRingModule
-  signature: : LieRingModule L' M where
-  body: add_lie (x : L) y m
-  lie_add x y m := lie_add (x : L) y m
-  leibniz_lie x y m := leibniz_lie x (y : L) m
-
-中文:
-实例 lieRingModule
-  签名: : Lie环模 L' M where
-  定义体: add_lie (x : L) y m
-  lie_add x y m := lie_add (x : L) y m
-  leibniz_lie x y m := leibniz_lie x (y : L) m
-
-Depends on / 依赖: add_lie
+--- 原说明 ---
+Given a Lie algebra `L` containing a Lie subalgebra `L' ⊆ L`, together with a Li
+e ring module
+`M` of `L`, we may regard `M` as a Lie ring module of `L'` by restriction.
 -/
 instance lieRingModule : LieRingModule L' M where
   add_lie x y m := add_lie (x : L) y m
@@ -922,332 +555,212 @@ instance lieRingModule : LieRingModule L' M where
 
 variable [Module R M]
 
-/--
-Instance `lieModule` / 实例 `lieModule`
+/-- Given a Lie algebra `L` containing a Lie subalgebra `L' ⊆ L`, together with a Lie module `M` of
+`L`, we may regard `M` as a Lie module of `L'` by restriction. -/
+/-
+**LieSubalgebra.lieModule** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieModule [LieModule R L M] : LieModule R L' M where smul_lie t x m
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.coe_bracket_of_module`：coe_bracket_of_module (x : L') (m :
+ M) : ⁅x, m⁆ = ⁅(x : L), m⁆
+· 使用定理 `Submodule.coe_smul_of_tower`：coe_smul_of_tower [SMul S R] [SMul S M] [Is
+ScalarTower S R M] (r : S) (x : p) : ((r • x : p) : M) = r • (x : M)
+· 使用定理 `smul_lie`：smul_lie : ⁅t • x, m⁆ = t • ⁅x, m⁆
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance lieModule
-  signature: [LieModule R L M]
-  body: by
-    rw [coe_bracket_of_module]; rw [Submodule.coe_smul_of_tower]; rw [smul_lie]; rw [coe_bracket_of_module]
-  lie_smul t x m := by simp only [coe_bracket_of_module, lie_smul]
-
-中文:
-实例 lieModule
-  签名: [Lie模 R L M]
-  定义体: by
-    rw [coe_bracket_of_module]; rw [Submodule.coe_smul_of_tower]; rw [smul_lie]; rw [coe_bracket_of_module]
-  lie_smul t x m := by simp only [coe_bracket_of_module, lie_smul]
-
-Depends on / 依赖: Submodule, Submodule.coe_smul_of_tower, coe_bracket_of_module, coe_smul_of_tower, lie_smul, smul_lie
+--- 原说明 ---
+Given a Lie algebra `L` containing a Lie subalgebra `L' ⊆ L`, together with a Li
+e module `M` of
+`L`, we may regard `M` as a Lie module of `L'` by restriction.
 -/
 instance lieModule [LieModule R L M] : LieModule R L' M where
   smul_lie t x m := by
-    rw [coe_bracket_of_module]; rw [Submodule.coe_smul_of_tower]; rw [smul_lie]; rw [coe_bracket_of_module]
+    rw [coe_bracket_of_module, Submodule.coe_smul_of_tower, smul_lie, coe_bracket_of_module]
   lie_smul t x m := by simp only [coe_bracket_of_module, lie_smul]
 
-/--
-Definition of `_root_.LieModuleHom.restrictLie` / `_root_.LieModuleHom.restrictLie` 的定义
+/-- An `L`-equivariant map of Lie modules `M → N` is `L'`-equivariant for any Lie subalgebra
+`L' ⊆ L`. -/
+/-
+**LieSubalgebra._root_.LieModuleHom.restrictLie** 是 Mathlib 中的一个定义，位于命名空间 `LieSu
+balgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LieModuleHom.restrictLie
-  signature: (f : M ->ₗ⁅R,L⁆ N) (L' : LieSubalgebra R L)
-  body: { (f : M ->ₗ[R] N) with map_lie' := @fun x m => f.map_lie (↑x) m }
-
-@[simp]
-
-中文:
-定义 _root_.Lie模态射.restrictLie
-  签名: (f : M ->ₗ⁅R,L⁆ N) (L' : Lie子代数 R L)
-  定义体: { (f : M ->ₗ[R] N) with map_lie' := @fun x m => f.map_lie (↑x) m }
-
-@[simp]
-
-Depends on / 依赖: f.map_lie, map_lie
+--- 原说明 ---
+An `L`-equivariant map of Lie modules `M → N` is `L'`-equivariant for any Lie su
+balgebra
+`L' ⊆ L`.
 -/
-def _root_.LieModuleHom.restrictLie (f : M ->ₗ⁅R,L⁆ N) (L' : LieSubalgebra R L) : M ->ₗ⁅R,L'⁆ N :=
-  { (f : M ->ₗ[R] N) with map_lie' := @fun x m => f.map_lie (↑x) m }
+def _root_.LieModuleHom.restrictLie (f : M →ₗ⁅R,L⁆ N) (L' : LieSubalgebra R L) : M →ₗ⁅R,L'⁆ N :=
+  { (f : M →ₗ[R] N) with map_lie' := @fun x m ↦ f.map_lie (↑x) m }
 
 @[simp]
-/--
-theorem `_root_.LieModuleHom.coe_restrictLie` / 定理 `_root_.LieModuleHom.coe_restrictLie`
-
-English:
-theorem _root_.LieModuleHom.coe_restrictLie
-  given: (f : M ->ₗ⁅R,L⁆ N)
-  statement: ⇑(f.restrictLie L') = f
-  proof: rfl
-
-中文:
-定理 _root_.Lie模态射.coe_restrictLie
-  条件: (f : M ->ₗ⁅R,L⁆ N)
-  结论: ⇑(f.restrictLie L') = f
-  证明: rfl
+/-
+**LieSubalgebra._root_.LieModuleHom.coe_restrictLie** 是 Mathlib 中的一个定理，位于命名空间 `L
+ieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.LieModuleHom.coe_restrictLie (f : M ->ₗ⁅R,L⁆ N) : ⇑(f.restrictLie L') = f :=
+theorem _root_.LieModuleHom.coe_restrictLie (f : M →ₗ⁅R,L⁆ N) : ⇑(f.restrictLie L') = f :=
   rfl
 
 end LieModule
 
-/--
-Definition of `incl` / `incl` 的定义
+/-- The embedding of a Lie subalgebra into the ambient space as a morphism of Lie algebras. -/
+/-
+**LieSubalgebra.incl** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：incl : L' ->ₗ⁅R⁆ L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: : L' ->ₗ⁅R⁆ L
-  body: { (L' : Submodule R L).subtype with
-    map_lie' := rfl }
-
-@[simp]
-
-中文:
-定义 incl
-  签名: : L' ->ₗ⁅R⁆ L
-  定义体: { (L' : Submodule R L).subtype with
-    map_lie' := rfl }
-
-@[simp]
-
-Depends on / 依赖: Submodule, map_lie, subtype
+--- 原说明 ---
+The embedding of a Lie subalgebra into the ambient space as a morphism of Lie al
+gebras.
 -/
-def incl : L' ->ₗ⁅R⁆ L :=
+def incl : L' →ₗ⁅R⁆ L :=
   { (L' : Submodule R L).subtype with
     map_lie' := rfl }
 
 @[simp]
-/--
-theorem `coe_incl` / 定理 `coe_incl`
-
-English:
-theorem coe_incl
-  statement: ⇑L'.incl = ((↑) : L' -> L)
-  proof: rfl
-
-中文:
-定理 coe_incl
-  结论: ⇑L'.incl = ((↑) : L' -> L)
-  证明: rfl
+/-
+**LieSubalgebra.coe_incl** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_incl : ⇑L'.incl = ((↑) : L' -> L)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_incl : ⇑L'.incl = ((↑) : L' -> L) :=
+theorem coe_incl : ⇑L'.incl = ((↑) : L' → L) :=
   rfl
 
-/--
-Definition of `incl'` / `incl'` 的定义
+/-- The embedding of a Lie subalgebra into the ambient space as a morphism of Lie modules. -/
+/-
+**LieSubalgebra.incl'** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：incl' : L' ->ₗ⁅R,L'⁆ L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl'
-  signature: : L' ->ₗ⁅R,L'⁆ L
-  body: { (L' : Submodule R L).subtype with
-    map_lie' := rfl }
-
-@[simp]
-
-中文:
-定义 incl'
-  签名: : L' ->ₗ⁅R,L'⁆ L
-  定义体: { (L' : Submodule R L).subtype with
-    map_lie' := rfl }
-
-@[simp]
-
-Depends on / 依赖: Submodule, map_lie, subtype
+--- 原说明 ---
+The embedding of a Lie subalgebra into the ambient space as a morphism of Lie mo
+dules.
 -/
-def incl' : L' ->ₗ⁅R,L'⁆ L :=
+def incl' : L' →ₗ⁅R,L'⁆ L :=
   { (L' : Submodule R L).subtype with
     map_lie' := rfl }
 
 @[simp]
-/--
-theorem `coe_incl'` / 定理 `coe_incl'`
-
-English:
-theorem coe_incl'
-  statement: ⇑L'.incl' = ((↑) : L' -> L)
-  proof: rfl
-
-中文:
-定理 coe_incl'
-  结论: ⇑L'.incl' = ((↑) : L' -> L)
-  证明: rfl
+/-
+**LieSubalgebra.coe_incl'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_incl' : ⇑L'.incl' = ((↑) : L' -> L)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_incl' : ⇑L'.incl' = ((↑) : L' -> L) :=
+theorem coe_incl' : ⇑L'.incl' = ((↑) : L' → L) :=
   rfl
 
 end LieSubalgebra
 
 variable {R L}
 variable {L₂ : Type w} [LieRing L₂] [LieAlgebra R L₂]
-variable (f : L ->ₗ⁅R⁆ L₂)
+variable (f : L →ₗ⁅R⁆ L₂)
 
 namespace LieHom
 
-/--
-Definition of `range` / `range` 的定义
+/-- The range of a morphism of Lie algebras is a Lie subalgebra. -/
+/-
+**LieHom.range** 是 Mathlib 中的一个定义，位于命名空间 `LieHom`。
+形式化陈述：range : LieSubalgebra R L₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: : LieSubalgebra R L₂
-  body: { LinearMap.range (f : L ->ₗ[R] L₂) with
-      lie_mem' := by
-        rintro - - ⟨x, rfl⟩ ⟨y, rfl⟩
-        exact ⟨⁅x, y⁆, f.map_lie x y⟩ }
-
-@[simp]
-
-中文:
-定义 range
-  签名: : Lie子代数 R L₂
-  定义体: { LinearMap.range (f : L ->ₗ[R] L₂) with
-      lie_mem' := by
-        rintro - - ⟨x, rfl⟩ ⟨y, rfl⟩
-        exact ⟨⁅x, y⁆, f.map_lie x y⟩ }
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.range, f.map_lie, lie_mem, map_lie
+--- 原说明 ---
+The range of a morphism of Lie algebras is a Lie subalgebra.
 -/
 def range : LieSubalgebra R L₂ :=
-  { LinearMap.range (f : L ->ₗ[R] L₂) with
+  { LinearMap.range (f : L →ₗ[R] L₂) with
       lie_mem' := by
         rintro - - ⟨x, rfl⟩ ⟨y, rfl⟩
         exact ⟨⁅x, y⁆, f.map_lie x y⟩ }
 
 @[simp]
-/--
-theorem `coe_range` / 定理 `coe_range`
-
-English:
-theorem coe_range
-  statement: (f.range : Set L₂) = Set.range f
-  proof: LinearMap.coe_range (f : L ->ₗ[R] L₂)
-
-@[simp]
-
-中文:
-定理 coe_range
-  结论: (f.range : 集合 L₂) = 集合.range f
-  证明: LinearMap.coe_range (f : L ->ₗ[R] L₂)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.coe_range, coe_range
+/-
+**LieHom.coe_range** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：coe_range : (f.range : Set L₂) = Set.range f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.coe_range`：coe_range [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] 
+M₂) : (range f : Set M₂) = Set.range f
 -/
 theorem coe_range : (f.range : Set L₂) = Set.range f :=
-  LinearMap.coe_range (f : L ->ₗ[R] L₂)
+  LinearMap.coe_range (f : L →ₗ[R] L₂)
 
 @[simp]
-/--
-theorem `mem_range` / 定理 `mem_range`
-
-English:
-theorem mem_range
-  given: (x : L₂)
-  statement: x in f.range ↔ exists y : L, f y = x
-  proof: LinearMap.mem_range
-
-中文:
-定理 mem_range
-  条件: (x : L₂)
-  结论: x in f.range ↔ 存在 y : L, f y = x
-  证明: LinearMap.mem_range
-
-Depends on / 依赖: LinearMap, LinearMap.mem_range, mem_range
+/-
+**LieHom.mem_range** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：mem_range (x : L₂) : x in f.range ↔ exists y : L, f y = x
+参数：x : L₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
 -/
-theorem mem_range (x : L₂) : x in f.range ↔ exists y : L, f y = x :=
+theorem mem_range (x : L₂) : x ∈ f.range ↔ ∃ y : L, f y = x :=
   LinearMap.mem_range
-
-/--
-theorem `mem_range_self` / 定理 `mem_range_self`
-
-English:
-theorem mem_range_self
-  given: (x : L)
-  statement: f x in f.range
-  proof: LinearMap.mem_range_self (f : L ->ₗ[R] L₂) x
-
-中文:
-定理 mem_range_self
-  条件: (x : L)
-  结论: f x in f.range
-  证明: LinearMap.mem_range_self (f : L ->ₗ[R] L₂) x
-
-Depends on / 依赖: LinearMap, LinearMap.mem_range_self, mem_range_self
+/-
+**LieHom.mem_range_self** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：mem_range_self (x : L) : f x in f.range
+参数：x : L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.mem_range_self`：mem_range_self [RingHomSurjective τ₁₂] (f : M 
+->ₛₗ[τ₁₂] M₂) (x : M) : f x in range f
 -/
-theorem mem_range_self (x : L) : f x in f.range :=
-  LinearMap.mem_range_self (f : L ->ₗ[R] L₂) x
+theorem mem_range_self (x : L) : f x ∈ f.range :=
+  LinearMap.mem_range_self (f : L →ₗ[R] L₂) x
 
-/--
-Definition of `rangeRestrict` / `rangeRestrict` 的定义
+/-- We can restrict a morphism to a (surjective) map to its range. -/
+/-
+**LieHom.rangeRestrict** 是 Mathlib 中的一个定义，位于命名空间 `LieHom`。
+形式化陈述：rangeRestrict : L ->ₗ⁅R⁆ f.range
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeRestrict
-  signature: : L ->ₗ⁅R⁆ f.range
-  body: { (f : L ->ₗ[R] L₂).rangeRestrict with
-    map_lie' := @fun x y => by
-      apply Subtype.ext
-      exact f.map_lie x y }
-
-@[simp]
-
-中文:
-定义 rangeRestrict
-  签名: : L ->ₗ⁅R⁆ f.range
-  定义体: { (f : L ->ₗ[R] L₂).rangeRestrict with
-    map_lie' := @fun x y => by
-      apply Subtype.ext
-      exact f.map_lie x y }
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, f.map_lie, map_lie, rangeRestrict
+--- 原说明 ---
+We can restrict a morphism to a (surjective) map to its range.
 -/
-def rangeRestrict : L ->ₗ⁅R⁆ f.range :=
-  { (f : L ->ₗ[R] L₂).rangeRestrict with
-    map_lie' := @fun x y => by
+def rangeRestrict : L →ₗ⁅R⁆ f.range :=
+  { (f : L →ₗ[R] L₂).rangeRestrict with
+    map_lie' := @fun x y ↦ by
       apply Subtype.ext
       exact f.map_lie x y }
 
 @[simp]
-/--
-theorem `rangeRestrict_apply` / 定理 `rangeRestrict_apply`
-
-English:
-theorem rangeRestrict_apply
-  given: (x : L)
-  statement: f.rangeRestrict x = ⟨f x, f.mem_range_self x⟩
-  proof: rfl
-
-中文:
-定理 rangeRestrict_apply
-  条件: (x : L)
-  结论: f.rangeRestrict x = ⟨f x, f.mem_range_self x⟩
-  证明: rfl
+/-
+**LieHom.rangeRestrict_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：rangeRestrict_apply (x : L) : f.rangeRestrict x = ⟨f x, f.mem_range_self x
+⟩
+参数：x : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rangeRestrict_apply (x : L) : f.rangeRestrict x = ⟨f x, f.mem_range_self x⟩ :=
   rfl
-
-/--
-theorem `surjective_rangeRestrict` / 定理 `surjective_rangeRestrict`
-
-English:
-theorem surjective_rangeRestrict
-  statement: Function.Surjective f.rangeRestrict
-  proof: by
-  rintro ⟨y, hy⟩
-  rw [mem_range] at hy; obtain ⟨x, rfl⟩ := hy
-  use x
-  simp only [rangeRestrict_apply]
-
-中文:
-定理 surjective_rangeRestrict
-  结论: 函数.满射 f.rangeRestrict
-  证明: by
-  rintro ⟨y, hy⟩
-  rw [mem_range] at hy; obtain ⟨x, rfl⟩ := hy
-  use x
-  simp only [rangeRestrict_apply]
-
-Depends on / 依赖: mem_range, rangeRestrict_apply
+/-
+**LieHom.surjective_rangeRestrict** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：surjective_rangeRestrict : Function.Surjective f.rangeRestrict
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieHom.mem_range`：mem_range (x : L₂) : x in f.range ↔ exists y : L, f y 
+= x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LieHom.mem_range_self`：mem_range_self (x : L) : f x in f.range
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem surjective_rangeRestrict : Function.Surjective f.rangeRestrict := by
   rintro ⟨y, hy⟩
@@ -1255,50 +768,32 @@ theorem surjective_rangeRestrict : Function.Surjective f.rangeRestrict := by
   use x
   simp only [rangeRestrict_apply]
 
-/--
-Definition of `equivRangeOfInjective` / `equivRangeOfInjective` 的定义
+/-- A Lie algebra is equivalent to its range under an injective Lie algebra morphism. -/
+/-
+**LieHom.equivRangeOfInjective** 是 Mathlib 中的一个定义，位于命名空间 `LieHom`。
+形式化陈述：equivRangeOfInjective (h : Function.Injective f) : L ≃ₗ⁅R⁆ f.range
+参数：h : Function.Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivRangeOfInjective
-  signature: (h : Function.Injective f)
-  body: LieEquiv.ofBijective f.rangeRestrict
-    ⟨fun x y hxy => by
-      simp only [Subtype.mk_eq_mk, rangeRestrict_apply] at hxy
-      exact h hxy, f.surjective_rangeRestrict⟩
-
-@[simp]
-
-中文:
-定义 equivRangeOfInjective
-  签名: (h : 函数.单射 f)
-  定义体: LieEquiv.ofBijective f.rangeRestrict
-    ⟨fun x y hxy => by
-      simp only [Subtype.mk_eq_mk, rangeRestrict_apply] at hxy
-      exact h hxy, f.surjective_rangeRestrict⟩
-
-@[simp]
-
-Depends on / 依赖: LieEquiv, LieEquiv.ofBijective, Subtype, Subtype.mk_eq_mk, f.rangeRestrict, f.surjective_rangeRestrict, mk_eq_mk, ofBijective, rangeRestrict, rangeRestrict_apply, surjective_rangeRestrict
+--- 原说明 ---
+A Lie algebra is equivalent to its range under an injective Lie algebra morphism
+.
 -/
 noncomputable def equivRangeOfInjective (h : Function.Injective f) : L ≃ₗ⁅R⁆ f.range :=
   LieEquiv.ofBijective f.rangeRestrict
-    ⟨fun x y hxy => by
+    ⟨fun x y hxy ↦ by
       simp only [Subtype.mk_eq_mk, rangeRestrict_apply] at hxy
       exact h hxy, f.surjective_rangeRestrict⟩
 
 @[simp]
-/--
-theorem `equivRangeOfInjective_apply` / 定理 `equivRangeOfInjective_apply`
-
-English:
-theorem equivRangeOfInjective_apply
-  given: (h : Function.Injective f) (x : L)
-  proof: rfl
-
-中文:
-定理 equivRangeOfInjective_apply
-  条件: (h : 函数.单射 f) (x : L)
-  证明: rfl
+/-
+**LieHom.equivRangeOfInjective_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：equivRangeOfInjective_apply (h : Function.Injective f) (x : L) : f.equivRa
+ngeOfInjective h x = ⟨f x, mem_range_self f x⟩
+参数：h : Function.Injective f；x : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivRangeOfInjective_apply (h : Function.Injective f) (x : L) :
     f.equivRangeOfInjective h x = ⟨f x, mem_range_self f x⟩ :=
@@ -1306,33 +801,19 @@ theorem equivRangeOfInjective_apply (h : Function.Injective f) (x : L) :
 
 end LieHom
 
-/--
-theorem `Submodule.exists_lieSubalgebra_coe_eq_iff` / 定理 `Submodule.exists_lieSubalgebra_coe_eq_iff`
-
-English:
-theorem Submodule.exists_lieSubalgebra_coe_eq_iff
-  given: (p : Submodule R L)
-  proof: by
-  constructor
-  · rintro ⟨K, rfl⟩ _ _
-    exact K.lie_mem'
-  · intro h
-    use { p with lie_mem' := h _ _ }
-
-中文:
-定理 子模.存在_lieSubalgebra_coe_eq_iff
-  条件: (p : 子模 R L)
-  证明: by
-  constructor
-  · rintro ⟨K, rfl⟩ _ _
-    exact K.lie_mem'
-  · intro h
-    use { p with lie_mem' := h _ _ }
-
-Depends on / 依赖: K.lie_mem, lie_mem
+/-
+**Submodule.exists_lieSubalgebra_coe_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.exists_lieSubalgebra_coe_eq_iff (p : Submodule R L) : (exists K 
+: LieSubalgebra R L, ↑K = p) ↔ forall x y : L, x in p -> y in p -> ⁅x, y⁆ in p
+参数：p : Submodule R L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.lie_mem'`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   (self : LieSubalgebra R L) {x y
+ : L}, x ∈ s…
 -/
 theorem Submodule.exists_lieSubalgebra_coe_eq_iff (p : Submodule R L) :
-    (exists K : LieSubalgebra R L, ↑K = p) ↔ forall x y : L, x in p -> y in p -> ⁅x, y⁆ in p := by
+    (∃ K : LieSubalgebra R L, ↑K = p) ↔ ∀ x y : L, x ∈ p → y ∈ p → ⁅x, y⁆ ∈ p := by
   constructor
   · rintro ⟨K, rfl⟩ _ _
     exact K.lie_mem'
@@ -1344,60 +825,37 @@ namespace LieSubalgebra
 variable (K K' : LieSubalgebra R L) (K₂ : LieSubalgebra R L₂)
 
 @[simp]
-/--
-theorem `incl_range` / 定理 `incl_range`
-
-English:
-theorem incl_range
-  statement: K.incl.range = K
-  proof: by
-  rw [← toSubmodule_inj]
-  exact (K : Submodule R L).range_subtype
-
-中文:
-定理 incl_range
-  结论: K.incl.range = K
-  证明: by
-  rw [← toSubmodule_inj]
-  exact (K : Submodule R L).range_subtype
-
-Depends on / 依赖: Submodule, range_subtype, toSubmodule_inj
+/-
+**LieSubalgebra.incl_range** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：incl_range : K.incl.range = K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.toSubmodule_inj`：toSubmodule_inj (L₁' L₂' : LieSubalgebra 
+R L) : (L₁' : Submodule R L) = (L₂' : Submodule R L) ↔ L₁' = L₂'
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
 -/
 theorem incl_range : K.incl.range = K := by
   rw [← toSubmodule_inj]
   exact (K : Submodule R L).range_subtype
 
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a Lie subalgebra under a Lie algebra morphism is a Lie subalgebra of the
+codomain. -/
+/-
+**LieSubalgebra.map** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：map : LieSubalgebra R L₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : LieSubalgebra R L₂
-  body: { (K : Submodule R L).map (f : L ->ₗ[R] L₂) with
-    lie_mem' {x y} hx hy := by
-      simp only [AddSubsemigroup.mem_carrier] at hx hy
-      rcases hx with ⟨x', hx', rfl⟩
-      rcases hy with ⟨y', hy', rfl⟩
-      simpa using ⟨⁅x', y'⁆, K.lie_mem hx' hy', f.map_lie x' y'⟩ }
-
-@[simp]
-
-中文:
-定义 map
-  签名: : Lie子代数 R L₂
-  定义体: { (K : Submodule R L).map (f : L ->ₗ[R] L₂) with
-    lie_mem' {x y} hx hy := by
-      simp only [AddSubsemigroup.mem_carrier] at hx hy
-      rcases hx with ⟨x', hx', rfl⟩
-      rcases hy with ⟨y', hy', rfl⟩
-      simpa using ⟨⁅x', y'⁆, K.lie_mem hx' hy', f.map_lie x' y'⟩ }
-
-@[simp]
-
-Depends on / 依赖: AddSubsemigroup, AddSubsemigroup.mem_carrier, K.lie_mem, Submodule, f.map_lie, lie_mem, map_lie, mem_carrier
+--- 原说明 ---
+The image of a Lie subalgebra under a Lie algebra morphism is a Lie subalgebra o
+f the
+codomain.
 -/
 def map : LieSubalgebra R L₂ :=
-  { (K : Submodule R L).map (f : L ->ₗ[R] L₂) with
+  { (K : Submodule R L).map (f : L →ₗ[R] L₂) with
     lie_mem' {x y} hx hy := by
       simp only [AddSubsemigroup.mem_carrier] at hx hy
       rcases hx with ⟨x', hx', rfl⟩
@@ -1405,110 +863,76 @@ def map : LieSubalgebra R L₂ :=
       simpa using ⟨⁅x', y'⁆, K.lie_mem hx' hy', f.map_lie x' y'⟩ }
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: (x : L₂)
-  statement: x in K.map f ↔ exists y : L, y in K ∧ f y = x
-  proof: Submodule.mem_map
-
-中文:
-定理 mem_map
-  条件: (x : L₂)
-  结论: x in K.map f ↔ 存在 y : L, y in K ∧ f y = x
-  证明: Submodule.mem_map
-
-Depends on / 依赖: Submodule, Submodule.mem_map, mem_map
+/-
+**LieSubalgebra.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_map (x : L₂) : x in K.map f ↔ exists y : L, y in K ∧ f y = x
+参数：x : L₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.mem_map`：mem_map {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {x :
+ M₂} : x in map f p ↔ exists y, y in p ∧ f y = x
 -/
-theorem mem_map (x : L₂) : x in K.map f ↔ exists y : L, y in K ∧ f y = x :=
+theorem mem_map (x : L₂) : x ∈ K.map f ↔ ∃ y : L, y ∈ K ∧ f y = x :=
   Submodule.mem_map
 
 -- TODO Rename and state for homs instead of equivs.
-/--
-theorem `mem_map_submodule` / 定理 `mem_map_submodule`
-
-English:
-theorem mem_map_submodule
-  given: (e : L ≃ₗ⁅R⁆ L₂) (x : L₂)
-  proof: Iff.rfl
-
-中文:
-定理 mem_map_submodule
-  条件: (e : L ≃ₗ⁅R⁆ L₂) (x : L₂)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.mem_map_submodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_map_submodule (e : L ≃ₗ⁅R⁆ L₂) (x : L₂) : x in K.map (e : L ->ₗ⁅R⁆ L₂)
+ ↔ x in (K : Submodule R L).map (e : L ->ₗ[R] L₂)
+参数：e : L ≃ₗ⁅R⁆ L₂；x : L₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_map_submodule (e : L ≃ₗ⁅R⁆ L₂) (x : L₂) :
-    x in K.map (e : L ->ₗ⁅R⁆ L₂) ↔ x in (K : Submodule R L).map (e : L ->ₗ[R] L₂) :=
+    x ∈ K.map (e : L →ₗ⁅R⁆ L₂) ↔ x ∈ (K : Submodule R L).map (e : L →ₗ[R] L₂) :=
   Iff.rfl
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- The preimage of a Lie subalgebra under a Lie algebra morphism is a Lie subalgebra of the
+domain. -/
+/-
+**LieSubalgebra.comap** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：comap : LieSubalgebra R L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: : LieSubalgebra R L
-  body: { (K₂ : Submodule R L₂).comap (f : L ->ₗ[R] L₂) with
-    lie_mem' := @fun x y hx hy => by
-      suffices ⁅f x, f y⁆ in K₂ by simp [this]
-      exact K₂.lie_mem hx hy }
-
-中文:
-定义 comap
-  签名: : Lie子代数 R L
-  定义体: { (K₂ : Submodule R L₂).comap (f : L ->ₗ[R] L₂) with
-    lie_mem' := @fun x y hx hy => by
-      suffices ⁅f x, f y⁆ in K₂ by simp [this]
-      exact K₂.lie_mem hx hy }
-
-Depends on / 依赖: Submodule, lie_mem
+--- 原说明 ---
+The preimage of a Lie subalgebra under a Lie algebra morphism is a Lie subalgebr
+a of the
+domain.
 -/
 def comap : LieSubalgebra R L :=
-  { (K₂ : Submodule R L₂).comap (f : L ->ₗ[R] L₂) with
-    lie_mem' := @fun x y hx hy => by
-      suffices ⁅f x, f y⁆ in K₂ by simp [this]
+  { (K₂ : Submodule R L₂).comap (f : L →ₗ[R] L₂) with
+    lie_mem' := @fun x y hx hy ↦ by
+      suffices ⁅f x, f y⁆ ∈ K₂ by simp [this]
       exact K₂.lie_mem hx hy }
-
-/--
-lemma `mem_comap` / 引理 `mem_comap`
-
-English:
-lemma mem_comap
-  given: {x : L}
-  statement: x in K₂.comap f ↔ f x in K₂
-  proof: Iff.rfl
-
-中文:
-引理 mem_comap
-  条件: {x : L}
-  结论: x in K₂.comap f ↔ f x in K₂
-  证明: Iff.rfl
+/-
+**LieSubalgebra.mem_comap** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] {L₂ : Type w}   [inst_3 : LieRing L₂] [inst_4 : LieAlgebra 
+R L₂] (f : L →ₗ⁅R⁆ L₂) (K₂ : LieSubalgebra R L₂) {x : L},   x ∈ LieSubalgebra.co
+map f K₂ ↔ f x ∈ K₂
+参数：f : L →ₗ⁅R⁆ L₂；K₂ : LieSubalgebra R L₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_comap {x : L} : x in K₂.comap f ↔ f x in K₂ := Iff.rfl
+@[simp] lemma mem_comap {x : L} : x ∈ K₂.comap f ↔ f x ∈ K₂ := Iff.rfl
 
-/--
-Definition of `equivMapOfInjective` / `equivMapOfInjective` 的定义
+/-- A Lie subalgebra is equivalent to its push forward along an injective linear map. -/
+/-
+**LieSubalgebra.equivMapOfInjective** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：{R : Type u} →   {L : Type v} →     [inst : CommRing R] →       [inst_1 : 
+LieRing L] →         [inst_2 : LieAlgebra R L] →           {L₂ : Type w} →      
+       [inst_3 : LieRing L₂] →               [inst_4 : LieAlgebra R L₂] →       
+          (f : L →ₗ⁅R⁆ L₂) → (K : LieSubalgebra R L) → Function.Injective ⇑f → ↥
+K ≃ₗ⁅R⁆ ↥(LieSubalgebra.map f K)
+参数：f : L →ₗ⁅R⁆ L₂；K : LieSubalgebra R L；LieSubalgebra.map f K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMapOfInjective
-  signature: (hf : Function.Injective f)
-  body: Submodule.equivMapOfInjective f.toLinearMap hf K
-  map_lie' {x y} := by
-    ext
-    change f ⁅(x : L), (y : L)⁆ = ⁅f (x : L), f (y : L)⁆
-    simp
-
-中文:
-定义 equivMapOfInjective
-  签名: (hf : 函数.单射 f)
-  定义体: Submodule.equivMapOfInjective f.toLinearMap hf K
-  map_lie' {x y} := by
-    ext
-    change f ⁅(x : L), (y : L)⁆ = ⁅f (x : L), f (y : L)⁆
-    simp
+--- 原说明 ---
+A Lie subalgebra is equivalent to its push forward along an injective linear map
+.
 -/
 @[simps!] noncomputable def equivMapOfInjective (hf : Function.Injective f) :
     K ≃ₗ⁅R⁆ K.map f where
@@ -1522,573 +946,311 @@ section LatticeStructure
 
 open Set
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (LieSubalgebra R L)
-  body: { PartialOrder.lift ((↑) : LieSubalgebra R L -> Set L) coe_injective with
-    le := fun N N' => forall ⦃x⦄, x in N -> x in N' }
-
-中文:
-实例 :
-  签名: 偏序 (Lie子代数 R L)
-  定义体: { PartialOrder.lift ((↑) : LieSubalgebra R L -> Set L) coe_injective with
-    le := fun N N' => forall ⦃x⦄, x in N -> x in N' }
-
-Depends on / 依赖: LieSubalgebra, PartialOrder, PartialOrder.lift, coe_injective
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (LieSubalgebra R L) :=
-  { PartialOrder.lift ((↑) : LieSubalgebra R L -> Set L) coe_injective with
-    le := fun N N' => forall ⦃x⦄, x in N -> x in N' }
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  statement: K <= K' ↔ (K : Set L) subseteq K'
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 le_def
-  结论: K <= K' ↔ (K : 集合 L) subseteq K'
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+  { PartialOrder.lift ((↑) : LieSubalgebra R L → Set L) coe_injective with
+    le := fun N N' ↦ ∀ ⦃x⦄, x ∈ N → x ∈ N' }
+/-
+**LieSubalgebra.le_def** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：le_def : K <= K' ↔ (K : Set L) subseteq K'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def : K <= K' ↔ (K : Set L) subseteq K' :=
+theorem le_def : K ≤ K' ↔ (K : Set L) ⊆ K' :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toSubmodule_le_toSubmodule` / 定理 `toSubmodule_le_toSubmodule`
-
-English:
-theorem toSubmodule_le_toSubmodule
-  statement: (K : Submodule R L) <= K' ↔ K <= K'
-  proof: Iff.rfl
-
-中文:
-定理 toSubmodule_le_toSubmodule
-  结论: (K : 子模 R L) <= K' ↔ K <= K'
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieSubalgebra.toSubmodule_le_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalge
+bra`。
+形式化陈述：toSubmodule_le_toSubmodule : (K : Submodule R L) <= K' ↔ K <= K'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toSubmodule_le_toSubmodule : (K : Submodule R L) <= K' ↔ K <= K' :=
+theorem toSubmodule_le_toSubmodule : (K : Submodule R L) ≤ K' ↔ K ≤ K' :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (LieSubalgebra R L)
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 底元素 (Lie子代数 R L)
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (LieSubalgebra R L) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `bot_coe` / 定理 `bot_coe`
-
-English:
-theorem bot_coe
-  statement: ((⊥ : LieSubalgebra R L) : Set L) = {0}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bot_coe
-  结论: ((⊥ : Lie子代数 R L) : 集合 L) = {0}
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.bot_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：bot_coe : ((⊥ : LieSubalgebra R L) : Set L) = {0}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_coe : ((⊥ : LieSubalgebra R L) : Set L) = {0} :=
   rfl
 
 @[simp]
-/--
-theorem `bot_toSubmodule` / 定理 `bot_toSubmodule`
-
-English:
-theorem bot_toSubmodule
-  statement: ((⊥ : LieSubalgebra R L) : Submodule R L) = ⊥
-  proof: rfl
-
-中文:
-定理 bot_toSubmodule
-  结论: ((⊥ : Lie子代数 R L) : 子模 R L) = ⊥
-  证明: rfl
+/-
+**LieSubalgebra.bot_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：bot_toSubmodule : ((⊥ : LieSubalgebra R L) : Submodule R L) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_toSubmodule : ((⊥ : LieSubalgebra R L) : Submodule R L) = ⊥ :=
   rfl
-
-/--
-lemma `toSubmodule_eq_bot` / 引理 `toSubmodule_eq_bot`
-
-English:
-lemma toSubmodule_eq_bot
-  given: (K : LieSubalgebra R L)
-  statement: K.toSubmodule = ⊥ ↔ K = ⊥
-  proof: by
-  simp [← toSubmodule_inj]
-
-@[simp]
-
-中文:
-引理 toSubmodule_eq_bot
-  条件: (K : Lie子代数 R L)
-  结论: K.toSubmodule = ⊥ ↔ K = ⊥
-  证明: by
-  simp [← toSubmodule_inj]
-
-@[simp]
+/-
+**LieSubalgebra.toSubmodule_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (K : LieSubalgebra R L),   K.toSubmodule = ⊥ ↔ K = ⊥
+参数：K : LieSubalgebra R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toSubmodule_eq_bot (K : LieSubalgebra R L) : K.toSubmodule = ⊥ ↔ K = ⊥ := by
   simp [← toSubmodule_inj]
 
 @[simp]
-/--
-theorem `mem_bot` / 定理 `mem_bot`
-
-English:
-theorem mem_bot
-  given: (x : L)
-  statement: x in (⊥ : LieSubalgebra R L) ↔ x = 0
-  proof: mem_singleton_iff
-
-中文:
-定理 mem_bot
-  条件: (x : L)
-  结论: x in (⊥ : Lie子代数 R L) ↔ x = 0
-  证明: mem_singleton_iff
-
-Depends on / 依赖: mem_singleton_iff
+/-
+**LieSubalgebra.mem_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_bot (x : L) : x in (⊥ : LieSubalgebra R L) ↔ x = 0
+参数：x : L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
-theorem mem_bot (x : L) : x in (⊥ : LieSubalgebra R L) ↔ x = 0 :=
+theorem mem_bot (x : L) : x ∈ (⊥ : LieSubalgebra R L) ↔ x = 0 :=
   mem_singleton_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (LieSubalgebra R L)
-  body: ⟨{ (⊤ : Submodule R L) with lie_mem' := @fun x y _ _ => mem_univ ⁅x, y⁆ }⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 顶元素 (Lie子代数 R L)
-  定义体: ⟨{ (⊤ : Submodule R L) with lie_mem' := @fun x y _ _ => mem_univ ⁅x, y⁆ }⟩
-
-@[simp]
-
-Depends on / 依赖: Submodule, lie_mem, mem_univ
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (LieSubalgebra R L) :=
-  ⟨{ (⊤ : Submodule R L) with lie_mem' := @fun x y _ _ => mem_univ ⁅x, y⁆ }⟩
+  ⟨{ (⊤ : Submodule R L) with lie_mem' := @fun x y _ _ ↦ mem_univ ⁅x, y⁆ }⟩
 
 @[simp]
-/--
-theorem `top_coe` / 定理 `top_coe`
-
-English:
-theorem top_coe
-  statement: ((⊤ : LieSubalgebra R L) : Set L) = univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 top_coe
-  结论: ((⊤ : Lie子代数 R L) : 集合 L) = univ
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.top_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：top_coe : ((⊤ : LieSubalgebra R L) : Set L) = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_coe : ((⊤ : LieSubalgebra R L) : Set L) = univ :=
   rfl
 
 @[simp]
-/--
-theorem `top_toSubmodule` / 定理 `top_toSubmodule`
-
-English:
-theorem top_toSubmodule
-  statement: ((⊤ : LieSubalgebra R L) : Submodule R L) = ⊤
-  proof: rfl
-
-中文:
-定理 top_toSubmodule
-  结论: ((⊤ : Lie子代数 R L) : 子模 R L) = ⊤
-  证明: rfl
+/-
+**LieSubalgebra.top_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：top_toSubmodule : ((⊤ : LieSubalgebra R L) : Submodule R L) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_toSubmodule : ((⊤ : LieSubalgebra R L) : Submodule R L) = ⊤ :=
   rfl
-
-/--
-lemma `toSubmodule_eq_top` / 引理 `toSubmodule_eq_top`
-
-English:
-lemma toSubmodule_eq_top
-  given: (K : LieSubalgebra R L)
-  statement: K.toSubmodule = ⊤ ↔ K = ⊤
-  proof: by
-  simp [← toSubmodule_inj]
-
-@[simp]
-
-中文:
-引理 toSubmodule_eq_top
-  条件: (K : Lie子代数 R L)
-  结论: K.toSubmodule = ⊤ ↔ K = ⊤
-  证明: by
-  simp [← toSubmodule_inj]
-
-@[simp]
+/-
+**LieSubalgebra.toSubmodule_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] (K : LieSubalgebra R L),   K.toSubmodule = ⊤ ↔ K = ⊤
+参数：K : LieSubalgebra R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toSubmodule_eq_top (K : LieSubalgebra R L) : K.toSubmodule = ⊤ ↔ K = ⊤ := by
   simp [← toSubmodule_inj]
 
 @[simp]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: (x : L)
-  statement: x in (⊤ : LieSubalgebra R L)
-  proof: mem_univ x
-
-中文:
-定理 mem_top
-  条件: (x : L)
-  结论: x in (⊤ : Lie子代数 R L)
-  证明: mem_univ x
-
-Depends on / 依赖: mem_univ
+/-
+**LieSubalgebra.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_top (x : L) : x in (⊤ : LieSubalgebra R L)
+参数：x : L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem mem_top (x : L) : x in (⊤ : LieSubalgebra R L) :=
+theorem mem_top (x : L) : x ∈ (⊤ : LieSubalgebra R L) :=
   mem_univ x
-
-/--
-theorem `_root_.LieHom.range_eq_map` / 定理 `_root_.LieHom.range_eq_map`
-
-English:
-theorem _root_.LieHom.range_eq_map
-  statement: f.range = map f ⊤
-  proof: by
-  ext
-  simp
-
-中文:
-定理 _root_.Lie态射.range_eq_map
-  结论: f.range = map f ⊤
-  证明: by
-  ext
-  simp
+/-
+**LieSubalgebra._root_.LieHom.range_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalge
+bra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LieHom.range_eq_map : f.range = map f ⊤ := by
   ext
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (LieSubalgebra R L)
-  body: ⟨fun K K' =>
-    { (K ⊓ K' : Submodule R L) with
-      lie_mem' := fun hx hy => mem_inter (K.lie_mem hx.1 hy.1) (K'.lie_mem hx.2 hy.2) }⟩
-
-中文:
-实例 :
-  签名: 最小值 (Lie子代数 R L)
-  定义体: ⟨fun K K' =>
-    { (K ⊓ K' : Submodule R L) with
-      lie_mem' := fun hx hy => mem_inter (K.lie_mem hx.1 hy.1) (K'.lie_mem hx.2 hy.2) }⟩
-
-Depends on / 依赖: K.lie_mem, Submodule, lie_mem, mem_inter
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (LieSubalgebra R L) :=
-  ⟨fun K K' =>
+  ⟨fun K K' ↦
     { (K ⊓ K' : Submodule R L) with
-      lie_mem' := fun hx hy => mem_inter (K.lie_mem hx.1 hy.1) (K'.lie_mem hx.2 hy.2) }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (LieSubalgebra R L)
-  body: ⟨fun S =>
-    { sInf {(s : Submodule R L) | s in S} with
-      lie_mem' := @fun x y hx hy => by
-        simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
-          forall_apply_eq_imp_iff₂, exists_imp, and_imp] at hx hy ⊢
-        intro K hK
-        exact K.lie_mem (hx K hK) (hy K hK) }⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 下确界集 (Lie子代数 R L)
-  定义体: ⟨fun S =>
-    { sInf {(s : Submodule R L) | s in S} with
-      lie_mem' := @fun x y hx hy => by
-        simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
-          forall_apply_eq_imp_iff₂, exists_imp, and_imp] at hx hy ⊢
-        intro K hK
-        exact K.lie_mem (hx K hK) (hy K hK) }⟩
-
-@[simp]
-
-Depends on / 依赖: K.lie_mem, Submodule, Submodule.coe_sInf, Submodule.mem_carrier, and_imp, coe_sInf, exists_imp, lie_mem, mem_carrier, mem_iInter, mem_ofPred_eq
+      lie_mem' := fun hx hy ↦ mem_inter (K.lie_mem hx.1 hy.1) (K'.lie_mem hx.2 hy.2) }⟩
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (LieSubalgebra R L) :=
-  ⟨fun S =>
-    { sInf {(s : Submodule R L) | s in S} with
-      lie_mem' := @fun x y hx hy => by
+  ⟨fun S ↦
+    { sInf {(s : Submodule R L) | s ∈ S} with
+      lie_mem' := @fun x y hx hy ↦ by
         simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
           forall_apply_eq_imp_iff₂, exists_imp, and_imp] at hx hy ⊢
         intro K hK
         exact K.lie_mem (hx K hK) (hy K hK) }⟩
 
 @[simp]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  statement: (↑(K ⊓ K') : Set L) = (K : Set L) inter (K' : Set L)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_inf
-  结论: (↑(K ⊓ K') : 集合 L) = (K : 集合 L) inter (K' : 集合 L)
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_inf : (↑(K ⊓ K') : Set L) = (K : Set L) inter (K' : Set L)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf : (↑(K ⊓ K') : Set L) = (K : Set L) inter (K' : Set L) :=
+theorem coe_inf : (↑(K ⊓ K') : Set L) = (K : Set L) ∩ (K' : Set L) :=
   rfl
 
 @[simp]
-/--
-theorem `sInf_toSubmodule` / 定理 `sInf_toSubmodule`
-
-English:
-theorem sInf_toSubmodule
-  given: (S : Set (LieSubalgebra R L))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sInf_toSubmodule
-  条件: (S : 集合 (Lie子代数 R L))
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.sInf_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：sInf_toSubmodule (S : Set (LieSubalgebra R L)) : (↑(sInf S) : Submodule R 
+L) = sInf {(s : Submodule R L) | s in S}
+参数：S : Set (LieSubalgebra R L)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sInf_toSubmodule (S : Set (LieSubalgebra R L)) :
-    (↑(sInf S) : Submodule R L) = sInf {(s : Submodule R L) | s in S} :=
+    (↑(sInf S) : Submodule R L) = sInf {(s : Submodule R L) | s ∈ S} :=
   rfl
 
 @[simp]
-/--
-theorem `coe_sInf` / 定理 `coe_sInf`
-
-English:
-theorem coe_sInf
-  given: (S : Set (LieSubalgebra R L))
-  statement: (↑(sInf S) : Set L) = ⋂ s in S, (s : Set L)
-  proof: by
-  rw [← coe_toSubmodule]; rw [sInf_toSubmodule]; rw [Submodule.coe_sInf]
-  ext x
-  simp
-
-中文:
-定理 coe_sInf
-  条件: (S : 集合 (Lie子代数 R L))
-  结论: (↑(sInf S) : 集合 L) = ⋂ s in S, (s : 集合 L)
-  证明: by
-  rw [← coe_toSubmodule]; rw [sInf_toSubmodule]; rw [Submodule.coe_sInf]
-  ext x
-  simp
-
-Depends on / 依赖: Submodule, Submodule.coe_sInf, coe_sInf, coe_toSubmodule, sInf_toSubmodule
+/-
+**LieSubalgebra.coe_sInf** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_sInf (S : Set (LieSubalgebra R L)) : (↑(sInf S) : Set L) = ⋂ s in S, (
+s : Set L)
+参数：S : Set (LieSubalgebra R L)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.coe_toSubmodule`：coe_toSubmodule : ((L' : Submodule R L) :
+ Set L) = L'
+· 使用定理 `LieSubalgebra.sInf_toSubmodule`：sInf_toSubmodule (S : Set (LieSubalgebra
+ R L)) : (↑(sInf S) : Submodule R L) = sInf {(s : Submodule R L) | s in S}
+· 使用定理 `Submodule.coe_sInf`：coe_sInf (P : Set (Submodule R M)) : (↑(sInf P) : Se
+t M) = ⋂ p in P, ↑p
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.biInter_and'`：biInter_and' (p : ι' -> Prop) (q : ι -> ι' -> Prop) (s
+ : forall x y, p y ∧ q x y -> Set α) : ⋂ (x : ι) (y : ι') (h : p y ∧ q x y), s x
+ y h =…
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_iInter_eq_right`：iInter_iInter_eq_right {b : β} {s : forall x
+ : β, b = x -> Set α} : ⋂ (x) (h : b = x), s x h = s b rfl
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_sInf (S : Set (LieSubalgebra R L)) : (↑(sInf S) : Set L) = ⋂ s in S, (s : Set L) := by
-  rw [← coe_toSubmodule]; rw [sInf_toSubmodule]; rw [Submodule.coe_sInf]
+theorem coe_sInf (S : Set (LieSubalgebra R L)) : (↑(sInf S) : Set L) = ⋂ s ∈ S, (s : Set L) := by
+  rw [← coe_toSubmodule, sInf_toSubmodule, Submodule.coe_sInf]
   ext x
   simp
-
-/--
-theorem `sInf_glb` / 定理 `sInf_glb`
-
-English:
-theorem sInf_glb
-  given: (S : Set (LieSubalgebra R L))
-  statement: IsGLB S (sInf S)
-  proof: by
-  have h : forall K K' : LieSubalgebra R L, (K : Set L) <= K' ↔ K <= K' := by
-    intros
-    exact Iff.rfl
-  apply IsGLB.of_image @h
-  simp only [coe_sInf]
-  exact isGLB_biInf
-
-中文:
-定理 sInf_glb
-  条件: (S : 集合 (Lie子代数 R L))
-  结论: IsGLB S (sInf S)
-  证明: by
-  have h : forall K K' : LieSubalgebra R L, (K : Set L) <= K' ↔ K <= K' := by
-    intros
-    exact Iff.rfl
-  apply IsGLB.of_image @h
-  simp only [coe_sInf]
-  exact isGLB_biInf
-
-Depends on / 依赖: Iff.rfl, IsGLB.of_image, LieSubalgebra, coe_sInf, intros, isGLB_biInf, of_image
+/-
+**LieSubalgebra.sInf_glb** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：sInf_glb (S : Set (LieSubalgebra R L)) : IsGLB S (sInf S)
+参数：S : Set (LieSubalgebra R L)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `IsGLB.of_image`：IsGLB.of_image [Preorder α] [Preorder β] {f : α -> β} (h
+f : forall {x y}, f x <= f y ↔ x <= y) {s : Set α} {x : α} (hx : IsGLB (f '' s) 
+(f x…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.coe_sInf`：coe_sInf (S : Set (LieSubalgebra R L)) : (↑(sInf
+ S) : Set L) = ⋂ s in S, (s : Set L)
+· 使用定理 `isGLB_biInf`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] 
+{s : Set β} {f : β → α}, IsGLB (f '' s) (⨅ x ∈ s, f x)
 -/
 theorem sInf_glb (S : Set (LieSubalgebra R L)) : IsGLB S (sInf S) := by
-  have h : forall K K' : LieSubalgebra R L, (K : Set L) <= K' ↔ K <= K' := by
+  have h : ∀ K K' : LieSubalgebra R L, (K : Set L) ≤ K' ↔ K ≤ K' := by
     intros
     exact Iff.rfl
   apply IsGLB.of_image @h
   simp only [coe_sInf]
   exact isGLB_biInf
 
-/--
-Instance `completeLattice` / 实例 `completeLattice`
+/-- The set of Lie subalgebras of a Lie algebra form a complete lattice.
 
-English:
-instance completeLattice
-  signature: : CompleteLattice (LieSubalgebra R L)
-  body: { completeLatticeOfInf _ sInf_glb with
-    bot := ⊥
-    bot_le := fun N _ h => by
-      rw [mem_bot] at h
-      rw [h]
-      exact N.zero_mem'
-    top := ⊤
-    le_top := fun _ _ _ => trivial
-    inf := (· ⊓ ·)
-    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
-    inf_le_left := fun _ _ _ => And.left
-    inf_le_right := fun _ _ _ => And.right }
+We provide explicit values for the fields `bot`, `top`, `inf` to get more convenient definitions
+than we would otherwise obtain from `completeLatticeOfInf`. -/
+/-
+**LieSubalgebra.completeLattice** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：completeLattice : CompleteLattice (LieSubalgebra R L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.sInf_glb`：sInf_glb (S : Set (LieSubalgebra R L)) : IsGLB S
+ (sInf S)
+· 使用定理 `trivial`：True
 
-中文:
-实例 completeLattice
-  签名: : 完备格 (Lie子代数 R L)
-  定义体: { completeLatticeOfInf _ sInf_glb with
-    bot := ⊥
-    bot_le := fun N _ h => by
-      rw [mem_bot] at h
-      rw [h]
-      exact N.zero_mem'
-    top := ⊤
-    le_top := fun _ _ _ => trivial
-    inf := (· ⊓ ·)
-    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
-    inf_le_left := fun _ _ _ => And.left
-    inf_le_right := fun _ _ _ => And.right }
+--- 原说明 ---
+The set of Lie subalgebras of a Lie algebra form a complete lattice.
 
-Depends on / 依赖: And.left, And.right, N.zero_mem, bot_le, completeLatticeOfInf, inf_le_left, inf_le_right, le_inf, le_top, mem_bot, sInf_glb, zero_mem
+We provide explicit values for the fields `bot`, `top`, `inf` to get more conven
+ient definitions
+than we would otherwise obtain from `completeLatticeOfInf`.
 -/
 instance completeLattice : CompleteLattice (LieSubalgebra R L) :=
   { completeLatticeOfInf _ sInf_glb with
     bot := ⊥
-    bot_le := fun N _ h => by
+    bot_le := fun N _ h ↦ by
       rw [mem_bot] at h
       rw [h]
       exact N.zero_mem'
     top := ⊤
-    le_top := fun _ _ _ => trivial
+    le_top := fun _ _ _ ↦ trivial
     inf := (· ⊓ ·)
-    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
-    inf_le_left := fun _ _ _ => And.left
-    inf_le_right := fun _ _ _ => And.right }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (LieSubalgebra R L)
-  body: max
-
-中文:
-实例 :
-  签名: 加法 (Lie子代数 R L)
-  定义体: max
+    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm ↦ ⟨h₁₂ hm, h₁₃ hm⟩
+    inf_le_left := fun _ _ _ ↦ And.left
+    inf_le_right := fun _ _ _ ↦ And.right }
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (LieSubalgebra R L) where add := max
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (LieSubalgebra R L)
-  body: ⊥
-
-中文:
-实例 :
-  签名: 零 (Lie子代数 R L)
-  定义体: ⊥
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (LieSubalgebra R L) where zero := ⊥
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: : AddCommMonoid (LieSubalgebra R L) where
-  body: sup_assoc
-  zero_add := bot_sup_eq
-  add_zero := sup_bot_eq
-  add_comm := sup_comm
-  nsmul := nsmulRec
-
-中文:
-实例 addCommMonoid
-  签名: : 加法交换幺半群 (Lie子代数 R L) where
-  定义体: sup_assoc
-  zero_add := bot_sup_eq
-  add_zero := sup_bot_eq
-  add_comm := sup_comm
-  nsmul := nsmulRec
-
-Depends on / 依赖: sup_assoc
+/-
+**LieSubalgebra.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：addCommMonoid : AddCommMonoid (LieSubalgebra R L) where add_assoc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoid : AddCommMonoid (LieSubalgebra R L) where
   add_assoc := sup_assoc
@@ -2096,47 +1258,15 @@ instance addCommMonoid : AddCommMonoid (LieSubalgebra R L) where
   add_zero := sup_bot_eq
   add_comm := sup_comm
   nsmul := nsmulRec
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOrderedAddMonoid (LieSubalgebra R L)
-  body: sup_le_sup_right
-
-中文:
-实例 :
-  签名: 是OrderedAdd幺半群 (Lie子代数 R L)
-  定义体: sup_le_sup_right
-
-Depends on / 依赖: sup_le_sup_right
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsOrderedAddMonoid (LieSubalgebra R L) where
   add_le_add_left _ _ := sup_le_sup_right
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanonicallyOrderedAdd (LieSubalgebra R L)
-  body: ⟨b, (sup_eq_right.2 h).symm⟩
-  le_add_self _ _ := le_sup_right
-  le_self_add _ _ := le_sup_left
-
-@[simp]
-
-中文:
-实例 :
-  签名: 典范有序加法 (Lie子代数 R L)
-  定义体: ⟨b, (sup_eq_right.2 h).symm⟩
-  le_add_self _ _ := le_sup_right
-  le_self_add _ _ := le_sup_left
-
-@[simp]
-
-Depends on / 依赖: sup_eq_right
+/-
+**LieSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CanonicallyOrderedAdd (LieSubalgebra R L) where
   exists_add_of_le {_a b} h := ⟨b, (sup_eq_right.2 h).symm⟩
@@ -2144,189 +1274,152 @@ instance : CanonicallyOrderedAdd (LieSubalgebra R L) where
   le_self_add _ _ := le_sup_left
 
 @[simp]
-/--
-theorem `add_eq_sup` / 定理 `add_eq_sup`
-
-English:
-theorem add_eq_sup
-  statement: K + K' = K ⊔ K'
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_eq_sup
-  结论: K + K' = K ⊔ K'
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.add_eq_sup** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：add_eq_sup : K + K' = K ⊔ K'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_eq_sup : K + K' = K ⊔ K' :=
   rfl
 
 @[simp]
-/--
-theorem `inf_toSubmodule` / 定理 `inf_toSubmodule`
-
-English:
-theorem inf_toSubmodule
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inf_toSubmodule
-  证明: rfl
-
-@[simp]
+/-
+**LieSubalgebra.inf_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：inf_toSubmodule : (↑(K ⊓ K') : Submodule R L) = (K : Submodule R L) ⊓ (K' 
+: Submodule R L)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inf_toSubmodule :
     (↑(K ⊓ K') : Submodule R L) = (K : Submodule R L) ⊓ (K' : Submodule R L) :=
   rfl
 
 @[simp]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  given: (x : L)
-  statement: x in K ⊓ K' ↔ x in K ∧ x in K'
-  proof: by
-  rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [inf_toSubmodule]; rw [Submodule.mem_inf]
-
-中文:
-定理 mem_inf
-  条件: (x : L)
-  结论: x in K ⊓ K' ↔ x in K ∧ x in K'
-  证明: by
-  rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [inf_toSubmodule]; rw [Submodule.mem_inf]
-
-Depends on / 依赖: Submodule, Submodule.mem_inf, inf_toSubmodule, mem_inf, mem_toSubmodule
+/-
+**LieSubalgebra.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_inf (x : L) : x in K ⊓ K' ↔ x in K ∧ x in K'
+参数：x : L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.mem_toSubmodule`：mem_toSubmodule {x : L} : x in (L' : Subm
+odule R L) ↔ x in L'
+· 使用定理 `LieSubalgebra.inf_toSubmodule`：inf_toSubmodule : (↑(K ⊓ K') : Submodule 
+R L) = (K : Submodule R L) ⊓ (K' : Submodule R L)
+· 使用定理 `Submodule.mem_inf`：mem_inf {p q : Submodule R M} {x : M} : x in p ⊓ q ↔ 
+x in p ∧ x in q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf (x : L) : x in K ⊓ K' ↔ x in K ∧ x in K' := by
-  rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [← mem_toSubmodule]; rw [inf_toSubmodule]; rw [Submodule.mem_inf]
-
-/--
-theorem `eq_bot_iff` / 定理 `eq_bot_iff`
-
-English:
-theorem eq_bot_iff
-  statement: K = ⊥ ↔ forall x : L, x in K -> x = 0
-  proof: by
-  rw [_root_.eq_bot_iff]
-  exact Iff.rfl
-
-中文:
-定理 eq_bot_iff
-  结论: K = ⊥ ↔ 对任意 x : L, x in K -> x = 0
-  证明: by
-  rw [_root_.eq_bot_iff]
-  exact Iff.rfl
-
-Depends on / 依赖: Iff.rfl, _root_, _root_.eq_bot_iff, eq_bot_iff
+theorem mem_inf (x : L) : x ∈ K ⊓ K' ↔ x ∈ K ∧ x ∈ K' := by
+  rw [← mem_toSubmodule, ← mem_toSubmodule, ← mem_toSubmodule, inf_toSubmodule,
+    Submodule.mem_inf]
+/-
+**LieSubalgebra.eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：eq_bot_iff : K = ⊥ ↔ forall x : L, x in K -> x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eq_bot_iff : K = ⊥ ↔ forall x : L, x in K -> x = 0 := by
+theorem eq_bot_iff : K = ⊥ ↔ ∀ x : L, x ∈ K → x = 0 := by
   rw [_root_.eq_bot_iff]
   exact Iff.rfl
-
-/--
-Instance `subsingleton_of_bot` / 实例 `subsingleton_of_bot`
-
-English:
-instance subsingleton_of_bot
-  signature: : Subsingleton (LieSubalgebra R (⊥ : LieSubalgebra R L))
-  body: by
-  apply subsingleton_of_bot_eq_top
-  ext ⟨x, hx⟩; change x in ⊥ at hx; rw [LieSubalgebra.mem_bot] at hx; subst hx
-  simp only [mem_bot, mem_top, iff_true]
-  rfl
-
-中文:
-实例 subsingleton_of_bot
-  签名: : 子单例 (Lie子代数 R (⊥ : Lie子代数 R L))
-  定义体: by
-  apply subsingleton_of_bot_eq_top
-  ext ⟨x, hx⟩; change x in ⊥ at hx; rw [LieSubalgebra.mem_bot] at hx; subst hx
-  simp only [mem_bot, mem_top, iff_true]
-  rfl
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.mem_bot, iff_true, mem_bot, mem_top, subsingleton_of_bot_eq_top
+/-
+**LieSubalgebra.subsingleton_of_bot** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalgebra`。
+形式化陈述：subsingleton_of_bot : Subsingleton (LieSubalgebra R (⊥ : LieSubalgebra R L
+))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_of_bot_eq_top`：subsingleton_of_bot_eq_top (hα : (⊥ : α) = (
+⊤ : α)) : Subsingleton α
+· 使用定理 `LieSubalgebra.ext`：ext (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in
+ L₁' ↔ x in L₂') : L₁' = L₂'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.mem_bot`：mem_bot (x : L) : x in (⊥ : LieSubalgebra R L) ↔ 
+x = 0
 -/
 instance subsingleton_of_bot : Subsingleton (LieSubalgebra R (⊥ : LieSubalgebra R L)) := by
   apply subsingleton_of_bot_eq_top
-  ext ⟨x, hx⟩; change x in ⊥ at hx; rw [LieSubalgebra.mem_bot] at hx; subst hx
+  ext ⟨x, hx⟩; change x ∈ ⊥ at hx; rw [LieSubalgebra.mem_bot] at hx; subst hx
   simp only [mem_bot, mem_top, iff_true]
   rfl
-
-/--
-theorem `subsingleton_bot` / 定理 `subsingleton_bot`
-
-English:
-theorem subsingleton_bot
-  statement: Subsingleton (⊥ : LieSubalgebra R L)
-  proof: show Subsingleton ((⊥ : LieSubalgebra R L) : Set L) by simp
-
-中文:
-定理 subsingleton_bot
-  结论: 子单例 (⊥ : Lie子代数 R L)
-  证明: show Subsingleton ((⊥ : LieSubalgebra R L) : Set L) by simp
-
-Depends on / 依赖: LieSubalgebra, Subsingleton
+/-
+**LieSubalgebra.subsingleton_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：subsingleton_bot : Subsingleton (⊥ : LieSubalgebra R L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem subsingleton_bot : Subsingleton (⊥ : LieSubalgebra R L) :=
   show Subsingleton ((⊥ : LieSubalgebra R L) : Set L) by simp
 
 variable {K K'} in
-/--
-lemma `disjoint_toSubmodule` / 引理 `disjoint_toSubmodule`
-
-English:
-lemma disjoint_toSubmodule
-  proof: by
-  simp [disjoint_iff, ← toSubmodule_inj]
-
-中文:
-引理 disjoint_toSubmodule
-  证明: by
-  simp [disjoint_iff, ← toSubmodule_inj]
+/-
+**LieSubalgebra.disjoint_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L]   {K K' : LieSubalgebra R L}, Disjoint K.toSubmodule K'.toS
+ubmodule ↔ Disjoint K K'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma disjoint_toSubmodule :
     Disjoint (K : Submodule R L) (K' : Submodule R L) ↔ Disjoint K K' := by
   simp [disjoint_iff, ← toSubmodule_inj]
 
 variable (R L)
-
-/--
-Instance `wellFoundedGT_of_noetherian` / 实例 `wellFoundedGT_of_noetherian`
-
-English:
-instance wellFoundedGT_of_noetherian
-  signature: [IsNoetherian R L]
-  body: RelHomClass.isWellFounded (⟨toSubmodule, @fun _ _ h => h⟩ : _ ->r (· > ·))
-
-中文:
-实例 wellFoundedGT_of_noetherian
-  签名: [是Noether R L]
-  定义体: RelHomClass.isWellFounded (⟨toSubmodule, @fun _ _ h => h⟩ : _ ->r (· > ·))
-
-Depends on / 依赖: RelHomClass, RelHomClass.isWellFounded, isWellFounded, toSubmodule
+/-
+**LieSubalgebra.wellFoundedGT_of_noetherian** 是 Mathlib 中的一个实例，位于命名空间 `LieSubalg
+ebra`。
+形式化陈述：wellFoundedGT_of_noetherian [IsNoetherian R L] : WellFoundedGT (LieSubalge
+bra R L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelHomClass.isWellFounded`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → 
+Prop} {s : β → β → Prop} {F : Type u_5} [inst : FunLike F α β]   [RelHomClass F 
+r s] (f : F) [I…
+· 使用定理 `RelHom.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Pro
+p} {s : β → β → Prop}, RelHomClass (r →r s) r s
 -/
 instance wellFoundedGT_of_noetherian [IsNoetherian R L] : WellFoundedGT (LieSubalgebra R L) :=
-  RelHomClass.isWellFounded (⟨toSubmodule, @fun _ _ h => h⟩ : _ ->r (· > ·))
-
-/--
-theorem `map_top` / 定理 `map_top`
-
-English:
-theorem map_top
-  statement: f.range = LieSubalgebra.map f ⊤
-  proof: by ext; simp
-
-中文:
-定理 map_top
-  结论: f.range = Lie子代数.map f ⊤
-  证明: by ext; simp
+  RelHomClass.isWellFounded (⟨toSubmodule, @fun _ _ h ↦ h⟩ : _ →r (· > ·))
+/-
+**LieSubalgebra.map_top** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：map_top : f.range = LieSubalgebra.map f ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.ext`：ext (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in
+ L₁' ↔ x in L₂') : L₁' = L₂'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem map_top : f.range = LieSubalgebra.map f ⊤ := by ext; simp
 
@@ -2334,171 +1427,106 @@ variable {R L K K' f}
 
 section NestedSubalgebras
 
-variable (h : K <= K')
+variable (h : K ≤ K')
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- Given two nested Lie subalgebras `K ⊆ K'`, the inclusion `K ↪ K'` is a morphism of Lie
+algebras. -/
+/-
+**LieSubalgebra.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：inclusion : K ->ₗ⁅R⁆ K'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: : K ->ₗ⁅R⁆ K'
-  body: { Submodule.inclusion h with map_lie' := @fun _ _ => rfl }
-
-@[simp]
-
-中文:
-定义 inclusion
-  签名: : K ->ₗ⁅R⁆ K'
-  定义体: { Submodule.inclusion h with map_lie' := @fun _ _ => rfl }
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.inclusion, inclusion, map_lie
+--- 原说明 ---
+Given two nested Lie subalgebras `K ⊆ K'`, the inclusion `K ↪ K'` is a morphism 
+of Lie
+algebras.
 -/
-def inclusion : K ->ₗ⁅R⁆ K' :=
-  { Submodule.inclusion h with map_lie' := @fun _ _ => rfl }
+def inclusion : K →ₗ⁅R⁆ K' :=
+  { Submodule.inclusion h with map_lie' := @fun _ _ ↦ rfl }
 
 @[simp]
-/--
-theorem `coe_inclusion` / 定理 `coe_inclusion`
-
-English:
-theorem coe_inclusion
-  given: (x : K)
-  statement: (inclusion h x : L) = x
-  proof: rfl
-
-中文:
-定理 coe_inclusion
-  条件: (x : K)
-  结论: (inclusion h x : L) = x
-  证明: rfl
+/-
+**LieSubalgebra.coe_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_inclusion (x : K) : (inclusion h x : L) = x
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_inclusion (x : K) : (inclusion h x : L) = x :=
   rfl
-
-/--
-theorem `inclusion_apply` / 定理 `inclusion_apply`
-
-English:
-theorem inclusion_apply
-  given: (x : K)
-  statement: inclusion h x = ⟨x.1, h x.2⟩
-  proof: rfl
-
-中文:
-定理 inclusion_apply
-  条件: (x : K)
-  结论: inclusion h x = ⟨x.1, h x.2⟩
-  证明: rfl
+/-
+**LieSubalgebra.inclusion_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：inclusion_apply (x : K) : inclusion h x = ⟨x.1, h x.2⟩
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inclusion_apply (x : K) : inclusion h x = ⟨x.1, h x.2⟩ :=
   rfl
-
-/--
-theorem `inclusion_injective` / 定理 `inclusion_injective`
-
-English:
-theorem inclusion_injective
-  statement: Function.Injective (inclusion h)
-  proof: fun x y => by
-  simp only [inclusion_apply, imp_self, Subtype.mk_eq_mk, SetLike.coe_eq_coe]
-
-中文:
-定理 inclusion_injective
-  结论: 函数.单射 (inclusion h)
-  证明: fun x y => by
-  simp only [inclusion_apply, imp_self, Subtype.mk_eq_mk, SetLike.coe_eq_coe]
-
-Depends on / 依赖: SetLike, SetLike.coe_eq_coe, Subtype, Subtype.mk_eq_mk, coe_eq_coe, imp_self, inclusion_apply, mk_eq_mk
+/-
+**LieSubalgebra.inclusion_injective** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：inclusion_injective : Function.Injective (inclusion h)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem inclusion_injective : Function.Injective (inclusion h) := fun x y => by
+theorem inclusion_injective : Function.Injective (inclusion h) := fun x y ↦ by
   simp only [inclusion_apply, imp_self, Subtype.mk_eq_mk, SetLike.coe_eq_coe]
 
-/--
-Definition of `ofLe` / `ofLe` 的定义
+/-- Given two nested Lie subalgebras `K ⊆ K'`, we can view `K` as a Lie subalgebra of `K'`,
+regarded as Lie algebra in its own right. -/
+/-
+**LieSubalgebra.ofLe** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：ofLe : LieSubalgebra R K'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLe
-  signature: : LieSubalgebra R K'
-  body: (inclusion h).range
-
-@[simp]
-
-中文:
-定义 ofLe
-  签名: : Lie子代数 R K'
-  定义体: (inclusion h).range
-
-@[simp]
-
-Depends on / 依赖: inclusion
+--- 原说明 ---
+Given two nested Lie subalgebras `K ⊆ K'`, we can view `K` as a Lie subalgebra o
+f `K'`,
+regarded as Lie algebra in its own right.
 -/
 def ofLe : LieSubalgebra R K' :=
   (inclusion h).range
 
 @[simp]
-/--
-theorem `mem_ofLe` / 定理 `mem_ofLe`
-
-English:
-theorem mem_ofLe
-  given: (x : K')
-  statement: x in ofLe h ↔ (x : L) in K
-  proof: by
-  simp only [ofLe, inclusion_apply, LieHom.mem_range]
-  constructor
-  · rintro ⟨y, rfl⟩
-    exact y.property
-  · intro h
-    use ⟨(x : L), h⟩
-
-中文:
-定理 mem_ofLe
-  条件: (x : K')
-  结论: x in ofLe h ↔ (x : L) in K
-  证明: by
-  simp only [ofLe, inclusion_apply, LieHom.mem_range]
-  constructor
-  · rintro ⟨y, rfl⟩
-    exact y.property
-  · intro h
-    use ⟨(x : L), h⟩
-
-Depends on / 依赖: LieHom, LieHom.mem_range, inclusion_apply, mem_range, property, y.property
+/-
+**LieSubalgebra.mem_ofLe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_ofLe (x : K') : x in ofLe h ↔ (x : L) in K
+参数：x : K'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem mem_ofLe (x : K') : x in ofLe h ↔ (x : L) in K := by
+theorem mem_ofLe (x : K') : x ∈ ofLe h ↔ (x : L) ∈ K := by
   simp only [ofLe, inclusion_apply, LieHom.mem_range]
   constructor
   · rintro ⟨y, rfl⟩
     exact y.property
   · intro h
     use ⟨(x : L), h⟩
-
-/--
-theorem `ofLe_eq_comap_incl` / 定理 `ofLe_eq_comap_incl`
-
-English:
-theorem ofLe_eq_comap_incl
-  statement: ofLe h = K.comap K'.incl
-  proof: by
-  ext
-  rw [mem_ofLe]
-  rfl
-
-@[simp]
-
-中文:
-定理 ofLe_eq_comap_incl
-  结论: ofLe h = K.comap K'.incl
-  证明: by
-  ext
-  rw [mem_ofLe]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: mem_ofLe
+/-
+**LieSubalgebra.ofLe_eq_comap_incl** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：ofLe_eq_comap_incl : ofLe h = K.comap K'.incl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.ext`：ext (L₁' L₂' : LieSubalgebra R L) (h : forall x, x in
+ L₁' ↔ x in L₂') : L₁' = L₂'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.mem_ofLe`：mem_ofLe (x : K') : x in ofLe h ↔ (x : L) in K
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofLe_eq_comap_incl : ofLe h = K.comap K'.incl := by
   ext
@@ -2506,100 +1534,69 @@ theorem ofLe_eq_comap_incl : ofLe h = K.comap K'.incl := by
   rfl
 
 @[simp]
-/--
-theorem `coe_ofLe` / 定理 `coe_ofLe`
-
-English:
-theorem coe_ofLe
-  statement: (ofLe h : Submodule R K') = LinearMap.range (Submodule.inclusion h)
-  proof: rfl
-
-中文:
-定理 coe_ofLe
-  结论: (ofLe h : 子模 R K') = 线性映射.range (子模.inclusion h)
-  证明: rfl
+/-
+**LieSubalgebra.coe_ofLe** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：coe_ofLe : (ofLe h : Submodule R K') = LinearMap.range (Submodule.inclusio
+n h)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofLe : (ofLe h : Submodule R K') = LinearMap.range (Submodule.inclusion h) :=
   rfl
 
-/--
-Definition of `equivOfLe` / `equivOfLe` 的定义
+/-- Given nested Lie subalgebras `K ⊆ K'`, there is a natural equivalence from `K` to its image in
+`K'`. -/
+/-
+**LieSubalgebra.equivOfLe** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：equivOfLe : K ≃ₗ⁅R⁆ ofLe h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.inclusion_injective`：inclusion_injective : Function.Inject
+ive (inclusion h)
 
-English:
-definition equivOfLe
-  signature: : K ≃ₗ⁅R⁆ ofLe h
-  body: (inclusion h).equivRangeOfInjective (inclusion_injective h)
-
-@[simp]
-
-中文:
-定义 equivOfLe
-  签名: : K ≃ₗ⁅R⁆ ofLe h
-  定义体: (inclusion h).equivRangeOfInjective (inclusion_injective h)
-
-@[simp]
-
-Depends on / 依赖: equivRangeOfInjective, inclusion, inclusion_injective
+--- 原说明 ---
+Given nested Lie subalgebras `K ⊆ K'`, there is a natural equivalence from `K` t
+o its image in
+`K'`.
 -/
 noncomputable def equivOfLe : K ≃ₗ⁅R⁆ ofLe h :=
   (inclusion h).equivRangeOfInjective (inclusion_injective h)
 
 @[simp]
-/--
-theorem `equivOfLe_apply` / 定理 `equivOfLe_apply`
-
-English:
-theorem equivOfLe_apply
-  given: (x : K)
-  statement: equivOfLe h x = ⟨inclusion h x, (inclusion h).mem_range_self x⟩
-  proof: rfl
-
-中文:
-定理 equivOfLe_apply
-  条件: (x : K)
-  结论: equivOfLe h x = ⟨inclusion h x, (inclusion h).mem_range_self x⟩
-  证明: rfl
+/-
+**LieSubalgebra.equivOfLe_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：equivOfLe_apply (x : K) : equivOfLe h x = ⟨inclusion h x, (inclusion h).me
+m_range_self x⟩
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivOfLe_apply (x : K) : equivOfLe h x = ⟨inclusion h x, (inclusion h).mem_range_self x⟩ :=
   rfl
 
 end NestedSubalgebras
 
-/--
-theorem `map_le_iff_le_comap` / 定理 `map_le_iff_le_comap`
-
-English:
-theorem map_le_iff_le_comap
-  given: {K : LieSubalgebra R L} {K' : LieSubalgebra R L₂}
-  proof: Set.image_subset_iff
-
-中文:
-定理 map_le_iff_le_comap
-  条件: {K : Lie子代数 R L} {K' : Lie子代数 R L₂}
-  证明: Set.image_subset_iff
-
-Depends on / 依赖: Set.image_subset_iff, image_subset_iff
+/-
+**LieSubalgebra.map_le_iff_le_comap** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：map_le_iff_le_comap {K : LieSubalgebra R L} {K' : LieSubalgebra R L₂} : ma
+p f K <= K' ↔ K <= comap f K'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
 theorem map_le_iff_le_comap {K : LieSubalgebra R L} {K' : LieSubalgebra R L₂} :
-    map f K <= K' ↔ K <= comap f K' :=
+    map f K ≤ K' ↔ K ≤ comap f K' :=
   Set.image_subset_iff
-
-/--
-theorem `gc_map_comap` / 定理 `gc_map_comap`
-
-English:
-theorem gc_map_comap
-  statement: GaloisConnection (map f) (comap f)
-  proof: fun _ _ => map_le_iff_le_comap
-
-中文:
-定理 gc_map_comap
-  结论: GaloisConnection (map f) (comap f)
-  证明: fun _ _ => map_le_iff_le_comap
-
-Depends on / 依赖: map_le_iff_le_comap
+/-
+**LieSubalgebra.gc_map_comap** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：gc_map_comap : GaloisConnection (map f) (comap f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.map_le_iff_le_comap`：map_le_iff_le_comap {K : LieSubalgebr
+a R L} {K' : LieSubalgebra R L₂} : map f K <= K' ↔ K <= comap f K'
 -/
-theorem gc_map_comap : GaloisConnection (map f) (comap f) := fun _ _ => map_le_iff_le_comap
+theorem gc_map_comap : GaloisConnection (map f) (comap f) := fun _ _ ↦ map_le_iff_le_comap
 
 end LatticeStructure
 
@@ -2607,261 +1604,203 @@ section LieSpan
 
 variable (R L) (s : Set L)
 
-/--
-Definition of `lieSpan` / `lieSpan` 的定义
+/-- The Lie subalgebra of a Lie algebra `L` generated by a subset `s ⊆ L`. -/
+/-
+**LieSubalgebra.lieSpan** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieSpan : LieSubalgebra R L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lieSpan
-  signature: : LieSubalgebra R L
-  body: sInf { N | s subseteq N }
-
-中文:
-定义 lieSpan
-  签名: : Lie子代数 R L
-  定义体: sInf { N | s subseteq N }
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+The Lie subalgebra of a Lie algebra `L` generated by a subset `s ⊆ L`.
 -/
 def lieSpan : LieSubalgebra R L :=
-  sInf { N | s subseteq N }
+  sInf { N | s ⊆ N }
 
 variable {R L s}
-
-/--
-theorem `mem_lieSpan` / 定理 `mem_lieSpan`
-
-English:
-theorem mem_lieSpan
-  given: {x : L}
-  statement: x in lieSpan R L s ↔ forall K : LieSubalgebra R L, s subseteq K -> x in K
-  proof: by
-  rw [← SetLike.mem_coe]; rw [lieSpan]; rw [coe_sInf]
-  exact Set.mem_iInter₂
-
-中文:
-定理 mem_lieSpan
-  条件: {x : L}
-  结论: x in lieSpan R L s ↔ 对任意 K : Lie子代数 R L, s subseteq K -> x in K
-  证明: by
-  rw [← SetLike.mem_coe]; rw [lieSpan]; rw [coe_sInf]
-  exact Set.mem_iInter₂
-
-Depends on / 依赖: Set.mem_iInter, SetLike, SetLike.mem_coe, coe_sInf, lieSpan, mem_coe
+/-
+**LieSubalgebra.mem_lieSpan** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：mem_lieSpan {x : L} : x in lieSpan R L s ↔ forall K : LieSubalgebra R L, s
+ subseteq K -> x in K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `LieSubalgebra.lieSpan.eq_1`：∀ (R : Type u) (L : Type v) [inst : CommRing
+ R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (s : Set L),   LieSubalgebra.
+lieSpan R L s = …
+· 使用定理 `LieSubalgebra.coe_sInf`：coe_sInf (S : Set (LieSubalgebra R L)) : (↑(sInf
+ S) : Set L) = ⋂ s in S, (s : Set L)
+· 使用定理 `Set.mem_iInter₂`：mem_iInter₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋂ (i) (j), s i j) ↔ forall i j, x in s i j
 -/
-theorem mem_lieSpan {x : L} : x in lieSpan R L s ↔ forall K : LieSubalgebra R L, s subseteq K -> x in K := by
-  rw [← SetLike.mem_coe]; rw [lieSpan]; rw [coe_sInf]
+theorem mem_lieSpan {x : L} : x ∈ lieSpan R L s ↔ ∀ K : LieSubalgebra R L, s ⊆ K → x ∈ K := by
+  rw [← SetLike.mem_coe, lieSpan, coe_sInf]
   exact Set.mem_iInter₂
-
-/--
-theorem `subset_lieSpan` / 定理 `subset_lieSpan`
-
-English:
-theorem subset_lieSpan
-  statement: s subseteq lieSpan R L s
-  proof: by
+/-
+**LieSubalgebra.subset_lieSpan** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：subset_lieSpan : s subseteq lieSpan R L s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `LieSubalgebra.mem_lieSpan`：mem_lieSpan {x : L} : x in lieSpan R L s ↔ fo
+rall K : LieSubalgebra R L, s subseteq K -> x in K
+-/
+theorem subset_lieSpan : s ⊆ lieSpan R L s := by
   intro m hm
-  rw [SetLike.mem_coe]; rw [mem_lieSpan]
+  rw [SetLike.mem_coe, mem_lieSpan]
   intro K hK
   exact hK hm
-
-中文:
-定理 subset_lieSpan
-  结论: s subseteq lieSpan R L s
-  证明: by
-  intro m hm
-  rw [SetLike.mem_coe]; rw [mem_lieSpan]
-  intro K hK
-  exact hK hm
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, mem_coe, mem_lieSpan
+/-
+**LieSubalgebra.submodule_span_le_lieSpan** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgeb
+ra`。
+形式化陈述：submodule_span_le_lieSpan : Submodule.span R s <= lieSpan R L s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `LieSubalgebra.coe_toSubmodule`：coe_toSubmodule : ((L' : Submodule R L) :
+ Set L) = L'
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
 -/
-theorem subset_lieSpan : s subseteq lieSpan R L s := by
-  intro m hm
-  rw [SetLike.mem_coe]; rw [mem_lieSpan]
-  intro K hK
-  exact hK hm
-
-/--
-theorem `submodule_span_le_lieSpan` / 定理 `submodule_span_le_lieSpan`
-
-English:
-theorem submodule_span_le_lieSpan
-  statement: Submodule.span R s <= lieSpan R L s
-  proof: by
-  rw [Submodule.span_le]; rw [coe_toSubmodule]
+theorem submodule_span_le_lieSpan : Submodule.span R s ≤ lieSpan R L s := by
+  rw [Submodule.span_le, coe_toSubmodule]
   apply subset_lieSpan
-
-中文:
-定理 submodule_span_le_lieSpan
-  结论: 子模.span R s <= lieSpan R L s
-  证明: by
-  rw [Submodule.span_le]; rw [coe_toSubmodule]
-  apply subset_lieSpan
-
-Depends on / 依赖: Submodule, Submodule.span_le, coe_toSubmodule, span_le, subset_lieSpan
+/-
+**LieSubalgebra.lieSpan_le** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieSpan_le {K} : lieSpan R L s <= K ↔ s subseteq K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.mem_lieSpan`：mem_lieSpan {x : L} : x in lieSpan R L s ↔ fo
+rall K : LieSubalgebra R L, s subseteq K -> x in K
 -/
-theorem submodule_span_le_lieSpan : Submodule.span R s <= lieSpan R L s := by
-  rw [Submodule.span_le]; rw [coe_toSubmodule]
-  apply subset_lieSpan
-
-/--
-theorem `lieSpan_le` / 定理 `lieSpan_le`
-
-English:
-theorem lieSpan_le
-  given: {K}
-  statement: lieSpan R L s <= K ↔ s subseteq K
-  proof: by
+theorem lieSpan_le {K} : lieSpan R L s ≤ K ↔ s ⊆ K := by
   constructor
   · exact Set.Subset.trans subset_lieSpan
   · intro hs m hm
     rw [mem_lieSpan] at hm
     exact hm _ hs
-
-中文:
-定理 lieSpan_le
-  条件: {K}
-  结论: lieSpan R L s <= K ↔ s subseteq K
-  证明: by
-  constructor
-  · exact Set.Subset.trans subset_lieSpan
-  · intro hs m hm
-    rw [mem_lieSpan] at hm
-    exact hm _ hs
-
-Depends on / 依赖: Set.Subset.trans, Subset, mem_lieSpan, subset_lieSpan
+/-
+**LieSubalgebra.lieSpan_mono** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieSpan_mono {t : Set L} (h : s subseteq t) : lieSpan R L s <= lieSpan R L
+ t
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
 -/
-theorem lieSpan_le {K} : lieSpan R L s <= K ↔ s subseteq K := by
-  constructor
-  · exact Set.Subset.trans subset_lieSpan
-  · intro hs m hm
-    rw [mem_lieSpan] at hm
-    exact hm _ hs
-
-/--
-theorem `lieSpan_mono` / 定理 `lieSpan_mono`
-
-English:
-theorem lieSpan_mono
-  given: {t : Set L} (h : s subseteq t)
-  statement: lieSpan R L s <= lieSpan R L t
-  proof: by
+theorem lieSpan_mono {t : Set L} (h : s ⊆ t) : lieSpan R L s ≤ lieSpan R L t := by
   rw [lieSpan_le]
   exact Set.Subset.trans h subset_lieSpan
-
-中文:
-定理 lieSpan_mono
-  条件: {t : 集合 L} (h : s subseteq t)
-  结论: lieSpan R L s <= lieSpan R L t
-  证明: by
-  rw [lieSpan_le]
-  exact Set.Subset.trans h subset_lieSpan
-
-Depends on / 依赖: Set.Subset.trans, Subset, lieSpan_le, subset_lieSpan
--/
-theorem lieSpan_mono {t : Set L} (h : s subseteq t) : lieSpan R L s <= lieSpan R L t := by
-  rw [lieSpan_le]
-  exact Set.Subset.trans h subset_lieSpan
-
-/--
-theorem `lieSpan_eq` / 定理 `lieSpan_eq`
-
-English:
-theorem lieSpan_eq
-  statement: lieSpan R L (K : Set L) = K
-  proof: le_antisymm (lieSpan_le.mpr rfl.subset) subset_lieSpan
-
-中文:
-定理 lieSpan_eq
-  结论: lieSpan R L (K : 集合 L) = K
-  证明: le_antisymm (lieSpan_le.mpr rfl.subset) subset_lieSpan
-
-Depends on / 依赖: le_antisymm, lieSpan_le, lieSpan_le.mpr, rfl.subset, subset, subset_lieSpan
+/-
+**LieSubalgebra.lieSpan_eq** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieSpan_eq : lieSpan R L (K : Set L) = K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
 -/
 theorem lieSpan_eq : lieSpan R L (K : Set L) = K :=
   le_antisymm (lieSpan_le.mpr rfl.subset) subset_lieSpan
-
-/--
-theorem `coe_lieSpan_submodule_eq_iff` / 定理 `coe_lieSpan_submodule_eq_iff`
-
-English:
-theorem coe_lieSpan_submodule_eq_iff
-  given: {p : Submodule R L}
-  proof: by
-  rw [p.exists_lieSubalgebra_coe_eq_iff]; constructor <;> intro h
-  · intro x m hm
-    rw [← h]; rw [mem_toSubmodule]
-    exact lie_mem _ (subset_lieSpan hm)
-  · rw [← toSubmodule_mk p @h, coe_toSubmodule, toSubmodule_inj, lieSpan_eq]
-
-中文:
-定理 coe_lieSpan_submodule_eq_iff
-  条件: {p : 子模 R L}
-  证明: by
-  rw [p.exists_lieSubalgebra_coe_eq_iff]; constructor <;> intro h
-  · intro x m hm
-    rw [← h]; rw [mem_toSubmodule]
-    exact lie_mem _ (subset_lieSpan hm)
-  · rw [← toSubmodule_mk p @h, coe_toSubmodule, toSubmodule_inj, lieSpan_eq]
-
-Depends on / 依赖: coe_toSubmodule, exists_lieSubalgebra_coe_eq_iff, lieSpan_eq, lie_mem, mem_toSubmodule, p.exists_lieSubalgebra_coe_eq_iff, subset_lieSpan, toSubmodule_inj, toSubmodule_mk
+/-
+**LieSubalgebra.coe_lieSpan_submodule_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieSubal
+gebra`。
+形式化陈述：coe_lieSpan_submodule_eq_iff {p : Submodule R L} : (lieSpan R L (p : Set L
+) : Submodule R L) = p ↔ exists K : LieSubalgebra R L, ↑K = p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.exists_lieSubalgebra_coe_eq_iff`：Submodule.exists_lieSubalgebr
+a_coe_eq_iff (p : Submodule R L) : (exists K : LieSubalgebra R L, ↑K = p) ↔ fora
+ll x y : L, x in p -> y in p ->…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.mem_toSubmodule`：mem_toSubmodule {x : L} : x in (L' : Subm
+odule R L) ↔ x in L'
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `LieSubalgebra.toSubmodule_mk`：toSubmodule_mk (p : Submodule R L) (h) : (
+({ p with lie_mem'
+· 使用定理 `LieSubalgebra.coe_toSubmodule`：coe_toSubmodule : ((L' : Submodule R L) :
+ Set L) = L'
+· 使用定理 `LieSubalgebra.toSubmodule_inj`：toSubmodule_inj (L₁' L₂' : LieSubalgebra 
+R L) : (L₁' : Submodule R L) = (L₂' : Submodule R L) ↔ L₁' = L₂'
+· 使用定理 `LieSubalgebra.lieSpan_eq`：lieSpan_eq : lieSpan R L (K : Set L) = K
 -/
 theorem coe_lieSpan_submodule_eq_iff {p : Submodule R L} :
-    (lieSpan R L (p : Set L) : Submodule R L) = p ↔ exists K : LieSubalgebra R L, ↑K = p := by
+    (lieSpan R L (p : Set L) : Submodule R L) = p ↔ ∃ K : LieSubalgebra R L, ↑K = p := by
   rw [p.exists_lieSubalgebra_coe_eq_iff]; constructor <;> intro h
   · intro x m hm
-    rw [← h]; rw [mem_toSubmodule]
+    rw [← h, mem_toSubmodule]
     exact lie_mem _ (subset_lieSpan hm)
   · rw [← toSubmodule_mk p @h, coe_toSubmodule, toSubmodule_inj, lieSpan_eq]
 
 open Submodule in
-/--
-theorem `coe_lieSpan_eq_span_of_forall_lie_eq_zero` / 定理 `coe_lieSpan_eq_span_of_forall_lie_eq_zero`
-
-English:
-theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
-  proof: by
-  suffices forall {x y}, x in span R s -> y in span R s -> ⁅x, y⁆ in span R s by
-    refine le_antisymm ?_ submodule_span_le_lieSpan
-    change _ <= ({ span R s with lie_mem' := this } : LieSubalgebra R L)
-    rw [lieSpan_le]
-    exact subset_span
-  intro x y hx hy
-  induction hx, hy using span_induction₂ with
-  | mem_mem x y hx hy => simp [hs x hx y hy]
-  | zero_left y hy => simp
-  | zero_right x hx => simp
-  | add_left x y z _ _ _ hx hy => simp [add_mem hx hy]
-  | add_right x y z _ _ _ hx hy => simp [add_mem hx hy]
-  | smul_left r x y _ _ h => simp [smul_mem _ r h]
-  | smul_right r x y _ _ h => simp [smul_mem _ r h]
-
-中文:
-定理 coe_lieSpan_eq_span_of_对任意_lie_eq_zero
-  证明: by
-  suffices forall {x y}, x in span R s -> y in span R s -> ⁅x, y⁆ in span R s by
-    refine le_antisymm ?_ submodule_span_le_lieSpan
-    change _ <= ({ span R s with lie_mem' := this } : LieSubalgebra R L)
-    rw [lieSpan_le]
-    exact subset_span
-  intro x y hx hy
-  induction hx, hy using span_induction₂ with
-  | mem_mem x y hx hy => simp [hs x hx y hy]
-  | zero_left y hy => simp
-  | zero_right x hx => simp
-  | add_left x y z _ _ _ hx hy => simp [add_mem hx hy]
-  | add_right x y z _ _ _ hx hy => simp [add_mem hx hy]
-  | smul_left r x y _ _ h => simp [smul_mem _ r h]
-  | smul_right r x y _ _ h => simp [smul_mem _ r h]
-
-Depends on / 依赖: LieSubalgebra, add_left, add_mem, add_right, le_antisymm, lieSpan_le, lie_mem, mem_mem, submodule_span_le_lieSpan, subset_span, zero_left, zero_right
+/-
+**LieSubalgebra.coe_lieSpan_eq_span_of_forall_lie_eq_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `LieSubalgebra`。
+形式化陈述：coe_lieSpan_eq_span_of_forall_lie_eq_zero {s : Set L} (hs : forallᵉ (x in 
+s) (y in s), ⁅x, y⁆ = 0) : lieSpan R L s = span R s
+参数：hs : forallᵉ (x in s) (y in s), ⁅x, y⁆ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.span_induction₂`：span_induction₂ {N : Type*} [AddCommMonoid N]
+ [Module R N] {t : Set N} {p : (x : M) -> (y : N) -> x in span R s -> y in span 
+R t -> Prop} (m…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `zero_lie`：zero_lie : ⁅(0 : L), m⁆ = 0
+· 使用定理 `lie_zero`：lie_zero : ⁅x, 0⁆ = (0 : M)
+· 使用定理 `add_lie`：add_lie : ⁅x + y, m⁆ = ⁅x, m⁆ + ⁅y, m⁆
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `lie_add`：lie_add : ⁅x, m + n⁆ = ⁅x, m⁆ + ⁅x, n⁆
+· 使用定理 `smul_lie`：smul_lie : ⁅t • x, m⁆ = t • ⁅x, m⁆
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `LieSubalgebra.submodule_span_le_lieSpan`：submodule_span_le_lieSpan : Sub
+module.span R s <= lieSpan R L s
 -/
 theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
-    {s : Set L} (hs : forallᵉ (x in s) (y in s), ⁅x, y⁆ = 0) :
+    {s : Set L} (hs : ∀ᵉ (x ∈ s) (y ∈ s), ⁅x, y⁆ = 0) :
     lieSpan R L s = span R s := by
-  suffices forall {x y}, x in span R s -> y in span R s -> ⁅x, y⁆ in span R s by
+  suffices ∀ {x y}, x ∈ span R s → y ∈ span R s → ⁅x, y⁆ ∈ span R s by
     refine le_antisymm ?_ submodule_span_le_lieSpan
-    change _ <= ({ span R s with lie_mem' := this } : LieSubalgebra R L)
+    change _ ≤ ({ span R s with lie_mem' := this } : LieSubalgebra R L)
     rw [lieSpan_le]
     exact subset_span
   intro x y hx hy
@@ -2873,339 +1812,349 @@ theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
   | add_right x y z _ _ _ hx hy => simp [add_mem hx hy]
   | smul_left r x y _ _ h => simp [smul_mem _ r h]
   | smul_right r x y _ _ h => simp [smul_mem _ r h]
-
-/--
-theorem `map_lieSpan` / 定理 `map_lieSpan`
-
-English:
-theorem map_lieSpan
-  proof: by
-  refine le_antisymm ?_ (lieSpan_le.mpr <| Set.image_mono subset_lieSpan)
-  rw [map_le_iff_le_comap]; rw [lieSpan_le]
-  change s subseteq f ⁻¹' (lieSpan R L₂ (f '' s))
-exact image_subset_iff.mp subset_lieSpan
-
-中文:
-定理 map_lieSpan
-  证明: by
-  refine le_antisymm ?_ (lieSpan_le.mpr <| Set.image_mono subset_lieSpan)
-  rw [map_le_iff_le_comap]; rw [lieSpan_le]
-  change s subseteq f ⁻¹' (lieSpan R L₂ (f '' s))
-exact image_subset_iff.mp subset_lieSpan
-
-Depends on / 依赖: Set.image_mono, image_mono, image_subset_iff, image_subset_iff.mp, le_antisymm, lieSpan, lieSpan_le, lieSpan_le.mpr, map_le_iff_le_comap, subset_lieSpan, subseteq
+/-
+**LieSubalgebra.map_lieSpan** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：map_lieSpan : (lieSpan R L s).map f = lieSpan R L₂ (f '' s)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubalgebra.map_le_iff_le_comap`：map_le_iff_le_comap {K : LieSubalgebr
+a R L} {K' : LieSubalgebra R L₂} : map f K <= K' ↔ K <= comap f K'
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
 theorem map_lieSpan :
     (lieSpan R L s).map f = lieSpan R L₂ (f '' s) := by
   refine le_antisymm ?_ (lieSpan_le.mpr <| Set.image_mono subset_lieSpan)
-  rw [map_le_iff_le_comap]; rw [lieSpan_le]
-  change s subseteq f ⁻¹' (lieSpan R L₂ (f '' s))
-exact image_subset_iff.mp subset_lieSpan
+  rw [map_le_iff_le_comap, lieSpan_le]
+  change s ⊆ f ⁻¹' (lieSpan R L₂ (f '' s))
+  exact image_subset_iff.mp <| subset_lieSpan
 
 variable (R L)
 
-/--
-Definition of `gi` / `gi` 的定义
+/-- `lieSpan` forms a Galois insertion with the coercion from `LieSubalgebra` to `Set`. -/
+/-
+**LieSubalgebra.gi** 是 Mathlib 中的一个定义，位于命名空间 `LieSubalgebra`。
+形式化陈述：(R : Type u) →   (L : Type v) →     [inst : CommRing R] →       [inst_1 : 
+LieRing L] → [inst_2 : LieAlgebra R L] → GaloisInsertion (LieSubalgebra.lieSpan 
+R L) SetLike.coe
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
 
-English:
-definition gi
-  signature: : GaloisInsertion (lieSpan R L : Set L -> LieSubalgebra R L) (↑) where
-  body: lieSpan R L s
-  gc _ _ := lieSpan_le
-  le_l_u _ := subset_lieSpan
-  choice_eq _ _ := rfl
-
-@[simp]
-
-中文:
-定义 gi
-  签名: : Galois嵌入 (lieSpan R L : 集合 L -> Lie子代数 R L) (↑) where
-  定义体: lieSpan R L s
-  gc _ _ := lieSpan_le
-  le_l_u _ := subset_lieSpan
-  choice_eq _ _ := rfl
-
-@[simp]
+--- 原说明 ---
+`lieSpan` forms a Galois insertion with the coercion from `LieSubalgebra` to `Se
+t`.
 -/
-protected def gi : GaloisInsertion (lieSpan R L : Set L -> LieSubalgebra R L) (↑) where
+protected def gi : GaloisInsertion (lieSpan R L : Set L → LieSubalgebra R L) (↑) where
   choice s _ := lieSpan R L s
   gc _ _ := lieSpan_le
   le_l_u _ := subset_lieSpan
   choice_eq _ _ := rfl
 
 @[simp]
-/--
-theorem `span_empty` / 定理 `span_empty`
-
-English:
-theorem span_empty
-  statement: lieSpan R L (∅ : Set L) = ⊥
-  proof: (LieSubalgebra.gi R L).gc.l_bot
-
-@[simp]
-
-中文:
-定理 span_empty
-  结论: lieSpan R L (∅ : 集合 L) = ⊥
-  证明: (LieSubalgebra.gi R L).gc.l_bot
-
-@[simp]
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.gi, gc.l_bot, l_bot
+/-
+**LieSubalgebra.span_empty** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：span_empty : lieSpan R L (∅ : Set L) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
 theorem span_empty : lieSpan R L (∅ : Set L) = ⊥ :=
   (LieSubalgebra.gi R L).gc.l_bot
 
 @[simp]
-/--
-theorem `span_univ` / 定理 `span_univ`
-
-English:
-theorem span_univ
-  statement: lieSpan R L (Set.univ : Set L) = ⊤
-  proof: eq_top_iff.2 SetLike.le_def.2 subset_lieSpan
-
-中文:
-定理 span_univ
-  结论: lieSpan R L (集合.univ : 集合 L) = ⊤
-  证明: eq_top_iff.2 SetLike.le_def.2 subset_lieSpan
-
-Depends on / 依赖: SetLike, SetLike.le_def, eq_top_iff, le_def, subset_lieSpan
+/-
+**LieSubalgebra.span_univ** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：span_univ : lieSpan R L (Set.univ : Set L) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
 -/
 theorem span_univ : lieSpan R L (Set.univ : Set L) = ⊤ :=
-eq_top_iff.2 SetLike.le_def.2 subset_lieSpan
+  eq_top_iff.2 <| SetLike.le_def.2 <| subset_lieSpan
 
 variable {L}
-
-/--
-theorem `span_union` / 定理 `span_union`
-
-English:
-theorem span_union
-  given: (s t : Set L)
-  statement: lieSpan R L (s union t) = lieSpan R L s ⊔ lieSpan R L t
-  proof: (LieSubalgebra.gi R L).gc.l_sup
-
-中文:
-定理 span_union
-  条件: (s t : 集合 L)
-  结论: lieSpan R L (s union t) = lieSpan R L s ⊔ lieSpan R L t
-  证明: (LieSubalgebra.gi R L).gc.l_sup
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.gi, gc.l_sup, l_sup
+/-
+**LieSubalgebra.span_union** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：span_union (s t : Set L) : lieSpan R L (s union t) = lieSpan R L s ⊔ lieSp
+an R L t
+参数：s t : Set L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem span_union (s t : Set L) : lieSpan R L (s union t) = lieSpan R L s ⊔ lieSpan R L t :=
+theorem span_union (s t : Set L) : lieSpan R L (s ∪ t) = lieSpan R L s ⊔ lieSpan R L t :=
   (LieSubalgebra.gi R L).gc.l_sup
-
-/--
-theorem `span_iUnion` / 定理 `span_iUnion`
-
-English:
-theorem span_iUnion
-  given: {ι} (s : ι -> Set L)
-  statement: lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R L (s i)
-  proof: (LieSubalgebra.gi R L).gc.l_iSup
-
-中文:
-定理 span_iUnion
-  条件: {ι} (s : ι -> 集合 L)
-  结论: lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R L (s i)
-  证明: (LieSubalgebra.gi R L).gc.l_iSup
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.gi, gc.l_iSup, l_iSup
+/-
+**LieSubalgebra.span_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：span_iUnion {ι} (s : ι -> Set L) : lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R
+ L (s i)
+参数：s : ι -> Set L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem span_iUnion {ι} (s : ι -> Set L) : lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R L (s i) :=
+theorem span_iUnion {ι} (s : ι → Set L) : lieSpan R L (⋃ i, s i) = ⨆ i, lieSpan R L (s i) :=
   (LieSubalgebra.gi R L).gc.l_iSup
 
 /-- An induction principle for span membership. If `p` holds for 0 and all elements of `s`, and is
 preserved under addition, scalar multiplication and the Lie bracket, then `p` holds for all
 elements of the Lie algebra spanned by `s`. -/
 @[elab_as_elim]
-/--
-theorem `lieSpan_induction` / 定理 `lieSpan_induction`
+/-
+**LieSubalgebra.lieSpan_induction** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：lieSpan_induction {p : (x : L) -> x in lieSpan R L s -> Prop} (mem : foral
+l (x) (h : x in s), p x (subset_lieSpan h)) (zero : p 0 (LieSubalgebra.zero_mem 
+_)) (add : forall x y hx hy, p x hx -> p y hy -> p (x + y) (LieSubalgebra.add_me
+m _ ‹_› ‹_›)) (smul : forall (a : R) (x hx), p x hx -> p (a • x) (LieSubalgebra.
+smul_mem _ _ ‹_›)) {x} (lie : forall x y hx hy, p x hx -> p y hy -> p (⁅x, y⁆) (
+LieSubalgebra.lie_mem _ ‹_› ‹_›)) (hx : x in lieSpan R L s) : p x hx
+参数：x : L；mem : forall (x) (h : x in s), p x (subset_lieSpan h)；zero : p 0 (LieSu
+balgebra.zero_mem _)；add : forall x y hx hy, p x hx -> p y hy -> p (x + y) (LieS
+ubalgebra.add_mem _ ‹_› ‹_›)；smul : forall (a : R) (x hx), p x hx -> p (a • x) (
+LieSubalgebra.smul_mem _ _ ‹_›)；lie : forall x y hx hy, p x hx -> p y hy -> p (⁅
+x, y⁆) (LieSubalgebra.lie_mem _ ‹_› ‹_›)；hx : x in lieSpan R L s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `LieSubalgebra.zero_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L),   0 ∈ L
+'
+· 使用定理 `LieSubalgebra.add_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] [
+inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   {x y : 
+L}, x ∈ L' …
+· 使用定理 `LieSubalgebra.smul_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   (t : R
+) {x : L}, x…
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
 
-English:
-theorem lieSpan_induction
-  statement: {p : (x : L) -> x in lieSpan R L s -> Prop}
-  proof: by
-  let p : LieSubalgebra R L :=
-    { carrier := { x | exists hx, p x hx }
-      add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
-      zero_mem' := ⟨_, zero⟩
-      smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
-      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx hpy⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (K := p)
-
-中文:
-定理 lieSpan_induction
-  结论: {p : (x : L) -> x in lieSpan R L s -> 命题}
-  证明: by
-  let p : LieSubalgebra R L :=
-    { carrier := { x | exists hx, p x hx }
-      add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
-      zero_mem' := ⟨_, zero⟩
-      smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
-      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx hpy⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (K := p)
-
-Depends on / 依赖: LieSubalgebra, add_mem, carrier, lieSpan_le, lie_mem, smul_mem, subset_lieSpan, zero_mem
+--- 原说明 ---
+An induction principle for span membership. If `p` holds for 0 and all elements 
+of `s`, and is
+preserved under addition, scalar multiplication and the Lie bracket, then `p` ho
+lds for all
+elements of the Lie algebra spanned by `s`.
 -/
-theorem lieSpan_induction {p : (x : L) -> x in lieSpan R L s -> Prop}
-    (mem : forall (x) (h : x in s), p x (subset_lieSpan h))
+theorem lieSpan_induction {p : (x : L) → x ∈ lieSpan R L s → Prop}
+    (mem : ∀ (x) (h : x ∈ s), p x (subset_lieSpan h))
     (zero : p 0 (LieSubalgebra.zero_mem _))
-    (add : forall x y hx hy, p x hx -> p y hy -> p (x + y) (LieSubalgebra.add_mem _ ‹_› ‹_›))
-    (smul : forall (a : R) (x hx), p x hx -> p (a • x) (LieSubalgebra.smul_mem _ _ ‹_›)) {x}
-    (lie : forall x y hx hy, p x hx -> p y hy -> p (⁅x, y⁆) (LieSubalgebra.lie_mem _ ‹_› ‹_›))
-    (hx : x in lieSpan R L s) : p x hx := by
+    (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (LieSubalgebra.add_mem _ ‹_› ‹_›))
+    (smul : ∀ (a : R) (x hx), p x hx → p (a • x) (LieSubalgebra.smul_mem _ _ ‹_›)) {x}
+    (lie : ∀ x y hx hy, p x hx → p y hy → p (⁅x, y⁆) (LieSubalgebra.lie_mem _ ‹_› ‹_›))
+    (hx : x ∈ lieSpan R L s) : p x hx := by
   let p : LieSubalgebra R L :=
-    { carrier := { x | exists hx, p x hx }
-      add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
+    { carrier := { x | ∃ hx, p x hx }
+      add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ ↦ ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩
-      smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
-      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx hpy⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (K := p)
-
-/--
-lemma `lieSpan_neg` / 引理 `lieSpan_neg`
-
-English:
-lemma lieSpan_neg
-  statement: lieSpan R L (-s) = lieSpan R L s
-  proof: by
-  suffices forall s : Set L, lieSpan R L (-s) <= lieSpan R L s from
-le_antisymm (this s) by simpa using (this (-s))
-  intro s x hx
-  induction hx using lieSpan_induction with
-| mem y h => exact neg_mem_iff.mp subset_lieSpan Set.mem_neg.mp h
-  | zero => exact zero_mem _
-  | add _ _ _ _ hu hv => exact add_mem hu hv
-  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
-  | lie _ _ _ _ hu hv => exact lie_mem _ hu hv
-
-中文:
-引理 lieSpan_neg
-  结论: lieSpan R L (-s) = lieSpan R L s
-  证明: by
-  suffices forall s : Set L, lieSpan R L (-s) <= lieSpan R L s from
-le_antisymm (this s) by simpa using (this (-s))
-  intro s x hx
-  induction hx using lieSpan_induction with
-| mem y h => exact neg_mem_iff.mp subset_lieSpan Set.mem_neg.mp h
-  | zero => exact zero_mem _
-  | add _ _ _ _ hu hv => exact add_mem hu hv
-  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
-  | lie _ _ _ _ hu hv => exact lie_mem _ hu hv
+      smul_mem' := fun r ↦ fun ⟨_, hpx⟩ ↦ ⟨_, smul r _ _ hpx⟩
+      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ ↦ ⟨_, lie _ _ _ _ hpx hpy⟩ }
+  exact lieSpan_le (K := p) |>.mpr (fun y hy ↦ ⟨subset_lieSpan hy, mem y hy⟩) hx |>.elim fun _ ↦ id
+/-
+**LieSubalgebra.lieSpan_neg** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebra`。
+形式化陈述：∀ (R : Type u) {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] {s : Set L},   LieSubalgebra.lieSpan R L (-s) = LieSubalgeb
+ra.lieSpan R L s
+参数：R : Type u；-s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.lieSpan_induction`：lieSpan_induction {p : (x : L) -> x in 
+lieSpan R L s -> Prop} (mem : forall (x) (h : x in s), p x (subset_lieSpan h)) (
+zero : p 0 (LieSubalg…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `neg_mem_iff`：∀ {S : Type u_3} {G : Type u_4} [inst : InvolutiveNeg G] {x
+ : SetLike S G} [NegMemClass S G] {H : S} {x_1 : G},   -x_1 ∈ H ↔ x_1 ∈ H
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `Set.mem_neg`：∀ {α : Type u_2} [inst : Neg α] {s : Set α} {a : α}, a ∈ -s
+ ↔ -a ∈ s
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
+· 使用定理 `LieSubalgebra.instSMulMemClass`：∀ (R : Type u) (L : Type v) [inst : Comm
+Ring R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   SMulMemClass (LieSubal
+gebra R L) R L
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 @[simp] lemma lieSpan_neg : lieSpan R L (-s) = lieSpan R L s := by
-  suffices forall s : Set L, lieSpan R L (-s) <= lieSpan R L s from
-le_antisymm (this s) by simpa using (this (-s))
+  suffices ∀ s : Set L, lieSpan R L (-s) ≤ lieSpan R L s from
+    le_antisymm (this s) <| by simpa using (this (-s))
   intro s x hx
   induction hx using lieSpan_induction with
-| mem y h => exact neg_mem_iff.mp subset_lieSpan Set.mem_neg.mp h
+  | mem y h => exact neg_mem_iff.mp <| subset_lieSpan <| Set.mem_neg.mp h
   | zero => exact zero_mem _
   | add _ _ _ _ hu hv => exact add_mem hu hv
   | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
   | lie _ _ _ _ hu hv => exact lie_mem _ hu hv
 
 variable {R} in
-/--
-lemma `lieSpan_lieSpan_coe_preimage` / 引理 `lieSpan_lieSpan_coe_preimage`
-
-English:
-lemma lieSpan_lieSpan_coe_preimage
-  statement: lieSpan R _ (((↑) : lieSpan R L s -> L) ⁻¹' s) = ⊤
-  proof: by
-  rw [eq_top_iff]
-  rintro ⟨x, hx⟩ -
-  induction hx using lieSpan_induction with
-| mem u hu => exact subset_lieSpan by simpa
-  | zero => exact zero_mem _
-  | add u v _ _ hu hv => revert hu hv; exact add_mem
-  | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-  | lie u v _ _ hu hv => revert hu hv; exact LieSubalgebra.lie_mem _
-
-中文:
-引理 lieSpan_lieSpan_coe_preimage
-  结论: lieSpan R _ (((↑) : lieSpan R L s -> L) ⁻¹' s) = ⊤
-  证明: by
-  rw [eq_top_iff]
-  rintro ⟨x, hx⟩ -
-  induction hx using lieSpan_induction with
-| mem u hu => exact subset_lieSpan by simpa
-  | zero => exact zero_mem _
-  | add u v _ _ hu hv => revert hu hv; exact add_mem
-  | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-  | lie u v _ _ hu hv => revert hu hv; exact LieSubalgebra.lie_mem _
+/-
+**LieSubalgebra.lieSpan_lieSpan_coe_preimage** 是 Mathlib 中的一个定理，位于命名空间 `LieSubal
+gebra`。
+形式化陈述：∀ {R : Type u} {L : Type v} [inst : CommRing R] [inst_1 : LieRing L] [inst
+_2 : LieAlgebra R L] {s : Set L},   LieSubalgebra.lieSpan R (↥(LieSubalgebra.lie
+Span R L s)) (Subtype.val ⁻¹' s) = ⊤
+参数：↥(LieSubalgebra.lieSpan R L s)；Subtype.val ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `LieSubalgebra.lieSpan_induction`：lieSpan_induction {p : (x : L) -> x in 
+lieSpan R L s -> Prop} (mem : forall (x) (h : x in s), p x (subset_lieSpan h)) (
+zero : p 0 (LieSubalg…
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `LieSubalgebra.smul_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   (t : R
+) {x : L}, x…
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
 -/
-@[simp] lemma lieSpan_lieSpan_coe_preimage : lieSpan R _ (((↑) : lieSpan R L s -> L) ⁻¹' s) = ⊤ := by
+@[simp] lemma lieSpan_lieSpan_coe_preimage : lieSpan R _ (((↑) : lieSpan R L s → L) ⁻¹' s) = ⊤ := by
   rw [eq_top_iff]
   rintro ⟨x, hx⟩ -
   induction hx using lieSpan_induction with
-| mem u hu => exact subset_lieSpan by simpa
+  | mem u hu => exact subset_lieSpan <| by simpa
   | zero => exact zero_mem _
   | add u v _ _ hu hv => revert hu hv; exact add_mem
   | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
   | lie u v _ _ hu hv => revert hu hv; exact LieSubalgebra.lie_mem _
-
-/--
-lemma `comap_lieSpan_range_eq` / 引理 `comap_lieSpan_range_eq`
-
-English:
-lemma comap_lieSpan_range_eq
-  given: {ι : Type*} (f : ι -> K)
-  proof: by
-  apply le_antisymm
-  · intro ⟨x, hx⟩ hx'
-    simp only [mem_comap, coe_incl] at hx'
-    suffices x in (lieSpan R K (range f)).map K.incl by aesop
-    clear hx
-    induction hx' using lieSpan_induction with
-    | mem u hu =>
-have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
-      aesop
-    | zero => exact zero_mem _
-    | add u v _ _ hu hv => revert hu hv; exact add_mem
-    | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-    | lie u v _ _ hu hv => revert hu hv; exact lie_mem _
-  · rw [lieSpan_le]
-    rintro - ⟨i, rfl⟩
-    simp only [SetLike.mem_coe, mem_comap, coe_incl]
-exact subset_lieSpan by simp
-
-中文:
-引理 comap_lieSpan_range_eq
-  条件: {ι : 类型} (f : ι -> K)
-  证明: by
-  apply le_antisymm
-  · intro ⟨x, hx⟩ hx'
-    simp only [mem_comap, coe_incl] at hx'
-    suffices x in (lieSpan R K (range f)).map K.incl by aesop
-    clear hx
-    induction hx' using lieSpan_induction with
-    | mem u hu =>
-have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
-      aesop
-    | zero => exact zero_mem _
-    | add u v _ _ hu hv => revert hu hv; exact add_mem
-    | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-    | lie u v _ _ hu hv => revert hu hv; exact lie_mem _
-  · rw [lieSpan_le]
-    rintro - ⟨i, rfl⟩
-    simp only [SetLike.mem_coe, mem_comap, coe_incl]
-exact subset_lieSpan by simp
-
-Depends on / 依赖: K.incl, LieSubalgebra, LieSubalgebra.smul_mem, add_mem, coe_incl, le_antisymm, lieSpan, lieSpan_induction, lieSpan_le, lie_mem, mem_comap, mem_range_self, revert, smul_mem, subset_lieSpan, zero_mem
+/-
+**LieSubalgebra.comap_lieSpan_range_eq** 是 Mathlib 中的一个引理，位于命名空间 `LieSubalgebra`
+。
+形式化陈述：comap_lieSpan_range_eq {ι : Type*} (f : ι -> K) : (lieSpan R L (range ((↑)
+ ∘ f))).comap K.incl = lieSpan R K (range f)
+参数：f : ι -> K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LieSubalgebra.lieSpan_induction`：lieSpan_induction {p : (x : L) -> x in 
+lieSpan R L s -> Prop} (mem : forall (x) (h : x in s), p x (subset_lieSpan h)) (
+zero : p 0 (LieSubalg…
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `LieSubalgebra.smul_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   (t : R
+) {x : L}, x…
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
+· 使用定理 `LieSubalgebra.lieSpan_le`：lieSpan_le {K} : lieSpan R L s <= K ↔ s subset
+eq K
 -/
-lemma comap_lieSpan_range_eq {ι : Type*} (f : ι -> K) :
+lemma comap_lieSpan_range_eq {ι : Type*} (f : ι → K) :
     (lieSpan R L (range ((↑) ∘ f))).comap K.incl = lieSpan R K (range f) := by
   apply le_antisymm
   · intro ⟨x, hx⟩ hx'
     simp only [mem_comap, coe_incl] at hx'
-    suffices x in (lieSpan R K (range f)).map K.incl by aesop
+    suffices x ∈ (lieSpan R K (range f)).map K.incl by aesop
     clear hx
     induction hx' using lieSpan_induction with
     | mem u hu =>
-have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
+      have (i : ι) : f i ∈ lieSpan R K (range f) := subset_lieSpan <| mem_range_self i
       aesop
     | zero => exact zero_mem _
     | add u v _ _ hu hv => revert hu hv; exact add_mem
@@ -3214,7 +2163,7 @@ have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
   · rw [lieSpan_le]
     rintro - ⟨i, rfl⟩
     simp only [SetLike.mem_coe, mem_comap, coe_incl]
-exact subset_lieSpan by simp
+    exact subset_lieSpan <| by simp
 
 end LieSpan
 
@@ -3227,98 +2176,63 @@ namespace LieEquiv
 variable {R : Type u} {L₁ : Type v} {L₂ : Type w}
 variable [CommRing R] [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂]
 
-/--
-Definition of `ofInjective` / `ofInjective` 的定义
+/-- An injective Lie algebra morphism is an equivalence onto its range. -/
+/-
+**LieEquiv.ofInjective** 是 Mathlib 中的一个定义，位于命名空间 `LieEquiv`。
+形式化陈述：ofInjective (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) : L₁ ≃ₗ⁅R⁆ f.ran
+ge
+参数：f : L₁ ->ₗ⁅R⁆ L₂；h : Function.Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInjective
-  signature: (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f)
-  body: { LinearEquiv.ofInjective (f : L₁ ->ₗ[R] L₂) <| by rwa [LieHom.coe_toLinearMap] with
-map_lie' {x y} := SetCoe.ext f.map_lie x y }
-
-@[simp]
-
-中文:
-定义 ofInjective
-  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (h : 函数.单射 f)
-  定义体: { LinearEquiv.ofInjective (f : L₁ ->ₗ[R] L₂) <| by rwa [LieHom.coe_toLinearMap] with
-map_lie' {x y} := SetCoe.ext f.map_lie x y }
-
-@[simp]
-
-Depends on / 依赖: LieHom, LieHom.coe_toLinearMap, LinearEquiv, LinearEquiv.ofInjective, SetCoe, SetCoe.ext, coe_toLinearMap, f.map_lie, map_lie, ofInjective
+--- 原说明 ---
+An injective Lie algebra morphism is an equivalence onto its range.
 -/
-noncomputable def ofInjective (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) : L₁ ≃ₗ⁅R⁆ f.range :=
-  { LinearEquiv.ofInjective (f : L₁ ->ₗ[R] L₂) <| by rwa [LieHom.coe_toLinearMap] with
-map_lie' {x y} := SetCoe.ext f.map_lie x y }
+noncomputable def ofInjective (f : L₁ →ₗ⁅R⁆ L₂) (h : Function.Injective f) : L₁ ≃ₗ⁅R⁆ f.range :=
+  { LinearEquiv.ofInjective (f : L₁ →ₗ[R] L₂) <| by rwa [LieHom.coe_toLinearMap] with
+    map_lie' {x y} := SetCoe.ext <| f.map_lie x y }
 
 @[simp]
-/--
-theorem `ofInjective_apply` / 定理 `ofInjective_apply`
-
-English:
-theorem ofInjective_apply
-  given: (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁)
-  proof: rfl
-
-中文:
-定理 ofInjective_apply
-  条件: (f : L₁ ->ₗ⁅R⁆ L₂) (h : 函数.单射 f) (x : L₁)
-  证明: rfl
+/-
+**LieEquiv.ofInjective_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieEquiv`。
+形式化陈述：ofInjective_apply (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁) :
+ ↑(ofInjective f h x) = f x
+参数：f : L₁ ->ₗ⁅R⁆ L₂；h : Function.Injective f；x : L₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofInjective_apply (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁) :
+theorem ofInjective_apply (f : L₁ →ₗ⁅R⁆ L₂) (h : Function.Injective f) (x : L₁) :
     ↑(ofInjective f h x) = f x :=
   rfl
 
 variable (L₁' L₁'' : LieSubalgebra R L₁) (L₂' : LieSubalgebra R L₂)
 
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-- Lie subalgebras that are equal as sets are equivalent as Lie algebras. -/
+/-
+**LieEquiv.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `LieEquiv`。
+形式化陈述：ofEq (h : (L₁' : Set L₁) = L₁'') : L₁' ≃ₗ⁅R⁆ L₁''
+参数：h : (L₁' : Set L₁) = L₁''。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: (h : (L₁' : Set L₁) = L₁'')
-  body: { LinearEquiv.ofEq (L₁' : Submodule R L₁) (L₁'' : Submodule R L₁) (by
-      ext x
-      change x in (L₁' : Set L₁) ↔ x in (L₁'' : Set L₁)
-      rw [h]) with
-    map_lie' {_ _} := rfl }
-
-@[simp]
-
-中文:
-定义 ofEq
-  签名: (h : (L₁' : 集合 L₁) = L₁'')
-  定义体: { LinearEquiv.ofEq (L₁' : Submodule R L₁) (L₁'' : Submodule R L₁) (by
-      ext x
-      change x in (L₁' : Set L₁) ↔ x in (L₁'' : Set L₁)
-      rw [h]) with
-    map_lie' {_ _} := rfl }
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq, Submodule, map_lie
+--- 原说明 ---
+Lie subalgebras that are equal as sets are equivalent as Lie algebras.
 -/
 def ofEq (h : (L₁' : Set L₁) = L₁'') : L₁' ≃ₗ⁅R⁆ L₁'' :=
   { LinearEquiv.ofEq (L₁' : Submodule R L₁) (L₁'' : Submodule R L₁) (by
       ext x
-      change x in (L₁' : Set L₁) ↔ x in (L₁'' : Set L₁)
+      change x ∈ (L₁' : Set L₁) ↔ x ∈ (L₁'' : Set L₁)
       rw [h]) with
     map_lie' {_ _} := rfl }
 
 @[simp]
-/--
-theorem `ofEq_apply` / 定理 `ofEq_apply`
-
-English:
-theorem ofEq_apply
-  given: (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : L)
-  proof: rfl
-
-中文:
-定理 ofEq_apply
-  条件: (L L' : Lie子代数 R L₁) (h : (L : 集合 L₁) = L') (x : L)
-  证明: rfl
+/-
+**LieEquiv.ofEq_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieEquiv`。
+形式化陈述：ofEq_apply (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : L) : (
+↑(ofEq L L' h x) : L₁) = x
+参数：L L' : LieSubalgebra R L₁；h : (L : Set L₁) = L'；x : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofEq_apply (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : L) :
     (↑(ofEq L L' h x) : L₁) = x :=
@@ -3326,132 +2240,82 @@ theorem ofEq_apply (L L' : LieSubalgebra R L₁) (h : (L : Set L₁) = L') (x : 
 
 variable (e : L₁ ≃ₗ⁅R⁆ L₂)
 
-/--
-Definition of `lieSubalgebraMap` / `lieSubalgebraMap` 的定义
+/-- An equivalence of Lie algebras restricts to an equivalence from any Lie subalgebra onto its
+image. -/
+/-
+**LieEquiv.lieSubalgebraMap** 是 Mathlib 中的一个定义，位于命名空间 `LieEquiv`。
+形式化陈述：lieSubalgebraMap : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : LieSubalgebra R L₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lieSubalgebraMap
-  signature: : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : LieSubalgebra R L₂)
-  body: { LinearEquiv.submoduleMap (e : L₁ ≃ₗ[R] L₂) ↑L₁'' with
-    map_lie' := @fun x y => by
-      apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
-
-@[simp]
-
-中文:
-定义 lieSubalgebraMap
-  签名: : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : Lie子代数 R L₂)
-  定义体: { LinearEquiv.submoduleMap (e : L₁ ≃ₗ[R] L₂) ↑L₁'' with
-    map_lie' := @fun x y => by
-      apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
-
-@[simp]
-
-Depends on / 依赖: LieHom, LieHom.map_lie, LinearEquiv, LinearEquiv.submoduleMap, SetCoe, SetCoe.ext, map_lie, submoduleMap
+--- 原说明 ---
+An equivalence of Lie algebras restricts to an equivalence from any Lie subalgeb
+ra onto its
+image.
 -/
 def lieSubalgebraMap : L₁'' ≃ₗ⁅R⁆ (L₁''.map e : LieSubalgebra R L₂) :=
   { LinearEquiv.submoduleMap (e : L₁ ≃ₗ[R] L₂) ↑L₁'' with
-    map_lie' := @fun x y => by
+    map_lie' := @fun x y ↦ by
       apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
+      exact LieHom.map_lie (↑e : L₁ →ₗ⁅R⁆ L₂) ↑x ↑y }
 
 @[simp]
-/--
-theorem `lieSubalgebraMap_apply` / 定理 `lieSubalgebraMap_apply`
-
-English:
-theorem lieSubalgebraMap_apply
-  given: (x : L₁'')
-  statement: ↑(e.lieSubalgebraMap _ x) = e x
-  proof: rfl
-
-中文:
-定理 lieSubalgebraMap_apply
-  条件: (x : L₁'')
-  结论: ↑(e.lieSubalgebraMap _ x) = e x
-  证明: rfl
+/-
+**LieEquiv.lieSubalgebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieEquiv`。
+形式化陈述：lieSubalgebraMap_apply (x : L₁'') : ↑(e.lieSubalgebraMap _ x) = e x
+参数：x : L₁''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lieSubalgebraMap_apply (x : L₁'') : ↑(e.lieSubalgebraMap _ x) = e x :=
   rfl
 
-/--
-Definition of `ofSubalgebras` / `ofSubalgebras` 的定义
+/-- An equivalence of Lie algebras restricts to an equivalence from any Lie subalgebra onto its
+image. -/
+/-
+**LieEquiv.ofSubalgebras** 是 Mathlib 中的一个定义，位于命名空间 `LieEquiv`。
+形式化陈述：ofSubalgebras (h : L₁'.map ↑e = L₂') : L₁' ≃ₗ⁅R⁆ L₂'
+参数：h : L₁'.map ↑e = L₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubalgebras
-  signature: (h : L₁'.map ↑e = L₂')
-  body: { LinearEquiv.ofSubmodules (e : L₁ ≃ₗ[R] L₂) (↑L₁') (↑L₂') (by
-      rw [← h]
-      rfl) with
-    map_lie' := @fun x y => by
-      apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
-
-@[simp]
-
-中文:
-定义 ofSubalgebras
-  签名: (h : L₁'.map ↑e = L₂')
-  定义体: { LinearEquiv.ofSubmodules (e : L₁ ≃ₗ[R] L₂) (↑L₁') (↑L₂') (by
-      rw [← h]
-      rfl) with
-    map_lie' := @fun x y => by
-      apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
-
-@[simp]
-
-Depends on / 依赖: LieHom, LieHom.map_lie, LinearEquiv, LinearEquiv.ofSubmodules, SetCoe, SetCoe.ext, map_lie, ofSubmodules
+--- 原说明 ---
+An equivalence of Lie algebras restricts to an equivalence from any Lie subalgeb
+ra onto its
+image.
 -/
 def ofSubalgebras (h : L₁'.map ↑e = L₂') : L₁' ≃ₗ⁅R⁆ L₂' :=
   { LinearEquiv.ofSubmodules (e : L₁ ≃ₗ[R] L₂) (↑L₁') (↑L₂') (by
       rw [← h]
       rfl) with
-    map_lie' := @fun x y => by
+    map_lie' := @fun x y ↦ by
       apply SetCoe.ext
-      exact LieHom.map_lie (↑e : L₁ ->ₗ⁅R⁆ L₂) ↑x ↑y }
+      exact LieHom.map_lie (↑e : L₁ →ₗ⁅R⁆ L₂) ↑x ↑y }
 
 @[simp]
-/--
-theorem `ofSubalgebras_apply` / 定理 `ofSubalgebras_apply`
-
-English:
-theorem ofSubalgebras_apply
-  given: (h : L₁'.map ↑e = L₂') (x : L₁')
-  statement: ↑(e.ofSubalgebras _ _ h x) = e x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofSubalgebras_apply
-  条件: (h : L₁'.map ↑e = L₂') (x : L₁')
-  结论: ↑(e.ofSubalgebras _ _ h x) = e x
-  证明: rfl
-
-@[simp]
+/-
+**LieEquiv.ofSubalgebras_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieEquiv`。
+形式化陈述：ofSubalgebras_apply (h : L₁'.map ↑e = L₂') (x : L₁') : ↑(e.ofSubalgebras _
+ _ h x) = e x
+参数：h : L₁'.map ↑e = L₂'；x : L₁'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofSubalgebras_apply (h : L₁'.map ↑e = L₂') (x : L₁') : ↑(e.ofSubalgebras _ _ h x) = e x :=
   rfl
 
 @[simp]
-/--
-theorem `ofSubalgebras_symm_apply` / 定理 `ofSubalgebras_symm_apply`
-
-English:
-theorem ofSubalgebras_symm_apply
-  given: (h : L₁'.map ↑e = L₂') (x : L₂')
-  proof: rfl
-
-中文:
-定理 ofSubalgebras_symm_apply
-  条件: (h : L₁'.map ↑e = L₂') (x : L₂')
-  证明: rfl
+/-
+**LieEquiv.ofSubalgebras_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieEquiv`。
+形式化陈述：ofSubalgebras_symm_apply (h : L₁'.map ↑e = L₂') (x : L₂') : ↑((e.ofSubalge
+bras _ _ h).symm x) = e.symm x
+参数：h : L₁'.map ↑e = L₂'；x : L₂'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofSubalgebras_symm_apply (h : L₁'.map ↑e = L₂') (x : L₂') :
     ↑((e.ofSubalgebras _ _ h).symm x) = e.symm x :=
   rfl
 
 end LieEquiv
+

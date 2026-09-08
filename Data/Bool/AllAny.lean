@@ -17,61 +17,61 @@ existential quantifiers. Their definitions are in core Lean.
 public section
 
 
-variable {α : Type*} {p : α -> Prop} [DecidablePred p] {l : List α} {a : α}
+variable {α : Type*} {p : α → Prop} [DecidablePred p] {l : List α} {a : α}
 
 namespace List
 
-/--
-theorem `all_iff_forall_prop` / 定理 `all_iff_forall_prop`
-
-English:
-theorem all_iff_forall_prop
-  statement: (all l fun a => p a) ↔ forall a in l, p a
-  proof: by
-  simp
-
-中文:
-定理 all_iff_对任意_prop
-  结论: (all l fun a => p a) ↔ 对任意 a in l, p a
-  证明: by
-  simp
+/-
+**List.all_iff_forall_prop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：all_iff_forall_prop : (all l fun a => p a) ↔ forall a in l, p a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem all_iff_forall_prop : (all l fun a => p a) ↔ forall a in l, p a := by
+theorem all_iff_forall_prop : (all l fun a => p a) ↔ ∀ a ∈ l, p a := by
   simp
-
-/--
-theorem `any_iff_exists_prop` / 定理 `any_iff_exists_prop`
-
-English:
-theorem any_iff_exists_prop
-  statement: (any l fun a => p a) ↔ exists a in l, p a
-  proof: by simp
-
-中文:
-定理 any_iff_存在_prop
-  结论: (any l fun a => p a) ↔ 存在 a in l, p a
-  证明: by simp
+/-
+**List.any_iff_exists_prop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：any_iff_exists_prop : (any l fun a => p a) ↔ exists a in l, p a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem any_iff_exists_prop : (any l fun a => p a) ↔ exists a in l, p a := by simp
-
-/--
-theorem `any_of_mem` / 定理 `any_of_mem`
-
-English:
-theorem any_of_mem
-  given: {p : α -> Bool} (h₁ : a in l) (h₂ : p a)
-  statement: any l p
-  proof: any_eq_true.2 ⟨_, h₁, h₂⟩
-
-中文:
-定理 any_of_mem
-  条件: {p : α -> 布尔值} (h₁ : a in l) (h₂ : p a)
-  结论: any l p
-  证明: any_eq_true.2 ⟨_, h₁, h₂⟩
-
-Depends on / 依赖: any_eq_true
+theorem any_iff_exists_prop : (any l fun a => p a) ↔ ∃ a ∈ l, p a := by simp
+/-
+**List.any_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：any_of_mem {p : α -> Bool} (h₁ : a in l) (h₂ : p a) : any l p
+参数：h₁ : a in l；h₂ : p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.any_eq_true`：∀ {α : Type u_1} {p : α → Bool} {l : List α}, l.any p 
+= true ↔ ∃ x ∈ l, p x = true
 -/
-theorem any_of_mem {p : α -> Bool} (h₁ : a in l) (h₂ : p a) : any l p :=
+theorem any_of_mem {p : α → Bool} (h₁ : a ∈ l) (h₂ : p a) : any l p :=
   any_eq_true.2 ⟨_, h₁, h₂⟩
 
 end List
+

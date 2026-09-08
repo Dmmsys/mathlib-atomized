@@ -23,51 +23,43 @@ namespace Equiv
 variable (e : α ≃ β)
 
 -- See note [instance transfer via equivalence]
-/--
-Definition of `dist` / `dist` 的定义
+/-- Transfer a `Dist` across an `Equiv` -/
+/-
+**Equiv.dist** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Dist β] → Dist α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation dist
-  signature: (e : α ≃ β) [Dist β]
-  body: ⟨fun x y => dist (e.toFun x) (e.toFun y)⟩
-
-中文:
-缩写 dist
-  签名: (e : α ≃ β) [Dist β]
-  定义体: ⟨fun x y => dist (e.toFun x) (e.toFun y)⟩
+--- 原说明 ---
+Transfer a `Dist` across an `Equiv`
 -/
-protected abbrev dist (e : α ≃ β) [Dist β] : Dist α := ⟨fun x y => dist (e.toFun x) (e.toFun y)⟩
+protected abbrev dist (e : α ≃ β) [Dist β] : Dist α := ⟨fun x y ↦ dist (e.toFun x) (e.toFun y)⟩
 
-/--
-Definition of `pseudometricSpace` / `pseudometricSpace` 的定义
+/-- Transfer a `PseudoMetricSpace` across an `Equiv` -/
+/-
+**Equiv.pseudometricSpace** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [PseudoMetricSpace β] → α ≃ β → PseudoMe
+tricSpace α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation pseudometricSpace
-  signature: [PseudoMetricSpace β] (e : α ≃ β)
-  body: .induced e.toFun ‹_›
-
-中文:
-缩写 pseudometricSpace
-  签名: [伪度量空间 β] (e : α ≃ β)
-  定义体: .induced e.toFun ‹_›
+--- 原说明 ---
+Transfer a `PseudoMetricSpace` across an `Equiv`
 -/
 protected abbrev pseudometricSpace [PseudoMetricSpace β] (e : α ≃ β) : PseudoMetricSpace α :=
   .induced e.toFun ‹_›
 
-/--
-Definition of `metricSpace` / `metricSpace` 的定义
+/-- Transfer a `MetricSpace` across an `Equiv` -/
+/-
+**Equiv.metricSpace** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [MetricSpace β] → α ≃ β → MetricSpace α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation metricSpace
-  signature: [MetricSpace β] (e : α ≃ β)
-  body: .induced e.toFun e.injective ‹_›
-
-中文:
-缩写 metricSpace
-  签名: [度量空间 β] (e : α ≃ β)
-  定义体: .induced e.toFun e.injective ‹_›
+--- 原说明 ---
+Transfer a `MetricSpace` across an `Equiv`
 -/
 protected abbrev metricSpace [MetricSpace β] (e : α ≃ β) : MetricSpace α :=
   .induced e.toFun e.injective ‹_›
 
 end Equiv
+

@@ -21,7 +21,7 @@ Taking or removing element from the tail end of a list
 - `rtake n`: take `n : ℕ` elements from the tail
 - `rdropWhile p`: remove all the elements from the tail of a list until it finds the first element
   for which `p : α → Bool` returns false. This element and everything before is returned.
-- `rtakeWhile p`: Returns the longest terminal segment of a list for which `p : α → Bool` returns
+- `rtakeWhile p`:  Returns the longest terminal segment of a list for which `p : α → Bool` returns
   true.
 
 ## Implementation detail
@@ -39,100 +39,99 @@ another function that takes a `L : ℕ` and use `L - n`. Under a proof condition
 -- Make sure we don't import algebra
 assert_not_exists Monoid
 
-variable {α : Type*} (p : α -> Bool) (l : List α) (n : Nat)
+variable {α : Type*} (p : α → Bool) (l : List α) (n : ℕ)
 
 namespace List
 
-/--
-Definition of `rdrop` / `rdrop` 的定义
+/-- Drop `n` elements from the tail end of a list. -/
+/-
+**List.rdrop** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：rdrop : List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rdrop
-  signature: : List α
-  body: l.take (l.length - n)
-
-@[simp]
-
-中文:
-定义 rdrop
-  签名: : 列表 α
-  定义体: l.take (l.length - n)
-
-@[simp]
-
-Depends on / 依赖: l.length, l.take, length
+--- 原说明 ---
+Drop `n` elements from the tail end of a list.
 -/
 def rdrop : List α :=
   l.take (l.length - n)
 
 @[simp]
-/--
-theorem `rdrop_nil` / 定理 `rdrop_nil`
-
-English:
-theorem rdrop_nil
-  statement: rdrop ([] : List α) n = []
-  proof: by simp [rdrop]
-
-@[simp]
-
-中文:
-定理 rdrop_nil
-  结论: rdrop ([] : 列表 α) n = []
-  证明: by simp [rdrop]
-
-@[simp]
+/-
+**List.rdrop_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdrop_nil : rdrop ([] : List α) n = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `List.take_nil`：∀ {α : Type u} {i : ℕ}, List.take i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rdrop_nil : rdrop ([] : List α) n = [] := by simp [rdrop]
 
 @[simp]
-/--
-theorem `rdrop_zero` / 定理 `rdrop_zero`
-
-English:
-theorem rdrop_zero
-  statement: rdrop l 0 = l
-  proof: by simp [rdrop]
-
-中文:
-定理 rdrop_zero
-  结论: rdrop l 0 = l
-  证明: by simp [rdrop]
+/-
+**List.rdrop_zero** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdrop_zero : rdrop l 0 = l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.take_length`：∀ {α : Type u_1} {l : List α}, List.take l.length l = 
+l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rdrop_zero : rdrop l 0 = l := by simp [rdrop]
-
-/--
-theorem `rdrop_eq_reverse_drop_reverse` / 定理 `rdrop_eq_reverse_drop_reverse`
-
-English:
-theorem rdrop_eq_reverse_drop_reverse
-  statement: l.rdrop n = reverse (l.reverse.drop n)
-  proof: by
-  rw [rdrop]
-  induction l using List.reverseRecOn generalizing n with
-  | nil => simp
-  | append_singleton xs x IH =>
-    cases n
-    · simp [take_length_add_append]
-    · simp [take_append, IH]
-
-@[simp]
-
-中文:
-定理 rdrop_eq_reverse_drop_reverse
-  结论: l.rdrop n = reverse (l.reverse.drop n)
-  证明: by
-  rw [rdrop]
-  induction l using List.reverseRecOn generalizing n with
-  | nil => simp
-  | append_singleton xs x IH =>
-    cases n
-    · simp [take_length_add_append]
-    · simp [take_append, IH]
-
-@[simp]
-
-Depends on / 依赖: List.reverseRecOn, append_singleton, generalizing, reverseRecOn, take_append, take_length_add_append
+/-
+**List.rdrop_eq_reverse_drop_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdrop_eq_reverse_drop_reverse : l.rdrop n = reverse (l.reverse.drop n)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdrop.eq_1`：∀ {α : Type u_1} (l : List α) (n : ℕ), l.rdrop n = List
+.take (l.length - n) l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `List.take_nil`：∀ {α : Type u} {i : ℕ}, List.take i [] = []
+· 使用定理 `List.drop_nil`：∀ {α : Type u} {i : ℕ}, List.drop i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `List.take_length_add_append`：∀ {α : Type u_1} {l₁ l₂ : List α} (i : ℕ), 
+List.take (l₁.length + i) (l₁ ++ l₂) = l₁ ++ List.take i l₂
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.Simproc.add_sub_add_le`：∀ (a c : ℕ) {b d : ℕ}, b ≤ d → a + b - (c + 
+d) = a - (c + (d - b))
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `List.take_append`：∀ {α : Type u_1} {l₁ l₂ : List α} {i : ℕ}, List.take i
+ (l₁ ++ l₂) = List.take i l₁ ++ List.take (i - l₁.length) l₂
+· 使用定理 `List.append_nil`：∀ {α : Type u} (as : List α), as ++ [] = as
+· 使用定理 `List.drop_succ_cons`：∀ {α : Type u} {a : α} {l : List α} {i : ℕ}, List.d
+rop (i + 1) (a :: l) = List.drop i l
 -/
 theorem rdrop_eq_reverse_drop_reverse : l.rdrop n = reverse (l.reverse.drop n) := by
   rw [rdrop]
@@ -144,118 +143,117 @@ theorem rdrop_eq_reverse_drop_reverse : l.rdrop n = reverse (l.reverse.drop n) :
     · simp [take_append, IH]
 
 @[simp]
-/--
-theorem `rdrop_concat_succ` / 定理 `rdrop_concat_succ`
-
-English:
-theorem rdrop_concat_succ
-  given: (x : α)
-  statement: rdrop (l ++ [x]) (n + 1) = rdrop l n
-  proof: by
-  simp [rdrop_eq_reverse_drop_reverse]
-
-中文:
-定理 rdrop_concat_succ
-  条件: (x : α)
-  结论: rdrop (l ++ [x]) (n + 1) = rdrop l n
-  证明: by
-  simp [rdrop_eq_reverse_drop_reverse]
-
-Depends on / 依赖: rdrop_eq_reverse_drop_reverse
+/-
+**List.rdrop_concat_succ** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdrop_concat_succ (x : α) : rdrop (l ++ [x]) (n + 1) = rdrop l n
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdrop_eq_reverse_drop_reverse`：rdrop_eq_reverse_drop_reverse : l.rd
+rop n = reverse (l.reverse.drop n)
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.drop_succ_cons`：∀ {α : Type u} {a : α} {l : List α} {i : ℕ}, List.d
+rop (i + 1) (a :: l) = List.drop i l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rdrop_concat_succ (x : α) : rdrop (l ++ [x]) (n + 1) = rdrop l n := by
   simp [rdrop_eq_reverse_drop_reverse]
 
-/--
-Definition of `rtake` / `rtake` 的定义
+/-- Take `n` elements from the tail end of a list. -/
+/-
+**List.rtake** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：rtake : List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rtake
-  signature: : List α
-  body: l.drop (l.length - n)
-
-@[simp]
-
-中文:
-定义 rtake
-  签名: : 列表 α
-  定义体: l.drop (l.length - n)
-
-@[simp]
-
-Depends on / 依赖: l.drop, l.length, length
+--- 原说明 ---
+Take `n` elements from the tail end of a list.
 -/
 def rtake : List α :=
   l.drop (l.length - n)
 
 @[simp]
-/--
-theorem `rtake_nil` / 定理 `rtake_nil`
-
-English:
-theorem rtake_nil
-  statement: rtake ([] : List α) n = []
-  proof: by simp [rtake]
-
-@[simp]
-
-中文:
-定理 rtake_nil
-  结论: rtake ([] : 列表 α) n = []
-  证明: by simp [rtake]
-
-@[simp]
+/-
+**List.rtake_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtake_nil : rtake ([] : List α) n = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `List.drop_nil`：∀ {α : Type u} {i : ℕ}, List.drop i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rtake_nil : rtake ([] : List α) n = [] := by simp [rtake]
 
 @[simp]
-/--
-theorem `rtake_zero` / 定理 `rtake_zero`
-
-English:
-theorem rtake_zero
-  statement: rtake l 0 = []
-  proof: by simp [rtake]
-
-中文:
-定理 rtake_zero
-  结论: rtake l 0 = []
-  证明: by simp [rtake]
+/-
+**List.rtake_zero** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtake_zero : rtake l 0 = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.drop_length`：∀ {α : Type u_1} {l : List α}, List.drop l.length l = 
+[]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rtake_zero : rtake l 0 = [] := by simp [rtake]
-
-/--
-theorem `rtake_eq_reverse_take_reverse` / 定理 `rtake_eq_reverse_take_reverse`
-
-English:
-theorem rtake_eq_reverse_take_reverse
-  statement: l.rtake n = reverse (l.reverse.take n)
-  proof: by
-  rw [rtake]
-  induction l using List.reverseRecOn generalizing n with
-  | nil => simp
-  | append_singleton xs x IH =>
-    cases n
-    · exact drop_length
-    · simp [drop_append, IH]
-
-@[simp]
-
-中文:
-定理 rtake_eq_reverse_take_reverse
-  结论: l.rtake n = reverse (l.reverse.take n)
-  证明: by
-  rw [rtake]
-  induction l using List.reverseRecOn generalizing n with
-  | nil => simp
-  | append_singleton xs x IH =>
-    cases n
-    · exact drop_length
-    · simp [drop_append, IH]
-
-@[simp]
-
-Depends on / 依赖: List.reverseRecOn, append_singleton, drop_append, drop_length, generalizing, reverseRecOn
+/-
+**List.rtake_eq_reverse_take_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtake_eq_reverse_take_reverse : l.rtake n = reverse (l.reverse.take n)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rtake.eq_1`：∀ {α : Type u_1} (l : List α) (n : ℕ), l.rtake n = List
+.drop (l.length - n) l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `List.drop_nil`：∀ {α : Type u} {i : ℕ}, List.drop i [] = []
+· 使用定理 `List.take_nil`：∀ {α : Type u} {i : ℕ}, List.take i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.drop_length`：∀ {α : Type u_1} {l : List α}, List.drop l.length l = 
+[]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.Simproc.add_sub_add_le`：∀ (a c : ℕ) {b d : ℕ}, b ≤ d → a + b - (c + 
+d) = a - (c + (d - b))
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `List.drop_append`：∀ {α : Type u_1} {l₁ l₂ : List α} {i : ℕ}, List.drop i
+ (l₁ ++ l₂) = List.drop i l₁ ++ List.drop (i - l₁.length) l₂
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
 -/
 theorem rtake_eq_reverse_take_reverse : l.rtake n = reverse (l.reverse.take n) := by
   rw [rtake]
@@ -267,90 +265,85 @@ theorem rtake_eq_reverse_take_reverse : l.rtake n = reverse (l.reverse.take n) :
     · simp [drop_append, IH]
 
 @[simp]
-/--
-theorem `rtake_concat_succ` / 定理 `rtake_concat_succ`
-
-English:
-theorem rtake_concat_succ
-  given: (x : α)
-  statement: rtake (l ++ [x]) (n + 1) = rtake l n ++ [x]
-  proof: by
-  simp [rtake_eq_reverse_take_reverse]
-
-中文:
-定理 rtake_concat_succ
-  条件: (x : α)
-  结论: rtake (l ++ [x]) (n + 1) = rtake l n ++ [x]
-  证明: by
-  simp [rtake_eq_reverse_take_reverse]
-
-Depends on / 依赖: rtake_eq_reverse_take_reverse
+/-
+**List.rtake_concat_succ** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtake_concat_succ (x : α) : rtake (l ++ [x]) (n + 1) = rtake l n ++ [x]
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rtake_eq_reverse_take_reverse`：rtake_eq_reverse_take_reverse : l.rt
+ake n = reverse (l.reverse.take n)
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rtake_concat_succ (x : α) : rtake (l ++ [x]) (n + 1) = rtake l n ++ [x] := by
   simp [rtake_eq_reverse_take_reverse]
 
-/--
-Definition of `rdropWhile` / `rdropWhile` 的定义
+/-- Drop elements from the tail end of a list that satisfy `p : α → Bool`.
+Implemented naively via `List.reverse` -/
+/-
+**List.rdropWhile** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：rdropWhile : List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rdropWhile
-  signature: : List α
-  body: reverse (l.reverse.dropWhile p)
-
-@[simp]
-
-中文:
-定义 rdropWhile
-  签名: : 列表 α
-  定义体: reverse (l.reverse.dropWhile p)
-
-@[simp]
-
-Depends on / 依赖: dropWhile, l.reverse.dropWhile, reverse
+--- 原说明 ---
+Drop elements from the tail end of a list that satisfy `p : α → Bool`.
+Implemented naively via `List.reverse`
 -/
 def rdropWhile : List α :=
   reverse (l.reverse.dropWhile p)
 
 @[simp]
-/--
-theorem `rdropWhile_nil` / 定理 `rdropWhile_nil`
-
-English:
-theorem rdropWhile_nil
-  statement: rdropWhile p ([] : List α) = []
-  proof: by simp [rdropWhile]
-
-中文:
-定理 rdropWhile_nil
-  结论: rdropWhile p ([] : 列表 α) = []
-  证明: by simp [rdropWhile]
-
-Depends on / 依赖: rdropWhile
+/-
+**List.rdropWhile_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_nil : rdropWhile p ([] : List α) = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rdropWhile_nil : rdropWhile p ([] : List α) = [] := by simp [rdropWhile]
-
-/--
-theorem `rdropWhile_concat` / 定理 `rdropWhile_concat`
-
-English:
-theorem rdropWhile_concat
-  given: (x : α)
-  proof: by
-  simp only [rdropWhile, dropWhile, reverse_append, reverse_singleton, singleton_append]
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-中文:
-定理 rdropWhile_concat
-  条件: (x : α)
-  证明: by
-  simp only [rdropWhile, dropWhile, reverse_append, reverse_singleton, singleton_append]
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: dropWhile, rdropWhile, reverse_append, reverse_singleton, singleton_append, split_ifs
+/-
+**List.rdropWhile_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_concat (x : α) : rdropWhile p (l ++ [x]) = if p x then rdropWhi
+le p l else l ++ [x]
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.reverse_singleton`：∀ {α : Type u_1} {a : α}, [a].reverse = [a]
+· 使用定理 `List.dropWhile.eq_2`：∀ {α : Type u} (p : α → Bool) (a : α) (as : List α)
+,   List.dropWhile p (a :: as) =     match p a with     | true => List.dropWhile
+ p as    …
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Bool.of_not_eq_true`：∀ {b : Bool}, ¬b = true → b = false
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 theorem rdropWhile_concat (x : α) :
     rdropWhile p (l ++ [x]) = if p x then rdropWhile p l else l ++ [x] := by
@@ -358,298 +351,258 @@ theorem rdropWhile_concat (x : α) :
   split_ifs with h <;> simp [h]
 
 @[simp]
-/--
-theorem `rdropWhile_concat_pos` / 定理 `rdropWhile_concat_pos`
-
-English:
-theorem rdropWhile_concat_pos
-  given: (x : α) (h : p x)
-  statement: rdropWhile p (l ++ [x]) = rdropWhile p l
-  proof: by
-  rw [rdropWhile_concat]; rw [if_pos h]
-
-@[simp]
-
-中文:
-定理 rdropWhile_concat_pos
-  条件: (x : α) (h : p x)
-  结论: rdropWhile p (l ++ [x]) = rdropWhile p l
-  证明: by
-  rw [rdropWhile_concat]; rw [if_pos h]
-
-@[simp]
-
-Depends on / 依赖: if_pos, rdropWhile_concat
+/-
+**List.rdropWhile_concat_pos** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_concat_pos (x : α) (h : p x) : rdropWhile p (l ++ [x]) = rdropW
+hile p l
+参数：x : α；h : p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdropWhile_concat`：rdropWhile_concat (x : α) : rdropWhile p (l ++ [
+x]) = if p x then rdropWhile p l else l ++ [x]
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem rdropWhile_concat_pos (x : α) (h : p x) : rdropWhile p (l ++ [x]) = rdropWhile p l := by
-  rw [rdropWhile_concat]; rw [if_pos h]
+  rw [rdropWhile_concat, if_pos h]
 
 @[simp]
-/--
-theorem `rdropWhile_concat_neg` / 定理 `rdropWhile_concat_neg`
-
-English:
-theorem rdropWhile_concat_neg
-  given: (x : α) (h : ¬p x)
-  statement: rdropWhile p (l ++ [x]) = l ++ [x]
-  proof: by
-  rw [rdropWhile_concat]; rw [if_neg h]
-
-中文:
-定理 rdropWhile_concat_neg
-  条件: (x : α) (h : ¬p x)
-  结论: rdropWhile p (l ++ [x]) = l ++ [x]
-  证明: by
-  rw [rdropWhile_concat]; rw [if_neg h]
-
-Depends on / 依赖: if_neg, rdropWhile_concat
+/-
+**List.rdropWhile_concat_neg** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_concat_neg (x : α) (h : ¬p x) : rdropWhile p (l ++ [x]) = l ++ 
+[x]
+参数：x : α；h : ¬p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdropWhile_concat`：rdropWhile_concat (x : α) : rdropWhile p (l ++ [
+x]) = if p x then rdropWhile p l else l ++ [x]
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 theorem rdropWhile_concat_neg (x : α) (h : ¬p x) : rdropWhile p (l ++ [x]) = l ++ [x] := by
-  rw [rdropWhile_concat]; rw [if_neg h]
-
-/--
-theorem `rdropWhile_singleton` / 定理 `rdropWhile_singleton`
-
-English:
-theorem rdropWhile_singleton
-  given: (x : α)
-  statement: rdropWhile p [x] = if p x then [] else [x]
-  proof: by
-  rw [← nil_append [x], rdropWhile_concat, rdropWhile_nil]
-
-中文:
-定理 rdropWhile_singleton
-  条件: (x : α)
-  结论: rdropWhile p [x] = if p x then [] else [x]
-  证明: by
-  rw [← nil_append [x], rdropWhile_concat, rdropWhile_nil]
-
-Depends on / 依赖: nil_append, rdropWhile_concat, rdropWhile_nil
+  rw [rdropWhile_concat, if_neg h]
+/-
+**List.rdropWhile_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_singleton (x : α) : rdropWhile p [x] = if p x then [] else [x]
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `List.rdropWhile_concat`：rdropWhile_concat (x : α) : rdropWhile p (l ++ [
+x]) = if p x then rdropWhile p l else l ++ [x]
+· 使用定理 `List.rdropWhile_nil`：rdropWhile_nil : rdropWhile p ([] : List α) = []
 -/
 theorem rdropWhile_singleton (x : α) : rdropWhile p [x] = if p x then [] else [x] := by
   rw [← nil_append [x], rdropWhile_concat, rdropWhile_nil]
-
-/--
-theorem `rdropWhile_last_not` / 定理 `rdropWhile_last_not`
-
-English:
-theorem rdropWhile_last_not
-  given: (hl : l.rdropWhile p != [])
-  statement: ¬p ((rdropWhile p l).getLast hl)
-  proof: by
-  simp_rw [rdropWhile]
-  rw [getLast_reverse]; rw [head_dropWhile_not p]
-  simp
-
-中文:
-定理 rdropWhile_last_not
-  条件: (hl : l.rdropWhile p != [])
-  结论: ¬p ((rdropWhile p l).getLast hl)
-  证明: by
-  simp_rw [rdropWhile]
-  rw [getLast_reverse]; rw [head_dropWhile_not p]
-  simp
-
-Depends on / 依赖: getLast_reverse, head_dropWhile_not, rdropWhile, simp_rw
+/-
+**List.rdropWhile_last_not** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_last_not (hl : l.rdropWhile p != []) : ¬p ((rdropWhile p l).get
+Last hl)
+参数：hl : l.rdropWhile p != []。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.getLast_reverse`：∀ {α : Type u_1} {l : List α} (h : l.reverse ≠ [])
+, l.reverse.getLast h = l.head ⋯
+· 使用定理 `List.head_dropWhile_not`：∀ {α : Type u_1} (p : α → Bool) {l : List α} (w
+ : List.dropWhile p l ≠ []), p ((List.dropWhile p l).head w) = false
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Bool.false_eq_true`：(false = true) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem rdropWhile_last_not (hl : l.rdropWhile p != []) : ¬p ((rdropWhile p l).getLast hl) := by
+theorem rdropWhile_last_not (hl : l.rdropWhile p ≠ []) : ¬p ((rdropWhile p l).getLast hl) := by
   simp_rw [rdropWhile]
-  rw [getLast_reverse]; rw [head_dropWhile_not p]
+  rw [getLast_reverse, head_dropWhile_not p]
   simp
-
-/--
-theorem `rdropWhile_prefix` / 定理 `rdropWhile_prefix`
-
-English:
-theorem rdropWhile_prefix
-  statement: l.rdropWhile p <+: l
-  proof: by
-  rw [← reverse_suffix]; rw [rdropWhile]; rw [reverse_reverse]
-  exact dropWhile_suffix _
-
-中文:
-定理 rdropWhile_prefix
-  结论: l.rdropWhile p <+: l
-  证明: by
-  rw [← reverse_suffix]; rw [rdropWhile]; rw [reverse_reverse]
-  exact dropWhile_suffix _
-
-Depends on / 依赖: dropWhile_suffix, rdropWhile, reverse_reverse, reverse_suffix
+/-
+**List.rdropWhile_prefix** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_prefix : l.rdropWhile p <+: l
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.reverse_suffix`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.reverse <:+ l
+₂.reverse ↔ l₁ <+: l₂
+· 使用定理 `List.rdropWhile.eq_1`：∀ {α : Type u_1} (p : α → Bool) (l : List α), List
+.rdropWhile p l = (List.dropWhile p l.reverse).reverse
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `List.dropWhile_suffix`：∀ {α : Type u_1} {l : List α} (p : α → Bool), Lis
+t.dropWhile p l <:+ l
 -/
 theorem rdropWhile_prefix : l.rdropWhile p <+: l := by
-  rw [← reverse_suffix]; rw [rdropWhile]; rw [reverse_reverse]
+  rw [← reverse_suffix, rdropWhile, reverse_reverse]
   exact dropWhile_suffix _
 
 variable {p} {l}
 
 @[simp]
-/--
-theorem `rdropWhile_eq_nil_iff` / 定理 `rdropWhile_eq_nil_iff`
-
-English:
-theorem rdropWhile_eq_nil_iff
-  statement: rdropWhile p l = [] ↔ forall x in l, p x
-  proof: by simp [rdropWhile]
-
-@[simp]
-
-中文:
-定理 rdropWhile_eq_nil_iff
-  结论: rdropWhile p l = [] ↔ 对任意 x in l, p x
-  证明: by simp [rdropWhile]
-
-@[simp]
-
-Depends on / 依赖: rdropWhile
+/-
+**List.rdropWhile_eq_nil_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_eq_nil_iff : rdropWhile p l = [] ↔ forall x in l, p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem rdropWhile_eq_nil_iff : rdropWhile p l = [] ↔ forall x in l, p x := by simp [rdropWhile]
+theorem rdropWhile_eq_nil_iff : rdropWhile p l = [] ↔ ∀ x ∈ l, p x := by simp [rdropWhile]
 
 @[simp]
-/--
-theorem `rdropWhile_eq_self_iff` / 定理 `rdropWhile_eq_self_iff`
-
-English:
-theorem rdropWhile_eq_self_iff
-  statement: rdropWhile p l = l ↔ forall hl : l != [], ¬p (l.getLast hl)
-  proof: by
-  simp [rdropWhile, reverse_eq_iff, getLast_eq_getElem, Nat.pos_iff_ne_zero]
-
-中文:
-定理 rdropWhile_eq_self_iff
-  结论: rdropWhile p l = l ↔ 对任意 hl : l != [], ¬p (l.getLast hl)
-  证明: by
-  simp [rdropWhile, reverse_eq_iff, getLast_eq_getElem, Nat.pos_iff_ne_zero]
-
-Depends on / 依赖: Nat.pos_iff_ne_zero, getLast_eq_getElem, pos_iff_ne_zero, rdropWhile, reverse_eq_iff
+/-
+**List.rdropWhile_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_eq_self_iff : rdropWhile p l = l ↔ forall hl : l != [], ¬p (l.g
+etLast hl)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.sub_one_sub_lt_of_lt`：∀ {a b : ℕ}, a < b → b - 1 - a < b
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.getElem_reverse`：∀ {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.r
+everse.length), l.reverse[i] = l[l.length - 1 - i]
+· 使用定理 `Bool.not_eq_true`：∀ (b : Bool), (¬b = true) = (b = false)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `List.getLast_eq_getElem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.g
+etLast h = l[l.length - 1]
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem rdropWhile_eq_self_iff : rdropWhile p l = l ↔ forall hl : l != [], ¬p (l.getLast hl) := by
+theorem rdropWhile_eq_self_iff : rdropWhile p l = l ↔ ∀ hl : l ≠ [], ¬p (l.getLast hl) := by
   simp [rdropWhile, reverse_eq_iff, getLast_eq_getElem, Nat.pos_iff_ne_zero]
 
 variable (p) (l)
-
-/--
-theorem `dropWhile_idempotent` / 定理 `dropWhile_idempotent`
-
-English:
-theorem dropWhile_idempotent
-  statement: dropWhile p (dropWhile p l) = dropWhile p l
-  proof: by
-  simp only [dropWhile_eq_self_iff]
-  exact fun h => dropWhile_get_zero_not p l h
-
-中文:
-定理 dropWhile_idempotent
-  结论: dropWhile p (dropWhile p l) = dropWhile p l
-  证明: by
-  simp only [dropWhile_eq_self_iff]
-  exact fun h => dropWhile_get_zero_not p l h
-
-Depends on / 依赖: dropWhile_eq_self_iff, dropWhile_get_zero_not
+/-
+**List.dropWhile_idempotent** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：dropWhile_idempotent : dropWhile p (dropWhile p l) = dropWhile p l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.dropWhile_get_zero_not`：dropWhile_get_zero_not (l : List α) (hl : 0
+ < (l.dropWhile p).length) : ¬p ((l.dropWhile p).get ⟨0, hl⟩)
 -/
 theorem dropWhile_idempotent : dropWhile p (dropWhile p l) = dropWhile p l := by
   simp only [dropWhile_eq_self_iff]
   exact fun h => dropWhile_get_zero_not p l h
-
-/--
-theorem `rdropWhile_idempotent` / 定理 `rdropWhile_idempotent`
-
-English:
-theorem rdropWhile_idempotent
-  statement: rdropWhile p (rdropWhile p l) = rdropWhile p l
-  proof: rdropWhile_eq_self_iff.mpr (rdropWhile_last_not _ _)
-
-中文:
-定理 rdropWhile_idempotent
-  结论: rdropWhile p (rdropWhile p l) = rdropWhile p l
-  证明: rdropWhile_eq_self_iff.mpr (rdropWhile_last_not _ _)
-
-Depends on / 依赖: rdropWhile_eq_self_iff, rdropWhile_eq_self_iff.mpr, rdropWhile_last_not
+/-
+**List.rdropWhile_idempotent** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_idempotent : rdropWhile p (rdropWhile p l) = rdropWhile p l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.rdropWhile_eq_self_iff`：rdropWhile_eq_self_iff : rdropWhile p l = l
+ ↔ forall hl : l != [], ¬p (l.getLast hl)
+· 使用定理 `List.rdropWhile_last_not`：rdropWhile_last_not (hl : l.rdropWhile p != []
+) : ¬p ((rdropWhile p l).getLast hl)
 -/
 theorem rdropWhile_idempotent : rdropWhile p (rdropWhile p l) = rdropWhile p l :=
   rdropWhile_eq_self_iff.mpr (rdropWhile_last_not _ _)
-
-/--
-theorem `rdropWhile_reverse` / 定理 `rdropWhile_reverse`
-
-English:
-theorem rdropWhile_reverse
-  statement: l.reverse.rdropWhile p = (l.dropWhile p).reverse
-  proof: by
-  simp_rw [rdropWhile, reverse_reverse]
-
-中文:
-定理 rdropWhile_reverse
-  结论: l.reverse.rdropWhile p = (l.dropWhile p).reverse
-  证明: by
-  simp_rw [rdropWhile, reverse_reverse]
-
-Depends on / 依赖: rdropWhile, reverse_reverse, simp_rw
+/-
+**List.rdropWhile_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_reverse : l.reverse.rdropWhile p = (l.dropWhile p).reverse
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rdropWhile_reverse : l.reverse.rdropWhile p = (l.dropWhile p).reverse := by
   simp_rw [rdropWhile, reverse_reverse]
 
-/--
-Definition of `rtakeWhile` / `rtakeWhile` 的定义
+/-- Take elements from the tail end of a list that satisfy `p : α → Bool`.
+Implemented naively via `List.reverse` -/
+/-
+**List.rtakeWhile** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：rtakeWhile : List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rtakeWhile
-  signature: : List α
-  body: reverse (l.reverse.takeWhile p)
-
-@[simp]
-
-中文:
-定义 rtakeWhile
-  签名: : 列表 α
-  定义体: reverse (l.reverse.takeWhile p)
-
-@[simp]
-
-Depends on / 依赖: l.reverse.takeWhile, reverse, takeWhile
+--- 原说明 ---
+Take elements from the tail end of a list that satisfy `p : α → Bool`.
+Implemented naively via `List.reverse`
 -/
 def rtakeWhile : List α :=
   reverse (l.reverse.takeWhile p)
 
 @[simp]
-/--
-theorem `rtakeWhile_nil` / 定理 `rtakeWhile_nil`
-
-English:
-theorem rtakeWhile_nil
-  statement: rtakeWhile p ([] : List α) = []
-  proof: by simp [rtakeWhile]
-
-中文:
-定理 rtakeWhile_nil
-  结论: rtakeWhile p ([] : 列表 α) = []
-  证明: by simp [rtakeWhile]
-
-Depends on / 依赖: rtakeWhile
+/-
+**List.rtakeWhile_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_nil : rtakeWhile p ([] : List α) = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rtakeWhile_nil : rtakeWhile p ([] : List α) = [] := by simp [rtakeWhile]
-
-/--
-theorem `rtakeWhile_concat` / 定理 `rtakeWhile_concat`
-
-English:
-theorem rtakeWhile_concat
-  given: (x : α)
-  proof: by
-  simp only [rtakeWhile, takeWhile, reverse_append, reverse_singleton, singleton_append]
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-中文:
-定理 rtakeWhile_concat
-  条件: (x : α)
-  证明: by
-  simp only [rtakeWhile, takeWhile, reverse_append, reverse_singleton, singleton_append]
-  split_ifs with h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: reverse_append, reverse_singleton, rtakeWhile, singleton_append, split_ifs, takeWhile
+/-
+**List.rtakeWhile_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_concat (x : α) : rtakeWhile p (l ++ [x]) = if p x then rtakeWhi
+le p l ++ [x] else []
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.reverse_singleton`：∀ {α : Type u_1} {a : α}, [a].reverse = [a]
+· 使用定理 `List.takeWhile.eq_2`：∀ {α : Type u} (p : α → Bool) (a : α) (as : List α)
+,   List.takeWhile p (a :: as) =     match p a with     | true => a :: List.take
+While p a…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Bool.of_not_eq_true`：∀ {b : Bool}, ¬b = true → b = false
 -/
 theorem rtakeWhile_concat (x : α) :
     rtakeWhile p (l ++ [x]) = if p x then rtakeWhile p l ++ [x] else [] := by
@@ -657,312 +610,292 @@ theorem rtakeWhile_concat (x : α) :
   split_ifs with h <;> simp [h]
 
 @[simp]
-/--
-theorem `rtakeWhile_concat_pos` / 定理 `rtakeWhile_concat_pos`
-
-English:
-theorem rtakeWhile_concat_pos
-  given: (x : α) (h : p x)
-  proof: by rw [rtakeWhile_concat, if_pos h]
-
-@[simp]
-
-中文:
-定理 rtakeWhile_concat_pos
-  条件: (x : α) (h : p x)
-  证明: by rw [rtakeWhile_concat, if_pos h]
-
-@[simp]
-
-Depends on / 依赖: if_pos, rtakeWhile_concat
+/-
+**List.rtakeWhile_concat_pos** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_concat_pos (x : α) (h : p x) : rtakeWhile p (l ++ [x]) = rtakeW
+hile p l ++ [x]
+参数：x : α；h : p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rtakeWhile_concat`：rtakeWhile_concat (x : α) : rtakeWhile p (l ++ [
+x]) = if p x then rtakeWhile p l ++ [x] else []
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem rtakeWhile_concat_pos (x : α) (h : p x) :
     rtakeWhile p (l ++ [x]) = rtakeWhile p l ++ [x] := by rw [rtakeWhile_concat, if_pos h]
 
 @[simp]
-/--
-theorem `rtakeWhile_concat_neg` / 定理 `rtakeWhile_concat_neg`
-
-English:
-theorem rtakeWhile_concat_neg
-  given: (x : α) (h : ¬p x)
-  statement: rtakeWhile p (l ++ [x]) = []
-  proof: by
-  rw [rtakeWhile_concat]; rw [if_neg h]
-
-中文:
-定理 rtakeWhile_concat_neg
-  条件: (x : α) (h : ¬p x)
-  结论: rtakeWhile p (l ++ [x]) = []
-  证明: by
-  rw [rtakeWhile_concat]; rw [if_neg h]
-
-Depends on / 依赖: if_neg, rtakeWhile_concat
+/-
+**List.rtakeWhile_concat_neg** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_concat_neg (x : α) (h : ¬p x) : rtakeWhile p (l ++ [x]) = []
+参数：x : α；h : ¬p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rtakeWhile_concat`：rtakeWhile_concat (x : α) : rtakeWhile p (l ++ [
+x]) = if p x then rtakeWhile p l ++ [x] else []
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 theorem rtakeWhile_concat_neg (x : α) (h : ¬p x) : rtakeWhile p (l ++ [x]) = [] := by
-  rw [rtakeWhile_concat]; rw [if_neg h]
-
-/--
-theorem `rtakeWhile_suffix` / 定理 `rtakeWhile_suffix`
-
-English:
-theorem rtakeWhile_suffix
-  statement: l.rtakeWhile p <:+ l
-  proof: by
-  rw [← reverse_prefix]; rw [rtakeWhile]; rw [reverse_reverse]
-  exact takeWhile_prefix _
-
-中文:
-定理 rtakeWhile_suffix
-  结论: l.rtakeWhile p <:+ l
-  证明: by
-  rw [← reverse_prefix]; rw [rtakeWhile]; rw [reverse_reverse]
-  exact takeWhile_prefix _
-
-Depends on / 依赖: reverse_prefix, reverse_reverse, rtakeWhile, takeWhile_prefix
+  rw [rtakeWhile_concat, if_neg h]
+/-
+**List.rtakeWhile_suffix** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_suffix : l.rtakeWhile p <:+ l
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.reverse_prefix`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.reverse <+: l
+₂.reverse ↔ l₁ <:+ l₂
+· 使用定理 `List.rtakeWhile.eq_1`：∀ {α : Type u_1} (p : α → Bool) (l : List α), List
+.rtakeWhile p l = (List.takeWhile p l.reverse).reverse
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `List.takeWhile_prefix`：∀ {α : Type u_1} {l : List α} (p : α → Bool), Lis
+t.takeWhile p l <+: l
 -/
 theorem rtakeWhile_suffix : l.rtakeWhile p <:+ l := by
-  rw [← reverse_prefix]; rw [rtakeWhile]; rw [reverse_reverse]
+  rw [← reverse_prefix, rtakeWhile, reverse_reverse]
   exact takeWhile_prefix _
 
 variable {p} {l}
 
 @[simp]
-/--
-theorem `rtakeWhile_eq_self_iff` / 定理 `rtakeWhile_eq_self_iff`
-
-English:
-theorem rtakeWhile_eq_self_iff
-  statement: rtakeWhile p l = l ↔ forall x in l, p x
-  proof: by
+/-
+**List.rtakeWhile_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_eq_self_iff : rtakeWhile p l = l ↔ forall x in l, p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem rtakeWhile_eq_self_iff : rtakeWhile p l = l ↔ ∀ x ∈ l, p x := by
   simp [rtakeWhile, reverse_eq_iff]
 
 @[simp]
-
-中文:
-定理 rtakeWhile_eq_self_iff
-  结论: rtakeWhile p l = l ↔ 对任意 x in l, p x
-  证明: by
-  simp [rtakeWhile, reverse_eq_iff]
-
-@[simp]
-
-Depends on / 依赖: reverse_eq_iff, rtakeWhile
+/-
+**List.rtakeWhile_eq_nil_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_eq_nil_iff : rtakeWhile p l = [] ↔ forall hl : l != [], ¬p (l.g
+etLast hl)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `Bool.not_eq_true`：∀ (b : Bool), (¬b = true) = (b = false)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `List.getLast_append_of_ne_nil`：∀ {α : Type u_1} {l' l : List α} (h₁ : l 
+++ l' ≠ []) (h₂ : l' ≠ []), (l ++ l').getLast h₁ = l'.getLast h₂
 -/
-theorem rtakeWhile_eq_self_iff : rtakeWhile p l = l ↔ forall x in l, p x := by
-  simp [rtakeWhile, reverse_eq_iff]
-
-@[simp]
-/--
-theorem `rtakeWhile_eq_nil_iff` / 定理 `rtakeWhile_eq_nil_iff`
-
-English:
-theorem rtakeWhile_eq_nil_iff
-  statement: rtakeWhile p l = [] ↔ forall hl : l != [], ¬p (l.getLast hl)
-  proof: by
+theorem rtakeWhile_eq_nil_iff : rtakeWhile p l = [] ↔ ∀ hl : l ≠ [], ¬p (l.getLast hl) := by
   induction l using List.reverseRecOn <;> simp [rtakeWhile]
-
-中文:
-定理 rtakeWhile_eq_nil_iff
-  结论: rtakeWhile p l = [] ↔ 对任意 hl : l != [], ¬p (l.getLast hl)
-  证明: by
-  induction l using List.reverseRecOn <;> simp [rtakeWhile]
-
-Depends on / 依赖: List.reverseRecOn, reverseRecOn, rtakeWhile
+/-
+**List.mem_rtakeWhile_imp** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mem_rtakeWhile_imp {x : α} (hx : x in rtakeWhile p l) : p x
+参数：hx : x in rtakeWhile p l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_takeWhile_imp`：mem_takeWhile_imp {x : α} (hx : x in takeWhile p
+ l) : p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.mem_reverse`：∀ {α : Type u_1} {x : α} {as : List α}, x ∈ as.reverse
+ ↔ x ∈ as
+· 使用定理 `List.rtakeWhile.eq_1`：∀ {α : Type u_1} (p : α → Bool) (l : List α), List
+.rtakeWhile p l = (List.takeWhile p l.reverse).reverse
 -/
-theorem rtakeWhile_eq_nil_iff : rtakeWhile p l = [] ↔ forall hl : l != [], ¬p (l.getLast hl) := by
-  induction l using List.reverseRecOn <;> simp [rtakeWhile]
-
-/--
-theorem `mem_rtakeWhile_imp` / 定理 `mem_rtakeWhile_imp`
-
-English:
-theorem mem_rtakeWhile_imp
-  given: {x : α} (hx : x in rtakeWhile p l)
-  statement: p x
-  proof: by
-  rw [rtakeWhile]; rw [mem_reverse] at hx
+theorem mem_rtakeWhile_imp {x : α} (hx : x ∈ rtakeWhile p l) : p x := by
+  rw [rtakeWhile, mem_reverse] at hx
   exact mem_takeWhile_imp hx
-
-中文:
-定理 mem_rtakeWhile_imp
-  条件: {x : α} (hx : x in rtakeWhile p l)
-  结论: p x
-  证明: by
-  rw [rtakeWhile]; rw [mem_reverse] at hx
-  exact mem_takeWhile_imp hx
-
-Depends on / 依赖: mem_reverse, mem_takeWhile_imp, rtakeWhile
+/-
+**List.rtakeWhile_idempotent** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_idempotent (p : α -> Bool) (l : List α) : rtakeWhile p (rtakeWh
+ile p l) = rtakeWhile p l
+参数：p : α -> Bool；l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.rtakeWhile_eq_self_iff`：rtakeWhile_eq_self_iff : rtakeWhile p l = l
+ ↔ forall x in l, p x
+· 使用定理 `List.mem_rtakeWhile_imp`：mem_rtakeWhile_imp {x : α} (hx : x in rtakeWhil
+e p l) : p x
 -/
-theorem mem_rtakeWhile_imp {x : α} (hx : x in rtakeWhile p l) : p x := by
-  rw [rtakeWhile]; rw [mem_reverse] at hx
-  exact mem_takeWhile_imp hx
-
-/--
-theorem `rtakeWhile_idempotent` / 定理 `rtakeWhile_idempotent`
-
-English:
-theorem rtakeWhile_idempotent
-  given: (p : α -> Bool) (l : List α)
-  proof: rtakeWhile_eq_self_iff.mpr fun _ => mem_rtakeWhile_imp
-
-中文:
-定理 rtakeWhile_idempotent
-  条件: (p : α -> 布尔值) (l : 列表 α)
-  证明: rtakeWhile_eq_self_iff.mpr fun _ => mem_rtakeWhile_imp
-
-Depends on / 依赖: mem_rtakeWhile_imp, rtakeWhile_eq_self_iff, rtakeWhile_eq_self_iff.mpr
--/
-theorem rtakeWhile_idempotent (p : α -> Bool) (l : List α) :
+theorem rtakeWhile_idempotent (p : α → Bool) (l : List α) :
     rtakeWhile p (rtakeWhile p l) = rtakeWhile p l :=
   rtakeWhile_eq_self_iff.mpr fun _ => mem_rtakeWhile_imp
-
-/--
-theorem `rtakeWhile_reverse` / 定理 `rtakeWhile_reverse`
-
-English:
-theorem rtakeWhile_reverse
-  statement: l.reverse.rtakeWhile p = (l.takeWhile p).reverse
-  proof: by
-  simp_rw [rtakeWhile, reverse_reverse]
-
-@[simp]
-
-中文:
-定理 rtakeWhile_reverse
-  结论: l.reverse.rtakeWhile p = (l.takeWhile p).reverse
-  证明: by
-  simp_rw [rtakeWhile, reverse_reverse]
-
-@[simp]
-
-Depends on / 依赖: reverse_reverse, rtakeWhile, simp_rw
+/-
+**List.rtakeWhile_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rtakeWhile_reverse : l.reverse.rtakeWhile p = (l.takeWhile p).reverse
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rtakeWhile_reverse : l.reverse.rtakeWhile p = (l.takeWhile p).reverse := by
   simp_rw [rtakeWhile, reverse_reverse]
 
 @[simp]
-/--
-theorem `rdropWhile_append_rtakeWhile` / 定理 `rdropWhile_append_rtakeWhile`
-
-English:
-theorem rdropWhile_append_rtakeWhile
-  proof: by
-  simp only [rdropWhile, rtakeWhile]
-  rw [← List.reverse_append]; rw [takeWhile_append_dropWhile]; rw [reverse_reverse]
-
-中文:
-定理 rdropWhile_append_rtakeWhile
-  证明: by
-  simp only [rdropWhile, rtakeWhile]
-  rw [← List.reverse_append]; rw [takeWhile_append_dropWhile]; rw [reverse_reverse]
-
-Depends on / 依赖: List.reverse_append, rdropWhile, reverse_append, reverse_reverse, rtakeWhile, takeWhile_append_dropWhile
+/-
+**List.rdropWhile_append_rtakeWhile** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：rdropWhile_append_rtakeWhile : l.rdropWhile p ++ l.rtakeWhile p = l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.takeWhile_append_dropWhile`：∀ {α : Type u_1} {p : α → Bool} {l : Li
+st α}, List.takeWhile p l ++ List.dropWhile p l = l
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 theorem rdropWhile_append_rtakeWhile :
     l.rdropWhile p ++ l.rtakeWhile p = l := by
   simp only [rdropWhile, rtakeWhile]
-  rw [← List.reverse_append]; rw [takeWhile_append_dropWhile]; rw [reverse_reverse]
-
-/--
-lemma `rdrop_add` / 引理 `rdrop_add`
-
-English:
-lemma rdrop_add
-  given: (i j : Nat)
-  statement: (l.rdrop i).rdrop j = l.rdrop (i + j)
-  proof: by
-  simp_rw [rdrop_eq_reverse_drop_reverse, reverse_reverse, drop_drop]
-
-@[simp]
-
-中文:
-引理 rdrop_add
-  条件: (i j : 自然数)
-  结论: (l.rdrop i).rdrop j = l.rdrop (i + j)
-  证明: by
-  simp_rw [rdrop_eq_reverse_drop_reverse, reverse_reverse, drop_drop]
-
-@[simp]
-
-Depends on / 依赖: drop_drop, rdrop_eq_reverse_drop_reverse, reverse_reverse, simp_rw
+  rw [← List.reverse_append, takeWhile_append_dropWhile, reverse_reverse]
+/-
+**List.rdrop_add** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：rdrop_add (i j : Nat) : (l.rdrop i).rdrop j = l.rdrop (i + j)
+参数：i j : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.rdrop_eq_reverse_drop_reverse`：rdrop_eq_reverse_drop_reverse : l.rd
+rop n = reverse (l.reverse.drop n)
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.drop_drop`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.drop i (Li
+st.drop j l) = List.drop (j + i) l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rdrop_add (i j : Nat) : (l.rdrop i).rdrop j = l.rdrop (i + j) := by
+lemma rdrop_add (i j : ℕ) : (l.rdrop i).rdrop j = l.rdrop (i + j) := by
   simp_rw [rdrop_eq_reverse_drop_reverse, reverse_reverse, drop_drop]
 
 @[simp]
-/--
-lemma `rdrop_append_length` / 引理 `rdrop_append_length`
-
-English:
-lemma rdrop_append_length
-  given: {l₁ l₂ : List α}
-  proof: by
-  rw [rdrop_eq_reverse_drop_reverse]; rw [← length_reverse]; rw [reverse_append]; rw [drop_left]; rw [reverse_reverse]
-
-中文:
-引理 rdrop_append_length
-  条件: {l₁ l₂ : 列表 α}
-  证明: by
-  rw [rdrop_eq_reverse_drop_reverse]; rw [← length_reverse]; rw [reverse_append]; rw [drop_left]; rw [reverse_reverse]
-
-Depends on / 依赖: drop_left, length_reverse, rdrop_eq_reverse_drop_reverse, reverse_append, reverse_reverse
+/-
+**List.rdrop_append_length** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：rdrop_append_length {l₁ l₂ : List α} : List.rdrop (l₁ ++ l₂) (List.length 
+l₂) = l₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdrop_eq_reverse_drop_reverse`：rdrop_eq_reverse_drop_reverse : l.rd
+rop n = reverse (l.reverse.drop n)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.drop_left`：∀ {α : Type u_1} {l₁ l₂ : List α}, List.drop l₁.length (
+l₁ ++ l₂) = l₂
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 lemma rdrop_append_length {l₁ l₂ : List α} :
     List.rdrop (l₁ ++ l₂) (List.length l₂) = l₁ := by
-  rw [rdrop_eq_reverse_drop_reverse]; rw [← length_reverse]; rw [reverse_append]; rw [drop_left]; rw [reverse_reverse]
-
-/--
-lemma `rdrop_append_of_le_length` / 引理 `rdrop_append_of_le_length`
-
-English:
-lemma rdrop_append_of_le_length
-  given: {l₁ l₂ : List α} (k : Nat)
-  proof: by
-  intro hk
-  rw [← length_reverse] at hk
-  rw [rdrop_eq_reverse_drop_reverse]; rw [reverse_append]; rw [drop_append_of_le_length hk]; rw [reverse_append]; rw [reverse_reverse]; rw [← rdrop_eq_reverse_drop_reverse]
-
-@[simp]
-
-中文:
-引理 rdrop_append_of_le_length
-  条件: {l₁ l₂ : 列表 α} (k : 自然数)
-  证明: by
-  intro hk
-  rw [← length_reverse] at hk
-  rw [rdrop_eq_reverse_drop_reverse]; rw [reverse_append]; rw [drop_append_of_le_length hk]; rw [reverse_append]; rw [reverse_reverse]; rw [← rdrop_eq_reverse_drop_reverse]
-
-@[simp]
-
-Depends on / 依赖: drop_append_of_le_length, length_reverse, rdrop_eq_reverse_drop_reverse, reverse_append, reverse_reverse
+  rw [rdrop_eq_reverse_drop_reverse, ← length_reverse,
+      reverse_append, drop_left, reverse_reverse]
+/-
+**List.rdrop_append_of_le_length** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：rdrop_append_of_le_length {l₁ l₂ : List α} (k : Nat) : k <= length l₂ -> L
+ist.rdrop (l₁ ++ l₂) k = l₁ ++ List.rdrop l₂ k
+参数：k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rdrop_eq_reverse_drop_reverse`：rdrop_eq_reverse_drop_reverse : l.rd
+rop n = reverse (l.reverse.drop n)
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `List.drop_append_of_le_length`：∀ {α : Type u_1} {l₁ l₂ : List α} {i : ℕ}
+, i ≤ l₁.length → List.drop i (l₁ ++ l₂) = List.drop i l₁ ++ l₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
-lemma rdrop_append_of_le_length {l₁ l₂ : List α} (k : Nat) :
-    k <= length l₂ -> List.rdrop (l₁ ++ l₂) k = l₁ ++ List.rdrop l₂ k := by
+lemma rdrop_append_of_le_length {l₁ l₂ : List α} (k : ℕ) :
+    k ≤ length l₂ → List.rdrop (l₁ ++ l₂) k = l₁ ++ List.rdrop l₂ k := by
   intro hk
   rw [← length_reverse] at hk
-  rw [rdrop_eq_reverse_drop_reverse]; rw [reverse_append]; rw [drop_append_of_le_length hk]; rw [reverse_append]; rw [reverse_reverse]; rw [← rdrop_eq_reverse_drop_reverse]
+  rw [rdrop_eq_reverse_drop_reverse, reverse_append, drop_append_of_le_length hk,
+    reverse_append, reverse_reverse, ← rdrop_eq_reverse_drop_reverse]
 
 @[simp]
-/--
-lemma `rdrop_append_length_add` / 引理 `rdrop_append_length_add`
-
-English:
-lemma rdrop_append_length_add
-  given: {l₁ l₂ : List α} (k : Nat)
-  proof: by
-  rw [← rdrop_add]; rw [rdrop_append_length]
-
-中文:
-引理 rdrop_append_length_add
-  条件: {l₁ l₂ : 列表 α} (k : 自然数)
-  证明: by
-  rw [← rdrop_add]; rw [rdrop_append_length]
-
-Depends on / 依赖: rdrop_add, rdrop_append_length
+/-
+**List.rdrop_append_length_add** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：rdrop_append_length_add {l₁ l₂ : List α} (k : Nat) : List.rdrop (l₁ ++ l₂)
+ (length l₂ + k) = List.rdrop l₁ k
+参数：k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `List.rdrop_add`：rdrop_add (i j : Nat) : (l.rdrop i).rdrop j = l.rdrop (i
+ + j)
+· 使用引理 `List.rdrop_append_length`：rdrop_append_length {l₁ l₂ : List α} : List.rd
+rop (l₁ ++ l₂) (List.length l₂) = l₁
 -/
-lemma rdrop_append_length_add {l₁ l₂ : List α} (k : Nat) :
+lemma rdrop_append_length_add {l₁ l₂ : List α} (k : ℕ) :
     List.rdrop (l₁ ++ l₂) (length l₂ + k) = List.rdrop l₁ k := by
-  rw [← rdrop_add]; rw [rdrop_append_length]
+  rw [← rdrop_add, rdrop_append_length]
 
 end List
+

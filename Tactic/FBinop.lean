@@ -40,24 +40,13 @@ initialize registerTraceClass `Elab.fbinop
 any coercions that the "functors" `S` and `S'` possess. -/
 syntax:max (name := prodSyntax) "fbinop% " ident ppSpace term:max ppSpace term:max : term
 
-/--
-Inductive type `Tree` / 归纳类型 `Tree`
+/-- Tree recording the structure of the `fbinop%` expression. -/
+/-
+**FBinopElab.Tree** 是 Mathlib 中的一个归纳类型，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Tree
-  parameters: where
-  constructors (3):
-    - term: (ref : Syntax) (infoTrees : PersistentArray InfoTree) (val : Expr)
-    - binop: (ref : Syntax) (f : Expr) (lhs rhs : Tree)
-    - macroExpansion: (macroName : Name) (stx stx' : Syntax) (nested : Tree)
-
-中文:
-归纳类型 树
-  参数: where
-  构造子 (3 个):
-    - term: (ref : Syntax) (infoTrees : PersistentArray InfoTree) (val : Expr)
-    - binop: (ref : Syntax) (f : Expr) (lhs rhs : 树)
-    - macroExpansion: (macroName : Name) (stx stx' : Syntax) (nested : 树)
+--- 原说明 ---
+Tree recording the structure of the `fbinop%` expression.
 -/
 private inductive Tree where
   /-- Leaf of the tree. Stores the generated `InfoTree` from elaborating `val`. -/
@@ -69,25 +58,9 @@ private inductive Tree where
   /-- Store macro expansion information to make sure that "go to definition" behaves
   similarly to notation defined without using `fbinop%`. -/
   | macroExpansion (macroName : Name) (stx stx' : Syntax) (nested : Tree)
-
-/--
-Definition of `toTree` / `toTree` 的定义
-
-English:
-definition toTree
-  signature: (s : Syntax)
-  body: do
-  let result ← go s
-  synthesizeSyntheticMVars (postpone := .yes)
-  return result
-
-中文:
-定义 toTree
-  签名: (s : Syntax)
-  定义体: do
-  let result ← go s
-  synthesizeSyntheticMVars (postpone := .yes)
-  return result
+/-
+**FBinopElab.toTree** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private partial def toTree (s : Syntax) : TermElabM Tree := do
   let result ← go s
@@ -104,9 +77,9 @@ where
         go e
     | _ =>
       withRef s do
-match ← liftMacroM expandMacroImpl? (← getEnv) s with
+        match ← liftMacroM <| expandMacroImpl? (← getEnv) s with
         | some (macroName, s?) =>
-let s' ← liftMacroM liftExcept s?
+          let s' ← liftMacroM <| liftExcept s?
           withPushMacroExpansionStack s s' do
             return .macroExpansion macroName s s' (← go s')
         | none => processLeaf s
@@ -120,76 +93,44 @@ let s' ← liftMacroM liftExcept s?
     let info ← getResetInfoTrees
     return .term s info e
 
-/--
-Definition of `SRec` / `SRec` 的定义
+/-- Records a "functor", which is some function `Type u → Type v`. We only
+allow `c a1 ... an` for `c` a constant. This is so we can abstract out the universe variables. -/
+/-
+**FBinopElab.SRec** 是 Mathlib 中的一个结构，位于命名空间 `FBinopElab`。
+形式化陈述：SRec where name : Name args : Array Expr deriving Inhabited, ToExpr  /-- G
+iven a type expression, try to remove the last argument(s) and create an `SRec` 
+for the underlying "functor". Only applies to function applications with a const
+ant head, and, after dropping all instance arguments, it requires that the remai
+ning last argument be a type. Returns the `SRec` and the argument. -/ private pa
+rtial def extractS (e : Expr) : TermElabM (Option (SRec × Expr))
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SRec
-  parameters: where
-  axioms and operations (2):
-    - name : Name
-    - args : Array Expr
-
-中文:
-结构 SRec
-  参数: where
-  公理与运算 (2 个):
-    - name : Name
-    - args : 数组 Expr
-
-Depends on / 依赖: Meta.isType, args.back, args.pop, args.size, e.getAppArgs, e.getAppFn, e.letBody, e.letValue, extractS, getAppArgs, getAppFn, getFunInfoNArgs, info.back, info.pop, instantiate1, isInstImplicit, isType, letBody, letValue, paramInfo
+--- 原说明 ---
+Records a "functor", which is some function `Type u → Type v`. We only
+allow `c a1 ... an` for `c` a constant. This is so we can abstract out the unive
+rse variables.
 -/
 structure SRec where
   name : Name
   args : Array Expr
   deriving Inhabited, ToExpr
 
-/--
-Definition of `extractS` / `extractS` 的定义
+/-- Given a type expression, try to remove the last argument(s) and create an `SRec` for the
+underlying "functor". Only applies to function applications with a constant head, and,
+after dropping all instance arguments, it requires that the remaining last argument be a type.
+Returns the `SRec` and the argument. -/
+/-
+**FBinopElab.extractS** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extractS
-  signature: (e : Expr)
-  body: match e with
-  | .letE .. => extractS (e.letBody!.instantiate1 e.letValue!)
-  | .mdata _ b => extractS b
-  | .app .. => do
-    let f := e.getAppFn
-    let .const n _ := f | return none
-    let mut args := e.getAppArgs
-    let mut info := (← getFunInfoNArgs f args.size).paramInfo
-    for _ in [0 : args.size - 1] do
-      if info.back!.isInstImplicit then
-        args := args.pop
-        info := info.pop
-      else
-        break
-    let x := args.back!
-    unless ← Meta.isType x do return none
-    return some ({name := n, args := args.pop}, x)
-  | _ => return none
-
-中文:
-定义 extractS
-  签名: (e : Expr)
-  定义体: match e with
-  | .letE .. => extractS (e.letBody!.instantiate1 e.letValue!)
-  | .mdata _ b => extractS b
-  | .app .. => do
-    let f := e.getAppFn
-    let .const n _ := f | return none
-    let mut args := e.getAppArgs
-    let mut info := (← getFunInfoNArgs f args.size).paramInfo
-    for _ in [0 : args.size - 1] do
-      if info.back!.isInstImplicit then
-        args := args.pop
-        info := info.pop
-      else
-        break
-    let x := args.back!
-    unless ← Meta.isType x do return none
-    return some ({name := n, args := args.pop}, x)
-  | _ => return none
+--- 原说明 ---
+Given a type expression, try to remove the last argument(s) and create an `SRec`
+ for the
+underlying "functor". Only applies to function applications with a constant head
+, and,
+after dropping all instance arguments, it requires that the remaining last argum
+ent be a type.
+Returns the `SRec` and the argument.
 -/
 private partial def extractS (e : Expr) : TermElabM (Option (SRec × Expr)) :=
   match e with
@@ -211,32 +152,15 @@ private partial def extractS (e : Expr) : TermElabM (Option (SRec × Expr)) :=
     return some ({name := n, args := args.pop}, x)
   | _ => return none
 
-/--
-Definition of `applyS` / `applyS` 的定义
+/-- Computes `S x := c a1 ... an x` if it is type correct.
+Inserts instance arguments after `x`. -/
+/-
+**FBinopElab.applyS** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyS
-  signature: (S : SRec) (x : Expr)
-  body: try
-    let f ← mkConstWithFreshMVarLevels S.name
-    let v ← elabAppArgs f #[] ((S.args.push x).map .expr)
-      (expectedType? := none) (explicit := true) (ellipsis := false)
-    -- Now elaborate any remaining instance arguments
-    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false) (ellipsis := false)
-  catch _ =>
-    return none
-
-中文:
-定义 applyS
-  签名: (S : SRec) (x : Expr)
-  定义体: try
-    let f ← mkConstWithFreshMVarLevels S.name
-    let v ← elabAppArgs f #[] ((S.args.push x).map .expr)
-      (expectedType? := none) (explicit := true) (ellipsis := false)
-    -- Now elaborate any remaining instance arguments
-    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false) (ellipsis := false)
-  catch _ =>
-    return none
+--- 原说明 ---
+Computes `S x := c a1 ... an x` if it is type correct.
+Inserts instance arguments after `x`.
 -/
 private def applyS (S : SRec) (x : Expr) : TermElabM (Option Expr) :=
   try
@@ -248,34 +172,16 @@ private def applyS (S : SRec) (x : Expr) : TermElabM (Option Expr) :=
   catch _ =>
     return none
 
-/--
-Definition of `hasCoeS` / `hasCoeS` 的定义
+/-- For a given argument `x`, checks if there is a coercion from `fromS x` to `toS x`
+if these expressions are type correct. -/
+/-
+**FBinopElab.hasCoeS** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasCoeS
-  signature: (fromS toS : SRec) (x : Expr)
-  body: do
-  let some fromType ← applyS fromS x | return false
-  let some toType ← applyS toS x | return false
-  trace[Elab.fbinop] m!"fromType = {fromType}, toType = {toType}"
-  withLocalDeclD `v fromType fun v => do
-    match ← coerceSimple? v toType with
-    | .some _ => return true
-    | .none => return false
-    | .undef => return false -- TODO: should we do something smarter here?
-
-中文:
-定义 hasCoeS
-  签名: (fromS toS : SRec) (x : Expr)
-  定义体: do
-  let some fromType ← applyS fromS x | return false
-  let some toType ← applyS toS x | return false
-  trace[Elab.fbinop] m!"fromType = {fromType}, toType = {toType}"
-  withLocalDeclD `v fromType fun v => do
-    match ← coerceSimple? v toType with
-    | .some _ => return true
-    | .none => return false
-    | .undef => return false -- TODO: should we do something smarter here?
+--- 原说明 ---
+For a given argument `x`, checks if there is a coercion from `fromS x` to `toS x
+`
+if these expressions are type correct.
 -/
 private def hasCoeS (fromS toS : SRec) (x : Expr) : TermElabM Bool := do
   let some fromType ← applyS fromS x | return false
@@ -284,67 +190,29 @@ private def hasCoeS (fromS toS : SRec) (x : Expr) : TermElabM Bool := do
   withLocalDeclD `v fromType fun v => do
     match ← coerceSimple? v toType with
     | .some _ => return true
-    | .none => return false
-    | .undef => return false -- TODO: should we do something smarter here?
+    | .none   => return false
+    | .undef  => return false -- TODO: should we do something smarter here?
 
-/--
-Definition of `AnalyzeResult` / `AnalyzeResult` 的定义
+/-- Result returned by `analyze`. -/
+/-
+**FBinopElab.AnalyzeResult** 是 Mathlib 中的一个结构，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AnalyzeResult
-  parameters: where
-  axioms and operations (2):
-    - maxS? : Option SRec  [default: none]
-    - hasUncomparable : Bool  [default: false]
-
-中文:
-结构 AnalyzeResult
-  参数: where
-  公理与运算 (2 个):
-    - maxS? : 选项类型 SRec  [默认: none]
-    - hasUncomparable : 布尔值  [默认: false]
-
-Depends on / 依赖: LinearOrder, LinearOrder.supConvergenceClass, TopologicalSpace, supConvergenceClass
+--- 原说明 ---
+Result returned by `analyze`.
 -/
 private structure AnalyzeResult where
   maxS? : Option SRec := none
   /-- `true` if there are two types `α` and `β` where we don't have coercions in any direction. -/
   hasUncomparable : Bool := false
 
-/--
-Definition of `analyze` / `analyze` 的定义
+/-- Compute a minimal `SRec` for an expression tree. -/
+/-
+**FBinopElab.analyze** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition analyze
-  signature: (t : Tree) (expectedType? : Option Expr)
-  body: do
-  let maxS? ←
-    match expectedType? with
-    | none => pure none
-    | some expectedType =>
-      let expectedType ← instantiateMVars expectedType
-      if let some (S, _) ← extractS expectedType then
-        pure S
-      else
-        pure none
-  (go t *> get).run' { maxS? }
-
-中文:
-定义 analyze
-  签名: (t : 树) (expectedType? : 选项类型 Expr)
-  定义体: do
-  let maxS? ←
-    match expectedType? with
-    | none => pure none
-    | some expectedType =>
-      let expectedType ← instantiateMVars expectedType
-      if let some (S, _) ← extractS expectedType then
-        pure S
-      else
-        pure none
-  (go t *> get).run' { maxS? }
-
-Depends on / 依赖: LinearOrder, LinearOrder.infConvergenceClass, TopologicalSpace, infConvergenceClass
+--- 原说明 ---
+Compute a minimal `SRec` for an expression tree.
 -/
 private def analyze (t : Tree) (expectedType? : Option Expr) : TermElabM AnalyzeResult := do
   let maxS? ←
@@ -368,10 +236,10 @@ where
         let some (S, x) ← extractS type
           | return -- Rather than marking as incomparable, let's hope there's a coercion!
         match (← get).maxS? with
-        | none => modify fun s => { s with maxS? := S }
+        | none     => modify fun s => { s with maxS? := S }
         | some maxS =>
           let some maxSx ← applyS maxS x | return -- Same here.
-unless ← withNewMCtxDepth isDefEqGuarded maxSx type do
+          unless ← withNewMCtxDepth <| isDefEqGuarded maxSx type do
             if ← hasCoeS S maxS x then
               return ()
             else if ← hasCoeS maxS S x then
@@ -379,93 +247,43 @@ unless ← withNewMCtxDepth isDefEqGuarded maxSx type do
             else
               trace[Elab.fbinop] "uncomparable types: {maxSx}, {type}"
               modify fun s => { s with hasUncomparable := true }
-
-/--
-Definition of `mkBinOp` / `mkBinOp` 的定义
-
-English:
-definition mkBinOp
-  signature: (f : Expr) (lhs rhs : Expr)
-  body: do
-  elabAppArgs f #[] #[Arg.expr lhs, Arg.expr rhs] (expectedType? := none)
-    (explicit := false) (ellipsis := false) (resultIsOutParamSupport := false)
-
-中文:
-定义 mkBinOp
-  签名: (f : Expr) (lhs rhs : Expr)
-  定义体: do
-  elabAppArgs f #[] #[Arg.expr lhs, Arg.expr rhs] (expectedType? := none)
-    (explicit := false) (ellipsis := false) (resultIsOutParamSupport := false)
+/-
+**FBinopElab.mkBinOp** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def mkBinOp (f : Expr) (lhs rhs : Expr) : TermElabM Expr := do
   elabAppArgs f #[] #[Arg.expr lhs, Arg.expr rhs] (expectedType? := none)
     (explicit := false) (ellipsis := false) (resultIsOutParamSupport := false)
 
-/--
-Definition of `toExprCore` / `toExprCore` 的定义
+/-- Turn a tree back into an expression. -/
+/-
+**FBinopElab.toExprCore** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toExprCore
-  signature: (t : Tree)
-  body: do
-  match t with
-  | .term _ trees e =>
-    modifyInfoState (fun s => { s with trees := s.trees ++ trees }); return e
-  | .binop ref f lhs rhs =>
-withRef ref withTermInfoContext' .anonymous ref do
-      let lhs ← toExprCore lhs
-      let mut rhs ← toExprCore rhs
-      mkBinOp f lhs rhs
-  | .macroExpansion macroName stx stx' nested =>
-withRef stx withTermInfoContext' macroName stx do
-      withMacroExpansion stx stx' do
-        toExprCore nested
-
-中文:
-定义 toExprCore
-  签名: (t : 树)
-  定义体: do
-  match t with
-  | .term _ trees e =>
-    modifyInfoState (fun s => { s with trees := s.trees ++ trees }); return e
-  | .binop ref f lhs rhs =>
-withRef ref withTermInfoContext' .anonymous ref do
-      let lhs ← toExprCore lhs
-      let mut rhs ← toExprCore rhs
-      mkBinOp f lhs rhs
-  | .macroExpansion macroName stx stx' nested =>
-withRef stx withTermInfoContext' macroName stx do
-      withMacroExpansion stx stx' do
-        toExprCore nested
+--- 原说明 ---
+Turn a tree back into an expression.
 -/
 private def toExprCore (t : Tree) : TermElabM Expr := do
   match t with
   | .term _ trees e =>
     modifyInfoState (fun s => { s with trees := s.trees ++ trees }); return e
   | .binop ref f lhs rhs =>
-withRef ref withTermInfoContext' .anonymous ref do
+    withRef ref <| withTermInfoContext' .anonymous ref do
       let lhs ← toExprCore lhs
       let mut rhs ← toExprCore rhs
       mkBinOp f lhs rhs
   | .macroExpansion macroName stx stx' nested =>
-withRef stx withTermInfoContext' macroName stx do
+    withRef stx <| withTermInfoContext' macroName stx do
       withMacroExpansion stx stx' do
         toExprCore nested
 
-/--
-Definition of `applyCoe` / `applyCoe` 的定义
+/-- Try to coerce elements in the tree to `maxS` when needed. -/
+/-
+**FBinopElab.applyCoe** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyCoe
-  signature: (t : Tree) (maxS : SRec)
-  body: do
-  go t none
-
-中文:
-定义 applyCoe
-  签名: (t : 树) (maxS : SRec)
-  定义体: do
-  go t none
+--- 原说明 ---
+Try to coerce elements in the tree to `maxS` when needed.
 -/
 private def applyCoe (t : Tree) (maxS : SRec) : TermElabM Tree := do
   go t none
@@ -494,45 +312,13 @@ where
         return t
       else
         trace[Elab.fbinop] "added coercion: {e} : {type} => {maxType}"
-withRef ref return .term ref trees (← mkCoe maxType e)
+        withRef ref <| return .term ref trees (← mkCoe maxType e)
     | .macroExpansion macroName stx stx' nested =>
-withRef stx withPushMacroExpansionStack stx stx' do
+      withRef stx <| withPushMacroExpansionStack stx stx' do
         return .macroExpansion macroName stx stx' (← go nested f?)
-
-/--
-Definition of `toExpr` / `toExpr` 的定义
-
-English:
-definition toExpr
-  signature: (tree : Tree) (expectedType? : Option Expr)
-  body: do
-  let r ← analyze tree expectedType?
-  trace[Elab.fbinop] "hasUncomparable: {r.hasUncomparable}, maxType: {Lean.toExpr r.maxS?}"
-  if r.hasUncomparable || r.maxS?.isNone then
-    let result ← toExprCore tree
-    ensureHasType expectedType? result
-  else
-    let result ← toExprCore (← applyCoe tree r.maxS?.get!)
-    trace[Elab.fbinop] "result: {result}"
-    ensureHasType expectedType? result
-
-@[term_elab prodSyntax]
-
-中文:
-定义 toExpr
-  签名: (tree : 树) (expectedType? : 选项类型 Expr)
-  定义体: do
-  let r ← analyze tree expectedType?
-  trace[Elab.fbinop] "hasUncomparable: {r.hasUncomparable}, maxType: {Lean.toExpr r.maxS?}"
-  if r.hasUncomparable || r.maxS?.isNone then
-    let result ← toExprCore tree
-    ensureHasType expectedType? result
-  else
-    let result ← toExprCore (← applyCoe tree r.maxS?.get!)
-    trace[Elab.fbinop] "result: {result}"
-    ensureHasType expectedType? result
-
-@[term_elab prodSyntax]
+/-
+**FBinopElab.toExpr** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def toExpr (tree : Tree) (expectedType? : Option Expr) : TermElabM Expr := do
   let r ← analyze tree expectedType?
@@ -546,24 +332,14 @@ private def toExpr (tree : Tree) (expectedType? : Option Expr) : TermElabM Expr 
     ensureHasType expectedType? result
 
 @[term_elab prodSyntax]
-/--
-Definition of `elabBinOp` / `elabBinOp` 的定义
-
-English:
-definition elabBinOp
-  signature: : TermElab
-  body: fun stx expectedType? => do
-  toExpr (← toTree stx) expectedType?
-
-中文:
-定义 elabBinOp
-  签名: : TermElab
-  定义体: fun stx expectedType? => do
-  toExpr (← toTree stx) expectedType?
-
-Depends on / 依赖: expectedType
+/-
+**FBinopElab.elabBinOp** 是 Mathlib 中的一个定义，位于命名空间 `FBinopElab`。
+形式化陈述：elabBinOp : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabBinOp : TermElab := fun stx expectedType? => do
   toExpr (← toTree stx) expectedType?
 
 end FBinopElab
+

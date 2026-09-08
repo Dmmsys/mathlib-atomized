@@ -26,372 +26,216 @@ namespace Set
 variable {α : Type u} {s t u s₁ s₂ t₁ t₂ : Set α}
 
 
+/-! ### Disjointness -/
 
-/--
-theorem `disjoint_iff` / 定理 `disjoint_iff`
+/-
+**Set.disjoint_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, Disjoint s t ↔ s ∩ t ⊆ ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
 
-English:
-theorem disjoint_iff
-  statement: Disjoint s t ↔ s inter t subseteq ∅
-  proof: disjoint_iff_inf_le
-
-中文:
-定理 disjoint_iff
-  结论: Disjoint s t ↔ s inter t subseteq ∅
-  证明: disjoint_iff_inf_le
+--- 原说明 ---
+### Disjointness
 -/
-protected theorem disjoint_iff : Disjoint s t ↔ s inter t subseteq ∅ :=
+protected theorem disjoint_iff : Disjoint s t ↔ s ∩ t ⊆ ∅ :=
   disjoint_iff_inf_le
-
-/--
-theorem `disjoint_iff_inter_eq_empty` / 定理 `disjoint_iff_inter_eq_empty`
-
-English:
-theorem disjoint_iff_inter_eq_empty
-  statement: Disjoint s t ↔ s inter t = ∅
-  proof: disjoint_iff
-
-中文:
-定理 disjoint_iff_inter_eq_empty
-  结论: Disjoint s t ↔ s inter t = ∅
-  证明: disjoint_iff
-
-Depends on / 依赖: disjoint_iff
+/-
+**Set.disjoint_iff_inter_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_iff_inter_eq_empty : Disjoint s t ↔ s inter t = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
 -/
-theorem disjoint_iff_inter_eq_empty : Disjoint s t ↔ s inter t = ∅ :=
+theorem disjoint_iff_inter_eq_empty : Disjoint s t ↔ s ∩ t = ∅ :=
   disjoint_iff
-
-/--
-theorem `_root_.Disjoint.inter_eq` / 定理 `_root_.Disjoint.inter_eq`
-
-English:
-theorem _root_.Disjoint.inter_eq
-  statement: Disjoint s t -> s inter t = ∅
-  proof: Disjoint.eq_bot
-
-@[grind =]
-
-中文:
-定理 _root_.Disjoint.inter_eq
-  结论: Disjoint s t -> s inter t = ∅
-  证明: Disjoint.eq_bot
-
-@[grind =]
-
-Depends on / 依赖: Disjoint, Disjoint.eq_bot, eq_bot
+/-
+**Set._root_.Disjoint.inter_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Disjoint.inter_eq : Disjoint s t -> s inter t = ∅ :=
+theorem _root_.Disjoint.inter_eq : Disjoint s t → s ∩ t = ∅ :=
   Disjoint.eq_bot
 
 @[grind =]
-/--
-theorem `disjoint_left` / 定理 `disjoint_left`
-
-English:
-theorem disjoint_left
-  statement: Disjoint s t ↔ forall ⦃a⦄, a in s -> a ∉ t
-  proof: disjoint_iff_inf_le.trans forall_congr' fun _ => not_and
+/-
+**Set.disjoint_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> a ∉ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `not_and`：∀ {a b : Prop}, ¬(a ∧ b) ↔ a → ¬b
+-/
+theorem disjoint_left : Disjoint s t ↔ ∀ ⦃a⦄, a ∈ s → a ∉ t :=
+  disjoint_iff_inf_le.trans <| forall_congr' fun _ => not_and
 
 alias ⟨_root_.Disjoint.notMem_of_mem_left, _⟩ := disjoint_left
-
-中文:
-定理 disjoint_left
-  结论: Disjoint s t ↔ 对任意 ⦃a⦄, a in s -> a ∉ t
-  证明: disjoint_iff_inf_le.trans forall_congr' fun _ => not_and
-
-alias ⟨_root_.Disjoint.notMem_of_mem_left, _⟩ := disjoint_left
-
-Depends on / 依赖: disjoint_iff_inf_le, disjoint_iff_inf_le.trans, forall_congr, not_and
+/-
+**Set.disjoint_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_right : Disjoint s t ↔ forall ⦃a⦄, a in t -> a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> a ∉ t :=
-disjoint_iff_inf_le.trans forall_congr' fun _ => not_and
-
-alias ⟨_root_.Disjoint.notMem_of_mem_left, _⟩ := disjoint_left
-
-/--
-theorem `disjoint_right` / 定理 `disjoint_right`
-
-English:
-theorem disjoint_right
-  statement: Disjoint s t ↔ forall ⦃a⦄, a in t -> a ∉ s
-  proof: by rw [disjoint_comm, disjoint_left]
+theorem disjoint_right : Disjoint s t ↔ ∀ ⦃a⦄, a ∈ t → a ∉ s := by rw [disjoint_comm, disjoint_left]
 
 alias ⟨_root_.Disjoint.notMem_of_mem_right, _⟩ := disjoint_right
-
-中文:
-定理 disjoint_right
-  结论: Disjoint s t ↔ 对任意 ⦃a⦄, a in t -> a ∉ s
-  证明: by rw [disjoint_comm, disjoint_left]
-
-alias ⟨_root_.Disjoint.notMem_of_mem_right, _⟩ := disjoint_right
-
-Depends on / 依赖: disjoint_comm, disjoint_left
+/-
+**Set.not_disjoint_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：not_disjoint_iff : ¬Disjoint s t ↔ exists x, x in s ∧ x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem disjoint_right : Disjoint s t ↔ forall ⦃a⦄, a in t -> a ∉ s := by rw [disjoint_comm, disjoint_left]
-
-alias ⟨_root_.Disjoint.notMem_of_mem_right, _⟩ := disjoint_right
-
-/--
-lemma `not_disjoint_iff` / 引理 `not_disjoint_iff`
-
-English:
-lemma not_disjoint_iff
-  statement: ¬Disjoint s t ↔ exists x, x in s ∧ x in t
-  proof: by grind
-
-中文:
-引理 not_disjoint_iff
-  结论: ¬Disjoint s t ↔ 存在 x, x in s ∧ x in t
-  证明: by grind
+lemma not_disjoint_iff : ¬Disjoint s t ↔ ∃ x, x ∈ s ∧ x ∈ t := by grind
+/-
+**Set.not_disjoint_iff_nonempty_inter** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：not_disjoint_iff_nonempty_inter : ¬ Disjoint s t ↔ (s inter t).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.not_disjoint_iff`：not_disjoint_iff : ¬Disjoint s t ↔ exists x, x in 
+s ∧ x in t
 -/
-lemma not_disjoint_iff : ¬Disjoint s t ↔ exists x, x in s ∧ x in t := by grind
-
-/--
-lemma `not_disjoint_iff_nonempty_inter` / 引理 `not_disjoint_iff_nonempty_inter`
-
-English:
-lemma not_disjoint_iff_nonempty_inter
-  statement: ¬ Disjoint s t ↔ (s inter t).Nonempty
-  proof: not_disjoint_iff
+lemma not_disjoint_iff_nonempty_inter : ¬ Disjoint s t ↔ (s ∩ t).Nonempty := not_disjoint_iff
 
 alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
-
-中文:
-引理 not_disjoint_iff_nonempty_inter
-  结论: ¬ Disjoint s t ↔ (s inter t).非空
-  证明: not_disjoint_iff
-
-alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
-
-Depends on / 依赖: not_disjoint_iff, stereographic
+/-
+**Set.disjoint_or_nonempty_inter** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_or_nonempty_inter (s t : Set α) : Disjoint s t ∨ (s inter t).None
+mpty
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Set.not_disjoint_iff_nonempty_inter`：not_disjoint_iff_nonempty_inter : ¬
+ Disjoint s t ↔ (s inter t).Nonempty
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
 -/
-lemma not_disjoint_iff_nonempty_inter : ¬ Disjoint s t ↔ (s inter t).Nonempty := not_disjoint_iff
-
-alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
-
-/--
-lemma `disjoint_or_nonempty_inter` / 引理 `disjoint_or_nonempty_inter`
-
-English:
-lemma disjoint_or_nonempty_inter
-  given: (s t : Set α)
-  statement: Disjoint s t ∨ (s inter t).Nonempty
-  proof: (em _).imp_right not_disjoint_iff_nonempty_inter.1
-
-中文:
-引理 disjoint_or_nonempty_inter
-  条件: (s t : 集合 α)
-  结论: Disjoint s t ∨ (s inter t).非空
-  证明: (em _).imp_right not_disjoint_iff_nonempty_inter.1
-
-Depends on / 依赖: imp_right, not_disjoint_iff_nonempty_inter, stereographic
--/
-lemma disjoint_or_nonempty_inter (s t : Set α) : Disjoint s t ∨ (s inter t).Nonempty :=
+lemma disjoint_or_nonempty_inter (s t : Set α) : Disjoint s t ∨ (s ∩ t).Nonempty :=
   (em _).imp_right not_disjoint_iff_nonempty_inter.1
-
-/--
-lemma `disjoint_iff_forall_ne` / 引理 `disjoint_iff_forall_ne`
-
-English:
-lemma disjoint_iff_forall_ne
-  statement: Disjoint s t ↔ forall ⦃a⦄, a in s -> forall ⦃b⦄, b in t -> a != b
-  proof: by grind
+/-
+**Set.disjoint_iff_forall_ne** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_iff_forall_ne : Disjoint s t ↔ forall ⦃a⦄, a in s -> forall ⦃b⦄, 
+b in t -> a != b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma disjoint_iff_forall_ne : Disjoint s t ↔ ∀ ⦃a⦄, a ∈ s → ∀ ⦃b⦄, b ∈ t → a ≠ b := by grind
 
 alias ⟨_root_.Disjoint.ne_of_mem, _⟩ := disjoint_iff_forall_ne
-
-中文:
-引理 disjoint_iff_对任意_ne
-  结论: Disjoint s t ↔ 对任意 ⦃a⦄, a in s -> 对任意 ⦃b⦄, b in t -> a != b
-  证明: by grind
-
-alias ⟨_root_.Disjoint.ne_of_mem, _⟩ := disjoint_iff_forall_ne
+/-
+**Set.disjoint_of_subset_left** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_of_subset_left (h : s subseteq u) (d : Disjoint u t) : Disjoint s
+ t
+参数：h : s subseteq u；d : Disjoint u t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
 -/
-lemma disjoint_iff_forall_ne : Disjoint s t ↔ forall ⦃a⦄, a in s -> forall ⦃b⦄, b in t -> a != b := by grind
-
-alias ⟨_root_.Disjoint.ne_of_mem, _⟩ := disjoint_iff_forall_ne
-
-/--
-lemma `disjoint_of_subset_left` / 引理 `disjoint_of_subset_left`
-
-English:
-lemma disjoint_of_subset_left
-  given: (h : s subseteq u) (d : Disjoint u t)
-  statement: Disjoint s t
-  proof: d.mono_left h
-
-中文:
-引理 disjoint_of_subset_left
-  条件: (h : s subseteq u) (d : Disjoint u t)
-  结论: Disjoint s t
-  证明: d.mono_left h
-
-Depends on / 依赖: EuclideanSpace, EuclideanSpace.instChartedSpaceSphere, Fact.mk, d.mono_left, finrank_euclideanSpace_fin, instChartedSpaceSphere, mono_left
+lemma disjoint_of_subset_left (h : s ⊆ u) (d : Disjoint u t) : Disjoint s t := d.mono_left h
+/-
+**Set.disjoint_of_subset_right** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_of_subset_right (h : t subseteq u) (d : Disjoint s u) : Disjoint 
+s t
+参数：h : t subseteq u；d : Disjoint s u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
 -/
-lemma disjoint_of_subset_left (h : s subseteq u) (d : Disjoint u t) : Disjoint s t := d.mono_left h
-/--
-lemma `disjoint_of_subset_right` / 引理 `disjoint_of_subset_right`
-
-English:
-lemma disjoint_of_subset_right
-  given: (h : t subseteq u) (d : Disjoint s u)
-  statement: Disjoint s t
-  proof: d.mono_right h
-
-中文:
-引理 disjoint_of_subset_right
-  条件: (h : t subseteq u) (d : Disjoint s u)
-  结论: Disjoint s t
-  证明: d.mono_right h
-
-Depends on / 依赖: d.mono_right, mono_right
+lemma disjoint_of_subset_right (h : t ⊆ u) (d : Disjoint s u) : Disjoint s t := d.mono_right h
+/-
+**Set.disjoint_of_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_of_subset (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (h : Disjoi
+nt s₂ t₂) : Disjoint s₁ t₁
+参数：hs : s₁ subseteq s₂；ht : t₁ subseteq t₂；h : Disjoint s₂ t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
 -/
-lemma disjoint_of_subset_right (h : t subseteq u) (d : Disjoint s u) : Disjoint s t := d.mono_right h
-
-/--
-lemma `disjoint_of_subset` / 引理 `disjoint_of_subset`
-
-English:
-lemma disjoint_of_subset
-  given: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (h : Disjoint s₂ t₂)
-  statement: Disjoint s₁ t₁
-  proof: h.mono hs ht
-
-@[simp]
-
-中文:
-引理 disjoint_of_subset
-  条件: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (h : Disjoint s₂ t₂)
-  结论: Disjoint s₁ t₁
-  证明: h.mono hs ht
-
-@[simp]
-
-Depends on / 依赖: OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, Submodule, Submodule.coe_norm, U.symm, coe_norm, fromOrthogonalSpanSingleton, h.mono, ne_zero_of_mem_unit_sphere, stereographic, v.val
--/
-lemma disjoint_of_subset (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) (h : Disjoint s₂ t₂) : Disjoint s₁ t₁ :=
+lemma disjoint_of_subset (hs : s₁ ⊆ s₂) (ht : t₁ ⊆ t₂) (h : Disjoint s₂ t₂) : Disjoint s₁ t₁ :=
   h.mono hs ht
 
 @[simp]
-/--
-lemma `disjoint_union_left` / 引理 `disjoint_union_left`
-
-English:
-lemma disjoint_union_left
-  statement: Disjoint (s union t) u ↔ Disjoint s u ∧ Disjoint t u
-  proof: disjoint_sup_left
-
-@[simp]
-
-中文:
-引理 disjoint_union_left
-  结论: Disjoint (s union t) u ↔ Disjoint s u ∧ Disjoint t u
-  证明: disjoint_sup_left
-
-@[simp]
-
-Depends on / 依赖: disjoint_sup_left
+/-
+**Set.disjoint_union_left** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_union_left : Disjoint (s union t) u ↔ Disjoint s u ∧ Disjoint t u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_sup_left`：disjoint_sup_left : Disjoint (a ⊔ b) c ↔ Disjoint a c
+ ∧ Disjoint b c
 -/
-lemma disjoint_union_left : Disjoint (s union t) u ↔ Disjoint s u ∧ Disjoint t u := disjoint_sup_left
+lemma disjoint_union_left : Disjoint (s ∪ t) u ↔ Disjoint s u ∧ Disjoint t u := disjoint_sup_left
 
 @[simp]
-/--
-lemma `disjoint_union_right` / 引理 `disjoint_union_right`
-
-English:
-lemma disjoint_union_right
-  statement: Disjoint s (t union u) ↔ Disjoint s t ∧ Disjoint s u
-  proof: disjoint_sup_right
-
-中文:
-引理 disjoint_union_right
-  结论: Disjoint s (t union u) ↔ Disjoint s t ∧ Disjoint s u
-  证明: disjoint_sup_right
-
-Depends on / 依赖: EuclideanSpace, EuclideanSpace.instIsManifoldSphere, Fact.mk, disjoint_sup_right, finrank_euclideanSpace_fin, instIsManifoldSphere
+/-
+**Set.disjoint_union_right** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：disjoint_union_right : Disjoint s (t union u) ↔ Disjoint s t ∧ Disjoint s 
+u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_sup_right`：disjoint_sup_right : Disjoint a (b ⊔ c) ↔ Disjoint a
+ b ∧ Disjoint a c
 -/
-lemma disjoint_union_right : Disjoint s (t union u) ↔ Disjoint s t ∧ Disjoint s u := disjoint_sup_right
-
-/--
-lemma `disjoint_empty` / 引理 `disjoint_empty`
-
-English:
-lemma disjoint_empty
-  given: (s : Set α)
-  statement: Disjoint s ∅
-  proof: disjoint_bot_right
-
-中文:
-引理 disjoint_empty
-  条件: (s : 集合 α)
-  结论: Disjoint s ∅
-  证明: disjoint_bot_right
+lemma disjoint_union_right : Disjoint s (t ∪ u) ↔ Disjoint s t ∧ Disjoint s u := disjoint_sup_right
+/-
+**Set.disjoint_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} (s : Set α), Disjoint s ∅
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_bot_right`：disjoint_bot_right : Disjoint a ⊥
 -/
 @[simp] lemma disjoint_empty (s : Set α) : Disjoint s ∅ := disjoint_bot_right
-/--
-lemma `empty_disjoint` / 引理 `empty_disjoint`
-
-English:
-lemma empty_disjoint
-  given: (s : Set α)
-  statement: Disjoint ∅ s
-  proof: disjoint_bot_left
-
-中文:
-引理 empty_disjoint
-  条件: (s : 集合 α)
-  结论: Disjoint ∅ s
-  证明: disjoint_bot_left
+/-
+**Set.empty_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} (s : Set α), Disjoint ∅ s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_bot_left`：disjoint_bot_left : Disjoint ⊥ a
 -/
 @[simp] lemma empty_disjoint (s : Set α) : Disjoint ∅ s := disjoint_bot_left
-
-/--
-lemma `univ_disjoint` / 引理 `univ_disjoint`
-
-English:
-lemma univ_disjoint
-  statement: Disjoint univ s ↔ s = ∅
-  proof: top_disjoint
-
-中文:
-引理 univ_disjoint
-  结论: Disjoint univ s ↔ s = ∅
-  证明: top_disjoint
+/-
+**Set.univ_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s : Set α}, Disjoint Set.univ s ↔ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_disjoint`：top_disjoint : Disjoint ⊤ a ↔ a = ⊥
 -/
 @[simp] lemma univ_disjoint : Disjoint univ s ↔ s = ∅ := top_disjoint
-/--
-lemma `disjoint_univ` / 引理 `disjoint_univ`
-
-English:
-lemma disjoint_univ
-  statement: Disjoint s univ ↔ s = ∅
-  proof: disjoint_top
-
-中文:
-引理 disjoint_univ
-  结论: Disjoint s univ ↔ s = ∅
-  证明: disjoint_top
+/-
+**Set.disjoint_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s : Set α}, Disjoint s Set.univ ↔ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_top`：disjoint_top : Disjoint a ⊤ ↔ a = ⊥
 -/
 @[simp] lemma disjoint_univ : Disjoint s univ ↔ s = ∅ := disjoint_top
-
-/--
-theorem `disjoint_range_iff` / 定理 `disjoint_range_iff`
-
-English:
-theorem disjoint_range_iff
-  given: {β γ : Sort*} {x : β -> α} {y : γ -> α}
-  proof: by
-  simp [Set.disjoint_iff_forall_ne]
-
-中文:
-定理 disjoint_range_iff
-  条件: {β γ : 类型层*} {x : β -> α} {y : γ -> α}
-  证明: by
-  simp [Set.disjoint_iff_forall_ne]
-
-Depends on / 依赖: Set.disjoint_iff_forall_ne, disjoint_iff_forall_ne
+/-
+**Set.disjoint_range_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_range_iff {β γ : Sort*} {x : β -> α} {y : γ -> α} : Disjoint (ran
+ge x) (range y) ↔ forall i j, x i != y j
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem disjoint_range_iff {β γ : Sort*} {x : β -> α} {y : γ -> α} :
-    Disjoint (range x) (range y) ↔ forall i j, x i != y j := by
+theorem disjoint_range_iff {β γ : Sort*} {x : β → α} {y : γ → α} :
+    Disjoint (range x) (range y) ↔ ∀ i j, x i ≠ y j := by
   simp [Set.disjoint_iff_forall_ne]
 
 end Set
@@ -402,188 +246,113 @@ variable {α : Type*} {s t u : Set α}
 
 namespace Disjoint
 
-/--
-theorem `union_left` / 定理 `union_left`
-
-English:
-theorem union_left
-  given: (hs : Disjoint s u) (ht : Disjoint t u)
-  statement: Disjoint (s union t) u
-  proof: hs.sup_left ht
-
-中文:
-定理 union_left
-  条件: (hs : Disjoint s u) (ht : Disjoint t u)
-  结论: Disjoint (s union t) u
-  证明: hs.sup_left ht
-
-Depends on / 依赖: hs.sup_left, sup_left
+/-
+**Disjoint.union_left** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：union_left (hs : Disjoint s u) (ht : Disjoint t u) : Disjoint (s union t) 
+u
+参数：hs : Disjoint s u；ht : Disjoint t u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.sup_left`：Disjoint.sup_left (ha : Disjoint a c) (hb : Disjoint 
+b c) : Disjoint (a ⊔ b) c
 -/
-theorem union_left (hs : Disjoint s u) (ht : Disjoint t u) : Disjoint (s union t) u :=
+theorem union_left (hs : Disjoint s u) (ht : Disjoint t u) : Disjoint (s ∪ t) u :=
   hs.sup_left ht
-
-/--
-theorem `union_right` / 定理 `union_right`
-
-English:
-theorem union_right
-  given: (ht : Disjoint s t) (hu : Disjoint s u)
-  statement: Disjoint s (t union u)
-  proof: ht.sup_right hu
-
-中文:
-定理 union_right
-  条件: (ht : Disjoint s t) (hu : Disjoint s u)
-  结论: Disjoint s (t union u)
-  证明: ht.sup_right hu
-
-Depends on / 依赖: ht.sup_right, sup_right
+/-
+**Disjoint.union_right** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：union_right (ht : Disjoint s t) (hu : Disjoint s u) : Disjoint s (t union 
+u)
+参数：ht : Disjoint s t；hu : Disjoint s u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.sup_right`：Disjoint.sup_right (hb : Disjoint a b) (hc : Disjoin
+t a c) : Disjoint a (b ⊔ c)
 -/
-theorem union_right (ht : Disjoint s t) (hu : Disjoint s u) : Disjoint s (t union u) :=
+theorem union_right (ht : Disjoint s t) (hu : Disjoint s u) : Disjoint s (t ∪ u) :=
   ht.sup_right hu
-
-/--
-theorem `inter_left` / 定理 `inter_left`
-
-English:
-theorem inter_left
-  given: (u : Set α) (h : Disjoint s t)
-  statement: Disjoint (s inter u) t
-  proof: h.inf_left _
-
-中文:
-定理 inter_left
-  条件: (u : 集合 α) (h : Disjoint s t)
-  结论: Disjoint (s inter u) t
-  证明: h.inf_left _
-
-Depends on / 依赖: h.inf_left, inf_left
+/-
+**Disjoint.inter_left** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：inter_left (u : Set α) (h : Disjoint s t) : Disjoint (s inter u) t
+参数：u : Set α；h : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.inf_left`：Disjoint.inf_left (h : Disjoint a b) : Disjoint (a ⊓ 
+c) b
 -/
-theorem inter_left (u : Set α) (h : Disjoint s t) : Disjoint (s inter u) t :=
+theorem inter_left (u : Set α) (h : Disjoint s t) : Disjoint (s ∩ u) t :=
   h.inf_left _
-
-/--
-theorem `inter_left'` / 定理 `inter_left'`
-
-English:
-theorem inter_left'
-  given: (u : Set α) (h : Disjoint s t)
-  statement: Disjoint (u inter s) t
-  proof: h.inf_left' _
-
-中文:
-定理 inter_left'
-  条件: (u : 集合 α) (h : Disjoint s t)
-  结论: Disjoint (u inter s) t
-  证明: h.inf_left' _
-
-Depends on / 依赖: h.inf_left, inf_left
+/-
+**Disjoint.inter_left'** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：inter_left' (u : Set α) (h : Disjoint s t) : Disjoint (u inter s) t
+参数：u : Set α；h : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.inf_left'`：Disjoint.inf_left' (h : Disjoint a b) : Disjoint (c 
+⊓ a) b
 -/
-theorem inter_left' (u : Set α) (h : Disjoint s t) : Disjoint (u inter s) t :=
+theorem inter_left' (u : Set α) (h : Disjoint s t) : Disjoint (u ∩ s) t :=
   h.inf_left' _
-
-/--
-theorem `inter_right` / 定理 `inter_right`
-
-English:
-theorem inter_right
-  given: (u : Set α) (h : Disjoint s t)
-  statement: Disjoint s (t inter u)
-  proof: h.inf_right _
-
-中文:
-定理 inter_right
-  条件: (u : 集合 α) (h : Disjoint s t)
-  结论: Disjoint s (t inter u)
-  证明: h.inf_right _
-
-Depends on / 依赖: h.inf_right, inf_right
+/-
+**Disjoint.inter_right** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：inter_right (u : Set α) (h : Disjoint s t) : Disjoint s (t inter u)
+参数：u : Set α；h : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.inf_right`：Disjoint.inf_right (h : Disjoint a b) : Disjoint a (
+b ⊓ c)
 -/
-theorem inter_right (u : Set α) (h : Disjoint s t) : Disjoint s (t inter u) :=
+theorem inter_right (u : Set α) (h : Disjoint s t) : Disjoint s (t ∩ u) :=
   h.inf_right _
-
-/--
-theorem `inter_right'` / 定理 `inter_right'`
-
-English:
-theorem inter_right'
-  given: (u : Set α) (h : Disjoint s t)
-  statement: Disjoint s (u inter t)
-  proof: h.inf_right' _
-
-中文:
-定理 inter_right'
-  条件: (u : 集合 α) (h : Disjoint s t)
-  结论: Disjoint s (u inter t)
-  证明: h.inf_right' _
-
-Depends on / 依赖: h.inf_right, inf_right
+/-
+**Disjoint.inter_right'** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：inter_right' (u : Set α) (h : Disjoint s t) : Disjoint s (u inter t)
+参数：u : Set α；h : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.inf_right'`：Disjoint.inf_right' (h : Disjoint a b) : Disjoint a
+ (c ⊓ b)
 -/
-theorem inter_right' (u : Set α) (h : Disjoint s t) : Disjoint s (u inter t) :=
+theorem inter_right' (u : Set α) (h : Disjoint s t) : Disjoint s (u ∩ t) :=
   h.inf_right' _
-
-/--
-theorem `subset_left_of_subset_union` / 定理 `subset_left_of_subset_union`
-
-English:
-theorem subset_left_of_subset_union
-  given: (h : s subseteq t union u) (hac : Disjoint s u)
-  statement: s subseteq t
-  proof: hac.left_le_of_le_sup_right h
-
-中文:
-定理 subset_left_of_subset_union
-  条件: (h : s subseteq t union u) (hac : Disjoint s u)
-  结论: s subseteq t
-  证明: hac.left_le_of_le_sup_right h
-
-Depends on / 依赖: hac.left_le_of_le_sup_right, left_le_of_le_sup_right
+/-
+**Disjoint.subset_left_of_subset_union** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：subset_left_of_subset_union (h : s subseteq t union u) (hac : Disjoint s u
+) : s subseteq t
+参数：h : s subseteq t union u；hac : Disjoint s u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.left_le_of_le_sup_right`：Disjoint.left_le_of_le_sup_right (h : 
+a <= b ⊔ c) (hd : Disjoint a c) : a <= b
 -/
-theorem subset_left_of_subset_union (h : s subseteq t union u) (hac : Disjoint s u) : s subseteq t :=
+theorem subset_left_of_subset_union (h : s ⊆ t ∪ u) (hac : Disjoint s u) : s ⊆ t :=
   hac.left_le_of_le_sup_right h
-
-/--
-theorem `subset_right_of_subset_union` / 定理 `subset_right_of_subset_union`
-
-English:
-theorem subset_right_of_subset_union
-  given: (h : s subseteq t union u) (hab : Disjoint s t)
-  statement: s subseteq u
-  proof: hab.left_le_of_le_sup_left h
-
-中文:
-定理 subset_right_of_subset_union
-  条件: (h : s subseteq t union u) (hab : Disjoint s t)
-  结论: s subseteq u
-  证明: hab.left_le_of_le_sup_left h
-
-Depends on / 依赖: hab.left_le_of_le_sup_left, left_le_of_le_sup_left
+/-
+**Disjoint.subset_right_of_subset_union** 是 Mathlib 中的一个定理，位于命名空间 `Disjoint`。
+形式化陈述：subset_right_of_subset_union (h : s subseteq t union u) (hab : Disjoint s 
+t) : s subseteq u
+参数：h : s subseteq t union u；hab : Disjoint s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.left_le_of_le_sup_left`：Disjoint.left_le_of_le_sup_left (h : a 
+<= c ⊔ b) (hd : Disjoint a c) : a <= b
 -/
-theorem subset_right_of_subset_union (h : s subseteq t union u) (hab : Disjoint s t) : s subseteq u :=
+theorem subset_right_of_subset_union (h : s ⊆ t ∪ u) (hab : Disjoint s t) : s ⊆ u :=
   hab.left_le_of_le_sup_left h
 
 end Disjoint
 
 namespace Set
 
-/--
-theorem `mem_union_of_disjoint` / 定理 `mem_union_of_disjoint`
-
-English:
-theorem mem_union_of_disjoint
-  given: (h : Disjoint s t) {x : α}
-  statement: x in s union t ↔ Xor (x in s) (x in t)
-  proof: by
-  grind [Xor]
-
-中文:
-定理 mem_union_of_disjoint
-  条件: (h : Disjoint s t) {x : α}
-  结论: x in s union t ↔ Xor (x in s) (x in t)
-  证明: by
-  grind [Xor]
+/-
+**Set.mem_union_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_union_of_disjoint (h : Disjoint s t) {x : α} : x in s union t ↔ Xor (x
+ in s) (x in t)
+参数：h : Disjoint s t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_union_of_disjoint (h : Disjoint s t) {x : α} : x in s union t ↔ Xor (x in s) (x in t) := by
+theorem mem_union_of_disjoint (h : Disjoint s t) {x : α} : x ∈ s ∪ t ↔ Xor (x ∈ s) (x ∈ t) := by
   grind [Xor]
 
 end Set
+

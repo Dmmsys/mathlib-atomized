@@ -8,7 +8,7 @@ module
 public import Mathlib.Algebra.Ring.Pi
 public import Mathlib.Algebra.Ring.Subring.Defs
 public import Mathlib.GroupTheory.GroupAction.SubMulAction
-public import Mathlib.Order.Filter.Cofinite -- shake: keep (used in notation only)
+public import Mathlib.Order.Filter.Cofinite  -- shake: keep (used in notation only)
 public import Mathlib.Algebra.Module.Pi
 
 /-!
@@ -60,26 +60,48 @@ restricted product, adeles, ideles
 open Set Filter
 
 variable {ι : Type*}
-variable (R : ι -> Type*) (A : (i : ι) -> Set (R i))
+variable (R : ι → Type*) (A : (i : ι) → Set (R i))
 
 /-!
 ## Definition and elementary maps
 -/
 
-/--
-Definition of `RestrictedProduct` / `RestrictedProduct` 的定义
+/-- The **restricted product** of a family `R : ι → Type*` of types, relative to subsets
+`A : (i : ι) → Set (R i)` and the filter `𝓕 : Filter ι`, is the set of all `x : Π i, R i`
+such that the set `{j | x j ∈ A j}` belongs to `𝓕`. We denote it by `Πʳ i, [R i, A i]_[𝓕]`.
 
-English:
-definition RestrictedProduct
-  signature: (𝓕 : Filter ι)
-  body: {x : Π i, R i // forallᶠ i in 𝓕, x i in A i}
+The most common use case is with `𝓕 = cofinite`, in which case the restricted product is the set
+of all `x : Π i, R i` such that `x j ∈ A j` for all but finitely many `j`. We denote it simply
+by `Πʳ i, [R i, A i]`.
 
-中文:
-定义 RestrictedProduct
-  签名: (𝓕 : 滤子 ι)
-  定义体: {x : Π i, R i // forallᶠ i in 𝓕, x i in A i}
+Similarly, if `S` is a principal filter, the restricted product `Πʳ i, [R i, A i]_[𝓟 s]`
+is the set of all `x : Π i, R i` such that `∀ j ∈ S, x j ∈ A j`. -/
+/-
+**RestrictedProduct** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RestrictedProduct (𝓕 : Filter ι) : Type _
+参数：𝓕 : Filter ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The **restricted product** of a family `R : ι → Type*` of types, relative to sub
+sets
+`A : (i : ι) → Set (R i)` and the filter `𝓕 : Filter ι`, is the set of all `x : 
+Π i, R i`
+such that the set `{j | x j ∈ A j}` belongs to `𝓕`. We denote it by `Πʳ i, [R i,
+ A i]_[𝓕]`.
+
+The most common use case is with `𝓕 = cofinite`, in which case the restricted pr
+oduct is the set
+of all `x : Π i, R i` such that `x j ∈ A j` for all but finitely many `j`. We de
+note it simply
+by `Πʳ i, [R i, A i]`.
+
+Similarly, if `S` is a principal filter, the restricted product `Πʳ i, [R i, A i
+]_[𝓟 s]`
+is the set of all `x : Π i, R i` such that `∀ j ∈ S, x j ∈ A j`.
 -/
-def RestrictedProduct (𝓕 : Filter ι) : Type _ := {x : Π i, R i // forallᶠ i in 𝓕, x i in A i}
+def RestrictedProduct (𝓕 : Filter ι) : Type _ := {x : Π i, R i // ∀ᶠ i in 𝓕, x i ∈ A i}
 
 open Batteries.ExtendedBinder
 
@@ -99,376 +121,280 @@ open scoped RestrictedProduct
 
 variable {𝓕 𝓖 : Filter ι}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DFunLike (Πʳ i, [R i, A i]_[𝓕]) ι R
-  body: x.1 i
-  coe_injective _ _ := Subtype.ext
-
-中文:
-实例 :
-  签名: 依赖函数状 (Πʳ i, [R i, A i]_[𝓕]) ι R
-  定义体: x.1 i
-  coe_injective _ _ := Subtype.ext
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DFunLike (Πʳ i, [R i, A i]_[𝓕]) ι R where
   coe x i := x.1 i
   coe_injective _ _ := Subtype.ext
 
 variable {R A} in
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for `RestrictedProduct`. -/
+/-
+**RestrictedProduct.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：mk (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i) : Πʳ i, [R i, A i]_[𝓕]
+参数：x : Π i, R i；hx : forallᶠ i in 𝓕, x i in A i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i)
-  body: ⟨x, hx⟩
-
-@[simp]
-
-中文:
-缩写 mk
-  签名: (x : Π i, R i) (hx : 对任意ᶠ i in 𝓕, x i in A i)
-  定义体: ⟨x, hx⟩
-
-@[simp]
+--- 原说明 ---
+Constructor for `RestrictedProduct`.
 -/
-abbrev mk (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i) : Πʳ i, [R i, A i]_[𝓕] :=
+abbrev mk (x : Π i, R i) (hx : ∀ᶠ i in 𝓕, x i ∈ A i) : Πʳ i, [R i, A i]_[𝓕] :=
   ⟨x, hx⟩
 
 @[simp]
-/--
-lemma `mk_apply` / 引理 `mk_apply`
-
-English:
-lemma mk_apply
-  given: (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i) (i : ι)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 mk_apply
-  条件: (x : Π i, R i) (hx : 对任意ᶠ i in 𝓕, x i in A i) (i : ι)
-  证明: rfl
-
-@[ext]
+/-
+**RestrictedProduct.mk_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mk_apply (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i) (i : ι) : (mk x 
+hx) i = x i
+参数：x : Π i, R i；hx : forallᶠ i in 𝓕, x i in A i；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_apply (x : Π i, R i) (hx : forallᶠ i in 𝓕, x i in A i) (i : ι) :
+lemma mk_apply (x : Π i, R i) (hx : ∀ᶠ i in 𝓕, x i ∈ A i) (i : ι) :
     (mk x hx) i = x i := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x i = y i)
-  statement: x = y
-  proof: Subtype.ext funext h
-
-中文:
-引理 ext
-  条件: {x y : Πʳ i, [R i, A i]_[𝓕]} (h : 对任意 i, x i = y i)
-  结论: x = y
-  证明: Subtype.ext funext h
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**RestrictedProduct.ext** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x i = y i) : x = y
+参数：h : forall i, x i = y i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x i = y i) : x = y :=
-Subtype.ext funext h
-
-/--
-lemma `range_coe` / 引理 `range_coe`
-
-English:
-lemma range_coe
-  proof: Subtype.range_val_subtype
-
-中文:
-引理 range_coe
-  证明: Subtype.range_val_subtype
-
-Depends on / 依赖: Subtype, Subtype.range_val_subtype, range_val_subtype
+lemma ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : ∀ i, x i = y i) : x = y :=
+  Subtype.ext <| funext h
+/-
+**RestrictedProduct.range_coe** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：range_coe : range ((↑) : Πʳ i, [R i, A i]_[𝓕] -> Π i, R i) = {x | forallᶠ 
+i in 𝓕, x i in A i}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.range_val_subtype`：range_val_subtype {p : α -> Prop} : range (Su
+btype.val : Subtype p -> α) = { x | p x }
 -/
 lemma range_coe :
-    range ((↑) : Πʳ i, [R i, A i]_[𝓕] -> Π i, R i) = {x | forallᶠ i in 𝓕, x i in A i} :=
+    range ((↑) : Πʳ i, [R i, A i]_[𝓕] → Π i, R i) = {x | ∀ᶠ i in 𝓕, x i ∈ A i} :=
   Subtype.range_val_subtype
-
-/--
-lemma `range_coe_principal` / 引理 `range_coe_principal`
-
-English:
-lemma range_coe_principal
-  given: {S : Set ι}
-  proof: range_coe R A
-
-中文:
-引理 range_coe_principal
-  条件: {S : 集合 ι}
-  证明: range_coe R A
-
-Depends on / 依赖: range_coe
+/-
+**RestrictedProduct.range_coe_principal** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPro
+duct`。
+形式化陈述：range_coe_principal {S : Set ι} : range ((↑) : Πʳ i, [R i, A i]_[𝓟 S] -> Π
+ i, R i) = S.pi A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.range_coe`：range_coe : range ((↑) : Πʳ i, [R i, A i]_[
+𝓕] -> Π i, R i) = {x | forallᶠ i in 𝓕, x i in A i}
 -/
 lemma range_coe_principal {S : Set ι} :
-    range ((↑) : Πʳ i, [R i, A i]_[𝓟 S] -> Π i, R i) = S.pi A :=
+    range ((↑) : Πʳ i, [R i, A i]_[𝓟 S] → Π i, R i) = S.pi A :=
   range_coe R A
-
-/--
-lemma `eventually` / 引理 `eventually`
-
-English:
-lemma eventually
-  given: (x : Πʳ i, [R i, A i]_[𝓕])
-  statement: forallᶠ i in 𝓕, x i in A i
-  proof: x.2
-
-中文:
-引理 eventually
-  条件: (x : Πʳ i, [R i, A i]_[𝓕])
-  结论: 对任意ᶠ i in 𝓕, x i in A i
-  证明: x.2
+/-
+**RestrictedProduct.eventually** 是 Mathlib 中的一个定理，位于命名空间 `RestrictedProduct`。
+形式化陈述：∀ {ι : Type u_1} (R : ι → Type u_2) (A : (i : ι) → Set (R i)) {𝓕 : Filter 
+ι}   (x : RestrictedProduct (fun i => R i) (fun i => A i) 𝓕), ∀ᶠ (i : ι) in 𝓕, x
+ i ∈ A i
+参数：R : ι → Type u_2；A : (i : ι) → Set (R i)；x : RestrictedProduct (fun i => R i)
+ (fun i => A i) 𝓕；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-@[simp] lemma eventually (x : Πʳ i, [R i, A i]_[𝓕]) : forallᶠ i in 𝓕, x i in A i := x.2
+@[simp] lemma eventually (x : Πʳ i, [R i, A i]_[𝓕]) : ∀ᶠ i in 𝓕, x i ∈ A i := x.2
 
 variable (𝓕) in
-/--
-Definition of `structureMap` / `structureMap` 的定义
+/-- The *structure map* of the restricted product is the obvious inclusion from `Π i, A i`
+into `Πʳ i, [R i, A i]_[𝓕]`. -/
+/-
+**RestrictedProduct.structureMap** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：structureMap (x : Π i, A i) : Πʳ i, [R i, A i]_[𝓕]
+参数：x : Π i, A i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structureMap
-  signature: (x : Π i, A i)
-  body: ⟨fun i => x i, .of_forall fun i => (x i).2⟩
-
-@[simp]
-
-中文:
-定义 structureMap
-  签名: (x : Π i, A i)
-  定义体: ⟨fun i => x i, .of_forall fun i => (x i).2⟩
-
-@[simp]
-
-Depends on / 依赖: of_forall
+--- 原说明 ---
+The *structure map* of the restricted product is the obvious inclusion from `Π i
+, A i`
+into `Πʳ i, [R i, A i]_[𝓕]`.
 -/
 def structureMap (x : Π i, A i) : Πʳ i, [R i, A i]_[𝓕] :=
-  ⟨fun i => x i, .of_forall fun i => (x i).2⟩
+  ⟨fun i ↦ x i, .of_forall fun i ↦ (x i).2⟩
 
 @[simp]
-/--
-lemma `structureMap_apply` / 引理 `structureMap_apply`
-
-English:
-lemma structureMap_apply
-  given: {x : Π i, A i} (i : ι)
-  proof: rfl
-
-中文:
-引理 structureMap_apply
-  条件: {x : Π i, A i} (i : ι)
-  证明: rfl
+/-
+**RestrictedProduct.structureMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProd
+uct`。
+形式化陈述：structureMap_apply {x : Π i, A i} (i : ι) : structureMap R A 𝓕 x i = x i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma structureMap_apply {x : Π i, A i} (i : ι) :
     structureMap R A 𝓕 x i = x i :=
   rfl
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- If `𝓕 ≤ 𝓖`, the restricted product `Πʳ i, [R i, A i]_[𝓖]` is naturally included in
+`Πʳ i, [R i, A i]_[𝓕]`. This is the corresponding map. -/
+/-
+**RestrictedProduct.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：inclusion (h : 𝓕 <= 𝓖) (x : Πʳ i, [R i, A i]_[𝓖]) : Πʳ i, [R i, A i]_[𝓕]
+参数：h : 𝓕 <= 𝓖；x : Πʳ i, [R i, A i]_[𝓖]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: (h : 𝓕 <= 𝓖) (x : Πʳ i, [R i, A i]_[𝓖])
-  body: ⟨x, x.2.filter_mono h⟩
-
-@[simp]
-
-中文:
-定义 inclusion
-  签名: (h : 𝓕 <= 𝓖) (x : Πʳ i, [R i, A i]_[𝓖])
-  定义体: ⟨x, x.2.filter_mono h⟩
-
-@[simp]
-
-Depends on / 依赖: filter_mono
+--- 原说明 ---
+If `𝓕 ≤ 𝓖`, the restricted product `Πʳ i, [R i, A i]_[𝓖]` is naturally included 
+in
+`Πʳ i, [R i, A i]_[𝓕]`. This is the corresponding map.
 -/
-def inclusion (h : 𝓕 <= 𝓖) (x : Πʳ i, [R i, A i]_[𝓖]) :
+def inclusion (h : 𝓕 ≤ 𝓖) (x : Πʳ i, [R i, A i]_[𝓖]) :
     Πʳ i, [R i, A i]_[𝓕] :=
   ⟨x, x.2.filter_mono h⟩
 
 @[simp]
-/--
-lemma `inclusion_apply` / 引理 `inclusion_apply`
-
-English:
-lemma inclusion_apply
-  given: (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓖]} (i : ι)
-  proof: rfl
-
-中文:
-引理 inclusion_apply
-  条件: (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓖]} (i : ι)
-  证明: rfl
+/-
+**RestrictedProduct.inclusion_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct
+`。
+形式化陈述：inclusion_apply (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓖]} (i : ι) : inclusio
+n R A h x i = x i
+参数：h : 𝓕 <= 𝓖；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inclusion_apply (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓖]} (i : ι) :
+lemma inclusion_apply (h : 𝓕 ≤ 𝓖) {x : Πʳ i, [R i, A i]_[𝓖]} (i : ι) :
     inclusion R A h x i = x i :=
   rfl
 
 variable (𝓕) in
-/--
-lemma `inclusion_eq_id` / 引理 `inclusion_eq_id`
-
-English:
-lemma inclusion_eq_id
-  statement: inclusion R A (le_refl 𝓕) = id
-  proof: rfl
-
-中文:
-引理 inclusion_eq_id
-  结论: inclusion R A (le_refl 𝓕) = id
-  证明: rfl
+/-
+**RestrictedProduct.inclusion_eq_id** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct
+`。
+形式化陈述：inclusion_eq_id : inclusion R A (le_refl 𝓕) = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 lemma inclusion_eq_id : inclusion R A (le_refl 𝓕) = id := rfl
-
-/--
-lemma `exists_inclusion_eq_of_eventually` / 引理 `exists_inclusion_eq_of_eventually`
-
-English:
-lemma exists_inclusion_eq_of_eventually
-  statement: (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]}
-  proof: ⟨⟨x.1, hx𝓖⟩, rfl⟩
-
-中文:
-引理 存在_inclusion_eq_of_eventually
-  结论: (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]}
-  证明: ⟨⟨x.1, hx𝓖⟩, rfl⟩
+/-
+**RestrictedProduct.exists_inclusion_eq_of_eventually** 是 Mathlib 中的一个引理，位于命名空间 
+`RestrictedProduct`。
+形式化陈述：exists_inclusion_eq_of_eventually (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]} 
+(hx𝓖 : forallᶠ i in 𝓖, x i in A i) : exists x' : Πʳ i, [R i, A i]_[𝓖], inclusion
+ R A h x' = x
+参数：h : 𝓕 <= 𝓖；hx𝓖 : forallᶠ i in 𝓖, x i in A i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma exists_inclusion_eq_of_eventually (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]}
-    (hx𝓖 : forallᶠ i in 𝓖, x i in A i) :
-    exists x' : Πʳ i, [R i, A i]_[𝓖], inclusion R A h x' = x :=
+lemma exists_inclusion_eq_of_eventually (h : 𝓕 ≤ 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]}
+    (hx𝓖 : ∀ᶠ i in 𝓖, x i ∈ A i) :
+    ∃ x' : Πʳ i, [R i, A i]_[𝓖], inclusion R A h x' = x :=
   ⟨⟨x.1, hx𝓖⟩, rfl⟩
-
-/--
-lemma `exists_structureMap_eq_of_forall` / 引理 `exists_structureMap_eq_of_forall`
-
-English:
-lemma exists_structureMap_eq_of_forall
-  statement: {x : Πʳ i, [R i, A i]_[𝓕]}
-  proof: ⟨fun i => ⟨x i, hx i⟩, rfl⟩
-
-中文:
-引理 存在_structureMap_eq_of_对任意
-  结论: {x : Πʳ i, [R i, A i]_[𝓕]}
-  证明: ⟨fun i => ⟨x i, hx i⟩, rfl⟩
+/-
+**RestrictedProduct.exists_structureMap_eq_of_forall** 是 Mathlib 中的一个引理，位于命名空间 `
+RestrictedProduct`。
+形式化陈述：exists_structureMap_eq_of_forall {x : Πʳ i, [R i, A i]_[𝓕]} (hx : forall i
+, x.1 i in A i) : exists x' : Π i, A i, structureMap R A 𝓕 x' = x
+参数：hx : forall i, x.1 i in A i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exists_structureMap_eq_of_forall {x : Πʳ i, [R i, A i]_[𝓕]}
-    (hx : forall i, x.1 i in A i) :
-    exists x' : Π i, A i, structureMap R A 𝓕 x' = x :=
-  ⟨fun i => ⟨x i, hx i⟩, rfl⟩
-
-/--
-lemma `range_inclusion` / 引理 `range_inclusion`
-
-English:
-lemma range_inclusion
-  given: (h : 𝓕 <= 𝓖)
-  proof: subset_antisymm (range_subset_iff.mpr fun x => x.2)
-    (fun _ hx => mem_range.mpr <| exists_inclusion_eq_of_eventually R A h hx)
-
-@[simp]
-
-中文:
-引理 range_inclusion
-  条件: (h : 𝓕 <= 𝓖)
-  证明: subset_antisymm (range_subset_iff.mpr fun x => x.2)
-    (fun _ hx => mem_range.mpr <| exists_inclusion_eq_of_eventually R A h hx)
-
-@[simp]
-
-Depends on / 依赖: exists_inclusion_eq_of_eventually, mem_range, mem_range.mpr, range_subset_iff, range_subset_iff.mpr, subset_antisymm
+    (hx : ∀ i, x.1 i ∈ A i) :
+    ∃ x' : Π i, A i, structureMap R A 𝓕 x' = x :=
+  ⟨fun i ↦ ⟨x i, hx i⟩, rfl⟩
+/-
+**RestrictedProduct.range_inclusion** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct
+`。
+形式化陈述：range_inclusion (h : 𝓕 <= 𝓖) : Set.range (inclusion R A h) = {x | forallᶠ 
+i in 𝓖, x i in A i}
+参数：h : 𝓕 <= 𝓖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用引理 `RestrictedProduct.exists_inclusion_eq_of_eventually`：exists_inclusion_eq
+_of_eventually (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]} (hx𝓖 : forallᶠ i in 𝓖, x 
+i in A i) : exists x' : Πʳ i, [R i, A i]_…
 -/
-lemma range_inclusion (h : 𝓕 <= 𝓖) :
-    Set.range (inclusion R A h) = {x | forallᶠ i in 𝓖, x i in A i} :=
-  subset_antisymm (range_subset_iff.mpr fun x => x.2)
-    (fun _ hx => mem_range.mpr <| exists_inclusion_eq_of_eventually R A h hx)
+lemma range_inclusion (h : 𝓕 ≤ 𝓖) :
+    Set.range (inclusion R A h) = {x | ∀ᶠ i in 𝓖, x i ∈ A i} :=
+  subset_antisymm (range_subset_iff.mpr fun x ↦ x.2)
+    (fun _ hx ↦ mem_range.mpr <| exists_inclusion_eq_of_eventually R A h hx)
 
 @[simp]
-/--
-lemma `coe_comp_inclusion` / 引理 `coe_comp_inclusion`
-
-English:
-lemma coe_comp_inclusion
-  given: (h : 𝓕 <= 𝓖)
-  proof: rfl
-
-中文:
-引理 coe_comp_inclusion
-  条件: (h : 𝓕 <= 𝓖)
-  证明: rfl
+/-
+**RestrictedProduct.coe_comp_inclusion** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProd
+uct`。
+形式化陈述：coe_comp_inclusion (h : 𝓕 <= 𝓖) : DFunLike.coe ∘ inclusion R A h = DFunLik
+e.coe
+参数：h : 𝓕 <= 𝓖。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comp_inclusion (h : 𝓕 <= 𝓖) :
+lemma coe_comp_inclusion (h : 𝓕 ≤ 𝓖) :
     DFunLike.coe ∘ inclusion R A h = DFunLike.coe :=
   rfl
-
-/--
-lemma `image_coe_preimage_inclusion_subset` / 引理 `image_coe_preimage_inclusion_subset`
-
-English:
-lemma image_coe_preimage_inclusion_subset
-  statement: (h : 𝓕 <= 𝓖)
-  proof: fun _ ⟨x, hx, hx'⟩ => ⟨inclusion R A h x, hx, hx'⟩
-
-中文:
-引理 image_coe_preimage_inclusion_subset
-  结论: (h : 𝓕 <= 𝓖)
-  证明: fun _ ⟨x, hx, hx'⟩ => ⟨inclusion R A h x, hx, hx'⟩
-
-Depends on / 依赖: inclusion
+/-
+**RestrictedProduct.image_coe_preimage_inclusion_subset** 是 Mathlib 中的一个引理，位于命名空
+间 `RestrictedProduct`。
+形式化陈述：image_coe_preimage_inclusion_subset (h : 𝓕 <= 𝓖) (U : Set Πʳ i, [R i, A i]
+_[𝓕]) : (⇑) '' inclusion R A h ⁻¹' U subseteq (⇑) '' U
+参数：h : 𝓕 <= 𝓖；U : Set Πʳ i, [R i, A i]_[𝓕]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma image_coe_preimage_inclusion_subset (h : 𝓕 <= 𝓖)
-    (U : Set Πʳ i, [R i, A i]_[𝓕]) : (⇑) '' inclusion R A h ⁻¹' U subseteq (⇑) '' U :=
-  fun _ ⟨x, hx, hx'⟩ => ⟨inclusion R A h x, hx, hx'⟩
-
-/--
-lemma `range_structureMap` / 引理 `range_structureMap`
-
-English:
-lemma range_structureMap
-  proof: subset_antisymm (range_subset_iff.mpr fun x i => (x i).2)
-    (fun _ hx => mem_range.mpr <| exists_structureMap_eq_of_forall R A hx)
-
-@[simp]
-
-中文:
-引理 range_structureMap
-  证明: subset_antisymm (range_subset_iff.mpr fun x i => (x i).2)
-    (fun _ hx => mem_range.mpr <| exists_structureMap_eq_of_forall R A hx)
-
-@[simp]
-
-Depends on / 依赖: exists_structureMap_eq_of_forall, mem_range, mem_range.mpr, range_subset_iff, range_subset_iff.mpr, subset_antisymm
+lemma image_coe_preimage_inclusion_subset (h : 𝓕 ≤ 𝓖)
+    (U : Set Πʳ i, [R i, A i]_[𝓕]) : (⇑) '' inclusion R A h ⁻¹' U ⊆ (⇑) '' U :=
+  fun _ ⟨x, hx, hx'⟩ ↦ ⟨inclusion R A h x, hx, hx'⟩
+/-
+**RestrictedProduct.range_structureMap** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProd
+uct`。
+形式化陈述：range_structureMap : Set.range (structureMap R A 𝓕) = {f | forall i, f.1 i
+ in A i}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用引理 `RestrictedProduct.exists_structureMap_eq_of_forall`：exists_structureMap_
+eq_of_forall {x : Πʳ i, [R i, A i]_[𝓕]} (hx : forall i, x.1 i in A i) : exists x
+' : Π i, A i, structureMap R A 𝓕 x' = x
 -/
 lemma range_structureMap :
-    Set.range (structureMap R A 𝓕) = {f | forall i, f.1 i in A i} :=
-  subset_antisymm (range_subset_iff.mpr fun x i => (x i).2)
-    (fun _ hx => mem_range.mpr <| exists_structureMap_eq_of_forall R A hx)
+    Set.range (structureMap R A 𝓕) = {f | ∀ i, f.1 i ∈ A i} :=
+  subset_antisymm (range_subset_iff.mpr fun x i ↦ (x i).2)
+    (fun _ hx ↦ mem_range.mpr <| exists_structureMap_eq_of_forall R A hx)
 
 @[simp]
-/--
-lemma `coe_comp_structureMap` / 引理 `coe_comp_structureMap`
-
-English:
-lemma coe_comp_structureMap
-  proof: rfl
-
-中文:
-引理 coe_comp_structureMap
-  证明: rfl
+/-
+**RestrictedProduct.coe_comp_structureMap** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedP
+roduct`。
+形式化陈述：coe_comp_structureMap : DFunLike.coe ∘ structureMap R A 𝓕 = fun x i => (x 
+i).val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_comp_structureMap :
-    DFunLike.coe ∘ structureMap R A 𝓕 = fun x i => (x i).val :=
+    DFunLike.coe ∘ structureMap R A 𝓕 = fun x i ↦ (x i).val :=
   rfl
 
 section Algebra
@@ -479,525 +405,268 @@ In this section, we endow the restricted product with its algebraic instances.
 To avoid any unnecessary coercions, we use subobject classes for the subset `B i` of each `R i`.
 -/
 
-variable {S : ι -> Type*} -- subobject type
+variable {S : ι → Type*} -- subobject type
 variable [Π i, SetLike (S i) (R i)]
 variable {B : Π i, S i}
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, One (R i)] [forall i, OneMemClass (S i) (R i)] : One (Πʳ i, [R i, B i]_[𝓕]) where
-  body: ⟨fun _ => 1, .of_forall fun _ => one_mem _⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [Π
-  签名: i, 幺 (R i)] [对任意 i, OneMem类 (S i) (R i)] : 幺 (Πʳ i, [R i, B i]_[𝓕]) where
-  定义体: ⟨fun _ => 1, .of_forall fun _ => one_mem _⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: of_forall, one_mem
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, One (R i)] [forall i, OneMemClass (S i) (R i)] : One (Πʳ i, [R i, B i]_[𝓕]) where
-  one := ⟨fun _ => 1, .of_forall fun _ => one_mem _⟩
+instance [Π i, One (R i)] [∀ i, OneMemClass (S i) (R i)] : One (Πʳ i, [R i, B i]_[𝓕]) where
+  one := ⟨fun _ ↦ 1, .of_forall fun _ ↦ one_mem _⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `one_apply` / 引理 `one_apply`
-
-English:
-lemma one_apply
-  given: [Π i, One (R i)] [forall i, OneMemClass (S i) (R i)] (i : ι)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 one_apply
-  条件: [Π i, 幺 (R i)] [对任意 i, OneMem类 (S i) (R i)] (i : ι)
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.one_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：one_apply [Π i, One (R i)] [forall i, OneMemClass (S i) (R i)] (i : ι) : (
+1 : Πʳ i, [R i, B i]_[𝓕]) i = 1
+参数：R i；S i；R i；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma one_apply [Π i, One (R i)] [forall i, OneMemClass (S i) (R i)] (i : ι) :
+lemma one_apply [Π i, One (R i)] [∀ i, OneMemClass (S i) (R i)] (i : ι) :
     (1 : Πʳ i, [R i, B i]_[𝓕]) i = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Inv (R i)] [forall i, InvMemClass (S i) (R i)] : Inv (Πʳ i, [R i, B i]_[𝓕]) where
-  body: ⟨fun i => (x i)⁻¹, x.2.mono fun _ => inv_mem⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [Π
-  签名: i, 取逆 (R i)] [对任意 i, InvMem类 (S i) (R i)] : 取逆 (Πʳ i, [R i, B i]_[𝓕]) where
-  定义体: ⟨fun i => (x i)⁻¹, x.2.mono fun _ => inv_mem⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_mem
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Inv (R i)] [forall i, InvMemClass (S i) (R i)] : Inv (Πʳ i, [R i, B i]_[𝓕]) where
-  inv x := ⟨fun i => (x i)⁻¹, x.2.mono fun _ => inv_mem⟩
+instance [Π i, Inv (R i)] [∀ i, InvMemClass (S i) (R i)] : Inv (Πʳ i, [R i, B i]_[𝓕]) where
+  inv x := ⟨fun i ↦ (x i)⁻¹, x.2.mono fun _ ↦ inv_mem⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `inv_apply` / 引理 `inv_apply`
-
-English:
-lemma inv_apply
-  statement: [Π i, Inv (R i)] [forall i, InvMemClass (S i) (R i)]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 inv_apply
-  结论: [Π i, 取逆 (R i)] [对任意 i, InvMem类 (S i) (R i)]
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：inv_apply [Π i, Inv (R i)] [forall i, InvMemClass (S i) (R i)] (x : Πʳ i, 
+[R i, B i]_[𝓕]) (i : ι) : (x⁻¹) i = (x i)⁻¹
+参数：R i；S i；R i；x : Πʳ i, [R i, B i]_[𝓕]；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inv_apply [Π i, Inv (R i)] [forall i, InvMemClass (S i) (R i)]
+lemma inv_apply [Π i, Inv (R i)] [∀ i, InvMemClass (S i) (R i)]
     (x : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (x⁻¹) i = (x i)⁻¹ :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Mul (R i)] [forall i, MulMemClass (S i) (R i)] : Mul (Πʳ i, [R i, B i]_[𝓕]) where
-  body: ⟨fun i => x i * y i, y.2.mp (x.2.mono fun _ => mul_mem)⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [Π
-  签名: i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)] : 乘法 (Πʳ i, [R i, B i]_[𝓕]) where
-  定义体: ⟨fun i => x i * y i, y.2.mp (x.2.mono fun _ => mul_mem)⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mul_mem
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Mul (R i)] [forall i, MulMemClass (S i) (R i)] : Mul (Πʳ i, [R i, B i]_[𝓕]) where
-  mul x y := ⟨fun i => x i * y i, y.2.mp (x.2.mono fun _ => mul_mem)⟩
+instance [Π i, Mul (R i)] [∀ i, MulMemClass (S i) (R i)] : Mul (Πʳ i, [R i, B i]_[𝓕]) where
+  mul x y := ⟨fun i ↦ x i * y i, y.2.mp (x.2.mono fun _ ↦ mul_mem)⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  statement: [Π i, Mul (R i)] [forall i, MulMemClass (S i) (R i)]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 mul_apply
-  结论: [Π i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)]
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.mul_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mul_apply [Π i, Mul (R i)] [forall i, MulMemClass (S i) (R i)] (x y : Πʳ i
+, [R i, B i]_[𝓕]) (i : ι) : (x * y) i = x i * y i
+参数：R i；S i；R i；x y : Πʳ i, [R i, B i]_[𝓕]；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mul_apply [Π i, Mul (R i)] [forall i, MulMemClass (S i) (R i)]
+lemma mul_apply [Π i, Mul (R i)] [∀ i, MulMemClass (S i) (R i)]
     (x y : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (x * y) i = x i * y i :=
   rfl
 
 @[to_additive]
-instance {G : Type*} [Π i, SMul G (R i)] [forall i, SMulMemClass (S i) G (R i)] :
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {G : Type*} [Π i, SMul G (R i)] [∀ i, SMulMemClass (S i) G (R i)] :
     SMul G (Πʳ i, [R i, B i]_[𝓕]) where
-  smul g x := ⟨fun i => g • (x i), x.2.mono fun _ => SMulMemClass.smul_mem g⟩
+  smul g x := ⟨fun i ↦ g • (x i), x.2.mono fun _ ↦ SMulMemClass.smul_mem g⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_apply` / 引理 `smul_apply`
-
-English:
-lemma smul_apply
-  statement: {G : Type*} [Π i, SMul G (R i)] [forall i, SMulMemClass (S i) G (R i)] (g : G)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 smul_apply
-  结论: {G : 类型} [Π i, 标量乘法 G (R i)] [对任意 i, SMulMem类 (S i) G (R i)] (g : G)
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.smul_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：smul_apply {G : Type*} [Π i, SMul G (R i)] [forall i, SMulMemClass (S i) G
+ (R i)] (g : G) (x : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (g • x) i = g • x i
+参数：R i；S i；R i；g : G；x : Πʳ i, [R i, B i]_[𝓕]；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_apply {G : Type*} [Π i, SMul G (R i)] [forall i, SMulMemClass (S i) G (R i)] (g : G)
+lemma smul_apply {G : Type*} [Π i, SMul G (R i)] [∀ i, SMulMemClass (S i) G (R i)] (g : G)
     (x : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (g • x) i = g • x i :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)] :
-  body: ⟨fun i => x i / y i, y.2.mp (x.2.mono fun _ => div_mem)⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [Π
-  签名: i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
-  定义体: ⟨fun i => x i / y i, y.2.mp (x.2.mono fun _ => div_mem)⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: div_mem
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)] :
+instance [Π i, DivInvMonoid (R i)] [∀ i, SubgroupClass (S i) (R i)] :
     Div (Πʳ i, [R i, B i]_[𝓕]) where
-  div x y := ⟨fun i => x i / y i, y.2.mp (x.2.mono fun _ => div_mem)⟩
+  div x y := ⟨fun i ↦ x i / y i, y.2.mp (x.2.mono fun _ ↦ div_mem)⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `div_apply` / 引理 `div_apply`
-
-English:
-lemma div_apply
-  statement: [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 div_apply
-  结论: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.div_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：div_apply [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)] 
+(x y : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (x / y) i = x i / y i
+参数：R i；S i；R i；x y : Πʳ i, [R i, B i]_[𝓕]；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma div_apply [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
+lemma div_apply [Π i, DivInvMonoid (R i)] [∀ i, SubgroupClass (S i) (R i)]
     (x y : Πʳ i, [R i, B i]_[𝓕]) (i : ι) : (x / y) i = x i / y i :=
   rfl
 
 @[to_additive]
-/--
-Instance `instPow` / 实例 `instPow`
-
-English:
-instance instPow
-  signature: [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-  body: ⟨fun i => x i ^ n, x.2.mono fun _ hi => pow_mem hi n⟩
-
-@[to_additive]
-
-中文:
-实例 instPow
-  签名: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
-  定义体: ⟨fun i => x i ^ n, x.2.mono fun _ hi => pow_mem hi n⟩
-
-@[to_additive]
-
-Depends on / 依赖: pow_mem
+/-
+**RestrictedProduct.instPow** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+形式化陈述：instPow [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] : Pow (
+Πʳ i, [R i, B i]_[𝓕]) Nat where pow x n
+参数：R i；S i；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPow [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
-    Pow (Πʳ i, [R i, B i]_[𝓕]) Nat where
-  pow x n := ⟨fun i => x i ^ n, x.2.mono fun _ hi => pow_mem hi n⟩
+instance instPow [Π i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)] :
+    Pow (Πʳ i, [R i, B i]_[𝓕]) ℕ where
+  pow x n := ⟨fun i ↦ x i ^ n, x.2.mono fun _ hi ↦ pow_mem hi n⟩
 
 @[to_additive]
-/--
-lemma `pow_apply` / 引理 `pow_apply`
-
-English:
-lemma pow_apply
-  statement: [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 pow_apply
-  结论: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
-  证明: rfl
-
-@[to_additive]
+/-
+**RestrictedProduct.pow_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：pow_apply [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] (x : 
+Πʳ i, [R i, B i]_[𝓕]) (n : Nat) (i : ι) : (x ^ n) i = x i ^ n
+参数：R i；S i；R i；x : Πʳ i, [R i, B i]_[𝓕]；n : Nat；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma pow_apply [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-    (x : Πʳ i, [R i, B i]_[𝓕]) (n : Nat) (i : ι) : (x ^ n) i = x i ^ n :=
+lemma pow_apply [Π i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)]
+    (x : Πʳ i, [R i, B i]_[𝓕]) (n : ℕ) (i : ι) : (x ^ n) i = x i ^ n :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
-  body: DFunLike.coe_injective.monoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 [Π
-  签名: i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective.monoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.monoid, coe_injective, monoid
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
+instance [Π i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)] :
     Monoid (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.monoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
+  DFunLike.coe_injective.monoid _ rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, CommMonoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
-  body: DFunLike.coe_injective.commMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 [Π
-  签名: i, 交换幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective.commMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.commMonoid, coe_injective, commMonoid
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, CommMonoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
+instance [Π i, CommMonoid (R i)] [∀ i, SubmonoidClass (S i) (R i)] :
     CommMonoid (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.commMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
+  DFunLike.coe_injective.commMonoid _ rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
 
 @[to_additive]
-/--
-Instance `instZPow` / 实例 `instZPow`
-
-English:
-instance instZPow
-  signature: [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
-  body: ⟨fun i => x i ^ n, x.2.mono fun _ hi => zpow_mem hi n⟩
-
-@[to_additive]
-
-中文:
-实例 instZPow
-  签名: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
-  定义体: ⟨fun i => x i ^ n, x.2.mono fun _ hi => zpow_mem hi n⟩
-
-@[to_additive]
-
-Depends on / 依赖: zpow_mem
+/-
+**RestrictedProduct.instZPow** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+形式化陈述：instZPow [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)] :
+ Pow (Πʳ i, [R i, B i]_[𝓕]) Int where pow x n
+参数：R i；S i；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instZPow [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)] :
-    Pow (Πʳ i, [R i, B i]_[𝓕]) Int where
-  pow x n := ⟨fun i => x i ^ n, x.2.mono fun _ hi => zpow_mem hi n⟩
+instance instZPow [Π i, DivInvMonoid (R i)] [∀ i, SubgroupClass (S i) (R i)] :
+    Pow (Πʳ i, [R i, B i]_[𝓕]) ℤ where
+  pow x n := ⟨fun i ↦ x i ^ n, x.2.mono fun _ hi ↦ zpow_mem hi n⟩
 
 @[to_additive]
-/--
-lemma `zpow_apply` / 引理 `zpow_apply`
-
-English:
-lemma zpow_apply
-  statement: [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
-  proof: rfl
-
-中文:
-引理 zpow_apply
-  结论: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
-  证明: rfl
+/-
+**RestrictedProduct.zpow_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：zpow_apply [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
+ (x : Πʳ i, [R i, B i]_[𝓕]) (n : Int) (i : ι) : (x ^ n) i = x i ^ n
+参数：R i；S i；R i；x : Πʳ i, [R i, B i]_[𝓕]；n : Int；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma zpow_apply [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
-    (x : Πʳ i, [R i, B i]_[𝓕]) (n : Int) (i : ι) : (x ^ n) i = x i ^ n :=
+lemma zpow_apply [Π i, DivInvMonoid (R i)] [∀ i, SubgroupClass (S i) (R i)]
+    (x : Πʳ i, [R i, B i]_[𝓕]) (n : ℤ) (i : ι) : (x ^ n) i = x i ^ n :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, AddMonoidWithOne (R i)] [forall i, AddSubmonoidWithOneClass (S i) (R i)] :
-  body: ⟨fun _ => n, .of_forall fun _ => natCast_mem _ n⟩
-
-@[to_additive]
-
-中文:
-实例 [Π
-  签名: i, 加法带幺幺半群 (R i)] [对任意 i, 加法带幺子幺半群类 (S i) (R i)] :
-  定义体: ⟨fun _ => n, .of_forall fun _ => natCast_mem _ n⟩
-
-@[to_additive]
-
-Depends on / 依赖: natCast_mem, of_forall
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, AddMonoidWithOne (R i)] [forall i, AddSubmonoidWithOneClass (S i) (R i)] :
+instance [Π i, AddMonoidWithOne (R i)] [∀ i, AddSubmonoidWithOneClass (S i) (R i)] :
     NatCast (Πʳ i, [R i, B i]_[𝓕]) where
-  natCast n := ⟨fun _ => n, .of_forall fun _ => natCast_mem _ n⟩
+  natCast n := ⟨fun _ ↦ n, .of_forall fun _ ↦ natCast_mem _ n⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Group (R i)] [forall i, SubgroupClass (S i) (R i)] :
-  body: DFunLike.coe_injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 [Π
-  签名: i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.group, coe_injective
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Group (R i)] [forall i, SubgroupClass (S i) (R i)] :
+instance [Π i, Group (R i)] [∀ i, SubgroupClass (S i) (R i)] :
     Group (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
+  DFunLike.coe_injective.group _ rfl (fun _ _ ↦ rfl) (fun _ ↦ rfl) (fun _ _ ↦ rfl)
+    (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, CommGroup (R i)] [forall i, SubgroupClass (S i) (R i)] :
-  body: DFunLike.coe_injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [Π
-  签名: i, 交换群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.commGroup, coe_injective, commGroup
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, CommGroup (R i)] [forall i, SubgroupClass (S i) (R i)] :
+instance [Π i, CommGroup (R i)] [∀ i, SubgroupClass (S i) (R i)] :
     CommGroup (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Ring (R i)] [forall i, SubringClass (S i) (R i)] :
-  body: ⟨fun _ => n, .of_forall fun _ => intCast_mem _ n⟩
-
-中文:
-实例 [Π
-  签名: i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
-  定义体: ⟨fun _ => n, .of_forall fun _ => intCast_mem _ n⟩
-
-Depends on / 依赖: intCast_mem, of_forall
+  DFunLike.coe_injective.commGroup _ rfl (fun _ _ ↦ rfl) (fun _ ↦ rfl) (fun _ _ ↦ rfl)
+    (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)] :
+instance [Π i, Ring (R i)] [∀ i, SubringClass (S i) (R i)] :
     IntCast (Πʳ i, [R i, B i]_[𝓕]) where
-  intCast n := ⟨fun _ => n, .of_forall fun _ => intCast_mem _ n⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, Ring (R i)] [forall i, SubringClass (S i) (R i)] :
-  body: DFunLike.coe_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl)
-
-中文:
-实例 [Π
-  签名: i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.ring, coe_injective
+  intCast n := ⟨fun _ ↦ n, .of_forall fun _ ↦ intCast_mem _ n⟩
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)] :
+instance [Π i, Ring (R i)] [∀ i, SubringClass (S i) (R i)] :
     Ring (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Π
-  signature: i, CommRing (R i)] [forall i, SubringClass (S i) (R i)] :
-  body: DFunLike.coe_injective funext (fun _ => mul_comm _ _)
-
-中文:
-实例 [Π
-  签名: i, 交换环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
-  定义体: DFunLike.coe_injective funext (fun _ => mul_comm _ _)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, mul_comm
+  DFunLike.coe_injective.ring _ rfl rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ ↦ rfl)
+    (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ ↦ rfl) (fun _ ↦ rfl)
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Π i, CommRing (R i)] [forall i, SubringClass (S i) (R i)] :
+instance [Π i, CommRing (R i)] [∀ i, SubringClass (S i) (R i)] :
     CommRing (Πʳ i, [R i, B i]_[𝓕]) where
-mul_comm _ _ := DFunLike.coe_injective funext (fun _ => mul_comm _ _)
+  mul_comm _ _ := DFunLike.coe_injective <| funext (fun _ ↦ mul_comm _ _)
 
 variable {R} in
 /-- The coercion from the restricted product of monoids `A i` to the (normal) product
 is a monoid homomorphism. -/
 @[to_additive /-- The coercion from the restricted product of additive monoids `A i` to the
 (normal) product is an additive monoid homomorphism. -/]
-/--
-Definition of `coeMonoidHom` / `coeMonoidHom` 的定义
-
-English:
-definition coeMonoidHom
-  signature: [forall i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-  body: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 coeMonoidHom
-  签名: [对任意 i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
-  定义体: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
+/-
+**RestrictedProduct.coeMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：coeMonoidHom [forall i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i
+)] : Πʳ i, [R i, B i]_[𝓕] ->* Π i, R i where toFun
+参数：R i；S i；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def coeMonoidHom [forall i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
-    Πʳ i, [R i, B i]_[𝓕] ->* Π i, R i where
+def coeMonoidHom [∀ i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)] :
+    Πʳ i, [R i, B i]_[𝓕] →* Π i, R i where
   toFun := (↑)
   map_one' := rfl
   map_mul' _ _ := rfl
-
+/-
+**RestrictedProduct.** 是 Mathlib 中的一个实例，位于命名空间 `RestrictedProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R₀ : Type*} [Semiring R₀] [Π i, AddCommMonoid (R i)] [Π i, Module R₀ (R i)]
-    [forall i, AddSubmonoidClass (S i) (R i)] [forall i, SMulMemClass (S i) R₀ (R i)] :
+    [∀ i, AddSubmonoidClass (S i) (R i)] [∀ i, SMulMemClass (S i) R₀ (R i)] :
   Module R₀ (Πʳ i, [R i, B i]_[𝓕]) :=
-  DFunLike.coe_injective.module R₀ (M := Π i, R i) coeAddMonoidHom (fun _ _ => rfl)
+  DFunLike.coe_injective.module R₀ (M := Π i, R i) coeAddMonoidHom (fun _ _ ↦ rfl)
 
 end Algebra
 
 section eval
 
-variable {S : ι -> Type*}
+variable {S : ι → Type*}
 variable [Π i, SetLike (S i) (R i)]
 variable {B : Π i, S i}
 
@@ -1006,92 +675,65 @@ product `Πʳ i, [R i, B i]_[𝓕]` to the component `R j`.
 -/
 @[to_additive /-- `RestrictedProduct.evalAddMonoidHom j` is the monoid homomorphism from the
 restricted product `Πʳ i, [R i, B i]_[𝓕]` to the component `R j`. -/]
-/--
-Definition of `evalMonoidHom` / `evalMonoidHom` 的定义
-
-English:
-definition evalMonoidHom
-  signature: (j : ι) [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-  body: x j
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 evalMonoidHom
-  签名: (j : ι) [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
-  定义体: x j
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
+/-
+**RestrictedProduct.evalMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：evalMonoidHom (j : ι) [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) 
+(R i)] : (Πʳ i, [R i, B i]_[𝓕]) ->* R j where toFun x
+参数：j : ι；R i；S i；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def evalMonoidHom (j : ι) [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)] :
-    (Πʳ i, [R i, B i]_[𝓕]) ->* R j where
+def evalMonoidHom (j : ι) [Π i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)] :
+    (Πʳ i, [R i, B i]_[𝓕]) →* R j where
   toFun x := x j
   map_one' := rfl
   map_mul' _ _ := rfl
 
 @[simp]
-/--
-lemma `evalMonoidHom_apply` / 引理 `evalMonoidHom_apply`
-
-English:
-lemma evalMonoidHom_apply
-  statement: [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
-  proof: rfl
-
-中文:
-引理 evalMonoidHom_apply
-  结论: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
-  证明: rfl
+/-
+**RestrictedProduct.evalMonoidHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPro
+duct`。
+形式化陈述：evalMonoidHom_apply [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R
+ i)] (x : Πʳ i, [R i, B i]_[𝓕]) (j : ι) : evalMonoidHom R j x = x j
+参数：R i；S i；R i；x : Πʳ i, [R i, B i]_[𝓕]；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma evalMonoidHom_apply [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
+lemma evalMonoidHom_apply [Π i, Monoid (R i)] [∀ i, SubmonoidClass (S i) (R i)]
     (x : Πʳ i, [R i, B i]_[𝓕]) (j : ι) : evalMonoidHom R j x = x j :=
   rfl
 
-/--
-Definition of `evalRingHom` / `evalRingHom` 的定义
-
-English:
-definition evalRingHom
-  signature: (j : ι) [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
-  body: evalMonoidHom R j
-  __ := evalAddMonoidHom R j
-
-@[simp]
-
-中文:
-定义 evalRingHom
-  签名: (j : ι) [Π i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)]
-  定义体: evalMonoidHom R j
-  __ := evalAddMonoidHom R j
-
-@[simp]
-
-Depends on / 依赖: evalMonoidHom
+/-- `RestrictedProduct.evalRingHom j` is the ring homomorphism from the restricted
+product `Πʳ i, [R i, B i]_[𝓕]` to the component `R j`.
 -/
-def evalRingHom (j : ι) [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)] :
-    (Πʳ i, [R i, B i]_[𝓕]) ->+* R j where
+/-
+**RestrictedProduct.evalRingHom** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：evalRingHom (j : ι) [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
+ : (Πʳ i, [R i, B i]_[𝓕]) ->+* R j where __
+参数：j : ι；R i；S i；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`RestrictedProduct.evalRingHom j` is the ring homomorphism from the restricted
+product `Πʳ i, [R i, B i]_[𝓕]` to the component `R j`.
+-/
+def evalRingHom (j : ι) [Π i, Ring (R i)] [∀ i, SubringClass (S i) (R i)] :
+    (Πʳ i, [R i, B i]_[𝓕]) →+* R j where
   __ := evalMonoidHom R j
   __ := evalAddMonoidHom R j
 
 @[simp]
-/--
-lemma `evalRingHom_apply` / 引理 `evalRingHom_apply`
-
-English:
-lemma evalRingHom_apply
-  statement: [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
-  proof: rfl
-
-中文:
-引理 evalRingHom_apply
-  结论: [Π i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)]
-  证明: rfl
+/-
+**RestrictedProduct.evalRingHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProdu
+ct`。
+形式化陈述：evalRingHom_apply [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)] (
+x : Πʳ i, [R i, B i]_[𝓕]) (j : ι) : evalRingHom R j x = x j
+参数：R i；S i；R i；x : Πʳ i, [R i, B i]_[𝓕]；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma evalRingHom_apply [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
+lemma evalRingHom_apply [Π i, Ring (R i)] [∀ i, SubringClass (S i) (R i)]
     (x : Πʳ i, [R i, B i]_[𝓕]) (j : ι) : evalRingHom R j x = x j :=
   rfl
 
@@ -1100,56 +742,57 @@ end eval
 section map
 
 variable {ι₁ ι₂ : Type*}
-variable (R₁ : ι₁ -> Type*) (R₂ : ι₂ -> Type*)
+variable (R₁ : ι₁ → Type*) (R₂ : ι₂ → Type*)
 variable {𝓕₁ : Filter ι₁} {𝓕₂ : Filter ι₂}
-variable {A₁ : (i : ι₁) -> Set (R₁ i)} {A₂ : (i : ι₂) -> Set (R₂ i)}
-variable {S₁ : ι₁ -> Type*} {S₂ : ι₂ -> Type*}
+variable {A₁ : (i : ι₁) → Set (R₁ i)} {A₂ : (i : ι₂) → Set (R₂ i)}
+variable {S₁ : ι₁ → Type*} {S₂ : ι₂ → Type*}
 variable [Π i, SetLike (S₁ i) (R₁ i)] [Π j, SetLike (S₂ j) (R₂ j)]
 variable {B₁ : Π i, S₁ i} {B₂ : Π j, S₂ j}
-variable (f : ι₂ -> ι₁) (hf : Tendsto f 𝓕₂ 𝓕₁)
+variable (f : ι₂ → ι₁) (hf : Tendsto f 𝓕₂ 𝓕₁)
 
 section set
 
-variable (φ : forall j, R₁ (f j) -> R₂ j) (hφ : forallᶠ j in 𝓕₂, MapsTo (φ j) (A₁ (f j)) (A₂ j))
+variable (φ : ∀ j, R₁ (f j) → R₂ j) (hφ : ∀ᶠ j in 𝓕₂, MapsTo (φ j) (A₁ (f j)) (A₂ j))
 
 /--
-Definition of `mapAlong` / `mapAlong` 的定义
+Given two restricted products `Πʳ (i : ι₁), [R₁ i, A₁ i]_[𝓕₁]` and `Πʳ (j : ι₂), [R₂ j, A₂ j]_[𝓕₂]`,
+`RestrictedProduct.mapAlong` gives a function between them. The data needed is a
+function `f : ι₂ → ι₁` such that `𝓕₂` tends to `𝓕₁` along `f`, and functions `φ j : R₁ (f j) → R₂ j`
+sending `A₁ (f j)` into `A₂ j` for an `𝓕₂`-large set of `j`'s.
 
-English:
-definition mapAlong
-  signature: (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁])
-  body: ⟨fun j => φ j (x (f j)), by
-  filter_upwards [hf.eventually x.2, hφ] using fun _ h1 h2 => h2 h1⟩
+See also `mapAlongMonoidHom`, `mapAlongAddMonoidHom` and `mapAlongRingHom` for variants.
+-/
+/-
+**RestrictedProduct.mapAlong** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：mapAlong (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) : Πʳ j, [R₂ j, A₂ j]_[𝓕₂]
+参数：x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given two restricted products `Πʳ (i : ι₁), [R₁ i, A₁ i]_[𝓕₁]` and `Πʳ (j : ι₂),
+ [R₂ j, A₂ j]_[𝓕₂]`,
+`RestrictedProduct.mapAlong` gives a function between them. The data needed is a
+function `f : ι₂ → ι₁` such that `𝓕₂` tends to `𝓕₁` along `f`, and functions `φ 
+j : R₁ (f j) → R₂ j`
+sending `A₁ (f j)` into `A₂ j` for an `𝓕₂`-large set of `j`'s.
 
-中文:
-定义 mapAlong
-  签名: (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁])
-  定义体: ⟨fun j => φ j (x (f j)), by
-  filter_upwards [hf.eventually x.2, hφ] using fun _ h1 h2 => h2 h1⟩
-
-@[simp]
-
-Depends on / 依赖: eventually, filter_upwards, hf.eventually
+See also `mapAlongMonoidHom`, `mapAlongAddMonoidHom` and `mapAlongRingHom` for v
+ariants.
 -/
 def mapAlong (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) : Πʳ j, [R₂ j, A₂ j]_[𝓕₂] :=
-  ⟨fun j => φ j (x (f j)), by
-  filter_upwards [hf.eventually x.2, hφ] using fun _ h1 h2 => h2 h1⟩
+  ⟨fun j ↦ φ j (x (f j)), by
+  filter_upwards [hf.eventually x.2, hφ] using fun _ h1 h2 ↦ h2 h1⟩
 
 @[simp]
-/--
-lemma `mapAlong_apply` / 引理 `mapAlong_apply`
-
-English:
-lemma mapAlong_apply
-  given: (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) (j : ι₂)
-  proof: rfl
-
-中文:
-引理 mapAlong_apply
-  条件: (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) (j : ι₂)
-  证明: rfl
+/-
+**RestrictedProduct.mapAlong_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`
+。
+形式化陈述：mapAlong_apply (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) (j : ι₂) : x.mapAlong R₁ R₂ f
+ hf φ hφ j = φ j (x (f j))
+参数：x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]；j : ι₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapAlong_apply (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) (j : ι₂) :
     x.mapAlong R₁ R₂ f hf φ hφ j = φ j (x (f j)) :=
@@ -1157,49 +800,44 @@ lemma mapAlong_apply (x : Πʳ i, [R₁ i, A₁ i]_[𝓕₁]) (j : ι₂) :
 
 -- variant of `mapAlong` where the index set is constant
 
-/--
-Definition of `map` / `map` 的定义
+/-- The maps between restricted products over a fixed index type,
+given maps on the factors. -/
+/-
+**RestrictedProduct.map** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：map {G H : ι -> Type*} {C : (i : ι) -> Set (G i)} {D : (i : ι) -> Set (H i
+)} (φ : (i : ι) -> G i -> H i) (hφ : forallᶠ i in 𝓕, MapsTo (φ i) (C i) (D i)) (
+x : Πʳ i, [G i, C i]_[𝓕]) : (Πʳ i, [H i, D i]_[𝓕])
+参数：i : ι；G i；i : ι；H i；φ : (i : ι) -> G i -> H i；hφ : forallᶠ i in 𝓕, MapsTo (φ 
+i) (C i) (D i)；x : Πʳ i, [G i, C i]_[𝓕]。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
 
-English:
-definition map
-  signature: {G H : ι -> Type*}
-  body: mapAlong G H id Filter.tendsto_id φ hφ x
-
-@[simp]
-
-中文:
-定义 map
-  签名: {G H : ι -> 类型}
-  定义体: mapAlong G H id Filter.tendsto_id φ hφ x
-
-@[simp]
-
-Depends on / 依赖: Filter, Filter.tendsto_id, mapAlong, tendsto_id
+--- 原说明 ---
+The maps between restricted products over a fixed index type,
+given maps on the factors.
 -/
-def map {G H : ι -> Type*}
-    {C : (i : ι) -> Set (G i)}
-    {D : (i : ι) -> Set (H i)} (φ : (i : ι) -> G i -> H i)
-    (hφ : forallᶠ i in 𝓕, MapsTo (φ i) (C i) (D i))
+def map {G H : ι → Type*}
+    {C : (i : ι) → Set (G i)}
+    {D : (i : ι) → Set (H i)} (φ : (i : ι) → G i → H i)
+    (hφ : ∀ᶠ i in 𝓕, MapsTo (φ i) (C i) (D i))
     (x : Πʳ i, [G i, C i]_[𝓕]) : (Πʳ i, [H i, D i]_[𝓕]) :=
   mapAlong G H id Filter.tendsto_id φ hφ x
 
 @[simp]
-/--
-lemma `map_apply` / 引理 `map_apply`
-
-English:
-lemma map_apply
-  statement: {G H : ι -> Type*} {C : (i : ι) -> Set (G i)}
-  proof: rfl
-
-中文:
-引理 map_apply
-  结论: {G H : ι -> 类型} {C : (i : ι) -> 集合 (G i)}
-  证明: rfl
+/-
+**RestrictedProduct.map_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：map_apply {G H : ι -> Type*} {C : (i : ι) -> Set (G i)} {D : (i : ι) -> Se
+t (H i)} (φ : (i : ι) -> G i -> H i) (hφ : forallᶠ i in 𝓕, MapsTo (φ i) (C i) (D
+ i)) (x : Πʳ i, [G i, C i]_[𝓕]) (j : ι) : x.map φ hφ j = φ j (x j)
+参数：i : ι；G i；i : ι；H i；φ : (i : ι) -> G i -> H i；hφ : forallᶠ i in 𝓕, MapsTo (φ 
+i) (C i) (D i)；x : Πʳ i, [G i, C i]_[𝓕]；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_apply {G H : ι -> Type*} {C : (i : ι) -> Set (G i)}
-    {D : (i : ι) -> Set (H i)} (φ : (i : ι) -> G i -> H i)
-    (hφ : forallᶠ i in 𝓕, MapsTo (φ i) (C i) (D i))
+lemma map_apply {G H : ι → Type*} {C : (i : ι) → Set (G i)}
+    {D : (i : ι) → Set (H i)} (φ : (i : ι) → G i → H i)
+    (hφ : ∀ᶠ i in 𝓕, MapsTo (φ i) (C i) (D i))
     (x : Πʳ i, [G i, C i]_[𝓕]) (j : ι) :
     x.map φ hφ j = φ j (x j) :=
   rfl
@@ -1208,9 +846,9 @@ end set
 
 section monoid
 
-variable [Π i, Monoid (R₁ i)] [Π i, Monoid (R₂ i)] [forall i, SubmonoidClass (S₁ i) (R₁ i)]
-    [forall i, SubmonoidClass (S₂ i) (R₂ i)] (φ : forall j, R₁ (f j) ->* R₂ j)
-    (hφ : forallᶠ j in 𝓕₂, MapsTo (φ j) (B₁ (f j)) (B₂ j))
+variable [Π i, Monoid (R₁ i)] [Π i, Monoid (R₂ i)] [∀ i, SubmonoidClass (S₁ i) (R₁ i)]
+    [∀ i, SubmonoidClass (S₂ i) (R₂ i)] (φ : ∀ j, R₁ (f j) →* R₂ j)
+    (hφ : ∀ᶠ j in 𝓕₂, MapsTo (φ j) (B₁ (f j)) (B₂ j))
 
 /--
 Given two restricted products `Πʳ (i : ι₁), [R₁ i, B₁ i]_[𝓕₁]` and `Πʳ (j : ι₂), [R₂ j, B₂ j]_[𝓕₂]`
@@ -1224,39 +862,16 @@ homomorphisms `φ j : R₁ (f j) → R₂ j` sending `B₁ (f j)` into `B₂ j` 
 gives an additive monoid homomorphism between them. The data needed is a function `f : ι₂ → ι₁` such
 that `𝓕₂` tends to `𝓕₁` along `f`, and additive monoid homomorphisms `φ j : R₁ (f j) → R₂ j`
 sending `B₁ (f j)` into `B₂ j` for an `𝓕₂`-large set of `j`'s. -/]
-/--
-Definition of `mapAlongMonoidHom` / `mapAlongMonoidHom` 的定义
-
-English:
-definition mapAlongMonoidHom
-  signature: : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  body: mapAlong R₁ R₂ f hf (fun j r => φ j r) hφ
-  map_one' := by
-    ext i
-    exact map_one (φ i)
-  map_mul' x y := by
-    ext i
-    exact map_mul (φ i) _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mapAlongMonoidHom
-  签名: : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  定义体: mapAlong R₁ R₂ f hf (fun j r => φ j r) hφ
-  map_one' := by
-    ext i
-    exact map_one (φ i)
-  map_mul' x y := by
-    ext i
-    exact map_mul (φ i) _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mapAlong
+/-
+**RestrictedProduct.mapAlongMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProdu
+ct`。
+形式化陈述：mapAlongMonoidHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] wh
+ere toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapAlongMonoidHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  toFun := mapAlong R₁ R₂ f hf (fun j r => φ j r) hφ
+def mapAlongMonoidHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] →* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
+  toFun := mapAlong R₁ R₂ f hf (fun j r ↦ φ j r) hφ
   map_one' := by
     ext i
     exact map_one (φ i)
@@ -1265,18 +880,14 @@ def mapAlongMonoidHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->* Πʳ j, [R₂ j, 
     exact map_mul (φ i) _ _
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapAlongMonoidHom_apply` / 引理 `mapAlongMonoidHom_apply`
-
-English:
-lemma mapAlongMonoidHom_apply
-  given: (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂)
-  proof: rfl
-
-中文:
-引理 mapAlongMonoidHom_apply
-  条件: (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂)
-  证明: rfl
+/-
+**RestrictedProduct.mapAlongMonoidHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `Restricte
+dProduct`。
+形式化陈述：mapAlongMonoidHom_apply (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂) : x.mapAlon
+gMonoidHom R₁ R₂ f hf φ hφ j = φ j (x (f j))
+参数：x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]；j : ι₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapAlongMonoidHom_apply (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂) :
     x.mapAlongMonoidHom R₁ R₂ f hf φ hφ j = φ j (x (f j)) :=
@@ -1286,48 +897,47 @@ end monoid
 
 section ring
 
-variable [Π i, Ring (R₁ i)] [Π i, Ring (R₂ i)] [forall i, SubringClass (S₁ i) (R₁ i)]
-    [forall i, SubringClass (S₂ i) (R₂ i)] (φ : forall j, R₁ (f j) ->+* R₂ j)
-    (hφ : forallᶠ j in 𝓕₂, MapsTo (φ j) (B₁ (f j)) (B₂ j))
+variable [Π i, Ring (R₁ i)] [Π i, Ring (R₂ i)] [∀ i, SubringClass (S₁ i) (R₁ i)]
+    [∀ i, SubringClass (S₂ i) (R₂ i)] (φ : ∀ j, R₁ (f j) →+* R₂ j)
+    (hφ : ∀ᶠ j in 𝓕₂, MapsTo (φ j) (B₁ (f j)) (B₂ j))
 
 /--
-Definition of `mapAlongRingHom` / `mapAlongRingHom` 的定义
-
-English:
-definition mapAlongRingHom
-  signature: : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->+* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  body: mapAlongMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
-  __ := mapAlongAddMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
-
-@[simp]
-
-中文:
-定义 mapAlongRingHom
-  签名: : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->+* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  定义体: mapAlongMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
-  __ := mapAlongAddMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
-
-@[simp]
-
-Depends on / 依赖: mapAlongMonoidHom
+Given two restricted products of rings `Πʳ (i : ι₁), [R₁ i, B₁ i]_[𝓕₁]` and
+`Πʳ (j : ι₂), [R₂ j, B₂ j]_[𝓕₂]`, `RestrictedProduct.mapAlongRingHom` gives a
+ring homomorphism between them. The data needed is a
+function `f : ι₂ → ι₁` such that `𝓕₂` tends to `𝓕₁` along `f`, and ring homomorphisms
+`φ j : R₁ (f j) → R₂ j` sending `B₁ (f j)` into `B₂ j` for an `𝓕₂`-large set of `j`'s.
 -/
-def mapAlongRingHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->+* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
-  __ := mapAlongMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
-  __ := mapAlongAddMonoidHom R₁ R₂ f hf (fun j => φ j) hφ
+/-
+**RestrictedProduct.mapAlongRingHom** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct
+`。
+形式化陈述：mapAlongRingHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] ->+* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] whe
+re __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given two restricted products of rings `Πʳ (i : ι₁), [R₁ i, B₁ i]_[𝓕₁]` and
+`Πʳ (j : ι₂), [R₂ j, B₂ j]_[𝓕₂]`, `RestrictedProduct.mapAlongRingHom` gives a
+ring homomorphism between them. The data needed is a
+function `f : ι₂ → ι₁` such that `𝓕₂` tends to `𝓕₁` along `f`, and ring homomorp
+hisms
+`φ j : R₁ (f j) → R₂ j` sending `B₁ (f j)` into `B₂ j` for an `𝓕₂`-large set of 
+`j`'s.
+-/
+def mapAlongRingHom : Πʳ i, [R₁ i, B₁ i]_[𝓕₁] →+* Πʳ j, [R₂ j, B₂ j]_[𝓕₂] where
+  __ := mapAlongMonoidHom R₁ R₂ f hf (fun j ↦ φ j) hφ
+  __ := mapAlongAddMonoidHom R₁ R₂ f hf (fun j ↦ φ j) hφ
 
 @[simp]
-/--
-lemma `mapAlongRingHom_apply` / 引理 `mapAlongRingHom_apply`
-
-English:
-lemma mapAlongRingHom_apply
-  given: (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂)
-  proof: rfl
-
-中文:
-引理 mapAlongRingHom_apply
-  条件: (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂)
-  证明: rfl
+/-
+**RestrictedProduct.mapAlongRingHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedP
+roduct`。
+形式化陈述：mapAlongRingHom_apply (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂) : x.mapAlongR
+ingHom R₁ R₂ f hf φ hφ j = φ j (x (f j))
+参数：x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]；j : ι₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapAlongRingHom_apply (x : Πʳ i, [R₁ i, B₁ i]_[𝓕₁]) (j : ι₂) :
     x.mapAlongRingHom R₁ R₂ f hf φ hφ j = φ j (x (f j)) :=
@@ -1339,470 +949,420 @@ end map
 
 section single
 
-variable {S : ι -> Type*} {G : ι -> Type*} [Π i, SetLike (S i) (G i)] (A : (i : ι) -> (S i))
+variable {S : ι → Type*} {G : ι → Type*} [Π i, SetLike (S i) (G i)] (A : (i : ι) → (S i))
   [DecidableEq ι]
 
 section one
 
-variable [forall i, One (G i)] [forall i, OneMemClass (S i) (G i)] (i : ι)
+variable [∀ i, One (G i)] [∀ i, OneMemClass (S i) (G i)] (i : ι)
 
 /-- The function supported at `i`, with value `x` there, and `1` elsewhere. -/
 @[to_additive
 /-- The function supported at `i`, with value `x` there, and `0` elsewhere. -/]
-/--
-Definition of `mulSingle` / `mulSingle` 的定义
-
-English:
-definition mulSingle
-  signature: (x : G i)
-  body: Pi.mulSingle i x
-  property := by
-    filter_upwards [show {i}ᶜ in Filter.cofinite by simp]
-    simp_all
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulSingle
-  签名: (x : G i)
-  定义体: Pi.mulSingle i x
-  property := by
-    filter_upwards [show {i}ᶜ in Filter.cofinite by simp]
-    simp_all
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Pi.mulSingle, mulSingle
+/-
+**RestrictedProduct.mulSingle** 是 Mathlib 中的一个定义，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle (x : G i) : Πʳ i, [G i, A i] where val
+参数：x : G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mulSingle (x : G i) : Πʳ i, [G i, A i] where
   val := Pi.mulSingle i x
   property := by
-    filter_upwards [show {i}ᶜ in Filter.cofinite by simp]
+    filter_upwards [show {i}ᶜ ∈ Filter.cofinite by simp]
     simp_all
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_mulSingle_apply` / 引理 `coe_mulSingle_apply`
-
-English:
-lemma coe_mulSingle_apply
-  given: (x : G i) (j : ι)
-  statement: mulSingle A i x j = Pi.mulSingle i x j
-  proof: rfl
-
-中文:
-引理 coe_mulSingle_apply
-  条件: (x : G i) (j : ι)
-  结论: mulSingle A i x j = 依赖函数类型.mulSingle i x j
-  证明: rfl
+/-
+**RestrictedProduct.coe_mulSingle_apply** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPro
+duct`。
+形式化陈述：coe_mulSingle_apply (x : G i) (j : ι) : mulSingle A i x j = Pi.mulSingle i
+ x j
+参数：x : G i；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mulSingle_apply (x : G i) (j : ι) : mulSingle A i x j = Pi.mulSingle i x j := rfl
-/--
-lemma `comp_mulSingle` / 引理 `comp_mulSingle`
-
-English:
-lemma comp_mulSingle
-  statement: (↑) ∘ mulSingle A i = Pi.mulSingle (M := G) i
-  proof: by ext; simp
-
-@[to_additive]
-
-中文:
-引理 comp_mulSingle
-  结论: (↑) ∘ mulSingle A i = 依赖函数类型.mulSingle (M := G) i
-  证明: by ext; simp
-
-@[to_additive]
+/-
+**RestrictedProduct.comp_mulSingle** 是 Mathlib 中的一个定理，位于命名空间 `RestrictedProduct`
+。
+形式化陈述：∀ {ι : Type u_1} {S : ι → Type u_3} {G : ι → Type u_4} [inst : (i : ι) → S
+etLike (S i) (G i)] (A : (i : ι) → S i)   [inst_1 : DecidableEq ι] [inst_2 : (i 
+: ι) → One (G i)] [inst_3 : ∀ (i : ι), OneMemClass (S i) (G i)] (i : ι),   DFunL
+ike.coe ∘ RestrictedProduct.mulSingle A i = Pi.mulSingle i
+参数：i : ι；S i；G i；A : (i : ι) → S i；i : ι；G i；i : ι；S i；G i；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma comp_mulSingle : (↑) ∘ mulSingle A i = Pi.mulSingle (M := G) i := by ext; simp
 
 @[to_additive]
-/--
-lemma `mulSingle_injective` / 引理 `mulSingle_injective`
-
-English:
-lemma mulSingle_injective
-  statement: (mulSingle A i).Injective
-  proof: (comp_mulSingle A _ ▸ Pi.mulSingle_injective i).of_comp
-
-@[to_additive]
-
-中文:
-引理 mulSingle_injective
-  结论: (mulSingle A i).单射
-  证明: (comp_mulSingle A _ ▸ Pi.mulSingle_injective i).of_comp
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_injective, comp_mulSingle, mulSingle_injective, of_comp
+/-
+**RestrictedProduct.mulSingle_injective** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPro
+duct`。
+形式化陈述：mulSingle_injective : (mulSingle A i).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用引理 `Pi.mulSingle_injective`：mulSingle_injective (i : ι) : Function.Injective
+ (mulSingle i : M i -> forall i, M i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RestrictedProduct.comp_mulSingle`：∀ {ι : Type u_1} {S : ι → Type u_3} {G
+ : ι → Type u_4} [inst : (i : ι) → SetLike (S i) (G i)] (A : (i : ι) → S i)   [i
+nst_1 : DecidableEq ι]…
 -/
 lemma mulSingle_injective : (mulSingle A i).Injective :=
   (comp_mulSingle A _ ▸ Pi.mulSingle_injective i).of_comp
 
 @[to_additive]
-/--
-lemma `mulSingle_inj` / 引理 `mulSingle_inj`
-
-English:
-lemma mulSingle_inj
-  given: {x y : G i}
-  statement: mulSingle A i x = mulSingle A i y ↔ x = y
-  proof: (mulSingle_injective A i).eq_iff
-
-@[to_additive]
-
-中文:
-引理 mulSingle_inj
-  条件: {x y : G i}
-  结论: mulSingle A i x = mulSingle A i y ↔ x = y
-  证明: (mulSingle_injective A i).eq_iff
-
-@[to_additive]
-
-Depends on / 依赖: eq_iff, mulSingle_injective
+/-
+**RestrictedProduct.mulSingle_inj** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_inj {x y : G i} : mulSingle A i x = mulSingle A i y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `RestrictedProduct.mulSingle_injective`：mulSingle_injective : (mulSingle 
+A i).Injective
 -/
 lemma mulSingle_inj {x y : G i} : mulSingle A i x = mulSingle A i y ↔ x = y :=
   (mulSingle_injective A i).eq_iff
 
 @[to_additive]
-/--
-lemma `mulSingle_eq_same` / 引理 `mulSingle_eq_same`
-
-English:
-lemma mulSingle_eq_same
-  given: (r : G i)
-  statement: mulSingle A i r i = r
-  proof: Pi.mulSingle_eq_same i r
-
-@[to_additive]
-
-中文:
-引理 mulSingle_eq_same
-  条件: (r : G i)
-  结论: mulSingle A i r i = r
-  证明: Pi.mulSingle_eq_same i r
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_eq_same, mulSingle_eq_same
+/-
+**RestrictedProduct.mulSingle_eq_same** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProdu
+ct`。
+形式化陈述：mulSingle_eq_same (r : G i) : mulSingle A i r i = r
+参数：r : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.mulSingle_eq_same`：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i 
+x i = x
 -/
 lemma mulSingle_eq_same (r : G i) : mulSingle A i r i = r := Pi.mulSingle_eq_same i r
 
 @[to_additive]
-/--
-lemma `mulSingle_eq_of_ne` / 引理 `mulSingle_eq_of_ne`
-
-English:
-lemma mulSingle_eq_of_ne
-  given: {i j : ι} (r : G i) (h : j != i)
-  statement: mulSingle A i r j = 1
-  proof: Pi.mulSingle_eq_of_ne h r
-
-@[to_additive]
-
-中文:
-引理 mulSingle_eq_of_ne
-  条件: {i j : ι} (r : G i) (h : j != i)
-  结论: mulSingle A i r j = 1
-  证明: Pi.mulSingle_eq_of_ne h r
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_eq_of_ne, mulSingle_eq_of_ne
+/-
+**RestrictedProduct.mulSingle_eq_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProd
+uct`。
+形式化陈述：mulSingle_eq_of_ne {i j : ι} (r : G i) (h : j != i) : mulSingle A i r j = 
+1
+参数：r : G i；h : j != i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.mulSingle_eq_of_ne`：mulSingle_eq_of_ne {i i' : ι} (h : i' != i) (x : 
+M i) : mulSingle i x i' = 1
 -/
-lemma mulSingle_eq_of_ne {i j : ι} (r : G i) (h : j != i) : mulSingle A i r j = 1 :=
+lemma mulSingle_eq_of_ne {i j : ι} (r : G i) (h : j ≠ i) : mulSingle A i r j = 1 :=
   Pi.mulSingle_eq_of_ne h r
 
 @[to_additive]
-/--
-lemma `mulSingle_eq_of_ne'` / 引理 `mulSingle_eq_of_ne'`
-
-English:
-lemma mulSingle_eq_of_ne'
-  given: {i j : ι} (r : G i) (h : i != j)
-  statement: mulSingle A i r j = 1
-  proof: Pi.mulSingle_eq_of_ne' h r
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_eq_of_ne'
-  条件: {i j : ι} (r : G i) (h : i != j)
-  结论: mulSingle A i r j = 1
-  证明: Pi.mulSingle_eq_of_ne' h r
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Pi.mulSingle_eq_of_ne, mulSingle_eq_of_ne
+/-
+**RestrictedProduct.mulSingle_eq_of_ne'** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPro
+duct`。
+形式化陈述：mulSingle_eq_of_ne' {i j : ι} (r : G i) (h : i != j) : mulSingle A i r j =
+ 1
+参数：r : G i；h : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.mulSingle_eq_of_ne'`：mulSingle_eq_of_ne' {i i' : ι} (h : i != i') (x 
+: M i) : mulSingle i x i' = 1
 -/
-lemma mulSingle_eq_of_ne' {i j : ι} (r : G i) (h : i != j) : mulSingle A i r j = 1 :=
+lemma mulSingle_eq_of_ne' {i j : ι} (r : G i) (h : i ≠ j) : mulSingle A i r j = 1 :=
   Pi.mulSingle_eq_of_ne' h r
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_one` / 引理 `mulSingle_one`
-
-English:
-lemma mulSingle_one
-  statement: mulSingle A i 1 = 1
-  proof: by ext; simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_one
-  结论: mulSingle A i 1 = 1
-  证明: by ext; simp
-
-@[to_additive (attr := simp)]
+/-
+**RestrictedProduct.mulSingle_one** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_one : mulSingle A i 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `Pi.mulSingle_one`：mulSingle_one (i : ι) : mulSingle i (1 : M i) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mulSingle_one : mulSingle A i 1 = 1 := by ext; simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_eq_one_iff` / 引理 `mulSingle_eq_one_iff`
-
-English:
-lemma mulSingle_eq_one_iff
-  given: {x : G i}
-  statement: mulSingle A i x = 1 ↔ x = 1
-  proof: Subtype.ext_iff.trans Pi.mulSingle_eq_one_iff
-
-@[to_additive]
-
-中文:
-引理 mulSingle_eq_one_iff
-  条件: {x : G i}
-  结论: mulSingle A i x = 1 ↔ x = 1
-  证明: Subtype.ext_iff.trans Pi.mulSingle_eq_one_iff
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_eq_one_iff, Subtype, Subtype.ext_iff.trans, ext_iff, mulSingle_eq_one_iff
+/-
+**RestrictedProduct.mulSingle_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPr
+oduct`。
+形式化陈述：mulSingle_eq_one_iff {x : G i} : mulSingle A i x = 1 ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用引理 `Pi.mulSingle_eq_one_iff`：mulSingle_eq_one_iff : mulSingle i x = 1 ↔ x = 
+1
 -/
 lemma mulSingle_eq_one_iff {x : G i} : mulSingle A i x = 1 ↔ x = 1 :=
   Subtype.ext_iff.trans Pi.mulSingle_eq_one_iff
 
 @[to_additive]
-/--
-lemma `mulSingle_ne_one_iff` / 引理 `mulSingle_ne_one_iff`
-
-English:
-lemma mulSingle_ne_one_iff
-  given: {x : G i}
-  statement: mulSingle A i x != 1 ↔ x != 1
-  proof: Subtype.coe_ne_coe.symm.trans Pi.mulSingle_ne_one_iff
-
-中文:
-引理 mulSingle_ne_one_iff
-  条件: {x : G i}
-  结论: mulSingle A i x != 1 ↔ x != 1
-  证明: Subtype.coe_ne_coe.symm.trans Pi.mulSingle_ne_one_iff
-
-Depends on / 依赖: Pi.mulSingle_ne_one_iff, Subtype, Subtype.coe_ne_coe.symm.trans, coe_ne_coe, mulSingle_ne_one_iff
+/-
+**RestrictedProduct.mulSingle_ne_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedPr
+oduct`。
+形式化陈述：mulSingle_ne_one_iff {x : G i} : mulSingle A i x != 1 ↔ x != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Subtype.coe_ne_coe`：coe_ne_coe {a b : Subtype p} : (a : α) != b ↔ a != b
+· 使用引理 `Pi.mulSingle_ne_one_iff`：mulSingle_ne_one_iff : mulSingle i x != 1 ↔ x !
+= 1
 -/
-lemma mulSingle_ne_one_iff {x : G i} : mulSingle A i x != 1 ↔ x != 1 :=
+lemma mulSingle_ne_one_iff {x : G i} : mulSingle A i x ≠ 1 ↔ x ≠ 1 :=
   Subtype.coe_ne_coe.symm.trans Pi.mulSingle_ne_one_iff
 
 end one
 
 @[to_additive]
-/--
-lemma `mulSingle_mul` / 引理 `mulSingle_mul`
-
-English:
-lemma mulSingle_mul
-  statement: [forall i, MulOneClass (G i)] [forall i, OneMemClass (S i) (G i)]
-  proof: by
-  ext; simp [Pi.mulSingle_mul]
-
-@[simp]
-
-中文:
-引理 mulSingle_mul
-  结论: [对任意 i, MulOne类 (G i)] [对任意 i, OneMem类 (S i) (G i)]
-  证明: by
-  ext; simp [Pi.mulSingle_mul]
-
-@[simp]
-
-Depends on / 依赖: Pi.mulSingle_mul, mulSingle_mul
+/-
+**RestrictedProduct.mulSingle_mul** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_mul [forall i, MulOneClass (G i)] [forall i, OneMemClass (S i) (
+G i)] [forall i, MulMemClass (S i) (G i)] (i : ι) (r s : G i) : mulSingle A i (r
+ * s) = mulSingle A i r * mulSingle A i s
+参数：G i；S i；G i；S i；G i；i : ι；r s : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Pi.mulSingle_mul`：Pi.mulSingle_mul [forall i, MulOneClass <| f i] (i : I
+) (x y : f i) : mulSingle i (x * y) = mulSingle i x * mulSingle i y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mulSingle_mul [forall i, MulOneClass (G i)] [forall i, OneMemClass (S i) (G i)]
-    [forall i, MulMemClass (S i) (G i)] (i : ι) (r s : G i) :
+lemma mulSingle_mul [∀ i, MulOneClass (G i)] [∀ i, OneMemClass (S i) (G i)]
+    [∀ i, MulMemClass (S i) (G i)] (i : ι) (r s : G i) :
     mulSingle A i (r * s) = mulSingle A i r * mulSingle A i s := by
   ext; simp [Pi.mulSingle_mul]
 
 @[simp]
-/--
-lemma `mul_single` / 引理 `mul_single`
-
-English:
-lemma mul_single
-  statement: [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G i)]
-  proof: by
-  ext j
-  rcases eq_or_ne i j with rfl | hne; · simp
-  simp [single_eq_of_ne' A _ hne]
-
-@[simp]
-
-中文:
-引理 mul_single
-  结论: [对任意 i, 乘零类 (G i)] [对任意 i, ZeroMem类 (S i) (G i)]
-  证明: by
-  ext j
-  rcases eq_or_ne i j with rfl | hne; · simp
-  simp [single_eq_of_ne' A _ hne]
-
-@[simp]
-
-Depends on / 依赖: eq_or_ne, single_eq_of_ne
+/-
+**RestrictedProduct.mul_single** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mul_single [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G
+ i)] [forall i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]
+) : single A i (x i * r) = x * single A i r
+参数：G i；S i；G i；S i；G i；i : ι；r : G i；x : Πʳ i, [G i, A i]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RestrictedProduct.single_eq_of_ne'`：∀ {ι : Type u_1} {S : ι → Type u_3} 
+{G : ι → Type u_4} [inst : (i : ι) → SetLike (S i) (G i)] (A : (i : ι) → S i)   
+[inst_1 : DecidableEq ι]…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-lemma mul_single [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G i)]
-    [forall i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]) :
+lemma mul_single [∀ i, MulZeroClass (G i)] [∀ i, ZeroMemClass (S i) (G i)]
+    [∀ i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]) :
     single A i (x i * r) = x * single A i r := by
   ext j
   rcases eq_or_ne i j with rfl | hne; · simp
   simp [single_eq_of_ne' A _ hne]
 
 @[simp]
-/--
-lemma `single_mul` / 引理 `single_mul`
-
-English:
-lemma single_mul
-  statement: [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G i)]
-  proof: by
-  ext j
-  rcases eq_or_ne i j with rfl | hne; · simp
-  simp [single_eq_of_ne' A _ hne]
-
-@[to_additive]
-
-中文:
-引理 single_mul
-  结论: [对任意 i, 乘零类 (G i)] [对任意 i, ZeroMem类 (S i) (G i)]
-  证明: by
-  ext j
-  rcases eq_or_ne i j with rfl | hne; · simp
-  simp [single_eq_of_ne' A _ hne]
-
-@[to_additive]
-
-Depends on / 依赖: eq_or_ne, single_eq_of_ne
+/-
+**RestrictedProduct.single_mul** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：single_mul [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G
+ i)] [forall i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]
+) : single A i (r * x i) = single A i r * x
+参数：G i；S i；G i；S i；G i；i : ι；r : G i；x : Πʳ i, [G i, A i]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RestrictedProduct.single_eq_of_ne'`：∀ {ι : Type u_1} {S : ι → Type u_3} 
+{G : ι → Type u_4} [inst : (i : ι) → SetLike (S i) (G i)] (A : (i : ι) → S i)   
+[inst_1 : DecidableEq ι]…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-lemma single_mul [forall i, MulZeroClass (G i)] [forall i, ZeroMemClass (S i) (G i)]
-    [forall i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]) :
+lemma single_mul [∀ i, MulZeroClass (G i)] [∀ i, ZeroMemClass (S i) (G i)]
+    [∀ i, MulMemClass (S i) (G i)] (i : ι) (r : G i) (x : Πʳ i, [G i, A i]) :
     single A i (r * x i) = single A i r * x := by
   ext j
   rcases eq_or_ne i j with rfl | hne; · simp
   simp [single_eq_of_ne' A _ hne]
 
 @[to_additive]
-/--
-lemma `mulSingle_inv` / 引理 `mulSingle_inv`
-
-English:
-lemma mulSingle_inv
-  statement: [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
-  proof: by
-  ext; simp [Pi.mulSingle_inv]
-
-@[to_additive]
-
-中文:
-引理 mulSingle_inv
-  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
-  证明: by
-  ext; simp [Pi.mulSingle_inv]
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_inv, mulSingle_inv
+/-
+**RestrictedProduct.mulSingle_inv** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_inv [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)
+] (i : ι) (r : G i) : mulSingle A i r⁻¹ = (mulSingle A i r)⁻¹
+参数：G i；S i；G i；i : ι；r : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Pi.mulSingle_inv`：Pi.mulSingle_inv [forall i, Group <| f i] (i : I) (x :
+ f i) : mulSingle i x⁻¹ = (mulSingle i x)⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mulSingle_inv [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
+lemma mulSingle_inv [∀ i, Group (G i)] [∀ i, SubgroupClass (S i) (G i)]
     (i : ι) (r : G i) :
     mulSingle A i r⁻¹ = (mulSingle A i r)⁻¹ := by
   ext; simp [Pi.mulSingle_inv]
 
 @[to_additive]
-/--
-lemma `mulSingle_div` / 引理 `mulSingle_div`
-
-English:
-lemma mulSingle_div
-  statement: [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
-  proof: by
-  ext; simp [Pi.mulSingle_div]
-
-@[to_additive]
-
-中文:
-引理 mulSingle_div
-  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
-  证明: by
-  ext; simp [Pi.mulSingle_div]
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_div, mulSingle_div
+/-
+**RestrictedProduct.mulSingle_div** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_div [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)
+] (i : ι) (r s : G i) : mulSingle A i (r / s) = mulSingle A i r / mulSingle A i 
+s
+参数：G i；S i；G i；i : ι；r s : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Pi.mulSingle_div`：Pi.mulSingle_div [forall i, Group <| f i] (i : I) (x y
+ : f i) : mulSingle i (x / y) = mulSingle i x / mulSingle i y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mulSingle_div [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
+lemma mulSingle_div [∀ i, Group (G i)] [∀ i, SubgroupClass (S i) (G i)]
     (i : ι) (r s : G i) :
     mulSingle A i (r / s) = mulSingle A i r / mulSingle A i s := by
   ext; simp [Pi.mulSingle_div]
 
 @[to_additive]
-/--
-lemma `mulSingle_pow` / 引理 `mulSingle_pow`
-
-English:
-lemma mulSingle_pow
-  statement: [forall i, Monoid (G i)] [forall i, SubmonoidClass (S i) (G i)]
-  proof: by
-  ext; simp [Pi.mulSingle_pow, RestrictedProduct.pow_apply]
-
-@[to_additive]
-
-中文:
-引理 mulSingle_pow
-  结论: [对任意 i, 幺半群 (G i)] [对任意 i, 子幺半群类 (S i) (G i)]
-  证明: by
-  ext; simp [Pi.mulSingle_pow, RestrictedProduct.pow_apply]
-
-@[to_additive]
-
-Depends on / 依赖: Pi.mulSingle_pow, RestrictedProduct, RestrictedProduct.pow_apply, mulSingle_pow, pow_apply
+/-
+**RestrictedProduct.mulSingle_pow** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`。
+形式化陈述：mulSingle_pow [forall i, Monoid (G i)] [forall i, SubmonoidClass (S i) (G 
+i)] (i : ι) (r : G i) (n : Nat) : mulSingle A i (r ^ n) = mulSingle A i r ^ n
+参数：G i；S i；G i；i : ι；r : G i；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Pi.mulSingle_pow`：Pi.mulSingle_pow [forall i, Monoid (f i)] (i : I) (x :
+ f i) (n : Nat) : mulSingle i (x ^ n) = mulSingle i x ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mulSingle_pow [forall i, Monoid (G i)] [forall i, SubmonoidClass (S i) (G i)]
-    (i : ι) (r : G i) (n : Nat) :
+lemma mulSingle_pow [∀ i, Monoid (G i)] [∀ i, SubmonoidClass (S i) (G i)]
+    (i : ι) (r : G i) (n : ℕ) :
     mulSingle A i (r ^ n) = mulSingle A i r ^ n := by
   ext; simp [Pi.mulSingle_pow, RestrictedProduct.pow_apply]
 
 @[to_additive]
-/--
-lemma `mulSingle_zpow` / 引理 `mulSingle_zpow`
-
-English:
-lemma mulSingle_zpow
-  statement: [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
-  proof: by
-  ext; simp [Pi.mulSingle_zpow, RestrictedProduct.zpow_apply]
-
-中文:
-引理 mulSingle_zpow
-  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
-  证明: by
-  ext; simp [Pi.mulSingle_zpow, RestrictedProduct.zpow_apply]
-
-Depends on / 依赖: Pi.mulSingle_zpow, RestrictedProduct, RestrictedProduct.zpow_apply, mulSingle_zpow, zpow_apply
+/-
+**RestrictedProduct.mulSingle_zpow** 是 Mathlib 中的一个引理，位于命名空间 `RestrictedProduct`
+。
+形式化陈述：mulSingle_zpow [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i
+)] (i : ι) (r : G i) (n : Int) : mulSingle A i (r ^ n) = mulSingle A i r ^ n
+参数：G i；S i；G i；i : ι；r : G i；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RestrictedProduct.ext`：ext {x y : Πʳ i, [R i, A i]_[𝓕]} (h : forall i, x
+ i = y i) : x = y
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Pi.mulSingle_zpow`：Pi.mulSingle_zpow [forall i, Group (f i)] (i : I) (x 
+: f i) (n : Int) : mulSingle i (x ^ n) = mulSingle i x ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mulSingle_zpow [forall i, Group (G i)] [forall i, SubgroupClass (S i) (G i)]
-    (i : ι) (r : G i) (n : Int) :
+lemma mulSingle_zpow [∀ i, Group (G i)] [∀ i, SubgroupClass (S i) (G i)]
+    (i : ι) (r : G i) (n : ℤ) :
     mulSingle A i (r ^ n) = mulSingle A i r ^ n := by
   ext; simp [Pi.mulSingle_zpow, RestrictedProduct.zpow_apply]
 
 end single
 
 end RestrictedProduct
+

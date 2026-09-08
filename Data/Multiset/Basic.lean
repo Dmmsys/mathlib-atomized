@@ -29,221 +29,147 @@ namespace Multiset
 
 section ToList
 
-/--
-Definition of `toList` / `toList` 的定义
+/-- Produces a list of the elements in the multiset using choice. -/
+/-
+**Multiset.toList** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：toList (s : Multiset α)
+参数：s : Multiset α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toList
-  signature: (s : Multiset α)
-  body: s.out
-
-@[simp, norm_cast]
-
-中文:
-定义 toList
-  签名: (s : Multiset α)
-  定义体: s.out
-
-@[simp, norm_cast]
-
-Depends on / 依赖: s.out
+--- 原说明 ---
+Produces a list of the elements in the multiset using choice.
 -/
 noncomputable def toList (s : Multiset α) :=
   s.out
 
 @[simp, norm_cast]
-/--
-theorem `coe_toList` / 定理 `coe_toList`
-
-English:
-theorem coe_toList
-  given: (s : Multiset α)
-  statement: (s.toList : Multiset α) = s
-  proof: s.out_eq'
-
-@[simp]
-
-中文:
-定理 coe_toList
-  条件: (s : Multiset α)
-  结论: (s.toList : Multiset α) = s
-  证明: s.out_eq'
-
-@[simp]
-
-Depends on / 依赖: out_eq, s.out_eq
+/-
+**Multiset.coe_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_toList (s : Multiset α) : (s.toList : Multiset α) = s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq'`：out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q
 -/
 theorem coe_toList (s : Multiset α) : (s.toList : Multiset α) = s :=
   s.out_eq'
 
 @[simp]
-/--
-theorem `toList_eq_nil` / 定理 `toList_eq_nil`
-
-English:
-theorem toList_eq_nil
-  given: {s : Multiset α}
-  statement: s.toList = [] ↔ s = 0
-  proof: by
-  rw [← coe_eq_zero]; rw [coe_toList]
-
-中文:
-定理 toList_eq_nil
-  条件: {s : Multiset α}
-  结论: s.toList = [] ↔ s = 0
-  证明: by
-  rw [← coe_eq_zero]; rw [coe_toList]
-
-Depends on / 依赖: coe_eq_zero, coe_toList
+/-
+**Multiset.toList_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toList_eq_nil {s : Multiset α} : s.toList = [] ↔ s = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_eq_zero`：coe_eq_zero (l : List α) : (l : Multiset α) = 0 ↔ 
+l = []
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toList_eq_nil {s : Multiset α} : s.toList = [] ↔ s = 0 := by
-  rw [← coe_eq_zero]; rw [coe_toList]
-
-/--
-theorem `empty_toList` / 定理 `empty_toList`
-
-English:
-theorem empty_toList
-  given: {s : Multiset α}
-  statement: s.toList.isEmpty ↔ s = 0
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 empty_toList
-  条件: {s : Multiset α}
-  结论: s.toList.isEmpty ↔ s = 0
-  证明: by simp
-
-@[simp]
+  rw [← coe_eq_zero, coe_toList]
+/-
+**Multiset.empty_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：empty_toList {s : Multiset α} : s.toList.isEmpty ↔ s = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem empty_toList {s : Multiset α} : s.toList.isEmpty ↔ s = 0 := by simp
 
 @[simp]
-/--
-theorem `toList_zero` / 定理 `toList_zero`
-
-English:
-theorem toList_zero
-  statement: (Multiset.toList 0 : List α) = []
-  proof: toList_eq_nil.mpr rfl
-
-@[simp]
-
-中文:
-定理 toList_zero
-  结论: (Multiset.toList 0 : 列表 α) = []
-  证明: toList_eq_nil.mpr rfl
-
-@[simp]
-
-Depends on / 依赖: toList_eq_nil, toList_eq_nil.mpr
+/-
+**Multiset.toList_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toList_zero : (Multiset.toList 0 : List α) = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.toList_eq_nil`：toList_eq_nil {s : Multiset α} : s.toList = [] ↔
+ s = 0
 -/
 theorem toList_zero : (Multiset.toList 0 : List α) = [] :=
   toList_eq_nil.mpr rfl
 
 @[simp]
-/--
-theorem `mem_toList` / 定理 `mem_toList`
-
-English:
-theorem mem_toList
-  given: {a : α} {s : Multiset α}
-  statement: a in s.toList ↔ a in s
-  proof: by
-  rw [← mem_coe]; rw [coe_toList]
-
-@[simp]
-
-中文:
-定理 mem_toList
-  条件: {a : α} {s : Multiset α}
-  结论: a in s.toList ↔ a in s
-  证明: by
-  rw [← mem_coe]; rw [coe_toList]
-
-@[simp]
-
-Depends on / 依赖: coe_toList, mem_coe
+/-
+**Multiset.mem_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_toList {a : α} {s : Multiset α} : a in s.toList ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.mem_coe`：mem_coe {a : α} {l : List α} : a in (l : Multiset α) ↔
+ a in l
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toList {a : α} {s : Multiset α} : a in s.toList ↔ a in s := by
-  rw [← mem_coe]; rw [coe_toList]
+theorem mem_toList {a : α} {s : Multiset α} : a ∈ s.toList ↔ a ∈ s := by
+  rw [← mem_coe, coe_toList]
 
 @[simp]
-/--
-theorem `toList_eq_singleton_iff` / 定理 `toList_eq_singleton_iff`
-
-English:
-theorem toList_eq_singleton_iff
-  given: {a : α} {m : Multiset α}
-  statement: m.toList = [a] ↔ m = {a}
-  proof: by
-  rw [← perm_singleton]; rw [← coe_eq_coe]; rw [coe_toList]; rw [coe_singleton]
-
-@[simp]
-
-中文:
-定理 toList_eq_singleton_iff
-  条件: {a : α} {m : Multiset α}
-  结论: m.toList = [a] ↔ m = {a}
-  证明: by
-  rw [← perm_singleton]; rw [← coe_eq_coe]; rw [coe_toList]; rw [coe_singleton]
-
-@[simp]
-
-Depends on / 依赖: coe_eq_coe, coe_singleton, coe_toList, perm_singleton
+/-
+**Multiset.toList_eq_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toList_eq_singleton_iff {a : α} {m : Multiset α} : m.toList = [a] ↔ m = {a
+}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.perm_singleton`：∀ {α : Type u_1} {a : α} {l : List α}, l.Perm [a] ↔
+ l = [a]
+· 使用定理 `Multiset.coe_eq_coe`：coe_eq_coe {l₁ l₂ : List α} : (l₁ : Multiset α) = l
+₂ ↔ l₁ ~ l₂
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `Multiset.coe_singleton`：coe_singleton (a : α) : ([a] : Multiset α) = {a}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toList_eq_singleton_iff {a : α} {m : Multiset α} : m.toList = [a] ↔ m = {a} := by
-  rw [← perm_singleton]; rw [← coe_eq_coe]; rw [coe_toList]; rw [coe_singleton]
+  rw [← perm_singleton, ← coe_eq_coe, coe_toList, coe_singleton]
 
 @[simp]
-/--
-theorem `toList_singleton` / 定理 `toList_singleton`
-
-English:
-theorem toList_singleton
-  given: (a : α)
-  statement: ({a} : Multiset α).toList = [a]
-  proof: Multiset.toList_eq_singleton_iff.2 rfl
-
-@[simp]
-
-中文:
-定理 toList_singleton
-  条件: (a : α)
-  结论: ({a} : Multiset α).toList = [a]
-  证明: Multiset.toList_eq_singleton_iff.2 rfl
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.toList_eq_singleton_iff, toList_eq_singleton_iff
+/-
+**Multiset.toList_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toList_singleton (a : α) : ({a} : Multiset α).toList = [a]
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.toList_eq_singleton_iff`：toList_eq_singleton_iff {a : α} {m : M
+ultiset α} : m.toList = [a] ↔ m = {a}
 -/
 theorem toList_singleton (a : α) : ({a} : Multiset α).toList = [a] :=
   Multiset.toList_eq_singleton_iff.2 rfl
 
 @[simp]
-/--
-theorem `length_toList` / 定理 `length_toList`
-
-English:
-theorem length_toList
-  given: (s : Multiset α)
-  statement: s.toList.length = card s
-  proof: by
-  rw [← coe_card]; rw [coe_toList]
-
-中文:
-定理 length_toList
-  条件: (s : Multiset α)
-  结论: s.toList.length = card s
-  证明: by
-  rw [← coe_card]; rw [coe_toList]
-
-Depends on / 依赖: coe_card, coe_toList
+/-
+**Multiset.length_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：length_toList (s : Multiset α) : s.toList.length = card s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_card`：coe_card (l : List α) : card (l : Multiset α) = lengt
+h l
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
 -/
 theorem length_toList (s : Multiset α) : s.toList.length = card s := by
-  rw [← coe_card]; rw [coe_toList]
+  rw [← coe_card, coe_toList]
 
 end ToList
 
@@ -251,233 +177,176 @@ end ToList
 
 /-- The strong induction principle for multisets. -/
 @[elab_as_elim]
-/--
-Definition of `strongInductionOn` / `strongInductionOn` 的定义
+/-
+**Multiset.strongInductionOn** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：strongInductionOn {p : Multiset α -> Sort*} (s : Multiset α) (ih : forall 
+s, (forall t < s, p t) -> p s) : p s
+参数：s : Multiset α；ih : forall s, (forall t < s, p t) -> p s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition strongInductionOn
-  signature: {p : Multiset α -> Sort*} (s : Multiset α) (ih : forall s, (forall t < s, p t) -> p s)
-  body: (ih s) fun t _h =>
-      strongInductionOn t ih
-termination_by card s
-decreasing_by exact card_lt_card _h
-
-中文:
-定义 strongInductionOn
-  签名: {p : Multiset α -> 类型层*} (s : Multiset α) (ih : 对任意 s, (对任意 t < s, p t) -> p s)
-  定义体: (ih s) fun t _h =>
-      strongInductionOn t ih
-termination_by card s
-decreasing_by exact card_lt_card _h
-
-Depends on / 依赖: card_lt_card, decreasing_by, strongInductionOn, termination_by
+--- 原说明 ---
+The strong induction principle for multisets.
 -/
-def strongInductionOn {p : Multiset α -> Sort*} (s : Multiset α) (ih : forall s, (forall t < s, p t) -> p s) :
+def strongInductionOn {p : Multiset α → Sort*} (s : Multiset α) (ih : ∀ s, (∀ t < s, p t) → p s) :
     p s :=
     (ih s) fun t _h =>
       strongInductionOn t ih
 termination_by card s
 decreasing_by exact card_lt_card _h
-
-/--
-theorem `strongInductionOn_eq` / 定理 `strongInductionOn_eq`
-
-English:
-theorem strongInductionOn_eq
-  given: {p : Multiset α -> Sort*} (s : Multiset α) (H)
-  proof: by
-  rw [strongInductionOn]
-
-@[elab_as_elim]
-
-中文:
-定理 strongInductionOn_eq
-  条件: {p : Multiset α -> 类型层*} (s : Multiset α) (H)
-  证明: by
-  rw [strongInductionOn]
-
-@[elab_as_elim]
-
-Depends on / 依赖: strongInductionOn
+/-
+**Multiset.strongInductionOn_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：strongInductionOn_eq {p : Multiset α -> Sort*} (s : Multiset α) (H) : @str
+ongInductionOn _ p s H = H s fun t _h => @strongInductionOn _ p t H
+参数：s : Multiset α；H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.strongInductionOn.eq_1`：∀ {α : Type u_1} {p : Multiset α → Sort
+ u_3} (s : Multiset α)   (ih : (s : Multiset α) → ((t : Multiset α) → t < s → p 
+t) → p s),   s.strong…
 -/
-theorem strongInductionOn_eq {p : Multiset α -> Sort*} (s : Multiset α) (H) :
+theorem strongInductionOn_eq {p : Multiset α → Sort*} (s : Multiset α) (H) :
     @strongInductionOn _ p s H = H s fun t _h => @strongInductionOn _ p t H := by
   rw [strongInductionOn]
 
 @[elab_as_elim]
-/--
-theorem `case_strongInductionOn` / 定理 `case_strongInductionOn`
-
-English:
-theorem case_strongInductionOn
-  statement: {p : Multiset α -> Prop} (s : Multiset α) (h₀ : p 0)
-  proof: Multiset.strongInductionOn s fun s =>
-    Multiset.induction_on s (fun _ => h₀) fun _a _s _ ih =>
-(h₁ _ _) fun _t h => ih _ lt_of_le_of_lt h lt_cons_self _ _
-
-中文:
-定理 case_strongInductionOn
-  结论: {p : Multiset α -> 命题} (s : Multiset α) (h₀ : p 0)
-  证明: Multiset.strongInductionOn s fun s =>
-    Multiset.induction_on s (fun _ => h₀) fun _a _s _ ih =>
-(h₁ _ _) fun _t h => ih _ lt_of_le_of_lt h lt_cons_self _ _
-
-Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.strongInductionOn, induction_on, lt_cons_self, lt_of_le_of_lt, strongInductionOn
+/-
+**Multiset.case_strongInductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：case_strongInductionOn {p : Multiset α -> Prop} (s : Multiset α) (h₀ : p 0
+) (h₁ : forall a s, (forall t <= s, p t) -> p (a ::ₘ s)) : p s
+参数：s : Multiset α；h₀ : p 0；h₁ : forall a s, (forall t <= s, p t) -> p (a ::ₘ s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Multiset.lt_cons_self`：lt_cons_self (s : Multiset α) (a : α) : s < a ::ₘ
+ s
 -/
-theorem case_strongInductionOn {p : Multiset α -> Prop} (s : Multiset α) (h₀ : p 0)
-    (h₁ : forall a s, (forall t <= s, p t) -> p (a ::ₘ s)) : p s :=
+theorem case_strongInductionOn {p : Multiset α → Prop} (s : Multiset α) (h₀ : p 0)
+    (h₁ : ∀ a s, (∀ t ≤ s, p t) → p (a ::ₘ s)) : p s :=
   Multiset.strongInductionOn s fun s =>
     Multiset.induction_on s (fun _ => h₀) fun _a _s _ ih =>
-(h₁ _ _) fun _t h => ih _ lt_of_le_of_lt h lt_cons_self _ _
+      (h₁ _ _) fun _t h => ih _ <| lt_of_le_of_lt h <| lt_cons_self _ _
 
-/--
-Definition of `strongDownwardInduction` / `strongDownwardInduction` 的定义
+/-- Suppose that, given that `p t` can be defined on all supersets of `s` of cardinality less than
+`n`, one knows how to define `p s`. Then one can inductively define `p s` for all multisets `s` of
+cardinality less than `n`, starting from multisets of card `n` and iterating. This
+can be used either to define data, or to prove properties. -/
+/-
+**Multiset.strongDownwardInduction** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：strongDownwardInduction {p : Multiset α -> Sort*} {n : Nat} (H : forall t₁
+, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n ->
+ p t₁) (s : Multiset α) : card s <= n -> p s
+参数：H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) ->
+ card t₁ <= n -> p t₁；s : Multiset α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition strongDownwardInduction
-  signature: {p : Multiset α -> Sort*} {n : Nat}
-  body: H s fun {t} ht _h =>
-    strongDownwardInduction H t ht
-termination_by n - card s
-decreasing_by have := (card_lt_card _h); lia
-
-中文:
-定义 strongDownwardInduction
-  签名: {p : Multiset α -> 类型层*} {n : 自然数}
-  定义体: H s fun {t} ht _h =>
-    strongDownwardInduction H t ht
-termination_by n - card s
-decreasing_by have := (card_lt_card _h); lia
-
-Depends on / 依赖: card_lt_card, decreasing_by, strongDownwardInduction, termination_by
+--- 原说明 ---
+Suppose that, given that `p t` can be defined on all supersets of `s` of cardina
+lity less than
+`n`, one knows how to define `p s`. Then one can inductively define `p s` for al
+l multisets `s` of
+cardinality less than `n`, starting from multisets of card `n` and iterating. Th
+is
+can be used either to define data, or to prove properties.
 -/
-def strongDownwardInduction {p : Multiset α -> Sort*} {n : Nat}
-    (H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n -> p t₁)
+def strongDownwardInduction {p : Multiset α → Sort*} {n : ℕ}
+    (H : ∀ t₁, (∀ {t₂ : Multiset α}, card t₂ ≤ n → t₁ < t₂ → p t₂) → card t₁ ≤ n → p t₁)
     (s : Multiset α) :
-    card s <= n -> p s :=
+    card s ≤ n → p s :=
   H s fun {t} ht _h =>
     strongDownwardInduction H t ht
 termination_by n - card s
 decreasing_by have := (card_lt_card _h); lia
-
-/--
-theorem `strongDownwardInduction_eq` / 定理 `strongDownwardInduction_eq`
-
-English:
-theorem strongDownwardInduction_eq
-  statement: {p : Multiset α -> Sort*} {n : Nat}
-  proof: by
-  rw [strongDownwardInduction]
-
-中文:
-定理 strongDownwardInduction_eq
-  结论: {p : Multiset α -> 类型层*} {n : 自然数}
-  证明: by
-  rw [strongDownwardInduction]
-
-Depends on / 依赖: strongDownwardInduction
+/-
+**Multiset.strongDownwardInduction_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：strongDownwardInduction_eq {p : Multiset α -> Sort*} {n : Nat} (H : forall
+ t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n
+ -> p t₁) (s : Multiset α) : strongDownwardInduction H s = H s fun ht _hst => st
+rongDownwardInduction H _ ht
+参数：H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) ->
+ card t₁ <= n -> p t₁；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.strongDownwardInduction.eq_1`：∀ {α : Type u_1} {p : Multiset α 
+→ Sort u_3} {n : ℕ}   (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n 
+→ t₁ < t₂ → p t₂) → t₁.card…
 -/
-theorem strongDownwardInduction_eq {p : Multiset α -> Sort*} {n : Nat}
-    (H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n -> p t₁)
+theorem strongDownwardInduction_eq {p : Multiset α → Sort*} {n : ℕ}
+    (H : ∀ t₁, (∀ {t₂ : Multiset α}, card t₂ ≤ n → t₁ < t₂ → p t₂) → card t₁ ≤ n → p t₁)
     (s : Multiset α) :
     strongDownwardInduction H s = H s fun ht _hst => strongDownwardInduction H _ ht := by
   rw [strongDownwardInduction]
 
 /-- Analogue of `strongDownwardInduction` with order of arguments swapped. -/
 @[elab_as_elim]
-/--
-Definition of `strongDownwardInductionOn` / `strongDownwardInductionOn` 的定义
+/-
+**Multiset.strongDownwardInductionOn** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：strongDownwardInductionOn {p : Multiset α -> Sort*} {n : Nat} : forall s :
+ Multiset α, (forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p
+ t₂) -> card t₁ <= n -> p t₁) -> card s <= n -> p s
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition strongDownwardInductionOn
-  signature: {p : Multiset α -> Sort*} {n : Nat}
-  body: fun s H => strongDownwardInduction H s
-
-中文:
-定义 strongDownwardInductionOn
-  签名: {p : Multiset α -> 类型层*} {n : 自然数}
-  定义体: fun s H => strongDownwardInduction H s
-
-Depends on / 依赖: strongDownwardInduction
+--- 原说明 ---
+Analogue of `strongDownwardInduction` with order of arguments swapped.
 -/
-def strongDownwardInductionOn {p : Multiset α -> Sort*} {n : Nat} :
-    forall s : Multiset α,
-      (forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n -> p t₁) ->
-        card s <= n -> p s :=
+def strongDownwardInductionOn {p : Multiset α → Sort*} {n : ℕ} :
+    ∀ s : Multiset α,
+      (∀ t₁, (∀ {t₂ : Multiset α}, card t₂ ≤ n → t₁ < t₂ → p t₂) → card t₁ ≤ n → p t₁) →
+        card s ≤ n → p s :=
   fun s H => strongDownwardInduction H s
-
-/--
-theorem `strongDownwardInductionOn_eq` / 定理 `strongDownwardInductionOn_eq`
-
-English:
-theorem strongDownwardInductionOn_eq
-  statement: {p : Multiset α -> Sort*} (s : Multiset α) {n : Nat}
-  proof: by
-  dsimp only [strongDownwardInductionOn]
-  rw [strongDownwardInduction]
-
-中文:
-定理 strongDownwardInductionOn_eq
-  结论: {p : Multiset α -> 类型层*} (s : Multiset α) {n : 自然数}
-  证明: by
-  dsimp only [strongDownwardInductionOn]
-  rw [strongDownwardInduction]
-
-Depends on / 依赖: strongDownwardInduction, strongDownwardInductionOn
+/-
+**Multiset.strongDownwardInductionOn_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：strongDownwardInductionOn_eq {p : Multiset α -> Sort*} (s : Multiset α) {n
+ : Nat} (H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p 
+t₂) -> card t₁ <= n -> p t₁) : s.strongDownwardInductionOn H = H s fun {t} ht _h
+ => t.strongDownwardInductionOn H ht
+参数：s : Multiset α；H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ <
+ t₂ -> p t₂) -> card t₁ <= n -> p t₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.strongDownwardInduction.eq_1`：∀ {α : Type u_1} {p : Multiset α 
+→ Sort u_3} {n : ℕ}   (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n 
+→ t₁ < t₂ → p t₂) → t₁.card…
 -/
-theorem strongDownwardInductionOn_eq {p : Multiset α -> Sort*} (s : Multiset α) {n : Nat}
-    (H : forall t₁, (forall {t₂ : Multiset α}, card t₂ <= n -> t₁ < t₂ -> p t₂) -> card t₁ <= n -> p t₁) :
+theorem strongDownwardInductionOn_eq {p : Multiset α → Sort*} (s : Multiset α) {n : ℕ}
+    (H : ∀ t₁, (∀ {t₂ : Multiset α}, card t₂ ≤ n → t₁ < t₂ → p t₂) → card t₁ ≤ n → p t₁) :
     s.strongDownwardInductionOn H = H s fun {t} ht _h => t.strongDownwardInductionOn H ht := by
   dsimp only [strongDownwardInductionOn]
   rw [strongDownwardInduction]
 
 section Choose
 
-variable (p : α -> Prop) [DecidablePred p] (l : Multiset α)
+variable (p : α → Prop) [DecidablePred p] (l : Multiset α)
 
-/--
-Definition of `chooseX` / `chooseX` 的定义
+/-- Given a proof `hp` that there exists a unique `a ∈ l` such that `p a`, `chooseX p l hp` returns
+that `a` together with proofs of `a ∈ l` and `p a`. -/
+/-
+**Multiset.chooseX** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：chooseX : forall _hp : exists! a, a in l ∧ p a, { a // a in l ∧ p a }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chooseX
-  signature: : forall _hp : exists! a, a in l ∧ p a, { a // a in l ∧ p a }
-  body: Quotient.recOn l (fun l' ex_unique => List.chooseX p l' (ExistsUnique.exists ex_unique))
-    (by
-      intro a b _
-      funext hp
-      suffices all_equal : forall x y : { t // t in b ∧ p t }, x = y by
-        apply all_equal
-      rintro ⟨x, px⟩ ⟨y, py⟩
-      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_unique⟩
-      congr
-      calc
-        x = z := z_unique x px
-        _ = y := (z_unique y py).symm)
-
-中文:
-定义 chooseX
-  签名: : 对任意 _hp : 存在! a, a in l ∧ p a, { a // a in l ∧ p a }
-  定义体: Quotient.recOn l (fun l' ex_unique => List.chooseX p l' (ExistsUnique.exists ex_unique))
-    (by
-      intro a b _
-      funext hp
-      suffices all_equal : forall x y : { t // t in b ∧ p t }, x = y by
-        apply all_equal
-      rintro ⟨x, px⟩ ⟨y, py⟩
-      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_unique⟩
-      congr
-      calc
-        x = z := z_unique x px
-        _ = y := (z_unique y py).symm)
-
-Depends on / 依赖: ExistsUnique, ExistsUnique.exists, List.chooseX, Quotient, Quotient.recOn, _z_mem_l, all_equal, chooseX, ex_unique, z_unique
+--- 原说明 ---
+Given a proof `hp` that there exists a unique `a ∈ l` such that `p a`, `chooseX 
+p l hp` returns
+that `a` together with proofs of `a ∈ l` and `p a`.
 -/
-def chooseX : forall _hp : exists! a, a in l ∧ p a, { a // a in l ∧ p a } :=
+def chooseX : ∀ _hp : ∃! a, a ∈ l ∧ p a, { a // a ∈ l ∧ p a } :=
   Quotient.recOn l (fun l' ex_unique => List.chooseX p l' (ExistsUnique.exists ex_unique))
     (by
       intro a b _
       funext hp
-      suffices all_equal : forall x y : { t // t in b ∧ p t }, x = y by
+      suffices all_equal : ∀ x y : { t // t ∈ b ∧ p t }, x = y by
         apply all_equal
       rintro ⟨x, px⟩ ⟨y, py⟩
       rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_unique⟩
@@ -486,133 +355,85 @@ def chooseX : forall _hp : exists! a, a in l ∧ p a, { a // a in l ∧ p a } :=
         x = z := z_unique x px
         _ = y := (z_unique y py).symm)
 
-/--
-Definition of `choose` / `choose` 的定义
+/-- Given a proof `hp` that there exists a unique `a ∈ l` such that `p a`, `choose p l hp` returns
+that `a`. -/
+/-
+**Multiset.choose** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：choose (hp : exists! a, a in l ∧ p a) : α
+参数：hp : exists! a, a in l ∧ p a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition choose
-  signature: (hp : exists! a, a in l ∧ p a)
-  body: chooseX p l hp
-
-中文:
-定义 choose
-  签名: (hp : 存在! a, a in l ∧ p a)
-  定义体: chooseX p l hp
-
-Depends on / 依赖: chooseX
+--- 原说明 ---
+Given a proof `hp` that there exists a unique `a ∈ l` such that `p a`, `choose p
+ l hp` returns
+that `a`.
 -/
-def choose (hp : exists! a, a in l ∧ p a) : α :=
+def choose (hp : ∃! a, a ∈ l ∧ p a) : α :=
   chooseX p l hp
-
-/--
-theorem `choose_spec` / 定理 `choose_spec`
-
-English:
-theorem choose_spec
-  given: (hp : exists! a, a in l ∧ p a)
-  statement: choose p l hp in l ∧ p (choose p l hp)
-  proof: (chooseX p l hp).property
-
-中文:
-定理 choose_spec
-  条件: (hp : 存在! a, a in l ∧ p a)
-  结论: choose p l hp in l ∧ p (choose p l hp)
-  证明: (chooseX p l hp).property
-
-Depends on / 依赖: chooseX, property
+/-
+**Multiset.choose_spec** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：choose_spec (hp : exists! a, a in l ∧ p a) : choose p l hp in l ∧ p (choos
+e p l hp)
+参数：hp : exists! a, a in l ∧ p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem choose_spec (hp : exists! a, a in l ∧ p a) : choose p l hp in l ∧ p (choose p l hp) :=
+theorem choose_spec (hp : ∃! a, a ∈ l ∧ p a) : choose p l hp ∈ l ∧ p (choose p l hp) :=
   (chooseX p l hp).property
-
-/--
-theorem `choose_mem` / 定理 `choose_mem`
-
-English:
-theorem choose_mem
-  given: (hp : exists! a, a in l ∧ p a)
-  statement: choose p l hp in l
-  proof: (choose_spec _ _ _).1
-
-中文:
-定理 choose_mem
-  条件: (hp : 存在! a, a in l ∧ p a)
-  结论: choose p l hp in l
-  证明: (choose_spec _ _ _).1
-
-Depends on / 依赖: choose_spec
+/-
+**Multiset.choose_mem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：choose_mem (hp : exists! a, a in l ∧ p a) : choose p l hp in l
+参数：hp : exists! a, a in l ∧ p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Multiset.choose_spec`：choose_spec (hp : exists! a, a in l ∧ p a) : choos
+e p l hp in l ∧ p (choose p l hp)
 -/
-theorem choose_mem (hp : exists! a, a in l ∧ p a) : choose p l hp in l :=
+theorem choose_mem (hp : ∃! a, a ∈ l ∧ p a) : choose p l hp ∈ l :=
   (choose_spec _ _ _).1
-
-/--
-theorem `choose_property` / 定理 `choose_property`
-
-English:
-theorem choose_property
-  given: (hp : exists! a, a in l ∧ p a)
-  statement: p (choose p l hp)
-  proof: (choose_spec _ _ _).2
-
-中文:
-定理 choose_property
-  条件: (hp : 存在! a, a in l ∧ p a)
-  结论: p (choose p l hp)
-  证明: (choose_spec _ _ _).2
-
-Depends on / 依赖: choose_spec
+/-
+**Multiset.choose_property** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：choose_property (hp : exists! a, a in l ∧ p a) : p (choose p l hp)
+参数：hp : exists! a, a in l ∧ p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Multiset.choose_spec`：choose_spec (hp : exists! a, a in l ∧ p a) : choos
+e p l hp in l ∧ p (choose p l hp)
 -/
-theorem choose_property (hp : exists! a, a in l ∧ p a) : p (choose p l hp) :=
+theorem choose_property (hp : ∃! a, a ∈ l ∧ p a) : p (choose p l hp) :=
   (choose_spec _ _ _).2
-
-/--
-theorem `choose_eq_iff` / 定理 `choose_eq_iff`
-
-English:
-theorem choose_eq_iff
-  given: (hp : exists! a, a in l ∧ p a) {a : α}
-  statement: choose p l hp = a ↔ a in l ∧ p a
-  proof: ⟨fun h => h ▸ choose_spec p l hp, hp.unique (choose_spec p l hp)⟩
-
-中文:
-定理 choose_eq_iff
-  条件: (hp : 存在! a, a in l ∧ p a) {a : α}
-  结论: choose p l hp = a ↔ a in l ∧ p a
-  证明: ⟨fun h => h ▸ choose_spec p l hp, hp.unique (choose_spec p l hp)⟩
-
-Depends on / 依赖: choose_spec, hp.unique, unique
+/-
+**Multiset.choose_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：choose_eq_iff (hp : exists! a, a in l ∧ p a) {a : α} : choose p l hp = a ↔
+ a in l ∧ p a
+参数：hp : exists! a, a in l ∧ p a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.choose_spec`：choose_spec (hp : exists! a, a in l ∧ p a) : choos
+e p l hp in l ∧ p (choose p l hp)
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
 -/
-theorem choose_eq_iff (hp : exists! a, a in l ∧ p a) {a : α} : choose p l hp = a ↔ a in l ∧ p a :=
+theorem choose_eq_iff (hp : ∃! a, a ∈ l ∧ p a) {a : α} : choose p l hp = a ↔ a ∈ l ∧ p a :=
   ⟨fun h => h ▸ choose_spec p l hp, hp.unique (choose_spec p l hp)⟩
 
 end Choose
 
 variable (α) in
-/--
-Definition of `subsingletonEquiv` / `subsingletonEquiv` 的定义
+/-- The equivalence between lists and multisets of a subsingleton type. -/
+/-
+**Multiset.subsingletonEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：subsingletonEquiv [Subsingleton α] : List α ≃ Multiset α where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subsingletonEquiv
-  signature: [Subsingleton α]
-  body: ofList
-  invFun :=
-    (Quot.lift id) fun (a b : List α) (h : a ~ b) =>
-      (List.ext_get h.length_eq) fun _ _ _ => Subsingleton.elim _ _
-  right_inv m := Quot.inductionOn m fun _ => rfl
-
-@[simp]
-
-中文:
-定义 subsingletonEquiv
-  签名: [子单例 α]
-  定义体: ofList
-  invFun :=
-    (Quot.lift id) fun (a b : List α) (h : a ~ b) =>
-      (List.ext_get h.length_eq) fun _ _ _ => Subsingleton.elim _ _
-  right_inv m := Quot.inductionOn m fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: ofList
+--- 原说明 ---
+The equivalence between lists and multisets of a subsingleton type.
 -/
 def subsingletonEquiv [Subsingleton α] : List α ≃ Multiset α where
   toFun := ofList
@@ -622,21 +443,16 @@ def subsingletonEquiv [Subsingleton α] : List α ≃ Multiset α where
   right_inv m := Quot.inductionOn m fun _ => rfl
 
 @[simp]
-/--
-theorem `coe_subsingletonEquiv` / 定理 `coe_subsingletonEquiv`
-
-English:
-theorem coe_subsingletonEquiv
-  given: [Subsingleton α]
-  proof: rfl
-
-中文:
-定理 coe_subsingletonEquiv
-  条件: [子单例 α]
-  证明: rfl
+/-
+**Multiset.coe_subsingletonEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_subsingletonEquiv [Subsingleton α] : (subsingletonEquiv α : List α -> 
+Multiset α) = ofList
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_subsingletonEquiv [Subsingleton α] :
-    (subsingletonEquiv α : List α -> Multiset α) = ofList :=
+    (subsingletonEquiv α : List α → Multiset α) = ofList :=
   rfl
 
 end Multiset
+

@@ -20,40 +20,37 @@ Given `X : Type u` and `κ : Cardinal.{v}`, we introduce a predicate
 
 universe w v u u'
 
-/--
-Definition of `HasCardinalLT` / `HasCardinalLT` 的定义
+/-- The property that the cardinal of a type `X : Type u` is less than `κ : Cardinal.{v}`. -/
+/-
+**HasCardinalLT** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasCardinalLT (X : Type u) (κ : Cardinal.{v}) : Prop
+参数：X : Type u；κ : Cardinal.{v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasCardinalLT
-  signature: (X : Type u) (κ : Cardinal.{v})
-  body: Cardinal.lift.{v} (Cardinal.mk X) < Cardinal.lift κ
-
-中文:
-定义 HasCardinalLT
-  签名: (X : 类型u) (κ : 基数.{v})
-  定义体: Cardinal.lift.{v} (Cardinal.mk X) < Cardinal.lift κ
-
-Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.mk
+--- 原说明 ---
+The property that the cardinal of a type `X : Type u` is less than `κ : Cardinal
+.{v}`.
 -/
 def HasCardinalLT (X : Type u) (κ : Cardinal.{v}) : Prop :=
   Cardinal.lift.{v} (Cardinal.mk X) < Cardinal.lift κ
-
-/--
-lemma `hasCardinalLT_iff_cardinal_mk_lt` / 引理 `hasCardinalLT_iff_cardinal_mk_lt`
-
-English:
-lemma hasCardinalLT_iff_cardinal_mk_lt
-  given: (X : Type u) (κ : Cardinal.{u})
-  proof: by
-  simp [HasCardinalLT]
-
-中文:
-引理 hasCardinalLT_iff_cardinal_mk_lt
-  条件: (X : 类型u) (κ : 基数.{u})
-  证明: by
-  simp [HasCardinalLT]
-
-Depends on / 依赖: HasCardinalLT
+/-
+**hasCardinalLT_iff_cardinal_mk_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_iff_cardinal_mk_lt (X : Type u) (κ : Cardinal.{u}) : HasCard
+inalLT X κ ↔ Cardinal.mk X < κ
+参数：X : Type u；κ : Cardinal.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma hasCardinalLT_iff_cardinal_mk_lt (X : Type u) (κ : Cardinal.{u}) :
     HasCardinalLT X κ ↔ Cardinal.mk X < κ := by
@@ -67,121 +64,98 @@ variable {X : Type u} {κ : Cardinal.{v}} (h : HasCardinalLT X κ)
 
 include h
 
-/--
-lemma `small` / 引理 `small`
-
-English:
-lemma small
-  statement: Small.{v} X
-  proof: by
-  dsimp [HasCardinalLT] at h
-  rw [← Cardinal.lift_lt.{_]; rw [v + 1}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  simpa only [Cardinal.small_iff_lift_mk_lt_univ] using h.trans (Cardinal.lift_lt_univ' κ)
-
-中文:
-引理 small
-  结论: Small.{v} X
-  证明: by
-  dsimp [HasCardinalLT] at h
-  rw [← Cardinal.lift_lt.{_]; rw [v + 1}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  simpa only [Cardinal.small_iff_lift_mk_lt_univ] using h.trans (Cardinal.lift_lt_univ' κ)
-
-Depends on / 依赖: Cardinal, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.lift_lt_univ, Cardinal.small_iff_lift_mk_lt_univ, HasCardinalLT, h.trans, lift_lift, lift_lt, lift_lt_univ, small_iff_lift_mk_lt_univ
+/-
+**HasCardinalLT.small** 是 Mathlib 中的一个引理，位于命名空间 `HasCardinalLT`。
+形式化陈述：small : Small.{v} X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Cardinal.lift_lt_univ'`：lift_lt_univ' (c : Cardinal) : lift.{max (u + 1)
+ v, u} c < univ.{u, v}
 -/
 lemma small : Small.{v} X := by
   dsimp [HasCardinalLT] at h
-  rw [← Cardinal.lift_lt.{_]; rw [v + 1}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
+  rw [← Cardinal.lift_lt.{_, v + 1}, Cardinal.lift_lift, Cardinal.lift_lift] at h
   simpa only [Cardinal.small_iff_lift_mk_lt_univ] using h.trans (Cardinal.lift_lt_univ' κ)
-
-/--
-lemma `of_le` / 引理 `of_le`
-
-English:
-lemma of_le
-  given: {κ' : Cardinal.{v}} (hκ' : κ <= κ')
-  proof: lt_of_lt_of_le h (by simpa only [Cardinal.lift_le] using hκ')
-
-中文:
-引理 of_le
-  条件: {κ' : 基数.{v}} (hκ' : κ <= κ')
-  证明: lt_of_lt_of_le h (by simpa only [Cardinal.lift_le] using hκ')
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le, lift_le, lt_of_lt_of_le
+/-
+**HasCardinalLT.of_le** 是 Mathlib 中的一个引理，位于命名空间 `HasCardinalLT`。
+形式化陈述：of_le {κ' : Cardinal.{v}} (hκ' : κ <= κ') : HasCardinalLT X κ'
+参数：hκ' : κ <= κ'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
 -/
-lemma of_le {κ' : Cardinal.{v}} (hκ' : κ <= κ') :
+lemma of_le {κ' : Cardinal.{v}} (hκ' : κ ≤ κ') :
     HasCardinalLT X κ' :=
   lt_of_lt_of_le h (by simpa only [Cardinal.lift_le] using hκ')
 
 variable {Y : Type u'}
-
-/--
-lemma `of_injective` / 引理 `of_injective`
-
-English:
-lemma of_injective
-  given: (f : Y -> X) (hf : Function.Injective f)
-  proof: by
-  dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  exact lt_of_le_of_lt (Cardinal.mk_le_of_injective
-    (Function.Injective.comp ULift.up_injective
-      (Function.Injective.comp hf ULift.down_injective))) h
-
-中文:
-引理 of_injective
-  条件: (f : Y -> X) (hf : 函数.单射 f)
-  证明: by
-  dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  exact lt_of_le_of_lt (Cardinal.mk_le_of_injective
-    (Function.Injective.comp ULift.up_injective
-      (Function.Injective.comp hf ULift.down_injective))) h
-
-Depends on / 依赖: Cardinal, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_le_of_injective, Function, Function.Injective.comp, HasCardinalLT, Injective, ULift.down_injective, ULift.up_injective, down_injective, lift_lift, lift_lt, lt_of_le_of_lt, mk_le_of_injective, up_injective
+/-
+**HasCardinalLT.of_injective** 是 Mathlib 中的一个引理，位于命名空间 `HasCardinalLT`。
+形式化陈述：of_injective (f : Y -> X) (hf : Function.Injective f) : HasCardinalLT Y κ
+参数：f : Y -> X；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Cardinal.mk_le_of_injective`：mk_le_of_injective {α β : Type u} {f : α ->
+ β} (hf : Injective f) : #α <= #β
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `ULift.up_injective`：up_injective : Injective (@up α)
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
 -/
-lemma of_injective (f : Y -> X) (hf : Function.Injective f) :
+lemma of_injective (f : Y → X) (hf : Function.Injective f) :
     HasCardinalLT Y κ := by
   dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
+  rw [← Cardinal.lift_lt.{_, u}, Cardinal.lift_lift, Cardinal.lift_lift]
+  rw [← Cardinal.lift_lt.{_, u'}, Cardinal.lift_lift, Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_injective
     (Function.Injective.comp ULift.up_injective
       (Function.Injective.comp hf ULift.down_injective))) h
-
-/--
-lemma `of_surjective` / 引理 `of_surjective`
-
-English:
-lemma of_surjective
-  given: (f : X -> Y) (hf : Function.Surjective f)
-  proof: by
-  dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  exact lt_of_le_of_lt (Cardinal.mk_le_of_surjective
-    (Function.Surjective.comp ULift.up_surjective (Function.Surjective.comp hf
-      ULift.down_surjective))) h
-
-中文:
-引理 of_surjective
-  条件: (f : X -> Y) (hf : 函数.满射 f)
-  证明: by
-  dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
-  exact lt_of_le_of_lt (Cardinal.mk_le_of_surjective
-    (Function.Surjective.comp ULift.up_surjective (Function.Surjective.comp hf
-      ULift.down_surjective))) h
-
-Depends on / 依赖: Cardinal, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_le_of_surjective, Function, Function.Surjective.comp, HasCardinalLT, Surjective, ULift.down_surjective, ULift.up_surjective, down_surjective, lift_lift, lift_lt, lt_of_le_of_lt, mk_le_of_surjective, up_surjective
+/-
+**HasCardinalLT.of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `HasCardinalLT`。
+形式化陈述：of_surjective (f : X -> Y) (hf : Function.Surjective f) : HasCardinalLT Y 
+κ
+参数：f : X -> Y；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Cardinal.mk_le_of_surjective`：mk_le_of_surjective {α β : Type u} {f : α 
+-> β} (hf : Surjective f) : #β <= #α
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `ULift.up_surjective`：up_surjective : Surjective (@up α)
+· 使用定理 `ULift.down_surjective`：down_surjective : Surjective (@down α)
 -/
-lemma of_surjective (f : X -> Y) (hf : Function.Surjective f) :
+lemma of_surjective (f : X → Y) (hf : Function.Surjective f) :
     HasCardinalLT Y κ := by
   dsimp [HasCardinalLT] at h ⊢
-  rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
-  rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
+  rw [← Cardinal.lift_lt.{_, u}, Cardinal.lift_lift, Cardinal.lift_lift]
+  rw [← Cardinal.lift_lt.{_, u'}, Cardinal.lift_lift, Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_surjective
     (Function.Surjective.comp ULift.up_surjective (Function.Surjective.comp hf
       ULift.down_surjective))) h
@@ -190,506 +164,477 @@ end
 
 end HasCardinalLT
 
-/--
-lemma `hasCardinalLT_iff_of_equiv` / 引理 `hasCardinalLT_iff_of_equiv`
-
-English:
-lemma hasCardinalLT_iff_of_equiv
-  given: {X : Type u} {Y : Type u'} (e : X ≃ Y) (κ : Cardinal.{v})
-  proof: ⟨fun h => h.of_injective _ e.symm.injective,
-    fun h => h.of_injective _ e.injective⟩
-
-@[simp]
-
-中文:
-引理 hasCardinalLT_iff_of_equiv
-  条件: {X : 类型u} {Y : 类型u'} (e : X ≃ Y) (κ : 基数.{v})
-  证明: ⟨fun h => h.of_injective _ e.symm.injective,
-    fun h => h.of_injective _ e.injective⟩
-
-@[simp]
-
-Depends on / 依赖: Decidable, Iff.rfl, Subtype, Subtype.val, continuous_subtype_val, continuous_subtype_val.restrictPreimage, decidable_of_iff, e.injective, e.symm.injective, h.of_injective, injective, of_injective, piecewise, piecewise_apply_left, restrictPreimage
+/-
+**hasCardinalLT_iff_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_iff_of_equiv {X : Type u} {Y : Type u'} (e : X ≃ Y) (κ : Car
+dinal.{v}) : HasCardinalLT X κ ↔ HasCardinalLT Y κ
+参数：e : X ≃ Y；κ : Cardinal.{v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HasCardinalLT.of_injective`：of_injective (f : Y -> X) (hf : Function.Inj
+ective f) : HasCardinalLT Y κ
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma hasCardinalLT_iff_of_equiv {X : Type u} {Y : Type u'} (e : X ≃ Y) (κ : Cardinal.{v}) :
     HasCardinalLT X κ ↔ HasCardinalLT Y κ :=
-  ⟨fun h => h.of_injective _ e.symm.injective,
-    fun h => h.of_injective _ e.injective⟩
+  ⟨fun h ↦ h.of_injective _ e.symm.injective,
+    fun h ↦ h.of_injective _ e.injective⟩
 
 @[simp]
-/--
-lemma `hasCardinalLT_aleph0_iff` / 引理 `hasCardinalLT_aleph0_iff`
-
-English:
-lemma hasCardinalLT_aleph0_iff
-  given: (X : Type u)
-  proof: by
-  simpa [HasCardinalLT] using Cardinal.mk_lt_aleph0_iff
-
-中文:
-引理 hasCardinalLT_aleph0_iff
-  条件: (X : 类型u)
-  证明: by
-  simpa [HasCardinalLT] using Cardinal.mk_lt_aleph0_iff
-
-Depends on / 依赖: Cardinal, Cardinal.mk_lt_aleph0_iff, Decidable, HasCardinalLT, Iff.rfl, Subtype, Subtype.val, continuous_subtype_val, continuous_subtype_val.restrictPreimage, decidable_of_iff, mk_lt_aleph0_iff, piecewise, piecewise_apply_right, restrictPreimage
+/-
+**hasCardinalLT_aleph0_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_aleph0_iff (X : Type u) : HasCardinalLT X Cardinal.aleph0.{v
+} ↔ Finite X
+参数：X : Type u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.lift_aleph0`：lift_aleph0 : lift ℵ₀ = ℵ₀
+· 使用引理 `Cardinal.mk_lt_aleph0_iff`：mk_lt_aleph0_iff : #α < ℵ₀ ↔ Finite α
 -/
 lemma hasCardinalLT_aleph0_iff (X : Type u) :
     HasCardinalLT X Cardinal.aleph0.{v} ↔ Finite X := by
   simpa [HasCardinalLT] using Cardinal.mk_lt_aleph0_iff
-
-/--
-lemma `hasCardinalLT_of_finite` / 引理 `hasCardinalLT_of_finite`
-
-English:
-lemma hasCardinalLT_of_finite
-  proof: .of_le (by rwa [hasCardinalLT_aleph0_iff]) hκ
-
-@[simp]
-
-中文:
-引理 hasCardinalLT_of_finite
-  证明: .of_le (by rwa [hasCardinalLT_aleph0_iff]) hκ
-
-@[simp]
-
-Depends on / 依赖: hasCardinalLT_aleph0_iff, of_le
+/-
+**hasCardinalLT_of_finite** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_of_finite (X : Type*) [Finite X] (κ : Cardinal) (hκ : Cardin
+al.aleph0 <= κ) : HasCardinalLT X κ
+参数：X : Type*；κ : Cardinal；hκ : Cardinal.aleph0 <= κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HasCardinalLT.of_le`：of_le {κ' : Cardinal.{v}} (hκ' : κ <= κ') : HasCard
+inalLT X κ'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `hasCardinalLT_aleph0_iff`：hasCardinalLT_aleph0_iff (X : Type u) : HasCar
+dinalLT X Cardinal.aleph0.{v} ↔ Finite X
 -/
 lemma hasCardinalLT_of_finite
-    (X : Type*) [Finite X] (κ : Cardinal) (hκ : Cardinal.aleph0 <= κ) :
+    (X : Type*) [Finite X] (κ : Cardinal) (hκ : Cardinal.aleph0 ≤ κ) :
     HasCardinalLT X κ :=
   .of_le (by rwa [hasCardinalLT_aleph0_iff]) hκ
 
 @[simp]
-/--
-lemma `hasCardinalLT_lift_iff` / 引理 `hasCardinalLT_lift_iff`
-
-English:
-lemma hasCardinalLT_lift_iff
-  given: (X : Type v) (κ : Cardinal.{w})
-  proof: by
-  simp [HasCardinalLT, ← (Cardinal.lift_strictMono.{max v w, max u}).lt_iff_lt]
-
-@[simp]
-
-中文:
-引理 hasCardinalLT_lift_iff
-  条件: (X : 类型v) (κ : 基数.{w})
-  证明: by
-  simp [HasCardinalLT, ← (Cardinal.lift_strictMono.{max v w, max u}).lt_iff_lt]
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_strictMono, HasCardinalLT, lift_strictMono, lt_iff_lt
+/-
+**hasCardinalLT_lift_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_lift_iff (X : Type v) (κ : Cardinal.{w}) : HasCardinalLT X (
+Cardinal.lift.{u} κ) ↔ HasCardinalLT X κ
+参数：X : Type v；κ : Cardinal.{w}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Cardinal.lift_strictMono`：lift_strictMono : StrictMono lift
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma hasCardinalLT_lift_iff (X : Type v) (κ : Cardinal.{w}) :
     HasCardinalLT X (Cardinal.lift.{u} κ) ↔ HasCardinalLT X κ := by
   simp [HasCardinalLT, ← (Cardinal.lift_strictMono.{max v w, max u}).lt_iff_lt]
 
 @[simp]
-/--
-lemma `hasCardinalLT_ulift_iff` / 引理 `hasCardinalLT_ulift_iff`
-
-English:
-lemma hasCardinalLT_ulift_iff
-  given: (X : Type v) (κ : Cardinal.{w})
-  proof: hasCardinalLT_iff_of_equiv Equiv.ulift κ
-
-中文:
-引理 hasCardinalLT_ulift_iff
-  条件: (X : 类型v) (κ : 基数.{w})
-  证明: hasCardinalLT_iff_of_equiv Equiv.ulift κ
-
-Depends on / 依赖: Equiv.ulift, hasCardinalLT_iff_of_equiv
+/-
+**hasCardinalLT_ulift_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_ulift_iff (X : Type v) (κ : Cardinal.{w}) : HasCardinalLT (U
+Lift.{u} X) κ ↔ HasCardinalLT X κ
+参数：X : Type v；κ : Cardinal.{w}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `hasCardinalLT_iff_of_equiv`：hasCardinalLT_iff_of_equiv {X : Type u} {Y :
+ Type u'} (e : X ≃ Y) (κ : Cardinal.{v}) : HasCardinalLT X κ ↔ HasCardinalLT Y κ
 -/
 lemma hasCardinalLT_ulift_iff (X : Type v) (κ : Cardinal.{w}) :
     HasCardinalLT (ULift.{u} X) κ ↔ HasCardinalLT X κ :=
   hasCardinalLT_iff_of_equiv Equiv.ulift κ
-
-/--
-lemma `hasCardinalLT_sum_iff` / 引理 `hasCardinalLT_sum_iff`
-
-English:
-lemma hasCardinalLT_sum_iff
-  statement: (X : Type u) (Y : Type u') (κ : Cardinal.{w})
-  proof: by
-  constructor
-  · intro h
-    exact ⟨h.of_injective _ Sum.inl_injective,
-      h.of_injective _ Sum.inr_injective⟩
-  · rintro ⟨hX, hY⟩
-    dsimp [HasCardinalLT] at hX hY ⊢
-    rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hX
-    rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hY
-    simp only [Cardinal.mk_sum, Cardinal.lift_add, Cardinal.lift_lift]
-    exact Cardinal.add_lt_of_lt (by simpa using hκ) hX hY
-
-中文:
-引理 hasCardinalLT_sum_iff
-  结论: (X : 类型u) (Y : 类型u') (κ : 基数.{w})
-  证明: by
-  constructor
-  · intro h
-    exact ⟨h.of_injective _ Sum.inl_injective,
-      h.of_injective _ Sum.inr_injective⟩
-  · rintro ⟨hX, hY⟩
-    dsimp [HasCardinalLT] at hX hY ⊢
-    rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hX
-    rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hY
-    simp only [Cardinal.mk_sum, Cardinal.lift_add, Cardinal.lift_lift]
-    exact Cardinal.add_lt_of_lt (by simpa using hκ) hX hY
-
-Depends on / 依赖: Cardinal, Cardinal.add_lt_of_lt, Cardinal.lift_add, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_sum, HasCardinalLT, Sum.inl_injective, Sum.inr_injective, add_lt_of_lt, h.of_injective, inl_injective, inr_injective, lift_add, lift_lift, lift_lt, mk_sum, of_injective
+/-
+**hasCardinalLT_sum_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_sum_iff (X : Type u) (Y : Type u') (κ : Cardinal.{w}) (hκ : 
+Cardinal.aleph0 <= κ) : HasCardinalLT (X oplus Y) κ ↔ HasCardinalLT X κ ∧ HasCar
+dinalLT Y κ
+参数：X : Type u；Y : Type u'；κ : Cardinal.{w}；hκ : Cardinal.aleph0 <= κ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HasCardinalLT.of_injective`：of_injective (f : Y -> X) (hf : Function.Inj
+ective f) : HasCardinalLT Y κ
+· 使用定理 `Sum.inl_injective`：inl_injective : Function.Injective (inl : α -> α oplu
+s β)
+· 使用定理 `Sum.inr_injective`：inr_injective : Function.Injective (inr : β -> α oplu
+s β)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_sum`：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.
+{v, u} #α + lift.{u, v} #β
+· 使用定理 `Cardinal.lift_add`：lift_add (a b : Cardinal.{u}) : lift.{v} (a + b) = li
+ft.{v} a + lift.{v} b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Cardinal.add_lt_of_lt`：add_lt_of_lt {a b c : Cardinal} (hc : ℵ₀ <= c) (h
+1 : a < c) (h2 : b < c) : a + b < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
 -/
 lemma hasCardinalLT_sum_iff (X : Type u) (Y : Type u') (κ : Cardinal.{w})
-    (hκ : Cardinal.aleph0 <= κ) :
-    HasCardinalLT (X oplus Y) κ ↔ HasCardinalLT X κ ∧ HasCardinalLT Y κ := by
+    (hκ : Cardinal.aleph0 ≤ κ) :
+    HasCardinalLT (X ⊕ Y) κ ↔ HasCardinalLT X κ ∧ HasCardinalLT Y κ := by
   constructor
   · intro h
     exact ⟨h.of_injective _ Sum.inl_injective,
       h.of_injective _ Sum.inr_injective⟩
   · rintro ⟨hX, hY⟩
     dsimp [HasCardinalLT] at hX hY ⊢
-    rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hX
-    rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hY
+    rw [← Cardinal.lift_lt.{_, u'}, Cardinal.lift_lift, Cardinal.lift_lift] at hX
+    rw [← Cardinal.lift_lt.{_, u}, Cardinal.lift_lift, Cardinal.lift_lift] at hY
     simp only [Cardinal.mk_sum, Cardinal.lift_add, Cardinal.lift_lift]
     exact Cardinal.add_lt_of_lt (by simpa using hκ) hX hY
-
-/--
-lemma `hasCardinalLT_option_iff` / 引理 `hasCardinalLT_option_iff`
-
-English:
-lemma hasCardinalLT_option_iff
-  statement: (X : Type u) (κ : Cardinal.{w})
-  proof: by
-  rw [hasCardinalLT_iff_of_equiv (Equiv.optionEquivSumPUnit.{0} X)]; rw [hasCardinalLT_sum_iff _ _ _ hκ]; rw [and_iff_left_iff_imp]
-  refine fun _ => HasCardinalLT.of_le ?_ hκ
-  rw [hasCardinalLT_aleph0_iff]
-  infer_instance
-
-中文:
-引理 hasCardinalLT_option_iff
-  结论: (X : 类型u) (κ : 基数.{w})
-  证明: by
-  rw [hasCardinalLT_iff_of_equiv (Equiv.optionEquivSumPUnit.{0} X)]; rw [hasCardinalLT_sum_iff _ _ _ hκ]; rw [and_iff_left_iff_imp]
-  refine fun _ => HasCardinalLT.of_le ?_ hκ
-  rw [hasCardinalLT_aleph0_iff]
-  infer_instance
-
-Depends on / 依赖: Equiv.optionEquivSumPUnit, HasCardinalLT, HasCardinalLT.of_le, and_iff_left_iff_imp, hasCardinalLT_aleph0_iff, hasCardinalLT_iff_of_equiv, hasCardinalLT_sum_iff, infer_instance, of_le, optionEquivSumPUnit
+/-
+**hasCardinalLT_option_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_option_iff (X : Type u) (κ : Cardinal.{w}) (hκ : Cardinal.al
+eph0 <= κ) : HasCardinalLT (Option X) κ ↔ HasCardinalLT X κ
+参数：X : Type u；κ : Cardinal.{w}；hκ : Cardinal.aleph0 <= κ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `hasCardinalLT_iff_of_equiv`：hasCardinalLT_iff_of_equiv {X : Type u} {Y :
+ Type u'} (e : X ≃ Y) (κ : Cardinal.{v}) : HasCardinalLT X κ ↔ HasCardinalLT Y κ
+· 使用引理 `hasCardinalLT_sum_iff`：hasCardinalLT_sum_iff (X : Type u) (Y : Type u') 
+(κ : Cardinal.{w}) (hκ : Cardinal.aleph0 <= κ) : HasCardinalLT (X oplus Y) κ ↔ H
+asCardinalL…
+· 使用定理 `and_iff_left_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ a) ↔ a → b
+· 使用引理 `HasCardinalLT.of_le`：of_le {κ' : Cardinal.{v}} (hκ' : κ <= κ') : HasCard
+inalLT X κ'
+· 使用引理 `hasCardinalLT_aleph0_iff`：hasCardinalLT_aleph0_iff (X : Type u) : HasCar
+dinalLT X Cardinal.aleph0.{v} ↔ Finite X
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 lemma hasCardinalLT_option_iff (X : Type u) (κ : Cardinal.{w})
-    (hκ : Cardinal.aleph0 <= κ) :
+    (hκ : Cardinal.aleph0 ≤ κ) :
     HasCardinalLT (Option X) κ ↔ HasCardinalLT X κ := by
-  rw [hasCardinalLT_iff_of_equiv (Equiv.optionEquivSumPUnit.{0} X)]; rw [hasCardinalLT_sum_iff _ _ _ hκ]; rw [and_iff_left_iff_imp]
-  refine fun _ => HasCardinalLT.of_le ?_ hκ
+  rw [hasCardinalLT_iff_of_equiv (Equiv.optionEquivSumPUnit.{0} X),
+    hasCardinalLT_sum_iff _ _ _ hκ, and_iff_left_iff_imp]
+  refine fun _ ↦ HasCardinalLT.of_le ?_ hκ
   rw [hasCardinalLT_aleph0_iff]
   infer_instance
-
-/--
-lemma `hasCardinalLT_subtype_max` / 引理 `hasCardinalLT_subtype_max`
-
-English:
-lemma hasCardinalLT_subtype_max
-  proof: by
-  have : HasCardinalLT (Subtype P₁ oplus Subtype P₂) κ := by
-    rw [hasCardinalLT_sum_iff _ _ _ hκ]
-    exact ⟨h₁, h₂⟩
-  refine this.of_surjective (Sum.elim (fun x => ⟨x.1, Or.inl x.2⟩)
-    (fun x => ⟨x.1, Or.inr x.2⟩)) ?_
-  rintro ⟨x, hx | hx⟩
-  · exact ⟨Sum.inl ⟨x, hx⟩, rfl⟩
-  · exact ⟨Sum.inr ⟨x, hx⟩, rfl⟩
-
-中文:
-引理 hasCardinalLT_subtype_max
-  证明: by
-  have : HasCardinalLT (Subtype P₁ oplus Subtype P₂) κ := by
-    rw [hasCardinalLT_sum_iff _ _ _ hκ]
-    exact ⟨h₁, h₂⟩
-  refine this.of_surjective (Sum.elim (fun x => ⟨x.1, Or.inl x.2⟩)
-    (fun x => ⟨x.1, Or.inr x.2⟩)) ?_
-  rintro ⟨x, hx | hx⟩
-  · exact ⟨Sum.inl ⟨x, hx⟩, rfl⟩
-  · exact ⟨Sum.inr ⟨x, hx⟩, rfl⟩
-
-Depends on / 依赖: HasCardinalLT, Or.inl, Or.inr, Subtype, Sum.elim, Sum.inl, Sum.inr, hasCardinalLT_sum_iff, of_surjective, this.of_surjective
+/-
+**hasCardinalLT_subtype_max** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_subtype_max {X : Type*} {P₁ P₂ : X -> Prop} {κ : Cardinal} (
+hκ : Cardinal.aleph0 <= κ) (h₁ : HasCardinalLT (Subtype P₁) κ) (h₂ : HasCardinal
+LT (Subtype P₂) κ) : HasCardinalLT (Subtype (P₁ ⊔ P₂)) κ
+参数：hκ : Cardinal.aleph0 <= κ；h₁ : HasCardinalLT (Subtype P₁) κ；h₂ : HasCardinalL
+T (Subtype P₂) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `hasCardinalLT_sum_iff`：hasCardinalLT_sum_iff (X : Type u) (Y : Type u') 
+(κ : Cardinal.{w}) (hκ : Cardinal.aleph0 <= κ) : HasCardinalLT (X oplus Y) κ ↔ H
+asCardinalL…
+· 使用引理 `HasCardinalLT.of_surjective`：of_surjective (f : X -> Y) (hf : Function.S
+urjective f) : HasCardinalLT Y κ
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma hasCardinalLT_subtype_max
-    {X : Type*} {P₁ P₂ : X -> Prop} {κ : Cardinal} (hκ : Cardinal.aleph0 <= κ)
+    {X : Type*} {P₁ P₂ : X → Prop} {κ : Cardinal} (hκ : Cardinal.aleph0 ≤ κ)
     (h₁ : HasCardinalLT (Subtype P₁) κ) (h₂ : HasCardinalLT (Subtype P₂) κ) :
     HasCardinalLT (Subtype (P₁ ⊔ P₂)) κ := by
-  have : HasCardinalLT (Subtype P₁ oplus Subtype P₂) κ := by
+  have : HasCardinalLT (Subtype P₁ ⊕ Subtype P₂) κ := by
     rw [hasCardinalLT_sum_iff _ _ _ hκ]
     exact ⟨h₁, h₂⟩
-  refine this.of_surjective (Sum.elim (fun x => ⟨x.1, Or.inl x.2⟩)
-    (fun x => ⟨x.1, Or.inr x.2⟩)) ?_
+  refine this.of_surjective (Sum.elim (fun x ↦ ⟨x.1, Or.inl x.2⟩)
+    (fun x ↦ ⟨x.1, Or.inr x.2⟩)) ?_
   rintro ⟨x, hx | hx⟩
   · exact ⟨Sum.inl ⟨x, hx⟩, rfl⟩
   · exact ⟨Sum.inr ⟨x, hx⟩, rfl⟩
-
-/--
-lemma `hasCardinalLT_union` / 引理 `hasCardinalLT_union`
-
-English:
-lemma hasCardinalLT_union
-  proof: hasCardinalLT_subtype_max hκ h₁ h₂
-
-中文:
-引理 hasCardinalLT_union
-  证明: hasCardinalLT_subtype_max hκ h₁ h₂
-
-Depends on / 依赖: hasCardinalLT_subtype_max
+/-
+**hasCardinalLT_union** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_union {X : Type*} {S₁ S₂ : Set X} {κ : Cardinal} (hκ : Cardi
+nal.aleph0 <= κ) (h₁ : HasCardinalLT S₁ κ) (h₂ : HasCardinalLT S₂ κ) : HasCardin
+alLT (S₁ union S₂ : Set _) κ
+参数：hκ : Cardinal.aleph0 <= κ；h₁ : HasCardinalLT S₁ κ；h₂ : HasCardinalLT S₂ κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `hasCardinalLT_subtype_max`：hasCardinalLT_subtype_max {X : Type*} {P₁ P₂ 
+: X -> Prop} {κ : Cardinal} (hκ : Cardinal.aleph0 <= κ) (h₁ : HasCardinalLT (Sub
+type P₁) κ) (h₂…
 -/
 lemma hasCardinalLT_union
-    {X : Type*} {S₁ S₂ : Set X} {κ : Cardinal} (hκ : Cardinal.aleph0 <= κ)
+    {X : Type*} {S₁ S₂ : Set X} {κ : Cardinal} (hκ : Cardinal.aleph0 ≤ κ)
     (h₁ : HasCardinalLT S₁ κ) (h₂ : HasCardinalLT S₂ κ) :
-    HasCardinalLT (S₁ union S₂ : Set _) κ :=
+    HasCardinalLT (S₁ ∪ S₂ : Set _) κ :=
   hasCardinalLT_subtype_max hκ h₁ h₂
 
-/--
-lemma `hasCardinalLT_sigma'` / 引理 `hasCardinalLT_sigma'`
+/-- The particular case of `hasCardinalLT_sigma` when all the inputs are in the
+same universe `w`. It is used to prove the general case. -/
+/-
+**hasCardinalLT_sigma'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_sigma' {ι : Type w} (α : ι -> Type w) (κ : Cardinal.{w}) [Fa
+ct κ.IsRegular] (hι : HasCardinalLT ι κ) (hα : forall i, HasCardinalLT (α i) κ) 
+: HasCardinalLT (Σ i, α i) κ
+参数：α : ι -> Type w；κ : Cardinal.{w}；hι : HasCardinalLT ι κ；hα : forall i, HasCar
+dinalLT (α i) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_sigma`：mk_sigma {ι} (f : ι -> Type*) : #(Σ i, f i) = sum fun
+ i => #(f i)
+· 使用定理 `Cardinal.sum_lt_lift_of_isRegular`：sum_lt_lift_of_isRegular {ι : Type u}
+ {f : ι -> Cardinal} (hc : IsRegular c) (hι : Cardinal.lift.{v, u} #ι < c) (hf :
+ forall i, f i < c) : s…
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 
-English:
-lemma hasCardinalLT_sigma'
-  statement: {ι : Type w} (α : ι -> Type w) (κ : Cardinal.{w}) [Fact κ.IsRegular]
-  proof: by
-  simp only [hasCardinalLT_iff_cardinal_mk_lt] at hι hα ⊢
-  rw [Cardinal.mk_sigma]
-  exact Cardinal.sum_lt_lift_of_isRegular.{w, w} Fact.out (by simpa) hα
-
-中文:
-引理 hasCardinalLT_sigma'
-  结论: {ι : 类型 w} (α : ι -> 类型 w) (κ : 基数.{w}) [Fact κ.是正则]
-  证明: by
-  simp only [hasCardinalLT_iff_cardinal_mk_lt] at hι hα ⊢
-  rw [Cardinal.mk_sigma]
-  exact Cardinal.sum_lt_lift_of_isRegular.{w, w} Fact.out (by simpa) hα
-
-Depends on / 依赖: Cardinal, Cardinal.mk_sigma, Cardinal.sum_lt_lift_of_isRegular, Fact.out, hasCardinalLT_iff_cardinal_mk_lt, mk_sigma, sum_lt_lift_of_isRegular
+--- 原说明 ---
+The particular case of `hasCardinalLT_sigma` when all the inputs are in the
+same universe `w`. It is used to prove the general case.
 -/
-lemma hasCardinalLT_sigma' {ι : Type w} (α : ι -> Type w) (κ : Cardinal.{w}) [Fact κ.IsRegular]
-    (hι : HasCardinalLT ι κ) (hα : forall i, HasCardinalLT (α i) κ) :
+lemma hasCardinalLT_sigma' {ι : Type w} (α : ι → Type w) (κ : Cardinal.{w}) [Fact κ.IsRegular]
+    (hι : HasCardinalLT ι κ) (hα : ∀ i, HasCardinalLT (α i) κ) :
     HasCardinalLT (Σ i, α i) κ := by
   simp only [hasCardinalLT_iff_cardinal_mk_lt] at hι hα ⊢
   rw [Cardinal.mk_sigma]
   exact Cardinal.sum_lt_lift_of_isRegular.{w, w} Fact.out (by simpa) hα
-
-/--
-lemma `hasCardinalLT_sigma` / 引理 `hasCardinalLT_sigma`
-
-English:
-lemma hasCardinalLT_sigma
-  statement: {ι : Type u} (α : ι -> Type v) (κ : Cardinal.{w}) [Fact κ.IsRegular]
-  proof: by
-  have : Fact (Cardinal.lift.{max u v} κ).IsRegular := ⟨Cardinal.IsRegular.lift Fact.out⟩
-  have := hasCardinalLT_sigma'
-    (fun (i : ULift.{max v w} ι) => ULift.{max u w} (α (ULift.down i)))
-    (Cardinal.lift.{max u v} κ) (by simpa)
-    (fun i => by simpa using hα (ULift.down i))
-  rw [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨i, a⟩ => ⟨ULift.down i, ULift.down a⟩)
-    (fun ⟨i, a⟩ => ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
-
-中文:
-引理 hasCardinalLT_sigma
-  结论: {ι : 类型u} (α : ι -> 类型v) (κ : 基数.{w}) [Fact κ.是正则]
-  证明: by
-  have : Fact (Cardinal.lift.{max u v} κ).IsRegular := ⟨Cardinal.IsRegular.lift Fact.out⟩
-  have := hasCardinalLT_sigma'
-    (fun (i : ULift.{max v w} ι) => ULift.{max u w} (α (ULift.down i)))
-    (Cardinal.lift.{max u v} κ) (by simpa)
-    (fun i => by simpa using hα (ULift.down i))
-  rw [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨i, a⟩ => ⟨ULift.down i, ULift.down a⟩)
-    (fun ⟨i, a⟩ => ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
-
-Depends on / 依赖: Cardinal, Cardinal.IsRegular.lift, Cardinal.lift, Fact.out, IsRegular, ULift.down, ULift.up, hasCardinalLT_lift_iff, hasCardinalLT_sigma, of_surjective, this.of_surjective
+/-
+**hasCardinalLT_sigma** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_sigma {ι : Type u} (α : ι -> Type v) (κ : Cardinal.{w}) [Fac
+t κ.IsRegular] (hι : HasCardinalLT ι κ) (hα : forall i, HasCardinalLT (α i) κ) :
+ HasCardinalLT (Σ i, α i) κ
+参数：α : ι -> Type v；κ : Cardinal.{w}；hι : HasCardinalLT ι κ；hα : forall i, HasCar
+dinalLT (α i) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.IsRegular.lift`：∀ {κ : Cardinal.{v}}, κ.IsRegular → (Cardinal.l
+ift.{u, v} κ).IsRegular
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用引理 `hasCardinalLT_sigma'`：hasCardinalLT_sigma' {ι : Type w} (α : ι -> Type w
+) (κ : Cardinal.{w}) [Fact κ.IsRegular] (hι : HasCardinalLT ι κ) (hα : forall i,
+ HasCardin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `HasCardinalLT.of_surjective`：of_surjective (f : X -> Y) (hf : Function.S
+urjective f) : HasCardinalLT Y κ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `hasCardinalLT_lift_iff`：hasCardinalLT_lift_iff (X : Type v) (κ : Cardina
+l.{w}) : HasCardinalLT X (Cardinal.lift.{u} κ) ↔ HasCardinalLT X κ
 -/
-lemma hasCardinalLT_sigma {ι : Type u} (α : ι -> Type v) (κ : Cardinal.{w}) [Fact κ.IsRegular]
-    (hι : HasCardinalLT ι κ) (hα : forall i, HasCardinalLT (α i) κ) :
+lemma hasCardinalLT_sigma {ι : Type u} (α : ι → Type v) (κ : Cardinal.{w}) [Fact κ.IsRegular]
+    (hι : HasCardinalLT ι κ) (hα : ∀ i, HasCardinalLT (α i) κ) :
     HasCardinalLT (Σ i, α i) κ := by
   have : Fact (Cardinal.lift.{max u v} κ).IsRegular := ⟨Cardinal.IsRegular.lift Fact.out⟩
   have := hasCardinalLT_sigma'
-    (fun (i : ULift.{max v w} ι) => ULift.{max u w} (α (ULift.down i)))
+    (fun (i : ULift.{max v w} ι) ↦ ULift.{max u w} (α (ULift.down i)))
     (Cardinal.lift.{max u v} κ) (by simpa)
-    (fun i => by simpa using hα (ULift.down i))
+    (fun i ↦ by simpa using hα (ULift.down i))
   rw [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨i, a⟩ => ⟨ULift.down i, ULift.down a⟩)
-    (fun ⟨i, a⟩ => ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
-
-/--
-lemma `hasCardinalLT_subtype_iSup` / 引理 `hasCardinalLT_subtype_iSup`
-
-English:
-lemma hasCardinalLT_subtype_iSup
-  proof: (hasCardinalLT_sigma (fun i => Subtype (P i)) κ hι hP).of_surjective
-    (fun ⟨i, x, hx⟩ => ⟨x, by simp only [iSup_apply, iSup_Prop_eq]; exact ⟨i, hx⟩⟩) (by
-    rintro ⟨_, h⟩
-    simp only [iSup_apply, iSup_Prop_eq] at h
-    obtain ⟨i, hi⟩ := h
-    exact ⟨⟨i, _, hi⟩, rfl⟩)
-
-中文:
-引理 hasCardinalLT_subtype_iSup
-  证明: (hasCardinalLT_sigma (fun i => Subtype (P i)) κ hι hP).of_surjective
-    (fun ⟨i, x, hx⟩ => ⟨x, by simp only [iSup_apply, iSup_Prop_eq]; exact ⟨i, hx⟩⟩) (by
-    rintro ⟨_, h⟩
-    simp only [iSup_apply, iSup_Prop_eq] at h
-    obtain ⟨i, hi⟩ := h
-    exact ⟨⟨i, _, hi⟩, rfl⟩)
-
-Depends on / 依赖: Subtype, hasCardinalLT_sigma, iSup_Prop_eq, iSup_apply, of_surjective
+  exact this.of_surjective (fun ⟨i, a⟩ ↦ ⟨ULift.down i, ULift.down a⟩)
+    (fun ⟨i, a⟩ ↦ ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
+/-
+**hasCardinalLT_subtype_iSup** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_subtype_iSup {ι : Type*} {X : Type*} (P : ι -> X -> Prop) {κ
+ : Cardinal} [Fact κ.IsRegular] (hι : HasCardinalLT ι κ) (hP : forall i, HasCard
+inalLT (Subtype (P i)) κ) : HasCardinalLT (Subtype (⨆ i, P i)) κ
+参数：P : ι -> X -> Prop；hι : HasCardinalLT ι κ；hP : forall i, HasCardinalLT (Subty
+pe (P i)) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HasCardinalLT.of_surjective`：of_surjective (f : X -> Y) (hf : Function.S
+urjective f) : HasCardinalLT Y κ
+· 使用引理 `hasCardinalLT_sigma`：hasCardinalLT_sigma {ι : Type u} (α : ι -> Type v) 
+(κ : Cardinal.{w}) [Fact κ.IsRegular] (hι : HasCardinalLT ι κ) (hα : forall i, H
+asCardina…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iSup_apply`：iSup_apply {α : Type*} {β : α -> Type*} {ι : Sort*} [forall 
+i, SupSet (β i)] {f : ι -> forall a, β a} {a : α} : (⨆ i, f i) a = ⨆ i, f i a
+· 使用定理 `iSup_Prop_eq`：iSup_Prop_eq {p : ι -> Prop} : ⨆ i, p i = exists i, p i
 -/
 lemma hasCardinalLT_subtype_iSup
-    {ι : Type*} {X : Type*} (P : ι -> X -> Prop) {κ : Cardinal} [Fact κ.IsRegular]
-    (hι : HasCardinalLT ι κ) (hP : forall i, HasCardinalLT (Subtype (P i)) κ) :
+    {ι : Type*} {X : Type*} (P : ι → X → Prop) {κ : Cardinal} [Fact κ.IsRegular]
+    (hι : HasCardinalLT ι κ) (hP : ∀ i, HasCardinalLT (Subtype (P i)) κ) :
     HasCardinalLT (Subtype (⨆ i, P i)) κ :=
-  (hasCardinalLT_sigma (fun i => Subtype (P i)) κ hι hP).of_surjective
-    (fun ⟨i, x, hx⟩ => ⟨x, by simp only [iSup_apply, iSup_Prop_eq]; exact ⟨i, hx⟩⟩) (by
+  (hasCardinalLT_sigma (fun i ↦ Subtype (P i)) κ hι hP).of_surjective
+    (fun ⟨i, x, hx⟩ ↦ ⟨x, by simp only [iSup_apply, iSup_Prop_eq]; exact ⟨i, hx⟩⟩) (by
     rintro ⟨_, h⟩
     simp only [iSup_apply, iSup_Prop_eq] at h
     obtain ⟨i, hi⟩ := h
     exact ⟨⟨i, _, hi⟩, rfl⟩)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `hasCardinalLT_iUnion` / 引理 `hasCardinalLT_iUnion`
-
-English:
-lemma hasCardinalLT_iUnion
-  proof: by
-  convert! show HasCardinalLT (Set.ofPred ((⨆ i, S i))) κ from hasCardinalLT_subtype_iSup S hι hS
-  aesop
-
-中文:
-引理 hasCardinalLT_iUnion
-  证明: by
-  convert! show HasCardinalLT (Set.ofPred ((⨆ i, S i))) κ from hasCardinalLT_subtype_iSup S hι hS
-  aesop
-
-Depends on / 依赖: HasCardinalLT, Set.ofPred, convert, hasCardinalLT_subtype_iSup, ofPred
+/-
+**hasCardinalLT_iUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_iUnion {ι : Type*} {X : Type*} (S : ι -> Set X) {κ : Cardina
+l} [Fact κ.IsRegular] (hι : HasCardinalLT ι κ) (hS : forall i, HasCardinalLT (S 
+i) κ) : HasCardinalLT (⋃ i, S i) κ
+参数：S : ι -> Set X；hι : HasCardinalLT ι κ；hS : forall i, HasCardinalLT (S i) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iSup_apply`：iSup_apply {α : Type*} {β : α -> Type*} {ι : Sort*} [forall 
+i, SupSet (β i)] {f : ι -> forall a, β a} {a : α} : (⨆ i, f i) a = ⨆ i, f i a
+· 使用定理 `iSup_Prop_eq`：iSup_Prop_eq {p : ι -> Prop} : ⨆ i, p i = exists i, p i
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用引理 `hasCardinalLT_subtype_iSup`：hasCardinalLT_subtype_iSup {ι : Type*} {X : 
+Type*} (P : ι -> X -> Prop) {κ : Cardinal} [Fact κ.IsRegular] (hι : HasCardinalL
+T ι κ) (hP : for…
 -/
 lemma hasCardinalLT_iUnion
-    {ι : Type*} {X : Type*} (S : ι -> Set X) {κ : Cardinal} [Fact κ.IsRegular]
-    (hι : HasCardinalLT ι κ) (hS : forall i, HasCardinalLT (S i) κ) :
+    {ι : Type*} {X : Type*} (S : ι → Set X) {κ : Cardinal} [Fact κ.IsRegular]
+    (hι : HasCardinalLT ι κ) (hS : ∀ i, HasCardinalLT (S i) κ) :
     HasCardinalLT (⋃ i, S i) κ := by
   convert! show HasCardinalLT (Set.ofPred ((⨆ i, S i))) κ from hasCardinalLT_subtype_iSup S hι hS
   aesop
 
-/--
-lemma `hasCardinalLT_prod'` / 引理 `hasCardinalLT_prod'`
+/-- The particular case of `hasCardinalLT_prod` when all the inputs are in the
+same universe `w`. It is used to prove the general case. -/
+/-
+**hasCardinalLT_prod'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_prod' {T₁ T₂ : Type w} {κ : Cardinal.{w}} (hκ : Cardinal.ale
+ph0 <= κ) (h₁ : HasCardinalLT T₁ κ) (h₂ : HasCardinalLT T₂ κ) : HasCardinalLT (T
+₁ × T₂) κ
+参数：hκ : Cardinal.aleph0 <= κ；h₁ : HasCardinalLT T₁ κ；h₂ : HasCardinalLT T₂ κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `hasCardinalLT_iff_cardinal_mk_lt`：hasCardinalLT_iff_cardinal_mk_lt (X : 
+Type u) (κ : Cardinal.{u}) : HasCardinalLT X κ ↔ Cardinal.mk X < κ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_prod`：mk_prod (α : Type u) (β : Type v) : #(α × β) = lift.{v
+, u} #α * lift.{u, v} #β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mul_lt_of_lt`：mul_lt_of_lt {a b c : Cardinal} (hc : ℵ₀ <= c) (h
+a : a < c) (hb : b < c) : a * b < c
 
-English:
-lemma hasCardinalLT_prod'
-  statement: {T₁ T₂ : Type w} {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 <= κ)
-  proof: by
-  rw [hasCardinalLT_iff_cardinal_mk_lt] at h₁ h₂ ⊢
-  simpa using Cardinal.mul_lt_of_lt hκ h₁ h₂
-
-中文:
-引理 hasCardinalLT_prod'
-  结论: {T₁ T₂ : 类型 w} {κ : 基数.{w}} (hκ : 基数.aleph0 <= κ)
-  证明: by
-  rw [hasCardinalLT_iff_cardinal_mk_lt] at h₁ h₂ ⊢
-  simpa using Cardinal.mul_lt_of_lt hκ h₁ h₂
-
-Depends on / 依赖: Cardinal, Cardinal.mul_lt_of_lt, hasCardinalLT_iff_cardinal_mk_lt, mul_lt_of_lt
+--- 原说明 ---
+The particular case of `hasCardinalLT_prod` when all the inputs are in the
+same universe `w`. It is used to prove the general case.
 -/
-lemma hasCardinalLT_prod' {T₁ T₂ : Type w} {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 <= κ)
+lemma hasCardinalLT_prod' {T₁ T₂ : Type w} {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 ≤ κ)
     (h₁ : HasCardinalLT T₁ κ) (h₂ : HasCardinalLT T₂ κ) :
     HasCardinalLT (T₁ × T₂) κ := by
   rw [hasCardinalLT_iff_cardinal_mk_lt] at h₁ h₂ ⊢
   simpa using Cardinal.mul_lt_of_lt hκ h₁ h₂
-
-/--
-lemma `hasCardinalLT_prod` / 引理 `hasCardinalLT_prod`
-
-English:
-lemma hasCardinalLT_prod
-  statement: {T₁ : Type u} {T₂ : Type u'}
-  proof: by
-  have := hasCardinalLT_prod' (T₁ := ULift.{max u' w} T₁) (T₂ := ULift.{max u w} T₂)
-    (κ := Cardinal.lift.{max u u'} κ) (by simpa) (by simpa) (by simpa)
-  simp only [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨x₁, x₂⟩ => ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ =>
-    ⟨⟨ULift.up x₁, ULift.up x₂⟩, rfl⟩)
-
-中文:
-引理 hasCardinalLT_prod
-  结论: {T₁ : 类型u} {T₂ : 类型u'}
-  证明: by
-  have := hasCardinalLT_prod' (T₁ := ULift.{max u' w} T₁) (T₂ := ULift.{max u w} T₂)
-    (κ := Cardinal.lift.{max u u'} κ) (by simpa) (by simpa) (by simpa)
-  simp only [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨x₁, x₂⟩ => ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ =>
-    ⟨⟨ULift.up x₁, ULift.up x₂⟩, rfl⟩)
-
-Depends on / 依赖: Cardinal, Cardinal.lift, ULift.down, ULift.up, hasCardinalLT_lift_iff, hasCardinalLT_prod, of_surjective, this.of_surjective
+/-
+**hasCardinalLT_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasCardinalLT_prod {T₁ : Type u} {T₂ : Type u'} {κ : Cardinal.{w}} (hκ : C
+ardinal.aleph0 <= κ) (h₁ : HasCardinalLT T₁ κ) (h₂ : HasCardinalLT T₂ κ) : HasCa
+rdinalLT (T₁ × T₂) κ
+参数：hκ : Cardinal.aleph0 <= κ；h₁ : HasCardinalLT T₁ κ；h₂ : HasCardinalLT T₂ κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `hasCardinalLT_prod'`：hasCardinalLT_prod' {T₁ T₂ : Type w} {κ : Cardinal.
+{w}} (hκ : Cardinal.aleph0 <= κ) (h₁ : HasCardinalLT T₁ κ) (h₂ : HasCardinalLT T
+₂ κ) : Ha…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `HasCardinalLT.of_surjective`：of_surjective (f : X -> Y) (hf : Function.S
+urjective f) : HasCardinalLT Y κ
 -/
 lemma hasCardinalLT_prod {T₁ : Type u} {T₂ : Type u'}
-    {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 <= κ)
+    {κ : Cardinal.{w}} (hκ : Cardinal.aleph0 ≤ κ)
     (h₁ : HasCardinalLT T₁ κ) (h₂ : HasCardinalLT T₂ κ) :
     HasCardinalLT (T₁ × T₂) κ := by
   have := hasCardinalLT_prod' (T₁ := ULift.{max u' w} T₁) (T₂ := ULift.{max u w} T₂)
     (κ := Cardinal.lift.{max u u'} κ) (by simpa) (by simpa) (by simpa)
   simp only [hasCardinalLT_lift_iff] at this
-  exact this.of_surjective (fun ⟨x₁, x₂⟩ => ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ =>
+  exact this.of_surjective (fun ⟨x₁, x₂⟩ ↦ ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ ↦
     ⟨⟨ULift.up x₁, ULift.up x₂⟩, rfl⟩)
 
 namespace HasCardinalLT
 
-/--
-lemma `exists_regular_cardinal` / 引理 `exists_regular_cardinal`
+/-- For any `w`-small type `X`, there exists a regular cardinal `κ : Cardinal.{w}`
+such that `HasCardinalLT X κ`. -/
+/-
+**HasCardinalLT.exists_regular_cardinal** 是 Mathlib 中的一个引理，位于命名空间 `HasCardinalLT
+`。
+形式化陈述：exists_regular_cardinal (X : Type u) [Small.{w} X] : exists (κ : Cardinal.
+{w}), κ.IsRegular ∧ HasCardinalLT X κ
+参数：X : Type u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_succ`：isRegular_succ {c : Cardinal} (hc : ℵ₀ <= c) : 
+IsRegular (succ c)
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `hasCardinalLT_iff_of_equiv`：hasCardinalLT_iff_of_equiv {X : Type u} {Y :
+ Type u'} (e : X ≃ Y) (κ : Cardinal.{v}) : HasCardinalLT X κ ↔ HasCardinalLT Y κ
+· 使用定理 `Cardinal.instNoMaxOrder`：NoMaxOrder Cardinal.{u}
 
-English:
-lemma exists_regular_cardinal
-  given: (X : Type u) [Small.{w} X]
-  proof: ⟨Order.succ (max (Cardinal.mk (Shrink.{w} X)) .aleph0),
-    Cardinal.isRegular_succ (le_max_right _ _), by
-      simp [hasCardinalLT_iff_of_equiv (equivShrink.{w} X),
-        hasCardinalLT_iff_cardinal_mk_lt]⟩
-
-中文:
-引理 存在_regular_cardinal
-  条件: (X : 类型u) [Small.{w} X]
-  证明: ⟨Order.succ (max (Cardinal.mk (Shrink.{w} X)) .aleph0),
-    Cardinal.isRegular_succ (le_max_right _ _), by
-      simp [hasCardinalLT_iff_of_equiv (equivShrink.{w} X),
-        hasCardinalLT_iff_cardinal_mk_lt]⟩
-
-Depends on / 依赖: Cardinal, Cardinal.isRegular_succ, Cardinal.mk, Order.succ, Shrink, aleph0, equivShrink, hasCardinalLT_iff_cardinal_mk_lt, hasCardinalLT_iff_of_equiv, isRegular_succ, le_max_right
+--- 原说明 ---
+For any `w`-small type `X`, there exists a regular cardinal `κ : Cardinal.{w}`
+such that `HasCardinalLT X κ`.
 -/
 lemma exists_regular_cardinal (X : Type u) [Small.{w} X] :
-    exists (κ : Cardinal.{w}), κ.IsRegular ∧ HasCardinalLT X κ :=
+    ∃ (κ : Cardinal.{w}), κ.IsRegular ∧ HasCardinalLT X κ :=
   ⟨Order.succ (max (Cardinal.mk (Shrink.{w} X)) .aleph0),
     Cardinal.isRegular_succ (le_max_right _ _), by
       simp [hasCardinalLT_iff_of_equiv (equivShrink.{w} X),
         hasCardinalLT_iff_cardinal_mk_lt]⟩
 
-/--
-lemma `exists_regular_cardinal_forall` / 引理 `exists_regular_cardinal_forall`
+/-- For any `w`-small family `X : ι → Type u` of `w`-small types, there exists
+a regular cardinal `κ : Cardinal.{w}` such that `HasCardinalLT (X i) κ` for all `i : ι`. -/
+/-
+**HasCardinalLT.exists_regular_cardinal_forall** 是 Mathlib 中的一个引理，位于命名空间 `HasCar
+dinalLT`。
+形式化陈述：exists_regular_cardinal_forall {ι : Type v} (X : ι -> Type u) [Small.{w} ι
+] [forall i, Small.{w} (X i)] : exists (κ : Cardinal.{w}), κ.IsRegular ∧ forall 
+(i : ι), HasCardinalLT (X i) κ
+参数：X : ι -> Type u；X i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HasCardinalLT.exists_regular_cardinal`：exists_regular_cardinal (X : Type
+ u) [Small.{w} X] : exists (κ : Cardinal.{w}), κ.IsRegular ∧ HasCardinalLT X κ
+· 使用引理 `HasCardinalLT.of_injective`：of_injective (f : Y -> X) (hf : Function.Inj
+ective f) : HasCardinalLT Y κ
+· 使用定理 `sigma_mk_injective`：∀ {α : Type u_1} {β : α → Type u_4} {i : α}, Functio
+n.Injective (Sigma.mk i)
 
-English:
-lemma exists_regular_cardinal_forall
-  statement: {ι : Type v} (X : ι -> Type u) [Small.{w} ι]
-  proof: by
-  obtain ⟨κ, hκ, h⟩ := exists_regular_cardinal.{w} (Sigma X)
-  exact ⟨κ, hκ, fun i => h.of_injective _ sigma_mk_injective⟩
-
-中文:
-引理 存在_regular_cardinal_对任意
-  结论: {ι : 类型v} (X : ι -> 类型u) [Small.{w} ι]
-  证明: by
-  obtain ⟨κ, hκ, h⟩ := exists_regular_cardinal.{w} (Sigma X)
-  exact ⟨κ, hκ, fun i => h.of_injective _ sigma_mk_injective⟩
-
-Depends on / 依赖: exists_regular_cardinal, h.of_injective, of_injective, sigma_mk_injective
+--- 原说明 ---
+For any `w`-small family `X : ι → Type u` of `w`-small types, there exists
+a regular cardinal `κ : Cardinal.{w}` such that `HasCardinalLT (X i) κ` for all 
+`i : ι`.
 -/
-lemma exists_regular_cardinal_forall {ι : Type v} (X : ι -> Type u) [Small.{w} ι]
-    [forall i, Small.{w} (X i)] :
-    exists (κ : Cardinal.{w}), κ.IsRegular ∧ forall (i : ι), HasCardinalLT (X i) κ := by
+lemma exists_regular_cardinal_forall {ι : Type v} (X : ι → Type u) [Small.{w} ι]
+    [∀ i, Small.{w} (X i)] :
+    ∃ (κ : Cardinal.{w}), κ.IsRegular ∧ ∀ (i : ι), HasCardinalLT (X i) κ := by
   obtain ⟨κ, hκ, h⟩ := exists_regular_cardinal.{w} (Sigma X)
-  exact ⟨κ, hκ, fun i => h.of_injective _ sigma_mk_injective⟩
+  exact ⟨κ, hκ, fun i ↦ h.of_injective _ sigma_mk_injective⟩
 
 end HasCardinalLT
+

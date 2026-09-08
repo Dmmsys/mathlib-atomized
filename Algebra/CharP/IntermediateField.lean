@@ -24,94 +24,106 @@ variable {F E : Type*} [Field F] [Field E] [Algebra F E]
 
 namespace IntermediateField
 
-variable (L : IntermediateField F E) (p : Nat)
+variable (L : IntermediateField F E) (p : ℕ)
 
-/--
-Instance `charZero` / 实例 `charZero`
-
-English:
-instance charZero
-  signature: [CharZero F]
-  body: charZero_of_injective_algebraMap (algebraMap F _).injective
-
-中文:
-实例 charZero
-  签名: [特征零 F]
-  定义体: charZero_of_injective_algebraMap (algebraMap F _).injective
-
-Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective
+/-
+**IntermediateField.charZero** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+形式化陈述：charZero [CharZero F] : CharZero L
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `charZero_of_injective_algebraMap`：charZero_of_injective_algebraMap [Comm
+Semiring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A))
+ [CharZero R] : CharZe…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 instance charZero [CharZero F] : CharZero L :=
   charZero_of_injective_algebraMap (algebraMap F _).injective
-
-/--
-Instance `charP` / 实例 `charP`
-
-English:
-instance charP
-  signature: [CharP F p]
-  body: charP_of_injective_algebraMap (algebraMap F _).injective p
-
-中文:
-实例 charP
-  签名: [特征p F p]
-  定义体: charP_of_injective_algebraMap (algebraMap F _).injective p
-
-Depends on / 依赖: algebraMap, charP_of_injective_algebraMap, injective
+/-
+**IntermediateField.charP** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+形式化陈述：charP [CharP F p] : CharP L p
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `charP_of_injective_algebraMap`：charP_of_injective_algebraMap [CommSemiri
+ng R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A)) (p : 
+Nat) [CharP R p] : …
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 instance charP [CharP F p] : CharP L p :=
   charP_of_injective_algebraMap (algebraMap F _).injective p
-
-/--
-Instance `expChar` / 实例 `expChar`
-
-English:
-instance expChar
-  signature: [ExpChar F p]
-  body: expChar_of_injective_algebraMap (algebraMap F _).injective p
-
-中文:
-实例 expChar
-  签名: [ExpChar F p]
-  定义体: expChar_of_injective_algebraMap (algebraMap F _).injective p
-
-Depends on / 依赖: algebraMap, expChar_of_injective_algebraMap, injective
+/-
+**IntermediateField.expChar** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+形式化陈述：expChar [ExpChar F p] : ExpChar L p
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `expChar_of_injective_algebraMap`：expChar_of_injective_algebraMap [CommSe
+miring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A)) (
+q : Nat) [ExpChar R q…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 instance expChar [ExpChar F p] : ExpChar L p :=
   expChar_of_injective_algebraMap (algebraMap F _).injective p
-
-/--
-Instance `charP'` / 实例 `charP'`
-
-English:
-instance charP'
-  signature: [CharP E p]
-  body: Subfield.charP L.toSubfield p
-
-中文:
-实例 charP'
-  签名: [特征p E p]
-  定义体: Subfield.charP L.toSubfield p
-
-Depends on / 依赖: L.toSubfield, Subfield, Subfield.charP, toSubfield
+/-
+**IntermediateField.charP'** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+形式化陈述：charP' [CharP E p] : CharP L p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance charP' [CharP E p] : CharP L p := Subfield.charP L.toSubfield p
-
-/--
-Instance `expChar'` / 实例 `expChar'`
-
-English:
-instance expChar'
-  signature: [ExpChar E p]
-  body: Subfield.expChar L.toSubfield p
-
-中文:
-实例 expChar'
-  签名: [ExpChar E p]
-  定义体: Subfield.expChar L.toSubfield p
-
-Depends on / 依赖: L.toSubfield, Subfield, Subfield.expChar, expChar, toSubfield
+/-
+**IntermediateField.expChar'** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+形式化陈述：expChar' [ExpChar E p] : ExpChar L p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance expChar' [ExpChar E p] : ExpChar L p := Subfield.expChar L.toSubfield p
 
 end IntermediateField
+

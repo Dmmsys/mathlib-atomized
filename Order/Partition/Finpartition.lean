@@ -82,26 +82,15 @@ variable {α : Type*}
 /-- A finite partition of `a : α` is a pairwise disjoint finite set of elements whose supremum is
 `a`. We forbid `⊥` as a part. -/
 @[ext]
-/--
-Definition of `Finpartition` / `Finpartition` 的定义
+/-
+**Finpartition** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → [inst : Lattice α] → [OrderBot α] → α → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Finpartition
-  parameters: [Lattice α] [OrderBot α] (a : α)
-  axioms and operations (4):
-    - parts : Finset α
-    - supIndep : parts.SupIndep id
-    - sup_parts : parts.sup id = a
-    - bot_notMem : ⊥ ∉ parts
-
-中文:
-结构 有限分拆
-  参数: [格 α] [有底序 α] (a : α)
-  公理与运算 (4 个):
-    - parts : 有限集 α
-    - supIndep : parts.SupIndep id
-    - sup_parts : parts.上确界 id = a
-    - bot_notMem : ⊥ ∉ parts
+--- 原说明 ---
+A finite partition of `a : α` is a pairwise disjoint finite set of elements whos
+e supremum is
+`a`. We forbid `⊥` as a part.
 -/
 structure Finpartition [Lattice α] [OrderBot α] (a : α) where
   /-- The elements of the finite partition of `a` -/
@@ -122,26 +111,16 @@ variable [Lattice α] [OrderBot α]
 
 /-- A `Finpartition` constructor which does not insist on `⊥` not being a part. -/
 @[simps]
-/--
-Definition of `ofErase` / `ofErase` 的定义
+/-
+**Finpartition.ofErase** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofErase [DecidableEq α] {a : α} (parts : Finset α) (sup_indep : parts.SupI
+ndep id) (sup_parts : parts.sup id = a) : Finpartition a where parts
+参数：parts : Finset α；sup_indep : parts.SupIndep id；sup_parts : parts.sup id = a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofErase
-  signature: [DecidableEq α] {a : α} (parts : Finset α) (sup_indep : parts.SupIndep id)
-  body: parts.erase ⊥
-  supIndep := sup_indep.subset (erase_subset _ _)
-  sup_parts := (sup_erase_bot _).trans sup_parts
-  bot_notMem := notMem_erase _ _
-
-中文:
-定义 ofErase
-  签名: [DecidableEq α] {a : α} (parts : 有限集 α) (sup_indep : parts.SupIndep id)
-  定义体: parts.erase ⊥
-  supIndep := sup_indep.subset (erase_subset _ _)
-  sup_parts := (sup_erase_bot _).trans sup_parts
-  bot_notMem := notMem_erase _ _
-
-Depends on / 依赖: parts.erase
+--- 原说明 ---
+A `Finpartition` constructor which does not insist on `⊥` not being a part.
 -/
 def ofErase [DecidableEq α] {a : α} (parts : Finset α) (sup_indep : parts.SupIndep id)
     (sup_parts : parts.sup id = a) : Finpartition a where
@@ -152,77 +131,60 @@ def ofErase [DecidableEq α] {a : α} (parts : Finset α) (sup_indep : parts.Sup
 
 /-- A `Finpartition` constructor from a bigger existing finpartition. -/
 @[simps]
-/--
-Definition of `ofSubset` / `ofSubset` 的定义
+/-
+**Finpartition.ofSubset** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofSubset {a b : α} (P : Finpartition a) {parts : Finset α} (subset : parts
+ subseteq P.parts) (sup_parts : parts.sup id = b) : Finpartition b
+参数：P : Finpartition a；subset : parts subseteq P.parts；sup_parts : parts.sup id =
+ b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubset
-  signature: {a b : α} (P : Finpartition a) {parts : Finset α} (subset : parts subseteq P.parts)
-  body: { parts := parts
-    supIndep := P.supIndep.subset subset
-    sup_parts := sup_parts
-    bot_notMem := fun h => P.bot_notMem (subset h) }
-
-中文:
-定义 ofSubset
-  签名: {a b : α} (P : 有限分拆 a) {parts : 有限集 α} (subset : parts subseteq P.parts)
-  定义体: { parts := parts
-    supIndep := P.supIndep.subset subset
-    sup_parts := sup_parts
-    bot_notMem := fun h => P.bot_notMem (subset h) }
-
-Depends on / 依赖: P.bot_notMem, P.supIndep.subset, bot_notMem, subset, supIndep, sup_parts
+--- 原说明 ---
+A `Finpartition` constructor from a bigger existing finpartition.
 -/
-def ofSubset {a b : α} (P : Finpartition a) {parts : Finset α} (subset : parts subseteq P.parts)
+def ofSubset {a b : α} (P : Finpartition a) {parts : Finset α} (subset : parts ⊆ P.parts)
     (sup_parts : parts.sup id = b) : Finpartition b :=
   { parts := parts
     supIndep := P.supIndep.subset subset
     sup_parts := sup_parts
-    bot_notMem := fun h => P.bot_notMem (subset h) }
-
-/--
-lemma `sum_ofSubset_eq_sum` / 引理 `sum_ofSubset_eq_sum`
-
-English:
-lemma sum_ofSubset_eq_sum
-  statement: {a b : α} (P : Finpartition a) {parts : Finset α}
-  proof: Finset.sum_subset subset hf
-
-中文:
-引理 sum_ofSubset_eq_sum
-  结论: {a b : α} (P : 有限分拆 a) {parts : 有限集 α}
-  证明: Finset.sum_subset subset hf
-
-Depends on / 依赖: Finset, Finset.sum_subset, subset, sum_subset
+    bot_notMem := fun h ↦ P.bot_notMem (subset h) }
+/-
+**Finpartition.sum_ofSubset_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：sum_ofSubset_eq_sum {a b : α} (P : Finpartition a) {parts : Finset α} (sub
+set : parts subseteq P.parts) (sup_parts : parts.sup id = b) {X : Type*} [AddCom
+mMonoid X] (f : α -> X) (hf : forall p in P.parts, p ∉ parts -> f p = 0) : ∑ p i
+n (P.ofSubset subset sup_parts).parts, f p = ∑ p in P.parts, f p
+参数：P : Finpartition a；subset : parts subseteq P.parts；sup_parts : parts.sup id =
+ b；f : α -> X；hf : forall p in P.parts, p ∉ parts -> f p = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
 -/
 lemma sum_ofSubset_eq_sum {a b : α} (P : Finpartition a) {parts : Finset α}
-    (subset : parts subseteq P.parts) (sup_parts : parts.sup id = b)
-    {X : Type*} [AddCommMonoid X] (f : α -> X) (hf : forall p in P.parts, p ∉ parts -> f p = 0) :
-    ∑ p in (P.ofSubset subset sup_parts).parts, f p = ∑ p in P.parts, f p :=
+    (subset : parts ⊆ P.parts) (sup_parts : parts.sup id = b)
+    {X : Type*} [AddCommMonoid X] (f : α → X) (hf : ∀ p ∈ P.parts, p ∉ parts → f p = 0) :
+    ∑ p ∈ (P.ofSubset subset sup_parts).parts, f p = ∑ p ∈ P.parts, f p :=
   Finset.sum_subset subset hf
 
 /-- Changes the type of a finpartition to an equal one. -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**Finpartition.copy** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：copy {a b : α} (P : Finpartition a) (h : a = b) : Finpartition b where par
+ts
+参数：P : Finpartition a；h : a = b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
 
-English:
-definition copy
-  signature: {a b : α} (P : Finpartition a) (h : a = b)
-  body: P.parts
-  supIndep := P.supIndep
-  sup_parts := h ▸ P.sup_parts
-  bot_notMem := P.bot_notMem
-
-中文:
-定义 copy
-  签名: {a b : α} (P : 有限分拆 a) (h : a = b)
-  定义体: P.parts
-  supIndep := P.supIndep
-  sup_parts := h ▸ P.sup_parts
-  bot_notMem := P.bot_notMem
-
-Depends on / 依赖: P.parts
+--- 原说明 ---
+Changes the type of a finpartition to an equal one.
 -/
 def copy {a b : α} (P : Finpartition a) (h : a = b) : Finpartition b where
   parts := P.parts
@@ -230,52 +192,17 @@ def copy {a b : α} (P : Finpartition a) (h : a = b) : Finpartition b where
   sup_parts := h ▸ P.sup_parts
   bot_notMem := P.bot_notMem
 
-/--
-Definition of `map` / `map` 的定义
+/-- Transfer a finpartition over an order isomorphism. -/
+/-
+**Finpartition.map** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：map {β : Type*} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : Finpart
+ition a) : Finpartition (e a) where parts
+参数：e : α ≃o β；P : Finpartition a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {β : Type*} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : Finpartition a)
-  body: P.parts.map e
-  supIndep u hu _ hb hbu _ hx hxu := by
-    rw [← map_symm_subset] at hu
-    simp only [mem_map_equiv] at hb
-    have := P.supIndep hu hb (by simp [hbu]) (map_rel e.symm hx) ?_
-    · rw [← e.symm.map_bot] at this
-      exact e.symm.map_rel_iff.mp this
-    · convert! e.symm.map_rel_iff.mpr hxu
-      rw [map_finset_sup]; rw [sup_map]
-      rfl
-  sup_parts := by simp [← P.sup_parts]
-  bot_notMem := by
-    rw [mem_map_equiv]
-    convert! P.bot_notMem
-    exact e.symm.map_bot
-
-@[simp]
-
-中文:
-定义 map
-  签名: {β : 类型} [格 β] [有底序 β] {a : α} (e : α ≃o β) (P : 有限分拆 a)
-  定义体: P.parts.map e
-  supIndep u hu _ hb hbu _ hx hxu := by
-    rw [← map_symm_subset] at hu
-    simp only [mem_map_equiv] at hb
-    have := P.supIndep hu hb (by simp [hbu]) (map_rel e.symm hx) ?_
-    · rw [← e.symm.map_bot] at this
-      exact e.symm.map_rel_iff.mp this
-    · convert! e.symm.map_rel_iff.mpr hxu
-      rw [map_finset_sup]; rw [sup_map]
-      rfl
-  sup_parts := by simp [← P.sup_parts]
-  bot_notMem := by
-    rw [mem_map_equiv]
-    convert! P.bot_notMem
-    exact e.symm.map_bot
-
-@[simp]
-
-Depends on / 依赖: P.parts.map
+--- 原说明 ---
+Transfer a finpartition over an order isomorphism.
 -/
 def map {β : Type*} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : Finpartition a) :
     Finpartition (e a) where
@@ -287,7 +214,7 @@ def map {β : Type*} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : F
     · rw [← e.symm.map_bot] at this
       exact e.symm.map_rel_iff.mp this
     · convert! e.symm.map_rel_iff.mpr hxu
-      rw [map_finset_sup]; rw [sup_map]
+      rw [map_finset_sup, sup_map]
       rfl
   sup_parts := by simp [← P.sup_parts]
   bot_notMem := by
@@ -296,18 +223,12 @@ def map {β : Type*} [Lattice β] [OrderBot β] {a : α} (e : α ≃o β) (P : F
     exact e.symm.map_bot
 
 @[simp]
-/--
-theorem `parts_map` / 定理 `parts_map`
-
-English:
-theorem parts_map
-  given: {β : Type*} [Lattice β] [OrderBot β] {a : α} {e : α ≃o β} {P : Finpartition a}
-  proof: rfl
-
-中文:
-定理 parts_map
-  条件: {β : 类型} [格 β] [有底序 β] {a : α} {e : α ≃o β} {P : 有限分拆 a}
-  证明: rfl
+/-
+**Finpartition.parts_map** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_map {β : Type*} [Lattice β] [OrderBot β] {a : α} {e : α ≃o β} {P : F
+inpartition a} : (P.map e).parts = P.parts.map e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parts_map {β : Type*} [Lattice β] [OrderBot β] {a : α} {e : α ≃o β} {P : Finpartition a} :
     (P.map e).parts = P.parts.map e := rfl
@@ -316,66 +237,33 @@ variable (α)
 
 /-- The empty finpartition. -/
 @[simps]
-/--
-Definition of `empty` / `empty` 的定义
+/-
+**Finpartition.empty** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：(α : Type u_1) → [inst : Lattice α] → [inst_1 : OrderBot α] → Finpartition
+ ⊥
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty
-  signature: : Finpartition (⊥ : α) where
-  body: ∅
-  supIndep := supIndep_empty _
-  sup_parts := Finset.sup_empty
-  bot_notMem := notMem_empty ⊥
-
-中文:
-定义 empty
-  签名: : 有限分拆 (⊥ : α) where
-  定义体: ∅
-  supIndep := supIndep_empty _
-  sup_parts := Finset.sup_empty
-  bot_notMem := notMem_empty ⊥
+--- 原说明 ---
+The empty finpartition.
 -/
 protected def empty : Finpartition (⊥ : α) where
   parts := ∅
   supIndep := supIndep_empty _
   sup_parts := Finset.sup_empty
   bot_notMem := notMem_empty ⊥
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Finpartition (⊥ : α))
-  body: ⟨Finpartition.empty α⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (有限分拆 (⊥ : α))
-  定义体: ⟨Finpartition.empty α⟩
-
-@[simp]
-
-Depends on / 依赖: Finpartition, Finpartition.empty
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Finpartition (⊥ : α)) :=
   ⟨Finpartition.empty α⟩
 
 @[simp]
-/--
-theorem `default_eq_empty` / 定理 `default_eq_empty`
-
-English:
-theorem default_eq_empty
-  statement: (default : Finpartition (⊥ : α)) = Finpartition.empty α
-  proof: rfl
-
-中文:
-定理 default_eq_empty
-  结论: (default : 有限分拆 (⊥ : α)) = 有限分拆.empty α
-  证明: rfl
+/-
+**Finpartition.default_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：default_eq_empty : (default : Finpartition (⊥ : α)) = Finpartition.empty α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem default_eq_empty : (default : Finpartition (⊥ : α)) = Finpartition.empty α :=
   rfl
@@ -384,143 +272,123 @@ variable {α} {a : α}
 
 /-- The finpartition in one part, aka indiscrete finpartition. -/
 @[simps]
-/--
-Definition of `indiscrete` / `indiscrete` 的定义
+/-
+**Finpartition.indiscrete** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：indiscrete (ha : a != ⊥) : Finpartition a where parts
+参数：ha : a != ⊥。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition indiscrete
-  signature: (ha : a != ⊥)
-  body: {a}
-  supIndep := supIndep_singleton _ _
-  sup_parts := Finset.sup_singleton
-  bot_notMem h := ha (mem_singleton.1 h).symm
-
-中文:
-定义 indiscrete
-  签名: (ha : a != ⊥)
-  定义体: {a}
-  supIndep := supIndep_singleton _ _
-  sup_parts := Finset.sup_singleton
-  bot_notMem h := ha (mem_singleton.1 h).symm
+--- 原说明 ---
+The finpartition in one part, aka indiscrete finpartition.
 -/
-def indiscrete (ha : a != ⊥) : Finpartition a where
+def indiscrete (ha : a ≠ ⊥) : Finpartition a where
   parts := {a}
   supIndep := supIndep_singleton _ _
   sup_parts := Finset.sup_singleton
   bot_notMem h := ha (mem_singleton.1 h).symm
 
 variable (P : Finpartition a)
-
-/--
-theorem `le` / 定理 `le`
-
-English:
-theorem le
-  given: {b : α} (hb : b in P.parts)
-  statement: b <= a
-  proof: (le_sup hb).trans P.sup_parts.le
-
-中文:
-定理 le
-  条件: {b : α} (hb : b in P.parts)
-  结论: b <= a
-  证明: (le_sup hb).trans P.sup_parts.le
+/-
+**Finpartition.le** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot α] {a : α} (P : Fin
+partition a) {b : α}, b ∈ P.parts → b ≤ a
+参数：P : Finpartition a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
 -/
-protected theorem le {b : α} (hb : b in P.parts) : b <= a :=
+protected theorem le {b : α} (hb : b ∈ P.parts) : b ≤ a :=
   (le_sup hb).trans P.sup_parts.le
-
-/--
-theorem `ne_bot` / 定理 `ne_bot`
-
-English:
-theorem ne_bot
-  given: {b : α} (hb : b in P.parts)
-  statement: b != ⊥
-  proof: by
-  intro h
-  refine P.bot_notMem (?_)
-  rw [h] at hb
-  exact hb
-
-中文:
-定理 ne_bot
-  条件: {b : α} (hb : b in P.parts)
-  结论: b != ⊥
-  证明: by
-  intro h
-  refine P.bot_notMem (?_)
-  rw [h] at hb
-  exact hb
-
-Depends on / 依赖: P.bot_notMem, bot_notMem
+/-
+**Finpartition.ne_bot** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+参数：hb : b in P.parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem ne_bot {b : α} (hb : b in P.parts) : b != ⊥ := by
+theorem ne_bot {b : α} (hb : b ∈ P.parts) : b ≠ ⊥ := by
   intro h
   refine P.bot_notMem (?_)
   rw [h] at hb
   exact hb
-
-/--
-theorem `disjoint` / 定理 `disjoint`
-
-English:
-theorem disjoint
-  statement: (P.parts : Set α).PairwiseDisjoint id
-  proof: P.supIndep.pairwiseDisjoint
-
-中文:
-定理 disjoint
-  结论: (P.parts : 集合 α).PairwiseDisjoint id
-  证明: P.supIndep.pairwiseDisjoint
+/-
+**Finpartition.disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot α] {a : α} (P : Fin
+partition a), (↑P.parts).PairwiseDisjoint id
+参数：P : Finpartition a；↑P.parts。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.SupIndep.pairwiseDisjoint`：∀ {α : Type u_1} {ι : Type u_3} [inst 
+: Lattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α},   s.SupIndep f → 
+(↑s).PairwiseDisjoint …
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
 -/
 protected theorem disjoint : (P.parts : Set α).PairwiseDisjoint id :=
   P.supIndep.pairwiseDisjoint
 
 section Apply
 
-variable {β : Type*} {f : α -> β}
+variable {β : Type*} {f : α → β}
 
-/--
-theorem `sup_parts_apply` / 定理 `sup_parts_apply`
+/-- The `sup` of a sup-bot-preserving map `f` over the parts of a `Finpartition` equals `f a`. -/
+/-
+**Finpartition.sup_parts_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：sup_parts_apply [SemilatticeSup β] [OrderBot β] (hf : forall x y, f (x ⊔ y
+) = f x ⊔ f y) (hbot : f ⊥ = ⊥) : P.parts.sup f = f a
+参数：hf : forall x y, f (x ⊔ y) = f x ⊔ f y；hbot : f ⊥ = ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.apply_sup_eq_sup_comp`：apply_sup_eq_sup_comp [SemilatticeSup γ] [
+OrderBot γ] {s : Finset β} {f : β -> α} (g : α -> γ) (g_sup : forall x y, g (x ⊔
+ y) = g x ⊔ g y) (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
 
-English:
-theorem sup_parts_apply
-  statement: [SemilatticeSup β] [OrderBot β] (hf : forall x y, f (x ⊔ y) = f x ⊔ f y)
-  proof: (apply_sup_eq_sup_comp f hf hbot).symm.trans (congrArg f P.sup_parts)
-
-中文:
-定理 sup_parts_apply
-  结论: [SemilatticeSup β] [有底序 β] (hf : 对任意 x y, f (x ⊔ y) = f x ⊔ f y)
-  证明: (apply_sup_eq_sup_comp f hf hbot).symm.trans (congrArg f P.sup_parts)
-
-Depends on / 依赖: P.sup_parts, apply_sup_eq_sup_comp, sup_parts, symm.trans
+--- 原说明 ---
+The `sup` of a sup-bot-preserving map `f` over the parts of a `Finpartition` equ
+als `f a`.
 -/
-theorem sup_parts_apply [SemilatticeSup β] [OrderBot β] (hf : forall x y, f (x ⊔ y) = f x ⊔ f y)
+theorem sup_parts_apply [SemilatticeSup β] [OrderBot β] (hf : ∀ x y, f (x ⊔ y) = f x ⊔ f y)
     (hbot : f ⊥ = ⊥) : P.parts.sup f = f a :=
   (apply_sup_eq_sup_comp f hf hbot).symm.trans (congrArg f P.sup_parts)
 
-/--
-theorem `pairwiseDisjoint_apply` / 定理 `pairwiseDisjoint_apply`
+/-- Parts of a `Finpartition` are pairwise disjoint under an inf-bot-preserving map. -/
+/-
+**Finpartition.pairwiseDisjoint_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：pairwiseDisjoint_apply [SemilatticeInf β] [OrderBot β] (hf : forall x y, f
+ (x ⊓ y) = f x ⊓ f y) (hbot : f ⊥ = ⊥) : (P.parts : Set α).PairwiseDisjoint f
+参数：hf : forall x y, f (x ⊓ y) = f x ⊓ f y；hbot : f ⊥ = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `Finpartition.disjoint`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (P : Finpartition a), (↑P.parts).PairwiseDisjoint id
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem pairwiseDisjoint_apply
-  statement: [SemilatticeInf β] [OrderBot β] (hf : forall x y, f (x ⊓ y) = f x ⊓ f y)
-  proof: by
-  intro _ hx _ hy hxy
-  have := (P.disjoint hx hy hxy).eq_bot
-  simp_all [disjoint_iff, ← hf]
-
-中文:
-定理 pairwiseDisjoint_apply
-  结论: [SemilatticeInf β] [有底序 β] (hf : 对任意 x y, f (x ⊓ y) = f x ⊓ f y)
-  证明: by
-  intro _ hx _ hy hxy
-  have := (P.disjoint hx hy hxy).eq_bot
-  simp_all [disjoint_iff, ← hf]
-
-Depends on / 依赖: P.disjoint, disjoint, disjoint_iff, eq_bot
+--- 原说明 ---
+Parts of a `Finpartition` are pairwise disjoint under an inf-bot-preserving map.
 -/
-theorem pairwiseDisjoint_apply [SemilatticeInf β] [OrderBot β] (hf : forall x y, f (x ⊓ y) = f x ⊓ f y)
+theorem pairwiseDisjoint_apply [SemilatticeInf β] [OrderBot β] (hf : ∀ x y, f (x ⊓ y) = f x ⊓ f y)
     (hbot : f ⊥ = ⊥) : (P.parts : Set α).PairwiseDisjoint f := by
   intro _ hx _ hy hxy
   have := (P.disjoint hx hy hxy).eq_bot
@@ -531,130 +399,84 @@ end Apply
 variable {P}
 
 @[simp]
-/--
-theorem `parts_eq_empty_iff` / 定理 `parts_eq_empty_iff`
-
-English:
-theorem parts_eq_empty_iff
-  statement: P.parts = ∅ ↔ a = ⊥
-  proof: by
-  simp_rw [← P.sup_parts]
-  refine ⟨fun h => ?_, fun h => eq_empty_iff_forall_notMem.2 fun b hb => P.bot_notMem ?_⟩
-  · rw [h]
-    exact Finset.sup_empty
-  · rwa [← le_bot_iff.1 ((le_sup hb).trans h.le)]
-
-@[simp]
-
-中文:
-定理 parts_eq_empty_iff
-  结论: P.parts = ∅ ↔ a = ⊥
-  证明: by
-  simp_rw [← P.sup_parts]
-  refine ⟨fun h => ?_, fun h => eq_empty_iff_forall_notMem.2 fun b hb => P.bot_notMem ?_⟩
-  · rw [h]
-    exact Finset.sup_empty
-  · rwa [← le_bot_iff.1 ((le_sup hb).trans h.le)]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sup_empty, P.bot_notMem, P.sup_parts, bot_notMem, eq_empty_iff_forall_notMem, h.le, le_bot_iff, le_sup, simp_rw, sup_empty, sup_parts
+/-
+**Finpartition.parts_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_eq_empty_iff : P.parts = ∅ ↔ a = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Finse
+t α} : s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem parts_eq_empty_iff : P.parts = ∅ ↔ a = ⊥ := by
   simp_rw [← P.sup_parts]
-  refine ⟨fun h => ?_, fun h => eq_empty_iff_forall_notMem.2 fun b hb => P.bot_notMem ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ eq_empty_iff_forall_notMem.2 fun b hb ↦ P.bot_notMem ?_⟩
   · rw [h]
     exact Finset.sup_empty
   · rwa [← le_bot_iff.1 ((le_sup hb).trans h.le)]
 
 @[simp]
-/--
-theorem `parts_nonempty_iff` / 定理 `parts_nonempty_iff`
-
-English:
-theorem parts_nonempty_iff
-  statement: P.parts.Nonempty ↔ a != ⊥
-  proof: by
-  contrapose!; exact parts_eq_empty_iff
-
-中文:
-定理 parts_nonempty_iff
-  结论: P.parts.非空 ↔ a != ⊥
-  证明: by
-  contrapose!; exact parts_eq_empty_iff
-
-Depends on / 依赖: contrapose, parts_eq_empty_iff
+/-
+**Finpartition.parts_nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_nonempty_iff : P.parts.Nonempty ↔ a != ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₃`：contrapose_iff₃ {p q : Prop} 
+: (¬ p ↔ q) -> (p ↔ ¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.parts_eq_empty_iff`：parts_eq_empty_iff : P.parts = ∅ ↔ a = 
+⊥
 -/
-theorem parts_nonempty_iff : P.parts.Nonempty ↔ a != ⊥ := by
+theorem parts_nonempty_iff : P.parts.Nonempty ↔ a ≠ ⊥ := by
   contrapose!; exact parts_eq_empty_iff
-
-/--
-theorem `parts_nonempty` / 定理 `parts_nonempty`
-
-English:
-theorem parts_nonempty
-  given: (P : Finpartition a) (ha : a != ⊥)
-  statement: P.parts.Nonempty
-  proof: parts_nonempty_iff.2 ha
-
-中文:
-定理 parts_nonempty
-  条件: (P : 有限分拆 a) (ha : a != ⊥)
-  结论: P.parts.非空
-  证明: parts_nonempty_iff.2 ha
-
-Depends on / 依赖: parts_nonempty_iff
+/-
+**Finpartition.parts_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_nonempty (P : Finpartition a) (ha : a != ⊥) : P.parts.Nonempty
+参数：P : Finpartition a；ha : a != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finpartition.parts_nonempty_iff`：parts_nonempty_iff : P.parts.Nonempty ↔
+ a != ⊥
 -/
-theorem parts_nonempty (P : Finpartition a) (ha : a != ⊥) : P.parts.Nonempty :=
+theorem parts_nonempty (P : Finpartition a) (ha : a ≠ ⊥) : P.parts.Nonempty :=
   parts_nonempty_iff.2 ha
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique (Finpartition (⊥ : α))
-  body: { (inferInstance : Inhabited (Finpartition (⊥ : α))) with
-    uniq := fun P => by
-      ext a
-      exact iff_of_false (fun h => P.ne_bot h <| le_bot_iff.1 <| P.le h) (notMem_empty a) }
-
-中文:
-实例 :
-  签名: 唯一 (有限分拆 (⊥ : α))
-  定义体: { (inferInstance : Inhabited (Finpartition (⊥ : α))) with
-    uniq := fun P => by
-      ext a
-      exact iff_of_false (fun h => P.ne_bot h <| le_bot_iff.1 <| P.le h) (notMem_empty a) }
-
-Depends on / 依赖: Finpartition, Inhabited, P.le, P.ne_bot, iff_of_false, le_bot_iff, ne_bot, notMem_empty
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique (Finpartition (⊥ : α)) :=
   { (inferInstance : Inhabited (Finpartition (⊥ : α))) with
-    uniq := fun P => by
+    uniq := fun P ↦ by
       ext a
-      exact iff_of_false (fun h => P.ne_bot h <| le_bot_iff.1 <| P.le h) (notMem_empty a) }
-
-/--
-Instance `instNonempty` / 实例 `instNonempty`
-
-English:
-instance instNonempty
-  signature: : Nonempty (Finpartition a)
-  body: by
-  by_cases h : a = ⊥
-  · rw [h]; exact ⟨Finpartition.empty α⟩
-  · exact ⟨Finpartition.indiscrete h⟩
-
-中文:
-实例 instNonempty
-  签名: : 非空 (有限分拆 a)
-  定义体: by
-  by_cases h : a = ⊥
-  · rw [h]; exact ⟨Finpartition.empty α⟩
-  · exact ⟨Finpartition.indiscrete h⟩
-
-Depends on / 依赖: Finpartition, Finpartition.empty, Finpartition.indiscrete, indiscrete
+      exact iff_of_false (fun h ↦ P.ne_bot h <| le_bot_iff.1 <| P.le h) (notMem_empty a) }
+/-
+**Finpartition.instNonempty** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+形式化陈述：instNonempty : Nonempty (Finpartition a)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 instance instNonempty : Nonempty (Finpartition a) := by
   by_cases h : a = ⊥
@@ -662,43 +484,19 @@ instance instNonempty : Nonempty (Finpartition a) := by
   · exact ⟨Finpartition.indiscrete h⟩
 
 -- See note [reducible non-instances]
-/--
-Definition of `_root_.IsAtom.uniqueFinpartition` / `_root_.IsAtom.uniqueFinpartition` 的定义
+/-- There's a unique partition of an atom. -/
+/-
+**Finpartition._root_.IsAtom.uniqueFinpartition** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fin
+partition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.IsAtom.uniqueFinpartition
-  signature: (ha : IsAtom a)
-  body: indiscrete ha.1
-  uniq P := by
-    have h : forall b in P.parts, b = a := fun _ hb =>
-      (ha.le_iff.mp <| P.le hb).resolve_left (P.ne_bot hb)
-    ext b
-    refine Iff.trans ⟨h b, ?_⟩ mem_singleton.symm
-    rintro rfl
-    obtain ⟨c, hc⟩ := P.parts_nonempty ha.1
-    simp_rw [← h c hc]
-    exact hc
-
-中文:
-缩写 _root_.IsAtom.uniqueFinpartition
-  签名: (ha : IsAtom a)
-  定义体: indiscrete ha.1
-  uniq P := by
-    have h : forall b in P.parts, b = a := fun _ hb =>
-      (ha.le_iff.mp <| P.le hb).resolve_left (P.ne_bot hb)
-    ext b
-    refine Iff.trans ⟨h b, ?_⟩ mem_singleton.symm
-    rintro rfl
-    obtain ⟨c, hc⟩ := P.parts_nonempty ha.1
-    simp_rw [← h c hc]
-    exact hc
-
-Depends on / 依赖: indiscrete
+--- 原说明 ---
+There's a unique partition of an atom.
 -/
 abbrev _root_.IsAtom.uniqueFinpartition (ha : IsAtom a) : Unique (Finpartition a) where
   default := indiscrete ha.1
   uniq P := by
-    have h : forall b in P.parts, b = a := fun _ hb =>
+    have h : ∀ b ∈ P.parts, b = a := fun _ hb ↦
       (ha.le_iff.mp <| P.le hb).resolve_left (P.ne_bot hb)
     ext b
     refine Iff.trans ⟨h b, ?_⟩ mem_singleton.symm
@@ -706,29 +504,13 @@ abbrev _root_.IsAtom.uniqueFinpartition (ha : IsAtom a) : Unique (Finpartition a
     obtain ⟨c, hc⟩ := P.parts_nonempty ha.1
     simp_rw [← h c hc]
     exact hc
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: α] [DecidableEq α] (a
-  body: @Fintype.ofSurjective { p : Finset α // p.SupIndep id ∧ p.sup id = a ∧ ⊥ ∉ p } (Finpartition a) _
-    (Subtype.fintype _) (fun i => ⟨i.1, i.2.1, i.2.2.1, i.2.2.2⟩) fun ⟨_, y, z, w⟩ =>
-    ⟨⟨_, y, z, w⟩, rfl⟩
-
-中文:
-实例 [有限类型
-  签名: α] [DecidableEq α] (a
-  定义体: @Fintype.ofSurjective { p : Finset α // p.SupIndep id ∧ p.sup id = a ∧ ⊥ ∉ p } (Finpartition a) _
-    (Subtype.fintype _) (fun i => ⟨i.1, i.2.1, i.2.2.1, i.2.2.2⟩) fun ⟨_, y, z, w⟩ =>
-    ⟨⟨_, y, z, w⟩, rfl⟩
-
-Depends on / 依赖: Finpartition, Finset, Fintype, Fintype.ofSurjective, Subtype, Subtype.fintype, SupIndep, fintype, ofSurjective, p.SupIndep, p.sup
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype α] [DecidableEq α] (a : α) : Fintype (Finpartition a) :=
   @Fintype.ofSurjective { p : Finset α // p.SupIndep id ∧ p.sup id = a ∧ ⊥ ∉ p } (Finpartition a) _
-    (Subtype.fintype _) (fun i => ⟨i.1, i.2.1, i.2.2.1, i.2.2.2⟩) fun ⟨_, y, z, w⟩ =>
+    (Subtype.fintype _) (fun i ↦ ⟨i.1, i.2.1, i.2.2.1, i.2.2.2⟩) fun ⟨_, y, z, w⟩ ↦
     ⟨⟨_, y, z, w⟩, rfl⟩
 
 /-! ### Refinement order -/
@@ -736,81 +518,31 @@ instance [Fintype α] [DecidableEq α] (a : α) : Fintype (Finpartition a) :=
 
 section Order
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- We say that `P ≤ Q` if `P` refines `Q`: each part of `P` is less than some part of `Q`. -/
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: LE (Finpartition a)
-  body: ⟨fun P Q => forall ⦃b⦄, b in P.parts -> exists c in Q.parts, b <= c⟩
-
-中文:
-实例 :
-  签名: LE (有限分拆 a)
-  定义体: ⟨fun P Q => forall ⦃b⦄, b in P.parts -> exists c in Q.parts, b <= c⟩
-
-Depends on / 依赖: P.parts, Q.parts
+--- 原说明 ---
+We say that `P ≤ Q` if `P` refines `Q`: each part of `P` is less than some part 
+of `Q`.
 -/
 instance : LE (Finpartition a) :=
-  ⟨fun P Q => forall ⦃b⦄, b in P.parts -> exists c in Q.parts, b <= c⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Finpartition a)
-  body: { (inferInstance : LE (Finpartition a)) with
-    le_refl := fun _ b hb => ⟨b, hb, le_rfl⟩
-    le_trans := fun _ Q R hPQ hQR b hb => by
-      obtain ⟨c, hc, hbc⟩ := hPQ hb
-      obtain ⟨d, hd, hcd⟩ := hQR hc
-      exact ⟨d, hd, hbc.trans hcd⟩
-    le_antisymm := fun P Q hPQ hQP => by
-      ext b
-      refine ⟨fun hb => ?_, fun hb => ?_⟩
-      · obtain ⟨c, hc, hbc⟩ := hPQ hb
-        obtain ⟨d, hd, hcd⟩ := hQP hc
-        rwa [hbc.antisymm]
-        rwa [P.disjoint.eq_of_le hb hd (P.ne_bot hb) (hbc.trans hcd)]
-      · obtain ⟨c, hc, hbc⟩ := hQP hb
-        obtain ⟨d, hd, hcd⟩ := hPQ hc
-        rwa [hbc.antisymm]
-        rwa [Q.disjoint.eq_of_le hb hd (Q.ne_bot hb) (hbc.trans hcd)] }
-
-中文:
-实例 :
-  签名: 偏序 (有限分拆 a)
-  定义体: { (inferInstance : LE (Finpartition a)) with
-    le_refl := fun _ b hb => ⟨b, hb, le_rfl⟩
-    le_trans := fun _ Q R hPQ hQR b hb => by
-      obtain ⟨c, hc, hbc⟩ := hPQ hb
-      obtain ⟨d, hd, hcd⟩ := hQR hc
-      exact ⟨d, hd, hbc.trans hcd⟩
-    le_antisymm := fun P Q hPQ hQP => by
-      ext b
-      refine ⟨fun hb => ?_, fun hb => ?_⟩
-      · obtain ⟨c, hc, hbc⟩ := hPQ hb
-        obtain ⟨d, hd, hcd⟩ := hQP hc
-        rwa [hbc.antisymm]
-        rwa [P.disjoint.eq_of_le hb hd (P.ne_bot hb) (hbc.trans hcd)]
-      · obtain ⟨c, hc, hbc⟩ := hQP hb
-        obtain ⟨d, hd, hcd⟩ := hPQ hc
-        rwa [hbc.antisymm]
-        rwa [Q.disjoint.eq_of_le hb hd (Q.ne_bot hb) (hbc.trans hcd)] }
-
-Depends on / 依赖: Finpartition, P.disjoint.eq_of_le, P.ne_bot, antisymm, disjoint, eq_of_le, hbc.antisymm, hbc.trans, le_antisymm, le_refl, le_rfl, le_trans, ne_bot
+  ⟨fun P Q ↦ ∀ ⦃b⦄, b ∈ P.parts → ∃ c ∈ Q.parts, b ≤ c⟩
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Finpartition a) :=
   { (inferInstance : LE (Finpartition a)) with
-    le_refl := fun _ b hb => ⟨b, hb, le_rfl⟩
-    le_trans := fun _ Q R hPQ hQR b hb => by
+    le_refl := fun _ b hb ↦ ⟨b, hb, le_rfl⟩
+    le_trans := fun _ Q R hPQ hQR b hb ↦ by
       obtain ⟨c, hc, hbc⟩ := hPQ hb
       obtain ⟨d, hd, hcd⟩ := hQR hc
       exact ⟨d, hd, hbc.trans hcd⟩
-    le_antisymm := fun P Q hPQ hQP => by
+    le_antisymm := fun P Q hPQ hQP ↦ by
       ext b
-      refine ⟨fun hb => ?_, fun hb => ?_⟩
+      refine ⟨fun hb ↦ ?_, fun hb ↦ ?_⟩
       · obtain ⟨c, hc, hbc⟩ := hPQ hb
         obtain ⟨d, hd, hcd⟩ := hQP hc
         rwa [hbc.antisymm]
@@ -819,31 +551,9 @@ instance : PartialOrder (Finpartition a) :=
         obtain ⟨d, hd, hcd⟩ := hPQ hc
         rwa [hbc.antisymm]
         rwa [Q.disjoint.eq_of_le hb hd (Q.ne_bot hb) (hbc.trans hcd)] }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Decidable
-  signature: (a = ⊥)] : OrderTop (Finpartition a) where
-  body: if ha : a = ⊥ then (Finpartition.empty α).copy ha.symm else indiscrete ha
-  le_top P := by
-    split_ifs with h
-    · intro x hx
-      simpa [h, P.ne_bot hx] using P.le hx
-    · exact fun b hb => ⟨a, mem_singleton_self _, P.le hb⟩
-
-中文:
-实例 [可判定
-  签名: (a = ⊥)] : 有顶序 (有限分拆 a) where
-  定义体: if ha : a = ⊥ then (Finpartition.empty α).copy ha.symm else indiscrete ha
-  le_top P := by
-    split_ifs with h
-    · intro x hx
-      simpa [h, P.ne_bot hx] using P.le hx
-    · exact fun b hb => ⟨a, mem_singleton_self _, P.le hb⟩
-
-Depends on / 依赖: Finpartition, Finpartition.empty, ha.symm, indiscrete
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Decidable (a = ⊥)] : OrderTop (Finpartition a) where
   top := if ha : a = ⊥ then (Finpartition.empty α).copy ha.symm else indiscrete ha
@@ -851,237 +561,175 @@ instance [Decidable (a = ⊥)] : OrderTop (Finpartition a) where
     split_ifs with h
     · intro x hx
       simpa [h, P.ne_bot hx] using P.le hx
-    · exact fun b hb => ⟨a, mem_singleton_self _, P.le hb⟩
-
-/--
-theorem `parts_top_subset` / 定理 `parts_top_subset`
-
-English:
-theorem parts_top_subset
-  given: (a : α) [Decidable (a = ⊥)]
-  statement: (⊤ : Finpartition a).parts subseteq {a}
-  proof: by
-  intro b hb
-  have hb : b in Finpartition.parts (dite _ _ _) := hb
-  split_ifs at hb
-  · simp only [copy_parts, empty_parts, notMem_empty] at hb
-  · exact hb
-
-中文:
-定理 parts_top_subset
-  条件: (a : α) [可判定 (a = ⊥)]
-  结论: (⊤ : 有限分拆 a).parts subseteq {a}
-  证明: by
-  intro b hb
-  have hb : b in Finpartition.parts (dite _ _ _) := hb
-  split_ifs at hb
-  · simp only [copy_parts, empty_parts, notMem_empty] at hb
-  · exact hb
-
-Depends on / 依赖: Finpartition, Finpartition.parts, I.IsMaximal, I.IsPrime, IsMaximal, IsPrime, KrullDimLE, Ring.KrullDimLE, copy_parts, empty_parts, notMem_empty, split_ifs
+    · exact fun b hb ↦ ⟨a, mem_singleton_self _, P.le hb⟩
+/-
+**Finpartition.parts_top_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_top_subset (a : α) [Decidable (a = ⊥)] : (⊤ : Finpartition a).parts 
+subseteq {a}
+参数：a : α；a = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.copy_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a b : α} (P : Finpartition a) (h : a = b),   (P.copy h).parts = P.pa
+rts
+· 使用定理 `Finpartition.empty_parts`：∀ (α : Type u_1) [inst : Lattice α] [inst_1 : 
+OrderBot α], (Finpartition.empty α).parts = ∅
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem parts_top_subset (a : α) [Decidable (a = ⊥)] : (⊤ : Finpartition a).parts subseteq {a} := by
+theorem parts_top_subset (a : α) [Decidable (a = ⊥)] : (⊤ : Finpartition a).parts ⊆ {a} := by
   intro b hb
-  have hb : b in Finpartition.parts (dite _ _ _) := hb
+  have hb : b ∈ Finpartition.parts (dite _ _ _) := hb
   split_ifs at hb
   · simp only [copy_parts, empty_parts, notMem_empty] at hb
   · exact hb
-
-/--
-theorem `parts_top_subsingleton` / 定理 `parts_top_subsingleton`
-
-English:
-theorem parts_top_subsingleton
-  given: (a : α) [Decidable (a = ⊥)]
-  proof: Set.subsingleton_of_subset_singleton fun _ hb => mem_singleton.1 parts_top_subset _ hb
-
-中文:
-定理 parts_top_subsingleton
-  条件: (a : α) [可判定 (a = ⊥)]
-  证明: Set.subsingleton_of_subset_singleton fun _ hb => mem_singleton.1 parts_top_subset _ hb
-
-Depends on / 依赖: Set.subsingleton_of_subset_singleton, mem_singleton, parts_top_subset, subsingleton_of_subset_singleton
+/-
+**Finpartition.parts_top_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_top_subsingleton (a : α) [Decidable (a = ⊥)] : ((⊤ : Finpartition a)
+.parts : Set α).Subsingleton
+参数：a : α；a = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subsingleton_of_subset_singleton`：subsingleton_of_subset_singleton (
+h : s subseteq {a}) : s.Subsingleton
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
+· 使用定理 `Finpartition.parts_top_subset`：parts_top_subset (a : α) [Decidable (a = 
+⊥)] : (⊤ : Finpartition a).parts subseteq {a}
 -/
 theorem parts_top_subsingleton (a : α) [Decidable (a = ⊥)] :
     ((⊤ : Finpartition a).parts : Set α).Subsingleton :=
-Set.subsingleton_of_subset_singleton fun _ hb => mem_singleton.1 parts_top_subset _ hb
+  Set.subsingleton_of_subset_singleton fun _ hb ↦ mem_singleton.1 <| parts_top_subset _ hb
 
 -- TODO: this instance takes double-exponential time to generate all partitions, find a faster way
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] {s
-  body: s.powerset.powerset.image
-    fun ps => if h : ps.sup id = s ∧ ⊥ ∉ ps ∧ ps.SupIndep id then ⟨ps, h.2.2, h.1, h.2.1⟩ else ⊤
-  complete P := by
-    refine mem_image.mpr ⟨P.parts, ?_, ?_⟩
-    · rw [mem_powerset]; intro p hp; rw [mem_powerset]; exact P.le hp
-    · simp [P.supIndep, P.sup_parts, P.bot_notMem, -bot_eq_empty]
-
-中文:
-实例 [DecidableEq
-  签名: α] {s
-  定义体: s.powerset.powerset.image
-    fun ps => if h : ps.sup id = s ∧ ⊥ ∉ ps ∧ ps.SupIndep id then ⟨ps, h.2.2, h.1, h.2.1⟩ else ⊤
-  complete P := by
-    refine mem_image.mpr ⟨P.parts, ?_, ?_⟩
-    · rw [mem_powerset]; intro p hp; rw [mem_powerset]; exact P.le hp
-    · simp [P.supIndep, P.sup_parts, P.bot_notMem, -bot_eq_empty]
-
-Depends on / 依赖: powerset, s.powerset.powerset.image
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] {s : Finset α} : Fintype (Finpartition s) where
   elems := s.powerset.powerset.image
-    fun ps => if h : ps.sup id = s ∧ ⊥ ∉ ps ∧ ps.SupIndep id then ⟨ps, h.2.2, h.1, h.2.1⟩ else ⊤
+    fun ps ↦ if h : ps.sup id = s ∧ ⊥ ∉ ps ∧ ps.SupIndep id then ⟨ps, h.2.2, h.1, h.2.1⟩ else ⊤
   complete P := by
     refine mem_image.mpr ⟨P.parts, ?_, ?_⟩
     · rw [mem_powerset]; intro p hp; rw [mem_powerset]; exact P.le hp
     · simp [P.supIndep, P.sup_parts, P.bot_notMem, -bot_eq_empty]
-
-/--
-theorem `exists_le_of_le` / 定理 `exists_le_of_le`
-
-English:
-theorem exists_le_of_le
-  given: {a b : α} {P Q : Finpartition a} (h : P <= Q) (hb : b in Q.parts)
-  proof: by
-  classical
-  by_contra H
-  refine Q.ne_bot hb (disjoint_self.1 <| Disjoint.mono_right (Q.le hb) ?_)
-  have : forall p in P.parts, exists q in Q.parts.erase b, p <= q := by grind [h _]
-  have : P.parts.sup id <= (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
-  grw [← P.sup_parts, this]
-  exact Q.supIndep (erase_subset _ _) hb (notMem_erase _ _)
-
-中文:
-定理 存在_le_of_le
-  条件: {a b : α} {P Q : 有限分拆 a} (h : P <= Q) (hb : b in Q.parts)
-  证明: by
-  classical
-  by_contra H
-  refine Q.ne_bot hb (disjoint_self.1 <| Disjoint.mono_right (Q.le hb) ?_)
-  have : forall p in P.parts, exists q in Q.parts.erase b, p <= q := by grind [h _]
-  have : P.parts.sup id <= (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
-  grw [← P.sup_parts, this]
-  exact Q.supIndep (erase_subset _ _) hb (notMem_erase _ _)
-
-Depends on / 依赖: Disjoint, Disjoint.mono_right, Finset, Finset.le_sup, Finset.sup_le_iff, P.parts, P.parts.sup, P.sup_parts, Q.le, Q.ne_bot, Q.parts.erase, Q.supIndep, classical, disjoint_self, erase_subset, le_sup, mono_right, ne_bot, notMem_erase, supIndep
+/-
+**Finpartition.exists_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：exists_le_of_le {a b : α} {P Q : Finpartition a} (h : P <= Q) (hb : b in Q
+.parts) : exists c in P.parts, c <= b
+参数：h : P <= Q；hb : b in Q.parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `disjoint_self`：disjoint_self : Disjoint a a ↔ a = ⊥
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
+· 使用定理 `Finset.erase_subset`：erase_subset (a : α) (s : Finset α) : erase s a sub
+seteq s
+· 使用定理 `Finset.notMem_erase`：notMem_erase (a : α) (s : Finset α) : a ∉ erase s a
 -/
-theorem exists_le_of_le {a b : α} {P Q : Finpartition a} (h : P <= Q) (hb : b in Q.parts) :
-    exists c in P.parts, c <= b := by
+theorem exists_le_of_le {a b : α} {P Q : Finpartition a} (h : P ≤ Q) (hb : b ∈ Q.parts) :
+    ∃ c ∈ P.parts, c ≤ b := by
   classical
   by_contra H
   refine Q.ne_bot hb (disjoint_self.1 <| Disjoint.mono_right (Q.le hb) ?_)
-  have : forall p in P.parts, exists q in Q.parts.erase b, p <= q := by grind [h _]
-  have : P.parts.sup id <= (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
+  have : ∀ p ∈ P.parts, ∃ q ∈ Q.parts.erase b, p ≤ q := by grind [h _]
+  have : P.parts.sup id ≤ (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
   grw [← P.sup_parts, this]
   exact Q.supIndep (erase_subset _ _) hb (notMem_erase _ _)
-
-/--
-theorem `card_mono` / 定理 `card_mono`
-
-English:
-theorem card_mono
-  given: {a : α} {P Q : Finpartition a} (h : P <= Q)
-  statement: #Q.parts <= #P.parts
-  proof: by
-  have : forall b in Q.parts, exists c in P.parts, c <= b := fun b => exists_le_of_le h
-  choose f hP hf using this
-  rw [← card_attach]
-  refine card_le_card_of_injOn (fun b => f _ b.2) (fun b _ => hP _ b.2) fun b _ c _ h => ?_
-  exact
-    Subtype.coe_injective
-      (Q.disjoint.elim b.2 c.2 fun H =>
-P.ne_bot (hP _ b.2) disjoint_self.1 H.mono (hf _ b.2) h.le.trans hf _ c.2)
-
-中文:
-定理 card_mono
-  条件: {a : α} {P Q : 有限分拆 a} (h : P <= Q)
-  结论: #Q.parts <= #P.parts
-  证明: by
-  have : forall b in Q.parts, exists c in P.parts, c <= b := fun b => exists_le_of_le h
-  choose f hP hf using this
-  rw [← card_attach]
-  refine card_le_card_of_injOn (fun b => f _ b.2) (fun b _ => hP _ b.2) fun b _ c _ h => ?_
-  exact
-    Subtype.coe_injective
-      (Q.disjoint.elim b.2 c.2 fun H =>
-P.ne_bot (hP _ b.2) disjoint_self.1 H.mono (hf _ b.2) h.le.trans hf _ c.2)
-
-Depends on / 依赖: H.mono, P.ne_bot, P.parts, Q.disjoint.elim, Q.parts, Subtype, Subtype.coe_injective, card_attach, card_le_card_of_injOn, coe_injective, disjoint, disjoint_self, exists_le_of_le, h.le.trans, ne_bot
+/-
+**Finpartition.card_mono** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_mono {a : α} {P Q : Finpartition a} (h : P <= Q) : #Q.parts <= #P.par
+ts
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.exists_le_of_le`：exists_le_of_le {a b : α} {P Q : Finpartit
+ion a} (h : P <= Q) (hb : b in Q.parts) : exists c in P.parts, c <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_attach`：card_attach : #s.attach = #s
+· 使用引理 `Finset.card_le_card_of_injOn`：card_le_card_of_injOn (f : α -> β) (hf : S
+et.MapsTo f s t) (f_inj : (s : Set α).InjOn f) : #s <= #t
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `Set.PairwiseDisjoint.elim`：∀ {α : Type u_1} {ι : Type u_4} [inst : Parti
+alOrder α] [inst_1 : OrderBot α] {s : Set ι} {f : ι → α},   s.PairwiseDisjoint f
+ → ∀ {i j : ι},…
+· 使用定理 `Finpartition.disjoint`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (P : Finpartition a), (↑P.parts).PairwiseDisjoint id
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `disjoint_self`：disjoint_self : Disjoint a a ↔ a = ⊥
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem card_mono {a : α} {P Q : Finpartition a} (h : P <= Q) : #Q.parts <= #P.parts := by
-  have : forall b in Q.parts, exists c in P.parts, c <= b := fun b => exists_le_of_le h
+theorem card_mono {a : α} {P Q : Finpartition a} (h : P ≤ Q) : #Q.parts ≤ #P.parts := by
+  have : ∀ b ∈ Q.parts, ∃ c ∈ P.parts, c ≤ b := fun b ↦ exists_le_of_le h
   choose f hP hf using this
   rw [← card_attach]
-  refine card_le_card_of_injOn (fun b => f _ b.2) (fun b _ => hP _ b.2) fun b _ c _ h => ?_
+  refine card_le_card_of_injOn (fun b ↦ f _ b.2) (fun b _ ↦ hP _ b.2) fun b _ c _ h ↦ ?_
   exact
     Subtype.coe_injective
-      (Q.disjoint.elim b.2 c.2 fun H =>
-P.ne_bot (hP _ b.2) disjoint_self.1 H.mono (hf _ b.2) h.le.trans hf _ c.2)
+      (Q.disjoint.elim b.2 c.2 fun H ↦
+        P.ne_bot (hP _ b.2) <| disjoint_self.1 <| H.mono (hf _ b.2) <| h.le.trans <| hf _ c.2)
 
 end Order
 
 section ToSubtype
 
-variable {s : α} (P : Finpartition s) {Pr : α -> Prop}
-  (Prsup : forall ⦃s t : α⦄, Pr s -> Pr t -> Pr (s ⊔ t)) (Prinf : forall ⦃s t : α⦄, Pr s -> Pr t -> Pr (s ⊓ t))
-  (Prbot : Pr (⊥ : α)) (hs : Pr s) (hP : forall p in P.parts, Pr p)
+variable {s : α} (P : Finpartition s) {Pr : α → Prop}
+  (Prsup : ∀ ⦃s t : α⦄, Pr s → Pr t → Pr (s ⊔ t)) (Prinf : ∀ ⦃s t : α⦄, Pr s → Pr t → Pr (s ⊓ t))
+  (Prbot : Pr (⊥ : α)) (hs : Pr s) (hP : ∀ p ∈ P.parts, Pr p)
 
-/--
-Definition of `toSubtype` / `toSubtype` 的定义
+/-- A `Finpartition` constructor in `Subtype Pr` for `Pr : Set X → Prop` such that `Pr` is closed
+under intersection and union and `Pr ⊥` holds from a `P : Finpartition s` with explicit assumptions
+that `Pr s` and `Pr p` for each part `p`. -/
+/-
+**Finpartition.toSubtype** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：toSubtype : letI : Lattice (Subtype Pr)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubtype
-  signature: :
-  body: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    Finpartition (⟨s, hs⟩ : Subtype Pr) :=
-  letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
-  letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-  { parts := preimage P.parts Subtype.val Subtype.val_injective.injOn
-    supIndep t ht i hi hi' := by
-      classical
-      have : (fun (i : Subtype Pr) => (id i).val) = id ∘ Subtype.val := rfl
-      rw [disjoint_subtype_iff Prinf Prbot]; rw [sup_coe]; rw [this]; rw [← sup_image t Subtype.val id]
-      · apply P.supIndep
-        · simpa [image_subset_iff_subset_preimage] using ht
-        · simpa using hi
-        · simpa [i.property] using hi'
-      exact Prsup
-    sup_parts := by
-      simpa [Finset.sup_preimage_val_id Prsup Prbot hP] using P.sup_parts
-    bot_notMem := by simpa [mem_preimage, Subtype.coe_bot Prbot] using P.bot_notMem }
-
-@[simp]
-
-中文:
-定义 toSubtype
-  签名: :
-  定义体: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    Finpartition (⟨s, hs⟩ : Subtype Pr) :=
-  letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
-  letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-  { parts := preimage P.parts Subtype.val Subtype.val_injective.injOn
-    supIndep t ht i hi hi' := by
-      classical
-      have : (fun (i : Subtype Pr) => (id i).val) = id ∘ Subtype.val := rfl
-      rw [disjoint_subtype_iff Prinf Prbot]; rw [sup_coe]; rw [this]; rw [← sup_image t Subtype.val id]
-      · apply P.supIndep
-        · simpa [image_subset_iff_subset_preimage] using ht
-        · simpa using hi
-        · simpa [i.property] using hi'
-      exact Prsup
-    sup_parts := by
-      simpa [Finset.sup_preimage_val_id Prsup Prbot hP] using P.sup_parts
-    bot_notMem := by simpa [mem_preimage, Subtype.coe_bot Prbot] using P.bot_notMem }
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.lattice, lattice
+--- 原说明 ---
+A `Finpartition` constructor in `Subtype Pr` for `Pr : Set X → Prop` such that `
+Pr` is closed
+under intersection and union and `Pr ⊥` holds from a `P : Finpartition s` with e
+xplicit assumptions
+that `Pr s` and `Pr p` for each part `p`.
 -/
 noncomputable def toSubtype :
     letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
@@ -1093,7 +741,7 @@ noncomputable def toSubtype :
     supIndep t ht i hi hi' := by
       classical
       have : (fun (i : Subtype Pr) => (id i).val) = id ∘ Subtype.val := rfl
-      rw [disjoint_subtype_iff Prinf Prbot]; rw [sup_coe]; rw [this]; rw [← sup_image t Subtype.val id]
+      rw [disjoint_subtype_iff Prinf Prbot, sup_coe, this, ← sup_image t Subtype.val id]
       · apply P.supIndep
         · simpa [image_subset_iff_subset_preimage] using ht
         · simpa using hi
@@ -1104,55 +752,58 @@ noncomputable def toSubtype :
     bot_notMem := by simpa [mem_preimage, Subtype.coe_bot Prbot] using P.bot_notMem }
 
 @[simp]
-/--
-lemma `mem_toSubtype_iff` / 引理 `mem_toSubtype_iff`
-
-English:
-lemma mem_toSubtype_iff
-  given: (p : Subtype Pr)
-  proof: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    p in (toSubtype P Prsup Prinf Prbot hs hP).parts ↔ p.val in P.parts := by simp [toSubtype]
-
-中文:
-引理 mem_toSubtype_iff
-  条件: (p : 子类型 Pr)
-  证明: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    p in (toSubtype P Prsup Prinf Prbot hs hP).parts ↔ p.val in P.parts := by simp [toSubtype]
-
-Depends on / 依赖: Subtype, Subtype.lattice, lattice, zero_le_one
+/-
+**Finpartition.mem_toSubtype_iff** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：mem_toSubtype_iff (p : Subtype Pr) : letI : Lattice (Subtype Pr)
+参数：p : Subtype Pr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mem_toSubtype_iff (p : Subtype Pr) :
     letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
     letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    p in (toSubtype P Prsup Prinf Prbot hs hP).parts ↔ p.val in P.parts := by simp [toSubtype]
-
-/--
-lemma `sum_eq_sum_finpartition_subtype` / 引理 `sum_eq_sum_finpartition_subtype`
-
-English:
-lemma sum_eq_sum_finpartition_subtype
-  given: {X : Type*} [AddCommMonoid X] (f : α -> X)
-  proof: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    ∑ p in P.parts, f p = ∑ p in (Finpartition.toSubtype P Prsup Prinf Prbot hs hP).parts, f p := by
-  apply Finset.sum_bij (fun p hpP => ⟨p, hP p hpP⟩) <;> simp
-
-中文:
-引理 sum_eq_sum_finpartition_subtype
-  条件: {X : 类型} [加法交换幺半群 X] (f : α -> X)
-  证明: Subtype.lattice Prsup Prinf
-    letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    ∑ p in P.parts, f p = ∑ p in (Finpartition.toSubtype P Prsup Prinf Prbot hs hP).parts, f p := by
-  apply Finset.sum_bij (fun p hpP => ⟨p, hP p hpP⟩) <;> simp
-
-Depends on / 依赖: Subtype, Subtype.lattice, lattice
+    p ∈ (toSubtype P Prsup Prinf Prbot hs hP).parts ↔ p.val ∈ P.parts := by simp [toSubtype]
+/-
+**Finpartition.sum_eq_sum_finpartition_subtype** 是 Mathlib 中的一个引理，位于命名空间 `Finpar
+tition`。
+形式化陈述：sum_eq_sum_finpartition_subtype {X : Type*} [AddCommMonoid X] (f : α -> X)
+ : letI : Lattice (Subtype Pr)
+参数：f : α -> X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_bij`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : (a 
+: ι)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sum_eq_sum_finpartition_subtype {X : Type*} [AddCommMonoid X] (f : α -> X) :
+lemma sum_eq_sum_finpartition_subtype {X : Type*} [AddCommMonoid X] (f : α → X) :
     letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
     letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-    ∑ p in P.parts, f p = ∑ p in (Finpartition.toSubtype P Prsup Prinf Prbot hs hP).parts, f p := by
+    ∑ p ∈ P.parts, f p = ∑ p ∈ (Finpartition.toSubtype P Prsup Prinf Prbot hs hP).parts, f p := by
   apply Finset.sum_bij (fun p hpP => ⟨p, hP p hpP⟩) <;> simp
 
 end ToSubtype
@@ -1163,62 +814,13 @@ section DistribLattice
 
 variable [DistribLattice α] [OrderBot α] [DecidableEq α] {a b c : α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Finpartition a)
-  body: ⟨fun P Q =>
-    ofErase ((P.parts ×ˢ Q.parts).image fun bc => bc.1 ⊓ bc.2)
-      (by
-        rw [supIndep_iff_disjoint_erase]
-        simp only [mem_image, and_imp, forall_exists_index, id, Prod.exists,
-          mem_product, Finset.disjoint_sup_right, mem_erase, Ne]
-        rintro _ x₁ y₁ hx₁ hy₁ rfl _ h x₂ y₂ hx₂ hy₂ rfl
-        rcases eq_or_ne x₁ x₂ with (rfl | xdiff)
-        · refine Disjoint.mono inf_le_right inf_le_right (Q.disjoint hy₁ hy₂ ?_)
-          intro t
-          simp [t] at h
-        exact Disjoint.mono inf_le_left inf_le_left (P.disjoint hx₁ hx₂ xdiff))
-      (by
-        rw [sup_image]; rw [id_comp]; rw [sup_product_left]
-        trans P.parts.sup id ⊓ Q.parts.sup id
-        · simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left]
-          rfl
-        · rw [P.sup_parts, Q.sup_parts, inf_idem])⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 最小值 (有限分拆 a)
-  定义体: ⟨fun P Q =>
-    ofErase ((P.parts ×ˢ Q.parts).image fun bc => bc.1 ⊓ bc.2)
-      (by
-        rw [supIndep_iff_disjoint_erase]
-        simp only [mem_image, and_imp, forall_exists_index, id, Prod.exists,
-          mem_product, Finset.disjoint_sup_right, mem_erase, Ne]
-        rintro _ x₁ y₁ hx₁ hy₁ rfl _ h x₂ y₂ hx₂ hy₂ rfl
-        rcases eq_or_ne x₁ x₂ with (rfl | xdiff)
-        · refine Disjoint.mono inf_le_right inf_le_right (Q.disjoint hy₁ hy₂ ?_)
-          intro t
-          simp [t] at h
-        exact Disjoint.mono inf_le_left inf_le_left (P.disjoint hx₁ hx₂ xdiff))
-      (by
-        rw [sup_image]; rw [id_comp]; rw [sup_product_left]
-        trans P.parts.sup id ⊓ Q.parts.sup id
-        · simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left]
-          rfl
-        · rw [P.sup_parts, Q.sup_parts, inf_idem])⟩
-
-@[simp]
-
-Depends on / 依赖: Disjoint, Disjoint.mono, Finset, Finset.disjoint_sup_right, P.disjoint, P.parts, Prod.exists, Q.disjoint, Q.parts, and_imp, disjoint, disjoint_sup_right, eq_or_ne, forall_exists_index, inf_le_left, inf_le_right, mem_erase, mem_image, mem_product, ofErase
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (Finpartition a) :=
-  ⟨fun P Q =>
-    ofErase ((P.parts ×ˢ Q.parts).image fun bc => bc.1 ⊓ bc.2)
+  ⟨fun P Q ↦
+    ofErase ((P.parts ×ˢ Q.parts).image fun bc ↦ bc.1 ⊓ bc.2)
       (by
         rw [supIndep_iff_disjoint_erase]
         simp only [mem_image, and_imp, forall_exists_index, id, Prod.exists,
@@ -1230,90 +832,39 @@ instance : Min (Finpartition a) :=
           simp [t] at h
         exact Disjoint.mono inf_le_left inf_le_left (P.disjoint hx₁ hx₂ xdiff))
       (by
-        rw [sup_image]; rw [id_comp]; rw [sup_product_left]
+        rw [sup_image, id_comp, sup_product_left]
         trans P.parts.sup id ⊓ Q.parts.sup id
         · simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left]
           rfl
         · rw [P.sup_parts, Q.sup_parts, inf_idem])⟩
 
 @[simp]
-/--
-theorem `parts_inf` / 定理 `parts_inf`
-
-English:
-theorem parts_inf
-  given: (P Q : Finpartition a)
-  proof: rfl
-
-中文:
-定理 parts_inf
-  条件: (P Q : 有限分拆 a)
-  证明: rfl
+/-
+**Finpartition.parts_inf** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_inf (P Q : Finpartition a) : (P ⊓ Q).parts = ((P.parts ×ˢ Q.parts).i
+mage fun bc : α × α => bc.1 ⊓ bc.2).erase ⊥
+参数：P Q : Finpartition a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parts_inf (P Q : Finpartition a) :
-    (P ⊓ Q).parts = ((P.parts ×ˢ Q.parts).image fun bc : α × α => bc.1 ⊓ bc.2).erase ⊥ :=
+    (P ⊓ Q).parts = ((P.parts ×ˢ Q.parts).image fun bc : α × α ↦ bc.1 ⊓ bc.2).erase ⊥ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeInf (Finpartition a)
-  body: { inf := Min.min
-    inf_le_left := fun P Q b hb => by
-      obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_product] at hc
-      exact ⟨c.1, hc.1, inf_le_left⟩
-    inf_le_right := fun P Q b hb => by
-      obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_product] at hc
-      exact ⟨c.2, hc.2, inf_le_right⟩
-    le_inf := fun P Q R hPQ hPR b hb => by
-      obtain ⟨c, hc, hbc⟩ := hPQ hb
-      obtain ⟨d, hd, hbd⟩ := hPR hb
-      have h := _root_.le_inf hbc hbd
-      refine
-        ⟨c ⊓ d,
-          mem_erase_of_ne_of_mem (ne_bot_of_le_ne_bot (P.ne_bot hb) h)
-            (mem_image.2 ⟨(c, d), mem_product.2 ⟨hc, hd⟩, rfl⟩),
-          h⟩ }
-
-中文:
-实例 :
-  签名: SemilatticeInf (有限分拆 a)
-  定义体: { inf := Min.min
-    inf_le_left := fun P Q b hb => by
-      obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_product] at hc
-      exact ⟨c.1, hc.1, inf_le_left⟩
-    inf_le_right := fun P Q b hb => by
-      obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_product] at hc
-      exact ⟨c.2, hc.2, inf_le_right⟩
-    le_inf := fun P Q R hPQ hPR b hb => by
-      obtain ⟨c, hc, hbc⟩ := hPQ hb
-      obtain ⟨d, hd, hbd⟩ := hPR hb
-      have h := _root_.le_inf hbc hbd
-      refine
-        ⟨c ⊓ d,
-          mem_erase_of_ne_of_mem (ne_bot_of_le_ne_bot (P.ne_bot hb) h)
-            (mem_image.2 ⟨(c, d), mem_product.2 ⟨hc, hd⟩, rfl⟩),
-          h⟩ }
-
-Depends on / 依赖: Min.min, _root_, _root_.le_inf, inf_le_left, inf_le_right, le_inf, mem_erase_of_ne_of_mem, mem_image, mem_of_mem_erase, mem_product, ne_bot_of_le_ne_bot
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeInf (Finpartition a) :=
   { inf := Min.min
-    inf_le_left := fun P Q b hb => by
+    inf_le_left := fun P Q b hb ↦ by
       obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
       rw [mem_product] at hc
       exact ⟨c.1, hc.1, inf_le_left⟩
-    inf_le_right := fun P Q b hb => by
+    inf_le_right := fun P Q b hb ↦ by
       obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
       rw [mem_product] at hc
       exact ⟨c.2, hc.2, inf_le_right⟩
-    le_inf := fun P Q R hPQ hPR b hb => by
+    le_inf := fun P Q R hPQ hPR b hb ↦ by
       obtain ⟨c, hc, hbc⟩ := hPQ hb
       obtain ⟨d, hd, hbd⟩ := hPR hb
       have h := _root_.le_inf hbc hbd
@@ -1323,44 +874,19 @@ instance : SemilatticeInf (Finpartition a) :=
             (mem_image.2 ⟨(c, d), mem_product.2 ⟨hc, hd⟩, rfl⟩),
           h⟩ }
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- Restrict a partition of `a` to `b` where `b ≤ a` by intersecting each part with `b`. -/
+/-
+**Finpartition.restrict** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：restrict (P : Finpartition a) (hb : b <= a) : Finpartition b where parts
+参数：P : Finpartition a；hb : b <= a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (P : Finpartition a) (hb : b <= a)
-  body: (P.parts.image (· ⊓ b)).erase ⊥
-  supIndep := supIndep_iff_pairwiseDisjoint.mpr fun x hx y hy hxy => by
-    simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
-    obtain ⟨⟨px, hpx, rfl⟩, _⟩ := hx
-    obtain ⟨⟨py, hpy, rfl⟩, _⟩ := hy
-    simpa [Function.onFun, id_eq]
-      using (P.disjoint hpx hpy fun h => hxy (h ▸ rfl)).mono inf_le_left inf_le_left
-  sup_parts := by
-    simp only [sup_erase_bot, sup_image, Function.id_comp, (sup_inf_distrib_right ..).symm]
-    have : P.parts.sup (fun x => x) = a := P.sup_parts
-    rw [this]; rw [inf_eq_right.mpr hb]
-  bot_notMem := notMem_erase _ _
-
-中文:
-定义 restrict
-  签名: (P : 有限分拆 a) (hb : b <= a)
-  定义体: (P.parts.image (· ⊓ b)).erase ⊥
-  supIndep := supIndep_iff_pairwiseDisjoint.mpr fun x hx y hy hxy => by
-    simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
-    obtain ⟨⟨px, hpx, rfl⟩, _⟩ := hx
-    obtain ⟨⟨py, hpy, rfl⟩, _⟩ := hy
-    simpa [Function.onFun, id_eq]
-      using (P.disjoint hpx hpy fun h => hxy (h ▸ rfl)).mono inf_le_left inf_le_left
-  sup_parts := by
-    simp only [sup_erase_bot, sup_image, Function.id_comp, (sup_inf_distrib_right ..).symm]
-    have : P.parts.sup (fun x => x) = a := P.sup_parts
-    rw [this]; rw [inf_eq_right.mpr hb]
-  bot_notMem := notMem_erase _ _
-
-Depends on / 依赖: P.parts.image
+--- 原说明 ---
+Restrict a partition of `a` to `b` where `b ≤ a` by intersecting each part with 
+`b`.
 -/
-def restrict (P : Finpartition a) (hb : b <= a) : Finpartition b where
+def restrict (P : Finpartition a) (hb : b ≤ a) : Finpartition b where
   parts := (P.parts.image (· ⊓ b)).erase ⊥
   supIndep := supIndep_iff_pairwiseDisjoint.mpr fun x hx y hy hxy => by
     simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
@@ -1371,92 +897,96 @@ def restrict (P : Finpartition a) (hb : b <= a) : Finpartition b where
   sup_parts := by
     simp only [sup_erase_bot, sup_image, Function.id_comp, (sup_inf_distrib_right ..).symm]
     have : P.parts.sup (fun x => x) = a := P.sup_parts
-    rw [this]; rw [inf_eq_right.mpr hb]
+    rw [this, inf_eq_right.mpr hb]
   bot_notMem := notMem_erase _ _
 
-/--
-lemma `sum_restrict` / 引理 `sum_restrict`
+/-- The sum of a set-valued function over restricted partition parts equals the sum over original
+parts with `f (· ⊓ b)`, provided `f ⊥ = 0` (so bottom terms don't contribute). -/
+/-
+**Finpartition.sum_restrict** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：sum_restrict (P : Finpartition a) (hb : b <= a) {M : Type*} [AddCommMonoid
+ M] (f : α -> M) (hf : f ⊥ = 0) : ∑ p in (P.restrict hb).parts, f p = ∑ q in P.p
+arts, f (q ⊓ b)
+参数：P : Finpartition a；hb : b <= a；f : α -> M；hf : f ⊥ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `Finpartition.disjoint`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (P : Finpartition a), (↑P.parts).PairwiseDisjoint id
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finpartition.mk.congr_simp`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 
+: OrderBot α] {a : α} (parts parts_1 : Finset α) (e_parts : parts = parts_1)   (
+supIndep : parts…
+· 使用定理 `Finset.sum_image`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [inst :
+ AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι]   {s : Finset κ} {g : κ →
+ ι}, S…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_filter_add_sum_filter_not`：∀ {ι : Type u_1} {M : Type u_4} [i
+nst : AddCommMonoid M] (s : Finset ι) (p : ι → Prop) [inst_1 : DecidablePred p] 
+  [inst_2 : (x : ι) → Deci…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma sum_restrict
-  statement: (P : Finpartition a) (hb : b <= a) {M : Type*} [AddCommMonoid M]
-  proof: by
-  have hinj : forall x in P.parts.filter (· ⊓ b != ⊥), forall y in P.parts.filter (· ⊓ b != ⊥),
-      x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
-    by_contra hne
-    simp only [Finset.mem_filter] at hx hy
-    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left inf_le_left
-    grind
-  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b != ⊥)).image (· ⊓ b) := by
-    grind
-  have hz : ∑ x in P.parts.filter (¬ · ⊓ b != ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
-    simp only [ne_eq, Decidable.not_not, Finset.mem_filter] at hx
-    rw [hx.2]; rw [hf]
-  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b != ⊥), hz,
-    Finset.sum_image hinj, add_zero]
-
-中文:
-引理 sum_restrict
-  结论: (P : 有限分拆 a) (hb : b <= a) {M : 类型} [加法交换幺半群 M]
-  证明: by
-  have hinj : forall x in P.parts.filter (· ⊓ b != ⊥), forall y in P.parts.filter (· ⊓ b != ⊥),
-      x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
-    by_contra hne
-    simp only [Finset.mem_filter] at hx hy
-    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left inf_le_left
-    grind
-  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b != ⊥)).image (· ⊓ b) := by
-    grind
-  have hz : ∑ x in P.parts.filter (¬ · ⊓ b != ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
-    simp only [ne_eq, Decidable.not_not, Finset.mem_filter] at hx
-    rw [hx.2]; rw [hf]
-  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b != ⊥), hz,
-    Finset.sum_image hinj, add_zero]
-
-Depends on / 依赖: Disjoint, Finset, Finset.mem_filter, Finset.sum_eq_zero, P.disjoint, P.parts.filter, P.parts.image, disjoint, filter, inf_le_left, mem_filter, sum_eq_zero
+--- 原说明 ---
+The sum of a set-valued function over restricted partition parts equals the sum 
+over original
+parts with `f (· ⊓ b)`, provided `f ⊥ = 0` (so bottom terms don't contribute).
 -/
-lemma sum_restrict (P : Finpartition a) (hb : b <= a) {M : Type*} [AddCommMonoid M]
-    (f : α -> M) (hf : f ⊥ = 0) :
-    ∑ p in (P.restrict hb).parts, f p = ∑ q in P.parts, f (q ⊓ b) := by
-  have hinj : forall x in P.parts.filter (· ⊓ b != ⊥), forall y in P.parts.filter (· ⊓ b != ⊥),
-      x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
+lemma sum_restrict (P : Finpartition a) (hb : b ≤ a) {M : Type*} [AddCommMonoid M]
+    (f : α → M) (hf : f ⊥ = 0) :
+    ∑ p ∈ (P.restrict hb).parts, f p = ∑ q ∈ P.parts, f (q ⊓ b) := by
+  have hinj : ∀ x ∈ P.parts.filter (· ⊓ b ≠ ⊥), ∀ y ∈ P.parts.filter (· ⊓ b ≠ ⊥),
+      x ⊓ b = y ⊓ b → x = y := fun x hx y hy hxy => by
     by_contra hne
     simp only [Finset.mem_filter] at hx hy
     have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left inf_le_left
     grind
-  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b != ⊥)).image (· ⊓ b) := by
+  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b ≠ ⊥)).image (· ⊓ b) := by
     grind
-  have hz : ∑ x in P.parts.filter (¬ · ⊓ b != ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
+  have hz : ∑ x ∈ P.parts.filter (¬ · ⊓ b ≠ ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
     simp only [ne_eq, Decidable.not_not, Finset.mem_filter] at hx
-    rw [hx.2]; rw [hf]
-  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b != ⊥), hz,
+    rw [hx.2, hf]
+  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b ≠ ⊥), hz,
     Finset.sum_image hinj, add_zero]
 
 /-- A `Finpartition` constructor of `parts.sup id` from a finset `parts` of pairwise disjoint
 elements. Any `⊥` elements in `parts` are erased. -/
 @[simps]
-/--
-Definition of `ofPairwiseDisjoint` / `ofPairwiseDisjoint` 的定义
+/-
+**Finpartition.ofPairwiseDisjoint** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofPairwiseDisjoint (parts : Finset α) (hdisjoint : (parts : Set α).Pairwis
+eDisjoint id) : Finpartition (parts.sup id) where parts
+参数：parts : Finset α；hdisjoint : (parts : Set α).PairwiseDisjoint id。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofPairwiseDisjoint
-  signature: (parts : Finset α) (hdisjoint : (parts : Set α).PairwiseDisjoint id)
-  body: parts.erase ⊥
-  supIndep := Finset.supIndep_iff_pairwiseDisjoint.mpr fun _ ha _ hb hab =>
-    hdisjoint (Finset.erase_subset _ _ ha) (Finset.erase_subset _ _ hb) hab
-  sup_parts := Finset.sup_erase_bot parts
-  bot_notMem := Finset.notMem_erase _ _
-
-中文:
-定义 ofPairwiseDisjoint
-  签名: (parts : 有限集 α) (hdisjoint : (parts : 集合 α).PairwiseDisjoint id)
-  定义体: parts.erase ⊥
-  supIndep := Finset.supIndep_iff_pairwiseDisjoint.mpr fun _ ha _ hb hab =>
-    hdisjoint (Finset.erase_subset _ _ ha) (Finset.erase_subset _ _ hb) hab
-  sup_parts := Finset.sup_erase_bot parts
-  bot_notMem := Finset.notMem_erase _ _
-
-Depends on / 依赖: parts.erase
+--- 原说明 ---
+A `Finpartition` constructor of `parts.sup id` from a finset `parts` of pairwise
+ disjoint
+elements. Any `⊥` elements in `parts` are erased.
 -/
 def ofPairwiseDisjoint (parts : Finset α) (hdisjoint : (parts : Set α).PairwiseDisjoint id) :
     Finpartition (parts.sup id) where
@@ -1465,41 +995,52 @@ def ofPairwiseDisjoint (parts : Finset α) (hdisjoint : (parts : Set α).Pairwis
     hdisjoint (Finset.erase_subset _ _ ha) (Finset.erase_subset _ _ hb) hab
   sup_parts := Finset.sup_erase_bot parts
   bot_notMem := Finset.notMem_erase _ _
-
-/--
-lemma `sum_ofPairwiseDisjoint_eq_sum` / 引理 `sum_ofPairwiseDisjoint_eq_sum`
-
-English:
-lemma sum_ofPairwiseDisjoint_eq_sum
-  statement: {parts : Finset α}
-  proof: by
-  by_cases hbot : ⊥ in parts
-  · simp only [Finpartition.ofPairwiseDisjoint]
-    rw [← erase_union_eq ⊥ parts hbot]; rw [union_comm]; rw [sum_union_eq_right]
-    · simp
-    grind
-  · simp_all
-
-中文:
-引理 sum_ofPairwiseDisjoint_eq_sum
-  结论: {parts : 有限集 α}
-  证明: by
-  by_cases hbot : ⊥ in parts
-  · simp only [Finpartition.ofPairwiseDisjoint]
-    rw [← erase_union_eq ⊥ parts hbot]; rw [union_comm]; rw [sum_union_eq_right]
-    · simp
-    grind
-  · simp_all
-
-Depends on / 依赖: Finpartition, Finpartition.ofPairwiseDisjoint, erase_union_eq, ofPairwiseDisjoint, sum_union_eq_right, union_comm
+/-
+**Finpartition.sum_ofPairwiseDisjoint_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `Finparti
+tion`。
+形式化陈述：sum_ofPairwiseDisjoint_eq_sum {parts : Finset α} (hdisjoint : (parts : Set
+ α).PairwiseDisjoint id) {X : Type*} [AddCommMonoid X] {f : α -> X} (hf : f ⊥ = 
+0) : ∑ p in (ofPairwiseDisjoint parts hdisjoint).parts, f p = ∑ p in parts, f p
+参数：hdisjoint : (parts : Set α).PairwiseDisjoint id；hf : f ⊥ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.erase_union_eq`：erase_union_eq (a : α) (s : Finset α) (h : a in s
+) : (erase s a) union {a} = s
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用定理 `Finset.sum_union_eq_right`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Fins
+et ι} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   (∀ a ∈ s₁
+, a ∉ s₂ → f a …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.erase_insert_eq_erase`：erase_insert_eq_erase (s : Finset α) (a : 
+α) : (insert a s).erase a = s.erase a
+· 使用定理 `Finset.erase_eq_of_notMem`：erase_eq_of_notMem {a : α} {s : Finset α} (h 
+: a ∉ s) : erase s a = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finpartition.ofPairwiseDisjoint_parts`：∀ {α : Type u_1} [inst : DistribL
+attice α] [inst_1 : OrderBot α] [inst_2 : DecidableEq α] (parts : Finset α)   (h
+disjoint : (↑parts).Pairwis…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
 lemma sum_ofPairwiseDisjoint_eq_sum {parts : Finset α}
     (hdisjoint : (parts : Set α).PairwiseDisjoint id)
-    {X : Type*} [AddCommMonoid X] {f : α -> X} (hf : f ⊥ = 0) :
-    ∑ p in (ofPairwiseDisjoint parts hdisjoint).parts, f p = ∑ p in parts, f p := by
-  by_cases hbot : ⊥ in parts
+    {X : Type*} [AddCommMonoid X] {f : α → X} (hf : f ⊥ = 0) :
+    ∑ p ∈ (ofPairwiseDisjoint parts hdisjoint).parts, f p = ∑ p ∈ parts, f p := by
+  by_cases hbot : ⊥ ∈ parts
   · simp only [Finpartition.ofPairwiseDisjoint]
-    rw [← erase_union_eq ⊥ parts hbot]; rw [union_comm]; rw [sum_union_eq_right]
+    rw [← erase_union_eq ⊥ parts hbot, union_comm, sum_union_eq_right]
     · simp
     grind
   · simp_all
@@ -1512,221 +1053,179 @@ variable [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a b 
 
 /-- Combine a family of partitions of pairwise disjoint elements into a partition of their sup. -/
 @[simps]
-/--
-Definition of `combine` / `combine` 的定义
+/-
+**Finpartition.combine** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：combine {ι : Type*} {I : Finset ι} {a : ι -> α} (P : forall i, Finpartitio
+n (a i)) (ha : I.SupIndep a) : Finpartition (I.sup a) where parts
+参数：P : forall i, Finpartition (a i)；ha : I.SupIndep a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition combine
-  signature: {ι : Type*} {I : Finset ι} {a : ι -> α} (P : forall i, Finpartition (a i))
-  body: I.biUnion fun i => (P i).parts
-  supIndep :=
-    .biUnion (by simpa only [sup_parts]) (fun i _ => (P i).supIndep)
-  sup_parts := by
-    rw [sup_biUnion]
-    exact sup_congr rfl fun i _ => (P i).sup_parts
-  bot_notMem := by
-    rw [mem_biUnion]; push Not; exact fun i _ => (P i).bot_notMem
-
-中文:
-定义 combine
-  签名: {ι : 类型} {I : 有限集 ι} {a : ι -> α} (P : 对任意 i, 有限分拆 (a i))
-  定义体: I.biUnion fun i => (P i).parts
-  supIndep :=
-    .biUnion (by simpa only [sup_parts]) (fun i _ => (P i).supIndep)
-  sup_parts := by
-    rw [sup_biUnion]
-    exact sup_congr rfl fun i _ => (P i).sup_parts
-  bot_notMem := by
-    rw [mem_biUnion]; push Not; exact fun i _ => (P i).bot_notMem
-
-Depends on / 依赖: I.biUnion, biUnion
+--- 原说明 ---
+Combine a family of partitions of pairwise disjoint elements into a partition of
+ their sup.
 -/
-def combine {ι : Type*} {I : Finset ι} {a : ι -> α} (P : forall i, Finpartition (a i))
+def combine {ι : Type*} {I : Finset ι} {a : ι → α} (P : ∀ i, Finpartition (a i))
     (ha : I.SupIndep a) : Finpartition (I.sup a) where
   parts := I.biUnion fun i => (P i).parts
   supIndep :=
-    .biUnion (by simpa only [sup_parts]) (fun i _ => (P i).supIndep)
+    .biUnion (by simpa only [sup_parts]) (fun i _ ↦ (P i).supIndep)
   sup_parts := by
     rw [sup_biUnion]
     exact sup_congr rfl fun i _ => (P i).sup_parts
   bot_notMem := by
     rw [mem_biUnion]; push Not; exact fun i _ => (P i).bot_notMem
 
-/--
-lemma `sum_combine` / 引理 `sum_combine`
+/-- The sum of a set-valued function over a combined partition equals the sum of sums over component
+partitions. -/
+/-
+**Finpartition.sum_combine** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：sum_combine {ι : Type*} {I : Finset ι} {s : ι -> α} (P : forall i, Finpart
+ition (s i)) (ha : I.SupIndep s) {M : Type*} [AddCommMonoid M] (f : α -> M) : ∑ 
+p in (Finpartition.combine P ha).parts, f p = ∑ i in I, ∑ p in (P i).parts, f p
+参数：P : forall i, Finpartition (s i)；ha : I.SupIndep s；f : α -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_biUnion`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [inst
+ : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι]   {s : Finset κ} {t : κ
+ → Finse…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.onFun.eq_1`：∀ {α : Sort u₁} {β : Sort u₂} {φ : Sort u₃} (f : β 
+→ β → φ) (g : α → β) (x y : α),   Function.onFun f g x y = f (g x) (g y)
+· 使用定理 `Finset.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s 
+-> a ∉ t
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `Finset.SupIndep.pairwiseDisjoint`：∀ {α : Type u_1} {ι : Type u_3} [inst 
+: Lattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α},   s.SupIndep f → 
+(↑s).PairwiseDisjoint …
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `disjoint_self`：disjoint_self : Disjoint a a ↔ a = ⊥
 
-English:
-lemma sum_combine
-  statement: {ι : Type*} {I : Finset ι} {s : ι -> α} (P : forall i, Finpartition (s i))
-  proof: by
-  simp_rw [combine]
-  refine Finset.sum_biUnion fun i hi j hj hij => ?_
-  rw [Function.onFun]; rw [Finset.disjoint_left]
-  intro p hpi hpj
-  have hp_disj : Disjoint p p := (ha.pairwiseDisjoint hi hj hij).mono ((P i).le hpi) ((P j).le hpj)
-  exact (P i).ne_bot hpi (disjoint_self.mp hp_disj)
-
-中文:
-引理 sum_combine
-  结论: {ι : 类型} {I : 有限集 ι} {s : ι -> α} (P : 对任意 i, 有限分拆 (s i))
-  证明: by
-  simp_rw [combine]
-  refine Finset.sum_biUnion fun i hi j hj hij => ?_
-  rw [Function.onFun]; rw [Finset.disjoint_left]
-  intro p hpi hpj
-  have hp_disj : Disjoint p p := (ha.pairwiseDisjoint hi hj hij).mono ((P i).le hpi) ((P j).le hpj)
-  exact (P i).ne_bot hpi (disjoint_self.mp hp_disj)
-
-Depends on / 依赖: Disjoint, Finset, Finset.disjoint_left, Finset.sum_biUnion, Function, Function.onFun, combine, disjoint_left, disjoint_self, disjoint_self.mp, ha.pairwiseDisjoint, hp_disj, ne_bot, pairwiseDisjoint, simp_rw, sum_biUnion
+--- 原说明 ---
+The sum of a set-valued function over a combined partition equals the sum of sum
+s over component
+partitions.
 -/
-lemma sum_combine {ι : Type*} {I : Finset ι} {s : ι -> α} (P : forall i, Finpartition (s i))
-    (ha : I.SupIndep s) {M : Type*} [AddCommMonoid M] (f : α -> M) :
-    ∑ p in (Finpartition.combine P ha).parts, f p = ∑ i in I, ∑ p in (P i).parts, f p := by
+lemma sum_combine {ι : Type*} {I : Finset ι} {s : ι → α} (P : ∀ i, Finpartition (s i))
+    (ha : I.SupIndep s) {M : Type*} [AddCommMonoid M] (f : α → M) :
+    ∑ p ∈ (Finpartition.combine P ha).parts, f p = ∑ i ∈ I, ∑ p ∈ (P i).parts, f p := by
   simp_rw [combine]
   refine Finset.sum_biUnion fun i hi j hj hij => ?_
-  rw [Function.onFun]; rw [Finset.disjoint_left]
+  rw [Function.onFun, Finset.disjoint_left]
   intro p hpi hpj
   have hp_disj : Disjoint p p := (ha.pairwiseDisjoint hi hj hij).mono ((P i).le hpi) ((P j).le hpj)
   exact (P i).ne_bot hpi (disjoint_self.mp hp_disj)
 
 section Bind
 
-variable {P : Finpartition a} {Q : forall i in P.parts, Finpartition i}
+variable {P : Finpartition a} {Q : ∀ i ∈ P.parts, Finpartition i}
 
 /-- Given a finpartition `P` of `a` and finpartitions of each part of `P`, this yields the
 finpartition of `a` obtained by juxtaposing all the subpartitions. -/
 @[simps! parts]
-/--
-Definition of `bind` / `bind` 的定义
+/-
+**Finpartition.bind** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：bind (P : Finpartition a) (Q : forall i in P.parts, Finpartition i) : Finp
+artition a
+参数：P : Finpartition a；Q : forall i in P.parts, Finpartition i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bind
-  signature: (P : Finpartition a) (Q : forall i in P.parts, Finpartition i)
-  body: (combine (fun i : P.parts => Q i.1 i.2) P.supIndep.attach).copy by
-    rw [Finset.sup_attach (f := fun x => x)]; rw [← Function.id_def]; rw [P.sup_parts]
-
-中文:
-定义 bind
-  签名: (P : 有限分拆 a) (Q : 对任意 i in P.parts, 有限分拆 i)
-  定义体: (combine (fun i : P.parts => Q i.1 i.2) P.supIndep.attach).copy by
-    rw [Finset.sup_attach (f := fun x => x)]; rw [← Function.id_def]; rw [P.sup_parts]
-
-Depends on / 依赖: Finset, Finset.sup_attach, Function, Function.id_def, P.parts, P.supIndep.attach, P.sup_parts, attach, combine, id_def, supIndep, sup_attach, sup_parts
+--- 原说明 ---
+Given a finpartition `P` of `a` and finpartitions of each part of `P`, this yiel
+ds the
+finpartition of `a` obtained by juxtaposing all the subpartitions.
 -/
-def bind (P : Finpartition a) (Q : forall i in P.parts, Finpartition i) : Finpartition a :=
-(combine (fun i : P.parts => Q i.1 i.2) P.supIndep.attach).copy by
-    rw [Finset.sup_attach (f := fun x => x)]; rw [← Function.id_def]; rw [P.sup_parts]
-
-/--
-theorem `mem_bind` / 定理 `mem_bind`
-
-English:
-theorem mem_bind
-  statement: b in (P.bind Q).parts ↔ exists A hA, b in (Q A hA).parts
-  proof: by
-  rw [bind_parts]; rw [mem_biUnion]
+def bind (P : Finpartition a) (Q : ∀ i ∈ P.parts, Finpartition i) : Finpartition a :=
+  (combine (fun i : P.parts => Q i.1 i.2) P.supIndep.attach).copy <| by
+    rw [Finset.sup_attach (f := fun x => x), ← Function.id_def, P.sup_parts]
+/-
+**Finpartition.mem_bind** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：mem_bind : b in (P.bind Q).parts ↔ exists A hA, b in (Q A hA).parts
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.bind_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] [inst_2 : IsModularLattice α] [inst_3 : DecidableEq α] {a : α}   (P :
+ Finpartition…
+· 使用定理 `Finset.mem_biUnion`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : 
+α → Finset β} [inst : DecidableEq β] {b : β},   b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t
+ a
+· 使用定理 `Finset.mem_attach`：mem_attach (s : Finset α) : forall x, x in s.attach
+-/
+theorem mem_bind : b ∈ (P.bind Q).parts ↔ ∃ A hA, b ∈ (Q A hA).parts := by
+  rw [bind_parts, mem_biUnion]
   constructor
   · rintro ⟨⟨A, hA⟩, -, h⟩
     exact ⟨A, hA, h⟩
   · rintro ⟨A, hA, h⟩
     exact ⟨⟨A, hA⟩, mem_attach _ ⟨A, hA⟩, h⟩
-
-中文:
-定理 mem_bind
-  结论: b in (P.bind Q).parts ↔ 存在 A hA, b in (Q A hA).parts
-  证明: by
-  rw [bind_parts]; rw [mem_biUnion]
-  constructor
-  · rintro ⟨⟨A, hA⟩, -, h⟩
-    exact ⟨A, hA, h⟩
-  · rintro ⟨A, hA, h⟩
-    exact ⟨⟨A, hA⟩, mem_attach _ ⟨A, hA⟩, h⟩
-
-Depends on / 依赖: bind_parts, mem_attach, mem_biUnion
+/-
+**Finpartition.card_bind** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_bind (Q : forall i in P.parts, Finpartition i) : #(P.bind Q).parts = 
+∑ A in P.parts.attach, #(Q _ A.2).parts
+参数：Q : forall i in P.parts, Finpartition i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_biUnion`：card_biUnion [DecidableEq M] {t : ι -> Finset M} (h
+ : (s : Set ι).PairwiseDisjoint t) : #(s.biUnion t) = ∑ u in s, #(t u)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.onFun.eq_1`：∀ {α : Sort u₁} {β : Sort u₂} {φ : Sort u₃} (f : β 
+→ β → φ) (g : α → β) (x y : α),   Function.onFun f g x y = f (g x) (g y)
+· 使用定理 `Finset.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s 
+-> a ∉ t
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `Disjoint.le_bot`：Disjoint.le_bot : Disjoint a b -> a ⊓ b <= ⊥
+· 使用定理 `Finpartition.disjoint`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (P : Finpartition a), (↑P.parts).PairwiseDisjoint id
+· 使用定理 `Subtype.mk_eq_mk`：mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a
+ = a'
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
 -/
-theorem mem_bind : b in (P.bind Q).parts ↔ exists A hA, b in (Q A hA).parts := by
-  rw [bind_parts]; rw [mem_biUnion]
-  constructor
-  · rintro ⟨⟨A, hA⟩, -, h⟩
-    exact ⟨A, hA, h⟩
-  · rintro ⟨A, hA, h⟩
-    exact ⟨⟨A, hA⟩, mem_attach _ ⟨A, hA⟩, h⟩
-
-/--
-theorem `card_bind` / 定理 `card_bind`
-
-English:
-theorem card_bind
-  given: (Q : forall i in P.parts, Finpartition i)
-  proof: by
+theorem card_bind (Q : ∀ i ∈ P.parts, Finpartition i) :
+    #(P.bind Q).parts = ∑ A ∈ P.parts.attach, #(Q _ A.2).parts := by
   apply card_biUnion
   rintro ⟨b, hb⟩ - ⟨c, hc⟩ - hbc
-  rw [Function.onFun]; rw [Finset.disjoint_left]
+  rw [Function.onFun, Finset.disjoint_left]
   rintro d hdb hdc
-  rw [Ne]; rw [Subtype.mk_eq_mk] at hbc
+  rw [Ne, Subtype.mk_eq_mk] at hbc
   exact
     (Q b hb).ne_bot hdb
       (eq_bot_iff.2 <|
-(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bot)
-
-中文:
-定理 card_bind
-  条件: (Q : 对任意 i in P.parts, 有限分拆 i)
-  证明: by
-  apply card_biUnion
-  rintro ⟨b, hb⟩ - ⟨c, hc⟩ - hbc
-  rw [Function.onFun]; rw [Finset.disjoint_left]
-  rintro d hdb hdc
-  rw [Ne]; rw [Subtype.mk_eq_mk] at hbc
-  exact
-    (Q b hb).ne_bot hdb
-      (eq_bot_iff.2 <|
-(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bot)
-
-Depends on / 依赖: Finset, Finset.disjoint_left, Function, Function.onFun, P.disjoint, Subtype, Subtype.mk_eq_mk, card_biUnion, disjoint, disjoint_left, eq_bot_iff, le_bot, le_inf, mk_eq_mk, ne_bot
--/
-theorem card_bind (Q : forall i in P.parts, Finpartition i) :
-    #(P.bind Q).parts = ∑ A in P.parts.attach, #(Q _ A.2).parts := by
-  apply card_biUnion
-  rintro ⟨b, hb⟩ - ⟨c, hc⟩ - hbc
-  rw [Function.onFun]; rw [Finset.disjoint_left]
-  rintro d hdb hdc
-  rw [Ne]; rw [Subtype.mk_eq_mk] at hbc
-  exact
-    (Q b hb).ne_bot hdb
-      (eq_bot_iff.2 <|
-(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bot)
+        (le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans <| (P.disjoint hb hc hbc).le_bot)
 
 end Bind
 
 /-- Adds `b` to a finpartition of `a` to make a finpartition of `a ⊔ b`. -/
 @[simps]
-/--
-Definition of `extend` / `extend` 的定义
+/-
+**Finpartition.extend** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：extend (P : Finpartition a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b
+ = c) : Finpartition c where parts
+参数：P : Finpartition a；hb : b != ⊥；hab : Disjoint a b；hc : a ⊔ b = c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extend
-  signature: (P : Finpartition a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c)
-  body: insert b P.parts
-  supIndep := by
-    refine P.supIndep.insert ?_
-    rwa [sup_parts, disjoint_comm]
-  sup_parts := by rwa [sup_insert, P.sup_parts, id, _root_.sup_comm]
-  bot_notMem h := (mem_insert.1 h).elim hb.symm P.bot_notMem
-
-中文:
-定义 extend
-  签名: (P : 有限分拆 a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c)
-  定义体: insert b P.parts
-  supIndep := by
-    refine P.supIndep.insert ?_
-    rwa [sup_parts, disjoint_comm]
-  sup_parts := by rwa [sup_insert, P.sup_parts, id, _root_.sup_comm]
-  bot_notMem h := (mem_insert.1 h).elim hb.symm P.bot_notMem
-
-Depends on / 依赖: P.parts, insert
+--- 原说明 ---
+Adds `b` to a finpartition of `a` to make a finpartition of `a ⊔ b`.
 -/
-def extend (P : Finpartition a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c) :
+def extend (P : Finpartition a) (hb : b ≠ ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c) :
     Finpartition c where
   parts := insert b P.parts
   supIndep := by
@@ -1734,25 +1233,25 @@ def extend (P : Finpartition a) (hb : b != ⊥) (hab : Disjoint a b) (hc : a ⊔
     rwa [sup_parts, disjoint_comm]
   sup_parts := by rwa [sup_insert, P.sup_parts, id, _root_.sup_comm]
   bot_notMem h := (mem_insert.1 h).elim hb.symm P.bot_notMem
-
-/--
-theorem `card_extend` / 定理 `card_extend`
-
-English:
-theorem card_extend
-  statement: (P : Finpartition a) (b c : α) {hb : b != ⊥} {hab : Disjoint a b}
-  proof: card_insert_of_notMem fun h => hb hab.symm.eq_bot_of_le P.le h
-
-中文:
-定理 card_extend
-  结论: (P : 有限分拆 a) (b c : α) {hb : b != ⊥} {hab : Disjoint a b}
-  证明: card_insert_of_notMem fun h => hb hab.symm.eq_bot_of_le P.le h
-
-Depends on / 依赖: P.le, card_insert_of_notMem, eq_bot_of_le, hab.symm.eq_bot_of_le
+/-
+**Finpartition.card_extend** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_extend (P : Finpartition a) (b c : α) {hb : b != ⊥} {hab : Disjoint a
+ b} {hc : a ⊔ b = c} : #(P.extend hb hab hc).parts = #P.parts + 1
+参数：P : Finpartition a；b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `Disjoint.eq_bot_of_le`：Disjoint.eq_bot_of_le (hab : Disjoint a b) (h : a
+ <= b) : a = ⊥
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
 -/
-theorem card_extend (P : Finpartition a) (b c : α) {hb : b != ⊥} {hab : Disjoint a b}
+theorem card_extend (P : Finpartition a) (b c : α) {hb : b ≠ ⊥} {hab : Disjoint a b}
     {hc : a ⊔ b = c} : #(P.extend hb hab hc).parts = #P.parts + 1 :=
-card_insert_of_notMem fun h => hb hab.symm.eq_bot_of_le P.le h
+  card_insert_of_notMem fun h ↦ hb <| hab.symm.eq_bot_of_le <| P.le h
 
 end IsModularLattice
 
@@ -1762,190 +1261,177 @@ variable [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b c : α} (P : Finpa
 
 /-- Restricts a finpartition to avoid a given element. -/
 @[simps!]
-/--
-Definition of `avoid` / `avoid` 的定义
+/-
+**Finpartition.avoid** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：avoid (b : α) : Finpartition (a \ b)
+参数：b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition avoid
-  signature: (b : α)
-  body: ofErase
-    (P.parts.image (· \ b))
-    (P.disjoint.image_finset_of_le fun _ => sdiff_le).supIndep
-    (by rw [sup_image, id_comp, Finset.sup_sdiff_right, ← Function.id_def, P.sup_parts])
-
-@[simp]
-
-中文:
-定义 avoid
-  签名: (b : α)
-  定义体: ofErase
-    (P.parts.image (· \ b))
-    (P.disjoint.image_finset_of_le fun _ => sdiff_le).supIndep
-    (by rw [sup_image, id_comp, Finset.sup_sdiff_right, ← Function.id_def, P.sup_parts])
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sup_sdiff_right, Function, Function.id_def, P.disjoint.image_finset_of_le, P.parts.image, P.sup_parts, disjoint, id_comp, id_def, image_finset_of_le, ofErase, sdiff_le, supIndep, sup_image, sup_parts, sup_sdiff_right
+--- 原说明 ---
+Restricts a finpartition to avoid a given element.
 -/
 def avoid (b : α) : Finpartition (a \ b) :=
   ofErase
     (P.parts.image (· \ b))
-    (P.disjoint.image_finset_of_le fun _ => sdiff_le).supIndep
+    (P.disjoint.image_finset_of_le fun _ ↦ sdiff_le).supIndep
     (by rw [sup_image, id_comp, Finset.sup_sdiff_right, ← Function.id_def, P.sup_parts])
 
 @[simp]
-/--
-theorem `mem_avoid` / 定理 `mem_avoid`
-
-English:
-theorem mem_avoid
-  statement: c in (P.avoid b).parts ↔ exists d in P.parts, ¬d <= b ∧ d \ b = c
-  proof: by
-  simp only [avoid, ofErase, mem_erase, Ne, mem_image, ← exists_and_left,
-    @and_left_comm (c != ⊥)]
-refine exists_congr fun d => and_congr_right' and_congr_left ?_
-  rintro rfl
-  rw [sdiff_eq_bot_iff]
-
-中文:
-定理 mem_avoid
-  结论: c in (P.avoid b).parts ↔ 存在 d in P.parts, ¬d <= b ∧ d \ b = c
-  证明: by
-  simp only [avoid, ofErase, mem_erase, Ne, mem_image, ← exists_and_left,
-    @and_left_comm (c != ⊥)]
-refine exists_congr fun d => and_congr_right' and_congr_left ?_
-  rintro rfl
-  rw [sdiff_eq_bot_iff]
-
-Depends on / 依赖: and_congr_left, and_congr_right, and_left_comm, exists_and_left, exists_congr, mem_erase, mem_image, ofErase, sdiff_eq_bot_iff
+/-
+**Finpartition.mem_avoid** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：mem_avoid : c in (P.avoid b).parts ↔ exists d in P.parts, ¬d <= b ∧ d \ b 
+= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_left_comm`：∀ {a b c : Prop}, a ∧ b ∧ c ↔ b ∧ a ∧ c
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `and_congr_right'`：∀ {b c a : Prop}, (b ↔ c) → (a ∧ b ↔ a ∧ c)
+· 使用定理 `and_congr_left`：∀ {c a b : Prop}, (c → (a ↔ b)) → (a ∧ c ↔ b ∧ c)
+· 使用定理 `sdiff_eq_bot_iff`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α
+] {a b : α}, b \ a = ⊥ ↔ b ≤ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_avoid : c in (P.avoid b).parts ↔ exists d in P.parts, ¬d <= b ∧ d \ b = c := by
+theorem mem_avoid : c ∈ (P.avoid b).parts ↔ ∃ d ∈ P.parts, ¬d ≤ b ∧ d \ b = c := by
   simp only [avoid, ofErase, mem_erase, Ne, mem_image, ← exists_and_left,
-    @and_left_comm (c != ⊥)]
-refine exists_congr fun d => and_congr_right' and_congr_left ?_
+    @and_left_comm (c ≠ ⊥)]
+  refine exists_congr fun d ↦ and_congr_right' <| and_congr_left ?_
   rintro rfl
   rw [sdiff_eq_bot_iff]
 
-/--
-Definition of `extendOfLE` / `extendOfLE` 的定义
+/-- Extend a partition of `a` to a partition of `b` when `a ≤ b`, by adding `b \ a` as a `part`. -/
+/-
+**Finpartition.extendOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：extendOfLE (hab : a <= b) : Finpartition b
+参数：hab : a <= b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
 
-English:
-definition extendOfLE
-  signature: (hab : a <= b)
-  body: if hr : b \ a = ⊥ then (le_antisymm (sdiff_eq_bot_iff.mp hr) hab) ▸ P
-    else P.extend hr disjoint_sdiff_self_right (sup_sdiff_cancel_right hab)
-
-中文:
-定义 extendOfLE
-  签名: (hab : a <= b)
-  定义体: if hr : b \ a = ⊥ then (le_antisymm (sdiff_eq_bot_iff.mp hr) hab) ▸ P
-    else P.extend hr disjoint_sdiff_self_right (sup_sdiff_cancel_right hab)
-
-Depends on / 依赖: P.extend, disjoint_sdiff_self_right, extend, le_antisymm, sdiff_eq_bot_iff, sdiff_eq_bot_iff.mp, sup_sdiff_cancel_right
+--- 原说明 ---
+Extend a partition of `a` to a partition of `b` when `a ≤ b`, by adding `b \ a` 
+as a `part`.
 -/
-def extendOfLE (hab : a <= b) : Finpartition b :=
+def extendOfLE (hab : a ≤ b) : Finpartition b :=
   if hr : b \ a = ⊥ then (le_antisymm (sdiff_eq_bot_iff.mp hr) hab) ▸ P
     else P.extend hr disjoint_sdiff_self_right (sup_sdiff_cancel_right hab)
-
-/--
-lemma `parts_extendOfLE_of_eq` / 引理 `parts_extendOfLE_of_eq`
-
-English:
-lemma parts_extendOfLE_of_eq
-  given: (hab : a = b)
-  statement: (P.extendOfLE hab.le).parts = P.parts
-  proof: by
-  subst hab; simp [extendOfLE]
-
-中文:
-引理 parts_extendOfLE_of_eq
-  条件: (hab : a = b)
-  结论: (P.extendOfLE hab.le).parts = P.parts
-  证明: by
-  subst hab; simp [extendOfLE]
-
-Depends on / 依赖: extendOfLE
+/-
+**Finpartition.parts_extendOfLE_of_eq** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：parts_extendOfLE_of_eq (hab : a = b) : (P.extendOfLE hab.le).parts = P.par
+ts
+参数：hab : a = b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `sdiff_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a :
+ α}, a \ a = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma parts_extendOfLE_of_eq (hab : a = b) : (P.extendOfLE hab.le).parts = P.parts := by
   subst hab; simp [extendOfLE]
-
-/--
-lemma `parts_extendOfLE_of_lt` / 引理 `parts_extendOfLE_of_lt`
-
-English:
-lemma parts_extendOfLE_of_lt
-  given: (hab : a < b)
-  proof: by
-  simp [extendOfLE, sdiff_eq_bot_iff.not.mpr (not_le_of_gt hab)]
-
-中文:
-引理 parts_extendOfLE_of_lt
-  条件: (hab : a < b)
-  证明: by
-  simp [extendOfLE, sdiff_eq_bot_iff.not.mpr (not_le_of_gt hab)]
-
-Depends on / 依赖: extendOfLE, not_le_of_gt, sdiff_eq_bot_iff, sdiff_eq_bot_iff.not.mpr
+/-
+**Finpartition.parts_extendOfLE_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：parts_extendOfLE_of_lt (hab : a < b) : (P.extendOfLE (le_of_lt hab)).parts
+ = insert (b \ a) P.parts
+参数：hab : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `sdiff_eq_bot_iff`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α
+] {a b : α}, b \ a = ⊥ ↔ b ≤ a
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `Finpartition.extend_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 :
+ OrderBot α] [inst_2 : IsModularLattice α] [inst_3 : DecidableEq α]   {a b c : α
+} (P : Finparti…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma parts_extendOfLE_of_lt (hab : a < b) :
     (P.extendOfLE (le_of_lt hab)).parts = insert (b \ a) P.parts := by
   simp [extendOfLE, sdiff_eq_bot_iff.not.mpr (not_le_of_gt hab)]
-
-/--
-lemma `parts_subset_extendOfLE` / 引理 `parts_subset_extendOfLE`
-
-English:
-lemma parts_subset_extendOfLE
-  given: (hab : a <= b)
-  statement: P.parts subseteq (P.extendOfLE hab).parts
-  proof: by
-  unfold extendOfLE
-  split_ifs with hr
-  · cases le_antisymm (sdiff_eq_bot_iff.mp hr) hab; rfl
-  · exact Finset.subset_insert _ _
-
-中文:
-引理 parts_subset_extendOfLE
-  条件: (hab : a <= b)
-  结论: P.parts subseteq (P.extendOfLE hab).parts
-  证明: by
-  unfold extendOfLE
-  split_ifs with hr
-  · cases le_antisymm (sdiff_eq_bot_iff.mp hr) hab; rfl
-  · exact Finset.subset_insert _ _
-
-Depends on / 依赖: Finset, Finset.subset_insert, extendOfLE, le_antisymm, sdiff_eq_bot_iff, sdiff_eq_bot_iff.mp, split_ifs, subset_insert
+/-
+**Finpartition.parts_subset_extendOfLE** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：parts_subset_extendOfLE (hab : a <= b) : P.parts subseteq (P.extendOfLE ha
+b).parts
+参数：hab : a <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sdiff_eq_bot_iff`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α
+] {a b : α}, b \ a = ⊥ ↔ b ≤ a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Finset.subset_insert`：∀ {α : Type u_1} [inst : DecidableEq α] (a : α) (s
+ : Finset α), s ⊆ insert a s
 -/
-lemma parts_subset_extendOfLE (hab : a <= b) : P.parts subseteq (P.extendOfLE hab).parts := by
+lemma parts_subset_extendOfLE (hab : a ≤ b) : P.parts ⊆ (P.extendOfLE hab).parts := by
   unfold extendOfLE
   split_ifs with hr
   · cases le_antisymm (sdiff_eq_bot_iff.mp hr) hab; rfl
   · exact Finset.subset_insert _ _
-
-/--
-lemma `mem_parts_or_eq_sdiff_of_mem_extendOfLE` / 引理 `mem_parts_or_eq_sdiff_of_mem_extendOfLE`
-
-English:
-lemma mem_parts_or_eq_sdiff_of_mem_extendOfLE
-  statement: (hab : a <= b) {p : α}
-  proof: by
-  by_cases h : a < b
-  · simp_all [parts_extendOfLE_of_lt _ h, mem_insert, Or.comm]
-  · left
-    simpa [parts_extendOfLE_of_eq _ (LE.le.eq_of_not_lt hab h)] using hp
-
-中文:
-引理 mem_parts_or_eq_sdiff_of_mem_extendOfLE
-  结论: (hab : a <= b) {p : α}
-  证明: by
-  by_cases h : a < b
-  · simp_all [parts_extendOfLE_of_lt _ h, mem_insert, Or.comm]
-  · left
-    simpa [parts_extendOfLE_of_eq _ (LE.le.eq_of_not_lt hab h)] using hp
-
-Depends on / 依赖: LE.le.eq_of_not_lt, Or.comm, eq_of_not_lt, mem_insert, parts_extendOfLE_of_eq, parts_extendOfLE_of_lt
+/-
+**Finpartition.mem_parts_or_eq_sdiff_of_mem_extendOfLE** 是 Mathlib 中的一个引理，位于命名空间
+ `Finpartition`。
+形式化陈述：mem_parts_or_eq_sdiff_of_mem_extendOfLE (hab : a <= b) {p : α} (hp : p in 
+(P.extendOfLE hab).parts) : p in P.parts ∨ p = b \ a
+参数：hab : a <= b；hp : p in (P.extendOfLE hab).parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finpartition.parts_extendOfLE_of_lt`：parts_extendOfLE_of_lt (hab : a < b
+) : (P.extendOfLE (le_of_lt hab)).parts = insert (b \ a) P.parts
+· 使用引理 `Finpartition.parts_extendOfLE_of_eq`：parts_extendOfLE_of_eq (hab : a = b
+) : (P.extendOfLE hab.le).parts = P.parts
+· 使用定理 `LE.le.eq_of_not_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, 
+a ≤ b → ¬a < b → a = b
 -/
-lemma mem_parts_or_eq_sdiff_of_mem_extendOfLE (hab : a <= b) {p : α}
-    (hp : p in (P.extendOfLE hab).parts) : p in P.parts ∨ p = b \ a := by
+lemma mem_parts_or_eq_sdiff_of_mem_extendOfLE (hab : a ≤ b) {p : α}
+    (hp : p ∈ (P.extendOfLE hab).parts) : p ∈ P.parts ∨ p = b \ a := by
   by_cases h : a < b
   · simp_all [parts_extendOfLE_of_lt _ h, mem_insert, Or.comm]
   · left
@@ -1962,175 +1448,113 @@ namespace Finpartition
 
 variable [DecidableEq α] {s t u : Finset α} (P : Finpartition s) {a : α}
 
-/--
-lemma `subset` / 引理 `subset`
-
-English:
-lemma subset
-  given: {a : Finset α} (ha : a in P.parts)
-  statement: a subseteq s
-  proof: P.le ha
-
-中文:
-引理 subset
-  条件: {a : 有限集 α} (ha : a in P.parts)
-  结论: a subseteq s
-  证明: P.le ha
-
-Depends on / 依赖: P.le
+/-
+**Finpartition.subset** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：subset {a : Finset α} (ha : a in P.parts) : a subseteq s
+参数：ha : a in P.parts。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
 -/
-lemma subset {a : Finset α} (ha : a in P.parts) : a subseteq s := P.le ha
-
-/--
-theorem `nonempty_of_mem_parts` / 定理 `nonempty_of_mem_parts`
-
-English:
-theorem nonempty_of_mem_parts
-  given: {a : Finset α} (ha : a in P.parts)
-  statement: a.Nonempty
-  proof: nonempty_iff_ne_empty.2 P.ne_bot ha
-
-@[simp]
-
-中文:
-定理 nonempty_of_mem_parts
-  条件: {a : 有限集 α} (ha : a in P.parts)
-  结论: a.非空
-  证明: nonempty_iff_ne_empty.2 P.ne_bot ha
-
-@[simp]
-
-Depends on / 依赖: P.ne_bot, ne_bot, nonempty_iff_ne_empty
+lemma subset {a : Finset α} (ha : a ∈ P.parts) : a ⊆ s := P.le ha
+/-
+**Finpartition.nonempty_of_mem_parts** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：nonempty_of_mem_parts {a : Finset α} (ha : a in P.parts) : a.Nonempty
+参数：ha : a in P.parts。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
 -/
-theorem nonempty_of_mem_parts {a : Finset α} (ha : a in P.parts) : a.Nonempty :=
-nonempty_iff_ne_empty.2 P.ne_bot ha
+theorem nonempty_of_mem_parts {a : Finset α} (ha : a ∈ P.parts) : a.Nonempty :=
+  nonempty_iff_ne_empty.2 <| P.ne_bot ha
 
 @[simp]
-/--
-theorem `empty_notMem_parts` / 定理 `empty_notMem_parts`
-
-English:
-theorem empty_notMem_parts
-  statement: ∅ ∉ P.parts
-  proof: P.bot_notMem
-
-中文:
-定理 empty_notMem_parts
-  结论: ∅ ∉ P.parts
-  证明: P.bot_notMem
-
-Depends on / 依赖: P.bot_notMem, bot_notMem
+/-
+**Finpartition.empty_notMem_parts** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：empty_notMem_parts : ∅ ∉ P.parts
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
 -/
 theorem empty_notMem_parts : ∅ ∉ P.parts := P.bot_notMem
-
-/--
-theorem `ne_empty` / 定理 `ne_empty`
-
-English:
-theorem ne_empty
-  given: (h : t in P.parts)
-  statement: t != ∅
-  proof: P.ne_bot h
-
-中文:
-定理 ne_empty
-  条件: (h : t in P.parts)
-  结论: t != ∅
-  证明: P.ne_bot h
-
-Depends on / 依赖: P.ne_bot, ne_bot
+/-
+**Finpartition.ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：ne_empty (h : t in P.parts) : t != ∅
+参数：h : t in P.parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
 -/
-theorem ne_empty (h : t in P.parts) : t != ∅ := P.ne_bot h
-
-/--
-lemma `eq_of_mem_parts` / 引理 `eq_of_mem_parts`
-
-English:
-lemma eq_of_mem_parts
-  given: (ht : t in P.parts) (hu : u in P.parts) (hat : a in t) (hau : a in u)
-  statement: t = u
-  proof: P.disjoint.elim ht hu not_disjoint_iff.2 ⟨a, hat, hau⟩
-
-中文:
-引理 eq_of_mem_parts
-  条件: (ht : t in P.parts) (hu : u in P.parts) (hat : a in t) (hau : a in u)
-  结论: t = u
-  证明: P.disjoint.elim ht hu not_disjoint_iff.2 ⟨a, hat, hau⟩
-
-Depends on / 依赖: P.disjoint.elim, disjoint, not_disjoint_iff
+theorem ne_empty (h : t ∈ P.parts) : t ≠ ∅ := P.ne_bot h
+/-
+**Finpartition.eq_of_mem_parts** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：eq_of_mem_parts (ht : t in P.parts) (hu : u in P.parts) (hat : a in t) (ha
+u : a in u) : t = u
+参数：ht : t in P.parts；hu : u in P.parts；hat : a in t；hau : a in u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.PairwiseDisjoint.elim`：∀ {α : Type u_1} {ι : Type u_4} [inst : Parti
+alOrder α] [inst_1 : OrderBot α] {s : Set ι} {f : ι → α},   s.PairwiseDisjoint f
+ → ∀ {i j : ι},…
+· 使用定理 `Finpartition.disjoint`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (P : Finpartition a), (↑P.parts).PairwiseDisjoint id
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.not_disjoint_iff`：not_disjoint_iff : ¬Disjoint s t ↔ exists a, a 
+in s ∧ a in t
 -/
-lemma eq_of_mem_parts (ht : t in P.parts) (hu : u in P.parts) (hat : a in t) (hau : a in u) : t = u :=
-P.disjoint.elim ht hu not_disjoint_iff.2 ⟨a, hat, hau⟩
-
-/--
-theorem `exists_mem` / 定理 `exists_mem`
-
-English:
-theorem exists_mem
-  given: (ha : a in s)
-  statement: exists t in P.parts, a in t
-  proof: by
+lemma eq_of_mem_parts (ht : t ∈ P.parts) (hu : u ∈ P.parts) (hat : a ∈ t) (hau : a ∈ u) : t = u :=
+  P.disjoint.elim ht hu <| not_disjoint_iff.2 ⟨a, hat, hau⟩
+/-
+**Finpartition.exists_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：exists_mem (ha : a in s) : exists t in P.parts, a in t
+参数：ha : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_sup`：∀ {α : Type u_2} {ι : Type u_5} [inst : DecidableEq α] {
+s : Finset ι} {f : ι → Finset α} {a : α},   a ∈ s.sup f ↔ ∃ i ∈ s, a ∈ f i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+-/
+theorem exists_mem (ha : a ∈ s) : ∃ t ∈ P.parts, a ∈ t := by
   simp_rw [← P.sup_parts] at ha
   exact mem_sup.1 ha
-
-中文:
-定理 存在_mem
-  条件: (ha : a in s)
-  结论: 存在 t in P.parts, a in t
-  证明: by
-  simp_rw [← P.sup_parts] at ha
-  exact mem_sup.1 ha
-
-Depends on / 依赖: P.sup_parts, mem_sup, simp_rw, sup_parts
--/
-theorem exists_mem (ha : a in s) : exists t in P.parts, a in t := by
-  simp_rw [← P.sup_parts] at ha
-  exact mem_sup.1 ha
-
-/--
-theorem `biUnion_parts` / 定理 `biUnion_parts`
-
-English:
-theorem biUnion_parts
-  statement: P.parts.biUnion id = s
-  proof: (sup_eq_biUnion _ _).symm.trans P.sup_parts
-
-中文:
-定理 biUnion_parts
-  结论: P.parts.biUnion id = s
-  证明: (sup_eq_biUnion _ _).symm.trans P.sup_parts
-
-Depends on / 依赖: P.sup_parts, sup_eq_biUnion, sup_parts, symm.trans
+/-
+**Finpartition.biUnion_parts** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：biUnion_parts : P.parts.biUnion id = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sup_eq_biUnion`：sup_eq_biUnion {α β} [DecidableEq β] (s : Finset 
+α) (t : α -> Finset β) : s.sup t = s.biUnion t
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
 -/
 theorem biUnion_parts : P.parts.biUnion id = s :=
   (sup_eq_biUnion _ _).symm.trans P.sup_parts
-
-/--
-theorem `existsUnique_mem` / 定理 `existsUnique_mem`
-
-English:
-theorem existsUnique_mem
-  given: (ha : a in s)
-  statement: exists! t, t in P.parts ∧ a in t
-  proof: by
-  obtain ⟨t, ht, ht'⟩ := P.exists_mem ha
-  refine ⟨t, ⟨ht, ht'⟩, ?_⟩
-  rintro u ⟨hu, hu'⟩
-  exact P.eq_of_mem_parts hu ht hu' ht'
-
-中文:
-定理 存在Unique_mem
-  条件: (ha : a in s)
-  结论: 存在! t, t in P.parts ∧ a in t
-  证明: by
-  obtain ⟨t, ht, ht'⟩ := P.exists_mem ha
-  refine ⟨t, ⟨ht, ht'⟩, ?_⟩
-  rintro u ⟨hu, hu'⟩
-  exact P.eq_of_mem_parts hu ht hu' ht'
-
-Depends on / 依赖: P.eq_of_mem_parts, P.exists_mem, eq_of_mem_parts, exists_mem
+/-
+**Finpartition.existsUnique_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：existsUnique_mem (ha : a in s) : exists! t, t in P.parts ∧ a in t
+参数：ha : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.exists_mem`：exists_mem (ha : a in s) : exists t in P.parts,
+ a in t
+· 使用引理 `Finpartition.eq_of_mem_parts`：eq_of_mem_parts (ht : t in P.parts) (hu : 
+u in P.parts) (hat : a in t) (hau : a in u) : t = u
 -/
-theorem existsUnique_mem (ha : a in s) : exists! t, t in P.parts ∧ a in t := by
+theorem existsUnique_mem (ha : a ∈ s) : ∃! t, t ∈ P.parts ∧ a ∈ t := by
   obtain ⟨t, ht, ht'⟩ := P.exists_mem ha
   refine ⟨t, ⟨ht, ht'⟩, ?_⟩
   rintro u ⟨hu, hu'⟩
@@ -2142,57 +1566,31 @@ exactly one member of `parts`. This provides a converse to `Finpartition.subset`
 `Finpartition.not_empty_mem_parts` and `Finpartition.existsUnique_mem`.
 -/
 @[simps]
-/--
-Definition of `ofExistsUnique` / `ofExistsUnique` 的定义
+/-
+**Finpartition.ofExistsUnique** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofExistsUnique (parts : Finset (Finset α)) (h : forall p in parts, p subse
+teq s) (h' : forall a in s, exists! t in parts, a in t) (h'' : ∅ ∉ parts) : Finp
+artition s where parts
+参数：parts : Finset (Finset α)；h : forall p in parts, p subseteq s；h' : forall a i
+n s, exists! t in parts, a in t；h'' : ∅ ∉ parts。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExistsUnique
-  signature: (parts : Finset (Finset α)) (h : forall p in parts, p subseteq s)
-  body: parts
-  supIndep := by
-    simp only [supIndep_iff_pairwiseDisjoint]
-    intro a ha b hb hab
-    rw [Function.onFun]; rw [Finset.disjoint_left]
-    intro x hx hx'
-    exact hab ((h' x (h _ ha hx)).unique ⟨ha, hx⟩ ⟨hb, hx'⟩)
-  sup_parts := by
-    ext i
-    simp only [mem_sup, id_eq]
-    constructor
-    · rintro ⟨j, hj, hj'⟩
-      exact h j hj hj'
-    · rintro hi
-      exact (h' i hi).exists
-  bot_notMem := h''
-
-中文:
-定义 ofExistsUnique
-  签名: (parts : 有限集 (有限集 α)) (h : 对任意 p in parts, p subseteq s)
-  定义体: parts
-  supIndep := by
-    simp only [supIndep_iff_pairwiseDisjoint]
-    intro a ha b hb hab
-    rw [Function.onFun]; rw [Finset.disjoint_left]
-    intro x hx hx'
-    exact hab ((h' x (h _ ha hx)).unique ⟨ha, hx⟩ ⟨hb, hx'⟩)
-  sup_parts := by
-    ext i
-    simp only [mem_sup, id_eq]
-    constructor
-    · rintro ⟨j, hj, hj'⟩
-      exact h j hj hj'
-    · rintro hi
-      exact (h' i hi).exists
-  bot_notMem := h''
+--- 原说明 ---
+Construct a `Finpartition s` from a finset of finsets `parts` such that each ele
+ment of `s` is in
+exactly one member of `parts`. This provides a converse to `Finpartition.subset`
+,
+`Finpartition.not_empty_mem_parts` and `Finpartition.existsUnique_mem`.
 -/
-def ofExistsUnique (parts : Finset (Finset α)) (h : forall p in parts, p subseteq s)
-    (h' : forall a in s, exists! t in parts, a in t) (h'' : ∅ ∉ parts) :
+def ofExistsUnique (parts : Finset (Finset α)) (h : ∀ p ∈ parts, p ⊆ s)
+    (h' : ∀ a ∈ s, ∃! t ∈ parts, a ∈ t) (h'' : ∅ ∉ parts) :
     Finpartition s where
   parts := parts
   supIndep := by
     simp only [supIndep_iff_pairwiseDisjoint]
     intro a ha b hb hab
-    rw [Function.onFun]; rw [Finset.disjoint_left]
+    rw [Function.onFun, Finset.disjoint_left]
     intro x hx hx'
     exact hab ((h' x (h _ ha hx)).unique ⟨ha, hx⟩ ⟨hb, hx'⟩)
   sup_parts := by
@@ -2205,361 +1603,276 @@ def ofExistsUnique (parts : Finset (Finset α)) (h : forall p in parts, p subset
       exact (h' i hi).exists
   bot_notMem := h''
 
-/--
-Definition of `part` / `part` 的定义
+/-- The part of the finpartition that `a` lies in. -/
+/-
+**Finpartition.part** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：part (a : α) : Finset α
+参数：a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.existsUnique_mem`：existsUnique_mem (ha : a in s) : exists! 
+t, t in P.parts ∧ a in t
 
-English:
-definition part
-  signature: (a : α)
-  body: if ha : a in s then choose (hp := P.existsUnique_mem ha) else ∅
-
-@[simp]
-
-中文:
-定义 part
-  签名: (a : α)
-  定义体: if ha : a in s then choose (hp := P.existsUnique_mem ha) else ∅
-
-@[simp]
-
-Depends on / 依赖: P.existsUnique_mem, existsUnique_mem
+--- 原说明 ---
+The part of the finpartition that `a` lies in.
 -/
-def part (a : α) : Finset α := if ha : a in s then choose (hp := P.existsUnique_mem ha) else ∅
+def part (a : α) : Finset α := if ha : a ∈ s then choose (hp := P.existsUnique_mem ha) else ∅
 
 @[simp]
-/--
-lemma `part_mem` / 引理 `part_mem`
-
-English:
-lemma part_mem
-  statement: P.part a in P.parts ↔ a in s
-  proof: by
-  by_cases ha : a in s <;> simp [part, ha, choose_mem]
-
-@[simp]
-
-中文:
-引理 part_mem
-  结论: P.part a in P.parts ↔ a in s
-  证明: by
-  by_cases ha : a in s <;> simp [part, ha, choose_mem]
-
-@[simp]
-
-Depends on / 依赖: choose_mem
+/-
+**Finpartition.part_mem** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_mem : P.part a in P.parts ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.existsUnique_mem`：existsUnique_mem (ha : a in s) : exists! 
+t, t in P.parts ∧ a in t
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
-lemma part_mem : P.part a in P.parts ↔ a in s := by
-  by_cases ha : a in s <;> simp [part, ha, choose_mem]
+lemma part_mem : P.part a ∈ P.parts ↔ a ∈ s := by
+  by_cases ha : a ∈ s <;> simp [part, ha, choose_mem]
 
 @[simp]
-/--
-lemma `part_eq_empty` / 引理 `part_eq_empty`
-
-English:
-lemma part_eq_empty
-  statement: P.part a = ∅ ↔ a ∉ s
-  proof: ⟨fun h has => P.ne_empty (P.part_mem.2 has) h, fun h => by simp [part, h]⟩
-
-@[simp]
-
-中文:
-引理 part_eq_empty
-  结论: P.part a = ∅ ↔ a ∉ s
-  证明: ⟨fun h has => P.ne_empty (P.part_mem.2 has) h, fun h => by simp [part, h]⟩
-
-@[simp]
-
-Depends on / 依赖: P.ne_empty, P.part_mem, ne_empty, part_mem
+/-
+**Finpartition.part_eq_empty** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_eq_empty : P.part a = ∅ ↔ a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.ne_empty`：ne_empty (h : t in P.parts) : t != ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_mem`：part_mem : P.part a in P.parts ↔ a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `Finpartition.existsUnique_mem`：existsUnique_mem (ha : a in s) : exists! 
+t, t in P.parts ∧ a in t
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma part_eq_empty : P.part a = ∅ ↔ a ∉ s :=
-  ⟨fun h has => P.ne_empty (P.part_mem.2 has) h, fun h => by simp [part, h]⟩
+  ⟨fun h has ↦ P.ne_empty (P.part_mem.2 has) h, fun h ↦ by simp [part, h]⟩
 
 @[simp]
-/--
-lemma `part_nonempty` / 引理 `part_nonempty`
-
-English:
-lemma part_nonempty
-  statement: (P.part a).Nonempty ↔ a in s
-  proof: by
+/-
+**Finpartition.part_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_nonempty : (P.part a).Nonempty ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finpartition.part_eq_empty`：part_eq_empty : P.part a = ∅ ↔ a ∉ s
+-/
+lemma part_nonempty : (P.part a).Nonempty ↔ a ∈ s := by
   contrapose!; exact part_eq_empty P
 
 @[simp]
-
-中文:
-引理 part_nonempty
-  结论: (P.part a).非空 ↔ a in s
-  证明: by
-  contrapose!; exact part_eq_empty P
-
-@[simp]
-
-Depends on / 依赖: contrapose, part_eq_empty
+/-
+**Finpartition.part_subset** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_subset (a : α) : P.part a subseteq s
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_mem`：part_mem : P.part a in P.parts ↔ a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finpartition.part_eq_empty`：part_eq_empty : P.part a = ∅ ↔ a ∉ s
 -/
-lemma part_nonempty : (P.part a).Nonempty ↔ a in s := by
-  contrapose!; exact part_eq_empty P
-
-@[simp]
-/--
-lemma `part_subset` / 引理 `part_subset`
-
-English:
-lemma part_subset
-  given: (a : α)
-  statement: P.part a subseteq s
-  proof: by
-  by_cases ha : a in s
-· exact P.le P.part_mem.2 ha
+lemma part_subset (a : α) : P.part a ⊆ s := by
+  by_cases ha : a ∈ s
+  · exact P.le <| P.part_mem.2 ha
   · simp [P.part_eq_empty.2 ha]
 
 @[simp]
-
-中文:
-引理 part_subset
-  条件: (a : α)
-  结论: P.part a subseteq s
-  证明: by
-  by_cases ha : a in s
-· exact P.le P.part_mem.2 ha
-  · simp [P.part_eq_empty.2 ha]
-
-@[simp]
-
-Depends on / 依赖: P.le, P.part_eq_empty, P.part_mem, part_eq_empty, part_mem
+/-
+**Finpartition.mem_part_self** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：mem_part_self : a in P.part a ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finpartition.existsUnique_mem`：existsUnique_mem (ha : a in s) : exists! 
+t, t in P.parts ∧ a in t
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Finset.choose_property`：choose_property (hp : exists! a, a in l ∧ p a) :
+ p (l.choose p hp)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_eq_empty`：part_eq_empty : P.part a = ∅ ↔ a ∉ s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma part_subset (a : α) : P.part a subseteq s := by
-  by_cases ha : a in s
-· exact P.le P.part_mem.2 ha
-  · simp [P.part_eq_empty.2 ha]
-
-@[simp]
-/--
-lemma `mem_part_self` / 引理 `mem_part_self`
-
-English:
-lemma mem_part_self
-  statement: a in P.part a ↔ a in s
-  proof: by
-  by_cases ha : a in s
-  · simp [part, ha, choose_property (p := fun s => a in s) P.parts (P.existsUnique_mem ha)]
+lemma mem_part_self : a ∈ P.part a ↔ a ∈ s := by
+  by_cases ha : a ∈ s
+  · simp [part, ha, choose_property (p := fun s => a ∈ s) P.parts (P.existsUnique_mem ha)]
   · simp [P.part_eq_empty.2, ha]
 
 alias ⟨_, mem_part⟩ := mem_part_self
-
-中文:
-引理 mem_part_self
-  结论: a in P.part a ↔ a in s
-  证明: by
-  by_cases ha : a in s
-  · simp [part, ha, choose_property (p := fun s => a in s) P.parts (P.existsUnique_mem ha)]
-  · simp [P.part_eq_empty.2, ha]
-
-alias ⟨_, mem_part⟩ := mem_part_self
-
-Depends on / 依赖: P.existsUnique_mem, P.part_eq_empty, P.parts, choose_property, existsUnique_mem, part_eq_empty
+/-
+**Finpartition.part_eq_iff_mem** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_eq_iff_mem (ht : t in P.parts) : P.part a = t ↔ a in t
+参数：ht : t in P.parts。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `Finpartition.eq_of_mem_parts`：eq_of_mem_parts (ht : t in P.parts) (hu : 
+u in P.parts) (hat : a in t) (hau : a in u) : t = u
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
 -/
-lemma mem_part_self : a in P.part a ↔ a in s := by
-  by_cases ha : a in s
-  · simp [part, ha, choose_property (p := fun s => a in s) P.parts (P.existsUnique_mem ha)]
-  · simp [P.part_eq_empty.2, ha]
-
-alias ⟨_, mem_part⟩ := mem_part_self
-
-/--
-lemma `part_eq_iff_mem` / 引理 `part_eq_iff_mem`
-
-English:
-lemma part_eq_iff_mem
-  given: (ht : t in P.parts)
-  statement: P.part a = t ↔ a in t
-  proof: by
+lemma part_eq_iff_mem (ht : t ∈ P.parts) : P.part a = t ↔ a ∈ t := by
   constructor
   · rintro rfl
     simp_all
   · intro hat
     apply P.eq_of_mem_parts (a := a) <;> simp [*, P.le ht hat]
-
-中文:
-引理 part_eq_iff_mem
-  条件: (ht : t in P.parts)
-  结论: P.part a = t ↔ a in t
-  证明: by
-  constructor
-  · rintro rfl
-    simp_all
-  · intro hat
-    apply P.eq_of_mem_parts (a := a) <;> simp [*, P.le ht hat]
-
-Depends on / 依赖: P.eq_of_mem_parts, P.le, eq_of_mem_parts
+/-
+**Finpartition.part_eq_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：part_eq_of_mem (ht : t in P.parts) (hat : a in t) : P.part a = t
+参数：ht : t in P.parts；hat : a in t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_eq_iff_mem`：part_eq_iff_mem (ht : t in P.parts) : P.pa
+rt a = t ↔ a in t
 -/
-lemma part_eq_iff_mem (ht : t in P.parts) : P.part a = t ↔ a in t := by
-  constructor
-  · rintro rfl
-    simp_all
-  · intro hat
-    apply P.eq_of_mem_parts (a := a) <;> simp [*, P.le ht hat]
-
-/--
-lemma `part_eq_of_mem` / 引理 `part_eq_of_mem`
-
-English:
-lemma part_eq_of_mem
-  given: (ht : t in P.parts) (hat : a in t)
-  statement: P.part a = t
-  proof: (P.part_eq_iff_mem ht).2 hat
-
-中文:
-引理 part_eq_of_mem
-  条件: (ht : t in P.parts) (hat : a in t)
-  结论: P.part a = t
-  证明: (P.part_eq_iff_mem ht).2 hat
-
-Depends on / 依赖: P.part_eq_iff_mem, part_eq_iff_mem
--/
-lemma part_eq_of_mem (ht : t in P.parts) (hat : a in t) : P.part a = t :=
+lemma part_eq_of_mem (ht : t ∈ P.parts) (hat : a ∈ t) : P.part a = t :=
   (P.part_eq_iff_mem ht).2 hat
-
-/--
-lemma `mem_part_iff_part_eq_part` / 引理 `mem_part_iff_part_eq_part`
-
-English:
-lemma mem_part_iff_part_eq_part
-  given: {b : α} (ha : a in s) (hb : b in s)
-  proof: ⟨fun c => (P.part_eq_of_mem (P.part_mem.2 hb) c), fun c => c ▸ P.mem_part ha⟩
-
-中文:
-引理 mem_part_iff_part_eq_part
-  条件: {b : α} (ha : a in s) (hb : b in s)
-  证明: ⟨fun c => (P.part_eq_of_mem (P.part_mem.2 hb) c), fun c => c ▸ P.mem_part ha⟩
-
-Depends on / 依赖: P.mem_part, P.part_eq_of_mem, P.part_mem, mem_part, part_eq_of_mem, part_mem
+/-
+**Finpartition.mem_part_iff_part_eq_part** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition
+`。
+形式化陈述：mem_part_iff_part_eq_part {b : α} (ha : a in s) (hb : b in s) : a in P.par
+t b ↔ P.part a = P.part b
+参数：ha : a in s；hb : b in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finpartition.part_eq_of_mem`：part_eq_of_mem (ht : t in P.parts) (hat : a
+ in t) : P.part a = t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_mem`：part_mem : P.part a in P.parts ↔ a in s
+· 使用定理 `Finpartition.mem_part`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Fins
+et α} (P : Finpartition s) {a : α}, a ∈ s → a ∈ P.part a
 -/
-lemma mem_part_iff_part_eq_part {b : α} (ha : a in s) (hb : b in s) :
-    a in P.part b ↔ P.part a = P.part b :=
-  ⟨fun c => (P.part_eq_of_mem (P.part_mem.2 hb) c), fun c => c ▸ P.mem_part ha⟩
-
-/--
-theorem `part_surjOn` / 定理 `part_surjOn`
-
-English:
-theorem part_surjOn
-  statement: Set.SurjOn P.part s P.parts
-  proof: fun p hp => by
+lemma mem_part_iff_part_eq_part {b : α} (ha : a ∈ s) (hb : b ∈ s) :
+    a ∈ P.part b ↔ P.part a = P.part b :=
+  ⟨fun c ↦ (P.part_eq_of_mem (P.part_mem.2 hb) c), fun c ↦ c ▸ P.mem_part ha⟩
+/-
+**Finpartition.part_surjOn** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：part_surjOn : Set.SurjOn P.part s P.parts
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.nonempty_of_mem_parts`：nonempty_of_mem_parts {a : Finset α}
+ (ha : a in P.parts) : a.Nonempty
+· 使用定理 `Finset.mem_of_subset`：mem_of_subset {s₁ s₂ : Finset α} {a : α} : s₁ subs
+eteq s₂ -> a in s₁ -> a in s₂
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `Finpartition.existsUnique_mem`：existsUnique_mem (ha : a in s) : exists! 
+t, t in P.parts ∧ a in t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finpartition.part_mem`：part_mem : P.part a in P.parts ↔ a in s
+· 使用定理 `Finpartition.mem_part`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Fins
+et α} (P : Finpartition s) {a : α}, a ∈ s → a ∈ P.part a
+-/
+theorem part_surjOn : Set.SurjOn P.part s P.parts := fun p hp ↦ by
   obtain ⟨x, hx⟩ := P.nonempty_of_mem_parts hp
   have hx' := mem_of_subset (P.le hp) hx
   use x, hx', (P.existsUnique_mem hx').unique ⟨P.part_mem.2 hx', P.mem_part hx'⟩ ⟨hp, hx⟩
-
-中文:
-定理 part_surjOn
-  结论: 集合.满射限制 P.part s P.parts
-  证明: fun p hp => by
-  obtain ⟨x, hx⟩ := P.nonempty_of_mem_parts hp
-  have hx' := mem_of_subset (P.le hp) hx
-  use x, hx', (P.existsUnique_mem hx').unique ⟨P.part_mem.2 hx', P.mem_part hx'⟩ ⟨hp, hx⟩
-
-Depends on / 依赖: P.existsUnique_mem, P.le, P.mem_part, P.nonempty_of_mem_parts, P.part_mem, existsUnique_mem, mem_of_subset, mem_part, nonempty_of_mem_parts, part_mem, unique
+/-
+**Finpartition.exists_subset_part_bijOn** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`
+。
+形式化陈述：exists_subset_part_bijOn : exists r subseteq s, Set.BijOn P.part r P.parts
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.exists_bijOn_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set
+ α} {t : Set β} {f : α → β}, Set.SurjOn f s t → ∃ s' ⊆ s, Set.BijOn f s' t
+· 使用定理 `Finpartition.part_surjOn`：part_surjOn : Set.SurjOn P.part s P.parts
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.instCanLiftFinsetCoeFinite`：∀ {α : Type u}, CanLift (Set α) (Finset 
+α) SetLike.coe Set.Finite
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
 -/
-theorem part_surjOn : Set.SurjOn P.part s P.parts := fun p hp => by
-  obtain ⟨x, hx⟩ := P.nonempty_of_mem_parts hp
-  have hx' := mem_of_subset (P.le hp) hx
-  use x, hx', (P.existsUnique_mem hx').unique ⟨P.part_mem.2 hx', P.mem_part hx'⟩ ⟨hp, hx⟩
-
-/--
-theorem `exists_subset_part_bijOn` / 定理 `exists_subset_part_bijOn`
-
-English:
-theorem exists_subset_part_bijOn
-  statement: exists r subseteq s, Set.BijOn P.part r P.parts
-  proof: by
+theorem exists_subset_part_bijOn : ∃ r ⊆ s, Set.BijOn P.part r P.parts := by
   obtain ⟨r, hrs, hr⟩ := P.part_surjOn.exists_bijOn_subset
   lift r to Finset α using s.finite_toSet.subset hrs
   exact ⟨r, mod_cast hrs, hr⟩
-
-中文:
-定理 存在_subset_part_bijOn
-  结论: 存在 r subseteq s, 集合.双射限制 P.part r P.parts
-  证明: by
-  obtain ⟨r, hrs, hr⟩ := P.part_surjOn.exists_bijOn_subset
-  lift r to Finset α using s.finite_toSet.subset hrs
-  exact ⟨r, mod_cast hrs, hr⟩
-
-Depends on / 依赖: Finset, P.part_surjOn.exists_bijOn_subset, exists_bijOn_subset, finite_toSet, mod_cast, part_surjOn, s.finite_toSet.subset, subset
+/-
+**Finpartition.mem_part_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：mem_part_iff_exists {b} : a in P.part b ↔ exists p in P.parts, a in p ∧ b 
+in p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Finpartition.part_nonempty`：part_nonempty : (P.part a).Nonempty ↔ a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `Finpartition.part_eq_of_mem`：part_eq_of_mem (ht : t in P.parts) (hat : a
+ in t) : P.part a = t
 -/
-theorem exists_subset_part_bijOn : exists r subseteq s, Set.BijOn P.part r P.parts := by
-  obtain ⟨r, hrs, hr⟩ := P.part_surjOn.exists_bijOn_subset
-  lift r to Finset α using s.finite_toSet.subset hrs
-  exact ⟨r, mod_cast hrs, hr⟩
-
-/--
-theorem `mem_part_iff_exists` / 定理 `mem_part_iff_exists`
-
-English:
-theorem mem_part_iff_exists
-  given: {b}
-  statement: a in P.part b ↔ exists p in P.parts, a in p ∧ b in p
-  proof: by
+theorem mem_part_iff_exists {b} : a ∈ P.part b ↔ ∃ p ∈ P.parts, a ∈ p ∧ b ∈ p := by
   constructor
   · intro h
-    have : b in s := P.part_nonempty.1 ⟨a, h⟩
+    have : b ∈ s := P.part_nonempty.1 ⟨a, h⟩
     refine ⟨_, ?_, h, ?_⟩ <;> simp [this]
   · rintro ⟨p, hp, hap, hbp⟩
     obtain rfl : P.part b = p := P.part_eq_of_mem hp hbp
     exact hap
 
-中文:
-定理 mem_part_iff_存在
-  条件: {b}
-  结论: a in P.part b ↔ 存在 p in P.parts, a in p ∧ b in p
-  证明: by
-  constructor
-  · intro h
-    have : b in s := P.part_nonempty.1 ⟨a, h⟩
-    refine ⟨_, ?_, h, ?_⟩ <;> simp [this]
-  · rintro ⟨p, hp, hap, hbp⟩
-    obtain rfl : P.part b = p := P.part_eq_of_mem hp hbp
-    exact hap
+/-- Equivalence between a finpartition's parts as a dependent sum and the partitioned set. -/
+/-
+**Finpartition.equivSigmaParts** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：equivSigmaParts : s ≃ Σ t : P.parts, t.1 where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: P.part, P.part_eq_of_mem, P.part_nonempty, part_eq_of_mem, part_nonempty
--/
-theorem mem_part_iff_exists {b} : a in P.part b ↔ exists p in P.parts, a in p ∧ b in p := by
-  constructor
-  · intro h
-    have : b in s := P.part_nonempty.1 ⟨a, h⟩
-    refine ⟨_, ?_, h, ?_⟩ <;> simp [this]
-  · rintro ⟨p, hp, hap, hbp⟩
-    obtain rfl : P.part b = p := P.part_eq_of_mem hp hbp
-    exact hap
-
-/--
-Definition of `equivSigmaParts` / `equivSigmaParts` 的定义
-
-English:
-definition equivSigmaParts
-  signature: : s ≃ Σ t : P.parts, t.1 where
-  body: ⟨⟨P.part x.1, P.part_mem.2 x.2⟩, ⟨x, P.mem_part x.2⟩⟩
-  invFun x := ⟨x.2, mem_of_subset (P.le x.1.2) x.2.2⟩
-  left_inv x := by simp
-  right_inv x := by
-    ext e
-    · obtain ⟨⟨p, mp⟩, ⟨f, mf⟩⟩ := x
-      dsimp only at mf ⊢
-      rw [P.part_eq_of_mem mp mf]
-    · simp
-
-中文:
-定义 equivSigmaParts
-  签名: : s ≃ Σ t : P.parts, t.1 where
-  定义体: ⟨⟨P.part x.1, P.part_mem.2 x.2⟩, ⟨x, P.mem_part x.2⟩⟩
-  invFun x := ⟨x.2, mem_of_subset (P.le x.1.2) x.2.2⟩
-  left_inv x := by simp
-  right_inv x := by
-    ext e
-    · obtain ⟨⟨p, mp⟩, ⟨f, mf⟩⟩ := x
-      dsimp only at mf ⊢
-      rw [P.part_eq_of_mem mp mf]
-    · simp
-
-Depends on / 依赖: P.mem_part, P.part, P.part_mem, mem_part, part_mem
+--- 原说明 ---
+Equivalence between a finpartition's parts as a dependent sum and the partitione
+d set.
 -/
 def equivSigmaParts : s ≃ Σ t : P.parts, t.1 where
   toFun x := ⟨⟨P.part x.1, P.part_mem.2 x.2⟩, ⟨x, P.mem_part x.2⟩⟩
@@ -2573,180 +1886,171 @@ def equivSigmaParts : s ≃ Σ t : P.parts, t.1 where
     · simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `exists_enumeration` / 引理 `exists_enumeration`
-
-English:
-lemma exists_enumeration
-  statement: exists f : s ≃ Σ t : P.parts, Fin #t.1,
-  proof: by
-  use P.equivSigmaParts.trans ((Equiv.refl _).sigmaCongr (fun t => t.1.equivFin))
-  simp [equivSigmaParts, Equiv.sigmaCongr, Equiv.sigmaCongrLeft]
-
-中文:
-引理 存在_enumeration
-  结论: 存在 f : s ≃ Σ t : P.parts, 有限集 #t.1,
-  证明: by
-  use P.equivSigmaParts.trans ((Equiv.refl _).sigmaCongr (fun t => t.1.equivFin))
-  simp [equivSigmaParts, Equiv.sigmaCongr, Equiv.sigmaCongrLeft]
-
-Depends on / 依赖: Equiv.refl, Equiv.sigmaCongr, Equiv.sigmaCongrLeft, P.equivSigmaParts.trans, equivFin, equivSigmaParts, sigmaCongr, sigmaCongrLeft
+/-
+**Finpartition.exists_enumeration** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：exists_enumeration : exists f : s ≃ Σ t : P.parts, Fin #t.1, forall a b : 
+s, P.part a = P.part b ↔ (f a).1 = (f b).1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Sigma.eta`：∀ {α : Type u_1} {β : α → Type u_4} (x : (a : α) × β a), ⟨x.f
+st, x.snd⟩ = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `Equiv.sigmaCongrRight_apply`：∀ {α : Type u_3} {β₁ : α → Type u_1} {β₂ : 
+α → Type u_2} (F : (a : α) → β₁ a ≃ β₂ a) (a : (a : α) × β₁ a),   (Equiv.sigmaCo
+ngrRight F) a = ⟨…
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma exists_enumeration : exists f : s ≃ Σ t : P.parts, Fin #t.1,
-    forall a b : s, P.part a = P.part b ↔ (f a).1 = (f b).1 := by
-  use P.equivSigmaParts.trans ((Equiv.refl _).sigmaCongr (fun t => t.1.equivFin))
+lemma exists_enumeration : ∃ f : s ≃ Σ t : P.parts, Fin #t.1,
+    ∀ a b : s, P.part a = P.part b ↔ (f a).1 = (f b).1 := by
+  use P.equivSigmaParts.trans ((Equiv.refl _).sigmaCongr (fun t ↦ t.1.equivFin))
   simp [equivSigmaParts, Equiv.sigmaCongr, Equiv.sigmaCongrLeft]
-
-/--
-theorem `sum_card_parts` / 定理 `sum_card_parts`
-
-English:
-theorem sum_card_parts
-  statement: ∑ i in P.parts, #i = #s
-  proof: by
-  convert! congr_arg Finset.card P.biUnion_parts
-  rw [card_biUnion P.supIndep.pairwiseDisjoint]
-  rfl
-
-中文:
-定理 sum_card_parts
-  结论: ∑ i in P.parts, #i = #s
-  证明: by
-  convert! congr_arg Finset.card P.biUnion_parts
-  rw [card_biUnion P.supIndep.pairwiseDisjoint]
-  rfl
-
-Depends on / 依赖: Finset, Finset.card, P.biUnion_parts, P.supIndep.pairwiseDisjoint, biUnion_parts, card_biUnion, congr_arg, convert, pairwiseDisjoint, supIndep
+/-
+**Finpartition.sum_card_parts** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：sum_card_parts : ∑ i in P.parts, #i = #s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_biUnion`：card_biUnion [DecidableEq M] {t : ι -> Finset M} (h
+ : (s : Set ι).PairwiseDisjoint t) : #(s.biUnion t) = ∑ u in s, #(t u)
+· 使用定理 `Finset.SupIndep.pairwiseDisjoint`：∀ {α : Type u_1} {ι : Type u_3} [inst 
+: Lattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α},   s.SupIndep f → 
+(↑s).PairwiseDisjoint …
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Finpartition.biUnion_parts`：biUnion_parts : P.parts.biUnion id = s
 -/
-theorem sum_card_parts : ∑ i in P.parts, #i = #s := by
+theorem sum_card_parts : ∑ i ∈ P.parts, #i = #s := by
   convert! congr_arg Finset.card P.biUnion_parts
   rw [card_biUnion P.supIndep.pairwiseDisjoint]
   rfl
 
 /-- `⊥` is the partition in singletons, aka discrete partition. -/
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`⊥` is the partition in singletons, aka discrete partition.
+-/
 instance (s : Finset α) : Bot (Finpartition s) :=
-  ⟨{ parts := s.map ⟨singleton, singleton_injective⟩
-supIndep := Set.PairwiseDisjoint.supIndep by
+  ⟨{  parts := s.map ⟨singleton, singleton_injective⟩
+      supIndep := Set.PairwiseDisjoint.supIndep <| by
         rw [Finset.coe_map]
         exact Finset.pairwiseDisjoint_range_singleton.subset (Set.image_subset_range _ _)
       sup_parts := by rw [sup_map, id_comp, Embedding.coeFn_mk, Finset.sup_singleton_eq_self]
       bot_notMem := by simp }⟩
 
 @[simp]
-/--
-theorem `parts_bot` / 定理 `parts_bot`
-
-English:
-theorem parts_bot
-  given: (s : Finset α)
-  proof: rfl
-
-中文:
-定理 parts_bot
-  条件: (s : 有限集 α)
-  证明: rfl
+/-
+**Finpartition.parts_bot** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：parts_bot (s : Finset α) : (⊥ : Finpartition s).parts = s.map ⟨singleton, 
+singleton_injective⟩
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parts_bot (s : Finset α) :
     (⊥ : Finpartition s).parts = s.map ⟨singleton, singleton_injective⟩ :=
   rfl
-
-/--
-theorem `card_bot` / 定理 `card_bot`
-
-English:
-theorem card_bot
-  given: (s : Finset α)
-  statement: #(⊥ : Finpartition s).parts = #s
-  proof: Finset.card_map _
-
-中文:
-定理 card_bot
-  条件: (s : 有限集 α)
-  结论: #(⊥ : 有限分拆 s).parts = #s
-  证明: Finset.card_map _
-
-Depends on / 依赖: Finset, Finset.card_map, card_map
+/-
+**Finpartition.card_bot** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_bot (s : Finset α) : #(⊥ : Finpartition s).parts = #s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用定理 `Finset.singleton_injective`：singleton_injective : Injective (singleton :
+ α -> Finset α)
 -/
 theorem card_bot (s : Finset α) : #(⊥ : Finpartition s).parts = #s := Finset.card_map _
-
-/--
-theorem `mem_bot_iff` / 定理 `mem_bot_iff`
-
-English:
-theorem mem_bot_iff
-  statement: t in (⊥ : Finpartition s).parts ↔ exists a in s, {a} = t
-  proof: mem_map
-
-中文:
-定理 mem_bot_iff
-  结论: t in (⊥ : 有限分拆 s).parts ↔ 存在 a in s, {a} = t
-  证明: mem_map
-
-Depends on / 依赖: mem_map
+/-
+**Finpartition.mem_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：mem_bot_iff : t in (⊥ : Finpartition s).parts ↔ exists a in s, {a} = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_map`：mem_map {b : β} : b in s.map f ↔ exists a in s, f a = b
+· 使用定理 `Finset.singleton_injective`：singleton_injective : Injective (singleton :
+ α -> Finset α)
 -/
-theorem mem_bot_iff : t in (⊥ : Finpartition s).parts ↔ exists a in s, {a} = t :=
+theorem mem_bot_iff : t ∈ (⊥ : Finpartition s).parts ↔ ∃ a ∈ s, {a} = t :=
   mem_map
-
+/-
+**Finpartition.** 是 Mathlib 中的一个实例，位于命名空间 `Finpartition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (s : Finset α) : OrderBot (Finpartition s) :=
   { (inferInstance : Bot (Finpartition s)) with
-    bot_le := fun P t ht => by
+    bot_le := fun P t ht ↦ by
       rw [mem_bot_iff] at ht
       obtain ⟨a, ha, rfl⟩ := ht
       obtain ⟨t, ht, hat⟩ := P.exists_mem ha
       exact ⟨t, ht, singleton_subset_iff.2 hat⟩ }
-
-/--
-theorem `card_parts_le_card` / 定理 `card_parts_le_card`
-
-English:
-theorem card_parts_le_card
-  statement: #P.parts <= #s
-  proof: by
-  rw [← card_bot s]
-  exact card_mono bot_le
-
-中文:
-定理 card_parts_le_card
-  结论: #P.parts <= #s
-  证明: by
-  rw [← card_bot s]
-  exact card_mono bot_le
-
-Depends on / 依赖: bot_le, card_bot, card_mono
+/-
+**Finpartition.card_parts_le_card** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_parts_le_card : #P.parts <= #s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finpartition.card_bot`：card_bot (s : Finset α) : #(⊥ : Finpartition s).p
+arts = #s
+· 使用定理 `Finpartition.card_mono`：card_mono {a : α} {P Q : Finpartition a} (h : P 
+<= Q) : #Q.parts <= #P.parts
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
-theorem card_parts_le_card : #P.parts <= #s := by
+theorem card_parts_le_card : #P.parts ≤ #s := by
   rw [← card_bot s]
   exact card_mono bot_le
-
-/--
-lemma `card_mod_card_parts_le` / 引理 `card_mod_card_parts_le`
-
-English:
-lemma card_mod_card_parts_le
-  statement: #s % #P.parts <= #P.parts
-  proof: by
-  obtain h | h := (#P.parts).eq_zero_or_pos
-  · rw [h]
-    rw [Finset.card_eq_zero]; rw [parts_eq_empty_iff]; rw [bot_eq_empty]; rw [← Finset.card_eq_zero] at h
-    rw [h]
-  · exact (Nat.mod_lt _ h).le
-
-中文:
-引理 card_mod_card_parts_le
-  结论: #s % #P.parts <= #P.parts
-  证明: by
-  obtain h | h := (#P.parts).eq_zero_or_pos
-  · rw [h]
-    rw [Finset.card_eq_zero]; rw [parts_eq_empty_iff]; rw [bot_eq_empty]; rw [← Finset.card_eq_zero] at h
-    rw [h]
-  · exact (Nat.mod_lt _ h).le
-
-Depends on / 依赖: Finset, Finset.card_eq_zero, Nat.mod_lt, P.parts, bot_eq_empty, card_eq_zero, eq_zero_or_pos, mod_lt, parts_eq_empty_iff
+/-
+**Finpartition.card_mod_card_parts_le** 是 Mathlib 中的一个引理，位于命名空间 `Finpartition`。
+形式化陈述：card_mod_card_parts_le : #s % #P.parts <= #P.parts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_eq_zero`：∀ {α : Type u_1} {s : Finset α}, s.card = 0 ↔ s = ∅
+· 使用定理 `Finset.bot_eq_empty`：bot_eq_empty : (⊥ : Finset α) = ∅
+· 使用定理 `Finpartition.parts_eq_empty_iff`：parts_eq_empty_iff : P.parts = ∅ ↔ a = 
+⊥
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
 -/
-lemma card_mod_card_parts_le : #s % #P.parts <= #P.parts := by
+lemma card_mod_card_parts_le : #s % #P.parts ≤ #P.parts := by
   obtain h | h := (#P.parts).eq_zero_or_pos
   · rw [h]
-    rw [Finset.card_eq_zero]; rw [parts_eq_empty_iff]; rw [bot_eq_empty]; rw [← Finset.card_eq_zero] at h
+    rw [Finset.card_eq_zero, parts_eq_empty_iff, bot_eq_empty, ← Finset.card_eq_zero] at h
     rw [h]
   · exact (Nat.mod_lt _ h).le
 
@@ -2755,59 +2059,22 @@ section SetSetoid
 /-- A setoid over a finite type induces a finpartition of the type's elements,
 where the parts are the setoid's equivalence classes. -/
 @[simps -isSimp]
-/--
-Definition of `ofSetSetoid` / `ofSetSetoid` 的定义
+/-
+**Finpartition.ofSetSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofSetSetoid (s : Setoid α) (x : Finset α) [DecidableRel s.r] : Finpartitio
+n x where parts
+参数：s : Setoid α；x : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSetSetoid
-  signature: (s : Setoid α) (x : Finset α) [DecidableRel s.r]
-  body: x.image fun a => {b in x | s.r a b}
-  supIndep := by
-    suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
-      simp only [supIndep_iff_pairwiseDisjoint, Set.PairwiseDisjoint, Set.Pairwise, coe_image,
-        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem_not_eq,
-        forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_filter, not_and, filter_inj',
-        not_forall, @not_imp_comm (_ ↔ _), Decidable.not_not]
-      intro _ _ _ _ _ _ _ _ ha _ hb
-      exact ⟨(s.trans' hb <| s.trans' (s.symm' ha) ·), (s.trans' ha <| s.trans' (s.symm' hb) ·)⟩
-    simp +contextual [← Quotient.eq]
-  sup_parts := by
-    ext a
-    simp_rw [sup_image, id_comp, mem_sup, mem_filter]
-    refine ⟨(·.choose_spec.2.1), fun _ => by use a⟩
-  bot_notMem := by
-    suffices forall x₁ in x, exists x₂ in x, s x₁ x₂ by simpa [filter_eq_empty_iff]
-    intro x _
-    use x
-
-中文:
-定义 ofSetSetoid
-  签名: (s : 集合等价关系 α) (x : 有限集 α) [DecidableRel s.r]
-  定义体: x.image fun a => {b in x | s.r a b}
-  supIndep := by
-    suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
-      simp only [supIndep_iff_pairwiseDisjoint, Set.PairwiseDisjoint, Set.Pairwise, coe_image,
-        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem_not_eq,
-        forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_filter, not_and, filter_inj',
-        not_forall, @not_imp_comm (_ ↔ _), Decidable.not_not]
-      intro _ _ _ _ _ _ _ _ ha _ hb
-      exact ⟨(s.trans' hb <| s.trans' (s.symm' ha) ·), (s.trans' ha <| s.trans' (s.symm' hb) ·)⟩
-    simp +contextual [← Quotient.eq]
-  sup_parts := by
-    ext a
-    simp_rw [sup_image, id_comp, mem_sup, mem_filter]
-    refine ⟨(·.choose_spec.2.1), fun _ => by use a⟩
-  bot_notMem := by
-    suffices forall x₁ in x, exists x₂ in x, s x₁ x₂ by simpa [filter_eq_empty_iff]
-    intro x _
-    use x
-
-Depends on / 依赖: x.image
+--- 原说明 ---
+A setoid over a finite type induces a finpartition of the type's elements,
+where the parts are the setoid's equivalence classes.
 -/
 def ofSetSetoid (s : Setoid α) (x : Finset α) [DecidableRel s.r] : Finpartition x where
-  parts := x.image fun a => {b in x | s.r a b}
+  parts := x.image fun a ↦ {b ∈ x | s.r a b}
   supIndep := by
-    suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
+    suffices ∀ (a b c d : α), s a d → s b d → (s a c ↔ s b c) by
       simp only [supIndep_iff_pairwiseDisjoint, Set.PairwiseDisjoint, Set.Pairwise, coe_image,
         Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem_not_eq,
         forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_filter, not_and, filter_inj',
@@ -2818,46 +2085,45 @@ def ofSetSetoid (s : Setoid α) (x : Finset α) [DecidableRel s.r] : Finpartitio
   sup_parts := by
     ext a
     simp_rw [sup_image, id_comp, mem_sup, mem_filter]
-    refine ⟨(·.choose_spec.2.1), fun _ => by use a⟩
+    refine ⟨(·.choose_spec.2.1), fun _ ↦ by use a⟩
   bot_notMem := by
-    suffices forall x₁ in x, exists x₂ in x, s x₁ x₂ by simpa [filter_eq_empty_iff]
+    suffices ∀ x₁ ∈ x, ∃ x₂ ∈ x, s x₁ x₂ by simpa [filter_eq_empty_iff]
     intro x _
     use x
-
-/--
-theorem `mem_part_ofSetSetoid_iff_rel` / 定理 `mem_part_ofSetSetoid_iff_rel`
-
-English:
-theorem mem_part_ofSetSetoid_iff_rel
-  given: {s : Setoid α} (x : Finset α) [DecidableRel s.r] {b : α}
-  proof: by
-  suffices (exists a₁ in x, (b in x ∧ s a₁ b) ∧ a in x ∧ s a₁ a) ↔ a in x ∧ b in x ∧ s a b by
-    simpa [mem_part_iff_exists, ofSetSetoid_parts]
-  exact ⟨
-    fun ⟨c, _, ⟨hb, hcb⟩, ⟨ha, hca⟩⟩ => ⟨ha, hb, s.trans' (s.symm' hca) hcb⟩,
-    fun h => ⟨a, ⟨h.1, ⟨⟨h.2.1, h.2.2⟩, ⟨h.1, s.refl _⟩⟩⟩⟩
-  ⟩
-
-中文:
-定理 mem_part_ofSetSetoid_iff_rel
-  条件: {s : 集合等价关系 α} (x : 有限集 α) [DecidableRel s.r] {b : α}
-  证明: by
-  suffices (exists a₁ in x, (b in x ∧ s a₁ b) ∧ a in x ∧ s a₁ a) ↔ a in x ∧ b in x ∧ s a b by
-    simpa [mem_part_iff_exists, ofSetSetoid_parts]
-  exact ⟨
-    fun ⟨c, _, ⟨hb, hcb⟩, ⟨ha, hca⟩⟩ => ⟨ha, hb, s.trans' (s.symm' hca) hcb⟩,
-    fun h => ⟨a, ⟨h.1, ⟨⟨h.2.1, h.2.2⟩, ⟨h.1, s.refl _⟩⟩⟩⟩
-  ⟩
-
-Depends on / 依赖: mem_part_iff_exists, ofSetSetoid_parts, s.refl, s.symm, s.trans
+/-
+**Finpartition.mem_part_ofSetSetoid_iff_rel** 是 Mathlib 中的一个定理，位于命名空间 `Finpartit
+ion`。
+形式化陈述：mem_part_ofSetSetoid_iff_rel {s : Setoid α} (x : Finset α) [DecidableRel s
+.r] {b : α} : b in (ofSetSetoid s x).part a ↔ a in x ∧ b in x ∧ s a b
+参数：x : Finset α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.trans'`：trans' (r : Setoid α) : forall {x y z}, r x y -> r y z ->
+ r x z
+· 使用定理 `Setoid.symm'`：symm' (r : Setoid α) : forall {x y}, r x y -> r y x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finpartition.ofSetSetoid_parts`：∀ {α : Type u_1} [inst : DecidableEq α] 
+(s : Setoid α) (x : Finset α) [inst_1 : DecidableRel ⇑s],   (Finpartition.ofSetS
+etoid s x).parts = F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 theorem mem_part_ofSetSetoid_iff_rel {s : Setoid α} (x : Finset α) [DecidableRel s.r] {b : α} :
-    b in (ofSetSetoid s x).part a ↔ a in x ∧ b in x ∧ s a b := by
-  suffices (exists a₁ in x, (b in x ∧ s a₁ b) ∧ a in x ∧ s a₁ a) ↔ a in x ∧ b in x ∧ s a b by
+    b ∈ (ofSetSetoid s x).part a ↔ a ∈ x ∧ b ∈ x ∧ s a b := by
+  suffices (∃ a₁ ∈ x, (b ∈ x ∧ s a₁ b) ∧ a ∈ x ∧ s a₁ a) ↔ a ∈ x ∧ b ∈ x ∧ s a b by
     simpa [mem_part_iff_exists, ofSetSetoid_parts]
   exact ⟨
-    fun ⟨c, _, ⟨hb, hcb⟩, ⟨ha, hca⟩⟩ => ⟨ha, hb, s.trans' (s.symm' hca) hcb⟩,
-    fun h => ⟨a, ⟨h.1, ⟨⟨h.2.1, h.2.2⟩, ⟨h.1, s.refl _⟩⟩⟩⟩
+    fun ⟨c, _, ⟨hb, hcb⟩, ⟨ha, hca⟩⟩ ↦ ⟨ha, hb, s.trans' (s.symm' hca) hcb⟩,
+    fun h ↦ ⟨a, ⟨h.1, ⟨⟨h.2.1, h.2.2⟩, ⟨h.1, s.refl _⟩⟩⟩⟩
   ⟩
 
 end SetSetoid
@@ -2869,305 +2135,264 @@ variable [Fintype α]
 /-- A setoid over a finite type induces a finpartition of the type's elements,
 where the parts are the setoid's equivalence classes. -/
 @[simps! -isSimp]
-/--
-Definition of `ofSetoid` / `ofSetoid` 的定义
+/-
+**Finpartition.ofSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：ofSetoid (s : Setoid α) [DecidableRel s.r] : Finpartition (univ : Finset α
+)
+参数：s : Setoid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSetoid
-  signature: (s : Setoid α) [DecidableRel s.r]
-  body: ofSetSetoid s univ
-
-中文:
-定义 ofSetoid
-  签名: (s : 集合等价关系 α) [DecidableRel s.r]
-  定义体: ofSetSetoid s univ
-
-Depends on / 依赖: ofSetSetoid
+--- 原说明 ---
+A setoid over a finite type induces a finpartition of the type's elements,
+where the parts are the setoid's equivalence classes.
 -/
 def ofSetoid (s : Setoid α) [DecidableRel s.r] : Finpartition (univ : Finset α) :=
   ofSetSetoid s univ
-
-/--
-theorem `mem_part_ofSetoid_iff_rel` / 定理 `mem_part_ofSetoid_iff_rel`
-
-English:
-theorem mem_part_ofSetoid_iff_rel
-  given: {s : Setoid α} [DecidableRel s.r] {b : α}
-  proof: by
-  suffices b in (ofSetSetoid s univ).part a ↔ a in univ ∧ b in univ ∧ s a b by simpa
-  exact mem_part_ofSetSetoid_iff_rel univ
-
-中文:
-定理 mem_part_ofSetoid_iff_rel
-  条件: {s : 集合等价关系 α} [DecidableRel s.r] {b : α}
-  证明: by
-  suffices b in (ofSetSetoid s univ).part a ↔ a in univ ∧ b in univ ∧ s a b by simpa
-  exact mem_part_ofSetSetoid_iff_rel univ
-
-Depends on / 依赖: mem_part_ofSetSetoid_iff_rel, ofSetSetoid
+/-
+**Finpartition.mem_part_ofSetoid_iff_rel** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition
+`。
+形式化陈述：mem_part_ofSetoid_iff_rel {s : Setoid α} [DecidableRel s.r] {b : α} : b in
+ (ofSetoid s).part a ↔ s a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.mem_part_ofSetSetoid_iff_rel`：mem_part_ofSetSetoid_iff_rel 
+{s : Setoid α} (x : Finset α) [DecidableRel s.r] {b : α} : b in (ofSetSetoid s x
+).part a ↔ a in x ∧ b in x ∧ s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 theorem mem_part_ofSetoid_iff_rel {s : Setoid α} [DecidableRel s.r] {b : α} :
-    b in (ofSetoid s).part a ↔ s a b := by
-  suffices b in (ofSetSetoid s univ).part a ↔ a in univ ∧ b in univ ∧ s a b by simpa
+    b ∈ (ofSetoid s).part a ↔ s a b := by
+  suffices b ∈ (ofSetSetoid s univ).part a ↔ a ∈ univ ∧ b ∈ univ ∧ s a b by simpa
   exact mem_part_ofSetSetoid_iff_rel univ
 
 end Setoid
 
 section Atomise
 
-/--
-Definition of `atomise` / `atomise` 的定义
+/-- Cuts `s` along the finsets in `F`: Two elements of `s` will be in the same part if they are
+in the same finsets of `F`. -/
+/-
+**Finpartition.atomise** 是 Mathlib 中的一个定义，位于命名空间 `Finpartition`。
+形式化陈述：atomise (s : Finset α) (F : Finset (Finset α)) : Finpartition s
+参数：s : Finset α；F : Finset (Finset α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition atomise
-  signature: (s : Finset α) (F : Finset (Finset α))
-  body: ofErase (F.powerset.image fun Q => {i in s | forall t in F, t in Q ↔ i in t})
-    (Set.PairwiseDisjoint.supIndep fun x hx y hy h =>
-      disjoint_left.mpr fun z hz1 hz2 =>
-        h (by
-            rw [mem_coe]; rw [mem_image] at hx hy
-            obtain ⟨Q, hQ, rfl⟩ := hx
-            obtain ⟨R, hR, rfl⟩ := hy
-            suffices h' : Q = R by
-              subst h'
-              exact of_eq_true (eq_self {i in s | forall t in F, t in Q ↔ i in t})
-            rw [id]; rw [mem_filter] at hz1 hz2
-            rw [mem_powerset] at hQ hR
-            ext i
-            refine ⟨fun hi => ?_, fun hi => ?_⟩
-            · rwa [hz2.2 _ (hQ hi), ← hz1.2 _ (hQ hi)]
-            · rwa [hz1.2 _ (hR hi), ← hz2.2 _ (hR hi)]))
-    (by
-      refine (Finset.sup_le fun t ht => ?_).antisymm fun a ha => ?_
-      · rw [mem_image] at ht
-        obtain ⟨A, _, rfl⟩ := ht
-        exact s.filter_subset _
-      · rw [mem_sup]
-        refine
-          ⟨{i in s | forall t in F, t in {u in F | a in u} ↔ i in t},
-            mem_image_of_mem _ (mem_powerset.2 <| filter_subset _ _),
-            mem_filter.2 ⟨ha, fun t ht => ?_⟩⟩
-        rw [mem_filter]
-        exact and_iff_right ht)
-
-中文:
-定义 atomise
-  签名: (s : 有限集 α) (F : 有限集 (有限集 α))
-  定义体: ofErase (F.powerset.image fun Q => {i in s | forall t in F, t in Q ↔ i in t})
-    (Set.PairwiseDisjoint.supIndep fun x hx y hy h =>
-      disjoint_left.mpr fun z hz1 hz2 =>
-        h (by
-            rw [mem_coe]; rw [mem_image] at hx hy
-            obtain ⟨Q, hQ, rfl⟩ := hx
-            obtain ⟨R, hR, rfl⟩ := hy
-            suffices h' : Q = R by
-              subst h'
-              exact of_eq_true (eq_self {i in s | forall t in F, t in Q ↔ i in t})
-            rw [id]; rw [mem_filter] at hz1 hz2
-            rw [mem_powerset] at hQ hR
-            ext i
-            refine ⟨fun hi => ?_, fun hi => ?_⟩
-            · rwa [hz2.2 _ (hQ hi), ← hz1.2 _ (hQ hi)]
-            · rwa [hz1.2 _ (hR hi), ← hz2.2 _ (hR hi)]))
-    (by
-      refine (Finset.sup_le fun t ht => ?_).antisymm fun a ha => ?_
-      · rw [mem_image] at ht
-        obtain ⟨A, _, rfl⟩ := ht
-        exact s.filter_subset _
-      · rw [mem_sup]
-        refine
-          ⟨{i in s | forall t in F, t in {u in F | a in u} ↔ i in t},
-            mem_image_of_mem _ (mem_powerset.2 <| filter_subset _ _),
-            mem_filter.2 ⟨ha, fun t ht => ?_⟩⟩
-        rw [mem_filter]
-        exact and_iff_right ht)
-
-Depends on / 依赖: F.powerset.image, PairwiseDisjoint, Set.PairwiseDisjoint.supIndep, disjoint_left, disjoint_left.mpr, eq_self, mem_coe, mem_filter, mem_image, mem_powerset, ofErase, of_eq_true, powerset, supIndep
+--- 原说明 ---
+Cuts `s` along the finsets in `F`: Two elements of `s` will be in the same part 
+if they are
+in the same finsets of `F`.
 -/
 def atomise (s : Finset α) (F : Finset (Finset α)) : Finpartition s :=
-  ofErase (F.powerset.image fun Q => {i in s | forall t in F, t in Q ↔ i in t})
-    (Set.PairwiseDisjoint.supIndep fun x hx y hy h =>
-      disjoint_left.mpr fun z hz1 hz2 =>
+  ofErase (F.powerset.image fun Q ↦ {i ∈ s | ∀ t ∈ F, t ∈ Q ↔ i ∈ t})
+    (Set.PairwiseDisjoint.supIndep fun x hx y hy h ↦
+      disjoint_left.mpr fun z hz1 hz2 ↦
         h (by
-            rw [mem_coe]; rw [mem_image] at hx hy
+            rw [mem_coe, mem_image] at hx hy
             obtain ⟨Q, hQ, rfl⟩ := hx
             obtain ⟨R, hR, rfl⟩ := hy
             suffices h' : Q = R by
               subst h'
-              exact of_eq_true (eq_self {i in s | forall t in F, t in Q ↔ i in t})
-            rw [id]; rw [mem_filter] at hz1 hz2
+              exact of_eq_true (eq_self {i ∈ s | ∀ t ∈ F, t ∈ Q ↔ i ∈ t})
+            rw [id, mem_filter] at hz1 hz2
             rw [mem_powerset] at hQ hR
             ext i
-            refine ⟨fun hi => ?_, fun hi => ?_⟩
+            refine ⟨fun hi ↦ ?_, fun hi ↦ ?_⟩
             · rwa [hz2.2 _ (hQ hi), ← hz1.2 _ (hQ hi)]
             · rwa [hz1.2 _ (hR hi), ← hz2.2 _ (hR hi)]))
     (by
-      refine (Finset.sup_le fun t ht => ?_).antisymm fun a ha => ?_
+      refine (Finset.sup_le fun t ht ↦ ?_).antisymm fun a ha ↦ ?_
       · rw [mem_image] at ht
         obtain ⟨A, _, rfl⟩ := ht
         exact s.filter_subset _
       · rw [mem_sup]
         refine
-          ⟨{i in s | forall t in F, t in {u in F | a in u} ↔ i in t},
+          ⟨{i ∈ s | ∀ t ∈ F, t ∈ {u ∈ F | a ∈ u} ↔ i ∈ t},
             mem_image_of_mem _ (mem_powerset.2 <| filter_subset _ _),
-            mem_filter.2 ⟨ha, fun t ht => ?_⟩⟩
+            mem_filter.2 ⟨ha, fun t ht ↦ ?_⟩⟩
         rw [mem_filter]
         exact and_iff_right ht)
 
 variable {F : Finset (Finset α)}
-
-/--
-theorem `mem_atomise` / 定理 `mem_atomise`
-
-English:
-theorem mem_atomise
-  proof: by
-  simp only [atomise, ofErase, bot_eq_empty, mem_erase, mem_image, nonempty_iff_ne_empty,
-    mem_powerset]
-
-中文:
-定理 mem_atomise
-  证明: by
-  simp only [atomise, ofErase, bot_eq_empty, mem_erase, mem_image, nonempty_iff_ne_empty,
-    mem_powerset]
-
-Depends on / 依赖: atomise, bot_eq_empty, mem_erase, mem_image, mem_powerset, nonempty_iff_ne_empty, ofErase
+/-
+**Finpartition.mem_atomise** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：mem_atomise : t in (atomise s F).parts ↔ t.Nonempty ∧ exists Q subseteq F,
+ {i in s | forall u in F, u in Q ↔ i in u} = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_atomise :
-    t in (atomise s F).parts ↔
-      t.Nonempty ∧ exists Q subseteq F, {i in s | forall u in F, u in Q ↔ i in u} = t := by
+    t ∈ (atomise s F).parts ↔
+      t.Nonempty ∧ ∃ Q ⊆ F, {i ∈ s | ∀ u ∈ F, u ∈ Q ↔ i ∈ u} = t := by
   simp only [atomise, ofErase, bot_eq_empty, mem_erase, mem_image, nonempty_iff_ne_empty,
     mem_powerset]
-
-/--
-theorem `atomise_empty` / 定理 `atomise_empty`
-
-English:
-theorem atomise_empty
-  given: (hs : s.Nonempty)
-  statement: (atomise s ∅).parts = {s}
-  proof: by
-  simp only [atomise, powerset_empty, image_singleton, notMem_empty, IsEmpty.forall_iff,
-    imp_true_iff, filter_true]
-  exact erase_eq_of_notMem (notMem_singleton.2 hs.ne_empty.symm)
-
-中文:
-定理 atomise_empty
-  条件: (hs : s.非空)
-  结论: (atomise s ∅).parts = {s}
-  证明: by
-  simp only [atomise, powerset_empty, image_singleton, notMem_empty, IsEmpty.forall_iff,
-    imp_true_iff, filter_true]
-  exact erase_eq_of_notMem (notMem_singleton.2 hs.ne_empty.symm)
-
-Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, atomise, erase_eq_of_notMem, filter_true, forall_iff, hs.ne_empty.symm, image_singleton, imp_true_iff, ne_empty, notMem_empty, notMem_singleton, powerset_empty
+/-
+**Finpartition.atomise_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：atomise_empty (hs : s.Nonempty) : (atomise s ∅).parts = {s}
+参数：hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Finset.filter_true`：∀ {α : Type u_1} {h : DecidablePred fun x => True} (
+s : Finset α), {x ∈ s | True} = s
+· 使用定理 `Finset.image_singleton`：image_singleton (f : α -> β) (a : α) : image f {
+a} = {f a}
+· 使用定理 `Finpartition.ofErase.congr_simp`：∀ {α : Type u_1} [inst : Lattice α] [in
+st_1 : OrderBot α] [inst_2 : DecidableEq α] {a : α} (parts parts_1 : Finset α)  
+ (e_parts : parts = p…
+· 使用定理 `Finset.erase_eq_of_notMem`：erase_eq_of_notMem {a : α} {s : Finset α} (h 
+: a ∉ s) : erase s a = s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.notMem_singleton`：notMem_singleton {a b : α} : a ∉ ({b} : Finset 
+α) ↔ a != b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Finset.Nonempty.ne_empty`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+s ≠ ∅
 -/
 theorem atomise_empty (hs : s.Nonempty) : (atomise s ∅).parts = {s} := by
   simp only [atomise, powerset_empty, image_singleton, notMem_empty, IsEmpty.forall_iff,
     imp_true_iff, filter_true]
   exact erase_eq_of_notMem (notMem_singleton.2 hs.ne_empty.symm)
-
-/--
-theorem `card_atomise_le` / 定理 `card_atomise_le`
-
-English:
-theorem card_atomise_le
-  statement: #(atomise s F).parts <= 2 ^ #F
-  proof: (card_le_card <| erase_subset _ _).trans Finset.card_image_le.trans (card_powerset _).le
-
-中文:
-定理 card_atomise_le
-  结论: #(atomise s F).parts <= 2 ^ #F
-  证明: (card_le_card <| erase_subset _ _).trans Finset.card_image_le.trans (card_powerset _).le
-
-Depends on / 依赖: Finset, Finset.card_image_le.trans, card_image_le, card_le_card, card_powerset, erase_subset
+/-
+**Finpartition.card_atomise_le** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：card_atomise_le : #(atomise s F).parts <= 2 ^ #F
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `Finset.erase_subset`：erase_subset (a : α) (s : Finset α) : erase s a sub
+seteq s
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Finset.card_powerset`：card_powerset (s : Finset α) : card (powerset s) =
+ 2 ^ card s
 -/
-theorem card_atomise_le : #(atomise s F).parts <= 2 ^ #F :=
-(card_le_card <| erase_subset _ _).trans Finset.card_image_le.trans (card_powerset _).le
-
-/--
-theorem `biUnion_filter_atomise` / 定理 `biUnion_filter_atomise`
-
-English:
-theorem biUnion_filter_atomise
-  given: (ht : t in F) (hts : t subseteq s)
-  proof: by
+theorem card_atomise_le : #(atomise s F).parts ≤ 2 ^ #F :=
+  (card_le_card <| erase_subset _ _).trans <| Finset.card_image_le.trans (card_powerset _).le
+/-
+**Finpartition.biUnion_filter_atomise** 是 Mathlib 中的一个定理，位于命名空间 `Finpartition`。
+形式化陈述：biUnion_filter_atomise (ht : t in F) (hts : t subseteq s) : {u in (atomise
+ s F).parts | u subseteq t ∧ u.Nonempty}.biUnion id = t
+参数：ht : t in F；hts : t subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.mem_biUnion`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : 
+α → Finset β} [inst : DecidableEq β] {b : β},   b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Finpartition.exists_mem`：exists_mem (ha : a in s) : exists t in P.parts,
+ a in t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finpartition.mem_atomise`：mem_atomise : t in (atomise s F).parts ↔ t.Non
+empty ∧ exists Q subseteq F, {i in s | forall u in F, u in Q ↔ i in u} = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem biUnion_filter_atomise (ht : t ∈ F) (hts : t ⊆ s) :
+    {u ∈ (atomise s F).parts | u ⊆ t ∧ u.Nonempty}.biUnion id = t := by
   ext a
-  refine mem_biUnion.trans ⟨fun ⟨u, hu, ha⟩ => (mem_filter.1 hu).2.1 ha, fun ha => ?_⟩
+  refine mem_biUnion.trans ⟨fun ⟨u, hu, ha⟩ ↦ (mem_filter.1 hu).2.1 ha, fun ha ↦ ?_⟩
   obtain ⟨u, hu, hau⟩ := (atomise s F).exists_mem (hts ha)
-  refine ⟨u, mem_filter.2 ⟨hu, fun b hb => ?_, _, hau⟩, hau⟩
+  refine ⟨u, mem_filter.2 ⟨hu, fun b hb ↦ ?_, _, hau⟩, hau⟩
   obtain ⟨Q, _hQ, rfl⟩ := (mem_atomise.1 hu).2
   rw [mem_filter] at hau hb
   rwa [← hb.2 _ ht, hau.2 _ ht]
-
-中文:
-定理 biUnion_filter_atomise
-  条件: (ht : t in F) (hts : t subseteq s)
-  证明: by
-  ext a
-  refine mem_biUnion.trans ⟨fun ⟨u, hu, ha⟩ => (mem_filter.1 hu).2.1 ha, fun ha => ?_⟩
-  obtain ⟨u, hu, hau⟩ := (atomise s F).exists_mem (hts ha)
-  refine ⟨u, mem_filter.2 ⟨hu, fun b hb => ?_, _, hau⟩, hau⟩
-  obtain ⟨Q, _hQ, rfl⟩ := (mem_atomise.1 hu).2
-  rw [mem_filter] at hau hb
-  rwa [← hb.2 _ ht, hau.2 _ ht]
-
-Depends on / 依赖: atomise, exists_mem, mem_atomise, mem_biUnion, mem_biUnion.trans, mem_filter
+/-
+**Finpartition.card_filter_atomise_le_two_pow** 是 Mathlib 中的一个定理，位于命名空间 `Finpart
+ition`。
+形式化陈述：card_filter_atomise_le_two_pow (ht : t in F) : #{u in (atomise s F).parts 
+| u subseteq t ∧ u.Nonempty} <= 2 ^ (#F - 1)
+参数：ht : t in F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.subset_iff`：subset_iff {s₁ s₂ : Finset α} : s₁ subseteq s₂ ↔ fora
+ll ⦃x⦄, x in s₁ -> x in s₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.erase_subset_erase`：erase_subset_erase (a : α) {s t : Finset α} (
+h : s subseteq t) : erase s a subseteq erase t a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.insert_erase`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset
+ α} {a : α}, a ∈ s → insert a (s.erase a) = s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
+· 使用定理 `Finset.card_powerset`：card_powerset (s : Finset α) : card (powerset s) =
+ 2 ^ card s
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem biUnion_filter_atomise (ht : t in F) (hts : t subseteq s) :
-    {u in (atomise s F).parts | u subseteq t ∧ u.Nonempty}.biUnion id = t := by
-  ext a
-  refine mem_biUnion.trans ⟨fun ⟨u, hu, ha⟩ => (mem_filter.1 hu).2.1 ha, fun ha => ?_⟩
-  obtain ⟨u, hu, hau⟩ := (atomise s F).exists_mem (hts ha)
-  refine ⟨u, mem_filter.2 ⟨hu, fun b hb => ?_, _, hau⟩, hau⟩
-  obtain ⟨Q, _hQ, rfl⟩ := (mem_atomise.1 hu).2
-  rw [mem_filter] at hau hb
-  rwa [← hb.2 _ ht, hau.2 _ ht]
-
-/--
-theorem `card_filter_atomise_le_two_pow` / 定理 `card_filter_atomise_le_two_pow`
-
-English:
-theorem card_filter_atomise_le_two_pow
-  given: (ht : t in F)
-  proof: by
+theorem card_filter_atomise_le_two_pow (ht : t ∈ F) :
+    #{u ∈ (atomise s F).parts | u ⊆ t ∧ u.Nonempty} ≤ 2 ^ (#F - 1) := by
   suffices h :
-    {u in (atomise s F).parts | u subseteq t ∧ u.Nonempty} subseteq
-      (F.erase t).powerset.image fun P => {i in s | forall x in F, x in insert t P ↔ i in x} by
+    {u ∈ (atomise s F).parts | u ⊆ t ∧ u.Nonempty} ⊆
+      (F.erase t).powerset.image fun P ↦ {i ∈ s | ∀ x ∈ F, x ∈ insert t P ↔ i ∈ x} by
     refine (card_le_card h).trans (card_image_le.trans ?_)
-    rw [card_powerset]; rw [card_erase_of_mem ht]
-  rw [subset_iff]
-  simp_rw [mem_image, mem_powerset, mem_filter, and_imp, Finset.Nonempty, exists_imp, mem_atomise,
-    and_imp, Finset.Nonempty, exists_imp, and_imp]
-  rintro P' i hi P PQ rfl hy₂ j _hj
-  refine ⟨P.erase t, erase_subset_erase _ PQ, ?_⟩
-  simp only [insert_erase (((mem_filter.1 hi).2 _ ht).2 <| hy₂ hi)]
-
-中文:
-定理 card_filter_atomise_le_two_pow
-  条件: (ht : t in F)
-  证明: by
-  suffices h :
-    {u in (atomise s F).parts | u subseteq t ∧ u.Nonempty} subseteq
-      (F.erase t).powerset.image fun P => {i in s | forall x in F, x in insert t P ↔ i in x} by
-    refine (card_le_card h).trans (card_image_le.trans ?_)
-    rw [card_powerset]; rw [card_erase_of_mem ht]
-  rw [subset_iff]
-  simp_rw [mem_image, mem_powerset, mem_filter, and_imp, Finset.Nonempty, exists_imp, mem_atomise,
-    and_imp, Finset.Nonempty, exists_imp, and_imp]
-  rintro P' i hi P PQ rfl hy₂ j _hj
-  refine ⟨P.erase t, erase_subset_erase _ PQ, ?_⟩
-  simp only [insert_erase (((mem_filter.1 hi).2 _ ht).2 <| hy₂ hi)]
-
-Depends on / 依赖: F.erase, Finset, Finset.Nonempty, Nonempty, P.erase, and_imp, atomise, card_erase_of_mem, card_image_le, card_image_le.trans, card_le_card, card_powerset, erase_subset_era, exists_imp, insert, mem_atomise, mem_filter, mem_image, mem_powerset, powerset
--/
-theorem card_filter_atomise_le_two_pow (ht : t in F) :
-    #{u in (atomise s F).parts | u subseteq t ∧ u.Nonempty} <= 2 ^ (#F - 1) := by
-  suffices h :
-    {u in (atomise s F).parts | u subseteq t ∧ u.Nonempty} subseteq
-      (F.erase t).powerset.image fun P => {i in s | forall x in F, x in insert t P ↔ i in x} by
-    refine (card_le_card h).trans (card_image_le.trans ?_)
-    rw [card_powerset]; rw [card_erase_of_mem ht]
+    rw [card_powerset, card_erase_of_mem ht]
   rw [subset_iff]
   simp_rw [mem_image, mem_powerset, mem_filter, and_imp, Finset.Nonempty, exists_imp, mem_atomise,
     and_imp, Finset.Nonempty, exists_imp, and_imp]
@@ -3178,3 +2403,4 @@ theorem card_filter_atomise_le_two_pow (ht : t in F) :
 end Atomise
 
 end Finpartition
+

@@ -69,22 +69,15 @@ namespace Mathlib.Tactic.LibraryRewrite
 
 open Lean Meta RefinedDiscrTree
 
-/--
-Definition of `RewriteLemma` / `RewriteLemma` 的定义
+/-- The structure for rewrite lemmas stored in the `RefinedDiscrTree`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.RewriteLemma** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.LibraryRewrite`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RewriteLemma
-  parameters: where
-  axioms and operations (2):
-    - name : Name
-    - symm : Bool
-
-中文:
-结构 RewriteLemma
-  参数: where
-  公理与运算 (2 个):
-    - name : Name
-    - symm : 布尔值
+--- 原说明 ---
+The structure for rewrite lemmas stored in the `RefinedDiscrTree`.
 -/
 structure RewriteLemma where
   /-- The name of the lemma -/
@@ -92,42 +85,28 @@ structure RewriteLemma where
   /-- `symm` is `true` when rewriting from right to left -/
   symm : Bool
 deriving BEq, Inhabited
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat RewriteLemma
-  body: f! "{if lem.symm then "← " else ""}{lem.name}"
-
-中文:
-实例 :
-  签名: ToFormat RewriteLemma
-  定义体: f! "{if lem.symm then "← " else ""}{lem.name}"
-
-Depends on / 依赖: lem.name, lem.symm
+/-
+**Mathlib.Tactic.LibraryRewrite.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Libra
+ryRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat RewriteLemma where
   format lem := f! "{if lem.symm then "← " else ""}{lem.name}"
 
-/--
-Definition of `isMVarSwap` / `isMVarSwap` 的定义
+/-- Return `true` if `s` and `t` are equal up to changing the `MVarId`s. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.isMVarSwap** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.LibraryRewrite`。
+形式化陈述：isMVarSwap (t s : Expr) : Bool
+参数：t s : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isMVarSwap
-  signature: (t s : Expr)
-  body: .isSome go t s {}
-
-中文:
-定义 isMVarSwap
-  签名: (t s : Expr)
-  定义体: .isSome go t s {}
-
-Depends on / 依赖: isSome
+--- 原说明 ---
+Return `true` if `s` and `t` are equal up to changing the `MVarId`s.
 -/
 def isMVarSwap (t s : Expr) : Bool :=
-.isSome go t s {}
+  go t s {} |>.isSome
 where
   /-- The main loop of `isMVarSwap`. Returning `none` corresponds to a failure. -/
   go (t s : Expr) (swaps : List (MVarId × MVarId)) : Option (List (MVarId × MVarId)) := do
@@ -136,18 +115,18 @@ where
     guard (isTricky s)
     match t, s with
     -- Note we don't bother keeping track of universe level metavariables.
-    | .const n₁ _ , .const n₂ _ => guard (n₁ == n₂); some swaps
-    | .sort _ , .sort _ => some swaps
+    | .const n₁ _       , .const n₂ _        => guard (n₁ == n₂); some swaps
+    | .sort _           , .sort _            => some swaps
     | .forallE _ d₁ b₁ _, .forallE _ d₂ b₂ _ => go d₁ d₂ swaps >>= go b₁ b₂
-    | .lam _ d₁ b₁ _ , .lam _ d₂ b₂ _ => go d₁ d₂ swaps >>= go b₁ b₂
-    | .mdata d₁ e₁ , .mdata d₂ e₂ => guard (d₁ == d₂); go e₁ e₂ swaps
+    | .lam _ d₁ b₁ _    , .lam _ d₂ b₂ _     => go d₁ d₂ swaps >>= go b₁ b₂
+    | .mdata d₁ e₁      , .mdata d₂ e₂       => guard (d₁ == d₂); go e₁ e₂ swaps
     | .letE _ t₁ v₁ b₁ _, .letE _ t₂ v₂ b₂ _ => go t₁ t₂ swaps >>= go v₁ v₂ >>= go b₁ b₂
-    | .app f₁ a₁ , .app f₂ a₂ => go f₁ f₂ swaps >>= go a₁ a₂
-    | .proj n₁ i₁ e₁ , .proj n₂ i₂ e₂ => guard (n₁ == n₂ && i₁ == i₂); go e₁ e₂ swaps
-    | .fvar fvarId₁ , .fvar fvarId₂ => guard (fvarId₁ == fvarId₂); some swaps
-    | .lit v₁ , .lit v₂ => guard (v₁ == v₂); some swaps
-    | .bvar i₁ , .bvar i₂ => guard (i₁ == i₂); some swaps
-    | .mvar mvarId₁ , .mvar mvarId₂ =>
+    | .app f₁ a₁        , .app f₂ a₂         => go f₁ f₂ swaps >>= go a₁ a₂
+    | .proj n₁ i₁ e₁    , .proj n₂ i₂ e₂     => guard (n₁ == n₂ && i₁ == i₂); go e₁ e₂ swaps
+    | .fvar fvarId₁     , .fvar fvarId₂      => guard (fvarId₁ == fvarId₂); some swaps
+    | .lit v₁           , .lit v₂            => guard (v₁ == v₂); some swaps
+    | .bvar i₁          , .bvar i₂           => guard (i₁ == i₂); some swaps
+    | .mvar mvarId₁     , .mvar mvarId₂      =>
       match swaps.find? (·.1 == mvarId₁) with
       | none =>
         guard (swaps.all (·.2 != mvarId₂))
@@ -155,92 +134,38 @@ where
         if mvarId₁ == mvarId₂ then
           some swaps
         else
-some (mvarId₂, mvarId₁) :: swaps
+          some <| (mvarId₂, mvarId₁) :: swaps
       | some (_, mvarId) => guard (mvarId == mvarId₂); some swaps
-    | _ , _ => none
+    | _                 , _                  => none
   else
     guard (t == s); some swaps
 
-/--
-Definition of `eqOrIff?` / `eqOrIff?` 的定义
+/-- Extract the left and right-hand sides of an equality or iff statement. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.eqOrIff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.LibraryRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eqOrIff?
-  signature: (e : Expr)
-  body: match e.eq? with
-  | some (_, lhs, rhs) => some (lhs, rhs)
-  | none => e.iff?
-
-中文:
-定义 eqOrIff?
-  签名: (e : Expr)
-  定义体: match e.eq? with
-  | some (_, lhs, rhs) => some (lhs, rhs)
-  | none => e.iff?
+--- 原说明 ---
+Extract the left and right-hand sides of an equality or iff statement.
 -/
 @[inline] def eqOrIff? (e : Expr) : Option (Expr × Expr) :=
   match e.eq? with
   | some (_, lhs, rhs) => some (lhs, rhs)
   | none => e.iff?
 
-/--
-Definition of `addRewriteEntry` / `addRewriteEntry` 的定义
+/-- Try adding the lemma to the `RefinedDiscrTree`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.addRewriteEntry** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.LibraryRewrite`。
+形式化陈述：addRewriteEntry (name : Name) (cinfo : ConstantInfo) : MetaM (List (Rewrit
+eLemma × List (Key × LazyEntry)))
+参数：name : Name；cinfo : ConstantInfo。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addRewriteEntry
-  signature: (name : Name) (cinfo : ConstantInfo)
-  body: do
-  -- we start with a fast-failing check to see if the lemma has the right shape
-  let .const head _ := cinfo.type.getForallBody.getAppFn | return []
-  unless head == ``Eq || head == ``Iff do return []
-  setMCtx {} -- recall that the metavariable context is not guaranteed to be empty at the start
-  let (_, _, eqn) ← forallMetaTelescope cinfo.type
-  let some (lhs, rhs) := eqOrIff? eqn | return []
-  let badMatch e :=
-    e.getAppFn.isMVar ||
-    -- this extra check excludes general equality lemmas that apply at any equality
-    -- these are almost never useful, and there are very many of them.
-    e.eq?.any fun (α, l, r) =>
-      α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
-  if badMatch lhs then
-    if badMatch rhs then
-      return []
-    else
-      return [({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
-  else
-    let result := ({ name, symm := false }, ← initializeLazyEntryWithEta lhs)
-    if badMatch rhs || isMVarSwap lhs rhs then
-      return [result]
-    else
-      return [result, ({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
-
-中文:
-定义 addRewriteEntry
-  签名: (name : Name) (cinfo : ConstantInfo)
-  定义体: do
-  -- we start with a fast-failing check to see if the lemma has the right shape
-  let .const head _ := cinfo.type.getForallBody.getAppFn | return []
-  unless head == ``Eq || head == ``Iff do return []
-  setMCtx {} -- recall that the metavariable context is not guaranteed to be empty at the start
-  let (_, _, eqn) ← forallMetaTelescope cinfo.type
-  let some (lhs, rhs) := eqOrIff? eqn | return []
-  let badMatch e :=
-    e.getAppFn.isMVar ||
-    -- this extra check excludes general equality lemmas that apply at any equality
-    -- these are almost never useful, and there are very many of them.
-    e.eq?.any fun (α, l, r) =>
-      α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
-  if badMatch lhs then
-    if badMatch rhs then
-      return []
-    else
-      return [({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
-  else
-    let result := ({ name, symm := false }, ← initializeLazyEntryWithEta lhs)
-    if badMatch rhs || isMVarSwap lhs rhs then
-      return [result]
-    else
-      return [result, ({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
+--- 原说明 ---
+Try adding the lemma to the `RefinedDiscrTree`.
 -/
 def addRewriteEntry (name : Name) (cinfo : ConstantInfo) :
     MetaM (List (RewriteLemma × List (Key × LazyEntry))) := do
@@ -269,28 +194,18 @@ def addRewriteEntry (name : Name) (cinfo : ConstantInfo) :
       return [result, ({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
 
 
-/--
-Definition of `addLocalRewriteEntry` / `addLocalRewriteEntry` 的定义
+/-- Try adding the local hypothesis to the `RefinedDiscrTree`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.addLocalRewriteEntry** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：addLocalRewriteEntry (decl : LocalDecl) : MetaM (List ((FVarId × Bool) × L
+ist (Key × LazyEntry)))
+参数：decl : LocalDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addLocalRewriteEntry
-  signature: (decl : LocalDecl)
-  body: do
-  -- The transparency is set to `reducible`. Stronger reduction may give unexpected results.
-  let (_, _, eqn) ← forallMetaTelescopeReducing decl.type
-  let some (lhs, rhs) := eqOrIff? (← whnf eqn) | return []
-  let result := ((decl.fvarId, false), ← initializeLazyEntryWithEta lhs)
-  return [result, ((decl.fvarId, true), ← initializeLazyEntryWithEta rhs)]
-
-中文:
-定义 addLocalRewriteEntry
-  签名: (decl : LocalDecl)
-  定义体: do
-  -- The transparency is set to `reducible`. Stronger reduction may give unexpected results.
-  let (_, _, eqn) ← forallMetaTelescopeReducing decl.type
-  let some (lhs, rhs) := eqOrIff? (← whnf eqn) | return []
-  let result := ((decl.fvarId, false), ← initializeLazyEntryWithEta lhs)
-  return [result, ((decl.fvarId, true), ← initializeLazyEntryWithEta rhs)]
+--- 原说明 ---
+Try adding the local hypothesis to the `RefinedDiscrTree`.
 -/
 def addLocalRewriteEntry (decl : LocalDecl) :
     MetaM (List ((FVarId × Bool) × List (Key × LazyEntry))) := do
@@ -299,47 +214,19 @@ def addLocalRewriteEntry (decl : LocalDecl) :
   let some (lhs, rhs) := eqOrIff? (← whnf eqn) | return []
   let result := ((decl.fvarId, false), ← initializeLazyEntryWithEta lhs)
   return [result, ((decl.fvarId, true), ← initializeLazyEntryWithEta rhs)]
-
-/--
-Definition of `ExtState` / `ExtState` 的定义
-
-English:
-abbreviation ExtState
-  body: IO.Ref (Option (RefinedDiscrTree RewriteLemma))
-
-private initialize ExtState.default : ExtState ←
-  IO.mkRef none
-
-中文:
-缩写 ExtState
-  定义体: IO.Ref (Option (RefinedDiscrTree RewriteLemma))
-
-private initialize ExtState.default : ExtState ←
-  IO.mkRef none
+/-
+**Mathlib.Tactic.LibraryRewrite.ExtState** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Ta
+ctic.LibraryRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private abbrev ExtState := IO.Ref (Option (RefinedDiscrTree RewriteLemma))
 
 private initialize ExtState.default : ExtState ←
   IO.mkRef none
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited ExtState
-  body: ExtState.default
-
-private initialize importedRewriteLemmasExt : EnvExtension ExtState ←
-  registerEnvExtension (IO.mkRef none)
-
-中文:
-实例 :
-  签名: 可居 ExtState
-  定义体: ExtState.default
-
-private initialize importedRewriteLemmasExt : EnvExtension ExtState ←
-  registerEnvExtension (IO.mkRef none)
+/-
+**Mathlib.Tactic.LibraryRewrite.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Libra
+ryRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private instance : Inhabited ExtState where
   default := ExtState.default
@@ -351,40 +238,22 @@ private initialize importedRewriteLemmasExt : EnvExtension ExtState ←
 
 /-! ### Computing the Rewrites -/
 
-/--
-Definition of `getImportCandidates` / `getImportCandidates` 的定义
+/-- Get all potential rewrite lemmas from the imported environment.
+By setting the `librarySearch.excludedModules` option, all lemmas from certain modules
+can be excluded. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getImportCandidates** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.LibraryRewrite`。
+形式化陈述：getImportCandidates (e : Expr) : MetaM (Array (Array RewriteLemma))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getImportCandidates
-  signature: (e : Expr)
-  body: do
-  let matchResult ← findImportMatches importedRewriteLemmasExt addRewriteEntry
-    /-
-    5000 constants seems to be approximately the right number of tasks
-    Too many means the tasks are too long.
-    Too few means less cache can be reused and more time is spent on combining different results.
-
-    With 5000 constants per task, we set the `HashMap` capacity to 256,
-    which is the largest capacity it gets to reach.
-    -/
-    (constantsPerTask := 5000) (capacityPerTask := 256) e
-  return matchResult.flatten
-
-中文:
-定义 getImportCandidates
-  签名: (e : Expr)
-  定义体: do
-  let matchResult ← findImportMatches importedRewriteLemmasExt addRewriteEntry
-    /-
-    5000 constants seems to be approximately the right number of tasks
-    Too many means the tasks are too long.
-    Too few means less cache can be reused and more time is spent on combining different results.
-
-    With 5000 constants per task, we set the `HashMap` capacity to 256,
-    which is the largest capacity it gets to reach.
-    -/
-    (constantsPerTask := 5000) (capacityPerTask := 256) e
-  return matchResult.flatten
+--- 原说明 ---
+Get all potential rewrite lemmas from the imported environment.
+By setting the `librarySearch.excludedModules` option, all lemmas from certain m
+odules
+can be excluded.
 -/
 def getImportCandidates (e : Expr) : MetaM (Array (Array RewriteLemma)) := do
   let matchResult ← findImportMatches importedRewriteLemmasExt addRewriteEntry
@@ -399,24 +268,20 @@ def getImportCandidates (e : Expr) : MetaM (Array (Array RewriteLemma)) := do
     (constantsPerTask := 5000) (capacityPerTask := 256) e
   return matchResult.flatten
 
-/--
-Definition of `getModuleCandidates` / `getModuleCandidates` 的定义
+/-- Get all potential rewrite lemmas from the current file. Exclude lemmas from modules
+in the `librarySearch.excludedModules` option. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getModuleCandidates** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.LibraryRewrite`。
+形式化陈述：getModuleCandidates (e : Expr) : MetaM (Array (Array RewriteLemma))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getModuleCandidates
-  signature: (e : Expr)
-  body: do
-  let moduleTreeRef ← createModuleTreeRef addRewriteEntry
-  let matchResult ← findModuleMatches moduleTreeRef e
-  return matchResult.flatten
-
-中文:
-定义 getModuleCandidates
-  签名: (e : Expr)
-  定义体: do
-  let moduleTreeRef ← createModuleTreeRef addRewriteEntry
-  let matchResult ← findModuleMatches moduleTreeRef e
-  return matchResult.flatten
+--- 原说明 ---
+Get all potential rewrite lemmas from the current file. Exclude lemmas from modu
+les
+in the `librarySearch.excludedModules` option.
 -/
 def getModuleCandidates (e : Expr) : MetaM (Array (Array RewriteLemma)) := do
   let moduleTreeRef ← createModuleTreeRef addRewriteEntry
@@ -424,30 +289,15 @@ def getModuleCandidates (e : Expr) : MetaM (Array (Array RewriteLemma)) := do
   return matchResult.flatten
 
 
-/--
-Definition of `Rewrite` / `Rewrite` 的定义
+/-- A rewrite lemma that has been applied to an expression. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.Rewrite** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tac
+tic.LibraryRewrite`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Rewrite
-  parameters: where
-  axioms and operations (6):
-    - symm : Bool
-    - proof : Expr
-    - replacement : Expr
-    - stringLength : Nat
-    - extraGoals : Array (MVarId × BinderInfo)
-    - makesNewMVars : Bool
-
-中文:
-结构 Rewrite
-  参数: where
-  公理与运算 (6 个):
-    - symm : 布尔值
-    - proof : Expr
-    - replacement : Expr
-    - stringLength : 自然数
-    - extraGoals : 数组 (MVarId × BinderInfo)
-    - makesNewMVars : 布尔值
+--- 原说明 ---
+A rewrite lemma that has been applied to an expression.
 -/
 structure Rewrite where
   /-- `symm` is `true` when rewriting from right to left -/
@@ -463,66 +313,17 @@ structure Rewrite where
   /-- Whether the rewrite introduces a new metavariable in the replacement expression. -/
   makesNewMVars : Bool
 
-/--
-Definition of `checkRewrite` / `checkRewrite` 的定义
+/-- If `thm` can be used to rewrite `e`, return the rewrite. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.checkRewrite** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.LibraryRewrite`。
+形式化陈述：checkRewrite (thm e : Expr) (symm : Bool) : MetaM (Option Rewrite)
+参数：thm e : Expr；symm : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkRewrite
-  signature: (thm e : Expr) (symm : Bool)
-  body: do
-  withTraceNodeBefore `rw?? (fun _ => return m!
-    "rewriting {e} by {if symm then "← " else ""}{thm}") do
-  let (mvars, binderInfos, eqn) ← forallMetaTelescopeReducing (← inferType thm)
-  let some (lhs, rhs) := eqOrIff? (← whnf eqn) |
-    throwError "Expected equation, not {indentExpr eqn}"
-  let (lhs, rhs) := if symm then (rhs, lhs) else (lhs, rhs)
-  let unifies ← withTraceNodeBefore `rw?? (fun _ =>return m! "unifying {e} =?= {lhs}")
-    (withReducible (isDefEq lhs e))
-  unless unifies do return none
-  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
-  let lhs ← instantiateMVars lhs
-  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
-    return none
-  synthAppInstances `rw?? default mvars binderInfos false false
-  let mut extraGoals := #[]
-  for mvar in mvars, bi in binderInfos do
-    unless ← mvar.mvarId!.isAssigned do
-      extraGoals := extraGoals.push (mvar.mvarId!, bi)
-
-  let replacement ← instantiateMVars rhs
-  let stringLength := (← ppExpr replacement).pretty.length
-  let makesNewMVars := (replacement.findMVar? fun mvarId => mvars.any (·.mvarId! == mvarId)).isSome
-  let proof ← instantiateMVars (mkAppN thm mvars)
-  return some { symm, proof, replacement, stringLength, extraGoals, makesNewMVars }
-
-中文:
-定义 checkRewrite
-  签名: (thm e : Expr) (symm : 布尔值)
-  定义体: do
-  withTraceNodeBefore `rw?? (fun _ => return m!
-    "rewriting {e} by {if symm then "← " else ""}{thm}") do
-  let (mvars, binderInfos, eqn) ← forallMetaTelescopeReducing (← inferType thm)
-  let some (lhs, rhs) := eqOrIff? (← whnf eqn) |
-    throwError "Expected equation, not {indentExpr eqn}"
-  let (lhs, rhs) := if symm then (rhs, lhs) else (lhs, rhs)
-  let unifies ← withTraceNodeBefore `rw?? (fun _ =>return m! "unifying {e} =?= {lhs}")
-    (withReducible (isDefEq lhs e))
-  unless unifies do return none
-  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
-  let lhs ← instantiateMVars lhs
-  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
-    return none
-  synthAppInstances `rw?? default mvars binderInfos false false
-  let mut extraGoals := #[]
-  for mvar in mvars, bi in binderInfos do
-    unless ← mvar.mvarId!.isAssigned do
-      extraGoals := extraGoals.push (mvar.mvarId!, bi)
-
-  let replacement ← instantiateMVars rhs
-  let stringLength := (← ppExpr replacement).pretty.length
-  let makesNewMVars := (replacement.findMVar? fun mvarId => mvars.any (·.mvarId! == mvarId)).isSome
-  let proof ← instantiateMVars (mkAppN thm mvars)
-  return some { symm, proof, replacement, stringLength, extraGoals, makesNewMVars }
+--- 原说明 ---
+If `thm` can be used to rewrite `e`, return the rewrite.
 -/
 def checkRewrite (thm e : Expr) (symm : Bool) : MetaM (Option Rewrite) := do
   withTraceNodeBefore `rw?? (fun _ => return m!
@@ -553,127 +354,83 @@ def checkRewrite (thm e : Expr) (symm : Bool) : MetaM (Option Rewrite) := do
 initialize
   registerTraceClass `rw??
 
-/--
-Definition of `checkAndSortRewriteLemmas` / `checkAndSortRewriteLemmas` 的定义
+/-- Try to rewrite `e` with each of the rewrite lemmas, and sort the resulting rewrites. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.checkAndSortRewriteLemmas** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：checkAndSortRewriteLemmas (e : Expr) (rewrites : Array RewriteLemma) : Met
+aM (Array (Rewrite × Name))
+参数：e : Expr；rewrites : Array RewriteLemma。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkAndSortRewriteLemmas
-  signature: (e : Expr) (rewrites : Array RewriteLemma)
-  body: do
-  let rewrites ← rewrites.filterMapM fun rw =>
-    tryCatchRuntimeEx do
-        let thm ← mkConstWithFreshMVarLevels rw.name
-Option.map (·, rw.name) < > checkRewrite thm e rw.symm
-      fun _ =>
-        return none
-let lt (a b : (Rewrite × Name)) := Ordering.isLT
-(compare a.1.extraGoals.size b.1.extraGoals.size).then
-(compare a.1.symm b.1.symm).then
-(compare a.2.toString.length b.2.toString.length).then
-(compare a.1.stringLength b.1.stringLength).then
-    (Name.cmp a.2 b.2)
-  return rewrites.qsort lt
-
-中文:
-定义 checkAndSortRewriteLemmas
-  签名: (e : Expr) (rewrites : 数组 RewriteLemma)
-  定义体: do
-  let rewrites ← rewrites.filterMapM fun rw =>
-    tryCatchRuntimeEx do
-        let thm ← mkConstWithFreshMVarLevels rw.name
-Option.map (·, rw.name) < > checkRewrite thm e rw.symm
-      fun _ =>
-        return none
-let lt (a b : (Rewrite × Name)) := Ordering.isLT
-(compare a.1.extraGoals.size b.1.extraGoals.size).then
-(compare a.1.symm b.1.symm).then
-(compare a.2.toString.length b.2.toString.length).then
-(compare a.1.stringLength b.1.stringLength).then
-    (Name.cmp a.2 b.2)
-  return rewrites.qsort lt
+--- 原说明 ---
+Try to rewrite `e` with each of the rewrite lemmas, and sort the resulting rewri
+tes.
 -/
 def checkAndSortRewriteLemmas (e : Expr) (rewrites : Array RewriteLemma) :
     MetaM (Array (Rewrite × Name)) := do
   let rewrites ← rewrites.filterMapM fun rw =>
     tryCatchRuntimeEx do
         let thm ← mkConstWithFreshMVarLevels rw.name
-Option.map (·, rw.name) < > checkRewrite thm e rw.symm
+        Option.map (·, rw.name) <$> checkRewrite thm e rw.symm
       fun _ =>
         return none
-let lt (a b : (Rewrite × Name)) := Ordering.isLT
-(compare a.1.extraGoals.size b.1.extraGoals.size).then
-(compare a.1.symm b.1.symm).then
-(compare a.2.toString.length b.2.toString.length).then
-(compare a.1.stringLength b.1.stringLength).then
+  let lt (a b : (Rewrite × Name)) := Ordering.isLT <|
+    (compare a.1.extraGoals.size b.1.extraGoals.size).then <|
+    (compare a.1.symm b.1.symm).then <|
+    (compare a.2.toString.length b.2.toString.length).then <|
+    (compare a.1.stringLength b.1.stringLength).then <|
     (Name.cmp a.2 b.2)
   return rewrites.qsort lt
 
-/--
-Definition of `getImportRewrites` / `getImportRewrites` 的定义
+/-- Return all applicable library rewrites of `e`.
+Note that the result may contain duplicate rewrites. These can be removed with `filterRewrites`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getImportRewrites** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.LibraryRewrite`。
+形式化陈述：getImportRewrites (e : Expr) : MetaM (Array (Array (Rewrite × Name)))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getImportRewrites
-  signature: (e : Expr)
-  body: do
-  (← getImportCandidates e).mapM (checkAndSortRewriteLemmas e)
-
-中文:
-定义 getImportRewrites
-  签名: (e : Expr)
-  定义体: do
-  (← getImportCandidates e).mapM (checkAndSortRewriteLemmas e)
+--- 原说明 ---
+Return all applicable library rewrites of `e`.
+Note that the result may contain duplicate rewrites. These can be removed with `
+filterRewrites`.
 -/
 def getImportRewrites (e : Expr) : MetaM (Array (Array (Rewrite × Name))) := do
   (← getImportCandidates e).mapM (checkAndSortRewriteLemmas e)
 
-/--
-Definition of `getModuleRewrites` / `getModuleRewrites` 的定义
+/-- Same as `getImportRewrites`, but for lemmas from the current file. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getModuleRewrites** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.LibraryRewrite`。
+形式化陈述：getModuleRewrites (e : Expr) : MetaM (Array (Array (Rewrite × Name)))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getModuleRewrites
-  signature: (e : Expr)
-  body: do
-  (← getModuleCandidates e).mapM (checkAndSortRewriteLemmas e)
-
-中文:
-定义 getModuleRewrites
-  签名: (e : Expr)
-  定义体: do
-  (← getModuleCandidates e).mapM (checkAndSortRewriteLemmas e)
+--- 原说明 ---
+Same as `getImportRewrites`, but for lemmas from the current file.
 -/
 def getModuleRewrites (e : Expr) : MetaM (Array (Array (Rewrite × Name))) := do
   (← getModuleCandidates e).mapM (checkAndSortRewriteLemmas e)
 
 /-! ### Rewriting by hypotheses -/
 
-/--
-Definition of `getHypotheses` / `getHypotheses` 的定义
+/-- Construct the `RefinedDiscrTree` of all local hypotheses. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getHypotheses** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.LibraryRewrite`。
+形式化陈述：getHypotheses (except : Option FVarId) : MetaM (RefinedDiscrTree (FVarId ×
+ Bool))
+参数：except : Option FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getHypotheses
-  signature: (except : Option FVarId)
-  body: withReducible do
-  let mut tree : PreDiscrTree (FVarId × Bool) := {}
-  for decl in ← getLCtx do
-    if !decl.isImplementationDetail && except.all (· != decl.fvarId) then
-      for (val, entries) in ← addLocalRewriteEntry decl do
-        for (key, entry) in entries do
-          tree := tree.push key (entry, val)
-  return tree.toRefinedDiscrTree
-
-中文:
-定义 getHypotheses
-  签名: (except : 选项类型 FVarId)
-  定义体: withReducible do
-  let mut tree : PreDiscrTree (FVarId × Bool) := {}
-  for decl in ← getLCtx do
-    if !decl.isImplementationDetail && except.all (· != decl.fvarId) then
-      for (val, entries) in ← addLocalRewriteEntry decl do
-        for (key, entry) in entries do
-          tree := tree.push key (entry, val)
-  return tree.toRefinedDiscrTree
-
-Depends on / 依赖: FVarId, PreDiscrTree, addLocalRewriteEntry, decl.fvarId, decl.isImplementationDetail, entries, except, except.all, fvarId, getLCtx, isImplementationDetail, return, toRefinedDiscrTree, tree.push, tree.toRefinedDiscrTree, withReducible
+--- 原说明 ---
+Construct the `RefinedDiscrTree` of all local hypotheses.
 -/
 def getHypotheses (except : Option FVarId) : MetaM (RefinedDiscrTree (FVarId × Bool)) :=
   withReducible do
@@ -685,79 +442,44 @@ def getHypotheses (except : Option FVarId) : MetaM (RefinedDiscrTree (FVarId × 
           tree := tree.push key (entry, val)
   return tree.toRefinedDiscrTree
 
-/--
-Definition of `getHypothesisRewrites` / `getHypothesisRewrites` 的定义
+/-- Return all applicable hypothesis rewrites of `e`. Similar to `getImportRewrites`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getHypothesisRewrites** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：getHypothesisRewrites (e : Expr) (except : Option FVarId) : MetaM (Array (
+Array (Rewrite × FVarId)))
+参数：e : Expr；except : Option FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getHypothesisRewrites
-  signature: (e : Expr) (except : Option FVarId)
-  body: do
-  let (candidates, _) ← (← getHypotheses except).getMatch e (unify := false) (matchRootStar := true)
-  let candidates := candidates.flatten
-candidates.mapM Array.filterMapM fun (fvarId, symm) =>
-    tryCatchRuntimeEx do
-Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
-    fun _ =>
-      return none
-
-中文:
-定义 getHypothesisRewrites
-  签名: (e : Expr) (except : 选项类型 FVarId)
-  定义体: do
-  let (candidates, _) ← (← getHypotheses except).getMatch e (unify := false) (matchRootStar := true)
-  let candidates := candidates.flatten
-candidates.mapM Array.filterMapM fun (fvarId, symm) =>
-    tryCatchRuntimeEx do
-Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
-    fun _ =>
-      return none
+--- 原说明 ---
+Return all applicable hypothesis rewrites of `e`. Similar to `getImportRewrites`
+.
 -/
 def getHypothesisRewrites (e : Expr) (except : Option FVarId) :
     MetaM (Array (Array (Rewrite × FVarId))) := do
   let (candidates, _) ← (← getHypotheses except).getMatch e (unify := false) (matchRootStar := true)
   let candidates := candidates.flatten
-candidates.mapM Array.filterMapM fun (fvarId, symm) =>
+  candidates.mapM <| Array.filterMapM fun (fvarId, symm) =>
     tryCatchRuntimeEx do
-Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
+      Option.map (·, fvarId) <$> checkRewrite (.fvar fvarId) e symm
     fun _ =>
       return none
 
 /-! ### Filtering out duplicate lemmas -/
 
-/--
-Definition of `getBinderInfos` / `getBinderInfos` 的定义
+/-- Get the `BinderInfo`s for the arguments of `mkAppN fn args`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getBinderInfos** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.LibraryRewrite`。
+形式化陈述：getBinderInfos (fn : Expr) (args : Array Expr) : MetaM (Array BinderInfo)
+参数：fn : Expr；args : Array Expr。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition getBinderInfos
-  signature: (fn : Expr) (args : Array Expr)
-  body: do
-  let mut fnType ← inferType fn
-  let mut result := Array.mkEmpty args.size
-  let mut j := 0
-  for i in [:args.size] do
-    unless fnType.isForall do
-      fnType ← whnfD (fnType.instantiateRevRange j i args)
-      j := i
-    let .forallE _ _ b bi := fnType | throwError m! "expected function type {indentExpr fnType}"
-    fnType := b
-    result := result.push bi
-  return result
-
-中文:
-定义 getBinderInfos
-  签名: (fn : Expr) (args : 数组 Expr)
-  定义体: do
-  let mut fnType ← inferType fn
-  let mut result := Array.mkEmpty args.size
-  let mut j := 0
-  for i in [:args.size] do
-    unless fnType.isForall do
-      fnType ← whnfD (fnType.instantiateRevRange j i args)
-      j := i
-    let .forallE _ _ b bi := fnType | throwError m! "expected function type {indentExpr fnType}"
-    fnType := b
-    result := result.push bi
-  return result
+--- 原说明 ---
+Get the `BinderInfo`s for the arguments of `mkAppN fn args`.
 -/
 def getBinderInfos (fn : Expr) (args : Array Expr) : MetaM (Array BinderInfo) := do
   let mut fnType ← inferType fn
@@ -772,42 +494,17 @@ def getBinderInfos (fn : Expr) (args : Array Expr) : MetaM (Array BinderInfo) :=
     result := result.push bi
   return result
 
-/--
-Definition of `isExplicitEq` / `isExplicitEq` 的定义
+/-- Determine whether the explicit parts of two expressions are equal,
+and the implicit parts are definitionally equal. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.isExplicitEq** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathl
+ib.Tactic.LibraryRewrite`。
+形式化陈述：Expr → Expr → MetaM Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isExplicitEq
-  signature: (t s : Expr)
-  body: do
-  if t == s then
-    return true
-  unless t.getAppNumArgs == s.getAppNumArgs && t.getAppFn == s.getAppFn do
-    return false
-  let tArgs := t.getAppArgs
-  let sArgs := s.getAppArgs
-  let bis ← getBinderInfos t.getAppFn tArgs
-  t.getAppNumArgs.allM fun i _ =>
-    if bis[i]!.isExplicit then
-      isExplicitEq tArgs[i]! sArgs[i]!
-    else
-      isDefEq tArgs[i]! sArgs[i]!
-
-中文:
-定义 isExplicitEq
-  签名: (t s : Expr)
-  定义体: do
-  if t == s then
-    return true
-  unless t.getAppNumArgs == s.getAppNumArgs && t.getAppFn == s.getAppFn do
-    return false
-  let tArgs := t.getAppArgs
-  let sArgs := s.getAppArgs
-  let bis ← getBinderInfos t.getAppFn tArgs
-  t.getAppNumArgs.allM fun i _ =>
-    if bis[i]!.isExplicit then
-      isExplicitEq tArgs[i]! sArgs[i]!
-    else
-      isDefEq tArgs[i]! sArgs[i]!
+--- 原说明 ---
+Determine whether the explicit parts of two expressions are equal,
+and the implicit parts are definitionally equal.
 -/
 partial def isExplicitEq (t s : Expr) : MetaM Bool := do
   if t == s then
@@ -826,51 +523,22 @@ partial def isExplicitEq (t s : Expr) : MetaM Bool := do
 /-- Filter out duplicate rewrites, reflexive rewrites
 or rewrites that have metavariables in the replacement expression. -/
 @[specialize]
-/--
-Definition of `filterRewrites` / `filterRewrites` 的定义
+/-
+**Mathlib.Tactic.LibraryRewrite.filterRewrites** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.LibraryRewrite`。
+形式化陈述：filterRewrites {α} (e : Expr) (rewrites : Array α) (replacement : α -> Exp
+r) (makesNewMVars : α -> Bool) : MetaM (Array α)
+参数：e : Expr；rewrites : Array α；replacement : α -> Expr；makesNewMVars : α -> Bool
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filterRewrites
-  signature: {α} (e : Expr) (rewrites : Array α) (replacement : α -> Expr)
-  body: withNewMCtxDepth do
-  let mut filtered := #[]
-  for rw in rewrites do
-    -- exclude rewrites that introduce new metavariables into the expression
-    if makesNewMVars rw then continue
-    -- exclude a reflexive rewrite
-    if ← isExplicitEq (replacement rw) e then
-      trace[rw??] "discarded reflexive rewrite {replacement rw}"
-      continue
-    -- exclude two identical looking rewrites
-    if ← filtered.anyM (isExplicitEq (replacement rw) <| replacement ·) then
-      trace[rw??] "discarded duplicate rewrite {replacement rw}"
-      continue
-    filtered := filtered.push rw
-  return filtered
-
-中文:
-定义 filterRewrites
-  签名: {α} (e : Expr) (rewrites : 数组 α) (replacement : α -> Expr)
-  定义体: withNewMCtxDepth do
-  let mut filtered := #[]
-  for rw in rewrites do
-    -- exclude rewrites that introduce new metavariables into the expression
-    if makesNewMVars rw then continue
-    -- exclude a reflexive rewrite
-    if ← isExplicitEq (replacement rw) e then
-      trace[rw??] "discarded reflexive rewrite {replacement rw}"
-      continue
-    -- exclude two identical looking rewrites
-    if ← filtered.anyM (isExplicitEq (replacement rw) <| replacement ·) then
-      trace[rw??] "discarded duplicate rewrite {replacement rw}"
-      continue
-    filtered := filtered.push rw
-  return filtered
-
-Depends on / 依赖: filtered, rewrites, withNewMCtxDepth
+--- 原说明 ---
+Filter out duplicate rewrites, reflexive rewrites
+or rewrites that have metavariables in the replacement expression.
 -/
-def filterRewrites {α} (e : Expr) (rewrites : Array α) (replacement : α -> Expr)
-    (makesNewMVars : α -> Bool) : MetaM (Array α) :=
+def filterRewrites {α} (e : Expr) (rewrites : Array α) (replacement : α → Expr)
+    (makesNewMVars : α → Bool) : MetaM (Array α) :=
   withNewMCtxDepth do
   let mut filtered := #[]
   for rw in rewrites do
@@ -891,28 +559,18 @@ def filterRewrites {α} (e : Expr) (rewrites : Array α) (replacement : α -> Ex
 /-! ### User interface -/
 
 
-/--
-Definition of `mkRewrite` / `mkRewrite` 的定义
+/-- Return syntax for the rewrite tactic `rw [e]`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.mkRewrite** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.LibraryRewrite`。
+形式化陈述：mkRewrite (occ : Option Nat) (symm : Bool) (e : Term) (loc : Option Name) 
+: CoreM (TSyntax `tactic)
+参数：occ : Option Nat；symm : Bool；e : Term；loc : Option Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkRewrite
-  signature: (occ : Option Nat) (symm : Bool) (e : Term) (loc : Option Name)
-  body: do
-  let loc ← loc.mapM fun h => `(Lean.Parser.Tactic.location| at $(mkIdent h):term)
-  let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
-  match occ with
-  | some n => `(tactic| nth_rw $(Syntax.mkNatLit n):num [$rule] $(loc)?)
-  | none => `(tactic| rw [$rule] $(loc)?)
-
-中文:
-定义 mkRewrite
-  签名: (occ : 选项类型 自然数) (symm : 布尔值) (e : 项) (loc : 选项类型 Name)
-  定义体: do
-  let loc ← loc.mapM fun h => `(Lean.Parser.Tactic.location| at $(mkIdent h):term)
-  let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
-  match occ with
-  | some n => `(tactic| nth_rw $(Syntax.mkNatLit n):num [$rule] $(loc)?)
-  | none => `(tactic| rw [$rule] $(loc)?)
+--- 原说明 ---
+Return syntax for the rewrite tactic `rw [e]`.
 -/
 def mkRewrite (occ : Option Nat) (symm : Bool) (e : Term) (loc : Option Name) :
     CoreM (TSyntax `tactic) := do
@@ -922,52 +580,39 @@ def mkRewrite (occ : Option Nat) (symm : Bool) (e : Term) (loc : Option Name) :
   | some n => `(tactic| nth_rw $(Syntax.mkNatLit n):num [$rule] $(loc)?)
   | none => `(tactic| rw [$rule] $(loc)?)
 
-/--
-Definition of `tacticPasteString` / `tacticPasteString` 的定义
+/-- Given tactic syntax `tac` that we want to paste into the editor, return it as a string.
+This function respects the 100 character limit for long lines. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.tacticPasteString** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.LibraryRewrite`。
+形式化陈述：tacticPasteString (tac : TSyntax `tactic) (range : Lsp.Range) : CoreM Stri
+ng
+参数：tac : TSyntax `tactic；range : Lsp.Range。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tacticPasteString
-  signature: (tac : TSyntax `tactic) (range : Lsp.Range)
-  body: do
-  let column := range.start.character
-  let indent := column
-  return (← PrettyPrinter.ppTactic tac).pretty 100 indent column
-
-中文:
-定义 tacticPasteString
-  签名: (tac : TSyntax `tactic) (range : Lsp.值域)
-  定义体: do
-  let column := range.start.character
-  let indent := column
-  return (← PrettyPrinter.ppTactic tac).pretty 100 indent column
+--- 原说明 ---
+Given tactic syntax `tac` that we want to paste into the editor, return it as a 
+string.
+This function respects the 100 character limit for long lines.
 -/
 def tacticPasteString (tac : TSyntax `tactic) (range : Lsp.Range) : CoreM String := do
   let column := range.start.character
   let indent := column
   return (← PrettyPrinter.ppTactic tac).pretty 100 indent column
 
-/--
-Definition of `tacticSyntax` / `tacticSyntax` 的定义
+/-- Return the rewrite tactic that performs the rewrite. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.tacticSyntax** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.LibraryRewrite`。
+形式化陈述：tacticSyntax (rw : Rewrite) (occ : Option Nat) (loc : Option Name) : MetaM
+ (TSyntax `tactic)
+参数：rw : Rewrite；occ : Option Nat；loc : Option Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tacticSyntax
-  signature: (rw : Rewrite) (occ : Option Nat) (loc : Option Name)
-  body: withoutModifyingMCtx do
-  -- we want the new metavariables to be printed as `?_` in the tactic syntax
-  for (mvarId, _) in rw.extraGoals do mvarId.setTag .anonymous
-  let proof ← withOptions (pp.mvars.anonymous.set · false) (PrettyPrinter.delab rw.proof)
-  mkRewrite occ rw.symm proof loc
-
-中文:
-定义 tacticSyntax
-  签名: (rw : Rewrite) (occ : 选项类型 自然数) (loc : 选项类型 Name)
-  定义体: withoutModifyingMCtx do
-  -- we want the new metavariables to be printed as `?_` in the tactic syntax
-  for (mvarId, _) in rw.extraGoals do mvarId.setTag .anonymous
-  let proof ← withOptions (pp.mvars.anonymous.set · false) (PrettyPrinter.delab rw.proof)
-  mkRewrite occ rw.symm proof loc
-
-Depends on / 依赖: withoutModifyingMCtx
+--- 原说明 ---
+Return the rewrite tactic that performs the rewrite.
 -/
 def tacticSyntax (rw : Rewrite) (occ : Option Nat) (loc : Option Name) :
     MetaM (TSyntax `tactic) := withoutModifyingMCtx do
@@ -978,34 +623,15 @@ def tacticSyntax (rw : Rewrite) (occ : Option Nat) (loc : Option Name) :
 
 open Widget ProofWidgets Jsx Server
 
-/--
-Definition of `RewriteInterface` / `RewriteInterface` 的定义
+/-- The structure with all data necessary for rendering a rewrite suggestion -/
+/-
+**Mathlib.Tactic.LibraryRewrite.RewriteInterface** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.LibraryRewrite`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RewriteInterface
-  parameters: where
-  axioms and operations (8):
-    - symm : Bool
-    - tactic : String
-    - replacement : Expr
-    - replacementString : String
-    - extraGoals : Array CodeWithInfos
-    - prettyLemma : CodeWithInfos
-    - lemmaType : Expr
-    - makesNewMVars : Bool
-
-中文:
-结构 Rewrite整数erface
-  参数: where
-  公理与运算 (8 个):
-    - symm : 布尔值
-    - tactic : String
-    - replacement : Expr
-    - replacementString : String
-    - extraGoals : 数组 CodeWithInfos
-    - prettyLemma : CodeWithInfos
-    - lemmaType : Expr
-    - makesNewMVars : 布尔值
+--- 原说明 ---
+The structure with all data necessary for rendering a rewrite suggestion
 -/
 structure RewriteInterface where
   /-- `symm` is `true` when rewriting from right to left -/
@@ -1025,58 +651,18 @@ structure RewriteInterface where
   /-- Whether the rewrite introduces new metavariables with the replacement. -/
   makesNewMVars : Bool
 
-/--
-Definition of `Rewrite.toInterface` / `Rewrite.toInterface` 的定义
+/-- Construct the `RewriteInterface` from a `Rewrite`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.Rewrite.toInterface** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.LibraryRewrite.Rewrite`。
+形式化陈述：Mathlib.Tactic.LibraryRewrite.Rewrite →   Name ⊕ FVarId → Option ℕ → Optio
+n Name → Lsp.Range → MetaM Mathlib.Tactic.LibraryRewrite.RewriteInterface
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rewrite.toInterface
-  signature: (rw : Rewrite) (name : Name oplus FVarId) (occ : Option Nat)
-  body: do
-  let tactic ← tacticSyntax rw occ loc
-  let tactic ← tacticPasteString tactic range
-  let replacementString := Format.pretty (← ppExpr rw.replacement)
-  let mut extraGoals := #[]
-  for (mvarId, bi) in rw.extraGoals do
-    if bi.isExplicit then
-      let extraGoal ← ppExprTagged (← instantiateMVars (← mvarId.getType))
-      extraGoals := extraGoals.push extraGoal
-  match name with
-  | .inl name =>
-    let prettyLemma := match ← ppExprTagged (← mkConstWithLevelParams name) with
-      | .tag tag _ => .tag tag (.text s!"{name}")
-      | code => code
-    let lemmaType := (← getConstInfo name).type
-    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
-  | .inr fvarId =>
-    let prettyLemma ← ppExprTagged (.fvar fvarId)
-    let lemmaType ← fvarId.getType
-    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
-
-中文:
-定义 Rewrite.to整数erface
-  签名: (rw : Rewrite) (name : Name oplus FVarId) (occ : 选项类型 自然数)
-  定义体: do
-  let tactic ← tacticSyntax rw occ loc
-  let tactic ← tacticPasteString tactic range
-  let replacementString := Format.pretty (← ppExpr rw.replacement)
-  let mut extraGoals := #[]
-  for (mvarId, bi) in rw.extraGoals do
-    if bi.isExplicit then
-      let extraGoal ← ppExprTagged (← instantiateMVars (← mvarId.getType))
-      extraGoals := extraGoals.push extraGoal
-  match name with
-  | .inl name =>
-    let prettyLemma := match ← ppExprTagged (← mkConstWithLevelParams name) with
-      | .tag tag _ => .tag tag (.text s!"{name}")
-      | code => code
-    let lemmaType := (← getConstInfo name).type
-    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
-  | .inr fvarId =>
-    let prettyLemma ← ppExprTagged (.fvar fvarId)
-    let lemmaType ← fvarId.getType
-    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
+--- 原说明 ---
+Construct the `RewriteInterface` from a `Rewrite`.
 -/
-def Rewrite.toInterface (rw : Rewrite) (name : Name oplus FVarId) (occ : Option Nat)
+def Rewrite.toInterface (rw : Rewrite) (name : Name ⊕ FVarId) (occ : Option Nat)
     (loc : Option Name) (range : Lsp.Range) : MetaM RewriteInterface := do
   let tactic ← tacticSyntax rw occ loc
   let tactic ← tacticPasteString tactic range
@@ -1098,24 +684,15 @@ def Rewrite.toInterface (rw : Rewrite) (name : Name oplus FVarId) (occ : Option 
     let lemmaType ← fvarId.getType
     return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
 
-/--
-Inductive type `Kind` / 归纳类型 `Kind`
+/-- The kind of rewrite -/
+/-
+**Mathlib.Tactic.LibraryRewrite.Kind** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic
+.LibraryRewrite`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Kind
-  parameters: where
-  constructors (3):
-    - hypothesis: 
-    - fromFile: 
-    - fromCache: 
-
-中文:
-归纳类型 Kind
-  参数: where
-  构造子 (3 个):
-    - hypothesis: 
-    - fromFile: 
-    - fromCache: 
+--- 原说明 ---
+The kind of rewrite
 -/
 inductive Kind where
   /-- A rewrite with a local hypothesis -/
@@ -1125,54 +702,20 @@ inductive Kind where
   /-- A rewrite with a lemma from an imported file -/
   | fromCache
 
-/--
-Definition of `getRewriteInterfaces` / `getRewriteInterfaces` 的定义
+/-- Return the Interfaces for rewriting `e`, both filtered and unfiltered. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.getRewriteInterfaces** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：getRewriteInterfaces (e : Expr) (occ : Option Nat) (loc : Option Name) (ex
+cept : Option FVarId) (range : Lsp.Range) : MetaM (Array (Array RewriteInterface
+ × Kind) × Array (Array RewriteInterface × Kind))
+参数：e : Expr；occ : Option Nat；loc : Option Name；except : Option FVarId；range : Ls
+p.Range。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getRewriteInterfaces
-  signature: (e : Expr) (occ : Option Nat) (loc : Option Name) (except : Option FVarId)
-  body: do
-  let mut filtr := #[]
-  let mut all := #[]
-  for rewrites in ← getHypothesisRewrites e except do
-    let rewrites ← rewrites.mapM fun (rw, fvarId) => rw.toInterface (.inr fvarId) occ loc range
-    all := all.push (rewrites, .hypothesis)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .hypothesis)
-
-  for rewrites in ← getModuleRewrites e do
-    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
-    all := all.push (rewrites, .fromFile)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromFile)
-
-  for rewrites in ← getImportRewrites e do
-    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
-    all := all.push (rewrites, .fromCache)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromCache)
-  return (filtr, all)
-
-中文:
-定义 getRewrite整数erfaces
-  签名: (e : Expr) (occ : 选项类型 自然数) (loc : 选项类型 Name) (except : 选项类型 FVarId)
-  定义体: do
-  let mut filtr := #[]
-  let mut all := #[]
-  for rewrites in ← getHypothesisRewrites e except do
-    let rewrites ← rewrites.mapM fun (rw, fvarId) => rw.toInterface (.inr fvarId) occ loc range
-    all := all.push (rewrites, .hypothesis)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .hypothesis)
-
-  for rewrites in ← getModuleRewrites e do
-    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
-    all := all.push (rewrites, .fromFile)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromFile)
-
-  for rewrites in ← getImportRewrites e do
-    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
-    all := all.push (rewrites, .fromCache)
-    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromCache)
-  return (filtr, all)
-
-Depends on / 依赖: SpectralMapClass, SpectralMapClass.toContinuousMapClass, TopologicalSpace, toContinuousMapClass
+--- 原说明 ---
+Return the Interfaces for rewriting `e`, both filtered and unfiltered.
 -/
 def getRewriteInterfaces (e : Expr) (occ : Option Nat) (loc : Option Name) (except : Option FVarId)
     (range : Lsp.Range) :
@@ -1195,52 +738,39 @@ def getRewriteInterfaces (e : Expr) (occ : Option Nat) (loc : Option Name) (exce
     filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromCache)
   return (filtr, all)
 
-/--
-Definition of `pattern` / `pattern` 的定义
+/-- Render the matching side of the rewrite lemma.
+This is shown at the header of each section of rewrite results. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.pattern** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.LibraryRewrite`。
+形式化陈述：pattern {α} (type : Expr) (symm : Bool) (k : Expr -> MetaM α) : MetaM α
+参数：type : Expr；symm : Bool；k : Expr -> MetaM α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pattern
-  signature: {α} (type : Expr) (symm : Bool) (k : Expr -> MetaM α)
-  body: do
-  forallTelescopeReducing type fun _ e => do
-    let some (lhs, rhs) := eqOrIff? (← whnf e) | throwError "Expected equation, not {indentExpr e}"
-    k (if symm then rhs else lhs)
-
-中文:
-定义 pattern
-  签名: {α} (type : Expr) (symm : 布尔值) (k : Expr -> MetaM α)
-  定义体: do
-  forallTelescopeReducing type fun _ e => do
-    let some (lhs, rhs) := eqOrIff? (← whnf e) | throwError "Expected equation, not {indentExpr e}"
-    k (if symm then rhs else lhs)
+--- 原说明 ---
+Render the matching side of the rewrite lemma.
+This is shown at the header of each section of rewrite results.
 -/
-def pattern {α} (type : Expr) (symm : Bool) (k : Expr -> MetaM α) : MetaM α := do
+def pattern {α} (type : Expr) (symm : Bool) (k : Expr → MetaM α) : MetaM α := do
   forallTelescopeReducing type fun _ e => do
     let some (lhs, rhs) := eqOrIff? (← whnf e) | throwError "Expected equation, not {indentExpr e}"
     k (if symm then rhs else lhs)
 
-/--
-Definition of `renderRewrites` / `renderRewrites` 的定义
+/-- Render the given rewrite results. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.renderRewrites** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.LibraryRewrite`。
+形式化陈述：renderRewrites (e : Expr) (results : Array (Array RewriteInterface × Kind)
+) (range : Lsp.Range) (doc : FileWorker.EditableDocument) (showNames : Bool) : M
+etaM Html
+参数：e : Expr；results : Array (Array RewriteInterface × Kind)；range : Lsp.Range；do
+c : FileWorker.EditableDocument；showNames : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition renderRewrites
-  signature: (e : Expr) (results : Array (Array RewriteInterface × Kind))
-  body: do
-  let htmls ← results.filterMapM (renderSection showNames)
-  if htmls.isEmpty then
-    return <p> No rewrites found for <InteractiveCode fmt={← ppExprTagged e}/> </p>
-  else
-    return .element "div" #[("style", json% {"marginLeft" : "4px"})] htmls
-
-中文:
-定义 renderRewrites
-  签名: (e : Expr) (results : 数组 (数组 Rewrite整数erface × Kind))
-  定义体: do
-  let htmls ← results.filterMapM (renderSection showNames)
-  if htmls.isEmpty then
-    return <p> No rewrites found for <InteractiveCode fmt={← ppExprTagged e}/> </p>
-  else
-    return .element "div" #[("style", json% {"marginLeft" : "4px"})] htmls
+--- 原说明 ---
+Render the given rewrite results.
 -/
 def renderRewrites (e : Expr) (results : Array (Array RewriteInterface × Kind))
     (range : Lsp.Range) (doc : FileWorker.EditableDocument) (showNames : Bool) :
@@ -1269,7 +799,7 @@ where
 
   /-- Render the list of rewrite results in one section. -/
   renderSectionCore (showNames : Bool) (sec : Array RewriteInterface) : Html :=
-.element "ul" #[("style", json% { "padding-left" : "30px"})]
+    .element "ul" #[("style", json% { "padding-left" : "30px"})] <|
     sec.map fun rw =>
       <li> { .element "p" #[] <|
         let button :=
@@ -1286,80 +816,16 @@ where
 
 /-- The rpc method of the `rw??` widget. -/
 @[server_rpc_method]
-/--
-Definition of `rpc` / `rpc` 的定义
+/-
+**Mathlib.Tactic.LibraryRewrite.rpc** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Li
+braryRewrite`。
+形式化陈述：rpc (props : SelectInsertParams) : RequestM (RequestTask Html)
+参数：props : SelectInsertParams。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rpc
-  signature: (props : SelectInsertParams)
-  body: RequestM.asTask do
-  let doc ← RequestM.readDoc
-  let some loc := props.selectedLocations.back? |
-    return .text "rw??: Please shift-click an expression."
-  if loc.loc matches .hypValue .. then
-    return .text "rw??: cannot rewrite in the value of a let variable."
-  let some goal := props.goals[0]? | return .text "rw??: there is no goal to solve!"
-  if loc.mvarId != goal.mvarId then
-    return .text "rw??: the selected expression should be in the main goal."
-  goal.ctx.val.runMetaM {} do
-    let md ← goal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
-    Meta.withLCtx lctx md.localInstances do
-
-      let rootExpr ← loc.rootExpr
-let some (subExpr, occ) ← withReducible viewKAbstractSubExpr rootExpr loc.pos |
-        return .text "rw??: expressions with bound variables are not yet supported"
-      unless ← kabstractIsTypeCorrect rootExpr subExpr loc.pos do
-return .text "rw??: the selected expression cannot be rewritten, \
-          because the motive is not type correct. \
-          This usually occurs when trying to rewrite a term that appears as a dependent argument."
-      let location ← loc.fvarId?.mapM FVarId.getUserName
-
-      let (filtered, all) ← getRewriteInterfaces subExpr occ location loc.fvarId? props.replaceRange
-      let filtered ← renderRewrites subExpr filtered props.replaceRange doc false
-      let all ← renderRewrites subExpr all props.replaceRange doc true
-      return <FilterDetails
-        summary={.text "Rewrite suggestions:"}
-        all={all}
-        filtered={filtered}
-        initiallyFiltered={true} />
-
-中文:
-定义 rpc
-  签名: (props : SelectInsertParams)
-  定义体: RequestM.asTask do
-  let doc ← RequestM.readDoc
-  let some loc := props.selectedLocations.back? |
-    return .text "rw??: Please shift-click an expression."
-  if loc.loc matches .hypValue .. then
-    return .text "rw??: cannot rewrite in the value of a let variable."
-  let some goal := props.goals[0]? | return .text "rw??: there is no goal to solve!"
-  if loc.mvarId != goal.mvarId then
-    return .text "rw??: the selected expression should be in the main goal."
-  goal.ctx.val.runMetaM {} do
-    let md ← goal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
-    Meta.withLCtx lctx md.localInstances do
-
-      let rootExpr ← loc.rootExpr
-let some (subExpr, occ) ← withReducible viewKAbstractSubExpr rootExpr loc.pos |
-        return .text "rw??: expressions with bound variables are not yet supported"
-      unless ← kabstractIsTypeCorrect rootExpr subExpr loc.pos do
-return .text "rw??: the selected expression cannot be rewritten, \
-          because the motive is not type correct. \
-          This usually occurs when trying to rewrite a term that appears as a dependent argument."
-      let location ← loc.fvarId?.mapM FVarId.getUserName
-
-      let (filtered, all) ← getRewriteInterfaces subExpr occ location loc.fvarId? props.replaceRange
-      let filtered ← renderRewrites subExpr filtered props.replaceRange doc false
-      let all ← renderRewrites subExpr all props.replaceRange doc true
-      return <FilterDetails
-        summary={.text "Rewrite suggestions:"}
-        all={all}
-        filtered={filtered}
-        initiallyFiltered={true} />
-
-Depends on / 依赖: Please, RequestM, RequestM.asTask, RequestM.readDoc, asTask, cannot, expression, getDecl, goal.ctx.val.runMetaM, goal.mvarId, goal.mvarId.getDecl, hypValue, loc.loc, loc.mvarId, matches, mvarId, props.goals, props.selectedLocations.back, readDoc, return
+--- 原说明 ---
+The rpc method of the `rw??` widget.
 -/
 def rpc (props : SelectInsertParams) : RequestM (RequestTask Html) :=
   RequestM.asTask do
@@ -1373,21 +839,21 @@ def rpc (props : SelectInsertParams) : RequestM (RequestTask Html) :=
     return .text "rw??: the selected expression should be in the main goal."
   goal.ctx.val.runMetaM {} do
     let md ← goal.mvarId.getDecl
-.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
+    let lctx := md.lctx |>.sanitizeNames.run' {options := (← getOptions)}
     Meta.withLCtx lctx md.localInstances do
 
       let rootExpr ← loc.rootExpr
-let some (subExpr, occ) ← withReducible viewKAbstractSubExpr rootExpr loc.pos |
+      let some (subExpr, occ) ← withReducible <| viewKAbstractSubExpr rootExpr loc.pos |
         return .text "rw??: expressions with bound variables are not yet supported"
       unless ← kabstractIsTypeCorrect rootExpr subExpr loc.pos do
-return .text "rw??: the selected expression cannot be rewritten, \
+        return .text <| "rw??: the selected expression cannot be rewritten, \
           because the motive is not type correct. \
           This usually occurs when trying to rewrite a term that appears as a dependent argument."
       let location ← loc.fvarId?.mapM FVarId.getUserName
 
       let (filtered, all) ← getRewriteInterfaces subExpr occ location loc.fvarId? props.replaceRange
       let filtered ← renderRewrites subExpr filtered props.replaceRange doc false
-      let all ← renderRewrites subExpr all props.replaceRange doc true
+      let all      ← renderRewrites subExpr all      props.replaceRange doc true
       return <FilterDetails
         summary={.text "Rewrite suggestions:"}
         all={all}
@@ -1396,20 +862,15 @@ return .text "rw??: the selected expression cannot be rewritten, \
 
 /-- The component called by the `rw??` tactic -/
 @[widget_module]
-/--
-Definition of `LibraryRewriteComponent` / `LibraryRewriteComponent` 的定义
+/-
+**Mathlib.Tactic.LibraryRewrite.LibraryRewriteComponent** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：LibraryRewriteComponent : Component SelectInsertParams
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LibraryRewriteComponent
-  signature: : Component SelectInsertParams
-  body: mk_rpc_widget% LibraryRewrite.rpc
-
-中文:
-定义 LibraryRewriteComponent
-  签名: : Component SelectInsertParams
-  定义体: mk_rpc_widget% LibraryRewrite.rpc
-
-Depends on / 依赖: LibraryRewrite, LibraryRewrite.rpc, mk_rpc_widget
+--- 原说明 ---
+The component called by the `rw??` tactic
 -/
 def LibraryRewriteComponent : Component SelectInsertParams :=
   mk_rpc_widget% LibraryRewrite.rpc
@@ -1430,34 +891,15 @@ elab stx:"rw??" : tactic => do
     (pure <| json% { replaceRange : $range }) stx
 
 
-/--
-Definition of `Rewrite.toMessageData` / `Rewrite.toMessageData` 的定义
+/-- Represent a `Rewrite` as `MessageData`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.Rewrite.toMessageData** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.LibraryRewrite.Rewrite`。
+形式化陈述：Mathlib.Tactic.LibraryRewrite.Rewrite → Name → MetaM MessageData
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rewrite.toMessageData
-  signature: (rw : Rewrite) (name : Name)
-  body: do
-  let extraGoals ← rw.extraGoals.filterMapM fun (mvarId, bi) => do
-    if bi.isExplicit then
-      return some m! "⊢ {← mvarId.getType}"
-    return none
-  let list := [m! "{rw.replacement}"]
-      ++ extraGoals.toList
-      ++ [m! "{name}"]
-return .group .nest 2 "· " ++ .joinSep list "\n"
-
-中文:
-定义 Rewrite.toMessageData
-  签名: (rw : Rewrite) (name : Name)
-  定义体: do
-  let extraGoals ← rw.extraGoals.filterMapM fun (mvarId, bi) => do
-    if bi.isExplicit then
-      return some m! "⊢ {← mvarId.getType}"
-    return none
-  let list := [m! "{rw.replacement}"]
-      ++ extraGoals.toList
-      ++ [m! "{name}"]
-return .group .nest 2 "· " ++ .joinSep list "\n"
+--- 原说明 ---
+Represent a `Rewrite` as `MessageData`.
 -/
 def Rewrite.toMessageData (rw : Rewrite) (name : Name) : MetaM MessageData := do
   let extraGoals ← rw.extraGoals.filterMapM fun (mvarId, bi) => do
@@ -1467,37 +909,27 @@ def Rewrite.toMessageData (rw : Rewrite) (name : Name) : MetaM MessageData := do
   let list := [m! "{rw.replacement}"]
       ++ extraGoals.toList
       ++ [m! "{name}"]
-return .group .nest 2 "· " ++ .joinSep list "\n"
+  return .group <| .nest 2 <| "· " ++ .joinSep list "\n"
 
-/--
-Definition of `SectionToMessageData` / `SectionToMessageData` 的定义
+/-- Represent a section of rewrites as `MessageData`. -/
+/-
+**Mathlib.Tactic.LibraryRewrite.SectionToMessageData** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.LibraryRewrite`。
+形式化陈述：SectionToMessageData (sec : Array (Rewrite × Name) × Bool) : MetaM (Option
+ MessageData)
+参数：sec : Array (Rewrite × Name) × Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SectionToMessageData
-  signature: (sec : Array (Rewrite × Name) × Bool)
-  body: do
-  let rewrites ← sec.1.toList.mapM fun (rw, name) => rw.toMessageData name
-  let rewrites : MessageData := .group (.joinSep rewrites "\n")
-  let some (rw, name) := sec.1[0]? | return none
-  let head ← pattern (← getConstInfo name).type rw.symm (addMessageContext m! "{·}")
-return some "Pattern " ++ head ++ "\n" ++ rewrites
-
-中文:
-定义 SectionToMessageData
-  签名: (sec : 数组 (Rewrite × Name) × 布尔值)
-  定义体: do
-  let rewrites ← sec.1.toList.mapM fun (rw, name) => rw.toMessageData name
-  let rewrites : MessageData := .group (.joinSep rewrites "\n")
-  let some (rw, name) := sec.1[0]? | return none
-  let head ← pattern (← getConstInfo name).type rw.symm (addMessageContext m! "{·}")
-return some "Pattern " ++ head ++ "\n" ++ rewrites
+--- 原说明 ---
+Represent a section of rewrites as `MessageData`.
 -/
 def SectionToMessageData (sec : Array (Rewrite × Name) × Bool) : MetaM (Option MessageData) := do
   let rewrites ← sec.1.toList.mapM fun (rw, name) => rw.toMessageData name
   let rewrites : MessageData := .group (.joinSep rewrites "\n")
   let some (rw, name) := sec.1[0]? | return none
   let head ← pattern (← getConstInfo name).type rw.symm (addMessageContext m! "{·}")
-return some "Pattern " ++ head ++ "\n" ++ rewrites
+  return some <| "Pattern " ++ head ++ "\n" ++ rewrites
 
 /-- `#rw?? e` gives all possible rewrites of `e`. It is a testing command for the `rw??` tactic -/
 syntax (name := rw??Command) "#rw??" (&"all")? term : command
@@ -1505,67 +937,18 @@ syntax (name := rw??Command) "#rw??" (&"all")? term : command
 open Elab
 /-- Elaborate a `#rw??` command. -/
 @[command_elab rw??Command]
-/--
-Definition of `elabrw??Command` / `elabrw??Command` 的定义
+/-
+**Mathlib.Tactic.LibraryRewrite.elabrw** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.LibraryRewrite`。
+形式化陈述：elabrw??Command : Command.CommandElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabrw??Command
-  signature: : Command.CommandElab
-  body: fun stx =>
-withoutModifyingEnv Command.runTermElabM fun _ => do
-  let e ← Term.elabTerm stx[2] none
-  Term.synthesizeSyntheticMVarsNoPostponing
-  let e ← Term.levelMVarToParam (← instantiateMVars e)
-
-  let filter := stx[1].isNone
-  let mut rewrites := #[]
-  for rws in ← getModuleRewrites e do
-    let rws ← if filter then
-      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
-      else pure rws
-    rewrites := rewrites.push (rws, true)
-  for rws in ← getImportRewrites e do
-    let rws ← if filter then
-      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
-      else pure rws
-    rewrites := rewrites.push (rws, false)
-
-let sections ← liftMetaM rewrites.filterMapM SectionToMessageData
-  if sections.isEmpty then
-    logInfo m! "No rewrites found for {e}"
-  else
-    logInfo (.joinSep sections.toList "\n\n")
-
-中文:
-定义 elabrw??Command
-  签名: : Command.CommandElab
-  定义体: fun stx =>
-withoutModifyingEnv Command.runTermElabM fun _ => do
-  let e ← Term.elabTerm stx[2] none
-  Term.synthesizeSyntheticMVarsNoPostponing
-  let e ← Term.levelMVarToParam (← instantiateMVars e)
-
-  let filter := stx[1].isNone
-  let mut rewrites := #[]
-  for rws in ← getModuleRewrites e do
-    let rws ← if filter then
-      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
-      else pure rws
-    rewrites := rewrites.push (rws, true)
-  for rws in ← getImportRewrites e do
-    let rws ← if filter then
-      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
-      else pure rws
-    rewrites := rewrites.push (rws, false)
-
-let sections ← liftMetaM rewrites.filterMapM SectionToMessageData
-  if sections.isEmpty then
-    logInfo m! "No rewrites found for {e}"
-  else
-    logInfo (.joinSep sections.toList "\n\n")
+--- 原说明 ---
+Elaborate a `#rw??` command.
 -/
 def elabrw??Command : Command.CommandElab := fun stx =>
-withoutModifyingEnv Command.runTermElabM fun _ => do
+  withoutModifyingEnv <| Command.runTermElabM fun _ => do
   let e ← Term.elabTerm stx[2] none
   Term.synthesizeSyntheticMVarsNoPostponing
   let e ← Term.levelMVarToParam (← instantiateMVars e)
@@ -1583,10 +966,11 @@ withoutModifyingEnv Command.runTermElabM fun _ => do
       else pure rws
     rewrites := rewrites.push (rws, false)
 
-let sections ← liftMetaM rewrites.filterMapM SectionToMessageData
+  let sections ← liftMetaM <| rewrites.filterMapM SectionToMessageData
   if sections.isEmpty then
     logInfo m! "No rewrites found for {e}"
   else
     logInfo (.joinSep sections.toList "\n\n")
 
 end Mathlib.Tactic.LibraryRewrite
+

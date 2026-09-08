@@ -50,261 +50,164 @@ namespace Prod.Lex
 
 @[inherit_doc] notation:35 α " ×ₗ " β:34 => Lex (Prod α β)
 
-/--
-Instance `instLE` / 实例 `instLE`
+/-- Dictionary / lexicographic ordering on pairs. -/
+/-
+**Prod.Lex.instLE** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instLE (α β : Type*) [LT α] [LE β] : LE (α ×ₗ β) where le
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLE
-  signature: (α β : Type*) [LT α] [LE β]
-  body: Prod.Lex (· < ·) (· <= ·)
-
-中文:
-实例 instLE
-  签名: (α β : 类型) [LT α] [LE β]
-  定义体: Prod.Lex (· < ·) (· <= ·)
-
-Depends on / 依赖: Prod.Lex
+--- 原说明 ---
+Dictionary / lexicographic ordering on pairs.
 -/
-instance instLE (α β : Type*) [LT α] [LE β] : LE (α ×ₗ β) where le := Prod.Lex (· < ·) (· <= ·)
-
-/--
-Instance `instLT` / 实例 `instLT`
-
-English:
-instance instLT
-  signature: (α β : Type*) [LT α] [LT β]
-  body: Prod.Lex (· < ·) (· < ·)
-
-中文:
-实例 instLT
-  签名: (α β : 类型) [LT α] [LT β]
-  定义体: Prod.Lex (· < ·) (· < ·)
-
-Depends on / 依赖: Prod.Lex
+instance instLE (α β : Type*) [LT α] [LE β] : LE (α ×ₗ β) where le := Prod.Lex (· < ·) (· ≤ ·)
+/-
+**Prod.Lex.instLT** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instLT (α β : Type*) [LT α] [LT β] : LT (α ×ₗ β) where lt
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLT (α β : Type*) [LT α] [LT β] : LT (α ×ₗ β) where lt := Prod.Lex (· < ·) (· < ·)
-
-/--
-theorem `toLex_le_toLex` / 定理 `toLex_le_toLex`
-
-English:
-theorem toLex_le_toLex
-  given: [LT α] [LE β] {x y : α × β}
-  proof: Prod.lex_def
-
-@[to_dual existing toLex_le_toLex]
-
-中文:
-定理 toLex_le_toLex
-  条件: [LT α] [LE β] {x y : α × β}
-  证明: Prod.lex_def
-
-@[to_dual existing toLex_le_toLex]
-
-Depends on / 依赖: Prod.lex_def, lex_def
+/-
+**Prod.Lex.toLex_le_toLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_le_toLex [LT α] [LE β] {x y : α × β} : toLex x <= toLex y ↔ x.1 < y.
+1 ∨ x.1 = y.1 ∧ x.2 <= y.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.lex_def`：∀ {α : Type u} {β : Type v} {r : α → α → Prop} {s : β → β 
+→ Prop} {p q : α × β},   Prod.Lex r s p q ↔ r p.1 q.1 ∨ p.1 = q.1 ∧ s p.2 q.2
 -/
 theorem toLex_le_toLex [LT α] [LE β] {x y : α × β} :
-    toLex x <= toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 <= y.2 :=
+    toLex x ≤ toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 ≤ y.2 :=
   Prod.lex_def
 
 @[to_dual existing toLex_le_toLex]
-/--
-theorem `toLex_ge_toLex` / 定理 `toLex_ge_toLex`
-
-English:
-theorem toLex_ge_toLex
-  given: [LT α] [LE β] {x y : α × β}
-  proof: by
-  rw [eq_comm]; rw [toLex_le_toLex]
-
-中文:
-定理 toLex_ge_toLex
-  条件: [LT α] [LE β] {x y : α × β}
-  证明: by
-  rw [eq_comm]; rw [toLex_le_toLex]
-
-Depends on / 依赖: eq_comm, toLex_le_toLex
+/-
+**Prod.Lex.toLex_ge_toLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_ge_toLex [LT α] [LE β] {x y : α × β} : toLex y <= toLex x ↔ y.1 < x.
+1 ∨ x.1 = y.1 ∧ y.2 <= x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Prod.Lex.toLex_le_toLex`：toLex_le_toLex [LT α] [LE β] {x y : α × β} : to
+Lex x <= toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 <= y.2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toLex_ge_toLex [LT α] [LE β] {x y : α × β} :
-    toLex y <= toLex x ↔ y.1 < x.1 ∨ x.1 = y.1 ∧ y.2 <= x.2 := by
-  rw [eq_comm]; rw [toLex_le_toLex]
-
-/--
-theorem `toLex_lt_toLex` / 定理 `toLex_lt_toLex`
-
-English:
-theorem toLex_lt_toLex
-  given: [LT α] [LT β] {x y : α × β}
-  proof: Prod.lex_def
-
-@[to_dual existing toLex_lt_toLex]
-
-中文:
-定理 toLex_lt_toLex
-  条件: [LT α] [LT β] {x y : α × β}
-  证明: Prod.lex_def
-
-@[to_dual existing toLex_lt_toLex]
-
-Depends on / 依赖: Prod.lex_def, lex_def
+    toLex y ≤ toLex x ↔ y.1 < x.1 ∨ x.1 = y.1 ∧ y.2 ≤ x.2 := by
+  rw [eq_comm, toLex_le_toLex]
+/-
+**Prod.Lex.toLex_lt_toLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_lt_toLex [LT α] [LT β] {x y : α × β} : toLex x < toLex y ↔ x.1 < y.1
+ ∨ x.1 = y.1 ∧ x.2 < y.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.lex_def`：∀ {α : Type u} {β : Type v} {r : α → α → Prop} {s : β → β 
+→ Prop} {p q : α × β},   Prod.Lex r s p q ↔ r p.1 q.1 ∨ p.1 = q.1 ∧ s p.2 q.2
 -/
 theorem toLex_lt_toLex [LT α] [LT β] {x y : α × β} :
     toLex x < toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 < y.2 :=
   Prod.lex_def
 
 @[to_dual existing toLex_lt_toLex]
-/--
-theorem `toLex_gt_toLex` / 定理 `toLex_gt_toLex`
-
-English:
-theorem toLex_gt_toLex
-  given: [LT α] [LT β] {x y : α × β}
-  proof: by
-  rw [eq_comm]; rw [toLex_lt_toLex]
-
-@[to_dual none]
-
-中文:
-定理 toLex_gt_toLex
-  条件: [LT α] [LT β] {x y : α × β}
-  证明: by
-  rw [eq_comm]; rw [toLex_lt_toLex]
-
-@[to_dual none]
-
-Depends on / 依赖: eq_comm, toLex_lt_toLex
+/-
+**Prod.Lex.toLex_gt_toLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_gt_toLex [LT α] [LT β] {x y : α × β} : toLex y < toLex x ↔ y.1 < x.1
+ ∨ x.1 = y.1 ∧ y.2 < x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Prod.Lex.toLex_lt_toLex`：toLex_lt_toLex [LT α] [LT β] {x y : α × β} : to
+Lex x < toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 < y.2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toLex_gt_toLex [LT α] [LT β] {x y : α × β} :
     toLex y < toLex x ↔ y.1 < x.1 ∨ x.1 = y.1 ∧ y.2 < x.2 := by
-  rw [eq_comm]; rw [toLex_lt_toLex]
+  rw [eq_comm, toLex_lt_toLex]
 
 @[to_dual none]
-/--
-lemma `le_iff` / 引理 `le_iff`
-
-English:
-lemma le_iff
-  given: [LT α] [LE β] {x y : α ×ₗ β}
-  proof: toLex_le_toLex
-
-@[to_dual none]
-
-中文:
-引理 le_iff
-  条件: [LT α] [LE β] {x y : α ×ₗ β}
-  证明: toLex_le_toLex
-
-@[to_dual none]
-
-Depends on / 依赖: toLex_le_toLex
+/-
+**Prod.Lex.le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：le_iff [LT α] [LE β] {x y : α ×ₗ β} : x <= y ↔ (ofLex x).1 < (ofLex y).1 ∨
+ (ofLex x).1 = (ofLex y).1 ∧ (ofLex x).2 <= (ofLex y).2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.Lex.toLex_le_toLex`：toLex_le_toLex [LT α] [LE β] {x y : α × β} : to
+Lex x <= toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 <= y.2
 -/
 lemma le_iff [LT α] [LE β] {x y : α ×ₗ β} :
-    x <= y ↔ (ofLex x).1 < (ofLex y).1 ∨ (ofLex x).1 = (ofLex y).1 ∧ (ofLex x).2 <= (ofLex y).2 :=
+    x ≤ y ↔ (ofLex x).1 < (ofLex y).1 ∨ (ofLex x).1 = (ofLex y).1 ∧ (ofLex x).2 ≤ (ofLex y).2 :=
   toLex_le_toLex
 
 @[to_dual none]
-/--
-lemma `lt_iff` / 引理 `lt_iff`
-
-English:
-lemma lt_iff
-  given: [LT α] [LT β] {x y : α ×ₗ β}
-  proof: toLex_lt_toLex
-
-中文:
-引理 lt_iff
-  条件: [LT α] [LT β] {x y : α ×ₗ β}
-  证明: toLex_lt_toLex
-
-Depends on / 依赖: toLex_lt_toLex
+/-
+**Prod.Lex.lt_iff** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：lt_iff [LT α] [LT β] {x y : α ×ₗ β} : x < y ↔ (ofLex x).1 < (ofLex y).1 ∨ 
+(ofLex x).1 = (ofLex y).1 ∧ (ofLex x).2 < (ofLex y).2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.Lex.toLex_lt_toLex`：toLex_lt_toLex [LT α] [LT β] {x y : α × β} : to
+Lex x < toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 < y.2
 -/
 lemma lt_iff [LT α] [LT β] {x y : α ×ₗ β} :
     x < y ↔ (ofLex x).1 < (ofLex y).1 ∨ (ofLex x).1 = (ofLex y).1 ∧ (ofLex x).2 < (ofLex y).2 :=
   toLex_lt_toLex
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedLT (α ×ₗ β)
-  body: instIsWellFounded
-
-中文:
-实例 [LT
-  签名: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedLT (α ×ₗ β)
-  定义体: instIsWellFounded
-
-Depends on / 依赖: instIsWellFounded
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedLT (α ×ₗ β) :=
   instIsWellFounded
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedRelation (α ×ₗ β)
-  body: ⟨(· < ·), wellFounded_lt⟩
-
-中文:
-实例 [LT
-  签名: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : 良基关系 (α ×ₗ β)
-  定义体: ⟨(· < ·), wellFounded_lt⟩
-
-Depends on / 依赖: wellFounded_lt
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedRelation (α ×ₗ β) :=
   ⟨(· < ·), wellFounded_lt⟩
 
-/--
-Instance `instPreorder` / 实例 `instPreorder`
+/-- Dictionary / lexicographic preorder for pairs. -/
+/-
+**Prod.Lex.instPreorder** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instPreorder (α β : Type*) [Preorder α] [Preorder β] : Preorder (α ×ₗ β) w
+here le_refl
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instPreorder
-  signature: (α β : Type*) [Preorder α] [Preorder β]
-  body: refl_of Prod.Lex _ _
-le_trans _ _ _ := trans_of Prod.Lex _ _
-  lt_iff_le_not_ge x₁ x₂ := by grind [le_iff, lt_iff, lt_iff_le_not_ge]
-
-中文:
-实例 instPreorder
-  签名: (α β : 类型) [预序 α] [预序 β]
-  定义体: refl_of Prod.Lex _ _
-le_trans _ _ _ := trans_of Prod.Lex _ _
-  lt_iff_le_not_ge x₁ x₂ := by grind [le_iff, lt_iff, lt_iff_le_not_ge]
-
-Depends on / 依赖: Prod.Lex, refl_of
+--- 原说明 ---
+Dictionary / lexicographic preorder for pairs.
 -/
 instance instPreorder (α β : Type*) [Preorder α] [Preorder β] : Preorder (α ×ₗ β) where
-le_refl := refl_of Prod.Lex _ _
-le_trans _ _ _ := trans_of Prod.Lex _ _
+  le_refl := refl_of <| Prod.Lex _ _
+  le_trans _ _ _ := trans_of <| Prod.Lex _ _
   lt_iff_le_not_ge x₁ x₂ := by grind [le_iff, lt_iff, lt_iff_le_not_ge]
 
-/--
-theorem `monotone_fst` / 定理 `monotone_fst`
+/-- See also `monotone_fst_ofLex` for a version stated in terms of `Monotone`. -/
+/-
+**Prod.Lex.monotone_fst** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：monotone_fst [Preorder α] [LE β] (t c : α ×ₗ β) (h : t <= c) : (ofLex t).1
+ <= (ofLex c).1
+参数：t c : α ×ₗ β；h : t <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.Lex.toLex_le_toLex`：toLex_le_toLex [LT α] [LE β] {x y : α × β} : to
+Lex x <= toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 <= y.2
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 
-English:
-theorem monotone_fst
-  given: [Preorder α] [LE β] (t c : α ×ₗ β) (h : t <= c)
-  proof: by
-  cases toLex_le_toLex.mp h with
-  | inl h' => exact h'.le
-  | inr h' => exact h'.1.le
-
-中文:
-定理 monotone_fst
-  条件: [预序 α] [LE β] (t c : α ×ₗ β) (h : t <= c)
-  证明: by
-  cases toLex_le_toLex.mp h with
-  | inl h' => exact h'.le
-  | inr h' => exact h'.1.le
-
-Depends on / 依赖: toLex_le_toLex, toLex_le_toLex.mp
+--- 原说明 ---
+See also `monotone_fst_ofLex` for a version stated in terms of `Monotone`.
 -/
-theorem monotone_fst [Preorder α] [LE β] (t c : α ×ₗ β) (h : t <= c) :
-    (ofLex t).1 <= (ofLex c).1 := by
+theorem monotone_fst [Preorder α] [LE β] (t c : α ×ₗ β) (h : t ≤ c) :
+    (ofLex t).1 ≤ (ofLex c).1 := by
   cases toLex_le_toLex.mp h with
   | inl h' => exact h'.le
   | inr h' => exact h'.1.le
@@ -313,77 +216,45 @@ section Preorder
 
 variable [Preorder α] [Preorder β]
 
-/--
-theorem `monotone_fst_ofLex` / 定理 `monotone_fst_ofLex`
-
-English:
-theorem monotone_fst_ofLex
-  statement: Monotone fun x : α ×ₗ β => (ofLex x).1
-  proof: monotone_fst
-
-@[to_dual self]
-
-中文:
-定理 monotone_fst_ofLex
-  结论: 递增 fun x : α ×ₗ β => (ofLex x).1
-  证明: monotone_fst
-
-@[to_dual self]
-
-Depends on / 依赖: monotone_fst
+/-
+**Prod.Lex.monotone_fst_ofLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：monotone_fst_ofLex : Monotone fun x : α ×ₗ β => (ofLex x).1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.Lex.monotone_fst`：monotone_fst [Preorder α] [LE β] (t c : α ×ₗ β) (
+h : t <= c) : (ofLex t).1 <= (ofLex c).1
 -/
-theorem monotone_fst_ofLex : Monotone fun x : α ×ₗ β => (ofLex x).1 := monotone_fst
+theorem monotone_fst_ofLex : Monotone fun x : α ×ₗ β ↦ (ofLex x).1 := monotone_fst
 
 @[to_dual self]
-/--
-theorem `_root_.WCovBy.fst_ofLex` / 定理 `_root_.WCovBy.fst_ofLex`
-
-English:
-theorem _root_.WCovBy.fst_ofLex
-  given: {a b : α ×ₗ β} (h : a ⩿ b)
-  statement: (ofLex a).1 ⩿ (ofLex b).1
-  proof: ⟨monotone_fst _ _ h.1, fun c hac hcb => h.2 (c := toLex (c, a.2)) (.left _ _ hac) (.left _ _ hcb)⟩
-
-@[to_dual none]
-
-中文:
-定理 _root_.WCovBy.fst_ofLex
-  条件: {a b : α ×ₗ β} (h : a ⩿ b)
-  结论: (ofLex a).1 ⩿ (ofLex b).1
-  证明: ⟨monotone_fst _ _ h.1, fun c hac hcb => h.2 (c := toLex (c, a.2)) (.left _ _ hac) (.left _ _ hcb)⟩
-
-@[to_dual none]
-
-Depends on / 依赖: monotone_fst
+/-
+**Prod.Lex._root_.WCovBy.fst_ofLex** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.WCovBy.fst_ofLex {a b : α ×ₗ β} (h : a ⩿ b) : (ofLex a).1 ⩿ (ofLex b).1 :=
-  ⟨monotone_fst _ _ h.1, fun c hac hcb => h.2 (c := toLex (c, a.2)) (.left _ _ hac) (.left _ _ hcb)⟩
+  ⟨monotone_fst _ _ h.1, fun c hac hcb ↦ h.2 (c := toLex (c, a.2)) (.left _ _ hac) (.left _ _ hcb)⟩
 
 @[to_dual none]
-/--
-theorem `toLex_covBy_toLex_iff` / 定理 `toLex_covBy_toLex_iff`
-
-English:
-theorem toLex_covBy_toLex_iff
-  given: {a₁ a₂ : α} {b₁ b₂ : β}
-  proof: by
-  simp only [CovBy, toLex_lt_toLex, toLex.surjective.forall, Prod.forall, isMax_iff_forall_not_lt,
-    isMin_iff_forall_not_lt]
-  grind
-
-@[to_dual none]
-
-中文:
-定理 toLex_covBy_toLex_iff
-  条件: {a₁ a₂ : α} {b₁ b₂ : β}
-  证明: by
-  simp only [CovBy, toLex_lt_toLex, toLex.surjective.forall, Prod.forall, isMax_iff_forall_not_lt,
-    isMin_iff_forall_not_lt]
-  grind
-
-@[to_dual none]
-
-Depends on / 依赖: Prod.forall, isMax_iff_forall_not_lt, isMin_iff_forall_not_lt, surjective, toLex.surjective.forall, toLex_lt_toLex
+/-
+**Prod.Lex.toLex_covBy_toLex_iff** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_covBy_toLex_iff {a₁ a₂ : α} {b₁ b₂ : β} : toLex (a₁, b₁) ⋖ toLex (a₂
+, b₂) ↔ a₁ = a₂ ∧ b₁ ⋖ b₂ ∨ a₁ ⋖ a₂ ∧ IsMax b₁ ∧ IsMin b₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 theorem toLex_covBy_toLex_iff {a₁ a₂ : α} {b₁ b₂ : β} :
     toLex (a₁, b₁) ⋖ toLex (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ ⋖ b₂ ∨ a₁ ⋖ a₂ ∧ IsMax b₁ ∧ IsMin b₂ := by
@@ -392,20 +263,16 @@ theorem toLex_covBy_toLex_iff {a₁ a₂ : α} {b₁ b₂ : β} :
   grind
 
 @[to_dual none]
-/--
-theorem `covBy_iff` / 定理 `covBy_iff`
-
-English:
-theorem covBy_iff
-  given: {a b : α ×ₗ β}
-  proof: toLex_covBy_toLex_iff
-
-中文:
-定理 covBy_iff
-  条件: {a b : α ×ₗ β}
-  证明: toLex_covBy_toLex_iff
-
-Depends on / 依赖: toLex_covBy_toLex_iff
+/-
+**Prod.Lex.covBy_iff** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：covBy_iff {a b : α ×ₗ β} : a ⋖ b ↔ (ofLex a).1 = (ofLex b).1 ∧ (ofLex a).2
+ ⋖ (ofLex b).2 ∨ (ofLex a).1 ⋖ (ofLex b).1 ∧ IsMax (ofLex a).2 ∧ IsMin (ofLex b)
+.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.Lex.toLex_covBy_toLex_iff`：toLex_covBy_toLex_iff {a₁ a₂ : α} {b₁ b₂
+ : β} : toLex (a₁, b₁) ⋖ toLex (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ ⋖ b₂ ∨ a₁ ⋖ a₂ ∧ IsMax b₁
+ ∧ IsMin b₂
 -/
 theorem covBy_iff {a b : α ×ₗ β} :
     a ⋖ b ↔ (ofLex a).1 = (ofLex b).1 ∧ (ofLex a).2 ⋖ (ofLex b).2 ∨
@@ -420,141 +287,130 @@ variable [PartialOrder α] [Preorder β] {x y : α × β}
 
 /-- Variant of `Prod.Lex.toLex_le_toLex` for partial orders. -/
 @[to_dual none]
-/--
-lemma `toLex_le_toLex'` / 引理 `toLex_le_toLex'`
+/-
+**Prod.Lex.toLex_le_toLex'** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_le_toLex' : toLex x <= toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 <= y
+.2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.not_and_iff_not_or_not'`：∀ {b a : Prop} [Decidable b], ¬(a ∧ b
+) ↔ ¬a ∨ ¬b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 
-English:
-lemma toLex_le_toLex'
-  statement: toLex x <= toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 <= y.2)
-  proof: by
-  simp only [toLex_le_toLex, lt_iff_le_not_ge, le_antisymm_iff]
-  tauto
-
-中文:
-引理 toLex_le_toLex'
-  结论: toLex x <= toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 <= y.2)
-  证明: by
-  simp only [toLex_le_toLex, lt_iff_le_not_ge, le_antisymm_iff]
-  tauto
-
-Depends on / 依赖: le_antisymm_iff, lt_iff_le_not_ge, toLex_le_toLex
+--- 原说明 ---
+Variant of `Prod.Lex.toLex_le_toLex` for partial orders.
 -/
-lemma toLex_le_toLex' : toLex x <= toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 <= y.2) := by
+lemma toLex_le_toLex' : toLex x ≤ toLex y ↔ x.1 ≤ y.1 ∧ (x.1 = y.1 → x.2 ≤ y.2) := by
   simp only [toLex_le_toLex, lt_iff_le_not_ge, le_antisymm_iff]
   tauto
 
 /-- Variant of `Prod.Lex.toLex_lt_toLex` for partial orders. -/
 @[to_dual none]
-/--
-lemma `toLex_lt_toLex'` / 引理 `toLex_lt_toLex'`
+/-
+**Prod.Lex.toLex_lt_toLex'** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_lt_toLex' : toLex x < toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 < y.2
+)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.Lex.toLex_lt_toLex`：toLex_lt_toLex [LT α] [LT β] {x y : α × β} : to
+Lex x < toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 < y.2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.not_and_iff_not_or_not'`：∀ {b a : Prop} [Decidable b], ¬(a ∧ b
+) ↔ ¬a ∨ ¬b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 
-English:
-lemma toLex_lt_toLex'
-  statement: toLex x < toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 < y.2)
-  proof: by
-  rw [toLex_lt_toLex]
-  simp only [lt_iff_le_not_ge, le_antisymm_iff]
-  tauto
-
-中文:
-引理 toLex_lt_toLex'
-  结论: toLex x < toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 < y.2)
-  证明: by
-  rw [toLex_lt_toLex]
-  simp only [lt_iff_le_not_ge, le_antisymm_iff]
-  tauto
-
-Depends on / 依赖: le_antisymm_iff, lt_iff_le_not_ge, toLex_lt_toLex
+--- 原说明 ---
+Variant of `Prod.Lex.toLex_lt_toLex` for partial orders.
 -/
-lemma toLex_lt_toLex' : toLex x < toLex y ↔ x.1 <= y.1 ∧ (x.1 = y.1 -> x.2 < y.2) := by
+lemma toLex_lt_toLex' : toLex x < toLex y ↔ x.1 ≤ y.1 ∧ (x.1 = y.1 → x.2 < y.2) := by
   rw [toLex_lt_toLex]
   simp only [lt_iff_le_not_ge, le_antisymm_iff]
   tauto
 
 /-- Variant of `Prod.Lex.le_iff` for partial orders. -/
 @[to_dual none]
-/--
-lemma `le_iff'` / 引理 `le_iff'`
+/-
+**Prod.Lex.le_iff'** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：le_iff' {x y : α ×ₗ β} : x <= y ↔ (ofLex x).1 <= (ofLex y).1 ∧ ((ofLex x).
+1 = (ofLex y).1 -> (ofLex x).2 <= (ofLex y).2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Prod.Lex.toLex_le_toLex'`：toLex_le_toLex' : toLex x <= toLex y ↔ x.1 <= 
+y.1 ∧ (x.1 = y.1 -> x.2 <= y.2)
 
-English:
-lemma le_iff'
-  given: {x y : α ×ₗ β}
-  proof: toLex_le_toLex'
-
-中文:
-引理 le_iff'
-  条件: {x y : α ×ₗ β}
-  证明: toLex_le_toLex'
-
-Depends on / 依赖: toLex_le_toLex
+--- 原说明 ---
+Variant of `Prod.Lex.le_iff` for partial orders.
 -/
 lemma le_iff' {x y : α ×ₗ β} :
-    x <= y ↔ (ofLex x).1 <= (ofLex y).1 ∧ ((ofLex x).1 = (ofLex y).1 -> (ofLex x).2 <= (ofLex y).2) :=
+    x ≤ y ↔ (ofLex x).1 ≤ (ofLex y).1 ∧ ((ofLex x).1 = (ofLex y).1 → (ofLex x).2 ≤ (ofLex y).2) :=
   toLex_le_toLex'
 
 /-- Variant of `Prod.Lex.lt_iff` for partial orders. -/
 @[to_dual none]
-/--
-lemma `lt_iff'` / 引理 `lt_iff'`
+/-
+**Prod.Lex.lt_iff'** 是 Mathlib 中的一个引理，位于命名空间 `Prod.Lex`。
+形式化陈述：lt_iff' {x y : α ×ₗ β} : x < y ↔ (ofLex x).1 <= (ofLex y).1 ∧ ((ofLex x).1
+ = (ofLex y).1 -> (ofLex x).2 < (ofLex y).2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Prod.Lex.toLex_lt_toLex'`：toLex_lt_toLex' : toLex x < toLex y ↔ x.1 <= y
+.1 ∧ (x.1 = y.1 -> x.2 < y.2)
 
-English:
-lemma lt_iff'
-  given: {x y : α ×ₗ β}
-  proof: toLex_lt_toLex'
-
-中文:
-引理 lt_iff'
-  条件: {x y : α ×ₗ β}
-  证明: toLex_lt_toLex'
-
-Depends on / 依赖: toLex_lt_toLex
+--- 原说明 ---
+Variant of `Prod.Lex.lt_iff` for partial orders.
 -/
 lemma lt_iff' {x y : α ×ₗ β} :
-    x < y ↔ (ofLex x).1 <= (ofLex y).1 ∧ ((ofLex x).1 = (ofLex y).1 -> (ofLex x).2 < (ofLex y).2) :=
+    x < y ↔ (ofLex x).1 ≤ (ofLex y).1 ∧ ((ofLex x).1 = (ofLex y).1 → (ofLex x).2 < (ofLex y).2) :=
   toLex_lt_toLex'
-
-/--
-theorem `toLex_mono` / 定理 `toLex_mono`
-
-English:
-theorem toLex_mono
-  statement: Monotone (toLex : α × β -> α ×ₗ β)
-  proof: fun _x _y hxy => toLex_le_toLex'.2 ⟨hxy.1, fun _ => hxy.2⟩
-
-中文:
-定理 toLex_mono
-  结论: 递增 (toLex : α × β -> α ×ₗ β)
-  证明: fun _x _y hxy => toLex_le_toLex'.2 ⟨hxy.1, fun _ => hxy.2⟩
-
-Depends on / 依赖: toLex_le_toLex
+/-
+**Prod.Lex.toLex_mono** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_mono : Monotone (toLex : α × β -> α ×ₗ β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Prod.Lex.toLex_le_toLex'`：toLex_le_toLex' : toLex x <= toLex y ↔ x.1 <= 
+y.1 ∧ (x.1 = y.1 -> x.2 <= y.2)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem toLex_mono : Monotone (toLex : α × β -> α ×ₗ β) :=
-  fun _x _y hxy => toLex_le_toLex'.2 ⟨hxy.1, fun _ => hxy.2⟩
-
-/--
-theorem `toLex_strictMono` / 定理 `toLex_strictMono`
-
-English:
-theorem toLex_strictMono
-  statement: StrictMono (toLex : α × β -> α ×ₗ β)
-  proof: by
-  rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ h
-  obtain rfl | ha : a₁ = a₂ ∨ _ := h.le.1.eq_or_lt
-  · exact right _ (Prod.mk_lt_mk_iff_right.1 h)
-  · exact left _ _ ha
-
-中文:
-定理 toLex_strictMono
-  结论: 严格递增 (toLex : α × β -> α ×ₗ β)
-  证明: by
-  rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ h
-  obtain rfl | ha : a₁ = a₂ ∨ _ := h.le.1.eq_or_lt
-  · exact right _ (Prod.mk_lt_mk_iff_right.1 h)
-  · exact left _ _ ha
-
-Depends on / 依赖: Prod.mk_lt_mk_iff_right, eq_or_lt, h.le, mk_lt_mk_iff_right
+theorem toLex_mono : Monotone (toLex : α × β → α ×ₗ β) :=
+  fun _x _y hxy ↦ toLex_le_toLex'.2 ⟨hxy.1, fun _ ↦ hxy.2⟩
+/-
+**Prod.Lex.toLex_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：toLex_strictMono : StrictMono (toLex : α × β -> α ×ₗ β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.mk_lt_mk_iff_right`：mk_lt_mk_iff_right : (a, b₁) < (a, b₂) ↔ b₁ < b
+₂
 -/
-theorem toLex_strictMono : StrictMono (toLex : α × β -> α ×ₗ β) := by
+theorem toLex_strictMono : StrictMono (toLex : α × β → α ×ₗ β) := by
   rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ h
   obtain rfl | ha : a₁ = a₂ ∨ _ := h.le.1.eq_or_lt
   · exact right _ (Prod.mk_lt_mk_iff_right.1 h)
@@ -562,170 +418,71 @@ theorem toLex_strictMono : StrictMono (toLex : α × β -> α ×ₗ β) := by
 
 end PartialOrderPreorder
 
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
+/-- Dictionary / lexicographic partial order for pairs. -/
+/-
+**Prod.Lex.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instPartialOrder (α β : Type*) [PartialOrder α] [PartialOrder β] : Partial
+Order (α ×ₗ β) where le_antisymm _ _
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instPartialOrder
-  signature: (α β : Type*) [PartialOrder α] [PartialOrder β]
-  body: antisymm_of (Prod.Lex _ _)
-
-中文:
-实例 instPartialOrder
-  签名: (α β : 类型) [偏序 α] [偏序 β]
-  定义体: antisymm_of (Prod.Lex _ _)
-
-Depends on / 依赖: Prod.Lex, antisymm_of
+--- 原说明 ---
+Dictionary / lexicographic partial order for pairs.
 -/
 instance instPartialOrder (α β : Type*) [PartialOrder α] [PartialOrder β] :
     PartialOrder (α ×ₗ β) where
   le_antisymm _ _ := antisymm_of (Prod.Lex _ _)
-
-/--
-Instance `instOrdLexProd` / 实例 `instOrdLexProd`
-
-English:
-instance instOrdLexProd
-  signature: [Ord α] [Ord β]
-  body: fast_instance% lexOrd
-
-中文:
-实例 instOrdLexProd
-  签名: [序 α] [序 β]
-  定义体: fast_instance% lexOrd
-
-Depends on / 依赖: fast_instance, lexOrd
+/-
+**Prod.Lex.instOrdLexProd** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instOrdLexProd [Ord α] [Ord β] : Ord (α ×ₗ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrdLexProd [Ord α] [Ord β] : Ord (α ×ₗ β) := fast_instance% lexOrd
-
-/--
-theorem `compare_def` / 定理 `compare_def`
-
-English:
-theorem compare_def
-  given: [Ord α] [Ord β]
-  statement: @compare (α ×ₗ β) _ =
-  proof: rfl
-
-中文:
-定理 compare_def
-  条件: [序 α] [序 β]
-  结论: @compare (α ×ₗ β) _ =
-  证明: rfl
+/-
+**Prod.Lex.compare_def** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：compare_def [Ord α] [Ord β] : @compare (α ×ₗ β) _ = compareLex (compareOn 
+fun x => (ofLex x).1) (compareOn fun x => (ofLex x).2)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compare_def [Ord α] [Ord β] : @compare (α ×ₗ β) _ =
     compareLex (compareOn fun x => (ofLex x).1) (compareOn fun x => (ofLex x).2) := rfl
-
-/--
-theorem `_root_.lexOrd_eq` / 定理 `_root_.lexOrd_eq`
-
-English:
-theorem _root_.lexOrd_eq
-  given: [Ord α] [Ord β]
-  statement: @lexOrd α β _ _ = instOrdLexProd
-  proof: rfl
-
-中文:
-定理 _root_.lexOrd_eq
-  条件: [序 α] [序 β]
-  结论: @lexOrd α β _ _ = instOrdLexProd
-  证明: rfl
+/-
+**Prod.Lex._root_.lexOrd_eq** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.lexOrd_eq [Ord α] [Ord β] : @lexOrd α β _ _ = instOrdLexProd := rfl
-
-/--
-theorem `_root_.Ord.lex_eq` / 定理 `_root_.Ord.lex_eq`
-
-English:
-theorem _root_.Ord.lex_eq
-  given: [oα : Ord α] [oβ : Ord β]
-  statement: Ord.lex oα oβ = instOrdLexProd
-  proof: rfl
-
-中文:
-定理 _root_.序.lex_eq
-  条件: [oα : 序 α] [oβ : 序 β]
-  结论: 序.lex oα oβ = instOrdLexProd
-  证明: rfl
+/-
+**Prod.Lex._root_.Ord.lex_eq** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Ord.lex_eq [oα : Ord α] [oβ : Ord β] : Ord.lex oα oβ = instOrdLexProd := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ord
-  signature: α] [Ord β] [Std.OrientedOrd α] [Std.OrientedOrd β] : Std.OrientedOrd (α ×ₗ β)
-  body: inferInstanceAs (@Std.OrientedCmp (α × β) (compareLex _ _))
-
-中文:
-实例 [序
-  签名: α] [序 β] [Std.OrientedOrd α] [Std.OrientedOrd β] : Std.OrientedOrd (α ×ₗ β)
-  定义体: inferInstanceAs (@Std.OrientedCmp (α × β) (compareLex _ _))
-
-Depends on / 依赖: OrientedCmp, Std.OrientedCmp, compareLex
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ord α] [Ord β] [Std.OrientedOrd α] [Std.OrientedOrd β] : Std.OrientedOrd (α ×ₗ β) :=
   inferInstanceAs (@Std.OrientedCmp (α × β) (compareLex _ _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ord
-  signature: α] [Ord β] [Std.TransOrd α] [Std.TransOrd β] : Std.TransOrd (α ×ₗ β)
-  body: inferInstanceAs (@Std.TransCmp (α × β) (compareLex _ _))
-
-中文:
-实例 [序
-  签名: α] [序 β] [Std.TransOrd α] [Std.TransOrd β] : Std.TransOrd (α ×ₗ β)
-  定义体: inferInstanceAs (@Std.TransCmp (α × β) (compareLex _ _))
-
-Depends on / 依赖: Std.TransCmp, TransCmp, compareLex
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ord α] [Ord β] [Std.TransOrd α] [Std.TransOrd β] : Std.TransOrd (α ×ₗ β) :=
   inferInstanceAs (@Std.TransCmp (α × β) (compareLex _ _))
 
-/--
-Instance `instLinearOrder` / 实例 `instLinearOrder`
+/-- Dictionary / lexicographic linear order for pairs. -/
+/-
+**Prod.Lex.instLinearOrder** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：instLinearOrder (α β : Type*) [LinearOrder α] [LinearOrder β] : LinearOrde
+r (α ×ₗ β) where le_total
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLinearOrder
-  signature: (α β : Type*) [LinearOrder α] [LinearOrder β]
-  body: total_of (Prod.Lex _ _)
-  toDecidableLE := Prod.Lex.decidable _ _
-  toDecidableLT := Prod.Lex.decidable _ _
-  toDecidableEq := instDecidableEqLex _
-  compare_eq_compareOfLessAndEq := fun a b => by
-    have : DecidableLT (α ×ₗ β) := Prod.Lex.decidable _ _
-    have : Std.LawfulBEqOrd (α ×ₗ β) := ⟨by
-      simp [compare_def, compareLex, compareOn, Ordering.then_eq_eq]⟩
-    have : Std.LawfulLTOrd (α ×ₗ β) := ⟨by
-      simp [compare_def, compareLex, compareOn, Ordering.then_eq_lt, toLex_lt_toLex,
-        compare_lt_iff_lt]⟩
-    convert! Std.LawfulLTCmp.eq_compareOfLessAndEq (cmp := compare) a b
-
-@[to_dual]
-
-中文:
-实例 instLinearOrder
-  签名: (α β : 类型) [线性序 α] [线性序 β]
-  定义体: total_of (Prod.Lex _ _)
-  toDecidableLE := Prod.Lex.decidable _ _
-  toDecidableLT := Prod.Lex.decidable _ _
-  toDecidableEq := instDecidableEqLex _
-  compare_eq_compareOfLessAndEq := fun a b => by
-    have : DecidableLT (α ×ₗ β) := Prod.Lex.decidable _ _
-    have : Std.LawfulBEqOrd (α ×ₗ β) := ⟨by
-      simp [compare_def, compareLex, compareOn, Ordering.then_eq_eq]⟩
-    have : Std.LawfulLTOrd (α ×ₗ β) := ⟨by
-      simp [compare_def, compareLex, compareOn, Ordering.then_eq_lt, toLex_lt_toLex,
-        compare_lt_iff_lt]⟩
-    convert! Std.LawfulLTCmp.eq_compareOfLessAndEq (cmp := compare) a b
-
-@[to_dual]
-
-Depends on / 依赖: Prod.Lex, total_of
+--- 原说明 ---
+Dictionary / lexicographic linear order for pairs.
 -/
 instance instLinearOrder (α β : Type*) [LinearOrder α] [LinearOrder β] : LinearOrder (α ×ₗ β) where
   le_total := total_of (Prod.Lex _ _)
@@ -742,63 +499,28 @@ instance instLinearOrder (α β : Type*) [LinearOrder α] [LinearOrder β] : Lin
     convert! Std.LawfulLTCmp.eq_compareOfLessAndEq (cmp := compare) a b
 
 @[to_dual]
-/--
-Instance `orderBot` / 实例 `orderBot`
-
-English:
-instance orderBot
-  signature: [PartialOrder α] [Preorder β] [OrderBot α] [OrderBot β]
-  body: toLex ⊥
-  bot_le _ := toLex_mono bot_le
-
-中文:
-实例 orderBot
-  签名: [偏序 α] [预序 β] [有底序 α] [有底序 β]
-  定义体: toLex ⊥
-  bot_le _ := toLex_mono bot_le
+/-
+**Prod.Lex.orderBot** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：orderBot [PartialOrder α] [Preorder β] [OrderBot α] [OrderBot β] : OrderBo
+t (α ×ₗ β) where bot
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance orderBot [PartialOrder α] [Preorder β] [OrderBot α] [OrderBot β] : OrderBot (α ×ₗ β) where
   bot := toLex ⊥
   bot_le _ := toLex_mono bot_le
-
-/--
-Instance `boundedOrder` / 实例 `boundedOrder`
-
-English:
-instance boundedOrder
-  signature: [PartialOrder α] [Preorder β] [BoundedOrder α] [BoundedOrder β]
-
-中文:
-实例 boundedOrder
-  签名: [偏序 α] [预序 β] [有界序 α] [有界序 β]
+/-
+**Prod.Lex.boundedOrder** 是 Mathlib 中的一个定义，位于命名空间 `Prod.Lex`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : PartialOrder α] → [inst_1 
+: Preorder β] → [BoundedOrder α] → [BoundedOrder β] → BoundedOrder (Lex (α × β))
+参数：Lex (α × β)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance boundedOrder [PartialOrder α] [Preorder β] [BoundedOrder α] [BoundedOrder β] :
     BoundedOrder (α ×ₗ β) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] [Preorder β] [DenselyOrdered α] [DenselyOrdered β] :
-  body: by
-    rintro _ _ (@⟨a₁, b₁, a₂, b₂, h⟩ | @⟨a, b₁, b₂, h⟩)
-    · obtain ⟨c, h₁, h₂⟩ := exists_between h
-      exact ⟨(c, b₁), left _ _ h₁, left _ _ h₂⟩
-    · obtain ⟨c, h₁, h₂⟩ := exists_between h
-      exact ⟨(a, c), right _ h₁, right _ h₂⟩
-
-中文:
-实例 [预序
-  签名: α] [预序 β] [稠密序 α] [稠密序 β] :
-  定义体: by
-    rintro _ _ (@⟨a₁, b₁, a₂, b₂, h⟩ | @⟨a, b₁, b₂, h⟩)
-    · obtain ⟨c, h₁, h₂⟩ := exists_between h
-      exact ⟨(c, b₁), left _ _ h₁, left _ _ h₂⟩
-    · obtain ⟨c, h₁, h₂⟩ := exists_between h
-      exact ⟨(a, c), right _ h₁, right _ h₂⟩
-
-Depends on / 依赖: exists_between
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] [Preorder β] [DenselyOrdered α] [DenselyOrdered β] :
     DenselyOrdered (α ×ₗ β) where
@@ -808,45 +530,9 @@ instance [Preorder α] [Preorder β] [DenselyOrdered α] [DenselyOrdered β] :
       exact ⟨(c, b₁), left _ _ h₁, left _ _ h₂⟩
     · obtain ⟨c, h₁, h₂⟩ := exists_between h
       exact ⟨(a, c), right _ h₁, right _ h₂⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] [Preorder β] [NoMinOrder β] [DenselyOrdered β] :
-  body: by
-    cases x with | h x
-    cases y with | h y
-    simp only [Prod.Lex.toLex_lt_toLex] at h
-    rcases h with (h | h)
-    · obtain ⟨v, hv⟩ := exists_lt y.2
-      use toLex (y.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h, hv]
-    · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
-
-@[to_dual existing]
-
-中文:
-实例 [预序
-  签名: α] [预序 β] [NoMin序 β] [稠密序 β] :
-  定义体: by
-    cases x with | h x
-    cases y with | h y
-    simp only [Prod.Lex.toLex_lt_toLex] at h
-    rcases h with (h | h)
-    · obtain ⟨v, hv⟩ := exists_lt y.2
-      use toLex (y.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h, hv]
-    · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
-
-@[to_dual existing]
-
-Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, Prod.Lex.toLex_lt_toLex, exists_lt, toLex_lt_toLex
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] [Preorder β] [NoMinOrder β] [DenselyOrdered β] :
     DenselyOrdered (α ×ₗ β) where
@@ -863,44 +549,9 @@ instance [Preorder α] [Preorder β] [NoMinOrder β] [DenselyOrdered β] :
       simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
 
 @[to_dual existing]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] [Preorder β] [NoMaxOrder β] [DenselyOrdered β] :
-  body: by
-    cases x with | h x
-    cases y with | h y
-    simp only [Prod.Lex.toLex_lt_toLex] at h
-    rcases h with (h | h)
-    · obtain ⟨v, hv⟩ := exists_gt x.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h, hv]
-    · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
-
-@[to_dual]
-
-中文:
-实例 [预序
-  签名: α] [预序 β] [NoMax序 β] [稠密序 β] :
-  定义体: by
-    cases x with | h x
-    cases y with | h y
-    simp only [Prod.Lex.toLex_lt_toLex] at h
-    rcases h with (h | h)
-    · obtain ⟨v, hv⟩ := exists_gt x.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h, hv]
-    · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use toLex (x.1, v)
-      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
-
-@[to_dual]
-
-Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, Prod.Lex.toLex_lt_toLex, exists_gt, toLex_lt_toLex
+/-
+**Prod.Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] [Preorder β] [NoMaxOrder β] [DenselyOrdered β] :
     DenselyOrdered (α ×ₗ β) where
@@ -917,75 +568,63 @@ instance [Preorder α] [Preorder β] [NoMaxOrder β] [DenselyOrdered β] :
       simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
 
 @[to_dual]
-/--
-Instance `noMaxOrder_of_left` / 实例 `noMaxOrder_of_left`
-
-English:
-instance noMaxOrder_of_left
-  signature: [Preorder α] [Preorder β] [NoMaxOrder α]
-  body: by
-    rw [Lex.forall]; rw [Prod.forall]
-    intro a b
-    obtain ⟨c, h⟩ := exists_gt a
-    use toLex (c, b)
-    simpa [lt_iff]
-
-@[to_dual]
-
-中文:
-实例 noMaxOrder_of_left
-  签名: [预序 α] [预序 β] [NoMax序 α]
-  定义体: by
-    rw [Lex.forall]; rw [Prod.forall]
-    intro a b
-    obtain ⟨c, h⟩ := exists_gt a
-    use toLex (c, b)
-    simpa [lt_iff]
-
-@[to_dual]
-
-Depends on / 依赖: Lex.forall, Prod.forall, exists_gt, lt_iff
+/-
+**Prod.Lex.noMaxOrder_of_left** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：noMaxOrder_of_left [Preorder α] [Preorder β] [NoMaxOrder α] : NoMaxOrder (
+α ×ₗ β) where exists_gt
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lex.forall`：∀ {α : Type u_1} {p : Lex α → Prop}, (∀ (a : Lex α), p a) ↔ 
+∀ (a : α), p (toLex a)
+· 使用定理 `Prod.forall`：∀ {α : Type u_1} {β : Type u_2} {p : α × β → Prop}, (∀ (x :
+ α × β), p x) ↔ ∀ (a : α) (b : β), p (a, b)
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
 instance noMaxOrder_of_left [Preorder α] [Preorder β] [NoMaxOrder α] : NoMaxOrder (α ×ₗ β) where
   exists_gt := by
-    rw [Lex.forall]; rw [Prod.forall]
+    rw [Lex.forall, Prod.forall]
     intro a b
     obtain ⟨c, h⟩ := exists_gt a
     use toLex (c, b)
     simpa [lt_iff]
 
 @[to_dual]
-/--
-Instance `noMaxOrder_of_right` / 实例 `noMaxOrder_of_right`
-
-English:
-instance noMaxOrder_of_right
-  signature: [Preorder α] [Preorder β] [NoMaxOrder β]
-  body: by
-    rw [Lex.forall]; rw [Prod.forall]
-    intro a b
-    obtain ⟨c, h⟩ := exists_gt b
-    use toLex (a, c)
-    simpa [lt_iff]
-
-中文:
-实例 noMaxOrder_of_right
-  签名: [预序 α] [预序 β] [NoMax序 β]
-  定义体: by
-    rw [Lex.forall]; rw [Prod.forall]
-    intro a b
-    obtain ⟨c, h⟩ := exists_gt b
-    use toLex (a, c)
-    simpa [lt_iff]
-
-Depends on / 依赖: Lex.forall, Prod.forall, exists_gt, lt_iff
+/-
+**Prod.Lex.noMaxOrder_of_right** 是 Mathlib 中的一个实例，位于命名空间 `Prod.Lex`。
+形式化陈述：noMaxOrder_of_right [Preorder α] [Preorder β] [NoMaxOrder β] : NoMaxOrder 
+(α ×ₗ β) where exists_gt
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lex.forall`：∀ {α : Type u_1} {p : Lex α → Prop}, (∀ (a : Lex α), p a) ↔ 
+∀ (a : α), p (toLex a)
+· 使用定理 `Prod.forall`：∀ {α : Type u_1} {β : Type u_2} {p : α × β → Prop}, (∀ (x :
+ α × β), p x) ↔ ∀ (a : α) (b : β), p (a, b)
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
 instance noMaxOrder_of_right [Preorder α] [Preorder β] [NoMaxOrder β] : NoMaxOrder (α ×ₗ β) where
   exists_gt := by
-    rw [Lex.forall]; rw [Prod.forall]
+    rw [Lex.forall, Prod.forall]
     intro a b
     obtain ⟨c, h⟩ := exists_gt b
     use toLex (a, c)
     simpa [lt_iff]
 
 end Prod.Lex
+

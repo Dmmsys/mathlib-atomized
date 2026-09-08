@@ -35,41 +35,43 @@ variable [AddCommMonoid M] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMon
          [AddCommMonoid N]
 variable [Module R M] [Module R M₁] [Module R M₂] [Module R M₃] [Module R N]
 
-/--
-Definition of `IsometryEquiv` / `IsometryEquiv` 的定义
+/-- An isometric equivalence between two quadratic spaces `M₁, Q₁` and `M₂, Q₂` over a ring `R`,
+is a linear equivalence between `M₁` and `M₂` that commutes with the quadratic forms. -/
+/-
+**QuadraticMap.IsometryEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 `QuadraticMap`。
+形式化陈述：{R : Type u_2} →   {M₁ : Type u_5} →     {M₂ : Type u_6} →       {N : Type
+ u_9} →         [inst : CommSemiring R] →           [inst_1 : AddCommMonoid M₁] 
+→             [inst_2 : AddCommMonoid M₂] →               [inst_3 : AddCommMonoi
+d N] →                 [inst_4 : _root_.Module R M₁] →                   [inst_5
+ : _root_.Module R M₂] →                     [inst_6 : _root_.Module R N] → Quad
+raticMap R M₁ N → QuadraticMap R M₂ N → Type (max u_5 u_6)
+参数：max u_5 u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsometryEquiv
-  parameters: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
-  extends: M₁ ≃ₗ[R] M₂
-  axioms and operations (1):
-    - map_app' : forall m, Q₂ (toFun m) = Q₁ m
-
-中文:
-结构 等距等价
-  参数: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
-  继承: M₁ ≃ₗ[R] M₂
-  公理与运算 (1 个):
-    - map_app' : 对任意 m, Q₂ (toFun m) = Q₁ m
+--- 原说明 ---
+An isometric equivalence between two quadratic spaces `M₁, Q₁` and `M₂, Q₂` over
+ a ring `R`,
+is a linear equivalence between `M₁` and `M₂` that commutes with the quadratic f
+orms.
 -/
 structure IsometryEquiv (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
     extends M₁ ≃ₗ[R] M₂ where
-  map_app' : forall m, Q₂ (toFun m) = Q₁ m
+  map_app' : ∀ m, Q₂ (toFun m) = Q₁ m
 
-/--
-Definition of `Equivalent` / `Equivalent` 的定义
+/-- Two quadratic forms over a ring `R` are equivalent
+if there exists an isometric equivalence between them:
+a linear equivalence that transforms one quadratic form into the other. -/
+/-
+**QuadraticMap.Equivalent** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：Equivalent (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) : Prop
+参数：Q₁ : QuadraticMap R M₁ N；Q₂ : QuadraticMap R M₂ N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equivalent
-  signature: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
-  body: Nonempty (Q₁.IsometryEquiv Q₂)
-
-中文:
-定义 Equivalent
-  签名: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
-  定义体: Nonempty (Q₁.IsometryEquiv Q₂)
-
-Depends on / 依赖: IsometryEquiv, Nonempty
+--- 原说明 ---
+Two quadratic forms over a ring `R` are equivalent
+if there exists an isometric equivalence between them:
+a linear equivalence that transforms one quadratic form into the other.
 -/
 def Equivalent (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) : Prop :=
   Nonempty (Q₁.IsometryEquiv Q₂)
@@ -78,28 +80,10 @@ namespace IsometryEquiv
 
 variable {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂ N} {Q₃ : QuadraticMap R M₃ N}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (Q₁.IsometryEquiv Q₂) M₁ M₂
-  body: f.toLinearEquiv
-  inv f := f.toLinearEquiv.symm
-  left_inv f := f.toLinearEquiv.left_inv
-  right_inv f := f.toLinearEquiv.right_inv
-  coe_injective' f g := by cases f; cases g; simp +contextual
-
-中文:
-实例 :
-  签名: 等价状 (Q₁.等距等价 Q₂) M₁ M₂
-  定义体: f.toLinearEquiv
-  inv f := f.toLinearEquiv.symm
-  left_inv f := f.toLinearEquiv.left_inv
-  right_inv f := f.toLinearEquiv.right_inv
-  coe_injective' f g := by cases f; cases g; simp +contextual
-
-Depends on / 依赖: f.toLinearEquiv, toLinearEquiv
+/-
+**QuadraticMap.IsometryEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.IsometryEq
+uiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (Q₁.IsometryEquiv Q₂) M₁ M₂ where
   coe f := f.toLinearEquiv
@@ -107,132 +91,78 @@ instance : EquivLike (Q₁.IsometryEquiv Q₂) M₁ M₂ where
   left_inv f := f.toLinearEquiv.left_inv
   right_inv f := f.toLinearEquiv.right_inv
   coe_injective' f g := by cases f; cases g; simp +contextual
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearEquivClass (Q₁.IsometryEquiv Q₂) R M₁ M₂
-  body: map_add f.toLinearEquiv
-  map_smulₛₗ f := map_smulₛₗ f.toLinearEquiv
-
-中文:
-实例 :
-  签名: LinearEquivClass (Q₁.等距等价 Q₂) R M₁ M₂
-  定义体: map_add f.toLinearEquiv
-  map_smulₛₗ f := map_smulₛₗ f.toLinearEquiv
-
-Depends on / 依赖: f.toLinearEquiv, map_add, toLinearEquiv
+/-
+**QuadraticMap.IsometryEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.IsometryEq
+uiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LinearEquivClass (Q₁.IsometryEquiv Q₂) R M₁ M₂ where
   map_add f := map_add f.toLinearEquiv
   map_smulₛₗ f := map_smulₛₗ f.toLinearEquiv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (Q₁.IsometryEquiv Q₂) (M₁ ≃ₗ[R] M₂)
-  body: ⟨IsometryEquiv.toLinearEquiv⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: CoeOut (Q₁.等距等价 Q₂) (M₁ ≃ₗ[R] M₂)
-  定义体: ⟨IsometryEquiv.toLinearEquiv⟩
-
-@[simp]
-
-Depends on / 依赖: IsometryEquiv, IsometryEquiv.toLinearEquiv, toLinearEquiv
+/-
+**QuadraticMap.IsometryEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.IsometryEq
+uiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (Q₁.IsometryEquiv Q₂) (M₁ ≃ₗ[R] M₂) :=
   ⟨IsometryEquiv.toLinearEquiv⟩
 
 @[simp]
-/--
-theorem `coe_toLinearEquiv` / 定理 `coe_toLinearEquiv`
-
-English:
-theorem coe_toLinearEquiv
-  given: (f : Q₁.IsometryEquiv Q₂)
-  statement: ⇑(f : M₁ ≃ₗ[R] M₂) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toLinearEquiv
-  条件: (f : Q₁.等距等价 Q₂)
-  结论: ⇑(f : M₁ ≃ₗ[R] M₂) = f
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticMap.IsometryEquiv.coe_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Quadra
+ticMap.IsometryEquiv`。
+形式化陈述：coe_toLinearEquiv (f : Q₁.IsometryEquiv Q₂) : ⇑(f : M₁ ≃ₗ[R] M₂) = f
+参数：f : Q₁.IsometryEquiv Q₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toLinearEquiv (f : Q₁.IsometryEquiv Q₂) : ⇑(f : M₁ ≃ₗ[R] M₂) = f :=
   rfl
 
 @[simp]
-/--
-theorem `map_app` / 定理 `map_app`
-
-English:
-theorem map_app
-  given: (f : Q₁.IsometryEquiv Q₂) (m : M₁)
-  statement: Q₂ (f m) = Q₁ m
-  proof: f.map_app' m
-
-中文:
-定理 map_app
-  条件: (f : Q₁.等距等价 Q₂) (m : M₁)
-  结论: Q₂ (f m) = Q₁ m
-  证明: f.map_app' m
-
-Depends on / 依赖: f.map_app, map_app
+/-
+**QuadraticMap.IsometryEquiv.map_app** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Iso
+metryEquiv`。
+形式化陈述：map_app (f : Q₁.IsometryEquiv Q₂) (m : M₁) : Q₂ (f m) = Q₁ m
+参数：f : Q₁.IsometryEquiv Q₂；m : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.IsometryEquiv.map_app'`：∀ {R : Type u_2} {M₁ : Type u_5} {M
+₂ : Type u_6} {N : Type u_9} [inst : CommSemiring R] [inst_1 : AddCommMonoid M₁]
+   [inst_2 : AddCommMonoi…
 -/
 theorem map_app (f : Q₁.IsometryEquiv Q₂) (m : M₁) : Q₂ (f m) = Q₁ m :=
   f.map_app' m
 
 /-- The identity isometric equivalence between a quadratic form and itself. -/
 @[refl]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**QuadraticMap.IsometryEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isomet
+ryEquiv`。
+形式化陈述：refl (Q : QuadraticMap R M N) : Q.IsometryEquiv Q
+参数：Q : QuadraticMap R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (Q : QuadraticMap R M N)
-  body: { LinearEquiv.refl R M with map_app' := fun _ => rfl }
-
-中文:
-定义 refl
-  签名: (Q : 二次映射 R M N)
-  定义体: { LinearEquiv.refl R M with map_app' := fun _ => rfl }
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl, map_app
+--- 原说明 ---
+The identity isometric equivalence between a quadratic form and itself.
 -/
 def refl (Q : QuadraticMap R M N) : Q.IsometryEquiv Q :=
   { LinearEquiv.refl R M with map_app' := fun _ => rfl }
 
 /-- The inverse isometric equivalence of an isometric equivalence between two quadratic forms. -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**QuadraticMap.IsometryEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isomet
+ryEquiv`。
+形式化陈述：symm (f : Q₁.IsometryEquiv Q₂) : Q₂.IsometryEquiv Q₁
+参数：f : Q₁.IsometryEquiv Q₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (f : Q₁.IsometryEquiv Q₂)
-  body: { (f : M₁ ≃ₗ[R] M₂).symm with
-    map_app' := by intro m; rw [← f.map_app]; congr; exact f.toLinearEquiv.apply_symm_apply m }
-
-中文:
-定义 symm
-  签名: (f : Q₁.等距等价 Q₂)
-  定义体: { (f : M₁ ≃ₗ[R] M₂).symm with
-    map_app' := by intro m; rw [← f.map_app]; congr; exact f.toLinearEquiv.apply_symm_apply m }
-
-Depends on / 依赖: apply_symm_apply, f.map_app, f.toLinearEquiv.apply_symm_apply, map_app, toLinearEquiv
+--- 原说明 ---
+The inverse isometric equivalence of an isometric equivalence between two quadra
+tic forms.
 -/
 def symm (f : Q₁.IsometryEquiv Q₂) : Q₂.IsometryEquiv Q₁ :=
   { (f : M₁ ≃ₗ[R] M₂).symm with
@@ -240,22 +170,17 @@ def symm (f : Q₁.IsometryEquiv Q₂) : Q₂.IsometryEquiv Q₁ :=
 
 /-- The composition of two isometric equivalences between quadratic forms. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**QuadraticMap.IsometryEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isome
+tryEquiv`。
+形式化陈述：trans (f : Q₁.IsometryEquiv Q₂) (g : Q₂.IsometryEquiv Q₃) : Q₁.IsometryEqu
+iv Q₃
+参数：f : Q₁.IsometryEquiv Q₂；g : Q₂.IsometryEquiv Q₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (f : Q₁.IsometryEquiv Q₂) (g : Q₂.IsometryEquiv Q₃)
-  body: { (f : M₁ ≃ₗ[R] M₂).trans (g : M₂ ≃ₗ[R] M₃) with
-    map_app' := by intro m; rw [← f.map_app, ← g.map_app]; rfl }
-
-中文:
-定义 trans
-  签名: (f : Q₁.等距等价 Q₂) (g : Q₂.等距等价 Q₃)
-  定义体: { (f : M₁ ≃ₗ[R] M₂).trans (g : M₂ ≃ₗ[R] M₃) with
-    map_app' := by intro m; rw [← f.map_app, ← g.map_app]; rfl }
-
-Depends on / 依赖: f.map_app, g.map_app, map_app
+--- 原说明 ---
+The composition of two isometric equivalences between quadratic forms.
 -/
 def trans (f : Q₁.IsometryEquiv Q₂) (g : Q₂.IsometryEquiv Q₃) : Q₁.IsometryEquiv Q₃ :=
   { (f : M₁ ≃ₗ[R] M₂).trans (g : M₂ ≃ₗ[R] M₃) with
@@ -263,113 +188,89 @@ def trans (f : Q₁.IsometryEquiv Q₂) (g : Q₂.IsometryEquiv Q₃) : Q₁.Iso
 
 /-- Isometric equivalences are isometric maps -/
 @[simps]
-/--
-Definition of `toIsometry` / `toIsometry` 的定义
+/-
+**QuadraticMap.IsometryEquiv.toIsometry** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.
+IsometryEquiv`。
+形式化陈述：toIsometry (g : Q₁.IsometryEquiv Q₂) : Q₁ ->qᵢ Q₂ where toFun x
+参数：g : Q₁.IsometryEquiv Q₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.IsometryEquiv.map_app'`：∀ {R : Type u_2} {M₁ : Type u_5} {M
+₂ : Type u_6} {N : Type u_9} [inst : CommSemiring R] [inst_1 : AddCommMonoid M₁]
+   [inst_2 : AddCommMonoi…
 
-English:
-definition toIsometry
-  signature: (g : Q₁.IsometryEquiv Q₂)
-  body: g x
-  __ := g
-
-中文:
-定义 toIsometry
-  签名: (g : Q₁.等距等价 Q₂)
-  定义体: g x
-  __ := g
+--- 原说明 ---
+Isometric equivalences are isometric maps
 -/
-def toIsometry (g : Q₁.IsometryEquiv Q₂) : Q₁ ->qᵢ Q₂ where
+def toIsometry (g : Q₁.IsometryEquiv Q₂) : Q₁ →qᵢ Q₂ where
   toFun x := g x
   __ := g
-
-/--
-lemma `apply_symm_apply` / 引理 `apply_symm_apply`
-
-English:
-lemma apply_symm_apply
-  given: (f : Q₁.IsometryEquiv Q₂) (x : M₂)
-  statement: f (f.symm x) = x
-  proof: f.toEquiv.apply_symm_apply x
-
-中文:
-引理 apply_symm_apply
-  条件: (f : Q₁.等距等价 Q₂) (x : M₂)
-  结论: f (f.symm x) = x
-  证明: f.toEquiv.apply_symm_apply x
+/-
+**QuadraticMap.IsometryEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Quadrat
+icMap.IsometryEquiv`。
+形式化陈述：∀ {R : Type u_2} {M₁ : Type u_5} {M₂ : Type u_6} {N : Type u_9} [inst : Co
+mmSemiring R] [inst_1 : AddCommMonoid M₁]   [inst_2 : AddCommMonoid M₂] [inst_3 
+: AddCommMonoid N] [inst_4 : _root_.Module R M₁] [inst_5 : _root_.Module R M₂]  
+ [inst_6 : _root_.Module R N] {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂
+ N} (f : Q₁.IsometryEquiv Q₂) (x : M₂),   f (f.symm x) = x
+参数：f : Q₁.IsometryEquiv Q₂；x : M₂；f.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 @[simp] lemma apply_symm_apply (f : Q₁.IsometryEquiv Q₂) (x : M₂) : f (f.symm x) = x :=
   f.toEquiv.apply_symm_apply x
-
-/--
-lemma `symm_apply_apply` / 引理 `symm_apply_apply`
-
-English:
-lemma symm_apply_apply
-  given: (f : Q₁.IsometryEquiv Q₂) (x : M₁)
-  statement: f.symm (f x) = x
-  proof: f.toEquiv.symm_apply_apply x
-
-中文:
-引理 symm_apply_apply
-  条件: (f : Q₁.等距等价 Q₂) (x : M₁)
-  结论: f.symm (f x) = x
-  证明: f.toEquiv.symm_apply_apply x
+/-
+**QuadraticMap.IsometryEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Quadrat
+icMap.IsometryEquiv`。
+形式化陈述：∀ {R : Type u_2} {M₁ : Type u_5} {M₂ : Type u_6} {N : Type u_9} [inst : Co
+mmSemiring R] [inst_1 : AddCommMonoid M₁]   [inst_2 : AddCommMonoid M₂] [inst_3 
+: AddCommMonoid N] [inst_4 : _root_.Module R M₁] [inst_5 : _root_.Module R M₂]  
+ [inst_6 : _root_.Module R N] {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂
+ N} (f : Q₁.IsometryEquiv Q₂) (x : M₁),   f.symm (f x) = x
+参数：f : Q₁.IsometryEquiv Q₂；x : M₁；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 @[simp] lemma symm_apply_apply (f : Q₁.IsometryEquiv Q₂) (x : M₁) : f.symm (f x) = x :=
   f.toEquiv.symm_apply_apply x
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: (f : Q₁.IsometryEquiv Q₂) {x y}
-  proof: f.toEquiv.symm_apply_eq
-
-中文:
-定理 symm_apply_eq
-  条件: (f : Q₁.等距等价 Q₂) {x y}
-  证明: f.toEquiv.symm_apply_eq
-
-Depends on / 依赖: f.toEquiv.symm_apply_eq, symm_apply_eq, toEquiv
+/-
+**QuadraticMap.IsometryEquiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticM
+ap.IsometryEquiv`。
+形式化陈述：symm_apply_eq (f : Q₁.IsometryEquiv Q₂) {x y} : f.symm x = y ↔ x = f y
+参数：f : Q₁.IsometryEquiv Q₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
 theorem symm_apply_eq (f : Q₁.IsometryEquiv Q₂) {x y} :
     f.symm x = y ↔ x = f y :=
   f.toEquiv.symm_apply_eq
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: (f : Q₁.IsometryEquiv Q₂) {x y}
-  proof: f.toEquiv.eq_symm_apply
-
-中文:
-定理 eq_symm_apply
-  条件: (f : Q₁.等距等价 Q₂) {x y}
-  证明: f.toEquiv.eq_symm_apply
-
-Depends on / 依赖: eq_symm_apply, f.toEquiv.eq_symm_apply, toEquiv
+/-
+**QuadraticMap.IsometryEquiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticM
+ap.IsometryEquiv`。
+形式化陈述：eq_symm_apply (f : Q₁.IsometryEquiv Q₂) {x y} : y = f.symm x ↔ f y = x
+参数：f : Q₁.IsometryEquiv Q₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem eq_symm_apply (f : Q₁.IsometryEquiv Q₂) {x y} :
     y = f.symm x ↔ f y = x :=
   f.toEquiv.eq_symm_apply
-
-/--
-lemma `coe_symm_toLinearEquiv` / 引理 `coe_symm_toLinearEquiv`
-
-English:
-lemma coe_symm_toLinearEquiv
-  given: (f : Q₁.IsometryEquiv Q₂)
-  statement: f.toLinearEquiv.symm = f.symm
-  proof: rfl
-
-中文:
-引理 coe_symm_toLinearEquiv
-  条件: (f : Q₁.等距等价 Q₂)
-  结论: f.toLinearEquiv.symm = f.symm
-  证明: rfl
+/-
+**QuadraticMap.IsometryEquiv.coe_symm_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Q
+uadraticMap.IsometryEquiv`。
+形式化陈述：∀ {R : Type u_2} {M₁ : Type u_5} {M₂ : Type u_6} {N : Type u_9} [inst : Co
+mmSemiring R] [inst_1 : AddCommMonoid M₁]   [inst_2 : AddCommMonoid M₂] [inst_3 
+: AddCommMonoid N] [inst_4 : _root_.Module R M₁] [inst_5 : _root_.Module R M₂]  
+ [inst_6 : _root_.Module R N] {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂
+ N} (f : Q₁.IsometryEquiv Q₂),   f.symm = f.symm.toLinearEquiv
+参数：f : Q₁.IsometryEquiv Q₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_symm_toLinearEquiv (f : Q₁.IsometryEquiv Q₂) : f.toLinearEquiv.symm = f.symm :=
   rfl
@@ -381,103 +282,62 @@ namespace Equivalent
 variable {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂ N} {Q₃ : QuadraticMap R M₃ N}
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (Q : QuadraticMap R M N)
-  statement: Q.Equivalent Q
-  proof: ⟨IsometryEquiv.refl Q⟩
-
-@[symm]
-
-中文:
-定理 refl
-  条件: (Q : 二次映射 R M N)
-  结论: Q.Equivalent Q
-  证明: ⟨IsometryEquiv.refl Q⟩
-
-@[symm]
-
-Depends on / 依赖: IsometryEquiv, IsometryEquiv.refl
+/-
+**QuadraticMap.Equivalent.refl** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Equivalen
+t`。
+形式化陈述：refl (Q : QuadraticMap R M N) : Q.Equivalent Q
+参数：Q : QuadraticMap R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl (Q : QuadraticMap R M N) : Q.Equivalent Q :=
   ⟨IsometryEquiv.refl Q⟩
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: (h : Q₁.Equivalent Q₂)
-  statement: Q₂.Equivalent Q₁
-  proof: h.elim fun f => ⟨f.symm⟩
-
-@[trans]
-
-中文:
-定理 symm
-  条件: (h : Q₁.Equivalent Q₂)
-  结论: Q₂.Equivalent Q₁
-  证明: h.elim fun f => ⟨f.symm⟩
-
-@[trans]
-
-Depends on / 依赖: f.symm, h.elim
+/-
+**QuadraticMap.Equivalent.symm** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Equivalen
+t`。
+形式化陈述：symm (h : Q₁.Equivalent Q₂) : Q₂.Equivalent Q₁
+参数：h : Q₁.Equivalent Q₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
 theorem symm (h : Q₁.Equivalent Q₂) : Q₂.Equivalent Q₁ :=
   h.elim fun f => ⟨f.symm⟩
 
 @[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  given: (h : Q₁.Equivalent Q₂) (h' : Q₂.Equivalent Q₃)
-  statement: Q₁.Equivalent Q₃
-  proof: h'.elim h.elim fun f g => ⟨f.trans g⟩
-
-中文:
-定理 trans
-  条件: (h : Q₁.Equivalent Q₂) (h' : Q₂.Equivalent Q₃)
-  结论: Q₁.Equivalent Q₃
-  证明: h'.elim h.elim fun f g => ⟨f.trans g⟩
-
-Depends on / 依赖: f.trans, h.elim
+/-
+**QuadraticMap.Equivalent.trans** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Equivale
+nt`。
+形式化陈述：trans (h : Q₁.Equivalent Q₂) (h' : Q₂.Equivalent Q₃) : Q₁.Equivalent Q₃
+参数：h : Q₁.Equivalent Q₂；h' : Q₂.Equivalent Q₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
 theorem trans (h : Q₁.Equivalent Q₂) (h' : Q₂.Equivalent Q₃) : Q₁.Equivalent Q₃ :=
-h'.elim h.elim fun f g => ⟨f.trans g⟩
+  h'.elim <| h.elim fun f g => ⟨f.trans g⟩
 
 end Equivalent
 
-/--
-Definition of `isometryEquivOfCompLinearEquiv` / `isometryEquivOfCompLinearEquiv` 的定义
+/-- A quadratic form composed with a `LinearEquiv` is isometric to itself. -/
+/-
+**QuadraticMap.isometryEquivOfCompLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Quadrat
+icMap`。
+形式化陈述：isometryEquivOfCompLinearEquiv (Q : QuadraticMap R M N) (f : M₁ ≃ₗ[R] M) :
+ Q.IsometryEquiv (Q.comp (f : M₁ ->ₗ[R] M))
+参数：Q : QuadraticMap R M N；f : M₁ ≃ₗ[R] M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isometryEquivOfCompLinearEquiv
-  signature: (Q : QuadraticMap R M N) (f : M₁ ≃ₗ[R] M)
-  body: { f.symm with
-    map_app' := by
-      intro
-      simp only [comp_apply, LinearEquiv.coe_coe, LinearEquiv.toFun_eq_coe,
-        f.apply_symm_apply] }
-
-中文:
-定义 isometryEquivOfCompLinearEquiv
-  签名: (Q : 二次映射 R M N) (f : M₁ ≃ₗ[R] M)
-  定义体: { f.symm with
-    map_app' := by
-      intro
-      simp only [comp_apply, LinearEquiv.coe_coe, LinearEquiv.toFun_eq_coe,
-        f.apply_symm_apply] }
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.toFun_eq_coe, apply_symm_apply, coe_coe, comp_apply, f.apply_symm_apply, f.symm, map_app, toFun_eq_coe
+--- 原说明 ---
+A quadratic form composed with a `LinearEquiv` is isometric to itself.
 -/
 def isometryEquivOfCompLinearEquiv (Q : QuadraticMap R M N) (f : M₁ ≃ₗ[R] M) :
-    Q.IsometryEquiv (Q.comp (f : M₁ ->ₗ[R] M)) :=
+    Q.IsometryEquiv (Q.comp (f : M₁ →ₗ[R] M)) :=
   { f.symm with
     map_app' := by
       intro
@@ -486,20 +346,17 @@ def isometryEquivOfCompLinearEquiv (Q : QuadraticMap R M N) (f : M₁ ≃ₗ[R] 
 
 variable [Finite ι]
 
-/--
-Definition of `isometryEquivBasisRepr` / `isometryEquivBasisRepr` 的定义
+/-- A quadratic form is isometrically equivalent to its bases representations. -/
+/-
+**QuadraticMap.isometryEquivBasisRepr** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：isometryEquivBasisRepr (Q : QuadraticMap R M N) (v : Basis ι R M) : Isomet
+ryEquiv Q (Q.basisRepr v)
+参数：Q : QuadraticMap R M N；v : Basis ι R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isometryEquivBasisRepr
-  signature: (Q : QuadraticMap R M N) (v : Basis ι R M)
-  body: isometryEquivOfCompLinearEquiv Q v.equivFun.symm
-
-中文:
-定义 isometryEquivBasisRepr
-  签名: (Q : 二次映射 R M N) (v : 基 ι R M)
-  定义体: isometryEquivOfCompLinearEquiv Q v.equivFun.symm
-
-Depends on / 依赖: equivFun, isometryEquivOfCompLinearEquiv, v.equivFun.symm
+--- 原说明 ---
+A quadratic form is isometrically equivalent to its bases representations.
 -/
 noncomputable def isometryEquivBasisRepr (Q : QuadraticMap R M N) (v : Basis ι R M) :
     IsometryEquiv Q (Q.basisRepr v) :=
@@ -510,26 +367,20 @@ end QuadraticMap
 namespace QuadraticForm
 variable [Field K] [Invertible (2 : K)] [AddCommGroup V] [Module K V]
 
-/--
-Definition of `isometryEquivWeightedSumSquares` / `isometryEquivWeightedSumSquares` 的定义
+/-- Given an orthogonal basis, a quadratic form is isometrically equivalent with a weighted sum of
+squares. -/
+/-
+**QuadraticForm.isometryEquivWeightedSumSquares** 是 Mathlib 中的一个定义，位于命名空间 `Quadr
+aticForm`。
+形式化陈述：isometryEquivWeightedSumSquares (Q : QuadraticForm K V) (v : Basis (Fin (M
+odule.finrank K V)) K V) (hv₁ : (associated (R
+参数：Q : QuadraticForm K V；v : Basis (Fin (Module.finrank K V)) K V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isometryEquivWeightedSumSquares
-  signature: (Q : QuadraticForm K V)
-  body: by
-  let iso := Q.isometryEquivBasisRepr v
-  refine ⟨iso, fun m => ?_⟩
-  convert! iso.map_app m
-  rw [basisRepr_eq_of_iIsOrtho _ _ hv₁]
-
-中文:
-定义 isometryEquivWeightedSumSquares
-  签名: (Q : QuadraticForm K V)
-  定义体: by
-  let iso := Q.isometryEquivBasisRepr v
-  refine ⟨iso, fun m => ?_⟩
-  convert! iso.map_app m
-  rw [basisRepr_eq_of_iIsOrtho _ _ hv₁]
+--- 原说明 ---
+Given an orthogonal basis, a quadratic form is isometrically equivalent with a w
+eighted sum of
+squares.
 -/
 noncomputable def isometryEquivWeightedSumSquares (Q : QuadraticForm K V)
     (v : Basis (Fin (Module.finrank K V)) K V)
@@ -543,55 +394,85 @@ noncomputable def isometryEquivWeightedSumSquares (Q : QuadraticForm K V)
 variable [FiniteDimensional K V]
 
 open LinearMap.BilinForm
-
-/--
-theorem `equivalent_weightedSumSquares` / 定理 `equivalent_weightedSumSquares`
-
-English:
-theorem equivalent_weightedSumSquares
-  given: (Q : QuadraticForm K V)
-  proof: let ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm _ Q)
-  ⟨_, ⟨Q.isometryEquivWeightedSumSquares v hv₁⟩⟩
-
-中文:
-定理 equivalent_weightedSumSquares
-  条件: (Q : QuadraticForm K V)
-  证明: let ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm _ Q)
-  ⟨_, ⟨Q.isometryEquivWeightedSumSquares v hv₁⟩⟩
-
-Depends on / 依赖: Q.isometryEquivWeightedSumSquares, associated_isSymm, exists_orthogonal_basis, isometryEquivWeightedSumSquares
+/-
+**QuadraticForm.equivalent_weightedSumSquares** 是 Mathlib 中的一个定理，位于命名空间 `Quadrat
+icForm`。
+形式化陈述：equivalent_weightedSumSquares (Q : QuadraticForm K V) : exists w : Fin (Mo
+dule.finrank K V) -> K, Equivalent Q (weightedSumSquares K w)
+参数：Q : QuadraticForm K V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.BilinForm.exists_orthogonal_basis`：exists_orthogonal_basis [hK
+ : Invertible (2 : K)] {B : LinearMap.BilinForm K V} (hB₂ : B.IsSymm) : exists v
+ : Basis (Fin (finrank K V)) K V,…
+· 使用定理 `QuadraticForm.associated_isSymm`：∀ (S : Type u_1) {R : Type u_3} {M : Ty
+pe u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module 
+R M] [inst_3 : CommSe…
 -/
 theorem equivalent_weightedSumSquares (Q : QuadraticForm K V) :
-    exists w : Fin (Module.finrank K V) -> K, Equivalent Q (weightedSumSquares K w) :=
+    ∃ w : Fin (Module.finrank K V) → K, Equivalent Q (weightedSumSquares K w) :=
   let ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm _ Q)
   ⟨_, ⟨Q.isometryEquivWeightedSumSquares v hv₁⟩⟩
-
-/--
-theorem `equivalent_weightedSumSquares_units_of_nondegenerate'` / 定理 `equivalent_weightedSumSquares_units_of_nondegenerate'`
-
-English:
-theorem equivalent_weightedSumSquares_units_of_nondegenerate'
-  statement: (Q : QuadraticForm K V)
-  proof: by
-  obtain ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm K Q)
-  have hv₂ := hv₁.not_isOrtho_basis_self_of_separatingLeft hQ
-  simp_rw [associated_eq_self_apply] at hv₂
-  exact ⟨fun i => Units.mk0 _ (hv₂ i), ⟨Q.isometryEquivWeightedSumSquares v hv₁⟩⟩
-
-中文:
-定理 equivalent_weightedSumSquares_units_of_nondegenerate'
-  结论: (Q : QuadraticForm K V)
-  证明: by
-  obtain ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm K Q)
-  have hv₂ := hv₁.not_isOrtho_basis_self_of_separatingLeft hQ
-  simp_rw [associated_eq_self_apply] at hv₂
-  exact ⟨fun i => Units.mk0 _ (hv₂ i), ⟨Q.isometryEquivWeightedSumSquares v hv₁⟩⟩
-
-Depends on / 依赖: SeparatingLeft
+/-
+**QuadraticForm.equivalent_weightedSumSquares_units_of_nondegenerate'** 是 Mathli
+b 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：equivalent_weightedSumSquares_units_of_nondegenerate' (Q : QuadraticForm K
+ V) (hQ : (associated (R
+参数：Q : QuadraticForm K V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.BilinForm.exists_orthogonal_basis`：exists_orthogonal_basis [hK
+ : Invertible (2 : K)] {B : LinearMap.BilinForm K V} (hB₂ : B.IsSymm) : exists v
+ : Basis (Fin (finrank K V)) K V,…
+· 使用定理 `QuadraticForm.associated_isSymm`：∀ (S : Type u_1) {R : Type u_3} {M : Ty
+pe u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module 
+R M] [inst_3 : CommSe…
+· 使用定理 `LinearMap.IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft`：∀ {n : Type
+ u_19} {R : Type u_20} {M : Type u_21} {M₁ : Type u_22} [inst : CommSemiring R] 
+[inst_1 : AddCommMonoid M]   [inst_2 : AddCommMon…
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_eq_self_apply`：associated_eq_self_apply (x : M) 
+: associatedHom S Q x x = Q x
 -/
 theorem equivalent_weightedSumSquares_units_of_nondegenerate' (Q : QuadraticForm K V)
     (hQ : (associated (R := K) Q).SeparatingLeft) :
-    exists w : Fin (Module.finrank K V) -> Kˣ, Equivalent Q (weightedSumSquares K w) := by
+    ∃ w : Fin (Module.finrank K V) → Kˣ, Equivalent Q (weightedSumSquares K w) := by
   obtain ⟨v, hv₁⟩ := exists_orthogonal_basis (associated_isSymm K Q)
   have hv₂ := hv₁.not_isOrtho_basis_self_of_separatingLeft hQ
   simp_rw [associated_eq_self_apply] at hv₂
@@ -600,68 +481,44 @@ theorem equivalent_weightedSumSquares_units_of_nondegenerate' (Q : QuadraticForm
 variable {ι S R : Type*}
 variable [Fintype ι] [CommSemiring R] [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
 variable [IsScalarTower S R R]
-variable {w : ι -> S} {w' : ι -> S}
+variable {w : ι → S} {w' : ι → S}
 
-/--
-Definition of `weightedSumSquaresCongr` / `weightedSumSquaresCongr` 的定义
+/-- The isometry between two weighted sum of squares of equal weights. -/
+/-
+**QuadraticForm.weightedSumSquaresCongr** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticForm
+`。
+形式化陈述：weightedSumSquaresCongr (h : w = w') : IsometryEquiv (weightedSumSquares R
+ w) (weightedSumSquares R w') where __
+参数：h : w = w'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightedSumSquaresCongr
-  signature: (h : w = w')
-  body: LinearEquiv.refl R (ι -> R)
-  map_app' := by simp [h]
-
-中文:
-定义 weightedSumSquaresCongr
-  签名: (h : w = w')
-  定义体: LinearEquiv.refl R (ι -> R)
-  map_app' := by simp [h]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl
+--- 原说明 ---
+The isometry between two weighted sum of squares of equal weights.
 -/
 def weightedSumSquaresCongr (h : w = w') :
     IsometryEquiv (weightedSumSquares R w) (weightedSumSquares R w') where
-  __ := LinearEquiv.refl R (ι -> R)
+  __ := LinearEquiv.refl R (ι → R)
   map_app' := by simp [h]
 
-/--
-Definition of `isometryEquivWeightedSumSquaresWeightedSumSquares` / `isometryEquivWeightedSumSquaresWeightedSumSquares` 的定义
+/-- The isometry between two weighted sum of squares, give that each weight is scaled by the square
+of a unit. -/
+/-
+**QuadraticForm.isometryEquivWeightedSumSquaresWeightedSumSquares** 是 Mathlib 中的
+一个定义，位于命名空间 `QuadraticForm`。
+形式化陈述：isometryEquivWeightedSumSquaresWeightedSumSquares (u : ι -> Sˣ) (h : foral
+l i, w' i * u i ^ 2 = w i) : IsometryEquiv (weightedSumSquares R w) (weightedSum
+Squares R w') where toFun x
+参数：u : ι -> Sˣ；h : forall i, w' i * u i ^ 2 = w i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isometryEquivWeightedSumSquaresWeightedSumSquares
-  signature: (u : ι -> Sˣ) (h : forall i, w' i * u i ^ 2 = w i)
-  body: u • x
-  invFun x := u⁻¹ • x
-  left_inv x := by simp
-  right_inv x := by simp
-  map_add' x y := by simp
-  map_smul' v x := by
-    ext i
-    simp only [Pi.smul_apply', Pi.smul_apply, RingHom.id_apply, smul_comm]
-  map_app' x := by
-    simp only [weightedSumSquares_apply, Pi.smul_apply']
-    refine Finset.sum_congr rfl fun j hj => ?_
-    rw [smul_mul_smul]; rw [Units.smul_def]; rw [smul_smul]; rw [← pow_two]; rw [← h]
-    simp
-
-中文:
-定义 isometryEquivWeightedSumSquaresWeightedSumSquares
-  签名: (u : ι -> Sˣ) (h : 对任意 i, w' i * u i ^ 2 = w i)
-  定义体: u • x
-  invFun x := u⁻¹ • x
-  left_inv x := by simp
-  right_inv x := by simp
-  map_add' x y := by simp
-  map_smul' v x := by
-    ext i
-    simp only [Pi.smul_apply', Pi.smul_apply, RingHom.id_apply, smul_comm]
-  map_app' x := by
-    simp only [weightedSumSquares_apply, Pi.smul_apply']
-    refine Finset.sum_congr rfl fun j hj => ?_
-    rw [smul_mul_smul]; rw [Units.smul_def]; rw [smul_smul]; rw [← pow_two]; rw [← h]
-    simp
+--- 原说明 ---
+The isometry between two weighted sum of squares, give that each weight is scale
+d by the square
+of a unit.
 -/
-def isometryEquivWeightedSumSquaresWeightedSumSquares (u : ι -> Sˣ) (h : forall i, w' i * u i ^ 2 = w i) :
+def isometryEquivWeightedSumSquaresWeightedSumSquares (u : ι → Sˣ) (h : ∀ i, w' i * u i ^ 2 = w i) :
     IsometryEquiv (weightedSumSquares R w) (weightedSumSquares R w') where
   toFun x := u • x
   invFun x := u⁻¹ • x
@@ -674,7 +531,8 @@ def isometryEquivWeightedSumSquaresWeightedSumSquares (u : ι -> Sˣ) (h : foral
   map_app' x := by
     simp only [weightedSumSquares_apply, Pi.smul_apply']
     refine Finset.sum_congr rfl fun j hj => ?_
-    rw [smul_mul_smul]; rw [Units.smul_def]; rw [smul_smul]; rw [← pow_two]; rw [← h]
+    rw [smul_mul_smul, Units.smul_def, smul_smul, ← pow_two, ← h]
     simp
 
 end QuadraticForm
+

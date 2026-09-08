@@ -40,22 +40,13 @@ variable [Mul M]
 /-- The center of a semigroup `M` is the set of elements that commute with everything in `M` -/
 @[to_additive /-- The center of an additive semigroup `M` is the set of elements that commute with
 everything in `M` -/]
-/--
-Definition of `center` / `center` 的定义
-
-English:
-definition center
-  signature: : Subsemigroup M where
-  body: Set.center M
-  mul_mem' := Set.mul_mem_center
-
-中文:
-定义 center
-  签名: : 子半群 M where
-  定义体: Set.center M
-  mul_mem' := Set.mul_mem_center
-
-Depends on / 依赖: Set.center, center
+/-
+**Subsemigroup.center** 是 Mathlib 中的一个定义，位于命名空间 `Subsemigroup`。
+形式化陈述：center : Subsemigroup M where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mul_mem_center`：mul_mem_center {z₁ z₂ : M} (hz₁ : z₁ in Set.center M
+) (hz₂ : z₂ in Set.center M) : z₁ * z₂ in Set.center M
 -/
 def center : Subsemigroup M where
   carrier := Set.center M
@@ -65,26 +56,21 @@ variable {M}
 
 /-- The center of a magma is commutative and associative. -/
 @[to_additive /-- The center of an additive magma is commutative and associative. -/]
-/--
-Instance `center.commSemigroup` / 实例 `center.commSemigroup`
+/-
+**Subsemigroup.center.commSemigroup** 是 Mathlib 中的一个定义，位于命名空间 `Subsemigroup.cent
+er`。
+形式化陈述：{M : Type u_1} → [inst : Mul M] → CommSemigroup ↥(Subsemigroup.center M)
+参数：Subsemigroup.center M。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
 
-English:
-instance center.commSemigroup
-  signature: : CommSemigroup (center M) where
-  body: Subtype.ext b.2.mid_assoc _ _
-mul_comm a _ := Subtype.ext a.2.comm _
-
-中文:
-实例 center.commSemigroup
-  签名: : 交换半群 (center M) where
-  定义体: Subtype.ext b.2.mid_assoc _ _
-mul_comm a _ := Subtype.ext a.2.comm _
-
-Depends on / 依赖: Subtype, Subtype.ext, mid_assoc
+--- 原说明 ---
+The center of a magma is commutative and associative.
 -/
 instance center.commSemigroup : CommSemigroup (center M) where
-mul_assoc _ b _ := Subtype.ext b.2.mid_assoc _ _
-mul_comm a _ := Subtype.ext a.2.comm _
+  mul_assoc _ b _ := Subtype.ext <| b.2.mid_assoc _ _
+  mul_comm a _ := Subtype.ext <| a.2.comm _
 
 end Mul
 
@@ -92,53 +78,35 @@ section Semigroup
 variable {M} [Semigroup M]
 
 @[to_additive]
-/--
-theorem `mem_center_iff` / 定理 `mem_center_iff`
-
-English:
-theorem mem_center_iff
-  given: {z : M}
-  statement: z in center M ↔ forall g, g * z = z * g
-  proof: by
-  rw [← Semigroup.mem_center_iff]
-  exact Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_center_iff
-  条件: {z : M}
-  结论: z in center M ↔ 对任意 g, g * z = z * g
-  证明: by
-  rw [← Semigroup.mem_center_iff]
-  exact Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl, Semigroup, Semigroup.mem_center_iff, mem_center_iff
+/-
+**Subsemigroup.mem_center_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_center_iff {z : M} : z in center M ↔ forall g, g * z = z * g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Semigroup.mem_center_iff`：∀ {M : Type u_1} [inst : Semigroup M] {z : M},
+ z ∈ Set.center M ↔ ∀ (g : M), g * z = z * g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_center_iff {z : M} : z in center M ↔ forall g, g * z = z * g := by
+theorem mem_center_iff {z : M} : z ∈ center M ↔ ∀ g, g * z = z * g := by
   rw [← Semigroup.mem_center_iff]
   exact Iff.rfl
 
 @[to_additive]
-/--
-Instance `decidableMemCenter` / 实例 `decidableMemCenter`
-
-English:
-instance decidableMemCenter
-  signature: (a) [Decidable <| forall b : M, b * a = a * b]
-  body: decidable_of_iff' _ Semigroup.mem_center_iff
-
-中文:
-实例 decidableMemCenter
-  签名: (a) [可判定 <| 对任意 b : M, b * a = a * b]
-  定义体: decidable_of_iff' _ Semigroup.mem_center_iff
-
-Depends on / 依赖: Semigroup, Semigroup.mem_center_iff, decidable_of_iff, mem_center_iff
+/-
+**Subsemigroup.decidableMemCenter** 是 Mathlib 中的一个实例，位于命名空间 `Subsemigroup`。
+形式化陈述：decidableMemCenter (a) [Decidable <| forall b : M, b * a = a * b] : Decida
+ble (a in center M)
+参数：a。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Semigroup.mem_center_iff`：∀ {M : Type u_1} [inst : Semigroup M] {z : M},
+ z ∈ Set.center M ↔ ∀ (g : M), g * z = z * g
 -/
-instance decidableMemCenter (a) [Decidable <| forall b : M, b * a = a * b] :
-    Decidable (a in center M) :=
+instance decidableMemCenter (a) [Decidable <| ∀ b : M, b * a = a * b] :
+    Decidable (a ∈ center M) :=
   decidable_of_iff' _ Semigroup.mem_center_iff
 
 end Semigroup
@@ -147,20 +115,14 @@ section CommSemigroup
 variable [CommSemigroup M]
 
 @[to_additive (attr := simp)]
-/--
-theorem `center_eq_top` / 定理 `center_eq_top`
-
-English:
-theorem center_eq_top
-  statement: center M = ⊤
-  proof: SetLike.coe_injective (Set.center_eq_univ M)
-
-中文:
-定理 center_eq_top
-  结论: center M = ⊤
-  证明: SetLike.coe_injective (Set.center_eq_univ M)
-
-Depends on / 依赖: Set.center_eq_univ, SetLike, SetLike.coe_injective, center_eq_univ, coe_injective
+/-
+**Subsemigroup.center_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：center_eq_top : center M = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.center_eq_univ`：center_eq_univ : center M = univ
 -/
 theorem center_eq_top : center M = ⊤ :=
   SetLike.coe_injective (Set.center_eq_univ M)
@@ -168,3 +130,4 @@ theorem center_eq_top : center M = ⊤ :=
 end CommSemigroup
 
 end Subsemigroup
+

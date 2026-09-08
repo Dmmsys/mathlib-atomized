@@ -67,7 +67,7 @@ we will not be able to translate declarations that (e.g.) talk about multiplicat
 anyway.
 -/
 
-syntax relevantArgOption := &"relevant_arg" " := " hole > ident > num
+syntax relevantArgOption := &"relevant_arg" " := " hole <|> ident <|> num
 /--
 `(dont_translate := ...)` takes a list of type variables (separated by spaces) that should not be
 considered for translation. For example in
@@ -79,7 +79,7 @@ we can choose to only translate `α` by writing `to_additive (dont_translate := 
 
 syntax dontTranslateOption := &"dont_translate" " := " (ident <|> num)+
 
-syntax renameRule := ident (" -> " <|> " ↔ ") ident
+syntax renameRule := ident (" → " <|> " ↔ ") ident
 
 attribute [nolint docBlame] renameRule
 
@@ -91,7 +91,7 @@ The `(rename := ...)` option takes a comma-separated list of rename rules of the
 syntax renameOption := &"rename" " := " renameRule,+
 
 syntax bracketedOption := "(" attrOption <|> reorderOption <|>
-relevantArgOption > dontTranslateOption > renameOption ")"
+  relevantArgOption <|> dontTranslateOption <|> renameOption ")"
 
 /-- A hint about the translated declaration
 
@@ -171,22 +171,19 @@ register_option linter.translate.warnInvalid : Bool := {
   descr := "Linter used by translate attributes that warns when a translation was not added
     because of being invalid." }
 
-/--
-Inductive type `RelevantArg` / 归纳类型 `RelevantArg`
+/-- `RelevantArg` represents an optional argument that should be checked to determine
+whether or not to translate the given constant. -/
+/-
+**Mathlib.Tactic.Translate.RelevantArg** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tact
+ic.Translate`。
+形式化陈述：RelevantArg where /-- No argument needs to be checked. This is specified w
+ith `(relevant_arg
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive RelevantArg
-  parameters: where
-  constructors (2):
-    - noArg: 
-    - arg: (n : Nat)
-
-中文:
-归纳类型 RelevantArg
-  参数: where
-  构造子 (2 个):
-    - noArg: 
-    - arg: (n : 自然数)
+--- 原说明 ---
+`RelevantArg` represents an optional argument that should be checked to determin
+e
+whether or not to translate the given constant. -/
 -/
 inductive RelevantArg where
   /-- No argument needs to be checked. This is specified with `(relevant_arg := _)`. -/
@@ -195,56 +192,43 @@ inductive RelevantArg where
   | arg (n : Nat)
   deriving BEq, Inhabited
 
-/--
-Definition of `RelevantArg.min` / `RelevantArg.min` 的定义
+/-- Combine two known `RelevantArg`s by taking the smallest value of the two.
+Recall that if there are multiple relevant arguments, `relevant_arg` is set to the smallest one. -/
+/-
+**Mathlib.Tactic.Translate.RelevantArg.min** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RelevantArg.min
-  signature: : RelevantArg -> RelevantArg -> RelevantArg
-
-中文:
-定义 RelevantArg.最小值
-  签名: : RelevantArg -> RelevantArg -> RelevantArg
+--- 原说明 ---
+Combine two known `RelevantArg`s by taking the smallest value of the two.
+Recall that if there are multiple relevant arguments, `relevant_arg` is set to t
+he smallest one.
 -/
-private def RelevantArg.min : RelevantArg -> RelevantArg -> RelevantArg
+private def RelevantArg.min : RelevantArg → RelevantArg → RelevantArg
   | .arg x, .arg y => .arg (x.min y)
   | x, .noArg => x
   | .noArg, y => y
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToMessageData RelevantArg
-
-中文:
-实例 :
-  签名: ToMessageData RelevantArg
+/-
+**Mathlib.Tactic.Translate.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Translate`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToMessageData RelevantArg where
   toMessageData
     | .arg n => m!"{n + 1}"
     | .noArg => "_"
 
-/--
-Definition of `TranslationInfo` / `TranslationInfo` 的定义
+/-- `TranslationInfo` stores the information of how to translate a constant. -/
+/-
+**Mathlib.Tactic.Translate.TranslationInfo** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+形式化陈述：TranslationInfo where /-- The name that we are translating to. -/ translat
+ion : Name /-- The arguments that should be reordered when translating, using di
+sjoint cycle notation. -/ reorder : Reorder
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TranslationInfo
-  parameters: where
-  axioms and operations (3):
-    - translation : Name
-    - reorder : Reorder  [default: {}]
-    - relevantArg : RelevantArg  [default: .arg 0]
-
-中文:
-结构 TranslationInfo
-  参数: where
-  公理与运算 (3 个):
-    - translation : Name
-    - reorder : Reorder  [默认: {}]
-    - relevantArg : RelevantArg  [默认: .arg 0]
+--- 原说明 ---
+`TranslationInfo` stores the information of how to translate a constant.
 -/
 structure TranslationInfo where
   /-- The name that we are translating to. -/
@@ -254,34 +238,22 @@ structure TranslationInfo where
   /-- The argument used to determine whether this constant should be translated. -/
   relevantArg : RelevantArg := .arg 0
 
-/--
-Definition of `TranslateData` / `TranslateData` 的定义
+/-- `TranslateData` is a structure that holds all data required for a translation attribute. -/
+/-
+**Mathlib.Tactic.Translate.TranslateData** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tact
+ic.Translate`。
+形式化陈述：TranslateData : Type where /-- An attribute that tells that certain argume
+nts of this definition are not involved when translating. This helps the transla
+tion heuristic by also transforming definitions if `ℕ` or another fixed type occ
+urs as one of these arguments. -/ ignoreArgsAttr : NameMapExtension (List Nat) /
+-- The global `do_translate`/`dont_translate` attributes specify whether operati
+ons on a given type should be translated. `dont_translate` can be used for types
+ that are translated, such
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TranslateData
-  parameters: : Type where
-  axioms and operations (8):
-    - ignoreArgsAttr : NameMapExtension (List Nat)
-    - doTranslateAttr : NameMapExtension Bool
-    - unfoldBoundaries? : Option UnfoldBoundary.UnfoldBoundaryExt  [default: none]
-    - translations : NameMapExtension TranslationInfo
-    - attrName : Name
-    - changeNumeral : Bool
-    - isDual : Bool
-    - guessNameExt : GuessName.GuessNameExt
-
-中文:
-结构 TranslateData
-  参数: : 类型 where
-  公理与运算 (8 个):
-    - ignoreArgsAttr : NameMapExtension (列表 自然数)
-    - doTranslateAttr : NameMapExtension 布尔值
-    - unfoldBoundaries? : 选项类型 UnfoldBoundary.UnfoldBoundaryExt  [默认: none]
-    - translations : NameMapExtension TranslationInfo
-    - attrName : Name
-    - changeNumeral : 布尔值
-    - isDual : 布尔值
-    - guessNameExt : GuessName.GuessNameExt
+--- 原说明 ---
+`TranslateData` is a structure that holds all data required for a translation at
+tribute. -/
 -/
 structure TranslateData : Type where
   /-- An attribute that tells that certain arguments of this definition are not
@@ -317,76 +289,49 @@ structure TranslateData : Type where
 
 attribute [inherit_doc GuessName.GuessNameExt] TranslateData.guessNameExt
 
-/--
-Definition of `findTranslation?` / `findTranslation?` 的定义
+/-- Get the translation for the given name. -/
+/-
+**Mathlib.Tactic.Translate.findTranslation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+形式化陈述：findTranslation? (env : Environment) (t : TranslateData) : Name -> Option 
+TranslationInfo
+参数：env : Environment；t : TranslateData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findTranslation?
-  signature: (env : Environment) (t : TranslateData)
-  body: t.translations.find? env
-
-中文:
-定义 findTranslation?
-  签名: (env : Environment) (t : TranslateData)
-  定义体: t.translations.find? env
-
-Depends on / 依赖: t.translations.find, translations
+--- 原说明 ---
+Get the translation for the given name.
 -/
-def findTranslation? (env : Environment) (t : TranslateData) : Name -> Option TranslationInfo :=
+def findTranslation? (env : Environment) (t : TranslateData) : Name → Option TranslationInfo :=
   t.translations.find? env
 
-/--
-Definition of `findTranslationName?` / `findTranslationName?` 的定义
+/-- Get the translation name for the given name. -/
+/-
+**Mathlib.Tactic.Translate.findTranslationName** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate`。
+形式化陈述：findTranslationName? (env : Environment) (t : TranslateData) (n : Name) : 
+Option Name
+参数：env : Environment；t : TranslateData；n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findTranslationName?
-  signature: (env : Environment) (t : TranslateData) (n : Name)
-  body: (findTranslation? env t n).map (·.translation)
-
-中文:
-定义 findTranslationName?
-  签名: (env : Environment) (t : TranslateData) (n : Name)
-  定义体: (findTranslation? env t n).map (·.translation)
-
-Depends on / 依赖: findTranslation, translation
+--- 原说明 ---
+Get the translation name for the given name.
 -/
 def findTranslationName? (env : Environment) (t : TranslateData) (n : Name) : Option Name :=
   (findTranslation? env t n).map (·.translation)
 
-/--
-Definition of `realizeGlobalConst` / `realizeGlobalConst` 的定义
+/-- Check if the given constant exists in the environment, also checking for reserved names.
+This function is based on `Lean.realizeGlobalName`. -/
+/-
+**Mathlib.Tactic.Translate.realizeGlobalConst** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition realizeGlobalConst
-  signature: (c : Name)
-  body: do
-  let env ← getEnv
-  if env.contains c then
-    return true
-  unless isReservedName env c do
-    return false
-  try
-    executeReservedNameAction c
-    return (← getEnv).containsOnBranch c
-  catch ex =>
-    logError m!"Failed to realize constant {c}:{indentD ex.toMessageData}"
-    return false
-
-中文:
-定义 realizeGlobalConst
-  签名: (c : Name)
-  定义体: do
-  let env ← getEnv
-  if env.contains c then
-    return true
-  unless isReservedName env c do
-    return false
-  try
-    executeReservedNameAction c
-    return (← getEnv).containsOnBranch c
-  catch ex =>
-    logError m!"Failed to realize constant {c}:{indentD ex.toMessageData}"
-    return false
+--- 原说明 ---
+Check if the given constant exists in the environment, also checking for reserve
+d names.
+This function is based on `Lean.realizeGlobalName`.
 -/
 private def realizeGlobalConst (c : Name) : CoreM Bool := do
   let env ← getEnv
@@ -401,32 +346,26 @@ private def realizeGlobalConst (c : Name) : CoreM Bool := do
     logError m!"Failed to realize constant {c}:{indentD ex.toMessageData}"
     return false
 
-/--
-Definition of `findPrefixTranslation?` / `findPrefixTranslation?` 的定义
+/-- Get the translation for the given name,
+falling back to translating a prefix of the name if the full name can't be translated.
+This allows translating automatically generated declarations such as `IsRegular.casesOn`.
+We make sure that the new constant is realized. -/
+/-
+**Mathlib.Tactic.Translate.findPrefixTranslation** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Translate`。
+形式化陈述：findPrefixTranslation? (n : Name) (t : TranslateData) : CoreM (Option Tran
+slationInfo)
+参数：n : Name；t : TranslateData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findPrefixTranslation?
-  signature: (n : Name) (t : TranslateData)
-  body: do
-  let env ← getEnv
-  if let some info := findTranslation? env t n then
-    return info
-  let .str n postFix := n | return none
-  let some info := go env n [postFix] | return none
-  unless ← realizeGlobalConst info.translation do return none
-  return info
-
-中文:
-定义 findPrefixTranslation?
-  签名: (n : Name) (t : TranslateData)
-  定义体: do
-  let env ← getEnv
-  if let some info := findTranslation? env t n then
-    return info
-  let .str n postFix := n | return none
-  let some info := go env n [postFix] | return none
-  unless ← realizeGlobalConst info.translation do return none
-  return info
+--- 原说明 ---
+Get the translation for the given name,
+falling back to translating a prefix of the name if the full name can't be trans
+lated.
+This allows translating automatically generated declarations such as `IsRegular.
+casesOn`.
+We make sure that the new constant is realized.
 -/
 def findPrefixTranslation? (n : Name) (t : TranslateData) : CoreM (Option TranslationInfo) := do
   let env ← getEnv
@@ -452,30 +391,21 @@ where
   let .str n postFix := n | return none
   return go env n (postFix :: postFixes)
 
-/--
-Definition of `insertTranslation` / `insertTranslation` 的定义
+/-- Add a translation to the translations map. If the translation attribute is dual,
+also add the reverse translation. -/
+/-
+**Mathlib.Tactic.Translate.insertTranslation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Translate`。
+形式化陈述：insertTranslation (t : TranslateData) (src tgt : Name) (reorder : Reorder)
+ (relevantArg : RelevantArg) (ref : Syntax) : CoreM Unit
+参数：t : TranslateData；src tgt : Name；reorder : Reorder；relevantArg : RelevantArg；
+ref : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insertTranslation
-  signature: (t : TranslateData) (src tgt : Name) (reorder : Reorder)
-  body: do
-  insertTranslationAux src t { translation := tgt, reorder, relevantArg }
-  if t.isDual && src != tgt then
-    /- In practice, `relevantArg` does not overlap with `reorder` for dual translations,
-    so we don't bother applying the permutation to `relevantArg`. -/
-    insertTranslationAux tgt t {
-      translation := src, reorder := reorder.reverse, relevantArg }
-
-中文:
-定义 insertTranslation
-  签名: (t : TranslateData) (src tgt : Name) (reorder : Reorder)
-  定义体: do
-  insertTranslationAux src t { translation := tgt, reorder, relevantArg }
-  if t.isDual && src != tgt then
-    /- In practice, `relevantArg` does not overlap with `reorder` for dual translations,
-    so we don't bother applying the permutation to `relevantArg`. -/
-    insertTranslationAux tgt t {
-      translation := src, reorder := reorder.reverse, relevantArg }
+--- 原说明 ---
+Add a translation to the translations map. If the translation attribute is dual,
+also add the reverse translation.
 -/
 def insertTranslation (t : TranslateData) (src tgt : Name) (reorder : Reorder)
     (relevantArg : RelevantArg) (ref : Syntax) :
@@ -494,48 +424,20 @@ where
         `{info'.translation}` instead of `{info.translation}`.\n\
         Unless the original translation was wrong, please remove this `{t.attrName}` attribute."
     modifyEnv (t.translations.addEntry · (src, info))
-    trace[translate] "Added translation {src} => {tgt}\
+    trace[translate] "Added translation {src} ↦ {tgt}\
       {if info.reorder.reorder.isEmpty then "" else s!" (reorder := {info.reorder.reorder})"} \
       (relevant_arg := {info.relevantArg})"
 
-/--
-Definition of `Config` / `Config` 的定义
+/-- `Config` is the type of the arguments that can be provided to `to_additive`. -/
+/-
+**Mathlib.Tactic.Translate.Config** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.Tran
+slate`。
+形式化陈述：Config : Type where /-- View the trace of the translation procedure. Equiv
+alent to `set_option trace.translate true`. -/ trace : Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Config
-  parameters: : Type where
-  axioms and operations (13):
-    - trace : Bool  [default: false]
-    - target : Name  [default: Name.anonymous]
-    - doc : Option (TSyntax ``Lean.Parser.Command.docComment)  [default: .none]
-    - allowAutoName : Bool  [default: false]
-    - reorder? : Option ArgReorder  [default: .none]
-    - relevantArg? : Option RelevantArg  [default: .none]
-    - attrs : Array Syntax  [default: #[]]
-    - dontTranslate : List Nat  [default: []]
-    - ref : Syntax
-    - existing : Bool  [default: false]
-    - self : Bool  [default: false]
-    - none : Bool  [default: false]
-    - rename : NameMap Name  [default: {}]
-
-中文:
-结构 余nfig
-  参数: : 类型 where
-  公理与运算 (13 个):
-    - trace : 布尔值  [默认: false]
-    - target : Name  [默认: Name.anonymous]
-    - doc : 选项类型 (TSyntax ``Lean.Parser.Command.docComment)  [默认: .none]
-    - allowAutoName : 布尔值  [默认: false]
-    - reorder? : 选项类型 ArgReorder  [默认: .none]
-    - relevantArg? : 选项类型 RelevantArg  [默认: .none]
-    - attrs : 数组 Syntax  [默认: #[]]
-    - dontTranslate : 列表 自然数  [默认: []]
-    - ref : Syntax
-    - existing : 布尔值  [默认: false]
-    - self : 布尔值  [默认: false]
-    - none : 布尔值  [默认: false]
-    - rename : NameMap Name  [默认: {}]
+--- 原说明 ---
+`Config` is the type of the arguments that can be provided to `to_additive`.
 -/
 structure Config : Type where
   /-- View the trace of the translation procedure.
@@ -576,69 +478,61 @@ structure Config : Type where
   /-- A map specifying the binder names of the translated declaration. -/
   rename : NameMap Name := {}
 
-/--
-Definition of `etaExpandN` / `etaExpandN` 的定义
+/-- Eta expands `e` exactly `n` times. -/
+/-
+**Mathlib.Tactic.Translate.etaExpandN** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：etaExpandN (n : Nat) (e : Expr) : MetaM Expr
+参数：n : Nat；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition etaExpandN
-  signature: (n : Nat) (e : Expr)
-  body: do
-  forallBoundedTelescope (← inferType e) (some n) fun xs _ => do
-    if xs.size != n then
-      throwError "{e} is not a function of arity at least {n}"
-    mkLambdaFVars xs (mkAppN e xs)
-
-中文:
-定义 etaExpandN
-  签名: (n : 自然数) (e : Expr)
-  定义体: do
-  forallBoundedTelescope (← inferType e) (some n) fun xs _ => do
-    if xs.size != n then
-      throwError "{e} is not a function of arity at least {n}"
-    mkLambdaFVars xs (mkAppN e xs)
+--- 原说明 ---
+Eta expands `e` exactly `n` times.
 -/
 def etaExpandN (n : Nat) (e : Expr) : MetaM Expr := do
-  forallBoundedTelescope (← inferType e) (some n) fun xs _ => do
-    if xs.size != n then
+  forallBoundedTelescope (← inferType e) (some n) fun xs _ ↦ do
+    if xs.size ≠ n then
       throwError "{e} is not a function of arity at least {n}"
     mkLambdaFVars xs (mkAppN e xs)
 
-/--
-Definition of `ReplacementM` / `ReplacementM` 的定义
+/-- Monad used by `applyReplacementFun`.
+- The reader stores the free variables on which nothing should be translated.
+- The state stores the free variables on which something has been translated.
+- The cache caches the results on subexpressions. -/
+/-
+**Mathlib.Tactic.Translate.ReplacementM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+形式化陈述：ReplacementM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ReplacementM
-  body: ReaderT (Array FVarId) MonadCacheT ExprStructEq Expr StateRefT (Std.HashSet FVarId) MetaM
-
-中文:
-缩写 ReplacementM
-  定义体: ReaderT (Array FVarId) MonadCacheT ExprStructEq Expr StateRefT (Std.HashSet FVarId) MetaM
-
-Depends on / 依赖: ExprStructEq, FVarId, HashSet, MonadCacheT, ReaderT, StateRefT, Std.HashSet
+--- 原说明 ---
+Monad used by `applyReplacementFun`.
+- The reader stores the free variables on which nothing should be translated.
+- The state stores the free variables on which something has been translated.
+- The cache caches the results on subexpressions.
 -/
 abbrev ReplacementM :=
-ReaderT (Array FVarId) MonadCacheT ExprStructEq Expr StateRefT (Std.HashSet FVarId) MetaM
+  ReaderT (Array FVarId) <| MonadCacheT ExprStructEq Expr StateRefT (Std.HashSet FVarId) MetaM
 
-/--
-Definition of `ReplacementM.run` / `ReplacementM.run` 的定义
+/-- Run a `ReplacementM` computation, returning the result and the value of `relevant_arg` that
+corresponds to this translation. -/
+/-
+**Mathlib.Tactic.Translate.ReplacementM.run** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Translate.ReplacementM`。
+形式化陈述：{α : Type} → Array FVarId → Array FVarId → Mathlib.Tactic.Translate.Replac
+ementM α → MetaM (α × Option ℕ)
+参数：α × Option ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ReplacementM.run
-  signature: {α} (dontTranslate allFVars : Array FVarId) (x : ReplacementM α)
-  body: do
-.run {} .run let (a, relevantFVars) ← x dontTranslate
-  return (a, allFVars.findIdx? relevantFVars.contains)
-
-中文:
-定义 ReplacementM.run
-  签名: {α} (dontTranslate allFVars : 数组 FVarId) (x : ReplacementM α)
-  定义体: do
-.run {} .run let (a, relevantFVars) ← x dontTranslate
-  return (a, allFVars.findIdx? relevantFVars.contains)
+--- 原说明 ---
+Run a `ReplacementM` computation, returning the result and the value of `relevan
+t_arg` that
+corresponds to this translation.
 -/
 def ReplacementM.run {α} (dontTranslate allFVars : Array FVarId) (x : ReplacementM α) :
     MetaM (α × Option Nat) := do
-.run {} .run let (a, relevantFVars) ← x dontTranslate
+  let (a, relevantFVars) ← x dontTranslate |>.run |>.run {}
   return (a, allFVars.findIdx? relevantFVars.contains)
 
 /-- Implementation function for `shouldTranslate`.
@@ -648,6 +542,21 @@ to avoid visiting the same subexpression many times.
 
 Note that this function is still called many times by `applyReplacementFun`
 and we're not remembering the cache between these calls. -/
+/-
+**Mathlib.Tactic.Translate.shouldTranslateUnsafe** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Implementation function for `shouldTranslate`.
+Returning `none` means that `e` contains no constant that blocks translation.
+We cache previous applications of the function, using an expression cache using 
+ptr equality
+to avoid visiting the same subexpression many times.
+
+Note that this function is still called many times by `applyReplacementFun`
+and we're not remembering the cache between these calls.
+-/
 private unsafe def shouldTranslateUnsafe (env : Environment) (t : TranslateData) (e : Expr) :
     ReplacementM (Option Expr) := do
   let visitedFVars : IO.Ref (Array FVarId) ← IO.mkRef #[]
@@ -658,14 +567,14 @@ private unsafe def shouldTranslateUnsafe (env : Environment) (t : TranslateData)
       return
     modify fun s => s.insert e
     match e with
-    | .app .. => e.withApp fun f args => do
+    | .app .. => e.withApp fun f args ↦ do
       match f with
       | .const n _ =>
         -- A constant in an application, e.g. `Prod` in `α × β`, is translated by default.
         let doTranslate := (t.doTranslateAttr.find? env n).getD true
         unless doTranslate do throw e
         let l := (t.ignoreArgsAttr.find? env n).getD []
-        args.size.forM fun i _ => do
+        args.size.forM fun i _ ↦ do
           if !l.contains i then visit args[i]
       | .fvar .. => visit f -- We don't look in the arguments of free variables.
       | _ => visit f; args.forM visit
@@ -673,12 +582,12 @@ private unsafe def shouldTranslateUnsafe (env : Environment) (t : TranslateData)
       -- A constant not in an application, e.g. `ℕ`, is not translated by default.
       let doTranslate := (t.doTranslateAttr.find? env n).getD (findTranslation? env t n).isSome
       unless doTranslate do throw e
-    | .lam _ _ t _ => visit t
-    | .forallE _ _ t _ => visit t
+    | .lam _ _ t _       => visit t
+    | .forallE _ _ t _   => visit t
     | .letE _ _ e body _ => visit e; visit body
-    | .mdata _ b => visit b
-    | .proj _ _ b => visit b
-    | .fvar fvarId =>
+    | .mdata _ b         => visit b
+    | .proj _ _ b        => visit b
+    | .fvar fvarId       =>
       if dontTranslate.contains fvarId then
         throw e
       if let some value := (lctx.get! fvarId).value? (allowNondep := true) then
@@ -688,8 +597,8 @@ private unsafe def shouldTranslateUnsafe (env : Environment) (t : TranslateData)
     /- We do not translate the order on `Prop`.
     TODO: We also don't want to translate the category on `Type u`. Unfortunately, replacing
     `.sort 0` with `.sort _` here breaks some uses of `to_additive` on `MonCat`. -/
-    | .sort 0 => throw e
-    | _ => pure ()
+    | .sort 0            => throw e
+    | _                  => pure ()
   match ← (visit e).run' mkPtrSet with
   | .error e => return some e
   | .ok () =>
@@ -706,21 +615,51 @@ This means we will replace expression applied to e.g. `α` or `α × β`, but no
 e.g. `ℕ` or `ℝ × α`.
 We ignore all arguments specified by the `ignore` `NameMap`. -/
 @[implemented_by shouldTranslateUnsafe]
+/-
+**Mathlib.Tactic.Translate.shouldTranslate** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib
+.Tactic.Translate`。
+形式化陈述：Environment → Mathlib.Tactic.Translate.TranslateData → Expr → Mathlib.Tact
+ic.Translate.ReplacementM (Option Expr)
+参数：Option Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`shouldTranslate e` tests whether the expression `e` contains a constant
+that is not applied to any arguments and that doesn't have a translation itself.
+This is used for deciding which subexpressions to translate: we only translate
+constants if `shouldTranslate` applied to their relevant argument returns `true`
+.
+This means we will replace expression applied to e.g. `α` or `α × β`, but not wh
+en applied to
+e.g. `ℕ` or `ℝ × α`.
+We ignore all arguments specified by the `ignore` `NameMap`.
+-/
 opaque shouldTranslate (env : Environment) (t : TranslateData) (e : Expr) :
   ReplacementM (Option Expr)
 
 /--
-Definition of `applyReplacementFun` / `applyReplacementFun` 的定义
+`applyReplacementFun e` replaces the expression `e` with its translation.
+It translates each identifier (inductive type, defined function etc) in an expression, unless
+* The identifier occurs in an application with `relevantArg` argument `arg`; and
+* `shouldTranslate arg` is false.
 
-English:
-definition applyReplacementFun
-  signature: (t : TranslateData) (e : Expr)
-  body: visit e
+It will also reorder arguments of certain functions, using the stored `reorder`.
+-/
+/-
+**Mathlib.Tactic.Translate.applyReplacementFun** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData → Expr → Mathlib.Tactic.Translate.R
+eplacementM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 applyReplacementFun
-  签名: (t : TranslateData) (e : Expr)
-  定义体: visit e
+--- 原说明 ---
+`applyReplacementFun e` replaces the expression `e` with its translation.
+It translates each identifier (inductive type, defined function etc) in an expre
+ssion, unless
+* The identifier occurs in an application with `relevantArg` argument `arg`; and
+* `shouldTranslate arg` is false.
+
+It will also reorder arguments of certain functions, using the stored `reorder`.
 -/
 partial def applyReplacementFun (t : TranslateData) (e : Expr) : ReplacementM Expr :=
   visit e
@@ -734,16 +673,16 @@ where
     checkCache { val := e : ExprStructEq } fun _ => do
     let e ← match e with
       | .forallE .. => visitForall e
-      | .lam .. => visitLambda e []
-      | .letE .. => visitLet e
-      | .mdata _ b => return e.updateMData! (← visit b)
-      | .proj .. => visitApp e
-      | .app .. => visitApp e
-      | .const .. => visitApp e
-      | _ => pure e
+      | .lam ..     => visitLambda e []
+      | .letE ..    => visitLet e
+      | .mdata _ b  => return e.updateMData! (← visit b)
+      | .proj ..    => visitApp e
+      | .app ..     => visitApp e
+      | .const ..   => visitApp e
+      | _           => pure e
     trace[translate_detail] "result: {e}"
     return e
-  visitApp (e : Expr) := e.withApp fun f args => do
+  visitApp (e : Expr) := e.withApp fun f args ↦ do
     let env ← getEnv
     match f with
     | .proj n i b =>
@@ -752,13 +691,13 @@ where
       let some projName := info.getProjFn? i | unreachable!
       -- if `projName` has a translation, replace `f` with the application `projName s`
       -- and then visit `projName s args` again.
-.isNone then if findTranslation? env t projName
+      if findTranslation? env t projName |>.isNone then
         return mkAppN (f.updateProj! (← visit b)) (← args.mapM visit)
-visit (← whnfD (← inferType b)).withApp fun bf bargs =>
+      visit <| (← whnfD (← inferType b)).withApp fun bf bargs ↦
         mkAppN (.app (mkAppN (.const projName bf.constLevels!) bargs) b) args
     | .const n₀ ls₀ =>
       -- Replace numeral `1` with `0` in applications of `OfNat` and `OfNat.ofNat`.
-      if h : t.changeNumeral ∧ (n₀ matches ``OfNat | ``OfNat.ofNat) ∧ 2 <= args.size then
+      if h : t.changeNumeral ∧ (n₀ matches ``OfNat | ``OfNat.ofNat) ∧ 2 ≤ args.size then
         if args[1] == mkRawNatLit 1 then
           if (← shouldTranslate env t args[0]).isNone then
             -- In this case, we still update all arguments of `g` that are not numerals,
@@ -802,7 +741,7 @@ visit (← whnfD (← inferType b)).withApp fun bf bargs =>
   we use a fresh `tmpLCtx : LocalContext` to store the translated types of the free variables.
   This is because the local context in the `MetaM` monad stores their original types.
 
-  In `visitLambda`, we keep track of the value of variables, which helps in `shouldTranslate`. -/
+  In `visitLambda`, we keep track of the value of  variables, which helps in `shouldTranslate`. -/
   visitLambda (e : Expr) (values : List Expr) (fvars : Array Expr := #[])
       (tmpLCtx : LocalContext := {}) := do
     if let .lam n d b bi := e then
@@ -837,46 +776,24 @@ visit (← whnfD (← inferType b)).withApp fun bf bargs =>
       -- Note that `mkLambda` will make `let` expressions because it will see the `LocalDecl.ldecl`.
       return tmpLCtx.mkLambda (usedLetOnly := false) fvars e
 
-/--
-Definition of `renameBinderNames` / `renameBinderNames` 的定义
+/-- Rename binder names in pi type. -/
+/-
+**Mathlib.Tactic.Translate.renameBinderNames** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Translate`。
+形式化陈述：renameBinderNames (data : GuessName.GuessNameData) (rename : NameMap Name)
+ (src : Expr) : Expr
+参数：data : GuessName.GuessNameData；rename : NameMap Name；src : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition renameBinderNames
-  signature: (data : GuessName.GuessNameData) (rename : NameMap Name)
-  body: src.mapForallBinderNames fun n => (rename.get? n).getD
-    match n with
-| .str p s => .str p
-      let s' := GuessName.guessName data s
-      if s' != s then s' else
-      -- If the name starts with `h`, translate the rest of the name, e.g. `hmax` ↦ `hmin`.
-      if let some suffix := s.dropPrefix? 'h' then
-        "h" ++ GuessName.guessName data suffix.toString
-      else
-        s
-    | n => n
-
-中文:
-定义 renameBinderNames
-  签名: (data : GuessName.GuessNameData) (rename : NameMap Name)
-  定义体: src.mapForallBinderNames fun n => (rename.get? n).getD
-    match n with
-| .str p s => .str p
-      let s' := GuessName.guessName data s
-      if s' != s then s' else
-      -- If the name starts with `h`, translate the rest of the name, e.g. `hmax` ↦ `hmin`.
-      if let some suffix := s.dropPrefix? 'h' then
-        "h" ++ GuessName.guessName data suffix.toString
-      else
-        s
-    | n => n
-
-Depends on / 依赖: GuessName, GuessName.guessName, guessName, mapForallBinderNames, rename.get, src.mapForallBinderNames
+--- 原说明 ---
+Rename binder names in pi type.
 -/
 def renameBinderNames (data : GuessName.GuessNameData) (rename : NameMap Name)
     (src : Expr) : Expr :=
-src.mapForallBinderNames fun n => (rename.get? n).getD
+  src.mapForallBinderNames fun n => (rename.get? n).getD <|
     match n with
-| .str p s => .str p
+    | .str p s => .str p <|
       let s' := GuessName.guessName data s
       if s' != s then s' else
       -- If the name starts with `h`, translate the rest of the name, e.g. `hmax` ↦ `hmin`.
@@ -886,54 +803,20 @@ src.mapForallBinderNames fun n => (rename.get? n).getD
         s
     | n => n
 
-/--
-Definition of `applyReplacementForall` / `applyReplacementForall` 的定义
+/-- Run `applyReplacementFun` on an expression `∀ x₁ .. xₙ, e`,
+making sure not to translate type-classes on `xᵢ` if `i` is in `dontTranslate`. -/
+/-
+**Mathlib.Tactic.Translate.applyReplacementForall** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.Translate`。
+形式化陈述：applyReplacementForall (t : TranslateData) (dontTranslate : List Nat) (e :
+ Expr) : MetaM (Expr × Option RelevantArg)
+参数：t : TranslateData；dontTranslate : List Nat；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyReplacementForall
-  signature: (t : TranslateData) (dontTranslate : List Nat) (e : Expr)
-  body: withTraceNode `translate_detail (fun _ =>
-    return m!"translating the type {e}") do
-  forallTelescope e fun xs e => do
-    let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
-    let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
-      let mut e ← applyReplacementFun t e
-      for x in xs.reverse do
-        let decl ← x.getDecl
-        let xType ← applyReplacementFun t decl.type
-        e := .forallE decl.userName xType (e.abstract #[.fvar x]) decl.binderInfo
-      return e
-    -- Heuristic: for instances, the `relevant_arg` option defaults to `.noArg`.
-    -- This is useful in `to_additive` for instances on `GrpCat`/`MonCat`.
-    let relevantArg? ← match relevantArg? with
-      | some relevantArg => pure (some <| .arg relevantArg)
-| none => pure if (← isClass? e).isSome then some .noArg else none
-    return (e, relevantArg?)
-
-中文:
-定义 applyReplacementForall
-  签名: (t : TranslateData) (dontTranslate : 列表 自然数) (e : Expr)
-  定义体: withTraceNode `translate_detail (fun _ =>
-    return m!"translating the type {e}") do
-  forallTelescope e fun xs e => do
-    let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
-    let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
-      let mut e ← applyReplacementFun t e
-      for x in xs.reverse do
-        let decl ← x.getDecl
-        let xType ← applyReplacementFun t decl.type
-        e := .forallE decl.userName xType (e.abstract #[.fvar x]) decl.binderInfo
-      return e
-    -- Heuristic: for instances, the `relevant_arg` option defaults to `.noArg`.
-    -- This is useful in `to_additive` for instances on `GrpCat`/`MonCat`.
-    let relevantArg? ← match relevantArg? with
-      | some relevantArg => pure (some <| .arg relevantArg)
-| none => pure if (← isClass? e).isSome then some .noArg else none
-    return (e, relevantArg?)
-
-Depends on / 依赖: ReplacementM, ReplacementM.run, abstract, applyReplacementFun, binderInfo, decl.binderInfo, decl.type, decl.userName, dontTranslate, dontTranslate.filterMap, e.abstract, filterMap, forallE, forallTelescope, fvarId, getDecl, relevantArg, return, reverse, toArray
+--- 原说明 ---
+Run `applyReplacementFun` on an expression `∀ x₁ .. xₙ, e`,
+making sure not to translate type-classes on `xᵢ` if `i` is in `dontTranslate`.
 -/
 def applyReplacementForall (t : TranslateData) (dontTranslate : List Nat) (e : Expr) :
     MetaM (Expr × Option RelevantArg) :=
@@ -941,7 +824,7 @@ def applyReplacementForall (t : TranslateData) (dontTranslate : List Nat) (e : E
     return m!"translating the type {e}") do
   forallTelescope e fun xs e => do
     let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
+    let dontTranslate := dontTranslate.filterMap (xs[·]?) |>.toArray
     let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
       let mut e ← applyReplacementFun t e
       for x in xs.reverse do
@@ -953,47 +836,23 @@ def applyReplacementForall (t : TranslateData) (dontTranslate : List Nat) (e : E
     -- This is useful in `to_additive` for instances on `GrpCat`/`MonCat`.
     let relevantArg? ← match relevantArg? with
       | some relevantArg => pure (some <| .arg relevantArg)
-| none => pure if (← isClass? e).isSome then some .noArg else none
+      | none => pure <| if (← isClass? e).isSome then some .noArg else none
     return (e, relevantArg?)
 
-/--
-Definition of `applyReplacementLambda` / `applyReplacementLambda` 的定义
+/-- Run `applyReplacementFun` on an expression `fun x₁ .. xₙ ↦ e`,
+making sure not to translate type-classes on `xᵢ` if `i` is in `dontTranslate`. -/
+/-
+**Mathlib.Tactic.Translate.applyReplacementLambda** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.Translate`。
+形式化陈述：applyReplacementLambda (t : TranslateData) (dontTranslate : List Nat) (e :
+ Expr) : MetaM (Expr × Option RelevantArg)
+参数：t : TranslateData；dontTranslate : List Nat；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyReplacementLambda
-  signature: (t : TranslateData) (dontTranslate : List Nat) (e : Expr)
-  body: withTraceNode `translate_detail (fun _ =>
-    return m!"translating the value {e}") do
-  lambdaTelescope e fun xs e => do
-    let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
-    let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
-      let mut e ← applyReplacementFun t e
-      for x in xs.reverse do
-        let decl ← x.getDecl
-        let xType ← applyReplacementFun t decl.type
-        e := .lam decl.userName xType (e.abstract #[.fvar x]) decl.binderInfo
-      return e
-    return (e, relevantArg?.map .arg)
-
-中文:
-定义 applyReplacementLambda
-  签名: (t : TranslateData) (dontTranslate : 列表 自然数) (e : Expr)
-  定义体: withTraceNode `translate_detail (fun _ =>
-    return m!"translating the value {e}") do
-  lambdaTelescope e fun xs e => do
-    let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
-    let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
-      let mut e ← applyReplacementFun t e
-      for x in xs.reverse do
-        let decl ← x.getDecl
-        let xType ← applyReplacementFun t decl.type
-        e := .lam decl.userName xType (e.abstract #[.fvar x]) decl.binderInfo
-      return e
-    return (e, relevantArg?.map .arg)
-
-Depends on / 依赖: ReplacementM, ReplacementM.run, abstract, applyReplacementFun, binderInfo, decl.binderInfo, decl.type, decl.userName, dontTranslate, dontTranslate.filterMap, e.abstract, filterMap, fvarId, getDecl, lambdaTelescope, relevantArg, return, reverse, toArray, translate_detail
+--- 原说明 ---
+Run `applyReplacementFun` on an expression `fun x₁ .. xₙ ↦ e`,
+making sure not to translate type-classes on `xᵢ` if `i` is in `dontTranslate`.
 -/
 def applyReplacementLambda (t : TranslateData) (dontTranslate : List Nat) (e : Expr) :
     MetaM (Expr × Option RelevantArg) :=
@@ -1001,7 +860,7 @@ def applyReplacementLambda (t : TranslateData) (dontTranslate : List Nat) (e : E
     return m!"translating the value {e}") do
   lambdaTelescope e fun xs e => do
     let xs := xs.map (·.fvarId!)
-.toArray let dontTranslate := dontTranslate.filterMap (xs[·]?)
+    let dontTranslate := dontTranslate.filterMap (xs[·]?) |>.toArray
     let (e, relevantArg?) ← ReplacementM.run dontTranslate xs do
       let mut e ← applyReplacementFun t e
       for x in xs.reverse do
@@ -1011,62 +870,23 @@ def applyReplacementLambda (t : TranslateData) (dontTranslate : List Nat) (e : E
       return e
     return (e, relevantArg?.map .arg)
 
-/--
-Definition of `updateDecl` / `updateDecl` 的定义
+/-- Run `applyReplacementFun` on the given `srcDecl` to make a new declaration with name `tgt`. -/
+/-
+**Mathlib.Tactic.Translate.updateDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：updateDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo) (reor
+der : ArgReorder) (dont : List Nat) (unfoldBoundaries? : Option UnfoldBoundary.U
+nfoldBoundaries) (rename : NameMap Name) : MetaM (ConstantInfo × Option Relevant
+Arg)
+参数：t : TranslateData；tgt : Name；srcDecl : ConstantInfo；reorder : ArgReorder；dont
+ : List Nat；unfoldBoundaries? : Option UnfoldBoundary.UnfoldBoundaries；rename : 
+NameMap Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateDecl
-  signature: (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
-  body: do
-  unless srcDecl.all == [srcDecl.name] do
-    throwError "`{t.attrName}` does not support mutually recursive declarations."
-  let decl := srcDecl.updateName tgt
-  let decl := decl.updateAll [tgt]
-  let mut value := decl.value! (allowOpaque := true)
-  if let some b := unfoldBoundaries? then
-    value ← b.cast (← b.insertBoundaries value t.attrName) decl.type t.attrName
-  trace[translate] "Value before translation:{indentExpr value}"
-  let (value', relevantArg₁) ← applyReplacementLambda t dont value
-  value ← reorderLambda reorder value'
-  if let some b := unfoldBoundaries? then
-    value ← b.unfoldInsertions value
-  let decl := decl.updateValue value
-  let mut type := decl.type
-  if let some b := unfoldBoundaries? then
-    type ← b.insertBoundaries decl.type t.attrName
-let (type', relevantArg₂) ← applyReplacementForall t dont
-    renameBinderNames (t.guessNameExt.getState (← getEnv)) rename type
-  type ← reorderForall reorder type'
-  if let some b := unfoldBoundaries? then
-    type ← b.unfoldInsertions type
-  return (decl.updateType type, .merge .min relevantArg₁ relevantArg₂)
-
-中文:
-定义 updateDecl
-  签名: (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
-  定义体: do
-  unless srcDecl.all == [srcDecl.name] do
-    throwError "`{t.attrName}` does not support mutually recursive declarations."
-  let decl := srcDecl.updateName tgt
-  let decl := decl.updateAll [tgt]
-  let mut value := decl.value! (allowOpaque := true)
-  if let some b := unfoldBoundaries? then
-    value ← b.cast (← b.insertBoundaries value t.attrName) decl.type t.attrName
-  trace[translate] "Value before translation:{indentExpr value}"
-  let (value', relevantArg₁) ← applyReplacementLambda t dont value
-  value ← reorderLambda reorder value'
-  if let some b := unfoldBoundaries? then
-    value ← b.unfoldInsertions value
-  let decl := decl.updateValue value
-  let mut type := decl.type
-  if let some b := unfoldBoundaries? then
-    type ← b.insertBoundaries decl.type t.attrName
-let (type', relevantArg₂) ← applyReplacementForall t dont
-    renameBinderNames (t.guessNameExt.getState (← getEnv)) rename type
-  type ← reorderForall reorder type'
-  if let some b := unfoldBoundaries? then
-    type ← b.unfoldInsertions type
-  return (decl.updateType type, .merge .min relevantArg₁ relevantArg₂)
+--- 原说明 ---
+Run `applyReplacementFun` on the given `srcDecl` to make a new declaration with 
+name `tgt`.
 -/
 def updateDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
     (reorder : ArgReorder) (dont : List Nat)
@@ -1088,85 +908,43 @@ def updateDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
   let mut type := decl.type
   if let some b := unfoldBoundaries? then
     type ← b.insertBoundaries decl.type t.attrName
-let (type', relevantArg₂) ← applyReplacementForall t dont
+  let (type', relevantArg₂) ← applyReplacementForall t dont <|
     renameBinderNames (t.guessNameExt.getState (← getEnv)) rename type
   type ← reorderForall reorder type'
   if let some b := unfoldBoundaries? then
     type ← b.unfoldInsertions type
   return (decl.updateType type, .merge .min relevantArg₁ relevantArg₂)
 
-/--
-Definition of `updateAndAddDecl` / `updateAndAddDecl` 的定义
+/-- Translate the source declaration and then run `addDecl`. If the kernel throws an error,
+try to emit a better error message.
 
-English:
-definition updateAndAddDecl
-  signature: (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
-  body: -- Set `Elab.async` to `false` so that we can catch kernel errors.
-  withOptions (Elab.async.set · false) do
-  let decl ←
-    if let some unfoldBoundaries := t.unfoldBoundaries? then
-      let env ← getEnv
-      -- First attempt to generate the translation without unfold boundaries.
-      let declAttempt ← updateDecl t tgt srcDecl reorder dont none rename
-      try
-        addDecl declAttempt.1.toDeclaration!
-        trace[translate] "generating\n{tgt} : {declAttempt.1.type} :=\
-          {indentExpr <| declAttempt.1.value! (allowOpaque := true)}"
-        return declAttempt -- early return
-      catch _ =>
-        setEnv env
-        updateDecl t tgt srcDecl reorder dont (unfoldBoundaries.getState env) rename
-    else
-      updateDecl t tgt srcDecl reorder dont none rename
-  trace[translate] "generating\n{tgt} : {decl.1.type} :=\
-    {indentExpr <| decl.1.value! (allowOpaque := true)}"
-  try
-    addDecl decl.1.toDeclaration!
-    return decl
-  catch ex =>
-    try
-withoutExporting check (decl.1.value! (allowOpaque := true))
-    catch ex =>
-      throwError "@[{t.attrName}] failed to add declaration `{decl.1.name}`.\n \
-        The translated value is not type correct.\n \
-        For help, see the docstring of `to_additive`, section `Troubleshooting`.\n\
-        {ex.toMessageData}"
-    throwError "@[{t.attrName}] failed. Nested error message:\n{ex.toMessageData}"
+For efficiency in `to_dual`, we first run `updateDecl` without any `UnfoldBoundaries`,
+and only if that fails do we try to include them.
+The reason is that in the most common case, `to_dual` succeeds without needing to insert
+unfold boundaries, and figuring out whether to insert them can be quite expensive. -/
+/-
+**Mathlib.Tactic.Translate.updateAndAddDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Translate`。
+形式化陈述：updateAndAddDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
+ (reorder : ArgReorder) (dont : List Nat) (rename : NameMap Name) : MetaM (Const
+antInfo × Option RelevantArg)
+参数：t : TranslateData；tgt : Name；srcDecl : ConstantInfo；reorder : ArgReorder；dont
+ : List Nat；rename : NameMap Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 updateAndAddDecl
-  签名: (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
-  定义体: -- Set `Elab.async` to `false` so that we can catch kernel errors.
-  withOptions (Elab.async.set · false) do
-  let decl ←
-    if let some unfoldBoundaries := t.unfoldBoundaries? then
-      let env ← getEnv
-      -- First attempt to generate the translation without unfold boundaries.
-      let declAttempt ← updateDecl t tgt srcDecl reorder dont none rename
-      try
-        addDecl declAttempt.1.toDeclaration!
-        trace[translate] "generating\n{tgt} : {declAttempt.1.type} :=\
-          {indentExpr <| declAttempt.1.value! (allowOpaque := true)}"
-        return declAttempt -- early return
-      catch _ =>
-        setEnv env
-        updateDecl t tgt srcDecl reorder dont (unfoldBoundaries.getState env) rename
-    else
-      updateDecl t tgt srcDecl reorder dont none rename
-  trace[translate] "generating\n{tgt} : {decl.1.type} :=\
-    {indentExpr <| decl.1.value! (allowOpaque := true)}"
-  try
-    addDecl decl.1.toDeclaration!
-    return decl
-  catch ex =>
-    try
-withoutExporting check (decl.1.value! (allowOpaque := true))
-    catch ex =>
-      throwError "@[{t.attrName}] failed to add declaration `{decl.1.name}`.\n \
-        The translated value is not type correct.\n \
-        For help, see the docstring of `to_additive`, section `Troubleshooting`.\n\
-        {ex.toMessageData}"
-    throwError "@[{t.attrName}] failed. Nested error message:\n{ex.toMessageData}"
+--- 原说明 ---
+Translate the source declaration and then run `addDecl`. If the kernel throws an
+ error,
+try to emit a better error message.
+
+For efficiency in `to_dual`, we first run `updateDecl` without any `UnfoldBounda
+ries`,
+and only if that fails do we try to include them.
+The reason is that in the most common case, `to_dual` succeeds without needing t
+o insert
+unfold boundaries, and figuring out whether to insert them can be quite expensiv
+e.
 -/
 def updateAndAddDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
     (reorder : ArgReorder) (dont : List Nat) (rename : NameMap Name) :
@@ -1195,44 +973,35 @@ def updateAndAddDecl (t : TranslateData) (tgt : Name) (srcDecl : ConstantInfo)
     return decl
   catch ex =>
     try
-withoutExporting check (decl.1.value! (allowOpaque := true))
+      withoutExporting <| check (decl.1.value! (allowOpaque := true))
     catch ex =>
-      throwError "@[{t.attrName}] failed to add declaration `{decl.1.name}`.\n \
-        The translated value is not type correct.\n \
+      throwError "@[{t.attrName}] failed to add declaration `{decl.1.name}`.\n  \
+        The translated value is not type correct.\n  \
         For help, see the docstring of `to_additive`, section `Troubleshooting`.\n\
         {ex.toMessageData}"
     throwError "@[{t.attrName}] failed. Nested error message:\n{ex.toMessageData}"
 
-/--
-Definition of `declUnfoldSimpAuxLemmas` / `declUnfoldSimpAuxLemmas` 的定义
+/-- Unfold `simp`, `gcongr` and `hcongr`/`congr_simp` auxlemmas in the type and value.
+The reason why we can't just translate them is that they are generated by the `@[simp]` attribute,
+so it would require a change in the implementation of `@[simp]` to add these translations.
+Additionally, these lemmas have very short proofs, so unfolding them is not costly. -/
+/-
+**Mathlib.Tactic.Translate.declUnfoldSimpAuxLemmas** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Translate`。
+形式化陈述：declUnfoldSimpAuxLemmas (decl : ConstantInfo) : MetaM ConstantInfo
+参数：decl : ConstantInfo。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition declUnfoldSimpAuxLemmas
-  signature: (decl : ConstantInfo)
-  body: do
-  let unfold (e : Expr) := deltaExpand e (allowOpaque := true) fun
-    | .str _ s => "_simp_".isPrefixOf s || "_gcongr_".isPrefixOf s ||
-        isHCongrReservedNameSuffix s || s == congrSimpSuffix
-    | _ => false
-  let mut decl := decl
-decl := decl.updateType ← unfold decl.type
-  if let some v := decl.value? (allowOpaque := true) then
-decl := decl.updateValue ← unfold v
-  return decl
-
-中文:
-定义 declUnfoldSimpAuxLemmas
-  签名: (decl : ConstantInfo)
-  定义体: do
-  let unfold (e : Expr) := deltaExpand e (allowOpaque := true) fun
-    | .str _ s => "_simp_".isPrefixOf s || "_gcongr_".isPrefixOf s ||
-        isHCongrReservedNameSuffix s || s == congrSimpSuffix
-    | _ => false
-  let mut decl := decl
-decl := decl.updateType ← unfold decl.type
-  if let some v := decl.value? (allowOpaque := true) then
-decl := decl.updateValue ← unfold v
-  return decl
+--- 原说明 ---
+Unfold `simp`, `gcongr` and `hcongr`/`congr_simp` auxlemmas in the type and valu
+e.
+The reason why we can't just translate them is that they are generated by the `@
+[simp]` attribute,
+so it would require a change in the implementation of `@[simp]` to add these tra
+nslations.
+Additionally, these lemmas have very short proofs, so unfolding them is not cost
+ly.
 -/
 def declUnfoldSimpAuxLemmas (decl : ConstantInfo) : MetaM ConstantInfo := do
   let unfold (e : Expr) := deltaExpand e (allowOpaque := true) fun
@@ -1240,39 +1009,24 @@ def declUnfoldSimpAuxLemmas (decl : ConstantInfo) : MetaM ConstantInfo := do
         isHCongrReservedNameSuffix s || s == congrSimpSuffix
     | _ => false
   let mut decl := decl
-decl := decl.updateType ← unfold decl.type
+  decl := decl.updateType <| ← unfold decl.type
   if let some v := decl.value? (allowOpaque := true) then
-decl := decl.updateValue ← unfold v
+    decl := decl.updateValue <| ← unfold v
   return decl
 
-/--
-Definition of `findTargetName` / `findTargetName` 的定义
+/-- Find the target name of `src`, which is assumed to have been selected by `findAuxDecls`. -/
+/-
+**Mathlib.Tactic.Translate.findTargetName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+形式化陈述：findTargetName (env : Environment) (t : TranslateData) (src rootSrc rootTg
+t : Name) : CoreM Name
+参数：env : Environment；t : TranslateData；src rootSrc rootTgt : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findTargetName
-  signature: (env : Environment) (t : TranslateData) (src rootSrc rootTgt : Name)
-  body: do
-  /- This covers auxiliary declarations like `match_i` and `proof_i`. -/
-  if let some post := (privateToUserName rootSrc).isPrefixOf? (privateToUserName src) then
-    let tgt := rootTgt ++ post
-    return if isPrivateName src then mkPrivateName env tgt else tgt
-  if src.hasMacroScopes then
-    mkFreshUserName src.eraseMacroScopes
-  else
-    withDeclNameForAuxNaming src do mkAuxDeclName (Name.mkSimple s!"_{t.attrName.toString}")
-
-中文:
-定义 findTargetName
-  签名: (env : Environment) (t : TranslateData) (src rootSrc rootTgt : Name)
-  定义体: do
-  /- This covers auxiliary declarations like `match_i` and `proof_i`. -/
-  if let some post := (privateToUserName rootSrc).isPrefixOf? (privateToUserName src) then
-    let tgt := rootTgt ++ post
-    return if isPrivateName src then mkPrivateName env tgt else tgt
-  if src.hasMacroScopes then
-    mkFreshUserName src.eraseMacroScopes
-  else
-    withDeclNameForAuxNaming src do mkAuxDeclName (Name.mkSimple s!"_{t.attrName.toString}")
+--- 原说明 ---
+Find the target name of `src`, which is assumed to have been selected by `findAu
+xDecls`.
 -/
 def findTargetName (env : Environment) (t : TranslateData) (src rootSrc rootTgt : Name) :
     CoreM Name := do
@@ -1285,38 +1039,40 @@ def findTargetName (env : Environment) (t : TranslateData) (src rootSrc rootTgt 
   else
     withDeclNameForAuxNaming src do mkAuxDeclName (Name.mkSimple s!"_{t.attrName.toString}")
 
-/--
-Definition of `findAuxDecls` / `findAuxDecls` 的定义
+/-- Returns a `NameSet` of auxiliary constants in `decl` that might have been generated
+when adding `pre` to the environment, and which hence might need to be translated.
+Examples include `pre.match_5`, `pre._proof_2`, `someOtherDeclaration._proof_2` and `wrapped✝`.
+The reason why we have to include `_proof_i` lemmas from other declarations is that there is a
+cache of such proofs, and previous such auxiliary proofs are reused when possible.
+These auxiliary declarations may be private or not, independent of whether `pre` is private.
+`wrapped✝` is generated by `irreducible_def`, and it has macro scopes.
+-/
+/-
+**Mathlib.Tactic.Translate.findAuxDecls** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Translate`。
+形式化陈述：findAuxDecls (decl : ConstantInfo) (pre : Name) : CoreM (Array Name)
+参数：decl : ConstantInfo；pre : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findAuxDecls
-  signature: (decl : ConstantInfo) (pre : Name)
-  body: do
-  let env ← withoutExporting getEnv
-  return (Expr.app decl.type (decl.value! (allowOpaque := true))).foldConsts #[] fun n l =>
-    if (env.find? n).any (·.hasValue (allowOpaque := true)) &&
-      ((match n with | .str _ s => "_proof_".isPrefixOf s | _ => false) ||
-      (privateToUserName n).getPrefix == privateToUserName pre || n.hasMacroScopes) then
-      l.push n
-    else
-      l
-
-中文:
-定义 findAuxDecls
-  签名: (decl : ConstantInfo) (pre : Name)
-  定义体: do
-  let env ← withoutExporting getEnv
-  return (Expr.app decl.type (decl.value! (allowOpaque := true))).foldConsts #[] fun n l =>
-    if (env.find? n).any (·.hasValue (allowOpaque := true)) &&
-      ((match n with | .str _ s => "_proof_".isPrefixOf s | _ => false) ||
-      (privateToUserName n).getPrefix == privateToUserName pre || n.hasMacroScopes) then
-      l.push n
-    else
-      l
+--- 原说明 ---
+Returns a `NameSet` of auxiliary constants in `decl` that might have been genera
+ted
+when adding `pre` to the environment, and which hence might need to be translate
+d.
+Examples include `pre.match_5`, `pre._proof_2`, `someOtherDeclaration._proof_2` 
+and `wrapped✝`.
+The reason why we have to include `_proof_i` lemmas from other declarations is t
+hat there is a
+cache of such proofs, and previous such auxiliary proofs are reused when possibl
+e.
+These auxiliary declarations may be private or not, independent of whether `pre`
+ is private.
+`wrapped✝` is generated by `irreducible_def`, and it has macro scopes.
 -/
 def findAuxDecls (decl : ConstantInfo) (pre : Name) : CoreM (Array Name) := do
   let env ← withoutExporting getEnv
-  return (Expr.app decl.type (decl.value! (allowOpaque := true))).foldConsts #[] fun n l =>
+  return (Expr.app decl.type (decl.value! (allowOpaque := true))).foldConsts #[] fun n l ↦
     if (env.find? n).any (·.hasValue (allowOpaque := true)) &&
       ((match n with | .str _ s => "_proof_".isPrefixOf s | _ => false) ||
       (privateToUserName n).getPrefix == privateToUserName pre || n.hasMacroScopes) then
@@ -1324,48 +1080,19 @@ def findAuxDecls (decl : ConstantInfo) (pre : Name) : CoreM (Array Name) := do
     else
       l
 
-/--
-Definition of `getRelevantArg` / `getRelevantArg` 的定义
+/-- Return the `relevant_arg` option based on the computed `relevantArg?`
+and the given `cfg.relevantArg?`. -/
+/-
+**Mathlib.Tactic.Translate.getRelevantArg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+形式化陈述：getRelevantArg (t : TranslateData) (cfg : Config) (relevantArg? : Option R
+elevantArg) (src : Name) (lint : Bool
+参数：t : TranslateData；cfg : Config；relevantArg? : Option RelevantArg；src : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getRelevantArg
-  signature: (t : TranslateData) (cfg : Config) (relevantArg? : Option RelevantArg)
-  body: do
-  let relevantArg := relevantArg?.getD (.arg 0)
-  if let some relevantArg' := cfg.relevantArg? then
-    if lint && relevantArg == relevantArg' then
-      Linter.logLintIf linter.translateRelevantArg cfg.ref m!"\
-        `{t.attrName}` correctly autogenerated `(relevant_arg := {relevantArg'})` for \
-        `{.ofConstName src}`.\nYou may remove the option."
-    else if lint && relevantArg?.isSome then
-      Linter.logLintIf linter.translateRelevantArg cfg.ref m!"\
-        `{t.attrName}` determined that `(relevant_arg := {relevantArg})` \
-        is the right option for `{.ofConstName src}`, \
-        rather than `(relevant_arg := {relevantArg'})`.\nYou may remove the option."
-    pure relevantArg'
-  else
-    return relevantArg
-
-中文:
-定义 getRelevantArg
-  签名: (t : TranslateData) (cfg : 余nfig) (relevantArg? : 选项类型 RelevantArg)
-  定义体: do
-  let relevantArg := relevantArg?.getD (.arg 0)
-  if let some relevantArg' := cfg.relevantArg? then
-    if lint && relevantArg == relevantArg' then
-      Linter.logLintIf linter.translateRelevantArg cfg.ref m!"\
-        `{t.attrName}` correctly autogenerated `(relevant_arg := {relevantArg'})` for \
-        `{.ofConstName src}`.\nYou may remove the option."
-    else if lint && relevantArg?.isSome then
-      Linter.logLintIf linter.translateRelevantArg cfg.ref m!"\
-        `{t.attrName}` determined that `(relevant_arg := {relevantArg})` \
-        is the right option for `{.ofConstName src}`, \
-        rather than `(relevant_arg := {relevantArg'})`.\nYou may remove the option."
-    pure relevantArg'
-  else
-    return relevantArg
-
-Depends on / 依赖: RelevantArg
+--- 原说明 ---
+Return the `relevant_arg` option based on the computed `relevantArg?`
+and the given `cfg.relevantArg?`.
 -/
 def getRelevantArg (t : TranslateData) (cfg : Config) (relevantArg? : Option RelevantArg)
     (src : Name) (lint : Bool := true) : CoreM RelevantArg := do
@@ -1384,210 +1111,31 @@ def getRelevantArg (t : TranslateData) (cfg : Config) (relevantArg? : Option Rel
   else
     return relevantArg
 
-/--
-Definition of `transformDeclRec` / `transformDeclRec` 的定义
+/-- Translate the declaration `src` and recursively all declarations `rootSrc._proof_i`
+occurring in `src` using the `translations` dictionary.
 
-English:
-definition transformDeclRec
-  signature: (t : TranslateData) (cfg : Config) (rootSrc rootTgt src : Name)
-  body: do
-  let env ← getEnv
-  trace[translate_detail] "visiting {src}"
-  -- if we have already translated this declaration, we do nothing.
-  if (findTranslation? env t src).isSome && src != rootSrc then
-    return
-  -- if this declaration is not `rootSrc` and not an internal declaration, we return an error,
-  -- since we should have already translated this declaration.
-  if src != rootSrc && !src.isInternalDetail then
-    throwError "The declaration {rootSrc} depends on the declaration {src} \
-    which is in the namespace {rootSrc}, but does not have the `@[{t.attrName}]` attribute. \
-    This is not supported.\nWorkaround: move {src} to a different namespace."
-  -- we find, or guess, the translated name of `src`
-  let tgt ← findTargetName env t src rootSrc rootTgt
-  -- we skip if we already transformed this declaration before.
-.contains tgt then if env.setExporting false
-    if tgt == src then
-      -- Note: this can happen for equation lemmas of declarations without a translation.
-      trace[translate_detail] "Auxiliary declaration {src} will be translated to itself."
-    else
-      trace[translate_detail] "Already visited {tgt} as translation of {src}."
-    return
-  let srcDecl ← withoutExporting do getConstInfo src
-  -- we first unfold all auxlemmas, since they are not always able to be translated on their own
-  let srcDecl ← withoutExporting do MetaM.run' do declUnfoldSimpAuxLemmas srcDecl
-  -- we then transform all auxiliary declarations generated when elaborating `rootSrc`
-  for n in ← findAuxDecls srcDecl rootSrc do
-    transformDeclRec t cfg rootSrc rootTgt n
-  -- expose target body when source body is exposed
-  withExporting (isExporting := (← getEnv).setExporting true |>.find? src |>.any (·.hasValue)) do
-  -- We still lack a heuristic that automatically infers the `dontTranslate`,
-  -- so for now we do a best guess based on argument names.
-  let dontTranslate ← if cfg.dontTranslate.isEmpty then pure [] else
-    if src == rootSrc then pure cfg.dontTranslate else
-      let namesPre := (← getConstInfo rootSrc).type.getForallBinderNames
-      let namesSrc := (← getConstInfo src).type.getForallBinderNames
-pure cfg.dontTranslate.filterMap (namesPre[·]? >>= namesSrc.idxOf?)
-  -- now transform the source declaration
-  let (tgtDecl, relevantArg?) ←
-MetaM.run' updateAndAddDecl t tgt srcDecl reorder dontTranslate rename
-  let relevantArg ←
-    if src == rootSrc then
-      getRelevantArg t cfg relevantArg? src
-    else
-      pure (relevantArg?.getD .noArg)
-  insertTranslation t src tgt { reorder } relevantArg cfg.ref
-  if src == rootSrc && srcDecl.isThm && tgtDecl.type == srcDecl.type then
-    Linter.logLintIf linter.translateRedundant cfg.ref m!"`{t.attrName}` did not change the type \
-      of theorem `{.ofConstName src}`. Please remove the attribute."
-  /- If `src` is explicitly marked as `noncomputable`, then add the new decl as a declaration but
-  do not compile it, and mark is as noncomputable. Otherwise, only log errors in compiling if `src`
-  has executable code.
+- `rootSrc` is the declaration that got the translation attribute and `rootTgt` is its target.
+- `src` is assumed to have a value available in the environment.
+- `reorder` and `rename` are only used for the translation of `src`.
+-/
+/-
+**Mathlib.Tactic.Translate.transformDeclRec** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathli
+b.Tactic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData →   Mathlib.Tactic.Translate.Config
+ →     Name → Name → Name → optParam Mathlib.Tactic.Translate.ArgReorder { } → o
+ptParam (NameMap Name) ∅ → CoreM Unit
+参数：NameMap Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  Note that `noncomputable section` does not explicitly mark noncomputable definitions as
-  `noncomputable`, but simply abstains from logging compilation errors.
+--- 原说明 ---
+Translate the declaration `src` and recursively all declarations `rootSrc._proof
+_i`
+occurring in `src` using the `translations` dictionary.
 
-  This is not a perfect solution, as ideally we *should* complain when `src` should
-  produce executable code but fails to do so (e.g. outside of `noncomputable section`). However,
-  the `messages` and `infoState` are reset before this runs, so we cannot check for compilation
-  errors on `src`. The scope set by `noncomputable` section lives in the `CommandElabM` state
-  (which is inaccessible here), so we cannot test for `noncomputable section` directly. See [Zulip](https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/to_additive.20and.20noncomputable/with/310541981). -/
-  if isNoncomputable (← getEnv) src then
-    modifyEnv (addNoncomputable · tgt)
-  else
-    if isMarkedMeta (← getEnv) src then
-      -- We need to mark `tgt` as `meta` before running `compileDecl`
-      modifyEnv (markMeta · tgt)
-    compileDecl tgtDecl.toDeclaration! (logErrors := (IR.findEnvDecl (← getEnv) src).isSome)
-  if let .defnInfo { hints := .abbrev, .. } := tgtDecl then
-    if (← getReducibilityStatus src) == .reducible then
-      setReducibilityStatus tgt .reducible
-    if Compiler.getInlineAttribute? (← getEnv) src == some .inline then
-MetaM.run' Meta.setInlineAttribute tgt
-  -- now add declaration ranges so jump-to-definition works
-  -- note: we currently also do this for auxiliary declarations, while they are not normally
-  -- generated for those. We could change that.
-  addDeclarationRangesFromSyntax tgt (← getRef) cfg.ref
-  if isProtected (← getEnv) src then
-    modifyEnv (addProtected · tgt)
-  if defeqAttr.hasTag (← getEnv) src then
-    /- It can be that `src` holds reflexively but `tgt` doesn't, so we need to use `inferDefEqAttr`.
-    For example in `Ici_inter_Iic : Ici a ∩ Iic b = Icc a b := rfl`. -/
-MetaM.run' inferDefEqAttr tgt
-    /- Under the strict `@[defeq]` inference of lean4#13492, `inferDefEqAttr` tags the
-    additive translation only `@[backward_defeq]` even when the multiplicative source is
-    `@[defeq]` and the additive proof is rfl-shaped, because `withReducibleAndInstances`
-    `isDefEq` checks fail systematically for `to_additive`-generated additive lemmas
-    (the additive instance projections don't reduce at instance transparency).
-    To keep the simp/dsimp behaviour symmetric between additive and multiplicative
-    versions, promote `tgt` to `@[defeq]` whenever the source is `@[defeq]` and the
-    translated proof is at least rfl-shaped (i.e. `@[backward_defeq]` was inferred). -/
-    if backwardDefeqAttr.hasTag (← getEnv) tgt && !defeqAttr.hasTag (← getEnv) tgt then
-      defeqAttr.setTag tgt
-  if let some matcherInfo ← getMatcherInfo? src then
-    Match.addMatcherInfo tgt matcherInfo
-  -- necessary so that e.g. match equations can be generated for `tgt`
-  enableRealizationsForConst tgt
-
-中文:
-定义 transformDeclRec
-  签名: (t : TranslateData) (cfg : 余nfig) (rootSrc rootTgt src : Name)
-  定义体: do
-  let env ← getEnv
-  trace[translate_detail] "visiting {src}"
-  -- if we have already translated this declaration, we do nothing.
-  if (findTranslation? env t src).isSome && src != rootSrc then
-    return
-  -- if this declaration is not `rootSrc` and not an internal declaration, we return an error,
-  -- since we should have already translated this declaration.
-  if src != rootSrc && !src.isInternalDetail then
-    throwError "The declaration {rootSrc} depends on the declaration {src} \
-    which is in the namespace {rootSrc}, but does not have the `@[{t.attrName}]` attribute. \
-    This is not supported.\nWorkaround: move {src} to a different namespace."
-  -- we find, or guess, the translated name of `src`
-  let tgt ← findTargetName env t src rootSrc rootTgt
-  -- we skip if we already transformed this declaration before.
-.contains tgt then if env.setExporting false
-    if tgt == src then
-      -- Note: this can happen for equation lemmas of declarations without a translation.
-      trace[translate_detail] "Auxiliary declaration {src} will be translated to itself."
-    else
-      trace[translate_detail] "Already visited {tgt} as translation of {src}."
-    return
-  let srcDecl ← withoutExporting do getConstInfo src
-  -- we first unfold all auxlemmas, since they are not always able to be translated on their own
-  let srcDecl ← withoutExporting do MetaM.run' do declUnfoldSimpAuxLemmas srcDecl
-  -- we then transform all auxiliary declarations generated when elaborating `rootSrc`
-  for n in ← findAuxDecls srcDecl rootSrc do
-    transformDeclRec t cfg rootSrc rootTgt n
-  -- expose target body when source body is exposed
-  withExporting (isExporting := (← getEnv).setExporting true |>.find? src |>.any (·.hasValue)) do
-  -- We still lack a heuristic that automatically infers the `dontTranslate`,
-  -- so for now we do a best guess based on argument names.
-  let dontTranslate ← if cfg.dontTranslate.isEmpty then pure [] else
-    if src == rootSrc then pure cfg.dontTranslate else
-      let namesPre := (← getConstInfo rootSrc).type.getForallBinderNames
-      let namesSrc := (← getConstInfo src).type.getForallBinderNames
-pure cfg.dontTranslate.filterMap (namesPre[·]? >>= namesSrc.idxOf?)
-  -- now transform the source declaration
-  let (tgtDecl, relevantArg?) ←
-MetaM.run' updateAndAddDecl t tgt srcDecl reorder dontTranslate rename
-  let relevantArg ←
-    if src == rootSrc then
-      getRelevantArg t cfg relevantArg? src
-    else
-      pure (relevantArg?.getD .noArg)
-  insertTranslation t src tgt { reorder } relevantArg cfg.ref
-  if src == rootSrc && srcDecl.isThm && tgtDecl.type == srcDecl.type then
-    Linter.logLintIf linter.translateRedundant cfg.ref m!"`{t.attrName}` did not change the type \
-      of theorem `{.ofConstName src}`. Please remove the attribute."
-  /- If `src` is explicitly marked as `noncomputable`, then add the new decl as a declaration but
-  do not compile it, and mark is as noncomputable. Otherwise, only log errors in compiling if `src`
-  has executable code.
-
-  Note that `noncomputable section` does not explicitly mark noncomputable definitions as
-  `noncomputable`, but simply abstains from logging compilation errors.
-
-  This is not a perfect solution, as ideally we *should* complain when `src` should
-  produce executable code but fails to do so (e.g. outside of `noncomputable section`). However,
-  the `messages` and `infoState` are reset before this runs, so we cannot check for compilation
-  errors on `src`. The scope set by `noncomputable` section lives in the `CommandElabM` state
-  (which is inaccessible here), so we cannot test for `noncomputable section` directly. See [Zulip](https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/to_additive.20and.20noncomputable/with/310541981). -/
-  if isNoncomputable (← getEnv) src then
-    modifyEnv (addNoncomputable · tgt)
-  else
-    if isMarkedMeta (← getEnv) src then
-      -- We need to mark `tgt` as `meta` before running `compileDecl`
-      modifyEnv (markMeta · tgt)
-    compileDecl tgtDecl.toDeclaration! (logErrors := (IR.findEnvDecl (← getEnv) src).isSome)
-  if let .defnInfo { hints := .abbrev, .. } := tgtDecl then
-    if (← getReducibilityStatus src) == .reducible then
-      setReducibilityStatus tgt .reducible
-    if Compiler.getInlineAttribute? (← getEnv) src == some .inline then
-MetaM.run' Meta.setInlineAttribute tgt
-  -- now add declaration ranges so jump-to-definition works
-  -- note: we currently also do this for auxiliary declarations, while they are not normally
-  -- generated for those. We could change that.
-  addDeclarationRangesFromSyntax tgt (← getRef) cfg.ref
-  if isProtected (← getEnv) src then
-    modifyEnv (addProtected · tgt)
-  if defeqAttr.hasTag (← getEnv) src then
-    /- It can be that `src` holds reflexively but `tgt` doesn't, so we need to use `inferDefEqAttr`.
-    For example in `Ici_inter_Iic : Ici a ∩ Iic b = Icc a b := rfl`. -/
-MetaM.run' inferDefEqAttr tgt
-    /- Under the strict `@[defeq]` inference of lean4#13492, `inferDefEqAttr` tags the
-    additive translation only `@[backward_defeq]` even when the multiplicative source is
-    `@[defeq]` and the additive proof is rfl-shaped, because `withReducibleAndInstances`
-    `isDefEq` checks fail systematically for `to_additive`-generated additive lemmas
-    (the additive instance projections don't reduce at instance transparency).
-    To keep the simp/dsimp behaviour symmetric between additive and multiplicative
-    versions, promote `tgt` to `@[defeq]` whenever the source is `@[defeq]` and the
-    translated proof is at least rfl-shaped (i.e. `@[backward_defeq]` was inferred). -/
-    if backwardDefeqAttr.hasTag (← getEnv) tgt && !defeqAttr.hasTag (← getEnv) tgt then
-      defeqAttr.setTag tgt
-  if let some matcherInfo ← getMatcherInfo? src then
-    Match.addMatcherInfo tgt matcherInfo
-  -- necessary so that e.g. match equations can be generated for `tgt`
-  enableRealizationsForConst tgt
+- `rootSrc` is the declaration that got the translation attribute and `rootTgt` 
+is its target.
+- `src` is assumed to have a value available in the environment.
+- `reorder` and `rename` are only used for the translation of `src`.
 -/
 partial def transformDeclRec (t : TranslateData) (cfg : Config) (rootSrc rootTgt src : Name)
     (reorder : ArgReorder := {}) (rename : NameMap Name := {}) : CoreM Unit := do
@@ -1605,7 +1153,7 @@ partial def transformDeclRec (t : TranslateData) (cfg : Config) (rootSrc rootTgt
   -- we find, or guess, the translated name of `src`
   let tgt ← findTargetName env t src rootSrc rootTgt
   -- we skip if we already transformed this declaration before.
-.contains tgt then if env.setExporting false
+  if env.setExporting false |>.contains tgt then
     if tgt == src then
       -- Note: this can happen for equation lemmas of declarations without a translation.
       trace[translate_detail] "Auxiliary declaration {src} will be translated to itself."
@@ -1626,10 +1174,10 @@ partial def transformDeclRec (t : TranslateData) (cfg : Config) (rootSrc rootTgt
     if src == rootSrc then pure cfg.dontTranslate else
       let namesPre := (← getConstInfo rootSrc).type.getForallBinderNames
       let namesSrc := (← getConstInfo src).type.getForallBinderNames
-pure cfg.dontTranslate.filterMap (namesPre[·]? >>= namesSrc.idxOf?)
+      pure <| cfg.dontTranslate.filterMap (namesPre[·]? >>= namesSrc.idxOf?)
   -- now transform the source declaration
   let (tgtDecl, relevantArg?) ←
-MetaM.run' updateAndAddDecl t tgt srcDecl reorder dontTranslate rename
+    MetaM.run' <| updateAndAddDecl t tgt srcDecl reorder dontTranslate rename
   let relevantArg ←
     if src == rootSrc then
       getRelevantArg t cfg relevantArg? src
@@ -1662,7 +1210,7 @@ MetaM.run' updateAndAddDecl t tgt srcDecl reorder dontTranslate rename
     if (← getReducibilityStatus src) == .reducible then
       setReducibilityStatus tgt .reducible
     if Compiler.getInlineAttribute? (← getEnv) src == some .inline then
-MetaM.run' Meta.setInlineAttribute tgt
+      MetaM.run' <| Meta.setInlineAttribute tgt
   -- now add declaration ranges so jump-to-definition works
   -- note: we currently also do this for auxiliary declarations, while they are not normally
   -- generated for those. We could change that.
@@ -1672,7 +1220,7 @@ MetaM.run' Meta.setInlineAttribute tgt
   if defeqAttr.hasTag (← getEnv) src then
     /- It can be that `src` holds reflexively but `tgt` doesn't, so we need to use `inferDefEqAttr`.
     For example in `Ici_inter_Iic : Ici a ∩ Iic b = Icc a b := rfl`. -/
-MetaM.run' inferDefEqAttr tgt
+    MetaM.run' <| inferDefEqAttr tgt
     /- Under the strict `@[defeq]` inference of lean4#13492, `inferDefEqAttr` tags the
     additive translation only `@[backward_defeq]` even when the multiplicative source is
     `@[defeq]` and the additive proof is rfl-shaped, because `withReducibleAndInstances`
@@ -1688,36 +1236,22 @@ MetaM.run' inferDefEqAttr tgt
   -- necessary so that e.g. match equations can be generated for `tgt`
   enableRealizationsForConst tgt
 
-/--
-Definition of `copyInstanceAttribute` / `copyInstanceAttribute` 的定义
+/-- Copy the instance attribute in a `to_additive`
 
-English:
-definition copyInstanceAttribute
-  signature: (src tgt : Name)
-  body: do
-  if let some prio ← getInstancePriority? src then
-    let attr_kind := (← getInstanceAttrKind? src).getD .global
-    -- Copy `instance_reducible` / `instance_reducible` status before adding instance attribute
-    match (← getReducibilityStatus src) with
-    | .implicitReducible => setReducibilityStatus tgt .implicitReducible
-    | .instanceReducible => setReducibilityStatus tgt .instanceReducible
-    | _ => pure ()
-    trace[translate_detail] "Making {tgt} an instance with priority {prio}."
-.run' addInstance tgt attr_kind prio
+[todo] it seems not to work when the `to_additive` is added as an attribute later. -/
+/-
+**Mathlib.Tactic.Translate.copyInstanceAttribute** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Translate`。
+形式化陈述：copyInstanceAttribute (src tgt : Name) : CoreM Unit
+参数：src tgt : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 copyInstanceAttribute
-  签名: (src tgt : Name)
-  定义体: do
-  if let some prio ← getInstancePriority? src then
-    let attr_kind := (← getInstanceAttrKind? src).getD .global
-    -- Copy `instance_reducible` / `instance_reducible` status before adding instance attribute
-    match (← getReducibilityStatus src) with
-    | .implicitReducible => setReducibilityStatus tgt .implicitReducible
-    | .instanceReducible => setReducibilityStatus tgt .instanceReducible
-    | _ => pure ()
-    trace[translate_detail] "Making {tgt} an instance with priority {prio}."
-.run' addInstance tgt attr_kind prio
+--- 原说明 ---
+Copy the instance attribute in a `to_additive`
+
+[todo] it seems not to work when the `to_additive` is added as an attribute late
+r.
 -/
 def copyInstanceAttribute (src tgt : Name) : CoreM Unit := do
   if let some prio ← getInstancePriority? src then
@@ -1728,88 +1262,52 @@ def copyInstanceAttribute (src tgt : Name) : CoreM Unit := do
     | .instanceReducible => setReducibilityStatus tgt .instanceReducible
     | _ => pure ()
     trace[translate_detail] "Making {tgt} an instance with priority {prio}."
-.run' addInstance tgt attr_kind prio
+    addInstance tgt attr_kind prio |>.run'
 
 open Batteries.Tactic.Alias in
-/--
-Definition of `copyAliasAttribute` / `copyAliasAttribute` 的定义
+/-- If `src` was declared with `alias`, then record `tgt` as an alias,
+and give it an alias-style docstring if it doesn't have a doc-string already -/
+/-
+**Mathlib.Tactic.Translate.copyAliasAttribute** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate`。
+形式化陈述：copyAliasAttribute (t : TranslateData) (src tgt : Name) : CoreM Unit
+参数：t : TranslateData；src tgt : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copyAliasAttribute
-  signature: (t : TranslateData) (src tgt : Name)
-  body: do
-  if let some srcInfo ← getAliasInfo? src then
-    let env ← getEnv
-    let tgtInfo? := match srcInfo with
-| .plain n => .plain < > findTranslationName? env t n
-| .forward n => .forward < > findTranslationName? env t n
-| .reverse n => .reverse < > findTranslationName? env t n
-    if let some tgtInfo := tgtInfo? then
-      setAliasInfo tgtInfo tgt
-      addAliasDocstring tgt tgtInfo
-
-中文:
-定义 copyAliasAttribute
-  签名: (t : TranslateData) (src tgt : Name)
-  定义体: do
-  if let some srcInfo ← getAliasInfo? src then
-    let env ← getEnv
-    let tgtInfo? := match srcInfo with
-| .plain n => .plain < > findTranslationName? env t n
-| .forward n => .forward < > findTranslationName? env t n
-| .reverse n => .reverse < > findTranslationName? env t n
-    if let some tgtInfo := tgtInfo? then
-      setAliasInfo tgtInfo tgt
-      addAliasDocstring tgt tgtInfo
+--- 原说明 ---
+If `src` was declared with `alias`, then record `tgt` as an alias,
+and give it an alias-style docstring if it doesn't have a doc-string already
 -/
 def copyAliasAttribute (t : TranslateData) (src tgt : Name) : CoreM Unit := do
   if let some srcInfo ← getAliasInfo? src then
     let env ← getEnv
     let tgtInfo? := match srcInfo with
-| .plain n => .plain < > findTranslationName? env t n
-| .forward n => .forward < > findTranslationName? env t n
-| .reverse n => .reverse < > findTranslationName? env t n
+      | .plain n => .plain <$> findTranslationName? env t n
+      | .forward n => .forward <$> findTranslationName? env t n
+      | .reverse n => .reverse <$> findTranslationName? env t n
     if let some tgtInfo := tgtInfo? then
       setAliasInfo tgtInfo tgt
       addAliasDocstring tgt tgtInfo
 
-/--
-Definition of `warnAttrCore` / `warnAttrCore` 的定义
+/-- Warn the user when the declaration has an attribute. -/
+/-
+**Mathlib.Tactic.Translate.warnAttrCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Translate`。
+形式化陈述：warnAttrCore (stx : Syntax) (f : Environment -> Name -> Bool) (thisAttr at
+trName src tgt : Name) : CoreM Unit
+参数：stx : Syntax；f : Environment -> Name -> Bool；thisAttr attrName src tgt : Name
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition warnAttrCore
-  signature: (stx : Syntax) (f : Environment -> Name -> Bool)
-  body: do
-  if f (← getEnv) src then
-Linter.logLintIf linter.existingAttributeWarning stx
-      m!"The source declaration {src} was given attribute {attrName} before calling @[{thisAttr}]. \
-         The preferred method is to use `@[{thisAttr} (attr := {attrName})]` to apply the \
-         attribute to both {src} and the target declaration {tgt}." ++
-      if thisAttr == `to_additive then
-        m!"\nSpecial case: If this declaration was generated by @[to_additive] \
-          itself, you can use @[to_additive (attr := to_additive, {attrName})] on the original \
-          declaration."
-      else ""
-
-中文:
-定义 warnAttrCore
-  签名: (stx : Syntax) (f : Environment -> Name -> 布尔值)
-  定义体: do
-  if f (← getEnv) src then
-Linter.logLintIf linter.existingAttributeWarning stx
-      m!"The source declaration {src} was given attribute {attrName} before calling @[{thisAttr}]. \
-         The preferred method is to use `@[{thisAttr} (attr := {attrName})]` to apply the \
-         attribute to both {src} and the target declaration {tgt}." ++
-      if thisAttr == `to_additive then
-        m!"\nSpecial case: If this declaration was generated by @[to_additive] \
-          itself, you can use @[to_additive (attr := to_additive, {attrName})] on the original \
-          declaration."
-      else ""
+--- 原说明 ---
+Warn the user when the declaration has an attribute.
 -/
-def warnAttrCore (stx : Syntax) (f : Environment -> Name -> Bool)
+def warnAttrCore (stx : Syntax) (f : Environment → Name → Bool)
     (thisAttr attrName src tgt : Name) : CoreM Unit := do
   if f (← getEnv) src then
-Linter.logLintIf linter.existingAttributeWarning stx
+    Linter.logLintIf linter.existingAttributeWarning stx <|
       m!"The source declaration {src} was given attribute {attrName} before calling @[{thisAttr}]. \
          The preferred method is to use `@[{thisAttr} (attr := {attrName})]` to apply the \
          attribute to both {src} and the target declaration {tgt}." ++
@@ -1819,124 +1317,53 @@ Linter.logLintIf linter.existingAttributeWarning stx
           declaration."
       else ""
 
-/--
-Definition of `warnAttr` / `warnAttr` 的定义
+/-- Warn the user when the declaration has a simple scoped attribute. -/
+/-
+**Mathlib.Tactic.Translate.warnAttr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Tr
+anslate`。
+形式化陈述：warnAttr {α β : Type} [Inhabited β] (stx : Syntax) (attr : SimpleScopedEnv
+Extension α β) (f : β -> Name -> Bool) (thisAttr attrName src tgt : Name) : Core
+M Unit
+参数：stx : Syntax；attr : SimpleScopedEnvExtension α β；f : β -> Name -> Bool；thisAt
+tr attrName src tgt : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition warnAttr
-  signature: {α β : Type} [Inhabited β] (stx : Syntax) (attr : SimpleScopedEnvExtension α β)
-  body: warnAttrCore stx (f <| attr.getState ·) thisAttr attrName src tgt
-
-中文:
-定义 warnAttr
-  签名: {α β : 类型} [可居 β] (stx : Syntax) (attr : SimpleScopedEnvExtension α β)
-  定义体: warnAttrCore stx (f <| attr.getState ·) thisAttr attrName src tgt
-
-Depends on / 依赖: attr.getState, attrName, getState, thisAttr, warnAttrCore
+--- 原说明 ---
+Warn the user when the declaration has a simple scoped attribute.
 -/
 def warnAttr {α β : Type} [Inhabited β] (stx : Syntax) (attr : SimpleScopedEnvExtension α β)
-    (f : β -> Name -> Bool) (thisAttr attrName src tgt : Name) : CoreM Unit :=
+    (f : β → Name → Bool) (thisAttr attrName src tgt : Name) : CoreM Unit :=
   warnAttrCore stx (f <| attr.getState ·) thisAttr attrName src tgt
 
-/--
-Definition of `warnParametricAttr` / `warnParametricAttr` 的定义
+/-- Warn the user when the declaration has a parametric attribute. -/
+/-
+**Mathlib.Tactic.Translate.warnParametricAttr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate`。
+形式化陈述：warnParametricAttr {β : Type} [Inhabited β] (stx : Syntax) (attr : Paramet
+ricAttribute β) (thisAttr attrName src tgt : Name) : CoreM Unit
+参数：stx : Syntax；attr : ParametricAttribute β；thisAttr attrName src tgt : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition warnParametricAttr
-  signature: {β : Type} [Inhabited β] (stx : Syntax) (attr : ParametricAttribute β)
-  body: warnAttrCore stx (attr.getParam? · · |>.isSome) thisAttr attrName src tgt
-
-中文:
-定义 warnParametricAttr
-  签名: {β : 类型} [可居 β] (stx : Syntax) (attr : ParametricAttribute β)
-  定义体: warnAttrCore stx (attr.getParam? · · |>.isSome) thisAttr attrName src tgt
-
-Depends on / 依赖: attr.getParam, attrName, getParam, isSome, thisAttr, warnAttrCore
+--- 原说明 ---
+Warn the user when the declaration has a parametric attribute.
 -/
 def warnParametricAttr {β : Type} [Inhabited β] (stx : Syntax) (attr : ParametricAttribute β)
     (thisAttr attrName src tgt : Name) : CoreM Unit :=
   warnAttrCore stx (attr.getParam? · · |>.isSome) thisAttr attrName src tgt
 
-/--
-Definition of `targetName` / `targetName` 的定义
+/-- Return the provided target name or autogenerate one if one was not provided. -/
+/-
+**Mathlib.Tactic.Translate.targetName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：targetName (t : TranslateData) (cfg : Config) (src : Name) : CoreM Name
+参数：t : TranslateData；cfg : Config；src : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition targetName
-  signature: (t : TranslateData) (cfg : Config) (src : Name)
-  body: do
-  if cfg.self then
-    if cfg.target != .anonymous then
-      logWarning m!"`{t.attrName} self` ignores the provided name {cfg.target}"
-    return src
-  if cfg.none then
-    if cfg.target != .anonymous then
-      logWarning m!"`{t.attrName} none` ignores the provided name {cfg.target}"
-    return ← withDeclNameForAuxNaming src do
-mkAuxDeclName .mkSimple ("_" ++ t.attrName.toString)
-  let .str pre s := src | throwError "{t.attrName}: can't transport {src}"
-  trace[translate_detail] "The name {s} splits as {open GuessName in s.splitCase}"
-  -- Auto-generated name of the resulting declaration, without prior namespace components.
-  let translatedName := GuessName.guessName (t.guessNameExt.getState (← getEnv)) s
-  let translatedNamespace := translateNamespace (← getEnv) pre
-  let autoGeneratedName := translatedNamespace.str translatedName
-  -- Heuristic: if a new name is manually provided which has fewer components than `src`,
-  -- prepend the first components from `src` to create a translated name of the same depth.
-  let resultingName := if cfg.target == .anonymous then autoGeneratedName else
-    -- A provided name starting with `_root_` disables the namespace length heuristic.
-    if rootNamespace.isPrefixOf cfg.target then removeRoot cfg.target
-    else (translatedNamespace.splitAt (cfg.target.getNumParts - 1)).1 ++ cfg.target
-  if resultingName == src then
-    throwError "{t.attrName}: the generated translated name equals the original name '{src}'.\n\
-    If this is intentional, use the `@[{t.attrName} self]` syntax.\n\
-    Otherwise, check that your declaration name is correct \
-    (if your declaration is an instance, try naming it)\n\
-    or provide a translated name using the `@[{t.attrName} my_add_name]` syntax."
-  if cfg.target != .anonymous && autoGeneratedName == resultingName && !cfg.allowAutoName then
-    Linter.logLintIf linter.translateGenerateName cfg.ref m!"\
-      `{t.attrName}` correctly autogenerated target name for {src}.\n\
-      You may remove the explicit argument {cfg.target}."
-  if cfg.target != .anonymous then
-    trace[translate_detail] "The automatically generated name would be {autoGeneratedName}"
-  return resultingName
-
-中文:
-定义 targetName
-  签名: (t : TranslateData) (cfg : 余nfig) (src : Name)
-  定义体: do
-  if cfg.self then
-    if cfg.target != .anonymous then
-      logWarning m!"`{t.attrName} self` ignores the provided name {cfg.target}"
-    return src
-  if cfg.none then
-    if cfg.target != .anonymous then
-      logWarning m!"`{t.attrName} none` ignores the provided name {cfg.target}"
-    return ← withDeclNameForAuxNaming src do
-mkAuxDeclName .mkSimple ("_" ++ t.attrName.toString)
-  let .str pre s := src | throwError "{t.attrName}: can't transport {src}"
-  trace[translate_detail] "The name {s} splits as {open GuessName in s.splitCase}"
-  -- Auto-generated name of the resulting declaration, without prior namespace components.
-  let translatedName := GuessName.guessName (t.guessNameExt.getState (← getEnv)) s
-  let translatedNamespace := translateNamespace (← getEnv) pre
-  let autoGeneratedName := translatedNamespace.str translatedName
-  -- Heuristic: if a new name is manually provided which has fewer components than `src`,
-  -- prepend the first components from `src` to create a translated name of the same depth.
-  let resultingName := if cfg.target == .anonymous then autoGeneratedName else
-    -- A provided name starting with `_root_` disables the namespace length heuristic.
-    if rootNamespace.isPrefixOf cfg.target then removeRoot cfg.target
-    else (translatedNamespace.splitAt (cfg.target.getNumParts - 1)).1 ++ cfg.target
-  if resultingName == src then
-    throwError "{t.attrName}: the generated translated name equals the original name '{src}'.\n\
-    If this is intentional, use the `@[{t.attrName} self]` syntax.\n\
-    Otherwise, check that your declaration name is correct \
-    (if your declaration is an instance, try naming it)\n\
-    or provide a translated name using the `@[{t.attrName} my_add_name]` syntax."
-  if cfg.target != .anonymous && autoGeneratedName == resultingName && !cfg.allowAutoName then
-    Linter.logLintIf linter.translateGenerateName cfg.ref m!"\
-      `{t.attrName}` correctly autogenerated target name for {src}.\n\
-      You may remove the explicit argument {cfg.target}."
-  if cfg.target != .anonymous then
-    trace[translate_detail] "The automatically generated name would be {autoGeneratedName}"
-  return resultingName
+--- 原说明 ---
+Return the provided target name or autogenerate one if one was not provided.
 -/
 def targetName (t : TranslateData) (cfg : Config) (src : Name) : CoreM Name := do
   if cfg.self then
@@ -1947,7 +1374,7 @@ def targetName (t : TranslateData) (cfg : Config) (src : Name) : CoreM Name := d
     if cfg.target != .anonymous then
       logWarning m!"`{t.attrName} none` ignores the provided name {cfg.target}"
     return ← withDeclNameForAuxNaming src do
-mkAuxDeclName .mkSimple ("_" ++ t.attrName.toString)
+      mkAuxDeclName <| .mkSimple ("_" ++ t.attrName.toString)
   let .str pre s := src | throwError "{t.attrName}: can't transport {src}"
   trace[translate_detail] "The name {s} splits as {open GuessName in s.splitCase}"
   -- Auto-generated name of the resulting declaration, without prior namespace components.
@@ -1977,147 +1404,34 @@ where
   translateNamespace (env : Environment) (n : Name) : Name :=
     let n' := Name.mapPrefix (findTranslationName? env t) n
     if n' == n && isPrivateName n then
-mkPrivateName env .mapPrefix (findTranslationName? env t) (privateToUserName n)
+      mkPrivateName env <| .mapPrefix (findTranslationName? env t) (privateToUserName n)
     else
       n'
 
-/--
-Definition of `checkExistingType` / `checkExistingType` 的定义
+/-- Verify that the type of `srcDecl` translates to that of `tgtDecl`.
+Also try to autogenerate the `reorder` and `relevant_arg` options for this translation. -/
+/-
+**Mathlib.Tactic.Translate.checkExistingType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData →   Name →     Name →       Mathlib
+.Tactic.Translate.Config →         optParam Bool true → MetaM (Mathlib.Tactic.Tr
+anslate.Reorder × Mathlib.Tactic.Translate.RelevantArg)
+参数：Mathlib.Tactic.Translate.Reorder × Mathlib.Tactic.Translate.RelevantArg。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkExistingType
-  signature: (t : TranslateData) (src tgt : Name) (cfg : Config) (lint := true)
-  body: withoutExporting do
-  withTraceNode `translate_detail (fun _ =>
-    return m!"checking translation `{.ofConstName src}` -> `{.ofConstName tgt}`") do
-  let srcDecl ← getConstInfo src
-  let tgtDecl ← getConstInfo tgt
-  unless srcDecl.numLevelParams == tgtDecl.numLevelParams do
-    throwError "`{t.attrName}` validation failed:\n expected {srcDecl.numLevelParams} \
-      universe levels, but '{tgt}' has {tgtDecl.numLevelParams} universe levels"
-  let mut srcType := srcDecl.type
-  let unfoldBoundaries? ← t.unfoldBoundaries?.mapM (return ·.getState (← getEnv))
-  if let some b := unfoldBoundaries? then
-    srcType ← b.insertBoundaries srcType t.attrName
-  let (srcType', relevantArg?) ← applyReplacementForall t cfg.dontTranslate srcType
-  srcType := srcType'
-  let reorder' ← withTraceNode `translate_detail (fun _ =>
-    return m!"guessing the reorder between `{srcType}` and `{tgtDecl.type}`") do
-    guessReorder srcType tgtDecl.type
-  trace[translate_detail] "The guessed reorder is {reorder'}"
-  let reorder ←
-    if let some reorder := cfg.reorder? then
-      if reorder.range > srcType.getForallArity then
-        throwError "The given (reorder := {reorder}) is out of bounds for `{.ofConstName src}`"
-      if lint && reorder == reorder' then
-        Linter.logLintIf linter.translateReorder cfg.ref m!"\
-          `{t.attrName}` correctly autogenerated `(reorder := {reorder'})` for {src}.\n\
-          You may remove the `(reorder := {reorder})` argument."
-      pure reorder
-    else
-      pure reorder'
-  if lint && cfg.self && reorder.isEmpty then
-    Linter.logLintIf linter.translateRedundant cfg.ref m!"\
-      `{t.attrName} self` is redundant when none of the arguments are reordered.\n\
-      Please remove the attribute, or provide an explicit `(reorder := ...)` argument.\n\
-      If you need to give a hint to `{t.attrName}` to translate expressions involving `{src}`,\n\
-      use `{t.attrName}_do_translate` instead"
-  srcType ← reorderForall reorder srcType
-  if let some b := unfoldBoundaries? then
-    srcType ← b.unfoldInsertions srcType
-  -- We rely on unification to determine how the universe parameters need to be reordered.
-  let levels ← mkFreshLevelMVars srcDecl.numLevelParams
-  srcType := srcType.instantiateLevelParams srcDecl.levelParams levels
-  let tgtType := tgtDecl.type
-unless ← withReducible isDefEq srcType tgtType do
-    throwError "`{t.attrName}` validation failed: expected{indentExpr srcType}\nbut '{tgt}' has \
-      type{indentExpr tgtType}"
-  -- Process any remaining universe constraints, to assign all universe metavariables.
-discard processPostponed (mayPostpone := false) (exceptionOnFailure := true)
-  let tgtParams := tgtDecl.levelParams.toArray
-  let params ← levels.mapIdxM fun i level => do
-    match ← instantiateLevelMVars level with
-    | .param u => return u
-    | _ =>
-      -- For example in `HasLimitsOfSize`, not all universe levels appear in the type.
-      -- In that case, default to not permuting the universe levels.
-      return tgtParams[i]!
-  let some univReorder := getPermutation params.toArray tgtParams |
-    throwError "inferred universe parameters {params} \
-      are not a reordering of {srcDecl.levelParams}."
-  return ({ univReorder, reorder }, ← getRelevantArg t cfg relevantArg? src lint)
-
-中文:
-定义 checkExistingType
-  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig) (lint := true)
-  定义体: withoutExporting do
-  withTraceNode `translate_detail (fun _ =>
-    return m!"checking translation `{.ofConstName src}` -> `{.ofConstName tgt}`") do
-  let srcDecl ← getConstInfo src
-  let tgtDecl ← getConstInfo tgt
-  unless srcDecl.numLevelParams == tgtDecl.numLevelParams do
-    throwError "`{t.attrName}` validation failed:\n expected {srcDecl.numLevelParams} \
-      universe levels, but '{tgt}' has {tgtDecl.numLevelParams} universe levels"
-  let mut srcType := srcDecl.type
-  let unfoldBoundaries? ← t.unfoldBoundaries?.mapM (return ·.getState (← getEnv))
-  if let some b := unfoldBoundaries? then
-    srcType ← b.insertBoundaries srcType t.attrName
-  let (srcType', relevantArg?) ← applyReplacementForall t cfg.dontTranslate srcType
-  srcType := srcType'
-  let reorder' ← withTraceNode `translate_detail (fun _ =>
-    return m!"guessing the reorder between `{srcType}` and `{tgtDecl.type}`") do
-    guessReorder srcType tgtDecl.type
-  trace[translate_detail] "The guessed reorder is {reorder'}"
-  let reorder ←
-    if let some reorder := cfg.reorder? then
-      if reorder.range > srcType.getForallArity then
-        throwError "The given (reorder := {reorder}) is out of bounds for `{.ofConstName src}`"
-      if lint && reorder == reorder' then
-        Linter.logLintIf linter.translateReorder cfg.ref m!"\
-          `{t.attrName}` correctly autogenerated `(reorder := {reorder'})` for {src}.\n\
-          You may remove the `(reorder := {reorder})` argument."
-      pure reorder
-    else
-      pure reorder'
-  if lint && cfg.self && reorder.isEmpty then
-    Linter.logLintIf linter.translateRedundant cfg.ref m!"\
-      `{t.attrName} self` is redundant when none of the arguments are reordered.\n\
-      Please remove the attribute, or provide an explicit `(reorder := ...)` argument.\n\
-      If you need to give a hint to `{t.attrName}` to translate expressions involving `{src}`,\n\
-      use `{t.attrName}_do_translate` instead"
-  srcType ← reorderForall reorder srcType
-  if let some b := unfoldBoundaries? then
-    srcType ← b.unfoldInsertions srcType
-  -- We rely on unification to determine how the universe parameters need to be reordered.
-  let levels ← mkFreshLevelMVars srcDecl.numLevelParams
-  srcType := srcType.instantiateLevelParams srcDecl.levelParams levels
-  let tgtType := tgtDecl.type
-unless ← withReducible isDefEq srcType tgtType do
-    throwError "`{t.attrName}` validation failed: expected{indentExpr srcType}\nbut '{tgt}' has \
-      type{indentExpr tgtType}"
-  -- Process any remaining universe constraints, to assign all universe metavariables.
-discard processPostponed (mayPostpone := false) (exceptionOnFailure := true)
-  let tgtParams := tgtDecl.levelParams.toArray
-  let params ← levels.mapIdxM fun i level => do
-    match ← instantiateLevelMVars level with
-    | .param u => return u
-    | _ =>
-      -- For example in `HasLimitsOfSize`, not all universe levels appear in the type.
-      -- In that case, default to not permuting the universe levels.
-      return tgtParams[i]!
-  let some univReorder := getPermutation params.toArray tgtParams |
-    throwError "inferred universe parameters {params} \
-      are not a reordering of {srcDecl.levelParams}."
-  return ({ univReorder, reorder }, ← getRelevantArg t cfg relevantArg? src lint)
+--- 原说明 ---
+Verify that the type of `srcDecl` translates to that of `tgtDecl`.
+Also try to autogenerate the `reorder` and `relevant_arg` options for this trans
+lation.
 -/
 partial def checkExistingType (t : TranslateData) (src tgt : Name) (cfg : Config) (lint := true) :
     MetaM (Reorder × RelevantArg) := withoutExporting do
   withTraceNode `translate_detail (fun _ =>
-    return m!"checking translation `{.ofConstName src}` -> `{.ofConstName tgt}`") do
+    return m!"checking translation `{.ofConstName src}` → `{.ofConstName tgt}`") do
   let srcDecl ← getConstInfo src
   let tgtDecl ← getConstInfo tgt
   unless srcDecl.numLevelParams == tgtDecl.numLevelParams do
-    throwError "`{t.attrName}` validation failed:\n expected {srcDecl.numLevelParams} \
+    throwError "`{t.attrName}` validation failed:\n  expected {srcDecl.numLevelParams} \
       universe levels, but '{tgt}' has {tgtDecl.numLevelParams} universe levels"
   let mut srcType := srcDecl.type
   let unfoldBoundaries? ← t.unfoldBoundaries?.mapM (return ·.getState (← getEnv))
@@ -2153,13 +1467,13 @@ partial def checkExistingType (t : TranslateData) (src tgt : Name) (cfg : Config
   let levels ← mkFreshLevelMVars srcDecl.numLevelParams
   srcType := srcType.instantiateLevelParams srcDecl.levelParams levels
   let tgtType := tgtDecl.type
-unless ← withReducible isDefEq srcType tgtType do
+  unless ← withReducible <| isDefEq srcType tgtType do
     throwError "`{t.attrName}` validation failed: expected{indentExpr srcType}\nbut '{tgt}' has \
       type{indentExpr tgtType}"
   -- Process any remaining universe constraints, to assign all universe metavariables.
-discard processPostponed (mayPostpone := false) (exceptionOnFailure := true)
+  discard <| processPostponed (mayPostpone := false) (exceptionOnFailure := true)
   let tgtParams := tgtDecl.levelParams.toArray
-  let params ← levels.mapIdxM fun i level => do
+  let params ← levels.mapIdxM fun i level ↦ do
     match ← instantiateLevelMVars level with
     | .param u => return u
     | _ =>
@@ -2171,43 +1485,26 @@ discard processPostponed (mayPostpone := false) (exceptionOnFailure := true)
       are not a reordering of {srcDecl.levelParams}."
   return ({ univReorder, reorder }, ← getRelevantArg t cfg relevantArg? src lint)
 
-/--
-Definition of `insertTranslationChecked` / `insertTranslationChecked` 的定义
+/-- A version of `insertTranslation` that checks whether the translation is valid, and only
+inserts the translation if it is valid. -/
+/-
+**Mathlib.Tactic.Translate.insertTranslationChecked** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.Translate`。
+形式化陈述：insertTranslationChecked (t : TranslateData) (src tgt : Name) (cfg : Confi
+g) : CoreM Unit
+参数：t : TranslateData；src tgt : Name；cfg : Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insertTranslationChecked
-  signature: (t : TranslateData) (src tgt : Name) (cfg : Config)
-  body: do
-  let (reorder, relevantArg) ←
-    try
-.run' checkExistingType t src tgt cfg (lint := false)
-    catch ex =>
-      Linter.logLintIf linter.translate.warnInvalid cfg.ref m!"\
-        @[{t.attrName}] failed to add a translation from `{.ofConstName src}` to \
-        `{.ofConstName tgt}`.\nPlease silence this warning and add a translation manually. \
-        Error:\n\n{ex.toMessageData}"
-      return
-  insertTranslation t src tgt reorder relevantArg cfg.ref
-
-中文:
-定义 insertTranslationChecked
-  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
-  定义体: do
-  let (reorder, relevantArg) ←
-    try
-.run' checkExistingType t src tgt cfg (lint := false)
-    catch ex =>
-      Linter.logLintIf linter.translate.warnInvalid cfg.ref m!"\
-        @[{t.attrName}] failed to add a translation from `{.ofConstName src}` to \
-        `{.ofConstName tgt}`.\nPlease silence this warning and add a translation manually. \
-        Error:\n\n{ex.toMessageData}"
-      return
-  insertTranslation t src tgt reorder relevantArg cfg.ref
+--- 原说明 ---
+A version of `insertTranslation` that checks whether the translation is valid, a
+nd only
+inserts the translation if it is valid.
 -/
 def insertTranslationChecked (t : TranslateData) (src tgt : Name) (cfg : Config) : CoreM Unit := do
   let (reorder, relevantArg) ←
     try
-.run' checkExistingType t src tgt cfg (lint := false)
+      checkExistingType t src tgt cfg (lint := false) |>.run'
     catch ex =>
       Linter.logLintIf linter.translate.warnInvalid cfg.ref m!"\
         @[{t.attrName}] failed to add a translation from `{.ofConstName src}` to \
@@ -2216,43 +1513,25 @@ def insertTranslationChecked (t : TranslateData) (src tgt : Name) (cfg : Config)
       return
   insertTranslation t src tgt reorder relevantArg cfg.ref
 
-/--
-Definition of `translateLemmas` / `translateLemmas` 的定义
+/-- `translateLemmas` runs `runAttr` on all elements of `names` and adds translations between
+the generated lemmas (the output of `t`).  `names` must be non-empty. -/
+/-
+**Mathlib.Tactic.Translate.translateLemmas** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+形式化陈述：translateLemmas (t : TranslateData) (names : Array Name) (desc : String) (
+cfg : Config) (runAttr : Name -> CoreM (Array Name)) : CoreM Unit
+参数：t : TranslateData；names : Array Name；desc : String；cfg : Config；runAttr : Nam
+e -> CoreM (Array Name)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition translateLemmas
-  signature: (t : TranslateData) (names : Array Name)
-  body: do
-  let auxLemmas ← names.mapM runAttr
-  let nLemmas := auxLemmas[0]!.size
-  for nm in names, lemmas in auxLemmas do
-    unless lemmas.size == nLemmas do
-      throwError "{names[0]!} and {nm} do not generate the same number of {desc}."
-  for srcLemmas in auxLemmas, tgtLemmas in auxLemmas.eraseIdx! 0 do
-    for srcLemma in srcLemmas, tgtLemma in tgtLemmas do
-      -- Only add a translation if one doesn't already exist.
-      -- This happens if `srcLemma` is the `_assoc` lemma from `to_dual (attr := reassoc)`.
-      if (findTranslation? (← getEnv) t srcLemma).isNone then
-        insertTranslationChecked t srcLemma tgtLemma cfg
-
-中文:
-定义 translateLemmas
-  签名: (t : TranslateData) (names : 数组 Name)
-  定义体: do
-  let auxLemmas ← names.mapM runAttr
-  let nLemmas := auxLemmas[0]!.size
-  for nm in names, lemmas in auxLemmas do
-    unless lemmas.size == nLemmas do
-      throwError "{names[0]!} and {nm} do not generate the same number of {desc}."
-  for srcLemmas in auxLemmas, tgtLemmas in auxLemmas.eraseIdx! 0 do
-    for srcLemma in srcLemmas, tgtLemma in tgtLemmas do
-      -- Only add a translation if one doesn't already exist.
-      -- This happens if `srcLemma` is the `_assoc` lemma from `to_dual (attr := reassoc)`.
-      if (findTranslation? (← getEnv) t srcLemma).isNone then
-        insertTranslationChecked t srcLemma tgtLemma cfg
+--- 原说明 ---
+`translateLemmas` runs `runAttr` on all elements of `names` and adds translation
+s between
+the generated lemmas (the output of `t`).  `names` must be non-empty.
 -/
 def translateLemmas (t : TranslateData) (names : Array Name)
-    (desc : String) (cfg : Config) (runAttr : Name -> CoreM (Array Name)) : CoreM Unit := do
+    (desc : String) (cfg : Config) (runAttr : Name → CoreM (Array Name)) : CoreM Unit := do
   let auxLemmas ← names.mapM runAttr
   let nLemmas := auxLemmas[0]!.size
   for nm in names, lemmas in auxLemmas do
@@ -2265,132 +1544,81 @@ def translateLemmas (t : TranslateData) (names : Array Name)
       if (findTranslation? (← getEnv) t srcLemma).isNone then
         insertTranslationChecked t srcLemma tgtLemma cfg
 
-/--
-Definition of `proceedFieldsAux` / `proceedFieldsAux` 的定义
+/-- if `f src = #[a_1, ..., a_n]` and `f tgt = #[b_1, ... b_n]` then `proceedFieldsAux src tgt f`
+will insert translations from `a_i` to `b_i`. -/
+/-
+**Mathlib.Tactic.Translate.proceedFieldsAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Translate`。
+形式化陈述：proceedFieldsAux (t : TranslateData) (src tgt : Name) (cfg : Config) (f : 
+Name -> Array Name) : CoreM Unit
+参数：t : TranslateData；src tgt : Name；cfg : Config；f : Name -> Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proceedFieldsAux
-  signature: (t : TranslateData) (src tgt : Name) (cfg : Config)
-  body: do
-  let srcFields := f src
-  let tgtFields := f tgt
-  if srcFields.size != tgtFields.size then
-    throwError "Failed to map fields of {src}, {tgt} with {srcFields} => {tgtFields}.\n \
-      Lengths do not match."
-  for srcField in srcFields, tgtField in tgtFields do
-    insertTranslationChecked t srcField tgtField cfg
-
-中文:
-定义 proceedFieldsAux
-  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
-  定义体: do
-  let srcFields := f src
-  let tgtFields := f tgt
-  if srcFields.size != tgtFields.size then
-    throwError "Failed to map fields of {src}, {tgt} with {srcFields} => {tgtFields}.\n \
-      Lengths do not match."
-  for srcField in srcFields, tgtField in tgtFields do
-    insertTranslationChecked t srcField tgtField cfg
+--- 原说明 ---
+if `f src = #[a_1, ..., a_n]` and `f tgt = #[b_1, ... b_n]` then `proceedFieldsA
+ux src tgt f`
+will insert translations from `a_i` to `b_i`.
 -/
 def proceedFieldsAux (t : TranslateData) (src tgt : Name) (cfg : Config)
-    (f : Name -> Array Name) : CoreM Unit := do
+    (f : Name → Array Name) : CoreM Unit := do
   let srcFields := f src
   let tgtFields := f tgt
   if srcFields.size != tgtFields.size then
-    throwError "Failed to map fields of {src}, {tgt} with {srcFields} => {tgtFields}.\n \
+    throwError "Failed to map fields of {src}, {tgt} with {srcFields} ↦ {tgtFields}.\n \
       Lengths do not match."
   for srcField in srcFields, tgtField in tgtFields do
     insertTranslationChecked t srcField tgtField cfg
 
-/--
-Definition of `proceedFields` / `proceedFields` 的定义
+/-- Add the structure fields of `src` to the translations dictionary
+so that they will be translated correctly. -/
+/-
+**Mathlib.Tactic.Translate.proceedFields** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Translate`。
+形式化陈述：proceedFields (t : TranslateData) (src tgt : Name) (cfg : Config) : CoreM 
+Unit
+参数：t : TranslateData；src tgt : Name；cfg : Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proceedFields
-  signature: (t : TranslateData) (src tgt : Name) (cfg : Config)
-  body: do
-  let env ← getEnv
-  let aux := proceedFieldsAux t src tgt cfg
-  -- add translations for the structure fields
-  aux fun declName =>
-    if isStructure env declName then
-      let info := getStructureInfo env declName
-      Array.ofFn (n := info.fieldNames.size) (info.getProjFn? · |>.get!)
-    else
-      #[]
-  -- add translations for the automatically generated instances with `extend`.
-  aux fun declName =>
-    if isStructure env declName then
-.parentInfo getStructureInfo env declName
-.filterMap fun c => if !c.subobject then c.projFn else none
-    else
-      #[]
-  -- add translations for the constructors of an inductive type
-  aux fun declName => match env.find? declName with
-    | some (ConstantInfo.inductInfo { ctors, .. }) => ctors.toArray
-    | _ => #[]
-
-中文:
-定义 proceedFields
-  签名: (t : TranslateData) (src tgt : Name) (cfg : 余nfig)
-  定义体: do
-  let env ← getEnv
-  let aux := proceedFieldsAux t src tgt cfg
-  -- add translations for the structure fields
-  aux fun declName =>
-    if isStructure env declName then
-      let info := getStructureInfo env declName
-      Array.ofFn (n := info.fieldNames.size) (info.getProjFn? · |>.get!)
-    else
-      #[]
-  -- add translations for the automatically generated instances with `extend`.
-  aux fun declName =>
-    if isStructure env declName then
-.parentInfo getStructureInfo env declName
-.filterMap fun c => if !c.subobject then c.projFn else none
-    else
-      #[]
-  -- add translations for the constructors of an inductive type
-  aux fun declName => match env.find? declName with
-    | some (ConstantInfo.inductInfo { ctors, .. }) => ctors.toArray
-    | _ => #[]
+--- 原说明 ---
+Add the structure fields of `src` to the translations dictionary
+so that they will be translated correctly.
 -/
 def proceedFields (t : TranslateData) (src tgt : Name) (cfg : Config) : CoreM Unit := do
   let env ← getEnv
   let aux := proceedFieldsAux t src tgt cfg
   -- add translations for the structure fields
-  aux fun declName =>
+  aux fun declName ↦
     if isStructure env declName then
       let info := getStructureInfo env declName
       Array.ofFn (n := info.fieldNames.size) (info.getProjFn? · |>.get!)
     else
       #[]
   -- add translations for the automatically generated instances with `extend`.
-  aux fun declName =>
+  aux fun declName ↦
     if isStructure env declName then
-.parentInfo getStructureInfo env declName
-.filterMap fun c => if !c.subobject then c.projFn else none
+      getStructureInfo env declName |>.parentInfo
+        |>.filterMap fun c ↦ if !c.subobject then c.projFn else none
     else
       #[]
   -- add translations for the constructors of an inductive type
-  aux fun declName => match env.find? declName with
+  aux fun declName ↦ match env.find? declName with
     | some (ConstantInfo.inductInfo { ctors, .. }) => ctors.toArray
     | _ => #[]
 
-/--
-Definition of `elabRename` / `elabRename` 的定义
+/-- Elaboration of the `(rename := ...)` option. -/
+/-
+**Mathlib.Tactic.Translate.elabRename** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：elabRename (stx : Array (TSyntax ``renameRule)) (declName : Name) (argName
+s : Array Name) : MetaM (NameMap Name)
+参数：stx : Array (TSyntax ``renameRule)；declName : Name；argNames : Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabRename
-  signature: (stx : Array (TSyntax ``renameRule)) (declName : Name) (argNames : Array Name)
-  body: stx.foldlM elabRule {}
-
-中文:
-定义 elabRename
-  签名: (stx : 数组 (TSyntax ``renameRule)) (declName : Name) (argNames : 数组 Name)
-  定义体: stx.foldlM elabRule {}
-
-Depends on / 依赖: elabRule, foldlM, stx.foldlM
+--- 原说明 ---
+Elaboration of the `(rename := ...)` option.
 -/
 def elabRename (stx : Array (TSyntax ``renameRule)) (declName : Name) (argNames : Array Name) :
     MetaM (NameMap Name) :=
@@ -2398,7 +1626,7 @@ def elabRename (stx : Array (TSyntax ``renameRule)) (declName : Name) (argNames 
 where
   elabRule rename stx := do
     match stx with
-    | `(renameRule| $old -> $new) =>
+    | `(renameRule| $old → $new) =>
       addRule old new rename
     | `(renameRule| $first ↔ $second) =>
       addRule first second rename >>= addRule second first
@@ -2411,127 +1639,39 @@ where
       throwErrorAt old "rename rule for `{old.getId}` already specified"
     return rename.insert old.getId new.getId
 
-/--
-Definition of `elabTranslationAttr` / `elabTranslationAttr` 的定义
+/-- Elaboration of the configuration options for a translation attribute. It is assumed that
+- `stx[0]` is the attribute (e.g. `to_additive`)
+- `stx[1]` is the optional tracing `?`
+- `stx[2]` is the remaining `attrArgs`
 
-English:
-definition elabTranslationAttr
-  signature: (declName : Name) (stx : Syntax)
-  body: do
-  match stx[2] with
-  | `(attrArgs| $hint $[$opts:bracketedOption]* $[$tgt]? $[$doc]?) =>
-MetaM.run' forallTelescope (← getConstInfo declName).type fun xs _ => do
-    let argNames ← xs.mapM (·.fvarId!.getUserName)
-    let mut attrs := #[]
-    let mut reorder? := none
-    let mut relevantArg? := none
-    let mut dontTranslate := []
-    let mut rename : NameMap Name := {}
-    for opt in opts do
-      match opt with
-      | `(bracketedOption| (attr := $[$stxs],*)) =>
-        attrs := attrs ++ stxs
-      | `(bracketedOption| (reorder := $reorder)) =>
-        if reorder?.isSome then
-          throwErrorAt opt "cannot specify `reorder` multiple times"
-reorder? ← some < > elabReorder reorder argNames xs (.ofConstName declName)
-      | `(bracketedOption| (relevant_arg := $n)) =>
-        if relevantArg?.isSome then
-          throwErrorAt opt "cannot specify `relevant_arg` multiple times"
-        if let `($_:hole) := n then
-          relevantArg? := some .noArg
-        else
-relevantArg? := some .arg (← elabArgStx ⟨n.raw⟩ argNames xs (.ofConstName declName))
-      | `(bracketedOption| (dont_translate := $[$types]*)) =>
-        dontTranslate := dontTranslate ++
-          (← types.toList.mapM (elabArgStx · argNames xs (.ofConstName declName)))
-      | `(bracketedOption| (rename := $[$rules],*)) =>
-        if !rename.isEmpty then
-          throwErrorAt opt "cannot specify `rename` multiple times"
-        rename ← elabRename rules declName argNames
-      | _ => throwUnsupportedSyntax
-    let mut existing := false; let mut self := false; let mut none := false
-    match hint with
-    | `(translationHint| existing) => existing := true
-    | `(translationHint| self) => existing := true; self := true
-    | `(translationHint| none) => none := true
-    | _ => pure ()
-    if (self || none) && !attrs.isEmpty then
-      throwError "invalid `(attr := ...)` after `self` or `none`, \
-        as there is no other declaration for the attributes.\n\
-        Instead, you can write the attributes in the usual way."
-    trace[translate_detail]
-      "attributes: {attrs}; reorder arguments: {reorder?.elim "none" (·.toString)}"
-    return {
-      trace := !stx[1].isNone
-      target := match tgt with | some tgt => tgt.getId | _ => Name.anonymous
-      doc, attrs, reorder?, relevantArg?, dontTranslate, existing, self, none, rename,
-      ref := match tgt with | some tgt => tgt.raw | _ => stx[0] }
-  | _ => throwUnsupportedSyntax
+TODO: Currently, we don't deduce any `dont_translate` arguments based on the type of `declName`.
+In the future we would like that the presence of `MonoidAlgebra k G` will automatically
+flag `k` as a type to not be translated. -/
+/-
+**Mathlib.Tactic.Translate.elabTranslationAttr** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate`。
+形式化陈述：elabTranslationAttr (declName : Name) (stx : Syntax) : CoreM Config
+参数：declName : Name；stx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-mutual
+--- 原说明 ---
+Elaboration of the configuration options for a translation attribute. It is assu
+med that
+- `stx[0]` is the attribute (e.g. `to_additive`)
+- `stx[1]` is the optional tracing `?`
+- `stx[2]` is the remaining `attrArgs`
 
-中文:
-定义 elabTranslationAttr
-  签名: (declName : Name) (stx : Syntax)
-  定义体: do
-  match stx[2] with
-  | `(attrArgs| $hint $[$opts:bracketedOption]* $[$tgt]? $[$doc]?) =>
-MetaM.run' forallTelescope (← getConstInfo declName).type fun xs _ => do
-    let argNames ← xs.mapM (·.fvarId!.getUserName)
-    let mut attrs := #[]
-    let mut reorder? := none
-    let mut relevantArg? := none
-    let mut dontTranslate := []
-    let mut rename : NameMap Name := {}
-    for opt in opts do
-      match opt with
-      | `(bracketedOption| (attr := $[$stxs],*)) =>
-        attrs := attrs ++ stxs
-      | `(bracketedOption| (reorder := $reorder)) =>
-        if reorder?.isSome then
-          throwErrorAt opt "cannot specify `reorder` multiple times"
-reorder? ← some < > elabReorder reorder argNames xs (.ofConstName declName)
-      | `(bracketedOption| (relevant_arg := $n)) =>
-        if relevantArg?.isSome then
-          throwErrorAt opt "cannot specify `relevant_arg` multiple times"
-        if let `($_:hole) := n then
-          relevantArg? := some .noArg
-        else
-relevantArg? := some .arg (← elabArgStx ⟨n.raw⟩ argNames xs (.ofConstName declName))
-      | `(bracketedOption| (dont_translate := $[$types]*)) =>
-        dontTranslate := dontTranslate ++
-          (← types.toList.mapM (elabArgStx · argNames xs (.ofConstName declName)))
-      | `(bracketedOption| (rename := $[$rules],*)) =>
-        if !rename.isEmpty then
-          throwErrorAt opt "cannot specify `rename` multiple times"
-        rename ← elabRename rules declName argNames
-      | _ => throwUnsupportedSyntax
-    let mut existing := false; let mut self := false; let mut none := false
-    match hint with
-    | `(translationHint| existing) => existing := true
-    | `(translationHint| self) => existing := true; self := true
-    | `(translationHint| none) => none := true
-    | _ => pure ()
-    if (self || none) && !attrs.isEmpty then
-      throwError "invalid `(attr := ...)` after `self` or `none`, \
-        as there is no other declaration for the attributes.\n\
-        Instead, you can write the attributes in the usual way."
-    trace[translate_detail]
-      "attributes: {attrs}; reorder arguments: {reorder?.elim "none" (·.toString)}"
-    return {
-      trace := !stx[1].isNone
-      target := match tgt with | some tgt => tgt.getId | _ => Name.anonymous
-      doc, attrs, reorder?, relevantArg?, dontTranslate, existing, self, none, rename,
-      ref := match tgt with | some tgt => tgt.raw | _ => stx[0] }
-  | _ => throwUnsupportedSyntax
-
-mutual
+TODO: Currently, we don't deduce any `dont_translate` arguments based on the typ
+e of `declName`.
+In the future we would like that the presence of `MonoidAlgebra k G` will automa
+tically
+flag `k` as a type to not be translated.
 -/
 def elabTranslationAttr (declName : Name) (stx : Syntax) : CoreM Config := do
   match stx[2] with
   | `(attrArgs| $hint $[$opts:bracketedOption]* $[$tgt]? $[$doc]?) =>
-MetaM.run' forallTelescope (← getConstInfo declName).type fun xs _ => do
+    MetaM.run' <| forallTelescope (← getConstInfo declName).type fun xs _ => do
     let argNames ← xs.mapM (·.fvarId!.getUserName)
     let mut attrs := #[]
     let mut reorder? := none
@@ -2545,14 +1685,14 @@ MetaM.run' forallTelescope (← getConstInfo declName).type fun xs _ => do
       | `(bracketedOption| (reorder := $reorder)) =>
         if reorder?.isSome then
           throwErrorAt opt "cannot specify `reorder` multiple times"
-reorder? ← some < > elabReorder reorder argNames xs (.ofConstName declName)
+        reorder? ← some <$> elabReorder reorder argNames xs (.ofConstName declName)
       | `(bracketedOption| (relevant_arg := $n)) =>
         if relevantArg?.isSome then
           throwErrorAt opt "cannot specify `relevant_arg` multiple times"
         if let `($_:hole) := n then
           relevantArg? := some .noArg
         else
-relevantArg? := some .arg (← elabArgStx ⟨n.raw⟩ argNames xs (.ofConstName declName))
+          relevantArg? := some <| .arg (← elabArgStx ⟨n.raw⟩ argNames xs (.ofConstName declName))
       | `(bracketedOption| (dont_translate := $[$types]*)) =>
         dontTranslate := dontTranslate ++
           (← types.toList.mapM (elabArgStx · argNames xs (.ofConstName declName)))
@@ -2581,142 +1721,17 @@ relevantArg? := some .arg (← elabArgStx ⟨n.raw⟩ argNames xs (.ofConstName 
   | _ => throwUnsupportedSyntax
 
 mutual
-/--
-Definition of `applyAttributes` / `applyAttributes` 的定义
+/-- Apply attributes to the original and translated declarations. -/
+/-
+**Mathlib.Tactic.Translate.applyAttributes** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib
+.Tactic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData → Mathlib.Tactic.Translate.Config →
+ Name → Name → Elab.TermElabM (Array Name)
+参数：Array Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyAttributes
-  signature: (t : TranslateData) (cfg : Config) (src tgt : Name)
-  body: do
-  if !cfg.existing && !cfg.none then
-    -- Copy the `instance` attribute, since it is nice to directly tag `instance` declarations.
-    copyInstanceAttribute src tgt
-    copyAliasAttribute t src tgt
-  -- Warn users if the original declaration has an attribute
-  if !cfg.existing && !cfg.none && linter.existingAttributeWarning.get (← getOptions) then
-    let appliedAttrs ← getAllSimpAttrs src
-    if appliedAttrs.size > 0 then
-      let appliedAttrs := ", ".intercalate (appliedAttrs.toList.map toString)
-      -- Note: we're not bothering to print the correct attribute arguments.
-      Linter.logLintIf linter.existingAttributeWarning cfg.ref m!"\
-        The source declaration {src} was given the simp-attribute(s) {appliedAttrs} before \
-        calling @[{t.attrName}].\nThe preferred method is to use something like \
-        `@[{t.attrName} (attr := {appliedAttrs})]`\nto apply the attribute to both \
-        {src} and the target declaration {tgt}."
-    warnAttr cfg.ref Lean.Meta.Ext.extExtension
-      (fun b n => (b.tree.values.any fun t => t.declName = n)) t.attrName `ext src tgt
-    warnAttr cfg.ref Lean.Meta.Rfl.reflExt (·.values.contains ·) t.attrName `refl src tgt
-    warnAttr cfg.ref Lean.Meta.Symm.symmExt (·.values.contains ·) t.attrName `symm src tgt
-    warnAttr cfg.ref Batteries.Tactic.transExt (·.values.contains ·) t.attrName `trans src tgt
-    warnAttr cfg.ref Lean.Meta.coeExt (·.contains ·) t.attrName `coe src tgt
-    warnParametricAttr cfg.ref Lean.Linter.deprecatedAttr t.attrName `deprecated src tgt
-    warnAttrCore cfg.ref Term.elabAsElim.hasTag t.attrName `elab_as_elim src tgt
-  -- add attributes
-  -- the following is similar to `Term.ApplyAttributesCore`, but we hijack the implementation of
-  -- `simps` and `to_additive`.
-  let attrs ← elabAttrs cfg.attrs
-  let (additiveAttrs, attrs) := attrs.partition (·.name == t.attrName)
-  let nestedDecls ←
-    match h : additiveAttrs.size with
-    | 0 => pure #[]
-    | 1 =>
-      let cfg ← elabTranslationAttr src additiveAttrs[0].stx
-      addTranslationAttr t tgt cfg additiveAttrs[0].kind
-    | _ => throwError "cannot apply {t.attrName} multiple times."
-  let allDecls := #[src, tgt] ++ nestedDecls
-  if attrs.size > 0 then
-    trace[translate_detail] "Applying attributes {attrs.map (·.stx)} to {allDecls}"
-  for attr in attrs do
-    if let some impl := (← generatingAttrs.get).find? attr.name then
-      withRef attr.stx do withLogging do
-        translateLemmas t allDecls "simps lemmas" cfg
-          (impl · attr.stx attr.kind)
-    else
-      let mut attr := attr
-      -- Set the target of `(attr := deprecated)` when applied to an `alias`.
-      if attr.name == `deprecated then
-        if let some info ← Batteries.Tactic.Alias.getAliasInfo? src then
-          if let `(attr| deprecated%$tk $[$desc:str]? $[(since := $since)]?) := attr.stx then
-            attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent info.name) [$desc:str]? [(since := $since)]?) }
-      for decl in allDecls, i in 0...* do
-        if i != 0 then
-          -- Translate the target of `(attr := deprecated)` if possible.
-          if attr.name == `deprecated then
-            if let `(attr| deprecated%$tk $name $[$desc]? $[(since := $since)]?) := attr.stx then
-              let name ← realizeGlobalConstNoOverload name
-              if let some name := findTranslationName? (← getEnv) t name then
-                attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent name) [$desc]? [(since := $since)]?) }
-        Term.applyAttributes decl #[attr]
-  return nestedDecls
-
-中文:
-定义 applyAttributes
-  签名: (t : TranslateData) (cfg : 余nfig) (src tgt : Name)
-  定义体: do
-  if !cfg.existing && !cfg.none then
-    -- Copy the `instance` attribute, since it is nice to directly tag `instance` declarations.
-    copyInstanceAttribute src tgt
-    copyAliasAttribute t src tgt
-  -- Warn users if the original declaration has an attribute
-  if !cfg.existing && !cfg.none && linter.existingAttributeWarning.get (← getOptions) then
-    let appliedAttrs ← getAllSimpAttrs src
-    if appliedAttrs.size > 0 then
-      let appliedAttrs := ", ".intercalate (appliedAttrs.toList.map toString)
-      -- Note: we're not bothering to print the correct attribute arguments.
-      Linter.logLintIf linter.existingAttributeWarning cfg.ref m!"\
-        The source declaration {src} was given the simp-attribute(s) {appliedAttrs} before \
-        calling @[{t.attrName}].\nThe preferred method is to use something like \
-        `@[{t.attrName} (attr := {appliedAttrs})]`\nto apply the attribute to both \
-        {src} and the target declaration {tgt}."
-    warnAttr cfg.ref Lean.Meta.Ext.extExtension
-      (fun b n => (b.tree.values.any fun t => t.declName = n)) t.attrName `ext src tgt
-    warnAttr cfg.ref Lean.Meta.Rfl.reflExt (·.values.contains ·) t.attrName `refl src tgt
-    warnAttr cfg.ref Lean.Meta.Symm.symmExt (·.values.contains ·) t.attrName `symm src tgt
-    warnAttr cfg.ref Batteries.Tactic.transExt (·.values.contains ·) t.attrName `trans src tgt
-    warnAttr cfg.ref Lean.Meta.coeExt (·.contains ·) t.attrName `coe src tgt
-    warnParametricAttr cfg.ref Lean.Linter.deprecatedAttr t.attrName `deprecated src tgt
-    warnAttrCore cfg.ref Term.elabAsElim.hasTag t.attrName `elab_as_elim src tgt
-  -- add attributes
-  -- the following is similar to `Term.ApplyAttributesCore`, but we hijack the implementation of
-  -- `simps` and `to_additive`.
-  let attrs ← elabAttrs cfg.attrs
-  let (additiveAttrs, attrs) := attrs.partition (·.name == t.attrName)
-  let nestedDecls ←
-    match h : additiveAttrs.size with
-    | 0 => pure #[]
-    | 1 =>
-      let cfg ← elabTranslationAttr src additiveAttrs[0].stx
-      addTranslationAttr t tgt cfg additiveAttrs[0].kind
-    | _ => throwError "cannot apply {t.attrName} multiple times."
-  let allDecls := #[src, tgt] ++ nestedDecls
-  if attrs.size > 0 then
-    trace[translate_detail] "Applying attributes {attrs.map (·.stx)} to {allDecls}"
-  for attr in attrs do
-    if let some impl := (← generatingAttrs.get).find? attr.name then
-      withRef attr.stx do withLogging do
-        translateLemmas t allDecls "simps lemmas" cfg
-          (impl · attr.stx attr.kind)
-    else
-      let mut attr := attr
-      -- Set the target of `(attr := deprecated)` when applied to an `alias`.
-      if attr.name == `deprecated then
-        if let some info ← Batteries.Tactic.Alias.getAliasInfo? src then
-          if let `(attr| deprecated%$tk $[$desc:str]? $[(since := $since)]?) := attr.stx then
-            attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent info.name) [$desc:str]? [(since := $since)]?) }
-      for decl in allDecls, i in 0...* do
-        if i != 0 then
-          -- Translate the target of `(attr := deprecated)` if possible.
-          if attr.name == `deprecated then
-            if let `(attr| deprecated%$tk $name $[$desc]? $[(since := $since)]?) := attr.stx then
-              let name ← realizeGlobalConstNoOverload name
-              if let some name := findTranslationName? (← getEnv) t name then
-                attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent name) [$desc]? [(since := $since)]?) }
-        Term.applyAttributes decl #[attr]
-  return nestedDecls
+--- 原说明 ---
+Apply attributes to the original and translated declarations.
 -/
 partial def applyAttributes (t : TranslateData) (cfg : Config) (src tgt : Name) :
     TermElabM (Array Name) := do
@@ -2770,7 +1785,7 @@ partial def applyAttributes (t : TranslateData) (cfg : Config) (src tgt : Name) 
         if let some info ← Batteries.Tactic.Alias.getAliasInfo? src then
           if let `(attr| deprecated%$tk $[$desc:str]? $[(since := $since)]?) := attr.stx then
             attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent info.name) [$desc:str]? [(since := $since)]?) }
+              deprecated%$tk $(mkCIdent info.name) $[$desc:str]? $[(since := $since)]?) }
       for decl in allDecls, i in 0...* do
         if i != 0 then
           -- Translate the target of `(attr := deprecated)` if possible.
@@ -2779,50 +1794,21 @@ deprecated% tk (mkCIdent info.name) [$desc:str]? [(since := $since)]?) }
               let name ← realizeGlobalConstNoOverload name
               if let some name := findTranslationName? (← getEnv) t name then
                 attr := { attr with stx := ← `(attr|
-deprecated% tk (mkCIdent name) [$desc]? [(since := $since)]?) }
+                  deprecated%$tk $(mkCIdent name) $[$desc]? $[(since := $since)]?) }
         Term.applyAttributes decl #[attr]
   return nestedDecls
 
-/--
-Definition of `copyMetaData` / `copyMetaData` 的定义
+/-- Copies equation lemmas and attributes from `src` to `tgt`. -/
+/-
+**Mathlib.Tactic.Translate.copyMetaData** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData → Mathlib.Tactic.Translate.Config →
+ Name → Name → CoreM (Array Name)
+参数：Array Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copyMetaData
-  signature: (t : TranslateData) (cfg : Config) (src tgt : Name)
-  body: do
-  -- The equation lemmas can only be related if the value of `tgt` is the translated value of `src`.
-  unless cfg.existing do
-    if let some eqns := eqnsAttribute.find? (← getEnv) src then
-      unless (eqnsAttribute.find? (← getEnv) tgt).isSome do
-        for eqn in eqns do
-          _ ← addTranslationAttr t eqn cfg
-        eqnsAttribute.add tgt (eqns.map (findTranslationName? (← getEnv) t · |>.get!))
-    else
-      /- We need to generate all equation lemmas for `src` and `tgt`, even for non-recursive
-      definitions. If we don't do that, the equation lemma for `src` might be generated later
-      when doing a `rw`, but it won't be generated for `tgt`. -/
-      translateLemmas t #[src, tgt] "equation lemmas" cfg fun nm =>
-(·.getD #[]) < > MetaM.run' (getEqnsFor? nm)
-.run'.run' applyAttributes t cfg src tgt
-
-中文:
-定义 copyMetaData
-  签名: (t : TranslateData) (cfg : 余nfig) (src tgt : Name)
-  定义体: do
-  -- The equation lemmas can only be related if the value of `tgt` is the translated value of `src`.
-  unless cfg.existing do
-    if let some eqns := eqnsAttribute.find? (← getEnv) src then
-      unless (eqnsAttribute.find? (← getEnv) tgt).isSome do
-        for eqn in eqns do
-          _ ← addTranslationAttr t eqn cfg
-        eqnsAttribute.add tgt (eqns.map (findTranslationName? (← getEnv) t · |>.get!))
-    else
-      /- We need to generate all equation lemmas for `src` and `tgt`, even for non-recursive
-      definitions. If we don't do that, the equation lemma for `src` might be generated later
-      when doing a `rw`, but it won't be generated for `tgt`. -/
-      translateLemmas t #[src, tgt] "equation lemmas" cfg fun nm =>
-(·.getD #[]) < > MetaM.run' (getEqnsFor? nm)
-.run'.run' applyAttributes t cfg src tgt
+--- 原说明 ---
+Copies equation lemmas and attributes from `src` to `tgt`.
 -/
 partial def copyMetaData (t : TranslateData) (cfg : Config) (src tgt : Name) :
     CoreM (Array Name) := do
@@ -2837,104 +1823,29 @@ partial def copyMetaData (t : TranslateData) (cfg : Config) (src tgt : Name) :
       /- We need to generate all equation lemmas for `src` and `tgt`, even for non-recursive
       definitions. If we don't do that, the equation lemma for `src` might be generated later
       when doing a `rw`, but it won't be generated for `tgt`. -/
-      translateLemmas t #[src, tgt] "equation lemmas" cfg fun nm =>
-(·.getD #[]) < > MetaM.run' (getEqnsFor? nm)
-.run'.run' applyAttributes t cfg src tgt
+      translateLemmas t #[src, tgt] "equation lemmas" cfg fun nm ↦
+        (·.getD #[]) <$> MetaM.run' (getEqnsFor? nm)
+  applyAttributes t cfg src tgt |>.run'.run'
 
-/--
-Definition of `addTranslationAttr` / `addTranslationAttr` 的定义
+/-- `addTranslationAttr src cfg` adds a translation attribute to `src` with configuration `cfg`.
+See the attribute implementation for more details.
+It returns an array with names of translated declarations (usually 1, but more if there are nested
+`to_additive` calls). -/
+/-
+**Mathlib.Tactic.Translate.addTranslationAttr** 是 Mathlib 中的一个不透明定义，位于命名空间 `Math
+lib.Tactic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData →   Name → Mathlib.Tactic.Translate
+.Config → optParam AttributeKind AttributeKind.global → AttrM (Array Name)
+参数：Array Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addTranslationAttr
-  signature: (t : TranslateData) (src : Name) (cfg : Config)
-  body: do
-  if (kind != AttributeKind.global) then
-    throwError "`{t.attrName}` can only be used as a global attribute"
-  withOptions (fun o => if cfg.trace then o.set `trace.translate true else o) do
-  let tgt ← targetName t cfg src
-  let alreadyExists ← realizeGlobalConst tgt
-  if cfg.existing != alreadyExists && !(← isInductive src) && !cfg.self then
-Linter.logLintIf linter.translateExisting cfg.ref
-      if alreadyExists then
-        m!"The translated declaration already exists. Please specify this explicitly using \
-           `@[{t.attrName} existing]`."
-      else
-        "The translated declaration doesn't exist. Please remove the option `existing`."
-  if alreadyExists then
-let (reorder, relevantArg) ← MetaM.run' checkExistingType t src tgt cfg
-    insertTranslation t src tgt reorder relevantArg cfg.ref
-    -- since `tgt` already exists, we just need to
-    -- add translations `src.x ↦ tgt.x'` for any subfields.
-    trace[translate_detail] "declaration {tgt} already exists."
-    proceedFields t src tgt cfg
-  else
-    unless (← withoutExporting do getConstInfo src).hasValue (allowOpaque := true) do
-      throwError "`{t.attrName}` cannot translate `{.ofConstName src}` because it has no value."
-    let reorder := cfg.reorder?.getD {}
-    -- tgt doesn't exist, so let's make it
-    transformDeclRec t cfg src tgt src reorder cfg.rename
-  if let some doc := cfg.doc then
-    if alreadyExists then
-logWarningAt doc
-        if (← findInternalDocString? (← getEnv) tgt).isSome then
-          m!"The target declaration `{.ofConstName tgt}` already has a docstring."
-        else
-          m!"This docstring should be added directly to `{.ofConstName tgt}`."
-    -- TODO: `Syntax.missing` means we do not add binders to the context,
-    -- so the docstring is going to have incomplete syntax highlighting.
-.run'.run' addDocString tgt Syntax.missing doc
-  let nestedNames ← copyMetaData t cfg src tgt
-  -- add pop-up information when mousing over the given translated name
-  -- (the information will be over the attribute if no translated name is given)
-  Term.addTermInfo' cfg.ref (← mkConstWithLevelParams tgt) (isBinder := !alreadyExists)
-.run' .run'
-  return nestedNames.push tgt
-
-中文:
-定义 addTranslationAttr
-  签名: (t : TranslateData) (src : Name) (cfg : 余nfig)
-  定义体: do
-  if (kind != AttributeKind.global) then
-    throwError "`{t.attrName}` can only be used as a global attribute"
-  withOptions (fun o => if cfg.trace then o.set `trace.translate true else o) do
-  let tgt ← targetName t cfg src
-  let alreadyExists ← realizeGlobalConst tgt
-  if cfg.existing != alreadyExists && !(← isInductive src) && !cfg.self then
-Linter.logLintIf linter.translateExisting cfg.ref
-      if alreadyExists then
-        m!"The translated declaration already exists. Please specify this explicitly using \
-           `@[{t.attrName} existing]`."
-      else
-        "The translated declaration doesn't exist. Please remove the option `existing`."
-  if alreadyExists then
-let (reorder, relevantArg) ← MetaM.run' checkExistingType t src tgt cfg
-    insertTranslation t src tgt reorder relevantArg cfg.ref
-    -- since `tgt` already exists, we just need to
-    -- add translations `src.x ↦ tgt.x'` for any subfields.
-    trace[translate_detail] "declaration {tgt} already exists."
-    proceedFields t src tgt cfg
-  else
-    unless (← withoutExporting do getConstInfo src).hasValue (allowOpaque := true) do
-      throwError "`{t.attrName}` cannot translate `{.ofConstName src}` because it has no value."
-    let reorder := cfg.reorder?.getD {}
-    -- tgt doesn't exist, so let's make it
-    transformDeclRec t cfg src tgt src reorder cfg.rename
-  if let some doc := cfg.doc then
-    if alreadyExists then
-logWarningAt doc
-        if (← findInternalDocString? (← getEnv) tgt).isSome then
-          m!"The target declaration `{.ofConstName tgt}` already has a docstring."
-        else
-          m!"This docstring should be added directly to `{.ofConstName tgt}`."
-    -- TODO: `Syntax.missing` means we do not add binders to the context,
-    -- so the docstring is going to have incomplete syntax highlighting.
-.run'.run' addDocString tgt Syntax.missing doc
-  let nestedNames ← copyMetaData t cfg src tgt
-  -- add pop-up information when mousing over the given translated name
-  -- (the information will be over the attribute if no translated name is given)
-  Term.addTermInfo' cfg.ref (← mkConstWithLevelParams tgt) (isBinder := !alreadyExists)
-.run' .run'
-  return nestedNames.push tgt
+--- 原说明 ---
+`addTranslationAttr src cfg` adds a translation attribute to `src` with configur
+ation `cfg`.
+See the attribute implementation for more details.
+It returns an array with names of translated declarations (usually 1, but more i
+f there are nested
+`to_additive` calls).
 -/
 partial def addTranslationAttr (t : TranslateData) (src : Name) (cfg : Config)
     (kind := AttributeKind.global) : AttrM (Array Name) := do
@@ -2944,14 +1855,14 @@ partial def addTranslationAttr (t : TranslateData) (src : Name) (cfg : Config)
   let tgt ← targetName t cfg src
   let alreadyExists ← realizeGlobalConst tgt
   if cfg.existing != alreadyExists && !(← isInductive src) && !cfg.self then
-Linter.logLintIf linter.translateExisting cfg.ref
+    Linter.logLintIf linter.translateExisting cfg.ref <|
       if alreadyExists then
         m!"The translated declaration already exists. Please specify this explicitly using \
            `@[{t.attrName} existing]`."
       else
         "The translated declaration doesn't exist. Please remove the option `existing`."
   if alreadyExists then
-let (reorder, relevantArg) ← MetaM.run' checkExistingType t src tgt cfg
+    let (reorder, relevantArg) ← MetaM.run' <| checkExistingType t src tgt cfg
     insertTranslation t src tgt reorder relevantArg cfg.ref
     -- since `tgt` already exists, we just need to
     -- add translations `src.x ↦ tgt.x'` for any subfields.
@@ -2965,21 +1876,22 @@ let (reorder, relevantArg) ← MetaM.run' checkExistingType t src tgt cfg
     transformDeclRec t cfg src tgt src reorder cfg.rename
   if let some doc := cfg.doc then
     if alreadyExists then
-logWarningAt doc
+      logWarningAt doc <|
         if (← findInternalDocString? (← getEnv) tgt).isSome then
           m!"The target declaration `{.ofConstName tgt}` already has a docstring."
         else
           m!"This docstring should be added directly to `{.ofConstName tgt}`."
     -- TODO: `Syntax.missing` means we do not add binders to the context,
     -- so the docstring is going to have incomplete syntax highlighting.
-.run'.run' addDocString tgt Syntax.missing doc
+    addDocString tgt Syntax.missing doc |>.run'.run'
   let nestedNames ← copyMetaData t cfg src tgt
   -- add pop-up information when mousing over the given translated name
   -- (the information will be over the attribute if no translated name is given)
   Term.addTermInfo' cfg.ref (← mkConstWithLevelParams tgt) (isBinder := !alreadyExists)
-.run' .run'
+    |>.run' |>.run'
   return nestedNames.push tgt
 
 end
 
 end Mathlib.Tactic.Translate
+

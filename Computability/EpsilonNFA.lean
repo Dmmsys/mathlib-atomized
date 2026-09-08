@@ -30,30 +30,33 @@ open Computability
 
 universe u v
 
-/--
-Definition of `εNFA` / `εNFA` 的定义
+/-- An `εNFA` is a set of states (`σ`), a transition function from state to state labelled by the
+  alphabet (`step`), a starting state (`start`) and a set of acceptance states (`accept`).
+  Note the transition function sends a state to a `Set` of states and can make ε-transitions by
+  inputting `none`.
+  Since this definition allows for Automata with infinite states, a `Fintype` instance must be
+  supplied for true `εNFA`'s. -/
+/-
+**** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure εNFA
-  parameters: (α : Type u) (σ : Type v)
-  axioms and operations (3):
-    - step : σ -> Option α -> Set σ
-    - start : Set σ
-    - accept : Set σ
-
-中文:
-结构 εNFA
-  参数: (α : 类型u) (σ : 类型v)
-  公理与运算 (3 个):
-    - step : σ -> 选项类型 α -> 集合 σ
-    - start : 集合 σ
-    - accept : 集合 σ
+--- 原说明 ---
+An `εNFA` is a set of states (`σ`), a transition function from state to state la
+belled by the
+  alphabet (`step`), a starting state (`start`) and a set of acceptance states (
+`accept`).
+  Note the transition function sends a state to a `Set` of states and can make ε
+-transitions by
+  inputting `none`.
+  Since this definition allows for Automata with infinite states, a `Fintype` in
+stance must be
+  supplied for true `εNFA`'s.
 -/
 structure εNFA (α : Type u) (σ : Type v) where
   /-- Transition function. The automaton is rendered non-deterministic by this transition function
   returning `Set σ` (rather than `σ`), and ε-transitions are made possible by taking `Option α`
   (rather than `α`). -/
-  step : σ -> Option α -> Set σ
+  step : σ → Option α → Set σ
   /-- Starting states. -/
   start : Set σ
   /-- Set of acceptance states. -/
@@ -63,128 +66,49 @@ variable {α : Type u} {σ : Type v} (M : εNFA α σ) {S : Set σ} {s t u : σ}
 
 namespace εNFA
 
-/--
-Inductive type `εClosure` / 归纳类型 `εClosure`
+/-- The `εClosure` of a set is the set of states which can be reached by taking a finite string of
+ε-transitions from an element of the set. -/
+/-
+**εNFA.** 是 Mathlib 中的一个归纳类型，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive εClosure
-  parameters: (S : Set σ)
-  constructors (2):
-    - base: forall s in S, εClosure S s
-    - step: forall (s), forall t in M.step s none, εClosure S s -> εClosure S t
-
-中文:
-归纳类型 εClosure
-  参数: (S : 集合 σ)
-  构造子 (2 个):
-    - base: 对任意 s in S, εClosure S s
-    - step: 对任意 (s), 对任意 t in M.step s none, εClosure S s -> εClosure S t
+--- 原说明 ---
+The `εClosure` of a set is the set of states which can be reached by taking a fi
+nite string of
+ε-transitions from an element of the set.
 -/
 inductive εClosure (S : Set σ) : Set σ
-  | base : forall s in S, εClosure S s
-  | step : forall (s), forall t in M.step s none, εClosure S s -> εClosure S t
+  | base : ∀ s ∈ S, εClosure S s
+  | step : ∀ (s), ∀ t ∈ M.step s none, εClosure S s → εClosure S t
 
 @[simp]
-/--
-theorem `subset_εClosure` / 定理 `subset_εClosure`
-
-English:
-theorem subset_εClosure
-  given: (S : Set σ)
-  statement: S subseteq M.εClosure S
-  proof: εClosure.base
-
-@[simp]
-
-中文:
-定理 subset_εClosure
-  条件: (S : 集合 σ)
-  结论: S subseteq M.εClosure S
-  证明: εClosure.base
-
-@[simp]
-
-Depends on / 依赖: Closure.base
+/-
+**εNFA.subset_** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_εClosure (S : Set σ) : S subseteq M.εClosure S :=
+theorem subset_εClosure (S : Set σ) : S ⊆ M.εClosure S :=
   εClosure.base
 
 @[simp]
-/--
-theorem `εClosure_empty` / 定理 `εClosure_empty`
-
-English:
-theorem εClosure_empty
-  statement: M.εClosure ∅ = ∅
-  proof: eq_empty_of_forall_notMem fun s hs => by induction hs <;> assumption
-
-@[simp]
-
-中文:
-定理 εClosure_empty
-  结论: M.εClosure ∅ = ∅
-  证明: eq_empty_of_forall_notMem fun s hs => by induction hs <;> assumption
-
-@[simp]
-
-Depends on / 依赖: eq_empty_of_forall_notMem
+/-
+**εNFA.** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem εClosure_empty : M.εClosure ∅ = ∅ :=
-  eq_empty_of_forall_notMem fun s hs => by induction hs <;> assumption
+  eq_empty_of_forall_notMem fun s hs ↦ by induction hs <;> assumption
 
 @[simp]
-/--
-theorem `εClosure_univ` / 定理 `εClosure_univ`
-
-English:
-theorem εClosure_univ
-  statement: M.εClosure univ = univ
-  proof: eq_univ_of_univ_subset subset_εClosure _ _
-
-中文:
-定理 εClosure_univ
-  结论: M.εClosure univ = univ
-  证明: eq_univ_of_univ_subset subset_εClosure _ _
-
-Depends on / 依赖: eq_univ_of_univ_subset
+/-
+**εNFA.** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem εClosure_univ : M.εClosure univ = univ :=
-eq_univ_of_univ_subset subset_εClosure _ _
-
-/--
-theorem `mem_εClosure_iff_exists` / 定理 `mem_εClosure_iff_exists`
-
-English:
-theorem mem_εClosure_iff_exists
-  statement: s in M.εClosure S ↔ exists t in S, s in M.εClosure {t} where
-  proof: by
-    induction h with
-    | base => tauto
-    | step _ _ _ _ ih =>
-      obtain ⟨s, _, _⟩ := ih
-      use s
-      solve_by_elim [εClosure.step]
-  mpr := by
-    intro ⟨t, _, h⟩
-    induction h <;> subst_vars <;> solve_by_elim [εClosure.step]
-
-中文:
-定理 mem_εClosure_iff_存在
-  结论: s in M.εClosure S ↔ 存在 t in S, s in M.εClosure {t} where
-  证明: by
-    induction h with
-    | base => tauto
-    | step _ _ _ _ ih =>
-      obtain ⟨s, _, _⟩ := ih
-      use s
-      solve_by_elim [εClosure.step]
-  mpr := by
-    intro ⟨t, _, h⟩
-    induction h <;> subst_vars <;> solve_by_elim [εClosure.step]
-
-Depends on / 依赖: Closure.step, solve_by_elim
+  eq_univ_of_univ_subset <| subset_εClosure _ _
+/-
+**εNFA.mem_** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_εClosure_iff_exists : s in M.εClosure S ↔ exists t in S, s in M.εClosure {t} where
+theorem mem_εClosure_iff_exists : s ∈ M.εClosure S ↔ ∃ t ∈ S, s ∈ M.εClosure {t} where
   mp h := by
     induction h with
     | base => tauto
@@ -196,387 +120,294 @@ theorem mem_εClosure_iff_exists : s in M.εClosure S ↔ exists t in S, s in M.
     intro ⟨t, _, h⟩
     induction h <;> subst_vars <;> solve_by_elim [εClosure.step]
 
-/--
-Definition of `stepSet` / `stepSet` 的定义
+/-- `M.stepSet S a` is the union of the ε-closure of `M.step s a` for all `s ∈ S`. -/
+/-
+**εNFA.stepSet** 是 Mathlib 中的一个定义，位于命名空间 `εNFA`。
+形式化陈述：stepSet (S : Set σ) (a : α) : Set σ
+参数：S : Set σ；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stepSet
-  signature: (S : Set σ) (a : α)
-  body: ⋃ s in S, M.εClosure (M.step s a)
-
-中文:
-定义 stepSet
-  签名: (S : 集合 σ) (a : α)
-  定义体: ⋃ s in S, M.εClosure (M.step s a)
-
-Depends on / 依赖: M.step
+--- 原说明 ---
+`M.stepSet S a` is the union of the ε-closure of `M.step s a` for all `s ∈ S`.
 -/
 def stepSet (S : Set σ) (a : α) : Set σ :=
-  ⋃ s in S, M.εClosure (M.step s a)
+  ⋃ s ∈ S, M.εClosure (M.step s a)
 
 variable {M}
 
 @[simp]
-/--
-theorem `mem_stepSet_iff` / 定理 `mem_stepSet_iff`
-
-English:
-theorem mem_stepSet_iff
-  statement: s in M.stepSet S a ↔ exists t in S, s in M.εClosure (M.step t a)
-  proof: by
-  simp_rw [stepSet, mem_iUnion₂, exists_prop]
-
-@[simp]
-
-中文:
-定理 mem_stepSet_iff
-  结论: s in M.stepSet S a ↔ 存在 t in S, s in M.εClosure (M.step t a)
-  证明: by
-  simp_rw [stepSet, mem_iUnion₂, exists_prop]
-
-@[simp]
-
-Depends on / 依赖: exists_prop, simp_rw, stepSet
+/-
+**εNFA.mem_stepSet_iff** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：mem_stepSet_iff : s in M.stepSet S a ↔ exists t in S, s in M.εClosure (M.s
+tep t a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_stepSet_iff : s in M.stepSet S a ↔ exists t in S, s in M.εClosure (M.step t a) := by
+theorem mem_stepSet_iff : s ∈ M.stepSet S a ↔ ∃ t ∈ S, s ∈ M.εClosure (M.step t a) := by
   simp_rw [stepSet, mem_iUnion₂, exists_prop]
 
 @[simp]
-/--
-theorem `stepSet_empty` / 定理 `stepSet_empty`
-
-English:
-theorem stepSet_empty
-  given: (a : α)
-  statement: M.stepSet ∅ a = ∅
-  proof: by
-  simp_rw [stepSet, mem_empty_iff_false, iUnion_false, iUnion_empty]
-
-中文:
-定理 stepSet_empty
-  条件: (a : α)
-  结论: M.stepSet ∅ a = ∅
-  证明: by
-  simp_rw [stepSet, mem_empty_iff_false, iUnion_false, iUnion_empty]
-
-Depends on / 依赖: iUnion_empty, iUnion_false, mem_empty_iff_false, simp_rw, stepSet
+/-
+**εNFA.stepSet_empty** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：stepSet_empty (a : α) : M.stepSet ∅ a = ∅
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_false`：iUnion_false {s : False -> Set α} : iUnion s = ∅
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem stepSet_empty (a : α) : M.stepSet ∅ a = ∅ := by
   simp_rw [stepSet, mem_empty_iff_false, iUnion_false, iUnion_empty]
 
 variable (M)
 
-/--
-Definition of `evalFrom` / `evalFrom` 的定义
+/-- `M.evalFrom S x` computes all possible paths through `M` with input `x` starting at an element
+of `S`. -/
+/-
+**εNFA.evalFrom** 是 Mathlib 中的一个定义，位于命名空间 `εNFA`。
+形式化陈述：evalFrom (start : Set σ) : List α -> Set σ
+参数：start : Set σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalFrom
-  signature: (start : Set σ)
-  body: List.foldl M.stepSet (M.εClosure start)
-
-@[simp]
-
-中文:
-定义 evalFrom
-  签名: (start : 集合 σ)
-  定义体: List.foldl M.stepSet (M.εClosure start)
-
-@[simp]
-
-Depends on / 依赖: List.foldl, M.stepSet, stepSet
+--- 原说明 ---
+`M.evalFrom S x` computes all possible paths through `M` with input `x` starting
+ at an element
+of `S`.
 -/
-def evalFrom (start : Set σ) : List α -> Set σ :=
+def evalFrom (start : Set σ) : List α → Set σ :=
   List.foldl M.stepSet (M.εClosure start)
 
 @[simp]
-/--
-theorem `evalFrom_nil` / 定理 `evalFrom_nil`
-
-English:
-theorem evalFrom_nil
-  given: (S : Set σ)
-  statement: M.evalFrom S [] = M.εClosure S
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 evalFrom_nil
-  条件: (S : 集合 σ)
-  结论: M.evalFrom S [] = M.εClosure S
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.evalFrom_nil** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：evalFrom_nil (S : Set σ) : M.evalFrom S [] = M.εClosure S
+参数：S : Set σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem evalFrom_nil (S : Set σ) : M.evalFrom S [] = M.εClosure S :=
   rfl
 
 @[simp]
-/--
-theorem `evalFrom_singleton` / 定理 `evalFrom_singleton`
-
-English:
-theorem evalFrom_singleton
-  given: (S : Set σ) (a : α)
-  statement: M.evalFrom S [a] = M.stepSet (M.εClosure S) a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 evalFrom_singleton
-  条件: (S : 集合 σ) (a : α)
-  结论: M.evalFrom S [a] = M.stepSet (M.εClosure S) a
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.evalFrom_singleton** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：evalFrom_singleton (S : Set σ) (a : α) : M.evalFrom S [a] = M.stepSet (M.ε
+Closure S) a
+参数：S : Set σ；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem evalFrom_singleton (S : Set σ) (a : α) : M.evalFrom S [a] = M.stepSet (M.εClosure S) a :=
   rfl
 
 @[simp]
-/--
-theorem `evalFrom_append_singleton` / 定理 `evalFrom_append_singleton`
-
-English:
-theorem evalFrom_append_singleton
-  given: (S : Set σ) (x : List α) (a : α)
-  proof: by
-  rw [evalFrom]; rw [List.foldl_append]; rw [List.foldl_cons]; rw [List.foldl_nil]
-
-@[simp]
-
-中文:
-定理 evalFrom_append_singleton
-  条件: (S : 集合 σ) (x : 列表 α) (a : α)
-  证明: by
-  rw [evalFrom]; rw [List.foldl_append]; rw [List.foldl_cons]; rw [List.foldl_nil]
-
-@[simp]
-
-Depends on / 依赖: List.foldl_append, List.foldl_cons, List.foldl_nil, evalFrom, foldl_append, foldl_cons, foldl_nil
+/-
+**εNFA.evalFrom_append_singleton** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：evalFrom_append_singleton (S : Set σ) (x : List α) (a : α) : M.evalFrom S 
+(x ++ [a]) = M.stepSet (M.evalFrom S x) a
+参数：S : Set σ；x : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `εNFA.evalFrom.eq_1`：∀ {α : Type u} {σ : Type v} (M : εNFA α σ) (start : 
+Set σ), M.evalFrom start = List.foldl M.stepSet (M.εClosure start)
+· 使用定理 `List.foldl_append`：∀ {α : Type u_1} {β : Type u_2} {f : β → α → β} {b : 
+β} {l l' : List α},   List.foldl f b (l ++ l') = List.foldl f (List.foldl f b l)
+ l'
+· 使用定理 `List.foldl_cons`：∀ {α : Type u} {β : Type v} {a : α} {l : List α} {f : β
+ → α → β} {b : β},   List.foldl f b (a :: l) = List.foldl f (f b a) l
+· 使用定理 `List.foldl_nil`：∀ {α : Type u_1} {β : Type u_2} {f : α → β → α} {b : α},
+ List.foldl f b [] = b
 -/
 theorem evalFrom_append_singleton (S : Set σ) (x : List α) (a : α) :
     M.evalFrom S (x ++ [a]) = M.stepSet (M.evalFrom S x) a := by
-  rw [evalFrom]; rw [List.foldl_append]; rw [List.foldl_cons]; rw [List.foldl_nil]
+  rw [evalFrom, List.foldl_append, List.foldl_cons, List.foldl_nil]
 
 @[simp]
-/--
-theorem `evalFrom_empty` / 定理 `evalFrom_empty`
-
-English:
-theorem evalFrom_empty
-  given: (x : List α)
-  statement: M.evalFrom ∅ x = ∅
-  proof: by
-  induction x using List.reverseRecOn with
-  | nil => rw [evalFrom_nil, εClosure_empty]
-  | append_singleton x a ih => rw [evalFrom_append_singleton, ih, stepSet_empty]
-
-中文:
-定理 evalFrom_empty
-  条件: (x : 列表 α)
-  结论: M.evalFrom ∅ x = ∅
-  证明: by
-  induction x using List.reverseRecOn with
-  | nil => rw [evalFrom_nil, εClosure_empty]
-  | append_singleton x a ih => rw [evalFrom_append_singleton, ih, stepSet_empty]
-
-Depends on / 依赖: List.reverseRecOn, append_singleton, evalFrom_append_singleton, evalFrom_nil, reverseRecOn, stepSet_empty
+/-
+**εNFA.evalFrom_empty** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：evalFrom_empty (x : List α) : M.evalFrom ∅ x = ∅
+参数：x : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `εNFA.evalFrom_nil`：evalFrom_nil (S : Set σ) : M.evalFrom S [] = M.εClosu
+re S
+· 使用定理 `εNFA.εClosure_empty`：εClosure_empty : M.εClosure ∅ = ∅
+· 使用定理 `εNFA.evalFrom_append_singleton`：evalFrom_append_singleton (S : Set σ) (x
+ : List α) (a : α) : M.evalFrom S (x ++ [a]) = M.stepSet (M.evalFrom S x) a
+· 使用定理 `εNFA.stepSet_empty`：stepSet_empty (a : α) : M.stepSet ∅ a = ∅
 -/
 theorem evalFrom_empty (x : List α) : M.evalFrom ∅ x = ∅ := by
   induction x using List.reverseRecOn with
   | nil => rw [evalFrom_nil, εClosure_empty]
   | append_singleton x a ih => rw [evalFrom_append_singleton, ih, stepSet_empty]
-
-/--
-theorem `mem_evalFrom_iff_exists` / 定理 `mem_evalFrom_iff_exists`
-
-English:
-theorem mem_evalFrom_iff_exists
-  given: {s : σ} {S : Set σ} {x : List α}
-  proof: by
-  induction x using List.reverseRecOn generalizing s with
-  | nil => apply mem_εClosure_iff_exists
-  | append_singleton _ _ ih =>
-    simp_rw [evalFrom_append_singleton, mem_stepSet_iff, ih]
-    tauto
-
-中文:
-定理 mem_evalFrom_iff_存在
-  条件: {s : σ} {S : 集合 σ} {x : 列表 α}
-  证明: by
-  induction x using List.reverseRecOn generalizing s with
-  | nil => apply mem_εClosure_iff_exists
-  | append_singleton _ _ ih =>
-    simp_rw [evalFrom_append_singleton, mem_stepSet_iff, ih]
-    tauto
-
-Depends on / 依赖: List.reverseRecOn, append_singleton, evalFrom_append_singleton, generalizing, mem_stepSet_iff, reverseRecOn, simp_rw
+/-
+**εNFA.mem_evalFrom_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：mem_evalFrom_iff_exists {s : σ} {S : Set σ} {x : List α} : s in M.evalFrom
+ S x ↔ exists t in S, s in M.evalFrom {t} x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `εNFA.mem_εClosure_iff_exists`：mem_εClosure_iff_exists : s in M.εClosure 
+S ↔ exists t in S, s in M.εClosure {t} where mp h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `εNFA.evalFrom_append_singleton`：evalFrom_append_singleton (S : Set σ) (x
+ : List α) (a : α) : M.evalFrom S (x ++ [a]) = M.stepSet (M.evalFrom S x) a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem mem_evalFrom_iff_exists {s : σ} {S : Set σ} {x : List α} :
-    s in M.evalFrom S x ↔ exists t in S, s in M.evalFrom {t} x := by
+    s ∈ M.evalFrom S x ↔ ∃ t ∈ S, s ∈ M.evalFrom {t} x := by
   induction x using List.reverseRecOn generalizing s with
   | nil => apply mem_εClosure_iff_exists
   | append_singleton _ _ ih =>
     simp_rw [evalFrom_append_singleton, mem_stepSet_iff, ih]
     tauto
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- `M.eval x` computes all possible paths through `M` with input `x` starting at an element of
+`M.start`. -/
+/-
+**εNFA.eval** 是 Mathlib 中的一个定义，位于命名空间 `εNFA`。
+形式化陈述：eval
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  body: M.evalFrom M.start
-
-@[simp]
-
-中文:
-定义 eval
-  定义体: M.evalFrom M.start
-
-@[simp]
-
-Depends on / 依赖: M.evalFrom, M.start, evalFrom
+--- 原说明 ---
+`M.eval x` computes all possible paths through `M` with input `x` starting at an
+ element of
+`M.start`.
 -/
 def eval :=
   M.evalFrom M.start
 
 @[simp]
-/--
-theorem `eval_nil` / 定理 `eval_nil`
-
-English:
-theorem eval_nil
-  statement: M.eval [] = M.εClosure M.start
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 eval_nil
-  结论: M.eval [] = M.εClosure M.start
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.eval_nil** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：eval_nil : M.eval [] = M.εClosure M.start
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval_nil : M.eval [] = M.εClosure M.start :=
   rfl
 
 @[simp]
-/--
-theorem `eval_singleton` / 定理 `eval_singleton`
-
-English:
-theorem eval_singleton
-  given: (a : α)
-  statement: M.eval [a] = M.stepSet (M.εClosure M.start) a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 eval_singleton
-  条件: (a : α)
-  结论: M.eval [a] = M.stepSet (M.εClosure M.start) a
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.eval_singleton** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：eval_singleton (a : α) : M.eval [a] = M.stepSet (M.εClosure M.start) a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval_singleton (a : α) : M.eval [a] = M.stepSet (M.εClosure M.start) a :=
   rfl
 
 @[simp]
-/--
-theorem `eval_append_singleton` / 定理 `eval_append_singleton`
-
-English:
-theorem eval_append_singleton
-  given: (x : List α) (a : α)
-  statement: M.eval (x ++ [a]) = M.stepSet (M.eval x) a
-  proof: evalFrom_append_singleton _ _ _ _
-
-中文:
-定理 eval_append_singleton
-  条件: (x : 列表 α) (a : α)
-  结论: M.eval (x ++ [a]) = M.stepSet (M.eval x) a
-  证明: evalFrom_append_singleton _ _ _ _
-
-Depends on / 依赖: evalFrom_append_singleton
+/-
+**εNFA.eval_append_singleton** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：eval_append_singleton (x : List α) (a : α) : M.eval (x ++ [a]) = M.stepSet
+ (M.eval x) a
+参数：x : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `εNFA.evalFrom_append_singleton`：evalFrom_append_singleton (S : Set σ) (x
+ : List α) (a : α) : M.evalFrom S (x ++ [a]) = M.stepSet (M.evalFrom S x) a
 -/
 theorem eval_append_singleton (x : List α) (a : α) : M.eval (x ++ [a]) = M.stepSet (M.eval x) a :=
   evalFrom_append_singleton _ _ _ _
 
-/--
-Definition of `accepts` / `accepts` 的定义
+/-- `M.accepts` is the language of `x` such that there is an accept state in `M.eval x`. -/
+/-
+**εNFA.accepts** 是 Mathlib 中的一个定义，位于命名空间 `εNFA`。
+形式化陈述：accepts : Language α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition accepts
-  signature: : Language α
-  body: { x | exists S in M.accept, S in M.eval x }
-
-中文:
-定义 accepts
-  签名: : Language α
-  定义体: { x | exists S in M.accept, S in M.eval x }
-
-Depends on / 依赖: M.accept, M.eval, accept
+--- 原说明 ---
+`M.accepts` is the language of `x` such that there is an accept state in `M.eval
+ x`.
 -/
 def accepts : Language α :=
-  { x | exists S in M.accept, S in M.eval x }
+  { x | ∃ S ∈ M.accept, S ∈ M.eval x }
 
 /-- `M.IsPath` represents a traversal in `M` from a start state to an end state by following a list
 of transitions in order. -/
 @[mk_iff]
-/--
-Inductive type `IsPath` / 归纳类型 `IsPath`
+/-
+**εNFA.IsPath** 是 Mathlib 中的一个归纳类型，位于命名空间 `εNFA`。
+形式化陈述：{α : Type u} → {σ : Type v} → εNFA α σ → σ → σ → List (Option α) → Prop
+参数：Option α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IsPath
-  parameters: : σ -> σ -> List (Option α) -> Prop
-  constructors (2):
-    - nil: (s : σ) : IsPath s s []
-    - cons: (t s u : σ) (a : Option α) (x : List (Option α)) : t in M.step s a -> IsPath t u x -> IsPath s u (a :: x)
-
-中文:
-归纳类型 是道路
-  参数: : σ -> σ -> 列表 (选项类型 α) -> 命题
-  构造子 (2 个):
-    - nil: (s : σ) : 是道路 s s []
-    - cons: (t s u : σ) (a : 选项类型 α) (x : 列表 (选项类型 α)) : t in M.step s a -> 是道路 t u x -> 是道路 s u (a :: x)
+--- 原说明 ---
+`M.IsPath` represents a traversal in `M` from a start state to an end state by f
+ollowing a list
+of transitions in order.
 -/
-inductive IsPath : σ -> σ -> List (Option α) -> Prop
+inductive IsPath : σ → σ → List (Option α) → Prop
   | nil (s : σ) : IsPath s s []
   | cons (t s u : σ) (a : Option α) (x : List (Option α)) :
-      t in M.step s a -> IsPath t u x -> IsPath s u (a :: x)
+      t ∈ M.step s a → IsPath t u x → IsPath s u (a :: x)
 
 @[simp]
-/--
-theorem `isPath_nil` / 定理 `isPath_nil`
-
-English:
-theorem isPath_nil
-  statement: M.IsPath s t [] ↔ s = t
-  proof: by
-  rw [isPath_iff]
-  simp [eq_comm]
-
-alias ⟨IsPath.eq_of_nil, _⟩ := isPath_nil
-
-@[simp]
-
-中文:
-定理 isPath_nil
-  结论: M.是道路 s t [] ↔ s = t
-  证明: by
-  rw [isPath_iff]
-  simp [eq_comm]
-
-alias ⟨IsPath.eq_of_nil, _⟩ := isPath_nil
-
-@[simp]
-
-Depends on / 依赖: eq_comm, isPath_iff
+/-
+**εNFA.isPath_nil** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：isPath_nil : M.IsPath s t [] ↔ s = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `εNFA.isPath_iff`：∀ {α : Type u} {σ : Type v} (M : εNFA α σ) (a a_1 : σ) 
+(a_2 : List (Option α)),   M.IsPath a a_1 a_2 ↔ a_1 = a ∧ a_2 = [] ∨ ∃ t a_3 x, 
+t ∈ M…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `instNonemptyOfMonad`：∀ {m : Type u_1 → Type u_2} {α : Type u_1} [Monad m
+] [Nonempty α], Nonempty (m α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isPath_nil : M.IsPath s t [] ↔ s = t := by
   rw [isPath_iff]
@@ -585,78 +416,40 @@ theorem isPath_nil : M.IsPath s t [] ↔ s = t := by
 alias ⟨IsPath.eq_of_nil, _⟩ := isPath_nil
 
 @[simp]
-/--
-theorem `isPath_singleton` / 定理 `isPath_singleton`
-
-English:
-theorem isPath_singleton
-  given: {a : Option α}
-  statement: M.IsPath s t [a] ↔ t in M.step s a where
-  proof: by
-    rintro (_ | ⟨_, _, _, _, _, _, ⟨⟩⟩)
-    assumption
-  mpr := by tauto
-
-alias ⟨_, IsPath.singleton⟩ := isPath_singleton
-
-中文:
-定理 isPath_singleton
-  条件: {a : 选项类型 α}
-  结论: M.是道路 s t [a] ↔ t in M.step s a where
-  证明: by
-    rintro (_ | ⟨_, _, _, _, _, _, ⟨⟩⟩)
-    assumption
-  mpr := by tauto
-
-alias ⟨_, IsPath.singleton⟩ := isPath_singleton
+/-
+**εNFA.isPath_singleton** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：isPath_singleton {a : Option α} : M.IsPath s t [a] ↔ t in M.step s a where
+ mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem isPath_singleton {a : Option α} : M.IsPath s t [a] ↔ t in M.step s a where
+theorem isPath_singleton {a : Option α} : M.IsPath s t [a] ↔ t ∈ M.step s a where
   mp := by
     rintro (_ | ⟨_, _, _, _, _, _, ⟨⟩⟩)
     assumption
   mpr := by tauto
 
 alias ⟨_, IsPath.singleton⟩ := isPath_singleton
-
-/--
-theorem `isPath_append` / 定理 `isPath_append`
-
-English:
-theorem isPath_append
-  given: {x y : List (Option α)}
-  proof: by
-    induction x generalizing s with
-    | nil =>
-      rw [List.nil_append]
-      tauto
-    | cons x a ih =>
-      rintro (_ | ⟨t, _, _, _, _, _, h⟩)
-      apply ih at h
-      tauto
-  mpr := by
-    intro ⟨t, hx, _⟩
-    induction x generalizing s <;> cases hx <;> tauto
-
-中文:
-定理 isPath_append
-  条件: {x y : 列表 (选项类型 α)}
-  证明: by
-    induction x generalizing s with
-    | nil =>
-      rw [List.nil_append]
-      tauto
-    | cons x a ih =>
-      rintro (_ | ⟨t, _, _, _, _, _, h⟩)
-      apply ih at h
-      tauto
-  mpr := by
-    intro ⟨t, hx, _⟩
-    induction x generalizing s <;> cases hx <;> tauto
-
-Depends on / 依赖: List.nil_append, generalizing, nil_append
+/-
+**εNFA.isPath_append** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：isPath_append {x y : List (Option α)} : M.IsPath s u (x ++ y) ↔ exists t, 
+M.IsPath s t x ∧ M.IsPath t u y where mp
+参数：Option α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem isPath_append {x y : List (Option α)} :
-    M.IsPath s u (x ++ y) ↔ exists t, M.IsPath s t x ∧ M.IsPath t u y where
+    M.IsPath s u (x ++ y) ↔ ∃ t, M.IsPath s t x ∧ M.IsPath t u y where
   mp := by
     induction x generalizing s with
     | nil =>
@@ -669,62 +462,12 @@ theorem isPath_append {x y : List (Option α)} :
   mpr := by
     intro ⟨t, hx, _⟩
     induction x generalizing s <;> cases hx <;> tauto
-
-/--
-theorem `mem_εClosure_iff_exists_path` / 定理 `mem_εClosure_iff_exists_path`
-
-English:
-theorem mem_εClosure_iff_exists_path
-  given: {s₁ s₂ : σ}
-  proof: by
-    induction h with
-    | base t =>
-      use 0
-      subst t
-      apply IsPath.nil
-    | step _ _ _ _ ih =>
-      obtain ⟨n, _⟩ := ih
-      use n + 1
-      rw [List.replicate_add]; rw [isPath_append]
-      tauto
-  mpr := by
-    intro ⟨n, h⟩
-    induction n generalizing s₂
-    · rw [List.replicate_zero] at h
-      apply IsPath.eq_of_nil at h
-      solve_by_elim
-    · simp_rw [List.replicate_add, isPath_append, List.replicate_one, isPath_singleton] at h
-      obtain ⟨t, _, _⟩ := h
-      solve_by_elim [εClosure.step]
-
-中文:
-定理 mem_εClosure_iff_存在_path
-  条件: {s₁ s₂ : σ}
-  证明: by
-    induction h with
-    | base t =>
-      use 0
-      subst t
-      apply IsPath.nil
-    | step _ _ _ _ ih =>
-      obtain ⟨n, _⟩ := ih
-      use n + 1
-      rw [List.replicate_add]; rw [isPath_append]
-      tauto
-  mpr := by
-    intro ⟨n, h⟩
-    induction n generalizing s₂
-    · rw [List.replicate_zero] at h
-      apply IsPath.eq_of_nil at h
-      solve_by_elim
-    · simp_rw [List.replicate_add, isPath_append, List.replicate_one, isPath_singleton] at h
-      obtain ⟨t, _, _⟩ := h
-      solve_by_elim [εClosure.step]
-
-Depends on / 依赖: Closure.step, IsPath, IsPath.eq_of_nil, IsPath.nil, List.replicate_add, List.replicate_one, List.replicate_zero, eq_of_nil, generalizing, isPath_append, isPath_singleton, replicate_add, replicate_one, replicate_zero, simp_rw, solve_by_elim
+/-
+**εNFA.mem_** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mem_εClosure_iff_exists_path {s₁ s₂ : σ} :
-    s₂ in M.εClosure {s₁} ↔ exists n, M.IsPath s₁ s₂ (.replicate n none) where
+    s₂ ∈ M.εClosure {s₁} ↔ ∃ n, M.IsPath s₁ s₂ (.replicate n none) where
   mp h := by
     induction h with
     | base t =>
@@ -734,7 +477,7 @@ theorem mem_εClosure_iff_exists_path {s₁ s₂ : σ} :
     | step _ _ _ _ ih =>
       obtain ⟨n, _⟩ := ih
       use n + 1
-      rw [List.replicate_add]; rw [isPath_append]
+      rw [List.replicate_add, isPath_append]
       tauto
   mpr := by
     intro ⟨n, h⟩
@@ -745,89 +488,51 @@ theorem mem_εClosure_iff_exists_path {s₁ s₂ : σ} :
     · simp_rw [List.replicate_add, isPath_append, List.replicate_one, isPath_singleton] at h
       obtain ⟨t, _, _⟩ := h
       solve_by_elim [εClosure.step]
-
-/--
-theorem `mem_evalFrom_iff_exists_path` / 定理 `mem_evalFrom_iff_exists_path`
-
-English:
-theorem mem_evalFrom_iff_exists_path
-  given: {s₁ s₂ : σ} {x : List α}
-  proof: by
-  induction x using List.reverseRecOn generalizing s₂ with
-  | nil =>
-    rw [evalFrom_nil]; rw [mem_εClosure_iff_exists_path]
-    constructor
-    · intro ⟨n, _⟩
-      use List.replicate n none
-      rw [List.reduceOption_replicate_none]
-      trivial
-    · simp_rw [List.reduceOption_eq_nil_iff]
-      intro ⟨_, ⟨n, rfl⟩, h⟩
-      exact ⟨n, h⟩
-  | append_singleton x a ih =>
-    rw [evalFrom_append_singleton]; rw [mem_stepSet_iff]
-    constructor
-    · intro ⟨t, ht, h⟩
-      obtain ⟨x', _, _⟩ := ih.mp ht
-      rw [mem_εClosure_iff_exists] at h
-      simp_rw [mem_εClosure_iff_exists_path] at h
-      obtain ⟨u, _, n, _⟩ := h
-      use x' ++ some a :: List.replicate n none
-      rw [List.reduceOption_append]; rw [List.reduceOption_cons_of_some]; rw [List.reduceOption_replicate_none]; rw [isPath_append]
-      tauto
-    · simp_rw [← List.concat_eq_append, List.reduceOption_eq_concat_iff,
-        List.reduceOption_eq_nil_iff]
-      intro ⟨_, ⟨x', _, rfl, _, n, rfl⟩, h⟩
-      rw [isPath_append] at h
-      obtain ⟨t, _, _ | u⟩ := h
-      use t
-      rw [mem_εClosure_iff_exists]; rw [ih]
-      simp_rw [mem_εClosure_iff_exists_path]
-      tauto
-
-中文:
-定理 mem_evalFrom_iff_存在_path
-  条件: {s₁ s₂ : σ} {x : 列表 α}
-  证明: by
-  induction x using List.reverseRecOn generalizing s₂ with
-  | nil =>
-    rw [evalFrom_nil]; rw [mem_εClosure_iff_exists_path]
-    constructor
-    · intro ⟨n, _⟩
-      use List.replicate n none
-      rw [List.reduceOption_replicate_none]
-      trivial
-    · simp_rw [List.reduceOption_eq_nil_iff]
-      intro ⟨_, ⟨n, rfl⟩, h⟩
-      exact ⟨n, h⟩
-  | append_singleton x a ih =>
-    rw [evalFrom_append_singleton]; rw [mem_stepSet_iff]
-    constructor
-    · intro ⟨t, ht, h⟩
-      obtain ⟨x', _, _⟩ := ih.mp ht
-      rw [mem_εClosure_iff_exists] at h
-      simp_rw [mem_εClosure_iff_exists_path] at h
-      obtain ⟨u, _, n, _⟩ := h
-      use x' ++ some a :: List.replicate n none
-      rw [List.reduceOption_append]; rw [List.reduceOption_cons_of_some]; rw [List.reduceOption_replicate_none]; rw [isPath_append]
-      tauto
-    · simp_rw [← List.concat_eq_append, List.reduceOption_eq_concat_iff,
-        List.reduceOption_eq_nil_iff]
-      intro ⟨_, ⟨x', _, rfl, _, n, rfl⟩, h⟩
-      rw [isPath_append] at h
-      obtain ⟨t, _, _ | u⟩ := h
-      use t
-      rw [mem_εClosure_iff_exists]; rw [ih]
-      simp_rw [mem_εClosure_iff_exists_path]
-      tauto
-
-Depends on / 依赖: List.reduceOption_eq_nil_iff, List.reduceOption_replicate_none, List.replicate, List.reverseRecOn, append_singleton, evalFrom_append_singleton, evalFrom_nil, generalizing, ih.mp, mem_stepSet_iff, reduceOption_eq_nil_iff, reduceOption_replicate_none, replicate, reverseRecOn, simp_rw
+/-
+**εNFA.mem_evalFrom_iff_exists_path** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：mem_evalFrom_iff_exists_path {s₁ s₂ : σ} {x : List α} : s₂ in M.evalFrom {
+s₁} x ↔ exists x', x'.reduceOption = x ∧ M.IsPath s₁ s₂ x'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `εNFA.evalFrom_nil`：evalFrom_nil (S : Set σ) : M.evalFrom S [] = M.εClosu
+re S
+· 使用定理 `εNFA.mem_εClosure_iff_exists_path`：mem_εClosure_iff_exists_path {s₁ s₂ :
+ σ} : s₂ in M.εClosure {s₁} ↔ exists n, M.IsPath s₁ s₂ (.replicate n none) where
+ mp h
+· 使用定理 `List.reduceOption_replicate_none`：reduceOption_replicate_none {n : Nat} 
+: (replicate n (@none α)).reduceOption = []
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `εNFA.evalFrom_append_singleton`：evalFrom_append_singleton (S : Set σ) (x
+ : List α) (a : α) : M.evalFrom S (x ++ [a]) = M.stepSet (M.evalFrom S x) a
+· 使用定理 `εNFA.mem_stepSet_iff`：mem_stepSet_iff : s in M.stepSet S a ↔ exists t in
+ S, s in M.εClosure (M.step t a)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `εNFA.mem_εClosure_iff_exists`：mem_εClosure_iff_exists : s in M.εClosure 
+S ↔ exists t in S, s in M.εClosure {t} where mp h
+· 使用定理 `List.reduceOption_append`：reduceOption_append (l l' : List (Option α)) :
+ (l ++ l').reduceOption = l.reduceOption ++ l'.reduceOption
+· 使用定理 `List.reduceOption_cons_of_some`：reduceOption_cons_of_some (x : α) (l : L
+ist (Option α)) : reduceOption (some x :: l) = x :: l.reduceOption
+· 使用定理 `εNFA.isPath_append`：isPath_append {x y : List (Option α)} : M.IsPath s u
+ (x ++ y) ↔ exists t, M.IsPath s t x ∧ M.IsPath t u y where mp
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem mem_evalFrom_iff_exists_path {s₁ s₂ : σ} {x : List α} :
-    s₂ in M.evalFrom {s₁} x ↔ exists x', x'.reduceOption = x ∧ M.IsPath s₁ s₂ x' := by
+    s₂ ∈ M.evalFrom {s₁} x ↔ ∃ x', x'.reduceOption = x ∧ M.IsPath s₁ s₂ x' := by
   induction x using List.reverseRecOn generalizing s₂ with
   | nil =>
-    rw [evalFrom_nil]; rw [mem_εClosure_iff_exists_path]
+    rw [evalFrom_nil, mem_εClosure_iff_exists_path]
     constructor
     · intro ⟨n, _⟩
       use List.replicate n none
@@ -837,7 +542,7 @@ theorem mem_evalFrom_iff_exists_path {s₁ s₂ : σ} {x : List α} :
       intro ⟨_, ⟨n, rfl⟩, h⟩
       exact ⟨n, h⟩
   | append_singleton x a ih =>
-    rw [evalFrom_append_singleton]; rw [mem_stepSet_iff]
+    rw [evalFrom_append_singleton, mem_stepSet_iff]
     constructor
     · intro ⟨t, ht, h⟩
       obtain ⟨x', _, _⟩ := ih.mp ht
@@ -845,7 +550,8 @@ theorem mem_evalFrom_iff_exists_path {s₁ s₂ : σ} {x : List α} :
       simp_rw [mem_εClosure_iff_exists_path] at h
       obtain ⟨u, _, n, _⟩ := h
       use x' ++ some a :: List.replicate n none
-      rw [List.reduceOption_append]; rw [List.reduceOption_cons_of_some]; rw [List.reduceOption_replicate_none]; rw [isPath_append]
+      rw [List.reduceOption_append, List.reduceOption_cons_of_some,
+        List.reduceOption_replicate_none, isPath_append]
       tauto
     · simp_rw [← List.concat_eq_append, List.reduceOption_eq_concat_iff,
         List.reduceOption_eq_nil_iff]
@@ -853,49 +559,33 @@ theorem mem_evalFrom_iff_exists_path {s₁ s₂ : σ} {x : List α} :
       rw [isPath_append] at h
       obtain ⟨t, _, _ | u⟩ := h
       use t
-      rw [mem_εClosure_iff_exists]; rw [ih]
+      rw [mem_εClosure_iff_exists, ih]
       simp_rw [mem_εClosure_iff_exists_path]
       tauto
-
-/--
-theorem `mem_accepts_iff_exists_path` / 定理 `mem_accepts_iff_exists_path`
-
-English:
-theorem mem_accepts_iff_exists_path
-  given: {x : List α}
-  proof: by
-    intro ⟨s₂, _, h⟩
-    rw [eval]; rw [mem_evalFrom_iff_exists] at h
-    obtain ⟨s₁, _, h⟩ := h
-    rw [mem_evalFrom_iff_exists_path] at h
-    tauto
-  mpr := by
-    intro ⟨s₁, s₂, x', hs₁, hs₂, h⟩
-    have := M.mem_evalFrom_iff_exists.mpr ⟨_, hs₁, M.mem_evalFrom_iff_exists_path.mpr ⟨_, h⟩⟩
-    exact ⟨s₂, hs₂, this⟩
-
-中文:
-定理 mem_accepts_iff_存在_path
-  条件: {x : 列表 α}
-  证明: by
-    intro ⟨s₂, _, h⟩
-    rw [eval]; rw [mem_evalFrom_iff_exists] at h
-    obtain ⟨s₁, _, h⟩ := h
-    rw [mem_evalFrom_iff_exists_path] at h
-    tauto
-  mpr := by
-    intro ⟨s₁, s₂, x', hs₁, hs₂, h⟩
-    have := M.mem_evalFrom_iff_exists.mpr ⟨_, hs₁, M.mem_evalFrom_iff_exists_path.mpr ⟨_, h⟩⟩
-    exact ⟨s₂, hs₂, this⟩
-
-Depends on / 依赖: M.mem_evalFrom_iff_exists.mpr, M.mem_evalFrom_iff_exists_path.mpr, mem_evalFrom_iff_exists, mem_evalFrom_iff_exists_path
+/-
+**εNFA.mem_accepts_iff_exists_path** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：mem_accepts_iff_exists_path {x : List α} : x in M.accepts ↔ exists s₁ s₂ x
+', s₁ in M.start ∧ s₂ in M.accept ∧ x'.reduceOption = x ∧ M.IsPath s₁ s₂ x' wher
+e mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `εNFA.mem_evalFrom_iff_exists`：mem_evalFrom_iff_exists {s : σ} {S : Set σ
+} {x : List α} : s in M.evalFrom S x ↔ exists t in S, s in M.evalFrom {t} x
+· 使用定理 `εNFA.eval.eq_1`：∀ {α : Type u} {σ : Type v} (M : εNFA α σ), M.eval = M.e
+valFrom M.start
+· 使用定理 `εNFA.mem_evalFrom_iff_exists_path`：mem_evalFrom_iff_exists_path {s₁ s₂ :
+ σ} {x : List α} : s₂ in M.evalFrom {s₁} x ↔ exists x', x'.reduceOption = x ∧ M.
+IsPath s₁ s₂ x'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem mem_accepts_iff_exists_path {x : List α} :
-    x in M.accepts ↔
-      exists s₁ s₂ x', s₁ in M.start ∧ s₂ in M.accept ∧ x'.reduceOption = x ∧ M.IsPath s₁ s₂ x' where
+    x ∈ M.accepts ↔
+      ∃ s₁ s₂ x', s₁ ∈ M.start ∧ s₂ ∈ M.accept ∧ x'.reduceOption = x ∧ M.IsPath s₁ s₂ x' where
   mp := by
     intro ⟨s₂, _, h⟩
-    rw [eval]; rw [mem_evalFrom_iff_exists] at h
+    rw [eval, mem_evalFrom_iff_exists] at h
     obtain ⟨s₁, _, h⟩ := h
     rw [mem_evalFrom_iff_exists_path] at h
     tauto
@@ -907,28 +597,15 @@ theorem mem_accepts_iff_exists_path {x : List α} :
 /-! ### Conversions between `εNFA` and `NFA` -/
 
 
-/--
-Definition of `toNFA` / `toNFA` 的定义
+/-- `M.toNFA` is an `NFA` constructed from an `εNFA` `M`. -/
+/-
+**εNFA.toNFA** 是 Mathlib 中的一个定义，位于命名空间 `εNFA`。
+形式化陈述：toNFA : NFA α σ where step S a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNFA
-  signature: : NFA α σ where
-  body: M.εClosure (M.step S a)
-  start := M.εClosure M.start
-  accept := M.accept
-
-@[simp]
-
-中文:
-定义 toNFA
-  签名: : NFA α σ where
-  定义体: M.εClosure (M.step S a)
-  start := M.εClosure M.start
-  accept := M.accept
-
-@[simp]
-
-Depends on / 依赖: M.step
+--- 原说明 ---
+`M.toNFA` is an `NFA` constructed from an `εNFA` `M`.
 -/
 def toNFA : NFA α σ where
   step S a := M.εClosure (M.step S a)
@@ -936,128 +613,69 @@ def toNFA : NFA α σ where
   accept := M.accept
 
 @[simp]
-/--
-theorem `toNFA_evalFrom_match` / 定理 `toNFA_evalFrom_match`
-
-English:
-theorem toNFA_evalFrom_match
-  given: (start : Set σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toNFA_evalFrom_match
-  条件: (start : 集合 σ)
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.toNFA_evalFrom_match** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：toNFA_evalFrom_match (start : Set σ) : M.toNFA.evalFrom (M.εClosure start)
+ = M.evalFrom start
+参数：start : Set σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toNFA_evalFrom_match (start : Set σ) :
     M.toNFA.evalFrom (M.εClosure start) = M.evalFrom start :=
   rfl
 
 @[simp]
-/--
-theorem `toNFA_correct` / 定理 `toNFA_correct`
-
-English:
-theorem toNFA_correct
-  statement: M.toNFA.accepts = M.accepts
-  proof: rfl
-
-中文:
-定理 toNFA_correct
-  结论: M.toNFA.accepts = M.accepts
-  证明: rfl
+/-
+**εNFA.toNFA_correct** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：toNFA_correct : M.toNFA.accepts = M.accepts
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toNFA_correct : M.toNFA.accepts = M.accepts :=
   rfl
-
-/--
-theorem `pumping_lemma` / 定理 `pumping_lemma`
-
-English:
-theorem pumping_lemma
-  statement: [Fintype σ] {x : List α} (hx : x in M.accepts)
-  proof: M.toNFA.pumping_lemma hx hlen
-
-中文:
-定理 pumping_lemma
-  结论: [有限类型 σ] {x : 列表 α} (hx : x in M.accepts)
-  证明: M.toNFA.pumping_lemma hx hlen
-
-Depends on / 依赖: M.toNFA.pumping_lemma, pumping_lemma
+/-
+**εNFA.pumping_lemma** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：pumping_lemma [Fintype σ] {x : List α} (hx : x in M.accepts) (hlen : Finty
+pe.card (Set σ) <= List.length x) : exists a b c, x = a ++ b ++ c ∧ a.length + b
+.length <= Fintype.card (Set σ) ∧ b != [] ∧ {a} * {b}∗ * {c} <= M.accepts
+参数：hx : x in M.accepts；hlen : Fintype.card (Set σ) <= List.length x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NFA.pumping_lemma`：pumping_lemma [Fintype σ] {x : List α} (hx : x in M.a
+ccepts) (hlen : Fintype.card (Set σ) <= List.length x) : exists a b c, x = a ++ 
+b ++ c …
 -/
-theorem pumping_lemma [Fintype σ] {x : List α} (hx : x in M.accepts)
-    (hlen : Fintype.card (Set σ) <= List.length x) :
-    exists a b c, x = a ++ b ++ c ∧
-      a.length + b.length <= Fintype.card (Set σ) ∧ b != [] ∧ {a} * {b}∗ * {c} <= M.accepts :=
+theorem pumping_lemma [Fintype σ] {x : List α} (hx : x ∈ M.accepts)
+    (hlen : Fintype.card (Set σ) ≤ List.length x) :
+    ∃ a b c, x = a ++ b ++ c ∧
+      a.length + b.length ≤ Fintype.card (Set σ) ∧ b ≠ [] ∧ {a} * {b}∗ * {c} ≤ M.accepts :=
   M.toNFA.pumping_lemma hx hlen
 
 end εNFA
 
 namespace NFA
 
-/--
-Definition of `toεNFA` / `toεNFA` 的定义
+/-- `M.toεNFA` is an `εNFA` constructed from an `NFA` `M` by using the same start and accept
+  states and transition functions. -/
+/-
+**NFA.to** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toεNFA
-  signature: (M : NFA α σ)
-  body: a.casesOn' ∅ fun a => M.step s a
-  start := M.start
-  accept := M.accept
-
-@[simp]
-
-中文:
-定义 toεNFA
-  签名: (M : NFA α σ)
-  定义体: a.casesOn' ∅ fun a => M.step s a
-  start := M.start
-  accept := M.accept
-
-@[simp]
-
-Depends on / 依赖: M.step, a.casesOn, casesOn
+--- 原说明 ---
+`M.toεNFA` is an `εNFA` constructed from an `NFA` `M` by using the same start an
+d accept
+  states and transition functions.
 -/
 def toεNFA (M : NFA α σ) : εNFA α σ where
-  step s a := a.casesOn' ∅ fun a => M.step s a
+  step s a := a.casesOn' ∅ fun a ↦ M.step s a
   start := M.start
   accept := M.accept
 
 @[simp]
-/--
-theorem `toεNFA_εClosure` / 定理 `toεNFA_εClosure`
-
-English:
-theorem toεNFA_εClosure
-  given: (M : NFA α σ) (S : Set σ)
-  statement: M.toεNFA.εClosure S = S
-  proof: by
-  ext a
-  refine ⟨?_, εNFA.εClosure.base _⟩
-  rintro (⟨_, h⟩ | ⟨_, _, h, _⟩)
-  · exact h
-  · cases h
-
-@[simp]
-
-中文:
-定理 toεNFA_εClosure
-  条件: (M : NFA α σ) (S : 集合 σ)
-  结论: M.toεNFA.εClosure S = S
-  证明: by
-  ext a
-  refine ⟨?_, εNFA.εClosure.base _⟩
-  rintro (⟨_, h⟩ | ⟨_, _, h, _⟩)
-  · exact h
-  · cases h
-
-@[simp]
-
-Depends on / 依赖: Closure.base
+/-
+**NFA.to** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toεNFA_εClosure (M : NFA α σ) (S : Set σ) : M.toεNFA.εClosure S = S := by
   ext a
@@ -1067,46 +685,13 @@ theorem toεNFA_εClosure (M : NFA α σ) (S : Set σ) : M.toεNFA.εClosure S =
   · cases h
 
 @[simp]
-/--
-theorem `toεNFA_evalFrom_match` / 定理 `toεNFA_evalFrom_match`
-
-English:
-theorem toεNFA_evalFrom_match
-  given: (M : NFA α σ) (start : Set σ)
-  proof: by
-  rw [evalFrom]; rw [εNFA.evalFrom]; rw [toεNFA_εClosure]
-  suffices εNFA.stepSet (toεNFA M) = stepSet M by rw [this]
-  ext S s
-  simp only [stepSet, εNFA.stepSet, exists_prop, Set.mem_iUnion]
-  apply exists_congr
-  simp only [and_congr_right_iff]
-  intro _ _
-  rw [M.toεNFA_εClosure]
-  rfl
-
-@[simp]
-
-中文:
-定理 toεNFA_evalFrom_match
-  条件: (M : NFA α σ) (start : 集合 σ)
-  证明: by
-  rw [evalFrom]; rw [εNFA.evalFrom]; rw [toεNFA_εClosure]
-  suffices εNFA.stepSet (toεNFA M) = stepSet M by rw [this]
-  ext S s
-  simp only [stepSet, εNFA.stepSet, exists_prop, Set.mem_iUnion]
-  apply exists_congr
-  simp only [and_congr_right_iff]
-  intro _ _
-  rw [M.toεNFA_εClosure]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: M.to, NFA.evalFrom, NFA.stepSet, Set.mem_iUnion, and_congr_right_iff, evalFrom, exists_congr, exists_prop, mem_iUnion, stepSet
+/-
+**NFA.to** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toεNFA_evalFrom_match (M : NFA α σ) (start : Set σ) :
     M.toεNFA.evalFrom start = M.evalFrom start := by
-  rw [evalFrom]; rw [εNFA.evalFrom]; rw [toεNFA_εClosure]
+  rw [evalFrom, εNFA.evalFrom, toεNFA_εClosure]
   suffices εNFA.stepSet (toεNFA M) = stepSet M by rw [this]
   ext S s
   simp only [stepSet, εNFA.stepSet, exists_prop, Set.mem_iUnion]
@@ -1117,29 +702,12 @@ theorem toεNFA_evalFrom_match (M : NFA α σ) (start : Set σ) :
   rfl
 
 @[simp]
-/--
-theorem `toεNFA_correct` / 定理 `toεNFA_correct`
-
-English:
-theorem toεNFA_correct
-  given: (M : NFA α σ)
-  statement: M.toεNFA.accepts = M.accepts
-  proof: by
-  rw [εNFA.accepts]; rw [εNFA.eval]; rw [toεNFA_evalFrom_match]
-  rfl
-
-中文:
-定理 toεNFA_correct
-  条件: (M : NFA α σ)
-  结论: M.toεNFA.accepts = M.accepts
-  证明: by
-  rw [εNFA.accepts]; rw [εNFA.eval]; rw [toεNFA_evalFrom_match]
-  rfl
-
-Depends on / 依赖: NFA.accepts, NFA.eval, accepts
+/-
+**NFA.to** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toεNFA_correct (M : NFA α σ) : M.toεNFA.accepts = M.accepts := by
-  rw [εNFA.accepts]; rw [εNFA.eval]; rw [toεNFA_evalFrom_match]
+  rw [εNFA.accepts, εNFA.eval, toεNFA_evalFrom_match]
   rfl
 
 end NFA
@@ -1149,182 +717,86 @@ end NFA
 
 namespace εNFA
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (εNFA α σ)
-  body: ⟨⟨fun _ _ => ∅, ∅, ∅⟩⟩
-
-中文:
-实例 :
-  签名: 零 (εNFA α σ)
-  定义体: ⟨⟨fun _ _ => ∅, ∅, ∅⟩⟩
+/-
+**εNFA.** 是 Mathlib 中的一个实例，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (εNFA α σ) :=
-  ⟨⟨fun _ _ => ∅, ∅, ∅⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (εNFA α σ)
-  body: ⟨⟨fun _ _ => ∅, univ, univ⟩⟩
-
-中文:
-实例 :
-  签名: 幺 (εNFA α σ)
-  定义体: ⟨⟨fun _ _ => ∅, univ, univ⟩⟩
+  ⟨⟨fun _ _ ↦ ∅, ∅, ∅⟩⟩
+/-
+**εNFA.** 是 Mathlib 中的一个实例，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (εNFA α σ) :=
-  ⟨⟨fun _ _ => ∅, univ, univ⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (εNFA α σ)
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (εNFA α σ)
-  定义体: ⟨0⟩
-
-@[simp]
+  ⟨⟨fun _ _ ↦ ∅, univ, univ⟩⟩
+/-
+**εNFA.** 是 Mathlib 中的一个实例，位于命名空间 `εNFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (εNFA α σ) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `step_zero` / 定理 `step_zero`
-
-English:
-theorem step_zero
-  given: (s a)
-  statement: (0 : εNFA α σ).step s a = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 step_zero
-  条件: (s a)
-  结论: (0 : εNFA α σ).step s a = ∅
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.step_zero** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：step_zero (s a) : (0 : εNFA α σ).step s a = ∅
+参数：s a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem step_zero (s a) : (0 : εNFA α σ).step s a = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `step_one` / 定理 `step_one`
-
-English:
-theorem step_one
-  given: (s a)
-  statement: (1 : εNFA α σ).step s a = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 step_one
-  条件: (s a)
-  结论: (1 : εNFA α σ).step s a = ∅
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.step_one** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：step_one (s a) : (1 : εNFA α σ).step s a = ∅
+参数：s a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem step_one (s a) : (1 : εNFA α σ).step s a = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `start_zero` / 定理 `start_zero`
-
-English:
-theorem start_zero
-  statement: (0 : εNFA α σ).start = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 start_zero
-  结论: (0 : εNFA α σ).start = ∅
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.start_zero** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：start_zero : (0 : εNFA α σ).start = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem start_zero : (0 : εNFA α σ).start = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `start_one` / 定理 `start_one`
-
-English:
-theorem start_one
-  statement: (1 : εNFA α σ).start = univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 start_one
-  结论: (1 : εNFA α σ).start = univ
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.start_one** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：start_one : (1 : εNFA α σ).start = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem start_one : (1 : εNFA α σ).start = univ :=
   rfl
 
 @[simp]
-/--
-theorem `accept_zero` / 定理 `accept_zero`
-
-English:
-theorem accept_zero
-  statement: (0 : εNFA α σ).accept = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 accept_zero
-  结论: (0 : εNFA α σ).accept = ∅
-  证明: rfl
-
-@[simp]
+/-
+**εNFA.accept_zero** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：accept_zero : (0 : εNFA α σ).accept = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem accept_zero : (0 : εNFA α σ).accept = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `accept_one` / 定理 `accept_one`
-
-English:
-theorem accept_one
-  statement: (1 : εNFA α σ).accept = univ
-  proof: rfl
-
-中文:
-定理 accept_one
-  结论: (1 : εNFA α σ).accept = univ
-  证明: rfl
+/-
+**εNFA.accept_one** 是 Mathlib 中的一个定理，位于命名空间 `εNFA`。
+形式化陈述：accept_one : (1 : εNFA α σ).accept = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem accept_one : (1 : εNFA α σ).accept = univ :=
   rfl
 
 end εNFA
+

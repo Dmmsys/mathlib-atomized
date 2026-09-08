@@ -41,28 +41,17 @@ variable {C : Type u₁} [Category.{v₁} C]
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 /-- Construct a cone for the empty diagram given an object. -/
 @[simps, implicit_reducible]
-/--
-Definition of `asEmptyCone` / `asEmptyCone` 的定义
+/-
+**CategoryTheory.Limits.asEmptyCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：asEmptyCone (X : C) : Cone (Functor.empty.{0} C)
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition asEmptyCone
-  signature: (X : C)
-  body: { pt := X
-    π :=
-    { app := by cat_disch } }
-
-#adaptation_note
-
-中文:
-定义 asEmptyCone
-  签名: (X : C)
-  定义体: { pt := X
-    π :=
-    { app := by cat_disch } }
-
-#adaptation_note
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Construct a cone for the empty diagram given an object.
 -/
 def asEmptyCone (X : C) : Cone (Functor.empty.{0} C) :=
   { pt := X
@@ -73,101 +62,68 @@ def asEmptyCone (X : C) : Cone (Functor.empty.{0} C) :=
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 /-- Construct a cocone for the empty diagram given an object. -/
 @[implicit_reducible, simps]
-/--
-Definition of `asEmptyCocone` / `asEmptyCocone` 的定义
+/-
+**CategoryTheory.Limits.asEmptyCocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：asEmptyCocone (X : C) : Cocone (Functor.empty.{0} C)
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition asEmptyCocone
-  signature: (X : C)
-  body: { pt := X
-    ι :=
-    { app := by cat_disch } }
-
-中文:
-定义 asEmptyCocone
-  签名: (X : C)
-  定义体: { pt := X
-    ι :=
-    { app := by cat_disch } }
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Construct a cocone for the empty diagram given an object.
 -/
 def asEmptyCocone (X : C) : Cocone (Functor.empty.{0} C) :=
   { pt := X
     ι :=
     { app := by cat_disch } }
 
-/--
-Definition of `IsTerminal` / `IsTerminal` 的定义
+/-- `X` is terminal if the cone it induces on the empty diagram is limiting. -/
+/-
+**CategoryTheory.Limits.IsTerminal** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：IsTerminal (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTerminal
-  signature: (X : C)
-  body: IsLimit (asEmptyCone X)
-
-中文:
-缩写 是终止
-  签名: (X : C)
-  定义体: IsLimit (asEmptyCone X)
-
-Depends on / 依赖: IsLimit, asEmptyCone
+--- 原说明 ---
+`X` is terminal if the cone it induces on the empty diagram is limiting.
 -/
 abbrev IsTerminal (X : C) :=
   IsLimit (asEmptyCone X)
 
-/--
-Definition of `IsInitial` / `IsInitial` 的定义
+/-- `X` is initial if the cocone it induces on the empty diagram is colimiting. -/
+/-
+**CategoryTheory.Limits.IsInitial** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：IsInitial (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsInitial
-  signature: (X : C)
-  body: IsColimit (asEmptyCocone X)
-
-中文:
-缩写 IsInitial
-  签名: (X : C)
-  定义体: IsColimit (asEmptyCocone X)
-
-Depends on / 依赖: IsColimit, asEmptyCocone
+--- 原说明 ---
+`X` is initial if the cocone it induces on the empty diagram is colimiting.
 -/
 abbrev IsInitial (X : C) :=
   IsColimit (asEmptyCocone X)
 
-/--
-Definition of `isTerminalEquivUnique` / `isTerminalEquivUnique` 的定义
+/-- An object `Y` is terminal iff for every `X` there is a unique morphism `X ⟶ Y`. -/
+/-
+**CategoryTheory.Limits.isTerminalEquivUnique** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：isTerminalEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (Y : C) : IsLimit 
+(⟨Y, by cat_disch, by simp⟩ : Cone F) ≃ forall X : C, Unique (X ⟶ Y) where toFun
+ t X
+参数：F : Discrete.{0} PEmpty.{1} ⥤ C；Y : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition isTerminalEquivUnique
-  signature: (F : Discrete.{0} PEmpty.{1} ⥤ C) (Y : C)
-  body: { default := t.lift ⟨X, ⟨by cat_disch, by simp⟩⟩
-      uniq := fun f =>
-        t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
-  invFun u :=
-    { lift := fun s => (u s.pt).default
-      uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.RightInverse, Function.LeftInverse]
-    subsingleton
-
-中文:
-定义 isTerminalEquivUnique
-  签名: (F : 离散.{0} 命题空.{1} ⥤ C) (Y : C)
-  定义体: { default := t.lift ⟨X, ⟨by cat_disch, by simp⟩⟩
-      uniq := fun f =>
-        t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
-  invFun u :=
-    { lift := fun s => (u s.pt).default
-      uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.RightInverse, Function.LeftInverse]
-    subsingleton
-
-Depends on / 依赖: Function, Function.LeftInverse, Function.RightInverse, LeftInverse, RightInverse, cat_disch, eq_iff_true_of_subsingleton, invFun, left_inv, right_inv, s.pt, subsingleton, t.lift, t.uniq
+--- 原说明 ---
+An object `Y` is terminal iff for every `X` there is a unique morphism `X ⟶ Y`.
 -/
 def isTerminalEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (Y : C) :
-    IsLimit (⟨Y, by cat_disch, by simp⟩ : Cone F) ≃ forall X : C, Unique (X ⟶ Y) where
+    IsLimit (⟨Y, by cat_disch, by simp⟩ : Cone F) ≃ ∀ X : C, Unique (X ⟶ Y) where
   toFun t X :=
     { default := t.lift ⟨X, ⟨by cat_disch, by simp⟩⟩
       uniq := fun f =>
@@ -180,111 +136,88 @@ def isTerminalEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (Y : C) :
     dsimp [Function.RightInverse, Function.LeftInverse]
     subsingleton
 
-/--
-Definition of `IsTerminal.ofUnique` / `IsTerminal.ofUnique` 的定义
+/-- An object `Y` is terminal if for every `X` there is a unique morphism `X ⟶ Y`
+    (as an instance). -/
+/-
+**CategoryTheory.Limits.IsTerminal.ofUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (Y : C
+) → [h : (X : C) → Unique (X ⟶ Y)] → CategoryTheory.Limits.IsTerminal Y
+参数：Y : C；X : C；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.ofUnique
-  signature: (Y : C) [h : forall X : C, Unique (X ⟶ Y)]
-  body: (h s.pt).default
-  fac := fun _ ⟨j⟩ => j.elim
-
-中文:
-定义 是终止.ofUnique
-  签名: (Y : C) [h : 对任意 X : C, 唯一 (X ⟶ Y)]
-  定义体: (h s.pt).default
-  fac := fun _ ⟨j⟩ => j.elim
-
-Depends on / 依赖: s.pt
+--- 原说明 ---
+An object `Y` is terminal if for every `X` there is a unique morphism `X ⟶ Y`
+    (as an instance).
 -/
-def IsTerminal.ofUnique (Y : C) [h : forall X : C, Unique (X ⟶ Y)] : IsTerminal Y where
+def IsTerminal.ofUnique (Y : C) [h : ∀ X : C, Unique (X ⟶ Y)] : IsTerminal Y where
   lift s := (h s.pt).default
   fac := fun _ ⟨j⟩ => j.elim
 
-/--
-Definition of `IsTerminal.ofUniqueHom` / `IsTerminal.ofUniqueHom` 的定义
+/-- An object `Y` is terminal if for every `X` there is a unique morphism `X ⟶ Y`
+    (as explicit arguments). -/
+/-
+**CategoryTheory.Limits.IsTerminal.ofUniqueHom** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {Y : C
+} → (h : (X : C) → X ⟶ Y) → (∀ (X : C) (m : X ⟶ Y), m = h X) → CategoryTheory.Li
+mits.IsTerminal Y
+参数：h : (X : C) → X ⟶ Y；∀ (X : C) (m : X ⟶ Y), m = h X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.ofUniqueHom
-  signature: {Y : C} (h : forall X : C, X ⟶ Y) (uniq : forall (X : C) (m : X ⟶ Y), m = h X)
-  body: have : forall X : C, Unique (X ⟶ Y) := fun X => ⟨⟨h X⟩, uniq X⟩
-  IsTerminal.ofUnique Y
-
-中文:
-定义 是终止.ofUniqueHom
-  签名: {Y : C} (h : 对任意 X : C, X ⟶ Y) (uniq : 对任意 (X : C) (m : X ⟶ Y), m = h X)
-  定义体: have : forall X : C, Unique (X ⟶ Y) := fun X => ⟨⟨h X⟩, uniq X⟩
-  IsTerminal.ofUnique Y
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, Unique, ofUnique
+--- 原说明 ---
+An object `Y` is terminal if for every `X` there is a unique morphism `X ⟶ Y`
+    (as explicit arguments).
 -/
-def IsTerminal.ofUniqueHom {Y : C} (h : forall X : C, X ⟶ Y) (uniq : forall (X : C) (m : X ⟶ Y), m = h X) :
+def IsTerminal.ofUniqueHom {Y : C} (h : ∀ X : C, X ⟶ Y) (uniq : ∀ (X : C) (m : X ⟶ Y), m = h X) :
     IsTerminal Y :=
-  have : forall X : C, Unique (X ⟶ Y) := fun X => ⟨⟨h X⟩, uniq X⟩
+  have : ∀ X : C, Unique (X ⟶ Y) := fun X ↦ ⟨⟨h X⟩, uniq X⟩
   IsTerminal.ofUnique Y
 
-/--
-Definition of `isTerminalTop` / `isTerminalTop` 的定义
+/-- If `α` is a preorder with top, then `⊤` is a terminal object. -/
+/-
+**CategoryTheory.Limits.isTerminalTop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：isTerminalTop {α : Type*} [Preorder α] [OrderTop α] : IsTerminal (⊤ : α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalTop
-  signature: {α : Type*} [Preorder α] [OrderTop α]
-  body: IsTerminal.ofUnique _
-
-中文:
-定义 isTerminalTop
-  签名: {α : 类型} [预序 α] [有顶序 α]
-  定义体: IsTerminal.ofUnique _
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
+--- 原说明 ---
+If `α` is a preorder with top, then `⊤` is a terminal object.
 -/
 def isTerminalTop {α : Type*} [Preorder α] [OrderTop α] : IsTerminal (⊤ : α) :=
   IsTerminal.ofUnique _
 
-/--
-Definition of `IsTerminal.ofIso` / `IsTerminal.ofIso` 的定义
+/-- Transport a term of type `IsTerminal` across an isomorphism. -/
+/-
+**CategoryTheory.Limits.IsTerminal.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {Y Z :
+ C} → CategoryTheory.Limits.IsTerminal Y → (Y ≅ Z) → CategoryTheory.Limits.IsTer
+minal Z
+参数：Y ≅ Z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.ofIso
-  signature: {Y Z : C} (hY : IsTerminal Y) (i : Y ≅ Z)
-  body: IsLimit.ofIsoLimit hY
-    { hom := { hom := i.hom }
-      inv := { hom := i.inv } }
-
-中文:
-定义 是终止.ofIso
-  签名: {Y Z : C} (hY : 是终止 Y) (i : Y ≅ Z)
-  定义体: IsLimit.ofIsoLimit hY
-    { hom := { hom := i.hom }
-      inv := { hom := i.inv } }
-
-Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, i.hom, i.inv, ofIsoLimit
+--- 原说明 ---
+Transport a term of type `IsTerminal` across an isomorphism.
 -/
 def IsTerminal.ofIso {Y Z : C} (hY : IsTerminal Y) (i : Y ≅ Z) : IsTerminal Z :=
   IsLimit.ofIsoLimit hY
     { hom := { hom := i.hom }
       inv := { hom := i.inv } }
 
-/--
-Definition of `IsTerminal.equivOfIso` / `IsTerminal.equivOfIso` 的定义
+/-- If `X` and `Y` are isomorphic, then `X` is terminal iff `Y` is. -/
+/-
+**CategoryTheory.Limits.IsTerminal.equivOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (X ≅ Y) → CategoryTheory.Limits.IsTerminal X ≃ CategoryTheory.Limits.IsTer
+minal Y
+参数：X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.equivOfIso
-  signature: {X Y : C} (e : X ≅ Y)
-  body: IsTerminal.ofIso h e
-  invFun h := IsTerminal.ofIso h e.symm
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 是终止.equivOfIso
-  签名: {X Y : C} (e : X ≅ Y)
-  定义体: IsTerminal.ofIso h e
-  invFun h := IsTerminal.ofIso h e.symm
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofIso
+--- 原说明 ---
+If `X` and `Y` are isomorphic, then `X` is terminal iff `Y` is.
 -/
 def IsTerminal.equivOfIso {X Y : C} (e : X ≅ Y) :
     IsTerminal X ≃ IsTerminal Y where
@@ -293,35 +226,23 @@ def IsTerminal.equivOfIso {X Y : C} (e : X ≅ Y) :
   left_inv _ := Subsingleton.elim _ _
   right_inv _ := Subsingleton.elim _ _
 
-/--
-Definition of `isInitialEquivUnique` / `isInitialEquivUnique` 的定义
+/-- An object `X` is initial iff for every `Y` there is a unique morphism `X ⟶ Y`. -/
+/-
+**CategoryTheory.Limits.isInitialEquivUnique** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：isInitialEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (X : C) : IsColimit
+ (⟨X, ⟨by cat_disch, by simp⟩⟩ : Cocone F) ≃ forall Y : C, Unique (X ⟶ Y) where 
+toFun t X
+参数：F : Discrete.{0} PEmpty.{1} ⥤ C；X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition isInitialEquivUnique
-  signature: (F : Discrete.{0} PEmpty.{1} ⥤ C) (X : C)
-  body: { default := t.desc ⟨X, ⟨by cat_disch, by simp⟩⟩
-      uniq := fun f => t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
-  invFun u :=
-    { desc := fun s => (u s.pt).default
-      uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by grind
-
-中文:
-定义 isInitialEquivUnique
-  签名: (F : 离散.{0} 命题空.{1} ⥤ C) (X : C)
-  定义体: { default := t.desc ⟨X, ⟨by cat_disch, by simp⟩⟩
-      uniq := fun f => t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
-  invFun u :=
-    { desc := fun s => (u s.pt).default
-      uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by grind
-
-Depends on / 依赖: Function, Function.LeftInverse, LeftInverse, cat_disch, eq_iff_true_of_subsingleton, invFun, left_inv, right_inv, s.pt, t.desc, t.uniq
+--- 原说明 ---
+An object `X` is initial iff for every `Y` there is a unique morphism `X ⟶ Y`.
 -/
 def isInitialEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (X : C) :
-    IsColimit (⟨X, ⟨by cat_disch, by simp⟩⟩ : Cocone F) ≃ forall Y : C, Unique (X ⟶ Y) where
+    IsColimit (⟨X, ⟨by cat_disch, by simp⟩⟩ : Cocone F) ≃ ∀ Y : C, Unique (X ⟶ Y) where
   toFun t X :=
     { default := t.desc ⟨X, ⟨by cat_disch, by simp⟩⟩
       uniq := fun f => t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
@@ -331,111 +252,88 @@ def isInitialEquivUnique (F : Discrete.{0} PEmpty.{1} ⥤ C) (X : C) :
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
   right_inv := by grind
 
-/--
-Definition of `IsInitial.ofUnique` / `IsInitial.ofUnique` 的定义
+/-- An object `X` is initial if for every `Y` there is a unique morphism `X ⟶ Y`
+    (as an instance). -/
+/-
+**CategoryTheory.Limits.IsInitial.ofUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (X : C
+) → [h : (Y : C) → Unique (X ⟶ Y)] → CategoryTheory.Limits.IsInitial X
+参数：X : C；Y : C；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.ofUnique
-  signature: (X : C) [h : forall Y : C, Unique (X ⟶ Y)]
-  body: (h s.pt).default
-  fac := fun _ ⟨j⟩ => j.elim
-
-中文:
-定义 IsInitial.ofUnique
-  签名: (X : C) [h : 对任意 Y : C, 唯一 (X ⟶ Y)]
-  定义体: (h s.pt).default
-  fac := fun _ ⟨j⟩ => j.elim
-
-Depends on / 依赖: s.pt
+--- 原说明 ---
+An object `X` is initial if for every `Y` there is a unique morphism `X ⟶ Y`
+    (as an instance).
 -/
-def IsInitial.ofUnique (X : C) [h : forall Y : C, Unique (X ⟶ Y)] : IsInitial X where
+def IsInitial.ofUnique (X : C) [h : ∀ Y : C, Unique (X ⟶ Y)] : IsInitial X where
   desc s := (h s.pt).default
   fac := fun _ ⟨j⟩ => j.elim
 
-/--
-Definition of `IsInitial.ofUniqueHom` / `IsInitial.ofUniqueHom` 的定义
+/-- An object `X` is initial if for every `Y` there is a unique morphism `X ⟶ Y`
+    (as explicit arguments). -/
+/-
+**CategoryTheory.Limits.IsInitial.ofUniqueHom** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X : C
+} → (h : (Y : C) → X ⟶ Y) → (∀ (Y : C) (m : X ⟶ Y), m = h Y) → CategoryTheory.Li
+mits.IsInitial X
+参数：h : (Y : C) → X ⟶ Y；∀ (Y : C) (m : X ⟶ Y), m = h Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.ofUniqueHom
-  signature: {X : C} (h : forall Y : C, X ⟶ Y) (uniq : forall (Y : C) (m : X ⟶ Y), m = h Y)
-  body: have : forall Y : C, Unique (X ⟶ Y) := fun Y => ⟨⟨h Y⟩, uniq Y⟩
-  IsInitial.ofUnique X
-
-中文:
-定义 IsInitial.ofUniqueHom
-  签名: {X : C} (h : 对任意 Y : C, X ⟶ Y) (uniq : 对任意 (Y : C) (m : X ⟶ Y), m = h Y)
-  定义体: have : forall Y : C, Unique (X ⟶ Y) := fun Y => ⟨⟨h Y⟩, uniq Y⟩
-  IsInitial.ofUnique X
-
-Depends on / 依赖: IsInitial, IsInitial.ofUnique, Unique, ofUnique
+--- 原说明 ---
+An object `X` is initial if for every `Y` there is a unique morphism `X ⟶ Y`
+    (as explicit arguments).
 -/
-def IsInitial.ofUniqueHom {X : C} (h : forall Y : C, X ⟶ Y) (uniq : forall (Y : C) (m : X ⟶ Y), m = h Y) :
+def IsInitial.ofUniqueHom {X : C} (h : ∀ Y : C, X ⟶ Y) (uniq : ∀ (Y : C) (m : X ⟶ Y), m = h Y) :
     IsInitial X :=
-  have : forall Y : C, Unique (X ⟶ Y) := fun Y => ⟨⟨h Y⟩, uniq Y⟩
+  have : ∀ Y : C, Unique (X ⟶ Y) := fun Y ↦ ⟨⟨h Y⟩, uniq Y⟩
   IsInitial.ofUnique X
 
-/--
-Definition of `isInitialBot` / `isInitialBot` 的定义
+/-- If `α` is a preorder with bot, then `⊥` is an initial object. -/
+/-
+**CategoryTheory.Limits.isInitialBot** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：isInitialBot {α : Type*} [Preorder α] [OrderBot α] : IsInitial (⊥ : α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialBot
-  signature: {α : Type*} [Preorder α] [OrderBot α]
-  body: IsInitial.ofUnique _
-
-中文:
-定义 isInitialBot
-  签名: {α : 类型} [预序 α] [有底序 α]
-  定义体: IsInitial.ofUnique _
-
-Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
+--- 原说明 ---
+If `α` is a preorder with bot, then `⊥` is an initial object.
 -/
 def isInitialBot {α : Type*} [Preorder α] [OrderBot α] : IsInitial (⊥ : α) :=
   IsInitial.ofUnique _
 
-/--
-Definition of `IsInitial.ofIso` / `IsInitial.ofIso` 的定义
+/-- Transport a term of type `IsInitial` across an isomorphism. -/
+/-
+**CategoryTheory.Limits.IsInitial.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → CategoryTheory.Limits.IsInitial X → (X ≅ Y) → CategoryTheory.Limits.IsInit
+ial Y
+参数：X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.ofIso
-  signature: {X Y : C} (hX : IsInitial X) (i : X ≅ Y)
-  body: IsColimit.ofIsoColimit hX
-    { hom := { hom := i.hom }
-      inv := { hom := i.inv } }
-
-中文:
-定义 IsInitial.ofIso
-  签名: {X Y : C} (hX : IsInitial X) (i : X ≅ Y)
-  定义体: IsColimit.ofIsoColimit hX
-    { hom := { hom := i.hom }
-      inv := { hom := i.inv } }
-
-Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, i.hom, i.inv, ofIsoColimit
+--- 原说明 ---
+Transport a term of type `IsInitial` across an isomorphism.
 -/
 def IsInitial.ofIso {X Y : C} (hX : IsInitial X) (i : X ≅ Y) : IsInitial Y :=
   IsColimit.ofIsoColimit hX
     { hom := { hom := i.hom }
       inv := { hom := i.inv } }
 
-/--
-Definition of `IsInitial.equivOfIso` / `IsInitial.equivOfIso` 的定义
+/-- If `X` and `Y` are isomorphic, then `X` is initial iff `Y` is. -/
+/-
+**CategoryTheory.Limits.IsInitial.equivOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (X ≅ Y) → CategoryTheory.Limits.IsInitial X ≃ CategoryTheory.Limits.IsInit
+ial Y
+参数：X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.equivOfIso
-  signature: {X Y : C} (e : X ≅ Y)
-  body: IsInitial.ofIso h e
-  invFun h := IsInitial.ofIso h e.symm
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 IsInitial.equivOfIso
-  签名: {X Y : C} (e : X ≅ Y)
-  定义体: IsInitial.ofIso h e
-  invFun h := IsInitial.ofIso h e.symm
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: IsInitial, IsInitial.ofIso
+--- 原说明 ---
+If `X` and `Y` are isomorphic, then `X` is initial iff `Y` is.
 -/
 def IsInitial.equivOfIso {X Y : C} (e : X ≅ Y) :
     IsInitial X ≃ IsInitial Y where
@@ -444,281 +342,240 @@ def IsInitial.equivOfIso {X Y : C} (e : X ≅ Y) :
   left_inv _ := Subsingleton.elim _ _
   right_inv _ := Subsingleton.elim _ _
 
-/--
-Definition of `IsTerminal.from` / `IsTerminal.from` 的定义
+/-- Give the morphism to a terminal object from any other. -/
+/-
+**CategoryTheory.Limits.IsTerminal.from** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] → {X : C} → 
+CategoryTheory.Limits.IsTerminal X → (Y : C) → Y ⟶ X
+参数：Y : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.from
-  signature: {X : C} (t : IsTerminal X) (Y : C)
-  body: t.lift (asEmptyCone Y)
-
-中文:
-定义 是终止.from
-  签名: {X : C} (t : 是终止 X) (Y : C)
-  定义体: t.lift (asEmptyCone Y)
-
-Depends on / 依赖: asEmptyCone, t.lift
+--- 原说明 ---
+Give the morphism to a terminal object from any other.
 -/
 def IsTerminal.from {X : C} (t : IsTerminal X) (Y : C) : Y ⟶ X :=
   t.lift (asEmptyCone Y)
 
-/--
-theorem `IsTerminal.hom_ext` / 定理 `IsTerminal.hom_ext`
+/-- Any two morphisms to a terminal object are equal. -/
+/-
+**CategoryTheory.Limits.IsTerminal.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsTerminal X)   (f g : Y ⟶ X), f = g
+参数：t : CategoryTheory.Limits.IsTerminal X；f g : Y ⟶ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
 
-English:
-theorem IsTerminal.hom_ext
-  given: {X Y : C} (t : IsTerminal X) (f g : Y ⟶ X)
-  statement: f = g
-  proof: IsLimit.hom_ext t (by simp)
-
-@[simp]
-
-中文:
-定理 是终止.hom_ext
-  条件: {X Y : C} (t : 是终止 X) (f g : Y ⟶ X)
-  结论: f = g
-  证明: IsLimit.hom_ext t (by simp)
-
-@[simp]
-
-Depends on / 依赖: IsLimit, IsLimit.hom_ext, hom_ext
+--- 原说明 ---
+Any two morphisms to a terminal object are equal.
 -/
 theorem IsTerminal.hom_ext {X Y : C} (t : IsTerminal X) (f g : Y ⟶ X) : f = g :=
   IsLimit.hom_ext t (by simp)
 
 @[simp]
-/--
-theorem `IsTerminal.comp_from` / 定理 `IsTerminal.comp_from`
-
-English:
-theorem IsTerminal.comp_from
-  given: {Z : C} (t : IsTerminal Z) {X Y : C} (f : X ⟶ Y)
-  proof: t.hom_ext _ _
-
-@[simp]
-
-中文:
-定理 是终止.comp_from
-  条件: {Z : C} (t : 是终止 Z) {X Y : C} (f : X ⟶ Y)
-  证明: t.hom_ext _ _
-
-@[simp]
-
-Depends on / 依赖: hom_ext, t.hom_ext
+/-
+**CategoryTheory.Limits.IsTerminal.comp_from** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {Z : C} (t : C
+ategoryTheory.Limits.IsTerminal Z) {X Y : C}   (f : X ⟶ Y), CategoryTheory.Categ
+oryStruct.comp f (t.from Y) = t.from X
+参数：t : CategoryTheory.Limits.IsTerminal Z；f : X ⟶ Y；t.from Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 -/
 theorem IsTerminal.comp_from {Z : C} (t : IsTerminal Z) {X Y : C} (f : X ⟶ Y) :
     f ≫ t.from Y = t.from X :=
   t.hom_ext _ _
 
 @[simp]
-/--
-theorem `IsTerminal.from_self` / 定理 `IsTerminal.from_self`
-
-English:
-theorem IsTerminal.from_self
-  given: {X : C} (t : IsTerminal X)
-  statement: t.from X = 𝟙 X
-  proof: t.hom_ext _ _
-
-中文:
-定理 是终止.from_self
-  条件: {X : C} (t : 是终止 X)
-  结论: t.from X = 𝟙 X
-  证明: t.hom_ext _ _
-
-Depends on / 依赖: hom_ext, t.hom_ext
+/-
+**CategoryTheory.Limits.IsTerminal.from_self** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (t : C
+ategoryTheory.Limits.IsTerminal X),   t.from X = CategoryTheory.CategoryStruct.i
+d X
+参数：t : CategoryTheory.Limits.IsTerminal X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 -/
 theorem IsTerminal.from_self {X : C} (t : IsTerminal X) : t.from X = 𝟙 X :=
   t.hom_ext _ _
 
-/--
-Definition of `IsInitial.to` / `IsInitial.to` 的定义
+/-- Give the morphism from an initial object to any other. -/
+/-
+**CategoryTheory.Limits.IsInitial.to** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] → {X : C} → 
+CategoryTheory.Limits.IsInitial X → (Y : C) → X ⟶ Y
+参数：Y : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.to
-  signature: {X : C} (t : IsInitial X) (Y : C)
-  body: t.desc (asEmptyCocone Y)
-
-中文:
-定义 IsInitial.to
-  签名: {X : C} (t : IsInitial X) (Y : C)
-  定义体: t.desc (asEmptyCocone Y)
-
-Depends on / 依赖: asEmptyCocone, t.desc
+--- 原说明 ---
+Give the morphism from an initial object to any other.
 -/
 def IsInitial.to {X : C} (t : IsInitial X) (Y : C) : X ⟶ Y :=
   t.desc (asEmptyCocone Y)
 
-/--
-theorem `IsInitial.hom_ext` / 定理 `IsInitial.hom_ext`
+/-- Any two morphisms from an initial object are equal. -/
+/-
+**CategoryTheory.Limits.IsInitial.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsInitial X)   (f g : X ⟶ Y), f = g
+参数：t : CategoryTheory.Limits.IsInitial X；f g : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
 
-English:
-theorem IsInitial.hom_ext
-  given: {X Y : C} (t : IsInitial X) (f g : X ⟶ Y)
-  statement: f = g
-  proof: IsColimit.hom_ext t (by simp)
-
-@[simp]
-
-中文:
-定理 IsInitial.hom_ext
-  条件: {X Y : C} (t : IsInitial X) (f g : X ⟶ Y)
-  结论: f = g
-  证明: IsColimit.hom_ext t (by simp)
-
-@[simp]
-
-Depends on / 依赖: IsColimit, IsColimit.hom_ext, hom_ext
+--- 原说明 ---
+Any two morphisms from an initial object are equal.
 -/
 theorem IsInitial.hom_ext {X Y : C} (t : IsInitial X) (f g : X ⟶ Y) : f = g :=
   IsColimit.hom_ext t (by simp)
 
 @[simp]
-/--
-theorem `IsInitial.to_comp` / 定理 `IsInitial.to_comp`
-
-English:
-theorem IsInitial.to_comp
-  given: {X : C} (t : IsInitial X) {Y Z : C} (f : Y ⟶ Z)
-  statement: t.to Y ≫ f = t.to Z
-  proof: t.hom_ext _ _
-
-@[simp]
-
-中文:
-定理 IsInitial.to_comp
-  条件: {X : C} (t : IsInitial X) {Y Z : C} (f : Y ⟶ Z)
-  结论: t.to Y ≫ f = t.to Z
-  证明: t.hom_ext _ _
-
-@[simp]
-
-Depends on / 依赖: hom_ext, t.hom_ext
+/-
+**CategoryTheory.Limits.IsInitial.to_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (t : C
+ategoryTheory.Limits.IsInitial X) {Y Z : C}   (f : Y ⟶ Z), CategoryTheory.Catego
+ryStruct.comp (t.to Y) f = t.to Z
+参数：t : CategoryTheory.Limits.IsInitial X；f : Y ⟶ Z；t.to Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem IsInitial.to_comp {X : C} (t : IsInitial X) {Y Z : C} (f : Y ⟶ Z) : t.to Y ≫ f = t.to Z :=
   t.hom_ext _ _
 
 @[simp]
-/--
-theorem `IsInitial.to_self` / 定理 `IsInitial.to_self`
-
-English:
-theorem IsInitial.to_self
-  given: {X : C} (t : IsInitial X)
-  statement: t.to X = 𝟙 X
-  proof: t.hom_ext _ _
-
-中文:
-定理 IsInitial.to_self
-  条件: {X : C} (t : IsInitial X)
-  结论: t.to X = 𝟙 X
-  证明: t.hom_ext _ _
-
-Depends on / 依赖: hom_ext, t.hom_ext
+/-
+**CategoryTheory.Limits.IsInitial.to_self** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (t : C
+ategoryTheory.Limits.IsInitial X),   t.to X = CategoryTheory.CategoryStruct.id X
+参数：t : CategoryTheory.Limits.IsInitial X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem IsInitial.to_self {X : C} (t : IsInitial X) : t.to X = 𝟙 X :=
   t.hom_ext _ _
 
-/--
-theorem `IsTerminal.isSplitMono_from` / 定理 `IsTerminal.isSplitMono_from`
+/-- Any morphism from a terminal object is split mono. -/
+/-
+**CategoryTheory.Limits.IsTerminal.isSplitMono_from** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsTerminal X)   (f : X ⟶ Y), CategoryTheory.IsSplitMono f
+参数：t : CategoryTheory.Limits.IsTerminal X；f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsSplitMono.mk'`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {X Y : C} {f : Y ⟶ X} (se : CategoryTheory.SplitMono f),   C
+ategoryTheory.IsSpli…
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 
-English:
-theorem IsTerminal.isSplitMono_from
-  given: {X Y : C} (t : IsTerminal X) (f : X ⟶ Y)
-  statement: IsSplitMono f
-  proof: IsSplitMono.mk' ⟨t.from _, t.hom_ext _ _⟩
-
-中文:
-定理 是终止.isSplitMono_from
-  条件: {X Y : C} (t : 是终止 X) (f : X ⟶ Y)
-  结论: 是分裂单态射 f
-  证明: IsSplitMono.mk' ⟨t.from _, t.hom_ext _ _⟩
-
-Depends on / 依赖: IsSplitMono, IsSplitMono.mk, hom_ext, t.from, t.hom_ext
+--- 原说明 ---
+Any morphism from a terminal object is split mono.
 -/
 theorem IsTerminal.isSplitMono_from {X Y : C} (t : IsTerminal X) (f : X ⟶ Y) : IsSplitMono f :=
   IsSplitMono.mk' ⟨t.from _, t.hom_ext _ _⟩
 
-/--
-theorem `IsInitial.isSplitEpi_to` / 定理 `IsInitial.isSplitEpi_to`
+/-- Any morphism to an initial object is split epi. -/
+/-
+**CategoryTheory.Limits.IsInitial.isSplitEpi_to** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsInitial X)   (f : Y ⟶ X), CategoryTheory.IsSplitEpi f
+参数：t : CategoryTheory.Limits.IsInitial X；f : Y ⟶ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsSplitEpi.mk'`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (se : CategoryTheory.SplitEpi f),   Cat
+egoryTheory.IsSplit…
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 
-English:
-theorem IsInitial.isSplitEpi_to
-  given: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  statement: IsSplitEpi f
-  proof: IsSplitEpi.mk' ⟨t.to _, t.hom_ext _ _⟩
-
-中文:
-定理 IsInitial.isSplitEpi_to
-  条件: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  结论: 是分裂满态射 f
-  证明: IsSplitEpi.mk' ⟨t.to _, t.hom_ext _ _⟩
-
-Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, hom_ext, t.hom_ext, t.to
+--- 原说明 ---
+Any morphism to an initial object is split epi.
 -/
 theorem IsInitial.isSplitEpi_to {X Y : C} (t : IsInitial X) (f : Y ⟶ X) : IsSplitEpi f :=
   IsSplitEpi.mk' ⟨t.to _, t.hom_ext _ _⟩
 
-/--
-theorem `IsTerminal.mono_from` / 定理 `IsTerminal.mono_from`
+/-- Any morphism from a terminal object is mono. -/
+/-
+**CategoryTheory.Limits.IsTerminal.mono_from** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsTerminal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsTerminal X)   (f : X ⟶ Y), CategoryTheory.Mono f
+参数：t : CategoryTheory.Limits.IsTerminal X；f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsTerminal.isSplitMono_from`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTe
+rminal X)   (f : X ⟶ Y), CategoryTheory…
+· 使用定理 `CategoryTheory.IsSplitMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [hf : CategoryTheory.IsSplitMono f], 
+  CategoryTheory.Mono…
 
-English:
-theorem IsTerminal.mono_from
-  given: {X Y : C} (t : IsTerminal X) (f : X ⟶ Y)
-  statement: Mono f
-  proof: by
-  have := t.isSplitMono_from f; infer_instance
-
-中文:
-定理 是终止.mono_from
-  条件: {X Y : C} (t : 是终止 X) (f : X ⟶ Y)
-  结论: 单态射 f
-  证明: by
-  have := t.isSplitMono_from f; infer_instance
-
-Depends on / 依赖: infer_instance, isSplitMono_from, t.isSplitMono_from
+--- 原说明 ---
+Any morphism from a terminal object is mono.
 -/
 theorem IsTerminal.mono_from {X Y : C} (t : IsTerminal X) (f : X ⟶ Y) : Mono f := by
   have := t.isSplitMono_from f; infer_instance
 
-/--
-theorem `IsInitial.epi_to` / 定理 `IsInitial.epi_to`
+/-- Any morphism to an initial object is epi. -/
+/-
+**CategoryTheory.Limits.IsInitial.epi_to** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t :
+ CategoryTheory.Limits.IsInitial X)   (f : Y ⟶ X), CategoryTheory.Epi f
+参数：t : CategoryTheory.Limits.IsInitial X；f : Y ⟶ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.isSplitEpi_to`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitia
+l X)   (f : Y ⟶ X), CategoryTheory.…
+· 使用定理 `CategoryTheory.IsSplitEpi.epi`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   C
+ategoryTheory.Epi f
 
-English:
-theorem IsInitial.epi_to
-  given: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  statement: Epi f
-  proof: by
-  have := t.isSplitEpi_to f; infer_instance
-
-中文:
-定理 IsInitial.epi_to
-  条件: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  结论: 满态射 f
-  证明: by
-  have := t.isSplitEpi_to f; infer_instance
-
-Depends on / 依赖: infer_instance, isSplitEpi_to, t.isSplitEpi_to
+--- 原说明 ---
+Any morphism to an initial object is epi.
 -/
 theorem IsInitial.epi_to {X Y : C} (t : IsInitial X) (f : Y ⟶ X) : Epi f := by
   have := t.isSplitEpi_to f; infer_instance
 
 /-- If `T` and `T'` are terminal, they are isomorphic. -/
 @[simps]
-/--
-Definition of `IsTerminal.uniqueUpToIso` / `IsTerminal.uniqueUpToIso` 的定义
+/-
+**CategoryTheory.Limits.IsTerminal.uniqueUpToIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.IsTerminal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {T T' 
+: C} → CategoryTheory.Limits.IsTerminal T → CategoryTheory.Limits.IsTerminal T' 
+→ (T ≅ T')
+参数：T ≅ T'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.uniqueUpToIso
-  signature: {T T' : C} (hT : IsTerminal T) (hT' : IsTerminal T')
-  body: hT'.from _
-  inv := hT.from _
-
-中文:
-定义 是终止.uniqueUpToIso
-  签名: {T T' : C} (hT : 是终止 T) (hT' : 是终止 T')
-  定义体: hT'.from _
-  inv := hT.from _
+--- 原说明 ---
+If `T` and `T'` are terminal, they are isomorphic.
 -/
 def IsTerminal.uniqueUpToIso {T T' : C} (hT : IsTerminal T) (hT' : IsTerminal T') : T ≅ T' where
   hom := hT'.from _
@@ -726,22 +583,17 @@ def IsTerminal.uniqueUpToIso {T T' : C} (hT : IsTerminal T) (hT' : IsTerminal T'
 
 /-- If `I` and `I'` are initial, they are isomorphic. -/
 @[simps]
-/--
-Definition of `IsInitial.uniqueUpToIso` / `IsInitial.uniqueUpToIso` 的定义
+/-
+**CategoryTheory.Limits.IsInitial.uniqueUpToIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.IsInitial`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {I I' 
+: C} → CategoryTheory.Limits.IsInitial I → CategoryTheory.Limits.IsInitial I' → 
+(I ≅ I')
+参数：I ≅ I'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.uniqueUpToIso
-  signature: {I I' : C} (hI : IsInitial I) (hI' : IsInitial I')
-  body: hI.to _
-  inv := hI'.to _
-
-中文:
-定义 IsInitial.uniqueUpToIso
-  签名: {I I' : C} (hI : IsInitial I) (hI' : IsInitial I')
-  定义体: hI.to _
-  inv := hI'.to _
-
-Depends on / 依赖: hI.to
+--- 原说明 ---
+If `I` and `I'` are initial, they are isomorphic.
 -/
 def IsInitial.uniqueUpToIso {I I' : C} (hI : IsInitial I) (hI' : IsInitial I') : I ≅ I' where
   hom := hI.to _
@@ -753,30 +605,22 @@ section Univ
 
 variable (X : C) {F₁ : Discrete.{w} PEmpty ⥤ C} {F₂ : Discrete.{w'} PEmpty ⥤ C}
 
-/--
-Definition of `isLimitChangeEmptyCone` / `isLimitChangeEmptyCone` 的定义
+/-- Being terminal is independent of the empty diagram, its universe, and the cone over it,
+    as long as the cone points are isomorphic. -/
+/-
+**CategoryTheory.Limits.isLimitChangeEmptyCone** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：isLimitChangeEmptyCone {c₁ : Cone F₁} (hl : IsLimit c₁) (c₂ : Cone F₂) (hi
+ : c₁.pt ≅ c₂.pt) : IsLimit c₂ where lift c
+参数：hl : IsLimit c₁；c₂ : Cone F₂；hi : c₁.pt ≅ c₂.pt。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition isLimitChangeEmptyCone
-  signature: {c₁ : Cone F₁} (hl : IsLimit c₁) (c₂ : Cone F₂) (hi : c₁.pt ≅ c₂.pt)
-  body: hl.lift ⟨c.pt, by cat_disch, by simp⟩ ≫ hi.hom
-  uniq c f _ := by
-    dsimp
-    rw [← hl.uniq _ (f ≫ hi.inv) _]
-    · simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
-    · simp
-
-中文:
-定义 isLimitChangeEmptyCone
-  签名: {c₁ : 锥 F₁} (hl : 是极限 c₁) (c₂ : 锥 F₂) (hi : c₁.pt ≅ c₂.pt)
-  定义体: hl.lift ⟨c.pt, by cat_disch, by simp⟩ ≫ hi.hom
-  uniq c f _ := by
-    dsimp
-    rw [← hl.uniq _ (f ≫ hi.inv) _]
-    · simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
-    · simp
-
-Depends on / 依赖: c.pt, cat_disch, hi.hom, hl.lift
+--- 原说明 ---
+Being terminal is independent of the empty diagram, its universe, and the cone o
+ver it,
+    as long as the cone points are isomorphic.
 -/
 def isLimitChangeEmptyCone {c₁ : Cone F₁} (hl : IsLimit c₁) (c₂ : Cone F₂) (hi : c₁.pt ≅ c₂.pt) :
     IsLimit c₂ where
@@ -787,30 +631,20 @@ def isLimitChangeEmptyCone {c₁ : Cone F₁} (hl : IsLimit c₁) (c₂ : Cone F
     · simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
     · simp
 
-/--
-Definition of `isLimitEmptyConeEquiv` / `isLimitEmptyConeEquiv` 的定义
+/-- Replacing an empty cone in `IsLimit` by another with the same cone point
+    is an equivalence. -/
+/-
+**CategoryTheory.Limits.isLimitEmptyConeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：isLimitEmptyConeEquiv (c₁ : Cone F₁) (c₂ : Cone F₂) (h : c₁.pt ≅ c₂.pt) : 
+IsLimit c₁ ≃ IsLimit c₂ where toFun hl
+参数：c₁ : Cone F₁；c₂ : Cone F₂；h : c₁.pt ≅ c₂.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitEmptyConeEquiv
-  signature: (c₁ : Cone F₁) (c₂ : Cone F₂) (h : c₁.pt ≅ c₂.pt)
-  body: isLimitChangeEmptyCone C hl c₂ h
-  invFun hl := isLimitChangeEmptyCone C hl c₁ h.symm
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingleton]
-
-中文:
-定义 isLimitEmptyConeEquiv
-  签名: (c₁ : 锥 F₁) (c₂ : 锥 F₂) (h : c₁.pt ≅ c₂.pt)
-  定义体: isLimitChangeEmptyCone C hl c₂ h
-  invFun hl := isLimitChangeEmptyCone C hl c₁ h.symm
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: isLimitChangeEmptyCone
+--- 原说明 ---
+Replacing an empty cone in `IsLimit` by another with the same cone point
+    is an equivalence.
 -/
 def isLimitEmptyConeEquiv (c₁ : Cone F₁) (c₂ : Cone F₂) (h : c₁.pt ≅ c₂.pt) :
     IsLimit c₁ ≃ IsLimit c₂ where
@@ -823,52 +657,40 @@ def isLimitEmptyConeEquiv (c₁ : Cone F₁) (c₂ : Cone F₂) (h : c₁.pt ≅
 
 /-- If `F` is an empty diagram, then a cone over `F` is limiting iff the cone point is terminal. -/
 noncomputable
-/--
-Definition of `isLimitEquivIsTerminalOfIsEmpty` / `isLimitEquivIsTerminalOfIsEmpty` 的定义
-
-English:
-definition isLimitEquivIsTerminalOfIsEmpty
-  signature: {J : Type*} [Category* J] [IsEmpty J] {F : J ⥤ C} (c : Cone F)
-  body: (IsLimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
-    (isLimitEmptyConeEquiv _ _ _ (.refl _))
-
-中文:
-定义 isLimitEquivIsTerminalOfIsEmpty
-  签名: {J : 类型} [范畴* J] [是空 J] {F : J ⥤ C} (c : 锥 F)
-  定义体: (IsLimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
-    (isLimitEmptyConeEquiv _ _ _ (.refl _))
-
-Depends on / 依赖: Discrete, IsLimit, IsLimit.whiskerEquivalenceEquiv, PEmpty, equivalenceOfIsEmpty, isLimitEmptyConeEquiv, whiskerEquivalenceEquiv
+/-
+**CategoryTheory.Limits.isLimitEquivIsTerminalOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：isLimitEquivIsTerminalOfIsEmpty {J : Type*} [Category* J] [IsEmpty J] {F :
+ J ⥤ C} (c : Cone F) : IsLimit c ≃ IsTerminal c.pt
+参数：c : Cone F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
 -/
 def isLimitEquivIsTerminalOfIsEmpty {J : Type*} [Category* J] [IsEmpty J] {F : J ⥤ C} (c : Cone F) :
     IsLimit c ≃ IsTerminal c.pt :=
   (IsLimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
     (isLimitEmptyConeEquiv _ _ _ (.refl _))
 
-/--
-Definition of `isColimitChangeEmptyCocone` / `isColimitChangeEmptyCocone` 的定义
+/-- Being initial is independent of the empty diagram, its universe, and the cocone over it,
+    as long as the cocone points are isomorphic. -/
+/-
+**CategoryTheory.Limits.isColimitChangeEmptyCocone** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：isColimitChangeEmptyCocone {c₁ : Cocone F₁} (hl : IsColimit c₁) (c₂ : Coco
+ne F₂) (hi : c₁.pt ≅ c₂.pt) : IsColimit c₂ where desc c
+参数：hl : IsColimit c₁；c₂ : Cocone F₂；hi : c₁.pt ≅ c₂.pt。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Aesop.BuiltinRules.pEmpty_false`：∀ (h : PEmpty.{u_1}), False
 
-English:
-definition isColimitChangeEmptyCocone
-  signature: {c₁ : Cocone F₁} (hl : IsColimit c₁) (c₂ : Cocone F₂)
-  body: hi.inv ≫ hl.desc ⟨c.pt, by cat_disch, by simp⟩
-  uniq c f _ := by
-    dsimp
-    rw [← hl.uniq _ (hi.hom ≫ f) _]
-    · simp only [Iso.inv_hom_id_assoc]
-    · simp
-
-中文:
-定义 isColimitChangeEmptyCocone
-  签名: {c₁ : 余锥 F₁} (hl : 是余极限 c₁) (c₂ : 余锥 F₂)
-  定义体: hi.inv ≫ hl.desc ⟨c.pt, by cat_disch, by simp⟩
-  uniq c f _ := by
-    dsimp
-    rw [← hl.uniq _ (hi.hom ≫ f) _]
-    · simp only [Iso.inv_hom_id_assoc]
-    · simp
-
-Depends on / 依赖: c.pt, cat_disch, hi.inv, hl.desc
+--- 原说明 ---
+Being initial is independent of the empty diagram, its universe, and the cocone 
+over it,
+    as long as the cocone points are isomorphic.
 -/
 def isColimitChangeEmptyCocone {c₁ : Cocone F₁} (hl : IsColimit c₁) (c₂ : Cocone F₂)
     (hi : c₁.pt ≅ c₂.pt) : IsColimit c₂ where
@@ -879,30 +701,20 @@ def isColimitChangeEmptyCocone {c₁ : Cocone F₁} (hl : IsColimit c₁) (c₂ 
     · simp only [Iso.inv_hom_id_assoc]
     · simp
 
-/--
-Definition of `isColimitEmptyCoconeEquiv` / `isColimitEmptyCoconeEquiv` 的定义
+/-- Replacing an empty cocone in `IsColimit` by another with the same cocone point
+    is an equivalence. -/
+/-
+**CategoryTheory.Limits.isColimitEmptyCoconeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：isColimitEmptyCoconeEquiv (c₁ : Cocone F₁) (c₂ : Cocone F₂) (h : c₁.pt ≅ c
+₂.pt) : IsColimit c₁ ≃ IsColimit c₂ where toFun hl
+参数：c₁ : Cocone F₁；c₂ : Cocone F₂；h : c₁.pt ≅ c₂.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitEmptyCoconeEquiv
-  signature: (c₁ : Cocone F₁) (c₂ : Cocone F₂) (h : c₁.pt ≅ c₂.pt)
-  body: isColimitChangeEmptyCocone C hl c₂ h
-  invFun hl := isColimitChangeEmptyCocone C hl c₁ h.symm
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingleton]
-
-中文:
-定义 isColimitEmptyCoconeEquiv
-  签名: (c₁ : 余锥 F₁) (c₂ : 余锥 F₂) (h : c₁.pt ≅ c₂.pt)
-  定义体: isColimitChangeEmptyCocone C hl c₂ h
-  invFun hl := isColimitChangeEmptyCocone C hl c₁ h.symm
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
-  right_inv := by
-    dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: isColimitChangeEmptyCocone
+--- 原说明 ---
+Replacing an empty cocone in `IsColimit` by another with the same cocone point
+    is an equivalence.
 -/
 def isColimitEmptyCoconeEquiv (c₁ : Cocone F₁) (c₂ : Cocone F₂) (h : c₁.pt ≅ c₂.pt) :
     IsColimit c₁ ≃ IsColimit c₂ where
@@ -916,22 +728,18 @@ def isColimitEmptyCoconeEquiv (c₁ : Cocone F₁) (c₂ : Cocone F₂) (h : c�
 /-- If `F` is an empty diagram,
 then a cocone over `F` is colimiting iff the cocone point is initial. -/
 noncomputable
-/--
-Definition of `isColimitEquivIsInitialOfIsEmpty` / `isColimitEquivIsInitialOfIsEmpty` 的定义
-
-English:
-definition isColimitEquivIsInitialOfIsEmpty
-  signature: {J : Type*} [Category* J] [IsEmpty J]
-  body: (IsColimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
-    (isColimitEmptyCoconeEquiv _ _ _ (.refl _))
-
-中文:
-定义 isColimitEquivIsInitialOfIsEmpty
-  签名: {J : 类型} [范畴* J] [是空 J]
-  定义体: (IsColimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
-    (isColimitEmptyCoconeEquiv _ _ _ (.refl _))
-
-Depends on / 依赖: Discrete, IsColimit, IsColimit.whiskerEquivalenceEquiv, PEmpty, equivalenceOfIsEmpty, isColimitEmptyCoconeEquiv, whiskerEquivalenceEquiv
+/-
+**CategoryTheory.Limits.isColimitEquivIsInitialOfIsEmpty** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：isColimitEquivIsInitialOfIsEmpty {J : Type*} [Category* J] [IsEmpty J] {F 
+: J ⥤ C} (c : Cocone F) : IsColimit c ≃ IsInitial c.pt
+参数：c : Cocone F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
 -/
 def isColimitEquivIsInitialOfIsEmpty {J : Type*} [Category* J] [IsEmpty J]
     {F : J ⥤ C} (c : Cocone F) : IsColimit c ≃ IsInitial c.pt :=
@@ -944,173 +752,192 @@ section
 
 variable {C}
 
-/--
-Definition of `terminalOpOfInitial` / `terminalOpOfInitial` 的定义
+/-- An initial object is terminal in the opposite category. -/
+/-
+**CategoryTheory.Limits.terminalOpOfInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：terminalOpOfInitial {X : C} (t : IsInitial X) : IsTerminal (Opposite.op X)
+ where lift s
+参数：t : IsInitial X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition terminalOpOfInitial
-  signature: {X : C} (t : IsInitial X)
-  body: (t.to s.pt.unop).op
-  uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
-
-中文:
-定义 terminalOpOfInitial
-  签名: {X : C} (t : IsInitial X)
-  定义体: (t.to s.pt.unop).op
-  uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
-
-Depends on / 依赖: s.pt.unop, t.to
+--- 原说明 ---
+An initial object is terminal in the opposite category.
 -/
 def terminalOpOfInitial {X : C} (t : IsInitial X) : IsTerminal (Opposite.op X) where
   lift s := (t.to s.pt.unop).op
   uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
 
-/--
-Definition of `terminalUnopOfInitial` / `terminalUnopOfInitial` 的定义
+/-- An initial object in the opposite category is terminal in the original category. -/
+/-
+**CategoryTheory.Limits.terminalUnopOfInitial** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：terminalUnopOfInitial {X : Cᵒᵖ} (t : IsInitial X) : IsTerminal X.unop wher
+e lift s
+参数：t : IsInitial X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition terminalUnopOfInitial
-  signature: {X : Cᵒᵖ} (t : IsInitial X)
-  body: (t.to (Opposite.op s.pt)).unop
-  uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
-
-中文:
-定义 terminalUnopOfInitial
-  签名: {X : Cᵒᵖ} (t : IsInitial X)
-  定义体: (t.to (Opposite.op s.pt)).unop
-  uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
-
-Depends on / 依赖: Opposite, Opposite.op, s.pt, t.to
+--- 原说明 ---
+An initial object in the opposite category is terminal in the original category.
 -/
 def terminalUnopOfInitial {X : Cᵒᵖ} (t : IsInitial X) : IsTerminal X.unop where
   lift s := (t.to (Opposite.op s.pt)).unop
   uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
 
-/--
-Definition of `initialOpOfTerminal` / `initialOpOfTerminal` 的定义
+/-- A terminal object is initial in the opposite category. -/
+/-
+**CategoryTheory.Limits.initialOpOfTerminal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：initialOpOfTerminal {X : C} (t : IsTerminal X) : IsInitial (Opposite.op X)
+ where desc s
+参数：t : IsTerminal X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialOpOfTerminal
-  signature: {X : C} (t : IsTerminal X)
-  body: (t.from s.pt.unop).op
-  uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
-
-中文:
-定义 initialOpOfTerminal
-  签名: {X : C} (t : 是终止 X)
-  定义体: (t.from s.pt.unop).op
-  uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
-
-Depends on / 依赖: s.pt.unop, t.from
+--- 原说明 ---
+A terminal object is initial in the opposite category.
 -/
 def initialOpOfTerminal {X : C} (t : IsTerminal X) : IsInitial (Opposite.op X) where
   desc s := (t.from s.pt.unop).op
   uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
 
-/--
-Definition of `initialUnopOfTerminal` / `initialUnopOfTerminal` 的定义
+/-- A terminal object in the opposite category is initial in the original category. -/
+/-
+**CategoryTheory.Limits.initialUnopOfTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：initialUnopOfTerminal {X : Cᵒᵖ} (t : IsTerminal X) : IsInitial X.unop wher
+e desc s
+参数：t : IsTerminal X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialUnopOfTerminal
-  signature: {X : Cᵒᵖ} (t : IsTerminal X)
-  body: (t.from (Opposite.op s.pt)).unop
-  uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
-
-中文:
-定义 initialUnopOfTerminal
-  签名: {X : Cᵒᵖ} (t : 是终止 X)
-  定义体: (t.from (Opposite.op s.pt)).unop
-  uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
-
-Depends on / 依赖: Opposite, Opposite.op, s.pt, t.from
+--- 原说明 ---
+A terminal object in the opposite category is initial in the original category.
 -/
 def initialUnopOfTerminal {X : Cᵒᵖ} (t : IsTerminal X) : IsInitial X.unop where
   desc s := (t.from (Opposite.op s.pt)).unop
   uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
 
-/--
-Definition of `InitialMonoClass` / `InitialMonoClass` 的定义
+/-- A category is an `InitialMonoClass` if the canonical morphism of an initial object is a
+monomorphism.  In practice, this is most useful when given an arbitrary morphism out of the chosen
+initial object, see `initial.mono_from`.
+Given a terminal object, this is equivalent to the assumption that the unique morphism from initial
+to terminal is a monomorphism, which is the second of Freyd's axioms for an AT category.
 
-English:
-class InitialMonoClass
-  parameters: (C : Type u₁) [Category.{v₁} C]
-  axioms and operations (1):
-    - isInitial_mono_from : forall {I} (X : C) (hI : IsInitial I), Mono (hI.to X)
+TODO: This is a condition satisfied by categories with zero objects and morphisms.
+-/
+/-
+**CategoryTheory.Limits.InitialMonoClass** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：(C : Type u₁) → [CategoryTheory.Category.{v₁, u₁} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 InitialMono类
-  参数: (C : 类型u₁) [范畴.{v₁} C]
-  公理与运算 (1 个):
-    - isInitial_mono_from : 对任意 {I} (X : C) (hI : IsInitial I), 单态射 (hI.to X)
+--- 原说明 ---
+A category is an `InitialMonoClass` if the canonical morphism of an initial obje
+ct is a
+monomorphism.  In practice, this is most useful when given an arbitrary morphism
+ out of the chosen
+initial object, see `initial.mono_from`.
+Given a terminal object, this is equivalent to the assumption that the unique mo
+rphism from initial
+to terminal is a monomorphism, which is the second of Freyd's axioms for an AT c
+ategory.
+
+TODO: This is a condition satisfied by categories with zero objects and morphism
+s.
 -/
 class InitialMonoClass (C : Type u₁) [Category.{v₁} C] : Prop where
   /-- The map from the (any as stated) initial object to any other object is a
     monomorphism -/
-  isInitial_mono_from : forall {I} (X : C) (hI : IsInitial I), Mono (hI.to X)
-
-/--
-theorem `IsInitial.mono_from` / 定理 `IsInitial.mono_from`
-
-English:
-theorem IsInitial.mono_from
-  given: [InitialMonoClass C] {I} {X : C} (hI : IsInitial I) (f : I ⟶ X)
-  proof: by
-  rw [hI.hom_ext f (hI.to X)]
-  apply InitialMonoClass.isInitial_mono_from
-
-中文:
-定理 IsInitial.mono_from
-  条件: [InitialMono类 C] {I} {X : C} (hI : IsInitial I) (f : I ⟶ X)
-  证明: by
-  rw [hI.hom_ext f (hI.to X)]
-  apply InitialMonoClass.isInitial_mono_from
-
-Depends on / 依赖: InitialMonoClass, InitialMonoClass.isInitial_mono_from, fun_, hI.hom_ext, hI.to, hom_ext, isInitial_mono_from, toUnit_unique
+  isInitial_mono_from : ∀ {I} (X : C) (hI : IsInitial I), Mono (hI.to X)
+/-
+**CategoryTheory.Limits.IsInitial.mono_from** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.IsInitial`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [CategoryTheor
+y.Limits.InitialMonoClass C] {I X : C}   (hI : CategoryTheory.Limits.IsInitial I
+) (f : I ⟶ X), CategoryTheory.Mono f
+参数：hI : CategoryTheory.Limits.IsInitial I；f : I ⟶ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
+· 使用定理 `CategoryTheory.Limits.InitialMonoClass.isInitial_mono_from`：∀ {C : Type 
+u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} [self : CategoryTheory.Limits.In
+itialMonoClass C] {I : C}   (X : C) (hI : Catego…
 -/
 theorem IsInitial.mono_from [InitialMonoClass C] {I} {X : C} (hI : IsInitial I) (f : I ⟶ X) :
     Mono f := by
   rw [hI.hom_ext f (hI.to X)]
   apply InitialMonoClass.isInitial_mono_from
 
-/--
-theorem `InitialMonoClass.of_isInitial` / 定理 `InitialMonoClass.of_isInitial`
+/-- To show a category is an `InitialMonoClass` it suffices to give an initial object such that
+every morphism out of it is a monomorphism. -/
+/-
+**CategoryTheory.Limits.InitialMonoClass.of_isInitial** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.InitialMonoClass`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {I : C} (hI : 
+CategoryTheory.Limits.IsInitial I),   (∀ (X : C), CategoryTheory.Mono (hI.to X))
+ → CategoryTheory.Limits.InitialMonoClass C
+参数：hI : CategoryTheory.Limits.IsInitial I；∀ (X : C), CategoryTheory.Mono (hI.to 
+X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.IsSplitMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [hf : CategoryTheory.IsSplitMono f], 
+  CategoryTheory.Mono…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-theorem InitialMonoClass.of_isInitial
-  given: {I : C} (hI : IsInitial I) (h : forall X, Mono (hI.to X))
-  proof: by
-    rw [hI'.hom_ext (hI'.to X) ((hI'.uniqueUpToIso hI).hom ≫ hI.to X)]
-    apply mono_comp
-
-中文:
-定理 InitialMono类.of_isInitial
-  条件: {I : C} (hI : IsInitial I) (h : 对任意 X, 单态射 (hI.to X))
-  证明: by
-    rw [hI'.hom_ext (hI'.to X) ((hI'.uniqueUpToIso hI).hom ≫ hI.to X)]
-    apply mono_comp
-
-Depends on / 依赖: IsTerminal, Limits, Limits.IsTerminal.mono_from, hI.to, hom_ext, isTerminalTensorUnit, mono_comp, mono_from, uniqueUpToIso
+--- 原说明 ---
+To show a category is an `InitialMonoClass` it suffices to give an initial objec
+t such that
+every morphism out of it is a monomorphism.
 -/
-theorem InitialMonoClass.of_isInitial {I : C} (hI : IsInitial I) (h : forall X, Mono (hI.to X)) :
+theorem InitialMonoClass.of_isInitial {I : C} (hI : IsInitial I) (h : ∀ X, Mono (hI.to X)) :
     InitialMonoClass C where
   isInitial_mono_from {I'} X hI' := by
     rw [hI'.hom_ext (hI'.to X) ((hI'.uniqueUpToIso hI).hom ≫ hI.to X)]
     apply mono_comp
 
-/--
-theorem `InitialMonoClass.of_isTerminal` / 定理 `InitialMonoClass.of_isTerminal`
+/-- To show a category is an `InitialMonoClass` it suffices to show the unique morphism from an
+initial object to a terminal object is a monomorphism. -/
+/-
+**CategoryTheory.Limits.InitialMonoClass.of_isTerminal** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.InitialMonoClass`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {I T : C} (hI 
+: CategoryTheory.Limits.IsInitial I)   (hT : CategoryTheory.Limits.IsTerminal T)
+, CategoryTheory.Mono (hI.to T) → CategoryTheory.Limits.InitialMonoClass C
+参数：hI : CategoryTheory.Limits.IsInitial I；hT : CategoryTheory.Limits.IsTerminal 
+T；hI.to T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.InitialMonoClass.of_isInitial`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {I : C} (hI : CategoryTheory.Limits.IsI
+nitial I),   (∀ (X : C), CategoryTheory.M…
+· 使用定理 `CategoryTheory.mono_of_mono_fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y Z : C} {f : Y ⟶ X} {g : Z ⟶ Y} {h : Z ⟶ X}   [CategoryThe
+ory.Mono h], Category…
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 
-English:
-theorem InitialMonoClass.of_isTerminal
-  statement: {I T : C} (hI : IsInitial I) (hT : IsTerminal T)
-  proof: InitialMonoClass.of_isInitial hI fun X => mono_of_mono_fac (hI.hom_ext (_ ≫ hT.from X) (hI.to T))
-
-中文:
-定理 InitialMono类.of_isTerminal
-  结论: {I T : C} (hI : IsInitial I) (hT : 是终止 T)
-  证明: InitialMonoClass.of_isInitial hI fun X => mono_of_mono_fac (hI.hom_ext (_ ≫ hT.from X) (hI.to T))
-
-Depends on / 依赖: InitialMonoClass, InitialMonoClass.of_isInitial, hI.hom_ext, hI.to, hT.from, hom_ext, mono_of_mono_fac, of_isInitial
+--- 原说明 ---
+To show a category is an `InitialMonoClass` it suffices to show the unique morph
+ism from an
+initial object to a terminal object is a monomorphism.
 -/
 theorem InitialMonoClass.of_isTerminal {I T : C} (hI : IsInitial I) (hT : IsTerminal T)
     (_ : Mono (hI.to T)) : InitialMonoClass C :=
@@ -1121,30 +948,19 @@ variable {J : Type u} [Category.{v} J]
 /-- From a functor `F : J ⥤ C`, given an initial object of `J`, construct a cone for `J`.
 In `limitOfDiagramInitial` we show it is a limit cone. -/
 @[implicit_reducible, simps]
-/--
-Definition of `coneOfDiagramInitial` / `coneOfDiagramInitial` 的定义
+/-
+**CategoryTheory.Limits.coneOfDiagramInitial** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：coneOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) : Cone F where
+ pt
+参数：tX : IsInitial X；F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOfDiagramInitial
-  signature: {X : J} (tX : IsInitial X) (F : J ⥤ C)
-  body: F.obj X
-  π :=
-    { app := fun j => F.map (tX.to j)
-      naturality := fun j j' k => by
-        dsimp
-        rw [← F.map_comp]; rw [Category.id_comp]; rw [tX.hom_ext (tX.to j ≫ k) (tX.to j')] }
-
-中文:
-定义 coneOfDiagramInitial
-  签名: {X : J} (tX : IsInitial X) (F : J ⥤ C)
-  定义体: F.obj X
-  π :=
-    { app := fun j => F.map (tX.to j)
-      naturality := fun j j' k => by
-        dsimp
-        rw [← F.map_comp]; rw [Category.id_comp]; rw [tX.hom_ext (tX.to j ≫ k) (tX.to j')] }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given an initial object of `J`, construct a cone for
+ `J`.
+In `limitOfDiagramInitial` we show it is a limit cone.
 -/
 def coneOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) : Cone F where
   pt := F.obj X
@@ -1152,26 +968,22 @@ def coneOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) : Cone F where
     { app := fun j => F.map (tX.to j)
       naturality := fun j j' k => by
         dsimp
-        rw [← F.map_comp]; rw [Category.id_comp]; rw [tX.hom_ext (tX.to j ≫ k) (tX.to j')] }
+        rw [← F.map_comp, Category.id_comp, tX.hom_ext (tX.to j ≫ k) (tX.to j')] }
 
-/--
-Definition of `limitOfDiagramInitial` / `limitOfDiagramInitial` 的定义
+/-- From a functor `F : J ⥤ C`, given an initial object of `J`, show the cone
+`coneOfDiagramInitial` is a limit. -/
+/-
+**CategoryTheory.Limits.limitOfDiagramInitial** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：limitOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) : IsLimit (co
+neOfDiagramInitial tX F) where lift s
+参数：tX : IsInitial X；F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitOfDiagramInitial
-  signature: {X : J} (tX : IsInitial X) (F : J ⥤ C)
-  body: s.π.app X
-  uniq s m w := by
-    simp_rw [← w X, coneOfDiagramInitial_π_app, tX.hom_ext (tX.to X) (𝟙 _)]
-    simp
-
-中文:
-定义 limitOfDiagramInitial
-  签名: {X : J} (tX : IsInitial X) (F : J ⥤ C)
-  定义体: s.π.app X
-  uniq s m w := by
-    simp_rw [← w X, coneOfDiagramInitial_π_app, tX.hom_ext (tX.to X) (𝟙 _)]
-    simp
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given an initial object of `J`, show the cone
+`coneOfDiagramInitial` is a limit.
 -/
 def limitOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) :
     IsLimit (coneOfDiagramInitial tX F) where
@@ -1184,37 +996,23 @@ def limitOfDiagramInitial {X : J} (tX : IsInitial X) (F : J ⥤ C) :
 provided that the morphisms in the diagram are isomorphisms.
 In `limitOfDiagramTerminal` we show it is a limit cone. -/
 @[implicit_reducible, simps]
-/--
-Definition of `coneOfDiagramTerminal` / `coneOfDiagramTerminal` 的定义
+/-
+**CategoryTheory.Limits.coneOfDiagramTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：coneOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C) [forall (i j
+ : J) (f : i ⟶ j), IsIso (F.map f)] : Cone F where pt
+参数：hX : IsTerminal X；F : J ⥤ C；i j : J；f : i ⟶ j；F.map f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOfDiagramTerminal
-  signature: {X : J} (hX : IsTerminal X) (F : J ⥤ C)
-  body: F.obj X
-  π :=
-    { app := fun _ => inv (F.map (hX.from _))
-      naturality := by
-        intro i j f
-        dsimp
-        simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.id_comp, ← F.map_comp,
-          hX.hom_ext (hX.from i) (f ≫ hX.from j)] }
-
-中文:
-定义 coneOfDiagramTerminal
-  签名: {X : J} (hX : 是终止 X) (F : J ⥤ C)
-  定义体: F.obj X
-  π :=
-    { app := fun _ => inv (F.map (hX.from _))
-      naturality := by
-        intro i j f
-        dsimp
-        simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.id_comp, ← F.map_comp,
-          hX.hom_ext (hX.from i) (f ≫ hX.from j)] }
-
-Depends on / 依赖: F.obj, toUnit
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given a terminal object of `J`, construct a cone for
+ `J`,
+provided that the morphisms in the diagram are isomorphisms.
+In `limitOfDiagramTerminal` we show it is a limit cone.
 -/
 def coneOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C)
-    [forall (i j : J) (f : i ⟶ j), IsIso (F.map f)] : Cone F where
+    [∀ (i j : J) (f : i ⟶ j), IsIso (F.map f)] : Cone F where
   pt := F.obj X
   π :=
     { app := fun _ => inv (F.map (hX.from _))
@@ -1224,50 +1022,43 @@ def coneOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C)
         simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.id_comp, ← F.map_comp,
           hX.hom_ext (hX.from i) (f ≫ hX.from j)] }
 
-/--
-Definition of `limitOfDiagramTerminal` / `limitOfDiagramTerminal` 的定义
+/-- From a functor `F : J ⥤ C`, given a terminal object of `J` and that the morphisms in the
+diagram are isomorphisms, show the cone `coneOfDiagramTerminal` is a limit. -/
+/-
+**CategoryTheory.Limits.limitOfDiagramTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：limitOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C) [forall (i 
+j : J) (f : i ⟶ j), IsIso (F.map f)] : IsLimit (coneOfDiagramTerminal hX F) wher
+e lift S
+参数：hX : IsTerminal X；F : J ⥤ C；i j : J；f : i ⟶ j；F.map f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitOfDiagramTerminal
-  signature: {X : J} (hX : IsTerminal X) (F : J ⥤ C)
-  body: S.π.app _
-
-中文:
-定义 limitOfDiagramTerminal
-  签名: {X : J} (hX : 是终止 X) (F : J ⥤ C)
-  定义体: S.π.app _
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given a terminal object of `J` and that the morphism
+s in the
+diagram are isomorphisms, show the cone `coneOfDiagramTerminal` is a limit.
 -/
 def limitOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C)
-    [forall (i j : J) (f : i ⟶ j), IsIso (F.map f)] : IsLimit (coneOfDiagramTerminal hX F) where
+    [∀ (i j : J) (f : i ⟶ j), IsIso (F.map f)] : IsLimit (coneOfDiagramTerminal hX F) where
   lift S := S.π.app _
 
 /-- From a functor `F : J ⥤ C`, given a terminal object of `J`, construct a cocone for `J`.
 In `colimitOfDiagramTerminal` we show it is a colimit cocone. -/
 @[implicit_reducible, simps]
-/--
-Definition of `coconeOfDiagramTerminal` / `coconeOfDiagramTerminal` 的定义
+/-
+**CategoryTheory.Limits.coconeOfDiagramTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：coconeOfDiagramTerminal {X : J} (tX : IsTerminal X) (F : J ⥤ C) : Cocone F
+ where pt
+参数：tX : IsTerminal X；F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeOfDiagramTerminal
-  signature: {X : J} (tX : IsTerminal X) (F : J ⥤ C)
-  body: F.obj X
-  ι :=
-    { app := fun j => F.map (tX.from j)
-      naturality := fun j j' k => by
-        dsimp
-        rw [← F.map_comp]; rw [Category.comp_id]; rw [tX.hom_ext (k ≫ tX.from j') (tX.from j)] }
-
-中文:
-定义 coconeOfDiagramTerminal
-  签名: {X : J} (tX : 是终止 X) (F : J ⥤ C)
-  定义体: F.obj X
-  ι :=
-    { app := fun j => F.map (tX.from j)
-      naturality := fun j j' k => by
-        dsimp
-        rw [← F.map_comp]; rw [Category.comp_id]; rw [tX.hom_ext (k ≫ tX.from j') (tX.from j)] }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given a terminal object of `J`, construct a cocone f
+or `J`.
+In `colimitOfDiagramTerminal` we show it is a colimit cocone.
 -/
 def coconeOfDiagramTerminal {X : J} (tX : IsTerminal X) (F : J ⥤ C) : Cocone F where
   pt := F.obj X
@@ -1275,46 +1066,31 @@ def coconeOfDiagramTerminal {X : J} (tX : IsTerminal X) (F : J ⥤ C) : Cocone F
     { app := fun j => F.map (tX.from j)
       naturality := fun j j' k => by
         dsimp
-        rw [← F.map_comp]; rw [Category.comp_id]; rw [tX.hom_ext (k ≫ tX.from j') (tX.from j)] }
+        rw [← F.map_comp, Category.comp_id, tX.hom_ext (k ≫ tX.from j') (tX.from j)] }
 
-/--
-Definition of `colimitOfDiagramTerminal` / `colimitOfDiagramTerminal` 的定义
+/-- From a functor `F : J ⥤ C`, given a terminal object of `J`, show the cocone
+`coconeOfDiagramTerminal` is a colimit. -/
+/-
+**CategoryTheory.Limits.colimitOfDiagramTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：colimitOfDiagramTerminal {X : J} (tX : IsTerminal X) (F : J ⥤ C) : IsColim
+it (coconeOfDiagramTerminal tX F) where desc s
+参数：tX : IsTerminal X；F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitOfDiagramTerminal
-  signature: {X : J} (tX : IsTerminal X) (F : J ⥤ C)
-  body: s.ι.app X
-  uniq s m w := by simp [← w X]
-
-中文:
-定义 colimitOfDiagramTerminal
-  签名: {X : J} (tX : 是终止 X) (F : J ⥤ C)
-  定义体: s.ι.app X
-  uniq s m w := by simp [← w X]
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given a terminal object of `J`, show the cocone
+`coconeOfDiagramTerminal` is a colimit.
 -/
 def colimitOfDiagramTerminal {X : J} (tX : IsTerminal X) (F : J ⥤ C) :
     IsColimit (coconeOfDiagramTerminal tX F) where
   desc s := s.ι.app X
   uniq s m w := by simp [← w X]
-
-/--
-lemma `IsColimit.isIso_ι_app_of_isTerminal` / 引理 `IsColimit.isIso_ι_app_of_isTerminal`
-
-English:
-lemma IsColimit.isIso_ι_app_of_isTerminal
-  statement: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
-  proof: by
-  change IsIso (coconePointUniqueUpToIso (colimitOfDiagramTerminal hX F) hc).hom
-  infer_instance
-
-中文:
-引理 是余极限.isIso_ι_app_of_isTerminal
-  结论: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
-  证明: by
-  change IsIso (coconePointUniqueUpToIso (colimitOfDiagramTerminal hX F) hc).hom
-  infer_instance
-
-Depends on / 依赖: coconePointUniqueUpToIso, colimitOfDiagramTerminal, infer_instance
+/-
+**CategoryTheory.Limits.IsColimit.isIso_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsColimit.isIso_ι_app_of_isTerminal {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
     (X : J) (hX : IsTerminal X) :
@@ -1326,37 +1102,23 @@ lemma IsColimit.isIso_ι_app_of_isTerminal {F : J ⥤ C} {c : Cocone F} (hc : Is
 provided that the morphisms in the diagram are isomorphisms.
 In `colimitOfDiagramInitial` we show it is a colimit cocone. -/
 @[implicit_reducible, simps]
-/--
-Definition of `coconeOfDiagramInitial` / `coconeOfDiagramInitial` 的定义
+/-
+**CategoryTheory.Limits.coconeOfDiagramInitial** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：coconeOfDiagramInitial {X : J} (hX : IsInitial X) (F : J ⥤ C) [forall (i j
+ : J) (f : i ⟶ j), IsIso (F.map f)] : Cocone F where pt
+参数：hX : IsInitial X；F : J ⥤ C；i j : J；f : i ⟶ j；F.map f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeOfDiagramInitial
-  signature: {X : J} (hX : IsInitial X) (F : J ⥤ C)
-  body: F.obj X
-  ι :=
-    { app := fun _ => inv (F.map (hX.to _))
-      naturality := by
-        intro i j f
-        dsimp
-        simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.comp_id, ← F.map_comp,
-          hX.hom_ext (hX.to i ≫ f) (hX.to j)] }
-
-中文:
-定义 coconeOfDiagramInitial
-  签名: {X : J} (hX : IsInitial X) (F : J ⥤ C)
-  定义体: F.obj X
-  ι :=
-    { app := fun _ => inv (F.map (hX.to _))
-      naturality := by
-        intro i j f
-        dsimp
-        simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.comp_id, ← F.map_comp,
-          hX.hom_ext (hX.to i ≫ f) (hX.to j)] }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given an initial object of `J`, construct a cocone f
+or `J`,
+provided that the morphisms in the diagram are isomorphisms.
+In `colimitOfDiagramInitial` we show it is a colimit cocone.
 -/
 def coconeOfDiagramInitial {X : J} (hX : IsInitial X) (F : J ⥤ C)
-    [forall (i j : J) (f : i ⟶ j), IsIso (F.map f)] : Cocone F where
+    [∀ (i j : J) (f : i ⟶ j), IsIso (F.map f)] : Cocone F where
   pt := F.obj X
   ι :=
     { app := fun _ => inv (F.map (hX.to _))
@@ -1366,41 +1128,30 @@ def coconeOfDiagramInitial {X : J} (hX : IsInitial X) (F : J ⥤ C)
         simp only [IsIso.eq_inv_comp, IsIso.comp_inv_eq, Category.comp_id, ← F.map_comp,
           hX.hom_ext (hX.to i ≫ f) (hX.to j)] }
 
-/--
-Definition of `colimitOfDiagramInitial` / `colimitOfDiagramInitial` 的定义
+/-- From a functor `F : J ⥤ C`, given an initial object of `J` and that the morphisms in the
+diagram are isomorphisms, show the cone `coconeOfDiagramInitial` is a colimit. -/
+/-
+**CategoryTheory.Limits.colimitOfDiagramInitial** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：colimitOfDiagramInitial {X : J} (hX : IsInitial X) (F : J ⥤ C) [forall (i 
+j : J) (f : i ⟶ j), IsIso (F.map f)] : IsColimit (coconeOfDiagramInitial hX F) w
+here desc S
+参数：hX : IsInitial X；F : J ⥤ C；i j : J；f : i ⟶ j；F.map f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitOfDiagramInitial
-  signature: {X : J} (hX : IsInitial X) (F : J ⥤ C)
-  body: S.ι.app _
-
-中文:
-定义 colimitOfDiagramInitial
-  签名: {X : J} (hX : IsInitial X) (F : J ⥤ C)
-  定义体: S.ι.app _
+--- 原说明 ---
+From a functor `F : J ⥤ C`, given an initial object of `J` and that the morphism
+s in the
+diagram are isomorphisms, show the cone `coconeOfDiagramInitial` is a colimit.
 -/
 def colimitOfDiagramInitial {X : J} (hX : IsInitial X) (F : J ⥤ C)
-    [forall (i j : J) (f : i ⟶ j), IsIso (F.map f)] : IsColimit (coconeOfDiagramInitial hX F) where
+    [∀ (i j : J) (f : i ⟶ j), IsIso (F.map f)] : IsColimit (coconeOfDiagramInitial hX F) where
   desc S := S.ι.app _
-
-/--
-lemma `IsLimit.isIso_π_app_of_isInitial` / 引理 `IsLimit.isIso_π_app_of_isInitial`
-
-English:
-lemma IsLimit.isIso_π_app_of_isInitial
-  statement: {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
-  proof: by
-  change IsIso (conePointUniqueUpToIso hc (limitOfDiagramInitial hX F)).hom
-  infer_instance
-
-中文:
-引理 是极限.isIso_π_app_of_isInitial
-  结论: {F : J ⥤ C} {c : 锥 F} (hc : 是极限 c)
-  证明: by
-  change IsIso (conePointUniqueUpToIso hc (limitOfDiagramInitial hX F)).hom
-  infer_instance
-
-Depends on / 依赖: conePointUniqueUpToIso, infer_instance, limitOfDiagramInitial
+/-
+**CategoryTheory.Limits.IsLimit.isIso_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsLimit.isIso_π_app_of_isInitial {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
     (X : J) (hX : IsInitial X) :
@@ -1408,26 +1159,34 @@ lemma IsLimit.isIso_π_app_of_isInitial {F : J ⥤ C} {c : Cone F} (hc : IsLimit
   change IsIso (conePointUniqueUpToIso hc (limitOfDiagramInitial hX F)).hom
   infer_instance
 
-/--
-lemma `isIso_of_isTerminal` / 引理 `isIso_of_isTerminal`
+/-- Any morphism between terminal objects is an isomorphism. -/
+/-
+**CategoryTheory.Limits.isIso_of_isTerminal** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：isIso_of_isTerminal {X Y : C} (hX : IsTerminal X) (hY : IsTerminal Y) (f :
+ X ⟶ Y) : IsIso f
+参数：hX : IsTerminal X；hY : IsTerminal Y；f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `CategoryTheory.Limits.IsTerminal.from_self`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsTerminal X)
+,   t.from X = CategoryTheory.Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 
-English:
-lemma isIso_of_isTerminal
-  given: {X Y : C} (hX : IsTerminal X) (hY : IsTerminal Y) (f : X ⟶ Y)
-  proof: by
-  refine ⟨⟨IsTerminal.from hX Y, ?_⟩⟩
-  simp only [IsTerminal.comp_from, IsTerminal.from_self, true_and]
-  apply IsTerminal.hom_ext hY
-
-中文:
-引理 isIso_of_isTerminal
-  条件: {X Y : C} (hX : 是终止 X) (hY : 是终止 Y) (f : X ⟶ Y)
-  证明: by
-  refine ⟨⟨IsTerminal.from hX Y, ?_⟩⟩
-  simp only [IsTerminal.comp_from, IsTerminal.from_self, true_and]
-  apply IsTerminal.hom_ext hY
-
-Depends on / 依赖: IsTerminal, IsTerminal.comp_from, IsTerminal.from, IsTerminal.from_self, IsTerminal.hom_ext, comp_from, from_self, hom_ext, true_and
+--- 原说明 ---
+Any morphism between terminal objects is an isomorphism.
 -/
 lemma isIso_of_isTerminal {X Y : C} (hX : IsTerminal X) (hY : IsTerminal Y) (f : X ⟶ Y) :
     IsIso f := by
@@ -1435,26 +1194,34 @@ lemma isIso_of_isTerminal {X Y : C} (hX : IsTerminal X) (hY : IsTerminal Y) (f :
   simp only [IsTerminal.comp_from, IsTerminal.from_self, true_and]
   apply IsTerminal.hom_ext hY
 
-/--
-lemma `isIso_of_isInitial` / 引理 `isIso_of_isInitial`
+/-- Any morphism between initial objects is an isomorphism. -/
+/-
+**CategoryTheory.Limits.isIso_of_isInitial** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：isIso_of_isInitial {X Y : C} (hX : IsInitial X) (hY : IsInitial Y) (f : X 
+⟶ Y) : IsIso f
+参数：hX : IsInitial X；hY : IsInitial Y；f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsInitial.to_comp`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsInitial X) {Y 
+Z : C}   (f : Y ⟶ Z), Categor…
+· 使用定理 `CategoryTheory.Limits.IsInitial.to_self`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsInitial X),   
+t.to X = CategoryTheory.Categ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 
-English:
-lemma isIso_of_isInitial
-  given: {X Y : C} (hX : IsInitial X) (hY : IsInitial Y) (f : X ⟶ Y)
-  proof: by
-  refine ⟨⟨IsInitial.to hY X, ?_⟩⟩
-  simp only [IsInitial.to_comp, IsInitial.to_self, and_true]
-  apply IsInitial.hom_ext hX
-
-中文:
-引理 isIso_of_isInitial
-  条件: {X Y : C} (hX : IsInitial X) (hY : IsInitial Y) (f : X ⟶ Y)
-  证明: by
-  refine ⟨⟨IsInitial.to hY X, ?_⟩⟩
-  simp only [IsInitial.to_comp, IsInitial.to_self, and_true]
-  apply IsInitial.hom_ext hX
-
-Depends on / 依赖: IsInitial, IsInitial.hom_ext, IsInitial.to, IsInitial.to_comp, IsInitial.to_self, and_true, hom_ext, to_comp, to_self
+--- 原说明 ---
+Any morphism between initial objects is an isomorphism.
 -/
 lemma isIso_of_isInitial {X Y : C} (hX : IsInitial X) (hY : IsInitial Y) (f : X ⟶ Y) :
     IsIso f := by
@@ -1464,89 +1231,69 @@ lemma isIso_of_isInitial {X Y : C} (hX : IsInitial X) (hY : IsInitial Y) (f : X 
 
 end
 
-/--
-Definition of `IsInitial.op` / `IsInitial.op` 的定义
+/-- An initial object is terminal in the opposite category. -/
+/-
+**CategoryTheory.Limits.IsInitial.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsInitial`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X : C
+} → CategoryTheory.Limits.IsInitial X → CategoryTheory.Limits.IsTerminal (Opposi
+te.op X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.op
-  signature: {X : C} (hX : IsInitial X)
-  body: IsTerminal.ofUniqueHom (fun _ => (hX.to _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
-
-中文:
-定义 IsInitial.op
-  签名: {X : C} (hX : IsInitial X)
-  定义体: IsTerminal.ofUniqueHom (fun _ => (hX.to _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, Quiver, Quiver.Hom.unop_inj, hX.hom_ext, hX.to, hom_ext, ofUniqueHom, unop_inj
+--- 原说明 ---
+An initial object is terminal in the opposite category.
 -/
 def IsInitial.op {X : C} (hX : IsInitial X) : IsTerminal (op X) :=
-  IsTerminal.ofUniqueHom (fun _ => (hX.to _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
+  IsTerminal.ofUniqueHom (fun _ ↦ (hX.to _).op)
+    (fun _ _ ↦ Quiver.Hom.unop_inj (hX.hom_ext _ _))
 
-/--
-Definition of `IsInitial.unop` / `IsInitial.unop` 的定义
+/-- An initial object in the opposite category is terminal in the original category. -/
+/-
+**CategoryTheory.Limits.IsInitial.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsInitial`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X : C
+ᵒᵖ} → CategoryTheory.Limits.IsInitial X → CategoryTheory.Limits.IsTerminal (Oppo
+site.unop X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInitial.unop
-  signature: {X : Cᵒᵖ} (hX : IsInitial X)
-  body: IsTerminal.ofUniqueHom (fun _ => (hX.to _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
-
-中文:
-定义 IsInitial.unop
-  签名: {X : Cᵒᵖ} (hX : IsInitial X)
-  定义体: IsTerminal.ofUniqueHom (fun _ => (hX.to _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, Quiver, Quiver.Hom.op_inj, hX.hom_ext, hX.to, hom_ext, ofUniqueHom, op_inj
+--- 原说明 ---
+An initial object in the opposite category is terminal in the original category.
 -/
 def IsInitial.unop {X : Cᵒᵖ} (hX : IsInitial X) : IsTerminal X.unop :=
-  IsTerminal.ofUniqueHom (fun _ => (hX.to _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
+  IsTerminal.ofUniqueHom (fun _ ↦ (hX.to _).unop)
+    (fun _ _ ↦ Quiver.Hom.op_inj (hX.hom_ext _ _))
 
-/--
-Definition of `IsTerminal.op` / `IsTerminal.op` 的定义
+/-- A terminal object is initial in the opposite category. -/
+/-
+**CategoryTheory.Limits.IsTerminal.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.IsTerminal`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X : C
+} → CategoryTheory.Limits.IsTerminal X → CategoryTheory.Limits.IsInitial (Opposi
+te.op X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.op
-  signature: {X : C} (hX : IsTerminal X)
-  body: IsInitial.ofUniqueHom (fun _ => (hX.from _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
-
-中文:
-定义 是终止.op
-  签名: {X : C} (hX : 是终止 X)
-  定义体: IsInitial.ofUniqueHom (fun _ => (hX.from _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
-
-Depends on / 依赖: IsInitial, IsInitial.ofUniqueHom, Quiver, Quiver.Hom.unop_inj, hX.from, hX.hom_ext, hom_ext, ofUniqueHom, unop_inj
+--- 原说明 ---
+A terminal object is initial in the opposite category.
 -/
 def IsTerminal.op {X : C} (hX : IsTerminal X) : IsInitial (op X) :=
-  IsInitial.ofUniqueHom (fun _ => (hX.from _).op)
-    (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
+  IsInitial.ofUniqueHom (fun _ ↦ (hX.from _).op)
+    (fun _ _ ↦ Quiver.Hom.unop_inj (hX.hom_ext _ _))
 
-/--
-Definition of `IsTerminal.unop` / `IsTerminal.unop` 的定义
+/-- A terminal object in the opposite category is initial in the original category. -/
+/-
+**CategoryTheory.Limits.IsTerminal.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.IsTerminal`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X : C
+ᵒᵖ} → CategoryTheory.Limits.IsTerminal X → CategoryTheory.Limits.IsInitial (Oppo
+site.unop X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTerminal.unop
-  signature: {X : Cᵒᵖ} (hX : IsTerminal X)
-  body: IsInitial.ofUniqueHom (fun _ => (hX.from _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
-
-中文:
-定义 是终止.unop
-  签名: {X : Cᵒᵖ} (hX : 是终止 X)
-  定义体: IsInitial.ofUniqueHom (fun _ => (hX.from _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
-
-Depends on / 依赖: IsInitial, IsInitial.ofUniqueHom, Quiver, Quiver.Hom.op_inj, hX.from, hX.hom_ext, hom_ext, ofUniqueHom, op_inj
+--- 原说明 ---
+A terminal object in the opposite category is initial in the original category.
 -/
 def IsTerminal.unop {X : Cᵒᵖ} (hX : IsTerminal X) : IsInitial X.unop :=
-  IsInitial.ofUniqueHom (fun _ => (hX.from _).unop)
-    (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
+  IsInitial.ofUniqueHom (fun _ ↦ (hX.from _).unop)
+    (fun _ _ ↦ Quiver.Hom.op_inj (hX.hom_ext _ _))
 
 end Limits
 
@@ -1554,82 +1301,68 @@ namespace Functor
 open Limits
 variable (C : Type*) [Category* C] {D : Type*} [Category* D]
 
-/--
-Definition of `isTerminalConst` / `isTerminalConst` 的定义
+/-- The constant functor returning a specific terminal object is indeed terminal. -/
+/-
+**CategoryTheory.Functor.isTerminalConst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：(C : Type u_1) →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {D 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {X
+ : D} →           CategoryTheory.Limits.IsTerminal X → CategoryTheory.Limits.IsT
+erminal ((CategoryTheory.Functor.const C).obj X)
+参数：CategoryTheory.Functor.const C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalConst
-  signature: {X : D} (hX : IsTerminal X)
-  body: .ofUniqueHom (fun Y => { app Z := hX.from (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
-
-@[simp]
-
-中文:
-定义 isTerminalConst
-  签名: {X : D} (hX : 是终止 X)
-  定义体: .ofUniqueHom (fun Y => { app Z := hX.from (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
-
-@[simp]
-
-Depends on / 依赖: Y.obj, hX.from, hX.hom_ext, hom_ext, intros, ofUniqueHom
+--- 原说明 ---
+The constant functor returning a specific terminal object is indeed terminal.
 -/
 def isTerminalConst {X : D} (hX : IsTerminal X) :
     IsTerminal ((Functor.const C).obj X) :=
   .ofUniqueHom (fun Y => { app Z := hX.from (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
 
 @[simp]
-/--
-lemma `isTerminalConst_from_app` / 引理 `isTerminalConst_from_app`
-
-English:
-lemma isTerminalConst_from_app
-  statement: {X : D} (hX : IsTerminal X)
-  proof: rfl
-
-中文:
-引理 isTerminalConst_from_app
-  结论: {X : D} (hX : 是终止 X)
-  证明: rfl
+/-
+**CategoryTheory.Functor.isTerminalConst_from_app** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {X : D} (hX : CategoryTheo
+ry.Limits.IsTerminal X)   (F : CategoryTheory.Functor C D) (Y : C),   ((Category
+Theory.Functor.isTerminalConst C hX).from F).app Y = hX.from (F.obj Y)
+参数：C : Type u_1；hX : CategoryTheory.Limits.IsTerminal X；F : CategoryTheory.Funct
+or C D；Y : C；(CategoryTheory.Functor.isTerminalConst C hX).from F；F.obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isTerminalConst_from_app {X : D} (hX : IsTerminal X)
     (F : C ⥤ D) (Y : C) : ((isTerminalConst C hX).from F).app Y = hX.from (F.obj Y) := rfl
 
-/--
-Definition of `isInitialConst` / `isInitialConst` 的定义
+/-- The constant functor returning a specific initial object is indeed initial. -/
+/-
+**CategoryTheory.Functor.isInitialConst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：(C : Type u_1) →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {D 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {X
+ : D} →           CategoryTheory.Limits.IsInitial X → CategoryTheory.Limits.IsIn
+itial ((CategoryTheory.Functor.const C).obj X)
+参数：CategoryTheory.Functor.const C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialConst
-  signature: {X : D} (hX : IsInitial X)
-  body: .ofUniqueHom (fun Y => { app Z := hX.to (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
-
-@[simp]
-
-中文:
-定义 isInitialConst
-  签名: {X : D} (hX : IsInitial X)
-  定义体: .ofUniqueHom (fun Y => { app Z := hX.to (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
-
-@[simp]
-
-Depends on / 依赖: Y.obj, hX.hom_ext, hX.to, hom_ext, intros, ofUniqueHom
+--- 原说明 ---
+The constant functor returning a specific initial object is indeed initial.
 -/
 def isInitialConst {X : D} (hX : IsInitial X) :
     IsInitial ((Functor.const C).obj X) :=
   .ofUniqueHom (fun Y => { app Z := hX.to (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
 
 @[simp]
-/--
-lemma `isInitialConst_to_app` / 引理 `isInitialConst_to_app`
-
-English:
-lemma isInitialConst_to_app
-  statement: {X : D} (hX : IsInitial X)
-  proof: rfl
-
-中文:
-引理 isInitialConst_to_app
-  结论: {X : D} (hX : IsInitial X)
-  证明: rfl
+/-
+**CategoryTheory.Functor.isInitialConst_to_app** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {X : D} (hX : CategoryTheo
+ry.Limits.IsInitial X)   (F : CategoryTheory.Functor C D) (Y : C), ((CategoryThe
+ory.Functor.isInitialConst C hX).to F).app Y = hX.to (F.obj Y)
+参数：C : Type u_1；hX : CategoryTheory.Limits.IsInitial X；F : CategoryTheory.Functo
+r C D；Y : C；(CategoryTheory.Functor.isInitialConst C hX).to F；F.obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isInitialConst_to_app {X : D} (hX : IsInitial X)
     (F : C ⥤ D) (Y : C) : ((isInitialConst C hX).to F).app Y = hX.to (F.obj Y) := rfl
@@ -1637,3 +1370,4 @@ lemma isInitialConst_to_app {X : D} (hX : IsInitial X)
 end Functor
 
 end CategoryTheory
+

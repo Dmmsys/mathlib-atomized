@@ -26,24 +26,15 @@ universe u
 
 open CategoryTheory Order
 
-/--
-Definition of `BoolRing` / `BoolRing` 的定义
+/-- The category of Boolean rings. -/
+/-
+**BoolRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BoolRing
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [booleanRing : BooleanRing carrier]
-
-中文:
-结构 布尔值环
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [booleanRing : 布尔ean环 carrier]
+--- 原说明 ---
+The category of Boolean rings.
 -/
 structure BoolRing where
   /-- Construct a bundled `BoolRing` from a `BooleanRing`. -/
@@ -56,20 +47,9 @@ namespace BoolRing
 
 initialize_simps_projections BoolRing (-booleanRing)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort BoolRing Type*
-  body: ⟨carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 布尔值环 类型
-  定义体: ⟨carrier⟩
-
-Depends on / 依赖: carrier
+/-
+**BoolRing.** 是 Mathlib 中的一个实例，位于命名空间 `BoolRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort BoolRing Type* :=
   ⟨carrier⟩
@@ -77,37 +57,18 @@ instance : CoeSort BoolRing Type* :=
 attribute [coe] carrier
 
 attribute [instance] booleanRing
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (α : Type*) [BooleanRing α]
-  statement: ↥(of α) = α
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (α : 类型) [布尔ean环 α]
-  结论: ↥(of α) = α
-  证明: rfl
+/-
+**BoolRing.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `BoolRing`。
+形式化陈述：coe_of (α : Type*) [BooleanRing α] : ↥(of α) = α
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (α : Type*) [BooleanRing α] : ↥(of α) = α :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited BoolRing
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 布尔值环
-  定义体: ⟨of PUnit⟩
+/-
+**BoolRing.** 是 Mathlib 中的一个实例，位于命名空间 `BoolRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited BoolRing :=
   ⟨of PUnit⟩
@@ -115,46 +76,25 @@ instance : Inhabited BoolRing :=
 variable {R} in
 /-- The type of morphisms in `BoolRing`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**BoolRing.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `BoolRing`。
+形式化陈述：BoolRing → BoolRing → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R S : BoolRing)
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : R ->+* S
-
-中文:
-结构 态射
-  参数: (R S : 布尔值环)
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : R ->+* S
+--- 原说明 ---
+The type of morphisms in `BoolRing`.
 -/
 structure Hom (R S : BoolRing) where
   private mk ::
   /-- The underlying ring hom. -/
-  hom' : R ->+* S
+  hom' : R →+* S
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category BoolRing
-  body: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 布尔值环
-  定义体: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**BoolRing.** 是 Mathlib 中的一个实例，位于命名空间 `BoolRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category BoolRing where
   Hom R S := Hom R S
@@ -163,132 +103,76 @@ instance : Category BoolRing where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory BoolRing (· ->+* ·)
-  body: f.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴 布尔值环 (· ->+* ·)
-  定义体: f.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: f.hom
+/-
+**BoolRing.** 是 Mathlib 中的一个实例，位于命名空间 `BoolRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory BoolRing (· ->+* ·) where
+instance : ConcreteCategory BoolRing (· →+* ·) where
   hom f := f.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `BoolRing` back into a `RingHom`. -/
+/-
+**BoolRing.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `BoolRing.Hom`。
+形式化陈述：{X Y : BoolRing} → X.Hom Y → ↑X →+* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : BoolRing} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := BoolRing) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 布尔值环} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := BoolRing) f
-
-Depends on / 依赖: BoolRing, ConcreteCategory, ConcreteCategory.hom
+--- 原说明 ---
+Turn a morphism in `BoolRing` back into a `RingHom`.
 -/
 abbrev Hom.hom {X Y : BoolRing} (f : Hom X Y) :=
   ConcreteCategory.hom (C := BoolRing) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `RingHom` as a morphism in `BoolRing`. -/
+/-
+**BoolRing.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `BoolRing`。
+形式化陈述：ofHom {R S : Type u} [BooleanRing R] [BooleanRing S] (f : R ->+* S) : of R
+ ⟶ of S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {R S : Type u} [BooleanRing R] [BooleanRing S] (f : R ->+* S)
-  body: ConcreteCategory.ofHom f
-
-@[ext]
-
-中文:
-缩写 ofHom
-  签名: {R S : 类型u} [布尔ean环 R] [布尔ean环 S] (f : R ->+* S)
-  定义体: ConcreteCategory.ofHom f
-
-@[ext]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `RingHom` as a morphism in `BoolRing`.
 -/
-abbrev ofHom {R S : Type u} [BooleanRing R] [BooleanRing S] (f : R ->+* S) : of R ⟶ of S :=
+abbrev ofHom {R S : Type u} [BooleanRing R] [BooleanRing S] (f : R →+* S) : of R ⟶ of S :=
   ConcreteCategory.ofHom f
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R S : BoolRing} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-中文:
-引理 hom_ext
-  条件: {R S : 布尔值环} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-Depends on / 依赖: Hom.ext
+/-
+**BoolRing.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `BoolRing`。
+形式化陈述：hom_ext {R S : BoolRing} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoolRing.Hom.ext`：∀ {R : BoolRing} {S : BoolRing} {x y : R.Hom S}, x.hom
+' = y.hom' → x = y
 -/
 lemma hom_ext {R S : BoolRing} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
-
-/--
-Instance `hasForgetToCommRing` / 实例 `hasForgetToCommRing`
-
-English:
-instance hasForgetToCommRing
-  signature: : HasForget₂ BoolRing CommRingCat where
-  body: { obj := fun R => CommRingCat.of R
-      map := fun f => CommRingCat.ofHom f.hom }
-
-中文:
-实例 hasForgetToCommRing
-  签名: : 有Forget₂ 布尔值环 交换环范畴 where
-  定义体: { obj := fun R => CommRingCat.of R
-      map := fun f => CommRingCat.ofHom f.hom }
-
-Depends on / 依赖: CommRingCat, CommRingCat.of, CommRingCat.ofHom, f.hom
+/-
+**BoolRing.hasForgetToCommRing** 是 Mathlib 中的一个实例，位于命名空间 `BoolRing`。
+形式化陈述：hasForgetToCommRing : HasForget₂ BoolRing CommRingCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToCommRing : HasForget₂ BoolRing CommRingCat where
   forget₂ :=
-    { obj := fun R => CommRingCat.of R
-      map := fun f => CommRingCat.ofHom f.hom }
+    { obj := fun R ↦ CommRingCat.of R
+      map := fun f ↦ CommRingCat.ofHom f.hom }
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /-- Constructs an isomorphism of Boolean rings from a ring isomorphism between them. -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**BoolRing.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `BoolRing.Iso`。
+形式化陈述：{α β : BoolRing} → ↑α ≃+* ↑β → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : BoolRing.{u}} (e : α ≃+* β)
-  body: ⟨e⟩
-  inv := ⟨e.symm⟩
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
-
-中文:
-定义 同构.mk
-  签名: {α β : 布尔值环.{u}} (e : α ≃+* β)
-  定义体: ⟨e⟩
-  inv := ⟨e.symm⟩
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
+--- 原说明 ---
+Constructs an isomorphism of Boolean rings from a ring isomorphism between them.
 -/
 def Iso.mk {α β : BoolRing.{u}} (e : α ≃+* β) : α ≅ β where
   hom := ⟨e⟩
@@ -301,89 +185,58 @@ end BoolRing
 /-! ### Equivalence between `BoolAlg` and `BoolRing` -/
 
 -- We have to add this instance since Lean doesn't see through `X.toBddDistLat`.
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : BoolAlg} :
     BooleanAlgebra ↑(BddDistLat.toBddLat (X.toBddDistLat)).toLat :=
   BoolAlg.str _
 
 -- We have to add this instance since Lean doesn't see through `R.toBddDistLat`.
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : Type u} [BooleanRing R] :
     BooleanRing (BoolAlg.of (AsBoolAlg ↑R)).toBddDistLat.toBddLat.toLat :=
-inferInstanceAs BooleanRing R
+  inferInstanceAs <| BooleanRing R
 
 @[simps]
-/--
-Instance `BoolRing.hasForgetToBoolAlg` / 实例 `BoolRing.hasForgetToBoolAlg`
-
-English:
-instance BoolRing.hasForgetToBoolAlg
-  signature: : HasForget₂ BoolRing BoolAlg where
-  body: .of (AsBoolAlg X)
-  forget₂.map f := BoolAlg.ofHom f.hom.asBoolAlg
-
-@[simps]
-
-中文:
-实例 布尔值环.hasForgetTo布尔Alg
-  签名: : 有Forget₂ 布尔值环 布尔Alg where
-  定义体: .of (AsBoolAlg X)
-  forget₂.map f := BoolAlg.ofHom f.hom.asBoolAlg
-
-@[simps]
-
-Depends on / 依赖: AsBoolAlg
+/-
+**BoolRing.hasForgetToBoolAlg** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：BoolRing.hasForgetToBoolAlg : HasForget₂ BoolRing BoolAlg where forget₂.ob
+j X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance BoolRing.hasForgetToBoolAlg : HasForget₂ BoolRing BoolAlg where
   forget₂.obj X := .of (AsBoolAlg X)
   forget₂.map f := BoolAlg.ofHom f.hom.asBoolAlg
 
 @[simps]
-/--
-Instance `BoolAlg.hasForgetToBoolRing` / 实例 `BoolAlg.hasForgetToBoolRing`
-
-English:
-instance BoolAlg.hasForgetToBoolRing
-  signature: : HasForget₂ BoolAlg BoolRing where
-  body: .of (AsBoolRing X)
-forget₂.map f := BoolRing.ofHom BoundedLatticeHom.asBoolRing f.hom
-
-中文:
-实例 布尔Alg.hasForgetTo布尔Ring
-  签名: : 有Forget₂ 布尔Alg 布尔值环 where
-  定义体: .of (AsBoolRing X)
-forget₂.map f := BoolRing.ofHom BoundedLatticeHom.asBoolRing f.hom
-
-Depends on / 依赖: AsBoolRing
+/-
+**BoolAlg.hasForgetToBoolRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：BoolAlg.hasForgetToBoolRing : HasForget₂ BoolAlg BoolRing where forget₂.ob
+j X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance BoolAlg.hasForgetToBoolRing : HasForget₂ BoolAlg BoolRing where
   forget₂.obj X := .of (AsBoolRing X)
-forget₂.map f := BoolRing.ofHom BoundedLatticeHom.asBoolRing f.hom
+  forget₂.map f := BoolRing.ofHom <| BoundedLatticeHom.asBoolRing f.hom
 
 /-- The equivalence between Boolean rings and Boolean algebras. This is actually an isomorphism. -/
 @[simps functor inverse]
-/--
-Definition of `boolRingCatEquivBoolAlg` / `boolRingCatEquivBoolAlg` 的定义
+/-
+**boolRingCatEquivBoolAlg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：boolRingCatEquivBoolAlg : BoolRing ≌ BoolAlg where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boolRingCatEquivBoolAlg
-  signature: : BoolRing ≌ BoolAlg where
-  body: forget₂ BoolRing BoolAlg
-  inverse := forget₂ BoolAlg BoolRing
-  unitIso := NatIso.ofComponents (fun X => BoolRing.Iso.mk <|
-    (RingEquiv.asBoolRingAsBoolAlg X).symm) fun {_ _} _ => rfl
-  counitIso := NatIso.ofComponents (fun X => BoolAlg.Iso.mk <|
-    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ => rfl
-
-中文:
-定义 boolRingCatEquiv布尔Alg
-  签名: : 布尔值环 ≌ 布尔Alg where
-  定义体: forget₂ BoolRing BoolAlg
-  inverse := forget₂ BoolAlg BoolRing
-  unitIso := NatIso.ofComponents (fun X => BoolRing.Iso.mk <|
-    (RingEquiv.asBoolRingAsBoolAlg X).symm) fun {_ _} _ => rfl
-  counitIso := NatIso.ofComponents (fun X => BoolAlg.Iso.mk <|
-    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ => rfl
-
-Depends on / 依赖: BoolAlg, BoolRing
+--- 原说明 ---
+The equivalence between Boolean rings and Boolean algebras. This is actually an 
+isomorphism.
 -/
 def boolRingCatEquivBoolAlg : BoolRing ≌ BoolAlg where
   functor := forget₂ BoolRing BoolAlg

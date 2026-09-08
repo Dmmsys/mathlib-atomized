@@ -30,53 +30,22 @@ variable {C J ι : Type*} [Category C] [Category J]
 namespace HomologicalComplex
 
 variable [HasZeroMorphisms C] (F : J ⥤ HomologicalComplex C c)
-  [forall (j : ι), HasLimit (F ⋙ eval C c j)]
+  [∀ (j : ι), HasLimit (F ⋙ eval C c j)]
   {cF : Cone F} (hcF : IsLimit cF)
 
 include hcF
 
-/--
-lemma `isIso_π_f_of_isLimit_of_isEventuallyConstantTo` / 引理 `isIso_π_f_of_isLimit_of_isEventuallyConstantTo`
-
-English:
-lemma isIso_π_f_of_isLimit_of_isEventuallyConstantTo
-  proof: hq.isIso_π_of_isLimit (isLimitOfPreserves (eval C c q) hcF)
-
-中文:
-引理 isIso_π_f_of_isLimit_of_isEventuallyConstantTo
-  证明: hq.isIso_π_of_isLimit (isLimitOfPreserves (eval C c q) hcF)
-
-Depends on / 依赖: hq.isIso_, isLimitOfPreserves
+/-
+**HomologicalComplex.isIso_** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_π_f_of_isLimit_of_isEventuallyConstantTo
     (q : ι) (j : J) (hq : (F ⋙ eval C c q).IsEventuallyConstantTo j) :
     IsIso ((cF.π.app j).f q) :=
   hq.isIso_π_of_isLimit (isLimitOfPreserves (eval C c q) hcF)
-
-/--
-lemma `quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo` / 引理 `quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo`
-
-English:
-lemma quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
-  proof: by
-  rw [quasiIsoAt_iff' _ q₀ q₁ q₂ h₀ h₂]
-  let φ := (shortComplexFunctor' C c q₀ q₁ q₂).map (cF.π.app j)
-  have : IsIso φ.τ₁ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₀
-  have : IsIso φ.τ₂ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₁
-  have : IsIso φ.τ₃ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₂
-  apply ShortComplex.quasiIso_of_epi_of_isIso_of_mono
-
-中文:
-引理 quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
-  证明: by
-  rw [quasiIsoAt_iff' _ q₀ q₁ q₂ h₀ h₂]
-  let φ := (shortComplexFunctor' C c q₀ q₁ q₂).map (cF.π.app j)
-  have : IsIso φ.τ₁ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₀
-  have : IsIso φ.τ₂ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₁
-  have : IsIso φ.τ₃ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₂
-  apply ShortComplex.quasiIso_of_epi_of_isIso_of_mono
-
-Depends on / 依赖: ShortComplex, ShortComplex.quasiIso_of_epi_of_isIso_of_mono, quasiIsoAt_iff, quasiIso_of_epi_of_isIso_of_mono, shortComplexFunctor
+/-
+**HomologicalComplex.quasiIsoAt_** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
     [CategoryWithHomology C] (q₀ q₁ q₂ : ι)
@@ -93,3 +62,4 @@ lemma quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
   apply ShortComplex.quasiIso_of_epi_of_isIso_of_mono
 
 end HomologicalComplex
+

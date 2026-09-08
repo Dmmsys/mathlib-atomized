@@ -34,91 +34,75 @@ namespace CategoryTheory
 
 variable {C : Type u} [Category.{v} C] [Preadditive C]
 
-/--
-Instance `preservesLimits_preadditiveYonedaObj` / 实例 `preservesLimits_preadditiveYonedaObj`
-
-English:
-instance preservesLimits_preadditiveYonedaObj
-  signature: (X : C)
-  body: have : PreservesLimits (preadditiveYonedaObj X ⋙ forget _) :=
-    (inferInstance : PreservesLimits (yoneda.obj X))
-  preservesLimits_of_reflects_of_preserves _ (forget _)
-
-中文:
-实例 preservesLimits_preadditiveYonedaObj
-  签名: (X : C)
-  定义体: have : PreservesLimits (preadditiveYonedaObj X ⋙ forget _) :=
-    (inferInstance : PreservesLimits (yoneda.obj X))
-  preservesLimits_of_reflects_of_preserves _ (forget _)
-
-Depends on / 依赖: PreservesLimits, forget, preadditiveYonedaObj, preservesLimits_of_reflects_of_preserves, yoneda, yoneda.obj
+/-
+**CategoryTheory.preservesLimits_preadditiveYonedaObj** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory`。
+形式化陈述：preservesLimits_preadditiveYonedaObj (X : C) : PreservesLimits (preadditiv
+eYonedaObj X)
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.yoneda_preservesLimits`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] (X : C),   CategoryTheory.Limits.PreservesLimitsOfSize.{
+t, w, v, v, u, v + 1} (Cate…
+· 使用引理 `CategoryTheory.Limits.preservesLimits_of_reflects_of_preserves`：preserve
+sLimits_of_reflects_of_preserves [PreservesLimitsOfSize.{w', w} (F ⋙ G)] [Reflec
+tsLimitsOfSize.{w', w} G] : PreservesLimitsOfSize.{w…
 -/
 instance preservesLimits_preadditiveYonedaObj (X : C) : PreservesLimits (preadditiveYonedaObj X) :=
   have : PreservesLimits (preadditiveYonedaObj X ⋙ forget _) :=
     (inferInstance : PreservesLimits (yoneda.obj X))
   preservesLimits_of_reflects_of_preserves _ (forget _)
-
-/--
-Instance `preservesLimits_preadditiveCoyonedaObj` / 实例 `preservesLimits_preadditiveCoyonedaObj`
-
-English:
-instance preservesLimits_preadditiveCoyonedaObj
-  signature: (X : C)
-  body: have : PreservesLimits (preadditiveCoyonedaObj X ⋙ forget _) :=
-    (inferInstance : PreservesLimits (coyoneda.obj (op X)))
-  preservesLimits_of_reflects_of_preserves _ (forget _)
-
-中文:
-实例 preservesLimits_preadditiveCoyonedaObj
-  签名: (X : C)
-  定义体: have : PreservesLimits (preadditiveCoyonedaObj X ⋙ forget _) :=
-    (inferInstance : PreservesLimits (coyoneda.obj (op X)))
-  preservesLimits_of_reflects_of_preserves _ (forget _)
-
-Depends on / 依赖: PreservesLimits, coyoneda, coyoneda.obj, forget, preadditiveCoyonedaObj, preservesLimits_of_reflects_of_preserves
+/-
+**CategoryTheory.preservesLimits_preadditiveCoyonedaObj** 是 Mathlib 中的一个实例，位于命名空
+间 `CategoryTheory`。
+形式化陈述：preservesLimits_preadditiveCoyonedaObj (X : C) : PreservesLimits (preaddit
+iveCoyonedaObj X)
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.coyoneda_preservesLimits`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] (X : Cᵒᵖ),   CategoryTheory.Limits.PreservesLimitsOfSi
+ze.{t, w, v, v, u, v + 1} (Ca…
+· 使用引理 `CategoryTheory.Limits.preservesLimits_of_reflects_of_preserves`：preserve
+sLimits_of_reflects_of_preserves [PreservesLimitsOfSize.{w', w} (F ⋙ G)] [Reflec
+tsLimitsOfSize.{w', w} G] : PreservesLimitsOfSize.{w…
 -/
 instance preservesLimits_preadditiveCoyonedaObj (X : C) :
     PreservesLimits (preadditiveCoyonedaObj X) :=
   have : PreservesLimits (preadditiveCoyonedaObj X ⋙ forget _) :=
     (inferInstance : PreservesLimits (coyoneda.obj (op X)))
   preservesLimits_of_reflects_of_preserves _ (forget _)
-
-/--
-Instance `preservesLimits_preadditiveYoneda_obj` / 实例 `preservesLimits_preadditiveYoneda_obj`
-
-English:
-instance preservesLimits_preadditiveYoneda_obj
-  signature: (X : C)
-  body: show PreservesLimits (preadditiveYonedaObj X ⋙ forget₂ _ _) from inferInstance
-
-中文:
-实例 preservesLimits_preadditiveYoneda_obj
-  签名: (X : C)
-  定义体: show PreservesLimits (preadditiveYonedaObj X ⋙ forget₂ _ _) from inferInstance
-
-Depends on / 依赖: PreservesLimits, preadditiveYonedaObj
+/-
+**CategoryTheory.preservesLimits_preadditiveYoneda_obj** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory`。
+形式化陈述：preservesLimits_preadditiveYoneda_obj (X : C) : PreservesLimits (preadditi
+veYoneda.obj X)
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimits`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ℰ :…
 -/
 instance preservesLimits_preadditiveYoneda_obj (X : C) :
     PreservesLimits (preadditiveYoneda.obj X) :=
   show PreservesLimits (preadditiveYonedaObj X ⋙ forget₂ _ _) from inferInstance
-
-/--
-Instance `preservesLimits_preadditiveCoyoneda_obj` / 实例 `preservesLimits_preadditiveCoyoneda_obj`
-
-English:
-instance preservesLimits_preadditiveCoyoneda_obj
-  signature: (X : Cᵒᵖ)
-  body: show PreservesLimits (preadditiveCoyonedaObj (unop X) ⋙ forget₂ _ _) from inferInstance
-
-中文:
-实例 preservesLimits_preadditiveCoyoneda_obj
-  签名: (X : Cᵒᵖ)
-  定义体: show PreservesLimits (preadditiveCoyonedaObj (unop X) ⋙ forget₂ _ _) from inferInstance
-
-Depends on / 依赖: PreservesLimits, preadditiveCoyonedaObj
+/-
+**CategoryTheory.preservesLimits_preadditiveCoyoneda_obj** 是 Mathlib 中的一个实例，位于命名
+空间 `CategoryTheory`。
+形式化陈述：preservesLimits_preadditiveCoyoneda_obj (X : Cᵒᵖ) : PreservesLimits (pread
+ditiveCoyoneda.obj X)
+参数：X : Cᵒᵖ。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimits`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ℰ :…
 -/
 instance preservesLimits_preadditiveCoyoneda_obj (X : Cᵒᵖ) :
     PreservesLimits (preadditiveCoyoneda.obj X) :=
   show PreservesLimits (preadditiveCoyonedaObj (unop X) ⋙ forget₂ _ _) from inferInstance
 
 end CategoryTheory
+

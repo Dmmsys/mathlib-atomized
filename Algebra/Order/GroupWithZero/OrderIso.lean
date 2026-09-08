@@ -28,43 +28,25 @@ attribute [local instance] PosMulReflectLT.toPosMulStrictMono PosMulReflectLT.to
 
 /-- `Equiv.mulLeft₀` as an order isomorphism. -/
 @[simps! +simpRhs]
-/--
-Definition of `mulLeft₀` / `mulLeft₀` 的定义
+/-
+**OrderIso.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.mulLeft (a : α) : α ≃o α where map_rel_iff' {_ _}
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulLeft₀
-  signature: (a : G₀) (ha : 0 < a)
-  body: .mulLeft₀ a ha.ne'
-  map_rel_iff' := mul_le_mul_iff_right₀ ha
-
-中文:
-定义 mulLeft₀
-  签名: (a : G₀) (ha : 0 < a)
-  定义体: .mulLeft₀ a ha.ne'
-  map_rel_iff' := mul_le_mul_iff_right₀ ha
-
-Depends on / 依赖: ha.ne
+--- 原说明 ---
+`Equiv.mulLeft₀` as an order isomorphism.
 -/
 def mulLeft₀ (a : G₀) (ha : 0 < a) : G₀ ≃o G₀ where
   toEquiv := .mulLeft₀ a ha.ne'
   map_rel_iff' := mul_le_mul_iff_right₀ ha
-
-/--
-lemma `mulLeft₀_symm` / 引理 `mulLeft₀_symm`
-
-English:
-lemma mulLeft₀_symm
-  given: (a : G₀) (ha : 0 < a)
-  statement: (mulLeft₀ a ha).symm = mulLeft₀ a⁻¹ (inv_pos.2 ha)
-  proof: by
-  ext; rfl
-
-中文:
-引理 mulLeft₀_symm
-  条件: (a : G₀) (ha : 0 < a)
-  结论: (mulLeft₀ a ha).symm = mulLeft₀ a⁻¹ (inv_pos.2 ha)
-  证明: by
-  ext; rfl
+/-
+**OrderIso.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.mulLeft (a : α) : α ≃o α where map_rel_iff' {_ _}
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mulLeft₀_symm (a : G₀) (ha : 0 < a) : (mulLeft₀ a ha).symm = mulLeft₀ a⁻¹ (inv_pos.2 ha) := by
   ext; rfl
@@ -78,67 +60,42 @@ variable [MulPosReflectLT G₀]
 
 /-- `Equiv.mulRight₀` as an order isomorphism. -/
 @[simps! +simpRhs]
-/--
-Definition of `mulRight₀` / `mulRight₀` 的定义
+/-
+**OrderIso.mulRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.mulRight (a : α) : α ≃o α where map_rel_iff' {_ _}
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRight₀
-  signature: (a : G₀) (ha : 0 < a)
-  body: .mulRight₀ a ha.ne'
-  map_rel_iff' := mul_le_mul_iff_left₀ ha
-
-中文:
-定义 mulRight₀
-  签名: (a : G₀) (ha : 0 < a)
-  定义体: .mulRight₀ a ha.ne'
-  map_rel_iff' := mul_le_mul_iff_left₀ ha
-
-Depends on / 依赖: ha.ne
+--- 原说明 ---
+`Equiv.mulRight₀` as an order isomorphism.
 -/
 def mulRight₀ (a : G₀) (ha : 0 < a) : G₀ ≃o G₀ where
   toEquiv := .mulRight₀ a ha.ne'
   map_rel_iff' := mul_le_mul_iff_left₀ ha
-
-/--
-lemma `mulRight₀_symm` / 引理 `mulRight₀_symm`
-
-English:
-lemma mulRight₀_symm
-  given: (a : G₀) (ha : 0 < a)
-  proof: by ext; rfl
-
-中文:
-引理 mulRight₀_symm
-  条件: (a : G₀) (ha : 0 < a)
-  证明: by ext; rfl
-
-Depends on / 依赖: IsOrderedRing, IsOrderedRing.toIsStrictOrderedRing, toIsStrictOrderedRing
+/-
+**OrderIso.mulRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.mulRight (a : α) : α ≃o α where map_rel_iff' {_ _}
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mulRight₀_symm (a : G₀) (ha : 0 < a) :
     (mulRight₀ a ha).symm = mulRight₀ a⁻¹ (Right.inv_pos.2 ha) := by ext; rfl
 
 /-- `Equiv.divRight₀` as an order isomorphism. -/
 @[simps! +simpRhs]
-/--
-Definition of `divRight₀` / `divRight₀` 的定义
+/-
+**OrderIso.divRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.divRight (a : α) : α ≃o α where toEquiv
+参数：a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `div_le_div_iff_right`：div_le_div_iff_right (c : α) : a / c <= b / c ↔ a 
+<= b
 
-English:
-definition divRight₀
-  signature: (a : G₀) (ha : 0 < a)
-  body: .divRight₀ a ha.ne'
-  map_rel_iff' {b c} := by
-    simp only [Equiv.divRight₀_apply, div_eq_mul_inv]
-    exact mul_le_mul_iff_left₀ (a := a⁻¹) (Right.inv_pos.mpr ha)
-
-中文:
-定义 divRight₀
-  签名: (a : G₀) (ha : 0 < a)
-  定义体: .divRight₀ a ha.ne'
-  map_rel_iff' {b c} := by
-    simp only [Equiv.divRight₀_apply, div_eq_mul_inv]
-    exact mul_le_mul_iff_left₀ (a := a⁻¹) (Right.inv_pos.mpr ha)
-
-Depends on / 依赖: IsOrderedRing, IsStrictOrderedRing, IsStrictOrderedRing.toIsOrderedRing, ha.ne, toIsOrderedRing
+--- 原说明 ---
+`Equiv.divRight₀` as an order isomorphism.
 -/
 def divRight₀ (a : G₀) (ha : 0 < a) : G₀ ≃o G₀ where
   toEquiv := .divRight₀ a ha.ne'
@@ -151,112 +108,62 @@ end right
 end OrderIso
 section Lattice
 
-/--
-lemma `mul_inf₀` / 引理 `mul_inf₀`
-
-English:
-lemma mul_inf₀
-  given: [SemilatticeInf G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  proof: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulLeft₀ c hc).map_inf a b
-
-中文:
-引理 mul_inf₀
-  条件: [SemilatticeInf G₀] [正乘反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  证明: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulLeft₀ c hc).map_inf a b
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, eq_or_lt, hc.eq_or_lt, map_inf
+/-
+**mul_inf** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_inf [MulLeftMono α] (a b c : α) : c * (a ⊓ b) = c * a ⊓ c * b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_inf`：OrderIso.map_inf [SemilatticeInf α] [SemilatticeInf β]
+ (f : α ≃o β) (x y : α) : f (x ⊓ y) = f x ⊓ f y
 -/
-lemma mul_inf₀ [SemilatticeInf G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀) :
+lemma mul_inf₀ [SemilatticeInf G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 ≤ c) (a b : G₀) :
     c * (a ⊓ b) = c * a ⊓ c * b := by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
   · exact (OrderIso.mulLeft₀ c hc).map_inf a b
-
-/--
-lemma `mul_sup₀` / 引理 `mul_sup₀`
-
-English:
-lemma mul_sup₀
-  given: [SemilatticeSup G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  proof: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulLeft₀ c hc).map_sup a b
-
-中文:
-引理 mul_sup₀
-  条件: [SemilatticeSup G₀] [正乘反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  证明: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulLeft₀ c hc).map_sup a b
-
-Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.toCharZero, OrderIso, OrderIso.mulLeft, eq_or_lt, hc.eq_or_lt, map_sup, toCharZero
+/-
+**mul_sup** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_sup [MulLeftMono α] (a b c : α) : c * (a ⊔ b) = c * a ⊔ c * b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
-lemma mul_sup₀ [SemilatticeSup G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀) :
+lemma mul_sup₀ [SemilatticeSup G₀] [PosMulReflectLT G₀] {c : G₀} (hc : 0 ≤ c) (a b : G₀) :
     c * (a ⊔ b) = c * a ⊔ c * b := by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
   · exact (OrderIso.mulLeft₀ c hc).map_sup a b
-
-/--
-lemma `inf_mul₀` / 引理 `inf_mul₀`
-
-English:
-lemma inf_mul₀
-  given: [SemilatticeInf G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  proof: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulRight₀ c hc).map_inf a b
-
-中文:
-引理 inf_mul₀
-  条件: [SemilatticeInf G₀] [乘正反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  证明: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulRight₀ c hc).map_inf a b
-
-Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.toNoMaxOrder, NoMaxOrder, OrderIso, OrderIso.mulRight, eq_or_lt, hc.eq_or_lt, map_inf, toNoMaxOrder
+/-
+**inf_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：inf_mul [MulRightMono α] (a b c : α) : (a ⊓ b) * c = a * c ⊓ b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_inf`：OrderIso.map_inf [SemilatticeInf α] [SemilatticeInf β]
+ (f : α ≃o β) (x y : α) : f (x ⊓ y) = f x ⊓ f y
 -/
-lemma inf_mul₀ [SemilatticeInf G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀) :
+lemma inf_mul₀ [SemilatticeInf G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 ≤ c) (a b : G₀) :
     (a ⊓ b) * c = a * c ⊓ b * c := by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
   · exact (OrderIso.mulRight₀ c hc).map_inf a b
-
-/--
-lemma `sup_mul₀` / 引理 `sup_mul₀`
-
-English:
-lemma sup_mul₀
-  given: [SemilatticeSup G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  proof: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulRight₀ c hc).map_sup a b
-
-中文:
-引理 sup_mul₀
-  条件: [SemilatticeSup G₀] [乘正反映严格偏序 G₀] {c : G₀} (hc : 0 <= c) (a b : G₀)
-  证明: by
-  obtain (rfl | hc) := hc.eq_or_lt
-  · simp
-  · exact (OrderIso.mulRight₀ c hc).map_sup a b
-
-Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.noZeroDivisors, NoZeroDivisors, OrderIso, OrderIso.mulRight, eq_or_lt, hc.eq_or_lt, map_sup, noZeroDivisors
+/-
+**sup_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sup_mul [MulRightMono α] (a b c : α) : (a ⊔ b) * c = a * c ⊔ b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
-lemma sup_mul₀ [SemilatticeSup G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 <= c) (a b : G₀) :
+lemma sup_mul₀ [SemilatticeSup G₀] [MulPosReflectLT G₀] {c : G₀} (hc : 0 ≤ c) (a b : G₀) :
     (a ⊔ b) * c = a * c ⊔ b * c := by
   obtain (rfl | hc) := hc.eq_or_lt
   · simp
   · exact (OrderIso.mulRight₀ c hc).map_sup a b
 
 end Lattice
+

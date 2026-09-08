@@ -41,84 +41,53 @@ section
 
 variable [CategoryWithCofibrations C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithCofibrations (Over S)
-  body: (cofibrations C).over
-
-中文:
-实例 :
-  签名: 带余纤维化范畴 (Over S)
-  定义体: (cofibrations C).over
-
-Depends on / 依赖: cofibrations
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithCofibrations (Over S) where
   cofibrations := (cofibrations C).over
-
-/--
-lemma `cofibrations_over_def` / 引理 `cofibrations_over_def`
-
-English:
-lemma cofibrations_over_def
-  proof: rfl
-
-中文:
-引理 cofibrations_over_def
-  证明: rfl
+/-
+**HomotopicalAlgebra.cofibrations_over_def** 是 Mathlib 中的一个引理，位于命名空间 `Homotopica
+lAlgebra`。
+形式化陈述：cofibrations_over_def : cofibrations (Over S) = (cofibrations C).over
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cofibrations_over_def :
     cofibrations (Over S) = (cofibrations C).over := rfl
-
-/--
-lemma `cofibrations_over_iff` / 引理 `cofibrations_over_iff`
-
-English:
-lemma cofibrations_over_iff
-  given: {X Y : Over S} (f : X ⟶ Y)
-  proof: by
-  simp only [cofibration_iff, cofibrations_over_def, MorphismProperty.over_iff]
-
-中文:
-引理 cofibrations_over_iff
-  条件: {X Y : Over S} (f : X ⟶ Y)
-  证明: by
-  simp only [cofibration_iff, cofibrations_over_def, MorphismProperty.over_iff]
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_iff, cofibration_iff, cofibrations_over_def, over_iff
+/-
+**HomotopicalAlgebra.cofibrations_over_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homotopica
+lAlgebra`。
+形式化陈述：cofibrations_over_iff {X Y : Over S} (f : X ⟶ Y) : Cofibration f ↔ Cofibra
+tion f.left
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma cofibrations_over_iff {X Y : Over S} (f : X ⟶ Y) :
     Cofibration f ↔ Cofibration f.left := by
   simp only [cofibration_iff, cofibrations_over_def, MorphismProperty.over_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Over S} (f : X ⟶ Y) [Cofibration f] : Cofibration f.left := by
   rwa [← cofibrations_over_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(cofibrations
-  signature: C).IsStableUnderRetracts] :
-  body: by
-  rw [cofibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-中文:
-实例 [(cofibrations
-  签名: C).是StableUnderRetracts] :
-  定义体: by
-  rw [cofibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_eq_inverseImage, cofibrations_over_def, infer_instance, over_eq_inverseImage
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(cofibrations C).IsStableUnderRetracts] :
     (cofibrations (Over S)).IsStableUnderRetracts := by
-  rw [cofibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
+  rw [cofibrations_over_def, MorphismProperty.over_eq_inverseImage]
   infer_instance
 
 end
@@ -127,84 +96,53 @@ section
 
 variable [CategoryWithFibrations C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithFibrations (Over S)
-  body: (fibrations C).over
-
-中文:
-实例 :
-  签名: 带纤维化范畴 (Over S)
-  定义体: (fibrations C).over
-
-Depends on / 依赖: fibrations
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithFibrations (Over S) where
   fibrations := (fibrations C).over
-
-/--
-lemma `fibrations_over_def` / 引理 `fibrations_over_def`
-
-English:
-lemma fibrations_over_def
-  proof: rfl
-
-中文:
-引理 fibrations_over_def
-  证明: rfl
+/-
+**HomotopicalAlgebra.fibrations_over_def** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalA
+lgebra`。
+形式化陈述：fibrations_over_def : fibrations (Over S) = (fibrations C).over
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fibrations_over_def :
     fibrations (Over S) = (fibrations C).over := rfl
-
-/--
-lemma `fibrations_over_iff` / 引理 `fibrations_over_iff`
-
-English:
-lemma fibrations_over_iff
-  given: {X Y : Over S} (f : X ⟶ Y)
-  proof: by
-  simp only [fibration_iff, fibrations_over_def, MorphismProperty.over_iff]
-
-中文:
-引理 fibrations_over_iff
-  条件: {X Y : Over S} (f : X ⟶ Y)
-  证明: by
-  simp only [fibration_iff, fibrations_over_def, MorphismProperty.over_iff]
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_iff, fibration_iff, fibrations_over_def, over_iff
+/-
+**HomotopicalAlgebra.fibrations_over_iff** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalA
+lgebra`。
+形式化陈述：fibrations_over_iff {X Y : Over S} (f : X ⟶ Y) : Fibration f ↔ Fibration f
+.left
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma fibrations_over_iff {X Y : Over S} (f : X ⟶ Y) :
     Fibration f ↔ Fibration f.left := by
   simp only [fibration_iff, fibrations_over_def, MorphismProperty.over_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Over S} (f : X ⟶ Y) [Fibration f] : Fibration f.left := by
   rwa [← fibrations_over_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(fibrations
-  signature: C).IsStableUnderRetracts] :
-  body: by
-  rw [fibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-中文:
-实例 [(fibrations
-  签名: C).是StableUnderRetracts] :
-  定义体: by
-  rw [fibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_eq_inverseImage, fibrations_over_def, infer_instance, over_eq_inverseImage
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(fibrations C).IsStableUnderRetracts] :
     (fibrations (Over S)).IsStableUnderRetracts := by
-  rw [fibrations_over_def]; rw [MorphismProperty.over_eq_inverseImage]
+  rw [fibrations_over_def, MorphismProperty.over_eq_inverseImage]
   infer_instance
 
 end
@@ -213,141 +151,88 @@ section
 
 variable [CategoryWithWeakEquivalences C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithWeakEquivalences (Over S)
-  body: (weakEquivalences C).over
-
-中文:
-实例 :
-  签名: 带弱等价范畴 (Over S)
-  定义体: (weakEquivalences C).over
-
-Depends on / 依赖: weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithWeakEquivalences (Over S) where
   weakEquivalences := (weakEquivalences C).over
-
-/--
-lemma `weakEquivalences_over_def` / 引理 `weakEquivalences_over_def`
-
-English:
-lemma weakEquivalences_over_def
-  proof: rfl
-
-中文:
-引理 weakEquivalences_over_def
-  证明: rfl
+/-
+**HomotopicalAlgebra.weakEquivalences_over_def** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：weakEquivalences_over_def : weakEquivalences (Over S) = (weakEquivalences 
+C).over
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weakEquivalences_over_def :
     weakEquivalences (Over S) = (weakEquivalences C).over := rfl
-
-/--
-lemma `weakEquivalences_over_iff` / 引理 `weakEquivalences_over_iff`
-
-English:
-lemma weakEquivalences_over_iff
-  given: {X Y : Over S} (f : X ⟶ Y)
-  proof: by
-  simp only [weakEquivalence_iff, weakEquivalences_over_def, MorphismProperty.over_iff]
-
-中文:
-引理 weakEquivalences_over_iff
-  条件: {X Y : Over S} (f : X ⟶ Y)
-  证明: by
-  simp only [weakEquivalence_iff, weakEquivalences_over_def, MorphismProperty.over_iff]
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_iff, over_iff, weakEquivalence_iff, weakEquivalences_over_def
+/-
+**HomotopicalAlgebra.weakEquivalences_over_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：weakEquivalences_over_iff {X Y : Over S} (f : X ⟶ Y) : WeakEquivalence f ↔
+ WeakEquivalence f.left
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma weakEquivalences_over_iff {X Y : Over S} (f : X ⟶ Y) :
     WeakEquivalence f ↔ WeakEquivalence f.left := by
   simp only [weakEquivalence_iff, weakEquivalences_over_def, MorphismProperty.over_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Over S} (f : X ⟶ Y) [WeakEquivalence f] : WeakEquivalence f.left := by
   rwa [← weakEquivalences_over_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(weakEquivalences
-  signature: C).IsStableUnderRetracts] :
-  body: by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-中文:
-实例 [(weakEquivalences
-  签名: C).是StableUnderRetracts] :
-  定义体: by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_eq_inverseImage, infer_instance, over_eq_inverseImage, weakEquivalences_over_def
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(weakEquivalences C).IsStableUnderRetracts] :
     (weakEquivalences (Over S)).IsStableUnderRetracts := by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
+  rw [weakEquivalences_over_def, MorphismProperty.over_eq_inverseImage]
   infer_instance
 
 end
 
-/--
-lemma `trivialCofibrations_over_eq` / 引理 `trivialCofibrations_over_eq`
-
-English:
-lemma trivialCofibrations_over_eq
-  proof: rfl
-
-中文:
-引理 trivialCofibrations_over_eq
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialCofibrations_over_eq** 是 Mathlib 中的一个引理，位于命名空间 `Homo
+topicalAlgebra`。
+形式化陈述：trivialCofibrations_over_eq [CategoryWithWeakEquivalences C] [CategoryWith
+Cofibrations C] : trivialCofibrations (Over S) = (trivialCofibrations C).over
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialCofibrations_over_eq
     [CategoryWithWeakEquivalences C] [CategoryWithCofibrations C] :
     trivialCofibrations (Over S) = (trivialCofibrations C).over := rfl
-
-/--
-lemma `trivialFibrations_over_eq` / 引理 `trivialFibrations_over_eq`
-
-English:
-lemma trivialFibrations_over_eq
-  proof: rfl
-
-中文:
-引理 trivialFibrations_over_eq
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialFibrations_over_eq** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：trivialFibrations_over_eq [CategoryWithWeakEquivalences C] [CategoryWithFi
+brations C] : trivialFibrations (Over S) = (trivialFibrations C).over
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialFibrations_over_eq
     [CategoryWithWeakEquivalences C] [CategoryWithFibrations C] :
     trivialFibrations (Over S) = (trivialFibrations C).over := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CategoryWithWeakEquivalences
-  signature: C]
-  body: by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-中文:
-实例 [带弱等价范畴
-  签名: C]
-  定义体: by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
-  infer_instance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.over_eq_inverseImage, infer_instance, over_eq_inverseImage, weakEquivalences_over_def
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CategoryWithWeakEquivalences C]
     [(weakEquivalences C).HasTwoOutOfThreeProperty] :
     (weakEquivalences (Over S)).HasTwoOutOfThreeProperty := by
-  rw [weakEquivalences_over_def]; rw [MorphismProperty.over_eq_inverseImage]
+  rw [weakEquivalences_over_def, MorphismProperty.over_eq_inverseImage]
   infer_instance
 
 section
@@ -355,73 +240,37 @@ section
 variable [CategoryWithWeakEquivalences C] [CategoryWithCofibrations C]
   [CategoryWithFibrations C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(trivialCofibrations
-  signature: C).HasFactorization (fibrations C)] :
-  body: by
-  rw [fibrations_over_def]; rw [trivialCofibrations_over_eq]
-  infer_instance
-
-中文:
-实例 [(trivialCofibrations
-  签名: C).有分解 (fibrations C)] :
-  定义体: by
-  rw [fibrations_over_def]; rw [trivialCofibrations_over_eq]
-  infer_instance
-
-Depends on / 依赖: fibrations_over_def, infer_instance, trivialCofibrations_over_eq
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(trivialCofibrations C).HasFactorization (fibrations C)] :
     (trivialCofibrations (Over S)).HasFactorization (fibrations (Over S)) := by
-  rw [fibrations_over_def]; rw [trivialCofibrations_over_eq]
+  rw [fibrations_over_def, trivialCofibrations_over_eq]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(cofibrations
-  signature: C).HasFactorization (trivialFibrations C)] :
-  body: by
-  rw [cofibrations_over_def]; rw [trivialFibrations_over_eq]
-  infer_instance
-
-中文:
-实例 [(cofibrations
-  签名: C).有分解 (trivialFibrations C)] :
-  定义体: by
-  rw [cofibrations_over_def]; rw [trivialFibrations_over_eq]
-  infer_instance
-
-Depends on / 依赖: cofibrations_over_def, infer_instance, trivialFibrations_over_eq
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(cofibrations C).HasFactorization (trivialFibrations C)] :
     (cofibrations (Over S)).HasFactorization (trivialFibrations (Over S)) := by
-  rw [cofibrations_over_def]; rw [trivialFibrations_over_eq]
+  rw [cofibrations_over_def, trivialFibrations_over_eq]
   infer_instance
 
 end
 
-/--
-Instance `ModelCategory.over` / 实例 `ModelCategory.over`
-
-English:
-instance ModelCategory.over
-  signature: [ModelCategory C]
-  body: .over _ _
-  cm4b _ _ _ _ _ := .over _ _
-
-中文:
-实例 模型范畴.over
-  签名: [模型范畴 C]
-  定义体: .over _ _
-  cm4b _ _ _ _ _ := .over _ _
+/-
+**HomotopicalAlgebra.ModelCategory.over** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAl
+gebra.ModelCategory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     (S : C) →
+ [HomotopicalAlgebra.ModelCategory C] → HomotopicalAlgebra.ModelCategory (Catego
+ryTheory.Over S)
+参数：S : C；CategoryTheory.Over S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ModelCategory.over [ModelCategory C] : ModelCategory (Over S) where
   cm4a _ _ _ _ _ := .over _ _
   cm4b _ _ _ _ _ := .over _ _
 
 end HomotopicalAlgebra
+

@@ -22,84 +22,42 @@ assert_not_exists Monoid
 
 namespace Fin
 
-variable {n k : Nat}
+variable {n k : ℕ}
 
-/--
-theorem `xor_assoc` / 定理 `xor_assoc`
-
-English:
-theorem xor_assoc
-  given: (h : k = 2 ^ n) (a b c : Fin k)
-  statement: (a ^^^ b) ^^^ c = a ^^^ (b ^^^ c)
-  proof: by
-  grind [Fin.xor_val, Nat.xor_mod_two_pow, Nat.mod_mod]
-
-中文:
-定理 xor_assoc
-  条件: (h : k = 2 ^ n) (a b c : 有限集 k)
-  结论: (a ^^^ b) ^^^ c = a ^^^ (b ^^^ c)
-  证明: by
-  grind [Fin.xor_val, Nat.xor_mod_two_pow, Nat.mod_mod]
-
-Depends on / 依赖: Fin.xor_val, Nat.mod_mod, Nat.xor_mod_two_pow, mod_mod, xor_mod_two_pow, xor_val
+/-
+**Fin.xor_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：xor_assoc (h : k = 2 ^ n) (a b c : Fin k) : (a ^^^ b) ^^^ c = a ^^^ (b ^^^
+ c)
+参数：h : k = 2 ^ n；a b c : Fin k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem xor_assoc (h : k = 2 ^ n) (a b c : Fin k) : (a ^^^ b) ^^^ c = a ^^^ (b ^^^ c) := by
   grind [Fin.xor_val, Nat.xor_mod_two_pow, Nat.mod_mod]
-/--
-theorem `xor_comm` / 定理 `xor_comm`
-
-English:
-theorem xor_comm
-  given: (a b : Fin k)
-  statement: a ^^^ b = b ^^^ a
-  proof: by grind [Fin.xor_val]
-
-中文:
-定理 xor_comm
-  条件: (a b : 有限集 k)
-  结论: a ^^^ b = b ^^^ a
-  证明: by grind [Fin.xor_val]
-
-Depends on / 依赖: Fin.val_zero, Fin.xor_val, Nat.mod_eq_of_lt, Nat.zero_mod, NeZero, mod_eq_of_lt, theorem, val_zero, xor_self, xor_val, xor_zero, zero_mod
+/-
+**Fin.xor_comm** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：xor_comm (a b : Fin k) : a ^^^ b = b ^^^ a
+参数：a b : Fin k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem xor_comm (a b : Fin k) : a ^^^ b = b ^^^ a := by grind [Fin.xor_val]
-/--
-theorem `xor_self` / 定理 `xor_self`
-
-English:
-theorem xor_self
-  given: [NeZero k] (a : Fin k)
-  statement: a ^^^ a = 0
-  proof: by
-  grind [Fin.xor_val, Nat.zero_mod]
-
-中文:
-定理 xor_self
-  条件: [NeZero k] (a : 有限集 k)
-  结论: a ^^^ a = 0
-  证明: by
-  grind [Fin.xor_val, Nat.zero_mod]
+/-
+**Fin.xor_self** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {k : ℕ} [inst : NeZero k] (a : Fin k), a ^^^ a = 0
+参数：a : Fin k。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem xor_self [NeZero k] (a : Fin k) : a ^^^ a = 0 := by
   grind [Fin.xor_val, Nat.zero_mod]
-/--
-theorem `xor_zero` / 定理 `xor_zero`
-
-English:
-theorem xor_zero
-  given: [NeZero k] (a : Fin k)
-  statement: a ^^^ 0 = a
-  proof: by
-  grind [Fin.xor_val, Fin.val_zero, Nat.mod_eq_of_lt]
-
-中文:
-定理 xor_zero
-  条件: [NeZero k] (a : 有限集 k)
-  结论: a ^^^ 0 = a
-  证明: by
-  grind [Fin.xor_val, Fin.val_zero, Nat.mod_eq_of_lt]
+/-
+**Fin.xor_zero** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {k : ℕ} [inst : NeZero k] (a : Fin k), a ^^^ 0 = a
+参数：a : Fin k。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem xor_zero [NeZero k] (a : Fin k) : a ^^^ 0 = a := by
   grind [Fin.xor_val, Fin.val_zero, Nat.mod_eq_of_lt]
 
 end Fin
+

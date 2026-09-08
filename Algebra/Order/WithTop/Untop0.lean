@@ -26,20 +26,15 @@ variable {α : Type*}
 section Zero
 variable [Zero α]
 
-/--
-Definition of `untop₀` / `untop₀` 的定义
+/-- Conversion from `WithTop α` to `α`, mapping `⊤` to zero. -/
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition untop₀
-  signature: (a : WithTop α)
-  body: a.untopD 0
-
-中文:
-定义 untop₀
-  签名: (a : WithTop α)
-  定义体: a.untopD 0
-
-Depends on / 依赖: a.untopD, untopD
+--- 原说明 ---
+Conversion from `WithTop α` to `α`, mapping `⊤` to zero.
 -/
 def untop₀ (a : WithTop α) : α := a.untopD 0
 
@@ -48,104 +43,51 @@ def untop₀ (a : WithTop α) : α := a.untopD 0
 -/
 
 @[simp]
-/--
-lemma `untop₀_eq_zero` / 引理 `untop₀_eq_zero`
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma untop₀_eq_zero
-  given: {a : WithTop α}
-  proof: by simp [untop₀]
-
-@[simp]
-
-中文:
-引理 untop₀_eq_zero
-  条件: {a : WithTop α}
-  证明: by simp [untop₀]
-
-@[simp]
+--- 原说明 ---
+## Simplifying Lemmas in cases where α is an Instance of Zero
 -/
 lemma untop₀_eq_zero {a : WithTop α} :
     a.untop₀ = 0 ↔ a = 0 ∨ a = ⊤ := by simp [untop₀]
 
 @[simp]
-/--
-lemma `untop₀_top` / 引理 `untop₀_top`
-
-English:
-lemma untop₀_top
-  statement: untop₀ ⊤ = (0 : α)
-  proof: by simp [untop₀]
-
-@[simp]
-
-中文:
-引理 untop₀_top
-  结论: untop₀ ⊤ = (0 : α)
-  证明: by simp [untop₀]
-
-@[simp]
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma untop₀_top : untop₀ ⊤ = (0 : α) := by simp [untop₀]
 
 @[simp]
-/--
-lemma `untop₀_zero` / 引理 `untop₀_zero`
-
-English:
-lemma untop₀_zero
-  statement: untop₀ 0 = (0 : α)
-  proof: by simp [untop₀]
-
-@[simp]
-
-中文:
-引理 untop₀_zero
-  结论: untop₀ 0 = (0 : α)
-  证明: by simp [untop₀]
-
-@[simp]
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma untop₀_zero : untop₀ 0 = (0 : α) := by simp [untop₀]
 
 @[simp]
-/--
-lemma `untop₀_coe` / 引理 `untop₀_coe`
-
-English:
-lemma untop₀_coe
-  given: (a : α)
-  statement: (a : WithTop α).untop₀ = a
-  proof: rfl
-
-中文:
-引理 untop₀_coe
-  条件: (a : α)
-  结论: (a : WithTop α).untop₀ = a
-  证明: rfl
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma untop₀_coe (a : α) : (a : WithTop α).untop₀ = a := rfl
-
-/--
-lemma `coe_untop₀_of_ne_top` / 引理 `coe_untop₀_of_ne_top`
-
-English:
-lemma coe_untop₀_of_ne_top
-  given: {a : WithTop α} (ha : a != ⊤)
-  proof: by
-  obtain ⟨b, hb⟩ := WithTop.ne_top_iff_exists.1 ha
-  simp [← hb]
-
-中文:
-引理 coe_untop₀_of_ne_top
-  条件: {a : WithTop α} (ha : a != ⊤)
-  证明: by
-  obtain ⟨b, hb⟩ := WithTop.ne_top_iff_exists.1 ha
-  simp [← hb]
-
-Depends on / 依赖: WithTop, WithTop.ne_top_iff_exists, ne_top_iff_exists
+/-
+**WithTop.coe_untop** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} (x : WithTop α) (hx : x ≠ ⊤), ↑(x.untop hx) = x
+参数：x : WithTop α；hx : x ≠ ⊤；x.untop hx。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_untop₀_of_ne_top {a : WithTop α} (ha : a != ⊤) :
+lemma coe_untop₀_of_ne_top {a : WithTop α} (ha : a ≠ ⊤) :
     a.untop₀ = a := by
   obtain ⟨b, hb⟩ := WithTop.ne_top_iff_exists.1 ha
   simp [← hb]
@@ -157,105 +99,55 @@ end Zero
 -/
 
 @[simp]
-/--
-lemma `untopD_add` / 引理 `untopD_add`
+/-
+**WithTop.untopD_add** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+形式化陈述：untopD_add [Add α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤) :
+ (a + b).untopD c = a.untopD c + b.untopD c
+参数：ha : a != ⊤；hb : b != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `WithTop.canLift`：∀ {α : Type u_1}, CanLift (WithTop α) α WithTop.some fu
+n r => r ≠ ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma untopD_add
-  given: [Add α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤)
-  proof: by
-  lift a to α using ha
-  lift b to α using hb
-  simp [← coe_add]
-
-@[simp]
-
-中文:
-引理 untopD_add
-  条件: [加法 α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤)
-  证明: by
-  lift a to α using ha
-  lift b to α using hb
-  simp [← coe_add]
-
-@[simp]
-
-Depends on / 依赖: coe_add
+--- 原说明 ---
+## Simplifying Lemmas involving addition and negation
 -/
-lemma untopD_add [Add α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤) :
+lemma untopD_add [Add α] {a b : WithTop α} {c : α} (ha : a ≠ ⊤) (hb : b ≠ ⊤) :
     (a + b).untopD c = a.untopD c + b.untopD c := by
   lift a to α using ha
   lift b to α using hb
   simp [← coe_add]
 
 @[simp]
-/--
-lemma `untop₀_add` / 引理 `untop₀_add`
-
-English:
-lemma untop₀_add
-  given: [AddZeroClass α] {a b : WithTop α} (ha : a != ⊤) (hb : b != ⊤)
-  proof: untopD_add ha hb
-
-@[simp]
-
-中文:
-引理 untop₀_add
-  条件: [加法零类 α] {a b : WithTop α} (ha : a != ⊤) (hb : b != ⊤)
-  证明: untopD_add ha hb
-
-@[simp]
-
-Depends on / 依赖: untopD_add
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma untop₀_add [AddZeroClass α] {a b : WithTop α} (ha : a != ⊤) (hb : b != ⊤) :
+lemma untop₀_add [AddZeroClass α] {a b : WithTop α} (ha : a ≠ ⊤) (hb : b ≠ ⊤) :
     (a + b).untop₀ = a.untop₀ + b.untop₀ := untopD_add ha hb
 
 @[simp]
-/--
-lemma `untop₀_natCast` / 引理 `untop₀_natCast`
-
-English:
-lemma untop₀_natCast
-  given: [AddMonoidWithOne α] (n : Nat)
-  statement: untop₀ (n : WithTop α) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 untop₀_natCast
-  条件: [加法带幺幺半群 α] (n : 自然数)
-  结论: untop₀ (n : WithTop α) = n
-  证明: rfl
-
-@[simp]
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma untop₀_natCast [AddMonoidWithOne α] (n : Nat) : untop₀ (n : WithTop α) = n := rfl
+lemma untop₀_natCast [AddMonoidWithOne α] (n : ℕ) : untop₀ (n : WithTop α) = n := rfl
 
 @[simp]
-/--
-theorem `untop₀_one` / 定理 `untop₀_one`
-
-English:
-theorem untop₀_one
-  given: {α : Type*} [AddMonoidWithOne α]
-  proof: by
-  convert WithTop.untop₀_natCast 1
-  all_goals exact Nat.cast_one.symm
-
-@[simp]
-
-中文:
-定理 untop₀_one
-  条件: {α : 类型} [加法带幺幺半群 α]
-  证明: by
-  convert WithTop.untop₀_natCast 1
-  all_goals exact Nat.cast_one.symm
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_one.symm, WithTop, WithTop.untop, all_goals, cast_one, convert
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem untop₀_one {α : Type*} [AddMonoidWithOne α] :
     (1 : WithTop α).untop₀ = 1 := by
@@ -263,59 +155,32 @@ theorem untop₀_one {α : Type*} [AddMonoidWithOne α] :
   all_goals exact Nat.cast_one.symm
 
 @[simp]
-/--
-lemma `untop₀_ofNat` / 引理 `untop₀_ofNat`
-
-English:
-lemma untop₀_ofNat
-  given: [AddMonoidWithOne α] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 untop₀_of自然数
-  条件: [加法带幺幺半群 α] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp]
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma untop₀_ofNat [AddMonoidWithOne α] (n : Nat) [n.AtLeastTwo] :
+lemma untop₀_ofNat [AddMonoidWithOne α] (n : ℕ) [n.AtLeastTwo] :
     untop₀ (ofNat(n) : WithTop α) = ofNat(n) := rfl
 
 @[simp]
-/--
-lemma `untop₀_neg` / 引理 `untop₀_neg`
-
-English:
-lemma untop₀_neg
-  given: [AddCommGroup α]
-  statement: forall a : WithTop α, (-a).untop₀ = -a.untop₀
-
-中文:
-引理 untop₀_neg
-  条件: [加法交换群 α]
-  结论: 对任意 a : WithTop α, (-a).untop₀ = -a.untop₀
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma untop₀_neg [AddCommGroup α] : forall a : WithTop α, (-a).untop₀ = -a.untop₀
+lemma untop₀_neg [AddCommGroup α] : ∀ a : WithTop α, (-a).untop₀ = -a.untop₀
   | ⊤ => by simp
   | (a : α) => rfl
 
 @[simp]
-/--
-lemma `untop₀_mul` / 引理 `untop₀_mul`
-
-English:
-lemma untop₀_mul
-  given: [DecidableEq α] [MulZeroClass α] (a b : WithTop α)
-  proof: untopD_zero_mul a b
-
-中文:
-引理 untop₀_mul
-  条件: [DecidableEq α] [乘零类 α] (a b : WithTop α)
-  证明: untopD_zero_mul a b
-
-Depends on / 依赖: untopD_zero_mul
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma untop₀_mul [DecidableEq α] [MulZeroClass α] (a b : WithTop α) :
     (a * b).untop₀ = a.untop₀ * b.untop₀ := untopD_zero_mul a b
@@ -325,114 +190,52 @@ section OrderedAddCommGroup
 variable [AddCommGroup α] [PartialOrder α] {a b : WithTop α}
 
 /--
-lemma `untop₀_nonneg` / 引理 `untop₀_nonneg`
-
-English:
-lemma untop₀_nonneg
-  statement: 0 <= a.untop₀ ↔ 0 <= a
-  proof: by
-  cases a with
-  | top => tauto
-  | coe a => simp
-
-中文:
-引理 untop₀_nonneg
-  结论: 0 <= a.untop₀ ↔ 0 <= a
-  证明: by
-  cases a with
-  | top => tauto
-  | coe a => simp
+Elements of ordered additive commutative groups are nonnegative iff their untop₀ is nonnegative.
 -/
-@[simp] lemma untop₀_nonneg : 0 <= a.untop₀ ↔ 0 <= a := by
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Elements of ordered additive commutative groups are nonnegative iff their untop₀
+ is nonnegative.
+-/
+@[simp] lemma untop₀_nonneg : 0 ≤ a.untop₀ ↔ 0 ≤ a := by
   cases a with
   | top => tauto
   | coe a => simp
-
-/--
-theorem `le_of_untop₀_le_untop₀` / 定理 `le_of_untop₀_le_untop₀`
-
-English:
-theorem le_of_untop₀_le_untop₀
-  given: (ha : a != ⊤) (h : a.untop₀ <= b.untop₀)
-  statement: a <= b
-  proof: by
+/-
+**WithTop.le_of_untop** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem le_of_untop₀_le_untop₀ (ha : a ≠ ⊤) (h : a.untop₀ ≤ b.untop₀) : a ≤ b := by
   lift a to α using ha
   by_cases hb : b = ⊤
   · simp_all
   lift b to α using hb
   simp_all
-
-中文:
-定理 le_of_untop₀_le_untop₀
-  条件: (ha : a != ⊤) (h : a.untop₀ <= b.untop₀)
-  结论: a <= b
-  证明: by
-  lift a to α using ha
-  by_cases hb : b = ⊤
-  · simp_all
-  lift b to α using hb
-  simp_all
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_of_untop₀_le_untop₀ (ha : a != ⊤) (h : a.untop₀ <= b.untop₀) : a <= b := by
-  lift a to α using ha
-  by_cases hb : b = ⊤
-  · simp_all
-  lift b to α using hb
-  simp_all
-
-/--
-theorem `untop₀_le_untop₀` / 定理 `untop₀_le_untop₀`
-
-English:
-theorem untop₀_le_untop₀
-  given: (hb : b != ⊤) (h : a <= b)
-  statement: a.untop₀ <= b.untop₀
-  proof: by
+@[simp, gcongr] theorem untop₀_le_untop₀ (hb : b ≠ ⊤) (h : a ≤ b) : a.untop₀ ≤ b.untop₀ := by
   lift b to α using hb
   by_cases ha : a = ⊤
   · simp_all
   lift a to α using ha
   simp_all
-
-中文:
-定理 untop₀_le_untop₀
-  条件: (hb : b != ⊤) (h : a <= b)
-  结论: a.untop₀ <= b.untop₀
-  证明: by
-  lift b to α using hb
-  by_cases ha : a = ⊤
-  · simp_all
-  lift a to α using ha
-  simp_all
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, gcongr] theorem untop₀_le_untop₀ (hb : b != ⊤) (h : a <= b) : a.untop₀ <= b.untop₀ := by
-  lift b to α using hb
-  by_cases ha : a = ⊤
-  · simp_all
-  lift a to α using ha
-  simp_all
-
-/--
-theorem `untop₀_le_untop₀_iff` / 定理 `untop₀_le_untop₀_iff`
-
-English:
-theorem untop₀_le_untop₀_iff
-  given: (ha : a != ⊤) (hb : b != ⊤)
-  proof: by
-  lift a to α using ha
-  lift b to α using hb
-  simp
-
-中文:
-定理 untop₀_le_untop₀_iff
-  条件: (ha : a != ⊤) (hb : b != ⊤)
-  证明: by
-  lift a to α using ha
-  lift b to α using hb
-  simp
--/
-theorem untop₀_le_untop₀_iff (ha : a != ⊤) (hb : b != ⊤) :
-    a.untop₀ <= b.untop₀ ↔ a <= b := by
+theorem untop₀_le_untop₀_iff (ha : a ≠ ⊤) (hb : b ≠ ⊤) :
+    a.untop₀ ≤ b.untop₀ ↔ a ≤ b := by
   lift a to α using ha
   lift b to α using hb
   simp
@@ -443,63 +246,28 @@ section LinearOrderedAddCommGroup
 
 variable [AddCommGroup α] [LinearOrder α] {a b : WithTop α}
 
-/--
-theorem `untop₀_max` / 定理 `untop₀_max`
-
-English:
-theorem untop₀_max
-  given: (ha : a != ⊤) (hb : b != ⊤)
-  proof: by
-  lift a to α using ha
-  lift b to α using hb
-  simp only [untop₀_coe]
-  by_cases h : a <= b
-  · simp [max_eq_right h, max_eq_right (coe_le_coe.mpr h)]
-  rw [not_le] at h
-  simp [max_eq_left h.le, max_eq_left (coe_lt_coe.mpr h).le]
-
-中文:
-定理 untop₀_max
-  条件: (ha : a != ⊤) (hb : b != ⊤)
-  证明: by
-  lift a to α using ha
-  lift b to α using hb
-  simp only [untop₀_coe]
-  by_cases h : a <= b
-  · simp [max_eq_right h, max_eq_right (coe_le_coe.mpr h)]
-  rw [not_le] at h
-  simp [max_eq_left h.le, max_eq_left (coe_lt_coe.mpr h).le]
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem untop₀_max (ha : a != ⊤) (hb : b != ⊤) :
+@[simp] theorem untop₀_max (ha : a ≠ ⊤) (hb : b ≠ ⊤) :
     (max a b).untop₀ = max a.untop₀ b.untop₀ := by
   lift a to α using ha
   lift b to α using hb
   simp only [untop₀_coe]
-  by_cases h : a <= b
+  by_cases h : a ≤ b
   · simp [max_eq_right h, max_eq_right (coe_le_coe.mpr h)]
   rw [not_le] at h
   simp [max_eq_left h.le, max_eq_left (coe_lt_coe.mpr h).le]
-
-/--
-theorem `untop₀_min` / 定理 `untop₀_min`
-
-English:
-theorem untop₀_min
-  given: (ha : a != ⊤) (hb : b != ⊤)
-  proof: by
-  lift a to α using ha
-  lift b to α using hb
-  norm_cast
-
-中文:
-定理 untop₀_min
-  条件: (ha : a != ⊤) (hb : b != ⊤)
-  证明: by
-  lift a to α using ha
-  lift b to α using hb
-  norm_cast
+/-
+**WithTop.untop** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：{α : Type u_1} → (x : WithTop α) → x ≠ ⊤ → α
+参数：x : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem untop₀_min (ha : a != ⊤) (hb : b != ⊤) :
+@[simp] theorem untop₀_min (ha : a ≠ ⊤) (hb : b ≠ ⊤) :
     (min a b).untop₀ = min a.untop₀ b.untop₀ := by
   lift a to α using ha
   lift b to α using hb
@@ -508,3 +276,4 @@ theorem untop₀_min
 end LinearOrderedAddCommGroup
 
 end WithTop
+

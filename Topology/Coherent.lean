@@ -40,209 +40,243 @@ variable {X : Type*} [TopologicalSpace X] {S : Set (Set X)} {t : Set X} {x : X}
 
 namespace Topology.IsCoherentWith
 
-/--
-theorem `isOpen_iff` / 定理 `isOpen_iff`
-
-English:
-theorem isOpen_iff
-  given: (hS : IsCoherentWith S)
-  proof: ⟨fun ht _ _ => ht.preimage continuous_subtype_val, hS.1 t⟩
-
-中文:
-定理 isOpen_iff
-  条件: (hS : 是余herentWith S)
-  证明: ⟨fun ht _ _ => ht.preimage continuous_subtype_val, hS.1 t⟩
+/-
+**Topology.IsCoherentWith.isOpen_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsCoher
+entWith`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {S : Set (Set X)} {t : Set X}
+,   Topology.IsCoherentWith S → (IsOpen t ↔ ∀ s ∈ S, IsOpen (Subtype.val ⁻¹' t))
+参数：Set X；IsOpen t ↔ ∀ s ∈ S, IsOpen (Subtype.val ⁻¹' t)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `Topology.IsCoherentWith.isOpen_of_forall_induced`：∀ {X : Type u_1} [tX :
+ TopologicalSpace X] {S : Set (Set X)},   Topology.IsCoherentWith S → ∀ (u : Set
+ X), (∀ s ∈ S, IsOpen (Subtype.val ⁻¹'…
 -/
 protected theorem isOpen_iff (hS : IsCoherentWith S) :
-    IsOpen t ↔ forall s in S, IsOpen ((↑) ⁻¹' t : Set s) :=
-  ⟨fun ht _ _ => ht.preimage continuous_subtype_val, hS.1 t⟩
-
-/--
-theorem `isClosed_iff` / 定理 `isClosed_iff`
-
-English:
-theorem isClosed_iff
-  given: (hS : IsCoherentWith S)
-  proof: by
-  simp only [← isOpen_compl_iff, hS.isOpen_iff, preimage_compl]
-
-中文:
-定理 isClosed_iff
-  条件: (hS : 是余herentWith S)
-  证明: by
-  simp only [← isOpen_compl_iff, hS.isOpen_iff, preimage_compl]
+    IsOpen t ↔ ∀ s ∈ S, IsOpen ((↑) ⁻¹' t : Set s) :=
+  ⟨fun ht _ _ ↦ ht.preimage continuous_subtype_val, hS.1 t⟩
+/-
+**Topology.IsCoherentWith.isClosed_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsCoh
+erentWith`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {S : Set (Set X)} {t : Set X}
+,   Topology.IsCoherentWith S → (IsClosed t ↔ ∀ s ∈ S, IsClosed (Subtype.val ⁻¹'
+ t))
+参数：Set X；IsClosed t ↔ ∀ s ∈ S, IsClosed (Subtype.val ⁻¹' t)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsCoherentWith.isOpen_iff`：∀ {X : Type u_1} [inst : Topological
+Space X] {S : Set (Set X)} {t : Set X},   Topology.IsCoherentWith S → (IsOpen t 
+↔ ∀ s ∈ S, IsOpen (Subty…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem isClosed_iff (hS : IsCoherentWith S) :
-    IsClosed t ↔ forall s in S, IsClosed ((↑) ⁻¹' t : Set s) := by
+    IsClosed t ↔ ∀ s ∈ S, IsClosed ((↑) ⁻¹' t : Set s) := by
   simp only [← isOpen_compl_iff, hS.isOpen_iff, preimage_compl]
-
-/--
-theorem `continuous_iff` / 定理 `continuous_iff`
-
-English:
-theorem continuous_iff
-  statement: {Y : Type*} [TopologicalSpace Y] {f : X -> Y}
-  proof: ⟨fun h _ _ => h.continuousOn, fun h => continuous_def.2 fun _u hu => hS.isOpen_iff.2 fun s hs =>
-hu.preimage (h s hs).domRestrict⟩
-
-中文:
-定理 continuous_iff
-  结论: {Y : 类型} [拓扑空间 Y] {f : X -> Y}
-  证明: ⟨fun h _ _ => h.continuousOn, fun h => continuous_def.2 fun _u hu => hS.isOpen_iff.2 fun s hs =>
-hu.preimage (h s hs).domRestrict⟩
+/-
+**Topology.IsCoherentWith.continuous_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsC
+oherentWith`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {S : Set (Set X)} {Y : Type u
+_2} [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsCoherentWith S → (Co
+ntinuous f ↔ ∀ s ∈ S, ContinuousOn f s)
+参数：Set X；Continuous f ↔ ∀ s ∈ S, ContinuousOn f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用定理 `Topology.IsCoherentWith.isOpen_iff`：∀ {X : Type u_1} [inst : Topological
+Space X] {S : Set (Set X)} {t : Set X},   Topology.IsCoherentWith S → (IsOpen t 
+↔ ∀ s ∈ S, IsOpen (Subty…
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
 -/
-protected theorem continuous_iff {Y : Type*} [TopologicalSpace Y] {f : X -> Y}
+protected theorem continuous_iff {Y : Type*} [TopologicalSpace Y] {f : X → Y}
     (hS : IsCoherentWith S) :
-    Continuous f ↔ forall s in S, ContinuousOn f s :=
-  ⟨fun h _ _ => h.continuousOn, fun h => continuous_def.2 fun _u hu => hS.isOpen_iff.2 fun s hs =>
-hu.preimage (h s hs).domRestrict⟩
-
-/--
-theorem `of_continuous_prop` / 定理 `of_continuous_prop`
-
-English:
-theorem of_continuous_prop
-  given: (h : forall f : X -> Prop, (forall s in S, ContinuousOn f s) -> Continuous f)
-  proof: by
-    simp only [continuousOn_iff_continuous_domRestrict, continuous_Prop] at *
-    exact h _ hu
-
-中文:
-定理 of_continuous_prop
-  条件: (h : 对任意 f : X -> 命题, (对任意 s in S, ContinuousOn f s) -> 连续 f)
-  证明: by
-    simp only [continuousOn_iff_continuous_domRestrict, continuous_Prop] at *
-    exact h _ hu
-
-Depends on / 依赖: continuousOn_iff_continuous_domRestrict, continuous_Prop
+    Continuous f ↔ ∀ s ∈ S, ContinuousOn f s :=
+  ⟨fun h _ _ ↦ h.continuousOn, fun h ↦ continuous_def.2 fun _u hu ↦ hS.isOpen_iff.2 fun s hs ↦
+    hu.preimage <| (h s hs).domRestrict⟩
+/-
+**Topology.IsCoherentWith.of_continuous_prop** 是 Mathlib 中的一个定理，位于命名空间 `Topology
+.IsCoherentWith`。
+形式化陈述：of_continuous_prop (h : forall f : X -> Prop, (forall s in S, ContinuousOn
+ f s) -> Continuous f) : IsCoherentWith S where isOpen_of_forall_induced u hu
+参数：h : forall f : X -> Prop, (forall s in S, ContinuousOn f s) -> Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem of_continuous_prop (h : forall f : X -> Prop, (forall s in S, ContinuousOn f s) -> Continuous f) :
+theorem of_continuous_prop (h : ∀ f : X → Prop, (∀ s ∈ S, ContinuousOn f s) → Continuous f) :
     IsCoherentWith S where
   isOpen_of_forall_induced u hu := by
     simp only [continuousOn_iff_continuous_domRestrict, continuous_Prop] at *
     exact h _ hu
-
-/--
-theorem `of_isClosed` / 定理 `of_isClosed`
-
-English:
-theorem of_isClosed
-  given: (h : forall t : Set X, (forall s in S, IsClosed ((↑) ⁻¹' t : Set s)) -> IsClosed t)
-  proof: ⟨fun _t ht => isClosed_compl_iff.1 h _ fun s hs => (ht s hs).isClosed_compl⟩
-
-中文:
-定理 of_isClosed
-  条件: (h : 对任意 t : 集合 X, (对任意 s in S, 是闭集 ((↑) ⁻¹' t : 集合 s)) -> 是闭集 t)
-  证明: ⟨fun _t ht => isClosed_compl_iff.1 h _ fun s hs => (ht s hs).isClosed_compl⟩
-
-Depends on / 依赖: isClosed_compl, isClosed_compl_iff
+/-
+**Topology.IsCoherentWith.of_isClosed** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsCohe
+rentWith`。
+形式化陈述：of_isClosed (h : forall t : Set X, (forall s in S, IsClosed ((↑) ⁻¹' t : S
+et s)) -> IsClosed t) : IsCoherentWith S
+参数：h : forall t : Set X, (forall s in S, IsClosed ((↑) ⁻¹' t : Set s)) -> IsClos
+ed t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClosed_compl_iff`：isClosed_compl_iff {s : Set X} : IsClosed sᶜ ↔ IsOpe
+n s
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
 -/
-theorem of_isClosed (h : forall t : Set X, (forall s in S, IsClosed ((↑) ⁻¹' t : Set s)) -> IsClosed t) :
+theorem of_isClosed (h : ∀ t : Set X, (∀ s ∈ S, IsClosed ((↑) ⁻¹' t : Set s)) → IsClosed t) :
     IsCoherentWith S :=
-⟨fun _t ht => isClosed_compl_iff.1 h _ fun s hs => (ht s hs).isClosed_compl⟩
-
-/--
-theorem `enlarge` / 定理 `enlarge`
-
-English:
-theorem enlarge
-  given: {T} (hS : IsCoherentWith S) (hT : forall s in S, exists t in T, s subseteq t)
-  proof: of_continuous_prop fun _f hf => hS.continuous_iff.2 fun s hs =>
-    let ⟨t, htT, hst⟩ := hT s hs; (hf t htT).mono hst
-
-中文:
-定理 enlarge
-  条件: {T} (hS : 是余herentWith S) (hT : 对任意 s in S, 存在 t in T, s subseteq t)
-  证明: of_continuous_prop fun _f hf => hS.continuous_iff.2 fun s hs =>
-    let ⟨t, htT, hst⟩ := hT s hs; (hf t htT).mono hst
+  ⟨fun _t ht ↦ isClosed_compl_iff.1 <| h _ fun s hs ↦ (ht s hs).isClosed_compl⟩
+/-
+**Topology.IsCoherentWith.enlarge** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsCoherent
+With`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {S T : Set (Set X)},   Topolo
+gy.IsCoherentWith S → (∀ s ∈ S, ∃ t ∈ T, s ⊆ t) → Topology.IsCoherentWith T
+参数：Set X；∀ s ∈ S, ∃ t ∈ T, s ⊆ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoherentWith.of_continuous_prop`：of_continuous_prop (h : fora
+ll f : X -> Prop, (forall s in S, ContinuousOn f s) -> Continuous f) : IsCoheren
+tWith S where isOpen_of_forall_i…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Topology.IsCoherentWith.continuous_iff`：∀ {X : Type u_1} [inst : Topolog
+icalSpace X] {S : Set (Set X)} {Y : Type u_2} [inst_1 : TopologicalSpace Y] {f :
+ X → Y},   Topology.IsCohere…
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
 -/
-protected theorem enlarge {T} (hS : IsCoherentWith S) (hT : forall s in S, exists t in T, s subseteq t) :
+protected theorem enlarge {T} (hS : IsCoherentWith S) (hT : ∀ s ∈ S, ∃ t ∈ T, s ⊆ t) :
     IsCoherentWith T :=
-  of_continuous_prop fun _f hf => hS.continuous_iff.2 fun s hs =>
+  of_continuous_prop fun _f hf ↦ hS.continuous_iff.2 fun s hs ↦
     let ⟨t, htT, hst⟩ := hT s hs; (hf t htT).mono hst
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: {T} (hS : IsCoherentWith S) (hT : S subseteq T)
-  statement: IsCoherentWith T
-  proof: hS.enlarge fun s hs => ⟨s, hT hs, Subset.rfl⟩
-
-中文:
-定理 mono
-  条件: {T} (hS : 是余herentWith S) (hT : S subseteq T)
-  结论: 是余herentWith T
-  证明: hS.enlarge fun s hs => ⟨s, hT hs, Subset.rfl⟩
+/-
+**Topology.IsCoherentWith.mono** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsCoherentWit
+h`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {S T : Set (Set X)},   Topolo
+gy.IsCoherentWith S → S ⊆ T → Topology.IsCoherentWith T
+参数：Set X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoherentWith.enlarge`：∀ {X : Type u_1} [inst : TopologicalSpa
+ce X] {S T : Set (Set X)},   Topology.IsCoherentWith S → (∀ s ∈ S, ∃ t ∈ T, s ⊆ 
+t) → Topology.IsCoher…
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-protected theorem mono {T} (hS : IsCoherentWith S) (hT : S subseteq T) : IsCoherentWith T :=
-  hS.enlarge fun s hs => ⟨s, hT hs, Subset.rfl⟩
+protected theorem mono {T} (hS : IsCoherentWith S) (hT : S ⊆ T) : IsCoherentWith T :=
+  hS.enlarge fun s hs ↦ ⟨s, hT hs, Subset.rfl⟩
 
-/--
-lemma `of_seq` / 引理 `of_seq`
+/-- If `X` is a sequential space
+and `S` contains each set of the form `insert x (Set.range u)`
+where `u : ℕ → X` is a sequence and `x` is its limit,
+then topology on `X` is generated by its restrictions to the sets of `S`. -/
+/-
+**Topology.IsCoherentWith.of_seq** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsCoherentW
+ith`。
+形式化陈述：of_seq [SequentialSpace X] (h : forall ⦃u : Nat -> X⦄ ⦃x : X⦄, Tendsto u a
+tTop (𝓝 x) -> insert x (range u) in S) : IsCoherentWith S
+参数：h : forall ⦃u : Nat -> X⦄ ⦃x : X⦄, Tendsto u atTop (𝓝 x) -> insert x (range u
+) in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoherentWith.of_isClosed`：of_isClosed (h : forall t : Set X, 
+(forall s in S, IsClosed ((↑) ⁻¹' t : Set s)) -> IsClosed t) : IsCoherentWith S
+· 使用定理 `IsSeqClosed.isClosed`：∀ {X : Type u_1} [inst : TopologicalSpace X] [Sequ
+entialSpace X] {s : Set X}, IsSeqClosed s → IsClosed s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClosed_induced_iff`：isClosed_induced_iff [t : TopologicalSpace β] {s :
+ Set α} {f : α -> β} : IsClosed[t.induced f] s ↔ exists t, IsClosed t ∧ f ⁻¹' t 
+= s
+· 使用定理 `IsClosed.mem_of_tendsto`：IsClosed.mem_of_tendsto {f : α -> X} {b : Filte
+r α} [NeBot b] (hs : IsClosed s) (hf : Tendsto f b (𝓝 x)) (h : forallᶠ x in b, f
+ x in s) : x …
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `Subtype.preimage_val_eq_preimage_val_iff`：preimage_val_eq_preimage_val_i
+ff (s t u : Set α) : (Subtype.val : s -> α) ⁻¹' t = Subtype.val ⁻¹' u ↔ s inter 
+t = s inter u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
 
-English:
-lemma of_seq
-  statement: [SequentialSpace X]
-  proof: by
-  refine of_isClosed fun t ht => IsSeqClosed.isClosed fun u x hut hux => ?_
-  rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
-  rw [Subtype.preimage_val_eq_preimage_val_iff]; rw [Set.ext_iff] at hst
-  suffices x in s by specialize hst x; simp_all
-refine hsc.mem_of_tendsto hux Eventually.of_forall fun k => ?_
-  specialize hst (u k)
-  simp_all
-
-中文:
-引理 of_seq
-  结论: [Sequential空间 X]
-  证明: by
-  refine of_isClosed fun t ht => IsSeqClosed.isClosed fun u x hut hux => ?_
-  rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
-  rw [Subtype.preimage_val_eq_preimage_val_iff]; rw [Set.ext_iff] at hst
-  suffices x in s by specialize hst x; simp_all
-refine hsc.mem_of_tendsto hux Eventually.of_forall fun k => ?_
-  specialize hst (u k)
-  simp_all
-
-Depends on / 依赖: Eventually, Eventually.of_forall, IsSeqClosed, IsSeqClosed.isClosed, Set.ext_iff, Subtype, Subtype.preimage_val_eq_preimage_val_iff, ext_iff, hsc.mem_of_tendsto, isClosed, isClosed_induced_iff, mem_of_tendsto, of_forall, of_isClosed, preimage_val_eq_preimage_val_iff, specialize
+--- 原说明 ---
+If `X` is a sequential space
+and `S` contains each set of the form `insert x (Set.range u)`
+where `u : ℕ → X` is a sequence and `x` is its limit,
+then topology on `X` is generated by its restrictions to the sets of `S`.
 -/
 lemma of_seq [SequentialSpace X]
-    (h : forall ⦃u : Nat -> X⦄ ⦃x : X⦄, Tendsto u atTop (𝓝 x) -> insert x (range u) in S) :
+    (h : ∀ ⦃u : ℕ → X⦄ ⦃x : X⦄, Tendsto u atTop (𝓝 x) → insert x (range u) ∈ S) :
     IsCoherentWith S := by
-  refine of_isClosed fun t ht => IsSeqClosed.isClosed fun u x hut hux => ?_
+  refine of_isClosed fun t ht ↦ IsSeqClosed.isClosed fun u x hut hux ↦ ?_
   rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
-  rw [Subtype.preimage_val_eq_preimage_val_iff]; rw [Set.ext_iff] at hst
-  suffices x in s by specialize hst x; simp_all
-refine hsc.mem_of_tendsto hux Eventually.of_forall fun k => ?_
+  rw [Subtype.preimage_val_eq_preimage_val_iff, Set.ext_iff] at hst
+  suffices x ∈ s by specialize hst x; simp_all
+  refine hsc.mem_of_tendsto hux <| Eventually.of_forall fun k ↦ ?_
   specialize hst (u k)
   simp_all
 
-/--
-lemma `of_nhds` / 引理 `of_nhds`
+/-- If each point of the space has a neighborhood from the family `S`,
+then the topology is generated by its restrictions to the sets of `S`. -/
+/-
+**Topology.IsCoherentWith.of_nhds** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsCoherent
+With`。
+形式化陈述：of_nhds (h : forall x, exists s in S, s in 𝓝 x) : IsCoherentWith S
+参数：h : forall x, exists s in S, s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoherentWith.of_continuous_prop`：of_continuous_prop (h : fora
+ll f : X -> Prop, (forall s in S, ContinuousOn f s) -> Continuous f) : IsCoheren
+tWith S where isOpen_of_forall_i…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_continuousAt`：continuous_iff_continuousAt : Continuous f 
+↔ forall x, ContinuousAt f x
+· 使用定理 `ContinuousOn.continuousAt`：ContinuousOn.continuousAt (h : ContinuousOn f
+ s) (hx : s in 𝓝 x) : ContinuousAt f x
 
-English:
-lemma of_nhds
-  given: (h : forall x, exists s in S, s in 𝓝 x)
-  statement: IsCoherentWith S
-  proof: of_continuous_prop fun _f hf => continuous_iff_continuousAt.2 fun x =>
-    let ⟨s, hsS, hsx⟩ := h x
-    (hf s hsS).continuousAt hsx
-
-中文:
-引理 of_nhds
-  条件: (h : 对任意 x, 存在 s in S, s in 𝓝 x)
-  结论: 是余herentWith S
-  证明: of_continuous_prop fun _f hf => continuous_iff_continuousAt.2 fun x =>
-    let ⟨s, hsS, hsx⟩ := h x
-    (hf s hsS).continuousAt hsx
-
-Depends on / 依赖: continuousAt, continuous_iff_continuousAt, of_continuous_prop
+--- 原说明 ---
+If each point of the space has a neighborhood from the family `S`,
+then the topology is generated by its restrictions to the sets of `S`.
 -/
-lemma of_nhds (h : forall x, exists s in S, s in 𝓝 x) : IsCoherentWith S :=
-  of_continuous_prop fun _f hf => continuous_iff_continuousAt.2 fun x =>
+lemma of_nhds (h : ∀ x, ∃ s ∈ S, s ∈ 𝓝 x) : IsCoherentWith S :=
+  of_continuous_prop fun _f hf ↦ continuous_iff_continuousAt.2 fun x ↦
     let ⟨s, hsS, hsx⟩ := h x
     (hf s hsS).continuousAt hsx
 
 end Topology.IsCoherentWith
+

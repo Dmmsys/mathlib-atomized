@@ -6,7 +6,7 @@ Authors: Reid Barton, Patrick Massot, Kim Morrison
 module
 
 public import Mathlib.CategoryTheory.Adjunction.Reflective
-public import Mathlib.CategoryTheory.Monad.Limits -- shake: keep (used in `example` only)
+public import Mathlib.CategoryTheory.Monad.Limits  -- shake: keep (used in `example` only)
 public import Mathlib.Topology.Category.TopCat.Basic
 public import Mathlib.Topology.UniformSpace.Completion
 
@@ -27,24 +27,15 @@ universe u
 open CategoryTheory
 
 
-/--
-Definition of `UniformSpaceCat` / `UniformSpaceCat` 的定义
+/-- An object in the category of uniform spaces. -/
+/-
+**UniformSpaceCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure UniformSpaceCat
-  parameters: : Type (u + 1) where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [str : UniformSpace carrier]
-
-中文:
-结构 一致空间范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [str : 一致空间 carrier]
+--- 原说明 ---
+An object in the category of uniform spaces.
 -/
 structure UniformSpaceCat : Type (u + 1) where
   /-- Construct a bundled `UniformSpace` from the underlying type and the typeclass. -/
@@ -57,67 +48,30 @@ attribute [instance] UniformSpaceCat.str
 
 namespace UniformSpaceCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort UniformSpaceCat Type*
-  body: ⟨carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 一致空间范畴 类型
-  定义体: ⟨carrier⟩
-
-Depends on / 依赖: carrier
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort UniformSpaceCat Type* :=
   ⟨carrier⟩
 
 /-- A bundled uniform continuous map. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**UniformSpaceCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `UniformSpaceCat`。
+形式化陈述：UniformSpaceCat → UniformSpaceCat → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : UniformSpaceCat)
-  axioms and operations (1):
-    - hom' : { f : X -> Y // UniformContinuous f }
-
-中文:
-结构 态射
-  参数: (X Y : 一致空间范畴)
-  公理与运算 (1 个):
-    - hom' : { f : X -> Y // 一致连续 f }
+--- 原说明 ---
+A bundled uniform continuous map.
 -/
 structure Hom (X Y : UniformSpaceCat) where
   /-- The underlying `UniformContinuous` function. -/
-  hom' : { f : X -> Y // UniformContinuous f }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LargeCategory.{u} UniformSpaceCat.{u}
-  body: Hom
-  id X := ⟨id, uniformContinuous_id⟩
-  comp f g := ⟨⟨g.hom'.val ∘ f.hom'.val, g.hom'.property.comp f.hom'.property⟩⟩
-  id_comp := by intros; apply Hom.ext; simp
-  comp_id := by intros; apply Hom.ext; simp
-  assoc := by intros; apply Hom.ext; ext; simp
-
-中文:
-实例 :
-  签名: 大范畴.{u} 一致空间范畴.{u}
-  定义体: Hom
-  id X := ⟨id, uniformContinuous_id⟩
-  comp f g := ⟨⟨g.hom'.val ∘ f.hom'.val, g.hom'.property.comp f.hom'.property⟩⟩
-  id_comp := by intros; apply Hom.ext; simp
-  comp_id := by intros; apply Hom.ext; simp
-  assoc := by intros; apply Hom.ext; ext; simp
+  hom' : { f : X → Y // UniformContinuous f }
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LargeCategory.{u} UniformSpaceCat.{u} where
   Hom := Hom
@@ -126,286 +80,164 @@ instance : LargeCategory.{u} UniformSpaceCat.{u} where
   id_comp := by intros; apply Hom.ext; simp
   comp_id := by intros; apply Hom.ext; simp
   assoc := by intros; apply Hom.ext; ext; simp
-
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: (X Y : UniformSpaceCat)
-  body: Subtype.val
-  coe_injective _ _ h := Subtype.ext h
-
-中文:
-实例 instFunLike
-  签名: (X Y : 一致空间范畴)
-  定义体: Subtype.val
-  coe_injective _ _ h := Subtype.ext h
-
-Depends on / 依赖: Subtype, Subtype.val
+/-
+**UniformSpaceCat.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+形式化陈述：instFunLike (X Y : UniformSpaceCat) : FunLike { f : X -> Y // UniformConti
+nuous f } X Y where coe
+参数：X Y : UniformSpaceCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike (X Y : UniformSpaceCat) :
-    FunLike { f : X -> Y // UniformContinuous f } X Y where
+    FunLike { f : X → Y // UniformContinuous f } X Y where
   coe := Subtype.val
   coe_injective _ _ h := Subtype.ext h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory UniformSpaceCat ({ f : · -> · // UniformContinuous f })
-  body: f.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴 一致空间范畴 ({ f : · -> · // 一致连续 f })
-  定义体: f.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: f.hom
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory UniformSpaceCat ({ f : · -> · // UniformContinuous f }) where
+instance : ConcreteCategory UniformSpaceCat ({ f : · → · // UniformContinuous f }) where
   hom f := f.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `UniformSpaceCat` back into a function which is `UniformContinuous`. -/
+/-
+**UniformSpaceCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpaceCat.Hom`。
+形式化陈述：{X Y : UniformSpaceCat} → X.Hom Y → { f // UniformContinuous f }
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : UniformSpaceCat} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := UniformSpaceCat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 一致空间范畴} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := UniformSpaceCat) f
+--- 原说明 ---
+Turn a morphism in `UniformSpaceCat` back into a function which is `UniformConti
+nuous`.
 -/
 abbrev Hom.hom {X Y : UniformSpaceCat} (f : Hom X Y) :=
   ConcreteCategory.hom (C := UniformSpaceCat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a function which is `UniformContinuous` as a morphism in `UniformSpaceCat`. -/
+/-
+**UniformSpaceCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `UniformSpaceCat`。
+形式化陈述：ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y] (f : { f : X -> Y /
+/ UniformContinuous f }) : of X ⟶ of Y
+参数：f : { f : X -> Y // UniformContinuous f }。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-  body: ConcreteCategory.ofHom f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [一致空间 X] [一致空间 Y]
-  定义体: ConcreteCategory.ofHom f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a function which is `UniformContinuous` as a morphism in `UniformSpace
+Cat`.
 -/
 abbrev ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-    (f : { f : X -> Y // UniformContinuous f }) : of X ⟶ of Y :=
+    (f : { f : X → Y // UniformContinuous f }) : of X ⟶ of Y :=
   ConcreteCategory.ofHom f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited UniformSpaceCat
-  body: ⟨UniformSpaceCat.of Empty⟩
-
-中文:
-实例 :
-  签名: 可居 一致空间范畴
-  定义体: ⟨UniformSpaceCat.of Empty⟩
-
-Depends on / 依赖: UniformSpaceCat, UniformSpaceCat.of
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited UniformSpaceCat :=
   ⟨UniformSpaceCat.of Empty⟩
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [UniformSpace X]
-  statement: (of X : Type u) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [一致空间 X]
-  结论: (of X : 类型u) = X
-  证明: rfl
-
-@[simp]
+/-
+**UniformSpaceCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：coe_of (X : Type u) [UniformSpace X] : (of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [UniformSpace X] : (of X : Type u) = X :=
   rfl
 
 @[simp]
-/--
-theorem `hom_comp` / 定理 `hom_comp`
-
-English:
-theorem hom_comp
-  given: {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 hom_comp
-  条件: {X Y Z : 一致空间范畴} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**UniformSpaceCat.hom_comp** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：hom_comp {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom =
+ ⟨g ∘ f, g.hom.prop.comp f.hom.prop⟩
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_comp {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = ⟨g ∘ f, g.hom.prop.comp f.hom.prop⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `hom_id` / 定理 `hom_id`
-
-English:
-theorem hom_id
-  given: (X : UniformSpaceCat)
-  statement: (𝟙 X : X ⟶ X).hom = ⟨id, uniformContinuous_id⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 hom_id
-  条件: (X : 一致空间范畴)
-  结论: (𝟙 X : X ⟶ X).hom = ⟨id, uniformContinuous_id⟩
-  证明: rfl
-
-@[simp]
+/-
+**UniformSpaceCat.hom_id** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：hom_id (X : UniformSpaceCat) : (𝟙 X : X ⟶ X).hom = ⟨id, uniformContinuous_
+id⟩
+参数：X : UniformSpaceCat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_id (X : UniformSpaceCat) : (𝟙 X : X ⟶ X).hom = ⟨id, uniformContinuous_id⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `hom_ofHom` / 定理 `hom_ofHom`
-
-English:
-theorem hom_ofHom
-  statement: {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-  proof: rfl
-
-中文:
-定理 hom_ofHom
-  结论: {X Y : 类型u} [一致空间 X] [一致空间 Y]
-  证明: rfl
+/-
+**UniformSpaceCat.hom_ofHom** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y] (f : { f : X ->
+ Y // UniformContinuous f }) : (ofHom f).hom = f
+参数：f : { f : X -> Y // UniformContinuous f }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-    (f : { f : X -> Y // UniformContinuous f }) : (ofHom f).hom = f :=
+    (f : { f : X → Y // UniformContinuous f }) : (ofHom f).hom = f :=
   rfl
-
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-中文:
-定理 coe_comp
-  条件: {X Y Z : 一致空间范畴} (f : X ⟶ Y) (g : Y ⟶ Z)
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
+/-
+**UniformSpaceCat.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：coe_comp {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g : X ->
+ Z) = g ∘ f
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g : X -> Z) = g ∘ f :=
+theorem coe_comp {X Y Z : UniformSpaceCat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g : X → Z) = g ∘ f :=
   rfl
-
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  given: (X : UniformSpaceCat)
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  条件: (X : 一致空间范畴)
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
+/-
+**UniformSpaceCat.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：coe_id (X : UniformSpaceCat) : (𝟙 X : X -> X) = id
+参数：X : UniformSpaceCat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_id (X : UniformSpaceCat) : (𝟙 X : X -> X) = id :=
+theorem coe_id (X : UniformSpaceCat) : (𝟙 X : X → X) = id :=
   rfl
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: {X Y : UniformSpaceCat} (f : X -> Y) (hf : UniformContinuous f)
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_mk
-  条件: {X Y : 一致空间范畴} (f : X -> Y) (hf : 一致连续 f)
-  证明: rfl
-
-@[ext]
+/-
+**UniformSpaceCat.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：coe_mk {X Y : UniformSpaceCat} (f : X -> Y) (hf : UniformContinuous f) : (
+⟨f, hf⟩ : X ⟶ Y).hom = f
+参数：f : X -> Y；hf : UniformContinuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk {X Y : UniformSpaceCat} (f : X -> Y) (hf : UniformContinuous f) :
+theorem coe_mk {X Y : UniformSpaceCat} (f : X → Y) (hf : UniformContinuous f) :
     (⟨f, hf⟩ : X ⟶ Y).hom = f :=
   rfl
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {X Y : UniformSpaceCat} {f g : X ⟶ Y} (h : (f : X -> Y) = g)
-  statement: f = g
-  proof: Hom.ext (Subtype.ext h)
-
-中文:
-定理 hom_ext
-  条件: {X Y : 一致空间范畴} {f g : X ⟶ Y} (h : (f : X -> Y) = g)
-  结论: f = g
-  证明: Hom.ext (Subtype.ext h)
-
-Depends on / 依赖: Hom.ext, Subtype, Subtype.ext
+/-
+**UniformSpaceCat.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：hom_ext {X Y : UniformSpaceCat} {f g : X ⟶ Y} (h : (f : X -> Y) = g) : f =
+ g
+参数：h : (f : X -> Y) = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpaceCat.Hom.ext`：∀ {X : UniformSpaceCat} {Y : UniformSpaceCat} {
+x y : X.Hom Y}, x.hom' = y.hom' → x = y
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-theorem hom_ext {X Y : UniformSpaceCat} {f g : X ⟶ Y} (h : (f : X -> Y) = g) : f = g :=
+theorem hom_ext {X Y : UniformSpaceCat} {f g : X ⟶ Y} (h : (f : X → Y) = g) : f = g :=
   Hom.ext (Subtype.ext h)
 
-/--
-Instance `hasForgetToTop` / 实例 `hasForgetToTop`
+/-- The forgetful functor from uniform spaces to topological spaces. -/
+/-
+**UniformSpaceCat.hasForgetToTop** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+形式化陈述：hasForgetToTop : HasForget₂ UniformSpaceCat.{u} TopCat.{u} where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasForgetToTop
-  signature: : HasForget₂ UniformSpaceCat.{u} TopCat.{u} where
-  body: { obj := fun X => TopCat.of X
-      map := fun f => TopCat.ofHom
-        { toFun := f
-          continuous_toFun := f.hom.property.continuous } }
-
-中文:
-实例 hasForgetToTop
-  签名: : 有Forget₂ 一致空间范畴.{u} 顶元素范畴.{u} where
-  定义体: { obj := fun X => TopCat.of X
-      map := fun f => TopCat.ofHom
-        { toFun := f
-          continuous_toFun := f.hom.property.continuous } }
-
-Depends on / 依赖: TopCat, TopCat.of, TopCat.ofHom, continuous, continuous_toFun, f.hom.property.continuous, property
+--- 原说明 ---
+The forgetful functor from uniform spaces to topological spaces.
 -/
 instance hasForgetToTop : HasForget₂ UniformSpaceCat.{u} TopCat.{u} where
   forget₂ :=
@@ -416,26 +248,15 @@ instance hasForgetToTop : HasForget₂ UniformSpaceCat.{u} TopCat.{u} where
 
 end UniformSpaceCat
 
-/--
-Definition of `CpltSepUniformSpace` / `CpltSepUniformSpace` 的定义
+/-- A (bundled) complete separated uniform space. -/
+/-
+**CpltSepUniformSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CpltSepUniformSpace
-  parameters: where
-  axioms and operations (4):
-    - α : Type u
-    - [isUniformSpace : UniformSpace α]
-    - [isCompleteSpace : CompleteSpace α]
-    - [isT0 : T0Space α]
-
-中文:
-结构 CpltSepUniform空间
-  参数: where
-  公理与运算 (4 个):
-    - α : 类型u
-    - [isUniformSpace : 一致空间 α]
-    - [isCompleteSpace : 完备空间 α]
-    - [isT0 : T0空间 α]
+--- 原说明 ---
+A (bundled) complete separated uniform space.
 -/
 structure CpltSepUniformSpace where
   /-- The underlying space -/
@@ -446,229 +267,152 @@ structure CpltSepUniformSpace where
 
 namespace CpltSepUniformSpace
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort CpltSepUniformSpace (Type u)
-  body: ⟨CpltSepUniformSpace.α⟩
-
-中文:
-实例 :
-  签名: CoeSort CpltSepUniform空间 (类型u)
-  定义体: ⟨CpltSepUniformSpace.α⟩
-
-Depends on / 依赖: CpltSepUniformSpace
+/-
+**CpltSepUniformSpace.** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort CpltSepUniformSpace (Type u) :=
   ⟨CpltSepUniformSpace.α⟩
 
 attribute [instance] isUniformSpace isCompleteSpace isT0
 
-/--
-Definition of `toUniformSpace` / `toUniformSpace` 的定义
+/-- The function forgetting that a complete separated uniform spaces is complete and separated. -/
+/-
+**CpltSepUniformSpace.toUniformSpace** 是 Mathlib 中的一个定义，位于命名空间 `CpltSepUniformSp
+ace`。
+形式化陈述：toUniformSpace (X : CpltSepUniformSpace) : UniformSpaceCat
+参数：X : CpltSepUniformSpace。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toUniformSpace
-  signature: (X : CpltSepUniformSpace)
-  body: UniformSpaceCat.of X
-
-中文:
-定义 toUniformSpace
-  签名: (X : CpltSepUniform空间)
-  定义体: UniformSpaceCat.of X
-
-Depends on / 依赖: UniformSpaceCat, UniformSpaceCat.of
+--- 原说明 ---
+The function forgetting that a complete separated uniform spaces is complete and
+ separated.
 -/
 def toUniformSpace (X : CpltSepUniformSpace) : UniformSpaceCat :=
   UniformSpaceCat.of X
-
-/--
-Instance `completeSpace` / 实例 `completeSpace`
-
-English:
-instance completeSpace
-  signature: (X : CpltSepUniformSpace)
-  body: CpltSepUniformSpace.isCompleteSpace X
-
-中文:
-实例 completeSpace
-  签名: (X : CpltSepUniform空间)
-  定义体: CpltSepUniformSpace.isCompleteSpace X
-
-Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.isCompleteSpace, isCompleteSpace
+/-
+**CpltSepUniformSpace.completeSpace** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpa
+ce`。
+形式化陈述：completeSpace (X : CpltSepUniformSpace) : CompleteSpace (toUniformSpace X)
+.carrier
+参数：X : CpltSepUniformSpace。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CpltSepUniformSpace.isCompleteSpace`：∀ (self : CpltSepUniformSpace), Com
+pleteSpace self.α
 -/
 instance completeSpace (X : CpltSepUniformSpace) : CompleteSpace (toUniformSpace X).carrier :=
   CpltSepUniformSpace.isCompleteSpace X
-
-/--
-Instance `t0Space` / 实例 `t0Space`
-
-English:
-instance t0Space
-  signature: (X : CpltSepUniformSpace)
-  body: CpltSepUniformSpace.isT0 X
-
-中文:
-实例 t0Space
-  签名: (X : CpltSepUniform空间)
-  定义体: CpltSepUniformSpace.isT0 X
-
-Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.isT0
+/-
+**CpltSepUniformSpace.t0Space** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：t0Space (X : CpltSepUniformSpace) : T0Space (toUniformSpace X).carrier
+参数：X : CpltSepUniformSpace。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CpltSepUniformSpace.isT0`：∀ (self : CpltSepUniformSpace), T0Space self.α
 -/
 instance t0Space (X : CpltSepUniformSpace) : T0Space (toUniformSpace X).carrier :=
   CpltSepUniformSpace.isT0 X
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a bundled `UniformSpace` from the underlying type and the appropriate typeclasses. -/
+/-
+**CpltSepUniformSpace.of** 是 Mathlib 中的一个定义，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：of (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X] : CpltSepUn
+iformSpace
+参数：X : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X]
-  body: ⟨X⟩
-
-@[simp]
-
-中文:
-定义 of
-  签名: (X : 类型u) [一致空间 X] [完备空间 X] [T0空间 X]
-  定义体: ⟨X⟩
-
-@[simp]
+--- 原说明 ---
+Construct a bundled `UniformSpace` from the underlying type and the appropriate 
+typeclasses.
 -/
 def of (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X] : CpltSepUniformSpace :=
   ⟨X⟩
 
 @[simp]
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X]
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [一致空间 X] [完备空间 X] [T0空间 X]
-  证明: rfl
+/-
+**CpltSepUniformSpace.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：coe_of (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X] : (of X
+ : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [UniformSpace X] [CompleteSpace X] [T0Space X] :
     (of X : Type u) = X :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited CpltSepUniformSpace
-  body: ⟨CpltSepUniformSpace.of Empty⟩
-
-中文:
-实例 :
-  签名: 可居 CpltSepUniform空间
-  定义体: ⟨CpltSepUniformSpace.of Empty⟩
-
-Depends on / 依赖: CpltSepUniformSpace, CpltSepUniformSpace.of
+/-
+**CpltSepUniformSpace.** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited CpltSepUniformSpace :=
   ⟨CpltSepUniformSpace.of Empty⟩
 
-/--
-Instance `category` / 实例 `category`
+/-- The category instance on `CpltSepUniformSpace`. -/
+/-
+**CpltSepUniformSpace.category** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：category : LargeCategory CpltSepUniformSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance category
-  signature: : LargeCategory CpltSepUniformSpace
-  body: inferInstanceAs Category (InducedCategory _ toUniformSpace)
-
-中文:
-实例 category
-  签名: : 大范畴 CpltSepUniform空间
-  定义体: inferInstanceAs Category (InducedCategory _ toUniformSpace)
-
-Depends on / 依赖: Category, InducedCategory, toUniformSpace
+--- 原说明 ---
+The category instance on `CpltSepUniformSpace`.
 -/
 instance category : LargeCategory CpltSepUniformSpace :=
-inferInstanceAs Category (InducedCategory _ toUniformSpace)
-
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: (X Y : CpltSepUniformSpace)
-  body: Subtype.val
-  coe_injective _ _ h := Subtype.ext h
-
-中文:
-实例 instFunLike
-  签名: (X Y : CpltSepUniform空间)
-  定义体: Subtype.val
-  coe_injective _ _ h := Subtype.ext h
-
-Depends on / 依赖: Subtype, Subtype.val
+  inferInstanceAs <| Category (InducedCategory _ toUniformSpace)
+/-
+**CpltSepUniformSpace.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniformSpace
+`。
+形式化陈述：instFunLike (X Y : CpltSepUniformSpace) : FunLike { f : X -> Y // UniformC
+ontinuous f } X Y where coe
+参数：X Y : CpltSepUniformSpace。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike (X Y : CpltSepUniformSpace) :
-    FunLike { f : X -> Y // UniformContinuous f } X Y where
+    FunLike { f : X → Y // UniformContinuous f } X Y where
   coe := Subtype.val
   coe_injective _ _ h := Subtype.ext h
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `concreteCategory` / 实例 `concreteCategory`
+/-- The concrete category instance on `CpltSepUniformSpace`. -/
+/-
+**CpltSepUniformSpace.concreteCategory** 是 Mathlib 中的一个实例，位于命名空间 `CpltSepUniform
+Space`。
+形式化陈述：concreteCategory : ConcreteCategory CpltSepUniformSpace ({ f : · -> · // U
+niformContinuous f })
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance concreteCategory
-  signature: : ConcreteCategory CpltSepUniformSpace
-  body: inferInstanceAs ConcreteCategory (InducedCategory _ toUniformSpace) _
-
-中文:
-实例 concreteCategory
-  签名: : 余ncrete范畴 CpltSepUniform空间
-  定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toUniformSpace) _
-
-Depends on / 依赖: ConcreteCategory, InducedCategory, toUniformSpace
+--- 原说明 ---
+The concrete category instance on `CpltSepUniformSpace`.
 -/
 instance concreteCategory : ConcreteCategory CpltSepUniformSpace
-    ({ f : · -> · // UniformContinuous f }) :=
-inferInstanceAs ConcreteCategory (InducedCategory _ toUniformSpace) _
+    ({ f : · → · // UniformContinuous f }) :=
+  inferInstanceAs <| ConcreteCategory (InducedCategory _ toUniformSpace) _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `hasForgetToUniformSpace` / 实例 `hasForgetToUniformSpace`
-
-English:
-instance hasForgetToUniformSpace
-  signature: : HasForget₂ CpltSepUniformSpace UniformSpaceCat
-  body: inferInstanceAs HasForget₂ (InducedCategory _ toUniformSpace) _
-
-中文:
-实例 hasForgetToUniformSpace
-  签名: : 有Forget₂ CpltSepUniform空间 一致空间范畴
-  定义体: inferInstanceAs HasForget₂ (InducedCategory _ toUniformSpace) _
-
-Depends on / 依赖: InducedCategory, toUniformSpace
+/-
+**CpltSepUniformSpace.hasForgetToUniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `CpltSep
+UniformSpace`。
+形式化陈述：hasForgetToUniformSpace : HasForget₂ CpltSepUniformSpace UniformSpaceCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToUniformSpace : HasForget₂ CpltSepUniformSpace UniformSpaceCat :=
-inferInstanceAs HasForget₂ (InducedCategory _ toUniformSpace) _
+  inferInstanceAs <| HasForget₂ (InducedCategory _ toUniformSpace) _
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `hom_comp` / 定理 `hom_comp`
-
-English:
-theorem hom_comp
-  given: {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-定理 hom_comp
-  条件: {X Y Z : CpltSepUniform空间} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CpltSepUniformSpace.hom_comp** 是 Mathlib 中的一个定理，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：hom_comp {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z) : ConcreteC
+ategory.hom (f ≫ g) = ⟨g ∘ f, g.hom.hom.prop.comp f.hom.hom.prop⟩
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_comp {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z) :
     ConcreteCategory.hom (f ≫ g) = ⟨g ∘ f, g.hom.hom.prop.comp f.hom.hom.prop⟩ :=
@@ -676,43 +420,29 @@ theorem hom_comp {X Y Z : CpltSepUniformSpace} (f : X ⟶ Y) (g : Y ⟶ Z) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `hom_id` / 定理 `hom_id`
-
-English:
-theorem hom_id
-  given: (X : CpltSepUniformSpace)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 hom_id
-  条件: (X : CpltSepUniform空间)
-  证明: rfl
-
-@[simp]
+/-
+**CpltSepUniformSpace.hom_id** 是 Mathlib 中的一个定理，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：hom_id (X : CpltSepUniformSpace) : ConcreteCategory.hom (𝟙 X : X ⟶ X) = ⟨i
+d, uniformContinuous_id⟩
+参数：X : CpltSepUniformSpace。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_id (X : CpltSepUniformSpace) :
     ConcreteCategory.hom (𝟙 X : X ⟶ X) = ⟨id, uniformContinuous_id⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `hom_ofHom` / 定理 `hom_ofHom`
-
-English:
-theorem hom_ofHom
-  statement: {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-  proof: rfl
-
-中文:
-定理 hom_ofHom
-  结论: {X Y : 类型u} [一致空间 X] [一致空间 Y]
-  证明: rfl
+/-
+**CpltSepUniformSpace.hom_ofHom** 是 Mathlib 中的一个定理，位于命名空间 `CpltSepUniformSpace`。
+形式化陈述：hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y] (f : { f : X ->
+ Y // UniformContinuous f }) : (UniformSpaceCat.ofHom f).hom = f
+参数：f : { f : X -> Y // UniformContinuous f }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hom_ofHom {X Y : Type u} [UniformSpace X] [UniformSpace Y]
-    (f : { f : X -> Y // UniformContinuous f }) : (UniformSpaceCat.ofHom f).hom = f :=
+    (f : { f : X → Y // UniformContinuous f }) : (UniformSpaceCat.ofHom f).hom = f :=
   rfl
 
 end CpltSepUniformSpace
@@ -726,28 +456,14 @@ open CpltSepUniformSpace
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The functor turning uniform spaces into complete separated uniform spaces. -/
 @[simps map]
-/--
-Definition of `completionFunctor` / `completionFunctor` 的定义
+/-
+**UniformSpaceCat.completionFunctor** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpaceCat`。
+形式化陈述：completionFunctor : UniformSpaceCat ⥤ CpltSepUniformSpace where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition completionFunctor
-  signature: : UniformSpaceCat ⥤ CpltSepUniformSpace where
-  body: CpltSepUniformSpace.of (Completion X)
-  map f := ConcreteCategory.ofHom ⟨Completion.map f.1, Completion.uniformContinuous_map⟩
-  map_id _ := InducedCategory.hom_ext (hom_ext (by apply Completion.map_id))
-  map_comp f g := InducedCategory.hom_ext (hom_ext (by
-    exact (Completion.map_comp g.hom.property f.hom.property).symm))
-
-中文:
-定义 completionFunctor
-  签名: : 一致空间范畴 ⥤ CpltSepUniform空间 where
-  定义体: CpltSepUniformSpace.of (Completion X)
-  map f := ConcreteCategory.ofHom ⟨Completion.map f.1, Completion.uniformContinuous_map⟩
-  map_id _ := InducedCategory.hom_ext (hom_ext (by apply Completion.map_id))
-  map_comp f g := InducedCategory.hom_ext (hom_ext (by
-    exact (Completion.map_comp g.hom.property f.hom.property).symm))
-
-Depends on / 依赖: Completion, CpltSepUniformSpace, CpltSepUniformSpace.of
+--- 原说明 ---
+The functor turning uniform spaces into complete separated uniform spaces.
 -/
 noncomputable def completionFunctor : UniformSpaceCat ⥤ CpltSepUniformSpace where
   obj X := CpltSepUniformSpace.of (Completion X)
@@ -756,69 +472,46 @@ noncomputable def completionFunctor : UniformSpaceCat ⥤ CpltSepUniformSpace wh
   map_comp f g := InducedCategory.hom_ext (hom_ext (by
     exact (Completion.map_comp g.hom.property f.hom.property).symm))
 
-/--
-Definition of `completionHom` / `completionHom` 的定义
+/-- The inclusion of a uniform space into its completion. -/
+/-
+**UniformSpaceCat.completionHom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpaceCat`。
+形式化陈述：completionHom (X : UniformSpaceCat) : X ⟶ (forget₂ CpltSepUniformSpace Uni
+formSpaceCat).obj (completionFunctor.obj X) where hom'.val
+参数：X : UniformSpaceCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition completionHom
-  signature: (X : UniformSpaceCat)
-  body: ((↑) : X -> Completion X)
-  hom'.property := Completion.uniformContinuous_coe X
-
-@[simp]
-
-中文:
-定义 completionHom
-  签名: (X : 一致空间范畴)
-  定义体: ((↑) : X -> Completion X)
-  hom'.property := Completion.uniformContinuous_coe X
-
-@[simp]
-
-Depends on / 依赖: Completion
+--- 原说明 ---
+The inclusion of a uniform space into its completion.
 -/
 noncomputable def completionHom (X : UniformSpaceCat) :
     X ⟶ (forget₂ CpltSepUniformSpace UniformSpaceCat).obj (completionFunctor.obj X) where
-  hom'.val := ((↑) : X -> Completion X)
+  hom'.val := ((↑) : X → Completion X)
   hom'.property := Completion.uniformContinuous_coe X
 
 @[simp]
-/--
-theorem `completionHom_val` / 定理 `completionHom_val`
-
-English:
-theorem completionHom_val
-  given: (X : UniformSpaceCat) (x)
-  statement: (completionHom X) x = (x : Completion X)
-  proof: rfl
-
-中文:
-定理 completionHom_val
-  条件: (X : 一致空间范畴) (x)
-  结论: (completionHom X) x = (x : 完备化 X)
-  证明: rfl
+/-
+**UniformSpaceCat.completionHom_val** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：completionHom_val (X : UniformSpaceCat) (x) : (completionHom X) x = (x : C
+ompletion X)
+参数：X : UniformSpaceCat；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem completionHom_val (X : UniformSpaceCat) (x) : (completionHom X) x = (x : Completion X) :=
   rfl
 
-/--
-Definition of `extensionHom` / `extensionHom` 的定义
+/-- The mate of a morphism from a `UniformSpace` to a `CpltSepUniformSpace`. -/
+/-
+**UniformSpaceCat.extensionHom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpaceCat`。
+形式化陈述：extensionHom {X : UniformSpaceCat} {Y : CpltSepUniformSpace} (f : X ⟶ (for
+get₂ CpltSepUniformSpace UniformSpaceCat).obj Y) : completionFunctor.obj X ⟶ Y
+参数：f : X ⟶ (forget₂ CpltSepUniformSpace UniformSpaceCat).obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extensionHom
-  signature: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
-  body: ConcreteCategory.ofHom ⟨Completion.extension f, Completion.uniformContinuous_extension⟩
-
-@[simp]
-
-中文:
-定义 extensionHom
-  签名: {X : 一致空间范畴} {Y : CpltSepUniform空间}
-  定义体: ConcreteCategory.ofHom ⟨Completion.extension f, Completion.uniformContinuous_extension⟩
-
-@[simp]
-
-Depends on / 依赖: Completion, Completion.extension, Completion.uniformContinuous_extension, ConcreteCategory, ConcreteCategory.ofHom, extension, uniformContinuous_extension
+--- 原说明 ---
+The mate of a morphism from a `UniformSpace` to a `CpltSepUniformSpace`.
 -/
 noncomputable def extensionHom {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
     (f : X ⟶ (forget₂ CpltSepUniformSpace UniformSpaceCat).obj Y) :
@@ -826,46 +519,39 @@ noncomputable def extensionHom {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
   ConcreteCategory.ofHom ⟨Completion.extension f, Completion.uniformContinuous_extension⟩
 
 @[simp]
-/--
-theorem `extensionHom_val` / 定理 `extensionHom_val`
-
-English:
-theorem extensionHom_val
-  statement: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 extensionHom_val
-  结论: {X : 一致空间范畴} {Y : CpltSepUniform空间}
-  证明: rfl
-
-@[simp]
+/-
+**UniformSpaceCat.extensionHom_val** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`。
+形式化陈述：extensionHom_val {X : UniformSpaceCat} {Y : CpltSepUniformSpace} (f : X ⟶ 
+(forget₂ _ _).obj Y) (x) : (extensionHom f) x = Completion.extension f x
+参数：f : X ⟶ (forget₂ _ _).obj Y；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extensionHom_val {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
     (f : X ⟶ (forget₂ _ _).obj Y) (x) : (extensionHom f) x = Completion.extension f x :=
   rfl
 
 @[simp]
-/--
-theorem `extension_comp_hom` / 定理 `extension_comp_hom`
-
-English:
-theorem extension_comp_hom
-  statement: {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
-  proof: by
-  ext x
-  exact congr_fun (Completion.extension_comp_coe f.hom.property) x
-
-中文:
-定理 extension_comp_hom
-  结论: {X : 一致空间范畴} {Y : CpltSepUniform空间}
-  证明: by
-  ext x
-  exact congr_fun (Completion.extension_comp_coe f.hom.property) x
-
-Depends on / 依赖: Completion, Completion.extension_comp_coe, congr_fun, extension_comp_coe, f.hom.property, property
+/-
+**UniformSpaceCat.extension_comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpaceCat`
+。
+形式化陈述：extension_comp_hom {X : UniformSpaceCat} {Y : CpltSepUniformSpace} (f : to
+UniformSpace (CpltSepUniformSpace.of (Completion X)) ⟶ toUniformSpace Y) : (exte
+nsionHom (completionHom X ≫ f)).hom = f
+参数：f : toUniformSpace (CpltSepUniformSpace.of (Completion X)) ⟶ toUniformSpace Y
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpaceCat.hom_ext`：hom_ext {X Y : UniformSpaceCat} {f g : X ⟶ Y} (
+h : (f : X -> Y) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `UniformSpace.Completion.extension_comp_coe`：extension_comp_coe {f : Comp
+letion α -> β} (hf : UniformContinuous f) : Completion.extension (f ∘ (↑)) = f
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem extension_comp_hom {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
     (f : toUniformSpace (CpltSepUniformSpace.of (Completion X)) ⟶ toUniformSpace Y) :
@@ -874,48 +560,15 @@ theorem extension_comp_hom {X : UniformSpaceCat} {Y : CpltSepUniformSpace}
   exact congr_fun (Completion.extension_comp_coe f.hom.property) x
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `adj` / `adj` 的定义
+/-- The completion functor is left adjoint to the forgetful functor. -/
+/-
+**UniformSpaceCat.adj** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpaceCat`。
+形式化陈述：adj : completionFunctor ⊣ forget₂ CpltSepUniformSpace UniformSpaceCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : completionFunctor ⊣ forget₂ CpltSepUniformSpace UniformSpaceCat
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => completionHom X ≫ f.hom
-          invFun := fun f => extensionHom f
-          left_inv := fun f => InducedCategory.hom_ext (by simp)
-          right_inv := fun f => by
-            ext x
-            rcases f with ⟨⟨_, _⟩⟩
-            exact @Completion.extension_coe _ _ _ _ _ (CpltSepUniformSpace.t0Space _)
-              ‹_› _ }
-      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
-        ext x
-        dsimp [-Function.comp_apply]
-        erw [Completion.extension_map (γ := Y) g.hom.2 f.hom.2]
-        rfl }
-
-中文:
-定义 adj
-  签名: : completionFunctor ⊣ forget₂ CpltSepUniform空间 一致空间范畴
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => completionHom X ≫ f.hom
-          invFun := fun f => extensionHom f
-          left_inv := fun f => InducedCategory.hom_ext (by simp)
-          right_inv := fun f => by
-            ext x
-            rcases f with ⟨⟨_, _⟩⟩
-            exact @Completion.extension_coe _ _ _ _ _ (CpltSepUniformSpace.t0Space _)
-              ‹_› _ }
-      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
-        ext x
-        dsimp [-Function.comp_apply]
-        erw [Completion.extension_map (γ := Y) g.hom.2 f.hom.2]
-        rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Completion, Completion.extension_coe, Completion.extension_map, CpltSepUniformSpace, CpltSepUniformSpace.t0Space, Function, Function.comp_apply, InducedCategory, InducedCategory.hom_ext, comp_apply, completionHom, extensionHom, extension_coe, extension_map, f.hom, g.hom, homEquiv, homEquiv_naturality_left_symm
+--- 原说明 ---
+The completion functor is left adjoint to the forgetful functor.
 -/
 noncomputable def adj : completionFunctor ⊣ forget₂ CpltSepUniformSpace UniformSpaceCat :=
   Adjunction.mkOfHomEquiv
@@ -933,25 +586,9 @@ noncomputable def adj : completionFunctor ⊣ forget₂ CpltSepUniformSpace Unif
         dsimp [-Function.comp_apply]
         erw [Completion.extension_map (γ := Y) g.hom.2 f.hom.2]
         rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Reflective (forget₂ CpltSepUniformSpace UniformSpaceCat)
-  body: completionFunctor
-  adj := adj
-  map_surjective f := ⟨ConcreteCategory.ofHom f.hom, rfl⟩
-
-中文:
-实例 :
-  签名: 反射 (forget₂ CpltSepUniform空间 一致空间范畴)
-  定义体: completionFunctor
-  adj := adj
-  map_surjective f := ⟨ConcreteCategory.ofHom f.hom, rfl⟩
-
-Depends on / 依赖: completionFunctor
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Reflective (forget₂ CpltSepUniformSpace UniformSpaceCat) where
   L := completionFunctor
@@ -961,7 +598,12 @@ noncomputable instance : Reflective (forget₂ CpltSepUniformSpace UniformSpaceC
 open CategoryTheory.Limits
 
 -- TODO Once someone defines `HasLimits UniformSpace`, turn this into an instance.
+/-
+**UniformSpaceCat.** 是 Mathlib 中的一个示例，位于命名空间 `UniformSpaceCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [HasLimits.{u} UniformSpaceCat.{u}] : HasLimits.{u} CpltSepUniformSpace.{u} :=
-hasLimits_of_reflective forget₂ CpltSepUniformSpace UniformSpaceCat.{u}
+  hasLimits_of_reflective <| forget₂ CpltSepUniformSpace UniformSpaceCat.{u}
 
 end UniformSpaceCat
+

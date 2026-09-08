@@ -18,73 +18,53 @@ This file proves that a finite stably free module `M` is free if it is invertibl
 -/
 
 variable {R : Type*} [CommRing R] {M N : Type*} [AddCommGroup M] [Module R M]
-  [AddCommGroup N] [Module R N] {n : Nat}
+  [AddCommGroup N] [Module R N] {n : ℕ}
 
-/--
-Definition of `exteriorPower.cofactorLinear` / `exteriorPower.cofactorLinear` 的定义
+/-- The map linear in the first argument and alternating in the remaining arguments that
+underlies the cofactor expansion along the `M`-summand of `M × N`. -/
+/-
+**exteriorPower.cofactorLinear** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：exteriorPower.cofactorLinear (bN : Module.Basis (Fin n) R N) : M × N ->ₗ[R
+] (M × N) [⋀^Fin n]->ₗ[R] M where toFun x
+参数：bN : Module.Basis (Fin n) R N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exteriorPower.cofactorLinear
-  signature: (bN : Module.Basis (Fin n) R N)
-  body: (bN.det.compLinearMap (LinearMap.snd R M N)).smulRight x.1
-  map_add' x y := AlternatingMap.ext fun _ => by simp
-  map_smul' c x := AlternatingMap.ext fun _ => by simp [smul_smul, mul_comm]
-
-中文:
-定义 exteriorPower.cofactorLinear
-  签名: (bN : 模.基 (有限集 n) R N)
-  定义体: (bN.det.compLinearMap (LinearMap.snd R M N)).smulRight x.1
-  map_add' x y := AlternatingMap.ext fun _ => by simp
-  map_smul' c x := AlternatingMap.ext fun _ => by simp [smul_smul, mul_comm]
-
-Depends on / 依赖: LinearMap, LinearMap.snd, bN.det.compLinearMap, compLinearMap, smulRight
+--- 原说明 ---
+The map linear in the first argument and alternating in the remaining arguments 
+that
+underlies the cofactor expansion along the `M`-summand of `M × N`.
 -/
 noncomputable def exteriorPower.cofactorLinear (bN : Module.Basis (Fin n) R N) :
-    M × N ->ₗ[R] (M × N) [⋀^Fin n]->ₗ[R] M where
+    M × N →ₗ[R] (M × N) [⋀^Fin n]→ₗ[R] M where
   toFun x := (bN.det.compLinearMap (LinearMap.snd R M N)).smulRight x.1
-  map_add' x y := AlternatingMap.ext fun _ => by simp
-  map_smul' c x := AlternatingMap.ext fun _ => by simp [smul_smul, mul_comm]
+  map_add' x y := AlternatingMap.ext fun _ ↦ by simp
+  map_smul' c x := AlternatingMap.ext fun _ ↦ by simp [smul_smul, mul_comm]
 
-/--
-Definition of `exteriorPower.cofactorToLeft` / `exteriorPower.cofactorToLeft` 的定义
+/-- The linear map from the top exterior power of `M × N` to `M` induced by the cofactor
+expansion along the `M`-summand. -/
+/-
+**exteriorPower.cofactorToLeft** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：exteriorPower.cofactorToLeft (bN : Module.Basis (Fin n) R N) : ⋀[R]^(n + 1
+) (M × N) ->ₗ[R] M
+参数：bN : Module.Basis (Fin n) R N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exteriorPower.cofactorToLeft
-  signature: (bN : Module.Basis (Fin n) R N)
-  body: exteriorPower.alternatingMapLinearEquiv (AlternatingMap.alternatizeUncurryFin (cofactorLinear bN))
-
-中文:
-定义 exteriorPower.cofactorToLeft
-  签名: (bN : 模.基 (有限集 n) R N)
-  定义体: exteriorPower.alternatingMapLinearEquiv (AlternatingMap.alternatizeUncurryFin (cofactorLinear bN))
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.alternatizeUncurryFin, alternatingMapLinearEquiv, alternatizeUncurryFin, cofactorLinear, exteriorPower, exteriorPower.alternatingMapLinearEquiv
+--- 原说明 ---
+The linear map from the top exterior power of `M × N` to `M` induced by the cofa
+ctor
+expansion along the `M`-summand.
 -/
 noncomputable def exteriorPower.cofactorToLeft (bN : Module.Basis (Fin n) R N) :
-    ⋀[R]^(n + 1) (M × N) ->ₗ[R] M :=
+    ⋀[R]^(n + 1) (M × N) →ₗ[R] M :=
   exteriorPower.alternatingMapLinearEquiv (AlternatingMap.alternatizeUncurryFin (cofactorLinear bN))
-
-/--
-lemma `exteriorPower.cofactorToLeft_ιMulti_cons` / 引理 `exteriorPower.cofactorToLeft_ιMulti_cons`
-
-English:
-lemma exteriorPower.cofactorToLeft_ιMulti_cons
-  given: (bN : Module.Basis (Fin n) R N) (m : M)
-  proof: by
-  simp [cofactorToLeft, cofactorLinear, AlternatingMap.alternatizeUncurryFin_apply,
-    Fin.sum_univ_succ, Module.Basis.det_self]
-
-中文:
-引理 exteriorPower.cofactorToLeft_ιMulti_cons
-  条件: (bN : 模.基 (有限集 n) R N) (m : M)
-  证明: by
-  simp [cofactorToLeft, cofactorLinear, AlternatingMap.alternatizeUncurryFin_apply,
-    Fin.sum_univ_succ, Module.Basis.det_self]
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.alternatizeUncurryFin_apply, Fin.sum_univ_succ, Module, Module.Basis.det_self, alternatizeUncurryFin_apply, cofactorLinear, cofactorToLeft, det_self, sum_univ_succ
+/-
+**exteriorPower.cofactorToLeft_** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exteriorPower.cofactorToLeft_ιMulti_cons (bN : Module.Basis (Fin n) R N) (m : M) :
-    cofactorToLeft bN (exteriorPower.ιMulti R (n + 1) (Fin.cons (m, 0) fun i => (0, bN i))) = m := by
+    cofactorToLeft bN (exteriorPower.ιMulti R (n + 1) (Fin.cons (m, 0) fun i ↦ (0, bN i))) = m := by
   simp [cofactorToLeft, cofactorLinear, AlternatingMap.alternatizeUncurryFin_apply,
     Fin.sum_univ_succ, Module.Basis.det_self]
 
@@ -106,7 +86,8 @@ public theorem Module.free_of_isStablyFree_of_invertible
   let e : R ≃ₗ[R] ⋀[R]^(n + 1) (M × N) :=
     (Module.nonempty_linearEquiv_of_finrank_eq_one <| by simp [exteriorPower.finrank_eq, hp]).some
   let bN : Module.Basis (Fin n) R N := Module.finBasis R N
-  let f : R ->ₗ[R] M := exteriorPower.cofactorToLeft bN ∘ₗ e
-exact Module.Free.of_equiv LinearEquiv.ofBijective f Invertible.bijective_of_surjective
-    fun x => ⟨e.symm (exteriorPower.ιMulti R (n + 1) (Fin.cons (x, 0) fun i => (0, bN i))), by
+  let f : R →ₗ[R] M := exteriorPower.cofactorToLeft bN ∘ₗ e
+  exact Module.Free.of_equiv <| LinearEquiv.ofBijective f <| Invertible.bijective_of_surjective <|
+    fun x ↦ ⟨e.symm (exteriorPower.ιMulti R (n + 1) (Fin.cons (x, 0) fun i ↦ (0, bN i))), by
       simp [f, exteriorPower.cofactorToLeft_ιMulti_cons]⟩
+

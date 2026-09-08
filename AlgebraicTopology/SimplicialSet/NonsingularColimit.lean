@@ -39,26 +39,16 @@ set_option backward.isDefEq.respectTransparency false in
 `X.N ⥤ SemiSimplexCategory` which sends a nondegenerate
 simplex `s : X.N` to `⦋s.dim⦌ₛ`. -/
 @[simps obj map]
-/--
-Definition of `toSemiSimplexCategory` / `toSemiSimplexCategory` 的定义
+/-
+**SSet.N.toSemiSimplexCategory** 是 Mathlib 中的一个定义，位于命名空间 `SSet.N`。
+形式化陈述：toSemiSimplexCategory : X.N ⥤ SemiSimplexCategory where obj s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSemiSimplexCategory
-  signature: : X.N ⥤ SemiSimplexCategory where
-  body: ⦋s.dim⦌ₛ
-  map f := SemiSimplexCategory.homOfMono (N.monoOfLE (leOfHom f))
-  map_id _ := SemiSimplexCategory.toSimplexCategory.map_injective (by simp)
-  map_comp _ _ := SemiSimplexCategory.toSimplexCategory.map_injective (by simp)
-
-中文:
-定义 toSemiSimplexCategory
-  签名: : X.N ⥤ SemiSimplex范畴 where
-  定义体: ⦋s.dim⦌ₛ
-  map f := SemiSimplexCategory.homOfMono (N.monoOfLE (leOfHom f))
-  map_id _ := SemiSimplexCategory.toSimplexCategory.map_injective (by simp)
-  map_comp _ _ := SemiSimplexCategory.toSimplexCategory.map_injective (by simp)
-
-Depends on / 依赖: s.dim
+--- 原说明 ---
+If `X` is a nonsingular simplicial set, this is the functor
+`X.N ⥤ SemiSimplexCategory` which sends a nondegenerate
+simplex `s : X.N` to `⦋s.dim⦌ₛ`.
 -/
 noncomputable def toSemiSimplexCategory : X.N ⥤ SemiSimplexCategory where
   obj s := ⦋s.dim⦌ₛ
@@ -68,89 +58,70 @@ noncomputable def toSemiSimplexCategory : X.N ⥤ SemiSimplexCategory where
 
 end N
 
-/--
-Definition of `functorN'` / `functorN'` 的定义
+/-- The functor `X.N ⥤ SSet` which sends `x : X.N` to `Δ[x.dim]`. -/
+/-
+**SSet.functorN'** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：functorN' : X.N ⥤ SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorN'
-  signature: : X.N ⥤ SSet.{u}
-  body: N.toSemiSimplexCategory X ⋙ SemiSimplexCategory.toSimplexCategory ⋙ SSet.stdSimplex
-
-中文:
-缩写 functorN'
-  签名: : X.N ⥤ SSet.{u}
-  定义体: N.toSemiSimplexCategory X ⋙ SemiSimplexCategory.toSimplexCategory ⋙ SSet.stdSimplex
-
-Depends on / 依赖: N.toSemiSimplexCategory, SSet.stdSimplex, SemiSimplexCategory, SemiSimplexCategory.toSimplexCategory, stdSimplex, toSemiSimplexCategory, toSimplexCategory
+--- 原说明 ---
+The functor `X.N ⥤ SSet` which sends `x : X.N` to `Δ[x.dim]`.
 -/
 noncomputable abbrev functorN' : X.N ⥤ SSet.{u} :=
     N.toSemiSimplexCategory X ⋙ SemiSimplexCategory.toSimplexCategory ⋙ SSet.stdSimplex
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `functorN'Iso` / `functorN'Iso` 的定义
+/-- The isomorphism `X.functorN' ≅ X.functorN` for a nonsingular simplicial set `X`. -/
+/-
+**SSet.functorN'Iso** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：(X : _root_.SSet) → [inst : X.Nonsingular] → X.functorN' ≅ X.functorN
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.N.nonDegenerate`：∀ {X : _root_.SSet} (self : X.N), self.simplex ∈ X
+.nonDegenerate self.dim
 
-English:
-definition functorN'Iso
-  signature: : X.functorN' ≅ X.functorN
-  body: NatIso.ofComponents (fun x => Nonsingular.iso _ x.nonDegenerate) (fun _ => by
-    simp [← cancel_mono (Subcomplex.ι _)])
-
-中文:
-定义 functorN'同构
-  签名: : X.functorN' ≅ X.functorN
-  定义体: NatIso.ofComponents (fun x => Nonsingular.iso _ x.nonDegenerate) (fun _ => by
-    simp [← cancel_mono (Subcomplex.ι _)])
+--- 原说明 ---
+The isomorphism `X.functorN' ≅ X.functorN` for a nonsingular simplicial set `X`.
 -/
 noncomputable def functorN'Iso : X.functorN' ≅ X.functorN :=
-  NatIso.ofComponents (fun x => Nonsingular.iso _ x.nonDegenerate) (fun _ => by
+  NatIso.ofComponents (fun x ↦ Nonsingular.iso _ x.nonDegenerate) (fun _ ↦ by
     simp [← cancel_mono (Subcomplex.ι _)])
 
 /-- If `X` is a nonsingular simplicial set, this is the cocone consisting
 of the (mono)morphisms `Δ[x.dim] ⟶ X` for all nondegenerate simplices `x : X.N`. -/
 @[simps]
-/--
-Definition of `coconeN'` / `coconeN'` 的定义
+/-
+**SSet.coconeN'** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：coconeN' : Cocone X.functorN' where pt
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition coconeN'
-  signature: : Cocone X.functorN' where
-  body: X
-  ι.app s := yonedaEquiv.symm s.simplex
-  ι.naturality _ _ f := N.stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex (leOfHom f)
-
-中文:
-定义 coconeN'
-  签名: : 余锥 X.functorN' where
-  定义体: X
-  ι.app s := yonedaEquiv.symm s.simplex
-  ι.naturality _ _ f := N.stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex (leOfHom f)
+--- 原说明 ---
+If `X` is a nonsingular simplicial set, this is the cocone consisting
+of the (mono)morphisms `Δ[x.dim] ⟶ X` for all nondegenerate simplices `x : X.N`.
 -/
 noncomputable def coconeN' : Cocone X.functorN' where
   pt := X
   ι.app s := yonedaEquiv.symm s.simplex
   ι.naturality _ _ f := N.stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex (leOfHom f)
 
-/--
-Definition of `isColimitCoconeN'` / `isColimitCoconeN'` 的定义
+/-- If `X` is a nonsingular simplicial set, `X` is the colimit of `Δ[x.dim]`
+for all nondegenerate simplices `x : X.N`. -/
+/-
+**SSet.isColimitCoconeN'** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：isColimitCoconeN' : IsColimit X.coconeN'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoconeN'
-  signature: : IsColimit X.coconeN'
-  body: (IsColimit.equivOfNatIsoOfIso
-    X.functorN'Iso.symm _ _ (Cocone.ext (Iso.refl _))).1 X.isColimitCoconeN
-
-中文:
-定义 isColimitCoconeN'
-  签名: : 是余极限 X.coconeN'
-  定义体: (IsColimit.equivOfNatIsoOfIso
-    X.functorN'Iso.symm _ _ (Cocone.ext (Iso.refl _))).1 X.isColimitCoconeN
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, Iso.symm, X.functorN, X.isColimitCoconeN, equivOfNatIsoOfIso, functorN, isColimitCoconeN
+--- 原说明 ---
+If `X` is a nonsingular simplicial set, `X` is the colimit of `Δ[x.dim]`
+for all nondegenerate simplices `x : X.N`.
 -/
 noncomputable def isColimitCoconeN' : IsColimit X.coconeN' :=
   (IsColimit.equivOfNatIsoOfIso
     X.functorN'Iso.symm _ _ (Cocone.ext (Iso.refl _))).1 X.isColimitCoconeN
 
 end SSet
+

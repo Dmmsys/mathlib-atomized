@@ -72,161 +72,119 @@ namespace DoldKan
 variable {C : Type*} [Category* C] [Preadditive C]
 variable {X : SimplicialObject C}
 
-/--
-Definition of `c` / `c` 的定义
+/-- As we are using chain complexes indexed by `ℕ`, we shall need the relation
+`c` such `c m n` if and only if `n+1=m`. -/
+/-
+**AlgebraicTopology.DoldKan.c** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicTopology.Dol
+dKan`。
+形式化陈述：c
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation c
-  body: ComplexShape.down Nat
-
-中文:
-缩写 c
-  定义体: ComplexShape.down Nat
-
-Depends on / 依赖: ComplexShape, ComplexShape.down
+--- 原说明 ---
+As we are using chain complexes indexed by `ℕ`, we shall need the relation
+`c` such `c m n` if and only if `n+1=m`.
 -/
 abbrev c :=
-  ComplexShape.down Nat
+  ComplexShape.down ℕ
 
-/--
-theorem `c_mk` / 定理 `c_mk`
+/-- Helper when we need some `c.rel i j` (i.e. `ComplexShape.down ℕ`),
+e.g. `c_mk n (n+1) rfl` -/
+/-
+**AlgebraicTopology.DoldKan.c_mk** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.Do
+ldKan`。
+形式化陈述：c_mk (i j : Nat) (h : j + 1 = i) : c.Rel i j
+参数：i j : Nat；h : j + 1 = i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.down_mk`：∀ {α : Type u_2} [inst : Add α] [inst_1 : IsRightC
+ancelAdd α] [inst_2 : One α] (j i : α),   i + 1 = j → (ComplexShape.down α).Rel 
+j i
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem c_mk
-  given: (i j : Nat) (h : j + 1 = i)
-  statement: c.Rel i j
-  proof: ComplexShape.down_mk i j h
-
-中文:
-定理 c_mk
-  条件: (i j : 自然数) (h : j + 1 = i)
-  结论: c.关系 i j
-  证明: ComplexShape.down_mk i j h
-
-Depends on / 依赖: ComplexShape, ComplexShape.down_mk, down_mk
+--- 原说明 ---
+Helper when we need some `c.rel i j` (i.e. `ComplexShape.down ℕ`),
+e.g. `c_mk n (n+1) rfl`
 -/
-theorem c_mk (i j : Nat) (h : j + 1 = i) : c.Rel i j :=
+theorem c_mk (i j : ℕ) (h : j + 1 = i) : c.Rel i j :=
   ComplexShape.down_mk i j h
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `cs_down_0_not_rel_left` / 定理 `cs_down_0_not_rel_left`
+/-- This lemma is meant to be used with `nullHomotopicMap'_f_of_not_rel_left` -/
+/-
+**AlgebraicTopology.DoldKan.cs_down_0_not_rel_left** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicTopology.DoldKan`。
+形式化陈述：cs_down_0_not_rel_left (j : Nat) : ¬c.Rel 0 j
+参数：j : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.not_succ_le_zero`：∀ (n : ℕ), n.succ ≤ 0 → False
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.succ_eq_add_one`：∀ (n : ℕ), n.succ = n + 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem cs_down_0_not_rel_left
-  given: (j : Nat)
-  statement: ¬c.Rel 0 j
-  proof: by
+--- 原说明 ---
+This lemma is meant to be used with `nullHomotopicMap'_f_of_not_rel_left`
+-/
+theorem cs_down_0_not_rel_left (j : ℕ) : ¬c.Rel 0 j := by
   intro hj
   dsimp at hj
   apply Nat.not_succ_le_zero j
-  rw [Nat.succ_eq_add_one]; rw [hj]
+  rw [Nat.succ_eq_add_one, hj]
 
-中文:
-定理 cs_down_0_not_rel_left
-  条件: (j : 自然数)
-  结论: ¬c.关系 0 j
-  证明: by
-  intro hj
-  dsimp at hj
-  apply Nat.not_succ_le_zero j
-  rw [Nat.succ_eq_add_one]; rw [hj]
+/-- The sequence of maps which gives the null homotopic maps `Hσ` that shall be in
+the inductive construction of the projections `P q : K[X] ⟶ K[X]` -/
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Nat.not_succ_le_zero, Nat.succ_eq_add_one, not_succ_le_zero, succ_eq_add_one
+--- 原说明 ---
+The sequence of maps which gives the null homotopic maps `Hσ` that shall be in
+the inductive construction of the projections `P q : K[X] ⟶ K[X]`
 -/
-theorem cs_down_0_not_rel_left (j : Nat) : ¬c.Rel 0 j := by
-  intro hj
-  dsimp at hj
-  apply Nat.not_succ_le_zero j
-  rw [Nat.succ_eq_add_one]; rw [hj]
+def hσ (q : ℕ) (n : ℕ) : X _⦋n⦌ ⟶ X _⦋n + 1⦌ :=
+  if n < q then 0 else (-1 : ℤ) ^ (n - q) • X.σ ⟨n - q, Nat.lt_succ_of_le (Nat.sub_le _ _)⟩
 
-/--
-Definition of `hσ` / `hσ` 的定义
+/-- We can turn `hσ` into a datum that can be passed to `nullHomotopicMap'`. -/
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hσ
-  signature: (q : Nat) (n : Nat)
-  body: if n < q then 0 else (-1 : Int) ^ (n - q) • X.σ ⟨n - q, Nat.lt_succ_of_le (Nat.sub_le _ _)⟩
-
-中文:
-定义 hσ
-  签名: (q : 自然数) (n : 自然数)
-  定义体: if n < q then 0 else (-1 : Int) ^ (n - q) • X.σ ⟨n - q, Nat.lt_succ_of_le (Nat.sub_le _ _)⟩
-
-Depends on / 依赖: Nat.lt_succ_of_le, Nat.sub_le, lt_succ_of_le, sub_le
+--- 原说明 ---
+We can turn `hσ` into a datum that can be passed to `nullHomotopicMap'`.
 -/
-def hσ (q : Nat) (n : Nat) : X _⦋n⦌ ⟶ X _⦋n + 1⦌ :=
-  if n < q then 0 else (-1 : Int) ^ (n - q) • X.σ ⟨n - q, Nat.lt_succ_of_le (Nat.sub_le _ _)⟩
-
-/--
-Definition of `hσ'` / `hσ'` 的定义
-
-English:
-definition hσ'
-  signature: (q : Nat)
-  body: fun n m hnm =>
+def hσ' (q : ℕ) : ∀ n m, c.Rel m n → (K[X].X n ⟶ K[X].X m) := fun n m hnm =>
   hσ q n ≫ eqToHom (by congr)
-
-中文:
-定义 hσ'
-  签名: (q : 自然数)
-  定义体: fun n m hnm =>
-  hσ q n ≫ eqToHom (by congr)
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def hσ' (q : Nat) : forall n m, c.Rel m n -> (K[X].X n ⟶ K[X].X m) := fun n m hnm =>
-  hσ q n ≫ eqToHom (by congr)
-
-/--
-theorem `hσ'_eq_zero` / 定理 `hσ'_eq_zero`
-
-English:
-theorem hσ'_eq_zero
-  given: {q n m : Nat} (hnq : n < q) (hnm : c.Rel m n)
-  proof: by
-  simp only [hσ', hσ]
-  split_ifs
-  exact zero_comp
-
-中文:
-定理 hσ'_eq_zero
-  条件: {q n m : 自然数} (hnq : n < q) (hnm : c.关系 m n)
-  证明: by
-  simp only [hσ', hσ]
-  split_ifs
-  exact zero_comp
--/
-theorem hσ'_eq_zero {q n m : Nat} (hnq : n < q) (hnm : c.Rel m n) :
+theorem hσ'_eq_zero {q n m : ℕ} (hnq : n < q) (hnm : c.Rel m n) :
     (hσ' q n m hnm : X _⦋n⦌ ⟶ X _⦋m⦌) = 0 := by
   simp only [hσ', hσ]
   split_ifs
   exact zero_comp
-
-/--
-theorem `hσ'_eq` / 定理 `hσ'_eq`
-
-English:
-theorem hσ'_eq
-  given: {q n a m : Nat} (ha : n = a + q) (hnm : c.Rel m n)
-  proof: by
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was: `grind [hσ', hσ]` -/
-  simp [hσ', hσ, ha]
-
-中文:
-定理 hσ'_eq
-  条件: {q n a m : 自然数} (ha : n = a + q) (hnm : c.关系 m n)
-  证明: by
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was: `grind [hσ', hσ]` -/
-  simp [hσ', hσ, ha]
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem hσ'_eq {q n a m : Nat} (ha : n = a + q) (hnm : c.Rel m n) :
+theorem hσ'_eq {q n a m : ℕ} (ha : n = a + q) (hnm : c.Rel m n) :
     (hσ' q n m hnm : X _⦋n⦌ ⟶ X _⦋m⦌) =
-      ((-1 : Int) ^ a • X.σ ⟨a, Nat.lt_succ_iff.mpr (Nat.le.intro (Eq.symm ha))⟩) ≫
+      ((-1 : ℤ) ^ a • X.σ ⟨a, Nat.lt_succ_iff.mpr (Nat.le.intro (Eq.symm ha))⟩) ≫
         eqToHom (by congr) := by
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
@@ -235,132 +193,70 @@ theorem hσ'_eq {q n a m : Nat} (ha : n = a + q) (hnm : c.Rel m n) :
   simp [hσ', hσ, ha]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hσ'_eq'` / 定理 `hσ'_eq'`
-
-English:
-theorem hσ'_eq'
-  given: {q n a : Nat} (ha : n = a + q)
-  proof: by
-  rw [hσ'_eq ha rfl]; rw [eqToHom_refl]; rw [comp_id]
-
-中文:
-定理 hσ'_eq'
-  条件: {q n a : 自然数} (ha : n = a + q)
-  证明: by
-  rw [hσ'_eq ha rfl]; rw [eqToHom_refl]; rw [comp_id]
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem hσ'_eq' {q n a : Nat} (ha : n = a + q) :
+theorem hσ'_eq' {q n a : ℕ} (ha : n = a + q) :
     (hσ' q n (n + 1) rfl : X _⦋n⦌ ⟶ X _⦋n + 1⦌) =
-      (-1 : Int) ^ a • X.σ ⟨a, Nat.lt_succ_iff.mpr (Nat.le.intro (Eq.symm ha))⟩ := by
-  rw [hσ'_eq ha rfl]; rw [eqToHom_refl]; rw [comp_id]
+      (-1 : ℤ) ^ a • X.σ ⟨a, Nat.lt_succ_iff.mpr (Nat.le.intro (Eq.symm ha))⟩ := by
+  rw [hσ'_eq ha rfl, eqToHom_refl, comp_id]
 
-/--
-Definition of `Hσ` / `Hσ` 的定义
+/-- The null homotopic map $(hσ q) ∘ d + d ∘ (hσ q)$ -/
+/-
+**AlgebraicTopology.DoldKan.H** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hσ
-  signature: (q : Nat)
-  body: nullHomotopicMap' (hσ' q)
-
-中文:
-定义 Hσ
-  签名: (q : 自然数)
-  定义体: nullHomotopicMap' (hσ' q)
-
-Depends on / 依赖: nullHomotopicMap
+--- 原说明 ---
+The null homotopic map $(hσ q) ∘ d + d ∘ (hσ q)$
 -/
-def Hσ (q : Nat) : K[X] ⟶ K[X] :=
+def Hσ (q : ℕ) : K[X] ⟶ K[X] :=
   nullHomotopicMap' (hσ' q)
 
-/--
-Definition of `homotopyHσToZero` / `homotopyHσToZero` 的定义
+/-- `Hσ` is null homotopic -/
+/-
+**AlgebraicTopology.DoldKan.homotopyH** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopolo
+gy.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homotopyHσToZero
-  signature: (q : Nat)
-  body: nullHomotopy' (hσ' q)
-
-中文:
-定义 homotopyHσToZero
-  签名: (q : 自然数)
-  定义体: nullHomotopy' (hσ' q)
-
-Depends on / 依赖: nullHomotopy
+--- 原说明 ---
+`Hσ` is null homotopic
 -/
-def homotopyHσToZero (q : Nat) : Homotopy (Hσ q : K[X] ⟶ K[X]) 0 :=
+def homotopyHσToZero (q : ℕ) : Homotopy (Hσ q : K[X] ⟶ K[X]) 0 :=
   nullHomotopy' (hσ' q)
 
-/--
-theorem `Hσ_eq_zero` / 定理 `Hσ_eq_zero`
+/-- In degree `0`, the null homotopic map `Hσ` is zero. -/
+/-
+**AlgebraicTopology.DoldKan.H** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Hσ_eq_zero
-  given: (q : Nat)
-  statement: (Hσ q : K[X] ⟶ K[X]).f 0 = 0
-  proof: by
-  unfold Hσ
-  rw [nullHomotopicMap'_f_of_not_rel_left (c_mk 1 0 rfl) cs_down_0_not_rel_left]
-  rcases q with (_ | q)
-  · rw [hσ'_eq (show 0 = 0 + 0 by rfl) (c_mk 1 0 rfl)]
-    suffices X.σ 0 ≫ X.δ 0 + -X.σ 0 ≫ X.δ 1 = 0 by simpa
-    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
-    simp
-  · rw [hσ'_eq_zero (Nat.succ_pos q) (c_mk 1 0 rfl), zero_comp]
-
-中文:
-定理 Hσ_eq_zero
-  条件: (q : 自然数)
-  结论: (Hσ q : K[X] ⟶ K[X]).f 0 = 0
-  证明: by
-  unfold Hσ
-  rw [nullHomotopicMap'_f_of_not_rel_left (c_mk 1 0 rfl) cs_down_0_not_rel_left]
-  rcases q with (_ | q)
-  · rw [hσ'_eq (show 0 = 0 + 0 by rfl) (c_mk 1 0 rfl)]
-    suffices X.σ 0 ≫ X.δ 0 + -X.σ 0 ≫ X.δ 1 = 0 by simpa
-    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
-    simp
-  · rw [hσ'_eq_zero (Nat.succ_pos q) (c_mk 1 0 rfl), zero_comp]
-
-Depends on / 依赖: Fin.castSucc_zero.symm, Fin.succ_zero_eq_one, Nat.succ_pos, _eq_zero, _f_of_not_rel_left, c_mk, castSucc_zero, cs_down_0_not_rel_left, nullHomotopicMap, succ_pos, succ_zero_eq_one, zero_comp
+--- 原说明 ---
+In degree `0`, the null homotopic map `Hσ` is zero.
 -/
-theorem Hσ_eq_zero (q : Nat) : (Hσ q : K[X] ⟶ K[X]).f 0 = 0 := by
+theorem Hσ_eq_zero (q : ℕ) : (Hσ q : K[X] ⟶ K[X]).f 0 = 0 := by
   unfold Hσ
   rw [nullHomotopicMap'_f_of_not_rel_left (c_mk 1 0 rfl) cs_down_0_not_rel_left]
   rcases q with (_ | q)
   · rw [hσ'_eq (show 0 = 0 + 0 by rfl) (c_mk 1 0 rfl)]
     suffices X.σ 0 ≫ X.δ 0 + -X.σ 0 ≫ X.δ 1 = 0 by simpa
-    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
+    rw [← Fin.succ_zero_eq_one, δ_comp_σ_succ, δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
     simp
   · rw [hσ'_eq_zero (Nat.succ_pos q) (c_mk 1 0 rfl), zero_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `hσ'_naturality` / 定理 `hσ'_naturality`
+/-- The maps `hσ' q n m hnm` are natural on the simplicial object -/
+/-
+**AlgebraicTopology.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hσ'_naturality
-  given: (q : Nat) (n m : Nat) (hnm : c.Rel m n) {X Y : SimplicialObject C} (f : X ⟶ Y)
-  proof: by
-  obtain rfl : n + 1 = m := hnm
-  -- `simp? [hσ', hσ]` says:
-  simp only [AlternatingFaceMapComplex.obj_X, hσ', hσ, Int.reduceNeg, eqToHom_refl, comp_id]
-  split_ifs
-  · rw [zero_comp, comp_zero]
-  · simp
-
-中文:
-定理 hσ'_naturality
-  条件: (q : 自然数) (n m : 自然数) (hnm : c.关系 m n) {X Y : SimplicialObject C} (f : X ⟶ Y)
-  证明: by
-  obtain rfl : n + 1 = m := hnm
-  -- `simp? [hσ', hσ]` says:
-  simp only [AlternatingFaceMapComplex.obj_X, hσ', hσ, Int.reduceNeg, eqToHom_refl, comp_id]
-  split_ifs
-  · rw [zero_comp, comp_zero]
-  · simp
+--- 原说明 ---
+The maps `hσ' q n m hnm` are natural on the simplicial object
 -/
-theorem hσ'_naturality (q : Nat) (n m : Nat) (hnm : c.Rel m n) {X Y : SimplicialObject C} (f : X ⟶ Y) :
+theorem hσ'_naturality (q : ℕ) (n m : ℕ) (hnm : c.Rel m n) {X Y : SimplicialObject C} (f : X ⟶ Y) :
     f.app (op ⦋n⦌) ≫ hσ' q n m hnm = hσ' q n m hnm ≫ f.app (op ⦋m⦌) := by
   obtain rfl : n + 1 = m := hnm
   -- `simp? [hσ', hσ]` says:
@@ -370,68 +266,37 @@ theorem hσ'_naturality (q : Nat) (n m : Nat) (hnm : c.Rel m n) {X Y : Simplicia
   · simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `natTransHσ` / `natTransHσ` 的定义
+/-- For each q, `Hσ q` is a natural transformation. -/
+/-
+**AlgebraicTopology.DoldKan.natTransH** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopolo
+gy.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natTransHσ
-  signature: (q : Nat)
-  body: Hσ q
-  naturality _ _ f := by
-    unfold Hσ
-    rw [nullHomotopicMap'_comp]; rw [comp_nullHomotopicMap']
-    congr
-    ext n m hnm
-    simp only [alternatingFaceMapComplex_map_f, hσ'_naturality]
-
-中文:
-定义 natTransHσ
-  签名: (q : 自然数)
-  定义体: Hσ q
-  naturality _ _ f := by
-    unfold Hσ
-    rw [nullHomotopicMap'_comp]; rw [comp_nullHomotopicMap']
-    congr
-    ext n m hnm
-    simp only [alternatingFaceMapComplex_map_f, hσ'_naturality]
+--- 原说明 ---
+For each q, `Hσ q` is a natural transformation.
 -/
-def natTransHσ (q : Nat) : alternatingFaceMapComplex C ⟶ alternatingFaceMapComplex C where
+def natTransHσ (q : ℕ) : alternatingFaceMapComplex C ⟶ alternatingFaceMapComplex C where
   app _ := Hσ q
   naturality _ _ f := by
     unfold Hσ
-    rw [nullHomotopicMap'_comp]; rw [comp_nullHomotopicMap']
+    rw [nullHomotopicMap'_comp, comp_nullHomotopicMap']
     congr
     ext n m hnm
     simp only [alternatingFaceMapComplex_map_f, hσ'_naturality]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `map_hσ'` / 定理 `map_hσ'`
+/-- The maps `hσ' q n m hnm` are compatible with the application of additive functors. -/
+/-
+**AlgebraicTopology.DoldKan.map_h** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.D
+oldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem map_hσ'
-  statement: {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
-  proof: by
-  unfold hσ' hσ
-  split_ifs
-  · simp only [Functor.map_zero, zero_comp]
-  · simp only [eqToHom_map, Functor.map_comp, Functor.map_zsmul]
-    rfl
-
-中文:
-定理 map_hσ'
-  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
-  证明: by
-  unfold hσ' hσ
-  split_ifs
-  · simp only [Functor.map_zero, zero_comp]
-  · simp only [eqToHom_map, Functor.map_comp, Functor.map_zsmul]
-    rfl
-
-Depends on / 依赖: Functor, Functor.map_comp, Functor.map_zero, Functor.map_zsmul, eqToHom_map, map_comp, map_zero, map_zsmul, split_ifs, zero_comp
+--- 原说明 ---
+The maps `hσ' q n m hnm` are compatible with the application of additive functor
+s.
 -/
 theorem map_hσ' {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
-    (X : SimplicialObject C) (q n m : Nat) (hnm : c.Rel m n) :
+    (X : SimplicialObject C) (q n m : ℕ) (hnm : c.Rel m n) :
     (hσ' q n m hnm : K[((whiskering _ _).obj G).obj X].X n ⟶ _) =
       G.map (hσ' q n m hnm : K[X].X n ⟶ _) := by
   unfold hσ' hσ
@@ -440,35 +305,18 @@ theorem map_hσ' {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Addi
   · simp only [eqToHom_map, Functor.map_comp, Functor.map_zsmul]
     rfl
 
-/--
-theorem `map_Hσ` / 定理 `map_Hσ`
+/-- The null homotopic maps `Hσ` are compatible with the application of additive functors. -/
+/-
+**AlgebraicTopology.DoldKan.map_H** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.D
+oldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem map_Hσ
-  statement: {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
-  proof: by
-  unfold Hσ
-  have eq := HomologicalComplex.congr_hom (map_nullHomotopicMap' G (@hσ' _ _ _ X q)) n
-  simp only [Functor.mapHomologicalComplex_map_f, ← map_hσ'] at eq
-  rw [eq]
-  let h := (Functor.congr_obj (map_alternatingFaceMapComplex G) X).symm
-  congr
-
-中文:
-定理 map_Hσ
-  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
-  证明: by
-  unfold Hσ
-  have eq := HomologicalComplex.congr_hom (map_nullHomotopicMap' G (@hσ' _ _ _ X q)) n
-  simp only [Functor.mapHomologicalComplex_map_f, ← map_hσ'] at eq
-  rw [eq]
-  let h := (Functor.congr_obj (map_alternatingFaceMapComplex G) X).symm
-  congr
-
-Depends on / 依赖: Functor, Functor.congr_obj, Functor.mapHomologicalComplex_map_f, HomologicalComplex, HomologicalComplex.congr_hom, congr_hom, congr_obj, mapHomologicalComplex_map_f, map_alternatingFaceMapComplex, map_nullHomotopicMap
+--- 原说明 ---
+The null homotopic maps `Hσ` are compatible with the application of additive fun
+ctors.
 -/
 theorem map_Hσ {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
-    (X : SimplicialObject C) (q n : Nat) :
+    (X : SimplicialObject C) (q n : ℕ) :
     (Hσ q : K[((whiskering C D).obj G).obj X] ⟶ _).f n = G.map ((Hσ q : K[X] ⟶ _).f n) := by
   unfold Hσ
   have eq := HomologicalComplex.congr_hom (map_nullHomotopicMap' G (@hσ' _ _ _ X q)) n
@@ -480,3 +328,4 @@ theorem map_Hσ {D : Type*} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Addit
 end DoldKan
 
 end AlgebraicTopology
+

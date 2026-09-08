@@ -25,70 +25,68 @@ public meta section
 namespace Mathlib.Tactic
 open Lean Elab.Tactic Meta Parser Term Syntax.MonadTraverser
 
-/--
-Definition of `optBinderIdent` / `optBinderIdent` 的定义
+/-- A parser for optional binder identifiers -/
+/-
+**Mathlib.Tactic.optBinderIdent** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：optBinderIdent : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition optBinderIdent
-  signature: : Parser
-  body: leading_parser
-  -- Note: the withResetCache is because leading_parser seems to add a cache boundary,
-  -- which causes the `hygieneInfo` parser not to be able to undo the trailing whitespace
-(ppSpace >> Term.binderIdent) > withResetCache hygieneInfo
-
-中文:
-定义 optBinderIdent
-  签名: : Parser
-  定义体: leading_parser
-  -- Note: the withResetCache is because leading_parser seems to add a cache boundary,
-  -- which causes the `hygieneInfo` parser not to be able to undo the trailing whitespace
-(ppSpace >> Term.binderIdent) > withResetCache hygieneInfo
-
-Depends on / 依赖: leading_parser
+--- 原说明 ---
+A parser for optional binder identifiers
 -/
 def optBinderIdent : Parser := leading_parser
   -- Note: the withResetCache is because leading_parser seems to add a cache boundary,
   -- which causes the `hygieneInfo` parser not to be able to undo the trailing whitespace
-(ppSpace >> Term.binderIdent) > withResetCache hygieneInfo
+  (ppSpace >> Term.binderIdent) <|> withResetCache hygieneInfo
 
-/--
-Definition of `optBinderIdent.name` / `optBinderIdent.name` 的定义
+/-- Retrieves the name of the optional identifier, if provided. Returns `this` otherwise -/
+/-
+**Mathlib.Tactic.optBinderIdent.name** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.o
+ptBinderIdent`。
+形式化陈述：TSyntax `Mathlib.Tactic.optBinderIdent → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition optBinderIdent.name
-  signature: (id : TSyntax ``optBinderIdent)
-  body: .getId if id.raw[0].isIdent then id.raw[0].getId else HygieneInfo.mkIdent ⟨id.raw[0]⟩ `this
-
-中文:
-定义 optBinderIdent.name
-  签名: (id : TSyntax ``optBinderIdent)
-  定义体: .getId if id.raw[0].isIdent then id.raw[0].getId else HygieneInfo.mkIdent ⟨id.raw[0]⟩ `this
-
-Depends on / 依赖: HygieneInfo, HygieneInfo.mkIdent, id.raw, isIdent, mkIdent
+--- 原说明 ---
+Retrieves the name of the optional identifier, if provided. Returns `this` other
+wise
 -/
 def optBinderIdent.name (id : TSyntax ``optBinderIdent) : Name :=
-.getId if id.raw[0].isIdent then id.raw[0].getId else HygieneInfo.mkIdent ⟨id.raw[0]⟩ `this
+  if id.raw[0].isIdent then id.raw[0].getId else HygieneInfo.mkIdent ⟨id.raw[0]⟩ `this |>.getId
 
 /--
-Definition of `haveIdLhs'` / `haveIdLhs'` 的定义
+Uses `checkColGt` to prevent
 
-English:
-definition haveIdLhs'
-  signature: : Parser
-  body: optBinderIdent >> many (ppSpace >>
-    checkColGt "expected to be indented" >> letIdBinder) >> optType
+```lean
+have h
+exact Nat
+```
 
-@[tactic_alt Lean.Parser.Tactic.tacticHave__]
+From being interpreted as
+```lean
+have h
+  exact Nat
+```
+-/
+/-
+**Mathlib.Tactic.haveIdLhs'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：haveIdLhs' : Parser
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 haveIdLhs'
-  签名: : Parser
-  定义体: optBinderIdent >> many (ppSpace >>
-    checkColGt "expected to be indented" >> letIdBinder) >> optType
+--- 原说明 ---
+Uses `checkColGt` to prevent
 
-@[tactic_alt Lean.Parser.Tactic.tacticHave__]
+```lean
+have h
+exact Nat
+```
 
-Depends on / 依赖: checkColGt, expected, indented, letIdBinder, optBinderIdent, optType, ppSpace
+From being interpreted as
+```lean
+have h
+  exact Nat
+```
 -/
 def haveIdLhs' : Parser :=
   optBinderIdent >> many (ppSpace >>
@@ -103,51 +101,31 @@ syntax "suffices" haveIdLhs' : tactic
 
 open Elab Term in
 /--
-Definition of `haveLetCore` / `haveLetCore` 的定义
+Adds hypotheses to the context, turning them into goals to be proved later if their proof terms
+aren't provided (`t: Option Term := none`).
 
-English:
-definition haveLetCore
-  signature: (goal : MVarId) (name : TSyntax ``optBinderIdent)
-  body: let declFn := if keepTerm then MVarId.define else MVarId.assert
-  goal.withContext do
-    let n := optBinderIdent.name name
-    let elabBinders k := if bis.isEmpty then k #[] else elabBinders bis k
-    let (goal1, t, p) ← elabBinders fun es => do
-      let t ← match t with
-      | none => mkFreshTypeMVar
-      | some stx => withRef stx do
-        let e ← Term.elabType stx
-        Term.synthesizeSyntheticMVars (postpone := .no)
-        instantiateMVars e
-      let p ← mkFreshExprMVar t MetavarKind.syntheticOpaque n
-      pure (p.mvarId!, ← mkForallFVars es t, ← mkLambdaFVars es p)
-    let (fvar, goal2) ← (← declFn goal n t p).intro1P
-    goal2.withContext do
-      Term.addTermInfo' (isBinder := true) name.raw[0] (mkFVar fvar)
-    pure (goal1, goal2)
+If the bound term is intended to be kept in the context, pass `keepTerm : Bool := true`. This is
+useful when extending the `let` tactic, which is expected to show the proof term in the infoview.
+-/
+/-
+**Mathlib.Tactic.haveLetCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：haveLetCore (goal : MVarId) (name : TSyntax ``optBinderIdent) (bis : Array
+ (TSyntax ``letIdBinder)) (t : Option Term) (keepTerm : Bool) : TermElabM (MVarI
+d × MVarId)
+参数：goal : MVarId；name : TSyntax ``optBinderIdent；bis : Array (TSyntax ``letIdBin
+der)；t : Option Term；keepTerm : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 haveLetCore
-  签名: (goal : MVarId) (name : TSyntax ``optBinderIdent)
-  定义体: let declFn := if keepTerm then MVarId.define else MVarId.assert
-  goal.withContext do
-    let n := optBinderIdent.name name
-    let elabBinders k := if bis.isEmpty then k #[] else elabBinders bis k
-    let (goal1, t, p) ← elabBinders fun es => do
-      let t ← match t with
-      | none => mkFreshTypeMVar
-      | some stx => withRef stx do
-        let e ← Term.elabType stx
-        Term.synthesizeSyntheticMVars (postpone := .no)
-        instantiateMVars e
-      let p ← mkFreshExprMVar t MetavarKind.syntheticOpaque n
-      pure (p.mvarId!, ← mkForallFVars es t, ← mkLambdaFVars es p)
-    let (fvar, goal2) ← (← declFn goal n t p).intro1P
-    goal2.withContext do
-      Term.addTermInfo' (isBinder := true) name.raw[0] (mkFVar fvar)
-    pure (goal1, goal2)
+--- 原说明 ---
+Adds hypotheses to the context, turning them into goals to be proved later if th
+eir proof terms
+aren't provided (`t: Option Term := none`).
 
-Depends on / 依赖: MVarId, MVarId.assert, MVarId.define, MetavarKind, MetavarKind.syntheticOpaque, Term.elabType, Term.synthesizeSyntheticMVars, assert, bis.isEmpty, declFn, define, elabBinders, elabType, goal.withContext, instantiateMVars, isEmpty, keepTerm, mkForallFVars, mkFreshExprMVar, mkFreshTypeMVar
+If the bound term is intended to be kept in the context, pass `keepTerm : Bool :
+= true`. This is
+useful when extending the `let` tactic, which is expected to show the proof term
+ in the infoview.
 -/
 def haveLetCore (goal : MVarId) (name : TSyntax ``optBinderIdent)
     (bis : Array (TSyntax ``letIdBinder))
@@ -156,7 +134,7 @@ def haveLetCore (goal : MVarId) (name : TSyntax ``optBinderIdent)
   goal.withContext do
     let n := optBinderIdent.name name
     let elabBinders k := if bis.isEmpty then k #[] else elabBinders bis k
-    let (goal1, t, p) ← elabBinders fun es => do
+    let (goal1, t, p) ← elabBinders fun es ↦ do
       let t ← match t with
       | none => mkFreshTypeMVar
       | some stx => withRef stx do
@@ -191,3 +169,4 @@ elab_rules : tactic
   replaceMainGoal [goal1, goal2]
 
 end Mathlib.Tactic
+

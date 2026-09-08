@@ -41,27 +41,34 @@ variable {C : Type u} [Category.{v} C]
 
 namespace Limits.ColimitPresentation
 
-/--
-lemma `isCardinalPresentable` / 引理 `isCardinalPresentable`
-
-English:
-lemma isCardinalPresentable
-  statement: {X : C} {J : Type w} [SmallCategory J]
-  proof: have (k : J) : IsCardinalPresentable (p.diag.obj k) κ' := isCardinalPresentable_of_le _ h
-  isCardinalPresentable_of_isColimit _ p.isColimit κ' hJ
-
-中文:
-引理 isCardinalPresentable
-  结论: {X : C} {J : 类型 w} [小范畴 J]
-  证明: have (k : J) : IsCardinalPresentable (p.diag.obj k) κ' := isCardinalPresentable_of_le _ h
-  isCardinalPresentable_of_isColimit _ p.isColimit κ' hJ
-
-Depends on / 依赖: IsCardinalPresentable, isCardinalPresentable_of_isColimit, isCardinalPresentable_of_le, isColimit, p.diag.obj, p.isColimit
+/-
+**CategoryTheory.Limits.ColimitPresentation.isCardinalPresentable** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：isCardinalPresentable {X : C} {J : Type w} [SmallCategory J] (p : ColimitP
+resentation J X) (κ : Cardinal.{w}) [Fact κ.IsRegular] (h : forall (j : J), IsCa
+rdinalPresentable (p.diag.obj j) κ) [LocallySmall.{w} C] (κ' : Cardinal.{w}) [Fa
+ct κ'.IsRegular] (h : κ <= κ') (hJ : HasCardinalLT (Arrow J) κ') : IsCardinalPre
+sentable X κ'
+参数：p : ColimitPresentation J X；κ : Cardinal.{w}；h : forall (j : J), IsCardinalPr
+esentable (p.diag.obj j) κ；κ' : Cardinal.{w}；h : κ <= κ'；hJ : HasCardinalLT (Arr
+ow J) κ'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isCardinalPresentable_of_le`：isCardinalPresentable_of_le 
+[IsCardinalPresentable X κ] {κ' : Cardinal.{w}} [Fact κ'.IsRegular] (h : κ <= κ'
+) : IsCardinalPresentable X κ'
+· 使用引理 `CategoryTheory.isCardinalPresentable_of_isColimit`：isCardinalPresentable
+_of_isColimit [LocallySmall.{w} C] {K : Type u'} [Category.{v'} K] [HasLimitsOfS
+hape Kᵒᵖ (Type w)] {Y : K ⥤ C} (c : Coc…
+· 使用定理 `CategoryTheory.Limits.Types.hasLimitsOfShape`：∀ {J : Type v} [inst : Cat
+egoryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimi
+tsOfShape J (Type u)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma isCardinalPresentable {X : C} {J : Type w} [SmallCategory J]
     (p : ColimitPresentation J X) (κ : Cardinal.{w}) [Fact κ.IsRegular]
-    (h : forall (j : J), IsCardinalPresentable (p.diag.obj j) κ) [LocallySmall.{w} C]
-    (κ' : Cardinal.{w}) [Fact κ'.IsRegular] (h : κ <= κ')
+    (h : ∀ (j : J), IsCardinalPresentable (p.diag.obj j) κ) [LocallySmall.{w} C]
+    (κ' : Cardinal.{w}) [Fact κ'.IsRegular] (h : κ ≤ κ')
     (hJ : HasCardinalLT (Arrow J) κ') :
     IsCardinalPresentable X κ' :=
   have (k : J) : IsCardinalPresentable (p.diag.obj k) κ' := isCardinalPresentable_of_le _ h
@@ -75,56 +82,61 @@ namespace ObjectProperty
 
 variable {P : ObjectProperty C}
 
-/--
-lemma `ColimitOfShape.isCardinalPresentable` / 引理 `ColimitOfShape.isCardinalPresentable`
-
-English:
-lemma ColimitOfShape.isCardinalPresentable
-  statement: {X : C} {J : Type w} [SmallCategory J]
-  proof: p.toColimitPresentation.isCardinalPresentable κ
-    (fun j => hP _ (p.prop_diag_obj j)) _ h hJ
-
-中文:
-引理 余limitOfShape.isCardinalPresentable
-  结论: {X : C} {J : 类型 w} [小范畴 J]
-  证明: p.toColimitPresentation.isCardinalPresentable κ
-    (fun j => hP _ (p.prop_diag_obj j)) _ h hJ
-
-Depends on / 依赖: isCardinalPresentable, p.prop_diag_obj, p.toColimitPresentation.isCardinalPresentable, prop_diag_obj, toColimitPresentation
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.isCardinalPresentable** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheo
+ry.ObjectProperty C} {X : C} {J : Type w}   [inst_1 : CategoryTheory.SmallCatego
+ry J] (p : P.ColimitOfShape J X) {κ : Cardinal.{w}} [inst_2 : Fact κ.IsRegular],
+   P ≤ CategoryTheory.isCardinalPresentable C κ →     ∀ [CategoryTheory.LocallyS
+mall.{w, v, u} C] (κ' : Cardinal.{w}) [inst_4 : Fact κ'.IsRegular],       κ ≤ κ'
+ → HasCardinalLT (CategoryTheory.Arrow J) κ' → CategoryTheory.IsCardinalPresenta
+ble X κ'
+参数：p : P.ColimitOfShape J X；κ' : Cardinal.{w}；CategoryTheory.Arrow J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.ColimitPresentation.isCardinalPresentable`：isCardi
+nalPresentable {X : C} {J : Type w} [SmallCategory J] (p : ColimitPresentation J
+ X) (κ : Cardinal.{w}) [Fact κ.IsRegular] (h : forall…
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma ColimitOfShape.isCardinalPresentable {X : C} {J : Type w} [SmallCategory J]
     (p : P.ColimitOfShape J X) {κ : Cardinal.{w}} [Fact κ.IsRegular]
-    (hP : P <= isCardinalPresentable C κ) [LocallySmall.{w} C]
-    (κ' : Cardinal.{w}) [Fact κ'.IsRegular] (h : κ <= κ')
+    (hP : P ≤ isCardinalPresentable C κ) [LocallySmall.{w} C]
+    (κ' : Cardinal.{w}) [Fact κ'.IsRegular] (h : κ ≤ κ')
     (hJ : HasCardinalLT (Arrow J) κ') :
     IsCardinalPresentable X κ' :=
   p.toColimitPresentation.isCardinalPresentable κ
-    (fun j => hP _ (p.prop_diag_obj j)) _ h hJ
+    (fun j ↦ hP _ (p.prop_diag_obj j)) _ h hJ
 
 variable {κ : Cardinal.{w}} [Fact κ.IsRegular]
 
 variable (P κ) in
-/--
-Definition of `IsCardinalFilteredGenerator` / `IsCardinalFilteredGenerator` 的定义
+/-- The condition that `P : ObjectProperty C` consists of `κ`-presentable objects
+and that any object of `C` is a `κ`-filtered colimit of objects satisfying `P`.
+(This notion is particularly relevant when `C` is locally `w`-small and `P` is
+essentially `w`-small, see `HasCardinalFilteredGenerators`, which appears in
+the definitions of locally presentable and accessible categories.) -/
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator** 是 Mathlib 中的一个归纳类型
+，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     CategoryT
+heory.ObjectProperty C → (κ : Cardinal.{w}) → [Fact κ.IsRegular] → Prop
+参数：κ : Cardinal.{w}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsCardinalFilteredGenerator
-  parameters: : Prop where
-  axioms and operations (2):
-    - le_isCardinalPresentable : P <= isCardinalPresentable C κ
-    - exists_colimitsOfShape((X : C)) : exists (J : Type w) (_ : SmallCategory J) (_ : IsCardinalFiltered J κ), P.colimitsOfShape J X
-
-中文:
-结构 是CardinalFilteredGenerator
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - le_isCardinalPresentable : P <= isCardinalPresentable C κ
-    - exists_colimitsOfShape((X : C)) : 存在 (J : 类型 w) (_ : 小范畴 J) (_ : 是CardinalFiltered J κ), P.colimitsOfShape J X
+--- 原说明 ---
+The condition that `P : ObjectProperty C` consists of `κ`-presentable objects
+and that any object of `C` is a `κ`-filtered colimit of objects satisfying `P`.
+(This notion is particularly relevant when `C` is locally `w`-small and `P` is
+essentially `w`-small, see `HasCardinalFilteredGenerators`, which appears in
+the definitions of locally presentable and accessible categories.)
 -/
 structure IsCardinalFilteredGenerator : Prop where
-  le_isCardinalPresentable : P <= isCardinalPresentable C κ
+  le_isCardinalPresentable : P ≤ isCardinalPresentable C κ
   exists_colimitsOfShape (X : C) :
-    exists (J : Type w) (_ : SmallCategory J) (_ : IsCardinalFiltered J κ),
+    ∃ (J : Type w) (_ : SmallCategory J) (_ : IsCardinalFiltered J κ),
       P.colimitsOfShape J X
 
 namespace IsCardinalFilteredGenerator
@@ -132,33 +144,29 @@ namespace IsCardinalFilteredGenerator
 variable (h : P.IsCardinalFilteredGenerator κ) (X : C)
 
 include h in
-/--
-lemma `of_le_isoClosure` / 引理 `of_le_isoClosure`
-
-English:
-lemma of_le_isoClosure
-  statement: {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure)
-  proof: h₂
-  exists_colimitsOfShape X := by
-    obtain ⟨J, _, _, hX⟩ := h.exists_colimitsOfShape X
-    exact ⟨J, inferInstance, inferInstance, by
-      simpa only [colimitsOfShape_isoClosure] using colimitsOfShape_monotone J h₁ _ hX⟩
-
-include h in
-
-中文:
-引理 of_le_isoClosure
-  结论: {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure)
-  证明: h₂
-  exists_colimitsOfShape X := by
-    obtain ⟨J, _, _, hX⟩ := h.exists_colimitsOfShape X
-    exact ⟨J, inferInstance, inferInstance, by
-      simpa only [colimitsOfShape_isoClosure] using colimitsOfShape_monotone J h₁ _ hX⟩
-
-include h in
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.of_le_isoClosure** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerato
+r`。
+形式化陈述：of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure) (h₂ : P
+' <= isCardinalPresentable C κ) : P'.IsCardinalFilteredGenerator κ where le_isCa
+rdinalPresentable
+参数：h₁ : P <= P'.isoClosure；h₂ : P' <= isCardinalPresentable C κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.exists_colimit
+sOfShape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Category
+Theory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_isoClosure`：colimitsOfShap
+e_isoClosure : P.isoClosure.colimitsOfShape J = P.colimitsOfShape J
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_monotone`：colimitsOfShape_
+monotone {Q : ObjectProperty C} (hPQ : P <= Q) : P.colimitsOfShape J <= Q.colimi
+tsOfShape J
 -/
-lemma of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure)
-    (h₂ : P' <= isCardinalPresentable C κ) :
+lemma of_le_isoClosure {P' : ObjectProperty C} (h₁ : P ≤ P'.isoClosure)
+    (h₂ : P' ≤ isCardinalPresentable C κ) :
     P'.IsCardinalFilteredGenerator κ where
   le_isCardinalPresentable := h₂
   exists_colimitsOfShape X := by
@@ -167,98 +175,96 @@ lemma of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure)
       simpa only [colimitsOfShape_isoClosure] using colimitsOfShape_monotone J h₁ _ hX⟩
 
 include h in
-/--
-lemma `isoClosure` / 引理 `isoClosure`
-
-English:
-lemma isoClosure
-  statement: P.isoClosure.IsCardinalFilteredGenerator κ
-  proof: h.of_le_isoClosure (P.le_isoClosure.trans P.isoClosure.le_isoClosure)
-    (by simpa only [ObjectProperty.isoClosure_le_iff] using h.le_isCardinalPresentable)
-
-中文:
-引理 isoClosure
-  结论: P.isoClosure.是CardinalFilteredGenerator κ
-  证明: h.of_le_isoClosure (P.le_isoClosure.trans P.isoClosure.le_isoClosure)
-    (by simpa only [ObjectProperty.isoClosure_le_iff] using h.le_isCardinalPresentable)
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.isoClosure_le_iff, P.isoClosure.le_isoClosure, P.le_isoClosure.trans, h.le_isCardinalPresentable, h.of_le_isoClosure, isoClosure, isoClosure_le_iff, le_isCardinalPresentable, le_isoClosure, of_le_isoClosure
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isoClosure** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator`。
+形式化陈述：isoClosure : P.isoClosure.IsCardinalFilteredGenerator κ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.of_le_isoClosu
+re`：of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure) (h₂ : P' 
+<= isCardinalPresentable C κ) : P'.IsCardinalFilteredGenerator κ…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
+· 使用定理 `CategoryTheory.instIsClosedUnderIsomorphismsIsCardinalPresentable`：∀ {C 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (κ : Cardinal.{w}) [inst_
+1 : Fact κ.IsRegular],   (CategoryTheory.isCardinalPres…
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
 -/
 lemma isoClosure : P.isoClosure.IsCardinalFilteredGenerator κ :=
   h.of_le_isoClosure (P.le_isoClosure.trans P.isoClosure.le_isoClosure)
     (by simpa only [ObjectProperty.isoClosure_le_iff] using h.le_isCardinalPresentable)
-
-/--
-lemma `isoClosure_iff` / 引理 `isoClosure_iff`
-
-English:
-lemma isoClosure_iff
-  proof: ⟨fun h => h.of_le_isoClosure (by rfl) (P.le_isoClosure.trans h.le_isCardinalPresentable),
-    isoClosure⟩
-
-include h in
-
-中文:
-引理 isoClosure_iff
-  证明: ⟨fun h => h.of_le_isoClosure (by rfl) (P.le_isoClosure.trans h.le_isCardinalPresentable),
-    isoClosure⟩
-
-include h in
-
-Depends on / 依赖: P.le_isoClosure.trans, h.le_isCardinalPresentable, h.of_le_isoClosure, isoClosure, le_isCardinalPresentable, le_isoClosure, of_le_isoClosure
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isoClosure_iff** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator`
+。
+形式化陈述：isoClosure_iff : P.isoClosure.IsCardinalFilteredGenerator κ ↔ P.IsCardinal
+FilteredGenerator κ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.of_le_isoClosu
+re`：of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure) (h₂ : P' 
+<= isCardinalPresentable C κ) : P'.IsCardinalFilteredGenerator κ…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用引理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isoClosure`：is
+oClosure : P.isoClosure.IsCardinalFilteredGenerator κ
 -/
 lemma isoClosure_iff :
     P.isoClosure.IsCardinalFilteredGenerator κ ↔ P.IsCardinalFilteredGenerator κ :=
-  ⟨fun h => h.of_le_isoClosure (by rfl) (P.le_isoClosure.trans h.le_isCardinalPresentable),
+  ⟨fun h ↦ h.of_le_isoClosure (by rfl) (P.le_isoClosure.trans h.le_isCardinalPresentable),
     isoClosure⟩
 
 include h in
-/--
-lemma `presentable` / 引理 `presentable`
-
-English:
-lemma presentable
-  given: [LocallySmall.{w} C] (X : C)
-  proof: by
-  obtain ⟨J, _, _, ⟨hX⟩⟩ := h.exists_colimitsOfShape X
-  obtain ⟨κ', _, le, hκ'⟩ : exists (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ <= κ'),
-      HasCardinalLT (Arrow J) κ' := by
-    obtain ⟨κ', h₁, h₂⟩ := HasCardinalLT.exists_regular_cardinal_forall.{w}
-      (Sum.elim (fun (_ : Unit) => Arrow J) (fun (_ : Unit) => κ.ord.ToType))
-    exact ⟨κ', ⟨h₁⟩,
-      le_of_lt (by simpa [hasCardinalLT_iff_cardinal_mk_lt] using h₂ (Sum.inr ⟨⟩)),
-      h₂ (Sum.inl ⟨⟩)⟩
-  have := hX.isCardinalPresentable h.le_isCardinalPresentable _ le hκ'
-  exact isPresentable_of_isCardinalPresentable _ κ'
-
-include h in
-
-中文:
-引理 presentable
-  条件: [LocallySmall.{w} C] (X : C)
-  证明: by
-  obtain ⟨J, _, _, ⟨hX⟩⟩ := h.exists_colimitsOfShape X
-  obtain ⟨κ', _, le, hκ'⟩ : exists (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ <= κ'),
-      HasCardinalLT (Arrow J) κ' := by
-    obtain ⟨κ', h₁, h₂⟩ := HasCardinalLT.exists_regular_cardinal_forall.{w}
-      (Sum.elim (fun (_ : Unit) => Arrow J) (fun (_ : Unit) => κ.ord.ToType))
-    exact ⟨κ', ⟨h₁⟩,
-      le_of_lt (by simpa [hasCardinalLT_iff_cardinal_mk_lt] using h₂ (Sum.inr ⟨⟩)),
-      h₂ (Sum.inl ⟨⟩)⟩
-  have := hX.isCardinalPresentable h.le_isCardinalPresentable _ le hκ'
-  exact isPresentable_of_isCardinalPresentable _ κ'
-
-include h in
-
-Depends on / 依赖: Cardinal, HasCardinalLT, HasCardinalLT.exists_regular_cardinal_forall, IsRegular, Sum.elim, Sum.inl, Sum.inr, ToType, exists_colimitsOfShape, exists_regular_cardinal_forall, h.exists_colimitsOfShape, h.le_isCardinalPresentable, hX.isCardinalPresentable, hasCardinalLT_iff_cardinal_mk_lt, isCardinalPresentable, le_isCardinalPresentable, le_of_lt, ord.ToType
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.presentable** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator`。
+形式化陈述：presentable [LocallySmall.{w} C] (X : C) : IsPresentable.{w} X
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.exists_colimit
+sOfShape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Category
+Theory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用引理 `HasCardinalLT.exists_regular_cardinal_forall`：exists_regular_cardinal_fo
+rall {ι : Type v} (X : ι -> Type u) [Small.{w} ι] [forall i, Small.{w} (X i)] : 
+exists (κ : Cardinal.{w}), κ.IsReg…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_toType`：∀ (o : Ordinal.{u_1}), Cardinal.mk o.ToType = o.card
+· 使用定理 `Cardinal.card_ord`：card_ord (c) : (ord c).card = c
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.isCardinalPresentable`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectP
+roperty C} {X : C} {J : Type w}   [inst_1 : CategoryTheo…
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用引理 `CategoryTheory.isPresentable_of_isCardinalPresentable`：isPresentable_of_
+isCardinalPresentable (κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCardinalPresentab
+le X κ] : IsPresentable.{w} X where exists_…
 -/
 lemma presentable [LocallySmall.{w} C] (X : C) :
     IsPresentable.{w} X := by
   obtain ⟨J, _, _, ⟨hX⟩⟩ := h.exists_colimitsOfShape X
-  obtain ⟨κ', _, le, hκ'⟩ : exists (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ <= κ'),
+  obtain ⟨κ', _, le, hκ'⟩ : ∃ (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ ≤ κ'),
       HasCardinalLT (Arrow J) κ' := by
     obtain ⟨κ', h₁, h₂⟩ := HasCardinalLT.exists_regular_cardinal_forall.{w}
-      (Sum.elim (fun (_ : Unit) => Arrow J) (fun (_ : Unit) => κ.ord.ToType))
+      (Sum.elim (fun (_ : Unit) ↦ Arrow J) (fun (_ : Unit) ↦ κ.ord.ToType))
     exact ⟨κ', ⟨h₁⟩,
       le_of_lt (by simpa [hasCardinalLT_iff_cardinal_mk_lt] using h₂ (Sum.inr ⟨⟩)),
       h₂ (Sum.inl ⟨⟩)⟩
@@ -266,69 +272,61 @@ lemma presentable [LocallySmall.{w} C] (X : C) :
   exact isPresentable_of_isCardinalPresentable _ κ'
 
 include h in
-/--
-lemma `isStrongGenerator` / 引理 `isStrongGenerator`
-
-English:
-lemma isStrongGenerator
-  statement: P.IsStrongGenerator
-  proof: IsStrongGenerator.mk_of_exists_colimitsOfShape.{w} (fun X => by
-    obtain ⟨_, _, _, hX⟩ := h.exists_colimitsOfShape X
-    exact ⟨_, _, hX⟩)
-
-include h in
-
-中文:
-引理 isStrongGenerator
-  结论: P.IsStrongGenerator
-  证明: IsStrongGenerator.mk_of_exists_colimitsOfShape.{w} (fun X => by
-    obtain ⟨_, _, _, hX⟩ := h.exists_colimitsOfShape X
-    exact ⟨_, _, hX⟩)
-
-include h in
-
-Depends on / 依赖: IsStrongGenerator, IsStrongGenerator.mk_of_exists_colimitsOfShape, exists_colimitsOfShape, h.exists_colimitsOfShape, mk_of_exists_colimitsOfShape
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isStrongGenerator** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerat
+or`。
+形式化陈述：isStrongGenerator : P.IsStrongGenerator
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStrongGenerator.mk_of_exists_colimitsOfS
+hape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheo
+ry.ObjectProperty C},   (∀ (X : C), ∃ J x, P.colimitsOfShape J X) …
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.exists_colimit
+sOfShape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Category
+Theory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
 -/
 lemma isStrongGenerator : P.IsStrongGenerator :=
-  IsStrongGenerator.mk_of_exists_colimitsOfShape.{w} (fun X => by
+  IsStrongGenerator.mk_of_exists_colimitsOfShape.{w} (fun X ↦ by
     obtain ⟨_, _, _, hX⟩ := h.exists_colimitsOfShape X
     exact ⟨_, _, hX⟩)
 
 include h in
-/--
-lemma `isPresentable_eq_retractClosure` / 引理 `isPresentable_eq_retractClosure`
-
-English:
-lemma isPresentable_eq_retractClosure
-  proof: by
-  refine le_antisymm (fun X hX => ?_) ?_
-  · rw [isCardinalPresentable_iff] at hX
-    obtain ⟨J, _, _, ⟨p⟩⟩ := h.exists_colimitsOfShape X
-    have := essentiallySmall_of_small_of_locallySmall.{w} J
-    obtain ⟨j, f, hf⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit (𝟙 X)
-    exact ⟨_, p.prop_diag_obj j, ⟨{ i := _, r := _, retract := hf}⟩⟩
-  · simpa only [ObjectProperty.retractClosure_le_iff] using h.le_isCardinalPresentable
-
-include h in
-
-中文:
-引理 isPresentable_eq_retractClosure
-  证明: by
-  refine le_antisymm (fun X hX => ?_) ?_
-  · rw [isCardinalPresentable_iff] at hX
-    obtain ⟨J, _, _, ⟨p⟩⟩ := h.exists_colimitsOfShape X
-    have := essentiallySmall_of_small_of_locallySmall.{w} J
-    obtain ⟨j, f, hf⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit (𝟙 X)
-    exact ⟨_, p.prop_diag_obj j, ⟨{ i := _, r := _, retract := hf}⟩⟩
-  · simpa only [ObjectProperty.retractClosure_le_iff] using h.le_isCardinalPresentable
-
-include h in
-
-Depends on / 依赖: IsCardinalPresentable, IsCardinalPresentable.exists_hom_of_isColimit, ObjectProperty, ObjectProperty.retractClosure_le_iff, essentiallySmall_of_small_of_locallySmall, exists_colimitsOfShape, exists_hom_of_isColimit, h.exists_colimitsOfShape, h.le_isCardinalPresentable, isCardinalPresentable_iff, isColimit, le_antisymm, le_isCardinalPresentable, p.isColimit, p.prop_diag_obj, prop_diag_obj, retract, retractClosure_le_iff
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isPresentable_eq_ret
+ractClosure** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalF
+ilteredGenerator`。
+形式化陈述：isPresentable_eq_retractClosure : isCardinalPresentable C κ = P.retractClo
+sure
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.exists_colimit
+sOfShape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Category
+Theory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.IsCardinalPresentable.exists_hom_of_isColimit`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (κ : Cardinal.{w}) [in
+st_1 : Fact κ.IsRegular]   {J : Type u_1} [inst_2 …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isCardinalPresentable_iff`：isCardinalPresentable_iff (X :
+ C) : isCardinalPresentable C κ X ↔ IsCardinalPresentable X κ
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.instIsStableUnderRetractsIsCardinalPresentable`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w}) [inst_1 : Fac
+t κ.IsRegular],   (CategoryTheory.isCardinalPresent…
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
 -/
 lemma isPresentable_eq_retractClosure :
     isCardinalPresentable C κ = P.retractClosure := by
-  refine le_antisymm (fun X hX => ?_) ?_
+  refine le_antisymm (fun X hX ↦ ?_) ?_
   · rw [isCardinalPresentable_iff] at hX
     obtain ⟨J, _, _, ⟨p⟩⟩ := h.exists_colimitsOfShape X
     have := essentiallySmall_of_small_of_locallySmall.{w} J
@@ -337,22 +335,23 @@ lemma isPresentable_eq_retractClosure :
   · simpa only [ObjectProperty.retractClosure_le_iff] using h.le_isCardinalPresentable
 
 include h in
-/--
-lemma `essentiallySmall_isPresentable` / 引理 `essentiallySmall_isPresentable`
-
-English:
-lemma essentiallySmall_isPresentable
-  proof: by
-  rw [h.isPresentable_eq_retractClosure]
-  infer_instance
-
-中文:
-引理 essentiallySmall_isPresentable
-  证明: by
-  rw [h.isPresentable_eq_retractClosure]
-  infer_instance
-
-Depends on / 依赖: h.isPresentable_eq_retractClosure, infer_instance, isPresentable_eq_retractClosure
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.essentiallySmall_isP
+resentable** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFi
+lteredGenerator`。
+形式化陈述：essentiallySmall_isPresentable [ObjectProperty.EssentiallySmall.{w} P] [Lo
+callySmall.{w} C] : ObjectProperty.EssentiallySmall.{w} (isCardinalPresentable C
+ κ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.isPresentable_
+eq_retractClosure`：isPresentable_eq_retractClosure : isCardinalPresentable C κ =
+ P.retractClosure
+· 使用定理 `CategoryTheory.ObjectProperty.instEssentiallySmallRetractClosureOfLocall
+ySmall`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTh
+eory.ObjectProperty C)   [CategoryTheory.ObjectProperty.EssentiallyS…
 -/
 lemma essentiallySmall_isPresentable
     [ObjectProperty.EssentiallySmall.{w} P] [LocallySmall.{w} C] :
@@ -364,39 +363,36 @@ end IsCardinalFilteredGenerator
 
 end ObjectProperty
 
-/--
-Definition of `HasCardinalFilteredGenerator` / `HasCardinalFilteredGenerator` 的定义
+/-- The property that a category `C` and a regular cardinal `κ`
+satisfy `P.IsCardinalFilteredGenerators κ` for a suitable essentially
+small `P : ObjectProperty C`. -/
+/-
+**CategoryTheory.HasCardinalFilteredGenerator** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：(C : Type u) → [hC : CategoryTheory.Category.{v, u} C] → (κ : Cardinal.{w}
+) → [hκ : Fact κ.IsRegular] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasCardinalFilteredGenerator
-  parameters: (C : Type u) [hC : Category.{v} C]
-  extends: LocallySmall.{w} C
-  axioms and operations (1):
-    - exists_generator((C κ) [hC] [hκ]) : exists (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P), P.IsCardinalFilteredGenerator κ
-
-中文:
-类 有CardinalFilteredGenerator
-  参数: (C : 类型u) [hC : 范畴.{v} C]
-  继承: LocallySmall.{w} C
-  公理与运算 (1 个):
-    - exists_generator((C κ) [hC] [hκ]) : 存在 (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P), P.是CardinalFilteredGenerator κ
+--- 原说明 ---
+The property that a category `C` and a regular cardinal `κ`
+satisfy `P.IsCardinalFilteredGenerators κ` for a suitable essentially
+small `P : ObjectProperty C`.
 -/
 class HasCardinalFilteredGenerator (C : Type u) [hC : Category.{v} C]
     (κ : Cardinal.{w}) [hκ : Fact κ.IsRegular] : Prop extends LocallySmall.{w} C where
   exists_generator (C κ) [hC] [hκ] :
-    exists (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P),
+    ∃ (P : ObjectProperty C) (_ : ObjectProperty.EssentiallySmall.{w} P),
       P.IsCardinalFilteredGenerator κ
-
-/--
-lemma `ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator` / 引理 `ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator`
-
-English:
-lemma ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
-  proof: ⟨P, inferInstance, hP⟩
-
-中文:
-引理 ObjectProperty.是CardinalFilteredGenerator.hasCardinalFilteredGenerator
-  证明: ⟨P, inferInstance, hP⟩
+/-
+**CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredG
+enerator** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsCardinalFilt
+eredGenerator`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheo
+ry.ObjectProperty C}   [CategoryTheory.ObjectProperty.EssentiallySmall.{w, v, u}
+ P] [CategoryTheory.LocallySmall.{w, v, u} C]   {κ : Cardinal.{w}} [hκ : Fact κ.
+IsRegular],   P.IsCardinalFilteredGenerator κ → CategoryTheory.HasCardinalFilter
+edGenerator C κ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
     {P : ObjectProperty C} [ObjectProperty.EssentiallySmall.{w} P]
@@ -404,36 +400,42 @@ lemma ObjectProperty.IsCardinalFilteredGenerator.hasCardinalFilteredGenerator
     (hP : P.IsCardinalFilteredGenerator κ) :
     HasCardinalFilteredGenerator C κ where
   exists_generator := ⟨P, inferInstance, hP⟩
-
-/--
-lemma `HasCardinalFilteredGenerator.exists_small_generator` / 引理 `HasCardinalFilteredGenerator.exists_small_generator`
-
-English:
-lemma HasCardinalFilteredGenerator.exists_small_generator
-  statement: (C : Type u) [Category.{v} C]
-  proof: by
-  obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
-  obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le P
-  exact ⟨Q, inferInstance, hP.of_le_isoClosure h₂ (h₁.trans hP.le_isCardinalPresentable)⟩
-
-中文:
-引理 有CardinalFilteredGenerator.存在_small_generator
-  结论: (C : 类型u) [范畴.{v} C]
-  证明: by
-  obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
-  obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le P
-  exact ⟨Q, inferInstance, hP.of_le_isoClosure h₂ (h₁.trans hP.le_isCardinalPresentable)⟩
-
-Depends on / 依赖: EssentiallySmall, HasCardinalFilteredGenerator, HasCardinalFilteredGenerator.exists_generator, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, exists_generator, exists_small_le, hP.le_isCardinalPresentable, hP.of_le_isoClosure, le_isCardinalPresentable, of_le_isoClosure
+/-
+**CategoryTheory.HasCardinalFilteredGenerator.exists_small_generator** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.HasCardinalFilteredGenerator`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w}
+) [inst_1 : Fact κ.IsRegular]   [CategoryTheory.HasCardinalFilteredGenerator C κ
+],   ∃ P, ∃ (_ : CategoryTheory.ObjectProperty.Small.{w, v, u} P), P.IsCardinalF
+ilteredGenerator κ
+参数：C : Type u；κ : Cardinal.{w}；_ : CategoryTheory.ObjectProperty.Small.{w, v, u}
+ P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.HasCardinalFilteredGenerator.exists_generator`：∀ (C : Typ
+e u) [hC : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w}) [hκ : Fact κ.IsR
+egular]   [self : CategoryTheory.HasCardinalFilter…
+· 使用定理 `CategoryTheory.ObjectProperty.EssentiallySmall.exists_small_le`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.ObjectPrope
+rty C)   [CategoryTheory.ObjectProperty.EssentiallyS…
+· 使用引理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.of_le_isoClosu
+re`：of_le_isoClosure {P' : ObjectProperty C} (h₁ : P <= P'.isoClosure) (h₂ : P' 
+<= isCardinalPresentable C κ) : P'.IsCardinalFilteredGenerator κ…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
 -/
 lemma HasCardinalFilteredGenerator.exists_small_generator (C : Type u) [Category.{v} C]
     (κ : Cardinal.{w}) [Fact κ.IsRegular] [HasCardinalFilteredGenerator C κ] :
-    exists (P : ObjectProperty C) (_ : ObjectProperty.Small.{w} P),
+    ∃ (P : ObjectProperty C) (_ : ObjectProperty.Small.{w} P),
       P.IsCardinalFilteredGenerator κ := by
   obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
   obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le P
   exact ⟨Q, inferInstance, hP.of_le_isoClosure h₂ (h₁.trans hP.le_isCardinalPresentable)⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (C : Type u) [Category.{v} C]
     (κ : Cardinal.{w}) [Fact κ.IsRegular] [HasCardinalFilteredGenerator C κ] :
     ObjectProperty.EssentiallySmall.{w} (isCardinalPresentable C κ) := by
@@ -441,3 +443,4 @@ instance (C : Type u) [Category.{v} C]
   exact hP.essentiallySmall_isPresentable
 
 end CategoryTheory
+

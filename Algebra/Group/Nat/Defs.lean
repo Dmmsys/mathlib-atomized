@@ -21,62 +21,35 @@ assert_not_exists MonoidWithZero DenselyOrdered
 
 namespace Nat
 
+/-! ### Instances -/
 
-/--
-Instance `instMulOneClass` / 实例 `instMulOneClass`
+/-
+**Nat.instMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMulOneClass : MulOneClass Nat where one_mul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.one_mul`：∀ (n : ℕ), 1 * n = n
+· 使用定理 `Nat.mul_one`：∀ (n : ℕ), n * 1 = n
 
-English:
-instance instMulOneClass
-  signature: : MulOneClass Nat where
-  body: Nat.one_mul
-  mul_one := Nat.mul_one
-
-中文:
-实例 instMulOneClass
-  签名: : MulOne类 自然数 where
-  定义体: Nat.one_mul
-  mul_one := Nat.mul_one
-
-Depends on / 依赖: Nat.one_mul, one_mul
+--- 原说明 ---
+### Instances
 -/
-instance instMulOneClass : MulOneClass Nat where
+instance instMulOneClass : MulOneClass ℕ where
   one_mul := Nat.one_mul
   mul_one := Nat.mul_one
-
-/--
-Instance `instAddCancelCommMonoid` / 实例 `instAddCancelCommMonoid`
-
-English:
-instance instAddCancelCommMonoid
-  signature: : AddCancelCommMonoid Nat where
-  body: Nat.add
-  add_assoc := Nat.add_assoc
-  zero := Nat.zero
-  zero_add := Nat.zero_add
-  add_zero := Nat.add_zero
-  add_comm := Nat.add_comm
-  nsmul m n := m * n
-  nsmul_zero := Nat.zero_mul
-  nsmul_succ := succ_mul
-  add_left_cancel _ _ _ := Nat.add_left_cancel
-
-中文:
-实例 instAddCancelCommMonoid
-  签名: : 加法消去交换幺半群 自然数 where
-  定义体: Nat.add
-  add_assoc := Nat.add_assoc
-  zero := Nat.zero
-  zero_add := Nat.zero_add
-  add_zero := Nat.add_zero
-  add_comm := Nat.add_comm
-  nsmul m n := m * n
-  nsmul_zero := Nat.zero_mul
-  nsmul_succ := succ_mul
-  add_left_cancel _ _ _ := Nat.add_left_cancel
-
-Depends on / 依赖: Nat.add
+/-
+**Nat.instAddCancelCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddCancelCommMonoid : AddCancelCommMonoid Nat where add
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.add_assoc`：∀ (n m k : ℕ), n + m + k = n + (m + k)
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.add_zero`：∀ (n : ℕ), n + 0 = n
+· 使用定理 `Nat.zero_mul`：∀ (n : ℕ), 0 * n = 0
+· 使用定理 `Nat.succ_mul`：∀ (n m : ℕ), n.succ * m = n * m + m
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
 -/
-instance instAddCancelCommMonoid : AddCancelCommMonoid Nat where
+instance instAddCancelCommMonoid : AddCancelCommMonoid ℕ where
   add := Nat.add
   add_assoc := Nat.add_assoc
   zero := Nat.zero
@@ -87,39 +60,18 @@ instance instAddCancelCommMonoid : AddCancelCommMonoid Nat where
   nsmul_zero := Nat.zero_mul
   nsmul_succ := succ_mul
   add_left_cancel _ _ _ := Nat.add_left_cancel
-
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: : CommMonoid Nat where
-  body: Nat.mul
-  mul_assoc := Nat.mul_assoc
-  one := Nat.succ Nat.zero
-  one_mul := Nat.one_mul
-  mul_one := Nat.mul_one
-  mul_comm := Nat.mul_comm
-  npow m n := n ^ m
-  npow_zero := Nat.pow_zero
-  npow_succ _ _ := rfl
-
-中文:
-实例 instCommMonoid
-  签名: : 交换幺半群 自然数 where
-  定义体: Nat.mul
-  mul_assoc := Nat.mul_assoc
-  one := Nat.succ Nat.zero
-  one_mul := Nat.one_mul
-  mul_one := Nat.mul_one
-  mul_comm := Nat.mul_comm
-  npow m n := n ^ m
-  npow_zero := Nat.pow_zero
-  npow_succ _ _ := rfl
-
-Depends on / 依赖: Nat.mul
+/-
+**Nat.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCommMonoid : CommMonoid Nat where mul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mul_assoc`：∀ (n m k : ℕ), n * m * k = n * (m * k)
+· 使用定理 `Nat.one_mul`：∀ (n : ℕ), 1 * n = n
+· 使用定理 `Nat.mul_one`：∀ (n : ℕ), n * 1 = n
+· 使用定理 `Nat.pow_zero`：∀ (n : ℕ), n ^ 0 = 1
+· 使用定理 `Nat.mul_comm`：∀ (n m : ℕ), n * m = m * n
 -/
-instance instCommMonoid : CommMonoid Nat where
+instance instCommMonoid : CommMonoid ℕ where
   mul := Nat.mul
   mul_assoc := Nat.mul_assoc
   one := Nat.succ Nat.zero
@@ -133,41 +85,27 @@ instance instCommMonoid : CommMonoid Nat where
 -- These instances can also be found from the `LinearOrderedCommMonoidWithZero ℕ` instance by
 -- typeclass search, but it is better practice to not rely on algebraic order theory to prove
 -- purely algebraic results on concrete types. Eg the results can be made available earlier.
-
-/--
-Instance `instIsMulTorsionFree` / 实例 `instIsMulTorsionFree`
-
-English:
-instance instIsMulTorsionFree
-  signature: : IsMulTorsionFree Nat where
-  body: (Nat.pow_left_inj h).mp
-
-中文:
-实例 instIsMulTorsionFree
-  签名: : 是MulTorsionFree 自然数 where
-  定义体: (Nat.pow_left_inj h).mp
-
-Depends on / 依赖: Nat.pow_left_inj, pow_left_inj
+/-
+**Nat.instIsMulTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instIsMulTorsionFree : IsMulTorsionFree Nat where pow_left_injective _ h _
+ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.pow_left_inj`：∀ {a b n : ℕ}, n ≠ 0 → (a ^ n = b ^ n ↔ a = b)
 -/
-instance instIsMulTorsionFree : IsMulTorsionFree Nat where
+instance instIsMulTorsionFree : IsMulTorsionFree ℕ where
   pow_left_injective _ h _ _ := (Nat.pow_left_inj h).mp
-
-/--
-Instance `instIsAddTorsionFree` / 实例 `instIsAddTorsionFree`
-
-English:
-instance instIsAddTorsionFree
-  signature: : IsAddTorsionFree Nat where
-  body: Nat.mul_left_cancel (Nat.pos_of_ne_zero hn) hxy
-
-中文:
-实例 instIsAddTorsionFree
-  签名: : 是加法无挠 自然数 where
-  定义体: Nat.mul_left_cancel (Nat.pos_of_ne_zero hn) hxy
-
-Depends on / 依赖: Nat.mul_left_cancel, Nat.pos_of_ne_zero, mul_left_cancel, pos_of_ne_zero
+/-
+**Nat.instIsAddTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instIsAddTorsionFree : IsAddTorsionFree Nat where nsmul_right_injective _n
+ hn _x _y hxy
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mul_left_cancel`：∀ {n m k : ℕ}, 0 < n → n * m = n * k → m = k
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
 -/
-instance instIsAddTorsionFree : IsAddTorsionFree Nat where
+instance instIsAddTorsionFree : IsAddTorsionFree ℕ where
   nsmul_right_injective _n hn _x _y hxy := Nat.mul_left_cancel (Nat.pos_of_ne_zero hn) hxy
 
 /-!
@@ -178,152 +116,81 @@ These also prevent non-computable instances being used to construct these instan
 
 set_option linter.style.whitespace false -- manual alignment is not recognised
 
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
+/-
+**Nat.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddCommMonoid : AddCommMonoid Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid Nat
-  body: by infer_instance
+--- 原说明 ---
+### Extra instances to short-circuit type class resolution
 
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+These also prevent non-computable instances being used to construct these instan
+ces non-computably.
 -/
-instance instAddCommMonoid : AddCommMonoid Nat := by infer_instance
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: : AddMonoid Nat
-  body: by infer_instance
-
-中文:
-实例 instAddMonoid
-  签名: : 加法幺半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instAddCommMonoid    : AddCommMonoid ℕ    := by infer_instance
+/-
+**Nat.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddMonoid : AddMonoid Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddMonoid : AddMonoid Nat := by infer_instance
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: : Monoid Nat
-  body: by infer_instance
-
-中文:
-实例 instMonoid
-  签名: : 幺半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instAddMonoid        : AddMonoid ℕ        := by infer_instance
+/-
+**Nat.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instMonoid : Monoid Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instMonoid : Monoid Nat := by infer_instance
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: : CommSemigroup Nat
-  body: by infer_instance
-
-中文:
-实例 instCommSemigroup
-  签名: : 交换半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instMonoid           : Monoid ℕ           := by infer_instance
+/-
+**Nat.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCommSemigroup : CommSemigroup Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCommSemigroup : CommSemigroup Nat := by infer_instance
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: : Semigroup Nat
-  body: by infer_instance
-
-中文:
-实例 instSemigroup
-  签名: : 半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instCommSemigroup    : CommSemigroup ℕ    := by infer_instance
+/-
+**Nat.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instSemigroup : Semigroup Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSemigroup : Semigroup Nat := by infer_instance
-/--
-Instance `instAddCommSemigroup` / 实例 `instAddCommSemigroup`
-
-English:
-instance instAddCommSemigroup
-  signature: : AddCommSemigroup Nat
-  body: by infer_instance
-
-中文:
-实例 instAddCommSemigroup
-  签名: : 加法交换半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instSemigroup        : Semigroup ℕ        := by infer_instance
+/-
+**Nat.instAddCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddCommSemigroup : AddCommSemigroup Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddCommSemigroup : AddCommSemigroup Nat := by infer_instance
-/--
-Instance `instAddSemigroup` / 实例 `instAddSemigroup`
-
-English:
-instance instAddSemigroup
-  signature: : AddSemigroup Nat
-  body: by infer_instance
-
-中文:
-实例 instAddSemigroup
-  签名: : 加法半群 自然数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instAddCommSemigroup : AddCommSemigroup ℕ := by infer_instance
+/-
+**Nat.instAddSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddSemigroup : AddSemigroup Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddSemigroup : AddSemigroup Nat := by infer_instance
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: : One Nat
-  body: inferInstance
-
-中文:
-实例 instOne
-  签名: : 幺 自然数
-  定义体: inferInstance
+instance instAddSemigroup     : AddSemigroup ℕ     := by infer_instance
+/-
+**Nat.instOne** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instOne : One Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instOne : One Nat := inferInstance
+instance instOne              : One ℕ              := inferInstance
 
 set_option linter.style.whitespace true
 
+/-! ### Miscellaneous lemmas -/
 
 -- We set the simp priority slightly lower than default; later more general lemmas will replace it.
-/--
-lemma `nsmul_eq_mul` / 引理 `nsmul_eq_mul`
-
-English:
-lemma nsmul_eq_mul
-  given: (m n : Nat)
-  statement: m • n = m * n
-  proof: rfl
-
-中文:
-引理 nsmul_eq_mul
-  条件: (m n : 自然数)
-  结论: m • n = m * n
-  证明: rfl
+/-
+**Nat.nsmul_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (m n : ℕ), m • n = m * n
+参数：m n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp 900] protected lemma nsmul_eq_mul (m n : Nat) : m • n = m * n := rfl
+@[simp 900] protected lemma nsmul_eq_mul (m n : ℕ) : m • n = m * n := rfl
 
 end Nat
+

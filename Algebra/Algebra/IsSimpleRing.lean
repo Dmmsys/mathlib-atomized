@@ -16,20 +16,9 @@ public section
 
 variable (R A : Type*) [CommRing R] [Semiring A] [Algebra R A] [IsSimpleRing R] [Nontrivial A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FaithfulSMul R A
-  body: .2 RingHom.injective _ faithfulSMul_iff_algebraMap_injective R A
-
-中文:
-实例 :
-  签名: 忠实标量乘法 R A
-  定义体: .2 RingHom.injective _ faithfulSMul_iff_algebraMap_injective R A
-
-Depends on / 依赖: RingHom, RingHom.injective, faithfulSMul_iff_algebraMap_injective, injective
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FaithfulSMul R A :=
-.2 RingHom.injective _ faithfulSMul_iff_algebraMap_injective R A
+  faithfulSMul_iff_algebraMap_injective R A |>.2 <| RingHom.injective _

@@ -38,26 +38,25 @@ namespace SSet
 
 variable (X : SSet.{u})
 
-/--
-Definition of `S` / `S` 的定义
+/-- The type of simplices of a simplicial set `X`. This type `X.S` is in bijection
+with `X.Elements` (see `SSet.S.equivElements`), but `X.S` is not what the literature
+names "category of simplices of `X`", as the category on `X.S` comes from
+a preorder (see `S.le_iff_nonempty_hom`). -/
+/-
+**SSet.S** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet`。
+形式化陈述：_root_.SSet → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure S
-  parameters: where
-  axioms and operations (2):
-    - {dim : Nat}
-    - simplex : X _⦋dim⦌
-
-中文:
-结构 S
-  参数: where
-  公理与运算 (2 个):
-    - {dim : 自然数}
-    - simplex : X _⦋dim⦌
+--- 原说明 ---
+The type of simplices of a simplicial set `X`. This type `X.S` is in bijection
+with `X.Elements` (see `SSet.S.equivElements`), but `X.S` is not what the litera
+ture
+names "category of simplices of `X`", as the category on `X.S` comes from
+a preorder (see `S.le_iff_nonempty_hom`).
 -/
 structure S where
   /-- the dimension of the simplex -/
-  {dim : Nat}
+  {dim : ℕ}
   /-- the simplex -/
   simplex : X _⦋dim⦌
 
@@ -65,131 +64,84 @@ variable {X}
 
 namespace S
 
-/--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  given: (s : X.S)
-  proof: ⟨s.dim, s.simplex, rfl⟩
-
-中文:
-引理 mk_surjective
-  条件: (s : X.S)
-  证明: ⟨s.dim, s.simplex, rfl⟩
-
-Depends on / 依赖: s.dim, s.simplex, simplex
+/-
+**SSet.S.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：mk_surjective (s : X.S) : exists (n : Nat) (x : X _⦋n⦌), s = mk x
+参数：s : X.S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_surjective (s : X.S) :
-    exists (n : Nat) (x : X _⦋n⦌), s = mk x :=
+    ∃ (n : ℕ) (x : X _⦋n⦌), s = mk x :=
   ⟨s.dim, s.simplex, rfl⟩
 
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a simplex by a morphism of simplicial sets. -/
+/-
+**SSet.S.map** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：map {Y : SSet.{u}} (f : X ⟶ Y) (s : X.S) : Y.S
+参数：f : X ⟶ Y；s : X.S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {Y : SSet.{u}} (f : X ⟶ Y) (s : X.S)
-  body: S.mk (f.app _ s.simplex)
-
-中文:
-定义 map
-  签名: {Y : SSet.{u}} (f : X ⟶ Y) (s : X.S)
-  定义体: S.mk (f.app _ s.simplex)
-
-Depends on / 依赖: S.mk, f.app, s.simplex, simplex
+--- 原说明 ---
+The image of a simplex by a morphism of simplicial sets.
 -/
 def map {Y : SSet.{u}} (f : X ⟶ Y) (s : X.S) : Y.S :=
   S.mk (f.app _ s.simplex)
-
-/--
-lemma `dim_eq_of_eq` / 引理 `dim_eq_of_eq`
-
-English:
-lemma dim_eq_of_eq
-  given: {s t : X.S} (h : s = t)
-  proof: congr_arg dim h
-
-中文:
-引理 dim_eq_of_eq
-  条件: {s t : X.S} (h : s = t)
-  证明: congr_arg dim h
-
-Depends on / 依赖: congr_arg
+/-
+**SSet.S.dim_eq_of_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：dim_eq_of_eq {s t : X.S} (h : s = t) : s.dim = t.dim
+参数：h : s = t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma dim_eq_of_eq {s t : X.S} (h : s = t) :
     s.dim = t.dim :=
   congr_arg dim h
-
-/--
-lemma `dim_eq_of_mk_eq` / 引理 `dim_eq_of_mk_eq`
-
-English:
-lemma dim_eq_of_mk_eq
-  statement: {n m : Nat} {x : X _⦋n⦌} {y : X _⦋m⦌}
-  proof: dim_eq_of_eq h
-
-中文:
-引理 dim_eq_of_mk_eq
-  结论: {n m : 自然数} {x : X _⦋n⦌} {y : X _⦋m⦌}
-  证明: dim_eq_of_eq h
-
-Depends on / 依赖: dim_eq_of_eq
+/-
+**SSet.S.dim_eq_of_mk_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：dim_eq_of_mk_eq {n m : Nat} {x : X _⦋n⦌} {y : X _⦋m⦌} (h : S.mk x = S.mk y
+) : n = m
+参数：h : S.mk x = S.mk y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.dim_eq_of_eq`：dim_eq_of_eq {s t : X.S} (h : s = t) : s.dim = t.di
+m
 -/
-lemma dim_eq_of_mk_eq {n m : Nat} {x : X _⦋n⦌} {y : X _⦋m⦌}
+lemma dim_eq_of_mk_eq {n m : ℕ} {x : X _⦋n⦌} {y : X _⦋m⦌}
     (h : S.mk x = S.mk y) : n = m :=
   dim_eq_of_eq h
 
 section
 
-variable (s : X.S) {d : Nat} (hd : s.dim = d)
+variable (s : X.S) {d : ℕ} (hd : s.dim = d)
 
 /-- When `s : X.S` is such that `s.dim = d`, this is a term
 that is equal to `s`, but whose dimension if definitionally equal to `d`. -/
 @[simps dim]
-/--
-Definition of `cast` / `cast` 的定义
+/-
+**SSet.S.cast** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：cast : X.S where dim
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: : X.S where
-  body: d
-  simplex := _root_.cast (by simp only [hd]) s.simplex
-
-中文:
-定义 cast
-  签名: : X.S where
-  定义体: d
-  simplex := _root_.cast (by simp only [hd]) s.simplex
+--- 原说明 ---
+When `s : X.S` is such that `s.dim = d`, this is a term
+that is equal to `s`, but whose dimension if definitionally equal to `d`.
 -/
 def cast : X.S where
   dim := d
   simplex := _root_.cast (by simp only [hd]) s.simplex
-
-/--
-lemma `cast_eq_self` / 引理 `cast_eq_self`
-
-English:
-lemma cast_eq_self
-  statement: s.cast hd = s
-  proof: by
-  obtain ⟨d, _, rfl⟩ := s.mk_surjective
-  obtain rfl := hd
-  rfl
-
-@[simp]
-
-中文:
-引理 cast_eq_self
-  结论: s.cast hd = s
-  证明: by
-  obtain ⟨d, _, rfl⟩ := s.mk_surjective
-  obtain rfl := hd
-  rfl
-
-@[simp]
-
-Depends on / 依赖: mk_surjective, s.mk_surjective
+/-
+**SSet.S.cast_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：cast_eq_self : s.cast hd = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.mk_surjective`：mk_surjective (s : X.S) : exists (n : Nat) (x : X 
+_⦋n⦌), s = mk x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma cast_eq_self : s.cast hd = s := by
   obtain ⟨d, _, rfl⟩ := s.mk_surjective
@@ -197,248 +149,218 @@ lemma cast_eq_self : s.cast hd = s := by
   rfl
 
 @[simp]
-/--
-lemma `cast_simplex_rfl` / 引理 `cast_simplex_rfl`
-
-English:
-lemma cast_simplex_rfl
-  statement: (s.cast rfl).simplex = s.simplex
-  proof: rfl
-
-中文:
-引理 cast_simplex_rfl
-  结论: (s.cast rfl).simplex = s.simplex
-  证明: rfl
+/-
+**SSet.S.cast_simplex_rfl** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：cast_simplex_rfl : (s.cast rfl).simplex = s.simplex
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cast_simplex_rfl : (s.cast rfl).simplex = s.simplex := rfl
 
 end
 
-/--
-lemma `ext_iff'` / 引理 `ext_iff'`
-
-English:
-lemma ext_iff'
-  given: (s t : X.S)
-  proof: ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => by
-    obtain ⟨_, _, rfl⟩ := s.mk_surjective
-    obtain ⟨_, _, rfl⟩ := t.mk_surjective
-    aesop⟩
-
-中文:
-引理 ext_iff'
-  条件: (s t : X.S)
-  证明: ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => by
-    obtain ⟨_, _, rfl⟩ := s.mk_surjective
-    obtain ⟨_, _, rfl⟩ := t.mk_surjective
-    aesop⟩
-
-Depends on / 依赖: mk_surjective, s.mk_surjective, t.mk_surjective
+/-
+**SSet.S.ext_iff'** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：ext_iff' (s t : X.S) : s = t ↔ exists (h : s.dim = t.dim), (s.cast h).simp
+lex = t.simplex
+参数：s t : X.S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.mk_surjective`：mk_surjective (s : X.S) : exists (n : Nat) (x : X 
+_⦋n⦌), s = mk x
+· 使用定理 `SSet.S.mk.injEq`：∀ {X : _root_.SSet} {dim : ℕ} (simplex : X.obj (Opposit
+e.op { len := dim })) (dim_1 : ℕ)   (simplex_1 : X.obj (Opposite.op { len := dim
+_1 })…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma ext_iff' (s t : X.S) :
-    s = t ↔ exists (h : s.dim = t.dim), (s.cast h).simplex = t.simplex :=
-  ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => by
+    s = t ↔ ∃ (h : s.dim = t.dim), (s.cast h).simplex = t.simplex :=
+  ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ ↦ by
     obtain ⟨_, _, rfl⟩ := s.mk_surjective
     obtain ⟨_, _, rfl⟩ := t.mk_surjective
     aesop⟩
-
-/--
-lemma `ext_iff` / 引理 `ext_iff`
-
-English:
-lemma ext_iff
-  given: {n : Nat} (x y : X _⦋n⦌)
-  proof: by
-  simp
-
-中文:
-引理 ext_iff
-  条件: {n : 自然数} (x y : X _⦋n⦌)
-  证明: by
-  simp
+/-
+**SSet.S.ext_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：ext_iff {n : Nat} (x y : X _⦋n⦌) : S.mk x = S.mk y ↔ x = y
+参数：x y : X _⦋n⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SSet.S.mk.injEq`：∀ {X : _root_.SSet} {dim : ℕ} (simplex : X.obj (Opposit
+e.op { len := dim })) (dim_1 : ℕ)   (simplex_1 : X.obj (Opposite.op { len := dim
+_1 })…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ext_iff {n : Nat} (x y : X _⦋n⦌) :
+lemma ext_iff {n : ℕ} (x y : X _⦋n⦌) :
     S.mk x = S.mk y ↔ x = y := by
   simp
 
-/--
-Definition of `subcomplex` / `subcomplex` 的定义
+/-- The subcomplex generated by a simplex. -/
+/-
+**SSet.S.subcomplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.S`。
+形式化陈述：subcomplex (s : X.S) : X.Subcomplex
+参数：s : X.S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subcomplex
-  signature: (s : X.S)
-  body: Subcomplex.ofSimplex s.simplex
-
-中文:
-缩写 subcomplex
-  签名: (s : X.S)
-  定义体: Subcomplex.ofSimplex s.simplex
-
-Depends on / 依赖: Subcomplex, Subcomplex.ofSimplex, ofSimplex, s.simplex, simplex
+--- 原说明 ---
+The subcomplex generated by a simplex.
 -/
 abbrev subcomplex (s : X.S) : X.Subcomplex := Subcomplex.ofSimplex s.simplex
-
-/--
-lemma `ofSimplex_eq_subcomplex_mk` / 引理 `ofSimplex_eq_subcomplex_mk`
-
-English:
-lemma ofSimplex_eq_subcomplex_mk
-  given: {n : Nat} (x : X _⦋n⦌)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofSimplex_eq_subcomplex_mk
-  条件: {n : 自然数} (x : X _⦋n⦌)
-  证明: rfl
-
-@[simp]
+/-
+**SSet.S.ofSimplex_eq_subcomplex_mk** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：ofSimplex_eq_subcomplex_mk {n : Nat} (x : X _⦋n⦌) : Subcomplex.ofSimplex x
+ = (S.mk x).subcomplex
+参数：x : X _⦋n⦌。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofSimplex_eq_subcomplex_mk {n : Nat} (x : X _⦋n⦌) :
+lemma ofSimplex_eq_subcomplex_mk {n : ℕ} (x : X _⦋n⦌) :
     Subcomplex.ofSimplex x = (S.mk x).subcomplex := rfl
 
 @[simp]
-/--
-lemma `subcomplex_cast` / 引理 `subcomplex_cast`
-
-English:
-lemma subcomplex_cast
-  given: (s : X.S) {d : Nat} (hd : s.dim = d)
-  proof: by
-  rw [cast_eq_self]
-
-中文:
-引理 subcomplex_cast
-  条件: (s : X.S) {d : 自然数} (hd : s.dim = d)
-  证明: by
-  rw [cast_eq_self]
-
-Depends on / 依赖: cast_eq_self
+/-
+**SSet.S.subcomplex_cast** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：subcomplex_cast (s : X.S) {d : Nat} (hd : s.dim = d) : (s.cast hd).subcomp
+lex = s.subcomplex
+参数：s : X.S；hd : s.dim = d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.cast_eq_self`：cast_eq_self : s.cast hd = s
 -/
-lemma subcomplex_cast (s : X.S) {d : Nat} (hd : s.dim = d) :
+lemma subcomplex_cast (s : X.S) {d : ℕ} (hd : s.dim = d) :
     (s.cast hd).subcomplex = s.subcomplex := by
   rw [cast_eq_self]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `s : X.S` and `t : X.S` are simplices of a simplicial set, `s ≤ t` means
+that the subcomplex generated by `s` is contained in the subcomplex generated by `t`,
+see `SSet.S.le_def` and `SSet.S.le_iff`. Note that the
+category structure on `X.S` induced by this preorder is not
+the "category of simplices" of `X` (which is see `X.Elementsᵒᵖ`);
+see `SSet.S.le_iff_nonempty_hom` for the precise relation. -/
+/-
+**SSet.S.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.S`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Preorder X.S
-  body: Preorder.lift subcomplex
-
-中文:
-实例 :
-  签名: 预序 X.S
-  定义体: Preorder.lift subcomplex
-
-Depends on / 依赖: Preorder, Preorder.lift, subcomplex
+--- 原说明 ---
+If `s : X.S` and `t : X.S` are simplices of a simplicial set, `s ≤ t` means
+that the subcomplex generated by `s` is contained in the subcomplex generated by
+ `t`,
+see `SSet.S.le_def` and `SSet.S.le_iff`. Note that the
+category structure on `X.S` induced by this preorder is not
+the "category of simplices" of `X` (which is see `X.Elementsᵒᵖ`);
+see `SSet.S.le_iff_nonempty_hom` for the precise relation.
 -/
 instance : Preorder X.S := Preorder.lift subcomplex
-
-/--
-lemma `le_def` / 引理 `le_def`
-
-English:
-lemma le_def
-  given: {s t : X.S}
-  statement: s <= t ↔ s.subcomplex <= t.subcomplex
-  proof: Iff.rfl
-
-中文:
-引理 le_def
-  条件: {s t : X.S}
-  结论: s <= t ↔ s.subcomplex <= t.subcomplex
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**SSet.S.le_def** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：le_def {s t : X.S} : s <= t ↔ s.subcomplex <= t.subcomplex
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_def {s t : X.S} : s <= t ↔ s.subcomplex <= t.subcomplex :=
+lemma le_def {s t : X.S} : s ≤ t ↔ s.subcomplex ≤ t.subcomplex :=
   Iff.rfl
-
-/--
-lemma `le_iff` / 引理 `le_iff`
-
-English:
-lemma le_iff
-  given: {s t : X.S}
-  proof: by
-  rw [le_def]; rw [Subcomplex.ofSimplex_le_iff]; rw [Subfunctor.ofSection_obj]; rw [Set.mem_ofPred_eq]
-  tauto
-
-中文:
-引理 le_iff
-  条件: {s t : X.S}
-  证明: by
-  rw [le_def]; rw [Subcomplex.ofSimplex_le_iff]; rw [Subfunctor.ofSection_obj]; rw [Set.mem_ofPred_eq]
-  tauto
-
-Depends on / 依赖: Set.mem_ofPred_eq, Subcomplex, Subcomplex.ofSimplex_le_iff, Subfunctor, Subfunctor.ofSection_obj, le_def, mem_ofPred_eq, ofSection_obj, ofSimplex_le_iff
+/-
+**SSet.S.le_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：le_iff {s t : X.S} : s <= t ↔ exists (f : ⦋s.dim⦌ ⟶ ⦋t.dim⦌), X.map f.op t
+.simplex = s.simplex
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.le_def`：le_def {s t : X.S} : s <= t ↔ s.subcomplex <= t.subcomple
+x
+· 使用引理 `SSet.Subcomplex.ofSimplex_le_iff`：ofSimplex_le_iff {n : Nat} (x : X _⦋n⦌
+) (A : X.Subcomplex) : ofSimplex x <= A ↔ x in A.obj _
+· 使用定理 `CategoryTheory.Subfunctor.ofSection_obj`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {F : CategoryTheory.Functor Cᵒᵖ (Type w)} {X : Cᵒᵖ}   
+(x : F.obj X) (U : Cᵒᵖ),   (C…
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
 -/
 lemma le_iff {s t : X.S} :
-    s <= t ↔ exists (f : ⦋s.dim⦌ ⟶ ⦋t.dim⦌), X.map f.op t.simplex = s.simplex := by
-  rw [le_def]; rw [Subcomplex.ofSimplex_le_iff]; rw [Subfunctor.ofSection_obj]; rw [Set.mem_ofPred_eq]
+    s ≤ t ↔ ∃ (f : ⦋s.dim⦌ ⟶ ⦋t.dim⦌), X.map f.op t.simplex = s.simplex := by
+  rw [le_def, Subcomplex.ofSimplex_le_iff, Subfunctor.ofSection_obj, Set.mem_ofPred_eq]
   tauto
-
-/--
-lemma `mk_map_le` / 引理 `mk_map_le`
-
-English:
-lemma mk_map_le
-  given: {n m : Nat} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌)
-  proof: by
-  rw [le_iff]
-  tauto
-
-中文:
-引理 mk_map_le
-  条件: {n m : 自然数} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌)
-  证明: by
-  rw [le_iff]
-  tauto
-
-Depends on / 依赖: le_iff
+/-
+**SSet.S.mk_map_le** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：mk_map_le {n m : Nat} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) : S.mk (X.map f.op x) <
+= S.mk x
+参数：x : X _⦋n⦌；f : ⦋m⦌ ⟶ ⦋n⦌。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.le_iff`：le_iff {s t : X.S} : s <= t ↔ exists (f : ⦋s.dim⦌ ⟶ ⦋t.di
+m⦌), X.map f.op t.simplex = s.simplex
 -/
-lemma mk_map_le {n m : Nat} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) :
-    S.mk (X.map f.op x) <= S.mk x := by
+lemma mk_map_le {n m : ℕ} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) :
+    S.mk (X.map f.op x) ≤ S.mk x := by
   rw [le_iff]
   tauto
-
-/--
-lemma `mk_map_eq_iff_of_mono` / 引理 `mk_map_eq_iff_of_mono`
-
-English:
-lemma mk_map_eq_iff_of_mono
-  statement: {n m : Nat} (x : X _⦋n⦌)
-  proof: by
-  constructor
-  · intro h
-    obtain rfl := S.dim_eq_of_mk_eq h
-    obtain rfl := SimplexCategory.eq_id_of_mono f
-    infer_instance
-  · intro hf
-    obtain rfl := SimplexCategory.eq_of_isIso f
-    obtain rfl := SimplexCategory.eq_id_of_isIso f
-    simp
-
-中文:
-引理 mk_map_eq_iff_of_mono
-  结论: {n m : 自然数} (x : X _⦋n⦌)
-  证明: by
-  constructor
-  · intro h
-    obtain rfl := S.dim_eq_of_mk_eq h
-    obtain rfl := SimplexCategory.eq_id_of_mono f
-    infer_instance
-  · intro hf
-    obtain rfl := SimplexCategory.eq_of_isIso f
-    obtain rfl := SimplexCategory.eq_id_of_isIso f
-    simp
-
-Depends on / 依赖: S.dim_eq_of_mk_eq, SimplexCategory, SimplexCategory.eq_id_of_isIso, SimplexCategory.eq_id_of_mono, SimplexCategory.eq_of_isIso, dim_eq_of_mk_eq, eq_id_of_isIso, eq_id_of_mono, eq_of_isIso, infer_instance
+/-
+**SSet.S.mk_map_eq_iff_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：mk_map_eq_iff_of_mono {n m : Nat} (x : X _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) [Mono f] : 
+S.mk (X.map f.op x) = S.mk x ↔ IsIso f
+参数：x : X _⦋n⦌；f : ⦋m⦌ ⟶ ⦋n⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimplexCategory.eq_id_of_mono`：eq_id_of_mono {x : SimplexCategory} (i : 
+x ⟶ x) [Mono i] : i = 𝟙 _
+· 使用引理 `SSet.S.dim_eq_of_mk_eq`：dim_eq_of_mk_eq {n m : Nat} {x : X _⦋n⦌} {y : X 
+_⦋m⦌} (h : S.mk x = S.mk y) : n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimplexCategory.eq_id_of_isIso`：eq_id_of_isIso {x : SimplexCategory} (f 
+: x ⟶ x) [IsIso f] : f = 𝟙 _
+· 使用引理 `SimplexCategory.eq_of_isIso`：eq_of_isIso {n m : Nat} (f : ⦋n⦌ ⟶ ⦋m⦌) [Is
+Iso f] : n = m
 -/
-lemma mk_map_eq_iff_of_mono {n m : Nat} (x : X _⦋n⦌)
+lemma mk_map_eq_iff_of_mono {n m : ℕ} (x : X _⦋n⦌)
     (f : ⦋m⦌ ⟶ ⦋n⦌) [Mono f] :
     S.mk (X.map f.op x) = S.mk x ↔ IsIso f := by
   constructor
@@ -456,62 +378,37 @@ of elements of `X` considered as a functor `SimplexCategoryᵒᵖ ⥤ Type u`.
 (Note that this is not an (anti)equivalence of categories,
 see `S.le_iff_nonempty_hom`.) -/
 @[simps!]
-/--
-Definition of `equivElements` / `equivElements` 的定义
+/-
+**SSet.S.equivElements** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：equivElements : X.S ≃ X.Elements where toFun s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivElements
-  signature: : X.S ≃ X.Elements where
-  body: X.elementsMk _ s.simplex
-  invFun := by rintro ⟨⟨⟨n⟩⟩, x⟩; exact S.mk x
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 equivElements
-  签名: : X.S ≃ X.Elements where
-  定义体: X.elementsMk _ s.simplex
-  invFun := by rintro ⟨⟨⟨n⟩⟩, x⟩; exact S.mk x
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-Depends on / 依赖: X.elementsMk, elementsMk, s.simplex, simplex
+--- 原说明 ---
+The type of simplices of `X : SSet.{u}` identifies to the type
+of elements of `X` considered as a functor `SimplexCategoryᵒᵖ ⥤ Type u`.
+(Note that this is not an (anti)equivalence of categories,
+see `S.le_iff_nonempty_hom`.)
 -/
 def equivElements : X.S ≃ X.Elements where
   toFun s := X.elementsMk _ s.simplex
   invFun := by rintro ⟨⟨⟨n⟩⟩, x⟩; exact S.mk x
   left_inv _ := rfl
   right_inv _ := rfl
-
-/--
-lemma `le_iff_nonempty_hom` / 引理 `le_iff_nonempty_hom`
-
-English:
-lemma le_iff_nonempty_hom
-  given: (x y : X.S)
-  proof: by
-  rw [le_iff]
-  constructor
-  · rintro ⟨f, hf⟩
-    exact ⟨⟨f.op, hf⟩⟩
-  · rintro ⟨f, hf⟩
-    exact ⟨f.unop, hf⟩
-
-中文:
-引理 le_iff_nonempty_hom
-  条件: (x y : X.S)
-  证明: by
-  rw [le_iff]
-  constructor
-  · rintro ⟨f, hf⟩
-    exact ⟨⟨f.op, hf⟩⟩
-  · rintro ⟨f, hf⟩
-    exact ⟨f.unop, hf⟩
-
-Depends on / 依赖: f.op, f.unop, le_iff
+/-
+**SSet.S.le_iff_nonempty_hom** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S`。
+形式化陈述：le_iff_nonempty_hom (x y : X.S) : x <= y ↔ Nonempty (equivElements y ⟶ equ
+ivElements x)
+参数：x y : X.S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.le_iff`：le_iff {s t : X.S} : s <= t ↔ exists (f : ⦋s.dim⦌ ⟶ ⦋t.di
+m⦌), X.map f.op t.simplex = s.simplex
 -/
 lemma le_iff_nonempty_hom (x y : X.S) :
-    x <= y ↔ Nonempty (equivElements y ⟶ equivElements x) := by
+    x ≤ y ↔ Nonempty (equivElements y ⟶ equivElements x) := by
   rw [le_iff]
   constructor
   · rintro ⟨f, hf⟩
@@ -521,22 +418,15 @@ lemma le_iff_nonempty_hom (x y : X.S) :
 
 /-- The bijection `X.op.S ≃ X.S`. -/
 @[simps -isSimp apply symm_apply]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**SSet.S.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：opEquiv : X.op.S ≃ X.S where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition opEquiv
-  signature: : X.op.S ≃ X.S where
-  body: S.mk (opObjEquiv x.simplex)
-  invFun y := S.mk (opObjEquiv.symm y.simplex)
-
-中文:
-定义 opEquiv
-  签名: : X.op.S ≃ X.S where
-  定义体: S.mk (opObjEquiv x.simplex)
-  invFun y := S.mk (opObjEquiv.symm y.simplex)
-
-Depends on / 依赖: S.mk, opObjEquiv, simplex, x.simplex
+--- 原说明 ---
+The bijection `X.op.S ≃ X.S`.
 -/
 def opEquiv : X.op.S ≃ X.S where
   toFun x := S.mk (opObjEquiv x.simplex)
@@ -545,26 +435,16 @@ def opEquiv : X.op.S ≃ X.S where
 /-- The bijection `X.S ≃ Y.S` on simplices of simplicial sets that
 is induced by an isomorphism `X ≅ Y`. -/
 @[simps -isSimp apply symm_apply]
-/--
-Definition of `equivOfIso` / `equivOfIso` 的定义
+/-
+**SSet.S.equivOfIso** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：equivOfIso {Y : SSet.{u}} (e : X ≅ Y) : X.S ≃ Y.S where toFun s
+参数：e : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivOfIso
-  signature: {Y : SSet.{u}} (e : X ≅ Y)
-  body: S.mk (e.hom.app _ s.simplex)
-  invFun s := S.mk (e.inv.app _ s.simplex)
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 equivOfIso
-  签名: {Y : SSet.{u}} (e : X ≅ Y)
-  定义体: S.mk (e.hom.app _ s.simplex)
-  invFun s := S.mk (e.inv.app _ s.simplex)
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-Depends on / 依赖: S.mk, e.hom.app, s.simplex, simplex
+--- 原说明 ---
+The bijection `X.S ≃ Y.S` on simplices of simplicial sets that
+is induced by an isomorphism `X ≅ Y`.
 -/
 def equivOfIso {Y : SSet.{u}} (e : X ≅ Y) : X.S ≃ Y.S where
   toFun s := S.mk (e.hom.app _ s.simplex)
@@ -575,3 +455,4 @@ def equivOfIso {Y : SSet.{u}} (e : X ≅ Y) : X.S ≃ Y.S where
 end S
 
 end SSet
+

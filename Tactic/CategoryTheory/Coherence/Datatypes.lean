@@ -44,20 +44,15 @@ namespace Mathlib.Tactic
 
 namespace BicategoryLike
 
-/--
-Definition of `Obj` / `Obj` 的定义
+/-- Expressions for objects. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Obj** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Obj
-  parameters: where
-  axioms and operations (1):
-    - e? : Option Expr
-
-中文:
-结构 Obj
-  参数: where
-  公理与运算 (1 个):
-    - e? : 选项类型 Expr
+--- 原说明 ---
+Expressions for objects.
 -/
 structure Obj where
   /-- Extracts a lean expression from an `Obj` term. Return `none` in the monoidal
@@ -65,40 +60,28 @@ structure Obj where
   e? : Option Expr
   deriving Inhabited
 
-/--
-Definition of `Obj.e` / `Obj.e` 的定义
+/-- Extract a lean expression from an `Obj` term. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Obj.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+BicategoryLike.Obj`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.Obj → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Obj.e
-  signature: (a : Obj)
-  body: a.e?.get!
-
-中文:
-定义 Obj.e
-  签名: (a : Obj)
-  定义体: a.e?.get!
+--- 原说明 ---
+Extract a lean expression from an `Obj` term.
 -/
 def Obj.e (a : Obj) : Expr :=
   a.e?.get!
 
-/--
-Definition of `Atom₁` / `Atom₁` 的定义
+/-- Expressions for atomic 1-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Atom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic
+.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Atom₁
-  parameters: : Type where
-  axioms and operations (3):
-    - e : Expr
-    - src : Obj
-    - tgt : Obj
-
-中文:
-结构 Atom₁
-  参数: : 类型 where
-  公理与运算 (3 个):
-    - e : Expr
-    - src : Obj
-    - tgt : Obj
+--- 原说明 ---
+Expressions for atomic 1-morphisms.
 -/
 structure Atom₁ : Type where
   /-- Extract a lean expression from an `Atom₁` term. -/
@@ -109,181 +92,132 @@ structure Atom₁ : Type where
   tgt : Obj
   deriving Inhabited
 
-/--
-Definition of `MkAtom₁` / `MkAtom₁` 的定义
+/-- A monad equipped with the ability to construct `Atom₁` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkAtom** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkAtom₁
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - ofExpr((e : Expr)) : m Atom₁
-
-中文:
-类 MkAtom₁
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - ofExpr((e : Expr)) : m Atom₁
+--- 原说明 ---
+A monad equipped with the ability to construct `Atom₁` terms.
 -/
-class MkAtom₁ (m : Type -> Type) where
+class MkAtom₁ (m : Type → Type) where
   /-- Construct a `Atom₁` term from a lean expression. -/
   ofExpr (e : Expr) : m Atom₁
 
-/--
-Inductive type `Mor₁` / 归纳类型 `Mor₁`
+/-- Expressions for 1-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Mor₁
-  parameters: : Type
-  constructors (3):
-    - id: (e : Expr) (a : Obj) : Mor₁
-    - comp: (e : Expr) : Mor₁ -> Mor₁ -> Mor₁
-    - of: Atom₁ -> Mor₁
-
-中文:
-归纳类型 Mor₁
-  参数: : 类型
-  构造子 (3 个):
-    - id: (e : Expr) (a : Obj) : Mor₁
-    - comp: (e : Expr) : Mor₁ -> Mor₁ -> Mor₁
-    - of: Atom₁ -> Mor₁
+--- 原说明 ---
+Expressions for 1-morphisms.
 -/
 inductive Mor₁ : Type
   /-- `id e a` is the expression for `𝟙 a`, where `e` is the underlying lean expression. -/
   | id (e : Expr) (a : Obj) : Mor₁
   /-- `comp e f g` is the expression for `f ≫ g`, where `e` is the underlying lean expression. -/
-  | comp (e : Expr) : Mor₁ -> Mor₁ -> Mor₁
+  | comp (e : Expr) : Mor₁ → Mor₁ → Mor₁
   /-- The expression for an atomic 1-morphism. -/
-  | of : Atom₁ -> Mor₁
+  | of : Atom₁ → Mor₁
   deriving Inhabited
 
-/--
-Definition of `MkMor₁` / `MkMor₁` 的定义
+/-- A monad equipped with the ability to construct `Mor₁` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkMor** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tactic.B
+icategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkMor₁
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - ofExpr((e : Expr)) : m Mor₁
-
-中文:
-类 MkMor₁
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - ofExpr((e : Expr)) : m Mor₁
+--- 原说明 ---
+A monad equipped with the ability to construct `Mor₁` terms.
 -/
-class MkMor₁ (m : Type -> Type) where
+class MkMor₁ (m : Type → Type) where
   /-- Construct a `Mor₁` term from a lean expression. -/
   ofExpr (e : Expr) : m Mor₁
 
-/--
-Definition of `Mor₁.e` / `Mor₁.e` 的定义
+/-- The underlying lean expression of a 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₁.e
-  signature: : Mor₁ -> Expr
-
-中文:
-定义 Mor₁.e
-  签名: : Mor₁ -> Expr
+--- 原说明 ---
+The underlying lean expression of a 1-morphism.
 -/
-def Mor₁.e : Mor₁ -> Expr
+def Mor₁.e : Mor₁ → Expr
   | .id e _ => e
   | .comp e _ _ => e
   | .of a => a.e
 
-/--
-Definition of `Mor₁.src` / `Mor₁.src` 的定义
+/-- The domain of a 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₁.src
-  signature: : Mor₁ -> Obj
-
-中文:
-定义 Mor₁.src
-  签名: : Mor₁ -> Obj
+--- 原说明 ---
+The domain of a 1-morphism.
 -/
-def Mor₁.src : Mor₁ -> Obj
+def Mor₁.src : Mor₁ → Obj
   | .id _ a => a
   | .comp _ f _ => f.src
   | .of f => f.src
 
-/--
-Definition of `Mor₁.tgt` / `Mor₁.tgt` 的定义
+/-- The codomain of a 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₁.tgt
-  signature: : Mor₁ -> Obj
-
-中文:
-定义 Mor₁.tgt
-  签名: : Mor₁ -> Obj
+--- 原说明 ---
+The codomain of a 1-morphism.
 -/
-def Mor₁.tgt : Mor₁ -> Obj
+def Mor₁.tgt : Mor₁ → Obj
   | .id _ a => a
   | .comp _ _ g => g.tgt
   | .of f => f.tgt
 
-/--
-Definition of `Mor₁.toList` / `Mor₁.toList` 的定义
+/-- Converts a 1-morphism into a list of its components. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₁.toList
-  signature: : Mor₁ -> List Atom₁
-
-中文:
-定义 Mor₁.toList
-  签名: : Mor₁ -> 列表 Atom₁
+--- 原说明 ---
+Converts a 1-morphism into a list of its components.
 -/
-def Mor₁.toList : Mor₁ -> List Atom₁
+def Mor₁.toList : Mor₁ → List Atom₁
   | .id _ _ => []
   | .comp _ f g => f.toList ++ g.toList
   | .of f => [f]
 
-/--
-Definition of `MonadMor₁` / `MonadMor₁` 的定义
+/-- A monad equipped with the ability to manipulate 1-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tacti
+c.BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadMor₁
-  parameters: (m : Type -> Type)
-  axioms and operations (2):
-    - id₁M((a : Obj)) : m Mor₁
-    - comp₁M((f g : Mor₁)) : m Mor₁
-
-中文:
-类 MonadMor₁
-  参数: (m : 类型 -> 类型)
-  公理与运算 (2 个):
-    - id₁M((a : Obj)) : m Mor₁
-    - comp₁M((f g : Mor₁)) : m Mor₁
+--- 原说明 ---
+A monad equipped with the ability to manipulate 1-morphisms.
 -/
-class MonadMor₁ (m : Type -> Type) where
+class MonadMor₁ (m : Type → Type) where
   /-- The expression for `𝟙 a`. -/
   id₁M (a : Obj) : m Mor₁
   /-- The expression for `f ≫ g`. -/
   comp₁M (f g : Mor₁) : m Mor₁
 
-/--
-Definition of `CoherenceHom` / `CoherenceHom` 的定义
+/-- Expressions for coherence isomorphisms (i.e., structural 2-morphisms
+given by `BicategoricalCoherence.iso`). -/
+/-
+**Mathlib.Tactic.BicategoryLike.CoherenceHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoherenceHom
-  parameters: where
-  axioms and operations (5):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
-    - inst : Expr
-    - unfold : Expr
-
-中文:
-结构 余herence态射
-  参数: where
-  公理与运算 (5 个):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
-    - inst : Expr
-    - unfold : Expr
+--- 原说明 ---
+Expressions for coherence isomorphisms (i.e., structural 2-morphisms
+given by `BicategoricalCoherence.iso`).
 -/
 structure CoherenceHom where
   /-- The underlying lean expression of a coherence isomorphism. -/
@@ -298,24 +232,15 @@ structure CoherenceHom where
   unfold : Expr
   deriving Inhabited
 
-/--
-Definition of `AtomIso` / `AtomIso` 的定义
+/-- Expressions for atomic non-structural 2-isomorphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.AtomIso** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tac
+tic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AtomIso
-  parameters: where
-  axioms and operations (3):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
-
-中文:
-结构 AtomIso
-  参数: where
-  公理与运算 (3 个):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
+--- 原说明 ---
+Expressions for atomic non-structural 2-isomorphisms.
 -/
 structure AtomIso where
   /-- The underlying lean expression of an `AtomIso` term. -/
@@ -326,28 +251,15 @@ structure AtomIso where
   tgt : Mor₁
   deriving Inhabited
 
-/--
-Inductive type `StructuralAtom` / 归纳类型 `StructuralAtom`
+/-- Expressions for atomic structural 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.StructuralAtom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Math
+lib.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive StructuralAtom
-  parameters: : Type
-  constructors (5):
-    - associator: (e : Expr) (f g h : Mor₁) : StructuralAtom
-    - leftUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
-    - rightUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
-    - id: (e : Expr) (f : Mor₁) : StructuralAtom
-    - coherenceHom: (α : CoherenceHom) : StructuralAtom
-
-中文:
-归纳类型 StructuralAtom
-  参数: : 类型
-  构造子 (5 个):
-    - associator: (e : Expr) (f g h : Mor₁) : StructuralAtom
-    - leftUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
-    - rightUnitor: (e : Expr) (f : Mor₁) : StructuralAtom
-    - id: (e : Expr) (f : Mor₁) : StructuralAtom
-    - coherenceHom: (α : 余herence态射) : StructuralAtom
+--- 原说明 ---
+Expressions for atomic structural 2-morphisms.
 -/
 inductive StructuralAtom : Type
   /-- The expression for the associator `α_ f g h`. -/
@@ -360,34 +272,14 @@ inductive StructuralAtom : Type
   | coherenceHom (α : CoherenceHom) : StructuralAtom
   deriving Inhabited
 
-/--
-Inductive type `Mor₂Iso` / 归纳类型 `Mor₂Iso`
+/-- Expressions for 2-isomorphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Mor₂Iso
-  parameters: : Type where
-  constructors (8):
-    - structuralAtom: (α : StructuralAtom) : Mor₂Iso
-    - comp: (e : Expr) (f g h : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
-    - whiskerLeft: (e : Expr) (f g h : Mor₁) (η : Mor₂Iso) : Mor₂Iso
-    - whiskerRight: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) (h : Mor₁) : Mor₂Iso
-    - horizontalComp: (e : Expr) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
-    - inv: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) : Mor₂Iso
-    - coherenceComp: (e : Expr) (f g h i : Mor₁) (α : CoherenceHom) (η θ : Mor₂Iso) : Mor₂Iso
-    - of: (η : AtomIso) : Mor₂Iso
-
-中文:
-归纳类型 Mor₂Iso
-  参数: : 类型 where
-  构造子 (8 个):
-    - structuralAtom: (α : StructuralAtom) : Mor₂Iso
-    - comp: (e : Expr) (f g h : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
-    - whiskerLeft: (e : Expr) (f g h : Mor₁) (η : Mor₂Iso) : Mor₂Iso
-    - whiskerRight: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) (h : Mor₁) : Mor₂Iso
-    - horizontalComp: (e : Expr) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂Iso) : Mor₂Iso
-    - inv: (e : Expr) (f g : Mor₁) (η : Mor₂Iso) : Mor₂Iso
-    - coherenceComp: (e : Expr) (f g h i : Mor₁) (α : 余herence态射) (η θ : Mor₂Iso) : Mor₂Iso
-    - of: (η : AtomIso) : Mor₂Iso
+--- 原说明 ---
+Expressions for 2-isomorphisms.
 -/
 inductive Mor₂Iso : Type where
   | structuralAtom (α : StructuralAtom) : Mor₂Iso
@@ -400,37 +292,31 @@ inductive Mor₂Iso : Type where
   | of (η : AtomIso) : Mor₂Iso
   deriving Inhabited
 
-/--
-Definition of `MonadCoherehnceHom` / `MonadCoherehnceHom` 的定义
+/-- A monad equipped with the ability to unfold `BicategoricalCoherence.iso`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadCoherehnceHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+Mathlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadCoherehnceHom
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - unfoldM((α : CoherenceHom)) : m Mor₂Iso
-
-中文:
-类 MonadCoherehnce态射
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - unfoldM((α : 余herence态射)) : m Mor₂Iso
+--- 原说明 ---
+A monad equipped with the ability to unfold `BicategoricalCoherence.iso`.
 -/
-class MonadCoherehnceHom (m : Type -> Type) where
+class MonadCoherehnceHom (m : Type → Type) where
   /-- Unfold a coherence isomorphism. -/
   unfoldM (α : CoherenceHom) : m Mor₂Iso
 
-/--
-Definition of `StructuralAtom.e` / `StructuralAtom.e` 的定义
+/-- The underlying lean expression of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.StructuralAtom.e** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.BicategoryLike.StructuralAtom`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.StructuralAtom → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StructuralAtom.e
-  signature: : StructuralAtom -> Expr
-
-中文:
-定义 StructuralAtom.e
-  签名: : StructuralAtom -> Expr
+--- 原说明 ---
+The underlying lean expression of a 2-isomorphism.
 -/
-def StructuralAtom.e : StructuralAtom -> Expr
+def StructuralAtom.e : StructuralAtom → Expr
   | .associator e .. => e
   | .leftUnitor e .. => e
   | .rightUnitor e .. => e
@@ -439,56 +325,56 @@ def StructuralAtom.e : StructuralAtom -> Expr
 
 open MonadMor₁
 
-variable {m : Type -> Type} [Monad m]
+variable {m : Type → Type} [Monad m]
 
-/--
-Definition of `StructuralAtom.srcM` / `StructuralAtom.srcM` 的定义
+/-- The domain of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.StructuralAtom.srcM** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.StructuralAtom`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.StructuralAtom → m Mathlib.Tactic.
+BicategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StructuralAtom.srcM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 StructuralAtom.srcM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-isomorphism.
 -/
-def StructuralAtom.srcM [MonadMor₁ m] : StructuralAtom -> m Mor₁
+def StructuralAtom.srcM [MonadMor₁ m] : StructuralAtom → m Mor₁
   | .associator _ f g h => do comp₁M (← comp₁M f g) h
   | .leftUnitor _ f => do comp₁M (← id₁M f.src) f
   | .rightUnitor _ f => do comp₁M f (← id₁M f.tgt)
   | .id _ f => return f
   | .coherenceHom α => return α.src
 
-/--
-Definition of `StructuralAtom.tgtM` / `StructuralAtom.tgtM` 的定义
+/-- The codomain of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.StructuralAtom.tgtM** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.StructuralAtom`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.StructuralAtom → m Mathlib.Tactic.
+BicategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StructuralAtom.tgtM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 StructuralAtom.tgtM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-isomorphism.
 -/
-def StructuralAtom.tgtM [MonadMor₁ m] : StructuralAtom -> m Mor₁
+def StructuralAtom.tgtM [MonadMor₁ m] : StructuralAtom → m Mor₁
   | .associator _ f g h => do comp₁M f (← comp₁M g h)
   | .leftUnitor _ f => return f
   | .rightUnitor _ f => return f
   | .id _ f => return f
   | .coherenceHom α => return α.tgt
 
-/--
-Definition of `Mor₂Iso.e` / `Mor₂Iso.e` 的定义
+/-- The underlying lean expression of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂Iso.e
-  signature: : Mor₂Iso -> Expr
-
-中文:
-定义 Mor₂Iso.e
-  签名: : Mor₂Iso -> Expr
+--- 原说明 ---
+The underlying lean expression of a 2-isomorphism.
 -/
-def Mor₂Iso.e : Mor₂Iso -> Expr
+def Mor₂Iso.e : Mor₂Iso → Expr
   | .structuralAtom α => α.e
   | .comp e .. => e
   | .whiskerLeft e .. => e
@@ -498,18 +384,16 @@ def Mor₂Iso.e : Mor₂Iso -> Expr
   | .coherenceComp e .. => e
   | .of η => η.e
 
-/--
-Definition of `Mor₂Iso.srcM` / `Mor₂Iso.srcM` 的定义
+/-- The domain of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂Iso.srcM
-  signature: {m : Type -> Type} [Monad m] [MonadMor₁ m]
-
-中文:
-定义 Mor₂Iso.srcM
-  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-isomorphism.
 -/
-def Mor₂Iso.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂Iso -> m Mor₁
+def Mor₂Iso.srcM {m : Type → Type} [Monad m] [MonadMor₁ m] : Mor₂Iso → m Mor₁
   | .structuralAtom α => α.srcM
   | .comp _ f .. => return f
   | .whiskerLeft _ f g .. => do comp₁M f g
@@ -519,20 +403,16 @@ def Mor₂Iso.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂Iso -> m
   | .coherenceComp _ f .. => return f
   | .of η => return η.src
 
-/--
-Definition of `Mor₂Iso.tgtM` / `Mor₂Iso.tgtM` 的定义
+/-- The codomain of a 2-isomorphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂Iso.tgtM
-  signature: {m : Type -> Type} [Monad m] [MonadMor₁ m]
-
-中文:
-定义 Mor₂Iso.tgtM
-  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
-
-Depends on / 依赖: Countable, OrderTopology
+--- 原说明 ---
+The codomain of a 2-isomorphism.
 -/
-def Mor₂Iso.tgtM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂Iso -> m Mor₁
+def Mor₂Iso.tgtM {m : Type → Type} [Monad m] [MonadMor₁ m] : Mor₂Iso → m Mor₁
   | .structuralAtom α => α.tgtM
   | .comp _ _ _ h .. => return h
   | .whiskerLeft _ f _ h _ => do comp₁M f h
@@ -542,42 +422,16 @@ def Mor₂Iso.tgtM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂Iso -> m
   | .coherenceComp _ _ _ _ i .. => return i
   | .of η => return η.tgt
 
-/--
-Definition of `MonadMor₂Iso` / `MonadMor₂Iso` 的定义
+/-- A monad equipped with the ability to construct `Mor₂Iso` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tacti
+c.BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadMor₂Iso
-  parameters: (m : Type -> Type)
-  axioms and operations (11):
-    - associatorM((f g h : Mor₁)) : m StructuralAtom
-    - leftUnitorM((f : Mor₁)) : m StructuralAtom
-    - rightUnitorM((f : Mor₁)) : m StructuralAtom
-    - id₂M((f : Mor₁)) : m StructuralAtom
-    - coherenceHomM((f g : Mor₁) (inst : Expr)) : m CoherenceHom
-    - comp₂M((η θ : Mor₂Iso)) : m Mor₂Iso
-    - whiskerLeftM((f : Mor₁) (η : Mor₂Iso)) : m Mor₂Iso
-    - whiskerRightM((η : Mor₂Iso) (h : Mor₁)) : m Mor₂Iso
-    - horizontalCompM((η θ : Mor₂Iso)) : m Mor₂Iso
-    - symmM((η : Mor₂Iso)) : m Mor₂Iso
-    - coherenceCompM((α : CoherenceHom) (η θ : Mor₂Iso)) : m Mor₂Iso
-
-中文:
-类 MonadMor₂Iso
-  参数: (m : 类型 -> 类型)
-  公理与运算 (11 个):
-    - associatorM((f g h : Mor₁)) : m StructuralAtom
-    - leftUnitorM((f : Mor₁)) : m StructuralAtom
-    - rightUnitorM((f : Mor₁)) : m StructuralAtom
-    - id₂M((f : Mor₁)) : m StructuralAtom
-    - coherenceHomM((f g : Mor₁) (inst : Expr)) : m 余herence态射
-    - comp₂M((η θ : Mor₂Iso)) : m Mor₂Iso
-    - whiskerLeftM((f : Mor₁) (η : Mor₂Iso)) : m Mor₂Iso
-    - whiskerRightM((η : Mor₂Iso) (h : Mor₁)) : m Mor₂Iso
-    - horizontalCompM((η θ : Mor₂Iso)) : m Mor₂Iso
-    - symmM((η : Mor₂Iso)) : m Mor₂Iso
-    - coherenceCompM((α : 余herence态射) (η θ : Mor₂Iso)) : m Mor₂Iso
+--- 原说明 ---
+A monad equipped with the ability to construct `Mor₂Iso` terms.
 -/
-class MonadMor₂Iso (m : Type -> Type) where
+class MonadMor₂Iso (m : Type → Type) where
   /-- The expression for the associator `α_ f g h`. -/
   associatorM (f g h : Mor₁) : m StructuralAtom
   /-- The expression for the left unitor `λ_ f`. -/
@@ -603,118 +457,91 @@ class MonadMor₂Iso (m : Type -> Type) where
 
 namespace MonadMor₂Iso
 
-variable {m : Type -> Type} [Monad m] [MonadMor₂Iso m]
+variable {m : Type → Type} [Monad m] [MonadMor₂Iso m]
 
-/--
-Definition of `associatorM'` / `associatorM'` 的定义
+/-- The expression for the associator `α_ f g h`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor₂Iso.associatorM'** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.BicategoryLike.MonadMor₂Iso`。
+形式化陈述：associatorM' (f g h : Mor₁) : m Mor₂Iso
+参数：f g h : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorM'
-  signature: (f g h : Mor₁)
-  body: do
-return .structuralAtom ← MonadMor₂Iso.associatorM f g h
-
-中文:
-定义 associatorM'
-  签名: (f g h : Mor₁)
-  定义体: do
-return .structuralAtom ← MonadMor₂Iso.associatorM f g h
+--- 原说明 ---
+The expression for the associator `α_ f g h`.
 -/
 def associatorM' (f g h : Mor₁) : m Mor₂Iso := do
-return .structuralAtom ← MonadMor₂Iso.associatorM f g h
+  return .structuralAtom <| ← MonadMor₂Iso.associatorM f g h
 
-/--
-Definition of `leftUnitorM'` / `leftUnitorM'` 的定义
+/-- The expression for the left unitor `λ_ f`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor₂Iso.leftUnitorM'** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.BicategoryLike.MonadMor₂Iso`。
+形式化陈述：leftUnitorM' (f : Mor₁) : m Mor₂Iso
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitorM'
-  signature: (f : Mor₁)
-  body: do
-return .structuralAtom ← MonadMor₂Iso.leftUnitorM f
-
-中文:
-定义 leftUnitorM'
-  签名: (f : Mor₁)
-  定义体: do
-return .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+--- 原说明 ---
+The expression for the left unitor `λ_ f`.
 -/
 def leftUnitorM' (f : Mor₁) : m Mor₂Iso := do
-return .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+  return .structuralAtom <| ← MonadMor₂Iso.leftUnitorM f
 
-/--
-Definition of `rightUnitorM'` / `rightUnitorM'` 的定义
+/-- The expression for the right unitor `ρ_ f`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor₂Iso.rightUnitorM'** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Tactic.BicategoryLike.MonadMor₂Iso`。
+形式化陈述：rightUnitorM' (f : Mor₁) : m Mor₂Iso
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitorM'
-  signature: (f : Mor₁)
-  body: do
-return .structuralAtom ← MonadMor₂Iso.rightUnitorM f
-
-中文:
-定义 rightUnitorM'
-  签名: (f : Mor₁)
-  定义体: do
-return .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+--- 原说明 ---
+The expression for the right unitor `ρ_ f`.
 -/
 def rightUnitorM' (f : Mor₁) : m Mor₂Iso := do
-return .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+  return .structuralAtom <| ← MonadMor₂Iso.rightUnitorM f
 
-/--
-Definition of `id₂M'` / `id₂M'` 的定义
+/-- The expression for the identity `Iso.refl f`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor₂Iso.id** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike.MonadMor₂Iso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id₂M'
-  signature: (f : Mor₁)
-  body: do
-return .structuralAtom ← MonadMor₂Iso.id₂M f
-
-中文:
-定义 id₂M'
-  签名: (f : Mor₁)
-  定义体: do
-return .structuralAtom ← MonadMor₂Iso.id₂M f
+--- 原说明 ---
+The expression for the identity `Iso.refl f`.
 -/
 def id₂M' (f : Mor₁) : m Mor₂Iso := do
-return .structuralAtom ← MonadMor₂Iso.id₂M f
+  return .structuralAtom <| ← MonadMor₂Iso.id₂M f
 
-/--
-Definition of `coherenceHomM'` / `coherenceHomM'` 的定义
+/-- The expression for the coherence isomorphism `⊗𝟙 : f ⟶ g`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor₂Iso.coherenceHomM'** 是 Mathlib 中的一个定义，位
+于命名空间 `Mathlib.Tactic.BicategoryLike.MonadMor₂Iso`。
+形式化陈述：coherenceHomM' (f g : Mor₁) (inst : Expr) : m Mor₂Iso
+参数：f g : Mor₁；inst : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coherenceHomM'
-  signature: (f g : Mor₁) (inst : Expr)
-  body: do
-return .structuralAtom .coherenceHom ← MonadMor₂Iso.coherenceHomM f g inst
-
-中文:
-定义 coherenceHomM'
-  签名: (f g : Mor₁) (inst : Expr)
-  定义体: do
-return .structuralAtom .coherenceHom ← MonadMor₂Iso.coherenceHomM f g inst
+--- 原说明 ---
+The expression for the coherence isomorphism `⊗𝟙 : f ⟶ g`.
 -/
 def coherenceHomM' (f g : Mor₁) (inst : Expr) : m Mor₂Iso := do
-return .structuralAtom .coherenceHom ← MonadMor₂Iso.coherenceHomM f g inst
+  return .structuralAtom <| .coherenceHom <| ← MonadMor₂Iso.coherenceHomM f g inst
 
 end MonadMor₂Iso
 
-/--
-Definition of `Atom` / `Atom` 的定义
+/-- Expressions for atomic non-structural 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Atom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic
+.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Atom
-  parameters: where
-  axioms and operations (3):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
-
-中文:
-结构 原子
-  参数: where
-  公理与运算 (3 个):
-    - e : Expr
-    - src : Mor₁
-    - tgt : Mor₁
+--- 原说明 ---
+Expressions for atomic non-structural 2-morphisms.
 -/
 structure Atom where
   /-- Extract a lean expression from an `Atom` expression. -/
@@ -725,22 +552,25 @@ structure Atom where
   tgt : Mor₁
   deriving Inhabited
 
-/--
-Definition of `IsoLift` / `IsoLift` 的定义
+/-- `Mor₂` expressions defined below will have the `isoLift? : Option IsoLift` field.
+For `η : Mor₂` such that `η.isoLift? = some isoLift`, we have the following data:
+- `isoLift.e`: an expression for a 2-isomorphism `η'`, given as a `Mor₂Iso` term,
+- `isoLift.eq`: a lean expression for the proof that `η'.hom = η`.
+-/
+/-
+**Mathlib.Tactic.BicategoryLike.IsoLift** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tac
+tic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsoLift
-  parameters: where
-  axioms and operations (2):
-    - e : Mor₂Iso
-    - eq : Expr
-
-中文:
-结构 是oLift
-  参数: where
-  公理与运算 (2 个):
-    - e : Mor₂Iso
-    - eq : Expr
+--- 原说明 ---
+`Mor₂` expressions defined below will have the `isoLift? : Option IsoLift` field
+.
+For `η : Mor₂` such that `η.isoLift? = some isoLift`, we have the following data
+:
+- `isoLift.e`: an expression for a 2-isomorphism `η'`, given as a `Mor₂Iso` term
+,
+- `isoLift.eq`: a lean expression for the proof that `η'.hom = η`.
 -/
 structure IsoLift where
   /-- The expression for the 2-isomorphism. -/
@@ -749,36 +579,14 @@ structure IsoLift where
   the original 2-morphism. -/
   eq : Expr
 
-/--
-Inductive type `Mor₂` / 归纳类型 `Mor₂`
+/-- Expressions for 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Mor₂
-  parameters: : Type where
-  constructors (9):
-    - isoHom: (e : Expr) (isoLift : IsoLift) (iso : Mor₂Iso) : Mor₂
-    - isoInv: (e : Expr) (isoLift : IsoLift) (iso : Mor₂Iso) : Mor₂
-    - id: (e : Expr) (isoLift : IsoLift) (f : Mor₁) : Mor₂
-    - comp: (e : Expr) (isoLift? : Option IsoLift) (f g h : Mor₁) (η θ : Mor₂) : Mor₂
-    - whiskerLeft: (e : Expr) (isoLift? : Option IsoLift) (f g h : Mor₁) (η : Mor₂) : Mor₂
-    - whiskerRight: (e : Expr) (isoLift? : Option IsoLift) (f g : Mor₁) (η : Mor₂) (h : Mor₁) : Mor₂
-    - horizontalComp: (e : Expr) (isoLift? : Option IsoLift) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂) : Mor₂
-    - coherenceComp: (e : Expr) (isoLift? : Option IsoLift) (f g h i : Mor₁) (α : CoherenceHom) (η θ : Mor₂) : Mor₂
-    - of: (η : Atom) : Mor₂
-
-中文:
-归纳类型 Mor₂
-  参数: : 类型 where
-  构造子 (9 个):
-    - isoHom: (e : Expr) (isoLift : 是oLift) (iso : Mor₂Iso) : Mor₂
-    - isoInv: (e : Expr) (isoLift : 是oLift) (iso : Mor₂Iso) : Mor₂
-    - id: (e : Expr) (isoLift : 是oLift) (f : Mor₁) : Mor₂
-    - comp: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h : Mor₁) (η θ : Mor₂) : Mor₂
-    - whiskerLeft: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h : Mor₁) (η : Mor₂) : Mor₂
-    - whiskerRight: (e : Expr) (isoLift? : 选项类型 是oLift) (f g : Mor₁) (η : Mor₂) (h : Mor₁) : Mor₂
-    - horizontalComp: (e : Expr) (isoLift? : 选项类型 是oLift) (f₁ g₁ f₂ g₂ : Mor₁) (η θ : Mor₂) : Mor₂
-    - coherenceComp: (e : Expr) (isoLift? : 选项类型 是oLift) (f g h i : Mor₁) (α : 余herence态射) (η θ : Mor₂) : Mor₂
-    - of: (η : 原子) : Mor₂
+--- 原说明 ---
+Expressions for 2-morphisms.
 -/
 inductive Mor₂ : Type where
   /-- The expression for `Iso.hom`. -/
@@ -803,37 +611,29 @@ inductive Mor₂ : Type where
   | of (η : Atom) : Mor₂
   deriving Inhabited
 
-/--
-Definition of `MkMor₂` / `MkMor₂` 的定义
+/-- A monad equipped with the ability to construct `Mor₂` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkMor** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tactic.B
+icategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkMor₂
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - ofExpr((e : Expr)) : m Mor₂
-
-中文:
-类 MkMor₂
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - ofExpr((e : Expr)) : m Mor₂
+--- 原说明 ---
+A monad equipped with the ability to construct `Mor₂` terms.
 -/
-class MkMor₂ (m : Type -> Type) where
+class MkMor₂ (m : Type → Type) where
   /-- Construct a `Mor₂` term from a lean expression. -/
   ofExpr (e : Expr) : m Mor₂
 
-/--
-Definition of `Mor₂.e` / `Mor₂.e` 的定义
+/-- The underlying lean expression of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂.e
-  signature: : Mor₂ -> Expr
-
-中文:
-定义 Mor₂.e
-  签名: : Mor₂ -> Expr
+--- 原说明 ---
+The underlying lean expression of a 2-morphism.
 -/
-def Mor₂.e : Mor₂ -> Expr
+def Mor₂.e : Mor₂ → Expr
   | .isoHom e .. => e
   | .isoInv e .. => e
   | .id e .. => e
@@ -844,18 +644,19 @@ def Mor₂.e : Mor₂ -> Expr
   | .coherenceComp e .. => e
   | .of η => η.e
 
-/--
-Definition of `Mor₂.isoLift?` / `Mor₂.isoLift?` 的定义
+/-- `η.isoLift?` is a pair of a 2-isomorphism `η'` and a proof that `η'.hom = η`. If no such `η'`
+is found, returns `none`. This function does not seek `IsIso` instance. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂.isoLift?
-  signature: : Mor₂ -> Option IsoLift
-
-中文:
-定义 Mor₂.isoLift?
-  签名: : Mor₂ -> 选项类型 是oLift
+--- 原说明 ---
+`η.isoLift?` is a pair of a 2-isomorphism `η'` and a proof that `η'.hom = η`. If
+ no such `η'`
+is found, returns `none`. This function does not seek `IsIso` instance.
 -/
-def Mor₂.isoLift? : Mor₂ -> Option IsoLift
+def Mor₂.isoLift? : Mor₂ → Option IsoLift
   | .isoHom _ isoLift .. => some isoLift
   | .isoInv _ isoLift .. => some isoLift
   | .id _ isoLift .. => some isoLift
@@ -866,18 +667,16 @@ def Mor₂.isoLift? : Mor₂ -> Option IsoLift
   | .coherenceComp _ isoLift? .. => isoLift?
   | .of _ => none
 
-/--
-Definition of `Mor₂.srcM` / `Mor₂.srcM` 的定义
+/-- The domain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂.srcM
-  signature: {m : Type -> Type} [Monad m] [MonadMor₁ m]
-
-中文:
-定义 Mor₂.srcM
-  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-morphism.
 -/
-def Mor₂.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor₁
+def Mor₂.srcM {m : Type → Type} [Monad m] [MonadMor₁ m] : Mor₂ → m Mor₁
   | .isoHom _ _ iso => iso.srcM
   | .isoInv _ _ iso => iso.tgtM
   | .id _ _ f => return f
@@ -888,18 +687,16 @@ def Mor₂.srcM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor�
   | .coherenceComp _ _ f .. => return f
   | .of η => return η.src
 
-/--
-Definition of `Mor₂.tgtM` / `Mor₂.tgtM` 的定义
+/-- The codomain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂.tgtM
-  signature: {m : Type -> Type} [Monad m] [MonadMor₁ m]
-
-中文:
-定义 Mor₂.tgtM
-  签名: {m : 类型 -> 类型} [单子 m] [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-morphism.
 -/
-def Mor₂.tgtM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor₁
+def Mor₂.tgtM {m : Type → Type} [Monad m] [MonadMor₁ m] : Mor₂ → m Mor₁
   | .isoHom _ _ iso => iso.tgtM
   | .isoInv _ _ iso => iso.srcM
   | .id _ _ f => return f
@@ -910,40 +707,16 @@ def Mor₂.tgtM {m : Type -> Type} [Monad m] [MonadMor₁ m] : Mor₂ -> m Mor�
   | .coherenceComp _ _ _ _ _ i .. => return i
   | .of η => return η.tgt
 
-/--
-Definition of `MonadMor₂` / `MonadMor₂` 的定义
+/-- A monad equipped with the ability to manipulate 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadMor** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tacti
+c.BicategoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadMor₂
-  parameters: (m : Type -> Type)
-  axioms and operations (10):
-    - homM((η : Mor₂Iso)) : m Mor₂
-    - atomHomM((η : AtomIso)) : m Atom
-    - invM((η : Mor₂Iso)) : m Mor₂
-    - atomInvM((η : AtomIso)) : m Atom
-    - id₂M((f : Mor₁)) : m Mor₂
-    - comp₂M((η θ : Mor₂)) : m Mor₂
-    - whiskerLeftM((f : Mor₁) (η : Mor₂)) : m Mor₂
-    - whiskerRightM((η : Mor₂) (h : Mor₁)) : m Mor₂
-    - horizontalCompM((η θ : Mor₂)) : m Mor₂
-    - coherenceCompM((α : CoherenceHom) (η θ : Mor₂)) : m Mor₂
-
-中文:
-类 MonadMor₂
-  参数: (m : 类型 -> 类型)
-  公理与运算 (10 个):
-    - homM((η : Mor₂Iso)) : m Mor₂
-    - atomHomM((η : AtomIso)) : m 原子
-    - invM((η : Mor₂Iso)) : m Mor₂
-    - atomInvM((η : AtomIso)) : m 原子
-    - id₂M((f : Mor₁)) : m Mor₂
-    - comp₂M((η θ : Mor₂)) : m Mor₂
-    - whiskerLeftM((f : Mor₁) (η : Mor₂)) : m Mor₂
-    - whiskerRightM((η : Mor₂) (h : Mor₁)) : m Mor₂
-    - horizontalCompM((η θ : Mor₂)) : m Mor₂
-    - coherenceCompM((α : 余herence态射) (η θ : Mor₂)) : m Mor₂
+--- 原说明 ---
+A monad equipped with the ability to manipulate 2-morphisms.
 -/
-class MonadMor₂ (m : Type -> Type) where
+class MonadMor₂ (m : Type → Type) where
   /-- The expression for `Iso.hom η`. -/
   homM (η : Mor₂Iso) : m Mor₂
   /-- The expression for `Iso.hom η`. -/
@@ -965,214 +738,185 @@ class MonadMor₂ (m : Type -> Type) where
   /-- The expression for the coherence composition `η ⊗≫ θ := η ≫ α ≫ θ`. -/
   coherenceCompM (α : CoherenceHom) (η θ : Mor₂) : m Mor₂
 
-/--
-Inductive type `NormalizedHom` / 归纳类型 `NormalizedHom`
+/-- Type of normalized 1-morphisms `((... ≫ h) ≫ g) ≫ f`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalizedHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive NormalizedHom
-  parameters: : Type
-  constructors (2):
-    - nil: (e : Mor₁) (a : Obj) : NormalizedHom
-    - cons: (e : Mor₁) : NormalizedHom -> Atom₁ -> NormalizedHom
-
-中文:
-归纳类型 Normalized态射
-  参数: : 类型
-  构造子 (2 个):
-    - nil: (e : Mor₁) (a : Obj) : Normalized态射
-    - cons: (e : Mor₁) : Normalized态射 -> Atom₁ -> Normalized态射
+--- 原说明 ---
+Type of normalized 1-morphisms `((... ≫ h) ≫ g) ≫ f`.
 -/
 inductive NormalizedHom : Type
   /-- The identity 1-morphism `𝟙 a`. -/
   | nil (e : Mor₁) (a : Obj) : NormalizedHom
   /-- The `cons` composes an atomic 1-morphism at the end of a normalized 1-morphism. -/
-  | cons (e : Mor₁) : NormalizedHom -> Atom₁ -> NormalizedHom
+  | cons (e : Mor₁) : NormalizedHom → Atom₁ → NormalizedHom
   deriving Inhabited
 
-/--
-Definition of `NormalizedHom.e` / `NormalizedHom.e` 的定义
+/-- The underlying expression of a normalized 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalizedHom.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike.NormalizedHom`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.NormalizedHom → Mathlib.Tactic.BicategoryLik
+e.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalizedHom.e
-  signature: : NormalizedHom -> Mor₁
-
-中文:
-定义 Normalized态射.e
-  签名: : Normalized态射 -> Mor₁
+--- 原说明 ---
+The underlying expression of a normalized 1-morphism.
 -/
-def NormalizedHom.e : NormalizedHom -> Mor₁
+def NormalizedHom.e : NormalizedHom → Mor₁
   | NormalizedHom.nil e _ => e
   | NormalizedHom.cons e _ _ => e
 
-/--
-Definition of `NormalizedHom.src` / `NormalizedHom.src` 的定义
+/-- The domain of a normalized 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalizedHom.src** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.NormalizedHom`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.NormalizedHom → Mathlib.Tactic.BicategoryLik
+e.Obj
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalizedHom.src
-  signature: : NormalizedHom -> Obj
-
-中文:
-定义 Normalized态射.src
-  签名: : Normalized态射 -> Obj
+--- 原说明 ---
+The domain of a normalized 1-morphism.
 -/
-def NormalizedHom.src : NormalizedHom -> Obj
+def NormalizedHom.src : NormalizedHom → Obj
   | NormalizedHom.nil _ a => a
   | NormalizedHom.cons _ p _ => p.src
 
-/--
-Definition of `NormalizedHom.tgt` / `NormalizedHom.tgt` 的定义
+/-- The codomain of a normalized 1-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalizedHom.tgt** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.NormalizedHom`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.NormalizedHom → Mathlib.Tactic.BicategoryLik
+e.Obj
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalizedHom.tgt
-  signature: : NormalizedHom -> Obj
-
-中文:
-定义 Normalized态射.tgt
-  签名: : Normalized态射 -> Obj
+--- 原说明 ---
+The codomain of a normalized 1-morphism.
 -/
-def NormalizedHom.tgt : NormalizedHom -> Obj
+def NormalizedHom.tgt : NormalizedHom → Obj
   | NormalizedHom.nil _ a => a
-  | NormalizedHom.cons _ _ f => f.tgt
+  | NormalizedHom.cons _ _  f => f.tgt
 
-/--
-Definition of `normalizedHom.nilM` / `normalizedHom.nilM` 的定义
+/-- Construct the `NormalizedHom.nil` term in `m`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.normalizedHom.nilM** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike.normalizedHom`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.Obj → m Mathlib.Tactic.BicategoryL
+ike.NormalizedHom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalizedHom.nilM
-  signature: [MonadMor₁ m] (a : Obj)
-  body: do
-  return NormalizedHom.nil (← id₁M a) a
-
-中文:
-定义 normalizedHom.nilM
-  签名: [MonadMor₁ m] (a : Obj)
-  定义体: do
-  return NormalizedHom.nil (← id₁M a) a
+--- 原说明 ---
+Construct the `NormalizedHom.nil` term in `m`.
 -/
 def normalizedHom.nilM [MonadMor₁ m] (a : Obj) : m NormalizedHom := do
   return NormalizedHom.nil (← id₁M a) a
 
-/--
-Definition of `NormalizedHom.consM` / `NormalizedHom.consM` 的定义
+/-- Construct a `NormalizedHom.cons` term in `m`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalizedHom.consM** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.NormalizedHom`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.NormalizedHom →         Mathlib.Ta
+ctic.BicategoryLike.Atom₁ → m Mathlib.Tactic.BicategoryLike.NormalizedHom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalizedHom.consM
-  signature: [MonadMor₁ m] (p : NormalizedHom) (f : Atom₁)
-  body: do
-  return NormalizedHom.cons (← comp₁M p.e (.of f)) p f
-
-中文:
-定义 Normalized态射.consM
-  签名: [MonadMor₁ m] (p : Normalized态射) (f : Atom₁)
-  定义体: do
-  return NormalizedHom.cons (← comp₁M p.e (.of f)) p f
+--- 原说明 ---
+Construct a `NormalizedHom.cons` term in `m`.
 -/
 def NormalizedHom.consM [MonadMor₁ m] (p : NormalizedHom) (f : Atom₁) :
     m NormalizedHom := do
   return NormalizedHom.cons (← comp₁M p.e (.of f)) p f
 
-/--
-Definition of `Context` / `Context` 的定义
+/-- `Context ρ` provides the context for manipulating 2-morphisms in a monoidal category or
+bicategory. In particular, we will store `MonoidalCategory` or `Bicategory` instance in a context,
+and use this through a reader monad when we construct the lean expressions for 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Context** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tac
+tic.BicategoryLike`。
+形式化陈述：Type → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Context
-  parameters: (ρ : Type)
-  axioms and operations (1):
-    - mkContext? : Expr -> MetaM (Option ρ)
-
-中文:
-类 余ntext
-  参数: (ρ : 类型)
-  公理与运算 (1 个):
-    - mkContext? : Expr -> MetaM (选项类型 ρ)
+--- 原说明 ---
+`Context ρ` provides the context for manipulating 2-morphisms in a monoidal cate
+gory or
+bicategory. In particular, we will store `MonoidalCategory` or `Bicategory` inst
+ance in a context,
+and use this through a reader monad when we construct the lean expressions for 2
+-morphisms.
 -/
 class Context (ρ : Type) where
   /-- Construct a context from a lean expression for a 2-morphism. -/
-  mkContext? : Expr -> MetaM (Option ρ)
+  mkContext? : Expr → MetaM (Option ρ)
 
 export Context (mkContext?)
 
-/--
-Definition of `mkContext` / `mkContext` 的定义
+/-- Construct a context from a lean expression for a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.mkContext** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.BicategoryLike`。
+形式化陈述：mkContext {ρ : Type} [Context ρ] (e : Expr) : MetaM ρ
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkContext
-  signature: {ρ : Type} [Context ρ] (e : Expr)
-  body: do
-  match ← mkContext? e with
-  | some c => return c
-  | none => throwError "failed to construct a monoidal category or bicategory context from {e}"
-
-中文:
-定义 mkContext
-  签名: {ρ : 类型} [余ntext ρ] (e : Expr)
-  定义体: do
-  match ← mkContext? e with
-  | some c => return c
-  | none => throwError "failed to construct a monoidal category or bicategory context from {e}"
+--- 原说明 ---
+Construct a context from a lean expression for a 2-morphism.
 -/
 def mkContext {ρ : Type} [Context ρ] (e : Expr) : MetaM ρ := do
   match ← mkContext? e with
   | some c => return c
   | none => throwError "failed to construct a monoidal category or bicategory context from {e}"
 
-/--
-Definition of `State` / `State` 的定义
+/-- The state for the `CoherenceM ρ` monad. -/
+/-
+**Mathlib.Tactic.BicategoryLike.State** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+形式化陈述：State where /-- The cache for evaluating lean expressions of 1-morphisms i
+nto `Mor₁` terms. -/ cache : PersistentExprMap Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure State
-  parameters: where
-  axioms and operations (1):
-    - cache : PersistentExprMap Mor₁  [default: {}]
-
-中文:
-结构 State
-  参数: where
-  公理与运算 (1 个):
-    - cache : PersistentExprMap Mor₁  [默认: {}]
+--- 原说明 ---
+The state for the `CoherenceM ρ` monad.
 -/
 structure State where
   /-- The cache for evaluating lean expressions of 1-morphisms into `Mor₁` terms. -/
   cache : PersistentExprMap Mor₁ := {}
 
-/--
-Definition of `CoherenceM` / `CoherenceM` 的定义
+/-- The monad for manipulating 2-morphisms in a monoidal category or bicategory. -/
+/-
+**Mathlib.Tactic.BicategoryLike.CoherenceM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.
+Tactic.BicategoryLike`。
+形式化陈述：CoherenceM (ρ : Type)
+参数：ρ : Type。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CoherenceM
-  signature: (ρ : Type)
-  body: ReaderT ρ StateT State MetaM
-
-中文:
-缩写 CoherenceM
-  签名: (ρ : 类型)
-  定义体: ReaderT ρ StateT State MetaM
-
-Depends on / 依赖: ReaderT, StateT
+--- 原说明 ---
+The monad for manipulating 2-morphisms in a monoidal category or bicategory.
 -/
-abbrev CoherenceM (ρ : Type) := ReaderT ρ StateT State MetaM
+abbrev CoherenceM (ρ : Type) := ReaderT ρ <| StateT State MetaM
 
-/--
-Definition of `CoherenceM.run` / `CoherenceM.run` 的定义
+/-- Run the `CoherenceM ρ` monad. -/
+/-
+**Mathlib.Tactic.BicategoryLike.CoherenceM.run** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.BicategoryLike.CoherenceM`。
+形式化陈述：{α ρ : Type} →   Mathlib.Tactic.BicategoryLike.CoherenceM ρ α → ρ → optPar
+am Mathlib.Tactic.BicategoryLike.State { } → MetaM α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CoherenceM.run
-  signature: {α ρ : Type} (x : CoherenceM ρ α) (ctx : ρ) (s : State := {})
-  body: do
-Prod.fst < > ReaderT.run x ctx s
-
-中文:
-定义 CoherenceM.run
-  签名: {α ρ : 类型} (x : CoherenceM ρ α) (ctx : ρ) (s : State := {})
-  定义体: do
-Prod.fst < > ReaderT.run x ctx s
+--- 原说明 ---
+Run the `CoherenceM ρ` monad.
 -/
 def CoherenceM.run {α ρ : Type} (x : CoherenceM ρ α) (ctx : ρ) (s : State := {}) :
     MetaM α := do
-Prod.fst < > ReaderT.run x ctx s
+  Prod.fst <$> ReaderT.run x ctx s
 
 end BicategoryLike
 
 end Tactic
 
 end Mathlib
+

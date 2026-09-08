@@ -66,55 +66,6 @@ has a doc string, a doc string for the dual version should be passed explicitly 
 ```
 /-- The maximum is commutative. -/
 @[to_dual /-- The minimum is commutative. -/]
-/--
-theorem `max_comm'` / 定理 `max_comm'`
-
-English:
-theorem max_comm'
-  given: {α} [LinearOrder α] (x y : α)
-  statement: max x y = max y x
-  proof: max_comm x y
-```
-
-Use the `(reorder := ...)` syntax to reorder the arguments compared to the dual declaration.
-This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
-the fifth argument before the third argument. For example, this is used when tagging `LE.le`
-with `to_dual self (reorder := 3 4)`, so that `a <= b` gets transformed into `b <= a`.
-
-Use the `to_dual self` syntax to mark the lemma as its own dual. This is needed if the lemma is
-its own dual, up to a reordering of its arguments. `to_dual self` (and `to_dual existing`) tries to
-autogenerate the `(reorder := ...)` argument, so it is usually not necessary to give it explicitly.
-
-Use the `to_dual existing` syntax to use an existing dual declaration,
-instead of automatically generating it.
-
-Use the `(attr := ...)` syntax to apply attributes to both the original and the dual version:
-```
-
-中文:
-定理 max_comm'
-  条件: {α} [线性序 α] (x y : α)
-  结论: 最大值 x y = 最大值 y x
-  证明: max_comm x y
-```
-
-Use the `(reorder := ...)` syntax to reorder the arguments compared to the dual declaration.
-This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
-the fifth argument before the third argument. For example, this is used when tagging `LE.le`
-with `to_dual self (reorder := 3 4)`, so that `a <= b` gets transformed into `b <= a`.
-
-Use the `to_dual self` syntax to mark the lemma as its own dual. This is needed if the lemma is
-its own dual, up to a reordering of its arguments. `to_dual self` (and `to_dual existing`) tries to
-autogenerate the `(reorder := ...)` argument, so it is usually not necessary to give it explicitly.
-
-Use the `to_dual existing` syntax to use an existing dual declaration,
-instead of automatically generating it.
-
-Use the `(attr := ...)` syntax to apply attributes to both the original and the dual version:
-```
--/
 theorem max_comm' {α} [LinearOrder α] (x y : α) : max x y = max y x := max_comm x y
 ```
 
@@ -122,7 +73,7 @@ Use the `(reorder := ...)` syntax to reorder the arguments compared to the dual 
 This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
 `α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
 the fifth argument before the third argument. For example, this is used when tagging `LE.le`
-with `to_dual self (reorder := 3 4)`, so that `a <= b` gets transformed into `b <= a`.
+with `to_dual self (reorder := 3 4)`, so that `a ≤ b` gets transformed into `b ≤ a`.
 
 Use the `to_dual self` syntax to mark the lemma as its own dual. This is needed if the lemma is
 its own dual, up to a reordering of its arguments. `to_dual self` (and `to_dual existing`) tries to
@@ -133,29 +84,6 @@ instead of automatically generating it.
 
 Use the `(attr := ...)` syntax to apply attributes to both the original and the dual version:
 ```
-/--
-lemma `min_self` / 引理 `min_self`
-
-English:
-lemma min_self
-  given: (a : α)
-  statement: min a a = a
-  proof: sorry
-```
-
-The `reassoc` attribute in category theory interacts with `to_dual` in a unique way, because it
-generates `_assoc` theorems that aren't dual to any other theorem. To deal with this, the `reassoc`
-
-中文:
-引理 min_self
-  条件: (a : α)
-  结论: 最小值 a a = a
-  证明: sorry
-```
-
-The `reassoc` attribute in category theory interacts with `to_dual` in a unique way, because it
-generates `_assoc` theorems that aren't dual to any other theorem. To deal with this, the `reassoc`
--/
 @[to_dual (attr := simp)] lemma min_self (a : α) : min a a = a := sorry
 ```
 
@@ -165,13 +93,13 @@ attribute will add a `to_dual none` tag to an `_assoc` theorem if the original t
 already tagged with `to_dual`. This also works with `to_dual (attr := reassoc)`.
 
 The `(rename := ...)` syntax can be used for specifying the argument names of the generated
-declaration, overriding the automatic translation of names. For example, `(rename := x -> a, y ↔ z)`
+declaration, overriding the automatic translation of names. For example, `(rename := x → a, y ↔ z)`
 will translate `lemma min_foo (x y z : α) ...` to `lemma max_foo (a z y : α) ...`.
 
 Some definitions are dual to something other than the dual of their value. Some examples:
-- `Ico a b := { x | a <= x ∧ x < b }` is dual to `Ioc b a := { x | b < x ∧ x <= a }`.
-- `Monotone f := forall ⦃a b⦄, a <= b -> f a <= f b` is dual to itself.
-- `DecidableLE α := forall a b : α, Decidable (a <= b)` is dual to itself.
+- `Ico a b := { x | a ≤ x ∧ x < b }` is dual to `Ioc b a := { x | b < x ∧ x ≤ a }`.
+- `Monotone f := ∀ ⦃a b⦄, a ≤ b → f a ≤ f b` is dual to itself.
+- `DecidableLE α := ∀ a b : α, Decidable (a ≤ b)` is dual to itself.
 
 To be able to translate a term involving such constants, `to_dual` needs to insert casts,
 so that the term's correctness doesn't rely on unfolding them.
@@ -189,12 +117,12 @@ macro "to_dual?" rest:attrArgs : attr => `(attr| to_dual ? $rest)
 @[inherit_doc to_dual_ignore_args]
 initialize ignoreArgsAttr : NameMapExtension (List Nat) ←
   registerNameMapAttribute {
-    name := `to_dual_ignore_args
+    name  := `to_dual_ignore_args
     descr :=
       "Auxiliary attribute for `to_dual` stating that certain arguments are not dualized."
-    add := fun _ stx => do
+    add := fun _ stx ↦ do
       let ids ← match stx with
-| `(attr| to_dual_ignore_args $[$ids:num]*) => pure ids.map (·.getNat - 1)
+        | `(attr| to_dual_ignore_args $[$ids:num]*) => pure <| ids.map (·.getNat - 1)
         | _ => throwUnsupportedSyntax
       return ids.toList }
 
@@ -220,218 +148,12 @@ initialize
 initialize translations : NameMapExtension TranslationInfo ← registerNameMapExtension _
 
 @[inherit_doc GuessName.GuessNameData.nameDict]
-/--
-Definition of `nameDict` / `nameDict` 的定义
-
-English:
-definition nameDict
-  signature: : Std.HashMap String (List String)
-  body: .ofList [
-  ("top", ["Bot"]),
-  ("bot", ["Top"]),
-  ("untop", ["Unbot"]),
-  ("unbot", ["Untop"]),
-  ("inf", ["Sup"]),
-  ("sup", ["Inf"]),
-  ("inf₂", ["Sup₂"]),
-  ("sup₂", ["Inf₂"]),
-  ("sinf", ["SSup"]),
-  ("ssup", ["SInf"]),
-  ("min", ["Max"]),
-  ("max", ["Min"]),
-  ("min?", ["Max?"]),
-  ("max?", ["Min?"]),
-  ("argmin", ["Argmax"]),
-  ("argmax", ["Argmin"]),
-  ("minimum", ["Maximum"]),
-  ("maximum", ["Minimum"]),
-  ("minimal", ["Maximal"]),
-  ("maximal", ["Minimal"]),
-  ("lower", ["Upper"]),
-  ("upper", ["Lower"]),
-  ("below", ["Above"]),
-  ("above", ["Below"]),
-  ("least", ["Greatest"]),
-  ("greatest", ["Least"]),
-  ("glb", ["LUB"]),
-  ("lub", ["GLB"]),
-  ("cofinal", ["Coinitial"]),
-  ("coinitial", ["Cofinal"]),
-  ("succ", ["Pred"]),
-  ("pred", ["Succ"]),
-  ("disjoint", ["Codisjoint"]),
-  ("codisjoint", ["Disjoint"]),
-  ("atom", ["Coatom"]),
-  ("coatom", ["Atom"]),
-  ("lfp", ["Gfp"]),
-  ("gfp", ["Lfp"]),
-  ("ioi", ["Iio"]),
-  ("iio", ["Ioi"]),
-  ("ici", ["Iic"]),
-  ("iic", ["Ici"]),
-  ("ioc", ["Ico"]),
-  ("ico", ["Ioc"]),
-  ("next", ["Prev"]),
-  ("prev", ["Next"]),
-  ("heyting", ["Coheyting"]),
-  ("coheyting", ["Heyting"]),
-  ("frame", ["Coframe"]),
-  ("coframe", ["Frame"]),
-  ("epigraph", ["Hypograph"]),
-  ("hypograph", ["Epigraph"]),
-
-  ("epi", ["Mono"]),
-  /- `mono` can also refer to monotone, so we don't translate it. -/
-  -- ("mono", ["Epi"]),
-  ("epimorphisms", ["Monomorphisms"]),
-  ("monomorphisms", ["Epimorphisms"]),
-  ("terminal", ["Initial"]),
-  ("initial", ["Terminal"]),
-  ("precompose", ["Postcompose"]),
-  ("postcompose", ["Precompose"]),
-  ("cone", ["Cocone"]),
-  ("cocone", ["Cone"]),
-  ("cones", ["Cocones"]),
-  ("cocones", ["Cones"]),
-  ("fan", ["Cofan"]),
-  ("cofan", ["Fan"]),
-  ("limit", ["Colimit"]),
-  ("colimit", ["Limit"]),
-  ("lim", ["Colim"]),
-  ("colim", ["Lim"]),
-  ("limits", ["Colimits"]),
-  ("colimits", ["Limits"]),
-  ("product", ["Coproduct"]),
-  ("coproduct", ["Product"]),
-  ("products", ["Coproducts"]),
-  ("coproducts", ["Products"]),
-  ("pushout", ["Pullback"]),
-  ("pullback", ["Pushout"]),
-  ("pushouts", ["Pullbacks"]),
-  ("pullbacks", ["Pushouts"]),
-  ("span", ["Cospan"]),
-  ("cospan", ["Span"]),
-  ("kernel", ["Cokernel"]),
-  ("cokernel", ["Kernel"]),
-  ("kernels", ["Cokernels"]),
-  ("cokernels", ["Kernels"]),
-  ("unit", ["Counit"]),
-  ("counit", ["Unit"]),
-  ("monad", ["Comonad"]),
-  ("comonad", ["Monad"]),
-  ("monadic", ["Comonadic"]),
-  ("comonadic", ["Monadic"]),
-  ("section", ["Retraction"]),
-  ("retraction", ["Section"]),
-]
-
-@[inherit_doc GuessName.GuessNameData.abbreviationDict]
-
-中文:
-定义 nameDict
-  签名: : Std.HashMap String (列表 String)
-  定义体: .ofList [
-  ("top", ["Bot"]),
-  ("bot", ["Top"]),
-  ("untop", ["Unbot"]),
-  ("unbot", ["Untop"]),
-  ("inf", ["Sup"]),
-  ("sup", ["Inf"]),
-  ("inf₂", ["Sup₂"]),
-  ("sup₂", ["Inf₂"]),
-  ("sinf", ["SSup"]),
-  ("ssup", ["SInf"]),
-  ("min", ["Max"]),
-  ("max", ["Min"]),
-  ("min?", ["Max?"]),
-  ("max?", ["Min?"]),
-  ("argmin", ["Argmax"]),
-  ("argmax", ["Argmin"]),
-  ("minimum", ["Maximum"]),
-  ("maximum", ["Minimum"]),
-  ("minimal", ["Maximal"]),
-  ("maximal", ["Minimal"]),
-  ("lower", ["Upper"]),
-  ("upper", ["Lower"]),
-  ("below", ["Above"]),
-  ("above", ["Below"]),
-  ("least", ["Greatest"]),
-  ("greatest", ["Least"]),
-  ("glb", ["LUB"]),
-  ("lub", ["GLB"]),
-  ("cofinal", ["Coinitial"]),
-  ("coinitial", ["Cofinal"]),
-  ("succ", ["Pred"]),
-  ("pred", ["Succ"]),
-  ("disjoint", ["Codisjoint"]),
-  ("codisjoint", ["Disjoint"]),
-  ("atom", ["Coatom"]),
-  ("coatom", ["Atom"]),
-  ("lfp", ["Gfp"]),
-  ("gfp", ["Lfp"]),
-  ("ioi", ["Iio"]),
-  ("iio", ["Ioi"]),
-  ("ici", ["Iic"]),
-  ("iic", ["Ici"]),
-  ("ioc", ["Ico"]),
-  ("ico", ["Ioc"]),
-  ("next", ["Prev"]),
-  ("prev", ["Next"]),
-  ("heyting", ["Coheyting"]),
-  ("coheyting", ["Heyting"]),
-  ("frame", ["Coframe"]),
-  ("coframe", ["Frame"]),
-  ("epigraph", ["Hypograph"]),
-  ("hypograph", ["Epigraph"]),
-
-  ("epi", ["Mono"]),
-  /- `mono` can also refer to monotone, so we don't translate it. -/
-  -- ("mono", ["Epi"]),
-  ("epimorphisms", ["Monomorphisms"]),
-  ("monomorphisms", ["Epimorphisms"]),
-  ("terminal", ["Initial"]),
-  ("initial", ["Terminal"]),
-  ("precompose", ["Postcompose"]),
-  ("postcompose", ["Precompose"]),
-  ("cone", ["Cocone"]),
-  ("cocone", ["Cone"]),
-  ("cones", ["Cocones"]),
-  ("cocones", ["Cones"]),
-  ("fan", ["Cofan"]),
-  ("cofan", ["Fan"]),
-  ("limit", ["Colimit"]),
-  ("colimit", ["Limit"]),
-  ("lim", ["Colim"]),
-  ("colim", ["Lim"]),
-  ("limits", ["Colimits"]),
-  ("colimits", ["Limits"]),
-  ("product", ["Coproduct"]),
-  ("coproduct", ["Product"]),
-  ("products", ["Coproducts"]),
-  ("coproducts", ["Products"]),
-  ("pushout", ["Pullback"]),
-  ("pullback", ["Pushout"]),
-  ("pushouts", ["Pullbacks"]),
-  ("pullbacks", ["Pushouts"]),
-  ("span", ["Cospan"]),
-  ("cospan", ["Span"]),
-  ("kernel", ["Cokernel"]),
-  ("cokernel", ["Kernel"]),
-  ("kernels", ["Cokernels"]),
-  ("cokernels", ["Kernels"]),
-  ("unit", ["Counit"]),
-  ("counit", ["Unit"]),
-  ("monad", ["Comonad"]),
-  ("comonad", ["Monad"]),
-  ("monadic", ["Comonadic"]),
-  ("comonadic", ["Monadic"]),
-  ("section", ["Retraction"]),
-  ("retraction", ["Section"]),
-]
-
-@[inherit_doc GuessName.GuessNameData.abbreviationDict]
-
-Depends on / 依赖: ofList
+/-
+**Mathlib.Tactic.ToDual.nameDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ToDua
+l`。
+形式化陈述：nameDict : Std.HashMap String (List String)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def nameDict : Std.HashMap String (List String) := .ofList [
   ("top", ["Bot"]),
@@ -533,74 +255,12 @@ def nameDict : Std.HashMap String (List String) := .ofList [
 ]
 
 @[inherit_doc GuessName.GuessNameData.abbreviationDict]
-/--
-Definition of `abbreviationDict` / `abbreviationDict` 的定义
-
-English:
-definition abbreviationDict
-  signature: : Std.HashMap String String
-  body: .ofList [
-  ("wellFoundedLT", "WellFoundedGT"),
-  ("wellFoundedGT", "WellFoundedLT"),
-  ("nhdsLT", "NhdsGT"),
-  ("nhdsGT", "NhdsLT"),
-  ("nhdsLE", "NhdsGE"),
-  ("nhdsGE", "NhdsLE"),
-  ("relIsoLT", "RelIsoGT"),
-  ("relIsoGT", "RelIsoLT"),
-  ("succColimit", "SuccLimit"),
-  ("predColimit", "PredLimit"),
-  ("codirectedOrder", "DirectedOrder"),
-  ("directedOrder", "CodirectedOrder"),
-  ("galoisInsertion", "GaloisCoinsertion"),
-  ("galoisCoinsertion", "GaloisInsertion"),
-  ("leftOrdContinuous", "RightOrdContinuous"),
-  ("rightOrdContinuous", "LeftOrdContinuous"),
-  ("bihimp", "SymmDiff"),
-  ("symmDiff", "Bihimp"),
-
-  -- Revert translations if they should not happen in certain word combinations:
-  ("neTop", "NeBot"),
-  ("decidableSucc", "DecidablePred"),
-  ("ofSucc", "OfPred"),
-  ("maximalAxioms", "MinimalAxioms"),
-]
-
-@[inherit_doc GuessName.GuessNameExt]
-
-中文:
-定义 abbreviationDict
-  签名: : Std.HashMap String String
-  定义体: .ofList [
-  ("wellFoundedLT", "WellFoundedGT"),
-  ("wellFoundedGT", "WellFoundedLT"),
-  ("nhdsLT", "NhdsGT"),
-  ("nhdsGT", "NhdsLT"),
-  ("nhdsLE", "NhdsGE"),
-  ("nhdsGE", "NhdsLE"),
-  ("relIsoLT", "RelIsoGT"),
-  ("relIsoGT", "RelIsoLT"),
-  ("succColimit", "SuccLimit"),
-  ("predColimit", "PredLimit"),
-  ("codirectedOrder", "DirectedOrder"),
-  ("directedOrder", "CodirectedOrder"),
-  ("galoisInsertion", "GaloisCoinsertion"),
-  ("galoisCoinsertion", "GaloisInsertion"),
-  ("leftOrdContinuous", "RightOrdContinuous"),
-  ("rightOrdContinuous", "LeftOrdContinuous"),
-  ("bihimp", "SymmDiff"),
-  ("symmDiff", "Bihimp"),
-
-  -- Revert translations if they should not happen in certain word combinations:
-  ("neTop", "NeBot"),
-  ("decidableSucc", "DecidablePred"),
-  ("ofSucc", "OfPred"),
-  ("maximalAxioms", "MinimalAxioms"),
-]
-
-@[inherit_doc GuessName.GuessNameExt]
-
-Depends on / 依赖: ofList
+/-
+**Mathlib.Tactic.ToDual.abbreviationDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.ToDual`。
+形式化陈述：abbreviationDict : Std.HashMap String String
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def abbreviationDict : Std.HashMap String String := .ofList [
   ("wellFoundedLT", "WellFoundedGT"),
@@ -634,28 +294,16 @@ initialize guessNameExt : GuessName.GuessNameExt ←
   GuessName.registerGuessNameExt { nameDict, abbreviationDict }
 
 
-/--
-Definition of `data` / `data` 的定义
+/-- The bundle of environment extensions for `to_dual` -/
+/-
+**Mathlib.Tactic.ToDual.data** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ToDual`。
+形式化陈述：data : TranslateData where ignoreArgsAttr; doTranslateAttr; translations u
+nfoldBoundaries?
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition data
-  signature: : TranslateData where
-  body: some unfoldBoundaries
-  attrName := `to_dual
-  changeNumeral := false
-  isDual := true
-  guessNameExt
-
-中文:
-定义 data
-  签名: : TranslateData where
-  定义体: some unfoldBoundaries
-  attrName := `to_dual
-  changeNumeral := false
-  isDual := true
-  guessNameExt
-
-Depends on / 依赖: unfoldBoundaries
+--- 原说明 ---
+The bundle of environment extensions for `to_dual`
 -/
 def data : TranslateData where
   ignoreArgsAttr; doTranslateAttr; translations
@@ -680,7 +328,7 @@ elab "to_dual_insert_cast_fun" declName:ident " := " valStx₁:term ", " valStx�
 initialize registerBuiltinAttribute {
     name := `to_dual
     descr := "Transport to dual"
-    add := fun src stx kind => discard do
+    add := fun src stx kind ↦ discard do
       profileitM Exception "to_dual" (← getOptions) do
         addTranslationAttr data src (← elabTranslationAttr src stx) kind
     applicationTime := .afterCompilation
@@ -694,3 +342,4 @@ elab "to_dual_name_hint" hints:(ident ident),* : command => do
     guessNameExt.addTranslation ⟨hint[1]⟩ ⟨hint[0]⟩
 
 end Mathlib.Tactic.ToDual
+

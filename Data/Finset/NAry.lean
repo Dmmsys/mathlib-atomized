@@ -33,1045 +33,616 @@ variable {α α' β β' γ γ' δ δ' ε ε' ζ ζ' ν : Type*}
 namespace Finset
 
 variable [DecidableEq α'] [DecidableEq β'] [DecidableEq γ] [DecidableEq γ']
-  [DecidableEq δ'] [DecidableEq ε] [DecidableEq ε'] {f f' : α -> β -> γ} {g g' : α -> β -> γ -> δ}
+  [DecidableEq δ'] [DecidableEq ε] [DecidableEq ε'] {f f' : α → β → γ} {g g' : α → β → γ → δ}
   {s s' : Finset α} {t t' : Finset β} {u u' : Finset γ} {a a' : α} {b b' : β} {c : γ}
 
-/--
-Definition of `image₂` / `image₂` 的定义
+/-- The image of a binary function `f : α → β → γ` as a function `Finset α → Finset β → Finset γ`.
+Mathematically this should be thought of as the image of the corresponding function `α × β → γ`. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image₂
-  signature: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
-  body: (s ×ˢ t).image uncurry f
-
-@[simp]
-
-中文:
-定义 image₂
-  签名: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
-  定义体: (s ×ˢ t).image uncurry f
-
-@[simp]
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The image of a binary function `f : α → β → γ` as a function `Finset α → Finset 
+β → Finset γ`.
+Mathematically this should be thought of as the image of the corresponding funct
+ion `α × β → γ`.
 -/
-def image₂ (f : α -> β -> γ) (s : Finset α) (t : Finset β) : Finset γ :=
-(s ×ˢ t).image uncurry f
+def image₂ (f : α → β → γ) (s : Finset α) (t : Finset β) : Finset γ :=
+  (s ×ˢ t).image <| uncurry f
 
 @[simp]
-/--
-theorem `mem_image₂` / 定理 `mem_image₂`
-
-English:
-theorem mem_image₂
-  statement: c in image₂ f s t ↔ exists a in s, exists b in t, f a b = c
-  proof: by
+/-
+**Finset.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_image : b in s.image f ↔ exists a in s, f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem mem_image₂ : c ∈ image₂ f s t ↔ ∃ a ∈ s, ∃ b ∈ t, f a b = c := by
   simp [image₂, and_assoc]
 
 @[simp, norm_cast]
-
-中文:
-定理 mem_image₂
-  结论: c in image₂ f s t ↔ 存在 a in s, 存在 b in t, f a b = c
-  证明: by
-  simp [image₂, and_assoc]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: and_assoc
+/-
+**Finset.coe_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_image : ↑(s.image f) = f '' ↑s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem mem_image₂ : c in image₂ f s t ↔ exists a in s, exists b in t, f a b = c := by
-  simp [image₂, and_assoc]
-
-@[simp, norm_cast]
-/--
-theorem `coe_image₂` / 定理 `coe_image₂`
-
-English:
-theorem coe_image₂
-  given: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
-  proof: Set.ext fun _ => mem_image₂
-
-中文:
-定理 coe_image₂
-  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
-  证明: Set.ext fun _ => mem_image₂
-
-Depends on / 依赖: Set.ext
--/
-theorem coe_image₂ (f : α -> β -> γ) (s : Finset α) (t : Finset β) :
+theorem coe_image₂ (f : α → β → γ) (s : Finset α) (t : Finset β) :
     (image₂ f s t : Set γ) = Set.image2 f s t :=
   Set.ext fun _ => mem_image₂
-
-/--
-theorem `card_image₂_le` / 定理 `card_image₂_le`
-
-English:
-theorem card_image₂_le
-  given: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
-  proof: card_image_le.trans_eq card_product _ _
-
-中文:
-定理 card_image₂_le
-  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
-  证明: card_image_le.trans_eq card_product _ _
-
-Depends on / 依赖: card_image_le, card_image_le.trans_eq, card_product, trans_eq
+/-
+**Finset.card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem card_image₂_le (f : α -> β -> γ) (s : Finset α) (t : Finset β) :
-    #(image₂ f s t) <= #s * #t :=
-card_image_le.trans_eq card_product _ _
-
-/--
-theorem `card_image₂_iff` / 定理 `card_image₂_iff`
-
-English:
-theorem card_image₂_iff
-  proof: by
-  rw [← card_product]; rw [← coe_product]
-  exact card_image_iff
-
-中文:
-定理 card_image₂_iff
-  证明: by
-  rw [← card_product]; rw [← coe_product]
-  exact card_image_iff
-
-Depends on / 依赖: card_image_iff, card_product, coe_product
+theorem card_image₂_le (f : α → β → γ) (s : Finset α) (t : Finset β) :
+    #(image₂ f s t) ≤ #s * #t :=
+  card_image_le.trans_eq <| card_product _ _
+/-
+**Finset.card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card_image₂_iff :
     #(image₂ f s t) = #s * #t ↔ (s ×ˢ t : Set (α × β)).InjOn fun x => f x.1 x.2 := by
-  rw [← card_product]; rw [← coe_product]
+  rw [← card_product, ← coe_product]
   exact card_image_iff
-
-/--
-theorem `card_image₂` / 定理 `card_image₂`
-
-English:
-theorem card_image₂
-  given: (hf : Injective2 f) (s : Finset α) (t : Finset β)
-  proof: (card_image_of_injective _ hf.uncurry).trans card_product _ _
-
-中文:
-定理 card_image₂
-  条件: (hf : Injective2 f) (s : 有限集 α) (t : 有限集 β)
-  证明: (card_image_of_injective _ hf.uncurry).trans card_product _ _
-
-Depends on / 依赖: card_image_of_injective, card_product, hf.uncurry, uncurry
+/-
+**Finset.card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card_image₂ (hf : Injective2 f) (s : Finset α) (t : Finset β) :
     #(image₂ f s t) = #s * #t :=
-(card_image_of_injective _ hf.uncurry).trans card_product _ _
-
-/--
-theorem `mem_image₂_of_mem` / 定理 `mem_image₂_of_mem`
-
-English:
-theorem mem_image₂_of_mem
-  given: (ha : a in s) (hb : b in t)
-  statement: f a b in image₂ f s t
-  proof: mem_image₂.2 ⟨a, ha, b, hb, rfl⟩
-
-中文:
-定理 mem_image₂_of_mem
-  条件: (ha : a in s) (hb : b in t)
-  结论: f a b in image₂ f s t
-  证明: mem_image₂.2 ⟨a, ha, b, hb, rfl⟩
+  (card_image_of_injective _ hf.uncurry).trans <| card_product _ _
+/-
+**Finset.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_image : b in s.image f ↔ exists a in s, f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_image₂_of_mem (ha : a in s) (hb : b in t) : f a b in image₂ f s t :=
+theorem mem_image₂_of_mem (ha : a ∈ s) (hb : b ∈ t) : f a b ∈ image₂ f s t :=
   mem_image₂.2 ⟨a, ha, b, hb, rfl⟩
-
-/--
-theorem `mem_image₂_iff` / 定理 `mem_image₂_iff`
-
-English:
-theorem mem_image₂_iff
-  given: (hf : Injective2 f)
-  statement: f a b in image₂ f s t ↔ a in s ∧ b in t
-  proof: by
-  rw [← mem_coe]; rw [coe_image₂]; rw [mem_image2_iff hf]; rw [mem_coe]; rw [mem_coe]
+/-
+**Finset.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_image : b in s.image f ↔ exists a in s, f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem mem_image₂_iff (hf : Injective2 f) : f a b ∈ image₂ f s t ↔ a ∈ s ∧ b ∈ t := by
+  rw [← mem_coe, coe_image₂, mem_image2_iff hf, mem_coe, mem_coe]
 
 @[gcongr]
-
-中文:
-定理 mem_image₂_iff
-  条件: (hf : Injective2 f)
-  结论: f a b in image₂ f s t ↔ a in s ∧ b in t
-  证明: by
-  rw [← mem_coe]; rw [coe_image₂]; rw [mem_image2_iff hf]; rw [mem_coe]; rw [mem_coe]
-
-@[gcongr]
-
-Depends on / 依赖: mem_coe, mem_image2_iff
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_image₂_iff (hf : Injective2 f) : f a b in image₂ f s t ↔ a in s ∧ b in t := by
-  rw [← mem_coe]; rw [coe_image₂]; rw [mem_image2_iff hf]; rw [mem_coe]; rw [mem_coe]
-
-@[gcongr]
-/--
-theorem `image₂_subset` / 定理 `image₂_subset`
-
-English:
-theorem image₂_subset
-  given: (hs : s subseteq s') (ht : t subseteq t')
-  statement: image₂ f s t subseteq image₂ f s' t'
-  proof: by
-  rw [← coe_subset]; rw [coe_image₂]; rw [coe_image₂]
+theorem image₂_subset (hs : s ⊆ s') (ht : t ⊆ t') : image₂ f s t ⊆ image₂ f s' t' := by
+  rw [← coe_subset, coe_image₂, coe_image₂]
   exact image2_subset hs ht
-
-中文:
-定理 image₂_subset
-  条件: (hs : s subseteq s') (ht : t subseteq t')
-  结论: image₂ f s t subseteq image₂ f s' t'
-  证明: by
-  rw [← coe_subset]; rw [coe_image₂]; rw [coe_image₂]
-  exact image2_subset hs ht
-
-Depends on / 依赖: coe_subset, image2_subset
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_subset (hs : s subseteq s') (ht : t subseteq t') : image₂ f s t subseteq image₂ f s' t' := by
-  rw [← coe_subset]; rw [coe_image₂]; rw [coe_image₂]
-  exact image2_subset hs ht
-
-/--
-theorem `image₂_subset_left` / 定理 `image₂_subset_left`
-
-English:
-theorem image₂_subset_left
-  given: (ht : t subseteq t')
-  statement: image₂ f s t subseteq image₂ f s t'
-  proof: image₂_subset Subset.rfl ht
-
-中文:
-定理 image₂_subset_left
-  条件: (ht : t subseteq t')
-  结论: image₂ f s t subseteq image₂ f s t'
-  证明: image₂_subset Subset.rfl ht
-
-Depends on / 依赖: Or.rec, Subset, Subset.rfl, coprime_iff_not_dvd, dvd_of_dvd_mul_left, h.mul_left, h.mul_right, mul_left, mul_right, or_iff_not_imp_left, pp.coprime_iff_not_dvd
--/
-theorem image₂_subset_left (ht : t subseteq t') : image₂ f s t subseteq image₂ f s t' :=
+theorem image₂_subset_left (ht : t ⊆ t') : image₂ f s t ⊆ image₂ f s t' :=
   image₂_subset Subset.rfl ht
-
-/--
-theorem `image₂_subset_right` / 定理 `image₂_subset_right`
-
-English:
-theorem image₂_subset_right
-  given: (hs : s subseteq s')
-  statement: image₂ f s t subseteq image₂ f s' t
-  proof: image₂_subset hs Subset.rfl
-
-中文:
-定理 image₂_subset_right
-  条件: (hs : s subseteq s')
-  结论: image₂ f s t subseteq image₂ f s' t
-  证明: image₂_subset hs Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_subset_right (hs : s subseteq s') : image₂ f s t subseteq image₂ f s' t :=
+theorem image₂_subset_right (hs : s ⊆ s') : image₂ f s t ⊆ image₂ f s' t :=
   image₂_subset hs Subset.rfl
-
-/--
-theorem `image_subset_image₂_left` / 定理 `image_subset_image₂_left`
-
-English:
-theorem image_subset_image₂_left
-  given: (hb : b in t)
-  statement: s.image (fun a => f a b) subseteq image₂ f s t
-  proof: image_subset_iff.2 fun _ ha => mem_image₂_of_mem ha hb
-
-中文:
-定理 image_subset_image₂_left
-  条件: (hb : b in t)
-  结论: s.像 (fun a => f a b) subseteq image₂ f s t
-  证明: image_subset_iff.2 fun _ ha => mem_image₂_of_mem ha hb
-
-Depends on / 依赖: image_subset_iff
+/-
+**Finset.image_subset_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_subset_image {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₁.image f su
+bseteq s₂.image f
+参数：h : s₁ subseteq s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Multiset.map_subset_map`：map_subset_map {f : α -> β} {s t : Multiset α} 
+(H : s subseteq t) : map f s subseteq map f t
 -/
-theorem image_subset_image₂_left (hb : b in t) : s.image (fun a => f a b) subseteq image₂ f s t :=
+theorem image_subset_image₂_left (hb : b ∈ t) : s.image (fun a => f a b) ⊆ image₂ f s t :=
   image_subset_iff.2 fun _ ha => mem_image₂_of_mem ha hb
-
-/--
-theorem `image_subset_image₂_right` / 定理 `image_subset_image₂_right`
-
-English:
-theorem image_subset_image₂_right
-  given: (ha : a in s)
-  statement: t.image (fun b => f a b) subseteq image₂ f s t
-  proof: image_subset_iff.2 fun _ => mem_image₂_of_mem ha
-
-中文:
-定理 image_subset_image₂_right
-  条件: (ha : a in s)
-  结论: t.像 (fun b => f a b) subseteq image₂ f s t
-  证明: image_subset_iff.2 fun _ => mem_image₂_of_mem ha
-
-Depends on / 依赖: image_subset_iff
+/-
+**Finset.image_subset_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_subset_image {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₁.image f su
+bseteq s₂.image f
+参数：h : s₁ subseteq s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Multiset.map_subset_map`：map_subset_map {f : α -> β} {s t : Multiset α} 
+(H : s subseteq t) : map f s subseteq map f t
 -/
-theorem image_subset_image₂_right (ha : a in s) : t.image (fun b => f a b) subseteq image₂ f s t :=
+theorem image_subset_image₂_right (ha : a ∈ s) : t.image (fun b => f a b) ⊆ image₂ f s t :=
   image_subset_iff.2 fun _ => mem_image₂_of_mem ha
-
-/--
-lemma `forall_mem_image₂` / 引理 `forall_mem_image₂`
-
-English:
-lemma forall_mem_image₂
-  given: {p : γ -> Prop}
-  proof: by
-  simp_rw [← mem_coe, coe_image₂, forall_mem_image2]
-
-中文:
-引理 对任意_mem_image₂
-  条件: {p : γ -> 命题}
-  证明: by
-  simp_rw [← mem_coe, coe_image₂, forall_mem_image2]
-
-Depends on / 依赖: forall_mem_image2, mem_coe, simp_rw
+/-
+**Finset.forall_mem_image** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：forall_mem_image {p : β -> Prop} : (forall y in s.image f, p y) ↔ forall ⦃
+x⦄, x in s -> p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma forall_mem_image₂ {p : γ -> Prop} :
-    (forall z in image₂ f s t, p z) ↔ forall x in s, forall y in t, p (f x y) := by
+lemma forall_mem_image₂ {p : γ → Prop} :
+    (∀ z ∈ image₂ f s t, p z) ↔ ∀ x ∈ s, ∀ y ∈ t, p (f x y) := by
   simp_rw [← mem_coe, coe_image₂, forall_mem_image2]
-
-/--
-lemma `exists_mem_image₂` / 引理 `exists_mem_image₂`
-
-English:
-lemma exists_mem_image₂
-  given: {p : γ -> Prop}
-  proof: by
+/-
+**Finset.exists_mem_image** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：exists_mem_image {p : β -> Prop} : (exists y in s.image f, p y) ↔ exists x
+ in s, p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma exists_mem_image₂ {p : γ → Prop} :
+    (∃ z ∈ image₂ f s t, p z) ↔ ∃ x ∈ s, ∃ y ∈ t, p (f x y) := by
   simp_rw [← mem_coe, coe_image₂, exists_mem_image2]
 
 @[simp]
-
-中文:
-引理 存在_mem_image₂
-  条件: {p : γ -> 命题}
-  证明: by
-  simp_rw [← mem_coe, coe_image₂, exists_mem_image2]
-
-@[simp]
-
-Depends on / 依赖: exists_mem_image2, mem_coe, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma exists_mem_image₂ {p : γ -> Prop} :
-    (exists z in image₂ f s t, p z) ↔ exists x in s, exists y in t, p (f x y) := by
-  simp_rw [← mem_coe, coe_image₂, exists_mem_image2]
-
-@[simp]
-/--
-theorem `image₂_subset_iff` / 定理 `image₂_subset_iff`
-
-English:
-theorem image₂_subset_iff
-  statement: image₂ f s t subseteq u ↔ forall x in s, forall y in t, f x y in u
-  proof: forall_mem_image₂
-
-中文:
-定理 image₂_subset_iff
-  结论: image₂ f s t subseteq u ↔ 对任意 x in s, 对任意 y in t, f x y in u
-  证明: forall_mem_image₂
--/
-theorem image₂_subset_iff : image₂ f s t subseteq u ↔ forall x in s, forall y in t, f x y in u :=
+theorem image₂_subset_iff : image₂ f s t ⊆ u ↔ ∀ x ∈ s, ∀ y ∈ t, f x y ∈ u :=
   forall_mem_image₂
-
-/--
-theorem `image₂_subset_iff_left` / 定理 `image₂_subset_iff_left`
-
-English:
-theorem image₂_subset_iff_left
-  statement: image₂ f s t subseteq u ↔ forall a in s, (t.image fun b => f a b) subseteq u
-  proof: by
-  simp_rw [image₂_subset_iff, image_subset_iff]
-
-中文:
-定理 image₂_subset_iff_left
-  结论: image₂ f s t subseteq u ↔ 对任意 a in s, (t.像 fun b => f a b) subseteq u
-  证明: by
-  simp_rw [image₂_subset_iff, image_subset_iff]
-
-Depends on / 依赖: image_subset_iff, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_subset_iff_left : image₂ f s t subseteq u ↔ forall a in s, (t.image fun b => f a b) subseteq u := by
+theorem image₂_subset_iff_left : image₂ f s t ⊆ u ↔ ∀ a ∈ s, (t.image fun b => f a b) ⊆ u := by
   simp_rw [image₂_subset_iff, image_subset_iff]
-
-/--
-theorem `image₂_subset_iff_right` / 定理 `image₂_subset_iff_right`
-
-English:
-theorem image₂_subset_iff_right
-  statement: image₂ f s t subseteq u ↔ forall b in t, (s.image fun a => f a b) subseteq u
-  proof: by
-  simp_rw [image₂_subset_iff, image_subset_iff, @forall₂_comm α]
-
-@[simp]
-
-中文:
-定理 image₂_subset_iff_right
-  结论: image₂ f s t subseteq u ↔ 对任意 b in t, (s.像 fun a => f a b) subseteq u
-  证明: by
-  simp_rw [image₂_subset_iff, image_subset_iff, @forall₂_comm α]
-
-@[simp]
-
-Depends on / 依赖: image_subset_iff, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_subset_iff_right : image₂ f s t subseteq u ↔ forall b in t, (s.image fun a => f a b) subseteq u := by
+theorem image₂_subset_iff_right : image₂ f s t ⊆ u ↔ ∀ b ∈ t, (s.image fun a => f a b) ⊆ u := by
   simp_rw [image₂_subset_iff, image_subset_iff, @forall₂_comm α]
 
 @[simp]
-/--
-theorem `image₂_nonempty_iff` / 定理 `image₂_nonempty_iff`
-
-English:
-theorem image₂_nonempty_iff
-  statement: (image₂ f s t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
-  proof: by
-  rw [← coe_nonempty]; rw [coe_image₂]
-  exact image2_nonempty_iff
-
-@[aesop safe apply (rule_sets := [finsetNonempty])]
-
-中文:
-定理 image₂_nonempty_iff
-  结论: (image₂ f s t).非空 ↔ s.非空 ∧ t.非空
-  证明: by
-  rw [← coe_nonempty]; rw [coe_image₂]
-  exact image2_nonempty_iff
-
-@[aesop safe apply (rule_sets := [finsetNonempty])]
-
-Depends on / 依赖: coe_nonempty, image2_nonempty_iff
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_nonempty_iff : (image₂ f s t).Nonempty ↔ s.Nonempty ∧ t.Nonempty := by
-  rw [← coe_nonempty]; rw [coe_image₂]
+  rw [← coe_nonempty, coe_image₂]
   exact image2_nonempty_iff
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
-/--
-theorem `Nonempty.image₂` / 定理 `Nonempty.image₂`
-
-English:
-theorem Nonempty.image₂
-  given: (hs : s.Nonempty) (ht : t.Nonempty)
-  statement: (image₂ f s t).Nonempty
-  proof: image₂_nonempty_iff.2 ⟨hs, ht⟩
-
-中文:
-定理 非空.image₂
-  条件: (hs : s.非空) (ht : t.非空)
-  结论: (image₂ f s t).非空
-  证明: image₂_nonempty_iff.2 ⟨hs, ht⟩
+/-
+**Finset.Nonempty.image** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : DecidableEq β] {s : Finset α},   s
+.Nonempty → ∀ (f : α → β), (Finset.image f s).Nonempty
+参数：f : α → β；Finset.image f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finset.image_nonempty`：image_nonempty : (s.image f).Nonempty ↔ s.Nonempt
+y
 -/
 theorem Nonempty.image₂ (hs : s.Nonempty) (ht : t.Nonempty) : (image₂ f s t).Nonempty :=
   image₂_nonempty_iff.2 ⟨hs, ht⟩
-
-/--
-theorem `Nonempty.of_image₂_left` / 定理 `Nonempty.of_image₂_left`
-
-English:
-theorem Nonempty.of_image₂_left
-  given: (h : (s.image₂ f t).Nonempty)
-  statement: s.Nonempty
-  proof: (image₂_nonempty_iff.1 h).1
-
-中文:
-定理 非空.of_image₂_left
-  条件: (h : (s.image₂ f t).非空)
-  结论: s.非空
-  证明: (image₂_nonempty_iff.1 h).1
+/-
+**Finset.Nonempty.of_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : DecidableEq β] {f : α → β} {s : Fi
+nset α},   (Finset.image f s).Nonempty → s.Nonempty
+参数：Finset.image f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Finset.image_nonempty`：image_nonempty : (s.image f).Nonempty ↔ s.Nonempt
+y
 -/
 theorem Nonempty.of_image₂_left (h : (s.image₂ f t).Nonempty) : s.Nonempty :=
   (image₂_nonempty_iff.1 h).1
-
-/--
-theorem `Nonempty.of_image₂_right` / 定理 `Nonempty.of_image₂_right`
-
-English:
-theorem Nonempty.of_image₂_right
-  given: (h : (s.image₂ f t).Nonempty)
-  statement: t.Nonempty
-  proof: (image₂_nonempty_iff.1 h).2
-
-@[simp]
-
-中文:
-定理 非空.of_image₂_right
-  条件: (h : (s.image₂ f t).非空)
-  结论: t.非空
-  证明: (image₂_nonempty_iff.1 h).2
-
-@[simp]
+/-
+**Finset.Nonempty.of_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : DecidableEq β] {f : α → β} {s : Fi
+nset α},   (Finset.image f s).Nonempty → s.Nonempty
+参数：Finset.image f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Finset.image_nonempty`：image_nonempty : (s.image f).Nonempty ↔ s.Nonempt
+y
 -/
 theorem Nonempty.of_image₂_right (h : (s.image₂ f t).Nonempty) : t.Nonempty :=
   (image₂_nonempty_iff.1 h).2
 
 @[simp]
-/--
-theorem `image₂_empty_left` / 定理 `image₂_empty_left`
-
-English:
-theorem image₂_empty_left
-  statement: image₂ f ∅ t = ∅
-  proof: coe_injective by simp
-
-@[simp]
-
-中文:
-定理 image₂_empty_left
-  结论: image₂ f ∅ t = ∅
-  证明: coe_injective by simp
-
-@[simp]
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_empty_left : image₂ f ∅ t = ∅ :=
-coe_injective by simp
+  coe_injective <| by simp
 
 @[simp]
-/--
-theorem `image₂_empty_right` / 定理 `image₂_empty_right`
-
-English:
-theorem image₂_empty_right
-  statement: image₂ f s ∅ = ∅
-  proof: coe_injective by simp
-
-@[simp]
-
-中文:
-定理 image₂_empty_right
-  结论: image₂ f s ∅ = ∅
-  证明: coe_injective by simp
-
-@[simp]
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_empty_right : image₂ f s ∅ = ∅ :=
-coe_injective by simp
+  coe_injective <| by simp
 
 @[simp]
-/--
-theorem `image₂_eq_empty_iff` / 定理 `image₂_eq_empty_iff`
-
-English:
-theorem image₂_eq_empty_iff
-  statement: image₂ f s t = ∅ ↔ s = ∅ ∨ t = ∅
-  proof: by
-  contrapose!; exact image₂_nonempty_iff
-
-@[simp]
-
-中文:
-定理 image₂_eq_empty_iff
-  结论: image₂ f s t = ∅ ↔ s = ∅ ∨ t = ∅
-  证明: by
-  contrapose!; exact image₂_nonempty_iff
-
-@[simp]
-
-Depends on / 依赖: contrapose
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_eq_empty_iff : image₂ f s t = ∅ ↔ s = ∅ ∨ t = ∅ := by
   contrapose!; exact image₂_nonempty_iff
 
 @[simp]
-/--
-theorem `image₂_singleton_left` / 定理 `image₂_singleton_left`
-
-English:
-theorem image₂_singleton_left
-  statement: image₂ f {a} t = t.image fun b => f a b
-  proof: ext fun x => by simp
-
-@[simp]
-
-中文:
-定理 image₂_singleton_left
-  结论: image₂ f {a} t = t.像 fun b => f a b
-  证明: ext fun x => by simp
-
-@[simp]
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_singleton_left : image₂ f {a} t = t.image fun b => f a b :=
   ext fun x => by simp
 
 @[simp]
-/--
-theorem `image₂_singleton_right` / 定理 `image₂_singleton_right`
-
-English:
-theorem image₂_singleton_right
-  statement: image₂ f s {b} = s.image fun a => f a b
-  proof: ext fun x => by simp
-
-中文:
-定理 image₂_singleton_right
-  结论: image₂ f s {b} = s.像 fun a => f a b
-  证明: ext fun x => by simp
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_singleton_right : image₂ f s {b} = s.image fun a => f a b :=
   ext fun x => by simp
-
-/--
-theorem `image₂_singleton_left'` / 定理 `image₂_singleton_left'`
-
-English:
-theorem image₂_singleton_left'
-  statement: image₂ f {a} t = t.image (f a)
-  proof: image₂_singleton_left
-
-中文:
-定理 image₂_singleton_left'
-  结论: image₂ f {a} t = t.像 (f a)
-  证明: image₂_singleton_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_singleton_left' : image₂ f {a} t = t.image (f a) :=
   image₂_singleton_left
-
-/--
-theorem `image₂_singleton` / 定理 `image₂_singleton`
-
-English:
-theorem image₂_singleton
-  statement: image₂ f {a} {b} = {f a b}
-  proof: by simp
-
-中文:
-定理 image₂_singleton
-  结论: image₂ f {a} {b} = {f a b}
-  证明: by simp
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_singleton : image₂ f {a} {b} = {f a b} := by simp
-
-/--
-theorem `image₂_union_left` / 定理 `image₂_union_left`
-
-English:
-theorem image₂_union_left
-  given: [DecidableEq α]
-  statement: image₂ f (s union s') t = image₂ f s t union image₂ f s' t
-  proof: coe_injective by
-    push_cast
-    exact image2_union_left
-
-中文:
-定理 image₂_union_left
-  条件: [DecidableEq α]
-  结论: image₂ f (s union s') t = image₂ f s t union image₂ f s' t
-  证明: coe_injective by
-    push_cast
-    exact image2_union_left
-
-Depends on / 依赖: coe_injective, image2_union_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_union_left [DecidableEq α] : image₂ f (s union s') t = image₂ f s t union image₂ f s' t :=
-coe_injective by
+theorem image₂_union_left [DecidableEq α] : image₂ f (s ∪ s') t = image₂ f s t ∪ image₂ f s' t :=
+  coe_injective <| by
     push_cast
     exact image2_union_left
-
-/--
-theorem `image₂_union_right` / 定理 `image₂_union_right`
-
-English:
-theorem image₂_union_right
-  given: [DecidableEq β]
-  statement: image₂ f s (t union t') = image₂ f s t union image₂ f s t'
-  proof: coe_injective by
-    push_cast
-    exact image2_union_right
-
-@[simp]
-
-中文:
-定理 image₂_union_right
-  条件: [DecidableEq β]
-  结论: image₂ f s (t union t') = image₂ f s t union image₂ f s t'
-  证明: coe_injective by
-    push_cast
-    exact image2_union_right
-
-@[simp]
-
-Depends on / 依赖: coe_injective, image2_union_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_union_right [DecidableEq β] : image₂ f s (t union t') = image₂ f s t union image₂ f s t' :=
-coe_injective by
+theorem image₂_union_right [DecidableEq β] : image₂ f s (t ∪ t') = image₂ f s t ∪ image₂ f s t' :=
+  coe_injective <| by
     push_cast
     exact image2_union_right
 
 @[simp]
-/--
-theorem `image₂_insert_left` / 定理 `image₂_insert_left`
-
-English:
-theorem image₂_insert_left
-  given: [DecidableEq α]
-  proof: coe_injective by
-    push_cast
-    exact image2_insert_left
-
-@[simp]
-
-中文:
-定理 image₂_insert_left
-  条件: [DecidableEq α]
-  证明: coe_injective by
-    push_cast
-    exact image2_insert_left
-
-@[simp]
-
-Depends on / 依赖: coe_injective, image2_insert_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_insert_left [DecidableEq α] :
-    image₂ f (insert a s) t = (t.image fun b => f a b) union image₂ f s t :=
-coe_injective by
+    image₂ f (insert a s) t = (t.image fun b => f a b) ∪ image₂ f s t :=
+  coe_injective <| by
     push_cast
     exact image2_insert_left
 
 @[simp]
-/--
-theorem `image₂_insert_right` / 定理 `image₂_insert_right`
-
-English:
-theorem image₂_insert_right
-  given: [DecidableEq β]
-  proof: coe_injective by
-    push_cast
-    exact image2_insert_right
-
-中文:
-定理 image₂_insert_right
-  条件: [DecidableEq β]
-  证明: coe_injective by
-    push_cast
-    exact image2_insert_right
-
-Depends on / 依赖: coe_injective, image2_insert_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_insert_right [DecidableEq β] :
-    image₂ f s (insert b t) = (s.image fun a => f a b) union image₂ f s t :=
-coe_injective by
+    image₂ f s (insert b t) = (s.image fun a => f a b) ∪ image₂ f s t :=
+  coe_injective <| by
     push_cast
     exact image2_insert_right
-
-/--
-theorem `image₂_inter_left` / 定理 `image₂_inter_left`
-
-English:
-theorem image₂_inter_left
-  given: [DecidableEq α] (hf : Injective2 f)
-  proof: coe_injective by
-    push_cast
-    exact image2_inter_left hf
-
-中文:
-定理 image₂_inter_left
-  条件: [DecidableEq α] (hf : Injective2 f)
-  证明: coe_injective by
-    push_cast
-    exact image2_inter_left hf
-
-Depends on / 依赖: coe_injective, image2_inter_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_left [DecidableEq α] (hf : Injective2 f) :
-    image₂ f (s inter s') t = image₂ f s t inter image₂ f s' t :=
-coe_injective by
+    image₂ f (s ∩ s') t = image₂ f s t ∩ image₂ f s' t :=
+  coe_injective <| by
     push_cast
     exact image2_inter_left hf
-
-/--
-theorem `image₂_inter_right` / 定理 `image₂_inter_right`
-
-English:
-theorem image₂_inter_right
-  given: [DecidableEq β] (hf : Injective2 f)
-  proof: coe_injective by
-    push_cast
-    exact image2_inter_right hf
-
-中文:
-定理 image₂_inter_right
-  条件: [DecidableEq β] (hf : Injective2 f)
-  证明: coe_injective by
-    push_cast
-    exact image2_inter_right hf
-
-Depends on / 依赖: coe_injective, image2_inter_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_right [DecidableEq β] (hf : Injective2 f) :
-    image₂ f s (t inter t') = image₂ f s t inter image₂ f s t' :=
-coe_injective by
+    image₂ f s (t ∩ t') = image₂ f s t ∩ image₂ f s t' :=
+  coe_injective <| by
     push_cast
     exact image2_inter_right hf
-
-/--
-theorem `image₂_inter_subset_left` / 定理 `image₂_inter_subset_left`
-
-English:
-theorem image₂_inter_subset_left
-  given: [DecidableEq α]
-  proof: coe_subset.1 by
-    push_cast
-    exact image2_inter_subset_left
-
-中文:
-定理 image₂_inter_subset_left
-  条件: [DecidableEq α]
-  证明: coe_subset.1 by
-    push_cast
-    exact image2_inter_subset_left
-
-Depends on / 依赖: coe_subset, image2_inter_subset_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_subset_left [DecidableEq α] :
-    image₂ f (s inter s') t subseteq image₂ f s t inter image₂ f s' t :=
-coe_subset.1 by
+    image₂ f (s ∩ s') t ⊆ image₂ f s t ∩ image₂ f s' t :=
+  coe_subset.1 <| by
     push_cast
     exact image2_inter_subset_left
-
-/--
-theorem `image₂_inter_subset_right` / 定理 `image₂_inter_subset_right`
-
-English:
-theorem image₂_inter_subset_right
-  given: [DecidableEq β]
-  proof: coe_subset.1 by
-    push_cast
-    exact image2_inter_subset_right
-
-中文:
-定理 image₂_inter_subset_right
-  条件: [DecidableEq β]
-  证明: coe_subset.1 by
-    push_cast
-    exact image2_inter_subset_right
-
-Depends on / 依赖: coe_subset, image2_inter_subset_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_subset_right [DecidableEq β] :
-    image₂ f s (t inter t') subseteq image₂ f s t inter image₂ f s t' :=
-coe_subset.1 by
+    image₂ f s (t ∩ t') ⊆ image₂ f s t ∩ image₂ f s t' :=
+  coe_subset.1 <| by
     push_cast
     exact image2_inter_subset_right
-
-/--
-theorem `image₂_congr` / 定理 `image₂_congr`
-
-English:
-theorem image₂_congr
-  given: (h : forall a in s, forall b in t, f a b = f' a b)
-  statement: image₂ f s t = image₂ f' s t
-  proof: coe_injective by
-    push_cast
-    exact image2_congr h
-
-中文:
-定理 image₂_congr
-  条件: (h : 对任意 a in s, 对任意 b in t, f a b = f' a b)
-  结论: image₂ f s t = image₂ f' s t
-  证明: coe_injective by
-    push_cast
-    exact image2_congr h
-
-Depends on / 依赖: coe_injective, image2_congr
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_congr (h : forall a in s, forall b in t, f a b = f' a b) : image₂ f s t = image₂ f' s t :=
-coe_injective by
+theorem image₂_congr (h : ∀ a ∈ s, ∀ b ∈ t, f a b = f' a b) : image₂ f s t = image₂ f' s t :=
+  coe_injective <| by
     push_cast
     exact image2_congr h
 
-/--
-theorem `image₂_congr'` / 定理 `image₂_congr'`
+/-- A common special case of `image₂_congr` -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_congr'
-  given: (h : forall a b, f a b = f' a b)
-  statement: image₂ f s t = image₂ f' s t
-  proof: image₂_congr fun a _ b _ => h a b
-
-中文:
-定理 image₂_congr'
-  条件: (h : 对任意 a b, f a b = f' a b)
-  结论: image₂ f s t = image₂ f' s t
-  证明: image₂_congr fun a _ b _ => h a b
+--- 原说明 ---
+A common special case of `image₂_congr`
 -/
-theorem image₂_congr' (h : forall a b, f a b = f' a b) : image₂ f s t = image₂ f' s t :=
+theorem image₂_congr' (h : ∀ a b, f a b = f' a b) : image₂ f s t = image₂ f' s t :=
   image₂_congr fun a _ b _ => h a b
 
 variable (s t)
-
-/--
-theorem `card_image₂_singleton_left` / 定理 `card_image₂_singleton_left`
-
-English:
-theorem card_image₂_singleton_left
-  given: (hf : Injective (f a))
-  statement: #(image₂ f {a} t) = #t
-  proof: by
-  rw [image₂_singleton_left]; rw [card_image_of_injective _ hf]
-
-中文:
-定理 card_image₂_singleton_left
-  条件: (hf : 单射 (f a))
-  结论: #(image₂ f {a} t) = #t
-  证明: by
-  rw [image₂_singleton_left]; rw [card_image_of_injective _ hf]
-
-Depends on / 依赖: card_image_of_injective
+/-
+**Finset.card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card_image₂_singleton_left (hf : Injective (f a)) : #(image₂ f {a} t) = #t := by
-  rw [image₂_singleton_left]; rw [card_image_of_injective _ hf]
-
-/--
-theorem `card_image₂_singleton_right` / 定理 `card_image₂_singleton_right`
-
-English:
-theorem card_image₂_singleton_right
-  given: (hf : Injective fun a => f a b)
-  proof: by rw [image₂_singleton_right, card_image_of_injective _ hf]
-
-中文:
-定理 card_image₂_singleton_right
-  条件: (hf : 单射 fun a => f a b)
-  证明: by rw [image₂_singleton_right, card_image_of_injective _ hf]
-
-Depends on / 依赖: card_image_of_injective
+  rw [image₂_singleton_left, card_image_of_injective _ hf]
+/-
+**Finset.card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card_image₂_singleton_right (hf : Injective fun a => f a b) :
     #(image₂ f s {b}) = #s := by rw [image₂_singleton_right, card_image_of_injective _ hf]
-
-/--
-theorem `image₂_singleton_inter` / 定理 `image₂_singleton_inter`
-
-English:
-theorem image₂_singleton_inter
-  given: [DecidableEq β] (t₁ t₂ : Finset β) (hf : Injective (f a))
-  proof: by
-  simp_rw [image₂_singleton_left, image_inter _ _ hf]
-
-中文:
-定理 image₂_singleton_inter
-  条件: [DecidableEq β] (t₁ t₂ : 有限集 β) (hf : 单射 (f a))
-  证明: by
-  simp_rw [image₂_singleton_left, image_inter _ _ hf]
-
-Depends on / 依赖: image_inter, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_singleton_inter [DecidableEq β] (t₁ t₂ : Finset β) (hf : Injective (f a)) :
-    image₂ f {a} (t₁ inter t₂) = image₂ f {a} t₁ inter image₂ f {a} t₂ := by
+    image₂ f {a} (t₁ ∩ t₂) = image₂ f {a} t₁ ∩ image₂ f {a} t₂ := by
   simp_rw [image₂_singleton_left, image_inter _ _ hf]
-
-/--
-theorem `image₂_inter_singleton` / 定理 `image₂_inter_singleton`
-
-English:
-theorem image₂_inter_singleton
-  given: [DecidableEq α] (s₁ s₂ : Finset α) (hf : Injective fun a => f a b)
-  proof: by
-  simp_rw [image₂_singleton_right, image_inter _ _ hf]
-
-中文:
-定理 image₂_inter_singleton
-  条件: [DecidableEq α] (s₁ s₂ : 有限集 α) (hf : 单射 fun a => f a b)
-  证明: by
-  simp_rw [image₂_singleton_right, image_inter _ _ hf]
-
-Depends on / 依赖: image_inter, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_singleton [DecidableEq α] (s₁ s₂ : Finset α) (hf : Injective fun a => f a b) :
-    image₂ f (s₁ inter s₂) {b} = image₂ f s₁ {b} inter image₂ f s₂ {b} := by
+    image₂ f (s₁ ∩ s₂) {b} = image₂ f s₁ {b} ∩ image₂ f s₂ {b} := by
   simp_rw [image₂_singleton_right, image_inter _ _ hf]
-
-/--
-theorem `card_le_card_image₂_left` / 定理 `card_le_card_image₂_left`
-
-English:
-theorem card_le_card_image₂_left
-  given: {s : Finset α} (ha : a in s) (hf : Injective (f a))
-  proof: card_le_card_of_injOn (f a) (fun _ hb => mem_image₂_of_mem ha hb) hf.injOn
-
-中文:
-定理 card_le_card_image₂_left
-  条件: {s : 有限集 α} (ha : a in s) (hf : 单射 (f a))
-  证明: card_le_card_of_injOn (f a) (fun _ hb => mem_image₂_of_mem ha hb) hf.injOn
-
-Depends on / 依赖: card_le_card_of_injOn, hf.injOn
+/-
+**Finset.card_le_card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem card_le_card_image₂_left {s : Finset α} (ha : a in s) (hf : Injective (f a)) :
-    #t <= #(image₂ f s t) :=
-  card_le_card_of_injOn (f a) (fun _ hb => mem_image₂_of_mem ha hb) hf.injOn
-
-/--
-theorem `card_le_card_image₂_right` / 定理 `card_le_card_image₂_right`
-
-English:
-theorem card_le_card_image₂_right
-  given: {t : Finset β} (hb : b in t) (hf : Injective (f · b))
-  proof: card_le_card_of_injOn (f · b) (fun _ ha => mem_image₂_of_mem ha hb) hf.injOn
-
-中文:
-定理 card_le_card_image₂_right
-  条件: {t : 有限集 β} (hb : b in t) (hf : 单射 (f · b))
-  证明: card_le_card_of_injOn (f · b) (fun _ ha => mem_image₂_of_mem ha hb) hf.injOn
-
-Depends on / 依赖: card_le_card_of_injOn, hf.injOn
+theorem card_le_card_image₂_left {s : Finset α} (ha : a ∈ s) (hf : Injective (f a)) :
+    #t ≤ #(image₂ f s t) :=
+  card_le_card_of_injOn (f a) (fun _ hb ↦ mem_image₂_of_mem ha hb) hf.injOn
+/-
+**Finset.card_le_card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem card_le_card_image₂_right {t : Finset β} (hb : b in t) (hf : Injective (f · b)) :
-    #s <= #(image₂ f s t) :=
-  card_le_card_of_injOn (f · b) (fun _ ha => mem_image₂_of_mem ha hb) hf.injOn
+theorem card_le_card_image₂_right {t : Finset β} (hb : b ∈ t) (hf : Injective (f · b)) :
+    #s ≤ #(image₂ f s t) :=
+  card_le_card_of_injOn (f · b) (fun _ ha ↦ mem_image₂_of_mem ha hb) hf.injOn
 
 variable {s t}
-
-/--
-theorem `biUnion_image_left` / 定理 `biUnion_image_left`
-
-English:
-theorem biUnion_image_left
-  statement: (s.biUnion fun a => t.image <| f a) = image₂ f s t
-  proof: coe_injective by
-    push_cast
-    exact Set.iUnion_image_left _
-
-中文:
-定理 biUnion_image_left
-  结论: (s.biUnion fun a => t.像 <| f a) = image₂ f s t
-  证明: coe_injective by
-    push_cast
-    exact Set.iUnion_image_left _
-
-Depends on / 依赖: Set.iUnion_image_left, coe_injective, iUnion_image_left
+/-
+**Finset.biUnion_image_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：biUnion_image_left : (s.biUnion fun a => t.image <| f a) = image₂ f s t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.coe_biUnion`：coe_biUnion : (s.biUnion t : Set β) = ⋃ x in (s : Se
+t α), t x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_image₂`：coe_image₂ (f : α -> β -> γ) (s : Finset α) (t : Fins
+et β) : (image₂ f s t : Set γ) = Set.image2 f s t
+· 使用定理 `Set.iUnion_image_left`：iUnion_image_left : ⋃ a in s, f a '' t = image2 f
+ s t
 -/
 theorem biUnion_image_left : (s.biUnion fun a => t.image <| f a) = image₂ f s t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact Set.iUnion_image_left _
-
-/--
-theorem `biUnion_image_right` / 定理 `biUnion_image_right`
-
-English:
-theorem biUnion_image_right
-  statement: (t.biUnion fun b => s.image fun a => f a b) = image₂ f s t
-  proof: coe_injective by
-    push_cast
-    exact Set.iUnion_image_right _
-
-中文:
-定理 biUnion_image_right
-  结论: (t.biUnion fun b => s.像 fun a => f a b) = image₂ f s t
-  证明: coe_injective by
-    push_cast
-    exact Set.iUnion_image_right _
-
-Depends on / 依赖: Set.iUnion_image_right, coe_injective, iUnion_image_right
+/-
+**Finset.biUnion_image_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：biUnion_image_right : (t.biUnion fun b => s.image fun a => f a b) = image₂
+ f s t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.coe_biUnion`：coe_biUnion : (s.biUnion t : Set β) = ⋃ x in (s : Se
+t α), t x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_image₂`：coe_image₂ (f : α -> β -> γ) (s : Finset α) (t : Fins
+et β) : (image₂ f s t : Set γ) = Set.image2 f s t
+· 使用定理 `Set.iUnion_image_right`：iUnion_image_right : ⋃ b in t, (f · b) '' s = im
+age2 f s t
 -/
 theorem biUnion_image_right : (t.biUnion fun b => s.image fun a => f a b) = image₂ f s t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact Set.iUnion_image_right _
 
@@ -1088,734 +659,544 @@ The proof pattern is `image₂_lemma operation_lemma`. For example, `image₂_co
 section
 variable [DecidableEq δ]
 
-/--
-theorem `image_image₂` / 定理 `image_image₂`
-
-English:
-theorem image_image₂
-  given: (f : α -> β -> γ) (g : γ -> δ)
-  proof: coe_injective by
-    push_cast
-    exact image_image2 _ _
-
-中文:
-定理 image_image₂
-  条件: (f : α -> β -> γ) (g : γ -> δ)
-  证明: coe_injective by
-    push_cast
-    exact image_image2 _ _
-
-Depends on / 依赖: coe_injective, image_image2
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem image_image₂ (f : α -> β -> γ) (g : γ -> δ) :
+theorem image_image₂ (f : α → β → γ) (g : γ → δ) :
     (image₂ f s t).image g = image₂ (fun a b => g (f a b)) s t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2 _ _
-
-/--
-theorem `image₂_image_left` / 定理 `image₂_image_left`
-
-English:
-theorem image₂_image_left
-  given: (f : γ -> β -> δ) (g : α -> γ)
-  proof: coe_injective by
-    push_cast
-    exact image2_image_left _ _
-
-中文:
-定理 image₂_image_left
-  条件: (f : γ -> β -> δ) (g : α -> γ)
-  证明: coe_injective by
-    push_cast
-    exact image2_image_left _ _
-
-Depends on / 依赖: coe_injective, image2_image_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_image_left (f : γ -> β -> δ) (g : α -> γ) :
+theorem image₂_image_left (f : γ → β → δ) (g : α → γ) :
     image₂ f (s.image g) t = image₂ (fun a b => f (g a) b) s t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_image_left _ _
-
-/--
-theorem `image₂_image_right` / 定理 `image₂_image_right`
-
-English:
-theorem image₂_image_right
-  given: (f : α -> γ -> δ) (g : β -> γ)
-  proof: coe_injective by
-    push_cast
-    exact image2_image_right _ _
-
-@[simp]
-
-中文:
-定理 image₂_image_right
-  条件: (f : α -> γ -> δ) (g : β -> γ)
-  证明: coe_injective by
-    push_cast
-    exact image2_image_right _ _
-
-@[simp]
-
-Depends on / 依赖: coe_injective, image2_image_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_image_right (f : α -> γ -> δ) (g : β -> γ) :
+theorem image₂_image_right (f : α → γ → δ) (g : β → γ) :
     image₂ f s (t.image g) = image₂ (fun a b => f a (g b)) s t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_image_right _ _
 
 @[simp]
-/--
-theorem `image₂_mk_eq_product` / 定理 `image₂_mk_eq_product`
-
-English:
-theorem image₂_mk_eq_product
-  given: [DecidableEq α] [DecidableEq β] (s : Finset α) (t : Finset β)
-  proof: by ext; simp [Prod.ext_iff]
-
-@[simp]
-
-中文:
-定理 image₂_mk_eq_product
-  条件: [DecidableEq α] [DecidableEq β] (s : 有限集 α) (t : 有限集 β)
-  证明: by ext; simp [Prod.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: Prod.ext_iff, ext_iff
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_mk_eq_product [DecidableEq α] [DecidableEq β] (s : Finset α) (t : Finset β) :
     image₂ Prod.mk s t = s ×ˢ t := by ext; simp [Prod.ext_iff]
 
 @[simp]
-/--
-theorem `image₂_curry` / 定理 `image₂_curry`
-
-English:
-theorem image₂_curry
-  given: (f : α × β -> γ) (s : Finset α) (t : Finset β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 image₂_curry
-  条件: (f : α × β -> γ) (s : 有限集 α) (t : 有限集 β)
-  证明: rfl
-
-@[simp]
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_curry (f : α × β -> γ) (s : Finset α) (t : Finset β) :
+theorem image₂_curry (f : α × β → γ) (s : Finset α) (t : Finset β) :
     image₂ (curry f) s t = (s ×ˢ t).image f := rfl
 
 @[simp]
-/--
-theorem `image_uncurry_product` / 定理 `image_uncurry_product`
-
-English:
-theorem image_uncurry_product
-  given: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
-  proof: rfl
-
-中文:
-定理 image_uncurry_product
-  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
-  证明: rfl
+/-
+**Finset.image_uncurry_product** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_uncurry_product (f : α -> β -> γ) (s : Finset α) (t : Finset β) : (s
+ ×ˢ t).image (uncurry f) = image₂ f s t
+参数：f : α -> β -> γ；s : Finset α；t : Finset β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image_uncurry_product (f : α -> β -> γ) (s : Finset α) (t : Finset β) :
+theorem image_uncurry_product (f : α → β → γ) (s : Finset α) (t : Finset β) :
     (s ×ˢ t).image (uncurry f) = image₂ f s t := rfl
-
-/--
-theorem `image₂_swap` / 定理 `image₂_swap`
-
-English:
-theorem image₂_swap
-  given: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
-  proof: coe_injective by
-    push_cast
-    exact image2_swap _ _ _
-
-@[simp]
-
-中文:
-定理 image₂_swap
-  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
-  证明: coe_injective by
-    push_cast
-    exact image2_swap _ _ _
-
-@[simp]
-
-Depends on / 依赖: coe_injective, image2_swap
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_swap (f : α -> β -> γ) (s : Finset α) (t : Finset β) :
+theorem image₂_swap (f : α → β → γ) (s : Finset α) (t : Finset β) :
     image₂ f s t = image₂ (fun a b => f b a) t s :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_swap _ _ _
 
 @[simp]
-/--
-theorem `image₂_left` / 定理 `image₂_left`
-
-English:
-theorem image₂_left
-  given: [DecidableEq α] (h : t.Nonempty)
-  statement: image₂ (fun x _ => x) s t = s
-  proof: coe_injective by
-    push_cast
-    exact image2_left h
-
-@[simp]
-
-中文:
-定理 image₂_left
-  条件: [DecidableEq α] (h : t.非空)
-  结论: image₂ (fun x _ => x) s t = s
-  证明: coe_injective by
-    push_cast
-    exact image2_left h
-
-@[simp]
-
-Depends on / 依赖: coe_injective, image2_left
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_left [DecidableEq α] (h : t.Nonempty) : image₂ (fun x _ => x) s t = s :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_left h
 
 @[simp]
-/--
-theorem `image₂_right` / 定理 `image₂_right`
-
-English:
-theorem image₂_right
-  given: [DecidableEq β] (h : s.Nonempty)
-  statement: image₂ (fun _ y => y) s t = t
-  proof: coe_injective by
-    push_cast
-    exact image2_right h
-
-中文:
-定理 image₂_right
-  条件: [DecidableEq β] (h : s.非空)
-  结论: image₂ (fun _ y => y) s t = t
-  证明: coe_injective by
-    push_cast
-    exact image2_right h
-
-Depends on / 依赖: coe_injective, image2_right
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_right [DecidableEq β] (h : s.Nonempty) : image₂ (fun _ y => y) s t = t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_right h
-
-/--
-theorem `image₂_assoc` / 定理 `image₂_assoc`
-
-English:
-theorem image₂_assoc
-  statement: {γ : Type*} {u : Finset γ}
-  proof: coe_injective by
-    push_cast
-    exact image2_assoc h_assoc
-
-中文:
-定理 image₂_assoc
-  结论: {γ : 类型} {u : 有限集 γ}
-  证明: coe_injective by
-    push_cast
-    exact image2_assoc h_assoc
-
-Depends on / 依赖: coe_injective, h_assoc, image2_assoc
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_assoc {γ : Type*} {u : Finset γ}
-    {f : δ -> γ -> ε} {g : α -> β -> δ} {f' : α -> ε' -> ε}
-    {g' : β -> γ -> ε'} (h_assoc : forall a b c, f (g a b) c = f' a (g' b c)) :
+    {f : δ → γ → ε} {g : α → β → δ} {f' : α → ε' → ε}
+    {g' : β → γ → ε'} (h_assoc : ∀ a b c, f (g a b) c = f' a (g' b c)) :
     image₂ f (image₂ g s t) u = image₂ f' s (image₂ g' t u) :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_assoc h_assoc
-
-/--
-theorem `image₂_comm` / 定理 `image₂_comm`
-
-English:
-theorem image₂_comm
-  given: {g : β -> α -> γ} (h_comm : forall a b, f a b = g b a)
-  statement: image₂ f s t = image₂ g t s
-  proof: (image₂_swap _ _ _).trans by simp_rw [h_comm]
-
-中文:
-定理 image₂_comm
-  条件: {g : β -> α -> γ} (h_comm : 对任意 a b, f a b = g b a)
-  结论: image₂ f s t = image₂ g t s
-  证明: (image₂_swap _ _ _).trans by simp_rw [h_comm]
-
-Depends on / 依赖: h_comm, simp_rw
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_comm {g : β -> α -> γ} (h_comm : forall a b, f a b = g b a) : image₂ f s t = image₂ g t s :=
-(image₂_swap _ _ _).trans by simp_rw [h_comm]
-
-/--
-theorem `image₂_left_comm` / 定理 `image₂_left_comm`
-
-English:
-theorem image₂_left_comm
-  statement: {γ : Type*} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-  proof: coe_injective by
-    push_cast
-    exact image2_left_comm h_left_comm
-
-中文:
-定理 image₂_left_comm
-  结论: {γ : 类型} {u : 有限集 γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-  证明: coe_injective by
-    push_cast
-    exact image2_left_comm h_left_comm
-
-Depends on / 依赖: coe_injective, h_left_comm, image2_left_comm
+theorem image₂_comm {g : β → α → γ} (h_comm : ∀ a b, f a b = g b a) : image₂ f s t = image₂ g t s :=
+  (image₂_swap _ _ _).trans <| by simp_rw [h_comm]
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_left_comm {γ : Type*} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-    {f' : α -> γ -> δ'} {g' : β -> δ' -> ε} (h_left_comm : forall a b c, f a (g b c) = g' b (f' a c)) :
+theorem image₂_left_comm {γ : Type*} {u : Finset γ} {f : α → δ → ε} {g : β → γ → δ}
+    {f' : α → γ → δ'} {g' : β → δ' → ε} (h_left_comm : ∀ a b c, f a (g b c) = g' b (f' a c)) :
     image₂ f s (image₂ g t u) = image₂ g' t (image₂ f' s u) :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_left_comm h_left_comm
-
-/--
-theorem `image₂_right_comm` / 定理 `image₂_right_comm`
-
-English:
-theorem image₂_right_comm
-  statement: {γ : Type*} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-  proof: coe_injective by
-    push_cast
-    exact image2_right_comm h_right_comm
-
-中文:
-定理 image₂_right_comm
-  结论: {γ : 类型} {u : 有限集 γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-  证明: coe_injective by
-    push_cast
-    exact image2_right_comm h_right_comm
-
-Depends on / 依赖: coe_injective, h_right_comm, image2_right_comm
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_right_comm {γ : Type*} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-    {f' : α -> γ -> δ'} {g' : δ' -> β -> ε} (h_right_comm : forall a b c, f (g a b) c = g' (f' a c) b) :
+theorem image₂_right_comm {γ : Type*} {u : Finset γ} {f : δ → γ → ε} {g : α → β → δ}
+    {f' : α → γ → δ'} {g' : δ' → β → ε} (h_right_comm : ∀ a b c, f (g a b) c = g' (f' a c) b) :
     image₂ f (image₂ g s t) u = image₂ g' (image₂ f' s u) t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_right_comm h_right_comm
-
-/--
-theorem `image₂_image₂_image₂_comm` / 定理 `image₂_image₂_image₂_comm`
-
-English:
-theorem image₂_image₂_image₂_comm
-  statement: {γ δ : Type*} {u : Finset γ} {v : Finset δ} [DecidableEq ζ]
-  proof: coe_injective by
-    push_cast
-    exact image2_image2_image2_comm h_comm
-
-中文:
-定理 image₂_image₂_image₂_comm
-  结论: {γ δ : 类型} {u : 有限集 γ} {v : 有限集 δ} [DecidableEq ζ]
-  证明: coe_injective by
-    push_cast
-    exact image2_image2_image2_comm h_comm
-
-Depends on / 依赖: coe_injective, h_comm, image2_image2_image2_comm
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_image₂_image₂_comm {γ δ : Type*} {u : Finset γ} {v : Finset δ} [DecidableEq ζ]
-    [DecidableEq ζ'] [DecidableEq ν] {f : ε -> ζ -> ν} {g : α -> β -> ε} {h : γ -> δ -> ζ}
-    {f' : ε' -> ζ' -> ν} {g' : α -> γ -> ε'} {h' : β -> δ -> ζ'}
-    (h_comm : forall a b c d, f (g a b) (h c d) = f' (g' a c) (h' b d)) :
+    [DecidableEq ζ'] [DecidableEq ν] {f : ε → ζ → ν} {g : α → β → ε} {h : γ → δ → ζ}
+    {f' : ε' → ζ' → ν} {g' : α → γ → ε'} {h' : β → δ → ζ'}
+    (h_comm : ∀ a b c d, f (g a b) (h c d) = f' (g' a c) (h' b d)) :
     image₂ f (image₂ g s t) (image₂ h u v) = image₂ f' (image₂ g' s u) (image₂ h' t v) :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image2_image2_image2_comm h_comm
-
-/--
-theorem `image_image₂_distrib` / 定理 `image_image₂_distrib`
-
-English:
-theorem image_image₂_distrib
-  statement: {g : γ -> δ} {f' : α' -> β' -> δ} {g₁ : α -> α'} {g₂ : β -> β'}
-  proof: coe_injective by
-    push_cast
-    exact image_image2_distrib h_distrib
-
-中文:
-定理 image_image₂_distrib
-  结论: {g : γ -> δ} {f' : α' -> β' -> δ} {g₁ : α -> α'} {g₂ : β -> β'}
-  证明: coe_injective by
-    push_cast
-    exact image_image2_distrib h_distrib
-
-Depends on / 依赖: coe_injective, h_distrib, image_image2_distrib
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem image_image₂_distrib {g : γ -> δ} {f' : α' -> β' -> δ} {g₁ : α -> α'} {g₂ : β -> β'}
-    (h_distrib : forall a b, g (f a b) = f' (g₁ a) (g₂ b)) :
+theorem image_image₂_distrib {g : γ → δ} {f' : α' → β' → δ} {g₁ : α → α'} {g₂ : β → β'}
+    (h_distrib : ∀ a b, g (f a b) = f' (g₁ a) (g₂ b)) :
     (image₂ f s t).image g = image₂ f' (s.image g₁) (t.image g₂) :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2_distrib h_distrib
 
-/--
-theorem `image_image₂_distrib_left` / 定理 `image_image₂_distrib_left`
+/-- Symmetric statement to `Finset.image₂_image_left_comm`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_distrib_left
-  statement: {g : γ -> δ} {f' : α' -> β -> δ} {g' : α -> α'}
-  proof: coe_injective by
-    push_cast
-    exact image_image2_distrib_left h_distrib
-
-中文:
-定理 image_image₂_distrib_left
-  结论: {g : γ -> δ} {f' : α' -> β -> δ} {g' : α -> α'}
-  证明: coe_injective by
-    push_cast
-    exact image_image2_distrib_left h_distrib
-
-Depends on / 依赖: coe_injective, h_distrib, image_image2_distrib_left
+--- 原说明 ---
+Symmetric statement to `Finset.image₂_image_left_comm`.
 -/
-theorem image_image₂_distrib_left {g : γ -> δ} {f' : α' -> β -> δ} {g' : α -> α'}
-    (h_distrib : forall a b, g (f a b) = f' (g' a) b) :
+theorem image_image₂_distrib_left {g : γ → δ} {f' : α' → β → δ} {g' : α → α'}
+    (h_distrib : ∀ a b, g (f a b) = f' (g' a) b) :
     (image₂ f s t).image g = image₂ f' (s.image g') t :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2_distrib_left h_distrib
 
-/--
-theorem `image_image₂_distrib_right` / 定理 `image_image₂_distrib_right`
+/-- Symmetric statement to `Finset.image_image₂_right_comm`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_distrib_right
-  statement: {g : γ -> δ} {f' : α -> β' -> δ} {g' : β -> β'}
-  proof: coe_injective by
-    push_cast
-    exact image_image2_distrib_right h_distrib
-
-中文:
-定理 image_image₂_distrib_right
-  结论: {g : γ -> δ} {f' : α -> β' -> δ} {g' : β -> β'}
-  证明: coe_injective by
-    push_cast
-    exact image_image2_distrib_right h_distrib
-
-Depends on / 依赖: coe_injective, h_distrib, image_image2_distrib_right
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_right_comm`.
 -/
-theorem image_image₂_distrib_right {g : γ -> δ} {f' : α -> β' -> δ} {g' : β -> β'}
-    (h_distrib : forall a b, g (f a b) = f' a (g' b)) :
+theorem image_image₂_distrib_right {g : γ → δ} {f' : α → β' → δ} {g' : β → β'}
+    (h_distrib : ∀ a b, g (f a b) = f' a (g' b)) :
     (image₂ f s t).image g = image₂ f' s (t.image g') :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2_distrib_right h_distrib
 
-/--
-theorem `image₂_image_left_comm` / 定理 `image₂_image_left_comm`
+/-- Symmetric statement to `Finset.image_image₂_distrib_left`. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_image_left_comm
-  statement: {f : α' -> β -> γ} {g : α -> α'} {f' : α -> β -> δ} {g' : δ -> γ}
-  proof: (image_image₂_distrib_left fun a b => (h_left_comm a b).symm).symm
-
-中文:
-定理 image₂_image_left_comm
-  结论: {f : α' -> β -> γ} {g : α -> α'} {f' : α -> β -> δ} {g' : δ -> γ}
-  证明: (image_image₂_distrib_left fun a b => (h_left_comm a b).symm).symm
-
-Depends on / 依赖: h_left_comm
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_distrib_left`.
 -/
-theorem image₂_image_left_comm {f : α' -> β -> γ} {g : α -> α'} {f' : α -> β -> δ} {g' : δ -> γ}
-    (h_left_comm : forall a b, f (g a) b = g' (f' a b)) :
+theorem image₂_image_left_comm {f : α' → β → γ} {g : α → α'} {f' : α → β → δ} {g' : δ → γ}
+    (h_left_comm : ∀ a b, f (g a) b = g' (f' a b)) :
     image₂ f (s.image g) t = (image₂ f' s t).image g' :=
   (image_image₂_distrib_left fun a b => (h_left_comm a b).symm).symm
 
-/--
-theorem `image_image₂_right_comm` / 定理 `image_image₂_right_comm`
+/-- Symmetric statement to `Finset.image_image₂_distrib_right`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_right_comm
-  statement: {f : α -> β' -> γ} {g : β -> β'} {f' : α -> β -> δ} {g' : δ -> γ}
-  proof: (image_image₂_distrib_right fun a b => (h_right_comm a b).symm).symm
-
-中文:
-定理 image_image₂_right_comm
-  结论: {f : α -> β' -> γ} {g : β -> β'} {f' : α -> β -> δ} {g' : δ -> γ}
-  证明: (image_image₂_distrib_right fun a b => (h_right_comm a b).symm).symm
-
-Depends on / 依赖: h_right_comm
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_distrib_right`.
 -/
-theorem image_image₂_right_comm {f : α -> β' -> γ} {g : β -> β'} {f' : α -> β -> δ} {g' : δ -> γ}
-    (h_right_comm : forall a b, f a (g b) = g' (f' a b)) :
+theorem image_image₂_right_comm {f : α → β' → γ} {g : β → β'} {f' : α → β → δ} {g' : δ → γ}
+    (h_right_comm : ∀ a b, f a (g b) = g' (f' a b)) :
     image₂ f s (t.image g) = (image₂ f' s t).image g' :=
   (image_image₂_distrib_right fun a b => (h_right_comm a b).symm).symm
 
-/--
-theorem `image₂_distrib_subset_left` / 定理 `image₂_distrib_subset_left`
+/-- The other direction does not hold because of the `s`-`s` cross terms on the RHS. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_distrib_subset_left
-  statement: {γ : Type*} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-  proof: coe_subset.1 by
+--- 原说明 ---
+The other direction does not hold because of the `s`-`s` cross terms on the RHS.
+-/
+theorem image₂_distrib_subset_left {γ : Type*} {u : Finset γ} {f : α → δ → ε} {g : β → γ → δ}
+    {f₁ : α → β → β'} {f₂ : α → γ → γ'} {g' : β' → γ' → ε}
+    (h_distrib : ∀ a b c, f a (g b c) = g' (f₁ a b) (f₂ a c)) :
+    image₂ f s (image₂ g t u) ⊆ image₂ g' (image₂ f₁ s t) (image₂ f₂ s u) :=
+  coe_subset.1 <| by
     push_cast
     exact Set.image2_distrib_subset_left h_distrib
 
-中文:
-定理 image₂_distrib_subset_left
-  结论: {γ : 类型} {u : 有限集 γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-  证明: coe_subset.1 by
-    push_cast
-    exact Set.image2_distrib_subset_left h_distrib
+/-- The other direction does not hold because of the `u`-`u` cross terms on the RHS. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Set.image2_distrib_subset_left, coe_subset, h_distrib, image2_distrib_subset_left
+--- 原说明 ---
+The other direction does not hold because of the `u`-`u` cross terms on the RHS.
 -/
-theorem image₂_distrib_subset_left {γ : Type*} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
-    {f₁ : α -> β -> β'} {f₂ : α -> γ -> γ'} {g' : β' -> γ' -> ε}
-    (h_distrib : forall a b c, f a (g b c) = g' (f₁ a b) (f₂ a c)) :
-    image₂ f s (image₂ g t u) subseteq image₂ g' (image₂ f₁ s t) (image₂ f₂ s u) :=
-coe_subset.1 by
-    push_cast
-    exact Set.image2_distrib_subset_left h_distrib
-
-/--
-theorem `image₂_distrib_subset_right` / 定理 `image₂_distrib_subset_right`
-
-English:
-theorem image₂_distrib_subset_right
-  statement: {γ : Type*} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-  proof: coe_subset.1 by
+theorem image₂_distrib_subset_right {γ : Type*} {u : Finset γ} {f : δ → γ → ε} {g : α → β → δ}
+    {f₁ : α → γ → α'} {f₂ : β → γ → β'} {g' : α' → β' → ε}
+    (h_distrib : ∀ a b c, f (g a b) c = g' (f₁ a c) (f₂ b c)) :
+    image₂ f (image₂ g s t) u ⊆ image₂ g' (image₂ f₁ s u) (image₂ f₂ t u) :=
+  coe_subset.1 <| by
     push_cast
     exact Set.image2_distrib_subset_right h_distrib
-
-中文:
-定理 image₂_distrib_subset_right
-  结论: {γ : 类型} {u : 有限集 γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-  证明: coe_subset.1 by
-    push_cast
-    exact Set.image2_distrib_subset_right h_distrib
-
-Depends on / 依赖: Set.image2_distrib_subset_right, coe_subset, h_distrib, image2_distrib_subset_right
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem image₂_distrib_subset_right {γ : Type*} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
-    {f₁ : α -> γ -> α'} {f₂ : β -> γ -> β'} {g' : α' -> β' -> ε}
-    (h_distrib : forall a b c, f (g a b) c = g' (f₁ a c) (f₂ b c)) :
-    image₂ f (image₂ g s t) u subseteq image₂ g' (image₂ f₁ s u) (image₂ f₂ t u) :=
-coe_subset.1 by
-    push_cast
-    exact Set.image2_distrib_subset_right h_distrib
-
-/--
-theorem `image_image₂_antidistrib` / 定理 `image_image₂_antidistrib`
-
-English:
-theorem image_image₂_antidistrib
-  statement: {g : γ -> δ} {f' : β' -> α' -> δ} {g₁ : β -> β'} {g₂ : α -> α'}
-  proof: by
-  rw [image₂_swap f]
-  exact image_image₂_distrib fun _ _ => h_antidistrib _ _
-
-中文:
-定理 image_image₂_antidistrib
-  结论: {g : γ -> δ} {f' : β' -> α' -> δ} {g₁ : β -> β'} {g₂ : α -> α'}
-  证明: by
-  rw [image₂_swap f]
-  exact image_image₂_distrib fun _ _ => h_antidistrib _ _
-
-Depends on / 依赖: h_antidistrib
--/
-theorem image_image₂_antidistrib {g : γ -> δ} {f' : β' -> α' -> δ} {g₁ : β -> β'} {g₂ : α -> α'}
-    (h_antidistrib : forall a b, g (f a b) = f' (g₁ b) (g₂ a)) :
+theorem image_image₂_antidistrib {g : γ → δ} {f' : β' → α' → δ} {g₁ : β → β'} {g₂ : α → α'}
+    (h_antidistrib : ∀ a b, g (f a b) = f' (g₁ b) (g₂ a)) :
     (image₂ f s t).image g = image₂ f' (t.image g₁) (s.image g₂) := by
   rw [image₂_swap f]
   exact image_image₂_distrib fun _ _ => h_antidistrib _ _
 
-/--
-theorem `image_image₂_antidistrib_left` / 定理 `image_image₂_antidistrib_left`
+/-- Symmetric statement to `Finset.image₂_image_left_anticomm`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_antidistrib_left
-  statement: {g : γ -> δ} {f' : β' -> α -> δ} {g' : β -> β'}
-  proof: coe_injective by
-    push_cast
-    exact image_image2_antidistrib_left h_antidistrib
-
-中文:
-定理 image_image₂_antidistrib_left
-  结论: {g : γ -> δ} {f' : β' -> α -> δ} {g' : β -> β'}
-  证明: coe_injective by
-    push_cast
-    exact image_image2_antidistrib_left h_antidistrib
-
-Depends on / 依赖: coe_injective, h_antidistrib, image_image2_antidistrib_left
+--- 原说明 ---
+Symmetric statement to `Finset.image₂_image_left_anticomm`.
 -/
-theorem image_image₂_antidistrib_left {g : γ -> δ} {f' : β' -> α -> δ} {g' : β -> β'}
-    (h_antidistrib : forall a b, g (f a b) = f' (g' b) a) :
+theorem image_image₂_antidistrib_left {g : γ → δ} {f' : β' → α → δ} {g' : β → β'}
+    (h_antidistrib : ∀ a b, g (f a b) = f' (g' b) a) :
     (image₂ f s t).image g = image₂ f' (t.image g') s :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2_antidistrib_left h_antidistrib
 
-/--
-theorem `image_image₂_antidistrib_right` / 定理 `image_image₂_antidistrib_right`
+/-- Symmetric statement to `Finset.image_image₂_right_anticomm`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_antidistrib_right
-  statement: {g : γ -> δ} {f' : β -> α' -> δ} {g' : α -> α'}
-  proof: coe_injective by
-    push_cast
-    exact image_image2_antidistrib_right h_antidistrib
-
-中文:
-定理 image_image₂_antidistrib_right
-  结论: {g : γ -> δ} {f' : β -> α' -> δ} {g' : α -> α'}
-  证明: coe_injective by
-    push_cast
-    exact image_image2_antidistrib_right h_antidistrib
-
-Depends on / 依赖: coe_injective, h_antidistrib, image_image2_antidistrib_right
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_right_anticomm`.
 -/
-theorem image_image₂_antidistrib_right {g : γ -> δ} {f' : β -> α' -> δ} {g' : α -> α'}
-    (h_antidistrib : forall a b, g (f a b) = f' b (g' a)) :
+theorem image_image₂_antidistrib_right {g : γ → δ} {f' : β → α' → δ} {g' : α → α'}
+    (h_antidistrib : ∀ a b, g (f a b) = f' b (g' a)) :
     (image₂ f s t).image g = image₂ f' t (s.image g') :=
-coe_injective by
+  coe_injective <| by
     push_cast
     exact image_image2_antidistrib_right h_antidistrib
 
-/--
-theorem `image₂_image_left_anticomm` / 定理 `image₂_image_left_anticomm`
+/-- Symmetric statement to `Finset.image_image₂_antidistrib_left`. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_image_left_anticomm
-  statement: {f : α' -> β -> γ} {g : α -> α'} {f' : β -> α -> δ} {g' : δ -> γ}
-  proof: (image_image₂_antidistrib_left fun a b => (h_left_anticomm b a).symm).symm
-
-中文:
-定理 image₂_image_left_anticomm
-  结论: {f : α' -> β -> γ} {g : α -> α'} {f' : β -> α -> δ} {g' : δ -> γ}
-  证明: (image_image₂_antidistrib_left fun a b => (h_left_anticomm b a).symm).symm
-
-Depends on / 依赖: h_left_anticomm
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_antidistrib_left`.
 -/
-theorem image₂_image_left_anticomm {f : α' -> β -> γ} {g : α -> α'} {f' : β -> α -> δ} {g' : δ -> γ}
-    (h_left_anticomm : forall a b, f (g a) b = g' (f' b a)) :
+theorem image₂_image_left_anticomm {f : α' → β → γ} {g : α → α'} {f' : β → α → δ} {g' : δ → γ}
+    (h_left_anticomm : ∀ a b, f (g a) b = g' (f' b a)) :
     image₂ f (s.image g) t = (image₂ f' t s).image g' :=
   (image_image₂_antidistrib_left fun a b => (h_left_anticomm b a).symm).symm
 
-/--
-theorem `image_image₂_right_anticomm` / 定理 `image_image₂_right_anticomm`
+/-- Symmetric statement to `Finset.image_image₂_antidistrib_right`. -/
+/-
+**Finset.image_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：image_image [DecidableEq γ] {g : β -> γ} : (s.image f).image g = s.image (
+g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.dedup_map_dedup_eq`：dedup_map_dedup_eq [DecidableEq β] (f : α -
+> β) (s : Multiset α) : dedup (map f (dedup s)) = dedup (map f s)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem image_image₂_right_anticomm
-  statement: {f : α -> β' -> γ} {g : β -> β'} {f' : β -> α -> δ} {g' : δ -> γ}
-  proof: (image_image₂_antidistrib_right fun a b => (h_right_anticomm b a).symm).symm
-
-中文:
-定理 image_image₂_right_anticomm
-  结论: {f : α -> β' -> γ} {g : β -> β'} {f' : β -> α -> δ} {g' : δ -> γ}
-  证明: (image_image₂_antidistrib_right fun a b => (h_right_anticomm b a).symm).symm
-
-Depends on / 依赖: h_right_anticomm
+--- 原说明 ---
+Symmetric statement to `Finset.image_image₂_antidistrib_right`.
 -/
-theorem image_image₂_right_anticomm {f : α -> β' -> γ} {g : β -> β'} {f' : β -> α -> δ} {g' : δ -> γ}
-    (h_right_anticomm : forall a b, f a (g b) = g' (f' b a)) :
+theorem image_image₂_right_anticomm {f : α → β' → γ} {g : β → β'} {f' : β → α → δ} {g' : δ → γ}
+    (h_right_anticomm : ∀ a b, f a (g b) = g' (f' b a)) :
     image₂ f s (t.image g) = (image₂ f' t s).image g' :=
   (image_image₂_antidistrib_right fun a b => (h_right_anticomm b a).symm).symm
 
-/--
-theorem `image₂_left_identity` / 定理 `image₂_left_identity`
+/-- If `a` is a left identity for `f : α → β → β`, then `{a}` is a left identity for
+`Finset.image₂ f`. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_left_identity
-  given: {f : α -> γ -> γ} {a : α} (h : forall b, f a b = b) (t : Finset γ)
-  proof: coe_injective by rw [coe_image₂, coe_singleton, Set.image2_left_identity h]
-
-中文:
-定理 image₂_left_identity
-  条件: {f : α -> γ -> γ} {a : α} (h : 对任意 b, f a b = b) (t : 有限集 γ)
-  证明: coe_injective by rw [coe_image₂, coe_singleton, Set.image2_left_identity h]
-
-Depends on / 依赖: Set.image2_left_identity, coe_injective, coe_singleton, image2_left_identity
+--- 原说明 ---
+If `a` is a left identity for `f : α → β → β`, then `{a}` is a left identity for
+`Finset.image₂ f`.
 -/
-theorem image₂_left_identity {f : α -> γ -> γ} {a : α} (h : forall b, f a b = b) (t : Finset γ) :
+theorem image₂_left_identity {f : α → γ → γ} {a : α} (h : ∀ b, f a b = b) (t : Finset γ) :
     image₂ f {a} t = t :=
-coe_injective by rw [coe_image₂, coe_singleton, Set.image2_left_identity h]
+  coe_injective <| by rw [coe_image₂, coe_singleton, Set.image2_left_identity h]
 
-/--
-theorem `image₂_right_identity` / 定理 `image₂_right_identity`
+/-- If `b` is a right identity for `f : α → β → α`, then `{b}` is a right identity for
+`Finset.image₂ f`. -/
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem image₂_right_identity
-  given: {f : γ -> β -> γ} {b : β} (h : forall a, f a b = a) (s : Finset γ)
-  proof: by rw [image₂_singleton_right, funext h, image_id']
-
-中文:
-定理 image₂_right_identity
-  条件: {f : γ -> β -> γ} {b : β} (h : 对任意 a, f a b = a) (s : 有限集 γ)
-  证明: by rw [image₂_singleton_right, funext h, image_id']
-
-Depends on / 依赖: image_id
+--- 原说明 ---
+If `b` is a right identity for `f : α → β → α`, then `{b}` is a right identity f
+or
+`Finset.image₂ f`.
 -/
-theorem image₂_right_identity {f : γ -> β -> γ} {b : β} (h : forall a, f a b = a) (s : Finset γ) :
+theorem image₂_right_identity {f : γ → β → γ} {b : β} (h : ∀ a, f a b = a) (s : Finset γ) :
     image₂ f s {b} = s := by rw [image₂_singleton_right, funext h, image_id']
 
-/--
-theorem `card_dvd_card_image₂_right` / 定理 `card_dvd_card_image₂_right`
+/-- If each partial application of `f` is injective, and images of `s` under those partial
+applications are disjoint (but not necessarily distinct!), then the size of `t` divides the size of
+`Finset.image₂ f s t`. -/
+/-
+**Finset.card_dvd_card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem card_dvd_card_image₂_right
-  statement: (hf : forall a in s, Injective (f a))
-  proof: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp
-  | insert a s _ ih => ?_
-  specialize ih (forall_of_forall_insert hf)
-    (hs.subset <| Set.image_mono <| coe_subset.2 <| subset_insert _ _)
-  rw [image₂_insert_left]
-  by_cases h : Disjoint (image (f a) t) (image₂ f s t)
-  · rw [card_union_of_disjoint h]
-    exact Nat.dvd_add (card_image_of_injective _ <| hf _ <| mem_insert_self _ _).symm.dvd ih
-  simp_rw [← biUnion_image_left, disjoint_biUnion_right, not_forall] at h
-  obtain ⟨b, hb, h⟩ := h
-  rwa [union_eq_right.2]
-  exact (hs.eq (Set.mem_image_of_mem _ <| mem_insert_self _ _)
-      (Set.mem_image_of_mem _ <| mem_insert_of_mem hb) h).trans_subset
-    (image_subset_image₂_right hb)
-
-中文:
-定理 card_dvd_card_image₂_right
-  结论: (hf : 对任意 a in s, 单射 (f a))
-  证明: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp
-  | insert a s _ ih => ?_
-  specialize ih (forall_of_forall_insert hf)
-    (hs.subset <| Set.image_mono <| coe_subset.2 <| subset_insert _ _)
-  rw [image₂_insert_left]
-  by_cases h : Disjoint (image (f a) t) (image₂ f s t)
-  · rw [card_union_of_disjoint h]
-    exact Nat.dvd_add (card_image_of_injective _ <| hf _ <| mem_insert_self _ _).symm.dvd ih
-  simp_rw [← biUnion_image_left, disjoint_biUnion_right, not_forall] at h
-  obtain ⟨b, hb, h⟩ := h
-  rwa [union_eq_right.2]
-  exact (hs.eq (Set.mem_image_of_mem _ <| mem_insert_self _ _)
-      (Set.mem_image_of_mem _ <| mem_insert_of_mem hb) h).trans_subset
-    (image_subset_image₂_right hb)
-
-Depends on / 依赖: Disjoint, Finset, Finset.induction, Nat.dvd_add, Set.image_mono, biUnion_image_left, card_image_of_injective, card_union_of_disjoint, classical, coe_subset, disjoint_biUnion_right, dvd_add, forall_of_forall_insert, hs.subset, image_mono, insert, mem_insert_self, not_forall, simp_rw, specialize
+--- 原说明 ---
+If each partial application of `f` is injective, and images of `s` under those p
+artial
+applications are disjoint (but not necessarily distinct!), then the size of `t` 
+divides the size of
+`Finset.image₂ f s t`.
 -/
-theorem card_dvd_card_image₂_right (hf : forall a in s, Injective (f a))
+theorem card_dvd_card_image₂_right (hf : ∀ a ∈ s, Injective (f a))
     (hs : ((fun a => t.image <| f a) '' s).PairwiseDisjoint id) : #t ∣ #(image₂ f s t) := by
   classical
   induction s using Finset.induction with
@@ -1834,160 +1215,96 @@ theorem card_dvd_card_image₂_right (hf : forall a in s, Injective (f a))
       (Set.mem_image_of_mem _ <| mem_insert_of_mem hb) h).trans_subset
     (image_subset_image₂_right hb)
 
-/--
-theorem `card_dvd_card_image₂_left` / 定理 `card_dvd_card_image₂_left`
+/-- If each partial application of `f` is injective, and images of `t` under those partial
+applications are disjoint (but not necessarily distinct!), then the size of `s` divides the size of
+`Finset.image₂ f s t`. -/
+/-
+**Finset.card_dvd_card_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem card_dvd_card_image₂_left
-  statement: (hf : forall b in t, Injective fun a => f a b)
-  proof: by rw [← image₂_swap]; exact card_dvd_card_image₂_right hf ht
-
-中文:
-定理 card_dvd_card_image₂_left
-  结论: (hf : 对任意 b in t, 单射 fun a => f a b)
-  证明: by rw [← image₂_swap]; exact card_dvd_card_image₂_right hf ht
+--- 原说明 ---
+If each partial application of `f` is injective, and images of `t` under those p
+artial
+applications are disjoint (but not necessarily distinct!), then the size of `s` 
+divides the size of
+`Finset.image₂ f s t`.
 -/
-theorem card_dvd_card_image₂_left (hf : forall b in t, Injective fun a => f a b)
+theorem card_dvd_card_image₂_left (hf : ∀ b ∈ t, Injective fun a => f a b)
     (ht : ((fun b => s.image fun a => f a b) '' t).PairwiseDisjoint id) :
     #s ∣ #(image₂ f s t) := by rw [← image₂_swap]; exact card_dvd_card_image₂_right hf ht
 
-/--
-theorem `subset_set_image₂` / 定理 `subset_set_image₂`
+/-- If a `Finset` is a subset of the image of two `Set`s under a binary operation,
+then it is a subset of the `Finset.image₂` of two `Finset` subsets of these `Set`s. -/
+/-
+**Finset.subset_set_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem subset_set_image₂
-  given: {s : Set α} {t : Set β} (hu : ↑u subseteq image2 f s t)
-  proof: by
-  rw [← Set.image_prod]; rw [subset_set_image_iff] at hu
-  rcases hu with ⟨u, hu, rfl⟩
-  classical
-  use u.image Prod.fst, u.image Prod.snd
-  simp only [coe_image, Set.image_subset_iff, image₂_image_left, image₂_image_right,
-    image_subset_iff]
-  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2, fun x hx => mem_image₂_of_mem hx hx⟩
-
-中文:
-定理 subset_set_image₂
-  条件: {s : 集合 α} {t : 集合 β} (hu : ↑u subseteq image2 f s t)
-  证明: by
-  rw [← Set.image_prod]; rw [subset_set_image_iff] at hu
-  rcases hu with ⟨u, hu, rfl⟩
-  classical
-  use u.image Prod.fst, u.image Prod.snd
-  simp only [coe_image, Set.image_subset_iff, image₂_image_left, image₂_image_right,
-    image_subset_iff]
-  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2, fun x hx => mem_image₂_of_mem hx hx⟩
-
-Depends on / 依赖: Prod.fst, Prod.snd, Set.image_prod, Set.image_subset_iff, classical, coe_image, image_prod, image_subset_iff, subset_set_image_iff, u.image
+--- 原说明 ---
+If a `Finset` is a subset of the image of two `Set`s under a binary operation,
+then it is a subset of the `Finset.image₂` of two `Finset` subsets of these `Set
+`s.
 -/
-theorem subset_set_image₂ {s : Set α} {t : Set β} (hu : ↑u subseteq image2 f s t) :
-    exists (s' : Finset α) (t' : Finset β), ↑s' subseteq s ∧ ↑t' subseteq t ∧ u subseteq image₂ f s' t' := by
-  rw [← Set.image_prod]; rw [subset_set_image_iff] at hu
+theorem subset_set_image₂ {s : Set α} {t : Set β} (hu : ↑u ⊆ image2 f s t) :
+    ∃ (s' : Finset α) (t' : Finset β), ↑s' ⊆ s ∧ ↑t' ⊆ t ∧ u ⊆ image₂ f s' t' := by
+  rw [← Set.image_prod, subset_set_image_iff] at hu
   rcases hu with ⟨u, hu, rfl⟩
   classical
   use u.image Prod.fst, u.image Prod.snd
   simp only [coe_image, Set.image_subset_iff, image₂_image_left, image₂_image_right,
     image_subset_iff]
-  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2, fun x hx => mem_image₂_of_mem hx hx⟩
+  exact ⟨fun _ h ↦ (hu h).1, fun _ h ↦ (hu h).2, fun x hx ↦ mem_image₂_of_mem hx hx⟩
 
 end
 section UnionInter
 
 variable [DecidableEq α] [DecidableEq β]
 
-/--
-theorem `image₂_inter_union_subset_union` / 定理 `image₂_inter_union_subset_union`
-
-English:
-theorem image₂_inter_union_subset_union
-  proof: coe_subset.1 by
-    push_cast
-    exact Set.image2_inter_union_subset_union
-
-中文:
-定理 image₂_inter_union_subset_union
-  证明: coe_subset.1 by
-    push_cast
-    exact Set.image2_inter_union_subset_union
-
-Depends on / 依赖: Set.image2_inter_union_subset_union, coe_subset, image2_inter_union_subset_union
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_inter_union_subset_union :
-    image₂ f (s inter s') (t union t') subseteq image₂ f s t union image₂ f s' t' :=
-coe_subset.1 by
+    image₂ f (s ∩ s') (t ∪ t') ⊆ image₂ f s t ∪ image₂ f s' t' :=
+  coe_subset.1 <| by
     push_cast
     exact Set.image2_inter_union_subset_union
-
-/--
-theorem `image₂_union_inter_subset_union` / 定理 `image₂_union_inter_subset_union`
-
-English:
-theorem image₂_union_inter_subset_union
-  proof: coe_subset.1 by
-    push_cast
-    exact Set.image2_union_inter_subset_union
-
-中文:
-定理 image₂_union_inter_subset_union
-  证明: coe_subset.1 by
-    push_cast
-    exact Set.image2_union_inter_subset_union
-
-Depends on / 依赖: Set.image2_union_inter_subset_union, coe_subset, image2_union_inter_subset_union
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image₂_union_inter_subset_union :
-    image₂ f (s union s') (t inter t') subseteq image₂ f s t union image₂ f s' t' :=
-coe_subset.1 by
+    image₂ f (s ∪ s') (t ∩ t') ⊆ image₂ f s t ∪ image₂ f s' t' :=
+  coe_subset.1 <| by
     push_cast
     exact Set.image2_union_inter_subset_union
-
-/--
-theorem `image₂_inter_union_subset` / 定理 `image₂_inter_union_subset`
-
-English:
-theorem image₂_inter_union_subset
-  given: {f : α -> α -> β} {s t : Finset α} (hf : forall a b, f a b = f b a)
-  proof: coe_subset.1 by
-    push_cast
-    exact image2_inter_union_subset hf
-
-中文:
-定理 image₂_inter_union_subset
-  条件: {f : α -> α -> β} {s t : 有限集 α} (hf : 对任意 a b, f a b = f b a)
-  证明: coe_subset.1 by
-    push_cast
-    exact image2_inter_union_subset hf
-
-Depends on / 依赖: coe_subset, image2_inter_union_subset
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_inter_union_subset {f : α -> α -> β} {s t : Finset α} (hf : forall a b, f a b = f b a) :
-    image₂ f (s inter t) (s union t) subseteq image₂ f s t :=
-coe_subset.1 by
+theorem image₂_inter_union_subset {f : α → α → β} {s t : Finset α} (hf : ∀ a b, f a b = f b a) :
+    image₂ f (s ∩ t) (s ∪ t) ⊆ image₂ f s t :=
+  coe_subset.1 <| by
     push_cast
     exact image2_inter_union_subset hf
-
-/--
-theorem `image₂_union_inter_subset` / 定理 `image₂_union_inter_subset`
-
-English:
-theorem image₂_union_inter_subset
-  given: {f : α -> α -> β} {s t : Finset α} (hf : forall a b, f a b = f b a)
-  proof: coe_subset.1 by
-    push_cast
-    exact image2_union_inter_subset hf
-
-中文:
-定理 image₂_union_inter_subset
-  条件: {f : α -> α -> β} {s t : 有限集 α} (hf : 对任意 a b, f a b = f b a)
-  证明: coe_subset.1 by
-    push_cast
-    exact image2_union_inter_subset hf
-
-Depends on / 依赖: coe_subset, image2_union_inter_subset
+/-
+**Finset.image** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：image (f : α -> β) (s : Finset α) : Finset β
+参数：f : α -> β；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image₂_union_inter_subset {f : α -> α -> β} {s t : Finset α} (hf : forall a b, f a b = f b a) :
-    image₂ f (s union t) (s inter t) subseteq image₂ f s t :=
-coe_subset.1 by
+theorem image₂_union_inter_subset {f : α → α → β} {s t : Finset α} (hf : ∀ a b, f a b = f b a) :
+    image₂ f (s ∪ t) (s ∩ t) ⊆ image₂ f s t :=
+  coe_subset.1 <| by
     push_cast
     exact image2_union_inter_subset hf
 
@@ -1998,133 +1315,149 @@ section SemilatticeSup
 variable [SemilatticeSup δ]
 
 @[simp (default + 1)] -- otherwise `simp` doesn't use `forall_mem_image₂`
-/--
-lemma `sup'_image₂_le` / 引理 `sup'_image₂_le`
-
-English:
-lemma sup'_image₂_le
-  given: {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty)
-  proof: by
-  rw [sup'_le_iff]; rw [forall_mem_image₂]
-
-中文:
-引理 上确界'_image₂_le
-  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).非空)
-  证明: by
-  rw [sup'_le_iff]; rw [forall_mem_image₂]
+/-
+**Finset.sup'_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeSup α] [
+inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : (Finset.image f s).No
+nempty) (g : β → α), (Finset.image f s).sup' hs g = s.sup' ⋯ (g ∘ f)
+参数：hs : (Finset.image f s).Nonempty；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_eq_coe`：coe_eq_coe : (a : WithBot α) = b ↔ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_sup'`：coe_sup' : ((s.sup' H f : α) : WithBot α) = s.sup ((↑) 
+∘ f)
+· 使用定理 `Finset.sup_image`：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) 
+(g : β -> α) : (s.image f).sup g = s.sup (g ∘ f)
 -/
-lemma sup'_image₂_le {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty) :
-    sup' (image₂ f s t) h g <= a ↔ forall x in s, forall y in t, g (f x y) <= a := by
-  rw [sup'_le_iff]; rw [forall_mem_image₂]
-
-/--
-lemma `sup'_image₂_left` / 引理 `sup'_image₂_left`
-
-English:
-lemma sup'_image₂_left
-  given: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
-  proof: by
-  simp only [image₂, sup'_image, sup'_product_left]; rfl
-
-中文:
-引理 上确界'_image₂_left
-  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
-  证明: by
-  simp only [image₂, sup'_image, sup'_product_left]; rfl
+lemma sup'_image₂_le {g : γ → δ} {a : δ} (h : (image₂ f s t).Nonempty) :
+    sup' (image₂ f s t) h g ≤ a ↔ ∀ x ∈ s, ∀ y ∈ t, g (f x y) ≤ a := by
+  rw [sup'_le_iff, forall_mem_image₂]
+/-
+**Finset.sup'_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeSup α] [
+inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : (Finset.image f s).No
+nempty) (g : β → α), (Finset.image f s).sup' hs g = s.sup' ⋯ (g ∘ f)
+参数：hs : (Finset.image f s).Nonempty；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_eq_coe`：coe_eq_coe : (a : WithBot α) = b ↔ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_sup'`：coe_sup' : ((s.sup' H f : α) : WithBot α) = s.sup ((↑) 
+∘ f)
+· 使用定理 `Finset.sup_image`：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) 
+(g : β -> α) : (s.image f).sup g = s.sup (g ∘ f)
 -/
-lemma sup'_image₂_left (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
+lemma sup'_image₂_left (g : γ → δ) (h : (image₂ f s t).Nonempty) :
     sup' (image₂ f s t) h g =
-      sup' s h.of_image₂_left fun x => sup' t h.of_image₂_right (g <| f x ·) := by
+      sup' s h.of_image₂_left fun x ↦ sup' t h.of_image₂_right (g <| f x ·) := by
   simp only [image₂, sup'_image, sup'_product_left]; rfl
-
-/--
-lemma `sup'_image₂_right` / 引理 `sup'_image₂_right`
-
-English:
-lemma sup'_image₂_right
-  given: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
-  proof: by
-  simp only [image₂, sup'_image, sup'_product_right]; rfl
-
-中文:
-引理 上确界'_image₂_right
-  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
-  证明: by
-  simp only [image₂, sup'_image, sup'_product_right]; rfl
+/-
+**Finset.sup'_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeSup α] [
+inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : (Finset.image f s).No
+nempty) (g : β → α), (Finset.image f s).sup' hs g = s.sup' ⋯ (g ∘ f)
+参数：hs : (Finset.image f s).Nonempty；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_eq_coe`：coe_eq_coe : (a : WithBot α) = b ↔ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_sup'`：coe_sup' : ((s.sup' H f : α) : WithBot α) = s.sup ((↑) 
+∘ f)
+· 使用定理 `Finset.sup_image`：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) 
+(g : β -> α) : (s.image f).sup g = s.sup (g ∘ f)
 -/
-lemma sup'_image₂_right (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
+lemma sup'_image₂_right (g : γ → δ) (h : (image₂ f s t).Nonempty) :
     sup' (image₂ f s t) h g =
-      sup' t h.of_image₂_right fun y => sup' s h.of_image₂_left (g <| f · y) := by
+      sup' t h.of_image₂_right fun y ↦ sup' s h.of_image₂_left (g <| f · y) := by
   simp only [image₂, sup'_image, sup'_product_right]; rfl
 
 variable [OrderBot δ]
 
 @[simp (default + 1)] -- otherwise `simp` doesn't use `forall_mem_image₂`
-/--
-lemma `sup_image₂_le` / 引理 `sup_image₂_le`
-
-English:
-lemma sup_image₂_le
-  given: {g : γ -> δ} {a : δ}
-  proof: by
-  rw [Finset.sup_le_iff]; rw [forall_mem_image₂]
-
-中文:
-引理 sup_image₂_le
-  条件: {g : γ -> δ} {a : δ}
-  证明: by
-  rw [Finset.sup_le_iff]; rw [forall_mem_image₂]
-
-Depends on / 依赖: Finset, Finset.sup_le_iff, sup_le_iff
+/-
+**Finset.sup_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) (g : β -> α) : (s.im
+age f).sup g = s.sup (g ∘ f)
+参数：s : Finset γ；f : γ -> β；g : β -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.fold_image_idem`：fold_image_idem [DecidableEq α] {g : γ -> α} {s 
+: Finset γ} [hi : Std.IdempotentOp op] : (image g s).fold op b f = s.fold op b (
+f ∘ g)
+· 使用定理 `instCommutativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Commutative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instAssociativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Associative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instIdempotentOpMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], S
+td.IdempotentOp fun x1 x2 => x1 ⊔ x2
 -/
-lemma sup_image₂_le {g : γ -> δ} {a : δ} :
-    sup (image₂ f s t) g <= a ↔ forall x in s, forall y in t, g (f x y) <= a := by
-  rw [Finset.sup_le_iff]; rw [forall_mem_image₂]
+lemma sup_image₂_le {g : γ → δ} {a : δ} :
+    sup (image₂ f s t) g ≤ a ↔ ∀ x ∈ s, ∀ y ∈ t, g (f x y) ≤ a := by
+  rw [Finset.sup_le_iff, forall_mem_image₂]
 
 variable (s t)
-
-/--
-lemma `sup_image₂_left` / 引理 `sup_image₂_left`
-
-English:
-lemma sup_image₂_left
-  given: (g : γ -> δ)
-  statement: sup (image₂ f s t) g = sup s fun x => sup t (g <| f x ·)
-  proof: by
-  simp only [image₂, sup_image, sup_product_left]; rfl
-
-中文:
-引理 sup_image₂_left
-  条件: (g : γ -> δ)
-  结论: 上确界 (image₂ f s t) g = 上确界 s fun x => 上确界 t (g <| f x ·)
-  证明: by
-  simp only [image₂, sup_image, sup_product_left]; rfl
-
-Depends on / 依赖: sup_image, sup_product_left
+/-
+**Finset.sup_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) (g : β -> α) : (s.im
+age f).sup g = s.sup (g ∘ f)
+参数：s : Finset γ；f : γ -> β；g : β -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.fold_image_idem`：fold_image_idem [DecidableEq α] {g : γ -> α} {s 
+: Finset γ} [hi : Std.IdempotentOp op] : (image g s).fold op b f = s.fold op b (
+f ∘ g)
+· 使用定理 `instCommutativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Commutative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instAssociativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Associative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instIdempotentOpMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], S
+td.IdempotentOp fun x1 x2 => x1 ⊔ x2
 -/
-lemma sup_image₂_left (g : γ -> δ) : sup (image₂ f s t) g = sup s fun x => sup t (g <| f x ·) := by
+lemma sup_image₂_left (g : γ → δ) : sup (image₂ f s t) g = sup s fun x ↦ sup t (g <| f x ·) := by
   simp only [image₂, sup_image, sup_product_left]; rfl
-
-/--
-lemma `sup_image₂_right` / 引理 `sup_image₂_right`
-
-English:
-lemma sup_image₂_right
-  given: (g : γ -> δ)
-  statement: sup (image₂ f s t) g = sup t fun y => sup s (g <| f · y)
-  proof: by
-  simp only [image₂, sup_image, sup_product_right]; rfl
-
-中文:
-引理 sup_image₂_right
-  条件: (g : γ -> δ)
-  结论: 上确界 (image₂ f s t) g = 上确界 t fun y => 上确界 s (g <| f · y)
-  证明: by
-  simp only [image₂, sup_image, sup_product_right]; rfl
-
-Depends on / 依赖: sup_image, sup_product_right
+/-
+**Finset.sup_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) (g : β -> α) : (s.im
+age f).sup g = s.sup (g ∘ f)
+参数：s : Finset γ；f : γ -> β；g : β -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.fold_image_idem`：fold_image_idem [DecidableEq α] {g : γ -> α} {s 
+: Finset γ} [hi : Std.IdempotentOp op] : (image g s).fold op b f = s.fold op b (
+f ∘ g)
+· 使用定理 `instCommutativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Commutative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instAssociativeMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], St
+d.Associative fun x1 x2 => x1 ⊔ x2
+· 使用定理 `instIdempotentOpMax_mathlib`：∀ {α : Type u} [inst : SemilatticeSup α], S
+td.IdempotentOp fun x1 x2 => x1 ⊔ x2
 -/
-lemma sup_image₂_right (g : γ -> δ) : sup (image₂ f s t) g = sup t fun y => sup s (g <| f · y) := by
+lemma sup_image₂_right (g : γ → δ) : sup (image₂ f s t) g = sup t fun y ↦ sup s (g <| f · y) := by
   simp only [image₂, sup_image, sup_product_right]; rfl
 
 end SemilatticeSup
@@ -2134,119 +1467,121 @@ section SemilatticeInf
 variable [SemilatticeInf δ]
 
 @[simp (default + 1)] -- otherwise `simp` doesn't use `forall_mem_image₂`
-/--
-lemma `le_inf'_image₂` / 引理 `le_inf'_image₂`
-
-English:
-lemma le_inf'_image₂
-  given: {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty)
-  proof: by
-  rw [le_inf'_iff]; rw [forall_mem_image₂]
-
-中文:
-引理 le_inf'_image₂
-  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).非空)
-  证明: by
-  rw [le_inf'_iff]; rw [forall_mem_image₂]
-
-Depends on / 依赖: _iff, le_inf
+/-
+**Finset.le_inf'_image** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_inf'_image₂ {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty) :
-    a <= inf' (image₂ f s t) h g ↔ forall x in s, forall y in t, a <= g (f x y) := by
-  rw [le_inf'_iff]; rw [forall_mem_image₂]
-
-/--
-lemma `inf'_image₂_left` / 引理 `inf'_image₂_left`
-
-English:
-lemma inf'_image₂_left
-  given: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
-  proof: sup'_image₂_left (δ := δᵒᵈ) g h
-
-中文:
-引理 下确界'_image₂_left
-  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
-  证明: sup'_image₂_left (δ := δᵒᵈ) g h
+lemma le_inf'_image₂ {g : γ → δ} {a : δ} (h : (image₂ f s t).Nonempty) :
+    a ≤ inf' (image₂ f s t) h g ↔ ∀ x ∈ s, ∀ y ∈ t, a ≤ g (f x y) := by
+  rw [le_inf'_iff, forall_mem_image₂]
+/-
+**Finset.inf'_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeInf α] [
+inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : (Finset.image f s).No
+nempty) (g : β → α), (Finset.image f s).inf' hs g = s.inf' ⋯ (g ∘ f)
+参数：hs : (Finset.image f s).Nonempty；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithTop.coe_eq_coe`：∀ {α : Type u_1} {a b : α}, ↑a = ↑b ↔ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_inf'`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf 
+α] {s : Finset β} (H : s.Nonempty) (f : β → α),   ↑(s.inf' H f) = s.inf (WithTop
+.some…
+· 使用定理 `Finset.inf_image`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst :
+ SemilatticeInf α] [inst_1 : OrderTop α] [inst_2 : DecidableEq β]   (s : Finset 
+γ) (f …
 -/
-lemma inf'_image₂_left (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
+lemma inf'_image₂_left (g : γ → δ) (h : (image₂ f s t).Nonempty) :
     inf' (image₂ f s t) h g =
-      inf' s h.of_image₂_left fun x => inf' t h.of_image₂_right (g <| f x ·) :=
+      inf' s h.of_image₂_left fun x ↦ inf' t h.of_image₂_right (g <| f x ·) :=
   sup'_image₂_left (δ := δᵒᵈ) g h
-
-/--
-lemma `inf'_image₂_right` / 引理 `inf'_image₂_right`
-
-English:
-lemma inf'_image₂_right
-  given: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
-  proof: sup'_image₂_right (δ := δᵒᵈ) g h
-
-中文:
-引理 下确界'_image₂_right
-  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
-  证明: sup'_image₂_right (δ := δᵒᵈ) g h
+/-
+**Finset.inf'_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeInf α] [
+inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : (Finset.image f s).No
+nempty) (g : β → α), (Finset.image f s).inf' hs g = s.inf' ⋯ (g ∘ f)
+参数：hs : (Finset.image f s).Nonempty；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithTop.coe_eq_coe`：∀ {α : Type u_1} {a b : α}, ↑a = ↑b ↔ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_inf'`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf 
+α] {s : Finset β} (H : s.Nonempty) (f : β → α),   ↑(s.inf' H f) = s.inf (WithTop
+.some…
+· 使用定理 `Finset.inf_image`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst :
+ SemilatticeInf α] [inst_1 : OrderTop α] [inst_2 : DecidableEq β]   (s : Finset 
+γ) (f …
 -/
-lemma inf'_image₂_right (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
+lemma inf'_image₂_right (g : γ → δ) (h : (image₂ f s t).Nonempty) :
     inf' (image₂ f s t) h g =
-      inf' t h.of_image₂_right fun y => inf' s h.of_image₂_left (g <| f · y) :=
+      inf' t h.of_image₂_right fun y ↦ inf' s h.of_image₂_left (g <| f · y) :=
   sup'_image₂_right (δ := δᵒᵈ) g h
 
 variable [OrderTop δ]
 
 @[simp (default + 1)] -- otherwise `simp` doesn't use `forall_mem_image₂`
-/--
-lemma `le_inf_image₂` / 引理 `le_inf_image₂`
-
-English:
-lemma le_inf_image₂
-  given: {g : γ -> δ} {a : δ}
-  proof: sup_image₂_le (δ := δᵒᵈ)
-
-中文:
-引理 le_inf_image₂
-  条件: {g : γ -> δ} {a : δ}
-  证明: sup_image₂_le (δ := δᵒᵈ)
+/-
+**Finset.le_inf_image** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_inf_image₂ {g : γ -> δ} {a : δ} :
-    a <= inf (image₂ f s t) g ↔ forall x in s, forall y in t, a <= g (f x y) :=
+lemma le_inf_image₂ {g : γ → δ} {a : δ} :
+    a ≤ inf (image₂ f s t) g ↔ ∀ x ∈ s, ∀ y ∈ t, a ≤ g (f x y) :=
   sup_image₂_le (δ := δᵒᵈ)
 
 variable (s t)
-
-/--
-lemma `inf_image₂_left` / 引理 `inf_image₂_left`
-
-English:
-lemma inf_image₂_left
-  given: (g : γ -> δ)
-  statement: inf (image₂ f s t) g = inf s fun x => inf t (g ∘ f x)
-  proof: sup_image₂_left (δ := δᵒᵈ) ..
-
-中文:
-引理 inf_image₂_left
-  条件: (g : γ -> δ)
-  结论: 下确界 (image₂ f s t) g = 下确界 s fun x => 下确界 t (g ∘ f x)
-  证明: sup_image₂_left (δ := δᵒᵈ) ..
+/-
+**Finset.inf_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeInf α] [
+inst_1 : OrderTop α] [inst_2 : DecidableEq β]   (s : Finset γ) (f : γ → β) (g : 
+β → α), (Finset.image f s).inf g = s.inf (g ∘ f)
+参数：s : Finset γ；f : γ → β；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.fold_image_idem`：fold_image_idem [DecidableEq α] {g : γ -> α} {s 
+: Finset γ} [hi : Std.IdempotentOp op] : (image g s).fold op b f = s.fold op b (
+f ∘ g)
+· 使用定理 `instCommutativeMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], St
+d.Commutative fun x1 x2 => x1 ⊓ x2
+· 使用定理 `instAssociativeMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], St
+d.Associative fun x1 x2 => x1 ⊓ x2
+· 使用定理 `instIdempotentOpMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], S
+td.IdempotentOp fun x1 x2 => x1 ⊓ x2
 -/
-lemma inf_image₂_left (g : γ -> δ) : inf (image₂ f s t) g = inf s fun x => inf t (g ∘ f x) :=
+lemma inf_image₂_left (g : γ → δ) : inf (image₂ f s t) g = inf s fun x ↦ inf t (g ∘ f x) :=
   sup_image₂_left (δ := δᵒᵈ) ..
-
-/--
-lemma `inf_image₂_right` / 引理 `inf_image₂_right`
-
-English:
-lemma inf_image₂_right
-  given: (g : γ -> δ)
-  statement: inf (image₂ f s t) g = inf t fun y => inf s (g <| f · y)
-  proof: sup_image₂_right (δ := δᵒᵈ) ..
-
-中文:
-引理 inf_image₂_right
-  条件: (g : γ -> δ)
-  结论: 下确界 (image₂ f s t) g = 下确界 t fun y => 下确界 s (g <| f · y)
-  证明: sup_image₂_right (δ := δᵒᵈ) ..
+/-
+**Finset.inf_image** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : SemilatticeInf α] [
+inst_1 : OrderTop α] [inst_2 : DecidableEq β]   (s : Finset γ) (f : γ → β) (g : 
+β → α), (Finset.image f s).inf g = s.inf (g ∘ f)
+参数：s : Finset γ；f : γ → β；g : β → α；Finset.image f s；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.fold_image_idem`：fold_image_idem [DecidableEq α] {g : γ -> α} {s 
+: Finset γ} [hi : Std.IdempotentOp op] : (image g s).fold op b f = s.fold op b (
+f ∘ g)
+· 使用定理 `instCommutativeMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], St
+d.Commutative fun x1 x2 => x1 ⊓ x2
+· 使用定理 `instAssociativeMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], St
+d.Associative fun x1 x2 => x1 ⊓ x2
+· 使用定理 `instIdempotentOpMin_mathlib`：∀ {α : Type u} [inst : SemilatticeInf α], S
+td.IdempotentOp fun x1 x2 => x1 ⊓ x2
 -/
-lemma inf_image₂_right (g : γ -> δ) : inf (image₂ f s t) g = inf t fun y => inf s (g <| f · y) :=
+lemma inf_image₂_right (g : γ → δ) : inf (image₂ f s t) g = inf t fun y ↦ inf s (g <| f · y) :=
   sup_image₂_right (δ := δᵒᵈ) ..
 
 end SemilatticeInf
@@ -2256,28 +1591,33 @@ end Finset
 open Finset
 
 namespace Fintype
-variable {ι : Type*} {α β γ : ι -> Type*} [DecidableEq ι] [Fintype ι] [forall i, DecidableEq (γ i)]
+variable {ι : Type*} {α β γ : ι → Type*} [DecidableEq ι] [Fintype ι] [∀ i, DecidableEq (γ i)]
 
-/--
-lemma `piFinset_image₂` / 引理 `piFinset_image₂`
-
-English:
-lemma piFinset_image₂
-  given: (f : forall i, α i -> β i -> γ i) (s : forall i, Finset (α i)) (t : forall i, Finset (β i))
-  proof: by
-  ext; simp only [mem_piFinset, mem_image₂, Classical.skolem, forall_and, funext_iff]
-
-中文:
-引理 piFinset_image₂
-  条件: (f : 对任意 i, α i -> β i -> γ i) (s : 对任意 i, 有限集 (α i)) (t : 对任意 i, 有限集 (β i))
-  证明: by
-  ext; simp only [mem_piFinset, mem_image₂, Classical.skolem, forall_and, funext_iff]
-
-Depends on / 依赖: Classical, Classical.skolem, forall_and, funext_iff, mem_piFinset, skolem
+/-
+**Fintype.piFinset_image** 是 Mathlib 中的一个引理，位于命名空间 `Fintype`。
+形式化陈述：piFinset_image [forall a, DecidableEq (δ a)] (f : forall a, γ a -> δ a) (s
+ : forall a, Finset (γ a)) : piFinset (fun a => (s a).image (f a)) = (piFinset s
+).image fun b a => f _ (b a)
+参数：δ a；f : forall a, γ a -> δ a；s : forall a, Finset (γ a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma piFinset_image₂ (f : forall i, α i -> β i -> γ i) (s : forall i, Finset (α i)) (t : forall i, Finset (β i)) :
-    piFinset (fun i => image₂ (f i) (s i) (t i)) =
-      image₂ (fun a b i => f _ (a i) (b i)) (piFinset s) (piFinset t) := by
+lemma piFinset_image₂ (f : ∀ i, α i → β i → γ i) (s : ∀ i, Finset (α i)) (t : ∀ i, Finset (β i)) :
+    piFinset (fun i ↦ image₂ (f i) (s i) (t i)) =
+      image₂ (fun a b i ↦ f _ (a i) (b i)) (piFinset s) (piFinset t) := by
   ext; simp only [mem_piFinset, mem_image₂, Classical.skolem, forall_and, funext_iff]
 
 end Fintype
@@ -2287,42 +1627,57 @@ namespace Set
 variable [DecidableEq γ] {s : Set α} {t : Set β}
 
 @[simp]
-/--
-theorem `toFinset_image2` / 定理 `toFinset_image2`
-
-English:
-theorem toFinset_image2
-  statement: (f : α -> β -> γ) (s : Set α) (t : Set β) [Fintype s] [Fintype t]
-  proof: Finset.coe_injective by simp
-
-中文:
-定理 toFinset_image2
-  结论: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [有限类型 s] [有限类型 t]
-  证明: Finset.coe_injective by simp
-
-Depends on / 依赖: Finset, Finset.coe_injective, coe_injective
+/-
+**Set.toFinset_image2** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：toFinset_image2 (f : α -> β -> γ) (s : Set α) (t : Set β) [Fintype s] [Fin
+type t] [Fintype (image2 f s t)] : (image2 f s t).toFinset = Finset.image₂ f s.t
+oFinset t.toFinset
+参数：f : α -> β -> γ；s : Set α；t : Set β；image2 f s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `Finset.coe_image₂`：coe_image₂ (f : α -> β -> γ) (s : Finset α) (t : Fins
+et β) : (image₂ f s t : Set γ) = Set.image2 f s t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toFinset_image2 (f : α -> β -> γ) (s : Set α) (t : Set β) [Fintype s] [Fintype t]
+theorem toFinset_image2 (f : α → β → γ) (s : Set α) (t : Set β) [Fintype s] [Fintype t]
     [Fintype (image2 f s t)] : (image2 f s t).toFinset = Finset.image₂ f s.toFinset t.toFinset :=
-Finset.coe_injective by simp
-
-/--
-theorem `Finite.toFinset_image2` / 定理 `Finite.toFinset_image2`
-
-English:
-theorem Finite.toFinset_image2
-  statement: (f : α -> β -> γ) (hs : s.Finite) (ht : t.Finite)
-  proof: Finset.coe_injective by simp
-
-中文:
-定理 有限.toFinset_image2
-  结论: (f : α -> β -> γ) (hs : s.有限) (ht : t.有限)
-  证明: Finset.coe_injective by simp
-
-Depends on / 依赖: Finset, Finset.image, hf.toFinset, hs.image2, hs.toFinset, ht.toFinset, image2, toFinset
+  Finset.coe_injective <| by simp
+/-
+**Set.Finite.toFinset_image2** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} [inst : DecidableEq γ] {s :
+ Set α} {t : Set β} (f : α → β → γ)   (hs : s.Finite) (ht : t.Finite) (hf : optP
+aram (Set.image2 f s t).Finite ⋯),   hf.toFinset = Finset.image₂ f hs.toFinset h
+t.toFinset
+参数：f : α → β → γ；hs : s.Finite；ht : t.Finite；hf : optParam (Set.image2 f s t).Fi
+nite ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Finset.coe_image₂`：coe_image₂ (f : α -> β -> γ) (s : Finset α) (t : Fins
+et β) : (image₂ f s t : Set γ) = Set.image2 f s t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Finite.toFinset_image2 (f : α -> β -> γ) (hs : s.Finite) (ht : t.Finite)
+theorem Finite.toFinset_image2 (f : α → β → γ) (hs : s.Finite) (ht : t.Finite)
     (hf := hs.image2 f ht) : hf.toFinset = Finset.image₂ f hs.toFinset ht.toFinset :=
-Finset.coe_injective by simp
+  Finset.coe_injective <| by simp
 
 end Set
+

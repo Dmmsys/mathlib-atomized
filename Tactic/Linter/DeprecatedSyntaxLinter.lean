@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Parser.Command
 
 /-!
@@ -103,40 +103,34 @@ public register_option linter.style.maxHeartbeats : Bool := {
   descr := "enable the maxHeartbeats linter"
 }
 
-/--
-Definition of `getSetOptionMaxHeartbeatsComment` / `getSetOptionMaxHeartbeatsComment` 的定义
+/-- If the input syntax is of the form `set_option <option> num in <string> cmd`,
+where `<option>` contains `maxHeartbeats`, then it returns
+* the `<option>`, as a name (typically, `maxHeartbeats` or `synthInstance.maxHeartbeats`);
+* the number `num` and
+* whatever is in `<string>`. Note that `<string>` can only consist of whitespace and comments.
 
-English:
-definition getSetOptionMaxHeartbeatsComment
-  signature: : Syntax -> Option (Name × Nat × Substring.Raw)
-  body: mh.getId
-    if !opt.components.contains `maxHeartbeats then
-      none
-    else
-      if let some inAtom := stx.find? (·.getAtomVal == "in") then
-        inAtom.getTrailing?.map (opt, n.getNat, ·)
-      else
-        -- This branch should be unreachable.
-        some default
-  | _ => none
-
-中文:
-定义 getSetOptionMaxHeartbeatsComment
-  签名: : Syntax -> 选项类型 (Name × 自然数 × Substring.Raw)
-  定义体: mh.getId
-    if !opt.components.contains `maxHeartbeats then
-      none
-    else
-      if let some inAtom := stx.find? (·.getAtomVal == "in") then
-        inAtom.getTrailing?.map (opt, n.getNat, ·)
-      else
-        -- This branch should be unreachable.
-        some default
-  | _ => none
-
-Depends on / 依赖: mh.getId
+Otherwise, it returns `none`.
 -/
-def getSetOptionMaxHeartbeatsComment : Syntax -> Option (Name × Nat × Substring.Raw)
+/-
+**Mathlib.Linter.Style.getSetOptionMaxHeartbeatsComment** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Linter.Style`。
+形式化陈述：getSetOptionMaxHeartbeatsComment : Syntax -> Option (Name × Nat × Substrin
+g.Raw) | stx@`(command|set_option $mh $n:num in $_) => let opt
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If the input syntax is of the form `set_option <option> num in <string> cmd`,
+where `<option>` contains `maxHeartbeats`, then it returns
+* the `<option>`, as a name (typically, `maxHeartbeats` or `synthInstance.maxHea
+rtbeats`);
+* the number `num` and
+* whatever is in `<string>`. Note that `<string>` can only consist of whitespace
+ and comments.
+
+Otherwise, it returns `none`.
+-/
+def getSetOptionMaxHeartbeatsComment : Syntax → Option (Name × Nat × Substring.Raw)
   | stx@`(command|set_option $mh $n:num in $_) =>
     let opt := mh.getId
     if !opt.components.contains `maxHeartbeats then
@@ -149,52 +143,21 @@ def getSetOptionMaxHeartbeatsComment : Syntax -> Option (Name × Nat × Substrin
         some default
   | _ => none
 
-/--
-Definition of `isDecideNative` / `isDecideNative` 的定义
+/-- Whether a given piece of syntax represents a `decide` tactic call with the `native` option
+enabled. This may have false negatives for `decide (config := {<options>})` syntax. -/
+/-
+**Mathlib.Linter.Style.isDecideNative** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter.
+Style`。
+形式化陈述：isDecideNative (stx : Syntax ) : Bool
+参数：stx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isDecideNative
-  signature: (stx : Syntax )
-  body: match stx with
-  | .node _ ``Lean.Parser.Tactic.decide args =>
-    -- The configuration passed to the tactic call.
-    let config := args[1]![0]
-    -- Check all configuration arguments in order to determine the final
-    -- toggling of the native decide option.
-    if let (.node _ _ config_args) := config then
-      let natives := config_args.filterMap (match ·[0] with
-        | `(Parser.Tactic.posConfigItem| +native) => some true
-        | `(Parser.Tactic.negConfigItem| -native) => some false
-        | `(Parser.Tactic.valConfigItem| (config := {native := true})) => some true
-        | `(Parser.Tactic.valConfigItem| (config := {native := false})) => some false
-        | _ => none)
-      natives.back? == some true
-    else
-      false
-  | _ => false
-
-中文:
-定义 isDecide自然数ive
-  签名: (stx : Syntax )
-  定义体: match stx with
-  | .node _ ``Lean.Parser.Tactic.decide args =>
-    -- The configuration passed to the tactic call.
-    let config := args[1]![0]
-    -- Check all configuration arguments in order to determine the final
-    -- toggling of the native decide option.
-    if let (.node _ _ config_args) := config then
-      let natives := config_args.filterMap (match ·[0] with
-        | `(Parser.Tactic.posConfigItem| +native) => some true
-        | `(Parser.Tactic.negConfigItem| -native) => some false
-        | `(Parser.Tactic.valConfigItem| (config := {native := true})) => some true
-        | `(Parser.Tactic.valConfigItem| (config := {native := false})) => some false
-        | _ => none)
-      natives.back? == some true
-    else
-      false
-  | _ => false
-
-Depends on / 依赖: Lean.Parser.Tactic.decide, Parser, Tactic
+--- 原说明 ---
+Whether a given piece of syntax represents a `decide` tactic call with the `nati
+ve` option
+enabled. This may have false negatives for `decide (config := {<options>})` synt
+ax.
 -/
 def isDecideNative (stx : Syntax ) : Bool :=
   match stx with
@@ -217,110 +180,15 @@ def isDecideNative (stx : Syntax ) : Bool :=
 
 /-- `getDeprecatedSyntax t` returns all usages of deprecated syntax in the input syntax `t`. -/
 partial
-/--
-Definition of `getDeprecatedSyntax` / `getDeprecatedSyntax` 的定义
-
-English:
-definition getDeprecatedSyntax
-  signature: : Syntax -> Array (SyntaxNodeKind × Syntax × MessageData)
-  body: args.flatMap getDeprecatedSyntax
-    match kind with
-    | ``Lean.Parser.Tactic.refine' =>
-      rargs.push (kind, stx,
-        "The `refine'` tactic is discouraged: \
-         please strongly consider using `refine` or `apply` instead.")
-    | `Mathlib.Tactic.cases' =>
-      rargs.push (kind, stx,
-        "The `cases'` tactic is discouraged: \
-         please strongly consider using `obtain`, `rcases` or `cases` instead.")
-    | `Mathlib.Tactic.induction' =>
-      rargs.push (kind, stx,
-        "The `induction'` tactic is discouraged: \
-         please strongly consider using `induction` instead.")
-    | ``Lean.Parser.Tactic.tacticAdmit =>
-      rargs.push (kind, stx,
-        "The `admit` tactic is discouraged: \
-         please strongly consider using the synonymous `sorry` instead.")
-    | ``Lean.Parser.Tactic.decide =>
-      if isDecideNative stx then
-        rargs.push (kind, stx, "Using `decide +native` is not allowed in mathlib: \
-        because it trusts the entire Lean compiler (not just the Lean kernel), \
-        it could quite possibly be used to prove false.")
-      else
-        rargs
-    | ``Lean.Parser.Tactic.nativeDecide =>
-      rargs.push (kind, stx, "Using `native_decide` is not allowed in mathlib: \
-        because it trusts the entire Lean compiler (not just the Lean kernel), \
-        it could quite possibly be used to prove false.")
-    | ``Lean.Parser.Command.in =>
-      match getSetOptionMaxHeartbeatsComment stx with
-      | none => rargs
-      | some (opt, n, trailing) =>
-        -- Since we are now seeing the currently outermost `maxHeartbeats` option,
-        -- we remove all subsequent potential flags and only decide whether to lint or not
-        -- based on whether the current option has a comment.
-        let rargs := rargs.filter (·.1 != `MaxHeartbeats)
-        if trailing.toString.trimAsciiStart.isEmpty then
-          rargs.push (`MaxHeartbeats, stx,
-            s!"Please, add a comment explaining the need for modifying the maxHeartbeat limit, \
-              as in\nset_option {opt} {n} in\n-- reason for change\n...")
-        else
-          rargs
-    | _ => rargs
-  | _ => default
-
-中文:
-定义 getDeprecatedSyntax
-  签名: : Syntax -> 数组 (SyntaxNodeKind × Syntax × MessageData)
-  定义体: args.flatMap getDeprecatedSyntax
-    match kind with
-    | ``Lean.Parser.Tactic.refine' =>
-      rargs.push (kind, stx,
-        "The `refine'` tactic is discouraged: \
-         please strongly consider using `refine` or `apply` instead.")
-    | `Mathlib.Tactic.cases' =>
-      rargs.push (kind, stx,
-        "The `cases'` tactic is discouraged: \
-         please strongly consider using `obtain`, `rcases` or `cases` instead.")
-    | `Mathlib.Tactic.induction' =>
-      rargs.push (kind, stx,
-        "The `induction'` tactic is discouraged: \
-         please strongly consider using `induction` instead.")
-    | ``Lean.Parser.Tactic.tacticAdmit =>
-      rargs.push (kind, stx,
-        "The `admit` tactic is discouraged: \
-         please strongly consider using the synonymous `sorry` instead.")
-    | ``Lean.Parser.Tactic.decide =>
-      if isDecideNative stx then
-        rargs.push (kind, stx, "Using `decide +native` is not allowed in mathlib: \
-        because it trusts the entire Lean compiler (not just the Lean kernel), \
-        it could quite possibly be used to prove false.")
-      else
-        rargs
-    | ``Lean.Parser.Tactic.nativeDecide =>
-      rargs.push (kind, stx, "Using `native_decide` is not allowed in mathlib: \
-        because it trusts the entire Lean compiler (not just the Lean kernel), \
-        it could quite possibly be used to prove false.")
-    | ``Lean.Parser.Command.in =>
-      match getSetOptionMaxHeartbeatsComment stx with
-      | none => rargs
-      | some (opt, n, trailing) =>
-        -- Since we are now seeing the currently outermost `maxHeartbeats` option,
-        -- we remove all subsequent potential flags and only decide whether to lint or not
-        -- based on whether the current option has a comment.
-        let rargs := rargs.filter (·.1 != `MaxHeartbeats)
-        if trailing.toString.trimAsciiStart.isEmpty then
-          rargs.push (`MaxHeartbeats, stx,
-            s!"Please, add a comment explaining the need for modifying the maxHeartbeat limit, \
-              as in\nset_option {opt} {n} in\n-- reason for change\n...")
-        else
-          rargs
-    | _ => rargs
-  | _ => default
-
-Depends on / 依赖: args.flatMap, flatMap, getDeprecatedSyntax
+/-
+**Mathlib.Linter.Style.getDeprecatedSyntax** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Li
+nter.Style`。
+形式化陈述：getDeprecatedSyntax : Syntax -> Array (SyntaxNodeKind × Syntax × MessageDa
+ta) | stx@(.node _ kind args) => let rargs
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def getDeprecatedSyntax : Syntax -> Array (SyntaxNodeKind × Syntax × MessageData)
+def getDeprecatedSyntax : Syntax → Array (SyntaxNodeKind × Syntax × MessageData)
   | stx@(.node _ kind args) =>
     let rargs := args.flatMap getDeprecatedSyntax
     match kind with
@@ -368,70 +236,37 @@ def getDeprecatedSyntax : Syntax -> Array (SyntaxNodeKind × Syntax × MessageDa
     | _ => rargs
   | _ => default
 
-/--
-Definition of `deprecatedSyntaxLinter` / `deprecatedSyntaxLinter` 的定义
+/-- The deprecated syntax linter flags usages of deprecated syntax and suggests
+replacement syntax. For each individual case, linting can be turned on or off separately.
 
-English:
-definition deprecatedSyntaxLinter
-  signature: : Linter where run stx
-  body: do
-  unless getLinterValue linter.style.refine (← getLinterOptions) ||
-      getLinterValue linter.style.cases (← getLinterOptions) ||
-      getLinterValue linter.style.induction (← getLinterOptions) ||
-      getLinterValue linter.style.admit (← getLinterOptions) ||
-      getLinterValue linter.style.maxHeartbeats (← getLinterOptions) ||
-      getLinterValue linter.style.nativeDecide (← getLinterOptions) do
-    return
-  if (← MonadState.get).messages.hasErrors then
-    return
-  let deprecations := getDeprecatedSyntax stx
-  -- Using `withSetOptionIn` here, allows the linter to parse also the "leading" `set_option`s
-  -- but then flagging them only if the corresponding option is still set after elaborating the
-  -- leading `set_option`s.
-  -- In particular, this means that the linter "sees" `set_option maxHeartbeats 10 in ...`,
-  -- records it in `deprecations` and then acts on it, according to the correct options.
-  (withSetOptionIn fun _ => do
-    for (kind, stx', msg) in deprecations do
-      match kind with
-      | ``Lean.Parser.Tactic.refine' => Linter.logLintIf linter.style.refine stx' msg
-      | `Mathlib.Tactic.cases' => Linter.logLintIf linter.style.cases stx' msg
-      | `Mathlib.Tactic.induction' => Linter.logLintIf linter.style.induction stx' msg
-      | ``Lean.Parser.Tactic.tacticAdmit => Linter.logLintIf linter.style.admit stx' msg
-      | ``Lean.Parser.Tactic.nativeDecide | ``Lean.Parser.Tactic.decide =>
-        Linter.logLintIf linter.style.nativeDecide stx' msg
-      | `MaxHeartbeats => Linter.logLintIf linter.style.maxHeartbeats stx' msg
-      | _ => continue) stx
+* `refine'`, superseded by `refine` and `apply` (controlled by `linter.style.refine`)
+* `cases'`, superseded by `obtain`, `rcases` and `cases` (controlled by `linter.style.cases`)
+* `induction'`, superseded by `induction` (controlled by `linter.style.induction`)
+* `admit`, superseded by `sorry` (controlled by `linter.style.admit`)
+* `set_option maxHeartbeats`, should contain an explanatory comment
+  (controlled by `linter.style.maxHeartbeats`)
+-/
+/-
+**Mathlib.Linter.Style.deprecatedSyntaxLinter** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Linter.Style`。
+形式化陈述：deprecatedSyntaxLinter : Linter where run stx
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 deprecatedSyntaxLinter
-  签名: : Linter where run stx
-  定义体: do
-  unless getLinterValue linter.style.refine (← getLinterOptions) ||
-      getLinterValue linter.style.cases (← getLinterOptions) ||
-      getLinterValue linter.style.induction (← getLinterOptions) ||
-      getLinterValue linter.style.admit (← getLinterOptions) ||
-      getLinterValue linter.style.maxHeartbeats (← getLinterOptions) ||
-      getLinterValue linter.style.nativeDecide (← getLinterOptions) do
-    return
-  if (← MonadState.get).messages.hasErrors then
-    return
-  let deprecations := getDeprecatedSyntax stx
-  -- Using `withSetOptionIn` here, allows the linter to parse also the "leading" `set_option`s
-  -- but then flagging them only if the corresponding option is still set after elaborating the
-  -- leading `set_option`s.
-  -- In particular, this means that the linter "sees" `set_option maxHeartbeats 10 in ...`,
-  -- records it in `deprecations` and then acts on it, according to the correct options.
-  (withSetOptionIn fun _ => do
-    for (kind, stx', msg) in deprecations do
-      match kind with
-      | ``Lean.Parser.Tactic.refine' => Linter.logLintIf linter.style.refine stx' msg
-      | `Mathlib.Tactic.cases' => Linter.logLintIf linter.style.cases stx' msg
-      | `Mathlib.Tactic.induction' => Linter.logLintIf linter.style.induction stx' msg
-      | ``Lean.Parser.Tactic.tacticAdmit => Linter.logLintIf linter.style.admit stx' msg
-      | ``Lean.Parser.Tactic.nativeDecide | ``Lean.Parser.Tactic.decide =>
-        Linter.logLintIf linter.style.nativeDecide stx' msg
-      | `MaxHeartbeats => Linter.logLintIf linter.style.maxHeartbeats stx' msg
-      | _ => continue) stx
+--- 原说明 ---
+The deprecated syntax linter flags usages of deprecated syntax and suggests
+replacement syntax. For each individual case, linting can be turned on or off se
+parately.
+
+* `refine'`, superseded by `refine` and `apply` (controlled by `linter.style.ref
+ine`)
+* `cases'`, superseded by `obtain`, `rcases` and `cases` (controlled by `linter.
+style.cases`)
+* `induction'`, superseded by `induction` (controlled by `linter.style.induction
+`)
+* `admit`, superseded by `sorry` (controlled by `linter.style.admit`)
+* `set_option maxHeartbeats`, should contain an explanatory comment
+  (controlled by `linter.style.maxHeartbeats`)
 -/
 def deprecatedSyntaxLinter : Linter where run stx := do
   unless getLinterValue linter.style.refine (← getLinterOptions) ||
@@ -449,7 +284,7 @@ def deprecatedSyntaxLinter : Linter where run stx := do
   -- leading `set_option`s.
   -- In particular, this means that the linter "sees" `set_option maxHeartbeats 10 in ...`,
   -- records it in `deprecations` and then acts on it, according to the correct options.
-  (withSetOptionIn fun _ => do
+  (withSetOptionIn fun _ ↦ do
     for (kind, stx', msg) in deprecations do
       match kind with
       | ``Lean.Parser.Tactic.refine' => Linter.logLintIf linter.style.refine stx' msg
@@ -464,3 +299,4 @@ def deprecatedSyntaxLinter : Linter where run stx := do
 initialize addLinter deprecatedSyntaxLinter
 
 end Mathlib.Linter.Style
+

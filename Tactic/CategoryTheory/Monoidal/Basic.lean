@@ -31,24 +31,17 @@ open CategoryTheory Mathlib.Tactic.BicategoryLike
 
 namespace Mathlib.Tactic.Monoidal
 
-/--
-Definition of `monoidalNf` / `monoidalNf` 的定义
+/-- Normalize the both sides of an equality. -/
+/-
+**Mathlib.Tactic.Monoidal.monoidalNf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.M
+onoidal`。
+形式化陈述：monoidalNf (mvarId : MVarId) : MetaM (List MVarId)
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monoidalNf
-  signature: (mvarId : MVarId)
-  body: do
-  BicategoryLike.normalForm Monoidal.Context `monoidal mvarId
-
-@[inherit_doc monoidalNf]
-
-中文:
-定义 monoidalNf
-  签名: (mvarId : MVarId)
-  定义体: do
-  BicategoryLike.normalForm Monoidal.Context `monoidal mvarId
-
-@[inherit_doc monoidalNf]
+--- 原说明 ---
+Normalize the both sides of an equality.
 -/
 def monoidalNf (mvarId : MVarId) : MetaM (List MVarId) := do
   BicategoryLike.normalForm Monoidal.Context `monoidal mvarId
@@ -58,29 +51,41 @@ elab "monoidal_nf" : tactic => withMainContext do
   replaceMainGoal (← monoidalNf (← getMainGoal))
 
 /--
-Definition of `monoidal` / `monoidal` 的定义
+Use the coherence theorem for monoidal categories to solve equations in a monoidal category,
+where the two sides only differ by replacing strings of monoidal structural morphisms
+(that is, associators, unitors, and identities)
+with different strings of structural morphisms with the same source and target.
 
-English:
-definition monoidal
-  signature: (mvarId : MVarId)
-  body: BicategoryLike.main Monoidal.Context `monoidal mvarId
+That is, `monoidal` can handle goals of the form
+`a ≫ f ≫ b ≫ g ≫ c = a' ≫ f ≫ b' ≫ g ≫ c'`
+where `a = a'`, `b = b'`, and `c = c'` can be proved using `monoidal_coherence`.
+-/
+/-
+**Mathlib.Tactic.Monoidal.monoidal** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Mon
+oidal`。
+形式化陈述：monoidal (mvarId : MVarId) : MetaM (List MVarId)
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc monoidal]
+--- 原说明 ---
+Use the coherence theorem for monoidal categories to solve equations in a monoid
+al category,
+where the two sides only differ by replacing strings of monoidal structural morp
+hisms
+(that is, associators, unitors, and identities)
+with different strings of structural morphisms with the same source and target.
 
-中文:
-定义 monoidal
-  签名: (mvarId : MVarId)
-  定义体: BicategoryLike.main Monoidal.Context `monoidal mvarId
-
-@[inherit_doc monoidal]
-
-Depends on / 依赖: BicategoryLike, BicategoryLike.main, Context, Monoidal, Monoidal.Context, monoidal, mvarId
+That is, `monoidal` can handle goals of the form
+`a ≫ f ≫ b ≫ g ≫ c = a' ≫ f ≫ b' ≫ g ≫ c'`
+where `a = a'`, `b = b'`, and `c = c'` can be proved using `monoidal_coherence`.
 -/
 def monoidal (mvarId : MVarId) : MetaM (List MVarId) :=
   BicategoryLike.main Monoidal.Context `monoidal mvarId
 
 @[inherit_doc monoidal]
 elab "monoidal" : tactic => withMainContext do
-replaceMainGoal ← monoidal ← getMainGoal
+  replaceMainGoal <| ← monoidal <| ← getMainGoal
 
 end Mathlib.Tactic.Monoidal
+

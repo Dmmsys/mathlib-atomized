@@ -29,101 +29,72 @@ universe v u
 
 namespace CategoryTheory
 
-variable (C : Type u) [Category.{v} C] {FC : C -> C -> Type*} {CC : C -> Type*}
-variable [forall X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
+variable (C : Type u) [Category.{v} C] {FC : C → C → Type*} {CC : C → Type*}
+variable [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
 
 namespace MorphismProperty
 
 open Function
 
-/--
-Definition of `injective` / `injective` 的定义
+/-- Injectivity (in a concrete category) as a `MorphismProperty` -/
+/-
+**CategoryTheory.MorphismProperty.injective** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.MorphismProperty`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     {FC : C →
+ C → Type u_1} →       {CC : C → Type u_2} →         [inst_1 : (X Y : C) → FunLi
+ke (FC X Y) (CC X) (CC Y)] →           [CategoryTheory.ConcreteCategory C FC] → 
+CategoryTheory.MorphismProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition injective
-  signature: : MorphismProperty C
-  body: fun _ _ f => Injective f
-
-中文:
-定义 injective
-  签名: : MorphismProperty C
-  定义体: fun _ _ f => Injective f
+--- 原说明 ---
+Injectivity (in a concrete category) as a `MorphismProperty`
 -/
 protected def injective : MorphismProperty C := fun _ _ f => Injective f
 
-/--
-Definition of `surjective` / `surjective` 的定义
+/-- Surjectivity (in a concrete category) as a `MorphismProperty` -/
+/-
+**CategoryTheory.MorphismProperty.surjective** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.MorphismProperty`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     {FC : C →
+ C → Type u_1} →       {CC : C → Type u_2} →         [inst_1 : (X Y : C) → FunLi
+ke (FC X Y) (CC X) (CC Y)] →           [CategoryTheory.ConcreteCategory C FC] → 
+CategoryTheory.MorphismProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition surjective
-  signature: : MorphismProperty C
-  body: fun _ _ f => Surjective f
-
-中文:
-定义 surjective
-  签名: : MorphismProperty C
-  定义体: fun _ _ f => Surjective f
+--- 原说明 ---
+Surjectivity (in a concrete category) as a `MorphismProperty`
 -/
 protected def surjective : MorphismProperty C := fun _ _ f => Surjective f
 
-/--
-Definition of `bijective` / `bijective` 的定义
+/-- Bijectivity (in a concrete category) as a `MorphismProperty` -/
+/-
+**CategoryTheory.MorphismProperty.bijective** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.MorphismProperty`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     {FC : C →
+ C → Type u_1} →       {CC : C → Type u_2} →         [inst_1 : (X Y : C) → FunLi
+ke (FC X Y) (CC X) (CC Y)] →           [CategoryTheory.ConcreteCategory C FC] → 
+CategoryTheory.MorphismProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bijective
-  signature: : MorphismProperty C
-  body: fun _ _ f => Bijective f
-
-中文:
-定义 bijective
-  签名: : MorphismProperty C
-  定义体: fun _ _ f => Bijective f
+--- 原说明 ---
+Bijectivity (in a concrete category) as a `MorphismProperty`
 -/
 protected def bijective : MorphismProperty C := fun _ _ f => Bijective f
-
-/--
-theorem `bijective_eq_sup` / 定理 `bijective_eq_sup`
-
-English:
-theorem bijective_eq_sup
-  proof: rfl
-
-中文:
-定理 bijective_eq_sup
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.bijective_eq_sup** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.MorphismProperty`。
+形式化陈述：bijective_eq_sup : MorphismProperty.bijective C = MorphismProperty.injecti
+ve C ⊓ MorphismProperty.surjective C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bijective_eq_sup :
     MorphismProperty.bijective C = MorphismProperty.injective C ⊓ MorphismProperty.surjective C :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (MorphismProperty.injective C).IsMultiplicative
-  body: by
-    delta MorphismProperty.injective
-    convert! injective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.injective
-    rw [hom_comp]
-    exact hg.comp hf
-
-中文:
-实例 :
-  签名: (MorphismProperty.injective C).是Multiplicative
-  定义体: by
-    delta MorphismProperty.injective
-    convert! injective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.injective
-    rw [hom_comp]
-    exact hg.comp hf
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.injective, comp_mem, convert, hg.comp, hom_comp, injective, injective_id
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (MorphismProperty.injective C).IsMultiplicative where
   id_mem X := by
@@ -134,35 +105,10 @@ instance : (MorphismProperty.injective C).IsMultiplicative where
     delta MorphismProperty.injective
     rw [hom_comp]
     exact hg.comp hf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (MorphismProperty.surjective C).IsMultiplicative
-  body: by
-    delta MorphismProperty.surjective
-    convert! surjective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.surjective
-    rw [hom_comp]
-    exact hg.comp hf
-
-中文:
-实例 :
-  签名: (MorphismProperty.surjective C).是Multiplicative
-  定义体: by
-    delta MorphismProperty.surjective
-    convert! surjective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.surjective
-    rw [hom_comp]
-    exact hg.comp hf
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.surjective, comp_mem, convert, hg.comp, hom_comp, surjective, surjective_id
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (MorphismProperty.surjective C).IsMultiplicative where
   id_mem X := by
@@ -173,35 +119,10 @@ instance : (MorphismProperty.surjective C).IsMultiplicative where
     delta MorphismProperty.surjective
     rw [hom_comp]
     exact hg.comp hf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (MorphismProperty.bijective C).IsMultiplicative
-  body: by
-    delta MorphismProperty.bijective
-    convert! bijective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.bijective
-    rw [hom_comp]
-    exact hg.comp hf
-
-中文:
-实例 :
-  签名: (MorphismProperty.bijective C).是Multiplicative
-  定义体: by
-    delta MorphismProperty.bijective
-    convert! bijective_id
-    aesop
-  comp_mem f g hf hg := by
-    delta MorphismProperty.bijective
-    rw [hom_comp]
-    exact hg.comp hf
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.bijective, bijective, bijective_id, comp_mem, convert, hg.comp, hom_comp
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (MorphismProperty.bijective C).IsMultiplicative where
   id_mem X := by
@@ -212,65 +133,65 @@ instance : (MorphismProperty.bijective C).IsMultiplicative where
     delta MorphismProperty.bijective
     rw [hom_comp]
     exact hg.comp hf
-
-/--
-Instance `injective_respectsIso` / 实例 `injective_respectsIso`
-
-English:
-instance injective_respectsIso
-  signature: : (MorphismProperty.injective C).RespectsIso
-  body: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.injective)
-
-中文:
-实例 injective_respectsIso
-  签名: : (MorphismProperty.injective C).RespectsIso
-  定义体: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.injective)
-
-Depends on / 依赖: forget, injective, mapIso, respectsIso_of_isStableUnderComposition, toEquiv, toEquiv.injective
+/-
+**CategoryTheory.MorphismProperty.injective_respectsIso** 是 Mathlib 中的一个实例，位于命名空
+间 `CategoryTheory.MorphismProperty`。
+形式化陈述：injective_respectsIso : (MorphismProperty.injective C).RespectsIso
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.respectsIso_of_isStableUnderComposition`
+：respectsIso_of_isStableUnderComposition {P : MorphismProperty C} [P.IsStableUnd
+erComposition] (hP : isomorphisms C <= P) : RespectsIso P
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsMultiplicativeInjective`：∀ (C : Ty
+pe u) [inst : CategoryTheory.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C 
+→ Type u_2}   [inst_1 : (X Y : C) → FunLike (FC X Y…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 instance injective_respectsIso : (MorphismProperty.injective C).RespectsIso :=
   respectsIso_of_isStableUnderComposition
     (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.injective)
-
-/--
-Instance `surjective_respectsIso` / 实例 `surjective_respectsIso`
-
-English:
-instance surjective_respectsIso
-  signature: : (MorphismProperty.surjective C).RespectsIso
-  body: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.surjective)
-
-中文:
-实例 surjective_respectsIso
-  签名: : (MorphismProperty.surjective C).RespectsIso
-  定义体: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.surjective)
-
-Depends on / 依赖: forget, mapIso, respectsIso_of_isStableUnderComposition, surjective, toEquiv, toEquiv.surjective
+/-
+**CategoryTheory.MorphismProperty.surjective_respectsIso** 是 Mathlib 中的一个实例，位于命名
+空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：surjective_respectsIso : (MorphismProperty.surjective C).RespectsIso
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.respectsIso_of_isStableUnderComposition`
+：respectsIso_of_isStableUnderComposition {P : MorphismProperty C} [P.IsStableUnd
+erComposition] (hP : isomorphisms C <= P) : RespectsIso P
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsMultiplicativeSurjective`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C
+ → Type u_2}   [inst_1 : (X Y : C) → FunLike (FC X Y…
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 instance surjective_respectsIso : (MorphismProperty.surjective C).RespectsIso :=
   respectsIso_of_isStableUnderComposition
     (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.surjective)
-
-/--
-Instance `bijective_respectsIso` / 实例 `bijective_respectsIso`
-
-English:
-instance bijective_respectsIso
-  signature: : (MorphismProperty.bijective C).RespectsIso
-  body: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.bijective)
-
-中文:
-实例 bijective_respectsIso
-  签名: : (MorphismProperty.bijective C).RespectsIso
-  定义体: respectsIso_of_isStableUnderComposition
-    (fun _ _ f (_ : IsIso f) => ((forget C).mapIso (asIso f)).toEquiv.bijective)
-
-Depends on / 依赖: bijective, forget, mapIso, respectsIso_of_isStableUnderComposition, toEquiv, toEquiv.bijective
+/-
+**CategoryTheory.MorphismProperty.bijective_respectsIso** 是 Mathlib 中的一个实例，位于命名空
+间 `CategoryTheory.MorphismProperty`。
+形式化陈述：bijective_respectsIso : (MorphismProperty.bijective C).RespectsIso
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.respectsIso_of_isStableUnderComposition`
+：respectsIso_of_isStableUnderComposition {P : MorphismProperty C} [P.IsStableUnd
+erComposition] (hP : isomorphisms C <= P) : RespectsIso P
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsMultiplicativeBijective`：∀ (C : Ty
+pe u) [inst : CategoryTheory.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C 
+→ Type u_2}   [inst_1 : (X Y : C) → FunLike (FC X Y…
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 instance bijective_respectsIso : (MorphismProperty.bijective C).RespectsIso :=
   respectsIso_of_isStableUnderComposition
@@ -280,50 +201,48 @@ end MorphismProperty
 
 namespace ConcreteCategory
 
-/--
-Definition of `HasSurjectiveInjectiveFactorization` / `HasSurjectiveInjectiveFactorization` 的定义
+/-- The property that any morphism in a concrete category can be factored as a surjective
+map followed by an injective map. -/
+/-
+**CategoryTheory.ConcreteCategory.HasSurjectiveInjectiveFactorization** 是 Mathli
+b 中的一个缩写定义，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：HasSurjectiveInjectiveFactorization
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasSurjectiveInjectiveFactorization
-  body: (MorphismProperty.surjective C).HasFactorization (MorphismProperty.injective C)
-
-中文:
-缩写 HasSurjectiveInjectiveFactorization
-  定义体: (MorphismProperty.surjective C).HasFactorization (MorphismProperty.injective C)
-
-Depends on / 依赖: HasFactorization, MorphismProperty, MorphismProperty.injective, MorphismProperty.surjective, injective, surjective
+--- 原说明 ---
+The property that any morphism in a concrete category can be factored as a surje
+ctive
+map followed by an injective map.
 -/
 abbrev HasSurjectiveInjectiveFactorization :=
     (MorphismProperty.surjective C).HasFactorization (MorphismProperty.injective C)
 
-/--
-Definition of `HasFunctorialSurjectiveInjectiveFactorization` / `HasFunctorialSurjectiveInjectiveFactorization` 的定义
+/-- The property that any morphism in a concrete category can be functorially
+factored as a surjective map followed by an injective map. -/
+/-
+**CategoryTheory.ConcreteCategory.HasFunctorialSurjectiveInjectiveFactorization*
+* 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：HasFunctorialSurjectiveInjectiveFactorization
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasFunctorialSurjectiveInjectiveFactorization
-  body: (MorphismProperty.surjective C).HasFunctorialFactorization (MorphismProperty.injective C)
-
-中文:
-缩写 HasFunctorialSurjectiveInjectiveFactorization
-  定义体: (MorphismProperty.surjective C).HasFunctorialFactorization (MorphismProperty.injective C)
-
-Depends on / 依赖: HasFunctorialFactorization, MorphismProperty, MorphismProperty.injective, MorphismProperty.surjective, injective, surjective
+--- 原说明 ---
+The property that any morphism in a concrete category can be functorially
+factored as a surjective map followed by an injective map.
 -/
 abbrev HasFunctorialSurjectiveInjectiveFactorization :=
   (MorphismProperty.surjective C).HasFunctorialFactorization (MorphismProperty.injective C)
 
-/--
-Definition of `FunctorialSurjectiveInjectiveFactorizationData` / `FunctorialSurjectiveInjectiveFactorizationData` 的定义
+/-- The structure containing the data of a functorial factorization of morphisms as
+a surjective map followed by an injective map in a concrete category. -/
+/-
+**CategoryTheory.ConcreteCategory.FunctorialSurjectiveInjectiveFactorizationData
+** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：FunctorialSurjectiveInjectiveFactorizationData
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FunctorialSurjectiveInjectiveFactorizationData
-  body: (MorphismProperty.surjective C).FunctorialFactorizationData (MorphismProperty.injective C)
-
-中文:
-缩写 FunctorialSurjectiveInjectiveFactorizationData
-  定义体: (MorphismProperty.surjective C).FunctorialFactorizationData (MorphismProperty.injective C)
-
-Depends on / 依赖: FunctorialFactorizationData, MorphismProperty, MorphismProperty.injective, MorphismProperty.surjective, injective, surjective
+--- 原说明 ---
+The structure containing the data of a functorial factorization of morphisms as
+a surjective map followed by an injective map in a concrete category.
 -/
 abbrev FunctorialSurjectiveInjectiveFactorizationData :=
   (MorphismProperty.surjective C).FunctorialFactorizationData (MorphismProperty.injective C)
@@ -333,57 +252,24 @@ end ConcreteCategory
 open ConcreteCategory
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `functorialSurjectiveInjectiveFactorizationData` / `functorialSurjectiveInjectiveFactorizationData` 的定义
+/-- In the category of types, any map can be functorially factored as a surjective
+map followed by an injective map. -/
+/-
+**CategoryTheory.functorialSurjectiveInjectiveFactorizationData** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory`。
+形式化陈述：functorialSurjectiveInjectiveFactorizationData : FunctorialSurjectiveInjec
+tiveFactorizationData (Type u) where Z.obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorialSurjectiveInjectiveFactorizationData
-  signature: :
-  body: Set.range f.hom.hom
-  Z.map φ := ↾fun y => ⟨φ.right y.1, by obtain ⟨_, x, rfl⟩ := y; exact ⟨φ.left x, congr_hom φ.w x⟩⟩
-  i :=
-    { app := fun f => ↾fun x => ⟨f.hom x, ⟨x, rfl⟩⟩
-      naturality := fun f g φ => by
-        ext x
-        exact congr_hom φ.w x }
-  p :=
-    { app := fun _ => ↾fun y => y.1
-      naturality := by intros; rfl; }
-  fac := rfl
-  hi := by
-    rintro f ⟨_, x, rfl⟩
-    exact ⟨x, rfl⟩
-  hp f x₁ x₂ h := by
-    rw [Subtype.ext_iff]
-    exact h
-
-中文:
-定义 functorialSurjectiveInjectiveFactorizationData
-  签名: :
-  定义体: Set.range f.hom.hom
-  Z.map φ := ↾fun y => ⟨φ.right y.1, by obtain ⟨_, x, rfl⟩ := y; exact ⟨φ.left x, congr_hom φ.w x⟩⟩
-  i :=
-    { app := fun f => ↾fun x => ⟨f.hom x, ⟨x, rfl⟩⟩
-      naturality := fun f g φ => by
-        ext x
-        exact congr_hom φ.w x }
-  p :=
-    { app := fun _ => ↾fun y => y.1
-      naturality := by intros; rfl; }
-  fac := rfl
-  hi := by
-    rintro f ⟨_, x, rfl⟩
-    exact ⟨x, rfl⟩
-  hp f x₁ x₂ h := by
-    rw [Subtype.ext_iff]
-    exact h
-
-Depends on / 依赖: Set.range, f.hom.hom
+--- 原说明 ---
+In the category of types, any map can be functorially factored as a surjective
+map followed by an injective map.
 -/
 def functorialSurjectiveInjectiveFactorizationData :
     FunctorialSurjectiveInjectiveFactorizationData (Type u) where
   Z.obj f := Set.range f.hom.hom
-  Z.map φ := ↾fun y => ⟨φ.right y.1, by obtain ⟨_, x, rfl⟩ := y; exact ⟨φ.left x, congr_hom φ.w x⟩⟩
+  Z.map φ := ↾fun y ↦ ⟨φ.right y.1, by obtain ⟨_, x, rfl⟩ := y; exact ⟨φ.left x, congr_hom φ.w x⟩⟩
   i :=
     { app := fun f => ↾fun x => ⟨f.hom x, ⟨x, rfl⟩⟩
       naturality := fun f g φ => by
@@ -399,24 +285,13 @@ def functorialSurjectiveInjectiveFactorizationData :
   hp f x₁ x₂ h := by
     rw [Subtype.ext_iff]
     exact h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFunctorialSurjectiveInjectiveFactorization (Type u)
-  body: ⟨functorialSurjectiveInjectiveFactorizationData⟩
-
-中文:
-实例 :
-  签名: HasFunctorialSurjectiveInjectiveFactorization (类型u)
-  定义体: ⟨functorialSurjectiveInjectiveFactorizationData⟩
-
-Depends on / 依赖: functorialSurjectiveInjectiveFactorizationData
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFunctorialSurjectiveInjectiveFactorization (Type u) where
   nonempty_functorialFactorizationData :=
     ⟨functorialSurjectiveInjectiveFactorizationData⟩
 
 end CategoryTheory
+

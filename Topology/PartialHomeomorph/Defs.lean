@@ -49,24 +49,15 @@ variable {X X' : Type*} {Y Y' : Type*} {Z Z' : Type*}
   [TopologicalSpace X] [TopologicalSpace X'] [TopologicalSpace Y] [TopologicalSpace Y']
   [TopologicalSpace Z] [TopologicalSpace Z']
 
-/--
-Definition of `PartialHomeomorph` / `PartialHomeomorph` 的定义
+/-- Partial homeomorphisms, defined on subsets of the space -/
+/-
+**PartialHomeomorph** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_7) → (Y : Type u_8) → [TopologicalSpace X] → [TopologicalSpace
+ Y] → Type (max u_7 u_8)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PartialHomeomorph
-  parameters: (X : Type*) (Y : Type*) [TopologicalSpace X]
-  extends: PartialEquiv X Y
-  axioms and operations (2):
-    - continuousOn_toFun : ContinuousOn toFun source
-    - continuousOn_invFun : ContinuousOn invFun target
-
-中文:
-结构 PartialHomeomorph
-  参数: (X : 类型) (Y : 类型) [拓扑空间 X]
-  继承: 部分等价 X Y
-  公理与运算 (2 个):
-    - continuousOn_toFun : ContinuousOn toFun source
-    - continuousOn_invFun : ContinuousOn invFun target
+--- 原说明 ---
+Partial homeomorphisms, defined on subsets of the space
 -/
 structure PartialHomeomorph (X : Type*) (Y : Type*) [TopologicalSpace X]
     [TopologicalSpace Y] extends PartialEquiv X Y where
@@ -79,544 +70,389 @@ variable (e : PartialHomeomorph X Y)
 
 /-! Basic properties; inverse (symm instance) -/
 section Basic
-/--
-Definition of `toFun'` / `toFun'` 的定义
+/-- Coercion of a partial homeomorphisms to a function. We don't use `e.toFun` because it is
+actually `e.toPartialEquiv.toFun`, so `simp` will apply lemmas about `toPartialEquiv`. -/
+/-
+**PartialHomeomorph.toFun'** 是 Mathlib 中的一个定义，位于命名空间 `PartialHomeomorph`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_3} → [inst : TopologicalSpace X] → [inst_1 
+: TopologicalSpace Y] → PartialHomeomorph X Y → X → Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFun'
-  signature: : X -> Y
-  body: e.toFun
-
-中文:
-定义 toFun'
-  签名: : X -> Y
-  定义体: e.toFun
+--- 原说明 ---
+Coercion of a partial homeomorphisms to a function. We don't use `e.toFun` becau
+se it is
+actually `e.toPartialEquiv.toFun`, so `simp` will apply lemmas about `toPartialE
+quiv`.
 -/
-@[coe] def toFun' : X -> Y := e.toFun
+@[coe] def toFun' : X → Y := e.toFun
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Coercion of a `PartialHomeomorph` to function.
+Note that a `PartialHomeomorph` is not `DFunLike`. -/
+/-
+**PartialHomeomorph.** 是 Mathlib 中的一个实例，位于命名空间 `PartialHomeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeFun (PartialHomeomorph X Y) fun _ => X -> Y
-  body: ⟨fun e => e.toFun'⟩
-
-中文:
-实例 :
-  签名: CoeFun (PartialHomeomorph X Y) fun _ => X -> Y
-  定义体: ⟨fun e => e.toFun'⟩
-
-Depends on / 依赖: e.toFun
+--- 原说明 ---
+Coercion of a `PartialHomeomorph` to function.
+Note that a `PartialHomeomorph` is not `DFunLike`.
 -/
-instance : CoeFun (PartialHomeomorph X Y) fun _ => X -> Y :=
+instance : CoeFun (PartialHomeomorph X Y) fun _ => X → Y :=
   ⟨fun e => e.toFun'⟩
 
 /-- The inverse of a partial homeomorphism -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**PartialHomeomorph.symm** 是 Mathlib 中的一个定义，位于命名空间 `PartialHomeomorph`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_3} →     [inst : TopologicalSpace X] → [ins
+t_1 : TopologicalSpace Y] → PartialHomeomorph X Y → PartialHomeomorph Y X
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.continuousOn_invFun`：∀ {X : Type u_7} {Y : Type u_8} [
+inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : PartialHomeom
+orph X Y), ContinuousOn sel…
+· 使用定理 `PartialHomeomorph.continuousOn_toFun`：∀ {X : Type u_7} {Y : Type u_8} [i
+nst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : PartialHomeomo
+rph X Y), ContinuousOn (↑s…
 
-English:
-definition symm
-  signature: : PartialHomeomorph Y X where
-  body: e.toPartialEquiv.symm
-  continuousOn_toFun := e.continuousOn_invFun
-  continuousOn_invFun := e.continuousOn_toFun
-
-中文:
-定义 symm
-  签名: : PartialHomeomorph Y X where
-  定义体: e.toPartialEquiv.symm
-  continuousOn_toFun := e.continuousOn_invFun
-  continuousOn_invFun := e.continuousOn_toFun
+--- 原说明 ---
+The inverse of a partial homeomorphism
 -/
 protected def symm : PartialHomeomorph Y X where
   toPartialEquiv := e.toPartialEquiv.symm
   continuousOn_toFun := e.continuousOn_invFun
   continuousOn_invFun := e.continuousOn_toFun
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+  because it is a composition of multiple projections. -/
+/-
+**PartialHomeomorph.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `PartialHomeomorph.Sim
+ps`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_3} → [inst : TopologicalSpace X] → [inst_1 
+: TopologicalSpace Y] → PartialHomeomorph X Y → X → Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (e : PartialHomeomorph X Y)
-  body: e
-
-中文:
-定义 Simps.apply
-  签名: (e : PartialHomeomorph X Y)
-  定义体: e
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+  because it is a composition of multiple projections.
 -/
-def Simps.apply (e : PartialHomeomorph X Y) : X -> Y := e
+def Simps.apply (e : PartialHomeomorph X Y) : X → Y := e
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**PartialHomeomorph.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `PartialHomeomorp
+h.Simps`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_3} → [inst : TopologicalSpace X] → [inst_1 
+: TopologicalSpace Y] → PartialHomeomorph X Y → Y → X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: (e : PartialHomeomorph X Y)
-  body: e.symm
-
-initialize_simps_projections PartialHomeomorph (toFun -> apply, invFun -> symm_apply)
-
-@[fun_prop]
-
-中文:
-定义 Simps.symm_apply
-  签名: (e : PartialHomeomorph X Y)
-  定义体: e.symm
-
-initialize_simps_projections PartialHomeomorph (toFun -> apply, invFun -> symm_apply)
-
-@[fun_prop]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.symm_apply (e : PartialHomeomorph X Y) : Y -> X := e.symm
+def Simps.symm_apply (e : PartialHomeomorph X Y) : Y → X := e.symm
 
-initialize_simps_projections PartialHomeomorph (toFun -> apply, invFun -> symm_apply)
-
-@[fun_prop]
-/--
-theorem `continuousOn` / 定理 `continuousOn`
-
-English:
-theorem continuousOn
-  statement: ContinuousOn e e.source
-  proof: e.continuousOn_toFun
+initialize_simps_projections PartialHomeomorph (toFun → apply, invFun → symm_apply)
 
 @[fun_prop]
-
-中文:
-定理 continuousOn
-  结论: ContinuousOn e e.source
-  证明: e.continuousOn_toFun
-
-@[fun_prop]
+/-
+**PartialHomeomorph.continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   ContinuousOn (↑e) e.source
+参数：e : PartialHomeomorph X Y；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.continuousOn_toFun`：∀ {X : Type u_7} {Y : Type u_8} [i
+nst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : PartialHomeomo
+rph X Y), ContinuousOn (↑s…
 -/
 protected theorem continuousOn : ContinuousOn e e.source :=
   e.continuousOn_toFun
 
 @[fun_prop]
-/--
-theorem `continuousOn_symm` / 定理 `continuousOn_symm`
-
-English:
-theorem continuousOn_symm
-  statement: ContinuousOn e.symm e.target
-  proof: e.continuousOn_invFun
-
-@[simp]
-
-中文:
-定理 continuousOn_symm
-  结论: ContinuousOn e.symm e.target
-  证明: e.continuousOn_invFun
-
-@[simp]
-
-Depends on / 依赖: continuousOn_invFun, e.continuousOn_invFun
+/-
+**PartialHomeomorph.continuousOn_symm** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomor
+ph`。
+形式化陈述：continuousOn_symm : ContinuousOn e.symm e.target
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.continuousOn_invFun`：∀ {X : Type u_7} {Y : Type u_8} [
+inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : PartialHomeom
+orph X Y), ContinuousOn sel…
 -/
 theorem continuousOn_symm : ContinuousOn e.symm e.target :=
   e.continuousOn_invFun
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (e : PartialEquiv X Y) (h₁ h₂)
-  statement: (PartialHomeomorph.mk e h₁ h₂ : X -> Y) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (e : 部分等价 X Y) (h₁ h₂)
-  结论: (PartialHomeomorph.mk e h₁ h₂ : X -> Y) = e
-  证明: rfl
-
-@[simp]
+/-
+**PartialHomeomorph.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：coe_mk (e : PartialEquiv X Y) (h₁ h₂) : (PartialHomeomorph.mk e h₁ h₂ : X 
+-> Y) = e
+参数：e : PartialEquiv X Y；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (e : PartialEquiv X Y) (h₁ h₂) : (PartialHomeomorph.mk e h₁ h₂ : X -> Y) = e := rfl
+theorem coe_mk (e : PartialEquiv X Y) (h₁ h₂) : (PartialHomeomorph.mk e h₁ h₂ : X → Y) = e := rfl
 
 @[simp]
-/--
-theorem `coe_mk_symm` / 定理 `coe_mk_symm`
-
-English:
-theorem coe_mk_symm
-  given: (e : PartialEquiv X Y) (h₁ h₂)
-  proof: rfl
-
-中文:
-定理 coe_mk_symm
-  条件: (e : 部分等价 X Y) (h₁ h₂)
-  证明: rfl
+/-
+**PartialHomeomorph.coe_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：coe_mk_symm (e : PartialEquiv X Y) (h₁ h₂) : ((PartialHomeomorph.mk e h₁ h
+₂).symm : Y -> X) = e.symm
+参数：e : PartialEquiv X Y；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk_symm (e : PartialEquiv X Y) (h₁ h₂) :
-    ((PartialHomeomorph.mk e h₁ h₂).symm : Y -> X) = e.symm :=
+    ((PartialHomeomorph.mk e h₁ h₂).symm : Y → X) = e.symm :=
   rfl
-
-/--
-theorem `toPartialEquiv_injective` / 定理 `toPartialEquiv_injective`
-
-English:
-theorem toPartialEquiv_injective
-
-中文:
-定理 toPartialEquiv_injective
+/-
+**PartialHomeomorph.toPartialEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `PartialH
+omeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y],   Function.Injective PartialHomeomorph.toPartialEquiv
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toPartialEquiv_injective :
-    Injective (toPartialEquiv : PartialHomeomorph X Y -> PartialEquiv X Y)
+    Injective (toPartialEquiv : PartialHomeomorph X Y → PartialEquiv X Y)
   | ⟨_, _, _⟩, ⟨_, _, _⟩, rfl => rfl
 
 /- Register a few simp lemmas to make sure that `simp` puts the application of a local
 homeomorphism in its normal form, i.e., in terms of its coercion to a function. -/
 @[simp]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
+/-
+**PartialHomeomorph.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：toFun_eq_coe (e : PartialHomeomorph X Y) : e.toFun = e
+参数：e : PartialHomeomorph X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toFun_eq_coe
-  given: (e : PartialHomeomorph X Y)
-  statement: e.toFun = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: (e : PartialHomeomorph X Y)
-  结论: e.toFun = e
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Register a few simp lemmas to make sure that `simp` puts the application of a lo
+cal
+homeomorphism in its normal form, i.e., in terms of its coercion to a function.
 -/
 theorem toFun_eq_coe (e : PartialHomeomorph X Y) : e.toFun = e :=
   rfl
 
 @[simp]
-/--
-theorem `invFun_eq_coe` / 定理 `invFun_eq_coe`
-
-English:
-theorem invFun_eq_coe
-  given: (e : PartialHomeomorph X Y)
-  statement: e.invFun = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invFun_eq_coe
-  条件: (e : PartialHomeomorph X Y)
-  结论: e.invFun = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**PartialHomeomorph.invFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：invFun_eq_coe (e : PartialHomeomorph X Y) : e.invFun = e.symm
+参数：e : PartialHomeomorph X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invFun_eq_coe (e : PartialHomeomorph X Y) : e.invFun = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toPartialEquiv` / 定理 `coe_toPartialEquiv`
-
-English:
-theorem coe_toPartialEquiv
-  statement: (e.toPartialEquiv : X -> Y) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toPartialEquiv
-  结论: (e.toPartialEquiv : X -> Y) = e
-  证明: rfl
-
-@[simp]
+/-
+**PartialHomeomorph.coe_toPartialEquiv** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomo
+rph`。
+形式化陈述：coe_toPartialEquiv : (e.toPartialEquiv : X -> Y) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toPartialEquiv : (e.toPartialEquiv : X -> Y) = e :=
+theorem coe_toPartialEquiv : (e.toPartialEquiv : X → Y) = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toPartialEquiv_symm` / 定理 `coe_toPartialEquiv_symm`
-
-English:
-theorem coe_toPartialEquiv_symm
-  statement: (e.toPartialEquiv.symm : Y -> X) = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toPartialEquiv_symm
-  结论: (e.toPartialEquiv.symm : Y -> X) = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**PartialHomeomorph.coe_toPartialEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `PartialHo
+meomorph`。
+形式化陈述：coe_toPartialEquiv_symm : (e.toPartialEquiv.symm : Y -> X) = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toPartialEquiv_symm : (e.toPartialEquiv.symm : Y -> X) = e.symm :=
+theorem coe_toPartialEquiv_symm : (e.toPartialEquiv.symm : Y → X) = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `map_source` / 定理 `map_source`
-
-English:
-theorem map_source
-  given: {x : X} (h : x in e.source)
-  statement: e x in e.target
-  proof: e.map_source' h
-
-中文:
-定理 map_source
-  条件: {x : X} (h : x in e.source)
-  结论: e x in e.target
-  证明: e.map_source' h
-
-Depends on / 依赖: e.map_source, map_source
+/-
+**PartialHomeomorph.map_source** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：map_source {x : X} (h : x in e.source) : e x in e.target
+参数：h : x in e.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.map_source'`：∀ {α : Type u_5} {β : Type u_6} (self : Partia
+lEquiv α β) ⦃x : α⦄, x ∈ self.source → ↑self x ∈ self.target
 -/
-theorem map_source {x : X} (h : x in e.source) : e x in e.target :=
+theorem map_source {x : X} (h : x ∈ e.source) : e x ∈ e.target :=
   e.map_source' h
 
-/--
-lemma `image_source_subset` / 引理 `image_source_subset`
+/-- Variant of `map_source`, stated in terms of subsets. -/
+/-
+**PartialHomeomorph.image_source_subset** 是 Mathlib 中的一个引理，位于命名空间 `PartialHomeom
+orph`。
+形式化陈述：image_source_subset : e '' e.source subseteq e.target
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_of_eq_of_mem`：mem_of_eq_of_mem {x y : α} {s : Set α} (hx : x = y
+) (h : y in s) : x in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.map_source'`：∀ {α : Type u_5} {β : Type u_6} (self : Partia
+lEquiv α β) ⦃x : α⦄, x ∈ self.source → ↑self x ∈ self.target
 
-English:
-lemma image_source_subset
-  statement: e '' e.source subseteq e.target
-  proof: fun _ ⟨_, hx, hex⟩ => mem_of_eq_of_mem (id hex.symm) (e.map_source' hx)
-
-@[simp]
-
-中文:
-引理 image_source_subset
-  结论: e '' e.source subseteq e.target
-  证明: fun _ ⟨_, hx, hex⟩ => mem_of_eq_of_mem (id hex.symm) (e.map_source' hx)
-
-@[simp]
-
-Depends on / 依赖: e.map_source, hex.symm, map_source, mem_of_eq_of_mem
+--- 原说明 ---
+Variant of `map_source`, stated in terms of subsets.
 -/
-lemma image_source_subset : e '' e.source subseteq e.target :=
-  fun _ ⟨_, hx, hex⟩ => mem_of_eq_of_mem (id hex.symm) (e.map_source' hx)
+lemma image_source_subset : e '' e.source ⊆ e.target :=
+  fun _ ⟨_, hx, hex⟩ ↦ mem_of_eq_of_mem (id hex.symm) (e.map_source' hx)
 
 @[simp]
-/--
-theorem `map_target` / 定理 `map_target`
-
-English:
-theorem map_target
-  given: {x : Y} (h : x in e.target)
-  statement: e.symm x in e.source
-  proof: e.map_target' h
-
-@[simp]
-
-中文:
-定理 map_target
-  条件: {x : Y} (h : x in e.target)
-  结论: e.symm x in e.source
-  证明: e.map_target' h
-
-@[simp]
-
-Depends on / 依赖: e.map_target, map_target
+/-
+**PartialHomeomorph.map_target** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：map_target {x : Y} (h : x in e.target) : e.symm x in e.source
+参数：h : x in e.target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.map_target'`：∀ {α : Type u_5} {β : Type u_6} (self : Partia
+lEquiv α β) ⦃x : β⦄, x ∈ self.target → self.invFun x ∈ self.source
 -/
-theorem map_target {x : Y} (h : x in e.target) : e.symm x in e.source :=
+theorem map_target {x : Y} (h : x ∈ e.target) : e.symm x ∈ e.source :=
   e.map_target' h
 
 @[simp]
-/--
-theorem `left_inv` / 定理 `left_inv`
-
-English:
-theorem left_inv
-  given: {x : X} (h : x in e.source)
-  statement: e.symm (e x) = x
-  proof: e.left_inv' h
-
-@[simp]
-
-中文:
-定理 left_inv
-  条件: {x : X} (h : x in e.source)
-  结论: e.symm (e x) = x
-  证明: e.left_inv' h
-
-@[simp]
-
-Depends on / 依赖: e.left_inv, left_inv
+/-
+**PartialHomeomorph.left_inv** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：left_inv {x : X} (h : x in e.source) : e.symm (e x) = x
+参数：h : x in e.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.left_inv'`：∀ {α : Type u_5} {β : Type u_6} (self : PartialE
+quiv α β) ⦃x : α⦄, x ∈ self.source → self.invFun (↑self x) = x
 -/
-theorem left_inv {x : X} (h : x in e.source) : e.symm (e x) = x :=
+theorem left_inv {x : X} (h : x ∈ e.source) : e.symm (e x) = x :=
   e.left_inv' h
 
 @[simp]
-/--
-theorem `right_inv` / 定理 `right_inv`
-
-English:
-theorem right_inv
-  given: {x : Y} (h : x in e.target)
-  statement: e (e.symm x) = x
-  proof: e.right_inv' h
-
-中文:
-定理 right_inv
-  条件: {x : Y} (h : x in e.target)
-  结论: e (e.symm x) = x
-  证明: e.right_inv' h
-
-Depends on / 依赖: e.right_inv, right_inv
+/-
+**PartialHomeomorph.right_inv** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：right_inv {x : Y} (h : x in e.target) : e (e.symm x) = x
+参数：h : x in e.target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.right_inv'`：∀ {α : Type u_5} {β : Type u_6} (self : Partial
+Equiv α β) ⦃x : β⦄, x ∈ self.target → ↑self (self.invFun x) = x
 -/
-theorem right_inv {x : Y} (h : x in e.target) : e (e.symm x) = x :=
+theorem right_inv {x : Y} (h : x ∈ e.target) : e (e.symm x) = x :=
   e.right_inv' h
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: {x : X} {y : Y} (hx : x in e.source) (hy : y in e.target)
-  proof: e.toPartialEquiv.eq_symm_apply hx hy
-
-中文:
-定理 eq_symm_apply
-  条件: {x : X} {y : Y} (hx : x in e.source) (hy : y in e.target)
-  证明: e.toPartialEquiv.eq_symm_apply hx hy
-
-Depends on / 依赖: e.toPartialEquiv.eq_symm_apply, eq_symm_apply, toPartialEquiv
+/-
+**PartialHomeomorph.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：eq_symm_apply {x : X} {y : Y} (hx : x in e.source) (hy : y in e.target) : 
+x = e.symm y ↔ e x = y
+参数：hx : x in e.source；hy : y in e.target。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.eq_symm_apply`：eq_symm_apply {x : α} {y : β} (hx : x in e.s
+ource) (hy : y in e.target) : x = e.symm y ↔ e x = y
 -/
-theorem eq_symm_apply {x : X} {y : Y} (hx : x in e.source) (hy : y in e.target) :
+theorem eq_symm_apply {x : X} {y : Y} (hx : x ∈ e.source) (hy : y ∈ e.target) :
     x = e.symm y ↔ e x = y :=
   e.toPartialEquiv.eq_symm_apply hx hy
-
-/--
-theorem `mapsTo` / 定理 `mapsTo`
-
-English:
-theorem mapsTo
-  statement: MapsTo e e.source e.target
-  proof: fun _ => e.map_source
-
-中文:
-定理 mapsTo
-  结论: 映射到 e e.source e.target
-  证明: fun _ => e.map_source
+/-
+**PartialHomeomorph.mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.MapsTo (↑e) e.source e.target
+参数：e : PartialHomeomorph X Y；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.map_source`：map_source {x : X} (h : x in e.source) : e
+ x in e.target
 -/
 protected theorem mapsTo : MapsTo e e.source e.target := fun _ => e.map_source
-
-/--
-theorem `mapsTo_symm` / 定理 `mapsTo_symm`
-
-English:
-theorem mapsTo_symm
-  statement: MapsTo e.symm e.target e.source
-  proof: e.symm.mapsTo
-
-中文:
-定理 mapsTo_symm
-  结论: 映射到 e.symm e.target e.source
-  证明: e.symm.mapsTo
+/-
+**PartialHomeomorph.mapsTo_symm** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.MapsTo (↑e.symm) e.target e.s
+ource
+参数：e : PartialHomeomorph X Y；↑e.symm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.mapsTo`：∀ {X : Type u_1} {Y : Type u_3} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Set.M
+apsTo (↑e) e.s…
 -/
 protected theorem mapsTo_symm : MapsTo e.symm e.target e.source :=
   e.symm.mapsTo
-
-/--
-theorem `leftInvOn` / 定理 `leftInvOn`
-
-English:
-theorem leftInvOn
-  statement: LeftInvOn e.symm e e.source
-  proof: fun _ => e.left_inv
-
-中文:
-定理 leftInvOn
-  结论: LeftInvOn e.symm e e.source
-  证明: fun _ => e.left_inv
+/-
+**PartialHomeomorph.leftInvOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.LeftInvOn (↑e.symm) (↑e) e.so
+urce
+参数：e : PartialHomeomorph X Y；↑e.symm；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.left_inv`：left_inv {x : X} (h : x in e.source) : e.sym
+m (e x) = x
 -/
 protected theorem leftInvOn : LeftInvOn e.symm e e.source := fun _ => e.left_inv
-
-/--
-theorem `rightInvOn` / 定理 `rightInvOn`
-
-English:
-theorem rightInvOn
-  statement: RightInvOn e.symm e e.target
-  proof: fun _ => e.right_inv
-
-中文:
-定理 rightInvOn
-  结论: RightInvOn e.symm e e.target
-  证明: fun _ => e.right_inv
+/-
+**PartialHomeomorph.rightInvOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.RightInvOn (↑e.symm) (↑e) e.t
+arget
+参数：e : PartialHomeomorph X Y；↑e.symm；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.right_inv`：right_inv {x : Y} (h : x in e.target) : e (
+e.symm x) = x
 -/
 protected theorem rightInvOn : RightInvOn e.symm e e.target := fun _ => e.right_inv
-
-/--
-theorem `invOn` / 定理 `invOn`
-
-English:
-theorem invOn
-  statement: InvOn e.symm e e.source e.target
-  proof: ⟨e.leftInvOn, e.rightInvOn⟩
-
-中文:
-定理 invOn
-  结论: InvOn e.symm e e.source e.target
-  证明: ⟨e.leftInvOn, e.rightInvOn⟩
+/-
+**PartialHomeomorph.invOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.InvOn (↑e.symm) (↑e) e.source
+ e.target
+参数：e : PartialHomeomorph X Y；↑e.symm；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.leftInvOn`：∀ {X : Type u_1} {Y : Type u_3} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Se
+t.LeftInvOn (↑e.s…
+· 使用定理 `PartialHomeomorph.rightInvOn`：∀ {X : Type u_1} {Y : Type u_3} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   S
+et.RightInvOn (↑e.…
 -/
 protected theorem invOn : InvOn e.symm e e.source e.target :=
   ⟨e.leftInvOn, e.rightInvOn⟩
-
-/--
-theorem `injOn` / 定理 `injOn`
-
-English:
-theorem injOn
-  statement: InjOn e e.source
-  proof: e.leftInvOn.injOn
-
-中文:
-定理 injOn
-  结论: 单射限制 e e.source
-  证明: e.leftInvOn.injOn
+/-
+**PartialHomeomorph.injOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.InjOn (↑e) e.source
+参数：e : PartialHomeomorph X Y；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.LeftInvOn.injOn`：injOn (h : LeftInvOn f₁' f s) : InjOn f s
+· 使用定理 `PartialHomeomorph.leftInvOn`：∀ {X : Type u_1} {Y : Type u_3} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Se
+t.LeftInvOn (↑e.s…
 -/
 protected theorem injOn : InjOn e e.source :=
   e.leftInvOn.injOn
-
-/--
-theorem `bijOn` / 定理 `bijOn`
-
-English:
-theorem bijOn
-  statement: BijOn e e.source e.target
-  proof: e.invOn.bijOn e.mapsTo e.mapsTo_symm
-
-中文:
-定理 bijOn
-  结论: 双射限制 e e.source e.target
-  证明: e.invOn.bijOn e.mapsTo e.mapsTo_symm
+/-
+**PartialHomeomorph.bijOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.BijOn (↑e) e.source e.target
+参数：e : PartialHomeomorph X Y；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.InvOn.bijOn`：bijOn (h : InvOn f' f s t) (hf : MapsTo f s t) (hf' : M
+apsTo f' t s) : BijOn f s t
+· 使用定理 `PartialHomeomorph.invOn`：∀ {X : Type u_1} {Y : Type u_3} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Set.In
+vOn (↑e.symm)…
+· 使用定理 `PartialHomeomorph.mapsTo`：∀ {X : Type u_1} {Y : Type u_3} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Set.M
+apsTo (↑e) e.s…
+· 使用定理 `PartialHomeomorph.mapsTo_symm`：∀ {X : Type u_1} {Y : Type u_3} [inst : T
+opologicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   
+Set.MapsTo (↑e.symm…
 -/
 protected theorem bijOn : BijOn e e.source e.target :=
   e.invOn.bijOn e.mapsTo e.mapsTo_symm
-
-/--
-theorem `surjOn` / 定理 `surjOn`
-
-English:
-theorem surjOn
-  statement: SurjOn e e.source e.target
-  proof: e.bijOn.surjOn
-
-中文:
-定理 surjOn
-  结论: 满射限制 e e.source e.target
-  证明: e.bijOn.surjOn
+/-
+**PartialHomeomorph.surjOn** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   Set.SurjOn (↑e) e.source e.target
+参数：e : PartialHomeomorph X Y；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.surjOn`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.SurjOn f s t
+· 使用定理 `PartialHomeomorph.bijOn`：∀ {X : Type u_1} {Y : Type u_3} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   Set.Bi
+jOn (↑e) e.so…
 -/
 protected theorem surjOn : SurjOn e e.source e.target :=
   e.bijOn.surjOn
@@ -627,24 +463,10 @@ end Basic
 to a set `s` in the domain and to `t` in the codomain. -/
 @[simps! -fullyApplied apply symm_apply toPartialEquiv,
   simps! -isSimp source target]
-/--
-Definition of `_root_.Homeomorph.toPartialHomeomorphOfImageEq` / `_root_.Homeomorph.toPartialHomeomorphOfImageEq` 的定义
-
-English:
-definition _root_.Homeomorph.toPartialHomeomorphOfImageEq
-  signature: (e : X ≃ₜ Y) (s : Set X)
-  body: e.toPartialEquivOfImageEq s t h
-  continuousOn_toFun := e.continuous.continuousOn
-  continuousOn_invFun := e.symm.continuous.continuousOn
-
-中文:
-定义 _root_.同胚.toPartialHomeomorphOfImageEq
-  签名: (e : X ≃ₜ Y) (s : 集合 X)
-  定义体: e.toPartialEquivOfImageEq s t h
-  continuousOn_toFun := e.continuous.continuousOn
-  continuousOn_invFun := e.symm.continuous.continuousOn
-
-Depends on / 依赖: e.toPartialEquivOfImageEq, toPartialEquivOfImageEq
+/-
+**PartialHomeomorph._root_.Homeomorph.toPartialHomeomorphOfImageEq** 是 Mathlib 中
+的一个定义，位于命名空间 `PartialHomeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.Homeomorph.toPartialHomeomorphOfImageEq (e : X ≃ₜ Y) (s : Set X)
     (t : Set Y) (h : e '' s = t) : PartialHomeomorph X Y where
@@ -654,65 +476,44 @@ def _root_.Homeomorph.toPartialHomeomorphOfImageEq (e : X ≃ₜ Y) (s : Set X)
 
 /-- A homeomorphism induces a partial homeomorphism on the whole space -/
 @[simps! -fullyApplied]
-/--
-Definition of `_root_.Homeomorph.toPartialHomeomorph` / `_root_.Homeomorph.toPartialHomeomorph` 的定义
+/-
+**PartialHomeomorph._root_.Homeomorph.toPartialHomeomorph** 是 Mathlib 中的一个定义，位于命
+名空间 `PartialHomeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Homeomorph.toPartialHomeomorph
-  signature: (e : X ≃ₜ Y)
-  body: e.toPartialHomeomorphOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
-
-中文:
-定义 _root_.同胚.toPartialHomeomorph
-  签名: (e : X ≃ₜ Y)
-  定义体: e.toPartialHomeomorphOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
-
-Depends on / 依赖: e.surjective.range_eq, e.toPartialHomeomorphOfImageEq, image_univ, range_eq, surjective, toPartialHomeomorphOfImageEq
+--- 原说明 ---
+A homeomorphism induces a partial homeomorphism on the whole space
 -/
 def _root_.Homeomorph.toPartialHomeomorph (e : X ≃ₜ Y) : PartialHomeomorph X Y :=
-e.toPartialHomeomorphOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
+  e.toPartialHomeomorphOfImageEq univ univ <| by rw [image_univ, e.surjective.range_eq]
 
-/--
-Definition of `replacePartialEquiv` / `replacePartialEquiv` 的定义
+/-- Replace `toPartialEquiv` field to provide better definitional equalities. -/
+/-
+**PartialHomeomorph.replacePartialEquiv** 是 Mathlib 中的一个定义，位于命名空间 `PartialHomeom
+orph`。
+形式化陈述：replacePartialEquiv (e : PartialHomeomorph X Y) (e' : PartialEquiv X Y) (h
+ : e.toPartialEquiv = e') : PartialHomeomorph X Y where toPartialEquiv
+参数：e : PartialHomeomorph X Y；e' : PartialEquiv X Y；h : e.toPartialEquiv = e'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition replacePartialEquiv
-  signature: (e : PartialHomeomorph X Y) (e' : PartialEquiv X Y)
-  body: e'
-  continuousOn_toFun := h ▸ e.continuousOn_toFun
-  continuousOn_invFun := h ▸ e.continuousOn_invFun
-
-中文:
-定义 replacePartialEquiv
-  签名: (e : PartialHomeomorph X Y) (e' : 部分等价 X Y)
-  定义体: e'
-  continuousOn_toFun := h ▸ e.continuousOn_toFun
-  continuousOn_invFun := h ▸ e.continuousOn_invFun
+--- 原说明 ---
+Replace `toPartialEquiv` field to provide better definitional equalities.
 -/
 def replacePartialEquiv (e : PartialHomeomorph X Y) (e' : PartialEquiv X Y)
     (h : e.toPartialEquiv = e') : PartialHomeomorph X Y where
   toPartialEquiv := e'
   continuousOn_toFun := h ▸ e.continuousOn_toFun
   continuousOn_invFun := h ▸ e.continuousOn_invFun
-
-/--
-theorem `replacePartialEquiv_eq_self` / 定理 `replacePartialEquiv_eq_self`
-
-English:
-theorem replacePartialEquiv_eq_self
-  statement: (e' : PartialEquiv X Y)
-  proof: by
-  cases e
-  subst e'
-  rfl
-
-中文:
-定理 replacePartialEquiv_eq_self
-  结论: (e' : 部分等价 X Y)
-  证明: by
-  cases e
-  subst e'
-  rfl
+/-
+**PartialHomeomorph.replacePartialEquiv_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Parti
+alHomeomorph`。
+形式化陈述：replacePartialEquiv_eq_self (e' : PartialEquiv X Y) (h : e.toPartialEquiv 
+= e') : e.replacePartialEquiv e' h = e
+参数：e' : PartialEquiv X Y；h : e.toPartialEquiv = e'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem replacePartialEquiv_eq_self (e' : PartialEquiv X Y)
     (h : e.toPartialEquiv = e') : e.replacePartialEquiv e' h = e := by
@@ -725,109 +526,87 @@ It is not sufficient to have equal `toFun` and `source`, as this only determines
 the target. This would only be true for a weaker notion of equality, arguably the right one,
 called `EqOnSource`. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**PartialHomeomorph.ext** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y]   (e e' : PartialHomeomorph X Y),   (∀ (x : X), ↑e x = ↑e' x) → 
+(∀ (x : Y), ↑e.symm x = ↑e'.symm x) → e.source = e'.source → e = e'
+参数：e e' : PartialHomeomorph X Y；∀ (x : X), ↑e x = ↑e' x；∀ (x : Y), ↑e.symm x = ↑
+e'.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialHomeomorph.toPartialEquiv_injective`：∀ {X : Type u_1} {Y : Type u
+_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Function.Inject
+ive PartialHomeomorph.toPartialE…
+· 使用定理 `PartialEquiv.ext`：∀ {α : Type u_1} {β : Type u_2} {e e' : PartialEquiv α
+ β},   (∀ (x : α), ↑e x = ↑e' x) → (∀ (x : β), ↑e.symm x = ↑e'.symm x) → e.sourc
+e = e'…
 
-English:
-theorem ext
-  statement: (e' : PartialHomeomorph X Y) (h : forall x, e x = e' x)
-  proof: toPartialEquiv_injective (PartialEquiv.ext h hinv hs)
-
-@[simp]
-
-中文:
-定理 ext
-  结论: (e' : PartialHomeomorph X Y) (h : 对任意 x, e x = e' x)
-  证明: toPartialEquiv_injective (PartialEquiv.ext h hinv hs)
-
-@[simp]
+--- 原说明 ---
+Two partial homeomorphisms are equal when they have equal `toFun`, `invFun` and 
+`source`.
+It is not sufficient to have equal `toFun` and `source`, as this only determines
+ `invFun` on
+the target. This would only be true for a weaker notion of equality, arguably th
+e right one,
+called `EqOnSource`.
 -/
-protected theorem ext (e' : PartialHomeomorph X Y) (h : forall x, e x = e' x)
-    (hinv : forall x, e.symm x = e'.symm x) (hs : e.source = e'.source) : e = e' :=
+protected theorem ext (e' : PartialHomeomorph X Y) (h : ∀ x, e x = e' x)
+    (hinv : ∀ x, e.symm x = e'.symm x) (hs : e.source = e'.source) : e = e' :=
   toPartialEquiv_injective (PartialEquiv.ext h hinv hs)
 
 @[simp]
-/--
-theorem `symm_toPartialEquiv` / 定理 `symm_toPartialEquiv`
-
-English:
-theorem symm_toPartialEquiv
-  statement: e.symm.toPartialEquiv = e.toPartialEquiv.symm
-  proof: rfl
-
-中文:
-定理 symm_toPartialEquiv
-  结论: e.symm.toPartialEquiv = e.toPartialEquiv.symm
-  证明: rfl
+/-
+**PartialHomeomorph.symm_toPartialEquiv** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeom
+orph`。
+形式化陈述：symm_toPartialEquiv : e.symm.toPartialEquiv = e.toPartialEquiv.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_toPartialEquiv : e.symm.toPartialEquiv = e.toPartialEquiv.symm :=
   rfl
 
 -- The following lemmas are already simp via `PartialEquiv`
-/--
-theorem `symm_source` / 定理 `symm_source`
-
-English:
-theorem symm_source
-  statement: e.symm.source = e.target
-  proof: rfl
-
-中文:
-定理 symm_source
-  结论: e.symm.source = e.target
-  证明: rfl
+/-
+**PartialHomeomorph.symm_source** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：symm_source : e.symm.source = e.target
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_source : e.symm.source = e.target :=
   rfl
-
-/--
-theorem `symm_target` / 定理 `symm_target`
-
-English:
-theorem symm_target
-  statement: e.symm.target = e.source
-  proof: rfl
-
-中文:
-定理 symm_target
-  结论: e.symm.target = e.source
-  证明: rfl
+/-
+**PartialHomeomorph.symm_target** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：symm_target : e.symm.target = e.source
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_target : e.symm.target = e.source :=
   rfl
-
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**PartialHomeomorph.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (e : PartialHomeomorph X Y),   e.symm.symm = e
+参数：e : PartialHomeomorph X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem symm_symm : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**PartialHomeomorph.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `PartialHomeomorph`
+。
+形式化陈述：symm_bijective : Function.Bijective (PartialHomeomorph.symm : PartialHomeo
+morph X Y -> PartialHomeomorph Y X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `PartialHomeomorph.symm_symm`：∀ {X : Type u_1} {Y : Type u_3} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (e : PartialHomeomorph X Y),   e.
+symm.symm = e
 -/
 theorem symm_bijective : Function.Bijective
-    (PartialHomeomorph.symm : PartialHomeomorph X Y -> PartialHomeomorph Y X) :=
+    (PartialHomeomorph.symm : PartialHomeomorph X Y → PartialHomeomorph Y X) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 end PartialHomeomorph
+

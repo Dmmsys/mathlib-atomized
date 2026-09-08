@@ -38,28 +38,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `F : C ⥤ D` is a representably flat and cover preserving functor between sites, then
 any point on `D` induces a point on `C` by precomposing the fiber functor with `F`. -/
 @[simps]
-/--
-Definition of `comap` / `comap` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Point.comap** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.GrothendieckTopology.Point`。
+形式化陈述：comap : Point.{w} J where fiber
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: : Point.{w} J where
-  body: F ⋙ Φ.fiber
-  jointly_surjective {X} {R} hR x := by
-    obtain ⟨Y, f, ⟨W, g, h, hg, rfl⟩, y, rfl⟩ :=
-      Φ.jointly_surjective (Sieve.functorPushforward F R) (hF.cover_preserve hR) x
-    use W, g, hg, Φ.fiber.map h y
-    simp
-
-中文:
-定义 comap
-  签名: : Point.{w} J where
-  定义体: F ⋙ Φ.fiber
-  jointly_surjective {X} {R} hR x := by
-    obtain ⟨Y, f, ⟨W, g, h, hg, rfl⟩, y, rfl⟩ :=
-      Φ.jointly_surjective (Sieve.functorPushforward F R) (hF.cover_preserve hR) x
-    use W, g, hg, Φ.fiber.map h y
-    simp
+--- 原说明 ---
+If `F : C ⥤ D` is a representably flat and cover preserving functor between site
+s, then
+any point on `D` induces a point on `C` by precomposing the fiber functor with `
+F`.
 -/
 def comap : Point.{w} J where
   fiber := F ⋙ Φ.fiber
@@ -72,20 +62,25 @@ def comap : Point.{w} J where
 variable (A : Type*) [Category.{v} A] [HasProducts.{w} A]
   [Functor.IsContinuous F J K]
 
-/--
-Definition of `skyscraperSheafFunctorCompSheafPushforwardContinuous` / `skyscraperSheafFunctorCompSheafPushforwardContinuous` 的定义
+/-- Given a continuous functor `F : C ⥤ D` between sites `(C, J)` and `(D, K)`,
+and a point `Φ` of `(D, K)`, this is the isomorphism between
+`Φ.skyscraperSheafFunctor ⋙ F.sheafPushforwardContinuous A J K` and
+`(Φ.comap F hF).skyscraperSheafFunctor`. -/
+/-
+**CategoryTheory.GrothendieckTopology.Point.skyscraperSheafFunctorCompSheafPushf
+orwardContinuous** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.
+Point`。
+形式化陈述：skyscraperSheafFunctorCompSheafPushforwardContinuous : Φ.skyscraperSheafFu
+nctor ⋙ F.sheafPushforwardContinuous A J K ≅ (Φ.comap F hF).skyscraperSheafFunct
+or
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition skyscraperSheafFunctorCompSheafPushforwardContinuous
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 skyscraperSheafFunctorCompSheafPushforwardContinuous
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Given a continuous functor `F : C ⥤ D` between sites `(C, J)` and `(D, K)`,
+and a point `Φ` of `(D, K)`, this is the isomorphism between
+`Φ.skyscraperSheafFunctor ⋙ F.sheafPushforwardContinuous A J K` and
+`(Φ.comap F hF).skyscraperSheafFunctor`.
 -/
 noncomputable def skyscraperSheafFunctorCompSheafPushforwardContinuous :
     Φ.skyscraperSheafFunctor ⋙ F.sheafPushforwardContinuous A J K ≅
@@ -100,24 +95,20 @@ and a point `Φ` of `(D, K)`, the fiber functor on sheaves of the
 point `Φ.comap F hF` on `(C, J)` identifies to the composition
 `F.sheafPullback A J K ⋙ Φ.sheafFiber`. -/
 @[simps! -isSimp]
-/--
-Definition of `sheafFiberComapIso` / `sheafFiberComapIso` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Point.sheafFiberComapIso** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：sheafFiberComapIso : (Φ.comap F hF).sheafFiber ≅ F.sheafPullback A J K ⋙ Φ
+.sheafFiber
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sheafFiberComapIso
-  signature: :
-  body: (conjugateIsoEquiv ((F.sheafAdjunctionContinuous A J K).comp Φ.skyscraperSheafAdjunction)
-    (Φ.comap F hF).skyscraperSheafAdjunction).symm
-      (Φ.skyscraperSheafFunctorCompSheafPushforwardContinuous F hF A)
-
-中文:
-定义 sheafFiberComapIso
-  签名: :
-  定义体: (conjugateIsoEquiv ((F.sheafAdjunctionContinuous A J K).comp Φ.skyscraperSheafAdjunction)
-    (Φ.comap F hF).skyscraperSheafAdjunction).symm
-      (Φ.skyscraperSheafFunctorCompSheafPushforwardContinuous F hF A)
-
-Depends on / 依赖: F.sheafAdjunctionContinuous, conjugateIsoEquiv, sheafAdjunctionContinuous, skyscraperSheafAdjunction, skyscraperSheafFunctorCompSheafPushforwardContinuous
+--- 原说明 ---
+Given a continuous functor `F : C ⥤ D` between sites `(C, J)` and `(D, K)`,
+and a point `Φ` of `(D, K)`, the fiber functor on sheaves of the
+point `Φ.comap F hF` on `(C, J)` identifies to the composition
+`F.sheafPullback A J K ⋙ Φ.sheafFiber`.
 -/
 noncomputable def sheafFiberComapIso :
     (Φ.comap F hF).sheafFiber ≅ F.sheafPullback A J K ⋙ Φ.sheafFiber :=
@@ -126,3 +117,4 @@ noncomputable def sheafFiberComapIso :
       (Φ.skyscraperSheafFunctorCompSheafPushforwardContinuous F hF A)
 
 end CategoryTheory.GrothendieckTopology.Point
+

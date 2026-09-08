@@ -62,313 +62,224 @@ namespace LinearMap
 
 namespace BilinForm
 
-/--
-theorem `add_left` / 定理 `add_left`
-
-English:
-theorem add_left
-  given: (x y z : M)
-  statement: B (x + y) z = B x z + B y z
-  proof: map_add₂ _ _ _ _
-
-中文:
-定理 add_left
-  条件: (x y z : M)
-  结论: B (x + y) z = B x z + B y z
-  证明: map_add₂ _ _ _ _
+/-
+**LinearMap.BilinForm.add_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：add_left (x y z : M) : B (x + y) z = B x z + B y z
+参数：x y z : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_add₂`：map_add₂ (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (x₁ x₂ y) :
+ f (x₁ + x₂) y = f x₁ y + f x₂ y
 -/
 theorem add_left (x y z : M) : B (x + y) z = B x z + B y z := map_add₂ _ _ _ _
-
-/--
-theorem `smul_left` / 定理 `smul_left`
-
-English:
-theorem smul_left
-  given: (a : R) (x y : M)
-  statement: B (a • x) y = a * B x y
-  proof: map_smul₂ _ _ _ _
-
-中文:
-定理 smul_left
-  条件: (a : R) (x y : M)
-  结论: B (a • x) y = a * B x y
-  证明: map_smul₂ _ _ _ _
+/-
+**LinearMap.BilinForm.smul_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：smul_left (a : R) (x y : M) : B (a • x) y = a * B x y
+参数：a : R；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul₂`：map_smul₂ (f : M₂ ->ₗ[R] N₂ ->ₛₗ[σ₁₂] P₂) (r : R) (
+x y) : f (r • x) y = r • f x y
 -/
 theorem smul_left (a : R) (x y : M) : B (a • x) y = a * B x y := map_smul₂ _ _ _ _
-
-/--
-theorem `add_right` / 定理 `add_right`
-
-English:
-theorem add_right
-  given: (x y z : M)
-  statement: B x (y + z) = B x y + B x z
-  proof: map_add _ _ _
-
-中文:
-定理 add_right
-  条件: (x y z : M)
-  结论: B x (y + z) = B x y + B x z
-  证明: map_add _ _ _
-
-Depends on / 依赖: map_add
+/-
+**LinearMap.BilinForm.add_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：add_right (x y z : M) : B x (y + z) = B x y + B x z
+参数：x y z : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
 -/
 theorem add_right (x y z : M) : B x (y + z) = B x y + B x z := map_add _ _ _
-
-/--
-theorem `smul_right` / 定理 `smul_right`
-
-English:
-theorem smul_right
-  given: (a : R) (x y : M)
-  statement: B x (a • y) = a * B x y
-  proof: map_smul _ _ _
-
-中文:
-定理 smul_right
-  条件: (a : R) (x y : M)
-  结论: B x (a • y) = a * B x y
-  证明: map_smul _ _ _
-
-Depends on / 依赖: map_smul
+/-
+**LinearMap.BilinForm.smul_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`
+。
+形式化陈述：smul_right (a : R) (x y : M) : B x (a • y) = a * B x y
+参数：a : R；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
 -/
 theorem smul_right (a : R) (x y : M) : B x (a • y) = a * B x y := map_smul _ _ _
-
-/--
-theorem `zero_left` / 定理 `zero_left`
-
-English:
-theorem zero_left
-  given: (x : M)
-  statement: B 0 x = 0
-  proof: map_zero₂ _ _
-
-中文:
-定理 zero_left
-  条件: (x : M)
-  结论: B 0 x = 0
-  证明: map_zero₂ _ _
+/-
+**LinearMap.BilinForm.zero_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：zero_left (x : M) : B 0 x = 0
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_zero₂`：map_zero₂ (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (y) : f 0
+ y = 0
 -/
 theorem zero_left (x : M) : B 0 x = 0 := map_zero₂ _ _
-
-/--
-theorem `zero_right` / 定理 `zero_right`
-
-English:
-theorem zero_right
-  given: (x : M)
-  statement: B x 0 = 0
-  proof: map_zero _
-
-中文:
-定理 zero_right
-  条件: (x : M)
-  结论: B x 0 = 0
-  证明: map_zero _
-
-Depends on / 依赖: map_zero
+/-
+**LinearMap.BilinForm.zero_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`
+。
+形式化陈述：zero_right (x : M) : B x 0 = 0
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 theorem zero_right (x : M) : B x 0 = 0 := map_zero _
-
-/--
-theorem `neg_left` / 定理 `neg_left`
-
-English:
-theorem neg_left
-  given: (x y : M₁)
-  statement: B₁ (-x) y = -B₁ x y
-  proof: map_neg₂ _ _ _
-
-中文:
-定理 neg_left
-  条件: (x y : M₁)
-  结论: B₁ (-x) y = -B₁ x y
-  证明: map_neg₂ _ _ _
+/-
+**LinearMap.BilinForm.neg_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：neg_left (x y : M₁) : B₁ (-x) y = -B₁ x y
+参数：x y : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_neg₂`：map_neg₂ (f : M' ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P') (x y) : f
+ (-x) y = -f x y
 -/
 theorem neg_left (x y : M₁) : B₁ (-x) y = -B₁ x y := map_neg₂ _ _ _
-
-/--
-theorem `neg_right` / 定理 `neg_right`
-
-English:
-theorem neg_right
-  given: (x y : M₁)
-  statement: B₁ x (-y) = -B₁ x y
-  proof: map_neg _ _
-
-中文:
-定理 neg_right
-  条件: (x y : M₁)
-  结论: B₁ x (-y) = -B₁ x y
-  证明: map_neg _ _
-
-Depends on / 依赖: map_neg
+/-
+**LinearMap.BilinForm.neg_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：neg_right (x y : M₁) : B₁ x (-y) = -B₁ x y
+参数：x y : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 theorem neg_right (x y : M₁) : B₁ x (-y) = -B₁ x y := map_neg _ _
-
-/--
-theorem `sub_left` / 定理 `sub_left`
-
-English:
-theorem sub_left
-  given: (x y z : M₁)
-  statement: B₁ (x - y) z = B₁ x z - B₁ y z
-  proof: map_sub₂ _ _ _ _
-
-中文:
-定理 sub_left
-  条件: (x y z : M₁)
-  结论: B₁ (x - y) z = B₁ x z - B₁ y z
-  证明: map_sub₂ _ _ _ _
+/-
+**LinearMap.BilinForm.sub_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：sub_left (x y z : M₁) : B₁ (x - y) z = B₁ x z - B₁ y z
+参数：x y z : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_sub₂`：map_sub₂ (f : M' ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P') (x y z) :
+ f (x - y) z = f x z - f y z
 -/
 theorem sub_left (x y z : M₁) : B₁ (x - y) z = B₁ x z - B₁ y z := map_sub₂ _ _ _ _
-
-/--
-theorem `sub_right` / 定理 `sub_right`
-
-English:
-theorem sub_right
-  given: (x y z : M₁)
-  statement: B₁ x (y - z) = B₁ x y - B₁ x z
-  proof: map_sub _ _ _
-
-中文:
-定理 sub_right
-  条件: (x y z : M₁)
-  结论: B₁ x (y - z) = B₁ x y - B₁ x z
-  证明: map_sub _ _ _
-
-Depends on / 依赖: map_sub
+/-
+**LinearMap.BilinForm.sub_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：sub_right (x y z : M₁) : B₁ x (y - z) = B₁ x y - B₁ x z
+参数：x y z : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 theorem sub_right (x y z : M₁) : B₁ x (y - z) = B₁ x y - B₁ x z := map_sub _ _ _
-
-/--
-lemma `smul_left_of_tower` / 引理 `smul_left_of_tower`
-
-English:
-lemma smul_left_of_tower
-  given: (r : S) (x y : M)
-  statement: B (r • x) y = r • B x y
-  proof: by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_left]; rw [Algebra.smul_def]
-
-中文:
-引理 smul_left_of_tower
-  条件: (r : S) (x y : M)
-  结论: B (r • x) y = r • B x y
-  证明: by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_left]; rw [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, IsScalarTower, IsScalarTower.algebraMap_smul, algebraMap_smul, smul_def, smul_left
+/-
+**LinearMap.BilinForm.smul_left_of_tower** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap.Bi
+linForm`。
+形式化陈述：smul_left_of_tower (r : S) (x y : M) : B (r • x) y = r • B x y
+参数：r : S；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `LinearMap.BilinForm.smul_left`：smul_left (a : R) (x y : M) : B (a • x) y
+ = a * B x y
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 lemma smul_left_of_tower (r : S) (x y : M) : B (r • x) y = r • B x y := by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_left]; rw [Algebra.smul_def]
-
-/--
-lemma `smul_right_of_tower` / 引理 `smul_right_of_tower`
-
-English:
-lemma smul_right_of_tower
-  given: (r : S) (x y : M)
-  statement: B x (r • y) = r • B x y
-  proof: by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_right]; rw [Algebra.smul_def]
-
-中文:
-引理 smul_right_of_tower
-  条件: (r : S) (x y : M)
-  结论: B x (r • y) = r • B x y
-  证明: by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_right]; rw [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, IsScalarTower, IsScalarTower.algebraMap_smul, algebraMap_smul, smul_def, smul_right
+  rw [← IsScalarTower.algebraMap_smul R r, smul_left, Algebra.smul_def]
+/-
+**LinearMap.BilinForm.smul_right_of_tower** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap.B
+ilinForm`。
+形式化陈述：smul_right_of_tower (r : S) (x y : M) : B x (r • y) = r • B x y
+参数：r : S；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `LinearMap.BilinForm.smul_right`：smul_right (a : R) (x y : M) : B x (a • 
+y) = a * B x y
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 lemma smul_right_of_tower (r : S) (x y : M) : B x (r • y) = r • B x y := by
-  rw [← IsScalarTower.algebraMap_smul R r]; rw [smul_right]; rw [Algebra.smul_def]
+  rw [← IsScalarTower.algebraMap_smul R r, smul_right, Algebra.smul_def]
 
 variable {D : BilinForm R M} {D₁ : BilinForm R₁ M₁}
 
 -- TODO: instantiate `FunLike`
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective ((fun B x y => B x y) : BilinForm R M -> M -> M -> R)
-  proof: fun B D h => by
-    ext x y
-    apply congrFun₂ h
-
-@[ext]
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 ((fun B x y => B x y) : BilinForm R M -> M -> M -> R)
-  证明: fun B D h => by
-    ext x y
-    apply congrFun₂ h
-
-@[ext]
+/-
+**LinearMap.BilinForm.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinFo
+rm`。
+形式化陈述：coe_injective : Function.Injective ((fun B x y => B x y) : BilinForm R M -
+> M -> M -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
 -/
-theorem coe_injective : Function.Injective ((fun B x y => B x y) : BilinForm R M -> M -> M -> R) :=
+theorem coe_injective : Function.Injective ((fun B x y => B x y) : BilinForm R M → M → M → R) :=
   fun B D h => by
     ext x y
     apply congrFun₂ h
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (H : forall x y : M, B x y = D x y)
-  statement: B = D
-  proof: ext₂ H
-
-中文:
-定理 ext
-  条件: (H : 对任意 x y : M, B x y = D x y)
-  结论: B = D
-  证明: ext₂ H
+/-
+**LinearMap.BilinForm.ext** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：ext (H : forall x y : M, B x y = D x y) : B = D
+参数：H : forall x y : M, B x y = D x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext₂`：ext₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (H : forall m n, 
+f m n = g m n) : f = g
 -/
-theorem ext (H : forall x y : M, B x y = D x y) : B = D := ext₂ H
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : B = D) (x y : M)
-  statement: B x y = D x y
-  proof: congr_fun₂ h _ _
-
-@[simp]
-
-中文:
-定理 congr_fun
-  条件: (h : B = D) (x y : M)
-  结论: B x y = D x y
-  证明: congr_fun₂ h _ _
-
-@[simp]
+theorem ext (H : ∀ x y : M, B x y = D x y) : B = D := ext₂ H
+/-
+**LinearMap.BilinForm.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：congr_fun (h : B = D) (x y : M) : B x y = D x y
+参数：h : B = D；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.congr_fun₂`：congr_fun₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (h : 
+f = g) (x y) : f x y = g x y
 -/
 theorem congr_fun (h : B = D) (x y : M) : B x y = D x y := congr_fun₂ h _ _
 
 @[simp]
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (x y : M)
-  statement: (0 : BilinForm R M) x y = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: (x y : M)
-  结论: (0 : BilinForm R M) x y = 0
-  证明: rfl
+/-
+**LinearMap.BilinForm.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`
+。
+形式化陈述：zero_apply (x y : M) : (0 : BilinForm R M) x y = 0
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply (x y : M) : (0 : BilinForm R M) x y = 0 :=
   rfl
@@ -376,170 +287,118 @@ theorem zero_apply (x y : M) : (0 : BilinForm R M) x y = 0 :=
 variable (B D B₁ D₁)
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: (x y : M)
-  statement: (B + D) x y = B x y + D x y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_apply
-  条件: (x y : M)
-  结论: (B + D) x y = B x y + D x y
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.BilinForm.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：add_apply (x y : M) : (B + D) x y = B x y + D x y
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply (x y : M) : (B + D) x y = B x y + D x y :=
   rfl
 
 @[simp]
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  given: (x y : M₁)
-  statement: (-B₁) x y = -B₁ x y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neg_apply
-  条件: (x y : M₁)
-  结论: (-B₁) x y = -B₁ x y
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.BilinForm.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：neg_apply (x y : M₁) : (-B₁) x y = -B₁ x y
+参数：x y : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply (x y : M₁) : (-B₁) x y = -B₁ x y :=
   rfl
 
 @[simp]
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  given: (x y : M₁)
-  statement: (B₁ - D₁) x y = B₁ x y - D₁ x y
-  proof: rfl
-
-中文:
-定理 sub_apply
-  条件: (x y : M₁)
-  结论: (B₁ - D₁) x y = B₁ x y - D₁ x y
-  证明: rfl
+/-
+**LinearMap.BilinForm.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：sub_apply (x y : M₁) : (B₁ - D₁) x y = B₁ x y - D₁ x y
+参数：x y : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply (x y : M₁) : (B₁ - D₁) x y = B₁ x y - D₁ x y :=
   rfl
 
 /-- `coeFn` as an `AddMonoidHom` -/
 @[simps]
-/--
-Definition of `coeFnAddMonoidHom` / `coeFnAddMonoidHom` 的定义
+/-
+**LinearMap.BilinForm.coeFnAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.Bil
+inForm`。
+形式化陈述：coeFnAddMonoidHom : BilinForm R M ->+ M -> M -> R where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnAddMonoidHom
-  signature: : BilinForm R M ->+ M -> M -> R where
-  body: fun B x y => B x y
-  map_zero' := rfl
-  map_add' _ _ := rfl
-
-中文:
-定义 coeFnAddMonoidHom
-  签名: : BilinForm R M ->+ M -> M -> R where
-  定义体: fun B x y => B x y
-  map_zero' := rfl
-  map_add' _ _ := rfl
+--- 原说明 ---
+`coeFn` as an `AddMonoidHom`
 -/
-def coeFnAddMonoidHom : BilinForm R M ->+ M -> M -> R where
+def coeFnAddMonoidHom : BilinForm R M →+ M → M → R where
   toFun := fun B x y => B x y
   map_zero' := rfl
   map_add' _ _ := rfl
 
 section flip
 
-/--
-Definition of `flipHom` / `flipHom` 的定义
+/-- The flip of a bilinear form, obtained by exchanging the left and right arguments. -/
+/-
+**LinearMap.BilinForm.flipHom** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：flipHom : BilinForm R M ≃ₗ[R] BilinForm R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipHom
-  signature: : BilinForm R M ≃ₗ[R] BilinForm R M
-  body: LinearMap.lflip
-
-@[simp]
-
-中文:
-定义 flipHom
-  签名: : BilinForm R M ≃ₗ[R] BilinForm R M
-  定义体: LinearMap.lflip
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.lflip
+--- 原说明 ---
+The flip of a bilinear form, obtained by exchanging the left and right arguments
+.
 -/
 def flipHom : BilinForm R M ≃ₗ[R] BilinForm R M := LinearMap.lflip
 
 @[simp]
-/--
-theorem `flip_apply` / 定理 `flip_apply`
-
-English:
-theorem flip_apply
-  given: (A : BilinForm R M) (x y : M)
-  statement: flipHom A x y = A y x
-  proof: rfl
-
-中文:
-定理 flip_apply
-  条件: (A : BilinForm R M) (x y : M)
-  结论: flipHom A x y = A y x
-  证明: rfl
+/-
+**LinearMap.BilinForm.flip_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`
+。
+形式化陈述：flip_apply (A : BilinForm R M) (x y : M) : flipHom A x y = A y x
+参数：A : BilinForm R M；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 theorem flip_apply (A : BilinForm R M) (x y : M) : flipHom A x y = A y x :=
   rfl
-
-/--
-theorem `flip_flip` / 定理 `flip_flip`
-
-English:
-theorem flip_flip
-  proof: by
-  ext A
-  simp
-
-中文:
-定理 flip_flip
-  证明: by
-  ext A
-  simp
+/-
+**LinearMap.BilinForm.flip_flip** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：flip_flip : flipHom.trans flipHom = LinearEquiv.refl R (BilinForm R M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `LinearMap.BilinForm.ext`：ext (H : forall x y : M, B x y = D x y) : B = D
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem flip_flip :
     flipHom.trans flipHom = LinearEquiv.refl R (BilinForm R M) := by
   ext A
   simp
 
-/--
-Definition of `flip` / `flip` 的定义
+/-- The `flip` of a bilinear form over a commutative ring, obtained by exchanging the left and
+right arguments. -/
+/-
+**LinearMap.BilinForm.flip** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：flip (B : BilinForm R M)
+参数：B : BilinForm R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation flip
-  signature: (B : BilinForm R M)
-  body: flipHom B
-
-中文:
-缩写 flip
-  签名: (B : BilinForm R M)
-  定义体: flipHom B
-
-Depends on / 依赖: flipHom
+--- 原说明 ---
+The `flip` of a bilinear form over a commutative ring, obtained by exchanging th
+e left and
+right arguments.
 -/
 abbrev flip (B : BilinForm R M) :=
   flipHom B
@@ -548,20 +407,15 @@ end flip
 
 /-- The restriction of a bilinear form on a submodule. -/
 @[simps! apply]
-/--
-Definition of `restrict` / `restrict` 的定义
+/-
+**LinearMap.BilinForm.restrict** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.BilinForm`。
+形式化陈述：restrict (B : BilinForm R M) (W : Submodule R M) : BilinForm R W
+参数：B : BilinForm R M；W : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (B : BilinForm R M) (W : Submodule R M)
-  body: LinearMap.domRestrict₁₂ B W W
-
-中文:
-定义 restrict
-  签名: (B : BilinForm R M) (W : 子模 R M)
-  定义体: LinearMap.domRestrict₁₂ B W W
-
-Depends on / 依赖: LinearMap, LinearMap.domRestrict
+--- 原说明 ---
+The restriction of a bilinear form on a submodule.
 -/
 def restrict (B : BilinForm R M) (W : Submodule R M) : BilinForm R W :=
   LinearMap.domRestrict₁₂ B W W
@@ -569,21 +423,16 @@ def restrict (B : BilinForm R M) (W : Submodule R M) : BilinForm R W :=
 end BilinForm
 
 @[simp]
-/--
-theorem `lsmul_flip_apply` / 定理 `lsmul_flip_apply`
-
-English:
-theorem lsmul_flip_apply
-  given: (m : M)
-  statement: (lsmul R M).flip m = toSpanSingleton R M m
-  proof: rfl
-
-中文:
-定理 lsmul_flip_apply
-  条件: (m : M)
-  结论: (lsmul R M).flip m = toSpanSingleton R M m
-  证明: rfl
+/-
+**LinearMap.lsmul_flip_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：lsmul_flip_apply (m : M) : (lsmul R M).flip m = toSpanSingleton R M m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 theorem lsmul_flip_apply (m : M) : (lsmul R M).flip m = toSpanSingleton R M m := rfl
 
 end LinearMap
+

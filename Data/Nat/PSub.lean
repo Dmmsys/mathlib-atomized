@@ -27,299 +27,209 @@ wrap the result in an `Option` type instead:
 
 namespace Nat
 
-/--
-Definition of `ppred` / `ppred` 的定义
+/-- Partial predecessor operation. Returns `ppred n = some m`
+  if `n = m + 1`, otherwise `none`. -/
+/-
+**Nat.ppred** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → Option ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ppred
-  signature: : Nat -> Option Nat
-
-中文:
-定义 ppred
-  签名: : 自然数 -> 选项类型 自然数
+--- 原说明 ---
+Partial predecessor operation. Returns `ppred n = some m`
+  if `n = m + 1`, otherwise `none`.
 -/
-def ppred : Nat -> Option Nat
+def ppred : ℕ → Option ℕ
   | 0 => none
   | n + 1 => some n
 
 @[simp]
-/--
-theorem `ppred_zero` / 定理 `ppred_zero`
-
-English:
-theorem ppred_zero
-  statement: ppred 0 = none
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ppred_zero
-  结论: ppred 0 = none
-  证明: rfl
-
-@[simp]
+/-
+**Nat.ppred_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ppred_zero : ppred 0 = none
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ppred_zero : ppred 0 = none := rfl
 
 @[simp]
-/--
-theorem `ppred_succ` / 定理 `ppred_succ`
-
-English:
-theorem ppred_succ
-  given: {n : Nat}
-  statement: ppred (succ n) = some n
-  proof: rfl
-
-中文:
-定理 ppred_succ
-  条件: {n : 自然数}
-  结论: ppred (succ n) = some n
-  证明: rfl
+/-
+**Nat.ppred_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ppred_succ {n : Nat} : ppred (succ n) = some n
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ppred_succ {n : Nat} : ppred (succ n) = some n := rfl
+theorem ppred_succ {n : ℕ} : ppred (succ n) = some n := rfl
 
-/--
-Definition of `psub` / `psub` 的定义
+/-- Partial subtraction operation. Returns `psub m n = some k`
+  if `m = n + k`, otherwise `none`. -/
+/-
+**Nat.psub** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ → Option ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition psub
-  signature: (m : Nat)
-
-中文:
-定义 psub
-  签名: (m : 自然数)
+--- 原说明 ---
+Partial subtraction operation. Returns `psub m n = some k`
+  if `m = n + k`, otherwise `none`.
 -/
-def psub (m : Nat) : Nat -> Option Nat
+def psub (m : ℕ) : ℕ → Option ℕ
   | 0 => some m
   | n + 1 => psub m n >>= ppred
 
 @[simp]
-/--
-theorem `psub_zero` / 定理 `psub_zero`
-
-English:
-theorem psub_zero
-  given: {m : Nat}
-  statement: psub m 0 = some m
-  proof: rfl
+/-
+**Nat.psub_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：psub_zero {m : Nat} : psub m 0 = some m
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem psub_zero {m : ℕ} : psub m 0 = some m := rfl
 
 @[simp]
-
-中文:
-定理 psub_zero
-  条件: {m : 自然数}
-  结论: psub m 0 = some m
-  证明: rfl
-
-@[simp]
+/-
+**Nat.psub_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：psub_succ {m n : Nat} : psub m (succ n) = psub m n >>= ppred
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem psub_zero {m : Nat} : psub m 0 = some m := rfl
-
-@[simp]
-/--
-theorem `psub_succ` / 定理 `psub_succ`
-
-English:
-theorem psub_succ
-  given: {m n : Nat}
-  statement: psub m (succ n) = psub m n >>= ppred
-  proof: rfl
-
-中文:
-定理 psub_succ
-  条件: {m n : 自然数}
-  结论: psub m (succ n) = psub m n >>= ppred
-  证明: rfl
+theorem psub_succ {m n : ℕ} : psub m (succ n) = psub m n >>= ppred := rfl
+/-
+**Nat.pred_eq_ppred** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：pred_eq_ppred (n : Nat) : pred n = (ppred n).getD 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem psub_succ {m n : Nat} : psub m (succ n) = psub m n >>= ppred := rfl
-
-/--
-theorem `pred_eq_ppred` / 定理 `pred_eq_ppred`
-
-English:
-theorem pred_eq_ppred
-  given: (n : Nat)
-  statement: pred n = (ppred n).getD 0
-  proof: by cases n <;> rfl
-
-中文:
-定理 pred_eq_ppred
-  条件: (n : 自然数)
-  结论: pred n = (ppred n).getD 0
-  证明: by cases n <;> rfl
+theorem pred_eq_ppred (n : ℕ) : pred n = (ppred n).getD 0 := by cases n <;> rfl
+/-
+**Nat.sub_eq_psub** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (m n : ℕ), m - n = (m.psub n).getD 0
+参数：m n : ℕ；m.psub n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pred_eq_ppred (n : Nat) : pred n = (ppred n).getD 0 := by cases n <;> rfl
-
-/--
-theorem `sub_eq_psub` / 定理 `sub_eq_psub`
-
-English:
-theorem sub_eq_psub
-  given: (m : Nat)
-  statement: forall n, m - n = (psub m n).getD 0
-
-中文:
-定理 sub_eq_psub
-  条件: (m : 自然数)
-  结论: 对任意 n, m - n = (psub m n).getD 0
--/
-theorem sub_eq_psub (m : Nat) : forall n, m - n = (psub m n).getD 0
+theorem sub_eq_psub (m : ℕ) : ∀ n, m - n = (psub m n).getD 0
   | 0 => rfl
-| n + 1 => (pred_eq_ppred (m - n)).trans by rw [sub_eq_psub m n, psub]; cases psub m n <;> rfl
+  | n + 1 => (pred_eq_ppred (m - n)).trans <| by rw [sub_eq_psub m n, psub]; cases psub m n <;> rfl
 
 @[simp]
-/--
-theorem `ppred_eq_some` / 定理 `ppred_eq_some`
-
-English:
-theorem ppred_eq_some
-  given: {m : Nat}
-  statement: forall {n}, ppred n = some m ↔ succ m = n
-
-中文:
-定理 ppred_eq_some
-  条件: {m : 自然数}
-  结论: 对任意 {n}, ppred n = some m ↔ succ m = n
+/-
+**Nat.ppred_eq_some** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {m n : ℕ}, n.ppred = some m ↔ m.succ = n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ppred_eq_some {m : Nat} : forall {n}, ppred n = some m ↔ succ m = n
+theorem ppred_eq_some {m : ℕ} : ∀ {n}, ppred n = some m ↔ succ m = n
   | 0 => by constructor <;> intro h <;> contradiction
   | n + 1 => by constructor <;> intro h <;> injection h <;> subst m <;> rfl
 
 @[simp]
-/--
-theorem `ppred_eq_none` / 定理 `ppred_eq_none`
-
-English:
-theorem ppred_eq_none
-  statement: forall {n : Nat}, ppred n = none ↔ n = 0
-
-中文:
-定理 ppred_eq_none
-  结论: 对任意 {n : 自然数}, ppred n = none ↔ n = 0
+/-
+**Nat.ppred_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, n.ppred = none ↔ n = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem ppred_eq_none : forall {n : Nat}, ppred n = none ↔ n = 0
+theorem ppred_eq_none : ∀ {n : ℕ}, ppred n = none ↔ n = 0
   | 0 => by simp
   | n + 1 => by constructor <;> intro <;> contradiction
-
-/--
-theorem `psub_eq_some` / 定理 `psub_eq_some`
-
-English:
-theorem psub_eq_some
-  given: {m : Nat}
-  statement: forall {n k}, psub m n = some k ↔ k + n = m
-
-中文:
-定理 psub_eq_some
-  条件: {m : 自然数}
-  结论: 对任意 {n k}, psub m n = some k ↔ k + n = m
+/-
+**Nat.psub_eq_some** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {m n k : ℕ}, m.psub n = some k ↔ k + n = m
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem psub_eq_some {m : Nat} : forall {n k}, psub m n = some k ↔ k + n = m
+theorem psub_eq_some {m : ℕ} : ∀ {n k}, psub m n = some k ↔ k + n = m
   | 0, k => by simp [eq_comm]
   | n + 1, k => by
     apply Option.bind_eq_some_iff.trans
     simp only [psub_eq_some, ppred_eq_some]
     simp [add_comm, add_left_comm]
-
-/--
-theorem `psub_eq_none` / 定理 `psub_eq_none`
-
-English:
-theorem psub_eq_none
-  given: {m n : Nat}
-  statement: psub m n = none ↔ m < n
-  proof: by
-  rcases s : psub m n
-  · simp only [true_iff]
-    refine lt_of_not_ge fun h => ?_
-    obtain ⟨k, e⟩ := le.dest h
-    injection s.symm.trans (psub_eq_some.2 <| (add_comm _ _).trans e)
-  · grind [psub_eq_some]
-
-中文:
-定理 psub_eq_none
-  条件: {m n : 自然数}
-  结论: psub m n = none ↔ m < n
-  证明: by
-  rcases s : psub m n
-  · simp only [true_iff]
-    refine lt_of_not_ge fun h => ?_
-    obtain ⟨k, e⟩ := le.dest h
-    injection s.symm.trans (psub_eq_some.2 <| (add_comm _ _).trans e)
-  · grind [psub_eq_some]
-
-Depends on / 依赖: add_comm, injection, le.dest, lt_of_not_ge, psub_eq_some, s.symm.trans, true_iff
+/-
+**Nat.psub_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：psub_eq_none {m n : Nat} : psub m n = none ↔ m < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Nat.le.dest`：∀ {n m : ℕ}, n ≤ m → ∃ k, n + k = m
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.psub_eq_some`：∀ {m n k : ℕ}, m.psub n = some k ↔ k + n = m
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-theorem psub_eq_none {m n : Nat} : psub m n = none ↔ m < n := by
+theorem psub_eq_none {m n : ℕ} : psub m n = none ↔ m < n := by
   rcases s : psub m n
   · simp only [true_iff]
     refine lt_of_not_ge fun h => ?_
     obtain ⟨k, e⟩ := le.dest h
     injection s.symm.trans (psub_eq_some.2 <| (add_comm _ _).trans e)
   · grind [psub_eq_some]
-
-/--
-theorem `ppred_eq_pred` / 定理 `ppred_eq_pred`
-
-English:
-theorem ppred_eq_pred
-  given: {n} (h : 0 < n)
-  statement: ppred n = some (pred n)
-  proof: ppred_eq_some.2 succ_pred_eq_of_pos h
-
-中文:
-定理 ppred_eq_pred
-  条件: {n} (h : 0 < n)
-  结论: ppred n = some (pred n)
-  证明: ppred_eq_some.2 succ_pred_eq_of_pos h
-
-Depends on / 依赖: ppred_eq_some, succ_pred_eq_of_pos
+/-
+**Nat.ppred_eq_pred** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ppred_eq_pred {n} (h : 0 < n) : ppred n = some (pred n)
+参数：h : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.ppred_eq_some`：∀ {m n : ℕ}, n.ppred = some m ↔ m.succ = n
+· 使用定理 `Nat.succ_pred_eq_of_pos`：∀ {n : ℕ}, 0 < n → n.pred.succ = n
 -/
 theorem ppred_eq_pred {n} (h : 0 < n) : ppred n = some (pred n) :=
-ppred_eq_some.2 succ_pred_eq_of_pos h
-
-/--
-theorem `psub_eq_sub` / 定理 `psub_eq_sub`
-
-English:
-theorem psub_eq_sub
-  given: {m n} (h : n <= m)
-  statement: psub m n = some (m - n)
-  proof: psub_eq_some.2 Nat.sub_add_cancel h
-
-中文:
-定理 psub_eq_sub
-  条件: {m n} (h : n <= m)
-  结论: psub m n = some (m - n)
-  证明: psub_eq_some.2 Nat.sub_add_cancel h
-
-Depends on / 依赖: Nat.sub_add_cancel, psub_eq_some, sub_add_cancel
+  ppred_eq_some.2 <| succ_pred_eq_of_pos h
+/-
+**Nat.psub_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：psub_eq_sub {m n} (h : n <= m) : psub m n = some (m - n)
+参数：h : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.psub_eq_some`：∀ {m n k : ℕ}, m.psub n = some k ↔ k + n = m
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
 -/
-theorem psub_eq_sub {m n} (h : n <= m) : psub m n = some (m - n) :=
-psub_eq_some.2 Nat.sub_add_cancel h
-
-/--
-theorem `psub_add` / 定理 `psub_add`
-
-English:
-theorem psub_add
-  given: (m n k)
-  proof: by
-    induction k with
-    | zero => simp
-    | succ n ih => simp only [ih, add_succ, psub_succ, bind_assoc]
-
-中文:
-定理 psub_add
-  条件: (m n k)
-  证明: by
-    induction k with
-    | zero => simp
-    | succ n ih => simp only [ih, add_succ, psub_succ, bind_assoc]
-
-Depends on / 依赖: add_succ, bind_assoc, psub_succ
+theorem psub_eq_sub {m n} (h : n ≤ m) : psub m n = some (m - n) :=
+  psub_eq_some.2 <| Nat.sub_add_cancel h
+/-
+**Nat.psub_add** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：psub_add (m n k) : psub m (n + k) = (do psub (← psub m n) k)
+参数：m n k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Option.bind_fun_some`：∀ {α : Type u_1} (x : Option α), x.bind some = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `instLawfulMonadOption`：LawfulMonad Option
 -/
 theorem psub_add (m n k) :
     psub m (n + k) = (do psub (← psub m n) k) := by
@@ -329,44 +239,41 @@ theorem psub_add (m n k) :
 
 /-- Same as `psub`, but with a more efficient implementation. -/
 @[inline]
-/--
-Definition of `psub'` / `psub'` 的定义
+/-
+**Nat.psub'** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：psub' (m n : Nat) : Option Nat
+参数：m n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition psub'
-  signature: (m n : Nat)
-  body: if n <= m then some (m - n) else none
-
-中文:
-定义 psub'
-  签名: (m n : 自然数)
-  定义体: if n <= m then some (m - n) else none
+--- 原说明 ---
+Same as `psub`, but with a more efficient implementation.
 -/
-def psub' (m n : Nat) : Option Nat :=
-  if n <= m then some (m - n) else none
-
-/--
-theorem `psub'_eq_psub` / 定理 `psub'_eq_psub`
-
-English:
-theorem psub'_eq_psub
-  given: (m n)
-  statement: psub' m n = psub m n
-  proof: by
-  rw [psub']
-  split_ifs with h
-  · exact (psub_eq_sub h).symm
-  · exact (psub_eq_none.2 (not_le.1 h)).symm
-
-中文:
-定理 psub'_eq_psub
-  条件: (m n)
-  结论: psub' m n = psub m n
-  证明: by
-  rw [psub']
-  split_ifs with h
-  · exact (psub_eq_sub h).symm
-  · exact (psub_eq_none.2 (not_le.1 h)).symm
+def psub' (m n : ℕ) : Option ℕ :=
+  if n ≤ m then some (m - n) else none
+/-
+**Nat.psub'_eq_psub** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (m n : ℕ), m.psub' n = m.psub n
+参数：m n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.psub'.eq_1`：∀ (m n : ℕ), m.psub' n = if n ≤ m then some (m - n) else
+ none
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.psub_eq_sub`：psub_eq_sub {m n} (h : n <= m) : psub m n = some (m - n
+)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.psub_eq_none`：psub_eq_none {m n : Nat} : psub m n = none ↔ m < n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
 theorem psub'_eq_psub (m n) : psub' m n = psub m n := by
   rw [psub']
@@ -375,3 +282,4 @@ theorem psub'_eq_psub (m n) : psub' m n = psub m n := by
   · exact (psub_eq_none.2 (not_le.1 h)).symm
 
 end Nat
+

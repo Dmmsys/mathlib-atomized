@@ -70,22 +70,19 @@ to_dual_name_hint Lift Desc
 
 section Limit
 
-/--
-Definition of `LimitCone` / `LimitCone` 的定义
+/-- `LimitCone F` contains a cone over `F` together with the information that it is a limit. -/
+/-
+**CategoryTheory.Limits.LimitCone** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} → [inst_1 : CategoryTheory.Category.{v, u} C] → CategoryTheory.Functor J 
+C → Type (max (max u u₁) v)
+参数：max (max u u₁) v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LimitCone
-  parameters: (F : J ⥤ C)
-  axioms and operations (2):
-    - cone : Cone F
-    - isLimit : IsLimit cone
-
-中文:
-结构 极限锥
-  参数: (F : J ⥤ C)
-  公理与运算 (2 个):
-    - cone : 锥 F
-    - isLimit : 是极限 cone
+--- 原说明 ---
+`LimitCone F` contains a cone over `F` together with the information that it is 
+a limit.
 -/
 structure LimitCone (F : J ⥤ C) where
   /-- The cone itself -/
@@ -96,22 +93,19 @@ structure LimitCone (F : J ⥤ C) where
 /-- `ColimitCocone F` contains a cocone over `F` together with the information that it is a
 colimit. -/
 @[to_dual]
-/--
-Definition of `ColimitCocone` / `ColimitCocone` 的定义
+/-
+**CategoryTheory.Limits.ColimitCocone** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} → [inst_1 : CategoryTheory.Category.{v, u} C] → CategoryTheory.Functor J 
+C → Type (max (max u u₁) v)
+参数：max (max u u₁) v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ColimitCocone
-  parameters: (F : J ⥤ C)
-  axioms and operations (2):
-    - cocone : Cocone F
-    - isColimit : IsColimit cocone
-
-中文:
-结构 余极限余锥
-  参数: (F : J ⥤ C)
-  公理与运算 (2 个):
-    - cocone : 余锥 F
-    - isColimit : 是余极限 cocone
+--- 原说明 ---
+`ColimitCocone F` contains a cocone over `F` together with the information that 
+it is a
+colimit.
 -/
 structure ColimitCocone (F : J ⥤ C) where
   /-- The cocone itself -/
@@ -119,18 +113,17 @@ structure ColimitCocone (F : J ⥤ C) where
   /-- The proof that it is the colimit cocone -/
   isColimit : IsColimit cocone
 
-/--
-Definition of `HasLimit` / `HasLimit` 的定义
+/-- `HasLimit F` represents the mere existence of a limit for `F`. -/
+/-
+**CategoryTheory.Limits.HasLimit** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} → [inst_1 : CategoryTheory.Category.{v, u} C] → CategoryTheory.Functor J 
+C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLimit
-  parameters: (F : J ⥤ C)
-  (no additional axioms)
-
-中文:
-类 有极限
-  参数: (F : J ⥤ C)
-  (无附加公理)
+--- 原说明 ---
+`HasLimit F` represents the mere existence of a limit for `F`.
 -/
 class HasLimit (F : J ⥤ C) : Prop where mk' ::
   /-- There is some limit cone for `F` -/
@@ -138,40 +131,30 @@ class HasLimit (F : J ⥤ C) : Prop where mk' ::
 
 /-- `HasColimit F` represents the mere existence of a colimit for `F`. -/
 @[to_dual]
-/--
-Definition of `HasColimit` / `HasColimit` 的定义
+/-
+**CategoryTheory.Limits.HasColimit** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} → [inst_1 : CategoryTheory.Category.{v, u} C] → CategoryTheory.Functor J 
+C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasColimit
-  parameters: (F : J ⥤ C)
-  (no additional axioms)
-
-中文:
-类 有余极限
-  参数: (F : J ⥤ C)
-  (无附加公理)
+--- 原说明 ---
+`HasColimit F` represents the mere existence of a colimit for `F`.
 -/
 class HasColimit (F : J ⥤ C) : Prop where mk' ::
   /-- There exists a colimit for `F` -/
   exists_colimit : Nonempty (ColimitCocone F)
 
 @[to_dual]
-/--
-theorem `HasLimit.mk` / 定理 `HasLimit.mk`
-
-English:
-theorem HasLimit.mk
-  given: {F : J ⥤ C} (d : LimitCone F)
-  statement: HasLimit F
-  proof: ⟨Nonempty.intro d⟩
-
-中文:
-定理 有极限.mk
-  条件: {F : J ⥤ C} (d : 极限锥 F)
-  结论: 有极限 F
-  证明: ⟨Nonempty.intro d⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.Limits.HasLimit.mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits.HasLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} (d
+ : CategoryTheory.Limits.LimitCone F), CategoryTheory.Limits.HasLimit F
+参数：d : CategoryTheory.Limits.LimitCone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasLimit.mk {F : J ⥤ C} (d : LimitCone F) : HasLimit F :=
   ⟨Nonempty.intro d⟩
@@ -179,69 +162,54 @@ theorem HasLimit.mk {F : J ⥤ C} (d : LimitCone F) : HasLimit F :=
 /-- Use the axiom of choice to extract explicit `LimitCone F` from `HasLimit F`. -/
 @[no_expose, to_dual
 /-- Use the axiom of choice to extract explicit `ColimitCocone F` from `HasColimit F`. -/]
-/--
-Definition of `getLimitCone` / `getLimitCone` 的定义
-
-English:
-definition getLimitCone
-  signature: (F : J ⥤ C) [HasLimit F]
-  body: Classical.choice HasLimit.exists_limit
-
-中文:
-定义 getLimitCone
-  签名: (F : J ⥤ C) [有极限 F]
-  定义体: Classical.choice HasLimit.exists_limit
-
-Depends on / 依赖: Classical, Classical.choice, HasLimit, HasLimit.exists_limit, choice, exists_limit
+/-
+**CategoryTheory.Limits.getLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：getLimitCone (F : J ⥤ C) [HasLimit F] : LimitCone F
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.exists_limit`：∀ {J : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} J} {C : Type u} {inst_1 : CategoryTheory.Category.
+{v, u} C}   {F : CategoryTheory.F…
 -/
 def getLimitCone (F : J ⥤ C) [HasLimit F] : LimitCone F :=
-Classical.choice HasLimit.exists_limit
+  Classical.choice <| HasLimit.exists_limit
 
 variable (J C)
 
-/--
-Definition of `HasLimitsOfShape` / `HasLimitsOfShape` 的定义
+/-- `C` has limits of shape `J` if there exists a limit for every functor `F : J ⥤ C`. -/
+/-
+**CategoryTheory.Limits.HasLimitsOfShape** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：HasLimitsOfShape : Prop where /-- All functors `F : J ⥤ C` from `J` have l
+imits -/ has_limit : forall F : J ⥤ C, HasLimit F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLimitsOfShape
-  parameters: : Prop where
-  axioms and operations (1):
-    - has_limit : forall F : J ⥤ C, HasLimit F  [default: by infer_instance]
-
-中文:
-类 有形状极限
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - has_limit : 对任意 F : J ⥤ C, 有极限 F  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+`C` has limits of shape `J` if there exists a limit for every functor `F : J ⥤ C
+`.
 -/
 class HasLimitsOfShape : Prop where
   /-- All functors `F : J ⥤ C` from `J` have limits -/
-  has_limit : forall F : J ⥤ C, HasLimit F := by infer_instance
+  has_limit : ∀ F : J ⥤ C, HasLimit F := by infer_instance
 
 /-- `C` has colimits of shape `J` if there exists a colimit for every functor `F : J ⥤ C`. -/
 @[to_dual]
-/--
-Definition of `HasColimitsOfShape` / `HasColimitsOfShape` 的定义
+/-
+**CategoryTheory.Limits.HasColimitsOfShape** 是 Mathlib 中的一个类，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：HasColimitsOfShape : Prop where /-- All `F : J ⥤ C` have colimits for a fi
+xed `J` -/ has_colimit : forall F : J ⥤ C, HasColimit F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasColimitsOfShape
-  parameters: : Prop where
-  axioms and operations (1):
-    - has_colimit : forall F : J ⥤ C, HasColimit F  [default: by infer_instance]
-
-中文:
-类 有形状余极限
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - has_colimit : 对任意 F : J ⥤ C, 有余极限 F  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+`C` has colimits of shape `J` if there exists a colimit for every functor `F : J
+ ⥤ C`.
 -/
 class HasColimitsOfShape : Prop where
   /-- All `F : J ⥤ C` have colimits for a fixed `J` -/
-  has_colimit : forall F : J ⥤ C, HasColimit F := by infer_instance
+  has_colimit : ∀ F : J ⥤ C, HasColimit F := by infer_instance
 
 /-- `C` has all limits of size `v₁ u₁` (`HasLimitsOfSize.{v₁ u₁} C`)
 if it has limits of every shape `J : Type u₁` with `[Category.{v₁} J]`.
@@ -250,26 +218,18 @@ if it has limits of every shape `J : Type u₁` with `[Category.{v₁} J]`.
 -- https://github.com/leanprover/lean4/pull/12423, the shape universes `v₁, u₁` would default
 -- to universe output parameters. See Note [universe output parameters and typeclass caching].
 @[univ_out_params, pp_with_univ]
-/--
-Definition of `HasLimitsOfSize` / `HasLimitsOfSize` 的定义
-
-English:
-class HasLimitsOfSize
-  parameters: (C : Type u) [Category.{v} C]
-  axioms and operations (1):
-    - has_limits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasLimitsOfShape J C  [default: by infer_instance]
-
-中文:
-类 有LimitsOfSize
-  参数: (C : 类型u) [范畴.{v} C]
-  公理与运算 (1 个):
-    - has_limits_of_shape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有形状极限 J C  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Limits.HasLimitsOfSize** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：HasLimitsOfSize (C : Type u) [Category.{v} C] : Prop where /-- All functor
+s `F : J ⥤ C` from all small `J` have limits -/ has_limits_of_shape : forall (J 
+: Type u₁) [Category.{v₁} J], HasLimitsOfShape J C
+参数：C : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class HasLimitsOfSize (C : Type u) [Category.{v} C] : Prop where
   /-- All functors `F : J ⥤ C` from all small `J` have limits -/
-  has_limits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasLimitsOfShape J C := by
+  has_limits_of_shape : ∀ (J : Type u₁) [Category.{v₁} J], HasLimitsOfShape J C := by
     infer_instance
 
 /-- `C` has all colimits of size `v₁ u₁` (`HasColimitsOfSize.{v₁ u₁} C`)
@@ -279,69 +239,47 @@ if it has colimits of every shape `J : Type u₁` with `[Category.{v₁} J]`.
 -- https://github.com/leanprover/lean4/pull/12423, the shape universes `v₁, u₁` would default
 -- to universe output parameters. See Note [universe output parameters and typeclass caching].
 @[to_dual, univ_out_params, pp_with_univ]
-/--
-Definition of `HasColimitsOfSize` / `HasColimitsOfSize` 的定义
-
-English:
-class HasColimitsOfSize
-  parameters: (C : Type u) [Category.{v} C]
-  axioms and operations (1):
-    - has_colimits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasColimitsOfShape J C  [default: by infer_instance]
-
-中文:
-类 有余limitsOfSize
-  参数: (C : 类型u) [范畴.{v} C]
-  公理与运算 (1 个):
-    - has_colimits_of_shape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有形状余极限 J C  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Limits.HasColimitsOfSize** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：HasColimitsOfSize (C : Type u) [Category.{v} C] : Prop where /-- All `F : 
+J ⥤ C` have colimits for all small `J` -/ has_colimits_of_shape : forall (J : Ty
+pe u₁) [Category.{v₁} J], HasColimitsOfShape J C
+参数：C : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class HasColimitsOfSize (C : Type u) [Category.{v} C] : Prop where
   /-- All `F : J ⥤ C` have colimits for all small `J` -/
-  has_colimits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasColimitsOfShape J C := by
+  has_colimits_of_shape : ∀ (J : Type u₁) [Category.{v₁} J], HasColimitsOfShape J C := by
     infer_instance
 
 /-- `C` has all (small) limits if it has limits of every shape that is as big as its hom-sets. -/
 @[to_dual
 /-- `C` has all (small) colimits if it has colimits of every shape that is as big as its hom-sets.
 -/]
-/--
-Definition of `HasLimits` / `HasLimits` 的定义
-
-English:
-abbreviation HasLimits
-  signature: (C : Type u) [Category.{v} C]
-  body: HasLimitsOfSize.{v, v} C
-
-@[to_dual]
-
-中文:
-缩写 有极限
-  签名: (C : 类型u) [范畴.{v} C]
-  定义体: HasLimitsOfSize.{v, v} C
-
-@[to_dual]
-
-Depends on / 依赖: HasLimitsOfSize
+/-
+**CategoryTheory.Limits.HasLimits** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：HasLimits (C : Type u) [Category.{v} C] : Prop
+参数：C : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev HasLimits (C : Type u) [Category.{v} C] : Prop :=
   HasLimitsOfSize.{v, v} C
 
 @[to_dual]
-/--
-theorem `HasLimits.has_limits_of_shape` / 定理 `HasLimits.has_limits_of_shape`
-
-English:
-theorem HasLimits.has_limits_of_shape
-  statement: {C : Type u} [Category.{v} C] [HasLimits C] (J : Type v)
-  proof: HasLimitsOfSize.has_limits_of_shape J
-
-中文:
-定理 有极限.has_limits_of_shape
-  结论: {C : 类型u} [范畴.{v} C] [有极限 C] (J : 类型v)
-  证明: HasLimitsOfSize.has_limits_of_shape J
-
-Depends on / 依赖: HasLimitsOfSize, HasLimitsOfSize.has_limits_of_shape, has_limits_of_shape
+/-
+**CategoryTheory.Limits.HasLimits.has_limits_of_shape** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.HasLimits`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasLimits C] (J : Type v)   [inst_2 : CategoryTheory.Category.{v, v} J], C
+ategoryTheory.Limits.HasLimitsOfShape J C
+参数：J : Type v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimitsOfSize.has_limits_of_shape`：∀ {C : Type u
+} {inst : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasLim
+itsOfSize.{v₁, u₁, v, u} C]   (J : Type u₁) [in…
 -/
 theorem HasLimits.has_limits_of_shape {C : Type u} [Category.{v} C] [HasLimits C] (J : Type v)
     [Category.{v} J] : HasLimitsOfShape J C :=
@@ -351,12 +289,20 @@ variable {J C}
 
 -- see Note [lower instance priority]
 @[to_dual]
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {J : Type u₁} [Category.{v₁} J]
     [HasLimitsOfShape J C] (F : J ⥤ C) : HasLimit F :=
   HasLimitsOfShape.has_limit F
 
 -- see Note [lower instance priority]
 @[to_dual]
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {J : Type u₁} [Category.{v₁} J]
     [HasLimitsOfSize.{v₁, u₁} C] : HasLimitsOfShape J C :=
   HasLimitsOfSize.has_limits_of_shape J
@@ -364,40 +310,32 @@ instance (priority := 100) {J : Type u₁} [Category.{v₁} J]
 -- Interface to the `HasLimit` class.
 /-- An arbitrary choice of limit cone for a functor. -/
 @[to_dual colimit.cocone /-- An arbitrary choice of colimit cocone of a functor. -/]
-/--
-Definition of `limit.cone` / `limit.cone` 的定义
+/-
+**CategoryTheory.Limits.limit.cone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) → [CategoryTheory.Limits.HasLimit F] → CategoryTheory.Limi
+ts.Cone F
+参数：F : CategoryTheory.Functor J C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.cone
-  signature: (F : J ⥤ C) [HasLimit F]
-  body: (getLimitCone F).cone
-
-中文:
-定义 limit.cone
-  签名: (F : J ⥤ C) [有极限 F]
-  定义体: (getLimitCone F).cone
-
-Depends on / 依赖: getLimitCone
+--- 原说明 ---
+An arbitrary choice of limit cone for a functor.
 -/
 def limit.cone (F : J ⥤ C) [HasLimit F] : Cone F :=
   (getLimitCone F).cone
 
 /-- An arbitrary choice of limit object of a functor. -/
 @[to_dual (attr := implicit_reducible) /-- An arbitrary choice of colimit object of a functor. -/]
-/--
-Definition of `limit` / `limit` 的定义
+/-
+**CategoryTheory.Limits.limit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：limit (F : J ⥤ C) [HasLimit F]
+参数：F : J ⥤ C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit
-  signature: (F : J ⥤ C) [HasLimit F]
-  body: (limit.cone F).pt
-
-中文:
-定义 limit
-  签名: (F : J ⥤ C) [有极限 F]
-  定义体: (limit.cone F).pt
-
-Depends on / 依赖: limit.cone
+--- 原说明 ---
+An arbitrary choice of limit object of a functor.
 -/
 def limit (F : J ⥤ C) [HasLimit F] :=
   (limit.cone F).pt
@@ -405,44 +343,17 @@ def limit (F : J ⥤ C) [HasLimit F] :=
 /-- The projection from the limit object to a value of the functor. -/
 @[to_dual (attr := implicit_reducible) ι
 /-- The coprojection from a value of the functor to the colimit object. -/]
-/--
-Definition of `limit.π` / `limit.π` 的定义
-
-English:
-definition limit.π
-  signature: (F : J ⥤ C) [HasLimit F] (j : J)
-  body: (limit.cone F).π.app j
-
-中文:
-定义 limit.π
-  签名: (F : J ⥤ C) [有极限 F] (j : J)
-  定义体: (limit.cone F).π.app j
-
-Depends on / 依赖: limit.cone
+/-
+**CategoryTheory.Limits.limit.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def limit.π (F : J ⥤ C) [HasLimit F] (j : J) : limit F ⟶ F.obj j :=
   (limit.cone F).π.app j
-
-/--
-theorem `limit.π_comp_eqToHom` / 定理 `limit.π_comp_eqToHom`
-
-English:
-theorem limit.π_comp_eqToHom
-  given: (F : J ⥤ C) [HasLimit F] {j j' : J} (hj : j = j')
-  proof: by
-  subst hj
-  simp
-
-@[to_dual existing (attr := reassoc) π_comp_eqToHom]
-
-中文:
-定理 limit.π_comp_eqToHom
-  条件: (F : J ⥤ C) [有极限 F] {j j' : J} (hj : j = j')
-  证明: by
-  subst hj
-  simp
-
-@[to_dual existing (attr := reassoc) π_comp_eqToHom]
+/-
+**CategoryTheory.Limits.limit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.π_comp_eqToHom (F : J ⥤ C) [HasLimit F] {j j' : J} (hj : j = j') :
     limit.π F j ≫ eqToHom (by subst hj; rfl) = limit.π F j' := by
@@ -450,26 +361,10 @@ theorem limit.π_comp_eqToHom (F : J ⥤ C) [HasLimit F] {j j' : J} (hj : j = j'
   simp
 
 @[to_dual existing (attr := reassoc) π_comp_eqToHom]
-/--
-theorem `colimit.eqToHom_comp_ι` / 定理 `colimit.eqToHom_comp_ι`
-
-English:
-theorem colimit.eqToHom_comp_ι
-  given: (F : J ⥤ C) [HasColimit F] {j j' : J} (hj : j = j')
-  proof: by
-  subst hj
-  simp
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 colimit.eqToHom_comp_ι
-  条件: (F : J ⥤ C) [有余极限 F] {j j' : J} (hj : j = j')
-  证明: by
-  subst hj
-  simp
-
-@[to_dual (attr := simp)]
+/-
+**CategoryTheory.Limits.colimit.eqToHom_comp_** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit.eqToHom_comp_ι (F : J ⥤ C) [HasColimit F] {j j' : J} (hj : j = j') :
     eqToHom (by subst hj; rfl) ≫ colimit.ι F j = colimit.ι F j' := by
@@ -477,66 +372,43 @@ theorem colimit.eqToHom_comp_ι (F : J ⥤ C) [HasColimit F] {j j' : J} (hj : j 
   simp
 
 @[to_dual (attr := simp)]
-/--
-theorem `limit.cone_x` / 定理 `limit.cone_x`
-
-English:
-theorem limit.cone_x
-  given: {F : J ⥤ C} [HasLimit F]
-  statement: (limit.cone F).pt = limit F
-  proof: rfl
-
-@[to_dual (attr := simp) cocone_ι]
-
-中文:
-定理 limit.cone_x
-  条件: {F : J ⥤ C} [有极限 F]
-  结论: (limit.cone F).pt = limit F
-  证明: rfl
-
-@[to_dual (attr := simp) cocone_ι]
+/-
+**CategoryTheory.Limits.limit.cone_x** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F],   (CategoryTheory.Limits.limit.cone F
+).pt = CategoryTheory.Limits.limit F
+参数：CategoryTheory.Limits.limit.cone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.cone_x {F : J ⥤ C} [HasLimit F] : (limit.cone F).pt = limit F :=
   rfl
 
 @[to_dual (attr := simp) cocone_ι]
-/--
-theorem `limit.cone_π` / 定理 `limit.cone_π`
-
-English:
-theorem limit.cone_π
-  given: {F : J ⥤ C} [HasLimit F]
-  statement: (limit.cone F).π.app = limit.π _
-  proof: rfl
-
-@[to_dual (attr := reassoc (attr := simp))]
-
-中文:
-定理 limit.cone_π
-  条件: {F : J ⥤ C} [有极限 F]
-  结论: (limit.cone F).π.app = limit.π _
-  证明: rfl
-
-@[to_dual (attr := reassoc (attr := simp))]
+/-
+**CategoryTheory.Limits.limit.cone_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.cone_π {F : J ⥤ C} [HasLimit F] : (limit.cone F).π.app = limit.π _ :=
   rfl
 
 @[to_dual (attr := reassoc (attr := simp))]
-/--
-theorem `limit.w` / 定理 `limit.w`
-
-English:
-theorem limit.w
-  given: (F : J ⥤ C) [HasLimit F] {j j' : J} (f : j ⟶ j')
-  proof: (limit.cone F).w f
-
-中文:
-定理 limit.w
-  条件: (F : J ⥤ C) [有极限 F] {j j' : J} (f : j ⟶ j')
-  证明: (limit.cone F).w f
-
-Depends on / 依赖: limit.cone
+/-
+**CategoryTheory.Limits.limit.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits
+.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor J C) [i
+nst_2 : CategoryTheory.Limits.HasLimit F] {j j' : J} (f : j ⟶ j'),   CategoryThe
+ory.CategoryStruct.comp (CategoryTheory.Limits.limit.π F j) (F.map f) = Category
+Theory.Limits.limit.π F j'
+参数：F : CategoryTheory.Functor J C；f : j ⟶ j'；CategoryTheory.Limits.limit.π F j；F
+.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
 -/
 theorem limit.w (F : J ⥤ C) [HasLimit F] {j j' : J} (f : j ⟶ j') :
     limit.π F j ≫ F.map f = limit.π F j' :=
@@ -545,20 +417,15 @@ theorem limit.w (F : J ⥤ C) [HasLimit F] {j j' : J} (f : j ⟶ j') :
 /-- Evidence that the arbitrary choice of cone provided by `limit.cone F` is a limit cone. -/
 @[to_dual
 /-- Evidence that the arbitrary choice of cocone is a colimit cocone. -/]
-/--
-Definition of `limit.isLimit` / `limit.isLimit` 的定义
-
-English:
-definition limit.isLimit
-  signature: (F : J ⥤ C) [HasLimit F]
-  body: (getLimitCone F).isLimit
-
-中文:
-定义 limit.isLimit
-  签名: (F : J ⥤ C) [有极限 F]
-  定义体: (getLimitCone F).isLimit
-
-Depends on / 依赖: getLimitCone, isLimit
+/-
+**CategoryTheory.Limits.limit.isLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            CategoryTheory.Limits.IsLimit (CategoryTheory.Limits.limit.cone F)
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Limits.limit.cone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def limit.isLimit (F : J ⥤ C) [HasLimit F] : IsLimit (limit.cone F) :=
   (getLimitCone F).isLimit
@@ -566,65 +433,41 @@ def limit.isLimit (F : J ⥤ C) [HasLimit F] : IsLimit (limit.cone F) :=
 /-- The morphism from the cone point of any other cone to the limit object. -/
 @[to_dual
 /-- The morphism from the colimit object to the cone point of any other cocone. -/]
-/--
-Definition of `limit.lift` / `limit.lift` 的定义
-
-English:
-definition limit.lift
-  signature: (F : J ⥤ C) [HasLimit F] (c : Cone F)
-  body: (limit.isLimit F).lift c
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 limit.lift
-  签名: (F : J ⥤ C) [有极限 F] (c : 锥 F)
-  定义体: (limit.isLimit F).lift c
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.limit.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            (c : CategoryTheory.Limits.Cone F) → c.pt ⟶ CategoryTheory.Limits.li
+mit F
+参数：F : CategoryTheory.Functor J C；c : CategoryTheory.Limits.Cone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def limit.lift (F : J ⥤ C) [HasLimit F] (c : Cone F) : c.pt ⟶ limit F :=
   (limit.isLimit F).lift c
 
 @[to_dual (attr := simp)]
-/--
-theorem `limit.isLimit_lift` / 定理 `limit.isLimit_lift`
-
-English:
-theorem limit.isLimit_lift
-  given: {F : J ⥤ C} [HasLimit F] (c : Cone F)
-  proof: rfl
-
-@[to_dual (attr := reassoc (attr := simp)) ι_desc]
-
-中文:
-定理 limit.isLimit_lift
-  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F)
-  证明: rfl
-
-@[to_dual (attr := reassoc (attr := simp)) ι_desc]
+/-
+**CategoryTheory.Limits.limit.isLimit_lift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] (c : CategoryTheory.Limits.Cone F),   
+(CategoryTheory.Limits.limit.isLimit F).lift c = CategoryTheory.Limits.limit.lif
+t F c
+参数：c : CategoryTheory.Limits.Cone F；CategoryTheory.Limits.limit.isLimit F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.isLimit_lift {F : J ⥤ C} [HasLimit F] (c : Cone F) :
     (limit.isLimit F).lift c = limit.lift F c :=
   rfl
 
 @[to_dual (attr := reassoc (attr := simp)) ι_desc]
-/--
-theorem `limit.lift_π` / 定理 `limit.lift_π`
-
-English:
-theorem limit.lift_π
-  given: {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J)
-  proof: IsLimit.fac _ c j
-
-中文:
-定理 limit.lift_π
-  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) (j : J)
-  证明: IsLimit.fac _ c j
-
-Depends on / 依赖: IsLimit, IsLimit.fac
+/-
+**CategoryTheory.Limits.limit.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.lift_π {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J) :
     limit.lift F c ≫ limit.π F j = c.π.app j :=
@@ -643,43 +486,23 @@ Usually this morphism should be accessed through `colim.map`,
 but may be needed separately when you have specified colimits for the source and target functors,
 but not necessarily for all functors of shape `J`.
 -/]
-/--
-Definition of `limMap` / `limMap` 的定义
-
-English:
-definition limMap
-  signature: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G)
-  body: IsLimit.map _ (limit.isLimit G) α
-
-@[to_dual (attr := reassoc (attr := simp)) ι_colimMap]
-
-中文:
-定义 limMap
-  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G)
-  定义体: IsLimit.map _ (limit.isLimit G) α
-
-@[to_dual (attr := reassoc (attr := simp)) ι_colimMap]
-
-Depends on / 依赖: IsLimit, IsLimit.map, isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.limMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+形式化陈述：limMap {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) : limit F ⟶ lim
+it G
+参数：α : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def limMap {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) : limit F ⟶ limit G :=
   IsLimit.map _ (limit.isLimit G) α
 
 @[to_dual (attr := reassoc (attr := simp)) ι_colimMap]
-/--
-theorem `limMap_π` / 定理 `limMap_π`
-
-English:
-theorem limMap_π
-  given: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) (j : J)
-  proof: limit.lift_π _ j
-
-中文:
-定理 limMap_π
-  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) (j : J)
-  证明: limit.lift_π _ j
-
-Depends on / 依赖: limit.lift_
+/-
+**CategoryTheory.Limits.limMap_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limMap_π {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) (j : J) :
     limMap α ≫ limit.π G j = limit.π F j ≫ α.app j :=
@@ -687,188 +510,132 @@ theorem limMap_π {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) (j : 
 
 /-- The cone morphism from any cone to the arbitrary choice of limit cone. -/
 @[to_dual /-- The cocone morphism from the arbitrary choice of colimit cocone to any cocone. -/]
-/--
-Definition of `limit.coneMorphism` / `limit.coneMorphism` 的定义
+/-
+**CategoryTheory.Limits.limit.coneMorphism** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            (c : CategoryTheory.Limits.Cone F) → c ⟶ CategoryTheory.Limits.limit
+.cone F
+参数：c : CategoryTheory.Limits.Cone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.coneMorphism
-  signature: {F : J ⥤ C} [HasLimit F] (c : Cone F)
-  body: (limit.isLimit F).liftConeMorphism c
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 limit.coneMorphism
-  签名: {F : J ⥤ C} [有极限 F] (c : 锥 F)
-  定义体: (limit.isLimit F).liftConeMorphism c
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: isLimit, liftConeMorphism, limit.isLimit
+--- 原说明 ---
+The cone morphism from any cone to the arbitrary choice of limit cone.
 -/
 def limit.coneMorphism {F : J ⥤ C} [HasLimit F] (c : Cone F) : c ⟶ limit.cone F :=
   (limit.isLimit F).liftConeMorphism c
 
 @[to_dual (attr := simp)]
-/--
-theorem `limit.coneMorphism_hom` / 定理 `limit.coneMorphism_hom`
-
-English:
-theorem limit.coneMorphism_hom
-  given: {F : J ⥤ C} [HasLimit F] (c : Cone F)
-  proof: rfl
-
-@[to_dual ι_coconeMorphism]
-
-中文:
-定理 limit.coneMorphism_hom
-  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F)
-  证明: rfl
-
-@[to_dual ι_coconeMorphism]
+/-
+**CategoryTheory.Limits.limit.coneMorphism_hom** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] (c : CategoryTheory.Limits.Cone F),   
+(CategoryTheory.Limits.limit.coneMorphism c).hom = CategoryTheory.Limits.limit.l
+ift F c
+参数：c : CategoryTheory.Limits.Cone F；CategoryTheory.Limits.limit.coneMorphism c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.coneMorphism_hom {F : J ⥤ C} [HasLimit F] (c : Cone F) :
     (limit.coneMorphism c).hom = limit.lift F c :=
   rfl
 
 @[to_dual ι_coconeMorphism]
-/--
-theorem `limit.coneMorphism_π` / 定理 `limit.coneMorphism_π`
-
-English:
-theorem limit.coneMorphism_π
-  given: {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J)
-  proof: by simp
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
-
-中文:
-定理 limit.coneMorphism_π
-  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) (j : J)
-  证明: by simp
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
+/-
+**CategoryTheory.Limits.limit.coneMorphism_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.coneMorphism_π {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J) :
     (limit.coneMorphism c).hom ≫ limit.π F j = c.π.app j := by simp
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
-/--
-theorem `limit.conePointUniqueUpToIso_hom_comp` / 定理 `limit.conePointUniqueUpToIso_hom_comp`
-
-English:
-theorem limit.conePointUniqueUpToIso_hom_comp
-  statement: {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-
-中文:
-定理 limit.conePointUniqueUpToIso_hom_comp
-  结论: {F : J ⥤ C} [有极限 F] {c : 锥 F} (hc : 是极限 c)
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.limit.conePointUniqueUpToIso_hom_comp** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] {c : CategoryTheory.Limits.Cone F}   (
+hc : CategoryTheory.Limits.IsLimit c) (j : J),   CategoryTheory.CategoryStruct.c
+omp (hc.conePointUniqueUpToIso (CategoryTheory.Limits.limit.isLimit F)).hom     
+  (CategoryTheory.Limits.limit.π F j) =     c.π.app j
+参数：hc : CategoryTheory.Limits.IsLimit c；j : J；hc.conePointUniqueUpToIso (Categor
+yTheory.Limits.limit.isLimit F)；CategoryTheory.Limits.limit.π F j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
 -/
 theorem limit.conePointUniqueUpToIso_hom_comp {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
     (j : J) : (IsLimit.conePointUniqueUpToIso hc (limit.isLimit _)).hom ≫ limit.π F j = c.π.app j :=
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-/--
-theorem `limit.conePointUniqueUpToIso_inv_comp` / 定理 `limit.conePointUniqueUpToIso_inv_comp`
-
-English:
-theorem limit.conePointUniqueUpToIso_inv_comp
-  statement: {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
-
-@[to_dual]
-
-中文:
-定理 limit.conePointUniqueUpToIso_inv_comp
-  结论: {F : J ⥤ C} [有极限 F] {c : 锥 F} (hc : 是极限 c)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
-
-@[to_dual]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.limit.conePointUniqueUpToIso_inv_comp** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] {c : CategoryTheory.Limits.Cone F}   (
+hc : CategoryTheory.Limits.IsLimit c) (j : J),   CategoryTheory.CategoryStruct.c
+omp ((CategoryTheory.Limits.limit.isLimit F).conePointUniqueUpToIso hc).inv     
+  (CategoryTheory.Limits.limit.π F j) =     c.π.app j
+参数：hc : CategoryTheory.Limits.IsLimit c；j : J；(CategoryTheory.Limits.limit.isLim
+it F).conePointUniqueUpToIso hc；CategoryTheory.Limits.limit.π F j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem limit.conePointUniqueUpToIso_inv_comp {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
     (j : J) : (IsLimit.conePointUniqueUpToIso (limit.isLimit _) hc).inv ≫ limit.π F j = c.π.app j :=
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
 
 @[to_dual]
-/--
-theorem `limit.existsUnique` / 定理 `limit.existsUnique`
-
-English:
-theorem limit.existsUnique
-  given: {F : J ⥤ C} [HasLimit F] (t : Cone F)
-  proof: (limit.isLimit F).existsUnique _
-
-中文:
-定理 limit.存在Unique
-  条件: {F : J ⥤ C} [有极限 F] (t : 锥 F)
-  证明: (limit.isLimit F).existsUnique _
-
-Depends on / 依赖: existsUnique, inverseImage_eq, isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.limit.existsUnique** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] (t : CategoryTheory.Limits.Cone F),   
+∃! l, ∀ (j : J), CategoryTheory.CategoryStruct.comp l (CategoryTheory.Limits.lim
+it.π F j) = t.π.app j
+参数：t : CategoryTheory.Limits.Cone F；j : J；CategoryTheory.Limits.limit.π F j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.existsUnique`：existsUnique {t : Cone F} (h
+ : IsLimit t) (s : Cone F) : exists! l : s.pt ⟶ t.pt, forall j, l ≫ t.π.app j = 
+s.π.app j
 -/
 theorem limit.existsUnique {F : J ⥤ C} [HasLimit F] (t : Cone F) :
-    exists! l : t.pt ⟶ limit F, forall j, l ≫ limit.π F j = t.π.app j :=
+    ∃! l : t.pt ⟶ limit F, ∀ j, l ≫ limit.π F j = t.π.app j :=
   (limit.isLimit F).existsUnique _
 
 /-- Given any other limit cone for `F`, the chosen `limit F` is isomorphic to the cone point. -/
 @[to_dual
 /-- Given any other colimit cocone for `F`, the chosen `colimit F` is isomorphic to the cocone
 point. -/]
-/--
-Definition of `limit.isoLimitCone` / `limit.isoLimitCone` 的定义
-
-English:
-definition limit.isoLimitCone
-  signature: {F : J ⥤ C} [HasLimit F] (t : LimitCone F)
-  body: IsLimit.conePointUniqueUpToIso (limit.isLimit F) t.isLimit
-
-@[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_inv]
-
-中文:
-定义 limit.isoLimitCone
-  签名: {F : J ⥤ C} [有极限 F] (t : 极限锥 F)
-  定义体: IsLimit.conePointUniqueUpToIso (limit.isLimit F) t.isLimit
-
-@[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_inv]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, limit.isLimit, t.isLimit
+/-
+**CategoryTheory.Limits.limit.isoLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            (t : CategoryTheory.Limits.LimitCone F) → CategoryTheory.Limits.limi
+t F ≅ t.cone.pt
+参数：t : CategoryTheory.Limits.LimitCone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def limit.isoLimitCone {F : J ⥤ C} [HasLimit F] (t : LimitCone F) : limit F ≅ t.cone.pt :=
   IsLimit.conePointUniqueUpToIso (limit.isLimit F) t.isLimit
 
 @[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_inv]
-/--
-theorem `limit.isoLimitCone_hom_π` / 定理 `limit.isoLimitCone_hom_π`
-
-English:
-theorem limit.isoLimitCone_hom_π
-  given: {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J)
-  proof: by
-  dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
-  simp
-
-@[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_hom]
-
-中文:
-定理 limit.isoLimitCone_hom_π
-  条件: {F : J ⥤ C} [有极限 F] (t : 极限锥 F) (j : J)
-  证明: by
-  dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
-  simp
-
-@[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_hom]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isoLimitCone, limit.isoLimitCone
+/-
+**CategoryTheory.Limits.limit.isoLimitCone_hom_** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.isoLimitCone_hom_π {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J) :
     (limit.isoLimitCone t).hom ≫ t.cone.π.app j = limit.π F j := by
@@ -876,28 +643,10 @@ theorem limit.isoLimitCone_hom_π {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (
   simp
 
 @[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_hom]
-/--
-theorem `limit.isoLimitCone_inv_π` / 定理 `limit.isoLimitCone_inv_π`
-
-English:
-theorem limit.isoLimitCone_inv_π
-  given: {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J)
-  proof: by
-  dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
-  simp
-
-@[to_dual (attr := ext)]
-
-中文:
-定理 limit.isoLimitCone_inv_π
-  条件: {F : J ⥤ C} [有极限 F] (t : 极限锥 F) (j : J)
-  证明: by
-  dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
-  simp
-
-@[to_dual (attr := ext)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isoLimitCone, limit.isoLimitCone
+/-
+**CategoryTheory.Limits.limit.isoLimitCone_inv_** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.isoLimitCone_inv_π {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J) :
     (limit.isoLimitCone t).inv ≫ limit.π F j = t.cone.π.app j := by
@@ -905,219 +654,252 @@ theorem limit.isoLimitCone_inv_π {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (
   simp
 
 @[to_dual (attr := ext)]
-/--
-theorem `limit.hom_ext` / 定理 `limit.hom_ext`
-
-English:
-theorem limit.hom_ext
-  statement: {F : J ⥤ C} [HasLimit F] {X : C} {f f' : X ⟶ limit F}
-  proof: (limit.isLimit F).hom_ext w
-
-@[to_dual]
-
-中文:
-定理 limit.hom_ext
-  结论: {F : J ⥤ C} [有极限 F] {X : C} {f f' : X ⟶ limit F}
-  证明: (limit.isLimit F).hom_ext w
-
-@[to_dual]
-
-Depends on / 依赖: hom_ext, isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.limit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] {X : C}   {f f' : X ⟶ CategoryTheory.L
+imits.limit F},   (∀ (j : J),       CategoryTheory.CategoryStruct.comp f (Catego
+ryTheory.Limits.limit.π F j) =         CategoryTheory.CategoryStruct.comp f' (Ca
+tegoryTheory.Limits.limit.π F j)) →     f = f'
+参数：∀ (j : J),       CategoryTheory.CategoryStruct.comp f (CategoryTheory.Limits.
+limit.π F j) =         CategoryTheory.CategoryStruct.comp f' (CategoryTheory.Lim
+its.limit.π F j)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
 -/
 theorem limit.hom_ext {F : J ⥤ C} [HasLimit F] {X : C} {f f' : X ⟶ limit F}
-    (w : forall j, f ≫ limit.π F j = f' ≫ limit.π F j) : f = f' :=
+    (w : ∀ j, f ≫ limit.π F j = f' ≫ limit.π F j) : f = f' :=
   (limit.isLimit F).hom_ext w
 
 @[to_dual]
-/--
-Instance `isIso_limMap` / 实例 `isIso_limMap`
-
-English:
-instance isIso_limMap
-  signature: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [IsIso α]
-  body: ⟨limMap (inv α), by cat_disch , by cat_disch⟩
-
-@[to_dual (attr := reassoc (attr := simp)) map_desc]
-
-中文:
-实例 isIso_limMap
-  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) [是同构 α]
-  定义体: ⟨limMap (inv α), by cat_disch , by cat_disch⟩
-
-@[to_dual (attr := reassoc (attr := simp)) map_desc]
-
-Depends on / 依赖: cat_disch, limMap
+/-
+**CategoryTheory.Limits.isIso_limMap** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：isIso_limMap {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [IsIso α]
+ : IsIso (limMap α)
+参数：α : F ⟶ G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.NatIso.isIso_inv_app`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.limMap_π_assoc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 -/
 instance isIso_limMap {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [IsIso α] :
     IsIso (limMap α) :=
   ⟨limMap (inv α), by cat_disch , by cat_disch⟩
 
 @[to_dual (attr := reassoc (attr := simp)) map_desc]
-/--
-theorem `limit.lift_map` / 定理 `limit.lift_map`
-
-English:
-theorem limit.lift_map
-  given: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (c : Cone F) (α : F ⟶ G)
-  proof: by
-  ext
-  rw [assoc]; rw [limMap_π]; rw [limit.lift_π_assoc]; rw [limit.lift_π]
-  rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 limit.lift_map
-  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (c : 锥 F) (α : F ⟶ G)
-  证明: by
-  ext
-  rw [assoc]; rw [limMap_π]; rw [limit.lift_π_assoc]; rw [limit.lift_π]
-  rfl
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: limit.lift_
+/-
+**CategoryTheory.Limits.limit.lift_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F G : CategoryTheory.Functor J C} 
+[inst_2 : CategoryTheory.Limits.HasLimit F]   [inst_3 : CategoryTheory.Limits.Ha
+sLimit G] (c : CategoryTheory.Limits.Cone F) (α : F ⟶ G),   CategoryTheory.Categ
+oryStruct.comp (CategoryTheory.Limits.limit.lift F c) (CategoryTheory.Limits.lim
+Map α) =     CategoryTheory.Limits.limit.lift G ((CategoryTheory.Limits.Cone.pos
+tcompose α).obj c)
+参数：c : CategoryTheory.Limits.Cone F；α : F ⟶ G；CategoryTheory.Limits.limit.lift F
+ c；CategoryTheory.Limits.limMap α；(CategoryTheory.Limits.Cone.postcompose α).obj
+ c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
 -/
 theorem limit.lift_map {F G : J ⥤ C} [HasLimit F] [HasLimit G] (c : Cone F) (α : F ⟶ G) :
     limit.lift F c ≫ limMap α = limit.lift G ((Cone.postcompose α).obj c) := by
   ext
-  rw [assoc]; rw [limMap_π]; rw [limit.lift_π_assoc]; rw [limit.lift_π]
+  rw [assoc, limMap_π, limit.lift_π_assoc, limit.lift_π]
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `limit.lift_cone` / 定理 `limit.lift_cone`
-
-English:
-theorem limit.lift_cone
-  given: {F : J ⥤ C} [HasLimit F]
-  statement: limit.lift F (limit.cone F) = 𝟙 (limit F)
-  proof: (limit.isLimit _).lift_self
-
-中文:
-定理 limit.lift_cone
-  条件: {F : J ⥤ C} [有极限 F]
-  结论: limit.lift F (limit.cone F) = 𝟙 (limit F)
-  证明: (limit.isLimit _).lift_self
-
-Depends on / 依赖: isLimit, lift_self, limit.isLimit
+/-
+**CategoryTheory.Limits.limit.lift_cone** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F],   CategoryTheory.Limits.limit.lift F 
+(CategoryTheory.Limits.limit.cone F) =     CategoryTheory.CategoryStruct.id (Cat
+egoryTheory.Limits.limit F)
+参数：CategoryTheory.Limits.limit.cone F；CategoryTheory.Limits.limit F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.lift_self`：lift_self {c : Cone F} (t : IsL
+imit c) : t.lift c = 𝟙 c.pt
 -/
 theorem limit.lift_cone {F : J ⥤ C} [HasLimit F] : limit.lift F (limit.cone F) = 𝟙 (limit F) :=
   (limit.isLimit _).lift_self
 
 -- TODO: `to_dual` doesn't yet know that it shouldn't translate the category on `Type _`.
-/--
-Definition of `limit.homIso` / `limit.homIso` 的定义
+/-- The isomorphism (in `Type`) between
+morphisms from a specified object `W` to the limit object,
+and cones with cone point `W`.
+-/
+/-
+**CategoryTheory.Limits.limit.homIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            (W : C) → ULift.{u₁, v} (W ⟶ CategoryTheory.Limits.limit F) ≅ F.cone
+s.obj (Opposite.op W)
+参数：F : CategoryTheory.Functor J C；W : C；W ⟶ CategoryTheory.Limits.limit F；Opposi
+te.op W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.homIso
-  signature: (F : J ⥤ C) [HasLimit F] (W : C)
-  body: (limit.isLimit F).homIso W
-
-@[simp]
-
-中文:
-定义 limit.homIso
-  签名: (F : J ⥤ C) [有极限 F] (W : C)
-  定义体: (limit.isLimit F).homIso W
-
-@[simp]
-
-Depends on / 依赖: homIso, isLimit, limit.isLimit
+--- 原说明 ---
+The isomorphism (in `Type`) between
+morphisms from a specified object `W` to the limit object,
+and cones with cone point `W`.
 -/
 def limit.homIso (F : J ⥤ C) [HasLimit F] (W : C) :
     ULift.{u₁} (W ⟶ limit F : Type v) ≅ F.cones.obj (op W) :=
   (limit.isLimit F).homIso W
 
 @[simp]
-/--
-theorem `limit.homIso_hom` / 定理 `limit.homIso_hom`
-
-English:
-theorem limit.homIso_hom
-  given: (F : J ⥤ C) [HasLimit F] {W : C}
-  proof: (limit.isLimit F).homIso_hom
-
-中文:
-定理 limit.homIso_hom
-  条件: (F : J ⥤ C) [有极限 F] {W : C}
-  证明: (limit.isLimit F).homIso_hom
-
-Depends on / 依赖: homIso_hom, isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.limit.homIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor J C) [i
+nst_2 : CategoryTheory.Limits.HasLimit F] {W : C},   (CategoryTheory.Limits.limi
+t.homIso F W).hom =     TypeCat.ofHom fun f =>       CategoryTheory.CategoryStru
+ct.comp ((CategoryTheory.Functor.const J).map f.down)         (CategoryTheory.Li
+mits.limit.cone F).π
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Limits.limit.homIso F W；(Catego
+ryTheory.Functor.const J).map f.down；CategoryTheory.Limits.limit.cone F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.homIso_hom`：homIso_hom (h : IsLimit t) {W 
+: C} : (IsLimit.homIso h W).hom = ↾fun f => (t.extend f.down).π
 -/
 theorem limit.homIso_hom (F : J ⥤ C) [HasLimit F] {W : C} :
-    (limit.homIso F W).hom = ↾fun f => (const J).map f.down ≫ (limit.cone F).π :=
+    (limit.homIso F W).hom = ↾fun f ↦ (const J).map f.down ≫ (limit.cone F).π :=
   (limit.isLimit F).homIso_hom
 
-/--
-Definition of `limit.homIso'` / `limit.homIso'` 的定义
+/-- The isomorphism (in `Type`) between
+morphisms from a specified object `W` to the limit object,
+and an explicit componentwise description of cones with cone point `W`.
+-/
+/-
+**CategoryTheory.Limits.limit.homIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasLimit F] → 
+            (W : C) →               ULift.{u₁, v} (W ⟶ CategoryTheory.Limits.lim
+it F) ≅                 { p // ∀ {j j' : J} (f : j ⟶ j'), CategoryTheory.Categor
+yStruct.comp (p j) (F.map f) = p j' }
+参数：F : CategoryTheory.Functor J C；W : C；W ⟶ CategoryTheory.Limits.limit F；f : j 
+⟶ j'；p j；F.map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.homIso'
-  signature: (F : J ⥤ C) [HasLimit F] (W : C)
-  body: (limit.isLimit F).homIso' W
-
-@[to_dual]
-
-中文:
-定义 limit.homIso'
-  签名: (F : J ⥤ C) [有极限 F] (W : C)
-  定义体: (limit.isLimit F).homIso' W
-
-@[to_dual]
-
-Depends on / 依赖: homIso, isLimit, limit.isLimit
+--- 原说明 ---
+The isomorphism (in `Type`) between
+morphisms from a specified object `W` to the limit object,
+and an explicit componentwise description of cones with cone point `W`.
 -/
 def limit.homIso' (F : J ⥤ C) [HasLimit F] (W : C) :
     ULift.{u₁} (W ⟶ limit F : Type v) ≅
-      { p : forall j, W ⟶ F.obj j // forall {j j' : J} (f : j ⟶ j'), p j ≫ F.map f = p j' } :=
+      { p : ∀ j, W ⟶ F.obj j // ∀ {j j' : J} (f : j ⟶ j'), p j ≫ F.map f = p j' } :=
   (limit.isLimit F).homIso' W
 
 @[to_dual]
-/--
-theorem `limit.lift_extend` / 定理 `limit.lift_extend`
-
-English:
-theorem limit.lift_extend
-  given: {F : J ⥤ C} [HasLimit F] (c : Cone F) {X : C} (f : X ⟶ c.pt)
-  proof: by cat_disch
-
-中文:
-定理 limit.lift_extend
-  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) {X : C} (f : X ⟶ c.pt)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Limits.limit.lift_extend** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimit F] (c : CategoryTheory.Limits.Cone F)   {
+X : C} (f : X ⟶ c.pt),   CategoryTheory.Limits.limit.lift F (c.extend f) =     C
+ategoryTheory.CategoryStruct.comp f (CategoryTheory.Limits.limit.lift F c)
+参数：c : CategoryTheory.Limits.Cone F；f : X ⟶ c.pt；c.extend f；CategoryTheory.Limit
+s.limit.lift F c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.lift_extend {F : J ⥤ C} [HasLimit F] (c : Cone F) {X : C} (f : X ⟶ c.pt) :
     limit.lift F (c.extend f) = f ≫ limit.lift F c := by cat_disch
 
 /-- If a functor `F` has a limit, so does any naturally isomorphic functor. -/
 @[to_dual none]
-/--
-theorem `hasLimit_of_iso` / 定理 `hasLimit_of_iso`
+/-
+**CategoryTheory.Limits.hasLimit_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：hasLimit_of_iso {F G : J ⥤ C} [HasLimit F] (α : F ≅ G) : HasLimit G
+参数：α : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-theorem hasLimit_of_iso
-  given: {F G : J ⥤ C} [HasLimit F] (α : F ≅ G)
-  statement: HasLimit G
-  proof: HasLimit.mk
-    { cone := (Cone.postcompose α.hom).obj (limit.cone F)
-      isLimit := (IsLimit.postcomposeHomEquiv _ _).symm (limit.isLimit F) }
-
-@[to_dual]
-
-中文:
-定理 hasLimit_of_iso
-  条件: {F G : J ⥤ C} [有极限 F] (α : F ≅ G)
-  结论: 有极限 G
-  证明: HasLimit.mk
-    { cone := (Cone.postcompose α.hom).obj (limit.cone F)
-      isLimit := (IsLimit.postcomposeHomEquiv _ _).symm (limit.isLimit F) }
-
-@[to_dual]
-
-Depends on / 依赖: Cone.postcompose, HasLimit, HasLimit.mk, IsLimit, IsLimit.postcomposeHomEquiv, isLimit, limit.cone, limit.isLimit, postcompose, postcomposeHomEquiv
+--- 原说明 ---
+If a functor `F` has a limit, so does any naturally isomorphic functor.
 -/
 theorem hasLimit_of_iso {F G : J ⥤ C} [HasLimit F] (α : F ≅ G) : HasLimit G :=
   HasLimit.mk
@@ -1125,42 +907,41 @@ theorem hasLimit_of_iso {F G : J ⥤ C} [HasLimit F] (α : F ≅ G) : HasLimit G
       isLimit := (IsLimit.postcomposeHomEquiv _ _).symm (limit.isLimit F) }
 
 @[to_dual]
-/--
-theorem `hasLimit_iff_of_iso` / 定理 `hasLimit_iff_of_iso`
-
-English:
-theorem hasLimit_iff_of_iso
-  given: {F G : J ⥤ C} (α : F ≅ G)
-  statement: HasLimit F ↔ HasLimit G
-  proof: ⟨fun _ => hasLimit_of_iso α, fun _ => hasLimit_of_iso α.symm⟩
-
-中文:
-定理 hasLimit_iff_of_iso
-  条件: {F G : J ⥤ C} (α : F ≅ G)
-  结论: 有极限 F ↔ 有极限 G
-  证明: ⟨fun _ => hasLimit_of_iso α, fun _ => hasLimit_of_iso α.symm⟩
-
-Depends on / 依赖: hasLimit_of_iso
+/-
+**CategoryTheory.Limits.hasLimit_iff_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：hasLimit_iff_of_iso {F G : J ⥤ C} (α : F ≅ G) : HasLimit F ↔ HasLimit G
+参数：α : F ≅ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 -/
 theorem hasLimit_iff_of_iso {F G : J ⥤ C} (α : F ≅ G) : HasLimit F ↔ HasLimit G :=
-  ⟨fun _ => hasLimit_of_iso α, fun _ => hasLimit_of_iso α.symm⟩
+  ⟨fun _ ↦ hasLimit_of_iso α, fun _ ↦ hasLimit_of_iso α.symm⟩
 
 -- See the construction of limits from products and equalizers
 -- for an example usage.
-/--
-theorem `HasLimit.ofConesIso` / 定理 `HasLimit.ofConesIso`
+/-- If a functor `G` has the same collection of cones as a functor `F`
+which has a limit, then `G` also has a limit. -/
+/-
+**CategoryTheory.Limits.HasLimit.ofConesIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.HasLimit`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J K : Type u₁} [
+inst_1 : CategoryTheory.Category.{v₁, u₁} J]   [inst_2 : CategoryTheory.Category
+.{v₂, u₁} K] (F : CategoryTheory.Functor J C) (G : CategoryTheory.Functor K C)  
+ (h : F.cones ≅ G.cones) [CategoryTheory.Limits.HasLimit F], CategoryTheory.Limi
+ts.HasLimit G
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor K C；h : F.cones ≅ G
+.cones。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
 
-English:
-theorem HasLimit.ofConesIso
-  statement: {J K : Type u₁} [Category.{v₁} J] [Category.{v₂} K] (F : J ⥤ C)
-  proof: HasLimit.mk ⟨_, IsLimit.ofRepresentableBy ((limit.isLimit F).representableBy.ofIso h)⟩
-
-中文:
-定理 有极限.ofConesIso
-  结论: {J K : 类型u₁} [范畴.{v₁} J] [范畴.{v₂} K] (F : J ⥤ C)
-  证明: HasLimit.mk ⟨_, IsLimit.ofRepresentableBy ((limit.isLimit F).representableBy.ofIso h)⟩
-
-Depends on / 依赖: HasLimit, HasLimit.mk, IsLimit, IsLimit.ofRepresentableBy, isLimit, limit.isLimit, ofRepresentableBy, representableBy, representableBy.ofIso
+--- 原说明 ---
+If a functor `G` has the same collection of cones as a functor `F`
+which has a limit, then `G` also has a limit.
 -/
 theorem HasLimit.ofConesIso {J K : Type u₁} [Category.{v₁} J] [Category.{v₂} K] (F : J ⥤ C)
     (G : K ⥤ C) (h : F.cones ≅ G.cones) [HasLimit F] : HasLimit G :=
@@ -1173,95 +954,58 @@ if the functors are naturally isomorphic.
 /-- The colimits of `F : J ⥤ C` and `G : J ⥤ C` are isomorphic,
 if the functors are naturally isomorphic.
 -/]
-/--
-Definition of `HasLimit.isoOfNatIso` / `HasLimit.isoOfNatIso` 的定义
-
-English:
-definition HasLimit.isoOfNatIso
-  signature: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G)
-  body: IsLimit.conePointsIsoOfNatIso (limit.isLimit F) (limit.isLimit G) w
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 有极限.isoOf自然数Iso
-  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G)
-  定义体: IsLimit.conePointsIsoOfNatIso (limit.isLimit F) (limit.isLimit G) w
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointsIsoOfNatIso, conePointsIsoOfNatIso, isLimit, limit.isLimit
+/-
+**CategoryTheory.Limits.HasLimit.isoOfNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.HasLimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F G : Cate
+goryTheory.Functor J C} →           [inst_2 : CategoryTheory.Limits.HasLimit F] 
+→             [inst_3 : CategoryTheory.Limits.HasLimit G] →               (F ≅ G
+) → (CategoryTheory.Limits.limit F ≅ CategoryTheory.Limits.limit G)
+参数：F ≅ G；CategoryTheory.Limits.limit F ≅ CategoryTheory.Limits.limit G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def HasLimit.isoOfNatIso {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) : limit F ≅ limit G :=
   IsLimit.conePointsIsoOfNatIso (limit.isLimit F) (limit.isLimit G) w
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.isoOfNatIso_hom_π` / 定理 `HasLimit.isoOfNatIso_hom_π`
-
-English:
-theorem HasLimit.isoOfNatIso_hom_π
-  given: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J)
-  proof: IsLimit.conePointsIsoOfNatIso_hom_comp _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有极限.isoOf自然数Iso_hom_π
-  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G) (j : J)
-  证明: IsLimit.conePointsIsoOfNatIso_hom_comp _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointsIsoOfNatIso_hom_comp, conePointsIsoOfNatIso_hom_comp
+/-
+**CategoryTheory.Limits.HasLimit.isoOfNatIso_hom_** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasLimit.isoOfNatIso_hom_π {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J) :
     (HasLimit.isoOfNatIso w).hom ≫ limit.π G j = limit.π F j ≫ w.hom.app j :=
   IsLimit.conePointsIsoOfNatIso_hom_comp _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.isoOfNatIso_inv_π` / 定理 `HasLimit.isoOfNatIso_inv_π`
-
-English:
-theorem HasLimit.isoOfNatIso_inv_π
-  given: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J)
-  proof: IsLimit.conePointsIsoOfNatIso_inv_comp _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有极限.isoOf自然数Iso_inv_π
-  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G) (j : J)
-  证明: IsLimit.conePointsIsoOfNatIso_inv_comp _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointsIsoOfNatIso_inv_comp, conePointsIsoOfNatIso_inv_comp
+/-
+**CategoryTheory.Limits.HasLimit.isoOfNatIso_inv_** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasLimit.isoOfNatIso_inv_π {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J) :
     (HasLimit.isoOfNatIso w).inv ≫ limit.π F j = limit.π G j ≫ w.inv.app j :=
   IsLimit.conePointsIsoOfNatIso_inv_comp _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.lift_isoOfNatIso_hom` / 定理 `HasLimit.lift_isoOfNatIso_hom`
-
-English:
-theorem HasLimit.lift_isoOfNatIso_hom
-  statement: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone F)
-  proof: IsLimit.lift_comp_conePointsIsoOfNatIso_hom _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有极限.lift_isoOf自然数Iso_hom
-  结论: {F G : J ⥤ C} [有极限 F] [有极限 G] (t : 锥 F)
-  证明: IsLimit.lift_comp_conePointsIsoOfNatIso_hom _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.lift_comp_conePointsIsoOfNatIso_hom, lift_comp_conePointsIsoOfNatIso_hom
+/-
+**CategoryTheory.Limits.HasLimit.lift_isoOfNatIso_hom** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.HasLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F G : CategoryTheory.Functor J C} 
+[inst_2 : CategoryTheory.Limits.HasLimit F]   [inst_3 : CategoryTheory.Limits.Ha
+sLimit G] (t : CategoryTheory.Limits.Cone F) (w : F ≅ G),   CategoryTheory.Categ
+oryStruct.comp (CategoryTheory.Limits.limit.lift F t)       (CategoryTheory.Limi
+ts.HasLimit.isoOfNatIso w).hom =     CategoryTheory.Limits.limit.lift G ((Catego
+ryTheory.Limits.Cone.postcompose w.hom).obj t)
+参数：t : CategoryTheory.Limits.Cone F；w : F ≅ G；CategoryTheory.Limits.limit.lift F
+ t；CategoryTheory.Limits.HasLimit.isoOfNatIso w；(CategoryTheory.Limits.Cone.post
+compose w.hom).obj t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.lift_comp_conePointsIsoOfNatIso_hom`：lift_
+comp_conePointsIsoOfNatIso_hom {F G : J ⥤ C} {r s : Cone F} {t : Cone G} (P : Is
+Limit s) (Q : IsLimit t) (w : F ≅ G) : P.lift r ≫ (cone…
 -/
 theorem HasLimit.lift_isoOfNatIso_hom {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone F)
     (w : F ≅ G) :
@@ -1270,20 +1014,23 @@ theorem HasLimit.lift_isoOfNatIso_hom {F G : J ⥤ C} [HasLimit F] [HasLimit G] 
   IsLimit.lift_comp_conePointsIsoOfNatIso_hom _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.lift_isoOfNatIso_inv` / 定理 `HasLimit.lift_isoOfNatIso_inv`
-
-English:
-theorem HasLimit.lift_isoOfNatIso_inv
-  statement: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone G)
-  proof: IsLimit.lift_comp_conePointsIsoOfNatIso_inv _ _ _
-
-中文:
-定理 有极限.lift_isoOf自然数Iso_inv
-  结论: {F G : J ⥤ C} [有极限 F] [有极限 G] (t : 锥 G)
-  证明: IsLimit.lift_comp_conePointsIsoOfNatIso_inv _ _ _
-
-Depends on / 依赖: IsLimit, IsLimit.lift_comp_conePointsIsoOfNatIso_inv, lift_comp_conePointsIsoOfNatIso_inv
+/-
+**CategoryTheory.Limits.HasLimit.lift_isoOfNatIso_inv** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.HasLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F G : CategoryTheory.Functor J C} 
+[inst_2 : CategoryTheory.Limits.HasLimit F]   [inst_3 : CategoryTheory.Limits.Ha
+sLimit G] (t : CategoryTheory.Limits.Cone G) (w : F ≅ G),   CategoryTheory.Categ
+oryStruct.comp (CategoryTheory.Limits.limit.lift G t)       (CategoryTheory.Limi
+ts.HasLimit.isoOfNatIso w).inv =     CategoryTheory.Limits.limit.lift F ((Catego
+ryTheory.Limits.Cone.postcompose w.inv).obj t)
+参数：t : CategoryTheory.Limits.Cone G；w : F ≅ G；CategoryTheory.Limits.limit.lift G
+ t；CategoryTheory.Limits.HasLimit.isoOfNatIso w；(CategoryTheory.Limits.Cone.post
+compose w.inv).obj t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.lift_comp_conePointsIsoOfNatIso_inv`：lift_
+comp_conePointsIsoOfNatIso_inv {F G : J ⥤ C} {r s : Cone G} {t : Cone F} (P : Is
+Limit t) (Q : IsLimit s) (w : F ≅ G) : Q.lift r ≫ (cone…
 -/
 theorem HasLimit.lift_isoOfNatIso_inv {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone G)
     (w : F ≅ G) :
@@ -1291,20 +1038,28 @@ theorem HasLimit.lift_isoOfNatIso_inv {F G : J ⥤ C} [HasLimit F] [HasLimit G] 
       limit.lift F ((Cone.postcompose w.inv).obj _) :=
   IsLimit.lift_comp_conePointsIsoOfNatIso_inv _ _ _
 
-/--
-Definition of `HasLimit.isoOfEquivalence` / `HasLimit.isoOfEquivalence` 的定义
+/-- The limits of `F : J ⥤ C` and `G : K ⥤ C` are isomorphic,
+if there is an equivalence `e : J ≌ K` making the triangle commute up to natural isomorphism.
+-/
+/-
+**CategoryTheory.Limits.HasLimit.isoOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.HasLimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {K : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} K] →         {C : Typ
+e u} →           [inst_2 : CategoryTheory.Category.{v, u} C] →             {F : 
+CategoryTheory.Functor J C} →               [inst_3 : CategoryTheory.Limits.HasL
+imit F] →                 {G : CategoryTheory.Functor K C} →                   [
+inst_4 : CategoryTheory.Limits.HasLimit G] →                     (e : J ≌ K) →  
+                     (e.functor.comp G ≅ F) → (CategoryTheory.Limits.limit F ≅ C
+ategoryTheory.Limits.limit G)
+参数：e : J ≌ K；e.functor.comp G ≅ F；CategoryTheory.Limits.limit F ≅ CategoryTheory
+.Limits.limit G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasLimit.isoOfEquivalence
-  signature: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G] (e : J ≌ K)
-  body: IsLimit.conePointsIsoOfEquivalence (limit.isLimit F) (limit.isLimit G) e w
-
-中文:
-定义 有极限.isoOfEquivalence
-  签名: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G] (e : J ≌ K)
-  定义体: IsLimit.conePointsIsoOfEquivalence (limit.isLimit F) (limit.isLimit G) e w
-
-Depends on / 依赖: CatCommSq, Discrete, E.functor, Functor, Functor.associator, Functor.pi, Functor.rightUnitor, IsLimit, IsLimit.conePointsIsoOfEquivalence, Iso.refl, associator, conePointsIsoOfEquivalence, counitIso, counitIso.symm, functor, isLimit, isoWhiskerLeft, isoWhiskerRight, limit.isLimit, piEquivalenceFunctorDiscrete
+--- 原说明 ---
+The limits of `F : J ⥤ C` and `G : K ⥤ C` are isomorphic,
+if there is an equivalence `e : J ≌ K` making the triangle commute up to natural
+ isomorphism.
 -/
 def HasLimit.isoOfEquivalence {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G] (e : J ≌ K)
     (w : e.functor ⋙ G ≅ F) : limit F ≅ limit G :=
@@ -1312,24 +1067,10 @@ def HasLimit.isoOfEquivalence {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.isoOfEquivalence_hom_π` / 定理 `HasLimit.isoOfEquivalence_hom_π`
-
-English:
-theorem HasLimit.isoOfEquivalence_hom_π
-  statement: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
-  proof: by
-  simp only [HasLimit.isoOfEquivalence, IsLimit.conePointsIsoOfEquivalence_hom]
-  simp
-
-中文:
-定理 有极限.isoOfEquivalence_hom_π
-  结论: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G]
-  证明: by
-  simp only [HasLimit.isoOfEquivalence, IsLimit.conePointsIsoOfEquivalence_hom]
-  simp
-
-Depends on / 依赖: HasLimit, HasLimit.isoOfEquivalence, IsLimit, IsLimit.conePointsIsoOfEquivalence_hom, conePointsIsoOfEquivalence_hom, isoOfEquivalence
+/-
+**CategoryTheory.Limits.HasLimit.isoOfEquivalence_hom_** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasLimit.isoOfEquivalence_hom_π {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
     (e : J ≌ K) (w : e.functor ⋙ G ≅ F) (k : K) :
@@ -1340,24 +1081,10 @@ theorem HasLimit.isoOfEquivalence_hom_π {F : J ⥤ C} [HasLimit F] {G : K ⥤ C
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-theorem `HasLimit.isoOfEquivalence_inv_π` / 定理 `HasLimit.isoOfEquivalence_inv_π`
-
-English:
-theorem HasLimit.isoOfEquivalence_inv_π
-  statement: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
-  proof: by
-  simp only [HasLimit.isoOfEquivalence]
-  simp
-
-中文:
-定理 有极限.isoOfEquivalence_inv_π
-  结论: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G]
-  证明: by
-  simp only [HasLimit.isoOfEquivalence]
-  simp
-
-Depends on / 依赖: HasLimit, HasLimit.isoOfEquivalence, isoOfEquivalence
+/-
+**CategoryTheory.Limits.HasLimit.isoOfEquivalence_inv_** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasLimit.isoOfEquivalence_inv_π {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
     (e : J ≌ K) (w : e.functor ⋙ G ≅ F) (j : J) :
@@ -1371,68 +1098,72 @@ section Pre
 variable (F)
 variable [HasLimit F] (E : K ⥤ J) [HasLimit (E ⋙ F)]
 
-/--
-Definition of `limit.pre` / `limit.pre` 的定义
+/-- The canonical morphism from the limit of `F` to the limit of `E ⋙ F`.
+-/
+/-
+**CategoryTheory.Limits.limit.pre** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {K : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} K] →         {C : Typ
+e u} →           [inst_2 : CategoryTheory.Category.{v, u} C] →             (F : 
+CategoryTheory.Functor J C) →               [inst_3 : CategoryTheory.Limits.HasL
+imit F] →                 (E : CategoryTheory.Functor K J) →                   [
+inst_4 : CategoryTheory.Limits.HasLimit (E.comp F)] →                     Catego
+ryTheory.Limits.limit F ⟶ CategoryTheory.Limits.limit (E.comp F)
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；E.comp
+ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.pre
-  signature: : limit F ⟶ limit (E ⋙ F)
-  body: limit.lift (E ⋙ F) ((limit.cone F).whisker E)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 limit.pre
-  签名: : limit F ⟶ limit (E ⋙ F)
-  定义体: limit.lift (E ⋙ F) ((limit.cone F).whisker E)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: limit.cone, limit.lift, whisker
+--- 原说明 ---
+The canonical morphism from the limit of `F` to the limit of `E ⋙ F`.
 -/
 def limit.pre : limit F ⟶ limit (E ⋙ F) :=
   limit.lift (E ⋙ F) ((limit.cone F).whisker E)
 
 @[reassoc (attr := simp)]
-/--
-theorem `limit.pre_π` / 定理 `limit.pre_π`
-
-English:
-theorem limit.pre_π
-  given: (k : K)
-  statement: limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E.obj k)
-  proof: by
-  simp [limit.pre]
-
-@[simp]
-
-中文:
-定理 limit.pre_π
-  条件: (k : K)
-  结论: limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E.obj k)
-  证明: by
-  simp [limit.pre]
-
-@[simp]
-
-Depends on / 依赖: limit.pre
+/-
+**CategoryTheory.Limits.limit.pre_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.pre_π (k : K) : limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E.obj k) := by
   simp [limit.pre]
 
 @[simp]
-/--
-theorem `limit.lift_pre` / 定理 `limit.lift_pre`
-
-English:
-theorem limit.lift_pre
-  given: (c : Cone F)
-  proof: by ext; simp
-
-中文:
-定理 limit.lift_pre
-  条件: (c : 锥 F)
-  证明: by ext; simp
+/-
+**CategoryTheory.Limits.limit.lift_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasLimit F] (E : CategoryTheory.Functor K J)   [inst_4 : CategoryThe
+ory.Limits.HasLimit (E.comp F)] (c : CategoryTheory.Limits.Cone F),   CategoryTh
+eory.CategoryStruct.comp (CategoryTheory.Limits.limit.lift F c) (CategoryTheory.
+Limits.limit.pre F E) =     CategoryTheory.Limits.limit.lift (E.comp F) (Categor
+yTheory.Limits.Cone.whisker E c)
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；c : Ca
+tegoryTheory.Limits.Cone F；CategoryTheory.Limits.limit.lift F c；CategoryTheory.L
+imits.limit.pre F E；E.comp F；CategoryTheory.Limits.Cone.whisker E c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.lift_pre (c : Cone F) :
     limit.lift F c ≫ limit.pre F E = limit.lift (E ⋙ F) (c.whisker E) := by ext; simp
@@ -1441,26 +1172,33 @@ variable {L : Type u₃} [Category.{v₃} L]
 variable (D : L ⥤ K)
 
 @[simp]
-/--
-theorem `limit.pre_pre` / 定理 `limit.pre_pre`
-
-English:
-theorem limit.pre_pre
-  given: [h : HasLimit (D ⋙ E ⋙ F)]
-  statement: haveI : HasLimit ((D ⋙ E) ⋙ F)
-  proof: h
-    limit.pre F E ≫ limit.pre (E ⋙ F) D = limit.pre F (D ⋙ E) := by
-  have : HasLimit ((D ⋙ E) ⋙ F) := h
-  ext j; erw [assoc, limit.pre_π, limit.pre_π, limit.pre_π]; rfl
-
-中文:
-定理 limit.pre_pre
-  条件: [h : 有极限 (D ⋙ E ⋙ F)]
-  结论: haveI : 有极限 ((D ⋙ E) ⋙ F)
-  证明: h
-    limit.pre F E ≫ limit.pre (E ⋙ F) D = limit.pre F (D ⋙ E) := by
-  have : HasLimit ((D ⋙ E) ⋙ F) := h
-  ext j; erw [assoc, limit.pre_π, limit.pre_π, limit.pre_π]; rfl
+/-
+**CategoryTheory.Limits.limit.pre_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasLimit F] (E : CategoryTheory.Functor K J)   [inst_4 : CategoryThe
+ory.Limits.HasLimit (E.comp F)] {L : Type u₃} [inst_5 : CategoryTheory.Category.
+{v₃, u₃} L]   (D : CategoryTheory.Functor L K) [h : CategoryTheory.Limits.HasLim
+it (D.comp (E.comp F))],   CategoryTheory.CategoryStruct.comp (CategoryTheory.Li
+mits.limit.pre F E)       (CategoryTheory.Limits.limit.pre (E.comp F) D) =     C
+ategoryTheory.Limits.limit.pre F (D.comp E)
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；D : Ca
+tegoryTheory.Functor L K；D.comp (E.comp F)；CategoryTheory.Limits.limit.pre F E；C
+ategoryTheory.Limits.limit.pre (E.comp F) D；D.comp E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
 -/
 theorem limit.pre_pre [h : HasLimit (D ⋙ E ⋙ F)] : haveI : HasLimit ((D ⋙ E) ⋙ F) := h
     limit.pre F E ≫ limit.pre (E ⋙ F) D = limit.pre F (D ⋙ E) := by
@@ -1470,19 +1208,56 @@ theorem limit.pre_pre [h : HasLimit (D ⋙ E ⋙ F)] : haveI : HasLimit ((D ⋙ 
 variable {E F}
 
 /--
-theorem `limit.pre_eq` / 定理 `limit.pre_eq`
+If we have particular limit cones available for `E ⋙ F` and for `F`,
+we obtain a formula for `limit.pre F E`.
+-/
+/-
+**CategoryTheory.Limits.limit.pre_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {F : CategoryTheory.Functor J C}   [inst_3 : CategoryTh
+eory.Limits.HasLimit F] {E : CategoryTheory.Functor K J}   [inst_4 : CategoryThe
+ory.Limits.HasLimit (E.comp F)] (s : CategoryTheory.Limits.LimitCone (E.comp F))
+   (t : CategoryTheory.Limits.LimitCone F),   CategoryTheory.Limits.limit.pre F 
+E =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.limit.isoLimit
+Cone t).hom       (CategoryTheory.CategoryStruct.comp (s.isLimit.lift (CategoryT
+heory.Limits.Cone.whisker E t.cone))         (CategoryTheory.Limits.limit.isoLim
+itCone s).inv)
+参数：E.comp F；s : CategoryTheory.Limits.LimitCone (E.comp F)；t : CategoryTheory.Li
+mits.LimitCone F；CategoryTheory.Limits.limit.isoLimitCone t；CategoryTheory.Categ
+oryStruct.comp (s.isLimit.lift (CategoryTheory.Limits.Cone.whisker E t.cone))   
+      (CategoryTheory.Limits.limit.isoLimitCone s).inv。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_inv_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_hom_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem limit.pre_eq
-  given: (s : LimitCone (E ⋙ F)) (t : LimitCone F)
-  proof: by cat_disch
-
-中文:
-定理 limit.pre_eq
-  条件: (s : 极限锥 (E ⋙ F)) (t : 极限锥 F)
-  证明: by cat_disch
-
-Depends on / 依赖: Construction, Functor, Functor.assoc, Functor.comp_id, IsEquivalence, IsEquivalence.mk, Localization, Localization.Construction.fac, Localization.Construction.uniq, Q_inverts, W.Q_inverts, cat_disch, comp_id, eqToIso, inverts, isEquivalence
+--- 原说明 ---
+If we have particular limit cones available for `E ⋙ F` and for `F`,
+we obtain a formula for `limit.pre F E`.
 -/
 theorem limit.pre_eq (s : LimitCone (E ⋙ F)) (t : LimitCone F) :
     limit.pre F E = (limit.isoLimitCone t).hom ≫ s.isLimit.lift (t.cone.whisker E) ≫
@@ -1495,106 +1270,111 @@ section Post
 variable {D : Type u'} [Category.{v'} D]
 variable (F : J ⥤ C) [HasLimit F] (G : C ⥤ D) [HasLimit (F ⋙ G)]
 
-/--
-Definition of `limit.post` / `limit.post` 的定义
+/-- The canonical morphism from `G` applied to the limit of `F` to the limit of `F ⋙ G`.
+-/
+/-
+**CategoryTheory.Limits.limit.post** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.limit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {D : Type u
+'} →           [inst_2 : CategoryTheory.Category.{v', u'} D] →             (F : 
+CategoryTheory.Functor J C) →               [inst_3 : CategoryTheory.Limits.HasL
+imit F] →                 (G : CategoryTheory.Functor C D) →                   [
+inst_4 : CategoryTheory.Limits.HasLimit (F.comp G)] →                     G.obj 
+(CategoryTheory.Limits.limit F) ⟶ CategoryTheory.Limits.limit (F.comp G)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；Catego
+ryTheory.Limits.limit F；F.comp G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit.post
-  signature: : G.obj (limit F) ⟶ limit (F ⋙ G)
-  body: limit.lift (F ⋙ G) (G.mapCone (limit.cone F))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 limit.post
-  签名: : G.obj (limit F) ⟶ limit (F ⋙ G)
-  定义体: limit.lift (F ⋙ G) (G.mapCone (limit.cone F))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: G.mapCone, limit.cone, limit.lift, mapCone
+--- 原说明 ---
+The canonical morphism from `G` applied to the limit of `F` to the limit of `F ⋙
+ G`.
 -/
 def limit.post : G.obj (limit F) ⟶ limit (F ⋙ G) :=
   limit.lift (F ⋙ G) (G.mapCone (limit.cone F))
 
 @[reassoc (attr := simp)]
-/--
-theorem `limit.post_π` / 定理 `limit.post_π`
-
-English:
-theorem limit.post_π
-  given: (j : J)
-  statement: limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j)
-  proof: by
-  simp [limit.post]
-
-@[simp]
-
-中文:
-定理 limit.post_π
-  条件: (j : J)
-  结论: limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j)
-  证明: by
-  simp [limit.post]
-
-@[simp]
-
-Depends on / 依赖: limit.post
+/-
+**CategoryTheory.Limits.limit.post_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit.post_π (j : J) : limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j) := by
   simp [limit.post]
 
 @[simp]
-/--
-theorem `limit.lift_post` / 定理 `limit.lift_post`
-
-English:
-theorem limit.lift_post
-  given: (c : Cone F)
-  proof: by
-  ext
-  rw [assoc]; rw [limit.post_π]; rw [← G.map_comp]; rw [limit.lift_π]; rw [limit.lift_π]
-  rfl
-
-@[simp]
-
-中文:
-定理 limit.lift_post
-  条件: (c : 锥 F)
-  证明: by
-  ext
-  rw [assoc]; rw [limit.post_π]; rw [← G.map_comp]; rw [limit.lift_π]; rw [limit.lift_π]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: G.map_comp, limit.lift_, limit.post_, map_comp
+/-
+**CategoryTheory.Limits.limit.lift_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {D : Type u'} [inst_2 : CategoryThe
+ory.Category.{v', u'} D] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasLimit F] (G : CategoryTheory.Functor C D)   [inst_4 : CategoryThe
+ory.Limits.HasLimit (F.comp G)] (c : CategoryTheory.Limits.Cone F),   CategoryTh
+eory.CategoryStruct.comp (G.map (CategoryTheory.Limits.limit.lift F c))       (C
+ategoryTheory.Limits.limit.post F G) =     CategoryTheory.Limits.limit.lift (F.c
+omp G) (G.mapCone c)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；c : Ca
+tegoryTheory.Limits.Cone F；G.map (CategoryTheory.Limits.limit.lift F c)；Category
+Theory.Limits.limit.post F G；F.comp G；G.mapCone c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.post_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {D : Type u'} [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
 -/
 theorem limit.lift_post (c : Cone F) :
     G.map (limit.lift F c) ≫ limit.post F G = limit.lift (F ⋙ G) (G.mapCone c) := by
   ext
-  rw [assoc]; rw [limit.post_π]; rw [← G.map_comp]; rw [limit.lift_π]; rw [limit.lift_π]
+  rw [assoc, limit.post_π, ← G.map_comp, limit.lift_π, limit.lift_π]
   rfl
 
 @[simp]
-/--
-theorem `limit.post_post` / 定理 `limit.post_post`
-
-English:
-theorem limit.post_post
-  given: {E : Type u''} [Category.{v''} E] (H : D ⥤ E) [h : HasLimit ((F ⋙ G) ⋙ H)]
-  proof: h
-    H.map (limit.post F G) ≫ limit.post (F ⋙ G) H = limit.post F (G ⋙ H) := by
-  have : HasLimit (F ⋙ G ⋙ H) := h
-  ext; erw [assoc, limit.post_π, ← H.map_comp, limit.post_π, limit.post_π]; rfl
-
-中文:
-定理 limit.post_post
-  条件: {E : 类型u''} [范畴.{v''} E] (H : D ⥤ E) [h : 有极限 ((F ⋙ G) ⋙ H)]
-  证明: h
-    H.map (limit.post F G) ≫ limit.post (F ⋙ G) H = limit.post F (G ⋙ H) := by
-  have : HasLimit (F ⋙ G ⋙ H) := h
-  ext; erw [assoc, limit.post_π, ← H.map_comp, limit.post_π, limit.post_π]; rfl
+/-
+**CategoryTheory.Limits.limit.post_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {D : Type u'} [inst_2 : CategoryThe
+ory.Category.{v', u'} D] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasLimit F] (G : CategoryTheory.Functor C D)   [inst_4 : CategoryThe
+ory.Limits.HasLimit (F.comp G)] {E : Type u''} [inst_5 : CategoryTheory.Category
+.{v'', u''} E]   (H : CategoryTheory.Functor D E) [h : CategoryTheory.Limits.Has
+Limit ((F.comp G).comp H)],   CategoryTheory.CategoryStruct.comp (H.map (Categor
+yTheory.Limits.limit.post F G))       (CategoryTheory.Limits.limit.post (F.comp 
+G) H) =     CategoryTheory.Limits.limit.post F (G.comp H)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；H : Ca
+tegoryTheory.Functor D E；(F.comp G).comp H；H.map (CategoryTheory.Limits.limit.po
+st F G)；CategoryTheory.Limits.limit.post (F.comp G) H；G.comp H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.post_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {D : Type u'} [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem limit.post_post {E : Type u''} [Category.{v''} E] (H : D ⥤ E) [h : HasLimit ((F ⋙ G) ⋙ H)] :
     -- H G (limit F) ⟶ H (limit (F ⋙ G)) ⟶ limit ((F ⋙ G) ⋙ H) equals
@@ -1606,24 +1386,43 @@ theorem limit.post_post {E : Type u''} [Category.{v''} E] (H : D ⥤ E) [h : Has
 
 end Post
 
-/--
-theorem `limit.pre_post` / 定理 `limit.pre_post`
-
-English:
-theorem limit.pre_post
-  statement: {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
-  proof: h
-    G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E := by
-  have : HasLimit (E ⋙ F ⋙ G) := h
-  ext; erw [assoc, limit.post_π, ← G.map_comp, limit.pre_π, assoc, limit.pre_π, limit.post_π]
-
-中文:
-定理 limit.pre_post
-  结论: {D : 类型u'} [范畴.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
-  证明: h
-    G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E := by
-  have : HasLimit (E ⋙ F ⋙ G) := h
-  ext; erw [assoc, limit.post_π, ← G.map_comp, limit.pre_π, assoc, limit.pre_π, limit.post_π]
+/-
+**CategoryTheory.Limits.limit.pre_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {D : Type u'} [inst_3 : CategoryTheory.Category.{v', u'
+} D]   (E : CategoryTheory.Functor K J) (F : CategoryTheory.Functor J C) (G : Ca
+tegoryTheory.Functor C D)   [inst_4 : CategoryTheory.Limits.HasLimit F] [inst_5 
+: CategoryTheory.Limits.HasLimit (E.comp F)]   [inst_6 : CategoryTheory.Limits.H
+asLimit (F.comp G)] [h : CategoryTheory.Limits.HasLimit ((E.comp F).comp G)],   
+CategoryTheory.CategoryStruct.comp (G.map (CategoryTheory.Limits.limit.pre F E))
+       (CategoryTheory.Limits.limit.post (E.comp F) G) =     CategoryTheory.Cate
+goryStruct.comp (CategoryTheory.Limits.limit.post F G)       (CategoryTheory.Lim
+its.limit.pre (F.comp G) E)
+参数：E : CategoryTheory.Functor K J；F : CategoryTheory.Functor J C；G : CategoryThe
+ory.Functor C D；E.comp F；F.comp G；(E.comp F).comp G；G.map (CategoryTheory.Limits
+.limit.pre F E)；CategoryTheory.Limits.limit.post (E.comp F) G；CategoryTheory.Lim
+its.limit.post F G；CategoryTheory.Limits.limit.pre (F.comp G) E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.post_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {D : Type u'} [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
 -/
 theorem limit.pre_post {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
     [HasLimit F] [HasLimit (E ⋙ F)] [HasLimit (F ⋙ G)]
@@ -1635,25 +1434,17 @@ theorem limit.pre_post {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ 
   ext; erw [assoc, limit.post_π, ← G.map_comp, limit.pre_π, assoc, limit.pre_π, limit.post_π]
 
 open CategoryTheory.Equivalence
-
-/--
-Instance `hasLimit_equivalence_comp` / 实例 `hasLimit_equivalence_comp`
-
-English:
-instance hasLimit_equivalence_comp
-  signature: (e : K ≌ J) [HasLimit F]
-  body: HasLimit.mk
-    { cone := Cone.whisker e.functor (limit.cone F)
-      isLimit := IsLimit.whiskerEquivalence (limit.isLimit F) e }
-
-中文:
-实例 hasLimit_equivalence_comp
-  签名: (e : K ≌ J) [有极限 F]
-  定义体: HasLimit.mk
-    { cone := Cone.whisker e.functor (limit.cone F)
-      isLimit := IsLimit.whiskerEquivalence (limit.isLimit F) e }
-
-Depends on / 依赖: Cone.whisker, HasLimit, HasLimit.mk, IsLimit, IsLimit.whiskerEquivalence, e.functor, functor, isLimit, limit.cone, limit.isLimit, whisker, whiskerEquivalence
+/-
+**CategoryTheory.Limits.hasLimit_equivalence_comp** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：hasLimit_equivalence_comp (e : K ≌ J) [HasLimit F] : HasLimit (e.functor ⋙
+ F)
+参数：e : K ≌ J。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
 -/
 instance hasLimit_equivalence_comp (e : K ≌ J) [HasLimit F] : HasLimit (e.functor ⋙ F) :=
   HasLimit.mk
@@ -1661,67 +1452,49 @@ instance hasLimit_equivalence_comp (e : K ≌ J) [HasLimit F] : HasLimit (e.func
       isLimit := IsLimit.whiskerEquivalence (limit.isLimit F) e }
 
 -- not entirely sure why this is needed
-/--
-theorem `hasLimit_of_equivalence_comp` / 定理 `hasLimit_of_equivalence_comp`
+/-- If a `E ⋙ F` has a limit, and `E` is an equivalence, we can construct a limit of `F`.
+-/
+/-
+**CategoryTheory.Limits.hasLimit_of_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：hasLimit_of_equivalence_comp (e : K ≌ J) [HasLimit (e.functor ⋙ F)] : HasL
+imit F
+参数：e : K ≌ J；e.functor ⋙ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 
-English:
-theorem hasLimit_of_equivalence_comp
-  given: (e : K ≌ J) [HasLimit (e.functor ⋙ F)]
-  statement: HasLimit F
-  proof: by
-  have : HasLimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasLimit_equivalence_comp e.symm
-  apply hasLimit_of_iso (e.invFunIdAssoc F)
-
-中文:
-定理 hasLimit_of_equivalence_comp
-  条件: (e : K ≌ J) [有极限 (e.functor ⋙ F)]
-  结论: 有极限 F
-  证明: by
-  have : HasLimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasLimit_equivalence_comp e.symm
-  apply hasLimit_of_iso (e.invFunIdAssoc F)
-
-Depends on / 依赖: HasLimit, Limits, Limits.hasLimit_equivalence_comp, e.functor, e.invFunIdAssoc, e.inverse, e.symm, functor, hasLimit_equivalence_comp, hasLimit_of_iso, invFunIdAssoc, inverse
+--- 原说明 ---
+If a `E ⋙ F` has a limit, and `E` is an equivalence, we can construct a limit of
+ `F`.
 -/
 theorem hasLimit_of_equivalence_comp (e : K ≌ J) [HasLimit (e.functor ⋙ F)] : HasLimit F := by
   have : HasLimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasLimit_equivalence_comp e.symm
   apply hasLimit_of_iso (e.invFunIdAssoc F)
-
-/--
-lemma `hasLimit_equivalence_comp_iff` / 引理 `hasLimit_equivalence_comp_iff`
-
-English:
-lemma hasLimit_equivalence_comp_iff
-  given: (e : K ≌ J)
-  statement: HasLimit (e.functor ⋙ F) ↔ HasLimit F
-  proof: ⟨fun _ => hasLimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-中文:
-引理 hasLimit_equivalence_comp_iff
-  条件: (e : K ≌ J)
-  结论: 有极限 (e.functor ⋙ F) ↔ 有极限 F
-  证明: ⟨fun _ => hasLimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-Depends on / 依赖: hasLimit_of_equivalence_comp
+/-
+**CategoryTheory.Limits.hasLimit_equivalence_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasLimit_equivalence_comp_iff (e : K ≌ J) : HasLimit (e.functor ⋙ F) ↔ Has
+Limit F
+参数：e : K ≌ J。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_equivalence_comp`：hasLimit_of_equivale
+nce_comp (e : K ≌ J) [HasLimit (e.functor ⋙ F)] : HasLimit F
 -/
 lemma hasLimit_equivalence_comp_iff (e : K ≌ J) : HasLimit (e.functor ⋙ F) ↔ HasLimit F :=
-  ⟨fun _ => hasLimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-/--
-lemma `hasLimit_inverse_equivalence_comp_iff` / 引理 `hasLimit_inverse_equivalence_comp_iff`
-
-English:
-lemma hasLimit_inverse_equivalence_comp_iff
-  given: (e : J ≌ K)
-  statement: HasLimit (e.inverse ⋙ F) ↔ HasLimit F
-  proof: hasLimit_equivalence_comp_iff e.symm
-
-中文:
-引理 hasLimit_inverse_equivalence_comp_iff
-  条件: (e : J ≌ K)
-  结论: 有极限 (e.inverse ⋙ F) ↔ 有极限 F
-  证明: hasLimit_equivalence_comp_iff e.symm
-
-Depends on / 依赖: e.symm, hasLimit_equivalence_comp_iff
+  ⟨fun _ ↦ hasLimit_of_equivalence_comp e, fun _ ↦ inferInstance⟩
+/-
+**CategoryTheory.Limits.hasLimit_inverse_equivalence_comp_iff** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasLimit_inverse_equivalence_comp_iff (e : J ≌ K) : HasLimit (e.inverse ⋙ 
+F) ↔ HasLimit F
+参数：e : J ≌ K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasLimit_equivalence_comp_iff`：hasLimit_equivalenc
+e_comp_iff (e : K ≌ J) : HasLimit (e.functor ⋙ F) ↔ HasLimit F
 -/
 lemma hasLimit_inverse_equivalence_comp_iff (e : J ≌ K) : HasLimit (e.inverse ⋙ F) ↔ HasLimit F :=
   hasLimit_equivalence_comp_iff e.symm
@@ -1736,32 +1509,17 @@ section
 
 /-- `limit F` is functorial in `F`, when `C` has all limits of shape `J`. -/
 @[simps, implicit_reducible]
-/--
-Definition of `lim` / `lim` 的定义
+/-
+**CategoryTheory.Limits.lim** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：lim : (J ⥤ C) ⥤ C where obj F
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition lim
-  signature: : (J ⥤ C) ⥤ C where
-  body: limit F
-  map α := limMap α
-  map_id F := by
-    apply Limits.limit.hom_ext; intro j
-    simp
-  map_comp α β := by
-    apply Limits.limit.hom_ext; intro j
-    simp [assoc]
-
-中文:
-定义 lim
-  签名: : (J ⥤ C) ⥤ C where
-  定义体: limit F
-  map α := limMap α
-  map_id F := by
-    apply Limits.limit.hom_ext; intro j
-    simp
-  map_comp α β := by
-    apply Limits.limit.hom_ext; intro j
-    simp [assoc]
+--- 原说明 ---
+`limit F` is functorial in `F`, when `C` has all limits of shape `J`.
 -/
 def lim : (J ⥤ C) ⥤ C where
   obj F := limit F
@@ -1775,18 +1533,12 @@ def lim : (J ⥤ C) ⥤ C where
 
 /-- The natural transformation induced by `limit.π`. -/
 @[simps]
-/--
-Definition of `lim.π` / `lim.π` 的定义
+/-
+**CategoryTheory.Limits.lim.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lim.π
-  signature: (j : J)
-  body: limit.π F j
-
-中文:
-定义 lim.π
-  签名: (j : J)
-  定义体: limit.π F j
+--- 原说明 ---
+The natural transformation induced by `limit.π`.
 -/
 def lim.π (j : J) : lim ⟶ (evaluation J C).obj j where
   app F := limit.π F j
@@ -1795,102 +1547,185 @@ end
 
 variable {G : J ⥤ C} (α : F ⟶ G)
 
-/--
-theorem `limMap_eq` / 定理 `limMap_eq`
-
-English:
-theorem limMap_eq
-  statement: limMap α = lim.map α
-  proof: rfl
-
-中文:
-定理 limMap_eq
-  结论: limMap α = lim.map α
-  证明: rfl
+/-
+**CategoryTheory.Limits.limMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：limMap_eq : limMap α = lim.map α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem limMap_eq : limMap α = lim.map α := rfl
-
-/--
-theorem `limit.map_pre` / 定理 `limit.map_pre`
-
-English:
-theorem limit.map_pre
-  given: [HasLimitsOfShape K C] (E : K ⥤ J)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 limit.map_pre
-  条件: [有形状极限 K C] (E : K ⥤ J)
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Limits.limit.map_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {F : CategoryTheory.Functor J C}   [inst_3 : CategoryTh
+eory.Limits.HasLimitsOfShape J C] {G : CategoryTheory.Functor J C} (α : F ⟶ G)  
+ [inst_4 : CategoryTheory.Limits.HasLimitsOfShape K C] (E : CategoryTheory.Funct
+or K J),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.lim.map α) 
+(CategoryTheory.Limits.limit.pre G E) =     CategoryTheory.CategoryStruct.comp (
+CategoryTheory.Limits.limit.pre F E)       (CategoryTheory.Limits.lim.map (E.whi
+skerLeft α))
+参数：α : F ⟶ G；E : CategoryTheory.Functor K J；CategoryTheory.Limits.lim.map α；Cate
+goryTheory.Limits.limit.pre G E；CategoryTheory.Limits.limit.pre F E；CategoryTheo
+ry.Limits.lim.map (E.whiskerLeft α)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.limit.pre_π_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} K]   {C : Type u} [inst…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.map_pre [HasLimitsOfShape K C] (E : K ⥤ J) :
     lim.map α ≫ limit.pre G E = limit.pre F E ≫ lim.map (whiskerLeft E α) := by
   ext
   simp
-
-/--
-theorem `limit.map_pre'` / 定理 `limit.map_pre'`
-
-English:
-theorem limit.map_pre'
-  given: [HasLimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
-  proof: by
-  ext1; simp
-
-中文:
-定理 limit.map_pre'
-  条件: [有形状极限 K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
-  证明: by
-  ext1; simp
+/-
+**CategoryTheory.Limits.limit.map_pre'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] [inst_3 : CategoryTheory.Limits.HasLimitsOfShape J C]  
+ [inst_4 : CategoryTheory.Limits.HasLimitsOfShape K C] (F : CategoryTheory.Funct
+or J C)   {E₁ E₂ : CategoryTheory.Functor K J} (α : E₁ ⟶ E₂),   CategoryTheory.L
+imits.limit.pre F E₂ =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Li
+mits.limit.pre F E₁)       (CategoryTheory.Limits.lim.map (CategoryTheory.Functo
+r.whiskerRight α F))
+参数：F : CategoryTheory.Functor J C；α : E₁ ⟶ E₂；CategoryTheory.Limits.limit.pre F 
+E₁；CategoryTheory.Limits.lim.map (CategoryTheory.Functor.whiskerRight α F)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.limit.pre_π_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.limit.w`：∀ {J : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   (F
+ : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.map_pre' [HasLimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂) :
     limit.pre F E₂ = limit.pre F E₁ ≫ lim.map (whiskerRight α F) := by
   ext1; simp
-
-/--
-theorem `limit.id_pre` / 定理 `limit.id_pre`
-
-English:
-theorem limit.id_pre
-  given: (F : J ⥤ C)
-  statement: limit.pre F (𝟭 _) = lim.map (Functor.leftUnitor F).inv
-  proof: by
-  cat_disch
-
-中文:
-定理 limit.id_pre
-  条件: (F : J ⥤ C)
-  结论: limit.pre F (𝟭 _) = lim.map (函子.leftUnitor F).inv
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Limits.limit.id_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   [inst_2 : CategoryTheory.Limits.Has
+LimitsOfShape J C] (F : CategoryTheory.Functor J C),   CategoryTheory.Limits.lim
+it.pre F (CategoryTheory.Functor.id J) = CategoryTheory.Limits.lim.map F.leftUni
+tor.inv
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Functor.id J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.pre_π`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.id_pre (F : J ⥤ C) : limit.pre F (𝟭 _) = lim.map (Functor.leftUnitor F).inv := by
   cat_disch
-
-/--
-theorem `limit.map_post` / 定理 `limit.map_post`
-
-English:
-theorem limit.map_post
-  given: {D : Type u'} [Category.{v'} D] [HasLimitsOfShape J D] (H : C ⥤ D)
-  proof: by
-  ext
-  simp only [whiskerRight_app, limMap_π, assoc, limit.post_π_assoc, limit.post_π, ← H.map_comp]
-
-中文:
-定理 limit.map_post
-  条件: {D : 类型u'} [范畴.{v'} D] [有形状极限 J D] (H : C ⥤ D)
-  证明: by
-  ext
-  simp only [whiskerRight_app, limMap_π, assoc, limit.post_π_assoc, limit.post_π, ← H.map_comp]
-
-Depends on / 依赖: H.map_comp, limit.post_, map_comp, whiskerRight_app
+/-
+**CategoryTheory.Limits.limit.map_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.limit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasLimitsOfShape J C]   {G : CategoryTheory.Functo
+r J C} (α : F ⟶ G) {D : Type u'} [inst_3 : CategoryTheory.Category.{v', u'} D]  
+ [inst_4 : CategoryTheory.Limits.HasLimitsOfShape J D] (H : CategoryTheory.Funct
+or C D),   CategoryTheory.CategoryStruct.comp (H.map (CategoryTheory.Limits.limM
+ap α)) (CategoryTheory.Limits.limit.post G H) =     CategoryTheory.CategoryStruc
+t.comp (CategoryTheory.Limits.limit.post F H)       (CategoryTheory.Limits.limMa
+p (CategoryTheory.Functor.whiskerRight α H))
+参数：α : F ⟶ G；H : CategoryTheory.Functor C D；H.map (CategoryTheory.Limits.limMap 
+α)；CategoryTheory.Limits.limit.post G H；CategoryTheory.Limits.limit.post F H；Cat
+egoryTheory.Limits.limMap (CategoryTheory.Functor.whiskerRight α H)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.post_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {D : Type u'} [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.limit.post_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {D : Type u'} [inst_2…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem limit.map_post {D : Type u'} [Category.{v'} D] [HasLimitsOfShape J D] (H : C ⥤ D) :
     /- H (limit F) ⟶ H (limit G) ⟶ limit (G ⋙ H) vs
@@ -1901,58 +1736,48 @@ theorem limit.map_post {D : Type u'} [Category.{v'} D] [HasLimitsOfShape J D] (H
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `limYoneda` / `limYoneda` 的定义
+/-- The isomorphism between
+morphisms from `W` to the cone point of the limit cone for `F`
+and cones over `F` with cone point `W`
+is natural in `F`.
+-/
+/-
+**CategoryTheory.Limits.limYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：limYoneda : lim ⋙ yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ≅
+ CategoryTheory.cones J C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition limYoneda
-  signature: :
-  body: NatIso.ofComponents fun F => NatIso.ofComponents fun W => limit.homIso F (unop W)
-
-中文:
-定义 limYoneda
-  签名: :
-  定义体: NatIso.ofComponents fun F => NatIso.ofComponents fun W => limit.homIso F (unop W)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, homIso, limit.homIso, ofComponents
+--- 原说明 ---
+The isomorphism between
+morphisms from `W` to the cone point of the limit cone for `F`
+and cones over `F` with cone point `W`
+is natural in `F`.
 -/
 def limYoneda :
     lim ⋙ yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ≅ CategoryTheory.cones J C :=
   NatIso.ofComponents fun F => NatIso.ofComponents fun W => limit.homIso F (unop W)
 
-/--
-Definition of `constLimAdj` / `constLimAdj` 的定义
+/-- The constant functor and limit functor are adjoint to each other -/
+/-
+**CategoryTheory.Limits.constLimAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：constLimAdj : (const J : C ⥤ J ⥤ C) ⊣ lim
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition constLimAdj
-  signature: : (const J : C ⥤ J ⥤ C) ⊣ lim
-  body: Adjunction.mk' {
-  homEquiv := fun c g =>
-    { toFun := fun f => limit.lift _ ⟨c, f⟩
-      invFun := fun f =>
-        { app := fun _ => f ≫ limit.π _ _ }
-      left_inv := by cat_disch
-      right_inv := by cat_disch }
-  unit := { app := fun _ => limit.lift _ ⟨_, 𝟙 _⟩ }
-  counit := { app := fun g => { app := limit.π _ } } }
-
-中文:
-定义 constLimAdj
-  签名: : (const J : C ⥤ J ⥤ C) ⊣ lim
-  定义体: Adjunction.mk' {
-  homEquiv := fun c g =>
-    { toFun := fun f => limit.lift _ ⟨c, f⟩
-      invFun := fun f =>
-        { app := fun _ => f ≫ limit.π _ _ }
-      left_inv := by cat_disch
-      right_inv := by cat_disch }
-  unit := { app := fun _ => limit.lift _ ⟨_, 𝟙 _⟩ }
-  counit := { app := fun g => { app := limit.π _ } } }
-
-Depends on / 依赖: Adjunction, Adjunction.mk
+--- 原说明 ---
+The constant functor and limit functor are adjoint to each other
 -/
 def constLimAdj : (const J : C ⥤ J ⥤ C) ⊣ lim := Adjunction.mk' {
-  homEquiv := fun c g =>
+  homEquiv := fun c g ↦
     { toFun := fun f => limit.lift _ ⟨c, f⟩
       invFun := fun f =>
         { app := fun _ => f ≫ limit.π _ _ }
@@ -1960,66 +1785,67 @@ def constLimAdj : (const J : C ⥤ J ⥤ C) ⊣ lim := Adjunction.mk' {
       right_inv := by cat_disch }
   unit := { app := fun _ => limit.lift _ ⟨_, 𝟙 _⟩ }
   counit := { app := fun g => { app := limit.π _ } } }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRightAdjoint (lim : (J ⥤ C) ⥤ C)
-  body: ⟨_, ⟨constLimAdj⟩⟩
-
-中文:
-实例 :
-  签名: 是右伴随 (lim : (J ⥤ C) ⥤ C)
-  定义体: ⟨_, ⟨constLimAdj⟩⟩
-
-Depends on / 依赖: constLimAdj
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsRightAdjoint (lim : (J ⥤ C) ⥤ C) :=
   ⟨_, ⟨constLimAdj⟩⟩
 
 end LimFunctor
 
-/--
-Instance `limMap_mono'` / 实例 `limMap_mono'`
-
-English:
-instance limMap_mono'
-  signature: {F G : J ⥤ C} [HasLimitsOfShape J C] (α : F ⟶ G) [Mono α]
-  body: (lim : (J ⥤ C) ⥤ C).map_mono α
-
-中文:
-实例 limMap_mono'
-  签名: {F G : J ⥤ C} [有形状极限 J C] (α : F ⟶ G) [单态射 α]
-  定义体: (lim : (J ⥤ C) ⥤ C).map_mono α
-
-Depends on / 依赖: map_mono
+/-
+**CategoryTheory.Limits.limMap_mono'** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：limMap_mono' {F G : J ⥤ C} [HasLimitsOfShape J C] (α : F ⟶ G) [Mono α] : M
+ono (limMap α)
+参数：α : F ⟶ G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preservesMonomorphisms_of_isRightAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instIsRightAdjointFunctorLim`：∀ {J : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Ca
+tegory.{v, u} C]   [inst_2 : CategoryThe…
 -/
 instance limMap_mono' {F G : J ⥤ C} [HasLimitsOfShape J C] (α : F ⟶ G) [Mono α] : Mono (limMap α) :=
   (lim : (J ⥤ C) ⥤ C).map_mono α
-
-/--
-Instance `limMap_mono` / 实例 `limMap_mono`
-
-English:
-instance limMap_mono
-  signature: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [forall j, Mono (α.app j)]
-  body: ⟨fun {Z} u v h =>
-limit.hom_ext fun j => (cancel_mono (α.app j)).1 by simpa using h =≫ limit.π _ j⟩
-
-中文:
-实例 limMap_mono
-  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) [对任意 j, 单态射 (α.app j)]
-  定义体: ⟨fun {Z} u v h =>
-limit.hom_ext fun j => (cancel_mono (α.app j)).1 by simpa using h =≫ limit.π _ j⟩
-
-Depends on / 依赖: cancel_mono, hom_ext, limit.hom_ext
+/-
+**CategoryTheory.Limits.limMap_mono** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：limMap_mono {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [forall j,
+ Mono (α.app j)] : Mono (limMap α)
+参数：α : F ⟶ G；α.app j。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.limMap_π`：limMap_π {F G : J ⥤ C} [HasLimit F] [Has
+Limit G] (α : F ⟶ G) (j : J) : limMap α ≫ limit.π G j = limit.π F j ≫ α.app j
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
 -/
-instance limMap_mono {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [forall j, Mono (α.app j)] :
+instance limMap_mono {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [∀ j, Mono (α.app j)] :
     Mono (limMap α) :=
   ⟨fun {Z} u v h =>
-limit.hom_ext fun j => (cancel_mono (α.app j)).1 by simpa using h =≫ limit.π _ j⟩
+    limit.hom_ext fun j => (cancel_mono (α.app j)).1 <| by simpa using h =≫ limit.π _ j⟩
 
 section Adjunction
 
@@ -2034,22 +1860,16 @@ a limit cone for any `F : J ⥤ C`. -/
 
 /-- The limit cone obtained from a right adjoint of the constant functor. -/
 @[simps]
-/--
-Definition of `coneOfAdj` / `coneOfAdj` 的定义
+/-
+**CategoryTheory.Limits.coneOfAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：coneOfAdj (F : J ⥤ C) : Cone F where pt
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOfAdj
-  signature: (F : J ⥤ C)
-  body: L.obj F
-  π := adj.counit.app F
-
-中文:
-定义 coneOfAdj
-  签名: (F : J ⥤ C)
-  定义体: L.obj F
-  π := adj.counit.app F
-
-Depends on / 依赖: L.obj
+--- 原说明 ---
+The limit cone obtained from a right adjoint of the constant functor.
 -/
 noncomputable def coneOfAdj (F : J ⥤ C) : Cone F where
   pt := L.obj F
@@ -2058,32 +1878,16 @@ noncomputable def coneOfAdj (F : J ⥤ C) : Cone F where
 set_option backward.defeqAttrib.useBackward true in
 /-- The cones defined by `coneOfAdj` are limit cones. -/
 @[simps]
-/--
-Definition of `isLimitConeOfAdj` / `isLimitConeOfAdj` 的定义
+/-
+**CategoryTheory.Limits.isLimitConeOfAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：isLimitConeOfAdj (F : J ⥤ C) : IsLimit (coneOfAdj adj F) where lift s
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitConeOfAdj
-  signature: (F : J ⥤ C)
-  body: adj.homEquiv _ _ s.π
-  fac s j := by
-    have eq := NatTrans.congr_app (adj.counit.naturality s.π) j
-    have eq' := NatTrans.congr_app (adj.left_triangle_components s.pt) j
-    dsimp at eq eq' ⊢
-    rw [adj.homEquiv_unit]; rw [assoc]; rw [eq]; rw [reassoc_of% eq']
-  uniq s m hm := (adj.homEquiv _ _).symm.injective (by ext j; simpa using! hm j)
-
-中文:
-定义 isLimitConeOfAdj
-  签名: (F : J ⥤ C)
-  定义体: adj.homEquiv _ _ s.π
-  fac s j := by
-    have eq := NatTrans.congr_app (adj.counit.naturality s.π) j
-    have eq' := NatTrans.congr_app (adj.left_triangle_components s.pt) j
-    dsimp at eq eq' ⊢
-    rw [adj.homEquiv_unit]; rw [assoc]; rw [eq]; rw [reassoc_of% eq']
-  uniq s m hm := (adj.homEquiv _ _).symm.injective (by ext j; simpa using! hm j)
-
-Depends on / 依赖: adj.homEquiv, homEquiv
+--- 原说明 ---
+The cones defined by `coneOfAdj` are limit cones.
 -/
 def isLimitConeOfAdj (F : J ⥤ C) :
     IsLimit (coneOfAdj adj F) where
@@ -2092,31 +1896,29 @@ def isLimitConeOfAdj (F : J ⥤ C) :
     have eq := NatTrans.congr_app (adj.counit.naturality s.π) j
     have eq' := NatTrans.congr_app (adj.left_triangle_components s.pt) j
     dsimp at eq eq' ⊢
-    rw [adj.homEquiv_unit]; rw [assoc]; rw [eq]; rw [reassoc_of% eq']
+    rw [adj.homEquiv_unit, assoc, eq, reassoc_of% eq']
   uniq s m hm := (adj.homEquiv _ _).symm.injective (by ext j; simpa using! hm j)
 
 end Adjunction
 
-/--
-theorem `hasLimitsOfShape_of_equivalence` / 定理 `hasLimitsOfShape_of_equivalence`
+/-- We can transport limits of shape `J` along an equivalence `J ≌ J'`.
+-/
+/-
+**CategoryTheory.Limits.hasLimitsOfShape_of_equivalence** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：hasLimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌
+ J') [HasLimitsOfShape J C] : HasLimitsOfShape J' C
+参数：e : J ≌ J'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_equivalence_comp`：hasLimit_of_equivale
+nce_comp (e : K ≌ J) [HasLimit (e.functor ⋙ F)] : HasLimit F
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-theorem hasLimitsOfShape_of_equivalence
-  statement: {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J')
-  proof: by
-  constructor
-  intro F
-  apply hasLimit_of_equivalence_comp e
-
-中文:
-定理 hasLimitsOfShape_of_equivalence
-  结论: {J' : 类型u₂} [范畴.{v₂} J'] (e : J ≌ J')
-  证明: by
-  constructor
-  intro F
-  apply hasLimit_of_equivalence_comp e
-
-Depends on / 依赖: hasLimit_of_equivalence_comp
+--- 原说明 ---
+We can transport limits of shape `J` along an equivalence `J ≌ J'`.
 -/
 theorem hasLimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J')
     [HasLimitsOfShape J C] : HasLimitsOfShape J' C := by
@@ -2125,25 +1927,24 @@ theorem hasLimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e
   apply hasLimit_of_equivalence_comp e
 
 variable (C)
-
-/--
-lemma `HasLimitsOfShape.of_small` / 引理 `HasLimitsOfShape.of_small`
-
-English:
-lemma HasLimitsOfShape.of_small
-  proof: by
-  have := HasLimitsOfSize.has_limits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
-  exact hasLimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-中文:
-引理 有形状极限.of_small
-  证明: by
-  have := HasLimitsOfSize.has_limits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
-  exact hasLimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-Depends on / 依赖: HasLimitsOfSize, HasLimitsOfSize.has_limits_of_shape, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, hasLimitsOfShape_of_equivalence, has_limits_of_shape, symm.trans
+/-
+**CategoryTheory.Limits.HasLimitsOfShape.of_small** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.HasLimitsOfShape`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasLimitsOfSize.{v₁, u₁, v, u} C]   (J : Type u₂) [inst_2 : CategoryTheory
+.Category.{v₂, u₂} J] [Small.{u₁, u₂} J]   [CategoryTheory.LocallySmall.{v₁, v₂,
+ u₂} J], CategoryTheory.Limits.HasLimitsOfShape J C
+参数：C : Type u；J : Type u₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Shrink.instLocallySmallShrink`：∀ (C : Type u) [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : Small.{w', u} C]   [CategoryTheory.Loca
+llySmall.{w, v, u} C], CategoryThe…
+· 使用定理 `CategoryTheory.Limits.HasLimitsOfSize.has_limits_of_shape`：∀ {C : Type u
+} {inst : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasLim
+itsOfSize.{v₁, u₁, v, u} C]   (J : Type u₁) [in…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
 -/
 lemma HasLimitsOfShape.of_small
     [HasLimitsOfSize.{v₁, u₁} C] (J : Type u₂) [Category.{v₂} J]
@@ -2152,23 +1953,26 @@ lemma HasLimitsOfShape.of_small
   have := HasLimitsOfSize.has_limits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
   exact hasLimitsOfShape_of_equivalence
     ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-/--
-lemma `HasLimitsOfShape.of_essentiallySmall` / 引理 `HasLimitsOfShape.of_essentiallySmall`
-
-English:
-lemma HasLimitsOfShape.of_essentiallySmall
-  proof: by
-  have := HasLimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
-  exact hasLimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
-
-中文:
-引理 有形状极限.of_essentiallySmall
-  证明: by
-  have := HasLimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
-  exact hasLimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
-
-Depends on / 依赖: HasLimitsOfShape, HasLimitsOfShape.of_small, SmallModel, equivSmallModel, hasLimitsOfShape_of_equivalence, of_small
+/-
+**CategoryTheory.Limits.HasLimitsOfShape.of_essentiallySmall** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits.HasLimitsOfShape`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasLimitsOfSize.{v₁, u₁, v, u} C]   (J : Type u₂) [inst_2 : CategoryTheory
+.Category.{v₂, u₂} J] [CategoryTheory.EssentiallySmall.{u₁, v₂, u₂} J]   [Catego
+ryTheory.LocallySmall.{v₁, v₂, u₂} J], CategoryTheory.Limits.HasLimitsOfShape J 
+C
+参数：C : Type u；J : Type u₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimitsOfShape.of_small`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimitsOfSize.{v₁, u₁
+, v, u} C]   (J : Type u₂) [inst_2 : …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.instLocallySmallSmallModel`：∀ (C : Type u) [inst : Catego
+ryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.EssentiallySmall.{w, v, u} 
+C]   [CategoryTheory.LocallySma…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
 -/
 lemma HasLimitsOfShape.of_essentiallySmall
     [HasLimitsOfSize.{v₁, u₁} C] (J : Type u₂) [Category.{v₂} J]
@@ -2177,46 +1981,56 @@ lemma HasLimitsOfShape.of_essentiallySmall
   have := HasLimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
   exact hasLimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
 
-/--
-theorem `hasLimitsOfSizeOfUnivLE` / 定理 `hasLimitsOfSizeOfUnivLE`
+/-- A category that has larger limits also has smaller limits. -/
+/-
+**CategoryTheory.Limits.hasLimitsOfSizeOfUnivLE** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：hasLimitsOfSizeOfUnivLE [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}] [HasLimitsOfSi
+ze.{v₁, u₁} C] : HasLimitsOfSize.{v₂, u₂} C where has_limits_of_shape J {_}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-theorem hasLimitsOfSizeOfUnivLE
-  statement: [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
-  proof: hasLimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
-
-中文:
-定理 hasLimitsOfSizeOfUnivLE
-  结论: [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
-  证明: hasLimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
-
-Depends on / 依赖: hasLimitsOfShape_of_equivalence
+--- 原说明 ---
+A category that has larger limits also has smaller limits.
 -/
 theorem hasLimitsOfSizeOfUnivLE [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
     [HasLimitsOfSize.{v₁, u₁} C] : HasLimitsOfSize.{v₂, u₂} C where
   has_limits_of_shape J {_} := hasLimitsOfShape_of_equivalence
     ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
 
-/--
-theorem `hasLimitsOfSizeShrink` / 定理 `hasLimitsOfSizeShrink`
+/-- `hasLimitsOfSizeShrink.{v u} C` tries to obtain `HasLimitsOfSize.{v u} C`
+from some other `HasLimitsOfSize C`.
+-/
+/-
+**CategoryTheory.Limits.hasLimitsOfSizeShrink** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：hasLimitsOfSizeShrink [HasLimitsOfSize.{max v₁ v₂, max u₁ u₂} C] : HasLimi
+tsOfSize.{v₁, u₁} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfSizeOfUnivLE`：hasLimitsOfSizeOfUnivLE [
+UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}] [HasLimitsOfSize.{v₁, u₁} C] : HasLimitsOfSiz
+e.{v₂, u₂} C where has_limits_of_sh…
 
-English:
-theorem hasLimitsOfSizeShrink
-  given: [HasLimitsOfSize.{max v₁ v₂, max u₁ u₂} C]
-  proof: hasLimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
-中文:
-定理 hasLimitsOfSizeShrink
-  条件: [有LimitsOfSize.{最大值 v₁ v₂, 最大值 u₁ u₂} C]
-  证明: hasLimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
-Depends on / 依赖: hasLimitsOfSizeOfUnivLE
+--- 原说明 ---
+`hasLimitsOfSizeShrink.{v u} C` tries to obtain `HasLimitsOfSize.{v u} C`
+from some other `HasLimitsOfSize C`.
 -/
 theorem hasLimitsOfSizeShrink [HasLimitsOfSize.{max v₁ v₂, max u₁ u₂} C] :
     HasLimitsOfSize.{v₁, u₁} C := hasLimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasSmallestLimitsOfHasLimits [HasLimits C] : HasLimitsOfSize.{0, 0} C :=
   hasLimitsOfSizeShrink.{0, 0} C
 
@@ -2224,190 +2038,165 @@ end Limit
 
 section Colimit
 
-/--
-Definition of `colimit.homIso` / `colimit.homIso` 的定义
+/-- The isomorphism (in `Type`) between
+morphisms from the colimit object to a specified object `W`,
+and cocones with cone point `W`.
+-/
+/-
+**CategoryTheory.Limits.colimit.homIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.colimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasColimit F] 
+→             (W : C) → ULift.{u₁, v} (CategoryTheory.Limits.colimit F ⟶ W) ≅ F.
+cocones.obj W
+参数：F : CategoryTheory.Functor J C；W : C；CategoryTheory.Limits.colimit F ⟶ W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit.homIso
-  signature: (F : J ⥤ C) [HasColimit F] (W : C)
-  body: (colimit.isColimit F).homIso W
-
-@[simp]
-
-中文:
-定义 colimit.homIso
-  签名: (F : J ⥤ C) [有余极限 F] (W : C)
-  定义体: (colimit.isColimit F).homIso W
-
-@[simp]
-
-Depends on / 依赖: colimit, colimit.isColimit, homIso, isColimit
+--- 原说明 ---
+The isomorphism (in `Type`) between
+morphisms from the colimit object to a specified object `W`,
+and cocones with cone point `W`.
 -/
 def colimit.homIso (F : J ⥤ C) [HasColimit F] (W : C) :
     ULift.{u₁} (colimit F ⟶ W : Type v) ≅ F.cocones.obj W :=
   (colimit.isColimit F).homIso W
 
 @[simp]
-/--
-theorem `colimit.homIso_hom` / 定理 `colimit.homIso_hom`
-
-English:
-theorem colimit.homIso_hom
-  given: (F : J ⥤ C) [HasColimit F] {W : C}
-  proof: (colimit.isColimit F).homIso_hom
-
-中文:
-定理 colimit.homIso_hom
-  条件: (F : J ⥤ C) [有余极限 F] {W : C}
-  证明: (colimit.isColimit F).homIso_hom
-
-Depends on / 依赖: colimit, colimit.isColimit, homIso_hom, isColimit
+/-
+**CategoryTheory.Limits.colimit.homIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor J C) [i
+nst_2 : CategoryTheory.Limits.HasColimit F] {W : C},   (CategoryTheory.Limits.co
+limit.homIso F W).hom =     TypeCat.ofHom fun f =>       CategoryTheory.Category
+Struct.comp (CategoryTheory.Limits.colimit.cocone F).ι         ((CategoryTheory.
+Functor.const J).map f.down)
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Limits.colimit.homIso F W；Categ
+oryTheory.Limits.colimit.cocone F；(CategoryTheory.Functor.const J).map f.down。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.homIso_hom`：homIso_hom (h : IsColimit t)
+ {W : C} : (IsColimit.homIso h W).hom = ↾fun f => (t.extend f.down).ι
 -/
 theorem colimit.homIso_hom (F : J ⥤ C) [HasColimit F] {W : C} :
     (colimit.homIso F W).hom =
-      ↾fun f => (colimit.cocone F).ι ≫ (const J).map f.down :=
+      ↾fun f ↦ (colimit.cocone F).ι ≫ (const J).map f.down :=
   (colimit.isColimit F).homIso_hom
 
-/--
-Definition of `colimit.homIso'` / `colimit.homIso'` 的定义
+/-- The isomorphism (in `Type`) between
+morphisms from the colimit object to a specified object `W`,
+and an explicit componentwise description of cocones with cone point `W`.
+-/
+/-
+**CategoryTheory.Limits.colimit.homIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.colimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           [inst_2 : CategoryTheory.Limits.HasColimit F] 
+→             (W : C) →               ULift.{u₁, v} (CategoryTheory.Limits.colim
+it F ⟶ W) ≅                 { p // ∀ {j j' : J} (f : j ⟶ j'), CategoryTheory.Cat
+egoryStruct.comp (F.map f) (p j') = p j }
+参数：F : CategoryTheory.Functor J C；W : C；CategoryTheory.Limits.colimit F ⟶ W；f : 
+j ⟶ j'；F.map f；p j'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit.homIso'
-  signature: (F : J ⥤ C) [HasColimit F] (W : C)
-  body: (colimit.isColimit F).homIso' W
-
-中文:
-定义 colimit.homIso'
-  签名: (F : J ⥤ C) [有余极限 F] (W : C)
-  定义体: (colimit.isColimit F).homIso' W
-
-Depends on / 依赖: colimit, colimit.isColimit, homIso, isColimit
+--- 原说明 ---
+The isomorphism (in `Type`) between
+morphisms from the colimit object to a specified object `W`,
+and an explicit componentwise description of cocones with cone point `W`.
 -/
 def colimit.homIso' (F : J ⥤ C) [HasColimit F] (W : C) :
     ULift.{u₁} (colimit F ⟶ W : Type v) ≅
-      { p : forall j, F.obj j ⟶ W // forall {j j'} (f : j ⟶ j'), F.map f ≫ p j' = p j } :=
+      { p : ∀ j, F.obj j ⟶ W // ∀ {j j'} (f : j ⟶ j'), F.map f ≫ p j' = p j } :=
   (colimit.isColimit F).homIso' W
 
 -- This has the isomorphism pointing in the opposite direction than in `has_limit_of_iso`.
 -- This is intentional; it seems to help with elaboration.
 /-- If `F` has a colimit, so does any naturally isomorphic functor. -/
 @[to_dual none]
-/--
-theorem `hasColimit_of_iso` / 定理 `hasColimit_of_iso`
+/-
+**CategoryTheory.Limits.hasColimit_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：hasColimit_of_iso {F G : J ⥤ C} [HasColimit F] (α : G ≅ F) : HasColimit G
+参数：α : G ≅ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-theorem hasColimit_of_iso
-  given: {F G : J ⥤ C} [HasColimit F] (α : G ≅ F)
-  statement: HasColimit G
-  proof: HasColimit.mk
-    { cocone := (Cocone.precompose α.hom).obj (colimit.cocone F)
-      isColimit := (IsColimit.precomposeHomEquiv _ _).symm (colimit.isColimit F) }
-
-中文:
-定理 hasColimit_of_iso
-  条件: {F G : J ⥤ C} [有余极限 F] (α : G ≅ F)
-  结论: 有余极限 G
-  证明: HasColimit.mk
-    { cocone := (Cocone.precompose α.hom).obj (colimit.cocone F)
-      isColimit := (IsColimit.precomposeHomEquiv _ _).symm (colimit.isColimit F) }
-
-Depends on / 依赖: Cocone, Cocone.precompose, HasColimit, HasColimit.mk, IsColimit, IsColimit.precomposeHomEquiv, cocone, colimit, colimit.cocone, colimit.isColimit, isColimit, precompose, precomposeHomEquiv
+--- 原说明 ---
+If `F` has a colimit, so does any naturally isomorphic functor.
 -/
 theorem hasColimit_of_iso {F G : J ⥤ C} [HasColimit F] (α : G ≅ F) : HasColimit G :=
   HasColimit.mk
     { cocone := (Cocone.precompose α.hom).obj (colimit.cocone F)
       isColimit := (IsColimit.precomposeHomEquiv _ _).symm (colimit.isColimit F) }
 
-/--
-theorem `HasColimit.ofCoconesIso` / 定理 `HasColimit.ofCoconesIso`
+/-- If a functor `G` has the same collection of cocones as a functor `F`
+which has a colimit, then `G` also has a colimit. -/
+/-
+**CategoryTheory.Limits.HasColimit.ofCoconesIso** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.HasColimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {K : Type u₁} [inst_2 : CategoryThe
+ory.Category.{v₂, u₁} K] (F : CategoryTheory.Functor J C)   (G : CategoryTheory.
+Functor K C) (h : F.cocones ≅ G.cocones) [CategoryTheory.Limits.HasColimit F],  
+ CategoryTheory.Limits.HasColimit G
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor K C；h : F.cocones ≅
+ G.cocones。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 
-English:
-theorem HasColimit.ofCoconesIso
-  statement: {K : Type u₁} [Category.{v₂} K] (F : J ⥤ C) (G : K ⥤ C)
-  proof: HasColimit.mk ⟨_, IsColimit.ofCorepresentableBy ((colimit.isColimit F).corepresentableBy.ofIso h)⟩
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有余极限.ofCoconesIso
-  结论: {K : 类型u₁} [范畴.{v₂} K] (F : J ⥤ C) (G : K ⥤ C)
-  证明: HasColimit.mk ⟨_, IsColimit.ofCorepresentableBy ((colimit.isColimit F).corepresentableBy.ofIso h)⟩
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: HasColimit, HasColimit.mk, IsColimit, IsColimit.ofCorepresentableBy, colimit, colimit.isColimit, corepresentableBy, corepresentableBy.ofIso, isColimit, ofCorepresentableBy
+--- 原说明 ---
+If a functor `G` has the same collection of cocones as a functor `F`
+which has a colimit, then `G` also has a colimit.
 -/
 theorem HasColimit.ofCoconesIso {K : Type u₁} [Category.{v₂} K] (F : J ⥤ C) (G : K ⥤ C)
     (h : F.cocones ≅ G.cocones) [HasColimit F] : HasColimit G :=
   HasColimit.mk ⟨_, IsColimit.ofCorepresentableBy ((colimit.isColimit F).corepresentableBy.ofIso h)⟩
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.isoOfNatIso_ι_hom` / 定理 `HasColimit.isoOfNatIso_ι_hom`
-
-English:
-theorem HasColimit.isoOfNatIso_ι_hom
-  statement: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
-  proof: IsColimit.comp_coconePointsIsoOfNatIso_hom _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有余极限.isoOf自然数Iso_ι_hom
-  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (w : F ≅ G)
-  证明: IsColimit.comp_coconePointsIsoOfNatIso_hom _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointsIsoOfNatIso_hom, comp_coconePointsIsoOfNatIso_hom
+/-
+**CategoryTheory.Limits.HasColimit.isoOfNatIso_** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasColimit.isoOfNatIso_ι_hom {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
     (j : J) : colimit.ι F j ≫ (HasColimit.isoOfNatIso w).hom = w.hom.app j ≫ colimit.ι G j :=
   IsColimit.comp_coconePointsIsoOfNatIso_hom _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.isoOfNatIso_ι_inv` / 定理 `HasColimit.isoOfNatIso_ι_inv`
-
-English:
-theorem HasColimit.isoOfNatIso_ι_inv
-  statement: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
-  proof: IsColimit.comp_coconePointsIsoOfNatIso_inv _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有余极限.isoOf自然数Iso_ι_inv
-  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (w : F ≅ G)
-  证明: IsColimit.comp_coconePointsIsoOfNatIso_inv _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointsIsoOfNatIso_inv, comp_coconePointsIsoOfNatIso_inv
+/-
+**CategoryTheory.Limits.HasColimit.isoOfNatIso_** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasColimit.isoOfNatIso_ι_inv {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
     (j : J) : colimit.ι G j ≫ (HasColimit.isoOfNatIso w).inv = w.inv.app j ≫ colimit.ι F j :=
   IsColimit.comp_coconePointsIsoOfNatIso_inv _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.isoOfNatIso_hom_desc` / 定理 `HasColimit.isoOfNatIso_hom_desc`
-
-English:
-theorem HasColimit.isoOfNatIso_hom_desc
-  statement: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone G)
-  proof: IsColimit.coconePointsIsoOfNatIso_hom_desc _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 有余极限.isoOf自然数Iso_hom_desc
-  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (t : 余锥 G)
-  证明: IsColimit.coconePointsIsoOfNatIso_hom_desc _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointsIsoOfNatIso_hom_desc, coconePointsIsoOfNatIso_hom_desc
+/-
+**CategoryTheory.Limits.HasColimit.isoOfNatIso_hom_desc** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Limits.HasColimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F G : CategoryTheory.Functor J C} 
+[inst_2 : CategoryTheory.Limits.HasColimit F]   [inst_3 : CategoryTheory.Limits.
+HasColimit G] (t : CategoryTheory.Limits.Cocone G) (w : F ≅ G),   CategoryTheory
+.CategoryStruct.comp (CategoryTheory.Limits.HasColimit.isoOfNatIso w).hom       
+(CategoryTheory.Limits.colimit.desc G t) =     CategoryTheory.Limits.colimit.des
+c F ((CategoryTheory.Limits.Cocone.precompose w.hom).obj t)
+参数：t : CategoryTheory.Limits.Cocone G；w : F ≅ G；CategoryTheory.Limits.HasColimit
+.isoOfNatIso w；CategoryTheory.Limits.colimit.desc G t；(CategoryTheory.Limits.Coc
+one.precompose w.hom).obj t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.coconePointsIsoOfNatIso_hom_desc`：∀ {J :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : Ca
+tegoryTheory.Category.{v₃, u₃} C]   {F G : CategoryThe…
 -/
 theorem HasColimit.isoOfNatIso_hom_desc {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone G)
     (w : F ≅ G) :
@@ -2416,20 +2205,23 @@ theorem HasColimit.isoOfNatIso_hom_desc {F G : J ⥤ C} [HasColimit F] [HasColim
   IsColimit.coconePointsIsoOfNatIso_hom_desc _ _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.isoOfNatIso_inv_desc` / 定理 `HasColimit.isoOfNatIso_inv_desc`
-
-English:
-theorem HasColimit.isoOfNatIso_inv_desc
-  statement: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone F)
-  proof: IsColimit.coconePointsIsoOfNatIso_inv_desc _ _ _
-
-中文:
-定理 有余极限.isoOf自然数Iso_inv_desc
-  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (t : 余锥 F)
-  证明: IsColimit.coconePointsIsoOfNatIso_inv_desc _ _ _
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointsIsoOfNatIso_inv_desc, coconePointsIsoOfNatIso_inv_desc
+/-
+**CategoryTheory.Limits.HasColimit.isoOfNatIso_inv_desc** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Limits.HasColimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F G : CategoryTheory.Functor J C} 
+[inst_2 : CategoryTheory.Limits.HasColimit F]   [inst_3 : CategoryTheory.Limits.
+HasColimit G] (t : CategoryTheory.Limits.Cocone F) (w : F ≅ G),   CategoryTheory
+.CategoryStruct.comp (CategoryTheory.Limits.HasColimit.isoOfNatIso w).inv       
+(CategoryTheory.Limits.colimit.desc F t) =     CategoryTheory.Limits.colimit.des
+c G ((CategoryTheory.Limits.Cocone.precompose w.inv).obj t)
+参数：t : CategoryTheory.Limits.Cocone F；w : F ≅ G；CategoryTheory.Limits.HasColimit
+.isoOfNatIso w；CategoryTheory.Limits.colimit.desc F t；(CategoryTheory.Limits.Coc
+one.precompose w.inv).obj t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.coconePointsIsoOfNatIso_inv_desc`：∀ {J :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : Ca
+tegoryTheory.Category.{v₃, u₃} C]   {F G : CategoryThe…
 -/
 theorem HasColimit.isoOfNatIso_inv_desc {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone F)
     (w : F ≅ G) :
@@ -2437,20 +2229,28 @@ theorem HasColimit.isoOfNatIso_inv_desc {F G : J ⥤ C} [HasColimit F] [HasColim
       colimit.desc G ((Cocone.precompose w.inv).obj _) :=
   IsColimit.coconePointsIsoOfNatIso_inv_desc _ _ _
 
-/--
-Definition of `HasColimit.isoOfEquivalence` / `HasColimit.isoOfEquivalence` 的定义
+/-- The colimits of `F : J ⥤ C` and `G : K ⥤ C` are isomorphic,
+if there is an equivalence `e : J ≌ K` making the triangle commute up to natural isomorphism.
+-/
+/-
+**CategoryTheory.Limits.HasColimit.isoOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.HasColimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {K : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} K] →         {C : Typ
+e u} →           [inst_2 : CategoryTheory.Category.{v, u} C] →             {F : 
+CategoryTheory.Functor J C} →               [inst_3 : CategoryTheory.Limits.HasC
+olimit F] →                 {G : CategoryTheory.Functor K C} →                  
+ [inst_4 : CategoryTheory.Limits.HasColimit G] →                     (e : J ≌ K)
+ →                       (e.functor.comp G ≅ F) → (CategoryTheory.Limits.colimit
+ F ≅ CategoryTheory.Limits.colimit G)
+参数：e : J ≌ K；e.functor.comp G ≅ F；CategoryTheory.Limits.colimit F ≅ CategoryTheo
+ry.Limits.colimit G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasColimit.isoOfEquivalence
-  signature: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G] (e : J ≌ K)
-  body: IsColimit.coconePointsIsoOfEquivalence (colimit.isColimit F) (colimit.isColimit G) e w
-
-中文:
-定义 有余极限.isoOfEquivalence
-  签名: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G] (e : J ≌ K)
-  定义体: IsColimit.coconePointsIsoOfEquivalence (colimit.isColimit F) (colimit.isColimit G) e w
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointsIsoOfEquivalence, coconePointsIsoOfEquivalence, colimit, colimit.isColimit, isColimit
+--- 原说明 ---
+The colimits of `F : J ⥤ C` and `G : K ⥤ C` are isomorphic,
+if there is an equivalence `e : J ≌ K` making the triangle commute up to natural
+ isomorphism.
 -/
 def HasColimit.isoOfEquivalence {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G] (e : J ≌ K)
     (w : e.functor ⋙ G ≅ F) : colimit F ≅ colimit G :=
@@ -2458,22 +2258,10 @@ def HasColimit.isoOfEquivalence {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasC
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.ι_isoOfEquivalence_hom` / 定理 `HasColimit.ι_isoOfEquivalence_hom`
-
-English:
-theorem HasColimit.ι_isoOfEquivalence_hom
-  statement: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
-  proof: by
-  simp [HasColimit.isoOfEquivalence]
-
-中文:
-定理 有余极限.ι_isoOfEquivalence_hom
-  结论: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G]
-  证明: by
-  simp [HasColimit.isoOfEquivalence]
-
-Depends on / 依赖: HasColimit, HasColimit.isoOfEquivalence, isoOfEquivalence
+/-
+**CategoryTheory.Limits.HasColimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasColimit.ι_isoOfEquivalence_hom {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
     (e : J ≌ K) (w : e.functor ⋙ G ≅ F) (j : J) :
@@ -2483,34 +2271,10 @@ theorem HasColimit.ι_isoOfEquivalence_hom {F : J ⥤ C} [HasColimit F] {G : K �
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-theorem `HasColimit.ι_isoOfEquivalence_inv` / 定理 `HasColimit.ι_isoOfEquivalence_inv`
-
-English:
-theorem HasColimit.ι_isoOfEquivalence_inv
-  statement: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
-  proof: by
-  simp [HasColimit.isoOfEquivalence, IsColimit.coconePointsIsoOfEquivalence_inv]
-
-@[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_hom_π := HasColimit.ι_isoOfEquivalence_hom
-
-@[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOfEquivalence_inv
-
-中文:
-定理 有余极限.ι_isoOfEquivalence_inv
-  结论: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G]
-  证明: by
-  simp [HasColimit.isoOfEquivalence, IsColimit.coconePointsIsoOfEquivalence_inv]
-
-@[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_hom_π := HasColimit.ι_isoOfEquivalence_hom
-
-@[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOfEquivalence_inv
-
-Depends on / 依赖: HasColimit, HasColimit.isoOfEquivalence, IsColimit, IsColimit.coconePointsIsoOfEquivalence_inv, coconePointsIsoOfEquivalence_inv, isoOfEquivalence
+/-
+**CategoryTheory.Limits.HasColimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasColimit.ι_isoOfEquivalence_inv {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
     (e : J ≌ K) (w : e.functor ⋙ G ≅ F) (k : K) :
@@ -2529,98 +2293,79 @@ section Pre
 variable (F)
 variable [HasColimit F] (E : K ⥤ J) [HasColimit (E ⋙ F)]
 
-/--
-Definition of `colimit.pre` / `colimit.pre` 的定义
+/-- The canonical morphism from the colimit of `E ⋙ F` to the colimit of `F`.
+-/
+/-
+**CategoryTheory.Limits.colimit.pre** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits.colimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {K : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} K] →         {C : Typ
+e u} →           [inst_2 : CategoryTheory.Category.{v, u} C] →             (F : 
+CategoryTheory.Functor J C) →               [inst_3 : CategoryTheory.Limits.HasC
+olimit F] →                 (E : CategoryTheory.Functor K J) →                  
+ [inst_4 : CategoryTheory.Limits.HasColimit (E.comp F)] →                     Ca
+tegoryTheory.Limits.colimit (E.comp F) ⟶ CategoryTheory.Limits.colimit F
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；E.comp
+ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit.pre
-  signature: : colimit (E ⋙ F) ⟶ colimit F
-  body: colimit.desc (E ⋙ F) ((colimit.cocone F).whisker E)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 colimit.pre
-  签名: : colimit (E ⋙ F) ⟶ colimit F
-  定义体: colimit.desc (E ⋙ F) ((colimit.cocone F).whisker E)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cocone, colimit, colimit.cocone, colimit.desc, whisker
+--- 原说明 ---
+The canonical morphism from the colimit of `E ⋙ F` to the colimit of `F`.
 -/
 def colimit.pre : colimit (E ⋙ F) ⟶ colimit F :=
   colimit.desc (E ⋙ F) ((colimit.cocone F).whisker E)
 
 @[reassoc (attr := simp)]
-/--
-theorem `colimit.ι_pre` / 定理 `colimit.ι_pre`
-
-English:
-theorem colimit.ι_pre
-  given: (k : K)
-  statement: colimit.ι (E ⋙ F) k ≫ colimit.pre F E = colimit.ι F (E.obj k)
-  proof: by
-  simp [colimit.pre]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 colimit.ι_pre
-  条件: (k : K)
-  结论: colimit.ι (E ⋙ F) k ≫ colimit.pre F E = colimit.ι F (E.obj k)
-  证明: by
-  simp [colimit.pre]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.asEquivalence, Iso.refl, asEquivalence, colimit, colimit.pre, of_equivalence_target
+/-
+**CategoryTheory.Limits.colimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit.ι_pre (k : K) : colimit.ι (E ⋙ F) k ≫ colimit.pre F E = colimit.ι F (E.obj k) := by
   simp [colimit.pre]
 
 @[reassoc (attr := simp)]
-/--
-theorem `colimit.ι_inv_pre` / 定理 `colimit.ι_inv_pre`
-
-English:
-theorem colimit.ι_inv_pre
-  given: [IsIso (pre F E)] (k : K)
-  proof: by
-  simp [IsIso.comp_inv_eq]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 colimit.ι_inv_pre
-  条件: [是同构 (pre F E)] (k : K)
-  证明: by
-  simp [IsIso.comp_inv_eq]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsIso.comp_inv_eq, comp_inv_eq
+/-
+**CategoryTheory.Limits.colimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit.ι_inv_pre [IsIso (pre F E)] (k : K) :
     colimit.ι F (E.obj k) ≫ inv (colimit.pre F E) = colimit.ι (E ⋙ F) k := by
   simp [IsIso.comp_inv_eq]
 
 @[reassoc (attr := simp)]
-/--
-theorem `colimit.pre_desc` / 定理 `colimit.pre_desc`
-
-English:
-theorem colimit.pre_desc
-  given: (c : Cocone F)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 colimit.pre_desc
-  条件: (c : 余锥 F)
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Limits.colimit.pre_desc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasColimit F] (E : CategoryTheory.Functor K J)   [inst_4 : CategoryT
+heory.Limits.HasColimit (E.comp F)] (c : CategoryTheory.Limits.Cocone F),   Cate
+goryTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit.pre F E) (Category
+Theory.Limits.colimit.desc F c) =     CategoryTheory.Limits.colimit.desc (E.comp
+ F) (CategoryTheory.Limits.Cocone.whisker E c)
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；c : Ca
+tegoryTheory.Limits.Cocone F；CategoryTheory.Limits.colimit.pre F E；CategoryTheor
+y.Limits.colimit.desc F c；E.comp F；CategoryTheory.Limits.Cocone.whisker E c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre_assoc`：∀ {J : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem colimit.pre_desc (c : Cocone F) :
     colimit.pre F E ≫ colimit.desc F c = colimit.desc (E ⋙ F) (c.whisker E) := by
@@ -2631,55 +2376,94 @@ variable {L : Type u₃} [Category.{v₃} L]
 variable (D : L ⥤ K)
 
 @[simp]
-/--
-theorem `colimit.pre_pre` / 定理 `colimit.pre_pre`
-
-English:
-theorem colimit.pre_pre
-  given: [h : HasColimit (D ⋙ E ⋙ F)]
-  proof: h
-    colimit.pre (E ⋙ F) D ≫ colimit.pre F E = colimit.pre F (D ⋙ E) := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_pre]
-  have : HasColimit ((D ⋙ E) ⋙ F) := h
-  exact (colimit.ι_pre F (D ⋙ E) j).symm
-
-中文:
-定理 colimit.pre_pre
-  条件: [h : 有余极限 (D ⋙ E ⋙ F)]
-  证明: h
-    colimit.pre (E ⋙ F) D ≫ colimit.pre F E = colimit.pre F (D ⋙ E) := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_pre]
-  have : HasColimit ((D ⋙ E) ⋙ F) := h
-  exact (colimit.ι_pre F (D ⋙ E) j).symm
+/-
+**CategoryTheory.Limits.colimit.pre_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] (F : CategoryTheory.Functor J C)   [inst_3 : CategoryTh
+eory.Limits.HasColimit F] (E : CategoryTheory.Functor K J)   [inst_4 : CategoryT
+heory.Limits.HasColimit (E.comp F)] {L : Type u₃} [inst_5 : CategoryTheory.Categ
+ory.{v₃, u₃} L]   (D : CategoryTheory.Functor L K) [h : CategoryTheory.Limits.Ha
+sColimit (D.comp (E.comp F))],   CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.Limits.colimit.pre (E.comp F) D)       (CategoryTheory.Limits.colimit.pre F 
+E) =     CategoryTheory.Limits.colimit.pre F (D.comp E)
+参数：F : CategoryTheory.Functor J C；E : CategoryTheory.Functor K J；E.comp F；D : Ca
+tegoryTheory.Functor L K；D.comp (E.comp F)；CategoryTheory.Limits.colimit.pre (E.
+comp F) D；CategoryTheory.Limits.colimit.pre F E；D.comp E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
 -/
 theorem colimit.pre_pre [h : HasColimit (D ⋙ E ⋙ F)] :
     haveI : HasColimit ((D ⋙ E) ⋙ F) := h
     colimit.pre (E ⋙ F) D ≫ colimit.pre F E = colimit.pre F (D ⋙ E) := by
   ext j
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_pre]
+  rw [← assoc, colimit.ι_pre, colimit.ι_pre]
   have : HasColimit ((D ⋙ E) ⋙ F) := h
   exact (colimit.ι_pre F (D ⋙ E) j).symm
 
 variable {E F}
 
 /--
-theorem `colimit.pre_eq` / 定理 `colimit.pre_eq`
+If we have particular colimit cocones available for `E ⋙ F` and for `F`,
+we obtain a formula for `colimit.pre F E`.
+-/
+/-
+**CategoryTheory.Limits.colimit.pre_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {F : CategoryTheory.Functor J C}   [inst_3 : CategoryTh
+eory.Limits.HasColimit F] {E : CategoryTheory.Functor K J}   [inst_4 : CategoryT
+heory.Limits.HasColimit (E.comp F)] (s : CategoryTheory.Limits.ColimitCocone (E.
+comp F))   (t : CategoryTheory.Limits.ColimitCocone F),   CategoryTheory.Limits.
+colimit.pre F E =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.
+colimit.isoColimitCocone s).hom       (CategoryTheory.CategoryStruct.comp (s.isC
+olimit.desc (CategoryTheory.Limits.Cocone.whisker E t.cocone))         (Category
+Theory.Limits.colimit.isoColimitCocone t).inv)
+参数：E.comp F；s : CategoryTheory.Limits.ColimitCocone (E.comp F)；t : CategoryTheor
+y.Limits.ColimitCocone F；CategoryTheory.Limits.colimit.isoColimitCocone s；Catego
+ryTheory.CategoryStruct.comp (s.isColimit.desc (CategoryTheory.Limits.Cocone.whi
+sker E t.cocone))         (CategoryTheory.Limits.colimit.isoColimitCocone t).inv
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.colimit.isoColimitCocone_ι_hom_assoc`：∀ {J : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryT
+heory.Category.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac_assoc`：∀ {J : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{
+v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.colimit.isoColimitCocone_ι_inv`：∀ {J : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.
+Category.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem colimit.pre_eq
-  given: (s : ColimitCocone (E ⋙ F)) (t : ColimitCocone F)
-  proof: by
-  cat_disch
-
-中文:
-定理 colimit.pre_eq
-  条件: (s : 余极限余锥 (E ⋙ F)) (t : 余极限余锥 F)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+If we have particular colimit cocones available for `E ⋙ F` and for `F`,
+we obtain a formula for `colimit.pre F E`.
 -/
 theorem colimit.pre_eq (s : ColimitCocone (E ⋙ F)) (t : ColimitCocone F) :
     colimit.pre F E =
@@ -2695,109 +2479,113 @@ variable {D : Type u'} [Category.{v'} D]
 variable (F)
 variable [HasColimit F] (G : C ⥤ D) [HasColimit (F ⋙ G)]
 
-/--
-Definition of `colimit.post` / `colimit.post` 的定义
+/-- The canonical morphism from `G` applied to the colimit of `F ⋙ G`
+to `G` applied to the colimit of `F`.
+-/
+/-
+**CategoryTheory.Limits.colimit.post** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.colimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         (F : Catego
+ryTheory.Functor J C) →           {D : Type u'} →             [inst_2 : Category
+Theory.Category.{v', u'} D] →               [inst_3 : CategoryTheory.Limits.HasC
+olimit F] →                 (G : CategoryTheory.Functor C D) →                  
+ [inst_4 : CategoryTheory.Limits.HasColimit (F.comp G)] →                     Ca
+tegoryTheory.Limits.colimit (F.comp G) ⟶ G.obj (CategoryTheory.Limits.colimit F)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；F.comp
+ G；CategoryTheory.Limits.colimit F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit.post
-  signature: : colimit (F ⋙ G) ⟶ G.obj (colimit F)
-  body: colimit.desc (F ⋙ G) (G.mapCocone (colimit.cocone F))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 colimit.post
-  签名: : colimit (F ⋙ G) ⟶ G.obj (colimit F)
-  定义体: colimit.desc (F ⋙ G) (G.mapCocone (colimit.cocone F))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: G.mapCocone, cocone, colimit, colimit.cocone, colimit.desc, mapCocone
+--- 原说明 ---
+The canonical morphism from `G` applied to the colimit of `F ⋙ G`
+to `G` applied to the colimit of `F`.
 -/
 def colimit.post : colimit (F ⋙ G) ⟶ G.obj (colimit F) :=
   colimit.desc (F ⋙ G) (G.mapCocone (colimit.cocone F))
 
 @[reassoc (attr := simp)]
-/--
-theorem `colimit.ι_post` / 定理 `colimit.ι_post`
-
-English:
-theorem colimit.ι_post
-  given: (j : J)
-  proof: by
-  simp [colimit.post]
-
-@[simp]
-
-中文:
-定理 colimit.ι_post
-  条件: (j : J)
-  证明: by
-  simp [colimit.post]
-
-@[simp]
-
-Depends on / 依赖: colimit, colimit.post
+/-
+**CategoryTheory.Limits.colimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit.ι_post (j : J) :
     colimit.ι (F ⋙ G) j ≫ colimit.post F G = G.map (colimit.ι F j) := by
   simp [colimit.post]
 
 @[simp]
-/--
-theorem `colimit.post_desc` / 定理 `colimit.post_desc`
-
-English:
-theorem colimit.post_desc
-  given: (c : Cocone F)
-  proof: by
-  ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_desc]; rw [colimit.ι_desc]
-  rfl
-
-@[simp]
-
-中文:
-定理 colimit.post_desc
-  条件: (c : 余锥 F)
-  证明: by
-  ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_desc]; rw [colimit.ι_desc]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: G.map_comp, colimit, map_comp
+/-
+**CategoryTheory.Limits.colimit.post_desc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor J C) {D
+ : Type u'} [inst_2 : CategoryTheory.Category.{v', u'} D]   [inst_3 : CategoryTh
+eory.Limits.HasColimit F] (G : CategoryTheory.Functor C D)   [inst_4 : CategoryT
+heory.Limits.HasColimit (F.comp G)] (c : CategoryTheory.Limits.Cocone F),   Cate
+goryTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit.post F G)       (G
+.map (CategoryTheory.Limits.colimit.desc F c)) =     CategoryTheory.Limits.colim
+it.desc (F.comp G) (G.mapCocone c)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；c : Ca
+tegoryTheory.Limits.Cocone F；CategoryTheory.Limits.colimit.post F G；G.map (Categ
+oryTheory.Limits.colimit.desc F c)；F.comp G；G.mapCocone c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_post`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
 -/
 theorem colimit.post_desc (c : Cocone F) :
     colimit.post F G ≫ G.map (colimit.desc F c) = colimit.desc (F ⋙ G) (G.mapCocone c) := by
   ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_desc]; rw [colimit.ι_desc]
+  rw [← assoc, colimit.ι_post, ← G.map_comp, colimit.ι_desc, colimit.ι_desc]
   rfl
 
 @[simp]
-/--
-theorem `colimit.post_post` / 定理 `colimit.post_post`
-
-English:
-theorem colimit.post_post
-  statement: {E : Type u''} [Category.{v''} E] (H : D ⥤ E)
-  proof: h
-    colimit.post (F ⋙ G) H ≫ H.map (colimit.post F G) = colimit.post F (G ⋙ H) := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_post]
-  have : HasColimit (F ⋙ G ⋙ H) := h
-  exact (colimit.ι_post F (G ⋙ H) j).symm
-
-中文:
-定理 colimit.post_post
-  结论: {E : 类型u''} [范畴.{v''} E] (H : D ⥤ E)
-  证明: h
-    colimit.post (F ⋙ G) H ≫ H.map (colimit.post F G) = colimit.post F (G ⋙ H) := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_post]
-  have : HasColimit (F ⋙ G ⋙ H) := h
-  exact (colimit.ι_post F (G ⋙ H) j).symm
+/-
+**CategoryTheory.Limits.colimit.post_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor J C) {D
+ : Type u'} [inst_2 : CategoryTheory.Category.{v', u'} D]   [inst_3 : CategoryTh
+eory.Limits.HasColimit F] (G : CategoryTheory.Functor C D)   [inst_4 : CategoryT
+heory.Limits.HasColimit (F.comp G)] {E : Type u''} [inst_5 : CategoryTheory.Cate
+gory.{v'', u''} E]   (H : CategoryTheory.Functor D E) [h : CategoryTheory.Limits
+.HasColimit ((F.comp G).comp H)],   CategoryTheory.CategoryStruct.comp (Category
+Theory.Limits.colimit.post (F.comp G) H)       (H.map (CategoryTheory.Limits.col
+imit.post F G)) =     CategoryTheory.Limits.colimit.post F (G.comp H)
+参数：F : CategoryTheory.Functor J C；G : CategoryTheory.Functor C D；F.comp G；H : Ca
+tegoryTheory.Functor D E；(F.comp G).comp H；CategoryTheory.Limits.colimit.post (F
+.comp G) H；H.map (CategoryTheory.Limits.colimit.post F G)；G.comp H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_post`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem colimit.post_post {E : Type u''} [Category.{v''} E] (H : D ⥤ E)
     -- H G (colimit F) ⟶ H (colimit (F ⋙ G)) ⟶ colimit ((F ⋙ G) ⋙ H) equals
@@ -2805,36 +2593,49 @@ theorem colimit.post_post {E : Type u''} [Category.{v''} E] (H : D ⥤ E)
     [h : HasColimit ((F ⋙ G) ⋙ H)] : haveI : HasColimit (F ⋙ G ⋙ H) := h
     colimit.post (F ⋙ G) H ≫ H.map (colimit.post F G) = colimit.post F (G ⋙ H) := by
   ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_post]
+  rw [← assoc, colimit.ι_post, ← H.map_comp, colimit.ι_post]
   have : HasColimit (F ⋙ G ⋙ H) := h
   exact (colimit.ι_post F (G ⋙ H) j).symm
 
 end Post
 
-/--
-theorem `colimit.pre_post` / 定理 `colimit.pre_post`
-
-English:
-theorem colimit.pre_post
-  statement: {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
-  proof: h
-    colimit.post (E ⋙ F) G ≫ G.map (colimit.pre F E) =
-      colimit.pre (F ⋙ G) E ≫ colimit.post F G := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_pre]; rw [← assoc]
-  have : HasColimit (E ⋙ F ⋙ G) := h
-  erw [colimit.ι_pre (F ⋙ G) E j, colimit.ι_post]
-
-中文:
-定理 colimit.pre_post
-  结论: {D : 类型u'} [范畴.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
-  证明: h
-    colimit.post (E ⋙ F) G ≫ G.map (colimit.pre F E) =
-      colimit.pre (F ⋙ G) E ≫ colimit.post F G := by
-  ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_pre]; rw [← assoc]
-  have : HasColimit (E ⋙ F ⋙ G) := h
-  erw [colimit.ι_pre (F ⋙ G) E j, colimit.ι_post]
+/-
+**CategoryTheory.Limits.colimit.pre_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {D : Type u'} [inst_3 : CategoryTheory.Category.{v', u'
+} D]   (E : CategoryTheory.Functor K J) (F : CategoryTheory.Functor J C) (G : Ca
+tegoryTheory.Functor C D)   [inst_4 : CategoryTheory.Limits.HasColimit F] [inst_
+5 : CategoryTheory.Limits.HasColimit (E.comp F)]   [inst_6 : CategoryTheory.Limi
+ts.HasColimit (F.comp G)] [h : CategoryTheory.Limits.HasColimit ((E.comp F).comp
+ G)],   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit.post (
+E.comp F) G)       (G.map (CategoryTheory.Limits.colimit.pre F E)) =     Categor
+yTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit.pre (F.comp G) E)    
+   (CategoryTheory.Limits.colimit.post F G)
+参数：E : CategoryTheory.Functor K J；F : CategoryTheory.Functor J C；G : CategoryThe
+ory.Functor C D；E.comp F；F.comp G；(E.comp F).comp G；CategoryTheory.Limits.colimi
+t.post (E.comp F) G；G.map (CategoryTheory.Limits.colimit.pre F E)；CategoryTheory
+.Limits.colimit.pre (F.comp G) E；CategoryTheory.Limits.colimit.post F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_post`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
 -/
 theorem colimit.pre_post {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
     [HasColimit F] [HasColimit (E ⋙ F)] [HasColimit (F ⋙ G)] [h : HasColimit ((E ⋙ F) ⋙ G)] :
@@ -2844,95 +2645,71 @@ theorem colimit.pre_post {D : Type u'} [Category.{v'} D] (E : K ⥤ J) (F : J �
     colimit.post (E ⋙ F) G ≫ G.map (colimit.pre F E) =
       colimit.pre (F ⋙ G) E ≫ colimit.post F G := by
   ext j
-  rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_pre]; rw [← assoc]
+  rw [← assoc, colimit.ι_post, ← G.map_comp, colimit.ι_pre, ← assoc]
   have : HasColimit (E ⋙ F ⋙ G) := h
   erw [colimit.ι_pre (F ⋙ G) E j, colimit.ι_post]
 
 open CategoryTheory.Equivalence
-
-/--
-Instance `hasColimit_equivalence_comp` / 实例 `hasColimit_equivalence_comp`
-
-English:
-instance hasColimit_equivalence_comp
-  signature: (e : K ≌ J) [HasColimit F]
-  body: HasColimit.mk
-    { cocone := Cocone.whisker e.functor (colimit.cocone F)
-      isColimit := IsColimit.whiskerEquivalence (colimit.isColimit F) e }
-
-中文:
-实例 hasColimit_equivalence_comp
-  签名: (e : K ≌ J) [有余极限 F]
-  定义体: HasColimit.mk
-    { cocone := Cocone.whisker e.functor (colimit.cocone F)
-      isColimit := IsColimit.whiskerEquivalence (colimit.isColimit F) e }
-
-Depends on / 依赖: Cocone, Cocone.whisker, HasColimit, HasColimit.mk, IsColimit, IsColimit.whiskerEquivalence, cocone, colimit, colimit.cocone, colimit.isColimit, e.functor, functor, isColimit, whisker, whiskerEquivalence
+/-
+**CategoryTheory.Limits.hasColimit_equivalence_comp** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：hasColimit_equivalence_comp (e : K ≌ J) [HasColimit F] : HasColimit (e.fun
+ctor ⋙ F)
+参数：e : K ≌ J。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 -/
 instance hasColimit_equivalence_comp (e : K ≌ J) [HasColimit F] : HasColimit (e.functor ⋙ F) :=
   HasColimit.mk
     { cocone := Cocone.whisker e.functor (colimit.cocone F)
       isColimit := IsColimit.whiskerEquivalence (colimit.isColimit F) e }
 
-/--
-theorem `hasColimit_of_equivalence_comp` / 定理 `hasColimit_of_equivalence_comp`
+/-- If a `E ⋙ F` has a colimit, and `E` is an equivalence, we can construct a colimit of `F`.
+-/
+/-
+**CategoryTheory.Limits.hasColimit_of_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：hasColimit_of_equivalence_comp (e : K ≌ J) [HasColimit (e.functor ⋙ F)] : 
+HasColimit F
+参数：e : K ≌ J；e.functor ⋙ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_iso`：hasColimit_of_iso {F G : J ⥤ C}
+ [HasColimit F] (α : G ≅ F) : HasColimit G
 
-English:
-theorem hasColimit_of_equivalence_comp
-  given: (e : K ≌ J) [HasColimit (e.functor ⋙ F)]
-  statement: HasColimit F
-  proof: by
-  have : HasColimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasColimit_equivalence_comp e.symm
-  apply hasColimit_of_iso (e.invFunIdAssoc F).symm
-
-中文:
-定理 hasColimit_of_equivalence_comp
-  条件: (e : K ≌ J) [有余极限 (e.functor ⋙ F)]
-  结论: 有余极限 F
-  证明: by
-  have : HasColimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasColimit_equivalence_comp e.symm
-  apply hasColimit_of_iso (e.invFunIdAssoc F).symm
-
-Depends on / 依赖: HasColimit, Limits, Limits.hasColimit_equivalence_comp, e.functor, e.invFunIdAssoc, e.inverse, e.symm, functor, hasColimit_equivalence_comp, hasColimit_of_iso, invFunIdAssoc, inverse
+--- 原说明 ---
+If a `E ⋙ F` has a colimit, and `E` is an equivalence, we can construct a colimi
+t of `F`.
 -/
 theorem hasColimit_of_equivalence_comp (e : K ≌ J) [HasColimit (e.functor ⋙ F)] : HasColimit F := by
   have : HasColimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasColimit_equivalence_comp e.symm
   apply hasColimit_of_iso (e.invFunIdAssoc F).symm
-
-/--
-lemma `hasColimit_equivalence_comp_iff` / 引理 `hasColimit_equivalence_comp_iff`
-
-English:
-lemma hasColimit_equivalence_comp_iff
-  given: (e : K ≌ J)
-  statement: HasColimit (e.functor ⋙ F) ↔ HasColimit F
-  proof: ⟨fun _ => hasColimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-中文:
-引理 hasColimit_equivalence_comp_iff
-  条件: (e : K ≌ J)
-  结论: 有余极限 (e.functor ⋙ F) ↔ 有余极限 F
-  证明: ⟨fun _ => hasColimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-Depends on / 依赖: hasColimit_of_equivalence_comp
+/-
+**CategoryTheory.Limits.hasColimit_equivalence_comp_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：hasColimit_equivalence_comp_iff (e : K ≌ J) : HasColimit (e.functor ⋙ F) ↔
+ HasColimit F
+参数：e : K ≌ J。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_equivalence_comp`：hasColimit_of_equi
+valence_comp (e : K ≌ J) [HasColimit (e.functor ⋙ F)] : HasColimit F
 -/
 lemma hasColimit_equivalence_comp_iff (e : K ≌ J) : HasColimit (e.functor ⋙ F) ↔ HasColimit F :=
-  ⟨fun _ => hasColimit_of_equivalence_comp e, fun _ => inferInstance⟩
-
-/--
-lemma `hasColimit_inverse_equivalence_comp_iff` / 引理 `hasColimit_inverse_equivalence_comp_iff`
-
-English:
-lemma hasColimit_inverse_equivalence_comp_iff
-  given: (e : J ≌ K)
-  proof: hasColimit_equivalence_comp_iff e.symm
-
-中文:
-引理 hasColimit_inverse_equivalence_comp_iff
-  条件: (e : J ≌ K)
-  证明: hasColimit_equivalence_comp_iff e.symm
-
-Depends on / 依赖: e.symm, hasColimit_equivalence_comp_iff
+  ⟨fun _ ↦ hasColimit_of_equivalence_comp e, fun _ ↦ inferInstance⟩
+/-
+**CategoryTheory.Limits.hasColimit_inverse_equivalence_comp_iff** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimit_inverse_equivalence_comp_iff (e : J ≌ K) : HasColimit (e.invers
+e ⋙ F) ↔ HasColimit F
+参数：e : J ≌ K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasColimit_equivalence_comp_iff`：hasColimit_equiva
+lence_comp_iff (e : K ≌ J) : HasColimit (e.functor ⋙ F) ↔ HasColimit F
 -/
 lemma hasColimit_inverse_equivalence_comp_iff (e : J ≌ K) :
     HasColimit (e.inverse ⋙ F) ↔ HasColimit F :=
@@ -2946,22 +2723,17 @@ section
 
 /-- `colimit F` is functorial in `F`, when `C` has all colimits of shape `J`. -/
 @[simps, implicit_reducible]
-/--
-Definition of `colim` / `colim` 的定义
+/-
+**CategoryTheory.Limits.colim** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：colim : (J ⥤ C) ⥤ C where obj F
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition colim
-  signature: : (J ⥤ C) ⥤ C where
-  body: colimit F
-  map α := colimMap α
-
-中文:
-定义 colim
-  签名: : (J ⥤ C) ⥤ C where
-  定义体: colimit F
-  map α := colimMap α
-
-Depends on / 依赖: colimit
+--- 原说明 ---
+`colimit F` is functorial in `F`, when `C` has all colimits of shape `J`.
 -/
 def colim : (J ⥤ C) ⥤ C where
   obj F := colimit F
@@ -2969,20 +2741,13 @@ def colim : (J ⥤ C) ⥤ C where
 
 /-- The natural transformation induced by `colimit.ι`. -/
 @[simps]
-/--
-Definition of `colim.ι` / `colim.ι` 的定义
+/-
+**CategoryTheory.Limits.colim.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colim.ι
-  signature: (j : J)
-  body: colimit.ι F j
-
-中文:
-定义 colim.ι
-  签名: (j : J)
-  定义体: colimit.ι F j
-
-Depends on / 依赖: colimit
+--- 原说明 ---
+The natural transformation induced by `colimit.ι`.
 -/
 def colim.ι (j : J) : (evaluation J C).obj j ⟶ colim where
   app F := colimit.ι F j
@@ -2991,132 +2756,178 @@ end
 
 variable {G : J ⥤ C} (α : F ⟶ G)
 
-/--
-theorem `colimMap_eq` / 定理 `colimMap_eq`
-
-English:
-theorem colimMap_eq
-  statement: colimMap α = colim.map α
-  proof: rfl
-
-@[reassoc]
-
-中文:
-定理 colimMap_eq
-  结论: colimMap α = colim.map α
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.Limits.colimMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：colimMap_eq : colimMap α = colim.map α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem colimMap_eq : colimMap α = colim.map α := rfl
 
 @[reassoc]
-/--
-theorem `colimit.ι_map` / 定理 `colimit.ι_map`
-
-English:
-theorem colimit.ι_map
-  given: (j : J)
-  statement: colimit.ι F j ≫ colim.map α = α.app j ≫ colimit.ι G j
-  proof: by simp
-
-中文:
-定理 colimit.ι_map
-  条件: (j : J)
-  结论: colimit.ι F j ≫ colim.map α = α.app j ≫ colimit.ι G j
-  证明: by simp
+/-
+**CategoryTheory.Limits.colimit.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimit.ι_map (j : J) : colimit.ι F j ≫ colim.map α = α.app j ≫ colimit.ι G j := by simp
-
-/--
-theorem `colimit.pre_map` / 定理 `colimit.pre_map`
-
-English:
-theorem colimit.pre_map
-  given: [HasColimitsOfShape K C] (E : K ⥤ J)
-  proof: by
-  ext
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_map]; rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_pre]
-  rfl
-
-中文:
-定理 colimit.pre_map
-  条件: [有形状余极限 K C] (E : K ⥤ J)
-  证明: by
-  ext
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_map]; rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_pre]
-  rfl
-
-Depends on / 依赖: colimit
+/-
+**CategoryTheory.Limits.colimit.pre_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] {F : CategoryTheory.Functor J C}   [inst_3 : CategoryTh
+eory.Limits.HasColimitsOfShape J C] {G : CategoryTheory.Functor J C} (α : F ⟶ G)
+   [inst_4 : CategoryTheory.Limits.HasColimitsOfShape K C] (E : CategoryTheory.F
+unctor K J),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit
+.pre F E) (CategoryTheory.Limits.colim.map α) =     CategoryTheory.CategoryStruc
+t.comp (CategoryTheory.Limits.colim.map (E.whiskerLeft α))       (CategoryTheory
+.Limits.colimit.pre G E)
+参数：α : F ⟶ G；E : CategoryTheory.Functor K J；CategoryTheory.Limits.colimit.pre F 
+E；CategoryTheory.Limits.colim.map α；CategoryTheory.Limits.colim.map (E.whiskerLe
+ft α)；CategoryTheory.Limits.colimit.pre G E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_map`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 -/
 theorem colimit.pre_map [HasColimitsOfShape K C] (E : K ⥤ J) :
     colimit.pre F E ≫ colim.map α = colim.map (whiskerLeft E α) ≫ colimit.pre G E := by
   ext
-  rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_map]; rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_pre]
+  rw [← assoc, colimit.ι_pre, colimit.ι_map, ← assoc, colimit.ι_map, assoc, colimit.ι_pre]
   rfl
-
-/--
-theorem `colimit.pre_map'` / 定理 `colimit.pre_map'`
-
-English:
-theorem colimit.pre_map'
-  given: [HasColimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
-  proof: by
-  ext1
-  simp
-
-中文:
-定理 colimit.pre_map'
-  条件: [有形状余极限 K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
-  证明: by
-  ext1
-  simp
+/-
+**CategoryTheory.Limits.colimit.pre_map'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {K : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} K]   {C : Type u} [inst_2 : CategoryT
+heory.Category.{v, u} C] [inst_3 : CategoryTheory.Limits.HasColimitsOfShape J C]
+   [inst_4 : CategoryTheory.Limits.HasColimitsOfShape K C] (F : CategoryTheory.F
+unctor J C)   {E₁ E₂ : CategoryTheory.Functor K J} (α : E₁ ⟶ E₂),   CategoryTheo
+ry.Limits.colimit.pre F E₁ =     CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.Limits.colim.map (CategoryTheory.Functor.whiskerRight α F))       (CategoryT
+heory.Limits.colimit.pre F E₂)
+参数：F : CategoryTheory.Functor J C；α : E₁ ⟶ E₂；CategoryTheory.Limits.colim.map (C
+ategoryTheory.Functor.whiskerRight α F)；CategoryTheory.Limits.colimit.pre F E₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimit.w`：∀ {J : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   
+(F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem colimit.pre_map' [HasColimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂) :
     colimit.pre F E₁ = colim.map (whiskerRight α F) ≫ colimit.pre F E₂ := by
   ext1
   simp
-
-/--
-theorem `colimit.pre_id` / 定理 `colimit.pre_id`
-
-English:
-theorem colimit.pre_id
-  given: (F : J ⥤ C)
-  proof: by cat_disch
-
-中文:
-定理 colimit.pre_id
-  条件: (F : J ⥤ C)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Limits.colimit.pre_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   [inst_2 : CategoryTheory.Limits.Has
+ColimitsOfShape J C] (F : CategoryTheory.Functor J C),   CategoryTheory.Limits.c
+olimit.pre F (CategoryTheory.Functor.id J) = CategoryTheory.Limits.colim.map F.l
+eftUnitor.hom
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Functor.id J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem colimit.pre_id (F : J ⥤ C) :
     colimit.pre F (𝟭 _) = colim.map (Functor.leftUnitor F).hom := by cat_disch
-
-/--
-theorem `colimit.map_post` / 定理 `colimit.map_post`
-
-English:
-theorem colimit.map_post
-  statement: {D : Type u'} [Category.{v'} D] [HasColimitsOfShape J D]
-  proof: by
-  ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_map]; rw [H.map_comp]
-  rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_post]
-  rfl
-
-中文:
-定理 colimit.map_post
-  结论: {D : 类型u'} [范畴.{v'} D] [有形状余极限 J D]
-  证明: by
-  ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_map]; rw [H.map_comp]
-  rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_post]
-  rfl
-
-Depends on / 依赖: H.map_comp, colimit, map_comp
+/-
+**CategoryTheory.Limits.colimit.map_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.colimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [
+inst_1 : CategoryTheory.Category.{v, u} C]   {F : CategoryTheory.Functor J C} [i
+nst_2 : CategoryTheory.Limits.HasColimitsOfShape J C]   {G : CategoryTheory.Func
+tor J C} (α : F ⟶ G) {D : Type u'} [inst_3 : CategoryTheory.Category.{v', u'} D]
+   [inst_4 : CategoryTheory.Limits.HasColimitsOfShape J D] (H : CategoryTheory.F
+unctor C D),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.colimit
+.post F H)       (H.map (CategoryTheory.Limits.colim.map α)) =     CategoryTheor
+y.CategoryStruct.comp (CategoryTheory.Limits.colim.map (CategoryTheory.Functor.w
+hiskerRight α H))       (CategoryTheory.Limits.colimit.post G H)
+参数：α : F ⟶ G；H : CategoryTheory.Functor C D；CategoryTheory.Limits.colimit.post F
+ H；H.map (CategoryTheory.Limits.colim.map α)；CategoryTheory.Limits.colim.map (Ca
+tegoryTheory.Functor.whiskerRight α H)；CategoryTheory.Limits.colimit.post G H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_post`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_map`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 -/
 theorem colimit.map_post {D : Type u'} [Category.{v'} D] [HasColimitsOfShape J D]
     (H : C ⥤ D) :
@@ -3125,64 +2936,52 @@ theorem colimit.map_post {D : Type u'} [Category.{v'} D] [HasColimitsOfShape J D
     colimit.post F H ≫ H.map (colim.map α) =
       colim.map (whiskerRight α H) ≫ colimit.post G H := by
   ext
-  rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_map]; rw [H.map_comp]
-  rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_post]
+  rw [← assoc, colimit.ι_post, ← H.map_comp, colimit.ι_map, H.map_comp]
+  rw [← assoc, colimit.ι_map, assoc, colimit.ι_post]
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `colimCoyoneda` / `colimCoyoneda` 的定义
+/-- The isomorphism between
+morphisms from the cone point of the colimit cocone for `F` to `W`
+and cocones over `F` with cone point `W`
+is natural in `F`.
+-/
+/-
+**CategoryTheory.Limits.colimCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：colimCoyoneda : colim.op ⋙ coyoneda ⋙ (whiskeringRight _ _ _).obj uliftFun
+ctor.{u₁} ≅ CategoryTheory.cocones J C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimCoyoneda
-  signature: : colim.op ⋙ coyoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁}
-  body: NatIso.ofComponents fun F => NatIso.ofComponents fun W => colimit.homIso (unop F) W
-
-中文:
-定义 colimCoyoneda
-  签名: : colim.op ⋙ coyoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁}
-  定义体: NatIso.ofComponents fun F => NatIso.ofComponents fun W => colimit.homIso (unop F) W
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, colimit, colimit.homIso, homIso, ofComponents
+--- 原说明 ---
+The isomorphism between
+morphisms from the cone point of the colimit cocone for `F` to `W`
+and cocones over `F` with cone point `W`
+is natural in `F`.
 -/
 def colimCoyoneda : colim.op ⋙ coyoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁}
     ≅ CategoryTheory.cocones J C :=
   NatIso.ofComponents fun F => NatIso.ofComponents fun W => colimit.homIso (unop F) W
 
-/--
-Definition of `colimConstAdj` / `colimConstAdj` 的定义
+/-- The colimit functor and constant functor are adjoint to each other
+-/
+/-
+**CategoryTheory.Limits.colimConstAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：colimConstAdj : (colim : (J ⥤ C) ⥤ C) ⊣ const J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition colimConstAdj
-  signature: : (colim : (J ⥤ C) ⥤ C) ⊣ const J
-  body: Adjunction.mk' {
-  homEquiv := fun f c =>
-    { toFun := fun g =>
-        { app := fun _ => colimit.ι _ _ ≫ g }
-      invFun := fun g => colimit.desc _ ⟨_, g⟩
-      left_inv := by cat_disch
-      right_inv := by cat_disch }
-  unit := { app := fun g => { app := colimit.ι _ } }
-  counit := { app := fun _ => colimit.desc _ ⟨_, 𝟙 _⟩ } }
-
-中文:
-定义 colimConstAdj
-  签名: : (colim : (J ⥤ C) ⥤ C) ⊣ const J
-  定义体: Adjunction.mk' {
-  homEquiv := fun f c =>
-    { toFun := fun g =>
-        { app := fun _ => colimit.ι _ _ ≫ g }
-      invFun := fun g => colimit.desc _ ⟨_, g⟩
-      left_inv := by cat_disch
-      right_inv := by cat_disch }
-  unit := { app := fun g => { app := colimit.ι _ } }
-  counit := { app := fun _ => colimit.desc _ ⟨_, 𝟙 _⟩ } }
-
-Depends on / 依赖: Adjunction, Adjunction.mk
+--- 原说明 ---
+The colimit functor and constant functor are adjoint to each other
 -/
 def colimConstAdj : (colim : (J ⥤ C) ⥤ C) ⊣ const J := Adjunction.mk' {
-  homEquiv := fun f c =>
+  homEquiv := fun f c ↦
     { toFun := fun g =>
         { app := fun _ => colimit.ι _ _ ≫ g }
       invFun := fun g => colimit.desc _ ⟨_, g⟩
@@ -3190,88 +2989,81 @@ def colimConstAdj : (colim : (J ⥤ C) ⥤ C) ⊣ const J := Adjunction.mk' {
       right_inv := by cat_disch }
   unit := { app := fun g => { app := colimit.ι _ } }
   counit := { app := fun _ => colimit.desc _ ⟨_, 𝟙 _⟩ } }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLeftAdjoint (colim : (J ⥤ C) ⥤ C)
-  body: ⟨_, ⟨colimConstAdj⟩⟩
-
-中文:
-实例 :
-  签名: 是左伴随 (colim : (J ⥤ C) ⥤ C)
-  定义体: ⟨_, ⟨colimConstAdj⟩⟩
-
-Depends on / 依赖: colimConstAdj
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLeftAdjoint (colim : (J ⥤ C) ⥤ C) :=
   ⟨_, ⟨colimConstAdj⟩⟩
 
 end ColimFunctor
 
-/--
-Instance `colimMap_epi'` / 实例 `colimMap_epi'`
-
-English:
-instance colimMap_epi'
-  signature: {F G : J ⥤ C} [HasColimitsOfShape J C] (α : F ⟶ G) [Epi α]
-  body: (colim : (J ⥤ C) ⥤ C).map_epi α
-
-中文:
-实例 colimMap_epi'
-  签名: {F G : J ⥤ C} [有形状余极限 J C] (α : F ⟶ G) [满态射 α]
-  定义体: (colim : (J ⥤ C) ⥤ C).map_epi α
-
-Depends on / 依赖: map_epi
+/-
+**CategoryTheory.Limits.colimMap_epi'** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：colimMap_epi' {F G : J ⥤ C} [HasColimitsOfShape J C] (α : F ⟶ G) [Epi α] :
+ Epi (colimMap α)
+参数：α : F ⟶ G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.preservesEpimorphisms_of_isLeftAdjoint`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instIsLeftAdjointFunctorColim`：∀ {J : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.C
+ategory.{v, u} C]   [inst_2 : CategoryThe…
 -/
 instance colimMap_epi' {F G : J ⥤ C} [HasColimitsOfShape J C] (α : F ⟶ G) [Epi α] :
     Epi (colimMap α) :=
   (colim : (J ⥤ C) ⥤ C).map_epi α
-
-/--
-Instance `colimMap_epi` / 实例 `colimMap_epi`
-
-English:
-instance colimMap_epi
-  signature: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (α : F ⟶ G) [forall j, Epi (α.app j)]
-  body: ⟨fun {Z} u v h =>
-colimit.hom_ext fun j => (cancel_epi (α.app j)).1 by simpa using colimit.ι _ j ≫= h⟩
-
-中文:
-实例 colimMap_epi
-  签名: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (α : F ⟶ G) [对任意 j, 满态射 (α.app j)]
-  定义体: ⟨fun {Z} u v h =>
-colimit.hom_ext fun j => (cancel_epi (α.app j)).1 by simpa using colimit.ι _ j ≫= h⟩
-
-Depends on / 依赖: cancel_epi, colimit, colimit.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.colimMap_epi** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：colimMap_epi {F G : J ⥤ C} [HasColimit F] [HasColimit G] (α : F ⟶ G) [fora
+ll j, Epi (α.app j)] : Epi (colimMap α)
+参数：α : F ⟶ G；α.app j。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
 -/
-instance colimMap_epi {F G : J ⥤ C} [HasColimit F] [HasColimit G] (α : F ⟶ G) [forall j, Epi (α.app j)] :
+instance colimMap_epi {F G : J ⥤ C} [HasColimit F] [HasColimit G] (α : F ⟶ G) [∀ j, Epi (α.app j)] :
     Epi (colimMap α) :=
   ⟨fun {Z} u v h =>
-colimit.hom_ext fun j => (cancel_epi (α.app j)).1 by simpa using colimit.ι _ j ≫= h⟩
+    colimit.hom_ext fun j => (cancel_epi (α.app j)).1 <| by simpa using colimit.ι _ j ≫= h⟩
 
-/--
-theorem `hasColimitsOfShape_of_equivalence` / 定理 `hasColimitsOfShape_of_equivalence`
+/-- We can transport colimits of shape `J` along an equivalence `J ≌ J'`.
+-/
+/-
+**CategoryTheory.Limits.hasColimitsOfShape_of_equivalence** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J
+ ≌ J') [HasColimitsOfShape J C] : HasColimitsOfShape J' C
+参数：e : J ≌ J'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_equivalence_comp`：hasColimit_of_equi
+valence_comp (e : K ≌ J) [HasColimit (e.functor ⋙ F)] : HasColimit F
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-theorem hasColimitsOfShape_of_equivalence
-  statement: {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J')
-  proof: by
-  constructor
-  intro F
-  apply hasColimit_of_equivalence_comp e
-
-中文:
-定理 hasColimitsOfShape_of_equivalence
-  结论: {J' : 类型u₂} [范畴.{v₂} J'] (e : J ≌ J')
-  证明: by
-  constructor
-  intro F
-  apply hasColimit_of_equivalence_comp e
-
-Depends on / 依赖: hasColimit_of_equivalence_comp
+--- 原说明 ---
+We can transport colimits of shape `J` along an equivalence `J ≌ J'`.
 -/
 theorem hasColimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J')
     [HasColimitsOfShape J C] : HasColimitsOfShape J' C := by
@@ -3280,25 +3072,24 @@ theorem hasColimitsOfShape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] 
   apply hasColimit_of_equivalence_comp e
 
 variable (C)
-
-/--
-lemma `HasColimitsOfShape.of_small` / 引理 `HasColimitsOfShape.of_small`
-
-English:
-lemma HasColimitsOfShape.of_small
-  proof: by
-  have := HasColimitsOfSize.has_colimits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
-  exact hasColimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-中文:
-引理 有形状余极限.of_small
-  证明: by
-  have := HasColimitsOfSize.has_colimits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
-  exact hasColimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-Depends on / 依赖: HasColimitsOfSize, HasColimitsOfSize.has_colimits_of_shape, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, hasColimitsOfShape_of_equivalence, has_colimits_of_shape, symm.trans
+/-
+**CategoryTheory.Limits.HasColimitsOfShape.of_small** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.HasColimitsOfShape`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasColimitsOfSize.{v₁, u₁, v, u} C]   (J : Type u₂) [inst_2 : CategoryTheo
+ry.Category.{v₂, u₂} J] [Small.{u₁, u₂} J]   [CategoryTheory.LocallySmall.{v₁, v
+₂, u₂} J], CategoryTheory.Limits.HasColimitsOfShape J C
+参数：C : Type u；J : Type u₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Shrink.instLocallySmallShrink`：∀ (C : Type u) [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : Small.{w', u} C]   [CategoryTheory.Loca
+llySmall.{w, v, u} C], CategoryThe…
+· 使用定理 `CategoryTheory.Limits.HasColimitsOfSize.has_colimits_of_shape`：∀ {C : Ty
+pe u} {inst : CategoryTheory.Category.{v, u} C}   [self : CategoryTheory.Limits.
+HasColimitsOfSize.{v₁, u₁, v, u} C] (J : Type u₁)  …
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
 -/
 lemma HasColimitsOfShape.of_small
     [HasColimitsOfSize.{v₁, u₁} C] (J : Type u₂) [Category.{v₂} J]
@@ -3307,23 +3098,26 @@ lemma HasColimitsOfShape.of_small
   have := HasColimitsOfSize.has_colimits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
   exact hasColimitsOfShape_of_equivalence
     ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
-
-/--
-lemma `HasColimitsOfShape.of_essentiallySmall` / 引理 `HasColimitsOfShape.of_essentiallySmall`
-
-English:
-lemma HasColimitsOfShape.of_essentiallySmall
-  proof: by
-  have := HasColimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
-  exact hasColimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
-
-中文:
-引理 有形状余极限.of_essentiallySmall
-  证明: by
-  have := HasColimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
-  exact hasColimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
-
-Depends on / 依赖: HasColimitsOfShape, HasColimitsOfShape.of_small, SmallModel, equivSmallModel, hasColimitsOfShape_of_equivalence, of_small
+/-
+**CategoryTheory.Limits.HasColimitsOfShape.of_essentiallySmall** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits.HasColimitsOfShape`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.L
+imits.HasColimitsOfSize.{v₁, u₁, v, u} C]   (J : Type u₂) [inst_2 : CategoryTheo
+ry.Category.{v₂, u₂} J] [CategoryTheory.EssentiallySmall.{u₁, v₂, u₂} J]   [Cate
+goryTheory.LocallySmall.{v₁, v₂, u₂} J], CategoryTheory.Limits.HasColimitsOfShap
+e J C
+参数：C : Type u；J : Type u₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimitsOfShape.of_small`：∀ (C : Type u) [inst 
+: CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimitsOfSize.{v₁
+, u₁, v, u} C]   (J : Type u₂) [inst_2 …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.instLocallySmallSmallModel`：∀ (C : Type u) [inst : Catego
+ryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.EssentiallySmall.{w, v, u} 
+C]   [CategoryTheory.LocallySma…
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
 -/
 lemma HasColimitsOfShape.of_essentiallySmall
     [HasColimitsOfSize.{v₁, u₁} C] (J : Type u₂) [Category.{v₂} J]
@@ -3332,46 +3126,57 @@ lemma HasColimitsOfShape.of_essentiallySmall
   have := HasColimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
   exact hasColimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
 
-/--
-theorem `hasColimitsOfSizeOfUnivLE` / 定理 `hasColimitsOfSizeOfUnivLE`
+/-- A category that has larger colimits also has smaller colimits. -/
+/-
+**CategoryTheory.Limits.hasColimitsOfSizeOfUnivLE** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：hasColimitsOfSizeOfUnivLE [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}] [HasColimits
+OfSize.{v₁, u₁} C] : HasColimitsOfSize.{v₂, u₂} C where has_colimits_of_shape J 
+{_}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-theorem hasColimitsOfSizeOfUnivLE
-  statement: [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
-  proof: hasColimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
-
-中文:
-定理 hasColimitsOfSizeOfUnivLE
-  结论: [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
-  证明: hasColimitsOfShape_of_equivalence
-    ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
-
-Depends on / 依赖: hasColimitsOfShape_of_equivalence
+--- 原说明 ---
+A category that has larger colimits also has smaller colimits.
 -/
 theorem hasColimitsOfSizeOfUnivLE [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}]
     [HasColimitsOfSize.{v₁, u₁} C] : HasColimitsOfSize.{v₂, u₂} C where
   has_colimits_of_shape J {_} := hasColimitsOfShape_of_equivalence
     ((ShrinkHoms.equivalence.{v₁} J).trans <| Shrink.equivalence _).symm
 
-/--
-theorem `hasColimitsOfSizeShrink` / 定理 `hasColimitsOfSizeShrink`
+/-- `hasColimitsOfSizeShrink.{v u} C` tries to obtain `HasColimitsOfSize.{v u} C`
+from some other `HasColimitsOfSize C`.
+-/
+/-
+**CategoryTheory.Limits.hasColimitsOfSizeShrink** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：hasColimitsOfSizeShrink [HasColimitsOfSize.{max v₁ v₂, max u₁ u₂} C] : Has
+ColimitsOfSize.{v₁, u₁} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfSizeOfUnivLE`：hasColimitsOfSizeOfUniv
+LE [UnivLE.{v₂, v₁}] [UnivLE.{u₂, u₁}] [HasColimitsOfSize.{v₁, u₁} C] : HasColim
+itsOfSize.{v₂, u₂} C where has_colimi…
 
-English:
-theorem hasColimitsOfSizeShrink
-  given: [HasColimitsOfSize.{max v₁ v₂, max u₁ u₂} C]
-  proof: hasColimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
-中文:
-定理 hasColimitsOfSizeShrink
-  条件: [有余limitsOfSize.{最大值 v₁ v₂, 最大值 u₁ u₂} C]
-  证明: hasColimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
-Depends on / 依赖: hasColimitsOfSizeOfUnivLE
+--- 原说明 ---
+`hasColimitsOfSizeShrink.{v u} C` tries to obtain `HasColimitsOfSize.{v u} C`
+from some other `HasColimitsOfSize C`.
 -/
 theorem hasColimitsOfSizeShrink [HasColimitsOfSize.{max v₁ v₂, max u₁ u₂} C] :
     HasColimitsOfSize.{v₁, u₁} C := hasColimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasSmallestColimitsOfHasColimits [HasColimits C] :
     HasColimitsOfSize.{0, 0} C :=
   hasColimitsOfSizeShrink.{0, 0} C
@@ -3381,38 +3186,19 @@ end Colimit
 section Opposite
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `IsLimit.op` / `IsLimit.op` 的定义
+/-- If `t : Cone F` is a limit cone, then `t.op : Cocone F.op` is a colimit cocone.
+-/
+/-
+**CategoryTheory.Limits.IsLimit.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.IsLimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           {t : CategoryTheory.Limits.Cone F} → CategoryT
+heory.Limits.IsLimit t → CategoryTheory.Limits.IsColimit t.op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLimit.op
-  signature: {t : Cone F} (P : IsLimit t)
-  body: (P.lift s.unop).op
-  fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.unop m.unop]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-中文:
-定义 是极限.op
-  签名: {t : 锥 F} (P : 是极限 t)
-  定义体: (P.lift s.unop).op
-  fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.unop m.unop]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-Depends on / 依赖: P.lift, s.unop
+--- 原说明 ---
+If `t : Cone F` is a limit cone, then `t.op : Cocone F.op` is a colimit cocone.
 -/
 def IsLimit.op {t : Cone F} (P : IsLimit t) : IsColimit t.op where
   desc s := (P.lift s.unop).op
@@ -3427,38 +3213,19 @@ def IsLimit.op {t : Cone F} (P : IsLimit t) : IsColimit t.op where
       rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `IsColimit.op` / `IsColimit.op` 的定义
+/-- If `t : Cocone F` is a colimit cocone, then `t.op : Cone F.op` is a limit cone.
+-/
+/-
+**CategoryTheory.Limits.IsColimit.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsColimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           {t : CategoryTheory.Limits.Cocone F} → Categor
+yTheory.Limits.IsColimit t → CategoryTheory.Limits.IsLimit t.op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsColimit.op
-  signature: {t : Cocone F} (P : IsColimit t)
-  body: (P.desc s.unop).op
-  fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.unop m.unop]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-中文:
-定义 是余极限.op
-  签名: {t : 余锥 F} (P : 是余极限 t)
-  定义体: (P.desc s.unop).op
-  fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.unop m.unop]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-Depends on / 依赖: P.desc, s.unop
+--- 原说明 ---
+If `t : Cocone F` is a colimit cocone, then `t.op : Cone F.op` is a limit cone.
 -/
 def IsColimit.op {t : Cocone F} (P : IsColimit t) : IsLimit t.op where
   lift s := (P.desc s.unop).op
@@ -3473,38 +3240,20 @@ def IsColimit.op {t : Cocone F} (P : IsColimit t) : IsLimit t.op where
       rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `IsLimit.unop` / `IsLimit.unop` 的定义
+/-- If `t : Cone F.op` is a limit cone, then `t.unop : Cocone F` is a colimit cocone.
+-/
+/-
+**CategoryTheory.Limits.IsLimit.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.IsLimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           {t : CategoryTheory.Limits.Cone F.op} →       
+      CategoryTheory.Limits.IsLimit t → CategoryTheory.Limits.IsColimit t.unop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLimit.unop
-  signature: {t : Cone F.op} (P : IsLimit t)
-  body: (P.lift s.op).unop
-  fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.op m.op]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-中文:
-定义 是极限.unop
-  签名: {t : 锥 F.op} (P : 是极限 t)
-  定义体: (P.lift s.op).unop
-  fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.op m.op]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-Depends on / 依赖: P.lift, s.op
+--- 原说明 ---
+If `t : Cone F.op` is a limit cone, then `t.unop : Cocone F` is a colimit cocone
+.
 -/
 def IsLimit.unop {t : Cone F.op} (P : IsLimit t) : IsColimit t.unop where
   desc s := (P.lift s.op).unop
@@ -3519,38 +3268,20 @@ def IsLimit.unop {t : Cone F.op} (P : IsLimit t) : IsColimit t.unop where
       rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `IsColimit.unop` / `IsColimit.unop` 的定义
+/-- If `t : Cocone F.op` is a colimit cocone, then `t.unop : Cone F` is a limit cone.
+-/
+/-
+**CategoryTheory.Limits.IsColimit.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsColimit`。
+形式化陈述：{J : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} J] →     {C : T
+ype u} →       [inst_1 : CategoryTheory.Category.{v, u} C] →         {F : Catego
+ryTheory.Functor J C} →           {t : CategoryTheory.Limits.Cocone F.op} →     
+        CategoryTheory.Limits.IsColimit t → CategoryTheory.Limits.IsLimit t.unop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsColimit.unop
-  signature: {t : Cocone F.op} (P : IsColimit t)
-  body: (P.desc s.op).unop
-  fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.op m.op]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-中文:
-定义 是余极限.unop
-  签名: {t : 余锥 F.op} (P : 是余极限 t)
-  定义体: (P.desc s.op).unop
-  fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
-  uniq s m w := by
-    dsimp
-    rw [← P.uniq s.op m.op]
-    · rfl
-    · dsimp
-      intro j
-      rw [← w]
-      rfl
-
-Depends on / 依赖: P.desc, s.op
+--- 原说明 ---
+If `t : Cocone F.op` is a colimit cocone, then `t.unop : Cone F` is a limit cone
+.
 -/
 def IsColimit.unop {t : Cocone F.op} (P : IsColimit t) : IsLimit t.unop where
   lift s := (P.desc s.op).unop
@@ -3564,110 +3295,99 @@ def IsColimit.unop {t : Cocone F.op} (P : IsColimit t) : IsLimit t.unop where
       rw [← w]
       rfl
 
-/--
-Definition of `isLimitOfOp` / `isLimitOfOp` 的定义
+/-- If `t.op : Cocone F.op` is a colimit cocone, then `t : Cone F` is a limit cone. -/
+/-
+**CategoryTheory.Limits.isLimitOfOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：isLimitOfOp {t : Cone F} (P : IsColimit t.op) : IsLimit t
+参数：P : IsColimit t.op。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitOfOp
-  signature: {t : Cone F} (P : IsColimit t.op)
-  body: P.unop
-
-中文:
-定义 isLimitOfOp
-  签名: {t : 锥 F} (P : 是余极限 t.op)
-  定义体: P.unop
-
-Depends on / 依赖: P.unop
+--- 原说明 ---
+If `t.op : Cocone F.op` is a colimit cocone, then `t : Cone F` is a limit cone.
 -/
 def isLimitOfOp {t : Cone F} (P : IsColimit t.op) : IsLimit t :=
   P.unop
 
-/--
-Definition of `isColimitOfOp` / `isColimitOfOp` 的定义
+/-- If `t.op : Cone F.op` is a limit cone, then `t : Cocone F` is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.isColimitOfOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：isColimitOfOp {t : Cocone F} (P : IsLimit t.op) : IsColimit t
+参数：P : IsLimit t.op。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitOfOp
-  signature: {t : Cocone F} (P : IsLimit t.op)
-  body: P.unop
-
-中文:
-定义 isColimitOfOp
-  签名: {t : 余锥 F} (P : 是极限 t.op)
-  定义体: P.unop
-
-Depends on / 依赖: P.unop
+--- 原说明 ---
+If `t.op : Cone F.op` is a limit cone, then `t : Cocone F` is a colimit cocone.
 -/
 def isColimitOfOp {t : Cocone F} (P : IsLimit t.op) : IsColimit t :=
   P.unop
 
-/--
-Definition of `isLimitOfUnop` / `isLimitOfUnop` 的定义
+/-- If `t.unop : Cocone F` is a colimit cocone, then `t : Cone F.op` is a limit cone. -/
+/-
+**CategoryTheory.Limits.isLimitOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：isLimitOfUnop {t : Cone F.op} (P : IsColimit t.unop) : IsLimit t
+参数：P : IsColimit t.unop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitOfUnop
-  signature: {t : Cone F.op} (P : IsColimit t.unop)
-  body: P.op
-
-中文:
-定义 isLimitOfUnop
-  签名: {t : 锥 F.op} (P : 是余极限 t.unop)
-  定义体: P.op
-
-Depends on / 依赖: P.op
+--- 原说明 ---
+If `t.unop : Cocone F` is a colimit cocone, then `t : Cone F.op` is a limit cone
+.
 -/
 def isLimitOfUnop {t : Cone F.op} (P : IsColimit t.unop) : IsLimit t :=
   P.op
 
-/--
-Definition of `isColimitOfUnop` / `isColimitOfUnop` 的定义
+/-- If `t.unop : Cone F` is a limit cone, then `t : Cocone F.op` is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.isColimitOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：isColimitOfUnop {t : Cocone F.op} (P : IsLimit t.unop) : IsColimit t
+参数：P : IsLimit t.unop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitOfUnop
-  signature: {t : Cocone F.op} (P : IsLimit t.unop)
-  body: P.op
-
-中文:
-定义 isColimitOfUnop
-  签名: {t : 余锥 F.op} (P : 是极限 t.unop)
-  定义体: P.op
-
-Depends on / 依赖: P.op
+--- 原说明 ---
+If `t.unop : Cone F` is a limit cone, then `t : Cocone F.op` is a colimit cocone
+.
 -/
 def isColimitOfUnop {t : Cocone F.op} (P : IsLimit t.unop) : IsColimit t :=
   P.op
 
-/--
-Definition of `isLimitEquivIsColimitOp` / `isLimitEquivIsColimitOp` 的定义
+/-- `t : Cone F` is a limit cone if and only if `t.op : Cocone F.op` is a colimit cocone.
+-/
+/-
+**CategoryTheory.Limits.isLimitEquivIsColimitOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：isLimitEquivIsColimitOp {t : Cone F} : IsLimit t ≃ IsColimit t.op
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitEquivIsColimitOp
-  signature: {t : Cone F}
-  body: equivOfSubsingletonOfSubsingleton IsLimit.op isLimitOfOp
-
-中文:
-定义 isLimitEquivIsColimitOp
-  签名: {t : 锥 F}
-  定义体: equivOfSubsingletonOfSubsingleton IsLimit.op isLimitOfOp
-
-Depends on / 依赖: IsLimit, IsLimit.op, equivOfSubsingletonOfSubsingleton, isLimitOfOp
+--- 原说明 ---
+`t : Cone F` is a limit cone if and only if `t.op : Cocone F.op` is a colimit co
+cone.
 -/
 def isLimitEquivIsColimitOp {t : Cone F} : IsLimit t ≃ IsColimit t.op :=
   equivOfSubsingletonOfSubsingleton IsLimit.op isLimitOfOp
 
-/--
-Definition of `isColimitEquivIsLimitOp` / `isColimitEquivIsLimitOp` 的定义
+/-- `t : Cocone F` is a colimit cocone if and only if `t.op : Cone F.op` is a limit cone.
+-/
+/-
+**CategoryTheory.Limits.isColimitEquivIsLimitOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：isColimitEquivIsLimitOp {t : Cocone F} : IsColimit t ≃ IsLimit t.op
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.subsingleton`：∀ {J : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Categor
+y.{v₃, u₃} C]   {F : CategoryTheor…
 
-English:
-definition isColimitEquivIsLimitOp
-  signature: {t : Cocone F}
-  body: equivOfSubsingletonOfSubsingleton IsColimit.op isColimitOfOp
-
-中文:
-定义 isColimitEquivIsLimitOp
-  签名: {t : 余锥 F}
-  定义体: equivOfSubsingletonOfSubsingleton IsColimit.op isColimitOfOp
-
-Depends on / 依赖: IsColimit, IsColimit.op, equivOfSubsingletonOfSubsingleton, isColimitOfOp
+--- 原说明 ---
+`t : Cocone F` is a colimit cocone if and only if `t.op : Cone F.op` is a limit 
+cone.
 -/
 def isColimitEquivIsLimitOp {t : Cocone F} : IsColimit t ≃ IsLimit t.op :=
   equivOfSubsingletonOfSubsingleton IsColimit.op isColimitOfOp
@@ -3677,3 +3397,4 @@ end Opposite
 end Limits
 
 end CategoryTheory
+

@@ -34,43 +34,68 @@ section LinearOrder
 variable {α β : Type*} [LinearOrder α] [TopologicalSpace α] [OrderTopology α]
 variable [LinearOrder β] [TopologicalSpace β] [OrderTopology β]
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_right_of_exists_between` / 定理 `StrictMonoOn.continuousWithinAt_right_of_exists_between`
+/-- If `f` is a function strictly monotone on a right neighborhood of `a` and the
+image of this neighborhood under `f` meets every interval `(f a, b]`, `b > f a`, then `f` is
+continuous at `a` from the right.
 
-English:
-theorem StrictMonoOn.continuousWithinAt_right_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
-  refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
-  · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
-      ((h_mono.le_iff_le has hxs).2 hxa)
-  · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-    rw [h_mono.lt_iff_lt has hcs] at hac
-    filter_upwards [hs, Ico_mem_nhdsGE hac]
-    rintro x hx ⟨_, hxc⟩
-    exact ((h_mono.lt_iff_lt hx hcs).2 hxc).trans_le hcb
+The assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b` is required because otherwise the
+function `f : ℝ → ℝ` given by `f x = if x ≤ 0 then x else x + 1` would be a counter-example at
+`a = 0`. -/
+/-
+**StrictMonoOn.continuousWithinAt_right_of_exists_between** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_right_of_exists_between {f : α -> β} {s : 
+Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hfs : forall b >
+ f a, exists c in s, f c in Ioc (f a) b) : ContinuousWithinAt f (Ici a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[>=] a；hfs : forall b > f a, exists c in
+ s, f c in Ioc (f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_of_mem_nhdsWithin`：mem_of_mem_nhdsWithin {a : α} {s t : Set α} (ha :
+ a in s) (ht : t in 𝓝[s] a) : a in t
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tendsto_order`：tendsto_order [OrderTopology α] {f : β -> α} {a : α} {x :
+ Filter β} : Tendsto f x (𝓝 a) ↔ (forall a' < a, forallᶠ b in x, a' < f b) ∧ for
+all…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `StrictMonoOn.le_iff_le`：StrictMonoOn.le_iff_le (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a <= f b ↔ a <= b
+· 使用定理 `Ico_mem_nhdsGE`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Lin
+earOrder α] [ClosedIciTopology α] {a b : α},   b < a → Set.Ico b a ∈ nhdsWithin 
+b (S…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StrictMonoOn.lt_iff_lt`：StrictMonoOn.lt_iff_lt (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a < f b ↔ a < b
 
-中文:
-定理 StrictMonoOn.continuousWithinAt_right_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
-  refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
-  · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
-      ((h_mono.le_iff_le has hxs).2 hxa)
-  · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-    rw [h_mono.lt_iff_lt has hcs] at hac
-    filter_upwards [hs, Ico_mem_nhdsGE hac]
-    rintro x hx ⟨_, hxc⟩
-    exact ((h_mono.lt_iff_lt hx hcs).2 hxc).trans_le hcb
+--- 原说明 ---
+If `f` is a function strictly monotone on a right neighborhood of `a` and the
+image of this neighborhood under `f` meets every interval `(f a, b]`, `b > f a`,
+ then `f` is
+continuous at `a` from the right.
 
-Depends on / 依赖: Ico_mem_nhdsGE, filter_upwards, h_mono, h_mono.le_iff_le, h_mono.lt_iff_lt, hb.trans_le, le_iff_le, lt_iff_lt, mem_of_mem_nhdsWithin, self_mem_Ici, self_mem_nhdsWithin, tendsto_order, trans_le
+The assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b` is required because
+ otherwise the
+function `f : ℝ → ℝ` given by `f x = if x ≤ 0 then x else x + 1` would be a coun
+ter-example at
+`a = 0`.
 -/
-theorem StrictMonoOn.continuousWithinAt_right_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hfs : forall b > f a, exists c in s, f c in Ioc (f a) b) :
+theorem StrictMonoOn.continuousWithinAt_right_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≥] a) (hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b) :
     ContinuousWithinAt f (Ici a) a := by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
+  have has : a ∈ s := mem_of_mem_nhdsWithin self_mem_Ici hs
   refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       ((h_mono.le_iff_le has hxs).2 hxa)
@@ -80,82 +105,123 @@ theorem StrictMonoOn.continuousWithinAt_right_of_exists_between {f : α -> β} {
     rintro x hx ⟨_, hxc⟩
     exact ((h_mono.lt_iff_lt hx hcs).2 hxc).trans_le hcb
 
-/--
-theorem `continuousWithinAt_right_of_monotoneOn_of_exists_between` / 定理 `continuousWithinAt_right_of_monotoneOn_of_exists_between`
+/-- If `f` is a monotone function on a right neighborhood of `a` and the image of this neighborhood
+under `f` meets every interval `(f a, b)`, `b > f a`, then `f` is continuous at `a` from the right.
 
-English:
-theorem continuousWithinAt_right_of_monotoneOn_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
-  refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
-  · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
-      (h_mono has hxs hxa)
-  · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-have : a < c := not_le.1 fun h => hac.not_ge h_mono hcs has h
-    filter_upwards [hs, Ico_mem_nhdsGE this]
-    rintro x hx ⟨_, hxc⟩
-    exact (h_mono hx hcs hxc.le).trans_lt hcb
+The assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioo (f a) b` cannot be replaced by the weaker
+assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b` we use for strictly monotone functions
+because otherwise the function `ceil : ℝ → ℤ` would be a counter-example at `a = 0`. -/
+/-
+**continuousWithinAt_right_of_monotoneOn_of_exists_between** 是 Mathlib 中的一个定理，位于
+命名空间 ``。
+形式化陈述：continuousWithinAt_right_of_monotoneOn_of_exists_between {f : α -> β} {s :
+ Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[>=] a) (hfs : forall b > 
+f a, exists c in s, f c in Ioo (f a) b) : ContinuousWithinAt f (Ici a) a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝[>=] a；hfs : forall b > f a, exists c in s
+, f c in Ioo (f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_of_mem_nhdsWithin`：mem_of_mem_nhdsWithin {a : α} {s t : Set α} (ha :
+ a in s) (ht : t in 𝓝[s] a) : a in t
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tendsto_order`：tendsto_order [OrderTopology α] {f : β -> α} {a : α} {x :
+ Filter β} : Tendsto f x (𝓝 a) ↔ (forall a' < a, forallᶠ b in x, a' < f b) ∧ for
+all…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Ico_mem_nhdsGE`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Lin
+earOrder α] [ClosedIciTopology α] {a b : α},   b < a → Set.Ico b a ∈ nhdsWithin 
+b (S…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-中文:
-定理 continuousWithinAt_right_of_monotoneOn_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
-  refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
-  · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
-      (h_mono has hxs hxa)
-  · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-have : a < c := not_le.1 fun h => hac.not_ge h_mono hcs has h
-    filter_upwards [hs, Ico_mem_nhdsGE this]
-    rintro x hx ⟨_, hxc⟩
-    exact (h_mono hx hcs hxc.le).trans_lt hcb
+--- 原说明 ---
+If `f` is a monotone function on a right neighborhood of `a` and the image of th
+is neighborhood
+under `f` meets every interval `(f a, b)`, `b > f a`, then `f` is continuous at 
+`a` from the right.
 
-Depends on / 依赖: Ico_mem_nhdsGE, filter_upwards, h_mono, hac.not_ge, hb.trans_le, hxc.le, mem_of_mem_nhdsWithin, not_ge, not_le, self_mem_Ici, self_mem_nhdsWithin, tendsto_order, trans_le, trans_lt
+The assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioo (f a) b` cannot be replaced 
+by the weaker
+assumption `hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b` we use for strictly mon
+otone functions
+because otherwise the function `ceil : ℝ → ℤ` would be a counter-example at `a =
+ 0`.
 -/
-theorem continuousWithinAt_right_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (h_mono : MonotoneOn f s) (hs : s in 𝓝[>=] a) (hfs : forall b > f a, exists c in s, f c in Ioo (f a) b) :
+theorem continuousWithinAt_right_of_monotoneOn_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝[≥] a) (hfs : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioo (f a) b) :
     ContinuousWithinAt f (Ici a) a := by
-  have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
+  have has : a ∈ s := mem_of_mem_nhdsWithin self_mem_Ici hs
   refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       (h_mono has hxs hxa)
   · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-have : a < c := not_le.1 fun h => hac.not_ge h_mono hcs has h
+    have : a < c := not_le.1 fun h => hac.not_ge <| h_mono hcs has h
     filter_upwards [hs, Ico_mem_nhdsGE this]
     rintro x hx ⟨_, hxc⟩
     exact (h_mono hx hcs hxc.le).trans_lt hcb
 
-/--
-theorem `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin` / 定理 `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is monotone on a right neighborhood of `a` and
+the closure of the image of this neighborhood under `f` is a right neighborhood of `f a`, then `f`
+is continuous at `a` from the right. -/
+/-
+**continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin** 是 Mat
+hlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [De
+nselyOrdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs :
+ s in 𝓝[>=] a) (hfs : closure (f '' s) in 𝓝[>=] f a) : ContinuousWithinAt f (Ici
+ a) a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝[>=] a；hfs : closure (f '' s) in 𝓝[>=] f a
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_exists_between`：continuousWith
+inAt_right_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_m
+ono : MonotoneOn f s) (hs : s in 𝓝[>=] a) (hfs…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset`：mem_nhdsGE_iff_exists_mem_Ioc_
+Ico_subset {a u' : α} {s : Set α} (hu' : a < u') : s in 𝓝[>=] a ↔ exists u in Io
+c a u', Ico a u subseteq s
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `mem_closure_iff`：mem_closure_iff : x in closure s ↔ forall o, IsOpen o -
+> x in o -> (o inter s).Nonempty
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
 
-English:
-theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  statement: [DenselyOrdered β]
-  proof: by
-  refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
-  rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
-  rcases exists_between hab' with ⟨c', hc'⟩
-  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen_Ioo hc' with
-    ⟨_, hc, ⟨c, hcs, rfl⟩⟩
-  exact ⟨c, hcs, hc.1, hc.2.trans_le hbb'⟩
-
-中文:
-定理 continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  结论: [稠密序 β]
-  证明: by
-  refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
-  rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
-  rcases exists_between hab' with ⟨c', hc'⟩
-  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen_Ioo hc' with
-    ⟨_, hc, ⟨c, hcs, rfl⟩⟩
-  exact ⟨c, hcs, hc.1, hc.2.trans_le hbb'⟩
-
-Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_exists_between, exists_between, h_mono, isOpen_Ioo, mem_closure_iff, mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset, trans_le
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a right neighbo
+rhood of `a` and
+the closure of the image of this neighborhood under `f` is a right neighborhood 
+of `f a`, then `f`
+is continuous at `a` from the right.
 -/
 theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyOrdered β]
-    {f : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[>=] a)
-    (hfs : closure (f '' s) in 𝓝[>=] f a) : ContinuousWithinAt f (Ici a) a := by
+    {f : α → β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝[≥] a)
+    (hfs : closure (f '' s) ∈ 𝓝[≥] f a) : ContinuousWithinAt f (Ici a) a := by
   refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
   rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
   rcases exists_between hab' with ⟨c', hc'⟩
@@ -163,470 +229,661 @@ theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [
     ⟨_, hc, ⟨c, hcs, rfl⟩⟩
   exact ⟨c, hcs, hc.1, hc.2.trans_le hbb'⟩
 
-/--
-theorem `continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin` / 定理 `continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is monotone on a right neighborhood of `a` and
+the image of this neighborhood under `f` is a right neighborhood of `f a`, then `f` is continuous at
+`a` from the right. -/
+/-
+**continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin** 是 Mathlib 中的一
+个定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[
+>=] a) (hfs : f '' s in 𝓝[>=] f a) : ContinuousWithinAt f (Ici a) a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝[>=] a；hfs : f '' s in 𝓝[>=] f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin`：
+continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyO
+rdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : Monoton…
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin
-  statement: [DenselyOrdered β]
-  proof: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
-    mem_of_superset hfs subset_closure
-
-中文:
-定理 continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin
-  结论: [稠密序 β]
-  证明: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
-    mem_of_superset hfs subset_closure
-
-Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin, h_mono, mem_of_superset, subset_closure
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a right neighbo
+rhood of `a` and
+the image of this neighborhood under `f` is a right neighborhood of `f a`, then 
+`f` is continuous at
+`a` from the right.
 -/
 theorem continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin [DenselyOrdered β]
-    {f : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[>=] a)
-    (hfs : f '' s in 𝓝[>=] f a) : ContinuousWithinAt f (Ici a) a :=
-continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
+    {f : α → β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝[≥] a)
+    (hfs : f '' s ∈ 𝓝[≥] f a) : ContinuousWithinAt f (Ici a) a :=
+  continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs <|
     mem_of_superset hfs subset_closure
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin` / 定理 `StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a right neighborhood
+of `a` and the closure of the image of this neighborhood under `f` is a right neighborhood of `f a`,
+then `f` is continuous at `a` from the right. -/
+/-
+**StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin** 是 Math
+lib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin [Den
+selyOrdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs 
+: s in 𝓝[>=] a) (hfs : closure (f '' s) in 𝓝[>=] f a) : ContinuousWithinAt f (Ic
+i a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[>=] a；hfs : closure (f '' s) in 𝓝[>=] f
+ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin`：
+continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyO
+rdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : Monoton…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `StrictMonoOn.le_iff_le`：StrictMonoOn.le_iff_le (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a <= f b ↔ a <= b
 
-English:
-theorem StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-  statement: [DenselyOrdered β]
-  proof: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
-    (fun _ hx _ hy => (h_mono.le_iff_le hx hy).2) hs hfs
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-  结论: [稠密序 β]
-  证明: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
-    (fun _ hx _ hy => (h_mono.le_iff_le hx hy).2) hs hfs
-
-Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin, h_mono, h_mono.le_iff_le, le_iff_le
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a righ
+t neighborhood
+of `a` and the closure of the image of this neighborhood under `f` is a right ne
+ighborhood of `f a`,
+then `f` is continuous at `a` from the right.
 -/
 theorem StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin [DenselyOrdered β]
-    {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a)
-    (hfs : closure (f '' s) in 𝓝[>=] f a) : ContinuousWithinAt f (Ici a) a :=
+    {f : α → β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≥] a)
+    (hfs : closure (f '' s) ∈ 𝓝[≥] f a) : ContinuousWithinAt f (Ici a) a :=
   continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
     (fun _ hx _ hy => (h_mono.le_iff_le hx hy).2) hs hfs
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin` / 定理 `StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a right neighborhood
+of `a` and the image of this neighborhood under `f` is a right neighborhood of `f a`, then `f` is
+continuous at `a` from the right. -/
+/-
+**StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin** 是 Mathlib 中的一个
+定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin [DenselyOrde
+red β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝
+[>=] a) (hfs : f '' s in 𝓝[>=] f a) : ContinuousWithinAt f (Ici a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[>=] a；hfs : f '' s in 𝓝[>=] f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin`：S
+trictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMo…
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin
-  statement: [DenselyOrdered β] {f : α -> β}
-  proof: h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs
-    (mem_of_superset hfs subset_closure)
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin
-  结论: [稠密序 β] {f : α -> β}
-  证明: h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs
-    (mem_of_superset hfs subset_closure)
-
-Depends on / 依赖: continuousWithinAt_right_of_closure_image_mem_nhdsWithin, h_mono, h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin, mem_of_superset, subset_closure
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a righ
+t neighborhood
+of `a` and the image of this neighborhood under `f` is a right neighborhood of `
+f a`, then `f` is
+continuous at `a` from the right.
 -/
-theorem StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α -> β}
-    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hfs : f '' s in 𝓝[>=] f a) :
+theorem StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α → β}
+    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≥] a) (hfs : f '' s ∈ 𝓝[≥] f a) :
     ContinuousWithinAt f (Ici a) a :=
   h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs
     (mem_of_superset hfs subset_closure)
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_right_of_surjOn` / 定理 `StrictMonoOn.continuousWithinAt_right_of_surjOn`
+/-- If a function `f` is strictly monotone on a right neighborhood of `a` and the image of this
+neighborhood under `f` includes `Ioi (f a)`, then `f` is continuous at `a` from the right. -/
+/-
+**StrictMonoOn.continuousWithinAt_right_of_surjOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_right_of_surjOn {f : α -> β} {s : Set α} {
+a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hfs : SurjOn f s (Ioi (f
+ a))) : ContinuousWithinAt f (Ici a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[>=] a；hfs : SurjOn f s (Ioi (f a))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_exists_between`：StrictMonoOn.co
+ntinuousWithinAt_right_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_mon
+o : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hf…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 
-English:
-theorem StrictMonoOn.continuousWithinAt_right_of_surjOn
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: h_mono.continuousWithinAt_right_of_exists_between hs fun _ hb =>
-    let ⟨c, hcs, hcb⟩ := hfs hb
-    ⟨c, hcs, hcb.symm ▸ hb, hcb.le⟩
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_right_of_surjOn
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: h_mono.continuousWithinAt_right_of_exists_between hs fun _ hb =>
-    let ⟨c, hcs, hcb⟩ := hfs hb
-    ⟨c, hcs, hcb.symm ▸ hb, hcb.le⟩
-
-Depends on / 依赖: continuousWithinAt_right_of_exists_between, h_mono, h_mono.continuousWithinAt_right_of_exists_between, hcb.le, hcb.symm
+--- 原说明 ---
+If a function `f` is strictly monotone on a right neighborhood of `a` and the im
+age of this
+neighborhood under `f` includes `Ioi (f a)`, then `f` is continuous at `a` from 
+the right.
 -/
-theorem StrictMonoOn.continuousWithinAt_right_of_surjOn {f : α -> β} {s : Set α} {a : α}
-    (h_mono : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hfs : SurjOn f s (Ioi (f a))) :
+theorem StrictMonoOn.continuousWithinAt_right_of_surjOn {f : α → β} {s : Set α} {a : α}
+    (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≥] a) (hfs : SurjOn f s (Ioi (f a))) :
     ContinuousWithinAt f (Ici a) a :=
   h_mono.continuousWithinAt_right_of_exists_between hs fun _ hb =>
     let ⟨c, hcs, hcb⟩ := hfs hb
     ⟨c, hcs, hcb.symm ▸ hb, hcb.le⟩
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_left_of_exists_between` / 定理 `StrictMonoOn.continuousWithinAt_left_of_exists_between`
+/-- If `f` is a strictly monotone function on a left neighborhood of `a` and the image of this
+neighborhood under `f` meets every interval `[b, f a)`, `b < f a`, then `f` is continuous at `a`
+from the left.
 
-English:
-theorem StrictMonoOn.continuousWithinAt_left_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: h_mono.dual.continuousWithinAt_right_of_exists_between hs fun b hb =>
-    let ⟨c, hcs, hcb, hca⟩ := hfs b hb
-    ⟨c, hcs, hca, hcb⟩
+The assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a)` is required because otherwise the
+function `f : ℝ → ℝ` given by `f x = if x < 0 then x else x + 1` would be a counter-example at
+`a = 0`. -/
+/-
+**StrictMonoOn.continuousWithinAt_left_of_exists_between** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_left_of_exists_between {f : α -> β} {s : S
+et α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs : forall b < 
+f a, exists c in s, f c in Ico b (f a)) : ContinuousWithinAt f (Iic a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[<=] a；hfs : forall b < f a, exists c in
+ s, f c in Ico b (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_exists_between`：StrictMonoOn.co
+ntinuousWithinAt_right_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_mon
+o : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hf…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `StrictMonoOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst
+_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → StrictMonoOn (⇑Or
+derDual…
 
-中文:
-定理 StrictMonoOn.continuousWithinAt_left_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: h_mono.dual.continuousWithinAt_right_of_exists_between hs fun b hb =>
-    let ⟨c, hcs, hcb, hca⟩ := hfs b hb
-    ⟨c, hcs, hca, hcb⟩
+--- 原说明 ---
+If `f` is a strictly monotone function on a left neighborhood of `a` and the ima
+ge of this
+neighborhood under `f` meets every interval `[b, f a)`, `b < f a`, then `f` is c
+ontinuous at `a`
+from the left.
 
-Depends on / 依赖: continuousWithinAt_right_of_exists_between, h_mono, h_mono.dual.continuousWithinAt_right_of_exists_between
+The assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a)` is required because
+ otherwise the
+function `f : ℝ → ℝ` given by `f x = if x < 0 then x else x + 1` would be a coun
+ter-example at
+`a = 0`.
 -/
-theorem StrictMonoOn.continuousWithinAt_left_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs : forall b < f a, exists c in s, f c in Ico b (f a)) :
+theorem StrictMonoOn.continuousWithinAt_left_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≤] a) (hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a)) :
     ContinuousWithinAt f (Iic a) a :=
   h_mono.dual.continuousWithinAt_right_of_exists_between hs fun b hb =>
     let ⟨c, hcs, hcb, hca⟩ := hfs b hb
     ⟨c, hcs, hca, hcb⟩
 
-/--
-theorem `continuousWithinAt_left_of_monotoneOn_of_exists_between` / 定理 `continuousWithinAt_left_of_monotoneOn_of_exists_between`
+/-- If `f` is a monotone function on a left neighborhood of `a` and the image of this neighborhood
+under `f` meets every interval `(b, f a)`, `b < f a`, then `f` is continuous at `a` from the left.
 
-English:
-theorem continuousWithinAt_left_of_monotoneOn_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: @continuousWithinAt_right_of_monotoneOn_of_exists_between αᵒᵈ βᵒᵈ _ _ _ _ _ _ f s a hf.dual hs
-    fun b hb =>
-    let ⟨c, hcs, hcb, hca⟩ := hfs b hb
-    ⟨c, hcs, hca, hcb⟩
+The assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ioo b (f a)` cannot be replaced by the weaker
+assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a)` we use for strictly monotone functions
+because otherwise the function `floor : ℝ → ℤ` would be a counter-example at `a = 0`. -/
+/-
+**continuousWithinAt_left_of_monotoneOn_of_exists_between** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：continuousWithinAt_left_of_monotoneOn_of_exists_between {f : α -> β} {s : 
+Set α} {a : α} (hf : MonotoneOn f s) (hs : s in 𝓝[<=] a) (hfs : forall b < f a, 
+exists c in s, f c in Ioo b (f a)) : ContinuousWithinAt f (Iic a) a
+参数：hf : MonotoneOn f s；hs : s in 𝓝[<=] a；hfs : forall b < f a, exists c in s, f 
+c in Ioo b (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_exists_between`：continuousWith
+inAt_right_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_m
+ono : MonotoneOn f s) (hs : s in 𝓝[>=] a) (hfs…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `MonotoneOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β} {s : Set α},   MonotoneOn f s → MonotoneOn (⇑OrderDua
+l.toD…
 
-中文:
-定理 continuousWithinAt_left_of_monotoneOn_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: @continuousWithinAt_right_of_monotoneOn_of_exists_between αᵒᵈ βᵒᵈ _ _ _ _ _ _ f s a hf.dual hs
-    fun b hb =>
-    let ⟨c, hcs, hcb, hca⟩ := hfs b hb
-    ⟨c, hcs, hca, hcb⟩
+--- 原说明 ---
+If `f` is a monotone function on a left neighborhood of `a` and the image of thi
+s neighborhood
+under `f` meets every interval `(b, f a)`, `b < f a`, then `f` is continuous at 
+`a` from the left.
 
-Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_exists_between, hf.dual
+The assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ioo b (f a)` cannot be replaced 
+by the weaker
+assumption `hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a)` we use for strictly mon
+otone functions
+because otherwise the function `floor : ℝ → ℤ` would be a counter-example at `a 
+= 0`.
 -/
-theorem continuousWithinAt_left_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (hf : MonotoneOn f s) (hs : s in 𝓝[<=] a) (hfs : forall b < f a, exists c in s, f c in Ioo b (f a)) :
+theorem continuousWithinAt_left_of_monotoneOn_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (hf : MonotoneOn f s) (hs : s ∈ 𝓝[≤] a) (hfs : ∀ b < f a, ∃ c ∈ s, f c ∈ Ioo b (f a)) :
     ContinuousWithinAt f (Iic a) a :=
   @continuousWithinAt_right_of_monotoneOn_of_exists_between αᵒᵈ βᵒᵈ _ _ _ _ _ _ f s a hf.dual hs
     fun b hb =>
     let ⟨c, hcs, hcb, hca⟩ := hfs b hb
     ⟨c, hcs, hca, hcb⟩
 
-/--
-theorem `continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin` / 定理 `continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is monotone on a left neighborhood of `a` and
+the closure of the image of this neighborhood under `f` is a left neighborhood of `f a`, then `f` is
+continuous at `a` from the left -/
+/-
+**continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin** 是 Math
+lib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin [Den
+selyOrdered β] {f : α -> β} {s : Set α} {a : α} (hf : MonotoneOn f s) (hs : s in
+ 𝓝[<=] a) (hfs : closure (f '' s) in 𝓝[<=] f a) : ContinuousWithinAt f (Iic a) a
+参数：hf : MonotoneOn f s；hs : s in 𝓝[<=] a；hfs : closure (f '' s) in 𝓝[<=] f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin`：
+continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyO
+rdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : Monoton…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `MonotoneOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β} {s : Set α},   MonotoneOn f s → MonotoneOn (⇑OrderDua
+l.toD…
 
-English:
-theorem continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  statement: [DenselyOrdered β]
-  proof: @continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin αᵒᵈ βᵒᵈ _ _ _ _ _ _ _ f s
-    a hf.dual hs hfs
-
-中文:
-定理 continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  结论: [稠密序 β]
-  证明: @continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin αᵒᵈ βᵒᵈ _ _ _ _ _ _ _ f s
-    a hf.dual hs hfs
-
-Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin, hf.dual
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a left neighbor
+hood of `a` and
+the closure of the image of this neighborhood under `f` is a left neighborhood o
+f `f a`, then `f` is
+continuous at `a` from the left
 -/
 theorem continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyOrdered β]
-    {f : α -> β} {s : Set α} {a : α} (hf : MonotoneOn f s) (hs : s in 𝓝[<=] a)
-    (hfs : closure (f '' s) in 𝓝[<=] f a) : ContinuousWithinAt f (Iic a) a :=
+    {f : α → β} {s : Set α} {a : α} (hf : MonotoneOn f s) (hs : s ∈ 𝓝[≤] a)
+    (hfs : closure (f '' s) ∈ 𝓝[≤] f a) : ContinuousWithinAt f (Iic a) a :=
   @continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin αᵒᵈ βᵒᵈ _ _ _ _ _ _ _ f s
     a hf.dual hs hfs
 
-/--
-theorem `continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin` / 定理 `continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is monotone on a left neighborhood of `a` and
+the image of this neighborhood under `f` is a left neighborhood of `f a`, then `f` is continuous at
+`a` from the left. -/
+/-
+**continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin** 是 Mathlib 中的一个
+定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin [DenselyOrde
+red β] {f : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[<
+=] a) (hfs : f '' s in 𝓝[<=] f a) : ContinuousWithinAt f (Iic a) a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝[<=] a；hfs : f '' s in 𝓝[<=] f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin`：c
+ontinuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (hf : MonotoneOn f…
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin
-  statement: [DenselyOrdered β] {f : α -> β}
-  proof: continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
-    (mem_of_superset hfs subset_closure)
-
-中文:
-定理 continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin
-  结论: [稠密序 β] {f : α -> β}
-  证明: continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
-    (mem_of_superset hfs subset_closure)
-
-Depends on / 依赖: continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin, h_mono, mem_of_superset, subset_closure
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a left neighbor
+hood of `a` and
+the image of this neighborhood under `f` is a left neighborhood of `f a`, then `
+f` is continuous at
+`a` from the left.
 -/
-theorem continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α -> β}
-    {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝[<=] a) (hfs : f '' s in 𝓝[<=] f a) :
+theorem continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α → β}
+    {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝[≤] a) (hfs : f '' s ∈ 𝓝[≤] f a) :
     ContinuousWithinAt f (Iic a) a :=
   continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
     (mem_of_superset hfs subset_closure)
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin` / 定理 `StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a left neighborhood of
+`a` and the closure of the image of this neighborhood under `f` is a left neighborhood of `f a`,
+then `f` is continuous at `a` from the left. -/
+/-
+**StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin** 是 Mathl
+ib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin [Dens
+elyOrdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs :
+ s in 𝓝[<=] a) (hfs : closure (f '' s) in 𝓝[<=] f a) : ContinuousWithinAt f (Iic
+ a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[<=] a；hfs : closure (f '' s) in 𝓝[<=] f
+ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin`：S
+trictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMo…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `StrictMonoOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst
+_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → StrictMonoOn (⇑Or
+derDual…
 
-English:
-theorem StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin
-  statement: [DenselyOrdered β]
-  proof: h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs hfs
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin
-  结论: [稠密序 β]
-  证明: h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs hfs
-
-Depends on / 依赖: continuousWithinAt_right_of_closure_image_mem_nhdsWithin, h_mono, h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a left
+ neighborhood of
+`a` and the closure of the image of this neighborhood under `f` is a left neighb
+orhood of `f a`,
+then `f` is continuous at `a` from the left.
 -/
 theorem StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin [DenselyOrdered β]
-    {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a)
-    (hfs : closure (f '' s) in 𝓝[<=] f a) : ContinuousWithinAt f (Iic a) a :=
+    {f : α → β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≤] a)
+    (hfs : closure (f '' s) ∈ 𝓝[≤] f a) : ContinuousWithinAt f (Iic a) a :=
   h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs hfs
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin` / 定理 `StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a left neighborhood of
+`a` and the image of this neighborhood under `f` is a left neighborhood of `f a`, then `f` is
+continuous at `a` from the left. -/
+/-
+**StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin [DenselyOrder
+ed β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[
+<=] a) (hfs : f '' s in 𝓝[<=] f a) : ContinuousWithinAt f (Iic a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[<=] a；hfs : f '' s in 𝓝[<=] f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin`：StrictMon
+oOn.continuousWithinAt_right_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α -
+> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `StrictMonoOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst
+_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → StrictMonoOn (⇑Or
+derDual…
 
-English:
-theorem StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin
-  statement: [DenselyOrdered β] {f : α -> β}
-  proof: h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin hs hfs
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin
-  结论: [稠密序 β] {f : α -> β}
-  证明: h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin hs hfs
-
-Depends on / 依赖: continuousWithinAt_right_of_image_mem_nhdsWithin, h_mono, h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a left
+ neighborhood of
+`a` and the image of this neighborhood under `f` is a left neighborhood of `f a`
+, then `f` is
+continuous at `a` from the left.
 -/
-theorem StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α -> β}
-    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs : f '' s in 𝓝[<=] f a) :
+theorem StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin [DenselyOrdered β] {f : α → β}
+    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≤] a) (hfs : f '' s ∈ 𝓝[≤] f a) :
     ContinuousWithinAt f (Iic a) a :=
   h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin hs hfs
 
-/--
-theorem `StrictMonoOn.continuousWithinAt_left_of_surjOn` / 定理 `StrictMonoOn.continuousWithinAt_left_of_surjOn`
+/-- If a function `f` is strictly monotone on a left neighborhood of `a` and the image of this
+neighborhood under `f` includes `Iio (f a)`, then `f` is continuous at `a` from the left. -/
+/-
+**StrictMonoOn.continuousWithinAt_left_of_surjOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousWithinAt_left_of_surjOn {f : α -> β} {s : Set α} {a
+ : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs : SurjOn f s (Iio (f 
+a))) : ContinuousWithinAt f (Iic a) a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝[<=] a；hfs : SurjOn f s (Iio (f a))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_surjOn`：StrictMonoOn.continuous
+WithinAt_right_of_surjOn {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn
+ f s) (hs : s in 𝓝[>=] a) (hfs : Surj…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `StrictMonoOn.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst
+_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → StrictMonoOn (⇑Or
+derDual…
 
-English:
-theorem StrictMonoOn.continuousWithinAt_left_of_surjOn
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: h_mono.dual.continuousWithinAt_right_of_surjOn hs hfs
-
-中文:
-定理 StrictMonoOn.continuousWithinAt_left_of_surjOn
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: h_mono.dual.continuousWithinAt_right_of_surjOn hs hfs
-
-Depends on / 依赖: continuousWithinAt_right_of_surjOn, h_mono, h_mono.dual.continuousWithinAt_right_of_surjOn
+--- 原说明 ---
+If a function `f` is strictly monotone on a left neighborhood of `a` and the ima
+ge of this
+neighborhood under `f` includes `Iio (f a)`, then `f` is continuous at `a` from 
+the left.
 -/
-theorem StrictMonoOn.continuousWithinAt_left_of_surjOn {f : α -> β} {s : Set α} {a : α}
-    (h_mono : StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs : SurjOn f s (Iio (f a))) :
+theorem StrictMonoOn.continuousWithinAt_left_of_surjOn {f : α → β} {s : Set α} {a : α}
+    (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝[≤] a) (hfs : SurjOn f s (Iio (f a))) :
     ContinuousWithinAt f (Iic a) a :=
   h_mono.dual.continuousWithinAt_right_of_surjOn hs hfs
 
-/--
-theorem `StrictMonoOn.continuousAt_of_exists_between` / 定理 `StrictMonoOn.continuousAt_of_exists_between`
+/-- If a function `f` is strictly monotone on a neighborhood of `a` and the image of this
+neighborhood under `f` meets every interval `[b, f a)`, `b < f a`, and every interval
+`(f a, b]`, `b > f a`, then `f` is continuous at `a`. -/
+/-
+**StrictMonoOn.continuousAt_of_exists_between** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousAt_of_exists_between {f : α -> β} {s : Set α} {a : 
+α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a) (hfs_l : forall b < f a, exists c
+ in s, f c in Ico b (f a)) (hfs_r : forall b > f a, exists c in s, f c in Ioc (f
+ a) b) : ContinuousAt f a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝 a；hfs_l : forall b < f a, exists c in s
+, f c in Ico b (f a)；hfs_r : forall b > f a, exists c in s, f c in Ioc (f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousAt_iff_continuous_left_right`：continuousAt_iff_continuous_left
+_right {a : α} {f : α -> β} : ContinuousAt f a ↔ ContinuousWithinAt f (Iic a) a 
+∧ ContinuousWithinAt f (Ici …
+· 使用定理 `StrictMonoOn.continuousWithinAt_left_of_exists_between`：StrictMonoOn.con
+tinuousWithinAt_left_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_mono 
+: StrictMonoOn f s) (hs : s in 𝓝[<=] a) (hfs…
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_exists_between`：StrictMonoOn.co
+ntinuousWithinAt_right_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_mon
+o : StrictMonoOn f s) (hs : s in 𝓝[>=] a) (hf…
 
-English:
-theorem StrictMonoOn.continuousAt_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: continuousAt_iff_continuous_left_right.2
-    ⟨h_mono.continuousWithinAt_left_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_l,
-      h_mono.continuousWithinAt_right_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
-
-中文:
-定理 StrictMonoOn.continuousAt_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: continuousAt_iff_continuous_left_right.2
-    ⟨h_mono.continuousWithinAt_left_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_l,
-      h_mono.continuousWithinAt_right_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
-
-Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_exists_between, continuousWithinAt_right_of_exists_between, h_mono, h_mono.continuousWithinAt_left_of_exists_between, h_mono.continuousWithinAt_right_of_exists_between, hfs_l, hfs_r, mem_nhdsWithin_of_mem_nhds
+--- 原说明 ---
+If a function `f` is strictly monotone on a neighborhood of `a` and the image of
+ this
+neighborhood under `f` meets every interval `[b, f a)`, `b < f a`, and every int
+erval
+`(f a, b]`, `b > f a`, then `f` is continuous at `a`.
 -/
-theorem StrictMonoOn.continuousAt_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a) (hfs_l : forall b < f a, exists c in s, f c in Ico b (f a))
-    (hfs_r : forall b > f a, exists c in s, f c in Ioc (f a) b) : ContinuousAt f a :=
+theorem StrictMonoOn.continuousAt_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝 a) (hfs_l : ∀ b < f a, ∃ c ∈ s, f c ∈ Ico b (f a))
+    (hfs_r : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioc (f a) b) : ContinuousAt f a :=
   continuousAt_iff_continuous_left_right.2
     ⟨h_mono.continuousWithinAt_left_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_l,
       h_mono.continuousWithinAt_right_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
 
-/--
-theorem `StrictMonoOn.continuousAt_of_closure_image_mem_nhds` / 定理 `StrictMonoOn.continuousAt_of_closure_image_mem_nhds`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a neighborhood of `a`
+and the closure of the image of this neighborhood under `f` is a neighborhood of `f a`, then `f` is
+continuous at `a`. -/
+/-
+**StrictMonoOn.continuousAt_of_closure_image_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：StrictMonoOn.continuousAt_of_closure_image_mem_nhds [DenselyOrdered β] {f 
+: α -> β} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a) (hfs :
+ closure (f '' s) in 𝓝 (f a)) : ContinuousAt f a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝 a；hfs : closure (f '' s) in 𝓝 (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousAt_iff_continuous_left_right`：continuousAt_iff_continuous_left
+_right {a : α} {f : α -> β} : ContinuousAt f a ↔ ContinuousWithinAt f (Iic a) a 
+∧ ContinuousWithinAt f (Ici …
+· 使用定理 `StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin`：St
+rictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin [DenselyOrder
+ed β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMon…
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin`：S
+trictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (h_mono : StrictMo…
 
-English:
-theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds
-  statement: [DenselyOrdered β] {f : α -> β}
-  proof: continuousAt_iff_continuous_left_right.2
-    ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
-        (mem_nhdsWithin_of_mem_nhds hfs),
-      h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
-
-中文:
-定理 StrictMonoOn.continuousAt_of_closure_image_mem_nhds
-  结论: [稠密序 β] {f : α -> β}
-  证明: continuousAt_iff_continuous_left_right.2
-    ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
-        (mem_nhdsWithin_of_mem_nhds hfs),
-      h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
-
-Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_closure_image_mem_nhdsWithin, continuousWithinAt_right_of_closure_image_mem_nhdsWithin, h_mono, h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin, h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a neig
+hborhood of `a`
+and the closure of the image of this neighborhood under `f` is a neighborhood of
+ `f a`, then `f` is
+continuous at `a`.
 -/
-theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds [DenselyOrdered β] {f : α -> β}
-    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a)
-    (hfs : closure (f '' s) in 𝓝 (f a)) : ContinuousAt f a :=
+theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds [DenselyOrdered β] {f : α → β}
+    {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝 a)
+    (hfs : closure (f '' s) ∈ 𝓝 (f a)) : ContinuousAt f a :=
   continuousAt_iff_continuous_left_right.2
     ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
         (mem_nhdsWithin_of_mem_nhds hfs),
       h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
-/--
-theorem `StrictMonoOn.continuousAt_of_image_mem_nhds` / 定理 `StrictMonoOn.continuousAt_of_image_mem_nhds`
+/-- If a function `f` with a densely ordered codomain is strictly monotone on a neighborhood of `a`
+and the image of this set under `f` is a neighborhood of `f a`, then `f` is continuous at `a`. -/
+/-
+**StrictMonoOn.continuousAt_of_image_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.continuousAt_of_image_mem_nhds [DenselyOrdered β] {f : α -> β
+} {s : Set α} {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a) (hfs : f '' s 
+in 𝓝 (f a)) : ContinuousAt f a
+参数：h_mono : StrictMonoOn f s；hs : s in 𝓝 a；hfs : f '' s in 𝓝 (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.continuousAt_of_closure_image_mem_nhds`：StrictMonoOn.contin
+uousAt_of_closure_image_mem_nhds [DenselyOrdered β] {f : α -> β} {s : Set α} {a 
+: α} (h_mono : StrictMonoOn f s) (hs : s …
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem StrictMonoOn.continuousAt_of_image_mem_nhds
-  statement: [DenselyOrdered β] {f : α -> β} {s : Set α}
-  proof: h_mono.continuousAt_of_closure_image_mem_nhds hs (mem_of_superset hfs subset_closure)
-
-中文:
-定理 StrictMonoOn.continuousAt_of_image_mem_nhds
-  结论: [稠密序 β] {f : α -> β} {s : 集合 α}
-  证明: h_mono.continuousAt_of_closure_image_mem_nhds hs (mem_of_superset hfs subset_closure)
-
-Depends on / 依赖: continuousAt_of_closure_image_mem_nhds, h_mono, h_mono.continuousAt_of_closure_image_mem_nhds, mem_of_superset, subset_closure
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is strictly monotone on a neig
+hborhood of `a`
+and the image of this set under `f` is a neighborhood of `f a`, then `f` is cont
+inuous at `a`.
 -/
-theorem StrictMonoOn.continuousAt_of_image_mem_nhds [DenselyOrdered β] {f : α -> β} {s : Set α}
-    {a : α} (h_mono : StrictMonoOn f s) (hs : s in 𝓝 a) (hfs : f '' s in 𝓝 (f a)) :
+theorem StrictMonoOn.continuousAt_of_image_mem_nhds [DenselyOrdered β] {f : α → β} {s : Set α}
+    {a : α} (h_mono : StrictMonoOn f s) (hs : s ∈ 𝓝 a) (hfs : f '' s ∈ 𝓝 (f a)) :
     ContinuousAt f a :=
   h_mono.continuousAt_of_closure_image_mem_nhds hs (mem_of_superset hfs subset_closure)
 
-/--
-theorem `continuousAt_of_monotoneOn_of_exists_between` / 定理 `continuousAt_of_monotoneOn_of_exists_between`
+/-- If `f` is a monotone function on a neighborhood of `a` and the image of this neighborhood under
+`f` meets every interval `(b, f a)`, `b < f a`, and every interval `(f a, b)`, `b > f a`, then `f`
+is continuous at `a`. -/
+/-
+**continuousAt_of_monotoneOn_of_exists_between** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a :
+ α} (h_mono : MonotoneOn f s) (hs : s in 𝓝 a) (hfs_l : forall b < f a, exists c 
+in s, f c in Ioo b (f a)) (hfs_r : forall b > f a, exists c in s, f c in Ioo (f 
+a) b) : ContinuousAt f a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝 a；hfs_l : forall b < f a, exists c in s, 
+f c in Ioo b (f a)；hfs_r : forall b > f a, exists c in s, f c in Ioo (f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousAt_iff_continuous_left_right`：continuousAt_iff_continuous_left
+_right {a : α} {f : α -> β} : ContinuousAt f a ↔ ContinuousWithinAt f (Iic a) a 
+∧ ContinuousWithinAt f (Ici …
+· 使用定理 `continuousWithinAt_left_of_monotoneOn_of_exists_between`：continuousWithi
+nAt_left_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α} (hf : 
+MonotoneOn f s) (hs : s in 𝓝[<=] a) (hfs : fo…
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_exists_between`：continuousWith
+inAt_right_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α} (h_m
+ono : MonotoneOn f s) (hs : s in 𝓝[>=] a) (hfs…
 
-English:
-theorem continuousAt_of_monotoneOn_of_exists_between
-  statement: {f : α -> β} {s : Set α} {a : α}
-  proof: continuousAt_iff_continuous_left_right.2
-    ⟨continuousWithinAt_left_of_monotoneOn_of_exists_between h_mono (mem_nhdsWithin_of_mem_nhds hs)
-        hfs_l,
-      continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
-
-中文:
-定理 continuousAt_of_monotoneOn_of_存在_between
-  结论: {f : α -> β} {s : 集合 α} {a : α}
-  证明: continuousAt_iff_continuous_left_right.2
-    ⟨continuousWithinAt_left_of_monotoneOn_of_exists_between h_mono (mem_nhdsWithin_of_mem_nhds hs)
-        hfs_l,
-      continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
-
-Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_monotoneOn_of_exists_between, continuousWithinAt_right_of_monotoneOn_of_exists_between, h_mono, hfs_l, hfs_r, mem_nhdsWithin_of_mem_nhds
+--- 原说明 ---
+If `f` is a monotone function on a neighborhood of `a` and the image of this nei
+ghborhood under
+`f` meets every interval `(b, f a)`, `b < f a`, and every interval `(f a, b)`, `
+b > f a`, then `f`
+is continuous at `a`.
 -/
-theorem continuousAt_of_monotoneOn_of_exists_between {f : α -> β} {s : Set α} {a : α}
-    (h_mono : MonotoneOn f s) (hs : s in 𝓝 a) (hfs_l : forall b < f a, exists c in s, f c in Ioo b (f a))
-    (hfs_r : forall b > f a, exists c in s, f c in Ioo (f a) b) : ContinuousAt f a :=
+theorem continuousAt_of_monotoneOn_of_exists_between {f : α → β} {s : Set α} {a : α}
+    (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝 a) (hfs_l : ∀ b < f a, ∃ c ∈ s, f c ∈ Ioo b (f a))
+    (hfs_r : ∀ b > f a, ∃ c ∈ s, f c ∈ Ioo (f a) b) : ContinuousAt f a :=
   continuousAt_iff_continuous_left_right.2
     ⟨continuousWithinAt_left_of_monotoneOn_of_exists_between h_mono (mem_nhdsWithin_of_mem_nhds hs)
         hfs_l,
       continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono
         (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
 
-/--
-theorem `continuousAt_of_monotoneOn_of_closure_image_mem_nhds` / 定理 `continuousAt_of_monotoneOn_of_closure_image_mem_nhds`
+/-- If a function `f` with a densely ordered codomain is monotone on a neighborhood of `a` and the
+closure of the image of this neighborhood under `f` is a neighborhood of `f a`, then `f` is
+continuous at `a`. -/
+/-
+**continuousAt_of_monotoneOn_of_closure_image_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：continuousAt_of_monotoneOn_of_closure_image_mem_nhds [DenselyOrdered β] {f
+ : α -> β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝 a) (hfs : 
+closure (f '' s) in 𝓝 (f a)) : ContinuousAt f a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝 a；hfs : closure (f '' s) in 𝓝 (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousAt_iff_continuous_left_right`：continuousAt_iff_continuous_left
+_right {a : α} {f : α -> β} : ContinuousAt f a ↔ ContinuousWithinAt f (Iic a) a 
+∧ ContinuousWithinAt f (Ici …
+· 使用定理 `continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin`：c
+ontinuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyOrd
+ered β] {f : α -> β} {s : Set α} {a : α} (hf : MonotoneOn f…
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin`：
+continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin [DenselyO
+rdered β] {f : α -> β} {s : Set α} {a : α} (h_mono : Monoton…
 
-English:
-theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds
-  statement: [DenselyOrdered β] {f : α -> β}
-  proof: continuousAt_iff_continuous_left_right.2
-    ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
-      continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
-
-中文:
-定理 continuousAt_of_monotoneOn_of_closure_image_mem_nhds
-  结论: [稠密序 β] {f : α -> β}
-  证明: continuousAt_iff_continuous_left_right.2
-    ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
-      continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
-
-Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin, continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin, h_mono, mem_nhdsWithin_of_mem_nhds
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a neighborhood 
+of `a` and the
+closure of the image of this neighborhood under `f` is a neighborhood of `f a`, 
+then `f` is
+continuous at `a`.
 -/
-theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds [DenselyOrdered β] {f : α -> β}
-    {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝 a)
-    (hfs : closure (f '' s) in 𝓝 (f a)) : ContinuousAt f a :=
+theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds [DenselyOrdered β] {f : α → β}
+    {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝 a)
+    (hfs : closure (f '' s) ∈ 𝓝 (f a)) : ContinuousAt f a :=
   continuousAt_iff_continuous_left_right.2
     ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
       continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
-/--
-theorem `continuousAt_of_monotoneOn_of_image_mem_nhds` / 定理 `continuousAt_of_monotoneOn_of_image_mem_nhds`
+/-- If a function `f` with a densely ordered codomain is monotone on a neighborhood of `a` and the
+image of this neighborhood under `f` is a neighborhood of `f a`, then `f` is continuous at `a`. -/
+/-
+**continuousAt_of_monotoneOn_of_image_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_of_monotoneOn_of_image_mem_nhds [DenselyOrdered β] {f : α -> 
+β} {s : Set α} {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝 a) (hfs : f '' s i
+n 𝓝 (f a)) : ContinuousAt f a
+参数：h_mono : MonotoneOn f s；hs : s in 𝓝 a；hfs : f '' s in 𝓝 (f a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_of_monotoneOn_of_closure_image_mem_nhds`：continuousAt_of_mo
+notoneOn_of_closure_image_mem_nhds [DenselyOrdered β] {f : α -> β} {s : Set α} {
+a : α} (h_mono : MonotoneOn f s) (hs : s i…
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem continuousAt_of_monotoneOn_of_image_mem_nhds
-  statement: [DenselyOrdered β] {f : α -> β} {s : Set α}
-  proof: continuousAt_of_monotoneOn_of_closure_image_mem_nhds h_mono hs
-    (mem_of_superset hfs subset_closure)
-
-中文:
-定理 continuousAt_of_monotoneOn_of_image_mem_nhds
-  结论: [稠密序 β] {f : α -> β} {s : 集合 α}
-  证明: continuousAt_of_monotoneOn_of_closure_image_mem_nhds h_mono hs
-    (mem_of_superset hfs subset_closure)
-
-Depends on / 依赖: continuousAt_of_monotoneOn_of_closure_image_mem_nhds, h_mono, mem_of_superset, subset_closure
+--- 原说明 ---
+If a function `f` with a densely ordered codomain is monotone on a neighborhood 
+of `a` and the
+image of this neighborhood under `f` is a neighborhood of `f a`, then `f` is con
+tinuous at `a`.
 -/
-theorem continuousAt_of_monotoneOn_of_image_mem_nhds [DenselyOrdered β] {f : α -> β} {s : Set α}
-    {a : α} (h_mono : MonotoneOn f s) (hs : s in 𝓝 a) (hfs : f '' s in 𝓝 (f a)) : ContinuousAt f a :=
+theorem continuousAt_of_monotoneOn_of_image_mem_nhds [DenselyOrdered β] {f : α → β} {s : Set α}
+    {a : α} (h_mono : MonotoneOn f s) (hs : s ∈ 𝓝 a) (hfs : f '' s ∈ 𝓝 (f a)) : ContinuousAt f a :=
   continuousAt_of_monotoneOn_of_closure_image_mem_nhds h_mono hs
     (mem_of_superset hfs subset_closure)
 
-/--
-theorem `Monotone.continuous_of_denseRange` / 定理 `Monotone.continuous_of_denseRange`
+/-- A monotone function with densely ordered codomain and a dense range is continuous. -/
+/-
+**Monotone.continuous_of_denseRange** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.continuous_of_denseRange [DenselyOrdered β] {f : α -> β} (h_mono 
+: Monotone f) (h_dense : DenseRange f) : Continuous f
+参数：h_mono : Monotone f；h_dense : DenseRange f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_continuousAt`：continuous_iff_continuousAt : Continuous f 
+↔ forall x, ContinuousAt f x
+· 使用定理 `continuousAt_of_monotoneOn_of_closure_image_mem_nhds`：continuousAt_of_mo
+notoneOn_of_closure_image_mem_nhds [DenselyOrdered β] {f : α -> β} {s : Set α} {
+a : α} (h_mono : MonotoneOn f s) (hs : s i…
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Dense.closure_eq`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X}
+, Dense s → closure s = Set.univ
 
-English:
-theorem Monotone.continuous_of_denseRange
-  statement: [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
-  proof: continuous_iff_continuousAt.mpr fun a =>
-    continuousAt_of_monotoneOn_of_closure_image_mem_nhds (fun _ _ _ _ hxy => h_mono hxy)
-univ_mem
-      by simp only [image_univ, h_dense.closure_eq, univ_mem]
-
-中文:
-定理 递增.continuous_of_denseRange
-  结论: [稠密序 β] {f : α -> β} (h_mono : 递增 f)
-  证明: continuous_iff_continuousAt.mpr fun a =>
-    continuousAt_of_monotoneOn_of_closure_image_mem_nhds (fun _ _ _ _ hxy => h_mono hxy)
-univ_mem
-      by simp only [image_univ, h_dense.closure_eq, univ_mem]
-
-Depends on / 依赖: closure_eq, continuousAt_of_monotoneOn_of_closure_image_mem_nhds, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, h_dense, h_dense.closure_eq, h_mono, image_univ, univ_mem
+--- 原说明 ---
+A monotone function with densely ordered codomain and a dense range is continuou
+s.
 -/
-theorem Monotone.continuous_of_denseRange [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
+theorem Monotone.continuous_of_denseRange [DenselyOrdered β] {f : α → β} (h_mono : Monotone f)
     (h_dense : DenseRange f) : Continuous f :=
   continuous_iff_continuousAt.mpr fun a =>
     continuousAt_of_monotoneOn_of_closure_image_mem_nhds (fun _ _ _ _ hxy => h_mono hxy)
-univ_mem
+        univ_mem <|
       by simp only [image_univ, h_dense.closure_eq, univ_mem]
 
-/--
-theorem `Monotone.continuous_of_surjective` / 定理 `Monotone.continuous_of_surjective`
+/-- A monotone surjective function with a densely ordered codomain is continuous. -/
+/-
+**Monotone.continuous_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.continuous_of_surjective [DenselyOrdered β] {f : α -> β} (h_mono 
+: Monotone f) (h_surj : Function.Surjective f) : Continuous f
+参数：h_mono : Monotone f；h_surj : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.continuous_of_denseRange`：Monotone.continuous_of_denseRange [De
+nselyOrdered β] {f : α -> β} (h_mono : Monotone f) (h_dense : DenseRange f) : Co
+ntinuous f
+· 使用定理 `Function.Surjective.denseRange`：Function.Surjective.denseRange (hf : Fun
+ction.Surjective f) : DenseRange f
 
-English:
-theorem Monotone.continuous_of_surjective
-  statement: [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
-  proof: h_mono.continuous_of_denseRange h_surj.denseRange
-
-中文:
-定理 递增.continuous_of_surjective
-  结论: [稠密序 β] {f : α -> β} (h_mono : 递增 f)
-  证明: h_mono.continuous_of_denseRange h_surj.denseRange
-
-Depends on / 依赖: continuous_of_denseRange, denseRange, h_mono, h_mono.continuous_of_denseRange, h_surj, h_surj.denseRange
+--- 原说明 ---
+A monotone surjective function with a densely ordered codomain is continuous.
 -/
-theorem Monotone.continuous_of_surjective [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
+theorem Monotone.continuous_of_surjective [DenselyOrdered β] {f : α → β} (h_mono : Monotone f)
     (h_surj : Function.Surjective f) : Continuous f :=
   h_mono.continuous_of_denseRange h_surj.denseRange
 
@@ -645,119 +902,84 @@ namespace OrderIso
 variable {α β : Type*} [Preorder α] [Preorder β] [TopologicalSpace α] [TopologicalSpace β]
   [OrderTopology α] [OrderTopology β]
 
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (e : α ≃o β)
-  statement: Continuous e
-  proof: by
-  rw [‹OrderTopology β›.topology_eq_generate_intervals]; rw [continuous_generateFrom_iff]
-  rintro s ⟨a, rfl | rfl⟩
-  · rw [e.preimage_Ioi]
-    apply isOpen_lt'
-  · rw [e.preimage_Iio]
-    apply isOpen_gt'
-
-中文:
-定理 continuous
-  条件: (e : α ≃o β)
-  结论: 连续 e
-  证明: by
-  rw [‹OrderTopology β›.topology_eq_generate_intervals]; rw [continuous_generateFrom_iff]
-  rintro s ⟨a, rfl | rfl⟩
-  · rw [e.preimage_Ioi]
-    apply isOpen_lt'
-  · rw [e.preimage_Iio]
-    apply isOpen_gt'
+/-
+**OrderIso.continuous** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_1 : Preorder β] 
+[inst_2 : TopologicalSpace α]   [inst_3 : TopologicalSpace β] [OrderTopology α] 
+[OrderTopology β] (e : α ≃o β), Continuous ⇑e
+参数：e : α ≃o β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderTopology.topology_eq_generate_intervals`：∀ {α : Type u_1} {t : Topo
+logicalSpace α} {inst : Preorder α} [self : OrderTopology α], t = Preorder.topol
+ogy α
+· 使用引理 `continuous_generateFrom_iff`：continuous_generateFrom_iff {t : Topologica
+lSpace α} {b : Set (Set β)} : Continuous[t, generateFrom b] f ↔ forall s in b, I
+sOpen (f ⁻¹' s)
+· 使用定理 `OrderIso.preimage_Ioi`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder 
+α] [inst_1 : Preorder β] (e : α ≃o β) (b : β),   ⇑e ⁻¹' Set.Ioi b = Set.Ioi (e.s
+ymm b)
+· 使用定理 `isOpen_lt'`：isOpen_lt' [OrderTopology α] (a : α) : IsOpen { b : α | a < 
+b }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.preimage_Iio`：preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b =
+ Iio (e.symm b)
+· 使用定理 `isOpen_gt'`：∀ {α : Type u} [ts : TopologicalSpace α] [inst : Preorder α]
+ [OrderTopology α] (a : α), IsOpen {b | b < a}
 -/
 protected theorem continuous (e : α ≃o β) : Continuous e := by
-  rw [‹OrderTopology β›.topology_eq_generate_intervals]; rw [continuous_generateFrom_iff]
+  rw [‹OrderTopology β›.topology_eq_generate_intervals, continuous_generateFrom_iff]
   rintro s ⟨a, rfl | rfl⟩
   · rw [e.preimage_Ioi]
     apply isOpen_lt'
   · rw [e.preimage_Iio]
     apply isOpen_gt'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HomeomorphClass (α ≃o β) α β
-  body: OrderIso.continuous
-  inv_continuous e := e.symm.continuous
-
-中文:
-实例 :
-  签名: 同胚类 (α ≃o β) α β
-  定义体: OrderIso.continuous
-  inv_continuous e := e.symm.continuous
-
-Depends on / 依赖: OrderIso, OrderIso.continuous, continuous
+/-
+**OrderIso.** 是 Mathlib 中的一个实例，位于命名空间 `OrderIso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HomeomorphClass (α ≃o β) α β where
   map_continuous := OrderIso.continuous
   inv_continuous e := e.symm.continuous
 
-/--
-Definition of `toHomeomorph` / `toHomeomorph` 的定义
+/-- An order isomorphism between two linear order `OrderTopology` spaces is a homeomorphism. -/
+/-
+**OrderIso.toHomeomorph** 是 Mathlib 中的一个缩写定义，位于命名空间 `OrderIso`。
+形式化陈述：toHomeomorph (e : α ≃o β) : α ≃ₜ β
+参数：e : α ≃o β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.instHomeomorphClass`：∀ {α : Type u_1} {β : Type u_2} [inst : Pr
+eorder α] [inst_1 : Preorder β] [inst_2 : TopologicalSpace α]   [inst_3 : Topolo
+gicalSpace β] [Ord…
 
-English:
-abbreviation toHomeomorph
-  signature: (e : α ≃o β)
-  body: HomeomorphClass.toHomeomorph e
-
-中文:
-缩写 toHomeomorph
-  签名: (e : α ≃o β)
-  定义体: HomeomorphClass.toHomeomorph e
-
-Depends on / 依赖: HomeomorphClass, HomeomorphClass.toHomeomorph, toHomeomorph
+--- 原说明 ---
+An order isomorphism between two linear order `OrderTopology` spaces is a homeom
+orphism.
 -/
 abbrev toHomeomorph (e : α ≃o β) : α ≃ₜ β :=
   HomeomorphClass.toHomeomorph e
-
-/--
-theorem `coe_toHomeomorph` / 定理 `coe_toHomeomorph`
-
-English:
-theorem coe_toHomeomorph
-  given: (e : α ≃o β)
-  statement: ⇑e.toHomeomorph = e
-  proof: rfl --Simp can prove this too
-
-@[simp]
-
-中文:
-定理 coe_toHomeomorph
-  条件: (e : α ≃o β)
-  结论: ⇑e.toHomeomorph = e
-  证明: rfl --Simp can prove this too
-
-@[simp]
+/-
+**OrderIso.coe_toHomeomorph** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：coe_toHomeomorph (e : α ≃o β) : ⇑e.toHomeomorph = e
+参数：e : α ≃o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toHomeomorph (e : α ≃o β) : ⇑e.toHomeomorph = e :=
   rfl --Simp can prove this too
 
 @[simp]
-/--
-theorem `coe_toHomeomorph_symm` / 定理 `coe_toHomeomorph_symm`
-
-English:
-theorem coe_toHomeomorph_symm
-  given: (e : α ≃o β)
-  statement: ⇑e.toHomeomorph.symm = e.symm
-  proof: rfl
-
-中文:
-定理 coe_toHomeomorph_symm
-  条件: (e : α ≃o β)
-  结论: ⇑e.toHomeomorph.symm = e.symm
-  证明: rfl
+/-
+**OrderIso.coe_toHomeomorph_symm** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：coe_toHomeomorph_symm (e : α ≃o β) : ⇑e.toHomeomorph.symm = e.symm
+参数：e : α ≃o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toHomeomorph_symm (e : α ≃o β) : ⇑e.toHomeomorph.symm = e.symm :=
   rfl
 
 end OrderIso
+

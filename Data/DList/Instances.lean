@@ -25,67 +25,38 @@ namespace Batteries
 
 variable (α : Type*)
 
-/--
-Definition of `DList.listEquivDList` / `DList.listEquivDList` 的定义
+/-- The natural equivalence between lists and difference lists, using
+`DList.ofList` and `DList.toList`. -/
+/-
+**Batteries.DList.listEquivDList** 是 Mathlib 中的一个定义，位于命名空间 `Batteries.DList`。
+形式化陈述：(α : Type u_1) → List α ≃ Batteries.DList α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Batteries.DList.toList_ofList`：∀ {α : Type u_1} (l : List α), (Batteries
+.DList.ofList l).toList = l
+· 使用定理 `Batteries.DList.ofList_toList`：∀ {α : Type u_1} (l : Batteries.DList α),
+ Batteries.DList.ofList l.toList = l
 
-English:
-definition DList.listEquivDList
-  signature: : List α ≃ DList α where
-  body: DList.ofList
-  invFun := DList.toList
-  left_inv _ := DList.toList_ofList _
-  right_inv _ := DList.ofList_toList _
-
-中文:
-定义 DList.listEquivDList
-  签名: : 列表 α ≃ DList α where
-  定义体: DList.ofList
-  invFun := DList.toList
-  left_inv _ := DList.toList_ofList _
-  right_inv _ := DList.ofList_toList _
-
-Depends on / 依赖: DList.ofList, ofList
+--- 原说明 ---
+The natural equivalence between lists and difference lists, using
+`DList.ofList` and `DList.toList`.
 -/
 def DList.listEquivDList : List α ≃ DList α where
   toFun := DList.ofList
   invFun := DList.toList
   left_inv _ := DList.toList_ofList _
   right_inv _ := DList.ofList_toList _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Traversable DList
-  body: Equiv.traversable DList.listEquivDList
-
-中文:
-实例 :
-  签名: 可遍历 DList
-  定义体: Equiv.traversable DList.listEquivDList
-
-Depends on / 依赖: DList.listEquivDList, Equiv.traversable, listEquivDList, traversable
+/-
+**Batteries.** 是 Mathlib 中的一个实例，位于命名空间 `Batteries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Traversable DList :=
   Equiv.traversable DList.listEquivDList
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulTraversable DList
-  body: Equiv.isLawfulTraversable DList.listEquivDList
-
-中文:
-实例 :
-  签名: 合法可遍历 DList
-  定义体: Equiv.isLawfulTraversable DList.listEquivDList
-
-Depends on / 依赖: DList.listEquivDList, Equiv.isLawfulTraversable, isLawfulTraversable, listEquivDList
+/-
+**Batteries.** 是 Mathlib 中的一个实例，位于命名空间 `Batteries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulTraversable DList :=
   Equiv.isLawfulTraversable DList.listEquivDList
 
 end Batteries
+

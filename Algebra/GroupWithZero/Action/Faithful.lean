@@ -23,18 +23,17 @@ variable {α : Type*}
 
 /-- `Monoid.toMulAction` is faithful on nontrivial cancellative monoids with zero. -/
 @[nolint unusedArguments, deprecated "subsumed by `instFaithfulSMul`" (since := "2026-02-03")]
-/--
-lemma `IsRightCancelMulZero.faithfulSMul` / 引理 `IsRightCancelMulZero.faithfulSMul`
+/-
+**IsRightCancelMulZero.faithfulSMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRightCancelMulZero.faithfulSMul [MonoidWithZero α] [IsRightCancelMulZero
+ α] : FaithfulSMul α α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFaithfulSMul`：∀ (R : Type u_4) [inst : MulOneClass R], FaithfulSMul 
+R R
 
-English:
-lemma IsRightCancelMulZero.faithfulSMul
-  given: [MonoidWithZero α] [IsRightCancelMulZero α]
-  proof: inferInstance
-
-中文:
-引理 是右消去MulZero.faithfulSMul
-  条件: [带零幺半群 α] [是右消去MulZero α]
-  证明: inferInstance
+--- 原说明 ---
+`Monoid.toMulAction` is faithful on nontrivial cancellative monoids with zero.
 -/
 lemma IsRightCancelMulZero.faithfulSMul [MonoidWithZero α] [IsRightCancelMulZero α] :
     FaithfulSMul α α := inferInstance

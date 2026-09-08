@@ -25,37 +25,21 @@ conformal, groupoid
 @[expose] public section
 
 
-variable {X : Type*} [NormedAddCommGroup X] [NormedSpace Real X]
+variable {X : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X]
 
-/--
-Definition of `conformalPregroupoid` / `conformalPregroupoid` 的定义
+/-- The pregroupoid of conformal maps. -/
+/-
+**conformalPregroupoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conformalPregroupoid : Pregroupoid X where property f u
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `conformalAt_id`：conformalAt_id (x : X) : ConformalAt _root_.id x
 
-English:
-definition conformalPregroupoid
-  signature: : Pregroupoid X where
-  body: forall x, x in u -> ConformalAt f x
-  comp {f _} _ _ hf hg _ _ _ x hx := (hg (f x) hx.2).comp x (hf x hx.1)
-  id_mem x _ := conformalAt_id x
-  locality _ h x hx :=
-    let ⟨_, _, h₂, h₃⟩ := h x hx
-    h₃ x ⟨hx, h₂⟩
-  congr hu h hf x hx := (hf x hx).congr hx hu h
-
-中文:
-定义 conformalPregroupoid
-  签名: : Pregroupoid X where
-  定义体: forall x, x in u -> ConformalAt f x
-  comp {f _} _ _ hf hg _ _ _ x hx := (hg (f x) hx.2).comp x (hf x hx.1)
-  id_mem x _ := conformalAt_id x
-  locality _ h x hx :=
-    let ⟨_, _, h₂, h₃⟩ := h x hx
-    h₃ x ⟨hx, h₂⟩
-  congr hu h hf x hx := (hf x hx).congr hx hu h
-
-Depends on / 依赖: ConformalAt
+--- 原说明 ---
+The pregroupoid of conformal maps.
 -/
 def conformalPregroupoid : Pregroupoid X where
-  property f u := forall x, x in u -> ConformalAt f x
+  property f u := ∀ x, x ∈ u → ConformalAt f x
   comp {f _} _ _ hf hg _ _ _ x hx := (hg (f x) hx.2).comp x (hf x hx.1)
   id_mem x _ := conformalAt_id x
   locality _ h x hx :=
@@ -63,20 +47,15 @@ def conformalPregroupoid : Pregroupoid X where
     h₃ x ⟨hx, h₂⟩
   congr hu h hf x hx := (hf x hx).congr hx hu h
 
-/--
-Definition of `conformalGroupoid` / `conformalGroupoid` 的定义
+/-- The groupoid of conformal maps. -/
+/-
+**conformalGroupoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conformalGroupoid : StructureGroupoid X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conformalGroupoid
-  signature: : StructureGroupoid X
-  body: conformalPregroupoid.groupoid
-
-中文:
-定义 conformalGroupoid
-  签名: : StructureGroupoid X
-  定义体: conformalPregroupoid.groupoid
-
-Depends on / 依赖: conformalPregroupoid, conformalPregroupoid.groupoid, groupoid
+--- 原说明 ---
+The groupoid of conformal maps.
 -/
 def conformalGroupoid : StructureGroupoid X :=
   conformalPregroupoid.groupoid

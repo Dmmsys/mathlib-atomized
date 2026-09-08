@@ -81,139 +81,125 @@ namespace MorphismProperty
 
 variable {C : Type u} [Category.{v} C] (I : MorphismProperty C)
 
-/--
-Definition of `HasSmallObjectArgument` / `HasSmallObjectArgument` 的定义
+/-- A class of morphisms `I : MorphismProperty C` satisfies the property
+`HasSmallObjectArgument.{w} I` if it permits the small object argument,
+i.e. there exists a regular cardinal `κ : Cardinal.{w}` such that
+`IsCardinalForSmallObjectArgument I κ` holds. -/
+/-
+**CategoryTheory.MorphismProperty.HasSmallObjectArgument** 是 Mathlib 中的一个归纳类型，位于
+命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasSmallObjectArgument
-  parameters: : Prop where
-  axioms and operations (1):
-    - exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType), IsCardinalForSmallObjectArgument I κ
-
-中文:
-类 有SmallObjectArgument
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - exists_cardinal : 存在 (κ : 基数.{w}) (_ : Fact κ.是正则) (_ : 有底序 κ.ord.ToType), 是CardinalForSmallObjectArgument I κ
+--- 原说明 ---
+A class of morphisms `I : MorphismProperty C` satisfies the property
+`HasSmallObjectArgument.{w} I` if it permits the small object argument,
+i.e. there exists a regular cardinal `κ : Cardinal.{w}` such that
+`IsCardinalForSmallObjectArgument I κ` holds.
 -/
 class HasSmallObjectArgument : Prop where
-  exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType),
+  exists_cardinal : ∃ (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType),
     IsCardinalForSmallObjectArgument I κ
 
 variable [HasSmallObjectArgument.{w} I]
 
-/--
-Definition of `smallObjectκ` / `smallObjectκ` 的定义
+/-- When `I : MorphismProperty C` permits the small object argument,
+this is a cardinal `κ` such that `IsCardinalForSmallObjectArgument I κ` holds. -/
+/-
+**CategoryTheory.MorphismProperty.smallObject** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smallObjectκ
-  signature: : Cardinal.{w}
-  body: (HasSmallObjectArgument.exists_cardinal (I := I)).choose
-
-local instance smallObjectκ_isRegular : Fact I.smallObjectκ.IsRegular :=
-  HasSmallObjectArgument.exists_cardinal.choose_spec.choose
-
-中文:
-定义 smallObjectκ
-  签名: : 基数.{w}
-  定义体: (HasSmallObjectArgument.exists_cardinal (I := I)).choose
-
-local instance smallObjectκ_isRegular : Fact I.smallObjectκ.IsRegular :=
-  HasSmallObjectArgument.exists_cardinal.choose_spec.choose
-
-Depends on / 依赖: HasSmallObjectArgument, HasSmallObjectArgument.exists_cardinal, exists_cardinal
+--- 原说明 ---
+When `I : MorphismProperty C` permits the small object argument,
+this is a cardinal `κ` such that `IsCardinalForSmallObjectArgument I κ` holds.
 -/
 noncomputable def smallObjectκ : Cardinal.{w} :=
   (HasSmallObjectArgument.exists_cardinal (I := I)).choose
 
 local instance smallObjectκ_isRegular : Fact I.smallObjectκ.IsRegular :=
   HasSmallObjectArgument.exists_cardinal.choose_spec.choose
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot I.smallObjectκ.ord.ToType
-  body: HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose
-
-中文:
-实例 :
-  签名: 有底序 I.smallObjectκ.ord.ToType
-  定义体: HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose
-
-Depends on / 依赖: HasSmallObjectArgument, HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose, choose_spec, exists_cardinal
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : OrderBot I.smallObjectκ.ord.ToType :=
   HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose
-
-/--
-Instance `isCardinalForSmallObjectArgument_smallObjectκ` / 实例 `isCardinalForSmallObjectArgument_smallObjectκ`
-
-English:
-instance isCardinalForSmallObjectArgument_smallObjectκ
-  signature: :
-  body: HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose_spec
-
-中文:
-实例 isCardinalForSmallObjectArgument_smallObjectκ
-  签名: :
-  定义体: HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose_spec
-
-Depends on / 依赖: HasSmallObjectArgument, HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose_spec, choose_spec, exists_cardinal
+/-
+**CategoryTheory.MorphismProperty.isCardinalForSmallObjectArgument_smallObject**
+ 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isCardinalForSmallObjectArgument_smallObjectκ :
     IsCardinalForSmallObjectArgument.{w} I I.smallObjectκ :=
   HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose_spec
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFunctorialFactorization I.rlp.llp I.rlp
-  body: hasFunctorialFactorization I I.smallObjectκ
-
-中文:
-实例 :
-  签名: 有FunctorialFactorization I.rlp.llp I.rlp
-  定义体: hasFunctorialFactorization I I.smallObjectκ
-
-Depends on / 依赖: I.smallObject, hasFunctorialFactorization
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFunctorialFactorization I.rlp.llp I.rlp :=
   hasFunctorialFactorization I I.smallObjectκ
 
-/--
-lemma `llp_rlp_of_hasSmallObjectArgument'` / 引理 `llp_rlp_of_hasSmallObjectArgument'`
+/-- If `I : MorphismProperty C` permits the small object argument,
+then the class of morphisms that have the left lifting property with respect to
+the maps that have the right lifting property with respect to `I` are
+exactly the retracts of transfinite compositions (indexed by `I.smallObjectκ.ord.ToType`)
+of pushouts of coproducts of morphisms in `C`. -/
+/-
+**CategoryTheory.MorphismProperty.llp_rlp_of_hasSmallObjectArgument'** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：llp_rlp_of_hasSmallObjectArgument' : I.rlp.llp = (transfiniteCompositionsO
+fShape (coproducts.{w} I).pushouts I.smallObjectκ.ord.ToType).retracts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument'`
+：llp_rlp_of_isCardinalForSmallObjectArgument' : I.rlp.llp = (transfiniteComposit
+ionsOfShape (coproducts.{w} I).pushouts κ.ord.ToType).retract…
+· 使用定理 `CategoryTheory.MorphismProperty.smallObjectκ_isRegular`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] (I : CategoryTheory.MorphismProperty C)
+   [inst_1 : I.HasSmallObjectArgument], Fact…
 
-English:
-lemma llp_rlp_of_hasSmallObjectArgument'
-  proof: llp_rlp_of_isCardinalForSmallObjectArgument' I I.smallObjectκ
-
-中文:
-引理 llp_rlp_of_hasSmallObjectArgument'
-  证明: llp_rlp_of_isCardinalForSmallObjectArgument' I I.smallObjectκ
-
-Depends on / 依赖: I.smallObject, llp_rlp_of_isCardinalForSmallObjectArgument
+--- 原说明 ---
+If `I : MorphismProperty C` permits the small object argument,
+then the class of morphisms that have the left lifting property with respect to
+the maps that have the right lifting property with respect to `I` are
+exactly the retracts of transfinite compositions (indexed by `I.smallObjectκ.ord
+.ToType`)
+of pushouts of coproducts of morphisms in `C`.
 -/
 lemma llp_rlp_of_hasSmallObjectArgument' :
     I.rlp.llp = (transfiniteCompositionsOfShape (coproducts.{w} I).pushouts
         I.smallObjectκ.ord.ToType).retracts :=
   llp_rlp_of_isCardinalForSmallObjectArgument' I I.smallObjectκ
 
-/--
-lemma `llp_rlp_of_hasSmallObjectArgument` / 引理 `llp_rlp_of_hasSmallObjectArgument`
+/-- If `I : MorphismProperty C` permits the small object argument,
+then the class of morphisms that have the left lifting property with respect to
+the maps that have the right lifting property with respect to `I` are
+exactly the retracts of transfinite compositions
+of pushouts of coproducts of morphisms in `C`. -/
+/-
+**CategoryTheory.MorphismProperty.llp_rlp_of_hasSmallObjectArgument** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：llp_rlp_of_hasSmallObjectArgument : I.rlp.llp = (transfiniteCompositions.{
+w} (coproducts.{w} I).pushouts).retracts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument`：
+llp_rlp_of_isCardinalForSmallObjectArgument : I.rlp.llp = (transfiniteCompositio
+ns.{w} (coproducts.{w} I).pushouts).retracts
+· 使用定理 `CategoryTheory.MorphismProperty.smallObjectκ_isRegular`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] (I : CategoryTheory.MorphismProperty C)
+   [inst_1 : I.HasSmallObjectArgument], Fact…
 
-English:
-lemma llp_rlp_of_hasSmallObjectArgument
-  proof: llp_rlp_of_isCardinalForSmallObjectArgument I I.smallObjectκ
-
-中文:
-引理 llp_rlp_of_hasSmallObjectArgument
-  证明: llp_rlp_of_isCardinalForSmallObjectArgument I I.smallObjectκ
-
-Depends on / 依赖: I.smallObject, llp_rlp_of_isCardinalForSmallObjectArgument
+--- 原说明 ---
+If `I : MorphismProperty C` permits the small object argument,
+then the class of morphisms that have the left lifting property with respect to
+the maps that have the right lifting property with respect to `I` are
+exactly the retracts of transfinite compositions
+of pushouts of coproducts of morphisms in `C`.
 -/
 lemma llp_rlp_of_hasSmallObjectArgument :
     I.rlp.llp =
@@ -223,3 +209,4 @@ lemma llp_rlp_of_hasSmallObjectArgument :
 end MorphismProperty
 
 end CategoryTheory
+

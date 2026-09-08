@@ -27,368 +27,318 @@ namespace Multiset
 
 variable {α β γ : Type*} (s : Multiset α) (t : Multiset β)
 
-/--
-Definition of `disjSum` / `disjSum` 的定义
+/-- Disjoint sum of multisets. -/
+/-
+**Multiset.disjSum** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：disjSum : Multiset (α oplus β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition disjSum
-  signature: : Multiset (α oplus β)
-  body: s.map inl + t.map inr
-
-@[simp]
-
-中文:
-定义 disjSum
-  签名: : Multiset (α oplus β)
-  定义体: s.map inl + t.map inr
-
-@[simp]
-
-Depends on / 依赖: s.map, t.map
+--- 原说明 ---
+Disjoint sum of multisets.
 -/
-def disjSum : Multiset (α oplus β) :=
+def disjSum : Multiset (α ⊕ β) :=
   s.map inl + t.map inr
 
 @[simp]
-/--
-theorem `zero_disjSum` / 定理 `zero_disjSum`
-
-English:
-theorem zero_disjSum
-  statement: (0 : Multiset α).disjSum t = t.map inr
-  proof: Multiset.zero_add _
-
-@[simp]
-
-中文:
-定理 zero_disjSum
-  结论: (0 : Multiset α).disjSum t = t.map inr
-  证明: Multiset.zero_add _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.zero_add, zero_add
+/-
+**Multiset.zero_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：zero_disjSum : (0 : Multiset α).disjSum t = t.map inr
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.zero_add`：∀ {α : Type u_1} (s : Multiset α), 0 + s = s
 -/
 theorem zero_disjSum : (0 : Multiset α).disjSum t = t.map inr :=
   Multiset.zero_add _
 
 @[simp]
-/--
-theorem `disjSum_zero` / 定理 `disjSum_zero`
-
-English:
-theorem disjSum_zero
-  statement: s.disjSum (0 : Multiset β) = s.map inl
-  proof: Multiset.add_zero _
-
-@[simp]
-
-中文:
-定理 disjSum_zero
-  结论: s.disjSum (0 : Multiset β) = s.map inl
-  证明: Multiset.add_zero _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.add_zero, add_zero
+/-
+**Multiset.disjSum_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_zero : s.disjSum (0 : Multiset β) = s.map inl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.add_zero`：∀ {α : Type u_1} (s : Multiset α), s + 0 = s
 -/
 theorem disjSum_zero : s.disjSum (0 : Multiset β) = s.map inl :=
   Multiset.add_zero _
 
 @[simp]
-/--
-theorem `card_disjSum` / 定理 `card_disjSum`
-
-English:
-theorem card_disjSum
-  statement: Multiset.card (s.disjSum t) = Multiset.card s + Multiset.card t
-  proof: by
-  rw [disjSum]; rw [card_add]; rw [card_map]; rw [card_map]
-
-中文:
-定理 card_disjSum
-  结论: Multiset.card (s.disjSum t) = Multiset.card s + Multiset.card t
-  证明: by
-  rw [disjSum]; rw [card_add]; rw [card_map]; rw [card_map]
-
-Depends on / 依赖: card_add, card_map, disjSum
+/-
+**Multiset.card_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_disjSum : Multiset.card (s.disjSum t) = Multiset.card s + Multiset.ca
+rd t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.disjSum.eq_1`：∀ {α : Type u_1} {β : Type u_2} (s : Multiset α) 
+(t : Multiset β),   s.disjSum t = Multiset.map Sum.inl s + Multiset.map Sum.inr 
+t
+· 使用定理 `Multiset.card_add`：card_add (s t : Multiset α) : card (s + t) = card s +
+ card t
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
 -/
 theorem card_disjSum : Multiset.card (s.disjSum t) = Multiset.card s + Multiset.card t := by
-  rw [disjSum]; rw [card_add]; rw [card_map]; rw [card_map]
+  rw [disjSum, card_add, card_map, card_map]
 
-variable {s t} {s₁ s₂ : Multiset α} {t₁ t₂ : Multiset β} {a : α} {b : β} {x : α oplus β}
-
-/--
-theorem `mem_disjSum` / 定理 `mem_disjSum`
-
-English:
-theorem mem_disjSum
-  statement: x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x
-  proof: by
-  simp_rw [disjSum, mem_add, mem_map]
-
-@[simp]
-
-中文:
-定理 mem_disjSum
-  结论: x in s.disjSum t ↔ (存在 a, a in s ∧ inl a = x) ∨ 存在 b, b in t ∧ inr b = x
-  证明: by
-  simp_rw [disjSum, mem_add, mem_map]
-
-@[simp]
-
-Depends on / 依赖: disjSum, mem_add, mem_map, simp_rw
+variable {s t} {s₁ s₂ : Multiset α} {t₁ t₂ : Multiset β} {a : α} {b : β} {x : α ⊕ β}
+/-
+**Multiset.mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_disjSum : x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b
+, b in t ∧ inr b = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_disjSum : x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x := by
+theorem mem_disjSum : x ∈ s.disjSum t ↔ (∃ a, a ∈ s ∧ inl a = x) ∨ ∃ b, b ∈ t ∧ inr b = x := by
   simp_rw [disjSum, mem_add, mem_map]
 
 @[simp]
-/--
-theorem `inl_mem_disjSum` / 定理 `inl_mem_disjSum`
-
-English:
-theorem inl_mem_disjSum
-  statement: inl a in s.disjSum t ↔ a in s
-  proof: by
-  rw [mem_disjSum]; rw [or_iff_left]
+/-
+**Multiset.inl_mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：inl_mem_disjSum : inl a in s.disjSum t ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.mem_disjSum`：mem_disjSum : x in s.disjSum t ↔ (exists a, a in s
+ ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x
+· 使用定理 `or_iff_left`：∀ {b a : Prop}, ¬b → (a ∨ b ↔ a)
+· 使用定理 `Sum.inr_ne_inl`：∀ {β : Type u_1} {b : β} {α : Type u_2} {a : α}, Sum.inr
+ b ≠ Sum.inl a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Sum.inl.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : α), (Sum.inl val
+ = Sum.inl val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem inl_mem_disjSum : inl a ∈ s.disjSum t ↔ a ∈ s := by
+  rw [mem_disjSum, or_iff_left]
   · simp only [inl.injEq, exists_eq_right]
   rintro ⟨b, _, hb⟩
   exact inr_ne_inl hb
 
 @[simp]
-
-中文:
-定理 inl_mem_disjSum
-  结论: inl a in s.disjSum t ↔ a in s
-  证明: by
-  rw [mem_disjSum]; rw [or_iff_left]
-  · simp only [inl.injEq, exists_eq_right]
-  rintro ⟨b, _, hb⟩
-  exact inr_ne_inl hb
-
-@[simp]
-
-Depends on / 依赖: exists_eq_right, inl.injEq, inr_ne_inl, mem_disjSum, or_iff_left
+/-
+**Multiset.inr_mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：inr_mem_disjSum : inr b in s.disjSum t ↔ b in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.mem_disjSum`：mem_disjSum : x in s.disjSum t ↔ (exists a, a in s
+ ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x
+· 使用定理 `or_iff_right`：∀ {a b : Prop}, ¬a → (a ∨ b ↔ b)
+· 使用定理 `Sum.inl_ne_inr`：∀ {α : Type u_1} {a : α} {β : Type u_2} {b : β}, Sum.inl
+ a ≠ Sum.inr b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Sum.inr.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : β), (Sum.inr val
+ = Sum.inr val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem inl_mem_disjSum : inl a in s.disjSum t ↔ a in s := by
-  rw [mem_disjSum]; rw [or_iff_left]
-  · simp only [inl.injEq, exists_eq_right]
-  rintro ⟨b, _, hb⟩
-  exact inr_ne_inl hb
-
-@[simp]
-/--
-theorem `inr_mem_disjSum` / 定理 `inr_mem_disjSum`
-
-English:
-theorem inr_mem_disjSum
-  statement: inr b in s.disjSum t ↔ b in t
-  proof: by
-  rw [mem_disjSum]; rw [or_iff_right]
+theorem inr_mem_disjSum : inr b ∈ s.disjSum t ↔ b ∈ t := by
+  rw [mem_disjSum, or_iff_right]
   · simp only [inr.injEq, exists_eq_right]
   rintro ⟨a, _, ha⟩
   exact inl_ne_inr ha
-
-中文:
-定理 inr_mem_disjSum
-  结论: inr b in s.disjSum t ↔ b in t
-  证明: by
-  rw [mem_disjSum]; rw [or_iff_right]
-  · simp only [inr.injEq, exists_eq_right]
-  rintro ⟨a, _, ha⟩
-  exact inl_ne_inr ha
-
-Depends on / 依赖: exists_eq_right, inl_ne_inr, inr.injEq, mem_disjSum, or_iff_right
+/-
+**Multiset.disjSum_mono** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_mono (hs : s₁ <= s₂) (ht : t₁ <= t₂) : s₁.disjSum t₁ <= s₂.disjSum
+ t₂
+参数：hs : s₁ <= s₂；ht : t₁ <= t₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
-theorem inr_mem_disjSum : inr b in s.disjSum t ↔ b in t := by
-  rw [mem_disjSum]; rw [or_iff_right]
-  · simp only [inr.injEq, exists_eq_right]
-  rintro ⟨a, _, ha⟩
-  exact inl_ne_inr ha
-
-/--
-theorem `disjSum_mono` / 定理 `disjSum_mono`
-
-English:
-theorem disjSum_mono
-  given: (hs : s₁ <= s₂) (ht : t₁ <= t₂)
-  statement: s₁.disjSum t₁ <= s₂.disjSum t₂
-  proof: add_le_add (map_le_map hs) (map_le_map ht)
-
-中文:
-定理 disjSum_mono
-  条件: (hs : s₁ <= s₂) (ht : t₁ <= t₂)
-  结论: s₁.disjSum t₁ <= s₂.disjSum t₂
-  证明: add_le_add (map_le_map hs) (map_le_map ht)
-
-Depends on / 依赖: add_le_add, map_le_map
--/
-theorem disjSum_mono (hs : s₁ <= s₂) (ht : t₁ <= t₂) : s₁.disjSum t₁ <= s₂.disjSum t₂ :=
+theorem disjSum_mono (hs : s₁ ≤ s₂) (ht : t₁ ≤ t₂) : s₁.disjSum t₁ ≤ s₂.disjSum t₂ :=
   add_le_add (map_le_map hs) (map_le_map ht)
-
-/--
-theorem `disjSum_mono_left` / 定理 `disjSum_mono_left`
-
-English:
-theorem disjSum_mono_left
-  given: (t : Multiset β)
-  statement: Monotone fun s : Multiset α => s.disjSum t
-  proof: fun _ _ hs => Multiset.add_le_add_right (map_le_map hs)
-
-中文:
-定理 disjSum_mono_left
-  条件: (t : Multiset β)
-  结论: 递增 fun s : Multiset α => s.disjSum t
-  证明: fun _ _ hs => Multiset.add_le_add_right (map_le_map hs)
-
-Depends on / 依赖: Multiset, Multiset.add_le_add_right, add_le_add_right, map_le_map
+/-
+**Multiset.disjSum_mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_mono_left (t : Multiset β) : Monotone fun s : Multiset α => s.disj
+Sum t
+参数：t : Multiset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.add_le_add_right`：∀ {α : Type u_1} {s t u : Multiset α}, s ≤ t 
+→ s + u ≤ t + u
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
 theorem disjSum_mono_left (t : Multiset β) : Monotone fun s : Multiset α => s.disjSum t :=
   fun _ _ hs => Multiset.add_le_add_right (map_le_map hs)
-
-/--
-theorem `disjSum_mono_right` / 定理 `disjSum_mono_right`
-
-English:
-theorem disjSum_mono_right
-  given: (s : Multiset α)
-  proof: fun _ _ ht =>
-  Multiset.add_le_add_left (map_le_map ht)
-
-中文:
-定理 disjSum_mono_right
-  条件: (s : Multiset α)
-  证明: fun _ _ ht =>
-  Multiset.add_le_add_left (map_le_map ht)
+/-
+**Multiset.disjSum_mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_mono_right (s : Multiset α) : Monotone (s.disjSum : Multiset β -> 
+Multiset (α oplus β))
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.add_le_add_left`：∀ {α : Type u_1} {s t u : Multiset α}, t ≤ u →
+ s + t ≤ s + u
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
 theorem disjSum_mono_right (s : Multiset α) :
-    Monotone (s.disjSum : Multiset β -> Multiset (α oplus β)) := fun _ _ ht =>
+    Monotone (s.disjSum : Multiset β → Multiset (α ⊕ β)) := fun _ _ ht =>
   Multiset.add_le_add_left (map_le_map ht)
-
-/--
-theorem `disjSum_lt_disjSum_of_lt_of_le` / 定理 `disjSum_lt_disjSum_of_lt_of_le`
-
-English:
-theorem disjSum_lt_disjSum_of_lt_of_le
-  given: (hs : s₁ < s₂) (ht : t₁ <= t₂)
-  proof: add_lt_add_of_lt_of_le (map_lt_map hs) (map_le_map ht)
-
-中文:
-定理 disjSum_lt_disjSum_of_lt_of_le
-  条件: (hs : s₁ < s₂) (ht : t₁ <= t₂)
-  证明: add_lt_add_of_lt_of_le (map_lt_map hs) (map_le_map ht)
-
-Depends on / 依赖: add_lt_add_of_lt_of_le, map_le_map, map_lt_map
+/-
+**Multiset.disjSum_lt_disjSum_of_lt_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_lt_disjSum_of_lt_of_le (hs : s₁ < s₂) (ht : t₁ <= t₂) : s₁.disjSum
+ t₁ < s₂.disjSum t₂
+参数：hs : s₁ < s₂；ht : t₁ <= t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_lt_add_of_lt_of_le`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddLeftMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c ≤ d → a 
++ c < b + d
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Multiset.map_lt_map`：map_lt_map {f : α -> β} {s t : Multiset α} (h : s <
+ t) : s.map f < t.map f
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
-theorem disjSum_lt_disjSum_of_lt_of_le (hs : s₁ < s₂) (ht : t₁ <= t₂) :
+theorem disjSum_lt_disjSum_of_lt_of_le (hs : s₁ < s₂) (ht : t₁ ≤ t₂) :
     s₁.disjSum t₁ < s₂.disjSum t₂ :=
   add_lt_add_of_lt_of_le (map_lt_map hs) (map_le_map ht)
-
-/--
-theorem `disjSum_lt_disjSum_of_le_of_lt` / 定理 `disjSum_lt_disjSum_of_le_of_lt`
-
-English:
-theorem disjSum_lt_disjSum_of_le_of_lt
-  given: (hs : s₁ <= s₂) (ht : t₁ < t₂)
-  proof: add_lt_add_of_le_of_lt (map_le_map hs) (map_lt_map ht)
-
-中文:
-定理 disjSum_lt_disjSum_of_le_of_lt
-  条件: (hs : s₁ <= s₂) (ht : t₁ < t₂)
-  证明: add_lt_add_of_le_of_lt (map_le_map hs) (map_lt_map ht)
-
-Depends on / 依赖: add_lt_add_of_le_of_lt, map_le_map, map_lt_map
+/-
+**Multiset.disjSum_lt_disjSum_of_le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_lt_disjSum_of_le_of_lt (hs : s₁ <= s₂) (ht : t₁ < t₂) : s₁.disjSum
+ t₁ < s₂.disjSum t₂
+参数：hs : s₁ <= s₂；ht : t₁ < t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_lt_add_of_le_of_lt`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddLeftStrictMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c < d → a 
++ c < b + d
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
+· 使用定理 `Multiset.map_lt_map`：map_lt_map {f : α -> β} {s t : Multiset α} (h : s <
+ t) : s.map f < t.map f
 -/
-theorem disjSum_lt_disjSum_of_le_of_lt (hs : s₁ <= s₂) (ht : t₁ < t₂) :
+theorem disjSum_lt_disjSum_of_le_of_lt (hs : s₁ ≤ s₂) (ht : t₁ < t₂) :
     s₁.disjSum t₁ < s₂.disjSum t₂ :=
   add_lt_add_of_le_of_lt (map_le_map hs) (map_lt_map ht)
-
-/--
-theorem `disjSum_strictMono_left` / 定理 `disjSum_strictMono_left`
-
-English:
-theorem disjSum_strictMono_left
-  given: (t : Multiset β)
-  statement: StrictMono fun s : Multiset α => s.disjSum t
-  proof: fun _ _ hs => disjSum_lt_disjSum_of_lt_of_le hs le_rfl
-
-中文:
-定理 disjSum_strictMono_left
-  条件: (t : Multiset β)
-  结论: 严格递增 fun s : Multiset α => s.disjSum t
-  证明: fun _ _ hs => disjSum_lt_disjSum_of_lt_of_le hs le_rfl
-
-Depends on / 依赖: disjSum_lt_disjSum_of_lt_of_le, le_rfl
+/-
+**Multiset.disjSum_strictMono_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_strictMono_left (t : Multiset β) : StrictMono fun s : Multiset α =
+> s.disjSum t
+参数：t : Multiset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.disjSum_lt_disjSum_of_lt_of_le`：disjSum_lt_disjSum_of_lt_of_le 
+(hs : s₁ < s₂) (ht : t₁ <= t₂) : s₁.disjSum t₁ < s₂.disjSum t₂
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem disjSum_strictMono_left (t : Multiset β) : StrictMono fun s : Multiset α => s.disjSum t :=
   fun _ _ hs => disjSum_lt_disjSum_of_lt_of_le hs le_rfl
-
-/--
-theorem `disjSum_strictMono_right` / 定理 `disjSum_strictMono_right`
-
-English:
-theorem disjSum_strictMono_right
-  given: (s : Multiset α)
-  proof: fun _ _ =>
-  disjSum_lt_disjSum_of_le_of_lt le_rfl
-
-中文:
-定理 disjSum_strictMono_right
-  条件: (s : Multiset α)
-  证明: fun _ _ =>
-  disjSum_lt_disjSum_of_le_of_lt le_rfl
+/-
+**Multiset.disjSum_strictMono_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjSum_strictMono_right (s : Multiset α) : StrictMono (s.disjSum : Multis
+et β -> Multiset (α oplus β))
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.disjSum_lt_disjSum_of_le_of_lt`：disjSum_lt_disjSum_of_le_of_lt 
+(hs : s₁ <= s₂) (ht : t₁ < t₂) : s₁.disjSum t₁ < s₂.disjSum t₂
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem disjSum_strictMono_right (s : Multiset α) :
-    StrictMono (s.disjSum : Multiset β -> Multiset (α oplus β)) := fun _ _ =>
+    StrictMono (s.disjSum : Multiset β → Multiset (α ⊕ β)) := fun _ _ =>
   disjSum_lt_disjSum_of_le_of_lt le_rfl
-
-/--
-theorem `Nodup.disjSum` / 定理 `Nodup.disjSum`
-
-English:
-theorem Nodup.disjSum
-  given: (hs : s.Nodup) (ht : t.Nodup)
-  statement: (s.disjSum t).Nodup
-  proof: by
-  refine ((hs.map inl_injective).add_iff <| ht.map inr_injective).2 ?_
-  rw [disjoint_map_map]
-  exact fun _ _ _ _ => inr_ne_inl.symm
-
-中文:
-定理 Nodup.disjSum
-  条件: (hs : s.Nodup) (ht : t.Nodup)
-  结论: (s.disjSum t).Nodup
-  证明: by
-  refine ((hs.map inl_injective).add_iff <| ht.map inr_injective).2 ?_
-  rw [disjoint_map_map]
-  exact fun _ _ _ _ => inr_ne_inl.symm
-
-Depends on / 依赖: _terminates, h.get
+/-
+**Multiset.Nodup.disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Multiset α} {t : Multiset β}, s.Nodup
+ → t.Nodup → (s.disjSum t).Nodup
+参数：s.disjSum t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.Nodup.add_iff`：∀ {α : Type u_1} {s t : Multiset α}, s.Nodup → t
+.Nodup → ((s + t).Nodup ↔ Disjoint s t)
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `Sum.inl_injective`：inl_injective : Function.Injective (inl : α -> α oplu
+s β)
+· 使用定理 `Sum.inr_injective`：inr_injective : Function.Injective (inr : β -> α oplu
+s β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.disjoint_map_map`：disjoint_map_map {f : α -> γ} {g : β -> γ} {s
+ : Multiset α} {t : Multiset β} : Disjoint (s.map f) (t.map g) ↔ forall a in s, 
+forall b in t, …
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Sum.inr_ne_inl`：∀ {β : Type u_1} {b : β} {α : Type u_2} {a : α}, Sum.inr
+ b ≠ Sum.inl a
 -/
 protected theorem Nodup.disjSum (hs : s.Nodup) (ht : t.Nodup) : (s.disjSum t).Nodup := by
   refine ((hs.map inl_injective).add_iff <| ht.map inr_injective).2 ?_
   rw [disjoint_map_map]
-  exact fun _ _ _ _ => inr_ne_inl.symm
-
-/--
-theorem `map_disjSum` / 定理 `map_disjSum`
-
-English:
-theorem map_disjSum
-  given: (f : α oplus β -> γ)
-  proof: by
-  simp_rw [disjSum, map_add, map_map, Function.comp_def]
-
-中文:
-定理 map_disjSum
-  条件: (f : α oplus β -> γ)
-  证明: by
-  simp_rw [disjSum, map_add, map_map, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, disjSum, map_add, map_map, simp_rw
+  exact fun _ _ _ _ ↦ inr_ne_inl.symm
+/-
+**Multiset.map_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_disjSum (f : α oplus β -> γ) : (s.disjSum t).map f = s.map (f <| .inl 
+·) + t.map (f <| .inr ·)
+参数：f : α oplus β -> γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_add`：map_add (f : α -> β) (s t) : map f (s + t) = map f s +
+ map f t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_disjSum (f : α oplus β -> γ) :
+theorem map_disjSum (f : α ⊕ β → γ) :
     (s.disjSum t).map f = s.map (f <| .inl ·) + t.map (f <| .inr ·) := by
   simp_rw [disjSum, map_add, map_map, Function.comp_def]
 
 end Multiset
+

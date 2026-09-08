@@ -26,22 +26,19 @@ open scoped ComonObj
 
 variable {C : Type*} [Category* C] (P : MorphismProperty C) [MonoidalCategory C]
 
-/--
-Definition of `IsStableUnderComonoid` / `IsStableUnderComonoid` 的定义
+/-- A braided-stable morphism property stable under comonoid counit and comultiplication. -/
+/-
+**CategoryTheory.MorphismProperty.IsStableUnderComonoid** 是 Mathlib 中的一个归纳类型，位于命
+名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       CategoryTheory.MorphismPropert
+y C → (c : C) → [CategoryTheory.ComonObj c] → Prop
+参数：c : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStableUnderComonoid
-  parameters: (P : MorphismProperty C) (c : C) [ComonObj c]
-  axioms and operations (2):
-    - counit_mem((P)) : P ε[c]
-    - comul_mem((P)) : P Δ[c]
-
-中文:
-类 是StableUnderComonoid
-  参数: (P : MorphismProperty C) (c : C) [余monObj c]
-  公理与运算 (2 个):
-    - counit_mem((P)) : P ε[c]
-    - comul_mem((P)) : P Δ[c]
+--- 原说明 ---
+A braided-stable morphism property stable under comonoid counit and comultiplica
+tion.
 -/
 class IsStableUnderComonoid (P : MorphismProperty C) (c : C) [ComonObj c] : Prop where
   counit_mem (P) : P ε[c]
@@ -50,46 +47,19 @@ class IsStableUnderComonoid (P : MorphismProperty C) (c : C) [ComonObj c] : Prop
 export IsStableUnderComonoid (counit_mem comul_mem)
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsMonoidalStable]
-  signature: (c : WideSubcategory P) [ComonObj c.obj]
-  body: ⟨ε[c.obj], P.counit_mem⟩
-  comul := ⟨Δ[c.obj], P.comul_mem⟩
-
-中文:
-实例 [P.是MonoidalStable]
-  签名: (c : 宽子范畴 P) [余monObj c.obj]
-  定义体: ⟨ε[c.obj], P.counit_mem⟩
-  comul := ⟨Δ[c.obj], P.comul_mem⟩
-
-Depends on / 依赖: P.counit_mem, c.obj, counit_mem
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsMonoidalStable] (c : WideSubcategory P) [ComonObj c.obj]
     [P.IsStableUnderComonoid c.obj] : ComonObj c where
   counit := ⟨ε[c.obj], P.counit_mem⟩
   comul := ⟨Δ[c.obj], P.comul_mem⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [BraidedCategory
-  signature: C] [P.IsStableUnderBraiding] (c
-  body: by
-    ext
-    exact IsCommComonObj.comul_comm _
-
-中文:
-实例 [辫范畴
-  签名: C] [P.是StableUnderBraiding] (c
-  定义体: by
-    ext
-    exact IsCommComonObj.comul_comm _
-
-Depends on / 依赖: IsCommComonObj, IsCommComonObj.comul_comm, comul_comm
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [BraidedCategory C] [P.IsStableUnderBraiding] (c : WideSubcategory P) [ComonObj c.obj]
     [IsCommComonObj c.obj] [P.IsStableUnderComonoid c.obj] : IsCommComonObj c where
@@ -99,18 +69,13 @@ instance [BraidedCategory C] [P.IsStableUnderBraiding] (c : WideSubcategory P) [
 
 open CopyDiscardCategory in
 attribute [local simp] copy_tensor discard_tensor copy_unit discard_unit in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CopyDiscardCategory
-  signature: C] [P.IsStableUnderBraiding] [forall c, P.IsStableUnderComonoid c] :
-
-中文:
-实例 [余pyDiscard范畴
-  签名: C] [P.是StableUnderBraiding] [对任意 c, P.是StableUnderComonoid c] :
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CopyDiscardCategory C] [P.IsStableUnderBraiding] [forall c, P.IsStableUnderComonoid c] :
+instance [CopyDiscardCategory C] [P.IsStableUnderBraiding] [∀ c, P.IsStableUnderComonoid c] :
     CopyDiscardCategory (WideSubcategory P) where
 
 end CategoryTheory.MorphismProperty
+

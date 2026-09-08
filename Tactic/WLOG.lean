@@ -29,28 +29,14 @@ namespace Mathlib.Tactic
 
 open Lean Meta Elab Term Tactic MetavarContext.MkBinding Parser.Tactic
 
-/--
-Definition of `WLOGResult` / `WLOGResult` 的定义
+/-- The result of running `wlog` on a goal. -/
+/-
+**Mathlib.Tactic.WLOGResult** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure WLOGResult
-  parameters: where
-  axioms and operations (5):
-    - reductionGoal : MVarId
-    - reductionFVarIds : FVarId × FVarId
-    - hypothesisGoal : MVarId
-    - hypothesisFVarId : FVarId
-    - revertedFVarIds : Array FVarId
-
-中文:
-结构 WLOGResult
-  参数: where
-  公理与运算 (5 个):
-    - reductionGoal : MVarId
-    - reductionFVarIds : FVarId × FVarId
-    - hypothesisGoal : MVarId
-    - hypothesisFVarId : FVarId
-    - revertedFVarIds : 数组 FVarId
+--- 原说明 ---
+The result of running `wlog` on a goal.
 -/
 structure WLOGResult where
   /-- The `reductionGoal` requires showing that the case `h : ¬ P` can be reduced to the case where
@@ -67,116 +53,54 @@ structure WLOGResult where
   -/
   reductionFVarIds : FVarId × FVarId
   /-- The original goal with the additional assumption `h : P`. -/
-  hypothesisGoal : MVarId
+  hypothesisGoal   : MVarId
   /-- The `FVarId` of the hypothesis `h` in `hypothesisGoal` -/
   hypothesisFVarId : FVarId
   /-- The array of `FVarId`s that was reverted to produce the reduction hypothesis `H` in
   `reductionGoal`, which are still present in the context of `reductionGoal` (but not necessarily
   `hypothesisGoal`). -/
-  revertedFVarIds : Array FVarId
+  revertedFVarIds  : Array FVarId
 
-/--
-Definition of `_root_.Lean.MVarId.wlog` / `_root_.Lean.MVarId.wlog` 的定义
+/-- `wlog goal h P xs H` will return two goals: the `hypothesisGoal`, which adds an assumption
+`h : P` to the context of `goal`, and the `reductionGoal`, which requires showing that the case
+`h : ¬ P` can be reduced to the case where `P` holds (typically by symmetry).
 
-English:
-definition _root_.Lean.MVarId.wlog
-  signature: (goal : MVarId) (h : Option Name) (P : Expr)
-  body: goal.withContext do
-  goal.checkNotAssigned `wlog
-  let H := H.getD `this
-  let inaccessible := h.isNone
-  let h := h.getD `h
-  /- Compute the type for H and keep track of the FVarId's reverted in doing so. (Do not modify the
-  tactic state.) -/
-  let HSuffix := Expr.forallE h P (← goal.getType) .default
-  let fvars ← getFVarIdsAt goal xs
-  let fvars := fvars.map Expr.fvar
-  let lctx := (← goal.getDecl).lctx
-  let (revertedFVars, HType) ← liftMkBindingM fun ctx => (do
-    let f ← collectForwardDeps lctx fvars
-    let revertedFVars := filterOutImplementationDetails lctx (f.map Expr.fvarId!)
-    let HType ← withFreshCache do
-      mkAuxMVarType lctx (revertedFVars.map Expr.fvar) .natural HSuffix (usedLetOnly := false)
-    return (revertedFVars, HType))
-      { preserveOrder := false, quotContext := ctx.quotContext }
-  /- Set up the goal which will suppose `h`; this begins as a goal with type H (hence HExpr), and h
-  is obtained through `introNP` -/
-  let HExpr ← mkFreshExprSyntheticOpaqueMVar HType
-  let hGoal := HExpr.mvarId!
-  /- Begin the "reduction goal" which will contain hypotheses `H` and `¬h`. For now, it only
-  contains `H`. Keep track of that hypothesis' FVarId. -/
-  let (HFVarId, reductionGoal) ←
-    goal.assertHypotheses #[{ userName := H, type := HType, value := HExpr }]
-  let HFVarId := HFVarId[0]!
-  /- Clear the reverted fvars from the branch that will contain `h` as a hypothesis. -/
-  let hGoal ← hGoal.tryClearMany revertedFVars
-  /- Introduce all of the reverted fvars to the context in order to restore the original target as
-  well as finally introduce the hypothesis `h`. -/
-  let (_, hGoal) ← hGoal.introNP revertedFVars.size
-  -- keep track of the hypothesis' FVarId
-  let (hFVar, hGoal) ← if inaccessible then hGoal.intro1 else hGoal.intro1P
-  /- Split the reduction goal by cases on `h`. Keep the one with `¬h` as the reduction goal,
-  and prove the easy goal by applying `H` to all its premises, which are fvars in the context. -/
-  let (⟨easyGoal, hyp⟩, ⟨reductionGoal, negHyp⟩) ←
-reductionGoal.byCases P if inaccessible then `_ else h
-  easyGoal.withContext do
-    -- Exclude ldecls from the `mkAppN` arguments
-    let HArgFVarIds ← revertedFVars.filterM (notM ·.isLetVar)
-let HApp ← instantiateMVars
-.app (.fvar hyp) mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar)
-    ensureHasNoMVars HApp
-    easyGoal.assign HApp
-  return ⟨reductionGoal, (HFVarId, negHyp), hGoal, hFVar, revertedFVars⟩
+In `reductionGoal`, there will be two additional assumptions:
+- `h : ¬ P`: the assumption that `P` does not hold
+- `H`: which is the statement that in the old context `P` suffices to prove the goal.
+  If `H` is `none`, the name `this` is used.
 
-中文:
-定义 _root_.Lean.MVarId.wlog
-  签名: (goal : MVarId) (h : 选项类型 Name) (P : Expr)
-  定义体: goal.withContext do
-  goal.checkNotAssigned `wlog
-  let H := H.getD `this
-  let inaccessible := h.isNone
-  let h := h.getD `h
-  /- Compute the type for H and keep track of the FVarId's reverted in doing so. (Do not modify the
-  tactic state.) -/
-  let HSuffix := Expr.forallE h P (← goal.getType) .default
-  let fvars ← getFVarIdsAt goal xs
-  let fvars := fvars.map Expr.fvar
-  let lctx := (← goal.getDecl).lctx
-  let (revertedFVars, HType) ← liftMkBindingM fun ctx => (do
-    let f ← collectForwardDeps lctx fvars
-    let revertedFVars := filterOutImplementationDetails lctx (f.map Expr.fvarId!)
-    let HType ← withFreshCache do
-      mkAuxMVarType lctx (revertedFVars.map Expr.fvar) .natural HSuffix (usedLetOnly := false)
-    return (revertedFVars, HType))
-      { preserveOrder := false, quotContext := ctx.quotContext }
-  /- Set up the goal which will suppose `h`; this begins as a goal with type H (hence HExpr), and h
-  is obtained through `introNP` -/
-  let HExpr ← mkFreshExprSyntheticOpaqueMVar HType
-  let hGoal := HExpr.mvarId!
-  /- Begin the "reduction goal" which will contain hypotheses `H` and `¬h`. For now, it only
-  contains `H`. Keep track of that hypothesis' FVarId. -/
-  let (HFVarId, reductionGoal) ←
-    goal.assertHypotheses #[{ userName := H, type := HType, value := HExpr }]
-  let HFVarId := HFVarId[0]!
-  /- Clear the reverted fvars from the branch that will contain `h` as a hypothesis. -/
-  let hGoal ← hGoal.tryClearMany revertedFVars
-  /- Introduce all of the reverted fvars to the context in order to restore the original target as
-  well as finally introduce the hypothesis `h`. -/
-  let (_, hGoal) ← hGoal.introNP revertedFVars.size
-  -- keep track of the hypothesis' FVarId
-  let (hFVar, hGoal) ← if inaccessible then hGoal.intro1 else hGoal.intro1P
-  /- Split the reduction goal by cases on `h`. Keep the one with `¬h` as the reduction goal,
-  and prove the easy goal by applying `H` to all its premises, which are fvars in the context. -/
-  let (⟨easyGoal, hyp⟩, ⟨reductionGoal, negHyp⟩) ←
-reductionGoal.byCases P if inaccessible then `_ else h
-  easyGoal.withContext do
-    -- Exclude ldecls from the `mkAppN` arguments
-    let HArgFVarIds ← revertedFVars.filterM (notM ·.isLetVar)
-let HApp ← instantiateMVars
-.app (.fvar hyp) mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar)
-    ensureHasNoMVars HApp
-    easyGoal.assign HApp
-  return ⟨reductionGoal, (HFVarId, negHyp), hGoal, hFVar, revertedFVars⟩
+If `xs` is `none`, all hypotheses are reverted to produce the reduction goal's hypothesis `H`.
+Otherwise, the `xs` are elaborated to hypotheses in the context of `goal`, and only those
+hypotheses are reverted (and any that depend on them).
+
+If `h` is `none`, the hypotheses of types `P` and `¬ P` in both branches will be inaccessible. -/
+/-
+**Mathlib.Tactic._root_.Lean.MVarId.wlog** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`wlog goal h P xs H` will return two goals: the `hypothesisGoal`, which adds an 
+assumption
+`h : P` to the context of `goal`, and the `reductionGoal`, which requires showin
+g that the case
+`h : ¬ P` can be reduced to the case where `P` holds (typically by symmetry).
+
+In `reductionGoal`, there will be two additional assumptions:
+- `h : ¬ P`: the assumption that `P` does not hold
+- `H`: which is the statement that in the old context `P` suffices to prove the 
+goal.
+  If `H` is `none`, the name `this` is used.
+
+If `xs` is `none`, all hypotheses are reverted to produce the reduction goal's h
+ypothesis `H`.
+Otherwise, the `xs` are elaborated to hypotheses in the context of `goal`, and o
+nly those
+hypotheses are reverted (and any that depend on them).
+
+If `h` is `none`, the hypotheses of types `P` and `¬ P` in both branches will be
+ inaccessible.
 -/
 def _root_.Lean.MVarId.wlog (goal : MVarId) (h : Option Name) (P : Expr)
     (xs : Option (TSyntaxArray `ident) := none) (H : Option Name := none) :
@@ -217,56 +141,28 @@ def _root_.Lean.MVarId.wlog (goal : MVarId) (h : Option Name) (P : Expr)
   /- Split the reduction goal by cases on `h`. Keep the one with `¬h` as the reduction goal,
   and prove the easy goal by applying `H` to all its premises, which are fvars in the context. -/
   let (⟨easyGoal, hyp⟩, ⟨reductionGoal, negHyp⟩) ←
-reductionGoal.byCases P if inaccessible then `_ else h
+    reductionGoal.byCases P <| if inaccessible then `_ else h
   easyGoal.withContext do
     -- Exclude ldecls from the `mkAppN` arguments
     let HArgFVarIds ← revertedFVars.filterM (notM ·.isLetVar)
-let HApp ← instantiateMVars
-.app (.fvar hyp) mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar)
+    let HApp ← instantiateMVars <|
+      mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar) |>.app (.fvar hyp)
     ensureHasNoMVars HApp
     easyGoal.assign HApp
   return ⟨reductionGoal, (HFVarId, negHyp), hGoal, hFVar, revertedFVars⟩
 
-/--
-Definition of `wlogCore` / `wlogCore` 的定义
+/-- The implementation of `wlog` and `wlog!` -/
+/-
+**Mathlib.Tactic.wlogCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：wlogCore (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray
+ `ident)) (H : Option (TSyntax `ident)) (pushConfig : Option (TSyntax ``optConfi
+g)
+参数：h : TSyntax ``binderIdent；P : Term；xs : Option (TSyntaxArray `ident)；H : Opti
+on (TSyntax `ident)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wlogCore
-  signature: (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray `ident))
-  body: do
-  withMainContext do
-  let H := H.map (·.getId)
-  let h := match h with
-  | `(binderIdent|$h:ident) => some h.getId
-  | _ => none
-  let P ← elabType P
-  let goal ← getMainGoal
-  let { reductionGoal, hypothesisGoal, reductionFVarIds .. } ← goal.wlog h P xs H
-  replaceMainGoal [reductionGoal, hypothesisGoal]
-  if let some cfg := pushConfig then
-    reductionGoal.withContext do
-let negHygName := mkIdent ← reductionFVarIds.2.getUserName
-      Push.push (← Push.elabPushConfig cfg) none (.const ``Not) (.targets #[(negHygName)] false)
-        (ifUnchanged := .error)
-
-中文:
-定义 wlogCore
-  签名: (h : TSyntax ``binderIdent) (P : 项) (xs : 选项类型 (TSyntaxArray `ident))
-  定义体: do
-  withMainContext do
-  let H := H.map (·.getId)
-  let h := match h with
-  | `(binderIdent|$h:ident) => some h.getId
-  | _ => none
-  let P ← elabType P
-  let goal ← getMainGoal
-  let { reductionGoal, hypothesisGoal, reductionFVarIds .. } ← goal.wlog h P xs H
-  replaceMainGoal [reductionGoal, hypothesisGoal]
-  if let some cfg := pushConfig then
-    reductionGoal.withContext do
-let negHygName := mkIdent ← reductionFVarIds.2.getUserName
-      Push.push (← Push.elabPushConfig cfg) none (.const ``Not) (.targets #[(negHygName)] false)
-        (ifUnchanged := .error)
+--- 原说明 ---
+The implementation of `wlog` and `wlog!`
 -/
 def wlogCore (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray `ident))
     (H : Option (TSyntax `ident)) (pushConfig : Option (TSyntax ``optConfig) := none) :
@@ -282,7 +178,7 @@ def wlogCore (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray `
   replaceMainGoal [reductionGoal, hypothesisGoal]
   if let some cfg := pushConfig then
     reductionGoal.withContext do
-let negHygName := mkIdent ← reductionFVarIds.2.getUserName
+      let negHygName := mkIdent <| ← reductionFVarIds.2.getUserName
       Push.push (← Push.elabPushConfig cfg) none (.const ``Not) (.targets #[(negHygName)] false)
         (ifUnchanged := .error)
 
@@ -316,7 +212,8 @@ syntax (name := wlog!) "wlog! " optConfig binderIdent " : " term
 
 elab_rules : tactic
 | `(tactic|
-wlog! cfg:optConfig h:binderIdent : P:term [ generalizing $xs*]? [ with $H:ident]?) =>
+    wlog! $cfg:optConfig $h:binderIdent : $P:term $[ generalizing $xs*]? $[ with $H:ident]?) =>
   wlogCore h P xs H cfg
 
 end Mathlib.Tactic
+

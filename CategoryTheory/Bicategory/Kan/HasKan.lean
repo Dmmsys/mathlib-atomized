@@ -51,93 +51,73 @@ open LeftExtension
 
 variable {f : a ⟶ b} {g : a ⟶ c}
 
-/--
-Definition of `HasLeftKanExtension` / `HasLeftKanExtension` 的定义
+/-- The existence of a left Kan extension of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.HasLeftKanExtension** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.Bicategory`。
+形式化陈述：{B : Type u} → [inst : CategoryTheory.Bicategory B] → {a b c : B} → (a ⟶ b
+) → (a ⟶ c) → Prop
+参数：a ⟶ b；a ⟶ c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLeftKanExtension
-  parameters: (f : a ⟶ b) (g : a ⟶ c)
-  axioms and operations (1):
-    - hasInitial : HasInitial LeftExtension f g
-
-中文:
-类 有LeftKanExtension
-  参数: (f : a ⟶ b) (g : a ⟶ c)
-  公理与运算 (1 个):
-    - hasInitial : HasInitial LeftExtension f g
+--- 原说明 ---
+The existence of a left Kan extension of `g` along `f`.
 -/
 class HasLeftKanExtension (f : a ⟶ b) (g : a ⟶ c) : Prop where
-hasInitial : HasInitial LeftExtension f g
-
-/--
-theorem `LeftExtension.IsKan.hasLeftKanExtension` / 定理 `LeftExtension.IsKan.hasLeftKanExtension`
-
-English:
-theorem LeftExtension.IsKan.hasLeftKanExtension
-  given: {t : LeftExtension f g} (H : IsKan t)
-  proof: ⟨IsInitial.hasInitial H⟩
-
-中文:
-定理 LeftExtension.IsKan.hasLeftKanExtension
-  条件: {t : LeftExtension f g} (H : IsKan t)
-  证明: ⟨IsInitial.hasInitial H⟩
-
-Depends on / 依赖: IsInitial, IsInitial.hasInitial, hasInitial
+  hasInitial : HasInitial <| LeftExtension f g
+/-
+**CategoryTheory.Bicategory.LeftExtension.IsKan.hasLeftKanExtension** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Bicategory.LeftExtension.IsKan`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b
+} {g : a ⟶ c}   {t : CategoryTheory.Bicategory.LeftExtension f g} (H : t.IsKan),
+ CategoryTheory.Bicategory.HasLeftKanExtension f g
+参数：H : t.IsKan。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hasInitial`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (h : CategoryTheory.Limits.IsInitial X),
+   CategoryTheory.Limits.HasInit…
 -/
 theorem LeftExtension.IsKan.hasLeftKanExtension {t : LeftExtension f g} (H : IsKan t) :
     HasLeftKanExtension f g :=
   ⟨IsInitial.hasInitial H⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLeftKanExtension
-  signature: f g] : HasInitial LeftExtension f g
-  body: HasLeftKanExtension.hasInitial
-
-中文:
-实例 [有LeftKanExtension
-  签名: f g] : HasInitial LeftExtension f g
-  定义体: HasLeftKanExtension.hasInitial
-
-Depends on / 依赖: HasLeftKanExtension, HasLeftKanExtension.hasInitial, hasInitial
+/-
+**CategoryTheory.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [HasLeftKanExtension f g] : HasInitial LeftExtension f g :=
+instance [HasLeftKanExtension f g] : HasInitial <| LeftExtension f g :=
   HasLeftKanExtension.hasInitial
 
-/--
-Definition of `lanLeftExtension` / `lanLeftExtension` 的定义
+/-- The left Kan extension of `g` along `f` at the level of structured arrows. -/
+/-
+**CategoryTheory.Bicategory.lanLeftExtension** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：lanLeftExtension (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : LeftE
+xtension f g
+参数：f : a ⟶ b；g : a ⟶ c。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instHasInitialLeftExtensionOfHasLeftKanExtensi
+on`：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b} 
+{g : a ⟶ c}   [CategoryTheory.Bicategory.HasLeftKanExtension f g…
 
-English:
-definition lanLeftExtension
-  signature: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  body: ⊥_ (LeftExtension f g)
-
-中文:
-定义 lanLeftExtension
-  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  定义体: ⊥_ (LeftExtension f g)
-
-Depends on / 依赖: LeftExtension
+--- 原说明 ---
+The left Kan extension of `g` along `f` at the level of structured arrows.
 -/
 def lanLeftExtension (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : LeftExtension f g :=
   ⊥_ (LeftExtension f g)
 
-/--
-Definition of `lan` / `lan` 的定义
+/-- The left Kan extension of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.lan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bicate
+gory`。
+形式化陈述：lan (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : b ⟶ c
+参数：f : a ⟶ b；g : a ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lan
-  signature: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  body: (lanLeftExtension f g).extension
-
-中文:
-定义 lan
-  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  定义体: (lanLeftExtension f g).extension
-
-Depends on / 依赖: extension, lanLeftExtension
+--- 原说明 ---
+The left Kan extension of `g` along `f`.
 -/
 def lan (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : b ⟶ c :=
   (lanLeftExtension f g).extension
@@ -146,9 +126,9 @@ def lan (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : b ⟶ c :=
 ```
   b
   △ \
-  | \ f⁺ g
-f | \
-  | ◿
+  |   \ f⁺ g
+f |     \
+  |       ◿
   a - - - ▷ c
       g
 ```
@@ -156,279 +136,234 @@ f | \
 scoped infixr:90 "⁺ " => lan
 
 @[simp]
-/--
-theorem `lanLeftExtension_extension` / 定理 `lanLeftExtension_extension`
-
-English:
-theorem lanLeftExtension_extension
-  given: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  proof: rfl
-
-中文:
-定理 lanLeftExtension_extension
-  条件: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.lanLeftExtension_extension** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Bicategory`。
+形式化陈述：lanLeftExtension_extension (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f 
+g] : (lanLeftExtension f g).extension = f⁺ g
+参数：f : a ⟶ b；g : a ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanLeftExtension_extension (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] :
     (lanLeftExtension f g).extension = f⁺ g := rfl
 
-/--
-Definition of `lanUnit` / `lanUnit` 的定义
+/-- The unit for the left Kan extension `f⁺ g`. -/
+/-
+**CategoryTheory.Bicategory.lanUnit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bi
+category`。
+形式化陈述：lanUnit (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : g ⟶ f ≫ f⁺ g
+参数：f : a ⟶ b；g : a ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanUnit
-  signature: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  body: (lanLeftExtension f g).unit
-
-@[simp]
-
-中文:
-定义 lanUnit
-  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  定义体: (lanLeftExtension f g).unit
-
-@[simp]
-
-Depends on / 依赖: lanLeftExtension
+--- 原说明 ---
+The unit for the left Kan extension `f⁺ g`.
 -/
 def lanUnit (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : g ⟶ f ≫ f⁺ g :=
   (lanLeftExtension f g).unit
 
 @[simp]
-/--
-theorem `lanLeftExtension_unit` / 定理 `lanLeftExtension_unit`
-
-English:
-theorem lanLeftExtension_unit
-  given: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  proof: rfl
-
-中文:
-定理 lanLeftExtension_unit
-  条件: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  证明: rfl
-
-Depends on / 依赖: preservesLimit_of_createsLimit_and_hasLimit
+/-
+**CategoryTheory.Bicategory.lanLeftExtension_unit** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Bicategory`。
+形式化陈述：lanLeftExtension_unit (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : 
+(lanLeftExtension f g).unit = lanUnit f g
+参数：f : a ⟶ b；g : a ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanLeftExtension_unit (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] :
     (lanLeftExtension f g).unit = lanUnit f g := rfl
 
-/--
-Definition of `lanIsKan` / `lanIsKan` 的定义
+/-- Evidence that `lanLeftExtension f g` is a Kan extension. -/
+/-
+**CategoryTheory.Bicategory.lanIsKan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+icategory`。
+形式化陈述：lanIsKan (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : (lanLeftExten
+sion f g).IsKan
+参数：f : a ⟶ b；g : a ⟶ c。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instHasInitialLeftExtensionOfHasLeftKanExtensi
+on`：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b} 
+{g : a ⟶ c}   [CategoryTheory.Bicategory.HasLeftKanExtension f g…
 
-English:
-definition lanIsKan
-  signature: (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
-  body: initialIsInitial
-
-中文:
-定义 lanIsKan
-  签名: (f : a ⟶ b) (g : a ⟶ c) [有LeftKanExtension f g]
-  定义体: initialIsInitial
-
-Depends on / 依赖: initialIsInitial, preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape
+--- 原说明 ---
+Evidence that `lanLeftExtension f g` is a Kan extension.
 -/
 def lanIsKan (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] : (lanLeftExtension f g).IsKan :=
   initialIsInitial
 
 variable {f : a ⟶ b} {g : a ⟶ c}
 
-/--
-Definition of `lanDesc` / `lanDesc` 的定义
+/-- The family of 2-morphisms out of the left Kan extension `f⁺ g`. -/
+/-
+**CategoryTheory.Bicategory.lanDesc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bi
+category`。
+形式化陈述：lanDesc [HasLeftKanExtension f g] (s : LeftExtension f g) : f⁺ g ⟶ s.exten
+sion
+参数：s : LeftExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanDesc
-  signature: [HasLeftKanExtension f g] (s : LeftExtension f g)
-  body: (lanIsKan f g).desc s
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lanDesc
-  签名: [有LeftKanExtension f g] (s : LeftExtension f g)
-  定义体: (lanIsKan f g).desc s
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: lanIsKan, preservesLimits_of_createsLimits_and_hasLimits
+--- 原说明 ---
+The family of 2-morphisms out of the left Kan extension `f⁺ g`.
 -/
 def lanDesc [HasLeftKanExtension f g] (s : LeftExtension f g) :
     f⁺ g ⟶ s.extension :=
   (lanIsKan f g).desc s
 
 @[reassoc (attr := simp)]
-/--
-theorem `lanUnit_desc` / 定理 `lanUnit_desc`
-
-English:
-theorem lanUnit_desc
-  given: [HasLeftKanExtension f g] (s : LeftExtension f g)
-  proof: (lanIsKan f g).fac s
-
-@[simp]
-
-中文:
-定理 lanUnit_desc
-  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
-  证明: (lanIsKan f g).fac s
-
-@[simp]
-
-Depends on / 依赖: lanIsKan
+/-
+**CategoryTheory.Bicategory.lanUnit_desc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Bicategory`。
+形式化陈述：lanUnit_desc [HasLeftKanExtension f g] (s : LeftExtension f g) : lanUnit f
+ g ≫ f ◁ lanDesc s = s.unit
+参数：s : LeftExtension f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftExtension.IsKan.fac`：fac (H : IsKan t) (s 
+: LeftExtension f g) : t.unit ≫ f ◁ H.desc s = s.unit
 -/
 theorem lanUnit_desc [HasLeftKanExtension f g] (s : LeftExtension f g) :
     lanUnit f g ≫ f ◁ lanDesc s = s.unit :=
   (lanIsKan f g).fac s
 
 @[simp]
-/--
-theorem `lanIsKan_desc` / 定理 `lanIsKan_desc`
-
-English:
-theorem lanIsKan_desc
-  given: [HasLeftKanExtension f g] (s : LeftExtension f g)
-  proof: rfl
-
-中文:
-定理 lanIsKan_desc
-  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.lanIsKan_desc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Bicategory`。
+形式化陈述：lanIsKan_desc [HasLeftKanExtension f g] (s : LeftExtension f g) : (lanIsKa
+n f g).desc s = lanDesc s
+参数：s : LeftExtension f g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanIsKan_desc [HasLeftKanExtension f g] (s : LeftExtension f g) :
     (lanIsKan f g).desc s = lanDesc s :=
   rfl
-
-/--
-theorem `Lan.existsUnique` / 定理 `Lan.existsUnique`
-
-English:
-theorem Lan.existsUnique
-  given: [HasLeftKanExtension f g] (s : LeftExtension f g)
-  proof: (lanIsKan f g).existsUnique _
-
-中文:
-定理 Lan.存在Unique
-  条件: [有LeftKanExtension f g] (s : LeftExtension f g)
-  证明: (lanIsKan f g).existsUnique _
-
-Depends on / 依赖: existsUnique, lanIsKan
+/-
+**CategoryTheory.Bicategory.Lan.existsUnique** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory.Lan`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b
+} {g : a ⟶ c}   [inst_1 : CategoryTheory.Bicategory.HasLeftKanExtension f g] (s 
+: CategoryTheory.Bicategory.LeftExtension f g),   ∃! τ,     CategoryTheory.Categ
+oryStruct.comp (CategoryTheory.Bicategory.lanUnit f g)         (CategoryTheory.B
+icategory.whiskerLeft f τ) =       s.unit
+参数：s : CategoryTheory.Bicategory.LeftExtension f g；CategoryTheory.Bicategory.lan
+Unit f g；CategoryTheory.Bicategory.whiskerLeft f τ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.IsUniversal.existsUnique`：existsUnique (h
+ : IsUniversal f) (g : StructuredArrow S T) : exists! η : f.right ⟶ g.right, f.h
+om ≫ T.map η = g.hom
 -/
 theorem Lan.existsUnique [HasLeftKanExtension f g] (s : LeftExtension f g) :
-    exists! τ, lanUnit f g ≫ f ◁ τ = s.unit :=
+    ∃! τ, lanUnit f g ≫ f ◁ τ = s.unit :=
   (lanIsKan f g).existsUnique _
 
-/--
-Definition of `Lan.CommuteWith` / `Lan.CommuteWith` 的定义
+/-- We say that a 1-morphism `h` commutes with the left Kan extension `f⁺ g` if the whiskered
+left extension for `f⁺ g` by `h` is a Kan extension of `g ≫ h` along `f`. -/
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.Bicategory.Lan`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b c : B} → 
+      (f : a ⟶ b) → (g : a ⟶ c) → [CategoryTheory.Bicategory.HasLeftKanExtension
+ f g] → {x : B} → (c ⟶ x) → Prop
+参数：f : a ⟶ b；g : a ⟶ c；c ⟶ x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Lan.CommuteWith
-  axioms and operations (1):
-    - commute : Nonempty IsKan (lanLeftExtension f g).whisker h
-
-中文:
-类 Lan.交换uteWith
-  公理与运算 (1 个):
-    - commute : 非空 IsKan (lanLeftExtension f g).whisker h
+--- 原说明 ---
+We say that a 1-morphism `h` commutes with the left Kan extension `f⁺ g` if the 
+whiskered
+left extension for `f⁺ g` by `h` is a Kan extension of `g ≫ h` along `f`.
 -/
 class Lan.CommuteWith
     (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g] {x : B} (h : c ⟶ x) : Prop where
-commute : Nonempty IsKan (lanLeftExtension f g).whisker h
+  commute : Nonempty <| IsKan <| (lanLeftExtension f g).whisker h
 
 namespace Lan.CommuteWith
 
-/--
-theorem `of_isKan_whisker` / 定理 `of_isKan_whisker`
-
-English:
-theorem of_isKan_whisker
-  statement: [HasLeftKanExtension f g] (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  proof: ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-中文:
-定理 of_isKan_whisker
-  结论: [有LeftKanExtension f g] (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  证明: ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-Depends on / 依赖: IsKan.ofIsoKan, ofIsoKan
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.of_isKan_whisker** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：of_isKan_whisker [HasLeftKanExtension f g] (t : LeftExtension f g) {x : B}
+ (h : c ⟶ x) (H : IsKan (t.whisker h)) (i : t.whisker h ≅ (lanLeftExtension f g)
+.whisker h) : Lan.CommuteWith f g h
+参数：t : LeftExtension f g；h : c ⟶ x；H : IsKan (t.whisker h)；i : t.whisker h ≅ (la
+nLeftExtension f g).whisker h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem of_isKan_whisker [HasLeftKanExtension f g] (t : LeftExtension f g) {x : B} (h : c ⟶ x)
     (H : IsKan (t.whisker h)) (i : t.whisker h ≅ (lanLeftExtension f g).whisker h) :
     Lan.CommuteWith f g h :=
   ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-/--
-theorem `of_lan_comp_iso` / 定理 `of_lan_comp_iso`
-
-English:
-theorem of_lan_comp_iso
-  statement: [HasLeftKanExtension f g]
-  proof: ⟨⟨(lanIsKan f (g ≫ h)).ofIsoKan StructuredArrow.isoMk i⟩⟩
-
-中文:
-定理 of_lan_comp_iso
-  结论: [有LeftKanExtension f g]
-  证明: ⟨⟨(lanIsKan f (g ≫ h)).ofIsoKan StructuredArrow.isoMk i⟩⟩
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, lanIsKan, ofIsoKan
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.of_lan_comp_iso** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：of_lan_comp_iso [HasLeftKanExtension f g] {x : B} {h : c ⟶ x} [HasLeftKanE
+xtension f (g ≫ h)] (i : f⁺ (g ≫ h) ≅ f⁺ g ≫ h) (w : lanUnit f (g ≫ h) ≫ f ◁ i.h
+om = lanUnit f g ▷ h ≫ (α_ _ _ _).hom) : Lan.CommuteWith f g h
+参数：g ≫ h；i : f⁺ (g ≫ h) ≅ f⁺ g ≫ h；w : lanUnit f (g ≫ h) ≫ f ◁ i.hom = lanUnit f
+ g ▷ h ≫ (α_ _ _ _).hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.precomp_map`：∀ {B : Type u} [inst : CategoryTh
+eory.Bicategory B] {a b : B} (c : B) (f : a ⟶ b) {X Y : b ⟶ c} (x : X ⟶ Y),   (C
+ategoryTheory.Bicategory.pr…
 -/
 theorem of_lan_comp_iso [HasLeftKanExtension f g]
     {x : B} {h : c ⟶ x} [HasLeftKanExtension f (g ≫ h)]
     (i : f⁺ (g ≫ h) ≅ f⁺ g ≫ h)
     (w : lanUnit f (g ≫ h) ≫ f ◁ i.hom = lanUnit f g ▷ h ≫ (α_ _ _ _).hom) :
     Lan.CommuteWith f g h :=
-⟨⟨(lanIsKan f (g ≫ h)).ofIsoKan StructuredArrow.isoMk i⟩⟩
+  ⟨⟨(lanIsKan f (g ≫ h)).ofIsoKan <| StructuredArrow.isoMk i⟩⟩
 
 variable (f : a ⟶ b) (g : a ⟶ c) [HasLeftKanExtension f g]
 variable {x : B} (h : c ⟶ x) [Lan.CommuteWith f g h]
 
-/--
-Definition of `isKan` / `isKan` 的定义
+/-- Evidence that `h` commutes with the left Kan extension `f⁺ g`. -/
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.isKan** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：isKan : IsKan (lanLeftExtension f g).whisker h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.Lan.CommuteWith.commute`：∀ {B : Type u} {inst 
+: CategoryTheory.Bicategory B} {a b c : B} {f : a ⟶ b} {g : a ⟶ c}   {inst_1 : C
+ategoryTheory.Bicategory.HasLeftKanExte…
 
-English:
-definition isKan
-  signature: : IsKan (lanLeftExtension f g).whisker h
-  body: Classical.choice Lan.CommuteWith.commute
-
-中文:
-定义 isKan
-  签名: : IsKan (lanLeftExtension f g).whisker h
-  定义体: Classical.choice Lan.CommuteWith.commute
-
-Depends on / 依赖: Classical, Classical.choice, CommuteWith, Lan.CommuteWith.commute, choice, commute
+--- 原说明 ---
+Evidence that `h` commutes with the left Kan extension `f⁺ g`.
 -/
-def isKan : IsKan (lanLeftExtension f g).whisker h := Classical.choice Lan.CommuteWith.commute
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLeftKanExtension f (g ≫ h)
-  body: (Lan.CommuteWith.isKan f g h).hasLeftKanExtension
-
-中文:
-实例 :
-  签名: 有LeftKanExtension f (g ≫ h)
-  定义体: (Lan.CommuteWith.isKan f g h).hasLeftKanExtension
-
-Depends on / 依赖: CommuteWith, Lan.CommuteWith.isKan, hasLeftKanExtension, preservesColimit_of_createsColimit_and_hasColimit
+def isKan : IsKan <| (lanLeftExtension f g).whisker h := Classical.choice Lan.CommuteWith.commute
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Bicategory.Lan.CommuteWith`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLeftKanExtension f (g ≫ h) := (Lan.CommuteWith.isKan f g h).hasLeftKanExtension
 
-/--
-Definition of `isKanWhisker` / `isKanWhisker` 的定义
+/-- If `h` commutes with `f⁺ g` and `t` is another left Kan extension of `g` along `f`, then
+`t.whisker h` is a left Kan extension of `g ≫ h` along `f`. -/
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.isKanWhisker** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：isKanWhisker (t : LeftExtension f g) (H : IsKan t) {x : B} (h : c ⟶ x) [La
+n.CommuteWith f g h] : IsKan (t.whisker h)
+参数：t : LeftExtension f g；H : IsKan t；h : c ⟶ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isKanWhisker
-  body: IsKan.whiskerOfCommute (lanLeftExtension f g) t (IsKan.uniqueUpToIso (lanIsKan f g) H) h
-    (isKan f g h)
-
-中文:
-定义 isKanWhisker
-  定义体: IsKan.whiskerOfCommute (lanLeftExtension f g) t (IsKan.uniqueUpToIso (lanIsKan f g) H) h
-    (isKan f g h)
-
-Depends on / 依赖: IsKan.uniqueUpToIso, IsKan.whiskerOfCommute, lanIsKan, lanLeftExtension, preservesColimitOfShape_of_createsColimitsOfShape_and_hasColimitsOfShape, uniqueUpToIso, whiskerOfCommute
+--- 原说明 ---
+If `h` commutes with `f⁺ g` and `t` is another left Kan extension of `g` along `
+f`, then
+`t.whisker h` is a left Kan extension of `g ≫ h` along `f`.
 -/
 def isKanWhisker
     (t : LeftExtension f g) (H : IsKan t) {x : B} (h : c ⟶ x) [Lan.CommuteWith f g h] :
@@ -436,59 +371,51 @@ def isKanWhisker
   IsKan.whiskerOfCommute (lanLeftExtension f g) t (IsKan.uniqueUpToIso (lanIsKan f g) H) h
     (isKan f g h)
 
-/--
-Definition of `lanCompIsoWhisker` / `lanCompIsoWhisker` 的定义
+/-- The isomorphism `f⁺ (g ≫ h) ≅ f⁺ g ≫ h` at the level of structured arrows. -/
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.lanCompIsoWhisker** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：lanCompIsoWhisker : lanLeftExtension f (g ≫ h) ≅ (lanLeftExtension f g).wh
+isker h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.Lan.CommuteWith.instHasLeftKanExtensionComp`：∀
+ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : 
+a ⟶ c)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanExte…
 
-English:
-definition lanCompIsoWhisker
-  signature: : lanLeftExtension f (g ≫ h) ≅ (lanLeftExtension f g).whisker h
-  body: IsKan.uniqueUpToIso (lanIsKan f (g ≫ h)) (Lan.CommuteWith.isKan f g h)
-
-@[simp]
-
-中文:
-定义 lanCompIsoWhisker
-  签名: : lanLeftExtension f (g ≫ h) ≅ (lanLeftExtension f g).whisker h
-  定义体: IsKan.uniqueUpToIso (lanIsKan f (g ≫ h)) (Lan.CommuteWith.isKan f g h)
-
-@[simp]
-
-Depends on / 依赖: CommuteWith, IsKan.uniqueUpToIso, Lan.CommuteWith.isKan, lanIsKan, preservesColimits_of_createsColimits_and_hasColimits, uniqueUpToIso
+--- 原说明 ---
+The isomorphism `f⁺ (g ≫ h) ≅ f⁺ g ≫ h` at the level of structured arrows.
 -/
 def lanCompIsoWhisker : lanLeftExtension f (g ≫ h) ≅ (lanLeftExtension f g).whisker h :=
   IsKan.uniqueUpToIso (lanIsKan f (g ≫ h)) (Lan.CommuteWith.isKan f g h)
 
 @[simp]
-/--
-theorem `lanCompIsoWhisker_hom_right` / 定理 `lanCompIsoWhisker_hom_right`
-
-English:
-theorem lanCompIsoWhisker_hom_right
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lanCompIsoWhisker_hom_right
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.lanCompIsoWhisker_hom_right** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：lanCompIsoWhisker_hom_right : (lanCompIsoWhisker f g h).hom.right = lanDes
+c ((lanLeftExtension f g).whisker h)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.Lan.CommuteWith.instHasLeftKanExtensionComp`：∀
+ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : 
+a ⟶ c)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanExte…
 -/
 theorem lanCompIsoWhisker_hom_right :
     (lanCompIsoWhisker f g h).hom.right = lanDesc ((lanLeftExtension f g).whisker h) :=
   rfl
 
 @[simp]
-/--
-theorem `lanCompIsoWhisker_inv_right` / 定理 `lanCompIsoWhisker_inv_right`
-
-English:
-theorem lanCompIsoWhisker_inv_right
-  proof: rfl
-
-中文:
-定理 lanCompIsoWhisker_inv_right
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.lanCompIsoWhisker_inv_right** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：lanCompIsoWhisker_inv_right : (lanCompIsoWhisker f g h).inv.right = (isKan
+ f g h).desc (lanLeftExtension f (g ≫ h))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.Lan.CommuteWith.instHasLeftKanExtensionComp`：∀
+ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : 
+a ⟶ c)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanExte…
 -/
 theorem lanCompIsoWhisker_inv_right :
     (lanCompIsoWhisker f g h).inv.right = (isKan f g h).desc (lanLeftExtension f (g ≫ h)) :=
@@ -496,84 +423,63 @@ theorem lanCompIsoWhisker_inv_right :
 
 /-- The 1-morphism `h` commutes with the left Kan extension `f⁺ g`. -/
 @[simps!]
-/--
-Definition of `lanCompIso` / `lanCompIso` 的定义
+/-
+**CategoryTheory.Bicategory.Lan.CommuteWith.lanCompIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Bicategory.Lan.CommuteWith`。
+形式化陈述：lanCompIso : f⁺ (g ≫ h) ≅ f⁺ g ≫ h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.Lan.CommuteWith.instHasLeftKanExtensionComp`：∀
+ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : 
+a ⟶ c)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanExte…
 
-English:
-definition lanCompIso
-  signature: : f⁺ (g ≫ h) ≅ f⁺ g ≫ h
-  body: Comma.rightIso lanCompIsoWhisker f g h
-
-中文:
-定义 lanCompIso
-  签名: : f⁺ (g ≫ h) ≅ f⁺ g ≫ h
-  定义体: Comma.rightIso lanCompIsoWhisker f g h
-
-Depends on / 依赖: Comma.rightIso, lanCompIsoWhisker, rightIso
+--- 原说明 ---
+The 1-morphism `h` commutes with the left Kan extension `f⁺ g`.
 -/
-def lanCompIso : f⁺ (g ≫ h) ≅ f⁺ g ≫ h := Comma.rightIso lanCompIsoWhisker f g h
+def lanCompIso : f⁺ (g ≫ h) ≅ f⁺ g ≫ h := Comma.rightIso <| lanCompIsoWhisker f g h
 
 end Lan.CommuteWith
 
-/--
-Definition of `HasAbsLeftKanExtension` / `HasAbsLeftKanExtension` 的定义
+/-- We say that there exists an absolute left Kan extension of `g` along `f` if any 1-morphism `h`
+commutes with the left Kan extension `f⁺ g`. -/
+/-
+**CategoryTheory.Bicategory.HasAbsLeftKanExtension** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.Bicategory`。
+形式化陈述：{B : Type u} → [inst : CategoryTheory.Bicategory B] → {a b c : B} → (a ⟶ b
+) → (a ⟶ c) → Prop
+参数：a ⟶ b；a ⟶ c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasAbsLeftKanExtension
-  parameters: (f : a ⟶ b) (g : a ⟶ c)
-  extends: HasLeftKanExtension f g
-  axioms and operations (1):
-    - commute({x : B} (h : c ⟶ x)) : Lan.CommuteWith f g h
-
-中文:
-类 有AbsLeftKanExtension
-  参数: (f : a ⟶ b) (g : a ⟶ c)
-  继承: 有LeftKanExtension f g
-  公理与运算 (1 个):
-    - commute({x : B} (h : c ⟶ x)) : Lan.交换uteWith f g h
+--- 原说明 ---
+We say that there exists an absolute left Kan extension of `g` along `f` if any 
+1-morphism `h`
+commutes with the left Kan extension `f⁺ g`.
 -/
 class HasAbsLeftKanExtension (f : a ⟶ b) (g : a ⟶ c) : Prop extends HasLeftKanExtension f g where
   commute {x : B} (h : c ⟶ x) : Lan.CommuteWith f g h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasAbsLeftKanExtension
-  signature: f g] {x
-  body: HasAbsLeftKanExtension.commute h
-
-中文:
-实例 [有AbsLeftKanExtension
-  签名: f g] {x
-  定义体: HasAbsLeftKanExtension.commute h
-
-Depends on / 依赖: HasAbsLeftKanExtension, HasAbsLeftKanExtension.commute, commute
+/-
+**CategoryTheory.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasAbsLeftKanExtension f g] {x : B} (h : c ⟶ x) : Lan.CommuteWith f g h :=
   HasAbsLeftKanExtension.commute h
-
-/--
-theorem `LeftExtension.IsAbsKan.hasAbsLeftKanExtension` / 定理 `LeftExtension.IsAbsKan.hasAbsLeftKanExtension`
-
-English:
-theorem LeftExtension.IsAbsKan.hasAbsLeftKanExtension
-  given: {t : LeftExtension f g} (H : IsAbsKan t)
-  proof: have : HasLeftKanExtension f g := H.isKan.hasLeftKanExtension
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanIsKan f g)) h⟩⟩⟩
-
-中文:
-定理 LeftExtension.IsAbsKan.hasAbsLeftKanExtension
-  条件: {t : LeftExtension f g} (H : IsAbsKan t)
-  证明: have : HasLeftKanExtension f g := H.isKan.hasLeftKanExtension
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanIsKan f g)) h⟩⟩⟩
-
-Depends on / 依赖: H.isKan, H.isKan.hasLeftKanExtension, H.ofIsoAbsKan, HasLeftKanExtension, IsKan.uniqueUpToIso, hasLeftKanExtension, lanIsKan, ofIsoAbsKan, uniqueUpToIso
+/-
+**CategoryTheory.Bicategory.LeftExtension.IsAbsKan.hasAbsLeftKanExtension** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Bicategory.LeftExtension.IsAbsKan`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b
+} {g : a ⟶ c}   {t : CategoryTheory.Bicategory.LeftExtension f g} (H : t.IsAbsKa
+n),   CategoryTheory.Bicategory.HasAbsLeftKanExtension f g
+参数：H : t.IsAbsKan。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftExtension.IsKan.hasLeftKanExtension`：∀ {B 
+: Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b} {g : a ⟶ 
+c}   {t : CategoryTheory.Bicategory.LeftExtension f g} …
 -/
 theorem LeftExtension.IsAbsKan.hasAbsLeftKanExtension {t : LeftExtension f g} (H : IsAbsKan t) :
     HasAbsLeftKanExtension f g :=
   have : HasLeftKanExtension f g := H.isKan.hasLeftKanExtension
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanIsKan f g)) h⟩⟩⟩
+  ⟨fun h ↦ ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanIsKan f g)) h⟩⟩⟩
 
 end LeftKan
 
@@ -583,91 +489,71 @@ open LeftLift
 
 variable {f : b ⟶ a} {g : c ⟶ a}
 
-/--
-Definition of `HasLeftKanLift` / `HasLeftKanLift` 的定义
+/-- The existence of a left Kan lift of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.HasLeftKanLift** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：{B : Type u} → [inst : CategoryTheory.Bicategory B] → {a b c : B} → (b ⟶ a
+) → (c ⟶ a) → Prop
+参数：b ⟶ a；c ⟶ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLeftKanLift
-  parameters: (f : b ⟶ a) (g : c ⟶ a)
-  (no additional axioms)
-
-中文:
-类 有LeftKanLift
-  参数: (f : b ⟶ a) (g : c ⟶ a)
-  (无附加公理)
+--- 原说明 ---
+The existence of a left Kan lift of `g` along `f`.
 -/
 class HasLeftKanLift (f : b ⟶ a) (g : c ⟶ a) : Prop where mk' ::
-hasInitial : HasInitial LeftLift f g
-
-/--
-theorem `LeftLift.IsKan.hasLeftKanLift` / 定理 `LeftLift.IsKan.hasLeftKanLift`
-
-English:
-theorem LeftLift.IsKan.hasLeftKanLift
-  given: {t : LeftLift f g} (H : IsKan t)
-  statement: HasLeftKanLift f g
-  proof: ⟨IsInitial.hasInitial H⟩
-
-中文:
-定理 LeftLift.IsKan.hasLeftKanLift
-  条件: {t : LeftLift f g} (H : IsKan t)
-  结论: 有LeftKanLift f g
-  证明: ⟨IsInitial.hasInitial H⟩
-
-Depends on / 依赖: IsInitial, IsInitial.hasInitial, hasInitial
+  hasInitial : HasInitial <| LeftLift f g
+/-
+**CategoryTheory.Bicategory.LeftLift.IsKan.hasLeftKanLift** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Bicategory.LeftLift.IsKan`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a
+} {g : c ⟶ a}   {t : CategoryTheory.Bicategory.LeftLift f g} (H : t.IsKan), Cate
+goryTheory.Bicategory.HasLeftKanLift f g
+参数：H : t.IsKan。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hasInitial`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (h : CategoryTheory.Limits.IsInitial X),
+   CategoryTheory.Limits.HasInit…
 -/
 theorem LeftLift.IsKan.hasLeftKanLift {t : LeftLift f g} (H : IsKan t) : HasLeftKanLift f g :=
   ⟨IsInitial.hasInitial H⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLeftKanLift
-  signature: f g] : HasInitial LeftLift f g
-  body: HasLeftKanLift.hasInitial
-
-中文:
-实例 [有LeftKanLift
-  签名: f g] : HasInitial LeftLift f g
-  定义体: HasLeftKanLift.hasInitial
-
-Depends on / 依赖: HasLeftKanLift, HasLeftKanLift.hasInitial, hasInitial
+/-
+**CategoryTheory.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [HasLeftKanLift f g] : HasInitial LeftLift f g := HasLeftKanLift.hasInitial
+instance [HasLeftKanLift f g] : HasInitial <| LeftLift f g := HasLeftKanLift.hasInitial
 
-/--
-Definition of `lanLiftLeftLift` / `lanLiftLeftLift` 的定义
+/-- The left Kan lift of `g` along `f` at the level of structured arrows. -/
+/-
+**CategoryTheory.Bicategory.lanLiftLeftLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：lanLiftLeftLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : LeftLift f 
+g
+参数：f : b ⟶ a；g : c ⟶ a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instHasInitialLeftLiftOfHasLeftKanLift`：∀ {B :
+ Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a} {g : c ⟶ a
+}   [CategoryTheory.Bicategory.HasLeftKanLift f g],   …
 
-English:
-definition lanLiftLeftLift
-  signature: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  body: ⊥_ (LeftLift f g)
-
-中文:
-定义 lanLiftLeftLift
-  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  定义体: ⊥_ (LeftLift f g)
-
-Depends on / 依赖: LeftLift
+--- 原说明 ---
+The left Kan lift of `g` along `f` at the level of structured arrows.
 -/
 def lanLiftLeftLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : LeftLift f g :=
   ⊥_ (LeftLift f g)
 
-/--
-Definition of `lanLift` / `lanLift` 的定义
+/-- The left Kan lift of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.lanLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bi
+category`。
+形式化陈述：lanLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : c ⟶ b
+参数：f : b ⟶ a；g : c ⟶ a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanLift
-  signature: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  body: (lanLiftLeftLift f g).lift
-
-中文:
-定义 lanLift
-  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  定义体: (lanLiftLeftLift f g).lift
-
-Depends on / 依赖: lanLiftLeftLift
+--- 原说明 ---
+The left Kan lift of `g` along `f`.
 -/
 def lanLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : c ⟶ b :=
   (lanLiftLeftLift f g).lift
@@ -676,9 +562,9 @@ def lanLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : c ⟶ b :=
 ```
             b
           ◹ |
-   f₊ g / |
-      / | f
-    / ▽
+   f₊ g /   |
+      /     | f
+    /       ▽
   c - - - ▷ a
        g
 ```
@@ -686,278 +572,234 @@ def lanLift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : c ⟶ b :=
 scoped infixr:90 "₊ " => lanLift
 
 @[simp]
-/--
-theorem `lanLiftLeftLift_lift` / 定理 `lanLiftLeftLift_lift`
-
-English:
-theorem lanLiftLeftLift_lift
-  given: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  proof: rfl
-
-中文:
-定理 lanLiftLeftLift_lift
-  条件: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.lanLiftLeftLift_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：lanLiftLeftLift_lift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : (lanLi
+ftLeftLift f g).lift = f₊ g
+参数：f : b ⟶ a；g : c ⟶ a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanLiftLeftLift_lift (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] :
     (lanLiftLeftLift f g).lift = f₊ g := rfl
 
-/--
-Definition of `lanLiftUnit` / `lanLiftUnit` 的定义
+/-- The unit for the left Kan lift `f₊ g`. -/
+/-
+**CategoryTheory.Bicategory.lanLiftUnit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Bicategory`。
+形式化陈述：lanLiftUnit (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : g ⟶ f₊ g ≫ f
+参数：f : b ⟶ a；g : c ⟶ a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanLiftUnit
-  signature: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  body: (lanLiftLeftLift f g).unit
-
-@[simp]
-
-中文:
-定义 lanLiftUnit
-  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  定义体: (lanLiftLeftLift f g).unit
-
-@[simp]
-
-Depends on / 依赖: lanLiftLeftLift
+--- 原说明 ---
+The unit for the left Kan lift `f₊ g`.
 -/
 def lanLiftUnit (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : g ⟶ f₊ g ≫ f :=
   (lanLiftLeftLift f g).unit
 
 @[simp]
-/--
-theorem `lanLiftLeftLift_unit` / 定理 `lanLiftLeftLift_unit`
-
-English:
-theorem lanLiftLeftLift_unit
-  given: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  proof: rfl
-
-中文:
-定理 lanLiftLeftLift_unit
-  条件: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.lanLiftLeftLift_unit** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：lanLiftLeftLift_unit (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : (lanLi
+ftLeftLift f g).unit = lanLiftUnit f g
+参数：f : b ⟶ a；g : c ⟶ a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanLiftLeftLift_unit (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] :
     (lanLiftLeftLift f g).unit = lanLiftUnit f g := rfl
 
-/--
-Definition of `lanLiftIsKan` / `lanLiftIsKan` 的定义
+/-- Evidence that `lanLiftLeftLift f g` is a Kan lift. -/
+/-
+**CategoryTheory.Bicategory.lanLiftIsKan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Bicategory`。
+形式化陈述：lanLiftIsKan (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : (lanLiftLeftLi
+ft f g).IsKan
+参数：f : b ⟶ a；g : c ⟶ a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instHasInitialLeftLiftOfHasLeftKanLift`：∀ {B :
+ Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a} {g : c ⟶ a
+}   [CategoryTheory.Bicategory.HasLeftKanLift f g],   …
 
-English:
-definition lanLiftIsKan
-  signature: (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
-  body: initialIsInitial
-
-中文:
-定义 lanLiftIsKan
-  签名: (f : b ⟶ a) (g : c ⟶ a) [有LeftKanLift f g]
-  定义体: initialIsInitial
-
-Depends on / 依赖: initialIsInitial
+--- 原说明 ---
+Evidence that `lanLiftLeftLift f g` is a Kan lift.
 -/
 def lanLiftIsKan (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] : (lanLiftLeftLift f g).IsKan :=
   initialIsInitial
 
 variable {f : b ⟶ a} {g : c ⟶ a}
 
-/--
-Definition of `lanLiftDesc` / `lanLiftDesc` 的定义
+/-- The family of 2-morphisms out of the left Kan lift `f₊ g`. -/
+/-
+**CategoryTheory.Bicategory.lanLiftDesc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Bicategory`。
+形式化陈述：lanLiftDesc [HasLeftKanLift f g] (s : LeftLift f g) : f₊ g ⟶ s.lift
+参数：s : LeftLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanLiftDesc
-  signature: [HasLeftKanLift f g] (s : LeftLift f g)
-  body: (lanLiftIsKan f g).desc s
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lanLiftDesc
-  签名: [有LeftKanLift f g] (s : LeftLift f g)
-  定义体: (lanLiftIsKan f g).desc s
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: lanLiftIsKan
+--- 原说明 ---
+The family of 2-morphisms out of the left Kan lift `f₊ g`.
 -/
 def lanLiftDesc [HasLeftKanLift f g] (s : LeftLift f g) :
     f₊ g ⟶ s.lift :=
   (lanLiftIsKan f g).desc s
 
 @[reassoc (attr := simp)]
-/--
-theorem `lanLiftUnit_desc` / 定理 `lanLiftUnit_desc`
-
-English:
-theorem lanLiftUnit_desc
-  given: [HasLeftKanLift f g] (s : LeftLift f g)
-  proof: (lanLiftIsKan f g).fac s
-
-@[simp]
-
-中文:
-定理 lanLiftUnit_desc
-  条件: [有LeftKanLift f g] (s : LeftLift f g)
-  证明: (lanLiftIsKan f g).fac s
-
-@[simp]
-
-Depends on / 依赖: lanLiftIsKan
+/-
+**CategoryTheory.Bicategory.lanLiftUnit_desc** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：lanLiftUnit_desc [HasLeftKanLift f g] (s : LeftLift f g) : lanLiftUnit f g
+ ≫ lanLiftDesc s ▷ f = s.unit
+参数：s : LeftLift f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftLift.IsKan.fac`：fac (H : IsKan t) (s : Lef
+tLift f g) : t.unit ≫ H.desc s ▷ f = s.unit
 -/
 theorem lanLiftUnit_desc [HasLeftKanLift f g] (s : LeftLift f g) :
     lanLiftUnit f g ≫ lanLiftDesc s ▷ f = s.unit :=
   (lanLiftIsKan f g).fac s
 
 @[simp]
-/--
-theorem `lanLiftIsKan_desc` / 定理 `lanLiftIsKan_desc`
-
-English:
-theorem lanLiftIsKan_desc
-  given: [HasLeftKanLift f g] (s : LeftLift f g)
-  proof: rfl
-
-中文:
-定理 lanLiftIsKan_desc
-  条件: [有LeftKanLift f g] (s : LeftLift f g)
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.lanLiftIsKan_desc** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Bicategory`。
+形式化陈述：lanLiftIsKan_desc [HasLeftKanLift f g] (s : LeftLift f g) : (lanLiftIsKan 
+f g).desc s = lanLiftDesc s
+参数：s : LeftLift f g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lanLiftIsKan_desc [HasLeftKanLift f g] (s : LeftLift f g) :
     (lanLiftIsKan f g).desc s = lanLiftDesc s :=
   rfl
-
-/--
-theorem `LanLift.existsUnique` / 定理 `LanLift.existsUnique`
-
-English:
-theorem LanLift.existsUnique
-  given: [HasLeftKanLift f g] (s : LeftLift f g)
-  proof: (lanLiftIsKan f g).existsUnique _
-
-中文:
-定理 LanLift.存在Unique
-  条件: [有LeftKanLift f g] (s : LeftLift f g)
-  证明: (lanLiftIsKan f g).existsUnique _
-
-Depends on / 依赖: existsUnique, lanLiftIsKan
+/-
+**CategoryTheory.Bicategory.LanLift.existsUnique** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory.LanLift`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a
+} {g : c ⟶ a}   [inst_1 : CategoryTheory.Bicategory.HasLeftKanLift f g] (s : Cat
+egoryTheory.Bicategory.LeftLift f g),   ∃! τ,     CategoryTheory.CategoryStruct.
+comp (CategoryTheory.Bicategory.lanLiftUnit f g)         (CategoryTheory.Bicateg
+ory.whiskerRight τ f) =       s.unit
+参数：s : CategoryTheory.Bicategory.LeftLift f g；CategoryTheory.Bicategory.lanLiftU
+nit f g；CategoryTheory.Bicategory.whiskerRight τ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.IsUniversal.existsUnique`：existsUnique (h
+ : IsUniversal f) (g : StructuredArrow S T) : exists! η : f.right ⟶ g.right, f.h
+om ≫ T.map η = g.hom
 -/
 theorem LanLift.existsUnique [HasLeftKanLift f g] (s : LeftLift f g) :
-    exists! τ, lanLiftUnit f g ≫ τ ▷ f = s.unit :=
+    ∃! τ, lanLiftUnit f g ≫ τ ▷ f = s.unit :=
   (lanLiftIsKan f g).existsUnique _
 
-/--
-Definition of `LanLift.CommuteWith` / `LanLift.CommuteWith` 的定义
+/-- We say that a 1-morphism `h` commutes with the left Kan lift `f₊ g` if the whiskered left lift
+for `f₊ g` by `h` is a Kan lift of `h ≫ g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.Bicategory.LanLift`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b c : B} → 
+(f : b ⟶ a) → (g : c ⟶ a) → [CategoryTheory.Bicategory.HasLeftKanLift f g] → {x 
+: B} → (x ⟶ c) → Prop
+参数：f : b ⟶ a；g : c ⟶ a；x ⟶ c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LanLift.CommuteWith
-  axioms and operations (1):
-    - commute : Nonempty IsKan (lanLiftLeftLift f g).whisker h
-
-中文:
-类 LanLift.交换uteWith
-  公理与运算 (1 个):
-    - commute : 非空 IsKan (lanLiftLeftLift f g).whisker h
+--- 原说明 ---
+We say that a 1-morphism `h` commutes with the left Kan lift `f₊ g` if the whisk
+ered left lift
+for `f₊ g` by `h` is a Kan lift of `h ≫ g` along `f`.
 -/
 class LanLift.CommuteWith
     (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g] {x : B} (h : x ⟶ c) : Prop where
-commute : Nonempty IsKan (lanLiftLeftLift f g).whisker h
+  commute : Nonempty <| IsKan <| (lanLiftLeftLift f g).whisker h
 
 namespace LanLift.CommuteWith
 
-/--
-theorem `of_isKan_whisker` / 定理 `of_isKan_whisker`
-
-English:
-theorem of_isKan_whisker
-  statement: [HasLeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  proof: ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-中文:
-定理 of_isKan_whisker
-  结论: [有LeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  证明: ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-Depends on / 依赖: IsKan.ofIsoKan, ofIsoKan
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.of_isKan_whisker** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：of_isKan_whisker [HasLeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ 
+c) (H : IsKan (t.whisker h)) (i : t.whisker h ≅ (lanLiftLeftLift f g).whisker h)
+ : LanLift.CommuteWith f g h
+参数：t : LeftLift f g；h : x ⟶ c；H : IsKan (t.whisker h)；i : t.whisker h ≅ (lanLift
+LeftLift f g).whisker h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem of_isKan_whisker [HasLeftKanLift f g] (t : LeftLift f g) {x : B} (h : x ⟶ c)
     (H : IsKan (t.whisker h)) (i : t.whisker h ≅ (lanLiftLeftLift f g).whisker h) :
     LanLift.CommuteWith f g h :=
   ⟨⟨IsKan.ofIsoKan H i⟩⟩
-
-/--
-theorem `of_lanLift_comp_iso` / 定理 `of_lanLift_comp_iso`
-
-English:
-theorem of_lanLift_comp_iso
-  statement: [HasLeftKanLift f g]
-  proof: ⟨⟨(lanLiftIsKan f (h ≫ g)).ofIsoKan StructuredArrow.isoMk i⟩⟩
-
-中文:
-定理 of_lanLift_comp_iso
-  结论: [有LeftKanLift f g]
-  证明: ⟨⟨(lanLiftIsKan f (h ≫ g)).ofIsoKan StructuredArrow.isoMk i⟩⟩
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, lanLiftIsKan, ofIsoKan
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.of_lanLift_comp_iso** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：of_lanLift_comp_iso [HasLeftKanLift f g] {x : B} {h : x ⟶ c} [HasLeftKanLi
+ft f (h ≫ g)] (i : f₊ (h ≫ g) ≅ h ≫ f₊ g) (w : lanLiftUnit f (h ≫ g) ≫ i.hom ▷ f
+ = h ◁ lanLiftUnit f g ≫ (α_ _ _ _).inv) : LanLift.CommuteWith f g h
+参数：h ≫ g；i : f₊ (h ≫ g) ≅ h ≫ f₊ g；w : lanLiftUnit f (h ≫ g) ≫ i.hom ▷ f = h ◁ l
+anLiftUnit f g ≫ (α_ _ _ _).inv。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.postcomp_map`：∀ {B : Type u} [inst : CategoryT
+heory.Bicategory B] {b c : B} (a : B) (f : b ⟶ c) {X Y : a ⟶ b} (x : X ⟶ Y),   (
+CategoryTheory.Bicategory.po…
 -/
 theorem of_lanLift_comp_iso [HasLeftKanLift f g]
     {x : B} {h : x ⟶ c} [HasLeftKanLift f (h ≫ g)]
     (i : f₊ (h ≫ g) ≅ h ≫ f₊ g)
     (w : lanLiftUnit f (h ≫ g) ≫ i.hom ▷ f = h ◁ lanLiftUnit f g ≫ (α_ _ _ _).inv) :
     LanLift.CommuteWith f g h :=
-⟨⟨(lanLiftIsKan f (h ≫ g)).ofIsoKan StructuredArrow.isoMk i⟩⟩
+  ⟨⟨(lanLiftIsKan f (h ≫ g)).ofIsoKan <| StructuredArrow.isoMk i⟩⟩
 
 variable (f : b ⟶ a) (g : c ⟶ a) [HasLeftKanLift f g]
 variable {x : B} (h : x ⟶ c) [LanLift.CommuteWith f g h]
 
-/--
-Definition of `isKan` / `isKan` 的定义
+/-- Evidence that `h` commutes with the left Kan lift `f₊ g`. -/
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.isKan** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：isKan : IsKan (lanLiftLeftLift f g).whisker h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LanLift.CommuteWith.commute`：∀ {B : Type u} {i
+nst : CategoryTheory.Bicategory B} {a b c : B} {f : b ⟶ a} {g : c ⟶ a}   {inst_1
+ : CategoryTheory.Bicategory.HasLeftKanLift…
 
-English:
-definition isKan
-  signature: : IsKan (lanLiftLeftLift f g).whisker h
-  body: Classical.choice LanLift.CommuteWith.commute
-
-中文:
-定义 isKan
-  签名: : IsKan (lanLiftLeftLift f g).whisker h
-  定义体: Classical.choice LanLift.CommuteWith.commute
-
-Depends on / 依赖: Classical, Classical.choice, CommuteWith, LanLift, LanLift.CommuteWith.commute, choice, commute
+--- 原说明 ---
+Evidence that `h` commutes with the left Kan lift `f₊ g`.
 -/
-def isKan : IsKan (lanLiftLeftLift f g).whisker h :=
+def isKan : IsKan <| (lanLiftLeftLift f g).whisker h :=
     Classical.choice LanLift.CommuteWith.commute
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLeftKanLift f (h ≫ g)
-  body: (LanLift.CommuteWith.isKan f g h).hasLeftKanLift
-
-中文:
-实例 :
-  签名: 有LeftKanLift f (h ≫ g)
-  定义体: (LanLift.CommuteWith.isKan f g h).hasLeftKanLift
-
-Depends on / 依赖: CommuteWith, LanLift, LanLift.CommuteWith.isKan, hasLeftKanLift
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.Bicategory.LanLift.CommuteWith`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLeftKanLift f (h ≫ g) := (LanLift.CommuteWith.isKan f g h).hasLeftKanLift
 
-/--
-Definition of `isKanWhisker` / `isKanWhisker` 的定义
+/-- If `h` commutes with `f₊ g` and `t` is another left Kan lift of `g` along `f`, then
+`t.whisker h` is a left Kan lift of `h ≫ g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.isKanWhisker** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：isKanWhisker (t : LeftLift f g) (H : IsKan t) {x : B} (h : x ⟶ c) [LanLift
+.CommuteWith f g h] : IsKan (t.whisker h)
+参数：t : LeftLift f g；H : IsKan t；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isKanWhisker
-  body: IsKan.whiskerOfCommute (lanLiftLeftLift f g) t (IsKan.uniqueUpToIso (lanLiftIsKan f g) H) h
-    (isKan f g h)
-
-中文:
-定义 isKanWhisker
-  定义体: IsKan.whiskerOfCommute (lanLiftLeftLift f g) t (IsKan.uniqueUpToIso (lanLiftIsKan f g) H) h
-    (isKan f g h)
-
-Depends on / 依赖: IsKan.uniqueUpToIso, IsKan.whiskerOfCommute, lanLiftIsKan, lanLiftLeftLift, uniqueUpToIso, whiskerOfCommute
+--- 原说明 ---
+If `h` commutes with `f₊ g` and `t` is another left Kan lift of `g` along `f`, t
+hen
+`t.whisker h` is a left Kan lift of `h ≫ g` along `f`.
 -/
 def isKanWhisker
     (t : LeftLift f g) (H : IsKan t) {x : B} (h : x ⟶ c) [LanLift.CommuteWith f g h] :
@@ -965,60 +807,52 @@ def isKanWhisker
   IsKan.whiskerOfCommute (lanLiftLeftLift f g) t (IsKan.uniqueUpToIso (lanLiftIsKan f g) H) h
     (isKan f g h)
 
-/--
-Definition of `lanLiftCompIsoWhisker` / `lanLiftCompIsoWhisker` 的定义
+/-- The isomorphism `f₊ (h ≫ g) ≅ h ≫ f₊ g` at the level of structured arrows. -/
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.lanLiftCompIsoWhisker** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：lanLiftCompIsoWhisker : lanLiftLeftLift f (h ≫ g) ≅ (lanLiftLeftLift f g).
+whisker h
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LanLift.CommuteWith.instHasLeftKanLiftComp`：∀ 
+{B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : b ⟶ a) (g : c
+ ⟶ a)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanLift…
 
-English:
-definition lanLiftCompIsoWhisker
-  signature: :
-  body: IsKan.uniqueUpToIso (lanLiftIsKan f (h ≫ g)) (LanLift.CommuteWith.isKan f g h)
-
-@[simp]
-
-中文:
-定义 lanLiftCompIsoWhisker
-  签名: :
-  定义体: IsKan.uniqueUpToIso (lanLiftIsKan f (h ≫ g)) (LanLift.CommuteWith.isKan f g h)
-
-@[simp]
-
-Depends on / 依赖: CommuteWith, IsKan.uniqueUpToIso, LanLift, LanLift.CommuteWith.isKan, lanLiftIsKan, uniqueUpToIso
+--- 原说明 ---
+The isomorphism `f₊ (h ≫ g) ≅ h ≫ f₊ g` at the level of structured arrows.
 -/
 def lanLiftCompIsoWhisker :
     lanLiftLeftLift f (h ≫ g) ≅ (lanLiftLeftLift f g).whisker h :=
   IsKan.uniqueUpToIso (lanLiftIsKan f (h ≫ g)) (LanLift.CommuteWith.isKan f g h)
 
 @[simp]
-/--
-theorem `lanLiftCompIsoWhisker_hom_right` / 定理 `lanLiftCompIsoWhisker_hom_right`
-
-English:
-theorem lanLiftCompIsoWhisker_hom_right
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lanLiftCompIsoWhisker_hom_right
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.lanLiftCompIsoWhisker_hom_right*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：lanLiftCompIsoWhisker_hom_right : (lanLiftCompIsoWhisker f g h).hom.right 
+= lanLiftDesc ((lanLiftLeftLift f g).whisker h)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LanLift.CommuteWith.instHasLeftKanLiftComp`：∀ 
+{B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : b ⟶ a) (g : c
+ ⟶ a)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanLift…
 -/
 theorem lanLiftCompIsoWhisker_hom_right :
     (lanLiftCompIsoWhisker f g h).hom.right = lanLiftDesc ((lanLiftLeftLift f g).whisker h) :=
   rfl
 
 @[simp]
-/--
-theorem `lanLiftCompIsoWhisker_inv_right` / 定理 `lanLiftCompIsoWhisker_inv_right`
-
-English:
-theorem lanLiftCompIsoWhisker_inv_right
-  proof: rfl
-
-中文:
-定理 lanLiftCompIsoWhisker_inv_right
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.lanLiftCompIsoWhisker_inv_right*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：lanLiftCompIsoWhisker_inv_right : (lanLiftCompIsoWhisker f g h).inv.right 
+= (isKan f g h).desc (lanLiftLeftLift f (h ≫ g))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LanLift.CommuteWith.instHasLeftKanLiftComp`：∀ 
+{B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : b ⟶ a) (g : c
+ ⟶ a)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanLift…
 -/
 theorem lanLiftCompIsoWhisker_inv_right :
     (lanLiftCompIsoWhisker f g h).inv.right = (isKan f g h).desc (lanLiftLeftLift f (h ≫ g)) :=
@@ -1026,87 +860,67 @@ theorem lanLiftCompIsoWhisker_inv_right :
 
 /-- The 1-morphism `h` commutes with the left Kan lift `f₊ g`. -/
 @[simps!]
-/--
-Definition of `lanLiftCompIso` / `lanLiftCompIso` 的定义
+/-
+**CategoryTheory.Bicategory.LanLift.CommuteWith.lanLiftCompIso** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Bicategory.LanLift.CommuteWith`。
+形式化陈述：lanLiftCompIso : f₊ (h ≫ g) ≅ h ≫ f₊ g
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LanLift.CommuteWith.instHasLeftKanLiftComp`：∀ 
+{B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} (f : b ⟶ a) (g : c
+ ⟶ a)   [inst_1 : CategoryTheory.Bicategory.HasLeftKanLift…
 
-English:
-definition lanLiftCompIso
-  signature: : f₊ (h ≫ g) ≅ h ≫ f₊ g
-  body: Comma.rightIso lanLiftCompIsoWhisker f g h
-
-中文:
-定义 lanLiftCompIso
-  签名: : f₊ (h ≫ g) ≅ h ≫ f₊ g
-  定义体: Comma.rightIso lanLiftCompIsoWhisker f g h
-
-Depends on / 依赖: Comma.rightIso, lanLiftCompIsoWhisker, rightIso
+--- 原说明 ---
+The 1-morphism `h` commutes with the left Kan lift `f₊ g`.
 -/
-def lanLiftCompIso : f₊ (h ≫ g) ≅ h ≫ f₊ g := Comma.rightIso lanLiftCompIsoWhisker f g h
+def lanLiftCompIso : f₊ (h ≫ g) ≅ h ≫ f₊ g := Comma.rightIso <| lanLiftCompIsoWhisker f g h
 
 end LanLift.CommuteWith
 
-/--
-Definition of `HasAbsLeftKanLift` / `HasAbsLeftKanLift` 的定义
+/-- We say that there exists an absolute left Kan lift of `g` along `f` if any 1-morphism `h`
+commutes with the left Kan lift `f₊ g`. -/
+/-
+**CategoryTheory.Bicategory.HasAbsLeftKanLift** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：{B : Type u} → [inst : CategoryTheory.Bicategory B] → {a b c : B} → (b ⟶ a
+) → (c ⟶ a) → Prop
+参数：b ⟶ a；c ⟶ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasAbsLeftKanLift
-  parameters: (f : b ⟶ a) (g : c ⟶ a)
-  extends: HasLeftKanLift f g
-  axioms and operations (1):
-    - commute : forall {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
-
-中文:
-类 有AbsLeftKanLift
-  参数: (f : b ⟶ a) (g : c ⟶ a)
-  继承: 有LeftKanLift f g
-  公理与运算 (1 个):
-    - commute : 对任意 {x : B} (h : x ⟶ c), LanLift.交换uteWith f g h
+--- 原说明 ---
+We say that there exists an absolute left Kan lift of `g` along `f` if any 1-mor
+phism `h`
+commutes with the left Kan lift `f₊ g`.
 -/
 class HasAbsLeftKanLift (f : b ⟶ a) (g : c ⟶ a) : Prop extends HasLeftKanLift f g where
-  commute : forall {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasAbsLeftKanLift
-  signature: f g] {x
-  body: HasAbsLeftKanLift.commute h
-
-中文:
-实例 [有AbsLeftKanLift
-  签名: f g] {x
-  定义体: HasAbsLeftKanLift.commute h
-
-Depends on / 依赖: HasAbsLeftKanLift, HasAbsLeftKanLift.commute, commute
+  commute : ∀ {x : B} (h : x ⟶ c), LanLift.CommuteWith f g h
+/-
+**CategoryTheory.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasAbsLeftKanLift f g] {x : B} (h : x ⟶ c) : LanLift.CommuteWith f g h :=
   HasAbsLeftKanLift.commute h
-
-/--
-theorem `LeftLift.IsAbsKan.hasAbsLeftKanLift` / 定理 `LeftLift.IsAbsKan.hasAbsLeftKanLift`
-
-English:
-theorem LeftLift.IsAbsKan.hasAbsLeftKanLift
-  given: {t : LeftLift f g} (H : IsAbsKan t)
-  proof: have : HasLeftKanLift f g := H.isKan.hasLeftKanLift
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanLiftIsKan f g)) h⟩⟩⟩
-
-中文:
-定理 LeftLift.IsAbsKan.hasAbsLeftKanLift
-  条件: {t : LeftLift f g} (H : IsAbsKan t)
-  证明: have : HasLeftKanLift f g := H.isKan.hasLeftKanLift
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanLiftIsKan f g)) h⟩⟩⟩
-
-Depends on / 依赖: H.isKan, H.isKan.hasLeftKanLift, H.ofIsoAbsKan, HasLeftKanLift, IsKan.uniqueUpToIso, hasLeftKanLift, lanLiftIsKan, ofIsoAbsKan, uniqueUpToIso
+/-
+**CategoryTheory.Bicategory.LeftLift.IsAbsKan.hasAbsLeftKanLift** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Bicategory.LeftLift.IsAbsKan`。
+形式化陈述：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a
+} {g : c ⟶ a}   {t : CategoryTheory.Bicategory.LeftLift f g} (H : t.IsAbsKan), C
+ategoryTheory.Bicategory.HasAbsLeftKanLift f g
+参数：H : t.IsAbsKan。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftLift.IsKan.hasLeftKanLift`：∀ {B : Type u} 
+[inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a} {g : c ⟶ a}   {t : 
+CategoryTheory.Bicategory.LeftLift f g} (H : …
 -/
 theorem LeftLift.IsAbsKan.hasAbsLeftKanLift {t : LeftLift f g} (H : IsAbsKan t) :
     HasAbsLeftKanLift f g :=
   have : HasLeftKanLift f g := H.isKan.hasLeftKanLift
-  ⟨fun h => ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanLiftIsKan f g)) h⟩⟩⟩
+  ⟨fun h ↦ ⟨⟨H.ofIsoAbsKan (IsKan.uniqueUpToIso H.isKan (lanLiftIsKan f g)) h⟩⟩⟩
 
 end LeftLift
 
 end Bicategory
 
 end CategoryTheory
+

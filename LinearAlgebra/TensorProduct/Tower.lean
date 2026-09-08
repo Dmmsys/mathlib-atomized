@@ -72,22 +72,19 @@ variable [AddCommMonoid P'] [Module R P'] [Module A P'] [Module B P']
 variable [IsScalarTower R A P'] [IsScalarTower R B P'] [SMulCommClass A B P']
 variable [AddCommMonoid Q'] [Module R Q']
 
-/--
-theorem `smul_eq_lsmul_rTensor` / 定理 `smul_eq_lsmul_rTensor`
-
-English:
-theorem smul_eq_lsmul_rTensor
-  given: (a : A) (x : M otimes[R] N)
-  statement: a • x = (lsmul R R M a).rTensor N x
-  proof: rfl
-
-中文:
-定理 smul_eq_lsmul_rTensor
-  条件: (a : A) (x : M otimes[R] N)
-  结论: a • x = (lsmul R R M a).rTensor N x
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.smul_eq_lsmul_rTensor** 是 Mathlib 中的一个定理，位于命
+名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：smul_eq_lsmul_rTensor (a : A) (x : M otimes[R] N) : a • x = (lsmul R R M a
+).rTensor N x
+参数：a : A；x : M otimes[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem smul_eq_lsmul_rTensor (a : A) (x : M otimes[R] N) : a • x = (lsmul R R M a).rTensor N x :=
+theorem smul_eq_lsmul_rTensor (a : A) (x : M ⊗[R] N) : a • x = (lsmul R R M a).rTensor N x :=
   rfl
 
 /-- Heterobasic version of `TensorProduct.curry`:
@@ -95,25 +92,30 @@ theorem smul_eq_lsmul_rTensor (a : A) (x : M otimes[R] N) : a • x = (lsmul R R
 Given a linear map `M ⊗[R] N →[A] P`, compose it with the canonical
 bilinear map `M →[A] N →[R] M ⊗[R] N` to form a bilinear map `M →[A] N →[R] P`. -/
 @[simps]
-nonrec def curry (f : M otimes[R] N ->ₗ[A] P) : M ->ₗ[A] N ->ₗ[R] P :=
+nonrec def curry (f : M ⊗[R] N →ₗ[A] P) : M →ₗ[A] N →ₗ[R] P :=
   { curry (f.restrictScalars R) with
     toFun := curry (f.restrictScalars R)
-    map_smul' := fun c x => LinearMap.ext fun y => f.map_smul c (x otimesₜ y) }
+    map_smul' := fun c x => LinearMap.ext fun y => f.map_smul c (x ⊗ₜ y) }
 
-/--
-theorem `restrictScalars_curry` / 定理 `restrictScalars_curry`
-
-English:
-theorem restrictScalars_curry
-  given: (f : M otimes[R] N ->ₗ[A] P)
-  proof: rfl
-
-中文:
-定理 restrictScalars_curry
-  条件: (f : M otimes[R] N ->ₗ[A] P)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.restrictScalars_curry** 是 Mathlib 中的一个定理，位于命
+名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：restrictScalars_curry (f : M otimes[R] N ->ₗ[A] P) : restrictScalars R (cu
+rry f) = TensorProduct.curry (f.restrictScalars R)
+参数：f : M otimes[R] N ->ₗ[A] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `LinearMap.instIsScalarTower`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
-theorem restrictScalars_curry (f : M otimes[R] N ->ₗ[A] P) :
+theorem restrictScalars_curry (f : M ⊗[R] N →ₗ[A] P) :
     restrictScalars R (curry f) = TensorProduct.curry (f.restrictScalars R) :=
   rfl
 
@@ -122,88 +124,80 @@ a better `ext` lemma than `TensorProduct.AlgebraTensorModule.ext` below.
 
 See note [partially-applied ext lemmas]. -/
 @[ext high]
-nonrec theorem curry_injective : Function.Injective (curry : (M otimes N ->ₗ[A] P) -> M ->ₗ[A] N ->ₗ[R] P) :=
+nonrec theorem curry_injective : Function.Injective (curry : (M ⊗ N →ₗ[A] P) → M →ₗ[A] N →ₗ[R] P) :=
   fun _ _ h =>
-LinearMap.restrictScalars_injective R
-curry_injective (congr_arg (LinearMap.restrictScalars R) h :)
+  LinearMap.restrictScalars_injective R <|
+    curry_injective <| (congr_arg (LinearMap.restrictScalars R) h :)
 
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {g h : M otimes[R] N ->ₗ[A] P} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y))
-  statement: g = h
-  proof: curry_injective LinearMap.ext₂ H
-
-中文:
-定理 ext
-  条件: {g h : M otimes[R] N ->ₗ[A] P} (H : 对任意 x y, g (x otimesₜ y) = h (x otimesₜ y))
-  结论: g = h
-  证明: curry_injective LinearMap.ext₂ H
-
-Depends on / 依赖: LinearMap, LinearMap.ext, curry_injective
+/-
+**TensorProduct.AlgebraTensorModule.ext** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct
+.AlgebraTensorModule`。
+形式化陈述：ext {g h : M otimes[R] N ->ₗ[A] P} (H : forall x y, g (x otimesₜ y) = h (x
+ otimesₜ y)) : g = h
+参数：H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext₂`：ext₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (H : forall m n, 
+f m n = g m n) : f = g
 -/
-theorem ext {g h : M otimes[R] N ->ₗ[A] P} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h :=
-curry_injective LinearMap.ext₂ H
+theorem ext {g h : M ⊗[R] N →ₗ[A] P} (H : ∀ x y, g (x ⊗ₜ y) = h (x ⊗ₜ y)) : g = h :=
+  curry_injective <| LinearMap.ext₂ H
 
 /-- Heterobasic version of `TensorProduct.lift`:
 
 Constructing a linear map `M ⊗[R] N →[A] P` given a bilinear map `M →[A] N →[R] P` with the
 property that its composition with the canonical bilinear map `M →[A] N →[R] M ⊗[R] N` is
 the given bilinear map `M →[A] N →[R] P`. -/
-nonrec def lift (f : M ->ₗ[A] N ->ₗ[R] P) : M otimes[R] N ->ₗ[A] P :=
+nonrec def lift (f : M →ₗ[A] N →ₗ[R] P) : M ⊗[R] N →ₗ[A] P :=
   { lift (f.restrictScalars R) with
     map_smul' := fun c =>
       show
-        forall x : M otimes[R] N,
+        ∀ x : M ⊗[R] N,
           (lift (f.restrictScalars R)).comp (lsmul R R _ c) x =
             (lsmul R R _ c).comp (lift (f.restrictScalars R)) x
         from
-LinearMap.ext_iff.1
+        LinearMap.ext_iff.1 <|
           TensorProduct.ext' fun x y => by
             simp only [comp_apply, Algebra.lsmul_coe, smul_tmul', lift.tmul,
               coe_restrictScalars, f.map_smul, smul_apply] }
 
 @[simp]
-/--
-theorem `lift_apply` / 定理 `lift_apply`
-
-English:
-theorem lift_apply
-  given: (f : M ->ₗ[A] N ->ₗ[R] P) (a : M otimes[R] N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lift_apply
-  条件: (f : M ->ₗ[A] N ->ₗ[R] P) (a : M otimes[R] N)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.lift_apply** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：lift_apply (f : M ->ₗ[A] N ->ₗ[R] P) (a : M otimes[R] N) : AlgebraTensorMo
+dule.lift f a = TensorProduct.lift (LinearMap.restrictScalars R f) a
+参数：f : M ->ₗ[A] N ->ₗ[R] P；a : M otimes[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem lift_apply (f : M ->ₗ[A] N ->ₗ[R] P) (a : M otimes[R] N) :
+theorem lift_apply (f : M →ₗ[A] N →ₗ[R] P) (a : M ⊗[R] N) :
     AlgebraTensorModule.lift f a = TensorProduct.lift (LinearMap.restrictScalars R f) a :=
   rfl
 
 @[simp]
-/--
-theorem `lift_tmul` / 定理 `lift_tmul`
-
-English:
-theorem lift_tmul
-  given: (f : M ->ₗ[A] N ->ₗ[R] P) (x : M) (y : N)
-  statement: lift f (x otimesₜ y) = f x y
-  proof: rfl
-
-中文:
-定理 lift_tmul
-  条件: (f : M ->ₗ[A] N ->ₗ[R] P) (x : M) (y : N)
-  结论: lift f (x otimesₜ y) = f x y
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.lift_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorP
+roduct.AlgebraTensorModule`。
+形式化陈述：lift_tmul (f : M ->ₗ[A] N ->ₗ[R] P) (x : M) (y : N) : lift f (x otimesₜ y)
+ = f x y
+参数：f : M ->ₗ[A] N ->ₗ[R] P；x : M；y : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem lift_tmul (f : M ->ₗ[A] N ->ₗ[R] P) (x : M) (y : N) : lift f (x otimesₜ y) = f x y :=
+theorem lift_tmul (f : M →ₗ[A] N →ₗ[R] P) (x : M) (y : N) : lift f (x ⊗ₜ y) = f x y :=
   rfl
 
 variable (R A B M N P Q)
@@ -217,24 +211,26 @@ Linearly constructing a linear map `M ⊗[R] N →[A] P` given a bilinear map `M
 with the property that its composition with the canonical bilinear map `M →[A] N →[R] M ⊗[R] N` is
 the given bilinear map `M →[A] N →[R] P`. -/
 @[simps]
-/--
-Definition of `uncurry` / `uncurry` 的定义
+/-
+**TensorProduct.AlgebraTensorModule.uncurry** 是 Mathlib 中的一个定义，位于命名空间 `TensorPro
+duct.AlgebraTensorModule`。
+形式化陈述：uncurry : (M ->ₗ[A] N ->ₗ[R] P) ->ₗ[B] M otimes[R] N ->ₗ[A] P where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition uncurry
-  signature: : (M ->ₗ[A] N ->ₗ[R] P) ->ₗ[B] M otimes[R] N ->ₗ[A] P where
-  body: lift
-  map_add' _ _ := ext fun x y => by simp only [lift_tmul, add_apply]
-  map_smul' _ _ := ext fun x y => by simp only [lift_tmul, smul_apply, RingHom.id_apply]
+--- 原说明 ---
+Heterobasic version of `TensorProduct.uncurry`:
 
-中文:
-定义 uncurry
-  签名: : (M ->ₗ[A] N ->ₗ[R] P) ->ₗ[B] M otimes[R] N ->ₗ[A] P where
-  定义体: lift
-  map_add' _ _ := ext fun x y => by simp only [lift_tmul, add_apply]
-  map_smul' _ _ := ext fun x y => by simp only [lift_tmul, smul_apply, RingHom.id_apply]
+Linearly constructing a linear map `M ⊗[R] N →[A] P` given a bilinear map `M →[A
+] N →[R] P`
+with the property that its composition with the canonical bilinear map `M →[A] N
+ →[R] M ⊗[R] N` is
+the given bilinear map `M →[A] N →[R] P`.
 -/
-def uncurry : (M ->ₗ[A] N ->ₗ[R] P) ->ₗ[B] M otimes[R] N ->ₗ[A] P where
+def uncurry : (M →ₗ[A] N →ₗ[R] P) →ₗ[B] M ⊗[R] N →ₗ[A] P where
   toFun := lift
   map_add' _ _ := ext fun x y => by simp only [lift_tmul, add_apply]
   map_smul' _ _ := ext fun x y => by simp only [lift_tmul, smul_apply, RingHom.id_apply]
@@ -244,46 +240,66 @@ def uncurry : (M ->ₗ[A] N ->ₗ[R] P) ->ₗ[B] M otimes[R] N ->ₗ[A] P where
 Given a linear map `M ⊗[R] N →[A] P`, compose it with the canonical
 bilinear map `M →[A] N →[R] M ⊗[R] N` to form a bilinear map `M →[A] N →[R] P`. -/
 @[simps]
-/--
-Definition of `lcurry` / `lcurry` 的定义
+/-
+**TensorProduct.AlgebraTensorModule.lcurry** 是 Mathlib 中的一个定义，位于命名空间 `TensorProd
+uct.AlgebraTensorModule`。
+形式化陈述：lcurry : (M otimes[R] N ->ₗ[A] P) ->ₗ[B] M ->ₗ[A] N ->ₗ[R] P where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition lcurry
-  signature: : (M otimes[R] N ->ₗ[A] P) ->ₗ[B] M ->ₗ[A] N ->ₗ[R] P where
-  body: curry
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
+--- 原说明 ---
+Heterobasic version of `TensorProduct.lcurry`:
 
-中文:
-定义 lcurry
-  签名: : (M otimes[R] N ->ₗ[A] P) ->ₗ[B] M ->ₗ[A] N ->ₗ[R] P where
-  定义体: curry
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
+Given a linear map `M ⊗[R] N →[A] P`, compose it with the canonical
+bilinear map `M →[A] N →[R] M ⊗[R] N` to form a bilinear map `M →[A] N →[R] P`.
 -/
-def lcurry : (M otimes[R] N ->ₗ[A] P) ->ₗ[B] M ->ₗ[A] N ->ₗ[R] P where
+def lcurry : (M ⊗[R] N →ₗ[A] P) →ₗ[B] M →ₗ[A] N →ₗ[R] P where
   toFun := curry
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/--
-Definition of `lift.equiv` / `lift.equiv` 的定义
+/-- Heterobasic version of `TensorProduct.lift.equiv`:
 
-English:
-definition lift.equiv
-  signature: : (M ->ₗ[A] N ->ₗ[R] P) ≃ₗ[B] M otimes[R] N ->ₗ[A] P
-  body: LinearEquiv.ofLinearMap (uncurry R A B M N P) (lcurry R A B M N P)
-    (LinearMap.ext fun _ => ext fun x y => lift_tmul _ x y)
-    (LinearMap.ext fun f => LinearMap.ext fun x => LinearMap.ext fun y => lift_tmul f x y)
+A linear equivalence constructing a linear map `M ⊗[R] N →[A] P` given a
+bilinear map `M →[A] N →[R] P` with the property that its composition with the
+canonical bilinear map `M →[A] N →[R] M ⊗[R] N` is the given bilinear map `M →[A] N →[R] P`. -/
+/-
+**TensorProduct.AlgebraTensorModule.lift.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Tensor
+Product.AlgebraTensorModule.lift`。
+形式化陈述：(R : Type uR) →   (A : Type uA) →     (B : Type uB) →       (M : Type uM) 
+→         (N : Type uN) →           (P : Type uP) →             [inst : CommSemi
+ring R] →               [inst_1 : Semiring A] →                 [inst_2 : Semiri
+ng B] →                   [inst_3 : Algebra R A] →                     [inst_4 :
+ Algebra R B] →                       [inst_5 : AddCommMonoid M] →              
+           [inst_6 : _root_.Module R M] →                           [inst_7 : _r
+oot_.Module A M] →                             [inst_8 : IsScalarTower R A M] → 
+                              [inst_9 : AddCommMonoid N] →                      
+           [inst_10 : _root_.Module R N] →                                   [in
+st_11 : AddCommMonoid P] →                                     [inst_12 : _root_
+.Module R P] →                                       [inst_13 : _root_.Module A 
+P] →                                         [inst_14 : IsScalarTower R A P] →  
+                                         [inst_15 : _root_.Module B P] →        
+                                     [inst_16 : IsScalarTower R B P] →          
+                                     [inst_17 : SMulCommClass A B P] →          
+                                       (M →ₗ[A] N →ₗ[R] P) ≃ₗ[B] TensorProduct R
+ M N →ₗ[A] P
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-中文:
-定义 lift.equiv
-  签名: : (M ->ₗ[A] N ->ₗ[R] P) ≃ₗ[B] M otimes[R] N ->ₗ[A] P
-  定义体: LinearEquiv.ofLinearMap (uncurry R A B M N P) (lcurry R A B M N P)
-    (LinearMap.ext fun _ => ext fun x y => lift_tmul _ x y)
-    (LinearMap.ext fun f => LinearMap.ext fun x => LinearMap.ext fun y => lift_tmul f x y)
+--- 原说明 ---
+Heterobasic version of `TensorProduct.lift.equiv`:
+
+A linear equivalence constructing a linear map `M ⊗[R] N →[A] P` given a
+bilinear map `M →[A] N →[R] P` with the property that its composition with the
+canonical bilinear map `M →[A] N →[R] M ⊗[R] N` is the given bilinear map `M →[A
+] N →[R] P`.
 -/
-def lift.equiv : (M ->ₗ[A] N ->ₗ[R] P) ≃ₗ[B] M otimes[R] N ->ₗ[A] P :=
+def lift.equiv : (M →ₗ[A] N →ₗ[R] P) ≃ₗ[B] M ⊗[R] N →ₗ[A] P :=
   LinearEquiv.ofLinearMap (uncurry R A B M N P) (lcurry R A B M N P)
     (LinearMap.ext fun _ => ext fun x y => lift_tmul _ x y)
     (LinearMap.ext fun f => LinearMap.ext fun x => LinearMap.ext fun y => lift_tmul f x y)
@@ -294,921 +310,941 @@ The canonical bilinear map `M →[A] N →[R] M ⊗[R] N`. -/
 @[simps! apply]
 nonrec def mk (A M N : Type*) [Semiring A]
     [AddCommMonoid M] [Module R M] [Module A M] [SMulCommClass R A M]
-    [AddCommMonoid N] [Module R N] : M ->ₗ[A] N ->ₗ[R] M otimes[R] N :=
+    [AddCommMonoid N] [Module R N] : M →ₗ[A] N →ₗ[R] M ⊗[R] N :=
   { mk R M N with map_smul' := fun _ _ => rfl }
 
 variable {R A B M N P Q}
 
-/--
-lemma `mk_eq` / 引理 `mk_eq`
+/-- The heterobasic version of `mk` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.mk_eq** 是 Mathlib 中的一个引理，位于命名空间 `TensorProdu
+ct.AlgebraTensorModule`。
+形式化陈述：mk_eq : mk R R M N = TensorProduct.mk R M N
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mk_eq
-  statement: mk R R M N = TensorProduct.mk R M N
-  proof: rfl
-
-中文:
-引理 mk_eq
-  结论: mk R R M N = 张量积.mk R M N
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `mk` coincides with the regular version.
 -/
 lemma mk_eq : mk R R M N = TensorProduct.mk R M N := rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- Heterobasic version of `TensorProduct.map` -/
+/-
+**TensorProduct.AlgebraTensorModule.map** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct
+.AlgebraTensorModule`。
+形式化陈述：map (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : M otimes[R] N ->ₗ[A] P otimes[R] Q
+参数：f : M ->ₗ[A] P；g : N ->ₗ[R] Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition map
-  signature: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  body: lift
-    { toFun := fun h => h ∘ₗ g,
-      map_add' := fun h₁ h₂ => LinearMap.add_comp g h₂ h₁,
-      map_smul' := fun c h => LinearMap.smul_comp c h g } ∘ₗ mk R A P Q ∘ₗ f
-
-中文:
-定义 map
-  签名: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  定义体: lift
-    { toFun := fun h => h ∘ₗ g,
-      map_add' := fun h₁ h₂ => LinearMap.add_comp g h₂ h₁,
-      map_smul' := fun c h => LinearMap.smul_comp c h g } ∘ₗ mk R A P Q ∘ₗ f
-
-Depends on / 依赖: LinearMap, LinearMap.add_comp, LinearMap.smul_comp, add_comp, map_add, map_smul, smul_comp
+--- 原说明 ---
+Heterobasic version of `TensorProduct.map`
 -/
-def map (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : M otimes[R] N ->ₗ[A] P otimes[R] Q :=
-lift
+def map (f : M →ₗ[A] P) (g : N →ₗ[R] Q) : M ⊗[R] N →ₗ[A] P ⊗[R] Q :=
+  lift <|
     { toFun := fun h => h ∘ₗ g,
       map_add' := fun h₁ h₂ => LinearMap.add_comp g h₂ h₁,
       map_smul' := fun c h => LinearMap.smul_comp c h g } ∘ₗ mk R A P Q ∘ₗ f
-
-/--
-theorem `map_tmul` / 定理 `map_tmul`
-
-English:
-theorem map_tmul
-  given: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) (m : M) (n : N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_tmul
-  条件: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) (m : M) (n : N)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.map_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} {P : Type uP} {Q
+ : Type uQ} [inst : CommSemiring R]   [inst_1 : Semiring A] [inst_2 : Algebra R 
+A] [inst_3 : AddCommMonoid M] [inst_4 : _root_.Module R M]   [inst_5 : _root_.Mo
+dule A M] [inst_6 : IsScalarTower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _r
+oot_.Module R N]   [inst_9 : AddCommMonoid P] [inst_10 : _root_.Module R P] [ins
+t_11 : _root_.Module A P] [inst_12 : IsScalarTower R A P]   [inst_13 : AddCommMo
+noid Q] [inst_14 : _root_.Module R Q] (f : M →ₗ[A] P) (g : N →ₗ[R] Q) (m : M) (n
+ : N),   (TensorProduct.AlgebraTensorModule.map f g) (m ⊗ₜ[R] n) = f m ⊗ₜ[R] g n
+参数：f : M →ₗ[A] P；g : N →ₗ[R] Q；m : M；n : N；TensorProduct.AlgebraTensorModule.map
+ f g；m ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-@[simp] theorem map_tmul (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) (m : M) (n : N) :
-    map f g (m otimesₜ n) = f m otimesₜ g n :=
+@[simp] theorem map_tmul (f : M →ₗ[A] P) (g : N →ₗ[R] Q) (m : M) (n : N) :
+    map f g (m ⊗ₜ n) = f m ⊗ₜ g n :=
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map (id : M ->ₗ[A] M) (id : N ->ₗ[R] N) = .id
-  proof: ext fun _ _ => rfl
-
-中文:
-定理 map_id
-  结论: map (id : M ->ₗ[A] M) (id : N ->ₗ[R] N) = .id
-  证明: ext fun _ _ => rfl
+/-
+**TensorProduct.AlgebraTensorModule.map_id** 是 Mathlib 中的一个定理，位于命名空间 `TensorProd
+uct.AlgebraTensorModule`。
+形式化陈述：map_id : map (id : M ->ₗ[A] M) (id : N ->ₗ[R] N) = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem map_id : map (id : M ->ₗ[A] M) (id : N ->ₗ[R] N) = .id :=
+theorem map_id : map (id : M →ₗ[A] M) (id : N →ₗ[R] N) = .id :=
   ext fun _ _ => rfl
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q)
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-定理 map_comp
-  条件: (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q)
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：map_comp (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N -
+>ₗ[R] Q) : map (f₂.comp f₁) (g₂.comp g₁) = (map f₂ g₂).comp (map f₁ g₁)
+参数：f₂ : P ->ₗ[A] P'；f₁ : M ->ₗ[A] P；g₂ : Q ->ₗ[R] Q'；g₁ : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem map_comp (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q) :
+theorem map_comp (f₂ : P →ₗ[A] P') (f₁ : M →ₗ[A] P) (g₂ : Q →ₗ[R] Q') (g₁ : N →ₗ[R] Q) :
     map (f₂.comp f₁) (g₂.comp g₁) = (map f₂ g₂).comp (map f₁ g₁) :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-theorem `map_one` / 定理 `map_one`
-
-English:
-theorem map_one
-  statement: map (1 : M ->ₗ[A] M) (1 : N ->ₗ[R] N) = 1
-  proof: map_id
-
-中文:
-定理 map_one
-  结论: map (1 : M ->ₗ[A] M) (1 : N ->ₗ[R] N) = 1
-  证明: map_id
+/-
+**TensorProduct.AlgebraTensorModule.map_one** 是 Mathlib 中的一个定理，位于命名空间 `TensorPro
+duct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} [inst : CommSemi
+ring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : AddCommMonoid M
+] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [inst_6 : IsScalar
+Tower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R N],   TensorPr
+oduct.AlgebraTensorModule.map 1 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_id`：map_id : map (id : M ->ₗ[A] M)
+ (id : N ->ₗ[R] N) = .id
 -/
-protected theorem map_one : map (1 : M ->ₗ[A] M) (1 : N ->ₗ[R] N) = 1 := map_id
-
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  given: (f₁ f₂ : M ->ₗ[A] M) (g₁ g₂ : N ->ₗ[R] N)
-  proof: map_comp _ _ _ _
-
-中文:
-定理 map_mul
-  条件: (f₁ f₂ : M ->ₗ[A] M) (g₁ g₂ : N ->ₗ[R] N)
-  证明: map_comp _ _ _ _
+protected theorem map_one : map (1 : M →ₗ[A] M) (1 : N →ₗ[R] N) = 1 := map_id
+/-
+**TensorProduct.AlgebraTensorModule.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `TensorPro
+duct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} [inst : CommSemi
+ring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : AddCommMonoid M
+] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [inst_6 : IsScalar
+Tower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R N] (f₁ f₂ : M 
+→ₗ[A] M)   (g₁ g₂ : N →ₗ[R] N),   TensorProduct.AlgebraTensorModule.map (f₁ * f₂
+) (g₁ * g₂) =     TensorProduct.AlgebraTensorModule.map f₁ g₁ * TensorProduct.Al
+gebraTensorModule.map f₂ g₂
+参数：f₁ f₂ : M →ₗ[A] M；g₁ g₂ : N →ₗ[R] N；f₁ * f₂；g₁ * g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_comp`：map_comp (f₂ : P ->ₗ[A] P') 
+(f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q) : map (f₂.comp f₁) (g₂.co
+mp g₁) = (map f₂ g₂).comp (map f…
 -/
-protected theorem map_mul (f₁ f₂ : M ->ₗ[A] M) (g₁ g₂ : N ->ₗ[R] N) :
+protected theorem map_mul (f₁ f₂ : M →ₗ[A] M) (g₁ g₂ : N →ₗ[R] N) :
     map (f₁ * f₂) (g₁ * g₂) = map f₁ g₁ * map f₂ g₂ := map_comp _ _ _ _
-
-/--
-theorem `map_add_left` / 定理 `map_add_left`
-
-English:
-theorem map_add_left
-  given: (f₁ f₂ : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  proof: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
-    add_apply, add_tmul]
-
-中文:
-定理 map_add_left
-  条件: (f₁ f₂ : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  证明: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
-    add_apply, add_tmul]
-
-Depends on / 依赖: TensorProduct, TensorProduct.curry_apply, add_apply, add_tmul, curry_apply, map_tmul, restrictScalars_apply, simp_rw
+/-
+**TensorProduct.AlgebraTensorModule.map_add_left** 是 Mathlib 中的一个定理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：map_add_left (f₁ f₂ : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map (f₁ + f₂) g = map
+ f₁ g + map f₂ g
+参数：f₁ f₂ : M ->ₗ[A] P；g : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TensorProduct.add_tmul`：add_tmul (m₁ m₂ : M) (n : N) : (m₁ + m₂) otimesₜ
+ n = m₁ otimesₜ n + m₂ otimesₜ[R] n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_add_left (f₁ f₂ : M ->ₗ[A] P) (g : N ->ₗ[R] Q) :
+theorem map_add_left (f₁ f₂ : M →ₗ[A] P) (g : N →ₗ[R] Q) :
     map (f₁ + f₂) g = map f₁ g + map f₂ g := by
   ext
   simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
     add_apply, add_tmul]
-
-/--
-theorem `map_add_right` / 定理 `map_add_right`
-
-English:
-theorem map_add_right
-  given: (f : M ->ₗ[A] P) (g₁ g₂ : N ->ₗ[R] Q)
-  proof: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
-    add_apply, tmul_add]
-
-中文:
-定理 map_add_right
-  条件: (f : M ->ₗ[A] P) (g₁ g₂ : N ->ₗ[R] Q)
-  证明: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
-    add_apply, tmul_add]
-
-Depends on / 依赖: TensorProduct, TensorProduct.curry_apply, add_apply, curry_apply, map_tmul, restrictScalars_apply, simp_rw, tmul_add
+/-
+**TensorProduct.AlgebraTensorModule.map_add_right** 是 Mathlib 中的一个定理，位于命名空间 `Ten
+sorProduct.AlgebraTensorModule`。
+形式化陈述：map_add_right (f : M ->ₗ[A] P) (g₁ g₂ : N ->ₗ[R] Q) : map f (g₁ + g₂) = ma
+p f g₁ + map f g₂
+参数：f : M ->ₗ[A] P；g₁ g₂ : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TensorProduct.tmul_add`：tmul_add (m : M) (n₁ n₂ : N) : m otimesₜ (n₁ + n
+₂) = m otimesₜ n₁ + m otimesₜ[R] n₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_add_right (f : M ->ₗ[A] P) (g₁ g₂ : N ->ₗ[R] Q) :
+theorem map_add_right (f : M →ₗ[A] P) (g₁ g₂ : N →ₗ[R] Q) :
     map f (g₁ + g₂) = map f g₁ + map f g₂ := by
   ext
   simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, add_apply, map_tmul,
     add_apply, tmul_add]
-
-/--
-theorem `map_smul_right` / 定理 `map_smul_right`
-
-English:
-theorem map_smul_right
-  given: (r : R) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  statement: map f (r • g) = r • map f g
-  proof: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
-    smul_apply, tmul_smul]
-
-中文:
-定理 map_smul_right
-  条件: (r : R) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  结论: map f (r • g) = r • map f g
-  证明: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
-    smul_apply, tmul_smul]
-
-Depends on / 依赖: TensorProduct, TensorProduct.curry_apply, curry_apply, map_tmul, restrictScalars_apply, simp_rw, smul_apply, tmul_smul
+/-
+**TensorProduct.AlgebraTensorModule.map_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `Te
+nsorProduct.AlgebraTensorModule`。
+形式化陈述：map_smul_right (r : R) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map f (r • g) =
+ r • map f g
+参数：r : R；f : M ->ₗ[A] P；g : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_smul_right (r : R) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map f (r • g) = r • map f g := by
+theorem map_smul_right (r : R) (f : M →ₗ[A] P) (g : N →ₗ[R] Q) : map f (r • g) = r • map f g := by
   ext
   simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
     smul_apply, tmul_smul]
-
-/--
-theorem `map_smul_left` / 定理 `map_smul_left`
-
-English:
-theorem map_smul_left
-  given: (b : B) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  statement: map (b • f) g = b • map f g
-  proof: by
+/-
+**TensorProduct.AlgebraTensorModule.map_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Ten
+sorProduct.AlgebraTensorModule`。
+形式化陈述：map_smul_left (b : B) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map (b • f) g = 
+b • map f g
+参数：b : B；f : M ->ₗ[A] P；g : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem map_smul_left (b : B) (f : M →ₗ[A] P) (g : N →ₗ[R] Q) : map (b • f) g = b • map f g := by
   ext
   simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
     smul_apply, smul_tmul']
 
-中文:
-定理 map_smul_left
-  条件: (b : B) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  结论: map (b • f) g = b • map f g
-  证明: by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
-    smul_apply, smul_tmul']
+/-- The heterobasic version of `map` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.map_eq** 是 Mathlib 中的一个定理，位于命名空间 `TensorProd
+uct.AlgebraTensorModule`。
+形式化陈述：map_eq (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q) : map f g = TensorProduct.map f g
+参数：f : M ->ₗ[R] P；g : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-Depends on / 依赖: TensorProduct, TensorProduct.curry_apply, curry_apply, map_tmul, restrictScalars_apply, simp_rw, smul_apply, smul_tmul
+--- 原说明 ---
+The heterobasic version of `map` coincides with the regular version.
 -/
-theorem map_smul_left (b : B) (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map (b • f) g = b • map f g := by
-  ext
-  simp_rw [curry_apply, TensorProduct.curry_apply, restrictScalars_apply, smul_apply, map_tmul,
-    smul_apply, smul_tmul']
-
-/--
-theorem `map_eq` / 定理 `map_eq`
-
-English:
-theorem map_eq
-  given: (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q)
-  statement: map f g = TensorProduct.map f g
-  proof: rfl
-
-中文:
-定理 map_eq
-  条件: (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q)
-  结论: map f g = 张量积.map f g
-  证明: rfl
--/
-theorem map_eq (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q) : map f g = TensorProduct.map f g := rfl
+theorem map_eq (f : M →ₗ[R] P) (g : N →ₗ[R] Q) : map f g = TensorProduct.map f g := rfl
 
 variable (A M) in
-/--
-Definition of `lTensor` / `lTensor` 的定义
+/-- Heterobasic version of `LinearMap.lTensor` -/
+/-
+**TensorProduct.AlgebraTensorModule.lTensor** 是 Mathlib 中的一个定义，位于命名空间 `TensorPro
+duct.AlgebraTensorModule`。
+形式化陈述：lTensor : (N ->ₗ[R] Q) ->ₗ[R] M otimes[R] N ->ₗ[A] M otimes[R] Q where toF
+un f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition lTensor
-  signature: : (N ->ₗ[R] Q) ->ₗ[R] M otimes[R] N ->ₗ[A] M otimes[R] Q where
-  body: map LinearMap.id f
-  map_add' f₁ f₂ := map_add_right _ f₁ f₂
-  map_smul' _ _ := map_smul_right _ _ _
-
-@[simp]
-
-中文:
-定义 lTensor
-  签名: : (N ->ₗ[R] Q) ->ₗ[R] M otimes[R] N ->ₗ[A] M otimes[R] Q where
-  定义体: map LinearMap.id f
-  map_add' f₁ f₂ := map_add_right _ f₁ f₂
-  map_smul' _ _ := map_smul_right _ _ _
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+Heterobasic version of `LinearMap.lTensor`
 -/
-def lTensor : (N ->ₗ[R] Q) ->ₗ[R] M otimes[R] N ->ₗ[A] M otimes[R] Q where
+def lTensor : (N →ₗ[R] Q) →ₗ[R] M ⊗[R] N →ₗ[A] M ⊗[R] Q where
   toFun f := map LinearMap.id f
   map_add' f₁ f₂ := map_add_right _ f₁ f₂
   map_smul' _ _ := map_smul_right _ _ _
 
 @[simp]
-/--
-lemma `coe_lTensor` / 引理 `coe_lTensor`
-
-English:
-lemma coe_lTensor
-  given: (f : N ->ₗ[R] Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_lTensor
-  条件: (f : N ->ₗ[R] Q)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.coe_lTensor** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：coe_lTensor (f : N ->ₗ[R] Q) : (lTensor A M f : M otimes[R] N -> M otimes[
+R] Q) = f.lTensor M
+参数：f : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma coe_lTensor (f : N ->ₗ[R] Q) :
-    (lTensor A M f : M otimes[R] N -> M otimes[R] Q) = f.lTensor M := rfl
+lemma coe_lTensor (f : N →ₗ[R] Q) :
+    (lTensor A M f : M ⊗[R] N → M ⊗[R] Q) = f.lTensor M := rfl
 
 @[simp]
-/--
-lemma `restrictScalars_lTensor` / 引理 `restrictScalars_lTensor`
-
-English:
-lemma restrictScalars_lTensor
-  given: (f : N ->ₗ[R] Q)
-  proof: rfl
-
-中文:
-引理 restrictScalars_lTensor
-  条件: (f : N ->ₗ[R] Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.restrictScalars_lTensor** 是 Mathlib 中的一个引理，位
+于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：restrictScalars_lTensor (f : N ->ₗ[R] Q) : (lTensor A M f).restrictScalars
+ R = f.lTensor M
+参数：f : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma restrictScalars_lTensor (f : N ->ₗ[R] Q) :
+lemma restrictScalars_lTensor (f : N →ₗ[R] Q) :
     (lTensor A M f).restrictScalars R = f.lTensor M := rfl
-
-/--
-lemma `lTensor_tmul` / 引理 `lTensor_tmul`
-
-English:
-lemma lTensor_tmul
-  given: (f : N ->ₗ[R] Q) (m : M) (n : N)
-  proof: rfl
-
-中文:
-引理 lTensor_tmul
-  条件: (f : N ->ₗ[R] Q) (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} {Q : Type uQ} [i
+nst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : A
+ddCommMonoid M] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [ins
+t_6 : IsScalarTower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R 
+N] [inst_9 : AddCommMonoid Q]   [inst_10 : _root_.Module R Q] (f : N →ₗ[R] Q) (m
+ : M) (n : N),   ((TensorProduct.AlgebraTensorModule.lTensor A M) f) (m ⊗ₜ[R] n)
+ = m ⊗ₜ[R] f n
+参数：f : N →ₗ[R] Q；m : M；n : N；(TensorProduct.AlgebraTensorModule.lTensor A M) f；m
+ ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-@[simp] lemma lTensor_tmul (f : N ->ₗ[R] Q) (m : M) (n : N) :
-    lTensor A M f (m otimesₜ[R] n) = m otimesₜ f n :=
+@[simp] lemma lTensor_tmul (f : N →ₗ[R] Q) (m : M) (n : N) :
+    lTensor A M f (m ⊗ₜ[R] n) = m ⊗ₜ f n :=
   rfl
-
-/--
-lemma `lTensor_id` / 引理 `lTensor_id`
-
-English:
-lemma lTensor_id
-  statement: lTensor A M (id : N ->ₗ[R] N) = .id
-  proof: ext fun _ _ => rfl
-
-中文:
-引理 lTensor_id
-  结论: lTensor A M (id : N ->ₗ[R] N) = .id
-  证明: ext fun _ _ => rfl
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_id** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} [inst : CommSemi
+ring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : AddCommMonoid M
+] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [inst_6 : IsScalar
+Tower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R N],   (TensorP
+roduct.AlgebraTensorModule.lTensor A M) LinearMap.id = LinearMap.id
+参数：TensorProduct.AlgebraTensorModule.lTensor A M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-@[simp] lemma lTensor_id : lTensor A M (id : N ->ₗ[R] N) = .id :=
+@[simp] lemma lTensor_id : lTensor A M (id : N →ₗ[R] N) = .id :=
   ext fun _ _ => rfl
-
-/--
-lemma `lTensor_comp` / 引理 `lTensor_comp`
-
-English:
-lemma lTensor_comp
-  given: (f₂ : Q ->ₗ[R] Q') (f₁ : N ->ₗ[R] Q)
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-引理 lTensor_comp
-  条件: (f₂ : Q ->ₗ[R] Q') (f₁ : N ->ₗ[R] Q)
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_comp** 是 Mathlib 中的一个引理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：lTensor_comp (f₂ : Q ->ₗ[R] Q') (f₁ : N ->ₗ[R] Q) : lTensor A M (f₂.comp f
+₁) = (lTensor A M f₂).comp (lTensor A M f₁)
+参数：f₂ : Q ->ₗ[R] Q'；f₁ : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma lTensor_comp (f₂ : Q ->ₗ[R] Q') (f₁ : N ->ₗ[R] Q) :
+lemma lTensor_comp (f₂ : Q →ₗ[R] Q') (f₁ : N →ₗ[R] Q) :
     lTensor A M (f₂.comp f₁) = (lTensor A M f₂).comp (lTensor A M f₁) :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-lemma `lTensor_one` / 引理 `lTensor_one`
-
-English:
-lemma lTensor_one
-  statement: lTensor A M (1 : N ->ₗ[R] N) = 1
-  proof: map_id
-
-中文:
-引理 lTensor_one
-  结论: lTensor A M (1 : N ->ₗ[R] N) = 1
-  证明: map_id
-
-Depends on / 依赖: map_id
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_one** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：lTensor_one : lTensor A M (1 : N ->ₗ[R] N) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_id`：map_id : map (id : M ->ₗ[A] M)
+ (id : N ->ₗ[R] N) = .id
 -/
-lemma lTensor_one : lTensor A M (1 : N ->ₗ[R] N) = 1 := map_id
-
-/--
-lemma `lTensor_mul` / 引理 `lTensor_mul`
-
-English:
-lemma lTensor_mul
-  given: (f₁ f₂ : N ->ₗ[R] N)
-  proof: lTensor_comp _ _
-
-中文:
-引理 lTensor_mul
-  条件: (f₁ f₂ : N ->ₗ[R] N)
-  证明: lTensor_comp _ _
-
-Depends on / 依赖: lTensor_comp
+lemma lTensor_one : lTensor A M (1 : N →ₗ[R] N) = 1 := map_id
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_mul** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：lTensor_mul (f₁ f₂ : N ->ₗ[R] N) : lTensor A M (f₁ * f₂) = lTensor A M f₁ 
+* lTensor A M f₂
+参数：f₁ f₂ : N ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TensorProduct.AlgebraTensorModule.lTensor_comp`：lTensor_comp (f₂ : Q ->ₗ
+[R] Q') (f₁ : N ->ₗ[R] Q) : lTensor A M (f₂.comp f₁) = (lTensor A M f₂).comp (lT
+ensor A M f₁)
 -/
-lemma lTensor_mul (f₁ f₂ : N ->ₗ[R] N) :
+lemma lTensor_mul (f₁ f₂ : N →ₗ[R] N) :
     lTensor A M (f₁ * f₂) = lTensor A M f₁ * lTensor A M f₂ := lTensor_comp _ _
 
 variable (R N) in
-/--
-Definition of `rTensor` / `rTensor` 的定义
+/-- Heterobasic version of `LinearMap.rTensor` -/
+/-
+**TensorProduct.AlgebraTensorModule.rTensor** 是 Mathlib 中的一个定义，位于命名空间 `TensorPro
+duct.AlgebraTensorModule`。
+形式化陈述：rTensor : (M ->ₗ[A] P) ->ₗ[R] M otimes[R] N ->ₗ[A] P otimes[R] N where toF
+un f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 
-English:
-definition rTensor
-  signature: : (M ->ₗ[A] P) ->ₗ[R] M otimes[R] N ->ₗ[A] P otimes[R] N where
-  body: map f LinearMap.id
-  map_add' f₁ f₂ := map_add_left f₁ f₂ _
-  map_smul' _ _ := map_smul_left _ _ _
-
-@[simp]
-
-中文:
-定义 rTensor
-  签名: : (M ->ₗ[A] P) ->ₗ[R] M otimes[R] N ->ₗ[A] P otimes[R] N where
-  定义体: map f LinearMap.id
-  map_add' f₁ f₂ := map_add_left f₁ f₂ _
-  map_smul' _ _ := map_smul_left _ _ _
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+Heterobasic version of `LinearMap.rTensor`
 -/
-def rTensor : (M ->ₗ[A] P) ->ₗ[R] M otimes[R] N ->ₗ[A] P otimes[R] N where
+def rTensor : (M →ₗ[A] P) →ₗ[R] M ⊗[R] N →ₗ[A] P ⊗[R] N where
   toFun f := map f LinearMap.id
   map_add' f₁ f₂ := map_add_left f₁ f₂ _
   map_smul' _ _ := map_smul_left _ _ _
 
 @[simp]
-/--
-lemma `coe_rTensor` / 引理 `coe_rTensor`
-
-English:
-lemma coe_rTensor
-  given: (f : M ->ₗ[A] P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_rTensor
-  条件: (f : M ->ₗ[A] P)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.coe_rTensor** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：coe_rTensor (f : M ->ₗ[A] P) : (rTensor R N f : M otimes[R] N -> P otimes[
+R] N) = f.rTensor N
+参数：f : M ->ₗ[A] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma coe_rTensor (f : M ->ₗ[A] P) :
-    (rTensor R N f : M otimes[R] N -> P otimes[R] N) = f.rTensor N := rfl
+lemma coe_rTensor (f : M →ₗ[A] P) :
+    (rTensor R N f : M ⊗[R] N → P ⊗[R] N) = f.rTensor N := rfl
 
 @[simp]
-/--
-lemma `restrictScalars_rTensor` / 引理 `restrictScalars_rTensor`
-
-English:
-lemma restrictScalars_rTensor
-  given: (f : M ->ₗ[A] P)
-  proof: rfl
-
-中文:
-引理 restrictScalars_rTensor
-  条件: (f : M ->ₗ[A] P)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.restrictScalars_rTensor** 是 Mathlib 中的一个引理，位
+于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：restrictScalars_rTensor (f : M ->ₗ[A] P) : (rTensor R N f).restrictScalars
+ R = f.rTensor N
+参数：f : M ->ₗ[A] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma restrictScalars_rTensor (f : M ->ₗ[A] P) :
+lemma restrictScalars_rTensor (f : M →ₗ[A] P) :
     (rTensor R N f).restrictScalars R = f.rTensor N := rfl
-
-/--
-lemma `rTensor_tmul` / 引理 `rTensor_tmul`
-
-English:
-lemma rTensor_tmul
-  given: (f : M ->ₗ[A] P) (m : M) (n : N)
-  proof: rfl
-
-中文:
-引理 rTensor_tmul
-  条件: (f : M ->ₗ[A] P) (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [i
+nst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : A
+ddCommMonoid M] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [ins
+t_6 : IsScalarTower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R 
+N] [inst_9 : AddCommMonoid P]   [inst_10 : _root_.Module R P] [inst_11 : _root_.
+Module A P] [inst_12 : IsScalarTower R A P] (f : M →ₗ[A] P) (m : M)   (n : N), (
+(TensorProduct.AlgebraTensorModule.rTensor R N) f) (m ⊗ₜ[R] n) = f m ⊗ₜ[R] n
+参数：f : M →ₗ[A] P；m : M；n : N；(TensorProduct.AlgebraTensorModule.rTensor R N) f；m
+ ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-@[simp] lemma rTensor_tmul (f : M ->ₗ[A] P) (m : M) (n : N) :
-    rTensor R N f (m otimesₜ[R] n) = f m otimesₜ n :=
+@[simp] lemma rTensor_tmul (f : M →ₗ[A] P) (m : M) (n : N) :
+    rTensor R N f (m ⊗ₜ[R] n) = f m ⊗ₜ n :=
   rfl
-
-/--
-lemma `rTensor_id` / 引理 `rTensor_id`
-
-English:
-lemma rTensor_id
-  statement: rTensor R N (id : M ->ₗ[A] M) = .id
-  proof: ext fun _ _ => rfl
-
-中文:
-引理 rTensor_id
-  结论: rTensor R N (id : M ->ₗ[A] M) = .id
-  证明: ext fun _ _ => rfl
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_id** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} [inst : CommSemi
+ring R] [inst_1 : Semiring A]   [inst_2 : Algebra R A] [inst_3 : AddCommMonoid M
+] [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M]   [inst_6 : IsScalar
+Tower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _root_.Module R N],   (TensorP
+roduct.AlgebraTensorModule.rTensor R N) LinearMap.id = LinearMap.id
+参数：TensorProduct.AlgebraTensorModule.rTensor R N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-@[simp] lemma rTensor_id : rTensor R N (id : M ->ₗ[A] M) = .id :=
+@[simp] lemma rTensor_id : rTensor R N (id : M →ₗ[A] M) = .id :=
   ext fun _ _ => rfl
-
-/--
-lemma `rTensor_comp` / 引理 `rTensor_comp`
-
-English:
-lemma rTensor_comp
-  given: (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P)
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-引理 rTensor_comp
-  条件: (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P)
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_comp** 是 Mathlib 中的一个引理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：rTensor_comp (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) : rTensor R N (f₂.comp f
+₁) = (rTensor R N f₂).comp (rTensor R N f₁)
+参数：f₂ : P ->ₗ[A] P'；f₁ : M ->ₗ[A] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
-lemma rTensor_comp (f₂ : P ->ₗ[A] P') (f₁ : M ->ₗ[A] P) :
+lemma rTensor_comp (f₂ : P →ₗ[A] P') (f₁ : M →ₗ[A] P) :
     rTensor R N (f₂.comp f₁) = (rTensor R N f₂).comp (rTensor R N f₁) :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-lemma `rTensor_one` / 引理 `rTensor_one`
-
-English:
-lemma rTensor_one
-  statement: rTensor R N (1 : M ->ₗ[A] M) = 1
-  proof: map_id
-
-中文:
-引理 rTensor_one
-  结论: rTensor R N (1 : M ->ₗ[A] M) = 1
-  证明: map_id
-
-Depends on / 依赖: map_id
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_one** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：rTensor_one : rTensor R N (1 : M ->ₗ[A] M) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_id`：map_id : map (id : M ->ₗ[A] M)
+ (id : N ->ₗ[R] N) = .id
 -/
-lemma rTensor_one : rTensor R N (1 : M ->ₗ[A] M) = 1 := map_id
-
-/--
-lemma `rTensor_mul` / 引理 `rTensor_mul`
-
-English:
-lemma rTensor_mul
-  given: (f₁ f₂ : M ->ₗ[A] M)
-  proof: rTensor_comp _ _
-
-中文:
-引理 rTensor_mul
-  条件: (f₁ f₂ : M ->ₗ[A] M)
-  证明: rTensor_comp _ _
-
-Depends on / 依赖: rTensor_comp
+lemma rTensor_one : rTensor R N (1 : M →ₗ[A] M) = 1 := map_id
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_mul** 是 Mathlib 中的一个引理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：rTensor_mul (f₁ f₂ : M ->ₗ[A] M) : rTensor R M (f₁ * f₂) = rTensor R M f₁ 
+* rTensor R M f₂
+参数：f₁ f₂ : M ->ₗ[A] M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TensorProduct.AlgebraTensorModule.rTensor_comp`：rTensor_comp (f₂ : P ->ₗ
+[A] P') (f₁ : M ->ₗ[A] P) : rTensor R N (f₂.comp f₁) = (rTensor R N f₂).comp (rT
+ensor R N f₁)
 -/
-lemma rTensor_mul (f₁ f₂ : M ->ₗ[A] M) :
+lemma rTensor_mul (f₁ f₂ : M →ₗ[A] M) :
     rTensor R M (f₁ * f₂) = rTensor R M f₁ * rTensor R M f₂ := rTensor_comp _ _
 
 variable (R A B M N P Q)
 
-/--
-Definition of `mapBilinear` / `mapBilinear` 的定义
+/-- Heterobasic version of `TensorProduct.map_bilinear` -/
+/-
+**TensorProduct.AlgebraTensorModule.mapBilinear** 是 Mathlib 中的一个定义，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：mapBilinear : (M ->ₗ[A] P) ->ₗ[B] (N ->ₗ[R] Q) ->ₗ[R] (M otimes[R] N ->ₗ[A
+] P otimes[R] Q)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_add_left`：map_add_left (f₁ f₂ : M 
+->ₗ[A] P) (g : N ->ₗ[R] Q) : map (f₁ + f₂) g = map f₁ g + map f₂ g
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_smul_left`：map_smul_left (b : B) (
+f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map (b • f) g = b • map f g
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_add_right`：map_add_right (f : M ->
+ₗ[A] P) (g₁ g₂ : N ->ₗ[R] Q) : map f (g₁ + g₂) = map f g₁ + map f g₂
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_smul_right`：map_smul_right (r : R)
+ (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : map f (r • g) = r • map f g
 
-English:
-definition mapBilinear
-  signature: : (M ->ₗ[A] P) ->ₗ[B] (N ->ₗ[R] Q) ->ₗ[R] (M otimes[R] N ->ₗ[A] P otimes[R] Q)
-  body: LinearMap.mk₂' _ _ map map_add_left map_smul_left map_add_right map_smul_right
-
-中文:
-定义 mapBilinear
-  签名: : (M ->ₗ[A] P) ->ₗ[B] (N ->ₗ[R] Q) ->ₗ[R] (M otimes[R] N ->ₗ[A] P otimes[R] Q)
-  定义体: LinearMap.mk₂' _ _ map map_add_left map_smul_left map_add_right map_smul_right
-
-Depends on / 依赖: LinearMap, LinearMap.mk, map_add_left, map_add_right, map_smul_left, map_smul_right
+--- 原说明 ---
+Heterobasic version of `TensorProduct.map_bilinear`
 -/
-def mapBilinear : (M ->ₗ[A] P) ->ₗ[B] (N ->ₗ[R] Q) ->ₗ[R] (M otimes[R] N ->ₗ[A] P otimes[R] Q) :=
+def mapBilinear : (M →ₗ[A] P) →ₗ[B] (N →ₗ[R] Q) →ₗ[R] (M ⊗[R] N →ₗ[A] P ⊗[R] Q) :=
   LinearMap.mk₂' _ _ map map_add_left map_smul_left map_add_right map_smul_right
 
 variable {R A B M N P Q}
 
 @[simp]
-/--
-theorem `mapBilinear_apply` / 定理 `mapBilinear_apply`
-
-English:
-theorem mapBilinear_apply
-  given: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  proof: rfl
-
-中文:
-定理 mapBilinear_apply
-  条件: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.mapBilinear_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`TensorProduct.AlgebraTensorModule`。
+形式化陈述：mapBilinear_apply (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) : mapBilinear R A B M 
+N P Q f g = map f g
+参数：f : M ->ₗ[A] P；g : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
-theorem mapBilinear_apply (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) :
+theorem mapBilinear_apply (f : M →ₗ[A] P) (g : N →ₗ[R] Q) :
     mapBilinear R A B M N P Q f g = map f g :=
   rfl
 
 variable (R A B M N P Q)
 
-/--
-Definition of `homTensorHomMap` / `homTensorHomMap` 的定义
+/-- Heterobasic version of `TensorProduct.homTensorHomMap` -/
+/-
+**TensorProduct.AlgebraTensorModule.homTensorHomMap** 是 Mathlib 中的一个定义，位于命名空间 `T
+ensorProduct.AlgebraTensorModule`。
+形式化陈述：homTensorHomMap : ((M ->ₗ[A] P) otimes[R] (N ->ₗ[R] Q)) ->ₗ[B] (M otimes[R
+] N ->ₗ[A] P otimes[R] Q)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 
-English:
-definition homTensorHomMap
-  signature: : ((M ->ₗ[A] P) otimes[R] (N ->ₗ[R] Q)) ->ₗ[B] (M otimes[R] N ->ₗ[A] P otimes[R] Q)
-  body: lift mapBilinear R A B M N P Q
-
-中文:
-定义 homTensorHomMap
-  签名: : ((M ->ₗ[A] P) otimes[R] (N ->ₗ[R] Q)) ->ₗ[B] (M otimes[R] N ->ₗ[A] P otimes[R] Q)
-  定义体: lift mapBilinear R A B M N P Q
-
-Depends on / 依赖: mapBilinear
+--- 原说明 ---
+Heterobasic version of `TensorProduct.homTensorHomMap`
 -/
-def homTensorHomMap : ((M ->ₗ[A] P) otimes[R] (N ->ₗ[R] Q)) ->ₗ[B] (M otimes[R] N ->ₗ[A] P otimes[R] Q) :=
-lift mapBilinear R A B M N P Q
+def homTensorHomMap : ((M →ₗ[A] P) ⊗[R] (N →ₗ[R] Q)) →ₗ[B] (M ⊗[R] N →ₗ[A] P ⊗[R] Q) :=
+  lift <| mapBilinear R A B M N P Q
 
 variable {R A B M N P Q}
-
-/--
-theorem `homTensorHomMap_apply` / 定理 `homTensorHomMap_apply`
-
-English:
-theorem homTensorHomMap_apply
-  given: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  proof: rfl
-
-中文:
-定理 homTensorHomMap_apply
-  条件: (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.homTensorHomMap_apply** 是 Mathlib 中的一个定理，位于命
+名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {B : Type uB} {M : Type uM} {N : Type uN} {P
+ : Type uP} {Q : Type uQ}   [inst : CommSemiring R] [inst_1 : Semiring A] [inst_
+2 : Semiring B] [inst_3 : Algebra R A] [inst_4 : Algebra R B]   [inst_5 : AddCom
+mMonoid M] [inst_6 : _root_.Module R M] [inst_7 : _root_.Module A M] [inst_8 : I
+sScalarTower R A M]   [inst_9 : AddCommMonoid N] [inst_10 : _root_.Module R N] [
+inst_11 : AddCommMonoid P] [inst_12 : _root_.Module R P]   [inst_13 : _root_.Mod
+ule A P] [inst_14 : IsScalarTower R A P] [inst_15 : AddCommMonoid Q]   [inst_16 
+: _root_.Module R Q] [inst_17 : _root_.Module B P] [inst_18 : IsScalarTower R B 
+P]   [inst_19 : SMulCommClass A B P] (f : M →ₗ[A] P) (g : N →ₗ[R] Q),   (TensorP
+roduct.AlgebraTensorModule.homTensorHomMap R A B M N P Q) (f ⊗ₜ[R] g) =     Tens
+orProduct.AlgebraTensorModule.map f g
+参数：f : M →ₗ[A] P；g : N →ₗ[R] Q；TensorProduct.AlgebraTensorModule.homTensorHomMap
+ R A B M N P Q；f ⊗ₜ[R] g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
-@[simp] theorem homTensorHomMap_apply (f : M ->ₗ[A] P) (g : N ->ₗ[R] Q) :
-    homTensorHomMap R A B M N P Q (f otimesₜ g) = map f g :=
+@[simp] theorem homTensorHomMap_apply (f : M →ₗ[A] P) (g : N →ₗ[R] Q) :
+    homTensorHomMap R A B M N P Q (f ⊗ₜ g) = map f g :=
   rfl
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- Heterobasic version of `TensorProduct.congr` -/
+/-
+**TensorProduct.AlgebraTensorModule.congr** 是 Mathlib 中的一个定义，位于命名空间 `TensorProdu
+ct.AlgebraTensorModule`。
+形式化陈述：congr (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) : (M otimes[R] N) ≃ₗ[A] (P otimes[R]
+ Q)
+参数：f : M ≃ₗ[A] P；g : N ≃ₗ[R] Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition congr
-  signature: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q)
-  body: LinearEquiv.ofLinearMap (map f g) (map f.symm g.symm)
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.apply_symm_apply _) (g.apply_symm_apply _))
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.symm_apply_apply _) (g.symm_apply_apply _))
-
-@[simp]
-
-中文:
-定义 congr
-  签名: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q)
-  定义体: LinearEquiv.ofLinearMap (map f g) (map f.symm g.symm)
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.apply_symm_apply _) (g.apply_symm_apply _))
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.symm_apply_apply _) (g.symm_apply_apply _))
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, apply_symm_apply, f.apply_symm_apply, f.symm, f.symm_apply_apply, g.apply_symm_apply, g.symm, g.symm_apply_apply, ofLinearMap, symm_apply_apply
+--- 原说明 ---
+Heterobasic version of `TensorProduct.congr`
 -/
-def congr (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) : (M otimes[R] N) ≃ₗ[A] (P otimes[R] Q) :=
+def congr (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) : (M ⊗[R] N) ≃ₗ[A] (P ⊗[R] Q) :=
   LinearEquiv.ofLinearMap (map f g) (map f.symm g.symm)
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.apply_symm_apply _) (g.apply_symm_apply _))
-    (ext fun _m _n => congr_arg₂ (· otimesₜ ·) (f.symm_apply_apply _) (g.symm_apply_apply _))
+    (ext fun _m _n => congr_arg₂ (· ⊗ₜ ·) (f.apply_symm_apply _) (g.apply_symm_apply _))
+    (ext fun _m _n => congr_arg₂ (· ⊗ₜ ·) (f.symm_apply_apply _) (g.symm_apply_apply _))
 
 @[simp]
-/--
-theorem `congr_refl` / 定理 `congr_refl`
-
-English:
-theorem congr_refl
-  statement: congr (.refl A M) (.refl R N) = .refl A _
-  proof: LinearEquiv.toLinearMap_injective map_id
-
-中文:
-定理 congr_refl
-  结论: congr (.refl A M) (.refl R N) = .refl A _
-  证明: LinearEquiv.toLinearMap_injective map_id
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_injective, map_id, toLinearMap_injective
+/-
+**TensorProduct.AlgebraTensorModule.congr_refl** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：congr_refl : congr (.refl A M) (.refl R N) = .refl A _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toLinearMap_injective`：toLinearMap_injective : Injective (to
+LinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_id`：map_id : map (id : M ->ₗ[A] M)
+ (id : N ->ₗ[R] N) = .id
 -/
 theorem congr_refl : congr (.refl A M) (.refl R N) = .refl A _ :=
-LinearEquiv.toLinearMap_injective map_id
-
-/--
-theorem `congr_trans` / 定理 `congr_trans`
-
-English:
-theorem congr_trans
-  given: (f₁ : M ≃ₗ[A] P) (f₂ : P ≃ₗ[A] P') (g₁ : N ≃ₗ[R] Q) (g₂ : Q ≃ₗ[R] Q')
-  proof: LinearEquiv.toLinearMap_injective map_comp _ _ _ _
-
-中文:
-定理 congr_trans
-  条件: (f₁ : M ≃ₗ[A] P) (f₂ : P ≃ₗ[A] P') (g₁ : N ≃ₗ[R] Q) (g₂ : Q ≃ₗ[R] Q')
-  证明: LinearEquiv.toLinearMap_injective map_comp _ _ _ _
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_injective, map_comp, toLinearMap_injective
+  LinearEquiv.toLinearMap_injective <| map_id
+/-
+**TensorProduct.AlgebraTensorModule.congr_trans** 是 Mathlib 中的一个定理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：congr_trans (f₁ : M ≃ₗ[A] P) (f₂ : P ≃ₗ[A] P') (g₁ : N ≃ₗ[R] Q) (g₂ : Q ≃ₗ
+[R] Q') : congr (f₁.trans f₂) (g₁.trans g₂) = (congr f₁ g₁).trans (congr f₂ g₂)
+参数：f₁ : M ≃ₗ[A] P；f₂ : P ≃ₗ[A] P'；g₁ : N ≃ₗ[R] Q；g₂ : Q ≃ₗ[R] Q'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toLinearMap_injective`：toLinearMap_injective : Injective (to
+LinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_comp`：map_comp (f₂ : P ->ₗ[A] P') 
+(f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q) : map (f₂.comp f₁) (g₂.co
+mp g₁) = (map f₂ g₂).comp (map f…
 -/
 theorem congr_trans (f₁ : M ≃ₗ[A] P) (f₂ : P ≃ₗ[A] P') (g₁ : N ≃ₗ[R] Q) (g₂ : Q ≃ₗ[R] Q') :
     congr (f₁.trans f₂) (g₁.trans g₂) = (congr f₁ g₁).trans (congr f₂ g₂) :=
-LinearEquiv.toLinearMap_injective map_comp _ _ _ _
-
-/--
-theorem `congr_symm` / 定理 `congr_symm`
-
-English:
-theorem congr_symm
-  given: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q)
-  statement: congr f.symm g.symm = (congr f g).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 congr_symm
-  条件: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q)
-  结论: congr f.symm g.symm = (congr f g).symm
-  证明: rfl
-
-@[simp]
+  LinearEquiv.toLinearMap_injective <| map_comp _ _ _ _
+/-
+**TensorProduct.AlgebraTensorModule.congr_symm** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：congr_symm (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) : congr f.symm g.symm = (congr 
+f g).symm
+参数：f : M ≃ₗ[A] P；g : N ≃ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem congr_symm (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) : congr f.symm g.symm = (congr f g).symm := rfl
 
 @[simp]
-/--
-theorem `congr_one` / 定理 `congr_one`
-
-English:
-theorem congr_one
-  statement: congr (1 : M ≃ₗ[A] M) (1 : N ≃ₗ[R] N) = 1
-  proof: congr_refl
-
-中文:
-定理 congr_one
-  结论: congr (1 : M ≃ₗ[A] M) (1 : N ≃ₗ[R] N) = 1
-  证明: congr_refl
-
-Depends on / 依赖: congr_refl
+/-
+**TensorProduct.AlgebraTensorModule.congr_one** 是 Mathlib 中的一个定理，位于命名空间 `TensorP
+roduct.AlgebraTensorModule`。
+形式化陈述：congr_one : congr (1 : M ≃ₗ[A] M) (1 : N ≃ₗ[R] N) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.congr_refl`：congr_refl : congr (.refl 
+A M) (.refl R N) = .refl A _
 -/
 theorem congr_one : congr (1 : M ≃ₗ[A] M) (1 : N ≃ₗ[R] N) = 1 := congr_refl
-
-/--
-theorem `congr_mul` / 定理 `congr_mul`
-
-English:
-theorem congr_mul
-  given: (f₁ f₂ : M ≃ₗ[A] M) (g₁ g₂ : N ≃ₗ[R] N)
-  proof: congr_trans _ _ _ _
-
-中文:
-定理 congr_mul
-  条件: (f₁ f₂ : M ≃ₗ[A] M) (g₁ g₂ : N ≃ₗ[R] N)
-  证明: congr_trans _ _ _ _
-
-Depends on / 依赖: congr_trans
+/-
+**TensorProduct.AlgebraTensorModule.congr_mul** 是 Mathlib 中的一个定理，位于命名空间 `TensorP
+roduct.AlgebraTensorModule`。
+形式化陈述：congr_mul (f₁ f₂ : M ≃ₗ[A] M) (g₁ g₂ : N ≃ₗ[R] N) : congr (f₁ * f₂) (g₁ * 
+g₂) = congr f₁ g₁ * congr f₂ g₂
+参数：f₁ f₂ : M ≃ₗ[A] M；g₁ g₂ : N ≃ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.congr_trans`：congr_trans (f₁ : M ≃ₗ[A]
+ P) (f₂ : P ≃ₗ[A] P') (g₁ : N ≃ₗ[R] Q) (g₂ : Q ≃ₗ[R] Q') : congr (f₁.trans f₂) (
+g₁.trans g₂) = (congr f₁ g₁).trans …
 -/
 theorem congr_mul (f₁ f₂ : M ≃ₗ[A] M) (g₁ g₂ : N ≃ₗ[R] N) :
     congr (f₁ * f₂) (g₁ * g₂) = congr f₁ g₁ * congr f₂ g₂ := congr_trans _ _ _ _
-
-/--
-theorem `congr_tmul` / 定理 `congr_tmul`
-
-English:
-theorem congr_tmul
-  given: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (m : M) (n : N)
-  proof: rfl
-
-中文:
-定理 congr_tmul
-  条件: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.congr_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} {P : Type uP} {Q
+ : Type uQ} [inst : CommSemiring R]   [inst_1 : Semiring A] [inst_2 : Algebra R 
+A] [inst_3 : AddCommMonoid M] [inst_4 : _root_.Module R M]   [inst_5 : _root_.Mo
+dule A M] [inst_6 : IsScalarTower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _r
+oot_.Module R N]   [inst_9 : AddCommMonoid P] [inst_10 : _root_.Module R P] [ins
+t_11 : _root_.Module A P] [inst_12 : IsScalarTower R A P]   [inst_13 : AddCommMo
+noid Q] [inst_14 : _root_.Module R Q] (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (m : M) (n
+ : N),   (TensorProduct.AlgebraTensorModule.congr f g) (m ⊗ₜ[R] n) = f m ⊗ₜ[R] g
+ n
+参数：f : M ≃ₗ[A] P；g : N ≃ₗ[R] Q；m : M；n : N；TensorProduct.AlgebraTensorModule.con
+gr f g；m ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] theorem congr_tmul (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (m : M) (n : N) :
-    congr f g (m otimesₜ n) = f m otimesₜ g n :=
+    congr f g (m ⊗ₜ n) = f m ⊗ₜ g n :=
   rfl
-
-/--
-theorem `congr_symm_tmul` / 定理 `congr_symm_tmul`
-
-English:
-theorem congr_symm_tmul
-  given: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (p : P) (q : Q)
-  proof: rfl
-
-中文:
-定理 congr_symm_tmul
-  条件: (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (p : P) (q : Q)
-  证明: rfl
-
-Depends on / 依赖: Structure, isExpansionOn_reduct
+/-
+**TensorProduct.AlgebraTensorModule.congr_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `T
+ensorProduct.AlgebraTensorModule`。
+形式化陈述：∀ {R : Type uR} {A : Type uA} {M : Type uM} {N : Type uN} {P : Type uP} {Q
+ : Type uQ} [inst : CommSemiring R]   [inst_1 : Semiring A] [inst_2 : Algebra R 
+A] [inst_3 : AddCommMonoid M] [inst_4 : _root_.Module R M]   [inst_5 : _root_.Mo
+dule A M] [inst_6 : IsScalarTower R A M] [inst_7 : AddCommMonoid N] [inst_8 : _r
+oot_.Module R N]   [inst_9 : AddCommMonoid P] [inst_10 : _root_.Module R P] [ins
+t_11 : _root_.Module A P] [inst_12 : IsScalarTower R A P]   [inst_13 : AddCommMo
+noid Q] [inst_14 : _root_.Module R Q] (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (p : P) (q
+ : Q),   (TensorProduct.AlgebraTensorModule.congr f g).symm (p ⊗ₜ[R] q) = f.symm
+ p ⊗ₜ[R] g.symm q
+参数：f : M ≃ₗ[A] P；g : N ≃ₗ[R] Q；p : P；q : Q；TensorProduct.AlgebraTensorModule.con
+gr f g；p ⊗ₜ[R] q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] theorem congr_symm_tmul (f : M ≃ₗ[A] P) (g : N ≃ₗ[R] Q) (p : P) (q : Q) :
-    (congr f g).symm (p otimesₜ q) = f.symm p otimesₜ g.symm q :=
+    (congr f g).symm (p ⊗ₜ q) = f.symm p ⊗ₜ g.symm q :=
   rfl
-
-/--
-theorem `congr_eq` / 定理 `congr_eq`
-
-English:
-theorem congr_eq
-  given: (f : M ≃ₗ[R] P) (g : N ≃ₗ[R] Q)
-  proof: rfl
-
-中文:
-定理 congr_eq
-  条件: (f : M ≃ₗ[R] P) (g : N ≃ₗ[R] Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.congr_eq** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：congr_eq (f : M ≃ₗ[R] P) (g : N ≃ₗ[R] Q) : congr f g = TensorProduct.congr
+ f g
+参数：f : M ≃ₗ[R] P；g : N ≃ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem congr_eq (f : M ≃ₗ[R] P) (g : N ≃ₗ[R] Q) :
     congr f g = TensorProduct.congr f g := rfl
 
 variable (R A M)
 
-/--
-Definition of `rid` / `rid` 的定义
+/-- Heterobasic version of `TensorProduct.rid`. -/
+/-
+**TensorProduct.AlgebraTensorModule.rid** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct
+.AlgebraTensorModule`。
+形式化陈述：(R : Type uR) →   (A : Type uA) →     (M : Type uM) →       [inst : CommSe
+miring R] →         [inst_1 : Semiring A] →           [inst_2 : Algebra R A] →  
+           [inst_3 : AddCommMonoid M] →               [inst_4 : _root_.Module R 
+M] →                 [inst_5 : _root_.Module A M] → [inst_6 : IsScalarTower R A 
+M] → TensorProduct R M R ≃ₗ[A] M
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 
-English:
-definition rid
-  signature: : M otimes[R] R ≃ₗ[A] M
-  body: LinearEquiv.ofLinearMap
-    (lift <| Algebra.lsmul _ _ _ |>.toLinearMap |>.flip)
-    (mk R A M R |>.flip 1)
-    (LinearMap.ext <| one_smul _)
-    (ext fun _ _ => smul_tmul _ _ _ |>.trans <| congr_arg _ <| mul_one _)
-
-中文:
-定义 rid
-  签名: : M otimes[R] R ≃ₗ[A] M
-  定义体: LinearEquiv.ofLinearMap
-    (lift <| Algebra.lsmul _ _ _ |>.toLinearMap |>.flip)
-    (mk R A M R |>.flip 1)
-    (LinearMap.ext <| one_smul _)
-    (ext fun _ _ => smul_tmul _ _ _ |>.trans <| congr_arg _ <| mul_one _)
+--- 原说明 ---
+Heterobasic version of `TensorProduct.rid`.
 -/
-protected def rid : M otimes[R] R ≃ₗ[A] M :=
+protected def rid : M ⊗[R] R ≃ₗ[A] M :=
   LinearEquiv.ofLinearMap
     (lift <| Algebra.lsmul _ _ _ |>.toLinearMap |>.flip)
     (mk R A M R |>.flip 1)
     (LinearMap.ext <| one_smul _)
     (ext fun _ _ => smul_tmul _ _ _ |>.trans <| congr_arg _ <| mul_one _)
 
-/--
-theorem `rid_eq_rid` / 定理 `rid_eq_rid`
+/-- The heterobasic version of `rid` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.rid_eq_rid** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：rid_eq_rid : AlgebraTensorModule.rid R R M = TensorProduct.rid R M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-theorem rid_eq_rid
-  statement: AlgebraTensorModule.rid R R M = TensorProduct.rid R M
-  proof: rfl
-
-中文:
-定理 rid_eq_rid
-  结论: AlgebraTensorModule.rid R R M = 张量积.rid R M
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `rid` coincides with the regular version.
 -/
 theorem rid_eq_rid : AlgebraTensorModule.rid R R M = TensorProduct.rid R M := rfl
 
 variable {R M} in
 @[simp]
-/--
-theorem `rid_tmul` / 定理 `rid_tmul`
-
-English:
-theorem rid_tmul
-  given: (r : R) (m : M)
-  statement: AlgebraTensorModule.rid R A M (m otimesₜ r) = r • m
-  proof: rfl
-
-中文:
-定理 rid_tmul
-  条件: (r : R) (m : M)
-  结论: AlgebraTensorModule.rid R A M (m otimesₜ r) = r • m
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.rid_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：rid_tmul (r : R) (m : M) : AlgebraTensorModule.rid R A M (m otimesₜ r) = r
+ • m
+参数：r : R；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem rid_tmul (r : R) (m : M) : AlgebraTensorModule.rid R A M (m otimesₜ r) = r • m := rfl
+theorem rid_tmul (r : R) (m : M) : AlgebraTensorModule.rid R A M (m ⊗ₜ r) = r • m := rfl
 
 variable {M} in
 @[simp]
-/--
-theorem `rid_symm_apply` / 定理 `rid_symm_apply`
-
-English:
-theorem rid_symm_apply
-  given: (m : M)
-  statement: (AlgebraTensorModule.rid R A M).symm m = m otimesₜ 1
-  proof: rfl
-
-中文:
-定理 rid_symm_apply
-  条件: (m : M)
-  结论: (AlgebraTensorModule.rid R A M).symm m = m otimesₜ 1
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.rid_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Te
+nsorProduct.AlgebraTensorModule`。
+形式化陈述：rid_symm_apply (m : M) : (AlgebraTensorModule.rid R A M).symm m = m otimes
+ₜ 1
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem rid_symm_apply (m : M) : (AlgebraTensorModule.rid R A M).symm m = m otimesₜ 1 := rfl
+theorem rid_symm_apply (m : M) : (AlgebraTensorModule.rid R A M).symm m = m ⊗ₜ 1 := rfl
 
 end
 
@@ -1231,32 +1267,34 @@ section assoc
 variable [Module R P] [IsScalarTower R A P]
 variable [Algebra A B] [IsScalarTower A B M]
 
-/--
-Definition of `assoc` / `assoc` 的定义
+/-- Heterobasic version of `TensorProduct.assoc`:
 
-English:
-definition assoc
-  signature: : (M otimes[A] P) otimes[R] Q ≃ₗ[B] M otimes[A] (P otimes[R] Q)
-  body: LinearEquiv.ofLinearMap
-    (lift <| lift <| lcurry R A B P Q _ ∘ₗ mk A B M (P otimes[R] Q))
-    (lift <| uncurry R A B P Q _ ∘ₗ curry (mk R B _ Q))
-    (by ext; rfl)
-    (by ext; rfl)
+`B`-linear equivalence between `(M ⊗[A] P) ⊗[R] Q` and `M ⊗[A] (P ⊗[R] Q)`.
 
-中文:
-定义 assoc
-  签名: : (M otimes[A] P) otimes[R] Q ≃ₗ[B] M otimes[A] (P otimes[R] Q)
-  定义体: LinearEquiv.ofLinearMap
-    (lift <| lift <| lcurry R A B P Q _ ∘ₗ mk A B M (P otimes[R] Q))
-    (lift <| uncurry R A B P Q _ ∘ₗ curry (mk R B _ Q))
-    (by ext; rfl)
-    (by ext; rfl)
+Note this is especially useful with `A = R` (where it is a "more linear" version of
+`TensorProduct.assoc`), or with `B = A`. -/
+/-
+**TensorProduct.AlgebraTensorModule.assoc** 是 Mathlib 中的一个定义，位于命名空间 `TensorProdu
+ct.AlgebraTensorModule`。
+形式化陈述：assoc : (M otimes[A] P) otimes[R] Q ≃ₗ[B] M otimes[A] (P otimes[R] Q)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, lcurry, ofLinearMap, otimes, uncurry
+--- 原说明 ---
+Heterobasic version of `TensorProduct.assoc`:
+
+`B`-linear equivalence between `(M ⊗[A] P) ⊗[R] Q` and `M ⊗[A] (P ⊗[R] Q)`.
+
+Note this is especially useful with `A = R` (where it is a "more linear" version
+ of
+`TensorProduct.assoc`), or with `B = A`.
 -/
-def assoc : (M otimes[A] P) otimes[R] Q ≃ₗ[B] M otimes[A] (P otimes[R] Q) :=
+def assoc : (M ⊗[A] P) ⊗[R] Q ≃ₗ[B] M ⊗[A] (P ⊗[R] Q) :=
   LinearEquiv.ofLinearMap
-    (lift <| lift <| lcurry R A B P Q _ ∘ₗ mk A B M (P otimes[R] Q))
+    (lift <| lift <| lcurry R A B P Q _ ∘ₗ mk A B M (P ⊗[R] Q))
     (lift <| uncurry R A B P Q _ ∘ₗ curry (mk R B _ Q))
     (by ext; rfl)
     (by ext; rfl)
@@ -1264,276 +1302,328 @@ def assoc : (M otimes[A] P) otimes[R] Q ≃ₗ[B] M otimes[A] (P otimes[R] Q) :=
 variable {M P N Q}
 
 @[simp]
-/--
-theorem `assoc_tmul` / 定理 `assoc_tmul`
-
-English:
-theorem assoc_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 assoc_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.assoc_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：assoc_tmul (m : M) (p : P) (q : Q) : assoc R A B M P Q ((m otimesₜ p) otim
+esₜ q) = m otimesₜ (p otimesₜ q)
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
 theorem assoc_tmul (m : M) (p : P) (q : Q) :
-    assoc R A B M P Q ((m otimesₜ p) otimesₜ q) = m otimesₜ (p otimesₜ q) :=
+    assoc R A B M P Q ((m ⊗ₜ p) ⊗ₜ q) = m ⊗ₜ (p ⊗ₜ q) :=
   rfl
 
 @[simp]
-/--
-theorem `assoc_symm_tmul` / 定理 `assoc_symm_tmul`
-
-English:
-theorem assoc_symm_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-中文:
-定理 assoc_symm_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.assoc_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `T
+ensorProduct.AlgebraTensorModule`。
+形式化陈述：assoc_symm_tmul (m : M) (p : P) (q : Q) : (assoc R A B M P Q).symm (m otim
+esₜ (p otimesₜ q)) = (m otimesₜ p) otimesₜ q
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem assoc_symm_tmul (m : M) (p : P) (q : Q) :
-    (assoc R A B M P Q).symm (m otimesₜ (p otimesₜ q)) = (m otimesₜ p) otimesₜ q :=
+    (assoc R A B M P Q).symm (m ⊗ₜ (p ⊗ₜ q)) = (m ⊗ₜ p) ⊗ₜ q :=
   rfl
 
-/--
-theorem `assoc_eq` / 定理 `assoc_eq`
+/-- The heterobasic version of `assoc` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.assoc_eq** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：assoc_eq : assoc R R R M P Q = TensorProduct.assoc R M P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-theorem assoc_eq
-  statement: assoc R R R M P Q = TensorProduct.assoc R M P Q
-  proof: rfl
-
-中文:
-定理 assoc_eq
-  结论: assoc R R R M P Q = 张量积.assoc R M P Q
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `assoc` coincides with the regular version.
 -/
 theorem assoc_eq : assoc R R R M P Q = TensorProduct.assoc R M P Q := rfl
-
-/--
-theorem `rTensor_tensor` / 定理 `rTensor_tensor`
-
-English:
-theorem rTensor_tensor
-  given: [Module R P'] [IsScalarTower R A P'] (g : P ->ₗ[A] P')
-  proof: TensorProduct.ext LinearMap.ext fun _ => ext fun _ _ => rfl
-
-中文:
-定理 rTensor_tensor
-  条件: [模 R P'] [标量塔 R A P'] (g : P ->ₗ[A] P')
-  证明: TensorProduct.ext LinearMap.ext fun _ => ext fun _ _ => rfl
-
-Depends on / 依赖: LinearMap, LinearMap.ext, TensorProduct, TensorProduct.ext
+/-
+**TensorProduct.AlgebraTensorModule.rTensor_tensor** 是 Mathlib 中的一个定理，位于命名空间 `Te
+nsorProduct.AlgebraTensorModule`。
+形式化陈述：rTensor_tensor [Module R P'] [IsScalarTower R A P'] (g : P ->ₗ[A] P') : g.
+rTensor (M otimes[R] N) = assoc R A A P' M N ∘ₗ map (g.rTensor M) id ∘ₗ (assoc R
+ A A P M N).symm.toLinearMap
+参数：g : P ->ₗ[A] P'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext`：ext {g h : M otimes N ->ₛₗ[σ₁₂] P₂} (H : (mk R M N).c
+ompr₂ₛₗ g = (mk R M N).compr₂ₛₗ h) : g = h
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `TensorProduct.AlgebraTensorModule.ext`：ext {g h : M otimes[R] N ->ₗ[A] P
+} (H : forall x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
-theorem rTensor_tensor [Module R P'] [IsScalarTower R A P'] (g : P ->ₗ[A] P') :
-    g.rTensor (M otimes[R] N) =
+theorem rTensor_tensor [Module R P'] [IsScalarTower R A P'] (g : P →ₗ[A] P') :
+    g.rTensor (M ⊗[R] N) =
       assoc R A A P' M N ∘ₗ map (g.rTensor M) id ∘ₗ (assoc R A A P M N).symm.toLinearMap :=
-TensorProduct.ext LinearMap.ext fun _ => ext fun _ _ => rfl
+  TensorProduct.ext <| LinearMap.ext fun _ ↦ ext fun _ _ ↦ rfl
 
 end assoc
 
 section cancelBaseChange
 variable [Algebra A B] [IsScalarTower A B M]
 
-/--
-Definition of `cancelBaseChange` / `cancelBaseChange` 的定义
+/-- `B`-linear equivalence between `M ⊗[A] (A ⊗[R] N)` and `M ⊗[R] N`.
+In particular useful with `B = A`. -/
+/-
+**TensorProduct.AlgebraTensorModule.cancelBaseChange** 是 Mathlib 中的一个定义，位于命名空间 `
+TensorProduct.AlgebraTensorModule`。
+形式化陈述：cancelBaseChange : M otimes[A] (A otimes[R] N) ≃ₗ[B] M otimes[R] N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition cancelBaseChange
-  signature: : M otimes[A] (A otimes[R] N) ≃ₗ[B] M otimes[R] N
-  body: letI g : (M otimes[A] A) otimes[R] N ≃ₗ[B] M otimes[R] N := congr (AlgebraTensorModule.rid A B M) (.refl R N)
-  (assoc R A B M A N).symm ≪≫ₗ g
-
-中文:
-定义 cancelBaseChange
-  签名: : M otimes[A] (A otimes[R] N) ≃ₗ[B] M otimes[R] N
-  定义体: letI g : (M otimes[A] A) otimes[R] N ≃ₗ[B] M otimes[R] N := congr (AlgebraTensorModule.rid A B M) (.refl R N)
-  (assoc R A B M A N).symm ≪≫ₗ g
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.rid, otimes
+--- 原说明 ---
+`B`-linear equivalence between `M ⊗[A] (A ⊗[R] N)` and `M ⊗[R] N`.
+In particular useful with `B = A`.
 -/
-def cancelBaseChange : M otimes[A] (A otimes[R] N) ≃ₗ[B] M otimes[R] N :=
-  letI g : (M otimes[A] A) otimes[R] N ≃ₗ[B] M otimes[R] N := congr (AlgebraTensorModule.rid A B M) (.refl R N)
+def cancelBaseChange : M ⊗[A] (A ⊗[R] N) ≃ₗ[B] M ⊗[R] N :=
+  letI g : (M ⊗[A] A) ⊗[R] N ≃ₗ[B] M ⊗[R] N := congr (AlgebraTensorModule.rid A B M) (.refl R N)
   (assoc R A B M A N).symm ≪≫ₗ g
 
-/--
-Definition of `distribBaseChange` / `distribBaseChange` 的定义
+/-- Base change distributes over tensor product. -/
+/-
+**TensorProduct.AlgebraTensorModule.distribBaseChange** 是 Mathlib 中的一个定义，位于命名空间 
+`TensorProduct.AlgebraTensorModule`。
+形式化陈述：distribBaseChange : A otimes[R] (N otimes[R] Q) ≃ₗ[A] (A otimes[R] N) otim
+es[A] (A otimes[R] Q)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition distribBaseChange
-  signature: : A otimes[R] (N otimes[R] Q) ≃ₗ[A] (A otimes[R] N) otimes[A] (A otimes[R] Q)
-  body: (cancelBaseChange _ _ _ _ _ ≪≫ₗ assoc _ _ _ _ _ _).symm
-
-中文:
-定义 distribBaseChange
-  签名: : A otimes[R] (N otimes[R] Q) ≃ₗ[A] (A otimes[R] N) otimes[A] (A otimes[R] Q)
-  定义体: (cancelBaseChange _ _ _ _ _ ≪≫ₗ assoc _ _ _ _ _ _).symm
-
-Depends on / 依赖: cancelBaseChange
+--- 原说明 ---
+Base change distributes over tensor product.
 -/
-def distribBaseChange : A otimes[R] (N otimes[R] Q) ≃ₗ[A] (A otimes[R] N) otimes[A] (A otimes[R] Q) :=
+def distribBaseChange : A ⊗[R] (N ⊗[R] Q) ≃ₗ[A] (A ⊗[R] N) ⊗[A] (A ⊗[R] Q) :=
   (cancelBaseChange _ _ _ _ _ ≪≫ₗ assoc _ _ _ _ _ _).symm
 
 variable {M P N Q}
 
 @[simp]
-/--
-theorem `cancelBaseChange_tmul` / 定理 `cancelBaseChange_tmul`
-
-English:
-theorem cancelBaseChange_tmul
-  given: (m : M) (n : N) (a : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cancelBaseChange_tmul
-  条件: (m : M) (n : N) (a : A)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.cancelBaseChange_tmul** 是 Mathlib 中的一个定理，位于命
+名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：cancelBaseChange_tmul (m : M) (n : N) (a : A) : cancelBaseChange R A B M N
+ (m otimesₜ (a otimesₜ n)) = (a • m) otimesₜ n
+参数：m : M；n : N；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem cancelBaseChange_tmul (m : M) (n : N) (a : A) :
-    cancelBaseChange R A B M N (m otimesₜ (a otimesₜ n)) = (a • m) otimesₜ n :=
+    cancelBaseChange R A B M N (m ⊗ₜ (a ⊗ₜ n)) = (a • m) ⊗ₜ n :=
   rfl
 
 @[simp]
-/--
-theorem `cancelBaseChange_symm_tmul` / 定理 `cancelBaseChange_symm_tmul`
-
-English:
-theorem cancelBaseChange_symm_tmul
-  given: (m : M) (n : N)
-  proof: rfl
-
-中文:
-定理 cancelBaseChange_symm_tmul
-  条件: (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.cancelBaseChange_symm_tmul** 是 Mathlib 中的一个定
+理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：cancelBaseChange_symm_tmul (m : M) (n : N) : (cancelBaseChange R A B M N).
+symm (m otimesₜ n) = m otimesₜ (1 otimesₜ n)
+参数：m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem cancelBaseChange_symm_tmul (m : M) (n : N) :
-    (cancelBaseChange R A B M N).symm (m otimesₜ n) = m otimesₜ (1 otimesₜ n) :=
+    (cancelBaseChange R A B M N).symm (m ⊗ₜ n) = m ⊗ₜ (1 ⊗ₜ n) :=
   rfl
-
-/--
-theorem `lTensor_comp_cancelBaseChange` / 定理 `lTensor_comp_cancelBaseChange`
-
-English:
-theorem lTensor_comp_cancelBaseChange
-  given: (f : N ->ₗ[R] Q)
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-定理 lTensor_comp_cancelBaseChange
-  条件: (f : N ->ₗ[R] Q)
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.lTensor_comp_cancelBaseChange** 是 Mathlib 中的
+一个定理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：lTensor_comp_cancelBaseChange (f : N ->ₗ[R] Q) : lTensor _ _ f ∘ₗ cancelBa
+seChange R A B M N = (cancelBaseChange R A B M Q).toLinearMap ∘ₗ lTensor _ _ (lT
+ensor _ _ f)
+参数：f : N ->ₗ[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lTensor_comp_cancelBaseChange (f : N ->ₗ[R] Q) :
+theorem lTensor_comp_cancelBaseChange (f : N →ₗ[R] Q) :
     lTensor _ _ f ∘ₗ cancelBaseChange R A B M N =
       (cancelBaseChange R A B M Q).toLinearMap ∘ₗ lTensor _ _ (lTensor _ _ f) := by
   ext; simp
 
 @[simp]
-/--
-theorem `distribBaseChange_tmul` / 定理 `distribBaseChange_tmul`
-
-English:
-theorem distribBaseChange_tmul
-  given: (n : N) (q : Q) (a : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 distribBaseChange_tmul
-  条件: (n : N) (q : Q) (a : A)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.distribBaseChange_tmul** 是 Mathlib 中的一个定理，位于
+命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：distribBaseChange_tmul (n : N) (q : Q) (a : A) : distribBaseChange R A N Q
+ (a otimesₜ (n otimesₜ q)) = (a otimesₜ n) otimesₜ (1 otimesₜ q)
+参数：n : N；q : Q；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem distribBaseChange_tmul (n : N) (q : Q) (a : A) :
-    distribBaseChange R A N Q (a otimesₜ (n otimesₜ q)) = (a otimesₜ n) otimesₜ (1 otimesₜ q) :=
+    distribBaseChange R A N Q (a ⊗ₜ (n ⊗ₜ q)) = (a ⊗ₜ n) ⊗ₜ (1 ⊗ₜ q) :=
   rfl
 
 @[simp]
-/--
-theorem `distribBaseChange_symm_tmul` / 定理 `distribBaseChange_symm_tmul`
-
-English:
-theorem distribBaseChange_symm_tmul
-  proof: by
-  apply ((distribBaseChange R A N Q).eq_symm_apply.mpr ?_).symm
-  rw [tmul_eq_smul_one_tmul b]; rw [← smul_tmul]; rw [smul_tmul']; rw [mul_comm]
-  simp
-
-中文:
-定理 distribBaseChange_symm_tmul
-  证明: by
-  apply ((distribBaseChange R A N Q).eq_symm_apply.mpr ?_).symm
-  rw [tmul_eq_smul_one_tmul b]; rw [← smul_tmul]; rw [smul_tmul']; rw [mul_comm]
-  simp
-
-Depends on / 依赖: distribBaseChange, eq_symm_apply, eq_symm_apply.mpr, mul_comm, smul_tmul, tmul_eq_smul_one_tmul
+/-
+**TensorProduct.AlgebraTensorModule.distribBaseChange_symm_tmul** 是 Mathlib 中的一个
+定理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：distribBaseChange_symm_tmul (n : N) (q : Q) (a b : A) : (distribBaseChange
+ R A N Q).symm ((a otimesₜ n) otimesₜ (b otimesₜ q)) = (a * b) otimesₜ (n otimes
+ₜ q)
+参数：n : N；q : Q；a b : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.eq_symm_apply`：eq_symm_apply {x y} : y = e.symm x ↔ e y = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorProduct.tmul_eq_smul_one_tmul`：tmul_eq_smul_one_tmul {S : Type*} [
+Semiring S] [Module R S] [SMulCommClass R S S] (s : S) (m : M) : s otimesₜ[R] m 
+= s • (1 otimesₜ[R] m)
+· 使用定理 `TensorProduct.smul_tmul`：smul_tmul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (m : M) (n : N) : (r • m) otimesₜ n = m otimesₜ[R] (r • n)
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.smul_tmul'`：smul_tmul' (r : R') (m : M) (n : N) : r • m ot
+imesₜ[R] n = (r • m) otimesₜ n
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem distribBaseChange_symm_tmul
     (n : N) (q : Q) (a b : A) :
-    (distribBaseChange R A N Q).symm ((a otimesₜ n) otimesₜ (b otimesₜ q)) = (a * b) otimesₜ (n otimesₜ q) := by
+    (distribBaseChange R A N Q).symm ((a ⊗ₜ n) ⊗ₜ (b ⊗ₜ q)) = (a * b) ⊗ₜ (n ⊗ₜ q) := by
   apply ((distribBaseChange R A N Q).eq_symm_apply.mpr ?_).symm
-  rw [tmul_eq_smul_one_tmul b]; rw [← smul_tmul]; rw [smul_tmul']; rw [mul_comm]
+  rw [tmul_eq_smul_one_tmul b, ← smul_tmul, smul_tmul', mul_comm]
   simp
-
-/--
-lemma `cancelBaseChange_self_eq_lid` / 引理 `cancelBaseChange_self_eq_lid`
-
-English:
-lemma cancelBaseChange_self_eq_lid
-  proof: by
-  ext x
-  induction x using TensorProduct.induction_on with
-  | zero => simp only [map_zero]
-  | tmul b y =>
-    induction y using TensorProduct.induction_on with
-    | zero => simp
-    | tmul a m =>
-      simp only [cancelBaseChange_tmul, lid_tmul, smul_tmul', smul_eq_mul, mul_comm]
-    | add x y hx hy =>
-      simp only [tmul_add, map_add, lid_tmul, hx, hy]
-  | add x y hx hy => simp [hx, hy]
-
-中文:
-引理 cancelBaseChange_self_eq_lid
-  证明: by
-  ext x
-  induction x using TensorProduct.induction_on with
-  | zero => simp only [map_zero]
-  | tmul b y =>
-    induction y using TensorProduct.induction_on with
-    | zero => simp
-    | tmul a m =>
-      simp only [cancelBaseChange_tmul, lid_tmul, smul_tmul', smul_eq_mul, mul_comm]
-    | add x y hx hy =>
-      simp only [tmul_add, map_add, lid_tmul, hx, hy]
-  | add x y hx hy => simp [hx, hy]
-
-Depends on / 依赖: TensorProduct, TensorProduct.induction_on, cancelBaseChange_tmul, induction_on, lid_tmul, map_add, map_zero, mul_comm, smul_eq_mul, smul_tmul, tmul_add
+/-
+**TensorProduct.AlgebraTensorModule.cancelBaseChange_self_eq_lid** 是 Mathlib 中的一
+个引理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：cancelBaseChange_self_eq_lid : cancelBaseChange R A A A N = TensorProduct.
+lid A (A otimes[R] N)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TensorProduct.tmul_zero`：tmul_zero (m : M) : m otimesₜ[R] (0 : N) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `TensorProduct.tmul_add`：tmul_add (m : M) (n₁ n₂ : N) : m otimesₜ (n₁ + n
+₂) = m otimesₜ n₁ + m otimesₜ[R] n₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
 -/
 lemma cancelBaseChange_self_eq_lid :
-    cancelBaseChange R A A A N = TensorProduct.lid A (A otimes[R] N) := by
+    cancelBaseChange R A A A N = TensorProduct.lid A (A ⊗[R] N) := by
   ext x
   induction x using TensorProduct.induction_on with
   | zero => simp only [map_zero]
@@ -1551,28 +1641,18 @@ end cancelBaseChange
 section leftComm
 variable [Module R P] [IsScalarTower R A P]
 
-/--
-Definition of `leftComm` / `leftComm` 的定义
+/-- Heterobasic version of `TensorProduct.leftComm` -/
+/-
+**TensorProduct.AlgebraTensorModule.leftComm** 是 Mathlib 中的一个定义，位于命名空间 `TensorPr
+oduct.AlgebraTensorModule`。
+形式化陈述：leftComm : M otimes[A] (P otimes[R] Q) ≃ₗ[A] P otimes[A] (M otimes[R] Q)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftComm
-  signature: : M otimes[A] (P otimes[R] Q) ≃ₗ[A] P otimes[A] (M otimes[R] Q)
-  body: let e₁ := (assoc R A A M P Q).symm
-  let e₂ := congr (TensorProduct.comm A M P) (1 : Q ≃ₗ[R] Q)
-  let e₃ := assoc R A A P M Q
-  e₁ ≪≫ₗ e₂ ≪≫ₗ e₃
-
-中文:
-定义 leftComm
-  签名: : M otimes[A] (P otimes[R] Q) ≃ₗ[A] P otimes[A] (M otimes[R] Q)
-  定义体: let e₁ := (assoc R A A M P Q).symm
-  let e₂ := congr (TensorProduct.comm A M P) (1 : Q ≃ₗ[R] Q)
-  let e₃ := assoc R A A P M Q
-  e₁ ≪≫ₗ e₂ ≪≫ₗ e₃
-
-Depends on / 依赖: TensorProduct, TensorProduct.comm
+--- 原说明 ---
+Heterobasic version of `TensorProduct.leftComm`
 -/
-def leftComm : M otimes[A] (P otimes[R] Q) ≃ₗ[A] P otimes[A] (M otimes[R] Q) :=
+def leftComm : M ⊗[A] (P ⊗[R] Q) ≃ₗ[A] P ⊗[A] (M ⊗[R] Q) :=
   let e₁ := (assoc R A A M P Q).symm
   let e₂ := congr (TensorProduct.comm A M P) (1 : Q ≃ₗ[R] Q)
   let e₃ := assoc R A A P M Q
@@ -1581,57 +1661,52 @@ def leftComm : M otimes[A] (P otimes[R] Q) ≃ₗ[A] P otimes[A] (M otimes[R] Q)
 variable {M N P Q}
 
 @[simp]
-/--
-theorem `leftComm_tmul` / 定理 `leftComm_tmul`
-
-English:
-theorem leftComm_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftComm_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.leftComm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Ten
+sorProduct.AlgebraTensorModule`。
+形式化陈述：leftComm_tmul (m : M) (p : P) (q : Q) : leftComm R A M P Q (m otimesₜ (p o
+timesₜ q)) = p otimesₜ (m otimesₜ q)
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem leftComm_tmul (m : M) (p : P) (q : Q) :
-    leftComm R A M P Q (m otimesₜ (p otimesₜ q)) = p otimesₜ (m otimesₜ q) :=
+    leftComm R A M P Q (m ⊗ₜ (p ⊗ₜ q)) = p ⊗ₜ (m ⊗ₜ q) :=
   rfl
 
 @[simp]
-/--
-theorem `leftComm_symm_tmul` / 定理 `leftComm_symm_tmul`
-
-English:
-theorem leftComm_symm_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-中文:
-定理 leftComm_symm_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.leftComm_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间
+ `TensorProduct.AlgebraTensorModule`。
+形式化陈述：leftComm_symm_tmul (m : M) (p : P) (q : Q) : (leftComm R A M P Q).symm (p 
+otimesₜ (m otimesₜ q)) = m otimesₜ (p otimesₜ q)
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem leftComm_symm_tmul (m : M) (p : P) (q : Q) :
-    (leftComm R A M P Q).symm (p otimesₜ (m otimesₜ q)) = m otimesₜ (p otimesₜ q) :=
+    (leftComm R A M P Q).symm (p ⊗ₜ (m ⊗ₜ q)) = m ⊗ₜ (p ⊗ₜ q) :=
   rfl
 
-/--
-theorem `leftComm_eq` / 定理 `leftComm_eq`
+/-- The heterobasic version of `leftComm` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.leftComm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：leftComm_eq : leftComm R R M P Q = TensorProduct.leftComm R M P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-theorem leftComm_eq
-  statement: leftComm R R M P Q = TensorProduct.leftComm R M P Q
-  proof: rfl
-
-中文:
-定理 leftComm_eq
-  结论: leftComm R R M P Q = 张量积.leftComm R M P Q
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `leftComm` coincides with the regular version.
 -/
 theorem leftComm_eq : leftComm R R M P Q = TensorProduct.leftComm R M P Q := rfl
 
@@ -1644,32 +1719,38 @@ variable [CommSemiring S] [Module S M] [Module S P] [Algebra S B]
 
 set_option backward.isDefEq.respectTransparency false in
 variable (S) in
-/--
-Definition of `rightComm` / `rightComm` 的定义
+/-- A tensor product analogue of `mul_right_comm`.
 
-English:
-definition rightComm
-  signature: : (M otimes[S] P) otimes[R] Q ≃ₗ[B] (M otimes[R] Q) otimes[S] P
-  body: LinearEquiv.ofLinearMap
-    (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
-      (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
-      (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (by ext; simp) (by ext; simp)
-
-中文:
-定义 rightComm
-  签名: : (M otimes[S] P) otimes[R] Q ≃ₗ[B] (M otimes[R] Q) otimes[S] P
-  定义体: LinearEquiv.ofLinearMap
-    (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
-      (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
-      (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.mk, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.lflip.toLinearMap, ofLinearMap, toLinearMap
+Suppose we have a diagram of algebras `R → B ← S`,
+and a `B`-module `M`, `S`-module `P`, `R`-module `Q`, then
+```
+(M ⊗ˢ P)      ⎛ M ⎞ ⊗ˢ P
+ ⊗ᴿ       ≅ᴮ  ⎜ ⊗ᴿ⎟
+ Q            ⎝ Q ⎠
+```
 -/
-def rightComm : (M otimes[S] P) otimes[R] Q ≃ₗ[B] (M otimes[R] Q) otimes[S] P :=
+/-
+**TensorProduct.AlgebraTensorModule.rightComm** 是 Mathlib 中的一个定义，位于命名空间 `TensorP
+roduct.AlgebraTensorModule`。
+形式化陈述：rightComm : (M otimes[S] P) otimes[R] Q ≃ₗ[B] (M otimes[R] Q) otimes[S] P
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+
+--- 原说明 ---
+A tensor product analogue of `mul_right_comm`.
+
+Suppose we have a diagram of algebras `R → B ← S`,
+and a `B`-module `M`, `S`-module `P`, `R`-module `Q`, then
+```
+(M ⊗ˢ P)      ⎛ M ⎞ ⊗ˢ P
+ ⊗ᴿ       ≅ᴮ  ⎜ ⊗ᴿ⎟
+ Q            ⎝ Q ⎠
+```
+-/
+def rightComm : (M ⊗[S] P) ⊗[R] Q ≃ₗ[B] (M ⊗[R] Q) ⊗[S] P :=
   LinearEquiv.ofLinearMap
     (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
       (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
@@ -1680,74 +1761,66 @@ def rightComm : (M otimes[S] P) otimes[R] Q ≃ₗ[B] (M otimes[R] Q) otimes[S] 
 variable {M N P Q}
 
 @[simp]
-/--
-theorem `rightComm_tmul` / 定理 `rightComm_tmul`
-
-English:
-theorem rightComm_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rightComm_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.rightComm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Te
+nsorProduct.AlgebraTensorModule`。
+形式化陈述：rightComm_tmul (m : M) (p : P) (q : Q) : rightComm R S B M P Q ((m otimesₜ
+ p) otimesₜ q) = (m otimesₜ q) otimesₜ p
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem rightComm_tmul (m : M) (p : P) (q : Q) :
-    rightComm R S B M P Q ((m otimesₜ p) otimesₜ q) = (m otimesₜ q) otimesₜ p :=
+    rightComm R S B M P Q ((m ⊗ₜ p) ⊗ₜ q) = (m ⊗ₜ q) ⊗ₜ p :=
   rfl
 
 @[simp]
-/--
-theorem `rightComm_symm` / 定理 `rightComm_symm`
-
-English:
-theorem rightComm_symm
-  proof: rfl
-
-中文:
-定理 rightComm_symm
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.rightComm_symm** 是 Mathlib 中的一个定理，位于命名空间 `Te
+nsorProduct.AlgebraTensorModule`。
+形式化陈述：rightComm_symm : (rightComm R S B M P Q).symm = rightComm S R B M Q P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem rightComm_symm :
     (rightComm R S B M P Q).symm = rightComm S R B M Q P :=
   rfl
-
-/--
-theorem `rightComm_symm_tmul` / 定理 `rightComm_symm_tmul`
-
-English:
-theorem rightComm_symm_tmul
-  given: (m : M) (p : P) (q : Q)
-  proof: rfl
-
-中文:
-定理 rightComm_symm_tmul
-  条件: (m : M) (p : P) (q : Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.rightComm_symm_tmul** 是 Mathlib 中的一个定理，位于命名空
+间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：rightComm_symm_tmul (m : M) (p : P) (q : Q) : (rightComm R S B M P Q).symm
+ ((m otimesₜ q) otimesₜ p) = (m otimesₜ p) otimesₜ q
+参数：m : M；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem rightComm_symm_tmul (m : M) (p : P) (q : Q) :
-    (rightComm R S B M P Q).symm ((m otimesₜ q) otimesₜ p) = (m otimesₜ p) otimesₜ q :=
+    (rightComm R S B M P Q).symm ((m ⊗ₜ q) ⊗ₜ p) = (m ⊗ₜ p) ⊗ₜ q :=
   rfl
 
-/--
-theorem `rightComm_eq` / 定理 `rightComm_eq`
+/-- The heterobasic version of `leftComm` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.rightComm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Tens
+orProduct.AlgebraTensorModule`。
+形式化陈述：rightComm_eq [Module R P] : rightComm R R R M P Q = TensorProduct.rightCom
+m R M P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-theorem rightComm_eq
-  given: [Module R P]
-  statement: rightComm R R R M P Q = TensorProduct.rightComm R M P Q
-  proof: rfl
-
-中文:
-定理 rightComm_eq
-  条件: [模 R P]
-  结论: rightComm R R R M P Q = 张量积.rightComm R M P Q
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `leftComm` coincides with the regular version.
 -/
 theorem rightComm_eq [Module R P] : rightComm R R R M P Q = TensorProduct.rightComm R M P Q := rfl
 
@@ -1763,97 +1836,110 @@ variable [IsScalarTower R S M] [SMulCommClass A S M] [SMulCommClass S A M]
 
 variable (S)
 
-/--
-Definition of `tensorTensorTensorComm` / `tensorTensorTensorComm` 的定义
+/-- Heterobasic version of `tensorTensorTensorComm`.
 
-English:
-definition tensorTensorTensorComm
-  signature: :
-  body: (assoc R A B (M otimes[S] N) P Q).symm
-    ≪≫ₗ congr (rightComm A S B M N P) (.refl R Q)
-    ≪≫ₗ assoc R _ _ (M otimes[A] P) N Q
+Suppose we have towers of algebras `R → S → B` and `R → A → B`, and
+a `B`-module `M`, `S`-module `N`, `A`-module `P`, `R`-module `Q`, then
+```
+(M ⊗ˢ N)      ⎛ M ⎞ ⊗ˢ ⎛ N ⎞
+ ⊗ᴬ       ≅ᴮ  ⎜ ⊗ᴬ⎟    ⎜ ⊗ᴿ⎟
+(P ⊗ᴿ Q)      ⎝ P ⎠    ⎝ Q ⎠
+```
+-/
+/-
+**TensorProduct.AlgebraTensorModule.tensorTensorTensorComm** 是 Mathlib 中的一个定义，位于
+命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：tensorTensorTensorComm : (M otimes[S] N) otimes[A] (P otimes[R] Q) ≃ₗ[B] (
+M otimes[A] P) otimes[S] (N otimes[R] Q)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-中文:
-定义 tensorTensorTensorComm
-  签名: :
-  定义体: (assoc R A B (M otimes[S] N) P Q).symm
-    ≪≫ₗ congr (rightComm A S B M N P) (.refl R Q)
-    ≪≫ₗ assoc R _ _ (M otimes[A] P) N Q
+--- 原说明 ---
+Heterobasic version of `tensorTensorTensorComm`.
 
-Depends on / 依赖: otimes, rightComm
+Suppose we have towers of algebras `R → S → B` and `R → A → B`, and
+a `B`-module `M`, `S`-module `N`, `A`-module `P`, `R`-module `Q`, then
+```
+(M ⊗ˢ N)      ⎛ M ⎞ ⊗ˢ ⎛ N ⎞
+ ⊗ᴬ       ≅ᴮ  ⎜ ⊗ᴬ⎟    ⎜ ⊗ᴿ⎟
+(P ⊗ᴿ Q)      ⎝ P ⎠    ⎝ Q ⎠
+```
 -/
 def tensorTensorTensorComm :
-    (M otimes[S] N) otimes[A] (P otimes[R] Q) ≃ₗ[B] (M otimes[A] P) otimes[S] (N otimes[R] Q) :=
-  (assoc R A B (M otimes[S] N) P Q).symm
+    (M ⊗[S] N) ⊗[A] (P ⊗[R] Q) ≃ₗ[B] (M ⊗[A] P) ⊗[S] (N ⊗[R] Q) :=
+  (assoc R A B (M ⊗[S] N) P Q).symm
     ≪≫ₗ congr (rightComm A S B M N P) (.refl R Q)
-    ≪≫ₗ assoc R _ _ (M otimes[A] P) N Q
+    ≪≫ₗ assoc R _ _ (M ⊗[A] P) N Q
 
 variable {M N P Q}
 
 @[simp]
-/--
-theorem `tensorTensorTensorComm_tmul` / 定理 `tensorTensorTensorComm_tmul`
-
-English:
-theorem tensorTensorTensorComm_tmul
-  given: (m : M) (n : N) (p : P) (q : Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorTensorTensorComm_tmul
-  条件: (m : M) (n : N) (p : P) (q : Q)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.tensorTensorTensorComm_tmul** 是 Mathlib 中的一个
+定理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：tensorTensorTensorComm_tmul (m : M) (n : N) (p : P) (q : Q) : tensorTensor
+TensorComm R S A B M N P Q ((m otimesₜ n) otimesₜ (p otimesₜ q)) = (m otimesₜ p)
+ otimesₜ (n otimesₜ q)
+参数：m : M；n : N；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem tensorTensorTensorComm_tmul (m : M) (n : N) (p : P) (q : Q) :
-    tensorTensorTensorComm R S A B M N P Q ((m otimesₜ n) otimesₜ (p otimesₜ q)) = (m otimesₜ p) otimesₜ (n otimesₜ q) :=
+    tensorTensorTensorComm R S A B M N P Q ((m ⊗ₜ n) ⊗ₜ (p ⊗ₜ q)) = (m ⊗ₜ p) ⊗ₜ (n ⊗ₜ q) :=
   rfl
 
 @[simp]
-/--
-theorem `tensorTensorTensorComm_symm` / 定理 `tensorTensorTensorComm_symm`
-
-English:
-theorem tensorTensorTensorComm_symm
-  proof: rfl
-
-中文:
-定理 tensorTensorTensorComm_symm
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.tensorTensorTensorComm_symm** 是 Mathlib 中的一个
+定理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：tensorTensorTensorComm_symm : (tensorTensorTensorComm R S A B M N P Q).sym
+m = tensorTensorTensorComm R A S B M P N Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem tensorTensorTensorComm_symm :
     (tensorTensorTensorComm R S A B M N P Q).symm = tensorTensorTensorComm R A S B M P N Q := rfl
-
-/--
-theorem `tensorTensorTensorComm_symm_tmul` / 定理 `tensorTensorTensorComm_symm_tmul`
-
-English:
-theorem tensorTensorTensorComm_symm_tmul
-  given: (m : M) (n : N) (p : P) (q : Q)
-  proof: rfl
-
-中文:
-定理 tensorTensorTensorComm_symm_tmul
-  条件: (m : M) (n : N) (p : P) (q : Q)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.tensorTensorTensorComm_symm_tmul** 是 Mathlib
+ 中的一个定理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：tensorTensorTensorComm_symm_tmul (m : M) (n : N) (p : P) (q : Q) : (tensor
+TensorTensorComm R S A B M N P Q).symm ((m otimesₜ p) otimesₜ (n otimesₜ q)) = (
+m otimesₜ n) otimesₜ (p otimesₜ q)
+参数：m : M；n : N；p : P；q : Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem tensorTensorTensorComm_symm_tmul (m : M) (n : N) (p : P) (q : Q) :
-    (tensorTensorTensorComm R S A B M N P Q).symm ((m otimesₜ p) otimesₜ (n otimesₜ q)) = (m otimesₜ n) otimesₜ (p otimesₜ q) :=
+    (tensorTensorTensorComm R S A B M N P Q).symm ((m ⊗ₜ p) ⊗ₜ (n ⊗ₜ q)) = (m ⊗ₜ n) ⊗ₜ (p ⊗ₜ q) :=
   rfl
 
-/--
-theorem `tensorTensorTensorComm_eq` / 定理 `tensorTensorTensorComm_eq`
+/-- The heterobasic version of `tensorTensorTensorComm` coincides with the regular version. -/
+/-
+**TensorProduct.AlgebraTensorModule.tensorTensorTensorComm_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：tensorTensorTensorComm_eq : tensorTensorTensorComm R R R R M N P Q = Tenso
+rProduct.tensorTensorTensorComm R M N P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-theorem tensorTensorTensorComm_eq
-  proof: rfl
-
-中文:
-定理 tensorTensorTensorComm_eq
-  证明: rfl
+--- 原说明 ---
+The heterobasic version of `tensorTensorTensorComm` coincides with the regular v
+ersion.
 -/
 theorem tensorTensorTensorComm_eq :
     tensorTensorTensorComm R R R R M N P Q = TensorProduct.tensorTensorTensorComm R M N P Q := rfl
@@ -1865,26 +1951,19 @@ section
 universe u₁ u₂ u₃ u₄
 
 attribute [local instance] ULift.algebra' in
-/--
-Definition of `uliftEquiv` / `uliftEquiv` 的定义
+/-- `ULift` commutes with tensor products. -/
+/-
+**TensorProduct.AlgebraTensorModule.uliftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Tensor
+Product.AlgebraTensorModule`。
+形式化陈述：uliftEquiv : ULift.{u₁} (M otimes[R] N) ≃ₗ[A] ULift.{u₂} M otimes[ULift.{u
+₃} R] ULift.{u₄} N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftEquiv
-  signature: : ULift.{u₁} (M otimes[R] N) ≃ₗ[A] ULift.{u₂} M otimes[ULift.{u₃} R] ULift.{u₄} N
-  body: ULift.moduleEquiv ≪≫ₗ
-    AlgebraTensorModule.congr ULift.moduleEquiv.symm ULift.moduleEquiv.symm ≪≫ₗ
-    (equivOfCompatibleSMul _ _ _ _ _)
-
-中文:
-定义 uliftEquiv
-  签名: : 类型层提升.{u₁} (M otimes[R] N) ≃ₗ[A] 类型层提升.{u₂} M otimes[类型层提升.{u₃} R] 类型层提升.{u₄} N
-  定义体: ULift.moduleEquiv ≪≫ₗ
-    AlgebraTensorModule.congr ULift.moduleEquiv.symm ULift.moduleEquiv.symm ≪≫ₗ
-    (equivOfCompatibleSMul _ _ _ _ _)
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.congr, ULift.moduleEquiv, ULift.moduleEquiv.symm, equivOfCompatibleSMul, moduleEquiv
+--- 原说明 ---
+`ULift` commutes with tensor products.
 -/
-def uliftEquiv : ULift.{u₁} (M otimes[R] N) ≃ₗ[A] ULift.{u₂} M otimes[ULift.{u₃} R] ULift.{u₄} N :=
+def uliftEquiv : ULift.{u₁} (M ⊗[R] N) ≃ₗ[A] ULift.{u₂} M ⊗[ULift.{u₃} R] ULift.{u₄} N :=
   ULift.moduleEquiv ≪≫ₗ
     AlgebraTensorModule.congr ULift.moduleEquiv.symm ULift.moduleEquiv.symm ≪≫ₗ
     (equivOfCompatibleSMul _ _ _ _ _)
@@ -1892,46 +1971,36 @@ def uliftEquiv : ULift.{u₁} (M otimes[R] N) ≃ₗ[A] ULift.{u₂} M otimes[UL
 variable {M N}
 
 @[simp]
-/--
-lemma `down_uliftEquiv_symm_tmul` / 引理 `down_uliftEquiv_symm_tmul`
-
-English:
-lemma down_uliftEquiv_symm_tmul
-  given: (m : ULift M) (n : ULift N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 down_uliftEquiv_symm_tmul
-  条件: (m : 类型层提升 M) (n : 类型层提升 N)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.AlgebraTensorModule.down_uliftEquiv_symm_tmul** 是 Mathlib 中的一个引理
+，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：down_uliftEquiv_symm_tmul (m : ULift M) (n : ULift N) : ((uliftEquiv R A M
+ N).symm (m otimesₜ n)).down = m.down otimesₜ n.down
+参数：m : ULift M；n : ULift N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma down_uliftEquiv_symm_tmul (m : ULift M) (n : ULift N) :
-    ((uliftEquiv R A M N).symm (m otimesₜ n)).down = m.down otimesₜ n.down :=
+    ((uliftEquiv R A M N).symm (m ⊗ₜ n)).down = m.down ⊗ₜ n.down :=
   rfl
 
 @[simp]
-/--
-lemma `uliftEquiv_tmul` / 引理 `uliftEquiv_tmul`
-
-English:
-lemma uliftEquiv_tmul
-  given: (m : M) (n : N)
-  statement: uliftEquiv R A M N ⟨m otimesₜ n⟩ = ⟨m⟩ otimesₜ ⟨n⟩
-  proof: rfl
-
-中文:
-引理 uliftEquiv_tmul
-  条件: (m : M) (n : N)
-  结论: uliftEquiv R A M N ⟨m otimesₜ n⟩ = ⟨m⟩ otimesₜ ⟨n⟩
-  证明: rfl
-
-Depends on / 依赖: constantsOn, constantsOn.structure, fast_instance, structure
+/-
+**TensorProduct.AlgebraTensorModule.uliftEquiv_tmul** 是 Mathlib 中的一个引理，位于命名空间 `T
+ensorProduct.AlgebraTensorModule`。
+形式化陈述：uliftEquiv_tmul (m : M) (n : N) : uliftEquiv R A M N ⟨m otimesₜ n⟩ = ⟨m⟩ o
+timesₜ ⟨n⟩
+参数：m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-lemma uliftEquiv_tmul (m : M) (n : N) : uliftEquiv R A M N ⟨m otimesₜ n⟩ = ⟨m⟩ otimesₜ ⟨n⟩ :=
+lemma uliftEquiv_tmul (m : M) (n : N) : uliftEquiv R A M N ⟨m ⊗ₜ n⟩ = ⟨m⟩ ⊗ₜ ⟨n⟩ :=
   rfl
 
 end
@@ -1957,207 +2026,300 @@ variable {R A B M N P : Type*} [CommSemiring R]
 variable [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
 variable [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
 variable [Module R M] [Module R N] [Module R P]
-variable (r : R) (f g : M ->ₗ[R] N)
+variable (r : R) (f g : M →ₗ[R] N)
 
 variable (A) in
-/--
-Definition of `baseChange` / `baseChange` 的定义
+/-- `baseChange A f` for `f : M →ₗ[R] N` is the `A`-linear map `A ⊗[R] M →ₗ[A] A ⊗[R] N`.
 
-English:
-definition baseChange
-  signature: (f : M ->ₗ[R] N)
-  body: AlgebraTensorModule.map (LinearMap.id : A ->ₗ[A] A) f
+This "base change" operation is also known as "extension of scalars". -/
+/-
+**LinearMap.baseChange** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：baseChange (f : M ->ₗ[R] N) : A otimes[R] M ->ₗ[A] A otimes[R] N
+参数：f : M ->ₗ[R] N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-@[simp]
+--- 原说明 ---
+`baseChange A f` for `f : M →ₗ[R] N` is the `A`-linear map `A ⊗[R] M →ₗ[A] A ⊗[R
+] N`.
 
-中文:
-定义 baseChange
-  签名: (f : M ->ₗ[R] N)
-  定义体: AlgebraTensorModule.map (LinearMap.id : A ->ₗ[A] A) f
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, LinearMap, LinearMap.id
+This "base change" operation is also known as "extension of scalars".
 -/
-def baseChange (f : M ->ₗ[R] N) : A otimes[R] M ->ₗ[A] A otimes[R] N :=
-  AlgebraTensorModule.map (LinearMap.id : A ->ₗ[A] A) f
+def baseChange (f : M →ₗ[R] N) : A ⊗[R] M →ₗ[A] A ⊗[R] N :=
+  AlgebraTensorModule.map (LinearMap.id : A →ₗ[A] A) f
 
 @[simp]
-/--
-theorem `baseChange_tmul` / 定理 `baseChange_tmul`
-
-English:
-theorem baseChange_tmul
-  given: (a : A) (x : M)
-  statement: f.baseChange A (a otimesₜ x) = a otimesₜ f x
-  proof: rfl
-
-中文:
-定理 baseChange_tmul
-  条件: (a : A) (x : M)
-  结论: f.baseChange A (a otimesₜ x) = a otimesₜ f x
-  证明: rfl
+/-
+**LinearMap.baseChange_tmul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_tmul (a : A) (x : M) : f.baseChange A (a otimesₜ x) = a otimesₜ
+ f x
+参数：a : A；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem baseChange_tmul (a : A) (x : M) : f.baseChange A (a otimesₜ x) = a otimesₜ f x :=
+theorem baseChange_tmul (a : A) (x : M) : f.baseChange A (a ⊗ₜ x) = a ⊗ₜ f x :=
   rfl
-
-/--
-theorem `baseChange_eq_ltensor` / 定理 `baseChange_eq_ltensor`
-
-English:
-theorem baseChange_eq_ltensor
-  statement: (f.baseChange A : A otimes M -> A otimes N) = f.lTensor A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 baseChange_eq_ltensor
-  结论: (f.baseChange A : A otimes M -> A otimes N) = f.lTensor A
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.baseChange_eq_ltensor** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_eq_ltensor : (f.baseChange A : A otimes M -> A otimes N) = f.lT
+ensor A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem baseChange_eq_ltensor : (f.baseChange A : A otimes M -> A otimes N) = f.lTensor A :=
+theorem baseChange_eq_ltensor : (f.baseChange A : A ⊗ M → A ⊗ N) = f.lTensor A :=
   rfl
 
 @[simp]
-/--
-theorem `baseChange_add` / 定理 `baseChange_add`
-
-English:
-theorem baseChange_add
-  statement: (f + g).baseChange A = f.baseChange A + g.baseChange A
-  proof: by
-  ext
-  simp [baseChange_eq_ltensor, -baseChange_tmul]
-
-@[simp]
-
-中文:
-定理 baseChange_add
-  结论: (f + g).baseChange A = f.baseChange A + g.baseChange A
-  证明: by
-  ext
-  simp [baseChange_eq_ltensor, -baseChange_tmul]
-
-@[simp]
-
-Depends on / 依赖: baseChange_eq_ltensor, baseChange_tmul
+/-
+**LinearMap.baseChange_add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_add : (f + g).baseChange A = f.baseChange A + g.baseChange A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.lTensor_add`：lTensor_add (f g : N ->ₗ[R] P) : (f + g).lTensor 
+M = f.lTensor M + g.lTensor M
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem baseChange_add : (f + g).baseChange A = f.baseChange A + g.baseChange A := by
   ext
   simp [baseChange_eq_ltensor, -baseChange_tmul]
 
 @[simp]
-/--
-theorem `baseChange_zero` / 定理 `baseChange_zero`
-
-English:
-theorem baseChange_zero
-  statement: baseChange A (0 : M ->ₗ[R] N) = 0
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 baseChange_zero
-  结论: baseChange A (0 : M ->ₗ[R] N) = 0
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**LinearMap.baseChange_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_zero : baseChange A (0 : M ->ₗ[R] N) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_zero`：tmul_zero (m : M) : m otimesₜ[R] (0 : N) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem baseChange_zero : baseChange A (0 : M ->ₗ[R] N) = 0 := by
+theorem baseChange_zero : baseChange A (0 : M →ₗ[R] N) = 0 := by
   ext
   simp
 
 @[simp]
-/--
-theorem `baseChange_smul` / 定理 `baseChange_smul`
-
-English:
-theorem baseChange_smul
-  statement: (r • f).baseChange A = r • f.baseChange A
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 baseChange_smul
-  结论: (r • f).baseChange A = r • f.baseChange A
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**LinearMap.baseChange_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_smul : (r • f).baseChange A = r • f.baseChange A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem baseChange_smul : (r • f).baseChange A = r • f.baseChange A := by
   ext
   simp
 
 @[simp]
-/--
-lemma `baseChange_id` / 引理 `baseChange_id`
-
-English:
-lemma baseChange_id
-  statement: (.id : M ->ₗ[R] M).baseChange A = .id
-  proof: by
-  ext; simp
-
-中文:
-引理 baseChange_id
-  结论: (.id : M ->ₗ[R] M).baseChange A = .id
-  证明: by
-  ext; simp
+/-
+**LinearMap.baseChange_id** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_id : (.id : M ->ₗ[R] M).baseChange A = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma baseChange_id : (.id : M ->ₗ[R] M).baseChange A = .id := by
+lemma baseChange_id : (.id : M →ₗ[R] M).baseChange A = .id := by
   ext; simp
-
-/--
-lemma `baseChange_comp` / 引理 `baseChange_comp`
-
-English:
-lemma baseChange_comp
-  given: (g : N ->ₗ[R] P)
-  proof: by
-  ext; simp
-
-中文:
-引理 baseChange_comp
-  条件: (g : N ->ₗ[R] P)
-  证明: by
-  ext; simp
+/-
+**LinearMap.baseChange_comp** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_comp (g : N ->ₗ[R] P) : (g ∘ₗ f).baseChange A = g.baseChange A 
+∘ₗ f.baseChange A
+参数：g : N ->ₗ[R] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma baseChange_comp (g : N ->ₗ[R] P) :
+lemma baseChange_comp (g : N →ₗ[R] P) :
     (g ∘ₗ f).baseChange A = g.baseChange A ∘ₗ f.baseChange A := by
   ext; simp
 
 open AlgebraTensorModule in
-/--
-lemma `baseChange_baseChange` / 引理 `baseChange_baseChange`
-
-English:
-lemma baseChange_baseChange
-  statement: {A B : Type*} [CommSemiring A] [Algebra R A]
-  proof: by
-  ext; simp
-
-中文:
-引理 baseChange_baseChange
-  结论: {A B : 类型} [交换半环 A] [代数 R A]
-  证明: by
-  ext; simp
+/-
+**LinearMap.baseChange_baseChange** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_baseChange {A B : Type*} [CommSemiring A] [Algebra R A] [Semiri
+ng B] [Algebra R B] [Algebra A B] [IsScalarTower R A B] (f : M ->ₗ[R] N) : ((f.b
+aseChange A).baseChange B) = (cancelBaseChange R A B B N).symm ∘ₗ (f.baseChange 
+B) ∘ₗ (cancelBaseChange R A B B M)
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma baseChange_baseChange {A B : Type*} [CommSemiring A] [Algebra R A]
     [Semiring B] [Algebra R B] [Algebra A B] [IsScalarTower R A B]
-    (f : M ->ₗ[R] N) :
+    (f : M →ₗ[R] N) :
     ((f.baseChange A).baseChange B) =
     (cancelBaseChange R A B B N).symm ∘ₗ
       (f.baseChange B) ∘ₗ (cancelBaseChange R A B B M) := by
@@ -2165,37 +2327,48 @@ lemma baseChange_baseChange {A B : Type*} [CommSemiring A] [Algebra R A]
 
 variable (R M) in
 @[simp]
-/--
-lemma `baseChange_one` / 引理 `baseChange_one`
-
-English:
-lemma baseChange_one
-  statement: (1 : Module.End R M).baseChange A = 1
-  proof: baseChange_id
-
-中文:
-引理 baseChange_one
-  结论: (1 : 模.End R M).baseChange A = 1
-  证明: baseChange_id
-
-Depends on / 依赖: baseChange_id
+/-
+**LinearMap.baseChange_one** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_one : (1 : Module.End R M).baseChange A = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LinearMap.baseChange_id`：baseChange_id : (.id : M ->ₗ[R] M).baseChange A
+ = .id
 -/
 lemma baseChange_one : (1 : Module.End R M).baseChange A = 1 := baseChange_id
-
-/--
-lemma `baseChange_mul` / 引理 `baseChange_mul`
-
-English:
-lemma baseChange_mul
-  given: (f g : Module.End R M)
-  proof: by
-  ext; simp
-
-中文:
-引理 baseChange_mul
-  条件: (f g : 模.End R M)
-  证明: by
-  ext; simp
+/-
+**LinearMap.baseChange_mul** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_mul (f g : Module.End R M) : (f * g).baseChange A = f.baseChang
+e A * g.baseChange A
+参数：f g : Module.End R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma baseChange_mul (f g : Module.End R M) :
     (f * g).baseChange A = f.baseChange A * g.baseChange A := by
@@ -2207,240 +2380,141 @@ variable (R A M N)
 
 When `M = N`, this is true more strongly as `Module.End.baseChangeHom`. -/
 @[simps]
-/--
-Definition of `baseChangeHom` / `baseChangeHom` 的定义
+/-
+**LinearMap.baseChangeHom** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：baseChangeHom : (M ->ₗ[R] N) ->ₗ[R] A otimes[R] M ->ₗ[A] A otimes[R] N whe
+re toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.baseChange_add`：baseChange_add : (f + g).baseChange A = f.base
+Change A + g.baseChange A
+· 使用定理 `LinearMap.baseChange_smul`：baseChange_smul : (r • f).baseChange A = r • 
+f.baseChange A
 
-English:
-definition baseChangeHom
-  signature: : (M ->ₗ[R] N) ->ₗ[R] A otimes[R] M ->ₗ[A] A otimes[R] N where
-  body: baseChange A
-  map_add' := baseChange_add
-  map_smul' := baseChange_smul
+--- 原说明 ---
+`baseChange` as a linear map.
 
-中文:
-定义 baseChangeHom
-  签名: : (M ->ₗ[R] N) ->ₗ[R] A otimes[R] M ->ₗ[A] A otimes[R] N where
-  定义体: baseChange A
-  map_add' := baseChange_add
-  map_smul' := baseChange_smul
-
-Depends on / 依赖: baseChange
+When `M = N`, this is true more strongly as `Module.End.baseChangeHom`.
 -/
-def baseChangeHom : (M ->ₗ[R] N) ->ₗ[R] A otimes[R] M ->ₗ[A] A otimes[R] N where
+def baseChangeHom : (M →ₗ[R] N) →ₗ[R] A ⊗[R] M →ₗ[A] A ⊗[R] N where
   toFun := baseChange A
   map_add' := baseChange_add
   map_smul' := baseChange_smul
 
 /-- `baseChange` as an `AlgHom`. -/
 @[simps!]
-/--
-Definition of `_root_.Module.End.baseChangeHom` / `_root_.Module.End.baseChangeHom` 的定义
+/-
+**LinearMap._root_.Module.End.baseChangeHom** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Module.End.baseChangeHom
-  signature: : Module.End R M ->ₐ[R] Module.End A (A otimes[R] M)
-  body: .ofLinearMap (LinearMap.baseChangeHom _ _ _ _) (baseChange_one _ _) baseChange_mul
-
-中文:
-定义 _root_.模.End.baseChangeHom
-  签名: : 模.End R M ->ₐ[R] 模.End A (A otimes[R] M)
-  定义体: .ofLinearMap (LinearMap.baseChangeHom _ _ _ _) (baseChange_one _ _) baseChange_mul
-
-Depends on / 依赖: LinearMap, LinearMap.baseChangeHom, baseChangeHom, baseChange_mul, baseChange_one, ofLinearMap
+--- 原说明 ---
+`baseChange` as an `AlgHom`.
 -/
-def _root_.Module.End.baseChangeHom : Module.End R M ->ₐ[R] Module.End A (A otimes[R] M) :=
+def _root_.Module.End.baseChangeHom : Module.End R M →ₐ[R] Module.End A (A ⊗[R] M) :=
   .ofLinearMap (LinearMap.baseChangeHom _ _ _ _) (baseChange_one _ _) baseChange_mul
-
-/--
-lemma `baseChange_pow` / 引理 `baseChange_pow`
-
-English:
-lemma baseChange_pow
-  given: (f : Module.End R M) (n : Nat)
-  proof: map_pow (Module.End.baseChangeHom _ _ _) f n
-
-中文:
-引理 baseChange_pow
-  条件: (f : 模.End R M) (n : 自然数)
-  证明: map_pow (Module.End.baseChangeHom _ _ _) f n
-
-Depends on / 依赖: Module, Module.End.baseChangeHom, baseChangeHom, map_pow
+/-
+**LinearMap.baseChange_pow** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_pow (f : Module.End R M) (n : Nat) : (f ^ n).baseChange A = f.b
+aseChange A ^ n
+参数：f : Module.End R M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-lemma baseChange_pow (f : Module.End R M) (n : Nat) :
+lemma baseChange_pow (f : Module.End R M) (n : ℕ) :
     (f ^ n).baseChange A = f.baseChange A ^ n :=
   map_pow (Module.End.baseChangeHom _ _ _) f n
 
-/--
-Definition of `_root_.LinearEquiv.baseChange` / `_root_.LinearEquiv.baseChange` 的定义
+/-- `baseChange A e` for `e : M ≃ₗ[R] N` is the `A`-linear map `A ⊗[R] M ≃ₗ[A] A ⊗[R] N`. -/
+/-
+**LinearMap._root_.LinearEquiv.baseChange** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearEquiv.baseChange
-  signature: (e : M ≃ₗ[R] N)
-  body: AlgebraTensorModule.congr (.refl _ _) e
-
-@[simp]
-
-中文:
-定义 _root_.线性等价.baseChange
-  签名: (e : M ≃ₗ[R] N)
-  定义体: AlgebraTensorModule.congr (.refl _ _) e
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.congr
+--- 原说明 ---
+`baseChange A e` for `e : M ≃ₗ[R] N` is the `A`-linear map `A ⊗[R] M ≃ₗ[A] A ⊗[R
+] N`.
 -/
-def _root_.LinearEquiv.baseChange (e : M ≃ₗ[R] N) : A otimes[R] M ≃ₗ[A] A otimes[R] N :=
+def _root_.LinearEquiv.baseChange (e : M ≃ₗ[R] N) : A ⊗[R] M ≃ₗ[A] A ⊗[R] N :=
   AlgebraTensorModule.congr (.refl _ _) e
 
 @[simp]
-/--
-theorem `_root_.LinearEquiv.coe_baseChange` / 定理 `_root_.LinearEquiv.coe_baseChange`
-
-English:
-theorem _root_.LinearEquiv.coe_baseChange
-  given: (f : M ≃ₗ[R] N)
-  proof: rfl
-
-中文:
-定理 _root_.线性等价.coe_baseChange
-  条件: (f : M ≃ₗ[R] N)
-  证明: rfl
+/-
+**LinearMap._root_.LinearEquiv.coe_baseChange** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.coe_baseChange (f : M ≃ₗ[R] N) :
     f.baseChange R A M N = f.toLinearMap.baseChange A :=
    rfl
-
-/--
-lemma `_root_.LinearEquiv.baseChange_tmul` / 引理 `_root_.LinearEquiv.baseChange_tmul`
-
-English:
-lemma _root_.LinearEquiv.baseChange_tmul
-  given: {e : M ≃ₗ[R] N} (a : A) (m : M)
-  proof: rfl
-
-中文:
-引理 _root_.线性等价.baseChange_tmul
-  条件: {e : M ≃ₗ[R] N} (a : A) (m : M)
-  证明: rfl
+/-
+**LinearMap._root_.LinearEquiv.baseChange_tmul** 是 Mathlib 中的一个引理，位于命名空间 `Linear
+Map`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.LinearEquiv.baseChange_tmul {e : M ≃ₗ[R] N} (a : A) (m : M) :
-    e.baseChange R A M N (a otimesₜ m) = a otimesₜ e m :=
+    e.baseChange R A M N (a ⊗ₜ m) = a ⊗ₜ e m :=
   rfl
-
-/--
-lemma `_root_.LinearEquiv.baseChange_symm_tmul` / 引理 `_root_.LinearEquiv.baseChange_symm_tmul`
-
-English:
-lemma _root_.LinearEquiv.baseChange_symm_tmul
-  given: {e : M ≃ₗ[R] N} (a : A) (n : N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.线性等价.baseChange_symm_tmul
-  条件: {e : M ≃ₗ[R] N} (a : A) (n : N)
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap._root_.LinearEquiv.baseChange_symm_tmul** 是 Mathlib 中的一个引理，位于命名空间 `L
+inearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.LinearEquiv.baseChange_symm_tmul {e : M ≃ₗ[R] N} (a : A) (n : N) :
-    (e.baseChange R A).symm (a otimesₜ n) = a otimesₜ e.symm n :=
+    (e.baseChange R A).symm (a ⊗ₜ n) = a ⊗ₜ e.symm n :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.LinearEquiv.baseChange_one` / 定理 `_root_.LinearEquiv.baseChange_one`
-
-English:
-theorem _root_.LinearEquiv.baseChange_one
-  proof: by
-  ext x
-  simp [← LinearEquiv.coe_toLinearMap]
-
-中文:
-定理 _root_.线性等价.baseChange_one
-  证明: by
-  ext x
-  simp [← LinearEquiv.coe_toLinearMap]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_toLinearMap, coe_toLinearMap
+/-
+**LinearMap._root_.LinearEquiv.baseChange_one** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.baseChange_one :
     (1 : M ≃ₗ[R] M).baseChange R A M M = 1 := by
   ext x
   simp [← LinearEquiv.coe_toLinearMap]
-
-/--
-theorem `_root_.LinearEquiv.baseChange_trans` / 定理 `_root_.LinearEquiv.baseChange_trans`
-
-English:
-theorem _root_.LinearEquiv.baseChange_trans
-  given: (e : M ≃ₗ[R] N) (f : N ≃ₗ[R] P)
-  proof: by
-  ext x
-  simp only [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange, LinearEquiv.trans_apply,
-    LinearEquiv.coe_trans, baseChange_eq_ltensor, lTensor_comp_apply]
-
-中文:
-定理 _root_.线性等价.baseChange_trans
-  条件: (e : M ≃ₗ[R] N) (f : N ≃ₗ[R] P)
-  证明: by
-  ext x
-  simp only [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange, LinearEquiv.trans_apply,
-    LinearEquiv.coe_trans, baseChange_eq_ltensor, lTensor_comp_apply]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_baseChange, LinearEquiv.coe_toLinearMap, LinearEquiv.coe_trans, LinearEquiv.trans_apply, baseChange_eq_ltensor, coe_baseChange, coe_toLinearMap, coe_trans, lTensor_comp_apply, trans_apply
+/-
+**LinearMap._root_.LinearEquiv.baseChange_trans** 是 Mathlib 中的一个定理，位于命名空间 `Linea
+rMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.baseChange_trans (e : M ≃ₗ[R] N) (f : N ≃ₗ[R] P) :
     (e.trans f).baseChange R A M P = (e.baseChange R A M N).trans (f.baseChange R A N P) := by
   ext x
   simp only [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange, LinearEquiv.trans_apply,
     LinearEquiv.coe_trans, baseChange_eq_ltensor, lTensor_comp_apply]
-
-/--
-theorem `_root_.LinearEquiv.baseChange_mul` / 定理 `_root_.LinearEquiv.baseChange_mul`
-
-English:
-theorem _root_.LinearEquiv.baseChange_mul
-  given: (e : M ≃ₗ[R] M) (f : M ≃ₗ[R] M)
-  proof: by
-  simp [LinearEquiv.mul_eq_trans, LinearEquiv.baseChange_trans]
-
-中文:
-定理 _root_.线性等价.baseChange_mul
-  条件: (e : M ≃ₗ[R] M) (f : M ≃ₗ[R] M)
-  证明: by
-  simp [LinearEquiv.mul_eq_trans, LinearEquiv.baseChange_trans]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.baseChange_trans, LinearEquiv.mul_eq_trans, baseChange_trans, mul_eq_trans
+/-
+**LinearMap._root_.LinearEquiv.baseChange_mul** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.baseChange_mul (e : M ≃ₗ[R] M) (f : M ≃ₗ[R] M) :
     (e * f).baseChange R A M M = (e.baseChange R A M M) * (f.baseChange R A M M) := by
   simp [LinearEquiv.mul_eq_trans, LinearEquiv.baseChange_trans]
-
-/--
-theorem `_root_.LinearEquiv.baseChange_symm` / 定理 `_root_.LinearEquiv.baseChange_symm`
-
-English:
-theorem _root_.LinearEquiv.baseChange_symm
-  given: (e : M ≃ₗ[R] N)
-  proof: by
-  ext x
-  rw [LinearEquiv.eq_symm_apply]
-  simp [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange,
-    baseChange_eq_ltensor, ← lTensor_comp_apply]
-
-中文:
-定理 _root_.线性等价.baseChange_symm
-  条件: (e : M ≃ₗ[R] N)
-  证明: by
-  ext x
-  rw [LinearEquiv.eq_symm_apply]
-  simp [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange,
-    baseChange_eq_ltensor, ← lTensor_comp_apply]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_baseChange, LinearEquiv.coe_toLinearMap, LinearEquiv.eq_symm_apply, baseChange_eq_ltensor, coe_baseChange, coe_toLinearMap, eq_symm_apply, lTensor_comp_apply
+/-
+**LinearMap._root_.LinearEquiv.baseChange_symm** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Map`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.baseChange_symm (e : M ≃ₗ[R] N) :
     e.symm.baseChange R A N M = (e.baseChange R A M N).symm := by
@@ -2448,84 +2522,31 @@ theorem _root_.LinearEquiv.baseChange_symm (e : M ≃ₗ[R] N) :
   rw [LinearEquiv.eq_symm_apply]
   simp [← LinearEquiv.coe_toLinearMap, LinearEquiv.coe_baseChange,
     baseChange_eq_ltensor, ← lTensor_comp_apply]
-
-/--
-theorem `_root_.LinearEquiv.baseChange_inv` / 定理 `_root_.LinearEquiv.baseChange_inv`
-
-English:
-theorem _root_.LinearEquiv.baseChange_inv
-  given: (e : M ≃ₗ[R] M)
-  proof: LinearEquiv.baseChange_symm R A M M e
-
-中文:
-定理 _root_.线性等价.baseChange_inv
-  条件: (e : M ≃ₗ[R] M)
-  证明: LinearEquiv.baseChange_symm R A M M e
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.baseChange_symm, baseChange_symm
+/-
+**LinearMap._root_.LinearEquiv.baseChange_inv** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.baseChange_inv (e : M ≃ₗ[R] M) :
     (e⁻¹).baseChange R A M M = (e.baseChange R A M M)⁻¹ :=
   LinearEquiv.baseChange_symm R A M M e
-
-/--
-lemma `_root_.LinearEquiv.baseChange_pow` / 引理 `_root_.LinearEquiv.baseChange_pow`
-
-English:
-lemma _root_.LinearEquiv.baseChange_pow
-  given: (f : M ≃ₗ[R] M) (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n h =>
-    simp [pow_succ, LinearEquiv.baseChange_mul, h]
-
-中文:
-引理 _root_.线性等价.baseChange_pow
-  条件: (f : M ≃ₗ[R] M) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n h =>
-    simp [pow_succ, LinearEquiv.baseChange_mul, h]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.baseChange_mul, baseChange_mul, pow_succ
+/-
+**LinearMap._root_.LinearEquiv.baseChange_pow** 是 Mathlib 中的一个引理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.LinearEquiv.baseChange_pow (f : M ≃ₗ[R] M) (n : Nat) :
+lemma _root_.LinearEquiv.baseChange_pow (f : M ≃ₗ[R] M) (n : ℕ) :
     (f ^ n).baseChange R A M M = f.baseChange R A M M ^ n := by
   induction n with
   | zero => simp
   | succ n h =>
     simp [pow_succ, LinearEquiv.baseChange_mul, h]
-
-/--
-lemma `_root_.LinearEquiv.baseChange_zpow` / 引理 `_root_.LinearEquiv.baseChange_zpow`
-
-English:
-lemma _root_.LinearEquiv.baseChange_zpow
-  given: (f : M ≃ₗ[R] M) (n : Int)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n h =>
-    simp only [zpow_add_one, LinearEquiv.baseChange_mul, h]
-  | pred n h =>
-    simp only [zpow_sub_one, LinearEquiv.baseChange_mul, h, LinearEquiv.baseChange_inv]
-
-中文:
-引理 _root_.线性等价.baseChange_zpow
-  条件: (f : M ≃ₗ[R] M) (n : 整数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n h =>
-    simp only [zpow_add_one, LinearEquiv.baseChange_mul, h]
-  | pred n h =>
-    simp only [zpow_sub_one, LinearEquiv.baseChange_mul, h, LinearEquiv.baseChange_inv]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.baseChange_inv, LinearEquiv.baseChange_mul, baseChange_inv, baseChange_mul, zpow_add_one, zpow_sub_one
+/-
+**LinearMap._root_.LinearEquiv.baseChange_zpow** 是 Mathlib 中的一个引理，位于命名空间 `Linear
+Map`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.LinearEquiv.baseChange_zpow (f : M ≃ₗ[R] M) (n : Int) :
+lemma _root_.LinearEquiv.baseChange_zpow (f : M ≃ₗ[R] M) (n : ℤ) :
     (f ^ n).baseChange R A M M = f.baseChange R A M M ^ n := by
   induction n with
   | zero => simp
@@ -2535,24 +2556,31 @@ lemma _root_.LinearEquiv.baseChange_zpow (f : M ≃ₗ[R] M) (n : Int) :
     simp only [zpow_sub_one, LinearEquiv.baseChange_mul, h, LinearEquiv.baseChange_inv]
 
 variable {R A M N} in
-/--
-theorem `rTensor_baseChange` / 定理 `rTensor_baseChange`
-
-English:
-theorem rTensor_baseChange
-  given: (φ : A ->ₐ[R] B) (t : A otimes[R] M) (f : M ->ₗ[R] N)
-  proof: by
-  simp [LinearMap.baseChange_eq_ltensor, ← LinearMap.comp_apply]
-
-中文:
-定理 rTensor_baseChange
-  条件: (φ : A ->ₐ[R] B) (t : A otimes[R] M) (f : M ->ₗ[R] N)
-  证明: by
-  simp [LinearMap.baseChange_eq_ltensor, ← LinearMap.comp_apply]
-
-Depends on / 依赖: LinearMap, LinearMap.baseChange_eq_ltensor, LinearMap.comp_apply, baseChange_eq_ltensor, comp_apply
+/-
+**LinearMap.rTensor_baseChange** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：rTensor_baseChange (φ : A ->ₐ[R] B) (t : A otimes[R] M) (f : M ->ₗ[R] N) :
+ (φ.toLinearMap.rTensor N) (f.baseChange A t) = (f.baseChange B) (φ.toLinearMap.
+rTensor M t)
+参数：φ : A ->ₐ[R] B；t : A otimes[R] M；f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.rTensor_comp_lTensor`：rTensor_comp_lTensor (f : M ->ₗ[R] P) (g
+ : N ->ₗ[R] Q) : (f.rTensor Q).comp (g.lTensor M) = map f g
+· 使用定理 `LinearMap.lTensor_comp_rTensor`：lTensor_comp_rTensor (f : M ->ₗ[R] P) (g
+ : N ->ₗ[R] Q) : (g.lTensor P).comp (f.rTensor N) = map f g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rTensor_baseChange (φ : A ->ₐ[R] B) (t : A otimes[R] M) (f : M ->ₗ[R] N) :
+theorem rTensor_baseChange (φ : A →ₐ[R] B) (t : A ⊗[R] M) (f : M →ₗ[R] N) :
     (φ.toLinearMap.rTensor N) (f.baseChange A t) =
       (f.baseChange B) (φ.toLinearMap.rTensor M t) := by
   simp [LinearMap.baseChange_eq_ltensor, ← LinearMap.comp_apply]
@@ -2564,55 +2592,81 @@ section Ring
 variable {R A B M N : Type*} [CommRing R]
 variable [Ring A] [Algebra R A] [Ring B] [Algebra R B]
 variable [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N]
-variable (f g : M ->ₗ[R] N)
+variable (f g : M →ₗ[R] N)
 
 @[simp]
-/--
-theorem `baseChange_sub` / 定理 `baseChange_sub`
-
-English:
-theorem baseChange_sub
-  statement: (f - g).baseChange A = f.baseChange A - g.baseChange A
-  proof: by
-  ext
-  simp [tmul_sub]
-
-@[simp]
-
-中文:
-定理 baseChange_sub
-  结论: (f - g).baseChange A = f.baseChange A - g.baseChange A
-  证明: by
-  ext
-  simp [tmul_sub]
-
-@[simp]
-
-Depends on / 依赖: tmul_sub
+/-
+**LinearMap.baseChange_sub** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_sub : (f - g).baseChange A = f.baseChange A - g.baseChange A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_sub`：tmul_sub (m : M) (p₁ p₂ : P) : m otimesₜ (p₁ - p
+₂) = m otimesₜ[R] p₁ - m otimesₜ[R] p₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem baseChange_sub : (f - g).baseChange A = f.baseChange A - g.baseChange A := by
   ext
   simp [tmul_sub]
 
 @[simp]
-/--
-theorem `baseChange_neg` / 定理 `baseChange_neg`
-
-English:
-theorem baseChange_neg
-  statement: (-f).baseChange A = -f.baseChange A
-  proof: by
-  ext
-  simp [tmul_neg]
-
-中文:
-定理 baseChange_neg
-  结论: (-f).baseChange A = -f.baseChange A
-  证明: by
-  ext
-  simp [tmul_neg]
-
-Depends on / 依赖: tmul_neg
+/-
+**LinearMap.baseChange_neg** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：baseChange_neg : (-f).baseChange A = -f.baseChange A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `TensorProduct.tmul_neg`：tmul_neg (m : M) (p : P) : m otimesₜ (-p) = -m o
+timesₜ[R] p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem baseChange_neg : (-f).baseChange A = -f.baseChange A := by
   ext
@@ -2629,255 +2683,271 @@ open TensorProduct
 variable {R M : Type*} (A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
   [AddCommMonoid M] [Module R M] (p q : Submodule R M)
 
-/--
-Definition of `baseChange` / `baseChange` 的定义
+/-- If `A` is an `R`-algebra, any `R`-submodule `p` of an `R`-module `M` may be pushed forward to
+an `A`-submodule of `A ⊗ M`.
 
-English:
-definition baseChange
-  signature: : Submodule A (A otimes[R] M)
-  body: LinearMap.range (p.subtype.baseChange A)
+This "base change" operation is also known as "extension of scalars". -/
+/-
+**Submodule.baseChange** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：baseChange : Submodule A (A otimes[R] M)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-中文:
-定义 baseChange
-  签名: : 子模 A (A otimes[R] M)
-  定义体: LinearMap.range (p.subtype.baseChange A)
+--- 原说明 ---
+If `A` is an `R`-algebra, any `R`-submodule `p` of an `R`-module `M` may be push
+ed forward to
+an `A`-submodule of `A ⊗ M`.
 
-Depends on / 依赖: LinearMap, LinearMap.range, baseChange, p.subtype.baseChange, subtype
+This "base change" operation is also known as "extension of scalars".
 -/
-def baseChange : Submodule A (A otimes[R] M) :=
+def baseChange : Submodule A (A ⊗[R] M) :=
   LinearMap.range (p.subtype.baseChange A)
 
 variable {A p} in
-/--
-lemma `tmul_mem_baseChange_of_mem` / 引理 `tmul_mem_baseChange_of_mem`
-
-English:
-lemma tmul_mem_baseChange_of_mem
-  given: (a : A) {m : M} (hm : m in p)
-  proof: ⟨a otimesₜ[R] ⟨m, hm⟩, rfl⟩
-
-中文:
-引理 tmul_mem_baseChange_of_mem
-  条件: (a : A) {m : M} (hm : m in p)
-  证明: ⟨a otimesₜ[R] ⟨m, hm⟩, rfl⟩
+/-
+**Submodule.tmul_mem_baseChange_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：tmul_mem_baseChange_of_mem (a : A) {m : M} (hm : m in p) : a otimesₜ[R] m 
+in p.baseChange A
+参数：a : A；hm : m in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-lemma tmul_mem_baseChange_of_mem (a : A) {m : M} (hm : m in p) :
-    a otimesₜ[R] m in p.baseChange A :=
-  ⟨a otimesₜ[R] ⟨m, hm⟩, rfl⟩
-
-/--
-lemma `baseChange_eq_span` / 引理 `baseChange_eq_span`
-
-English:
-lemma baseChange_eq_span
-  statement: p.baseChange A = span A (p.map (TensorProduct.mk R A M 1))
-  proof: by
-  refine le_antisymm ?_ ?_
-  · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
-      ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..), span_le]
-    refine fun _ ⟨a, m, h⟩ => ?_
-    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']
-    exact smul_mem _ a (subset_span ⟨m, m.2, rfl⟩)
-  · refine span_le.2 fun _ ⟨m, hm, h⟩ => h ▸ ⟨1 otimesₜ[R] ⟨m, hm⟩, rfl⟩
-
-@[simp]
-
-中文:
-引理 baseChange_eq_span
-  结论: p.baseChange A = span A (p.map (张量积.mk R A M 1))
-  证明: by
-  refine le_antisymm ?_ ?_
-  · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
-      ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..), span_le]
-    refine fun _ ⟨a, m, h⟩ => ?_
-    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']
-    exact smul_mem _ a (subset_span ⟨m, m.2, rfl⟩)
-  · refine span_le.2 fun _ ⟨m, hm, h⟩ => h ▸ ⟨1 otimesₜ[R] ⟨m, hm⟩, rfl⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.baseChange_tmul, LinearMap.range_le_iff_comap, S.subtype, SetLike, SetLike.mem_coe, baseChange, baseChange_tmul, eq_top_iff, le_antisymm, mem_coe, mem_comap, mul_one, range_le_iff_comap, relMap_leSymb, smul_eq_mul, smul_mem, smul_tmul, span_eq_top_of_span_eq_top, span_le
+lemma tmul_mem_baseChange_of_mem (a : A) {m : M} (hm : m ∈ p) :
+    a ⊗ₜ[R] m ∈ p.baseChange A :=
+  ⟨a ⊗ₜ[R] ⟨m, hm⟩, rfl⟩
+/-
+**Submodule.baseChange_eq_span** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：baseChange_eq_span : p.baseChange A = span A (p.map (TensorProduct.mk R A 
+M 1))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.baseChange.eq_1`：∀ {R : Type u_1} {M : Type u_2} (A : Type u_3
+) [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3
+ : AddCommMonoi…
+· 使用定理 `LinearMap.range_le_iff_comap`：range_le_iff_comap [RingHomSurjective τ₁₂]
+ {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R₂ M₂} : range f <= p ↔ comap f p = ⊤
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_eq_top_of_span_eq_top`：span_eq_top_of_span_eq_top (s : Se
+t M) (hs : span R s = ⊤) : span S s = ⊤
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.span_tmul_eq_top`：span_tmul_eq_top : Submodule.span R { t 
+: M otimes[R] N | exists m n, m otimesₜ n = t } = ⊤
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `Submodule.mem_comap`：mem_comap {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R₂ M₂
+} : x in comap f p ↔ f x in p
+· 使用定理 `LinearMap.baseChange_tmul`：baseChange_tmul (a : A) (x : M) : f.baseChang
+e A (a otimesₜ x) = a otimesₜ f x
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `TensorProduct.smul_tmul'`：smul_tmul' (r : R') (m : M) (n : N) : r • m ot
+imesₜ[R] n = (r • m) otimesₜ n
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 lemma baseChange_eq_span : p.baseChange A = span A (p.map (TensorProduct.mk R A M 1)) := by
   refine le_antisymm ?_ ?_
   · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
       ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..), span_le]
-    refine fun _ ⟨a, m, h⟩ => ?_
-    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']
+    refine fun _ ⟨a, m, h⟩ ↦ ?_
+    rw [← h, SetLike.mem_coe, mem_comap, LinearMap.baseChange_tmul, ← mul_one a, ← smul_eq_mul,
+      ← smul_tmul']
     exact smul_mem _ a (subset_span ⟨m, m.2, rfl⟩)
-  · refine span_le.2 fun _ ⟨m, hm, h⟩ => h ▸ ⟨1 otimesₜ[R] ⟨m, hm⟩, rfl⟩
+  · refine span_le.2 fun _ ⟨m, hm, h⟩ ↦ h ▸ ⟨1 ⊗ₜ[R] ⟨m, hm⟩, rfl⟩
 
 @[simp]
-/--
-lemma `baseChange_bot` / 引理 `baseChange_bot`
-
-English:
-lemma baseChange_bot
-  statement: (⊥ : Submodule R M).baseChange A = ⊥
-  proof: by simp [baseChange_eq_span]
-
-@[simp]
-
-中文:
-引理 baseChange_bot
-  结论: (⊥ : 子模 R M).baseChange A = ⊥
-  证明: by simp [baseChange_eq_span]
-
-@[simp]
-
-Depends on / 依赖: baseChange_eq_span
+/-
+**Submodule.baseChange_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：baseChange_bot : (⊥ : Submodule R M).baseChange A = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.baseChange_eq_span`：baseChange_eq_span : p.baseChange A = span
+ A (p.map (TensorProduct.mk R A M 1))
+· 使用定理 `Submodule.map_bot`：map_bot (f : M ->ₛₗ[σ₁₂] M₂) : map f ⊥ = ⊥
+· 使用定理 `Submodule.span_zero_singleton`：span_zero_singleton : R ∙ (0 : M) = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma baseChange_bot : (⊥ : Submodule R M).baseChange A = ⊥ := by simp [baseChange_eq_span]
 
 @[simp]
-/--
-lemma `baseChange_top` / 引理 `baseChange_top`
-
-English:
-lemma baseChange_top
-  statement: (⊤ : Submodule R M).baseChange A = ⊤
-  proof: by
-  rw [eq_top_iff]; rw [← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..)]
-  exact span_le.2 fun _ ⟨a, m, h⟩ => h ▸ tmul_mem_baseChange_of_mem _ trivial
-
-中文:
-引理 baseChange_top
-  结论: (⊤ : 子模 R M).baseChange A = ⊤
-  证明: by
-  rw [eq_top_iff]; rw [← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..)]
-  exact span_le.2 fun _ ⟨a, m, h⟩ => h ▸ tmul_mem_baseChange_of_mem _ trivial
-
-Depends on / 依赖: eq_top_iff, span_eq_top_of_span_eq_top, span_le, span_tmul_eq_top, tmul_mem_baseChange_of_mem
+/-
+**Submodule.baseChange_top** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：baseChange_top : (⊤ : Submodule R M).baseChange A = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_eq_top_of_span_eq_top`：span_eq_top_of_span_eq_top (s : Se
+t M) (hs : span R s = ⊤) : span S s = ⊤
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.span_tmul_eq_top`：span_tmul_eq_top : Submodule.span R { t 
+: M otimes[R] N | exists m n, m otimesₜ n = t } = ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用引理 `Submodule.tmul_mem_baseChange_of_mem`：tmul_mem_baseChange_of_mem (a : A)
+ {m : M} (hm : m in p) : a otimesₜ[R] m in p.baseChange A
+· 使用定理 `trivial`：True
 -/
 lemma baseChange_top : (⊤ : Submodule R M).baseChange A = ⊤ := by
-  rw [eq_top_iff]; rw [← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..)]
-  exact span_le.2 fun _ ⟨a, m, h⟩ => h ▸ tmul_mem_baseChange_of_mem _ trivial
+  rw [eq_top_iff, ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..)]
+  exact span_le.2 fun _ ⟨a, m, h⟩ ↦ h ▸ tmul_mem_baseChange_of_mem _ trivial
 
 variable {p q} in
-/--
-theorem `baseChange_mono` / 定理 `baseChange_mono`
-
-English:
-theorem baseChange_mono
-  given: (h : p <= q)
-  statement: p.baseChange A <= q.baseChange A
-  proof: by
-  rw [baseChange]; rw [LinearMap.baseChange]; rw [← subtype_comp_inclusion p q h]; rw [← LinearMap.id_comp LinearMap.id]; rw [AlgebraTensorModule.map_comp]
-  apply LinearMap.range_comp_le_range
-
-@[simp]
-
-中文:
-定理 baseChange_mono
-  条件: (h : p <= q)
-  结论: p.baseChange A <= q.baseChange A
-  证明: by
-  rw [baseChange]; rw [LinearMap.baseChange]; rw [← subtype_comp_inclusion p q h]; rw [← LinearMap.id_comp LinearMap.id]; rw [AlgebraTensorModule.map_comp]
-  apply LinearMap.range_comp_le_range
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map_comp, LinearMap, LinearMap.baseChange, LinearMap.id, LinearMap.id_comp, LinearMap.range_comp_le_range, baseChange, id_comp, map_comp, range_comp_le_range, subtype_comp_inclusion
+/-
+**Submodule.baseChange_mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：baseChange_mono (h : p <= q) : p.baseChange A <= q.baseChange A
+参数：h : p <= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.baseChange.eq_1`：∀ {R : Type u_1} {M : Type u_2} (A : Type u_3
+) [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3
+ : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `LinearMap.baseChange.eq_1`：∀ {R : Type u_1} (A : Type u_2) {M : Type u_4
+} {N : Type u_5} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Algeb
+ra R A] [inst_3…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.subtype_comp_inclusion`：subtype_comp_inclusion (p q : Submodul
+e R M) (h : p <= q) : q.subtype.comp (inclusion h) = p.subtype
+· 使用定理 `LinearMap.id_comp`：id_comp : id.comp f = f
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `TensorProduct.AlgebraTensorModule.map_comp`：map_comp (f₂ : P ->ₗ[A] P') 
+(f₁ : M ->ₗ[A] P) (g₂ : Q ->ₗ[R] Q') (g₁ : N ->ₗ[R] Q) : map (f₂.comp f₁) (g₂.co
+mp g₁) = (map f₂ g₂).comp (map f…
+· 使用定理 `LinearMap.range_comp_le_range`：range_comp_le_range [RingHomSurjective τ₂
+₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : range (g
+.comp f : M ->ₛₗ[τ₁…
 -/
-theorem baseChange_mono (h : p <= q) : p.baseChange A <= q.baseChange A := by
-  rw [baseChange]; rw [LinearMap.baseChange]; rw [← subtype_comp_inclusion p q h]; rw [← LinearMap.id_comp LinearMap.id]; rw [AlgebraTensorModule.map_comp]
+theorem baseChange_mono (h : p ≤ q) : p.baseChange A ≤ q.baseChange A := by
+  rw [baseChange, LinearMap.baseChange, ← subtype_comp_inclusion p q h,
+    ← LinearMap.id_comp LinearMap.id, AlgebraTensorModule.map_comp]
   apply LinearMap.range_comp_le_range
 
 @[simp]
-/--
-lemma `baseChange_span` / 引理 `baseChange_span`
-
-English:
-lemma baseChange_span
-  given: (s : Set M)
-  proof: by
-  rw [baseChange_eq_span]; rw [map_span]; rw [span_span_of_tower]
-
-中文:
-引理 baseChange_span
-  条件: (s : 集合 M)
-  证明: by
-  rw [baseChange_eq_span]; rw [map_span]; rw [span_span_of_tower]
-
-Depends on / 依赖: baseChange_eq_span, map_span, span_span_of_tower
+/-
+**Submodule.baseChange_span** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：baseChange_span (s : Set M) : (span R s).baseChange A = span A (TensorProd
+uct.mk R A M 1 '' s)
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.baseChange_eq_span`：baseChange_eq_span : p.baseChange A = span
+ A (p.map (TensorProduct.mk R A M 1))
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Submodule.span_span_of_tower`：span_span_of_tower : span S (span R s : Se
+t M) = span S s
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 lemma baseChange_span (s : Set M) :
     (span R s).baseChange A = span A (TensorProduct.mk R A M 1 '' s) := by
-  rw [baseChange_eq_span]; rw [map_span]; rw [span_span_of_tower]
+  rw [baseChange_eq_span, map_span, span_span_of_tower]
 
-/--
-Definition of `toBaseChange` / `toBaseChange` 的定义
+/-- Given an `R`-submodule `p` of `M`, and `R`-algebra `A`, we obtain an `A`-submodule of
+`A ⊗[R] M` by `p.baseChange A`. This is then the surjective `A`-linear map
+`A ⊗[R] M → p.baseChange A`. -/
+/-
+**Submodule.toBaseChange** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：toBaseChange : A otimes[R] p ->ₗ[A] p.baseChange A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-definition toBaseChange
-  signature: : A otimes[R] p ->ₗ[A] p.baseChange A
-  body: LinearMap.rangeRestrict _
-
-中文:
-定义 toBaseChange
-  签名: : A otimes[R] p ->ₗ[A] p.baseChange A
-  定义体: LinearMap.rangeRestrict _
-
-Depends on / 依赖: LinearMap, LinearMap.rangeRestrict, rangeRestrict
+--- 原说明 ---
+Given an `R`-submodule `p` of `M`, and `R`-algebra `A`, we obtain an `A`-submodu
+le of
+`A ⊗[R] M` by `p.baseChange A`. This is then the surjective `A`-linear map
+`A ⊗[R] M → p.baseChange A`.
 -/
-def toBaseChange : A otimes[R] p ->ₗ[A] p.baseChange A :=
+def toBaseChange : A ⊗[R] p →ₗ[A] p.baseChange A :=
   LinearMap.rangeRestrict _
-
-/--
-lemma `coe_toBaseChange_tmul` / 引理 `coe_toBaseChange_tmul`
-
-English:
-lemma coe_toBaseChange_tmul
-  given: (a : A) (x : p)
-  proof: rfl
-
-中文:
-引理 coe_toBaseChange_tmul
-  条件: (a : A) (x : p)
-  证明: rfl
+/-
+**Submodule.coe_toBaseChange_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} (A : Type u_3) [inst : CommSemiring R] [in
+st_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : AddCommMonoid M] [inst_4 :
+ _root_.Module R M] (p : Submodule R M) (a : A) (x : ↥p),   ↑((Submodule.toBaseC
+hange A p) (a ⊗ₜ[R] x)) = a ⊗ₜ[R] ↑x
+参数：A : Type u_3；p : Submodule R M；a : A；x : ↥p；(Submodule.toBaseChange A p) (a ⊗
+ₜ[R] x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 @[simp] lemma coe_toBaseChange_tmul (a : A) (x : p) :
-    (p.toBaseChange A (a otimesₜ x) : A otimes[R] M) = a otimesₜ (x : M) := rfl
-
-/--
-lemma `toBaseChange_surjective` / 引理 `toBaseChange_surjective`
-
-English:
-lemma toBaseChange_surjective
-  statement: Function.Surjective (p.toBaseChange A)
-  proof: LinearMap.surjective_rangeRestrict _
-
-中文:
-引理 toBaseChange_surjective
-  结论: 函数.满射 (p.toBaseChange A)
-  证明: LinearMap.surjective_rangeRestrict _
-
-Depends on / 依赖: LinearMap, LinearMap.surjective_rangeRestrict, surjective_rangeRestrict
+    (p.toBaseChange A (a ⊗ₜ x) : A ⊗[R] M) = a ⊗ₜ (x : M) := rfl
+/-
+**Submodule.toBaseChange_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：toBaseChange_surjective : Function.Surjective (p.toBaseChange A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.surjective_rangeRestrict`：surjective_rangeRestrict : Surjectiv
+e f.rangeRestrict
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma toBaseChange_surjective : Function.Surjective (p.toBaseChange A) :=
   LinearMap.surjective_rangeRestrict _
 
-/--
-lemma `toBaseChange_surjective'` / 引理 `toBaseChange_surjective'`
+/-- This version enables better pattern matching via the tactic `obtain`. -/
+/-
+**Submodule.toBaseChange_surjective'** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：toBaseChange_surjective' {y : A otimes[R] M} (hy : y in p.baseChange A) : 
+exists x : A otimes[R] p, p.toBaseChange A x = y
+参数：hy : y in p.baseChange A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `Submodule.toBaseChange_surjective`：toBaseChange_surjective : Function.Su
+rjective (p.toBaseChange A)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma toBaseChange_surjective'
-  given: {y : A otimes[R] M} (hy : y in p.baseChange A)
-  proof: by
-  obtain ⟨x, hx⟩ := toBaseChange_surjective A p ⟨y, hy⟩
-  exact ⟨x, congr($hx)⟩
-
-中文:
-引理 toBaseChange_surjective'
-  条件: {y : A otimes[R] M} (hy : y in p.baseChange A)
-  证明: by
-  obtain ⟨x, hx⟩ := toBaseChange_surjective A p ⟨y, hy⟩
-  exact ⟨x, congr($hx)⟩
-
-Depends on / 依赖: toBaseChange_surjective
+--- 原说明 ---
+This version enables better pattern matching via the tactic `obtain`.
 -/
-lemma toBaseChange_surjective' {y : A otimes[R] M} (hy : y in p.baseChange A) :
-    exists x : A otimes[R] p, p.toBaseChange A x = y := by
+lemma toBaseChange_surjective' {y : A ⊗[R] M} (hy : y ∈ p.baseChange A) :
+    ∃ x : A ⊗[R] p, p.toBaseChange A x = y := by
   obtain ⟨x, hx⟩ := toBaseChange_surjective A p ⟨y, hy⟩
   exact ⟨x, congr($hx)⟩
 
@@ -2888,52 +2958,87 @@ namespace TensorProduct.AlgebraTensorModule
 variable {R A M N : Type*} [CommSemiring R] [CommSemiring A] [Algebra R A]
 variable [AddCommGroup M] [Module R M] [AddCommGroup N] [Module A N]
 
-/--
-lemma `baseChange_comp_cancelBaseChange_symm_self` / 引理 `baseChange_comp_cancelBaseChange_symm_self`
-
-English:
-lemma baseChange_comp_cancelBaseChange_symm_self
-  given: (f : (A otimes[R] M) ->ₗ[A] N)
-  proof: by
-  rw [cancelBaseChange_self_eq_lid]
-  ext x
-  simp
-
-中文:
-引理 baseChange_comp_cancelBaseChange_symm_self
-  条件: (f : (A otimes[R] M) ->ₗ[A] N)
-  证明: by
-  rw [cancelBaseChange_self_eq_lid]
-  ext x
-  simp
-
-Depends on / 依赖: cancelBaseChange_self_eq_lid
+/-
+**TensorProduct.AlgebraTensorModule.baseChange_comp_cancelBaseChange_symm_self**
+ 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：baseChange_comp_cancelBaseChange_symm_self (f : (A otimes[R] M) ->ₗ[A] N) 
+: f.baseChange A ∘ₗ (cancelBaseChange R A A A M).symm = (TensorProduct.lid A N).
+symm ∘ₗ f
+参数：f : (A otimes[R] M) ->ₗ[A] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TensorProduct.AlgebraTensorModule.cancelBaseChange_self_eq_lid`：cancelBa
+seChange_self_eq_lid : cancelBaseChange R A A A N = TensorProduct.lid A (A otime
+s[R] N)
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma baseChange_comp_cancelBaseChange_symm_self (f : (A otimes[R] M) ->ₗ[A] N) :
+lemma baseChange_comp_cancelBaseChange_symm_self (f : (A ⊗[R] M) →ₗ[A] N) :
     f.baseChange A ∘ₗ (cancelBaseChange R A A A M).symm = (TensorProduct.lid A N).symm ∘ₗ f := by
   rw [cancelBaseChange_self_eq_lid]
   ext x
   simp
-
-/--
-lemma `ker_baseChange_comp_cancelBaseChange_symm` / 引理 `ker_baseChange_comp_cancelBaseChange_symm`
-
-English:
-lemma ker_baseChange_comp_cancelBaseChange_symm
-  given: (f : (A otimes[R] M) ->ₗ[A] N)
-  proof: by
-  rw [baseChange_comp_cancelBaseChange_symm_self]; rw [LinearMap.ker_comp]; rw [LinearEquiv.ker]; rw [Submodule.comap_bot]
-
-中文:
-引理 ker_baseChange_comp_cancelBaseChange_symm
-  条件: (f : (A otimes[R] M) ->ₗ[A] N)
-  证明: by
-  rw [baseChange_comp_cancelBaseChange_symm_self]; rw [LinearMap.ker_comp]; rw [LinearEquiv.ker]; rw [Submodule.comap_bot]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ker, LinearMap, LinearMap.ker_comp, Submodule, Submodule.comap_bot, baseChange_comp_cancelBaseChange_symm_self, comap_bot, ker_comp
+/-
+**TensorProduct.AlgebraTensorModule.ker_baseChange_comp_cancelBaseChange_symm** 
+是 Mathlib 中的一个引理，位于命名空间 `TensorProduct.AlgebraTensorModule`。
+形式化陈述：ker_baseChange_comp_cancelBaseChange_symm (f : (A otimes[R] M) ->ₗ[A] N) :
+ (f.baseChange A ∘ₗ (cancelBaseChange R A A A M).symm).ker = f.ker
+参数：f : (A otimes[R] M) ->ₗ[A] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TensorProduct.AlgebraTensorModule.baseChange_comp_cancelBaseChange_symm_
+self`：baseChange_comp_cancelBaseChange_symm_self (f : (A otimes[R] M) ->ₗ[A] N) 
+: f.baseChange A ∘ₗ (cancelBaseChange R A A A M).symm = (TensorPro…
+· 使用定理 `LinearMap.ker_comp`：ker_comp (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) 
+: ker (g.comp f : M ->ₛₗ[τ₁₃] M₃) = comap f (ker g)
+· 使用定理 `LinearEquiv.ker`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} {M₂ : T
+ype u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M]
+ [ins…
+· 使用定理 `Submodule.comap_bot`：comap_bot (f : M ->ₛₗ[τ₁₂] M₂) : comap f ⊥ = ker f
 -/
-lemma ker_baseChange_comp_cancelBaseChange_symm (f : (A otimes[R] M) ->ₗ[A] N) :
+lemma ker_baseChange_comp_cancelBaseChange_symm (f : (A ⊗[R] M) →ₗ[A] N) :
     (f.baseChange A ∘ₗ (cancelBaseChange R A A A M).symm).ker = f.ker := by
-  rw [baseChange_comp_cancelBaseChange_symm_self]; rw [LinearMap.ker_comp]; rw [LinearEquiv.ker]; rw [Submodule.comap_bot]
+  rw [baseChange_comp_cancelBaseChange_symm_self, LinearMap.ker_comp,
+    LinearEquiv.ker, Submodule.comap_bot]
 
 end TensorProduct.AlgebraTensorModule
+

@@ -19,41 +19,28 @@ public section
 
 variable {R : Type*} [Zero R]
 
-/--
-theorem `not_neZero` / 定理 `not_neZero`
-
-English:
-theorem not_neZero
-  given: {n : R}
-  statement: ¬NeZero n ↔ n = 0
-  proof: by simp [neZero_iff]
-
-中文:
-定理 not_neZero
-  条件: {n : R}
-  结论: ¬NeZero n ↔ n = 0
-  证明: by simp [neZero_iff]
-
-Depends on / 依赖: neZero_iff
+/-
+**not_neZero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_neZero {n : R} : ¬NeZero n ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem not_neZero {n : R} : ¬NeZero n ↔ n = 0 := by simp [neZero_iff]
-
-/--
-theorem `eq_zero_or_neZero` / 定理 `eq_zero_or_neZero`
-
-English:
-theorem eq_zero_or_neZero
-  given: (a : R)
-  statement: a = 0 ∨ NeZero a
-  proof: (eq_or_ne a 0).imp_right NeZero.mk
-
-中文:
-定理 eq_zero_or_neZero
-  条件: (a : R)
-  结论: a = 0 ∨ NeZero a
-  证明: (eq_or_ne a 0).imp_right NeZero.mk
-
-Depends on / 依赖: NeZero, NeZero.mk, eq_or_ne, imp_right
+/-
+**eq_zero_or_neZero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_zero_or_neZero (a : R) : a = 0 ∨ NeZero a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
 -/
 theorem eq_zero_or_neZero (a : R) : a = 0 ∨ NeZero a :=
   (eq_or_ne a 0).imp_right NeZero.mk
@@ -61,212 +48,112 @@ theorem eq_zero_or_neZero (a : R) : a = 0 ∨ NeZero a :=
 section
 variable {α : Type*} [Zero α]
 
-/--
-lemma `zero_ne_one` / 引理 `zero_ne_one`
-
-English:
-lemma zero_ne_one
-  given: [One α] [NeZero (1 : α)]
-  statement: (0 : α) != 1
-  proof: NeZero.ne' (1 : α)
-
-中文:
-引理 zero_ne_one
-  条件: [幺 α] [NeZero (1 : α)]
-  结论: (0 : α) != 1
-  证明: NeZero.ne' (1 : α)
+/-
+**zero_ne_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1], 0 ≠ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne'`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], 0 ≠
+ n
 -/
-@[simp] lemma zero_ne_one [One α] [NeZero (1 : α)] : (0 : α) != 1 := NeZero.ne' (1 : α)
-
-/--
-lemma `one_ne_zero` / 引理 `one_ne_zero`
-
-English:
-lemma one_ne_zero
-  given: [One α] [NeZero (1 : α)]
-  statement: (1 : α) != 0
-  proof: NeZero.ne (1 : α)
-
-中文:
-引理 one_ne_zero
-  条件: [幺 α] [NeZero (1 : α)]
-  结论: (1 : α) != 0
-  证明: NeZero.ne (1 : α)
+@[simp] lemma zero_ne_one [One α] [NeZero (1 : α)] : (0 : α) ≠ 1 := NeZero.ne' (1 : α)
+/-
+**one_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1], 1 ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 -/
-@[simp] lemma one_ne_zero [One α] [NeZero (1 : α)] : (1 : α) != 0 := NeZero.ne (1 : α)
-
-/--
-lemma `ne_zero_of_eq_one` / 引理 `ne_zero_of_eq_one`
-
-English:
-lemma ne_zero_of_eq_one
-  given: [One α] [NeZero (1 : α)] {a : α} (h : a = 1)
-  statement: a != 0
-  proof: h ▸ one_ne_zero
-
-中文:
-引理 ne_zero_of_eq_one
-  条件: [幺 α] [NeZero (1 : α)] {a : α} (h : a = 1)
-  结论: a != 0
-  证明: h ▸ one_ne_zero
-
-Depends on / 依赖: one_ne_zero
+@[simp] lemma one_ne_zero [One α] [NeZero (1 : α)] : (1 : α) ≠ 0 := NeZero.ne (1 : α)
+/-
+**ne_zero_of_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ne_zero_of_eq_one [One α] [NeZero (1 : α)] {a : α} (h : a = 1) : a != 0
+参数：1 : α；h : a = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma ne_zero_of_eq_one [One α] [NeZero (1 : α)] {a : α} (h : a = 1) : a != 0 := h ▸ one_ne_zero
-
-/--
-lemma `two_ne_zero` / 引理 `two_ne_zero`
-
-English:
-lemma two_ne_zero
-  given: [OfNat α 2] [NeZero (2 : α)]
-  statement: (2 : α) != 0
-  proof: NeZero.ne (2 : α)
-
-中文:
-引理 two_ne_zero
-  条件: [Of自然数 α 2] [NeZero (2 : α)]
-  结论: (2 : α) != 0
-  证明: NeZero.ne (2 : α)
-
-Depends on / 依赖: NeZero, NeZero.ne
+lemma ne_zero_of_eq_one [One α] [NeZero (1 : α)] {a : α} (h : a = 1) : a ≠ 0 := h ▸ one_ne_zero
+/-
+**two_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+参数：2 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 -/
-lemma two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0 := NeZero.ne (2 : α)
-
-/--
-lemma `three_ne_zero` / 引理 `three_ne_zero`
-
-English:
-lemma three_ne_zero
-  given: [OfNat α 3] [NeZero (3 : α)]
-  statement: (3 : α) != 0
-  proof: NeZero.ne (3 : α)
-
-中文:
-引理 three_ne_zero
-  条件: [Of自然数 α 3] [NeZero (3 : α)]
-  结论: (3 : α) != 0
-  证明: NeZero.ne (3 : α)
-
-Depends on / 依赖: NeZero, NeZero.ne
+lemma two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) ≠ 0 := NeZero.ne (2 : α)
+/-
+**three_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：three_ne_zero [OfNat α 3] [NeZero (3 : α)] : (3 : α) != 0
+参数：3 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 -/
-lemma three_ne_zero [OfNat α 3] [NeZero (3 : α)] : (3 : α) != 0 := NeZero.ne (3 : α)
-
-/--
-lemma `four_ne_zero` / 引理 `four_ne_zero`
-
-English:
-lemma four_ne_zero
-  given: [OfNat α 4] [NeZero (4 : α)]
-  statement: (4 : α) != 0
-  proof: NeZero.ne (4 : α)
-
-中文:
-引理 four_ne_zero
-  条件: [Of自然数 α 4] [NeZero (4 : α)]
-  结论: (4 : α) != 0
-  证明: NeZero.ne (4 : α)
-
-Depends on / 依赖: NeZero, NeZero.ne
+lemma three_ne_zero [OfNat α 3] [NeZero (3 : α)] : (3 : α) ≠ 0 := NeZero.ne (3 : α)
+/-
+**four_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：four_ne_zero [OfNat α 4] [NeZero (4 : α)] : (4 : α) != 0
+参数：4 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 -/
-lemma four_ne_zero [OfNat α 4] [NeZero (4 : α)] : (4 : α) != 0 := NeZero.ne (4 : α)
+lemma four_ne_zero [OfNat α 4] [NeZero (4 : α)] : (4 : α) ≠ 0 := NeZero.ne (4 : α)
 
 variable (α)
-
-/--
-lemma `zero_ne_one'` / 引理 `zero_ne_one'`
-
-English:
-lemma zero_ne_one'
-  given: [One α] [NeZero (1 : α)]
-  statement: (0 : α) != 1
-  proof: zero_ne_one
-
-中文:
-引理 zero_ne_one'
-  条件: [幺 α] [NeZero (1 : α)]
-  结论: (0 : α) != 1
-  证明: zero_ne_one
-
-Depends on / 依赖: zero_ne_one
+/-
+**zero_ne_one'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_ne_one' [One α] [NeZero (1 : α)] : (0 : α) != 1
+参数：1 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
 -/
-lemma zero_ne_one' [One α] [NeZero (1 : α)] : (0 : α) != 1 := zero_ne_one
-
-/--
-lemma `one_ne_zero'` / 引理 `one_ne_zero'`
-
-English:
-lemma one_ne_zero'
-  given: [One α] [NeZero (1 : α)]
-  statement: (1 : α) != 0
-  proof: one_ne_zero
-
-中文:
-引理 one_ne_zero'
-  条件: [幺 α] [NeZero (1 : α)]
-  结论: (1 : α) != 0
-  证明: one_ne_zero
-
-Depends on / 依赖: one_ne_zero
+lemma zero_ne_one' [One α] [NeZero (1 : α)] : (0 : α) ≠ 1 := zero_ne_one
+/-
+**one_ne_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_ne_zero' [One α] [NeZero (1 : α)] : (1 : α) != 0
+参数：1 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
 -/
-lemma one_ne_zero' [One α] [NeZero (1 : α)] : (1 : α) != 0 := one_ne_zero
-
-/--
-lemma `two_ne_zero'` / 引理 `two_ne_zero'`
-
-English:
-lemma two_ne_zero'
-  given: [OfNat α 2] [NeZero (2 : α)]
-  statement: (2 : α) != 0
-  proof: two_ne_zero
-
-中文:
-引理 two_ne_zero'
-  条件: [Of自然数 α 2] [NeZero (2 : α)]
-  结论: (2 : α) != 0
-  证明: two_ne_zero
-
-Depends on / 依赖: two_ne_zero
+lemma one_ne_zero' [One α] [NeZero (1 : α)] : (1 : α) ≠ 0 := one_ne_zero
+/-
+**two_ne_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+参数：2 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
 -/
-lemma two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0 := two_ne_zero
-
-/--
-lemma `three_ne_zero'` / 引理 `three_ne_zero'`
-
-English:
-lemma three_ne_zero'
-  given: [OfNat α 3] [NeZero (3 : α)]
-  statement: (3 : α) != 0
-  proof: three_ne_zero
-
-中文:
-引理 three_ne_zero'
-  条件: [Of自然数 α 3] [NeZero (3 : α)]
-  结论: (3 : α) != 0
-  证明: three_ne_zero
-
-Depends on / 依赖: three_ne_zero
+lemma two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) ≠ 0 := two_ne_zero
+/-
+**three_ne_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：three_ne_zero' [OfNat α 3] [NeZero (3 : α)] : (3 : α) != 0
+参数：3 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `three_ne_zero`：three_ne_zero [OfNat α 3] [NeZero (3 : α)] : (3 : α) != 0
 -/
-lemma three_ne_zero' [OfNat α 3] [NeZero (3 : α)] : (3 : α) != 0 := three_ne_zero
-
-/--
-lemma `four_ne_zero'` / 引理 `four_ne_zero'`
-
-English:
-lemma four_ne_zero'
-  given: [OfNat α 4] [NeZero (4 : α)]
-  statement: (4 : α) != 0
-  proof: four_ne_zero
-
-中文:
-引理 four_ne_zero'
-  条件: [Of自然数 α 4] [NeZero (4 : α)]
-  结论: (4 : α) != 0
-  证明: four_ne_zero
-
-Depends on / 依赖: four_ne_zero
+lemma three_ne_zero' [OfNat α 3] [NeZero (3 : α)] : (3 : α) ≠ 0 := three_ne_zero
+/-
+**four_ne_zero'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：four_ne_zero' [OfNat α 4] [NeZero (4 : α)] : (4 : α) != 0
+参数：4 : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `four_ne_zero`：four_ne_zero [OfNat α 4] [NeZero (4 : α)] : (4 : α) != 0
 -/
-lemma four_ne_zero' [OfNat α 4] [NeZero (4 : α)] : (4 : α) != 0 := four_ne_zero
+lemma four_ne_zero' [OfNat α 4] [NeZero (4 : α)] : (4 : α) ≠ 0 := four_ne_zero
 
 end
 
@@ -274,23 +161,15 @@ namespace NeZero
 
 variable {M : Type*} {x : M}
 
-/--
-theorem `of_pos` / 定理 `of_pos`
-
-English:
-theorem of_pos
-  given: [Preorder M] [Zero M] (h : 0 < x)
-  statement: NeZero x
-  proof: ⟨ne_of_gt h⟩
-
-中文:
-定理 of_pos
-  条件: [预序 M] [零 M] (h : 0 < x)
-  结论: NeZero x
-  证明: ⟨ne_of_gt h⟩
-
-Depends on / 依赖: ne_of_gt
+/-
+**NeZero.of_pos** 是 Mathlib 中的一个定理，位于命名空间 `NeZero`。
+形式化陈述：of_pos [Preorder M] [Zero M] (h : 0 < x) : NeZero x
+参数：h : 0 < x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
 theorem of_pos [Preorder M] [Zero M] (h : 0 < x) : NeZero x := ⟨ne_of_gt h⟩
 
 end NeZero
+

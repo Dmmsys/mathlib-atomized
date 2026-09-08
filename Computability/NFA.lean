@@ -48,28 +48,28 @@ open Computability
 
 universe u v
 
-/--
-Definition of `NFA` / `NFA` 的定义
+/-- An NFA is a set of states (`σ`), a transition function from state to state labelled by the
+  alphabet (`step`), a set of starting states (`start`) and a set of acceptance states (`accept`).
+  Note the transition function sends a state to a `Set` of states. These are the states that it
+  may be sent to. -/
+/-
+**NFA** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type v → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NFA
-  parameters: (α : Type u) (σ : Type v)
-  axioms and operations (3):
-    - step : σ -> α -> Set σ
-    - start : Set σ
-    - accept : Set σ
-
-中文:
-结构 NFA
-  参数: (α : 类型u) (σ : 类型v)
-  公理与运算 (3 个):
-    - step : σ -> α -> 集合 σ
-    - start : 集合 σ
-    - accept : 集合 σ
+--- 原说明 ---
+An NFA is a set of states (`σ`), a transition function from state to state label
+led by the
+  alphabet (`step`), a set of starting states (`start`) and a set of acceptance 
+states (`accept`).
+  Note the transition function sends a state to a `Set` of states. These are the
+ states that it
+  may be sent to.
 -/
 structure NFA (α : Type u) (σ : Type v) where
   /-- The NFA's transition function -/
-  step : σ -> α -> Set σ
+  step : σ → α → Set σ
   /-- Set of starting states -/
   start : Set σ
   /-- Set of accepting states -/
@@ -79,209 +79,178 @@ variable {α : Type u} {σ : Type v} {M : NFA α σ}
 
 namespace NFA
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (NFA α σ)
-  body: ⟨NFA.mk (fun _ _ => ∅) ∅ ∅⟩
-
-中文:
-实例 :
-  签名: 可居 (NFA α σ)
-  定义体: ⟨NFA.mk (fun _ _ => ∅) ∅ ∅⟩
-
-Depends on / 依赖: NFA.mk
+/-
+**NFA.** 是 Mathlib 中的一个实例，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (NFA α σ) :=
   ⟨NFA.mk (fun _ _ => ∅) ∅ ∅⟩
 
 variable (M) in
-/--
-Definition of `stepSet` / `stepSet` 的定义
+/-- `M.stepSet S a` is the union of `M.step s a` for all `s ∈ S`. -/
+/-
+**NFA.stepSet** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：stepSet (S : Set σ) (a : α) : Set σ
+参数：S : Set σ；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stepSet
-  signature: (S : Set σ) (a : α)
-  body: ⋃ s in S, M.step s a
-
-中文:
-定义 stepSet
-  签名: (S : 集合 σ) (a : α)
-  定义体: ⋃ s in S, M.step s a
-
-Depends on / 依赖: M.step
+--- 原说明 ---
+`M.stepSet S a` is the union of `M.step s a` for all `s ∈ S`.
 -/
 def stepSet (S : Set σ) (a : α) : Set σ :=
-  ⋃ s in S, M.step s a
-
-/--
-theorem `mem_stepSet` / 定理 `mem_stepSet`
-
-English:
-theorem mem_stepSet
-  given: {s : σ} {S : Set σ} {a : α}
-  statement: s in M.stepSet S a ↔ exists t in S, s in M.step t a
-  proof: by
-  simp [stepSet]
-
-中文:
-定理 mem_stepSet
-  条件: {s : σ} {S : 集合 σ} {a : α}
-  结论: s in M.stepSet S a ↔ 存在 t in S, s in M.step t a
-  证明: by
-  simp [stepSet]
-
-Depends on / 依赖: stepSet
+  ⋃ s ∈ S, M.step s a
+/-
+**NFA.mem_stepSet** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_stepSet {s : σ} {S : Set σ} {a : α} : s in M.stepSet S a ↔ exists t in
+ S, s in M.step t a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_stepSet {s : σ} {S : Set σ} {a : α} : s in M.stepSet S a ↔ exists t in S, s in M.step t a := by
+theorem mem_stepSet {s : σ} {S : Set σ} {a : α} : s ∈ M.stepSet S a ↔ ∃ t ∈ S, s ∈ M.step t a := by
   simp [stepSet]
 
 variable (M) in
 @[simp]
-/--
-theorem `stepSet_empty` / 定理 `stepSet_empty`
-
-English:
-theorem stepSet_empty
-  given: (a : α)
-  statement: M.stepSet ∅ a = ∅
-  proof: by simp [stepSet]
-
-中文:
-定理 stepSet_empty
-  条件: (a : α)
-  结论: M.stepSet ∅ a = ∅
-  证明: by simp [stepSet]
-
-Depends on / 依赖: stepSet
+/-
+**NFA.stepSet_empty** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：stepSet_empty (a : α) : M.stepSet ∅ a = ∅
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem stepSet_empty (a : α) : M.stepSet ∅ a = ∅ := by simp [stepSet]
 
 variable (M) in
 @[simp]
-/--
-theorem `stepSet_singleton` / 定理 `stepSet_singleton`
-
-English:
-theorem stepSet_singleton
-  given: (s : σ) (a : α)
-  statement: M.stepSet {s} a = M.step s a
-  proof: by
-  simp [stepSet]
-
-中文:
-定理 stepSet_singleton
-  条件: (s : σ) (a : α)
-  结论: M.stepSet {s} a = M.step s a
-  证明: by
-  simp [stepSet]
-
-Depends on / 依赖: stepSet
+/-
+**NFA.stepSet_singleton** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：stepSet_singleton (s : σ) (a : α) : M.stepSet {s} a = M.step s a
+参数：s : σ；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_iUnion_eq_left`：iUnion_iUnion_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋃ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem stepSet_singleton (s : σ) (a : α) : M.stepSet {s} a = M.step s a := by
   simp [stepSet]
 
 variable (M) in
 @[simp]
-/--
-theorem `stepSet_union` / 定理 `stepSet_union`
-
-English:
-theorem stepSet_union
-  given: {S T : Set σ} {a : α}
-  proof: by
-  ext s
-  simp [mem_stepSet, or_and_right, exists_or]
-
-中文:
-定理 stepSet_union
-  条件: {S T : 集合 σ} {a : α}
-  证明: by
-  ext s
-  simp [mem_stepSet, or_and_right, exists_or]
-
-Depends on / 依赖: exists_or, mem_stepSet, or_and_right
+/-
+**NFA.stepSet_union** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：stepSet_union {S T : Set σ} {a : α} : M.stepSet (S union T) a = M.stepSet 
+S a union M.stepSet T a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem stepSet_union {S T : Set σ} {a : α} :
-    M.stepSet (S union T) a = M.stepSet S a union M.stepSet T a := by
+    M.stepSet (S ∪ T) a = M.stepSet S a ∪ M.stepSet T a := by
   ext s
   simp [mem_stepSet, or_and_right, exists_or]
 
 variable (M) in
-/--
-Definition of `evalFrom` / `evalFrom` 的定义
+/-- `M.evalFrom S x` computes all possible paths through `M` with input `x` starting at an element
+  of `S`. -/
+/-
+**NFA.evalFrom** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：evalFrom (S : Set σ) : List α -> Set σ
+参数：S : Set σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalFrom
-  signature: (S : Set σ)
-  body: List.foldl M.stepSet S
-
-中文:
-定义 evalFrom
-  签名: (S : 集合 σ)
-  定义体: List.foldl M.stepSet S
-
-Depends on / 依赖: List.foldl, M.stepSet, stepSet
+--- 原说明 ---
+`M.evalFrom S x` computes all possible paths through `M` with input `x` starting
+ at an element
+  of `S`.
 -/
-def evalFrom (S : Set σ) : List α -> Set σ :=
+def evalFrom (S : Set σ) : List α → Set σ :=
   List.foldl M.stepSet S
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_nil` / 定理 `evalFrom_nil`
-
-English:
-theorem evalFrom_nil
-  given: (S : Set σ)
-  statement: M.evalFrom S [] = S
-  proof: rfl
-
-中文:
-定理 evalFrom_nil
-  条件: (S : 集合 σ)
-  结论: M.evalFrom S [] = S
-  证明: rfl
+/-
+**NFA.evalFrom_nil** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_nil (S : Set σ) : M.evalFrom S [] = S
+参数：S : Set σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem evalFrom_nil (S : Set σ) : M.evalFrom S [] = S :=
   rfl
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_singleton` / 定理 `evalFrom_singleton`
-
-English:
-theorem evalFrom_singleton
-  given: (S : Set σ) (a : α)
-  statement: M.evalFrom S [a] = M.stepSet S a
-  proof: rfl
-
-中文:
-定理 evalFrom_singleton
-  条件: (S : 集合 σ) (a : α)
-  结论: M.evalFrom S [a] = M.stepSet S a
-  证明: rfl
+/-
+**NFA.evalFrom_singleton** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_singleton (S : Set σ) (a : α) : M.evalFrom S [a] = M.stepSet S a
+参数：S : Set σ；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem evalFrom_singleton (S : Set σ) (a : α) : M.evalFrom S [a] = M.stepSet S a :=
   rfl
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_cons` / 定理 `evalFrom_cons`
-
-English:
-theorem evalFrom_cons
-  given: (S : Set σ) (a : α) (x : List α)
-  proof: rfl
-
-中文:
-定理 evalFrom_cons
-  条件: (S : 集合 σ) (a : α) (x : 列表 α)
-  证明: rfl
+/-
+**NFA.evalFrom_cons** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_cons (S : Set σ) (a : α) (x : List α) : M.evalFrom S (a :: x) = M
+.evalFrom (M.stepSet S a) x
+参数：S : Set σ；a : α；x : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem evalFrom_cons (S : Set σ) (a : α) (x : List α) :
     M.evalFrom S (a :: x) = M.evalFrom (M.stepSet S a) x :=
@@ -289,22 +258,23 @@ theorem evalFrom_cons (S : Set σ) (a : α) (x : List α) :
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_append` / 定理 `evalFrom_append`
-
-English:
-theorem evalFrom_append
-  given: (S : Set σ) (x y : List α)
-  proof: by
-  simp only [evalFrom, List.foldl_append]
-
-中文:
-定理 evalFrom_append
-  条件: (S : 集合 σ) (x y : 列表 α)
-  证明: by
-  simp only [evalFrom, List.foldl_append]
-
-Depends on / 依赖: List.foldl_append, evalFrom, foldl_append
+/-
+**NFA.evalFrom_append** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_append (S : Set σ) (x y : List α) : M.evalFrom S (x ++ y) = M.eva
+lFrom (M.evalFrom S x) y
+参数：S : Set σ；x y : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldl_append`：∀ {α : Type u_1} {β : Type u_2} {f : β → α → β} {b : 
+β} {l l' : List α},   List.foldl f b (l ++ l') = List.foldl f (List.foldl f b l)
+ l'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem evalFrom_append (S : Set σ) (x y : List α) :
     M.evalFrom S (x ++ y) = M.evalFrom (M.evalFrom S x) y := by
@@ -312,228 +282,217 @@ theorem evalFrom_append (S : Set σ) (x y : List α) :
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_union` / 定理 `evalFrom_union`
-
-English:
-theorem evalFrom_union
-  given: (S T : Set σ) (x : List α)
-  proof: by
-  induction x generalizing S T with
-  | nil => simp
-  | cons a x ih => simp [ih]
-
-中文:
-定理 evalFrom_union
-  条件: (S T : 集合 σ) (x : 列表 α)
-  证明: by
-  induction x generalizing S T with
-  | nil => simp
-  | cons a x ih => simp [ih]
-
-Depends on / 依赖: generalizing
+/-
+**NFA.evalFrom_union** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_union (S T : Set σ) (x : List α) : M.evalFrom (S union T) x = M.e
+valFrom S x union M.evalFrom T x
+参数：S T : Set σ；x : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.stepSet_union`：stepSet_union {S T : Set σ} {a : α} : M.stepSet (S un
+ion T) a = M.stepSet S a union M.stepSet T a
 -/
 theorem evalFrom_union (S T : Set σ) (x : List α) :
-    M.evalFrom (S union T) x = M.evalFrom S x union M.evalFrom T x := by
+    M.evalFrom (S ∪ T) x = M.evalFrom S x ∪ M.evalFrom T x := by
   induction x generalizing S T with
   | nil => simp
   | cons a x ih => simp [ih]
 
 variable (M) in
 @[simp]
-/--
-theorem `evalFrom_iUnion` / 定理 `evalFrom_iUnion`
-
-English:
-theorem evalFrom_iUnion
-  given: {ι : Sort*} (s : ι -> Set σ) (x : List α)
-  proof: by
-  induction x generalizing s with
-  | nil => simp
-  | cons a x ih => simp [stepSet, Set.iUnion_comm (ι := σ) (ι' := ι), ih]
-
-中文:
-定理 evalFrom_iUnion
-  条件: {ι : 类型层*} (s : ι -> 集合 σ) (x : 列表 α)
-  证明: by
-  induction x generalizing s with
-  | nil => simp
-  | cons a x ih => simp [stepSet, Set.iUnion_comm (ι := σ) (ι' := ι), ih]
-
-Depends on / 依赖: Set.iUnion_comm, generalizing, iUnion_comm, stepSet
+/-
+**NFA.evalFrom_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_iUnion {ι : Sort*} (s : ι -> Set σ) (x : List α) : M.evalFrom (⋃ 
+i, s i) x = ⋃ i, M.evalFrom (s i) x
+参数：s : ι -> Set σ；x : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_comm`：iUnion_comm (s : ι -> ι' -> Set α) : ⋃ (i) (i'), s i i'
+ = ⋃ (i') (i), s i i'
 -/
-theorem evalFrom_iUnion {ι : Sort*} (s : ι -> Set σ) (x : List α) :
+theorem evalFrom_iUnion {ι : Sort*} (s : ι → Set σ) (x : List α) :
     M.evalFrom (⋃ i, s i) x = ⋃ i, M.evalFrom (s i) x := by
   induction x generalizing s with
   | nil => simp
   | cons a x ih => simp [stepSet, Set.iUnion_comm (ι := σ) (ι' := ι), ih]
 
 variable (M) in
-/--
-theorem `evalFrom_iUnion₂` / 定理 `evalFrom_iUnion₂`
-
-English:
-theorem evalFrom_iUnion₂
-  given: {ι : Sort*} {κ : ι -> Sort*} (f : forall i, κ i -> Set σ) (x : List α)
-  proof: by
-  simp
-
-中文:
-定理 evalFrom_iUnion₂
-  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : 对任意 i, κ i -> 集合 σ) (x : 列表 α)
-  证明: by
-  simp
+/-
+**NFA.evalFrom_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_iUnion {ι : Sort*} (s : ι -> Set σ) (x : List α) : M.evalFrom (⋃ 
+i, s i) x = ⋃ i, M.evalFrom (s i) x
+参数：s : ι -> Set σ；x : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_comm`：iUnion_comm (s : ι -> ι' -> Set α) : ⋃ (i) (i'), s i i'
+ = ⋃ (i') (i), s i i'
 -/
-theorem evalFrom_iUnion₂ {ι : Sort*} {κ : ι -> Sort*} (f : forall i, κ i -> Set σ) (x : List α) :
+theorem evalFrom_iUnion₂ {ι : Sort*} {κ : ι → Sort*} (f : ∀ i, κ i → Set σ) (x : List α) :
     M.evalFrom (⋃ (i) (j), f i j) x = ⋃ (i) (j), M.evalFrom (f i j) x := by
   simp
 
 variable (M) in
-/--
-theorem `evalFrom_eq_biUnion_singleton` / 定理 `evalFrom_eq_biUnion_singleton`
-
-English:
-theorem evalFrom_eq_biUnion_singleton
-  given: (S : Set σ) (x : List α)
-  proof: by
-  simp [← evalFrom_iUnion₂]
-
-中文:
-定理 evalFrom_eq_biUnion_singleton
-  条件: (S : 集合 σ) (x : 列表 α)
-  证明: by
-  simp [← evalFrom_iUnion₂]
+/-
+**NFA.evalFrom_eq_biUnion_singleton** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：evalFrom_eq_biUnion_singleton (S : Set σ) (x : List α) : M.evalFrom S x = 
+⋃ s in S, M.evalFrom {s} x
+参数：S : Set σ；x : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem evalFrom_eq_biUnion_singleton (S : Set σ) (x : List α) :
-    M.evalFrom S x = ⋃ s in S, M.evalFrom {s} x := by
+    M.evalFrom S x = ⋃ s ∈ S, M.evalFrom {s} x := by
   simp [← evalFrom_iUnion₂]
-
-/--
-theorem `mem_evalFrom_iff_exists` / 定理 `mem_evalFrom_iff_exists`
-
-English:
-theorem mem_evalFrom_iff_exists
-  given: {s : σ} {S : Set σ} {x : List α}
-  proof: by
-  rw [evalFrom_eq_biUnion_singleton]
-  simp
-
-中文:
-定理 mem_evalFrom_iff_存在
-  条件: {s : σ} {S : 集合 σ} {x : 列表 α}
-  证明: by
-  rw [evalFrom_eq_biUnion_singleton]
-  simp
-
-Depends on / 依赖: evalFrom_eq_biUnion_singleton
+/-
+**NFA.mem_evalFrom_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_evalFrom_iff_exists {s : σ} {S : Set σ} {x : List α} : s in M.evalFrom
+ S x ↔ exists t in S, s in M.evalFrom {t} x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.evalFrom_eq_biUnion_singleton`：evalFrom_eq_biUnion_singleton (S : Se
+t σ) (x : List α) : M.evalFrom S x = ⋃ s in S, M.evalFrom {s} x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_evalFrom_iff_exists {s : σ} {S : Set σ} {x : List α} :
-    s in M.evalFrom S x ↔ exists t in S, s in M.evalFrom {t} x := by
+    s ∈ M.evalFrom S x ↔ ∃ t ∈ S, s ∈ M.evalFrom {t} x := by
   rw [evalFrom_eq_biUnion_singleton]
   simp
 
 variable (M) in
-/--
-Definition of `acceptsFrom` / `acceptsFrom` 的定义
+/-- `M.acceptsFrom S` is the language of `x` such that there is an accept state
+in `M.evalFrom S x`. -/
+/-
+**NFA.acceptsFrom** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：acceptsFrom (S : Set σ) : Language α
+参数：S : Set σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition acceptsFrom
-  signature: (S : Set σ)
-  body: {x | exists s in M.accept, s in M.evalFrom S x}
-
-中文:
-定义 acceptsFrom
-  签名: (S : 集合 σ)
-  定义体: {x | exists s in M.accept, s in M.evalFrom S x}
-
-Depends on / 依赖: M.accept, M.evalFrom, accept, evalFrom
+--- 原说明 ---
+`M.acceptsFrom S` is the language of `x` such that there is an accept state
+in `M.evalFrom S x`.
 -/
-def acceptsFrom (S : Set σ) : Language α := {x | exists s in M.accept, s in M.evalFrom S x}
-
-/--
-theorem `mem_acceptsFrom` / 定理 `mem_acceptsFrom`
-
-English:
-theorem mem_acceptsFrom
-  given: {S : Set σ} {x : List α}
-  proof: by
-  rfl
-
-中文:
-定理 mem_acceptsFrom
-  条件: {S : 集合 σ} {x : 列表 α}
-  证明: by
-  rfl
+def acceptsFrom (S : Set σ) : Language α := {x | ∃ s ∈ M.accept, s ∈ M.evalFrom S x}
+/-
+**NFA.mem_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_acceptsFrom {S : Set σ} {x : List α} : x in M.acceptsFrom S ↔ exists s
+ in M.accept, s in M.evalFrom S x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_acceptsFrom {S : Set σ} {x : List α} :
-    x in M.acceptsFrom S ↔ exists s in M.accept, s in M.evalFrom S x := by
+    x ∈ M.acceptsFrom S ↔ ∃ s ∈ M.accept, s ∈ M.evalFrom S x := by
   rfl
 
 variable (M) in
 @[simp]
-/--
-theorem `nil_mem_acceptsFrom` / 定理 `nil_mem_acceptsFrom`
-
-English:
-theorem nil_mem_acceptsFrom
-  given: {S : Set σ}
-  statement: [] in M.acceptsFrom S ↔ exists s in S, s in M.accept
-  proof: by
-  simp only [mem_acceptsFrom, evalFrom_nil]; tauto
-
-中文:
-定理 nil_mem_acceptsFrom
-  条件: {S : 集合 σ}
-  结论: [] in M.acceptsFrom S ↔ 存在 s in S, s in M.accept
-  证明: by
-  simp only [mem_acceptsFrom, evalFrom_nil]; tauto
-
-Depends on / 依赖: evalFrom_nil, mem_acceptsFrom
+/-
+**NFA.nil_mem_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：nil_mem_acceptsFrom {S : Set σ} : [] in M.acceptsFrom S ↔ exists s in S, s
+ in M.accept
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem nil_mem_acceptsFrom {S : Set σ} : [] in M.acceptsFrom S ↔ exists s in S, s in M.accept := by
+theorem nil_mem_acceptsFrom {S : Set σ} : [] ∈ M.acceptsFrom S ↔ ∃ s ∈ S, s ∈ M.accept := by
   simp only [mem_acceptsFrom, evalFrom_nil]; tauto
 
 variable (M) in
 @[simp]
-/--
-theorem `cons_mem_acceptsFrom` / 定理 `cons_mem_acceptsFrom`
-
-English:
-theorem cons_mem_acceptsFrom
-  given: {S : Set σ} {a : α} {x : List α}
-  proof: by
-  simp [mem_acceptsFrom]
-
-中文:
-定理 cons_mem_acceptsFrom
-  条件: {S : 集合 σ} {a : α} {x : 列表 α}
-  证明: by
-  simp [mem_acceptsFrom]
-
-Depends on / 依赖: mem_acceptsFrom
+/-
+**NFA.cons_mem_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：cons_mem_acceptsFrom {S : Set σ} {a : α} {x : List α} : a :: x in M.accept
+sFrom S ↔ x in M.acceptsFrom (M.stepSet S a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cons_mem_acceptsFrom {S : Set σ} {a : α} {x : List α} :
-    a :: x in M.acceptsFrom S ↔ x in M.acceptsFrom (M.stepSet S a) := by
+    a :: x ∈ M.acceptsFrom S ↔ x ∈ M.acceptsFrom (M.stepSet S a) := by
   simp [mem_acceptsFrom]
 
 set_option backward.isDefEq.respectTransparency false in
 variable (M) in
-/--
-theorem `cons_preimage_acceptsFrom` / 定理 `cons_preimage_acceptsFrom`
-
-English:
-theorem cons_preimage_acceptsFrom
-  given: {S : Set σ} {a : α}
-  proof: by
-  ext x; simp [cons_mem_acceptsFrom M]
-
-中文:
-定理 cons_preimage_acceptsFrom
-  条件: {S : 集合 σ} {a : α}
-  证明: by
-  ext x; simp [cons_mem_acceptsFrom M]
-
-Depends on / 依赖: cons_mem_acceptsFrom
+/-
+**NFA.cons_preimage_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：cons_preimage_acceptsFrom {S : Set σ} {a : α} : (a :: ·) ⁻¹' M.acceptsFrom
+ S = M.acceptsFrom (M.stepSet S a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.cons_mem_acceptsFrom`：cons_mem_acceptsFrom {S : Set σ} {a : α} {x : 
+List α} : a :: x in M.acceptsFrom S ↔ x in M.acceptsFrom (M.stepSet S a)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cons_preimage_acceptsFrom {S : Set σ} {a : α} :
     (a :: ·) ⁻¹' M.acceptsFrom S = M.acceptsFrom (M.stepSet S a) := by
@@ -541,45 +500,48 @@ theorem cons_preimage_acceptsFrom {S : Set σ} {a : α} :
 
 variable (M) in
 @[simp]
-/--
-theorem `append_mem_acceptsFrom` / 定理 `append_mem_acceptsFrom`
-
-English:
-theorem append_mem_acceptsFrom
-  given: {S : Set σ} {x y : List α}
-  proof: by
-  simp [mem_acceptsFrom]
-
-中文:
-定理 append_mem_acceptsFrom
-  条件: {S : 集合 σ} {x y : 列表 α}
-  证明: by
-  simp [mem_acceptsFrom]
-
-Depends on / 依赖: mem_acceptsFrom
+/-
+**NFA.append_mem_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：append_mem_acceptsFrom {S : Set σ} {x y : List α} : x ++ y in M.acceptsFro
+m S ↔ y in M.acceptsFrom (M.evalFrom S x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NFA.evalFrom_append`：evalFrom_append (S : Set σ) (x y : List α) : M.eval
+From S (x ++ y) = M.evalFrom (M.evalFrom S x) y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem append_mem_acceptsFrom {S : Set σ} {x y : List α} :
-    x ++ y in M.acceptsFrom S ↔ y in M.acceptsFrom (M.evalFrom S x) := by
+    x ++ y ∈ M.acceptsFrom S ↔ y ∈ M.acceptsFrom (M.evalFrom S x) := by
   simp [mem_acceptsFrom]
 
 set_option backward.isDefEq.respectTransparency false in
 variable (M) in
-/--
-theorem `append_preimage_acceptsFrom` / 定理 `append_preimage_acceptsFrom`
-
-English:
-theorem append_preimage_acceptsFrom
-  given: {S : Set σ} {x : List α}
-  proof: by
-  ext y; simp [append_mem_acceptsFrom M]
-
-中文:
-定理 append_preimage_acceptsFrom
-  条件: {S : 集合 σ} {x : 列表 α}
-  证明: by
-  ext y; simp [append_mem_acceptsFrom M]
-
-Depends on / 依赖: append_mem_acceptsFrom
+/-
+**NFA.append_preimage_acceptsFrom** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：append_preimage_acceptsFrom {S : Set σ} {x : List α} : (x ++ ·) ⁻¹' M.acce
+ptsFrom S = M.acceptsFrom (M.evalFrom S x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.append_mem_acceptsFrom`：append_mem_acceptsFrom {S : Set σ} {x y : Li
+st α} : x ++ y in M.acceptsFrom S ↔ y in M.acceptsFrom (M.evalFrom S x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem append_preimage_acceptsFrom {S : Set σ} {x : List α} :
     (x ++ ·) ⁻¹' M.acceptsFrom S = M.acceptsFrom (M.evalFrom S x) := by
@@ -587,37 +549,30 @@ theorem append_preimage_acceptsFrom {S : Set σ} {x : List α} :
 
 variable (M) in
 @[simp]
-/--
-theorem `acceptsFrom_union` / 定理 `acceptsFrom_union`
-
-English:
-theorem acceptsFrom_union
-  given: {S T : Set σ}
-  proof: by
-  rw [Language.add_def]; ext x
-  simp only [mem_acceptsFrom, evalFrom_union, mem_union]
-  constructor
-  · rintro ⟨s, hs, h | h⟩
-    · left; tauto
-    · right; tauto
-  · rintro (⟨s, hs, h⟩ | ⟨s, hs, h⟩) <;> exists s <;> tauto
-
-中文:
-定理 acceptsFrom_union
-  条件: {S T : 集合 σ}
-  证明: by
-  rw [Language.add_def]; ext x
-  simp only [mem_acceptsFrom, evalFrom_union, mem_union]
-  constructor
-  · rintro ⟨s, hs, h | h⟩
-    · left; tauto
-    · right; tauto
-  · rintro (⟨s, hs, h⟩ | ⟨s, hs, h⟩) <;> exists s <;> tauto
-
-Depends on / 依赖: Language, Language.add_def, add_def, evalFrom_union, mem_acceptsFrom, mem_union
+/-
+**NFA.acceptsFrom_union** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：acceptsFrom_union {S T : Set σ} : M.acceptsFrom (S union T) = M.acceptsFro
+m S + M.acceptsFrom T
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Language.add_def`：add_def (l m : Language α) : l + m = (l union m : Set 
+(List α))
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NFA.evalFrom_union`：evalFrom_union (S T : Set σ) (x : List α) : M.evalFr
+om (S union T) x = M.evalFrom S x union M.evalFrom T x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
 -/
 theorem acceptsFrom_union {S T : Set σ} :
-    M.acceptsFrom (S union T) = M.acceptsFrom S + M.acceptsFrom T := by
+    M.acceptsFrom (S ∪ T) = M.acceptsFrom S + M.acceptsFrom T := by
   rw [Language.add_def]; ext x
   simp only [mem_acceptsFrom, evalFrom_union, mem_union]
   constructor
@@ -629,28 +584,32 @@ theorem acceptsFrom_union {S T : Set σ} :
 set_option backward.isDefEq.respectTransparency false in
 variable (M) in
 @[simp]
-/--
-theorem `acceptsFrom_iUnion` / 定理 `acceptsFrom_iUnion`
-
-English:
-theorem acceptsFrom_iUnion
-  given: {ι : Sort*} (s : ι -> Set σ)
-  proof: by
-  ext x
-  simp only [acceptsFrom, evalFrom_iUnion, mem_iUnion]
-  simp_rw [↑mem_iUnion, ↑mem_ofPred_eq]; tauto
-
-中文:
-定理 acceptsFrom_iUnion
-  条件: {ι : 类型层*} (s : ι -> 集合 σ)
-  证明: by
-  ext x
-  simp only [acceptsFrom, evalFrom_iUnion, mem_iUnion]
-  simp_rw [↑mem_iUnion, ↑mem_ofPred_eq]; tauto
-
-Depends on / 依赖: acceptsFrom, evalFrom_iUnion, mem_iUnion, mem_ofPred_eq, simp_rw
+/-
+**NFA.acceptsFrom_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：acceptsFrom_iUnion {ι : Sort*} (s : ι -> Set σ) : M.acceptsFrom (⋃ i, s i)
+ = ⋃ i, M.acceptsFrom (s i)
+参数：s : ι -> Set σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NFA.evalFrom_iUnion`：evalFrom_iUnion {ι : Sort*} (s : ι -> Set σ) (x : L
+ist α) : M.evalFrom (⋃ i, s i) x = ⋃ i, M.evalFrom (s i) x
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
 -/
-theorem acceptsFrom_iUnion {ι : Sort*} (s : ι -> Set σ) :
+theorem acceptsFrom_iUnion {ι : Sort*} (s : ι → Set σ) :
     M.acceptsFrom (⋃ i, s i) = ⋃ i, M.acceptsFrom (s i) := by
   ext x
   simp only [acceptsFrom, evalFrom_iUnion, mem_iUnion]
@@ -658,395 +617,297 @@ theorem acceptsFrom_iUnion {ι : Sort*} (s : ι -> Set σ) :
 
 set_option backward.isDefEq.respectTransparency false in
 variable (M) in
-/--
-theorem `acceptsFrom_iUnion₂` / 定理 `acceptsFrom_iUnion₂`
-
-English:
-theorem acceptsFrom_iUnion₂
-  given: {ι : Sort*} {κ : ι -> Sort*} (f : forall i, κ i -> Set σ)
-  proof: by
-  simp
-
-中文:
-定理 acceptsFrom_iUnion₂
-  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : 对任意 i, κ i -> 集合 σ)
-  证明: by
-  simp
+/-
+**NFA.acceptsFrom_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：acceptsFrom_iUnion {ι : Sort*} (s : ι -> Set σ) : M.acceptsFrom (⋃ i, s i)
+ = ⋃ i, M.acceptsFrom (s i)
+参数：s : ι -> Set σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NFA.evalFrom_iUnion`：evalFrom_iUnion {ι : Sort*} (s : ι -> Set σ) (x : L
+ist α) : M.evalFrom (⋃ i, s i) x = ⋃ i, M.evalFrom (s i) x
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
 -/
-theorem acceptsFrom_iUnion₂ {ι : Sort*} {κ : ι -> Sort*} (f : forall i, κ i -> Set σ) :
+theorem acceptsFrom_iUnion₂ {ι : Sort*} {κ : ι → Sort*} (f : ∀ i, κ i → Set σ) :
     M.acceptsFrom (⋃ (i) (j), f i j) = ⋃ (i) (j), M.acceptsFrom (f i j) := by
   simp
 
 variable (M) in
 @[simp]
-/--
-theorem `mem_acceptsFrom_sep_fact` / 定理 `mem_acceptsFrom_sep_fact`
-
-English:
-theorem mem_acceptsFrom_sep_fact
-  given: {S : Set σ} {p : Prop} {x : List α}
-  proof: by
-  induction x generalizing S with
-  | nil => simp only [nil_mem_acceptsFrom, mem_ofPred_eq]; tauto
-  | cons a x ih =>
-    have h : M.stepSet {s in S | p} a = {s in M.stepSet S a | p} := by
-      ext s; simp only [stepSet, mem_ofPred_eq, mem_iUnion, exists_prop]; tauto
-    simp [h, ih]
-
-中文:
-定理 mem_acceptsFrom_sep_fact
-  条件: {S : 集合 σ} {p : 命题} {x : 列表 α}
-  证明: by
-  induction x generalizing S with
-  | nil => simp only [nil_mem_acceptsFrom, mem_ofPred_eq]; tauto
-  | cons a x ih =>
-    have h : M.stepSet {s in S | p} a = {s in M.stepSet S a | p} := by
-      ext s; simp only [stepSet, mem_ofPred_eq, mem_iUnion, exists_prop]; tauto
-    simp [h, ih]
+/-
+**NFA.mem_acceptsFrom_sep_fact** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem mem_acceptsFrom_sep_fact {S : Set σ} {p : Prop} {x : List α} :
-    x in M.acceptsFrom {s in S | p} ↔ x in M.acceptsFrom S ∧ p := by
+    x ∈ M.acceptsFrom {s ∈ S | p} ↔ x ∈ M.acceptsFrom S ∧ p := by
   induction x generalizing S with
   | nil => simp only [nil_mem_acceptsFrom, mem_ofPred_eq]; tauto
   | cons a x ih =>
-    have h : M.stepSet {s in S | p} a = {s in M.stepSet S a | p} := by
+    have h : M.stepSet {s ∈ S | p} a = {s ∈ M.stepSet S a | p} := by
       ext s; simp only [stepSet, mem_ofPred_eq, mem_iUnion, exists_prop]; tauto
     simp [h, ih]
 
 variable (M) in
-/--
-Definition of `eval` / `eval` 的定义
+/-- `M.eval x` computes all possible paths though `M` with input `x` starting at an element of
+  `M.start`. -/
+/-
+**NFA.eval** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：eval : List α -> Set σ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: : List α -> Set σ
-  body: M.evalFrom M.start
-
-中文:
-定义 eval
-  签名: : 列表 α -> 集合 σ
-  定义体: M.evalFrom M.start
-
-Depends on / 依赖: M.evalFrom, M.start, evalFrom
+--- 原说明 ---
+`M.eval x` computes all possible paths though `M` with input `x` starting at an 
+element of
+  `M.start`.
 -/
-def eval : List α -> Set σ :=
+def eval : List α → Set σ :=
   M.evalFrom M.start
 
 variable (M) in
 @[simp]
-/--
-theorem `eval_nil` / 定理 `eval_nil`
-
-English:
-theorem eval_nil
-  statement: M.eval [] = M.start
-  proof: rfl
-
-中文:
-定理 eval_nil
-  结论: M.eval [] = M.start
-  证明: rfl
+/-
+**NFA.eval_nil** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：eval_nil : M.eval [] = M.start
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval_nil : M.eval [] = M.start :=
   rfl
 
 variable (M) in
 @[simp]
-/--
-theorem `eval_singleton` / 定理 `eval_singleton`
-
-English:
-theorem eval_singleton
-  given: (a : α)
-  statement: M.eval [a] = M.stepSet M.start a
-  proof: rfl
-
-中文:
-定理 eval_singleton
-  条件: (a : α)
-  结论: M.eval [a] = M.stepSet M.start a
-  证明: rfl
+/-
+**NFA.eval_singleton** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：eval_singleton (a : α) : M.eval [a] = M.stepSet M.start a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval_singleton (a : α) : M.eval [a] = M.stepSet M.start a :=
   rfl
 
 variable (M) in
 @[simp]
-/--
-theorem `eval_append_singleton` / 定理 `eval_append_singleton`
-
-English:
-theorem eval_append_singleton
-  given: (x : List α) (a : α)
-  proof: by
-  simp [eval]
-
-中文:
-定理 eval_append_singleton
-  条件: (x : 列表 α) (a : α)
-  证明: by
-  simp [eval]
+/-
+**NFA.eval_append_singleton** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：eval_append_singleton (x : List α) (a : α) : M.eval (x ++ [a]) = M.stepSet
+ (M.eval x) a
+参数：x : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.evalFrom_append`：evalFrom_append (S : Set σ) (x y : List α) : M.eval
+From S (x ++ y) = M.evalFrom (M.evalFrom S x) y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_append_singleton (x : List α) (a : α) :
     M.eval (x ++ [a]) = M.stepSet (M.eval x) a := by
   simp [eval]
 
 variable (M) in
-/--
-Definition of `accepts` / `accepts` 的定义
+/-- `M.accepts` is the language of `x` such that there is an accept state in `M.eval x`. -/
+/-
+**NFA.accepts** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：accepts : Language α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition accepts
-  signature: : Language α
-  body: {x | exists S in M.accept, S in M.eval x}
-
-中文:
-定义 accepts
-  签名: : Language α
-  定义体: {x | exists S in M.accept, S in M.eval x}
-
-Depends on / 依赖: M.accept, M.eval, accept
+--- 原说明 ---
+`M.accepts` is the language of `x` such that there is an accept state in `M.eval
+ x`.
 -/
-def accepts : Language α := {x | exists S in M.accept, S in M.eval x}
-
-/--
-theorem `mem_accepts` / 定理 `mem_accepts`
-
-English:
-theorem mem_accepts
-  given: {x : List α}
-  statement: x in M.accepts ↔ exists S in M.accept, S in M.evalFrom M.start x
-  proof: by
-  rfl
-
-中文:
-定理 mem_accepts
-  条件: {x : 列表 α}
-  结论: x in M.accepts ↔ 存在 S in M.accept, S in M.evalFrom M.start x
-  证明: by
-  rfl
+def accepts : Language α := {x | ∃ S ∈ M.accept, S ∈ M.eval x}
+/-
+**NFA.mem_accepts** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_accepts {x : List α} : x in M.accepts ↔ exists S in M.accept, S in M.e
+valFrom M.start x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_accepts {x : List α} : x in M.accepts ↔ exists S in M.accept, S in M.evalFrom M.start x := by
+theorem mem_accepts {x : List α} : x ∈ M.accepts ↔ ∃ S ∈ M.accept, S ∈ M.evalFrom M.start x := by
   rfl
-
-/--
-theorem `accepts_eq_acceptsFrom_start` / 定理 `accepts_eq_acceptsFrom_start`
-
-English:
-theorem accepts_eq_acceptsFrom_start
-  statement: M.accepts = M.acceptsFrom M.start
-  proof: rfl
-
-中文:
-定理 accepts_eq_acceptsFrom_start
-  结论: M.accepts = M.acceptsFrom M.start
-  证明: rfl
+/-
+**NFA.accepts_eq_acceptsFrom_start** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：accepts_eq_acceptsFrom_start : M.accepts = M.acceptsFrom M.start
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem accepts_eq_acceptsFrom_start : M.accepts = M.acceptsFrom M.start := rfl
 
 variable (M) in
-/--
-Inductive type `Path` / 归纳类型 `Path`
+/-- `M.Path` represents a concrete path through the NFA from a start state to an end state
+for a particular word.
 
-English:
-inductive Path
-  parameters: : σ -> σ -> List α -> Type (max u v)
-  constructors (2):
-    - nil: (s : σ) : Path s s []
-    - cons: (t s u : σ) (a : α) (x : List α) : t in M.step s a -> Path t u x -> Path s u (a :: x)
+Note that due to the non-deterministic nature of the automata, there can be more than one `Path`
+for a given word.
 
-中文:
-归纳类型 道路
-  参数: : σ -> σ -> 列表 α -> 类型 (最大值 u v)
-  构造子 (2 个):
-    - nil: (s : σ) : 道路 s s []
-    - cons: (t s u : σ) (a : α) (x : 列表 α) : t in M.step s a -> 道路 t u x -> 道路 s u (a :: x)
+Also note that this is `Type` and not a `Prop`, so that we can speak about the properties
+of a particular `Path`, such as the set of states visited along the way (defined as `Path.supp`). -/
+/-
+**NFA.Path** 是 Mathlib 中的一个归纳类型，位于命名空间 `NFA`。
+形式化陈述：{α : Type u} → {σ : Type v} → NFA α σ → σ → σ → List α → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`M.Path` represents a concrete path through the NFA from a start state to an end
+ state
+for a particular word.
+
+Note that due to the non-deterministic nature of the automata, there can be more
+ than one `Path`
+for a given word.
+
+Also note that this is `Type` and not a `Prop`, so that we can speak about the p
+roperties
+of a particular `Path`, such as the set of states visited along the way (defined
+ as `Path.supp`).
 -/
-inductive Path : σ -> σ -> List α -> Type (max u v)
+inductive Path : σ → σ → List α → Type (max u v)
   | nil (s : σ) : Path s s []
   | cons (t s u : σ) (a : α) (x : List α) :
-      t in M.step s a -> Path t u x -> Path s u (a :: x)
+      t ∈ M.step s a → Path t u x → Path s u (a :: x)
 
 /-- Set of states visited by a path. -/
 @[simp]
-/--
-Definition of `Path.supp` / `Path.supp` 的定义
+/-
+**NFA.Path.supp** 是 Mathlib 中的一个定义，位于命名空间 `NFA.Path`。
+形式化陈述：{α : Type u} → {σ : Type v} → {M : NFA α σ} → [DecidableEq σ] → {s t : σ} 
+→ {x : List α} → M.Path s t x → Finset σ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Path.supp
-  signature: [DecidableEq σ] {s t : σ} {x : List α}
-
-中文:
-定义 道路.supp
-  签名: [DecidableEq σ] {s t : σ} {x : 列表 α}
+--- 原说明 ---
+Set of states visited by a path.
 -/
-def Path.supp [DecidableEq σ] {s t : σ} {x : List α} : M.Path s t x -> Finset σ
+def Path.supp [DecidableEq σ] {s t : σ} {x : List α} : M.Path s t x → Finset σ
   | nil s => {s}
-  | cons _ _ _ _ _ _ p => {s} union p.supp
-
-/--
-theorem `mem_evalFrom_iff_nonempty_path` / 定理 `mem_evalFrom_iff_nonempty_path`
-
-English:
-theorem mem_evalFrom_iff_nonempty_path
-  given: {s t : σ} {x : List α}
-  proof: match x with
-    | [] =>
-      have h : s = t := by simp at h; tauto
-      ⟨h ▸ Path.nil s⟩
-    | a :: x =>
-      have h : exists s' in M.step s a, t in M.evalFrom {s'} x := by
-        rw [evalFrom_cons]; rw [mem_evalFrom_iff_exists]; rw [stepSet_singleton] at h; exact h
-      let ⟨s', h₁, h₂⟩ := h
-      let ⟨p'⟩ := mem_evalFrom_iff_nonempty_path.1 h₂
-      ⟨Path.cons s' _ _ _ _ h₁ p'⟩
-  mpr p := match p with
-    | ⟨Path.nil s⟩ => by simp
-    | ⟨Path.cons s' s t a x h₁ h₂⟩ => by
-      rw [evalFrom_cons]; rw [stepSet_singleton]; rw [mem_evalFrom_iff_exists]
-      exact ⟨s', h₁, mem_evalFrom_iff_nonempty_path.2 ⟨h₂⟩⟩
-
-中文:
-定理 mem_evalFrom_iff_nonempty_path
-  条件: {s t : σ} {x : 列表 α}
-  证明: match x with
-    | [] =>
-      have h : s = t := by simp at h; tauto
-      ⟨h ▸ Path.nil s⟩
-    | a :: x =>
-      have h : exists s' in M.step s a, t in M.evalFrom {s'} x := by
-        rw [evalFrom_cons]; rw [mem_evalFrom_iff_exists]; rw [stepSet_singleton] at h; exact h
-      let ⟨s', h₁, h₂⟩ := h
-      let ⟨p'⟩ := mem_evalFrom_iff_nonempty_path.1 h₂
-      ⟨Path.cons s' _ _ _ _ h₁ p'⟩
-  mpr p := match p with
-    | ⟨Path.nil s⟩ => by simp
-    | ⟨Path.cons s' s t a x h₁ h₂⟩ => by
-      rw [evalFrom_cons]; rw [stepSet_singleton]; rw [mem_evalFrom_iff_exists]
-      exact ⟨s', h₁, mem_evalFrom_iff_nonempty_path.2 ⟨h₂⟩⟩
+  | cons _ _ _ _ _ _ p => {s} ∪ p.supp
+/-
+**NFA.mem_evalFrom_iff_nonempty_path** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_evalFrom_iff_nonempty_path {s t : σ} {x : List α} : t in M.evalFrom {s
+} x ↔ Nonempty (M.Path s t x) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mem_evalFrom_iff_nonempty_path {s t : σ} {x : List α} :
-    t in M.evalFrom {s} x ↔ Nonempty (M.Path s t x) where
+    t ∈ M.evalFrom {s} x ↔ Nonempty (M.Path s t x) where
   mp h := match x with
     | [] =>
       have h : s = t := by simp at h; tauto
       ⟨h ▸ Path.nil s⟩
     | a :: x =>
-      have h : exists s' in M.step s a, t in M.evalFrom {s'} x := by
-        rw [evalFrom_cons]; rw [mem_evalFrom_iff_exists]; rw [stepSet_singleton] at h; exact h
+      have h : ∃ s' ∈ M.step s a, t ∈ M.evalFrom {s'} x := by
+        rw [evalFrom_cons, mem_evalFrom_iff_exists, stepSet_singleton] at h; exact h
       let ⟨s', h₁, h₂⟩ := h
       let ⟨p'⟩ := mem_evalFrom_iff_nonempty_path.1 h₂
       ⟨Path.cons s' _ _ _ _ h₁ p'⟩
   mpr p := match p with
     | ⟨Path.nil s⟩ => by simp
     | ⟨Path.cons s' s t a x h₁ h₂⟩ => by
-      rw [evalFrom_cons]; rw [stepSet_singleton]; rw [mem_evalFrom_iff_exists]
+      rw [evalFrom_cons, stepSet_singleton, mem_evalFrom_iff_exists]
       exact ⟨s', h₁, mem_evalFrom_iff_nonempty_path.2 ⟨h₂⟩⟩
-
-/--
-theorem `accepts_iff_exists_path` / 定理 `accepts_iff_exists_path`
-
-English:
-theorem accepts_iff_exists_path
-  given: {x : List α}
-  proof: by
-  simp only [← mem_evalFrom_iff_nonempty_path, mem_accepts, mem_evalFrom_iff_exists (S := M.start)]
-  tauto
-
-中文:
-定理 accepts_iff_存在_path
-  条件: {x : 列表 α}
-  证明: by
-  simp only [← mem_evalFrom_iff_nonempty_path, mem_accepts, mem_evalFrom_iff_exists (S := M.start)]
-  tauto
-
-Depends on / 依赖: M.start, mem_accepts, mem_evalFrom_iff_exists, mem_evalFrom_iff_nonempty_path
+/-
+**NFA.accepts_iff_exists_path** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：accepts_iff_exists_path {x : List α} : x in M.accepts ↔ exists s in M.star
+t, exists t in M.accept, Nonempty (M.Path s t x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NFA.mem_evalFrom_iff_exists`：mem_evalFrom_iff_exists {s : σ} {S : Set σ}
+ {x : List α} : s in M.evalFrom S x ↔ exists t in S, s in M.evalFrom {t} x
 -/
 theorem accepts_iff_exists_path {x : List α} :
-    x in M.accepts ↔ exists s in M.start, exists t in M.accept, Nonempty (M.Path s t x) := by
+    x ∈ M.accepts ↔ ∃ s ∈ M.start, ∃ t ∈ M.accept, Nonempty (M.Path s t x) := by
   simp only [← mem_evalFrom_iff_nonempty_path, mem_accepts, mem_evalFrom_iff_exists (S := M.start)]
   tauto
 
 variable (M) in
-/--
-Definition of `toDFA` / `toDFA` 的定义
+/-- `M.toDFA` is a `DFA` constructed from an `NFA` `M` using the subset construction. The
+  states is the type of `Set`s of `M.state` and the step function is `M.stepSet`. -/
+/-
+**NFA.toDFA** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：toDFA : DFA α (Set σ) where step
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDFA
-  signature: : DFA α (Set σ) where
-  body: M.stepSet
-  start := M.start
-  accept := { S | exists s in S, s in M.accept }
-
-@[simp]
-
-中文:
-定义 toDFA
-  签名: : DFA α (集合 σ) where
-  定义体: M.stepSet
-  start := M.start
-  accept := { S | exists s in S, s in M.accept }
-
-@[simp]
-
-Depends on / 依赖: M.stepSet, stepSet
+--- 原说明 ---
+`M.toDFA` is a `DFA` constructed from an `NFA` `M` using the subset construction
+. The
+  states is the type of `Set`s of `M.state` and the step function is `M.stepSet`
+.
 -/
 def toDFA : DFA α (Set σ) where
   step := M.stepSet
   start := M.start
-  accept := { S | exists s in S, s in M.accept }
+  accept := { S | ∃ s ∈ S, s ∈ M.accept }
 
 @[simp]
-/--
-theorem `toDFA_correct` / 定理 `toDFA_correct`
-
-English:
-theorem toDFA_correct
-  statement: M.toDFA.accepts = M.accepts
-  proof: by
-  ext x
-  rw [mem_accepts]; rw [DFA.mem_accepts]
-  constructor <;> · exact fun ⟨w, h2, h3⟩ => ⟨w, h3, h2⟩
-
-中文:
-定理 toDFA_correct
-  结论: M.toDFA.accepts = M.accepts
-  证明: by
-  ext x
-  rw [mem_accepts]; rw [DFA.mem_accepts]
-  constructor <;> · exact fun ⟨w, h2, h3⟩ => ⟨w, h3, h2⟩
-
-Depends on / 依赖: DFA.mem_accepts, mem_accepts
+/-
+**NFA.toDFA_correct** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：toDFA_correct : M.toDFA.accepts = M.accepts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.mem_accepts`：mem_accepts {x : List α} : x in M.accepts ↔ exists S in
+ M.accept, S in M.evalFrom M.start x
+· 使用定理 `DFA.mem_accepts`：mem_accepts {x : List α} : x in M.accepts ↔ M.eval x in
+ M.accept
 -/
 theorem toDFA_correct : M.toDFA.accepts = M.accepts := by
   ext x
-  rw [mem_accepts]; rw [DFA.mem_accepts]
+  rw [mem_accepts, DFA.mem_accepts]
   constructor <;> · exact fun ⟨w, h2, h3⟩ => ⟨w, h3, h2⟩
-
-/--
-theorem `pumping_lemma` / 定理 `pumping_lemma`
-
-English:
-theorem pumping_lemma
-  statement: [Fintype σ] {x : List α} (hx : x in M.accepts)
-  proof: by
-  rw [← toDFA_correct] at hx ⊢
-  exact M.toDFA.pumping_lemma hx hlen
-
-中文:
-定理 pumping_lemma
-  结论: [有限类型 σ] {x : 列表 α} (hx : x in M.accepts)
-  证明: by
-  rw [← toDFA_correct] at hx ⊢
-  exact M.toDFA.pumping_lemma hx hlen
-
-Depends on / 依赖: M.toDFA.pumping_lemma, pumping_lemma, toDFA_correct
+/-
+**NFA.pumping_lemma** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：pumping_lemma [Fintype σ] {x : List α} (hx : x in M.accepts) (hlen : Finty
+pe.card (Set σ) <= List.length x) : exists a b c, x = a ++ b ++ c ∧ a.length + b
+.length <= Fintype.card (Set σ) ∧ b != [] ∧ {a} * {b}∗ * {c} <= M.accepts
+参数：hx : x in M.accepts；hlen : Fintype.card (Set σ) <= List.length x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NFA.toDFA_correct`：toDFA_correct : M.toDFA.accepts = M.accepts
+· 使用定理 `DFA.pumping_lemma`：pumping_lemma [Fintype σ] {x : List α} (hx : x in M.a
+ccepts) (hlen : Fintype.card σ <= List.length x) : exists a b c, x = a ++ b ++ c
+ ∧ a.le…
 -/
-theorem pumping_lemma [Fintype σ] {x : List α} (hx : x in M.accepts)
-    (hlen : Fintype.card (Set σ) <= List.length x) :
-    exists a b c,
+theorem pumping_lemma [Fintype σ] {x : List α} (hx : x ∈ M.accepts)
+    (hlen : Fintype.card (Set σ) ≤ List.length x) :
+    ∃ a b c,
       x = a ++ b ++ c ∧
-        a.length + b.length <= Fintype.card (Set σ) ∧ b != [] ∧ {a} * {b}∗ * {c} <= M.accepts := by
+        a.length + b.length ≤ Fintype.card (Set σ) ∧ b ≠ [] ∧ {a} * {b}∗ * {c} ≤ M.accepts := by
   rw [← toDFA_correct] at hx ⊢
   exact M.toDFA.pumping_lemma hx hlen
 
@@ -1054,26 +915,18 @@ end NFA
 
 namespace DFA
 
-/--
-Definition of `toNFA` / `toNFA` 的定义
+/-- `M.toNFA` is an `NFA` constructed from a `DFA` `M` by using the same start and accept
+  states and a transition function which sends `s` with input `a` to the singleton `M.step s a`. -/
+/-
+**DFA.toNFA** 是 Mathlib 中的一个定义，位于命名空间 `DFA`。
+形式化陈述：{α : Type u} → {σ : Type v} → DFA α σ → NFA α σ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNFA
-  signature: (M : DFA α σ)
-  body: {M.step s a}
-  start := {M.start}
-  accept := M.accept
-
-@[simp]
-
-中文:
-定义 toNFA
-  签名: (M : DFA α σ)
-  定义体: {M.step s a}
-  start := {M.start}
-  accept := M.accept
-
-@[simp]
+--- 原说明 ---
+`M.toNFA` is an `NFA` constructed from a `DFA` `M` by using the same start and a
+ccept
+  states and a transition function which sends `s` with input `a` to the singlet
+on `M.step s a`.
 -/
 @[simps] def toNFA (M : DFA α σ) : NFA α σ where
   step s a := {M.step s a}
@@ -1081,36 +934,32 @@ definition toNFA
   accept := M.accept
 
 @[simp]
-/--
-theorem `toNFA_evalFrom_match` / 定理 `toNFA_evalFrom_match`
-
-English:
-theorem toNFA_evalFrom_match
-  given: (M : DFA α σ) (start : σ) (s : List α)
-  proof: by
-  change List.foldl M.toNFA.stepSet {start} s = {List.foldl M.step start s}
-  induction s generalizing start with
-  | nil => tauto
-  | cons a s ih =>
-    rw [List.foldl]; rw [List.foldl]; rw [show M.toNFA.stepSet {start} a = {M.step start a} by simp [NFA.stepSet]]
-    tauto
-
-@[simp]
-
-中文:
-定理 toNFA_evalFrom_match
-  条件: (M : DFA α σ) (start : σ) (s : 列表 α)
-  证明: by
-  change List.foldl M.toNFA.stepSet {start} s = {List.foldl M.step start s}
-  induction s generalizing start with
-  | nil => tauto
-  | cons a s ih =>
-    rw [List.foldl]; rw [List.foldl]; rw [show M.toNFA.stepSet {start} a = {M.step start a} by simp [NFA.stepSet]]
-    tauto
-
-@[simp]
-
-Depends on / 依赖: List.foldl, M.step, M.toNFA.stepSet, NFA.stepSet, generalizing, stepSet
+/-
+**DFA.toNFA_evalFrom_match** 是 Mathlib 中的一个定理，位于命名空间 `DFA`。
+形式化陈述：toNFA_evalFrom_match (M : DFA α σ) (start : σ) (s : List α) : M.toNFA.eval
+From {start} s = {M.evalFrom start s}
+参数：M : DFA α σ；start : σ；s : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldl.eq_2`：∀ {α : Type u} {β : Type v} (f : α → β → α) (x : α) (b 
+: β) (l : List β),   List.foldl f x (b :: l) = List.foldl f (f x b) l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `DFA.toNFA_step`：∀ {α : Type u} {σ : Type v} (M : DFA α σ) (s : σ) (a : α
+), M.toNFA.step s a = {M.step s a}
+· 使用定理 `Set.iUnion_iUnion_eq_left`：iUnion_iUnion_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋃ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toNFA_evalFrom_match (M : DFA α σ) (start : σ) (s : List α) :
     M.toNFA.evalFrom {start} s = {M.evalFrom start s} := by
@@ -1118,42 +967,34 @@ theorem toNFA_evalFrom_match (M : DFA α σ) (start : σ) (s : List α) :
   induction s generalizing start with
   | nil => tauto
   | cons a s ih =>
-    rw [List.foldl]; rw [List.foldl]; rw [show M.toNFA.stepSet {start} a = {M.step start a} by simp [NFA.stepSet]]
+    rw [List.foldl, List.foldl,
+      show M.toNFA.stepSet {start} a = {M.step start a} by simp [NFA.stepSet]]
     tauto
 
 @[simp]
-/--
-theorem `toNFA_correct` / 定理 `toNFA_correct`
-
-English:
-theorem toNFA_correct
-  given: (M : DFA α σ)
-  statement: M.toNFA.accepts = M.accepts
-  proof: by
-  ext x
-  rw [NFA.mem_accepts]; rw [toNFA_start]; rw [toNFA_evalFrom_match]
-  constructor
-  · rintro ⟨S, hS₁, hS₂⟩
-    rwa [Set.mem_singleton_iff.mp hS₂] at hS₁
-  · exact fun h => ⟨M.eval x, h, rfl⟩
-
-中文:
-定理 toNFA_correct
-  条件: (M : DFA α σ)
-  结论: M.toNFA.accepts = M.accepts
-  证明: by
-  ext x
-  rw [NFA.mem_accepts]; rw [toNFA_start]; rw [toNFA_evalFrom_match]
-  constructor
-  · rintro ⟨S, hS₁, hS₂⟩
-    rwa [Set.mem_singleton_iff.mp hS₂] at hS₁
-  · exact fun h => ⟨M.eval x, h, rfl⟩
-
-Depends on / 依赖: M.eval, NFA.mem_accepts, Set.mem_singleton_iff.mp, mem_accepts, mem_singleton_iff, toNFA_evalFrom_match, toNFA_start
+/-
+**DFA.toNFA_correct** 是 Mathlib 中的一个定理，位于命名空间 `DFA`。
+形式化陈述：toNFA_correct (M : DFA α σ) : M.toNFA.accepts = M.accepts
+参数：M : DFA α σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NFA.mem_accepts`：mem_accepts {x : List α} : x in M.accepts ↔ exists S in
+ M.accept, S in M.evalFrom M.start x
+· 使用定理 `DFA.toNFA_start`：∀ {α : Type u} {σ : Type v} (M : DFA α σ), M.toNFA.star
+t = {M.start}
+· 使用定理 `DFA.toNFA_evalFrom_match`：toNFA_evalFrom_match (M : DFA α σ) (start : σ)
+ (s : List α) : M.toNFA.evalFrom {start} s = {M.evalFrom start s}
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
 theorem toNFA_correct (M : DFA α σ) : M.toNFA.accepts = M.accepts := by
   ext x
-  rw [NFA.mem_accepts]; rw [toNFA_start]; rw [toNFA_evalFrom_match]
+  rw [NFA.mem_accepts, toNFA_start, toNFA_evalFrom_match]
   constructor
   · rintro ⟨S, hS₁, hS₂⟩
     rwa [Set.mem_singleton_iff.mp hS₂] at hS₁
@@ -1167,111 +1008,79 @@ variable (M) in
 /-- `M.reverse` constructs an NFA with the same states as `M`, but all the transitions reversed. The
 resulting automaton accepts a word `x` if and only if `M` accepts `List.reverse x`. -/
 @[simps]
-/--
-Definition of `reverse` / `reverse` 的定义
+/-
+**NFA.reverse** 是 Mathlib 中的一个定义，位于命名空间 `NFA`。
+形式化陈述：reverse : NFA α σ where step s a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: : NFA α σ where
-  body: { s' | s in M.step s' a }
-  start := M.accept
-  accept := M.start
-
-中文:
-定义 reverse
-  签名: : NFA α σ where
-  定义体: { s' | s in M.step s' a }
-  start := M.accept
-  accept := M.start
-
-Depends on / 依赖: M.step
+--- 原说明 ---
+`M.reverse` constructs an NFA with the same states as `M`, but all the transitio
+ns reversed. The
+resulting automaton accepts a word `x` if and only if `M` accepts `List.reverse 
+x`.
 -/
 def reverse : NFA α σ where
-  step s a := { s' | s in M.step s' a }
+  step s a := { s' | s ∈ M.step s' a }
   start := M.accept
   accept := M.start
 
 variable (M) in
 @[simp]
-/--
-theorem `reverse_reverse` / 定理 `reverse_reverse`
-
-English:
-theorem reverse_reverse
-  statement: M.reverse.reverse = M
-  proof: by
-  simp [reverse]
-
-中文:
-定理 reverse_reverse
-  结论: M.reverse.reverse = M
-  证明: by
-  simp [reverse]
-
-Depends on / 依赖: reverse
+/-
+**NFA.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：reverse_reverse : M.reverse.reverse = M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem reverse_reverse : M.reverse.reverse = M := by
   simp [reverse]
-
-/--
-theorem `disjoint_stepSet_reverse` / 定理 `disjoint_stepSet_reverse`
-
-English:
-theorem disjoint_stepSet_reverse
-  given: {a : α} {S S' : Set σ}
-  proof: by
-  rw [← not_iff_not]
-  simp only [Set.not_disjoint_iff, mem_stepSet, reverse_step, Set.mem_ofPred_eq]
-  tauto
-
-中文:
-定理 disjoint_stepSet_reverse
-  条件: {a : α} {S S' : 集合 σ}
-  证明: by
-  rw [← not_iff_not]
-  simp only [Set.not_disjoint_iff, mem_stepSet, reverse_step, Set.mem_ofPred_eq]
-  tauto
-
-Depends on / 依赖: Set.mem_ofPred_eq, Set.not_disjoint_iff, mem_ofPred_eq, mem_stepSet, not_disjoint_iff, not_iff_not, reverse_step
+/-
+**NFA.disjoint_stepSet_reverse** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：disjoint_stepSet_reverse {a : α} {S S' : Set σ} : Disjoint S (M.reverse.st
+epSet S' a) ↔ Disjoint S' (M.stepSet S a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NFA.reverse_step`：∀ {α : Type u} {σ : Type v} (M : NFA α σ) (s : σ) (a :
+ α), M.reverse.step s a = {s' | s ∈ M.step s' a}
 -/
 theorem disjoint_stepSet_reverse {a : α} {S S' : Set σ} :
     Disjoint S (M.reverse.stepSet S' a) ↔ Disjoint S' (M.stepSet S a) := by
   rw [← not_iff_not]
   simp only [Set.not_disjoint_iff, mem_stepSet, reverse_step, Set.mem_ofPred_eq]
   tauto
-
-/--
-theorem `disjoint_evalFrom_reverse` / 定理 `disjoint_evalFrom_reverse`
-
-English:
-theorem disjoint_evalFrom_reverse
-  statement: {x : List α} {S S' : Set σ}
-  proof: by
-  simp only [evalFrom, List.foldl_reverse] at h ⊢
-  induction x generalizing S S' with
-  | nil =>
-    rw [disjoint_comm]
-    exact h
-  | cons x xs ih =>
-    rw [List.foldl_cons] at h
-    rw [List.foldr_cons]; rw [← NFA.disjoint_stepSet_reverse]; rw [disjoint_comm]
-    exact ih h
-
-中文:
-定理 disjoint_evalFrom_reverse
-  结论: {x : 列表 α} {S S' : 集合 σ}
-  证明: by
-  simp only [evalFrom, List.foldl_reverse] at h ⊢
-  induction x generalizing S S' with
-  | nil =>
-    rw [disjoint_comm]
-    exact h
-  | cons x xs ih =>
-    rw [List.foldl_cons] at h
-    rw [List.foldr_cons]; rw [← NFA.disjoint_stepSet_reverse]; rw [disjoint_comm]
-    exact ih h
-
-Depends on / 依赖: List.foldl_cons, List.foldl_reverse, List.foldr_cons, NFA.disjoint_stepSet_reverse, disjoint_comm, disjoint_stepSet_reverse, evalFrom, foldl_cons, foldl_reverse, foldr_cons, generalizing
+/-
+**NFA.disjoint_evalFrom_reverse** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：disjoint_evalFrom_reverse {x : List α} {S S' : Set σ} (h : Disjoint S (M.r
+everse.evalFrom S' x)) : Disjoint S' (M.evalFrom S x.reverse)
+参数：h : Disjoint S (M.reverse.evalFrom S' x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldl_reverse`：∀ {α : Type u_1} {β : Type u_2} {l : List α} {f : β 
+→ α → β} {b : β},   List.foldl f b l.reverse = List.foldr (fun x y => f y x) b l
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `List.foldr_cons`：∀ {α : Type u} {β : Type v} {a : α} {l : List α} {f : α
+ → β → β} {b : β},   List.foldr f b (a :: l) = f a (List.foldr f b l)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NFA.disjoint_stepSet_reverse`：disjoint_stepSet_reverse {a : α} {S S' : S
+et σ} : Disjoint S (M.reverse.stepSet S' a) ↔ Disjoint S' (M.stepSet S a)
+· 使用定理 `List.foldl_cons`：∀ {α : Type u} {β : Type v} {a : α} {l : List α} {f : β
+ → α → β} {b : β},   List.foldl f b (a :: l) = List.foldl f (f b a) l
 -/
 theorem disjoint_evalFrom_reverse {x : List α} {S S' : Set σ}
     (h : Disjoint S (M.reverse.evalFrom S' x)) : Disjoint S' (M.evalFrom S x.reverse) := by
@@ -1282,118 +1091,105 @@ theorem disjoint_evalFrom_reverse {x : List α} {S S' : Set σ}
     exact h
   | cons x xs ih =>
     rw [List.foldl_cons] at h
-    rw [List.foldr_cons]; rw [← NFA.disjoint_stepSet_reverse]; rw [disjoint_comm]
+    rw [List.foldr_cons, ← NFA.disjoint_stepSet_reverse, disjoint_comm]
     exact ih h
-
-/--
-theorem `disjoint_evalFrom_reverse_iff` / 定理 `disjoint_evalFrom_reverse_iff`
-
-English:
-theorem disjoint_evalFrom_reverse_iff
-  given: {x : List α} {S S' : Set σ}
-  proof: ⟨disjoint_evalFrom_reverse, fun h => List.reverse_reverse x ▸ disjoint_evalFrom_reverse h⟩
-
-@[simp]
-
-中文:
-定理 disjoint_evalFrom_reverse_iff
-  条件: {x : 列表 α} {S S' : 集合 σ}
-  证明: ⟨disjoint_evalFrom_reverse, fun h => List.reverse_reverse x ▸ disjoint_evalFrom_reverse h⟩
-
-@[simp]
-
-Depends on / 依赖: List.reverse_reverse, disjoint_evalFrom_reverse, reverse_reverse
+/-
+**NFA.disjoint_evalFrom_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：disjoint_evalFrom_reverse_iff {x : List α} {S S' : Set σ} : Disjoint S (M.
+reverse.evalFrom S' x) ↔ Disjoint S' (M.evalFrom S x.reverse)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NFA.disjoint_evalFrom_reverse`：disjoint_evalFrom_reverse {x : List α} {S
+ S' : Set σ} (h : Disjoint S (M.reverse.evalFrom S' x)) : Disjoint S' (M.evalFro
+m S x.reverse)
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 theorem disjoint_evalFrom_reverse_iff {x : List α} {S S' : Set σ} :
     Disjoint S (M.reverse.evalFrom S' x) ↔ Disjoint S' (M.evalFrom S x.reverse) :=
-  ⟨disjoint_evalFrom_reverse, fun h => List.reverse_reverse x ▸ disjoint_evalFrom_reverse h⟩
+  ⟨disjoint_evalFrom_reverse, fun h ↦ List.reverse_reverse x ▸ disjoint_evalFrom_reverse h⟩
 
 @[simp]
-/--
-theorem `mem_accepts_reverse` / 定理 `mem_accepts_reverse`
-
-English:
-theorem mem_accepts_reverse
-  given: {x : List α}
-  statement: x in M.reverse.accepts ↔ x.reverse in M.accepts
-  proof: by
-  simp [mem_accepts, ← Set.not_disjoint_iff, disjoint_evalFrom_reverse_iff]
-
-中文:
-定理 mem_accepts_reverse
-  条件: {x : 列表 α}
-  结论: x in M.reverse.accepts ↔ x.reverse in M.accepts
-  证明: by
-  simp [mem_accepts, ← Set.not_disjoint_iff, disjoint_evalFrom_reverse_iff]
-
-Depends on / 依赖: Set.not_disjoint_iff, disjoint_evalFrom_reverse_iff, mem_accepts, not_disjoint_iff
+/-
+**NFA.mem_accepts_reverse** 是 Mathlib 中的一个定理，位于命名空间 `NFA`。
+形式化陈述：mem_accepts_reverse {x : List α} : x in M.reverse.accepts ↔ x.reverse in M
+.accepts
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NFA.reverse_accept`：∀ {α : Type u} {σ : Type v} (M : NFA α σ), M.reverse
+.accept = M.start
+· 使用定理 `NFA.reverse_start`：∀ {α : Type u} {σ : Type v} (M : NFA α σ), M.reverse.
+start = M.accept
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_accepts_reverse {x : List α} : x in M.reverse.accepts ↔ x.reverse in M.accepts := by
+theorem mem_accepts_reverse {x : List α} : x ∈ M.reverse.accepts ↔ x.reverse ∈ M.accepts := by
   simp [mem_accepts, ← Set.not_disjoint_iff, disjoint_evalFrom_reverse_iff]
 
 end NFA
 
 namespace Language
 
-/--
-theorem `IsRegular.reverse` / 定理 `IsRegular.reverse`
-
-English:
-theorem IsRegular.reverse
-  given: {L : Language α} (h : L.IsRegular)
-  statement: L.reverse.IsRegular
-  proof: have ⟨σ, _, M, hM⟩ := h
-  ⟨_, inferInstance, M.toNFA.reverse.toDFA, by ext; simp [hM]⟩
-
-中文:
-定理 是正则.reverse
-  条件: {L : Language α} (h : L.是正则)
-  结论: L.reverse.是正则
-  证明: have ⟨σ, _, M, hM⟩ := h
-  ⟨_, inferInstance, M.toNFA.reverse.toDFA, by ext; simp [hM]⟩
+/-
+**Language.IsRegular.reverse** 是 Mathlib 中的一个定理，位于命名空间 `Language.IsRegular`。
+形式化陈述：∀ {α : Type u} {L : Language α}, L.IsRegular → L.reverse.IsRegular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NFA.toDFA_correct`：toDFA_correct : M.toDFA.accepts = M.accepts
+· 使用定理 `DFA.toNFA_correct`：toNFA_correct (M : DFA α σ) : M.toNFA.accepts = M.acc
+epts
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem IsRegular.reverse {L : Language α} (h : L.IsRegular) : L.reverse.IsRegular :=
   have ⟨σ, _, M, hM⟩ := h
   ⟨_, inferInstance, M.toNFA.reverse.toDFA, by ext; simp [hM]⟩
-
-/--
-theorem `IsRegular.of_reverse` / 定理 `IsRegular.of_reverse`
-
-English:
-theorem IsRegular.of_reverse
-  given: {L : Language α} (h : L.reverse.IsRegular)
-  statement: L.IsRegular
-  proof: L.reverse_reverse ▸ h.reverse
-
-中文:
-定理 是正则.of_reverse
-  条件: {L : Language α} (h : L.reverse.是正则)
-  结论: L.是正则
-  证明: L.reverse_reverse ▸ h.reverse
+/-
+**Language.IsRegular.of_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Language.IsRegular`。
+形式化陈述：∀ {α : Type u} {L : Language α}, L.reverse.IsRegular → L.IsRegular
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.IsRegular.reverse`：∀ {α : Type u} {L : Language α}, L.IsRegular
+ → L.reverse.IsRegular
+· 使用引理 `Language.reverse_reverse`：reverse_reverse (l : Language α) : l.reverse.r
+everse = l
 -/
 protected theorem IsRegular.of_reverse {L : Language α} (h : L.reverse.IsRegular) : L.IsRegular :=
   L.reverse_reverse ▸ h.reverse
 
 /-- Regular languages are closed under reversal. -/
 @[simp]
-/--
-theorem `isRegular_reverse_iff` / 定理 `isRegular_reverse_iff`
+/-
+**Language.isRegular_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：isRegular_reverse_iff {L : Language α} : L.reverse.IsRegular ↔ L.IsRegular
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.IsRegular.of_reverse`：∀ {α : Type u} {L : Language α}, L.revers
+e.IsRegular → L.IsRegular
+· 使用定理 `Language.IsRegular.reverse`：∀ {α : Type u} {L : Language α}, L.IsRegular
+ → L.reverse.IsRegular
 
-English:
-theorem isRegular_reverse_iff
-  given: {L : Language α}
-  statement: L.reverse.IsRegular ↔ L.IsRegular
-  proof: ⟨.of_reverse, .reverse⟩
-
-中文:
-定理 isRegular_reverse_iff
-  条件: {L : Language α}
-  结论: L.reverse.是正则 ↔ L.是正则
-  证明: ⟨.of_reverse, .reverse⟩
-
-Depends on / 依赖: of_reverse, reverse
+--- 原说明 ---
+Regular languages are closed under reversal.
 -/
 theorem isRegular_reverse_iff {L : Language α} : L.reverse.IsRegular ↔ L.IsRegular :=
   ⟨.of_reverse, .reverse⟩
 
 end Language
+

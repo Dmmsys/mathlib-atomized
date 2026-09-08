@@ -20,67 +20,77 @@ public section
 
 namespace EuclideanGeometry
 
-variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace Real V] [MetricSpace P]
+variable {V P : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MetricSpace P]
 variable [NormedAddTorsor V P]
 
 open scoped Real
 
-/--
-lemma `angle_self_orthogonalProjection` / 引理 `angle_self_orthogonalProjection`
-
-English:
-lemma angle_self_orthogonalProjection
-  statement: (p : P) {p' : P} {s : AffineSubspace Real P}
-  proof: ⟨p', h⟩
-    ∠ p (orthogonalProjection s p) p' = π / 2 := by
-  have : Nonempty s := ⟨p', h⟩
-  rw [angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
-  exact Submodule.inner_left_of_mem_orthogonal (K := s.direction)
-    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_mem _))
-    (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
-
-中文:
-引理 angle_self_orthogonalProjection
-  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
-  证明: ⟨p', h⟩
-    ∠ p (orthogonalProjection s p) p' = π / 2 := by
-  have : Nonempty s := ⟨p', h⟩
-  rw [angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
-  exact Submodule.inner_left_of_mem_orthogonal (K := s.direction)
-    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_mem _))
-    (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
+/-
+**EuclideanGeometry.angle_self_orthogonalProjection** 是 Mathlib 中的一个定理，位于命名空间 `E
+uclideanGeometry`。
+形式化陈述：∀ {V : Type u_1} {P : Type u_2} [inst : NormedAddCommGroup V] [inst_1 : In
+nerProductSpace ℝ V] [inst_2 : MetricSpace P]   [inst_3 : NormedAddTorsor V P] (
+p : P) {p' : P} {s : AffineSubspace ℝ P}   [inst_4 : s.direction.HasOrthogonalPr
+ojection] (h : p' ∈ s),   EuclideanGeometry.angle p (↑((EuclideanGeometry.orthog
+onalProjection s) p)) p' = Real.pi / 2
+参数：p : P；h : p' ∈ s；↑((EuclideanGeometry.orthogonalProjection s) p)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanGeometry.angle.eq_1`：∀ {V : Type u_1} {P : Type u_2} [inst : No
+rmedAddCommGroup V] [inst_1 : InnerProductSpace ℝ V] [inst_2 : MetricSpace P]   
+[inst_3 : NormedAd…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two`：inner_eq_zer
+o_iff_angle_eq_pi_div_two (x y : V) : ⟪x, y⟫ = 0 ↔ angle x y = π / 2
+· 使用定理 `Submodule.inner_left_of_mem_orthogonal`：inner_left_of_mem_orthogonal {u 
+v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, u⟫ = 0
+· 使用定理 `AffineSubspace.vsub_mem_direction`：vsub_mem_direction {s : AffineSubspac
+e k P} {p₁ p₂ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s) : p₁ -ᵥ p₂ in s.direction
+· 使用定理 `EuclideanGeometry.orthogonalProjection_mem`：orthogonalProjection_mem {s 
+: AffineSubspace 𝕜 P} [Nonempty s] [s.direction.HasOrthogonalProjection] (p : P)
+ : ↑(orthogonalProjection s p) i…
+· 使用定理 `EuclideanGeometry.vsub_orthogonalProjection_mem_direction_orthogonal`：vs
+ub_orthogonalProjection_mem_direction_orthogonal (s : AffineSubspace 𝕜 P) [Nonem
+pty s] [s.direction.HasOrthogonalProjection] (p : P) : p -…
 -/
-@[simp] lemma angle_self_orthogonalProjection (p : P) {p' : P} {s : AffineSubspace Real P}
-    [s.direction.HasOrthogonalProjection] (h : p' in s) :
+@[simp] lemma angle_self_orthogonalProjection (p : P) {p' : P} {s : AffineSubspace ℝ P}
+    [s.direction.HasOrthogonalProjection] (h : p' ∈ s) :
     haveI : Nonempty s := ⟨p', h⟩
     ∠ p (orthogonalProjection s p) p' = π / 2 := by
   have : Nonempty s := ⟨p', h⟩
-  rw [angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
+  rw [angle, ← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   exact Submodule.inner_left_of_mem_orthogonal (K := s.direction)
     (AffineSubspace.vsub_mem_direction h (orthogonalProjection_mem _))
     (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
-
-/--
-lemma `angle_orthogonalProjection_self` / 引理 `angle_orthogonalProjection_self`
-
-English:
-lemma angle_orthogonalProjection_self
-  statement: (p : P) {p' : P} {s : AffineSubspace Real P}
-  proof: ⟨p', h⟩
-    ∠ p' (orthogonalProjection s p) p = π / 2 := by
-  rw [angle_comm]; rw [angle_self_orthogonalProjection p h]
-
-中文:
-引理 angle_orthogonalProjection_self
-  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
-  证明: ⟨p', h⟩
-    ∠ p' (orthogonalProjection s p) p = π / 2 := by
-  rw [angle_comm]; rw [angle_self_orthogonalProjection p h]
+/-
+**EuclideanGeometry.angle_orthogonalProjection_self** 是 Mathlib 中的一个定理，位于命名空间 `E
+uclideanGeometry`。
+形式化陈述：∀ {V : Type u_1} {P : Type u_2} [inst : NormedAddCommGroup V] [inst_1 : In
+nerProductSpace ℝ V] [inst_2 : MetricSpace P]   [inst_3 : NormedAddTorsor V P] (
+p : P) {p' : P} {s : AffineSubspace ℝ P}   [inst_4 : s.direction.HasOrthogonalPr
+ojection] (h : p' ∈ s),   EuclideanGeometry.angle p' (↑((EuclideanGeometry.ortho
+gonalProjection s) p)) p = Real.pi / 2
+参数：p : P；h : p' ∈ s；↑((EuclideanGeometry.orthogonalProjection s) p)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanGeometry.angle_comm`：∀ {V : Type u_1} {P : Type u_2} [inst : No
+rmedAddCommGroup V] [inst_1 : InnerProductSpace ℝ V] [inst_2 : MetricSpace P]   
+[inst_3 : NormedAd…
+· 使用定理 `EuclideanGeometry.angle_self_orthogonalProjection`：∀ {V : Type u_1} {P :
+ Type u_2} [inst : NormedAddCommGroup V] [inst_1 : InnerProductSpace ℝ V] [inst_
+2 : MetricSpace P]   [inst_3 : NormedAd…
 -/
-@[simp] lemma angle_orthogonalProjection_self (p : P) {p' : P} {s : AffineSubspace Real P}
-    [s.direction.HasOrthogonalProjection] (h : p' in s) :
+@[simp] lemma angle_orthogonalProjection_self (p : P) {p' : P} {s : AffineSubspace ℝ P}
+    [s.direction.HasOrthogonalProjection] (h : p' ∈ s) :
     haveI : Nonempty s := ⟨p', h⟩
     ∠ p' (orthogonalProjection s p) p = π / 2 := by
-  rw [angle_comm]; rw [angle_self_orthogonalProjection p h]
+  rw [angle_comm, angle_self_orthogonalProjection p h]
 
 end EuclideanGeometry
+

@@ -46,310 +46,335 @@ ample set
 
 open Set
 
-variable {F : Type*} [AddCommGroup F] [Module Real F] [TopologicalSpace F]
+variable {F : Type*} [AddCommGroup F] [Module ℝ F] [TopologicalSpace F]
 
-/--
-Definition of `AmpleSet` / `AmpleSet` 的定义
+/-- A subset of a topological real vector space is ample
+if the convex hull of each of its connected components is the full space. -/
+/-
+**AmpleSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AmpleSet (s : Set F) : Prop
+参数：s : Set F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AmpleSet
-  signature: (s : Set F)
-  body: forall x in s, convexHull Real (connectedComponentIn s x) = univ
-
-中文:
-定义 AmpleSet
-  签名: (s : 集合 F)
-  定义体: forall x in s, convexHull Real (connectedComponentIn s x) = univ
-
-Depends on / 依赖: connectedComponentIn, convexHull
+--- 原说明 ---
+A subset of a topological real vector space is ample
+if the convex hull of each of its connected components is the full space.
 -/
 def AmpleSet (s : Set F) : Prop :=
-  forall x in s, convexHull Real (connectedComponentIn s x) = univ
+  ∀ x ∈ s, convexHull ℝ (connectedComponentIn s x) = univ
 
 /-- A whole vector space is ample. -/
 @[simp]
-/--
-theorem `ampleSet_univ` / 定理 `ampleSet_univ`
+/-
+**ampleSet_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ampleSet_univ {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F] : Am
+pleSet (univ : Set F)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `connectedComponentIn_univ`：connectedComponentIn_univ (x : α) : connected
+ComponentIn univ x = connectedComponent x
+· 使用定理 `PreconnectedSpace.connectedComponent_eq_univ`：PreconnectedSpace.connecte
+dComponent_eq_univ {X : Type*} [TopologicalSpace X] [h : PreconnectedSpace X] (x
+ : X) : connectedComponent x = uni…
+· 使用定理 `ConnectedSpace.toPreconnectedSpace`：∀ {α : Type u} {inst : TopologicalSp
+ace α} [self : ConnectedSpace α], PreconnectedSpace α
+· 使用定理 `PathConnectedSpace.connectedSpace`：∀ {X : Type u_1} [inst : TopologicalS
+pace X] [PathConnectedSpace X], ConnectedSpace X
+· 使用定理 `ContractibleSpace.instPathConnectedSpace`：∀ {X : Type u_1} [inst : Topol
+ogicalSpace X] [ContractibleSpace X], PathConnectedSpace X
+· 使用定理 `RealTopologicalVectorSpace.contractibleSpace`：∀ {E : Type u_1} [inst : A
+ddCommGroup E] [inst_1 : _root_.Module ℝ E] [inst_2 : TopologicalSpace E] [Conti
+nuousAdd E]   [ContinuousSMul ℝ E]…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `convexHull_univ`：convexHull_univ : convexHull 𝕜 (univ : Set E) = univ
 
-English:
-theorem ampleSet_univ
-  given: {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F]
-  proof: by
-  intro x _
-  rw [connectedComponentIn_univ]; rw [PreconnectedSpace.connectedComponent_eq_univ]; rw [convexHull_univ]
-
-中文:
-定理 ampleSet_univ
-  条件: {F : 类型} [赋范交换加群 F] [赋范空间 实数 F]
-  证明: by
-  intro x _
-  rw [connectedComponentIn_univ]; rw [PreconnectedSpace.connectedComponent_eq_univ]; rw [convexHull_univ]
-
-Depends on / 依赖: PreconnectedSpace, PreconnectedSpace.connectedComponent_eq_univ, connectedComponentIn_univ, connectedComponent_eq_univ, convexHull_univ
+--- 原说明 ---
+A whole vector space is ample.
 -/
-theorem ampleSet_univ {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F] :
+theorem ampleSet_univ {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] :
     AmpleSet (univ : Set F) := by
   intro x _
-  rw [connectedComponentIn_univ]; rw [PreconnectedSpace.connectedComponent_eq_univ]; rw [convexHull_univ]
+  rw [connectedComponentIn_univ, PreconnectedSpace.connectedComponent_eq_univ, convexHull_univ]
 
 /-- The empty set in a vector space is ample. -/
 @[simp]
-/--
-theorem `ampleSet_empty` / 定理 `ampleSet_empty`
+/-
+**ampleSet_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ampleSet_empty : AmpleSet (∅ : Set F)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ampleSet_empty
-  statement: AmpleSet (∅ : Set F)
-  proof: fun _ => False.elim
-
-中文:
-定理 ampleSet_empty
-  结论: AmpleSet (∅ : 集合 F)
-  证明: fun _ => False.elim
-
-Depends on / 依赖: False.elim
+--- 原说明 ---
+The empty set in a vector space is ample.
 -/
-theorem ampleSet_empty : AmpleSet (∅ : Set F) := fun _ => False.elim
+theorem ampleSet_empty : AmpleSet (∅ : Set F) := fun _ ↦ False.elim
 
 namespace AmpleSet
 
-/--
-theorem `union` / 定理 `union`
+/-- The union of two ample sets is ample. -/
+/-
+**AmpleSet.union** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：union {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t) : AmpleSet (s unio
+n t)
+参数：hs : AmpleSet s；ht : AmpleSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `convexHull_mono`：convexHull_mono (hst : s subseteq t) : convexHull 𝕜 s s
+ubseteq convexHull 𝕜 t
+· 使用定理 `connectedComponentIn_mono`：connectedComponentIn_mono (x : α) {F G : Set 
+α} (h : F subseteq G) : connectedComponentIn F x subseteq connectedComponentIn G
+ x
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 
-English:
-theorem union
-  given: {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t)
-  statement: AmpleSet (s union t)
-  proof: by
+--- 原说明 ---
+The union of two ample sets is ample.
+-/
+theorem union {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t) : AmpleSet (s ∪ t) := by
   intro x hx
   rcases hx with (h | h) <;>
   -- The connected component of `x ∈ s` in `s ∪ t` contains the connected component of `x` in `s`,
   -- hence is also full; similarly for `t`.
   [have hx := hs x h; have hx := ht x h] <;>
-  rw [← Set.univ_subset_iff]; rw [← hx] <;>
+  rw [← Set.univ_subset_iff, ← hx] <;>
   apply convexHull_mono <;>
   apply connectedComponentIn_mono <;>
   [apply subset_union_left; apply subset_union_right]
 
-中文:
-定理 union
-  条件: {s t : 集合 F} (hs : AmpleSet s) (ht : AmpleSet t)
-  结论: AmpleSet (s union t)
-  证明: by
-  intro x hx
-  rcases hx with (h | h) <;>
-  -- The connected component of `x ∈ s` in `s ∪ t` contains the connected component of `x` in `s`,
-  -- hence is also full; similarly for `t`.
-  [have hx := hs x h; have hx := ht x h] <;>
-  rw [← Set.univ_subset_iff]; rw [← hx] <;>
-  apply convexHull_mono <;>
-  apply connectedComponentIn_mono <;>
-  [apply subset_union_left; apply subset_union_right]
+variable {E : Type*} [AddCommGroup E] [Module ℝ E] [TopologicalSpace E]
+
+/-- Images of ample sets under continuous affine equivalences are ample. -/
+/-
+**AmpleSet.image** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : AmpleSet (L '' s)
+参数：h : AmpleSet s；L : E ≃ᴬ[Real] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.image_connectedComponentIn`：image_connectedComponentIn {s : S
+et X} (h : X ≃ₜ Y) {x : X} (hx : x in s) : h '' connectedComponentIn s x = conne
+ctedComponentIn (h '' s) (h…
+· 使用定理 `AffineMap.image_convexHull`：AffineMap.image_convexHull (f : E ->ᵃ[𝕜] F) 
+(s : Set E) : f '' convexHull 𝕜 s = convexHull 𝕜 (f '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `ContinuousAffineEquiv.surjective`：∀ {k : Type u_1} {P₁ : Type u_2} {P₂ :
+ Type u_3} {V₁ : Type u_6} {V₂ : Type u_7} [inst : Ring k]   [inst_1 : AddCommGr
+oup V₁] [inst_2 : _roo…
+
+--- 原说明 ---
+Images of ample sets under continuous affine equivalences are ample.
 -/
-theorem union {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t) : AmpleSet (s union t) := by
-  intro x hx
-  rcases hx with (h | h) <;>
-  -- The connected component of `x ∈ s` in `s ∪ t` contains the connected component of `x` in `s`,
-  -- hence is also full; similarly for `t`.
-  [have hx := hs x h; have hx := ht x h] <;>
-  rw [← Set.univ_subset_iff]; rw [← hx] <;>
-  apply convexHull_mono <;>
-  apply connectedComponentIn_mono <;>
-  [apply subset_union_left; apply subset_union_right]
-
-variable {E : Type*} [AddCommGroup E] [Module Real E] [TopologicalSpace E]
-
-/--
-theorem `image` / 定理 `image`
-
-English:
-theorem image
-  given: {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F)
-  proof: forall_mem_image.mpr fun x hx =>
-  calc (convexHull Real) (connectedComponentIn (L '' s) (L x))
-    _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
-.symm congrArg _ L.toHomeomorph.image_connectedComponentIn hx
-    _ = L '' (convexHull Real (connectedComponentIn s x)) :=
-.symm L.toAffineMap.image_convexHull _
+theorem image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[ℝ] F) :
+    AmpleSet (L '' s) := forall_mem_image.mpr fun x hx ↦
+  calc (convexHull ℝ) (connectedComponentIn (L '' s) (L x))
+    _ = (convexHull ℝ) (L '' (connectedComponentIn s x)) :=
+          .symm <| congrArg _ <| L.toHomeomorph.image_connectedComponentIn hx
+    _ = L '' (convexHull ℝ (connectedComponentIn s x)) :=
+          .symm <| L.toAffineMap.image_convexHull _
     _ = univ := by rw [h x hx, image_univ, L.surjective.range_eq]
 
-中文:
-定理 像
-  条件: {s : 集合 E} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
-  证明: forall_mem_image.mpr fun x hx =>
-  calc (convexHull Real) (connectedComponentIn (L '' s) (L x))
-    _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
-.symm congrArg _ L.toHomeomorph.image_connectedComponentIn hx
-    _ = L '' (convexHull Real (connectedComponentIn s x)) :=
-.symm L.toAffineMap.image_convexHull _
-    _ = univ := by rw [h x hx, image_univ, L.surjective.range_eq]
+/-- A set is ample iff its image under a continuous affine equivalence is. -/
+/-
+**AmpleSet.image_iff** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：image_iff {s : Set E} (L : E ≃ᴬ[Real] F) : AmpleSet (L '' s) ↔ AmpleSet s
+参数：L : E ≃ᴬ[Real] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AmpleSet.image`：image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : 
+AmpleSet (L '' s)
+· 使用定理 `ContinuousAffineEquiv.symm_image_image`：symm_image_image (e : P₁ ≃ᴬ[k] P
+₂) (s : Set P₁) : e.symm '' e '' s = s
 
-Depends on / 依赖: forall_mem_image, forall_mem_image.mpr
+--- 原说明 ---
+A set is ample iff its image under a continuous affine equivalence is.
 -/
-theorem image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) :
-    AmpleSet (L '' s) := forall_mem_image.mpr fun x hx =>
-  calc (convexHull Real) (connectedComponentIn (L '' s) (L x))
-    _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
-.symm congrArg _ L.toHomeomorph.image_connectedComponentIn hx
-    _ = L '' (convexHull Real (connectedComponentIn s x)) :=
-.symm L.toAffineMap.image_convexHull _
-    _ = univ := by rw [h x hx, image_univ, L.surjective.range_eq]
-
-/--
-theorem `image_iff` / 定理 `image_iff`
-
-English:
-theorem image_iff
-  given: {s : Set E} (L : E ≃ᴬ[Real] F)
-  proof: ⟨fun h => (L.symm_image_image s) ▸ h.image L.symm, fun h => h.image L⟩
-
-中文:
-定理 image_iff
-  条件: {s : 集合 E} (L : E ≃ᴬ[实数] F)
-  证明: ⟨fun h => (L.symm_image_image s) ▸ h.image L.symm, fun h => h.image L⟩
-
-Depends on / 依赖: L.symm, L.symm_image_image, h.image, symm_image_image
--/
-theorem image_iff {s : Set E} (L : E ≃ᴬ[Real] F) :
+theorem image_iff {s : Set E} (L : E ≃ᴬ[ℝ] F) :
     AmpleSet (L '' s) ↔ AmpleSet s :=
-  ⟨fun h => (L.symm_image_image s) ▸ h.image L.symm, fun h => h.image L⟩
+  ⟨fun h ↦ (L.symm_image_image s) ▸ h.image L.symm, fun h ↦ h.image L⟩
 
-/--
-theorem `preimage` / 定理 `preimage`
+/-- Pre-images of ample sets under continuous affine equivalences are ample. -/
+/-
+**AmpleSet.preimage** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：preimage {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : AmpleSet (L ⁻¹'
+ s)
+参数：h : AmpleSet s；L : E ≃ᴬ[Real] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousAffineEquiv.image_symm_eq_preimage`：∀ {k : Type u_1} {P₁ : Typ
+e u_2} {P₂ : Type u_3} {V₁ : Type u_6} {V₂ : Type u_7} [inst : Ring k]   [inst_1
+ : AddCommGroup V₁] [inst_2 : _roo…
+· 使用定理 `AmpleSet.image`：image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : 
+AmpleSet (L '' s)
 
-English:
-theorem preimage
-  given: {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[Real] F)
-  statement: AmpleSet (L ⁻¹' s)
-  proof: by
-  rw [← L.image_symm_eq_preimage]
-  exact h.image L.symm
-
-中文:
-定理 原像
-  条件: {s : 集合 F} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
-  结论: AmpleSet (L ⁻¹' s)
-  证明: by
-  rw [← L.image_symm_eq_preimage]
-  exact h.image L.symm
-
-Depends on / 依赖: L.image_symm_eq_preimage, L.symm, h.image, image_symm_eq_preimage
+--- 原说明 ---
+Pre-images of ample sets under continuous affine equivalences are ample.
 -/
-theorem preimage {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : AmpleSet (L ⁻¹' s) := by
+theorem preimage {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[ℝ] F) : AmpleSet (L ⁻¹' s) := by
   rw [← L.image_symm_eq_preimage]
   exact h.image L.symm
 
-/--
-theorem `preimage_iff` / 定理 `preimage_iff`
+/-- A set is ample iff its pre-image under a continuous affine equivalence is. -/
+/-
+**AmpleSet.preimage_iff** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：preimage_iff {s : Set F} (L : E ≃ᴬ[Real] F) : AmpleSet (L ⁻¹' s) ↔ AmpleSe
+t s
+参数：L : E ≃ᴬ[Real] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AmpleSet.image`：image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : 
+AmpleSet (L '' s)
+· 使用定理 `ContinuousAffineEquiv.image_preimage`：image_preimage (e : P₁ ≃ᴬ[k] P₂) (
+s : Set P₂) : e '' e ⁻¹' s = s
+· 使用定理 `AmpleSet.preimage`：preimage {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[Real]
+ F) : AmpleSet (L ⁻¹' s)
 
-English:
-theorem preimage_iff
-  given: {s : Set F} (L : E ≃ᴬ[Real] F)
-  proof: ⟨fun h => L.image_preimage s ▸ h.image L, fun h => h.preimage L⟩
-
-中文:
-定理 preimage_iff
-  条件: {s : 集合 F} (L : E ≃ᴬ[实数] F)
-  证明: ⟨fun h => L.image_preimage s ▸ h.image L, fun h => h.preimage L⟩
-
-Depends on / 依赖: L.image_preimage, h.image, h.preimage, image_preimage, preimage
+--- 原说明 ---
+A set is ample iff its pre-image under a continuous affine equivalence is.
 -/
-theorem preimage_iff {s : Set F} (L : E ≃ᴬ[Real] F) :
+theorem preimage_iff {s : Set F} (L : E ≃ᴬ[ℝ] F) :
     AmpleSet (L ⁻¹' s) ↔ AmpleSet s :=
-  ⟨fun h => L.image_preimage s ▸ h.image L, fun h => h.preimage L⟩
+  ⟨fun h ↦ L.image_preimage s ▸ h.image L, fun h ↦ h.preimage L⟩
 
 open scoped Pointwise
 
-/--
-theorem `vadd` / 定理 `vadd`
+/-- Affine translations of ample sets are ample. -/
+/-
+**AmpleSet.vadd** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：vadd [ContinuousAdd E] {s : Set E} (h : AmpleSet s) {y : E} : AmpleSet (y 
++ᵥ s)
+参数：h : AmpleSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AmpleSet.image`：image {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[Real] F) : 
+AmpleSet (L '' s)
+· 使用定理 `SeparatelyContinuousAdd.to_continuousVAdd`：∀ {M : Type u_3} [inst : Topo
+logicalSpace M] [inst_1 : Add M] [SeparatelyContinuousAdd M], ContinuousConstVAd
+d M M
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
 
-English:
-theorem vadd
-  given: [ContinuousAdd E] {s : Set E} (h : AmpleSet s) {y : E}
-  proof: h.image (ContinuousAffineEquiv.constVAdd Real E y)
-
-中文:
-定理 vadd
-  条件: [连续加法 E] {s : 集合 E} (h : AmpleSet s) {y : E}
-  证明: h.image (ContinuousAffineEquiv.constVAdd Real E y)
-
-Depends on / 依赖: ContinuousAffineEquiv, ContinuousAffineEquiv.constVAdd, constVAdd, h.image
+--- 原说明 ---
+Affine translations of ample sets are ample.
 -/
 theorem vadd [ContinuousAdd E] {s : Set E} (h : AmpleSet s) {y : E} :
     AmpleSet (y +ᵥ s) :=
-  h.image (ContinuousAffineEquiv.constVAdd Real E y)
+  h.image (ContinuousAffineEquiv.constVAdd ℝ E y)
 
-/--
-theorem `vadd_iff` / 定理 `vadd_iff`
+/-- A set is ample iff its affine translation is. -/
+/-
+**AmpleSet.vadd_iff** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：vadd_iff [ContinuousAdd E] {s : Set E} {y : E} : AmpleSet (y +ᵥ s) ↔ Ample
+Set s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AmpleSet.image_iff`：image_iff {s : Set E} (L : E ≃ᴬ[Real] F) : AmpleSet 
+(L '' s) ↔ AmpleSet s
+· 使用定理 `SeparatelyContinuousAdd.to_continuousVAdd`：∀ {M : Type u_3} [inst : Topo
+logicalSpace M] [inst_1 : Add M] [SeparatelyContinuousAdd M], ContinuousConstVAd
+d M M
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
 
-English:
-theorem vadd_iff
-  given: [ContinuousAdd E] {s : Set E} {y : E}
-  proof: AmpleSet.image_iff (ContinuousAffineEquiv.constVAdd Real E y)
-
-中文:
-定理 vadd_iff
-  条件: [连续加法 E] {s : 集合 E} {y : E}
-  证明: AmpleSet.image_iff (ContinuousAffineEquiv.constVAdd Real E y)
-
-Depends on / 依赖: AmpleSet, AmpleSet.image_iff, ContinuousAffineEquiv, ContinuousAffineEquiv.constVAdd, constVAdd, image_iff
+--- 原说明 ---
+A set is ample iff its affine translation is.
 -/
 theorem vadd_iff [ContinuousAdd E] {s : Set E} {y : E} :
     AmpleSet (y +ᵥ s) ↔ AmpleSet s :=
-  AmpleSet.image_iff (ContinuousAffineEquiv.constVAdd Real E y)
+  AmpleSet.image_iff (ContinuousAffineEquiv.constVAdd ℝ E y)
 
 /-! ## Subspaces of codimension at least two have ample complement -/
 section Codimension
 
-/--
-theorem `of_one_lt_codim` / 定理 `of_one_lt_codim`
+/-- Let `E` be a linear subspace in a real vector space.
+If `E` has codimension at least two, its complement is ample. -/
+/-
+**AmpleSet.of_one_lt_codim** 是 Mathlib 中的一个定理，位于命名空间 `AmpleSet`。
+形式化陈述：of_one_lt_codim [IsTopologicalAddGroup F] [ContinuousSMul Real F] {E : Sub
+module Real F} (hcodim : 1 < Module.rank Real (F ⧸ E)) : AmpleSet (Eᶜ : Set F)
+参数：hcodim : 1 < Module.rank Real (F ⧸ E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.connectedComponentIn_eq_self_of_one_lt_codim`：Submodule.connec
+tedComponentIn_eq_self_of_one_lt_codim (E : Submodule Real F) (hcodim : 1 < Modu
+le.rank Real (F ⧸ E)) {x : F} (hx : x ∉ E) :…
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `Submodule.eq_top_iff'`：eq_top_iff' {p : Submodule R M} : p = ⊤ ↔ forall 
+x, x in p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `rank_subsingleton'`：∀ (R : Type u_1) (M : Type u_2) [inst : Semiring R] 
+[inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Nontrivial R] [Subsin
+gleton M…
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `segment_subset_convexHull`：segment_subset_convexHull (hx : x in s) (hy :
+ y in s) : segment 𝕜 x y subseteq convexHull 𝕜 s
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Submodule.add_mem_iff_right`：∀ {R : Type u} {M : Type v} [inst : Ring R]
+ [inst_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   
+{x y : M}, x ∈ p …
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
+· 使用定理 `mem_segment_sub_add`：mem_segment_sub_add [Invertible (2 : 𝕜)] (x y : E) 
+: x in [x - y -[𝕜] x + y]
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `subset_convexHull`：subset_convexHull : s subseteq convexHull 𝕜 s
 
-English:
-theorem of_one_lt_codim
-  statement: [IsTopologicalAddGroup F] [ContinuousSMul Real F] {E : Submodule Real F}
-  proof: fun x hx => by
-  rw [E.connectedComponentIn_eq_self_of_one_lt_codim hcodim hx]; rw [eq_univ_iff_forall]
-  intro y
-  by_cases h : y in E
-  · obtain ⟨z, hz⟩ : exists z, z ∉ E := by
-      rw [← not_forall]; rw [← Submodule.eq_top_iff']
-      rintro rfl
-      simp at hcodim
-    refine segment_subset_convexHull ?_ ?_ (mem_segment_sub_add y z) <;>
-      simpa [sub_eq_add_neg, Submodule.add_mem_iff_right _ h]
-  · exact subset_convexHull Real (Eᶜ : Set F) h
-
-中文:
-定理 of_one_lt_codim
-  结论: [是拓扑加群 F] [连续标量乘法 实数 F] {E : 子模 实数 F}
-  证明: fun x hx => by
-  rw [E.connectedComponentIn_eq_self_of_one_lt_codim hcodim hx]; rw [eq_univ_iff_forall]
-  intro y
-  by_cases h : y in E
-  · obtain ⟨z, hz⟩ : exists z, z ∉ E := by
-      rw [← not_forall]; rw [← Submodule.eq_top_iff']
-      rintro rfl
-      simp at hcodim
-    refine segment_subset_convexHull ?_ ?_ (mem_segment_sub_add y z) <;>
-      simpa [sub_eq_add_neg, Submodule.add_mem_iff_right _ h]
-  · exact subset_convexHull Real (Eᶜ : Set F) h
-
-Depends on / 依赖: E.connectedComponentIn_eq_self_of_one_lt_codim, Submodule, Submodule.add_mem_iff_right, Submodule.eq_top_iff, add_mem_iff_right, connectedComponentIn_eq_self_of_one_lt_codim, eq_top_iff, eq_univ_iff_forall, hcodim, mem_segment_sub_add, not_forall, segment_subset_convexHull, sub_eq_add_neg, subset_convexHull
+--- 原说明 ---
+Let `E` be a linear subspace in a real vector space.
+If `E` has codimension at least two, its complement is ample.
 -/
-theorem of_one_lt_codim [IsTopologicalAddGroup F] [ContinuousSMul Real F] {E : Submodule Real F}
-    (hcodim : 1 < Module.rank Real (F ⧸ E)) :
-    AmpleSet (Eᶜ : Set F) := fun x hx => by
-  rw [E.connectedComponentIn_eq_self_of_one_lt_codim hcodim hx]; rw [eq_univ_iff_forall]
+theorem of_one_lt_codim [IsTopologicalAddGroup F] [ContinuousSMul ℝ F] {E : Submodule ℝ F}
+    (hcodim : 1 < Module.rank ℝ (F ⧸ E)) :
+    AmpleSet (Eᶜ : Set F) := fun x hx ↦ by
+  rw [E.connectedComponentIn_eq_self_of_one_lt_codim hcodim hx, eq_univ_iff_forall]
   intro y
-  by_cases h : y in E
-  · obtain ⟨z, hz⟩ : exists z, z ∉ E := by
-      rw [← not_forall]; rw [← Submodule.eq_top_iff']
+  by_cases h : y ∈ E
+  · obtain ⟨z, hz⟩ : ∃ z, z ∉ E := by
+      rw [← not_forall, ← Submodule.eq_top_iff']
       rintro rfl
       simp at hcodim
     refine segment_subset_convexHull ?_ ?_ (mem_segment_sub_add y z) <;>
       simpa [sub_eq_add_neg, Submodule.add_mem_iff_right _ h]
-  · exact subset_convexHull Real (Eᶜ : Set F) h
+  · exact subset_convexHull ℝ (Eᶜ : Set F) h
 
 end Codimension
 
 end AmpleSet
+

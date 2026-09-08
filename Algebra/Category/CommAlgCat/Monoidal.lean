@@ -29,155 +29,83 @@ variable {R : Type u} [CommRing R] {A B C D : CommAlgCat.{u} R}
 
 variable (A B)
 
-/--
-Definition of `binaryCofan` / `binaryCofan` 的定义
+/-- The explicit cocone with tensor products as the fibered coproduct in `CommAlgCat`. -/
+/-
+**CommAlgCat.binaryCofan** 是 Mathlib 中的一个定义，位于命名空间 `CommAlgCat`。
+形式化陈述：binaryCofan : BinaryCofan A B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCofan
-  signature: : BinaryCofan A B
-  body: .mk (ofHom includeLeft) (ofHom <| includeRight (A := A))
-
-中文:
-定义 binaryCofan
-  签名: : BinaryCofan A B
-  定义体: .mk (ofHom includeLeft) (ofHom <| includeRight (A := A))
-
-Depends on / 依赖: includeLeft, includeRight
+--- 原说明 ---
+The explicit cocone with tensor products as the fibered coproduct in `CommAlgCat
+`.
 -/
 def binaryCofan : BinaryCofan A B := .mk (ofHom includeLeft) (ofHom <| includeRight (A := A))
-
-/--
-lemma `binaryCofan_inl` / 引理 `binaryCofan_inl`
-
-English:
-lemma binaryCofan_inl
-  statement: (binaryCofan A B).inl = ofHom includeLeft
-  proof: rfl
-
-中文:
-引理 binaryCofan_inl
-  结论: (binaryCofan A B).inl = ofHom includeLeft
-  证明: rfl
+/-
+**CommAlgCat.binaryCofan_inl** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R),   (A.binaryCofan 
+B).inl = CommAlgCat.ofHom Algebra.TensorProduct.includeLeft
+参数：A B : CommAlgCat R；A.binaryCofan B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma binaryCofan_inl : (binaryCofan A B).inl = ofHom includeLeft := rfl
-/--
-lemma `binaryCofan_inr` / 引理 `binaryCofan_inr`
-
-English:
-lemma binaryCofan_inr
-  statement: (binaryCofan A B).inr = ofHom includeRight
-  proof: rfl
-
-中文:
-引理 binaryCofan_inr
-  结论: (binaryCofan A B).inr = ofHom includeRight
-  证明: rfl
+/-
+**CommAlgCat.binaryCofan_inr** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R),   (A.binaryCofan 
+B).inr = CommAlgCat.ofHom Algebra.TensorProduct.includeRight
+参数：A B : CommAlgCat R；A.binaryCofan B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma binaryCofan_inr : (binaryCofan A B).inr = ofHom includeRight := rfl
-/--
-lemma `binaryCofan_pt` / 引理 `binaryCofan_pt`
-
-English:
-lemma binaryCofan_pt
-  statement: (binaryCofan A B).pt = .of R (A otimes[R] B)
-  proof: rfl
-
-中文:
-引理 binaryCofan_pt
-  结论: (binaryCofan A B).pt = .of R (A otimes[R] B)
-  证明: rfl
+/-
+**CommAlgCat.binaryCofan_pt** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R), (A.binaryCofan B)
+.pt = CommAlgCat.of R (TensorProduct R ↑A ↑B)
+参数：A B : CommAlgCat R；A.binaryCofan B；TensorProduct R ↑A ↑B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma binaryCofan_pt : (binaryCofan A B).pt = .of R (A otimes[R] B) := rfl
+@[simp] lemma binaryCofan_pt : (binaryCofan A B).pt = .of R (A ⊗[R] B) := rfl
 
-/--
-Definition of `binaryCofanIsColimit` / `binaryCofanIsColimit` 的定义
+/-- Verify that the pushout cocone is indeed the colimit. -/
+/-
+**CommAlgCat.binaryCofanIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `CommAlgCat`。
+形式化陈述：binaryCofanIsColimit : IsColimit (binaryCofan A B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCofanIsColimit
-  signature: : IsColimit (binaryCofan A B)
-  body: BinaryCofan.IsColimit.mk _
-    (fun f g => ofHom (lift f.hom g.hom fun _ _ => .all _ _))
-    (fun f g => by ext1; exact lift_comp_includeLeft _ _ fun _ _ => .all _ _)
-    (fun f g => by ext1; exact lift_comp_includeRight _ _ fun _ _ => .all _ _)
-    (fun f g m hm₁ hm₂ => by
-      ext1
-      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ => .all _ _⟩).mp ?_
-      exact Subtype.ext (Prod.ext congr(($hm₁).hom) congr(($hm₂).hom)))
-
-中文:
-定义 binaryCofanIsColimit
-  签名: : 是余极限 (binaryCofan A B)
-  定义体: BinaryCofan.IsColimit.mk _
-    (fun f g => ofHom (lift f.hom g.hom fun _ _ => .all _ _))
-    (fun f g => by ext1; exact lift_comp_includeLeft _ _ fun _ _ => .all _ _)
-    (fun f g => by ext1; exact lift_comp_includeRight _ _ fun _ _ => .all _ _)
-    (fun f g m hm₁ hm₂ => by
-      ext1
-      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ => .all _ _⟩).mp ?_
-      exact Subtype.ext (Prod.ext congr(($hm₁).hom) congr(($hm₂).hom)))
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, IsColimit, Prod.ext, Subtype, Subtype.ext, f.hom, g.hom, liftEquiv, liftEquiv.symm_apply_eq, lift_comp_includeLeft, lift_comp_includeRight, symm_apply_eq
+--- 原说明 ---
+Verify that the pushout cocone is indeed the colimit.
 -/
 def binaryCofanIsColimit : IsColimit (binaryCofan A B) :=
   BinaryCofan.IsColimit.mk _
-    (fun f g => ofHom (lift f.hom g.hom fun _ _ => .all _ _))
-    (fun f g => by ext1; exact lift_comp_includeLeft _ _ fun _ _ => .all _ _)
-    (fun f g => by ext1; exact lift_comp_includeRight _ _ fun _ _ => .all _ _)
-    (fun f g m hm₁ hm₂ => by
+    (fun f g ↦ ofHom (lift f.hom g.hom fun _ _ ↦ .all _ _))
+    (fun f g ↦ by ext1; exact lift_comp_includeLeft _ _ fun _ _ ↦ .all _ _)
+    (fun f g ↦ by ext1; exact lift_comp_includeRight _ _ fun _ _ ↦ .all _ _)
+    (fun f g m hm₁ hm₂ ↦ by
       ext1
-      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ => .all _ _⟩).mp ?_
+      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ ↦ .all _ _⟩).mp ?_
       exact Subtype.ext (Prod.ext congr(($hm₁).hom) congr(($hm₂).hom)))
 
-/--
-Definition of `isInitialSelf` / `isInitialSelf` 的定义
+/-- The initial object of `CommAlgCat R` is `R` as an algebra over itself. -/
+/-
+**CommAlgCat.isInitialSelf** 是 Mathlib 中的一个定义，位于命名空间 `CommAlgCat`。
+形式化陈述：isInitialSelf : IsInitial (of R R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialSelf
-  signature: : IsInitial (of R R)
-  body: .ofUniqueHom (fun A => ofHom (Algebra.ofId R A)) fun _ _ => hom_ext (Algebra.ext_id _ _ _)
-
-中文:
-定义 isInitialSelf
-  签名: : IsInitial (of R R)
-  定义体: .ofUniqueHom (fun A => ofHom (Algebra.ofId R A)) fun _ _ => hom_ext (Algebra.ext_id _ _ _)
-
-Depends on / 依赖: Algebra, Algebra.ext_id, Algebra.ofId, ext_id, hom_ext, ofUniqueHom
+--- 原说明 ---
+The initial object of `CommAlgCat R` is `R` as an algebra over itself.
 -/
 def isInitialSelf : IsInitial (of R R) :=
-  .ofUniqueHom (fun A => ofHom (Algebra.ofId R A)) fun _ _ => hom_ext (Algebra.ext_id _ _ _)
+  .ofUniqueHom (fun A ↦ ofHom (Algebra.ofId R A)) fun _ _ ↦ hom_ext (Algebra.ext_id _ _ _)
 
 attribute [local simp] one_def in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalCategory (CommAlgCat.{u} R)
-  body: of R (S otimes[R] T)
-  whiskerLeft _ {_ _} f := ofHom (map (.id _ _) f.hom)
-  whiskerRight f T := ofHom (map f.hom (.id _ _))
-  tensorHom f g := ofHom (map f.hom g.hom)
-  tensorUnit := .of R R
-  associator _ _ _ := isoMk (assoc R R R _ _ _)
-  leftUnitor _ := isoMk (lid R _)
-  rightUnitor _ := isoMk (rid R R _)
-
-中文:
-实例 :
-  签名: 幺半群范畴 (交换Alg范畴.{u} R)
-  定义体: of R (S otimes[R] T)
-  whiskerLeft _ {_ _} f := ofHom (map (.id _ _) f.hom)
-  whiskerRight f T := ofHom (map f.hom (.id _ _))
-  tensorHom f g := ofHom (map f.hom g.hom)
-  tensorUnit := .of R R
-  associator _ _ _ := isoMk (assoc R R R _ _ _)
-  leftUnitor _ := isoMk (lid R _)
-  rightUnitor _ := isoMk (rid R R _)
-
-Depends on / 依赖: otimes
+/-
+**CommAlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalCategory (CommAlgCat.{u} R) where
-  tensorObj S T := of R (S otimes[R] T)
+  tensorObj S T := of R (S ⊗[R] T)
   whiskerLeft _ {_ _} f := ofHom (map (.id _ _) f.hom)
   whiskerRight f T := ofHom (map f.hom (.id _ _))
   tensorHom f g := ofHom (map f.hom g.hom)
@@ -185,144 +113,88 @@ instance : MonoidalCategory (CommAlgCat.{u} R) where
   associator _ _ _ := isoMk (assoc R R R _ _ _)
   leftUnitor _ := isoMk (lid R _)
   rightUnitor _ := isoMk (rid R R _)
-
-/--
-lemma `coe_tensorUnit` / 引理 `coe_tensorUnit`
-
-English:
-lemma coe_tensorUnit
-  statement: 𝟙_ (CommAlgCat.{u} R) = R
-  proof: rfl
-
-中文:
-引理 coe_tensorUnit
-  结论: 𝟙_ (交换Alg范畴.{u} R) = R
-  证明: rfl
+/-
+**CommAlgCat.coe_tensorUnit** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R], ↑(CategoryTheory.MonoidalCategoryStruc
+t.tensorUnit (CommAlgCat R)) = R
+参数：CategoryTheory.MonoidalCategoryStruct.tensorUnit (CommAlgCat R)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_tensorUnit : 𝟙_ (CommAlgCat.{u} R) = R := rfl
-
-/--
-lemma `coe_tensorObj` / 引理 `coe_tensorObj`
-
-English:
-lemma coe_tensorObj
-  statement: A otimes B = A otimes[R] B
-  proof: rfl
-
-中文:
-引理 coe_tensorObj
-  结论: A otimes B = A otimes[R] B
-  证明: rfl
+/-
+**CommAlgCat.coe_tensorObj** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R),   ↑(CategoryTheor
+y.MonoidalCategoryStruct.tensorObj A B) = TensorProduct R ↑A ↑B
+参数：A B : CommAlgCat R；CategoryTheory.MonoidalCategoryStruct.tensorObj A B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_tensorObj : A otimes B = A otimes[R] B := rfl
+@[simp] lemma coe_tensorObj : A ⊗ B = A ⊗[R] B := rfl
 
 variable {A B}
-
-/--
-lemma `tensorHom_hom` / 引理 `tensorHom_hom`
-
-English:
-lemma tensorHom_hom
-  given: (f : A ⟶ C) (g : B ⟶ D)
-  statement: (f otimesₘ g).hom = map f.hom g.hom
-  proof: rfl
-
-中文:
-引理 tensorHom_hom
-  条件: (f : A ⟶ C) (g : B ⟶ D)
-  结论: (f otimesₘ g).hom = map f.hom g.hom
-  证明: rfl
+/-
+**CommAlgCat.tensorHom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {A B C D : CommAlgCat R} (f : A ⟶ C) (g
+ : B ⟶ D),   CommAlgCat.Hom.hom (CategoryTheory.MonoidalCategoryStruct.tensorHom
+ f g) =     Algebra.TensorProduct.map (CommAlgCat.Hom.hom f) (CommAlgCat.Hom.hom
+ g)
+参数：f : A ⟶ C；g : B ⟶ D；CategoryTheory.MonoidalCategoryStruct.tensorHom f g；CommA
+lgCat.Hom.hom f；CommAlgCat.Hom.hom g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma tensorHom_hom (f : A ⟶ C) (g : B ⟶ D) : (f otimesₘ g).hom = map f.hom g.hom := rfl
+@[simp] lemma tensorHom_hom (f : A ⟶ C) (g : B ⟶ D) : (f ⊗ₘ g).hom = map f.hom g.hom := rfl
 
 variable (C) in
-/--
-lemma `whiskerRight_hom` / 引理 `whiskerRight_hom`
-
-English:
-lemma whiskerRight_hom
-  given: (f : A ⟶ B)
-  statement: (f ▷ C).hom = map f.hom (.id _ _)
-  proof: rfl
-
-中文:
-引理 whiskerRight_hom
-  条件: (f : A ⟶ B)
-  结论: (f ▷ C).hom = map f.hom (.id _ _)
-  证明: rfl
+/-
+**CommAlgCat.whiskerRight_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {A B : CommAlgCat R} (C : CommAlgCat R)
+ (f : A ⟶ B),   CommAlgCat.Hom.hom (CategoryTheory.MonoidalCategoryStruct.whiske
+rRight f C) =     Algebra.TensorProduct.map (CommAlgCat.Hom.hom f) (AlgHom.id R 
+↑C)
+参数：C : CommAlgCat R；f : A ⟶ B；CategoryTheory.MonoidalCategoryStruct.whiskerRight
+ f C；CommAlgCat.Hom.hom f；AlgHom.id R ↑C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma whiskerRight_hom (f : A ⟶ B) : (f ▷ C).hom = map f.hom (.id _ _) := rfl
 
 variable (C) in
-/--
-lemma `whiskerLeft_hom` / 引理 `whiskerLeft_hom`
-
-English:
-lemma whiskerLeft_hom
-  given: (f : A ⟶ B)
-  statement: (C ◁ f).hom = map (.id _ _) f.hom
-  proof: rfl
-
-中文:
-引理 whiskerLeft_hom
-  条件: (f : A ⟶ B)
-  结论: (C ◁ f).hom = map (.id _ _) f.hom
-  证明: rfl
+/-
+**CommAlgCat.whiskerLeft_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {A B : CommAlgCat R} (C : CommAlgCat R)
+ (f : A ⟶ B),   CommAlgCat.Hom.hom (CategoryTheory.MonoidalCategoryStruct.whiske
+rLeft C f) =     Algebra.TensorProduct.map (AlgHom.id R ↑C) (CommAlgCat.Hom.hom 
+f)
+参数：C : CommAlgCat R；f : A ⟶ B；CategoryTheory.MonoidalCategoryStruct.whiskerLeft 
+C f；AlgHom.id R ↑C；CommAlgCat.Hom.hom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma whiskerLeft_hom (f : A ⟶ B) : (C ◁ f).hom = map (.id _ _) f.hom := rfl
 
 variable (A B C) in
-/--
-lemma `associator_hom_hom` / 引理 `associator_hom_hom`
-
-English:
-lemma associator_hom_hom
-  statement: (α_ A B C).hom.hom = (assoc R R R A B C).toAlgHom
-  proof: rfl
-
-中文:
-引理 associator_hom_hom
-  结论: (α_ A B C).hom.hom = (assoc R R R A B C).toAlgHom
-  证明: rfl
+/-
+**CommAlgCat.associator_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B C : CommAlgCat R),   CommAlgCat.Ho
+m.hom (CategoryTheory.MonoidalCategoryStruct.associator A B C).hom =     ↑(Algeb
+ra.TensorProduct.assoc R R R ↑A ↑B ↑C)
+参数：A B C : CommAlgCat R；CategoryTheory.MonoidalCategoryStruct.associator A B C；A
+lgebra.TensorProduct.assoc R R R ↑A ↑B ↑C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma associator_hom_hom : (α_ A B C).hom.hom = (assoc R R R A B C).toAlgHom := rfl
 
 variable (A B C) in
-/--
-lemma `associator_inv_hom` / 引理 `associator_inv_hom`
-
-English:
-lemma associator_inv_hom
-  statement: (α_ A B C).inv.hom = (assoc R R R A B C).symm.toAlgHom
-  proof: rfl
-
-中文:
-引理 associator_inv_hom
-  结论: (α_ A B C).inv.hom = (assoc R R R A B C).symm.toAlgHom
-  证明: rfl
+/-
+**CommAlgCat.associator_inv_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B C : CommAlgCat R),   CommAlgCat.Ho
+m.hom (CategoryTheory.MonoidalCategoryStruct.associator A B C).inv =     ↑(Algeb
+ra.TensorProduct.assoc R R R ↑A ↑B ↑C).symm
+参数：A B C : CommAlgCat R；CategoryTheory.MonoidalCategoryStruct.associator A B C；A
+lgebra.TensorProduct.assoc R R R ↑A ↑B ↑C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma associator_inv_hom : (α_ A B C).inv.hom = (assoc R R R A B C).symm.toAlgHom := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BraidedCategory (CommAlgCat.{u} R)
-  body: isoMk (comm R _ _)
-  braiding_naturality_right := by intros; ext : 1; dsimp; ext <;> rfl
-  braiding_naturality_left := by intros; ext : 1; dsimp; ext <;> rfl
-  hexagon_forward S T U := by ext : 1; dsimp; ext <;> rfl
-  hexagon_reverse S T U := by ext : 1; dsimp; ext <;> rfl
-
-中文:
-实例 :
-  签名: 辫范畴 (交换Alg范畴.{u} R)
-  定义体: isoMk (comm R _ _)
-  braiding_naturality_right := by intros; ext : 1; dsimp; ext <;> rfl
-  braiding_naturality_left := by intros; ext : 1; dsimp; ext <;> rfl
-  hexagon_forward S T U := by ext : 1; dsimp; ext <;> rfl
-  hexagon_reverse S T U := by ext : 1; dsimp; ext <;> rfl
+/-
+**CommAlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BraidedCategory (CommAlgCat.{u} R) where
   braiding S T := isoMk (comm R _ _)
@@ -332,136 +204,81 @@ instance : BraidedCategory (CommAlgCat.{u} R) where
   hexagon_reverse S T U := by ext : 1; dsimp; ext <;> rfl
 
 variable (A B) in
-/--
-lemma `braiding_hom_hom` / 引理 `braiding_hom_hom`
-
-English:
-lemma braiding_hom_hom
-  statement: (β_ A B).hom.hom = (comm R A B).toAlgHom
-  proof: rfl
-
-中文:
-引理 braiding_hom_hom
-  结论: (β_ A B).hom.hom = (comm R A B).toAlgHom
-  证明: rfl
+/-
+**CommAlgCat.braiding_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R),   CommAlgCat.Hom.
+hom (β_ A B).hom = ↑(Algebra.TensorProduct.comm R ↑A ↑B)
+参数：A B : CommAlgCat R；β_ A B；Algebra.TensorProduct.comm R ↑A ↑B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma braiding_hom_hom : (β_ A B).hom.hom = (comm R A B).toAlgHom := rfl
 
 variable (A B) in
-/--
-lemma `braiding_inv_hom` / 引理 `braiding_inv_hom`
-
-English:
-lemma braiding_inv_hom
-  statement: (β_ A B).inv.hom = (comm R B A).toAlgHom
-  proof: rfl
-
-中文:
-引理 braiding_inv_hom
-  结论: (β_ A B).inv.hom = (comm R B A).toAlgHom
-  证明: rfl
+/-
+**CommAlgCat.braiding_inv_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : CommAlgCat R),   CommAlgCat.Hom.
+hom (β_ A B).inv = ↑(Algebra.TensorProduct.comm R ↑B ↑A)
+参数：A B : CommAlgCat R；β_ A B；Algebra.TensorProduct.comm R ↑B ↑A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma braiding_inv_hom : (β_ A B).inv.hom = (comm R B A).toAlgHom := rfl
 
 attribute [local ext] Quiver.Hom.unop_inj in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CartesianMonoidalCategory (CommAlgCat.{u} R)ᵒᵖ
-  body: terminalOpOfInitial isInitialSelf
-  fst := _
-  snd := _
-tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimit S.unop T.unop
-  fst_def S T := by ext x; change x otimesₜ 1 = x otimesₜ algebraMap R T.unop 1; simp
-  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S.unop 1 otimesₜ x; simp
-
-中文:
-实例 :
-  签名: CartesianMonoidal范畴 (交换Alg范畴.{u} R)ᵒᵖ
-  定义体: terminalOpOfInitial isInitialSelf
-  fst := _
-  snd := _
-tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimit S.unop T.unop
-  fst_def S T := by ext x; change x otimesₜ 1 = x otimesₜ algebraMap R T.unop 1; simp
-  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S.unop 1 otimesₜ x; simp
-
-Depends on / 依赖: isInitialSelf, terminalOpOfInitial
+/-
+**CommAlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CartesianMonoidalCategory (CommAlgCat.{u} R)ᵒᵖ where
   isTerminalTensorUnit := terminalOpOfInitial isInitialSelf
   fst := _
   snd := _
-tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimit S.unop T.unop
-  fst_def S T := by ext x; change x otimesₜ 1 = x otimesₜ algebraMap R T.unop 1; simp
-  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S.unop 1 otimesₜ x; simp
+  tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op <| binaryCofanIsColimit S.unop T.unop
+  fst_def S T := by ext x; change x ⊗ₜ 1 = x ⊗ₜ algebraMap R T.unop 1; simp
+  snd_def S T := by ext x; change 1 ⊗ₜ x = algebraMap R S.unop 1 ⊗ₜ x; simp
 
 variable {A B C D : (CommAlgCat.{u} R)ᵒᵖ}
-
-/--
-lemma `fst_unop_hom` / 引理 `fst_unop_hom`
-
-English:
-lemma fst_unop_hom
-  given: (A B : (CommAlgCat.{u} R)ᵒᵖ)
-  statement: (fst A B).unop.hom = includeLeft
-  proof: rfl
-
-中文:
-引理 fst_unop_hom
-  条件: (A B : (交换Alg范畴.{u} R)ᵒᵖ)
-  结论: (fst A B).unop.hom = includeLeft
-  证明: rfl
+/-
+**CommAlgCat.fst_unop_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : (CommAlgCat R)ᵒᵖ),   CommAlgCat.
+Hom.hom (CategoryTheory.SemiCartesianMonoidalCategory.fst A B).unop = Algebra.Te
+nsorProduct.includeLeft
+参数：A B : (CommAlgCat R)ᵒᵖ；CategoryTheory.SemiCartesianMonoidalCategory.fst A B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma fst_unop_hom (A B : (CommAlgCat.{u} R)ᵒᵖ) : (fst A B).unop.hom = includeLeft := rfl
-/--
-lemma `snd_unop_hom` / 引理 `snd_unop_hom`
-
-English:
-lemma snd_unop_hom
-  given: (A B : (CommAlgCat.{u} R)ᵒᵖ)
-  statement: (snd A B).unop.hom = includeRight
-  proof: rfl
-
-中文:
-引理 snd_unop_hom
-  条件: (A B : (交换Alg范畴.{u} R)ᵒᵖ)
-  结论: (snd A B).unop.hom = includeRight
-  证明: rfl
+/-
+**CommAlgCat.snd_unop_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A B : (CommAlgCat R)ᵒᵖ),   CommAlgCat.
+Hom.hom (CategoryTheory.SemiCartesianMonoidalCategory.snd A B).unop = Algebra.Te
+nsorProduct.includeRight
+参数：A B : (CommAlgCat R)ᵒᵖ；CategoryTheory.SemiCartesianMonoidalCategory.snd A B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma snd_unop_hom (A B : (CommAlgCat.{u} R)ᵒᵖ) : (snd A B).unop.hom = includeRight := rfl
 
 variable (A B) in
-/--
-lemma `toUnit_unop_hom` / 引理 `toUnit_unop_hom`
-
-English:
-lemma toUnit_unop_hom
-  statement: (toUnit A).unop.hom = Algebra.ofId R A.unop
-  proof: rfl
-
-中文:
-引理 toUnit_unop_hom
-  结论: (toUnit A).unop.hom = 代数.ofId R A.unop
-  证明: rfl
+/-
+**CommAlgCat.toUnit_unop_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (A : (CommAlgCat R)ᵒᵖ),   CommAlgCat.Ho
+m.hom (CategoryTheory.SemiCartesianMonoidalCategory.toUnit A).unop = Algebra.ofI
+d R ↑(Opposite.unop A)
+参数：A : (CommAlgCat R)ᵒᵖ；CategoryTheory.SemiCartesianMonoidalCategory.toUnit A；Op
+posite.unop A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toUnit_unop_hom : (toUnit A).unop.hom = Algebra.ofId R A.unop := rfl
-
-/--
-lemma `lift_unop_hom` / 引理 `lift_unop_hom`
-
-English:
-lemma lift_unop_hom
-  given: (f : C ⟶ A) (g : C ⟶ B)
-  proof: rfl
-
-中文:
-引理 lift_unop_hom
-  条件: (f : C ⟶ A) (g : C ⟶ B)
-  证明: rfl
+/-
+**CommAlgCat.lift_unop_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {A B C : (CommAlgCat R)ᵒᵖ} (f : C ⟶ A) 
+(g : C ⟶ B),   CommAlgCat.Hom.hom (CategoryTheory.CartesianMonoidalCategory.lift
+ f g).unop =     Algebra.TensorProduct.lift (CommAlgCat.Hom.hom f.unop) (CommAlg
+Cat.Hom.hom g.unop) ⋯
+参数：CommAlgCat R；f : C ⟶ A；g : C ⟶ B；CategoryTheory.CartesianMonoidalCategory.lif
+t f g；CommAlgCat.Hom.hom f.unop；CommAlgCat.Hom.hom g.unop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lift_unop_hom (f : C ⟶ A) (g : C ⟶ B) :
-    (lift f g).unop.hom = lift f.unop.hom g.unop.hom fun _ _ => .all _ _ := rfl
+    (lift f g).unop.hom = lift f.unop.hom g.unop.hom fun _ _ ↦ .all _ _ := rfl
 
 end CommAlgCat
+

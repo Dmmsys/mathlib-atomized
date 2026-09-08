@@ -28,382 +28,328 @@ variable {𝕜 α β : Type*}
 
 open Topology
 
-/--
-Definition of `ZeroAtFilter` / `ZeroAtFilter` 的定义
+/-- If `l` is a filter on `α`, then a function `f : α → β` is `ZeroAtFilter l`
+  if it tends to zero along `l`. -/
+/-
+**Filter.ZeroAtFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：ZeroAtFilter [Zero β] [TopologicalSpace β] (l : Filter α) (f : α -> β) : P
+rop
+参数：l : Filter α；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ZeroAtFilter
-  signature: [Zero β] [TopologicalSpace β] (l : Filter α) (f : α -> β)
-  body: Filter.Tendsto f l (𝓝 0)
-
-中文:
-定义 ZeroAtFilter
-  签名: [零 β] [拓扑空间 β] (l : 滤子 α) (f : α -> β)
-  定义体: Filter.Tendsto f l (𝓝 0)
-
-Depends on / 依赖: Filter, Filter.Tendsto, Tendsto
+--- 原说明 ---
+If `l` is a filter on `α`, then a function `f : α → β` is `ZeroAtFilter l`
+  if it tends to zero along `l`.
 -/
-def ZeroAtFilter [Zero β] [TopologicalSpace β] (l : Filter α) (f : α -> β) : Prop :=
+def ZeroAtFilter [Zero β] [TopologicalSpace β] (l : Filter α) (f : α → β) : Prop :=
   Filter.Tendsto f l (𝓝 0)
-
-/--
-theorem `zero_zeroAtFilter` / 定理 `zero_zeroAtFilter`
-
-English:
-theorem zero_zeroAtFilter
-  given: [Zero β] [TopologicalSpace β] (l : Filter α)
-  proof: tendsto_const_nhds
-
-nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
-    {l : Filter α} {f g : α -> β} (hf : ZeroAtFilter l f) (hg : ZeroAtFilter l g) :
-    ZeroAtFilter l (f + g) := by
-  simpa using! hf.add hg
-
-nonrec theorem ZeroAtFilter.neg [TopologicalSpace β] [SubtractionMonoid β] [ContinuousNeg β]
-    {l : Filter α} {f : α -> β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
-  simpa using! hf.neg
-
-中文:
-定理 zero_zeroAtFilter
-  条件: [零 β] [拓扑空间 β] (l : 滤子 α)
-  证明: tendsto_const_nhds
-
-nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
-    {l : Filter α} {f g : α -> β} (hf : ZeroAtFilter l f) (hg : ZeroAtFilter l g) :
-    ZeroAtFilter l (f + g) := by
-  simpa using! hf.add hg
-
-nonrec theorem ZeroAtFilter.neg [TopologicalSpace β] [SubtractionMonoid β] [ContinuousNeg β]
-    {l : Filter α} {f : α -> β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
-  simpa using! hf.neg
-
-Depends on / 依赖: tendsto_const_nhds
+/-
+**Filter.zero_zeroAtFilter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：zero_zeroAtFilter [Zero β] [TopologicalSpace β] (l : Filter α) : ZeroAtFil
+ter l (0 : α -> β)
+参数：l : Filter α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
 theorem zero_zeroAtFilter [Zero β] [TopologicalSpace β] (l : Filter α) :
-    ZeroAtFilter l (0 : α -> β) :=
+    ZeroAtFilter l (0 : α → β) :=
   tendsto_const_nhds
 
 nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
-    {l : Filter α} {f g : α -> β} (hf : ZeroAtFilter l f) (hg : ZeroAtFilter l g) :
+    {l : Filter α} {f g : α → β} (hf : ZeroAtFilter l f) (hg : ZeroAtFilter l g) :
     ZeroAtFilter l (f + g) := by
   simpa using! hf.add hg
 
 nonrec theorem ZeroAtFilter.neg [TopologicalSpace β] [SubtractionMonoid β] [ContinuousNeg β]
-    {l : Filter α} {f : α -> β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
+    {l : Filter α} {f : α → β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
   simpa using! hf.neg
-
-/--
-theorem `ZeroAtFilter.smul` / 定理 `ZeroAtFilter.smul`
-
-English:
-theorem ZeroAtFilter.smul
-  statement: [TopologicalSpace β] [Zero β]
-  proof: by simpa using! hf.const_smul c
-
-中文:
-定理 ZeroAtFilter.smul
-  结论: [拓扑空间 β] [零 β]
-  证明: by simpa using! hf.const_smul c
-
-Depends on / 依赖: const_smul, hf.const_smul
+/-
+**Filter.ZeroAtFilter.smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.ZeroAtFilter`。
+形式化陈述：∀ {𝕜 : Type u_1} {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace β]
+ [inst_1 : Zero β]   [inst_2 : SMulZeroClass 𝕜 β] [ContinuousConstSMul 𝕜 β] {l :
+ Filter α} {f : α → β} (c : 𝕜),   l.ZeroAtFilter f → l.ZeroAtFilter (c • f)
+参数：c : 𝕜；c • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Filter.Tendsto.const_smul`：Filter.Tendsto.const_smul {f : β -> α} {l : F
+ilter β} {a : α} (hf : Tendsto f l (𝓝 a)) (c : M) : Tendsto (fun x => c • f x) l
+ (𝓝 (c • a))
 -/
 theorem ZeroAtFilter.smul [TopologicalSpace β] [Zero β]
-    [SMulZeroClass 𝕜 β] [ContinuousConstSMul 𝕜 β] {l : Filter α} {f : α -> β} (c : 𝕜)
+    [SMulZeroClass 𝕜 β] [ContinuousConstSMul 𝕜 β] {l : Filter α} {f : α → β} (c : 𝕜)
     (hf : ZeroAtFilter l f) : ZeroAtFilter l (c • f) := by simpa using! hf.const_smul c
 
 variable (𝕜) in
-/--
-Definition of `zeroAtFilterSubmodule` / `zeroAtFilterSubmodule` 的定义
+/-- `zeroAtFilterSubmodule l` is the submodule of `f : α → β` which
+tend to zero along `l`. -/
+/-
+**Filter.zeroAtFilterSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：zeroAtFilterSubmodule [TopologicalSpace β] [Semiring 𝕜] [AddCommMonoid β] 
+[Module 𝕜 β] [ContinuousAdd β] [ContinuousConstSMul 𝕜 β] (l : Filter α) : Submod
+ule 𝕜 (α -> β) where carrier
+参数：l : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroAtFilterSubmodule
-  body: {f | ZeroAtFilter l f}
-  zero_mem' := zero_zeroAtFilter l
-  add_mem' ha hb := ha.add hb
-  smul_mem' c _ hf := hf.smul c
-
-中文:
-定义 zeroAtFilterSubmodule
-  定义体: {f | ZeroAtFilter l f}
-  zero_mem' := zero_zeroAtFilter l
-  add_mem' ha hb := ha.add hb
-  smul_mem' c _ hf := hf.smul c
-
-Depends on / 依赖: ZeroAtFilter
+--- 原说明 ---
+`zeroAtFilterSubmodule l` is the submodule of `f : α → β` which
+tend to zero along `l`.
 -/
 def zeroAtFilterSubmodule
     [TopologicalSpace β] [Semiring 𝕜] [AddCommMonoid β] [Module 𝕜 β]
     [ContinuousAdd β] [ContinuousConstSMul 𝕜 β]
-    (l : Filter α) : Submodule 𝕜 (α -> β) where
+    (l : Filter α) : Submodule 𝕜 (α → β) where
   carrier := {f | ZeroAtFilter l f}
   zero_mem' := zero_zeroAtFilter l
   add_mem' ha hb := ha.add hb
   smul_mem' c _ hf := hf.smul c
 
-/--
-Definition of `zeroAtFilterAddSubmonoid` / `zeroAtFilterAddSubmonoid` 的定义
+/-- `zeroAtFilterAddSubmonoid l` is the additive submonoid of `f : α → β`
+which tend to zero along `l`. -/
+/-
+**Filter.zeroAtFilterAddSubmonoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：zeroAtFilterAddSubmonoid [TopologicalSpace β] [AddZeroClass β] [Continuous
+Add β] (l : Filter α) : AddSubmonoid (α -> β) where carrier
+参数：l : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.ZeroAtFilter.add`：∀ {α : Type u_2} {β : Type u_3} [inst : Topolog
+icalSpace β] [inst_1 : AddZeroClass β] [ContinuousAdd β] {l : Filter α}   {f g :
+ α → β}, l.Ze…
 
-English:
-definition zeroAtFilterAddSubmonoid
-  signature: [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
-  body: {f | ZeroAtFilter l f}
-  add_mem' ha hb := ha.add hb
-  zero_mem' := zero_zeroAtFilter l
-
-中文:
-定义 zeroAtFilterAddSubmonoid
-  签名: [拓扑空间 β] [加法零类 β] [连续加法 β]
-  定义体: {f | ZeroAtFilter l f}
-  add_mem' ha hb := ha.add hb
-  zero_mem' := zero_zeroAtFilter l
-
-Depends on / 依赖: ZeroAtFilter
+--- 原说明 ---
+`zeroAtFilterAddSubmonoid l` is the additive submonoid of `f : α → β`
+which tend to zero along `l`.
 -/
 def zeroAtFilterAddSubmonoid [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
-    (l : Filter α) : AddSubmonoid (α -> β) where
+    (l : Filter α) : AddSubmonoid (α → β) where
   carrier := {f | ZeroAtFilter l f}
   add_mem' ha hb := ha.add hb
   zero_mem' := zero_zeroAtFilter l
 
-/--
-Definition of `BoundedAtFilter` / `BoundedAtFilter` 的定义
+/-- If `l` is a filter on `α`, then a function `f: α → β` is `BoundedAtFilter l`
+if `f =O[l] 1`. -/
+/-
+**Filter.BoundedAtFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：BoundedAtFilter [Norm β] (l : Filter α) (f : α -> β) : Prop
+参数：l : Filter α；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BoundedAtFilter
-  signature: [Norm β] (l : Filter α) (f : α -> β)
-  body: Asymptotics.IsBigO l f (1 : α -> Real)
-
-中文:
-定义 BoundedAtFilter
-  签名: [范数 β] (l : 滤子 α) (f : α -> β)
-  定义体: Asymptotics.IsBigO l f (1 : α -> Real)
-
-Depends on / 依赖: Asymptotics, Asymptotics.IsBigO, IsBigO
+--- 原说明 ---
+If `l` is a filter on `α`, then a function `f: α → β` is `BoundedAtFilter l`
+if `f =O[l] 1`.
 -/
-def BoundedAtFilter [Norm β] (l : Filter α) (f : α -> β) : Prop :=
-  Asymptotics.IsBigO l f (1 : α -> Real)
-
-/--
-theorem `ZeroAtFilter.boundedAtFilter` / 定理 `ZeroAtFilter.boundedAtFilter`
-
-English:
-theorem ZeroAtFilter.boundedAtFilter
-  statement: [SeminormedAddGroup β] {l : Filter α} {f : α -> β}
-  proof: ((Asymptotics.isLittleO_one_iff _).mpr hf).isBigO
-
-中文:
-定理 ZeroAtFilter.boundedAtFilter
-  结论: [半赋范加群 β] {l : 滤子 α} {f : α -> β}
-  证明: ((Asymptotics.isLittleO_one_iff _).mpr hf).isBigO
-
-Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_one_iff, Quotient, Quotient.mk, _surjective, isBigO, isLittleO_one_iff
+def BoundedAtFilter [Norm β] (l : Filter α) (f : α → β) : Prop :=
+  Asymptotics.IsBigO l f (1 : α → ℝ)
+/-
+**Filter.ZeroAtFilter.boundedAtFilter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.ZeroAtFi
+lter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SeminormedAddGroup β] {l : Filter 
+α} {f : α → β},   l.ZeroAtFilter f → l.BoundedAtFilter f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.isBigO`：∀ {α : Type u_1} {E : Type u_3} {F : Type 
+u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},  
+ f =o[l] g → f =O[…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Asymptotics.isLittleO_one_iff`：isLittleO_one_iff {f : α -> E'''} : f =o[
+l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
 -/
-theorem ZeroAtFilter.boundedAtFilter [SeminormedAddGroup β] {l : Filter α} {f : α -> β}
+theorem ZeroAtFilter.boundedAtFilter [SeminormedAddGroup β] {l : Filter α} {f : α → β}
     (hf : ZeroAtFilter l f) : BoundedAtFilter l f :=
   ((Asymptotics.isLittleO_one_iff _).mpr hf).isBigO
-
-/--
-theorem `const_boundedAtFilter` / 定理 `const_boundedAtFilter`
-
-English:
-theorem const_boundedAtFilter
-  given: [Norm β] (l : Filter α) (c : β)
-  proof: Asymptotics.isBigO_const_const c one_ne_zero l
-
-中文:
-定理 const_boundedAtFilter
-  条件: [范数 β] (l : 滤子 α) (c : β)
-  证明: Asymptotics.isBigO_const_const c one_ne_zero l
-
-Depends on / 依赖: Asymptotics, Asymptotics.isBigO_const_const, isBigO_const_const, one_ne_zero
+/-
+**Filter.const_boundedAtFilter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：const_boundedAtFilter [Norm β] (l : Filter α) (c : β) : BoundedAtFilter l 
+(Function.const α c : α -> β)
+参数：l : Filter α；c : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isBigO_const_const`：isBigO_const_const (c : E) {c' : F''} (h
+c' : c' != 0) (l : Filter α) : (fun _x : α => c) =O[l] fun _x => c'
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
 theorem const_boundedAtFilter [Norm β] (l : Filter α) (c : β) :
-    BoundedAtFilter l (Function.const α c : α -> β) :=
+    BoundedAtFilter l (Function.const α c : α → β) :=
   Asymptotics.isBigO_const_const c one_ne_zero l
 
 -- TODO(https://github.com/leanprover-community/mathlib4/issues/19288): Remove all Comm in the next
 -- three lemmas. This would require modifying the corresponding general asymptotics lemma.
-nonrec theorem BoundedAtFilter.add [SeminormedAddCommGroup β] {l : Filter α} {f g : α -> β}
+nonrec theorem BoundedAtFilter.add [SeminormedAddCommGroup β] {l : Filter α} {f g : α → β}
     (hf : BoundedAtFilter l f) (hg : BoundedAtFilter l g) : BoundedAtFilter l (f + g) := by
   simpa using! hf.add hg
-
-/--
-theorem `BoundedAtFilter.neg` / 定理 `BoundedAtFilter.neg`
-
-English:
-theorem BoundedAtFilter.neg
-  statement: [SeminormedAddCommGroup β] {l : Filter α} {f : α -> β}
-  proof: hf.neg_left
-
-中文:
-定理 BoundedAtFilter.neg
-  结论: [SeminormedAddComm群 β] {l : 滤子 α} {f : α -> β}
-  证明: hf.neg_left
-
-Depends on / 依赖: hf.neg_left, neg_left
+/-
+**Filter.BoundedAtFilter.neg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.BoundedAtFilter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SeminormedAddCommGroup β] {l : Fil
+ter α} {f : α → β},   l.BoundedAtFilter f → l.BoundedAtFilter (-f)
+参数：-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.neg_left`：∀ {α : Type u_1} {F : Type u_4} {E' : Type 
+u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {f' : α 
+→ E'} {l : Filter…
 -/
-theorem BoundedAtFilter.neg [SeminormedAddCommGroup β] {l : Filter α} {f : α -> β}
+theorem BoundedAtFilter.neg [SeminormedAddCommGroup β] {l : Filter α} {f : α → β}
     (hf : BoundedAtFilter l f) : BoundedAtFilter l (-f) :=
   hf.neg_left
-
-/--
-theorem `BoundedAtFilter.smul` / 定理 `BoundedAtFilter.smul`
-
-English:
-theorem BoundedAtFilter.smul
-  proof: hf.const_smul_left c
-
-nonrec theorem BoundedAtFilter.mul [SeminormedRing β] {l : Filter α} {f g : α -> β}
-    (hf : BoundedAtFilter l f) (hg : BoundedAtFilter l g) : BoundedAtFilter l (f * g) := by
-  refine (hf.mul hg).trans ?_
-  convert! Asymptotics.isBigO_refl (E := Real) _ l
-  simp
-
-中文:
-定理 BoundedAtFilter.smul
-  证明: hf.const_smul_left c
-
-nonrec theorem BoundedAtFilter.mul [SeminormedRing β] {l : Filter α} {f g : α -> β}
-    (hf : BoundedAtFilter l f) (hg : BoundedAtFilter l g) : BoundedAtFilter l (f * g) := by
-  refine (hf.mul hg).trans ?_
-  convert! Asymptotics.isBigO_refl (E := Real) _ l
-  simp
-
-Depends on / 依赖: const_smul_left, hf.const_smul_left
+/-
+**Filter.BoundedAtFilter.smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.BoundedAtFilter`
+。
+形式化陈述：∀ {𝕜 : Type u_1} {α : Type u_2} {β : Type u_3} [inst : SeminormedRing 𝕜] [
+inst_1 : SeminormedAddCommGroup β]   [inst_2 : _root_.Module 𝕜 β] [IsBoundedSMul
+ 𝕜 β] {l : Filter α} {f : α → β} (c : 𝕜),   l.BoundedAtFilter f → l.BoundedAtFil
+ter (c • f)
+参数：c : 𝕜；c • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.const_smul_left`：∀ {α : Type u_1} {F : Type u_4} {E' 
+: Type u_6} {R : Type u_13} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E']
+   [inst_2 : SeminormedR…
 -/
 theorem BoundedAtFilter.smul
     [SeminormedRing 𝕜] [SeminormedAddCommGroup β] [Module 𝕜 β] [IsBoundedSMul 𝕜 β]
-    {l : Filter α} {f : α -> β} (c : 𝕜) (hf : BoundedAtFilter l f) : BoundedAtFilter l (c • f) :=
+    {l : Filter α} {f : α → β} (c : 𝕜) (hf : BoundedAtFilter l f) : BoundedAtFilter l (c • f) :=
   hf.const_smul_left c
 
-nonrec theorem BoundedAtFilter.mul [SeminormedRing β] {l : Filter α} {f g : α -> β}
+nonrec theorem BoundedAtFilter.mul [SeminormedRing β] {l : Filter α} {f g : α → β}
     (hf : BoundedAtFilter l f) (hg : BoundedAtFilter l g) : BoundedAtFilter l (f * g) := by
   refine (hf.mul hg).trans ?_
-  convert! Asymptotics.isBigO_refl (E := Real) _ l
+  convert! Asymptotics.isBigO_refl (E := ℝ) _ l
   simp
-
-/--
-theorem `ZeroAtFilter.mul_boundedAtFilter` / 定理 `ZeroAtFilter.mul_boundedAtFilter`
-
-English:
-theorem ZeroAtFilter.mul_boundedAtFilter
-  statement: [SeminormedRing β] {l : Filter α}
-  proof: by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hf ⊢
-  simpa using! hf.mul_isBigO hg
-
-中文:
-定理 ZeroAtFilter.mul_boundedAtFilter
-  结论: [Seminormed环 β] {l : 滤子 α}
-  证明: by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hf ⊢
-  simpa using! hf.mul_isBigO hg
-
-Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_one_iff, ZeroAtFilter, hf.mul_isBigO, isLittleO_one_iff, mul_isBigO
+/-
+**Filter.ZeroAtFilter.mul_boundedAtFilter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Zero
+AtFilter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SeminormedRing β] {l : Filter α} {
+f g : α → β},   l.ZeroAtFilter f → l.BoundedAtFilter g → l.ZeroAtFilter (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.ZeroAtFilter.eq_1`：∀ {α : Type u_2} {β : Type u_3} [inst : Zero β
+] [inst_1 : TopologicalSpace β] (l : Filter α) (f : α → β),   l.ZeroAtFilter f =
+ Filter.Tendst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isLittleO_one_iff`：isLittleO_one_iff {f : α -> E'''} : f =o[
+l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Asymptotics.IsLittleO.mul_isBigO`：∀ {α : Type u_1} {R : Type u_13} [inst
+ : SeminormedRing R] {S : Type u_17} [inst_1 : NormedRing S] [NormMulClass S]   
+{l : Filter α} {f₁ f₂ …
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
 -/
 theorem ZeroAtFilter.mul_boundedAtFilter [SeminormedRing β] {l : Filter α}
-    {f g : α -> β} (hf : ZeroAtFilter l f) (hg : BoundedAtFilter l g) : ZeroAtFilter l (f * g) := by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hf ⊢
+    {f g : α → β} (hf : ZeroAtFilter l f) (hg : BoundedAtFilter l g) : ZeroAtFilter l (f * g) := by
+  rw [ZeroAtFilter, ← Asymptotics.isLittleO_one_iff (F := ℝ)] at hf ⊢
   simpa using! hf.mul_isBigO hg
-
-/--
-theorem `BoundedAtFilter.mul_zeroAtFilter` / 定理 `BoundedAtFilter.mul_zeroAtFilter`
-
-English:
-theorem BoundedAtFilter.mul_zeroAtFilter
-  statement: [SeminormedRing β] {l : Filter α}
-  proof: by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hg ⊢
-  simpa using! hf.mul_isLittleO hg
-
-中文:
-定理 BoundedAtFilter.mul_zeroAtFilter
-  结论: [Seminormed环 β] {l : 滤子 α}
-  证明: by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hg ⊢
-  simpa using! hf.mul_isLittleO hg
-
-Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_one_iff, ZeroAtFilter, hf.mul_isLittleO, isLittleO_one_iff, mul_isLittleO
+/-
+**Filter.BoundedAtFilter.mul_zeroAtFilter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Boun
+dedAtFilter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SeminormedRing β] {l : Filter α} {
+f g : α → β},   l.BoundedAtFilter f → l.ZeroAtFilter g → l.ZeroAtFilter (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.ZeroAtFilter.eq_1`：∀ {α : Type u_2} {β : Type u_3} [inst : Zero β
+] [inst_1 : TopologicalSpace β] (l : Filter α) (f : α → β),   l.ZeroAtFilter f =
+ Filter.Tendst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isLittleO_one_iff`：isLittleO_one_iff {f : α -> E'''} : f =o[
+l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Asymptotics.IsBigO.mul_isLittleO`：∀ {α : Type u_1} {R : Type u_13} [inst
+ : SeminormedRing R] {S : Type u_17} [inst_1 : NormedRing S] [NormMulClass S]   
+{l : Filter α} {f₁ f₂ …
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
 -/
 theorem BoundedAtFilter.mul_zeroAtFilter [SeminormedRing β] {l : Filter α}
-    {f g : α -> β} (hf : BoundedAtFilter l f) (hg : ZeroAtFilter l g) : ZeroAtFilter l (f * g) := by
-  rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hg ⊢
+    {f g : α → β} (hf : BoundedAtFilter l f) (hg : ZeroAtFilter l g) : ZeroAtFilter l (f * g) := by
+  rw [ZeroAtFilter, ← Asymptotics.isLittleO_one_iff (F := ℝ)] at hg ⊢
   simpa using! hf.mul_isLittleO hg
 
 variable (𝕜) in
-/--
-Definition of `boundedFilterSubmodule` / `boundedFilterSubmodule` 的定义
+/-- The submodule of functions that are bounded along a filter `l`. -/
+/-
+**Filter.boundedFilterSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：boundedFilterSubmodule [SeminormedRing 𝕜] [SeminormedAddCommGroup β] [Modu
+le 𝕜 β] [IsBoundedSMul 𝕜 β] (l : Filter α) : Submodule 𝕜 (α -> β) where carrier
+参数：l : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.BoundedAtFilter.add`：∀ {α : Type u_2} {β : Type u_3} [inst : Semi
+normedAddCommGroup β] {l : Filter α} {f g : α → β},   l.BoundedAtFilter f → l.Bo
+undedAtFilter g …
+· 使用定理 `Filter.BoundedAtFilter.smul`：∀ {𝕜 : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : SeminormedRing 𝕜] [inst_1 : SeminormedAddCommGroup β]   [inst_2 : _r
+oot_.Module 𝕜 β] …
 
-English:
-definition boundedFilterSubmodule
-  body: {f | BoundedAtFilter l f}
-  zero_mem' := const_boundedAtFilter l 0
-  add_mem' hf hg := hf.add hg
-  smul_mem' c _ hf := hf.smul c
-
-中文:
-定义 boundedFilterSubmodule
-  定义体: {f | BoundedAtFilter l f}
-  zero_mem' := const_boundedAtFilter l 0
-  add_mem' hf hg := hf.add hg
-  smul_mem' c _ hf := hf.smul c
-
-Depends on / 依赖: BoundedAtFilter
+--- 原说明 ---
+The submodule of functions that are bounded along a filter `l`.
 -/
 def boundedFilterSubmodule
     [SeminormedRing 𝕜] [SeminormedAddCommGroup β] [Module 𝕜 β] [IsBoundedSMul 𝕜 β] (l : Filter α) :
-    Submodule 𝕜 (α -> β) where
+    Submodule 𝕜 (α → β) where
   carrier := {f | BoundedAtFilter l f}
   zero_mem' := const_boundedAtFilter l 0
   add_mem' hf hg := hf.add hg
   smul_mem' c _ hf := hf.smul c
 
 variable (𝕜) in
-/--
-Definition of `boundedFilterSubalgebra` / `boundedFilterSubalgebra` 的定义
+/-- The subalgebra of functions that are bounded along a filter `l`. -/
+/-
+**Filter.boundedFilterSubalgebra** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：boundedFilterSubalgebra [SeminormedCommRing 𝕜] [SeminormedRing β] [Algebra
+ 𝕜 β] [IsBoundedSMul 𝕜 β] (l : Filter α) : Subalgebra 𝕜 (α -> β)
+参数：l : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boundedFilterSubalgebra
-  body: Submodule.toSubalgebra
-    (boundedFilterSubmodule 𝕜 l)
-    (const_boundedAtFilter l (1 : β))
-    (fun f g hf hg => by simpa only [Pi.one_apply, mul_one, norm_mul] using! hf.mul hg)
-
-中文:
-定义 boundedFilterSubalgebra
-  定义体: Submodule.toSubalgebra
-    (boundedFilterSubmodule 𝕜 l)
-    (const_boundedAtFilter l (1 : β))
-    (fun f g hf hg => by simpa only [Pi.one_apply, mul_one, norm_mul] using! hf.mul hg)
-
-Depends on / 依赖: Pi.one_apply, Submodule, Submodule.toSubalgebra, boundedFilterSubmodule, const_boundedAtFilter, hf.mul, mul_one, norm_mul, one_apply, toSubalgebra
+--- 原说明 ---
+The subalgebra of functions that are bounded along a filter `l`.
 -/
 def boundedFilterSubalgebra
     [SeminormedCommRing 𝕜] [SeminormedRing β] [Algebra 𝕜 β] [IsBoundedSMul 𝕜 β] (l : Filter α) :
-    Subalgebra 𝕜 (α -> β) :=
+    Subalgebra 𝕜 (α → β) :=
   Submodule.toSubalgebra
     (boundedFilterSubmodule 𝕜 l)
     (const_boundedAtFilter l (1 : β))
-    (fun f g hf hg => by simpa only [Pi.one_apply, mul_one, norm_mul] using! hf.mul hg)
-
-/--
-theorem `BoundedAtFilter.prod` / 定理 `BoundedAtFilter.prod`
-
-English:
-theorem BoundedAtFilter.prod
-  statement: {ι : Type} (s : Finset ι) [SeminormedCommRing β]
-  proof: (boundedFilterSubalgebra β l).prod_mem (f := f) h
-
-中文:
-定理 BoundedAtFilter.乘积
-  结论: {ι : 类型} (s : 有限集 ι) [SeminormedComm环 β]
-  证明: (boundedFilterSubalgebra β l).prod_mem (f := f) h
-
-Depends on / 依赖: boundedFilterSubalgebra, prod_mem
+    (fun f g hf hg ↦ by simpa only [Pi.one_apply, mul_one, norm_mul] using! hf.mul hg)
+/-
+**Filter.BoundedAtFilter.prod** 是 Mathlib 中的一个定理，位于命名空间 `Filter.BoundedAtFilter`
+。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {ι : Type} (s : Finset ι) [inst : Seminorm
+edCommRing β] {l : Filter α} {f : ι → α → β},   (∀ i ∈ s, l.BoundedAtFilter (f i
+)) → l.BoundedAtFilter (∏ i ∈ s, f i)
+参数：s : Finset ι；∀ i ∈ s, l.BoundedAtFilter (f i)；∏ i ∈ s, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.prod_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R]
+ [inst_1 : CommSemiring A] [inst_2 : Algebra R A]   (S : Subalgebra R A) {ι : Ty
+pe w} {t …
 -/
 theorem BoundedAtFilter.prod {ι : Type} (s : Finset ι) [SeminormedCommRing β]
-    {l : Filter α} {f : ι -> α -> β} (h : forall i in s, BoundedAtFilter l (f i)) :
-    BoundedAtFilter l (∏ i in s, f i) :=
+    {l : Filter α} {f : ι → α → β} (h : ∀ i ∈ s, BoundedAtFilter l (f i)) :
+    BoundedAtFilter l (∏ i ∈ s, f i) :=
   (boundedFilterSubalgebra β l).prod_mem (f := f) h
 
 end Filter
+

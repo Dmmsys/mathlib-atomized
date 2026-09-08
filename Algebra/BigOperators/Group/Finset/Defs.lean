@@ -65,70 +65,43 @@ of the finite set `s`.
 
 When the index type is a `Fintype`, the notation `∑ x, f x`, is a shorthand for
 `∑ x ∈ Finset.univ, f x`. -/]
-/--
-Definition of `prod` / `prod` 的定义
-
-English:
-definition prod
-  signature: [CommMonoid M] (s : Finset ι) (f : ι -> M)
-  body: (s.1.map f).prod
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 乘积
-  签名: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
-  定义体: (s.1.map f).prod
-
-@[to_additive (attr := simp)]
+/-
+**Finset.prod** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{ι : Type u_1} → {M : Type u_3} → [CommMonoid M] → Finset ι → (ι → M) → M
+参数：ι → M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def prod [CommMonoid M] (s : Finset ι) (f : ι -> M) : M :=
+protected def prod [CommMonoid M] (s : Finset ι) (f : ι → M) : M :=
   (s.1.map f).prod
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_mk` / 定理 `prod_mk`
-
-English:
-theorem prod_mk
-  given: [CommMonoid M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_mk
-  条件: [交换幺半群 M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Finset.prod_mk** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_mk [CommMonoid M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M) : (⟨s,
+ hs⟩ : Finset ι).prod f = (s.map f).prod
+参数：s : Multiset ι；hs : s.Nodup；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_mk [CommMonoid M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M) :
+theorem prod_mk [CommMonoid M] (s : Multiset ι) (hs : s.Nodup) (f : ι → M) :
     (⟨s, hs⟩ : Finset ι).prod f = (s.map f).prod :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_val` / 定理 `prod_val`
-
-English:
-theorem prod_val
-  given: [CommMonoid M] (s : Finset M)
-  statement: s.1.prod = s.prod id
-  proof: by
-  rw [Finset.prod]; rw [Multiset.map_id]
-
-中文:
-定理 prod_val
-  条件: [交换幺半群 M] (s : 有限集 M)
-  结论: s.1.乘积 = s.乘积 id
-  证明: by
-  rw [Finset.prod]; rw [Multiset.map_id]
-
-Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_id, map_id
+/-
+**Finset.prod_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_val [CommMonoid M] (s : Finset M) : s.1.prod = s.prod id
+参数：s : Finset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] 
+(s : Finset ι) (f : ι → M), s.prod f = (Multiset.map f s.val).prod
+· 使用定理 `Multiset.map_id`：map_id (s : Multiset α) : map id s = s
 -/
 theorem prod_val [CommMonoid M] (s : Finset M) : s.1.prod = s.prod id := by
-  rw [Finset.prod]; rw [Multiset.map_id]
+  rw [Finset.prod, Multiset.map_id]
 
 end Finset
 
@@ -165,7 +138,7 @@ syntax bigOpBinderParenthesized := " ("bigOpBinder")"
 /-- A list of parenthesized binders -/
 syntax bigOpBinderCollection := bigOpBinderParenthesized+
 /-- A single (unparenthesized) binder, or a list of parenthesized binders -/
-syntax bigOpBinders := bigOpBinderCollection > (ppSpace bigOpBinder)
+syntax bigOpBinders := bigOpBinderCollection <|> (ppSpace bigOpBinder)
 
 /-- Collects additional binder/Finset pairs for the given `bigOpBinder`.
 
@@ -178,16 +151,16 @@ meta def processBigOpBinder (processed : (Array (Term × Term))) (binder : TSynt
     | `(bigOpBinder| $x:term) =>
       match x with
       | `(($a + $b = $n)) => -- Maybe this is too cute.
-.push (← `(⟨$a, $b⟩), ← `(Finset.Nat.antidiagonal $n)) return processed
-.push (x, ← ``(Finset.univ)) | _ => return processed
-.push (x, ← ``((Finset.univ : Finset $t))) | `(bigOpBinder| $x : $t) => return processed
-.push (x, ← `(finset% $s)) | `(bigOpBinder| $x in $s) => return processed
-.push (x, ← `(finset% $sᶜ)) | `(bigOpBinder| $x ∉ $s) => return processed
-.push (x, ← `(Finset.univ.erase $n)) | `(bigOpBinder| $x != $n) => return processed
-.push (x, ← `(Finset.Iio $n)) | `(bigOpBinder| $x < $n) => return processed
-.push (x, ← `(Finset.Iic $n)) | `(bigOpBinder| $x <= $n) => return processed
-.push (x, ← `(Finset.Ioi $n)) | `(bigOpBinder| $x > $n) => return processed
-.push (x, ← `(Finset.Ici $n)) | `(bigOpBinder| $x >= $n) => return processed
+        return processed |>.push (← `(⟨$a, $b⟩), ← `(Finset.Nat.antidiagonal $n))
+      | _ => return processed |>.push (x, ← ``(Finset.univ))
+    | `(bigOpBinder| $x : $t) => return processed |>.push (x, ← ``((Finset.univ : Finset $t)))
+    | `(bigOpBinder| $x ∈ $s) => return processed |>.push (x, ← `(finset% $s))
+    | `(bigOpBinder| $x ∉ $s) => return processed |>.push (x, ← `(finset% $sᶜ))
+    | `(bigOpBinder| $x ≠ $n) => return processed |>.push (x, ← `(Finset.univ.erase $n))
+    | `(bigOpBinder| $x < $n) => return processed |>.push (x, ← `(Finset.Iio $n))
+    | `(bigOpBinder| $x ≤ $n) => return processed |>.push (x, ← `(Finset.Iic $n))
+    | `(bigOpBinder| $x > $n) => return processed |>.push (x, ← `(Finset.Ioi $n))
+    | `(bigOpBinder| $x ≥ $n) => return processed |>.push (x, ← `(Finset.Ici $n))
     | _ => Macro.throwUnsupported
 
 /-- Collects the binder/Finset pairs for the given `bigOpBinders`. -/
@@ -257,9 +230,9 @@ macro_rules (kind := bigsum)
     -- proof and `b` is the filtering proposition
     match hx??, p? with
     | some (some hx), some p =>
-      `(Finset.sum $s fun $x => if $hx : $p then $v else 0)
-    | _, some p => `(Finset.sum (Finset.filter (fun $x => $p) $s) (fun $x => $v))
-    | _, none => `(Finset.sum $s (fun $x => $v))
+      `(Finset.sum $s fun $x ↦ if $hx : $p then $v else 0)
+    | _, some p => `(Finset.sum (Finset.filter (fun $x ↦ $p) $s) (fun $x ↦ $v))
+    | _, none => `(Finset.sum $s (fun $x ↦ $v))
 
 macro_rules (kind := bigprod)
   | `(∏ $bs:bigOpBinders $[with $[$hx??:binderIdent :]? $p?:term]?, $v) => do
@@ -270,37 +243,29 @@ macro_rules (kind := bigprod)
     -- proof and `b` is the filtering proposition
     match hx??, p? with
     | some (some hx), some p =>
-      `(Finset.prod $s fun $x => if $hx : $p then $v else 1)
-    | _, some p => `(Finset.prod (Finset.filter (fun $x => $p) $s) (fun $x => $v))
-    | _, none => `(Finset.prod $s (fun $x => $v))
+      `(Finset.prod $s fun $x ↦ if $hx : $p then $v else 1)
+    | _, some p => `(Finset.prod (Finset.filter (fun $x ↦ $p) $s) (fun $x ↦ $v))
+    | _, none => `(Finset.prod $s (fun $x ↦ $v))
 
 open PrettyPrinter.Delaborator SubExpr
 open scoped Batteries.ExtendedBinder
 
-/--
-Inductive type `FinsetResult` / 归纳类型 `FinsetResult`
+/-- The possibilities we distinguish to delaborate the finset indexing a big operator:
+* `finset s` corresponds to `∑ x ∈ s, f x`
+* `univ` corresponds to `∑ x, f x`
+* `Iio n`/`Iic n`/`Ioi n`/`Ici n` corresponds to the intervals that are elaborated by sums.
+-/
+/-
+**BigOperators.FinsetResult** 是 Mathlib 中的一个归纳类型，位于命名空间 `BigOperators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive FinsetResult
-  parameters: where
-  constructors (6):
-    - finset: (s : Term)
-    - univ: 
-    - Iio: (n : Term)
-    - Iic: (n : Term)
-    - Ioi: (n : Term)
-    - Ici: (n : Term)
-
-中文:
-归纳类型 FinsetResult
-  参数: where
-  构造子 (6 个):
-    - finset: (s : 项)
-    - univ: 
-    - Iio: (n : 项)
-    - Iic: (n : 项)
-    - Ioi: (n : 项)
-    - Ici: (n : 项)
+--- 原说明 ---
+The possibilities we distinguish to delaborate the finset indexing a big operato
+r:
+* `finset s` corresponds to `∑ x ∈ s, f x`
+* `univ` corresponds to `∑ x, f x`
+* `Iio n`/`Iic n`/`Ioi n`/`Ici n` corresponds to the intervals that are elaborat
+ed by sums.
 -/
 private inductive FinsetResult where
   | finset (s : Term)
@@ -310,22 +275,21 @@ private inductive FinsetResult where
   | Ioi (n : Term)
   | Ici (n : Term)
 
-/--
-Definition of `FinsetFilterResult` / `FinsetFilterResult` 的定义
+/-- The possibilities we distinguish to delaborate the finset indexing a big operator, including
+filters.
+* `{finset := s, filter = none}` represents `∑ x ∈ s, f x`;
+* `{finset := s, filter = some p}` represents `∑ x ∈ s with p, f x`.
+-/
+/-
+**BigOperators.FinsetFilterResult** 是 Mathlib 中的一个结构，位于命名空间 `BigOperators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FinsetFilterResult
-  parameters: where
-  axioms and operations (2):
-    - finset : FinsetResult
-    - filter : Option Term
-
-中文:
-结构 FinsetFilterResult
-  参数: where
-  公理与运算 (2 个):
-    - finset : FinsetResult
-    - filter : 选项类型 项
+--- 原说明 ---
+The possibilities we distinguish to delaborate the finset indexing a big operato
+r, including
+filters.
+* `{finset := s, filter = none}` represents `∑ x ∈ s, f x`;
+* `{finset := s, filter = some p}` represents `∑ x ∈ s with p, f x`.
 -/
 private structure FinsetFilterResult where
   finset : FinsetResult
@@ -373,18 +337,18 @@ private meta def delabFinsetArg (i : Ident) : DelabM FinsetFilterResult := do
 /-- Delaborator for `Finset.prod`. The `pp.funBinderTypes` option controls whether
 to show the domain type when the product is over `Finset.univ`. -/
 @[app_delab Finset.prod] meta def delabFinsetProd : Delab :=
-whenPPOption getPPNotation withOverApp 5 do
+  whenPPOption getPPNotation <| withOverApp 5 do
   let #[_, _, _, _, f] := (← getExpr).getAppArgs | failure
   guard f.isLambda
-let ppDomain ← withAppArg getPPOption getPPFunBinderTypes
-let (i, body) ← withAppArg withBindingBodyUnusedName fun i => do
+  let ppDomain ← withAppArg <| getPPOption getPPFunBinderTypes
+  let (i, body) ← withAppArg <| withBindingBodyUnusedName fun i => do
     return ((⟨i⟩ : Ident), ← delab)
-let ⟨res, p⟩ ← withNaryArg 3 delabFinsetArg i
+  let ⟨res, p⟩ ← withNaryArg 3 <| delabFinsetArg i
   let withClause? : Option (TSyntax `BigOperators.BigOpWith) ← (match p with
     | .some pp => return some (← `(BigOpWith|with $pp:term))
     | .none => return none)
   match res with
-  | .finset ss => `(∏ $i:ident in $ss $[$withClause?]?, $body)
+  | .finset ss => `(∏ $i:ident ∈ $ss $[$withClause?]?, $body)
   | .univ =>
     let binder ←
     if ppDomain then
@@ -394,25 +358,25 @@ let ⟨res, p⟩ ← withNaryArg 3 delabFinsetArg i
       `(bigOpBinder| $i:ident)
     `(∏ $binder:bigOpBinder $[$withClause?]?, $body)
   | .Iio ss => `(∏ $i:ident < $ss $[$withClause?]?, $body)
-  | .Iic ss => `(∏ $i:ident <= $ss $[$withClause?]?, $body)
+  | .Iic ss => `(∏ $i:ident ≤ $ss $[$withClause?]?, $body)
   | .Ioi ss => `(∏ $i:ident > $ss $[$withClause?]?, $body)
-  | .Ici ss => `(∏ $i:ident >= $ss $[$withClause?]?, $body)
+  | .Ici ss => `(∏ $i:ident ≥ $ss $[$withClause?]?, $body)
 
 /-- Delaborator for `Finset.sum`. The `pp.funBinderTypes` option controls whether
 to show the domain type when the sum is over `Finset.univ`. -/
 @[app_delab Finset.sum] meta def delabFinsetSum : Delab :=
-whenPPOption getPPNotation withOverApp 5 do
+  whenPPOption getPPNotation <| withOverApp 5 do
   let #[_, _, _, _, f] := (← getExpr).getAppArgs | failure
   guard f.isLambda
-let ppDomain ← withAppArg getPPOption getPPFunBinderTypes
-let (i, body) ← withAppArg withBindingBodyUnusedName fun i => do
+  let ppDomain ← withAppArg <| getPPOption getPPFunBinderTypes
+  let (i, body) ← withAppArg <| withBindingBodyUnusedName fun i => do
     return ((⟨i⟩ : Ident), ← delab)
-let ⟨res, p⟩ ← withNaryArg 3 delabFinsetArg i
+  let ⟨res, p⟩ ← withNaryArg 3 <| delabFinsetArg i
   let withClause? : Option (TSyntax `BigOperators.BigOpWith) ← (match p with
     | .some pp => return some (← `(BigOpWith|with $pp:term))
     | .none => return none)
   match res with
-  | .finset ss => `(∑ $i:ident in $ss $[$withClause?]?, $body)
+  | .finset ss => `(∑ $i:ident ∈ $ss $[$withClause?]?, $body)
   | .univ =>
     let binder ←
     if ppDomain then
@@ -422,109 +386,88 @@ let ⟨res, p⟩ ← withNaryArg 3 delabFinsetArg i
       `(bigOpBinder| $i:ident)
     `(∑ $binder:bigOpBinder $[$withClause?]?, $body)
   | .Iio ss => `(∑ $i:ident < $ss $[$withClause?]?, $body)
-  | .Iic ss => `(∑ $i:ident <= $ss $[$withClause?]?, $body)
+  | .Iic ss => `(∑ $i:ident ≤ $ss $[$withClause?]?, $body)
   | .Ioi ss => `(∑ $i:ident > $ss $[$withClause?]?, $body)
-  | .Ici ss => `(∑ $i:ident >= $ss $[$withClause?]?, $body)
+  | .Ici ss => `(∑ $i:ident ≥ $ss $[$withClause?]?, $body)
 
 end BigOperators
 
 namespace Finset
 
-variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι -> M}
+variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι → M}
 
 @[to_additive]
-/--
-theorem `prod_eq_multiset_prod` / 定理 `prod_eq_multiset_prod`
-
-English:
-theorem prod_eq_multiset_prod
-  given: [CommMonoid M] (s : Finset ι) (f : ι -> M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_eq_multiset_prod
-  条件: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Finset.prod_eq_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_eq_multiset_prod [CommMonoid M] (s : Finset ι) (f : ι -> M) : ∏ x in 
+s, f x = (s.1.map f).prod
+参数：s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_eq_multiset_prod [CommMonoid M] (s : Finset ι) (f : ι -> M) :
-    ∏ x in s, f x = (s.1.map f).prod :=
+theorem prod_eq_multiset_prod [CommMonoid M] (s : Finset ι) (f : ι → M) :
+    ∏ x ∈ s, f x = (s.1.map f).prod :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `prod_map_val` / 引理 `prod_map_val`
-
-English:
-lemma prod_map_val
-  given: [CommMonoid M] (s : Finset ι) (f : ι -> M)
-  statement: (s.1.map f).prod = ∏ a in s, f a
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 prod_map_val
-  条件: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
-  结论: (s.1.map f).乘积 = ∏ a in s, f a
-  证明: rfl
-
-@[simp]
+/-
+**Finset.prod_map_val** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_map_val [CommMonoid M] (s : Finset ι) (f : ι -> M) : (s.1.map f).prod
+ = ∏ a in s, f a
+参数：s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma prod_map_val [CommMonoid M] (s : Finset ι) (f : ι -> M) : (s.1.map f).prod = ∏ a in s, f a :=
+lemma prod_map_val [CommMonoid M] (s : Finset ι) (f : ι → M) : (s.1.map f).prod = ∏ a ∈ s, f a :=
   rfl
 
 @[simp]
-/--
-theorem `sum_multiset_singleton` / 定理 `sum_multiset_singleton`
-
-English:
-theorem sum_multiset_singleton
-  given: (s : Finset ι)
-  statement: ∑ a in s, {a} = s.val
-  proof: by
-  simp only [sum_eq_multiset_sum, Multiset.sum_map_singleton]
-
-中文:
-定理 sum_multiset_singleton
-  条件: (s : 有限集 ι)
-  结论: ∑ a in s, {a} = s.val
-  证明: by
-  simp only [sum_eq_multiset_sum, Multiset.sum_map_singleton]
-
-Depends on / 依赖: Multiset, Multiset.sum_map_singleton, sum_eq_multiset_sum, sum_map_singleton
+/-
+**Finset.sum_multiset_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_multiset_singleton (s : Finset ι) : ∑ a in s, {a} = s.val
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.sum_map_singleton`：sum_map_singleton (s : Multiset M) : (s.map 
+fun a => ({a} : Multiset M)).sum = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_multiset_singleton (s : Finset ι) : ∑ a in s, {a} = s.val := by
+theorem sum_multiset_singleton (s : Finset ι) : ∑ a ∈ s, {a} = s.val := by
   simp only [sum_eq_multiset_sum, Multiset.sum_map_singleton]
 
 end Finset
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_prod` / 定理 `map_prod`
-
-English:
-theorem map_prod
-  statement: [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G M N] [MonoidHomClass G M N]
-  proof: by
-  simp only [Finset.prod_eq_multiset_prod, map_multiset_prod, Multiset.map_map]; rfl
-
-中文:
-定理 map_prod
-  结论: [交换幺半群 M] [交换幺半群 N] {G : 类型} [函数状 G M N] [幺半群态射类 G M N]
-  证明: by
-  simp only [Finset.prod_eq_multiset_prod, map_multiset_prod, Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.prod_eq_multiset_prod, Multiset, Multiset.map_map, map_map, map_multiset_prod, prod_eq_multiset_prod
+/-
+**map_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G M N] [Monoid
+HomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s, f x) = ∏ x in
+ s, g (f x)
+参数：g : G；f : ι -> M；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_multiset_prod`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst 
+: CommMonoid M] [inst_1 : CommMonoid N] [inst_2 : FunLike F M N]   [MonoidHomCla
+ss F M …
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
 theorem map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G M N] [MonoidHomClass G M N]
-    (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s, f x) = ∏ x in s, g (f x) := by
+    (g : G) (f : ι → M) (s : Finset ι) : g (∏ x ∈ s, f x) = ∏ x ∈ s, g (f x) := by
   simp only [Finset.prod_eq_multiset_prod, map_multiset_prod, Multiset.map_map]; rfl
 
-variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι -> M}
+variable {s s₁ s₂ : Finset ι} {a : ι} {f g : ι → M}
 
 namespace Finset
 
@@ -533,246 +476,182 @@ section CommMonoid
 variable [CommMonoid M]
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_empty` / 定理 `prod_empty`
-
-English:
-theorem prod_empty
-  statement: ∏ x in ∅, f x = 1
-  proof: rfl
-
-中文:
-定理 prod_empty
-  结论: ∏ x in ∅, f x = 1
-  证明: rfl
+/-
+**Finset.prod_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_empty : ∏ x in ∅, f x = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_empty : ∏ x in ∅, f x = 1 :=
+theorem prod_empty : ∏ x ∈ ∅, f x = 1 :=
   rfl
 
 /-- Variant of `prod_empty` not applied to a function. -/
 @[to_additive (attr := grind =)]
-/--
-theorem `prod_empty'` / 定理 `prod_empty'`
+/-
+**Finset.prod_empty'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_empty' : Finset.prod (∅ : Finset ι) = fun (_ : ι -> M) => 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem prod_empty'
-  statement: Finset.prod (∅ : Finset ι) = fun (_ : ι -> M) => 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 prod_empty'
-  结论: 有限集.乘积 (∅ : 有限集 ι) = fun (_ : ι -> M) => 1
-  证明: rfl
-
-@[to_additive]
+--- 原说明 ---
+Variant of `prod_empty` not applied to a function.
 -/
-theorem prod_empty' : Finset.prod (∅ : Finset ι) = fun (_ : ι -> M) => 1 :=
+theorem prod_empty' : Finset.prod (∅ : Finset ι) = fun (_ : ι → M) => 1 :=
   rfl
 
 @[to_additive]
-/--
-theorem `prod_of_isEmpty` / 定理 `prod_of_isEmpty`
-
-English:
-theorem prod_of_isEmpty
-  given: [IsEmpty ι] (s : Finset ι)
-  statement: ∏ i in s, f i = 1
-  proof: by
-  rw [eq_empty_of_isEmpty s]; rw [prod_empty]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_of_isEmpty
-  条件: [是空 ι] (s : 有限集 ι)
-  结论: ∏ i in s, f i = 1
-  证明: by
-  rw [eq_empty_of_isEmpty s]; rw [prod_empty]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_empty_of_isEmpty, prod_empty
+/-
+**Finset.prod_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_of_isEmpty [IsEmpty ι] (s : Finset ι) : ∏ i in s, f i = 1
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.eq_empty_of_isEmpty`：eq_empty_of_isEmpty [IsEmpty α] (s : Finset 
+α) : s = ∅
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
 -/
-theorem prod_of_isEmpty [IsEmpty ι] (s : Finset ι) : ∏ i in s, f i = 1 := by
-  rw [eq_empty_of_isEmpty s]; rw [prod_empty]
+theorem prod_of_isEmpty [IsEmpty ι] (s : Finset ι) : ∏ i ∈ s, f i = 1 := by
+  rw [eq_empty_of_isEmpty s, prod_empty]
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_const_one` / 定理 `prod_const_one`
-
-English:
-theorem prod_const_one
-  statement: (∏ _x in s, (1 : M)) = 1
-  proof: by
+/-
+**Finset.prod_const_one** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_const_one : (∏ _x in s, (1 : M)) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_const'`：∀ {α : Type u_1} {β : Type v} (s : Multiset α) (b :
+ β), Multiset.map (fun x => b) s = Multiset.replicate s.card b
+· 使用定理 `Multiset.prod_replicate`：prod_replicate (n : Nat) (a : M) : (replicate n
+ a).prod = a ^ n
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem prod_const_one : (∏ _x ∈ s, (1 : M)) = 1 := by
   simp only [Finset.prod, Multiset.map_const', Multiset.prod_replicate, one_pow]
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 prod_const_one
-  结论: (∏ _x in s, (1 : M)) = 1
-  证明: by
-  simp only [Finset.prod, Multiset.map_const', Multiset.prod_replicate, one_pow]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_const, Multiset.prod_replicate, map_const, one_pow, prod_replicate
+/-
+**Finset.prod_map** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x in s.map e, f x = ∏
+ x in s, f (e x)
+参数：s : Finset ι；e : ι ↪ κ；f : κ -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] 
+(s : Finset ι) (f : ι → M), s.prod f = (Multiset.map f s.val).prod
+· 使用定理 `Finset.map_val`：map_val (f : α ↪ β) (s : Finset α) : (map f s).1 = s.1.m
+ap f
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
-theorem prod_const_one : (∏ _x in s, (1 : M)) = 1 := by
-  simp only [Finset.prod, Multiset.map_const', Multiset.prod_replicate, one_pow]
-
-@[to_additive (attr := simp)]
-/--
-theorem `prod_map` / 定理 `prod_map`
-
-English:
-theorem prod_map
-  given: (s : Finset ι) (e : ι ↪ κ) (f : κ -> M)
-  proof: by
-  rw [Finset.prod]; rw [Finset.map_val]; rw [Multiset.map_map]; rfl
-
-中文:
-定理 prod_map
-  条件: (s : 有限集 ι) (e : ι ↪ κ) (f : κ -> M)
-  证明: by
-  rw [Finset.prod]; rw [Finset.map_val]; rw [Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.map_val, Finset.prod, Multiset, Multiset.map_map, map_map, map_val
--/
-theorem prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) :
-    ∏ x in s.map e, f x = ∏ x in s, f (e x) := by
-  rw [Finset.prod]; rw [Finset.map_val]; rw [Multiset.map_map]; rfl
+theorem prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ → M) :
+    ∏ x ∈ s.map e, f x = ∏ x ∈ s, f (e x) := by
+  rw [Finset.prod, Finset.map_val, Multiset.map_map]; rfl
 
 /-- Variant of `prod_map` not applied to a function. -/
 @[to_additive (attr := grind =)]
-/--
-theorem `prod_map'` / 定理 `prod_map'`
+/-
+**Finset.prod_map'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_map' (s : Finset ι) (e : ι ↪ κ) : Finset.prod (s.map e) = fun (f : κ 
+-> M) => ∏ x in s, f (e x)
+参数：s : Finset ι；e : ι ↪ κ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem prod_map'
-  given: (s : Finset ι) (e : ι ↪ κ)
-  proof: by
-  funext f
-  simp
-
-中文:
-定理 prod_map'
-  条件: (s : 有限集 ι) (e : ι ↪ κ)
-  证明: by
-  funext f
-  simp
+--- 原说明 ---
+Variant of `prod_map` not applied to a function.
 -/
 theorem prod_map' (s : Finset ι) (e : ι ↪ κ) :
-    Finset.prod (s.map e) = fun (f : κ -> M) => ∏ x in s, f (e x) := by
+    Finset.prod (s.map e) = fun (f : κ → M) => ∏ x ∈ s, f (e x) := by
   funext f
   simp
 
 section ToList
 
 @[to_additive (attr := simp, grind =)]
-/--
-theorem `prod_map_toList` / 定理 `prod_map_toList`
-
-English:
-theorem prod_map_toList
-  given: (s : Finset ι) (f : ι -> M)
-  statement: (s.toList.map f).prod = s.prod f
-  proof: by
-  rw [Finset.prod]; rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [Finset.coe_toList]
-
-@[to_additive (attr := simp, grind =)]
-
-中文:
-定理 prod_map_toList
-  条件: (s : 有限集 ι) (f : ι -> M)
-  结论: (s.toList.map f).乘积 = s.乘积 f
-  证明: by
-  rw [Finset.prod]; rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [Finset.coe_toList]
-
-@[to_additive (attr := simp, grind =)]
-
-Depends on / 依赖: Finset, Finset.coe_toList, Finset.prod, Multiset, Multiset.map_coe, Multiset.prod_coe, coe_toList, map_coe, prod_coe
+/-
+**Finset.prod_map_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_map_toList (s : Finset ι) (f : ι -> M) : (s.toList.map f).prod = s.pr
+od f
+参数：s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] 
+(s : Finset ι) (f : ι → M), s.prod f = (Multiset.map f s.val).prod
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.prod_coe`：prod_coe (l : List M) : prod ↑l = l.prod
+· 使用定理 `Multiset.map_coe`：∀ {α : Type u_1} {β : Type v} (f : α → β) (l : List α)
+, Multiset.map f ↑l = ↑(List.map f l)
+· 使用定理 `Finset.coe_toList`：coe_toList (s : Finset α) : (s.toList : Multiset α) =
+ s.val
 -/
-theorem prod_map_toList (s : Finset ι) (f : ι -> M) : (s.toList.map f).prod = s.prod f := by
-  rw [Finset.prod]; rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [Finset.coe_toList]
+theorem prod_map_toList (s : Finset ι) (f : ι → M) : (s.toList.map f).prod = s.prod f := by
+  rw [Finset.prod, ← Multiset.prod_coe, ← Multiset.map_coe, Finset.coe_toList]
 
 @[to_additive (attr := simp, grind =)]
-/--
-theorem `prod_toList` / 定理 `prod_toList`
-
-English:
-theorem prod_toList
-  given: {M : Type*} [CommMonoid M] (s : Finset M)
-  proof: by
-  simpa using! s.prod_map_toList id
-
-中文:
-定理 prod_toList
-  条件: {M : 类型} [交换幺半群 M] (s : 有限集 M)
-  证明: by
-  simpa using! s.prod_map_toList id
-
-Depends on / 依赖: prod_map_toList, s.prod_map_toList
+/-
+**Finset.prod_toList** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_toList {M : Type*} [CommMonoid M] (s : Finset M) : s.toList.prod = ∏ 
+x in s, x
+参数：s : Finset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `Finset.prod_map_toList`：prod_map_toList (s : Finset ι) (f : ι -> M) : (s
+.toList.map f).prod = s.prod f
 -/
 theorem prod_toList {M : Type*} [CommMonoid M] (s : Finset M) :
-    s.toList.prod = ∏ x in s, x := by
+    s.toList.prod = ∏ x ∈ s, x := by
   simpa using! s.prod_map_toList id
 
 end ToList
 
 @[to_additive]
-/--
-theorem `_root_.Equiv.Perm.prod_comp` / 定理 `_root_.Equiv.Perm.prod_comp`
-
-English:
-theorem _root_.Equiv.Perm.prod_comp
-  statement: (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> M)
-  proof: by
-  convert! (prod_map s σ.toEmbedding f).symm
-  exact (map_perm hs).symm
-
-@[to_additive]
-
-中文:
-定理 _root_.等价.置换.prod_comp
-  结论: (σ : 等价.置换 ι) (s : 有限集 ι) (f : ι -> M)
-  证明: by
-  convert! (prod_map s σ.toEmbedding f).symm
-  exact (map_perm hs).symm
-
-@[to_additive]
-
-Depends on / 依赖: convert, map_perm, prod_map, toEmbedding
+/-
+**Finset._root_.Equiv.Perm.prod_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Equiv.Perm.prod_comp (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> M)
-    (hs : { a | σ a != a } subseteq s) : (∏ x in s, f (σ x)) = ∏ x in s, f x := by
+theorem _root_.Equiv.Perm.prod_comp (σ : Equiv.Perm ι) (s : Finset ι) (f : ι → M)
+    (hs : { a | σ a ≠ a } ⊆ s) : (∏ x ∈ s, f (σ x)) = ∏ x ∈ s, f x := by
   convert! (prod_map s σ.toEmbedding f).symm
   exact (map_perm hs).symm
 
 @[to_additive]
-/--
-theorem `_root_.Equiv.Perm.prod_comp'` / 定理 `_root_.Equiv.Perm.prod_comp'`
-
-English:
-theorem _root_.Equiv.Perm.prod_comp'
-  statement: (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> ι -> M)
-  proof: by
-  convert! σ.prod_comp s (fun x => f x (σ.symm x)) hs
-  rw [Equiv.symm_apply_apply]
-
-中文:
-定理 _root_.等价.置换.prod_comp'
-  结论: (σ : 等价.置换 ι) (s : 有限集 ι) (f : ι -> ι -> M)
-  证明: by
-  convert! σ.prod_comp s (fun x => f x (σ.symm x)) hs
-  rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, convert, prod_comp, symm_apply_apply
+/-
+**Finset._root_.Equiv.Perm.prod_comp'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Equiv.Perm.prod_comp' (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> ι -> M)
-    (hs : { a | σ a != a } subseteq s) : (∏ x in s, f (σ x) x) = ∏ x in s, f x (σ.symm x) := by
+theorem _root_.Equiv.Perm.prod_comp' (σ : Equiv.Perm ι) (s : Finset ι) (f : ι → ι → M)
+    (hs : { a | σ a ≠ a } ⊆ s) : (∏ x ∈ s, f (σ x) x) = ∏ x ∈ s, f x (σ.symm x) := by
   convert! σ.prod_comp s (fun x => f x (σ.symm x)) hs
   rw [Equiv.symm_apply_apply]
 
@@ -787,7 +666,7 @@ section CommMonoid
 variable [CommMonoid M]
 
 section bij
-variable {s : Finset ι} {t : Finset κ} {f : ι -> M} {g : κ -> M}
+variable {s : Finset ι} {t : Finset κ} {f : ι → M} {g : κ → M}
 
 /-- Reorder a product.
 
@@ -803,25 +682,28 @@ rather than by an inverse function.
 
 The difference with `Finset.sum_nbij` is that the bijection is allowed to use membership of the
 domain of the sum, rather than being a non-dependent function. -/]
-/--
-theorem `prod_bij` / 定理 `prod_bij`
-
-English:
-theorem prod_bij
-  statement: (i : forall a in s, κ) (hi : forall a ha, i a ha in t)
-  proof: congr_arg Multiset.prod (Multiset.map_eq_map_of_bij_of_nodup f g s.2 t.2 i hi i_inj i_surj h)
-
-中文:
-定理 prod_bij
-  结论: (i : 对任意 a in s, κ) (hi : 对任意 a ha, i a ha in t)
-  证明: congr_arg Multiset.prod (Multiset.map_eq_map_of_bij_of_nodup f g s.2 t.2 i hi i_inj i_surj h)
-
-Depends on / 依赖: Multiset, Multiset.map_eq_map_of_bij_of_nodup, Multiset.prod, congr_arg, i_inj, i_surj, map_eq_map_of_bij_of_nodup
+/-
+**Finset.prod_bij** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_bij (i : forall a in s, κ) (hi : forall a ha, i a ha in t) (i_inj : f
+orall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂) (i_surj : forall b in t, ex
+ists a ha, i a ha = b) (h : forall a ha, f a = g (i a ha)) : ∏ x in s, f x = ∏ x
+ in t, g x
+参数：i : forall a in s, κ；hi : forall a ha, i a ha in t；i_inj : forall a₁ ha₁ a₂ h
+a₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂；i_surj : forall b in t, exists a ha, i a ha =
+ b；h : forall a ha, f a = g (i a ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Multiset.map_eq_map_of_bij_of_nodup`：map_eq_map_of_bij_of_nodup (f : α -
+> γ) (g : β -> γ) {s : Multiset α} {t : Multiset β} (hs : s.Nodup) (ht : t.Nodup
+) (i : forall a in s, β) …
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
-theorem prod_bij (i : forall a in s, κ) (hi : forall a ha, i a ha in t)
-    (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂)
-    (i_surj : forall b in t, exists a ha, i a ha = b) (h : forall a ha, f a = g (i a ha)) :
-    ∏ x in s, f x = ∏ x in t, g x :=
+theorem prod_bij (i : ∀ a ∈ s, κ) (hi : ∀ a ha, i a ha ∈ t)
+    (i_inj : ∀ a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ → a₁ = a₂)
+    (i_surj : ∀ b ∈ t, ∃ a ha, i a ha = b) (h : ∀ a ha, f a = g (i a ha)) :
+    ∏ x ∈ s, f x = ∏ x ∈ t, g x :=
   congr_arg Multiset.prod (Multiset.map_eq_map_of_bij_of_nodup f g s.2 t.2 i hi i_inj i_surj h)
 
 /-- Reorder a product.
@@ -838,33 +720,35 @@ as a surjective injection.
 
 The difference with `Finset.sum_nbij'` is that the bijection and its inverse are allowed to use
 membership of the domains of the sums, rather than being non-dependent functions. -/]
-/--
-theorem `prod_bij'` / 定理 `prod_bij'`
-
-English:
-theorem prod_bij'
-  statement: (i : forall a in s, κ) (j : forall a in t, ι) (hi : forall a ha, i a ha in t)
-  proof: by
-  refine prod_bij i hi (fun a1 h1 a2 h2 eq => ?_) (fun b hb => ⟨_, hj b hb, right_inv b hb⟩) h
-  rw [← left_inv a1 h1]; rw [← left_inv a2 h2]
-  simp only [eq]
-
-中文:
-定理 prod_bij'
-  结论: (i : 对任意 a in s, κ) (j : 对任意 a in t, ι) (hi : 对任意 a ha, i a ha in t)
-  证明: by
-  refine prod_bij i hi (fun a1 h1 a2 h2 eq => ?_) (fun b hb => ⟨_, hj b hb, right_inv b hb⟩) h
-  rw [← left_inv a1 h1]; rw [← left_inv a2 h2]
-  simp only [eq]
-
-Depends on / 依赖: left_inv, prod_bij, right_inv
+/-
+**Finset.prod_bij'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_bij' (i : forall a in s, κ) (j : forall a in t, ι) (hi : forall a ha,
+ i a ha in t) (hj : forall a ha, j a ha in s) (left_inv : forall a ha, j (i a ha
+) (hi a ha) = a) (right_inv : forall a ha, i (j a ha) (hj a ha) = a) (h : forall
+ a ha, f a = g (i a ha)) : ∏ x in s, f x = ∏ x in t, g x
+参数：i : forall a in s, κ；j : forall a in t, ι；hi : forall a ha, i a ha in t；hj : 
+forall a ha, j a ha in s；left_inv : forall a ha, j (i a ha) (hi a ha) = a；right_
+inv : forall a ha, i (j a ha) (hj a ha) = a；h : forall a ha, f a = g (i a ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_bij`：prod_bij (i : forall a in s, κ) (hi : forall a ha, i a 
+ha in t) (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂) (i_surj 
+: for…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_bij' (i : forall a in s, κ) (j : forall a in t, ι) (hi : forall a ha, i a ha in t)
-    (hj : forall a ha, j a ha in s) (left_inv : forall a ha, j (i a ha) (hi a ha) = a)
-    (right_inv : forall a ha, i (j a ha) (hj a ha) = a) (h : forall a ha, f a = g (i a ha)) :
-    ∏ x in s, f x = ∏ x in t, g x := by
-  refine prod_bij i hi (fun a1 h1 a2 h2 eq => ?_) (fun b hb => ⟨_, hj b hb, right_inv b hb⟩) h
-  rw [← left_inv a1 h1]; rw [← left_inv a2 h2]
+theorem prod_bij' (i : ∀ a ∈ s, κ) (j : ∀ a ∈ t, ι) (hi : ∀ a ha, i a ha ∈ t)
+    (hj : ∀ a ha, j a ha ∈ s) (left_inv : ∀ a ha, j (i a ha) (hi a ha) = a)
+    (right_inv : ∀ a ha, i (j a ha) (hj a ha) = a) (h : ∀ a ha, f a = g (i a ha)) :
+    ∏ x ∈ s, f x = ∏ x ∈ t, g x := by
+  refine prod_bij i hi (fun a1 h1 a2 h2 eq ↦ ?_) (fun b hb ↦ ⟨_, hj b hb, right_inv b hb⟩) h
+  rw [← left_inv a1 h1, ← left_inv a2 h2]
   simp only [eq]
 
 /-- Reorder a product.
@@ -881,25 +765,31 @@ rather than by an inverse function.
 
 The difference with `Finset.sum_bij` is that the bijection is a non-dependent function, rather than
 being allowed to use membership of the domain of the sum. -/]
-/--
-lemma `prod_nbij` / 引理 `prod_nbij`
-
-English:
-lemma prod_nbij
-  statement: (i : ι -> κ) (hi : forall a in s, i a in t) (i_inj : (s : Set ι).InjOn i)
-  proof: prod_bij (fun a _ => i a) hi i_inj (by simpa using! i_surj) h
-
-中文:
-引理 prod_nbij
-  结论: (i : ι -> κ) (hi : 对任意 a in s, i a in t) (i_inj : (s : 集合 ι).单射限制 i)
-  证明: prod_bij (fun a _ => i a) hi i_inj (by simpa using! i_surj) h
-
-Depends on / 依赖: i_inj, i_surj, prod_bij
+/-
+**Finset.prod_nbij** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_nbij (i : ι -> κ) (hi : forall a in s, i a in t) (i_inj : (s : Set ι)
+.InjOn i) (i_surj : (s : Set ι).SurjOn i t) (h : forall a in s, f a = g (i a)) :
+ ∏ x in s, f x = ∏ x in t, g x
+参数：i : ι -> κ；hi : forall a in s, i a in t；i_inj : (s : Set ι).InjOn i；i_surj : 
+(s : Set ι).SurjOn i t；h : forall a in s, f a = g (i a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_bij`：prod_bij (i : forall a in s, κ) (hi : forall a ha, i a 
+ha in t) (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂) (i_surj 
+: for…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma prod_nbij (i : ι -> κ) (hi : forall a in s, i a in t) (i_inj : (s : Set ι).InjOn i)
-    (i_surj : (s : Set ι).SurjOn i t) (h : forall a in s, f a = g (i a)) :
-    ∏ x in s, f x = ∏ x in t, g x :=
-  prod_bij (fun a _ => i a) hi i_inj (by simpa using! i_surj) h
+lemma prod_nbij (i : ι → κ) (hi : ∀ a ∈ s, i a ∈ t) (i_inj : (s : Set ι).InjOn i)
+    (i_surj : (s : Set ι).SurjOn i t) (h : ∀ a ∈ s, f a = g (i a)) :
+    ∏ x ∈ s, f x = ∏ x ∈ t, g x :=
+  prod_bij (fun a _ ↦ i a) hi i_inj (by simpa using! i_surj) h
 
 /-- Reorder a product.
 
@@ -922,25 +812,25 @@ functions, rather than being allowed to use membership of the domains of the sum
 
 The difference with `Finset.sum_equiv` is that bijectivity is only required to hold on the domains
 of the sums, rather than on the entire types. -/]
-/--
-lemma `prod_nbij'` / 引理 `prod_nbij'`
-
-English:
-lemma prod_nbij'
-  statement: (i : ι -> κ) (j : κ -> ι) (hi : forall a in s, i a in t) (hj : forall a in t, j a in s)
-  proof: prod_bij' (fun a _ => i a) (fun b _ => j b) hi hj left_inv right_inv h
-
-中文:
-引理 prod_nbij'
-  结论: (i : ι -> κ) (j : κ -> ι) (hi : 对任意 a in s, i a in t) (hj : 对任意 a in t, j a in s)
-  证明: prod_bij' (fun a _ => i a) (fun b _ => j b) hi hj left_inv right_inv h
-
-Depends on / 依赖: left_inv, prod_bij, right_inv
+/-
+**Finset.prod_nbij'** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_nbij' (i : ι -> κ) (j : κ -> ι) (hi : forall a in s, i a in t) (hj : 
+forall a in t, j a in s) (left_inv : forall a in s, j (i a) = a) (right_inv : fo
+rall a in t, i (j a) = a) (h : forall a in s, f a = g (i a)) : ∏ x in s, f x = ∏
+ x in t, g x
+参数：i : ι -> κ；j : κ -> ι；hi : forall a in s, i a in t；hj : forall a in t, j a in
+ s；left_inv : forall a in s, j (i a) = a；right_inv : forall a in t, i (j a) = a；
+h : forall a in s, f a = g (i a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_bij'`：prod_bij' (i : forall a in s, κ) (j : forall a in t, ι
+) (hi : forall a ha, i a ha in t) (hj : forall a ha, j a ha in s) (left_inv : fo
+rall a…
 -/
-lemma prod_nbij' (i : ι -> κ) (j : κ -> ι) (hi : forall a in s, i a in t) (hj : forall a in t, j a in s)
-    (left_inv : forall a in s, j (i a) = a) (right_inv : forall a in t, i (j a) = a)
-    (h : forall a in s, f a = g (i a)) : ∏ x in s, f x = ∏ x in t, g x :=
-  prod_bij' (fun a _ => i a) (fun b _ => j b) hi hj left_inv right_inv h
+lemma prod_nbij' (i : ι → κ) (j : κ → ι) (hi : ∀ a ∈ s, i a ∈ t) (hj : ∀ a ∈ t, j a ∈ s)
+    (left_inv : ∀ a ∈ s, j (i a) = a) (right_inv : ∀ a ∈ t, i (j a) = a)
+    (h : ∀ a ∈ s, f a = g (i a)) : ∏ x ∈ s, f x = ∏ x ∈ t, g x :=
+  prod_bij' (fun a _ ↦ i a) (fun b _ ↦ j b) hi hj left_inv right_inv h
 
 /-- Specialization of `Finset.prod_nbij'` that automatically fills in most arguments.
 
@@ -948,23 +838,37 @@ See `Fintype.prod_equiv` for the version where `s` and `t` are `univ`. -/
 @[to_additive /-- Specialization of `Finset.sum_nbij'` that automatically fills in most arguments.
 
 See `Fintype.sum_equiv` for the version where `s` and `t` are `univ`. -/]
-/--
-lemma `prod_equiv` / 引理 `prod_equiv`
-
-English:
-lemma prod_equiv
-  given: (e : ι ≃ κ) (hst : forall i, i in s ↔ e i in t) (hfg : forall i in s, f i = g (e i))
-  proof: by refine prod_nbij' e e.symm ?_ ?_ ?_ ?_ hfg <;> simp [hst]
-
-中文:
-引理 prod_equiv
-  条件: (e : ι ≃ κ) (hst : 对任意 i, i in s ↔ e i in t) (hfg : 对任意 i in s, f i = g (e i))
-  证明: by refine prod_nbij' e e.symm ?_ ?_ ?_ ?_ hfg <;> simp [hst]
-
-Depends on / 依赖: e.symm, prod_nbij
+/-
+**Finset.prod_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_equiv (e : ι ≃ κ) (hst : forall i, i in s ↔ e i in t) (hfg : forall i
+ in s, f i = g (e i)) : ∏ i in s, f i = ∏ i in t, g i
+参数：e : ι ≃ κ；hst : forall i, i in s ↔ e i in t；hfg : forall i in s, f i = g (e i
+)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.prod_nbij'`：prod_nbij' (i : ι -> κ) (j : κ -> ι) (hi : forall a i
+n s, i a in t) (hj : forall a in t, j a in s) (left_inv : forall a in s, j (i a)
+ = a) (…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma prod_equiv (e : ι ≃ κ) (hst : forall i, i in s ↔ e i in t) (hfg : forall i in s, f i = g (e i)) :
-    ∏ i in s, f i = ∏ i in t, g i := by refine prod_nbij' e e.symm ?_ ?_ ?_ ?_ hfg <;> simp [hst]
+lemma prod_equiv (e : ι ≃ κ) (hst : ∀ i, i ∈ s ↔ e i ∈ t) (hfg : ∀ i ∈ s, f i = g (e i)) :
+    ∏ i ∈ s, f i = ∏ i ∈ t, g i := by refine prod_nbij' e e.symm ?_ ?_ ?_ ?_ hfg <;> simp [hst]
 
 /-- Specialization of `Finset.prod_bij` that automatically fills in most arguments.
 
@@ -972,395 +876,351 @@ See `Fintype.prod_bijective` for the version where `s` and `t` are `univ`. -/
 @[to_additive /-- Specialization of `Finset.sum_bij` that automatically fills in most arguments.
 
 See `Fintype.sum_bijective` for the version where `s` and `t` are `univ`. -/]
-/--
-lemma `prod_bijective` / 引理 `prod_bijective`
-
-English:
-lemma prod_bijective
-  statement: (e : ι -> κ) (he : e.Bijective) (hst : forall i, i in s ↔ e i in t)
-  proof: prod_equiv (.ofBijective e he) hst hfg
-
-中文:
-引理 prod_bijective
-  结论: (e : ι -> κ) (he : e.双射) (hst : 对任意 i, i in s ↔ e i in t)
-  证明: prod_equiv (.ofBijective e he) hst hfg
-
-Depends on / 依赖: ofBijective, prod_equiv
+/-
+**Finset.prod_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_bijective (e : ι -> κ) (he : e.Bijective) (hst : forall i, i in s ↔ e
+ i in t) (hfg : forall i in s, f i = g (e i)) : ∏ i in s, f i = ∏ i in t, g i
+参数：e : ι -> κ；he : e.Bijective；hst : forall i, i in s ↔ e i in t；hfg : forall i 
+in s, f i = g (e i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.prod_equiv`：prod_equiv (e : ι ≃ κ) (hst : forall i, i in s ↔ e i 
+in t) (hfg : forall i in s, f i = g (e i)) : ∏ i in s, f i = ∏ i in t, g i
 -/
-lemma prod_bijective (e : ι -> κ) (he : e.Bijective) (hst : forall i, i in s ↔ e i in t)
-    (hfg : forall i in s, f i = g (e i)) :
-    ∏ i in s, f i = ∏ i in t, g i := prod_equiv (.ofBijective e he) hst hfg
+lemma prod_bijective (e : ι → κ) (he : e.Bijective) (hst : ∀ i, i ∈ s ↔ e i ∈ t)
+    (hfg : ∀ i ∈ s, f i = g (e i)) :
+    ∏ i ∈ s, f i = ∏ i ∈ t, g i := prod_equiv (.ofBijective e he) hst hfg
 
 end bij
 
 @[to_additive]
-/--
-theorem `prod_hom_rel` / 定理 `prod_hom_rel`
-
-English:
-theorem prod_hom_rel
-  statement: [CommMonoid N] {r : M -> N -> Prop} {f : ι -> M} {g : ι -> N} {s : Finset ι}
-  proof: by
-  delta Finset.prod
-  apply Multiset.prod_hom_rel <;> assumption
-
-中文:
-定理 prod_hom_rel
-  结论: [交换幺半群 N] {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N} {s : 有限集 ι}
-  证明: by
-  delta Finset.prod
-  apply Multiset.prod_hom_rel <;> assumption
-
-Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.prod_hom_rel, prod_hom_rel
+/-
+**Finset.prod_hom_rel** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_hom_rel [CommMonoid N] {r : M -> N -> Prop} {f : ι -> M} {g : ι -> N}
+ {s : Finset ι} (h₁ : r 1 1) (h₂ : forall a b c, r b c -> r (f a * b) (g a * c))
+ : r (∏ x in s, f x) (∏ x in s, g x)
+参数：h₁ : r 1 1；h₂ : forall a b c, r b c -> r (f a * b) (g a * c)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_hom_rel`：prod_hom_rel (s : Multiset ι) {r : M -> N -> Prop
+} {f : ι -> M} {g : ι -> N} (h₁ : r 1 1) (h₂ : forall ⦃a b c⦄, r b c -> r (f a *
+ b) (g a * …
 -/
-theorem prod_hom_rel [CommMonoid N] {r : M -> N -> Prop} {f : ι -> M} {g : ι -> N} {s : Finset ι}
-    (h₁ : r 1 1) (h₂ : forall a b c, r b c -> r (f a * b) (g a * c)) :
-    r (∏ x in s, f x) (∏ x in s, g x) := by
+theorem prod_hom_rel [CommMonoid N] {r : M → N → Prop} {f : ι → M} {g : ι → N} {s : Finset ι}
+    (h₁ : r 1 1) (h₂ : ∀ a b c, r b c → r (f a * b) (g a * c)) :
+    r (∏ x ∈ s, f x) (∏ x ∈ s, g x) := by
   delta Finset.prod
   apply Multiset.prod_hom_rel <;> assumption
 
 variable (f s)
 
 @[to_additive]
-/--
-theorem `prod_coe_sort_eq_attach` / 定理 `prod_coe_sort_eq_attach`
-
-English:
-theorem prod_coe_sort_eq_attach
-  given: (f : s -> M)
-  statement: ∏ i : s, f i = ∏ i in s.attach, f i
-  proof: rfl
-
-中文:
-定理 prod_coe_sort_eq_attach
-  条件: (f : s -> M)
-  结论: ∏ i : s, f i = ∏ i in s.attach, f i
-  证明: rfl
+/-
+**Finset.prod_coe_sort_eq_attach** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_coe_sort_eq_attach (f : s -> M) : ∏ i : s, f i = ∏ i in s.attach, f i
+参数：f : s -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_coe_sort_eq_attach (f : s -> M) : ∏ i : s, f i = ∏ i in s.attach, f i :=
+theorem prod_coe_sort_eq_attach (f : s → M) : ∏ i : s, f i = ∏ i ∈ s.attach, f i :=
   rfl
 
 variable {f s}
 
 @[to_additive]
-/--
-theorem `prod_ite_index` / 定理 `prod_ite_index`
-
-English:
-theorem prod_ite_index
-  given: (p : Prop) [Decidable p] (s t : Finset ι) (f : ι -> M)
-  proof: apply_ite (fun s => ∏ x in s, f x) _ _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_ite_index
-  条件: (p : 命题) [可判定 p] (s t : 有限集 ι) (f : ι -> M)
-  证明: apply_ite (fun s => ∏ x in s, f x) _ _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: apply_ite
+/-
+**Finset.prod_ite_index** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_ite_index (p : Prop) [Decidable p] (s t : Finset ι) (f : ι -> M) : ∏ 
+x in if p then s else t, f x = if p then ∏ x in s, f x else ∏ x in t, f x
+参数：p : Prop；s t : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `apply_ite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst 
+: Decidable P] (x y : α),   f (if P then x else y) = if P then f x else f y
 -/
-theorem prod_ite_index (p : Prop) [Decidable p] (s t : Finset ι) (f : ι -> M) :
-    ∏ x in if p then s else t, f x = if p then ∏ x in s, f x else ∏ x in t, f x :=
-  apply_ite (fun s => ∏ x in s, f x) _ _ _
+theorem prod_ite_index (p : Prop) [Decidable p] (s t : Finset ι) (f : ι → M) :
+    ∏ x ∈ if p then s else t, f x = if p then ∏ x ∈ s, f x else ∏ x ∈ t, f x :=
+  apply_ite (fun s => ∏ x ∈ s, f x) _ _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_ite_irrel` / 定理 `prod_ite_irrel`
-
-English:
-theorem prod_ite_irrel
-  given: (p : Prop) [Decidable p] (s : Finset ι) (f g : ι -> M)
-  proof: by
+/-
+**Finset.prod_ite_irrel** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_ite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f g : ι -> M) : ∏ 
+x in s, (if p then f x else g x) = if p then ∏ x in s, f x else ∏ x in s, g x
+参数：p : Prop；s : Finset ι；f g : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+-/
+theorem prod_ite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f g : ι → M) :
+    ∏ x ∈ s, (if p then f x else g x) = if p then ∏ x ∈ s, f x else ∏ x ∈ s, g x := by
   split_ifs with h <;> rfl
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 prod_ite_irrel
-  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f g : ι -> M)
-  证明: by
-  split_ifs with h <;> rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.prod_dite_irrel** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_dite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f : p -> ι -> M) 
+(g : ¬p -> ι -> M) : ∏ x in s, (if h : p then f h x else g h x) = if h : p then 
+∏ x in s, f h x else ∏ x in s, g h x
+参数：p : Prop；s : Finset ι；f : p -> ι -> M；g : ¬p -> ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem prod_ite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f g : ι -> M) :
-    ∏ x in s, (if p then f x else g x) = if p then ∏ x in s, f x else ∏ x in s, g x := by
-  split_ifs with h <;> rfl
-
-@[to_additive (attr := simp)]
-/--
-theorem `prod_dite_irrel` / 定理 `prod_dite_irrel`
-
-English:
-theorem prod_dite_irrel
-  given: (p : Prop) [Decidable p] (s : Finset ι) (f : p -> ι -> M) (g : ¬p -> ι -> M)
-  proof: by
-  split_ifs with h <;> rfl
-
-@[to_additive]
-
-中文:
-定理 prod_dite_irrel
-  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : p -> ι -> M) (g : ¬p -> ι -> M)
-  证明: by
+theorem prod_dite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f : p → ι → M) (g : ¬p → ι → M) :
+    ∏ x ∈ s, (if h : p then f h x else g h x) =
+      if h : p then ∏ x ∈ s, f h x else ∏ x ∈ s, g h x := by
   split_ifs with h <;> rfl
 
 @[to_additive]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.ite_prod_one** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ite_prod_one (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M) : (if p 
+then (∏ x in s, f x) else 1) = ∏ x in s, if p then f x else 1
+参数：p : Prop；s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_ite_irrel`：prod_ite_irrel (p : Prop) [Decidable p] (s : Fins
+et ι) (f g : ι -> M) : ∏ x in s, (if p then f x else g x) = if p then ∏ x in s, 
+f x else ∏ …
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Finset.prod_const_one`：prod_const_one : (∏ _x in s, (1 : M)) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_dite_irrel (p : Prop) [Decidable p] (s : Finset ι) (f : p -> ι -> M) (g : ¬p -> ι -> M) :
-    ∏ x in s, (if h : p then f h x else g h x) =
-      if h : p then ∏ x in s, f h x else ∏ x in s, g h x := by
-  split_ifs with h <;> rfl
-
-@[to_additive]
-/--
-theorem `ite_prod_one` / 定理 `ite_prod_one`
-
-English:
-theorem ite_prod_one
-  given: (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M)
-  proof: by
+theorem ite_prod_one (p : Prop) [Decidable p] (s : Finset ι) (f : ι → M) :
+    (if p then (∏ x ∈ s, f x) else 1) = ∏ x ∈ s, if p then f x else 1 := by
   simp only [prod_ite_irrel, prod_const_one]
 
 @[to_additive]
-
-中文:
-定理 ite_prod_one
-  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : ι -> M)
-  证明: by
-  simp only [prod_ite_irrel, prod_const_one]
-
-@[to_additive]
-
-Depends on / 依赖: prod_const_one, prod_ite_irrel
+/-
+**Finset.ite_one_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ite_one_prod (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M) : (if p 
+then 1 else (∏ x in s, f x)) = ∏ x in s, if p then 1 else f x
+参数：p : Prop；s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_ite_irrel`：prod_ite_irrel (p : Prop) [Decidable p] (s : Fins
+et ι) (f g : ι -> M) : ∏ x in s, (if p then f x else g x) = if p then ∏ x in s, 
+f x else ∏ …
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Finset.prod_const_one`：prod_const_one : (∏ _x in s, (1 : M)) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ite_prod_one (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M) :
-    (if p then (∏ x in s, f x) else 1) = ∏ x in s, if p then f x else 1 := by
+theorem ite_one_prod (p : Prop) [Decidable p] (s : Finset ι) (f : ι → M) :
+    (if p then 1 else (∏ x ∈ s, f x)) = ∏ x ∈ s, if p then 1 else f x := by
   simp only [prod_ite_irrel, prod_const_one]
 
 @[to_additive]
-/--
-theorem `ite_one_prod` / 定理 `ite_one_prod`
-
-English:
-theorem ite_one_prod
-  given: (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M)
-  proof: by
-  simp only [prod_ite_irrel, prod_const_one]
-
-@[to_additive]
-
-中文:
-定理 ite_one_prod
-  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : ι -> M)
-  证明: by
-  simp only [prod_ite_irrel, prod_const_one]
-
-@[to_additive]
-
-Depends on / 依赖: prod_const_one, prod_ite_irrel
+/-
+**Finset.nonempty_of_prod_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_of_prod_ne_one (h : ∏ x in s, f x != 1) : s.Nonempty
+参数：h : ∏ x in s, f x != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ite_one_prod (p : Prop) [Decidable p] (s : Finset ι) (f : ι -> M) :
-    (if p then 1 else (∏ x in s, f x)) = ∏ x in s, if p then 1 else f x := by
-  simp only [prod_ite_irrel, prod_const_one]
-
-@[to_additive]
-/--
-theorem `nonempty_of_prod_ne_one` / 定理 `nonempty_of_prod_ne_one`
-
-English:
-theorem nonempty_of_prod_ne_one
-  given: (h : ∏ x in s, f x != 1)
-  statement: s.Nonempty
-  proof: s.eq_empty_or_nonempty.elim (fun H => False.elim <| h <| H.symm ▸ prod_empty) id
-
-@[to_additive]
-
-中文:
-定理 nonempty_of_prod_ne_one
-  条件: (h : ∏ x in s, f x != 1)
-  结论: s.非空
-  证明: s.eq_empty_or_nonempty.elim (fun H => False.elim <| h <| H.symm ▸ prod_empty) id
-
-@[to_additive]
-
-Depends on / 依赖: False.elim, H.symm, eq_empty_or_nonempty, prod_empty, s.eq_empty_or_nonempty.elim
--/
-theorem nonempty_of_prod_ne_one (h : ∏ x in s, f x != 1) : s.Nonempty :=
+theorem nonempty_of_prod_ne_one (h : ∏ x ∈ s, f x ≠ 1) : s.Nonempty :=
   s.eq_empty_or_nonempty.elim (fun H => False.elim <| h <| H.symm ▸ prod_empty) id
 
 @[to_additive]
-/--
-theorem `prod_range_zero` / 定理 `prod_range_zero`
-
-English:
-theorem prod_range_zero
-  given: (f : Nat -> M)
-  statement: ∏ k in range 0, f k = 1
-  proof: by rw [range_zero, prod_empty]
-
-中文:
-定理 prod_range_zero
-  条件: (f : 自然数 -> M)
-  结论: ∏ k in range 0, f k = 1
-  证明: by rw [range_zero, prod_empty]
-
-Depends on / 依赖: prod_empty, range_zero
+/-
+**Finset.prod_range_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_zero (f : Nat -> M) : ∏ k in range 0, f k = 1
+参数：f : Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.range_zero`：range_zero : range 0 = ∅
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
 -/
-theorem prod_range_zero (f : Nat -> M) : ∏ k in range 0, f k = 1 := by rw [range_zero, prod_empty]
+theorem prod_range_zero (f : ℕ → M) : ∏ k ∈ range 0, f k = 1 := by rw [range_zero, prod_empty]
 
 open List
-
-/--
-theorem `sum_filter_count_eq_countP` / 定理 `sum_filter_count_eq_countP`
-
-English:
-theorem sum_filter_count_eq_countP
-  given: [DecidableEq ι] (p : ι -> Prop) [DecidablePred p] (l : List ι)
-  proof: by
-  simp [Finset.sum, sum_map_count_dedup_filter_eq_countP p l]
-
-中文:
-定理 sum_filter_count_eq_countP
-  条件: [DecidableEq ι] (p : ι -> 命题) [DecidablePred p] (l : 列表 ι)
-  证明: by
-  simp [Finset.sum, sum_map_count_dedup_filter_eq_countP p l]
-
-Depends on / 依赖: Finset, Finset.sum, sum_map_count_dedup_filter_eq_countP
+/-
+**Finset.sum_filter_count_eq_countP** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_filter_count_eq_countP [DecidableEq ι] (p : ι -> Prop) [DecidablePred 
+p] (l : List ι) : ∑ x in l.toFinset with p x, l.count x = l.countP p
+参数：p : ι -> Prop；l : List ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.sum_map_count_dedup_filter_eq_countP`：sum_map_count_dedup_filter_eq
+_countP (p : α -> Bool) (l : List α) : ((l.dedup.filter p).map fun x => l.count 
+x).sum = l.countP p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_filter_count_eq_countP [DecidableEq ι] (p : ι -> Prop) [DecidablePred p] (l : List ι) :
-    ∑ x in l.toFinset with p x, l.count x = l.countP p := by
+theorem sum_filter_count_eq_countP [DecidableEq ι] (p : ι → Prop) [DecidablePred p] (l : List ι) :
+    ∑ x ∈ l.toFinset with p x, l.count x = l.countP p := by
   simp [Finset.sum, sum_map_count_dedup_filter_eq_countP p l]
 
 open Multiset
 
 
 @[to_additive]
-/--
-theorem `prod_mem_multiset` / 定理 `prod_mem_multiset`
-
-English:
-theorem prod_mem_multiset
-  statement: [DecidableEq ι] (m : Multiset ι) (f : { x // x in m } -> M) (g : ι -> M)
-  proof: by
-  refine prod_bij' (fun x _ => x) (fun x hx => ⟨x, Multiset.mem_toFinset.1 hx⟩) ?_ ?_ ?_ ?_ ?_ <;>
-    simp [hfg]
-
-中文:
-定理 prod_mem_multiset
-  结论: [DecidableEq ι] (m : Multiset ι) (f : { x // x in m } -> M) (g : ι -> M)
-  证明: by
-  refine prod_bij' (fun x _ => x) (fun x hx => ⟨x, Multiset.mem_toFinset.1 hx⟩) ?_ ?_ ?_ ?_ ?_ <;>
-    simp [hfg]
-
-Depends on / 依赖: Multiset, Multiset.mem_toFinset, mem_toFinset, prod_bij
+/-
+**Finset.prod_mem_multiset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_mem_multiset [DecidableEq ι] (m : Multiset ι) (f : { x // x in m } ->
+ M) (g : ι -> M) (hfg : forall x, f x = g x) : ∏ x : { x // x in m }, f x = ∏ x 
+in m.toFinset, g x
+参数：m : Multiset ι；f : { x // x in m } -> M；g : ι -> M；hfg : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_bij'`：prod_bij' (i : forall a in s, κ) (j : forall a in t, ι
+) (hi : forall a ha, i a ha in t) (hj : forall a ha, j a ha in s) (left_inv : fo
+rall a…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_toFinset`：mem_toFinset {a : α} {s : Multiset α} : a in s.to
+Finset ↔ a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_mem_multiset [DecidableEq ι] (m : Multiset ι) (f : { x // x in m } -> M) (g : ι -> M)
-    (hfg : forall x, f x = g x) : ∏ x : { x // x in m }, f x = ∏ x in m.toFinset, g x := by
-  refine prod_bij' (fun x _ => x) (fun x hx => ⟨x, Multiset.mem_toFinset.1 hx⟩) ?_ ?_ ?_ ?_ ?_ <;>
+theorem prod_mem_multiset [DecidableEq ι] (m : Multiset ι) (f : { x // x ∈ m } → M) (g : ι → M)
+    (hfg : ∀ x, f x = g x) : ∏ x : { x // x ∈ m }, f x = ∏ x ∈ m.toFinset, g x := by
+  refine prod_bij' (fun x _ ↦ x) (fun x hx ↦ ⟨x, Multiset.mem_toFinset.1 hx⟩) ?_ ?_ ?_ ?_ ?_ <;>
     simp [hfg]
 
 /-- To prove a property of a product, it suffices to prove that
 the property is multiplicative and holds on factors. -/
 @[to_additive /-- To prove a property of a sum, it suffices to prove that
 the property is additive and holds on summands. -/]
-/--
-theorem `prod_induction` / 定理 `prod_induction`
-
-English:
-theorem prod_induction
-  statement: {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> Prop)
-  proof: Multiset.prod_induction _ _ hom unit (Multiset.forall_mem_map_iff.mpr base)
-
-中文:
-定理 prod_induction
-  结论: {M : 类型} [交换幺半群 M] (f : ι -> M) (p : M -> 命题)
-  证明: Multiset.prod_induction _ _ hom unit (Multiset.forall_mem_map_iff.mpr base)
-
-Depends on / 依赖: Multiset, Multiset.forall_mem_map_iff.mpr, Multiset.prod_induction, forall_mem_map_iff, prod_induction
+/-
+**Finset.prod_induction** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_induction {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> Prop) (ho
+m : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p <
+| f x) : p ∏ x in s, f x
+参数：f : ι -> M；p : M -> Prop；hom : forall a b, p a -> p b -> p (a * b)；unit : p 1
+；base : forall x in s, p <| f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_induction`：prod_induction (p : M -> Prop) (s : Multiset M)
+ (p_mul : forall a b, p a -> p b -> p (a * b)) (p_one : p 1) (p_s : forall a in 
+s, p a) : p s…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.forall_mem_map_iff`：forall_mem_map_iff {f : α -> β} {p : β -> P
+rop} {s : Multiset α} : (forall y in s.map f, p y) ↔ forall x in s, p (f x)
 -/
-theorem prod_induction {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> Prop)
-    (hom : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p <| f x) :
-p ∏ x in s, f x :=
+theorem prod_induction {M : Type*} [CommMonoid M] (f : ι → M) (p : M → Prop)
+    (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p <| f x) :
+    p <| ∏ x ∈ s, f x :=
   Multiset.prod_induction _ _ hom unit (Multiset.forall_mem_map_iff.mpr base)
 
 /-- To prove a property of a product, it suffices to prove that
 the property is multiplicative and holds on factors. -/
 @[to_additive /-- To prove a property of a sum, it suffices to prove that
 the property is additive and holds on summands. -/]
-/--
-theorem `prod_induction_nonempty` / 定理 `prod_induction_nonempty`
-
-English:
-theorem prod_induction_nonempty
-  statement: {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> Prop)
-  proof: Multiset.prod_induction_nonempty p hom (by simp [nonempty_iff_ne_empty.mp nonempty])
-    (Multiset.forall_mem_map_iff.mpr base)
-
-@[to_additive]
-
-中文:
-定理 prod_induction_nonempty
-  结论: {M : 类型} [交换幺半群 M] (f : ι -> M) (p : M -> 命题)
-  证明: Multiset.prod_induction_nonempty p hom (by simp [nonempty_iff_ne_empty.mp nonempty])
-    (Multiset.forall_mem_map_iff.mpr base)
-
-@[to_additive]
-
-Depends on / 依赖: Multiset, Multiset.forall_mem_map_iff.mpr, Multiset.prod_induction_nonempty, forall_mem_map_iff, nonempty, nonempty_iff_ne_empty, nonempty_iff_ne_empty.mp, prod_induction_nonempty
+/-
+**Finset.prod_induction_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_induction_nonempty {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> 
+Prop) (hom : forall a b, p a -> p b -> p (a * b)) (nonempty : s.Nonempty) (base 
+: forall x in s, p <| f x) : p ∏ x in s, f x
+参数：f : ι -> M；p : M -> Prop；hom : forall a b, p a -> p b -> p (a * b)；nonempty :
+ s.Nonempty；base : forall x in s, p <| f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_induction_nonempty`：prod_induction_nonempty (p : M -> Prop
+) (p_mul : forall a b, p a -> p b -> p (a * b)) (hs : s != ∅) (p_s : forall a in
+ s, p a) : p s.prod
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.forall_mem_map_iff`：forall_mem_map_iff {f : α -> β} {p : β -> P
+rop} {s : Multiset α} : (forall y in s.map f, p y) ↔ forall x in s, p (f x)
 -/
-theorem prod_induction_nonempty {M : Type*} [CommMonoid M] (f : ι -> M) (p : M -> Prop)
-    (hom : forall a b, p a -> p b -> p (a * b)) (nonempty : s.Nonempty) (base : forall x in s, p <| f x) :
-p ∏ x in s, f x :=
+theorem prod_induction_nonempty {M : Type*} [CommMonoid M] (f : ι → M) (p : M → Prop)
+    (hom : ∀ a b, p a → p b → p (a * b)) (nonempty : s.Nonempty) (base : ∀ x ∈ s, p <| f x) :
+    p <| ∏ x ∈ s, f x :=
   Multiset.prod_induction_nonempty p hom (by simp [nonempty_iff_ne_empty.mp nonempty])
     (Multiset.forall_mem_map_iff.mpr base)
 
 @[to_additive]
-/--
-theorem `prod_pow` / 定理 `prod_pow`
-
-English:
-theorem prod_pow
-  given: (s : Finset ι) (n : Nat) (f : ι -> M)
-  statement: ∏ x in s, f x ^ n = (∏ x in s, f x) ^ n
-  proof: Multiset.prod_map_pow
-
-中文:
-定理 prod_pow
-  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> M)
-  结论: ∏ x in s, f x ^ n = (∏ x in s, f x) ^ n
-  证明: Multiset.prod_map_pow
-
-Depends on / 依赖: Multiset, Multiset.prod_map_pow, prod_map_pow
+/-
+**Finset.prod_pow** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_pow (s : Finset ι) (n : Nat) (f : ι -> M) : ∏ x in s, f x ^ n = (∏ x 
+in s, f x) ^ n
+参数：s : Finset ι；n : Nat；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_map_pow`：prod_map_pow {n : Nat} : (m.map fun i => f i ^ n)
+.prod = (m.map f).prod ^ n
 -/
-theorem prod_pow (s : Finset ι) (n : Nat) (f : ι -> M) : ∏ x in s, f x ^ n = (∏ x in s, f x) ^ n :=
+theorem prod_pow (s : Finset ι) (n : ℕ) (f : ι → M) : ∏ x ∈ s, f x ^ n = (∏ x ∈ s, f x) ^ n :=
   Multiset.prod_map_pow
-
-/--
-theorem `prod_dvd_prod_of_subset` / 定理 `prod_dvd_prod_of_subset`
-
-English:
-theorem prod_dvd_prod_of_subset
-  statement: {ι M : Type*} [CommMonoid M] (s t : Finset ι) (f : ι -> M)
-  proof: Multiset.prod_dvd_prod_of_le Multiset.map_le_map by simpa
-
-中文:
-定理 prod_dvd_prod_of_subset
-  结论: {ι M : 类型} [交换幺半群 M] (s t : 有限集 ι) (f : ι -> M)
-  证明: Multiset.prod_dvd_prod_of_le Multiset.map_le_map by simpa
-
-Depends on / 依赖: Multiset, Multiset.map_le_map, Multiset.prod_dvd_prod_of_le, map_le_map, prod_dvd_prod_of_le
+/-
+**Finset.prod_dvd_prod_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_dvd_prod_of_subset {ι M : Type*} [CommMonoid M] (s t : Finset ι) (f :
+ ι -> M) (h : s subseteq t) : (∏ i in s, f i) ∣ ∏ i in t, f i
+参数：s t : Finset ι；f : ι -> M；h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_dvd_prod_of_le`：prod_dvd_prod_of_le (h : s <= t) : s.prod 
+∣ t.prod
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
-theorem prod_dvd_prod_of_subset {ι M : Type*} [CommMonoid M] (s t : Finset ι) (f : ι -> M)
-    (h : s subseteq t) : (∏ i in s, f i) ∣ ∏ i in t, f i :=
-Multiset.prod_dvd_prod_of_le Multiset.map_le_map by simpa
+theorem prod_dvd_prod_of_subset {ι M : Type*} [CommMonoid M] (s t : Finset ι) (f : ι → M)
+    (h : s ⊆ t) : (∏ i ∈ s, f i) ∣ ∏ i ∈ t, f i :=
+  Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map <| by simpa
 
 end CommMonoid
 
@@ -1369,39 +1229,44 @@ variable [AddCommMonoid M] (s : Finset ι)
 
 open MulOpposite
 
-/--
-lemma `op_sum` / 引理 `op_sum`
+/-- Moving to the opposite additive commutative monoid commutes with summing. -/
+/-
+**Finset.op_sum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M] (s : Finset ι) (f
+ : ι → M),   MulOpposite.op (∑ x ∈ s, f x) = ∑ x ∈ s, MulOpposite.op (f x)
+参数：s : Finset ι；f : ι → M；∑ x ∈ s, f x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 
-English:
-lemma op_sum
-  given: (f : ι -> M)
-  statement: op (∑ x in s, f x) = ∑ x in s, op (f x)
-  proof: map_sum opAddEquiv ..
-
-中文:
-引理 op_sum
-  条件: (f : ι -> M)
-  结论: op (∑ x in s, f x) = ∑ x in s, op (f x)
-  证明: map_sum opAddEquiv ..
+--- 原说明 ---
+Moving to the opposite additive commutative monoid commutes with summing.
 -/
-@[simp] lemma op_sum (f : ι -> M) : op (∑ x in s, f x) = ∑ x in s, op (f x) := map_sum opAddEquiv ..
+@[simp] lemma op_sum (f : ι → M) : op (∑ x ∈ s, f x) = ∑ x ∈ s, op (f x) := map_sum opAddEquiv ..
+/-
+**Finset.unop_sum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M] (s : Finset ι) (f
+ : ι → Mᵐᵒᵖ),   MulOpposite.unop (∑ x ∈ s, f x) = ∑ x ∈ s, MulOpposite.unop (f x
+)
+参数：s : Finset ι；f : ι → Mᵐᵒᵖ；∑ x ∈ s, f x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 
-/--
-lemma `unop_sum` / 引理 `unop_sum`
-
-English:
-lemma unop_sum
-  given: (f : ι -> Mᵐᵒᵖ)
-  statement: unop (∑ x in s, f x) = ∑ x in s, unop (f x)
-  proof: map_sum opAddEquiv.symm ..
-
-中文:
-引理 unop_sum
-  条件: (f : ι -> Mᵐᵒᵖ)
-  结论: unop (∑ x in s, f x) = ∑ x in s, unop (f x)
-  证明: map_sum opAddEquiv.symm ..
+--- 原说明 ---
+Moving to the opposite additive commutative monoid commutes with summing.
 -/
-@[simp] lemma unop_sum (f : ι -> Mᵐᵒᵖ) : unop (∑ x in s, f x) = ∑ x in s, unop (f x) :=
+@[simp] lemma unop_sum (f : ι → Mᵐᵒᵖ) : unop (∑ x ∈ s, f x) = ∑ x ∈ s, unop (f x) :=
   map_sum opAddEquiv.symm ..
 
 end MulOpposite
@@ -1411,39 +1276,36 @@ variable [CommMonoid M] (s : Finset ι)
 
 open AddOpposite
 
-/--
-lemma `op_prod` / 引理 `op_prod`
-
-English:
-lemma op_prod
-  given: (f : ι -> M)
-  statement: op (∏ i in s, f i) = ∏ i in s, op (f i)
-  proof: map_prod opMulEquiv ..
-
-中文:
-引理 op_prod
-  条件: (f : ι -> M)
-  结论: op (∏ i in s, f i) = ∏ i in s, op (f i)
-  证明: map_prod opMulEquiv ..
+/-
+**Finset.op_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] (s : Finset ι) (f : 
+ι → M),   AddOpposite.op (∏ i ∈ s, f i) = ∏ i ∈ s, AddOpposite.op (f i)
+参数：s : Finset ι；f : ι → M；∏ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
-@[simp] lemma op_prod (f : ι -> M) : op (∏ i in s, f i) = ∏ i in s, op (f i) := map_prod opMulEquiv ..
-
-/--
-lemma `unop_prod` / 引理 `unop_prod`
-
-English:
-lemma unop_prod
-  given: (f : ι -> Mᵐᵒᵖ)
-  statement: unop (∏ i in s, f i) = ∏ i in s, unop (f i)
-  proof: map_prod opMulEquiv.symm ..
-
-中文:
-引理 unop_prod
-  条件: (f : ι -> Mᵐᵒᵖ)
-  结论: unop (∏ i in s, f i) = ∏ i in s, unop (f i)
-  证明: map_prod opMulEquiv.symm ..
+@[simp] lemma op_prod (f : ι → M) : op (∏ i ∈ s, f i) = ∏ i ∈ s, op (f i) := map_prod opMulEquiv ..
+/-
+**Finset.unop_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] (s : Finset ι) (f : 
+ι → Mᵐᵒᵖ),   AddOpposite.unop (∏ i ∈ s, f i) = ∏ i ∈ s, AddOpposite.unop (f i)
+参数：s : Finset ι；f : ι → Mᵐᵒᵖ；∏ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
-@[simp] lemma unop_prod (f : ι -> Mᵐᵒᵖ) : unop (∏ i in s, f i) = ∏ i in s, unop (f i) :=
+@[simp] lemma unop_prod (f : ι → Mᵐᵒᵖ) : unop (∏ i ∈ s, f i) = ∏ i ∈ s, unop (f i) :=
   map_prod opMulEquiv.symm ..
 
 end AddOpposite
@@ -1453,153 +1315,128 @@ section DivisionCommMonoid
 variable [DivisionCommMonoid G]
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_inv_distrib` / 定理 `prod_inv_distrib`
-
-English:
-theorem prod_inv_distrib
-  given: (f : ι -> G)
-  statement: (∏ x in s, (f x)⁻¹) = (∏ x in s, f x)⁻¹
-  proof: Multiset.prod_map_inv
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_inv_distrib
-  条件: (f : ι -> G)
-  结论: (∏ x in s, (f x)⁻¹) = (∏ x in s, f x)⁻¹
-  证明: Multiset.prod_map_inv
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Multiset, Multiset.prod_map_inv, prod_map_inv
+/-
+**Finset.prod_inv_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_inv_distrib (f : ι -> G) : (∏ x in s, (f x)⁻¹) = (∏ x in s, f x)⁻¹
+参数：f : ι -> G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_map_inv`：prod_map_inv : (m.map fun i => (f i)⁻¹).prod = (m
+.map f).prod⁻¹
 -/
-theorem prod_inv_distrib (f : ι -> G) : (∏ x in s, (f x)⁻¹) = (∏ x in s, f x)⁻¹ :=
+theorem prod_inv_distrib (f : ι → G) : (∏ x ∈ s, (f x)⁻¹) = (∏ x ∈ s, f x)⁻¹ :=
   Multiset.prod_map_inv
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_div_distrib` / 定理 `prod_div_distrib`
-
-English:
-theorem prod_div_distrib
-  given: (f g : ι -> G)
-  statement: ∏ x in s, f x / g x = (∏ x in s, f x) / ∏ x in s, g x
-  proof: Multiset.prod_map_div
-
-@[to_additive]
-
-中文:
-定理 prod_div_distrib
-  条件: (f g : ι -> G)
-  结论: ∏ x in s, f x / g x = (∏ x in s, f x) / ∏ x in s, g x
-  证明: Multiset.prod_map_div
-
-@[to_additive]
-
-Depends on / 依赖: Multiset, Multiset.prod_map_div, prod_map_div
+/-
+**Finset.prod_div_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_div_distrib (f g : ι -> G) : ∏ x in s, f x / g x = (∏ x in s, f x) / 
+∏ x in s, g x
+参数：f g : ι -> G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_map_div`：prod_map_div : (m.map fun i => f i / g i).prod = 
+(m.map f).prod / (m.map g).prod
 -/
-theorem prod_div_distrib (f g : ι -> G) : ∏ x in s, f x / g x = (∏ x in s, f x) / ∏ x in s, g x :=
+theorem prod_div_distrib (f g : ι → G) : ∏ x ∈ s, f x / g x = (∏ x ∈ s, f x) / ∏ x ∈ s, g x :=
   Multiset.prod_map_div
 
 @[to_additive]
-/--
-theorem `prod_zpow` / 定理 `prod_zpow`
-
-English:
-theorem prod_zpow
-  given: (f : ι -> G) (s : Finset ι) (n : Int)
-  statement: ∏ a in s, f a ^ n = (∏ a in s, f a) ^ n
-  proof: Multiset.prod_map_zpow
-
-中文:
-定理 prod_zpow
-  条件: (f : ι -> G) (s : 有限集 ι) (n : 整数)
-  结论: ∏ a in s, f a ^ n = (∏ a in s, f a) ^ n
-  证明: Multiset.prod_map_zpow
-
-Depends on / 依赖: Multiset, Multiset.prod_map_zpow, prod_map_zpow
+/-
+**Finset.prod_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_zpow (f : ι -> G) (s : Finset ι) (n : Int) : ∏ a in s, f a ^ n = (∏ a
+ in s, f a) ^ n
+参数：f : ι -> G；s : Finset ι；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.prod_map_zpow`：prod_map_zpow {n : Int} : (m.map fun i => f i ^ 
+n).prod = (m.map f).prod ^ n
 -/
-theorem prod_zpow (f : ι -> G) (s : Finset ι) (n : Int) : ∏ a in s, f a ^ n = (∏ a in s, f a) ^ n :=
+theorem prod_zpow (f : ι → G) (s : Finset ι) (n : ℤ) : ∏ a ∈ s, f a ^ n = (∏ a ∈ s, f a) ^ n :=
   Multiset.prod_map_zpow
 
 end DivisionCommMonoid
 
-/--
-theorem `sum_nat_mod` / 定理 `sum_nat_mod`
-
-English:
-theorem sum_nat_mod
-  given: (s : Finset ι) (n : Nat) (f : ι -> Nat)
-  proof: (Multiset.sum_nat_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-中文:
-定理 sum_nat_mod
-  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> 自然数)
-  证明: (Multiset.sum_nat_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.sum, Multiset, Multiset.map_map, Multiset.sum_nat_mod, map_map, sum_nat_mod
+/-
+**Finset.sum_nat_mod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_nat_mod (s : Finset ι) (n : Nat) (f : ι -> Nat) : (∑ i in s, f i) % n 
+= (∑ i in s, f i % n) % n
+参数：s : Finset ι；n : Nat；f : ι -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.sum_nat_mod`：sum_nat_mod (s : Multiset Nat) (n : Nat) : s.sum %
+ n = (s.map (· % n)).sum % n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M
+] (s : Finset ι) (f : ι → M),   s.sum f = (Multiset.map f s.val).sum
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
-theorem sum_nat_mod (s : Finset ι) (n : Nat) (f : ι -> Nat) :
-    (∑ i in s, f i) % n = (∑ i in s, f i % n) % n :=
-(Multiset.sum_nat_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-/--
-theorem `prod_nat_mod` / 定理 `prod_nat_mod`
-
-English:
-theorem prod_nat_mod
-  given: (s : Finset ι) (n : Nat) (f : ι -> Nat)
-  proof: (Multiset.prod_nat_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
-
-中文:
-定理 prod_nat_mod
-  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> 自然数)
-  证明: (Multiset.prod_nat_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_map, Multiset.prod_nat_mod, map_map, prod_nat_mod
+theorem sum_nat_mod (s : Finset ι) (n : ℕ) (f : ι → ℕ) :
+    (∑ i ∈ s, f i) % n = (∑ i ∈ s, f i % n) % n :=
+  (Multiset.sum_nat_mod _ _).trans <| by rw [Finset.sum, Multiset.map_map]; rfl
+/-
+**Finset.prod_nat_mod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_nat_mod (s : Finset ι) (n : Nat) (f : ι -> Nat) : (∏ i in s, f i) % n
+ = (∏ i in s, f i % n) % n
+参数：s : Finset ι；n : Nat；f : ι -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.prod_nat_mod`：prod_nat_mod (s : Multiset Nat) (n : Nat) : s.pro
+d % n = (s.map (· % n)).prod % n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] 
+(s : Finset ι) (f : ι → M), s.prod f = (Multiset.map f s.val).prod
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
-theorem prod_nat_mod (s : Finset ι) (n : Nat) (f : ι -> Nat) :
-    (∏ i in s, f i) % n = (∏ i in s, f i % n) % n :=
-(Multiset.prod_nat_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
-
-/--
-theorem `sum_int_mod` / 定理 `sum_int_mod`
-
-English:
-theorem sum_int_mod
-  given: (s : Finset ι) (n : Int) (f : ι -> Int)
-  proof: (Multiset.sum_int_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-中文:
-定理 sum_int_mod
-  条件: (s : 有限集 ι) (n : 整数) (f : ι -> 整数)
-  证明: (Multiset.sum_int_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.sum, Multiset, Multiset.map_map, Multiset.sum_int_mod, map_map, sum_int_mod
+theorem prod_nat_mod (s : Finset ι) (n : ℕ) (f : ι → ℕ) :
+    (∏ i ∈ s, f i) % n = (∏ i ∈ s, f i % n) % n :=
+  (Multiset.prod_nat_mod _ _).trans <| by rw [Finset.prod, Multiset.map_map]; rfl
+/-
+**Finset.sum_int_mod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_int_mod (s : Finset ι) (n : Int) (f : ι -> Int) : (∑ i in s, f i) % n 
+= (∑ i in s, f i % n) % n
+参数：s : Finset ι；n : Int；f : ι -> Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.sum_int_mod`：sum_int_mod (s : Multiset Int) (n : Int) : s.sum %
+ n = (s.map (· % n)).sum % n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M
+] (s : Finset ι) (f : ι → M),   s.sum f = (Multiset.map f s.val).sum
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
-theorem sum_int_mod (s : Finset ι) (n : Int) (f : ι -> Int) :
-    (∑ i in s, f i) % n = (∑ i in s, f i % n) % n :=
-(Multiset.sum_int_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
-
-/--
-theorem `prod_int_mod` / 定理 `prod_int_mod`
-
-English:
-theorem prod_int_mod
-  given: (s : Finset ι) (n : Int) (f : ι -> Int)
-  proof: (Multiset.prod_int_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
-
-中文:
-定理 prod_int_mod
-  条件: (s : 有限集 ι) (n : 整数) (f : ι -> 整数)
-  证明: (Multiset.prod_int_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
-
-Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_map, Multiset.prod_int_mod, map_map, prod_int_mod
+theorem sum_int_mod (s : Finset ι) (n : ℤ) (f : ι → ℤ) :
+    (∑ i ∈ s, f i) % n = (∑ i ∈ s, f i % n) % n :=
+  (Multiset.sum_int_mod _ _).trans <| by rw [Finset.sum, Multiset.map_map]; rfl
+/-
+**Finset.prod_int_mod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_int_mod (s : Finset ι) (n : Int) (f : ι -> Int) : (∏ i in s, f i) % n
+ = (∏ i in s, f i % n) % n
+参数：s : Finset ι；n : Int；f : ι -> Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.prod_int_mod`：prod_int_mod (s : Multiset Int) (n : Int) : s.pro
+d % n = (s.map (· % n)).prod % n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod.eq_1`：∀ {ι : Type u_1} {M : Type u_3} [inst : CommMonoid M] 
+(s : Finset ι) (f : ι → M), s.prod f = (Multiset.map f s.val).prod
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
 -/
-theorem prod_int_mod (s : Finset ι) (n : Int) (f : ι -> Int) :
-    (∏ i in s, f i) % n = (∏ i in s, f i % n) % n :=
-(Multiset.prod_int_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
+theorem prod_int_mod (s : Finset ι) (n : ℤ) (f : ι → ℤ) :
+    (∏ i ∈ s, f i) % n = (∏ i ∈ s, f i % n) % n :=
+  (Multiset.prod_int_mod _ _).trans <| by rw [Finset.prod, Multiset.map_map]; rfl
 
 end Finset
 
@@ -1618,39 +1455,34 @@ See `Function.Bijective.prod_comp` for a version without `h`. -/
 `Function.Bijective`.
 
 See `Function.Bijective.sum_comp` for a version without `h`. -/]
-/--
-lemma `prod_bijective` / 引理 `prod_bijective`
-
-English:
-lemma prod_bijective
-  statement: (e : ι -> κ) (he : e.Bijective) (f : ι -> M) (g : κ -> M)
-  proof: prod_equiv (.ofBijective e he) (by simp) (by simp [h])
-
-@[to_additive] alias _root_.Function.Bijective.finsetProd := prod_bijective
-
-@[deprecated (since := "2026-04-08")]
-alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSum
-
-@[to_additive existing, deprecated (since := "2026-04-08")]
-alias _root_.Function.Bijective.finset_prod := _root_.Function.Bijective.finsetProd
-
-中文:
-引理 prod_bijective
-  结论: (e : ι -> κ) (he : e.双射) (f : ι -> M) (g : κ -> M)
-  证明: prod_equiv (.ofBijective e he) (by simp) (by simp [h])
-
-@[to_additive] alias _root_.Function.Bijective.finsetProd := prod_bijective
-
-@[deprecated (since := "2026-04-08")]
-alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSum
-
-@[to_additive existing, deprecated (since := "2026-04-08")]
-alias _root_.Function.Bijective.finset_prod := _root_.Function.Bijective.finsetProd
-
-Depends on / 依赖: ofBijective, prod_equiv
+/-
+**Fintype.prod_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Fintype`。
+形式化陈述：prod_bijective (e : ι -> κ) (he : e.Bijective) (f : ι -> M) (g : κ -> M) (
+h : forall x, f x = g (e x)) : ∏ x, f x = ∏ x, g x
+参数：e : ι -> κ；he : e.Bijective；f : ι -> M；g : κ -> M；h : forall x, f x = g (e x)
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.prod_equiv`：prod_equiv (e : ι ≃ κ) (hst : forall i, i in s ↔ e i 
+in t) (hfg : forall i in s, f i = g (e i)) : ∏ i in s, f i = ∏ i in t, g i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.ofBijective_apply`：∀ {α : Sort u} {β : Sort v} (f : α → β) (hf : F
+unction.Bijective f) (a : α), (Equiv.ofBijective f hf) a = f a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma prod_bijective (e : ι -> κ) (he : e.Bijective) (f : ι -> M) (g : κ -> M)
-    (h : forall x, f x = g (e x)) : ∏ x, f x = ∏ x, g x :=
+lemma prod_bijective (e : ι → κ) (he : e.Bijective) (f : ι → M) (g : κ → M)
+    (h : ∀ x, f x = g (e x)) : ∏ x, f x = ∏ x, g x :=
   prod_equiv (.ofBijective e he) (by simp) (by simp [h])
 
 @[to_additive] alias _root_.Function.Bijective.finsetProd := prod_bijective
@@ -1670,95 +1502,49 @@ See `Equiv.prod_comp` for a version without `h`.
 automatically fills in most arguments.
 
 See `Equiv.sum_comp` for a version without `h`. -/]
-/--
-lemma `prod_equiv` / 引理 `prod_equiv`
-
-English:
-lemma prod_equiv
-  given: (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h : forall x, f x = g (e x))
-  proof: prod_bijective _ e.bijective _ _ h
-
-@[to_additive]
-
-中文:
-引理 prod_equiv
-  条件: (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h : 对任意 x, f x = g (e x))
-  证明: prod_bijective _ e.bijective _ _ h
-
-@[to_additive]
-
-Depends on / 依赖: bijective, e.bijective, prod_bijective
+/-
+**Fintype.prod_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Fintype`。
+形式化陈述：prod_equiv (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h : forall x, f x = g (e
+ x)) : ∏ x, f x = ∏ x, g x
+参数：e : ι ≃ κ；f : ι -> M；g : κ -> M；h : forall x, f x = g (e x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fintype.prod_bijective`：prod_bijective (e : ι -> κ) (he : e.Bijective) (
+f : ι -> M) (g : κ -> M) (h : forall x, f x = g (e x)) : ∏ x, f x = ∏ x, g x
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-lemma prod_equiv (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h : forall x, f x = g (e x)) :
+lemma prod_equiv (e : ι ≃ κ) (f : ι → M) (g : κ → M) (h : ∀ x, f x = g (e x)) :
     ∏ x, f x = ∏ x, g x := prod_bijective _ e.bijective _ _ h
 
 @[to_additive]
-/--
-lemma `_root_.Function.Bijective.prod_comp` / 引理 `_root_.Function.Bijective.prod_comp`
-
-English:
-lemma _root_.Function.Bijective.prod_comp
-  given: {e : ι -> κ} (he : e.Bijective) (g : κ -> M)
-  proof: prod_bijective _ he _ _ fun _ => rfl
-
-@[to_additive]
-
-中文:
-引理 _root_.函数.双射.prod_comp
-  条件: {e : ι -> κ} (he : e.双射) (g : κ -> M)
-  证明: prod_bijective _ he _ _ fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: prod_bijective
+/-
+**Fintype._root_.Function.Bijective.prod_comp** 是 Mathlib 中的一个引理，位于命名空间 `Fintype
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Function.Bijective.prod_comp {e : ι -> κ} (he : e.Bijective) (g : κ -> M) :
-    ∏ i, g (e i) = ∏ i, g i := prod_bijective _ he _ _ fun _ => rfl
+lemma _root_.Function.Bijective.prod_comp {e : ι → κ} (he : e.Bijective) (g : κ → M) :
+    ∏ i, g (e i) = ∏ i, g i := prod_bijective _ he _ _ fun _ ↦ rfl
 
 @[to_additive]
-/--
-lemma `_root_.Equiv.prod_comp` / 引理 `_root_.Equiv.prod_comp`
-
-English:
-lemma _root_.Equiv.prod_comp
-  given: (e : ι ≃ κ) (g : κ -> M)
-  statement: ∏ i, g (e i) = ∏ i, g i
-  proof: prod_equiv e _ _ fun _ => rfl
-
-@[to_additive]
-
-中文:
-引理 _root_.等价.prod_comp
-  条件: (e : ι ≃ κ) (g : κ -> M)
-  结论: ∏ i, g (e i) = ∏ i, g i
-  证明: prod_equiv e _ _ fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: prod_equiv
+/-
+**Fintype._root_.Equiv.prod_comp** 是 Mathlib 中的一个引理，位于命名空间 `Fintype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Equiv.prod_comp (e : ι ≃ κ) (g : κ -> M) : ∏ i, g (e i) = ∏ i, g i :=
-  prod_equiv e _ _ fun _ => rfl
+lemma _root_.Equiv.prod_comp (e : ι ≃ κ) (g : κ → M) : ∏ i, g (e i) = ∏ i, g i :=
+  prod_equiv e _ _ fun _ ↦ rfl
 
 @[to_additive]
-/--
-theorem `prod_empty` / 定理 `prod_empty`
-
-English:
-theorem prod_empty
-  given: [IsEmpty ι] (f : ι -> M)
-  statement: ∏ x : ι, f x = 1
-  proof: prod_of_isEmpty _
-
-中文:
-定理 prod_empty
-  条件: [是空 ι] (f : ι -> M)
-  结论: ∏ x : ι, f x = 1
-  证明: prod_of_isEmpty _
-
-Depends on / 依赖: prod_of_isEmpty
+/-
+**Fintype.prod_empty** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：prod_empty [IsEmpty ι] (f : ι -> M) : ∏ x : ι, f x = 1
+参数：f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_of_isEmpty`：prod_of_isEmpty [IsEmpty ι] (s : Finset ι) : ∏ i
+ in s, f i = 1
 -/
-theorem prod_empty [IsEmpty ι] (f : ι -> M) : ∏ x : ι, f x = 1 := prod_of_isEmpty _
+theorem prod_empty [IsEmpty ι] (f : ι → M) : ∏ x : ι, f x = 1 := prod_of_isEmpty _
 
 end CommMonoid
 end Fintype
@@ -1767,52 +1553,62 @@ namespace Finset
 variable [CommMonoid M]
 
 @[to_additive (attr := simp)]
-/--
-lemma `prod_attach_univ` / 引理 `prod_attach_univ`
-
-English:
-lemma prod_attach_univ
-  given: [Fintype ι] (f : {i // i in @univ ι _} -> M)
-  proof: Fintype.prod_equiv (Equiv.subtypeUnivEquiv mem_univ) _ _ by simp
-
-@[to_additive]
-
-中文:
-引理 prod_attach_univ
-  条件: [有限类型 ι] (f : {i // i in @univ ι _} -> M)
-  证明: Fintype.prod_equiv (Equiv.subtypeUnivEquiv mem_univ) _ _ by simp
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.subtypeUnivEquiv, Fintype, Fintype.prod_equiv, mem_univ, prod_equiv, subtypeUnivEquiv
+/-
+**Finset.prod_attach_univ** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_attach_univ [Fintype ι] (f : {i // i in @univ ι _} -> M) : ∏ i in uni
+v.attach, f i = ∏ i, f ⟨i, mem_univ _⟩
+参数：f : {i // i in @univ ι _} -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fintype.prod_equiv`：prod_equiv (e : ι ≃ κ) (f : ι -> M) (g : κ -> M) (h 
+: forall x, f x = g (e x)) : ∏ x, f x = ∏ x, g x
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.subtypeUnivEquiv_apply`：∀ {α : Sort u_9} {p : α → Prop} (h : ∀ (x 
+: α), p x) (x : Subtype p), (Equiv.subtypeUnivEquiv h) x = ↑x
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma prod_attach_univ [Fintype ι] (f : {i // i in @univ ι _} -> M) :
-    ∏ i in univ.attach, f i = ∏ i, f ⟨i, mem_univ _⟩ :=
-Fintype.prod_equiv (Equiv.subtypeUnivEquiv mem_univ) _ _ by simp
+lemma prod_attach_univ [Fintype ι] (f : {i // i ∈ @univ ι _} → M) :
+    ∏ i ∈ univ.attach, f i = ∏ i, f ⟨i, mem_univ _⟩ :=
+  Fintype.prod_equiv (Equiv.subtypeUnivEquiv mem_univ) _ _ <| by simp
 
 @[to_additive]
-/--
-theorem `prod_erase_attach` / 定理 `prod_erase_attach`
-
-English:
-theorem prod_erase_attach
-  given: [DecidableEq ι] {s : Finset ι} (f : ι -> M) (i : ↑s)
-  proof: by
-  rw [← Function.Embedding.coe_subtype]; rw [← prod_map]
-  simp [attach_map_val]
-
-中文:
-定理 prod_erase_attach
-  条件: [DecidableEq ι] {s : 有限集 ι} (f : ι -> M) (i : ↑s)
-  证明: by
-  rw [← Function.Embedding.coe_subtype]; rw [← prod_map]
-  simp [attach_map_val]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.coe_subtype, attach_map_val, coe_subtype, prod_map
+/-
+**Finset.prod_erase_attach** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_erase_attach [DecidableEq ι] {s : Finset ι} (f : ι -> M) (i : ↑s) : ∏
+ j in s.attach.erase i, f ↑j = ∏ j in s.erase ↑i, f j
+参数：f : ι -> M；i : ↑s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Embedding.coe_subtype`：coe_subtype {α} (p : α -> Prop) : ↑(subt
+ype p) = Subtype.val
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.map_erase`：map_erase [DecidableEq α] (f : α ↪ β) (s : Finset α) (
+a : α) : (s.erase a).map f = (s.map f).erase (f a)
+· 使用定理 `Finset.attach_map_val`：attach_map_val {s : Finset α} : s.attach.map (Emb
+edding.subtype _) = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_erase_attach [DecidableEq ι] {s : Finset ι} (f : ι -> M) (i : ↑s) :
-    ∏ j in s.attach.erase i, f ↑j = ∏ j in s.erase ↑i, f j := by
-  rw [← Function.Embedding.coe_subtype]; rw [← prod_map]
+theorem prod_erase_attach [DecidableEq ι] {s : Finset ι} (f : ι → M) (i : ↑s) :
+    ∏ j ∈ s.attach.erase i, f ↑j = ∏ j ∈ s.erase ↑i, f j := by
+  rw [← Function.Embedding.coe_subtype, ← prod_map]
   simp [attach_map_val]
 
 end Finset
@@ -1820,229 +1616,204 @@ end Finset
 namespace Multiset
 
 @[simp]
-/--
-lemma `card_sum` / 引理 `card_sum`
-
-English:
-lemma card_sum
-  given: (s : Finset ι) (f : ι -> Multiset α)
-  statement: card (∑ i in s, f i) = ∑ i in s, card (f i)
-  proof: map_sum cardHom ..
-
-中文:
-引理 card_sum
-  条件: (s : 有限集 ι) (f : ι -> Multiset α)
-  结论: card (∑ i in s, f i) = ∑ i in s, card (f i)
-  证明: map_sum cardHom ..
-
-Depends on / 依赖: cardHom, map_sum
+/-
+**Multiset.card_sum** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：card_sum (s : Finset ι) (f : ι -> Multiset α) : card (∑ i in s, f i) = ∑ i
+ in s, card (f i)
+参数：s : Finset ι；f : ι -> Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-lemma card_sum (s : Finset ι) (f : ι -> Multiset α) : card (∑ i in s, f i) = ∑ i in s, card (f i) :=
+lemma card_sum (s : Finset ι) (f : ι → Multiset α) : card (∑ i ∈ s, f i) = ∑ i ∈ s, card (f i) :=
   map_sum cardHom ..
-
-/--
-theorem `disjoint_list_sum_left` / 定理 `disjoint_list_sum_left`
-
-English:
-theorem disjoint_list_sum_left
-  given: {a : Multiset α} {l : List (Multiset α)}
-  proof: by
-  induction l with
-  | nil =>
-    simp only [zero_disjoint, List.not_mem_nil, IsEmpty.forall_iff, forall_const, List.sum_nil]
-  | cons b bs ih =>
-    simp [ih]
-
-中文:
-定理 disjoint_list_sum_left
-  条件: {a : Multiset α} {l : 列表 (Multiset α)}
-  证明: by
-  induction l with
-  | nil =>
-    simp only [zero_disjoint, List.not_mem_nil, IsEmpty.forall_iff, forall_const, List.sum_nil]
-  | cons b bs ih =>
-    simp [ih]
-
-Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, List.not_mem_nil, List.sum_nil, forall_const, forall_iff, not_mem_nil, sum_nil, zero_disjoint
+/-
+**Multiset.disjoint_list_sum_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_list_sum_left {a : Multiset α} {l : List (Multiset α)} : Disjoint
+ l.sum a ↔ forall b in l, Disjoint b a
+参数：Multiset α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem disjoint_list_sum_left {a : Multiset α} {l : List (Multiset α)} :
-    Disjoint l.sum a ↔ forall b in l, Disjoint b a := by
+    Disjoint l.sum a ↔ ∀ b ∈ l, Disjoint b a := by
   induction l with
   | nil =>
     simp only [zero_disjoint, List.not_mem_nil, IsEmpty.forall_iff, forall_const, List.sum_nil]
   | cons b bs ih =>
     simp [ih]
-
-/--
-theorem `disjoint_list_sum_right` / 定理 `disjoint_list_sum_right`
-
-English:
-theorem disjoint_list_sum_right
-  given: {a : Multiset α} {l : List (Multiset α)}
-  proof: by
-  simpa only [disjoint_comm (a := a)] using disjoint_list_sum_left
-
-中文:
-定理 disjoint_list_sum_right
-  条件: {a : Multiset α} {l : 列表 (Multiset α)}
-  证明: by
-  simpa only [disjoint_comm (a := a)] using disjoint_list_sum_left
-
-Depends on / 依赖: disjoint_comm, disjoint_list_sum_left
+/-
+**Multiset.disjoint_list_sum_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_list_sum_right {a : Multiset α} {l : List (Multiset α)} : Disjoin
+t a l.sum ↔ forall b in l, Disjoint a b
+参数：Multiset α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Multiset.disjoint_list_sum_left`：disjoint_list_sum_left {a : Multiset α}
+ {l : List (Multiset α)} : Disjoint l.sum a ↔ forall b in l, Disjoint b a
 -/
 theorem disjoint_list_sum_right {a : Multiset α} {l : List (Multiset α)} :
-    Disjoint a l.sum ↔ forall b in l, Disjoint a b := by
+    Disjoint a l.sum ↔ ∀ b ∈ l, Disjoint a b := by
   simpa only [disjoint_comm (a := a)] using disjoint_list_sum_left
-
-/--
-theorem `disjoint_sum_left` / 定理 `disjoint_sum_left`
-
-English:
-theorem disjoint_sum_left
-  given: {a : Multiset α} {i : Multiset (Multiset α)}
-  proof: Quotient.inductionOn i fun l => by
-    rw [quot_mk_to_coe]; rw [Multiset.sum_coe]
-    exact disjoint_list_sum_left
-
-中文:
-定理 disjoint_sum_left
-  条件: {a : Multiset α} {i : Multiset (Multiset α)}
-  证明: Quotient.inductionOn i fun l => by
-    rw [quot_mk_to_coe]; rw [Multiset.sum_coe]
-    exact disjoint_list_sum_left
-
-Depends on / 依赖: Multiset, Multiset.sum_coe, Quotient, Quotient.inductionOn, disjoint_list_sum_left, inductionOn, quot_mk_to_coe, sum_coe
+/-
+**Multiset.disjoint_sum_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_sum_left {a : Multiset α} {i : Multiset (Multiset α)} : Disjoint 
+i.sum a ↔ forall b in i, Disjoint b a
+参数：Multiset α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.quot_mk_to_coe`：quot_mk_to_coe (l : List α) : @Eq (Multiset α) 
+⟦l⟧ l
+· 使用定理 `Multiset.sum_coe`：∀ {M : Type u_3} [inst : AddCommMonoid M] (l : List M)
+, (↑l).sum = l.sum
+· 使用定理 `Multiset.disjoint_list_sum_left`：disjoint_list_sum_left {a : Multiset α}
+ {l : List (Multiset α)} : Disjoint l.sum a ↔ forall b in l, Disjoint b a
 -/
 theorem disjoint_sum_left {a : Multiset α} {i : Multiset (Multiset α)} :
-    Disjoint i.sum a ↔ forall b in i, Disjoint b a :=
+    Disjoint i.sum a ↔ ∀ b ∈ i, Disjoint b a :=
   Quotient.inductionOn i fun l => by
-    rw [quot_mk_to_coe]; rw [Multiset.sum_coe]
+    rw [quot_mk_to_coe, Multiset.sum_coe]
     exact disjoint_list_sum_left
-
-/--
-theorem `disjoint_sum_right` / 定理 `disjoint_sum_right`
-
-English:
-theorem disjoint_sum_right
-  given: {a : Multiset α} {i : Multiset (Multiset α)}
-  proof: by
-  simpa only [disjoint_comm (a := a)] using disjoint_sum_left
-
-中文:
-定理 disjoint_sum_right
-  条件: {a : Multiset α} {i : Multiset (Multiset α)}
-  证明: by
-  simpa only [disjoint_comm (a := a)] using disjoint_sum_left
-
-Depends on / 依赖: disjoint_comm, disjoint_sum_left
+/-
+**Multiset.disjoint_sum_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_sum_right {a : Multiset α} {i : Multiset (Multiset α)} : Disjoint
+ a i.sum ↔ forall b in i, Disjoint a b
+参数：Multiset α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Multiset.disjoint_sum_left`：disjoint_sum_left {a : Multiset α} {i : Mult
+iset (Multiset α)} : Disjoint i.sum a ↔ forall b in i, Disjoint b a
 -/
 theorem disjoint_sum_right {a : Multiset α} {i : Multiset (Multiset α)} :
-    Disjoint a i.sum ↔ forall b in i, Disjoint a b := by
+    Disjoint a i.sum ↔ ∀ b ∈ i, Disjoint a b := by
   simpa only [disjoint_comm (a := a)] using disjoint_sum_left
-
-/--
-theorem `disjoint_finsetSum_left` / 定理 `disjoint_finsetSum_left`
-
-English:
-theorem disjoint_finsetSum_left
-  given: {i : Finset ι} {f : ι -> Multiset α} {a : Multiset α}
-  proof: by
-  convert! @disjoint_sum_left _ a (map f i.val)
-  simp
-
-@[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_left := disjoint_finsetSum_left
-
-中文:
-定理 disjoint_finsetSum_left
-  条件: {i : 有限集 ι} {f : ι -> Multiset α} {a : Multiset α}
-  证明: by
-  convert! @disjoint_sum_left _ a (map f i.val)
-  simp
-
-@[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_left := disjoint_finsetSum_left
-
-Depends on / 依赖: convert, disjoint_sum_left, i.val
+/-
+**Multiset.disjoint_finsetSum_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_finsetSum_left {i : Finset ι} {f : ι -> Multiset α} {a : Multiset
+ α} : Disjoint (i.sum f) a ↔ forall b in i, Disjoint (f b) a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Multiset.disjoint_sum_left`：disjoint_sum_left {a : Multiset α} {i : Mult
+iset (Multiset α)} : Disjoint i.sum a ↔ forall b in i, Disjoint b a
 -/
-theorem disjoint_finsetSum_left {i : Finset ι} {f : ι -> Multiset α} {a : Multiset α} :
-    Disjoint (i.sum f) a ↔ forall b in i, Disjoint (f b) a := by
+theorem disjoint_finsetSum_left {i : Finset ι} {f : ι → Multiset α} {a : Multiset α} :
+    Disjoint (i.sum f) a ↔ ∀ b ∈ i, Disjoint (f b) a := by
   convert! @disjoint_sum_left _ a (map f i.val)
   simp
 
 @[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_left := disjoint_finsetSum_left
-
-/--
-theorem `disjoint_finsetSum_right` / 定理 `disjoint_finsetSum_right`
-
-English:
-theorem disjoint_finsetSum_right
-  statement: {i : Finset ι} {f : ι -> Multiset α}
-  proof: by
-  simpa only [disjoint_comm] using disjoint_finsetSum_left
-
-@[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_right := disjoint_finsetSum_right
-
-中文:
-定理 disjoint_finsetSum_right
-  结论: {i : 有限集 ι} {f : ι -> Multiset α}
-  证明: by
-  simpa only [disjoint_comm] using disjoint_finsetSum_left
-
-@[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_right := disjoint_finsetSum_right
-
-Depends on / 依赖: disjoint_comm, disjoint_finsetSum_left
+/-
+**Multiset.disjoint_finsetSum_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：disjoint_finsetSum_right {i : Finset ι} {f : ι -> Multiset α} {a : Multise
+t α} : Disjoint a (i.sum f) ↔ forall b in i, Disjoint a (f b)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Multiset.disjoint_finsetSum_left`：disjoint_finsetSum_left {i : Finset ι}
+ {f : ι -> Multiset α} {a : Multiset α} : Disjoint (i.sum f) a ↔ forall b in i, 
+Disjoint (f b) a
 -/
-theorem disjoint_finsetSum_right {i : Finset ι} {f : ι -> Multiset α}
-    {a : Multiset α} : Disjoint a (i.sum f) ↔ forall b in i, Disjoint a (f b) := by
+theorem disjoint_finsetSum_right {i : Finset ι} {f : ι → Multiset α}
+    {a : Multiset α} : Disjoint a (i.sum f) ↔ ∀ b ∈ i, Disjoint a (f b) := by
   simpa only [disjoint_comm] using disjoint_finsetSum_left
 
 @[deprecated (since := "2026-04-08")] alias disjoint_finset_sum_right := disjoint_finsetSum_right
 
 variable [DecidableEq α]
-
-/--
-theorem `count_sum'` / 定理 `count_sum'`
-
-English:
-theorem count_sum'
-  given: {s : Finset ι} {a : α} {f : ι -> Multiset α}
-  proof: by
-  dsimp only [Finset.sum]
-  rw [count_sum]
-
-中文:
-定理 count_sum'
-  条件: {s : 有限集 ι} {a : α} {f : ι -> Multiset α}
-  证明: by
-  dsimp only [Finset.sum]
-  rw [count_sum]
-
-Depends on / 依赖: Finset, Finset.sum, count_sum
+/-
+**Multiset.count_sum'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：count_sum' {s : Finset ι} {a : α} {f : ι -> Multiset α} : count a (∑ x in 
+s, f x) = ∑ x in s, count a (f x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.count_sum`：count_sum [DecidableEq α] {m : Multiset β} {f : β ->
+ Multiset α} {a : α} : count a (map f m).sum = sum (m.map fun b => count a <| f 
+b)
 -/
-theorem count_sum' {s : Finset ι} {a : α} {f : ι -> Multiset α} :
-    count a (∑ x in s, f x) = ∑ x in s, count a (f x) := by
+theorem count_sum' {s : Finset ι} {a : α} {f : ι → Multiset α} :
+    count a (∑ x ∈ s, f x) = ∑ x ∈ s, count a (f x) := by
   dsimp only [Finset.sum]
   rw [count_sum]
-
-/--
-theorem `toFinset_prod_dvd_prod` / 定理 `toFinset_prod_dvd_prod`
-
-English:
-theorem toFinset_prod_dvd_prod
-  given: [DecidableEq M] [CommMonoid M] (S : Multiset M)
-  proof: by
-  rw [Finset.prod_eq_multiset_prod]
-  refine Multiset.prod_dvd_prod_of_le ?_
-  simp [Multiset.dedup_le S]
-
-中文:
-定理 toFinset_prod_dvd_prod
-  条件: [DecidableEq M] [交换幺半群 M] (S : Multiset M)
-  证明: by
-  rw [Finset.prod_eq_multiset_prod]
-  refine Multiset.prod_dvd_prod_of_le ?_
-  simp [Multiset.dedup_le S]
-
-Depends on / 依赖: Finset, Finset.prod_eq_multiset_prod, Multiset, Multiset.dedup_le, Multiset.prod_dvd_prod_of_le, dedup_le, prod_dvd_prod_of_le, prod_eq_multiset_prod
+/-
+**Multiset.toFinset_prod_dvd_prod** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinset_prod_dvd_prod [DecidableEq M] [CommMonoid M] (S : Multiset M) : S
+.toFinset.prod id ∣ S.prod
+参数：S : Multiset M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_eq_multiset_prod`：prod_eq_multiset_prod [CommMonoid M] (s : 
+Finset ι) (f : ι -> M) : ∏ x in s, f x = (s.1.map f).prod
+· 使用定理 `Multiset.prod_dvd_prod_of_le`：prod_dvd_prod_of_le (h : s <= t) : s.prod 
+∣ t.prod
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Multiset.dedup_le`：dedup_le (s : Multiset α) : dedup s <= s
 -/
 theorem toFinset_prod_dvd_prod [DecidableEq M] [CommMonoid M] (S : Multiset M) :
     S.toFinset.prod id ∣ S.prod := by
@@ -2053,23 +1824,18 @@ theorem toFinset_prod_dvd_prod [DecidableEq M] [CommMonoid M] (S : Multiset M) :
 end Multiset
 
 @[simp, norm_cast]
-/--
-theorem `Units.coe_prod` / 定理 `Units.coe_prod`
-
-English:
-theorem Units.coe_prod
-  given: [CommMonoid M] (f : α -> Mˣ) (s : Finset α)
-  proof: map_prod (Units.coeHom M) _ _
-
-中文:
-定理 单位群.coe_prod
-  条件: [交换幺半群 M] (f : α -> Mˣ) (s : 有限集 α)
-  证明: map_prod (Units.coeHom M) _ _
-
-Depends on / 依赖: Units.coeHom, coeHom, map_prod
+/-
+**Units.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Units.coe_prod [CommMonoid M] (f : α -> Mˣ) (s : Finset α) : (↑(∏ i in s, 
+f i) : M) = ∏ i in s, (f i : M)
+参数：f : α -> Mˣ；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
 -/
-theorem Units.coe_prod [CommMonoid M] (f : α -> Mˣ) (s : Finset α) :
-    (↑(∏ i in s, f i) : M) = ∏ i in s, (f i : M) :=
+theorem Units.coe_prod [CommMonoid M] (f : α → Mˣ) (s : Finset α) :
+    (↑(∏ i ∈ s, f i) : M) = ∏ i ∈ s, (f i : M) :=
   map_prod (Units.coeHom M) _ _
 
 
@@ -2084,41 +1850,33 @@ variable [Monoid M]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ofMul_list_prod` / 定理 `ofMul_list_prod`
-
-English:
-theorem ofMul_list_prod
-  given: (s : List M)
-  statement: ofMul s.prod = (s.map ofMul).sum
-  proof: by simp [ofMul]; rfl
-
-中文:
-定理 ofMul_list_prod
-  条件: (s : 列表 M)
-  结论: ofMul s.乘积 = (s.map ofMul).求和
-  证明: by simp [ofMul]; rfl
+/-
+**ofMul_list_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_list_prod (s : List M) : ofMul s.prod = (s.map ofMul).sum
+参数：s : List M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
 -/
 theorem ofMul_list_prod (s : List M) : ofMul s.prod = (s.map ofMul).sum := by simp [ofMul]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toMul_list_sum` / 定理 `toMul_list_sum`
-
-English:
-theorem toMul_list_sum
-  given: (s : List (Additive M))
-  statement: s.sum.toMul = (s.map toMul).prod
-  proof: by
-  simp [toMul, ofMul]; rfl
-
-中文:
-定理 toMul_list_sum
-  条件: (s : 列表 (加性 M))
-  结论: s.求和.toMul = (s.map toMul).乘积
-  证明: by
-  simp [toMul, ofMul]; rfl
+/-
+**toMul_list_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_list_sum (s : List (Additive M)) : s.sum.toMul = (s.map toMul).prod
+参数：s : List (Additive M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
 -/
 theorem toMul_list_sum (s : List (Additive M)) : s.sum.toMul = (s.map toMul).prod := by
   simp [toMul, ofMul]; rfl
@@ -2131,41 +1889,34 @@ variable [AddMonoid M]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ofAdd_list_prod` / 定理 `ofAdd_list_prod`
-
-English:
-theorem ofAdd_list_prod
-  given: (s : List M)
-  statement: ofAdd s.sum = (s.map ofAdd).prod
-  proof: by simp [ofAdd]; rfl
-
-中文:
-定理 ofAdd_list_prod
-  条件: (s : 列表 M)
-  结论: ofAdd s.求和 = (s.map ofAdd).乘积
-  证明: by simp [ofAdd]; rfl
+/-
+**ofAdd_list_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_list_prod (s : List M) : ofAdd s.sum = (s.map ofAdd).prod
+参数：s : List M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
 -/
 theorem ofAdd_list_prod (s : List M) : ofAdd s.sum = (s.map ofAdd).prod := by simp [ofAdd]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toAdd_list_sum` / 定理 `toAdd_list_sum`
-
-English:
-theorem toAdd_list_sum
-  given: (s : List (Multiplicative M))
-  statement: s.prod.toAdd = (s.map toAdd).sum
-  proof: by
-  simp [toAdd, ofAdd]; rfl
-
-中文:
-定理 toAdd_list_sum
-  条件: (s : 列表 (Multiplicative M))
-  结论: s.乘积.toAdd = (s.map toAdd).求和
-  证明: by
-  simp [toAdd, ofAdd]; rfl
+/-
+**toAdd_list_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_list_sum (s : List (Multiplicative M)) : s.prod.toAdd = (s.map toAdd
+).sum
+参数：s : List (Multiplicative M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
 -/
 theorem toAdd_list_sum (s : List (Multiplicative M)) : s.prod.toAdd = (s.map toAdd).sum := by
   simp [toAdd, ofAdd]; rfl
@@ -2178,91 +1929,64 @@ variable [CommMonoid M]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ofMul_multiset_prod` / 定理 `ofMul_multiset_prod`
-
-English:
-theorem ofMul_multiset_prod
-  given: (s : Multiset M)
-  statement: ofMul s.prod = (s.map ofMul).sum
-  proof: by
-  simp [ofMul]; rfl
-
-中文:
-定理 ofMul_multiset_prod
-  条件: (s : Multiset M)
-  结论: ofMul s.乘积 = (s.map ofMul).求和
-  证明: by
-  simp [ofMul]; rfl
+/-
+**ofMul_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_multiset_prod (s : Multiset M) : ofMul s.prod = (s.map ofMul).sum
+参数：s : Multiset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
 -/
 theorem ofMul_multiset_prod (s : Multiset M) : ofMul s.prod = (s.map ofMul).sum := by
   simp [ofMul]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toMul_multiset_sum` / 定理 `toMul_multiset_sum`
-
-English:
-theorem toMul_multiset_sum
-  given: (s : Multiset (Additive M))
-  statement: s.sum.toMul = (s.map toMul).prod
-  proof: by
-  simp [toMul, ofMul]; rfl
-
-@[simp]
-
-中文:
-定理 toMul_multiset_sum
-  条件: (s : Multiset (加性 M))
-  结论: s.求和.toMul = (s.map toMul).乘积
-  证明: by
-  simp [toMul, ofMul]; rfl
-
-@[simp]
+/-
+**toMul_multiset_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_multiset_sum (s : Multiset (Additive M)) : s.sum.toMul = (s.map toMu
+l).prod
+参数：s : Multiset (Additive M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
 -/
 theorem toMul_multiset_sum (s : Multiset (Additive M)) : s.sum.toMul = (s.map toMul).prod := by
   simp [toMul, ofMul]; rfl
 
 @[simp]
-/--
-theorem `ofMul_prod` / 定理 `ofMul_prod`
-
-English:
-theorem ofMul_prod
-  given: (s : Finset ι) (f : ι -> M)
-  statement: ofMul (∏ i in s, f i) = ∑ i in s, ofMul (f i)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_prod
-  条件: (s : 有限集 ι) (f : ι -> M)
-  结论: ofMul (∏ i in s, f i) = ∑ i in s, ofMul (f i)
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_prod (s : Finset ι) (f : ι -> M) : ofMul (∏ i in s, f i) = ∑ i in s,
+ ofMul (f i)
+参数：s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofMul_prod (s : Finset ι) (f : ι -> M) : ofMul (∏ i in s, f i) = ∑ i in s, ofMul (f i) :=
+theorem ofMul_prod (s : Finset ι) (f : ι → M) : ofMul (∏ i ∈ s, f i) = ∑ i ∈ s, ofMul (f i) :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_sum` / 定理 `toMul_sum`
-
-English:
-theorem toMul_sum
-  given: (s : Finset ι) (f : ι -> Additive M)
-  proof: rfl
-
-中文:
-定理 toMul_sum
-  条件: (s : 有限集 ι) (f : ι -> 加性 M)
-  证明: rfl
+/-
+**toMul_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_sum (s : Finset ι) (f : ι -> Additive M) : (∑ i in s, f i).toMul = ∏
+ i in s, (f i).toMul
+参数：s : Finset ι；f : ι -> Additive M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMul_sum (s : Finset ι) (f : ι -> Additive M) :
-    (∑ i in s, f i).toMul = ∏ i in s, (f i).toMul :=
+theorem toMul_sum (s : Finset ι) (f : ι → Additive M) :
+    (∑ i ∈ s, f i).toMul = ∏ i ∈ s, (f i).toMul :=
   rfl
 
 end CommMonoid
@@ -2273,90 +1997,66 @@ variable [AddCommMonoid M]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ofAdd_multiset_prod` / 定理 `ofAdd_multiset_prod`
-
-English:
-theorem ofAdd_multiset_prod
-  given: (s : Multiset M)
-  statement: ofAdd s.sum = (s.map ofAdd).prod
-  proof: by
-  simp [ofAdd]; rfl
-
-中文:
-定理 ofAdd_multiset_prod
-  条件: (s : Multiset M)
-  结论: ofAdd s.求和 = (s.map ofAdd).乘积
-  证明: by
-  simp [ofAdd]; rfl
+/-
+**ofAdd_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_multiset_prod (s : Multiset M) : ofAdd s.sum = (s.map ofAdd).prod
+参数：s : Multiset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
 -/
 theorem ofAdd_multiset_prod (s : Multiset M) : ofAdd s.sum = (s.map ofAdd).prod := by
   simp [ofAdd]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toAdd_multiset_sum` / 定理 `toAdd_multiset_sum`
-
-English:
-theorem toAdd_multiset_sum
-  given: (s : Multiset (Multiplicative M))
-  proof: by
-  simp [toAdd, ofAdd]; rfl
-
-@[simp]
-
-中文:
-定理 toAdd_multiset_sum
-  条件: (s : Multiset (Multiplicative M))
-  证明: by
-  simp [toAdd, ofAdd]; rfl
-
-@[simp]
+/-
+**toAdd_multiset_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_multiset_sum (s : Multiset (Multiplicative M)) : s.prod.toAdd = (s.m
+ap toAdd).sum
+参数：s : Multiset (Multiplicative M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
 -/
 theorem toAdd_multiset_sum (s : Multiset (Multiplicative M)) :
     s.prod.toAdd = (s.map toAdd).sum := by
   simp [toAdd, ofAdd]; rfl
 
 @[simp]
-/--
-theorem `ofAdd_sum` / 定理 `ofAdd_sum`
-
-English:
-theorem ofAdd_sum
-  given: (s : Finset ι) (f : ι -> M)
-  statement: ofAdd (∑ i in s, f i) = ∏ i in s, ofAdd (f i)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_sum
-  条件: (s : 有限集 ι) (f : ι -> M)
-  结论: ofAdd (∑ i in s, f i) = ∏ i in s, ofAdd (f i)
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_sum (s : Finset ι) (f : ι -> M) : ofAdd (∑ i in s, f i) = ∏ i in s, 
+ofAdd (f i)
+参数：s : Finset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofAdd_sum (s : Finset ι) (f : ι -> M) : ofAdd (∑ i in s, f i) = ∏ i in s, ofAdd (f i) :=
+theorem ofAdd_sum (s : Finset ι) (f : ι → M) : ofAdd (∑ i ∈ s, f i) = ∏ i ∈ s, ofAdd (f i) :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_prod` / 定理 `toAdd_prod`
-
-English:
-theorem toAdd_prod
-  given: (s : Finset ι) (f : ι -> Multiplicative M)
-  proof: rfl
-
-中文:
-定理 toAdd_prod
-  条件: (s : 有限集 ι) (f : ι -> Multiplicative M)
-  证明: rfl
+/-
+**toAdd_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_prod (s : Finset ι) (f : ι -> Multiplicative M) : (∏ i in s, f i).to
+Add = ∑ i in s, (f i).toAdd
+参数：s : Finset ι；f : ι -> Multiplicative M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAdd_prod (s : Finset ι) (f : ι -> Multiplicative M) :
-    (∏ i in s, f i).toAdd = ∑ i in s, (f i).toAdd :=
+theorem toAdd_prod (s : Finset ι) (f : ι → Multiplicative M) :
+    (∏ i ∈ s, f i).toAdd = ∑ i ∈ s, (f i).toAdd :=
   rfl
 
 end AddCommMonoid
+

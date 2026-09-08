@@ -44,77 +44,56 @@ variable {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
 
 namespace Measure
 
-/--
-Definition of `AbsolutelyContinuous` / `AbsolutelyContinuous` 的定义
+/-- We say that `μ` is absolutely continuous with respect to `ν`, or that `μ` is dominated by `ν`,
+  if `ν(A) = 0` implies that `μ(A) = 0`. -/
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous** 是 Mathlib 中的一个定义，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：AbsolutelyContinuous {_m0 : MeasurableSpace α} (μ ν : Measure α) : Prop
+参数：μ ν : Measure α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AbsolutelyContinuous
-  signature: {_m0 : MeasurableSpace α} (μ ν : Measure α)
-  body: forall ⦃s : Set α⦄, ν s = 0 -> μ s = 0
-
-@[inherit_doc MeasureTheory.Measure.AbsolutelyContinuous]
-scoped[MeasureTheory] infixl:50 " ≪ " => MeasureTheory.Measure.AbsolutelyContinuous
-
-中文:
-定义 AbsolutelyContinuous
-  签名: {_m0 : 可测空间 α} (μ ν : 测度 α)
-  定义体: forall ⦃s : Set α⦄, ν s = 0 -> μ s = 0
-
-@[inherit_doc MeasureTheory.Measure.AbsolutelyContinuous]
-scoped[MeasureTheory] infixl:50 " ≪ " => MeasureTheory.Measure.AbsolutelyContinuous
+--- 原说明 ---
+We say that `μ` is absolutely continuous with respect to `ν`, or that `μ` is dom
+inated by `ν`,
+  if `ν(A) = 0` implies that `μ(A) = 0`.
 -/
 def AbsolutelyContinuous {_m0 : MeasurableSpace α} (μ ν : Measure α) : Prop :=
-  forall ⦃s : Set α⦄, ν s = 0 -> μ s = 0
+  ∀ ⦃s : Set α⦄, ν s = 0 → μ s = 0
 
 @[inherit_doc MeasureTheory.Measure.AbsolutelyContinuous]
 scoped[MeasureTheory] infixl:50 " ≪ " => MeasureTheory.Measure.AbsolutelyContinuous
-
-/--
-theorem `absolutelyContinuous_of_le` / 定理 `absolutelyContinuous_of_le`
-
-English:
-theorem absolutelyContinuous_of_le
-  given: (h : μ <= ν)
-  statement: μ ≪ ν
-  proof: fun s hs =>
-nonpos_iff_eq_zero.1 hs ▸ le_iff'.1 h s
-
-alias _root_.LE.le.absolutelyContinuous := absolutelyContinuous_of_le
-
-中文:
-定理 absolutelyContinuous_of_le
-  条件: (h : μ <= ν)
-  结论: μ ≪ ν
-  证明: fun s hs =>
-nonpos_iff_eq_zero.1 hs ▸ le_iff'.1 h s
-
-alias _root_.LE.le.absolutelyContinuous := absolutelyContinuous_of_le
+/-
+**MeasureTheory.Measure.absolutelyContinuous_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：absolutelyContinuous_of_le (h : μ <= ν) : μ ≪ ν
+参数：h : μ <= ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `MeasureTheory.Measure.le_iff'`：le_iff' : μ₁ <= μ₂ ↔ forall s, μ₁ s <= μ₂
+ s
 -/
-theorem absolutelyContinuous_of_le (h : μ <= ν) : μ ≪ ν := fun s hs =>
-nonpos_iff_eq_zero.1 hs ▸ le_iff'.1 h s
+theorem absolutelyContinuous_of_le (h : μ ≤ ν) : μ ≪ ν := fun s hs =>
+  nonpos_iff_eq_zero.1 <| hs ▸ le_iff'.1 h s
 
 alias _root_.LE.le.absolutelyContinuous := absolutelyContinuous_of_le
-
-/--
-theorem `absolutelyContinuous_of_eq` / 定理 `absolutelyContinuous_of_eq`
-
-English:
-theorem absolutelyContinuous_of_eq
-  given: (h : μ = ν)
-  statement: μ ≪ ν
-  proof: h.le.absolutelyContinuous
-
-alias _root_.Eq.absolutelyContinuous := absolutelyContinuous_of_eq
-
-中文:
-定理 absolutelyContinuous_of_eq
-  条件: (h : μ = ν)
-  结论: μ ≪ ν
-  证明: h.le.absolutelyContinuous
-
-alias _root_.Eq.absolutelyContinuous := absolutelyContinuous_of_eq
-
-Depends on / 依赖: absolutelyContinuous, h.le.absolutelyContinuous
+/-
+**MeasureTheory.Measure.absolutelyContinuous_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：absolutelyContinuous_of_eq (h : μ = ν) : μ ≪ ν
+参数：h : μ = ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.absolutelyContinuous`：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ
+ ν : MeasureTheory.Measure α}, μ ≤ ν → μ.AbsolutelyContinuous ν
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem absolutelyContinuous_of_eq (h : μ = ν) : μ ≪ ν :=
   h.le.absolutelyContinuous
@@ -123,369 +102,297 @@ alias _root_.Eq.absolutelyContinuous := absolutelyContinuous_of_eq
 
 namespace AbsolutelyContinuous
 
-/--
-theorem `mk` / 定理 `mk`
-
-English:
-theorem mk
-  given: (h : forall ⦃s : Set α⦄, MeasurableSet s -> ν s = 0 -> μ s = 0)
-  statement: μ ≪ ν
-  proof: by
-  intro s hs
-  rcases exists_measurable_superset_of_null hs with ⟨t, h1t, h2t, h3t⟩
-  exact measure_mono_null h1t (h h2t h3t)
-
-@[refl]
-
-中文:
-定理 mk
-  条件: (h : 对任意 ⦃s : 集合 α⦄, 可测集 s -> ν s = 0 -> μ s = 0)
-  结论: μ ≪ ν
-  证明: by
-  intro s hs
-  rcases exists_measurable_superset_of_null hs with ⟨t, h1t, h2t, h3t⟩
-  exact measure_mono_null h1t (h h2t h3t)
-
-@[refl]
-
-Depends on / 依赖: exists_measurable_superset_of_null, measure_mono_null
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.mk** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：mk (h : forall ⦃s : Set α⦄, MeasurableSet s -> ν s = 0 -> μ s = 0) : μ ≪ ν
+参数：h : forall ⦃s : Set α⦄, MeasurableSet s -> ν s = 0 -> μ s = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.exists_measurable_superset_of_null`：exists_measurable_supe
+rset_of_null (h : μ s = 0) : exists t, s subseteq t ∧ MeasurableSet t ∧ μ t = 0
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 -/
-theorem mk (h : forall ⦃s : Set α⦄, MeasurableSet s -> ν s = 0 -> μ s = 0) : μ ≪ ν := by
+theorem mk (h : ∀ ⦃s : Set α⦄, MeasurableSet s → ν s = 0 → μ s = 0) : μ ≪ ν := by
   intro s hs
   rcases exists_measurable_superset_of_null hs with ⟨t, h1t, h2t, h3t⟩
   exact measure_mono_null h1t (h h2t h3t)
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: {_m0 : MeasurableSpace α} (μ : Measure α)
-  statement: μ ≪ μ
-  proof: rfl.absolutelyContinuous
-
-中文:
-定理 refl
-  条件: {_m0 : 可测空间 α} (μ : 测度 α)
-  结论: μ ≪ μ
-  证明: rfl.absolutelyContinuous
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.refl** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {_m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α), 
+μ.AbsolutelyContinuous μ
+参数：μ : MeasureTheory.Measure α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.absolutelyContinuous`：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ ν 
+: MeasureTheory.Measure α}, μ = ν → μ.AbsolutelyContinuous ν
 -/
 protected theorem refl {_m0 : MeasurableSpace α} (μ : Measure α) : μ ≪ μ :=
   rfl.absolutelyContinuous
-
-/--
-theorem `rfl` / 定理 `rfl`
-
-English:
-theorem rfl
-  statement: μ ≪ μ
-  proof: fun _s hs => hs
-
-中文:
-定理 rfl
-  结论: μ ≪ μ
-  证明: fun _s hs => hs
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ : MeasureTheory.Measure α}, μ
+.AbsolutelyContinuous μ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem rfl : μ ≪ μ := fun _s hs => hs
-
-/--
-Instance `instRefl` / 实例 `instRefl`
-
-English:
-instance instRefl
-  signature: {_ : MeasurableSpace α}
-  body: ⟨fun _ => AbsolutelyContinuous.rfl⟩
-
-@[simp]
-
-中文:
-实例 instRefl
-  签名: {_ : 可测空间 α}
-  定义体: ⟨fun _ => AbsolutelyContinuous.rfl⟩
-
-@[simp]
-
-Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.rfl
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.instRefl** 是 Mathlib 中的一个实例，位于命名空间 
+`MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：instRefl {_ : MeasurableSpace α} : @Std.Refl (Measure α) (· ≪ ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.rfl`：∀ {α : Type u_1} {mα : M
+easurableSpace α} {μ : MeasureTheory.Measure α}, μ.AbsolutelyContinuous μ
 -/
 instance instRefl {_ : MeasurableSpace α} : @Std.Refl (Measure α) (· ≪ ·) :=
   ⟨fun _ => AbsolutelyContinuous.rfl⟩
 
 @[simp]
-/--
-lemma `zero` / 引理 `zero`
-
-English:
-lemma zero
-  given: (μ : Measure α)
-  statement: 0 ≪ μ
-  proof: fun _ _ => by simp
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.zero** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} (μ : MeasureTheory.Measure α), M
+easureTheory.Measure.AbsolutelyContinuous 0 μ
+参数：μ : MeasureTheory.Measure α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+protected lemma zero (μ : Measure α) : 0 ≪ μ := fun _ _ ↦ by simp
 
 @[trans]
-
-中文:
-引理 zero
-  条件: (μ : 测度 α)
-  结论: 0 ≪ μ
-  证明: fun _ _ => by simp
-
-@[trans]
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.trans** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ₁ μ₂ μ₃ : MeasureTheory.Measur
+e α},   μ₁.AbsolutelyContinuous μ₂ → μ₂.AbsolutelyContinuous μ₃ → μ₁.AbsolutelyC
+ontinuous μ₃
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma zero (μ : Measure α) : 0 ≪ μ := fun _ _ => by simp
-
-@[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  given: (h1 : μ₁ ≪ μ₂) (h2 : μ₂ ≪ μ₃)
-  statement: μ₁ ≪ μ₃
-  proof: fun _s hs => h1 h2 hs
+protected theorem trans (h1 : μ₁ ≪ μ₂) (h2 : μ₂ ≪ μ₃) : μ₁ ≪ μ₃ := fun _s hs => h1 <| h2 hs
 
 @[gcongr, mono]
-
-中文:
-定理 trans
-  条件: (h1 : μ₁ ≪ μ₂) (h2 : μ₂ ≪ μ₃)
-  结论: μ₁ ≪ μ₃
-  证明: fun _s hs => h1 h2 hs
-
-@[gcongr, mono]
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.map** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {μ ν : MeasureTheory.Measure α},   μ.AbsolutelyContinuous ν →     ∀ {f :
+ α → β}, Measurable f → (MeasureTheory.Measure.map f μ).AbsolutelyContinuous (Me
+asureTheory.Measure.map f ν)
+参数：MeasureTheory.Measure.map f μ；MeasureTheory.Measure.map f ν。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.mk`：mk (h : forall ⦃s : Set α
+⦄, MeasurableSet s -> ν s = 0 -> μ s = 0) : μ ≪ ν
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
 -/
-protected theorem trans (h1 : μ₁ ≪ μ₂) (h2 : μ₂ ≪ μ₃) : μ₁ ≪ μ₃ := fun _s hs => h1 h2 hs
-
-@[gcongr, mono]
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  given: (h : μ ≪ ν) {f : α -> β} (hf : Measurable f)
-  statement: μ.map f ≪ ν.map f
-  proof: AbsolutelyContinuous.mk fun s hs => by simpa [hf, hs] using @h _
-
-中文:
-定理 map
-  条件: (h : μ ≪ ν) {f : α -> β} (hf : 可测 f)
-  结论: μ.map f ≪ ν.map f
-  证明: AbsolutelyContinuous.mk fun s hs => by simpa [hf, hs] using @h _
--/
-protected theorem map (h : μ ≪ ν) {f : α -> β} (hf : Measurable f) : μ.map f ≪ ν.map f :=
+protected theorem map (h : μ ≪ ν) {f : α → β} (hf : Measurable f) : μ.map f ≪ ν.map f :=
   AbsolutelyContinuous.mk fun s hs => by simpa [hf, hs] using @h _
-
-/--
-theorem `smul_left` / 定理 `smul_left`
-
-English:
-theorem smul_left
-  given: [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : μ ≪ ν) (c : R)
-  proof: fun s hνs => by
-  simp only [h hνs, smul_apply, smul_zero, ← smul_one_smul Real>=0∞ c (0 : Real>=0∞)]
-
-中文:
-定理 smul_left
-  条件: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
-  证明: fun s hνs => by
-  simp only [h hνs, smul_apply, smul_zero, ← smul_one_smul Real>=0∞ c (0 : Real>=0∞)]
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.smul_left** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {R : Type u_5} {mα : MeasurableSpace α} {μ ν : MeasureThe
+ory.Measure α} [inst : SMul R ENNReal]   [inst_1 : IsScalarTower R ENNReal ENNRe
+al], μ.AbsolutelyContinuous ν → ∀ (c : R), (c • μ).AbsolutelyContinuous ν
+参数：c : R；c • μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem smul_left [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : μ ≪ ν) (c : R) :
+protected theorem smul_left [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞] (h : μ ≪ ν) (c : R) :
     c • μ ≪ ν := fun s hνs => by
-  simp only [h hνs, smul_apply, smul_zero, ← smul_one_smul Real>=0∞ c (0 : Real>=0∞)]
+  simp only [h hνs, smul_apply, smul_zero, ← smul_one_smul ℝ≥0∞ c (0 : ℝ≥0∞)]
 
-/--
-theorem `smul` / 定理 `smul`
+/-- If `μ ≪ ν`, then `c • μ ≪ c • ν`.
 
-English:
-theorem smul
-  given: [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : μ ≪ ν) (c : R)
-  proof: by
-  intro s hνs
-  rw [smul_apply]; rw [← smul_one_smul Real>=0∞]; rw [smul_eq_mul]; rw [mul_eq_zero] at hνs ⊢
-  exact hνs.imp_right fun hs => h hs
+Earlier, this name was used for what's now called `AbsolutelyContinuous.smul_left`. -/
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.smul** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {R : Type u_5} {mα : MeasurableSpace α} {μ ν : MeasureThe
+ory.Measure α} [inst : SMul R ENNReal]   [inst_1 : IsScalarTower R ENNReal ENNRe
+al], μ.AbsolutelyContinuous ν → ∀ (c : R), (c • μ).AbsolutelyContinuous (c • ν)
+参数：c : R；c • μ；c • ν。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.smul_apply`：smul_apply {_m : MeasurableSpace α} (c
+ : R) (μ : Measure α) (s : Set α) : (c • μ) s = c • μ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `ENNReal.instNoZeroDivisors`：NoZeroDivisors ENNReal
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
 
-中文:
-定理 smul
-  条件: [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (h : μ ≪ ν) (c : R)
-  证明: by
-  intro s hνs
-  rw [smul_apply]; rw [← smul_one_smul Real>=0∞]; rw [smul_eq_mul]; rw [mul_eq_zero] at hνs ⊢
-  exact hνs.imp_right fun hs => h hs
+--- 原说明 ---
+If `μ ≪ ν`, then `c • μ ≪ c • ν`.
+
+Earlier, this name was used for what's now called `AbsolutelyContinuous.smul_lef
+t`.
 -/
-protected theorem smul [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : μ ≪ ν) (c : R) :
+protected theorem smul [SMul R ℝ≥0∞] [IsScalarTower R ℝ≥0∞ ℝ≥0∞] (h : μ ≪ ν) (c : R) :
     c • μ ≪ c • ν := by
   intro s hνs
-  rw [smul_apply]; rw [← smul_one_smul Real>=0∞]; rw [smul_eq_mul]; rw [mul_eq_zero] at hνs ⊢
-  exact hνs.imp_right fun hs => h hs
-
-/--
-lemma `add` / 引理 `add`
-
-English:
-lemma add
-  given: (h1 : μ₁ ≪ ν) (h2 : μ₂ ≪ ν')
-  statement: μ₁ + μ₂ ≪ ν + ν'
-  proof: by
-  intro s hs
-  simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
-  exact ⟨h1 hs.1, h2 hs.2⟩
-
-中文:
-引理 add
-  条件: (h1 : μ₁ ≪ ν) (h2 : μ₂ ≪ ν')
-  结论: μ₁ + μ₂ ≪ ν + ν'
-  证明: by
-  intro s hs
-  simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
-  exact ⟨h1 hs.1, h2 hs.2⟩
+  rw [smul_apply, ← smul_one_smul ℝ≥0∞, smul_eq_mul, mul_eq_zero] at hνs ⊢
+  exact hνs.imp_right fun hs ↦ h hs
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.add** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ₁ μ₂ ν ν' : MeasureTheory.Meas
+ure α},   μ₁.AbsolutelyContinuous ν → μ₂.AbsolutelyContinuous ν' → (μ₁ + μ₂).Abs
+olutelyContinuous (ν + ν')
+参数：μ₁ + μ₂；ν + ν'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected lemma add (h1 : μ₁ ≪ ν) (h2 : μ₂ ≪ ν') : μ₁ + μ₂ ≪ ν + ν' := by
   intro s hs
   simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
   exact ⟨h1 hs.1, h2 hs.2⟩
-
-/--
-lemma `add_left_iff` / 引理 `add_left_iff`
-
-English:
-lemma add_left_iff
-  given: {μ₁ μ₂ ν : Measure α}
-  proof: by
-  refine ⟨fun h => ?_, fun h => (h.1.add h.2).trans ?_⟩
-  · have : forall s, ν s = 0 -> μ₁ s = 0 ∧ μ₂ s = 0 := by intro s hs0; simpa using h hs0
-    exact ⟨fun s hs0 => (this s hs0).1, fun s hs0 => (this s hs0).2⟩
-  · rw [← two_smul Real>=0]
-    exact AbsolutelyContinuous.rfl.smul_left 2
-
-中文:
-引理 add_left_iff
-  条件: {μ₁ μ₂ ν : 测度 α}
-  证明: by
-  refine ⟨fun h => ?_, fun h => (h.1.add h.2).trans ?_⟩
-  · have : forall s, ν s = 0 -> μ₁ s = 0 ∧ μ₂ s = 0 := by intro s hs0; simpa using h hs0
-    exact ⟨fun s hs0 => (this s hs0).1, fun s hs0 => (this s hs0).2⟩
-  · rw [← two_smul Real>=0]
-    exact AbsolutelyContinuous.rfl.smul_left 2
-
-Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.rfl.smul_left, smul_left, two_smul
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.add_left_iff** 是 Mathlib 中的一个引理，位于命
+名空间 `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：add_left_iff {μ₁ μ₂ ν : Measure α} : μ₁ + μ₂ ≪ ν ↔ μ₁ ≪ ν ∧ μ₂ ≪ ν
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.trans`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ₁ μ₂ μ₃ : MeasureTheory.Measure α},   μ₁.AbsolutelyContinu
+ous μ₂ → μ₂.AbsolutelyContinuous μ₃ → …
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.add`：∀ {α : Type u_1} {mα : M
+easurableSpace α} {μ₁ μ₂ ν ν' : MeasureTheory.Measure α},   μ₁.AbsolutelyContinu
+ous ν → μ₂.AbsolutelyContinuous ν' →…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.smul_left`：∀ {α : Type u_1} {
+R : Type u_5} {mα : MeasurableSpace α} {μ ν : MeasureTheory.Measure α} [inst : S
+Mul R ENNReal]   [inst_1 : IsScalarTower R…
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.rfl`：∀ {α : Type u_1} {mα : M
+easurableSpace α} {μ : MeasureTheory.Measure α}, μ.AbsolutelyContinuous μ
 -/
 lemma add_left_iff {μ₁ μ₂ ν : Measure α} :
     μ₁ + μ₂ ≪ ν ↔ μ₁ ≪ ν ∧ μ₂ ≪ ν := by
-  refine ⟨fun h => ?_, fun h => (h.1.add h.2).trans ?_⟩
-  · have : forall s, ν s = 0 -> μ₁ s = 0 ∧ μ₂ s = 0 := by intro s hs0; simpa using h hs0
-    exact ⟨fun s hs0 => (this s hs0).1, fun s hs0 => (this s hs0).2⟩
-  · rw [← two_smul Real>=0]
+  refine ⟨fun h ↦ ?_, fun h ↦ (h.1.add h.2).trans ?_⟩
+  · have : ∀ s, ν s = 0 → μ₁ s = 0 ∧ μ₂ s = 0 := by intro s hs0; simpa using h hs0
+    exact ⟨fun s hs0 ↦ (this s hs0).1, fun s hs0 ↦ (this s hs0).2⟩
+  · rw [← two_smul ℝ≥0]
     exact AbsolutelyContinuous.rfl.smul_left 2
-
-/--
-lemma `add_left` / 引理 `add_left`
-
-English:
-lemma add_left
-  given: {μ₁ μ₂ ν : Measure α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν)
-  statement: μ₁ + μ₂ ≪ ν
-  proof: Measure.AbsolutelyContinuous.add_left_iff.mpr ⟨h₁, h₂⟩
-
-中文:
-引理 add_left
-  条件: {μ₁ μ₂ ν : 测度 α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν)
-  结论: μ₁ + μ₂ ≪ ν
-  证明: Measure.AbsolutelyContinuous.add_left_iff.mpr ⟨h₁, h₂⟩
-
-Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.add_left_iff.mpr, add_left_iff
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.add_left** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：add_left {μ₁ μ₂ ν : Measure α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν) : μ₁ + μ₂ ≪ ν
+参数：h₁ : μ₁ ≪ ν；h₂ : μ₂ ≪ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `MeasureTheory.Measure.AbsolutelyContinuous.add_left_iff`：add_left_iff {μ
+₁ μ₂ ν : Measure α} : μ₁ + μ₂ ≪ ν ↔ μ₁ ≪ ν ∧ μ₂ ≪ ν
 -/
 lemma add_left {μ₁ μ₂ ν : Measure α} (h₁ : μ₁ ≪ ν) (h₂ : μ₂ ≪ ν) : μ₁ + μ₂ ≪ ν :=
   Measure.AbsolutelyContinuous.add_left_iff.mpr ⟨h₁, h₂⟩
-
-/--
-lemma `add_right` / 引理 `add_right`
-
-English:
-lemma add_right
-  given: (h1 : μ ≪ ν) (ν' : Measure α)
-  statement: μ ≪ ν + ν'
-  proof: by
-  intro s hs
-  simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
-  exact h1 hs.1
-
-中文:
-引理 add_right
-  条件: (h1 : μ ≪ ν) (ν' : 测度 α)
-  结论: μ ≪ ν + ν'
-  证明: by
-  intro s hs
-  simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
-  exact h1 hs.1
-
-Depends on / 依赖: Pi.add_apply, add_apply, add_eq_zero, coe_add
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.add_right** 是 Mathlib 中的一个引理，位于命名空间
+ `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：add_right (h1 : μ ≪ ν) (ν' : Measure α) : μ ≪ ν + ν'
+参数：h1 : μ ≪ ν；ν' : Measure α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 lemma add_right (h1 : μ ≪ ν) (ν' : Measure α) : μ ≪ ν + ν' := by
   intro s hs
   simp only [coe_add, Pi.add_apply, add_eq_zero] at hs ⊢
   exact h1 hs.1
-
-/--
-lemma `add_right'` / 引理 `add_right'`
-
-English:
-lemma add_right'
-  given: (h : μ ≪ ν') (ν : Measure α)
-  statement: μ ≪ ν + ν'
-  proof: by
-  simp [add_comm, add_right h]
-
-中文:
-引理 add_right'
-  条件: (h : μ ≪ ν') (ν : 测度 α)
-  结论: μ ≪ ν + ν'
-  证明: by
-  simp [add_comm, add_right h]
-
-Depends on / 依赖: add_comm, add_right
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.add_right'** 是 Mathlib 中的一个引理，位于命名空
+间 `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：add_right' (h : μ ≪ ν') (ν : Measure α) : μ ≪ ν + ν'
+参数：h : μ ≪ ν'；ν : Measure α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `MeasureTheory.Measure.AbsolutelyContinuous.add_right`：add_right (h1 : μ 
+≪ ν) (ν' : Measure α) : μ ≪ ν + ν'
 -/
 lemma add_right' (h : μ ≪ ν') (ν : Measure α) : μ ≪ ν + ν' := by
   simp [add_comm, add_right h]
-
-/--
-lemma `null_mono` / 引理 `null_mono`
-
-English:
-lemma null_mono
-  given: {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t
-  statement: Set α⦄
-  proof: hμν ht
-
-中文:
-引理 null_mono
-  条件: {μ ν : 测度 α} (hμν : μ ≪ ν) ⦃t
-  结论: 集合 α⦄
-  证明: hμν ht
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.null_mono** 是 Mathlib 中的一个引理，位于命名空间
+ `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：null_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄ (ht : ν t = 0) : μ t
+ = 0
+参数：hμν : μ ≪ ν。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma null_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄
     (ht : ν t = 0) : μ t = 0 :=
   hμν ht
-
-/--
-lemma `pos_mono` / 引理 `pos_mono`
-
-English:
-lemma pos_mono
-  given: {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t
-  statement: Set α⦄
-  proof: by
-  contrapose! ht
-  simp_all [hμν.null_mono]
-
-中文:
-引理 pos_mono
-  条件: {μ ν : 测度 α} (hμν : μ ≪ ν) ⦃t
-  结论: 集合 α⦄
-  证明: by
-  contrapose! ht
-  simp_all [hμν.null_mono]
-
-Depends on / 依赖: contrapose, null_mono
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.pos_mono** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：pos_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄ (ht : 0 < μ t) : 0 < 
+ν t
+参数：hμν : μ ≪ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.AbsolutelyContinuous.null_mono`：null_mono {μ ν : M
+easure α} (hμν : μ ≪ ν) ⦃t : Set α⦄ (ht : ν t = 0) : μ t = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pos_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄
     (ht : 0 < μ t) : 0 < ν t := by
@@ -495,274 +402,239 @@ lemma pos_mono {μ ν : Measure α} (hμν : μ ≪ ν) ⦃t : Set α⦄
 end AbsolutelyContinuous
 
 @[simp]
-/--
-lemma `absolutelyContinuous_zero_iff` / 引理 `absolutelyContinuous_zero_iff`
-
-English:
-lemma absolutelyContinuous_zero_iff
-  statement: μ ≪ 0 ↔ μ = 0
-  proof: ⟨fun h => measure_univ_eq_zero.mp (h rfl), fun h => h.symm ▸ AbsolutelyContinuous.zero _⟩
-
-alias absolutelyContinuous_refl := AbsolutelyContinuous.refl
-alias absolutelyContinuous_rfl := AbsolutelyContinuous.rfl
-
-中文:
-引理 absolutelyContinuous_zero_iff
-  结论: μ ≪ 0 ↔ μ = 0
-  证明: ⟨fun h => measure_univ_eq_zero.mp (h rfl), fun h => h.symm ▸ AbsolutelyContinuous.zero _⟩
-
-alias absolutelyContinuous_refl := AbsolutelyContinuous.refl
-alias absolutelyContinuous_rfl := AbsolutelyContinuous.rfl
-
-Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.zero, h.symm, measure_univ_eq_zero, measure_univ_eq_zero.mp
+/-
+**MeasureTheory.Measure.absolutelyContinuous_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory.Measure`。
+形式化陈述：absolutelyContinuous_zero_iff : μ ≪ 0 ↔ μ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.Measure.measure_univ_eq_zero`：measure_univ_eq_zero : μ uni
+v = 0 ↔ μ = 0
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.zero`：∀ {α : Type u_1} {mα : 
+MeasurableSpace α} (μ : MeasureTheory.Measure α), MeasureTheory.Measure.Absolute
+lyContinuous 0 μ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma absolutelyContinuous_zero_iff : μ ≪ 0 ↔ μ = 0 :=
-  ⟨fun h => measure_univ_eq_zero.mp (h rfl), fun h => h.symm ▸ AbsolutelyContinuous.zero _⟩
+  ⟨fun h ↦ measure_univ_eq_zero.mp (h rfl), fun h ↦ h.symm ▸ AbsolutelyContinuous.zero _⟩
 
 alias absolutelyContinuous_refl := AbsolutelyContinuous.refl
 alias absolutelyContinuous_rfl := AbsolutelyContinuous.rfl
-
-/--
-lemma `absolutelyContinuous_sum_left` / 引理 `absolutelyContinuous_sum_left`
-
-English:
-lemma absolutelyContinuous_sum_left
-  given: {μs : ι -> Measure α} (hμs : forall i, μs i ≪ ν)
-  proof: AbsolutelyContinuous.mk fun s hs hs0 => by simp [sum_apply _ hs, fun i => hμs i hs0]
-
-中文:
-引理 absolutelyContinuous_sum_left
-  条件: {μs : ι -> 测度 α} (hμs : 对任意 i, μs i ≪ ν)
-  证明: AbsolutelyContinuous.mk fun s hs hs0 => by simp [sum_apply _ hs, fun i => hμs i hs0]
-
-Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, sum_apply
+/-
+**MeasureTheory.Measure.absolutelyContinuous_sum_left** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory.Measure`。
+形式化陈述：absolutelyContinuous_sum_left {μs : ι -> Measure α} (hμs : forall i, μs i 
+≪ ν) : Measure.sum μs ≪ ν
+参数：hμs : forall i, μs i ≪ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.mk`：mk (h : forall ⦃s : Set α
+⦄, MeasurableSet s -> ν s = 0 -> μ s = 0) : μ ≪ ν
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `tsum_zero`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : TopologicalSpace α] {L : SummationFilter β},   ∑'[L] (x : β), 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma absolutelyContinuous_sum_left {μs : ι -> Measure α} (hμs : forall i, μs i ≪ ν) :
+lemma absolutelyContinuous_sum_left {μs : ι → Measure α} (hμs : ∀ i, μs i ≪ ν) :
     Measure.sum μs ≪ ν :=
-  AbsolutelyContinuous.mk fun s hs hs0 => by simp [sum_apply _ hs, fun i => hμs i hs0]
-
-/--
-lemma `absolutelyContinuous_sum_right` / 引理 `absolutelyContinuous_sum_right`
-
-English:
-lemma absolutelyContinuous_sum_right
-  given: {μs : ι -> Measure α} (i : ι) (hνμ : ν ≪ μs i)
-  proof: by
-  refine AbsolutelyContinuous.mk fun s hs hs0 => ?_
-  simp only [sum_apply _ hs, ENNReal.tsum_eq_zero] at hs0
-  exact hνμ (hs0 i)
-
-中文:
-引理 absolutelyContinuous_sum_right
-  条件: {μs : ι -> 测度 α} (i : ι) (hνμ : ν ≪ μs i)
-  证明: by
-  refine AbsolutelyContinuous.mk fun s hs hs0 => ?_
-  simp only [sum_apply _ hs, ENNReal.tsum_eq_zero] at hs0
-  exact hνμ (hs0 i)
-
-Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, ENNReal, ENNReal.tsum_eq_zero, sum_apply, tsum_eq_zero
+  AbsolutelyContinuous.mk fun s hs hs0 ↦ by simp [sum_apply _ hs, fun i ↦ hμs i hs0]
+/-
+**MeasureTheory.Measure.absolutelyContinuous_sum_right** 是 Mathlib 中的一个引理，位于命名空间
+ `MeasureTheory.Measure`。
+形式化陈述：absolutelyContinuous_sum_right {μs : ι -> Measure α} (i : ι) (hνμ : ν ≪ μs
+ i) : ν ≪ Measure.sum μs
+参数：i : ι；hνμ : ν ≪ μs i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.mk`：mk (h : forall ⦃s : Set α
+⦄, MeasurableSet s -> ν s = 0 -> μ s = 0) : μ ≪ ν
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
 -/
-lemma absolutelyContinuous_sum_right {μs : ι -> Measure α} (i : ι) (hνμ : ν ≪ μs i) :
+lemma absolutelyContinuous_sum_right {μs : ι → Measure α} (i : ι) (hνμ : ν ≪ μs i) :
     ν ≪ Measure.sum μs := by
-  refine AbsolutelyContinuous.mk fun s hs hs0 => ?_
+  refine AbsolutelyContinuous.mk fun s hs hs0 ↦ ?_
   simp only [sum_apply _ hs, ENNReal.tsum_eq_zero] at hs0
   exact hνμ (hs0 i)
-
-/--
-lemma `smul_absolutelyContinuous` / 引理 `smul_absolutelyContinuous`
-
-English:
-lemma smul_absolutelyContinuous
-  given: {c : Real>=0∞}
-  statement: c • μ ≪ μ
-  proof: .smul_left .rfl _
-
-中文:
-引理 smul_absolutelyContinuous
-  条件: {c : 实数>=0∞}
-  结论: c • μ ≪ μ
-  证明: .smul_left .rfl _
-
-Depends on / 依赖: smul_left
+/-
+**MeasureTheory.Measure.smul_absolutelyContinuous** 是 Mathlib 中的一个引理，位于命名空间 `Mea
+sureTheory.Measure`。
+形式化陈述：smul_absolutelyContinuous {c : Real>=0∞} : c • μ ≪ μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.smul_left`：∀ {α : Type u_1} {
+R : Type u_5} {mα : MeasurableSpace α} {μ ν : MeasureTheory.Measure α} [inst : S
+Mul R ENNReal]   [inst_1 : IsScalarTower R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.rfl`：∀ {α : Type u_1} {mα : M
+easurableSpace α} {μ : MeasureTheory.Measure α}, μ.AbsolutelyContinuous μ
 -/
-lemma smul_absolutelyContinuous {c : Real>=0∞} : c • μ ≪ μ := .smul_left .rfl _
-
-/--
-theorem `absolutelyContinuous_of_le_smul` / 定理 `absolutelyContinuous_of_le_smul`
-
-English:
-theorem absolutelyContinuous_of_le_smul
-  given: {μ' : Measure α} {c : Real>=0∞} (hμ'_le : μ' <= c • μ)
-  proof: (Measure.absolutelyContinuous_of_le hμ'_le).trans smul_absolutelyContinuous
-
-中文:
-定理 absolutelyContinuous_of_le_smul
-  条件: {μ' : 测度 α} {c : 实数>=0∞} (hμ'_le : μ' <= c • μ)
-  证明: (Measure.absolutelyContinuous_of_le hμ'_le).trans smul_absolutelyContinuous
-
-Depends on / 依赖: Measure, Measure.absolutelyContinuous_of_le, absolutelyContinuous_of_le, smul_absolutelyContinuous
+lemma smul_absolutelyContinuous {c : ℝ≥0∞} : c • μ ≪ μ := .smul_left .rfl _
+/-
+**MeasureTheory.Measure.absolutelyContinuous_of_le_smul** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.Measure`。
+形式化陈述：absolutelyContinuous_of_le_smul {μ' : Measure α} {c : Real>=0∞} (hμ'_le : 
+μ' <= c • μ) : μ' ≪ μ
+参数：hμ'_le : μ' <= c • μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.trans`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ₁ μ₂ μ₃ : MeasureTheory.Measure α},   μ₁.AbsolutelyContinu
+ous μ₂ → μ₂.AbsolutelyContinuous μ₃ → …
+· 使用定理 `MeasureTheory.Measure.absolutelyContinuous_of_le`：absolutelyContinuous_o
+f_le (h : μ <= ν) : μ ≪ ν
+· 使用引理 `MeasureTheory.Measure.smul_absolutelyContinuous`：smul_absolutelyContinuo
+us {c : Real>=0∞} : c • μ ≪ μ
 -/
-theorem absolutelyContinuous_of_le_smul {μ' : Measure α} {c : Real>=0∞} (hμ'_le : μ' <= c • μ) :
+theorem absolutelyContinuous_of_le_smul {μ' : Measure α} {c : ℝ≥0∞} (hμ'_le : μ' ≤ c • μ) :
     μ' ≪ μ :=
   (Measure.absolutelyContinuous_of_le hμ'_le).trans smul_absolutelyContinuous
-
-/--
-lemma `absolutelyContinuous_smul` / 引理 `absolutelyContinuous_smul`
-
-English:
-lemma absolutelyContinuous_smul
-  given: {c : Real>=0∞} (hc : c != 0)
-  statement: μ ≪ c • μ
-  proof: by
-  simp [AbsolutelyContinuous, hc]
-
-中文:
-引理 absolutelyContinuous_smul
-  条件: {c : 实数>=0∞} (hc : c != 0)
-  结论: μ ≪ c • μ
-  证明: by
-  simp [AbsolutelyContinuous, hc]
-
-Depends on / 依赖: AbsolutelyContinuous
+/-
+**MeasureTheory.Measure.absolutelyContinuous_smul** 是 Mathlib 中的一个引理，位于命名空间 `Mea
+sureTheory.Measure`。
+形式化陈述：absolutelyContinuous_smul {c : Real>=0∞} (hc : c != 0) : μ ≪ c • μ
+参数：hc : c != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.instNoZeroDivisors`：NoZeroDivisors ENNReal
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma absolutelyContinuous_smul {c : Real>=0∞} (hc : c != 0) : μ ≪ c • μ := by
+lemma absolutelyContinuous_smul {c : ℝ≥0∞} (hc : c ≠ 0) : μ ≪ c • μ := by
   simp [AbsolutelyContinuous, hc]
-
-/--
-lemma `AbsolutelyContinuous.smul_right` / 引理 `AbsolutelyContinuous.smul_right`
-
-English:
-lemma AbsolutelyContinuous.smul_right
-  given: (hμν : μ ≪ ν) {c : Real>=0∞} (hc : c != 0)
-  statement: μ ≪ c • ν
-  proof: (absolutelyContinuous_smul hc).trans (hμν.smul c)
-
-中文:
-引理 AbsolutelyContinuous.smul_right
-  条件: (hμν : μ ≪ ν) {c : 实数>=0∞} (hc : c != 0)
-  结论: μ ≪ c • ν
-  证明: (absolutelyContinuous_smul hc).trans (hμν.smul c)
-
-Depends on / 依赖: absolutelyContinuous_smul
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.smul_right** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ ν : MeasureTheory.Measure α},
+   μ.AbsolutelyContinuous ν → ∀ {c : ENNReal}, c ≠ 0 → μ.AbsolutelyContinuous (c
+ • ν)
+参数：c • ν。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.trans`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ₁ μ₂ μ₃ : MeasureTheory.Measure α},   μ₁.AbsolutelyContinu
+ous μ₂ → μ₂.AbsolutelyContinuous μ₃ → …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `MeasureTheory.Measure.absolutelyContinuous_smul`：absolutelyContinuous_sm
+ul {c : Real>=0∞} (hc : c != 0) : μ ≪ c • μ
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.smul`：∀ {α : Type u_1} {R : T
+ype u_5} {mα : MeasurableSpace α} {μ ν : MeasureTheory.Measure α} [inst : SMul R
+ ENNReal]   [inst_1 : IsScalarTower R…
 -/
-lemma AbsolutelyContinuous.smul_right (hμν : μ ≪ ν) {c : Real>=0∞} (hc : c != 0) : μ ≪ c • ν :=
+lemma AbsolutelyContinuous.smul_right (hμν : μ ≪ ν) {c : ℝ≥0∞} (hc : c ≠ 0) : μ ≪ c • ν :=
   (absolutelyContinuous_smul hc).trans (hμν.smul c)
-
-/--
-theorem `ae_le_iff_absolutelyContinuous` / 定理 `ae_le_iff_absolutelyContinuous`
-
-English:
-theorem ae_le_iff_absolutelyContinuous
-  statement: ae μ <= ae ν ↔ μ ≪ ν
-  proof: ⟨fun h s => by
-    rw [measure_eq_zero_iff_ae_notMem]; rw [measure_eq_zero_iff_ae_notMem]
-    exact fun hs => h hs, fun h _ hs => h hs⟩
-
-alias ⟨_root_.LE.le.absolutelyContinuous_of_ae, AbsolutelyContinuous.ae_le⟩ :=
-  ae_le_iff_absolutelyContinuous
-
-alias ae_mono' := AbsolutelyContinuous.ae_le
-
-中文:
-定理 ae_le_iff_absolutelyContinuous
-  结论: ae μ <= ae ν ↔ μ ≪ ν
-  证明: ⟨fun h s => by
-    rw [measure_eq_zero_iff_ae_notMem]; rw [measure_eq_zero_iff_ae_notMem]
-    exact fun hs => h hs, fun h _ hs => h hs⟩
-
-alias ⟨_root_.LE.le.absolutelyContinuous_of_ae, AbsolutelyContinuous.ae_le⟩ :=
-  ae_le_iff_absolutelyContinuous
-
-alias ae_mono' := AbsolutelyContinuous.ae_le
-
-Depends on / 依赖: measure_eq_zero_iff_ae_notMem
+/-
+**MeasureTheory.Measure.ae_le_iff_absolutelyContinuous** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+形式化陈述：ae_le_iff_absolutelyContinuous : ae μ <= ae ν ↔ μ ≪ ν
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.measure_eq_zero_iff_ae_notMem`：measure_eq_zero_iff_ae_notM
+em {s : Set α} : μ s = 0 ↔ forallᵐ a ∂μ, a ∉ s
 -/
-theorem ae_le_iff_absolutelyContinuous : ae μ <= ae ν ↔ μ ≪ ν :=
+theorem ae_le_iff_absolutelyContinuous : ae μ ≤ ae ν ↔ μ ≪ ν :=
   ⟨fun h s => by
-    rw [measure_eq_zero_iff_ae_notMem]; rw [measure_eq_zero_iff_ae_notMem]
+    rw [measure_eq_zero_iff_ae_notMem, measure_eq_zero_iff_ae_notMem]
     exact fun hs => h hs, fun h _ hs => h hs⟩
 
 alias ⟨_root_.LE.le.absolutelyContinuous_of_ae, AbsolutelyContinuous.ae_le⟩ :=
   ae_le_iff_absolutelyContinuous
 
 alias ae_mono' := AbsolutelyContinuous.ae_le
-
-/--
-theorem `AbsolutelyContinuous.ae_eq` / 定理 `AbsolutelyContinuous.ae_eq`
-
-English:
-theorem AbsolutelyContinuous.ae_eq
-  given: (h : μ ≪ ν) {f g : α -> δ} (h' : f =ᵐ[ν] g)
-  statement: f =ᵐ[μ] g
-  proof: h.ae_le h'
-
-中文:
-定理 AbsolutelyContinuous.ae_eq
-  条件: (h : μ ≪ ν) {f g : α -> δ} (h' : f =ᵐ[ν] g)
-  结论: f =ᵐ[μ] g
-  证明: h.ae_le h'
-
-Depends on / 依赖: ae_le, h.ae_le
+/-
+**MeasureTheory.Measure.AbsolutelyContinuous.ae_eq** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure.AbsolutelyContinuous`。
+形式化陈述：∀ {α : Type u_1} {δ : Type u_3} {mα : MeasurableSpace α} {μ ν : MeasureThe
+ory.Measure α},   μ.AbsolutelyContinuous ν → ∀ {f g : α → δ}, f =ᵐ[ν] g → f =ᵐ[μ
+] g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.ae_le`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ ν : MeasureTheory.Measure α},   μ.AbsolutelyContinuous ν 
+→ MeasureTheory.ae μ ≤ MeasureTheory.a…
 -/
-theorem AbsolutelyContinuous.ae_eq (h : μ ≪ ν) {f g : α -> δ} (h' : f =ᵐ[ν] g) : f =ᵐ[μ] g :=
+theorem AbsolutelyContinuous.ae_eq (h : μ ≪ ν) {f g : α → δ} (h' : f =ᵐ[ν] g) : f =ᵐ[μ] g :=
   h.ae_le h'
 
 end Measure
 
-/--
-theorem `AEDisjoint.of_absolutelyContinuous` / 定理 `AEDisjoint.of_absolutelyContinuous`
-
-English:
-theorem AEDisjoint.of_absolutelyContinuous
-  proof: h' h
-
-中文:
-定理 AEDisjoint.of_absolutelyContinuous
-  证明: h' h
+/-
+**MeasureTheory.AEDisjoint.of_absolutelyContinuous** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.AEDisjoint`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ : MeasureTheory.Measure α} {s
+ t : Set α},   MeasureTheory.AEDisjoint μ s t →     ∀ {ν : MeasureTheory.Measure
+ α}, ν.AbsolutelyContinuous μ → MeasureTheory.AEDisjoint ν s t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem AEDisjoint.of_absolutelyContinuous
     (h : AEDisjoint μ s t) {ν : Measure α} (h' : ν ≪ μ) :
     AEDisjoint ν s t := h' h
-
-/--
-theorem `AEDisjoint.of_le` / 定理 `AEDisjoint.of_le`
-
-English:
-theorem AEDisjoint.of_le
-  proof: h.of_absolutelyContinuous (Measure.absolutelyContinuous_of_le h')
-
-@[gcongr, mono]
-
-中文:
-定理 AEDisjoint.of_le
-  证明: h.of_absolutelyContinuous (Measure.absolutelyContinuous_of_le h')
-
-@[gcongr, mono]
+/-
+**MeasureTheory.AEDisjoint.of_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEDisj
+oint`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ : MeasureTheory.Measure α} {s
+ t : Set α},   MeasureTheory.AEDisjoint μ s t → ∀ {ν : MeasureTheory.Measure α},
+ ν ≤ μ → MeasureTheory.AEDisjoint ν s t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEDisjoint.of_absolutelyContinuous`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ : MeasureTheory.Measure α} {s t : Set α},   MeasureTheory
+.AEDisjoint μ s t →     ∀ {ν : Measure…
+· 使用定理 `MeasureTheory.Measure.absolutelyContinuous_of_le`：absolutelyContinuous_o
+f_le (h : μ <= ν) : μ ≪ ν
 -/
 protected theorem AEDisjoint.of_le
-    (h : AEDisjoint μ s t) {ν : Measure α} (h' : ν <= μ) :
+    (h : AEDisjoint μ s t) {ν : Measure α} (h' : ν ≤ μ) :
     AEDisjoint ν s t :=
   h.of_absolutelyContinuous (Measure.absolutelyContinuous_of_le h')
 
 @[gcongr, mono]
-/--
-theorem `ae_mono` / 定理 `ae_mono`
-
-English:
-theorem ae_mono
-  given: (h : μ <= ν)
-  statement: ae μ <= ae ν
-  proof: h.absolutelyContinuous.ae_le
-
-中文:
-定理 ae_mono
-  条件: (h : μ <= ν)
-  结论: ae μ <= ae ν
-  证明: h.absolutelyContinuous.ae_le
-
-Depends on / 依赖: absolutelyContinuous, ae_le, h.absolutelyContinuous.ae_le
+/-
+**MeasureTheory.ae_mono** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：ae_mono (h : μ <= ν) : ae μ <= ae ν
+参数：h : μ <= ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.ae_le`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ ν : MeasureTheory.Measure α},   μ.AbsolutelyContinuous ν 
+→ MeasureTheory.ae μ ≤ MeasureTheory.a…
+· 使用定理 `LE.le.absolutelyContinuous`：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ
+ ν : MeasureTheory.Measure α}, μ ≤ ν → μ.AbsolutelyContinuous ν
 -/
-theorem ae_mono (h : μ <= ν) : ae μ <= ae ν :=
+theorem ae_mono (h : μ ≤ ν) : ae μ ≤ ae ν :=
   h.absolutelyContinuous.ae_le
 
 end MeasureTheory
@@ -771,28 +643,21 @@ namespace MeasurableEmbedding
 
 open MeasureTheory Measure
 
-variable {m0 : MeasurableSpace α} {m1 : MeasurableSpace β} {f : α -> β} {μ ν : Measure α}
+variable {m0 : MeasurableSpace α} {m1 : MeasurableSpace β} {f : α → β} {μ ν : Measure α}
 
-/--
-lemma `absolutelyContinuous_map` / 引理 `absolutelyContinuous_map`
-
-English:
-lemma absolutelyContinuous_map
-  given: (hf : MeasurableEmbedding f) (hμν : μ ≪ ν)
-  proof: by
-  intro t ht
-  rw [hf.map_apply] at ht ⊢
-  exact hμν ht
-
-中文:
-引理 absolutelyContinuous_map
-  条件: (hf : 可测嵌入 f) (hμν : μ ≪ ν)
-  证明: by
-  intro t ht
-  rw [hf.map_apply] at ht ⊢
-  exact hμν ht
-
-Depends on / 依赖: hf.map_apply, map_apply
+/-
+**MeasurableEmbedding.absolutelyContinuous_map** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+ableEmbedding`。
+形式化陈述：absolutelyContinuous_map (hf : MeasurableEmbedding f) (hμν : μ ≪ ν) : μ.ma
+p f ≪ ν.map f
+参数：hf : MeasurableEmbedding f；hμν : μ ≪ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableEmbedding.map_apply`：∀ {α : Type u_1} {β : Type u_2} {m0 : Mea
+surableSpace α} {m1 : MeasurableSpace β} {f : α → β},   MeasurableEmbedding f → 
+∀ (μ : MeasureTheor…
 -/
 lemma absolutelyContinuous_map (hf : MeasurableEmbedding f) (hμν : μ ≪ ν) :
     μ.map f ≪ ν.map f := by
@@ -801,3 +666,4 @@ lemma absolutelyContinuous_map (hf : MeasurableEmbedding f) (hμν : μ ≪ ν) 
   exact hμν ht
 
 end MeasurableEmbedding
+

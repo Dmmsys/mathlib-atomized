@@ -15,48 +15,21 @@ public section
 
 variable {α : Type*}
 
-/--
-Instance `List.Vector.finite` / 实例 `List.Vector.finite`
-
-English:
-instance List.Vector.finite
-  signature: [Finite α] {n : Nat}
-  body: by
-  have := Fintype.ofFinite α
-  infer_instance
-
-中文:
-实例 列表.Vector.finite
-  签名: [有限 α] {n : 自然数}
-  定义体: by
-  have := Fintype.ofFinite α
-  infer_instance
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, infer_instance, ofFinite
+/-
+**List.Vector.finite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：List.Vector.finite [Finite α] {n : Nat} : Finite (Vector α n)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Vector.instFinite`：∀ {α : Type u_1} [Finite α] {n : ℕ}, Finite (Lis
+t.Vector α n)
 -/
-instance List.Vector.finite [Finite α] {n : Nat} : Finite (Vector α n) := by
+instance List.Vector.finite [Finite α] {n : ℕ} : Finite (Vector α n) := by
   have := Fintype.ofFinite α
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] {n
-  body: by
-  have := Fintype.ofFinite α
-  infer_instance
-
-中文:
-实例 [有限
-  签名: α] {n
-  定义体: by
-  have := Fintype.ofFinite α
-  infer_instance
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, infer_instance, ofFinite
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Finite α] {n : Nat} : Finite (Sym α n) := by
+instance [Finite α] {n : ℕ} : Finite (Sym α n) := by
   have := Fintype.ofFinite α
   infer_instance

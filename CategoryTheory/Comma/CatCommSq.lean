@@ -18,18 +18,15 @@ public import Mathlib.CategoryTheory.Comma.Arrow
 namespace CategoryTheory.Arrow
 
 @[simps]
-/--
-Instance `catCommSq` / 实例 `catCommSq`
-
-English:
-instance catCommSq
-  body: (Functor.mapArrowFunctor _ _).mapIso (CatCommSq.iso T L R B)
-
-中文:
-实例 catCommSq
-  定义体: (Functor.mapArrowFunctor _ _).mapIso (CatCommSq.iso T L R B)
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, Functor, Functor.mapArrowFunctor, mapArrowFunctor, mapIso
+/-
+**CategoryTheory.Arrow.catCommSq** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Arrow
+`。
+形式化陈述：catCommSq {C₁ C₂ D₁ D₂ : Type*} [Category C₁] [Category C₂] [Category D₁] 
+[Category D₂] (T : C₁ ⥤ C₂) (L : C₁ ⥤ D₁) (R : C₂ ⥤ D₂) (B : D₁ ⥤ D₂) [CatCommSq
+ T L R B] : CatCommSq T.mapArrow L.mapArrow R.mapArrow B.mapArrow where iso
+参数：T : C₁ ⥤ C₂；L : C₁ ⥤ D₁；R : C₂ ⥤ D₂；B : D₁ ⥤ D₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance catCommSq
     {C₁ C₂ D₁ D₂ : Type*} [Category C₁] [Category C₂] [Category D₁] [Category D₂]
@@ -38,3 +35,4 @@ instance catCommSq
   iso := (Functor.mapArrowFunctor _ _).mapIso (CatCommSq.iso T L R B)
 
 end CategoryTheory.Arrow
+

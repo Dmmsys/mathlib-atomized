@@ -29,18 +29,19 @@ universe v u
 -- morphism levels before object levels. See note [category theory universes].
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `Kleisli` / `Kleisli` 的定义
+/-- The objects for the Kleisli category of the monad `T : Monad C`, which are the same
+thing as objects of the base category `C`.
+-/
+/-
+**CategoryTheory.Kleisli** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Monad C → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Kleisli
-  parameters: (T : Monad C)
-  (no additional axioms)
-
-中文:
-结构 Kleisli
-  参数: (T : 单子 C)
-  (无附加公理)
+--- 原说明 ---
+The objects for the Kleisli category of the monad `T : Monad C`, which are the s
+ame
+thing as objects of the base category `C`.
 -/
 structure Kleisli (T : Monad C) where mk (T) ::
   /-- The underlying object of the base category. -/
@@ -50,70 +51,45 @@ namespace Kleisli
 
 variable {T : Monad C}
 
-/--
-lemma `mk_of` / 引理 `mk_of`
-
-English:
-lemma mk_of
-  given: (c : Kleisli T)
-  statement: Kleisli.mk T c.of = c
-  proof: rfl
-
-中文:
-引理 mk_of
-  条件: (c : Kleisli T)
-  结论: Kleisli.mk T c.of = c
-  证明: rfl
+/-
+**CategoryTheory.Kleisli.mk_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Kleisli
+`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {T : CategoryTheo
+ry.Monad C} (c : CategoryTheory.Kleisli T),   { of := c.of } = c
+参数：c : CategoryTheory.Kleisli T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_of (c : Kleisli T) : Kleisli.mk T c.of = c := rfl
-/--
-lemma `of_mk` / 引理 `of_mk`
-
-English:
-lemma of_mk
-  given: (c : C)
-  statement: (Kleisli.mk T c).of = c
-  proof: rfl
-
-中文:
-引理 of_mk
-  条件: (c : C)
-  结论: (Kleisli.mk T c).of = c
-  证明: rfl
+/-
+**CategoryTheory.Kleisli.of_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Kleisli
+`。
+形式化陈述：of_mk (c : C) : (Kleisli.mk T c).of = c
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_mk (c : C) : (Kleisli.mk T c).of = c := rfl
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- For (T : Monad C), morphisms `c ⟶ c'` in the Kleisli category of `T` are
+morphisms ` c ⟶ T.obj c'` in `C`. -/
+/-
+**CategoryTheory.Kleisli.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Kleisli
+`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {T : Cate
+goryTheory.Monad C} → CategoryTheory.Kleisli T → CategoryTheory.Kleisli T → Type
+ v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (c c' : Kleisli T)
-  axioms and operations (1):
-    - of : c.of ⟶ T.obj c'.of
-
-中文:
-结构 态射
-  参数: (c c' : Kleisli T)
-  公理与运算 (1 个):
-    - of : c.of ⟶ T.obj c'.of
+--- 原说明 ---
+For (T : Monad C), morphisms `c ⟶ c'` in the Kleisli category of `T` are
+morphisms ` c ⟶ T.obj c'` in `C`.
 -/
 structure Hom (c c' : Kleisli T) where
   /-- The morphism in C underlying the morphism in the Kleisli category. -/
   of : c.of ⟶ T.obj c'.of
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: C] (T
-  body: ⟨.mk T default⟩
-
-中文:
-实例 [可居
-  签名: C] (T
-  定义体: ⟨.mk T default⟩
+/-
+**CategoryTheory.Kleisli.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Kleisli`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited C] (T : Monad C) : Inhabited (Kleisli T) := ⟨.mk T default⟩
 
@@ -123,45 +99,25 @@ attribute [local ext] Hom in
 /-- The Kleisli category on a monad `T`.
 cf Definition 5.2.9 in [Riehl][riehl2017]. -/
 @[simps!]
-/--
-Instance `category` / 实例 `category`
+/-
+**CategoryTheory.Kleisli.category** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Klei
+sli`。
+形式化陈述：category : Category (Kleisli T) where Hom X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance category
-  signature: : Category (Kleisli T) where
-  body: Hom X Y
-id X := .mk T.η.app X.of
-comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
-  id_comp {X} {Y} f := by
-    ext
-    dsimp
-    rw [← T.η.naturality_assoc f.of]; rw [T.left_unit]
-    apply Category.comp_id
-  assoc f g h := by
-    simp [Monad.assoc, T.mu_naturality_assoc]
-
-中文:
-实例 category
-  签名: : 范畴 (Kleisli T) where
-  定义体: Hom X Y
-id X := .mk T.η.app X.of
-comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
-  id_comp {X} {Y} f := by
-    ext
-    dsimp
-    rw [← T.η.naturality_assoc f.of]; rw [T.left_unit]
-    apply Category.comp_id
-  assoc f g h := by
-    simp [Monad.assoc, T.mu_naturality_assoc]
+--- 原说明 ---
+The Kleisli category on a monad `T`.
+cf Definition 5.2.9 in [Riehl][riehl2017].
 -/
 instance category : Category (Kleisli T) where
   Hom X Y := Hom X Y
-id X := .mk T.η.app X.of
-comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
+  id X := .mk <| T.η.app X.of
+  comp {_} {_} {Z} f g := .mk <| f.of ≫ T.map g.of ≫ T.μ.app Z.of
   id_comp {X} {Y} f := by
     ext
     dsimp
-    rw [← T.η.naturality_assoc f.of]; rw [T.left_unit]
+    rw [← T.η.naturality_assoc f.of, T.left_unit]
     apply Category.comp_id
   assoc f g h := by
     simp [Monad.assoc, T.mu_naturality_assoc]
@@ -169,22 +125,16 @@ comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
 variable {T} in
 attribute [local ext] Hom in
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {x y : Kleisli T} {f g : x ⟶ y} (h : f.of = g.of)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {x y : Kleisli T} {f g : x ⟶ y} (h : f.of = g.of)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.Kleisli.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Kleis
+li`。
+形式化陈述：hom_ext {x y : Kleisli T} {f g : x ⟶ y} (h : f.of = g.of) : f = g
+参数：h : f.of = g.of。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Kleisli.Hom.ext`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {T : CategoryTheory.Monad C} {c c' : CategoryTheory.Kleisli T} 
+  {x y : c.Hom c'}, …
 -/
 lemma hom_ext {x y : Kleisli T} {f g : x ⟶ y} (h : f.of = g.of) : f = g :=
   Hom.ext h
@@ -193,58 +143,34 @@ namespace Adjunction
 
 /-- The left adjoint of the adjunction which induces the monad `(T, η_ T, μ_ T)`. -/
 @[simps]
-/--
-Definition of `toKleisli` / `toKleisli` 的定义
+/-
+**CategoryTheory.Kleisli.Adjunction.toKleisli** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Kleisli.Adjunction`。
+形式化陈述：toKleisli : C ⥤ Kleisli T where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toKleisli
-  signature: : C ⥤ Kleisli T where
-  body: .mk T X
-map {X} {Y} f := .mk f ≫ T.η.app Y
-  map_comp {X} {Y} {Z} f g := by
-    unfold_projs
-    simp [← T.η.naturality g]
-
-中文:
-定义 toKleisli
-  签名: : C ⥤ Kleisli T where
-  定义体: .mk T X
-map {X} {Y} f := .mk f ≫ T.η.app Y
-  map_comp {X} {Y} {Z} f g := by
-    unfold_projs
-    simp [← T.η.naturality g]
+--- 原说明 ---
+The left adjoint of the adjunction which induces the monad `(T, η_ T, μ_ T)`.
 -/
 def toKleisli : C ⥤ Kleisli T where
   obj X := .mk T X
-map {X} {Y} f := .mk f ≫ T.η.app Y
+  map {X} {Y} f := .mk <| f ≫ T.η.app Y
   map_comp {X} {Y} {Z} f g := by
     unfold_projs
     simp [← T.η.naturality g]
 
 /-- The right adjoint of the adjunction which induces the monad `(T, η_ T, μ_ T)`. -/
 @[simps]
-/--
-Definition of `fromKleisli` / `fromKleisli` 的定义
+/-
+**CategoryTheory.Kleisli.Adjunction.fromKleisli** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Kleisli.Adjunction`。
+形式化陈述：fromKleisli : Kleisli T ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromKleisli
-  signature: : Kleisli T ⥤ C where
-  body: T.obj X.of
-  map {_} {Y} f := T.map f.of ≫ T.μ.app Y.of
-  map_id _ := T.right_unit _
-  map_comp {X} {Y} {Z} f g := by
-    simp [← T.μ.naturality_assoc g.of, T.assoc]
-
-中文:
-定义 fromKleisli
-  签名: : Kleisli T ⥤ C where
-  定义体: T.obj X.of
-  map {_} {Y} f := T.map f.of ≫ T.μ.app Y.of
-  map_id _ := T.right_unit _
-  map_comp {X} {Y} {Z} f g := by
-    simp [← T.μ.naturality_assoc g.of, T.assoc]
-
-Depends on / 依赖: T.obj, X.of
+--- 原说明 ---
+The right adjoint of the adjunction which induces the monad `(T, η_ T, μ_ T)`.
 -/
 def fromKleisli : Kleisli T ⥤ C where
   obj X := T.obj X.of
@@ -255,28 +181,18 @@ def fromKleisli : Kleisli T ⥤ C where
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `adj` / `adj` 的定义
+/-- The Kleisli adjunction which gives rise to the monad `(T, η_ T, μ_ T)`.
+cf Lemma 5.2.11 of [Riehl][riehl2017]. -/
+/-
+**CategoryTheory.Kleisli.Adjunction.adj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Kleisli.Adjunction`。
+形式化陈述：adj : toKleisli T ⊣ fromKleisli T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : toKleisli T ⊣ fromKleisli T
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := { toFun f := f.of, invFun f := .mk f }
-      homEquiv_naturality_left_symm := fun {X} {Y} {Z} f g => by
-        ext
-        simp [← T.η.naturality_assoc g] }
-
-中文:
-定义 adj
-  签名: : toKleisli T ⊣ fromKleisli T
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := { toFun f := f.of, invFun f := .mk f }
-      homEquiv_naturality_left_symm := fun {X} {Y} {Z} f g => by
-        ext
-        simp [← T.η.naturality_assoc g] }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, f.of, homEquiv, homEquiv_naturality_left_symm, invFun, mkOfHomEquiv, naturality_assoc
+--- 原说明 ---
+The Kleisli adjunction which gives rise to the monad `(T, η_ T, μ_ T)`.
+cf Lemma 5.2.11 of [Riehl][riehl2017].
 -/
 def adj : toKleisli T ⊣ fromKleisli T :=
   Adjunction.mkOfHomEquiv
@@ -286,20 +202,16 @@ def adj : toKleisli T ⊣ fromKleisli T :=
         simp [← T.η.naturality_assoc g] }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `toKleisliCompFromKleisliIsoSelf` / `toKleisliCompFromKleisliIsoSelf` 的定义
+/-- The composition of the adjunction gives the original functor. -/
+/-
+**CategoryTheory.Kleisli.Adjunction.toKleisliCompFromKleisliIsoSelf** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Kleisli.Adjunction`。
+形式化陈述：toKleisliCompFromKleisliIsoSelf : toKleisli T ⋙ fromKleisli T ≅ T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toKleisliCompFromKleisliIsoSelf
-  signature: : toKleisli T ⋙ fromKleisli T ≅ T
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 toKleisliCompFromKleisliIsoSelf
-  签名: : toKleisli T ⋙ fromKleisli T ≅ T
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The composition of the adjunction gives the original functor.
 -/
 def toKleisliCompFromKleisliIsoSelf : toKleisli T ⋙ fromKleisli T ≅ T :=
   NatIso.ofComponents fun _ => Iso.refl _
@@ -308,18 +220,19 @@ end Adjunction
 
 end Kleisli
 
-/--
-Definition of `Cokleisli` / `Cokleisli` 的定义
+/-- The objects for the co-Kleisli category of the comonad `U : Comonad C`, which are the same
+thing as objects of the base category `C`.
+-/
+/-
+**CategoryTheory.Cokleisli** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Comonad C → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cokleisli
-  parameters: (U : Comonad C)
-  (no additional axioms)
-
-中文:
-结构 余kleisli
-  参数: (U : 余单子 C)
-  (无附加公理)
+--- 原说明 ---
+The objects for the co-Kleisli category of the comonad `U : Comonad C`, which ar
+e the same
+thing as objects of the base category `C`.
 -/
 structure Cokleisli (U : Comonad C) where mk (U) ::
   /-- The underlying object of the base category. -/
@@ -329,117 +242,80 @@ namespace Cokleisli
 
 variable (U : Comonad C)
 
-/--
-lemma `mk_of` / 引理 `mk_of`
-
-English:
-lemma mk_of
-  given: (c : Cokleisli U)
-  statement: Cokleisli.mk U c.of = c
-  proof: rfl
-
-中文:
-引理 mk_of
-  条件: (c : 余kleisli U)
-  结论: 余kleisli.mk U c.of = c
-  证明: rfl
+/-
+**CategoryTheory.Cokleisli.mk_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Cokle
+isli`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (U : CategoryTheo
+ry.Comonad C)   (c : CategoryTheory.Cokleisli U), { of := c.of } = c
+参数：U : CategoryTheory.Comonad C；c : CategoryTheory.Cokleisli U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_of (c : Cokleisli U) : Cokleisli.mk U c.of = c := rfl
-/--
-lemma `of_mk` / 引理 `of_mk`
-
-English:
-lemma of_mk
-  given: (c : C)
-  statement: (Cokleisli.mk U c).of = c
-  proof: rfl
-
-中文:
-引理 of_mk
-  条件: (c : C)
-  结论: (余kleisli.mk U c).of = c
-  证明: rfl
+/-
+**CategoryTheory.Cokleisli.of_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cokle
+isli`。
+形式化陈述：of_mk (c : C) : (Cokleisli.mk U c).of = c
+参数：c : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_mk (c : C) : (Cokleisli.mk U c).of = c := rfl
 
 variable {U} in
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- For (U : Comonad C), morphisms `c ⟶ c'` in the Cokleisli category of `U` are
+morphisms ` U.obj c ⟶ c'` in `C`. -/
+/-
+**CategoryTheory.Cokleisli.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Cokle
+isli`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {U : Cate
+goryTheory.Comonad C} → CategoryTheory.Cokleisli U → CategoryTheory.Cokleisli U 
+→ Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (c c' : Cokleisli U)
-  axioms and operations (1):
-    - of : U.obj c.of ⟶ c'.of
-
-中文:
-结构 态射
-  参数: (c c' : 余kleisli U)
-  公理与运算 (1 个):
-    - of : U.obj c.of ⟶ c'.of
+--- 原说明 ---
+For (U : Comonad C), morphisms `c ⟶ c'` in the Cokleisli category of `U` are
+morphisms ` U.obj c ⟶ c'` in `C`.
 -/
 structure Hom (c c' : Cokleisli U) where
   /-- The morphism in C underlying the morphism in the Kleisli category. -/
   of : U.obj c.of ⟶ c'.of
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: C] (U
-  body: ⟨.mk U default⟩
-
-中文:
-实例 [可居
-  签名: C] (U
-  定义体: ⟨.mk U default⟩
+/-
+**CategoryTheory.Cokleisli.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cokleisli`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited C] (U : Comonad C) : Inhabited (Cokleisli U) := ⟨.mk U default⟩
 
 /-- The co-Kleisli category on a comonad `U`. -/
 @[simps!]
-/--
-Instance `category` / 实例 `category`
+/-
+**CategoryTheory.Cokleisli.category** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+kleisli`。
+形式化陈述：category : Category (Cokleisli U) where Hom X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance category
-  signature: : Category (Cokleisli U) where
-  body: Hom X Y
-id X := .mk U.ε.app X.of
-comp f g := .mk U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
-
-中文:
-实例 category
-  签名: : 范畴 (余kleisli U) where
-  定义体: Hom X Y
-id X := .mk U.ε.app X.of
-comp f g := .mk U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
+--- 原说明 ---
+The co-Kleisli category on a comonad `U`.
 -/
 instance category : Category (Cokleisli U) where
   Hom X Y := Hom X Y
-id X := .mk U.ε.app X.of
-comp f g := .mk U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
+  id X := .mk <| U.ε.app X.of
+  comp f g := .mk <| U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
 
 variable {T} in
 attribute [local ext] Hom in
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {x y : Cokleisli U} {f g : x ⟶ y} (h : f.of = g.of)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {x y : 余kleisli U} {f g : x ⟶ y} (h : f.of = g.of)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.Cokleisli.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cok
+leisli`。
+形式化陈述：hom_ext {x y : Cokleisli U} {f g : x ⟶ y} (h : f.of = g.of) : f = g
+参数：h : f.of = g.of。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Cokleisli.Hom.ext`：∀ {C : Type u} {inst : CategoryTheory.
+Category.{v, u} C} {U : CategoryTheory.Comonad C}   {c c' : CategoryTheory.Cokle
+isli U} {x y : c.Hom c…
 -/
 lemma hom_ext {x y : Cokleisli U} {f g : x ⟶ y} (h : f.of = g.of) : f = g :=
   Hom.ext h
@@ -448,20 +324,15 @@ namespace Adjunction
 
 /-- The right adjoint of the adjunction which induces the comonad `(U, ε_ U, δ_ U)`. -/
 @[simps]
-/--
-Definition of `toCokleisli` / `toCokleisli` 的定义
+/-
+**CategoryTheory.Cokleisli.Adjunction.toCokleisli** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Cokleisli.Adjunction`。
+形式化陈述：toCokleisli : C ⥤ Cokleisli U where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCokleisli
-  signature: : C ⥤ Cokleisli U where
-  body: .mk U X
-  map {X} {_} f := .mk (U.ε.app X ≫ f)
-
-中文:
-定义 toCokleisli
-  签名: : C ⥤ 余kleisli U where
-  定义体: .mk U X
-  map {X} {_} f := .mk (U.ε.app X ≫ f)
+--- 原说明 ---
+The right adjoint of the adjunction which induces the comonad `(U, ε_ U, δ_ U)`.
 -/
 def toCokleisli : C ⥤ Cokleisli U where
   obj X := .mk U X
@@ -469,24 +340,15 @@ def toCokleisli : C ⥤ Cokleisli U where
 
 /-- The left adjoint of the adjunction which induces the comonad `(U, ε_ U, δ_ U)`. -/
 @[simps]
-/--
-Definition of `fromCokleisli` / `fromCokleisli` 的定义
+/-
+**CategoryTheory.Cokleisli.Adjunction.fromCokleisli** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Cokleisli.Adjunction`。
+形式化陈述：fromCokleisli : Cokleisli U ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromCokleisli
-  signature: : Cokleisli U ⥤ C where
-  body: U.obj X.of
-  map {X} {_} f := U.δ.app X.of ≫ U.map f.of
-  map_id _ := U.right_counit _
-
-中文:
-定义 fromCokleisli
-  签名: : 余kleisli U ⥤ C where
-  定义体: U.obj X.of
-  map {X} {_} f := U.δ.app X.of ≫ U.map f.of
-  map_id _ := U.right_counit _
-
-Depends on / 依赖: U.obj, X.of
+--- 原说明 ---
+The left adjoint of the adjunction which induces the comonad `(U, ε_ U, δ_ U)`.
 -/
 def fromCokleisli : Cokleisli U ⥤ C where
   obj X := U.obj X.of
@@ -495,24 +357,16 @@ def fromCokleisli : Cokleisli U ⥤ C where
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `adj` / `adj` 的定义
+/-- The co-Kleisli adjunction which gives rise to the comonad `(U, ε_ U, δ_ U)`. -/
+/-
+**CategoryTheory.Cokleisli.Adjunction.adj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Cokleisli.Adjunction`。
+形式化陈述：adj : fromCokleisli U ⊣ toCokleisli U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : fromCokleisli U ⊣ toCokleisli U
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := { toFun f := .mk f, invFun f := f.of }
-      homEquiv_naturality_right := fun {X} {Y} {_} f g => by cat_disch }
-
-中文:
-定义 adj
-  签名: : fromCokleisli U ⊣ toCokleisli U
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := { toFun f := .mk f, invFun f := f.of }
-      homEquiv_naturality_right := fun {X} {Y} {_} f g => by cat_disch }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, cat_disch, f.of, homEquiv, homEquiv_naturality_right, invFun, mkOfHomEquiv
+--- 原说明 ---
+The co-Kleisli adjunction which gives rise to the comonad `(U, ε_ U, δ_ U)`.
 -/
 def adj : fromCokleisli U ⊣ toCokleisli U :=
   Adjunction.mkOfHomEquiv
@@ -520,20 +374,16 @@ def adj : fromCokleisli U ⊣ toCokleisli U :=
       homEquiv_naturality_right := fun {X} {Y} {_} f g => by cat_disch }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `toCokleisliCompFromCokleisliIsoSelf` / `toCokleisliCompFromCokleisliIsoSelf` 的定义
+/-- The composition of the adjunction gives the original functor. -/
+/-
+**CategoryTheory.Cokleisli.Adjunction.toCokleisliCompFromCokleisliIsoSelf** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Cokleisli.Adjunction`。
+形式化陈述：toCokleisliCompFromCokleisliIsoSelf : toCokleisli U ⋙ fromCokleisli U ≅ U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCokleisliCompFromCokleisliIsoSelf
-  signature: : toCokleisli U ⋙ fromCokleisli U ≅ U
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 toCokleisliCompFromCokleisliIsoSelf
-  签名: : toCokleisli U ⋙ fromCokleisli U ≅ U
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The composition of the adjunction gives the original functor.
 -/
 def toCokleisliCompFromCokleisliIsoSelf : toCokleisli U ⋙ fromCokleisli U ≅ U :=
   NatIso.ofComponents fun _ => Iso.refl _
@@ -543,3 +393,4 @@ end Adjunction
 end Cokleisli
 
 end CategoryTheory
+

@@ -22,235 +22,197 @@ variable {α β : Type*}
 
 section Fold
 
-variable (op : α -> α -> α) [hc : Std.Commutative op] [ha : Std.Associative op]
+variable (op : α → α → α) [hc : Std.Commutative op] [ha : Std.Associative op]
 
 local notation a " * " b => op a b
 
-/--
-Definition of `fold` / `fold` 的定义
+/-- `fold op b s` folds a commutative associative operation `op` over
+  the multiset `s`. -/
+/-
+**Multiset.fold** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：fold : α -> Multiset α -> α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instLeftCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → α
+ → α} [hc : Std.Commutative f] [ha : Std.Associative f], LeftCommutative f
 
-English:
-definition fold
-  signature: : α -> Multiset α -> α
-  body: foldr op
-
-中文:
-定义 fold
-  签名: : α -> Multiset α -> α
-  定义体: foldr op
+--- 原说明 ---
+`fold op b s` folds a commutative associative operation `op` over
+  the multiset `s`.
 -/
-def fold : α -> Multiset α -> α :=
+def fold : α → Multiset α → α :=
   foldr op
-
-/--
-theorem `fold_eq_foldr` / 定理 `fold_eq_foldr`
-
-English:
-theorem fold_eq_foldr
-  given: (b : α) (s : Multiset α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fold_eq_foldr
-  条件: (b : α) (s : Multiset α)
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.fold_eq_foldr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_eq_foldr (b : α) (s : Multiset α) : fold op b s = foldr op b s
+参数：b : α；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fold_eq_foldr (b : α) (s : Multiset α) :
     fold op b s = foldr op b s :=
   rfl
 
 @[simp]
-/--
-theorem `coe_fold_r` / 定理 `coe_fold_r`
-
-English:
-theorem coe_fold_r
-  given: (b : α) (l : List α)
-  statement: fold op b l = l.foldr op b
-  proof: rfl
-
-中文:
-定理 coe_fold_r
-  条件: (b : α) (l : 列表 α)
-  结论: fold op b l = l.foldr op b
-  证明: rfl
+/-
+**Multiset.coe_fold_r** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_fold_r (b : α) (l : List α) : fold op b l = l.foldr op b
+参数：b : α；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fold_r (b : α) (l : List α) : fold op b l = l.foldr op b :=
   rfl
-
-/--
-theorem `coe_fold_l` / 定理 `coe_fold_l`
-
-English:
-theorem coe_fold_l
-  given: (b : α) (l : List α)
-  statement: fold op b l = l.foldl op b
-  proof: (coe_foldr_swap op b l).trans by simp [hc.comm]
-
-中文:
-定理 coe_fold_l
-  条件: (b : α) (l : 列表 α)
-  结论: fold op b l = l.foldl op b
-  证明: (coe_foldr_swap op b l).trans by simp [hc.comm]
-
-Depends on / 依赖: coe_foldr_swap, hc.comm
+/-
+**Multiset.coe_fold_l** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_fold_l (b : α) (l : List α) : fold op b l = l.foldl op b
+参数：b : α；l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instLeftCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → α
+ → α} [hc : Std.Commutative f] [ha : Std.Associative f], LeftCommutative f
+· 使用定理 `Multiset.coe_foldr_swap`：coe_foldr_swap (f : α -> β -> β) [LeftCommutati
+ve f] (b : β) (l : List α) : foldr f b l = l.foldl (fun x y => f y x) b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_fold_l (b : α) (l : List α) : fold op b l = l.foldl op b :=
-(coe_foldr_swap op b l).trans by simp [hc.comm]
-
-/--
-theorem `fold_eq_foldl` / 定理 `fold_eq_foldl`
-
-English:
-theorem fold_eq_foldl
-  given: (b : α) (s : Multiset α)
-  proof: Quot.inductionOn s fun _ => coe_fold_l _ _ _
-
-@[simp]
-
-中文:
-定理 fold_eq_foldl
-  条件: (b : α) (s : Multiset α)
-  证明: Quot.inductionOn s fun _ => coe_fold_l _ _ _
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, coe_fold_l, inductionOn
+  (coe_foldr_swap op b l).trans <| by simp [hc.comm]
+/-
+**Multiset.fold_eq_foldl** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_eq_foldl (b : α) (s : Multiset α) : fold op b s = foldl op b s
+参数：b : α；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `instRightCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → 
+α → α} [hc : Std.Commutative f] [ha : Std.Associative f], RightCommutative f
+· 使用定理 `Multiset.coe_fold_l`：coe_fold_l (b : α) (l : List α) : fold op b l = l.f
+oldl op b
 -/
 theorem fold_eq_foldl (b : α) (s : Multiset α) :
     fold op b s = foldl op b s :=
   Quot.inductionOn s fun _ => coe_fold_l _ _ _
 
 @[simp]
-/--
-theorem `fold_zero` / 定理 `fold_zero`
-
-English:
-theorem fold_zero
-  given: (b : α)
-  statement: (0 : Multiset α).fold op b = b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fold_zero
-  条件: (b : α)
-  结论: (0 : Multiset α).fold op b = b
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.fold_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_zero (b : α) : (0 : Multiset α).fold op b = b
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fold_zero (b : α) : (0 : Multiset α).fold op b = b :=
   rfl
 
 @[simp]
-/--
-theorem `fold_cons_left` / 定理 `fold_cons_left`
-
-English:
-theorem fold_cons_left
-  statement: forall (b a : α) (s : Multiset α), (a ::ₘ s).fold op b = a * s.fold op b
-  proof: foldr_cons _
-
-中文:
-定理 fold_cons_left
-  结论: 对任意 (b a : α) (s : Multiset α), (a ::ₘ s).fold op b = a * s.fold op b
-  证明: foldr_cons _
-
-Depends on / 依赖: foldr_cons
+/-
+**Multiset.fold_cons_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_cons_left : forall (b a : α) (s : Multiset α), (a ::ₘ s).fold op b = 
+a * s.fold op b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.foldr_cons`：foldr_cons (b a s) : foldr f b (a ::ₘ s) = f a (fol
+dr f b s)
+· 使用定理 `instLeftCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → α
+ → α} [hc : Std.Commutative f] [ha : Std.Associative f], LeftCommutative f
 -/
-theorem fold_cons_left : forall (b a : α) (s : Multiset α), (a ::ₘ s).fold op b = a * s.fold op b :=
+theorem fold_cons_left : ∀ (b a : α) (s : Multiset α), (a ::ₘ s).fold op b = a * s.fold op b :=
   foldr_cons _
-
-/--
-theorem `fold_cons_right` / 定理 `fold_cons_right`
-
-English:
-theorem fold_cons_right
-  given: (b a : α) (s : Multiset α)
-  statement: (a ::ₘ s).fold op b = s.fold op b * a
-  proof: by
-  simp [hc.comm]
-
-中文:
-定理 fold_cons_right
-  条件: (b a : α) (s : Multiset α)
-  结论: (a ::ₘ s).fold op b = s.fold op b * a
-  证明: by
-  simp [hc.comm]
-
-Depends on / 依赖: hc.comm
+/-
+**Multiset.fold_cons_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_cons_right (b a : α) (s : Multiset α) : (a ::ₘ s).fold op b = s.fold 
+op b * a
+参数：b a : α；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.fold_cons_left`：fold_cons_left : forall (b a : α) (s : Multiset
+ α), (a ::ₘ s).fold op b = a * s.fold op b
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fold_cons_right (b a : α) (s : Multiset α) : (a ::ₘ s).fold op b = s.fold op b * a := by
   simp [hc.comm]
-
-/--
-theorem `fold_cons'_right` / 定理 `fold_cons'_right`
-
-English:
-theorem fold_cons'_right
-  given: (b a : α) (s : Multiset α)
-  statement: (a ::ₘ s).fold op b = s.fold op (b * a)
-  proof: by
-  rw [fold_eq_foldl]; rw [foldl_cons]; rw [← fold_eq_foldl]
-
-中文:
-定理 fold_cons'_right
-  条件: (b a : α) (s : Multiset α)
-  结论: (a ::ₘ s).fold op b = s.fold op (b * a)
-  证明: by
-  rw [fold_eq_foldl]; rw [foldl_cons]; rw [← fold_eq_foldl]
-
-Depends on / 依赖: fold_eq_foldl, foldl_cons
+/-
+**Multiset.fold_cons'_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} (op : α → α → α) [hc : Std.Commutative op] [ha : Std.Asso
+ciative op] (b a : α) (s : Multiset α),   Multiset.fold op b (a ::ₘ s) = Multise
+t.fold op (op b a) s
+参数：op : α → α → α；b a : α；s : Multiset α；a ::ₘ s；op b a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instRightCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → 
+α → α} [hc : Std.Commutative f] [ha : Std.Associative f], RightCommutative f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.fold_eq_foldl`：fold_eq_foldl (b : α) (s : Multiset α) : fold op
+ b s = foldl op b s
+· 使用定理 `Multiset.foldl_cons`：foldl_cons (b a s) : foldl f b (a ::ₘ s) = foldl f 
+(f b a) s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem fold_cons'_right (b a : α) (s : Multiset α) : (a ::ₘ s).fold op b = s.fold op (b * a) := by
-  rw [fold_eq_foldl]; rw [foldl_cons]; rw [← fold_eq_foldl]
-
-/--
-theorem `fold_cons'_left` / 定理 `fold_cons'_left`
-
-English:
-theorem fold_cons'_left
-  given: (b a : α) (s : Multiset α)
-  statement: (a ::ₘ s).fold op b = s.fold op (a * b)
-  proof: by
-  rw [fold_cons'_right]; rw [hc.comm]
-
-中文:
-定理 fold_cons'_left
-  条件: (b a : α) (s : Multiset α)
-  结论: (a ::ₘ s).fold op b = s.fold op (a * b)
-  证明: by
-  rw [fold_cons'_right]; rw [hc.comm]
+  rw [fold_eq_foldl, foldl_cons, ← fold_eq_foldl]
+/-
+**Multiset.fold_cons'_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} (op : α → α → α) [hc : Std.Commutative op] [ha : Std.Asso
+ciative op] (b a : α) (s : Multiset α),   Multiset.fold op b (a ::ₘ s) = Multise
+t.fold op (op a b) s
+参数：op : α → α → α；b a : α；s : Multiset α；a ::ₘ s；op a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.fold_cons'_right`：∀ {α : Type u_1} (op : α → α → α) [hc : Std.C
+ommutative op] [ha : Std.Associative op] (b a : α) (s : Multiset α),   Multiset.
+fold op b (a ::…
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
 -/
 theorem fold_cons'_left (b a : α) (s : Multiset α) : (a ::ₘ s).fold op b = s.fold op (a * b) := by
-  rw [fold_cons'_right]; rw [hc.comm]
-
-/--
-theorem `fold_add` / 定理 `fold_add`
-
-English:
-theorem fold_add
-  given: (b₁ b₂ : α) (s₁ s₂ : Multiset α)
-  proof: Multiset.induction_on s₂
-    (by rw [Multiset.add_zero, fold_zero, ← fold_cons'_right, ← fold_cons_right op])
-    (fun a b h => by rw [fold_cons_left, add_cons, fold_cons_left, h, ← ha.assoc, hc.comm a,
-      ha.assoc])
-
-中文:
-定理 fold_add
-  条件: (b₁ b₂ : α) (s₁ s₂ : Multiset α)
-  证明: Multiset.induction_on s₂
-    (by rw [Multiset.add_zero, fold_zero, ← fold_cons'_right, ← fold_cons_right op])
-    (fun a b h => by rw [fold_cons_left, add_cons, fold_cons_left, h, ← ha.assoc, hc.comm a,
-      ha.assoc])
-
-Depends on / 依赖: Multiset, Multiset.add_zero, Multiset.induction_on, _right, add_cons, add_zero, fold_cons, fold_cons_left, fold_cons_right, fold_zero, ha.assoc, hc.comm, induction_on
+  rw [fold_cons'_right, hc.comm]
+/-
+**Multiset.fold_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_add (b₁ b₂ : α) (s₁ s₂ : Multiset α) : (s₁ + s₂).fold op (b₁ * b₂) = 
+s₁.fold op b₁ * s₂.fold op b₂
+参数：b₁ b₂ : α；s₁ s₂ : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.add_zero`：∀ {α : Type u_1} (s : Multiset α), s + 0 = s
+· 使用定理 `Multiset.fold_zero`：fold_zero (b : α) : (0 : Multiset α).fold op b = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.fold_cons'_right`：∀ {α : Type u_1} (op : α → α → α) [hc : Std.C
+ommutative op] [ha : Std.Associative op] (b a : α) (s : Multiset α),   Multiset.
+fold op b (a ::…
+· 使用定理 `Multiset.fold_cons_right`：fold_cons_right (b a : α) (s : Multiset α) : (
+a ::ₘ s).fold op b = s.fold op b * a
+· 使用定理 `Multiset.fold_cons_left`：fold_cons_left : forall (b a : α) (s : Multiset
+ α), (a ::ₘ s).fold op b = a * s.fold op b
+· 使用定理 `Multiset.add_cons`：add_cons (a : α) (s t : Multiset α) : s + a ::ₘ t = a
+ ::ₘ (s + t)
+· 使用定理 `Std.Associative.assoc`：∀ {α : Sort u} {op : α → α → α} [self : Std.Assoc
+iative op] (a b c : α), op (op a b) c = op a (op b c)
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
 -/
 theorem fold_add (b₁ b₂ : α) (s₁ s₂ : Multiset α) :
     (s₁ + s₂).fold op (b₁ * b₂) = s₁.fold op b₁ * s₂.fold op b₂ :=
@@ -258,126 +220,148 @@ theorem fold_add (b₁ b₂ : α) (s₁ s₂ : Multiset α) :
     (by rw [Multiset.add_zero, fold_zero, ← fold_cons'_right, ← fold_cons_right op])
     (fun a b h => by rw [fold_cons_left, add_cons, fold_cons_left, h, ← ha.assoc, hc.comm a,
       ha.assoc])
-
-/--
-theorem `fold_singleton` / 定理 `fold_singleton`
-
-English:
-theorem fold_singleton
-  given: (b a : α)
-  statement: ({a} : Multiset α).fold op b = a * b
-  proof: foldr_singleton _ _ _
-
-中文:
-定理 fold_singleton
-  条件: (b a : α)
-  结论: ({a} : Multiset α).fold op b = a * b
-  证明: foldr_singleton _ _ _
-
-Depends on / 依赖: foldr_singleton
+/-
+**Multiset.fold_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_singleton (b a : α) : ({a} : Multiset α).fold op b = a * b
+参数：b a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.foldr_singleton`：foldr_singleton (b a) : foldr f b ({a} : Multi
+set α) = f a b
+· 使用定理 `instLeftCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → α
+ → α} [hc : Std.Commutative f] [ha : Std.Associative f], LeftCommutative f
 -/
 theorem fold_singleton (b a : α) : ({a} : Multiset α).fold op b = a * b :=
   foldr_singleton _ _ _
-
-/--
-theorem `fold_distrib` / 定理 `fold_distrib`
-
-English:
-theorem fold_distrib
-  given: {f g : β -> α} (u₁ u₂ : α) (s : Multiset β)
-  proof: Multiset.induction_on s (by simp) (fun a b h => by
-    rw [map_cons]; rw [fold_cons_left]; rw [h]; rw [map_cons]; rw [fold_cons_left]; rw [map_cons]; rw [fold_cons_right]; rw [ha.assoc]; rw [← ha.assoc (g a)]; rw [hc.comm (g a)]; rw [ha.assoc]; rw [hc.comm (g a)]; rw [ha.assoc])
-
-中文:
-定理 fold_distrib
-  条件: {f g : β -> α} (u₁ u₂ : α) (s : Multiset β)
-  证明: Multiset.induction_on s (by simp) (fun a b h => by
-    rw [map_cons]; rw [fold_cons_left]; rw [h]; rw [map_cons]; rw [fold_cons_left]; rw [map_cons]; rw [fold_cons_right]; rw [ha.assoc]; rw [← ha.assoc (g a)]; rw [hc.comm (g a)]; rw [ha.assoc]; rw [hc.comm (g a)]; rw [ha.assoc])
-
-Depends on / 依赖: Multiset, Multiset.induction_on, fold_cons_left, fold_cons_right, ha.assoc, hc.comm, induction_on, map_cons
+/-
+**Multiset.fold_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_distrib {f g : β -> α} (u₁ u₂ : α) (s : Multiset β) : (s.map fun x =>
+ f x * g x).fold op (u₁ * u₂) = (s.map f).fold op u₁ * (s.map g).fold op u₂
+参数：u₁ u₂ : α；s : Multiset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.fold_cons_left`：fold_cons_left : forall (b a : α) (s : Multiset
+ α), (a ::ₘ s).fold op b = a * s.fold op b
+· 使用定理 `Multiset.fold_cons_right`：fold_cons_right (b a : α) (s : Multiset α) : (
+a ::ₘ s).fold op b = s.fold op b * a
+· 使用定理 `Std.Associative.assoc`：∀ {α : Sort u} {op : α → α → α} [self : Std.Assoc
+iative op] (a b c : α), op (op a b) c = op a (op b c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
 -/
-theorem fold_distrib {f g : β -> α} (u₁ u₂ : α) (s : Multiset β) :
+theorem fold_distrib {f g : β → α} (u₁ u₂ : α) (s : Multiset β) :
     (s.map fun x => f x * g x).fold op (u₁ * u₂) = (s.map f).fold op u₁ * (s.map g).fold op u₂ :=
   Multiset.induction_on s (by simp) (fun a b h => by
-    rw [map_cons]; rw [fold_cons_left]; rw [h]; rw [map_cons]; rw [fold_cons_left]; rw [map_cons]; rw [fold_cons_right]; rw [ha.assoc]; rw [← ha.assoc (g a)]; rw [hc.comm (g a)]; rw [ha.assoc]; rw [hc.comm (g a)]; rw [ha.assoc])
-
-/--
-theorem `fold_hom` / 定理 `fold_hom`
-
-English:
-theorem fold_hom
-  statement: {op' : β -> β -> β} [Std.Commutative op'] [Std.Associative op'] {m : α -> β}
-  proof: Multiset.induction_on s (by simp) (by simp +contextual [hm])
-
-中文:
-定理 fold_hom
-  结论: {op' : β -> β -> β} [Std.交换 op'] [Std.结合 op'] {m : α -> β}
-  证明: Multiset.induction_on s (by simp) (by simp +contextual [hm])
-
-Depends on / 依赖: Multiset, Multiset.induction_on, contextual, induction_on
+    rw [map_cons, fold_cons_left, h, map_cons, fold_cons_left, map_cons,
+      fold_cons_right, ha.assoc, ← ha.assoc (g a), hc.comm (g a),
+      ha.assoc, hc.comm (g a), ha.assoc])
+/-
+**Multiset.fold_hom** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_hom {op' : β -> β -> β} [Std.Commutative op'] [Std.Associative op'] {
+m : α -> β} (hm : forall x y, m (op x y) = op' (m x) (m y)) (b : α) (s : Multise
+t α) : (s.map m).fold op' (m b) = m (s.fold op b)
+参数：hm : forall x y, m (op x y) = op' (m x) (m y)；b : α；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.fold.congr_simp`：∀ {α : Type u_1} (op op_1 : α → α → α) (e_op :
+ op = op_1) [hc : Std.Commutative op] [ha : Std.Associative op]   (a a_1 : α), a
+ = a_1 → ∀ (a_…
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.fold_cons_left`：fold_cons_left : forall (b a : α) (s : Multiset
+ α), (a ::ₘ s).fold op b = a * s.fold op b
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem fold_hom {op' : β -> β -> β} [Std.Commutative op'] [Std.Associative op'] {m : α -> β}
-    (hm : forall x y, m (op x y) = op' (m x) (m y)) (b : α) (s : Multiset α) :
+theorem fold_hom {op' : β → β → β} [Std.Commutative op'] [Std.Associative op'] {m : α → β}
+    (hm : ∀ x y, m (op x y) = op' (m x) (m y)) (b : α) (s : Multiset α) :
     (s.map m).fold op' (m b) = m (s.fold op b) :=
   Multiset.induction_on s (by simp) (by simp +contextual [hm])
-
-/--
-theorem `fold_union_inter` / 定理 `fold_union_inter`
-
-English:
-theorem fold_union_inter
-  given: [DecidableEq α] (s₁ s₂ : Multiset α) (b₁ b₂ : α)
-  proof: by
-  rw [← fold_add op]; rw [union_add_inter]; rw [fold_add op]
-
-@[simp]
-
-中文:
-定理 fold_union_inter
-  条件: [DecidableEq α] (s₁ s₂ : Multiset α) (b₁ b₂ : α)
-  证明: by
-  rw [← fold_add op]; rw [union_add_inter]; rw [fold_add op]
-
-@[simp]
-
-Depends on / 依赖: fold_add, union_add_inter
+/-
+**Multiset.fold_union_inter** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_union_inter [DecidableEq α] (s₁ s₂ : Multiset α) (b₁ b₂ : α) : ((s₁ u
+nion s₂).fold op b₁ * (s₁ inter s₂).fold op b₂) = s₁.fold op b₁ * s₂.fold op b₂
+参数：s₁ s₂ : Multiset α；b₁ b₂ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.fold_add`：fold_add (b₁ b₂ : α) (s₁ s₂ : Multiset α) : (s₁ + s₂)
+.fold op (b₁ * b₂) = s₁.fold op b₁ * s₂.fold op b₂
+· 使用引理 `Multiset.union_add_inter`：union_add_inter (s t : Multiset α) : s union t
+ + s inter t = s + t
 -/
 theorem fold_union_inter [DecidableEq α] (s₁ s₂ : Multiset α) (b₁ b₂ : α) :
-    ((s₁ union s₂).fold op b₁ * (s₁ inter s₂).fold op b₂) = s₁.fold op b₁ * s₂.fold op b₂ := by
-  rw [← fold_add op]; rw [union_add_inter]; rw [fold_add op]
+    ((s₁ ∪ s₂).fold op b₁ * (s₁ ∩ s₂).fold op b₂) = s₁.fold op b₁ * s₂.fold op b₂ := by
+  rw [← fold_add op, union_add_inter, fold_add op]
 
 @[simp]
-/--
-theorem `fold_dedup_idem` / 定理 `fold_dedup_idem`
-
-English:
-theorem fold_dedup_idem
-  given: [DecidableEq α] [hi : Std.IdempotentOp op] (s : Multiset α) (b : α)
-  proof: Multiset.induction_on s (by simp) fun a s IH => by
-    by_cases h : a in s; swap; · simp [IH, h]
-    simp only [h, dedup_cons_of_mem, IH, fold_cons_left]
-    show fold op b s = op a (fold op b s)
-    rw [← cons_erase h]; rw [fold_cons_left]; rw [← ha.assoc]; rw [hi.idempotent]
-
-中文:
-定理 fold_dedup_idem
-  条件: [DecidableEq α] [hi : Std.IdempotentOp op] (s : Multiset α) (b : α)
-  证明: Multiset.induction_on s (by simp) fun a s IH => by
-    by_cases h : a in s; swap; · simp [IH, h]
-    simp only [h, dedup_cons_of_mem, IH, fold_cons_left]
-    show fold op b s = op a (fold op b s)
-    rw [← cons_erase h]; rw [fold_cons_left]; rw [← ha.assoc]; rw [hi.idempotent]
-
-Depends on / 依赖: Multiset, Multiset.induction_on, cons_erase, dedup_cons_of_mem, fold_cons_left, ha.assoc, hi.idempotent, idempotent, induction_on
+/-
+**Multiset.fold_dedup_idem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：fold_dedup_idem [DecidableEq α] [hi : Std.IdempotentOp op] (s : Multiset α
+) (b : α) : (dedup s).fold op b = s.fold op b
+参数：s : Multiset α；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.fold.congr_simp`：∀ {α : Type u_1} (op op_1 : α → α → α) (e_op :
+ op = op_1) [hc : Std.Commutative op] [ha : Std.Associative op]   (a a_1 : α), a
+ = a_1 → ∀ (a_…
+· 使用定理 `Multiset.dedup_cons_of_mem`：dedup_cons_of_mem {a : α} {s : Multiset α} :
+ a in s -> dedup (a ::ₘ s) = dedup s
+· 使用定理 `Multiset.fold_cons_left`：fold_cons_left : forall (b a : α) (s : Multiset
+ α), (a ::ₘ s).fold op b = a * s.fold op b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.cons_erase`：cons_erase {s : Multiset α} {a : α} : a in s -> a :
+:ₘ s.erase a = s
+· 使用定理 `Std.Associative.assoc`：∀ {α : Sort u} {op : α → α → α} [self : Std.Assoc
+iative op] (a b c : α), op (op a b) c = op a (op b c)
+· 使用定理 `Std.IdempotentOp.idempotent`：∀ {α : Sort u} {op : α → α → α} [self : Std
+.IdempotentOp op] (x : α), op x x = x
+· 使用定理 `Multiset.dedup_cons_of_notMem`：dedup_cons_of_notMem {a : α} {s : Multise
+t α} : a ∉ s -> dedup (a ::ₘ s) = a ::ₘ dedup s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem fold_dedup_idem [DecidableEq α] [hi : Std.IdempotentOp op] (s : Multiset α) (b : α) :
     (dedup s).fold op b = s.fold op b :=
   Multiset.induction_on s (by simp) fun a s IH => by
-    by_cases h : a in s; swap; · simp [IH, h]
+    by_cases h : a ∈ s; swap; · simp [IH, h]
     simp only [h, dedup_cons_of_mem, IH, fold_cons_left]
     show fold op b s = op a (fold op b s)
-    rw [← cons_erase h]; rw [fold_cons_left]; rw [← ha.assoc]; rw [hi.idempotent]
+    rw [← cons_erase h, fold_cons_left, ← ha.assoc, hi.idempotent]
 
 end Fold
 
 end Multiset
+

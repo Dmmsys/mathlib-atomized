@@ -64,28 +64,19 @@ variable {α β : Type u}
 
 /-! ### Definition of cardinals -/
 
-/--
-Instance `Cardinal.isEquivalent` / 实例 `Cardinal.isEquivalent`
+/-- The equivalence relation on types given by equivalence (bijective correspondence) of types.
+  Quotienting by this equivalence relation gives the cardinal numbers.
+-/
+/-
+**Cardinal.isEquivalent** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Cardinal.isEquivalent : Setoid (Type u) where r α β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Cardinal.isEquivalent
-  signature: : Setoid (Type u) where
-  body: Nonempty (α ≃ β)
-  iseqv := ⟨
-    fun α => ⟨Equiv.refl α⟩,
-    fun ⟨e⟩ => ⟨e.symm⟩,
-    fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
-
-中文:
-实例 基数.isEquivalent
-  签名: : 集合等价关系 (类型u) where
-  定义体: Nonempty (α ≃ β)
-  iseqv := ⟨
-    fun α => ⟨Equiv.refl α⟩,
-    fun ⟨e⟩ => ⟨e.symm⟩,
-    fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+The equivalence relation on types given by equivalence (bijective correspondence
+) of types.
+  Quotienting by this equivalence relation gives the cardinal numbers.
 -/
 instance Cardinal.isEquivalent : Setoid (Type u) where
   r α β := Nonempty (α ≃ β)
@@ -98,305 +89,199 @@ instance Cardinal.isEquivalent : Setoid (Type u) where
   defined as the quotient of `Type u` by existence of an equivalence
   (a bijection with explicit inverse). -/
 @[pp_with_univ, wikidata Q163875]
-/--
-Definition of `Cardinal` / `Cardinal` 的定义
+/-
+**Cardinal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Cardinal : Type (u + 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cardinal
-  signature: : Type (u + 1)
-  body: Quotient Cardinal.isEquivalent
-
-中文:
-定义 基数
-  签名: : 类型 (u + 1)
-  定义体: Quotient Cardinal.isEquivalent
-
-Depends on / 依赖: Cardinal, Cardinal.isEquivalent, Quotient, isEquivalent
+--- 原说明 ---
+`Cardinal.{u}` is the type of cardinal numbers in `Type u`,
+  defined as the quotient of `Type u` by existence of an equivalence
+  (a bijection with explicit inverse).
 -/
 def Cardinal : Type (u + 1) :=
   Quotient Cardinal.isEquivalent
 
 namespace Cardinal
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The cardinal number of a type -/
+/-
+**Cardinal.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：mk : Type u -> Cardinal
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-definition mk
-  signature: : Type u -> Cardinal
-  body: Quotient.mk'
-
-@[inherit_doc]
-scoped prefix:max "#" => Cardinal.mk
-
-中文:
-定义 mk
-  签名: : 类型u -> 基数
-  定义体: Quotient.mk'
-
-@[inherit_doc]
-scoped prefix:max "#" => Cardinal.mk
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+The cardinal number of a type
 -/
-def mk : Type u -> Cardinal :=
+def mk : Type u → Cardinal :=
   Quotient.mk'
 
 @[inherit_doc]
 scoped prefix:max "#" => Cardinal.mk
-
-/--
-Instance `canLiftCardinalType` / 实例 `canLiftCardinalType`
-
-English:
-instance canLiftCardinalType
-  signature: : CanLift Cardinal.{u} (Type u) mk fun _ => True
-  body: ⟨fun c _ => Quot.inductionOn c fun α => ⟨α, rfl⟩⟩
-
-@[elab_as_elim]
-
-中文:
-实例 canLiftCardinalType
-  签名: : CanLift 基数.{u} (类型u) mk fun _ => 真
-  定义体: ⟨fun c _ => Quot.inductionOn c fun α => ⟨α, rfl⟩⟩
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+/-
+**Cardinal.canLiftCardinalType** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+形式化陈述：canLiftCardinalType : CanLift Cardinal.{u} (Type u) mk fun _ => True
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 -/
 instance canLiftCardinalType : CanLift Cardinal.{u} (Type u) mk fun _ => True :=
   ⟨fun c _ => Quot.inductionOn c fun α => ⟨α, rfl⟩⟩
 
 @[elab_as_elim]
-/--
-theorem `inductionOn` / 定理 `inductionOn`
-
-English:
-theorem inductionOn
-  given: {motive : Cardinal -> Prop} (c : Cardinal) (mk : forall α, motive #α)
-  statement: motive c
-  proof: Quotient.inductionOn c mk
-
-@[elab_as_elim]
-
-中文:
-定理 inductionOn
-  条件: {motive : 基数 -> 命题} (c : 基数) (mk : 对任意 α, motive #α)
-  结论: motive c
-  证明: Quotient.inductionOn c mk
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cardinal.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：inductionOn {motive : Cardinal -> Prop} (c : Cardinal) (mk : forall α, mot
+ive #α) : motive c
+参数：c : Cardinal；mk : forall α, motive #α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 -/
-theorem inductionOn {motive : Cardinal -> Prop} (c : Cardinal) (mk : forall α, motive #α) : motive c :=
+theorem inductionOn {motive : Cardinal → Prop} (c : Cardinal) (mk : ∀ α, motive #α) : motive c :=
   Quotient.inductionOn c mk
 
 @[elab_as_elim]
-/--
-theorem `inductionOn₂` / 定理 `inductionOn₂`
-
-English:
-theorem inductionOn₂
-  statement: {motive : Cardinal -> Cardinal -> Prop} (c₁ c₂ : Cardinal)
-  proof: Quotient.inductionOn₂ c₁ c₂ mk
-
-@[elab_as_elim]
-
-中文:
-定理 inductionOn₂
-  结论: {motive : 基数 -> 基数 -> 命题} (c₁ c₂ : 基数)
-  证明: Quotient.inductionOn₂ c₁ c₂ mk
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+/-
+**Cardinal.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：inductionOn {motive : Cardinal -> Prop} (c : Cardinal) (mk : forall α, mot
+ive #α) : motive c
+参数：c : Cardinal；mk : forall α, motive #α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 -/
-theorem inductionOn₂ {motive : Cardinal -> Cardinal -> Prop} (c₁ c₂ : Cardinal)
-    (mk : forall α β, motive #α #β) : motive c₁ c₂ :=
+theorem inductionOn₂ {motive : Cardinal → Cardinal → Prop} (c₁ c₂ : Cardinal)
+    (mk : ∀ α β, motive #α #β) : motive c₁ c₂ :=
   Quotient.inductionOn₂ c₁ c₂ mk
 
 @[elab_as_elim]
-/--
-theorem `inductionOn₃` / 定理 `inductionOn₃`
-
-English:
-theorem inductionOn₃
-  statement: {motive : Cardinal -> Cardinal -> Cardinal -> Prop} (c₁ c₂ c₃ : Cardinal)
-  proof: Quotient.inductionOn₃ c₁ c₂ c₃ mk
-
-中文:
-定理 inductionOn₃
-  结论: {motive : 基数 -> 基数 -> 基数 -> 命题} (c₁ c₂ c₃ : 基数)
-  证明: Quotient.inductionOn₃ c₁ c₂ c₃ mk
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+/-
+**Cardinal.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：inductionOn {motive : Cardinal -> Prop} (c : Cardinal) (mk : forall α, mot
+ive #α) : motive c
+参数：c : Cardinal；mk : forall α, motive #α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 -/
-theorem inductionOn₃ {motive : Cardinal -> Cardinal -> Cardinal -> Prop} (c₁ c₂ c₃ : Cardinal)
-    (mk : forall α β γ, motive #α #β #γ) : motive c₁ c₂ c₃ :=
+theorem inductionOn₃ {motive : Cardinal → Cardinal → Cardinal → Prop} (c₁ c₂ c₃ : Cardinal)
+    (mk : ∀ α β γ, motive #α #β #γ) : motive c₁ c₂ c₃ :=
   Quotient.inductionOn₃ c₁ c₂ c₃ mk
-
-/--
-theorem `induction_on_pi` / 定理 `induction_on_pi`
-
-English:
-theorem induction_on_pi
-  statement: {ι : Type*} {motive : (ι -> Cardinal) -> Prop}
-  proof: Quotient.induction_on_pi f mk
-
-中文:
-定理 induction_on_pi
-  结论: {ι : 类型} {motive : (ι -> 基数) -> 命题}
-  证明: Quotient.induction_on_pi f mk
-
-Depends on / 依赖: Quotient, Quotient.induction_on_pi, induction_on_pi
+/-
+**Cardinal.induction_on_pi** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：induction_on_pi {ι : Type*} {motive : (ι -> Cardinal) -> Prop} (f : ι -> C
+ardinal) (mk : forall f : ι -> Type v, motive fun i => #(f i)) : motive f
+参数：ι -> Cardinal；f : ι -> Cardinal；mk : forall f : ι -> Type v, motive fun i => 
+#(f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.induction_on_pi`：Quotient.induction_on_pi {ι : Type*} {α : ι ->
+ Sort*} {s : forall i, Setoid (α i)} {p : (forall i, Quotient (s i)) -> Prop} (f
+ : forall i, Q…
 -/
-theorem induction_on_pi {ι : Type*} {motive : (ι -> Cardinal) -> Prop}
-    (f : ι -> Cardinal) (mk : forall f : ι -> Type v, motive fun i => #(f i)) : motive f :=
+theorem induction_on_pi {ι : Type*} {motive : (ι → Cardinal) → Prop}
+    (f : ι → Cardinal) (mk : ∀ f : ι → Type v, motive fun i ↦ #(f i)) : motive f :=
   Quotient.induction_on_pi f mk
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  statement: #α = #β ↔ Nonempty (α ≃ β)
-  proof: Quotient.eq'
-
-@[simp]
-
-中文:
-定理 eq
-  结论: #α = #β ↔ 非空 (α ≃ β)
-  证明: Quotient.eq'
-
-@[simp]
+/-
+**Cardinal.eq** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty (α ≃ β)
+参数：α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq'`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a
+ = Quotient.mk' b ↔ s₁ a b
 -/
 protected theorem eq : #α = #β ↔ Nonempty (α ≃ β) :=
   Quotient.eq'
 
 @[simp]
-/--
-theorem `mk_out` / 定理 `mk_out`
-
-English:
-theorem mk_out
-  given: (c : Cardinal)
-  statement: #c.out = c
-  proof: Quotient.out_eq _
-
-中文:
-定理 mk_out
-  条件: (c : 基数)
-  结论: #c.out = c
-  证明: Quotient.out_eq _
-
-Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
+/-
+**Cardinal.mk_out** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_out (c : Cardinal) : #c.out = c
+参数：c : Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 theorem mk_out (c : Cardinal) : #c.out = c :=
   Quotient.out_eq _
 
-/--
-Definition of `outMkEquiv` / `outMkEquiv` 的定义
+/-- The representative of the cardinal of a type is equivalent to the original type. -/
+/-
+**Cardinal.outMkEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：outMkEquiv {α : Type v} : (#α).out ≃ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition outMkEquiv
-  signature: {α : Type v}
-  body: Nonempty.some Cardinal.eq.mp (by simp)
-
-中文:
-定义 outMkEquiv
-  签名: {α : 类型v}
-  定义体: Nonempty.some Cardinal.eq.mp (by simp)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Nonempty, Nonempty.some
+--- 原说明 ---
+The representative of the cardinal of a type is equivalent to the original type.
 -/
 def outMkEquiv {α : Type v} : (#α).out ≃ α :=
-Nonempty.some Cardinal.eq.mp (by simp)
-
-/--
-theorem `mk_congr` / 定理 `mk_congr`
-
-English:
-theorem mk_congr
-  given: (e : α ≃ β)
-  statement: #α = #β
-  proof: Quot.sound ⟨e⟩
-
-alias _root_.Equiv.cardinal_eq := mk_congr
-
-中文:
-定理 mk_congr
-  条件: (e : α ≃ β)
-  结论: #α = #β
-  证明: Quot.sound ⟨e⟩
-
-alias _root_.Equiv.cardinal_eq := mk_congr
-
-Depends on / 依赖: Quot.sound
+  Nonempty.some <| Cardinal.eq.mp (by simp)
+/-
+**Cardinal.mk_congr** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_congr (e : α ≃ β) : #α = #β
+参数：e : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_congr (e : α ≃ β) : #α = #β :=
   Quot.sound ⟨e⟩
 
 alias _root_.Equiv.cardinal_eq := mk_congr
 
-/--
-Definition of `map` / `map` 的定义
+/-- Lift a function between `Type*`s to a function between `Cardinal`s. -/
+/-
+**Cardinal.map** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：map (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) : Cardina
+l.{u} -> Cardinal.{v}
+参数：f : Type u -> Type v；hf : forall α β, α ≃ β -> f α ≃ f β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β)
-  body: Quotient.map f fun α β ⟨e⟩ => ⟨hf α β e⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : 类型u -> 类型v) (hf : 对任意 α β, α ≃ β -> f α ≃ f β)
-  定义体: Quotient.map f fun α β ⟨e⟩ => ⟨hf α β e⟩
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.map
+--- 原说明 ---
+Lift a function between `Type*`s to a function between `Cardinal`s.
 -/
-def map (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) : Cardinal.{u} -> Cardinal.{v} :=
+def map (f : Type u → Type v) (hf : ∀ α β, α ≃ β → f α ≃ f β) : Cardinal.{u} → Cardinal.{v} :=
   Quotient.map f fun α β ⟨e⟩ => ⟨hf α β e⟩
 
 @[simp]
-/--
-theorem `map_mk` / 定理 `map_mk`
-
-English:
-theorem map_mk
-  given: (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) (α : Type u)
-  proof: rfl
-
-中文:
-定理 map_mk
-  条件: (f : 类型u -> 类型v) (hf : 对任意 α β, α ≃ β -> f α ≃ f β) (α : 类型u)
-  证明: rfl
+/-
+**Cardinal.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：map_mk (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) (α : T
+ype u) : map f hf #α = #(f α)
+参数：f : Type u -> Type v；hf : forall α β, α ≃ β -> f α ≃ f β；α : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_mk (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) (α : Type u) :
+theorem map_mk (f : Type u → Type v) (hf : ∀ α β, α ≃ β → f α ≃ f β) (α : Type u) :
     map f hf #α = #(f α) :=
   rfl
 
-/--
-Definition of `map₂` / `map₂` 的定义
+/-- Lift a binary operation `Type* → Type* → Type*` to a binary operation on `Cardinal`s. -/
+/-
+**Cardinal.map** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：map (f : Type u -> Type v) (hf : forall α β, α ≃ β -> f α ≃ f β) : Cardina
+l.{u} -> Cardinal.{v}
+参数：f : Type u -> Type v；hf : forall α β, α ≃ β -> f α ≃ f β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (f : Type u -> Type v -> Type w) (hf : forall α β γ δ, α ≃ β -> γ ≃ δ -> f α γ ≃ f β δ)
-  body: Quotient.map₂ f fun α β ⟨e₁⟩ γ δ ⟨e₂⟩ => ⟨hf α β γ δ e₁ e₂⟩
-
-中文:
-定义 map₂
-  签名: (f : 类型u -> 类型v -> 类型 w) (hf : 对任意 α β γ δ, α ≃ β -> γ ≃ δ -> f α γ ≃ f β δ)
-  定义体: Quotient.map₂ f fun α β ⟨e₁⟩ γ δ ⟨e₂⟩ => ⟨hf α β γ δ e₁ e₂⟩
-
-Depends on / 依赖: Quotient, Quotient.map
+--- 原说明 ---
+Lift a binary operation `Type* → Type* → Type*` to a binary operation on `Cardin
+al`s.
 -/
-def map₂ (f : Type u -> Type v -> Type w) (hf : forall α β γ δ, α ≃ β -> γ ≃ δ -> f α γ ≃ f β δ) :
-    Cardinal.{u} -> Cardinal.{v} -> Cardinal.{w} :=
+def map₂ (f : Type u → Type v → Type w) (hf : ∀ α β γ δ, α ≃ β → γ ≃ δ → f α γ ≃ f β δ) :
+    Cardinal.{u} → Cardinal.{v} → Cardinal.{w} :=
   Quotient.map₂ f fun α β ⟨e₁⟩ γ δ ⟨e₂⟩ => ⟨hf α β γ δ e₁ e₂⟩
 
 /-! ### Lifting cardinals to a higher universe -/
@@ -404,1540 +289,1120 @@ def map₂ (f : Type u -> Type v -> Type w) (hf : forall α β γ δ, α ≃ β 
 /-- The universe lift operation on cardinals. You can specify the universes explicitly with
   `lift.{u v} : Cardinal.{v} → Cardinal.{max v u}` -/
 @[pp_with_univ]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**Cardinal.lift** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：lift (c : Cardinal.{v}) : Cardinal.{max v u}
+参数：c : Cardinal.{v}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition lift
-  signature: (c : Cardinal.{v})
-  body: map ULift.{u, v} (fun _ _ e => Equiv.ulift.trans <| e.trans Equiv.ulift.symm) c
-
-@[simp]
-
-中文:
-定义 lift
-  签名: (c : 基数.{v})
-  定义体: map ULift.{u, v} (fun _ _ e => Equiv.ulift.trans <| e.trans Equiv.ulift.symm) c
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, e.trans
+--- 原说明 ---
+The universe lift operation on cardinals. You can specify the universes explicit
+ly with
+  `lift.{u v} : Cardinal.{v} → Cardinal.{max v u}`
 -/
 def lift (c : Cardinal.{v}) : Cardinal.{max v u} :=
   map ULift.{u, v} (fun _ _ e => Equiv.ulift.trans <| e.trans Equiv.ulift.symm) c
 
 @[simp]
-/--
-theorem `mk_uLift` / 定理 `mk_uLift`
-
-English:
-theorem mk_uLift
-  given: (α)
-  statement: #(ULift.{v, u} α) = lift.{v} #α
-  proof: rfl
-
-中文:
-定理 mk_uLift
-  条件: (α)
-  结论: #(类型层提升.{v, u} α) = lift.{v} #α
-  证明: rfl
+/-
+**Cardinal.mk_uLift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_uLift (α) : #(ULift.{v, u} α) = lift.{v} #α
+参数：α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_uLift (α) : #(ULift.{v, u} α) = lift.{v} #α :=
   rfl
 
-/--
-theorem `lift_umax` / 定理 `lift_umax`
+/-- `lift.{max u v, u}` equals `lift.{v, u}`.
 
-English:
-theorem lift_umax
-  statement: lift.{max u v, u} = lift.{v, u}
-  proof: funext fun a => inductionOn a fun _ => (Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
+Unfortunately, the simp lemma doesn't work. -/
+/-
+**Cardinal.lift_umax** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_umax : lift.{max u v, u} = lift.{v, u}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-中文:
-定理 lift_umax
-  结论: lift.{最大值 u v, u} = lift.{v, u}
-  证明: funext fun a => inductionOn a fun _ => (Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
+--- 原说明 ---
+`lift.{max u v, u}` equals `lift.{v, u}`.
 
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, cardinal_eq, inductionOn
+Unfortunately, the simp lemma doesn't work.
 -/
 theorem lift_umax : lift.{max u v, u} = lift.{v, u} :=
   funext fun a => inductionOn a fun _ => (Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
 
-/--
-theorem `lift_id'` / 定理 `lift_id'`
+/-- A cardinal lifted to a lower or equal universe equals itself.
 
-English:
-theorem lift_id'
-  given: (a : Cardinal.{max u v})
-  statement: lift.{u} a = a
-  proof: inductionOn a fun _ => mk_congr Equiv.ulift
+Unfortunately, the simp lemma doesn't work. -/
+/-
+**Cardinal.lift_id'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+参数：a : Cardinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 
-中文:
-定理 lift_id'
-  条件: (a : 基数.{最大值 u v})
-  结论: lift.{u} a = a
-  证明: inductionOn a fun _ => mk_congr Equiv.ulift
+--- 原说明 ---
+A cardinal lifted to a lower or equal universe equals itself.
 
-Depends on / 依赖: Equiv.ulift, inductionOn, mk_congr
+Unfortunately, the simp lemma doesn't work.
 -/
 theorem lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a :=
   inductionOn a fun _ => mk_congr Equiv.ulift
 
 /-- A cardinal lifted to the same universe equals itself. -/
 @[simp]
-/--
-theorem `lift_id` / 定理 `lift_id`
+/-
+**Cardinal.lift_id** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_id (a : Cardinal) : lift.{u, u} a = a
+参数：a : Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
 
-English:
-theorem lift_id
-  given: (a : Cardinal)
-  statement: lift.{u, u} a = a
-  proof: lift_id'.{u, u} a
-
-中文:
-定理 lift_id
-  条件: (a : 基数)
-  结论: lift.{u, u} a = a
-  证明: lift_id'.{u, u} a
-
-Depends on / 依赖: lift_id
+--- 原说明 ---
+A cardinal lifted to the same universe equals itself.
 -/
 theorem lift_id (a : Cardinal) : lift.{u, u} a = a :=
   lift_id'.{u, u} a
 
 /-- A cardinal lifted to the zero universe equals itself. -/
 @[simp]
-/--
-theorem `lift_uzero` / 定理 `lift_uzero`
+/-
+**Cardinal.lift_uzero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_uzero (a : Cardinal.{u}) : lift.{0} a = a
+参数：a : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
 
-English:
-theorem lift_uzero
-  given: (a : Cardinal.{u})
-  statement: lift.{0} a = a
-  proof: lift_id'.{0, u} a
-
-@[simp]
-
-中文:
-定理 lift_uzero
-  条件: (a : 基数.{u})
-  结论: lift.{0} a = a
-  证明: lift_id'.{0, u} a
-
-@[simp]
-
-Depends on / 依赖: lift_id
+--- 原说明 ---
+A cardinal lifted to the zero universe equals itself.
 -/
 theorem lift_uzero (a : Cardinal.{u}) : lift.{0} a = a :=
   lift_id'.{0, u} a
 
 @[simp]
-/--
-theorem `lift_lift.` / 定理 `lift_lift.`
-
-English:
-theorem lift_lift.{u_1}
-  given: (a : Cardinal.{u_1})
-  statement: lift.{w} (lift.{v} a) = lift.{max v w} a
-  proof: inductionOn a fun _ => (Equiv.ulift.trans <| Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
-
-中文:
-定理 lift_lift.{u_1}
-  条件: (a : 基数.{u_1})
-  结论: lift.{w} (lift.{v} a) = lift.{最大值 v w} a
-  证明: inductionOn a fun _ => (Equiv.ulift.trans <| Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, cardinal_eq, inductionOn
+/-
+**Cardinal.lift_lift.** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lift.{v} a) = lift.{max v w} a :=
   inductionOn a fun _ => (Equiv.ulift.trans <| Equiv.ulift.trans Equiv.ulift.symm).cardinal_eq
-
-/--
-theorem `out_lift_equiv` / 定理 `out_lift_equiv`
-
-English:
-theorem out_lift_equiv
-  given: (a : Cardinal.{u})
-  statement: Nonempty ((lift.{v} a).out ≃ a.out)
-  proof: by
-  rw [← mk_out a]; rw [← mk_uLift]; rw [mk_out]
-  exact ⟨outMkEquiv.trans Equiv.ulift⟩
-
-中文:
-定理 out_lift_equiv
-  条件: (a : 基数.{u})
-  结论: 非空 ((lift.{v} a).out ≃ a.out)
-  证明: by
-  rw [← mk_out a]; rw [← mk_uLift]; rw [mk_out]
-  exact ⟨outMkEquiv.trans Equiv.ulift⟩
-
-Depends on / 依赖: Equiv.ulift, mk_out, mk_uLift, outMkEquiv, outMkEquiv.trans
+/-
+**Cardinal.out_lift_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：out_lift_equiv (a : Cardinal.{u}) : Nonempty ((lift.{v} a).out ≃ a.out)
+参数：a : Cardinal.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_out`：mk_out (c : Cardinal) : #c.out = c
+· 使用定理 `Cardinal.mk_uLift`：mk_uLift (α) : #(ULift.{v, u} α) = lift.{v} #α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem out_lift_equiv (a : Cardinal.{u}) : Nonempty ((lift.{v} a).out ≃ a.out) := by
-  rw [← mk_out a]; rw [← mk_uLift]; rw [mk_out]
+  rw [← mk_out a, ← mk_uLift, mk_out]
   exact ⟨outMkEquiv.trans Equiv.ulift⟩
-
-/--
-theorem `lift_mk_eq` / 定理 `lift_mk_eq`
-
-English:
-theorem lift_mk_eq
-  given: {α : Type u} {β : Type v}
-  proof: Quotient.eq'.trans
-⟨fun ⟨f⟩ => ⟨Equiv.ulift.symm.trans f.trans Equiv.ulift⟩, fun ⟨f⟩ =>
-⟨Equiv.ulift.trans f.trans Equiv.ulift.symm⟩⟩
-
-中文:
-定理 lift_mk_eq
-  条件: {α : 类型u} {β : 类型v}
-  证明: Quotient.eq'.trans
-⟨fun ⟨f⟩ => ⟨Equiv.ulift.symm.trans f.trans Equiv.ulift⟩, fun ⟨f⟩ =>
-⟨Equiv.ulift.trans f.trans Equiv.ulift.symm⟩⟩
-
-Depends on / 依赖: Equiv.ulift, Equiv.ulift.symm, Equiv.ulift.symm.trans, Equiv.ulift.trans, Quotient, Quotient.eq, f.trans
+/-
+**Cardinal.lift_mk_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_mk_eq {α : Type u} {β : Type v} : lift.{max v w} #α = lift.{max u w} 
+#β ↔ Nonempty (α ≃ β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `Quotient.eq'`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a
+ = Quotient.mk' b ↔ s₁ a b
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem lift_mk_eq {α : Type u} {β : Type v} :
     lift.{max v w} #α = lift.{max u w} #β ↔ Nonempty (α ≃ β) :=
   Quotient.eq'.trans
-⟨fun ⟨f⟩ => ⟨Equiv.ulift.symm.trans f.trans Equiv.ulift⟩, fun ⟨f⟩ =>
-⟨Equiv.ulift.trans f.trans Equiv.ulift.symm⟩⟩
+    ⟨fun ⟨f⟩ => ⟨Equiv.ulift.symm.trans <| f.trans Equiv.ulift⟩, fun ⟨f⟩ =>
+      ⟨Equiv.ulift.trans <| f.trans Equiv.ulift.symm⟩⟩
 
-/--
-theorem `lift_mk_eq'` / 定理 `lift_mk_eq'`
+/-- A variant of `Cardinal.lift_mk_eq` with specialized universes.
+Because Lean often cannot realize it should use this specialization itself,
+we provide this statement separately so you don't have to solve the specialization problem either.
+-/
+/-
+**Cardinal.lift_mk_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #α = lift.{u} #β ↔ Nonemp
+ty (α ≃ β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lift_mk_eq`：lift_mk_eq {α : Type u} {β : Type v} : lift.{max v 
+w} #α = lift.{max u w} #β ↔ Nonempty (α ≃ β)
 
-English:
-theorem lift_mk_eq'
-  given: {α : Type u} {β : Type v}
-  statement: lift.{v} #α = lift.{u} #β ↔ Nonempty (α ≃ β)
-  proof: lift_mk_eq.{u, v, 0}
-
-中文:
-定理 lift_mk_eq'
-  条件: {α : 类型u} {β : 类型v}
-  结论: lift.{v} #α = lift.{u} #β ↔ 非空 (α ≃ β)
-  证明: lift_mk_eq.{u, v, 0}
-
-Depends on / 依赖: lift_mk_eq
+--- 原说明 ---
+A variant of `Cardinal.lift_mk_eq` with specialized universes.
+Because Lean often cannot realize it should use this specialization itself,
+we provide this statement separately so you don't have to solve the specializati
+on problem either.
 -/
 theorem lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #α = lift.{u} #β ↔ Nonempty (α ≃ β) :=
   lift_mk_eq.{u, v, 0}
-
-/--
-theorem `mk_congr_lift` / 定理 `mk_congr_lift`
-
-English:
-theorem mk_congr_lift
-  given: {α : Type u} {β : Type v} (e : α ≃ β)
-  statement: lift.{v} #α = lift.{u} #β
-  proof: lift_mk_eq'.2 ⟨e⟩
-
-alias _root_.Equiv.lift_cardinal_eq := mk_congr_lift
-
-中文:
-定理 mk_congr_lift
-  条件: {α : 类型u} {β : 类型v} (e : α ≃ β)
-  结论: lift.{v} #α = lift.{u} #β
-  证明: lift_mk_eq'.2 ⟨e⟩
-
-alias _root_.Equiv.lift_cardinal_eq := mk_congr_lift
-
-Depends on / 依赖: lift_mk_eq
+/-
+**Cardinal.mk_congr_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_congr_lift {α : Type u} {β : Type v} (e : α ≃ β) : lift.{v} #α = lift.{
+u} #β
+参数：e : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_eq'`：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #
+α = lift.{u} #β ↔ Nonempty (α ≃ β)
 -/
 theorem mk_congr_lift {α : Type u} {β : Type v} (e : α ≃ β) : lift.{v} #α = lift.{u} #β :=
   lift_mk_eq'.2 ⟨e⟩
 
 alias _root_.Equiv.lift_cardinal_eq := mk_congr_lift
 
+/-! ### Basic cardinals -/
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Zero Cardinal.{u}
-  body: -- `PEmpty` might be more canonical, but this is convenient for defeq with natCast
-  ⟨lift #(Fin 0)⟩
-
-中文:
-实例 :
-  签名: 零 基数.{u}
-  定义体: -- `PEmpty` might be more canonical, but this is convenient for defeq with natCast
-  ⟨lift #(Fin 0)⟩
+--- 原说明 ---
+### Basic cardinals
 -/
 instance : Zero Cardinal.{u} :=
   -- `PEmpty` might be more canonical, but this is convenient for defeq with natCast
   ⟨lift #(Fin 0)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Cardinal.{u}
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 基数.{u}
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Cardinal.{u} :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: (α : Type u) [IsEmpty α]
-  statement: #α = 0
-  proof: (Equiv.equivOfIsEmpty α (ULift (Fin 0))).cardinal_eq
-
-@[simp]
-
-中文:
-定理 mk_eq_zero
-  条件: (α : 类型u) [是空 α]
-  结论: #α = 0
-  证明: (Equiv.equivOfIsEmpty α (ULift (Fin 0))).cardinal_eq
-
-@[simp]
-
-Depends on / 依赖: Equiv.equivOfIsEmpty, cardinal_eq, equivOfIsEmpty
+/-
+**Cardinal.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
+参数：α : Type u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `ULift.instIsEmpty`：∀ {α : Type u} [IsEmpty α], IsEmpty (ULift.{u_1, u} α
+)
 -/
 theorem mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0 :=
   (Equiv.equivOfIsEmpty α (ULift (Fin 0))).cardinal_eq
 
 @[simp]
-/--
-theorem `lift_zero` / 定理 `lift_zero`
-
-English:
-theorem lift_zero
-  statement: lift 0 = 0
-  proof: mk_eq_zero _
-
-中文:
-定理 lift_zero
-  结论: lift 0 = 0
-  证明: mk_eq_zero _
-
-Depends on / 依赖: mk_eq_zero
+/-
+**Cardinal.lift_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_zero : lift 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
+· 使用定理 `ULift.instIsEmpty`：∀ {α : Type u} [IsEmpty α], IsEmpty (ULift.{u_1, u} α
+)
 -/
 theorem lift_zero : lift 0 = 0 := mk_eq_zero _
-
-/--
-theorem `mk_eq_zero_iff` / 定理 `mk_eq_zero_iff`
-
-English:
-theorem mk_eq_zero_iff
-  given: {α : Type u}
-  statement: #α = 0 ↔ IsEmpty α
-  proof: ⟨fun e =>
-    let ⟨h⟩ := Quotient.exact e
-    h.isEmpty,
-    @mk_eq_zero α⟩
-
-中文:
-定理 mk_eq_zero_iff
-  条件: {α : 类型u}
-  结论: #α = 0 ↔ 是空 α
-  证明: ⟨fun e =>
-    let ⟨h⟩ := Quotient.exact e
-    h.isEmpty,
-    @mk_eq_zero α⟩
-
-Depends on / 依赖: Quotient, Quotient.exact, h.isEmpty, isEmpty, mk_eq_zero
+/-
+**Cardinal.mk_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_eq_zero_iff {α : Type u} : #α = 0 ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
+· 使用定理 `Equiv.isEmpty`：∀ {α : Sort u_1} {β : Sort u_4} (e : α ≃ β) [IsEmpty β], 
+IsEmpty α
+· 使用定理 `ULift.instIsEmpty`：∀ {α : Type u} [IsEmpty α], IsEmpty (ULift.{u_1, u} α
+)
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
 -/
 theorem mk_eq_zero_iff {α : Type u} : #α = 0 ↔ IsEmpty α :=
   ⟨fun e =>
     let ⟨h⟩ := Quotient.exact e
     h.isEmpty,
     @mk_eq_zero α⟩
-
-/--
-theorem `mk_ne_zero_iff` / 定理 `mk_ne_zero_iff`
-
-English:
-theorem mk_ne_zero_iff
-  given: {α : Type u}
-  statement: #α != 0 ↔ Nonempty α
-  proof: (not_iff_not.2 mk_eq_zero_iff).trans not_isEmpty_iff
-
-@[simp]
-
-中文:
-定理 mk_ne_zero_iff
-  条件: {α : 类型u}
-  结论: #α != 0 ↔ 非空 α
-  证明: (not_iff_not.2 mk_eq_zero_iff).trans not_isEmpty_iff
-
-@[simp]
-
-Depends on / 依赖: mk_eq_zero_iff, not_iff_not, not_isEmpty_iff
+/-
+**Cardinal.mk_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Cardinal.mk_eq_zero_iff`：mk_eq_zero_iff {α : Type u} : #α = 0 ↔ IsEmpty 
+α
+· 使用定理 `not_isEmpty_iff`：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
 -/
-theorem mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempty α :=
+theorem mk_ne_zero_iff {α : Type u} : #α ≠ 0 ↔ Nonempty α :=
   (not_iff_not.2 mk_eq_zero_iff).trans not_isEmpty_iff
 
 @[simp]
-/--
-theorem `mk_ne_zero` / 定理 `mk_ne_zero`
-
-English:
-theorem mk_ne_zero
-  given: (α : Type u) [Nonempty α]
-  statement: #α != 0
-  proof: mk_ne_zero_iff.2 ‹_›
-
-中文:
-定理 mk_ne_zero
-  条件: (α : 类型u) [非空 α]
-  结论: #α != 0
-  证明: mk_ne_zero_iff.2 ‹_›
-
-Depends on / 依赖: mk_ne_zero_iff
+/-
+**Cardinal.mk_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_ne_zero (α : Type u) [Nonempty α] : #α != 0
+参数：α : Type u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.mk_ne_zero_iff`：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempt
+y α
 -/
-theorem mk_ne_zero (α : Type u) [Nonempty α] : #α != 0 :=
+theorem mk_ne_zero (α : Type u) [Nonempty α] : #α ≠ 0 :=
   mk_ne_zero_iff.2 ‹_›
-
-/--
-theorem `nonempty_out` / 定理 `nonempty_out`
-
-English:
-theorem nonempty_out
-  given: {x : Cardinal} (h : x != 0)
-  statement: Nonempty x.out
-  proof: by
-  rwa [← mk_ne_zero_iff, mk_out]
-
-中文:
-定理 nonempty_out
-  条件: {x : 基数} (h : x != 0)
-  结论: 非空 x.out
-  证明: by
-  rwa [← mk_ne_zero_iff, mk_out]
-
-Depends on / 依赖: mk_ne_zero_iff, mk_out
+/-
+**Cardinal.nonempty_out** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nonempty_out {x : Cardinal} (h : x != 0) : Nonempty x.out
+参数：h : x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_ne_zero_iff`：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempt
+y α
+· 使用定理 `Cardinal.mk_out`：mk_out (c : Cardinal) : #c.out = c
 -/
-theorem nonempty_out {x : Cardinal} (h : x != 0) : Nonempty x.out := by
+theorem nonempty_out {x : Cardinal} (h : x ≠ 0) : Nonempty x.out := by
   rwa [← mk_ne_zero_iff, mk_out]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One Cardinal.{u}
-  body: -- `PUnit` might be more canonical, but this is convenient for defeq with natCast
-  ⟨lift #(Fin 1)⟩
-
-中文:
-实例 :
-  签名: 幺 基数.{u}
-  定义体: -- `PUnit` might be more canonical, but this is convenient for defeq with natCast
-  ⟨lift #(Fin 1)⟩
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One Cardinal.{u} :=
   -- `PUnit` might be more canonical, but this is convenient for defeq with natCast
   ⟨lift #(Fin 1)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nontrivial Cardinal.{u}
-  body: ⟨⟨1, 0, mk_ne_zero _⟩⟩
-
-中文:
-实例 :
-  签名: 非平凡 基数.{u}
-  定义体: ⟨⟨1, 0, mk_ne_zero _⟩⟩
-
-Depends on / 依赖: mk_ne_zero
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nontrivial Cardinal.{u} :=
   ⟨⟨1, 0, mk_ne_zero _⟩⟩
-
-/--
-theorem `mk_eq_one` / 定理 `mk_eq_one`
-
-English:
-theorem mk_eq_one
-  given: (α : Type u) [Subsingleton α] [Nonempty α]
-  statement: #α = 1
-  proof: let ⟨_⟩ := nonempty_unique α; (Equiv.ofUnique α (ULift (Fin 1))).cardinal_eq
-
-中文:
-定理 mk_eq_one
-  条件: (α : 类型u) [子单例 α] [非空 α]
-  结论: #α = 1
-  证明: let ⟨_⟩ := nonempty_unique α; (Equiv.ofUnique α (ULift (Fin 1))).cardinal_eq
-
-Depends on / 依赖: Equiv.ofUnique, cardinal_eq, nonempty_unique, ofUnique
+/-
+**Cardinal.mk_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α] : #α = 1
+参数：α : Type u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
 -/
 theorem mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α] : #α = 1 :=
   let ⟨_⟩ := nonempty_unique α; (Equiv.ofUnique α (ULift (Fin 1))).cardinal_eq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add Cardinal.{u}
-  body: ⟨map₂ Sum fun _ _ _ _ => Equiv.sumCongr⟩
-
-中文:
-实例 :
-  签名: 加法 基数.{u}
-  定义体: ⟨map₂ Sum fun _ _ _ _ => Equiv.sumCongr⟩
-
-Depends on / 依赖: Equiv.sumCongr, sumCongr
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add Cardinal.{u} :=
   ⟨map₂ Sum fun _ _ _ _ => Equiv.sumCongr⟩
-
-/--
-theorem `add_def` / 定理 `add_def`
-
-English:
-theorem add_def
-  given: (α β : Type u)
-  statement: #α + #β = #(α oplus β)
-  proof: rfl
-
-中文:
-定理 add_def
-  条件: (α β : 类型u)
-  结论: #α + #β = #(α oplus β)
-  证明: rfl
+/-
+**Cardinal.add_def** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：add_def (α β : Type u) : #α + #β = #(α oplus β)
+参数：α β : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem add_def (α β : Type u) : #α + #β = #(α oplus β) :=
+theorem add_def (α β : Type u) : #α + #β = #(α ⊕ β) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast Cardinal.{u}
-  body: ⟨fun n => lift #(Fin n)⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 自然数嵌入 基数.{u}
-  定义体: ⟨fun n => lift #(Fin n)⟩
-
-@[simp]
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatCast Cardinal.{u} :=
   ⟨fun n => lift #(Fin n)⟩
 
 @[simp]
-/--
-theorem `mk_sum` / 定理 `mk_sum`
-
-English:
-theorem mk_sum
-  given: (α : Type u) (β : Type v)
-  statement: #(α oplus β) = lift.{v, u} #α + lift.{u, v} #β
-  proof: mk_congr (Equiv.ulift.symm.sumCongr Equiv.ulift.symm)
-
-@[simp]
-
-中文:
-定理 mk_sum
-  条件: (α : 类型u) (β : 类型v)
-  结论: #(α oplus β) = lift.{v, u} #α + lift.{u, v} #β
-  证明: mk_congr (Equiv.ulift.symm.sumCongr Equiv.ulift.symm)
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.symm.sumCongr, mk_congr, sumCongr
+/-
+**Cardinal.mk_sum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.{v, u} #α + lift.{u
+, v} #β
+参数：α : Type u；β : Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.{v, u} #α + lift.{u, v} #β :=
+theorem mk_sum (α : Type u) (β : Type v) : #(α ⊕ β) = lift.{v, u} #α + lift.{u, v} #β :=
   mk_congr (Equiv.ulift.symm.sumCongr Equiv.ulift.symm)
 
 @[simp]
-/--
-theorem `mk_option` / 定理 `mk_option`
-
-English:
-theorem mk_option
-  given: {α : Type u}
-  statement: #(Option α) = #α + 1
-  proof: by
-  rw [(Equiv.optionEquivSumPUnit.{u]; rw [u} α).cardinal_eq]; rw [mk_sum]; rw [mk_eq_one PUnit]; rw [lift_id]; rw [lift_id]
-
-@[simp]
-
-中文:
-定理 mk_option
-  条件: {α : 类型u}
-  结论: #(选项类型 α) = #α + 1
-  证明: by
-  rw [(Equiv.optionEquivSumPUnit.{u]; rw [u} α).cardinal_eq]; rw [mk_sum]; rw [mk_eq_one PUnit]; rw [lift_id]; rw [lift_id]
-
-@[simp]
-
-Depends on / 依赖: Equiv.optionEquivSumPUnit, cardinal_eq, lift_id, mk_eq_one, mk_sum, optionEquivSumPUnit
+/-
+**Cardinal.mk_option** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_option {α : Type u} : #(Option α) = #α + 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `Cardinal.mk_sum`：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.
+{v, u} #α + lift.{u, v} #β
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
 theorem mk_option {α : Type u} : #(Option α) = #α + 1 := by
-  rw [(Equiv.optionEquivSumPUnit.{u]; rw [u} α).cardinal_eq]; rw [mk_sum]; rw [mk_eq_one PUnit]; rw [lift_id]; rw [lift_id]
+  rw [(Equiv.optionEquivSumPUnit.{u, u} α).cardinal_eq, mk_sum, mk_eq_one PUnit, lift_id, lift_id]
 
 @[simp]
-/--
-theorem `mk_psum` / 定理 `mk_psum`
-
-English:
-theorem mk_psum
-  given: (α : Type u) (β : Type v)
-  statement: #(α oplus' β) = lift.{v} #α + lift.{u} #β
-  proof: (mk_congr (Equiv.psumEquivSum α β)).trans (mk_sum α β)
-
-中文:
-定理 mk_psum
-  条件: (α : 类型u) (β : 类型v)
-  结论: #(α oplus' β) = lift.{v} #α + lift.{u} #β
-  证明: (mk_congr (Equiv.psumEquivSum α β)).trans (mk_sum α β)
-
-Depends on / 依赖: Equiv.psumEquivSum, mk_congr, mk_sum, psumEquivSum
+/-
+**Cardinal.mk_psum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_psum (α : Type u) (β : Type v) : #(α oplus' β) = lift.{v} #α + lift.{u}
+ #β
+参数：α : Type u；β : Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Cardinal.mk_sum`：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.
+{v, u} #α + lift.{u, v} #β
 -/
-theorem mk_psum (α : Type u) (β : Type v) : #(α oplus' β) = lift.{v} #α + lift.{u} #β :=
+theorem mk_psum (α : Type u) (β : Type v) : #(α ⊕' β) = lift.{v} #α + lift.{u} #β :=
   (mk_congr (Equiv.psumEquivSum α β)).trans (mk_sum α β)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul Cardinal.{u}
-  body: ⟨map₂ Prod fun _ _ _ _ => Equiv.prodCongr⟩
-
-中文:
-实例 :
-  签名: 乘法 基数.{u}
-  定义体: ⟨map₂ Prod fun _ _ _ _ => Equiv.prodCongr⟩
-
-Depends on / 依赖: Equiv.prodCongr, prodCongr
+/-
+**Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul Cardinal.{u} :=
   ⟨map₂ Prod fun _ _ _ _ => Equiv.prodCongr⟩
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (α β : Type u)
-  statement: #α * #β = #(α × β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mul_def
-  条件: (α β : 类型u)
-  结论: #α * #β = #(α × β)
-  证明: rfl
-
-@[simp]
+/-
+**Cardinal.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mul_def (α β : Type u) : #α * #β = #(α × β)
+参数：α β : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (α β : Type u) : #α * #β = #(α × β) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_prod` / 定理 `mk_prod`
-
-English:
-theorem mk_prod
-  given: (α : Type u) (β : Type v)
-  statement: #(α × β) = lift.{v, u} #α * lift.{u, v} #β
-  proof: mk_congr (Equiv.ulift.symm.prodCongr Equiv.ulift.symm)
-
-中文:
-定理 mk_prod
-  条件: (α : 类型u) (β : 类型v)
-  结论: #(α × β) = lift.{v, u} #α * lift.{u, v} #β
-  证明: mk_congr (Equiv.ulift.symm.prodCongr Equiv.ulift.symm)
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.symm.prodCongr, mk_congr, prodCongr
+/-
+**Cardinal.mk_prod** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_prod (α : Type u) (β : Type v) : #(α × β) = lift.{v, u} #α * lift.{u, v
+} #β
+参数：α : Type u；β : Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mk_prod (α : Type u) (β : Type v) : #(α × β) = lift.{v, u} #α * lift.{u, v} #β :=
   mk_congr (Equiv.ulift.symm.prodCongr Equiv.ulift.symm)
 
-/--
-Instance `instPowCardinal` / 实例 `instPowCardinal`
+/-- The cardinal exponential. `#α ^ #β` is the cardinal of `β → α`. -/
+/-
+**Cardinal.instPowCardinal** 是 Mathlib 中的一个实例，位于命名空间 `Cardinal`。
+形式化陈述：instPowCardinal : Pow Cardinal.{u} Cardinal.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instPowCardinal
-  signature: : Pow Cardinal.{u} Cardinal.{u}
-  body: ⟨map₂ (fun α β => β -> α) fun _ _ _ _ e₁ e₂ => e₂.arrowCongr e₁⟩
-
-中文:
-实例 instPowCardinal
-  签名: : 幂 基数.{u} 基数.{u}
-  定义体: ⟨map₂ (fun α β => β -> α) fun _ _ _ _ e₁ e₂ => e₂.arrowCongr e₁⟩
-
-Depends on / 依赖: arrowCongr
+--- 原说明 ---
+The cardinal exponential. `#α ^ #β` is the cardinal of `β → α`.
 -/
 instance instPowCardinal : Pow Cardinal.{u} Cardinal.{u} :=
-  ⟨map₂ (fun α β => β -> α) fun _ _ _ _ e₁ e₂ => e₂.arrowCongr e₁⟩
-
-/--
-theorem `power_def` / 定理 `power_def`
-
-English:
-theorem power_def
-  given: (α β : Type u)
-  statement: #α ^ #β = #(β -> α)
-  proof: rfl
-
-中文:
-定理 power_def
-  条件: (α β : 类型u)
-  结论: #α ^ #β = #(β -> α)
-  证明: rfl
+  ⟨map₂ (fun α β => β → α) fun _ _ _ _ e₁ e₂ => e₂.arrowCongr e₁⟩
+/-
+**Cardinal.power_def** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_def (α β : Type u) : #α ^ #β = #(β -> α)
+参数：α β : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem power_def (α β : Type u) : #α ^ #β = #(β -> α) :=
+theorem power_def (α β : Type u) : #α ^ #β = #(β → α) :=
   rfl
-
-/--
-theorem `mk_arrow` / 定理 `mk_arrow`
-
-English:
-theorem mk_arrow
-  given: (α : Type u) (β : Type v)
-  statement: #(α -> β) = (lift.{u} #β ^ lift.{v} #α)
-  proof: mk_congr (Equiv.ulift.symm.arrowCongr Equiv.ulift.symm)
-
-@[simp]
-
-中文:
-定理 mk_arrow
-  条件: (α : 类型u) (β : 类型v)
-  结论: #(α -> β) = (lift.{u} #β ^ lift.{v} #α)
-  证明: mk_congr (Equiv.ulift.symm.arrowCongr Equiv.ulift.symm)
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.symm.arrowCongr, arrowCongr, mk_congr
+/-
+**Cardinal.mk_arrow** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_arrow (α : Type u) (β : Type v) : #(α -> β) = (lift.{u} #β ^ lift.{v} #
+α)
+参数：α : Type u；β : Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mk_arrow (α : Type u) (β : Type v) : #(α -> β) = (lift.{u} #β ^ lift.{v} #α) :=
+theorem mk_arrow (α : Type u) (β : Type v) : #(α → β) = (lift.{u} #β ^ lift.{v} #α) :=
   mk_congr (Equiv.ulift.symm.arrowCongr Equiv.ulift.symm)
 
 @[simp]
-/--
-theorem `lift_power` / 定理 `lift_power`
-
-English:
-theorem lift_power
-  given: (a b : Cardinal.{u})
-  statement: lift.{v} (a ^ b) = lift.{v} a ^ lift.{v} b
-  proof: inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
-
-@[simp]
-
-中文:
-定理 lift_power
-  条件: (a b : 基数.{u})
-  结论: lift.{v} (a ^ b) = lift.{v} a ^ lift.{v} b
-  证明: inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift, Equiv.ulift.arrowCongr, Equiv.ulift.trans, arrowCongr, mk_congr
+/-
+**Cardinal.lift_power** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_power (a b : Cardinal.{u}) : lift.{v} (a ^ b) = lift.{v} a ^ lift.{v}
+ b
+参数：a b : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn₂`：inductionOn₂ {motive : Cardinal -> Cardinal -> Pr
+op} (c₁ c₂ : Cardinal) (mk : forall α β, motive #α #β) : motive c₁ c₂
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem lift_power (a b : Cardinal.{u}) : lift.{v} (a ^ b) = lift.{v} a ^ lift.{v} b :=
   inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
+    mk_congr <| Equiv.ulift.trans (Equiv.ulift.arrowCongr Equiv.ulift).symm
 
 @[simp]
-/--
-theorem `power_zero` / 定理 `power_zero`
-
-English:
-theorem power_zero
-  given: (a : Cardinal)
-  statement: a ^ (0 : Cardinal) = 1
-  proof: inductionOn a fun _ => mk_eq_one _
-
-@[simp]
-
-中文:
-定理 power_zero
-  条件: (a : 基数)
-  结论: a ^ (0 : 基数) = 1
-  证明: inductionOn a fun _ => mk_eq_one _
-
-@[simp]
-
-Depends on / 依赖: inductionOn, mk_eq_one
+/-
+**Cardinal.power_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_zero (a : Cardinal) : a ^ (0 : Cardinal) = 1
+参数：a : Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `ULift.instIsEmpty`：∀ {α : Type u} [IsEmpty α], IsEmpty (ULift.{u_1, u} α
+)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 theorem power_zero (a : Cardinal) : a ^ (0 : Cardinal) = 1 :=
   inductionOn a fun _ => mk_eq_one _
 
 @[simp]
-/--
-theorem `power_one` / 定理 `power_one`
-
-English:
-theorem power_one
-  given: (a : Cardinal.{u})
-  statement: a ^ (1 : Cardinal) = a
-  proof: inductionOn a fun α => mk_congr (Equiv.funUnique (ULift.{u} (Fin 1)) α)
-
-中文:
-定理 power_one
-  条件: (a : 基数.{u})
-  结论: a ^ (1 : 基数) = a
-  证明: inductionOn a fun α => mk_congr (Equiv.funUnique (ULift.{u} (Fin 1)) α)
-
-Depends on / 依赖: Equiv.funUnique, funUnique, inductionOn, mk_congr
+/-
+**Cardinal.power_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_one (a : Cardinal.{u}) : a ^ (1 : Cardinal) = a
+参数：a : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 -/
 theorem power_one (a : Cardinal.{u}) : a ^ (1 : Cardinal) = a :=
   inductionOn a fun α => mk_congr (Equiv.funUnique (ULift.{u} (Fin 1)) α)
-
-/--
-theorem `power_add` / 定理 `power_add`
-
-English:
-theorem power_add
-  given: (a b c : Cardinal)
-  statement: a ^ (b + c) = a ^ b * a ^ c
-  proof: inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumArrowEquivProdArrow β γ α
-
-@[simp]
-
-中文:
-定理 power_add
-  条件: (a b c : 基数)
-  结论: a ^ (b + c) = a ^ b * a ^ c
-  证明: inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumArrowEquivProdArrow β γ α
-
-@[simp]
-
-Depends on / 依赖: Equiv.sumArrowEquivProdArrow, mk_congr, sumArrowEquivProdArrow
+/-
+**Cardinal.power_add** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_add (a b c : Cardinal) : a ^ (b + c) = a ^ b * a ^ c
+参数：a b c : Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn₃`：inductionOn₃ {motive : Cardinal -> Cardinal -> Ca
+rdinal -> Prop} (c₁ c₂ c₃ : Cardinal) (mk : forall α β γ, motive #α #β #γ) : mot
+ive c₁ c₂ c…
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 -/
 theorem power_add (a b c : Cardinal) : a ^ (b + c) = a ^ b * a ^ c :=
-inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumArrowEquivProdArrow β γ α
+  inductionOn₃ a b c fun α β γ => mk_congr <| Equiv.sumArrowEquivProdArrow β γ α
 
 @[simp]
-/--
-theorem `one_power` / 定理 `one_power`
-
-English:
-theorem one_power
-  given: {a : Cardinal}
-  statement: (1 : Cardinal) ^ a = 1
-  proof: inductionOn a fun _ => mk_eq_one _
-
-@[simp]
-
-中文:
-定理 one_power
-  条件: {a : 基数}
-  结论: (1 : 基数) ^ a = 1
-  证明: inductionOn a fun _ => mk_eq_one _
-
-@[simp]
-
-Depends on / 依赖: inductionOn, mk_eq_one
+/-
+**Cardinal.one_power** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：one_power {a : Cardinal} : (1 : Cardinal) ^ a = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
+· 使用定理 `instSubsingletonULift`：∀ {α : Type u_1} [Subsingleton α], Subsingleton (
+ULift.{u_2, u_1} α)
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
+· 使用定理 `ULift.instNonempty_mathlib`：∀ {α : Type u} [Nonempty α], Nonempty (ULift
+.{u_1, u} α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem one_power {a : Cardinal} : (1 : Cardinal) ^ a = 1 :=
   inductionOn a fun _ => mk_eq_one _
 
 @[simp]
-/--
-theorem `zero_power` / 定理 `zero_power`
-
-English:
-theorem zero_power
-  given: {a : Cardinal}
-  statement: a != 0 -> (0 : Cardinal) ^ a = 0
-  proof: inductionOn a fun _ heq =>
-mk_eq_zero_iff.2
-isEmpty_pi.2
-        let ⟨a⟩ := mk_ne_zero_iff.1 heq
-        ⟨a, inferInstance⟩
-
-中文:
-定理 zero_power
-  条件: {a : 基数}
-  结论: a != 0 -> (0 : 基数) ^ a = 0
-  证明: inductionOn a fun _ heq =>
-mk_eq_zero_iff.2
-isEmpty_pi.2
-        let ⟨a⟩ := mk_ne_zero_iff.1 heq
-        ⟨a, inferInstance⟩
-
-Depends on / 依赖: inductionOn, isEmpty_pi, mk_eq_zero_iff, mk_ne_zero_iff
+/-
+**Cardinal.zero_power** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：zero_power {a : Cardinal} : a != 0 -> (0 : Cardinal) ^ a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.mk_eq_zero_iff`：mk_eq_zero_iff {α : Type u} : #α = 0 ↔ IsEmpty 
+α
+· 使用定理 `isEmpty_pi`：isEmpty_pi {π : α -> Sort*} : IsEmpty (forall a, π a) ↔ exis
+ts a, IsEmpty (π a)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.mk_ne_zero_iff`：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempt
+y α
+· 使用定理 `ULift.instIsEmpty`：∀ {α : Type u} [IsEmpty α], IsEmpty (ULift.{u_1, u} α
+)
 -/
-theorem zero_power {a : Cardinal} : a != 0 -> (0 : Cardinal) ^ a = 0 :=
+theorem zero_power {a : Cardinal} : a ≠ 0 → (0 : Cardinal) ^ a = 0 :=
   inductionOn a fun _ heq =>
-mk_eq_zero_iff.2
-isEmpty_pi.2
+    mk_eq_zero_iff.2 <|
+      isEmpty_pi.2 <|
         let ⟨a⟩ := mk_ne_zero_iff.1 heq
         ⟨a, inferInstance⟩
-
-/--
-theorem `power_ne_zero` / 定理 `power_ne_zero`
-
-English:
-theorem power_ne_zero
-  given: {a : Cardinal} (b : Cardinal)
-  statement: a != 0 -> a ^ b != 0
-  proof: inductionOn₂ a b fun _ _ h =>
-    let ⟨a⟩ := mk_ne_zero_iff.1 h
-    mk_ne_zero_iff.2 ⟨fun _ => a⟩
-
-中文:
-定理 power_ne_zero
-  条件: {a : 基数} (b : 基数)
-  结论: a != 0 -> a ^ b != 0
-  证明: inductionOn₂ a b fun _ _ h =>
-    let ⟨a⟩ := mk_ne_zero_iff.1 h
-    mk_ne_zero_iff.2 ⟨fun _ => a⟩
-
-Depends on / 依赖: mk_ne_zero_iff
+/-
+**Cardinal.power_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_ne_zero {a : Cardinal} (b : Cardinal) : a != 0 -> a ^ b != 0
+参数：b : Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn₂`：inductionOn₂ {motive : Cardinal -> Cardinal -> Pr
+op} (c₁ c₂ : Cardinal) (mk : forall α β, motive #α #β) : motive c₁ c₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.mk_ne_zero_iff`：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempt
+y α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem power_ne_zero {a : Cardinal} (b : Cardinal) : a != 0 -> a ^ b != 0 :=
+theorem power_ne_zero {a : Cardinal} (b : Cardinal) : a ≠ 0 → a ^ b ≠ 0 :=
   inductionOn₂ a b fun _ _ h =>
     let ⟨a⟩ := mk_ne_zero_iff.1 h
     mk_ne_zero_iff.2 ⟨fun _ => a⟩
-
-/--
-theorem `mul_power` / 定理 `mul_power`
-
-English:
-theorem mul_power
-  given: {a b c : Cardinal}
-  statement: (a * b) ^ c = a ^ c * b ^ c
-  proof: inductionOn₃ a b c fun _ _ γ => mk_congr Equiv.arrowProdEquivProdArrow γ _ _
-
-@[simp]
-
-中文:
-定理 mul_power
-  条件: {a b c : 基数}
-  结论: (a * b) ^ c = a ^ c * b ^ c
-  证明: inductionOn₃ a b c fun _ _ γ => mk_congr Equiv.arrowProdEquivProdArrow γ _ _
-
-@[simp]
-
-Depends on / 依赖: Equiv.arrowProdEquivProdArrow, arrowProdEquivProdArrow, mk_congr
+/-
+**Cardinal.mul_power** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mul_power {a b c : Cardinal} : (a * b) ^ c = a ^ c * b ^ c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn₃`：inductionOn₃ {motive : Cardinal -> Cardinal -> Ca
+rdinal -> Prop} (c₁ c₂ c₃ : Cardinal) (mk : forall α β γ, motive #α #β #γ) : mot
+ive c₁ c₂ c…
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 -/
 theorem mul_power {a b c : Cardinal} : (a * b) ^ c = a ^ c * b ^ c :=
-inductionOn₃ a b c fun _ _ γ => mk_congr Equiv.arrowProdEquivProdArrow γ _ _
+  inductionOn₃ a b c fun _ _ γ => mk_congr <| Equiv.arrowProdEquivProdArrow γ _ _
 
 @[simp]
-/--
-theorem `lift_one` / 定理 `lift_one`
-
-English:
-theorem lift_one
-  statement: lift 1 = 1
-  proof: mk_eq_one _
-
-@[simp]
-
-中文:
-定理 lift_one
-  结论: lift 1 = 1
-  证明: mk_eq_one _
-
-@[simp]
-
-Depends on / 依赖: mk_eq_one
+/-
+**Cardinal.lift_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_one : lift 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `instSubsingletonULift`：∀ {α : Type u_1} [Subsingleton α], Subsingleton (
+ULift.{u_2, u_1} α)
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用定理 `ULift.instNonempty_mathlib`：∀ {α : Type u} [Nonempty α], Nonempty (ULift
+.{u_1, u} α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem lift_one : lift 1 = 1 := mk_eq_one _
 
 @[simp]
-/--
-theorem `lift_add` / 定理 `lift_add`
-
-English:
-theorem lift_add
-  given: (a b : Cardinal.{u})
-  statement: lift.{v} (a + b) = lift.{v} a + lift.{v} b
-  proof: inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
-
-中文:
-定理 lift_add
-  条件: (a b : 基数.{u})
-  结论: lift.{v} (a + b) = lift.{v} a + lift.{v} b
-  证明: inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
-
-Depends on / 依赖: Equiv.sumCongr, Equiv.ulift, Equiv.ulift.trans, mk_congr, sumCongr
+/-
+**Cardinal.lift_add** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_add (a b : Cardinal.{u}) : lift.{v} (a + b) = lift.{v} a + lift.{v} b
+参数：a b : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn₂`：inductionOn₂ {motive : Cardinal -> Cardinal -> Pr
+op} (c₁ c₂ : Cardinal) (mk : forall α β, motive #α #β) : motive c₁ c₂
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem lift_add (a b : Cardinal.{u}) : lift.{v} (a + b) = lift.{v} a + lift.{v} b :=
   inductionOn₂ a b fun _ _ =>
-mk_congr Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
+    mk_congr <| Equiv.ulift.trans (Equiv.sumCongr Equiv.ulift Equiv.ulift).symm
 
 /-! ### Indexed cardinal `sum` -/
 
-/--
-Definition of `sum` / `sum` 的定义
+/-- The indexed sum of cardinals is the cardinality of the
+  indexed disjoint union, i.e. sigma type. -/
+/-
+**Cardinal.sum** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：sum {ι} (f : ι -> Cardinal) : Cardinal
+参数：f : ι -> Cardinal。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sum
-  signature: {ι} (f : ι -> Cardinal)
-  body: mk (Σ i, (f i).out)
-
-@[simp]
-
-中文:
-定义 求和
-  签名: {ι} (f : ι -> 基数)
-  定义体: mk (Σ i, (f i).out)
-
-@[simp]
+--- 原说明 ---
+The indexed sum of cardinals is the cardinality of the
+  indexed disjoint union, i.e. sigma type.
 -/
-def sum {ι} (f : ι -> Cardinal) : Cardinal :=
+def sum {ι} (f : ι → Cardinal) : Cardinal :=
   mk (Σ i, (f i).out)
 
 @[simp]
-/--
-theorem `mk_sigma` / 定理 `mk_sigma`
-
-English:
-theorem mk_sigma
-  given: {ι} (f : ι -> Type*)
-  statement: #(Σ i, f i) = sum fun i => #(f i)
-  proof: mk_congr Equiv.sigmaCongrRight fun _ => outMkEquiv.symm
-
-中文:
-定理 mk_sigma
-  条件: {ι} (f : ι -> 类型)
-  结论: #(Σ i, f i) = 求和 fun i => #(f i)
-  证明: mk_congr Equiv.sigmaCongrRight fun _ => outMkEquiv.symm
-
-Depends on / 依赖: Equiv.sigmaCongrRight, mk_congr, outMkEquiv, outMkEquiv.symm, sigmaCongrRight
+/-
+**Cardinal.mk_sigma** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma {ι} (f : ι -> Type*) : #(Σ i, f i) = sum fun i => #(f i)
+参数：f : ι -> Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mk_sigma {ι} (f : ι -> Type*) : #(Σ i, f i) = sum fun i => #(f i) :=
-mk_congr Equiv.sigmaCongrRight fun _ => outMkEquiv.symm
-
-/--
-theorem `mk_sigma_congr_lift` / 定理 `mk_sigma_congr_lift`
-
-English:
-theorem mk_sigma_congr_lift
-  statement: {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' -> Type w'}
-  proof: Cardinal.lift_mk_eq'.2 ⟨.sigmaCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-中文:
-定理 mk_sigma_congr_lift
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 类型 w} {g : ι' -> 类型 w'}
-  证明: Cardinal.lift_mk_eq'.2 ⟨.sigmaCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-Depends on / 依赖: Cardinal, Cardinal.lift_mk_eq, Classical, Classical.choice, choice, lift_mk_eq, sigmaCongr
+theorem mk_sigma {ι} (f : ι → Type*) : #(Σ i, f i) = sum fun i => #(f i) :=
+  mk_congr <| Equiv.sigmaCongrRight fun _ => outMkEquiv.symm
+/-
+**Cardinal.mk_sigma_congr_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma_congr_lift {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' 
+-> Type w'} (e : ι ≃ ι') (h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))) 
+: lift.{max v' w'} #(Σ i, f i) = lift.{max v w} #(Σ i, g i)
+参数：e : ι ≃ ι'；h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_eq'`：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #
+α = lift.{u} #β ↔ Nonempty (α ≃ β)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem mk_sigma_congr_lift {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' -> Type w'}
-    (e : ι ≃ ι') (h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))) :
+theorem mk_sigma_congr_lift {ι : Type v} {ι' : Type v'} {f : ι → Type w} {g : ι' → Type w'}
+    (e : ι ≃ ι') (h : ∀ i, lift.{w'} #(f i) = lift.{w} #(g (e i))) :
     lift.{max v' w'} #(Σ i, f i) = lift.{max v w} #(Σ i, g i) :=
-Cardinal.lift_mk_eq'.2 ⟨.sigmaCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-/--
-theorem `mk_sigma_congr` / 定理 `mk_sigma_congr`
-
-English:
-theorem mk_sigma_congr
-  statement: {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ≃ ι')
-  proof: mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_sigma_congr
-  结论: {ι ι' : 类型u} {f : ι -> 类型v} {g : ι' -> 类型v} (e : ι ≃ ι')
-  证明: mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.sigmaCongr, choice, mk_congr, sigmaCongr
+  Cardinal.lift_mk_eq'.2 ⟨.sigmaCongr e fun i ↦ Classical.choice <| Cardinal.lift_mk_eq'.1 (h i)⟩
+/-
+**Cardinal.mk_sigma_congr** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma_congr {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι
+ ≃ ι') (h : forall i, #(f i) = #(g (e i))) : #(Σ i, f i) = #(Σ i, g i)
+参数：e : ι ≃ ι'；h : forall i, #(f i) = #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 -/
-theorem mk_sigma_congr {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ≃ ι')
-    (h : forall i, #(f i) = #(g (e i))) : #(Σ i, f i) = #(Σ i, g i) :=
-mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
+theorem mk_sigma_congr {ι ι' : Type u} {f : ι → Type v} {g : ι' → Type v} (e : ι ≃ ι')
+    (h : ∀ i, #(f i) = #(g (e i))) : #(Σ i, f i) = #(Σ i, g i) :=
+  mk_congr <| Equiv.sigmaCongr e fun i ↦ Classical.choice <| Cardinal.eq.mp (h i)
 
-/--
-theorem `mk_sigma_congr'` / 定理 `mk_sigma_congr'`
+/-- Similar to `mk_sigma_congr` with indexing types in different universes. This is not a strict
+generalization. -/
+/-
+**Cardinal.mk_sigma_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma_congr' {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)}
+ {g : ι' -> Type max w (max u v)} (e : ι ≃ ι') (h : forall i, #(f i) = #(g (e i)
+)) : #(Σ i, f i) = #(Σ i, g i)
+参数：max u v；max u v；e : ι ≃ ι'；h : forall i, #(f i) = #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 
-English:
-theorem mk_sigma_congr'
-  statement: {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)}
-  proof: mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_sigma_congr'
-  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> 类型 最大值 w (最大值 u v)}
-  证明: mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.sigmaCongr, choice, mk_congr, sigmaCongr
+--- 原说明 ---
+Similar to `mk_sigma_congr` with indexing types in different universes. This is 
+not a strict
+generalization.
 -/
-theorem mk_sigma_congr' {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)}
-    {g : ι' -> Type max w (max u v)} (e : ι ≃ ι')
-    (h : forall i, #(f i) = #(g (e i))) : #(Σ i, f i) = #(Σ i, g i) :=
-mk_congr Equiv.sigmaCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-/--
-theorem `mk_sigma_congrRight` / 定理 `mk_sigma_congrRight`
-
-English:
-theorem mk_sigma_congrRight
-  given: {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i))
-  proof: mk_sigma_congr (Equiv.refl ι) h
-
-中文:
-定理 mk_sigma_congrRight
-  条件: {ι : 类型u} {f g : ι -> 类型v} (h : 对任意 i, #(f i) = #(g i))
-  证明: mk_sigma_congr (Equiv.refl ι) h
-
-Depends on / 依赖: Equiv.refl, mk_sigma_congr
+theorem mk_sigma_congr' {ι : Type u} {ι' : Type v} {f : ι → Type max w (max u v)}
+    {g : ι' → Type max w (max u v)} (e : ι ≃ ι')
+    (h : ∀ i, #(f i) = #(g (e i))) : #(Σ i, f i) = #(Σ i, g i) :=
+  mk_congr <| Equiv.sigmaCongr e fun i ↦ Classical.choice <| Cardinal.eq.mp (h i)
+/-
+**Cardinal.mk_sigma_congrRight** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i)
+ = #(g i)) : #(Σ i, f i) = #(Σ i, g i)
+参数：h : forall i, #(f i) = #(g i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_sigma_congr`：mk_sigma_congr {ι ι' : Type u} {f : ι -> Type v
+} {g : ι' -> Type v} (e : ι ≃ ι') (h : forall i, #(f i) = #(g (e i))) : #(Σ i, f
+ i) = #(Σ i, …
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem mk_sigma_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i)) :
+theorem mk_sigma_congrRight {ι : Type u} {f g : ι → Type v} (h : ∀ i, #(f i) = #(g i)) :
     #(Σ i, f i) = #(Σ i, g i) :=
   mk_sigma_congr (Equiv.refl ι) h
-
-/--
-theorem `mk_psigma_congrRight` / 定理 `mk_psigma_congrRight`
-
-English:
-theorem mk_psigma_congrRight
-  given: {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i))
-  proof: mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_psigma_congrRight
-  条件: {ι : 类型u} {f g : ι -> 类型v} (h : 对任意 i, #(f i) = #(g i))
-  证明: mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, choice, mk_congr, psigmaCongrRight
+/-
+**Cardinal.mk_psigma_congrRight** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_psigma_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i
+) = #(g i)) : #(Σ' i, f i) = #(Σ' i, g i)
+参数：h : forall i, #(f i) = #(g i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 -/
-theorem mk_psigma_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i)) :
+theorem mk_psigma_congrRight {ι : Type u} {f g : ι → Type v} (h : ∀ i, #(f i) = #(g i)) :
     #(Σ' i, f i) = #(Σ' i, g i) :=
-mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-/--
-theorem `mk_psigma_congrRight_prop` / 定理 `mk_psigma_congrRight_prop`
-
-English:
-theorem mk_psigma_congrRight_prop
-  given: {ι : Prop} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i))
-  proof: mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_psigma_congrRight_prop
-  条件: {ι : 命题} {f g : ι -> 类型v} (h : 对任意 i, #(f i) = #(g i))
-  证明: mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, choice, mk_congr, psigmaCongrRight
+  mk_congr <| .psigmaCongrRight fun i => Classical.choice <| Cardinal.eq.mp (h i)
+/-
+**Cardinal.mk_psigma_congrRight_prop** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_psigma_congrRight_prop {ι : Prop} {f g : ι -> Type v} (h : forall i, #(
+f i) = #(g i)) : #(Σ' i, f i) = #(Σ' i, g i)
+参数：h : forall i, #(f i) = #(g i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 -/
-theorem mk_psigma_congrRight_prop {ι : Prop} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i)) :
+theorem mk_psigma_congrRight_prop {ι : Prop} {f g : ι → Type v} (h : ∀ i, #(f i) = #(g i)) :
     #(Σ' i, f i) = #(Σ' i, g i) :=
-mk_congr .psigmaCongrRight fun i => Classical.choice Cardinal.eq.mp (h i)
-
-/--
-theorem `mk_sigma_arrow` / 定理 `mk_sigma_arrow`
-
-English:
-theorem mk_sigma_arrow
-  given: {ι} (α : Type*) (f : ι -> Type*)
-  proof: mk_congr Equiv.piCurry fun _ _ => α
-
-@[simp]
-
-中文:
-定理 mk_sigma_arrow
-  条件: {ι} (α : 类型) (f : ι -> 类型)
-  证明: mk_congr Equiv.piCurry fun _ _ => α
-
-@[simp]
-
-Depends on / 依赖: Equiv.piCurry, mk_congr, piCurry
+  mk_congr <| .psigmaCongrRight fun i => Classical.choice <| Cardinal.eq.mp (h i)
+/-
+**Cardinal.mk_sigma_arrow** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_sigma_arrow {ι} (α : Type*) (f : ι -> Type*) : #(Sigma f -> α) = #(Π i,
+ f i -> α)
+参数：α : Type*；f : ι -> Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 -/
-theorem mk_sigma_arrow {ι} (α : Type*) (f : ι -> Type*) :
-#(Sigma f -> α) = #(Π i, f i -> α) := mk_congr Equiv.piCurry fun _ _ => α
+theorem mk_sigma_arrow {ι} (α : Type*) (f : ι → Type*) :
+    #(Sigma f → α) = #(Π i, f i → α) := mk_congr <| Equiv.piCurry fun _ _ ↦ α
 
 @[simp]
-/--
-theorem `sum_const` / 定理 `sum_const`
-
-English:
-theorem sum_const
-  given: (ι : Type u) (a : Cardinal.{v})
-  proof: inductionOn a fun α =>
-mk_congr
-      calc
-        (Σ _ : ι, Quotient.out #α) ≃ ι × Quotient.out #α := Equiv.sigmaEquivProd _ _
-        _ ≃ ULift ι × ULift α := Equiv.ulift.symm.prodCongr (outMkEquiv.trans Equiv.ulift.symm)
-
-中文:
-定理 sum_const
-  条件: (ι : 类型u) (a : 基数.{v})
-  证明: inductionOn a fun α =>
-mk_congr
-      calc
-        (Σ _ : ι, Quotient.out #α) ≃ ι × Quotient.out #α := Equiv.sigmaEquivProd _ _
-        _ ≃ ULift ι × ULift α := Equiv.ulift.symm.prodCongr (outMkEquiv.trans Equiv.ulift.symm)
-
-Depends on / 依赖: Equiv.sigmaEquivProd, Equiv.ulift.symm, Equiv.ulift.symm.prodCongr, Quotient, Quotient.out, inductionOn, mk_congr, outMkEquiv, outMkEquiv.trans, prodCongr, sigmaEquivProd
+/-
+**Cardinal.sum_const** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：sum_const (ι : Type u) (a : Cardinal.{v}) : (sum fun _ : ι => a) = lift.{v
+} #ι * lift.{u} a
+参数：ι : Type u；a : Cardinal.{v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem sum_const (ι : Type u) (a : Cardinal.{v}) :
     (sum fun _ : ι => a) = lift.{v} #ι * lift.{u} a :=
   inductionOn a fun α =>
-mk_congr
+    mk_congr <|
       calc
         (Σ _ : ι, Quotient.out #α) ≃ ι × Quotient.out #α := Equiv.sigmaEquivProd _ _
         _ ≃ ULift ι × ULift α := Equiv.ulift.symm.prodCongr (outMkEquiv.trans Equiv.ulift.symm)
-
-/--
-theorem `sum_const'` / 定理 `sum_const'`
-
-English:
-theorem sum_const'
-  given: (ι : Type u) (a : Cardinal.{u})
-  statement: (sum fun _ : ι => a) = #ι * a
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 sum_const'
-  条件: (ι : 类型u) (a : 基数.{u})
-  结论: (求和 fun _ : ι => a) = #ι * a
-  证明: by simp
-
-@[simp]
+/-
+**Cardinal.sum_const'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：sum_const' (ι : Type u) (a : Cardinal.{u}) : (sum fun _ : ι => a) = #ι * a
+参数：ι : Type u；a : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.sum_const`：sum_const (ι : Type u) (a : Cardinal.{v}) : (sum fun
+ _ : ι => a) = lift.{v} #ι * lift.{u} a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sum_const' (ι : Type u) (a : Cardinal.{u}) : (sum fun _ : ι => a) = #ι * a := by simp
 
 @[simp]
-/--
-theorem `lift_sum` / 定理 `lift_sum`
-
-English:
-theorem lift_sum
-  given: {ι : Type u} (f : ι -> Cardinal.{v})
-  proof: Equiv.cardinal_eq
-Equiv.ulift.trans
-      Equiv.sigmaCongrRight fun a =>
-    -- Porting note: Inserted universe hint .{_,_,v} below
-Nonempty.some by rw [← lift_mk_eq.{_, _, v}, mk_out, mk_out, lift_lift]
-
-中文:
-定理 lift_sum
-  条件: {ι : 类型u} (f : ι -> 基数.{v})
-  证明: Equiv.cardinal_eq
-Equiv.ulift.trans
-      Equiv.sigmaCongrRight fun a =>
-    -- Porting note: Inserted universe hint .{_,_,v} below
-Nonempty.some by rw [← lift_mk_eq.{_, _, v}, mk_out, mk_out, lift_lift]
-
-Depends on / 依赖: Equiv.cardinal_eq, Equiv.sigmaCongrRight, Equiv.ulift.trans, cardinal_eq, sigmaCongrRight
+/-
+**Cardinal.lift_sum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_sum {ι : Type u} (f : ι -> Cardinal.{v}) : Cardinal.lift.{w} (Cardina
+l.sum f) = Cardinal.sum fun i => Cardinal.lift.{w} (f i)
+参数：f : ι -> Cardinal.{v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_mk_eq`：lift_mk_eq {α : Type u} {β : Type v} : lift.{max v 
+w} #α = lift.{max u w} #β ↔ Nonempty (α ≃ β)
+· 使用定理 `Cardinal.mk_out`：mk_out (c : Cardinal) : #c.out = c
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
 -/
-theorem lift_sum {ι : Type u} (f : ι -> Cardinal.{v}) :
+theorem lift_sum {ι : Type u} (f : ι → Cardinal.{v}) :
     Cardinal.lift.{w} (Cardinal.sum f) = Cardinal.sum fun i => Cardinal.lift.{w} (f i) :=
-Equiv.cardinal_eq
-Equiv.ulift.trans
+  Equiv.cardinal_eq <|
+    Equiv.ulift.trans <|
       Equiv.sigmaCongrRight fun a =>
     -- Porting note: Inserted universe hint .{_,_,v} below
-Nonempty.some by rw [← lift_mk_eq.{_, _, v}, mk_out, mk_out, lift_lift]
-
-/--
-theorem `sum_nat_eq_add_sum_succ` / 定理 `sum_nat_eq_add_sum_succ`
-
-English:
-theorem sum_nat_eq_add_sum_succ
-  given: (f : Nat -> Cardinal.{u})
-  proof: by
-  refine (Equiv.sigmaNatSucc fun i => Quotient.out (f i)).cardinal_eq.trans ?_
-  simp only [mk_sum, mk_out, lift_id, mk_sigma]
-
-中文:
-定理 sum_nat_eq_add_sum_succ
-  条件: (f : 自然数 -> 基数.{u})
-  证明: by
-  refine (Equiv.sigmaNatSucc fun i => Quotient.out (f i)).cardinal_eq.trans ?_
-  simp only [mk_sum, mk_out, lift_id, mk_sigma]
-
-Depends on / 依赖: Equiv.sigmaNatSucc, Quotient, Quotient.out, cardinal_eq, cardinal_eq.trans, lift_id, mk_out, mk_sigma, mk_sum, sigmaNatSucc
+        Nonempty.some <| by rw [← lift_mk_eq.{_, _, v}, mk_out, mk_out, lift_lift]
+/-
+**Cardinal.sum_nat_eq_add_sum_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：sum_nat_eq_add_sum_succ (f : Nat -> Cardinal.{u}) : Cardinal.sum f = f 0 +
+ Cardinal.sum fun i => f (i + 1)
+参数：f : Nat -> Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_sum`：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.
+{v, u} #α + lift.{u, v} #β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.mk_out`：mk_out (c : Cardinal) : #c.out = c
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mk_sigma`：mk_sigma {ι} (f : ι -> Type*) : #(Σ i, f i) = sum fun
+ i => #(f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_nat_eq_add_sum_succ (f : Nat -> Cardinal.{u}) :
+theorem sum_nat_eq_add_sum_succ (f : ℕ → Cardinal.{u}) :
     Cardinal.sum f = f 0 + Cardinal.sum fun i => f (i + 1) := by
   refine (Equiv.sigmaNatSucc fun i => Quotient.out (f i)).cardinal_eq.trans ?_
   simp only [mk_sum, mk_out, lift_id, mk_sigma]
 
 /-! ### Indexed cardinal `prod` -/
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The indexed product of cardinals is the cardinality of the Pi type
+  (dependent product). -/
+/-
+**Cardinal.prod** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：prod {ι : Type u} (f : ι -> Cardinal) : Cardinal
+参数：f : ι -> Cardinal。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: {ι : Type u} (f : ι -> Cardinal)
-  body: #(Π i, (f i).out)
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: {ι : 类型u} (f : ι -> 基数)
-  定义体: #(Π i, (f i).out)
-
-@[simp]
+--- 原说明 ---
+The indexed product of cardinals is the cardinality of the Pi type
+  (dependent product).
 -/
-def prod {ι : Type u} (f : ι -> Cardinal) : Cardinal :=
+def prod {ι : Type u} (f : ι → Cardinal) : Cardinal :=
   #(Π i, (f i).out)
 
 @[simp]
-/--
-theorem `mk_pi` / 定理 `mk_pi`
-
-English:
-theorem mk_pi
-  given: {ι : Type u} (α : ι -> Type v)
-  statement: #(Π i, α i) = prod fun i => #(α i)
-  proof: mk_congr Equiv.piCongrRight fun _ => outMkEquiv.symm
-
-中文:
-定理 mk_pi
-  条件: {ι : 类型u} (α : ι -> 类型v)
-  结论: #(Π i, α i) = 乘积 fun i => #(α i)
-  证明: mk_congr Equiv.piCongrRight fun _ => outMkEquiv.symm
-
-Depends on / 依赖: Equiv.piCongrRight, mk_congr, outMkEquiv, outMkEquiv.symm, piCongrRight
+/-
+**Cardinal.mk_pi** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi {ι : Type u} (α : ι -> Type v) : #(Π i, α i) = prod fun i => #(α i)
+参数：α : ι -> Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mk_pi {ι : Type u} (α : ι -> Type v) : #(Π i, α i) = prod fun i => #(α i) :=
-mk_congr Equiv.piCongrRight fun _ => outMkEquiv.symm
-
-/--
-theorem `mk_pi_congr_lift` / 定理 `mk_pi_congr_lift`
-
-English:
-theorem mk_pi_congr_lift
-  statement: {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' -> Type w'}
-  proof: Cardinal.lift_mk_eq'.2 ⟨.piCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-中文:
-定理 mk_pi_congr_lift
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 类型 w} {g : ι' -> 类型 w'}
-  证明: Cardinal.lift_mk_eq'.2 ⟨.piCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-Depends on / 依赖: Cardinal, Cardinal.lift_mk_eq, Classical, Classical.choice, choice, lift_mk_eq, piCongr
+theorem mk_pi {ι : Type u} (α : ι → Type v) : #(Π i, α i) = prod fun i => #(α i) :=
+  mk_congr <| Equiv.piCongrRight fun _ => outMkEquiv.symm
+/-
+**Cardinal.mk_pi_congr_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congr_lift {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' -> 
+Type w'} (e : ι ≃ ι') (h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))) : l
+ift.{max v' w'} #(Π i, f i) = lift.{max v w} #(Π i, g i)
+参数：e : ι ≃ ι'；h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_eq'`：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #
+α = lift.{u} #β ↔ Nonempty (α ≃ β)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem mk_pi_congr_lift {ι : Type v} {ι' : Type v'} {f : ι -> Type w} {g : ι' -> Type w'}
-    (e : ι ≃ ι') (h : forall i, lift.{w'} #(f i) = lift.{w} #(g (e i))) :
+theorem mk_pi_congr_lift {ι : Type v} {ι' : Type v'} {f : ι → Type w} {g : ι' → Type w'}
+    (e : ι ≃ ι') (h : ∀ i, lift.{w'} #(f i) = lift.{w} #(g (e i))) :
     lift.{max v' w'} #(Π i, f i) = lift.{max v w} #(Π i, g i) :=
-Cardinal.lift_mk_eq'.2 ⟨.piCongr e fun i => Classical.choice Cardinal.lift_mk_eq'.1 (h i)⟩
-
-/--
-theorem `mk_pi_congr` / 定理 `mk_pi_congr`
-
-English:
-theorem mk_pi_congr
-  statement: {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ≃ ι')
-  proof: mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_pi_congr
-  结论: {ι ι' : 类型u} {f : ι -> 类型v} {g : ι' -> 类型v} (e : ι ≃ ι')
-  证明: mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.piCongr, choice, mk_congr, piCongr
+  Cardinal.lift_mk_eq'.2 ⟨.piCongr e fun i ↦ Classical.choice <| Cardinal.lift_mk_eq'.1 (h i)⟩
+/-
+**Cardinal.mk_pi_congr** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congr {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ≃ 
+ι') (h : forall i, #(f i) = #(g (e i))) : #(Π i, f i) = #(Π i, g i)
+参数：e : ι ≃ ι'；h : forall i, #(f i) = #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 -/
-theorem mk_pi_congr {ι ι' : Type u} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ≃ ι')
-    (h : forall i, #(f i) = #(g (e i))) : #(Π i, f i) = #(Π i, g i) :=
-mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-/--
-theorem `mk_pi_congr_prop` / 定理 `mk_pi_congr_prop`
-
-English:
-theorem mk_pi_congr_prop
-  statement: {ι ι' : Prop} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ↔ ι')
-  proof: mk_congr Equiv.piCongr (.ofIff e) fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_pi_congr_prop
-  结论: {ι ι' : 命题} {f : ι -> 类型v} {g : ι' -> 类型v} (e : ι ↔ ι')
-  证明: mk_congr Equiv.piCongr (.ofIff e) fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.piCongr, choice, mk_congr, piCongr
+theorem mk_pi_congr {ι ι' : Type u} {f : ι → Type v} {g : ι' → Type v} (e : ι ≃ ι')
+    (h : ∀ i, #(f i) = #(g (e i))) : #(Π i, f i) = #(Π i, g i) :=
+  mk_congr <| Equiv.piCongr e fun i ↦ Classical.choice <| Cardinal.eq.mp (h i)
+/-
+**Cardinal.mk_pi_congr_prop** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congr_prop {ι ι' : Prop} {f : ι -> Type v} {g : ι' -> Type v} (e : ι
+ ↔ ι') (h : forall i, #(f i) = #(g (e.mp i))) : #(Π i, f i) = #(Π i, g i)
+参数：e : ι ↔ ι'；h : forall i, #(f i) = #(g (e.mp i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 -/
-theorem mk_pi_congr_prop {ι ι' : Prop} {f : ι -> Type v} {g : ι' -> Type v} (e : ι ↔ ι')
-    (h : forall i, #(f i) = #(g (e.mp i))) : #(Π i, f i) = #(Π i, g i) :=
-mk_congr Equiv.piCongr (.ofIff e) fun i => Classical.choice Cardinal.eq.mp (h i)
+theorem mk_pi_congr_prop {ι ι' : Prop} {f : ι → Type v} {g : ι' → Type v} (e : ι ↔ ι')
+    (h : ∀ i, #(f i) = #(g (e.mp i))) : #(Π i, f i) = #(Π i, g i) :=
+  mk_congr <| Equiv.piCongr (.ofIff e) fun i ↦ Classical.choice <| Cardinal.eq.mp (h i)
 
-/--
-theorem `mk_pi_congr'` / 定理 `mk_pi_congr'`
+/-- Similar to `mk_pi_congr` with indexing types in different universes. This is not a strict
+generalization. -/
+/-
+**Cardinal.mk_pi_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congr' {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)} {g
+ : ι' -> Type max w (max u v)} (e : ι ≃ ι') (h : forall i, #(f i) = #(g (e i))) 
+: #(Π i, f i) = #(Π i, g i)
+参数：max u v；max u v；e : ι ≃ ι'；h : forall i, #(f i) = #(g (e i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
 
-English:
-theorem mk_pi_congr'
-  statement: {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)}
-  proof: mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-中文:
-定理 mk_pi_congr'
-  结论: {ι : 类型u} {ι' : 类型v} {f : ι -> 类型 最大值 w (最大值 u v)}
-  证明: mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, Classical, Classical.choice, Equiv.piCongr, choice, mk_congr, piCongr
+--- 原说明 ---
+Similar to `mk_pi_congr` with indexing types in different universes. This is not
+ a strict
+generalization.
 -/
-theorem mk_pi_congr' {ι : Type u} {ι' : Type v} {f : ι -> Type max w (max u v)}
-    {g : ι' -> Type max w (max u v)} (e : ι ≃ ι')
-    (h : forall i, #(f i) = #(g (e i))) : #(Π i, f i) = #(Π i, g i) :=
-mk_congr Equiv.piCongr e fun i => Classical.choice Cardinal.eq.mp (h i)
-
-/--
-theorem `mk_pi_congrRight` / 定理 `mk_pi_congrRight`
-
-English:
-theorem mk_pi_congrRight
-  given: {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i))
-  proof: mk_pi_congr (Equiv.refl ι) h
-
-中文:
-定理 mk_pi_congrRight
-  条件: {ι : 类型u} {f g : ι -> 类型v} (h : 对任意 i, #(f i) = #(g i))
-  证明: mk_pi_congr (Equiv.refl ι) h
-
-Depends on / 依赖: Equiv.refl, mk_pi_congr
+theorem mk_pi_congr' {ι : Type u} {ι' : Type v} {f : ι → Type max w (max u v)}
+    {g : ι' → Type max w (max u v)} (e : ι ≃ ι')
+    (h : ∀ i, #(f i) = #(g (e i))) : #(Π i, f i) = #(Π i, g i) :=
+  mk_congr <| Equiv.piCongr e fun i ↦ Classical.choice <| Cardinal.eq.mp (h i)
+/-
+**Cardinal.mk_pi_congrRight** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = 
+#(g i)) : #(Π i, f i) = #(Π i, g i)
+参数：h : forall i, #(f i) = #(g i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_pi_congr`：mk_pi_congr {ι ι' : Type u} {f : ι -> Type v} {g :
+ ι' -> Type v} (e : ι ≃ ι') (h : forall i, #(f i) = #(g (e i))) : #(Π i, f i) = 
+#(Π i, g i…
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem mk_pi_congrRight {ι : Type u} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i)) :
+theorem mk_pi_congrRight {ι : Type u} {f g : ι → Type v} (h : ∀ i, #(f i) = #(g i)) :
     #(Π i, f i) = #(Π i, g i) :=
   mk_pi_congr (Equiv.refl ι) h
-
-/--
-theorem `mk_pi_congrRight_prop` / 定理 `mk_pi_congrRight_prop`
-
-English:
-theorem mk_pi_congrRight_prop
-  given: {ι : Prop} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i))
-  proof: mk_pi_congr_prop Iff.rfl h
-
-@[simp]
-
-中文:
-定理 mk_pi_congrRight_prop
-  条件: {ι : 命题} {f g : ι -> 类型v} (h : 对任意 i, #(f i) = #(g i))
-  证明: mk_pi_congr_prop Iff.rfl h
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl, mk_pi_congr_prop
+/-
+**Cardinal.mk_pi_congrRight_prop** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pi_congrRight_prop {ι : Prop} {f g : ι -> Type v} (h : forall i, #(f i)
+ = #(g i)) : #(Π i, f i) = #(Π i, g i)
+参数：h : forall i, #(f i) = #(g i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_pi_congr_prop`：mk_pi_congr_prop {ι ι' : Prop} {f : ι -> Type
+ v} {g : ι' -> Type v} (e : ι ↔ ι') (h : forall i, #(f i) = #(g (e.mp i))) : #(Π
+ i, f i) = #(Π …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mk_pi_congrRight_prop {ι : Prop} {f g : ι -> Type v} (h : forall i, #(f i) = #(g i)) :
+theorem mk_pi_congrRight_prop {ι : Prop} {f g : ι → Type v} (h : ∀ i, #(f i) = #(g i)) :
     #(Π i, f i) = #(Π i, g i) :=
   mk_pi_congr_prop Iff.rfl h
 
 @[simp]
-/--
-theorem `prod_const` / 定理 `prod_const`
-
-English:
-theorem prod_const
-  given: (ι : Type u) (a : Cardinal.{v})
-  proof: inductionOn a fun _ =>
-mk_congr Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.symm
-
-中文:
-定理 prod_const
-  条件: (ι : 类型u) (a : 基数.{v})
-  证明: inductionOn a fun _ =>
-mk_congr Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.symm
-
-Depends on / 依赖: Equiv.piCongr, Equiv.ulift.symm, inductionOn, mk_congr, outMkEquiv, outMkEquiv.trans, piCongr
+/-
+**Cardinal.prod_const** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：prod_const (ι : Type u) (a : Cardinal.{v}) : (prod fun _ : ι => a) = lift.
+{u} a ^ lift.{v} #ι
+参数：ι : Type u；a : Cardinal.{v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem prod_const (ι : Type u) (a : Cardinal.{v}) :
     (prod fun _ : ι => a) = lift.{u} a ^ lift.{v} #ι :=
   inductionOn a fun _ =>
-mk_congr Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.symm
-
-/--
-theorem `prod_const'` / 定理 `prod_const'`
-
-English:
-theorem prod_const'
-  given: (ι : Type u) (a : Cardinal.{u})
-  statement: (prod fun _ : ι => a) = a ^ #ι
-  proof: inductionOn a fun _ => (mk_pi _).symm
-
-@[simp]
-
-中文:
-定理 prod_const'
-  条件: (ι : 类型u) (a : 基数.{u})
-  结论: (乘积 fun _ : ι => a) = a ^ #ι
-  证明: inductionOn a fun _ => (mk_pi _).symm
-
-@[simp]
-
-Depends on / 依赖: inductionOn, mk_pi
+    mk_congr <| Equiv.piCongr Equiv.ulift.symm fun _ => outMkEquiv.trans Equiv.ulift.symm
+/-
+**Cardinal.prod_const'** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：prod_const' (ι : Type u) (a : Cardinal.{u}) : (prod fun _ : ι => a) = a ^ 
+#ι
+参数：ι : Type u；a : Cardinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_pi`：mk_pi {ι : Type u} (α : ι -> Type v) : #(Π i, α i) = pro
+d fun i => #(α i)
 -/
 theorem prod_const' (ι : Type u) (a : Cardinal.{u}) : (prod fun _ : ι => a) = a ^ #ι :=
   inductionOn a fun _ => (mk_pi _).symm
 
 @[simp]
-/--
-theorem `prod_eq_zero` / 定理 `prod_eq_zero`
-
-English:
-theorem prod_eq_zero
-  given: {ι} (f : ι -> Cardinal.{u})
-  statement: prod f = 0 ↔ exists i, f i = 0
-  proof: by
-  lift f to ι -> Type u using fun _ => trivial
-  simp only [mk_eq_zero_iff, ← mk_pi, isEmpty_pi]
-
-中文:
-定理 prod_eq_zero
-  条件: {ι} (f : ι -> 基数.{u})
-  结论: 乘积 f = 0 ↔ 存在 i, f i = 0
-  证明: by
-  lift f to ι -> Type u using fun _ => trivial
-  simp only [mk_eq_zero_iff, ← mk_pi, isEmpty_pi]
-
-Depends on / 依赖: isEmpty_pi, mk_eq_zero_iff, mk_pi
+/-
+**Cardinal.prod_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：prod_eq_zero {ι} (f : ι -> Cardinal.{u}) : prod f = 0 ↔ exists i, f i = 0
+参数：f : ι -> Cardinal.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `trivial`：True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem prod_eq_zero {ι} (f : ι -> Cardinal.{u}) : prod f = 0 ↔ exists i, f i = 0 := by
-  lift f to ι -> Type u using fun _ => trivial
+theorem prod_eq_zero {ι} (f : ι → Cardinal.{u}) : prod f = 0 ↔ ∃ i, f i = 0 := by
+  lift f to ι → Type u using fun _ => trivial
   simp only [mk_eq_zero_iff, ← mk_pi, isEmpty_pi]
-
-/--
-theorem `prod_ne_zero` / 定理 `prod_ne_zero`
-
-English:
-theorem prod_ne_zero
-  given: {ι} (f : ι -> Cardinal)
-  statement: prod f != 0 ↔ forall i, f i != 0
-  proof: by simp [prod_eq_zero]
-
-中文:
-定理 prod_ne_zero
-  条件: {ι} (f : ι -> 基数)
-  结论: 乘积 f != 0 ↔ 对任意 i, f i != 0
-  证明: by simp [prod_eq_zero]
-
-Depends on / 依赖: prod_eq_zero
+/-
+**Cardinal.prod_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：prod_ne_zero {ι} (f : ι -> Cardinal) : prod f != 0 ↔ forall i, f i != 0
+参数：f : ι -> Cardinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem prod_ne_zero {ι} (f : ι -> Cardinal) : prod f != 0 ↔ forall i, f i != 0 := by simp [prod_eq_zero]
-
-/--
-theorem `lift_power_sum` / 定理 `lift_power_sum`
-
-English:
-theorem lift_power_sum
-  given: {ι : Type u} (a : Cardinal.{v}) (f : ι -> Cardinal.{v})
-  proof: by
+theorem prod_ne_zero {ι} (f : ι → Cardinal) : prod f ≠ 0 ↔ ∀ i, f i ≠ 0 := by simp [prod_eq_zero]
+/-
+**Cardinal.lift_power_sum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_power_sum {ι : Type u} (a : Cardinal.{v}) (f : ι -> Cardinal.{v}) : l
+ift.{u, v} a ^ sum f = prod fun i => a ^ f i
+参数：a : Cardinal.{v}；f : ι -> Cardinal.{v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.inductionOn`：inductionOn {motive : Cardinal -> Prop} (c : Cardi
+nal) (mk : forall α, motive #α) : motive c
+· 使用定理 `Cardinal.induction_on_pi`：induction_on_pi {ι : Type*} {motive : (ι -> Ca
+rdinal) -> Prop} (f : ι -> Cardinal) (mk : forall f : ι -> Type v, motive fun i 
+=> #(f i)) : m…
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+-/
+theorem lift_power_sum {ι : Type u} (a : Cardinal.{v}) (f : ι → Cardinal.{v}) :
+    lift.{u, v} a ^ sum f = prod fun i ↦ a ^ f i := by
   induction a using Cardinal.inductionOn with | _ α =>
   induction f using induction_on_pi with | _ f =>
   simp_rw [← mk_uLift, prod, sum, power_def]
@@ -1946,314 +1411,194 @@ theorem lift_power_sum
   refine Equiv.piCongrRight fun b => ?_
   refine (Equiv.arrowCongr outMkEquiv Equiv.ulift).trans ?_
   exact outMkEquiv.symm
-
-中文:
-定理 lift_power_sum
-  条件: {ι : 类型u} (a : 基数.{v}) (f : ι -> 基数.{v})
-  证明: by
-  induction a using Cardinal.inductionOn with | _ α =>
-  induction f using induction_on_pi with | _ f =>
-  simp_rw [← mk_uLift, prod, sum, power_def]
-  apply mk_congr
-  refine (Equiv.piCurry fun _ _ => ULift α).trans ?_
-  refine Equiv.piCongrRight fun b => ?_
-  refine (Equiv.arrowCongr outMkEquiv Equiv.ulift).trans ?_
-  exact outMkEquiv.symm
-
-Depends on / 依赖: Cardinal, Cardinal.inductionOn, Equiv.arrowCongr, Equiv.piCongrRight, Equiv.piCurry, Equiv.ulift, arrowCongr, inductionOn, induction_on_pi, mk_congr, mk_uLift, outMkEquiv, outMkEquiv.symm, piCongrRight, piCurry, power_def, simp_rw
+/-
+**Cardinal.power_sum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_sum {ι : Type u} (a : Cardinal.{max u v}) (f : ι -> Cardinal.{max u 
+v}) : a ^ sum f = prod fun i => a ^ f i
+参数：a : Cardinal.{max u v}；f : ι -> Cardinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.lift_power_sum`：lift_power_sum {ι : Type u} (a : Cardinal.{v}) 
+(f : ι -> Cardinal.{v}) : lift.{u, v} a ^ sum f = prod fun i => a ^ f i
 -/
-theorem lift_power_sum {ι : Type u} (a : Cardinal.{v}) (f : ι -> Cardinal.{v}) :
-    lift.{u, v} a ^ sum f = prod fun i => a ^ f i := by
-  induction a using Cardinal.inductionOn with | _ α =>
-  induction f using induction_on_pi with | _ f =>
-  simp_rw [← mk_uLift, prod, sum, power_def]
-  apply mk_congr
-  refine (Equiv.piCurry fun _ _ => ULift α).trans ?_
-  refine Equiv.piCongrRight fun b => ?_
-  refine (Equiv.arrowCongr outMkEquiv Equiv.ulift).trans ?_
-  exact outMkEquiv.symm
-
-/--
-theorem `power_sum` / 定理 `power_sum`
-
-English:
-theorem power_sum
-  given: {ι : Type u} (a : Cardinal.{max u v}) (f : ι -> Cardinal.{max u v})
-  proof: by
+theorem power_sum {ι : Type u} (a : Cardinal.{max u v}) (f : ι → Cardinal.{max u v}) :
+    a ^ sum f = prod fun i ↦ a ^ f i := by
   simpa [← lift_umax] using lift_power_sum a f
 
 @[simp]
-
-中文:
-定理 power_sum
-  条件: {ι : 类型u} (a : 基数.{最大值 u v}) (f : ι -> 基数.{最大值 u v})
-  证明: by
-  simpa [← lift_umax] using lift_power_sum a f
-
-@[simp]
-
-Depends on / 依赖: lift_power_sum, lift_umax
+/-
+**Cardinal.lift_prod** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_prod {ι : Type u} (c : ι -> Cardinal.{v}) : lift.{w} (prod c) = prod 
+fun i => lift.{w} (c i)
+参数：c : ι -> Cardinal.{v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `trivial`：True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem power_sum {ι : Type u} (a : Cardinal.{max u v}) (f : ι -> Cardinal.{max u v}) :
-    a ^ sum f = prod fun i => a ^ f i := by
-  simpa [← lift_umax] using lift_power_sum a f
-
-@[simp]
-/--
-theorem `lift_prod` / 定理 `lift_prod`
-
-English:
-theorem lift_prod
-  given: {ι : Type u} (c : ι -> Cardinal.{v})
-  proof: by
-  lift c to ι -> Type v using fun _ => trivial
-  simp only [← mk_pi, ← mk_uLift]
-  exact mk_congr (Equiv.ulift.trans <| Equiv.piCongrRight fun i => Equiv.ulift.symm)
-
-中文:
-定理 lift_prod
-  条件: {ι : 类型u} (c : ι -> 基数.{v})
-  证明: by
-  lift c to ι -> Type v using fun _ => trivial
-  simp only [← mk_pi, ← mk_uLift]
-  exact mk_congr (Equiv.ulift.trans <| Equiv.piCongrRight fun i => Equiv.ulift.symm)
-
-Depends on / 依赖: Equiv.piCongrRight, Equiv.ulift.symm, Equiv.ulift.trans, mk_congr, mk_pi, mk_uLift, piCongrRight
--/
-theorem lift_prod {ι : Type u} (c : ι -> Cardinal.{v}) :
+theorem lift_prod {ι : Type u} (c : ι → Cardinal.{v}) :
     lift.{w} (prod c) = prod fun i => lift.{w} (c i) := by
-  lift c to ι -> Type v using fun _ => trivial
+  lift c to ι → Type v using fun _ => trivial
   simp only [← mk_pi, ← mk_uLift]
   exact mk_congr (Equiv.ulift.trans <| Equiv.piCongrRight fun i => Equiv.ulift.symm)
 
 /-! ### The first infinite cardinal `aleph0` -/
 
-/--
-Definition of `aleph0` / `aleph0` 的定义
+/-- `ℵ₀` is the smallest infinite cardinal. -/
+/-
+**Cardinal.aleph0** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：aleph0 : Cardinal.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition aleph0
-  signature: : Cardinal.{u}
-  body: lift #Nat
-
-@[inherit_doc] scoped notation "ℵ₀" => Cardinal.aleph0
-recommended_spelling "aleph0" for "ℵ₀" in [aleph0, «termℵ₀»]
-
-中文:
-定义 aleph0
-  签名: : 基数.{u}
-  定义体: lift #Nat
-
-@[inherit_doc] scoped notation "ℵ₀" => Cardinal.aleph0
-recommended_spelling "aleph0" for "ℵ₀" in [aleph0, «termℵ₀»]
+--- 原说明 ---
+`ℵ₀` is the smallest infinite cardinal.
 -/
 def aleph0 : Cardinal.{u} :=
-  lift #Nat
+  lift #ℕ
 
 @[inherit_doc] scoped notation "ℵ₀" => Cardinal.aleph0
 recommended_spelling "aleph0" for "ℵ₀" in [aleph0, «termℵ₀»]
-
-/--
-theorem `mk_nat` / 定理 `mk_nat`
-
-English:
-theorem mk_nat
-  statement: #Nat = ℵ₀
-  proof: (lift_id _).symm
-
-中文:
-定理 mk_nat
-  结论: #自然数 = ℵ₀
-  证明: (lift_id _).symm
-
-Depends on / 依赖: lift_id
+/-
+**Cardinal.mk_nat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_nat : #Nat = ℵ₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
-theorem mk_nat : #Nat = ℵ₀ :=
+theorem mk_nat : #ℕ = ℵ₀ :=
   (lift_id _).symm
-
-/--
-theorem `aleph0_ne_zero` / 定理 `aleph0_ne_zero`
-
-English:
-theorem aleph0_ne_zero
-  statement: ℵ₀ != 0
-  proof: mk_ne_zero _
-
-@[simp]
-
-中文:
-定理 aleph0_ne_zero
-  结论: ℵ₀ != 0
-  证明: mk_ne_zero _
-
-@[simp]
-
-Depends on / 依赖: mk_ne_zero
+/-
+**Cardinal.aleph0_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_ne_zero : ℵ₀ != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_ne_zero`：mk_ne_zero (α : Type u) [Nonempty α] : #α != 0
+· 使用定理 `ULift.instNonempty_mathlib`：∀ {α : Type u} [Nonempty α], Nonempty (ULift
+.{u_1, u} α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-theorem aleph0_ne_zero : ℵ₀ != 0 :=
+theorem aleph0_ne_zero : ℵ₀ ≠ 0 :=
   mk_ne_zero _
 
 @[simp]
-/--
-theorem `lift_aleph0` / 定理 `lift_aleph0`
-
-English:
-theorem lift_aleph0
-  statement: lift ℵ₀ = ℵ₀
-  proof: lift_lift _
-
-中文:
-定理 lift_aleph0
-  结论: lift ℵ₀ = ℵ₀
-  证明: lift_lift _
-
-Depends on / 依赖: lift_lift
+/-
+**Cardinal.lift_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_aleph0 : lift ℵ₀ = ℵ₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
 -/
 theorem lift_aleph0 : lift ℵ₀ = ℵ₀ :=
   lift_lift _
-
-/--
-theorem `lift_mk_fin` / 定理 `lift_mk_fin`
-
-English:
-theorem lift_mk_fin
-  given: (n : Nat)
-  statement: lift #(Fin n) = n
-  proof: rfl
-
-中文:
-定理 lift_mk_fin
-  条件: (n : 自然数)
-  结论: lift #(有限集 n) = n
-  证明: rfl
+/-
+**Cardinal.lift_mk_fin** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_mk_fin (n : Nat) : lift #(Fin n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_mk_fin (n : Nat) : lift #(Fin n) = n := rfl
+theorem lift_mk_fin (n : ℕ) : lift #(Fin n) = n := rfl
 
+/-! ### Cardinalities of basic sets and types -/
 
-/--
-theorem `mk_empty` / 定理 `mk_empty`
+/-
+**Cardinal.mk_empty** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_empty : #Empty = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
 
-English:
-theorem mk_empty
-  statement: #Empty = 0
-  proof: mk_eq_zero _
-
-中文:
-定理 mk_empty
-  结论: #空 = 0
-  证明: mk_eq_zero _
-
-Depends on / 依赖: mk_eq_zero
+--- 原说明 ---
+### Cardinalities of basic sets and types
 -/
 theorem mk_empty : #Empty = 0 :=
   mk_eq_zero _
-
-/--
-theorem `mk_pempty` / 定理 `mk_pempty`
-
-English:
-theorem mk_pempty
-  statement: #PEmpty = 0
-  proof: mk_eq_zero _
-
-中文:
-定理 mk_pempty
-  结论: #命题空 = 0
-  证明: mk_eq_zero _
-
-Depends on / 依赖: mk_eq_zero
+/-
+**Cardinal.mk_pempty** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_pempty : #PEmpty = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
 -/
 theorem mk_pempty : #PEmpty = 0 :=
   mk_eq_zero _
-
-/--
-theorem `mk_punit` / 定理 `mk_punit`
-
-English:
-theorem mk_punit
-  statement: #PUnit = 1
-  proof: mk_eq_one PUnit
-
-中文:
-定理 mk_punit
-  结论: #命题单元 = 1
-  证明: mk_eq_one PUnit
-
-Depends on / 依赖: mk_eq_one
+/-
+**Cardinal.mk_punit** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_punit : #PUnit = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 theorem mk_punit : #PUnit = 1 :=
   mk_eq_one PUnit
-
-/--
-theorem `mk_unit` / 定理 `mk_unit`
-
-English:
-theorem mk_unit
-  statement: #Unit = 1
-  proof: mk_punit
-
-中文:
-定理 mk_unit
-  结论: #单元 = 1
-  证明: mk_punit
-
-Depends on / 依赖: mk_punit
+/-
+**Cardinal.mk_unit** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_unit : #Unit = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_punit`：mk_punit : #PUnit = 1
 -/
 theorem mk_unit : #Unit = 1 :=
   mk_punit
-
-/--
-theorem `mk_plift_true` / 定理 `mk_plift_true`
-
-English:
-theorem mk_plift_true
-  statement: #(PLift True) = 1
-  proof: mk_eq_one _
-
-中文:
-定理 mk_plift_true
-  结论: #(命题层提升 真) = 1
-  证明: mk_eq_one _
-
-Depends on / 依赖: mk_eq_one
+/-
+**Cardinal.mk_plift_true** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_plift_true : #(PLift True) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `instSubsingletonPLift`：∀ {α : Sort u_1} [Subsingleton α], Subsingleton (
+PLift α)
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `PLift.instNonempty_mathlib`：∀ {α : Sort u} [Nonempty α], Nonempty (PLift
+ α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 theorem mk_plift_true : #(PLift True) = 1 :=
   mk_eq_one _
-
-/--
-theorem `mk_plift_false` / 定理 `mk_plift_false`
-
-English:
-theorem mk_plift_false
-  statement: #(PLift False) = 0
-  proof: mk_eq_zero _
-
-中文:
-定理 mk_plift_false
-  结论: #(命题层提升 假) = 0
-  证明: mk_eq_zero _
-
-Depends on / 依赖: mk_eq_zero
+/-
+**Cardinal.mk_plift_false** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_plift_false : #(PLift False) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
+· 使用定理 `PLift.instIsEmpty`：∀ {α : Sort u} [IsEmpty α], IsEmpty (PLift α)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem mk_plift_false : #(PLift False) = 0 :=
   mk_eq_zero _
-
-/--
-theorem `mk_subtype_of_equiv` / 定理 `mk_subtype_of_equiv`
-
-English:
-theorem mk_subtype_of_equiv
-  given: {α β : Type u} (p : β -> Prop) (e : α ≃ β)
-  proof: mk_congr (Equiv.subtypeEquivOfSubtype e)
-
-中文:
-定理 mk_subtype_of_equiv
-  条件: {α β : 类型u} (p : β -> 命题) (e : α ≃ β)
-  证明: mk_congr (Equiv.subtypeEquivOfSubtype e)
-
-Depends on / 依赖: Equiv.subtypeEquivOfSubtype, mk_congr, subtypeEquivOfSubtype
+/-
+**Cardinal.mk_subtype_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_subtype_of_equiv {α β : Type u} (p : β -> Prop) (e : α ≃ β) : #{ a : α 
+// p (e a) } = #{ b : β // p b }
+参数：p : β -> Prop；e : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
 -/
-theorem mk_subtype_of_equiv {α β : Type u} (p : β -> Prop) (e : α ≃ β) :
+theorem mk_subtype_of_equiv {α β : Type u} (p : β → Prop) (e : α ≃ β) :
     #{ a : α // p (e a) } = #{ b : β // p b } :=
   mk_congr (Equiv.subtypeEquivOfSubtype e)
 
@@ -2265,16 +1610,17 @@ end Cardinal
 
 -- Porting note: Meta code, do not port directly
 -- /-- Extension for the `positivity` tactic: The cardinal power of a positive cardinal is
--- positive. -/
+--  positive. -/
 -- @[positivity]
 -- unsafe def positivity_cardinal_pow : expr → tactic strictness
--- | q(@Pow.pow _ _ $(inst) $(a) $(b)) => do
--- let strictness_a ← core a
--- match strictness_a with
--- | positive p => positive <$> mk_app `` power_pos [b, p]
--- | _ => failed
--- |-- We already know that `0 ≤ x` for all `x : Cardinal`
--- _ =>
--- failed
+--   | q(@Pow.pow _ _ $(inst) $(a) $(b)) => do
+--     let strictness_a ← core a
+--     match strictness_a with
+--       | positive p => positive <$> mk_app `` power_pos [b, p]
+--       | _ => failed
+--   |-- We already know that `0 ≤ x` for all `x : Cardinal`
+--     _ =>
+--     failed
 
 -- end Tactic
+

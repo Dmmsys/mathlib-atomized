@@ -24,22 +24,14 @@ open CategoryTheory
 
 /-- The category of finite groups. -/
 @[pp_with_univ]
-/--
-Definition of `FiniteGrp` / `FiniteGrp` 的定义
+/-
+**FiniteGrp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FiniteGrp
-  parameters: where
-  axioms and operations (2):
-    - toGrp : GrpCat.{u}
-    - [isFinite : Finite toGrp]
-
-中文:
-结构 FiniteGrp
-  参数: where
-  公理与运算 (2 个):
-    - toGrp : 群范畴.{u}
-    - [isFinite : 有限 toGrp]
+--- 原说明 ---
+The category of finite groups.
 -/
 structure FiniteGrp where
   /-- A group that is finite -/
@@ -48,22 +40,14 @@ structure FiniteGrp where
 
 /-- The category of finite additive groups. -/
 @[pp_with_univ]
-/--
-Definition of `FiniteAddGrp` / `FiniteAddGrp` 的定义
+/-
+**FiniteAddGrp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FiniteAddGrp
-  parameters: where
-  axioms and operations (2):
-    - toAddGrp : AddGrpCat.{u}
-    - [isFinite : Finite toAddGrp]
-
-中文:
-结构 FiniteAddGrp
-  参数: where
-  公理与运算 (2 个):
-    - toAddGrp : 加法群范畴.{u}
-    - [isFinite : 有限 toAddGrp]
+--- 原说明 ---
+The category of finite additive groups.
 -/
 structure FiniteAddGrp where
   /-- An additive group that is finite -/
@@ -75,99 +59,52 @@ attribute [to_additive] FiniteGrp
 namespace FiniteGrp
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort FiniteGrp.{u} (Type u)
-  body: G.toGrp
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: CoeSort FiniteGrp.{u} (类型u)
-  定义体: G.toGrp
-
-@[to_additive]
-
-Depends on / 依赖: G.toGrp
+/-
+**FiniteGrp.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort FiniteGrp.{u} (Type u) where
   coe G := G.toGrp
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category FiniteGrp
-  body: inferInstanceAs Category (InducedCategory _ FiniteGrp.toGrp)
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 范畴 FiniteGrp
-  定义体: inferInstanceAs Category (InducedCategory _ FiniteGrp.toGrp)
-
-@[to_additive]
-
-Depends on / 依赖: Category, FiniteGrp, FiniteGrp.toGrp, InducedCategory
+/-
+**FiniteGrp.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category FiniteGrp :=
-inferInstanceAs Category (InducedCategory _ FiniteGrp.toGrp)
+  inferInstanceAs <| Category (InducedCategory _ FiniteGrp.toGrp)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory FiniteGrp (· ->* ·)
-  body: inferInstanceAs ConcreteCategory (InducedCategory _ toGrp) _
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 余ncrete范畴 FiniteGrp (· ->* ·)
-  定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toGrp) _
-
-@[to_additive]
-
-Depends on / 依赖: ConcreteCategory, InducedCategory
+/-
+**FiniteGrp.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory FiniteGrp (· ->* ·) :=
-inferInstanceAs ConcreteCategory (InducedCategory _ toGrp) _
+instance : ConcreteCategory FiniteGrp (· →* ·) :=
+  inferInstanceAs <| ConcreteCategory (InducedCategory _ toGrp) _
 
 @[to_additive]
-instance (G : FiniteGrp) : Group G := inferInstanceAs Group G.toGrp
+/-
+**FiniteGrp.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (G : FiniteGrp) : Group G := inferInstanceAs <| Group G.toGrp
 
 @[to_additive]
+/-
+**FiniteGrp.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (G : FiniteGrp) : Finite G := G.isFinite
 
 /-- Construct a term of `FiniteGrp` from a type endowed with the structure of a finite group. -/
 @[to_additive /-- Construct a term of `FiniteAddGrp` from a type endowed with the structure of a
 finite additive group. -/]
-/--
-Definition of `of` / `of` 的定义
-
-English:
-definition of
-  signature: (G : Type u) [Group G] [Finite G]
-  body: GrpCat.of G
-  isFinite := ‹_›
-
-中文:
-定义 of
-  签名: (G : 类型u) [群 G] [有限 G]
-  定义体: GrpCat.of G
-  isFinite := ‹_›
-
-Depends on / 依赖: GrpCat, GrpCat.of
+/-
+**FiniteGrp.of** 是 Mathlib 中的一个定义，位于命名空间 `FiniteGrp`。
+形式化陈述：of (G : Type u) [Group G] [Finite G] : FiniteGrp where toGrp
+参数：G : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def of (G : Type u) [Group G] [Finite G] : FiniteGrp where
   toGrp := GrpCat.of G
@@ -176,44 +113,29 @@ def of (G : Type u) [Group G] [Finite G] : FiniteGrp where
 /-- The morphism in `FiniteGrp`, induced from a morphism of the category `GrpCat`. -/
 @[to_additive
 /-- The morphism in `FiniteAddGrp`, induced from a morphism of the category `AddGrpCat` -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
-
-English:
-definition ofHom
-  signature: {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y)
-  body: InducedCategory.homMk (GrpCat.ofHom f)
-
-@[to_additive]
-
-中文:
-定义 ofHom
-  签名: {X Y : 类型u} [群 X] [有限 X] [群 Y] [有限 Y] (f : X ->* Y)
-  定义体: InducedCategory.homMk (GrpCat.ofHom f)
-
-@[to_additive]
-
-Depends on / 依赖: GrpCat, GrpCat.ofHom, InducedCategory, InducedCategory.homMk
+/-
+**FiniteGrp.ofHom** 是 Mathlib 中的一个定义，位于命名空间 `FiniteGrp`。
+形式化陈述：ofHom {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* 
+Y) : of X ⟶ of Y
+参数：f : X ->* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ofHom {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y) : of X ⟶ of Y :=
+def ofHom {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X →* Y) : of X ⟶ of Y :=
   InducedCategory.homMk (GrpCat.ofHom f)
 
 @[to_additive]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y) (x : X)
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [群 X] [有限 X] [群 Y] [有限 Y] (f : X ->* Y) (x : X)
-  证明: rfl
+/-
+**FiniteGrp.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `FiniteGrp`。
+形式化陈述：ofHom_apply {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : 
+X ->* Y) (x : X) : ofHom f x = f x
+参数：f : X ->* Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X →* Y) (x : X) :
     ofHom f x = f x :=
   rfl
 
 end FiniteGrp
+

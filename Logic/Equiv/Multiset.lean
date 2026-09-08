@@ -23,81 +23,57 @@ section Finset
 variable [Encodable α]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `enle` / `enle` 的定义
-
-English:
-definition enle
-  signature: : α -> α -> Prop
-  body: encode ⁻¹'o (· <= ·)
-deriving DecidableRel
-
-中文:
-定义 enle
-  签名: : α -> α -> 命题
-  定义体: encode ⁻¹'o (· <= ·)
-deriving DecidableRel
+/-
+**enle** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def enle : α -> α -> Prop :=
-  encode ⁻¹'o (· <= ·)
+private def enle : α → α → Prop :=
+  encode ⁻¹'o (· ≤ ·)
 deriving DecidableRel
 
 set_option backward.privateInPublic true in
 private local instance enle.isLinearOrder : IsLinearOrder α enle :=
-  (RelEmbedding.preimage ⟨encode, encode_injective⟩ (· <= ·)).isLinearOrder
+  (RelEmbedding.preimage ⟨encode, encode_injective⟩ (· ≤ ·)).isLinearOrder
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `encodeMultiset` / `encodeMultiset` 的定义
+/-- Explicit encoding function for `Multiset α` -/
+/-
+**encodeMultiset** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：encodeMultiset (s : Multiset α) : Nat
+参数：s : Multiset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encodeMultiset
-  signature: (s : Multiset α)
-  body: encode (s.sort enle)
-
-中文:
-定义 encodeMultiset
-  签名: (s : Multiset α)
-  定义体: encode (s.sort enle)
-
-Depends on / 依赖: encode, s.sort
+--- 原说明 ---
+Explicit encoding function for `Multiset α`
 -/
-def encodeMultiset (s : Multiset α) : Nat :=
+def encodeMultiset (s : Multiset α) : ℕ :=
   encode (s.sort enle)
 
-/--
-Definition of `decodeMultiset` / `decodeMultiset` 的定义
+/-- Explicit decoding function for `Multiset α` -/
+/-
+**decodeMultiset** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：decodeMultiset (n : Nat) : Option (Multiset α)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decodeMultiset
-  signature: (n : Nat)
-  body: ((↑) : List α -> Multiset α) < > decode (α := List α) n
-
-中文:
-定义 decodeMultiset
-  签名: (n : 自然数)
-  定义体: ((↑) : List α -> Multiset α) < > decode (α := List α) n
-
-Depends on / 依赖: Multiset, decode
+--- 原说明 ---
+Explicit decoding function for `Multiset α`
 -/
-def decodeMultiset (n : Nat) : Option (Multiset α) :=
-((↑) : List α -> Multiset α) < > decode (α := List α) n
+def decodeMultiset (n : ℕ) : Option (Multiset α) :=
+  ((↑) : List α → Multiset α) <$> decode (α := List α) n
 
-/--
-Instance `_root_.Multiset.encodable` / 实例 `_root_.Multiset.encodable`
+/-- If `α` is encodable, then so is `Multiset α`. -/
+/-
+**_root_.Multiset.encodable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：_root_.Multiset.encodable : Encodable (Multiset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance _root_.Multiset.encodable
-  signature: : Encodable (Multiset α)
-  body: ⟨encodeMultiset, decodeMultiset, fun s => by simp [encodeMultiset, decodeMultiset, encodek]⟩
-
-中文:
-实例 _root_.Multiset.encodable
-  签名: : 可编码 (Multiset α)
-  定义体: ⟨encodeMultiset, decodeMultiset, fun s => by simp [encodeMultiset, decodeMultiset, encodek]⟩
-
-Depends on / 依赖: decodeMultiset, encodeMultiset, encodek
+--- 原说明 ---
+If `α` is encodable, then so is `Multiset α`.
 -/
 instance _root_.Multiset.encodable : Encodable (Multiset α) :=
   ⟨encodeMultiset, decodeMultiset, fun s => by simp [encodeMultiset, decodeMultiset, encodek]⟩
@@ -109,169 +85,117 @@ variable [Denumerable α]
 
 section Multiset
 
-/--
-Definition of `lower` / `lower` 的定义
+/-- Outputs the list of differences of the input list, that is
+`lower [a₁, a₂, ...] n = [a₁ - n, a₂ - a₁, ...]` -/
+/-
+**Denumerable.lower** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：List ℕ → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lower
-  signature: : List Nat -> Nat -> List Nat
-
-中文:
-定义 lower
-  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
+--- 原说明 ---
+Outputs the list of differences of the input list, that is
+`lower [a₁, a₂, ...] n = [a₁ - n, a₂ - a₁, ...]`
 -/
-def lower : List Nat -> Nat -> List Nat
+def lower : List ℕ → ℕ → List ℕ
   | [], _ => []
   | m :: l, n => (m - n) :: lower l m
 
-/--
-Definition of `raise` / `raise` 的定义
+/-- Outputs the list of partial sums of the input list, that is
+`raise [a₁, a₂, ...] n = [n + a₁, n + a₁ + a₂, ...]` -/
+/-
+**Denumerable.raise** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：List ℕ → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition raise
-  signature: : List Nat -> Nat -> List Nat
-
-中文:
-定义 raise
-  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
+--- 原说明 ---
+Outputs the list of partial sums of the input list, that is
+`raise [a₁, a₂, ...] n = [n + a₁, n + a₁ + a₂, ...]`
 -/
-def raise : List Nat -> Nat -> List Nat
+def raise : List ℕ → ℕ → List ℕ
   | [], _ => []
   | m :: l, n => (m + n) :: raise l (m + n)
-
-/--
-theorem `lower_raise` / 定理 `lower_raise`
-
-English:
-theorem lower_raise
-  statement: forall l n, lower (raise l n) n = l
-
-中文:
-定理 lower_raise
-  结论: 对任意 l n, lower (raise l n) n = l
+/-
+**Denumerable.lower_raise** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) (n : ℕ), Denumerable.lower (Denumerable.raise l n) n = l
+参数：l : List ℕ；n : ℕ；Denumerable.raise l n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lower_raise : forall l n, lower (raise l n) n = l
+theorem lower_raise : ∀ l n, lower (raise l n) n = l
   | [], _ => rfl
   | m :: l, n => by rw [raise, lower, Nat.add_sub_cancel_right, lower_raise l]
-
-/--
-theorem `raise_lower` / 定理 `raise_lower`
-
-English:
-theorem raise_lower
-  statement: forall {l n}, List.SortedLE (n :: l) -> raise (lower l n) n = l
-  proof: List.rel_of_pairwise_cons h.pairwise List.mem_cons_self
-    simp [raise, lower, Nat.sub_add_cancel this, raise_lower h.pairwise.of_cons.sortedLE]
-
-中文:
-定理 raise_lower
-  结论: 对任意 {l n}, 列表.SortedLE (n :: l) -> raise (lower l n) n = l
-  证明: List.rel_of_pairwise_cons h.pairwise List.mem_cons_self
-    simp [raise, lower, Nat.sub_add_cancel this, raise_lower h.pairwise.of_cons.sortedLE]
-
-Depends on / 依赖: List.mem_cons_self, List.rel_of_pairwise_cons, h.pairwise, mem_cons_self, pairwise, rel_of_pairwise_cons
+/-
+**Denumerable.raise_lower** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：raise_lower : forall {l n}, List.SortedLE (n :: l) -> raise (lower l n) n 
+= l | [], _, _ => rfl | m :: l, n, h => by have : n <= m
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem raise_lower : forall {l n}, List.SortedLE (n :: l) -> raise (lower l n) n = l
+theorem raise_lower : ∀ {l n}, List.SortedLE (n :: l) → raise (lower l n) n = l
   | [], _, _ => rfl
   | m :: l, n, h => by
-    have : n <= m := List.rel_of_pairwise_cons h.pairwise List.mem_cons_self
+    have : n ≤ m := List.rel_of_pairwise_cons h.pairwise List.mem_cons_self
     simp [raise, lower, Nat.sub_add_cancel this, raise_lower h.pairwise.of_cons.sortedLE]
-
-/--
-theorem `isChain_raise` / 定理 `isChain_raise`
-
-English:
-theorem isChain_raise
-  statement: forall l n, List.IsChain (· <= ·) (raise l n)
-
-中文:
-定理 isChain_raise
-  结论: 对任意 l n, 列表.IsChain (· <= ·) (raise l n)
+/-
+**Denumerable.isChain_raise** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1 x2 => x1 ≤ x2) (Denumerable.r
+aise l n)
+参数：l : List ℕ；n : ℕ；fun x1 x2 => x1 ≤ x2；Denumerable.raise l n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isChain_raise : forall l n, List.IsChain (· <= ·) (raise l n)
+theorem isChain_raise : ∀ l n, List.IsChain (· ≤ ·) (raise l n)
   | [], _ => .nil
   | [_], _ => .singleton _
   | _ :: _ :: _, _ => .cons_cons (Nat.le_add_left _ _) (isChain_raise (_ :: _) _)
-
-/--
-theorem `isChain_cons_raise` / 定理 `isChain_cons_raise`
-
-English:
-theorem isChain_cons_raise
-  given: (l n)
-  statement: List.IsChain (· <= ·) (n :: raise l n)
-  proof: isChain_raise (n :: l) 0
-
-中文:
-定理 isChain_cons_raise
-  条件: (l n)
-  结论: 列表.IsChain (· <= ·) (n :: raise l n)
-  证明: isChain_raise (n :: l) 0
-
-Depends on / 依赖: isChain_raise
+/-
+**Denumerable.isChain_cons_raise** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：isChain_cons_raise (l n) : List.IsChain (· <= ·) (n :: raise l n)
+参数：l n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.isChain_raise`：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1 
+x2 => x1 ≤ x2) (Denumerable.raise l n)
 -/
-theorem isChain_cons_raise (l n) : List.IsChain (· <= ·) (n :: raise l n) :=
+theorem isChain_cons_raise (l n) : List.IsChain (· ≤ ·) (n :: raise l n) :=
   isChain_raise (n :: l) 0
 
-/--
-theorem `raise_sorted` / 定理 `raise_sorted`
+/-- `raise l n` is a non-decreasing sequence. -/
+/-
+**Denumerable.raise_sorted** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：raise_sorted (l n) : List.SortedLE (raise l n)
+参数：l n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, List.IsChain (fun x1 x2 => x1 ≤ x2) l → l.SortedLE
+· 使用定理 `Denumerable.isChain_raise`：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1 
+x2 => x1 ≤ x2) (Denumerable.raise l n)
 
-English:
-theorem raise_sorted
-  given: (l n)
-  statement: List.SortedLE (raise l n)
-  proof: (isChain_raise _ _).sortedLE
-
-中文:
-定理 raise_sorted
-  条件: (l n)
-  结论: 列表.SortedLE (raise l n)
-  证明: (isChain_raise _ _).sortedLE
-
-Depends on / 依赖: isChain_raise, sortedLE
+--- 原说明 ---
+`raise l n` is a non-decreasing sequence.
 -/
 theorem raise_sorted (l n) : List.SortedLE (raise l n) := (isChain_raise _ _).sortedLE
 
-/--
-Instance `multiset` / 实例 `multiset`
+/-- If `α` is denumerable, then so is `Multiset α`. Warning: this is *not* the same encoding as used
+in `Multiset.encodable`. -/
+/-
+**Denumerable.multiset** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：multiset : Denumerable (Multiset α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
 
-English:
-instance multiset
-  signature: : Denumerable (Multiset α)
-  body: mk'
-⟨fun s : Multiset α => encode lower (s.map encode).sort 0,
-     fun n =>
-      Multiset.map (ofNat α) (raise (ofNat (List Nat) n) 0),
-     fun s => by
-      have :=
-        raise_lower (List.pairwise_cons.2 ⟨fun n _ => Nat.zero_le n,
-        (s.map encode).pairwise_sort _⟩).sortedLE
-      simp [-Multiset.map_coe, this],
-     fun n => by
-      simp [-Multiset.map_coe, List.mergeSort_eq_self _ (raise_sorted _ _).pairwise, lower_raise]⟩
-
-中文:
-实例 multiset
-  签名: : 可枚举 (Multiset α)
-  定义体: mk'
-⟨fun s : Multiset α => encode lower (s.map encode).sort 0,
-     fun n =>
-      Multiset.map (ofNat α) (raise (ofNat (List Nat) n) 0),
-     fun s => by
-      have :=
-        raise_lower (List.pairwise_cons.2 ⟨fun n _ => Nat.zero_le n,
-        (s.map encode).pairwise_sort _⟩).sortedLE
-      simp [-Multiset.map_coe, this],
-     fun n => by
-      simp [-Multiset.map_coe, List.mergeSort_eq_self _ (raise_sorted _ _).pairwise, lower_raise]⟩
-
-Depends on / 依赖: List.mergeSort_eq_self, List.pairwise_cons, Multiset, Multiset.map, Multiset.map_coe, Nat.zero_le, encode, lower_raise, map_coe, mergeSort_eq_self, pairwise, pairwise_cons, pairwise_sort, raise_lower, raise_sorted, s.map, sortedLE, zero_le
+--- 原说明 ---
+If `α` is denumerable, then so is `Multiset α`. Warning: this is *not* the same 
+encoding as used
+in `Multiset.encodable`.
 -/
 instance multiset : Denumerable (Multiset α) :=
   mk'
-⟨fun s : Multiset α => encode lower (s.map encode).sort 0,
+    ⟨fun s : Multiset α => encode <| lower (s.map encode).sort 0,
      fun n =>
-      Multiset.map (ofNat α) (raise (ofNat (List Nat) n) 0),
+      Multiset.map (ofNat α) (raise (ofNat (List ℕ) n) 0),
      fun s => by
       have :=
         raise_lower (List.pairwise_cons.2 ⟨fun n _ => Nat.zero_le n,
@@ -283,3 +207,4 @@ instance multiset : Denumerable (Multiset α) :=
 end Multiset
 
 end Denumerable
+

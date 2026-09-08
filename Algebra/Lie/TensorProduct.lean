@@ -41,70 +41,39 @@ variable [AddCommGroup Q] [Module R Q] [LieRingModule L Q] [LieModule R L Q]
 
 attribute [local ext] TensorProduct.ext
 
-/--
-Definition of `hasBracketAux` / `hasBracketAux` 的定义
+/-- It is useful to define the bracket via this auxiliary function so that we have a type-theoretic
+expression of the fact that `L` acts by linear endomorphisms. It simplifies the proofs in
+`lieRingModule` below. -/
+/-
+**TensorProduct.LieModule.hasBracketAux** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct
+.LieModule`。
+形式化陈述：hasBracketAux (x : L) : Module.End R (M otimes[R] N)
+参数：x : L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasBracketAux
-  signature: (x : L)
-  body: (toEnd R L M x).rTensor N + (toEnd R L N x).lTensor M
-
-中文:
-定义 hasBracketAux
-  签名: (x : L)
-  定义体: (toEnd R L M x).rTensor N + (toEnd R L N x).lTensor M
-
-Depends on / 依赖: lTensor, rTensor
+--- 原说明 ---
+It is useful to define the bracket via this auxiliary function so that we have a
+ type-theoretic
+expression of the fact that `L` acts by linear endomorphisms. It simplifies the 
+proofs in
+`lieRingModule` below.
 -/
-def hasBracketAux (x : L) : Module.End R (M otimes[R] N) :=
+def hasBracketAux (x : L) : Module.End R (M ⊗[R] N) :=
   (toEnd R L M x).rTensor N + (toEnd R L N x).lTensor M
 
-/--
-Instance `lieRingModule` / 实例 `lieRingModule`
+/-- The tensor product of two Lie modules is a Lie ring module. -/
+/-
+**TensorProduct.LieModule.lieRingModule** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct
+.LieModule`。
+形式化陈述：lieRingModule : LieRingModule L (M otimes[R] N) where bracket x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lieRingModule
-  signature: : LieRingModule L (M otimes[R] N) where
-  body: hasBracketAux x
-  add_lie x y t := by
-    simp only [hasBracketAux, LinearMap.lTensor_add, LinearMap.rTensor_add, map_add,
-      LinearMap.add_apply]
-    abel
-  lie_add _ := map_add _
-  leibniz_lie x y t := by
-    suffices (hasBracketAux x).comp (hasBracketAux y) =
-        hasBracketAux ⁅x, y⁆ + (hasBracketAux y).comp (hasBracketAux x) by
-      rw [← LinearMap.comp_apply]; rw [this]; rfl
-    ext m n
-    simp only [hasBracketAux, AlgebraTensorModule.curry_apply, curry_apply, sub_tmul, tmul_sub,
-      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.coe_comp,
-      LinearMap.rTensor_tmul, LieHom.map_lie, toEnd_apply_apply, LinearMap.add_apply,
-      map_add, LieHom.lie_apply, Module.End.lie_apply, LinearMap.lTensor_tmul]
-    abel
-
-中文:
-实例 lieRingModule
-  签名: : Lie环模 L (M otimes[R] N) where
-  定义体: hasBracketAux x
-  add_lie x y t := by
-    simp only [hasBracketAux, LinearMap.lTensor_add, LinearMap.rTensor_add, map_add,
-      LinearMap.add_apply]
-    abel
-  lie_add _ := map_add _
-  leibniz_lie x y t := by
-    suffices (hasBracketAux x).comp (hasBracketAux y) =
-        hasBracketAux ⁅x, y⁆ + (hasBracketAux y).comp (hasBracketAux x) by
-      rw [← LinearMap.comp_apply]; rw [this]; rfl
-    ext m n
-    simp only [hasBracketAux, AlgebraTensorModule.curry_apply, curry_apply, sub_tmul, tmul_sub,
-      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.coe_comp,
-      LinearMap.rTensor_tmul, LieHom.map_lie, toEnd_apply_apply, LinearMap.add_apply,
-      map_add, LieHom.lie_apply, Module.End.lie_apply, LinearMap.lTensor_tmul]
-    abel
-
-Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, LocalizedModule, LocalizedModule.smul, hasBracketAux, map_smul_of_tower
+--- 原说明 ---
+The tensor product of two Lie modules is a Lie ring module.
 -/
-instance lieRingModule : LieRingModule L (M otimes[R] N) where
+instance lieRingModule : LieRingModule L (M ⊗[R] N) where
   bracket x := hasBracketAux x
   add_lie x y t := by
     simp only [hasBracketAux, LinearMap.lTensor_add, LinearMap.rTensor_add, map_add,
@@ -114,7 +83,7 @@ instance lieRingModule : LieRingModule L (M otimes[R] N) where
   leibniz_lie x y t := by
     suffices (hasBracketAux x).comp (hasBracketAux y) =
         hasBracketAux ⁅x, y⁆ + (hasBracketAux y).comp (hasBracketAux x) by
-      rw [← LinearMap.comp_apply]; rw [this]; rfl
+      rw [← LinearMap.comp_apply, this]; rfl
     ext m n
     simp only [hasBracketAux, AlgebraTensorModule.curry_apply, curry_apply, sub_tmul, tmul_sub,
       LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.coe_comp,
@@ -123,34 +92,40 @@ instance lieRingModule : LieRingModule L (M otimes[R] N) where
     abel
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `lieModule` / 实例 `lieModule`
+/-- The tensor product of two Lie modules is a Lie module. -/
+/-
+**TensorProduct.LieModule.lieModule** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct.Lie
+Module`。
+形式化陈述：lieModule : LieModule R L (M otimes[R] N) where smul_lie c x t
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `LieHom.instLinearMapClass`：∀ {R : Type u} {L₁ : Type v} {L₂ : Type w} [i
+nst : CommRing R] [inst_1 : LieRing L₁] [inst_2 : LieAlgebra R L₁]   [inst_3 : L
+ieRing L₂] [ins…
+· 使用定理 `LinearMap.rTensor_smul`：rTensor_smul (r : R) (f : N ->ₗ[R] P) : (r • f).
+rTensor M = r • f.rTensor M
+· 使用定理 `LinearMap.lTensor_smul`：lTensor_smul (r : R) (f : N ->ₗ[R] P) : (r • f).
+lTensor M = r • f.lTensor M
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance lieModule
-  signature: : LieModule R L (M otimes[R] N) where
-  body: by
-    change hasBracketAux (c • x) _ = c • hasBracketAux _ _
-    simp only [hasBracketAux, smul_add, LinearMap.rTensor_smul, LinearMap.smul_apply,
-      LinearMap.lTensor_smul, map_smul, LinearMap.add_apply]
-  lie_smul c _ := map_smul _ c
-
-@[simp]
-
-中文:
-实例 lieModule
-  签名: : Lie模 R L (M otimes[R] N) where
-  定义体: by
-    change hasBracketAux (c • x) _ = c • hasBracketAux _ _
-    simp only [hasBracketAux, smul_add, LinearMap.rTensor_smul, LinearMap.smul_apply,
-      LinearMap.lTensor_smul, map_smul, LinearMap.add_apply]
-  lie_smul c _ := map_smul _ c
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.lTensor_smul, LinearMap.rTensor_smul, LinearMap.smul_apply, LocalizedModule, LocalizedModule.mk_add_mk, add_apply, hasBracketAux, lTensor_smul, lie_smul, map_add, map_smul, mk_add_mk, rTensor_smul, smul_add, smul_apply
+--- 原说明 ---
+The tensor product of two Lie modules is a Lie module.
 -/
-instance lieModule : LieModule R L (M otimes[R] N) where
+instance lieModule : LieModule R L (M ⊗[R] N) where
   smul_lie c x t := by
     change hasBracketAux (c • x) _ = c • hasBracketAux _ _
     simp only [hasBracketAux, smul_add, LinearMap.rTensor_smul, LinearMap.smul_apply,
@@ -158,66 +133,49 @@ instance lieModule : LieModule R L (M otimes[R] N) where
   lie_smul c _ := map_smul _ c
 
 @[simp]
-/--
-theorem `lie_tmul_right` / 定理 `lie_tmul_right`
-
-English:
-theorem lie_tmul_right
-  given: (x : L) (m : M) (n : N)
-  statement: ⁅x, m otimesₜ[R] n⁆ = ⁅x, m⁆ otimesₜ n + m otimesₜ ⁅x, n⁆
-  proof: show hasBracketAux x (m otimesₜ[R] n) = _ by
-    simp only [hasBracketAux, LinearMap.rTensor_tmul, toEnd_apply_apply,
-      LinearMap.add_apply, LinearMap.lTensor_tmul]
-
-中文:
-定理 lie_tmul_right
-  条件: (x : L) (m : M) (n : N)
-  结论: ⁅x, m otimesₜ[R] n⁆ = ⁅x, m⁆ otimesₜ n + m otimesₜ ⁅x, n⁆
-  证明: show hasBracketAux x (m otimesₜ[R] n) = _ by
-    simp only [hasBracketAux, LinearMap.rTensor_tmul, toEnd_apply_apply,
-      LinearMap.add_apply, LinearMap.lTensor_tmul]
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.lTensor_tmul, LinearMap.rTensor_tmul, _smul, add_apply, hasBracketAux, lTensor_tmul, rTensor_tmul, toEnd_apply_apply, zero_smul
+/-
+**TensorProduct.LieModule.lie_tmul_right** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduc
+t.LieModule`。
+形式化陈述：lie_tmul_right (x : L) (m : M) (n : N) : ⁅x, m otimesₜ[R] n⁆ = ⁅x, m⁆ otim
+esₜ n + m otimesₜ ⁅x, n⁆
+参数：x : L；m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LieModule.toEnd_apply_apply`：∀ (R : Type u) (L : Type v) (M : Type w) [i
+nst : CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : Add
+CommGroup M] [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lie_tmul_right (x : L) (m : M) (n : N) : ⁅x, m otimesₜ[R] n⁆ = ⁅x, m⁆ otimesₜ n + m otimesₜ ⁅x, n⁆ :=
-  show hasBracketAux x (m otimesₜ[R] n) = _ by
+theorem lie_tmul_right (x : L) (m : M) (n : N) : ⁅x, m ⊗ₜ[R] n⁆ = ⁅x, m⁆ ⊗ₜ n + m ⊗ₜ ⁅x, n⁆ :=
+  show hasBracketAux x (m ⊗ₜ[R] n) = _ by
     simp only [hasBracketAux, LinearMap.rTensor_tmul, toEnd_apply_apply,
       LinearMap.add_apply, LinearMap.lTensor_tmul]
 
 variable (R L M N P Q)
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- The universal property for tensor product of modules of a Lie algebra: the `R`-linear
+tensor-hom adjunction is equivariant with respect to the `L` action. -/
+/-
+**TensorProduct.LieModule.lift** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct.LieModul
+e`。
+形式化陈述：lift : (M ->ₗ[R] N ->ₗ[R] P) ≃ₗ⁅R,L⁆ M otimes[R] N ->ₗ[R] P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : (M ->ₗ[R] N ->ₗ[R] P) ≃ₗ⁅R,L⁆ M otimes[R] N ->ₗ[R] P
-  body: { TensorProduct.lift.equiv (.id R) M N P with
-    map_lie' := fun {x f} => by
-      ext m n
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
-        AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
-        lift.equiv_apply, LieHom.lie_apply, LinearMap.sub_apply, lie_tmul_right, map_add]
-      abel }
-
-@[simp]
-
-中文:
-定义 lift
-  签名: : (M ->ₗ[R] N ->ₗ[R] P) ≃ₗ⁅R,L⁆ M otimes[R] N ->ₗ[R] P
-  定义体: { TensorProduct.lift.equiv (.id R) M N P with
-    map_lie' := fun {x f} => by
-      ext m n
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
-        AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
-        lift.equiv_apply, LieHom.lie_apply, LinearMap.sub_apply, lie_tmul_right, map_add]
-      abel }
-
-@[simp]
-
-Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, AlgebraTensorModule, AlgebraTensorModule.curry_apply, LieHom, LieHom.lie_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_restrictScalars, LinearMap.coe_toAddHom, LinearMap.sub_apply, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submonoid, Submonoid.coe_one, TensorProduct, TensorProduct.lift.equiv, algebraMap_isUnit_inv_apply_eq_iff, coe_coe
+--- 原说明 ---
+The universal property for tensor product of modules of a Lie algebra: the `R`-l
+inear
+tensor-hom adjunction is equivariant with respect to the `L` action.
 -/
-def lift : (M ->ₗ[R] N ->ₗ[R] P) ≃ₗ⁅R,L⁆ M otimes[R] N ->ₗ[R] P :=
+def lift : (M →ₗ[R] N →ₗ[R] P) ≃ₗ⁅R,L⁆ M ⊗[R] N →ₗ[R] P :=
   { TensorProduct.lift.equiv (.id R) M N P with
     map_lie' := fun {x f} => by
       ext m n
@@ -227,100 +185,91 @@ def lift : (M ->ₗ[R] N ->ₗ[R] P) ≃ₗ⁅R,L⁆ M otimes[R] N ->ₗ[R] P :=
       abel }
 
 @[simp]
-/--
-theorem `lift_apply` / 定理 `lift_apply`
-
-English:
-theorem lift_apply
-  given: (f : M ->ₗ[R] N ->ₗ[R] P) (m : M) (n : N)
-  statement: lift R L M N P f (m otimesₜ n) = f m n
-  proof: rfl
-
-中文:
-定理 lift_apply
-  条件: (f : M ->ₗ[R] N ->ₗ[R] P) (m : M) (n : N)
-  结论: lift R L M N P f (m otimesₜ n) = f m n
-  证明: rfl
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_cancel, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, OneMemClass, OneMemClass.coe_one, _one, algebraMap_isUnit_inv_apply_eq_iff, coe_one, fromLocalizedModule_mk, mk_cancel, one_smul
+/-
+**TensorProduct.LieModule.lift_apply** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct.Li
+eModule`。
+形式化陈述：lift_apply (f : M ->ₗ[R] N ->ₗ[R] P) (m : M) (n : N) : lift R L M N P f (m
+ otimesₜ n) = f m n
+参数：f : M ->ₗ[R] N ->ₗ[R] P；m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
-theorem lift_apply (f : M ->ₗ[R] N ->ₗ[R] P) (m : M) (n : N) : lift R L M N P f (m otimesₜ n) = f m n :=
+theorem lift_apply (f : M →ₗ[R] N →ₗ[R] P) (m : M) (n : N) : lift R L M N P f (m ⊗ₜ n) = f m n :=
   rfl
 
-/--
-Definition of `liftLie` / `liftLie` 的定义
+/-- A weaker form of the universal property for tensor product of modules of a Lie algebra.
 
-English:
-definition liftLie
-  signature: : (M ->ₗ⁅R,L⁆ N ->ₗ[R] P) ≃ₗ[R] M otimes[R] N ->ₗ⁅R,L⁆ P
-  body: maxTrivLinearMapEquivLieModuleHom.symm ≪≫ₗ ↑(maxTrivEquiv (lift R L M N P)) ≪≫ₗ
-    maxTrivLinearMapEquivLieModuleHom
+Note that maps `f` of type `M →ₗ⁅R,L⁆ N →ₗ[R] P` are exactly those `R`-bilinear maps satisfying
+`⁅x, f m n⁆ = f ⁅x, m⁆ n + f m ⁅x, n⁆` for all `x, m, n` (see e.g, `LieModuleHom.map_lie₂`). -/
+/-
+**TensorProduct.LieModule.liftLie** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct.LieMo
+dule`。
+形式化陈述：liftLie : (M ->ₗ⁅R,L⁆ N ->ₗ[R] P) ≃ₗ[R] M otimes[R] N ->ₗ⁅R,L⁆ P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A weaker form of the universal property for tensor product of modules of a Lie a
+lgebra.
 
-中文:
-定义 liftLie
-  签名: : (M ->ₗ⁅R,L⁆ N ->ₗ[R] P) ≃ₗ[R] M otimes[R] N ->ₗ⁅R,L⁆ P
-  定义体: maxTrivLinearMapEquivLieModuleHom.symm ≪≫ₗ ↑(maxTrivEquiv (lift R L M N P)) ≪≫ₗ
-    maxTrivLinearMapEquivLieModuleHom
-
-@[simp]
-
-Depends on / 依赖: Submonoid, Submonoid.smul_def, _cancel, _smul, maxTrivEquiv, maxTrivLinearMapEquivLieModuleHom, maxTrivLinearMapEquivLieModuleHom.symm, smul_def
+Note that maps `f` of type `M →ₗ⁅R,L⁆ N →ₗ[R] P` are exactly those `R`-bilinear 
+maps satisfying
+`⁅x, f m n⁆ = f ⁅x, m⁆ n + f m ⁅x, n⁆` for all `x, m, n` (see e.g, `LieModuleHom
+.map_lie₂`).
 -/
-def liftLie : (M ->ₗ⁅R,L⁆ N ->ₗ[R] P) ≃ₗ[R] M otimes[R] N ->ₗ⁅R,L⁆ P :=
+def liftLie : (M →ₗ⁅R,L⁆ N →ₗ[R] P) ≃ₗ[R] M ⊗[R] N →ₗ⁅R,L⁆ P :=
   maxTrivLinearMapEquivLieModuleHom.symm ≪≫ₗ ↑(maxTrivEquiv (lift R L M N P)) ≪≫ₗ
     maxTrivLinearMapEquivLieModuleHom
 
 @[simp]
-/--
-theorem `coe_liftLie_eq_lift_coe` / 定理 `coe_liftLie_eq_lift_coe`
-
-English:
-theorem coe_liftLie_eq_lift_coe
-  given: (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P)
-  proof: by
-  tauto
-
-中文:
-定理 coe_liftLie_eq_lift_coe
-  条件: (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P)
-  证明: by
-  tauto
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_cancel_common_left, mk_cancel_common_left
+/-
+**TensorProduct.LieModule.coe_liftLie_eq_lift_coe** 是 Mathlib 中的一个定理，位于命名空间 `Ten
+sorProduct.LieModule`。
+形式化陈述：coe_liftLie_eq_lift_coe (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) : ⇑(liftLie R L M N P 
+f) = lift R L M N P f
+参数：f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_liftLie_eq_lift_coe (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) :
+theorem coe_liftLie_eq_lift_coe (f : M →ₗ⁅R,L⁆ N →ₗ[R] P) :
     ⇑(liftLie R L M N P f) = lift R L M N P f := by
   tauto
-
-/--
-theorem `liftLie_apply` / 定理 `liftLie_apply`
-
-English:
-theorem liftLie_apply
-  given: (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) (m : M) (n : N)
-  proof: by
-  simp only [coe_liftLie_eq_lift_coe, LieModuleHom.coe_toLinearMap, lift_apply]
-
-中文:
-定理 liftLie_apply
-  条件: (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) (m : M) (n : N)
-  证明: by
-  simp only [coe_liftLie_eq_lift_coe, LieModuleHom.coe_toLinearMap, lift_apply]
-
-Depends on / 依赖: LieModuleHom, LieModuleHom.coe_toLinearMap, LocalizedModule, LocalizedModule.mk_cancel_common_right, coe_liftLie_eq_lift_coe, coe_toLinearMap, lift_apply, mk_cancel_common_right
+/-
+**TensorProduct.LieModule.liftLie_apply** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct
+.LieModule`。
+形式化陈述：liftLie_apply (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) (m : M) (n : N) : liftLie R L M 
+N P f (m otimesₜ n) = f m n
+参数：f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P；m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `TensorProduct.LieModule.coe_liftLie_eq_lift_coe`：coe_liftLie_eq_lift_coe
+ (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) : ⇑(liftLie R L M N P f) = lift R L M N P f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem liftLie_apply (f : M ->ₗ⁅R,L⁆ N ->ₗ[R] P) (m : M) (n : N) :
-    liftLie R L M N P f (m otimesₜ n) = f m n := by
+theorem liftLie_apply (f : M →ₗ⁅R,L⁆ N →ₗ[R] P) (m : M) (n : N) :
+    liftLie R L M N P f (m ⊗ₜ n) = f m n := by
   simp only [coe_liftLie_eq_lift_coe, LieModuleHom.coe_toLinearMap, lift_apply]
 
 variable {R L M N P Q}
 
 /-- A pair of Lie module morphisms `f : M → P` and `g : N → Q`, induce a Lie module morphism:
 `M ⊗ N → P ⊗ Q`. -/
-nonrec def map (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) : M otimes[R] N ->ₗ⁅R,L⁆ P otimes[R] Q :=
-  { map (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q) with
+nonrec def map (f : M →ₗ⁅R,L⁆ P) (g : N →ₗ⁅R,L⁆ Q) : M ⊗[R] N →ₗ⁅R,L⁆ P ⊗[R] Q :=
+  { map (f : M →ₗ[R] P) (g : N →ₗ[R] Q) with
     map_lie' := fun {x t} => by
       simp only [LinearMap.toFun_eq_coe]
       refine t.induction_on ?_ ?_ ?_
@@ -331,77 +280,57 @@ nonrec def map (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) : M otimes[R] N
       · intro t₁ t₂ ht₁ ht₂; simp only [ht₁, ht₂, lie_add, map_add] }
 
 @[simp]
-/--
-theorem `toLinearMap_map` / 定理 `toLinearMap_map`
-
-English:
-theorem toLinearMap_map
-  given: (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q)
-  proof: rfl
-
-@[simp]
-nonrec theorem map_tmul (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) (m : M) (n : N) :
-    map f g (m otimesₜ n) = f m otimesₜ g n :=
-  map_tmul _ _ _ _
-
-中文:
-定理 toLinearMap_map
-  条件: (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q)
-  证明: rfl
-
-@[simp]
-nonrec theorem map_tmul (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) (m : M) (n : N) :
-    map f g (m otimesₜ n) = f m otimesₜ g n :=
-  map_tmul _ _ _ _
-
-Depends on / 依赖: _add_mk, _cancel_left, smul_add
+/-
+**TensorProduct.LieModule.toLinearMap_map** 是 Mathlib 中的一个定理，位于命名空间 `TensorProdu
+ct.LieModule`。
+形式化陈述：toLinearMap_map (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) : (map f g : M otime
+s[R] N ->ₗ[R] P otimes[R] Q) = TensorProduct.map (f : M ->ₗ[R] P) (g : N ->ₗ[R] 
+Q)
+参数：f : M ->ₗ⁅R,L⁆ P；g : N ->ₗ⁅R,L⁆ Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_map (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) :
-    (map f g : M otimes[R] N ->ₗ[R] P otimes[R] Q) = TensorProduct.map (f : M ->ₗ[R] P) (g : N ->ₗ[R] Q) :=
+theorem toLinearMap_map (f : M →ₗ⁅R,L⁆ P) (g : N →ₗ⁅R,L⁆ Q) :
+    (map f g : M ⊗[R] N →ₗ[R] P ⊗[R] Q) = TensorProduct.map (f : M →ₗ[R] P) (g : N →ₗ[R] Q) :=
   rfl
 
 @[simp]
-nonrec theorem map_tmul (f : M ->ₗ⁅R,L⁆ P) (g : N ->ₗ⁅R,L⁆ Q) (m : M) (n : N) :
-    map f g (m otimesₜ n) = f m otimesₜ g n :=
+nonrec theorem map_tmul (f : M →ₗ⁅R,L⁆ P) (g : N →ₗ⁅R,L⁆ Q) (m : M) (n : N) :
+    map f g (m ⊗ₜ n) = f m ⊗ₜ g n :=
   map_tmul _ _ _ _
 
-/--
-Definition of `mapIncl` / `mapIncl` 的定义
+/-- Given Lie submodules `M' ⊆ M` and `N' ⊆ N`, this is the natural map: `M' ⊗ N' → M ⊗ N`. -/
+/-
+**TensorProduct.LieModule.mapIncl** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct.LieMo
+dule`。
+形式化陈述：mapIncl (M' : LieSubmodule R L M) (N' : LieSubmodule R L N) : M' otimes[R]
+ N' ->ₗ⁅R,L⁆ M otimes[R] N
+参数：M' : LieSubmodule R L M；N' : LieSubmodule R L N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 
-English:
-definition mapIncl
-  signature: (M' : LieSubmodule R L M) (N' : LieSubmodule R L N)
-  body: map M'.incl N'.incl
-
-@[simp]
-
-中文:
-定义 mapIncl
-  签名: (M' : Lie子模 R L M) (N' : Lie子模 R L N)
-  定义体: map M'.incl N'.incl
-
-@[simp]
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_eq, eq_comm, eq_iff, fromLocalizedModule, fromLocalizedModule.inj, mk_eq, simp_rw
+--- 原说明 ---
+Given Lie submodules `M' ⊆ M` and `N' ⊆ N`, this is the natural map: `M' ⊗ N' → 
+M ⊗ N`.
 -/
-def mapIncl (M' : LieSubmodule R L M) (N' : LieSubmodule R L N) : M' otimes[R] N' ->ₗ⁅R,L⁆ M otimes[R] N :=
+def mapIncl (M' : LieSubmodule R L M) (N' : LieSubmodule R L N) : M' ⊗[R] N' →ₗ⁅R,L⁆ M ⊗[R] N :=
   map M'.incl N'.incl
 
 @[simp]
-/--
-theorem `mapIncl_def` / 定理 `mapIncl_def`
-
-English:
-theorem mapIncl_def
-  given: (M' : LieSubmodule R L M) (N' : LieSubmodule R L N)
-  proof: rfl
-
-中文:
-定理 mapIncl_def
-  条件: (M' : Lie子模 R L M) (N' : Lie子模 R L N)
-  证明: rfl
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_neg, map_neg, mk_neg
+/-
+**TensorProduct.LieModule.mapIncl_def** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct.L
+ieModule`。
+形式化陈述：mapIncl_def (M' : LieSubmodule R L M) (N' : LieSubmodule R L N) : mapIncl 
+M' N' = map M'.incl N'.incl
+参数：M' : LieSubmodule R L M；N' : LieSubmodule R L N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
 theorem mapIncl_def (M' : LieSubmodule R L M) (N' : LieSubmodule R L N) :
     mapIncl M' N' = map M'.incl N'.incl :=
@@ -419,57 +348,48 @@ variable (R) (L : Type v) (M : Type w)
 variable [LieRing L] [LieAlgebra R L]
 variable [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M]
 
-/--
-Definition of `toModuleHom` / `toModuleHom` 的定义
+/-- The action of the Lie algebra on one of its modules, regarded as a morphism of Lie modules. -/
+/-
+**LieModule.toModuleHom** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：toModuleHom : L otimes[R] M ->ₗ⁅R,L⁆ M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toModuleHom
-  signature: : L otimes[R] M ->ₗ⁅R,L⁆ M
-  body: TensorProduct.LieModule.liftLie R L L M M
-    { (toEnd R L M : L ->ₗ[R] M ->ₗ[R] M) with
-      map_lie' := fun {x m} => by ext n; simp [LieRing.of_associative_ring_bracket] }
-
-@[simp]
-
-中文:
-定义 toModuleHom
-  签名: : L otimes[R] M ->ₗ⁅R,L⁆ M
-  定义体: TensorProduct.LieModule.liftLie R L L M M
-    { (toEnd R L M : L ->ₗ[R] M ->ₗ[R] M) with
-      map_lie' := fun {x m} => by ext n; simp [LieRing.of_associative_ring_bracket] }
-
-@[simp]
-
-Depends on / 依赖: LieModule, LieRing, LieRing.of_associative_ring_bracket, TensorProduct, TensorProduct.LieModule.liftLie, _add, _neg, liftLie, map_lie, of_associative_ring_bracket, sub_eq_add_neg
+--- 原说明 ---
+The action of the Lie algebra on one of its modules, regarded as a morphism of L
+ie modules.
 -/
-def toModuleHom : L otimes[R] M ->ₗ⁅R,L⁆ M :=
+def toModuleHom : L ⊗[R] M →ₗ⁅R,L⁆ M :=
   TensorProduct.LieModule.liftLie R L L M M
-    { (toEnd R L M : L ->ₗ[R] M ->ₗ[R] M) with
+    { (toEnd R L M : L →ₗ[R] M →ₗ[R] M) with
       map_lie' := fun {x m} => by ext n; simp [LieRing.of_associative_ring_bracket] }
 
 @[simp]
-/--
-theorem `toModuleHom_apply` / 定理 `toModuleHom_apply`
-
-English:
-theorem toModuleHom_apply
-  given: (x : L) (m : M)
-  statement: toModuleHom R L M (x otimesₜ m) = ⁅x, m⁆
-  proof: by
-  simp only [toModuleHom, TensorProduct.LieModule.liftLie_apply, LieModuleHom.coe_mk,
-    LieHom.coe_toLinearMap, toEnd_apply_apply]
-
-中文:
-定理 toModuleHom_apply
-  条件: (x : L) (m : M)
-  结论: toModuleHom R L M (x otimesₜ m) = ⁅x, m⁆
-  证明: by
-  simp only [toModuleHom, TensorProduct.LieModule.liftLie_apply, LieModuleHom.coe_mk,
-    LieHom.coe_toLinearMap, toEnd_apply_apply]
-
-Depends on / 依赖: LieHom, LieHom.coe_toLinearMap, LieModule, LieModuleHom, LieModuleHom.coe_mk, TensorProduct, TensorProduct.LieModule.liftLie_apply, _add_mk, _neg, coe_mk, coe_toLinearMap, liftLie_apply, smul_neg, sub_eq_add_neg, toEnd_apply_apply, toModuleHom
+/-
+**LieModule.toModuleHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：toModuleHom_apply (x : L) (m : M) : toModuleHom R L M (x otimesₜ m) = ⁅x, 
+m⁆
+参数：x : L；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorProduct.LieModule.liftLie_apply`：liftLie_apply (f : M ->ₗ⁅R,L⁆ N -
+>ₗ[R] P) (m : M) (n : N) : liftLie R L M N P f (m otimesₜ n) = f m n
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LieModuleHom.coe_mk`：coe_mk (f : M ->ₗ[R] N) (h) : ((⟨f, h⟩ : M ->ₗ⁅R,L⁆
+ N) : M -> N) = f
+· 使用定理 `LieModule.toEnd_apply_apply`：∀ (R : Type u) (L : Type v) (M : Type w) [i
+nst : CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : Add
+CommGroup M] [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toModuleHom_apply (x : L) (m : M) : toModuleHom R L M (x otimesₜ m) = ⁅x, m⁆ := by
+theorem toModuleHom_apply (x : L) (m : M) : toModuleHom R L M (x ⊗ₜ m) = ⁅x, m⁆ := by
   simp only [toModuleHom, TensorProduct.LieModule.liftLie_apply, LieModuleHom.coe_mk,
     LieHom.coe_toLinearMap, toEnd_apply_apply]
 
@@ -488,38 +408,77 @@ variable [LieRing L] [LieAlgebra R L]
 variable [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M]
 variable (I : LieIdeal R L) (N : LieSubmodule R L M)
 
-/--
-theorem `lieIdeal_oper_eq_tensor_map_range` / 定理 `lieIdeal_oper_eq_tensor_map_range`
+/-- A useful alternative characterisation of Lie ideal operations on Lie submodules.
 
-English:
-theorem lieIdeal_oper_eq_tensor_map_range
-  proof: by
-  rw [← toSubmodule_inj]; rw [lieIdeal_oper_eq_linear_span]; rw [LieModuleHom.toSubmodule_range]; rw [LieModuleHom.toLinearMap_comp]; rw [LinearMap.range_comp]; rw [mapIncl_def]; rw [toLinearMap_map]; rw [TensorProduct.range_map_eq_span_tmul]; rw [Submodule.map_span]
-  congr; ext m; constructor
-  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x otimesₜ n; constructor
-    · use ⟨x, hx⟩, ⟨n, hn⟩; rfl
-    · simp
-  · rintro ⟨t, ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩, h⟩; rw [← h]; use ⟨x, hx⟩, ⟨n, hn⟩; rfl
+Given a Lie ideal `I ⊆ L` and a Lie submodule `N ⊆ M`, by tensoring the inclusion maps and then
+applying the action of `L` on `M`, we obtain morphism of Lie modules `f : I ⊗ N → L ⊗ M → M`.
 
-中文:
-定理 lieIdeal_oper_eq_tensor_map_range
-  证明: by
-  rw [← toSubmodule_inj]; rw [lieIdeal_oper_eq_linear_span]; rw [LieModuleHom.toSubmodule_range]; rw [LieModuleHom.toLinearMap_comp]; rw [LinearMap.range_comp]; rw [mapIncl_def]; rw [toLinearMap_map]; rw [TensorProduct.range_map_eq_span_tmul]; rw [Submodule.map_span]
-  congr; ext m; constructor
-  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x otimesₜ n; constructor
-    · use ⟨x, hx⟩, ⟨n, hn⟩; rfl
-    · simp
-  · rintro ⟨t, ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩, h⟩; rw [← h]; use ⟨x, hx⟩, ⟨n, hn⟩; rfl
+This lemma states that `⁅I, N⁆ = range f`. -/
+/-
+**LieSubmodule.lieIdeal_oper_eq_tensor_map_range** 是 Mathlib 中的一个定理，位于命名空间 `LieS
+ubmodule`。
+形式化陈述：lieIdeal_oper_eq_tensor_map_range : ⁅I, N⁆ = ((toModuleHom R L M).comp (ma
+pIncl I N : I otimes[R] N ->ₗ⁅R,L⁆ L otimes[R] M)).range
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubmodule.toSubmodule_inj`：toSubmodule_inj : (N : Submodule R M) = (N
+' : Submodule R M) ↔ N = N'
+· 使用定理 `LieSubmodule.lieIdeal_oper_eq_linear_span`：lieIdeal_oper_eq_linear_span 
+[LieModule R L M] : (↑⁅I, N⁆ : Submodule R M) = Submodule.span R { ⁅(x : L), (n 
+: M)⁆ | (x : I) (n : N) }
+· 使用定理 `LieModuleHom.toSubmodule_range`：toSubmodule_range : f.range = LinearMap.
+range (f : M ->ₗ[R] N)
+· 使用定理 `LieModuleHom.toLinearMap_comp`：toLinearMap_comp (f : N ->ₗ⁅R,L⁆ P) (g : 
+M ->ₗ⁅R,L⁆ N) : (f.comp g : M ->ₗ[R] P) = (f : N ->ₗ[R] P).comp (g : M ->ₗ[R] N)
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `TensorProduct.LieModule.mapIncl_def`：mapIncl_def (M' : LieSubmodule R L 
+M) (N' : LieSubmodule R L N) : mapIncl M' N' = map M'.incl N'.incl
+· 使用定理 `TensorProduct.LieModule.toLinearMap_map`：toLinearMap_map (f : M ->ₗ⁅R,L⁆
+ P) (g : N ->ₗ⁅R,L⁆ Q) : (map f g : M otimes[R] N ->ₗ[R] P otimes[R] Q) = Tensor
+Product.map (f : M ->ₗ[R] P) …
+· 使用定理 `TensorProduct.range_map_eq_span_tmul`：range_map_eq_span_tmul (f : M ->ₗ[
+R] P) (g : N ->ₗ[R] Q) : range (map f g) = Submodule.span R { t | exists m n, f 
+m otimesₜ g n = t }
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LieModule.toModuleHom_apply`：toModuleHom_apply (x : L) (m : M) : toModul
+eHom R L M (x otimesₜ m) = ⁅x, m⁆
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: LieModuleHom, LieModuleHom.toLinearMap_comp, LieModuleHom.toSubmodule_range, LinearMap, LinearMap.range_comp, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submodule, Submodule.map_span, Submonoid, Submonoid.coe_mul, Submonoid.smul_def, TensorProduct, TensorProduct.range_map_eq_span_tmul, _cancel, _smul, algebraMap_isUnit_inv_apply_eq_iff, coe_mul, lieIdeal_oper_eq_linear_span, mapIncl_def
+--- 原说明 ---
+A useful alternative characterisation of Lie ideal operations on Lie submodules.
+
+Given a Lie ideal `I ⊆ L` and a Lie submodule `N ⊆ M`, by tensoring the inclusio
+n maps and then
+applying the action of `L` on `M`, we obtain morphism of Lie modules `f : I ⊗ N 
+→ L ⊗ M → M`.
+
+This lemma states that `⁅I, N⁆ = range f`.
 -/
 theorem lieIdeal_oper_eq_tensor_map_range :
-    ⁅I, N⁆ = ((toModuleHom R L M).comp (mapIncl I N : I otimes[R] N ->ₗ⁅R,L⁆ L otimes[R] M)).range := by
-  rw [← toSubmodule_inj]; rw [lieIdeal_oper_eq_linear_span]; rw [LieModuleHom.toSubmodule_range]; rw [LieModuleHom.toLinearMap_comp]; rw [LinearMap.range_comp]; rw [mapIncl_def]; rw [toLinearMap_map]; rw [TensorProduct.range_map_eq_span_tmul]; rw [Submodule.map_span]
+    ⁅I, N⁆ = ((toModuleHom R L M).comp (mapIncl I N : I ⊗[R] N →ₗ⁅R,L⁆ L ⊗[R] M)).range := by
+  rw [← toSubmodule_inj, lieIdeal_oper_eq_linear_span, LieModuleHom.toSubmodule_range,
+    LieModuleHom.toLinearMap_comp, LinearMap.range_comp, mapIncl_def, toLinearMap_map,
+    TensorProduct.range_map_eq_span_tmul, Submodule.map_span]
   congr; ext m; constructor
-  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x otimesₜ n; constructor
+  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x ⊗ₜ n; constructor
     · use ⟨x, hx⟩, ⟨n, hn⟩; rfl
     · simp
   · rintro ⟨t, ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩, h⟩; rw [← h]; use ⟨x, hx⟩, ⟨n, hn⟩; rfl
 
 end LieSubmodule
+

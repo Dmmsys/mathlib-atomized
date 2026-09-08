@@ -42,7 +42,7 @@ open scoped AlgebraicGeometry
 
 variable {C : Type u} [Category.{v} C]
 variable {X Y : TopCat.{w}} (f : X ⟶ Y)
-variable ⦃ι : Type w⦄ {U : ι -> Opens Y}
+variable ⦃ι : Type w⦄ {U : ι → Opens Y}
 
 namespace TopCat
 
@@ -50,206 +50,176 @@ namespace Sheaf
 
 open Presheaf
 
-/--
-theorem `pushforward_sheaf_of_sheaf` / 定理 `pushforward_sheaf_of_sheaf`
+/-- The pushforward of a sheaf (by a continuous map) is a sheaf.
+-/
+/-
+**TopCat.Sheaf.pushforward_sheaf_of_sheaf** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Shea
+f`。
+形式化陈述：pushforward_sheaf_of_sheaf {F : X.Presheaf C} (h : F.IsSheaf) : (f _* F).I
+sSheaf
+参数：h : F.IsSheaf。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.op_comp_isSheaf`：op_comp_isSheaf [Functor.IsConti
+nuous F J K] (G : Sheaf K A) : Presheaf.IsSheaf J (F.op ⋙ G.obj)
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
 
-English:
-theorem pushforward_sheaf_of_sheaf
-  given: {F : X.Presheaf C} (h : F.IsSheaf)
-  statement: (f _* F).IsSheaf
-  proof: (Opens.map f).op_comp_isSheaf _ _ ⟨_, h⟩
-
-中文:
-定理 pushforward_sheaf_of_sheaf
-  条件: {F : X.预层 C} (h : F.是层)
-  结论: (f _* F).是层
-  证明: (Opens.map f).op_comp_isSheaf _ _ ⟨_, h⟩
-
-Depends on / 依赖: Opens.map, op_comp_isSheaf
+--- 原说明 ---
+The pushforward of a sheaf (by a continuous map) is a sheaf.
 -/
 theorem pushforward_sheaf_of_sheaf {F : X.Presheaf C} (h : F.IsSheaf) : (f _* F).IsSheaf :=
   (Opens.map f).op_comp_isSheaf _ _ ⟨_, h⟩
 
 variable (C)
 
-/--
-Definition of `pushforward` / `pushforward` 的定义
+/-- The pushforward functor.
+-/
+/-
+**TopCat.Sheaf.pushforward** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：pushforward (f : X ⟶ Y) : X.Sheaf C ⥤ Y.Sheaf C
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
 
-English:
-definition pushforward
-  signature: (f : X ⟶ Y)
-  body: (Opens.map f).sheafPushforwardContinuous _ _ _
-
-中文:
-定义 pushforward
-  签名: (f : X ⟶ Y)
-  定义体: (Opens.map f).sheafPushforwardContinuous _ _ _
-
-Depends on / 依赖: Opens.map, sheafPushforwardContinuous
+--- 原说明 ---
+The pushforward functor.
 -/
 def pushforward (f : X ⟶ Y) : X.Sheaf C ⥤ Y.Sheaf C :=
   (Opens.map f).sheafPushforwardContinuous _ _ _
-
-/--
-lemma `pushforward_forget` / 引理 `pushforward_forget`
-
-English:
-lemma pushforward_forget
-  given: (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 pushforward_forget
-  条件: (f : X ⟶ Y)
-  证明: rfl
+/-
+**TopCat.Sheaf.pushforward_forget** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：pushforward_forget (f : X ⟶ Y) : pushforward C f ⋙ forget C Y = forget C X
+ ⋙ Presheaf.pushforward C f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pushforward_forget (f : X ⟶ Y) :
     pushforward C f ⋙ forget C Y = forget C X ⋙ Presheaf.pushforward C f := rfl
 
 /--
-Definition of `pushforwardForgetIso` / `pushforwardForgetIso` 的定义
+Pushforward of sheaves is isomorphic (actually definitionally equal) to pushforward of presheaves.
+-/
+/-
+**TopCat.Sheaf.pushforwardForgetIso** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：pushforwardForgetIso (f : X ⟶ Y) : pushforward C f ⋙ forget C Y ≅ forget C
+ X ⋙ Presheaf.pushforward C f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardForgetIso
-  signature: (f : X ⟶ Y)
-  body: Iso.refl _
-
-中文:
-定义 pushforwardForgetIso
-  签名: (f : X ⟶ Y)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Pushforward of sheaves is isomorphic (actually definitionally equal) to pushforw
+ard of presheaves.
 -/
 def pushforwardForgetIso (f : X ⟶ Y) :
     pushforward C f ⋙ forget C Y ≅ forget C X ⋙ Presheaf.pushforward C f := Iso.refl _
 
 variable {C}
-
-/--
-lemma `pushforward_obj_val` / 引理 `pushforward_obj_val`
-
-English:
-lemma pushforward_obj_val
-  given: (f : X ⟶ Y) (F : X.Sheaf C)
-  proof: rfl
-
-中文:
-引理 pushforward_obj_val
-  条件: (f : X ⟶ Y) (F : X.层 C)
-  证明: rfl
+/-
+**TopCat.Sheaf.pushforward_obj_val** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : TopCat} (f
+ : X ⟶ Y) (F : TopCat.Sheaf C X),   ((TopCat.Sheaf.pushforward C f).obj F).obj =
+ (TopCat.Presheaf.pushforward C f).obj F.obj
+参数：f : X ⟶ Y；F : TopCat.Sheaf C X；(TopCat.Sheaf.pushforward C f).obj F；TopCat.Pr
+esheaf.pushforward C f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforward_obj_val (f : X ⟶ Y) (F : X.Sheaf C) :
     ((pushforward C f).obj F).1 = f _* F.1 := rfl
-
-/--
-lemma `pushforward_map` / 引理 `pushforward_map`
-
-English:
-lemma pushforward_map
-  given: (f : X ⟶ Y) {F F' : X.Sheaf C} (α : F ⟶ F')
-  proof: rfl
-
-中文:
-引理 pushforward_map
-  条件: (f : X ⟶ Y) {F F' : X.层 C} (α : F ⟶ F')
-  证明: rfl
+/-
+**TopCat.Sheaf.pushforward_map** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : TopCat} (f
+ : X ⟶ Y) {F F' : TopCat.Sheaf C X}   (α : F ⟶ F'), ((TopCat.Sheaf.pushforward C
+ f).map α).hom = (TopCat.Presheaf.pushforward C f).map α.hom
+参数：f : X ⟶ Y；α : F ⟶ F'；(TopCat.Sheaf.pushforward C f).map α；TopCat.Presheaf.pus
+hforward C f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforward_map (f : X ⟶ Y) {F F' : X.Sheaf C} (α : F ⟶ F') :
     ((pushforward C f).map α).1 = (Presheaf.pushforward C f).map α.1 := rfl
 
-variable (A : Type*) [Category.{w} A] {FA : A -> A -> Type*} {CA : A -> Type w}
-variable [forall X Y, FunLike (FA X Y) (CA X) (CA Y)] [ConcreteCategory.{w} A FA] [HasColimits A]
+variable (A : Type*) [Category.{w} A] {FA : A → A → Type*} {CA : A → Type w}
+variable [∀ X Y, FunLike (FA X Y) (CA X) (CA Y)] [ConcreteCategory.{w} A FA] [HasColimits A]
 variable [HasLimits A] [PreservesLimits (CategoryTheory.forget A)]
 variable [PreservesFilteredColimits (CategoryTheory.forget A)]
 variable [(CategoryTheory.forget A).ReflectsIsomorphisms]
 
 /--
-Definition of `pullback` / `pullback` 的定义
+The pullback functor.
+-/
+/-
+**TopCat.Sheaf.pullback** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：pullback (f : X ⟶ Y) : Y.Sheaf A ⥤ X.Sheaf A
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
 
-English:
-definition pullback
-  signature: (f : X ⟶ Y)
-  body: (Opens.map f).sheafPullback _ _ _
-
-中文:
-定义 pullback
-  签名: (f : X ⟶ Y)
-  定义体: (Opens.map f).sheafPullback _ _ _
-
-Depends on / 依赖: Opens.map, sheafPullback
+--- 原说明 ---
+The pullback functor.
 -/
 def pullback (f : X ⟶ Y) : Y.Sheaf A ⥤ X.Sheaf A :=
   (Opens.map f).sheafPullback _ _ _
 
 /--
-Definition of `pullbackIso` / `pullbackIso` 的定义
+The pullback of a sheaf is isomorphic (actually definitionally equal) to the sheafification
+of the pullback as a presheaf.
+-/
+/-
+**TopCat.Sheaf.pullbackIso** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：pullbackIso (f : X ⟶ Y) : pullback A f ≅ forget A Y ⋙ Presheaf.pullback A 
+f ⋙ presheafToSheaf _ _
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
 
-English:
-definition pullbackIso
-  signature: (f : X ⟶ Y)
-  body: Functor.sheafPullbackConstruction.sheafPullbackIso _ _ _ _
-
-中文:
-定义 pullbackIso
-  签名: (f : X ⟶ Y)
-  定义体: Functor.sheafPullbackConstruction.sheafPullbackIso _ _ _ _
-
-Depends on / 依赖: Functor, Functor.sheafPullbackConstruction.sheafPullbackIso, sheafPullbackConstruction, sheafPullbackIso
+--- 原说明 ---
+The pullback of a sheaf is isomorphic (actually definitionally equal) to the she
+afification
+of the pullback as a presheaf.
 -/
 def pullbackIso (f : X ⟶ Y) :
     pullback A f ≅ forget A Y ⋙ Presheaf.pullback A f ⋙ presheafToSheaf _ _ :=
   Functor.sheafPullbackConstruction.sheafPullbackIso _ _ _ _
 
-/--
-Definition of `pullbackPushforwardAdjunction` / `pullbackPushforwardAdjunction` 的定义
+/-- The adjunction between pullback and pushforward for sheaves on topological spaces. -/
+/-
+**TopCat.Sheaf.pullbackPushforwardAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.S
+heaf`。
+形式化陈述：pullbackPushforwardAdjunction (f : X ⟶ Y) : pullback A f ⊣ pushforward A f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
 
-English:
-definition pullbackPushforwardAdjunction
-  signature: (f : X ⟶ Y)
-  body: (Opens.map f).sheafAdjunctionContinuous _ _ _
-
-中文:
-定义 pullbackPushforwardAdjunction
-  签名: (f : X ⟶ Y)
-  定义体: (Opens.map f).sheafAdjunctionContinuous _ _ _
-
-Depends on / 依赖: Opens.map, sheafAdjunctionContinuous
+--- 原说明 ---
+The adjunction between pullback and pushforward for sheaves on topological space
+s.
 -/
 def pullbackPushforwardAdjunction (f : X ⟶ Y) :
     pullback A f ⊣ pushforward A f :=
   (Opens.map f).sheafAdjunctionContinuous _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pullback A f).IsLeftAdjoint
-  body: (pullbackPushforwardAdjunction A f).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (pullback A f).是左伴随
-  定义体: (pullbackPushforwardAdjunction A f).isLeftAdjoint
-
-Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
+/-
+**TopCat.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pullback A f).IsLeftAdjoint := (pullbackPushforwardAdjunction A f).isLeftAdjoint
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward A f).IsRightAdjoint
-  body: (pullbackPushforwardAdjunction A f).isRightAdjoint
-
-中文:
-实例 :
-  签名: (pushforward A f).是右伴随
-  定义体: (pullbackPushforwardAdjunction A f).isRightAdjoint
-
-Depends on / 依赖: isRightAdjoint, pullbackPushforwardAdjunction
+/-
+**TopCat.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward A f).IsRightAdjoint := (pullbackPushforwardAdjunction A f).isRightAdjoint
 
@@ -265,28 +235,31 @@ variable (A : Type*) [Category.{w} A]
 variable {f : X ⟶ Y} (hf : IsOpenEmbedding f)
 
 /--
-Definition of `sheafPullback` / `sheafPullback` 的定义
+The "naive" sheaf pullback by an open embedding `f`: on the underlying presheaf, this is just
+composition by the functor `IsOpenMap.functor f` (sending an open `U` to `f '' U`).
+-/
+/-
+**Topology.IsOpenEmbedding.sheafPullback** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsO
+penEmbedding`。
+形式化陈述：sheafPullback : Y.Sheaf A ⥤ X.Sheaf A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsOpenEmbedding.functor_isContinuous`：Topology.IsOpenEmbedding.
+functor_isContinuous (h : IsOpenEmbedding f) : h.functor.IsContinuous (Opens.gro
+thendieckTopology X) (Opens.grothen…
 
-English:
-definition sheafPullback
-  signature: : Y.Sheaf A ⥤ X.Sheaf A
-  body: haveI := Topology.IsOpenEmbedding.functor_isContinuous hf
-  hf.functor.sheafPushforwardContinuous _ _ _
-
-中文:
-定义 sheafPullback
-  签名: : Y.层 A ⥤ X.层 A
-  定义体: haveI := Topology.IsOpenEmbedding.functor_isContinuous hf
-  hf.functor.sheafPushforwardContinuous _ _ _
-
-Depends on / 依赖: IsOpenEmbedding, Topology, Topology.IsOpenEmbedding.functor_isContinuous, functor, functor_isContinuous, hf.functor.sheafPushforwardContinuous, sheafPushforwardContinuous
+--- 原说明 ---
+The "naive" sheaf pullback by an open embedding `f`: on the underlying presheaf,
+ this is just
+composition by the functor `IsOpenMap.functor f` (sending an open `U` to `f '' U
+`).
 -/
 def sheafPullback : Y.Sheaf A ⥤ X.Sheaf A :=
   haveI := Topology.IsOpenEmbedding.functor_isContinuous hf
   hf.functor.sheafPushforwardContinuous _ _ _
 
-variable {FA : A -> A -> Type*} {CA : A -> Type w}
-variable [forall X Y, FunLike (FA X Y) (CA X) (CA Y)] [ConcreteCategory.{w} A FA] [HasColimits A]
+variable {FA : A → A → Type*} {CA : A → Type w}
+variable [∀ X Y, FunLike (FA X Y) (CA X) (CA Y)] [ConcreteCategory.{w} A FA] [HasColimits A]
 variable [HasLimits A] [PreservesLimits (CategoryTheory.forget A)]
 variable [PreservesFilteredColimits (CategoryTheory.forget A)]
 variable [(CategoryTheory.forget A).ReflectsIsomorphisms]
@@ -294,62 +267,40 @@ variable [(CategoryTheory.forget A).ReflectsIsomorphisms]
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `sheafPullbackIso` / `sheafPullbackIso` 的定义
+The pullback of a sheaf by an open embedding `f` is isomorphic to its naive pullback
+`IsOpenEmbedding.sheafPullback`, i.e. to the composition by the functor `IsOpenMap.functor f`.
+Also, this is an isomorphism of functors.
+-/
+/-
+**Topology.IsOpenEmbedding.sheafPullbackIso** 是 Mathlib 中的一个定义，位于命名空间 `Topology.
+IsOpenEmbedding`。
+形式化陈述：sheafPullbackIso : Sheaf.pullback A f ≅ hf.sheafPullback A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafPullbackIso
-  signature: : Sheaf.pullback A f ≅ hf.sheafPullback A
-  body: by
-  refine Sheaf.pullbackIso A f ≪≫ NatIso.ofComponents (fun F => ?_) (fun u => ?_)
-  · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso
-      (hf.isOpenMap.pullbackIso.app _) ≪≫
-      (fullyFaithfulSheafToPresheaf (Opens.grothendieckTopology X) A).preimageIso
-      (isoSheafify (Opens.grothendieckTopology X)
-      (TopCat.Presheaf.isSheaf_of_isOpenEmbedding hf F.2)).symm
-  · dsimp
-    rw [← Functor.map_comp_assoc]; rw [hf.isOpenMap.pullbackIso.hom.naturality]; rw [Sheaf.hom_ext_iff]
-    simp only [Functor.whiskeringLeft_obj_obj, Functor.whiskeringLeft_obj_map, Functor.map_comp,
-      isoSheafify_inv, Category.assoc]
-    rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]
-    dsimp [sheafPullback, Functor.sheafPushforwardContinuous, Sheaf.forget]
-    simp only [sheafifyMap_sheafifyLift, Category.comp_id, sheafifyMap_sheafifyLift_assoc]
-    rw [CategoryTheory.sheafifyLift_comp]
-
-中文:
-定义 sheafPullbackIso
-  签名: : 层.pullback A f ≅ hf.sheafPullback A
-  定义体: by
-  refine Sheaf.pullbackIso A f ≪≫ NatIso.ofComponents (fun F => ?_) (fun u => ?_)
-  · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso
-      (hf.isOpenMap.pullbackIso.app _) ≪≫
-      (fullyFaithfulSheafToPresheaf (Opens.grothendieckTopology X) A).preimageIso
-      (isoSheafify (Opens.grothendieckTopology X)
-      (TopCat.Presheaf.isSheaf_of_isOpenEmbedding hf F.2)).symm
-  · dsimp
-    rw [← Functor.map_comp_assoc]; rw [hf.isOpenMap.pullbackIso.hom.naturality]; rw [Sheaf.hom_ext_iff]
-    simp only [Functor.whiskeringLeft_obj_obj, Functor.whiskeringLeft_obj_map, Functor.map_comp,
-      isoSheafify_inv, Category.assoc]
-    rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]
-    dsimp [sheafPullback, Functor.sheafPushforwardContinuous, Sheaf.forget]
-    simp only [sheafifyMap_sheafifyLift, Category.comp_id, sheafifyMap_sheafifyLift_assoc]
-    rw [CategoryTheory.sheafifyLift_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, Functor.whiskerin, NatIso, NatIso.ofComponents, Opens.grothendieckTopology, Presheaf, Sheaf.hom_ext_iff, Sheaf.pullbackIso, TopCat, TopCat.Presheaf.isSheaf_of_isOpenEmbedding, fullyFaithfulSheafToPresheaf, grothendieckTopology, hf.isOpenMap.pullbackIso.app, hf.isOpenMap.pullbackIso.hom.naturality, hom_ext_iff, isOpenMap, isSheaf_of_isOpenEmbedding, isoSheafify, mapIso
+--- 原说明 ---
+The pullback of a sheaf by an open embedding `f` is isomorphic to its naive pull
+back
+`IsOpenEmbedding.sheafPullback`, i.e. to the composition by the functor `IsOpenM
+ap.functor f`.
+Also, this is an isomorphism of functors.
 -/
 def sheafPullbackIso : Sheaf.pullback A f ≅ hf.sheafPullback A := by
-  refine Sheaf.pullbackIso A f ≪≫ NatIso.ofComponents (fun F => ?_) (fun u => ?_)
+  refine Sheaf.pullbackIso A f ≪≫ NatIso.ofComponents (fun F ↦ ?_) (fun u ↦ ?_)
   · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso
       (hf.isOpenMap.pullbackIso.app _) ≪≫
       (fullyFaithfulSheafToPresheaf (Opens.grothendieckTopology X) A).preimageIso
       (isoSheafify (Opens.grothendieckTopology X)
       (TopCat.Presheaf.isSheaf_of_isOpenEmbedding hf F.2)).symm
   · dsimp
-    rw [← Functor.map_comp_assoc]; rw [hf.isOpenMap.pullbackIso.hom.naturality]; rw [Sheaf.hom_ext_iff]
+    rw [← Functor.map_comp_assoc, hf.isOpenMap.pullbackIso.hom.naturality, Sheaf.hom_ext_iff]
     simp only [Functor.whiskeringLeft_obj_obj, Functor.whiskeringLeft_obj_map, Functor.map_comp,
       isoSheafify_inv, Category.assoc]
-    rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]
+    rw [ObjectProperty.FullSubcategory.comp_hom, ObjectProperty.FullSubcategory.comp_hom,
+      ObjectProperty.FullSubcategory.comp_hom, ObjectProperty.FullSubcategory.comp_hom]
     dsimp [sheafPullback, Functor.sheafPushforwardContinuous, Sheaf.forget]
     simp only [sheafifyMap_sheafifyLift, Category.comp_id, sheafifyMap_sheafifyLift_assoc]
     rw [CategoryTheory.sheafifyLift_comp]
 
 end Topology.IsOpenEmbedding
+

@@ -59,20 +59,19 @@ that involve other properties, e.g. `IsCompact.inter_left`
 
 open Lean Parser Tactic
 
-/--
-Definition of `Mathlib.grindAttrs` / `Mathlib.grindAttrs` 的定义
+/-- A hash set of the grind attributes in Mathlib.
 
-English:
-definition Mathlib.grindAttrs
-  signature: : Std.HashSet Name
-  body: {`compactness, `closedness}
+When adding a new grind attribute, manually add it to this hash set as well. -/
+/-
+**Mathlib.grindAttrs** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Mathlib.grindAttrs : Std.HashSet Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Mathlib.grindAttrs
-  签名: : Std.HashSet Name
-  定义体: {`compactness, `closedness}
+--- 原说明 ---
+A hash set of the grind attributes in Mathlib.
 
-Depends on / 依赖: closedness, compactness
+When adding a new grind attribute, manually add it to this hash set as well.
 -/
 def Mathlib.grindAttrs : Std.HashSet Name :=
  {`compactness, `closedness}
@@ -120,3 +119,4 @@ macro (name := closednessTac) "closedness" config:optConfig : tactic =>
 @[inherit_doc closednessTac]
 macro "closedness?" config:optConfig : tactic =>
     `(tactic|grind? $config only [$(mkIdent `closedness):term])
+

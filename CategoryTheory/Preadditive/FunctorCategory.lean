@@ -24,71 +24,30 @@ open CategoryTheory.Limits Preadditive
 
 variable {C D : Type*} [Category* C] [Category* D] [Preadditive D]
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : C ⥤ D} : Zero (F ⟶ G) where
   zero := { app := fun _ => 0 }
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : C ⥤ D} : Add (F ⟶ G) where
   add α β := { app := fun X => α.app X + β.app X }
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : C ⥤ D} : Neg (F ⟶ G) where
   neg α := { app := fun X => -α.app X }
-
-/--
-Instance `functorCategoryPreadditive` / 实例 `functorCategoryPreadditive`
-
-English:
-instance functorCategoryPreadditive
-  signature: : Preadditive (C ⥤ D) where
-  body: { nsmul n α :=
-        { app := n • α.app
-          naturality X Y f := by
-            simp only [Pi.smul_apply, comp_nsmul, NatTrans.naturality, nsmul_comp] }
-      zsmul n α :=
-        { app := n • α.app
-          naturality X Y f := by
-            simp only [Pi.smul_apply, comp_zsmul, NatTrans.naturality, zsmul_comp] }
-      sub α β := { app := fun X => α.app X - β.app X }
-add_assoc _ _ _ := NatTrans.ext add_assoc _ _ _
-zero_add _ := NatTrans.ext zero_add _
-add_zero _ := NatTrans.ext add_zero _
-nsmul_zero _ := NatTrans.ext zero_nsmul _
-nsmul_succ _ _ := NatTrans.ext succ_nsmul _ _
-sub_eq_add_neg _ _ := NatTrans.ext sub_eq_add_neg _ _
-zsmul_zero' _ := NatTrans.ext zero_zsmul _
-zsmul_succ' _ _ := NatTrans.ext SubNegMonoid.zsmul_succ' _ _
-zsmul_neg' _ _ := NatTrans.ext SubNegMonoid.zsmul_neg' _ _
-neg_add_cancel _ := NatTrans.ext neg_add_cancel _
-add_comm _ _ := NatTrans.ext add_comm _ _ }
-add_comp _ _ _ _ _ _ := NatTrans.ext funext fun _ => add_comp _ _ _ _ _ _
-comp_add _ _ _ _ _ _ := NatTrans.ext funext fun _ => comp_add _ _ _ _ _ _
-
-中文:
-实例 functorCategoryPreadditive
-  签名: : 预加性 (C ⥤ D) where
-  定义体: { nsmul n α :=
-        { app := n • α.app
-          naturality X Y f := by
-            simp only [Pi.smul_apply, comp_nsmul, NatTrans.naturality, nsmul_comp] }
-      zsmul n α :=
-        { app := n • α.app
-          naturality X Y f := by
-            simp only [Pi.smul_apply, comp_zsmul, NatTrans.naturality, zsmul_comp] }
-      sub α β := { app := fun X => α.app X - β.app X }
-add_assoc _ _ _ := NatTrans.ext add_assoc _ _ _
-zero_add _ := NatTrans.ext zero_add _
-add_zero _ := NatTrans.ext add_zero _
-nsmul_zero _ := NatTrans.ext zero_nsmul _
-nsmul_succ _ _ := NatTrans.ext succ_nsmul _ _
-sub_eq_add_neg _ _ := NatTrans.ext sub_eq_add_neg _ _
-zsmul_zero' _ := NatTrans.ext zero_zsmul _
-zsmul_succ' _ _ := NatTrans.ext SubNegMonoid.zsmul_succ' _ _
-zsmul_neg' _ _ := NatTrans.ext SubNegMonoid.zsmul_neg' _ _
-neg_add_cancel _ := NatTrans.ext neg_add_cancel _
-add_comm _ _ := NatTrans.ext add_comm _ _ }
-add_comp _ _ _ _ _ _ := NatTrans.ext funext fun _ => add_comp _ _ _ _ _ _
-comp_add _ _ _ _ _ _ := NatTrans.ext funext fun _ => comp_add _ _ _ _ _ _
-
-Depends on / 依赖: NatTrans, NatTrans.ext, NatTrans.naturality, Pi.smul_apply, add_assoc, add_zero, comp_nsmul, comp_zsmul, naturality, nsmul_comp, nsmul_succ, nsmul_zero, smul_apply, zero_add, zero_nsmul, zsmul_comp
+/-
+**CategoryTheory.functorCategoryPreadditive** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory`。
+形式化陈述：functorCategoryPreadditive : Preadditive (C ⥤ D) where homGroup F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance functorCategoryPreadditive : Preadditive (C ⥤ D) where
   homGroup F G :=
@@ -101,19 +60,19 @@ instance functorCategoryPreadditive : Preadditive (C ⥤ D) where
           naturality X Y f := by
             simp only [Pi.smul_apply, comp_zsmul, NatTrans.naturality, zsmul_comp] }
       sub α β := { app := fun X => α.app X - β.app X }
-add_assoc _ _ _ := NatTrans.ext add_assoc _ _ _
-zero_add _ := NatTrans.ext zero_add _
-add_zero _ := NatTrans.ext add_zero _
-nsmul_zero _ := NatTrans.ext zero_nsmul _
-nsmul_succ _ _ := NatTrans.ext succ_nsmul _ _
-sub_eq_add_neg _ _ := NatTrans.ext sub_eq_add_neg _ _
-zsmul_zero' _ := NatTrans.ext zero_zsmul _
-zsmul_succ' _ _ := NatTrans.ext SubNegMonoid.zsmul_succ' _ _
-zsmul_neg' _ _ := NatTrans.ext SubNegMonoid.zsmul_neg' _ _
-neg_add_cancel _ := NatTrans.ext neg_add_cancel _
-add_comm _ _ := NatTrans.ext add_comm _ _ }
-add_comp _ _ _ _ _ _ := NatTrans.ext funext fun _ => add_comp _ _ _ _ _ _
-comp_add _ _ _ _ _ _ := NatTrans.ext funext fun _ => comp_add _ _ _ _ _ _
+      add_assoc _ _ _ := NatTrans.ext <| add_assoc _ _ _
+      zero_add _ := NatTrans.ext <| zero_add _
+      add_zero _ := NatTrans.ext <| add_zero _
+      nsmul_zero _ := NatTrans.ext <| zero_nsmul _
+      nsmul_succ _ _ := NatTrans.ext <| succ_nsmul _ _
+      sub_eq_add_neg _ _ := NatTrans.ext <| sub_eq_add_neg _ _
+      zsmul_zero' _ := NatTrans.ext <| zero_zsmul _
+      zsmul_succ' _ _ := NatTrans.ext <| SubNegMonoid.zsmul_succ' _ _
+      zsmul_neg' _ _ := NatTrans.ext <| SubNegMonoid.zsmul_neg' _ _
+      neg_add_cancel _ := NatTrans.ext <| neg_add_cancel _
+      add_comm _ _ := NatTrans.ext <| add_comm _ _ }
+  add_comp _ _ _ _ _ _ := NatTrans.ext <| funext fun _ ↦ add_comp _ _ _ _ _ _
+  comp_add _ _ _ _ _ _ := NatTrans.ext <| funext fun _ ↦ comp_add _ _ _ _ _ _
 
 namespace NatTrans
 
@@ -122,215 +81,137 @@ variable {F G : C ⥤ D}
 /-- Application of a natural transformation at a fixed object,
 as group homomorphism -/
 @[simps]
-/--
-Definition of `appHom` / `appHom` 的定义
+/-
+**CategoryTheory.NatTrans.appHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.NatTr
+ans`。
+形式化陈述：appHom (X : C) : (F ⟶ G) ->+ (F.obj X ⟶ G.obj X) where toFun α
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition appHom
-  signature: (X : C)
-  body: α.app X
-  map_zero' := rfl
-  map_add' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 appHom
-  签名: (X : C)
-  定义体: α.app X
-  map_zero' := rfl
-  map_add' _ _ := rfl
-
-@[simp]
+--- 原说明 ---
+Application of a natural transformation at a fixed object,
+as group homomorphism
 -/
-def appHom (X : C) : (F ⟶ G) ->+ (F.obj X ⟶ G.obj X) where
+def appHom (X : C) : (F ⟶ G) →+ (F.obj X ⟶ G.obj X) where
   toFun α := α.app X
   map_zero' := rfl
   map_add' _ _ := rfl
 
 @[simp]
-/--
-theorem `app_zero` / 定理 `app_zero`
-
-English:
-theorem app_zero
-  given: (X : C)
-  statement: (0 : F ⟶ G).app X = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_zero
-  条件: (X : C)
-  结论: (0 : F ⟶ G).app X = 0
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_zero** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Nat
+Trans`。
+形式化陈述：app_zero (X : C) : (0 : F ⟶ G).app X = 0
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem app_zero (X : C) : (0 : F ⟶ G).app X = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `app_add` / 定理 `app_add`
-
-English:
-theorem app_add
-  given: (X : C) (α β : F ⟶ G)
-  statement: (α + β).app X = α.app X + β.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_add
-  条件: (X : C) (α β : F ⟶ G)
-  结论: (α + β).app X = α.app X + β.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_add** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.NatT
+rans`。
+形式化陈述：app_add (X : C) (α β : F ⟶ G) : (α + β).app X = α.app X + β.app X
+参数：X : C；α β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem app_add (X : C) (α β : F ⟶ G) : (α + β).app X = α.app X + β.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_sub` / 定理 `app_sub`
-
-English:
-theorem app_sub
-  given: (X : C) (α β : F ⟶ G)
-  statement: (α - β).app X = α.app X - β.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_sub
-  条件: (X : C) (α β : F ⟶ G)
-  结论: (α - β).app X = α.app X - β.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_sub** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.NatT
+rans`。
+形式化陈述：app_sub (X : C) (α β : F ⟶ G) : (α - β).app X = α.app X - β.app X
+参数：X : C；α β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem app_sub (X : C) (α β : F ⟶ G) : (α - β).app X = α.app X - β.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_neg` / 定理 `app_neg`
-
-English:
-theorem app_neg
-  given: (X : C) (α : F ⟶ G)
-  statement: (-α).app X = -α.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_neg
-  条件: (X : C) (α : F ⟶ G)
-  结论: (-α).app X = -α.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_neg** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.NatT
+rans`。
+形式化陈述：app_neg (X : C) (α : F ⟶ G) : (-α).app X = -α.app X
+参数：X : C；α : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem app_neg (X : C) (α : F ⟶ G) : (-α).app X = -α.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_nsmul` / 定理 `app_nsmul`
-
-English:
-theorem app_nsmul
-  given: (X : C) (α : F ⟶ G) (n : Nat)
-  statement: (n • α).app X = n • α.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_nsmul
-  条件: (X : C) (α : F ⟶ G) (n : 自然数)
-  结论: (n • α).app X = n • α.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Na
+tTrans`。
+形式化陈述：app_nsmul (X : C) (α : F ⟶ G) (n : Nat) : (n • α).app X = n • α.app X
+参数：X : C；α : F ⟶ G；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem app_nsmul (X : C) (α : F ⟶ G) (n : Nat) : (n • α).app X = n • α.app X :=
+theorem app_nsmul (X : C) (α : F ⟶ G) (n : ℕ) : (n • α).app X = n • α.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_zsmul` / 定理 `app_zsmul`
-
-English:
-theorem app_zsmul
-  given: (X : C) (α : F ⟶ G) (n : Int)
-  statement: (n • α).app X = n • α.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_zsmul
-  条件: (X : C) (α : F ⟶ G) (n : 整数)
-  结论: (n • α).app X = n • α.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Na
+tTrans`。
+形式化陈述：app_zsmul (X : C) (α : F ⟶ G) (n : Int) : (n • α).app X = n • α.app X
+参数：X : C；α : F ⟶ G；n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem app_zsmul (X : C) (α : F ⟶ G) (n : Int) : (n • α).app X = n • α.app X :=
+theorem app_zsmul (X : C) (α : F ⟶ G) (n : ℤ) : (n • α).app X = n • α.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_units_zsmul` / 定理 `app_units_zsmul`
-
-English:
-theorem app_units_zsmul
-  given: (X : C) (α : F ⟶ G) (n : Intˣ)
-  statement: (n • α).app X = n • α.app X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_units_zsmul
-  条件: (X : C) (α : F ⟶ G) (n : 整数ˣ)
-  结论: (n • α).app X = n • α.app X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.NatTrans.app_units_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.NatTrans`。
+形式化陈述：app_units_zsmul (X : C) (α : F ⟶ G) (n : Intˣ) : (n • α).app X = n • α.app
+ X
+参数：X : C；α : F ⟶ G；n : Intˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem app_units_zsmul (X : C) (α : F ⟶ G) (n : Intˣ) : (n • α).app X = n • α.app X :=
+theorem app_units_zsmul (X : C) (α : F ⟶ G) (n : ℤˣ) : (n • α).app X = n • α.app X :=
   rfl
 
 @[simp]
-/--
-theorem `app_sum` / 定理 `app_sum`
-
-English:
-theorem app_sum
-  given: {ι : Type*} (s : Finset ι) (X : C) (α : ι -> (F ⟶ G))
-  proof: by
-  simp only [← appHom_apply, map_sum]
-
-中文:
-定理 app_sum
-  条件: {ι : 类型} (s : 有限集 ι) (X : C) (α : ι -> (F ⟶ G))
-  证明: by
-  simp only [← appHom_apply, map_sum]
-
-Depends on / 依赖: appHom_apply, map_sum
+/-
+**CategoryTheory.NatTrans.app_sum** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.NatT
+rans`。
+形式化陈述：app_sum {ι : Type*} (s : Finset ι) (X : C) (α : ι -> (F ⟶ G)) : (∑ i in s,
+ α i).app X = ∑ i in s, (α i).app X
+参数：s : Finset ι；X : C；α : ι -> (F ⟶ G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem app_sum {ι : Type*} (s : Finset ι) (X : C) (α : ι -> (F ⟶ G)) :
-    (∑ i in s, α i).app X = ∑ i in s, (α i).app X := by
+theorem app_sum {ι : Type*} (s : Finset ι) (X : C) (α : ι → (F ⟶ G)) :
+    (∑ i ∈ s, α i).app X = ∑ i ∈ s, (α i).app X := by
   simp only [← appHom_apply, map_sum]
 
 end NatTrans
 
 end CategoryTheory
+

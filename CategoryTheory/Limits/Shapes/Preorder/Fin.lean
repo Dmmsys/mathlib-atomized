@@ -27,40 +27,31 @@ open CategoryTheory Limits
 
 namespace Fin
 
-variable (n : Nat)
+variable (n : ℕ)
 
-/--
-Definition of `isInitialZero` / `isInitialZero` 的定义
+/-- `0` is an initial object in `Fin n` when `n ≠ 0`. -/
+/-
+**Fin.isInitialZero** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：isInitialZero [NeZero n] : IsInitial (0 : Fin n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialZero
-  signature: [NeZero n]
-  body: isInitialBot
-
-中文:
-定义 isInitialZero
-  签名: [NeZero n]
-  定义体: isInitialBot
-
-Depends on / 依赖: isInitialBot
+--- 原说明 ---
+`0` is an initial object in `Fin n` when `n ≠ 0`.
 -/
 def isInitialZero [NeZero n] : IsInitial (0 : Fin n) := isInitialBot
 
-/--
-Definition of `isTerminalLast` / `isTerminalLast` 的定义
+/-- `Fin.last n` is a terminal object in `Fin (n + 1)`. -/
+/-
+**Fin.isTerminalLast** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：isTerminalLast : IsTerminal (Fin.last n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalLast
-  signature: : IsTerminal (Fin.last n)
-  body: isTerminalTop
-
-中文:
-定义 isTerminalLast
-  签名: : 是终止 (有限集.last n)
-  定义体: isTerminalTop
-
-Depends on / 依赖: isTerminalTop
+--- 原说明 ---
+`Fin.last n` is a terminal object in `Fin (n + 1)`.
 -/
 def isTerminalLast : IsTerminal (Fin.last n) := isTerminalTop
 
 end Fin
+

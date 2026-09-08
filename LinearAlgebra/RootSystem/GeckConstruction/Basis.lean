@@ -40,100 +40,17 @@ variable {ι K M N : Type*} [Fintype ι] [DecidableEq ι] [Field K] [CharZero K]
 
 attribute [local instance 100] LieRing.ofAssociativeRing
 
-/--
-Definition of `basis` / `basis` 的定义
+/-- The Geck construction yields a basis of the Lie algebra it constructs. -/
+/-
+**RootPairing.GeckConstruction.basis** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Geck
+Construction`。
+形式化陈述：basis : LieAlgebra.Basis b.support (cartanSubalgebra' b) where A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-definition basis
-  signature: :
-  body: b.cartanMatrix
-  h i := ⟨h i, h_mem_lieAlgebra i⟩
-  e i := ⟨e i, e_mem_lieAlgebra i⟩
-  f i := ⟨f i, f_mem_lieAlgebra i⟩
-  cartan_eq_lieSpan := by
-    rw [cartanSubalgebra']; rw [cartanSubalgebra_eq_lieSpan]; rw [← LieSubalgebra.comap_lieSpan_range_eq]
-    rfl
-  nondegen := b.cartanMatrix_nondegenerate
-  linInd := by
-    apply LinearIndependent.of_comp (lieAlgebra b).subtype
-    exact linearIndependent_h b
-  sl2 i :=
-    let t := isSl2Triple i
-    { h_ne_zero := by simp [Subtype.ext_iff, t.h_ne_zero]
-      lie_e_f := by simp [Subtype.ext_iff, t.lie_e_f]
-      lie_h_e_nsmul := by simp [Subtype.ext_iff, t.lie_h_e_nsmul]
-      lie_h_f_nsmul := by simp [Subtype.ext_iff, t.lie_h_f_nsmul] }
-  lie_h_h i j := by simp [Subtype.ext_iff, lie_h_h]
-  lie_h_e i j := by simp [Subtype.ext_iff, lie_h_e]
-  lie_h_f i j := by simp [Subtype.ext_iff, lie_h_f]
-  lie_e_f_ne i j hij := by simp [Subtype.ext_iff, lie_e_f_ne hij]
-  span_ef := by
-    let h₀ (i : b.support) : lieAlgebra b := ⟨h i, h_mem_lieAlgebra i⟩
-    let e₀ (i : b.support) : lieAlgebra b := ⟨e i, e_mem_lieAlgebra i⟩
-    let f₀ (i : b.support) : lieAlgebra b := ⟨f i, f_mem_lieAlgebra i⟩
-    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) = ⊤
-    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) =
-        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ union range e₀ union range f₀) by
-      have hr : range h₀ union range e₀ union range f₀ = Subtype.val ⁻¹' (range h union range e union range f) := by
-        aesop
-      rw [this]; rw [hr]
-      exact LieSubalgebra.lieSpan_lieSpan_coe_preimage
-    simp only [union_assoc]
-    refine le_antisymm (LieSubalgebra.lieSpan_mono <| by simp) ?_
-    rw [LieSubalgebra.lieSpan_le]
-    refine union_subset ?_ LieSubalgebra.subset_lieSpan
-    rintro - ⟨i, rfl⟩
-    have hef : h₀ i = ⁅e₀ i, f₀ i⁆ := by ext1; simp [h₀, e₀, f₀, (isSl2Triple i).lie_e_f]
-    rw [hef]
-    apply LieSubalgebra.lie_mem <;>
-exact LieSubalgebra.subset_lieSpan by simp
-
-中文:
-定义 basis
-  签名: :
-  定义体: b.cartanMatrix
-  h i := ⟨h i, h_mem_lieAlgebra i⟩
-  e i := ⟨e i, e_mem_lieAlgebra i⟩
-  f i := ⟨f i, f_mem_lieAlgebra i⟩
-  cartan_eq_lieSpan := by
-    rw [cartanSubalgebra']; rw [cartanSubalgebra_eq_lieSpan]; rw [← LieSubalgebra.comap_lieSpan_range_eq]
-    rfl
-  nondegen := b.cartanMatrix_nondegenerate
-  linInd := by
-    apply LinearIndependent.of_comp (lieAlgebra b).subtype
-    exact linearIndependent_h b
-  sl2 i :=
-    let t := isSl2Triple i
-    { h_ne_zero := by simp [Subtype.ext_iff, t.h_ne_zero]
-      lie_e_f := by simp [Subtype.ext_iff, t.lie_e_f]
-      lie_h_e_nsmul := by simp [Subtype.ext_iff, t.lie_h_e_nsmul]
-      lie_h_f_nsmul := by simp [Subtype.ext_iff, t.lie_h_f_nsmul] }
-  lie_h_h i j := by simp [Subtype.ext_iff, lie_h_h]
-  lie_h_e i j := by simp [Subtype.ext_iff, lie_h_e]
-  lie_h_f i j := by simp [Subtype.ext_iff, lie_h_f]
-  lie_e_f_ne i j hij := by simp [Subtype.ext_iff, lie_e_f_ne hij]
-  span_ef := by
-    let h₀ (i : b.support) : lieAlgebra b := ⟨h i, h_mem_lieAlgebra i⟩
-    let e₀ (i : b.support) : lieAlgebra b := ⟨e i, e_mem_lieAlgebra i⟩
-    let f₀ (i : b.support) : lieAlgebra b := ⟨f i, f_mem_lieAlgebra i⟩
-    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) = ⊤
-    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) =
-        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ union range e₀ union range f₀) by
-      have hr : range h₀ union range e₀ union range f₀ = Subtype.val ⁻¹' (range h union range e union range f) := by
-        aesop
-      rw [this]; rw [hr]
-      exact LieSubalgebra.lieSpan_lieSpan_coe_preimage
-    simp only [union_assoc]
-    refine le_antisymm (LieSubalgebra.lieSpan_mono <| by simp) ?_
-    rw [LieSubalgebra.lieSpan_le]
-    refine union_subset ?_ LieSubalgebra.subset_lieSpan
-    rintro - ⟨i, rfl⟩
-    have hef : h₀ i = ⁅e₀ i, f₀ i⁆ := by ext1; simp [h₀, e₀, f₀, (isSl2Triple i).lie_e_f]
-    rw [hef]
-    apply LieSubalgebra.lie_mem <;>
-exact LieSubalgebra.subset_lieSpan by simp
-
-Depends on / 依赖: b.cartanMatrix, cartanMatrix
+--- 原说明 ---
+The Geck construction yields a basis of the Lie algebra it constructs.
 -/
 def basis :
     LieAlgebra.Basis b.support (cartanSubalgebra' b) where
@@ -142,7 +59,7 @@ def basis :
   e i := ⟨e i, e_mem_lieAlgebra i⟩
   f i := ⟨f i, f_mem_lieAlgebra i⟩
   cartan_eq_lieSpan := by
-    rw [cartanSubalgebra']; rw [cartanSubalgebra_eq_lieSpan]; rw [← LieSubalgebra.comap_lieSpan_range_eq]
+    rw [cartanSubalgebra', cartanSubalgebra_eq_lieSpan, ← LieSubalgebra.comap_lieSpan_range_eq]
     rfl
   nondegen := b.cartanMatrix_nondegenerate
   linInd := by
@@ -162,12 +79,12 @@ def basis :
     let h₀ (i : b.support) : lieAlgebra b := ⟨h i, h_mem_lieAlgebra i⟩
     let e₀ (i : b.support) : lieAlgebra b := ⟨e i, e_mem_lieAlgebra i⟩
     let f₀ (i : b.support) : lieAlgebra b := ⟨f i, f_mem_lieAlgebra i⟩
-    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) = ⊤
-    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) =
-        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ union range e₀ union range f₀) by
-      have hr : range h₀ union range e₀ union range f₀ = Subtype.val ⁻¹' (range h union range e union range f) := by
+    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ ∪ range f₀) = ⊤
+    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ ∪ range f₀) =
+        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ ∪ range e₀ ∪ range f₀) by
+      have hr : range h₀ ∪ range e₀ ∪ range f₀ = Subtype.val ⁻¹' (range h ∪ range e ∪ range f) := by
         aesop
-      rw [this]; rw [hr]
+      rw [this, hr]
       exact LieSubalgebra.lieSpan_lieSpan_coe_preimage
     simp only [union_assoc]
     refine le_antisymm (LieSubalgebra.lieSpan_mono <| by simp) ?_
@@ -177,58 +94,52 @@ def basis :
     have hef : h₀ i = ⁅e₀ i, f₀ i⁆ := by ext1; simp [h₀, e₀, f₀, (isSl2Triple i).lie_e_f]
     rw [hef]
     apply LieSubalgebra.lie_mem <;>
-exact LieSubalgebra.subset_lieSpan by simp
-
-/--
-lemma `basis_A_eq` / 引理 `basis_A_eq`
-
-English:
-lemma basis_A_eq
-  statement: (basis b).A = b.cartanMatrix
-  proof: rfl
-
-中文:
-引理 basis_A_eq
-  结论: (basis b).A = b.cartanMatrix
-  证明: rfl
+      exact LieSubalgebra.subset_lieSpan <| by simp
+/-
+**RootPairing.GeckConstruction.basis_A_eq** 是 Mathlib 中的一个定理，位于命名空间 `RootPairing
+.GeckConstruction`。
+形式化陈述：∀ {ι : Type u_1} {K : Type u_2} {M : Type u_3} {N : Type u_4} [inst : Fint
+ype ι] [inst_1 : DecidableEq ι]   [inst_2 : Field K] [inst_3 : CharZero K] [inst
+_4 : AddCommGroup M] [inst_5 : _root_.Module K M]   [inst_6 : AddCommGroup N] [i
+nst_7 : _root_.Module K N] {P : RootPairing ι K M N} [inst_8 : P.IsReduced]   [i
+nst_9 : P.IsCrystallographic] [inst_10 : P.IsIrreducible] [inst_11 : P.IsRootSys
+tem] (b : P.Base),   (RootPairing.GeckConstruction.basis b).A = b.cartanMatrix
+参数：b : P.Base；RootPairing.GeckConstruction.basis b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
 @[simp] lemma basis_A_eq : (basis b).A = b.cartanMatrix := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (cartanSubalgebra' b).IsCartanSubalgebra
-  body: (basis b).isCartanSubalgebra
-
-中文:
-实例 :
-  签名: (cartanSubalgebra' b).是Cartan子代数
-  定义体: (basis b).isCartanSubalgebra
-
-Depends on / 依赖: isCartanSubalgebra
+/-
+**RootPairing.GeckConstruction.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.GeckConst
+ruction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (cartanSubalgebra' b).IsCartanSubalgebra := (basis b).isCartanSubalgebra
 
 open LieAlgebra.IsKilling in
-/--
-Definition of `equivRootSystem` / `equivRootSystem` 的定义
+/-- Up to equivalence, `LieAlgebra.IsKilling.rootSystem` is left inverse to
+`RootPairing.GeckConstruction.lieAlgebra`. -/
+/-
+**RootPairing.GeckConstruction.equivRootSystem** 是 Mathlib 中的一个定义，位于命名空间 `RootPa
+iring.GeckConstruction`。
+形式化陈述：equivRootSystem [IsAlgClosed K] : P.Equiv (rootSystem (cartanSubalgebra' b
+))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `RootPairing.GeckConstruction.instIsCartanSubalgebraSubtypeMatrixSumMemFi
+nsetSupportLieSubalgebraLieAlgebraCartanSubalgebra'`：∀ {ι : Type u_1} {K : Type 
+u_2} {M : Type u_3} {N : Type u_4} [inst : Fintype ι] [inst_1 : DecidableEq ι]  
+ [inst_2 : Field K] [inst_3 : Cha…
 
-English:
-definition equivRootSystem
-  signature: [IsAlgClosed K]
-  body: b.equivOfCartanMatrixEq _ (basis b).baseSupportEquiv by simp [(basis b).cartanMatrix_base_eq]
-
-中文:
-定义 equivRootSystem
-  签名: [是代数闭 K]
-  定义体: b.equivOfCartanMatrixEq _ (basis b).baseSupportEquiv by simp [(basis b).cartanMatrix_base_eq]
-
-Depends on / 依赖: b.equivOfCartanMatrixEq, baseSupportEquiv, cartanMatrix_base_eq, equivOfCartanMatrixEq
+--- 原说明 ---
+Up to equivalence, `LieAlgebra.IsKilling.rootSystem` is left inverse to
+`RootPairing.GeckConstruction.lieAlgebra`.
 -/
 def equivRootSystem [IsAlgClosed K] :
     P.Equiv (rootSystem (cartanSubalgebra' b)) :=
-b.equivOfCartanMatrixEq _ (basis b).baseSupportEquiv by simp [(basis b).cartanMatrix_base_eq]
+  b.equivOfCartanMatrixEq _ (basis b).baseSupportEquiv <| by simp [(basis b).cartanMatrix_base_eq]
 
 end RootPairing.GeckConstruction
+

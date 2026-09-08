@@ -19,22 +19,41 @@ namespace Lean.Meta
 
 initialize registerTraceClass `Meta.CongrTheorems
 
-/--
-Definition of `mkHCongrWithArity'` / `mkHCongrWithArity'` 的定义
+/-- Generates a congruence lemma for a function `f` for `numArgs` of its arguments.
+The only `Lean.Meta.CongrArgKind` kinds that appear in such a lemma
+are `.eq`, `.heq`, and `.subsingletonInst`.
+The resulting lemma proves either an `Eq` or a `HEq` depending on whether the types
+of the LHS and RHS are equal or not.
 
-English:
-definition mkHCongrWithArity'
-  signature: (f : Expr) (numArgs : Nat)
-  body: do
-  let thm ← mkHCongrWithArity f numArgs
-  process thm thm.type thm.argKinds.toList #[] #[] #[] #[]
+This function is a wrapper around `Lean.Meta.mkHCongrWithArity`.
+It transforms the resulting congruence lemma by trying to automatically prove hypotheses
+using subsingleton lemmas, and if they are so provable they are recorded with `.subsingletonInst`.
+Note that this is slightly abusing `.subsingletonInst` since
+(1) the argument might not be for a `Decidable` instance and
+(2) the argument might not even be an instance. -/
+/-
+**Lean.Meta.mkHCongrWithArity'** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：mkHCongrWithArity' (f : Expr) (numArgs : Nat) : MetaM CongrTheorem
+参数：f : Expr；numArgs : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkHCongrWithArity'
-  签名: (f : Expr) (numArgs : 自然数)
-  定义体: do
-  let thm ← mkHCongrWithArity f numArgs
-  process thm thm.type thm.argKinds.toList #[] #[] #[] #[]
+--- 原说明 ---
+Generates a congruence lemma for a function `f` for `numArgs` of its arguments.
+The only `Lean.Meta.CongrArgKind` kinds that appear in such a lemma
+are `.eq`, `.heq`, and `.subsingletonInst`.
+The resulting lemma proves either an `Eq` or a `HEq` depending on whether the ty
+pes
+of the LHS and RHS are equal or not.
+
+This function is a wrapper around `Lean.Meta.mkHCongrWithArity`.
+It transforms the resulting congruence lemma by trying to automatically prove hy
+potheses
+using subsingleton lemmas, and if they are so provable they are recorded with `.
+subsingletonInst`.
+Note that this is slightly abusing `.subsingletonInst` since
+(1) the argument might not be for a `Decidable` instance and
+(2) the argument might not even be an instance.
 -/
 def mkHCongrWithArity' (f : Expr) (numArgs : Nat) : MetaM CongrTheorem := do
   let thm ← mkHCongrWithArity f numArgs
@@ -102,218 +121,144 @@ where
 
 universe u v
 
-/--
-Definition of `FastSubsingleton` / `FastSubsingleton` 的定义
+/-- A version of `Subsingleton` with few instances. It should fail fast. -/
+/-
+**Lean.Meta.FastSubsingleton** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Meta`。
+形式化陈述：Sort u → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FastSubsingleton
-  parameters: (α : Sort u)
-  axioms and operations (1):
-    - [inst : Subsingleton α]
-
-中文:
-类 FastSubsingleton
-  参数: (α : 类型层 u)
-  公理与运算 (1 个):
-    - [inst : 子单例 α]
+--- 原说明 ---
+A version of `Subsingleton` with few instances. It should fail fast.
 -/
 class FastSubsingleton (α : Sort u) : Prop where
   /-- The subsingleton instance. -/
   [inst : Subsingleton α]
 
-/--
-Definition of `FastIsEmpty` / `FastIsEmpty` 的定义
+/-- A version of `IsEmpty` with few instances. It should fail fast. -/
+/-
+**Lean.Meta.FastIsEmpty** 是 Mathlib 中的一个类，位于命名空间 `Lean.Meta`。
+形式化陈述：FastIsEmpty (α : Sort u) : Prop where [inst : IsEmpty α]  protected theore
+m FastSubsingleton.elim {α : Sort u} [h : FastSubsingleton α] : (a b : α) -> a =
+ b
+参数：α : Sort u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FastIsEmpty
-  parameters: (α : Sort u)
-  axioms and operations (1):
-    - [inst : IsEmpty α]
-
-中文:
-类 FastIsEmpty
-  参数: (α : 类型层 u)
-  公理与运算 (1 个):
-    - [inst : 是空 α]
-
-Depends on / 依赖: h.inst.allEq
+--- 原说明 ---
+A version of `IsEmpty` with few instances. It should fail fast.
 -/
 class FastIsEmpty (α : Sort u) : Prop where
   [inst : IsEmpty α]
-
-/--
-theorem `FastSubsingleton.elim` / 定理 `FastSubsingleton.elim`
-
-English:
-theorem FastSubsingleton.elim
-  given: {α : Sort u} [h : FastSubsingleton α]
-  statement: (a b : α) -> a = b
-  proof: h.inst.allEq
-
-中文:
-定理 FastSubsingleton.elim
-  条件: {α : 类型层 u} [h : FastSubsingleton α]
-  结论: (a b : α) -> a = b
-  证明: h.inst.allEq
+/-
+**Lean.Meta.FastSubsingleton.elim** 是 Mathlib 中的一个定理，位于命名空间 `Lean.Meta.FastSubsi
+ngleton`。
+形式化陈述：∀ {α : Sort u} [h : Meta.FastSubsingleton α] (a b : α), a = b
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.allEq`：∀ {α : Sort u} [self : Subsingleton α] (a b : α), a 
+= b
+· 使用定理 `Lean.Meta.FastSubsingleton.inst`：∀ {α : Sort u} [self : Meta.FastSubsing
+leton α], Subsingleton α
 -/
-protected theorem FastSubsingleton.elim {α : Sort u} [h : FastSubsingleton α] : (a b : α) -> a = b :=
+protected theorem FastSubsingleton.elim {α : Sort u} [h : FastSubsingleton α] : (a b : α) → a = b :=
   h.inst.allEq
-
-/--
-theorem `FastSubsingleton.helim` / 定理 `FastSubsingleton.helim`
-
-English:
-theorem FastSubsingleton.helim
-  statement: {α β : Sort u} [FastSubsingleton α]
-  proof: by
-  have : Subsingleton α := FastSubsingleton.inst
-  exact Subsingleton.helim h₂ a b
-
-中文:
-定理 FastSubsingleton.helim
-  结论: {α β : 类型层 u} [FastSubsingleton α]
-  证明: by
-  have : Subsingleton α := FastSubsingleton.inst
-  exact Subsingleton.helim h₂ a b
+/-
+**Lean.Meta.FastSubsingleton.helim** 是 Mathlib 中的一个定理，位于命名空间 `Lean.Meta.FastSubs
+ingleton`。
+形式化陈述：∀ {α β : Sort u} [Meta.FastSubsingleton α], α = β → ∀ (a : α) (b : β), a ≍
+ b
+参数：a : α；b : β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Lean.Meta.FastSubsingleton.inst`：∀ {α : Sort u} [self : Meta.FastSubsing
+leton α], Subsingleton α
+· 使用定理 `Subsingleton.helim`：∀ {α β : Sort u} [h₁ : Subsingleton α], α = β → ∀ (a
+ : α) (b : β), a ≍ b
 -/
 protected theorem FastSubsingleton.helim {α β : Sort u} [FastSubsingleton α]
     (h₂ : α = β) (a : α) (b : β) : a ≍ b := by
   have : Subsingleton α := FastSubsingleton.inst
   exact Subsingleton.helim h₂ a b
-
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {α : Type u} [inst : FastIsEmpty α] : FastSubsingleton α where
   inst := have := inst.inst; inferInstance
-
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {p : Prop} : FastSubsingleton p := {}
-
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {p : Prop} : FastSubsingleton (Decidable p) := {}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FastSubsingleton (Fin 1)
-  body: {}
-
-中文:
-实例 :
-  签名: FastSubsingleton (有限集 1)
-  定义体: {}
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FastSubsingleton (Fin 1) := {}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FastSubsingleton PUnit
-  body: {}
-
-中文:
-实例 :
-  签名: FastSubsingleton 命题单元
-  定义体: {}
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FastSubsingleton PUnit := {}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FastIsEmpty Empty
-  body: {}
-
-中文:
-实例 :
-  签名: FastIsEmpty 空
-  定义体: {}
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FastIsEmpty Empty := {}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FastIsEmpty False
-  body: {}
-
-中文:
-实例 :
-  签名: FastIsEmpty 假
-  定义体: {}
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FastIsEmpty False := {}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FastIsEmpty (Fin 0)
-  body: {}
-
-中文:
-实例 :
-  签名: FastIsEmpty (有限集 0)
-  定义体: {}
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FastIsEmpty (Fin 0) := {}
-
-instance {α : Sort u} [inst : FastIsEmpty α] {β : (x : α) -> Sort v} :
-    FastSubsingleton ((x : α) -> β x) where
-  inst.allEq _ _ := funext fun a => (inst.inst.false a).elim
-
-instance {α : Sort u} {β : (x : α) -> Sort v} [inst : forall x, FastSubsingleton (β x)] :
-    FastSubsingleton ((x : α) -> β x) where
-  inst := have := fun x => (inst x).inst; inferInstance
-
-/--
-Definition of `withSubsingletonAsFast` / `withSubsingletonAsFast` 的定义
-
-English:
-definition withSubsingletonAsFast
-  signature: {α : Type} [Inhabited α] (mx : (Expr -> Expr) -> MetaM α)
-  body: do
-  let insts1 := (← getLocalInstances).filter fun inst => inst.className == ``Subsingleton
-  let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty
-  let mkInst (f : Name) (inst : Expr) : MetaM Expr := do
-    forallTelescopeReducing (← inferType inst) fun args _ => do
-mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
-  let vals := (← insts1.mapM fun inst => mkInst ``FastSubsingleton.mk inst.fvar)
-    ++ (← insts2.mapM fun inst => mkInst ``FastIsEmpty.mk inst.fvar)
-  let tys ← vals.mapM inferType
-  withLocalDeclsD (tys.map fun ty => (`inst, fun _ => pure ty)) fun args =>
-    withNewLocalInstances args 0 do
-      let elim (e : Expr) : Expr := e.replaceFVars args vals
-      mx elim
-
-中文:
-定义 withSubsingletonAsFast
-  签名: {α : 类型} [可居 α] (mx : (Expr -> Expr) -> MetaM α)
-  定义体: do
-  let insts1 := (← getLocalInstances).filter fun inst => inst.className == ``Subsingleton
-  let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty
-  let mkInst (f : Name) (inst : Expr) : MetaM Expr := do
-    forallTelescopeReducing (← inferType inst) fun args _ => do
-mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
-  let vals := (← insts1.mapM fun inst => mkInst ``FastSubsingleton.mk inst.fvar)
-    ++ (← insts2.mapM fun inst => mkInst ``FastIsEmpty.mk inst.fvar)
-  let tys ← vals.mapM inferType
-  withLocalDeclsD (tys.map fun ty => (`inst, fun _ => pure ty)) fun args =>
-    withNewLocalInstances args 0 do
-      let elim (e : Expr) : Expr := e.replaceFVars args vals
-      mx elim
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def withSubsingletonAsFast {α : Type} [Inhabited α] (mx : (Expr -> Expr) -> MetaM α) : MetaM α := do
+instance {α : Sort u} [inst : FastIsEmpty α] {β : (x : α) → Sort v} :
+    FastSubsingleton ((x : α) → β x) where
+  inst.allEq _ _ := funext fun a => (inst.inst.false a).elim
+/-
+**Lean.Meta.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {α : Sort u} {β : (x : α) → Sort v} [inst : ∀ x, FastSubsingleton (β x)] :
+    FastSubsingleton ((x : α) → β x) where
+  inst := have := fun x ↦ (inst x).inst; inferInstance
+
+/--
+Runs `mx` in a context where all local `Subsingleton` and `IsEmpty` instances
+have associated `FastSubsingleton` and `FastIsEmpty` instances.
+The function passed to `mx` eliminates these instances from expressions,
+since they are only locally valid inside this context.
+-/
+/-
+**Lean.Meta.withSubsingletonAsFast** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：withSubsingletonAsFast {α : Type} [Inhabited α] (mx : (Expr -> Expr) -> Me
+taM α) : MetaM α
+参数：mx : (Expr -> Expr) -> MetaM α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Runs `mx` in a context where all local `Subsingleton` and `IsEmpty` instances
+have associated `FastSubsingleton` and `FastIsEmpty` instances.
+The function passed to `mx` eliminates these instances from expressions,
+since they are only locally valid inside this context.
+-/
+def withSubsingletonAsFast {α : Type} [Inhabited α] (mx : (Expr → Expr) → MetaM α) : MetaM α := do
   let insts1 := (← getLocalInstances).filter fun inst => inst.className == ``Subsingleton
   let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty
   let mkInst (f : Name) (inst : Expr) : MetaM Expr := do
     forallTelescopeReducing (← inferType inst) fun args _ => do
-mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
+      mkLambdaFVars args <| ← mkAppOptM f #[none, mkAppN inst args]
   let vals := (← insts1.mapM fun inst => mkInst ``FastSubsingleton.mk inst.fvar)
     ++ (← insts2.mapM fun inst => mkInst ``FastIsEmpty.mk inst.fvar)
   let tys ← vals.mapM inferType
@@ -322,40 +267,16 @@ mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
       let elim (e : Expr) : Expr := e.replaceFVars args vals
       mx elim
 
-/--
-Definition of `fastSubsingletonElim` / `fastSubsingletonElim` 的定义
+/-- Like `subsingletonElim` but uses `FastSubsingleton` to fail fast. -/
+/-
+**Lean.Meta.fastSubsingletonElim** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：fastSubsingletonElim (mvarId : MVarId) : MetaM Bool
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fastSubsingletonElim
-  signature: (mvarId : MVarId)
-  body: mvarId.withContext do
-    let res ← observing? do
-      mvarId.checkNotAssigned `fastSubsingletonElim
-      let tgt ← withReducible mvarId.getType'
-      let some (_, lhs, rhs) := tgt.eq? | failure
-      -- Note: `mkAppM` uses `withNewMCtxDepth`, which prevents `Sort _` from specializing to `Prop`
-      let pf ← withSubsingletonAsFast fun elim =>
-elim < > mkAppM ``FastSubsingleton.elim #[lhs, rhs]
-      mvarId.assign pf
-      return true
-    return res.getD false
-
-中文:
-定义 fastSubsingletonElim
-  签名: (mvarId : MVarId)
-  定义体: mvarId.withContext do
-    let res ← observing? do
-      mvarId.checkNotAssigned `fastSubsingletonElim
-      let tgt ← withReducible mvarId.getType'
-      let some (_, lhs, rhs) := tgt.eq? | failure
-      -- Note: `mkAppM` uses `withNewMCtxDepth`, which prevents `Sort _` from specializing to `Prop`
-      let pf ← withSubsingletonAsFast fun elim =>
-elim < > mkAppM ``FastSubsingleton.elim #[lhs, rhs]
-      mvarId.assign pf
-      return true
-    return res.getD false
-
-Depends on / 依赖: checkNotAssigned, failure, fastSubsingletonElim, getType, mvarId, mvarId.checkNotAssigned, mvarId.getType, mvarId.withContext, observing, tgt.eq, withContext, withReducible
+--- 原说明 ---
+Like `subsingletonElim` but uses `FastSubsingleton` to fail fast.
 -/
 def fastSubsingletonElim (mvarId : MVarId) : MetaM Bool :=
   mvarId.withContext do
@@ -365,149 +286,118 @@ def fastSubsingletonElim (mvarId : MVarId) : MetaM Bool :=
       let some (_, lhs, rhs) := tgt.eq? | failure
       -- Note: `mkAppM` uses `withNewMCtxDepth`, which prevents `Sort _` from specializing to `Prop`
       let pf ← withSubsingletonAsFast fun elim =>
-elim < > mkAppM ``FastSubsingleton.elim #[lhs, rhs]
+        elim <$> mkAppM ``FastSubsingleton.elim #[lhs, rhs]
       mvarId.assign pf
       return true
     return res.getD false
 
 /--
-Definition of `mkRichHCongr` / `mkRichHCongr` 的定义
+`mkRichHCongr fType funInfo fixedFun fixedParams forceHEq`
+create a congruence lemma to prove that `Eq/HEq (f a₁ ... aₙ) (f' a₁' ... aₙ')`.
+The functions have type `fType` and the number of arguments is governed by the `funInfo` data.
+Each argument produces an `Eq/HEq aᵢ aᵢ'` hypothesis, but we also provide these hypotheses
+the additional facts that the preceding equalities have been proved (unlike in `mkHCongrWithArity`).
+The first two arguments of the resulting theorem are for `f` and `f'`, followed by a proof
+of `f = f'`, unless `fixedFun` is `true` (see below).
 
-English:
-definition mkRichHCongr
-  signature: (fType : Expr) (info : FunInfo)
-  body: do
-  trace[Meta.CongrTheorems] "ftype: {fType}"
-  trace[Meta.CongrTheorems] "deps: {info.paramInfo.map (fun p => p.backDeps)}"
-  trace[Meta.CongrTheorems] "fixedFun={fixedFun}, fixedParams={fixedParams}"
-  doubleTelescope fType info.getArity fixedParams fun xs ys fixedParams => do
-    trace[Meta.CongrTheorems] "xs = {xs}"
-    trace[Meta.CongrTheorems] "ys = {ys}"
-    trace[Meta.CongrTheorems] "computed fixedParams={fixedParams}"
-    let lctx := (← getLCtx) -- checkpoint for a local context that only has the parameters
-    withLocalDeclD `f fType fun ef => withLocalDeclD `f' fType fun pef' => do
-    let ef' := if fixedFun then ef else pef'
-    withLocalDeclD `e (← mkEq ef ef') fun ee => do
-    withNewEqs xs ys fixedParams fun kinds eqs => do
-      let fParams := if fixedFun then #[ef] else #[ef, ef', ee]
-      let mut hs := fParams -- parameters to the basic congruence lemma
-      let mut hs' := fParams -- parameters to the richer congruence lemma
-      let mut vals' := fParams -- how to calculate the basic parameters from the richer ones
-      for i in [0 : info.getArity] do
-        hs := hs.push xs[i]!
-        hs' := hs'.push xs[i]!
-        vals' := vals'.push xs[i]!
-        if let some (eq, eq', val) := eqs[i]! then
-          -- Not a fixed argument
-.push eq hs := hs.push ys[i]!
-.push eq' hs' := hs'.push ys[i]!
-.push val vals' := vals'.push ys[i]!
-      -- Generate the theorem with respect to the simpler hypotheses
-      let mkConcl := if forceHEq then mkHEq else mkEqHEq
-      let congrType ← mkForallFVars hs (← mkConcl (mkAppN ef xs) (mkAppN ef' ys))
-      trace[Meta.CongrTheorems] "simple congrType: {congrType}"
-let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
-        | throwError "Internal error when constructing congruence lemma proof"
-      -- At this point, `mkLambdaFVars hs' (mkAppN proof vals')` is the richer proof.
-      -- We try to precompute some of the arguments using `trySolve`.
-      let mut hs'' := #[] -- eq' parameters that are actually used beyond those in `fParams`
-      let mut pfVars := #[] -- eq' parameters that can be solved for already
-      let mut pfVals := #[] -- the values to use for these parameters
-      let mut kinds' : Array CongrArgKind := #[if fixedFun then .fixed else .eq]
-      for i in [0 : info.getArity] do
-        hs'' := hs''.push xs[i]!
-        if let some (_, eq', _) := eqs[i]! then
-          -- Not a fixed argument
-          hs'' := hs''.push ys[i]!
-let pf? ← withLCtx lctx (← getLocalInstances) trySolve (← inferType eq')
-          if let some pf := pf? then
-            pfVars := pfVars.push eq'
-            pfVals := pfVals.push pf
-            kinds' := kinds'.push .subsingletonInst
-          else
-            hs'' := hs''.push eq'
-            kinds' := kinds'.push kinds[i]!
-        else
-          kinds' := kinds'.push .fixed
-      trace[Meta.CongrTheorems] "CongrArgKinds: {repr kinds'}"
-      -- Take `proof`, abstract the pfVars and provide the solved-for proofs (as an
-      -- optimization for proof term size) then abstract the remaining variables.
-      -- The `usedOnly` probably has no affect.
-      -- Note that since we are doing `proof.beta vals'` there is technically some quadratic
-      -- complexity, but it shouldn't be too bad since they're some applications of just variables.
-      let proof' ← mkLambdaFVars fParams (← mkLambdaFVars (usedOnly := true) hs''
-                    (mkAppN (← mkLambdaFVars pfVars (proof.beta vals')) pfVals))
-      let congrType' ← inferType proof'
-      trace[Meta.CongrTheorems] "rich congrType: {congrType'}"
-      return {proof := proof', type := congrType', argKinds := kinds'}
+When including hypotheses about previous hypotheses, we make use of dependency information
+and only include relevant equalities.
 
-中文:
-定义 mkRichHCongr
-  签名: (fType : Expr) (info : FunInfo)
-  定义体: do
-  trace[Meta.CongrTheorems] "ftype: {fType}"
-  trace[Meta.CongrTheorems] "deps: {info.paramInfo.map (fun p => p.backDeps)}"
-  trace[Meta.CongrTheorems] "fixedFun={fixedFun}, fixedParams={fixedParams}"
-  doubleTelescope fType info.getArity fixedParams fun xs ys fixedParams => do
-    trace[Meta.CongrTheorems] "xs = {xs}"
-    trace[Meta.CongrTheorems] "ys = {ys}"
-    trace[Meta.CongrTheorems] "computed fixedParams={fixedParams}"
-    let lctx := (← getLCtx) -- checkpoint for a local context that only has the parameters
-    withLocalDeclD `f fType fun ef => withLocalDeclD `f' fType fun pef' => do
-    let ef' := if fixedFun then ef else pef'
-    withLocalDeclD `e (← mkEq ef ef') fun ee => do
-    withNewEqs xs ys fixedParams fun kinds eqs => do
-      let fParams := if fixedFun then #[ef] else #[ef, ef', ee]
-      let mut hs := fParams -- parameters to the basic congruence lemma
-      let mut hs' := fParams -- parameters to the richer congruence lemma
-      let mut vals' := fParams -- how to calculate the basic parameters from the richer ones
-      for i in [0 : info.getArity] do
-        hs := hs.push xs[i]!
-        hs' := hs'.push xs[i]!
-        vals' := vals'.push xs[i]!
-        if let some (eq, eq', val) := eqs[i]! then
-          -- Not a fixed argument
-.push eq hs := hs.push ys[i]!
-.push eq' hs' := hs'.push ys[i]!
-.push val vals' := vals'.push ys[i]!
-      -- Generate the theorem with respect to the simpler hypotheses
-      let mkConcl := if forceHEq then mkHEq else mkEqHEq
-      let congrType ← mkForallFVars hs (← mkConcl (mkAppN ef xs) (mkAppN ef' ys))
-      trace[Meta.CongrTheorems] "simple congrType: {congrType}"
-let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
-        | throwError "Internal error when constructing congruence lemma proof"
-      -- At this point, `mkLambdaFVars hs' (mkAppN proof vals')` is the richer proof.
-      -- We try to precompute some of the arguments using `trySolve`.
-      let mut hs'' := #[] -- eq' parameters that are actually used beyond those in `fParams`
-      let mut pfVars := #[] -- eq' parameters that can be solved for already
-      let mut pfVals := #[] -- the values to use for these parameters
-      let mut kinds' : Array CongrArgKind := #[if fixedFun then .fixed else .eq]
-      for i in [0 : info.getArity] do
-        hs'' := hs''.push xs[i]!
-        if let some (_, eq', _) := eqs[i]! then
-          -- Not a fixed argument
-          hs'' := hs''.push ys[i]!
-let pf? ← withLCtx lctx (← getLocalInstances) trySolve (← inferType eq')
-          if let some pf := pf? then
-            pfVars := pfVars.push eq'
-            pfVals := pfVals.push pf
-            kinds' := kinds'.push .subsingletonInst
-          else
-            hs'' := hs''.push eq'
-            kinds' := kinds'.push kinds[i]!
-        else
-          kinds' := kinds'.push .fixed
-      trace[Meta.CongrTheorems] "CongrArgKinds: {repr kinds'}"
-      -- Take `proof`, abstract the pfVars and provide the solved-for proofs (as an
-      -- optimization for proof term size) then abstract the remaining variables.
-      -- The `usedOnly` probably has no affect.
-      -- Note that since we are doing `proof.beta vals'` there is technically some quadratic
-      -- complexity, but it shouldn't be too bad since they're some applications of just variables.
-      let proof' ← mkLambdaFVars fParams (← mkLambdaFVars (usedOnly := true) hs''
-                    (mkAppN (← mkLambdaFVars pfVars (proof.beta vals')) pfVals))
-      let congrType' ← inferType proof'
-      trace[Meta.CongrTheorems] "rich congrType: {congrType'}"
-      return {proof := proof', type := congrType', argKinds := kinds'}
+The argument `fty` denotes the type of `f`. The arity of the resulting congruence lemma is
+controlled by the size of the `info` array.
+
+For the purpose of generating nicer lemmas (to help `to_additive` for example),
+this function supports generating lemmas where certain parameters
+are meant to be fixed:
+
+* If `fixedFun` is `false` (the default) then the lemma starts with three arguments for `f`, `f'`,
+  and `h : f = f'`. Otherwise, if `fixedFun` is `true` then the lemma starts with just `f`.
+
+* If the `fixedParams` argument has `true` for a particular argument index, then this is a hint
+  that the congruence lemma may use the same parameter for both sides of the equality. There is
+  no guarantee -- it respects it if the types are equal for that parameter (i.e., if the parameter
+  does not depend on non-fixed parameters).
+
+If `forceHEq` is `true` then the conclusion of the generated theorem is a `HEq`.
+Otherwise it might be an `Eq` if the equality is homogeneous.
+
+This is the interpretation of the `CongrArgKind`s in the generated congruence theorem:
+* `.eq` corresponds to having three arguments `(x : α) (x' : α) (h : x = x')`.
+  Note that `h` might have additional hypotheses.
+* `.heq` corresponds to having three arguments `(x : α) (x' : α') (h : x ≍ x')`
+  Note that `h` might have additional hypotheses.
+* `.fixed` corresponds to having a single argument `(x : α)` that is fixed between the LHS and RHS
+* `.subsingletonInst` corresponds to having two arguments `(x : α) (x' : α')` for which the
+  congruence generator was able to prove that `x ≍ x'` already. This is a slight abuse of
+  this `CongrArgKind` since this is used even for types that are not subsingleton typeclasses.
+
+Note that the first entry in this array is for the function itself.
+-/
+/-
+**Lean.Meta.mkRichHCongr** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：Expr → Meta.FunInfo → optParam Bool false → optParam (Array Bool) #[] → op
+tParam Bool false → MetaM Meta.CongrTheorem
+参数：Array Bool。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
+
+--- 原说明 ---
+`mkRichHCongr fType funInfo fixedFun fixedParams forceHEq`
+create a congruence lemma to prove that `Eq/HEq (f a₁ ... aₙ) (f' a₁' ... aₙ')`.
+The functions have type `fType` and the number of arguments is governed by the `
+funInfo` data.
+Each argument produces an `Eq/HEq aᵢ aᵢ'` hypothesis, but we also provide these 
+hypotheses
+the additional facts that the preceding equalities have been proved (unlike in `
+mkHCongrWithArity`).
+The first two arguments of the resulting theorem are for `f` and `f'`, followed 
+by a proof
+of `f = f'`, unless `fixedFun` is `true` (see below).
+
+When including hypotheses about previous hypotheses, we make use of dependency i
+nformation
+and only include relevant equalities.
+
+The argument `fty` denotes the type of `f`. The arity of the resulting congruenc
+e lemma is
+controlled by the size of the `info` array.
+
+For the purpose of generating nicer lemmas (to help `to_additive` for example),
+this function supports generating lemmas where certain parameters
+are meant to be fixed:
+
+* If `fixedFun` is `false` (the default) then the lemma starts with three argume
+nts for `f`, `f'`,
+  and `h : f = f'`. Otherwise, if `fixedFun` is `true` then the lemma starts wit
+h just `f`.
+
+* If the `fixedParams` argument has `true` for a particular argument index, then
+ this is a hint
+  that the congruence lemma may use the same parameter for both sides of the equ
+ality. There is
+  no guarantee -- it respects it if the types are equal for that parameter (i.e.
+, if the parameter
+  does not depend on non-fixed parameters).
+
+If `forceHEq` is `true` then the conclusion of the generated theorem is a `HEq`.
+Otherwise it might be an `Eq` if the equality is homogeneous.
+
+This is the interpretation of the `CongrArgKind`s in the generated congruence th
+eorem:
+* `.eq` corresponds to having three arguments `(x : α) (x' : α) (h : x = x')`.
+  Note that `h` might have additional hypotheses.
+* `.heq` corresponds to having three arguments `(x : α) (x' : α') (h : x ≍ x')`
+  Note that `h` might have additional hypotheses.
+* `.fixed` corresponds to having a single argument `(x : α)` that is fixed betwe
+en the LHS and RHS
+* `.subsingletonInst` corresponds to having two arguments `(x : α) (x' : α')` fo
+r which the
+  congruence generator was able to prove that `x ≍ x'` already. This is a slight
+ abuse of
+  this `CongrArgKind` since this is used even for types that are not subsingleto
+n typeclasses.
+
+Note that the first entry in this array is for the function itself.
 -/
 partial def mkRichHCongr (fType : Expr) (info : FunInfo)
     (fixedFun : Bool := false) (fixedParams : Array Bool := #[])
@@ -526,23 +416,23 @@ partial def mkRichHCongr (fType : Expr) (info : FunInfo)
     withLocalDeclD `e (← mkEq ef ef') fun ee => do
     withNewEqs xs ys fixedParams fun kinds eqs => do
       let fParams := if fixedFun then #[ef] else #[ef, ef', ee]
-      let mut hs := fParams -- parameters to the basic congruence lemma
-      let mut hs' := fParams -- parameters to the richer congruence lemma
-      let mut vals' := fParams -- how to calculate the basic parameters from the richer ones
+      let mut hs := fParams     -- parameters to the basic congruence lemma
+      let mut hs' := fParams    -- parameters to the richer congruence lemma
+      let mut vals' := fParams  -- how to calculate the basic parameters from the richer ones
       for i in [0 : info.getArity] do
         hs := hs.push xs[i]!
         hs' := hs'.push xs[i]!
         vals' := vals'.push xs[i]!
         if let some (eq, eq', val) := eqs[i]! then
           -- Not a fixed argument
-.push eq hs := hs.push ys[i]!
-.push eq' hs' := hs'.push ys[i]!
-.push val vals' := vals'.push ys[i]!
+          hs := hs.push ys[i]! |>.push eq
+          hs' := hs'.push ys[i]! |>.push eq'
+          vals' := vals'.push ys[i]! |>.push val
       -- Generate the theorem with respect to the simpler hypotheses
       let mkConcl := if forceHEq then mkHEq else mkEqHEq
       let congrType ← mkForallFVars hs (← mkConcl (mkAppN ef xs) (mkAppN ef' ys))
       trace[Meta.CongrTheorems] "simple congrType: {congrType}"
-let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
+      let some proof ← withLCtx lctx (← getLocalInstances) <| trySolve congrType
         | throwError "Internal error when constructing congruence lemma proof"
       -- At this point, `mkLambdaFVars hs' (mkAppN proof vals')` is the richer proof.
       -- We try to precompute some of the arguments using `trySolve`.
@@ -555,7 +445,7 @@ let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
         if let some (_, eq', _) := eqs[i]! then
           -- Not a fixed argument
           hs'' := hs''.push ys[i]!
-let pf? ← withLCtx lctx (← getLocalInstances) trySolve (← inferType eq')
+          let pf? ← withLCtx lctx (← getLocalInstances) <| trySolve (← inferType eq')
           if let some pf := pf? then
             pfVars := pfVars.push eq'
             pfVals := pfVals.push pf
@@ -583,7 +473,7 @@ where
   We affix `'` to the second list of variables, and all the variables are introduced
   with default binder info. Calls `k` with the xs, ys, and a revised `fixed` array -/
   doubleTelescope {α} (fty : Expr) (numVars : Nat) (fixed : Array Bool)
-      (k : Array Expr -> Array Expr -> Array Bool -> MetaM α) : MetaM α := do
+      (k : Array Expr → Array Expr → Array Bool → MetaM α) : MetaM α := do
     let rec loop (i : Nat)
         (ftyx ftyy : Expr) (xs ys : Array Expr) (fixed' : Array Bool) : MetaM α := do
       if i < numVars then
@@ -611,7 +501,7 @@ where
   consists of (1) the simple congr lemma HEq arg, (2) the richer HEq arg, and (3) how to
   compute 1 in terms of 2. -/
   withNewEqs {α} (xs ys : Array Expr) (fixedParams : Array Bool)
-      (k : Array CongrArgKind -> Array (Option (Expr × Expr × Expr)) -> MetaM α) : MetaM α :=
+      (k : Array CongrArgKind → Array (Option (Expr × Expr × Expr)) → MetaM α) : MetaM α :=
     let rec loop (i : Nat)
         (kinds : Array CongrArgKind) (eqs : Array (Option (Expr × Expr × Expr))) := do
       if i < xs.size then
@@ -652,9 +542,10 @@ where
     let mvar ← mkFreshExprMVar ty
     trace[Meta.CongrTheorems] "trySolve {mvar.mvarId!}"
     -- The proofs we generate shouldn't require unfolding anything.
-withReducible trySolveCore mvar.mvarId!
+    withReducible <| trySolveCore mvar.mvarId!
     trace[Meta.CongrTheorems] "trySolve success!"
     let pf ← instantiateMVars mvar
     return pf
 
 end Lean.Meta
+

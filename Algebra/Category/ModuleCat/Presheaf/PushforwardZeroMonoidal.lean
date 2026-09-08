@@ -30,61 +30,25 @@ variable {C D : Type*} [Category* C] [Category* D]
   (F : C ⥤ D) (R : Dᵒᵖ ⥤ CommRingCat.{u})
 
 open ModuleCat.MonoidalCategory in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward₀OfCommRingCat F R).Monoidal
-  body: Functor.CoreMonoidal.toMonoidal
-    { εIso := Iso.refl _
-      -- using `Iso.refl _` for `μIso` directly hurts kernel typechecking
-      μIso _ _ := isoMk (fun _ => Iso.refl _) (fun _ _ _ => tensor_ext fun _ _ => rfl)
-      associativity _ _ _ := by
-        ext1
-        exact tensor_ext₃' fun m₁ m₂ m₃ => rfl
-      left_unitality _ := by
-        ext1
-        exact tensor_ext fun m₁ m₂ => rfl
-      right_unitality _ := by
-        ext1
-        exact tensor_ext fun m₁ m₂ => rfl
-    }
-
-中文:
-实例 :
-  签名: (pushforward₀OfCommRingCat F R).幺半群
-  定义体: Functor.CoreMonoidal.toMonoidal
-    { εIso := Iso.refl _
-      -- using `Iso.refl _` for `μIso` directly hurts kernel typechecking
-      μIso _ _ := isoMk (fun _ => Iso.refl _) (fun _ _ _ => tensor_ext fun _ _ => rfl)
-      associativity _ _ _ := by
-        ext1
-        exact tensor_ext₃' fun m₁ m₂ m₃ => rfl
-      left_unitality _ := by
-        ext1
-        exact tensor_ext fun m₁ m₂ => rfl
-      right_unitality _ := by
-        ext1
-        exact tensor_ext fun m₁ m₂ => rfl
-    }
-
-Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, Iso.refl, toMonoidal
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (pushforward₀OfCommRingCat F R).Monoidal :=
   Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       -- using `Iso.refl _` for `μIso` directly hurts kernel typechecking
-      μIso _ _ := isoMk (fun _ => Iso.refl _) (fun _ _ _ => tensor_ext fun _ _ => rfl)
+      μIso _ _ := isoMk (fun _ ↦ Iso.refl _) (fun _ _ _ ↦ tensor_ext fun _ _ ↦ rfl)
       associativity _ _ _ := by
         ext1
-        exact tensor_ext₃' fun m₁ m₂ m₃ => rfl
+        exact tensor_ext₃' fun m₁ m₂ m₃ ↦ rfl
       left_unitality _ := by
         ext1
-        exact tensor_ext fun m₁ m₂ => rfl
+        exact tensor_ext fun m₁ m₂ ↦ rfl
       right_unitality _ := by
         ext1
-        exact tensor_ext fun m₁ m₂ => rfl
+        exact tensor_ext fun m₁ m₂ ↦ rfl
     }
 
 end PresheafOfModules
+

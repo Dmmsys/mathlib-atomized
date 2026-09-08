@@ -40,102 +40,11 @@ syntax (name := letImplDetailStx) "let_impl_detail " ident " := " term "; " term
 open Lean Elab Term Meta
 
 @[term_elab letImplDetailStx, inherit_doc letImplDetailStx]
-/--
-Definition of `elabLetImplDetail` / `elabLetImplDetail` 的定义
-
-English:
-definition elabLetImplDetail
-  signature: : TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(let_impl_detail $id := $valStx; $body) => do
-    let val ← elabTerm valStx none
-    let type ← inferType val
-    trace[Elab.let.decl] "{id.getId} : {type} := {val}"
-    let result ←
-      withLetDecl id.getId (kind := .default) type val fun x => do
-        addLocalVarInfo id x
-        let lctx ← getLCtx
-        let lctx := lctx.modifyLocalDecl x.fvarId! fun decl => decl.setKind .implDetail
-        withLCtx lctx (← getLocalInstances) do
-          let body ← elabTermEnsuringType body expectedType?
-          let body ← instantiateMVars body
-          mkLetFVars #[x] body (usedLetOnly := false)
-    pure result
-  | _ => throwUnsupportedSyntax
-
-macro_rules
-| `({ $[$srcs,* with]? $[$fields],* $[: $ty?]? }) => show MacroM Term from do
-    let mut spreads := #[]
-    let mut newFields := #[]
-
-    for field in fields do
-      match field.1 with
-        | `(structInstField| $name:ident := $arg) =>
-          if name.getId.eraseMacroScopes == `__ then do
-            spreads := spreads.push arg
-          else
-            newFields := newFields.push field
-        | _ =>
-          throwUnsupported
-
-    if spreads.isEmpty then throwUnsupported
-
-let spreadData ← withFreshMacroScope spreads.mapIdxM fun i spread => do
-      let n := Name.num `__spread i
-      return (mkIdent <| ← Macro.addMacroScope n, spread)
-
-    let srcs := (srcs.map (·.getElems)).getD {} ++ spreadData.map Prod.fst
-    let body ← `({ $srcs,* with $[$newFields],* $[: $ty?]? })
-    spreadData.foldrM (init := body) fun (id, val) body => `(let_impl_detail $id := $val; $body)
-
-中文:
-定义 elabLetImplDetail
-  签名: : TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(let_impl_detail $id := $valStx; $body) => do
-    let val ← elabTerm valStx none
-    let type ← inferType val
-    trace[Elab.let.decl] "{id.getId} : {type} := {val}"
-    let result ←
-      withLetDecl id.getId (kind := .default) type val fun x => do
-        addLocalVarInfo id x
-        let lctx ← getLCtx
-        let lctx := lctx.modifyLocalDecl x.fvarId! fun decl => decl.setKind .implDetail
-        withLCtx lctx (← getLocalInstances) do
-          let body ← elabTermEnsuringType body expectedType?
-          let body ← instantiateMVars body
-          mkLetFVars #[x] body (usedLetOnly := false)
-    pure result
-  | _ => throwUnsupportedSyntax
-
-macro_rules
-| `({ $[$srcs,* with]? $[$fields],* $[: $ty?]? }) => show MacroM Term from do
-    let mut spreads := #[]
-    let mut newFields := #[]
-
-    for field in fields do
-      match field.1 with
-        | `(structInstField| $name:ident := $arg) =>
-          if name.getId.eraseMacroScopes == `__ then do
-            spreads := spreads.push arg
-          else
-            newFields := newFields.push field
-        | _ =>
-          throwUnsupported
-
-    if spreads.isEmpty then throwUnsupported
-
-let spreadData ← withFreshMacroScope spreads.mapIdxM fun i spread => do
-      let n := Name.num `__spread i
-      return (mkIdent <| ← Macro.addMacroScope n, spread)
-
-    let srcs := (srcs.map (·.getElems)).getD {} ++ spreadData.map Prod.fst
-    let body ← `({ $srcs,* with $[$newFields],* $[: $ty?]? })
-    spreadData.foldrM (init := body) fun (id, val) body => `(let_impl_detail $id := $val; $body)
-
-Depends on / 依赖: expectedType
+/-
+**elabLetImplDetail** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：elabLetImplDetail : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabLetImplDetail : TermElab := fun stx expectedType? =>
   match stx with
@@ -172,7 +81,7 @@ macro_rules
 
     if spreads.isEmpty then throwUnsupported
 
-let spreadData ← withFreshMacroScope spreads.mapIdxM fun i spread => do
+    let spreadData ← withFreshMacroScope <| spreads.mapIdxM fun i spread => do
       let n := Name.num `__spread i
       return (mkIdent <| ← Macro.addMacroScope n, spread)
 

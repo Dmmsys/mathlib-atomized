@@ -28,66 +28,36 @@ namespace Mathlib.Tactic.GRewrite
 
 open Lean Meta Elab Parser Tactic
 
-/--
-Definition of `mergeLCtx` / `mergeLCtx` 的定义
+/-- Return the union of `lctx₁` and `lctx₂`. -/
+/-
+**Mathlib.Tactic.GRewrite.mergeLCtx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.GR
+ewrite`。
+形式化陈述：mergeLCtx (lctx₁ lctx₂ : LocalContext) : LocalContext
+参数：lctx₁ lctx₂ : LocalContext。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mergeLCtx
-  signature: (lctx₁ lctx₂ : LocalContext)
-  body: lctx₂.foldl (init := lctx₁) fun lctx decl =>
-    if lctx.contains decl.fvarId then
-      lctx
-    else
-      lctx.addDecl decl
-
-中文:
-定义 mergeLCtx
-  签名: (lctx₁ lctx₂ : LocalContext)
-  定义体: lctx₂.foldl (init := lctx₁) fun lctx decl =>
-    if lctx.contains decl.fvarId then
-      lctx
-    else
-      lctx.addDecl decl
-
-Depends on / 依赖: addDecl, contains, decl.fvarId, fvarId, lctx.addDecl, lctx.contains
+--- 原说明 ---
+Return the union of `lctx₁` and `lctx₂`.
 -/
 def mergeLCtx (lctx₁ lctx₂ : LocalContext) : LocalContext :=
-  lctx₂.foldl (init := lctx₁) fun lctx decl =>
+  lctx₂.foldl (init := lctx₁) fun lctx decl ↦
     if lctx.contains decl.fvarId then
       lctx
     else
       lctx.addDecl decl
 
-/--
-Definition of `updateInfoTree` / `updateInfoTree` 的定义
+/-- Merge `lctx` into the local contexts in `tree`.
+This is used to let `tree` know about bound variables that the term has been unified with. -/
+/-
+**Mathlib.Tactic.GRewrite.updateInfoTree** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition updateInfoTree
-  signature: (lctx : LocalContext) (tree : InfoTree)
-  body: match tree with
-  | .context i tree => .context i (updateInfoTree lctx tree)
-  | .node i children =>
-    let i := match i with
-      | .ofTermInfo i => .ofTermInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofFieldInfo i => .ofFieldInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofMacroExpansionInfo i => .ofMacroExpansionInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | _ => i
-    .node i (children.map (updateInfoTree lctx))
-  | _ => tree
-
-中文:
-定义 updateInfoTree
-  签名: (lctx : LocalContext) (tree : InfoTree)
-  定义体: match tree with
-  | .context i tree => .context i (updateInfoTree lctx tree)
-  | .node i children =>
-    let i := match i with
-      | .ofTermInfo i => .ofTermInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofFieldInfo i => .ofFieldInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofMacroExpansionInfo i => .ofMacroExpansionInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | _ => i
-    .node i (children.map (updateInfoTree lctx))
-  | _ => tree
+--- 原说明 ---
+Merge `lctx` into the local contexts in `tree`.
+This is used to let `tree` know about bound variables that the term has been uni
+fied with.
 -/
 partial def updateInfoTree (lctx : LocalContext) (tree : InfoTree) : InfoTree :=
   match tree with
@@ -101,28 +71,17 @@ partial def updateInfoTree (lctx : LocalContext) (tree : InfoTree) : InfoTree :=
     .node i (children.map (updateInfoTree lctx))
   | _ => tree
 
-/--
-Definition of `finishElabGRewrite` / `finishElabGRewrite` 的定义
+/-- Analogous to `finishElabRewrite`. -/
+/-
+**Mathlib.Tactic.GRewrite.finishElabGRewrite** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.GRewrite`。
+形式化陈述：finishElabGRewrite (r : GRewriteResult) : MetaM GRewriteResult
+参数：r : GRewriteResult。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finishElabGRewrite
-  signature: (r : GRewriteResult)
-  body: do
-  let mvarIds ← r.mvarIds.filterM (not <$> ·.isAssigned)
-  mvarIds.forM fun newMVarId => newMVarId.withContext do
-    if ← Meta.isProp (← newMVarId.getType) then
-      newMVarId.setKind .syntheticOpaque
-  return { r with mvarIds }
-
-中文:
-定义 finishElabGRewrite
-  签名: (r : GRewriteResult)
-  定义体: do
-  let mvarIds ← r.mvarIds.filterM (not <$> ·.isAssigned)
-  mvarIds.forM fun newMVarId => newMVarId.withContext do
-    if ← Meta.isProp (← newMVarId.getType) then
-      newMVarId.setKind .syntheticOpaque
-  return { r with mvarIds }
+--- 原说明 ---
+Analogous to `finishElabRewrite`.
 -/
 def finishElabGRewrite (r : GRewriteResult) : MetaM GRewriteResult := do
   let mvarIds ← r.mvarIds.filterM (not <$> ·.isAssigned)
@@ -131,80 +90,19 @@ def finishElabGRewrite (r : GRewriteResult) : MetaM GRewriteResult := do
       newMVarId.setKind .syntheticOpaque
   return { r with mvarIds }
 
-/--
-Definition of `elabGRewrite` / `elabGRewrite` 的定义
+/-- Mostly analogous to `elabRewrite`. -/
+/-
+**Mathlib.Tactic.GRewrite.elabGRewrite** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.GRewrite`。
+形式化陈述：elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm 
+: Bool) (config : GRewrite.Config) : TacticM GRewriteResult
+参数：mvarId : MVarId；e : Expr；stx : Syntax；forwardImp symm : Bool；config : GRewrit
+e.Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabGRewrite
-  signature: (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : Bool)
-  body: do
-  let treesSaved ← getResetInfoTrees
-  let r ← Term.withSynthesize do
-    let mvarCounterSaved := (← getMCtx).mvarCounter
-    let thm ← elabTerm stx none true
-    if thm.hasSyntheticSorry then
-      throwAbortTactic
-    unless ← occursCheck mvarId thm do
-      throwErrorAt stx
-        "Occurs check failed: Expression{indentExpr thm}\ncontains the goal {Expr.mvar mvarId}"
-    let mvarIds ← getMVarsNoDelayed thm
-    let mctx ← getMCtx
-    let mvarIds := mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
-    let lctx ← getLCtx
-    let mvarIds ← mvarIds.mapM fun mvarId => do
-      let mut fvarIds := #[]
-      for decl in (← mvarId.getDecl).lctx do
-        unless lctx.contains decl.fvarId do
-          fvarIds := fvarIds.push decl
-      return (mvarId, fvarIds)
-    let r ← mvarId.grewrite e thm mvarIds
-      (forwardImp := forwardImp) (symm := symm) (config := config)
-    let mctx ← getMCtx
-    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
-    return { r with mvarIds }
-  let s ← getInfoState
-  let trees := s.trees.map (·.substitute s.assignment)
-  let trees := match r.lctx? with
-    | some lctx => trees.map (updateInfoTree lctx)
-    | none => trees
-  modifyInfoState fun s => { s with trees := treesSaved ++ trees }
-  finishElabGRewrite r
-
-中文:
-定义 elabGRewrite
-  签名: (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 布尔值)
-  定义体: do
-  let treesSaved ← getResetInfoTrees
-  let r ← Term.withSynthesize do
-    let mvarCounterSaved := (← getMCtx).mvarCounter
-    let thm ← elabTerm stx none true
-    if thm.hasSyntheticSorry then
-      throwAbortTactic
-    unless ← occursCheck mvarId thm do
-      throwErrorAt stx
-        "Occurs check failed: Expression{indentExpr thm}\ncontains the goal {Expr.mvar mvarId}"
-    let mvarIds ← getMVarsNoDelayed thm
-    let mctx ← getMCtx
-    let mvarIds := mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
-    let lctx ← getLCtx
-    let mvarIds ← mvarIds.mapM fun mvarId => do
-      let mut fvarIds := #[]
-      for decl in (← mvarId.getDecl).lctx do
-        unless lctx.contains decl.fvarId do
-          fvarIds := fvarIds.push decl
-      return (mvarId, fvarIds)
-    let r ← mvarId.grewrite e thm mvarIds
-      (forwardImp := forwardImp) (symm := symm) (config := config)
-    let mctx ← getMCtx
-    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
-    return { r with mvarIds }
-  let s ← getInfoState
-  let trees := s.trees.map (·.substitute s.assignment)
-  let trees := match r.lctx? with
-    | some lctx => trees.map (updateInfoTree lctx)
-    | none => trees
-  modifyInfoState fun s => { s with trees := treesSaved ++ trees }
-  finishElabGRewrite r
+--- 原说明 ---
+Mostly analogous to `elabRewrite`.
 -/
 def elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : Bool)
     (config : GRewrite.Config) : TacticM GRewriteResult := do
@@ -219,9 +117,9 @@ def elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 
         "Occurs check failed: Expression{indentExpr thm}\ncontains the goal {Expr.mvar mvarId}"
     let mvarIds ← getMVarsNoDelayed thm
     let mctx ← getMCtx
-    let mvarIds := mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    let mvarIds := mvarIds.filter fun mvarId ↦ mvarCounterSaved ≤ (mctx.getDecl mvarId).index
     let lctx ← getLCtx
-    let mvarIds ← mvarIds.mapM fun mvarId => do
+    let mvarIds ← mvarIds.mapM fun mvarId ↦ do
       let mut fvarIds := #[]
       for decl in (← mvarId.getDecl).lctx do
         unless lctx.contains decl.fvarId do
@@ -230,7 +128,7 @@ def elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 
     let r ← mvarId.grewrite e thm mvarIds
       (forwardImp := forwardImp) (symm := symm) (config := config)
     let mctx ← getMCtx
-    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved ≤ (mctx.getDecl mvarId).index
     return { r with mvarIds }
   let s ← getInfoState
   let trees := s.trees.map (·.substitute s.assignment)
@@ -240,30 +138,18 @@ def elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 
   modifyInfoState fun s => { s with trees := treesSaved ++ trees }
   finishElabGRewrite r
 
-/--
-Definition of `grewriteTarget` / `grewriteTarget` 的定义
+/-- Apply the `grewrite` tactic to the current goal. -/
+/-
+**Mathlib.Tactic.GRewrite.grewriteTarget** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.GRewrite`。
+形式化陈述：grewriteTarget (stx : Syntax) (symm : Bool) (config : GRewrite.Config) : T
+acticM Unit
+参数：stx : Syntax；symm : Bool；config : GRewrite.Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition grewriteTarget
-  signature: (stx : Syntax) (symm : Bool) (config : GRewrite.Config)
-  body: do
-  let goal ← getMainGoal
-  let r ← goal.withContext do
-    elabGRewrite goal (← goal.getType) stx (forwardImp := false) (symm := symm) (config := config)
-  let mvarNew ← mkFreshExprSyntheticOpaqueMVar r.eNew (← goal.getTag)
-  goal.assign (r.impProof.app mvarNew)
-  replaceMainGoal (mvarNew.mvarId! :: r.mvarIds)
-
-中文:
-定义 grewriteTarget
-  签名: (stx : Syntax) (symm : 布尔值) (config : GRewrite.余nfig)
-  定义体: do
-  let goal ← getMainGoal
-  let r ← goal.withContext do
-    elabGRewrite goal (← goal.getType) stx (forwardImp := false) (symm := symm) (config := config)
-  let mvarNew ← mkFreshExprSyntheticOpaqueMVar r.eNew (← goal.getTag)
-  goal.assign (r.impProof.app mvarNew)
-  replaceMainGoal (mvarNew.mvarId! :: r.mvarIds)
+--- 原说明 ---
+Apply the `grewrite` tactic to the current goal.
 -/
 def grewriteTarget (stx : Syntax) (symm : Bool) (config : GRewrite.Config) : TacticM Unit := do
   let goal ← getMainGoal
@@ -273,36 +159,18 @@ def grewriteTarget (stx : Syntax) (symm : Bool) (config : GRewrite.Config) : Tac
   goal.assign (r.impProof.app mvarNew)
   replaceMainGoal (mvarNew.mvarId! :: r.mvarIds)
 
-/--
-Definition of `grewriteLocalDecl` / `grewriteLocalDecl` 的定义
+/-- Apply the `grewrite` tactic to a local hypothesis. -/
+/-
+**Mathlib.Tactic.GRewrite.grewriteLocalDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.GRewrite`。
+形式化陈述：grewriteLocalDecl (stx : Syntax) (symm : Bool) (fvarId : FVarId) (config :
+ GRewrite.Config) : TacticM Unit
+参数：stx : Syntax；symm : Bool；fvarId : FVarId；config : GRewrite.Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition grewriteLocalDecl
-  signature: (stx : Syntax) (symm : Bool) (fvarId : FVarId) (config : GRewrite.Config)
-  body: withMainContext do
-  -- Note: we cannot execute `replace` inside `Term.withSynthesize`.
-  -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
-  let goal ← getMainGoal
-  let r ← withMainContext do
-    elabGRewrite (← getMainGoal) (← fvarId.getType) stx symm (forwardImp := true) (config := config)
-  let proof := r.impProof.app (.fvar fvarId)
-  let { mvarId, .. } ← goal.replace fvarId proof r.eNew
-  replaceMainGoal (mvarId :: r.mvarIds)
-
-中文:
-定义 grewriteLocalDecl
-  签名: (stx : Syntax) (symm : 布尔值) (fvarId : FVarId) (config : GRewrite.余nfig)
-  定义体: withMainContext do
-  -- Note: we cannot execute `replace` inside `Term.withSynthesize`.
-  -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
-  let goal ← getMainGoal
-  let r ← withMainContext do
-    elabGRewrite (← getMainGoal) (← fvarId.getType) stx symm (forwardImp := true) (config := config)
-  let proof := r.impProof.app (.fvar fvarId)
-  let { mvarId, .. } ← goal.replace fvarId proof r.eNew
-  replaceMainGoal (mvarId :: r.mvarIds)
-
-Depends on / 依赖: withMainContext
+--- 原说明 ---
+Apply the `grewrite` tactic to a local hypothesis.
 -/
 def grewriteLocalDecl (stx : Syntax) (symm : Bool) (fvarId : FVarId) (config : GRewrite.Config) :
     TacticM Unit := withMainContext do
@@ -486,7 +354,7 @@ replacing a goal `_ < _` by `_ ≤ _`. If this is not possible, then `a < b` is 
 -/
 macro "nth_grewrite" c:optConfig ppSpace nums:(num)+ s:rwRuleSeq loc:(location)? : tactic =>
   `(tactic|
-grewrite [$(getConfigItems c)]* +useKAbstract (occs := .pos [$[$nums],*]) s:rwRuleSeq (loc)?)
+    grewrite $[$(getConfigItems c)]* +useKAbstract (occs := .pos [$[$nums],*]) $s:rwRuleSeq $(loc)?)
 
 /--
 `nth_grw n₁ ... nₖ [e₁, ..., eₙ]` is a variant of `grw` that for each expression `eᵢ : R aᵢ bᵢ` only
@@ -515,6 +383,7 @@ replacing a goal `_ < _` by `_ ≤ _`. If this is not possible, then `a < b` is 
 -/
 macro "nth_grw" c:optConfig ppSpace nums:(num)+ s:rwRuleSeq loc:(location)? : tactic =>
   `(tactic|
-grw [$(getConfigItems c)]* +useKAbstract (occs := .pos [$[$nums],*]) s:rwRuleSeq (loc)?)
+    grw $[$(getConfigItems c)]* +useKAbstract (occs := .pos [$[$nums],*]) $s:rwRuleSeq $(loc)?)
 
 end Mathlib.Tactic.GRewrite
+

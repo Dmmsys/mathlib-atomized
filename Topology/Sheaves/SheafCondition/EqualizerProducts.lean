@@ -34,184 +34,195 @@ open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite TopologicalS
 namespace TopCat
 
 variable {C : Type u} [Category.{v} C] [HasProducts.{v'} C]
-variable {X : TopCat.{v'}} (F : Presheaf C X) {ι : Type v'} (U : ι -> Opens X)
+variable {X : TopCat.{v'}} (F : Presheaf C X) {ι : Type v'} (U : ι → Opens X)
 
 namespace Presheaf
 
 namespace SheafConditionEqualizerProducts
 
-/--
-Definition of `piOpens` / `piOpens` 的定义
+/-- The product of the sections of a presheaf over a family of open sets. -/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens** 是 Mathlib 中的一个定义，位于命
+名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：piOpens : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piOpens
-  signature: : C
-  body: ∏ᶜ fun i : ι => F.obj (op (U i))
-
-中文:
-定义 piOpens
-  签名: : C
-  定义体: ∏ᶜ fun i : ι => F.obj (op (U i))
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The product of the sections of a presheaf over a family of open sets.
 -/
 def piOpens : C :=
   ∏ᶜ fun i : ι => F.obj (op (U i))
 
-/--
-Definition of `piInters` / `piInters` 的定义
+/-- The product of the sections of a presheaf over the pairwise intersections of
+a family of open sets.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piInters** 是 Mathlib 中的一个定义，位于
+命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：piInters : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piInters
-  signature: : C
-  body: ∏ᶜ fun p : ι × ι => F.obj (op (U p.1 ⊓ U p.2))
-
-中文:
-定义 pi整数ers
-  签名: : C
-  定义体: ∏ᶜ fun p : ι × ι => F.obj (op (U p.1 ⊓ U p.2))
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The product of the sections of a presheaf over the pairwise intersections of
+a family of open sets.
 -/
 def piInters : C :=
   ∏ᶜ fun p : ι × ι => F.obj (op (U p.1 ⊓ U p.2))
 
-/--
-Definition of `leftRes` / `leftRes` 的定义
+/-- The morphism `Π F.obj (U i) ⟶ Π F.obj (U i) ⊓ (U j)` whose components
+are given by the restriction maps from `U i` to `U i ⊓ U j`.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.leftRes** 是 Mathlib 中的一个定义，位于命
+名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：leftRes : piOpens F U ⟶ piInters.{v'} F U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftRes
-  signature: : piOpens F U ⟶ piInters.{v'} F U
-  body: Pi.lift fun p : ι × ι => Pi.π _ p.1 ≫ F.map (infLELeft (U p.1) (U p.2)).op
-
-中文:
-定义 leftRes
-  签名: : piOpens F U ⟶ pi整数ers.{v'} F U
-  定义体: Pi.lift fun p : ι × ι => Pi.π _ p.1 ≫ F.map (infLELeft (U p.1) (U p.2)).op
-
-Depends on / 依赖: F.map, Pi.lift, infLELeft
+--- 原说明 ---
+The morphism `Π F.obj (U i) ⟶ Π F.obj (U i) ⊓ (U j)` whose components
+are given by the restriction maps from `U i` to `U i ⊓ U j`.
 -/
 def leftRes : piOpens F U ⟶ piInters.{v'} F U :=
   Pi.lift fun p : ι × ι => Pi.π _ p.1 ≫ F.map (infLELeft (U p.1) (U p.2)).op
 
-/--
-Definition of `rightRes` / `rightRes` 的定义
+/-- The morphism `Π F.obj (U i) ⟶ Π F.obj (U i) ⊓ (U j)` whose components
+are given by the restriction maps from `U j` to `U i ⊓ U j`.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.rightRes** 是 Mathlib 中的一个定义，位于
+命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：rightRes : piOpens F U ⟶ piInters.{v'} F U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightRes
-  signature: : piOpens F U ⟶ piInters.{v'} F U
-  body: Pi.lift fun p : ι × ι => Pi.π _ p.2 ≫ F.map (infLERight (U p.1) (U p.2)).op
-
-中文:
-定义 rightRes
-  签名: : piOpens F U ⟶ pi整数ers.{v'} F U
-  定义体: Pi.lift fun p : ι × ι => Pi.π _ p.2 ≫ F.map (infLERight (U p.1) (U p.2)).op
-
-Depends on / 依赖: F.map, Pi.lift, infLERight
+--- 原说明 ---
+The morphism `Π F.obj (U i) ⟶ Π F.obj (U i) ⊓ (U j)` whose components
+are given by the restriction maps from `U j` to `U i ⊓ U j`.
 -/
 def rightRes : piOpens F U ⟶ piInters.{v'} F U :=
   Pi.lift fun p : ι × ι => Pi.π _ p.2 ≫ F.map (infLERight (U p.1) (U p.2)).op
 
-/--
-Definition of `res` / `res` 的定义
+/-- The morphism `F.obj U ⟶ Π F.obj (U i)` whose components
+are given by the restriction maps from `U j` to `U i ⊓ U j`.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.res** 是 Mathlib 中的一个定义，位于命名空间 
+`TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：res : F.obj (op (iSup U)) ⟶ piOpens.{v'} F U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition res
-  signature: : F.obj (op (iSup U)) ⟶ piOpens.{v'} F U
-  body: Pi.lift fun i : ι => F.map (TopologicalSpace.Opens.leSupr U i).op
-
-中文:
-定义 res
-  签名: : F.obj (op (iSup U)) ⟶ piOpens.{v'} F U
-  定义体: Pi.lift fun i : ι => F.map (TopologicalSpace.Opens.leSupr U i).op
-
-Depends on / 依赖: F.map, Pi.lift, TopologicalSpace, TopologicalSpace.Opens.leSupr, leSupr
+--- 原说明 ---
+The morphism `F.obj U ⟶ Π F.obj (U i)` whose components
+are given by the restriction maps from `U j` to `U i ⊓ U j`.
 -/
 def res : F.obj (op (iSup U)) ⟶ piOpens.{v'} F U :=
   Pi.lift fun i : ι => F.map (TopologicalSpace.Opens.leSupr U i).op
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, elementwise]
-/--
-theorem `res_π` / 定理 `res_π`
-
-English:
-theorem res_π
-  given: (i : ι)
-  statement: res F U ≫ limit.π _ ⟨i⟩ = F.map (Opens.leSupr U i).op
-  proof: by
-  rw [res]; rw [limit.lift_π]; rw [Fan.mk_π_app]
-
-中文:
-定理 res_π
-  条件: (i : ι)
-  结论: res F U ≫ limit.π _ ⟨i⟩ = F.map (Opens.leSupr U i).op
-  证明: by
-  rw [res]; rw [limit.lift_π]; rw [Fan.mk_π_app]
-
-Depends on / 依赖: Fan.mk_, limit.lift_
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.res_** 是 Mathlib 中的一个定理，位于命名空间
+ `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem res_π (i : ι) : res F U ≫ limit.π _ ⟨i⟩ = F.map (Opens.leSupr U i).op := by
-  rw [res]; rw [limit.lift_π]; rw [Fan.mk_π_app]
+  rw [res, limit.lift_π, Fan.mk_π_app]
 
-/--
-theorem `piOpens.hom_ext` / 定理 `piOpens.hom_ext`
+/-- Copy of `limit.hom_ext`, specialized to `piOpens` for use by the `ext` tactic. -/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens.hom_ext** 是 Mathlib 中的
+一个定理，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasProducts C] {X : TopCat}   (F : TopCat.Presheaf C X) {ι : Type
+ v'} (U : ι → TopologicalSpace.Opens ↑X) {X_1 : C}   {f f' : X_1 ⟶ TopCat.Preshe
+af.SheafConditionEqualizerProducts.piOpens F U},   (∀ (j : CategoryTheory.Discre
+te ι),       CategoryTheory.CategoryStruct.comp f           (CategoryTheory.Limi
+ts.limit.π (CategoryTheory.Discrete.functor fun i => F.obj (Opposite.op (U i))) 
+j) =         CategoryTheory.CategoryStruct.comp f'           (CategoryTheory.Lim
+its.limit.π (CategoryTheory.Discrete.functor fun i => F.obj (Opposite.op (U i)))
+ j)) →     f = f'
+参数：F : TopCat.Presheaf C X；U : ι → TopologicalSpace.Opens ↑X；∀ (j : CategoryTheo
+ry.Discrete ι),       CategoryTheory.CategoryStruct.comp f           (CategoryTh
+eory.Limits.limit.π (CategoryTheory.Discrete.functor fun i => F.obj (Opposite.op
+ (U i))) j) =         CategoryTheory.CategoryStruct.comp f'           (CategoryT
+heory.Limits.limit.π (CategoryTheory.Discrete.functor fun i => F.obj (Opposite.o
+p (U i))) j)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 
-English:
-theorem piOpens.hom_ext
-  proof: limit.hom_ext w
-
-中文:
-定理 piOpens.hom_ext
-  证明: limit.hom_ext w
+--- 原说明 ---
+Copy of `limit.hom_ext`, specialized to `piOpens` for use by the `ext` tactic.
 -/
 @[ext] theorem piOpens.hom_ext
-    {X : C} {f f' : X ⟶ piOpens F U} (w : forall j, f ≫ limit.π _ j = f' ≫ limit.π _ j) : f = f' :=
+    {X : C} {f f' : X ⟶ piOpens F U} (w : ∀ j, f ≫ limit.π _ j = f' ≫ limit.π _ j) : f = f' :=
   limit.hom_ext w
 
-/--
-theorem `piInters.hom_ext` / 定理 `piInters.hom_ext`
+/-- Copy of `limit.hom_ext`, specialized to `piInters` for use by the `ext` tactic. -/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piInters.hom_ext** 是 Mathlib 中
+的一个定理，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.piInters`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasProducts C] {X : TopCat}   (F : TopCat.Presheaf C X) {ι : Type
+ v'} (U : ι → TopologicalSpace.Opens ↑X) {X_1 : C}   {f f' : X_1 ⟶ TopCat.Preshe
+af.SheafConditionEqualizerProducts.piInters F U},   (∀ (j : CategoryTheory.Discr
+ete (ι × ι)),       CategoryTheory.CategoryStruct.comp f           (CategoryTheo
+ry.Limits.limit.π (CategoryTheory.Discrete.functor fun p => F.obj (Opposite.op (
+U p.1 ⊓ U p.2)))             j) =         CategoryTheory.CategoryStruct.comp f' 
+          (CategoryTheory.Limits.limit.π (CategoryTheory.Discrete.functor fun p 
+=> F.obj (Opposite.op (U p.1 ⊓ U p.2)))             j)) →     f = f'
+参数：F : TopCat.Presheaf C X；U : ι → TopologicalSpace.Opens ↑X；∀ (j : CategoryTheo
+ry.Discrete (ι × ι)),       CategoryTheory.CategoryStruct.comp f           (Cate
+goryTheory.Limits.limit.π (CategoryTheory.Discrete.functor fun p => F.obj (Oppos
+ite.op (U p.1 ⊓ U p.2)))             j) =         CategoryTheory.CategoryStruct.
+comp f'           (CategoryTheory.Limits.limit.π (CategoryTheory.Discrete.functo
+r fun p => F.obj (Opposite.op (U p.1 ⊓ U p.2)))             j)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 
-English:
-theorem piInters.hom_ext
-  proof: limit.hom_ext w
-
-中文:
-定理 pi整数ers.hom_ext
-  证明: limit.hom_ext w
+--- 原说明 ---
+Copy of `limit.hom_ext`, specialized to `piInters` for use by the `ext` tactic.
 -/
 @[ext] theorem piInters.hom_ext
-    {X : C} {f f' : X ⟶ piInters F U} (w : forall j, f ≫ limit.π _ j = f' ≫ limit.π _ j) : f = f' :=
+    {X : C} {f f' : X ⟶ piInters F U} (w : ∀ j, f ≫ limit.π _ j = f' ≫ limit.π _ j) : f = f' :=
   limit.hom_ext w
 
 set_option backward.isDefEq.respectTransparency false in
 @[elementwise]
-/--
-theorem `w` / 定理 `w`
-
-English:
-theorem w
-  statement: res F U ≫ leftRes F U = res F U ≫ rightRes F U
-  proof: by
-  dsimp [res, leftRes, rightRes]
-  ext
-  simp only [limit.lift_π, limit.lift_π_assoc, Fan.mk_π_app, Category.assoc]
-  rw [← F.map_comp]
-  rw [← F.map_comp]
-  congr 1
-
-中文:
-定理 w
-  结论: res F U ≫ leftRes F U = res F U ≫ rightRes F U
-  证明: by
-  dsimp [res, leftRes, rightRes]
-  ext
-  simp only [limit.lift_π, limit.lift_π_assoc, Fan.mk_π_app, Category.assoc]
-  rw [← F.map_comp]
-  rw [← F.map_comp]
-  congr 1
-
-Depends on / 依赖: Category, Category.assoc, F.map_comp, Fan.mk_, leftRes, limit.lift_, map_comp, rightRes
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.w** 是 Mathlib 中的一个定理，位于命名空间 `T
+opCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：w : res F U ≫ leftRes F U = res F U ≫ rightRes F U
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.SheafConditionEqualizerProducts.piInters.hom_ext`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limi
+ts.HasProducts C] {X : TopCat}   (F : TopCat.Presheaf …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem w : res F U ≫ leftRes F U = res F U ≫ rightRes F U := by
   dsimp [res, leftRes, rightRes]
@@ -221,120 +232,75 @@ theorem w : res F U ≫ leftRes F U = res F U ≫ rightRes F U := by
   rw [← F.map_comp]
   congr 1
 
-/--
-Definition of `diagram` / `diagram` 的定义
+/-- The equalizer diagram for the sheaf condition.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.diagram** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：diagram : WalkingParallelPair ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagram
-  signature: : WalkingParallelPair ⥤ C
-  body: parallelPair (leftRes.{v'} F U) (rightRes F U)
-
-中文:
-缩写 diagram
-  签名: : WalkingParallelPair ⥤ C
-  定义体: parallelPair (leftRes.{v'} F U) (rightRes F U)
-
-Depends on / 依赖: leftRes, parallelPair, rightRes
+--- 原说明 ---
+The equalizer diagram for the sheaf condition.
 -/
 abbrev diagram : WalkingParallelPair ⥤ C :=
   parallelPair (leftRes.{v'} F U) (rightRes F U)
 
-/--
-Definition of `fork` / `fork` 的定义
+/-- The restriction map `F.obj U ⟶ Π F.obj (U i)` gives a cone over the equalizer diagram
+for the sheaf condition. The sheaf condition asserts this cone is a limit cone.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork** 是 Mathlib 中的一个定义，位于命名空间
+ `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：fork : Fork.{v} (leftRes F U) (rightRes F U)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.SheafConditionEqualizerProducts.w`：w : res F U ≫ leftRes
+ F U = res F U ≫ rightRes F U
 
-English:
-definition fork
-  signature: : Fork.{v} (leftRes F U) (rightRes F U)
-  body: Fork.ofι _ (w F U)
-
-@[simp]
-
-中文:
-定义 fork
-  签名: : 叉.{v} (leftRes F U) (rightRes F U)
-  定义体: Fork.ofι _ (w F U)
-
-@[simp]
-
-Depends on / 依赖: Fork.of
+--- 原说明 ---
+The restriction map `F.obj U ⟶ Π F.obj (U i)` gives a cone over the equalizer di
+agram
+for the sheaf condition. The sheaf condition asserts this cone is a limit cone.
 -/
 def fork : Fork.{v} (leftRes F U) (rightRes F U) :=
   Fork.ofι _ (w F U)
 
 @[simp]
-/--
-theorem `fork_pt` / 定理 `fork_pt`
-
-English:
-theorem fork_pt
-  statement: (fork F U).pt = F.obj (op (iSup U))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fork_pt
-  结论: (fork F U).pt = F.obj (op (iSup U))
-  证明: rfl
-
-@[simp]
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork_pt** 是 Mathlib 中的一个定理，位于命
+名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+形式化陈述：fork_pt : (fork F U).pt = F.obj (op (iSup U))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fork_pt : (fork F U).pt = F.obj (op (iSup U)) :=
   rfl
 
 @[simp]
-/--
-theorem `fork_ι` / 定理 `fork_ι`
-
-English:
-theorem fork_ι
-  statement: (fork F U).ι = res F U
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fork_ι
-  结论: (fork F U).ι = res F U
-  证明: rfl
-
-@[simp]
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork_** 是 Mathlib 中的一个定理，位于命名空
+间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fork_ι : (fork F U).ι = res F U :=
   rfl
 
 @[simp]
-/--
-theorem `fork_π_app_walkingParallelPair_zero` / 定理 `fork_π_app_walkingParallelPair_zero`
-
-English:
-theorem fork_π_app_walkingParallelPair_zero
-  statement: (fork F U).π.app WalkingParallelPair.zero = res F U
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fork_π_app_walkingParallelPair_zero
-  结论: (fork F U).π.app WalkingParallelPair.zero = res F U
-  证明: rfl
-
-@[simp]
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork_** 是 Mathlib 中的一个定理，位于命名空
+间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fork_π_app_walkingParallelPair_zero : (fork F U).π.app WalkingParallelPair.zero = res F U :=
   rfl
 
 @[simp]
-/--
-theorem `fork_π_app_walkingParallelPair_one` / 定理 `fork_π_app_walkingParallelPair_one`
-
-English:
-theorem fork_π_app_walkingParallelPair_one
-  proof: rfl
-
-中文:
-定理 fork_π_app_walkingParallelPair_one
-  证明: rfl
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork_** 是 Mathlib 中的一个定理，位于命名空
+间 `TopCat.Presheaf.SheafConditionEqualizerProducts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fork_π_app_walkingParallelPair_one :
     (fork F U).π.app WalkingParallelPair.one = res F U ≫ leftRes F U :=
@@ -344,86 +310,70 @@ variable {F} {G : Presheaf C X}
 
 /-- Isomorphic presheaves have isomorphic `piOpens` for any cover `U`. -/
 @[simp]
-/--
-Definition of `piOpens.isoOfIso` / `piOpens.isoOfIso` 的定义
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens.isoOfIso** 是 Mathlib 中
+的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasProducts C] →       {X : TopCat} →         {F : TopCat
+.Presheaf C X} →           {ι : Type v'} →             (U : ι → TopologicalSpace
+.Opens ↑X) →               {G : TopCat.Presheaf C X} →                 (F ≅ G) →
+                   (TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens F U 
+≅                     TopCat.Presheaf.SheafConditionEqualizerProducts.piOpens G 
+U)
+参数：U : ι → TopologicalSpace.Opens ↑X；F ≅ G；TopCat.Presheaf.SheafConditionEqualiz
+erProducts.piOpens F U ≅                     TopCat.Presheaf.SheafConditionEqual
+izerProducts.piOpens G U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piOpens.isoOfIso
-  signature: (α : F ≅ G)
-  body: Pi.mapIso fun _ => α.app _
-
-中文:
-定义 piOpens.isoOfIso
-  签名: (α : F ≅ G)
-  定义体: Pi.mapIso fun _ => α.app _
-
-Depends on / 依赖: Pi.mapIso, mapIso
+--- 原说明 ---
+Isomorphic presheaves have isomorphic `piOpens` for any cover `U`.
 -/
 def piOpens.isoOfIso (α : F ≅ G) : piOpens F U ≅ piOpens.{v'} G U :=
   Pi.mapIso fun _ => α.app _
 
 /-- Isomorphic presheaves have isomorphic `piInters` for any cover `U`. -/
 @[simp]
-/--
-Definition of `piInters.isoOfIso` / `piInters.isoOfIso` 的定义
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.piInters.isoOfIso** 是 Mathlib 
+中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.piInters`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasProducts C] →       {X : TopCat} →         {F : TopCat
+.Presheaf C X} →           {ι : Type v'} →             (U : ι → TopologicalSpace
+.Opens ↑X) →               {G : TopCat.Presheaf C X} →                 (F ≅ G) →
+                   (TopCat.Presheaf.SheafConditionEqualizerProducts.piInters F U
+ ≅                     TopCat.Presheaf.SheafConditionEqualizerProducts.piInters 
+G U)
+参数：U : ι → TopologicalSpace.Opens ↑X；F ≅ G；TopCat.Presheaf.SheafConditionEqualiz
+erProducts.piInters F U ≅                     TopCat.Presheaf.SheafConditionEqua
+lizerProducts.piInters G U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piInters.isoOfIso
-  signature: (α : F ≅ G)
-  body: Pi.mapIso fun _ => α.app _
-
-中文:
-定义 pi整数ers.isoOfIso
-  签名: (α : F ≅ G)
-  定义体: Pi.mapIso fun _ => α.app _
-
-Depends on / 依赖: Pi.mapIso, mapIso
+--- 原说明 ---
+Isomorphic presheaves have isomorphic `piInters` for any cover `U`.
 -/
 def piInters.isoOfIso (α : F ≅ G) : piInters F U ≅ piInters.{v'} G U :=
   Pi.mapIso fun _ => α.app _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `diagram.isoOfIso` / `diagram.isoOfIso` 的定义
+/-- Isomorphic presheaves have isomorphic sheaf condition diagrams. -/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.diagram.isoOfIso** 是 Mathlib 中
+的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.diagram`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasProducts C] →       {X : TopCat} →         {F : TopCat
+.Presheaf C X} →           {ι : Type v'} →             (U : ι → TopologicalSpace
+.Opens ↑X) →               {G : TopCat.Presheaf C X} →                 (F ≅ G) →
+                   (TopCat.Presheaf.SheafConditionEqualizerProducts.diagram F U 
+≅                     TopCat.Presheaf.SheafConditionEqualizerProducts.diagram G 
+U)
+参数：U : ι → TopologicalSpace.Opens ↑X；F ≅ G；TopCat.Presheaf.SheafConditionEqualiz
+erProducts.diagram F U ≅                     TopCat.Presheaf.SheafConditionEqual
+izerProducts.diagram G U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagram.isoOfIso
-  signature: (α : F ≅ G)
-  body: NatIso.ofComponents (by
-    rintro ⟨⟩
-    · exact piOpens.isoOfIso U α
-    · exact piInters.isoOfIso U α)
-    (by
-      rintro ⟨⟩ ⟨⟩ ⟨⟩
-      · simp
-      · dsimp
-        refine Pi.hom_ext _ _ fun b => ?_
-        simp [leftRes]
-      · dsimp [diagram]
-        refine Pi.hom_ext _ _ fun b => ?_
-        simp [rightRes]
-      · simp)
-
-中文:
-定义 diagram.isoOfIso
-  签名: (α : F ≅ G)
-  定义体: NatIso.ofComponents (by
-    rintro ⟨⟩
-    · exact piOpens.isoOfIso U α
-    · exact piInters.isoOfIso U α)
-    (by
-      rintro ⟨⟩ ⟨⟩ ⟨⟩
-      · simp
-      · dsimp
-        refine Pi.hom_ext _ _ fun b => ?_
-        simp [leftRes]
-      · dsimp [diagram]
-        refine Pi.hom_ext _ _ fun b => ?_
-        simp [rightRes]
-      · simp)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, Pi.hom_ext, diagram, hom_ext, isoOfIso, leftRes, ofComponents, piInters, piInters.isoOfIso, piOpens, piOpens.isoOfIso, rightRes
+--- 原说明 ---
+Isomorphic presheaves have isomorphic sheaf condition diagrams.
 -/
 def diagram.isoOfIso (α : F ≅ G) : diagram F U ≅ diagram.{v'} G U :=
   NatIso.ofComponents (by
@@ -434,70 +384,78 @@ def diagram.isoOfIso (α : F ≅ G) : diagram F U ≅ diagram.{v'} G U :=
       rintro ⟨⟩ ⟨⟩ ⟨⟩
       · simp
       · dsimp
-        refine Pi.hom_ext _ _ fun b => ?_
+        refine Pi.hom_ext _ _ fun b ↦ ?_
         simp [leftRes]
       · dsimp [diagram]
-        refine Pi.hom_ext _ _ fun b => ?_
+        refine Pi.hom_ext _ _ fun b ↦ ?_
         simp [rightRes]
       · simp)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `fork.isoOfIso` / `fork.isoOfIso` 的定义
+/-- If `F G : Presheaf C X` are isomorphic presheaves,
+then the `fork F U`, the canonical cone of the sheaf condition diagram for `F`,
+is isomorphic to `fork F G` postcomposed with the corresponding isomorphism between
+sheaf condition diagrams.
+-/
+/-
+**TopCat.Presheaf.SheafConditionEqualizerProducts.fork.isoOfIso** 是 Mathlib 中的一个
+定义，位于命名空间 `TopCat.Presheaf.SheafConditionEqualizerProducts.fork`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasProducts C] →       {X : TopCat} →         {F : TopCat
+.Presheaf C X} →           {ι : Type v'} →             (U : ι → TopologicalSpace
+.Opens ↑X) →               {G : TopCat.Presheaf C X} →                 (α : F ≅ 
+G) →                   TopCat.Presheaf.SheafConditionEqualizerProducts.fork F U 
+≅                     (CategoryTheory.Limits.Cone.postcompose                   
+        (TopCat.Presheaf.SheafConditionEqualizerProducts.diagram.isoOfIso U α).i
+nv).obj                       (TopCat.Presheaf.SheafConditionEqualizerProducts.f
+ork G U)
+参数：U : ι → TopologicalSpace.Opens ↑X；α : F ≅ G；CategoryTheory.Limits.Cone.postco
+mpose                           (TopCat.Presheaf.SheafConditionEqualizerProducts
+.diagram.isoOfIso U α).inv；TopCat.Presheaf.SheafConditionEqualizerProducts.fork 
+G U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fork.isoOfIso
-  signature: (α : F ≅ G)
-  body: by
-  fapply Fork.ext
-  · apply α.app
-  · dsimp
-    refine Pi.hom_ext _ _ fun b => ?_
-    dsimp only [Fork.ι]
-    simp [res, diagram.isoOfIso]
-
-中文:
-定义 fork.isoOfIso
-  签名: (α : F ≅ G)
-  定义体: by
-  fapply Fork.ext
-  · apply α.app
-  · dsimp
-    refine Pi.hom_ext _ _ fun b => ?_
-    dsimp only [Fork.ι]
-    simp [res, diagram.isoOfIso]
-
-Depends on / 依赖: Fork.ext, Pi.hom_ext, diagram, diagram.isoOfIso, fapply, hom_ext, isoOfIso
+--- 原说明 ---
+If `F G : Presheaf C X` are isomorphic presheaves,
+then the `fork F U`, the canonical cone of the sheaf condition diagram for `F`,
+is isomorphic to `fork F G` postcomposed with the corresponding isomorphism betw
+een
+sheaf condition diagrams.
 -/
 def fork.isoOfIso (α : F ≅ G) :
     fork F U ≅ (Cone.postcompose (diagram.isoOfIso U α).inv).obj (fork G U) := by
   fapply Fork.ext
   · apply α.app
   · dsimp
-    refine Pi.hom_ext _ _ fun b => ?_
+    refine Pi.hom_ext _ _ fun b ↦ ?_
     dsimp only [Fork.ι]
     simp [res, diagram.isoOfIso]
 
 end SheafConditionEqualizerProducts
 
-/--
-Definition of `IsSheafEqualizerProducts` / `IsSheafEqualizerProducts` 的定义
+/-- The sheaf condition for a `F : Presheaf C X` requires that the morphism
+`F.obj U ⟶ ∏ᶜ F.obj (U i)` (where `U` is some open set which is the union of the `U i`)
+is the equalizer of the two morphisms
+`∏ᶜ F.obj (U i) ⟶ ∏ᶜ F.obj (U i) ⊓ (U j)`.
+-/
+/-
+**TopCat.Presheaf.IsSheafEqualizerProducts** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Pre
+sheaf`。
+形式化陈述：IsSheafEqualizerProducts (F : Presheaf.{v', v, u} C X) : Prop
+参数：F : Presheaf.{v', v, u} C X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSheafEqualizerProducts
-  signature: (F : Presheaf.{v', v, u} C X)
-  body: forall ⦃ι : Type v'⦄ (U : ι -> Opens X), Nonempty (IsLimit (SheafConditionEqualizerProducts.fork F U))
-
-中文:
-定义 IsSheafEqualizerProducts
-  签名: (F : 预层.{v', v, u} C X)
-  定义体: forall ⦃ι : Type v'⦄ (U : ι -> Opens X), Nonempty (IsLimit (SheafConditionEqualizerProducts.fork F U))
-
-Depends on / 依赖: IsLimit, Nonempty, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.fork
+--- 原说明 ---
+The sheaf condition for a `F : Presheaf C X` requires that the morphism
+`F.obj U ⟶ ∏ᶜ F.obj (U i)` (where `U` is some open set which is the union of the
+ `U i`)
+is the equalizer of the two morphisms
+`∏ᶜ F.obj (U i) ⟶ ∏ᶜ F.obj (U i) ⊓ (U j)`.
 -/
 def IsSheafEqualizerProducts (F : Presheaf.{v', v, u} C X) : Prop :=
-  forall ⦃ι : Type v'⦄ (U : ι -> Opens X), Nonempty (IsLimit (SheafConditionEqualizerProducts.fork F U))
+  ∀ ⦃ι : Type v'⦄ (U : ι → Opens X), Nonempty (IsLimit (SheafConditionEqualizerProducts.fork F U))
 
 /-!
 The remainder of this file shows that the "equalizer products" sheaf condition is equivalent
@@ -513,64 +471,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps]
-/--
-Definition of `coneEquivFunctorObj` / `coneEquivFunctorObj` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivFunctorObj** 是 Ma
+thlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivFunctorObj (c : Cone ((diagram U).op ⋙ F)) : Cone (SheafCondition
+EqualizerProducts.diagram F U) where pt
+参数：c : Cone ((diagram U).op ⋙ F)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivFunctorObj
-  signature: (c : Cone ((diagram U).op ⋙ F))
-  body: c.pt
-  π :=
-    { app := fun Z =>
-        WalkingParallelPair.casesOn Z (Pi.lift fun i : ι => c.π.app (op (single i)))
-          (Pi.lift fun b : ι × ι => c.π.app (op (pair b.1 b.2)))
-      naturality := fun Y Z f => by
-        cases Y <;> cases Z <;> cases f
-        · dsimp
-          ext
-          simp
-        · dsimp
-          ext ij
-          rcases ij with ⟨i, j⟩
-          simpa [SheafConditionEqualizerProducts.leftRes]
-            using! c.π.naturality (Quiver.Hom.op (Hom.left i j))
-        · dsimp
-          ext ij
-          rcases ij with ⟨i, j⟩
-          simpa [SheafConditionEqualizerProducts.rightRes]
-            using! c.π.naturality (Quiver.Hom.op (Hom.right i j))
-        · dsimp
-          ext
-          simp }
-
-中文:
-定义 coneEquivFunctorObj
-  签名: (c : 锥 ((diagram U).op ⋙ F))
-  定义体: c.pt
-  π :=
-    { app := fun Z =>
-        WalkingParallelPair.casesOn Z (Pi.lift fun i : ι => c.π.app (op (single i)))
-          (Pi.lift fun b : ι × ι => c.π.app (op (pair b.1 b.2)))
-      naturality := fun Y Z f => by
-        cases Y <;> cases Z <;> cases f
-        · dsimp
-          ext
-          simp
-        · dsimp
-          ext ij
-          rcases ij with ⟨i, j⟩
-          simpa [SheafConditionEqualizerProducts.leftRes]
-            using! c.π.naturality (Quiver.Hom.op (Hom.left i j))
-        · dsimp
-          ext ij
-          rcases ij with ⟨i, j⟩
-          simpa [SheafConditionEqualizerProducts.rightRes]
-            using! c.π.naturality (Quiver.Hom.op (Hom.right i j))
-        · dsimp
-          ext
-          simp }
-
-Depends on / 依赖: c.pt
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivFunctorObj (c : Cone ((diagram U).op ⋙ F)) :
     Cone (SheafConditionEqualizerProducts.diagram F U) where
@@ -604,34 +515,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps!]
-/--
-Definition of `coneEquivFunctor` / `coneEquivFunctor` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivFunctor** 是 Mathl
+ib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivFunctor : Limits.Cone ((diagram U).op ⋙ F) ⥤ Limits.Cone (SheafCo
+nditionEqualizerProducts.diagram F U) where obj c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivFunctor
-  signature: :
-  body: coneEquivFunctorObj F U c
-  map {c c'} f :=
-    { hom := f.hom
-      w := fun j => by
-        cases j <;>
-          · dsimp
-            ext
-            simp }
-
-中文:
-定义 coneEquivFunctor
-  签名: :
-  定义体: coneEquivFunctorObj F U c
-  map {c c'} f :=
-    { hom := f.hom
-      w := fun j => by
-        cases j <;>
-          · dsimp
-            ext
-            simp }
-
-Depends on / 依赖: coneEquivFunctorObj
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivFunctor :
     Limits.Cone ((diagram U).op ⋙ F) ⥤
@@ -651,100 +544,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps]
-/--
-Definition of `coneEquivInverseObj` / `coneEquivInverseObj` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivInverseObj** 是 Ma
+thlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivInverseObj (c : Limits.Cone (SheafConditionEqualizerProducts.diag
+ram F U)) : Limits.Cone ((diagram U).op ⋙ F) where pt
+参数：c : Limits.Cone (SheafConditionEqualizerProducts.diagram F U)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivInverseObj
-  signature: (c : Limits.Cone (SheafConditionEqualizerProducts.diagram F U))
-  body: c.pt
-  π :=
-    { app := by
-        intro x
-        induction x with | op x => ?_
-        rcases x with (⟨i⟩ | ⟨i, j⟩)
-        · exact c.π.app WalkingParallelPair.zero ≫ Pi.π _ i
-        · exact c.π.app WalkingParallelPair.one ≫ Pi.π _ (i, j)
-      naturality := by
-        intro x y f
-        induction x with | op x => ?_
-        induction y with | op y => ?_
-        have ef : f = f.unop.op := rfl
-        revert ef
-        generalize f.unop = f'
-        rintro rfl
-        rcases x with (⟨i⟩ | ⟨⟩) <;> rcases y with (⟨⟩ | ⟨j, j⟩) <;> rcases f' with ⟨⟩
-        · dsimp
-          rw [F.map_id]
-          simp
-        · dsimp
-          simp only [Category.id_comp, Category.assoc]
-          have h := c.π.naturality WalkingParallelPairHom.left
-          dsimp [SheafConditionEqualizerProducts.leftRes] at h
-          simp only [Category.id_comp] at h
-          have h' := h =≫ Pi.π _ (i, j)
-          rw [h']
-          simp only [Category.assoc, limit.lift_π, Fan.mk_π_app]
-          rfl
-        · dsimp
-          simp only [Category.id_comp, Category.assoc]
-          have h := c.π.naturality WalkingParallelPairHom.right
-          dsimp [SheafConditionEqualizerProducts.rightRes] at h
-          simp only [Category.id_comp] at h
-          have h' := h =≫ Pi.π _ (j, i)
-          rw [h']
-          simp
-          rfl
-        · dsimp
-          rw [F.map_id]
-          simp }
-
-中文:
-定义 coneEquivInverseObj
-  签名: (c : Limits.锥 (SheafConditionEqualizerProducts.diagram F U))
-  定义体: c.pt
-  π :=
-    { app := by
-        intro x
-        induction x with | op x => ?_
-        rcases x with (⟨i⟩ | ⟨i, j⟩)
-        · exact c.π.app WalkingParallelPair.zero ≫ Pi.π _ i
-        · exact c.π.app WalkingParallelPair.one ≫ Pi.π _ (i, j)
-      naturality := by
-        intro x y f
-        induction x with | op x => ?_
-        induction y with | op y => ?_
-        have ef : f = f.unop.op := rfl
-        revert ef
-        generalize f.unop = f'
-        rintro rfl
-        rcases x with (⟨i⟩ | ⟨⟩) <;> rcases y with (⟨⟩ | ⟨j, j⟩) <;> rcases f' with ⟨⟩
-        · dsimp
-          rw [F.map_id]
-          simp
-        · dsimp
-          simp only [Category.id_comp, Category.assoc]
-          have h := c.π.naturality WalkingParallelPairHom.left
-          dsimp [SheafConditionEqualizerProducts.leftRes] at h
-          simp only [Category.id_comp] at h
-          have h' := h =≫ Pi.π _ (i, j)
-          rw [h']
-          simp only [Category.assoc, limit.lift_π, Fan.mk_π_app]
-          rfl
-        · dsimp
-          simp only [Category.id_comp, Category.assoc]
-          have h := c.π.naturality WalkingParallelPairHom.right
-          dsimp [SheafConditionEqualizerProducts.rightRes] at h
-          simp only [Category.id_comp] at h
-          have h' := h =≫ Pi.π _ (j, i)
-          rw [h']
-          simp
-          rfl
-        · dsimp
-          rw [F.map_id]
-          simp }
-
-Depends on / 依赖: c.pt
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivInverseObj (c : Limits.Cone (SheafConditionEqualizerProducts.diagram F U)) :
     Limits.Cone ((diagram U).op ⋙ F) where
@@ -794,42 +604,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps!]
-/--
-Definition of `coneEquivInverse` / `coneEquivInverse` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivInverse** 是 Mathl
+ib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivInverse : Limits.Cone (SheafConditionEqualizerProducts.diagram F 
+U) ⥤ Limits.Cone ((diagram U).op ⋙ F) where obj c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivInverse
-  signature: :
-  body: coneEquivInverseObj F U c
-  map {c c'} f :=
-    { hom := f.hom
-      w := by
-        intro x
-        induction x with | op x => ?_
-        rcases x with (⟨i⟩ | ⟨i, j⟩)
-        · dsimp
-          dsimp only [Fork.ι]
-          rw [← f.w WalkingParallelPair.zero]; rw [Category.assoc]
-        · dsimp
-          rw [← f.w WalkingParallelPair.one]; rw [Category.assoc] }
-
-中文:
-定义 coneEquivInverse
-  签名: :
-  定义体: coneEquivInverseObj F U c
-  map {c c'} f :=
-    { hom := f.hom
-      w := by
-        intro x
-        induction x with | op x => ?_
-        rcases x with (⟨i⟩ | ⟨i, j⟩)
-        · dsimp
-          dsimp only [Fork.ι]
-          rw [← f.w WalkingParallelPair.zero]; rw [Category.assoc]
-        · dsimp
-          rw [← f.w WalkingParallelPair.one]; rw [Category.assoc] }
-
-Depends on / 依赖: coneEquivInverseObj
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivInverse :
     Limits.Cone (SheafConditionEqualizerProducts.diagram F U) ⥤
@@ -843,52 +627,26 @@ def coneEquivInverse :
         rcases x with (⟨i⟩ | ⟨i, j⟩)
         · dsimp
           dsimp only [Fork.ι]
-          rw [← f.w WalkingParallelPair.zero]; rw [Category.assoc]
+          rw [← f.w WalkingParallelPair.zero, Category.assoc]
         · dsimp
-          rw [← f.w WalkingParallelPair.one]; rw [Category.assoc] }
+          rw [← f.w WalkingParallelPair.one, Category.assoc] }
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps]
-/--
-Definition of `coneEquivUnitIsoApp` / `coneEquivUnitIsoApp` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivUnitIsoApp** 是 Ma
+thlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivUnitIsoApp (c : Cone ((diagram U).op ⋙ F)) : (𝟭 (Cone ((diagram U
+).op ⋙ F))).obj c ≅ (coneEquivFunctor F U ⋙ coneEquivInverse F U).obj c where ho
+m
+参数：c : Cone ((diagram U).op ⋙ F)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivUnitIsoApp
-  signature: (c : Cone ((diagram U).op ⋙ F))
-  body: { hom := 𝟙 _
-      w := fun j => by
-        induction j with | op j => ?_
-        rcases j with ⟨⟩ <;>
-        · dsimp [coneEquivInverse]
-          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
-  inv :=
-    { hom := 𝟙 _
-      w := fun j => by
-        induction j with | op j => ?_
-        rcases j with ⟨⟩ <;>
-        · dsimp [coneEquivInverse]
-          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
-
-中文:
-定义 coneEquivUnitIsoApp
-  签名: (c : 锥 ((diagram U).op ⋙ F))
-  定义体: { hom := 𝟙 _
-      w := fun j => by
-        induction j with | op j => ?_
-        rcases j with ⟨⟩ <;>
-        · dsimp [coneEquivInverse]
-          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
-  inv :=
-    { hom := 𝟙 _
-      w := fun j => by
-        induction j with | op j => ?_
-        rcases j with ⟨⟩ <;>
-        · dsimp [coneEquivInverse]
-          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
-
-Depends on / 依赖: Category, Category.id_comp, Limits, Limits.Fan.mk_, Limits.limit.lift_, coneEquivInverse, id_comp
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivUnitIsoApp (c : Cone ((diagram U).op ⋙ F)) :
     (𝟭 (Cone ((diagram U).op ⋙ F))).obj c ≅
@@ -911,20 +669,16 @@ def coneEquivUnitIsoApp (c : Cone ((diagram U).op ⋙ F)) :
 set_option backward.defeqAttrib.useBackward true in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps!]
-/--
-Definition of `coneEquivUnitIso` / `coneEquivUnitIso` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivUnitIso** 是 Mathl
+ib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivUnitIso : 𝟭 (Limits.Cone ((diagram U).op ⋙ F)) ≅ coneEquivFunctor
+ F U ⋙ coneEquivInverse F U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivUnitIso
-  signature: :
-  body: NatIso.ofComponents (coneEquivUnitIsoApp F U)
-
-中文:
-定义 coneEquivUnitIso
-  签名: :
-  定义体: NatIso.ofComponents (coneEquivUnitIsoApp F U)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, coneEquivUnitIsoApp, ofComponents
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivUnitIso :
     𝟭 (Limits.Cone ((diagram U).op ⋙ F)) ≅ coneEquivFunctor F U ⋙ coneEquivInverse F U :=
@@ -934,70 +688,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `SheafConditionPairwiseIntersections.coneEquiv`. -/
 @[simps!]
-/--
-Definition of `coneEquivCounitIso` / `coneEquivCounitIso` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquivCounitIso** 是 Mat
+hlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquivCounitIso : coneEquivInverse F U ⋙ coneEquivFunctor F U ≅ 𝟭 (Limi
+ts.Cone (SheafConditionEqualizerProducts.diagram F U))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquivCounitIso
-  signature: :
-  body: NatIso.ofComponents
-    (fun c =>
-      { hom :=
-          { hom := 𝟙 _
-            w := by
-              rintro ⟨_ | _⟩
-              · dsimp
-                ext
-                simp
-              · dsimp
-                ext
-                simp }
-        inv :=
-          { hom := 𝟙 _
-            w := by
-              rintro ⟨_ | _⟩
-              · dsimp
-                ext
-                simp
-              · dsimp
-                ext
-                simp } })
-    fun {c d} f => by
-    ext
-    dsimp
-    simp only [Category.comp_id, Category.id_comp]
-
-中文:
-定义 coneEquivCounitIso
-  签名: :
-  定义体: NatIso.ofComponents
-    (fun c =>
-      { hom :=
-          { hom := 𝟙 _
-            w := by
-              rintro ⟨_ | _⟩
-              · dsimp
-                ext
-                simp
-              · dsimp
-                ext
-                simp }
-        inv :=
-          { hom := 𝟙 _
-            w := by
-              rintro ⟨_ | _⟩
-              · dsimp
-                ext
-                simp
-              · dsimp
-                ext
-                simp } })
-    fun {c d} f => by
-    ext
-    dsimp
-    simp only [Category.comp_id, Category.id_comp]
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, NatIso, NatIso.ofComponents, comp_id, id_comp, ofComponents
+--- 原说明 ---
+Implementation of `SheafConditionPairwiseIntersections.coneEquiv`.
 -/
 def coneEquivCounitIso :
     coneEquivInverse F U ⋙ coneEquivFunctor F U ≅
@@ -1034,26 +734,17 @@ set_option backward.defeqAttrib.useBackward true in
 Cones over `diagram U ⋙ F` are the same as a cones over the usual sheaf condition equalizer diagram.
 -/
 @[simps]
-/--
-Definition of `coneEquiv` / `coneEquiv` 的定义
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.coneEquiv** 是 Mathlib 中的一个
+定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwiseIntersections`。
+形式化陈述：coneEquiv : Limits.Cone ((diagram U).op ⋙ F) ≌ Limits.Cone (SheafCondition
+EqualizerProducts.diagram F U) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneEquiv
-  signature: :
-  body: coneEquivFunctor F U
-  inverse := coneEquivInverse F U
-  unitIso := coneEquivUnitIso F U
-  counitIso := coneEquivCounitIso F U
-
-中文:
-定义 coneEquiv
-  签名: :
-  定义体: coneEquivFunctor F U
-  inverse := coneEquivInverse F U
-  unitIso := coneEquivUnitIso F U
-  counitIso := coneEquivCounitIso F U
-
-Depends on / 依赖: coneEquivFunctor
+--- 原说明 ---
+Cones over `diagram U ⋙ F` are the same as a cones over the usual sheaf conditio
+n equalizer diagram.
 -/
 def coneEquiv :
     Limits.Cone ((diagram U).op ⋙ F) ≌
@@ -1065,74 +756,23 @@ def coneEquiv :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitMapConeOfIsLimitSheafConditionFork` / `isLimitMapConeOfIsLimitSheafConditionFork` 的定义
+/-- If `SheafConditionEqualizerProducts.fork` is an equalizer,
+then `F.mapCone (cone U)` is a limit cone.
+-/
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.isLimitMapConeOfIsLimitShe
+afConditionFork** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwis
+eIntersections`。
+形式化陈述：isLimitMapConeOfIsLimitSheafConditionFork (P : IsLimit (SheafConditionEqua
+lizerProducts.fork F U)) : IsLimit (F.mapCone (cocone U).op)
+参数：P : IsLimit (SheafConditionEqualizerProducts.fork F U)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitMapConeOfIsLimitSheafConditionFork
-  body: IsLimit.ofIsoLimit ((IsLimit.ofConeEquiv (coneEquiv F U).symm).symm P)
-    { hom :=
-        { hom := 𝟙 _
-          w := by
-            intro x
-            induction x with | op x => ?_
-            rcases x with ⟨⟩
-            · simp
-              rfl
-            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl }
-      inv :=
-        { hom := 𝟙 _
-          w := by
-            intro x
-            induction x with | op x => ?_
-            rcases x with ⟨⟩
-            · simp
-              rfl
-            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl } }
-
-中文:
-定义 isLimitMapConeOfIsLimitSheafConditionFork
-  定义体: IsLimit.ofIsoLimit ((IsLimit.ofConeEquiv (coneEquiv F U).symm).symm P)
-    { hom :=
-        { hom := 𝟙 _
-          w := by
-            intro x
-            induction x with | op x => ?_
-            rcases x with ⟨⟩
-            · simp
-              rfl
-            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl }
-      inv :=
-        { hom := 𝟙 _
-          w := by
-            intro x
-            induction x with | op x => ?_
-            rcases x with ⟨⟩
-            · simp
-              rfl
-            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl } }
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, Fan.mk_, IsLimit, IsLimit.ofConeEquiv, IsLimit.ofIsoLimit, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.leftRes, SheafConditionEqualizerProducts.res, coneEqui, coneEquiv, coneEquivInverse, id_comp, leftRes, limit.lift_, map_comp, ofConeEquiv, ofIsoLimit
+--- 原说明 ---
+If `SheafConditionEqualizerProducts.fork` is an equalizer,
+then `F.mapCone (cone U)` is a limit cone.
 -/
 def isLimitMapConeOfIsLimitSheafConditionFork
     (P : IsLimit (SheafConditionEqualizerProducts.fork F U)) : IsLimit (F.mapCone (cocone U).op) :=
@@ -1168,76 +808,23 @@ def isLimitMapConeOfIsLimitSheafConditionFork
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitSheafConditionForkOfIsLimitMapCone` / `isLimitSheafConditionForkOfIsLimitMapCone` 的定义
+/-- If `F.mapCone (cone U)` is a limit cone,
+then `SheafConditionEqualizerProducts.fork` is an equalizer.
+-/
+/-
+**TopCat.Presheaf.SheafConditionPairwiseIntersections.isLimitSheafConditionForkO
+fIsLimitMapCone** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf.SheafConditionPairwis
+eIntersections`。
+形式化陈述：isLimitSheafConditionForkOfIsLimitMapCone (Q : IsLimit (F.mapCone (cocone 
+U).op)) : IsLimit (SheafConditionEqualizerProducts.fork F U)
+参数：Q : IsLimit (F.mapCone (cocone U).op)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitSheafConditionForkOfIsLimitMapCone
-  signature: (Q : IsLimit (F.mapCone (cocone U).op))
-  body: IsLimit.ofIsoLimit ((IsLimit.ofConeEquiv (coneEquiv F U)).symm Q)
-    { hom :=
-        { hom := 𝟙 _
-          w := by
-            rintro ⟨⟩
-            · simp
-              rfl
-            · dsimp
-              ext
-              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl }
-      inv :=
-        { hom := 𝟙 _
-          w := by
-            rintro ⟨⟩
-            · simp
-              rfl
-            · dsimp
-              ext
-              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl } }
-
-中文:
-定义 isLimitSheafConditionForkOfIsLimitMapCone
-  签名: (Q : 是极限 (F.mapCone (cocone U).op))
-  定义体: IsLimit.ofIsoLimit ((IsLimit.ofConeEquiv (coneEquiv F U)).symm Q)
-    { hom :=
-        { hom := 𝟙 _
-          w := by
-            rintro ⟨⟩
-            · simp
-              rfl
-            · dsimp
-              ext
-              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl }
-      inv :=
-        { hom := 𝟙 _
-          w := by
-            rintro ⟨⟩
-            · simp
-              rfl
-            · dsimp
-              ext
-              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-                SheafConditionEqualizerProducts.leftRes]
-              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
-                Category.assoc]
-              rw [← F.map_comp]
-              rfl } }
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, Fan.mk_, IsLimit, IsLimit.ofConeEquiv, IsLimit.ofIsoLimit, SheafConditionEqualizerProdu, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.leftRes, SheafConditionEqualizerProducts.res, coneEquiv, coneEquivInverse, id_comp, leftRes, limit.lift_, map_comp, ofConeEquiv, ofIsoLimit
+--- 原说明 ---
+If `F.mapCone (cone U)` is a limit cone,
+then `SheafConditionEqualizerProducts.fork` is an equalizer.
 -/
 def isLimitSheafConditionForkOfIsLimitMapCone (Q : IsLimit (F.mapCone (cocone U).op)) :
     IsLimit (SheafConditionEqualizerProducts.fork F U) :=
@@ -1275,31 +862,32 @@ end SheafConditionPairwiseIntersections
 
 open SheafConditionPairwiseIntersections
 
-/--
-theorem `isSheaf_iff_isSheafEqualizerProducts` / 定理 `isSheaf_iff_isSheafEqualizerProducts`
+/-- The sheaf condition in terms of an equalizer diagram is equivalent
+to the default sheaf condition.
+-/
+/-
+**TopCat.Presheaf.isSheaf_iff_isSheafEqualizerProducts** 是 Mathlib 中的一个定理，位于命名空间
+ `TopCat.Presheaf`。
+形式化陈述：isSheaf_iff_isSheafEqualizerProducts (F : Presheaf C X) : F.IsSheaf ↔ F.Is
+SheafEqualizerProducts
+参数：F : Presheaf C X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `TopCat.Presheaf.isSheaf_iff_isSheafPairwiseIntersections`：isSheaf_iff_is
+SheafPairwiseIntersections : F.IsSheaf ↔ F.IsSheafPairwiseIntersections
 
-English:
-theorem isSheaf_iff_isSheafEqualizerProducts
-  given: (F : Presheaf C X)
-  proof: (isSheaf_iff_isSheafPairwiseIntersections F).trans
-    Iff.intro (fun h _ U => ⟨isLimitSheafConditionForkOfIsLimitMapCone F U (h U).some⟩) fun h _ U =>
-      ⟨isLimitMapConeOfIsLimitSheafConditionFork F U (h U).some⟩
-
-中文:
-定理 isSheaf_iff_isSheafEqualizerProducts
-  条件: (F : 预层 C X)
-  证明: (isSheaf_iff_isSheafPairwiseIntersections F).trans
-    Iff.intro (fun h _ U => ⟨isLimitSheafConditionForkOfIsLimitMapCone F U (h U).some⟩) fun h _ U =>
-      ⟨isLimitMapConeOfIsLimitSheafConditionFork F U (h U).some⟩
-
-Depends on / 依赖: Iff.intro, isLimitMapConeOfIsLimitSheafConditionFork, isLimitSheafConditionForkOfIsLimitMapCone, isSheaf_iff_isSheafPairwiseIntersections
+--- 原说明 ---
+The sheaf condition in terms of an equalizer diagram is equivalent
+to the default sheaf condition.
 -/
 theorem isSheaf_iff_isSheafEqualizerProducts (F : Presheaf C X) :
     F.IsSheaf ↔ F.IsSheafEqualizerProducts :=
-(isSheaf_iff_isSheafPairwiseIntersections F).trans
+  (isSheaf_iff_isSheafPairwiseIntersections F).trans <|
     Iff.intro (fun h _ U => ⟨isLimitSheafConditionForkOfIsLimitMapCone F U (h U).some⟩) fun h _ U =>
       ⟨isLimitMapConeOfIsLimitSheafConditionFork F U (h U).some⟩
 
 end Presheaf
 
 end TopCat
+

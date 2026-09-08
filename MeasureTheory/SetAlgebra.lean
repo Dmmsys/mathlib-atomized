@@ -53,167 +53,170 @@ variable {α : Type*} {𝒜 : Set (Set α)} {s t : Set α}
 
 /-! ### Definition and basic properties of an algebra of sets -/
 
-/--
-Definition of `IsSetAlgebra` / `IsSetAlgebra` 的定义
+/-- An algebra of sets is a family of sets containing the empty set and closed by complement and
+union. Consequently it is also closed by difference (see `IsSetAlgebra.sdiff_mem`) and intersection
+(see `IsSetAlgebra.inter_mem`). -/
+/-
+**MeasureTheory.IsSetAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{α : Type u_1} → Set (Set α) → Prop
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSetAlgebra
-  parameters: (𝒜 : Set (Set α))
-  axioms and operations (3):
-    - empty_mem : ∅ in 𝒜
-    - compl_mem : forall ⦃s⦄, s in 𝒜 -> sᶜ in 𝒜
-    - union_mem : forall ⦃s t⦄, s in 𝒜 -> t in 𝒜 -> s union t in 𝒜
-
-中文:
-结构 是集合代数
-  参数: (𝒜 : 集合 (集合 α))
-  公理与运算 (3 个):
-    - empty_mem : ∅ in 𝒜
-    - compl_mem : 对任意 ⦃s⦄, s in 𝒜 -> sᶜ in 𝒜
-    - union_mem : 对任意 ⦃s t⦄, s in 𝒜 -> t in 𝒜 -> s union t in 𝒜
+--- 原说明 ---
+An algebra of sets is a family of sets containing the empty set and closed by co
+mplement and
+union. Consequently it is also closed by difference (see `IsSetAlgebra.sdiff_mem
+`) and intersection
+(see `IsSetAlgebra.inter_mem`).
 -/
 structure IsSetAlgebra (𝒜 : Set (Set α)) : Prop where
-  empty_mem : ∅ in 𝒜
-  compl_mem : forall ⦃s⦄, s in 𝒜 -> sᶜ in 𝒜
-  union_mem : forall ⦃s t⦄, s in 𝒜 -> t in 𝒜 -> s union t in 𝒜
+  empty_mem : ∅ ∈ 𝒜
+  compl_mem : ∀ ⦃s⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
+  union_mem : ∀ ⦃s t⦄, s ∈ 𝒜 → t ∈ 𝒜 → s ∪ t ∈ 𝒜
 
 namespace IsSetAlgebra
 
-/--
-theorem `univ_mem` / 定理 `univ_mem`
+/-- An algebra of sets contains the whole set. -/
+/-
+**MeasureTheory.IsSetAlgebra.univ_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.I
+sSetAlgebra`。
+形式化陈述：univ_mem (h𝒜 : IsSetAlgebra 𝒜) : univ in 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.compl_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s : Set α⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.empty_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∅ ∈ 𝒜
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
 
-English:
-theorem univ_mem
-  given: (h𝒜 : IsSetAlgebra 𝒜)
-  statement: univ in 𝒜
-  proof: compl_empty ▸ h𝒜.compl_mem h𝒜.empty_mem
-
-中文:
-定理 univ_mem
-  条件: (h𝒜 : 是集合代数 𝒜)
-  结论: univ in 𝒜
-  证明: compl_empty ▸ h𝒜.compl_mem h𝒜.empty_mem
-
-Depends on / 依赖: compl_empty, compl_mem, empty_mem
+--- 原说明 ---
+An algebra of sets contains the whole set.
 -/
-theorem univ_mem (h𝒜 : IsSetAlgebra 𝒜) : univ in 𝒜 :=
+theorem univ_mem (h𝒜 : IsSetAlgebra 𝒜) : univ ∈ 𝒜 :=
   compl_empty ▸ h𝒜.compl_mem h𝒜.empty_mem
 
-/--
-theorem `inter_mem` / 定理 `inter_mem`
+/-- An algebra of sets is closed by intersection. -/
+/-
+**MeasureTheory.IsSetAlgebra.inter_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+IsSetAlgebra`。
+形式化陈述：inter_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜) : s inte
+r t in 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜；s_mem : s in 𝒜；t_mem : t in 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.compl_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s : Set α⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.union_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s t : Set α⦄, s ∈ 𝒜 → t ∈ 𝒜 → s ∪ t ∈ 𝒜
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_eq_compl_compl_union_compl`：inter_eq_compl_compl_union_compl (
+s t : Set α) : s inter t = (sᶜ union tᶜ)ᶜ
 
-English:
-theorem inter_mem
-  given: (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
-  proof: inter_eq_compl_compl_union_compl .. ▸
-    h𝒜.compl_mem (h𝒜.union_mem (h𝒜.compl_mem s_mem) (h𝒜.compl_mem t_mem))
-
-中文:
-定理 inter_mem
-  条件: (h𝒜 : 是集合代数 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
-  证明: inter_eq_compl_compl_union_compl .. ▸
-    h𝒜.compl_mem (h𝒜.union_mem (h𝒜.compl_mem s_mem) (h𝒜.compl_mem t_mem))
-
-Depends on / 依赖: compl_mem, inter_eq_compl_compl_union_compl, s_mem, t_mem, union_mem
+--- 原说明 ---
+An algebra of sets is closed by intersection.
 -/
-theorem inter_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜) :
-    s inter t in 𝒜 :=
+theorem inter_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s ∈ 𝒜) (t_mem : t ∈ 𝒜) :
+    s ∩ t ∈ 𝒜 :=
   inter_eq_compl_compl_union_compl .. ▸
     h𝒜.compl_mem (h𝒜.union_mem (h𝒜.compl_mem s_mem) (h𝒜.compl_mem t_mem))
 
-/--
-theorem `sdiff_mem` / 定理 `sdiff_mem`
+/-- An algebra of sets is closed by difference. -/
+/-
+**MeasureTheory.IsSetAlgebra.sdiff_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+IsSetAlgebra`。
+形式化陈述：sdiff_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜) : s \ t 
+in 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜；s_mem : s in 𝒜；t_mem : t in 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.inter_mem`：inter_mem (h𝒜 : IsSetAlgebra 𝒜) (s
+_mem : s in 𝒜) (t_mem : t in 𝒜) : s inter t in 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.compl_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s : Set α⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
 
-English:
-theorem sdiff_mem
-  given: (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
-  proof: h𝒜.inter_mem s_mem (h𝒜.compl_mem t_mem)
-
-@[deprecated (since := "2026-06-03")] alias diff_mem := sdiff_mem
-
-中文:
-定理 sdiff_mem
-  条件: (h𝒜 : 是集合代数 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
-  证明: h𝒜.inter_mem s_mem (h𝒜.compl_mem t_mem)
-
-@[deprecated (since := "2026-06-03")] alias diff_mem := sdiff_mem
-
-Depends on / 依赖: compl_mem, inter_mem, s_mem, t_mem
+--- 原说明 ---
+An algebra of sets is closed by difference.
 -/
-theorem sdiff_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜) :
-    s \ t in 𝒜 := h𝒜.inter_mem s_mem (h𝒜.compl_mem t_mem)
+theorem sdiff_mem (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s ∈ 𝒜) (t_mem : t ∈ 𝒜) :
+    s \ t ∈ 𝒜 := h𝒜.inter_mem s_mem (h𝒜.compl_mem t_mem)
 
 @[deprecated (since := "2026-06-03")] alias diff_mem := sdiff_mem
 
-/--
-theorem `isSetRing` / 定理 `isSetRing`
+/-- An algebra of sets is a ring of sets. -/
+/-
+**MeasureTheory.IsSetAlgebra.isSetRing** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+IsSetAlgebra`。
+形式化陈述：isSetRing (h𝒜 : IsSetAlgebra 𝒜) : IsSetRing 𝒜 where empty_mem
+参数：h𝒜 : IsSetAlgebra 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.empty_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∅ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.union_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s t : Set α⦄, s ∈ 𝒜 → t ∈ 𝒜 → s ∪ t ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.sdiff_mem`：sdiff_mem (h𝒜 : IsSetAlgebra 𝒜) (s
+_mem : s in 𝒜) (t_mem : t in 𝒜) : s \ t in 𝒜
 
-English:
-theorem isSetRing
-  given: (h𝒜 : IsSetAlgebra 𝒜)
-  statement: IsSetRing 𝒜 where
-  proof: h𝒜.empty_mem
-  union_mem := h𝒜.union_mem
-  sdiff_mem := fun _ _ => h𝒜.sdiff_mem
-
-中文:
-定理 isSetRing
-  条件: (h𝒜 : 是集合代数 𝒜)
-  结论: 是集合环 𝒜 where
-  证明: h𝒜.empty_mem
-  union_mem := h𝒜.union_mem
-  sdiff_mem := fun _ _ => h𝒜.sdiff_mem
-
-Depends on / 依赖: empty_mem
+--- 原说明 ---
+An algebra of sets is a ring of sets.
 -/
 theorem isSetRing (h𝒜 : IsSetAlgebra 𝒜) : IsSetRing 𝒜 where
   empty_mem := h𝒜.empty_mem
   union_mem := h𝒜.union_mem
-  sdiff_mem := fun _ _ => h𝒜.sdiff_mem
+  sdiff_mem := fun _ _ ↦ h𝒜.sdiff_mem
 
-/--
-theorem `biUnion_mem` / 定理 `biUnion_mem`
+/-- An algebra of sets is closed by finite unions. -/
+/-
+**MeasureTheory.IsSetAlgebra.biUnion_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.IsSetAlgebra`。
+形式化陈述：biUnion_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset
+ ι) (hs : forall i in S, s i in 𝒜) : ⋃ i in S, s i in 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜；S : Finset ι；hs : forall i in S, s i in 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.IsSetRing.biUnion_mem`：biUnion_mem {ι : Type*} (hC : IsSet
+Ring C) {s : ι -> Set α} (S : Finset ι) (hs : forall n in S, s n in C) : ⋃ i in 
+S, s i in C
+· 使用定理 `MeasureTheory.IsSetAlgebra.isSetRing`：isSetRing (h𝒜 : IsSetAlgebra 𝒜) : 
+IsSetRing 𝒜 where empty_mem
 
-English:
-theorem biUnion_mem
-  statement: {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
-  proof: h𝒜.isSetRing.biUnion_mem S hs
-
-中文:
-定理 biUnion_mem
-  结论: {ι : 类型} (h𝒜 : 是集合代数 𝒜) {s : ι -> 集合 α} (S : 有限集 ι)
-  证明: h𝒜.isSetRing.biUnion_mem S hs
-
-Depends on / 依赖: biUnion_mem, isSetRing, isSetRing.biUnion_mem
+--- 原说明 ---
+An algebra of sets is closed by finite unions.
 -/
-theorem biUnion_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
-    (hs : forall i in S, s i in 𝒜) : ⋃ i in S, s i in 𝒜 := h𝒜.isSetRing.biUnion_mem S hs
+theorem biUnion_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι → Set α} (S : Finset ι)
+    (hs : ∀ i ∈ S, s i ∈ 𝒜) : ⋃ i ∈ S, s i ∈ 𝒜 := h𝒜.isSetRing.biUnion_mem S hs
 
-/--
-theorem `biInter_mem` / 定理 `biInter_mem`
+/-- An algebra of sets is closed by finite intersections. -/
+/-
+**MeasureTheory.IsSetAlgebra.biInter_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.IsSetAlgebra`。
+形式化陈述：biInter_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset
+ ι) (hs : forall i in S, s i in 𝒜) : ⋂ i in S, s i in 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜；S : Finset ι；hs : forall i in S, s i in 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.set_biInter_coe`：set_biInter_coe (s : Finset α) (t : α -> Set β) 
+: ⋂ x in (↑s : Set α), t x = ⋂ x in s, t x
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Set.biInter_empty`：biInter_empty (u : α -> Set β) : ⋂ x in (∅ : Set α), 
+u x = univ
+· 使用定理 `MeasureTheory.IsSetAlgebra.univ_mem`：univ_mem (h𝒜 : IsSetAlgebra 𝒜) : un
+iv in 𝒜
+· 使用引理 `MeasureTheory.IsSetRing.biInter_mem`：biInter_mem {ι : Type*} (hC : IsSet
+Ring C) {s : ι -> Set α} (S : Finset ι) (hS : S.Nonempty) (hs : forall n in S, s
+ n in C) : ⋂ i in S, s i …
+· 使用定理 `MeasureTheory.IsSetAlgebra.isSetRing`：isSetRing (h𝒜 : IsSetAlgebra 𝒜) : 
+IsSetRing 𝒜 where empty_mem
 
-English:
-theorem biInter_mem
-  statement: {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
-  proof: by
-  by_cases! h : S = ∅
-  · rw [h, ← Finset.set_biInter_coe, Finset.coe_empty, biInter_empty]
-    exact h𝒜.univ_mem
-  · exact h𝒜.isSetRing.biInter_mem S h hs
-
-中文:
-定理 bi整数er_mem
-  结论: {ι : 类型} (h𝒜 : 是集合代数 𝒜) {s : ι -> 集合 α} (S : 有限集 ι)
-  证明: by
-  by_cases! h : S = ∅
-  · rw [h, ← Finset.set_biInter_coe, Finset.coe_empty, biInter_empty]
-    exact h𝒜.univ_mem
-  · exact h𝒜.isSetRing.biInter_mem S h hs
-
-Depends on / 依赖: Finset, Finset.coe_empty, Finset.set_biInter_coe, biInter_empty, biInter_mem, coe_empty, isSetRing, isSetRing.biInter_mem, set_biInter_coe, univ_mem
+--- 原说明 ---
+An algebra of sets is closed by finite intersections.
 -/
-theorem biInter_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
-    (hs : forall i in S, s i in 𝒜) : ⋂ i in S, s i in 𝒜 := by
+theorem biInter_mem {ι : Type*} (h𝒜 : IsSetAlgebra 𝒜) {s : ι → Set α} (S : Finset ι)
+    (hs : ∀ i ∈ S, s i ∈ 𝒜) : ⋂ i ∈ S, s i ∈ 𝒜 := by
   by_cases! h : S = ∅
   · rw [h, ← Finset.set_biInter_coe, Finset.coe_empty, biInter_empty]
     exact h𝒜.univ_mem
@@ -225,118 +228,96 @@ section generateSetAlgebra
 
 /-! ### Definition and properties of the algebra of sets generated by some family -/
 
-/--
-Inductive type `generateSetAlgebra` / 归纳类型 `generateSetAlgebra`
+/-- `generateSetAlgebra 𝒜` is the smallest algebra of sets containing `𝒜`. -/
+/-
+**MeasureTheory.generateSetAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{α : Type u_2} → Set (Set α) → Set (Set α)
+参数：Set α；Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive generateSetAlgebra
-  parameters: {α : Type*} (𝒜 : Set (Set α))
-  constructors (4):
-    - base: (s : Set α) (s_mem : s in 𝒜) : generateSetAlgebra 𝒜 s
-    - empty: generateSetAlgebra 𝒜 ∅
-    - compl: (s : Set α) (hs : generateSetAlgebra 𝒜 s) : generateSetAlgebra 𝒜 sᶜ
-    - union: (s t : Set α) (hs : generateSetAlgebra 𝒜 s) (ht : generateSetAlgebra 𝒜 t) : generateSetAlgebra 𝒜 (s union t)
-
-中文:
-归纳类型 generateSet代数
-  参数: {α : 类型} (𝒜 : 集合 (集合 α))
-  构造子 (4 个):
-    - base: (s : 集合 α) (s_mem : s in 𝒜) : generateSet代数 𝒜 s
-    - empty: generateSet代数 𝒜 ∅
-    - compl: (s : 集合 α) (hs : generateSet代数 𝒜 s) : generateSet代数 𝒜 sᶜ
-    - union: (s t : 集合 α) (hs : generateSet代数 𝒜 s) (ht : generateSet代数 𝒜 t) : generateSet代数 𝒜 (s union t)
+--- 原说明 ---
+`generateSetAlgebra 𝒜` is the smallest algebra of sets containing `𝒜`.
 -/
 inductive generateSetAlgebra {α : Type*} (𝒜 : Set (Set α)) : Set (Set α)
-  | base (s : Set α) (s_mem : s in 𝒜) : generateSetAlgebra 𝒜 s
+  | base (s : Set α) (s_mem : s ∈ 𝒜) : generateSetAlgebra 𝒜 s
   | empty : generateSetAlgebra 𝒜 ∅
   | compl (s : Set α) (hs : generateSetAlgebra 𝒜 s) : generateSetAlgebra 𝒜 sᶜ
   | union (s t : Set α) (hs : generateSetAlgebra 𝒜 s) (ht : generateSetAlgebra 𝒜 t) :
-      generateSetAlgebra 𝒜 (s union t)
+      generateSetAlgebra 𝒜 (s ∪ t)
 
-/--
-theorem `isSetAlgebra_generateSetAlgebra` / 定理 `isSetAlgebra_generateSetAlgebra`
+/-- The algebra of sets generated by a family of sets is an algebra of sets. -/
+/-
+**MeasureTheory.isSetAlgebra_generateSetAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：isSetAlgebra_generateSetAlgebra : IsSetAlgebra (generateSetAlgebra 𝒜) wher
+e empty_mem
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isSetAlgebra_generateSetAlgebra
-  proof: generateSetAlgebra.empty
-  compl_mem := fun _ hs => generateSetAlgebra.compl _ hs
-  union_mem := fun _ _ hs ht => generateSetAlgebra.union _ _ hs ht
-
-中文:
-定理 isSetAlgebra_generateSetAlgebra
-  证明: generateSetAlgebra.empty
-  compl_mem := fun _ hs => generateSetAlgebra.compl _ hs
-  union_mem := fun _ _ hs ht => generateSetAlgebra.union _ _ hs ht
-
-Depends on / 依赖: generateSetAlgebra, generateSetAlgebra.empty
+--- 原说明 ---
+The algebra of sets generated by a family of sets is an algebra of sets.
 -/
 theorem isSetAlgebra_generateSetAlgebra :
     IsSetAlgebra (generateSetAlgebra 𝒜) where
   empty_mem := generateSetAlgebra.empty
-  compl_mem := fun _ hs => generateSetAlgebra.compl _ hs
-  union_mem := fun _ _ hs ht => generateSetAlgebra.union _ _ hs ht
+  compl_mem := fun _ hs ↦ generateSetAlgebra.compl _ hs
+  union_mem := fun _ _ hs ht ↦ generateSetAlgebra.union _ _ hs ht
 
-/--
-theorem `self_subset_generateSetAlgebra` / 定理 `self_subset_generateSetAlgebra`
+/-- The algebra of sets generated by `𝒜` contains `𝒜`. -/
+/-
+**MeasureTheory.self_subset_generateSetAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：self_subset_generateSetAlgebra : 𝒜 subseteq generateSetAlgebra 𝒜
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem self_subset_generateSetAlgebra
-  statement: 𝒜 subseteq generateSetAlgebra 𝒜
-  proof: fun _ => generateSetAlgebra.base _
-
-中文:
-定理 self_subset_generateSetAlgebra
-  结论: 𝒜 subseteq generateSet代数 𝒜
-  证明: fun _ => generateSetAlgebra.base _
-
-Depends on / 依赖: generateSetAlgebra, generateSetAlgebra.base
+--- 原说明 ---
+The algebra of sets generated by `𝒜` contains `𝒜`.
 -/
-theorem self_subset_generateSetAlgebra : 𝒜 subseteq generateSetAlgebra 𝒜 :=
-  fun _ => generateSetAlgebra.base _
+theorem self_subset_generateSetAlgebra : 𝒜 ⊆ generateSetAlgebra 𝒜 :=
+  fun _ ↦ generateSetAlgebra.base _
 
 /-- The measurable space generated by a family of sets `𝒜` is the same as the one generated
 by the algebra of sets generated by `𝒜`. -/
 @[simp]
-/--
-theorem `generateFrom_generateSetAlgebra_eq` / 定理 `generateFrom_generateSetAlgebra_eq`
+/-
+**MeasureTheory.generateFrom_generateSetAlgebra_eq** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory`。
+形式化陈述：generateFrom_generateSetAlgebra_eq : generateFrom (generateSetAlgebra 𝒜) =
+ generateFrom 𝒜
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_induction`：generateFrom_induction (C : Set 
+(Set α)) (p : forall s : Set α, MeasurableSet[generateFrom C] s -> Prop) (hC : f
+orall t in C, forall ht, p t…
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasurableSet.union`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∪ s₂)
+· 使用定理 `MeasurableSpace.measurableSet_empty`：∀ {α : Type u_7} (self : Measurable
+Space α), MeasurableSpace.MeasurableSet' self ∅
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `MeasureTheory.self_subset_generateSetAlgebra`：self_subset_generateSetAlg
+ebra : 𝒜 subseteq generateSetAlgebra 𝒜
 
-English:
-theorem generateFrom_generateSetAlgebra_eq
-  proof: by
-  refine le_antisymm (fun s ms => ?_) (generateFrom_mono self_subset_generateSetAlgebra)
-  induction s, ms using generateFrom_induction with
-  | hC t ht h =>
-    clear h
-    induction ht with
-    | base u u_mem => exact measurableSet_generateFrom u_mem
-    | empty => exact @MeasurableSet.empty _ (generateFrom 𝒜)
-    | compl u _ mu => exact mu.compl
-    | union u v _ _ mu mv => exact MeasurableSet.union mu mv
-  | empty => exact MeasurableSpace.measurableSet_empty _
-  | compl t _ ht => exact ht.compl
-  | iUnion t _ ht => exact .iUnion ht
-
-中文:
-定理 generateFrom_generateSetAlgebra_eq
-  证明: by
-  refine le_antisymm (fun s ms => ?_) (generateFrom_mono self_subset_generateSetAlgebra)
-  induction s, ms using generateFrom_induction with
-  | hC t ht h =>
-    clear h
-    induction ht with
-    | base u u_mem => exact measurableSet_generateFrom u_mem
-    | empty => exact @MeasurableSet.empty _ (generateFrom 𝒜)
-    | compl u _ mu => exact mu.compl
-    | union u v _ _ mu mv => exact MeasurableSet.union mu mv
-  | empty => exact MeasurableSpace.measurableSet_empty _
-  | compl t _ ht => exact ht.compl
-  | iUnion t _ ht => exact .iUnion ht
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.empty, MeasurableSet.union, MeasurableSpace, MeasurableSpace.measurableSet_empty, generateFrom, generateFrom_induction, generateFrom_mono, ht.compl, iUnion, le_antisymm, measurableSet_empty, measurableSet_generateFrom, mu.compl, self_subset_generateSetAlgebra, u_mem
+--- 原说明 ---
+The measurable space generated by a family of sets `𝒜` is the same as the one ge
+nerated
+by the algebra of sets generated by `𝒜`.
 -/
 theorem generateFrom_generateSetAlgebra_eq :
     generateFrom (generateSetAlgebra 𝒜) = generateFrom 𝒜 := by
-  refine le_antisymm (fun s ms => ?_) (generateFrom_mono self_subset_generateSetAlgebra)
+  refine le_antisymm (fun s ms ↦ ?_) (generateFrom_mono self_subset_generateSetAlgebra)
   induction s, ms using generateFrom_induction with
   | hC t ht h =>
     clear h
@@ -349,35 +330,34 @@ theorem generateFrom_generateSetAlgebra_eq :
   | compl t _ ht => exact ht.compl
   | iUnion t _ ht => exact .iUnion ht
 
-/--
-theorem `generateSetAlgebra_mono` / 定理 `generateSetAlgebra_mono`
+/-- If a family of sets `𝒜` is contained in `ℬ`, then the algebra of sets generated by `𝒜`
+is contained in the one generated by `ℬ`. -/
+/-
+**MeasureTheory.generateSetAlgebra_mono** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+`。
+形式化陈述：generateSetAlgebra_mono {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ) : generateSet
+Algebra 𝒜 subseteq generateSetAlgebra ℬ
+参数：Set α；h : 𝒜 subseteq ℬ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.self_subset_generateSetAlgebra`：self_subset_generateSetAlg
+ebra : 𝒜 subseteq generateSetAlgebra 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.empty_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∅ ∈ 𝒜
+· 使用定理 `MeasureTheory.isSetAlgebra_generateSetAlgebra`：isSetAlgebra_generateSetA
+lgebra : IsSetAlgebra (generateSetAlgebra 𝒜) where empty_mem
+· 使用定理 `MeasureTheory.IsSetAlgebra.compl_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s : Set α⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.union_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s t : Set α⦄, s ∈ 𝒜 → t ∈ 𝒜 → s ∪ t ∈ 𝒜
 
-English:
-theorem generateSetAlgebra_mono
-  given: {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
-  proof: by
-  intro s hs
-  induction hs with
-  | base t t_mem => exact self_subset_generateSetAlgebra (h t_mem)
-  | empty => exact isSetAlgebra_generateSetAlgebra.empty_mem
-  | compl t _ t_mem => exact isSetAlgebra_generateSetAlgebra.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generateSetAlgebra.union_mem t_mem u_mem
-
-中文:
-定理 generateSetAlgebra_mono
-  条件: {ℬ : 集合 (集合 α)} (h : 𝒜 subseteq ℬ)
-  证明: by
-  intro s hs
-  induction hs with
-  | base t t_mem => exact self_subset_generateSetAlgebra (h t_mem)
-  | empty => exact isSetAlgebra_generateSetAlgebra.empty_mem
-  | compl t _ t_mem => exact isSetAlgebra_generateSetAlgebra.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generateSetAlgebra.union_mem t_mem u_mem
-
-Depends on / 依赖: compl_mem, empty_mem, isSetAlgebra_generateSetAlgebra, isSetAlgebra_generateSetAlgebra.compl_mem, isSetAlgebra_generateSetAlgebra.empty_mem, isSetAlgebra_generateSetAlgebra.union_mem, self_subset_generateSetAlgebra, t_mem, u_mem, union_mem
+--- 原说明 ---
+If a family of sets `𝒜` is contained in `ℬ`, then the algebra of sets generated 
+by `𝒜`
+is contained in the one generated by `ℬ`.
 -/
-theorem generateSetAlgebra_mono {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ) :
-    generateSetAlgebra 𝒜 subseteq generateSetAlgebra ℬ := by
+theorem generateSetAlgebra_mono {ℬ : Set (Set α)} (h : 𝒜 ⊆ ℬ) :
+    generateSetAlgebra 𝒜 ⊆ generateSetAlgebra ℬ := by
   intro s hs
   induction hs with
   | base t t_mem => exact self_subset_generateSetAlgebra (h t_mem)
@@ -387,35 +367,30 @@ theorem generateSetAlgebra_mono {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ) :
 
 namespace IsSetAlgebra
 
-/--
-theorem `generateSetAlgebra_subset` / 定理 `generateSetAlgebra_subset`
+/-- If a family of sets `𝒜` is contained in an algebra of sets `ℬ`, then so is the algebra of sets
+generated by `𝒜`. -/
+/-
+**MeasureTheory.IsSetAlgebra.generateSetAlgebra_subset** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.IsSetAlgebra`。
+形式化陈述：generateSetAlgebra_subset {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ) (hℬ : IsSet
+Algebra ℬ) : generateSetAlgebra 𝒜 subseteq ℬ
+参数：Set α；h : 𝒜 subseteq ℬ；hℬ : IsSetAlgebra ℬ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.empty_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∅ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.compl_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s : Set α⦄, s ∈ 𝒜 → sᶜ ∈ 𝒜
+· 使用定理 `MeasureTheory.IsSetAlgebra.union_mem`：∀ {α : Type u_1} {𝒜 : Set (Set α)}
+, MeasureTheory.IsSetAlgebra 𝒜 → ∀ ⦃s t : Set α⦄, s ∈ 𝒜 → t ∈ 𝒜 → s ∪ t ∈ 𝒜
 
-English:
-theorem generateSetAlgebra_subset
-  statement: {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
-  proof: by
-  intro s hs
-  induction hs with
-  | base t t_mem => exact h t_mem
-  | empty => exact hℬ.empty_mem
-  | compl t _ t_mem => exact hℬ.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact hℬ.union_mem t_mem u_mem
-
-中文:
-定理 generateSetAlgebra_subset
-  结论: {ℬ : 集合 (集合 α)} (h : 𝒜 subseteq ℬ)
-  证明: by
-  intro s hs
-  induction hs with
-  | base t t_mem => exact h t_mem
-  | empty => exact hℬ.empty_mem
-  | compl t _ t_mem => exact hℬ.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact hℬ.union_mem t_mem u_mem
-
-Depends on / 依赖: compl_mem, empty_mem, t_mem, u_mem, union_mem
+--- 原说明 ---
+If a family of sets `𝒜` is contained in an algebra of sets `ℬ`, then so is the a
+lgebra of sets
+generated by `𝒜`.
 -/
-theorem generateSetAlgebra_subset {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
-    (hℬ : IsSetAlgebra ℬ) : generateSetAlgebra 𝒜 subseteq ℬ := by
+theorem generateSetAlgebra_subset {ℬ : Set (Set α)} (h : 𝒜 ⊆ ℬ)
+    (hℬ : IsSetAlgebra ℬ) : generateSetAlgebra 𝒜 ⊆ ℬ := by
   intro s hs
   induction hs with
   | base t t_mem => exact h t_mem
@@ -423,158 +398,136 @@ theorem generateSetAlgebra_subset {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
   | compl t _ t_mem => exact hℬ.compl_mem t_mem
   | union t u _ _ t_mem u_mem => exact hℬ.union_mem t_mem u_mem
 
-/--
-theorem `generateSetAlgebra_subset_self` / 定理 `generateSetAlgebra_subset_self`
+/-- If `𝒜` is an algebra of sets, then it contains the algebra generated by itself. -/
+/-
+**MeasureTheory.IsSetAlgebra.generateSetAlgebra_subset_self** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.IsSetAlgebra`。
+形式化陈述：generateSetAlgebra_subset_self (h𝒜 : IsSetAlgebra 𝒜) : generateSetAlgebra 
+𝒜 subseteq 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetAlgebra.generateSetAlgebra_subset`：generateSetAlgebra
+_subset {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ) (hℬ : IsSetAlgebra ℬ) : generateSet
+Algebra 𝒜 subseteq ℬ
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 
-English:
-theorem generateSetAlgebra_subset_self
-  given: (h𝒜 : IsSetAlgebra 𝒜)
-  proof: h𝒜.generateSetAlgebra_subset subset_rfl
-
-中文:
-定理 generateSetAlgebra_subset_self
-  条件: (h𝒜 : 是集合代数 𝒜)
-  证明: h𝒜.generateSetAlgebra_subset subset_rfl
-
-Depends on / 依赖: generateSetAlgebra_subset, subset_rfl
+--- 原说明 ---
+If `𝒜` is an algebra of sets, then it contains the algebra generated by itself.
 -/
 theorem generateSetAlgebra_subset_self (h𝒜 : IsSetAlgebra 𝒜) :
-    generateSetAlgebra 𝒜 subseteq 𝒜 := h𝒜.generateSetAlgebra_subset subset_rfl
+    generateSetAlgebra 𝒜 ⊆ 𝒜 := h𝒜.generateSetAlgebra_subset subset_rfl
 
-/--
-theorem `generateSetAlgebra_eq` / 定理 `generateSetAlgebra_eq`
+/-- If `𝒜` is an algebra of sets, then it is equal to the algebra generated by itself. -/
+/-
+**MeasureTheory.IsSetAlgebra.generateSetAlgebra_eq** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.IsSetAlgebra`。
+形式化陈述：generateSetAlgebra_eq (h𝒜 : IsSetAlgebra 𝒜) : generateSetAlgebra 𝒜 = 𝒜
+参数：h𝒜 : IsSetAlgebra 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `MeasureTheory.IsSetAlgebra.generateSetAlgebra_subset_self`：generateSetAl
+gebra_subset_self (h𝒜 : IsSetAlgebra 𝒜) : generateSetAlgebra 𝒜 subseteq 𝒜
+· 使用定理 `MeasureTheory.self_subset_generateSetAlgebra`：self_subset_generateSetAlg
+ebra : 𝒜 subseteq generateSetAlgebra 𝒜
 
-English:
-theorem generateSetAlgebra_eq
-  given: (h𝒜 : IsSetAlgebra 𝒜)
-  statement: generateSetAlgebra 𝒜 = 𝒜
-  proof: Subset.antisymm h𝒜.generateSetAlgebra_subset_self self_subset_generateSetAlgebra
-
-中文:
-定理 generateSetAlgebra_eq
-  条件: (h𝒜 : 是集合代数 𝒜)
-  结论: generateSet代数 𝒜 = 𝒜
-  证明: Subset.antisymm h𝒜.generateSetAlgebra_subset_self self_subset_generateSetAlgebra
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, generateSetAlgebra_subset_self, self_subset_generateSetAlgebra
+--- 原说明 ---
+If `𝒜` is an algebra of sets, then it is equal to the algebra generated by itsel
+f.
 -/
 theorem generateSetAlgebra_eq (h𝒜 : IsSetAlgebra 𝒜) : generateSetAlgebra 𝒜 = 𝒜 :=
   Subset.antisymm h𝒜.generateSetAlgebra_subset_self self_subset_generateSetAlgebra
 
 end IsSetAlgebra
 
-/--
-theorem `mem_generateSetAlgebra_elim` / 定理 `mem_generateSetAlgebra_elim`
+/-- If a set belongs to the algebra of sets generated by `𝒜` then it can be written as a finite
+union of finite intersections of sets which are in `𝒜` or have their complement in `𝒜`. -/
+/-
+**MeasureTheory.mem_generateSetAlgebra_elim** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：mem_generateSetAlgebra_elim (s_mem : s in generateSetAlgebra 𝒜) : exists A
+ : Set (Set (Set α)), A.Finite ∧ (forall a in A, a.Finite) ∧ (forallᵉ (a in A) (
+t in a), t in 𝒜 ∨ tᶜ in 𝒜) ∧ s = ⋃ a in A, ⋂ t in a, t
+参数：s_mem : s in generateSetAlgebra 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eq_of_mem_singleton`：eq_of_mem_singleton {x y : α} (h : x in ({y} : 
+Set α)) : x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_iUnion_eq_left`：iUnion_iUnion_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋃ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.finite_empty`：finite_empty : (∅ : Set α).Finite
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.finite_coe_iff`：finite_coe_iff {s : Set α} : Finite s ↔ s.Finite
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.compl_iUnion`：compl_iUnion (s : ι -> Set β) : (⋃ i, s i)ᶜ = ⋂ i, (s 
+i)ᶜ
+· 使用定理 `Set.compl_iInter`：compl_iInter (s : ι -> Set β) : (⋂ i, s i)ᶜ = ⋃ i, (s 
+i)ᶜ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem mem_generateSetAlgebra_elim
-  given: (s_mem : s in generateSetAlgebra 𝒜)
-  proof: by
-  induction s_mem with
-  | base u u_mem =>
-    refine ⟨{{u}}, finite_singleton {u},
-      fun a ha => eq_of_mem_singleton ha ▸ finite_singleton u,
-      fun a ha t ht => ?_, by simp⟩
-    rw [eq_of_mem_singleton ha]; rw [ha]; rw [eq_of_mem_singleton ht]; rw [ht] at *
-    exact Or.inl u_mem
-  | empty => exact ⟨∅, finite_empty, fun _ h => (notMem_empty _ h).elim,
-    fun _ ha _ _ => (notMem_empty _ ha).elim, by simp⟩
-  | compl u _ u_ind =>
-    rcases u_ind with ⟨A, A_fin, mem_A, hA, u_eq⟩
-    have := finite_coe_iff.2 A_fin
-have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
-    refine ⟨{{(f a).1ᶜ | a : A} | f : (Π a : A, ↑a)}, finite_coe_iff.1 inferInstance,
-      fun a ⟨f, hf⟩ => hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht => ?_, ?_⟩
-    · rcases ha with ⟨f, rfl⟩
-      rcases ht with ⟨a, rfl⟩
-      rw [compl_compl]; rw [or_comm]
-      exact hA a.1 a.2 (f a).1 (f a).2
-    · ext x
-      simp only [u_eq, compl_iUnion, compl_iInter, mem_iInter, mem_iUnion, mem_compl_iff,
-        exists_prop, Subtype.exists, mem_ofPred_eq, iUnion_exists, iUnion_iUnion_eq',
-        iInter_exists]
-      constructor <;> intro hx
-      · choose f hf using hx
-        exact ⟨fun ⟨a, ha⟩ => ⟨f a ha, (hf a ha).1⟩, fun _ a ha h => by rw [← h]; exact (hf a ha).2⟩
-      · rcases hx with ⟨f, hf⟩
-        exact fun a ha => ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
-  | union u v _ _ u_ind v_ind =>
-    rcases u_ind with ⟨Au, Au_fin, mem_Au, hAu, u_eq⟩
-    rcases v_ind with ⟨Av, Av_fin, mem_Av, hAv, v_eq⟩
-    refine ⟨Au union Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
-    · rintro a (ha | ha)
-      · exact mem_Au a ha
-      · exact mem_Av a ha
-    · rintro a (ha | ha) t ht
-      · exact hAu a ha t ht
-      · exact hAv a ha t ht
-
-中文:
-定理 mem_generateSetAlgebra_elim
-  条件: (s_mem : s in generateSet代数 𝒜)
-  证明: by
-  induction s_mem with
-  | base u u_mem =>
-    refine ⟨{{u}}, finite_singleton {u},
-      fun a ha => eq_of_mem_singleton ha ▸ finite_singleton u,
-      fun a ha t ht => ?_, by simp⟩
-    rw [eq_of_mem_singleton ha]; rw [ha]; rw [eq_of_mem_singleton ht]; rw [ht] at *
-    exact Or.inl u_mem
-  | empty => exact ⟨∅, finite_empty, fun _ h => (notMem_empty _ h).elim,
-    fun _ ha _ _ => (notMem_empty _ ha).elim, by simp⟩
-  | compl u _ u_ind =>
-    rcases u_ind with ⟨A, A_fin, mem_A, hA, u_eq⟩
-    have := finite_coe_iff.2 A_fin
-have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
-    refine ⟨{{(f a).1ᶜ | a : A} | f : (Π a : A, ↑a)}, finite_coe_iff.1 inferInstance,
-      fun a ⟨f, hf⟩ => hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht => ?_, ?_⟩
-    · rcases ha with ⟨f, rfl⟩
-      rcases ht with ⟨a, rfl⟩
-      rw [compl_compl]; rw [or_comm]
-      exact hA a.1 a.2 (f a).1 (f a).2
-    · ext x
-      simp only [u_eq, compl_iUnion, compl_iInter, mem_iInter, mem_iUnion, mem_compl_iff,
-        exists_prop, Subtype.exists, mem_ofPred_eq, iUnion_exists, iUnion_iUnion_eq',
-        iInter_exists]
-      constructor <;> intro hx
-      · choose f hf using hx
-        exact ⟨fun ⟨a, ha⟩ => ⟨f a ha, (hf a ha).1⟩, fun _ a ha h => by rw [← h]; exact (hf a ha).2⟩
-      · rcases hx with ⟨f, hf⟩
-        exact fun a ha => ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
-  | union u v _ _ u_ind v_ind =>
-    rcases u_ind with ⟨Au, Au_fin, mem_Au, hAu, u_eq⟩
-    rcases v_ind with ⟨Av, Av_fin, mem_Av, hAv, v_eq⟩
-    refine ⟨Au union Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
-    · rintro a (ha | ha)
-      · exact mem_Au a ha
-      · exact mem_Av a ha
-    · rintro a (ha | ha) t ht
-      · exact hAu a ha t ht
-      · exact hAv a ha t ht
-
-Depends on / 依赖: A_fin, Or.inl, eq_of_mem_singleton, finite_coe_iff, finite_empty, finite_singleton, mem_A, notMem_empty, s_mem, u_eq, u_ind, u_mem
+--- 原说明 ---
+If a set belongs to the algebra of sets generated by `𝒜` then it can be written 
+as a finite
+union of finite intersections of sets which are in `𝒜` or have their complement 
+in `𝒜`.
 -/
-theorem mem_generateSetAlgebra_elim (s_mem : s in generateSetAlgebra 𝒜) :
-    exists A : Set (Set (Set α)), A.Finite ∧ (forall a in A, a.Finite) ∧
-    (forallᵉ (a in A) (t in a), t in 𝒜 ∨ tᶜ in 𝒜) ∧ s = ⋃ a in A, ⋂ t in a, t := by
+theorem mem_generateSetAlgebra_elim (s_mem : s ∈ generateSetAlgebra 𝒜) :
+    ∃ A : Set (Set (Set α)), A.Finite ∧ (∀ a ∈ A, a.Finite) ∧
+    (∀ᵉ (a ∈ A) (t ∈ a), t ∈ 𝒜 ∨ tᶜ ∈ 𝒜) ∧ s = ⋃ a ∈ A, ⋂ t ∈ a, t := by
   induction s_mem with
   | base u u_mem =>
     refine ⟨{{u}}, finite_singleton {u},
-      fun a ha => eq_of_mem_singleton ha ▸ finite_singleton u,
-      fun a ha t ht => ?_, by simp⟩
-    rw [eq_of_mem_singleton ha]; rw [ha]; rw [eq_of_mem_singleton ht]; rw [ht] at *
+      fun a ha ↦ eq_of_mem_singleton ha ▸ finite_singleton u,
+      fun a ha t ht ↦ ?_, by simp⟩
+    rw [eq_of_mem_singleton ha, ha, eq_of_mem_singleton ht, ht] at *
     exact Or.inl u_mem
-  | empty => exact ⟨∅, finite_empty, fun _ h => (notMem_empty _ h).elim,
-    fun _ ha _ _ => (notMem_empty _ ha).elim, by simp⟩
+  | empty => exact ⟨∅, finite_empty, fun _ h ↦ (notMem_empty _ h).elim,
+    fun _ ha _ _ ↦ (notMem_empty _ ha).elim, by simp⟩
   | compl u _ u_ind =>
     rcases u_ind with ⟨A, A_fin, mem_A, hA, u_eq⟩
     have := finite_coe_iff.2 A_fin
-have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
+    have := fun a : A ↦ finite_coe_iff.2 <| mem_A a.1 a.2
     refine ⟨{{(f a).1ᶜ | a : A} | f : (Π a : A, ↑a)}, finite_coe_iff.1 inferInstance,
-      fun a ⟨f, hf⟩ => hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht => ?_, ?_⟩
+      fun a ⟨f, hf⟩ ↦ hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht ↦ ?_, ?_⟩
     · rcases ha with ⟨f, rfl⟩
       rcases ht with ⟨a, rfl⟩
-      rw [compl_compl]; rw [or_comm]
+      rw [compl_compl, or_comm]
       exact hA a.1 a.2 (f a).1 (f a).2
     · ext x
       simp only [u_eq, compl_iUnion, compl_iInter, mem_iInter, mem_iUnion, mem_compl_iff,
@@ -582,13 +535,13 @@ have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
         iInter_exists]
       constructor <;> intro hx
       · choose f hf using hx
-        exact ⟨fun ⟨a, ha⟩ => ⟨f a ha, (hf a ha).1⟩, fun _ a ha h => by rw [← h]; exact (hf a ha).2⟩
+        exact ⟨fun ⟨a, ha⟩ ↦ ⟨f a ha, (hf a ha).1⟩, fun _ a ha h ↦ by rw [← h]; exact (hf a ha).2⟩
       · rcases hx with ⟨f, hf⟩
-        exact fun a ha => ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
+        exact fun a ha ↦ ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
   | union u v _ _ u_ind v_ind =>
     rcases u_ind with ⟨Au, Au_fin, mem_Au, hAu, u_eq⟩
     rcases v_ind with ⟨Av, Av_fin, mem_Av, hAv, v_eq⟩
-    refine ⟨Au union Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
+    refine ⟨Au ∪ Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
     · rintro a (ha | ha)
       · exact mem_Au a ha
       · exact mem_Av a ha
@@ -596,75 +549,65 @@ have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
       · exact hAu a ha t ht
       · exact hAv a ha t ht
 
-/--
-theorem `countable_generateSetAlgebra` / 定理 `countable_generateSetAlgebra`
+/-- If a family of sets is countable then so is the algebra of sets generated by it. -/
+/-
+**MeasureTheory.countable_generateSetAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：countable_generateSetAlgebra (h : 𝒜.Countable) : (generateSetAlgebra 𝒜).Co
+untable
+参数：h : 𝒜.Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.union`：∀ {α : Type u} {s t : Set α}, s.Countable → t.Count
+able → (s ∪ t).Countable
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Set.countable_ofPred_finite_subset`：countable_ofPred_finite_subset {s : 
+Set α} (hs : s.Countable) : { t | Set.Finite t ∧ t subseteq s }.Countable
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.countable_coe_iff`：countable_coe_iff {s : Set α} : Countable s ↔ s.C
+ountable
+· 使用定理 `MeasureTheory.mem_generateSetAlgebra_elim`：mem_generateSetAlgebra_elim (
+s_mem : s in generateSetAlgebra 𝒜) : exists A : Set (Set (Set α)), A.Finite ∧ (f
+orall a in A, a.Finite) ∧ (fora…
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
 
-English:
-theorem countable_generateSetAlgebra
-  given: (h : 𝒜.Countable)
-  proof: by
-  let ℬ := {s | s in 𝒜} union {s | sᶜ in 𝒜}
-  have count_ℬ : ℬ.Countable := by
-    apply h.union
-    have : compl '' 𝒜 = {s | sᶜ in 𝒜} := by
-      ext s
-      simpa using ⟨fun ⟨x, x_mem, hx⟩ => by simp [← hx, x_mem], fun hs => ⟨sᶜ, hs, by simp⟩⟩
-    exact this ▸ h.image compl
-  let f : Set (Set (Set α)) -> Set α := fun A => ⋃ a in A, ⋂ t in a, t
-  let 𝒞 := {a | a.Finite ∧ a subseteq ℬ}
-  have count_𝒞 : 𝒞.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_ℬ)
-  let 𝒟 := {A | A.Finite ∧ A subseteq 𝒞}
-  have count_𝒟 : 𝒟.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_𝒞)
-  have : generateSetAlgebra 𝒜 subseteq f '' 𝒟 := by
-    intro s s_mem
-    rcases mem_generateSetAlgebra_elim s_mem with ⟨A, A_fin, mem_A, hA, rfl⟩
-    exact ⟨A, ⟨A_fin, fun a ha => ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
-  exact (count_𝒟.image f).mono this
-
-中文:
-定理 countable_generateSetAlgebra
-  条件: (h : 𝒜.可数)
-  证明: by
-  let ℬ := {s | s in 𝒜} union {s | sᶜ in 𝒜}
-  have count_ℬ : ℬ.Countable := by
-    apply h.union
-    have : compl '' 𝒜 = {s | sᶜ in 𝒜} := by
-      ext s
-      simpa using ⟨fun ⟨x, x_mem, hx⟩ => by simp [← hx, x_mem], fun hs => ⟨sᶜ, hs, by simp⟩⟩
-    exact this ▸ h.image compl
-  let f : Set (Set (Set α)) -> Set α := fun A => ⋃ a in A, ⋂ t in a, t
-  let 𝒞 := {a | a.Finite ∧ a subseteq ℬ}
-  have count_𝒞 : 𝒞.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_ℬ)
-  let 𝒟 := {A | A.Finite ∧ A subseteq 𝒞}
-  have count_𝒟 : 𝒟.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_𝒞)
-  have : generateSetAlgebra 𝒜 subseteq f '' 𝒟 := by
-    intro s s_mem
-    rcases mem_generateSetAlgebra_elim s_mem with ⟨A, A_fin, mem_A, hA, rfl⟩
-    exact ⟨A, ⟨A_fin, fun a ha => ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
-  exact (count_𝒟.image f).mono this
-
-Depends on / 依赖: A.Finite, Countable, Finite, a.Finite, countable_coe_iff, countable_ofPred_finite_subset, h.image, h.union, subseteq, x_mem
+--- 原说明 ---
+If a family of sets is countable then so is the algebra of sets generated by it.
 -/
 theorem countable_generateSetAlgebra (h : 𝒜.Countable) :
     (generateSetAlgebra 𝒜).Countable := by
-  let ℬ := {s | s in 𝒜} union {s | sᶜ in 𝒜}
+  let ℬ := {s | s ∈ 𝒜} ∪ {s | sᶜ ∈ 𝒜}
   have count_ℬ : ℬ.Countable := by
     apply h.union
-    have : compl '' 𝒜 = {s | sᶜ in 𝒜} := by
+    have : compl '' 𝒜 = {s | sᶜ ∈ 𝒜} := by
       ext s
-      simpa using ⟨fun ⟨x, x_mem, hx⟩ => by simp [← hx, x_mem], fun hs => ⟨sᶜ, hs, by simp⟩⟩
+      simpa using ⟨fun ⟨x, x_mem, hx⟩ ↦ by simp [← hx, x_mem], fun hs ↦ ⟨sᶜ, hs, by simp⟩⟩
     exact this ▸ h.image compl
-  let f : Set (Set (Set α)) -> Set α := fun A => ⋃ a in A, ⋂ t in a, t
-  let 𝒞 := {a | a.Finite ∧ a subseteq ℬ}
+  let f : Set (Set (Set α)) → Set α := fun A ↦ ⋃ a ∈ A, ⋂ t ∈ a, t
+  let 𝒞 := {a | a.Finite ∧ a ⊆ ℬ}
   have count_𝒞 : 𝒞.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_ℬ)
-  let 𝒟 := {A | A.Finite ∧ A subseteq 𝒞}
+  let 𝒟 := {A | A.Finite ∧ A ⊆ 𝒞}
   have count_𝒟 : 𝒟.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_𝒞)
-  have : generateSetAlgebra 𝒜 subseteq f '' 𝒟 := by
+  have : generateSetAlgebra 𝒜 ⊆ f '' 𝒟 := by
     intro s s_mem
     rcases mem_generateSetAlgebra_elim s_mem with ⟨A, A_fin, mem_A, hA, rfl⟩
-    exact ⟨A, ⟨A_fin, fun a ha => ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
+    exact ⟨A, ⟨A_fin, fun a ha ↦ ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
   exact (count_𝒟.image f).mono this
 
 end generateSetAlgebra
 
 end MeasureTheory
+

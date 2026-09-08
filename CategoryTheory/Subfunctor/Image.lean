@@ -33,26 +33,16 @@ section range
 
 /-- The range of a morphism of type-valued functors, as a subfunctor of the target. -/
 @[simps]
-/--
-Definition of `range` / `range` 的定义
+/-
+**CategoryTheory.Subfunctor.range** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subf
+unctor`。
+形式化陈述：range (p : F' ⟶ F) : Subfunctor F where obj U
+参数：p : F' ⟶ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: (p : F' ⟶ F)
-  body: Set.range (p.app U)
-  map := by
-    rintro U V i _ ⟨x, rfl⟩
-    exact ⟨_, NatTrans.naturality_apply p i x⟩
-
-中文:
-定义 range
-  签名: (p : F' ⟶ F)
-  定义体: Set.range (p.app U)
-  map := by
-    rintro U V i _ ⟨x, rfl⟩
-    exact ⟨_, NatTrans.naturality_apply p i x⟩
-
-Depends on / 依赖: Set.range, p.app
+--- 原说明 ---
+The range of a morphism of type-valued functors, as a subfunctor of the target.
 -/
 def range (p : F' ⟶ F) : Subfunctor F where
   obj U := Set.range (p.app U)
@@ -61,37 +51,42 @@ def range (p : F' ⟶ F) : Subfunctor F where
     exact ⟨_, NatTrans.naturality_apply p i x⟩
 
 variable (F) in
-/--
-lemma `range_id` / 引理 `range_id`
-
-English:
-lemma range_id
-  statement: range (𝟙 F) = ⊤
-  proof: by aesop
-
-中文:
-引理 range_id
-  结论: range (𝟙 F) = ⊤
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.range_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.S
+ubfunctor`。
+形式化陈述：range_id : range (𝟙 F) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma range_id : range (𝟙 F) = ⊤ := by aesop
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `range_ι` / 引理 `range_ι`
-
-English:
-lemma range_ι
-  given: (G : Subfunctor F)
-  statement: range G.ι = G
-  proof: by aesop
-
-中文:
-引理 range_ι
-  条件: (G : 子函子 F)
-  结论: range G.ι = G
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.range_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Sub
+functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma range_ι (G : Subfunctor F) : range G.ι = G := by aesop
 
@@ -99,35 +94,21 @@ end range
 
 section lift
 
-variable (f : F' ⟶ F) {G : Subfunctor F} (hf : range f <= G)
+variable (f : F' ⟶ F) {G : Subfunctor F} (hf : range f ≤ G)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- If the image of a morphism falls in a subfunctor, then the morphism factors through it. -/
 @[simps! app]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.Subfunctor.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subfu
+nctor`。
+形式化陈述：lift : F' ⟶ G.toFunctor where app U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : F' ⟶ G.toFunctor where
-  body: ↾fun x => ⟨f.app U x, hf U (by simp)⟩
-  naturality _ _ g := by
-    ext x
-    simpa [Subtype.ext_iff, -NatTrans.naturality_apply] using NatTrans.naturality_apply f g x
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: : F' ⟶ G.toFunctor where
-  定义体: ↾fun x => ⟨f.app U x, hf U (by simp)⟩
-  naturality _ _ g := by
-    ext x
-    simpa [Subtype.ext_iff, -NatTrans.naturality_apply] using NatTrans.naturality_apply f g x
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: f.app
+--- 原说明 ---
+If the image of a morphism falls in a subfunctor, then the morphism factors thro
+ugh it.
 -/
 def lift : F' ⟶ G.toFunctor where
   app U := ↾fun x => ⟨f.app U x, hf U (by simp)⟩
@@ -136,18 +117,10 @@ def lift : F' ⟶ G.toFunctor where
     simpa [Subtype.ext_iff, -NatTrans.naturality_apply] using NatTrans.naturality_apply f g x
 
 @[reassoc (attr := simp)]
-/--
-theorem `lift_ι` / 定理 `lift_ι`
-
-English:
-theorem lift_ι
-  statement: lift f hf ≫ G.ι = f
-  proof: rfl
-
-中文:
-定理 lift_ι
-  结论: lift f hf ≫ G.ι = f
-  证明: rfl
+/-
+**CategoryTheory.Subfunctor.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Subf
+unctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_ι : lift f hf ≫ G.ι = f := rfl
 
@@ -157,60 +130,52 @@ section range
 
 variable (p : F' ⟶ F)
 
-/--
-Definition of `toRange` / `toRange` 的定义
+/-- Given a morphism `p : F' ⟶ F` of type-valued functors, this is the morphism
+from `F'` to its range. -/
+/-
+**CategoryTheory.Subfunctor.toRange** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Su
+bfunctor`。
+形式化陈述：toRange : F' ⟶ (range p).toFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRange
-  signature: :
-  body: lift p (by rfl)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 toRange
-  签名: :
-  定义体: lift p (by rfl)
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+Given a morphism `p : F' ⟶ F` of type-valued functors, this is the morphism
+from `F'` to its range.
 -/
 def toRange :
     F' ⟶ (range p).toFunctor :=
   lift p (by rfl)
 
 @[reassoc (attr := simp)]
-/--
-lemma `toRange_ι` / 引理 `toRange_ι`
-
-English:
-lemma toRange_ι
-  statement: toRange p ≫ (range p).ι = p
-  proof: rfl
-
-中文:
-引理 toRange_ι
-  结论: toRange p ≫ (range p).ι = p
-  证明: rfl
+/-
+**CategoryTheory.Subfunctor.toRange_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.S
+ubfunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toRange_ι : toRange p ≫ (range p).ι = p := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `toRange_app_val` / 引理 `toRange_app_val`
-
-English:
-lemma toRange_app_val
-  given: {i : C} (x : F'.obj i)
-  proof: by
-  simp [toRange]
-
-中文:
-引理 toRange_app_val
-  条件: {i : C} (x : F'.obj i)
-  证明: by
-  simp [toRange]
-
-Depends on / 依赖: toRange
+/-
+**CategoryTheory.Subfunctor.toRange_app_val** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Subfunctor`。
+形式化陈述：toRange_app_val {i : C} (x : F'.obj i) : ((toRange p).app i x).val = p.app
+ i x
+参数：x : F'.obj i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Subfunctor.lift_app`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (f : F' ⟶ F)   {
+G : CategoryTheory.Subfu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toRange_app_val {i : C} (x : F'.obj i) :
     ((toRange p).app i x).val = p.app i x := by
@@ -219,32 +184,24 @@ lemma toRange_app_val {i : C} (x : F'.obj i) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `range_toRange` / 引理 `range_toRange`
-
-English:
-lemma range_toRange
-  statement: range (toRange p) = ⊤
-  proof: by
-  ext i ⟨x, hx⟩
-  dsimp at hx ⊢
-  simp only [Set.mem_range, Set.mem_univ, iff_true]
-  simp only [Set.range] at hx
-  obtain ⟨y, rfl⟩ := hx
-  exact ⟨y, rfl⟩
-
-中文:
-引理 range_toRange
-  结论: range (toRange p) = ⊤
-  证明: by
-  ext i ⟨x, hx⟩
-  dsimp at hx ⊢
-  simp only [Set.mem_range, Set.mem_univ, iff_true]
-  simp only [Set.range] at hx
-  obtain ⟨y, rfl⟩ := hx
-  exact ⟨y, rfl⟩
-
-Depends on / 依赖: Set.mem_range, Set.mem_univ, Set.range, iff_true, mem_range, mem_univ
+/-
+**CategoryTheory.Subfunctor.range_toRange** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Subfunctor`。
+形式化陈述：range_toRange : range (toRange p) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
 -/
 lemma range_toRange : range (toRange p) = ⊤ := by
   ext i ⟨x, hx⟩
@@ -253,97 +210,63 @@ lemma range_toRange : range (toRange p) = ⊤ := by
   simp only [Set.range] at hx
   obtain ⟨y, rfl⟩ := hx
   exact ⟨y, rfl⟩
-
-/--
-lemma `epi_iff_range_eq_top` / 引理 `epi_iff_range_eq_top`
-
-English:
-lemma epi_iff_range_eq_top
-  proof: by
-  simp [NatTrans.epi_iff_epi_app, epi_iff_surjective, Subfunctor.ext_iff, funext_iff,
-    Set.range_eq_univ]
-
-中文:
-引理 epi_iff_range_eq_top
-  证明: by
-  simp [NatTrans.epi_iff_epi_app, epi_iff_surjective, Subfunctor.ext_iff, funext_iff,
-    Set.range_eq_univ]
-
-Depends on / 依赖: NatTrans, NatTrans.epi_iff_epi_app, Set.range_eq_univ, Subfunctor, Subfunctor.ext_iff, epi_iff_epi_app, epi_iff_surjective, ext_iff, funext_iff, range_eq_univ
+/-
+**CategoryTheory.Subfunctor.epi_iff_range_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Subfunctor`。
+形式化陈述：epi_iff_range_eq_top : Epi p ↔ range p = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePushouts_of_has_finite_limits`：∀ (C :
+ Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFin
+iteColimits C],   CategoryTheory.Limits.HasFiniteWideP…
+· 使用定理 `CategoryTheory.Limits.hasFiniteColimits_of_hasColimits`：∀ (C : Type u) [
+inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C], 
+  CategoryTheory.Limits.HasFiniteColimits C
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma epi_iff_range_eq_top :
     Epi p ↔ range p = ⊤ := by
   simp [NatTrans.epi_iff_epi_app, epi_iff_surjective, Subfunctor.ext_iff, funext_iff,
     Set.range_eq_univ]
-
-/--
-lemma `range_eq_top` / 引理 `range_eq_top`
-
-English:
-lemma range_eq_top
-  given: [Epi p]
-  statement: range p = ⊤
-  proof: by rwa [← epi_iff_range_eq_top]
-
-中文:
-引理 range_eq_top
-  条件: [满态射 p]
-  结论: range p = ⊤
-  证明: by rwa [← epi_iff_range_eq_top]
-
-Depends on / 依赖: epi_iff_range_eq_top
+/-
+**CategoryTheory.Subfunctor.range_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Subfunctor`。
+形式化陈述：range_eq_top [Epi p] : range p = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Subfunctor.epi_iff_range_eq_top`：epi_iff_range_eq_top : E
+pi p ↔ range p = ⊤
 -/
 lemma range_eq_top [Epi p] : range p = ⊤ := by rwa [← epi_iff_range_eq_top]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi (toRange p)
-  body: by simp [epi_iff_range_eq_top]
-
-中文:
-实例 :
-  签名: 满态射 (toRange p)
-  定义体: by simp [epi_iff_range_eq_top]
-
-Depends on / 依赖: epi_iff_range_eq_top
+/-
+**CategoryTheory.Subfunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subfuncto
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi (toRange p) := by simp [epi_iff_range_eq_top]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: p] : IsIso (toRange p)
-  body: by
-  have := mono_of_mono_fac (toRange_ι p)
-  rw [NatTrans.isIso_iff_isIso_app]
-  intro i
-  rw [isIso_iff_bijective]
-  constructor
-  · rw [← mono_iff_injective]
-    infer_instance
-  · rw [← epi_iff_surjective]
-    infer_instance
-
-中文:
-实例 [单态射
-  签名: p] : 是同构 (toRange p)
-  定义体: by
-  have := mono_of_mono_fac (toRange_ι p)
-  rw [NatTrans.isIso_iff_isIso_app]
-  intro i
-  rw [isIso_iff_bijective]
-  constructor
-  · rw [← mono_iff_injective]
-    infer_instance
-  · rw [← epi_iff_surjective]
-    infer_instance
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, epi_iff_surjective, infer_instance, isIso_iff_bijective, isIso_iff_isIso_app, mono_iff_injective, mono_of_mono_fac
+/-
+**CategoryTheory.Subfunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subfuncto
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono p] : IsIso (toRange p) := by
   have := mono_of_mono_fac (toRange_ι p)
@@ -355,22 +278,30 @@ instance [Mono p] : IsIso (toRange p) := by
     infer_instance
   · rw [← epi_iff_surjective]
     infer_instance
-
-/--
-lemma `range_comp_le` / 引理 `range_comp_le`
-
-English:
-lemma range_comp_le
-  given: (f : F ⟶ F') (g : F' ⟶ F'')
-  proof: fun _ _ _ => by aesop
-
-中文:
-引理 range_comp_le
-  条件: (f : F ⟶ F') (g : F' ⟶ F'')
-  证明: fun _ _ _ => by aesop
+/-
+**CategoryTheory.Subfunctor.range_comp_le** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Subfunctor`。
+形式化陈述：range_comp_le (f : F ⟶ F') (g : F' ⟶ F'') : range (f ≫ g) <= range g
+参数：f : F ⟶ F'；g : F' ⟶ F''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 lemma range_comp_le (f : F ⟶ F') (g : F' ⟶ F'') :
-    range (f ≫ g) <= range g := fun _ _ _ => by aesop
+    range (f ≫ g) ≤ range g := fun _ _ _ ↦ by aesop
 
 end range
 
@@ -380,97 +311,152 @@ variable (G : Subfunctor F) (f : F ⟶ F')
 
 /-- The image of a subfunctor by a morphism of type-valued functors. -/
 @[simps]
-/--
-Definition of `image` / `image` 的定义
+/-
+**CategoryTheory.Subfunctor.image** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subf
+unctor`。
+形式化陈述：image : Subfunctor F' where obj i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: : Subfunctor F' where
-  body: (f.app i) '' (G.obj i)
-  map := by
-    rintro Δ Δ' φ _ ⟨x, hx, rfl⟩
-    exact ⟨F.map φ x, G.map φ hx, by apply NatTrans.naturality_apply⟩
-
-中文:
-定义 像
-  签名: : 子函子 F' where
-  定义体: (f.app i) '' (G.obj i)
-  map := by
-    rintro Δ Δ' φ _ ⟨x, hx, rfl⟩
-    exact ⟨F.map φ x, G.map φ hx, by apply NatTrans.naturality_apply⟩
-
-Depends on / 依赖: G.obj, f.app
+--- 原说明 ---
+The image of a subfunctor by a morphism of type-valued functors.
 -/
 def image : Subfunctor F' where
   obj i := (f.app i) '' (G.obj i)
   map := by
     rintro Δ Δ' φ _ ⟨x, hx, rfl⟩
     exact ⟨F.map φ x, G.map φ hx, by apply NatTrans.naturality_apply⟩
-
-/--
-lemma `image_top` / 引理 `image_top`
-
-English:
-lemma image_top
-  statement: (⊤ : Subfunctor F).image f = range f
-  proof: by aesop
-
-@[simp]
-
-中文:
-引理 image_top
-  结论: (⊤ : 子函子 F).像 f = range f
-  证明: by aesop
-
-@[simp]
+/-
+**CategoryTheory.Subfunctor.image_top** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Subfunctor`。
+形式化陈述：image_top : (⊤ : Subfunctor F).image f = range f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma image_top : (⊤ : Subfunctor F).image f = range f := by aesop
 
 @[simp]
-/--
-lemma `image_iSup` / 引理 `image_iSup`
-
-English:
-lemma image_iSup
-  given: {ι : Type*} (G : ι -> Subfunctor F) (f : F ⟶ F')
-  proof: by aesop
-
-中文:
-引理 image_iSup
-  条件: {ι : 类型} (G : ι -> 子函子 F) (f : F ⟶ F')
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.image_iSup** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Subfunctor`。
+形式化陈述：image_iSup {ι : Type*} (G : ι -> Subfunctor F) (f : F ⟶ F') : (⨆ i, G i).i
+mage f = ⨆ i, (G i).image f
+参数：G : ι -> Subfunctor F；f : F ⟶ F'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用引理 `CategoryTheory.Subfunctor.iSup_obj`：iSup_obj {ι : Sort*} (S : ι -> Subfu
+nctor F) (U : C) : (⨆ i, S i).obj U = ⋃ i, (S i).obj U
 -/
-lemma image_iSup {ι : Type*} (G : ι -> Subfunctor F) (f : F ⟶ F') :
+lemma image_iSup {ι : Type*} (G : ι → Subfunctor F) (f : F ⟶ F') :
     (⨆ i, G i).image f = ⨆ i, (G i).image f := by aesop
-
-/--
-lemma `image_comp` / 引理 `image_comp`
-
-English:
-lemma image_comp
-  given: (g : F' ⟶ F'')
-  proof: by aesop
-
-中文:
-引理 image_comp
-  条件: (g : F' ⟶ F'')
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.image_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Subfunctor`。
+形式化陈述：image_comp (g : F' ⟶ F'') : G.image (f ≫ g) = (G.image f).image g
+参数：g : F' ⟶ F''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma image_comp (g : F' ⟶ F'') :
     G.image (f ≫ g) = (G.image f).image g := by aesop
-
-/--
-lemma `range_comp` / 引理 `range_comp`
-
-English:
-lemma range_comp
-  given: (g : F' ⟶ F'')
-  proof: by aesop
-
-中文:
-引理 range_comp
-  条件: (g : F' ⟶ F'')
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.range_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Subfunctor`。
+形式化陈述：range_comp (g : F' ⟶ F'') : range (f ≫ g) = (range f).image g
+参数：g : F' ⟶ F''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma range_comp (g : F' ⟶ F'') :
     range (f ≫ g) = (range f).image g := by aesop
@@ -481,30 +467,16 @@ section preimage
 
 /-- The preimage of a subfunctor by a morphism of type-valued functors. -/
 @[simps]
-/--
-Definition of `preimage` / `preimage` 的定义
+/-
+**CategoryTheory.Subfunctor.preimage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+ubfunctor`。
+形式化陈述：preimage (G : Subfunctor F) (p : F' ⟶ F) : Subfunctor F' where obj n
+参数：G : Subfunctor F；p : F' ⟶ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimage
-  signature: (G : Subfunctor F) (p : F' ⟶ F)
-  body: p.app n ⁻¹' (G.obj n)
-  map f := (Set.preimage_mono (G.map f)).trans (by
-    simp only [Set.preimage_preimage, NatTrans.naturality_apply]
-    rfl)
-
-@[simp]
-
-中文:
-定义 原像
-  签名: (G : 子函子 F) (p : F' ⟶ F)
-  定义体: p.app n ⁻¹' (G.obj n)
-  map f := (Set.preimage_mono (G.map f)).trans (by
-    simp only [Set.preimage_preimage, NatTrans.naturality_apply]
-    rfl)
-
-@[simp]
-
-Depends on / 依赖: G.obj, p.app
+--- 原说明 ---
+The preimage of a subfunctor by a morphism of type-valued functors.
 -/
 def preimage (G : Subfunctor F) (p : F' ⟶ F) : Subfunctor F' where
   obj n := p.app n ⁻¹' (G.obj n)
@@ -513,157 +485,138 @@ def preimage (G : Subfunctor F) (p : F' ⟶ F) : Subfunctor F' where
     rfl)
 
 @[simp]
-/--
-lemma `preimage_id` / 引理 `preimage_id`
-
-English:
-lemma preimage_id
-  given: (G : Subfunctor F)
-  proof: by aesop
-
-中文:
-引理 preimage_id
-  条件: (G : 子函子 F)
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.preimage_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Subfunctor`。
+形式化陈述：preimage_id (G : Subfunctor F) : G.preimage (𝟙 F) = G
+参数：G : Subfunctor F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preimage_id (G : Subfunctor F) :
     G.preimage (𝟙 F) = G := by aesop
-
-/--
-lemma `preimage_comp` / 引理 `preimage_comp`
-
-English:
-lemma preimage_comp
-  given: (G : Subfunctor F) (f : F'' ⟶ F') (g : F' ⟶ F)
-  proof: by aesop
-
-中文:
-引理 preimage_comp
-  条件: (G : 子函子 F) (f : F'' ⟶ F') (g : F' ⟶ F)
-  证明: by aesop
+/-
+**CategoryTheory.Subfunctor.preimage_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Subfunctor`。
+形式化陈述：preimage_comp (G : Subfunctor F) (f : F'' ⟶ F') (g : F' ⟶ F) : G.preimage 
+(f ≫ g) = (G.preimage g).preimage f
+参数：G : Subfunctor F；f : F'' ⟶ F'；g : F' ⟶ F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preimage_comp (G : Subfunctor F) (f : F'' ⟶ F') (g : F' ⟶ F) :
     G.preimage (f ≫ g) = (G.preimage g).preimage f := by aesop
-
-/--
-lemma `image_le_iff` / 引理 `image_le_iff`
-
-English:
-lemma image_le_iff
-  given: (G : Subfunctor F) (f : F ⟶ F') (G' : Subfunctor F')
-  proof: by
-  simp [Subfunctor.le_def]
-
-中文:
-引理 image_le_iff
-  条件: (G : 子函子 F) (f : F ⟶ F') (G' : 子函子 F')
-  证明: by
-  simp [Subfunctor.le_def]
-
-Depends on / 依赖: Subfunctor, Subfunctor.le_def, le_def
+/-
+**CategoryTheory.Subfunctor.image_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Subfunctor`。
+形式化陈述：image_le_iff (G : Subfunctor F) (f : F ⟶ F') (G' : Subfunctor F') : G.imag
+e f <= G' ↔ G <= G'.preimage f
+参数：G : Subfunctor F；f : F ⟶ F'；G' : Subfunctor F'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `CategoryTheory.Subfunctor.preimage_obj`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Categ
+oryTheory.Subfunctor F) (p :…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma image_le_iff (G : Subfunctor F) (f : F ⟶ F') (G' : Subfunctor F') :
-    G.image f <= G' ↔ G <= G'.preimage f := by
+    G.image f ≤ G' ↔ G ≤ G'.preimage f := by
   simp [Subfunctor.le_def]
 
-/--
-Definition of `fromPreimage` / `fromPreimage` 的定义
+/-- Given a morphism `p : F' ⟶ F` of type-valued functors and `G : Subfunctor F`,
+this is the morphism from the preimage of `G` by `p` to `G`. -/
+/-
+**CategoryTheory.Subfunctor.fromPreimage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Subfunctor`。
+形式化陈述：fromPreimage (G : Subfunctor F) (p : F' ⟶ F) : (G.preimage p).toFunctor ⟶ 
+G.toFunctor
+参数：G : Subfunctor F；p : F' ⟶ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromPreimage
-  signature: (G : Subfunctor F) (p : F' ⟶ F)
-  body: lift ((G.preimage p).ι ≫ p) (by
-    rw [range_comp]; rw [range_ι]; rw [image_le_iff])
-
-@[reassoc]
-
-中文:
-定义 fromPreimage
-  签名: (G : 子函子 F) (p : F' ⟶ F)
-  定义体: lift ((G.preimage p).ι ≫ p) (by
-    rw [range_comp]; rw [range_ι]; rw [image_le_iff])
-
-@[reassoc]
-
-Depends on / 依赖: G.preimage, image_le_iff, preimage, range_comp
+--- 原说明 ---
+Given a morphism `p : F' ⟶ F` of type-valued functors and `G : Subfunctor F`,
+this is the morphism from the preimage of `G` by `p` to `G`.
 -/
 def fromPreimage (G : Subfunctor F) (p : F' ⟶ F) :
     (G.preimage p).toFunctor ⟶ G.toFunctor :=
   lift ((G.preimage p).ι ≫ p) (by
-    rw [range_comp]; rw [range_ι]; rw [image_le_iff])
+    rw [range_comp, range_ι, image_le_iff])
 
 @[reassoc]
-/--
-lemma `fromPreimage_ι` / 引理 `fromPreimage_ι`
-
-English:
-lemma fromPreimage_ι
-  given: (G : Subfunctor F) (p : F' ⟶ F)
-  proof: rfl
-
-中文:
-引理 fromPreimage_ι
-  条件: (G : 子函子 F) (p : F' ⟶ F)
-  证明: rfl
+/-
+**CategoryTheory.Subfunctor.fromPreimage_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Subfunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromPreimage_ι (G : Subfunctor F) (p : F' ⟶ F) :
     G.fromPreimage p ≫ G.ι = (G.preimage p).ι ≫ p := rfl
-
-/--
-lemma `preimage_eq_top_iff` / 引理 `preimage_eq_top_iff`
-
-English:
-lemma preimage_eq_top_iff
-  given: (G : Subfunctor F) (p : F' ⟶ F)
-  proof: by
-  rw [← image_top]; rw [image_le_iff]
-  simp
-
-@[simp]
-
-中文:
-引理 preimage_eq_top_iff
-  条件: (G : 子函子 F) (p : F' ⟶ F)
-  证明: by
-  rw [← image_top]; rw [image_le_iff]
-  simp
-
-@[simp]
-
-Depends on / 依赖: image_le_iff, image_top
+/-
+**CategoryTheory.Subfunctor.preimage_eq_top_iff** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Subfunctor`。
+形式化陈述：preimage_eq_top_iff (G : Subfunctor F) (p : F' ⟶ F) : G.preimage p = ⊤ ↔ r
+ange p <= G
+参数：G : Subfunctor F；p : F' ⟶ F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Subfunctor.image_top`：image_top : (⊤ : Subfunctor F).imag
+e f = range f
+· 使用引理 `CategoryTheory.Subfunctor.image_le_iff`：image_le_iff (G : Subfunctor F) 
+(f : F ⟶ F') (G' : Subfunctor F') : G.image f <= G' ↔ G <= G'.preimage f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma preimage_eq_top_iff (G : Subfunctor F) (p : F' ⟶ F) :
-    G.preimage p = ⊤ ↔ range p <= G := by
-  rw [← image_top]; rw [image_le_iff]
+    G.preimage p = ⊤ ↔ range p ≤ G := by
+  rw [← image_top, image_le_iff]
   simp
 
 @[simp]
-/--
-lemma `preimage_image_of_epi` / 引理 `preimage_image_of_epi`
-
-English:
-lemma preimage_image_of_epi
-  given: (G : Subfunctor F) (p : F' ⟶ F) [hp : Epi p]
-  proof: by
-  apply le_antisymm
-  · rw [image_le_iff]
-  · intro i x hx
-    simp only [NatTrans.epi_iff_epi_app, epi_iff_surjective] at hp
-    obtain ⟨y, rfl⟩ := hp _ x
-    exact ⟨y, hx, rfl⟩
-
-中文:
-引理 preimage_image_of_epi
-  条件: (G : 子函子 F) (p : F' ⟶ F) [hp : 满态射 p]
-  证明: by
-  apply le_antisymm
-  · rw [image_le_iff]
-  · intro i x hx
-    simp only [NatTrans.epi_iff_epi_app, epi_iff_surjective] at hp
-    obtain ⟨y, rfl⟩ := hp _ x
-    exact ⟨y, hx, rfl⟩
-
-Depends on / 依赖: NatTrans, NatTrans.epi_iff_epi_app, epi_iff_epi_app, epi_iff_surjective, image_le_iff, le_antisymm
+/-
+**CategoryTheory.Subfunctor.preimage_image_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Subfunctor`。
+形式化陈述：preimage_image_of_epi (G : Subfunctor F) (p : F' ⟶ F) [hp : Epi p] : (G.pr
+eimage p).image p = G
+参数：G : Subfunctor F；p : F' ⟶ F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Subfunctor.image_le_iff`：image_le_iff (G : Subfunctor F) 
+(f : F ⟶ F') (G' : Subfunctor F') : G.image f <= G' ↔ G <= G'.preimage f
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePushouts_of_has_finite_limits`：∀ (C :
+ Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFin
+iteColimits C],   CategoryTheory.Limits.HasFiniteWideP…
+· 使用定理 `CategoryTheory.Limits.hasFiniteColimits_of_hasColimits`：∀ (C : Type u) [
+inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C], 
+  CategoryTheory.Limits.HasFiniteColimits C
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 lemma preimage_image_of_epi (G : Subfunctor F) (p : F' ⟶ F) [hp : Epi p] :
     (G.preimage p).image p = G := by
@@ -679,3 +632,4 @@ end preimage
 end Subfunctor
 
 end CategoryTheory
+

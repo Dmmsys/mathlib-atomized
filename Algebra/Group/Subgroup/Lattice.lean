@@ -63,28 +63,17 @@ variable {A : Type*} [AddGroup A]
 
 /-- Subgroups of a group `G` are isomorphic to additive subgroups of `Additive G`. -/
 @[simps!]
-/--
-Definition of `Subgroup.toAddSubgroup` / `Subgroup.toAddSubgroup` 的定义
+/-
+**Subgroup.toAddSubgroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Subgroup.toAddSubgroup : Subgroup G ≃o AddSubgroup (Additive G) where toFu
+n S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.inv_mem'`：∀ {G : Type u_3} [inst : Group G] (self : Subgroup G)
+ {x : G}, x ∈ self.carrier → x⁻¹ ∈ self.carrier
 
-English:
-definition Subgroup.toAddSubgroup
-  signature: : Subgroup G ≃o AddSubgroup (Additive G) where
-  body: { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
-  invFun S := { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
-  left_inv x := by cases x; rfl
-  right_inv x := by cases x; rfl
-  map_rel_iff' := Iff.rfl
-
-中文:
-定义 子群.toAddSubgroup
-  签名: : 子群 G ≃o 加法子群 (加性 G) where
-  定义体: { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
-  invFun S := { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
-  left_inv x := by cases x; rfl
-  right_inv x := by cases x; rfl
-  map_rel_iff' := Iff.rfl
-
-Depends on / 依赖: S.inv_mem, S.toSubmonoid, Submonoid, Submonoid.toAddSubmonoid, inv_mem, neg_mem, toAddSubmonoid, toSubmonoid
+--- 原说明 ---
+Subgroups of a group `G` are isomorphic to additive subgroups of `Additive G`.
 -/
 def Subgroup.toAddSubgroup : Subgroup G ≃o AddSubgroup (Additive G) where
   toFun S := { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
@@ -92,84 +81,58 @@ def Subgroup.toAddSubgroup : Subgroup G ≃o AddSubgroup (Additive G) where
   left_inv x := by cases x; rfl
   right_inv x := by cases x; rfl
   map_rel_iff' := Iff.rfl
-
-/--
-lemma `Additive.mem_toAddSubgroup` / 引理 `Additive.mem_toAddSubgroup`
-
-English:
-lemma Additive.mem_toAddSubgroup
-  given: (S : Subgroup G) (g : Additive G)
-  proof: .rfl
-
-中文:
-引理 加性.mem_toAddSubgroup
-  条件: (S : 子群 G) (g : 加性 G)
-  证明: .rfl
+/-
+**Additive.mem_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Additive`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (S : Subgroup G) (g : Additive G), g ∈ S
+ubgroup.toAddSubgroup S ↔ Additive.toMul g ∈ S
+参数：S : Subgroup G；g : Additive G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma Additive.mem_toAddSubgroup (S : Subgroup G) (g : Additive G) :
-    g in S.toAddSubgroup ↔ Additive.toMul g in S :=
+    g ∈ S.toAddSubgroup ↔ Additive.toMul g ∈ S :=
   .rfl
 
-/--
-Definition of `AddSubgroup.toSubgroup'` / `AddSubgroup.toSubgroup'` 的定义
+/-- Additive subgroups of an additive group `Additive G` are isomorphic to subgroups of `G`. -/
+/-
+**AddSubgroup.toSubgroup'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：AddSubgroup.toSubgroup' : AddSubgroup (Additive G) ≃o Subgroup G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AddSubgroup.toSubgroup'
-  signature: : AddSubgroup (Additive G) ≃o Subgroup G
-  body: Subgroup.toAddSubgroup.symm
-
-中文:
-缩写 加法子群.toSubgroup'
-  签名: : 加法子群 (加性 G) ≃o 子群 G
-  定义体: Subgroup.toAddSubgroup.symm
-
-Depends on / 依赖: Subgroup, Subgroup.toAddSubgroup.symm, toAddSubgroup
+--- 原说明 ---
+Additive subgroups of an additive group `Additive G` are isomorphic to subgroups
+ of `G`.
 -/
 abbrev AddSubgroup.toSubgroup' : AddSubgroup (Additive G) ≃o Subgroup G :=
   Subgroup.toAddSubgroup.symm
-
-/--
-lemma `AddSubgroup.mem_toSubgroup'` / 引理 `AddSubgroup.mem_toSubgroup'`
-
-English:
-lemma AddSubgroup.mem_toSubgroup'
-  given: (S : AddSubgroup (Additive G)) (g : G)
-  proof: .rfl
-
-中文:
-引理 加法子群.mem_toSubgroup'
-  条件: (S : 加法子群 (加性 G)) (g : G)
-  证明: .rfl
+/-
+**AddSubgroup.mem_toSubgroup'** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (S : AddSubgroup (Additive G)) (g : G), 
+  g ∈ AddSubgroup.toSubgroup' S ↔ Additive.ofMul g ∈ S
+参数：S : AddSubgroup (Additive G)；g : G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma AddSubgroup.mem_toSubgroup' (S : AddSubgroup (Additive G)) (g : G) :
-    g in toSubgroup' S ↔ Additive.ofMul g in S :=
+    g ∈ toSubgroup' S ↔ Additive.ofMul g ∈ S :=
   .rfl
 
 /-- Additive subgroups of an additive group `A` are isomorphic to subgroups of `Multiplicative A`.
 -/
 @[simps!]
-/--
-Definition of `AddSubgroup.toSubgroup` / `AddSubgroup.toSubgroup` 的定义
+/-
+**AddSubgroup.toSubgroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddSubgroup.toSubgroup : AddSubgroup A ≃o Subgroup (Multiplicative A) wher
+e toFun S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.neg_mem'`：∀ {G : Type u_3} [inst : AddGroup G] (self : AddSu
+bgroup G) {x : G}, x ∈ self.carrier → -x ∈ self.carrier
 
-English:
-definition AddSubgroup.toSubgroup
-  signature: : AddSubgroup A ≃o Subgroup (Multiplicative A) where
-  body: { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
-  invFun S := { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
-  left_inv x := by cases x; rfl
-  right_inv x := by cases x; rfl
-  map_rel_iff' := Iff.rfl
-
-中文:
-定义 加法子群.toSubgroup
-  签名: : 加法子群 A ≃o 子群 (Multiplicative A) where
-  定义体: { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
-  invFun S := { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
-  left_inv x := by cases x; rfl
-  right_inv x := by cases x; rfl
-  map_rel_iff' := Iff.rfl
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.toSubmonoid, S.neg_mem, S.toAddSubmonoid, inv_mem, neg_mem, toAddSubmonoid, toSubmonoid
+--- 原说明 ---
+Additive subgroups of an additive group `A` are isomorphic to subgroups of `Mult
+iplicative A`.
 -/
 def AddSubgroup.toSubgroup : AddSubgroup A ≃o Subgroup (Multiplicative A) where
   toFun S := { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
@@ -177,57 +140,42 @@ def AddSubgroup.toSubgroup : AddSubgroup A ≃o Subgroup (Multiplicative A) wher
   left_inv x := by cases x; rfl
   right_inv x := by cases x; rfl
   map_rel_iff' := Iff.rfl
-
-/--
-lemma `Multiplicative.mem_toSubgroup` / 引理 `Multiplicative.mem_toSubgroup`
-
-English:
-lemma Multiplicative.mem_toSubgroup
-  given: (S : AddSubgroup A) (a : Multiplicative A)
-  proof: .rfl
-
-中文:
-引理 Multiplicative.mem_toSubgroup
-  条件: (S : 加法子群 A) (a : Multiplicative A)
-  证明: .rfl
+/-
+**Multiplicative.mem_toSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Multiplicative`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (S : AddSubgroup A) (a : Multiplicati
+ve A),   a ∈ AddSubgroup.toSubgroup S ↔ Multiplicative.toAdd a ∈ S
+参数：S : AddSubgroup A；a : Multiplicative A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma Multiplicative.mem_toSubgroup (S : AddSubgroup A) (a : Multiplicative A) :
-    a in S.toSubgroup ↔ Multiplicative.toAdd a in S :=
+    a ∈ S.toSubgroup ↔ Multiplicative.toAdd a ∈ S :=
   .rfl
 
-/--
-Definition of `Subgroup.toAddSubgroup'` / `Subgroup.toAddSubgroup'` 的定义
+/-- Subgroups of an additive group `Multiplicative A` are isomorphic to additive subgroups of `A`.
+-/
+/-
+**Subgroup.toAddSubgroup'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Subgroup.toAddSubgroup' : Subgroup (Multiplicative A) ≃o AddSubgroup A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Subgroup.toAddSubgroup'
-  signature: : Subgroup (Multiplicative A) ≃o AddSubgroup A
-  body: AddSubgroup.toSubgroup.symm
-
-中文:
-缩写 子群.toAddSubgroup'
-  签名: : 子群 (Multiplicative A) ≃o 加法子群 A
-  定义体: AddSubgroup.toSubgroup.symm
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.toSubgroup.symm, toSubgroup
+--- 原说明 ---
+Subgroups of an additive group `Multiplicative A` are isomorphic to additive sub
+groups of `A`.
 -/
 abbrev Subgroup.toAddSubgroup' : Subgroup (Multiplicative A) ≃o AddSubgroup A :=
   AddSubgroup.toSubgroup.symm
-
-/--
-lemma `Subgroup.mem_toAddSubgroup'` / 引理 `Subgroup.mem_toAddSubgroup'`
-
-English:
-lemma Subgroup.mem_toAddSubgroup'
-  given: (S : Subgroup (Multiplicative A)) (a : A)
-  proof: .rfl
-
-中文:
-引理 子群.mem_toAddSubgroup'
-  条件: (S : 子群 (Multiplicative A)) (a : A)
-  证明: .rfl
+/-
+**Subgroup.mem_toAddSubgroup'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (S : Subgroup (Multiplicative A)) (a 
+: A),   a ∈ Subgroup.toAddSubgroup' S ↔ Multiplicative.ofAdd a ∈ S
+参数：S : Subgroup (Multiplicative A)；a : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma Subgroup.mem_toAddSubgroup' (S : Subgroup (Multiplicative A)) (a : A) :
-    a in toAddSubgroup' S ↔ Multiplicative.ofAdd a in S :=
+    a ∈ toAddSubgroup' S ↔ Multiplicative.ofAdd a ∈ S :=
   .rfl
 
 end mul_add
@@ -238,20 +186,12 @@ variable (H K : Subgroup G)
 
 /-- The subgroup `G` of the group `G`. -/
 @[to_additive /-- The `AddSubgroup G` of the `AddGroup G`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Top (Subgroup G)
-  body: ⟨{ (⊤ : Submonoid G) with inv_mem' := fun _ => Set.mem_univ _ }⟩
-
-中文:
-实例 :
-  签名: 顶元素 (子群 G)
-  定义体: ⟨{ (⊤ : Submonoid G) with inv_mem' := fun _ => Set.mem_univ _ }⟩
-
-Depends on / 依赖: Set.mem_univ, Submonoid, inv_mem, mem_univ
+--- 原说明 ---
+The subgroup `G` of the group `G`.
 -/
 instance : Top (Subgroup G) :=
   ⟨{ (⊤ : Submonoid G) with inv_mem' := fun _ => Set.mem_univ _ }⟩
@@ -263,340 +203,176 @@ This is the group version of `Submonoid.topEquiv`. -/
       /-- The top additive subgroup is isomorphic to the additive group.
 
       This is the additive group version of `AddSubmonoid.topEquiv`. -/]
-/--
-Definition of `topEquiv` / `topEquiv` 的定义
-
-English:
-definition topEquiv
-  signature: : (⊤ : Subgroup G) ≃* G
-  body: Submonoid.topEquiv
-
-中文:
-定义 topEquiv
-  签名: : (⊤ : 子群 G) ≃* G
-  定义体: Submonoid.topEquiv
-
-Depends on / 依赖: Submonoid, Submonoid.topEquiv, topEquiv
+/-
+**Subgroup.topEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Subgroup`。
+形式化陈述：topEquiv : (⊤ : Subgroup G) ≃* G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def topEquiv : (⊤ : Subgroup G) ≃* G :=
   Submonoid.topEquiv
 
 /-- The trivial subgroup `{1}` of a group `G`. -/
 @[to_additive /-- The trivial `AddSubgroup` `{0}` of an `AddGroup` `G`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Bot (Subgroup G)
-  body: ⟨{ (⊥ : Submonoid G) with inv_mem' := by simp}⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 底元素 (子群 G)
-  定义体: ⟨{ (⊥ : Submonoid G) with inv_mem' := by simp}⟩
-
-@[to_additive]
-
-Depends on / 依赖: Submonoid, inv_mem
+--- 原说明 ---
+The trivial subgroup `{1}` of a group `G`.
 -/
 instance : Bot (Subgroup G) :=
   ⟨{ (⊥ : Submonoid G) with inv_mem' := by simp}⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Subgroup G)
-  body: ⟨⊥⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 可居 (子群 G)
-  定义体: ⟨⊥⟩
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Subgroup G) :=
   ⟨⊥⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_bot` / 定理 `mem_bot`
-
-English:
-theorem mem_bot
-  given: {x : G}
-  statement: x in (⊥ : Subgroup G) ↔ x = 1
-  proof: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_bot
-  条件: {x : G}
-  结论: x in (⊥ : 子群 G) ↔ x = 1
-  证明: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subgroup.mem_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_bot {x : G} : x in (⊥ : Subgroup G) ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_bot {x : G} : x in (⊥ : Subgroup G) ↔ x = 1 :=
+theorem mem_bot {x : G} : x ∈ (⊥ : Subgroup G) ↔ x = 1 :=
   Iff.rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: (x : G)
-  statement: x in (⊤ : Subgroup G)
-  proof: Set.mem_univ x
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 mem_top
-  条件: (x : G)
-  结论: x in (⊤ : 子群 G)
-  证明: Set.mem_univ x
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+/-
+**Subgroup.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_top (x : G) : x in (⊤ : Subgroup G)
+参数：x : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem mem_top (x : G) : x in (⊤ : Subgroup G) :=
+theorem mem_top (x : G) : x ∈ (⊤ : Subgroup G) :=
   Set.mem_univ x
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : Subgroup G) : Set G) = Set.univ
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_top
-  结论: ((⊤ : 子群 G) : 集合 G) = 集合.univ
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Subgroup.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_top : ((⊤ : Subgroup G) : Set G) = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : Subgroup G) : Set G) = Set.univ :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ((⊥ : Subgroup G) : Set G) = {1}
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_bot
-  结论: ((⊥ : 子群 G) : 集合 G) = {1}
-  证明: rfl
-
-@[to_additive]
+/-
+**Subgroup.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_bot : ((⊥ : Subgroup G) : Set G) = {1}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : ((⊥ : Subgroup G) : Set G) = {1} :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique (⊥ : Subgroup G)
-  body: ⟨⟨1⟩, fun g => Subtype.ext g.2⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 唯一 (⊥ : 子群 G)
-  定义体: ⟨⟨1⟩, fun g => Subtype.ext g.2⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique (⊥ : Subgroup G) :=
   ⟨⟨1⟩, fun g => Subtype.ext g.2⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `top_toSubmonoid` / 定理 `top_toSubmonoid`
-
-English:
-theorem top_toSubmonoid
-  statement: (⊤ : Subgroup G).toSubmonoid = ⊤
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 top_toSubmonoid
-  结论: (⊤ : 子群 G).toSubmonoid = ⊤
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.top_toSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：top_toSubmonoid : (⊤ : Subgroup G).toSubmonoid = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_toSubmonoid : (⊤ : Subgroup G).toSubmonoid = ⊤ :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `bot_toSubmonoid` / 定理 `bot_toSubmonoid`
-
-English:
-theorem bot_toSubmonoid
-  statement: (⊥ : Subgroup G).toSubmonoid = ⊥
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 bot_toSubmonoid
-  结论: (⊥ : 子群 G).toSubmonoid = ⊥
-  证明: rfl
-
-@[to_additive]
+/-
+**Subgroup.bot_toSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：bot_toSubmonoid : (⊥ : Subgroup G).toSubmonoid = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_toSubmonoid : (⊥ : Subgroup G).toSubmonoid = ⊥ :=
   rfl
 
 @[to_additive]
-/--
-theorem `eq_bot_iff_forall` / 定理 `eq_bot_iff_forall`
-
-English:
-theorem eq_bot_iff_forall
-  statement: H = ⊥ ↔ forall x in H, x = (1 : G)
-  proof: toSubmonoid_injective.eq_iff.symm.trans Submonoid.eq_bot_iff_forall _
-
-@[to_additive]
-
-中文:
-定理 eq_bot_iff_对任意
-  结论: H = ⊥ ↔ 对任意 x in H, x = (1 : G)
-  证明: toSubmonoid_injective.eq_iff.symm.trans Submonoid.eq_bot_iff_forall _
-
-@[to_additive]
-
-Depends on / 依赖: Submonoid, Submonoid.eq_bot_iff_forall, eq_bot_iff_forall, eq_iff, toSubmonoid_injective, toSubmonoid_injective.eq_iff.symm.trans
+/-
+**Subgroup.eq_bot_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：eq_bot_iff_forall : H = ⊥ ↔ forall x in H, x = (1 : G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Subgroup.toSubmonoid_injective`：toSubmonoid_injective : Function.Injecti
+ve (toSubmonoid : Subgroup G -> Submonoid G)
+· 使用定理 `Submonoid.eq_bot_iff_forall`：eq_bot_iff_forall : S = ⊥ ↔ forall x in S, 
+x = (1 : M)
 -/
-theorem eq_bot_iff_forall : H = ⊥ ↔ forall x in H, x = (1 : G) :=
-toSubmonoid_injective.eq_iff.symm.trans Submonoid.eq_bot_iff_forall _
+theorem eq_bot_iff_forall : H = ⊥ ↔ ∀ x ∈ H, x = (1 : G) :=
+  toSubmonoid_injective.eq_iff.symm.trans <| Submonoid.eq_bot_iff_forall _
 
 @[to_additive]
-/--
-theorem `eq_bot_of_subsingleton` / 定理 `eq_bot_of_subsingleton`
-
-English:
-theorem eq_bot_of_subsingleton
-  given: [Subsingleton H]
-  statement: H = ⊥
-  proof: by
-  rw [Subgroup.eq_bot_iff_forall]
-  intro y hy
-  rw [← Subgroup.coe_mk H y hy]; rw [Subsingleton.elim (⟨y]; rw [hy⟩ : H) 1]; rw [Subgroup.coe_one]
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 eq_bot_of_subsingleton
-  条件: [子单例 H]
-  结论: H = ⊥
-  证明: by
-  rw [Subgroup.eq_bot_iff_forall]
-  intro y hy
-  rw [← Subgroup.coe_mk H y hy]; rw [Subsingleton.elim (⟨y]; rw [hy⟩ : H) 1]; rw [Subgroup.coe_one]
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Subgroup, Subgroup.coe_mk, Subgroup.coe_one, Subgroup.eq_bot_iff_forall, Subsingleton, Subsingleton.elim, coe_mk, coe_one, eq_bot_iff_forall
+/-
+**Subgroup.eq_bot_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：eq_bot_of_subsingleton [Subsingleton H] : H = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.eq_bot_iff_forall`：eq_bot_iff_forall : H = ⊥ ↔ forall x in H, x
+ = (1 : G)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.coe_mk`：coe_mk (x : G) (hx : x in H) : ((⟨x, hx⟩ : H) : G) = x
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Subgroup.coe_one`：coe_one : ((1 : H) : G) = 1
 -/
 theorem eq_bot_of_subsingleton [Subsingleton H] : H = ⊥ := by
   rw [Subgroup.eq_bot_iff_forall]
   intro y hy
-  rw [← Subgroup.coe_mk H y hy]; rw [Subsingleton.elim (⟨y]; rw [hy⟩ : H) 1]; rw [Subgroup.coe_one]
+  rw [← Subgroup.coe_mk H y hy, Subsingleton.elim (⟨y, hy⟩ : H) 1, Subgroup.coe_one]
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_eq_univ` / 定理 `coe_eq_univ`
-
-English:
-theorem coe_eq_univ
-  given: {H : Subgroup G}
-  statement: (H : Set G) = Set.univ ↔ H = ⊤
-  proof: (SetLike.ext'_iff.trans (by rfl)).symm
-
-@[to_additive]
-
-中文:
-定理 coe_eq_univ
-  条件: {H : 子群 G}
-  结论: (H : 集合 G) = 集合.univ ↔ H = ⊤
-  证明: (SetLike.ext'_iff.trans (by rfl)).symm
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.ext, _iff, _iff.trans
+/-
+**Subgroup.coe_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_eq_univ {H : Subgroup G} : (H : Set G) = Set.univ ↔ H = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_eq_univ {H : Subgroup G} : (H : Set G) = Set.univ ↔ H = ⊤ :=
   (SetLike.ext'_iff.trans (by rfl)).symm
 
 @[to_additive]
-/--
-theorem `coe_eq_singleton` / 定理 `coe_eq_singleton`
-
-English:
-theorem coe_eq_singleton
-  given: {H : Subgroup G}
-  statement: (exists g : G, (H : Set G) = {g}) ↔ H = ⊥
-  proof: ⟨fun ⟨g, hg⟩ =>
-    haveI : Subsingleton (H : Set G) := by
-      rw [hg]
-      infer_instance
-    H.eq_bot_of_subsingleton,
-    fun h => ⟨1, SetLike.ext'_iff.mp h⟩⟩
-
-@[to_additive]
-
-中文:
-定理 coe_eq_singleton
-  条件: {H : 子群 G}
-  结论: (存在 g : G, (H : 集合 G) = {g}) ↔ H = ⊥
-  证明: ⟨fun ⟨g, hg⟩ =>
-    haveI : Subsingleton (H : Set G) := by
-      rw [hg]
-      infer_instance
-    H.eq_bot_of_subsingleton,
-    fun h => ⟨1, SetLike.ext'_iff.mp h⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: H.eq_bot_of_subsingleton, SetLike, SetLike.ext, Subsingleton, _iff, _iff.mp, eq_bot_of_subsingleton, infer_instance
+/-
+**Subgroup.coe_eq_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_eq_singleton {H : Subgroup G} : (exists g : G, (H : Set G) = {g}) ↔ H 
+= ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.eq_bot_of_subsingleton`：eq_bot_of_subsingleton [Subsingleton H]
+ : H = ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
 -/
-theorem coe_eq_singleton {H : Subgroup G} : (exists g : G, (H : Set G) = {g}) ↔ H = ⊥ :=
+theorem coe_eq_singleton {H : Subgroup G} : (∃ g : G, (H : Set G) = {g}) ↔ H = ⊥ :=
   ⟨fun ⟨g, hg⟩ =>
     haveI : Subsingleton (H : Set G) := by
       rw [hg]
@@ -605,109 +381,94 @@ theorem coe_eq_singleton {H : Subgroup G} : (exists g : G, (H : Set G) = {g}) �
     fun h => ⟨1, SetLike.ext'_iff.mp h⟩⟩
 
 @[to_additive]
-/--
-theorem `nontrivial_iff_exists_ne_one` / 定理 `nontrivial_iff_exists_ne_one`
-
-English:
-theorem nontrivial_iff_exists_ne_one
-  given: (H : Subgroup G)
-  statement: Nontrivial H ↔ exists x in H, x != (1 : G)
-  proof: by
-  rw [Subtype.nontrivial_iff_exists_ne (fun x => x in H) (1 : H)]
-  simp
-
-@[to_additive]
-
-中文:
-定理 nontrivial_iff_存在_ne_one
-  条件: (H : 子群 G)
-  结论: 非平凡 H ↔ 存在 x in H, x != (1 : G)
-  证明: by
-  rw [Subtype.nontrivial_iff_exists_ne (fun x => x in H) (1 : H)]
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.nontrivial_iff_exists_ne, nontrivial_iff_exists_ne
+/-
+**Subgroup.nontrivial_iff_exists_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：nontrivial_iff_exists_ne_one (H : Subgroup G) : Nontrivial H ↔ exists x in
+ H, x != (1 : G)
+参数：H : Subgroup G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.nontrivial_iff_exists_ne`：Subtype.nontrivial_iff_exists_ne (p : 
+α -> Prop) (x : Subtype p) : Nontrivial (Subtype p) ↔ exists (y : α) (_ : p y), 
+y != x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem nontrivial_iff_exists_ne_one (H : Subgroup G) : Nontrivial H ↔ exists x in H, x != (1 : G) := by
-  rw [Subtype.nontrivial_iff_exists_ne (fun x => x in H) (1 : H)]
+theorem nontrivial_iff_exists_ne_one (H : Subgroup G) : Nontrivial H ↔ ∃ x ∈ H, x ≠ (1 : G) := by
+  rw [Subtype.nontrivial_iff_exists_ne (fun x => x ∈ H) (1 : H)]
   simp
 
 @[to_additive]
-/--
-theorem `exists_ne_one_of_nontrivial` / 定理 `exists_ne_one_of_nontrivial`
-
-English:
-theorem exists_ne_one_of_nontrivial
-  given: (H : Subgroup G) [Nontrivial H]
-  proof: by
-  rwa [← Subgroup.nontrivial_iff_exists_ne_one]
-
-@[to_additive]
-
-中文:
-定理 存在_ne_one_of_nontrivial
-  条件: (H : 子群 G) [非平凡 H]
-  证明: by
-  rwa [← Subgroup.nontrivial_iff_exists_ne_one]
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.nontrivial_iff_exists_ne_one, nontrivial_iff_exists_ne_one
+/-
+**Subgroup.exists_ne_one_of_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：exists_ne_one_of_nontrivial (H : Subgroup G) [Nontrivial H] : exists x in 
+H, x != 1
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.nontrivial_iff_exists_ne_one`：nontrivial_iff_exists_ne_one (H :
+ Subgroup G) : Nontrivial H ↔ exists x in H, x != (1 : G)
 -/
 theorem exists_ne_one_of_nontrivial (H : Subgroup G) [Nontrivial H] :
-    exists x in H, x != 1 := by
+    ∃ x ∈ H, x ≠ 1 := by
   rwa [← Subgroup.nontrivial_iff_exists_ne_one]
 
 @[to_additive]
-/--
-theorem `nontrivial_iff_ne_bot` / 定理 `nontrivial_iff_ne_bot`
-
-English:
-theorem nontrivial_iff_ne_bot
-  given: (H : Subgroup G)
-  statement: Nontrivial H ↔ H != ⊥
-  proof: by
-  rw [nontrivial_iff_exists_ne_one]; rw [ne_eq]; rw [eq_bot_iff_forall]
-  simp only [ne_eq, not_forall, exists_prop]
-
-中文:
-定理 nontrivial_iff_ne_bot
-  条件: (H : 子群 G)
-  结论: 非平凡 H ↔ H != ⊥
-  证明: by
-  rw [nontrivial_iff_exists_ne_one]; rw [ne_eq]; rw [eq_bot_iff_forall]
-  simp only [ne_eq, not_forall, exists_prop]
-
-Depends on / 依赖: eq_bot_iff_forall, exists_prop, ne_eq, nontrivial_iff_exists_ne_one, not_forall
+/-
+**Subgroup.nontrivial_iff_ne_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：nontrivial_iff_ne_bot (H : Subgroup G) : Nontrivial H ↔ H != ⊥
+参数：H : Subgroup G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.nontrivial_iff_exists_ne_one`：nontrivial_iff_exists_ne_one (H :
+ Subgroup G) : Nontrivial H ↔ exists x in H, x != (1 : G)
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Subgroup.eq_bot_iff_forall`：eq_bot_iff_forall : H = ⊥ ↔ forall x in H, x
+ = (1 : G)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem nontrivial_iff_ne_bot (H : Subgroup G) : Nontrivial H ↔ H != ⊥ := by
-  rw [nontrivial_iff_exists_ne_one]; rw [ne_eq]; rw [eq_bot_iff_forall]
+theorem nontrivial_iff_ne_bot (H : Subgroup G) : Nontrivial H ↔ H ≠ ⊥ := by
+  rw [nontrivial_iff_exists_ne_one, ne_eq, eq_bot_iff_forall]
   simp only [ne_eq, not_forall, exists_prop]
 
 /-- A subgroup is either the trivial subgroup or nontrivial. -/
 @[to_additive /-- A subgroup is either the trivial subgroup or nontrivial. -/]
-/--
-theorem `bot_or_nontrivial` / 定理 `bot_or_nontrivial`
+/-
+**Subgroup.bot_or_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：bot_or_nontrivial (H : Subgroup G) : H = ⊥ ∨ Nontrivial H
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.nontrivial_iff_ne_bot`：nontrivial_iff_ne_bot (H : Subgroup G) :
+ Nontrivial H ↔ H != ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.iff_iff_and_or_not_and_not`：∀ {a b : Prop} [Decidable b], (a ↔
+ b) ↔ a ∧ b ∨ ¬a ∧ ¬b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 
-English:
-theorem bot_or_nontrivial
-  given: (H : Subgroup G)
-  statement: H = ⊥ ∨ Nontrivial H
-  proof: by
-  have := nontrivial_iff_ne_bot H
-  tauto
-
-中文:
-定理 bot_or_nontrivial
-  条件: (H : 子群 G)
-  结论: H = ⊥ ∨ 非平凡 H
-  证明: by
-  have := nontrivial_iff_ne_bot H
-  tauto
-
-Depends on / 依赖: nontrivial_iff_ne_bot
+--- 原说明 ---
+A subgroup is either the trivial subgroup or nontrivial.
 -/
 theorem bot_or_nontrivial (H : Subgroup G) : H = ⊥ ∨ Nontrivial H := by
   have := nontrivial_iff_ne_bot H
@@ -715,85 +476,64 @@ theorem bot_or_nontrivial (H : Subgroup G) : H = ⊥ ∨ Nontrivial H := by
 
 /-- A subgroup is either the trivial subgroup or contains a non-identity element. -/
 @[to_additive /-- A subgroup is either the trivial subgroup or contains a nonzero element. -/]
-/--
-theorem `bot_or_exists_ne_one` / 定理 `bot_or_exists_ne_one`
+/-
+**Subgroup.bot_or_exists_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：bot_or_exists_ne_one (H : Subgroup G) : H = ⊥ ∨ exists x in H, x != (1 : G
+)
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.nontrivial_iff_exists_ne_one`：nontrivial_iff_exists_ne_one (H :
+ Subgroup G) : Nontrivial H ↔ exists x in H, x != (1 : G)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Subgroup.bot_or_nontrivial`：bot_or_nontrivial (H : Subgroup G) : H = ⊥ ∨
+ Nontrivial H
 
-English:
-theorem bot_or_exists_ne_one
-  given: (H : Subgroup G)
-  statement: H = ⊥ ∨ exists x in H, x != (1 : G)
-  proof: by
-  convert! H.bot_or_nontrivial
-  rw [nontrivial_iff_exists_ne_one]
-
-@[to_additive]
-
-中文:
-定理 bot_or_存在_ne_one
-  条件: (H : 子群 G)
-  结论: H = ⊥ ∨ 存在 x in H, x != (1 : G)
-  证明: by
-  convert! H.bot_or_nontrivial
-  rw [nontrivial_iff_exists_ne_one]
-
-@[to_additive]
-
-Depends on / 依赖: H.bot_or_nontrivial, bot_or_nontrivial, convert, nontrivial_iff_exists_ne_one
+--- 原说明 ---
+A subgroup is either the trivial subgroup or contains a non-identity element.
 -/
-theorem bot_or_exists_ne_one (H : Subgroup G) : H = ⊥ ∨ exists x in H, x != (1 : G) := by
+theorem bot_or_exists_ne_one (H : Subgroup G) : H = ⊥ ∨ ∃ x ∈ H, x ≠ (1 : G) := by
   convert! H.bot_or_nontrivial
   rw [nontrivial_iff_exists_ne_one]
 
 @[to_additive]
-/--
-lemma `ne_bot_iff_exists_ne_one` / 引理 `ne_bot_iff_exists_ne_one`
-
-English:
-lemma ne_bot_iff_exists_ne_one
-  given: {H : Subgroup G}
-  statement: H != ⊥ ↔ exists a : ↥H, a != 1
-  proof: by
-  rw [← nontrivial_iff_ne_bot]; rw [nontrivial_iff_exists_ne_one]
-  simp only [ne_eq, Subtype.exists, mk_eq_one, exists_prop]
-
-中文:
-引理 ne_bot_iff_存在_ne_one
-  条件: {H : 子群 G}
-  结论: H != ⊥ ↔ 存在 a : ↥H, a != 1
-  证明: by
-  rw [← nontrivial_iff_ne_bot]; rw [nontrivial_iff_exists_ne_one]
-  simp only [ne_eq, Subtype.exists, mk_eq_one, exists_prop]
-
-Depends on / 依赖: Subtype, Subtype.exists, exists_prop, mk_eq_one, ne_eq, nontrivial_iff_exists_ne_one, nontrivial_iff_ne_bot
+/-
+**Subgroup.ne_bot_iff_exists_ne_one** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：ne_bot_iff_exists_ne_one {H : Subgroup G} : H != ⊥ ↔ exists a : ↥H, a != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.nontrivial_iff_ne_bot`：nontrivial_iff_ne_bot (H : Subgroup G) :
+ Nontrivial H ↔ H != ⊥
+· 使用定理 `Subgroup.nontrivial_iff_exists_ne_one`：nontrivial_iff_exists_ne_one (H :
+ Subgroup G) : Nontrivial H ↔ exists x in H, x != (1 : G)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ne_bot_iff_exists_ne_one {H : Subgroup G} : H != ⊥ ↔ exists a : ↥H, a != 1 := by
-  rw [← nontrivial_iff_ne_bot]; rw [nontrivial_iff_exists_ne_one]
+lemma ne_bot_iff_exists_ne_one {H : Subgroup G} : H ≠ ⊥ ↔ ∃ a : ↥H, a ≠ 1 := by
+  rw [← nontrivial_iff_ne_bot, nontrivial_iff_exists_ne_one]
   simp only [ne_eq, Subtype.exists, mk_eq_one, exists_prop]
 
 /-- The inf of two subgroups is their intersection. -/
 @[to_additive /-- The inf of two `AddSubgroup`s is their intersection. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (Subgroup G)
-  body: ⟨fun H₁ H₂ =>
-    { H₁.toSubmonoid ⊓ H₂.toSubmonoid with
-      inv_mem' := fun ⟨hx, hx'⟩ => ⟨H₁.inv_mem hx, H₂.inv_mem hx'⟩ }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 最小值 (子群 G)
-  定义体: ⟨fun H₁ H₂ =>
-    { H₁.toSubmonoid ⊓ H₂.toSubmonoid with
-      inv_mem' := fun ⟨hx, hx'⟩ => ⟨H₁.inv_mem hx, H₂.inv_mem hx'⟩ }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: inv_mem, toSubmonoid
+--- 原说明 ---
+The inf of two subgroups is their intersection.
 -/
 instance : Min (Subgroup G) :=
   ⟨fun H₁ H₂ =>
@@ -801,221 +541,111 @@ instance : Min (Subgroup G) :=
       inv_mem' := fun ⟨hx, hx'⟩ => ⟨H₁.inv_mem hx, H₂.inv_mem hx'⟩ }⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (p p' : Subgroup G)
-  statement: ((p ⊓ p' : Subgroup G) : Set G) = (p : Set G) inter p'
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_inf
-  条件: (p p' : 子群 G)
-  结论: ((p ⊓ p' : 子群 G) : 集合 G) = (p : 集合 G) inter p'
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_inf (p p' : Subgroup G) : ((p ⊓ p' : Subgroup G) : Set G) = (p : Set G
+) inter p'
+参数：p p' : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (p p' : Subgroup G) : ((p ⊓ p' : Subgroup G) : Set G) = (p : Set G) inter p' :=
+theorem coe_inf (p p' : Subgroup G) : ((p ⊓ p' : Subgroup G) : Set G) = (p : Set G) ∩ p' :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  given: {p p' : Subgroup G} {x : G}
-  statement: x in p ⊓ p' ↔ x in p ∧ x in p'
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_inf
-  条件: {p p' : 子群 G} {x : G}
-  结论: x in p ⊓ p' ↔ x in p ∧ x in p'
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subgroup.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_inf {p p' : Subgroup G} {x : G} : x in p ⊓ p' ↔ x in p ∧ x in p'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf {p p' : Subgroup G} {x : G} : x in p ⊓ p' ↔ x in p ∧ x in p' :=
+theorem mem_inf {p p' : Subgroup G} {x : G} : x ∈ p ⊓ p' ↔ x ∈ p ∧ x ∈ p' :=
   Iff.rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Subgroup G)
-  body: ⟨fun s =>
-    { (⨅ S in s, Subgroup.toSubmonoid S).copy (⋂ S in s, ↑S) (by simp) with
-      inv_mem' := fun {x} hx =>
-        Set.mem_biInter fun i h => i.inv_mem (by apply Set.mem_iInter₂.1 hx i h) }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 下确界集 (子群 G)
-  定义体: ⟨fun s =>
-    { (⨅ S in s, Subgroup.toSubmonoid S).copy (⋂ S in s, ↑S) (by simp) with
-      inv_mem' := fun {x} hx =>
-        Set.mem_biInter fun i h => i.inv_mem (by apply Set.mem_iInter₂.1 hx i h) }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Set.mem_biInter, Set.mem_iInter, Subgroup, Subgroup.toSubmonoid, i.inv_mem, inv_mem, mem_biInter, toSubmonoid
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Subgroup G) :=
   ⟨fun s =>
-    { (⨅ S in s, Subgroup.toSubmonoid S).copy (⋂ S in s, ↑S) (by simp) with
+    { (⨅ S ∈ s, Subgroup.toSubmonoid S).copy (⋂ S ∈ s, ↑S) (by simp) with
       inv_mem' := fun {x} hx =>
         Set.mem_biInter fun i h => i.inv_mem (by apply Set.mem_iInter₂.1 hx i h) }⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_sInf` / 定理 `coe_sInf`
-
-English:
-theorem coe_sInf
-  given: (H : Set (Subgroup G))
-  statement: ((sInf H : Subgroup G) : Set G) = ⋂ s in H, ↑s
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_sInf
-  条件: (H : 集合 (子群 G))
-  结论: ((sInf H : 子群 G) : 集合 G) = ⋂ s in H, ↑s
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.coe_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_sInf (H : Set (Subgroup G)) : ((sInf H : Subgroup G) : Set G) = ⋂ s in
+ H, ↑s
+参数：H : Set (Subgroup G)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sInf (H : Set (Subgroup G)) : ((sInf H : Subgroup G) : Set G) = ⋂ s in H, ↑s :=
+theorem coe_sInf (H : Set (Subgroup G)) : ((sInf H : Subgroup G) : Set G) = ⋂ s ∈ H, ↑s :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_sInf` / 定理 `mem_sInf`
-
-English:
-theorem mem_sInf
-  given: {S : Set (Subgroup G)} {x : G}
-  statement: x in sInf S ↔ forall p in S, x in p
-  proof: Set.mem_iInter₂
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_sInf
-  条件: {S : 集合 (子群 G)} {x : G}
-  结论: x in sInf S ↔ 对任意 p in S, x in p
-  证明: Set.mem_iInter₂
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.mem_iInter
+/-
+**Subgroup.mem_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sInf {S : Set (Subgroup G)} {x : G} : x in sInf S ↔ forall p in S, x i
+n p
+参数：Subgroup G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_iInter₂`：mem_iInter₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋂ (i) (j), s i j) ↔ forall i j, x in s i j
 -/
-theorem mem_sInf {S : Set (Subgroup G)} {x : G} : x in sInf S ↔ forall p in S, x in p :=
+theorem mem_sInf {S : Set (Subgroup G)} {x : G} : x ∈ sInf S ↔ ∀ p ∈ S, x ∈ p :=
   Set.mem_iInter₂
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_iInf` / 定理 `mem_iInf`
-
-English:
-theorem mem_iInf
-  given: {ι : Sort*} {S : ι -> Subgroup G} {x : G}
-  statement: x in ⨅ i, S i ↔ forall i, x in S i
-  proof: by
-  simp only [iInf, mem_sInf, Set.forall_mem_range]
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 mem_iInf
-  条件: {ι : 类型层*} {S : ι -> 子群 G} {x : G}
-  结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
-  证明: by
-  simp only [iInf, mem_sInf, Set.forall_mem_range]
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Set.forall_mem_range, forall_mem_range, mem_sInf
+/-
+**Subgroup.mem_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_iInf {ι : Sort*} {S : ι -> Subgroup G} {x : G} : x in ⨅ i, S i ↔ foral
+l i, x in S i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iInf {ι : Sort*} {S : ι -> Subgroup G} {x : G} : x in ⨅ i, S i ↔ forall i, x in S i := by
+theorem mem_iInf {ι : Sort*} {S : ι → Subgroup G} {x : G} : x ∈ ⨅ i, S i ↔ ∀ i, x ∈ S i := by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_iInf` / 定理 `coe_iInf`
-
-English:
-theorem coe_iInf
-  given: {ι : Sort*} {S : ι -> Subgroup G}
-  statement: (↑(⨅ i, S i) : Set G) = ⋂ i, S i
-  proof: by
-  simp only [iInf, coe_sInf, Set.biInter_range]
-
-中文:
-定理 coe_iInf
-  条件: {ι : 类型层*} {S : ι -> 子群 G}
-  结论: (↑(⨅ i, S i) : 集合 G) = ⋂ i, S i
-  证明: by
-  simp only [iInf, coe_sInf, Set.biInter_range]
-
-Depends on / 依赖: Set.biInter_range, biInter_range, coe_sInf
+/-
+**Subgroup.coe_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_iInf {ι : Sort*} {S : ι -> Subgroup G} : (↑(⨅ i, S i) : Set G) = ⋂ i, 
+S i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biInter_range`：biInter_range {f : ι -> α} {g : α -> Set β} : ⋂ x in 
+range f, g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_iInf {ι : Sort*} {S : ι -> Subgroup G} : (↑(⨅ i, S i) : Set G) = ⋂ i, S i := by
+theorem coe_iInf {ι : Sort*} {S : ι → Subgroup G} : (↑(⨅ i, S i) : Set G) = ⋂ i, S i := by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
 /-- Subgroups of a group form a complete lattice. -/
 @[to_additive /-- The `AddSubgroup`s of an `AddGroup` form a complete lattice. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CompleteLattice (Subgroup G)
-  body: { completeLatticeOfInf (Subgroup G) fun _s =>
-      IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf with
-    bot := ⊥
-    bot_le := fun S _x hx => (mem_bot.1 hx).symm ▸ S.one_mem
-    top := ⊤
-    le_top := fun _S x _hx => mem_top x
-    inf := (· ⊓ ·)
-    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
-    inf_le_left := fun _a _b _x => And.left
-    inf_le_right := fun _a _b _x => And.right }
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 完备格 (子群 G)
-  定义体: { completeLatticeOfInf (Subgroup G) fun _s =>
-      IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf with
-    bot := ⊥
-    bot_le := fun S _x hx => (mem_bot.1 hx).symm ▸ S.one_mem
-    top := ⊤
-    le_top := fun _S x _hx => mem_top x
-    inf := (· ⊓ ·)
-    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
-    inf_le_left := fun _a _b _x => And.left
-    inf_le_right := fun _a _b _x => And.right }
-
-@[to_additive]
-
-Depends on / 依赖: And.left, And.right, IsGLB.of_image, S.one_mem, SetLike, SetLike.coe_subset_coe, Subgroup, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_top, of_image, one_mem
+--- 原说明 ---
+Subgroups of a group form a complete lattice.
 -/
 instance : CompleteLattice (Subgroup G) :=
   { completeLatticeOfInf (Subgroup G) fun _s =>
@@ -1030,189 +660,124 @@ instance : CompleteLattice (Subgroup G) :=
     inf_le_right := fun _a _b _x => And.right }
 
 @[to_additive]
-/--
-theorem `mem_sup_left` / 定理 `mem_sup_left`
-
-English:
-theorem mem_sup_left
-  given: {S T : Subgroup G}
-  statement: forall {x : G}, x in S -> x in S ⊔ T
-  proof: have : S <= S ⊔ T := le_sup_left; fun h => this h
-
-@[to_additive]
-
-中文:
-定理 mem_sup_left
-  条件: {S T : 子群 G}
-  结论: 对任意 {x : G}, x in S -> x in S ⊔ T
-  证明: have : S <= S ⊔ T := le_sup_left; fun h => this h
-
-@[to_additive]
-
-Depends on / 依赖: le_sup_left
+/-
+**Subgroup.mem_sup_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup_left {S T : Subgroup G} : forall {x : G}, x in S -> x in S ⊔ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
 -/
-theorem mem_sup_left {S T : Subgroup G} : forall {x : G}, x in S -> x in S ⊔ T :=
-  have : S <= S ⊔ T := le_sup_left; fun h => this h
+theorem mem_sup_left {S T : Subgroup G} : ∀ {x : G}, x ∈ S → x ∈ S ⊔ T :=
+  have : S ≤ S ⊔ T := le_sup_left; fun h ↦ this h
 
 @[to_additive]
-/--
-theorem `mem_sup_right` / 定理 `mem_sup_right`
-
-English:
-theorem mem_sup_right
-  given: {S T : Subgroup G}
-  statement: forall {x : G}, x in T -> x in S ⊔ T
-  proof: have : T <= S ⊔ T := le_sup_right; fun h => this h
-
-@[to_additive]
-
-中文:
-定理 mem_sup_right
-  条件: {S T : 子群 G}
-  结论: 对任意 {x : G}, x in T -> x in S ⊔ T
-  证明: have : T <= S ⊔ T := le_sup_right; fun h => this h
-
-@[to_additive]
-
-Depends on / 依赖: le_sup_right
+/-
+**Subgroup.mem_sup_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup_right {S T : Subgroup G} : forall {x : G}, x in T -> x in S ⊔ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-theorem mem_sup_right {S T : Subgroup G} : forall {x : G}, x in T -> x in S ⊔ T :=
-  have : T <= S ⊔ T := le_sup_right; fun h => this h
+theorem mem_sup_right {S T : Subgroup G} : ∀ {x : G}, x ∈ T → x ∈ S ⊔ T :=
+  have : T ≤ S ⊔ T := le_sup_right; fun h ↦ this h
 
 @[to_additive]
-/--
-theorem `mul_mem_sup` / 定理 `mul_mem_sup`
-
-English:
-theorem mul_mem_sup
-  given: {S T : Subgroup G} {x y : G} (hx : x in S) (hy : y in T)
-  statement: x * y in S ⊔ T
-  proof: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-中文:
-定理 mul_mem_sup
-  条件: {S T : 子群 G} {x y : G} (hx : x in S) (hy : y in T)
-  结论: x * y in S ⊔ T
-  证明: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
+/-
+**Subgroup.mul_mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mul_mem_sup {S T : Subgroup G} {x y : G} (hx : x in S) (hy : y in T) : x *
+ y in S ⊔ T
+参数：hx : x in S；hy : y in T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.mem_sup_left`：mem_sup_left {S T : Subgroup G} : forall {x : G},
+ x in S -> x in S ⊔ T
+· 使用定理 `Subgroup.mem_sup_right`：mem_sup_right {S T : Subgroup G} : forall {x : G
+}, x in T -> x in S ⊔ T
 -/
-theorem mul_mem_sup {S T : Subgroup G} {x y : G} (hx : x in S) (hy : y in T) : x * y in S ⊔ T :=
+theorem mul_mem_sup {S T : Subgroup G} {x y : G} (hx : x ∈ S) (hy : y ∈ T) : x * y ∈ S ⊔ T :=
   (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 @[to_additive]
-/--
-theorem `mem_iSup_of_mem` / 定理 `mem_iSup_of_mem`
-
-English:
-theorem mem_iSup_of_mem
-  given: {ι : Sort*} {S : ι -> Subgroup G} (i : ι)
-  proof: have : S i <= iSup S := le_iSup _ _; fun h => this h
-
-@[to_additive]
-
-中文:
-定理 mem_iSup_of_mem
-  条件: {ι : 类型层*} {S : ι -> 子群 G} (i : ι)
-  证明: have : S i <= iSup S := le_iSup _ _; fun h => this h
-
-@[to_additive]
-
-Depends on / 依赖: le_iSup
+/-
+**Subgroup.mem_iSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_iSup_of_mem {ι : Sort*} {S : ι -> Subgroup G} (i : ι) : forall {x : G}
+, x in S i -> x in iSup S
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-theorem mem_iSup_of_mem {ι : Sort*} {S : ι -> Subgroup G} (i : ι) :
-    forall {x : G}, x in S i -> x in iSup S :=
-  have : S i <= iSup S := le_iSup _ _; fun h => this h
+theorem mem_iSup_of_mem {ι : Sort*} {S : ι → Subgroup G} (i : ι) :
+    ∀ {x : G}, x ∈ S i → x ∈ iSup S :=
+  have : S i ≤ iSup S := le_iSup _ _; fun h ↦ this h
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_mem` / 定理 `mem_sSup_of_mem`
-
-English:
-theorem mem_sSup_of_mem
-  given: {S : Set (Subgroup G)} {s : Subgroup G} (hs : s in S)
-  proof: have : s <= sSup S := le_sSup hs; fun h => this h
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_sSup_of_mem
-  条件: {S : 集合 (子群 G)} {s : 子群 G} (hs : s in S)
-  证明: have : s <= sSup S := le_sSup hs; fun h => this h
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: le_sSup
+/-
+**Subgroup.mem_sSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sSup_of_mem {S : Set (Subgroup G)} {s : Subgroup G} (hs : s in S) : fo
+rall {x : G}, x in s -> x in sSup S
+参数：Subgroup G；hs : s in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
 -/
-theorem mem_sSup_of_mem {S : Set (Subgroup G)} {s : Subgroup G} (hs : s in S) :
-    forall {x : G}, x in s -> x in sSup S :=
-  have : s <= sSup S := le_sSup hs; fun h => this h
+theorem mem_sSup_of_mem {S : Set (Subgroup G)} {s : Subgroup G} (hs : s ∈ S) :
+    ∀ {x : G}, x ∈ s → x ∈ sSup S :=
+  have : s ≤ sSup S := le_sSup hs; fun h ↦ this h
 
 @[to_additive (attr := simp)]
-/--
-theorem `subsingleton_iff` / 定理 `subsingleton_iff`
-
-English:
-theorem subsingleton_iff
-  statement: Subsingleton (Subgroup G) ↔ Subsingleton G
-  proof: ⟨fun _ =>
-    ⟨fun x y =>
-      have : forall i : G, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Subgroup G) ⊥ ▸ mem_top i
-      (this x).trans (this y).symm⟩,
-    fun _ => ⟨fun x y => Subgroup.ext fun i => Subsingleton.elim 1 i ▸ by simp⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 subsingleton_iff
-  结论: 子单例 (子群 G) ↔ 子单例 G
-  证明: ⟨fun _ =>
-    ⟨fun x y =>
-      have : forall i : G, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Subgroup G) ⊥ ▸ mem_top i
-      (this x).trans (this y).symm⟩,
-    fun _ => ⟨fun x y => Subgroup.ext fun i => Subsingleton.elim 1 i ▸ by simp⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.ext, Subsingleton, Subsingleton.elim, mem_bot, mem_bot.mp, mem_top
+/-
+**Subgroup.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：subsingleton_iff : Subsingleton (Subgroup G) ↔ Subsingleton G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.mem_bot`：mem_bot {x : G} : x in (⊥ : Subgroup G) ↔ x = 1
+· 使用定理 `Subgroup.mem_top`：mem_top (x : G) : x in (⊤ : Subgroup G)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem subsingleton_iff : Subsingleton (Subgroup G) ↔ Subsingleton G :=
   ⟨fun _ =>
     ⟨fun x y =>
-      have : forall i : G, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Subgroup G) ⊥ ▸ mem_top i
+      have : ∀ i : G, i = 1 := fun i =>
+        mem_bot.mp <| Subsingleton.elim (⊤ : Subgroup G) ⊥ ▸ mem_top i
       (this x).trans (this y).symm⟩,
     fun _ => ⟨fun x y => Subgroup.ext fun i => Subsingleton.elim 1 i ▸ by simp⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `nontrivial_iff` / 定理 `nontrivial_iff`
-
-English:
-theorem nontrivial_iff
-  statement: Nontrivial (Subgroup G) ↔ Nontrivial G
-  proof: not_iff_not.mp
-    ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
-      not_nontrivial_iff_subsingleton.symm)
-
-@[to_additive]
-
-中文:
-定理 nontrivial_iff
-  结论: 非平凡 (子群 G) ↔ 非平凡 G
-  证明: not_iff_not.mp
-    ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
-      not_nontrivial_iff_subsingleton.symm)
-
-@[to_additive]
-
-Depends on / 依赖: not_iff_not, not_iff_not.mp, not_nontrivial_iff_subsingleton, not_nontrivial_iff_subsingleton.symm, not_nontrivial_iff_subsingleton.trans, subsingleton_iff
+/-
+**Subgroup.nontrivial_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：nontrivial_iff : Nontrivial (Subgroup G) ↔ Nontrivial G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `not_nontrivial_iff_subsingleton`：not_nontrivial_iff_subsingleton : ¬Nont
+rivial α ↔ Subsingleton α
+· 使用定理 `Subgroup.subsingleton_iff`：subsingleton_iff : Subsingleton (Subgroup G) 
+↔ Subsingleton G
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 -/
 theorem nontrivial_iff : Nontrivial (Subgroup G) ↔ Nontrivial G :=
   not_iff_not.mp
@@ -1220,206 +785,106 @@ theorem nontrivial_iff : Nontrivial (Subgroup G) ↔ Nontrivial G :=
       not_nontrivial_iff_subsingleton.symm)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: G] : Unique (Subgroup G)
-  body: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
-
-@[to_additive]
-
-中文:
-实例 [子单例
-  签名: G] : 唯一 (子群 G)
-  定义体: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, subsingleton_iff, subsingleton_iff.mpr
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton G] : Unique (Subgroup G) :=
   ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: G] : Nontrivial (Subgroup G)
-  body: nontrivial_iff.mpr ‹_›
-
-@[to_additive]
-
-中文:
-实例 [非平凡
-  签名: G] : 非平凡 (子群 G)
-  定义体: nontrivial_iff.mpr ‹_›
-
-@[to_additive]
-
-Depends on / 依赖: nontrivial_iff, nontrivial_iff.mpr
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial G] : Nontrivial (Subgroup G) :=
   nontrivial_iff.mpr ‹_›
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: G] : Nontrivial (⊤
-  body: by
-  rw [nontrivial_iff_ne_bot]
-  exact top_ne_bot
-
-@[to_additive]
-
-中文:
-实例 [非平凡
-  签名: G] : 非平凡 (⊤
-  定义体: by
-  rw [nontrivial_iff_ne_bot]
-  exact top_ne_bot
-
-@[to_additive]
-
-Depends on / 依赖: nontrivial_iff_ne_bot, top_ne_bot
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial G] : Nontrivial (⊤ : Subgroup G) := by
   rw [nontrivial_iff_ne_bot]
   exact top_ne_bot
 
 @[to_additive]
-/--
-theorem `eq_top_iff'` / 定理 `eq_top_iff'`
-
-English:
-theorem eq_top_iff'
-  statement: H = ⊤ ↔ forall x : G, x in H
-  proof: eq_top_iff.trans ⟨fun h m => h mem_top m, fun h m _ => h m⟩
-
-中文:
-定理 eq_top_iff'
-  结论: H = ⊤ ↔ 对任意 x : G, x in H
-  证明: eq_top_iff.trans ⟨fun h m => h mem_top m, fun h m _ => h m⟩
-
-Depends on / 依赖: eq_top_iff, eq_top_iff.trans, mem_top
+/-
+**Subgroup.eq_top_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：eq_top_iff' : H = ⊤ ↔ forall x : G, x in H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Subgroup.mem_top`：mem_top (x : G) : x in (⊤ : Subgroup G)
 -/
-theorem eq_top_iff' : H = ⊤ ↔ forall x : G, x in H :=
-eq_top_iff.trans ⟨fun h m => h mem_top m, fun h m _ => h m⟩
+theorem eq_top_iff' : H = ⊤ ↔ ∀ x : G, x ∈ H :=
+  eq_top_iff.trans ⟨fun h m => h <| mem_top m, fun h m _ => h m⟩
 
 /-- The `Subgroup` generated by a set. -/
 @[to_additive /-- The `AddSubgroup` generated by a set -/]
-/--
-Definition of `closure` / `closure` 的定义
+/-
+**Subgroup.closure** 是 Mathlib 中的一个定义，位于命名空间 `Subgroup`。
+形式化陈述：closure (k : Set G) : Subgroup G
+参数：k : Set G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closure
-  signature: (k : Set G)
-  body: sInf { K | k subseteq K }
-
-中文:
-定义 closure
-  签名: (k : 集合 G)
-  定义体: sInf { K | k subseteq K }
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+The `Subgroup` generated by a set.
 -/
 def closure (k : Set G) : Subgroup G :=
-  sInf { K | k subseteq K }
+  sInf { K | k ⊆ K }
 
 variable {k : Set G}
 
 @[to_additive]
-/--
-theorem `mem_closure` / 定理 `mem_closure`
-
-English:
-theorem mem_closure
-  given: {x : G}
-  statement: x in closure k ↔ forall K : Subgroup G, k subseteq K -> x in K
-  proof: mem_sInf
-
-中文:
-定理 mem_closure
-  条件: {x : G}
-  结论: x in closure k ↔ 对任意 K : 子群 G, k subseteq K -> x in K
-  证明: mem_sInf
-
-Depends on / 依赖: mem_sInf
+/-
+**Subgroup.mem_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_closure {x : G} : x in closure k ↔ forall K : Subgroup G, k subseteq K
+ -> x in K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.mem_sInf`：mem_sInf {S : Set (Subgroup G)} {x : G} : x in sInf S
+ ↔ forall p in S, x in p
 -/
-theorem mem_closure {x : G} : x in closure k ↔ forall K : Subgroup G, k subseteq K -> x in K :=
+theorem mem_closure {x : G} : x ∈ closure k ↔ ∀ K : Subgroup G, k ⊆ K → x ∈ K :=
   mem_sInf
 
 /-- The subgroup generated by a set includes the set. -/
 @[to_additive (attr := simp, aesop safe 20 (rule_sets := [SetLike]))
   /-- The `AddSubgroup` generated by a set includes the set. -/]
-/--
-theorem `subset_closure` / 定理 `subset_closure`
-
-English:
-theorem subset_closure
-  statement: k subseteq closure k
-  proof: fun _ hx => mem_closure.2 fun _ hK => hK hx
-
-@[to_additive (attr := aesop 80% (rule_sets := [SetLike]))]
-
-中文:
-定理 subset_closure
-  结论: k subseteq closure k
-  证明: fun _ hx => mem_closure.2 fun _ hK => hK hx
-
-@[to_additive (attr := aesop 80% (rule_sets := [SetLike]))]
-
-Depends on / 依赖: mem_closure
+/-
+**Subgroup.subset_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：subset_closure : k subseteq closure k
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.mem_closure`：mem_closure {x : G} : x in closure k ↔ forall K : 
+Subgroup G, k subseteq K -> x in K
 -/
-theorem subset_closure : k subseteq closure k := fun _ hx => mem_closure.2 fun _ hK => hK hx
+theorem subset_closure : k ⊆ closure k := fun _ hx => mem_closure.2 fun _ hK => hK hx
 
 @[to_additive (attr := aesop 80% (rule_sets := [SetLike]))]
-/--
-theorem `mem_closure_of_mem` / 定理 `mem_closure_of_mem`
-
-English:
-theorem mem_closure_of_mem
-  given: {s : Set G} {x : G} (hx : x in s)
-  statement: x in closure s
-  proof: subset_closure hx
-
-@[to_additive]
-
-中文:
-定理 mem_closure_of_mem
-  条件: {s : 集合 G} {x : G} (hx : x in s)
-  结论: x in closure s
-  证明: subset_closure hx
-
-@[to_additive]
-
-Depends on / 依赖: subset_closure
+/-
+**Subgroup.mem_closure_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_closure_of_mem {s : Set G} {x : G} (hx : x in s) : x in closure s
+参数：hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
-theorem mem_closure_of_mem {s : Set G} {x : G} (hx : x in s) : x in closure s := subset_closure hx
+theorem mem_closure_of_mem {s : Set G} {x : G} (hx : x ∈ s) : x ∈ closure s := subset_closure hx
 
 @[to_additive]
-/--
-theorem `notMem_of_notMem_closure` / 定理 `notMem_of_notMem_closure`
-
-English:
-theorem notMem_of_notMem_closure
-  given: {P : G} (hP : P ∉ closure k)
-  statement: P ∉ k
-  proof: fun h =>
-  hP (subset_closure h)
-
-中文:
-定理 notMem_of_notMem_closure
-  条件: {P : G} (hP : P ∉ closure k)
-  结论: P ∉ k
-  证明: fun h =>
-  hP (subset_closure h)
+/-
+**Subgroup.notMem_of_notMem_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：notMem_of_notMem_closure {P : G} (hP : P ∉ closure k) : P ∉ k
+参数：hP : P ∉ closure k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
 theorem notMem_of_notMem_closure {P : G} (hP : P ∉ closure k) : P ∉ k := fun h =>
   hP (subset_closure h)
@@ -1429,47 +894,31 @@ open Set
 /-- A subgroup `K` includes `closure k` if and only if it includes `k`. -/
 @[to_additive (attr := simp)
   /-- An additive subgroup `K` includes `closure k` if and only if it includes `k` -/]
-/--
-theorem `closure_le` / 定理 `closure_le`
-
-English:
-theorem closure_le
-  statement: closure k <= K ↔ k subseteq K
-  proof: ⟨Subset.trans subset_closure, fun h => sInf_le h⟩
-
-@[to_additive]
-
-中文:
-定理 closure_le
-  结论: closure k <= K ↔ k subseteq K
-  证明: ⟨Subset.trans subset_closure, fun h => sInf_le h⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subset, Subset.trans, sInf_le, subset_closure
+/-
+**Subgroup.closure_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_le : closure k <= K ↔ k subseteq K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `sInf_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, a ∈ s → sInf s ≤ a
 -/
-theorem closure_le : closure k <= K ↔ k subseteq K :=
+theorem closure_le : closure k ≤ K ↔ k ⊆ K :=
   ⟨Subset.trans subset_closure, fun h => sInf_le h⟩
 
 @[to_additive]
-/--
-theorem `closure_eq_of_le` / 定理 `closure_eq_of_le`
-
-English:
-theorem closure_eq_of_le
-  given: (h₁ : k subseteq K) (h₂ : K <= closure k)
-  statement: closure k = K
-  proof: le_antisymm ((closure_le <| K).2 h₁) h₂
-
-中文:
-定理 closure_eq_of_le
-  条件: (h₁ : k subseteq K) (h₂ : K <= closure k)
-  结论: closure k = K
-  证明: le_antisymm ((closure_le <| K).2 h₁) h₂
-
-Depends on / 依赖: closure_le, le_antisymm
+/-
+**Subgroup.closure_eq_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_eq_of_le (h₁ : k subseteq K) (h₂ : K <= closure k) : closure k = K
+参数：h₁ : k subseteq K；h₂ : K <= closure k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 -/
-theorem closure_eq_of_le (h₁ : k subseteq K) (h₂ : K <= closure k) : closure k = K :=
+theorem closure_eq_of_le (h₁ : k ⊆ K) (h₂ : K ≤ closure k) : closure k = K :=
   le_antisymm ((closure_le <| K).2 h₁) h₂
 
 /-- An induction principle for closure membership. If `p` holds for `1` and all elements of `k`, and
@@ -1485,91 +934,107 @@ only require showing `p` is preserved by multiplication by elements in `k`. -/
 
       See also `AddSubgroup.closure_induction_left` and `AddSubgroup.closure_induction_left` for
       versions that only require showing `p` is preserved by addition by elements in `k`. -/]
-/--
-theorem `closure_induction` / 定理 `closure_induction`
-
-English:
-theorem closure_induction
-  statement: {p : (g : G) -> g in closure k -> Prop}
-  proof: let K : Subgroup G :=
-    { carrier := { x | exists hx, p x hx }
-      mul_mem' := fun ⟨_, ha⟩ ⟨_, hb⟩ => ⟨_, mul _ _ _ _ ha hb⟩
-      one_mem' := ⟨_, one⟩
-      inv_mem' := fun ⟨_, hb⟩ => ⟨_, inv _ _ hb⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (K := K)
-
-中文:
-定理 closure_induction
-  结论: {p : (g : G) -> g in closure k -> 命题}
-  证明: let K : Subgroup G :=
-    { carrier := { x | exists hx, p x hx }
-      mul_mem' := fun ⟨_, ha⟩ ⟨_, hb⟩ => ⟨_, mul _ _ _ _ ha hb⟩
-      one_mem' := ⟨_, one⟩
-      inv_mem' := fun ⟨_, hb⟩ => ⟨_, inv _ _ hb⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (K := K)
-
-Depends on / 依赖: Subgroup, carrier, closure_le, inv_mem, mul_mem, one_mem, subset_closure
+/-
+**Subgroup.closure_induction** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_induction {p : (g : G) -> g in closure k -> Prop} (mem : forall x 
+(hx : x in k), p x (subset_closure hx)) (one : p 1 (one_mem _)) (mul : forall x 
+y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)) (inv : forall x hx, p x 
+hx -> p x⁻¹ (inv_mem hx)) {x} (hx : x in closure k) : p x hx
+参数：g : G；mem : forall x (hx : x in k), p x (subset_closure hx)；one : p 1 (one_me
+m _)；mul : forall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)；inv :
+ forall x hx, p x hx -> p x⁻¹ (inv_mem hx)；hx : x in closure k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 -/
-theorem closure_induction {p : (g : G) -> g in closure k -> Prop}
-    (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1 (one_mem _))
-    (mul : forall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy))
-    (inv : forall x hx, p x hx -> p x⁻¹ (inv_mem hx)) {x} (hx : x in closure k) : p x hx :=
+theorem closure_induction {p : (g : G) → g ∈ closure k → Prop}
+    (mem : ∀ x (hx : x ∈ k), p x (subset_closure hx)) (one : p 1 (one_mem _))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    (inv : ∀ x hx, p x hx → p x⁻¹ (inv_mem hx)) {x} (hx : x ∈ closure k) : p x hx :=
   let K : Subgroup G :=
-    { carrier := { x | exists hx, p x hx }
-      mul_mem' := fun ⟨_, ha⟩ ⟨_, hb⟩ => ⟨_, mul _ _ _ _ ha hb⟩
+    { carrier := { x | ∃ hx, p x hx }
+      mul_mem' := fun ⟨_, ha⟩ ⟨_, hb⟩ ↦ ⟨_, mul _ _ _ _ ha hb⟩
       one_mem' := ⟨_, one⟩
-      inv_mem' := fun ⟨_, hb⟩ => ⟨_, inv _ _ hb⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (K := K)
+      inv_mem' := fun ⟨_, hb⟩ ↦ ⟨_, inv _ _ hb⟩ }
+  closure_le (K := K) |>.mpr (fun y hy ↦ ⟨subset_closure hy, mem y hy⟩) hx |>.elim fun _ ↦ id
 
 /-- An induction principle for closure membership for predicates with two arguments. -/
 @[to_additive (attr := elab_as_elim)
       /-- An induction principle for additive closure membership, for
       predicates with two arguments. -/]
-/--
-theorem `closure_induction₂` / 定理 `closure_induction₂`
-
-English:
-theorem closure_induction₂
-  statement: {p : (x y : G) -> x in closure k -> y in closure k -> Prop}
-  proof: by
-  induction hy using closure_induction with
-  | mem z hz => induction hx using closure_induction with
-    | mem _ h => exact mem _ _ h hz
-    | one => exact one_left _ (subset_closure hz)
-    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | inv _ _ h => exact inv_left _ _ _ _ h
-  | one => exact one_right x hx
-  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
-  | inv _ _ h => exact inv_right _ _ _ _ h
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_induction₂
-  结论: {p : (x y : G) -> x in closure k -> y in closure k -> 命题}
-  证明: by
-  induction hy using closure_induction with
-  | mem z hz => induction hx using closure_induction with
-    | mem _ h => exact mem _ _ h hz
-    | one => exact one_left _ (subset_closure hz)
-    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | inv _ _ h => exact inv_left _ _ _ _ h
-  | one => exact one_right x hx
-  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
-  | inv _ _ h => exact inv_right _ _ _ _ h
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: closure_induction, inv_left, inv_right, mul_left, mul_right, one_left, one_right, subset_closure
+/-
+**Subgroup.closure_induction** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_induction {p : (g : G) -> g in closure k -> Prop} (mem : forall x 
+(hx : x in k), p x (subset_closure hx)) (one : p 1 (one_mem _)) (mul : forall x 
+y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)) (inv : forall x hx, p x 
+hx -> p x⁻¹ (inv_mem hx)) {x} (hx : x in closure k) : p x hx
+参数：g : G；mem : forall x (hx : x in k), p x (subset_closure hx)；one : p 1 (one_me
+m _)；mul : forall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)；inv :
+ forall x hx, p x hx -> p x⁻¹ (inv_mem hx)；hx : x in closure k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 -/
-theorem closure_induction₂ {p : (x y : G) -> x in closure k -> y in closure k -> Prop}
-    (mem : forall (x) (y) (hx : x in k) (hy : y in k), p x y (subset_closure hx) (subset_closure hy))
-    (one_left : forall x hx, p 1 x (one_mem _) hx) (one_right : forall x hx, p x 1 hx (one_mem _))
-    (mul_left : forall x y z hx hy hz, p x z hx hz -> p y z hy hz -> p (x * y) z (mul_mem hx hy) hz)
-    (mul_right : forall y z x hy hz hx, p x y hx hy -> p x z hx hz -> p x (y * z) hx (mul_mem hy hz))
-    (inv_left : forall x y hx hy, p x y hx hy -> p x⁻¹ y (inv_mem hx) hy)
-    (inv_right : forall x y hx hy, p x y hx hy -> p x y⁻¹ hx (inv_mem hy))
-    {x y : G} (hx : x in closure k) (hy : y in closure k) : p x y hx hy := by
+theorem closure_induction₂ {p : (x y : G) → x ∈ closure k → y ∈ closure k → Prop}
+    (mem : ∀ (x) (y) (hx : x ∈ k) (hy : y ∈ k), p x y (subset_closure hx) (subset_closure hy))
+    (one_left : ∀ x hx, p 1 x (one_mem _) hx) (one_right : ∀ x hx, p x 1 hx (one_mem _))
+    (mul_left : ∀ x y z hx hy hz, p x z hx hz → p y z hy hz → p (x * y) z (mul_mem hx hy) hz)
+    (mul_right : ∀ y z x hy hz hx, p x y hx hy → p x z hx hz → p x (y * z) hx (mul_mem hy hz))
+    (inv_left : ∀ x y hx hy, p x y hx hy → p x⁻¹ y (inv_mem hx) hy)
+    (inv_right : ∀ x y hx hy, p x y hx hy → p x y⁻¹ hx (inv_mem hy))
+    {x y : G} (hx : x ∈ closure k) (hy : y ∈ closure k) : p x y hx hy := by
   induction hy using closure_induction with
   | mem z hz => induction hx using closure_induction with
     | mem _ h => exact mem _ _ h hz
@@ -1581,53 +1046,58 @@ theorem closure_induction₂ {p : (x y : G) -> x in closure k -> y in closure k 
   | inv _ _ h => exact inv_right _ _ _ _ h
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_closure_coe_preimage` / 定理 `closure_closure_coe_preimage`
-
-English:
-theorem closure_closure_coe_preimage
-  given: {k : Set G}
-  statement: closure (((↑) : closure k -> G) ⁻¹' k) = ⊤
-  proof: eq_top_iff.2 fun x _ => Subtype.recOn x fun _ hx' =>
-    closure_induction (fun _ h => subset_closure h) (one_mem _) (fun _ _ _ _ => mul_mem)
-      (fun _ _ => inv_mem) hx'
-
-中文:
-定理 closure_closure_coe_preimage
-  条件: {k : 集合 G}
-  结论: closure (((↑) : closure k -> G) ⁻¹' k) = ⊤
-  证明: eq_top_iff.2 fun x _ => Subtype.recOn x fun _ hx' =>
-    closure_induction (fun _ h => subset_closure h) (one_mem _) (fun _ _ _ _ => mul_mem)
-      (fun _ _ => inv_mem) hx'
-
-Depends on / 依赖: Subtype, Subtype.recOn, closure_induction, eq_top_iff, inv_mem, mul_mem, one_mem, subset_closure
+/-
+**Subgroup.closure_closure_coe_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_closure_coe_preimage {k : Set G} : closure (((↑) : closure k -> G)
+ ⁻¹' k) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
 -/
-theorem closure_closure_coe_preimage {k : Set G} : closure (((↑) : closure k -> G) ⁻¹' k) = ⊤ :=
-  eq_top_iff.2 fun x _ => Subtype.recOn x fun _ hx' =>
-    closure_induction (fun _ h => subset_closure h) (one_mem _) (fun _ _ _ _ => mul_mem)
-      (fun _ _ => inv_mem) hx'
+theorem closure_closure_coe_preimage {k : Set G} : closure (((↑) : closure k → G) ⁻¹' k) = ⊤ :=
+  eq_top_iff.2 fun x _ ↦ Subtype.recOn x fun _ hx' ↦
+    closure_induction (fun _ h ↦ subset_closure h) (one_mem _) (fun _ _ _ _ ↦ mul_mem)
+      (fun _ _ ↦ inv_mem) hx'
 
 variable (G) in
 /-- `closure` forms a Galois insertion with the coercion to set. -/
 @[to_additive /-- `closure` forms a Galois insertion with the coercion to set. -/]
-/--
-Definition of `gi` / `gi` 的定义
+/-
+**Subgroup.gi** 是 Mathlib 中的一个定义，位于命名空间 `Subgroup`。
+形式化陈述：(G : Type u_1) → [inst : Group G] → GaloisInsertion Subgroup.closure SetLi
+ke.coe
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 
-English:
-definition gi
-  signature: : GaloisInsertion (@closure G _) (↑) where
-  body: closure s
-  gc s t := @closure_le _ _ t s
-  le_l_u _s := subset_closure
-  choice_eq _s _h := rfl
-
-中文:
-定义 gi
-  签名: : Galois嵌入 (@closure G _) (↑) where
-  定义体: closure s
-  gc s t := @closure_le _ _ t s
-  le_l_u _s := subset_closure
-  choice_eq _s _h := rfl
+--- 原说明 ---
+`closure` forms a Galois insertion with the coercion to set.
 -/
 protected def gi : GaloisInsertion (@closure G _) (↑) where
   choice s _ := closure s
@@ -1640,212 +1110,153 @@ then `closure h ≤ closure k`. -/
 @[to_additive (attr := gcongr)
       /-- Additive subgroup closure of a set is monotone in its argument: if `h ⊆ k`,
       then `closure h ≤ closure k` -/]
-/--
-theorem `closure_mono` / 定理 `closure_mono`
-
-English:
-theorem closure_mono
-  given: ⦃h k
-  statement: Set G⦄ (h' : h subseteq k) : closure h <= closure k
-  proof: (Subgroup.gi G).gc.monotone_l h'
-
-中文:
-定理 closure_mono
-  条件: ⦃h k
-  结论: 集合 G⦄ (h' : h subseteq k) : closure h <= closure k
-  证明: (Subgroup.gi G).gc.monotone_l h'
-
-Depends on / 依赖: Subgroup, Subgroup.gi, gc.monotone_l, monotone_l
+/-
+**Subgroup.closure_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_mono ⦃h k : Set G⦄ (h' : h subseteq k) : closure h <= closure k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_mono ⦃h k : Set G⦄ (h' : h subseteq k) : closure h <= closure k :=
+theorem closure_mono ⦃h k : Set G⦄ (h' : h ⊆ k) : closure h ≤ closure k :=
   (Subgroup.gi G).gc.monotone_l h'
 
 /-- Closure of a subgroup `K` equals `K`. -/
 @[to_additive (attr := simp) /-- Additive closure of an additive subgroup `K` equals `K` -/]
-/--
-theorem `closure_eq` / 定理 `closure_eq`
+/-
+**Subgroup.closure_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_eq : closure (K : Set G) = K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
 
-English:
-theorem closure_eq
-  statement: closure (K : Set G) = K
-  proof: (Subgroup.gi G).l_u_eq K
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_eq
-  结论: closure (K : 集合 G) = K
-  证明: (Subgroup.gi G).l_u_eq K
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.gi, l_u_eq
+--- 原说明 ---
+Closure of a subgroup `K` equals `K`.
 -/
 theorem closure_eq : closure (K : Set G) = K :=
   (Subgroup.gi G).l_u_eq K
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_empty` / 定理 `closure_empty`
-
-English:
-theorem closure_empty
-  statement: closure (∅ : Set G) = ⊥
-  proof: (Subgroup.gi G).gc.l_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_empty
-  结论: closure (∅ : 集合 G) = ⊥
-  证明: (Subgroup.gi G).gc.l_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.gi, gc.l_bot, l_bot
+/-
+**Subgroup.closure_empty** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_empty : closure (∅ : Set G) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
 theorem closure_empty : closure (∅ : Set G) = ⊥ :=
   (Subgroup.gi G).gc.l_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_univ` / 定理 `closure_univ`
-
-English:
-theorem closure_univ
-  statement: closure (univ : Set G) = ⊤
-  proof: @coe_top G _ ▸ closure_eq ⊤
-
-@[to_additive]
-
-中文:
-定理 closure_univ
-  结论: closure (univ : 集合 G) = ⊤
-  证明: @coe_top G _ ▸ closure_eq ⊤
-
-@[to_additive]
-
-Depends on / 依赖: closure_eq, coe_top
+/-
+**Subgroup.closure_univ** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_univ : closure (univ : Set G) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_eq`：closure_eq : closure (K : Set G) = K
+· 使用定理 `Subgroup.coe_top`：coe_top : ((⊤ : Subgroup G) : Set G) = Set.univ
 -/
 theorem closure_univ : closure (univ : Set G) = ⊤ :=
   @coe_top G _ ▸ closure_eq ⊤
 
 @[to_additive]
-/--
-theorem `closure_union` / 定理 `closure_union`
-
-English:
-theorem closure_union
-  given: (s t : Set G)
-  statement: closure (s union t) = closure s ⊔ closure t
-  proof: (Subgroup.gi G).gc.l_sup
-
-@[to_additive]
-
-中文:
-定理 closure_union
-  条件: (s t : 集合 G)
-  结论: closure (s union t) = closure s ⊔ closure t
-  证明: (Subgroup.gi G).gc.l_sup
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.gi, gc.l_sup, l_sup
+/-
+**Subgroup.closure_union** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_union (s t : Set G) : closure (s union t) = closure s ⊔ closure t
+参数：s t : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_union (s t : Set G) : closure (s union t) = closure s ⊔ closure t :=
+theorem closure_union (s t : Set G) : closure (s ∪ t) = closure s ⊔ closure t :=
   (Subgroup.gi G).gc.l_sup
 
 @[to_additive]
-/--
-theorem `sup_eq_closure` / 定理 `sup_eq_closure`
-
-English:
-theorem sup_eq_closure
-  given: (H H' : Subgroup G)
-  statement: H ⊔ H' = closure ((H : Set G) union (H' : Set G))
-  proof: by
-  simp_rw [closure_union, closure_eq]
-
-@[to_additive]
-
-中文:
-定理 sup_eq_closure
-  条件: (H H' : 子群 G)
-  结论: H ⊔ H' = closure ((H : 集合 G) union (H' : 集合 G))
-  证明: by
-  simp_rw [closure_union, closure_eq]
-
-@[to_additive]
-
-Depends on / 依赖: closure_eq, closure_union, simp_rw
+/-
+**Subgroup.sup_eq_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = closure ((H : Set G) union (
+H' : Set G))
+参数：H H' : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.closure_union`：closure_union (s t : Set G) : closure (s union t
+) = closure s ⊔ closure t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Subgroup.closure_eq`：closure_eq : closure (K : Set G) = K
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = closure ((H : Set G) union (H' : Set G)) := by
+theorem sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = closure ((H : Set G) ∪ (H' : Set G)) := by
   simp_rw [closure_union, closure_eq]
 
 @[to_additive]
-/--
-theorem `closure_iUnion` / 定理 `closure_iUnion`
-
-English:
-theorem closure_iUnion
-  given: {ι} (s : ι -> Set G)
-  statement: closure (⋃ i, s i) = ⨆ i, closure (s i)
-  proof: (Subgroup.gi G).gc.l_iSup
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_iUnion
-  条件: {ι} (s : ι -> 集合 G)
-  结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
-  证明: (Subgroup.gi G).gc.l_iSup
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subgroup, Subgroup.gi, gc.l_iSup, l_iSup
+/-
+**Subgroup.closure_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_iUnion {ι} (s : ι -> Set G) : closure (⋃ i, s i) = ⨆ i, closure (s
+ i)
+参数：s : ι -> Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_iUnion {ι} (s : ι -> Set G) : closure (⋃ i, s i) = ⨆ i, closure (s i) :=
+theorem closure_iUnion {ι} (s : ι → Set G) : closure (⋃ i, s i) = ⨆ i, closure (s i) :=
   (Subgroup.gi G).gc.l_iSup
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_eq_bot_iff` / 定理 `closure_eq_bot_iff`
-
-English:
-theorem closure_eq_bot_iff
-  statement: closure k = ⊥ ↔ k subseteq {1}
-  proof: le_bot_iff.symm.trans closure_le _
-
-@[to_additive]
-
-中文:
-定理 closure_eq_bot_iff
-  结论: closure k = ⊥ ↔ k subseteq {1}
-  证明: le_bot_iff.symm.trans closure_le _
-
-@[to_additive]
-
-Depends on / 依赖: closure_le, le_bot_iff, le_bot_iff.symm.trans
+/-
+**Subgroup.closure_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_eq_bot_iff : closure k = ⊥ ↔ k subseteq {1}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 -/
-theorem closure_eq_bot_iff : closure k = ⊥ ↔ k subseteq {1} := le_bot_iff.symm.trans closure_le _
+theorem closure_eq_bot_iff : closure k = ⊥ ↔ k ⊆ {1} := le_bot_iff.symm.trans <| closure_le _
 
 @[to_additive]
-/--
-theorem `iSup_eq_closure` / 定理 `iSup_eq_closure`
-
-English:
-theorem iSup_eq_closure
-  given: {ι : Sort*} (p : ι -> Subgroup G)
-  proof: by simp_rw [closure_iUnion, closure_eq]
-
-中文:
-定理 iSup_eq_closure
-  条件: {ι : 类型层*} (p : ι -> 子群 G)
-  证明: by simp_rw [closure_iUnion, closure_eq]
-
-Depends on / 依赖: closure_eq, closure_iUnion, simp_rw
+/-
+**Subgroup.iSup_eq_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：iSup_eq_closure {ι : Sort*} (p : ι -> Subgroup G) : ⨆ i, p i = closure (⋃ 
+i, (p i : Set G))
+参数：p : ι -> Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.closure_iUnion`：closure_iUnion {ι} (s : ι -> Set G) : closure (
+⋃ i, s i) = ⨆ i, closure (s i)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subgroup.closure_eq`：closure_eq : closure (K : Set G) = K
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iSup_eq_closure {ι : Sort*} (p : ι -> Subgroup G) :
+theorem iSup_eq_closure {ι : Sort*} (p : ι → Subgroup G) :
     ⨆ i, p i = closure (⋃ i, (p i : Set G)) := by simp_rw [closure_iUnion, closure_eq]
 
 /-- The subgroup generated by an element of a group equals the set of integer number powers of
@@ -1853,50 +1264,32 @@ the element. -/
 @[to_additive
       /-- The `AddSubgroup` generated by an element of an `AddGroup` equals the set of
       natural number multiples of the element. -/]
-/--
-theorem `mem_closure_singleton` / 定理 `mem_closure_singleton`
-
-English:
-theorem mem_closure_singleton
-  given: {x y : G}
-  statement: y in closure ({x} : Set G) ↔ exists n : Int, x ^ n = y
-  proof: by
-  refine
-    ⟨fun hy => closure_induction ?_ ?_ ?_ ?_ hy, fun ⟨n, hn⟩ =>
-      hn ▸ zpow_mem (subset_closure <| mem_singleton x) n⟩
-  · intro y hy
-    rw [eq_of_mem_singleton hy]
-    exact ⟨1, zpow_one x⟩
-  · exact ⟨0, zpow_zero x⟩
-  · rintro _ _ _ _ ⟨n, rfl⟩ ⟨m, rfl⟩
-    exact ⟨n + m, zpow_add x n m⟩
-  rintro _ _ ⟨n, rfl⟩
-  exact ⟨-n, zpow_neg x n⟩
-
-@[to_additive]
-
-中文:
-定理 mem_closure_singleton
-  条件: {x y : G}
-  结论: y in closure ({x} : 集合 G) ↔ 存在 n : 整数, x ^ n = y
-  证明: by
-  refine
-    ⟨fun hy => closure_induction ?_ ?_ ?_ ?_ hy, fun ⟨n, hn⟩ =>
-      hn ▸ zpow_mem (subset_closure <| mem_singleton x) n⟩
-  · intro y hy
-    rw [eq_of_mem_singleton hy]
-    exact ⟨1, zpow_one x⟩
-  · exact ⟨0, zpow_zero x⟩
-  · rintro _ _ _ _ ⟨n, rfl⟩ ⟨m, rfl⟩
-    exact ⟨n + m, zpow_add x n m⟩
-  rintro _ _ ⟨n, rfl⟩
-  exact ⟨-n, zpow_neg x n⟩
-
-@[to_additive]
-
-Depends on / 依赖: closure_induction, eq_of_mem_singleton, mem_singleton, subset_closure, zpow_add, zpow_mem, zpow_neg, zpow_one, zpow_zero
+/-
+**Subgroup.mem_closure_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_closure_singleton {x y : G} : y in closure ({x} : Set G) ↔ exists n : 
+Int, x ^ n = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eq_of_mem_singleton`：eq_of_mem_singleton {x y : α} (h : x in ({y} : 
+Set α)) : x = y
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : DivInvMonoid M] [inst_
+1 : SetLike S M] [hSM : SubgroupClass S M] {K : S}   {x : M}, x ∈ K → ∀ (n : ℤ…
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
-theorem mem_closure_singleton {x y : G} : y in closure ({x} : Set G) ↔ exists n : Int, x ^ n = y := by
+theorem mem_closure_singleton {x y : G} : y ∈ closure ({x} : Set G) ↔ ∃ n : ℤ, x ^ n = y := by
   refine
     ⟨fun hy => closure_induction ?_ ?_ ?_ ?_ hy, fun ⟨n, hn⟩ =>
       hn ▸ zpow_mem (subset_closure <| mem_singleton x) n⟩
@@ -1910,336 +1303,273 @@ theorem mem_closure_singleton {x y : G} : y in closure ({x} : Set G) ↔ exists 
   exact ⟨-n, zpow_neg x n⟩
 
 @[to_additive]
-/--
-theorem `closure_singleton_one` / 定理 `closure_singleton_one`
-
-English:
-theorem closure_singleton_one
-  statement: closure ({1} : Set G) = ⊥
-  proof: by
-  simp [eq_bot_iff_forall, mem_closure_singleton]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_singleton_one
-  结论: closure ({1} : 集合 G) = ⊥
-  证明: by
-  simp [eq_bot_iff_forall, mem_closure_singleton]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_bot_iff_forall, mem_closure_singleton
+/-
+**Subgroup.closure_singleton_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_singleton_one : closure ({1} : Set G) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem closure_singleton_one : closure ({1} : Set G) = ⊥ := by
   simp [eq_bot_iff_forall, mem_closure_singleton]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mem_closure_singleton_self` / 引理 `mem_closure_singleton_self`
-
-English:
-lemma mem_closure_singleton_self
-  given: (x : G)
-  statement: x in closure ({x} : Set G)
-  proof: by
-  simpa [-subset_closure] using subset_closure (k := {x})
-
-@[to_additive]
-
-中文:
-引理 mem_closure_singleton_self
-  条件: (x : G)
-  结论: x in closure ({x} : 集合 G)
-  证明: by
-  simpa [-subset_closure] using subset_closure (k := {x})
-
-@[to_additive]
-
-Depends on / 依赖: subset_closure
+/-
+**Subgroup.mem_closure_singleton_self** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：mem_closure_singleton_self (x : G) : x in closure ({x} : Set G)
+参数：x : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
-lemma mem_closure_singleton_self (x : G) : x in closure ({x} : Set G) := by
+lemma mem_closure_singleton_self (x : G) : x ∈ closure ({x} : Set G) := by
   simpa [-subset_closure] using subset_closure (k := {x})
 
 @[to_additive]
-/--
-theorem `le_closure_toSubmonoid` / 定理 `le_closure_toSubmonoid`
-
-English:
-theorem le_closure_toSubmonoid
-  given: (S : Set G)
-  statement: Submonoid.closure S <= (closure S).toSubmonoid
-  proof: Submonoid.closure_le.2 subset_closure
-
-@[to_additive]
-
-中文:
-定理 le_closure_toSubmonoid
-  条件: (S : 集合 G)
-  结论: 子幺半群.closure S <= (closure S).toSubmonoid
-  证明: Submonoid.closure_le.2 subset_closure
-
-@[to_additive]
-
-Depends on / 依赖: Submonoid, Submonoid.closure_le, closure_le, subset_closure
+/-
+**Subgroup.le_closure_toSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：le_closure_toSubmonoid (S : Set G) : Submonoid.closure S <= (closure S).to
+Submonoid
+参数：S : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submonoid.closure_le`：closure_le : closure s <= S ↔ s subseteq S
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
-theorem le_closure_toSubmonoid (S : Set G) : Submonoid.closure S <= (closure S).toSubmonoid :=
+theorem le_closure_toSubmonoid (S : Set G) : Submonoid.closure S ≤ (closure S).toSubmonoid :=
   Submonoid.closure_le.2 subset_closure
 
 @[to_additive]
-/--
-theorem `closure_eq_top_of_mclosure_eq_top` / 定理 `closure_eq_top_of_mclosure_eq_top`
-
-English:
-theorem closure_eq_top_of_mclosure_eq_top
-  given: {S : Set G} (h : Submonoid.closure S = ⊤)
-  proof: (eq_top_iff' _).2 fun _ => le_closure_toSubmonoid _ h.symm ▸ trivial
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_eq_top_of_mclosure_eq_top
-  条件: {S : 集合 G} (h : 子幺半群.closure S = ⊤)
-  证明: (eq_top_iff' _).2 fun _ => le_closure_toSubmonoid _ h.symm ▸ trivial
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_top_iff, h.symm, le_closure_toSubmonoid
+/-
+**Subgroup.closure_eq_top_of_mclosure_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup
+`。
+形式化陈述：closure_eq_top_of_mclosure_eq_top {S : Set G} (h : Submonoid.closure S = ⊤
+) : closure S = ⊤
+参数：h : Submonoid.closure S = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.eq_top_iff'`：eq_top_iff' : H = ⊤ ↔ forall x : G, x in H
+· 使用定理 `Subgroup.le_closure_toSubmonoid`：le_closure_toSubmonoid (S : Set G) : Su
+bmonoid.closure S <= (closure S).toSubmonoid
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem closure_eq_top_of_mclosure_eq_top {S : Set G} (h : Submonoid.closure S = ⊤) :
     closure S = ⊤ :=
-(eq_top_iff' _).2 fun _ => le_closure_toSubmonoid _ h.symm ▸ trivial
+  (eq_top_iff' _).2 fun _ => le_closure_toSubmonoid _ <| h.symm ▸ trivial
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_insert_one` / 定理 `closure_insert_one`
-
-English:
-theorem closure_insert_one
-  given: (s : Set G)
-  statement: closure (insert 1 s) = closure s
-  proof: by
-  rw [insert_eq]; rw [closure_union]
-  simp [one_mem]
-
-@[to_additive]
-
-中文:
-定理 closure_insert_one
-  条件: (s : 集合 G)
-  结论: closure (insert 1 s) = closure s
-  证明: by
-  rw [insert_eq]; rw [closure_union]
-  simp [one_mem]
-
-@[to_additive]
-
-Depends on / 依赖: closure_union, insert_eq, one_mem
+/-
+**Subgroup.closure_insert_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_insert_one (s : Set G) : closure (insert 1 s) = closure s
+参数：s : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.insert_eq`：insert_eq (x : α) (s : Set α) : insert x s = ({x} : Set α
+) union s
+· 使用定理 `Subgroup.closure_union`：closure_union (s t : Set G) : closure (s union t
+) = closure s ⊔ closure t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem closure_insert_one (s : Set G) : closure (insert 1 s) = closure s := by
-  rw [insert_eq]; rw [closure_union]
+  rw [insert_eq, closure_union]
   simp [one_mem]
 
 @[to_additive]
-/--
-theorem `closure_union_one` / 定理 `closure_union_one`
-
-English:
-theorem closure_union_one
-  given: (s : Set G)
-  statement: closure (s union {1}) = closure s
-  proof: by
-  rw [union_singleton]; rw [closure_insert_one]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 closure_union_one
-  条件: (s : 集合 G)
-  结论: closure (s union {1}) = closure s
-  证明: by
-  rw [union_singleton]; rw [closure_insert_one]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: closure_insert_one, union_singleton
+/-
+**Subgroup.closure_union_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_union_one (s : Set G) : closure (s union {1}) = closure s
+参数：s : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `Subgroup.closure_insert_one`：closure_insert_one (s : Set G) : closure (i
+nsert 1 s) = closure s
 -/
-theorem closure_union_one (s : Set G) : closure (s union {1}) = closure s := by
-  rw [union_singleton]; rw [closure_insert_one]
+theorem closure_union_one (s : Set G) : closure (s ∪ {1}) = closure s := by
+  rw [union_singleton, closure_insert_one]
 
 @[to_additive (attr := simp)]
-/--
-theorem `closure_sdiff_one` / 定理 `closure_sdiff_one`
-
-English:
-theorem closure_sdiff_one
-  given: (s : Set G)
-  statement: closure (s \ {1}) = closure s
-  proof: by
-  rw [← closure_union_one (s \ {1})]; rw [sdiff_union_self]; rw [closure_union_one]
-
-@[deprecated (since := "2026-06-03")] alias closure_diff_one := closure_sdiff_one
-
-中文:
-定理 closure_sdiff_one
-  条件: (s : 集合 G)
-  结论: closure (s \ {1}) = closure s
-  证明: by
-  rw [← closure_union_one (s \ {1})]; rw [sdiff_union_self]; rw [closure_union_one]
-
-@[deprecated (since := "2026-06-03")] alias closure_diff_one := closure_sdiff_one
-
-Depends on / 依赖: closure_union_one, sdiff_union_self
+/-
+**Subgroup.closure_sdiff_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_sdiff_one (s : Set G) : closure (s \ {1}) = closure s
+参数：s : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.closure_union_one`：closure_union_one (s : Set G) : closure (s u
+nion {1}) = closure s
+· 使用定理 `Set.sdiff_union_self`：sdiff_union_self {s t : Set α} : s \ t union t = s
+ union t
 -/
 theorem closure_sdiff_one (s : Set G) : closure (s \ {1}) = closure s := by
-  rw [← closure_union_one (s \ {1})]; rw [sdiff_union_self]; rw [closure_union_one]
+  rw [← closure_union_one (s \ {1}), sdiff_union_self, closure_union_one]
 
 @[deprecated (since := "2026-06-03")] alias closure_diff_one := closure_sdiff_one
-
-/--
-theorem `toAddSubgroup_closure` / 定理 `toAddSubgroup_closure`
-
-English:
-theorem toAddSubgroup_closure
-  given: (S : Set G)
-  proof: le_antisymm (toAddSubgroup.le_symm_apply.mp <|
-      (closure_le _).mpr (AddSubgroup.subset_closure (G := Additive G)))
-    ((AddSubgroup.closure_le _).mpr (subset_closure (G := G)))
-
-中文:
-定理 toAddSubgroup_closure
-  条件: (S : 集合 G)
-  证明: le_antisymm (toAddSubgroup.le_symm_apply.mp <|
-      (closure_le _).mpr (AddSubgroup.subset_closure (G := Additive G)))
-    ((AddSubgroup.closure_le _).mpr (subset_closure (G := G)))
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.closure_le, AddSubgroup.subset_closure, Additive, closure_le, le_antisymm, le_symm_apply, subset_closure, toAddSubgroup, toAddSubgroup.le_symm_apply.mp
+/-
+**Subgroup.toAddSubgroup_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：toAddSubgroup_closure (S : Set G) : (Subgroup.closure S).toAddSubgroup = A
+ddSubgroup.closure (Additive.toMul ⁻¹' S)
+参数：S : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `OrderIso.le_symm_apply`：le_symm_apply (e : α ≃o β) {x : α} {y : β} : x <
+= e.symm y ↔ e x <= y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `AddSubgroup.subset_closure`：∀ {G : Type u_1} [inst : AddGroup G] {k : Se
+t G}, k ⊆ ↑(AddSubgroup.closure k)
+· 使用定理 `AddSubgroup.closure_le`：∀ {G : Type u_1} [inst : AddGroup G] (K : AddSub
+group G) {k : Set G}, AddSubgroup.closure k ≤ K ↔ k ⊆ ↑K
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
 theorem toAddSubgroup_closure (S : Set G) :
     (Subgroup.closure S).toAddSubgroup = AddSubgroup.closure (Additive.toMul ⁻¹' S) :=
   le_antisymm (toAddSubgroup.le_symm_apply.mp <|
       (closure_le _).mpr (AddSubgroup.subset_closure (G := Additive G)))
     ((AddSubgroup.closure_le _).mpr (subset_closure (G := G)))
-
-/--
-theorem `_root_.AddSubgroup.toSubgroup_closure` / 定理 `_root_.AddSubgroup.toSubgroup_closure`
-
-English:
-theorem _root_.AddSubgroup.toSubgroup_closure
-  given: {A : Type*} [AddGroup A] (S : Set A)
-  proof: Subgroup.toAddSubgroup.injective (Subgroup.toAddSubgroup_closure _).symm
-
-中文:
-定理 _root_.加法子群.toSubgroup_closure
-  条件: {A : 类型} [加法群 A] (S : 集合 A)
-  证明: Subgroup.toAddSubgroup.injective (Subgroup.toAddSubgroup_closure _).symm
-
-Depends on / 依赖: Subgroup, Subgroup.toAddSubgroup.injective, Subgroup.toAddSubgroup_closure, injective, toAddSubgroup, toAddSubgroup_closure
+/-
+**Subgroup._root_.AddSubgroup.toSubgroup_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subg
+roup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AddSubgroup.toSubgroup_closure {A : Type*} [AddGroup A] (S : Set A) :
     (AddSubgroup.closure S).toSubgroup = Subgroup.closure (Multiplicative.toAdd ⁻¹' S) :=
   Subgroup.toAddSubgroup.injective (Subgroup.toAddSubgroup_closure _).symm
-
-/--
-theorem `toAddSubgroup'_closure` / 定理 `toAddSubgroup'_closure`
-
-English:
-theorem toAddSubgroup'_closure
-  given: {A : Type*} [AddGroup A] (S : Set (Multiplicative A))
-  proof: le_antisymm (toAddSubgroup'.to_galoisConnection.l_le <|
-(closure_le _).mpr AddSubgroup.subset_closure (G := A))
-    ((AddSubgroup.closure_le _).mpr <| Subgroup.subset_closure (G := Multiplicative A))
-
-中文:
-定理 toAddSubgroup'_closure
-  条件: {A : 类型} [加法群 A] (S : 集合 (Multiplicative A))
-  证明: le_antisymm (toAddSubgroup'.to_galoisConnection.l_le <|
-(closure_le _).mpr AddSubgroup.subset_closure (G := A))
-    ((AddSubgroup.closure_le _).mpr <| Subgroup.subset_closure (G := Multiplicative A))
+/-
+**Subgroup.toAddSubgroup'_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：∀ {A : Type u_2} [inst : AddGroup A] (S : Set (Multiplicative A)),   Subgr
+oup.toAddSubgroup' (Subgroup.closure S) = AddSubgroup.closure (⇑Multiplicative.o
+fAdd ⁻¹' S)
+参数：S : Set (Multiplicative A)；Subgroup.closure S；⇑Multiplicative.ofAdd ⁻¹' S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `GaloisConnection.l_le`：l_le {a : α} {b : β} : a <= u b -> l a <= b
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `AddSubgroup.subset_closure`：∀ {G : Type u_1} [inst : AddGroup G] {k : Se
+t G}, k ⊆ ↑(AddSubgroup.closure k)
+· 使用定理 `AddSubgroup.closure_le`：∀ {G : Type u_1} [inst : AddGroup G] (K : AddSub
+group G) {k : Set G}, AddSubgroup.closure k ≤ K ↔ k ⊆ ↑K
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
 theorem toAddSubgroup'_closure {A : Type*} [AddGroup A] (S : Set (Multiplicative A)) :
     (closure S).toAddSubgroup' = AddSubgroup.closure (Multiplicative.ofAdd ⁻¹' S) :=
   le_antisymm (toAddSubgroup'.to_galoisConnection.l_le <|
-(closure_le _).mpr AddSubgroup.subset_closure (G := A))
+      (closure_le _).mpr <| AddSubgroup.subset_closure (G := A))
     ((AddSubgroup.closure_le _).mpr <| Subgroup.subset_closure (G := Multiplicative A))
-
-/--
-theorem `_root_.AddSubgroup.toSubgroup'_closure` / 定理 `_root_.AddSubgroup.toSubgroup'_closure`
-
-English:
-theorem _root_.AddSubgroup.toSubgroup'_closure
-  given: (S : Set (Additive G))
-  proof: congr_arg AddSubgroup.toSubgroup' (toAddSubgroup'_closure _).symm
-
-@[to_additive]
-
-中文:
-定理 _root_.加法子群.toSubgroup'_closure
-  条件: (S : 集合 (加性 G))
-  证明: congr_arg AddSubgroup.toSubgroup' (toAddSubgroup'_closure _).symm
-
-@[to_additive]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.toSubgroup, _closure, congr_arg, toAddSubgroup, toSubgroup
+/-
+**Subgroup._root_.AddSubgroup.toSubgroup'_closure** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AddSubgroup.toSubgroup'_closure (S : Set (Additive G)) :
     (AddSubgroup.closure S).toSubgroup' = Subgroup.closure (Additive.ofMul ⁻¹' S) :=
   congr_arg AddSubgroup.toSubgroup' (toAddSubgroup'_closure _).symm
 
 @[to_additive]
-/--
-theorem `mem_biSup_of_directedOn` / 定理 `mem_biSup_of_directedOn`
-
-English:
-theorem mem_biSup_of_directedOn
-  statement: {ι} {p : ι -> Prop} {K : ι -> Subgroup G} {i : ι} (hp : p i)
-  proof: by
-  -- Could use the `Submonoid` version, but we limit the imports here
-  refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
-  · suffices x in closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) -> exists i, p i ∧ x in K i by
-      simpa only [closure_iUnion, closure_eq (K _)] using this
-    refine fun hx => closure_induction (fun _ => ?_) ?_ ?_ ?_ hx
-    · simp
-    · exact ⟨i, hp, (K i).one_mem⟩
-    · rintro x y _ _ ⟨i, hip, hi⟩ ⟨j, hjp, hj⟩
-      rcases hK i hip j hjp with ⟨k, hk, hki, hkj⟩
-      exact ⟨k, hk, mul_mem (hki hi) (hkj hj)⟩
-    · rintro _ _ ⟨i, hi', hi⟩
-      exact ⟨i, hi', inv_mem hi⟩
-  · apply le_iSup (fun i => ⨆ (_ : p i), K i) i
-    simp [hi, hi']
-
-@[to_additive]
-
-中文:
-定理 mem_biSup_of_directedOn
-  结论: {ι} {p : ι -> 命题} {K : ι -> 子群 G} {i : ι} (hp : p i)
-  证明: by
-  -- Could use the `Submonoid` version, but we limit the imports here
-  refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
-  · suffices x in closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) -> exists i, p i ∧ x in K i by
-      simpa only [closure_iUnion, closure_eq (K _)] using this
-    refine fun hx => closure_induction (fun _ => ?_) ?_ ?_ ?_ hx
-    · simp
-    · exact ⟨i, hp, (K i).one_mem⟩
-    · rintro x y _ _ ⟨i, hip, hi⟩ ⟨j, hjp, hj⟩
-      rcases hK i hip j hjp with ⟨k, hk, hki, hkj⟩
-      exact ⟨k, hk, mul_mem (hki hi) (hkj hj)⟩
-    · rintro _ _ ⟨i, hi', hi⟩
-      exact ⟨i, hi', inv_mem hi⟩
-  · apply le_iSup (fun i => ⨆ (_ : p i), K i) i
-    simp [hi, hi']
-
-@[to_additive]
+/-
+**Subgroup.mem_biSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_biSup_of_directedOn {ι} {p : ι -> Prop} {K : ι -> Subgroup G} {i : ι} 
+(hp : p i) (hK : DirectedOn ((· <= ·) on K) {i | p i}) {x : G} : x in (⨆ i, ⨆ (_
+h : p i), K i) ↔ exists i, p i ∧ x in K i
+参数：hp : p i；hK : DirectedOn ((· <= ·) on K) {i | p i}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subgroup.closure_iUnion`：closure_iUnion {ι} (s : ι -> Set G) : closure (
+⋃ i, s i) = ⨆ i, closure (s i)
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Subgroup.closure_eq`：closure_eq : closure (K : Set G) = K
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
 -/
-theorem mem_biSup_of_directedOn {ι} {p : ι -> Prop} {K : ι -> Subgroup G} {i : ι} (hp : p i)
-    (hK : DirectedOn ((· <= ·) on K) {i | p i})
-    {x : G} : x in (⨆ i, ⨆ (_h : p i), K i) ↔ exists i, p i ∧ x in K i := by
+theorem mem_biSup_of_directedOn {ι} {p : ι → Prop} {K : ι → Subgroup G} {i : ι} (hp : p i)
+    (hK : DirectedOn ((· ≤ ·) on K) {i | p i})
+    {x : G} : x ∈ (⨆ i, ⨆ (_h : p i), K i) ↔ ∃ i, p i ∧ x ∈ K i := by
   -- Could use the `Submonoid` version, but we limit the imports here
-  refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
-  · suffices x in closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) -> exists i, p i ∧ x in K i by
+  refine ⟨?_, fun ⟨i, hi', hi⟩ ↦ ?_⟩
+  · suffices x ∈ closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) → ∃ i, p i ∧ x ∈ K i by
       simpa only [closure_iUnion, closure_eq (K _)] using this
-    refine fun hx => closure_induction (fun _ => ?_) ?_ ?_ ?_ hx
+    refine fun hx ↦ closure_induction (fun _ ↦ ?_) ?_ ?_ ?_ hx
     · simp
     · exact ⟨i, hp, (K i).one_mem⟩
     · rintro x y _ _ ⟨i, hip, hi⟩ ⟨j, hjp, hj⟩
@@ -2247,22 +1577,54 @@ theorem mem_biSup_of_directedOn {ι} {p : ι -> Prop} {K : ι -> Subgroup G} {i 
       exact ⟨k, hk, mul_mem (hki hi) (hkj hj)⟩
     · rintro _ _ ⟨i, hi', hi⟩
       exact ⟨i, hi', inv_mem hi⟩
-  · apply le_iSup (fun i => ⨆ (_ : p i), K i) i
+  · apply le_iSup (fun i ↦ ⨆ (_ : p i), K i) i
     simp [hi, hi']
 
 @[to_additive]
-/--
-theorem `mem_iSup_of_directed` / 定理 `mem_iSup_of_directed`
-
-English:
-theorem mem_iSup_of_directed
-  statement: {ι} [hι : Nonempty ι] {K : ι -> Subgroup G} (hK : Directed (· <= ·) K)
-  proof: by
+/-
+**Subgroup.mem_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_iSup_of_directed {ι} [hι : Nonempty ι] {K : ι -> Subgroup G} (hK : Dir
+ected (· <= ·) K) {x : G} : x in (iSup K : Subgroup G) ↔ exists i, x in K i
+参数：hK : Directed (· <= ·) K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `iSup_plift_down`：iSup_plift_down (f : ι -> α) : ⨆ i, f (PLift.down i) = 
+⨆ i, f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subgroup.mem_biSup_of_directedOn`：mem_biSup_of_directedOn {ι} {p : ι -> 
+Prop} {K : ι -> Subgroup G} {i : ι} (hp : p i) (hK : DirectedOn ((· <= ·) on K) 
+{i | p i}) {x : G} : x…
+· 使用定理 `trivial`：True
+· 使用引理 `directedOn_onFun_iff`：directedOn_onFun_iff {r : α -> α -> Prop} {f : β -
+> α} {s : Set β} : DirectedOn (r on f) s ↔ DirectedOn r (f '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `directedOn_range`：directedOn_range {f : ι -> α} : DirectedOn r (.range f
+) ↔ Directed r f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem mem_iSup_of_directed {ι} [hι : Nonempty ι] {K : ι → Subgroup G} (hK : Directed (· ≤ ·) K)
+    {x : G} : x ∈ (iSup K : Subgroup G) ↔ ∃ i, x ∈ K i := by
   have : iSup K = ⨆ i : PLift ι, ⨆ (_ : True), K i.down := by simp [iSup_plift_down]
-  rw [this]; rw [mem_biSup_of_directedOn trivial]
+  rw [this, mem_biSup_of_directedOn trivial]
   · simp
   · simp only [ofPred_true]
-    rw [directedOn_onFun_iff]; rw [Set.image_univ]; rw [directedOn_range]
+    rw [directedOn_onFun_iff, Set.image_univ, directedOn_range]
     -- `Directed.mono_comp` and much of the Set API requires `Type u` instead of `Sort u`
     intro i
     simp only [PLift.exists]
@@ -2272,160 +1634,153 @@ theorem mem_iSup_of_directed
   · exact PLift.up hι.some
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 mem_iSup_of_directed
-  结论: {ι} [hι : 非空 ι] {K : ι -> 子群 G} (hK : Directed (· <= ·) K)
-  证明: by
-  have : iSup K = ⨆ i : PLift ι, ⨆ (_ : True), K i.down := by simp [iSup_plift_down]
-  rw [this]; rw [mem_biSup_of_directedOn trivial]
-  · simp
-  · simp only [ofPred_true]
-    rw [directedOn_onFun_iff]; rw [Set.image_univ]; rw [directedOn_range]
-    -- `Directed.mono_comp` and much of the Set API requires `Type u` instead of `Sort u`
-    intro i
-    simp only [PLift.exists]
-    intro j
-    refine (hK i.down j.down).imp ?_
-    simp
-  · exact PLift.up hι.some
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.image_univ, directedOn_onFun_iff, directedOn_range, i.down, iSup_plift_down, image_univ, mem_biSup_of_directedOn, ofPred_true
+/-
+**Subgroup.mem_iSup_prop** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_iSup_prop {p : Prop} {K : p -> Subgroup G} {x : G} : x in ⨆ (h : p), K
+ h ↔ x = 1 ∨ exists (h : p), x in K h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup_of_directed {ι} [hι : Nonempty ι] {K : ι -> Subgroup G} (hK : Directed (· <= ·) K)
-    {x : G} : x in (iSup K : Subgroup G) ↔ exists i, x in K i := by
-  have : iSup K = ⨆ i : PLift ι, ⨆ (_ : True), K i.down := by simp [iSup_plift_down]
-  rw [this]; rw [mem_biSup_of_directedOn trivial]
-  · simp
-  · simp only [ofPred_true]
-    rw [directedOn_onFun_iff]; rw [Set.image_univ]; rw [directedOn_range]
-    -- `Directed.mono_comp` and much of the Set API requires `Type u` instead of `Sort u`
-    intro i
-    simp only [PLift.exists]
-    intro j
-    refine (hK i.down j.down).imp ?_
-    simp
-  · exact PLift.up hι.some
-
-@[to_additive (attr := simp)]
-/--
-theorem `mem_iSup_prop` / 定理 `mem_iSup_prop`
-
-English:
-theorem mem_iSup_prop
-  given: {p : Prop} {K : p -> Subgroup G} {x : G}
-  proof: by
+theorem mem_iSup_prop {p : Prop} {K : p → Subgroup G} {x : G} :
+    x ∈ ⨆ (h : p), K h ↔ x = 1 ∨ ∃ (h : p), x ∈ K h := by
   by_cases h : p <;>
   simp +contextual [h]
 
 @[to_additive]
-
-中文:
-定理 mem_iSup_prop
-  条件: {p : 命题} {K : p -> 子群 G} {x : G}
-  证明: by
-  by_cases h : p <;>
-  simp +contextual [h]
-
-@[to_additive]
-
-Depends on / 依赖: contextual
+/-
+**Subgroup.coe_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_iSup_of_directed {ι} [Nonempty ι] {S : ι -> Subgroup G} (hS : Directed
+ (· <= ·) S) : ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.mem_iSup_of_directed`：mem_iSup_of_directed {ι} [hι : Nonempty ι
+] {K : ι -> Subgroup G} (hK : Directed (· <= ·) K) {x : G} : x in (iSup K : Subg
+roup G) ↔ exists i,…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup_prop {p : Prop} {K : p -> Subgroup G} {x : G} :
-    x in ⨆ (h : p), K h ↔ x = 1 ∨ exists (h : p), x in K h := by
-  by_cases h : p <;>
-  simp +contextual [h]
-
-@[to_additive]
-/--
-theorem `coe_iSup_of_directed` / 定理 `coe_iSup_of_directed`
-
-English:
-theorem coe_iSup_of_directed
-  given: {ι} [Nonempty ι] {S : ι -> Subgroup G} (hS : Directed (· <= ·) S)
-  proof: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-@[to_additive]
-
-中文:
-定理 coe_iSup_of_directed
-  条件: {ι} [非空 ι] {S : ι -> 子群 G} (hS : Directed (· <= ·) S)
-  证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext, mem_iSup_of_directed
--/
-theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι -> Subgroup G} (hS : Directed (· <= ·) S) :
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Subgroup G} (hS : Directed (· ≤ ·) S) :
     ((⨆ i, S i : Subgroup G) : Set G) = ⋃ i, S i :=
-  Set.ext fun x => by simp [mem_iSup_of_directed hS]
+  Set.ext fun x ↦ by simp [mem_iSup_of_directed hS]
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_directedOn` / 定理 `mem_sSup_of_directedOn`
-
-English:
-theorem mem_sSup_of_directedOn
-  statement: {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· <= ·) K)
-  proof: by
-  have : Nonempty K := Kne.to_subtype
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hK.directed_val, SetCoe.exists, exists_prop]
-
-@[to_additive]
-
-中文:
-定理 mem_sSup_of_directedOn
-  结论: {K : 集合 (子群 G)} (Kne : K.非空) (hK : DirectedOn (· <= ·) K)
-  证明: by
-  have : Nonempty K := Kne.to_subtype
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hK.directed_val, SetCoe.exists, exists_prop]
-
-@[to_additive]
-
-Depends on / 依赖: Kne.to_subtype, Nonempty, SetCoe, SetCoe.exists, directed_val, exists_prop, hK.directed_val, mem_iSup_of_directed, sSup_eq_iSup, to_subtype
+/-
+**Subgroup.mem_sSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sSup_of_directedOn {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : Dir
+ectedOn (· <= ·) K) {x : G} : x in sSup K ↔ exists s in K, x in s
+参数：Subgroup G；Kne : K.Nonempty；hK : DirectedOn (· <= ·) K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用定理 `Subgroup.mem_iSup_of_directed`：mem_iSup_of_directed {ι} [hι : Nonempty ι
+] {K : ι -> Subgroup G} (hK : Directed (· <= ·) K) {x : G} : x in (iSup K : Subg
+roup G) ↔ exists i,…
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sSup_of_directedOn {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· <= ·) K)
-    {x : G} : x in sSup K ↔ exists s in K, x in s := by
+theorem mem_sSup_of_directedOn {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· ≤ ·) K)
+    {x : G} : x ∈ sSup K ↔ ∃ s ∈ K, x ∈ s := by
   have : Nonempty K := Kne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hK.directed_val, SetCoe.exists, exists_prop]
 
 @[to_additive]
-/--
-theorem `isMulCommutative_iSup` / 定理 `isMulCommutative_iSup`
-
-English:
-theorem isMulCommutative_iSup
-  statement: {ι : Sort*} [Nonempty ι]
-  proof: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-@[to_additive]
-
-中文:
-定理 isMulCommutative_iSup
-  结论: {ι : 类型层*} [非空 ι]
-  证明: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_iUnion, SetLike, SetLike.mem_coe, coe_iSup_of_directed, forall_exists_index, mem_coe, mem_iUnion, of_setLike_mul_comm, setLike_mul_comm, simp_rw
+/-
+**Subgroup.isMulCommutative_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isMulCommutative_iSup {ι : Sort*} [Nonempty ι] {S : ι -> Subgroup G} [hS :
+ forall i, IsMulCommutative (S i)] (dir : Directed (· <= ·) S) : IsMulCommutativ
+e (⨆ i, S i : Subgroup G)
+参数：S i；dir : Directed (· <= ·) S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMulCommutative.of_setLike_mul_comm`：∀ {S : Type u_3} {M : Type u_4} [i
+nst : SetLike S M] [inst_1 : Mul M] [inst_2 : MulMemClass S M] {s : S},   (∀ a ∈
+ s, ∀ b ∈ s, a * b = b * a…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.coe_iSup_of_directed`：coe_iSup_of_directed {ι} [Nonempty ι] {S 
+: ι -> Subgroup G} (hS : Directed (· <= ·) S) : ((⨆ i, S i : Subgroup G) : Set G
+) = ⋃ i, S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `setLike_mul_comm`：setLike_mul_comm {S M : Type*} [SetLike S M] [Mul M] [
+MulMemClass S M] {s : S} [IsMulCommutative s] ⦃a b : M⦄ (ha : a in s) (hb : b in
+ s) : …
 -/
 theorem isMulCommutative_iSup {ι : Sort*} [Nonempty ι]
-    {S : ι -> Subgroup G} [hS : forall i, IsMulCommutative (S i)]
-    (dir : Directed (· <= ·) S) : IsMulCommutative (⨆ i, S i : Subgroup G) := by
+    {S : ι → Subgroup G} [hS : ∀ i, IsMulCommutative (S i)]
+    (dir : Directed (· ≤ ·) S) : IsMulCommutative (⨆ i, S i : Subgroup G) := by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
     SetLike.mem_coe, forall_exists_index]
@@ -2434,71 +1789,79 @@ theorem isMulCommutative_iSup {ι : Sort*} [Nonempty ι]
   exact setLike_mul_comm (hik ha) (hjk hb)
 
 @[to_additive]
-/--
-Instance `instIsMulCommutative_iSup` / 实例 `instIsMulCommutative_iSup`
-
-English:
-instance instIsMulCommutative_iSup
-  signature: {ι : Type*} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
-  body: isMulCommutative_iSup S.monotone.directed_le
-
-中文:
-实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
-  定义体: isMulCommutative_iSup S.monotone.directed_le
-
-Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
+/-
+**Subgroup.instIsMulCommutative_iSup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：instIsMulCommutative_iSup {ι : Type*} [Nonempty ι] [Preorder ι] [IsDirecte
+dOrder ι] {S : ι ->o Subgroup G} [hS : forall i, IsMulCommutative (S i)] : IsMul
+Commutative (⨆ i, S i : Subgroup G)
+参数：S i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.isMulCommutative_iSup`：isMulCommutative_iSup {ι : Sort*} [Nonem
+pty ι] {S : ι -> Subgroup G} [hS : forall i, IsMulCommutative (S i)] (dir : Dire
+cted (· <= ·) S) : I…
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
 -/
 instance instIsMulCommutative_iSup {ι : Type*} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
-    {S : ι ->o Subgroup G} [hS : forall i, IsMulCommutative (S i)] :
+    {S : ι →o Subgroup G} [hS : ∀ i, IsMulCommutative (S i)] :
     IsMulCommutative (⨆ i, S i : Subgroup G) :=
   isMulCommutative_iSup S.monotone.directed_le
 
 variable {C : Type*} [CommGroup C] {s t : Subgroup C} {x : C}
 
 @[to_additive]
-/--
-theorem `mem_sup` / 定理 `mem_sup`
-
-English:
-theorem mem_sup
-  statement: x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x
-  proof: ⟨fun h => by
-    rw [sup_eq_closure] at h
-    refine Subgroup.closure_induction ?_ ?_ ?_ ?_ h
-    · rintro y (h | h)
-      · exact ⟨y, h, 1, t.one_mem, by simp⟩
-      · exact ⟨1, s.one_mem, y, h, by simp⟩
-    · exact ⟨1, s.one_mem, 1, ⟨t.one_mem, mul_one 1⟩⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
-      exact ⟨_, mul_mem hy₁ hy₂, _, mul_mem hz₁ hz₂, by simp [mul_assoc, mul_left_comm]⟩
-    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
-      exact ⟨_, inv_mem hy, _, inv_mem hz, mul_comm z y ▸ (mul_inv_rev z y).symm⟩, by
-    rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz⟩
-
-@[to_additive]
-
-中文:
-定理 mem_sup
-  结论: x in s ⊔ t ↔ 存在 y in s, 存在 z in t, y * z = x
-  证明: ⟨fun h => by
-    rw [sup_eq_closure] at h
-    refine Subgroup.closure_induction ?_ ?_ ?_ ?_ h
-    · rintro y (h | h)
-      · exact ⟨y, h, 1, t.one_mem, by simp⟩
-      · exact ⟨1, s.one_mem, y, h, by simp⟩
-    · exact ⟨1, s.one_mem, 1, ⟨t.one_mem, mul_one 1⟩⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
-      exact ⟨_, mul_mem hy₁ hy₂, _, mul_mem hz₁ hz₂, by simp [mul_assoc, mul_left_comm]⟩
-    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
-      exact ⟨_, inv_mem hy, _, inv_mem hz, mul_comm z y ▸ (mul_inv_rev z y).symm⟩, by
-    rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.closure_induction, closure_induction, inv_mem, mul_assoc, mul_comm, mul_inv_rev, mul_left_comm, mul_mem, mul_one, one_mem, s.one_mem, sup_eq_closure, t.one_mem
+/-
+**Subgroup.mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup : x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Subgroup.sup_eq_closure`：sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = c
+losure ((H : Set G) union (H' : Set G))
+· 使用定理 `Subgroup.mul_mem_sup`：mul_mem_sup {S T : Subgroup G} {x y : G} (hx : x i
+n S) (hy : y in T) : x * y in S ⊔ T
 -/
-theorem mem_sup : x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x :=
+theorem mem_sup : x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x :=
   ⟨fun h => by
     rw [sup_eq_closure] at h
     refine Subgroup.closure_induction ?_ ?_ ?_ ?_ h
@@ -2513,124 +1876,105 @@ theorem mem_sup : x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x :=
     rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz⟩
 
 @[to_additive]
-/--
-theorem `mem_sup'` / 定理 `mem_sup'`
-
-English:
-theorem mem_sup'
-  statement: x in s ⊔ t ↔ exists (y : s) (z : t), (y : C) * z = x
-  proof: mem_sup.trans by simp only [SetLike.exists, exists_prop]
-
-中文:
-定理 mem_sup'
-  结论: x in s ⊔ t ↔ 存在 (y : s) (z : t), (y : C) * z = x
-  证明: mem_sup.trans by simp only [SetLike.exists, exists_prop]
-
-Depends on / 依赖: SetLike, SetLike.exists, exists_prop, mem_sup, mem_sup.trans
+/-
+**Subgroup.mem_sup'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup' : x in s ⊔ t ↔ exists (y : s) (z : t), (y : C) * z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.mem_sup`：mem_sup : x in s ⊔ t ↔ exists y in s, exists z in t, y
+ * z = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sup' : x in s ⊔ t ↔ exists (y : s) (z : t), (y : C) * z = x :=
-mem_sup.trans by simp only [SetLike.exists, exists_prop]
+theorem mem_sup' : x ∈ s ⊔ t ↔ ∃ (y : s) (z : t), (y : C) * z = x :=
+  mem_sup.trans <| by simp only [SetLike.exists, exists_prop]
 
-variable {P : C -> Prop}
-
-@[to_additive, simp high]
-/--
-lemma `forall_mem_sup` / 引理 `forall_mem_sup`
-
-English:
-lemma forall_mem_sup
-  proof: by
-  grind [mem_sup]
+variable {P : C → Prop}
 
 @[to_additive, simp high]
-
-中文:
-引理 对任意_mem_sup
-  证明: by
-  grind [mem_sup]
-
-@[to_additive, simp high]
-
-Depends on / 依赖: mem_sup
+/-
+**Subgroup.forall_mem_sup** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：forall_mem_sup : (forall x in s ⊔ t, P x) ↔ (forall x₁ in s, forall x₂ in 
+t, P (x₁ * x₂))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forall_mem_sup :
-    (forall x in s ⊔ t, P x) ↔ (forall x₁ in s, forall x₂ in t, P (x₁ * x₂)) := by
+    (∀ x ∈ s ⊔ t, P x) ↔ (∀ x₁ ∈ s, ∀ x₂ ∈ t, P (x₁ * x₂)) := by
   grind [mem_sup]
 
 @[to_additive, simp high]
-/--
-lemma `exists_mem_sup` / 引理 `exists_mem_sup`
-
-English:
-lemma exists_mem_sup
-  proof: by
-  simp [mem_sup]
-
-@[to_additive]
-
-中文:
-引理 存在_mem_sup
-  证明: by
-  simp [mem_sup]
-
-@[to_additive]
-
-Depends on / 依赖: mem_sup
+/-
+**Subgroup.exists_mem_sup** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：exists_mem_sup : (exists x in s ⊔ t, P x) ↔ (exists x₁ in s, exists x₂ in 
+t, P (x₁ * x₂))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma exists_mem_sup :
-    (exists x in s ⊔ t, P x) ↔ (exists x₁ in s, exists x₂ in t, P (x₁ * x₂)) := by
+    (∃ x ∈ s ⊔ t, P x) ↔ (∃ x₁ ∈ s, ∃ x₂ ∈ t, P (x₁ * x₂)) := by
   simp [mem_sup]
 
 @[to_additive]
-/--
-theorem `mem_sup_of_normal_right` / 定理 `mem_sup_of_normal_right`
-
-English:
-theorem mem_sup_of_normal_right
-  given: {s t : Subgroup G} [ht : t.Normal] {x : G}
-  proof: by
-  constructor
-  · intro hx; rw [sup_eq_closure] at hx
-    refine closure_induction ?_ ?_ ?_ ?_ hx
-    · rintro x (hx | hx)
-      · exact ⟨x, hx, 1, t.one_mem, by simp⟩
-      · exact ⟨1, s.one_mem, x, hx, by simp⟩
-    · exact ⟨1, s.one_mem, 1, t.one_mem, by simp⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
-      exact ⟨y₁ * y₂, s.mul_mem hy₁ hy₂,
-            (y₂⁻¹ * z₁ * y₂) * z₂, t.mul_mem (ht.conj_mem' z₁ hz₁ y₂) hz₂, by simp [mul_assoc]⟩
-    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
-      exact ⟨y⁻¹, s.inv_mem hy,
-            y * z⁻¹ * y⁻¹, ht.conj_mem z⁻¹ (t.inv_mem hz) y, by simp [mul_assoc]⟩
-  · rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz
-
-@[to_additive]
-
-中文:
-定理 mem_sup_of_normal_right
-  条件: {s t : 子群 G} [ht : t.正规] {x : G}
-  证明: by
-  constructor
-  · intro hx; rw [sup_eq_closure] at hx
-    refine closure_induction ?_ ?_ ?_ ?_ hx
-    · rintro x (hx | hx)
-      · exact ⟨x, hx, 1, t.one_mem, by simp⟩
-      · exact ⟨1, s.one_mem, x, hx, by simp⟩
-    · exact ⟨1, s.one_mem, 1, t.one_mem, by simp⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
-      exact ⟨y₁ * y₂, s.mul_mem hy₁ hy₂,
-            (y₂⁻¹ * z₁ * y₂) * z₂, t.mul_mem (ht.conj_mem' z₁ hz₁ y₂) hz₂, by simp [mul_assoc]⟩
-    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
-      exact ⟨y⁻¹, s.inv_mem hy,
-            y * z⁻¹ * y⁻¹, ht.conj_mem z⁻¹ (t.inv_mem hz) y, by simp [mul_assoc]⟩
-  · rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz
-
-@[to_additive]
-
-Depends on / 依赖: closure_induction, conj_mem, ht.c, ht.conj_mem, inv_mem, mul_assoc, mul_mem, one_mem, s.inv_mem, s.mul_mem, s.one_mem, sup_eq_closure, t.mul_mem, t.one_mem
+/-
+**Subgroup.mem_sup_of_normal_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup_of_normal_right {s t : Subgroup G} [ht : t.Normal] {x : G} : x in 
+s ⊔ t ↔ exists y in s, exists z in t, y * z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.Normal.conj_mem'`：conj_mem' (nH : H.Normal) (n : G) (hn : n in 
+H) (g : G) : g⁻¹ * n * g in H
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `Subgroup.Normal.conj_mem`：∀ {G : Type u_1} [inst : Group G] {H : Subgrou
+p G}, H.Normal → ∀ n ∈ H, ∀ (g : G), g * n * g⁻¹ ∈ H
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `Subgroup.sup_eq_closure`：sup_eq_closure (H H' : Subgroup G) : H ⊔ H' = c
+losure ((H : Set G) union (H' : Set G))
+· 使用定理 `Subgroup.mul_mem_sup`：mul_mem_sup {S T : Subgroup G} {x y : G} (hx : x i
+n S) (hy : y in T) : x * y in S ⊔ T
 -/
 theorem mem_sup_of_normal_right {s t : Subgroup G} [ht : t.Normal] {x : G} :
-    x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x := by
+    x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := by
   constructor
   · intro hx; rw [sup_eq_closure] at hx
     refine closure_induction ?_ ?_ ?_ ?_ hx
@@ -2647,148 +1991,136 @@ theorem mem_sup_of_normal_right {s t : Subgroup G} [ht : t.Normal] {x : G} :
   · rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz
 
 @[to_additive]
-/--
-theorem `mem_sup_of_normal_left` / 定理 `mem_sup_of_normal_left`
-
-English:
-theorem mem_sup_of_normal_left
-  given: {s t : Subgroup G} [hs : s.Normal] {x : G}
-  proof: by
-  have h := (sup_comm t s) ▸ mem_sup_of_normal_right (s := t) (t := s) (x := x)
-  exact h.trans
-    ⟨fun ⟨y, hy, z, hz, hp⟩ => ⟨y * z * y⁻¹, hs.conj_mem z hz y, y, hy, by simp [hp]⟩,
-    fun ⟨y, hy, z, hz, hp⟩ => ⟨z, hz, z⁻¹ * y * z, hs.conj_mem' y hy z, by simp [mul_assoc, hp]⟩⟩
-
-@[to_additive]
-
-中文:
-定理 mem_sup_of_normal_left
-  条件: {s t : 子群 G} [hs : s.正规] {x : G}
-  证明: by
-  have h := (sup_comm t s) ▸ mem_sup_of_normal_right (s := t) (t := s) (x := x)
-  exact h.trans
-    ⟨fun ⟨y, hy, z, hz, hp⟩ => ⟨y * z * y⁻¹, hs.conj_mem z hz y, y, hy, by simp [hp]⟩,
-    fun ⟨y, hy, z, hz, hp⟩ => ⟨z, hz, z⁻¹ * y * z, hs.conj_mem' y hy z, by simp [mul_assoc, hp]⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: conj_mem, h.trans, hs.conj_mem, mem_sup_of_normal_right, mul_assoc, sup_comm
+/-
+**Subgroup.mem_sup_of_normal_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_sup_of_normal_left {s t : Subgroup G} [hs : s.Normal] {x : G} : x in s
+ ⊔ t ↔ exists y in s, exists z in t, y * z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.mem_sup_of_normal_right`：mem_sup_of_normal_right {s t : Subgrou
+p G} [ht : t.Normal] {x : G} : x in s ⊔ t ↔ exists y in s, exists z in t, y * z 
+= x
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.Normal.conj_mem`：∀ {G : Type u_1} [inst : Group G] {H : Subgrou
+p G}, H.Normal → ∀ n ∈ H, ∀ (g : G), g * n * g⁻¹ ∈ H
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_mul_cancel_right`：inv_mul_cancel_right (a b : G) : a * b⁻¹ * b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subgroup.Normal.conj_mem'`：conj_mem' (nH : H.Normal) (n : G) (hn : n in 
+H) (g : G) : g⁻¹ * n * g in H
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
 -/
 theorem mem_sup_of_normal_left {s t : Subgroup G} [hs : s.Normal] {x : G} :
-    x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x := by
+    x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := by
   have h := (sup_comm t s) ▸ mem_sup_of_normal_right (s := t) (t := s) (x := x)
   exact h.trans
-    ⟨fun ⟨y, hy, z, hz, hp⟩ => ⟨y * z * y⁻¹, hs.conj_mem z hz y, y, hy, by simp [hp]⟩,
-    fun ⟨y, hy, z, hz, hp⟩ => ⟨z, hz, z⁻¹ * y * z, hs.conj_mem' y hy z, by simp [mul_assoc, hp]⟩⟩
+    ⟨fun ⟨y, hy, z, hz, hp⟩ ↦ ⟨y * z * y⁻¹, hs.conj_mem z hz y, y, hy, by simp [hp]⟩,
+    fun ⟨y, hy, z, hz, hp⟩ ↦ ⟨z, hz, z⁻¹ * y * z, hs.conj_mem' y hy z, by simp [mul_assoc, hp]⟩⟩
 
 @[to_additive]
-/--
-theorem `mem_closure_pair` / 定理 `mem_closure_pair`
-
-English:
-theorem mem_closure_pair
-  given: {x y z : C}
-  proof: by
-  rw [← Set.singleton_union]; rw [Subgroup.closure_union]; rw [mem_sup]
-  simp_rw [mem_closure_singleton, exists_exists_eq_and]
-
-@[to_additive]
-
-中文:
-定理 mem_closure_pair
-  条件: {x y z : C}
-  证明: by
-  rw [← Set.singleton_union]; rw [Subgroup.closure_union]; rw [mem_sup]
-  simp_rw [mem_closure_singleton, exists_exists_eq_and]
-
-@[to_additive]
-
-Depends on / 依赖: Set.singleton_union, Subgroup, Subgroup.closure_union, closure_union, exists_exists_eq_and, mem_closure_singleton, mem_sup, simp_rw, singleton_union
+/-
+**Subgroup.mem_closure_pair** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_closure_pair {x y z : C} : z in closure ({x, y} : Set C) ↔ exists m n 
+: Int, x ^ m * y ^ n = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.singleton_union`：singleton_union : {a} union s = insert a s
+· 使用定理 `Subgroup.closure_union`：closure_union (s t : Set G) : closure (s union t
+) = closure s ⊔ closure t
+· 使用定理 `Subgroup.mem_sup`：mem_sup : x in s ⊔ t ↔ exists y in s, exists z in t, y
+ * z = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_closure_pair {x y z : C} :
-    z in closure ({x, y} : Set C) ↔ exists m n : Int, x ^ m * y ^ n = z := by
-  rw [← Set.singleton_union]; rw [Subgroup.closure_union]; rw [mem_sup]
+    z ∈ closure ({x, y} : Set C) ↔ ∃ m n : ℤ, x ^ m * y ^ n = z := by
+  rw [← Set.singleton_union, Subgroup.closure_union, mem_sup]
   simp_rw [mem_closure_singleton, exists_exists_eq_and]
 
 @[to_additive]
-/--
-theorem `disjoint_def` / 定理 `disjoint_def`
-
-English:
-theorem disjoint_def
-  given: {H₁ H₂ : Subgroup G}
-  statement: Disjoint H₁ H₂ ↔ forall {x : G}, x in H₁ -> x in H₂ -> x = 1
-  proof: disjoint_iff_inf_le.trans by simp only [SetLike.le_def, mem_inf, mem_bot, and_imp]
-
-@[to_additive]
-
-中文:
-定理 disjoint_def
-  条件: {H₁ H₂ : 子群 G}
-  结论: Disjoint H₁ H₂ ↔ 对任意 {x : G}, x in H₁ -> x in H₂ -> x = 1
-  证明: disjoint_iff_inf_le.trans by simp only [SetLike.le_def, mem_inf, mem_bot, and_imp]
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.le_def, and_imp, disjoint_iff_inf_le, disjoint_iff_inf_le.trans, le_def, mem_bot, mem_inf
+/-
+**Subgroup.disjoint_def** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：disjoint_def {H₁ H₂ : Subgroup G} : Disjoint H₁ H₂ ↔ forall {x : G}, x in 
+H₁ -> x in H₂ -> x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem disjoint_def {H₁ H₂ : Subgroup G} : Disjoint H₁ H₂ ↔ forall {x : G}, x in H₁ -> x in H₂ -> x = 1 :=
-disjoint_iff_inf_le.trans by simp only [SetLike.le_def, mem_inf, mem_bot, and_imp]
+theorem disjoint_def {H₁ H₂ : Subgroup G} : Disjoint H₁ H₂ ↔ ∀ {x : G}, x ∈ H₁ → x ∈ H₂ → x = 1 :=
+  disjoint_iff_inf_le.trans <| by simp only [SetLike.le_def, mem_inf, mem_bot, and_imp]
 
 @[to_additive]
-/--
-theorem `disjoint_def'` / 定理 `disjoint_def'`
-
-English:
-theorem disjoint_def'
-  given: {H₁ H₂ : Subgroup G}
-  proof: disjoint_def.trans ⟨fun h _x _y hx hy hxy => h hx hxy.symm ▸ hy, fun h _x hx hx' => h hx hx' rfl⟩
-
-@[to_additive]
-
-中文:
-定理 disjoint_def'
-  条件: {H₁ H₂ : 子群 G}
-  证明: disjoint_def.trans ⟨fun h _x _y hx hy hxy => h hx hxy.symm ▸ hy, fun h _x hx hx' => h hx hx' rfl⟩
-
-@[to_additive]
-
-Depends on / 依赖: disjoint_def, disjoint_def.trans, hxy.symm
+/-
+**Subgroup.disjoint_def'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：disjoint_def' {H₁ H₂ : Subgroup G} : Disjoint H₁ H₂ ↔ forall {x y : G}, x 
+in H₁ -> y in H₂ -> x = y -> x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.disjoint_def`：disjoint_def {H₁ H₂ : Subgroup G} : Disjoint H₁ H
+₂ ↔ forall {x : G}, x in H₁ -> x in H₂ -> x = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem disjoint_def' {H₁ H₂ : Subgroup G} :
-    Disjoint H₁ H₂ ↔ forall {x y : G}, x in H₁ -> y in H₂ -> x = y -> x = 1 :=
-disjoint_def.trans ⟨fun h _x _y hx hy hxy => h hx hxy.symm ▸ hy, fun h _x hx hx' => h hx hx' rfl⟩
+    Disjoint H₁ H₂ ↔ ∀ {x y : G}, x ∈ H₁ → y ∈ H₂ → x = y → x = 1 :=
+  disjoint_def.trans ⟨fun h _x _y hx hy hxy ↦ h hx <| hxy.symm ▸ hy, fun h _x hx hx' ↦ h hx hx' rfl⟩
 
 @[to_additive]
-/--
-theorem `disjoint_iff_mul_eq_one` / 定理 `disjoint_iff_mul_eq_one`
-
-English:
-theorem disjoint_iff_mul_eq_one
-  given: {H₁ H₂ : Subgroup G}
-  proof: disjoint_def'.trans
-    ⟨fun h x y hx hy hxy =>
-      let hx1 : x = 1 := h hx (H₂.inv_mem hy) (eq_inv_iff_mul_eq_one.mpr hxy)
-      ⟨hx1, by simpa [hx1] using hxy⟩,
-      fun h _ _ hx hy hxy => (h hx (H₂.inv_mem hy) (mul_inv_eq_one.mpr hxy)).1⟩
-
-@[to_additive]
-
-中文:
-定理 disjoint_iff_mul_eq_one
-  条件: {H₁ H₂ : 子群 G}
-  证明: disjoint_def'.trans
-    ⟨fun h x y hx hy hxy =>
-      let hx1 : x = 1 := h hx (H₂.inv_mem hy) (eq_inv_iff_mul_eq_one.mpr hxy)
-      ⟨hx1, by simpa [hx1] using hxy⟩,
-      fun h _ _ hx hy hxy => (h hx (H₂.inv_mem hy) (mul_inv_eq_one.mpr hxy)).1⟩
-
-@[to_additive]
-
-Depends on / 依赖: disjoint_def, eq_inv_iff_mul_eq_one, eq_inv_iff_mul_eq_one.mpr, inv_mem, mul_inv_eq_one, mul_inv_eq_one.mpr
+/-
+**Subgroup.disjoint_iff_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：disjoint_iff_mul_eq_one {H₁ H₂ : Subgroup G} : Disjoint H₁ H₂ ↔ forall {x 
+y : G}, x in H₁ -> y in H₂ -> x * y = 1 -> x = 1 ∧ y = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.disjoint_def'`：disjoint_def' {H₁ H₂ : Subgroup G} : Disjoint H₁
+ H₂ ↔ forall {x y : G}, x in H₁ -> y in H₂ -> x = y -> x = 1
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_inv_iff_mul_eq_one`：eq_inv_iff_mul_eq_one : a = b⁻¹ ↔ a * b = 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
 -/
 theorem disjoint_iff_mul_eq_one {H₁ H₂ : Subgroup G} :
-    Disjoint H₁ H₂ ↔ forall {x y : G}, x in H₁ -> y in H₂ -> x * y = 1 -> x = 1 ∧ y = 1 :=
+    Disjoint H₁ H₂ ↔ ∀ {x y : G}, x ∈ H₁ → y ∈ H₂ → x * y = 1 → x = 1 ∧ y = 1 :=
   disjoint_def'.trans
     ⟨fun h x y hx hy hxy =>
       let hx1 : x = 1 := h hx (H₂.inv_mem hy) (eq_inv_iff_mul_eq_one.mpr hxy)
@@ -2796,37 +2128,40 @@ theorem disjoint_iff_mul_eq_one {H₁ H₂ : Subgroup G} :
       fun h _ _ hx hy hxy => (h hx (H₂.inv_mem hy) (mul_inv_eq_one.mpr hxy)).1⟩
 
 @[to_additive]
-/--
-theorem `mul_injective_of_disjoint` / 定理 `mul_injective_of_disjoint`
-
-English:
-theorem mul_injective_of_disjoint
-  given: {H₁ H₂ : Subgroup G} (h : Disjoint H₁ H₂)
-  proof: by
-  intro x y hxy
-  rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy
-  replace hxy := disjoint_iff_mul_eq_one.mp h (y.1⁻¹ * x.1).prop (x.2 * y.2⁻¹).prop hxy
-  rwa [coe_mul, coe_mul, coe_inv, coe_inv, inv_mul_eq_one, mul_inv_eq_one, ← Subtype.ext_iff, ←
-    Subtype.ext_iff, eq_comm, ← Prod.ext_iff] at hxy
-
-中文:
-定理 mul_injective_of_disjoint
-  条件: {H₁ H₂ : 子群 G} (h : Disjoint H₁ H₂)
-  证明: by
-  intro x y hxy
-  rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy
-  replace hxy := disjoint_iff_mul_eq_one.mp h (y.1⁻¹ * x.1).prop (x.2 * y.2⁻¹).prop hxy
-  rwa [coe_mul, coe_mul, coe_inv, coe_inv, inv_mul_eq_one, mul_inv_eq_one, ← Subtype.ext_iff, ←
-    Subtype.ext_iff, eq_comm, ← Prod.ext_iff] at hxy
-
-Depends on / 依赖: Prod.ext_iff, Subtype, Subtype.ext_iff, coe_inv, coe_mul, disjoint_iff_mul_eq_one, disjoint_iff_mul_eq_one.mp, eq_comm, ext_iff, inv_mul_eq_iff_eq_mul, inv_mul_eq_one, mul_assoc, mul_inv_eq_one, replace
+/-
+**Subgroup.mul_injective_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mul_injective_of_disjoint {H₁ H₂ : Subgroup G} (h : Disjoint H₁ H₂) : Func
+tion.Injective (fun g => g.1 * g.2 : H₁ × H₂ -> G)
+参数：h : Disjoint H₁ H₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.disjoint_iff_mul_eq_one`：disjoint_iff_mul_eq_one {H₁ H₂ : Subgr
+oup G} : Disjoint H₁ H₂ ↔ forall {x y : G}, x in H₁ -> y in H₂ -> x * y = 1 -> x
+ = 1 ∧ y = 1
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
+· 使用定理 `inv_mul_eq_iff_eq_mul`：inv_mul_eq_iff_eq_mul : a⁻¹ * b = c ↔ b = a * c
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `inv_mul_eq_one`：inv_mul_eq_one : a⁻¹ * b = 1 ↔ a = b
+· 使用定理 `Subgroup.coe_inv`：coe_inv (x : H) : ↑(x⁻¹ : H) = (x⁻¹ : G)
+· 使用定理 `Subgroup.coe_mul`：coe_mul (x y : H) : (↑(x * y) : G) = ↑x * ↑y
 -/
 theorem mul_injective_of_disjoint {H₁ H₂ : Subgroup G} (h : Disjoint H₁ H₂) :
-    Function.Injective (fun g => g.1 * g.2 : H₁ × H₂ -> G) := by
+    Function.Injective (fun g => g.1 * g.2 : H₁ × H₂ → G) := by
   intro x y hxy
-  rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy
+  rw [← inv_mul_eq_iff_eq_mul, ← mul_assoc, ← mul_inv_eq_one, mul_assoc] at hxy
   replace hxy := disjoint_iff_mul_eq_one.mp h (y.1⁻¹ * x.1).prop (x.2 * y.2⁻¹).prop hxy
   rwa [coe_mul, coe_mul, coe_inv, coe_inv, inv_mul_eq_one, mul_inv_eq_one, ← Subtype.ext_iff, ←
     Subtype.ext_iff, eq_comm, ← Prod.ext_iff] at hxy
 
 end Subgroup
+

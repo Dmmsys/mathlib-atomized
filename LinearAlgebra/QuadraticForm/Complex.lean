@@ -20,50 +20,47 @@ namespace QuadraticForm
 
 @[deprecated "Use QuadraticForm.equivalent_weightedSumSquares_of_isAlgClosed"
   (since := "2026-01-19")]
-/--
-theorem `equivalent_sum_squares` / 定理 `equivalent_sum_squares`
-
-English:
-theorem equivalent_sum_squares
-  statement: {M : Type*} [AddCommGroup M] [Module Complex M] [FiniteDimensional Complex M]
-  proof: equivalent_weightedSumSquares_of_isAlgClosed Q hQ
-
-@[deprecated "Use QuadraticForm.equivalent_of_isAlgClosed" (since := "2026-01-19")]
-
-中文:
-定理 equivalent_sum_squares
-  结论: {M : 类型} [加法交换群 M] [模 复形 M] [有限维 复形 M]
-  证明: equivalent_weightedSumSquares_of_isAlgClosed Q hQ
-
-@[deprecated "Use QuadraticForm.equivalent_of_isAlgClosed" (since := "2026-01-19")]
-
-Depends on / 依赖: SeparatingLeft
+/-
+**QuadraticForm.equivalent_sum_squares** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`
+。
+形式化陈述：equivalent_sum_squares {M : Type*} [AddCommGroup M] [Module Complex M] [Fi
+niteDimensional Complex M] (Q : QuadraticForm Complex M) (hQ : (associated (R
+参数：Q : QuadraticForm Complex M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `QuadraticForm.equivalent_weightedSumSquares_of_isAlgClosed`：equivalent_w
+eightedSumSquares_of_isAlgClosed [Invertible (2 : K)] {M : Type*} [AddCommGroup 
+M] [Module K M] [FiniteDimensional K M] (Q : Qua…
 -/
-theorem equivalent_sum_squares {M : Type*} [AddCommGroup M] [Module Complex M] [FiniteDimensional Complex M]
-    (Q : QuadraticForm Complex M) (hQ : (associated (R := Complex) Q).SeparatingLeft) :
-    Equivalent Q (weightedSumSquares Complex (1 : Fin (Module.finrank Complex M) -> Complex)) :=
+theorem equivalent_sum_squares {M : Type*} [AddCommGroup M] [Module ℂ M] [FiniteDimensional ℂ M]
+    (Q : QuadraticForm ℂ M) (hQ : (associated (R := ℂ) Q).SeparatingLeft) :
+    Equivalent Q (weightedSumSquares ℂ (1 : Fin (Module.finrank ℂ M) → ℂ)) :=
   equivalent_weightedSumSquares_of_isAlgClosed Q hQ
 
 @[deprecated "Use QuadraticForm.equivalent_of_isAlgClosed" (since := "2026-01-19")]
-/--
-theorem `complex_equivalent` / 定理 `complex_equivalent`
-
-English:
-theorem complex_equivalent
-  statement: {M : Type*} [AddCommGroup M] [Module Complex M]
-  proof: equivalent_of_isAlgClosed Q₁ Q₂ hQ₁ hQ₂
-
-中文:
-定理 complex_equivalent
-  结论: {M : 类型} [加法交换群 M] [模 复形 M]
-  证明: equivalent_of_isAlgClosed Q₁ Q₂ hQ₁ hQ₂
-
-Depends on / 依赖: equivalent_of_isAlgClosed
+/-
+**QuadraticForm.complex_equivalent** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：complex_equivalent {M : Type*} [AddCommGroup M] [Module Complex M] [Finite
+Dimensional Complex M] (Q₁ Q₂ : QuadraticForm Complex M) (hQ₁ : (associated Q₁).
+SeparatingLeft) (hQ₂ : (associated Q₂).SeparatingLeft) : Equivalent Q₁ Q₂
+参数：Q₁ Q₂ : QuadraticForm Complex M；hQ₁ : (associated Q₁).SeparatingLeft；hQ₂ : (a
+ssociated Q₂).SeparatingLeft。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `QuadraticForm.equivalent_of_isAlgClosed`：equivalent_of_isAlgClosed [Inve
+rtible (2 : K)] {M : Type*} [AddCommGroup M] [Module K M] [FiniteDimensional K M
+] (Q₁ Q₂ : QuadraticForm K M)…
 -/
-theorem complex_equivalent {M : Type*} [AddCommGroup M] [Module Complex M]
-    [FiniteDimensional Complex M] (Q₁ Q₂ : QuadraticForm Complex M)
+theorem complex_equivalent {M : Type*} [AddCommGroup M] [Module ℂ M]
+    [FiniteDimensional ℂ M] (Q₁ Q₂ : QuadraticForm ℂ M)
     (hQ₁ : (associated Q₁).SeparatingLeft)
     (hQ₂ : (associated Q₂).SeparatingLeft) : Equivalent Q₁ Q₂ :=
   equivalent_of_isAlgClosed Q₁ Q₂ hQ₁ hQ₂
 
 end QuadraticForm
+

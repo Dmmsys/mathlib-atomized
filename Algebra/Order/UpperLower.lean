@@ -28,50 +28,42 @@ section OrderedCommMonoid
 variable {α : Type*} [CommMonoid α] [Preorder α] [IsOrderedMonoid α] {s : Set α} {x : α}
 
 @[to_additive]
-/--
-theorem `IsUpperSet.smul_subset` / 定理 `IsUpperSet.smul_subset`
-
-English:
-theorem IsUpperSet.smul_subset
-  given: (hs : IsUpperSet s) (hx : 1 <= x)
-  statement: x • s subseteq s
-  proof: smul_set_subset_iff.2 fun _ => hs le_mul_of_one_le_left' hx
-
-@[to_additive]
-
-中文:
-定理 是上集.smul_subset
-  条件: (hs : 是上集 s) (hx : 1 <= x)
-  结论: x • s subseteq s
-  证明: smul_set_subset_iff.2 fun _ => hs le_mul_of_one_le_left' hx
-
-@[to_additive]
-
-Depends on / 依赖: le_mul_of_one_le_left, smul_set_subset_iff
+/-
+**IsUpperSet.smul_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.smul_subset (hs : IsUpperSet s) (hx : 1 <= x) : x • s subseteq 
+s
+参数：hs : IsUpperSet s；hx : 1 <= x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.smul_set_subset_iff`：smul_set_subset_iff : a • s subseteq t ↔ forall
+ ⦃b⦄, b in s -> a • b in t
+· 使用定理 `le_mul_of_one_le_left'`：le_mul_of_one_le_left' [MulRightMono α] {a b : α
+} (h : 1 <= b) : a <= b * a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem IsUpperSet.smul_subset (hs : IsUpperSet s) (hx : 1 <= x) : x • s subseteq s :=
-smul_set_subset_iff.2 fun _ => hs le_mul_of_one_le_left' hx
+theorem IsUpperSet.smul_subset (hs : IsUpperSet s) (hx : 1 ≤ x) : x • s ⊆ s :=
+  smul_set_subset_iff.2 fun _ ↦ hs <| le_mul_of_one_le_left' hx
 
 @[to_additive]
-/--
-theorem `IsLowerSet.smul_subset` / 定理 `IsLowerSet.smul_subset`
-
-English:
-theorem IsLowerSet.smul_subset
-  given: (hs : IsLowerSet s) (hx : x <= 1)
-  statement: x • s subseteq s
-  proof: smul_set_subset_iff.2 fun _ => hs mul_le_of_le_one_left' hx
-
-中文:
-定理 是下集.smul_subset
-  条件: (hs : 是下集 s) (hx : x <= 1)
-  结论: x • s subseteq s
-  证明: smul_set_subset_iff.2 fun _ => hs mul_le_of_le_one_left' hx
-
-Depends on / 依赖: mul_le_of_le_one_left, smul_set_subset_iff
+/-
+**IsLowerSet.smul_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.smul_subset (hs : IsLowerSet s) (hx : x <= 1) : x • s subseteq 
+s
+参数：hs : IsLowerSet s；hx : x <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.smul_set_subset_iff`：smul_set_subset_iff : a • s subseteq t ↔ forall
+ ⦃b⦄, b in s -> a • b in t
+· 使用定理 `mul_le_of_le_one_left'`：mul_le_of_le_one_left' [MulRightMono α] {a b : α
+} (h : b <= 1) : b * a <= a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem IsLowerSet.smul_subset (hs : IsLowerSet s) (hx : x <= 1) : x • s subseteq s :=
-smul_set_subset_iff.2 fun _ => hs mul_le_of_le_one_left' hx
+theorem IsLowerSet.smul_subset (hs : IsLowerSet s) (hx : x ≤ 1) : x • s ⊆ s :=
+  smul_set_subset_iff.2 fun _ ↦ hs <| mul_le_of_le_one_left' hx
 
 end OrderedCommMonoid
 
@@ -80,260 +72,175 @@ section OrderedCommGroup
 variable {α : Type*} [CommGroup α] [Preorder α] [IsOrderedMonoid α] {s t : Set α} {a : α}
 
 @[to_additive]
-/--
-theorem `IsUpperSet.smul` / 定理 `IsUpperSet.smul`
-
-English:
-theorem IsUpperSet.smul
-  given: (hs : IsUpperSet s)
-  statement: IsUpperSet (a • s)
-  proof: hs.image OrderIso.mulLeft _
-
-@[to_additive]
-
-中文:
-定理 是上集.smul
-  条件: (hs : 是上集 s)
-  结论: 是上集 (a • s)
-  证明: hs.image OrderIso.mulLeft _
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, hs.image, mulLeft
+/-
+**IsUpperSet.smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.smul (hs : IsUpperSet s) : IsUpperSet (a • s)
+参数：hs : IsUpperSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUpperSet.image`：IsUpperSet.image (hs : IsUpperSet s) (f : α ≃o β) : Is
+UpperSet (f '' s : Set β)
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem IsUpperSet.smul (hs : IsUpperSet s) : IsUpperSet (a • s) := hs.image OrderIso.mulLeft _
+theorem IsUpperSet.smul (hs : IsUpperSet s) : IsUpperSet (a • s) := hs.image <| OrderIso.mulLeft _
 
 @[to_additive]
-/--
-theorem `IsLowerSet.smul` / 定理 `IsLowerSet.smul`
-
-English:
-theorem IsLowerSet.smul
-  given: (hs : IsLowerSet s)
-  statement: IsLowerSet (a • s)
-  proof: hs.image OrderIso.mulLeft _
-
-@[to_additive]
-
-中文:
-定理 是下集.smul
-  条件: (hs : 是下集 s)
-  结论: 是下集 (a • s)
-  证明: hs.image OrderIso.mulLeft _
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, hs.image, mulLeft
+/-
+**IsLowerSet.smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.smul (hs : IsLowerSet s) : IsLowerSet (a • s)
+参数：hs : IsLowerSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLowerSet.image`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [i
+nst_1 : Preorder β] {s : Set α},   IsLowerSet s → ∀ (f : α ≃o β), IsLowerSet (⇑f
+ '' s)
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem IsLowerSet.smul (hs : IsLowerSet s) : IsLowerSet (a • s) := hs.image OrderIso.mulLeft _
+theorem IsLowerSet.smul (hs : IsLowerSet s) : IsLowerSet (a • s) := hs.image <| OrderIso.mulLeft _
 
 @[to_additive]
-/--
-theorem `Set.OrdConnected.smul` / 定理 `Set.OrdConnected.smul`
-
-English:
-theorem Set.OrdConnected.smul
-  given: (hs : s.OrdConnected)
-  statement: (a • s).OrdConnected
-  proof: by
-  rw [← hs.upperClosure_inter_lowerClosure]; rw [smul_set_inter]
-  exact (upperClosure _).upper.smul.ordConnected.inter (lowerClosure _).lower.smul.ordConnected
-
-@[to_additive]
-
-中文:
-定理 集合.序连通.smul
-  条件: (hs : s.序连通)
-  结论: (a • s).序连通
-  证明: by
-  rw [← hs.upperClosure_inter_lowerClosure]; rw [smul_set_inter]
-  exact (upperClosure _).upper.smul.ordConnected.inter (lowerClosure _).lower.smul.ordConnected
-
-@[to_additive]
-
-Depends on / 依赖: hs.upperClosure_inter_lowerClosure, lower.smul.ordConnected, lowerClosure, ordConnected, smul_set_inter, upper.smul.ordConnected.inter, upperClosure, upperClosure_inter_lowerClosure
+/-
+**Set.OrdConnected.smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.OrdConnected.smul (hs : s.OrdConnected) : (a • s).OrdConnected
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.OrdConnected.upperClosure_inter_lowerClosure`：Set.OrdConnected.upper
+Closure_inter_lowerClosure (h : s.OrdConnected) : ↑(upperClosure s) inter ↑(lowe
+rClosure s) = s
+· 使用定理 `Set.smul_set_inter`：smul_set_inter : a • (s inter t) = a • s inter a • t
+· 使用定理 `Set.OrdConnected.inter`：∀ {α : Type u_1} [inst : Preorder α] {s t : Set 
+α}, s.OrdConnected → t.OrdConnected → (s ∩ t).OrdConnected
+· 使用定理 `IsUpperSet.ordConnected`：IsUpperSet.ordConnected (h : IsUpperSet s) : s.
+OrdConnected
+· 使用定理 `IsUpperSet.smul`：IsUpperSet.smul (hs : IsUpperSet s) : IsUpperSet (a • s
+)
+· 使用定理 `UpperSet.upper`：∀ {α : Type u_1} [inst : LE α] (s : UpperSet α), IsUpper
+Set ↑s
+· 使用定理 `IsLowerSet.ordConnected`：IsLowerSet.ordConnected (h : IsLowerSet s) : s.
+OrdConnected
+· 使用定理 `IsLowerSet.smul`：IsLowerSet.smul (hs : IsLowerSet s) : IsLowerSet (a • s
+)
+· 使用定理 `LowerSet.lower`：∀ {α : Type u_1} [inst : LE α] (s : LowerSet α), IsLower
+Set ↑s
 -/
 theorem Set.OrdConnected.smul (hs : s.OrdConnected) : (a • s).OrdConnected := by
-  rw [← hs.upperClosure_inter_lowerClosure]; rw [smul_set_inter]
+  rw [← hs.upperClosure_inter_lowerClosure, smul_set_inter]
   exact (upperClosure _).upper.smul.ordConnected.inter (lowerClosure _).lower.smul.ordConnected
 
 @[to_additive]
-/--
-theorem `IsUpperSet.mul_left` / 定理 `IsUpperSet.mul_left`
-
-English:
-theorem IsUpperSet.mul_left
-  given: (ht : IsUpperSet t)
-  statement: IsUpperSet (s * t)
-  proof: by
-  rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-  exact isUpperSet_iUnion₂ fun x _ => ht.smul
-
-@[to_additive]
-
-中文:
-定理 是上集.mul_left
-  条件: (ht : 是上集 t)
-  结论: 是上集 (s * t)
-  证明: by
-  rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-  exact isUpperSet_iUnion₂ fun x _ => ht.smul
-
-@[to_additive]
-
-Depends on / 依赖: Set.iUnion_smul_set, ht.smul, iUnion_smul_set, smul_eq_mul
+/-
+**IsUpperSet.mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.mul_left (ht : IsUpperSet t) : IsUpperSet (s * t)
+参数：ht : IsUpperSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用引理 `Set.iUnion_smul_set`：iUnion_smul_set (s : Set α) (t : Set β) : ⋃ a in s,
+ a • t = s • t
+· 使用定理 `isUpperSet_iUnion₂`：isUpperSet_iUnion₂ {f : forall i, κ i -> Set α} (hf 
+: forall i j, IsUpperSet (f i j)) : IsUpperSet (⋃ (i) (j), f i j)
+· 使用定理 `IsUpperSet.smul`：IsUpperSet.smul (hs : IsUpperSet s) : IsUpperSet (a • s
+)
 -/
 theorem IsUpperSet.mul_left (ht : IsUpperSet t) : IsUpperSet (s * t) := by
-  rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-  exact isUpperSet_iUnion₂ fun x _ => ht.smul
+  rw [← smul_eq_mul, ← Set.iUnion_smul_set]
+  exact isUpperSet_iUnion₂ fun x _ ↦ ht.smul
 
 @[to_additive]
-/--
-theorem `IsUpperSet.mul_right` / 定理 `IsUpperSet.mul_right`
-
-English:
-theorem IsUpperSet.mul_right
-  given: (hs : IsUpperSet s)
-  statement: IsUpperSet (s * t)
-  proof: by
-  rw [mul_comm]
-  exact hs.mul_left
-
-@[to_additive]
-
-中文:
-定理 是上集.mul_right
-  条件: (hs : 是上集 s)
-  结论: 是上集 (s * t)
-  证明: by
-  rw [mul_comm]
-  exact hs.mul_left
-
-@[to_additive]
-
-Depends on / 依赖: hs.mul_left, mul_comm, mul_left
+/-
+**IsUpperSet.mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.mul_right (hs : IsUpperSet s) : IsUpperSet (s * t)
+参数：hs : IsUpperSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsUpperSet.mul_left`：IsUpperSet.mul_left (ht : IsUpperSet t) : IsUpperSe
+t (s * t)
 -/
 theorem IsUpperSet.mul_right (hs : IsUpperSet s) : IsUpperSet (s * t) := by
   rw [mul_comm]
   exact hs.mul_left
 
 @[to_additive]
-/--
-theorem `IsLowerSet.mul_left` / 定理 `IsLowerSet.mul_left`
-
-English:
-theorem IsLowerSet.mul_left
-  given: (ht : IsLowerSet t)
-  statement: IsLowerSet (s * t)
-  proof: ht.toDual.mul_left
-
-@[to_additive]
-
-中文:
-定理 是下集.mul_left
-  条件: (ht : 是下集 t)
-  结论: 是下集 (s * t)
-  证明: ht.toDual.mul_left
-
-@[to_additive]
-
-Depends on / 依赖: ht.toDual.mul_left, mul_left, toDual
+/-
+**IsLowerSet.mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.mul_left (ht : IsLowerSet t) : IsLowerSet (s * t)
+参数：ht : IsLowerSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUpperSet.mul_left`：IsUpperSet.mul_left (ht : IsUpperSet t) : IsUpperSe
+t (s * t)
+· 使用定理 `IsLowerSet.toDual`：∀ {α : Type u_1} [inst : LE α] {s : Set α}, IsLowerSe
+t s → IsUpperSet (⇑OrderDual.ofDual ⁻¹' s)
 -/
 theorem IsLowerSet.mul_left (ht : IsLowerSet t) : IsLowerSet (s * t) := ht.toDual.mul_left
 
 @[to_additive]
-/--
-theorem `IsLowerSet.mul_right` / 定理 `IsLowerSet.mul_right`
-
-English:
-theorem IsLowerSet.mul_right
-  given: (hs : IsLowerSet s)
-  statement: IsLowerSet (s * t)
-  proof: hs.toDual.mul_right
-
-@[to_additive]
-
-中文:
-定理 是下集.mul_right
-  条件: (hs : 是下集 s)
-  结论: 是下集 (s * t)
-  证明: hs.toDual.mul_right
-
-@[to_additive]
-
-Depends on / 依赖: hs.toDual.mul_right, mul_right, toDual
+/-
+**IsLowerSet.mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.mul_right (hs : IsLowerSet s) : IsLowerSet (s * t)
+参数：hs : IsLowerSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUpperSet.mul_right`：IsUpperSet.mul_right (hs : IsUpperSet s) : IsUpper
+Set (s * t)
+· 使用定理 `IsLowerSet.toDual`：∀ {α : Type u_1} [inst : LE α] {s : Set α}, IsLowerSe
+t s → IsUpperSet (⇑OrderDual.ofDual ⁻¹' s)
 -/
 theorem IsLowerSet.mul_right (hs : IsLowerSet s) : IsLowerSet (s * t) := hs.toDual.mul_right
 
 @[to_additive]
-/--
-theorem `IsUpperSet.inv` / 定理 `IsUpperSet.inv`
-
-English:
-theorem IsUpperSet.inv
-  statement: {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-  proof: fun _ _ h => hs inv_le_inv' h
-
-@[to_additive]
-
-中文:
-定理 是上集.inv
-  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
-  证明: fun _ _ h => hs inv_le_inv' h
-
-@[to_additive]
-
-Depends on / 依赖: inv_le_inv
+/-
+**IsUpperSet.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.inv {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid
+ α] {s : Set α} (hs : IsUpperSet s) : IsLowerSet s⁻¹
+参数：hs : IsUpperSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_le_inv'`：inv_le_inv' : a <= b -> b⁻¹ <= a⁻¹
 -/
 theorem IsUpperSet.inv {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-{s : Set α} (hs : IsUpperSet s) : IsLowerSet s⁻¹ := fun _ _ h => hs inv_le_inv' h
+  {s : Set α} (hs : IsUpperSet s) : IsLowerSet s⁻¹ := fun _ _ h ↦ hs <| inv_le_inv' h
 
 @[to_additive]
-/--
-theorem `IsLowerSet.inv` / 定理 `IsLowerSet.inv`
-
-English:
-theorem IsLowerSet.inv
-  statement: {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-  proof: fun _ _ h => hs inv_le_inv' h
-
-@[to_additive]
-
-中文:
-定理 是下集.inv
-  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
-  证明: fun _ _ h => hs inv_le_inv' h
-
-@[to_additive]
-
-Depends on / 依赖: inv_le_inv
+/-
+**IsLowerSet.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.inv {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid
+ α] {s : Set α} (hs : IsLowerSet s) : IsUpperSet s⁻¹
+参数：hs : IsLowerSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_le_inv'`：inv_le_inv' : a <= b -> b⁻¹ <= a⁻¹
 -/
 theorem IsLowerSet.inv {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-{s : Set α} (hs : IsLowerSet s) : IsUpperSet s⁻¹ := fun _ _ h => hs inv_le_inv' h
+  {s : Set α} (hs : IsLowerSet s) : IsUpperSet s⁻¹ := fun _ _ h ↦ hs <| inv_le_inv' h
 
 @[to_additive]
-/--
-theorem `IsUpperSet.div_left` / 定理 `IsUpperSet.div_left`
-
-English:
-theorem IsUpperSet.div_left
-  statement: {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-  proof: by
-  rw [div_eq_mul_inv]
-  exact ht.inv.mul_left
-
-@[to_additive]
-
-中文:
-定理 是上集.div_left
-  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
-  证明: by
-  rw [div_eq_mul_inv]
-  exact ht.inv.mul_left
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, ht.inv.mul_left, mul_left
+/-
+**IsUpperSet.div_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.div_left {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedM
+onoid α] {s t : Set α} (ht : IsUpperSet t) : IsLowerSet (s / t)
+参数：ht : IsUpperSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `IsLowerSet.mul_left`：IsLowerSet.mul_left (ht : IsLowerSet t) : IsLowerSe
+t (s * t)
+· 使用定理 `IsUpperSet.inv`：IsUpperSet.inv {α : Type*} [CommGroup α] [PartialOrder α
+] [IsOrderedMonoid α] {s : Set α} (hs : IsUpperSet s) : IsLowerSet s⁻¹
 -/
 theorem IsUpperSet.div_left {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
     {s t : Set α} (ht : IsUpperSet t) : IsLowerSet (s / t) := by
@@ -341,368 +248,171 @@ theorem IsUpperSet.div_left {α : Type*} [CommGroup α] [PartialOrder α] [IsOrd
   exact ht.inv.mul_left
 
 @[to_additive]
-/--
-theorem `IsUpperSet.div_right` / 定理 `IsUpperSet.div_right`
-
-English:
-theorem IsUpperSet.div_right
-  given: (hs : IsUpperSet s)
-  statement: IsUpperSet (s / t)
-  proof: by
-  rw [div_eq_mul_inv]
-  exact hs.mul_right
-
-@[to_additive]
-
-中文:
-定理 是上集.div_right
-  条件: (hs : 是上集 s)
-  结论: 是上集 (s / t)
-  证明: by
-  rw [div_eq_mul_inv]
-  exact hs.mul_right
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, hs.mul_right, mul_right
+/-
+**IsUpperSet.div_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUpperSet.div_right (hs : IsUpperSet s) : IsUpperSet (s / t)
+参数：hs : IsUpperSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `IsUpperSet.mul_right`：IsUpperSet.mul_right (hs : IsUpperSet s) : IsUpper
+Set (s * t)
 -/
 theorem IsUpperSet.div_right (hs : IsUpperSet s) : IsUpperSet (s / t) := by
   rw [div_eq_mul_inv]
   exact hs.mul_right
 
 @[to_additive]
-/--
-theorem `IsLowerSet.div_left` / 定理 `IsLowerSet.div_left`
-
-English:
-theorem IsLowerSet.div_left
-  statement: {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
-  proof: ht.toDual.div_left
-
-@[to_additive]
-
-中文:
-定理 是下集.div_left
-  结论: {α : 类型} [交换群 α] [偏序 α] [是Ordered幺半群 α]
-  证明: ht.toDual.div_left
-
-@[to_additive]
-
-Depends on / 依赖: div_left, ht.toDual.div_left, toDual
+/-
+**IsLowerSet.div_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.div_left {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedM
+onoid α] {s t : Set α} (ht : IsLowerSet t) : IsUpperSet (s / t)
+参数：ht : IsLowerSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUpperSet.div_left`：IsUpperSet.div_left {α : Type*} [CommGroup α] [Part
+ialOrder α] [IsOrderedMonoid α] {s t : Set α} (ht : IsUpperSet t) : IsLowerSet (
+s / t)
+· 使用定理 `IsLowerSet.toDual`：∀ {α : Type u_1} [inst : LE α] {s : Set α}, IsLowerSe
+t s → IsUpperSet (⇑OrderDual.ofDual ⁻¹' s)
 -/
 theorem IsLowerSet.div_left {α : Type*} [CommGroup α] [PartialOrder α] [IsOrderedMonoid α]
   {s t : Set α} (ht : IsLowerSet t) : IsUpperSet (s / t) := ht.toDual.div_left
 
 @[to_additive]
-/--
-theorem `IsLowerSet.div_right` / 定理 `IsLowerSet.div_right`
-
-English:
-theorem IsLowerSet.div_right
-  given: (hs : IsLowerSet s)
-  statement: IsLowerSet (s / t)
-  proof: hs.toDual.div_right
-
-中文:
-定理 是下集.div_right
-  条件: (hs : 是下集 s)
-  结论: 是下集 (s / t)
-  证明: hs.toDual.div_right
-
-Depends on / 依赖: div_right, hs.toDual.div_right, toDual
+/-
+**IsLowerSet.div_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLowerSet.div_right (hs : IsLowerSet s) : IsLowerSet (s / t)
+参数：hs : IsLowerSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUpperSet.div_right`：IsUpperSet.div_right (hs : IsUpperSet s) : IsUpper
+Set (s / t)
+· 使用定理 `IsLowerSet.toDual`：∀ {α : Type u_1} [inst : LE α] {s : Set α}, IsLowerSe
+t s → IsUpperSet (⇑OrderDual.ofDual ⁻¹' s)
 -/
 theorem IsLowerSet.div_right (hs : IsLowerSet s) : IsLowerSet (s / t) := hs.toDual.div_right
 
 namespace UpperSet
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (UpperSet α)
-  body: ⟨Ici 1⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 幺 (上集 α)
-  定义体: ⟨Ici 1⟩
-
-@[to_additive]
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (UpperSet α) :=
   ⟨Ici 1⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (UpperSet α)
-  body: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 乘法 (上集 α)
-  定义体: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: image2, mul_right
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (UpperSet α) :=
-  ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
+  ⟨fun s t ↦ ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div (UpperSet α)
-  body: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 除法 (上集 α)
-  定义体: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: div_right, image2
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Div (UpperSet α) :=
-  ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
+  ⟨fun s t ↦ ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul α (UpperSet α)
-  body: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 标量乘法 α (上集 α)
-  定义体: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp, norm_cast)]
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul α (UpperSet α) :=
-  ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
+  ⟨fun a s ↦ ⟨(a • ·) '' s, s.2.smul⟩⟩
 
 omit [IsOrderedMonoid α] in
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : UpperSet α) : Set α) = Set.Ici 1
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_one
-  结论: ((1 : 上集 α) : 集合 α) = 集合.左闭右无界区间 1
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**UpperSet.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：coe_one : ((1 : UpperSet α) : Set α) = Set.Ici 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ((1 : UpperSet α) : Set α) = Set.Ici 1 :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (s t : UpperSet α)
-  statement: (↑(s * t) : Set α) = s * t
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_mul
-  条件: (s t : 上集 α)
-  结论: (↑(s * t) : 集合 α) = s * t
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**UpperSet.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：coe_mul (s t : UpperSet α) : (↑(s * t) : Set α) = s * t
+参数：s t : UpperSet α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (s t : UpperSet α) : (↑(s * t) : Set α) = s * t :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: (s t : UpperSet α)
-  statement: (↑(s / t) : Set α) = s / t
-  proof: rfl
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_div
-  条件: (s t : 上集 α)
-  结论: (↑(s / t) : 集合 α) = s / t
-  证明: rfl
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
+/-
+**UpperSet.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：coe_div (s t : UpperSet α) : (↑(s / t) : Set α) = s / t
+参数：s t : UpperSet α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_div (s t : UpperSet α) : (↑(s / t) : Set α) = s / t :=
   rfl
 
 omit [IsOrderedMonoid α] in
 @[to_additive (attr := simp)]
-/--
-theorem `Ici_one` / 定理 `Ici_one`
-
-English:
-theorem Ici_one
-  statement: Ici (1 : α) = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 Ici_one
-  结论: 左闭右无界区间 (1 : α) = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**UpperSet.Ici_one** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：Ici_one : Ici (1 : α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ici_one : Ici (1 : α) = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction α (UpperSet α)
-  body: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 乘法作用 α (上集 α)
-  定义体: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.mulAction, coe_injective, mulAction
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction α (UpperSet α) :=
   SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
 
 @[to_additive]
-/--
-Instance `commSemigroup` / 实例 `commSemigroup`
-
-English:
-instance commSemigroup
-  signature: : CommSemigroup (UpperSet α)
-  body: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (UpperSet α)) with }
-
-@[to_additive]
-
-中文:
-实例 commSemigroup
-  签名: : 交换半群 (上集 α)
-  定义体: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (UpperSet α)) with }
-
-@[to_additive]
-
-Depends on / 依赖: CommSemigroup, SetLike, SetLike.coe_injective.commSemigroup, UpperSet, coe_injective, coe_mul, commSemigroup
+/-
+**UpperSet.commSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+形式化陈述：commSemigroup : CommSemigroup (UpperSet α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UpperSet.coe_mul`：coe_mul (s t : UpperSet α) : (↑(s * t) : Set α) = s * 
+t
 -/
 instance commSemigroup : CommSemigroup (UpperSet α) :=
   { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (UpperSet α)) with }
 
 @[to_additive]
-/--
-theorem `one_mul` / 定理 `one_mul`
-
-English:
-theorem one_mul
-  given: (s : UpperSet α)
-  statement: 1 * s = s
-  proof: SetLike.coe_injective
-(subset_mul_right _ self_mem_Ici).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.upper.smul_subset
-
-@[to_additive]
-
-中文:
-定理 one_mul
-  条件: (s : 上集 α)
-  结论: 1 * s = s
-  证明: SetLike.coe_injective
-(subset_mul_right _ self_mem_Ici).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.upper.smul_subset
-
-@[to_additive]
+/-
+**UpperSet.one_mul** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem one_mul (s : UpperSet α) : 1 * s = s :=
-SetLike.coe_injective
-(subset_mul_right _ self_mem_Ici).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.upper.smul_subset
+  SetLike.coe_injective <|
+    (subset_mul_right _ self_mem_Ici).antisymm' <| by
+      rw [← smul_eq_mul, ← Set.iUnion_smul_set]
+      exact Set.iUnion₂_subset fun _ ↦ s.upper.smul_subset
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonoid (UpperSet α)
-  body: { UpperSet.commSemigroup with
-    one_mul := private one_mul
-    mul_one := fun s => by
-      rw [mul_comm]
-      exact one_mul _ }
-
-中文:
-实例 :
-  签名: 交换幺半群 (上集 α)
-  定义体: { UpperSet.commSemigroup with
-    one_mul := private one_mul
-    mul_one := fun s => by
-      rw [mul_comm]
-      exact one_mul _ }
-
-Depends on / 依赖: UpperSet, UpperSet.commSemigroup, commSemigroup, mul_comm, mul_one, one_mul, private
+/-
+**UpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `UpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommMonoid (UpperSet α) :=
   { UpperSet.commSemigroup with
     one_mul := private one_mul
-    mul_one := fun s => by
+    mul_one := fun s ↦ by
       rw [mul_comm]
       exact one_mul _ }
 
@@ -711,269 +421,110 @@ end UpperSet
 namespace LowerSet
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (LowerSet α)
-  body: ⟨Iic 1⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 幺 (下集 α)
-  定义体: ⟨Iic 1⟩
-
-@[to_additive]
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (LowerSet α) :=
   ⟨Iic 1⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (LowerSet α)
-  body: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 乘法 (下集 α)
-  定义体: ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: image2, mul_right
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (LowerSet α) :=
-  ⟨fun s t => ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
+  ⟨fun s t ↦ ⟨image2 (· * ·) s t, s.2.mul_right⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div (LowerSet α)
-  body: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 除法 (下集 α)
-  定义体: ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: div_right, image2
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Div (LowerSet α) :=
-  ⟨fun s t => ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
+  ⟨fun s t ↦ ⟨image2 (· / ·) s t, s.2.div_right⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul α (LowerSet α)
-  body: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 标量乘法 α (下集 α)
-  定义体: ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul α (LowerSet α) :=
-  ⟨fun a s => ⟨(a • ·) '' s, s.2.smul⟩⟩
+  ⟨fun a s ↦ ⟨(a • ·) '' s, s.2.smul⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (s t : LowerSet α)
-  statement: (↑(s * t) : Set α) = s * t
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_mul
-  条件: (s t : 下集 α)
-  结论: (↑(s * t) : 集合 α) = s * t
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**LowerSet.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：coe_mul (s t : LowerSet α) : (↑(s * t) : Set α) = s * t
+参数：s t : LowerSet α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (s t : LowerSet α) : (↑(s * t) : Set α) = s * t :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: (s t : LowerSet α)
-  statement: (↑(s / t) : Set α) = s / t
-  proof: rfl
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_div
-  条件: (s t : 下集 α)
-  结论: (↑(s / t) : 集合 α) = s / t
-  证明: rfl
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
+/-
+**LowerSet.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：coe_div (s t : LowerSet α) : (↑(s / t) : Set α) = s / t
+参数：s t : LowerSet α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_div (s t : LowerSet α) : (↑(s / t) : Set α) = s / t :=
   rfl
 
 omit [IsOrderedMonoid α] in
 @[to_additive (attr := simp)]
-/--
-theorem `Iic_one` / 定理 `Iic_one`
-
-English:
-theorem Iic_one
-  statement: Iic (1 : α) = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 Iic_one
-  结论: 左无界右闭区间 (1 : α) = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**LowerSet.Iic_one** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：Iic_one : Iic (1 : α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Iic_one : Iic (1 : α) = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction α (LowerSet α)
-  body: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 乘法作用 α (下集 α)
-  定义体: SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.mulAction, coe_injective, mulAction
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction α (LowerSet α) :=
   SetLike.coe_injective.mulAction _ (fun _ _ => rfl)
 
 @[to_additive]
-/--
-Instance `commSemigroup` / 实例 `commSemigroup`
-
-English:
-instance commSemigroup
-  signature: : CommSemigroup (LowerSet α)
-  body: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (LowerSet α)) with }
-
-@[to_additive]
-
-中文:
-实例 commSemigroup
-  签名: : 交换半群 (下集 α)
-  定义体: { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (LowerSet α)) with }
-
-@[to_additive]
-
-Depends on / 依赖: CommSemigroup, LowerSet, SetLike, SetLike.coe_injective.commSemigroup, coe_injective, coe_mul, commSemigroup
+/-
+**LowerSet.commSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+形式化陈述：commSemigroup : CommSemigroup (LowerSet α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LowerSet.coe_mul`：coe_mul (s t : LowerSet α) : (↑(s * t) : Set α) = s * 
+t
 -/
 instance commSemigroup : CommSemigroup (LowerSet α) :=
   { (SetLike.coe_injective.commSemigroup _ coe_mul : CommSemigroup (LowerSet α)) with }
 
 @[to_additive]
-/--
-theorem `one_mul` / 定理 `one_mul`
-
-English:
-theorem one_mul
-  given: (s : LowerSet α)
-  statement: 1 * s = s
-  proof: SetLike.coe_injective
-(subset_mul_right _ self_mem_Iic).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.lower.smul_subset
-
-@[to_additive]
-
-中文:
-定理 one_mul
-  条件: (s : 下集 α)
-  结论: 1 * s = s
-  证明: SetLike.coe_injective
-(subset_mul_right _ self_mem_Iic).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.lower.smul_subset
-
-@[to_additive]
+/-
+**LowerSet.one_mul** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem one_mul (s : LowerSet α) : 1 * s = s :=
-SetLike.coe_injective
-(subset_mul_right _ self_mem_Iic).antisymm' by
-      rw [← smul_eq_mul]; rw [← Set.iUnion_smul_set]
-      exact Set.iUnion₂_subset fun _ => s.lower.smul_subset
+  SetLike.coe_injective <|
+    (subset_mul_right _ self_mem_Iic).antisymm' <| by
+      rw [← smul_eq_mul, ← Set.iUnion_smul_set]
+      exact Set.iUnion₂_subset fun _ ↦ s.lower.smul_subset
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonoid (LowerSet α)
-  body: { LowerSet.commSemigroup with
-    one_mul := private one_mul
-    mul_one := fun s => by
-      rw [mul_comm]
-      exact one_mul _ }
-
-中文:
-实例 :
-  签名: 交换幺半群 (下集 α)
-  定义体: { LowerSet.commSemigroup with
-    one_mul := private one_mul
-    mul_one := fun s => by
-      rw [mul_comm]
-      exact one_mul _ }
-
-Depends on / 依赖: LowerSet, LowerSet.commSemigroup, commSemigroup, mul_comm, mul_one, one_mul, private
+/-
+**LowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `LowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommMonoid (LowerSet α) :=
   { LowerSet.commSemigroup with
     one_mul := private one_mul
-    mul_one := fun s => by
+    mul_one := fun s ↦ by
       rw [mul_comm]
       exact one_mul _ }
 
@@ -983,125 +534,81 @@ variable (a s t)
 
 omit [IsOrderedMonoid α] in
 @[to_additive (attr := simp)]
-/--
-theorem `upperClosure_one` / 定理 `upperClosure_one`
-
-English:
-theorem upperClosure_one
-  statement: upperClosure (1 : Set α) = 1
-  proof: upperClosure_singleton _
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
-
-中文:
-定理 upperClosure_one
-  结论: upperClosure (1 : 集合 α) = 1
-  证明: upperClosure_singleton _
-
-omit [IsOrderedMonoid α] in
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: upperClosure_singleton
+/-
+**upperClosure_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_one : upperClosure (1 : Set α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperClosure_singleton`：upperClosure_singleton (a : α) : upperClosure ({
+a} : Set α) = UpperSet.Ici a
 -/
 theorem upperClosure_one : upperClosure (1 : Set α) = 1 :=
   upperClosure_singleton _
 
 omit [IsOrderedMonoid α] in
 @[to_additive (attr := simp)]
-/--
-theorem `lowerClosure_one` / 定理 `lowerClosure_one`
-
-English:
-theorem lowerClosure_one
-  statement: lowerClosure (1 : Set α) = 1
-  proof: lowerClosure_singleton _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lowerClosure_one
-  结论: lowerClosure (1 : 集合 α) = 1
-  证明: lowerClosure_singleton _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: lowerClosure_singleton
+/-
+**lowerClosure_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_one : lowerClosure (1 : Set α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lowerClosure_singleton`：∀ {α : Type u_1} [inst : Preorder α] (a : α), lo
+werClosure {a} = LowerSet.Iic a
 -/
 theorem lowerClosure_one : lowerClosure (1 : Set α) = 1 :=
   lowerClosure_singleton _
 
 @[to_additive (attr := simp)]
-/--
-theorem `upperClosure_smul` / 定理 `upperClosure_smul`
-
-English:
-theorem upperClosure_smul
-  statement: upperClosure (a • s) = a • upperClosure s
-  proof: upperClosure_image OrderIso.mulLeft a
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 upperClosure_smul
-  结论: upperClosure (a • s) = a • upperClosure s
-  证明: upperClosure_image OrderIso.mulLeft a
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, mulLeft, upperClosure_image
+/-
+**upperClosure_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_smul : upperClosure (a • s) = a • upperClosure s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperClosure_image`：upperClosure_image (f : α ≃o β) : upperClosure (f ''
+ s) = UpperSet.map f (upperClosure s)
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 theorem upperClosure_smul : upperClosure (a • s) = a • upperClosure s :=
-upperClosure_image OrderIso.mulLeft a
+  upperClosure_image <| OrderIso.mulLeft a
 
 @[to_additive (attr := simp)]
-/--
-theorem `lowerClosure_smul` / 定理 `lowerClosure_smul`
-
-English:
-theorem lowerClosure_smul
-  statement: lowerClosure (a • s) = a • lowerClosure s
-  proof: lowerClosure_image OrderIso.mulLeft a
-
-@[to_additive]
-
-中文:
-定理 lowerClosure_smul
-  结论: lowerClosure (a • s) = a • lowerClosure s
-  证明: lowerClosure_image OrderIso.mulLeft a
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, lowerClosure_image, mulLeft
+/-
+**lowerClosure_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_smul : lowerClosure (a • s) = a • lowerClosure s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lowerClosure_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] 
+[inst_1 : Preorder β] {s : Set α} (f : α ≃o β),   lowerClosure (⇑f '' s) = (Lowe
+rSet.map…
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 theorem lowerClosure_smul : lowerClosure (a • s) = a • lowerClosure s :=
-lowerClosure_image OrderIso.mulLeft a
+  lowerClosure_image <| OrderIso.mulLeft a
 
 @[to_additive]
-/--
-theorem `mul_upperClosure` / 定理 `mul_upperClosure`
-
-English:
-theorem mul_upperClosure
-  statement: s * upperClosure t = upperClosure (s * t)
-  proof: by
-  simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, upperClosure_iUnion, upperClosure_smul,
-    UpperSet.coe_iInf₂]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 mul_upperClosure
-  结论: s * upperClosure t = upperClosure (s * t)
-  证明: by
-  simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, upperClosure_iUnion, upperClosure_smul,
-    UpperSet.coe_iInf₂]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: Set.iUnion_smul_set, UpperSet, UpperSet.coe_iInf, iUnion_smul_set, simp_rw, smul_eq_mul, upperClosure_iUnion, upperClosure_smul
+/-
+**mul_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_upperClosure : s * upperClosure t = upperClosure (s * t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `upperClosure_iUnion`：upperClosure_iUnion (f : ι -> Set α) : upperClosure
+ (⋃ i, f i) = ⨅ i, upperClosure (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `upperClosure_smul`：upperClosure_smul : upperClosure (a • s) = a • upperC
+losure s
+· 使用定理 `UpperSet.coe_iInf₂`：coe_iInf₂ (f : forall i, κ i -> UpperSet α) : (↑(⨅ (
+i) (j), f i j) : Set α) = ⋃ (i) (j), f i j
 -/
 theorem mul_upperClosure : s * upperClosure t = upperClosure (s * t) := by
   simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, upperClosure_iUnion, upperClosure_smul,
@@ -1109,30 +616,28 @@ theorem mul_upperClosure : s * upperClosure t = upperClosure (s * t) := by
   rfl
 
 @[to_additive]
-/--
-theorem `mul_lowerClosure` / 定理 `mul_lowerClosure`
-
-English:
-theorem mul_lowerClosure
-  statement: s * lowerClosure t = lowerClosure (s * t)
-  proof: by
-  simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, lowerClosure_iUnion, lowerClosure_smul,
-    LowerSet.coe_iSup₂]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 mul_lowerClosure
-  结论: s * lowerClosure t = lowerClosure (s * t)
-  证明: by
-  simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, lowerClosure_iUnion, lowerClosure_smul,
-    LowerSet.coe_iSup₂]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: LowerSet, LowerSet.coe_iSup, Set.iUnion_smul_set, iUnion_smul_set, lowerClosure_iUnion, lowerClosure_smul, simp_rw, smul_eq_mul
+/-
+**mul_lowerClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lowerClosure : s * lowerClosure t = lowerClosure (s * t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `lowerClosure_iUnion`：lowerClosure_iUnion (f : ι -> Set α) : lowerClosure
+ (⋃ i, f i) = ⨆ i, lowerClosure (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `lowerClosure_smul`：lowerClosure_smul : lowerClosure (a • s) = a • lowerC
+losure s
+· 使用定理 `LowerSet.coe_iSup₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_5} [
+inst : LE α] (f : (i : ι) → κ i → LowerSet α),   ↑(⨆ i, ⨆ j, f i j) = ⋃ i, ⋃ j, 
+↑(f i j)
 -/
 theorem mul_lowerClosure : s * lowerClosure t = lowerClosure (s * t) := by
   simp_rw [← smul_eq_mul, ← Set.iUnion_smul_set, lowerClosure_iUnion, lowerClosure_smul,
@@ -1140,107 +645,88 @@ theorem mul_lowerClosure : s * lowerClosure t = lowerClosure (s * t) := by
   rfl
 
 @[to_additive]
-/--
-theorem `upperClosure_mul` / 定理 `upperClosure_mul`
-
-English:
-theorem upperClosure_mul
-  statement: ↑(upperClosure s) * t = upperClosure (s * t)
-  proof: by
-  simp_rw [mul_comm _ t]
-  exact mul_upperClosure _ _
-
-@[to_additive]
-
-中文:
-定理 upperClosure_mul
-  结论: ↑(upperClosure s) * t = upperClosure (s * t)
-  证明: by
-  simp_rw [mul_comm _ t]
-  exact mul_upperClosure _ _
-
-@[to_additive]
-
-Depends on / 依赖: mul_comm, mul_upperClosure, simp_rw
+/-
+**upperClosure_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_mul : ↑(upperClosure s) * t = upperClosure (s * t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_upperClosure`：mul_upperClosure : s * upperClosure t = upperClosure (
+s * t)
 -/
 theorem upperClosure_mul : ↑(upperClosure s) * t = upperClosure (s * t) := by
   simp_rw [mul_comm _ t]
   exact mul_upperClosure _ _
 
 @[to_additive]
-/--
-theorem `lowerClosure_mul` / 定理 `lowerClosure_mul`
-
-English:
-theorem lowerClosure_mul
-  statement: ↑(lowerClosure s) * t = lowerClosure (s * t)
-  proof: by
-  simp_rw [mul_comm _ t]
-  exact mul_lowerClosure _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lowerClosure_mul
-  结论: ↑(lowerClosure s) * t = lowerClosure (s * t)
-  证明: by
-  simp_rw [mul_comm _ t]
-  exact mul_lowerClosure _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mul_comm, mul_lowerClosure, simp_rw
+/-
+**lowerClosure_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_mul : ↑(lowerClosure s) * t = lowerClosure (s * t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_lowerClosure`：mul_lowerClosure : s * lowerClosure t = lowerClosure (
+s * t)
 -/
 theorem lowerClosure_mul : ↑(lowerClosure s) * t = lowerClosure (s * t) := by
   simp_rw [mul_comm _ t]
   exact mul_lowerClosure _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `upperClosure_mul_distrib` / 定理 `upperClosure_mul_distrib`
-
-English:
-theorem upperClosure_mul_distrib
-  statement: upperClosure (s * t) = upperClosure s * upperClosure t
-  proof: SetLike.coe_injective by
-    rw [UpperSet.coe_mul]; rw [mul_upperClosure]; rw [upperClosure_mul]; rw [UpperSet.upperClosure]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 upperClosure_mul_distrib
-  结论: upperClosure (s * t) = upperClosure s * upperClosure t
-  证明: SetLike.coe_injective by
-    rw [UpperSet.coe_mul]; rw [mul_upperClosure]; rw [upperClosure_mul]; rw [UpperSet.upperClosure]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, UpperSet, UpperSet.coe_mul, UpperSet.upperClosure, coe_injective, coe_mul, mul_upperClosure, upperClosure, upperClosure_mul
+/-
+**upperClosure_mul_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_mul_distrib : upperClosure (s * t) = upperClosure s * upperCl
+osure t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UpperSet.coe_mul`：coe_mul (s t : UpperSet α) : (↑(s * t) : Set α) = s * 
+t
+· 使用定理 `mul_upperClosure`：mul_upperClosure : s * upperClosure t = upperClosure (
+s * t)
+· 使用定理 `upperClosure_mul`：upperClosure_mul : ↑(upperClosure s) * t = upperClosur
+e (s * t)
+· 使用定理 `UpperSet.upperClosure`：∀ {α : Type u_1} [inst : Preorder α] (s : UpperSe
+t α), upperClosure ↑s = s
 -/
 theorem upperClosure_mul_distrib : upperClosure (s * t) = upperClosure s * upperClosure t :=
-SetLike.coe_injective by
-    rw [UpperSet.coe_mul]; rw [mul_upperClosure]; rw [upperClosure_mul]; rw [UpperSet.upperClosure]
+  SetLike.coe_injective <| by
+    rw [UpperSet.coe_mul, mul_upperClosure, upperClosure_mul, UpperSet.upperClosure]
 
 @[to_additive (attr := simp)]
-/--
-theorem `lowerClosure_mul_distrib` / 定理 `lowerClosure_mul_distrib`
-
-English:
-theorem lowerClosure_mul_distrib
-  statement: lowerClosure (s * t) = lowerClosure s * lowerClosure t
-  proof: SetLike.coe_injective by
-    rw [LowerSet.coe_mul]; rw [mul_lowerClosure]; rw [lowerClosure_mul]; rw [LowerSet.lowerClosure]
-
-中文:
-定理 lowerClosure_mul_distrib
-  结论: lowerClosure (s * t) = lowerClosure s * lowerClosure t
-  证明: SetLike.coe_injective by
-    rw [LowerSet.coe_mul]; rw [mul_lowerClosure]; rw [lowerClosure_mul]; rw [LowerSet.lowerClosure]
-
-Depends on / 依赖: LowerSet, LowerSet.coe_mul, LowerSet.lowerClosure, SetLike, SetLike.coe_injective, coe_injective, coe_mul, lowerClosure, lowerClosure_mul, mul_lowerClosure
+/-
+**lowerClosure_mul_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_mul_distrib : lowerClosure (s * t) = lowerClosure s * lowerCl
+osure t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LowerSet.coe_mul`：coe_mul (s t : LowerSet α) : (↑(s * t) : Set α) = s * 
+t
+· 使用定理 `mul_lowerClosure`：mul_lowerClosure : s * lowerClosure t = lowerClosure (
+s * t)
+· 使用定理 `lowerClosure_mul`：lowerClosure_mul : ↑(lowerClosure s) * t = lowerClosur
+e (s * t)
+· 使用定理 `LowerSet.lowerClosure`：∀ {α : Type u_1} [inst : Preorder α] (s : LowerSe
+t α), lowerClosure ↑s = s
 -/
 theorem lowerClosure_mul_distrib : lowerClosure (s * t) = lowerClosure s * lowerClosure t :=
-SetLike.coe_injective by
-    rw [LowerSet.coe_mul]; rw [mul_lowerClosure]; rw [lowerClosure_mul]; rw [LowerSet.lowerClosure]
+  SetLike.coe_injective <| by
+    rw [LowerSet.coe_mul, mul_lowerClosure, lowerClosure_mul, LowerSet.lowerClosure]
 
 end OrderedCommGroup
+

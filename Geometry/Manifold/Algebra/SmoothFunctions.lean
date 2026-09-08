@@ -29,162 +29,124 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCom
   {I' : ModelWithCorners 𝕜 E' H'} {N : Type*} [TopologicalSpace N] [ChartedSpace H N]
   {E'' : Type*} [NormedAddCommGroup E''] [NormedSpace 𝕜 E''] {H'' : Type*} [TopologicalSpace H'']
   {I'' : ModelWithCorners 𝕜 E'' H''} {N' : Type*} [TopologicalSpace N'] [ChartedSpace H'' N']
-  {n : Nat∞ω}
+  {n : ℕ∞ω}
 
 namespace ContMDiffMap
 
 @[to_additive]
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: ⟨fun f g => ⟨f * g, f.contMDiff.mul g.contMDiff⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instMul
-  签名: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: ⟨fun f g => ⟨f * g, f.contMDiff.mul g.contMDiff⟩⟩
-
-@[to_additive (attr := simp)]
+/-
+**ContMDiffMap.instMul** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：{𝕜 : Type u_1} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type u_2}
+ →       [inst_1 : NormedAddCommGroup E] →         [inst_2 : NormedSpace 𝕜 E] → 
+          {E' : Type u_3} →             [inst_3 : NormedAddCommGroup E'] →      
+         [inst_4 : NormedSpace 𝕜 E'] →                 {H : Type u_4} →         
+          [inst_5 : TopologicalSpace H] →                     {I : ModelWithCorn
+ers 𝕜 E H} →                       {H' : Type u_5} →                         [in
+st_6 : TopologicalSpace H'] →                           {I' : ModelWithCorners 𝕜
+ E' H'} →                             {N : Type u_6} →                          
+     [inst_7 : TopologicalSpace N] →                                 [inst_8 : C
+hartedSpace H N] →                                   {n : WithTop ℕ∞} →         
+                            {G : Type u_10} →                                   
+    [inst_9 : Mul G] →                                         [inst_10 : Topolo
+gicalSpace G] →                                           [inst_11 : ChartedSpac
+e H' G] →                                             [ContMDiffMul I' n G] → Mu
+l (ContMDiffMap I I' N G n)
+参数：ContMDiffMap I I' N G n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance instMul {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G]
     [ContMDiffMul I' n G] : Mul C^n⟮I, N; I', G⟯ :=
   ⟨fun f g => ⟨f * g, f.contMDiff.mul g.contMDiff⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  statement: {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_mul
-  结论: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G] [余ntMDiffMul I' n G]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**ContMDiffMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_mul {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [Cont
+MDiffMul I' n G] (f g : C^n⟮I, N; I', G⟯) : ⇑(f * g) = f * g
+参数：f g : C^n⟮I, N; I', G⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
     (f g : C^n⟮I, N; I', G⟯) : ⇑(f * g) = f * g :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_comp` / 定理 `mul_comp`
-
-English:
-theorem mul_comp
-  statement: {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_comp
-  结论: {G : 类型} [乘法 G] [拓扑空间 G] [Charted空间 H' G] [余ntMDiffMul I' n G]
-  证明: rfl
-
-@[to_additive]
+/-
+**ContMDiffMap.mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：mul_comp {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [Con
+tMDiffMul I' n G] (f g : C^n⟮I'', N'; I', G⟯) (h : C^n⟮I, N; I'', N'⟯) : (f * g)
+.comp h = f.comp h * g.comp h
+参数：f g : C^n⟮I'', N'; I', G⟯；h : C^n⟮I, N; I'', N'⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_comp {G : Type*} [Mul G] [TopologicalSpace G] [ChartedSpace H' G] [ContMDiffMul I' n G]
     (f g : C^n⟮I'', N'; I', G⟯) (h : C^n⟮I, N; I'', N'⟯) : (f * g).comp h = f.comp h * g.comp h :=
   rfl
 
 @[to_additive]
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: {G : Type*} [One G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: ⟨ContMDiffMap.const (1 : G)⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instOne
-  签名: {G : 类型} [幺 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: ⟨ContMDiffMap.const (1 : G)⟩
-
-@[to_additive (attr := simp)]
+/-
+**ContMDiffMap.instOne** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：{𝕜 : Type u_1} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type u_2}
+ →       [inst_1 : NormedAddCommGroup E] →         [inst_2 : NormedSpace 𝕜 E] → 
+          {E' : Type u_3} →             [inst_3 : NormedAddCommGroup E'] →      
+         [inst_4 : NormedSpace 𝕜 E'] →                 {H : Type u_4} →         
+          [inst_5 : TopologicalSpace H] →                     {I : ModelWithCorn
+ers 𝕜 E H} →                       {H' : Type u_5} →                         [in
+st_6 : TopologicalSpace H'] →                           {I' : ModelWithCorners 𝕜
+ E' H'} →                             {N : Type u_6} →                          
+     [inst_7 : TopologicalSpace N] →                                 [inst_8 : C
+hartedSpace H N] →                                   {n : WithTop ℕ∞} →         
+                            {G : Type u_10} →                                   
+    [One G] →                                         [inst_10 : TopologicalSpac
+e G] →                                           [inst_11 : ChartedSpace H' G] →
+ One (ContMDiffMap I I' N G n)
+参数：ContMDiffMap I I' N G n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance instOne {G : Type*} [One G] [TopologicalSpace G] [ChartedSpace H' G] :
     One C^n⟮I, N; I', G⟯ :=
   ⟨ContMDiffMap.const (1 : G)⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  given: {G : Type*} [One G] [TopologicalSpace G] [ChartedSpace H' G]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_one
-  条件: {G : 类型} [幺 G] [拓扑空间 G] [Charted空间 H' G]
-  证明: rfl
-
-@[to_additive]
+/-
+**ContMDiffMap.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_one {G : Type*} [One G] [TopologicalSpace G] [ChartedSpace H' G] : ⇑(1
+ : C^n⟮I, N; I', G⟯) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one {G : Type*} [One G] [TopologicalSpace G] [ChartedSpace H' G] :
     ⇑(1 : C^n⟮I, N; I', G⟯) = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `instPow` / 实例 `instPow`
-
-English:
-instance instPow
-  signature: {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: ⟨(f : N -> G) ^ n, (contMDiff_pow n).comp f.contMDiff⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instPow
-  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: ⟨(f : N -> G) ^ n, (contMDiff_pow n).comp f.contMDiff⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: contMDiff, contMDiff_pow, f.contMDiff
+/-
+**ContMDiffMap.instPow** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：instPow {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G] [C
+ontMDiffMul I' n G] : Pow C^n⟮I, N; I', G⟯ Nat where pow f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPow {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
     [ContMDiffMul I' n G] :
-    Pow C^n⟮I, N; I', G⟯ Nat where
-  pow f n := ⟨(f : N -> G) ^ n, (contMDiff_pow n).comp f.contMDiff⟩
+    Pow C^n⟮I, N; I', G⟯ ℕ where
+  pow f n := ⟨(f : N → G) ^ n, (contMDiff_pow n).comp f.contMDiff⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  statement: {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  proof: rfl
-
-中文:
-定理 coe_pow
-  结论: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  证明: rfl
+/-
+**ContMDiffMap.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_pow {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G] [C
+ontMDiffMul I' n G] (f : C^n⟮I, N; I', G⟯) (n : Nat) : ⇑(f ^ n) = (f : N -> G) ^
+ n
+参数：f : C^n⟮I, N; I', G⟯；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_pow {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-    [ContMDiffMul I' n G] (f : C^n⟮I, N; I', G⟯) (n : Nat) :
-    ⇑(f ^ n) = (f : N -> G) ^ n :=
+    [ContMDiffMul I' n G] (f : C^n⟮I, N; I', G⟯) (n : ℕ) :
+    ⇑(f ^ n) = (f : N → G) ^ n :=
   rfl
 
 section GroupStructure
@@ -197,44 +159,34 @@ under pointwise multiplication.
 -/
 
 @[to_additive]
-/--
-Instance `semigroup` / 实例 `semigroup`
+/-
+**ContMDiffMap.semigroup** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：semigroup {G : Type*} [Semigroup G] [TopologicalSpace G] [ChartedSpace H' 
+G] [ContMDiffMul I' n G] : Semigroup C^n⟮I, N; I', G⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance semigroup
-  signature: {G : Type*} [Semigroup G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: DFunLike.coe_injective.semigroup _ coe_mul
+--- 原说明 ---
+### Group structure
 
-@[to_additive]
-
-中文:
-实例 semigroup
-  签名: {G : 类型} [半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: DFunLike.coe_injective.semigroup _ coe_mul
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.semigroup, coe_injective, coe_mul, semigroup
+In this section we show that `C^n` functions valued in a Lie group inherit a gro
+up structure
+under pointwise multiplication.
 -/
 instance semigroup {G : Type*} [Semigroup G] [TopologicalSpace G] [ChartedSpace H' G]
     [ContMDiffMul I' n G] : Semigroup C^n⟮I, N; I', G⟯ :=
   DFunLike.coe_injective.semigroup _ coe_mul
 
 @[to_additive]
-/--
-Instance `monoid` / 实例 `monoid`
-
-English:
-instance monoid
-  signature: {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: DFunLike.coe_injective.monoid _ coe_one coe_mul coe_pow
-
-中文:
-实例 monoid
-  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: DFunLike.coe_injective.monoid _ coe_one coe_mul coe_pow
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.monoid, coe_injective, coe_mul, coe_one, coe_pow, monoid
+/-
+**ContMDiffMap.monoid** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：monoid {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G] [Co
+ntMDiffMul I' n G] : Monoid C^n⟮I, N; I', G⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffMap.coe_pow`：coe_pow {G : Type*} [Monoid G] [TopologicalSpace G
+] [ChartedSpace H' G] [ContMDiffMul I' n G] (f : C^n⟮I, N; I', G⟯) (n : Nat) : ⇑
+(f ^ n) = …
 -/
 instance monoid {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
     [ContMDiffMul I' n G] : Monoid C^n⟮I, N; I', G⟯ :=
@@ -243,27 +195,15 @@ instance monoid {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
 /-- Coercion to a function as a `MonoidHom`. Similar to `MonoidHom.coeFn`. -/
 @[to_additive (attr := simps) /-- Coercion to a function as an `AddMonoidHom`.
   Similar to `AddMonoidHom.coeFn`. -/]
-/--
-Definition of `coeFnMonoidHom` / `coeFnMonoidHom` 的定义
-
-English:
-definition coeFnMonoidHom
-  signature: {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: DFunLike.coe
-  map_one' := coe_one
-  map_mul' := coe_mul
-
-中文:
-定义 coeFnMonoidHom
-  签名: {G : 类型} [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: DFunLike.coe
-  map_one' := coe_one
-  map_mul' := coe_mul
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+/-
+**ContMDiffMap.coeFnMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：coeFnMonoidHom {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H
+' G] [ContMDiffMul I' n G] : C^n⟮I, N; I', G⟯ ->* N -> G where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def coeFnMonoidHom {G : Type*} [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-    [ContMDiffMul I' n G] : C^n⟮I, N; I', G⟯ ->* N -> G where
+    [ContMDiffMul I' n G] : C^n⟮I, N; I', G⟯ →* N → G where
   toFun := DFunLike.coe
   map_one' := coe_one
   map_mul' := coe_mul
@@ -275,29 +215,20 @@ variable (I N)
 @[to_additive /-- For a manifold `N` and a `C^n` homomorphism `φ` between additive Lie groups `G'`,
 `G''`, the 'left-composition-by-`φ`' group homomorphism from `C^n⟮I, N; I', G'⟯` to
 `C^n⟮I, N; I'', G''⟯`. -/]
-/--
-Definition of `compLeftMonoidHom` / `compLeftMonoidHom` 的定义
-
-English:
-definition compLeftMonoidHom
-  signature: {G' : Type*} [Monoid G'] [TopologicalSpace G'] [ChartedSpace H' G']
-  body: ⟨φ ∘ f, hφ.comp f.contMDiff⟩
-  map_one' := by ext; change φ 1 = 1; simp
-  map_mul' f g := by ext x; change φ (f x * g x) = φ (f x) * φ (g x); simp
-
-中文:
-定义 compLeftMonoidHom
-  签名: {G' : 类型} [幺半群 G'] [拓扑空间 G'] [Charted空间 H' G']
-  定义体: ⟨φ ∘ f, hφ.comp f.contMDiff⟩
-  map_one' := by ext; change φ 1 = 1; simp
-  map_mul' f g := by ext x; change φ (f x * g x) = φ (f x) * φ (g x); simp
-
-Depends on / 依赖: contMDiff, f.contMDiff
+/-
+**ContMDiffMap.compLeftMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：compLeftMonoidHom {G' : Type*} [Monoid G'] [TopologicalSpace G'] [ChartedS
+pace H' G'] [ContMDiffMul I' n G'] {G'' : Type*} [Monoid G''] [TopologicalSpace 
+G''] [ChartedSpace H'' G''] [ContMDiffMul I'' n G''] (φ : G' ->* G'') (hφ : CMDi
+ff n φ) : C^n⟮I, N; I', G'⟯ ->* C^n⟮I, N; I'', G''⟯ where toFun f
+参数：φ : G' ->* G''；hφ : CMDiff n φ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def compLeftMonoidHom {G' : Type*} [Monoid G'] [TopologicalSpace G'] [ChartedSpace H' G']
     [ContMDiffMul I' n G'] {G'' : Type*} [Monoid G''] [TopologicalSpace G''] [ChartedSpace H'' G'']
-    [ContMDiffMul I'' n G''] (φ : G' ->* G'') (hφ : CMDiff n φ) :
-    C^n⟮I, N; I', G'⟯ ->* C^n⟮I, N; I'', G''⟯ where
+    [ContMDiffMul I'' n G''] (φ : G' →* G'') (hφ : CMDiff n φ) :
+    C^n⟮I, N; I', G'⟯ →* C^n⟮I, N; I'', G''⟯ where
   toFun f := ⟨φ ∘ f, hφ.comp f.contMDiff⟩
   map_one' := by ext; change φ 1 = 1; simp
   map_mul' f g := by ext x; change φ (f x * g x) = φ (f x) * φ (g x); simp
@@ -309,27 +240,17 @@ variable (I') {N}
 `C^n⟮I, V; I', G⟯` to `C^n⟮I, U; I', G⟯`. -/
 @[to_additive /-- For an additive Lie group `G` and open sets `U ⊆ V` in `N`, the 'restriction'
 group homomorphism from `C^n⟮I, V; I', G⟯` to `C^n⟮I, U; I', G⟯`. -/]
-/--
-Definition of `restrictMonoidHom` / `restrictMonoidHom` 的定义
-
-English:
-definition restrictMonoidHom
-  signature: (G : Type*) [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 restrictMonoidHom
-  签名: (G : 类型) [幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: Set.inclusion, contMDiff, contMDiff_inclusion, f.contMDiff.comp, inclusion
+/-
+**ContMDiffMap.restrictMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：restrictMonoidHom (G : Type*) [Monoid G] [TopologicalSpace G] [ChartedSpac
+e H' G] [ContMDiffMul I' n G] {U V : Opens N} (h : U <= V) : C^n⟮I, V; I', G⟯ ->
+* C^n⟮I, U; I', G⟯ where toFun f
+参数：G : Type*；h : U <= V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def restrictMonoidHom (G : Type*) [Monoid G] [TopologicalSpace G] [ChartedSpace H' G]
-    [ContMDiffMul I' n G] {U V : Opens N} (h : U <= V) : C^n⟮I, V; I', G⟯ ->* C^n⟮I, U; I', G⟯ where
+    [ContMDiffMul I' n G] {U V : Opens N} (h : U ≤ V) : C^n⟮I, V; I', G⟯ →* C^n⟮I, U; I', G⟯ where
   toFun f := ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -337,56 +258,27 @@ def restrictMonoidHom (G : Type*) [Monoid G] [TopologicalSpace G] [ChartedSpace 
 variable {I I'}
 
 @[to_additive]
-/--
-Instance `commMonoid` / 实例 `commMonoid`
-
-English:
-instance commMonoid
-  signature: {G : Type*} [CommMonoid G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: DFunLike.coe_injective.commMonoid _ coe_one coe_mul coe_pow
-
-@[to_additive]
-
-中文:
-实例 commMonoid
-  签名: {G : 类型} [交换幺半群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: DFunLike.coe_injective.commMonoid _ coe_one coe_mul coe_pow
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.commMonoid, coe_injective, coe_mul, coe_one, coe_pow, commMonoid
+/-
+**ContMDiffMap.commMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：commMonoid {G : Type*} [CommMonoid G] [TopologicalSpace G] [ChartedSpace H
+' G] [ContMDiffMul I' n G] : CommMonoid C^n⟮I, N; I', G⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commMonoid {G : Type*} [CommMonoid G] [TopologicalSpace G] [ChartedSpace H' G]
     [ContMDiffMul I' n G] : CommMonoid C^n⟮I, N; I', G⟯ :=
   DFunLike.coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
 @[to_additive]
-/--
-Instance `group` / 实例 `group`
-
-English:
-instance group
-  signature: {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
-  body: { ContMDiffMap.monoid with
-    inv := fun f => ⟨fun x => (f x)⁻¹, f.contMDiff.inv⟩
-    inv_mul_cancel := fun a => by ext; exact inv_mul_cancel _
-    div := fun f g => ⟨f / g, f.contMDiff.div g.contMDiff⟩
-    div_eq_mul_inv := fun f g => by ext; exact div_eq_mul_inv _ _ }
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 group
-  签名: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
-  定义体: { ContMDiffMap.monoid with
-    inv := fun f => ⟨fun x => (f x)⁻¹, f.contMDiff.inv⟩
-    inv_mul_cancel := fun a => by ext; exact inv_mul_cancel _
-    div := fun f g => ⟨f / g, f.contMDiff.div g.contMDiff⟩
-    div_eq_mul_inv := fun f g => by ext; exact div_eq_mul_inv _ _ }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.monoid, contMDiff, div_eq_mul_inv, f.contMDiff.div, f.contMDiff.inv, g.contMDiff, inv_mul_cancel, monoid
+/-
+**ContMDiffMap.group** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：group {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieG
+roup I' n G] : Group C^n⟮I, N; I', G⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieGroup.toContMDiffMul`：∀ {𝕜 : Type u_1} {inst : NontriviallyNormedFiel
+d 𝕜} {H : Type u_2} {inst_1 : TopologicalSpace H} {E : Type u_3}   {inst_2 : Nor
+medAddCommGro…
 -/
 instance group {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G] :
     Group C^n⟮I, N; I', G⟯ :=
@@ -397,64 +289,38 @@ instance group {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [L
     div_eq_mul_inv := fun f g => by ext; exact div_eq_mul_inv _ _ }
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  statement: {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_inv
-  结论: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**ContMDiffMap.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_inv {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [Li
+eGroup I' n G] (f : C^n⟮I, N; I', G⟯) : ⇑f⁻¹ = (⇑f)⁻¹
+参数：f : C^n⟮I, N; I', G⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_inv {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
     (f : C^n⟮I, N; I', G⟯) : ⇑f⁻¹ = (⇑f)⁻¹ :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  statement: {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_div
-  结论: {G : 类型} [群 G] [拓扑空间 G] [Charted空间 H' G] [Lie群 I' n G]
-  证明: rfl
-
-@[to_additive]
+/-
+**ContMDiffMap.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_div {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [Li
+eGroup I' n G] (f g : C^n⟮I, N; I', G⟯) : ⇑(f / g) = f / g
+参数：f g : C^n⟮I, N; I', G⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_div {G : Type*} [Group G] [TopologicalSpace G] [ChartedSpace H' G] [LieGroup I' n G]
     (f g : C^n⟮I, N; I', G⟯) : ⇑(f / g) = f / g :=
   rfl
 
 @[to_additive]
-/--
-Instance `commGroup` / 实例 `commGroup`
-
-English:
-instance commGroup
-  signature: {G : Type*} [CommGroup G] [TopologicalSpace G] [ChartedSpace H' G]
-  body: { ContMDiffMap.group, ContMDiffMap.commMonoid with }
-
-中文:
-实例 commGroup
-  签名: {G : 类型} [交换群 G] [拓扑空间 G] [Charted空间 H' G]
-  定义体: { ContMDiffMap.group, ContMDiffMap.commMonoid with }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.commMonoid, ContMDiffMap.group, commMonoid
+/-
+**ContMDiffMap.commGroup** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：commGroup {G : Type*} [CommGroup G] [TopologicalSpace G] [ChartedSpace H' 
+G] [LieGroup I' n G] : CommGroup C^n⟮I, N; I', G⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commGroup {G : Type*} [CommGroup G] [TopologicalSpace G] [ChartedSpace H' G]
     [LieGroup I' n G] : CommGroup C^n⟮I, N; I', G⟯ :=
@@ -464,32 +330,33 @@ end GroupStructure
 
 section RingStructure
 
+/-!
+### Ring structure
+
+In this section we show that `C^n` functions valued in a `C^n` ring `R` inherit a ring structure
+under pointwise multiplication.
+-/
 
 
-/--
-Instance `semiring` / 实例 `semiring`
+/-
+**ContMDiffMap.semiring** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：semiring {R : Type*} [Semiring R] [TopologicalSpace R] [ChartedSpace H' R]
+ [ContMDiffRing I' n R] : Semiring C^n⟮I, N; I', R⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffRing.toContMDiffAdd`：∀ {𝕜 : Type u_1} {inst : NontriviallyNorme
+dField 𝕜} {H : Type u_2} {inst_1 : TopologicalSpace H} {E : Type u_3}   {inst_2 
+: NormedAddCommGro…
+· 使用定理 `ContMDiffRing.toContMDiffMul`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorme
+dField 𝕜] {H : Type u_2} [inst_1 : TopologicalSpace H] {E : Type u_3}   [inst_2 
+: NormedAddCommGro…
 
-English:
-instance semiring
-  signature: {R : Type*} [Semiring R] [TopologicalSpace R] [ChartedSpace H' R]
-  body: { ContMDiffMap.addCommMonoid,
-    ContMDiffMap.monoid with
-    left_distrib := fun a b c => by ext; exact left_distrib _ _ _
-    right_distrib := fun a b c => by ext; exact right_distrib _ _ _
-    zero_mul := fun a => by ext; exact zero_mul _
-    mul_zero := fun a => by ext; exact mul_zero _ }
+--- 原说明 ---
+### Ring structure
 
-中文:
-实例 semiring
-  签名: {R : 类型} [半环 R] [拓扑空间 R] [Charted空间 H' R]
-  定义体: { ContMDiffMap.addCommMonoid,
-    ContMDiffMap.monoid with
-    left_distrib := fun a b c => by ext; exact left_distrib _ _ _
-    right_distrib := fun a b c => by ext; exact right_distrib _ _ _
-    zero_mul := fun a => by ext; exact zero_mul _
-    mul_zero := fun a => by ext; exact mul_zero _ }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.addCommMonoid, ContMDiffMap.monoid, addCommMonoid, left_distrib, monoid, mul_zero, right_distrib, zero_mul
+In this section we show that `C^n` functions valued in a `C^n` ring `R` inherit 
+a ring structure
+under pointwise multiplication.
 -/
 instance semiring {R : Type*} [Semiring R] [TopologicalSpace R] [ChartedSpace H' R]
     [ContMDiffRing I' n R] : Semiring C^n⟮I, N; I', R⟯ :=
@@ -499,40 +366,25 @@ instance semiring {R : Type*} [Semiring R] [TopologicalSpace R] [ChartedSpace H'
     right_distrib := fun a b c => by ext; exact right_distrib _ _ _
     zero_mul := fun a => by ext; exact zero_mul _
     mul_zero := fun a => by ext; exact mul_zero _ }
-
-/--
-Instance `ring` / 实例 `ring`
-
-English:
-instance ring
-  signature: {R : Type*} [Ring R] [TopologicalSpace R] [ChartedSpace H' R] [ContMDiffRing I' n R]
-  body: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup with }
-
-中文:
-实例 ring
-  签名: {R : 类型} [环 R] [拓扑空间 R] [Charted空间 H' R] [余ntMDiff环 I' n R]
-  定义体: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup with }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.addCommGroup, ContMDiffMap.semiring, addCommGroup, semiring
+/-
+**ContMDiffMap.ring** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：ring {R : Type*} [Ring R] [TopologicalSpace R] [ChartedSpace H' R] [ContMD
+iffRing I' n R] : Ring C^n⟮I, N; I', R⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffRing.toLieAddGroup`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormed
+Field 𝕜] {H : Type u_2} [inst_1 : TopologicalSpace H] {E : Type u_3}   [inst_2 :
+ NormedAddCommGro…
 -/
 instance ring {R : Type*} [Ring R] [TopologicalSpace R] [ChartedSpace H' R] [ContMDiffRing I' n R] :
     Ring C^n⟮I, N; I', R⟯ :=
   { ContMDiffMap.semiring, ContMDiffMap.addCommGroup with }
-
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
-  body: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup, ContMDiffMap.commMonoid with }
-
-中文:
-实例 commRing
-  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
-  定义体: { ContMDiffMap.semiring, ContMDiffMap.addCommGroup, ContMDiffMap.commMonoid with }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.addCommGroup, ContMDiffMap.commMonoid, ContMDiffMap.semiring, addCommGroup, commMonoid, semiring
+/-
+**ContMDiffMap.commRing** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：commRing {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
+ [ContMDiffRing I' n R] : CommRing C^n⟮I, N; I', R⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commRing {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
     [ContMDiffRing I' n R] : CommRing C^n⟮I, N; I', R⟯ :=
@@ -540,55 +392,53 @@ instance commRing {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H'
 
 variable (I N)
 
-/--
-Definition of `compLeftRingHom` / `compLeftRingHom` 的定义
+/-- For a manifold `N` and a `C^n` homomorphism `φ` between `C^n` rings `R'`, `R''`, the
+'left-composition-by-`φ`' ring homomorphism from `C^n⟮I, N; I', R'⟯` to `C^n⟮I, N; I'', R''⟯`. -/
+/-
+**ContMDiffMap.compLeftRingHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：compLeftRingHom {R' : Type*} [Ring R'] [TopologicalSpace R'] [ChartedSpace
+ H' R'] [ContMDiffRing I' n R'] {R'' : Type*} [Ring R''] [TopologicalSpace R''] 
+[ChartedSpace H'' R''] [ContMDiffRing I'' n R''] (φ : R' ->+* R'') (hφ : CMDiff 
+n φ) : C^n⟮I, N; I', R'⟯ ->+* C^n⟮I, N; I'', R''⟯
+参数：φ : R' ->+* R''；hφ : CMDiff n φ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compLeftRingHom
-  signature: {R' : Type*} [Ring R'] [TopologicalSpace R'] [ChartedSpace H' R']
-  body: { ContMDiffMap.compLeftMonoidHom I N φ.toMonoidHom hφ,
-    ContMDiffMap.compLeftAddMonoidHom I N φ.toAddMonoidHom hφ with
-    toFun := fun f => ⟨φ ∘ f, hφ.comp f.contMDiff⟩ }
-
-中文:
-定义 compLeftRingHom
-  签名: {R' : 类型} [环 R'] [拓扑空间 R'] [Charted空间 H' R']
-  定义体: { ContMDiffMap.compLeftMonoidHom I N φ.toMonoidHom hφ,
-    ContMDiffMap.compLeftAddMonoidHom I N φ.toAddMonoidHom hφ with
-    toFun := fun f => ⟨φ ∘ f, hφ.comp f.contMDiff⟩ }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.compLeftAddMonoidHom, ContMDiffMap.compLeftMonoidHom, compLeftAddMonoidHom, compLeftMonoidHom, contMDiff, f.contMDiff, toAddMonoidHom, toMonoidHom
+--- 原说明 ---
+For a manifold `N` and a `C^n` homomorphism `φ` between `C^n` rings `R'`, `R''`,
+ the
+'left-composition-by-`φ`' ring homomorphism from `C^n⟮I, N; I', R'⟯` to `C^n⟮I, 
+N; I'', R''⟯`.
 -/
 def compLeftRingHom {R' : Type*} [Ring R'] [TopologicalSpace R'] [ChartedSpace H' R']
     [ContMDiffRing I' n R'] {R'' : Type*} [Ring R''] [TopologicalSpace R''] [ChartedSpace H'' R'']
-    [ContMDiffRing I'' n R''] (φ : R' ->+* R'') (hφ : CMDiff n φ) :
-    C^n⟮I, N; I', R'⟯ ->+* C^n⟮I, N; I'', R''⟯ :=
+    [ContMDiffRing I'' n R''] (φ : R' →+* R'') (hφ : CMDiff n φ) :
+    C^n⟮I, N; I', R'⟯ →+* C^n⟮I, N; I'', R''⟯ :=
   { ContMDiffMap.compLeftMonoidHom I N φ.toMonoidHom hφ,
     ContMDiffMap.compLeftAddMonoidHom I N φ.toAddMonoidHom hφ with
     toFun := fun f => ⟨φ ∘ f, hφ.comp f.contMDiff⟩ }
 
 variable (I') {N}
 
-/--
-Definition of `restrictRingHom` / `restrictRingHom` 的定义
+/-- For a "`C^n` ring" `R` and open sets `U ⊆ V` in `N`, the "restriction" ring homomorphism from
+`C^n⟮I, V; I', R⟯` to `C^n⟮I, U; I', R⟯`. -/
+/-
+**ContMDiffMap.restrictRingHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：restrictRingHom (R : Type*) [Ring R] [TopologicalSpace R] [ChartedSpace H'
+ R] [ContMDiffRing I' n R] {U V : Opens N} (h : U <= V) : C^n⟮I, V; I', R⟯ ->+* 
+C^n⟮I, U; I', R⟯
+参数：R : Type*；h : U <= V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictRingHom
-  signature: (R : Type*) [Ring R] [TopologicalSpace R] [ChartedSpace H' R]
-  body: { ContMDiffMap.restrictMonoidHom I I' R h, ContMDiffMap.restrictAddMonoidHom I I' R h with
-    toFun := fun f => ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩ }
-
-中文:
-定义 restrictRingHom
-  签名: (R : 类型) [环 R] [拓扑空间 R] [Charted空间 H' R]
-  定义体: { ContMDiffMap.restrictMonoidHom I I' R h, ContMDiffMap.restrictAddMonoidHom I I' R h with
-    toFun := fun f => ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩ }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.restrictAddMonoidHom, ContMDiffMap.restrictMonoidHom, Set.inclusion, contMDiff, contMDiff_inclusion, f.contMDiff.comp, inclusion, restrictAddMonoidHom, restrictMonoidHom
+--- 原说明 ---
+For a "`C^n` ring" `R` and open sets `U ⊆ V` in `N`, the "restriction" ring homo
+morphism from
+`C^n⟮I, V; I', R⟯` to `C^n⟮I, U; I', R⟯`.
 -/
 def restrictRingHom (R : Type*) [Ring R] [TopologicalSpace R] [ChartedSpace H' R]
-    [ContMDiffRing I' n R] {U V : Opens N} (h : U <= V) :
-    C^n⟮I, V; I', R⟯ ->+* C^n⟮I, U; I', R⟯ :=
+    [ContMDiffRing I' n R] {U V : Opens N} (h : U ≤ V) :
+    C^n⟮I, V; I', R⟯ →+* C^n⟮I, U; I', R⟯ :=
   { ContMDiffMap.restrictMonoidHom I I' R h, ContMDiffMap.restrictAddMonoidHom I I' R h with
     toFun := fun f => ⟨f ∘ Set.inclusion h, f.contMDiff.comp (contMDiff_inclusion h)⟩ }
 
@@ -596,130 +446,101 @@ variable {I I'}
 
 /-- Coercion to a function as a `RingHom`. -/
 @[simps]
-/--
-Definition of `coeFnRingHom` / `coeFnRingHom` 的定义
+/-
+**ContMDiffMap.coeFnRingHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：coeFnRingHom {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H
+' R] [ContMDiffRing I' n R] : C^n⟮I, N; I', R⟯ ->+* N -> R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnRingHom
-  signature: {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
-  body: { (coeFnMonoidHom : C^n⟮I, N; I', R⟯ ->* _), (coeFnAddMonoidHom : C^n⟮I, N; I', R⟯ ->+ _) with
-    toFun := (↑) }
-
-中文:
-定义 coeFnRingHom
-  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
-  定义体: { (coeFnMonoidHom : C^n⟮I, N; I', R⟯ ->* _), (coeFnAddMonoidHom : C^n⟮I, N; I', R⟯ ->+ _) with
-    toFun := (↑) }
-
-Depends on / 依赖: coeFnAddMonoidHom, coeFnMonoidHom
+--- 原说明 ---
+Coercion to a function as a `RingHom`.
 -/
 def coeFnRingHom {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
-    [ContMDiffRing I' n R] : C^n⟮I, N; I', R⟯ ->+* N -> R :=
-  { (coeFnMonoidHom : C^n⟮I, N; I', R⟯ ->* _), (coeFnAddMonoidHom : C^n⟮I, N; I', R⟯ ->+ _) with
+    [ContMDiffRing I' n R] : C^n⟮I, N; I', R⟯ →+* N → R :=
+  { (coeFnMonoidHom : C^n⟮I, N; I', R⟯ →* _), (coeFnAddMonoidHom : C^n⟮I, N; I', R⟯ →+ _) with
     toFun := (↑) }
 
-/--
-Definition of `evalRingHom` / `evalRingHom` 的定义
+/-- `Function.eval` as a `RingHom` on the ring of `C^n` functions. -/
+/-
+**ContMDiffMap.evalRingHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：evalRingHom {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H'
+ R] [ContMDiffRing I' n R] (m : N) : C^n⟮I, N; I', R⟯ ->+* R
+参数：m : N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalRingHom
-  signature: {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
-  body: (Pi.evalRingHom _ m : (N -> R) ->+* R).comp ContMDiffMap.coeFnRingHom
-
-中文:
-定义 evalRingHom
-  签名: {R : 类型} [交换环 R] [拓扑空间 R] [Charted空间 H' R]
-  定义体: (Pi.evalRingHom _ m : (N -> R) ->+* R).comp ContMDiffMap.coeFnRingHom
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.coeFnRingHom, Pi.evalRingHom, coeFnRingHom, evalRingHom
+--- 原说明 ---
+`Function.eval` as a `RingHom` on the ring of `C^n` functions.
 -/
 def evalRingHom {R : Type*} [CommRing R] [TopologicalSpace R] [ChartedSpace H' R]
-    [ContMDiffRing I' n R] (m : N) : C^n⟮I, N; I', R⟯ ->+* R :=
-  (Pi.evalRingHom _ m : (N -> R) ->+* R).comp ContMDiffMap.coeFnRingHom
+    [ContMDiffRing I' n R] (m : N) : C^n⟮I, N; I', R⟯ →+* R :=
+  (Pi.evalRingHom _ m : (N → R) →+* R).comp ContMDiffMap.coeFnRingHom
 
 end RingStructure
 
 section ModuleStructure
 
+/-!
+### Semimodule structure
+
+In this section we show that `C^n` functions valued in a vector space `M` over a normed
+field `𝕜` inherit a vector space structure.
+-/
 
 
-/--
-Instance `instSMul` / 实例 `instSMul`
+/-
+**ContMDiffMap.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：instSMul {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] : SMul 𝕜 C^n
+⟮I, N; 𝓘(𝕜, V), V⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSMul
-  signature: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-  body: ⟨fun r f => ⟨r • ⇑f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩⟩
+--- 原说明 ---
+### Semimodule structure
 
-@[simp]
-
-中文:
-实例 instSMul
-  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
-  定义体: ⟨fun r f => ⟨r • ⇑f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩⟩
-
-@[simp]
-
-Depends on / 依赖: contMDiff, contMDiff_const, contMDiff_const.smul, f.contMDiff
+In this section we show that `C^n` functions valued in a vector space `M` over a
+ normed
+field `𝕜` inherit a vector space structure.
 -/
 instance instSMul {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
     SMul 𝕜 C^n⟮I, N; 𝓘(𝕜, V), V⟯ :=
-  ⟨fun r f => ⟨r • ⇑f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩⟩
+  ⟨fun r f ↦ ⟨r • ⇑f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩⟩
 
 @[simp]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  statement: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_smul
-  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (r : 𝕜)
-  证明: rfl
-
-@[simp]
+/-
+**ContMDiffMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_smul {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜) (f :
+ C^n⟮I, N; 𝓘(𝕜, V), V⟯) : ⇑(r • f) = r • ⇑f
+参数：r : 𝕜；f : C^n⟮I, N; 𝓘(𝕜, V), V⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
     (f : C^n⟮I, N; 𝓘(𝕜, V), V⟯) : ⇑(r • f) = r • ⇑f :=
   rfl
 
 @[simp]
-/--
-theorem `smul_comp` / 定理 `smul_comp`
-
-English:
-theorem smul_comp
-  statement: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
-  proof: rfl
-
-中文:
-定理 smul_comp
-  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (r : 𝕜)
-  证明: rfl
+/-
+**ContMDiffMap.smul_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：smul_comp {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜) (g 
+: C^n⟮I'', N'; 𝓘(𝕜, V), V⟯) (h : C^n⟮I, N; I'', N'⟯) : (r • g).comp h = r • g.co
+mp h
+参数：r : 𝕜；g : C^n⟮I'', N'; 𝓘(𝕜, V), V⟯；h : C^n⟮I, N; I'', N'⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_comp {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (r : 𝕜)
     (g : C^n⟮I'', N'; 𝓘(𝕜, V), V⟯) (h : C^n⟮I, N; I'', N'⟯) : (r • g).comp h = r • g.comp h :=
   rfl
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-  body: Function.Injective.module 𝕜 coeFnAddMonoidHom ContMDiffMap.coe_injective coe_smul
-
-中文:
-实例 module
-  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
-  定义体: Function.Injective.module 𝕜 coeFnAddMonoidHom ContMDiffMap.coe_injective coe_smul
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.coe_injective, Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
+/-
+**ContMDiffMap.module** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：module {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] : Module 𝕜 C^n
+⟮I, N; 𝓘(𝕜, V), V⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffMap.coe_smul`：coe_smul {V : Type*} [NormedAddCommGroup V] [Norm
+edSpace 𝕜 V] (r : 𝕜) (f : C^n⟮I, N; 𝓘(𝕜, V), V⟯) : ⇑(r • f) = r • ⇑f
 -/
 instance module {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
     Module 𝕜 C^n⟮I, N; 𝓘(𝕜, V), V⟯ :=
@@ -727,28 +548,21 @@ instance module {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
 
 /-- Coercion to a function as a `LinearMap`. -/
 @[simps]
-/--
-Definition of `coeFnLinearMap` / `coeFnLinearMap` 的定义
+/-
+**ContMDiffMap.coeFnLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：coeFnLinearMap {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] : C^n⟮
+I, N; 𝓘(𝕜, V), V⟯ ->ₗ[𝕜] N -> V
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffMap.coe_smul`：coe_smul {V : Type*} [NormedAddCommGroup V] [Norm
+edSpace 𝕜 V] (r : 𝕜) (f : C^n⟮I, N; 𝓘(𝕜, V), V⟯) : ⇑(r • f) = r • ⇑f
 
-English:
-definition coeFnLinearMap
-  signature: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-  body: { (coeFnAddMonoidHom : C^n⟮I, N; 𝓘(𝕜, V), V⟯ ->+ _) with
-    toFun := (↑)
-    map_smul' := coe_smul }
-
-中文:
-定义 coeFnLinearMap
-  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
-  定义体: { (coeFnAddMonoidHom : C^n⟮I, N; 𝓘(𝕜, V), V⟯ ->+ _) with
-    toFun := (↑)
-    map_smul' := coe_smul }
-
-Depends on / 依赖: coeFnAddMonoidHom, coe_smul, map_smul
+--- 原说明 ---
+Coercion to a function as a `LinearMap`.
 -/
 def coeFnLinearMap {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
-    C^n⟮I, N; 𝓘(𝕜, V), V⟯ ->ₗ[𝕜] N -> V :=
-  { (coeFnAddMonoidHom : C^n⟮I, N; 𝓘(𝕜, V), V⟯ ->+ _) with
+    C^n⟮I, N; 𝓘(𝕜, V), V⟯ →ₗ[𝕜] N → V :=
+  { (coeFnAddMonoidHom : C^n⟮I, N; 𝓘(𝕜, V), V⟯ →+ _) with
     toFun := (↑)
     map_smul' := coe_smul }
 
@@ -766,91 +580,46 @@ inherit an algebra structure.
 
 variable {A : Type*} [NormedRing A] [NormedAlgebra 𝕜 A] [ContMDiffRing 𝓘(𝕜, A) n A]
 
-/--
-Definition of `C` / `C` 的定义
+/-- `C^n` constant functions as a `RingHom`. -/
+/-
+**ContMDiffMap.C** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：C : 𝕜 ->+* C^n⟮I, N; 𝓘(𝕜, A), A⟯ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition C
-  signature: : 𝕜 ->+* C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
-  body: fun c : 𝕜 => ⟨fun _ => (algebraMap 𝕜 A) c, contMDiff_const⟩
-  map_one' := by ext; exact (algebraMap 𝕜 A).map_one
-  map_mul' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_mul _ _
-  map_zero' := by ext; exact (algebraMap 𝕜 A).map_zero
-  map_add' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_add _ _
-
-中文:
-定义 C
-  签名: : 𝕜 ->+* C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
-  定义体: fun c : 𝕜 => ⟨fun _ => (algebraMap 𝕜 A) c, contMDiff_const⟩
-  map_one' := by ext; exact (algebraMap 𝕜 A).map_one
-  map_mul' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_mul _ _
-  map_zero' := by ext; exact (algebraMap 𝕜 A).map_zero
-  map_add' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_add _ _
-
-Depends on / 依赖: algebraMap, contMDiff_const
+--- 原说明 ---
+`C^n` constant functions as a `RingHom`.
 -/
-def C : 𝕜 ->+* C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
+def C : 𝕜 →+* C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
   toFun := fun c : 𝕜 => ⟨fun _ => (algebraMap 𝕜 A) c, contMDiff_const⟩
   map_one' := by ext; exact (algebraMap 𝕜 A).map_one
   map_mul' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_mul _ _
   map_zero' := by ext; exact (algebraMap 𝕜 A).map_zero
   map_add' c₁ c₂ := by ext; exact (algebraMap 𝕜 A).map_add _ _
-
-/--
-Instance `algebra` / 实例 `algebra`
-
-English:
-instance algebra
-  signature: : Algebra 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
-  body: fun r f => ⟨r • f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩
-  algebraMap := ContMDiffMap.C
-  commutes' := fun c f => by ext x; exact Algebra.commutes' _ _
-  smul_def' := fun c f => by ext x; exact Algebra.smul_def' _ _
-
-中文:
-实例 algebra
-  签名: : 代数 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
-  定义体: fun r f => ⟨r • f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩
-  algebraMap := ContMDiffMap.C
-  commutes' := fun c f => by ext x; exact Algebra.commutes' _ _
-  smul_def' := fun c f => by ext x; exact Algebra.smul_def' _ _
-
-Depends on / 依赖: contMDiff, contMDiff_const, contMDiff_const.smul, f.contMDiff
+/-
+**ContMDiffMap.algebra** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：algebra : Algebra 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where smul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebra : Algebra 𝕜 C^n⟮I, N; 𝓘(𝕜, A), A⟯ where
-  smul := fun r f => ⟨r • f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩
+  smul := fun r f ↦ ⟨r • f, contMDiff_const.smul (I := 𝓘(𝕜)) f.contMDiff⟩
   algebraMap := ContMDiffMap.C
   commutes' := fun c f => by ext x; exact Algebra.commutes' _ _
   smul_def' := fun c f => by ext x; exact Algebra.smul_def' _ _
 
 /-- Coercion to a function as an `AlgHom`. -/
 @[simps]
-/--
-Definition of `coeFnAlgHom` / `coeFnAlgHom` 的定义
+/-
+**ContMDiffMap.coeFnAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：coeFnAlgHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ ->ₐ[𝕜] N -> A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnAlgHom
-  signature: : C^n⟮I, N; 𝓘(𝕜, A), A⟯ ->ₐ[𝕜] N -> A where
-  body: (↑)
-  commutes' _ := rfl
-  -- `(ContMDiffMap.coeFnRingHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ →+* _) with` times out for some reason
-  map_zero' := ContMDiffMap.coe_zero
-  map_one' := ContMDiffMap.coe_one
-  map_add' := ContMDiffMap.coe_add
-  map_mul' := ContMDiffMap.coe_mul
-
-中文:
-定义 coeFnAlgHom
-  签名: : C^n⟮I, N; 𝓘(𝕜, A), A⟯ ->ₐ[𝕜] N -> A where
-  定义体: (↑)
-  commutes' _ := rfl
-  -- `(ContMDiffMap.coeFnRingHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ →+* _) with` times out for some reason
-  map_zero' := ContMDiffMap.coe_zero
-  map_one' := ContMDiffMap.coe_one
-  map_add' := ContMDiffMap.coe_add
-  map_mul' := ContMDiffMap.coe_mul
+--- 原说明 ---
+Coercion to a function as an `AlgHom`.
 -/
-def coeFnAlgHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ ->ₐ[𝕜] N -> A where
+def coeFnAlgHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ →ₐ[𝕜] N → A where
   toFun := (↑)
   commutes' _ := rfl
   -- `(ContMDiffMap.coeFnRingHom : C^n⟮I, N; 𝓘(𝕜, A), A⟯ →+* _) with` times out for some reason
@@ -869,20 +638,16 @@ section ModuleOverContinuousFunctions
 If `V` is a module over `𝕜`, then we show that the space of `C^n` functions from `N` to `V`
 is naturally a vector space over the ring of `C^n` functions from `N` to `𝕜`. -/
 
-/--
-Instance `instSMul'` / 实例 `instSMul'`
+/-- `C^n` scalar-valued functions act by left-multiplication on `C^n` functions. -/
+/-
+**ContMDiffMap.instSMul'** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：instSMul' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] : SMul C^n⟮
+I, N; 𝕜⟯ C^n⟮I, N; 𝓘(𝕜, V), V⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSMul'
-  signature: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-  body: ⟨fun f g => ⟨fun x => f x • g x, ContMDiff.smul f.2 g.2⟩⟩
-
-中文:
-实例 instSMul'
-  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
-  定义体: ⟨fun f g => ⟨fun x => f x • g x, ContMDiff.smul f.2 g.2⟩⟩
-
-Depends on / 依赖: ContMDiff, ContMDiff.smul
+--- 原说明 ---
+`C^n` scalar-valued functions act by left-multiplication on `C^n` functions.
 -/
 instance instSMul' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
     SMul C^n⟮I, N; 𝕜⟯ C^n⟮I, N; 𝓘(𝕜, V), V⟯ :=
@@ -890,48 +655,38 @@ instance instSMul' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
 
 /-- The left multiplication with a `C^n` scalar function commutes with composition. -/
 @[simp]
-/--
-theorem `smul_comp'` / 定理 `smul_comp'`
+/-
+**ContMDiffMap.smul_comp'** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：smul_comp' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (f : C^n⟮I
+'', N'; 𝕜⟯) (g : C^n⟮I'', N'; 𝓘(𝕜, V), V⟯) (h : C^n⟮I, N; I'', N'⟯) : (f • g).co
+mp h = f.comp h • g.comp h
+参数：f : C^n⟮I'', N'; 𝕜⟯；g : C^n⟮I'', N'; 𝓘(𝕜, V), V⟯；h : C^n⟮I, N; I'', N'⟯。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem smul_comp'
-  statement: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
-  proof: rfl
-
-中文:
-定理 smul_comp'
-  结论: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
-  证明: rfl
+--- 原说明 ---
+The left multiplication with a `C^n` scalar function commutes with composition.
 -/
 theorem smul_comp' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] (f : C^n⟮I'', N'; 𝕜⟯)
     (g : C^n⟮I'', N'; 𝓘(𝕜, V), V⟯) (h : C^n⟮I, N; I'', N'⟯) :
     (f • g).comp h = f.comp h • g.comp h :=
   rfl
 
-/--
-Instance `module'` / 实例 `module'`
+/-- The space of `C^n` functions with values in a space `V` is a module over the space of `C^n`
+functions with values in `𝕜`. -/
+/-
+**ContMDiffMap.module'** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：module' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] : Module C^n⟮
+I, N; 𝓘(𝕜), 𝕜⟯ C^n⟮I, N; 𝓘(𝕜, V), V⟯ where smul_add c f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFieldContMDiffRing`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField
+ 𝕜] {n : WithTop ℕ∞}, ContMDiffRing (modelWithCornersSelf 𝕜 𝕜) n 𝕜
 
-English:
-instance module'
-  signature: {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-  body: by ext x; exact smul_add (c x) (f x) (g x)
-  add_smul c₁ c₂ f := by ext x; exact add_smul (c₁ x) (c₂ x) (f x)
-  mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
-  one_smul f := by ext x; exact one_smul 𝕜 (f x)
-  zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; exact smul_zero _
-
-中文:
-实例 module'
-  签名: {V : 类型} [赋范交换加群 V] [赋范空间 𝕜 V]
-  定义体: by ext x; exact smul_add (c x) (f x) (g x)
-  add_smul c₁ c₂ f := by ext x; exact add_smul (c₁ x) (c₂ x) (f x)
-  mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
-  one_smul f := by ext x; exact one_smul 𝕜 (f x)
-  zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; exact smul_zero _
-
-Depends on / 依赖: add_smul, mul_smul, one_smul, smul_add, smul_zero, zero_smul
+--- 原说明 ---
+The space of `C^n` functions with values in a space `V` is a module over the spa
+ce of `C^n`
+functions with values in `𝕜`.
 -/
 instance module' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
     Module C^n⟮I, N; 𝓘(𝕜), 𝕜⟯ C^n⟮I, N; 𝓘(𝕜, V), V⟯ where
@@ -945,3 +700,4 @@ instance module' {V : Type*} [NormedAddCommGroup V] [NormedSpace 𝕜 V] :
 end ModuleOverContinuousFunctions
 
 end ContMDiffMap
+

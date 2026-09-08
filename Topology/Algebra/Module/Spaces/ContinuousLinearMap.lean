@@ -58,485 +58,485 @@ namespace ContinuousLinearMap
 
 section BoundedConvergence
 
-/-! ### Topology of bounded convergence -/
+/-! ### Topology of bounded convergence  -/
 
-variable {𝕜₁ 𝕜₂ 𝕜₃ : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] [NormedField 𝕜₃] {σ : 𝕜₁ ->+* 𝕜₂}
-  {τ : 𝕜₂ ->+* 𝕜₃} {ρ : 𝕜₁ ->+* 𝕜₃} [RingHomCompTriple σ τ ρ] {E F G : Type*} [AddCommGroup E]
+variable {𝕜₁ 𝕜₂ 𝕜₃ : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] [NormedField 𝕜₃] {σ : 𝕜₁ →+* 𝕜₂}
+  {τ : 𝕜₂ →+* 𝕜₃} {ρ : 𝕜₁ →+* 𝕜₃} [RingHomCompTriple σ τ ρ] {E F G : Type*} [AddCommGroup E]
   [Module 𝕜₁ E] [AddCommGroup F] [Module 𝕜₂ F]
   [AddCommGroup G] [Module 𝕜₃ G] [TopologicalSpace E]
 
-/--
-Instance `topologicalSpace` / 实例 `topologicalSpace`
+/-- The topology of bounded convergence on `E →L[𝕜] F`. This coincides with the topology induced by
+the operator norm when `E` and `F` are normed spaces. -/
+/-
+**ContinuousLinearMap.topologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：topologicalSpace [TopologicalSpace F] [IsTopologicalAddGroup F] : Topologi
+calSpace (E ->SL[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance topologicalSpace
-  signature: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  body: fast_instance% UniformConvergenceCLM.instTopologicalSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-中文:
-实例 topologicalSpace
-  签名: [拓扑空间 F] [是拓扑加群 F]
-  定义体: fast_instance% UniformConvergenceCLM.instTopologicalSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.instTopologicalSpace, fast_instance, instTopologicalSpace
+--- 原说明 ---
+The topology of bounded convergence on `E →L[𝕜] F`. This coincides with the topo
+logy induced by
+the operator norm when `E` and `F` are normed spaces.
 -/
 instance topologicalSpace [TopologicalSpace F] [IsTopologicalAddGroup F] :
-    TopologicalSpace (E ->SL[σ] F) :=
+    TopologicalSpace (E →SL[σ] F) :=
   fast_instance% UniformConvergenceCLM.instTopologicalSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-/--
-Instance `topologicalAddGroup` / 实例 `topologicalAddGroup`
-
-English:
-instance topologicalAddGroup
-  signature: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  body: UniformConvergenceCLM.instIsTopologicalAddGroup σ F _
-
-中文:
-实例 topologicalAddGroup
-  签名: [拓扑空间 F] [是拓扑加群 F]
-  定义体: UniformConvergenceCLM.instIsTopologicalAddGroup σ F _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instIsTopologicalAddGroup, instIsTopologicalAddGroup
+/-
+**ContinuousLinearMap.topologicalAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：topologicalAddGroup [TopologicalSpace F] [IsTopologicalAddGroup F] : IsTop
+ologicalAddGroup (E ->SL[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance topologicalAddGroup [TopologicalSpace F] [IsTopologicalAddGroup F] :
-    IsTopologicalAddGroup (E ->SL[σ] F) :=
+    IsTopologicalAddGroup (E →SL[σ] F) :=
   UniformConvergenceCLM.instIsTopologicalAddGroup σ F _
-
-/--
-Instance `continuousSMul` / 实例 `continuousSMul`
-
-English:
-instance continuousSMul
-  signature: [RingHomSurjective σ] [RingHomIsometric σ] [TopologicalSpace F]
-  body: UniformConvergenceCLM.continuousSMul σ F { S | IsVonNBounded 𝕜₁ S } fun _ hs => hs
-
-中文:
-实例 continuousSMul
-  签名: [RingHomSurjective σ] [RingHomIsometric σ] [拓扑空间 F]
-  定义体: UniformConvergenceCLM.continuousSMul σ F { S | IsVonNBounded 𝕜₁ S } fun _ hs => hs
-
-Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.continuousSMul, continuousSMul
+/-
+**ContinuousLinearMap.continuousSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：continuousSMul [RingHomSurjective σ] [RingHomIsometric σ] [TopologicalSpac
+e F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₂ F] : ContinuousSMul 𝕜₂ (E ->SL
+[σ] F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.continuousSMul`：continuousSMul [RingHomSurjective 
+σ] [RingHomIsometric σ] [TopologicalSpace F] [IsTopologicalAddGroup F] [Continuo
+usSMul 𝕜₂ F] (𝔖 : Set (Set…
 -/
 instance continuousSMul [RingHomSurjective σ] [RingHomIsometric σ] [TopologicalSpace F]
-    [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₂ F] : ContinuousSMul 𝕜₂ (E ->SL[σ] F) :=
+    [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₂ F] : ContinuousSMul 𝕜₂ (E →SL[σ] F) :=
   UniformConvergenceCLM.continuousSMul σ F { S | IsVonNBounded 𝕜₁ S } fun _ hs => hs
-
-/--
-Instance `uniformSpace` / 实例 `uniformSpace`
-
-English:
-instance uniformSpace
-  signature: [UniformSpace F] [IsUniformAddGroup F]
-  body: fast_instance% UniformConvergenceCLM.instUniformSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-中文:
-实例 uniformSpace
-  签名: [一致空间 F] [是UniformAdd群 F]
-  定义体: fast_instance% UniformConvergenceCLM.instUniformSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.instUniformSpace, fast_instance, instUniformSpace
+/-
+**ContinuousLinearMap.uniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：uniformSpace [UniformSpace F] [IsUniformAddGroup F] : UniformSpace (E ->SL
+[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance uniformSpace [UniformSpace F] [IsUniformAddGroup F] : UniformSpace (E ->SL[σ] F) :=
+instance uniformSpace [UniformSpace F] [IsUniformAddGroup F] : UniformSpace (E →SL[σ] F) :=
   fast_instance% UniformConvergenceCLM.instUniformSpace σ F { S | IsVonNBounded 𝕜₁ S }
-
-/--
-Instance `isUniformAddGroup` / 实例 `isUniformAddGroup`
-
-English:
-instance isUniformAddGroup
-  signature: [UniformSpace F] [IsUniformAddGroup F]
-  body: UniformConvergenceCLM.instIsUniformAddGroup σ F _
-
-中文:
-实例 isUniformAddGroup
-  签名: [一致空间 F] [是UniformAdd群 F]
-  定义体: UniformConvergenceCLM.instIsUniformAddGroup σ F _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instIsUniformAddGroup, instIsUniformAddGroup
+/-
+**ContinuousLinearMap.isUniformAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：isUniformAddGroup [UniformSpace F] [IsUniformAddGroup F] : IsUniformAddGro
+up (E ->SL[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isUniformAddGroup [UniformSpace F] [IsUniformAddGroup F] :
-    IsUniformAddGroup (E ->SL[σ] F) :=
+    IsUniformAddGroup (E →SL[σ] F) :=
   UniformConvergenceCLM.instIsUniformAddGroup σ F _
-
-/--
-Instance `instContinuousEvalConst` / 实例 `instContinuousEvalConst`
-
-English:
-instance instContinuousEvalConst
-  signature: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  body: UniformConvergenceCLM.continuousEvalConst σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-中文:
-实例 instContinuousEvalConst
-  签名: [拓扑空间 F] [是拓扑加群 F]
-  定义体: UniformConvergenceCLM.continuousEvalConst σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-Depends on / 依赖: Bornology, Bornology.sUnion_isVonNBounded_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.continuousEvalConst, continuousEvalConst, sUnion_isVonNBounded_eq_univ
+/-
+**ContinuousLinearMap.instContinuousEvalConst** 是 Mathlib 中的一个实例，位于命名空间 `Continu
+ousLinearMap`。
+形式化陈述：instContinuousEvalConst [TopologicalSpace F] [IsTopologicalAddGroup F] [Co
+ntinuousSMul 𝕜₁ E] : ContinuousEvalConst (E ->SL[σ] F) E F
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.continuousEvalConst`：continuousEvalConst [Topologi
+calSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E)) (h𝔖 : ⋃₀ 𝔖 = Set.univ) :
+ ContinuousEvalConst (E ->SLᵤ[σ…
+· 使用定理 `Bornology.sUnion_isVonNBounded_eq_univ`：sUnion_isVonNBounded_eq_univ : ⋃
+₀ Set.ofPred (IsVonNBounded 𝕜) = (Set.univ : Set E)
 -/
 instance instContinuousEvalConst [TopologicalSpace F] [IsTopologicalAddGroup F]
-    [ContinuousSMul 𝕜₁ E] : ContinuousEvalConst (E ->SL[σ] F) E F :=
+    [ContinuousSMul 𝕜₁ E] : ContinuousEvalConst (E →SL[σ] F) E F :=
   UniformConvergenceCLM.continuousEvalConst σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-/--
-Instance `instT2Space` / 实例 `instT2Space`
-
-English:
-instance instT2Space
-  signature: [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₁ E]
-  body: UniformConvergenceCLM.t2Space σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-中文:
-实例 instT2Space
-  签名: [拓扑空间 F] [是拓扑加群 F] [连续标量乘法 𝕜₁ E]
-  定义体: UniformConvergenceCLM.t2Space σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-Depends on / 依赖: Bornology, Bornology.sUnion_isVonNBounded_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.t2Space, sUnion_isVonNBounded_eq_univ, t2Space
+/-
+**ContinuousLinearMap.instT2Space** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：instT2Space [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousSMul
+ 𝕜₁ E] [T2Space F] : T2Space (E ->SL[σ] F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.t2Space`：t2Space [TopologicalSpace F] [IsTopologic
+alAddGroup F] [T2Space F] (𝔖 : Set (Set E)) (h𝔖 : ⋃₀ 𝔖 = univ) : T2Space (E ->SL
+ᵤ[σ, 𝔖] F)
+· 使用定理 `Bornology.sUnion_isVonNBounded_eq_univ`：sUnion_isVonNBounded_eq_univ : ⋃
+₀ Set.ofPred (IsVonNBounded 𝕜) = (Set.univ : Set E)
 -/
 instance instT2Space [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₁ E]
-    [T2Space F] : T2Space (E ->SL[σ] F) :=
+    [T2Space F] : T2Space (E →SL[σ] F) :=
   UniformConvergenceCLM.t2Space σ F _ Bornology.sUnion_isVonNBounded_eq_univ
-
-/--
-theorem `hasBasis_nhds_zero_of_basis` / 定理 `hasBasis_nhds_zero_of_basis`
-
-English:
-theorem hasBasis_nhds_zero_of_basis
-  statement: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  proof: UniformConvergenceCLM.hasBasis_nhds_zero_of_basis σ F { S | IsVonNBounded 𝕜₁ S }
-    ⟨∅, isVonNBounded_empty 𝕜₁ E⟩
-    (directedOn_of_sup_mem fun _ _ => IsVonNBounded.union) h
-
-中文:
-定理 hasBasis_nhds_zero_of_basis
-  结论: [拓扑空间 F] [是拓扑加群 F]
-  证明: UniformConvergenceCLM.hasBasis_nhds_zero_of_basis σ F { S | IsVonNBounded 𝕜₁ S }
-    ⟨∅, isVonNBounded_empty 𝕜₁ E⟩
-    (directedOn_of_sup_mem fun _ _ => IsVonNBounded.union) h
+/-
+**ContinuousLinearMap.hasBasis_nhds_zero_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：∀ {𝕜₁ : Type u_1} {𝕜₂ : Type u_2} [inst : NormedField 𝕜₁] [inst_1 : Normed
+Field 𝕜₂] {σ : 𝕜₁ →+* 𝕜₂} {E : Type u_4}   {F : Type u_5} [inst_2 : AddCommGroup
+ E] [inst_3 : _root_.Module 𝕜₁ E] [inst_4 : AddCommGroup F]   [inst_5 : _root_.M
+odule 𝕜₂ F] [inst_6 : TopologicalSpace E] [inst_7 : TopologicalSpace F]   [inst_
+8 : IsTopologicalAddGroup F] {ι : Type u_7} {p : ι → Prop} {b : ι → Set F},   (n
+hds 0).HasBasis p b →     (nhds 0).HasBasis (fun Si => Bornology.IsVonNBounded 𝕜
+₁ Si.1 ∧ p Si.2) fun Si => {f | ∀ x ∈ Si.1, f x ∈ b Si.2}
+参数：nhds 0；nhds 0；fun Si => Bornology.IsVonNBounded 𝕜₁ Si.1 ∧ p Si.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.hasBasis_nhds_zero_of_basis`：hasBasis_nhds_zero_of
+_basis [TopologicalSpace F] [IsTopologicalAddGroup F] {ι : Type*} (𝔖 : Set (Set 
+E)) (h𝔖₁ : 𝔖.Nonempty) (h𝔖₂ : DirectedO…
+· 使用定理 `Bornology.isVonNBounded_empty`：isVonNBounded_empty : IsVonNBounded 𝕜 (∅ 
+: Set E)
+· 使用定理 `directedOn_of_sup_mem`：directedOn_of_sup_mem [SemilatticeSup α] {S : Set
+ α} (H : forall ⦃i j⦄, i in S -> j in S -> i ⊔ j in S) : DirectedOn (· <= ·) S
+· 使用定理 `Bornology.IsVonNBounded.union`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : S
+eminormedRing 𝕜] [inst_1 : SMul 𝕜 E] [inst_2 : Zero E]   [inst_3 : TopologicalSp
+ace E] {s₁ s₂ : Set…
 -/
 protected theorem hasBasis_nhds_zero_of_basis [TopologicalSpace F] [IsTopologicalAddGroup F]
-    {ι : Type*} {p : ι -> Prop} {b : ι -> Set F} (h : (𝓝 0 : Filter F).HasBasis p b) :
-    (𝓝 (0 : E ->SL[σ] F)).HasBasis (fun Si : Set E × ι => IsVonNBounded 𝕜₁ Si.1 ∧ p Si.2)
-      fun Si => { f : E ->SL[σ] F | forall x in Si.1, f x in b Si.2 } :=
+    {ι : Type*} {p : ι → Prop} {b : ι → Set F} (h : (𝓝 0 : Filter F).HasBasis p b) :
+    (𝓝 (0 : E →SL[σ] F)).HasBasis (fun Si : Set E × ι => IsVonNBounded 𝕜₁ Si.1 ∧ p Si.2)
+      fun Si => { f : E →SL[σ] F | ∀ x ∈ Si.1, f x ∈ b Si.2 } :=
   UniformConvergenceCLM.hasBasis_nhds_zero_of_basis σ F { S | IsVonNBounded 𝕜₁ S }
     ⟨∅, isVonNBounded_empty 𝕜₁ E⟩
     (directedOn_of_sup_mem fun _ _ => IsVonNBounded.union) h
-
-/--
-theorem `hasBasis_nhds_zero` / 定理 `hasBasis_nhds_zero`
-
-English:
-theorem hasBasis_nhds_zero
-  given: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  proof: ContinuousLinearMap.hasBasis_nhds_zero_of_basis (𝓝 0).basis_sets
-
-中文:
-定理 hasBasis_nhds_zero
-  条件: [拓扑空间 F] [是拓扑加群 F]
-  证明: ContinuousLinearMap.hasBasis_nhds_zero_of_basis (𝓝 0).basis_sets
+/-
+**ContinuousLinearMap.hasBasis_nhds_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：∀ {𝕜₁ : Type u_1} {𝕜₂ : Type u_2} [inst : NormedField 𝕜₁] [inst_1 : Normed
+Field 𝕜₂] {σ : 𝕜₁ →+* 𝕜₂} {E : Type u_4}   {F : Type u_5} [inst_2 : AddCommGroup
+ E] [inst_3 : _root_.Module 𝕜₁ E] [inst_4 : AddCommGroup F]   [inst_5 : _root_.M
+odule 𝕜₂ F] [inst_6 : TopologicalSpace E] [inst_7 : TopologicalSpace F]   [inst_
+8 : IsTopologicalAddGroup F],   (nhds 0).HasBasis (fun SV => Bornology.IsVonNBou
+nded 𝕜₁ SV.1 ∧ SV.2 ∈ nhds 0) fun SV => {f | ∀ x ∈ SV.1, f x ∈ SV.2}
+参数：nhds 0；fun SV => Bornology.IsVonNBounded 𝕜₁ SV.1 ∧ SV.2 ∈ nhds 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.hasBasis_nhds_zero_of_basis`：∀ {𝕜₁ : Type u_1} {𝕜₂ :
+ Type u_2} [inst : NormedField 𝕜₁] [inst_1 : NormedField 𝕜₂] {σ : 𝕜₁ →+* 𝕜₂} {E 
+: Type u_4}   {F : Type u_5} [inst_2 …
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 protected theorem hasBasis_nhds_zero [TopologicalSpace F] [IsTopologicalAddGroup F] :
-    (𝓝 (0 : E ->SL[σ] F)).HasBasis
-      (fun SV : Set E × Set F => IsVonNBounded 𝕜₁ SV.1 ∧ SV.2 in (𝓝 0 : Filter F))
-      fun SV => { f : E ->SL[σ] F | forall x in SV.1, f x in SV.2 } :=
+    (𝓝 (0 : E →SL[σ] F)).HasBasis
+      (fun SV : Set E × Set F => IsVonNBounded 𝕜₁ SV.1 ∧ SV.2 ∈ (𝓝 0 : Filter F))
+      fun SV => { f : E →SL[σ] F | ∀ x ∈ SV.1, f x ∈ SV.2 } :=
   ContinuousLinearMap.hasBasis_nhds_zero_of_basis (𝓝 0).basis_sets
-
-/--
-theorem `isUniformEmbedding_toUniformOnFun` / 定理 `isUniformEmbedding_toUniformOnFun`
-
-English:
-theorem isUniformEmbedding_toUniformOnFun
-  given: [UniformSpace F] [IsUniformAddGroup F]
-  proof: UniformConvergenceCLM.isUniformEmbedding_coeFn ..
-
-中文:
-定理 isUniformEmbedding_toUniformOnFun
-  条件: [一致空间 F] [是UniformAdd群 F]
-  证明: UniformConvergenceCLM.isUniformEmbedding_coeFn ..
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformEmbedding_coeFn, isUniformEmbedding_coeFn
+/-
+**ContinuousLinearMap.isUniformEmbedding_toUniformOnFun** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousLinearMap`。
+形式化陈述：isUniformEmbedding_toUniformOnFun [UniformSpace F] [IsUniformAddGroup F] :
+ IsUniformEmbedding fun f : E ->SL[σ] F => UniformOnFun.ofFun {s | Bornology.IsV
+onNBounded 𝕜₁ s} f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.isUniformEmbedding_coeFn`：isUniformEmbedding_coeFn
+ [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E)) : IsUniformEmbedding (
+α
 -/
 theorem isUniformEmbedding_toUniformOnFun [UniformSpace F] [IsUniformAddGroup F] :
     IsUniformEmbedding
-      fun f : E ->SL[σ] F => UniformOnFun.ofFun {s | Bornology.IsVonNBounded 𝕜₁ s} f :=
+      fun f : E →SL[σ] F ↦ UniformOnFun.ofFun {s | Bornology.IsVonNBounded 𝕜₁ s} f :=
   UniformConvergenceCLM.isUniformEmbedding_coeFn ..
-
-/--
-Instance `uniformContinuousConstSMul` / 实例 `uniformContinuousConstSMul`
-
-English:
-instance uniformContinuousConstSMul
-  body: UniformConvergenceCLM.instUniformContinuousConstSMul σ F _ _
-
-中文:
-实例 uniformContinuousConstSMul
-  定义体: UniformConvergenceCLM.instUniformContinuousConstSMul σ F _ _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instUniformContinuousConstSMul, instUniformContinuousConstSMul
+/-
+**ContinuousLinearMap.uniformContinuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 `Cont
+inuousLinearMap`。
+形式化陈述：uniformContinuousConstSMul {M : Type*} [Monoid M] [DistribMulAction M F] [
+SMulCommClass 𝕜₂ M F] [UniformSpace F] [IsUniformAddGroup F] [UniformContinuousC
+onstSMul M F] : UniformContinuousConstSMul M (E ->SL[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniformContinuousConstSMul
     {M : Type*} [Monoid M] [DistribMulAction M F] [SMulCommClass 𝕜₂ M F]
     [UniformSpace F] [IsUniformAddGroup F] [UniformContinuousConstSMul M F] :
-    UniformContinuousConstSMul M (E ->SL[σ] F) :=
+    UniformContinuousConstSMul M (E →SL[σ] F) :=
   UniformConvergenceCLM.instUniformContinuousConstSMul σ F _ _
-
-/--
-Instance `continuousConstSMul` / 实例 `continuousConstSMul`
-
-English:
-instance continuousConstSMul
-  signature: {M : Type*} [Monoid M] [DistribMulAction M F] [SMulCommClass 𝕜₂ M F]
-  body: UniformConvergenceCLM.instContinuousConstSMul σ F _ _
-
-中文:
-实例 continuousConstSMul
-  签名: {M : 类型} [幺半群 M] [分配乘法作用 M F] [标量交换类 𝕜₂ M F]
-  定义体: UniformConvergenceCLM.instContinuousConstSMul σ F _ _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instContinuousConstSMul, instContinuousConstSMul
+/-
+**ContinuousLinearMap.continuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：continuousConstSMul {M : Type*} [Monoid M] [DistribMulAction M F] [SMulCom
+mClass 𝕜₂ M F] [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousConstSM
+ul M F] : ContinuousConstSMul M (E ->SL[σ] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance continuousConstSMul {M : Type*} [Monoid M] [DistribMulAction M F] [SMulCommClass 𝕜₂ M F]
     [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousConstSMul M F] :
-    ContinuousConstSMul M (E ->SL[σ] F) :=
+    ContinuousConstSMul M (E →SL[σ] F) :=
   UniformConvergenceCLM.instContinuousConstSMul σ F _ _
-
-/--
-theorem `nhds_zero_eq_of_basis` / 定理 `nhds_zero_eq_of_basis`
-
-English:
-theorem nhds_zero_eq_of_basis
-  statement: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  proof: UniformConvergenceCLM.nhds_zero_eq_of_basis _ _ _ h
-
-中文:
-定理 nhds_zero_eq_of_basis
-  结论: [拓扑空间 F] [是拓扑加群 F]
-  证明: UniformConvergenceCLM.nhds_zero_eq_of_basis _ _ _ h
+/-
+**ContinuousLinearMap.nhds_zero_eq_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：∀ {𝕜₁ : Type u_1} {𝕜₂ : Type u_2} [inst : NormedField 𝕜₁] [inst_1 : Normed
+Field 𝕜₂] {σ : 𝕜₁ →+* 𝕜₂} {E : Type u_4}   {F : Type u_5} [inst_2 : AddCommGroup
+ E] [inst_3 : _root_.Module 𝕜₁ E] [inst_4 : AddCommGroup F]   [inst_5 : _root_.M
+odule 𝕜₂ F] [inst_6 : TopologicalSpace E] [inst_7 : TopologicalSpace F]   [inst_
+8 : IsTopologicalAddGroup F] {ι : Type u_7} {p : ι → Prop} {b : ι → Set F},   (n
+hds 0).HasBasis p b →     nhds 0 = ⨅ s, ⨅ (_ : Bornology.IsVonNBounded 𝕜₁ s), ⨅ 
+i, ⨅ (_ : p i), Filter.principal {f | Set.MapsTo (⇑f) s (b i)}
+参数：nhds 0；_ : Bornology.IsVonNBounded 𝕜₁ s；_ : p i；⇑f；b i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.nhds_zero_eq_of_basis`：nhds_zero_eq_of_basis [Topo
+logicalSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E)) {ι : Type*} {p : ι -
+> Prop} {b : ι -> Set F} (h : (𝓝 …
 -/
 protected theorem nhds_zero_eq_of_basis [TopologicalSpace F] [IsTopologicalAddGroup F]
-    {ι : Type*} {p : ι -> Prop} {b : ι -> Set F} (h : (𝓝 0 : Filter F).HasBasis p b) :
-    𝓝 (0 : E ->SL[σ] F) =
+    {ι : Type*} {p : ι → Prop} {b : ι → Set F} (h : (𝓝 0 : Filter F).HasBasis p b) :
+    𝓝 (0 : E →SL[σ] F) =
       ⨅ (s : Set E) (_ : IsVonNBounded 𝕜₁ s) (i : ι) (_ : p i),
-        𝓟 {f : E ->SL[σ] F | MapsTo f s (b i)} :=
+        𝓟 {f : E →SL[σ] F | MapsTo f s (b i)} :=
   UniformConvergenceCLM.nhds_zero_eq_of_basis _ _ _ h
-
-/--
-theorem `nhds_zero_eq` / 定理 `nhds_zero_eq`
-
-English:
-theorem nhds_zero_eq
-  given: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  proof: UniformConvergenceCLM.nhds_zero_eq ..
-
-中文:
-定理 nhds_zero_eq
-  条件: [拓扑空间 F] [是拓扑加群 F]
-  证明: UniformConvergenceCLM.nhds_zero_eq ..
+/-
+**ContinuousLinearMap.nhds_zero_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：∀ {𝕜₁ : Type u_1} {𝕜₂ : Type u_2} [inst : NormedField 𝕜₁] [inst_1 : Normed
+Field 𝕜₂] {σ : 𝕜₁ →+* 𝕜₂} {E : Type u_4}   {F : Type u_5} [inst_2 : AddCommGroup
+ E] [inst_3 : _root_.Module 𝕜₁ E] [inst_4 : AddCommGroup F]   [inst_5 : _root_.M
+odule 𝕜₂ F] [inst_6 : TopologicalSpace E] [inst_7 : TopologicalSpace F]   [inst_
+8 : IsTopologicalAddGroup F],   nhds 0 = ⨅ s, ⨅ (_ : Bornology.IsVonNBounded 𝕜₁ 
+s), ⨅ U ∈ nhds 0, Filter.principal {f | Set.MapsTo (⇑f) s U}
+参数：_ : Bornology.IsVonNBounded 𝕜₁ s；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.nhds_zero_eq`：nhds_zero_eq [TopologicalSpace F] [I
+sTopologicalAddGroup F] (𝔖 : Set (Set E)) : 𝓝 (0 : E ->SLᵤ[σ, 𝔖] F) = ⨅ s in 𝔖, 
+⨅ t in 𝓝 (0 : F), 𝓟 {f :…
 -/
 protected theorem nhds_zero_eq [TopologicalSpace F] [IsTopologicalAddGroup F] :
-    𝓝 (0 : E ->SL[σ] F) =
-      ⨅ (s : Set E) (_ : IsVonNBounded 𝕜₁ s) (U : Set F) (_ : U in 𝓝 0),
-        𝓟 {f : E ->SL[σ] F | MapsTo f s U} :=
+    𝓝 (0 : E →SL[σ] F) =
+      ⨅ (s : Set E) (_ : IsVonNBounded 𝕜₁ s) (U : Set F) (_ : U ∈ 𝓝 0),
+        𝓟 {f : E →SL[σ] F | MapsTo f s U} :=
   UniformConvergenceCLM.nhds_zero_eq ..
 
-/--
-theorem `eventually_nhds_zero_mapsTo` / 定理 `eventually_nhds_zero_mapsTo`
+/-- If `s` is a von Neumann bounded set and `U` is a neighbourhood of zero,
+then sufficiently small continuous linear maps map `s` to `U`. -/
+/-
+**ContinuousLinearMap.eventually_nhds_zero_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：eventually_nhds_zero_mapsTo [TopologicalSpace F] [IsTopologicalAddGroup F]
+ {s : Set E} (hs : IsVonNBounded 𝕜₁ s) {U : Set F} (hu : U in 𝓝 0) : forallᶠ f :
+ E ->SL[σ] F in 𝓝 0, MapsTo f s U
+参数：hs : IsVonNBounded 𝕜₁ s；hu : U in 𝓝 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.eventually_nhds_zero_mapsTo`：eventually_nhds_zero_
+mapsTo [TopologicalSpace F] [IsTopologicalAddGroup F] {𝔖 : Set (Set E)} {s : Set
+ E} (hs : s in 𝔖) {U : Set F} (hu : U i…
 
-English:
-theorem eventually_nhds_zero_mapsTo
-  statement: [TopologicalSpace F] [IsTopologicalAddGroup F]
-  proof: UniformConvergenceCLM.eventually_nhds_zero_mapsTo _ hs hu
-
-中文:
-定理 eventually_nhds_zero_mapsTo
-  结论: [拓扑空间 F] [是拓扑加群 F]
-  证明: UniformConvergenceCLM.eventually_nhds_zero_mapsTo _ hs hu
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.eventually_nhds_zero_mapsTo, eventually_nhds_zero_mapsTo
+--- 原说明 ---
+If `s` is a von Neumann bounded set and `U` is a neighbourhood of zero,
+then sufficiently small continuous linear maps map `s` to `U`.
 -/
 theorem eventually_nhds_zero_mapsTo [TopologicalSpace F] [IsTopologicalAddGroup F]
-    {s : Set E} (hs : IsVonNBounded 𝕜₁ s) {U : Set F} (hu : U in 𝓝 0) :
-    forallᶠ f : E ->SL[σ] F in 𝓝 0, MapsTo f s U :=
+    {s : Set E} (hs : IsVonNBounded 𝕜₁ s) {U : Set F} (hu : U ∈ 𝓝 0) :
+    ∀ᶠ f : E →SL[σ] F in 𝓝 0, MapsTo f s U :=
   UniformConvergenceCLM.eventually_nhds_zero_mapsTo _ hs hu
 
-/--
-theorem `isVonNBounded_image2_apply` / 定理 `isVonNBounded_image2_apply`
+/-- If `S` is a von Neumann bounded set of continuous linear maps `f : E →SL[σ] F`
+and `s` is a von Neumann bounded set in the domain,
+then the set `{f x | (f ∈ S) (x ∈ s)}` is von Neumann bounded.
 
-English:
-theorem isVonNBounded_image2_apply
-  statement: {R : Type*} [SeminormedRing R]
-  proof: UniformConvergenceCLM.isVonNBounded_image2_apply hS hs
+See also `isVonNBounded_iff` for an `Iff` version with stronger typeclass assumptions. -/
+/-
+**ContinuousLinearMap.isVonNBounded_image2_apply** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousLinearMap`。
+形式化陈述：isVonNBounded_image2_apply {R : Type*} [SeminormedRing R] [TopologicalSpac
+e F] [IsTopologicalAddGroup F] [DistribMulAction R F] [ContinuousConstSMul R F] 
+[SMulCommClass 𝕜₂ R F] {S : Set (E ->SL[σ] F)} (hS : IsVonNBounded R S) {s : Set
+ E} (hs : IsVonNBounded 𝕜₁ s) : IsVonNBounded R (Set.image2 (fun f x => f x) S s
+)
+参数：E ->SL[σ] F；hS : IsVonNBounded R S；hs : IsVonNBounded 𝕜₁ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.isVonNBounded_image2_apply`：isVonNBounded_image2_a
+pply {R : Type*} [SeminormedRing R] [TopologicalSpace F] [IsTopologicalAddGroup 
+F] [DistribMulAction R F] [ContinuousC…
 
-中文:
-定理 isVonNBounded_image2_apply
-  结论: {R : 类型} [Seminormed环 R]
-  证明: UniformConvergenceCLM.isVonNBounded_image2_apply hS hs
+--- 原说明 ---
+If `S` is a von Neumann bounded set of continuous linear maps `f : E →SL[σ] F`
+and `s` is a von Neumann bounded set in the domain,
+then the set `{f x | (f ∈ S) (x ∈ s)}` is von Neumann bounded.
 
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isVonNBounded_image2_apply, isVonNBounded_image2_apply
+See also `isVonNBounded_iff` for an `Iff` version with stronger typeclass assump
+tions.
 -/
 theorem isVonNBounded_image2_apply {R : Type*} [SeminormedRing R]
     [TopologicalSpace F] [IsTopologicalAddGroup F]
     [DistribMulAction R F] [ContinuousConstSMul R F] [SMulCommClass 𝕜₂ R F]
-    {S : Set (E ->SL[σ] F)} (hS : IsVonNBounded R S) {s : Set E} (hs : IsVonNBounded 𝕜₁ s) :
-    IsVonNBounded R (Set.image2 (fun f x => f x) S s) :=
+    {S : Set (E →SL[σ] F)} (hS : IsVonNBounded R S) {s : Set E} (hs : IsVonNBounded 𝕜₁ s) :
+    IsVonNBounded R (Set.image2 (fun f x ↦ f x) S s) :=
   UniformConvergenceCLM.isVonNBounded_image2_apply hS hs
 
-/--
-theorem `isVonNBounded_iff` / 定理 `isVonNBounded_iff`
+/-- A set `S` of continuous linear maps is von Neumann bounded
+iff for any von Neumann bounded set `s`,
+the set `{f x | (f ∈ S) (x ∈ s)}` is von Neumann bounded.
 
-English:
-theorem isVonNBounded_iff
-  statement: {R : Type*} [NormedDivisionRing R]
-  proof: UniformConvergenceCLM.isVonNBounded_iff
+For the forward implication with weaker typeclass assumptions, see `isVonNBounded_image2_apply`. -/
+/-
+**ContinuousLinearMap.isVonNBounded_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：isVonNBounded_iff {R : Type*} [NormedDivisionRing R] [TopologicalSpace F] 
+[IsTopologicalAddGroup F] [Module R F] [ContinuousConstSMul R F] [SMulCommClass 
+𝕜₂ R F] {S : Set (E ->SL[σ] F)} : IsVonNBounded R S ↔ forall s, IsVonNBounded 𝕜₁
+ s -> IsVonNBounded R (Set.image2 (fun f x => f x) S s)
+参数：E ->SL[σ] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.isVonNBounded_iff`：isVonNBounded_iff {R : Type*} [
+NormedDivisionRing R] [TopologicalSpace F] [IsTopologicalAddGroup F] [Module R F
+] [ContinuousConstSMul R F] […
 
-中文:
-定理 isVonNBounded_iff
-  结论: {R : 类型} [NormedDivision环 R]
-  证明: UniformConvergenceCLM.isVonNBounded_iff
+--- 原说明 ---
+A set `S` of continuous linear maps is von Neumann bounded
+iff for any von Neumann bounded set `s`,
+the set `{f x | (f ∈ S) (x ∈ s)}` is von Neumann bounded.
 
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isVonNBounded_iff, isVonNBounded_iff
+For the forward implication with weaker typeclass assumptions, see `isVonNBounde
+d_image2_apply`.
 -/
 theorem isVonNBounded_iff {R : Type*} [NormedDivisionRing R]
     [TopologicalSpace F] [IsTopologicalAddGroup F]
     [Module R F] [ContinuousConstSMul R F] [SMulCommClass 𝕜₂ R F]
-    {S : Set (E ->SL[σ] F)} :
+    {S : Set (E →SL[σ] F)} :
     IsVonNBounded R S ↔
-      forall s, IsVonNBounded 𝕜₁ s -> IsVonNBounded R (Set.image2 (fun f x => f x) S s) :=
+      ∀ s, IsVonNBounded 𝕜₁ s → IsVonNBounded R (Set.image2 (fun f x ↦ f x) S s) :=
   UniformConvergenceCLM.isVonNBounded_iff
-
-/--
-theorem `completeSpace` / 定理 `completeSpace`
-
-English:
-theorem completeSpace
-  statement: [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F]
-  proof: UniformConvergenceCLM.completeSpace _ _ h sUnion_isVonNBounded_eq_univ
-
-中文:
-定理 completeSpace
-  结论: [一致空间 F] [是UniformAdd群 F] [连续标量乘法 𝕜₂ F] [完备空间 F]
-  证明: UniformConvergenceCLM.completeSpace _ _ h sUnion_isVonNBounded_eq_univ
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.completeSpace, completeSpace, sUnion_isVonNBounded_eq_univ
+/-
+**ContinuousLinearMap.completeSpace** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：completeSpace [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F]
+ [CompleteSpace F] [ContinuousSMul 𝕜₁ E] (h : IsCoherentWith {s : Set E | IsVonN
+Bounded 𝕜₁ s}) : CompleteSpace (E ->SL[σ] F)
+参数：h : IsCoherentWith {s : Set E | IsVonNBounded 𝕜₁ s}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.completeSpace`：completeSpace [UniformSpace F] [IsU
+niformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F] {𝔖 : Set (Set E)} (h𝔖 
+: IsCoherentWith 𝔖) (h𝔖U …
+· 使用定理 `Bornology.sUnion_isVonNBounded_eq_univ`：sUnion_isVonNBounded_eq_univ : ⋃
+₀ Set.ofPred (IsVonNBounded 𝕜) = (Set.univ : Set E)
 -/
 theorem completeSpace [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F]
     [ContinuousSMul 𝕜₁ E] (h : IsCoherentWith {s : Set E | IsVonNBounded 𝕜₁ s}) :
-    CompleteSpace (E ->SL[σ] F) :=
+    CompleteSpace (E →SL[σ] F) :=
   UniformConvergenceCLM.completeSpace _ _ h sUnion_isVonNBounded_eq_univ
-
-/--
-Instance `instCompleteSpace` / 实例 `instCompleteSpace`
-
-English:
-instance instCompleteSpace
-  signature: [IsTopologicalAddGroup E] [ContinuousSMul 𝕜₁ E] [SequentialSpace E]
-  body: completeSpace .of_seq fun _ _ h => (h.isVonNBounded_range 𝕜₁).insert _
-
-中文:
-实例 instCompleteSpace
-  签名: [是拓扑加群 E] [连续标量乘法 𝕜₁ E] [Sequential空间 E]
-  定义体: completeSpace .of_seq fun _ _ h => (h.isVonNBounded_range 𝕜₁).insert _
-
-Depends on / 依赖: completeSpace, h.isVonNBounded_range, insert, isVonNBounded_range, of_seq
+/-
+**ContinuousLinearMap.instCompleteSpace** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：instCompleteSpace [IsTopologicalAddGroup E] [ContinuousSMul 𝕜₁ E] [Sequent
+ialSpace E] [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [Comple
+teSpace F] : CompleteSpace (E ->SL[σ] F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.completeSpace`：completeSpace [UniformSpace F] [IsUni
+formAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F] [ContinuousSMul 𝕜₁ E] (h
+ : IsCoherentWith {s : …
+· 使用引理 `Topology.IsCoherentWith.of_seq`：of_seq [SequentialSpace X] (h : forall ⦃
+u : Nat -> X⦄ ⦃x : X⦄, Tendsto u atTop (𝓝 x) -> insert x (range u) in S) : IsCoh
+erentWith S
+· 使用定理 `Bornology.IsVonNBounded.insert`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : 
+NormedField 𝕜] [inst_1 : AddCommGroup E] [inst_2 : _root_.Module 𝕜 E]   [inst_3 
+: TopologicalSpace E…
+· 使用定理 `Filter.Tendsto.isVonNBounded_range`：Filter.Tendsto.isVonNBounded_range [
+NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E] [IsTopological
+AddGroup E] [ContinuousS…
 -/
 instance instCompleteSpace [IsTopologicalAddGroup E] [ContinuousSMul 𝕜₁ E] [SequentialSpace E]
     [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F] :
-    CompleteSpace (E ->SL[σ] F) :=
-completeSpace .of_seq fun _ _ h => (h.isVonNBounded_range 𝕜₁).insert _
-
-/--
-theorem `isUniformInducing_postcomp` / 定理 `isUniformInducing_postcomp`
-
-English:
-theorem isUniformInducing_postcomp
-  statement: [UniformSpace F] [IsUniformAddGroup F]
-  proof: UniformConvergenceCLM.isUniformInducing_postcomp _ f hf _
-
-中文:
-定理 isUniformInducing_postcomp
-  结论: [一致空间 F] [是UniformAdd群 F]
-  证明: UniformConvergenceCLM.isUniformInducing_postcomp _ f hf _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformInducing_postcomp, isUniformInducing_postcomp
+    CompleteSpace (E →SL[σ] F) :=
+  completeSpace <| .of_seq fun _ _ h ↦ (h.isVonNBounded_range 𝕜₁).insert _
+/-
+**ContinuousLinearMap.isUniformInducing_postcomp** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousLinearMap`。
+形式化陈述：isUniformInducing_postcomp [UniformSpace F] [IsUniformAddGroup F] [Uniform
+Space G] [IsUniformAddGroup G] (f : F ->SL[τ] G) (hf : IsUniformInducing f) : Is
+UniformInducing (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G))
+参数：f : F ->SL[τ] G；hf : IsUniformInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.isUniformInducing_postcomp`：isUniformInducing_post
+comp [AddCommGroup G] [UniformSpace G] [IsUniformAddGroup G] {𝕜₃ : Type*} [Norme
+dField 𝕜₃] [Module 𝕜₃ G] {τ : 𝕜₂ ->+* …
 -/
 theorem isUniformInducing_postcomp [UniformSpace F] [IsUniformAddGroup F]
-    [UniformSpace G] [IsUniformAddGroup G] (f : F ->SL[τ] G) (hf : IsUniformInducing f) :
-    IsUniformInducing (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G)) :=
+    [UniformSpace G] [IsUniformAddGroup G] (f : F →SL[τ] G) (hf : IsUniformInducing f) :
+    IsUniformInducing (f.comp : (E →SL[σ] F) → (E →SL[ρ] G)) :=
   UniformConvergenceCLM.isUniformInducing_postcomp _ f hf _
-
-/--
-theorem `isUniformEmbedding_postcomp` / 定理 `isUniformEmbedding_postcomp`
-
-English:
-theorem isUniformEmbedding_postcomp
-  statement: [UniformSpace F] [IsUniformAddGroup F]
-  proof: UniformConvergenceCLM.isUniformEmbedding_postcomp _ f hf _
-
-中文:
-定理 isUniformEmbedding_postcomp
-  结论: [一致空间 F] [是UniformAdd群 F]
-  证明: UniformConvergenceCLM.isUniformEmbedding_postcomp _ f hf _
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformEmbedding_postcomp, isUniformEmbedding_postcomp
+/-
+**ContinuousLinearMap.isUniformEmbedding_postcomp** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：isUniformEmbedding_postcomp [UniformSpace F] [IsUniformAddGroup F] [Unifor
+mSpace G] [IsUniformAddGroup G] (f : F ->SL[τ] G) (hf : IsUniformEmbedding f) : 
+IsUniformEmbedding (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G))
+参数：f : F ->SL[τ] G；hf : IsUniformEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformConvergenceCLM.isUniformEmbedding_postcomp`：isUniformEmbedding_po
+stcomp [AddCommGroup G] [UniformSpace G] [IsUniformAddGroup G] {𝕜₃ : Type*} [Nor
+medField 𝕜₃] [Module 𝕜₃ G] {τ : 𝕜₂ ->+*…
 -/
 theorem isUniformEmbedding_postcomp [UniformSpace F] [IsUniformAddGroup F]
-    [UniformSpace G] [IsUniformAddGroup G] (f : F ->SL[τ] G) (hf : IsUniformEmbedding f) :
-    IsUniformEmbedding (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G)) :=
+    [UniformSpace G] [IsUniformAddGroup G] (f : F →SL[τ] G) (hf : IsUniformEmbedding f) :
+    IsUniformEmbedding (f.comp : (E →SL[σ] F) → (E →SL[ρ] G)) :=
   UniformConvergenceCLM.isUniformEmbedding_postcomp _ f hf _
 
 variable [TopologicalSpace F] [TopologicalSpace G] (𝔖 : Set (Set E)) (𝔗 : Set (Set F))
-
-/--
-theorem `isInducing_postcomp` / 定理 `isInducing_postcomp`
-
-English:
-theorem isInducing_postcomp
-  statement: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
-  proof: letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
-  haveI : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
-  (isUniformInducing_postcomp f <| AddMonoidHom.isUniformInducing_of_isInducing hf).isInducing
-
-中文:
-定理 isInducing_postcomp
-  结论: [是拓扑加群 F] [是拓扑加群 G]
-  证明: letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
-  haveI : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
-  (isUniformInducing_postcomp f <| AddMonoidHom.isUniformInducing_of_isInducing hf).isInducing
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.isUniformInducing_of_isInducing, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformSpace, isInducing, isUniformAddGroup_of_addCommGroup, isUniformInducing_of_isInducing, isUniformInducing_postcomp, rightUniformSpace
+/-
+**ContinuousLinearMap.isInducing_postcomp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：isInducing_postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] (f
+ : F ->SL[τ] G) (hf : IsInducing f) : IsInducing (f.comp : (E ->SL[σ] F) -> (E -
+>SL[ρ] G))
+参数：f : F ->SL[τ] G；hf : IsInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.isInducing`：IsUniformInducing.isInducing {f : α -> β} 
+(h : IsUniformInducing f) : IsInducing f
+· 使用定理 `isUniformAddGroup_of_addCommGroup`：∀ {G : Type u_1} [inst : AddCommGroup
+ G] [inst_1 : TopologicalSpace G] [inst_2 : IsTopologicalAddGroup G],   IsUnifor
+mAddGroup G
+· 使用定理 `ContinuousLinearMap.isUniformInducing_postcomp`：isUniformInducing_postco
+mp [UniformSpace F] [IsUniformAddGroup F] [UniformSpace G] [IsUniformAddGroup G]
+ (f : F ->SL[τ] G) (hf : IsUniformIn…
+· 使用定理 `AddMonoidHom.isUniformInducing_of_isInducing`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {Hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
 theorem isInducing_postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
-    (f : F ->SL[τ] G) (hf : IsInducing f) :
-    IsInducing (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G)) :=
+    (f : F →SL[τ] G) (hf : IsInducing f) :
+    IsInducing (f.comp : (E →SL[σ] F) → (E →SL[ρ] G)) :=
   letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
   haveI : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
   (isUniformInducing_postcomp f <| AddMonoidHom.isUniformInducing_of_isInducing hf).isInducing
-
-/--
-theorem `isEmbedding_postcomp` / 定理 `isEmbedding_postcomp`
-
-English:
-theorem isEmbedding_postcomp
-  statement: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
-  proof: .mk (isInducing_postcomp f hf.isInducing) fun _ _ => f.cancel_left hf.injective
-
-中文:
-定理 isEmbedding_postcomp
-  结论: [是拓扑加群 F] [是拓扑加群 G]
-  证明: .mk (isInducing_postcomp f hf.isInducing) fun _ _ => f.cancel_left hf.injective
-
-Depends on / 依赖: cancel_left, f.cancel_left, hf.injective, hf.isInducing, injective, isInducing, isInducing_postcomp
+/-
+**ContinuousLinearMap.isEmbedding_postcomp** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：isEmbedding_postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] (
+f : F ->SL[τ] G) (hf : IsEmbedding f) : IsEmbedding (f.comp : (E ->SL[σ] F) -> (
+E ->SL[ρ] G))
+参数：f : F ->SL[τ] G；hf : IsEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.isInducing_postcomp`：isInducing_postcomp [IsTopologi
+calAddGroup F] [IsTopologicalAddGroup G] (f : F ->SL[τ] G) (hf : IsInducing f) :
+ IsInducing (f.comp : (E ->SL…
+· 使用定理 `Topology.IsEmbedding.isInducing`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Topology.I…
+· 使用定理 `ContinuousLinearMap.cancel_left`：cancel_left {g : M₂ ->SL[σ₂₃] M₃} {f₁ f
+₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g) (h : g ∘SL f₁ = g ∘SL f₂) : f₁ 
+= f₂
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
 -/
 theorem isEmbedding_postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
-    (f : F ->SL[τ] G) (hf : IsEmbedding f) :
-    IsEmbedding (f.comp : (E ->SL[σ] F) -> (E ->SL[ρ] G)) :=
-  .mk (isInducing_postcomp f hf.isInducing) fun _ _ => f.cancel_left hf.injective
+    (f : F →SL[τ] G) (hf : IsEmbedding f) :
+    IsEmbedding (f.comp : (E →SL[σ] F) → (E →SL[ρ] G)) :=
+  .mk (isInducing_postcomp f hf.isInducing) fun _ _ ↦ f.cancel_left hf.injective
 
 variable (G) in
 /-- Pre-composition by a *fixed* continuous linear map as a continuous linear map.
@@ -544,30 +544,27 @@ variable (G) in
 Note that in non-normed space it is not always true that composition is continuous
 in both variables, so we have to fix one of them. -/
 @[simps! apply]
-/--
-Definition of `precomp` / `precomp` 的定义
+/-
+**ContinuousLinearMap.precomp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：precomp [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] [RingHomSurje
+ctive σ] [RingHomIsometric σ] (L : E ->SL[σ] F) : (F ->SL[τ] G) ->L[𝕜₃] E ->SL[ρ
+] G where toFun f
+参数：L : E ->SL[σ] F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precomp
-  signature: [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] [RingHomSurjective σ]
-  body: f.comp L
-  __ := precompUniformConvergenceCLM G { S | IsVonNBounded 𝕜₁ S } { S | IsVonNBounded 𝕜₂ S } L
-    (fun _ hS => hS.image L)
+--- 原说明 ---
+Pre-composition by a *fixed* continuous linear map as a continuous linear map.
 
-中文:
-定义 precomp
-  签名: [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G] [RingHomSurjective σ]
-  定义体: f.comp L
-  __ := precompUniformConvergenceCLM G { S | IsVonNBounded 𝕜₁ S } { S | IsVonNBounded 𝕜₂ S } L
-    (fun _ hS => hS.image L)
-
-Depends on / 依赖: f.comp
+Note that in non-normed space it is not always true that composition is continuo
+us
+in both variables, so we have to fix one of them.
 -/
 def precomp [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] [RingHomSurjective σ]
-    [RingHomIsometric σ] (L : E ->SL[σ] F) : (F ->SL[τ] G) ->L[𝕜₃] E ->SL[ρ] G where
+    [RingHomIsometric σ] (L : E →SL[σ] F) : (F →SL[τ] G) →L[𝕜₃] E →SL[ρ] G where
   toFun f := f.comp L
   __ := precompUniformConvergenceCLM G { S | IsVonNBounded 𝕜₁ S } { S | IsVonNBounded 𝕜₂ S } L
-    (fun _ hS => hS.image L)
+    (fun _ hS ↦ hS.image L)
 
 variable (E) in
 /-- Post-composition by a *fixed* continuous linear map as a continuous linear map.
@@ -575,106 +572,116 @@ variable (E) in
 Note that in non-normed space it is not always true that composition is continuous
 in both variables, so we have to fix one of them. -/
 @[simps! apply]
-/--
-Definition of `postcomp` / `postcomp` 的定义
+/-
+**ContinuousLinearMap.postcomp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] [ContinuousCo
+nstSMul 𝕜₃ G] [ContinuousConstSMul 𝕜₂ F] (L : F ->SL[τ] G) : (E ->SL[σ] F) ->SL[
+τ] E ->SL[ρ] G where toFun f
+参数：L : F ->SL[τ] G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcomp
-  signature: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
-  body: L.comp f
-  __ := postcompUniformConvergenceCLM { S | IsVonNBounded 𝕜₁ S } L
+--- 原说明 ---
+Post-composition by a *fixed* continuous linear map as a continuous linear map.
 
-中文:
-定义 postcomp
-  签名: [是拓扑加群 F] [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G]
-  定义体: L.comp f
-  __ := postcompUniformConvergenceCLM { S | IsVonNBounded 𝕜₁ S } L
-
-Depends on / 依赖: L.comp
+Note that in non-normed space it is not always true that composition is continuo
+us
+in both variables, so we have to fix one of them.
 -/
 def postcomp [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
-    [ContinuousConstSMul 𝕜₂ F] (L : F ->SL[τ] G) : (E ->SL[σ] F) ->SL[τ] E ->SL[ρ] G where
+    [ContinuousConstSMul 𝕜₂ F] (L : F →SL[τ] G) : (E →SL[σ] F) →SL[τ] E →SL[ρ] G where
   toFun f := L.comp f
   __ := postcompUniformConvergenceCLM { S | IsVonNBounded 𝕜₁ S } L
 
 variable (σ F) in
-/--
-lemma `toUniformConvergenceCLM_continuous` / 引理 `toUniformConvergenceCLM_continuous`
-
-English:
-lemma toUniformConvergenceCLM_continuous
-  statement: [IsTopologicalAddGroup F]
-  proof: continuous_id_of_le UniformConvergenceCLM.topologicalSpace_mono _ _ h
-
-中文:
-引理 toUniformConvergenceCLM_continuous
-  结论: [是拓扑加群 F]
-  证明: continuous_id_of_le UniformConvergenceCLM.topologicalSpace_mono _ _ h
-
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.topologicalSpace_mono, continuous_id_of_le, topologicalSpace_mono
+/-
+**ContinuousLinearMap.toUniformConvergenceCLM_continuous** 是 Mathlib 中的一个引理，位于命名
+空间 `ContinuousLinearMap`。
+形式化陈述：toUniformConvergenceCLM_continuous [IsTopologicalAddGroup F] [ContinuousCo
+nstSMul 𝕜₂ F] (𝔖 : Set (Set E)) (h : 𝔖 subseteq {S | IsVonNBounded 𝕜₁ S}) : Cont
+inuous (ContinuousLinearMap.toUniformConvergenceCLM σ F 𝔖)
+参数：𝔖 : Set (Set E)；h : 𝔖 subseteq {S | IsVonNBounded 𝕜₁ S}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id_of_le`：continuous_id_of_le {t t' : TopologicalSpace α} (h 
+: t <= t') : Continuous[t, t'] id
+· 使用定理 `UniformConvergenceCLM.topologicalSpace_mono`：topologicalSpace_mono [Topo
+logicalSpace F] [IsTopologicalAddGroup F] (h : 𝔖₂ subseteq 𝔖₁) : instTopological
+Space σ F 𝔖₁ <= instTopologicalSp…
 -/
 lemma toUniformConvergenceCLM_continuous [IsTopologicalAddGroup F]
     [ContinuousConstSMul 𝕜₂ F]
-    (𝔖 : Set (Set E)) (h : 𝔖 subseteq {S | IsVonNBounded 𝕜₁ S}) :
+    (𝔖 : Set (Set E)) (h : 𝔖 ⊆ {S | IsVonNBounded 𝕜₁ S}) :
     Continuous (ContinuousLinearMap.toUniformConvergenceCLM σ F 𝔖) :=
-continuous_id_of_le UniformConvergenceCLM.topologicalSpace_mono _ _ h
+  continuous_id_of_le <| UniformConvergenceCLM.topologicalSpace_mono _ _ h
 
-/--
-theorem `continuous_of_continuous_uncurry` / 定理 `continuous_of_continuous_uncurry`
+/-- A bilinear map `B : E × F → G` which is (jointly) continuous is **hypocontinuous**:
+in curried form, it defines a continuous linear map `E →L[𝕜] F →L[𝕜] G`.
 
-English:
-theorem continuous_of_continuous_uncurry
-  proof: UniformConvergenceCLM.continuous_of_continuous_uncurry (fun _ => id) B hB
+In the normed setting, the converse is true, see `ContinuousLinearMap.continuous₂`.
+In general, however, hypocontinuity is a strictly weaker condition than joint continuity. -/
+/-
+**ContinuousLinearMap.continuous_of_continuous_uncurry** 是 Mathlib 中的一个定理，位于命名空间
+ `ContinuousLinearMap`。
+形式化陈述：continuous_of_continuous_uncurry {𝕜₁ : Type*} [NontriviallyNormedField 𝕜₁]
+ {σ : 𝕜₁ ->+* 𝕜₂} [Module 𝕜₁ E] {τ : 𝕜₃ ->+* 𝕜₂} [RingHomSurjective τ] [IsTopolo
+gicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] [IsTopologicalAddGroup F] [Continuou
+sConstSMul 𝕜₂ F] (B : G ->ₛₗ[τ] (E ->SL[σ] F)) (hB : Continuous (fun p : G × E =
+> B p.1 p.2)) : Continuous B
+参数：B : G ->ₛₗ[τ] (E ->SL[σ] F)；hB : Continuous (fun p : G × E => B p.1 p.2)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformConvergenceCLM.continuous_of_continuous_uncurry`：∀ {𝕜₂ : Type u_2
+} [inst : NormedField 𝕜₂] {E : Type u_3} {F : Type u_4} {G : Type u_5} [inst_1 :
+ AddCommGroup E]   [inst_2 : TopologicalSpac…
 
-中文:
-定理 continuous_of_continuous_uncurry
-  证明: UniformConvergenceCLM.continuous_of_continuous_uncurry (fun _ => id) B hB
+--- 原说明 ---
+A bilinear map `B : E × F → G` which is (jointly) continuous is **hypocontinuous
+**:
+in curried form, it defines a continuous linear map `E →L[𝕜] F →L[𝕜] G`.
 
-Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.continuous_of_continuous_uncurry, continuous_of_continuous_uncurry
+In the normed setting, the converse is true, see `ContinuousLinearMap.continuous
+₂`.
+In general, however, hypocontinuity is a strictly weaker condition than joint co
+ntinuity.
 -/
 theorem continuous_of_continuous_uncurry
-    {𝕜₁ : Type*} [NontriviallyNormedField 𝕜₁] {σ : 𝕜₁ ->+* 𝕜₂} [Module 𝕜₁ E]
-    {τ : 𝕜₃ ->+* 𝕜₂} [RingHomSurjective τ]
+    {𝕜₁ : Type*} [NontriviallyNormedField 𝕜₁] {σ : 𝕜₁ →+* 𝕜₂} [Module 𝕜₁ E]
+    {τ : 𝕜₃ →+* 𝕜₂} [RingHomSurjective τ]
     [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
     [IsTopologicalAddGroup F] [ContinuousConstSMul 𝕜₂ F]
-    (B : G ->ₛₗ[τ] (E ->SL[σ] F))
-    (hB : Continuous (fun p : G × E => B p.1 p.2)) :
+    (B : G →ₛₗ[τ] (E →SL[σ] F))
+    (hB : Continuous (fun p : G × E ↦ B p.1 p.2)) :
     Continuous B :=
-  UniformConvergenceCLM.continuous_of_continuous_uncurry (fun _ => id) B hB
+  UniformConvergenceCLM.continuous_of_continuous_uncurry (fun _ ↦ id) B hB
 
 end BoundedConvergence
 
 section Pi
 
-variable (𝕜 : Type*) [NormedField 𝕜] (E : Type*) {ι : Type*} (F : ι -> Type*)
+variable (𝕜 : Type*) [NormedField 𝕜] (E : Type*) {ι : Type*} (F : ι → Type*)
   [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E]
-  [forall i, AddCommGroup (F i)] [forall i, Module 𝕜 (F i)] [forall i, TopologicalSpace (F i)]
-  [forall i, IsTopologicalAddGroup (F i)] [forall i, ContinuousConstSMul 𝕜 (F i)]
+  [∀ i, AddCommGroup (F i)] [∀ i, Module 𝕜 (F i)] [∀ i, TopologicalSpace (F i)]
+  [∀ i, IsTopologicalAddGroup (F i)] [∀ i, ContinuousConstSMul 𝕜 (F i)]
 
 /-- `ContinuousLinearMap.pi`, upgraded to a continuous linear equivalence between
 `Π i, E →L[𝕜] F i` and `E →L[𝕜] Π i, F i`. -/
 @[simps]
-/--
-Definition of `piEquivL` / `piEquivL` 的定义
+/-
+**ContinuousLinearMap.piEquivL** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：piEquivL : (Π i, E ->L[𝕜] F i) ≃L[𝕜] (E ->L[𝕜] Π i, F i) where toFun F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquivL
-  signature: :
-  body: ContinuousLinearMap.pi F
-  invFun f i := (ContinuousLinearMap.proj i).comp f
-  __ := UniformConvergenceCLM.piEquivL _ _ _
-
-中文:
-定义 piEquivL
-  签名: :
-  定义体: ContinuousLinearMap.pi F
-  invFun f i := (ContinuousLinearMap.proj i).comp f
-  __ := UniformConvergenceCLM.piEquivL _ _ _
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.pi
+--- 原说明 ---
+`ContinuousLinearMap.pi`, upgraded to a continuous linear equivalence between
+`Π i, E →L[𝕜] F i` and `E →L[𝕜] Π i, F i`.
 -/
 def piEquivL :
-    (Π i, E ->L[𝕜] F i) ≃L[𝕜] (E ->L[𝕜] Π i, F i) where
+    (Π i, E →L[𝕜] F i) ≃L[𝕜] (E →L[𝕜] Π i, F i) where
   toFun F := ContinuousLinearMap.pi F
   invFun f i := (ContinuousLinearMap.proj i).comp f
   __ := UniformConvergenceCLM.piEquivL _ _ _
@@ -698,143 +705,150 @@ variable
   [AddCommGroup F] [Module 𝕜₂ F] [TopologicalSpace F]
   [AddCommGroup G] [Module 𝕜₃ G]
   [TopologicalSpace G] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
-  {σ₁₃ : R ->+* 𝕜₃} {σ₂₃ : 𝕜₂ ->+* 𝕜₃}
+  {σ₁₃ : R →+* 𝕜₃} {σ₂₃ : 𝕜₂ →+* 𝕜₃}
 
-/--
-theorem `map_add₂` / 定理 `map_add₂`
-
-English:
-theorem map_add₂
-  given: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F)
-  proof: by rw [f.map_add, add_apply]
-
-中文:
-定理 map_add₂
-  条件: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F)
-  证明: by rw [f.map_add, add_apply]
-
-Depends on / 依赖: add_apply, f.map_add, map_add
+/-
+**ContinuousLinearMap.map_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂)   (x y : M₁), f (x + y) = f x + f y
+参数：f : M₁ →SL[σ₁₂] M₂；x y : M₁；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem map_add₂ (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F) :
+theorem map_add₂ (f : E →SL[σ₁₃] F →SL[σ₂₃] G) (x x' : E) (y : F) :
     f (x + x') y = f x y + f x' y := by rw [f.map_add, add_apply]
-
-/--
-theorem `map_zero₂` / 定理 `map_zero₂`
-
-English:
-theorem map_zero₂
-  given: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (y : F)
-  statement: f 0 y = 0
-  proof: by
-  rw [f.map_zero]; rw [zero_apply]
-
-中文:
-定理 map_zero₂
-  条件: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (y : F)
-  结论: f 0 y = 0
-  证明: by
-  rw [f.map_zero]; rw [zero_apply]
-
-Depends on / 依赖: f.map_zero, map_zero, zero_apply
+/-
+**ContinuousLinearMap.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂),   f 0 = 0
+参数：f : M₁ →SL[σ₁₂] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem map_zero₂ (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (y : F) : f 0 y = 0 := by
-  rw [f.map_zero]; rw [zero_apply]
-
-/--
-theorem `map_smulₛₗ₂` / 定理 `map_smulₛₗ₂`
-
-English:
-theorem map_smulₛₗ₂
-  given: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (c : R) (x : E) (y : F)
-  proof: by rw [f.map_smulₛₗ, smul_apply]
-
-中文:
-定理 map_smulₛₗ₂
-  条件: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (c : R) (x : E) (y : F)
-  证明: by rw [f.map_smulₛₗ, smul_apply]
-
-Depends on / 依赖: f.map_smul, smul_apply
+theorem map_zero₂ (f : E →SL[σ₁₃] F →SL[σ₂₃] G) (y : F) : f 0 y = 0 := by
+  rw [f.map_zero, zero_apply]
+/-
+**ContinuousLinearMap.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   {M₂ : Type u_6} [inst_3 : TopologicalS
+pace M₂] [inst_4 : AddCommMonoid M₂] [inst_5 : _root_.Module R₁ M₁]   [inst_6 : 
+_root_.Module R₁ M₂] (f : M₁ →L[R₁] M₂) (c : R₁) (x : M₁), f (c • x) = c • f x
+参数：f : M₁ →L[R₁] M₂；c : R₁；x : M₁；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_smulₛₗ₂ (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (c : R) (x : E) (y : F) :
+theorem map_smulₛₗ₂ (f : E →SL[σ₁₃] F →SL[σ₂₃] G) (c : R) (x : E) (y : F) :
     f (c • x) y = σ₁₃ c • f x y := by rw [f.map_smulₛₗ, smul_apply]
 
 /-- Send a continuous sesquilinear map to an abstract sesquilinear map (forgetting continuity). -/
 @[simps -isSimp apply]
-/--
-Definition of `toLinearMap₁₂` / `toLinearMap₁₂` 的定义
+/-
+**ContinuousLinearMap.toLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Semiring R] →       [inst_
+1 : Semiring S] →         {σ : R →+* S} →           {M : Type u_3} →            
+ [inst_2 : TopologicalSpace M] →               [inst_3 : AddCommMonoid M] →     
+            {M₂ : Type u_4} →                   [inst_4 : TopologicalSpace M₂] →
+                     [inst_5 : AddCommMonoid M₂] →                       [inst_6
+ : _root_.Module R M] → [inst_7 : _root_.Module S M₂] → (M →SL[σ] M₂) → M →ₛₗ[σ]
+ M₂
+参数：M →SL[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearMap₁₂
-  signature: : (E ->SL[σ₁₃] F ->SL[σ₂₃] G) ->ₗ[𝕜₃] E ->ₛₗ[σ₁₃] F ->ₛₗ[σ₂₃] G where
-  body: (coeLMₛₗ σ₂₃).comp L.toLinearMap
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 toLinearMap₁₂
-  签名: : (E ->SL[σ₁₃] F ->SL[σ₂₃] G) ->ₗ[𝕜₃] E ->ₛₗ[σ₁₃] F ->ₛₗ[σ₂₃] G where
-  定义体: (coeLMₛₗ σ₂₃).comp L.toLinearMap
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: L.toLinearMap, toLinearMap
+--- 原说明 ---
+Send a continuous sesquilinear map to an abstract sesquilinear map (forgetting c
+ontinuity).
 -/
-def toLinearMap₁₂ : (E ->SL[σ₁₃] F ->SL[σ₂₃] G) ->ₗ[𝕜₃] E ->ₛₗ[σ₁₃] F ->ₛₗ[σ₂₃] G where
+def toLinearMap₁₂ : (E →SL[σ₁₃] F →SL[σ₂₃] G) →ₗ[𝕜₃] E →ₛₗ[σ₁₃] F →ₛₗ[σ₂₃] G where
   toFun L := (coeLMₛₗ σ₂₃).comp L.toLinearMap
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
-
-/--
-lemma `toLinearMap₁₂_apply_apply_apply` / 引理 `toLinearMap₁₂_apply_apply_apply`
-
-English:
-lemma toLinearMap₁₂_apply_apply_apply
-  given: (L : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (v : E) (w : F)
-  proof: rfl
-
-中文:
-引理 toLinearMap₁₂_apply_apply_apply
-  条件: (L : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (v : E) (w : F)
-  证明: rfl
+/-
+**ContinuousLinearMap.toLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Semiring R] →       [inst_
+1 : Semiring S] →         {σ : R →+* S} →           {M : Type u_3} →            
+ [inst_2 : TopologicalSpace M] →               [inst_3 : AddCommMonoid M] →     
+            {M₂ : Type u_4} →                   [inst_4 : TopologicalSpace M₂] →
+                     [inst_5 : AddCommMonoid M₂] →                       [inst_6
+ : _root_.Module R M] → [inst_7 : _root_.Module S M₂] → (M →SL[σ] M₂) → M →ₛₗ[σ]
+ M₂
+参数：M →SL[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toLinearMap₁₂_apply_apply_apply (L : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (v : E) (w : F) :
+@[simp] lemma toLinearMap₁₂_apply_apply_apply (L : E →SL[σ₁₃] F →SL[σ₂₃] G) (v : E) (w : F) :
     L.toLinearMap₁₂ v w = L v w := rfl
-
-/--
-lemma `toLinearMap₁₂_injective` / 引理 `toLinearMap₁₂_injective`
-
-English:
-lemma toLinearMap₁₂_injective
-  proof: by
-  simp [Function.Injective, LinearMap.ext_iff, ← ContinuousLinearMap.ext_iff]
-
-中文:
-引理 toLinearMap₁₂_injective
-  证明: by
-  simp [Function.Injective, LinearMap.ext_iff, ← ContinuousLinearMap.ext_iff]
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext_iff, Function, Function.Injective, Injective, LinearMap, LinearMap.ext_iff, ext_iff
+/-
+**ContinuousLinearMap.toLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Semiring R] →       [inst_
+1 : Semiring S] →         {σ : R →+* S} →           {M : Type u_3} →            
+ [inst_2 : TopologicalSpace M] →               [inst_3 : AddCommMonoid M] →     
+            {M₂ : Type u_4} →                   [inst_4 : TopologicalSpace M₂] →
+                     [inst_5 : AddCommMonoid M₂] →                       [inst_6
+ : _root_.Module R M] → [inst_7 : _root_.Module S M₂] → (M →SL[σ] M₂) → M →ₛₗ[σ]
+ M₂
+参数：M →SL[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap₁₂_injective :
-    (toLinearMap₁₂ (E := E) (F := F) (G := G) (σ₁₃ := σ₁₃) (σ₂₃ := σ₂₃) : _ -> _).Injective := by
+    (toLinearMap₁₂ (E := E) (F := F) (G := G) (σ₁₃ := σ₁₃) (σ₂₃ := σ₂₃) : _ → _).Injective := by
   simp [Function.Injective, LinearMap.ext_iff, ← ContinuousLinearMap.ext_iff]
-
-/--
-lemma `toLinearMap₁₂_inj` / 引理 `toLinearMap₁₂_inj`
-
-English:
-lemma toLinearMap₁₂_inj
-  given: (L₁ L₂ : E ->SL[σ₁₃] F ->SL[σ₂₃] G)
-  proof: toLinearMap₁₂_injective.eq_iff
-
-中文:
-引理 toLinearMap₁₂_inj
-  条件: (L₁ L₂ : E ->SL[σ₁₃] F ->SL[σ₂₃] G)
-  证明: toLinearMap₁₂_injective.eq_iff
-
-Depends on / 依赖: _injective.eq_iff, eq_iff
+/-
+**ContinuousLinearMap.toLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Semiring R] →       [inst_
+1 : Semiring S] →         {σ : R →+* S} →           {M : Type u_3} →            
+ [inst_2 : TopologicalSpace M] →               [inst_3 : AddCommMonoid M] →     
+            {M₂ : Type u_4} →                   [inst_4 : TopologicalSpace M₂] →
+                     [inst_5 : AddCommMonoid M₂] →                       [inst_6
+ : _root_.Module R M] → [inst_7 : _root_.Module S M₂] → (M →SL[σ] M₂) → M →ₛₗ[σ]
+ M₂
+参数：M →SL[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap₁₂_inj (L₁ L₂ : E ->SL[σ₁₃] F ->SL[σ₂₃] G) :
+lemma toLinearMap₁₂_inj (L₁ L₂ : E →SL[σ₁₃] F →SL[σ₂₃] G) :
     L₁.toLinearMap₁₂ = L₂.toLinearMap₁₂ ↔ L₁ = L₂ :=
   toLinearMap₁₂_injective.eq_iff
 
@@ -847,28 +861,36 @@ variable
   [AddCommGroup F] [Module 𝕜₂ F] [TopologicalSpace F]
   [AddCommGroup G] [Module 𝕜₃ G]
   [TopologicalSpace G] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
-  {σ₂₃ : 𝕜₂ ->+* 𝕜₃}
+  {σ₂₃ : 𝕜₂ →+* 𝕜₃}
 
-/--
-theorem `map_smul₂` / 定理 `map_smul₂`
-
-English:
-theorem map_smul₂
-  given: (f : E ->L[𝕜₃] F ->SL[σ₂₃] G) (c : 𝕜₃) (x : E) (y : F)
-  proof: by
-  rw [f.map_smul]; rw [smul_apply]
-
-中文:
-定理 map_smul₂
-  条件: (f : E ->L[𝕜₃] F ->SL[σ₂₃] G) (c : 𝕜₃) (x : E) (y : F)
-  证明: by
-  rw [f.map_smul]; rw [smul_apply]
-
-Depends on / 依赖: f.map_smul, map_smul, smul_apply
+/-
+**ContinuousLinearMap.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   {M₂ : Type u_6} [inst_3 : TopologicalS
+pace M₂] [inst_4 : AddCommMonoid M₂] [inst_5 : _root_.Module R₁ M₁]   [inst_6 : 
+_root_.Module R₁ M₂] (f : M₁ →L[R₁] M₂) (c : R₁) (x : M₁), f (c • x) = c • f x
+参数：f : M₁ →L[R₁] M₂；c : R₁；x : M₁；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_smul₂ (f : E ->L[𝕜₃] F ->SL[σ₂₃] G) (c : 𝕜₃) (x : E) (y : F) :
+theorem map_smul₂ (f : E →L[𝕜₃] F →SL[σ₂₃] G) (c : 𝕜₃) (x : E) (y : F) :
     f (c • x) y = c • f x y := by
-  rw [f.map_smul]; rw [smul_apply]
+  rw [f.map_smul, smul_apply]
 
 end Nonsemilinear
 
@@ -879,120 +901,152 @@ variable
   [AddCommGroup F] [Module 𝕜₂ F] [TopologicalSpace F]
   [AddCommGroup G] [Module 𝕜₃ G]
   [TopologicalSpace G] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
-  {σ₁₃ : R ->+* 𝕜₃} {σ₂₃ : 𝕜₂ ->+* 𝕜₃}
+  {σ₁₃ : R →+* 𝕜₃} {σ₂₃ : 𝕜₂ →+* 𝕜₃}
 
-/--
-theorem `map_sub₂` / 定理 `map_sub₂`
-
-English:
-theorem map_sub₂
-  given: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F)
-  proof: by rw [map_sub, sub_apply]
-
-中文:
-定理 map_sub₂
-  条件: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F)
-  证明: by rw [map_sub, sub_apply]
-
-Depends on / 依赖: map_sub, sub_apply
+/-
+**ContinuousLinearMap.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_2} [inst_1 : Ring R₂] {M : T
+ype u_4} [inst_2 : TopologicalSpace M]   [inst_3 : AddCommGroup M] {M₂ : Type u_
+5} [inst_4 : TopologicalSpace M₂] [inst_5 : AddCommGroup M₂]   [inst_6 : _root_.
+Module R M] [inst_7 : _root_.Module R₂ M₂] {σ₁₂ : R →+* R₂} (f : M →SL[σ₁₂] M₂) 
+(x y : M),   f (x - y) = f x - f y
+参数：f : M →SL[σ₁₂] M₂；x y : M；x - y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem map_sub₂ (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x x' : E) (y : F) :
+theorem map_sub₂ (f : E →SL[σ₁₃] F →SL[σ₂₃] G) (x x' : E) (y : F) :
     f (x - x') y = f x y - f x' y := by rw [map_sub, sub_apply]
-
-/--
-theorem `map_neg₂` / 定理 `map_neg₂`
-
-English:
-theorem map_neg₂
-  given: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x : E) (y : F)
-  statement: f (-x) y = -f x y
-  proof: by
-  rw [map_neg]; rw [neg_apply]
-
-中文:
-定理 map_neg₂
-  条件: (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x : E) (y : F)
-  结论: f (-x) y = -f x y
-  证明: by
-  rw [map_neg]; rw [neg_apply]
-
-Depends on / 依赖: map_neg, neg_apply
+/-
+**ContinuousLinearMap.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_2} [inst_1 : Ring R₂] {M : T
+ype u_4} [inst_2 : TopologicalSpace M]   [inst_3 : AddCommGroup M] {M₂ : Type u_
+5} [inst_4 : TopologicalSpace M₂] [inst_5 : AddCommGroup M₂]   [inst_6 : _root_.
+Module R M] [inst_7 : _root_.Module R₂ M₂] {σ₁₂ : R →+* R₂} (f : M →SL[σ₁₂] M₂) 
+(x : M),   f (-x) = -f x
+参数：f : M →SL[σ₁₂] M₂；x : M；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem map_neg₂ (f : E ->SL[σ₁₃] F ->SL[σ₂₃] G) (x : E) (y : F) : f (-x) y = -f x y := by
-  rw [map_neg]; rw [neg_apply]
+theorem map_neg₂ (f : E →SL[σ₁₃] F →SL[σ₂₃] G) (x : E) (y : F) : f (-x) y = -f x y := by
+  rw [map_neg, neg_apply]
 
 end AddCommGroup
 
 section BilinForm
 variable [NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E]
 
-/--
-Definition of `toBilinForm` / `toBilinForm` 的定义
+/-- Send a continuous bilinear form to an abstract bilinear form (forgetting continuity). -/
+/-
+**ContinuousLinearMap.toBilinForm** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：toBilinForm (L : E ->L[𝕜] E ->L[𝕜] 𝕜) : LinearMap.BilinForm 𝕜 E
+参数：L : E ->L[𝕜] E ->L[𝕜] 𝕜。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBilinForm
-  signature: (L : E ->L[𝕜] E ->L[𝕜] 𝕜)
-  body: L.toLinearMap₁₂
-
-中文:
-定义 toBilinForm
-  签名: (L : E ->L[𝕜] E ->L[𝕜] 𝕜)
-  定义体: L.toLinearMap₁₂
-
-Depends on / 依赖: L.toLinearMap
+--- 原说明 ---
+Send a continuous bilinear form to an abstract bilinear form (forgetting continu
+ity).
 -/
-def toBilinForm (L : E ->L[𝕜] E ->L[𝕜] 𝕜) : LinearMap.BilinForm 𝕜 E := L.toLinearMap₁₂
-
-/--
-lemma `toBilinForm_apply` / 引理 `toBilinForm_apply`
-
-English:
-lemma toBilinForm_apply
-  given: (L : E ->L[𝕜] E ->L[𝕜] 𝕜) (v : E) (w : E)
-  proof: rfl
-
-中文:
-引理 toBilinForm_apply
-  条件: (L : E ->L[𝕜] E ->L[𝕜] 𝕜) (v : E) (w : E)
-  证明: rfl
+def toBilinForm (L : E →L[𝕜] E →L[𝕜] 𝕜) : LinearMap.BilinForm 𝕜 E := L.toLinearMap₁₂
+/-
+**ContinuousLinearMap.toBilinForm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：∀ {𝕜 : Type u_2} {E : Type u_5} [inst : NormedField 𝕜] [inst_1 : AddCommGr
+oup E] [inst_2 : _root_.Module 𝕜 E]   [inst_3 : TopologicalSpace E] (L : E →L[𝕜]
+ E →L[𝕜] 𝕜) (v w : E), (L.toBilinForm v) w = (L v) w
+参数：L : E →L[𝕜] E →L[𝕜] 𝕜；v w : E；L.toBilinForm v；L v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
 -/
-@[simp] lemma toBilinForm_apply (L : E ->L[𝕜] E ->L[𝕜] 𝕜) (v : E) (w : E) :
+@[simp] lemma toBilinForm_apply (L : E →L[𝕜] E →L[𝕜] 𝕜) (v : E) (w : E) :
     L.toBilinForm v w = L v w := rfl
-
-/--
-lemma `toBilinForm_injective` / 引理 `toBilinForm_injective`
-
-English:
-lemma toBilinForm_injective
-  statement: (toBilinForm (𝕜 := 𝕜) (E := E)).Injective
-  proof: toLinearMap₁₂_injective
-
-中文:
-引理 toBilinForm_injective
-  结论: (toBilinForm (𝕜 := 𝕜) (E := E)).单射
-  证明: toLinearMap₁₂_injective
-
-Depends on / 依赖: Injective
+/-
+**ContinuousLinearMap.toBilinForm_injective** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：toBilinForm_injective : (toBilinForm (𝕜
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.toLinearMap₁₂_injective`：toLinearMap₁₂_injective : (
+toLinearMap₁₂ (E
 -/
 lemma toBilinForm_injective : (toBilinForm (𝕜 := 𝕜) (E := E)).Injective :=
   toLinearMap₁₂_injective
-
-/--
-lemma `toBilinForm_inj` / 引理 `toBilinForm_inj`
-
-English:
-lemma toBilinForm_inj
-  given: (L₁ L₂ : E ->L[𝕜] E ->L[𝕜] 𝕜)
-  proof: toBilinForm_injective.eq_iff
-
-中文:
-引理 toBilinForm_inj
-  条件: (L₁ L₂ : E ->L[𝕜] E ->L[𝕜] 𝕜)
-  证明: toBilinForm_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toBilinForm_injective, toBilinForm_injective.eq_iff
+/-
+**ContinuousLinearMap.toBilinForm_inj** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toBilinForm_inj (L₁ L₂ : E ->L[𝕜] E ->L[𝕜] 𝕜) : L₁.toBilinForm = L₂.toBili
+nForm ↔ L₁ = L₂
+参数：L₁ L₂ : E ->L[𝕜] E ->L[𝕜] 𝕜。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `ContinuousLinearMap.toBilinForm_injective`：toBilinForm_injective : (toBi
+linForm (𝕜
 -/
-lemma toBilinForm_inj (L₁ L₂ : E ->L[𝕜] E ->L[𝕜] 𝕜) :
+lemma toBilinForm_inj (L₁ L₂ : E →L[𝕜] E →L[𝕜] 𝕜) :
     L₁.toBilinForm = L₂.toBilinForm ↔ L₁ = L₂ :=
   toBilinForm_injective.eq_iff
 
@@ -1013,46 +1067,61 @@ variable [UniformSpace F] [IsUniformAddGroup F] [Module 𝕜 F]
   [Module 𝕜' E] [IsScalarTower 𝕜' 𝕜 E] [Module 𝕜' F] [IsScalarTower 𝕜' 𝕜 F]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isUniformEmbedding_restrictScalars` / 定理 `isUniformEmbedding_restrictScalars`
-
-English:
-theorem isUniformEmbedding_restrictScalars
-  proof: by
-  rw [← isUniformEmbedding_toUniformOnFun.of_comp_iff]
-  convert! isUniformEmbedding_toUniformOnFun using 4 with s
-  exact ⟨fun h => h.extend_scalars _, fun h => h.restrict_scalars _⟩
-
-中文:
-定理 isUniformEmbedding_restrictScalars
-  证明: by
-  rw [← isUniformEmbedding_toUniformOnFun.of_comp_iff]
-  convert! isUniformEmbedding_toUniformOnFun using 4 with s
-  exact ⟨fun h => h.extend_scalars _, fun h => h.restrict_scalars _⟩
-
-Depends on / 依赖: convert, extend_scalars, h.extend_scalars, h.restrict_scalars, isUniformEmbedding_toUniformOnFun, isUniformEmbedding_toUniformOnFun.of_comp_iff, of_comp_iff, restrict_scalars
+/-
+**ContinuousLinearMap.isUniformEmbedding_restrictScalars** 是 Mathlib 中的一个定理，位于命名
+空间 `ContinuousLinearMap`。
+形式化陈述：isUniformEmbedding_restrictScalars : IsUniformEmbedding (restrictScalars 𝕜
+' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsUniformEmbedding.of_comp_iff`：IsUniformEmbedding.of_comp_iff {g : β ->
+ γ} (hg : IsUniformEmbedding g) {f : α -> β} : IsUniformEmbedding (g ∘ f) ↔ IsUn
+iformEmbedding f
+· 使用定理 `ContinuousLinearMap.isUniformEmbedding_toUniformOnFun`：isUniformEmbeddin
+g_toUniformOnFun [UniformSpace F] [IsUniformAddGroup F] : IsUniformEmbedding fun
+ f : E ->SL[σ] F => UniformOnFun.ofFun {s |…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Bornology.IsVonNBounded.extend_scalars`：∀ {𝕜 : Type u_1} [inst : Nontriv
+iallyNormedField 𝕜] {E : Type u_6} [inst_1 : AddCommGroup E]   [inst_2 : _root_.
+Module 𝕜 E] (𝕝 : Type u_7) […
+· 使用定理 `Bornology.IsVonNBounded.restrict_scalars`：∀ (𝕜 : Type u_1) {𝕜' : Type u_
+2} {E : Type u_3} [inst : NormedField 𝕜] [inst_1 : NormedRing 𝕜']   [inst_2 : No
+rmedAlgebra 𝕜 𝕜'] [inst_3 : Ze…
 -/
 theorem isUniformEmbedding_restrictScalars :
-    IsUniformEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F)) := by
+    IsUniformEmbedding (restrictScalars 𝕜' : (E →L[𝕜] F) → (E →L[𝕜'] F)) := by
   rw [← isUniformEmbedding_toUniformOnFun.of_comp_iff]
   convert! isUniformEmbedding_toUniformOnFun using 4 with s
-  exact ⟨fun h => h.extend_scalars _, fun h => h.restrict_scalars _⟩
-
-/--
-theorem `uniformContinuous_restrictScalars` / 定理 `uniformContinuous_restrictScalars`
-
-English:
-theorem uniformContinuous_restrictScalars
-  proof: (isUniformEmbedding_restrictScalars 𝕜').uniformContinuous
-
-中文:
-定理 uniformContinuous_restrictScalars
-  证明: (isUniformEmbedding_restrictScalars 𝕜').uniformContinuous
-
-Depends on / 依赖: isUniformEmbedding_restrictScalars, uniformContinuous
+  exact ⟨fun h ↦ h.extend_scalars _, fun h ↦ h.restrict_scalars _⟩
+/-
+**ContinuousLinearMap.uniformContinuous_restrictScalars** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousLinearMap`。
+形式化陈述：uniformContinuous_restrictScalars : UniformContinuous (restrictScalars 𝕜' 
+: (E ->L[𝕜] F) -> (E ->L[𝕜'] F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousLinearMap.isUniformEmbedding_restrictScalars`：isUniformEmbeddi
+ng_restrictScalars : IsUniformEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E
+ ->L[𝕜'] F))
 -/
 theorem uniformContinuous_restrictScalars :
-    UniformContinuous (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F)) :=
+    UniformContinuous (restrictScalars 𝕜' : (E →L[𝕜] F) → (E →L[𝕜'] F)) :=
   (isUniformEmbedding_restrictScalars 𝕜').uniformContinuous
 
 end UniformSpace
@@ -1061,108 +1130,100 @@ variable [TopologicalSpace F] [IsTopologicalAddGroup F] [Module 𝕜 F]
   (𝕜' : Type*) [NontriviallyNormedField 𝕜'] [NormedAlgebra 𝕜' 𝕜]
   [Module 𝕜' E] [IsScalarTower 𝕜' 𝕜 E] [Module 𝕜' F] [IsScalarTower 𝕜' 𝕜 F]
 
-/--
-theorem `isEmbedding_restrictScalars` / 定理 `isEmbedding_restrictScalars`
-
-English:
-theorem isEmbedding_restrictScalars
-  proof: letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  (isUniformEmbedding_restrictScalars _).isEmbedding
-
-@[continuity, fun_prop]
-
-中文:
-定理 isEmbedding_restrictScalars
-  证明: letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  (isUniformEmbedding_restrictScalars _).isEmbedding
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformSpace, isEmbedding, isUniformAddGroup_of_addCommGroup, isUniformEmbedding_restrictScalars, rightUniformSpace
+/-
+**ContinuousLinearMap.isEmbedding_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：isEmbedding_restrictScalars : IsEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] 
+F) -> (E ->L[𝕜'] F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `isUniformAddGroup_of_addCommGroup`：∀ {G : Type u_1} [inst : AddCommGroup
+ G] [inst_1 : TopologicalSpace G] [inst_2 : IsTopologicalAddGroup G],   IsUnifor
+mAddGroup G
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `ContinuousLinearMap.isUniformEmbedding_restrictScalars`：isUniformEmbeddi
+ng_restrictScalars : IsUniformEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E
+ ->L[𝕜'] F))
 -/
 theorem isEmbedding_restrictScalars :
-    IsEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F)) :=
+    IsEmbedding (restrictScalars 𝕜' : (E →L[𝕜] F) → (E →L[𝕜'] F)) :=
   letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   (isUniformEmbedding_restrictScalars _).isEmbedding
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_restrictScalars` / 定理 `continuous_restrictScalars`
-
-English:
-theorem continuous_restrictScalars
-  proof: (isEmbedding_restrictScalars _).continuous
-
-中文:
-定理 continuous_restrictScalars
-  证明: (isEmbedding_restrictScalars _).continuous
-
-Depends on / 依赖: continuous, isEmbedding_restrictScalars
+/-
+**ContinuousLinearMap.continuous_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousLinearMap`。
+形式化陈述：continuous_restrictScalars : Continuous (restrictScalars 𝕜' : (E ->L[𝕜] F)
+ -> (E ->L[𝕜'] F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `ContinuousLinearMap.isEmbedding_restrictScalars`：isEmbedding_restrictSca
+lars : IsEmbedding (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F))
 -/
 theorem continuous_restrictScalars :
-    Continuous (restrictScalars 𝕜' : (E ->L[𝕜] F) -> (E ->L[𝕜'] F)) :=
+    Continuous (restrictScalars 𝕜' : (E →L[𝕜] F) → (E →L[𝕜'] F)) :=
   (isEmbedding_restrictScalars _).continuous
 
 variable (𝕜 E F)
 variable (𝕜'' : Type*) [Ring 𝕜'']
   [Module 𝕜'' F] [ContinuousConstSMul 𝕜'' F] [SMulCommClass 𝕜 𝕜'' F] [SMulCommClass 𝕜' 𝕜'' F]
 
-/--
-Definition of `restrictScalarsL` / `restrictScalarsL` 的定义
+/-- `ContinuousLinearMap.restrictScalars` as a `ContinuousLinearMap`. -/
+/-
+**ContinuousLinearMap.restrictScalarsL** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：restrictScalarsL : (E ->L[𝕜] F) ->L[𝕜''] E ->L[𝕜'] F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalarsL
-  signature: : (E ->L[𝕜] F) ->L[𝕜''] E ->L[𝕜'] F
-  body: .mk restrictScalarsₗ 𝕜 E F 𝕜' 𝕜''
-
-中文:
-定义 restrictScalarsL
-  签名: : (E ->L[𝕜] F) ->L[𝕜''] E ->L[𝕜'] F
-  定义体: .mk restrictScalarsₗ 𝕜 E F 𝕜' 𝕜''
+--- 原说明 ---
+`ContinuousLinearMap.restrictScalars` as a `ContinuousLinearMap`.
 -/
-def restrictScalarsL : (E ->L[𝕜] F) ->L[𝕜''] E ->L[𝕜'] F :=
-.mk restrictScalarsₗ 𝕜 E F 𝕜' 𝕜''
+def restrictScalarsL : (E →L[𝕜] F) →L[𝕜''] E →L[𝕜'] F :=
+  .mk <| restrictScalarsₗ 𝕜 E F 𝕜' 𝕜''
 
 variable {𝕜 E F 𝕜' 𝕜''}
 
 @[simp]
-/--
-theorem `coe_restrictScalarsL` / 定理 `coe_restrictScalarsL`
-
-English:
-theorem coe_restrictScalarsL
-  statement: (restrictScalarsL 𝕜 E F 𝕜' 𝕜'' : (E ->L[𝕜] F) ->ₗ[𝕜''] E ->L[𝕜'] F) =
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_restrictScalarsL
-  结论: (restrictScalarsL 𝕜 E F 𝕜' 𝕜'' : (E ->L[𝕜] F) ->ₗ[𝕜''] E ->L[𝕜'] F) =
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.coe_restrictScalarsL** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：coe_restrictScalarsL : (restrictScalarsL 𝕜 E F 𝕜' 𝕜'' : (E ->L[𝕜] F) ->ₗ[𝕜
+''] E ->L[𝕜'] F) = restrictScalarsₗ 𝕜 E F 𝕜' 𝕜''
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-theorem coe_restrictScalarsL : (restrictScalarsL 𝕜 E F 𝕜' 𝕜'' : (E ->L[𝕜] F) ->ₗ[𝕜''] E ->L[𝕜'] F) =
+theorem coe_restrictScalarsL : (restrictScalarsL 𝕜 E F 𝕜' 𝕜'' : (E →L[𝕜] F) →ₗ[𝕜''] E →L[𝕜'] F) =
     restrictScalarsₗ 𝕜 E F 𝕜' 𝕜'' :=
   rfl
 
 @[simp]
-/--
-theorem `coe_restrict_scalarsL'` / 定理 `coe_restrict_scalarsL'`
-
-English:
-theorem coe_restrict_scalarsL'
-  statement: ⇑(restrictScalarsL 𝕜 E F 𝕜' 𝕜'') = restrictScalars 𝕜'
-  proof: rfl
-
-中文:
-定理 coe_restrict_scalarsL'
-  结论: ⇑(restrictScalarsL 𝕜 E F 𝕜' 𝕜'') = restrictScalars 𝕜'
-  证明: rfl
+/-
+**ContinuousLinearMap.coe_restrict_scalarsL'** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：coe_restrict_scalarsL' : ⇑(restrictScalarsL 𝕜 E F 𝕜' 𝕜'') = restrictScalar
+s 𝕜'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 theorem coe_restrict_scalarsL' : ⇑(restrictScalarsL 𝕜 E F 𝕜' 𝕜'') = restrictScalars 𝕜' :=
   rfl
@@ -1182,30 +1243,18 @@ variable {𝕜 E F G : Type*} (S : Type*) [NormedField 𝕜] [Semiring S]
 
 /-- `ContinuousLinearMap.coprod` as a `ContinuousLinearEquiv`. -/
 @[simps!]
-/--
-Definition of `coprodEquivL` / `coprodEquivL` 的定义
+/-
+**ContinuousLinearMap.coprodEquivL** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：coprodEquivL : ((E ->L[𝕜] G) × (F ->L[𝕜] G)) ≃L[S] (E × F ->L[𝕜] G) where 
+__
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprodEquivL
-  signature: : ((E ->L[𝕜] G) × (F ->L[𝕜] G)) ≃L[S] (E × F ->L[𝕜] G) where
-  body: coprodEquiv
-  continuous_toFun :=
-    (((fst 𝕜 E F).precomp G).coprod ((snd 𝕜 E F).precomp G)).continuous
-  continuous_invFun :=
-    (((inl 𝕜 E F).precomp G).prod ((inr 𝕜 E F).precomp G)).continuous
-
-中文:
-定义 coprodEquivL
-  签名: : ((E ->L[𝕜] G) × (F ->L[𝕜] G)) ≃L[S] (E × F ->L[𝕜] G) where
-  定义体: coprodEquiv
-  continuous_toFun :=
-    (((fst 𝕜 E F).precomp G).coprod ((snd 𝕜 E F).precomp G)).continuous
-  continuous_invFun :=
-    (((inl 𝕜 E F).precomp G).prod ((inr 𝕜 E F).precomp G)).continuous
-
-Depends on / 依赖: coprodEquiv
+--- 原说明 ---
+`ContinuousLinearMap.coprod` as a `ContinuousLinearEquiv`.
 -/
-def coprodEquivL : ((E ->L[𝕜] G) × (F ->L[𝕜] G)) ≃L[S] (E × F ->L[𝕜] G) where
+def coprodEquivL : ((E →L[𝕜] G) × (F →L[𝕜] G)) ≃L[S] (E × F →L[𝕜] G) where
   __ := coprodEquiv
   continuous_toFun :=
     (((fst 𝕜 E F).precomp G).coprod ((snd 𝕜 E F).precomp G)).continuous
@@ -1216,32 +1265,16 @@ variable [Module S F] [SMulCommClass 𝕜 S F] [ContinuousConstSMul S F]
 
 /-- `ContinuousLinearMap.prod` as a `ContinuousLinearEquiv`. -/
 @[simps! apply]
-/--
-Definition of `prodL` / `prodL` 的定义
+/-
+**ContinuousLinearMap.prodL** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：prodL : ((E ->L[𝕜] F) × (E ->L[𝕜] G)) ≃L[S] (E ->L[𝕜] F × G) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodL
-  signature: : ((E ->L[𝕜] F) × (E ->L[𝕜] G)) ≃L[S] (E ->L[𝕜] F × G) where
-  body: prodₗ S
-  continuous_toFun := by
-    change Continuous fun x => .id 𝕜 _ ∘L prodₗ S x
-    simp_rw [← coprod_inl_inr]
-    exact (((inl 𝕜 F G).postcomp E).coprod ((inr 𝕜 F G).postcomp E)).continuous
-  continuous_invFun :=
-    (((fst 𝕜 F G).postcomp E).prod ((snd 𝕜 F G).postcomp E)).continuous
-
-中文:
-定义 prodL
-  签名: : ((E ->L[𝕜] F) × (E ->L[𝕜] G)) ≃L[S] (E ->L[𝕜] F × G) where
-  定义体: prodₗ S
-  continuous_toFun := by
-    change Continuous fun x => .id 𝕜 _ ∘L prodₗ S x
-    simp_rw [← coprod_inl_inr]
-    exact (((inl 𝕜 F G).postcomp E).coprod ((inr 𝕜 F G).postcomp E)).continuous
-  continuous_invFun :=
-    (((fst 𝕜 F G).postcomp E).prod ((snd 𝕜 F G).postcomp E)).continuous
+--- 原说明 ---
+`ContinuousLinearMap.prod` as a `ContinuousLinearEquiv`.
 -/
-def prodL : ((E ->L[𝕜] F) × (E ->L[𝕜] G)) ≃L[S] (E ->L[𝕜] F × G) where
+def prodL : ((E →L[𝕜] F) × (E →L[𝕜] G)) ≃L[S] (E →L[𝕜] F × G) where
   __ := prodₗ S
   continuous_toFun := by
     change Continuous fun x => .id 𝕜 _ ∘L prodₗ S x
@@ -1257,30 +1290,19 @@ variable {𝕜 E : Type*} [NontriviallyNormedField 𝕜] [AddCommGroup E] [Modul
 
 /-- `ContinuousLinearMap.toSpanSingleton` as a continuous linear equivalence. -/
 @[simps!]
-/--
-Definition of `toSpanSingletonCLE` / `toSpanSingletonCLE` 的定义
+/-
+**ContinuousLinearMap.toSpanSingletonCLE** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：toSpanSingletonCLE : E ≃L[𝕜] (𝕜 ->L[𝕜] E) where toLinearEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSpanSingletonCLE
-  signature: : E ≃L[𝕜] (𝕜 ->L[𝕜] E) where
-  body: toSpanSingletonLE ..
-continuous_toFun := continuous_of_continuous_uncurry _
-    continuous_snd.smul continuous_fst
-  continuous_invFun := continuous_eval_const 1
-
-中文:
-定义 toSpanSingletonCLE
-  签名: : E ≃L[𝕜] (𝕜 ->L[𝕜] E) where
-  定义体: toSpanSingletonLE ..
-continuous_toFun := continuous_of_continuous_uncurry _
-    continuous_snd.smul continuous_fst
-  continuous_invFun := continuous_eval_const 1
-
-Depends on / 依赖: toSpanSingletonLE
+--- 原说明 ---
+`ContinuousLinearMap.toSpanSingleton` as a continuous linear equivalence.
 -/
-def toSpanSingletonCLE : E ≃L[𝕜] (𝕜 ->L[𝕜] E) where
+def toSpanSingletonCLE : E ≃L[𝕜] (𝕜 →L[𝕜] E) where
   toLinearEquiv := toSpanSingletonLE ..
-continuous_toFun := continuous_of_continuous_uncurry _
+  continuous_toFun := continuous_of_continuous_uncurry _ <|
     continuous_snd.smul continuous_fst
   continuous_invFun := continuous_eval_const 1
 
@@ -1300,8 +1322,8 @@ variable {𝕜 : Type*} {𝕜₂ : Type*} {𝕜₃ : Type*} {𝕜₄ : Type*} {E
   [Module 𝕜 E] [Module 𝕜₂ F] [Module 𝕜₃ G] [Module 𝕜₄ H]
   [TopologicalSpace E] [TopologicalSpace F] [TopologicalSpace G] [TopologicalSpace H]
   [IsTopologicalAddGroup G] [IsTopologicalAddGroup H] [ContinuousConstSMul 𝕜₃ G]
-  [ContinuousConstSMul 𝕜₄ H] {σ₁₂ : 𝕜 ->+* 𝕜₂} {σ₂₁ : 𝕜₂ ->+* 𝕜} {σ₂₃ : 𝕜₂ ->+* 𝕜₃} {σ₁₃ : 𝕜 ->+* 𝕜₃}
-  {σ₃₄ : 𝕜₃ ->+* 𝕜₄} {σ₄₃ : 𝕜₄ ->+* 𝕜₃} {σ₂₄ : 𝕜₂ ->+* 𝕜₄} {σ₁₄ : 𝕜 ->+* 𝕜₄} [RingHomInvPair σ₁₂ σ₂₁]
+  [ContinuousConstSMul 𝕜₄ H] {σ₁₂ : 𝕜 →+* 𝕜₂} {σ₂₁ : 𝕜₂ →+* 𝕜} {σ₂₃ : 𝕜₂ →+* 𝕜₃} {σ₁₃ : 𝕜 →+* 𝕜₃}
+  {σ₃₄ : 𝕜₃ →+* 𝕜₄} {σ₄₃ : 𝕜₄ →+* 𝕜₃} {σ₂₄ : 𝕜₂ →+* 𝕜₄} {σ₁₄ : 𝕜 →+* 𝕜₄} [RingHomInvPair σ₁₂ σ₂₁]
   [RingHomInvPair σ₂₁ σ₁₂] [RingHomInvPair σ₃₄ σ₄₃] [RingHomInvPair σ₄₃ σ₃₄]
   [RingHomCompTriple σ₂₁ σ₁₄ σ₂₄] [RingHomCompTriple σ₂₄ σ₄₃ σ₂₃] [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
   [RingHomCompTriple σ₁₃ σ₃₄ σ₁₄] [RingHomCompTriple σ₂₃ σ₃₄ σ₂₄] [RingHomCompTriple σ₁₂ σ₂₄ σ₁₄]
@@ -1310,42 +1332,27 @@ variable {𝕜 : Type*} {𝕜₂ : Type*} {𝕜₃ : Type*} {𝕜₄ : Type*} {E
 /-- A pair of continuous (semi)linear equivalences generates a (semi)linear equivalence between the
 spaces of continuous (semi)linear maps. -/
 @[simps apply symm_apply toLinearEquiv_apply toLinearEquiv_symm_apply]
-/--
-Definition of `arrowCongrSL` / `arrowCongrSL` 的定义
+/-
+**ContinuousLinearEquiv.arrowCongrSL** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinear
+Equiv`。
+形式化陈述：arrowCongrSL (e₁₂ : E ≃SL[σ₁₂] F) (e₄₃ : H ≃SL[σ₄₃] G) : (E ->SL[σ₁₄] H) ≃
+SL[σ₄₃] F ->SL[σ₂₃] G
+参数：e₁₂ : E ≃SL[σ₁₂] F；e₄₃ : H ≃SL[σ₄₃] G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowCongrSL
-  signature: (e₁₂ : E ≃SL[σ₁₂] F) (e₄₃ : H ≃SL[σ₄₃] G)
-  body: { e₁₂.arrowCongrEquivₛₗ e₄₃ with
-    -- given explicitly to help `simps`
-    toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
-    -- given explicitly to help `simps`
-    invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
-    continuous_toFun := ((postcomp F e₄₃.toContinuousLinearMap).comp
-      (precomp H e₁₂.symm.toContinuousLinearMap)).continuous
-    continuous_invFun := ((precomp H e₁₂.toContinuousLinearMap).comp
-      (postcomp F e₄₃.symm.toContinuousLinearMap)).continuous }
-
-中文:
-定义 arrowCongrSL
-  签名: (e₁₂ : E ≃SL[σ₁₂] F) (e₄₃ : H ≃SL[σ₄₃] G)
-  定义体: { e₁₂.arrowCongrEquivₛₗ e₄₃ with
-    -- given explicitly to help `simps`
-    toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
-    -- given explicitly to help `simps`
-    invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
-    continuous_toFun := ((postcomp F e₄₃.toContinuousLinearMap).comp
-      (precomp H e₁₂.symm.toContinuousLinearMap)).continuous
-    continuous_invFun := ((precomp H e₁₂.toContinuousLinearMap).comp
-      (postcomp F e₄₃.symm.toContinuousLinearMap)).continuous }
+--- 原说明 ---
+A pair of continuous (semi)linear equivalences generates a (semi)linear equivale
+nce between the
+spaces of continuous (semi)linear maps.
 -/
 def arrowCongrSL (e₁₂ : E ≃SL[σ₁₂] F) (e₄₃ : H ≃SL[σ₄₃] G) :
-    (E ->SL[σ₁₄] H) ≃SL[σ₄₃] F ->SL[σ₂₃] G :=
+    (E →SL[σ₁₄] H) ≃SL[σ₄₃] F →SL[σ₂₃] G :=
 { e₁₂.arrowCongrEquivₛₗ e₄₃ with
     -- given explicitly to help `simps`
-    toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
+    toFun := fun L => (e₄₃ : H →SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F →SL[σ₂₁] E))
     -- given explicitly to help `simps`
-    invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
+    invFun := fun L => (e₄₃.symm : G →SL[σ₃₄] H).comp (L.comp (e₁₂ : E →SL[σ₁₂] F))
     continuous_toFun := ((postcomp F e₄₃.toContinuousLinearMap).comp
       (precomp H e₁₂.symm.toContinuousLinearMap)).continuous
     continuous_invFun := ((precomp H e₁₂.toContinuousLinearMap).comp
@@ -1361,171 +1368,174 @@ variable {𝕜 : Type*} {E : Type*} {F : Type*} {G : Type*} {H : Type*} [AddComm
   [TopologicalSpace G] [TopologicalSpace H] [IsTopologicalAddGroup G] [IsTopologicalAddGroup H]
   [ContinuousConstSMul 𝕜 G] [ContinuousConstSMul 𝕜 H]
 
-/--
-Definition of `arrowCongr` / `arrowCongr` 的定义
+/-- A pair of continuous linear equivalences generates a continuous linear equivalence between
+the spaces of continuous linear maps. -/
+/-
+**ContinuousLinearEquiv.arrowCongr** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearEq
+uiv`。
+形式化陈述：arrowCongr (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) : (E ->L[𝕜] H) ≃L[𝕜] F ->L[𝕜]
+ G
+参数：e₁ : E ≃L[𝕜] F；e₂ : H ≃L[𝕜] G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowCongr
-  signature: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G)
-  body: e₁.arrowCongrSL e₂
-
-中文:
-定义 arrowCongr
-  签名: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G)
-  定义体: e₁.arrowCongrSL e₂
-
-Depends on / 依赖: arrowCongrSL
+--- 原说明 ---
+A pair of continuous linear equivalences generates a continuous linear equivalen
+ce between
+the spaces of continuous linear maps.
 -/
-def arrowCongr (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) : (E ->L[𝕜] H) ≃L[𝕜] F ->L[𝕜] G :=
+def arrowCongr (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) : (E →L[𝕜] H) ≃L[𝕜] F →L[𝕜] G :=
   e₁.arrowCongrSL e₂
-
-/--
-lemma `arrowCongr_apply` / 引理 `arrowCongr_apply`
-
-English:
-lemma arrowCongr_apply
-  given: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) (f : E ->L[𝕜] H) (x : F)
-  proof: rfl
-
-中文:
-引理 arrowCongr_apply
-  条件: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) (f : E ->L[𝕜] H) (x : F)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.arrowCongr_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Type u_4} {H : Type u_
+5} [inst : AddCommGroup E]   [inst_1 : AddCommGroup F] [inst_2 : AddCommGroup G]
+ [inst_3 : AddCommGroup H] [inst_4 : NormedField 𝕜]   [inst_5 : _root_.Module 𝕜 
+E] [inst_6 : _root_.Module 𝕜 F] [inst_7 : _root_.Module 𝕜 G] [inst_8 : _root_.Mo
+dule 𝕜 H]   [inst_9 : TopologicalSpace E] [inst_10 : TopologicalSpace F] [inst_1
+1 : TopologicalSpace G]   [inst_12 : TopologicalSpace H] [inst_13 : IsTopologica
+lAddGroup G] [inst_14 : IsTopologicalAddGroup H]   [inst_15 : ContinuousConstSMu
+l 𝕜 G] [inst_16 : ContinuousConstSMul 𝕜 H] (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G)   (
+f : E →L[𝕜] H) (x : F), ((e₁.arrowCongr e₂) f) x = e₂ (f (e₁.symm x))
+参数：e₁ : E ≃L[𝕜] F；e₂ : H ≃L[𝕜] G；f : E →L[𝕜] H；x : F；(e₁.arrowCongr e₂) f；f (e₁.
+symm x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-@[simp] lemma arrowCongr_apply (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) (f : E ->L[𝕜] H) (x : F) :
+@[simp] lemma arrowCongr_apply (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) (f : E →L[𝕜] H) (x : F) :
     e₁.arrowCongr e₂ f x = e₂ (f (e₁.symm x)) := rfl
-
-/--
-lemma `arrowCongr_symm` / 引理 `arrowCongr_symm`
-
-English:
-lemma arrowCongr_symm
-  given: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G)
-  proof: rfl
-
-中文:
-引理 arrowCongr_symm
-  条件: (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.arrowCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Type u_4} {H : Type u_
+5} [inst : AddCommGroup E]   [inst_1 : AddCommGroup F] [inst_2 : AddCommGroup G]
+ [inst_3 : AddCommGroup H] [inst_4 : NormedField 𝕜]   [inst_5 : _root_.Module 𝕜 
+E] [inst_6 : _root_.Module 𝕜 F] [inst_7 : _root_.Module 𝕜 G] [inst_8 : _root_.Mo
+dule 𝕜 H]   [inst_9 : TopologicalSpace E] [inst_10 : TopologicalSpace F] [inst_1
+1 : TopologicalSpace G]   [inst_12 : TopologicalSpace H] [inst_13 : IsTopologica
+lAddGroup G] [inst_14 : IsTopologicalAddGroup H]   [inst_15 : ContinuousConstSMu
+l 𝕜 G] [inst_16 : ContinuousConstSMul 𝕜 H] (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G),   
+(e₁.arrowCongr e₂).symm = e₁.symm.arrowCongr e₂.symm
+参数：e₁ : E ≃L[𝕜] F；e₂ : H ≃L[𝕜] G；e₁.arrowCongr e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 @[simp] lemma arrowCongr_symm (e₁ : E ≃L[𝕜] F) (e₂ : H ≃L[𝕜] G) :
     (e₁.arrowCongr e₂).symm = e₁.symm.arrowCongr e₂.symm := rfl
 
-/--
-Definition of `conjContinuousAlgEquiv` / `conjContinuousAlgEquiv` 的定义
+/-- A continuous linear equivalence of two spaces induces a continuous equivalence of algebras of
+their endomorphisms. -/
+/-
+**ContinuousLinearEquiv.conjContinuousAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Contin
+uousLinearEquiv`。
+形式化陈述：conjContinuousAlgEquiv (e : G ≃L[𝕜] H) : (G ->L[𝕜] G) ≃A[𝕜] (H ->L[𝕜] H)
+参数：e : G ≃L[𝕜] H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjContinuousAlgEquiv
-  signature: (e : G ≃L[𝕜] H)
-  body: { e.arrowCongr e with
-    map_mul' _ _ := by ext; simp
-    commutes' _ := by ext; simp }
-
-中文:
-定义 conjContinuousAlgEquiv
-  签名: (e : G ≃L[𝕜] H)
-  定义体: { e.arrowCongr e with
-    map_mul' _ _ := by ext; simp
-    commutes' _ := by ext; simp }
-
-Depends on / 依赖: arrowCongr, commutes, e.arrowCongr, map_mul
+--- 原说明 ---
+A continuous linear equivalence of two spaces induces a continuous equivalence o
+f algebras of
+their endomorphisms.
 -/
-def conjContinuousAlgEquiv (e : G ≃L[𝕜] H) : (G ->L[𝕜] G) ≃A[𝕜] (H ->L[𝕜] H) :=
+def conjContinuousAlgEquiv (e : G ≃L[𝕜] H) : (G →L[𝕜] G) ≃A[𝕜] (H →L[𝕜] H) :=
   { e.arrowCongr e with
     map_mul' _ _ := by ext; simp
     commutes' _ := by ext; simp }
-
-/--
-theorem `conjContinuousAlgEquiv_apply_apply` / 定理 `conjContinuousAlgEquiv_apply_apply`
-
-English:
-theorem conjContinuousAlgEquiv_apply_apply
-  given: (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G) (x : H)
-  proof: rfl
-
-中文:
-定理 conjContinuousAlgEquiv_apply_apply
-  条件: (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G) (x : H)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.conjContinuousAlgEquiv_apply_apply** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousLinearEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} {G : Type u_4} {H : Type u_5} [inst : AddCommGroup G] [in
+st_1 : AddCommGroup H]   [inst_2 : NormedField 𝕜] [inst_3 : _root_.Module 𝕜 G] [
+inst_4 : _root_.Module 𝕜 H] [inst_5 : TopologicalSpace G]   [inst_6 : Topologica
+lSpace H] [inst_7 : IsTopologicalAddGroup G] [inst_8 : IsTopologicalAddGroup H] 
+  [inst_9 : ContinuousConstSMul 𝕜 G] [inst_10 : ContinuousConstSMul 𝕜 H] (e : G 
+≃L[𝕜] H) (f : G →L[𝕜] G) (x : H),   (e.conjContinuousAlgEquiv f) x = e (f (e.sym
+m x))
+参数：e : G ≃L[𝕜] H；f : G →L[𝕜] G；x : H；e.conjContinuousAlgEquiv f；f (e.symm x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-@[simp] theorem conjContinuousAlgEquiv_apply_apply (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G) (x : H) :
+@[simp] theorem conjContinuousAlgEquiv_apply_apply (e : G ≃L[𝕜] H) (f : G →L[𝕜] G) (x : H) :
     e.conjContinuousAlgEquiv f x = e (f (e.symm x)) := rfl
-
-/--
-theorem `symm_conjContinuousAlgEquiv_apply_apply` / 定理 `symm_conjContinuousAlgEquiv_apply_apply`
-
-English:
-theorem symm_conjContinuousAlgEquiv_apply_apply
-  given: (e : G ≃L[𝕜] H) (f : H ->L[𝕜] H) (x : G)
-  proof: rfl
-
-中文:
-定理 symm_conjContinuousAlgEquiv_apply_apply
-  条件: (e : G ≃L[𝕜] H) (f : H ->L[𝕜] H) (x : G)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.symm_conjContinuousAlgEquiv_apply_apply** 是 Mathlib 中的一个
+定理，位于命名空间 `ContinuousLinearEquiv`。
+形式化陈述：symm_conjContinuousAlgEquiv_apply_apply (e : G ≃L[𝕜] H) (f : H ->L[𝕜] H) (
+x : G) : e.conjContinuousAlgEquiv.symm f x = e.symm (f (e x))
+参数：e : G ≃L[𝕜] H；f : H ->L[𝕜] H；x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-theorem symm_conjContinuousAlgEquiv_apply_apply (e : G ≃L[𝕜] H) (f : H ->L[𝕜] H) (x : G) :
+theorem symm_conjContinuousAlgEquiv_apply_apply (e : G ≃L[𝕜] H) (f : H →L[𝕜] H) (x : G) :
     e.conjContinuousAlgEquiv.symm f x = e.symm (f (e x)) := rfl
-
-/--
-theorem `conjContinuousAlgEquiv_apply` / 定理 `conjContinuousAlgEquiv_apply`
-
-English:
-theorem conjContinuousAlgEquiv_apply
-  given: (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G)
-  proof: rfl
-
-中文:
-定理 conjContinuousAlgEquiv_apply
-  条件: (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.conjContinuousAlgEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousLinearEquiv`。
+形式化陈述：conjContinuousAlgEquiv_apply (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G) : e.conjCont
+inuousAlgEquiv f = e ∘L f ∘L e.symm
+参数：e : G ≃L[𝕜] H；f : G ->L[𝕜] G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-theorem conjContinuousAlgEquiv_apply (e : G ≃L[𝕜] H) (f : G ->L[𝕜] G) :
+theorem conjContinuousAlgEquiv_apply (e : G ≃L[𝕜] H) (f : G →L[𝕜] G) :
     e.conjContinuousAlgEquiv f = e ∘L f ∘L e.symm := rfl
-
-/--
-theorem `symm_conjContinuousAlgEquiv` / 定理 `symm_conjContinuousAlgEquiv`
-
-English:
-theorem symm_conjContinuousAlgEquiv
-  given: (e : G ≃L[𝕜] H)
-  proof: rfl
-
-中文:
-定理 symm_conjContinuousAlgEquiv
-  条件: (e : G ≃L[𝕜] H)
-  证明: rfl
+/-
+**ContinuousLinearEquiv.symm_conjContinuousAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} {G : Type u_4} {H : Type u_5} [inst : AddCommGroup G] [in
+st_1 : AddCommGroup H]   [inst_2 : NormedField 𝕜] [inst_3 : _root_.Module 𝕜 G] [
+inst_4 : _root_.Module 𝕜 H] [inst_5 : TopologicalSpace G]   [inst_6 : Topologica
+lSpace H] [inst_7 : IsTopologicalAddGroup G] [inst_8 : IsTopologicalAddGroup H] 
+  [inst_9 : ContinuousConstSMul 𝕜 G] [inst_10 : ContinuousConstSMul 𝕜 H] (e : G 
+≃L[𝕜] H),   e.conjContinuousAlgEquiv.symm = e.symm.conjContinuousAlgEquiv
+参数：e : G ≃L[𝕜] H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 @[simp] theorem symm_conjContinuousAlgEquiv (e : G ≃L[𝕜] H) :
     e.conjContinuousAlgEquiv.symm = e.symm.conjContinuousAlgEquiv := rfl
-
-/--
-theorem `conjContinuousAlgEquiv_refl` / 定理 `conjContinuousAlgEquiv_refl`
-
-English:
-theorem conjContinuousAlgEquiv_refl
-  statement: conjContinuousAlgEquiv (.refl 𝕜 G) = .refl 𝕜 _
-  proof: rfl
-
-中文:
-定理 conjContinuousAlgEquiv_refl
-  结论: conjContinuousAlgEquiv (.refl 𝕜 G) = .refl 𝕜 _
-  证明: rfl
+/-
+**ContinuousLinearEquiv.conjContinuousAlgEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearEquiv`。
+形式化陈述：∀ {𝕜 : Type u_1} {G : Type u_4} [inst : AddCommGroup G] [inst_1 : NormedFi
+eld 𝕜] [inst_2 : _root_.Module 𝕜 G]   [inst_3 : TopologicalSpace G] [inst_4 : Is
+TopologicalAddGroup G] [inst_5 : ContinuousConstSMul 𝕜 G],   (ContinuousLinearEq
+uiv.refl 𝕜 G).conjContinuousAlgEquiv = ContinuousAlgEquiv.refl 𝕜 (G →L[𝕜] G)
+参数：ContinuousLinearEquiv.refl 𝕜 G；G →L[𝕜] G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 @[simp] theorem conjContinuousAlgEquiv_refl : conjContinuousAlgEquiv (.refl 𝕜 G) = .refl 𝕜 _ := rfl
-
-/--
-theorem `conjContinuousAlgEquiv_trans` / 定理 `conjContinuousAlgEquiv_trans`
-
-English:
-theorem conjContinuousAlgEquiv_trans
-  statement: [IsTopologicalAddGroup E] [ContinuousConstSMul 𝕜 E]
-  proof: rfl
-
-中文:
-定理 conjContinuousAlgEquiv_trans
-  结论: [是拓扑加群 E] [连续常数标量乘法 𝕜 E]
-  证明: rfl
+/-
+**ContinuousLinearEquiv.conjContinuousAlgEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousLinearEquiv`。
+形式化陈述：conjContinuousAlgEquiv_trans [IsTopologicalAddGroup E] [ContinuousConstSMu
+l 𝕜 E] (e : E ≃L[𝕜] G) (f : G ≃L[𝕜] H) : (e.trans f).conjContinuousAlgEquiv = e.
+conjContinuousAlgEquiv.trans f.conjContinuousAlgEquiv
+参数：e : E ≃L[𝕜] G；f : G ≃L[𝕜] H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 theorem conjContinuousAlgEquiv_trans [IsTopologicalAddGroup E] [ContinuousConstSMul 𝕜 E]
     (e : E ≃L[𝕜] G) (f : G ≃L[𝕜] H) :
@@ -1535,3 +1545,4 @@ theorem conjContinuousAlgEquiv_trans [IsTopologicalAddGroup E] [ContinuousConstS
 end Linear
 
 end ContinuousLinearEquiv
+

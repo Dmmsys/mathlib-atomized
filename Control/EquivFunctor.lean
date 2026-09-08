@@ -24,32 +24,36 @@ universe u₀ u₁ u₂ v₀ v₁ v₂
 
 open Function
 
-/--
-Definition of `EquivFunctor` / `EquivFunctor` 的定义
+/-- An `EquivFunctor` is only functorial with respect to equivalences.
 
-English:
-class EquivFunctor
-  parameters: (f : Type u₀ -> Type u₁)
-  axioms and operations (3):
-    - map : forall {α β}, α ≃ β -> f α -> f β
-    - map_refl' : forall α, map (Equiv.refl α) = @id (f α)  [default: by rfl]
-    - map_trans' : forall {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k  [default: by rfl]
-
-中文:
-类 等价函子
-  参数: (f : 类型u₀ -> 类型u₁)
-  公理与运算 (3 个):
-    - map : 对任意 {α β}, α ≃ β -> f α -> f β
-    - map_refl' : 对任意 α, map (等价.refl α) = @id (f α)  [默认: by rfl]
-    - map_trans' : 对任意 {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k  [默认: by rfl]
+To construct an `EquivFunctor`, it suffices to supply just the function `f α → f β` from
+an equivalence `α ≃ β`, and then prove the functor laws. It's then a consequence that
+this function is part of an equivalence, provided by `EquivFunctor.mapEquiv`.
 -/
-class EquivFunctor (f : Type u₀ -> Type u₁) where
+/-
+**EquivFunctor** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：EquivFunctor (f : Type u₀ -> Type u₁) where /-- The action of `f` on isomo
+rphisms. -/ map : forall {α β}, α ≃ β -> f α -> f β /-- `map` of `f` preserves t
+he identity morphism. -/ map_refl' : forall α, map (Equiv.refl α) = @id (f α)
+参数：f : Type u₀ -> Type u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An `EquivFunctor` is only functorial with respect to equivalences.
+
+To construct an `EquivFunctor`, it suffices to supply just the function `f α → f
+ β` from
+an equivalence `α ≃ β`, and then prove the functor laws. It's then a consequence
+ that
+this function is part of an equivalence, provided by `EquivFunctor.mapEquiv`.
+-/
+class EquivFunctor (f : Type u₀ → Type u₁) where
   /-- The action of `f` on isomorphisms. -/
-  map : forall {α β}, α ≃ β -> f α -> f β
+  map : ∀ {α β}, α ≃ β → f α → f β
   /-- `map` of `f` preserves the identity morphism. -/
-  map_refl' : forall α, map (Equiv.refl α) = @id (f α) := by rfl
+  map_refl' : ∀ α, map (Equiv.refl α) = @id (f α) := by rfl
   /-- `map` is functorial on equivalences. -/
-  map_trans' : forall {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k := by rfl
+  map_trans' : ∀ {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k := by rfl
 
 attribute [simp] EquivFunctor.map_refl'
 
@@ -57,40 +61,18 @@ namespace EquivFunctor
 
 section
 
-variable (f : Type u₀ -> Type u₁) [EquivFunctor f] {α β : Type u₀} (e : α ≃ β)
+variable (f : Type u₀ → Type u₁) [EquivFunctor f] {α β : Type u₀} (e : α ≃ β)
 
-/--
-Definition of `mapEquiv` / `mapEquiv` 的定义
+/-- An `EquivFunctor` in fact takes every equiv to an equiv. -/
+/-
+**EquivFunctor.mapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv : f α ≃ f β where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mapEquiv
-  signature: : f α ≃ f β where
-  body: EquivFunctor.map e
-  invFun := EquivFunctor.map e.symm
-  left_inv x := by
-    convert! (congr_fun (EquivFunctor.map_trans' e e.symm) x).symm
-    simp
-  right_inv y := by
-    convert! (congr_fun (EquivFunctor.map_trans' e.symm e) y).symm
-    simp
-
-@[simp]
-
-中文:
-定义 mapEquiv
-  签名: : f α ≃ f β where
-  定义体: EquivFunctor.map e
-  invFun := EquivFunctor.map e.symm
-  left_inv x := by
-    convert! (congr_fun (EquivFunctor.map_trans' e e.symm) x).symm
-    simp
-  right_inv y := by
-    convert! (congr_fun (EquivFunctor.map_trans' e.symm e) y).symm
-    simp
-
-@[simp]
-
-Depends on / 依赖: EquivFunctor, EquivFunctor.map
+--- 原说明 ---
+An `EquivFunctor` in fact takes every equiv to an equiv.
 -/
 def mapEquiv : f α ≃ f β where
   toFun := EquivFunctor.map e
@@ -103,91 +85,68 @@ def mapEquiv : f α ≃ f β where
     simp
 
 @[simp]
-/--
-theorem `mapEquiv_apply` / 定理 `mapEquiv_apply`
-
-English:
-theorem mapEquiv_apply
-  given: (x : f α)
-  statement: mapEquiv f e x = EquivFunctor.map e x
-  proof: rfl
-
-中文:
-定理 mapEquiv_apply
-  条件: (x : f α)
-  结论: mapEquiv f e x = 等价函子.map e x
-  证明: rfl
+/-
+**EquivFunctor.mapEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv_apply (x : f α) : mapEquiv f e x = EquivFunctor.map e x
+参数：x : f α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapEquiv_apply (x : f α) : mapEquiv f e x = EquivFunctor.map e x :=
   rfl
-
-/--
-theorem `mapEquiv_symm_apply` / 定理 `mapEquiv_symm_apply`
-
-English:
-theorem mapEquiv_symm_apply
-  given: (y : f β)
-  statement: (mapEquiv f e).symm y = EquivFunctor.map e.symm y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapEquiv_symm_apply
-  条件: (y : f β)
-  结论: (mapEquiv f e).symm y = 等价函子.map e.symm y
-  证明: rfl
-
-@[simp]
+/-
+**EquivFunctor.mapEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv_symm_apply (y : f β) : (mapEquiv f e).symm y = EquivFunctor.map e
+.symm y
+参数：y : f β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mapEquiv_symm_apply (y : f β) : (mapEquiv f e).symm y = EquivFunctor.map e.symm y :=
   rfl
 
 @[simp]
-/--
-theorem `mapEquiv_refl` / 定理 `mapEquiv_refl`
-
-English:
-theorem mapEquiv_refl
-  given: (α)
-  statement: mapEquiv f (Equiv.refl α) = Equiv.refl (f α)
-  proof: by
-  ext; simp [mapEquiv]
-
-@[simp]
-
-中文:
-定理 mapEquiv_refl
-  条件: (α)
-  结论: mapEquiv f (等价.refl α) = 等价.refl (f α)
-  证明: by
-  ext; simp [mapEquiv]
-
-@[simp]
-
-Depends on / 依赖: mapEquiv
+/-
+**EquivFunctor.mapEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv_refl (α) : mapEquiv f (Equiv.refl α) = Equiv.refl (f α)
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `EquivFunctor.map_refl'`：∀ {f : Type u₀ → Type u₁} [self : EquivFunctor f
+] (α : Type u₀), EquivFunctor.map (Equiv.refl α) = id
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mapEquiv_refl (α) : mapEquiv f (Equiv.refl α) = Equiv.refl (f α) := by
   ext; simp [mapEquiv]
 
 @[simp]
-/--
-theorem `mapEquiv_symm` / 定理 `mapEquiv_symm`
-
-English:
-theorem mapEquiv_symm
-  statement: (mapEquiv f e).symm = mapEquiv f e.symm
-  proof: Equiv.ext mapEquiv_symm_apply f e
-
-中文:
-定理 mapEquiv_symm
-  结论: (mapEquiv f e).symm = mapEquiv f e.symm
-  证明: Equiv.ext mapEquiv_symm_apply f e
-
-Depends on / 依赖: Equiv.ext, mapEquiv_symm_apply
+/-
+**EquivFunctor.mapEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv_symm : (mapEquiv f e).symm = mapEquiv f e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `EquivFunctor.mapEquiv_symm_apply`：mapEquiv_symm_apply (y : f β) : (mapEq
+uiv f e).symm y = EquivFunctor.map e.symm y
 -/
 theorem mapEquiv_symm : (mapEquiv f e).symm = mapEquiv f e.symm :=
-Equiv.ext mapEquiv_symm_apply f e
+  Equiv.ext <| mapEquiv_symm_apply f e
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The composition of `mapEquiv`s is carried over the `EquivFunctor`.
@@ -195,20 +154,36 @@ For plain `Functor`s, this lemma is named `map_map` when applied
 or `map_comp_map` when not applied.
 -/
 @[simp]
-/--
-theorem `mapEquiv_trans` / 定理 `mapEquiv_trans`
+/-
+**EquivFunctor.mapEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor`。
+形式化陈述：mapEquiv_trans {γ : Type u₀} (ab : α ≃ β) (bc : β ≃ γ) : (mapEquiv f ab).t
+rans (mapEquiv f bc) = mapEquiv f (ab.trans bc)
+参数：ab : α ≃ β；bc : β ≃ γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `EquivFunctor.map_trans'`：∀ {f : Type u₀ → Type u₁} [self : EquivFunctor 
+f] {α β γ : Type u₀} (k : α ≃ β) (h : β ≃ γ),   EquivFunctor.map (k.trans h) = E
+quivFunctor.m…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mapEquiv_trans
-  given: {γ : Type u₀} (ab : α ≃ β) (bc : β ≃ γ)
-  proof: Equiv.ext fun x => by simp [mapEquiv, map_trans']
-
-中文:
-定理 mapEquiv_trans
-  条件: {γ : 类型u₀} (ab : α ≃ β) (bc : β ≃ γ)
-  证明: Equiv.ext fun x => by simp [mapEquiv, map_trans']
-
-Depends on / 依赖: Equiv.ext, mapEquiv, map_trans
+--- 原说明 ---
+The composition of `mapEquiv`s is carried over the `EquivFunctor`.
+For plain `Functor`s, this lemma is named `map_map` when applied
+or `map_comp_map` when not applied.
 -/
 theorem mapEquiv_trans {γ : Type u₀} (ab : α ≃ β) (bc : β ≃ γ) :
     (mapEquiv f ab).trans (mapEquiv f bc) = mapEquiv f (ab.trans bc) :=
@@ -216,7 +191,11 @@ theorem mapEquiv_trans {γ : Type u₀} (ab : α ≃ β) (bc : β ≃ γ) :
 
 end
 
-instance (priority := 100) ofLawfulFunctor (f : Type u₀ -> Type u₁) [Functor f] [LawfulFunctor f] :
+/-
+**EquivFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `EquivFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) ofLawfulFunctor (f : Type u₀ → Type u₁) [Functor f] [LawfulFunctor f] :
     EquivFunctor f where
   map {_ _} e := Functor.map e
   map_refl' α := by
@@ -225,29 +204,35 @@ instance (priority := 100) ofLawfulFunctor (f : Type u₀ -> Type u₁) [Functor
   map_trans' {α β γ} k h := by
     ext x
     apply LawfulFunctor.comp_map k h x
-
-/--
-theorem `mapEquiv.injective` / 定理 `mapEquiv.injective`
-
-English:
-theorem mapEquiv.injective
-  statement: (f : Type u₀ -> Type u₁)
-  proof: fun e₁ e₂ H =>
-    Equiv.ext fun x => h β (by simpa [EquivFunctor.map] using Equiv.congr_fun H (pure x))
-
-中文:
-定理 mapEquiv.injective
-  结论: (f : 类型u₀ -> 类型u₁)
-  证明: fun e₁ e₂ H =>
-    Equiv.ext fun x => h β (by simpa [EquivFunctor.map] using Equiv.congr_fun H (pure x))
-
-Depends on / 依赖: Equiv.congr_fun, Equiv.ext, EquivFunctor, EquivFunctor.map, congr_fun
+/-
+**EquivFunctor.mapEquiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `EquivFunctor.mapEqu
+iv`。
+形式化陈述：∀ (f : Type u₀ → Type u₁) [inst : Applicative f] [inst_1 : LawfulApplicati
+ve f] {α β : Type u₀},   (∀ (γ : Type u₀), Function.Injective pure) → Function.I
+njective (EquivFunctor.mapEquiv f)
+参数：f : Type u₀ → Type u₁；∀ (γ : Type u₀), Function.Injective pure；EquivFunctor.m
+apEquiv f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LawfulApplicative.toLawfulFunctor`：∀ {f : Type u → Type v} {inst : Appli
+cative f} [self : LawfulApplicative f], LawfulFunctor f
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulApplicative.map_pure`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : α → β) (x : α),   g <$> pure
+ x = pure (g x)
+· 使用定理 `Equiv.congr_fun`：∀ {α : Sort u} {β : Sort v} {f g : α ≃ β}, f = g → ∀ (x
+ : α), f x = g x
 -/
-theorem mapEquiv.injective (f : Type u₀ -> Type u₁)
+theorem mapEquiv.injective (f : Type u₀ → Type u₁)
     [Applicative f] [LawfulApplicative f] {α β : Type u₀}
-    (h : forall γ, Function.Injective (pure : γ -> f γ)) :
+    (h : ∀ γ, Function.Injective (pure : γ → f γ)) :
       Function.Injective (@EquivFunctor.mapEquiv f _ α β) :=
   fun e₁ e₂ H =>
     Equiv.ext fun x => h β (by simpa [EquivFunctor.map] using Equiv.congr_fun H (pure x))
 
 end EquivFunctor
+

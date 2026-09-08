@@ -21,22 +21,15 @@ namespace Submonoid
 variable (α) [MulZeroOneClass α] [PartialOrder α] [PosMulStrictMono α] [ZeroLEOneClass α]
   [NeZero (1 : α)] {a : α}
 
-/--
-Definition of `pos` / `pos` 的定义
+/-- The submonoid of positive elements. -/
+/-
+**Submonoid.pos** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：(α : Type u_1) →   [inst : MulZeroOneClass α] →     [inst_1 : PartialOrder
+ α] → [PosMulStrictMono α] → [ZeroLEOneClass α] → [NeZero 1] → Submonoid α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pos
-  signature: : Submonoid α where
-  body: Set.Ioi 0
-  one_mem' := zero_lt_one
-  mul_mem' := mul_pos
-
-中文:
-定义 pos
-  签名: : 子幺半群 α where
-  定义体: Set.Ioi 0
-  one_mem' := zero_lt_one
-  mul_mem' := mul_pos
+--- 原说明 ---
+The submonoid of positive elements.
 -/
 @[simps] def pos : Submonoid α where
   carrier := Set.Ioi 0
@@ -44,20 +37,15 @@ definition pos
   mul_mem' := mul_pos
 
 variable {α}
-
-/--
-lemma `mem_pos` / 引理 `mem_pos`
-
-English:
-lemma mem_pos
-  statement: a in pos α ↔ 0 < a
-  proof: Iff.rfl
-
-中文:
-引理 mem_pos
-  结论: a in pos α ↔ 0 < a
-  证明: Iff.rfl
+/-
+**Submonoid.mem_pos** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {α : Type u_1} [inst : MulZeroOneClass α] [inst_1 : PartialOrder α] [ins
+t_2 : PosMulStrictMono α]   [inst_3 : ZeroLEOneClass α] [inst_4 : NeZero 1] {a :
+ α}, a ∈ Submonoid.pos α ↔ 0 < a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_pos : a in pos α ↔ 0 < a := Iff.rfl
+@[simp] lemma mem_pos : a ∈ pos α ↔ 0 < a := Iff.rfl
 
 end Submonoid
+

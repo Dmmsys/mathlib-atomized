@@ -19,30 +19,9 @@ namespace Prod
 
 variable {α β : Type*} [AddGroupWithOne α] [AddGroupWithOne β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddGroupWithOne (α × β)
-  body: { Prod.instAddMonoidWithOne, Prod.instAddGroup with
-    intCast := fun n => (n, n)
-    intCast_ofNat := fun _ => by ext <;> simp
-    intCast_negSucc := fun _ => by ext <;> simp }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法带幺群 (α × β)
-  定义体: { Prod.instAddMonoidWithOne, Prod.instAddGroup with
-    intCast := fun n => (n, n)
-    intCast_ofNat := fun _ => by ext <;> simp
-    intCast_negSucc := fun _ => by ext <;> simp }
-
-@[simp]
-
-Depends on / 依赖: Prod.instAddGroup, Prod.instAddMonoidWithOne, instAddGroup, instAddMonoidWithOne, intCast, intCast_negSucc, intCast_ofNat
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddGroupWithOne (α × β) :=
   { Prod.instAddMonoidWithOne, Prod.instAddGroup with
@@ -51,45 +30,26 @@ instance : AddGroupWithOne (α × β) :=
     intCast_negSucc := fun _ => by ext <;> simp }
 
 @[simp]
-/--
-theorem `fst_intCast` / 定理 `fst_intCast`
-
-English:
-theorem fst_intCast
-  given: (n : Int)
-  statement: (n : α × β).fst = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_intCast
-  条件: (n : 整数)
-  结论: (n : α × β).fst = n
-  证明: rfl
-
-@[simp]
+/-
+**Prod.fst_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：fst_intCast (n : Int) : (n : α × β).fst = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fst_intCast (n : Int) : (n : α × β).fst = n :=
+theorem fst_intCast (n : ℤ) : (n : α × β).fst = n :=
   rfl
 
 @[simp]
-/--
-theorem `snd_intCast` / 定理 `snd_intCast`
-
-English:
-theorem snd_intCast
-  given: (n : Int)
-  statement: (n : α × β).snd = n
-  proof: rfl
-
-中文:
-定理 snd_intCast
-  条件: (n : 整数)
-  结论: (n : α × β).snd = n
-  证明: rfl
+/-
+**Prod.snd_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：snd_intCast (n : Int) : (n : α × β).snd = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem snd_intCast (n : Int) : (n : α × β).snd = n :=
+theorem snd_intCast (n : ℤ) : (n : α × β).snd = n :=
   rfl
 
 end Prod
+

@@ -28,6 +28,11 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory
 variable {C : Type u} [Category.{v} C] [Preadditive C] [CartesianMonoidalCategory C]
 
 @[simps]
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : GrpObj X where
   one := 0
   mul := fst _ _ + snd _ _
@@ -37,7 +42,11 @@ instance (X : C) : GrpObj X where
   mul_assoc := by simp [add_assoc]
 
 variable [BraidedCategory C]
-
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : IsCommMonObj X where
   mul_comm := by simp [add_comm]
 
@@ -45,20 +54,20 @@ variable (C) in
 /-- The canonical functor from an additive category into its commutative group objects. This is
 always an equivalence, see `commGrpEquivalence`. -/
 @[simps]
-/--
-Definition of `toCommGrp` / `toCommGrp` 的定义
+/-
+**CategoryTheory.Preadditive.toCommGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Preadditive`。
+形式化陈述：toCommGrp : C ⥤ CommGrp C where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.instIsCommMonObj`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   [inst_2 
+: CategoryTheory.CartesianMonoida…
 
-English:
-definition toCommGrp
-  signature: : C ⥤ CommGrp C where
-  body: ⟨X⟩
-  map {X Y} f := InducedCategory.homMk (Grp.homMk'' f)
-
-中文:
-定义 toCommGrp
-  签名: : C ⥤ 交换群 C where
-  定义体: ⟨X⟩
-  map {X Y} f := InducedCategory.homMk (Grp.homMk'' f)
+--- 原说明 ---
+The canonical functor from an additive category into its commutative group objec
+ts. This is
+always an equivalence, see `commGrpEquivalence`.
 -/
 def toCommGrp : C ⥤ CommGrp C where
   obj X := ⟨X⟩
@@ -68,22 +77,12 @@ def toCommGrp : C ⥤ CommGrp C where
 -- `CartesianMonoidalCategory` in preadditive categories, to give this lemma a proper home.
 set_option backward.privateInPublic true in
 omit [BraidedCategory C] in
-/--
-theorem `monoidal_hom_ext` / 定理 `monoidal_hom_ext`
-
-English:
-theorem monoidal_hom_ext
-  statement: {X Y Z : C} {f g : X otimes Y ⟶ Z}
-  proof: BinaryCofan.IsColimit.hom_ext
-    (binaryBiconeIsBilimitOfLimitConeOfIsLimit (tensorProductIsBinaryProduct X Y)).isColimit h₁ h₂
-
-中文:
-定理 monoidal_hom_ext
-  结论: {X Y Z : C} {f g : X otimes Y ⟶ Z}
-  证明: BinaryCofan.IsColimit.hom_ext
-    (binaryBiconeIsBilimitOfLimitConeOfIsLimit (tensorProductIsBinaryProduct X Y)).isColimit h₁ h₂
+/-
+**CategoryTheory.Preadditive.monoidal_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Preadditive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem monoidal_hom_ext {X Y Z : C} {f g : X otimes Y ⟶ Z}
+private theorem monoidal_hom_ext {X Y Z : C} {f g : X ⊗ Y ⟶ Z}
     (h₁ : lift (𝟙 X) 0 ≫ f = lift (𝟙 X) 0 ≫ g) (h₂ : lift 0 (𝟙 Y) ≫ f = lift 0 (𝟙 Y) ≫ g) :
     f = g :=
   BinaryCofan.IsColimit.hom_ext
@@ -94,48 +93,15 @@ set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /-- Auxiliary definition for `commGrpEquivalence`. -/
 @[simps!]
-/--
-Definition of `commGrpEquivalenceAux` / `commGrpEquivalenceAux` 的定义
+/-
+**CategoryTheory.Preadditive.commGrpEquivalenceAux** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Preadditive`。
+形式化陈述：commGrpEquivalenceAux : CommGrp.forget C ⋙ toCommGrp C ≅ 𝟭 (CommGrp C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commGrpEquivalenceAux
-  signature: : CommGrp.forget C ⋙ toCommGrp C ≅
-  body: by
-  refine NatIso.ofComponents (fun _ => CommGrp.mkIso (Iso.refl _) ?_ ?_) ?_
-  · exact ((IsZero.iff_id_eq_zero _).2 (Subsingleton.elim _ _)).eq_of_src _ _
-  · simp only [Functor.id_obj,
-      mul_def, Iso.refl_hom, Category.comp_id, tensorHom_id, id_whiskerRight, Category.id_comp]
-    apply monoidal_hom_ext
-    · simp only [comp_add, lift_fst, lift_snd, add_zero]
-      convert! (MonObj.lift_comp_one_right _ 0).symm
-      · simp
-      · infer_instance
-    · simp only [comp_add, lift_fst, lift_snd, zero_add]
-      convert! (MonObj.lift_comp_one_left 0 _).symm
-      · simp
-      · infer_instance
-  · cat_disch
-
-中文:
-定义 commGrpEquivalenceAux
-  签名: : 交换群.forget C ⋙ toCommGrp C ≅
-  定义体: by
-  refine NatIso.ofComponents (fun _ => CommGrp.mkIso (Iso.refl _) ?_ ?_) ?_
-  · exact ((IsZero.iff_id_eq_zero _).2 (Subsingleton.elim _ _)).eq_of_src _ _
-  · simp only [Functor.id_obj,
-      mul_def, Iso.refl_hom, Category.comp_id, tensorHom_id, id_whiskerRight, Category.id_comp]
-    apply monoidal_hom_ext
-    · simp only [comp_add, lift_fst, lift_snd, add_zero]
-      convert! (MonObj.lift_comp_one_right _ 0).symm
-      · simp
-      · infer_instance
-    · simp only [comp_add, lift_fst, lift_snd, zero_add]
-      convert! (MonObj.lift_comp_one_left 0 _).symm
-      · simp
-      · infer_instance
-  · cat_disch
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, CommGrp, CommGrp.mkIso, Functor, Functor.id_obj, IsZero, IsZero.iff_id_eq_zero, Iso.refl, Iso.refl_hom, MonObj, MonObj.lift_comp_o, MonObj.lift_comp_one_right, NatIso, NatIso.ofComponents, Subsingleton, Subsingleton.elim, add_zero, comp_add
+--- 原说明 ---
+Auxiliary definition for `commGrpEquivalence`.
 -/
 def commGrpEquivalenceAux : CommGrp.forget C ⋙ toCommGrp C ≅
       𝟭 (CommGrp C) := by
@@ -158,26 +124,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- An additive category is equivalent to its category of commutative group objects. -/
 @[simps!]
-/--
-Definition of `commGrpEquivalence` / `commGrpEquivalence` 的定义
+/-
+**CategoryTheory.Preadditive.commGrpEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Preadditive`。
+形式化陈述：commGrpEquivalence : C ≌ CommGrp C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commGrpEquivalence
-  signature: : C ≌ CommGrp C where
-  body: toCommGrp C
-  inverse := CommGrp.forget C
-  unitIso := Iso.refl _
-  counitIso := commGrpEquivalenceAux
-
-中文:
-定义 commGrpEquivalence
-  签名: : C ≌ 交换群 C where
-  定义体: toCommGrp C
-  inverse := CommGrp.forget C
-  unitIso := Iso.refl _
-  counitIso := commGrpEquivalenceAux
-
-Depends on / 依赖: toCommGrp
+--- 原说明 ---
+An additive category is equivalent to its category of commutative group objects.
 -/
 def commGrpEquivalence : C ≌ CommGrp C where
   functor := toCommGrp C
@@ -186,3 +141,4 @@ def commGrpEquivalence : C ≌ CommGrp C where
   counitIso := commGrpEquivalenceAux
 
 end CategoryTheory.Preadditive
+

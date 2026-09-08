@@ -32,36 +32,24 @@ We define `Class` as `Set ZFSet`, as this allows us to get many instances automa
 practice, we treat it as (the definitionally equal) `ZFSet → Prop`. This means, the preferred way to
 state that `x : ZFSet` belongs to `A : Class` is to write `A x`. -/
 @[pp_with_univ, use_set_notation_for_order]
-/--
-Definition of `Class` / `Class` 的定义
+/-
+**Class** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Class
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Class
-  body: Set ZFSet deriving LE, EmptyCollection, Nonempty, Union, Inter, Compl, SDiff
-
-中文:
-定义 类
-  定义体: Set ZFSet deriving LE, EmptyCollection, Nonempty, Union, Inter, Compl, SDiff
-
-Depends on / 依赖: EmptyCollection, Nonempty, deriving
+--- 原说明 ---
+The collection of all classes.
+We define `Class` as `Set ZFSet`, as this allows us to get many instances automa
+tically. However, in
+practice, we treat it as (the definitionally equal) `ZFSet → Prop`. This means, 
+the preferred way to
+state that `x : ZFSet` belongs to `A : Class` is to write `A x`.
 -/
 def Class :=
   Set ZFSet deriving LE, EmptyCollection, Nonempty, Union, Inter, Compl, SDiff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Insert ZFSet Class
-  body: ⟨Set.insert⟩
-
-中文:
-实例 :
-  签名: Insert ZFSet 类
-  定义体: ⟨Set.insert⟩
-
-Depends on / 依赖: Set.insert, insert
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Insert ZFSet Class :=
   ⟨Set.insert⟩
@@ -70,576 +58,346 @@ namespace Class
 
 -- Porting note: this used to be a `deriving HasSep Set` instance,
 -- it should probably be turned into notation.
-/--
-Definition of `sep` / `sep` 的定义
+/-- `{x ∈ A | p x}` is the class of elements in `A` satisfying `p` -/
+/-
+**Class.sep** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：(ZFSet.{u_1} → Prop) → Class.{u_1} → Class.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sep
-  signature: (p : ZFSet -> Prop) (A : Class)
-  body: {y | A y ∧ p y}
-
-@[ext]
-
-中文:
-定义 sep
-  签名: (p : ZFSet -> 命题) (A : 类)
-  定义体: {y | A y ∧ p y}
-
-@[ext]
+--- 原说明 ---
+`{x ∈ A | p x}` is the class of elements in `A` satisfying `p`
 -/
-protected def sep (p : ZFSet -> Prop) (A : Class) : Class :=
+protected def sep (p : ZFSet → Prop) (A : Class) : Class :=
   {y | A y ∧ p y}
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {x y : Class.{u}}
-  statement: (forall z : ZFSet.{u}, x z ↔ y z) -> x = y
-  proof: Set.ext
-
-中文:
-定理 ext
-  条件: {x y : 类.{u}}
-  结论: (对任意 z : ZFSet.{u}, x z ↔ y z) -> x = y
-  证明: Set.ext
-
-Depends on / 依赖: Set.ext
+/-
+**Class.ext** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> x = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> x = y :=
+theorem ext {x y : Class.{u}} : (∀ z : ZFSet.{u}, x z ↔ y z) → x = y :=
   Set.ext
 
 /-- Coerce a ZFC set into a class -/
 @[coe]
-/--
-Definition of `ofSet` / `ofSet` 的定义
+/-
+**Class.ofSet** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：ofSet (x : ZFSet.{u}) : Class.{u}
+参数：x : ZFSet.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSet
-  signature: (x : ZFSet.{u})
-  body: { y | y in x }
-
-中文:
-定义 ofSet
-  签名: (x : ZFSet.{u})
-  定义体: { y | y in x }
+--- 原说明 ---
+Coerce a ZFC set into a class
 -/
 def ofSet (x : ZFSet.{u}) : Class.{u} :=
-  { y | y in x }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe ZFSet Class
-  body: ⟨ofSet⟩
-
-中文:
-实例 :
-  签名: Coe ZFSet 类
-  定义体: ⟨ofSet⟩
-
-Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.toEDist, toEDist
+  { y | y ∈ x }
+/-
+**Class.** 是 Mathlib 中的一个实例，位于命名空间 `Class`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe ZFSet Class :=
   ⟨ofSet⟩
 
-/--
-Definition of `univ` / `univ` 的定义
+/-- The universal class -/
+/-
+**Class.univ** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：univ : Class
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition univ
-  signature: : Class
-  body: Set.univ
-
-中文:
-定义 univ
-  签名: : 类
-  定义体: Set.univ
-
-Depends on / 依赖: Set.univ
+--- 原说明 ---
+The universal class
 -/
 def univ : Class :=
   Set.univ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top Class
-  body: ⟨univ⟩
-
-deriving instance CompleteLattice for Class
-
-中文:
-实例 :
-  签名: 顶元素 类
-  定义体: ⟨univ⟩
-
-deriving instance CompleteLattice for Class
+/-
+**Class.** 是 Mathlib 中的一个实例，位于命名空间 `Class`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top Class := ⟨univ⟩
 
 deriving instance CompleteLattice for Class
 
-/--
-Definition of `ToSet` / `ToSet` 的定义
+/-- Assert that `A` is a ZFC set satisfying `B` -/
+/-
+**Class.ToSet** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：ToSet (B : Class.{u}) (A : Class.{u}) : Prop
+参数：B : Class.{u}；A : Class.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ToSet
-  signature: (B : Class.{u}) (A : Class.{u})
-  body: exists x : ZFSet, ↑x = A ∧ B x
-
-中文:
-定义 ToSet
-  签名: (B : 类.{u}) (A : 类.{u})
-  定义体: exists x : ZFSet, ↑x = A ∧ B x
+--- 原说明 ---
+Assert that `A` is a ZFC set satisfying `B`
 -/
 def ToSet (B : Class.{u}) (A : Class.{u}) : Prop :=
-  exists x : ZFSet, ↑x = A ∧ B x
+  ∃ x : ZFSet, ↑x = A ∧ B x
 
-/--
-Definition of `Mem` / `Mem` 的定义
+/-- `A ∈ B` if `A` is a ZFC set which satisfies `B` -/
+/-
+**Class.Mem** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：Class.{u} → Class.{u} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mem
-  signature: (B A : Class.{u})
-  body: ToSet.{u} B A
-
-中文:
-定义 Mem
-  签名: (B A : 类.{u})
-  定义体: ToSet.{u} B A
+--- 原说明 ---
+`A ∈ B` if `A` is a ZFC set which satisfies `B`
 -/
 protected def Mem (B A : Class.{u}) : Prop :=
   ToSet.{u} B A
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership Class Class
-  body: ⟨Class.Mem⟩
-
-中文:
-实例 :
-  签名: Membership 类 类
-  定义体: ⟨Class.Mem⟩
-
-Depends on / 依赖: Class.Mem
+/-
+**Class.** 是 Mathlib 中的一个实例，位于命名空间 `Class`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership Class Class :=
   ⟨Class.Mem⟩
-
-/--
-theorem `mem_def` / 定理 `mem_def`
-
-English:
-theorem mem_def
-  given: (A B : Class.{u})
-  statement: A in B ↔ exists x : ZFSet, ↑x = A ∧ B x
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_def
-  条件: (A B : 类.{u})
-  结论: A in B ↔ 存在 x : ZFSet, ↑x = A ∧ B x
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Class.mem_def** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_def (A B : Class.{u}) : A in B ↔ exists x : ZFSet, ↑x = A ∧ B x
+参数：A B : Class.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_def (A B : Class.{u}) : A in B ↔ exists x : ZFSet, ↑x = A ∧ B x :=
+theorem mem_def (A B : Class.{u}) : A ∈ B ↔ ∃ x : ZFSet, ↑x = A ∧ B x :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `notMem_empty` / 定理 `notMem_empty`
-
-English:
-theorem notMem_empty
-  given: (x : Class.{u})
-  statement: x ∉ (∅ : Class.{u})
-  proof: fun ⟨_, _, h⟩ => h
-
-@[simp]
-
-中文:
-定理 notMem_empty
-  条件: (x : 类.{u})
-  结论: x ∉ (∅ : 类.{u})
-  证明: fun ⟨_, _, h⟩ => h
-
-@[simp]
+/-
+**Class.notMem_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：notMem_empty (x : Class.{u}) : x ∉ (∅ : Class.{u})
+参数：x : Class.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem notMem_empty (x : Class.{u}) : x ∉ (∅ : Class.{u}) := fun ⟨_, _, h⟩ => h
 
 @[simp]
-/--
-theorem `not_empty_hom` / 定理 `not_empty_hom`
-
-English:
-theorem not_empty_hom
-  given: (x : ZFSet.{u})
-  statement: ¬(∅ : Class.{u}) x
-  proof: id
-
-@[simp]
-
-中文:
-定理 not_empty_hom
-  条件: (x : ZFSet.{u})
-  结论: ¬(∅ : 类.{u}) x
-  证明: id
-
-@[simp]
+/-
+**Class.not_empty_hom** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：not_empty_hom (x : ZFSet.{u}) : ¬(∅ : Class.{u}) x
+参数：x : ZFSet.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem not_empty_hom (x : ZFSet.{u}) : ¬(∅ : Class.{u}) x :=
   id
 
 @[simp]
-/--
-theorem `mem_univ` / 定理 `mem_univ`
-
-English:
-theorem mem_univ
-  given: {A : Class.{u}}
-  statement: A in univ.{u} ↔ exists x : ZFSet.{u}, ↑x = A
-  proof: exists_congr fun _ => iff_of_eq (and_true _)
-
-@[simp]
-
-中文:
-定理 mem_univ
-  条件: {A : 类.{u}}
-  结论: A in univ.{u} ↔ 存在 x : ZFSet.{u}, ↑x = A
-  证明: exists_congr fun _ => iff_of_eq (and_true _)
-
-@[simp]
-
-Depends on / 依赖: and_true, exists_congr, iff_of_eq
+/-
+**Class.mem_univ** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_univ {A : Class.{u}} : A in univ.{u} ↔ exists x : ZFSet.{u}, ↑x = A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem mem_univ {A : Class.{u}} : A in univ.{u} ↔ exists x : ZFSet.{u}, ↑x = A :=
+theorem mem_univ {A : Class.{u}} : A ∈ univ.{u} ↔ ∃ x : ZFSet.{u}, ↑x = A :=
   exists_congr fun _ => iff_of_eq (and_true _)
 
 @[simp]
-/--
-theorem `mem_univ_hom` / 定理 `mem_univ_hom`
-
-English:
-theorem mem_univ_hom
-  given: (x : ZFSet.{u})
-  statement: univ.{u} x
-  proof: trivial
-
-中文:
-定理 mem_univ_hom
-  条件: (x : ZFSet.{u})
-  结论: univ.{u} x
-  证明: trivial
+/-
+**Class.mem_univ_hom** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_univ_hom (x : ZFSet.{u}) : univ.{u} x
+参数：x : ZFSet.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem mem_univ_hom (x : ZFSet.{u}) : univ.{u} x :=
   trivial
-
-/--
-theorem `eq_univ_iff_forall` / 定理 `eq_univ_iff_forall`
-
-English:
-theorem eq_univ_iff_forall
-  given: {A : Class.{u}}
-  statement: A = univ ↔ forall x : ZFSet, A x
-  proof: Set.eq_univ_iff_forall
-
-中文:
-定理 eq_univ_iff_对任意
-  条件: {A : 类.{u}}
-  结论: A = univ ↔ 对任意 x : ZFSet, A x
-  证明: Set.eq_univ_iff_forall
-
-Depends on / 依赖: Set.eq_univ_iff_forall, eq_univ_iff_forall
+/-
+**Class.eq_univ_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：eq_univ_iff_forall {A : Class.{u}} : A = univ ↔ forall x : ZFSet, A x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
 -/
-theorem eq_univ_iff_forall {A : Class.{u}} : A = univ ↔ forall x : ZFSet, A x :=
+theorem eq_univ_iff_forall {A : Class.{u}} : A = univ ↔ ∀ x : ZFSet, A x :=
   Set.eq_univ_iff_forall
-
-/--
-theorem `eq_univ_of_forall` / 定理 `eq_univ_of_forall`
-
-English:
-theorem eq_univ_of_forall
-  given: {A : Class.{u}}
-  statement: (forall x : ZFSet, A x) -> A = univ
-  proof: Set.eq_univ_of_forall
-
-中文:
-定理 eq_univ_of_对任意
-  条件: {A : 类.{u}}
-  结论: (对任意 x : ZFSet, A x) -> A = univ
-  证明: Set.eq_univ_of_forall
-
-Depends on / 依赖: Set.eq_univ_of_forall, eq_univ_of_forall
+/-
+**Class.eq_univ_of_forall** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：eq_univ_of_forall {A : Class.{u}} : (forall x : ZFSet, A x) -> A = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
 -/
-theorem eq_univ_of_forall {A : Class.{u}} : (forall x : ZFSet, A x) -> A = univ :=
+theorem eq_univ_of_forall {A : Class.{u}} : (∀ x : ZFSet, A x) → A = univ :=
   Set.eq_univ_of_forall
-
-/--
-theorem `mem_wf` / 定理 `mem_wf`
-
-English:
-theorem mem_wf
-  statement: @WellFounded Class.{u} (· in ·)
-  proof: ⟨by
-    have H : forall x : ZFSet.{u}, @Acc Class.{u} (· in ·) ↑x := by
-      refine fun a => ZFSet.inductionOn a fun x IH => ⟨_, ?_⟩
-      rintro A ⟨z, rfl, hz⟩
-      exact IH z hz
-    refine fun A => ⟨A, ?_⟩
-    rintro B ⟨x, rfl, _⟩
-    exact H x⟩
-
-中文:
-定理 mem_wf
-  结论: @良基 类.{u} (· in ·)
-  证明: ⟨by
-    have H : forall x : ZFSet.{u}, @Acc Class.{u} (· in ·) ↑x := by
-      refine fun a => ZFSet.inductionOn a fun x IH => ⟨_, ?_⟩
-      rintro A ⟨z, rfl, hz⟩
-      exact IH z hz
-    refine fun A => ⟨A, ?_⟩
-    rintro B ⟨x, rfl, _⟩
-    exact H x⟩
-
-Depends on / 依赖: ZFSet.inductionOn, inductionOn
+/-
+**Class.mem_wf** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_wf : @WellFounded Class.{u} (· in ·)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZFSet.inductionOn`：inductionOn {p : ZFSet -> Prop} (x) (h : forall x, (f
+orall y in x, p y) -> p x) : p x
 -/
-theorem mem_wf : @WellFounded Class.{u} (· in ·) :=
+theorem mem_wf : @WellFounded Class.{u} (· ∈ ·) :=
   ⟨by
-    have H : forall x : ZFSet.{u}, @Acc Class.{u} (· in ·) ↑x := by
+    have H : ∀ x : ZFSet.{u}, @Acc Class.{u} (· ∈ ·) ↑x := by
       refine fun a => ZFSet.inductionOn a fun x IH => ⟨_, ?_⟩
       rintro A ⟨z, rfl, hz⟩
       exact IH z hz
     refine fun A => ⟨A, ?_⟩
     rintro B ⟨x, rfl, _⟩
     exact H x⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsWellFounded Class (· in ·)
-  body: ⟨mem_wf⟩
-
-中文:
-实例 :
-  签名: 是良基 类 (· in ·)
-  定义体: ⟨mem_wf⟩
-
-Depends on / 依赖: mem_wf
+/-
+**Class.** 是 Mathlib 中的一个实例，位于命名空间 `Class`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsWellFounded Class (· in ·) :=
+instance : IsWellFounded Class (· ∈ ·) :=
   ⟨mem_wf⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WellFoundedRelation Class
-  body: ⟨_, mem_wf⟩
-
-中文:
-实例 :
-  签名: 良基关系 类
-  定义体: ⟨_, mem_wf⟩
-
-Depends on / 依赖: NNDist, PseudoMetricSpace, PseudoMetricSpace.toNNDist, mem_wf, toNNDist
+/-
+**Class.** 是 Mathlib 中的一个实例，位于命名空间 `Class`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WellFoundedRelation Class :=
   ⟨_, mem_wf⟩
-
-/--
-theorem `mem_asymm` / 定理 `mem_asymm`
-
-English:
-theorem mem_asymm
-  given: {x y : Class}
-  statement: x in y -> y ∉ x
-  proof: asymm_of (· in ·)
-
-中文:
-定理 mem_asymm
-  条件: {x y : 类}
-  结论: x in y -> y ∉ x
-  证明: asymm_of (· in ·)
-
-Depends on / 依赖: asymm_of
+/-
+**Class.mem_asymm** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_asymm {x y : Class} : x in y -> y ∉ x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `asymm_of`：∀ {α : Sort u_1} (r : α → α → Prop) {a b : α} [Std.Asymm r], r
+ a b → ¬r b a
+· 使用定理 `instAsymmOfIsWellFounded`：∀ {α : Type u} (r : α → α → Prop) [IsWellFound
+ed α r], Std.Asymm r
+· 使用定理 `Class.instIsWellFoundedMem`：IsWellFounded Class.{u_1} fun x1 x2 => x1 ∈ 
+x2
 -/
-theorem mem_asymm {x y : Class} : x in y -> y ∉ x :=
-  asymm_of (· in ·)
-
-/--
-theorem `mem_irrefl` / 定理 `mem_irrefl`
-
-English:
-theorem mem_irrefl
-  given: (x : Class)
-  statement: x ∉ x
-  proof: irrefl_of (· in ·) x
-
-中文:
-定理 mem_irrefl
-  条件: (x : 类)
-  结论: x ∉ x
-  证明: irrefl_of (· in ·) x
-
-Depends on / 依赖: irrefl_of
+theorem mem_asymm {x y : Class} : x ∈ y → y ∉ x :=
+  asymm_of (· ∈ ·)
+/-
+**Class.mem_irrefl** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_irrefl (x : Class) : x ∉ x
+参数：x : Class。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `irrefl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Irrefl r] (a : α), ¬
+r a a
+· 使用定理 `Function.instIrreflSwapProp`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Ir
+refl r], Std.Irrefl (Function.swap r)
+· 使用定理 `Std.instIrreflOfAsymm`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Asymm r]
+, Std.Irrefl r
+· 使用定理 `Function.instAsymmSwapProp`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Asy
+mm r], Std.Asymm (Function.swap r)
+· 使用定理 `instAsymmOfIsWellFounded`：∀ {α : Type u} (r : α → α → Prop) [IsWellFound
+ed α r], Std.Asymm r
+· 使用定理 `Class.instIsWellFoundedMem`：IsWellFounded Class.{u_1} fun x1 x2 => x1 ∈ 
+x2
 -/
 theorem mem_irrefl (x : Class) : x ∉ x :=
-  irrefl_of (· in ·) x
+  irrefl_of (· ∈ ·) x
 
-/--
-theorem `univ_notMem_univ` / 定理 `univ_notMem_univ`
+/-- **There is no universal set.**
+This is stated as `univ ∉ univ`, meaning that `univ` (the class of all sets) is proper (does not
+belong to the class of all sets). -/
+/-
+**Class.univ_notMem_univ** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：univ_notMem_univ : univ ∉ univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.mem_irrefl`：mem_irrefl (x : Class) : x ∉ x
 
-English:
-theorem univ_notMem_univ
-  statement: univ ∉ univ
-  proof: mem_irrefl _
-
-中文:
-定理 univ_notMem_univ
-  结论: univ ∉ univ
-  证明: mem_irrefl _
-
-Depends on / 依赖: mem_irrefl
+--- 原说明 ---
+**There is no universal set.**
+This is stated as `univ ∉ univ`, meaning that `univ` (the class of all sets) is 
+proper (does not
+belong to the class of all sets).
 -/
 theorem univ_notMem_univ : univ ∉ univ :=
   mem_irrefl _
 
-/--
-Definition of `congToClass` / `congToClass` 的定义
+/-- Convert a conglomerate (a collection of classes) into a class -/
+/-
+**Class.congToClass** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：congToClass (x : Set Class.{u}) : Class.{u}
+参数：x : Set Class.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congToClass
-  signature: (x : Set Class.{u})
-  body: { y | ↑y in x }
-
-@[simp]
-
-中文:
-定义 congToClass
-  签名: (x : 集合 类.{u})
-  定义体: { y | ↑y in x }
-
-@[simp]
+--- 原说明 ---
+Convert a conglomerate (a collection of classes) into a class
 -/
 def congToClass (x : Set Class.{u}) : Class.{u} :=
-  { y | ↑y in x }
+  { y | ↑y ∈ x }
 
 @[simp]
-/--
-theorem `congToClass_empty` / 定理 `congToClass_empty`
-
-English:
-theorem congToClass_empty
-  statement: congToClass ∅ = ∅
-  proof: by
-  rfl
-
-中文:
-定理 congToClass_empty
-  结论: congToClass ∅ = ∅
-  证明: by
-  rfl
+/-
+**Class.congToClass_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：congToClass_empty : congToClass ∅ = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congToClass_empty : congToClass ∅ = ∅ := by
   rfl
 
-/--
-Definition of `classToCong` / `classToCong` 的定义
+/-- Convert a class into a conglomerate (a collection of classes) -/
+/-
+**Class.classToCong** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：classToCong (x : Class.{u}) : Set Class.{u}
+参数：x : Class.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition classToCong
-  signature: (x : Class.{u})
-  body: { y | y in x }
-
-@[simp]
-
-中文:
-定义 classToCong
-  签名: (x : 类.{u})
-  定义体: { y | y in x }
-
-@[simp]
+--- 原说明 ---
+Convert a class into a conglomerate (a collection of classes)
 -/
 def classToCong (x : Class.{u}) : Set Class.{u} :=
-  { y | y in x }
+  { y | y ∈ x }
 
 @[simp]
-/--
-theorem `classToCong_empty` / 定理 `classToCong_empty`
-
-English:
-theorem classToCong_empty
-  statement: classToCong ∅ = ∅
-  proof: by
-  simp [classToCong]
-
-中文:
-定理 classToCong_empty
-  结论: classToCong ∅ = ∅
-  证明: by
-  simp [classToCong]
-
-Depends on / 依赖: classToCong
+/-
+**Class.classToCong_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：classToCong_empty : classToCong ∅ = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem classToCong_empty : classToCong ∅ = ∅ := by
   simp [classToCong]
 
-/--
-Definition of `powerset` / `powerset` 的定义
+/-- The power class of a class is the class of all subclasses that are ZFC sets -/
+/-
+**Class.powerset** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：powerset (x : Class) : Class
+参数：x : Class。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powerset
-  signature: (x : Class)
-  body: congToClass (Set.powerset x)
-
-中文:
-定义 powerset
-  签名: (x : 类)
-  定义体: congToClass (Set.powerset x)
-
-Depends on / 依赖: Set.powerset, congToClass, powerset
+--- 原说明 ---
+The power class of a class is the class of all subclasses that are ZFC sets
 -/
 def powerset (x : Class) : Class :=
   congToClass (Set.powerset x)
 
-/--
-Definition of `sUnion` / `sUnion` 的定义
+/-- The union of a class is the class of all members of ZFC sets in the class. Uses `⋃₀` notation,
+scoped under the `Class` namespace. -/
+/-
+**Class.sUnion** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：sUnion (x : Class) : Class
+参数：x : Class。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sUnion
-  signature: (x : Class)
-  body: sSup (classToCong x)
-
-@[inherit_doc]
-scoped prefix:110 "⋃₀ " => Class.sUnion
-
-中文:
-定义 集合并集
-  签名: (x : 类)
-  定义体: sSup (classToCong x)
-
-@[inherit_doc]
-scoped prefix:110 "⋃₀ " => Class.sUnion
-
-Depends on / 依赖: classToCong
+--- 原说明 ---
+The union of a class is the class of all members of ZFC sets in the class. Uses 
+`⋃₀` notation,
+scoped under the `Class` namespace.
 -/
 def sUnion (x : Class) : Class :=
   sSup (classToCong x)
@@ -647,57 +405,34 @@ def sUnion (x : Class) : Class :=
 @[inherit_doc]
 scoped prefix:110 "⋃₀ " => Class.sUnion
 
-/--
-Definition of `sInter` / `sInter` 的定义
+/-- The intersection of a class is the class of all members of ZFC sets in the class .
+Uses `⋂₀` notation, scoped under the `Class` namespace. -/
+/-
+**Class.sInter** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：sInter (x : Class) : Class
+参数：x : Class。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sInter
-  signature: (x : Class)
-  body: sInf (classToCong x)
-
-@[inherit_doc]
-scoped prefix:110 "⋂₀ " => Class.sInter
-
-中文:
-定义 集合交集
-  签名: (x : 类)
-  定义体: sInf (classToCong x)
-
-@[inherit_doc]
-scoped prefix:110 "⋂₀ " => Class.sInter
-
-Depends on / 依赖: classToCong
+--- 原说明 ---
+The intersection of a class is the class of all members of ZFC sets in the class
+ .
+Uses `⋂₀` notation, scoped under the `Class` namespace.
 -/
 def sInter (x : Class) : Class :=
   sInf (classToCong x)
 
 @[inherit_doc]
 scoped prefix:110 "⋂₀ " => Class.sInter
-
-/--
-theorem `ofSet.inj` / 定理 `ofSet.inj`
-
-English:
-theorem ofSet.inj
-  given: {x y : ZFSet.{u}} (h : (x : Class.{u}) = y)
-  statement: x = y
-  proof: ZFSet.ext fun z => by
-    change (x : Class.{u}) z ↔ (y : Class.{u}) z
-    rw [h]
-
-@[simp]
-
-中文:
-定理 ofSet.inj
-  条件: {x y : ZFSet.{u}} (h : (x : 类.{u}) = y)
-  结论: x = y
-  证明: ZFSet.ext fun z => by
-    change (x : Class.{u}) z ↔ (y : Class.{u}) z
-    rw [h]
-
-@[simp]
-
-Depends on / 依赖: ZFSet.ext
+/-
+**Class.ofSet.inj** 是 Mathlib 中的一个定理，位于命名空间 `Class.ofSet`。
+形式化陈述：∀ {x y : ZFSet.{u}}, ↑x = ↑y → x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZFSet.ext`：∀ {x y : ZFSet.{u}}, (∀ (z : ZFSet.{u}), z ∈ x ↔ z ∈ y) → x =
+ y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofSet.inj {x y : ZFSet.{u}} (h : (x : Class.{u}) = y) : x = y :=
   ZFSet.ext fun z => by
@@ -705,252 +440,140 @@ theorem ofSet.inj {x y : ZFSet.{u}} (h : (x : Class.{u}) = y) : x = y :=
     rw [h]
 
 @[simp]
-/--
-theorem `toSet_of_ZFSet` / 定理 `toSet_of_ZFSet`
-
-English:
-theorem toSet_of_ZFSet
-  given: (A : Class.{u}) (x : ZFSet.{u})
-  statement: ToSet A x ↔ A x
-  proof: ⟨fun ⟨y, yx, py⟩ => by rwa [ofSet.inj yx] at py, fun px => ⟨x, rfl, px⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-定理 toSet_of_ZFSet
-  条件: (A : 类.{u}) (x : ZFSet.{u})
-  结论: ToSet A x ↔ A x
-  证明: ⟨fun ⟨y, yx, py⟩ => by rwa [ofSet.inj yx] at py, fun px => ⟨x, rfl, px⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ofSet.inj
+/-
+**Class.toSet_of_ZFSet** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：toSet_of_ZFSet (A : Class.{u}) (x : ZFSet.{u}) : ToSet A x ↔ A x
+参数：A : Class.{u}；x : ZFSet.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Class.ofSet.inj`：∀ {x y : ZFSet.{u}}, ↑x = ↑y → x = y
 -/
 theorem toSet_of_ZFSet (A : Class.{u}) (x : ZFSet.{u}) : ToSet A x ↔ A x :=
   ⟨fun ⟨y, yx, py⟩ => by rwa [ofSet.inj yx] at py, fun px => ⟨x, rfl, px⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mem` / 定理 `coe_mem`
-
-English:
-theorem coe_mem
-  given: {x : ZFSet.{u}} {A : Class.{u}}
-  statement: ↑x in A ↔ A x
-  proof: toSet_of_ZFSet _ _
-
-@[simp]
-
-中文:
-定理 coe_mem
-  条件: {x : ZFSet.{u}} {A : 类.{u}}
-  结论: ↑x in A ↔ A x
-  证明: toSet_of_ZFSet _ _
-
-@[simp]
-
-Depends on / 依赖: toSet_of_ZFSet
+/-
+**Class.coe_mem** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.toSet_of_ZFSet`：toSet_of_ZFSet (A : Class.{u}) (x : ZFSet.{u}) : T
+oSet A x ↔ A x
 -/
-theorem coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x :=
+theorem coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x ∈ A ↔ A x :=
   toSet_of_ZFSet _ _
 
 @[simp]
-/--
-theorem `coe_apply` / 定理 `coe_apply`
-
-English:
-theorem coe_apply
-  given: {x y : ZFSet.{u}}
-  statement: (y : Class.{u}) x ↔ x in y
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_apply
-  条件: {x y : ZFSet.{u}}
-  结论: (y : 类.{u}) x ↔ x in y
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Class.coe_apply** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in y :=
+theorem coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x ∈ y :=
   Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_subset` / 定理 `coe_subset`
-
-English:
-theorem coe_subset
-  given: (x y : ZFSet.{u})
-  statement: (x : Class.{u}) subseteq y ↔ x subseteq y
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_subset
-  条件: (x y : ZFSet.{u})
-  结论: (x : 类.{u}) subseteq y ↔ x subseteq y
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Class.coe_subset** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_subset (x y : ZFSet.{u}) : (x : Class.{u}) subseteq y ↔ x subseteq y
+参数：x y : ZFSet.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_subset (x y : ZFSet.{u}) : (x : Class.{u}) subseteq y ↔ x subseteq y :=
+theorem coe_subset (x y : ZFSet.{u}) : (x : Class.{u}) ⊆ y ↔ x ⊆ y :=
   Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_sep` / 定理 `coe_sep`
-
-English:
-theorem coe_sep
-  given: (p : Class.{u}) (x : ZFSet.{u})
-  proof: ext fun _ => ZFSet.mem_sep
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_sep
-  条件: (p : 类.{u}) (x : ZFSet.{u})
-  证明: ext fun _ => ZFSet.mem_sep
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.mem_sep, mem_sep
+/-
+**Class.coe_sep** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_sep (p : Class.{u}) (x : ZFSet.{u}) : (ZFSet.sep p x : Class) = { y in
+ x | p y }
+参数：p : Class.{u}；x : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_sep`：mem_sep {p : ZFSet.{u} -> Prop} {x y : ZFSet.{u}} : y in 
+ZFSet.sep p x ↔ y in x ∧ p y
 -/
 theorem coe_sep (p : Class.{u}) (x : ZFSet.{u}) :
-    (ZFSet.sep p x : Class) = { y in x | p y } :=
+    (ZFSet.sep p x : Class) = { y ∈ x | p y } :=
   ext fun _ => ZFSet.mem_sep
 
 @[simp, norm_cast]
-/--
-theorem `coe_empty` / 定理 `coe_empty`
-
-English:
-theorem coe_empty
-  statement: ↑(∅ : ZFSet.{u}) = (∅ : Class.{u})
-  proof: ext fun y => iff_false _ ▸ ZFSet.notMem_empty y
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_empty
-  结论: ↑(∅ : ZFSet.{u}) = (∅ : 类.{u})
-  证明: ext fun y => iff_false _ ▸ ZFSet.notMem_empty y
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.notMem_empty, iff_false, notMem_empty
+/-
+**Class.coe_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_empty : ↑(∅ : ZFSet.{u}) = (∅ : Class.{u})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.notMem_empty`：notMem_empty (x) : x ∉ (∅ : ZFSet.{u})
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
 -/
 theorem coe_empty : ↑(∅ : ZFSet.{u}) = (∅ : Class.{u}) :=
   ext fun y => iff_false _ ▸ ZFSet.notMem_empty y
 
 @[simp, norm_cast]
-/--
-theorem `coe_insert` / 定理 `coe_insert`
-
-English:
-theorem coe_insert
-  given: (x y : ZFSet.{u})
-  statement: ↑(insert x y) = @insert ZFSet.{u} Class.{u} _ x y
-  proof: ext fun _ => ZFSet.mem_insert_iff
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_insert
-  条件: (x y : ZFSet.{u})
-  结论: ↑(insert x y) = @insert ZFSet.{u} 类.{u} _ x y
-  证明: ext fun _ => ZFSet.mem_insert_iff
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.mem_insert_iff, mem_insert_iff
+/-
+**Class.coe_insert** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_insert (x y : ZFSet.{u}) : ↑(insert x y) = @insert ZFSet.{u} Class.{u}
+ _ x y
+参数：x y : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_insert_iff`：mem_insert_iff {x y z : ZFSet.{u}} : x in insert y
+ z ↔ x = y ∨ x in z
 -/
 theorem coe_insert (x y : ZFSet.{u}) : ↑(insert x y) = @insert ZFSet.{u} Class.{u} _ x y :=
   ext fun _ => ZFSet.mem_insert_iff
 
 @[simp, norm_cast]
-/--
-theorem `coe_union` / 定理 `coe_union`
-
-English:
-theorem coe_union
-  given: (x y : ZFSet.{u})
-  statement: ↑(x union y) = (x : Class.{u}) union y
-  proof: ext fun _ => ZFSet.mem_union
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_union
-  条件: (x y : ZFSet.{u})
-  结论: ↑(x union y) = (x : 类.{u}) union y
-  证明: ext fun _ => ZFSet.mem_union
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.mem_union, mem_union
+/-
+**Class.coe_union** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_union (x y : ZFSet.{u}) : ↑(x union y) = (x : Class.{u}) union y
+参数：x y : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_union`：∀ {x y z : ZFSet.{u}}, z ∈ x ∪ y ↔ z ∈ x ∨ z ∈ y
 -/
-theorem coe_union (x y : ZFSet.{u}) : ↑(x union y) = (x : Class.{u}) union y :=
+theorem coe_union (x y : ZFSet.{u}) : ↑(x ∪ y) = (x : Class.{u}) ∪ y :=
   ext fun _ => ZFSet.mem_union
 
 @[simp, norm_cast]
-/--
-theorem `coe_inter` / 定理 `coe_inter`
-
-English:
-theorem coe_inter
-  given: (x y : ZFSet.{u})
-  statement: ↑(x inter y) = (x : Class.{u}) inter y
-  proof: ext fun _ => ZFSet.mem_inter
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_inter
-  条件: (x y : ZFSet.{u})
-  结论: ↑(x inter y) = (x : 类.{u}) inter y
-  证明: ext fun _ => ZFSet.mem_inter
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.mem_inter, mem_inter
+/-
+**Class.coe_inter** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_inter (x y : ZFSet.{u}) : ↑(x inter y) = (x : Class.{u}) inter y
+参数：x y : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_inter`：∀ {x y z : ZFSet.{u}}, z ∈ x ∩ y ↔ z ∈ x ∧ z ∈ y
 -/
-theorem coe_inter (x y : ZFSet.{u}) : ↑(x inter y) = (x : Class.{u}) inter y :=
+theorem coe_inter (x y : ZFSet.{u}) : ↑(x ∩ y) = (x : Class.{u}) ∩ y :=
   ext fun _ => ZFSet.mem_inter
 
 @[simp, norm_cast]
-/--
-theorem `coe_sdiff` / 定理 `coe_sdiff`
-
-English:
-theorem coe_sdiff
-  given: (x y : ZFSet.{u})
-  statement: ↑(x \ y) = (x : Class.{u}) \ y
-  proof: ext fun _ => ZFSet.mem_sdiff
-
-@[deprecated (since := "2026-06-03")] alias coe_diff := coe_sdiff
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_sdiff
-  条件: (x y : ZFSet.{u})
-  结论: ↑(x \ y) = (x : 类.{u}) \ y
-  证明: ext fun _ => ZFSet.mem_sdiff
-
-@[deprecated (since := "2026-06-03")] alias coe_diff := coe_sdiff
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ZFSet.mem_sdiff, mem_sdiff
+/-
+**Class.coe_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_sdiff (x y : ZFSet.{u}) : ↑(x \ y) = (x : Class.{u}) \ y
+参数：x y : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_sdiff`：∀ {x y z : ZFSet.{u}}, z ∈ x \ y ↔ z ∈ x ∧ z ∉ y
 -/
 theorem coe_sdiff (x y : ZFSet.{u}) : ↑(x \ y) = (x : Class.{u}) \ y :=
   ext fun _ => ZFSet.mem_sdiff
@@ -958,82 +581,43 @@ theorem coe_sdiff (x y : ZFSet.{u}) : ↑(x \ y) = (x : Class.{u}) \ y :=
 @[deprecated (since := "2026-06-03")] alias coe_diff := coe_sdiff
 
 @[simp, norm_cast]
-/--
-theorem `coe_powerset` / 定理 `coe_powerset`
-
-English:
-theorem coe_powerset
-  given: (x : ZFSet.{u})
-  statement: ↑x.powerset = powerset.{u} x
-  proof: ext fun _ => ZFSet.mem_powerset
-
-@[simp]
-
-中文:
-定理 coe_powerset
-  条件: (x : ZFSet.{u})
-  结论: ↑x.powerset = powerset.{u} x
-  证明: ext fun _ => ZFSet.mem_powerset
-
-@[simp]
-
-Depends on / 依赖: ZFSet.mem_powerset, mem_powerset
+/-
+**Class.coe_powerset** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_powerset (x : ZFSet.{u}) : ↑x.powerset = powerset.{u} x
+参数：x : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `ZFSet.mem_powerset`：mem_powerset {x y : ZFSet.{u}} : y in powerset x ↔ y
+ subseteq x
 -/
 theorem coe_powerset (x : ZFSet.{u}) : ↑x.powerset = powerset.{u} x :=
   ext fun _ => ZFSet.mem_powerset
 
 @[simp]
-/--
-theorem `powerset_apply` / 定理 `powerset_apply`
-
-English:
-theorem powerset_apply
-  given: {A : Class.{u}} {x : ZFSet.{u}}
-  statement: powerset A x ↔ ↑x subseteq A
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 powerset_apply
-  条件: {A : 类.{u}} {x : ZFSet.{u}}
-  结论: powerset A x ↔ ↑x subseteq A
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Class.powerset_apply** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：powerset_apply {A : Class.{u}} {x : ZFSet.{u}} : powerset A x ↔ ↑x subsete
+q A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem powerset_apply {A : Class.{u}} {x : ZFSet.{u}} : powerset A x ↔ ↑x subseteq A :=
+theorem powerset_apply {A : Class.{u}} {x : ZFSet.{u}} : powerset A x ↔ ↑x ⊆ A :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `sUnion_apply` / 定理 `sUnion_apply`
-
-English:
-theorem sUnion_apply
-  given: {x : Class} {y : ZFSet}
-  statement: (⋃₀ x) y ↔ exists z : ZFSet, x z ∧ y in z
-  proof: by
-  constructor
-  · rintro ⟨-, ⟨z, rfl, hxz⟩, hyz⟩
-    exact ⟨z, hxz, hyz⟩
-  · exact fun ⟨z, hxz, hyz⟩ => ⟨_, coe_mem.2 hxz, hyz⟩
-
-中文:
-定理 sUnion_apply
-  条件: {x : 类} {y : ZFSet}
-  结论: (⋃₀ x) y ↔ 存在 z : ZFSet, x z ∧ y in z
-  证明: by
-  constructor
-  · rintro ⟨-, ⟨z, rfl, hxz⟩, hyz⟩
-    exact ⟨z, hxz, hyz⟩
-  · exact fun ⟨z, hxz, hyz⟩ => ⟨_, coe_mem.2 hxz, hyz⟩
-
-Depends on / 依赖: coe_mem
+/-
+**Class.sUnion_apply** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：sUnion_apply {x : Class} {y : ZFSet} : (⋃₀ x) y ↔ exists z : ZFSet, x z ∧ 
+y in z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
 -/
-theorem sUnion_apply {x : Class} {y : ZFSet} : (⋃₀ x) y ↔ exists z : ZFSet, x z ∧ y in z := by
+theorem sUnion_apply {x : Class} {y : ZFSet} : (⋃₀ x) y ↔ ∃ z : ZFSet, x z ∧ y ∈ z := by
   constructor
   · rintro ⟨-, ⟨z, rfl, hxz⟩, hyz⟩
     exact ⟨z, hxz, hyz⟩
@@ -1041,175 +625,102 @@ theorem sUnion_apply {x : Class} {y : ZFSet} : (⋃₀ x) y ↔ exists z : ZFSet
 
 open scoped ZFSet in
 @[simp, norm_cast]
-/--
-theorem `coe_sUnion` / 定理 `coe_sUnion`
-
-English:
-theorem coe_sUnion
-  given: (x : ZFSet.{u})
-  statement: ↑(⋃₀ x : ZFSet) = ⋃₀ (x : Class.{u})
-  proof: ext fun y =>
-    ZFSet.mem_sUnion.trans (sUnion_apply.trans <| by rfl).symm
-
-@[simp]
-
-中文:
-定理 coe_sUnion
-  条件: (x : ZFSet.{u})
-  结论: ↑(⋃₀ x : ZFSet) = ⋃₀ (x : 类.{u})
-  证明: ext fun y =>
-    ZFSet.mem_sUnion.trans (sUnion_apply.trans <| by rfl).symm
-
-@[simp]
-
-Depends on / 依赖: ZFSet.mem_sUnion.trans, mem_sUnion, sUnion_apply, sUnion_apply.trans
+/-
+**Class.coe_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_sUnion (x : ZFSet.{u}) : ↑(⋃₀ x : ZFSet) = ⋃₀ (x : Class.{u})
+参数：x : ZFSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ZFSet.mem_sUnion`：mem_sUnion {x y : ZFSet.{u}} : y in ⋃₀ x ↔ exists z in
+ x, y in z
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Class.sUnion_apply`：sUnion_apply {x : Class} {y : ZFSet} : (⋃₀ x) y ↔ ex
+ists z : ZFSet, x z ∧ y in z
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_sUnion (x : ZFSet.{u}) : ↑(⋃₀ x : ZFSet) = ⋃₀ (x : Class.{u}) :=
   ext fun y =>
     ZFSet.mem_sUnion.trans (sUnion_apply.trans <| by rfl).symm
 
 @[simp]
-/--
-theorem `mem_sUnion` / 定理 `mem_sUnion`
-
-English:
-theorem mem_sUnion
-  given: {x y : Class.{u}}
-  statement: y in ⋃₀ x ↔ exists z, z in x ∧ y in z
-  proof: by
-  constructor
-  · rintro ⟨w, rfl, z, hzx, hwz⟩
-    exact ⟨z, hzx, coe_mem.2 hwz⟩
-  · rintro ⟨w, hwx, z, rfl, hwz⟩
-    exact ⟨z, rfl, w, hwx, hwz⟩
-
-中文:
-定理 mem_sUnion
-  条件: {x y : 类.{u}}
-  结论: y in ⋃₀ x ↔ 存在 z, z in x ∧ y in z
-  证明: by
-  constructor
-  · rintro ⟨w, rfl, z, hzx, hwz⟩
-    exact ⟨z, hzx, coe_mem.2 hwz⟩
-  · rintro ⟨w, hwx, z, rfl, hwz⟩
-    exact ⟨z, rfl, w, hwx, hwz⟩
-
-Depends on / 依赖: coe_mem
+/-
+**Class.mem_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_sUnion {x y : Class.{u}} : y in ⋃₀ x ↔ exists z, z in x ∧ y in z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
 -/
-theorem mem_sUnion {x y : Class.{u}} : y in ⋃₀ x ↔ exists z, z in x ∧ y in z := by
+theorem mem_sUnion {x y : Class.{u}} : y ∈ ⋃₀ x ↔ ∃ z, z ∈ x ∧ y ∈ z := by
   constructor
   · rintro ⟨w, rfl, z, hzx, hwz⟩
     exact ⟨z, hzx, coe_mem.2 hwz⟩
   · rintro ⟨w, hwx, z, rfl, hwz⟩
     exact ⟨z, rfl, w, hwx, hwz⟩
-
-/--
-theorem `sInter_apply` / 定理 `sInter_apply`
-
-English:
-theorem sInter_apply
-  given: {x : Class.{u}} {y : ZFSet.{u}}
-  statement: (⋂₀ x) y ↔ forall z : ZFSet.{u}, x z -> y in z
-  proof: by
-  refine ⟨fun hxy z hxz => hxy _ ⟨z, rfl, hxz⟩, ?_⟩
-  rintro H - ⟨z, rfl, hxz⟩
-  exact H _ hxz
-
-中文:
-定理 s整数er_apply
-  条件: {x : 类.{u}} {y : ZFSet.{u}}
-  结论: (⋂₀ x) y ↔ 对任意 z : ZFSet.{u}, x z -> y in z
-  证明: by
-  refine ⟨fun hxy z hxz => hxy _ ⟨z, rfl, hxz⟩, ?_⟩
-  rintro H - ⟨z, rfl, hxz⟩
-  exact H _ hxz
+/-
+**Class.sInter_apply** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：sInter_apply {x : Class.{u}} {y : ZFSet.{u}} : (⋂₀ x) y ↔ forall z : ZFSet
+.{u}, x z -> y in z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sInter_apply {x : Class.{u}} {y : ZFSet.{u}} : (⋂₀ x) y ↔ forall z : ZFSet.{u}, x z -> y in z := by
+theorem sInter_apply {x : Class.{u}} {y : ZFSet.{u}} : (⋂₀ x) y ↔ ∀ z : ZFSet.{u}, x z → y ∈ z := by
   refine ⟨fun hxy z hxz => hxy _ ⟨z, rfl, hxz⟩, ?_⟩
   rintro H - ⟨z, rfl, hxz⟩
   exact H _ hxz
 
 open scoped ZFSet in
 @[simp, norm_cast]
-/--
-theorem `coe_sInter` / 定理 `coe_sInter`
-
-English:
-theorem coe_sInter
-  given: {x : ZFSet.{u}} (h : x.Nonempty)
-  statement: ↑(⋂₀ x : ZFSet) = ⋂₀ (x : Class.{u})
-  proof: Set.ext fun _ => (ZFSet.mem_sInter h).trans sInter_apply.symm
-
-中文:
-定理 coe_s整数er
-  条件: {x : ZFSet.{u}} (h : x.非空)
-  结论: ↑(⋂₀ x : ZFSet) = ⋂₀ (x : 类.{u})
-  证明: Set.ext fun _ => (ZFSet.mem_sInter h).trans sInter_apply.symm
-
-Depends on / 依赖: Set.ext, ZFSet.mem_sInter, mem_sInter, sInter_apply, sInter_apply.symm
+/-
+**Class.coe_sInter** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：coe_sInter {x : ZFSet.{u}} (h : x.Nonempty) : ↑(⋂₀ x : ZFSet) = ⋂₀ (x : Cl
+ass.{u})
+参数：h : x.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `ZFSet.mem_sInter`：mem_sInter {x y : ZFSet} (h : x.Nonempty) : y in ⋂₀ x 
+↔ forall z in x, y in z
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Class.sInter_apply`：sInter_apply {x : Class.{u}} {y : ZFSet.{u}} : (⋂₀ x
+) y ↔ forall z : ZFSet.{u}, x z -> y in z
 -/
 theorem coe_sInter {x : ZFSet.{u}} (h : x.Nonempty) : ↑(⋂₀ x : ZFSet) = ⋂₀ (x : Class.{u}) :=
   Set.ext fun _ => (ZFSet.mem_sInter h).trans sInter_apply.symm
-
-/--
-theorem `mem_of_mem_sInter` / 定理 `mem_of_mem_sInter`
-
-English:
-theorem mem_of_mem_sInter
-  given: {x y z : Class} (hy : y in ⋂₀ x) (hz : z in x)
-  statement: y in z
-  proof: by
-  obtain ⟨w, rfl, hw⟩ := hy
-  exact coe_mem.2 (hw z hz)
-
-中文:
-定理 mem_of_mem_s整数er
-  条件: {x y z : 类} (hy : y in ⋂₀ x) (hz : z in x)
-  结论: y in z
-  证明: by
-  obtain ⟨w, rfl, hw⟩ := hy
-  exact coe_mem.2 (hw z hz)
-
-Depends on / 依赖: coe_mem
+/-
+**Class.mem_of_mem_sInter** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_of_mem_sInter {x y z : Class} (hy : y in ⋂₀ x) (hz : z in x) : y in z
+参数：hy : y in ⋂₀ x；hz : z in x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
 -/
-theorem mem_of_mem_sInter {x y z : Class} (hy : y in ⋂₀ x) (hz : z in x) : y in z := by
+theorem mem_of_mem_sInter {x y z : Class} (hy : y ∈ ⋂₀ x) (hz : z ∈ x) : y ∈ z := by
   obtain ⟨w, rfl, hw⟩ := hy
   exact coe_mem.2 (hw z hz)
-
-/--
-theorem `mem_sInter` / 定理 `mem_sInter`
-
-English:
-theorem mem_sInter
-  given: {x y : Class.{u}} (h : x.Nonempty)
-  statement: y in ⋂₀ x ↔ forall z, z in x -> y in z
-  proof: by
-  refine ⟨fun hy z => mem_of_mem_sInter hy, fun H => ?_⟩
-  simp_rw [mem_def, sInter_apply]
-  obtain ⟨z, hz⟩ := h
-  obtain ⟨y, rfl, _⟩ := H z (coe_mem.2 hz)
-  refine ⟨y, rfl, fun w hxw => ?_⟩
-  simpa only [coe_mem, coe_apply] using H w (coe_mem.2 hxw)
-
-@[simp]
-
-中文:
-定理 mem_s整数er
-  条件: {x y : 类.{u}} (h : x.非空)
-  结论: y in ⋂₀ x ↔ 对任意 z, z in x -> y in z
-  证明: by
-  refine ⟨fun hy z => mem_of_mem_sInter hy, fun H => ?_⟩
-  simp_rw [mem_def, sInter_apply]
-  obtain ⟨z, hz⟩ := h
-  obtain ⟨y, rfl, _⟩ := H z (coe_mem.2 hz)
-  refine ⟨y, rfl, fun w hxw => ?_⟩
-  simpa only [coe_mem, coe_apply] using H w (coe_mem.2 hxw)
-
-@[simp]
-
-Depends on / 依赖: coe_apply, coe_mem, mem_def, mem_of_mem_sInter, sInter_apply, simp_rw
+/-
+**Class.mem_sInter** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：mem_sInter {x y : Class.{u}} (h : x.Nonempty) : y in ⋂₀ x ↔ forall z, z in
+ x -> y in z
+参数：h : x.Nonempty。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.mem_of_mem_sInter`：mem_of_mem_sInter {x y z : Class} (hy : y in ⋂₀
+ x) (hz : z in x) : y in z
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem mem_sInter {x y : Class.{u}} (h : x.Nonempty) : y in ⋂₀ x ↔ forall z, z in x -> y in z := by
+theorem mem_sInter {x y : Class.{u}} (h : x.Nonempty) : y ∈ ⋂₀ x ↔ ∀ z, z ∈ x → y ∈ z := by
   refine ⟨fun hy z => mem_of_mem_sInter hy, fun H => ?_⟩
   simp_rw [mem_def, sInter_apply]
   obtain ⟨z, hz⟩ := h
@@ -1218,84 +729,80 @@ theorem mem_sInter {x y : Class.{u}} (h : x.Nonempty) : y in ⋂₀ x ↔ forall
   simpa only [coe_mem, coe_apply] using H w (coe_mem.2 hxw)
 
 @[simp]
-/--
-theorem `sUnion_empty` / 定理 `sUnion_empty`
-
-English:
-theorem sUnion_empty
-  statement: ⋃₀ (∅ : Class.{u}) = (∅ : Class.{u})
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 sUnion_empty
-  结论: ⋃₀ (∅ : 类.{u}) = (∅ : 类.{u})
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Class.sUnion_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：sUnion_empty : ⋃₀ (∅ : Class.{u}) = (∅ : Class.{u})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sUnion_empty : ⋃₀ (∅ : Class.{u}) = (∅ : Class.{u}) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `sInter_empty` / 定理 `sInter_empty`
-
-English:
-theorem sInter_empty
-  statement: ⋂₀ (∅ : Class.{u}) = univ
-  proof: by
-  simp [sInter, Top.top]
-
-中文:
-定理 s整数er_empty
-  结论: ⋂₀ (∅ : 类.{u}) = univ
-  证明: by
-  simp [sInter, Top.top]
-
-Depends on / 依赖: Top.top, sInter
+/-
+**Class.sInter_empty** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：sInter_empty : ⋂₀ (∅ : Class.{u}) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Class.classToCong_empty`：classToCong_empty : classToCong ∅ = ∅
+· 使用定理 `sInf_empty`：∀ {α : Type u_1} [inst : CompleteLattice α], sInf ∅ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sInter_empty : ⋂₀ (∅ : Class.{u}) = univ := by
   simp [sInter, Top.top]
 
-/--
-theorem `eq_univ_of_powerset_subset` / 定理 `eq_univ_of_powerset_subset`
+/-- An induction principle for sets. If every subset of a class is a member, then the class is
+  universal. -/
+/-
+**Class.eq_univ_of_powerset_subset** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：eq_univ_of_powerset_subset {A : Class} (hA : powerset A subseteq A) : A = 
+univ
+参数：hA : powerset A subseteq A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.eq_univ_of_forall`：eq_univ_of_forall {A : Class.{u}} : (forall x :
+ ZFSet, A x) -> A = univ
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
+· 使用定理 `ZFSet.mem_wf`：mem_wf : @WellFounded ZFSet (· in ·)
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `WellFounded.not_lt_min`：not_lt_min {r : α -> α -> Prop} (H : WellFounded
+ r) (s : Set α) {x} (hx : x in s) : ¬r x (H.min s ⟨x, hx⟩)
+· 使用定理 `Class.coe_apply`：coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in 
+y
 
-English:
-theorem eq_univ_of_powerset_subset
-  given: {A : Class} (hA : powerset A subseteq A)
-  statement: A = univ
-  proof: eq_univ_of_forall
-    (by
-      by_contra! hnA
-      exact
-        WellFounded.min_mem ZFSet.mem_wf _ hnA
-          (hA fun x hx =>
-            Classical.not_not.1 fun hB =>
-WellFounded.not_lt_min ZFSet.mem_wf _ hB coe_apply.1 hx))
-
-中文:
-定理 eq_univ_of_powerset_subset
-  条件: {A : 类} (hA : powerset A subseteq A)
-  结论: A = univ
-  证明: eq_univ_of_forall
-    (by
-      by_contra! hnA
-      exact
-        WellFounded.min_mem ZFSet.mem_wf _ hnA
-          (hA fun x hx =>
-            Classical.not_not.1 fun hB =>
-WellFounded.not_lt_min ZFSet.mem_wf _ hB coe_apply.1 hx))
-
-Depends on / 依赖: Classical, Classical.not_not, WellFounded, WellFounded.min_mem, WellFounded.not_lt_min, ZFSet.mem_wf, coe_apply, eq_univ_of_forall, mem_wf, min_mem, not_lt_min, not_not
+--- 原说明 ---
+An induction principle for sets. If every subset of a class is a member, then th
+e class is
+  universal.
 -/
-theorem eq_univ_of_powerset_subset {A : Class} (hA : powerset A subseteq A) : A = univ :=
+theorem eq_univ_of_powerset_subset {A : Class} (hA : powerset A ⊆ A) : A = univ :=
   eq_univ_of_forall
     (by
       by_contra! hnA
@@ -1303,122 +810,98 @@ theorem eq_univ_of_powerset_subset {A : Class} (hA : powerset A subseteq A) : A 
         WellFounded.min_mem ZFSet.mem_wf _ hnA
           (hA fun x hx =>
             Classical.not_not.1 fun hB =>
-WellFounded.not_lt_min ZFSet.mem_wf _ hB coe_apply.1 hx))
+              WellFounded.not_lt_min ZFSet.mem_wf _ hB <| coe_apply.1 hx))
 
-/--
-Definition of `iota` / `iota` 的定义
+/-- The definite description operator, which is `{x}` if `{y | A y} = {x}` and `∅` otherwise. -/
+/-
+**Class.iota** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：iota (A : Class) : Class
+参数：A : Class。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iota
-  signature: (A : Class)
-  body: ⋃₀ ({ x | forall y, A y ↔ y = x } : Class)
-
-中文:
-定义 iota
-  签名: (A : 类)
-  定义体: ⋃₀ ({ x | forall y, A y ↔ y = x } : Class)
+--- 原说明 ---
+The definite description operator, which is `{x}` if `{y | A y} = {x}` and `∅` o
+therwise.
 -/
 def iota (A : Class) : Class :=
-  ⋃₀ ({ x | forall y, A y ↔ y = x } : Class)
-
-/--
-theorem `iota_val` / 定理 `iota_val`
-
-English:
-theorem iota_val
-  given: (A : Class) (x : ZFSet) (H : forall y, A y ↔ y = x)
-  statement: iota A = ↑x
-  proof: ext fun y =>
-    ⟨fun ⟨_, ⟨x', rfl, h⟩, yx'⟩ => by rwa [← (H x').1 <| (h x').2 rfl], fun yx =>
-      ⟨_, ⟨x, rfl, H⟩, yx⟩⟩
-
-中文:
-定理 iota_val
-  条件: (A : 类) (x : ZFSet) (H : 对任意 y, A y ↔ y = x)
-  结论: iota A = ↑x
-  证明: ext fun y =>
-    ⟨fun ⟨_, ⟨x', rfl, h⟩, yx'⟩ => by rwa [← (H x').1 <| (h x').2 rfl], fun yx =>
-      ⟨_, ⟨x, rfl, H⟩, yx⟩⟩
+  ⋃₀ ({ x | ∀ y, A y ↔ y = x } : Class)
+/-
+**Class.iota_val** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：iota_val (A : Class) (x : ZFSet) (H : forall y, A y ↔ y = x) : iota A = ↑x
+参数：A : Class；x : ZFSet；H : forall y, A y ↔ y = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem iota_val (A : Class) (x : ZFSet) (H : forall y, A y ↔ y = x) : iota A = ↑x :=
+theorem iota_val (A : Class) (x : ZFSet) (H : ∀ y, A y ↔ y = x) : iota A = ↑x :=
   ext fun y =>
     ⟨fun ⟨_, ⟨x', rfl, h⟩, yx'⟩ => by rwa [← (H x').1 <| (h x').2 rfl], fun yx =>
       ⟨_, ⟨x, rfl, H⟩, yx⟩⟩
 
-/--
-theorem `iota_ex` / 定理 `iota_ex`
+/-- Unlike the other set constructors, the `iota` definite descriptor
+  is a set for any set input, but not constructively so, so there is no
+  associated `Class → Set` function. -/
+/-
+**Class.iota_ex** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：iota_ex (A) : iota.{u} A in univ.{u}
+参数：A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Class.mem_univ`：mem_univ {A : Class.{u}} : A in univ.{u} ↔ exists x : ZF
+Set.{u}, ↑x = A
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Class.iota_val`：iota_val (A : Class) (x : ZFSet) (H : forall y, A y ↔ y 
+= x) : iota A = ↑x
+· 使用定理 `Class.ext`：ext {x y : Class.{u}} : (forall z : ZFSet.{u}, x z ↔ y z) -> 
+x = y
+· 使用定理 `Class.coe_empty`：coe_empty : ↑(∅ : ZFSet.{u}) = (∅ : Class.{u})
 
-English:
-theorem iota_ex
-  given: (A)
-  statement: iota.{u} A in univ.{u}
-  proof: mem_univ.2
-    Or.elim (Classical.em <| exists x, forall y, A y ↔ y = x) (fun ⟨x, h⟩ => ⟨x, Eq.symm <| iota_val A x h⟩)
-      fun hn =>
-      ⟨∅, ext fun _ => coe_empty.symm ▸ ⟨False.rec, fun ⟨_, ⟨x, rfl, H⟩, _⟩ => hn ⟨x, H⟩⟩⟩
-
-中文:
-定理 iota_ex
-  条件: (A)
-  结论: iota.{u} A in univ.{u}
-  证明: mem_univ.2
-    Or.elim (Classical.em <| exists x, forall y, A y ↔ y = x) (fun ⟨x, h⟩ => ⟨x, Eq.symm <| iota_val A x h⟩)
-      fun hn =>
-      ⟨∅, ext fun _ => coe_empty.symm ▸ ⟨False.rec, fun ⟨_, ⟨x, rfl, H⟩, _⟩ => hn ⟨x, H⟩⟩⟩
-
-Depends on / 依赖: Classical, Classical.em, Eq.symm, False.rec, Or.elim, coe_empty, coe_empty.symm, iota_val, mem_univ
+--- 原说明 ---
+Unlike the other set constructors, the `iota` definite descriptor
+  is a set for any set input, but not constructively so, so there is no
+  associated `Class → Set` function.
 -/
-theorem iota_ex (A) : iota.{u} A in univ.{u} :=
-mem_univ.2
-    Or.elim (Classical.em <| exists x, forall y, A y ↔ y = x) (fun ⟨x, h⟩ => ⟨x, Eq.symm <| iota_val A x h⟩)
+theorem iota_ex (A) : iota.{u} A ∈ univ.{u} :=
+  mem_univ.2 <|
+    Or.elim (Classical.em <| ∃ x, ∀ y, A y ↔ y = x) (fun ⟨x, h⟩ => ⟨x, Eq.symm <| iota_val A x h⟩)
       fun hn =>
       ⟨∅, ext fun _ => coe_empty.symm ▸ ⟨False.rec, fun ⟨_, ⟨x, rfl, H⟩, _⟩ => hn ⟨x, H⟩⟩⟩
 
-/--
-Definition of `fval` / `fval` 的定义
+/-- Function value -/
+/-
+**Class.fval** 是 Mathlib 中的一个定义，位于命名空间 `Class`。
+形式化陈述：fval (F A : Class.{u}) : Class.{u}
+参数：F A : Class.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fval
-  signature: (F A : Class.{u})
-  body: iota fun y => ToSet (fun x => F (ZFSet.pair x y)) A
-
-@[inherit_doc]
-infixl:100 " ′ " => fval
-
-中文:
-定义 fval
-  签名: (F A : 类.{u})
-  定义体: iota fun y => ToSet (fun x => F (ZFSet.pair x y)) A
-
-@[inherit_doc]
-infixl:100 " ′ " => fval
-
-Depends on / 依赖: ZFSet.pair
+--- 原说明 ---
+Function value
 -/
 def fval (F A : Class.{u}) : Class.{u} :=
   iota fun y => ToSet (fun x => F (ZFSet.pair x y)) A
 
 @[inherit_doc]
 infixl:100 " ′ " => fval
-
-/--
-theorem `fval_ex` / 定理 `fval_ex`
-
-English:
-theorem fval_ex
-  given: (F A : Class.{u})
-  statement: F ′ A in univ.{u}
-  proof: iota_ex _
-
-中文:
-定理 fval_ex
-  条件: (F A : 类.{u})
-  结论: F ′ A in univ.{u}
-  证明: iota_ex _
-
-Depends on / 依赖: iota_ex
+/-
+**Class.fval_ex** 是 Mathlib 中的一个定理，位于命名空间 `Class`。
+形式化陈述：fval_ex (F A : Class.{u}) : F ′ A in univ.{u}
+参数：F A : Class.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.iota_ex`：iota_ex (A) : iota.{u} A in univ.{u}
 -/
-theorem fval_ex (F A : Class.{u}) : F ′ A in univ.{u} :=
+theorem fval_ex (F A : Class.{u}) : F ′ A ∈ univ.{u} :=
   iota_ex _
 
 end Class
@@ -1427,240 +910,176 @@ namespace ZFSet
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `map_fval` / 定理 `map_fval`
-
-English:
-theorem map_fval
-  statement: {f : ZFSet.{u} -> ZFSet.{u}} [Definable₁ f] {x y : ZFSet.{u}}
-  proof: Class.iota_val _ _ fun z => by
-    rw [Class.toSet_of_ZFSet]; rw [Class.coe_apply]; rw [mem_map]
-    exact
-      ⟨fun ⟨w, _, pr⟩ => by
-        let ⟨wy, fw⟩ := ZFSet.pair_injective pr
-        rw [← fw]; rw [wy], fun e => by
-        subst e
-        exact ⟨_, h, rfl⟩⟩
-
-中文:
-定理 map_fval
-  结论: {f : ZFSet.{u} -> ZFSet.{u}} [Definable₁ f] {x y : ZFSet.{u}}
-  证明: Class.iota_val _ _ fun z => by
-    rw [Class.toSet_of_ZFSet]; rw [Class.coe_apply]; rw [mem_map]
-    exact
-      ⟨fun ⟨w, _, pr⟩ => by
-        let ⟨wy, fw⟩ := ZFSet.pair_injective pr
-        rw [← fw]; rw [wy], fun e => by
-        subst e
-        exact ⟨_, h, rfl⟩⟩
-
-Depends on / 依赖: Class.coe_apply, Class.iota_val, Class.toSet_of_ZFSet, ZFSet.pair_injective, coe_apply, iota_val, mem_map, pair_injective, toSet_of_ZFSet
+/-
+**ZFSet.map_fval** 是 Mathlib 中的一个定理，位于命名空间 `ZFSet`。
+形式化陈述：map_fval {f : ZFSet.{u} -> ZFSet.{u}} [Definable₁ f] {x y : ZFSet.{u}} (h 
+: y in x) : (ZFSet.map f x ′ y : Class.{u}) = f y
+参数：h : y in x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Class.iota_val`：iota_val (A : Class) (x : ZFSet) (H : forall y, A y ↔ y 
+= x) : iota A = ↑x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Class.toSet_of_ZFSet`：toSet_of_ZFSet (A : Class.{u}) (x : ZFSet.{u}) : T
+oSet A x ↔ A x
+· 使用定理 `Class.coe_apply`：coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in 
+y
+· 使用定理 `ZFSet.mem_map`：mem_map {f : ZFSet -> ZFSet} [Definable₁ f] {x y : ZFSet}
+ : y in map f x ↔ exists z in x, pair z (f z) = y
+· 使用定理 `ZFSet.pair_injective`：pair_injective : Function.Injective2 pair
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem map_fval {f : ZFSet.{u} -> ZFSet.{u}} [Definable₁ f] {x y : ZFSet.{u}}
-    (h : y in x) : (ZFSet.map f x ′ y : Class.{u}) = f y :=
+theorem map_fval {f : ZFSet.{u} → ZFSet.{u}} [Definable₁ f] {x y : ZFSet.{u}}
+    (h : y ∈ x) : (ZFSet.map f x ′ y : Class.{u}) = f y :=
   Class.iota_val _ _ fun z => by
-    rw [Class.toSet_of_ZFSet]; rw [Class.coe_apply]; rw [mem_map]
+    rw [Class.toSet_of_ZFSet, Class.coe_apply, mem_map]
     exact
       ⟨fun ⟨w, _, pr⟩ => by
         let ⟨wy, fw⟩ := ZFSet.pair_injective pr
-        rw [← fw]; rw [wy], fun e => by
+        rw [← fw, wy], fun e => by
         subst e
         exact ⟨_, h, rfl⟩⟩
 
 variable (x : ZFSet.{u})
 
-/--
-Definition of `choice` / `choice` 的定义
+/-- A choice function on the class of nonempty ZFC sets. -/
+/-
+**ZFSet.choice** 是 Mathlib 中的一个定义，位于命名空间 `ZFSet`。
+形式化陈述：choice : ZFSet
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-definition choice
-  signature: : ZFSet
-  body: @map (fun y => Classical.epsilon fun z => z in y) (Classical.allZFSetDefinable _) x
-
-中文:
-定义 choice
-  签名: : ZFSet
-  定义体: @map (fun y => Classical.epsilon fun z => z in y) (Classical.allZFSetDefinable _) x
-
-Depends on / 依赖: Classical, Classical.allZFSetDefinable, Classical.epsilon, allZFSetDefinable, epsilon
+--- 原说明 ---
+A choice function on the class of nonempty ZFC sets.
 -/
 noncomputable def choice : ZFSet :=
-  @map (fun y => Classical.epsilon fun z => z in y) (Classical.allZFSetDefinable _) x
-
-/--
-theorem `choice_mem_aux` / 定理 `choice_mem_aux`
-
-English:
-theorem choice_mem_aux
-  given: (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x)
-  proof: (@Classical.epsilon_spec _ fun z : ZFSet.{u} => z in y)
-by_contradiction fun n => h by rwa [← (eq_empty y).2 fun z zx => n ⟨z, zx⟩]
-
-中文:
-定理 choice_mem_aux
-  条件: (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x)
-  证明: (@Classical.epsilon_spec _ fun z : ZFSet.{u} => z in y)
-by_contradiction fun n => h by rwa [← (eq_empty y).2 fun z zx => n ⟨z, zx⟩]
-
-Depends on / 依赖: Classical, Classical.epsilon_spec, by_contradiction, epsilon_spec, eq_empty
+  @map (fun y => Classical.epsilon fun z => z ∈ y) (Classical.allZFSetDefinable _) x
+/-
+**ZFSet.choice_mem_aux** 是 Mathlib 中的一个定理，位于命名空间 `ZFSet`。
+形式化陈述：choice_mem_aux (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x) : (Classical.epsi
+lon fun z : ZFSet.{u} => z in y) in y
+参数：h : ∅ ∉ x；y : ZFSet.{u}；yx : y in x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.epsilon_spec`：∀ {α : Sort u} {p : α → Prop} (hex : ∃ y, p y), 
+p (Classical.epsilon p)
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ZFSet.eq_empty`：eq_empty (x : ZFSet.{u}) : x = ∅ ↔ forall y : ZFSet.{u},
+ y ∉ x
 -/
-theorem choice_mem_aux (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x) :
-    (Classical.epsilon fun z : ZFSet.{u} => z in y) in y :=
-(@Classical.epsilon_spec _ fun z : ZFSet.{u} => z in y)
-by_contradiction fun n => h by rwa [← (eq_empty y).2 fun z zx => n ⟨z, zx⟩]
-
-/--
-theorem `choice_isFunc` / 定理 `choice_isFunc`
-
-English:
-theorem choice_isFunc
-  given: (h : ∅ ∉ x)
-  statement: IsFunc x (⋃₀ x) (choice x)
-  proof: (@map_isFunc _ (Classical.allZFSetDefinable _) _ _).2 fun y yx =>
-    mem_sUnion.2 ⟨y, yx, choice_mem_aux x h y yx⟩
-
-中文:
-定理 choice_isFunc
-  条件: (h : ∅ ∉ x)
-  结论: IsFunc x (⋃₀ x) (choice x)
-  证明: (@map_isFunc _ (Classical.allZFSetDefinable _) _ _).2 fun y yx =>
-    mem_sUnion.2 ⟨y, yx, choice_mem_aux x h y yx⟩
-
-Depends on / 依赖: Classical, Classical.allZFSetDefinable, allZFSetDefinable, choice_mem_aux, map_isFunc, mem_sUnion
+theorem choice_mem_aux (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y ∈ x) :
+    (Classical.epsilon fun z : ZFSet.{u} => z ∈ y) ∈ y :=
+  (@Classical.epsilon_spec _ fun z : ZFSet.{u} => z ∈ y) <|
+    by_contradiction fun n => h <| by rwa [← (eq_empty y).2 fun z zx => n ⟨z, zx⟩]
+/-
+**ZFSet.choice_isFunc** 是 Mathlib 中的一个定理，位于命名空间 `ZFSet`。
+形式化陈述：choice_isFunc (h : ∅ ∉ x) : IsFunc x (⋃₀ x) (choice x)
+参数：h : ∅ ∉ x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ZFSet.map_isFunc`：map_isFunc {f : ZFSet -> ZFSet} [Definable₁ f] {x y : 
+ZFSet} : IsFunc x y (map f x) ↔ forall z in x, f z in y
+· 使用定理 `ZFSet.mem_sUnion`：mem_sUnion {x y : ZFSet.{u}} : y in ⋃₀ x ↔ exists z in
+ x, y in z
+· 使用定理 `ZFSet.choice_mem_aux`：choice_mem_aux (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y
+ in x) : (Classical.epsilon fun z : ZFSet.{u} => z in y) in y
 -/
 theorem choice_isFunc (h : ∅ ∉ x) : IsFunc x (⋃₀ x) (choice x) :=
   (@map_isFunc _ (Classical.allZFSetDefinable _) _ _).2 fun y yx =>
     mem_sUnion.2 ⟨y, yx, choice_mem_aux x h y yx⟩
-
-/--
-theorem `choice_mem` / 定理 `choice_mem`
-
-English:
-theorem choice_mem
-  given: (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x)
-  proof: by
-  delta choice
-  rw [@map_fval _ (Classical.allZFSetDefinable _) x y yx]; rw [Class.coe_mem]; rw [Class.coe_apply]
-  exact choice_mem_aux x h y yx
-
-中文:
-定理 choice_mem
-  条件: (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x)
-  证明: by
-  delta choice
-  rw [@map_fval _ (Classical.allZFSetDefinable _) x y yx]; rw [Class.coe_mem]; rw [Class.coe_apply]
-  exact choice_mem_aux x h y yx
-
-Depends on / 依赖: Class.coe_apply, Class.coe_mem, Classical, Classical.allZFSetDefinable, allZFSetDefinable, choice, choice_mem_aux, coe_apply, coe_mem, map_fval
+/-
+**ZFSet.choice_mem** 是 Mathlib 中的一个定理，位于命名空间 `ZFSet`。
+形式化陈述：choice_mem (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x) : (choice x ′ y : Cla
+ss.{u}) in (y : Class.{u})
+参数：h : ∅ ∉ x；y : ZFSet.{u}；yx : y in x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZFSet.map_fval`：map_fval {f : ZFSet.{u} -> ZFSet.{u}} [Definable₁ f] {x 
+y : ZFSet.{u}} (h : y in x) : (ZFSet.map f x ′ y : Class.{u}) = f y
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
+· 使用定理 `Class.coe_apply`：coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in 
+y
+· 使用定理 `ZFSet.choice_mem_aux`：choice_mem_aux (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y
+ in x) : (Classical.epsilon fun z : ZFSet.{u} => z in y) in y
 -/
-theorem choice_mem (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y in x) :
-    (choice x ′ y : Class.{u}) in (y : Class.{u}) := by
+theorem choice_mem (h : ∅ ∉ x) (y : ZFSet.{u}) (yx : y ∈ x) :
+    (choice x ′ y : Class.{u}) ∈ (y : Class.{u}) := by
   delta choice
-  rw [@map_fval _ (Classical.allZFSetDefinable _) x y yx]; rw [Class.coe_mem]; rw [Class.coe_apply]
+  rw [@map_fval _ (Classical.allZFSetDefinable _) x y yx, Class.coe_mem, Class.coe_apply]
   exact choice_mem_aux x h y yx
-
-/--
-lemma `coe_equiv_aux` / 引理 `coe_equiv_aux`
-
-English:
-lemma coe_equiv_aux
-  given: {s : Set ZFSet.{u}} (hs : Small.{u} s)
-  proof: by
-  ext x
-  rw [SetLike.mem_coe]; rw [← mk_out x]; rw [mk_mem_iff]; rw [mk_out]
-  refine ⟨?_, fun xs => ⟨equivShrink s (Subtype.mk x xs), ?_⟩⟩
-  · rintro ⟨b, h2⟩
-    rw [← ZFSet.eq]; rw [ZFSet.mk_out] at h2
-    simp [h2]
-  · simp [PSet.Equiv.refl]
-
-中文:
-引理 coe_equiv_aux
-  条件: {s : 集合 ZFSet.{u}} (hs : Small.{u} s)
-  证明: by
-  ext x
-  rw [SetLike.mem_coe]; rw [← mk_out x]; rw [mk_mem_iff]; rw [mk_out]
-  refine ⟨?_, fun xs => ⟨equivShrink s (Subtype.mk x xs), ?_⟩⟩
-  · rintro ⟨b, h2⟩
-    rw [← ZFSet.eq]; rw [ZFSet.mk_out] at h2
-    simp [h2]
-  · simp [PSet.Equiv.refl]
+/-
+**ZFSet.coe_equiv_aux** 是 Mathlib 中的一个引理，位于命名空间 `ZFSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma coe_equiv_aux {s : Set ZFSet.{u}} (hs : Small.{u} s) :
-    (mk <| PSet.mk (Shrink s) fun x => ((equivShrink s).symm x).1.out) = s := by
+    (mk <| PSet.mk (Shrink s) fun x ↦ ((equivShrink s).symm x).1.out) = s := by
   ext x
-  rw [SetLike.mem_coe]; rw [← mk_out x]; rw [mk_mem_iff]; rw [mk_out]
-  refine ⟨?_, fun xs => ⟨equivShrink s (Subtype.mk x xs), ?_⟩⟩
+  rw [SetLike.mem_coe, ← mk_out x, mk_mem_iff, mk_out]
+  refine ⟨?_, fun xs ↦ ⟨equivShrink s (Subtype.mk x xs), ?_⟩⟩
   · rintro ⟨b, h2⟩
-    rw [← ZFSet.eq]; rw [ZFSet.mk_out] at h2
+    rw [← ZFSet.eq, ZFSet.mk_out] at h2
     simp [h2]
   · simp [PSet.Equiv.refl]
 
 /-- `SetLike.coe` as an equivalence. -/
 @[simps apply_coe]
-/--
-Definition of `coeEquiv` / `coeEquiv` 的定义
+/-
+**ZFSet.coeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ZFSet`。
+形式化陈述：coeEquiv : ZFSet.{u} ≃ {s : Set ZFSet.{u} // Small.{u, u+1} s} where toFun
+ x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition coeEquiv
-  signature: : ZFSet.{u} ≃ {s : Set ZFSet.{u} // Small.{u, u+1} s} where
-  body: ⟨x, x.small_coe⟩
-invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
-  left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
-fun s => Subtype.coe_injective coe_equiv_aux s.2
-right_inv s := private Subtype.coe_injective coe_equiv_aux s.2
-
-中文:
-定义 coeEquiv
-  签名: : ZFSet.{u} ≃ {s : 集合 ZFSet.{u} // Small.{u, u+1} s} where
-  定义体: ⟨x, x.small_coe⟩
-invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
-  left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
-fun s => Subtype.coe_injective coe_equiv_aux s.2
-right_inv s := private Subtype.coe_injective coe_equiv_aux s.2
-
-Depends on / 依赖: small_coe, x.small_coe
+--- 原说明 ---
+`SetLike.coe` as an equivalence.
 -/
 noncomputable def coeEquiv : ZFSet.{u} ≃ {s : Set ZFSet.{u} // Small.{u, u+1} s} where
   toFun x := ⟨x, x.small_coe⟩
-invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
+  invFun := fun ⟨s, _⟩ ↦ mk <| PSet.mk (Shrink s) fun x ↦ ((equivShrink.{u, u + 1} s).symm x).1.out
   left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
-fun s => Subtype.coe_injective coe_equiv_aux s.2
-right_inv s := private Subtype.coe_injective coe_equiv_aux s.2
+    fun s ↦ Subtype.coe_injective <| coe_equiv_aux s.2
+  right_inv s := private Subtype.coe_injective <| coe_equiv_aux s.2
 
-/--
-theorem `isOrdinal_notMem_univ` / 定理 `isOrdinal_notMem_univ`
+/-- The **Burali-Forti paradox**: ordinals form a proper class. -/
+/-
+**ZFSet.isOrdinal_notMem_univ** 是 Mathlib 中的一个定理，位于命名空间 `ZFSet`。
+形式化陈述：isOrdinal_notMem_univ : IsOrdinal ∉ Class.univ.{u}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Class.coe_apply`：coe_apply {x y : ZFSet.{u}} : (y : Class.{u}) x ↔ x in 
+y
+· 使用定理 `ZFSet.IsOrdinal.mem`：∀ {x y : ZFSet.{u}}, x.IsOrdinal → y ∈ x → y.IsOrdi
+nal
+· 使用定理 `ZFSet.IsOrdinal.mem_trans`：mem_trans (h : z.IsOrdinal) : x in y -> y in 
+z -> x in z
+· 使用定理 `Class.mem_irrefl`：mem_irrefl (x : Class) : x ∉ x
+· 使用定理 `Class.coe_mem`：coe_mem {x : ZFSet.{u}} {A : Class.{u}} : ↑x in A ↔ A x
 
-English:
-theorem isOrdinal_notMem_univ
-  statement: IsOrdinal ∉ Class.univ.{u}
-  proof: by
-  rintro ⟨x, hx, -⟩
-  suffices IsOrdinal x by
-    apply Class.mem_irrefl x
-    rwa [Class.coe_mem, hx]
-  refine ⟨fun y hy z hz => ?_, fun hyz hzw hwx => ?_⟩ <;> rw [← Class.coe_apply, hx] at *
-  exacts [hy.mem hz, hwx.mem_trans hyz hzw]
-
-中文:
-定理 isOrdinal_notMem_univ
-  结论: 是序数 ∉ 类.univ.{u}
-  证明: by
-  rintro ⟨x, hx, -⟩
-  suffices IsOrdinal x by
-    apply Class.mem_irrefl x
-    rwa [Class.coe_mem, hx]
-  refine ⟨fun y hy z hz => ?_, fun hyz hzw hwx => ?_⟩ <;> rw [← Class.coe_apply, hx] at *
-  exacts [hy.mem hz, hwx.mem_trans hyz hzw]
-
-Depends on / 依赖: Class.coe_apply, Class.coe_mem, Class.mem_irrefl, IsOrdinal, coe_apply, coe_mem, exacts, hwx.mem_trans, hy.mem, mem_irrefl, mem_trans
+--- 原说明 ---
+The **Burali-Forti paradox**: ordinals form a proper class.
 -/
 theorem isOrdinal_notMem_univ : IsOrdinal ∉ Class.univ.{u} := by
   rintro ⟨x, hx, -⟩
   suffices IsOrdinal x by
     apply Class.mem_irrefl x
     rwa [Class.coe_mem, hx]
-  refine ⟨fun y hy z hz => ?_, fun hyz hzw hwx => ?_⟩ <;> rw [← Class.coe_apply, hx] at *
+  refine ⟨fun y hy z hz ↦ ?_, fun hyz hzw hwx ↦ ?_⟩ <;> rw [← Class.coe_apply, hx] at *
   exacts [hy.mem hz, hwx.mem_trans hyz hzw]
 
 end ZFSet
+

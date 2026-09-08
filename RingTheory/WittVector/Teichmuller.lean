@@ -34,175 +34,112 @@ namespace WittVector
 
 open MvPolynomial
 
-variable (p : Nat) {R S : Type*} [hp : Fact p.Prime] [CommRing R] [CommRing S]
+variable (p : ℕ) {R S : Type*} [hp : Fact p.Prime] [CommRing R] [CommRing S]
 
 local notation "𝕎" => WittVector p -- type as `\bbW`
 
-/--
-Definition of `teichmullerFun` / `teichmullerFun` 的定义
+/-- The underlying function of the monoid hom `WittVector.teichmuller`.
+The `0`-th coefficient of `teichmullerFun p r` is `r`, and all others are `0`.
+-/
+/-
+**WittVector.teichmullerFun** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：teichmullerFun (r : R) : 𝕎 R
+参数：r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition teichmullerFun
-  signature: (r : R)
-  body: ⟨fun n => if n = 0 then r else 0⟩
-
-中文:
-定义 teichmullerFun
-  签名: (r : R)
-  定义体: ⟨fun n => if n = 0 then r else 0⟩
+--- 原说明 ---
+The underlying function of the monoid hom `WittVector.teichmuller`.
+The `0`-th coefficient of `teichmullerFun p r` is `r`, and all others are `0`.
 -/
 def teichmullerFun (r : R) : 𝕎 R :=
   ⟨fun n => if n = 0 then r else 0⟩
 
+/-!
+## `teichmuller` is a monoid homomorphism
 
+On ghost components, it is clear that `teichmullerFun` is a monoid homomorphism.
+But in general the ghost map is not injective.
+We follow the same strategy as for proving that the ring operations on `𝕎 R`
+satisfy the ring axioms.
 
-/--
-theorem `ghostComponent_teichmullerFun` / 定理 `ghostComponent_teichmullerFun`
-
-English:
-theorem ghostComponent_teichmullerFun
-  given: (r : R) (n : Nat)
-  proof: by
-  rw [ghostComponent_apply]; rw [aeval_wittPolynomial]; rw [Finset.sum_eq_single 0]; rw [pow_zero]; rw [one_mul]; rw [tsub_zero]
-  · rfl
-  · intro i _ h0
-    simp [teichmullerFun, h0, hp.1.ne_zero]
-  · rw [Finset.mem_range]; intro h; exact (h (Nat.succ_pos n)).elim
-
-中文:
-定理 ghostComponent_teichmullerFun
-  条件: (r : R) (n : 自然数)
-  证明: by
-  rw [ghostComponent_apply]; rw [aeval_wittPolynomial]; rw [Finset.sum_eq_single 0]; rw [pow_zero]; rw [one_mul]; rw [tsub_zero]
-  · rfl
-  · intro i _ h0
-    simp [teichmullerFun, h0, hp.1.ne_zero]
-  · rw [Finset.mem_range]; intro h; exact (h (Nat.succ_pos n)).elim
+1. We first prove it for rings `R` where `p` is invertible,
+   because then the ghost map is in fact an isomorphism.
+2. After that, we derive the result for `MvPolynomial R ℤ`,
+3. and from that we can prove the result for arbitrary `R`.
 -/
-private theorem ghostComponent_teichmullerFun (r : R) (n : Nat) :
+
+
+/-
+**WittVector.ghostComponent_teichmullerFun** 是 Mathlib 中的一个定理，位于命名空间 `WittVector
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+## `teichmuller` is a monoid homomorphism
+
+On ghost components, it is clear that `teichmullerFun` is a monoid homomorphism.
+But in general the ghost map is not injective.
+We follow the same strategy as for proving that the ring operations on `𝕎 R`
+satisfy the ring axioms.
+
+1. We first prove it for rings `R` where `p` is invertible,
+   because then the ghost map is in fact an isomorphism.
+2. After that, we derive the result for `MvPolynomial R ℤ`,
+3. and from that we can prove the result for arbitrary `R`.
+-/
+private theorem ghostComponent_teichmullerFun (r : R) (n : ℕ) :
     ghostComponent n (teichmullerFun p r) = r ^ p ^ n := by
-  rw [ghostComponent_apply]; rw [aeval_wittPolynomial]; rw [Finset.sum_eq_single 0]; rw [pow_zero]; rw [one_mul]; rw [tsub_zero]
+  rw [ghostComponent_apply, aeval_wittPolynomial, Finset.sum_eq_single 0, pow_zero, one_mul,
+    tsub_zero]
   · rfl
   · intro i _ h0
     simp [teichmullerFun, h0, hp.1.ne_zero]
   · rw [Finset.mem_range]; intro h; exact (h (Nat.succ_pos n)).elim
-
-/--
-theorem `map_teichmullerFun` / 定理 `map_teichmullerFun`
-
-English:
-theorem map_teichmullerFun
-  given: (f : R ->+* S) (r : R)
-  proof: by
-  ext n; cases n
-  · rfl
-  · exact f.map_zero
-
-中文:
-定理 map_teichmullerFun
-  条件: (f : R ->+* S) (r : R)
-  证明: by
-  ext n; cases n
-  · rfl
-  · exact f.map_zero
+/-
+**WittVector.map_teichmullerFun** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem map_teichmullerFun (f : R ->+* S) (r : R) :
+private theorem map_teichmullerFun (f : R →+* S) (r : R) :
     map f (teichmullerFun p r) = teichmullerFun p (f r) := by
   ext n; cases n
   · rfl
   · exact f.map_zero
-
-/--
-theorem `teichmuller_mul_aux₁` / 定理 `teichmuller_mul_aux₁`
-
-English:
-theorem teichmuller_mul_aux₁
-  given: {R : Type*} (x y : MvPolynomial R Rat)
-  proof: by
-  apply (ghostMap.bijective_of_invertible p (MvPolynomial R Rat)).1
-  rw [map_mul]
-  ext1 n
-  simp only [Pi.mul_apply, ghostMap_apply, ghostComponent_teichmullerFun, mul_pow]
-
-中文:
-定理 teichmuller_mul_aux₁
-  条件: {R : 类型} (x y : 多元多项式 R 有理数)
-  证明: by
-  apply (ghostMap.bijective_of_invertible p (MvPolynomial R Rat)).1
-  rw [map_mul]
-  ext1 n
-  simp only [Pi.mul_apply, ghostMap_apply, ghostComponent_teichmullerFun, mul_pow]
+/-
+**WittVector.teichmuller_mul_aux** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem teichmuller_mul_aux₁ {R : Type*} (x y : MvPolynomial R Rat) :
+private theorem teichmuller_mul_aux₁ {R : Type*} (x y : MvPolynomial R ℚ) :
     teichmullerFun p (x * y) = teichmullerFun p x * teichmullerFun p y := by
-  apply (ghostMap.bijective_of_invertible p (MvPolynomial R Rat)).1
+  apply (ghostMap.bijective_of_invertible p (MvPolynomial R ℚ)).1
   rw [map_mul]
   ext1 n
   simp only [Pi.mul_apply, ghostMap_apply, ghostComponent_teichmullerFun, mul_pow]
-
-/--
-theorem `teichmuller_mul_aux₂` / 定理 `teichmuller_mul_aux₂`
-
-English:
-theorem teichmuller_mul_aux₂
-  given: {R : Type*} (x y : MvPolynomial R Int)
-  proof: by
-  refine map_injective (MvPolynomial.map (Int.castRingHom Rat))
-    (MvPolynomial.map_injective _ Int.cast_injective) ?_
-  simp only [teichmuller_mul_aux₁, map_teichmullerFun, map_mul]
-
-中文:
-定理 teichmuller_mul_aux₂
-  条件: {R : 类型} (x y : 多元多项式 R 整数)
-  证明: by
-  refine map_injective (MvPolynomial.map (Int.castRingHom Rat))
-    (MvPolynomial.map_injective _ Int.cast_injective) ?_
-  simp only [teichmuller_mul_aux₁, map_teichmullerFun, map_mul]
+/-
+**WittVector.teichmuller_mul_aux** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem teichmuller_mul_aux₂ {R : Type*} (x y : MvPolynomial R Int) :
+private theorem teichmuller_mul_aux₂ {R : Type*} (x y : MvPolynomial R ℤ) :
     teichmullerFun p (x * y) = teichmullerFun p x * teichmullerFun p y := by
-  refine map_injective (MvPolynomial.map (Int.castRingHom Rat))
+  refine map_injective (MvPolynomial.map (Int.castRingHom ℚ))
     (MvPolynomial.map_injective _ Int.cast_injective) ?_
   simp only [teichmuller_mul_aux₁, map_teichmullerFun, map_mul]
 
-/--
-Definition of `teichmuller` / `teichmuller` 的定义
+/-- The Teichmüller lift of an element of `R` to `𝕎 R`.
+The `0`-th coefficient of `teichmuller p r` is `r`, and all others are `0`.
+This is a monoid homomorphism. -/
+/-
+**WittVector.teichmuller** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：teichmuller : R ->* 𝕎 R where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition teichmuller
-  signature: : R ->* 𝕎 R where
-  body: teichmullerFun p
-  map_one' := by
-    ext ⟨⟩
-    · rw [one_coeff_zero]; rfl
-    · rw [one_coeff_eq_of_pos _ _ _ (Nat.succ_pos _)]; rfl
-  map_mul' := by
-    intro x y
-    rcases counit_surjective R x with ⟨x, rfl⟩
-    rcases counit_surjective R y with ⟨y, rfl⟩
-    simp only [← map_teichmullerFun, ← map_mul, teichmuller_mul_aux₂]
-
-@[simp]
-
-中文:
-定义 teichmuller
-  签名: : R ->* 𝕎 R where
-  定义体: teichmullerFun p
-  map_one' := by
-    ext ⟨⟩
-    · rw [one_coeff_zero]; rfl
-    · rw [one_coeff_eq_of_pos _ _ _ (Nat.succ_pos _)]; rfl
-  map_mul' := by
-    intro x y
-    rcases counit_surjective R x with ⟨x, rfl⟩
-    rcases counit_surjective R y with ⟨y, rfl⟩
-    simp only [← map_teichmullerFun, ← map_mul, teichmuller_mul_aux₂]
-
-@[simp]
-
-Depends on / 依赖: teichmullerFun
+--- 原说明 ---
+The Teichmüller lift of an element of `R` to `𝕎 R`.
+The `0`-th coefficient of `teichmuller p r` is `r`, and all others are `0`.
+This is a monoid homomorphism.
 -/
-def teichmuller : R ->* 𝕎 R where
+def teichmuller : R →* 𝕎 R where
   toFun := teichmullerFun p
   map_one' := by
     ext ⟨⟩
@@ -215,125 +152,97 @@ def teichmuller : R ->* 𝕎 R where
     simp only [← map_teichmullerFun, ← map_mul, teichmuller_mul_aux₂]
 
 @[simp]
-/--
-theorem `teichmuller_coeff_zero` / 定理 `teichmuller_coeff_zero`
-
-English:
-theorem teichmuller_coeff_zero
-  given: (r : R)
-  statement: (teichmuller p r).coeff 0 = r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 teichmuller_coeff_zero
-  条件: (r : R)
-  结论: (teichmuller p r).coeff 0 = r
-  证明: rfl
-
-@[simp]
+/-
+**WittVector.teichmuller_coeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：teichmuller_coeff_zero (r : R) : (teichmuller p r).coeff 0 = r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem teichmuller_coeff_zero (r : R) : (teichmuller p r).coeff 0 = r :=
   rfl
 
 @[simp]
-/--
-theorem `teichmuller_coeff_pos` / 定理 `teichmuller_coeff_pos`
-
-English:
-theorem teichmuller_coeff_pos
-  given: (r : R)
-  statement: forall (n : Nat) (_ : 0 < n), (teichmuller p r).coeff n = 0
-
-中文:
-定理 teichmuller_coeff_pos
-  条件: (r : R)
-  结论: 对任意 (n : 自然数) (_ : 0 < n), (teichmuller p r).coeff n = 0
+/-
+**WittVector.teichmuller_coeff_pos** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：∀ (p : ℕ) {R : Type u_1} [hp : Fact (Nat.Prime p)] [inst : CommRing R] (r 
+: R) (n : ℕ),   0 < n → ((WittVector.teichmuller p) r).coeff n = 0
+参数：p : ℕ；Nat.Prime p；r : R；n : ℕ；(WittVector.teichmuller p) r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem teichmuller_coeff_pos (r : R) : forall (n : Nat) (_ : 0 < n), (teichmuller p r).coeff n = 0
+theorem teichmuller_coeff_pos (r : R) : ∀ (n : ℕ) (_ : 0 < n), (teichmuller p r).coeff n = 0
   | _ + 1, _ => rfl
 
 @[simp]
-/--
-theorem `teichmuller_zero` / 定理 `teichmuller_zero`
-
-English:
-theorem teichmuller_zero
-  statement: teichmuller p (0 : R) = 0
-  proof: by
-  ext ⟨⟩ <;> · rw [zero_coeff]; rfl
-
-中文:
-定理 teichmuller_zero
-  结论: teichmuller p (0 : R) = 0
-  证明: by
-  ext ⟨⟩ <;> · rw [zero_coeff]; rfl
-
-Depends on / 依赖: zero_coeff
+/-
+**WittVector.teichmuller_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：teichmuller_zero : teichmuller p (0 : R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.zero_coeff`：zero_coeff (n : Nat) : (0 : 𝕎 R).coeff n = 0
 -/
 theorem teichmuller_zero : teichmuller p (0 : R) = 0 := by
   ext ⟨⟩ <;> · rw [zero_coeff]; rfl
 
 /-- `teichmuller` is a natural transformation. -/
 @[simp]
-/--
-theorem `map_teichmuller` / 定理 `map_teichmuller`
+/-
+**WittVector.map_teichmuller** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：map_teichmuller (f : R ->+* S) (r : R) : map f (teichmuller p r) = teichmu
+ller p (f r)
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.RingTheory.WittVector.Teichmuller.0.WittVector.map_teic
+hmullerFun`：∀ (p : ℕ) {R : Type u_1} {S : Type u_2} [hp : Fact (Nat.Prime p)] [i
+nst : CommRing R] [inst_1 : CommRing S]   (f : R →+* S) (r : R), (WittVe…
 
-English:
-theorem map_teichmuller
-  given: (f : R ->+* S) (r : R)
-  statement: map f (teichmuller p r) = teichmuller p (f r)
-  proof: map_teichmullerFun _ _ _
-
-中文:
-定理 map_teichmuller
-  条件: (f : R ->+* S) (r : R)
-  结论: map f (teichmuller p r) = teichmuller p (f r)
-  证明: map_teichmullerFun _ _ _
-
-Depends on / 依赖: map_teichmullerFun
+--- 原说明 ---
+`teichmuller` is a natural transformation.
 -/
-theorem map_teichmuller (f : R ->+* S) (r : R) : map f (teichmuller p r) = teichmuller p (f r) :=
+theorem map_teichmuller (f : R →+* S) (r : R) : map f (teichmuller p r) = teichmuller p (f r) :=
   map_teichmullerFun _ _ _
 
 /-- The `n`-th ghost component of `teichmuller p r` is `r ^ p ^ n`. -/
 @[simp]
-/--
-theorem `ghostComponent_teichmuller` / 定理 `ghostComponent_teichmuller`
+/-
+**WittVector.ghostComponent_teichmuller** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：ghostComponent_teichmuller (r : R) (n : Nat) : ghostComponent n (teichmull
+er p r) = r ^ p ^ n
+参数：r : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.RingTheory.WittVector.Teichmuller.0.WittVector.ghostCom
+ponent_teichmullerFun`：∀ (p : ℕ) {R : Type u_1} [hp : Fact (Nat.Prime p)] [inst 
+: CommRing R] (r : R) (n : ℕ),   (WittVector.ghostComponent n) (WittVector.teich
+mul…
 
-English:
-theorem ghostComponent_teichmuller
-  given: (r : R) (n : Nat)
-  proof: ghostComponent_teichmullerFun _ _ _
-
-中文:
-定理 ghostComponent_teichmuller
-  条件: (r : R) (n : 自然数)
-  证明: ghostComponent_teichmullerFun _ _ _
-
-Depends on / 依赖: ghostComponent_teichmullerFun
+--- 原说明 ---
+The `n`-th ghost component of `teichmuller p r` is `r ^ p ^ n`.
 -/
-theorem ghostComponent_teichmuller (r : R) (n : Nat) :
+theorem ghostComponent_teichmuller (r : R) (n : ℕ) :
     ghostComponent n (teichmuller p r) = r ^ p ^ n :=
   ghostComponent_teichmullerFun _ _ _
 
-/--
-lemma `constantCoeff_surjective` / 引理 `constantCoeff_surjective`
+/-- The Teichmüller lift is set-theoretically right inverse to the constant coefficient map,
+showing that the latter is surjective. -/
+/-
+**WittVector.constantCoeff_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_surjective : Function.Surjective (constantCoeff : 𝕎 R -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma constantCoeff_surjective
-  statement: Function.Surjective (constantCoeff : 𝕎 R -> R)
-  proof: fun r => ⟨teichmuller p r, rfl⟩
-
-中文:
-引理 constantCoeff_surjective
-  结论: 函数.满射 (constantCoeff : 𝕎 R -> R)
-  证明: fun r => ⟨teichmuller p r, rfl⟩
-
-Depends on / 依赖: teichmuller
+--- 原说明 ---
+The Teichmüller lift is set-theoretically right inverse to the constant coeffici
+ent map,
+showing that the latter is surjective.
 -/
-lemma constantCoeff_surjective : Function.Surjective (constantCoeff : 𝕎 R -> R) :=
-  fun r => ⟨teichmuller p r, rfl⟩
+lemma constantCoeff_surjective : Function.Surjective (constantCoeff : 𝕎 R → R) :=
+  fun r ↦ ⟨teichmuller p r, rfl⟩
 
 end WittVector
+

@@ -30,28 +30,23 @@ universe u v
 
 namespace CategoryTheory
 
-variable {c d : Type u -> Type v}
+variable {c d : Type u → Type v}
 
-/--
-Definition of `Bundled` / `Bundled` 的定义
+/-- `Bundled` is a type bundled with a type class instance for that type. Only
+the type class is exposed as a parameter. -/
+/-
+**CategoryTheory.Bundled** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：Bundled (c : Type u -> Type v) : Type max (u + 1) v where /-- The underlyi
+ng type of the bundled type -/ α : Type u /-- The corresponding instance of the 
+bundled type class -/ str : c α
+参数：c : Type u -> Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Bundled
-  parameters: (c : Type u -> Type v)
-  axioms and operations (2):
-    - α : Type u
-    - str : c α  [default: by infer_instance]
-
-中文:
-结构 打包
-  参数: (c : 类型u -> 类型v)
-  公理与运算 (2 个):
-    - α : 类型u
-    - str : c α  [默认: by infer_instance]
-
-Depends on / 依赖: PreservesColimits, PreservesColimits.preservesFiniteColimits, infer_instance, preservesFiniteColimits
+--- 原说明 ---
+`Bundled` is a type bundled with a type class instance for that type. Only
+the type class is exposed as a parameter.
 -/
-structure Bundled (c : Type u -> Type v) : Type max (u + 1) v where
+structure Bundled (c : Type u → Type v) : Type max (u + 1) v where
   /-- The underlying type of the bundled type -/
   α : Type u
   /-- The corresponding instance of the bundled type class -/
@@ -67,76 +62,56 @@ set_option checkBinderAnnotations false in
 
 -- Usually explicit instances will provide their own version of this, e.g. `MonCat.of` and
 -- `TopCat.of`.
-/--
-Definition of `of` / `of` 的定义
+/-- A generic function for lifting a type equipped with an instance to a bundled object. -/
+/-
+**CategoryTheory.Bundled.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bundled`。
+形式化陈述：of {c : Type u -> Type v} (α : Type u) [str : c α] : Bundled c
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: {c : Type u -> Type v} (α : Type u) [str : c α]
-  body: ⟨α, str⟩
-
-中文:
-定义 of
-  签名: {c : 类型u -> 类型v} (α : 类型u) [str : c α]
-  定义体: ⟨α, str⟩
+--- 原说明 ---
+A generic function for lifting a type equipped with an instance to a bundled obj
+ect.
 -/
-def of {c : Type u -> Type v} (α : Type u) [str : c α] : Bundled c :=
+def of {c : Type u → Type v} (α : Type u) [str : c α] : Bundled c :=
   ⟨α, str⟩
-
-/--
-Instance `coeSort` / 实例 `coeSort`
-
-English:
-instance coeSort
-  signature: : CoeSort (Bundled c) (Type u)
-  body: ⟨Bundled.α⟩
-
-中文:
-实例 coeSort
-  签名: : CoeSort (打包 c) (类型u)
-  定义体: ⟨Bundled.α⟩
-
-Depends on / 依赖: Bundled
+/-
+**CategoryTheory.Bundled.coeSort** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bundl
+ed`。
+形式化陈述：coeSort : CoeSort (Bundled c) (Type u)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coeSort : CoeSort (Bundled c) (Type u) :=
   ⟨Bundled.α⟩
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (α) (str)
-  statement: (@Bundled.mk c α str : Type u) = α
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (α) (str)
-  结论: (@打包.mk c α str : 类型u) = α
-  证明: rfl
+/-
+**CategoryTheory.Bundled.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bundle
+d`。
+形式化陈述：coe_mk (α) (str) : (@Bundled.mk c α str : Type u) = α
+参数：α；str。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (α) (str) : (@Bundled.mk c α str : Type u) = α :=
   rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- Map over the bundled structure -/
+/-
+**CategoryTheory.Bundled.map** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Bundled
+`。
+形式化陈述：map (f : forall {α}, c α -> d α) (b : Bundled c) : Bundled d
+参数：f : forall {α}, c α -> d α；b : Bundled c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation map
-  signature: (f : forall {α}, c α -> d α) (b : Bundled c)
-  body: ⟨b, f b.str⟩
-
-中文:
-缩写 map
-  签名: (f : 对任意 {α}, c α -> d α) (b : 打包 c)
-  定义体: ⟨b, f b.str⟩
-
-Depends on / 依赖: Finite, b.str
+--- 原说明 ---
+Map over the bundled structure
 -/
-abbrev map (f : forall {α}, c α -> d α) (b : Bundled c) : Bundled d :=
+abbrev map (f : ∀ {α}, c α → d α) (b : Bundled c) : Bundled d :=
   ⟨b, f b.str⟩
 
 end Bundled
 
 end CategoryTheory
+

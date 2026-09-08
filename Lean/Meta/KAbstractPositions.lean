@@ -30,82 +30,19 @@ whether this is the case.
 
 namespace Lean.Meta
 
-/--
-Definition of `kabstractPositions` / `kabstractPositions` 的定义
+/-- Return the positions that `kabstract` would abstract for pattern `p` in expression `e`.
+i.e. the positions that unify with `p`. -/
+/-
+**Lean.Meta.kabstractPositions** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：kabstractPositions (p e : Expr) : MetaM (Array SubExpr.Pos)
+参数：p e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kabstractPositions
-  signature: (p e : Expr)
-  body: do
-  let mctx ← getMCtx
-  let pHeadIdx := p.toHeadIndex
-  let pNumArgs := p.headNumArgs
-  let rec
-  /-- The main loop that loops through all subexpressions -/
-  visit (e : Expr) (pos : SubExpr.Pos) (positions : Array SubExpr.Pos) :
-      MetaM (Array SubExpr.Pos) := do
-    let visitChildren : Array SubExpr.Pos -> MetaM (Array SubExpr.Pos) :=
-      match e with
-      | .app fn arg => visit fn pos.pushAppFn
-                                    >=> visit arg pos.pushAppArg
-      | .mdata _ expr => visit expr pos
-      | .proj _ _ struct => visit struct pos.pushProj
-      | .letE _ type value body _ => visit type pos.pushLetVarType
-                                    >=> visit value pos.pushLetValue
-                                    >=> visit body pos.pushLetBody
-      | .lam _ binderType body _ => visit binderType pos.pushBindingDomain
-                                    >=> visit body pos.pushBindingBody
-      | .forallE _ binderType body _ => visit binderType pos.pushBindingDomain
-                                    >=> visit body pos.pushBindingBody
-      | _ => pure
-    if e.hasLooseBVars then
-      visitChildren positions
-    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
-      visitChildren positions
-    else
-      if ← isDefEq e p then
-        setMCtx mctx -- reset the `MetavarContext` because `isDefEq` can modify it if it succeeds
-        visitChildren (positions.push pos)
-      else
-        visitChildren positions
-  visit e .root #[]
-
-中文:
-定义 kabstractPositions
-  签名: (p e : Expr)
-  定义体: do
-  let mctx ← getMCtx
-  let pHeadIdx := p.toHeadIndex
-  let pNumArgs := p.headNumArgs
-  let rec
-  /-- The main loop that loops through all subexpressions -/
-  visit (e : Expr) (pos : SubExpr.Pos) (positions : Array SubExpr.Pos) :
-      MetaM (Array SubExpr.Pos) := do
-    let visitChildren : Array SubExpr.Pos -> MetaM (Array SubExpr.Pos) :=
-      match e with
-      | .app fn arg => visit fn pos.pushAppFn
-                                    >=> visit arg pos.pushAppArg
-      | .mdata _ expr => visit expr pos
-      | .proj _ _ struct => visit struct pos.pushProj
-      | .letE _ type value body _ => visit type pos.pushLetVarType
-                                    >=> visit value pos.pushLetValue
-                                    >=> visit body pos.pushLetBody
-      | .lam _ binderType body _ => visit binderType pos.pushBindingDomain
-                                    >=> visit body pos.pushBindingBody
-      | .forallE _ binderType body _ => visit binderType pos.pushBindingDomain
-                                    >=> visit body pos.pushBindingBody
-      | _ => pure
-    if e.hasLooseBVars then
-      visitChildren positions
-    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
-      visitChildren positions
-    else
-      if ← isDefEq e p then
-        setMCtx mctx -- reset the `MetavarContext` because `isDefEq` can modify it if it succeeds
-        visitChildren (positions.push pos)
-      else
-        visitChildren positions
-  visit e .root #[]
+--- 原说明 ---
+Return the positions that `kabstract` would abstract for pattern `p` in expressi
+on `e`.
+i.e. the positions that unify with `p`.
 -/
 def kabstractPositions (p e : Expr) : MetaM (Array SubExpr.Pos) := do
   let mctx ← getMCtx
@@ -115,20 +52,20 @@ def kabstractPositions (p e : Expr) : MetaM (Array SubExpr.Pos) := do
   /-- The main loop that loops through all subexpressions -/
   visit (e : Expr) (pos : SubExpr.Pos) (positions : Array SubExpr.Pos) :
       MetaM (Array SubExpr.Pos) := do
-    let visitChildren : Array SubExpr.Pos -> MetaM (Array SubExpr.Pos) :=
+    let visitChildren : Array SubExpr.Pos → MetaM (Array SubExpr.Pos) :=
       match e with
-      | .app fn arg => visit fn pos.pushAppFn
+      | .app fn arg                  => visit fn pos.pushAppFn
                                     >=> visit arg pos.pushAppArg
-      | .mdata _ expr => visit expr pos
-      | .proj _ _ struct => visit struct pos.pushProj
-      | .letE _ type value body _ => visit type pos.pushLetVarType
+      | .mdata _ expr                => visit expr pos
+      | .proj _ _ struct             => visit struct pos.pushProj
+      | .letE _ type value body _    => visit type pos.pushLetVarType
                                     >=> visit value pos.pushLetValue
                                     >=> visit body pos.pushLetBody
-      | .lam _ binderType body _ => visit binderType pos.pushBindingDomain
+      | .lam _ binderType body _     => visit binderType pos.pushBindingDomain
                                     >=> visit body pos.pushBindingBody
       | .forallE _ binderType body _ => visit binderType pos.pushBindingDomain
                                     >=> visit body pos.pushBindingBody
-      | _ => pure
+      | _                            => pure
     if e.hasLooseBVars then
       visitChildren positions
     else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
@@ -141,30 +78,22 @@ def kabstractPositions (p e : Expr) : MetaM (Array SubExpr.Pos) := do
         visitChildren positions
   visit e .root #[]
 
-/--
-Definition of `viewKAbstractSubExpr` / `viewKAbstractSubExpr` 的定义
+/-- Return the subexpression at position `pos` in `e` together with an occurrence number
+that allows the expression to be found by `kabstract`.
+Return `none` when the subexpression contains loose bound variables. -/
+/-
+**Lean.Meta.viewKAbstractSubExpr** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：viewKAbstractSubExpr (e : Expr) (pos : SubExpr.Pos) : MetaM (Option (Expr 
+× Option Nat))
+参数：e : Expr；pos : SubExpr.Pos。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition viewKAbstractSubExpr
-  signature: (e : Expr) (pos : SubExpr.Pos)
-  body: do
-  let subExpr ← Core.viewSubexpr pos e
-  if subExpr.hasLooseBVars then
-    return none
-  let positions ← kabstractPositions subExpr e
-  let some n := positions.idxOf? pos | unreachable!
-  return some (subExpr, if positions.size == 1 then none else some (n + 1))
-
-中文:
-定义 viewKAbstractSubExpr
-  签名: (e : Expr) (pos : SubExpr.Pos)
-  定义体: do
-  let subExpr ← Core.viewSubexpr pos e
-  if subExpr.hasLooseBVars then
-    return none
-  let positions ← kabstractPositions subExpr e
-  let some n := positions.idxOf? pos | unreachable!
-  return some (subExpr, if positions.size == 1 then none else some (n + 1))
+--- 原说明 ---
+Return the subexpression at position `pos` in `e` together with an occurrence nu
+mber
+that allows the expression to be found by `kabstract`.
+Return `none` when the subexpression contains loose bound variables.
 -/
 def viewKAbstractSubExpr (e : Expr) (pos : SubExpr.Pos) : MetaM (Option (Expr × Option Nat)) := do
   let subExpr ← Core.viewSubexpr pos e
@@ -174,25 +103,40 @@ def viewKAbstractSubExpr (e : Expr) (pos : SubExpr.Pos) : MetaM (Option (Expr ×
   let some n := positions.idxOf? pos | unreachable!
   return some (subExpr, if positions.size == 1 then none else some (n + 1))
 
-/--
-Definition of `kabstractIsTypeCorrect` / `kabstractIsTypeCorrect` 的定义
+/-- Determine whether the result of abstracting `subExpr` from `e` at position `pos` results
+in a well-typed expression. This is important if you want to rewrite at this position.
 
-English:
-definition kabstractIsTypeCorrect
-  signature: (e subExpr : Expr) (pos : SubExpr.Pos)
-  body: do
-  withLocalDeclD `_a (← inferType subExpr) fun fvar => do
-    isTypeCorrect (← replaceSubexpr (fun _ => pure fvar) pos e)
+Here is an example of what goes wrong with an ill-typed kabstract result:
 
-中文:
-定义 kabstractIsTypeCorrect
-  签名: (e subExpr : Expr) (pos : SubExpr.Pos)
-  定义体: do
-  withLocalDeclD `_a (← inferType subExpr) fun fvar => do
-    isTypeCorrect (← replaceSubexpr (fun _ => pure fvar) pos e)
+```
+example (h : [5] ≠ []) : List.getLast [5] h = 5 := by
+  rw [show [5] = [5] from rfl] -- tactic 'rewrite' failed, motive is not type correct
+```
+-/
+/-
+**Lean.Meta.kabstractIsTypeCorrect** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：kabstractIsTypeCorrect (e subExpr : Expr) (pos : SubExpr.Pos) : MetaM Bool
+参数：e subExpr : Expr；pos : SubExpr.Pos。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Determine whether the result of abstracting `subExpr` from `e` at position `pos`
+ results
+in a well-typed expression. This is important if you want to rewrite at this pos
+ition.
+
+Here is an example of what goes wrong with an ill-typed kabstract result:
+
+```
+example (h : [5] ≠ []) : List.getLast [5] h = 5 := by
+  rw [show [5] = [5] from rfl] -- tactic 'rewrite' failed, motive is not type co
+rrect
+```
 -/
 def kabstractIsTypeCorrect (e subExpr : Expr) (pos : SubExpr.Pos) : MetaM Bool := do
   withLocalDeclD `_a (← inferType subExpr) fun fvar => do
     isTypeCorrect (← replaceSubexpr (fun _ => pure fvar) pos e)
 
 end Lean.Meta
+

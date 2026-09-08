@@ -44,24 +44,22 @@ choices of `V`?
 
 open scoped ENNReal
 
-/--
-Definition of `WithLp` / `WithLp` 的定义
+/-- A type synonym for the given `V`, associated with the L`p` norm. Note that by default this just
+forgets the norm structure on `V`; it is up to downstream users to implement the L`p` norm (for
+instance, on `Prod` and finite `Pi` types). -/
+/-
+**WithLp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：ENNReal → Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure WithLp
-  parameters: (p : Real>=0∞) (V : Type*)
-  axioms and operations (2):
-    - toLp((p)) : :
-    - ofLp : V
-
-中文:
-结构 WithLp
-  参数: (p : 实数>=0∞) (V : 类型)
-  公理与运算 (2 个):
-    - toLp((p)) : :
-    - ofLp : V
+--- 原说明 ---
+A type synonym for the given `V`, associated with the L`p` norm. Note that by de
+fault this just
+forgets the norm structure on `V`; it is up to downstream users to implement the
+ L`p` norm (for
+instance, on `Prod` and finite `Pi` types).
 -/
-structure WithLp (p : Real>=0∞) (V : Type*) where
+structure WithLp (p : ℝ≥0∞) (V : Type*) where
   /-- Converts an element of `V` to an element of `WithLp p V`. -/
   toLp (p) ::
   /-- Converts an element of `WithLp p V` to an element of `V`. -/
@@ -77,34 +75,19 @@ meta def WithLp.delabToLp : Delab := delabApp
 
 end Notation
 
-variable (p : Real>=0∞) (K K' : Type*) {K'' : Type*} (V : Type*) {V' V'' : Type*}
+variable (p : ℝ≥0∞) (K K' : Type*) {K'' : Type*} (V : Type*) {V' V'' : Type*}
 
 namespace WithLp
 
 /-- `WithLp.ofLp` and `WithLp.toLp` as an equivalence. -/
 @[simps]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**WithLp.equiv** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → (V : Type u_4) → WithLp p V ≃ V
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: : WithLp p V ≃ V where
-  body: ofLp
-  invFun := toLp p
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-@[simp]
-
-中文:
-定义 equiv
-  签名: : WithLp p V ≃ V where
-  定义体: ofLp
-  invFun := toLp p
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-@[simp]
+--- 原说明 ---
+`WithLp.ofLp` and `WithLp.toLp` as an equivalence.
 -/
 protected def equiv : WithLp p V ≃ V where
   toFun := ofLp
@@ -113,468 +96,278 @@ protected def equiv : WithLp p V ≃ V where
   right_inv _ := rfl
 
 @[simp]
-/--
-lemma `equiv_symm_apply` / 引理 `equiv_symm_apply`
-
-English:
-lemma equiv_symm_apply
-  statement: ⇑(WithLp.equiv p V).symm = toLp p
-  proof: rfl
-
-中文:
-引理 equiv_symm_apply
-  结论: ⇑(WithLp.equiv p V).symm = toLp p
-  证明: rfl
+/-
+**WithLp.equiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：equiv_symm_apply : ⇑(WithLp.equiv p V).symm = toLp p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma equiv_symm_apply : ⇑(WithLp.equiv p V).symm = toLp p := rfl
 
+/-! `WithLp p V` inherits various module-adjacent structures from `V`. -/
 
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
+/-
+**WithLp.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instNontrivial [Nontrivial V] : Nontrivial (WithLp p V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nontrivial`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivia
+l β], Nontrivial α
 
-English:
-instance instNontrivial
-  signature: [Nontrivial V]
-  body: (WithLp.equiv p V).nontrivial
-
-中文:
-实例 instNontrivial
-  签名: [非平凡 V]
-  定义体: (WithLp.equiv p V).nontrivial
-
-Depends on / 依赖: WithLp, WithLp.equiv, nontrivial
+--- 原说明 ---
+`WithLp p V` inherits various module-adjacent structures from `V`.
 -/
 instance instNontrivial [Nontrivial V] : Nontrivial (WithLp p V) := (WithLp.equiv p V).nontrivial
-/--
-Instance `instUnique` / 实例 `instUnique`
-
-English:
-instance instUnique
-  signature: [Unique V]
-  body: (WithLp.equiv p V).unique
-
-中文:
-实例 instUnique
-  签名: [唯一 V]
-  定义体: (WithLp.equiv p V).unique
-
-Depends on / 依赖: WithLp, WithLp.equiv, unique
+/-
+**WithLp.instUnique** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instUnique [Unique V] : Unique (WithLp p V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUnique [Unique V] : Unique (WithLp p V) := (WithLp.equiv p V).unique
-/--
-Instance `instDecidableEq` / 实例 `instDecidableEq`
-
-English:
-instance instDecidableEq
-  signature: [DecidableEq V]
-  body: (WithLp.equiv p V).decidableEq
-
-中文:
-实例 instDecidableEq
-  签名: [DecidableEq V]
-  定义体: (WithLp.equiv p V).decidableEq
-
-Depends on / 依赖: WithLp, WithLp.equiv, decidableEq
+/-
+**WithLp.instDecidableEq** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instDecidableEq [DecidableEq V] : DecidableEq (WithLp p V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDecidableEq [DecidableEq V] : DecidableEq (WithLp p V) :=
   (WithLp.equiv p V).decidableEq
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup V]
-  body: (WithLp.equiv p V).addCommGroup
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 V]
-  定义体: (WithLp.equiv p V).addCommGroup
-
-Depends on / 依赖: Monoid, MulAction, WithLp, WithLp.equiv, addCommGroup, fast_instance, instMulAction, instSMul, instance, mulAction, to_additive
+/-
+**WithLp.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instAddCommGroup [AddCommGroup V] : AddCommGroup (WithLp p V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup [AddCommGroup V] : AddCommGroup (WithLp p V) :=
   (WithLp.equiv p V).addCommGroup
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: [SMul K V]
-  body: (WithLp.equiv p V).smul K
-
-中文:
-实例 instSMul
-  签名: [标量乘法 K V]
-  定义体: (WithLp.equiv p V).smul K
+/-
+**WithLp.instSMul** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → (K : Type u_1) → (V : Type u_4) → [SMul K V] → SMul K (Wit
+hLp p V)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instSMul [SMul K V] : SMul K (WithLp p V) :=
   (WithLp.equiv p V).smul K
-/--
-Instance `instMulAction` / 实例 `instMulAction`
-
-English:
-instance instMulAction
-  signature: [Monoid K] [MulAction K V]
-  body: fast_instance% (WithLp.equiv p V).mulAction K
-
-中文:
-实例 instMulAction
-  签名: [幺半群 K] [乘法作用 K V]
-  定义体: fast_instance% (WithLp.equiv p V).mulAction K
+/-
+**WithLp.instMulAction** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → (K : Type u_1) → (V : Type u_4) → [inst : Monoid K] → [Mul
+Action K V] → MulAction K (WithLp p V)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instMulAction [Monoid K] [MulAction K V] : MulAction K (WithLp p V) :=
   fast_instance% (WithLp.equiv p V).mulAction K
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid K] [AddCommGroup V] [DistribMulAction K V]
-  body: fast_instance% (WithLp.equiv p V).distribMulAction K
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 K] [加法交换群 V] [分配乘法作用 K V]
-  定义体: fast_instance% (WithLp.equiv p V).distribMulAction K
-
-Depends on / 依赖: WithLp, WithLp.equiv, distribMulAction, fast_instance
+/-
+**WithLp.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instDistribMulAction [Monoid K] [AddCommGroup V] [DistribMulAction K V] : 
+DistribMulAction K (WithLp p V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid K] [AddCommGroup V] [DistribMulAction K V] :
     DistribMulAction K (WithLp p V) := fast_instance% (WithLp.equiv p V).distribMulAction K
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring K] [AddCommGroup V] [Module K V]
-  body: fast_instance% (WithLp.equiv p V).module K
-
-中文:
-实例 instModule
-  签名: [半环 K] [加法交换群 V] [模 K V]
-  定义体: fast_instance% (WithLp.equiv p V).module K
-
-Depends on / 依赖: WithLp, WithLp.equiv, fast_instance, module
+/-
+**WithLp.instModule** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instModule [Semiring K] [AddCommGroup V] [Module K V] : Module K (WithLp p
+ V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [Semiring K] [AddCommGroup V] [Module K V] : Module K (WithLp p V) :=
   fast_instance% (WithLp.equiv p V).module K
 
 variable {K V}
-
-/--
-lemma `ofLp_toLp` / 引理 `ofLp_toLp`
-
-English:
-lemma ofLp_toLp
-  given: (x : V)
-  statement: ofLp (toLp p x) = x
-  proof: rfl
-
-中文:
-引理 ofLp_toLp
-  条件: (x : V)
-  结论: ofLp (toLp p x) = x
-  证明: rfl
+/-
+**WithLp.ofLp_toLp** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_toLp (x : V) : ofLp (toLp p x) = x
+参数：x : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofLp_toLp (x : V) : ofLp (toLp p x) = x := rfl
-/--
-lemma `toLp_ofLp` / 引理 `toLp_ofLp`
-
-English:
-lemma toLp_ofLp
-  given: (x : WithLp p V)
-  statement: toLp p (ofLp x) = x
-  proof: rfl
-
-中文:
-引理 toLp_ofLp
-  条件: (x : WithLp p V)
-  结论: toLp p (ofLp x) = x
-  证明: rfl
+/-
+**WithLp.toLp_ofLp** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} (x : WithLp p V), WithLp.toLp p x.ofLp = x
+参数：p : ENNReal；x : WithLp p V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_ofLp (x : WithLp p V) : toLp p (ofLp x) = x := rfl
-
-/--
-lemma `ext_iff` / 引理 `ext_iff`
-
-English:
-lemma ext_iff
-  given: {x y : WithLp p V}
-  statement: x = y ↔ x.ofLp = y.ofLp
-  proof: (WithLp.equiv p V).injective.eq_iff.symm
-
-中文:
-引理 ext_iff
-  条件: {x y : WithLp p V}
-  结论: x = y ↔ x.ofLp = y.ofLp
-  证明: (WithLp.equiv p V).injective.eq_iff.symm
-
-Depends on / 依赖: WithLp, WithLp.equiv, eq_iff, injective, injective.eq_iff.symm
+/-
+**WithLp.ext_iff** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ext_iff {x y : WithLp p V} : x = y ↔ x.ofLp = y.ofLp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma ext_iff {x y : WithLp p V} : x = y ↔ x.ofLp = y.ofLp :=
   (WithLp.equiv p V).injective.eq_iff.symm
-
-/--
-lemma `ofLp_surjective` / 引理 `ofLp_surjective`
-
-English:
-lemma ofLp_surjective
-  statement: Function.Surjective (@ofLp p V)
-  proof: Function.RightInverse.surjective ofLp_toLp _
-
-中文:
-引理 ofLp_surjective
-  结论: 函数.满射 (@ofLp p V)
-  证明: Function.RightInverse.surjective ofLp_toLp _
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, ofLp_toLp, surjective
+/-
+**WithLp.ofLp_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_surjective : Function.Surjective (@ofLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `WithLp.ofLp_toLp`：ofLp_toLp (x : V) : ofLp (toLp p x) = x
 -/
 lemma ofLp_surjective : Function.Surjective (@ofLp p V) :=
-Function.RightInverse.surjective ofLp_toLp _
-
-/--
-lemma `toLp_surjective` / 引理 `toLp_surjective`
-
-English:
-lemma toLp_surjective
-  statement: Function.Surjective (@toLp p V)
-  proof: Function.RightInverse.surjective toLp_ofLp _
-
-中文:
-引理 toLp_surjective
-  结论: 函数.满射 (@toLp p V)
-  证明: Function.RightInverse.surjective toLp_ofLp _
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toLp_ofLp
+  Function.RightInverse.surjective <| ofLp_toLp _
+/-
+**WithLp.toLp_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_surjective : Function.Surjective (@toLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `WithLp.toLp_ofLp`：∀ (p : ENNReal) {V : Type u_4} (x : WithLp p V), WithL
+p.toLp p x.ofLp = x
 -/
 lemma toLp_surjective : Function.Surjective (@toLp p V) :=
-Function.RightInverse.surjective toLp_ofLp _
-
-/--
-lemma `ofLp_injective` / 引理 `ofLp_injective`
-
-English:
-lemma ofLp_injective
-  statement: Function.Injective (@ofLp p V)
-  proof: Function.LeftInverse.injective toLp_ofLp _
-
-中文:
-引理 ofLp_injective
-  结论: 函数.单射 (@ofLp p V)
-  证明: Function.LeftInverse.injective toLp_ofLp _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, toLp_ofLp
+  Function.RightInverse.surjective <| toLp_ofLp _
+/-
+**WithLp.ofLp_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_injective : Function.Injective (@ofLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `WithLp.toLp_ofLp`：∀ (p : ENNReal) {V : Type u_4} (x : WithLp p V), WithL
+p.toLp p x.ofLp = x
 -/
 lemma ofLp_injective : Function.Injective (@ofLp p V) :=
-Function.LeftInverse.injective toLp_ofLp _
-
-/--
-lemma `toLp_injective` / 引理 `toLp_injective`
-
-English:
-lemma toLp_injective
-  statement: Function.Injective (@toLp p V)
-  proof: Function.LeftInverse.injective ofLp_toLp _
-
-中文:
-引理 toLp_injective
-  结论: 函数.单射 (@toLp p V)
-  证明: Function.LeftInverse.injective ofLp_toLp _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofLp_toLp
+  Function.LeftInverse.injective <| toLp_ofLp _
+/-
+**WithLp.toLp_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_injective : Function.Injective (@toLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `WithLp.ofLp_toLp`：ofLp_toLp (x : V) : ofLp (toLp p x) = x
 -/
 lemma toLp_injective : Function.Injective (@toLp p V) :=
-Function.LeftInverse.injective ofLp_toLp _
-
-/--
-lemma `ofLp_bijective` / 引理 `ofLp_bijective`
-
-English:
-lemma ofLp_bijective
-  statement: Function.Bijective (@ofLp p V)
-  proof: ⟨ofLp_injective p, ofLp_surjective p⟩
-
-中文:
-引理 ofLp_bijective
-  结论: 函数.双射 (@ofLp p V)
-  证明: ⟨ofLp_injective p, ofLp_surjective p⟩
-
-Depends on / 依赖: ofLp_injective, ofLp_surjective
+  Function.LeftInverse.injective <| ofLp_toLp _
+/-
+**WithLp.ofLp_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_bijective : Function.Bijective (@ofLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithLp.ofLp_injective`：ofLp_injective : Function.Injective (@ofLp p V)
+· 使用引理 `WithLp.ofLp_surjective`：ofLp_surjective : Function.Surjective (@ofLp p V
+)
 -/
 lemma ofLp_bijective : Function.Bijective (@ofLp p V) :=
   ⟨ofLp_injective p, ofLp_surjective p⟩
-
-/--
-lemma `toLp_bijective` / 引理 `toLp_bijective`
-
-English:
-lemma toLp_bijective
-  statement: Function.Bijective (@toLp p V)
-  proof: ⟨toLp_injective p, toLp_surjective p⟩
-
-中文:
-引理 toLp_bijective
-  结论: 函数.双射 (@toLp p V)
-  证明: ⟨toLp_injective p, toLp_surjective p⟩
-
-Depends on / 依赖: toLp_injective, toLp_surjective
+/-
+**WithLp.toLp_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_bijective : Function.Bijective (@toLp p V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithLp.toLp_injective`：toLp_injective : Function.Injective (@toLp p V)
+· 使用引理 `WithLp.toLp_surjective`：toLp_surjective : Function.Surjective (@toLp p V
+)
 -/
 lemma toLp_bijective : Function.Bijective (@toLp p V) :=
   ⟨toLp_injective p, toLp_surjective p⟩
 
 /-- Lift a function to `WithLp`. -/
 @[simp]
-/--
-Definition of `map` / `map` 的定义
+/-
+**WithLp.map** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → {V : Type u_4} → {V' : Type u_5} → (V → V') → WithLp p V →
+ WithLp p V'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : V -> V') (x : WithLp p V)
-  body: toLp p (f x.ofLp)
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : V -> V') (x : WithLp p V)
-  定义体: toLp p (f x.ofLp)
-
-@[simp]
+--- 原说明 ---
+Lift a function to `WithLp`.
 -/
-protected def map (f : V -> V') (x : WithLp p V) : WithLp p V' :=
+protected def map (f : V → V') (x : WithLp p V) : WithLp p V' :=
   toLp p (f x.ofLp)
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: WithLp.map p (id (α := V)) = id
-  proof: rfl
-
-中文:
-定理 map_id
-  结论: WithLp.map p (id (α := V)) = id
-  证明: rfl
+/-
+**WithLp.map_id** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：map_id : WithLp.map p (id (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_id : WithLp.map p (id (α := V)) = id :=
   rfl
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (f : V' -> V'') (g : V -> V')
-  proof: rfl
-
-中文:
-定理 map_comp
-  条件: (f : V' -> V'') (g : V -> V')
-  证明: rfl
+/-
+**WithLp.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：map_comp (f : V' -> V'') (g : V -> V') : WithLp.map p (f ∘ g) = WithLp.map
+ p f ∘ WithLp.map p g
+参数：f : V' -> V''；g : V -> V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_comp (f : V' -> V'') (g : V -> V') :
+theorem map_comp (f : V' → V'') (g : V → V') :
     WithLp.map p (f ∘ g) = WithLp.map p f ∘ WithLp.map p g :=
   rfl
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- Lift an equivalence to `WithLp`. -/
+/-
+**WithLp.congr** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → {V : Type u_4} → {V' : Type u_5} → V ≃ V' → WithLp p V ≃ W
+ithLp p V'
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congr
-  signature: (f : V ≃ V')
-  body: (WithLp.equiv p V).trans f.trans (WithLp.equiv p V').symm
-
-@[simp]
-
-中文:
-定义 congr
-  签名: (f : V ≃ V')
-  定义体: (WithLp.equiv p V).trans f.trans (WithLp.equiv p V').symm
-
-@[simp]
+--- 原说明 ---
+Lift an equivalence to `WithLp`.
 -/
 protected def congr (f : V ≃ V') : WithLp p V ≃ WithLp p V' :=
-(WithLp.equiv p V).trans f.trans (WithLp.equiv p V').symm
+  (WithLp.equiv p V).trans <| f.trans <| (WithLp.equiv p V').symm
 
 @[simp]
-/--
-theorem `coe_congr` / 定理 `coe_congr`
-
-English:
-theorem coe_congr
-  given: (f : V ≃ V')
-  statement: ⇑(WithLp.congr p f) = WithLp.map p f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_congr
-  条件: (f : V ≃ V')
-  结论: ⇑(WithLp.congr p f) = WithLp.map p f
-  证明: rfl
-
-@[simp]
+/-
+**WithLp.coe_congr** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：coe_congr (f : V ≃ V') : ⇑(WithLp.congr p f) = WithLp.map p f
+参数：f : V ≃ V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_congr (f : V ≃ V') : ⇑(WithLp.congr p f) = WithLp.map p f :=
   rfl
 
 @[simp]
-/--
-theorem `congr_refl` / 定理 `congr_refl`
-
-English:
-theorem congr_refl
-  statement: WithLp.congr p (Equiv.refl V) = Equiv.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 congr_refl
-  结论: WithLp.congr p (等价.refl V) = 等价.refl _
-  证明: rfl
-
-@[simp]
+/-
+**WithLp.congr_refl** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：congr_refl : WithLp.congr p (Equiv.refl V) = Equiv.refl _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 theorem congr_refl : WithLp.congr p (Equiv.refl V) = Equiv.refl _ :=
   rfl
 
 @[simp]
-/--
-theorem `congr_symm` / 定理 `congr_symm`
-
-English:
-theorem congr_symm
-  given: (f : V ≃ V')
-  statement: (WithLp.congr p f).symm = WithLp.congr p f.symm
-  proof: rfl
-
-中文:
-定理 congr_symm
-  条件: (f : V ≃ V')
-  结论: (WithLp.congr p f).symm = WithLp.congr p f.symm
-  证明: rfl
+/-
+**WithLp.congr_symm** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：congr_symm (f : V ≃ V') : (WithLp.congr p f).symm = WithLp.congr p f.symm
+参数：f : V ≃ V'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem congr_symm (f : V ≃ V') : (WithLp.congr p f).symm = WithLp.congr p f.symm :=
   rfl
-
-/--
-theorem `congr_trans` / 定理 `congr_trans`
-
-English:
-theorem congr_trans
-  given: (f : V ≃ V') (g : V' ≃ V'')
-  proof: rfl
-
-中文:
-定理 congr_trans
-  条件: (f : V ≃ V') (g : V' ≃ V'')
-  证明: rfl
+/-
+**WithLp.congr_trans** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：congr_trans (f : V ≃ V') (g : V' ≃ V'') : WithLp.congr p (f.trans g) = (Wi
+thLp.congr p f).trans (WithLp.congr p g)
+参数：f : V ≃ V'；g : V' ≃ V''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem congr_trans (f : V ≃ V') (g : V' ≃ V'') :
     WithLp.congr p (f.trans g) = (WithLp.congr p f).trans (WithLp.congr p g) :=
@@ -583,245 +376,136 @@ theorem congr_trans (f : V ≃ V') (g : V' ≃ V'') :
 section AddCommGroup
 variable [AddCommGroup V]
 
-/--
-lemma `toLp_zero` / 引理 `toLp_zero`
-
-English:
-lemma toLp_zero
-  statement: toLp p (0 : V) = 0
-  proof: rfl
-
-中文:
-引理 toLp_zero
-  结论: toLp p (0 : V) = 0
-  证明: rfl
+/-
+**WithLp.toLp_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V], WithLp.toLp p 0 = 
+0
+参数：p : ENNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_zero : toLp p (0 : V) = 0 := rfl
-/--
-lemma `ofLp_zero` / 引理 `ofLp_zero`
-
-English:
-lemma ofLp_zero
-  statement: ofLp (0 : WithLp p V) = 0
-  proof: rfl
-
-中文:
-引理 ofLp_zero
-  结论: ofLp (0 : WithLp p V) = 0
-  证明: rfl
+/-
+**WithLp.ofLp_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V], WithLp.ofLp 0 = 0
+参数：p : ENNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofLp_zero : ofLp (0 : WithLp p V) = 0 := rfl
-
-/--
-lemma `toLp_add` / 引理 `toLp_add`
-
-English:
-lemma toLp_add
-  given: (x y : V)
-  statement: toLp p (x + y) = toLp p x + toLp p y
-  proof: rfl
-
-中文:
-引理 toLp_add
-  条件: (x y : V)
-  结论: toLp p (x + y) = toLp p x + toLp p y
-  证明: rfl
+/-
+**WithLp.toLp_add** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x y : V),   WithLp
+.toLp p (x + y) = WithLp.toLp p x + WithLp.toLp p y
+参数：p : ENNReal；x y : V；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_add (x y : V) : toLp p (x + y) = toLp p x + toLp p y := rfl
-/--
-lemma `ofLp_add` / 引理 `ofLp_add`
-
-English:
-lemma ofLp_add
-  given: (x y : WithLp p V)
-  statement: ofLp (x + y) = ofLp x + ofLp y
-  proof: rfl
-
-中文:
-引理 ofLp_add
-  条件: (x y : WithLp p V)
-  结论: ofLp (x + y) = ofLp x + ofLp y
-  证明: rfl
+/-
+**WithLp.ofLp_add** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x y : WithLp p V),
+ (x + y).ofLp = x.ofLp + y.ofLp
+参数：p : ENNReal；x y : WithLp p V；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofLp_add (x y : WithLp p V) : ofLp (x + y) = ofLp x + ofLp y := rfl
-
-/--
-lemma `toLp_sub` / 引理 `toLp_sub`
-
-English:
-lemma toLp_sub
-  given: (x y : V)
-  statement: toLp p (x - y) = toLp p x - toLp p y
-  proof: rfl
-
-中文:
-引理 toLp_sub
-  条件: (x y : V)
-  结论: toLp p (x - y) = toLp p x - toLp p y
-  证明: rfl
+/-
+**WithLp.toLp_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x y : V),   WithLp
+.toLp p (x - y) = WithLp.toLp p x - WithLp.toLp p y
+参数：p : ENNReal；x y : V；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_sub (x y : V) : toLp p (x - y) = toLp p x - toLp p y := rfl
-/--
-lemma `ofLp_sub` / 引理 `ofLp_sub`
-
-English:
-lemma ofLp_sub
-  given: (x y : WithLp p V)
-  statement: ofLp (x - y) = ofLp x - ofLp y
-  proof: rfl
-
-中文:
-引理 ofLp_sub
-  条件: (x y : WithLp p V)
-  结论: ofLp (x - y) = ofLp x - ofLp y
-  证明: rfl
+/-
+**WithLp.ofLp_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x y : WithLp p V),
+ (x - y).ofLp = x.ofLp - y.ofLp
+参数：p : ENNReal；x y : WithLp p V；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofLp_sub (x y : WithLp p V) : ofLp (x - y) = ofLp x - ofLp y := rfl
-
-/--
-lemma `toLp_neg` / 引理 `toLp_neg`
-
-English:
-lemma toLp_neg
-  given: (x : V)
-  statement: toLp p (-x) = -toLp p x
-  proof: rfl
-
-中文:
-引理 toLp_neg
-  条件: (x : V)
-  结论: toLp p (-x) = -toLp p x
-  证明: rfl
+/-
+**WithLp.toLp_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x : V), WithLp.toL
+p p (-x) = -WithLp.toLp p x
+参数：p : ENNReal；x : V；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_neg (x : V) : toLp p (-x) = -toLp p x := rfl
-/--
-lemma `ofLp_neg` / 引理 `ofLp_neg`
-
-English:
-lemma ofLp_neg
-  given: (x : WithLp p V)
-  statement: ofLp (-x) = -ofLp x
-  proof: rfl
-
-中文:
-引理 ofLp_neg
-  条件: (x : WithLp p V)
-  结论: ofLp (-x) = -ofLp x
-  证明: rfl
+/-
+**WithLp.ofLp_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] (x : WithLp p V), (
+-x).ofLp = -x.ofLp
+参数：p : ENNReal；x : WithLp p V；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofLp_neg (x : WithLp p V) : ofLp (-x) = -ofLp x := rfl
-
-/--
-lemma `toLp_eq_zero` / 引理 `toLp_eq_zero`
-
-English:
-lemma toLp_eq_zero
-  given: {x : V}
-  statement: toLp p x = 0 ↔ x = 0
-  proof: (toLp_injective p).eq_iff
-
-中文:
-引理 toLp_eq_zero
-  条件: {x : V}
-  结论: toLp p x = 0 ↔ x = 0
-  证明: (toLp_injective p).eq_iff
+/-
+**WithLp.toLp_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] {x : V}, WithLp.toL
+p p x = 0 ↔ x = 0
+参数：p : ENNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithLp.toLp_injective`：toLp_injective : Function.Injective (@toLp p V)
 -/
 @[simp] lemma toLp_eq_zero {x : V} : toLp p x = 0 ↔ x = 0 := (toLp_injective p).eq_iff
-/--
-lemma `ofLp_eq_zero` / 引理 `ofLp_eq_zero`
-
-English:
-lemma ofLp_eq_zero
-  given: {x : WithLp p V}
-  statement: ofLp x = 0 ↔ x = 0
-  proof: (ofLp_injective p).eq_iff
-
-中文:
-引理 ofLp_eq_zero
-  条件: {x : WithLp p V}
-  结论: ofLp x = 0 ↔ x = 0
-  证明: (ofLp_injective p).eq_iff
+/-
+**WithLp.ofLp_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] {x : WithLp p V}, x
+.ofLp = 0 ↔ x = 0
+参数：p : ENNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithLp.ofLp_injective`：ofLp_injective : Function.Injective (@ofLp p V)
 -/
 @[simp] lemma ofLp_eq_zero {x : WithLp p V} : ofLp x = 0 ↔ x = 0 := (ofLp_injective p).eq_iff
 
 end AddCommGroup
 
-/--
-lemma `toLp_smul` / 引理 `toLp_smul`
-
-English:
-lemma toLp_smul
-  given: [SMul K V] (c : K) (x : V)
-  statement: toLp p (c • x) = c • (toLp p x)
-  proof: rfl
-
-中文:
-引理 toLp_smul
-  条件: [标量乘法 K V] (c : K) (x : V)
-  结论: toLp p (c • x) = c • (toLp p x)
-  证明: rfl
+/-
+**WithLp.toLp_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {K : Type u_1} {V : Type u_4} [inst : SMul K V] (c : K) (x
+ : V),   WithLp.toLp p (c • x) = c • WithLp.toLp p x
+参数：p : ENNReal；c : K；x : V；c • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLp_smul [SMul K V] (c : K) (x : V) : toLp p (c • x) = c • (toLp p x) := rfl
-/--
-lemma `ofLp_smul` / 引理 `ofLp_smul`
-
-English:
-lemma ofLp_smul
-  given: [SMul K V] (c : K) (x : WithLp p V)
-  statement: ofLp (c • x) = c • ofLp x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofLp_smul
-  条件: [标量乘法 K V] (c : K) (x : WithLp p V)
-  结论: ofLp (c • x) = c • ofLp x
-  证明: rfl
-
-@[to_additive]
+/-
+**WithLp.ofLp_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithLp`。
+形式化陈述：∀ (p : ENNReal) {K : Type u_1} {V : Type u_4} [inst : SMul K V] (c : K) (x
+ : WithLp p V), (c • x).ofLp = c • x.ofLp
+参数：p : ENNReal；c : K；x : WithLp p V；c • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofLp_smul [SMul K V] (c : K) (x : WithLp p V) : ofLp (c • x) = c • ofLp x := rfl
 
 @[to_additive]
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [SMul K K'] [SMul K V] [SMul K' V] [IsScalarTower K K' V]
-  body: (WithLp.equiv p V).isScalarTower K K'
-
-@[to_additive]
-
-中文:
-实例 instIsScalarTower
-  签名: [标量乘法 K K'] [标量乘法 K V] [标量乘法 K' V] [标量塔 K K' V]
-  定义体: (WithLp.equiv p V).isScalarTower K K'
-
-@[to_additive]
-
-Depends on / 依赖: WithLp, WithLp.equiv, isScalarTower
+/-
+**WithLp.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instIsScalarTower [SMul K K'] [SMul K V] [SMul K' V] [IsScalarTower K K' V
+] : IsScalarTower K K' (WithLp p V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.isScalarTower`：∀ (M : Type u_1) (N : Type u_2) {α : Type u_4} {β :
+ Type u_5} [inst : SMul M N] [inst_1 : SMul M β] [inst_2 : SMul N β]   (e : α ≃ 
+β) [IsSca…
 -/
 instance instIsScalarTower [SMul K K'] [SMul K V] [SMul K' V] [IsScalarTower K K' V] :
     IsScalarTower K K' (WithLp p V) :=
   (WithLp.equiv p V).isScalarTower K K'
 
 @[to_additive]
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMul K V] [SMul K' V] [SMulCommClass K K' V]
-  body: (WithLp.equiv p V).smulCommClass K K'
-
-中文:
-实例 instSMulCommClass
-  签名: [标量乘法 K V] [标量乘法 K' V] [标量交换类 K K' V]
-  定义体: (WithLp.equiv p V).smulCommClass K K'
-
-Depends on / 依赖: WithLp, WithLp.equiv, smulCommClass
+/-
+**WithLp.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instSMulCommClass [SMul K V] [SMul K' V] [SMulCommClass K K' V] : SMulComm
+Class K K' (WithLp p V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.smulCommClass`：∀ (M : Type u_1) (N : Type u_2) {α : Type u_4} {β :
+ Type u_5} [inst : SMul M β] [inst_1 : SMul N β] (e : α ≃ β)   [SMulCommClass M 
+N β], SMu…
 -/
 instance instSMulCommClass [SMul K V] [SMul K' V] [SMulCommClass K K' V] :
     SMulCommClass K K' (WithLp p V) :=
@@ -831,201 +515,154 @@ variable (K V)
 
 /-- `WithLp.equiv` as a group isomorphism. -/
 @[simps apply symm_apply]
-/--
-Definition of `addEquiv` / `addEquiv` 的定义
+/-
+**WithLp.addEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) → (V : Type u_4) → [inst : AddCommGroup V] → WithLp p V ≃+ V
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `WithLp.ofLp_add`：∀ (p : ENNReal) {V : Type u_4} [inst : AddCommGroup V] 
+(x y : WithLp p V), (x + y).ofLp = x.ofLp + y.ofLp
 
-English:
-definition addEquiv
-  signature: [AddCommGroup V]
-  body: ofLp
-  invFun := toLp p
-  map_add' := ofLp_add p
-
-中文:
-定义 addEquiv
-  签名: [加法交换群 V]
-  定义体: ofLp
-  invFun := toLp p
-  map_add' := ofLp_add p
+--- 原说明 ---
+`WithLp.equiv` as a group isomorphism.
 -/
 protected def addEquiv [AddCommGroup V] : WithLp p V ≃+ V where
   toFun := ofLp
   invFun := toLp p
   map_add' := ofLp_add p
-
-/--
-lemma `coe_addEquiv` / 引理 `coe_addEquiv`
-
-English:
-lemma coe_addEquiv
-  given: [AddCommGroup V]
-  statement: ⇑(WithLp.addEquiv p V) = ofLp
-  proof: rfl
-
-中文:
-引理 coe_addEquiv
-  条件: [加法交换群 V]
-  结论: ⇑(WithLp.addEquiv p V) = ofLp
-  证明: rfl
+/-
+**WithLp.coe_addEquiv** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：coe_addEquiv [AddCommGroup V] : ⇑(WithLp.addEquiv p V) = ofLp
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_addEquiv [AddCommGroup V] : ⇑(WithLp.addEquiv p V) = ofLp := rfl
-
-/--
-lemma `coe_symm_addEquiv` / 引理 `coe_symm_addEquiv`
-
-English:
-lemma coe_symm_addEquiv
-  given: [AddCommGroup V]
-  statement: ⇑(WithLp.addEquiv p V).symm = toLp p
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_symm_addEquiv
-  条件: [加法交换群 V]
-  结论: ⇑(WithLp.addEquiv p V).symm = toLp p
-  证明: rfl
-
-@[simp]
+/-
+**WithLp.coe_symm_addEquiv** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：coe_symm_addEquiv [AddCommGroup V] : ⇑(WithLp.addEquiv p V).symm = toLp p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_symm_addEquiv [AddCommGroup V] : ⇑(WithLp.addEquiv p V).symm = toLp p := rfl
 
 @[simp]
-/--
-lemma `ofLp_sum` / 引理 `ofLp_sum`
-
-English:
-lemma ofLp_sum
-  given: [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> WithLp p V)
-  proof: map_sum (WithLp.addEquiv _ _) _ _
-
-@[simp]
-
-中文:
-引理 ofLp_sum
-  条件: [加法交换群 V] {ι : 类型} (s : 有限集 ι) (f : ι -> WithLp p V)
-  证明: map_sum (WithLp.addEquiv _ _) _ _
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_sum
+/-
+**WithLp.ofLp_sum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> WithLp p V)
+ : (∑ i in s, f i).ofLp = ∑ i in s, (f i).ofLp
+参数：s : Finset ι；f : ι -> WithLp p V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma ofLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> WithLp p V) :
-    (∑ i in s, f i).ofLp = ∑ i in s, (f i).ofLp :=
+lemma ofLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι → WithLp p V) :
+    (∑ i ∈ s, f i).ofLp = ∑ i ∈ s, (f i).ofLp :=
   map_sum (WithLp.addEquiv _ _) _ _
 
 @[simp]
-/--
-lemma `toLp_sum` / 引理 `toLp_sum`
-
-English:
-lemma toLp_sum
-  given: [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> V)
-  proof: map_sum (WithLp.addEquiv _ _).symm _ _
-
-@[simp]
-
-中文:
-引理 toLp_sum
-  条件: [加法交换群 V] {ι : 类型} (s : 有限集 ι) (f : ι -> V)
-  证明: map_sum (WithLp.addEquiv _ _).symm _ _
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_sum
+/-
+**WithLp.toLp_sum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> V) : toLp p
+ (∑ i in s, f i) = ∑ i in s, toLp p (f i)
+参数：s : Finset ι；f : ι -> V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma toLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι -> V) :
-    toLp p (∑ i in s, f i) = ∑ i in s, toLp p (f i) :=
+lemma toLp_sum [AddCommGroup V] {ι : Type*} (s : Finset ι) (f : ι → V) :
+    toLp p (∑ i ∈ s, f i) = ∑ i ∈ s, toLp p (f i) :=
   map_sum (WithLp.addEquiv _ _).symm _ _
 
 @[simp]
-/--
-lemma `ofLp_listSum` / 引理 `ofLp_listSum`
-
-English:
-lemma ofLp_listSum
-  given: [AddCommGroup V] (l : List (WithLp p V))
-  proof: map_list_sum (WithLp.addEquiv _ _) _
-
-@[simp]
-
-中文:
-引理 ofLp_listSum
-  条件: [加法交换群 V] (l : 列表 (WithLp p V))
-  证明: map_list_sum (WithLp.addEquiv _ _) _
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_list_sum
+/-
+**WithLp.ofLp_listSum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_listSum [AddCommGroup V] (l : List (WithLp p V)) : l.sum.ofLp = (l.ma
+p ofLp).sum
+参数：l : List (WithLp p V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 lemma ofLp_listSum [AddCommGroup V] (l : List (WithLp p V)) :
     l.sum.ofLp = (l.map ofLp).sum :=
   map_list_sum (WithLp.addEquiv _ _) _
 
 @[simp]
-/--
-lemma `toLp_listSum` / 引理 `toLp_listSum`
-
-English:
-lemma toLp_listSum
-  given: [AddCommGroup V] (l : List V)
-  proof: map_list_sum (WithLp.addEquiv _ _).symm _
-
-@[simp]
-
-中文:
-引理 toLp_listSum
-  条件: [加法交换群 V] (l : 列表 V)
-  证明: map_list_sum (WithLp.addEquiv _ _).symm _
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_list_sum
+/-
+**WithLp.toLp_listSum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_listSum [AddCommGroup V] (l : List V) : toLp p l.sum = (l.map (toLp p
+)).sum
+参数：l : List V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 lemma toLp_listSum [AddCommGroup V] (l : List V) :
     toLp p l.sum = (l.map (toLp p)).sum :=
   map_list_sum (WithLp.addEquiv _ _).symm _
 
 @[simp]
-/--
-lemma `ofLp_multisetSum` / 引理 `ofLp_multisetSum`
-
-English:
-lemma ofLp_multisetSum
-  given: [AddCommGroup V] (s : Multiset (WithLp p V))
-  proof: map_multiset_sum (WithLp.addEquiv _ _) _
-
-@[simp]
-
-中文:
-引理 ofLp_multisetSum
-  条件: [加法交换群 V] (s : Multiset (WithLp p V))
-  证明: map_multiset_sum (WithLp.addEquiv _ _) _
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_multiset_sum
+/-
+**WithLp.ofLp_multisetSum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：ofLp_multisetSum [AddCommGroup V] (s : Multiset (WithLp p V)) : s.sum.ofLp
+ = (s.map ofLp).sum
+参数：s : Multiset (WithLp p V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 lemma ofLp_multisetSum [AddCommGroup V] (s : Multiset (WithLp p V)) :
     s.sum.ofLp = (s.map ofLp).sum :=
   map_multiset_sum (WithLp.addEquiv _ _) _
 
 @[simp]
-/--
-lemma `toLp_multisetSum` / 引理 `toLp_multisetSum`
-
-English:
-lemma toLp_multisetSum
-  given: [AddCommGroup V] (s : Multiset V)
-  proof: map_multiset_sum (WithLp.addEquiv _ _).symm _
-
-中文:
-引理 toLp_multisetSum
-  条件: [加法交换群 V] (s : Multiset V)
-  证明: map_multiset_sum (WithLp.addEquiv _ _).symm _
-
-Depends on / 依赖: WithLp, WithLp.addEquiv, addEquiv, map_multiset_sum
+/-
+**WithLp.toLp_multisetSum** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toLp_multisetSum [AddCommGroup V] (s : Multiset V) : toLp p s.sum = (s.map
+ (toLp p)).sum
+参数：s : Multiset V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 lemma toLp_multisetSum [AddCommGroup V] (s : Multiset V) :
     toLp p s.sum = (s.map (toLp p)).sum :=
@@ -1033,90 +670,56 @@ lemma toLp_multisetSum [AddCommGroup V] (s : Multiset V) :
 
 /-- `WithLp.equiv` as a linear equivalence. -/
 @[simps apply symm_apply]
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-
+**WithLp.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithLp`。
+形式化陈述：(p : ENNReal) →   (K : Type u_1) →     (V : Type u_4) → [inst : Semiring K
+] → [inst_1 : AddCommGroup V] → [inst_2 : _root_.Module K V] → WithLp p V ≃ₗ[K] 
+V
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquiv
-  signature: [Semiring K] [AddCommGroup V] [Module K V]
-  body: WithLp.addEquiv p V
-  map_smul' _ _ := rfl
-
-中文:
-定义 linearEquiv
-  签名: [半环 K] [加法交换群 V] [模 K V]
-  定义体: WithLp.addEquiv p V
-  map_smul' _ _ := rfl
+--- 原说明 ---
+`WithLp.equiv` as a linear equivalence.
 -/
 protected def linearEquiv [Semiring K] [AddCommGroup V] [Module K V] : WithLp p V ≃ₗ[K] V where
   __ := WithLp.addEquiv p V
   map_smul' _ _ := rfl
-
-/--
-lemma `coe_linearEquiv` / 引理 `coe_linearEquiv`
-
-English:
-lemma coe_linearEquiv
-  given: [Semiring K] [AddCommGroup V] [Module K V]
-  proof: rfl
-
-中文:
-引理 coe_linearEquiv
-  条件: [半环 K] [加法交换群 V] [模 K V]
-  证明: rfl
+/-
+**WithLp.coe_linearEquiv** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：coe_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] : ⇑(WithLp.line
+arEquiv p K V) = ofLp
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] :
     ⇑(WithLp.linearEquiv p K V) = ofLp := rfl
-
-/--
-lemma `coe_symm_linearEquiv` / 引理 `coe_symm_linearEquiv`
-
-English:
-lemma coe_symm_linearEquiv
-  given: [Semiring K] [AddCommGroup V] [Module K V]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_symm_linearEquiv
-  条件: [半环 K] [加法交换群 V] [模 K V]
-  证明: rfl
-
-@[simp]
+/-
+**WithLp.coe_symm_linearEquiv** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：coe_symm_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] : ⇑(WithLp
+.linearEquiv p K V).symm = toLp p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_symm_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] :
     ⇑(WithLp.linearEquiv p K V).symm = toLp p := rfl
 
 @[simp]
-/--
-lemma `toAddEquiv_linearEquiv` / 引理 `toAddEquiv_linearEquiv`
-
-English:
-lemma toAddEquiv_linearEquiv
-  given: [Semiring K] [AddCommGroup V] [Module K V]
-  proof: rfl
-
-中文:
-引理 toAddEquiv_linearEquiv
-  条件: [半环 K] [加法交换群 V] [模 K V]
-  证明: rfl
+/-
+**WithLp.toAddEquiv_linearEquiv** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：toAddEquiv_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] : (WithL
+p.linearEquiv p K V).toAddEquiv = WithLp.addEquiv p V
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toAddEquiv_linearEquiv [Semiring K] [AddCommGroup V] [Module K V] :
     (WithLp.linearEquiv p K V).toAddEquiv = WithLp.addEquiv p V := rfl
-
-/--
-Instance `instModuleFinite` / 实例 `instModuleFinite`
-
-English:
-instance instModuleFinite
-  body: Module.Finite.equiv (WithLp.linearEquiv p K V).symm
-
-中文:
-实例 instModuleFinite
-  定义体: Module.Finite.equiv (WithLp.linearEquiv p K V).symm
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv, WithLp, WithLp.linearEquiv, linearEquiv
+/-
+**WithLp.instModuleFinite** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：instModuleFinite [Semiring K] [AddCommGroup V] [Module K V] [Module.Finite
+ K V] : Module.Finite K (WithLp p V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
 -/
 instance instModuleFinite
     [Semiring K] [AddCommGroup V] [Module K V] [Module.Finite K V] :
@@ -1128,97 +731,59 @@ end WithLp
 section
 
 variable {K K' V} [Semiring K] [Semiring K'] [Semiring K'']
-  {σ : K ->+* K'} {σ' : K' ->+* K} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  {τ : K' ->+* K''} {τ' : K'' ->+* K'} [RingHomInvPair τ τ'] [RingHomInvPair τ' τ]
-  {ρ : K ->+* K''} {ρ' : K'' ->+* K} [RingHomInvPair ρ ρ'] [RingHomInvPair ρ' ρ]
+  {σ : K →+* K'} {σ' : K' →+* K} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+  {τ : K' →+* K''} {τ' : K'' →+* K'} [RingHomInvPair τ τ'] [RingHomInvPair τ' τ]
+  {ρ : K →+* K''} {ρ' : K'' →+* K} [RingHomInvPair ρ ρ'] [RingHomInvPair ρ' ρ]
   [RingHomCompTriple σ τ ρ] [RingHomCompTriple τ' σ' ρ']
   [AddCommGroup V] [Module K V] [AddCommGroup V'] [Module K' V'] [AddCommGroup V''] [Module K'' V'']
 
 namespace LinearMap
 
-/--
-Definition of `withLpMap` / `withLpMap` 的定义
+/-- Lift a (semi)linear map to `WithLp`. -/
+/-
+**LinearMap.withLpMap** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：withLpMap (f : V ->ₛₗ[σ] V') : WithLp p V ->ₛₗ[σ] WithLp p V'
+参数：f : V ->ₛₗ[σ] V'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withLpMap
-  signature: (f : V ->ₛₗ[σ] V')
-  body: (WithLp.linearEquiv p K' V').symm.toLinearMap ∘ₛₗ f ∘ₛₗ (WithLp.linearEquiv p K V).toLinearMap
-
-@[simp]
-
-中文:
-定义 withLpMap
-  签名: (f : V ->ₛₗ[σ] V')
-  定义体: (WithLp.linearEquiv p K' V').symm.toLinearMap ∘ₛₗ f ∘ₛₗ (WithLp.linearEquiv p K V).toLinearMap
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.linearEquiv, linearEquiv, symm.toLinearMap, toLinearMap
+--- 原说明 ---
+Lift a (semi)linear map to `WithLp`.
 -/
-def withLpMap (f : V ->ₛₗ[σ] V') : WithLp p V ->ₛₗ[σ] WithLp p V' :=
+def withLpMap (f : V →ₛₗ[σ] V') : WithLp p V →ₛₗ[σ] WithLp p V' :=
   (WithLp.linearEquiv p K' V').symm.toLinearMap ∘ₛₗ f ∘ₛₗ (WithLp.linearEquiv p K V).toLinearMap
 
 @[simp]
-/--
-theorem `coe_withLpMap` / 定理 `coe_withLpMap`
-
-English:
-theorem coe_withLpMap
-  given: (f : V ->ₛₗ[σ] V')
-  statement: ⇑(withLpMap p f) = WithLp.map p f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_withLpMap
-  条件: (f : V ->ₛₗ[σ] V')
-  结论: ⇑(withLpMap p f) = WithLp.map p f
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.coe_withLpMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：coe_withLpMap (f : V ->ₛₗ[σ] V') : ⇑(withLpMap p f) = WithLp.map p f
+参数：f : V ->ₛₗ[σ] V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_withLpMap (f : V ->ₛₗ[σ] V') : ⇑(withLpMap p f) = WithLp.map p f :=
+theorem coe_withLpMap (f : V →ₛₗ[σ] V') : ⇑(withLpMap p f) = WithLp.map p f :=
   rfl
 
 @[simp]
-/--
-theorem `withLpMap_id` / 定理 `withLpMap_id`
-
-English:
-theorem withLpMap_id
-  statement: withLpMap p (LinearMap.id (R := K) (M := V)) = LinearMap.id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 withLpMap_id
-  结论: withLpMap p (线性映射.id (R := K) (M := V)) = 线性映射.id
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**LinearMap.withLpMap_id** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：withLpMap_id : withLpMap p (LinearMap.id (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem withLpMap_id : withLpMap p (LinearMap.id (R := K) (M := V)) = LinearMap.id :=
   rfl
 
 @[simp]
-/--
-theorem `withLpMap_comp` / 定理 `withLpMap_comp`
-
-English:
-theorem withLpMap_comp
-  given: (f : V' ->ₛₗ[τ] V'') (g : V ->ₛₗ[σ] V')
-  proof: rfl
-
-中文:
-定理 withLpMap_comp
-  条件: (f : V' ->ₛₗ[τ] V'') (g : V ->ₛₗ[σ] V')
-  证明: rfl
+/-
+**LinearMap.withLpMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：withLpMap_comp (f : V' ->ₛₗ[τ] V'') (g : V ->ₛₗ[σ] V') : withLpMap p (f ∘ₛ
+ₗ g) = withLpMap p f ∘ₛₗ withLpMap p g
+参数：f : V' ->ₛₗ[τ] V''；g : V ->ₛₗ[σ] V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem withLpMap_comp (f : V' ->ₛₗ[τ] V'') (g : V ->ₛₗ[σ] V') :
+theorem withLpMap_comp (f : V' →ₛₗ[τ] V'') (g : V →ₛₗ[σ] V') :
     withLpMap p (f ∘ₛₗ g) = withLpMap p f ∘ₛₗ withLpMap p g :=
   rfl
 
@@ -1226,102 +791,61 @@ end LinearMap
 
 namespace LinearEquiv
 
-/--
-Definition of `withLpCongr` / `withLpCongr` 的定义
+/-- Lift a (semi)linear equivalence to `WithLp`. -/
+/-
+**LinearEquiv.withLpCongr** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：withLpCongr (f : V ≃ₛₗ[σ] V') : WithLp p V ≃ₛₗ[σ] WithLp p V'
+参数：f : V ≃ₛₗ[σ] V'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withLpCongr
-  signature: (f : V ≃ₛₗ[σ] V')
-  body: (WithLp.linearEquiv p K V).trans f.trans (WithLp.linearEquiv p K' V').symm
-
-@[simp]
-
-中文:
-定义 withLpCongr
-  签名: (f : V ≃ₛₗ[σ] V')
-  定义体: (WithLp.linearEquiv p K V).trans f.trans (WithLp.linearEquiv p K' V').symm
-
-@[simp]
-
-Depends on / 依赖: WithLp, WithLp.linearEquiv, f.trans, linearEquiv
+--- 原说明 ---
+Lift a (semi)linear equivalence to `WithLp`.
 -/
 def withLpCongr (f : V ≃ₛₗ[σ] V') : WithLp p V ≃ₛₗ[σ] WithLp p V' :=
-(WithLp.linearEquiv p K V).trans f.trans (WithLp.linearEquiv p K' V').symm
+  (WithLp.linearEquiv p K V).trans <| f.trans <| (WithLp.linearEquiv p K' V').symm
 
 @[simp]
-/--
-theorem `coe_withLpCongr` / 定理 `coe_withLpCongr`
-
-English:
-theorem coe_withLpCongr
-  given: (f : V ≃ₛₗ[σ] V')
-  statement: ⇑(withLpCongr p f) = WithLp.map p f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_withLpCongr
-  条件: (f : V ≃ₛₗ[σ] V')
-  结论: ⇑(withLpCongr p f) = WithLp.map p f
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_withLpCongr** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_withLpCongr (f : V ≃ₛₗ[σ] V') : ⇑(withLpCongr p f) = WithLp.map p f
+参数：f : V ≃ₛₗ[σ] V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_withLpCongr (f : V ≃ₛₗ[σ] V') : ⇑(withLpCongr p f) = WithLp.map p f :=
   rfl
 
 @[simp]
-/--
-theorem `withLpCongr_symm` / 定理 `withLpCongr_symm`
-
-English:
-theorem withLpCongr_symm
-  given: (f : V ≃ₛₗ[σ] V')
-  statement: (withLpCongr p f).symm = withLpCongr p f.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 withLpCongr_symm
-  条件: (f : V ≃ₛₗ[σ] V')
-  结论: (withLpCongr p f).symm = withLpCongr p f.symm
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.withLpCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：withLpCongr_symm (f : V ≃ₛₗ[σ] V') : (withLpCongr p f).symm = withLpCongr 
+p f.symm
+参数：f : V ≃ₛₗ[σ] V'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem withLpCongr_symm (f : V ≃ₛₗ[σ] V') : (withLpCongr p f).symm = withLpCongr p f.symm :=
   rfl
 
 @[simp]
-/--
-theorem `withLpCongr_refl` / 定理 `withLpCongr_refl`
-
-English:
-theorem withLpCongr_refl
-  proof: rfl
-
-中文:
-定理 withLpCongr_refl
-  证明: rfl
+/-
+**LinearEquiv.withLpCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：withLpCongr_refl : withLpCongr p (LinearEquiv.refl K V) = LinearEquiv.refl
+ K _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem withLpCongr_refl :
     withLpCongr p (LinearEquiv.refl K V) = LinearEquiv.refl K _ :=
   rfl
-
-/--
-theorem `withLpCongr_trans` / 定理 `withLpCongr_trans`
-
-English:
-theorem withLpCongr_trans
-  given: (f : V ≃ₛₗ[σ] V') (g : V' ≃ₛₗ[τ] V'')
-  proof: rfl
-
-中文:
-定理 withLpCongr_trans
-  条件: (f : V ≃ₛₗ[σ] V') (g : V' ≃ₛₗ[τ] V'')
-  证明: rfl
+/-
+**LinearEquiv.withLpCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：withLpCongr_trans (f : V ≃ₛₗ[σ] V') (g : V' ≃ₛₗ[τ] V'') : withLpCongr p (f
+.trans g) = (withLpCongr p f).trans (withLpCongr p g)
+参数：f : V ≃ₛₗ[σ] V'；g : V' ≃ₛₗ[τ] V''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem withLpCongr_trans (f : V ≃ₛₗ[σ] V') (g : V' ≃ₛₗ[τ] V'') :
     withLpCongr p (f.trans g) = (withLpCongr p f).trans (withLpCongr p g) :=
@@ -1330,3 +854,4 @@ theorem withLpCongr_trans (f : V ≃ₛₗ[σ] V') (g : V' ≃ₛₗ[τ] V'') :
 end LinearEquiv
 
 end
+

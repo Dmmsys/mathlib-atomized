@@ -35,77 +35,60 @@ namespace MultiseriesExpansion
 
 open Filter Topology Stream'
 
-/--
-Inductive type `IsZero` / 归纳类型 `IsZero`
+/-- A multiseries is zero if it is the real constant `0` or has an empty sequence. -/
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero** 是 Mathlib 中的一个归纳类型，位于命
+名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion`。
+形式化陈述：{basis : Tactic.ComputeAsymptotics.Basis} → Tactic.ComputeAsymptotics.Mult
+iseriesExpansion basis → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IsZero
-  parameters: : {basis : Basis} -> MultiseriesExpansion basis -> Prop
-  constructors (2):
-    - const: {c : MultiseriesExpansion []} (hc : c.toReal = 0) : IsZero c
-    - nil: {basis_hd} {basis_tl} (f) : @IsZero (basis_hd :: basis_tl) (mk .nil f)
-
-中文:
-归纳类型 是零
-  参数: : {basis : 基} -> MultiseriesExpansion basis -> 命题
-  构造子 (2 个):
-    - const: {c : MultiseriesExpansion []} (hc : c.to实数 = 0) : 是零 c
-    - nil: {basis_hd} {basis_tl} (f) : @是零 (basis_hd :: basis_tl) (mk .nil f)
+--- 原说明 ---
+A multiseries is zero if it is the real constant `0` or has an empty sequence.
 -/
-inductive IsZero : {basis : Basis} -> MultiseriesExpansion basis -> Prop
+inductive IsZero : {basis : Basis} → MultiseriesExpansion basis → Prop
 | const {c : MultiseriesExpansion []} (hc : c.toReal = 0) : IsZero c
 | nil {basis_hd} {basis_tl} (f) : @IsZero (basis_hd :: basis_tl) (mk .nil f)
 
 namespace IsZero
 
 @[simp]
-/--
-theorem `const_iff` / 定理 `const_iff`
-
-English:
-theorem const_iff
-  given: {c : MultiseriesExpansion []}
-  statement: IsZero c ↔ c.toReal = 0
-  proof: by
-  constructor <;> grind [IsZero]
-
-@[simp]
-
-中文:
-定理 const_iff
-  条件: {c : MultiseriesExpansion []}
-  结论: 是零 c ↔ c.to实数 = 0
-  证明: by
-  constructor <;> grind [IsZero]
-
-@[simp]
-
-Depends on / 依赖: IsZero
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero.const_iff** 是 Mathlib 中的
+一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero`。
+形式化陈述：const_iff {c : MultiseriesExpansion []} : IsZero c ↔ c.toReal = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_iff {c : MultiseriesExpansion []} : IsZero c ↔ c.toReal = 0 := by
   constructor <;> grind [IsZero]
 
 @[simp]
-/--
-theorem `iff_seq_eq_nil` / 定理 `iff_seq_eq_nil`
-
-English:
-theorem iff_seq_eq_nil
-  given: {basis_hd basis_tl} {ms : MultiseriesExpansion (basis_hd :: basis_tl)}
-  proof: by cases h; rw [mk_seq]
-  mpr h := by
-    convert IsZero.nil ms.toFun
-    simp [h]
-
-中文:
-定理 iff_seq_eq_nil
-  条件: {basis_hd basis_tl} {ms : MultiseriesExpansion (basis_hd :: basis_tl)}
-  证明: by cases h; rw [mk_seq]
-  mpr h := by
-    convert IsZero.nil ms.toFun
-    simp [h]
-
-Depends on / 依赖: IsZero, IsZero.nil, convert, mk_seq, ms.toFun
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero.iff_seq_eq_nil** 是 Mathl
+ib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero`。
+形式化陈述：iff_seq_eq_nil {basis_hd basis_tl} {ms : MultiseriesExpansion (basis_hd ::
+ basis_tl)} : IsZero ms ↔ ms.seq = .nil where mp h
+参数：basis_hd :: basis_tl。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Tactic.ComputeAsymptotics.MultiseriesExpansion.mk_seq`：mk_seq {basis_hd 
+basis_tl} (s : Multiseries basis_hd basis_tl) (f : Real -> Real) : (mk (basis_hd
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem iff_seq_eq_nil {basis_hd basis_tl} {ms : MultiseriesExpansion (basis_hd :: basis_tl)} :
     IsZero ms ↔ ms.seq = .nil where
@@ -113,27 +96,24 @@ theorem iff_seq_eq_nil {basis_hd basis_tl} {ms : MultiseriesExpansion (basis_hd 
   mpr h := by
     convert IsZero.nil ms.toFun
     simp [h]
-
-/--
-theorem `approximates_zero` / 定理 `approximates_zero`
-
-English:
-theorem approximates_zero
-  statement: {basis : Basis} {ms : MultiseriesExpansion basis}
-  proof: by
-  cases h_zero with
-  | const hc => simp [hc, Pi.zero_def]
-  | nil => simpa using h_approx
-
-中文:
-定理 approximates_zero
-  结论: {basis : 基} {ms : MultiseriesExpansion basis}
-  证明: by
-  cases h_zero with
-  | const hc => simp [hc, Pi.zero_def]
-  | nil => simpa using h_approx
-
-Depends on / 依赖: Pi.zero_def, h_approx, h_zero, zero_def
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero.approximates_zero** 是 Ma
+thlib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero`。
+形式化陈述：approximates_zero {basis : Basis} {ms : MultiseriesExpansion basis} (h_zer
+o : IsZero ms) (h_approx : ms.Approximates) : ms.toFun =ᶠ[atTop] 0
+参数：h_zero : IsZero ms；h_approx : ms.Approximates。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem approximates_zero {basis : Basis} {ms : MultiseriesExpansion basis}
     (h_zero : IsZero ms) (h_approx : ms.Approximates) :
@@ -141,111 +121,97 @@ theorem approximates_zero {basis : Basis} {ms : MultiseriesExpansion basis}
   cases h_zero with
   | const hc => simp [hc, Pi.zero_def]
   | nil => simpa using h_approx
-
-/--
-theorem `not_cons` / 定理 `not_cons`
-
-English:
-theorem not_cons
-  statement: {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl}
-  proof: by
-  simp
-
-中文:
-定理 not_cons
-  结论: {basis_hd} {basis_tl} {exp : 实数} {coef : MultiseriesExpansion basis_tl}
-  证明: by
-  simp
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero.not_cons** 是 Mathlib 中的一
+个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.IsZero`。
+形式化陈述：not_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion b
+asis_tl} {tl : Multiseries basis_hd basis_tl} {f : Real -> Real} : ¬ @IsZero (ba
+sis_hd :: basis_tl) (mk (.cons exp coef tl) f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem not_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl}
-    {tl : Multiseries basis_hd basis_tl} {f : Real -> Real} :
+theorem not_cons {basis_hd} {basis_tl} {exp : ℝ} {coef : MultiseriesExpansion basis_tl}
+    {tl : Multiseries basis_hd basis_tl} {f : ℝ → ℝ} :
     ¬ @IsZero (basis_hd :: basis_tl) (mk (.cons exp coef tl) f) := by
   simp
 
 end IsZero
 
-/--
-Inductive type `Trimmed` / 归纳类型 `Trimmed`
+/-- We call a multiseries `Trimmed` if it is either a constant, `.nil`, or `cons (exp, coef) tl`
+where `coef` is trimmed and is not zero. Intuitively, when a multiseries is trimmed, its leading
+monomial gives the main asymptotic behavior of the approximated function. -/
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.Trimmed** 是 Mathlib 中的一个归纳类型，位于
+命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion`。
+形式化陈述：{basis : Tactic.ComputeAsymptotics.Basis} → Tactic.ComputeAsymptotics.Mult
+iseriesExpansion basis → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Trimmed
-  parameters: : {basis : Basis} -> MultiseriesExpansion basis -> Prop
-  constructors (3):
-    - const: {c : Real} : @Trimmed [] c
-    - nil: {basis_hd} {basis_tl} {f} : @Trimmed (basis_hd :: basis_tl) (mk .nil f)
-    - cons: {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl} {f : Real -> Real} (h_trimmed : coef.Trimmed) (h_ne_zero : ¬ IsZero coef) : @Trimmed (basis_hd :: basis_tl) (mk (.cons exp coef tl) f)
-
-中文:
-归纳类型 Trimmed
-  参数: : {basis : 基} -> MultiseriesExpansion basis -> 命题
-  构造子 (3 个):
-    - const: {c : 实数} : @Trimmed [] c
-    - nil: {basis_hd} {basis_tl} {f} : @Trimmed (basis_hd :: basis_tl) (mk .nil f)
-    - cons: {basis_hd} {basis_tl} {exp : 实数} {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl} {f : 实数 -> 实数} (h_trimmed : coef.Trimmed) (h_ne_zero : ¬ 是零 coef) : @Trimmed (basis_hd :: basis_tl) (mk (.cons exp coef tl) f)
+--- 原说明 ---
+We call a multiseries `Trimmed` if it is either a constant, `.nil`, or `cons (ex
+p, coef) tl`
+where `coef` is trimmed and is not zero. Intuitively, when a multiseries is trim
+med, its leading
+monomial gives the main asymptotic behavior of the approximated function.
 -/
-inductive Trimmed : {basis : Basis} -> MultiseriesExpansion basis -> Prop
-| const {c : Real} : @Trimmed [] c
+inductive Trimmed : {basis : Basis} → MultiseriesExpansion basis → Prop
+| const {c : ℝ} : @Trimmed [] c
 | nil {basis_hd} {basis_tl} {f} : @Trimmed (basis_hd :: basis_tl) (mk .nil f)
-| cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl}
-  {tl : Multiseries basis_hd basis_tl} {f : Real -> Real} (h_trimmed : coef.Trimmed)
+| cons {basis_hd} {basis_tl} {exp : ℝ} {coef : MultiseriesExpansion basis_tl}
+  {tl : Multiseries basis_hd basis_tl} {f : ℝ → ℝ} (h_trimmed : coef.Trimmed)
   (h_ne_zero : ¬ IsZero coef) :
   @Trimmed (basis_hd :: basis_tl) (mk (.cons exp coef tl) f)
 
-/--
-Definition of `Multiseries.Trimmed` / `Multiseries.Trimmed` 的定义
+/-- We call a `Multiseries` `Trimmed` if it is either `.nil` or `cons (exp, coef) tl` where `coef`
+is trimmed and is not zero. -/
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.Trimmed** 是 Mathlib
+ 中的一个定义，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries`。
+形式化陈述：{basis_hd : ℝ → ℝ} →   {basis_tl : Tactic.ComputeAsymptotics.Basis} →     
+Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries basis_hd basis_tl → P
+rop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multiseries.Trimmed
-  signature: {basis_hd : Real -> Real} {basis_tl : Basis}
-  body: (mk ms 0).Trimmed
-
-中文:
-定义 Multiseries.Trimmed
-  签名: {basis_hd : 实数 -> 实数} {basis_tl : 基}
-  定义体: (mk ms 0).Trimmed
-
-Depends on / 依赖: Trimmed
+--- 原说明 ---
+We call a `Multiseries` `Trimmed` if it is either `.nil` or `cons (exp, coef) tl
+` where `coef`
+is trimmed and is not zero.
 -/
-def Multiseries.Trimmed {basis_hd : Real -> Real} {basis_tl : Basis}
+def Multiseries.Trimmed {basis_hd : ℝ → ℝ} {basis_tl : Basis}
     (ms : Multiseries basis_hd basis_tl) : Prop :=
   (mk ms 0).Trimmed
-
-/--
-theorem `trimmed_iff_seq_trimmed` / 定理 `trimmed_iff_seq_trimmed`
-
-English:
-theorem trimmed_iff_seq_trimmed
-  statement: {basis_hd : Real -> Real} {basis_tl : Basis}
-  proof: by
-    cases h <;> constructor <;> grind
-  mpr h := by
-    generalize hs : ms.seq = s at h
-    cases h with
-    | nil =>
-      convert Trimmed.nil (f := ms.toFun)
-      simp [hs]
-    | @cons _ _ exp coef tl _ h_trimmed h_ne_zero =>
-      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := tl) (f := ms.toFun)
-      simp only [ms_eq_mk_iff, hs, and_true]
-
-中文:
-定理 trimmed_iff_seq_trimmed
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
-  证明: by
-    cases h <;> constructor <;> grind
-  mpr h := by
-    generalize hs : ms.seq = s at h
-    cases h with
-    | nil =>
-      convert Trimmed.nil (f := ms.toFun)
-      simp [hs]
-    | @cons _ _ exp coef tl _ h_trimmed h_ne_zero =>
-      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := tl) (f := ms.toFun)
-      simp only [ms_eq_mk_iff, hs, and_true]
-
-Depends on / 依赖: Trimmed, Trimmed.cons, Trimmed.nil, and_true, convert, generalize, h_ne_zero, h_trimmed, ms.seq, ms.toFun, ms_eq_mk_iff
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.trimmed_iff_seq_trimmed** 是 Mat
+hlib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion`。
+形式化陈述：trimmed_iff_seq_trimmed {basis_hd : Real -> Real} {basis_tl : Basis} (ms :
+ MultiseriesExpansion (basis_hd :: basis_tl)) : ms.Trimmed ↔ ms.seq.Trimmed wher
+e mp h
+参数：ms : MultiseriesExpansion (basis_hd :: basis_tl)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem trimmed_iff_seq_trimmed {basis_hd : Real -> Real} {basis_tl : Basis}
+theorem trimmed_iff_seq_trimmed {basis_hd : ℝ → ℝ} {basis_tl : Basis}
     (ms : MultiseriesExpansion (basis_hd :: basis_tl)) :
     ms.Trimmed ↔ ms.seq.Trimmed where
   mp h := by
@@ -263,74 +229,54 @@ theorem trimmed_iff_seq_trimmed {basis_hd : Real -> Real} {basis_tl : Basis}
 namespace Multiseries.Trimmed
 
 @[simp]
-/--
-theorem `nil` / 定理 `nil`
-
-English:
-theorem nil
-  given: {basis_hd} {basis_tl}
-  proof: by
-  constructor
-
-中文:
-定理 nil
-  条件: {basis_hd} {basis_tl}
-  证明: by
-  constructor
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.Trimmed.nil** 是 Mat
+hlib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.T
+rimmed`。
+形式化陈述：nil {basis_hd} {basis_tl} : @Multiseries.Trimmed basis_hd basis_tl .nil
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nil {basis_hd} {basis_tl} :
     @Multiseries.Trimmed basis_hd basis_tl .nil := by
   constructor
-
-/--
-theorem `cons` / 定理 `cons`
-
-English:
-theorem cons
-  statement: {basis_hd} {basis_tl} {exp : Real}
-  proof: MultiseriesExpansion.Trimmed.cons h_coef h_ne_zero
-
-中文:
-定理 cons
-  结论: {basis_hd} {basis_tl} {exp : 实数}
-  证明: MultiseriesExpansion.Trimmed.cons h_coef h_ne_zero
-
-Depends on / 依赖: MultiseriesExpansion, MultiseriesExpansion.Trimmed.cons, Trimmed, h_coef, h_ne_zero
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.Trimmed.cons** 是 Ma
+thlib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.
+Trimmed`。
+形式化陈述：cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis
+_tl} {tl : Multiseries basis_hd basis_tl} (h_coef : coef.Trimmed) (h_ne_zero : ¬
+ IsZero coef) : Multiseries.Trimmed (cons exp coef tl)
+参数：h_coef : coef.Trimmed；h_ne_zero : ¬ IsZero coef。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cons {basis_hd} {basis_tl} {exp : Real}
+theorem cons {basis_hd} {basis_tl} {exp : ℝ}
     {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl}
     (h_coef : coef.Trimmed) (h_ne_zero : ¬ IsZero coef) :
     Multiseries.Trimmed (cons exp coef tl) :=
   MultiseriesExpansion.Trimmed.cons h_coef h_ne_zero
 
-/--
-theorem `elim_cons` / 定理 `elim_cons`
+/-- If `cons (exp, coef) tl` is trimmed, then `coef` is trimmed and is not zero. -/
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.Trimmed.elim_cons**
+ 是 Mathlib 中的一个定理，位于命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multise
+ries.Trimmed`。
+形式化陈述：elim_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion 
+basis_tl} {tl : Multiseries basis_hd basis_tl} (h : Multiseries.Trimmed (.cons e
+xp coef tl)) : coef.Trimmed ∧ ¬ IsZero coef
+参数：h : Multiseries.Trimmed (.cons exp coef tl)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem elim_cons
-  statement: {basis_hd} {basis_tl} {exp : Real}
-  proof: by
-  generalize h_ms : Multiseries.cons exp coef tl = ms at h
-  cases h with
-  | nil => simp at h_ms
-  | cons h_trimmed h_ne_zero =>
-    simp at h_ms
-    grind
-
-中文:
-定理 elim_cons
-  结论: {basis_hd} {basis_tl} {exp : 实数}
-  证明: by
-  generalize h_ms : Multiseries.cons exp coef tl = ms at h
-  cases h with
-  | nil => simp at h_ms
-  | cons h_trimmed h_ne_zero =>
-    simp at h_ms
-    grind
-
-Depends on / 依赖: Multiseries, Multiseries.cons, generalize, h_ms, h_ne_zero, h_trimmed
+--- 原说明 ---
+If `cons (exp, coef) tl` is trimmed, then `coef` is trimmed and is not zero.
 -/
-theorem elim_cons {basis_hd} {basis_tl} {exp : Real}
+theorem elim_cons {basis_hd} {basis_tl} {exp : ℝ}
     {coef : MultiseriesExpansion basis_tl} {tl : Multiseries basis_hd basis_tl}
     (h : Multiseries.Trimmed (.cons exp coef tl)) :
     coef.Trimmed ∧ ¬ IsZero coef := by
@@ -343,27 +289,25 @@ theorem elim_cons {basis_hd} {basis_tl} {exp : Real}
 
 end Multiseries.Trimmed
 
-/--
-theorem `elim_cons` / 定理 `elim_cons`
+/-- If `cons (exp, coef) tl` is trimmed, then `coef` is trimmed and is not zero. -/
+/-
+**Tactic.ComputeAsymptotics.MultiseriesExpansion.elim_cons** 是 Mathlib 中的一个定理，位于
+命名空间 `Tactic.ComputeAsymptotics.MultiseriesExpansion`。
+形式化陈述：elim_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion 
+basis_tl} {tl : Multiseries basis_hd basis_tl} {f : Real -> Real} (h : Trimmed (
+mk (.cons exp coef tl) f)) : coef.Trimmed ∧ ¬ IsZero coef
+参数：h : Trimmed (mk (.cons exp coef tl) f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.Trimmed.elim_
+cons`：elim_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion 
+basis_tl} {tl : Multiseries basis_hd basis_tl} (h : Multiseries.Tr…
 
-English:
-theorem elim_cons
-  statement: {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl}
-  proof: by
-  simp only [trimmed_iff_seq_trimmed, mk_seq] at h
-  exact h.elim_cons
-
-中文:
-定理 elim_cons
-  结论: {basis_hd} {basis_tl} {exp : 实数} {coef : MultiseriesExpansion basis_tl}
-  证明: by
-  simp only [trimmed_iff_seq_trimmed, mk_seq] at h
-  exact h.elim_cons
-
-Depends on / 依赖: elim_cons, h.elim_cons, mk_seq, trimmed_iff_seq_trimmed
+--- 原说明 ---
+If `cons (exp, coef) tl` is trimmed, then `coef` is trimmed and is not zero.
 -/
-theorem elim_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansion basis_tl}
-    {tl : Multiseries basis_hd basis_tl} {f : Real -> Real}
+theorem elim_cons {basis_hd} {basis_tl} {exp : ℝ} {coef : MultiseriesExpansion basis_tl}
+    {tl : Multiseries basis_hd basis_tl} {f : ℝ → ℝ}
     (h : Trimmed (mk (.cons exp coef tl) f)) :
     coef.Trimmed ∧ ¬ IsZero coef := by
   simp only [trimmed_iff_seq_trimmed, mk_seq] at h
@@ -372,3 +316,4 @@ theorem elim_cons {basis_hd} {basis_tl} {exp : Real} {coef : MultiseriesExpansio
 end MultiseriesExpansion
 
 end Tactic.ComputeAsymptotics
+

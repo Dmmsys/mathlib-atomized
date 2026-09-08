@@ -25,63 +25,38 @@ open CategoryTheory Limits CompHausLike
 
 namespace LightProfinite
 
-/--
-theorem `effectiveEpi_iff_surjective` / 定理 `effectiveEpi_iff_surjective`
-
-English:
-theorem effectiveEpi_iff_surjective
-  given: {X Y : LightProfinite.{u}} (f : X ⟶ Y)
-  proof: by
-  refine ⟨fun h => ?_, fun h => ⟨⟨effectiveEpiStruct f h⟩⟩⟩
-  rw [← epi_iff_surjective]
-  infer_instance
-
-中文:
-定理 effectiveEpi_iff_surjective
-  条件: {X Y : LightProfinite.{u}} (f : X ⟶ Y)
-  证明: by
-  refine ⟨fun h => ?_, fun h => ⟨⟨effectiveEpiStruct f h⟩⟩⟩
-  rw [← epi_iff_surjective]
-  infer_instance
-
-Depends on / 依赖: effectiveEpiStruct, epi_iff_surjective, infer_instance
+/-
+**LightProfinite.effectiveEpi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `LightPro
+finite`。
+形式化陈述：effectiveEpi_iff_surjective {X Y : LightProfinite.{u}} (f : X ⟶ Y) : Effec
+tiveEpi f ↔ Function.Surjective f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LightProfinite.epi_iff_surjective`：epi_iff_surjective {X Y : LightProfin
+ite.{u}} (f : X ⟶ Y) : Epi f ↔ Function.Surjective f
 -/
 theorem effectiveEpi_iff_surjective {X Y : LightProfinite.{u}} (f : X ⟶ Y) :
     EffectiveEpi f ↔ Function.Surjective f := by
-  refine ⟨fun h => ?_, fun h => ⟨⟨effectiveEpiStruct f h⟩⟩⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ⟨⟨effectiveEpiStruct f h⟩⟩⟩
   rw [← epi_iff_surjective]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preregular LightProfinite.{u}
-  body: by
-  apply CompHausLike.preregular
-  intro _ _ f
-  exact (effectiveEpi_iff_surjective f).mp
-
-example : Precoherent LightProfinite.{u} := inferInstance
-
-中文:
-实例 :
-  签名: Preregular LightProfinite.{u}
-  定义体: by
-  apply CompHausLike.preregular
-  intro _ _ f
-  exact (effectiveEpi_iff_surjective f).mp
-
-example : Precoherent LightProfinite.{u} := inferInstance
-
-Depends on / 依赖: CompHausLike, CompHausLike.preregular, effectiveEpi_iff_surjective, preregular
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preregular LightProfinite.{u} := by
   apply CompHausLike.preregular
   intro _ _ f
   exact (effectiveEpi_iff_surjective f).mp
-
+/-
+**LightProfinite.** 是 Mathlib 中的一个示例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Precoherent LightProfinite.{u} := inferInstance
 
 end LightProfinite
+

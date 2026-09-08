@@ -26,7 +26,7 @@ universe u v
 
 variable {𝕜 : Type u} [NontriviallyNormedField 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-variable {f : 𝕜 -> E} {x : 𝕜}
+variable {f : 𝕜 → E} {x : 𝕜}
 
 /-! ### Support of derivatives -/
 
@@ -35,151 +35,128 @@ section Support
 
 open Function
 
-/--
-theorem `HasStrictDerivAt.of_notMem_tsupport` / 定理 `HasStrictDerivAt.of_notMem_tsupport`
-
-English:
-theorem HasStrictDerivAt.of_notMem_tsupport
-  given: (h : x ∉ tsupport f)
-  statement: HasStrictDerivAt f 0 x
-  proof: by
-  rw [notMem_tsupport_iff_eventuallyEq] at h
-  exact (hasStrictDerivAt_const x 0).congr_of_eventuallyEq h.symm
-
-中文:
-定理 HasStrictDerivAt.of_notMem_tsupport
-  条件: (h : x ∉ tsupport f)
-  结论: HasStrictDerivAt f 0 x
-  证明: by
-  rw [notMem_tsupport_iff_eventuallyEq] at h
-  exact (hasStrictDerivAt_const x 0).congr_of_eventuallyEq h.symm
-
-Depends on / 依赖: congr_of_eventuallyEq, h.symm, hasStrictDerivAt_const, notMem_tsupport_iff_eventuallyEq
+/-
+**HasStrictDerivAt.of_notMem_tsupport** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.of_notMem_tsupport (h : x ∉ tsupport f) : HasStrictDerivA
+t f 0 x
+参数：h : x ∉ tsupport f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.congr_of_eventuallyEq`：HasStrictDerivAt.congr_of_eventu
+allyEq (h : HasStrictDerivAt f f' x) (h₁ : f =ᶠ[𝓝 x] f₁) : HasStrictDerivAt f₁ f
+' x
+· 使用定理 `hasStrictDerivAt_const`：hasStrictDerivAt_const : HasStrictDerivAt (fun _
+ => c) 0 x
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `notMem_tsupport_iff_eventuallyEq`：∀ {α : Type u_2} {β : Type u_4} [inst 
+: TopologicalSpace α] [inst_1 : Zero β] {f : α → β} {x : α},   x ∉ tsupport f ↔ 
+f =ᶠ[nhds x] 0
 -/
 theorem HasStrictDerivAt.of_notMem_tsupport (h : x ∉ tsupport f) : HasStrictDerivAt f 0 x := by
   rw [notMem_tsupport_iff_eventuallyEq] at h
   exact (hasStrictDerivAt_const x 0).congr_of_eventuallyEq h.symm
-
-/--
-theorem `HasDerivAt.of_notMem_tsupport` / 定理 `HasDerivAt.of_notMem_tsupport`
-
-English:
-theorem HasDerivAt.of_notMem_tsupport
-  given: (h : x ∉ tsupport f)
-  statement: HasDerivAt f 0 x
-  proof: (HasStrictDerivAt.of_notMem_tsupport h).hasDerivAt
-
-中文:
-定理 在点处可导.of_notMem_tsupport
-  条件: (h : x ∉ tsupport f)
-  结论: 在点处可导 f 0 x
-  证明: (HasStrictDerivAt.of_notMem_tsupport h).hasDerivAt
-
-Depends on / 依赖: HasStrictDerivAt, HasStrictDerivAt.of_notMem_tsupport, hasDerivAt, of_notMem_tsupport
+/-
+**HasDerivAt.of_notMem_tsupport** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.of_notMem_tsupport (h : x ∉ tsupport f) : HasDerivAt f 0 x
+参数：h : x ∉ tsupport f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.hasDerivAt`：HasStrictDerivAt.hasDerivAt (h : HasStrictD
+erivAt f f' x) : HasDerivAt f f' x
+· 使用定理 `HasStrictDerivAt.of_notMem_tsupport`：HasStrictDerivAt.of_notMem_tsupport
+ (h : x ∉ tsupport f) : HasStrictDerivAt f 0 x
 -/
 theorem HasDerivAt.of_notMem_tsupport (h : x ∉ tsupport f) : HasDerivAt f 0 x :=
   (HasStrictDerivAt.of_notMem_tsupport h).hasDerivAt
-
-/--
-theorem `HasDerivWithinAt.of_notMem_tsupport` / 定理 `HasDerivWithinAt.of_notMem_tsupport`
-
-English:
-theorem HasDerivWithinAt.of_notMem_tsupport
-  given: {s : Set 𝕜} (h : x ∉ tsupport f)
-  proof: (HasDerivAt.of_notMem_tsupport h).hasDerivWithinAt
-
-中文:
-定理 HasDerivWithinAt.of_notMem_tsupport
-  条件: {s : 集合 𝕜} (h : x ∉ tsupport f)
-  证明: (HasDerivAt.of_notMem_tsupport h).hasDerivWithinAt
-
-Depends on / 依赖: HasDerivAt, HasDerivAt.of_notMem_tsupport, hasDerivWithinAt, of_notMem_tsupport
+/-
+**HasDerivWithinAt.of_notMem_tsupport** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.of_notMem_tsupport {s : Set 𝕜} (h : x ∉ tsupport f) : Has
+DerivWithinAt f 0 s x
+参数：h : x ∉ tsupport f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.hasDerivWithinAt`：HasDerivAt.hasDerivWithinAt (h : HasDerivAt
+ f f' x) : HasDerivWithinAt f f' s x
+· 使用定理 `HasDerivAt.of_notMem_tsupport`：HasDerivAt.of_notMem_tsupport (h : x ∉ ts
+upport f) : HasDerivAt f 0 x
 -/
 theorem HasDerivWithinAt.of_notMem_tsupport {s : Set 𝕜} (h : x ∉ tsupport f) :
     HasDerivWithinAt f 0 s x :=
   (HasDerivAt.of_notMem_tsupport h).hasDerivWithinAt
-
-/--
-theorem `deriv_of_notMem_tsupport` / 定理 `deriv_of_notMem_tsupport`
-
-English:
-theorem deriv_of_notMem_tsupport
-  given: (h : x ∉ tsupport f)
-  statement: deriv f x = 0
-  proof: by
-  rw [notMem_tsupport_iff_eventuallyEq] at h
-  simp [h.deriv_eq]
-
-中文:
-定理 deriv_of_notMem_tsupport
-  条件: (h : x ∉ tsupport f)
-  结论: deriv f x = 0
-  证明: by
-  rw [notMem_tsupport_iff_eventuallyEq] at h
-  simp [h.deriv_eq]
-
-Depends on / 依赖: deriv_eq, h.deriv_eq, notMem_tsupport_iff_eventuallyEq
+/-
+**deriv_of_notMem_tsupport** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_of_notMem_tsupport (h : x ∉ tsupport f) : deriv f x = 0
+参数：h : x ∉ tsupport f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.EventuallyEq.deriv_eq`：Filter.EventuallyEq.deriv_eq (hL : f₁ =ᶠ[𝓝
+ x] f) : deriv f₁ x = deriv f x
+· 使用定理 `notMem_tsupport_iff_eventuallyEq`：∀ {α : Type u_2} {β : Type u_4} [inst 
+: TopologicalSpace α] [inst_1 : Zero β] {f : α → β} {x : α},   x ∉ tsupport f ↔ 
+f =ᶠ[nhds x] 0
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `deriv_zero`：deriv_zero : deriv (0 : 𝕜 -> F) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem deriv_of_notMem_tsupport (h : x ∉ tsupport f) : deriv f x = 0 := by
   rw [notMem_tsupport_iff_eventuallyEq] at h
   simp [h.deriv_eq]
-
-/--
-theorem `support_deriv_subset` / 定理 `support_deriv_subset`
-
-English:
-theorem support_deriv_subset
-  statement: support (deriv f) subseteq tsupport f
-  proof: fun x => by
-  rw [← not_imp_not]; rw [notMem_support]
-  exact deriv_of_notMem_tsupport
-
-中文:
-定理 support_deriv_subset
-  结论: support (deriv f) subseteq tsupport f
-  证明: fun x => by
-  rw [← not_imp_not]; rw [notMem_support]
-  exact deriv_of_notMem_tsupport
-
-Depends on / 依赖: deriv_of_notMem_tsupport, notMem_support, not_imp_not
+/-
+**support_deriv_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：support_deriv_subset : support (deriv f) subseteq tsupport f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `Function.notMem_support`：∀ {ι : Type u_1} {M : Type u_3} [inst : Zero M]
+ {f : ι → M} {x : ι}, x ∉ Function.support f ↔ f x = 0
+· 使用定理 `deriv_of_notMem_tsupport`：deriv_of_notMem_tsupport (h : x ∉ tsupport f) 
+: deriv f x = 0
 -/
-theorem support_deriv_subset : support (deriv f) subseteq tsupport f := fun x => by
-  rw [← not_imp_not]; rw [notMem_support]
+theorem support_deriv_subset : support (deriv f) ⊆ tsupport f := fun x ↦ by
+  rw [← not_imp_not, notMem_support]
   exact deriv_of_notMem_tsupport
-
-/--
-theorem `tsupport_deriv_subset` / 定理 `tsupport_deriv_subset`
-
-English:
-theorem tsupport_deriv_subset
-  statement: tsupport (deriv f) subseteq tsupport f
-  proof: closure_minimal support_deriv_subset isClosed_closure
-
-中文:
-定理 tsupport_deriv_subset
-  结论: tsupport (deriv f) subseteq tsupport f
-  证明: closure_minimal support_deriv_subset isClosed_closure
-
-Depends on / 依赖: closure_minimal, isClosed_closure, support_deriv_subset
+/-
+**tsupport_deriv_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsupport_deriv_subset : tsupport (deriv f) subseteq tsupport f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `support_deriv_subset`：support_deriv_subset : support (deriv f) subseteq 
+tsupport f
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 -/
-theorem tsupport_deriv_subset : tsupport (deriv f) subseteq tsupport f :=
+theorem tsupport_deriv_subset : tsupport (deriv f) ⊆ tsupport f :=
   closure_minimal support_deriv_subset isClosed_closure
-
-/--
-theorem `HasCompactSupport.deriv` / 定理 `HasCompactSupport.deriv`
-
-English:
-theorem HasCompactSupport.deriv
-  given: (hf : HasCompactSupport f)
-  proof: hf.mono' support_deriv_subset
-
-中文:
-定理 HasCompactSupport.deriv
-  条件: (hf : HasCompactSupport f)
-  证明: hf.mono' support_deriv_subset
+/-
+**HasCompactSupport.deriv** 是 Mathlib 中的一个定理，位于命名空间 `HasCompactSupport`。
+形式化陈述：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] {E : Type v} [inst_1 : N
+ormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {f : 𝕜 → E}, HasCompactSupport
+ f → HasCompactSupport (deriv f)
+参数：deriv f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasCompactSupport.mono'`：∀ {α : Type u_2} {β : Type u_4} {γ : Type u_5} 
+[inst : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : Zero γ]   {f : α → β} {f
+' : α → γ}, H…
+· 使用定理 `support_deriv_subset`：support_deriv_subset : support (deriv f) subseteq 
+tsupport f
 -/
 protected theorem HasCompactSupport.deriv (hf : HasCompactSupport f) :
     HasCompactSupport (deriv f) :=
   hf.mono' support_deriv_subset
 
 end Support
+

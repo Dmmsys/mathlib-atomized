@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # The `auxLemma` linter
@@ -29,42 +29,28 @@ open Lean Elab Linter
 
 namespace Mathlib.Linter.AuxLemma
 
-/--
-Definition of `matchesAuxPattern` / `matchesAuxPattern` 的定义
+/-- Returns `true` if `s` has the form `pfx ++ digits`, e.g. `"_proof_17"`. -/
+/-
+**Mathlib.Linter.AuxLemma.matchesAuxPattern** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.L
+inter.AuxLemma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchesAuxPattern
-  signature: (pfx : String) (s : String)
-  body: s.startsWith pfx && (s.drop pfx.length).all (·.isDigit) && s.rawEndPos > pfx.rawEndPos
-
-中文:
-定义 matchesAuxPattern
-  签名: (pfx : String) (s : String)
-  定义体: s.startsWith pfx && (s.drop pfx.length).all (·.isDigit) && s.rawEndPos > pfx.rawEndPos
+--- 原说明 ---
+Returns `true` if `s` has the form `pfx ++ digits`, e.g. `"_proof_17"`.
 -/
 @[inline] private def matchesAuxPattern (pfx : String) (s : String) : Bool :=
   s.startsWith pfx && (s.drop pfx.length).all (·.isDigit) && s.rawEndPos > pfx.rawEndPos
 
-/--
-Definition of `isAuxName` / `isAuxName` 的定义
+/-- Returns `true` if `s` is an auto-generated auxiliary name component,
+such as `_proof_1`, `match_2`, or `_sizeOf_3`. -/
+/-
+**Mathlib.Linter.AuxLemma.isAuxName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter.Au
+xLemma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isAuxName
-  signature: (s : String)
-  body: matchesAuxPattern "_proof_" s ||
-  matchesAuxPattern "match_" s ||
-  matchesAuxPattern "_sizeOf_" s ||
-  matchesAuxPattern "_simp_" s ||
-  matchesAuxPattern "_aux_" s
-
-中文:
-定义 isAuxName
-  签名: (s : String)
-  定义体: matchesAuxPattern "_proof_" s ||
-  matchesAuxPattern "match_" s ||
-  matchesAuxPattern "_sizeOf_" s ||
-  matchesAuxPattern "_simp_" s ||
-  matchesAuxPattern "_aux_" s
+--- 原说明 ---
+Returns `true` if `s` is an auto-generated auxiliary name component,
+such as `_proof_1`, `match_2`, or `_sizeOf_3`.
 -/
 private def isAuxName (s : String) : Bool :=
   matchesAuxPattern "_proof_" s ||
@@ -73,18 +59,16 @@ private def isAuxName (s : String) : Bool :=
   matchesAuxPattern "_simp_" s ||
   matchesAuxPattern "_aux_" s
 
-/--
-Definition of `nameRefersToAuxLemma` / `nameRefersToAuxLemma` 的定义
+/-- Returns `true` if any component of the name is an auto-generated auxiliary name. -/
+/-
+**Mathlib.Linter.AuxLemma.nameRefersToAuxLemma** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Linter.AuxLemma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nameRefersToAuxLemma
-  signature: : Name -> Bool
-
-中文:
-定义 nameRefersToAuxLemma
-  签名: : Name -> 布尔值
+--- 原说明 ---
+Returns `true` if any component of the name is an auto-generated auxiliary name.
 -/
-private def nameRefersToAuxLemma : Name -> Bool
+private def nameRefersToAuxLemma : Name → Bool
   | .str p s => isAuxName s || nameRefersToAuxLemma p
   | .num p _ => nameRefersToAuxLemma p
   | .anonymous => false
@@ -99,36 +83,12 @@ public register_option linter.auxLemma : Bool := {
 }
 
 @[inherit_doc linter.auxLemma]
-/--
-Definition of `auxLemmaLinter` / `auxLemmaLinter` 的定义
-
-English:
-definition auxLemmaLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-    unless getLinterValue linter.auxLemma (← getLinterOptions) do
-      return
-    if ← MonadLog.hasErrors then
-      return
-    if let some id := stx.find? fun s => s.isIdent && nameRefersToAuxLemma s.getId then
-      logLint linter.auxLemma id
-        m!"`{id.getId}` refers to an auto-generated auxiliary declaration. \
-          These are not stable across refactors; consider using a different approach."
-
-中文:
-定义 auxLemmaLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-    unless getLinterValue linter.auxLemma (← getLinterOptions) do
-      return
-    if ← MonadLog.hasErrors then
-      return
-    if let some id := stx.find? fun s => s.isIdent && nameRefersToAuxLemma s.getId then
-      logLint linter.auxLemma id
-        m!"`{id.getId}` refers to an auto-generated auxiliary declaration. \
-          These are not stable across refactors; consider using a different approach."
-
-Depends on / 依赖: withSetOptionIn
+/-
+**Mathlib.Linter.AuxLemma.auxLemmaLinter** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Lint
+er.AuxLemma`。
+形式化陈述：auxLemmaLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def auxLemmaLinter : Linter where run := withSetOptionIn fun stx => do
     unless getLinterValue linter.auxLemma (← getLinterOptions) do
@@ -143,3 +103,4 @@ def auxLemmaLinter : Linter where run := withSetOptionIn fun stx => do
 initialize addLinter auxLemmaLinter
 
 end Mathlib.Linter.AuxLemma
+

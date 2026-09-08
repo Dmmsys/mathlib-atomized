@@ -34,40 +34,31 @@ open scoped commutatorElement
 
 variable (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
 
-/--
-Instance `instNormalCommutatorClosure` / 实例 `instNormalCommutatorClosure`
-
-English:
-instance instNormalCommutatorClosure
-  signature: : (commutator G).topologicalClosure.Normal
-  body: Subgroup.is_normal_topologicalClosure (commutator G)
-
-中文:
-实例 instNormalCommutatorClosure
-  签名: : (commutator G).topologicalClosure.正规
-  定义体: Subgroup.is_normal_topologicalClosure (commutator G)
-
-Depends on / 依赖: Subgroup, Subgroup.is_normal_topologicalClosure, commutator, is_normal_topologicalClosure
+/-
+**instNormalCommutatorClosure** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instNormalCommutatorClosure : (commutator G).topologicalClosure.Normal
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.is_normal_topologicalClosure`：Subgroup.is_normal_topologicalClo
+sure {G : Type*} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] (N : Subg
+roup G) [N.Normal] : (Subgr…
+· 使用定理 `instNormalCommutator`：∀ (G : Type u_1) [inst : Group G], (commutator G).
+Normal
 -/
 instance instNormalCommutatorClosure : (commutator G).topologicalClosure.Normal :=
   Subgroup.is_normal_topologicalClosure (commutator G)
 
-/--
-Definition of `TopologicalAbelianization` / `TopologicalAbelianization` 的定义
+/-- The topological abelianization of `absoluteGaloisGroup`, that is, the quotient of
+  `absoluteGaloisGroup` by the topological closure of its commutator subgroup. -/
+/-
+**TopologicalAbelianization** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：TopologicalAbelianization
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TopologicalAbelianization
-  body: G ⧸ Subgroup.topologicalClosure (commutator G)
-
-local notation "G_ab" => TopologicalAbelianization
-
-中文:
-缩写 TopologicalAbelianization
-  定义体: G ⧸ Subgroup.topologicalClosure (commutator G)
-
-local notation "G_ab" => TopologicalAbelianization
-
-Depends on / 依赖: Subgroup, Subgroup.topologicalClosure, commutator, topologicalClosure
+--- 原说明 ---
+The topological abelianization of `absoluteGaloisGroup`, that is, the quotient o
+f
+  `absoluteGaloisGroup` by the topological closure of its commutator subgroup.
 -/
 abbrev TopologicalAbelianization := G ⧸ Subgroup.topologicalClosure (commutator G)
 
@@ -75,40 +66,18 @@ local notation "G_ab" => TopologicalAbelianization
 
 namespace TopologicalAbelianization
 
-/--
-Instance `commGroup` / 实例 `commGroup`
-
-English:
-instance commGroup
-  signature: : CommGroup (G_ab G) where
-  body: fun x y =>
-    Quotient.inductionOn₂' x y fun a b =>
-Quotient.sound'
-QuotientGroup.leftRel_apply.mpr by
-          have h : (a * b)⁻¹ * (b * a) = ⁅b⁻¹, a⁻¹⁆ := by group
-          rw [h]
-          exact Subgroup.le_topologicalClosure _ (Subgroup.commutator_mem_commutator
-            (Subgroup.mem_top b⁻¹) (Subgroup.mem_top a⁻¹))
-  __ : Group (G_ab G) := inferInstance
-
-中文:
-实例 commGroup
-  签名: : 交换群 (G_ab G) where
-  定义体: fun x y =>
-    Quotient.inductionOn₂' x y fun a b =>
-Quotient.sound'
-QuotientGroup.leftRel_apply.mpr by
-          have h : (a * b)⁻¹ * (b * a) = ⁅b⁻¹, a⁻¹⁆ := by group
-          rw [h]
-          exact Subgroup.le_topologicalClosure _ (Subgroup.commutator_mem_commutator
-            (Subgroup.mem_top b⁻¹) (Subgroup.mem_top a⁻¹))
-  __ : Group (G_ab G) := inferInstance
+/-
+**TopologicalAbelianization.commGroup** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalAbel
+ianization`。
+形式化陈述：commGroup : CommGroup (G_ab G) where mul_comm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commGroup : CommGroup (G_ab G) where
   mul_comm := fun x y =>
     Quotient.inductionOn₂' x y fun a b =>
-Quotient.sound'
-QuotientGroup.leftRel_apply.mpr by
+      Quotient.sound' <|
+        QuotientGroup.leftRel_apply.mpr <| by
           have h : (a * b)⁻¹ * (b * a) = ⁅b⁻¹, a⁻¹⁆ := by group
           rw [h]
           exact Subgroup.le_topologicalClosure _ (Subgroup.commutator_mem_commutator
@@ -116,3 +85,4 @@ QuotientGroup.leftRel_apply.mpr by
   __ : Group (G_ab G) := inferInstance
 
 end TopologicalAbelianization
+

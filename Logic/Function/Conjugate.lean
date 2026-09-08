@@ -26,333 +26,337 @@ namespace Function
 variable {α : Type*} {β : Type*} {γ : Type*}
 
 /--
-Definition of `Semiconj` / `Semiconj` 的定义
-
-English:
-definition Semiconj
-  signature: (f : α -> β) (ga : α -> α) (gb : β -> β)
-  body: forall x, f (ga x) = gb (f x)
-
-中文:
-定义 Semiconj
-  签名: (f : α -> β) (ga : α -> α) (gb : β -> β)
-  定义体: forall x, f (ga x) = gb (f x)
+We say that `f : α → β` semiconjugates `ga : α → α` to `gb : β → β` if `f ∘ ga = gb ∘ f`.
+We use `∀ x, f (ga x) = gb (f x)` as the definition, so given `h : Function.Semiconj f ga gb` and
+`a : α`, we have `h a : f (ga a) = gb (f a)` and `h.comp_eq : f ∘ ga = gb ∘ f`.
 -/
-def Semiconj (f : α -> β) (ga : α -> α) (gb : β -> β) : Prop :=
-  forall x, f (ga x) = gb (f x)
+/-
+**Function.Semiconj** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：Semiconj (f : α -> β) (ga : α -> α) (gb : β -> β) : Prop
+参数：f : α -> β；ga : α -> α；gb : β -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We say that `f : α → β` semiconjugates `ga : α → α` to `gb : β → β` if `f ∘ ga =
+ gb ∘ f`.
+We use `∀ x, f (ga x) = gb (f x)` as the definition, so given `h : Function.Semi
+conj f ga gb` and
+`a : α`, we have `h a : f (ga a) = gb (f a)` and `h.comp_eq : f ∘ ga = gb ∘ f`.
+-/
+def Semiconj (f : α → β) (ga : α → α) (gb : β → β) : Prop :=
+  ∀ x, f (ga x) = gb (f x)
 
 namespace Semiconj
 
-variable {f fab : α -> β} {fbc : β -> γ} {ga ga' : α -> α} {gb gb' : β -> β} {gc : γ -> γ}
+variable {f fab : α → β} {fbc : β → γ} {ga ga' : α → α} {gb gb' : β → β} {gc : γ → γ}
 
-/--
-lemma `_root_.Function.semiconj_iff_comp_eq` / 引理 `_root_.Function.semiconj_iff_comp_eq`
+/-- Definition of `Function.Semiconj` in terms of functional equality. -/
+/-
+**Function.Semiconj._root_.Function.semiconj_iff_comp_eq** 是 Mathlib 中的一个引理，位于命名
+空间 `Function.Semiconj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Function.semiconj_iff_comp_eq
-  statement: Semiconj f ga gb ↔ f ∘ ga = gb ∘ f
-  proof: funext_iff.symm
-
-protected alias ⟨comp_eq, _⟩ := semiconj_iff_comp_eq
-
-中文:
-引理 _root_.函数.semiconj_iff_comp_eq
-  结论: Semiconj f ga gb ↔ f ∘ ga = gb ∘ f
-  证明: funext_iff.symm
-
-protected alias ⟨comp_eq, _⟩ := semiconj_iff_comp_eq
-
-Depends on / 依赖: funext_iff, funext_iff.symm
+--- 原说明 ---
+Definition of `Function.Semiconj` in terms of functional equality.
 -/
 lemma _root_.Function.semiconj_iff_comp_eq : Semiconj f ga gb ↔ f ∘ ga = gb ∘ f := funext_iff.symm
 
 protected alias ⟨comp_eq, _⟩ := semiconj_iff_comp_eq
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (h : Semiconj f ga gb) (x : α)
-  statement: f (ga x) = gb (f x)
-  proof: h x
-
-中文:
-定理 eq
-  条件: (h : Semiconj f ga gb) (x : α)
-  结论: f (ga x) = gb (f x)
-  证明: h x
+/-
+**Function.Semiconj.eq** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : α → α} {gb : β → β},   F
+unction.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x)
+参数：x : α；ga x；f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem eq (h : Semiconj f ga gb) (x : α) : f (ga x) = gb (f x) :=
   h x
 
-/--
-theorem `comp_right` / 定理 `comp_right`
+/-- If `f` semiconjugates `ga` to `gb` and `ga'` to `gb'`,
+then it semiconjugates `ga ∘ ga'` to `gb ∘ gb'`. -/
+/-
+**Function.Semiconj.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：comp_right (h : Semiconj f ga gb) (h' : Semiconj f ga' gb') : Semiconj f (
+ga ∘ ga') (gb ∘ gb')
+参数：h : Semiconj f ga gb；h' : Semiconj f ga' gb'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : 
+α → α} {gb : β → β},   Function.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x
+)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem comp_right
-  given: (h : Semiconj f ga gb) (h' : Semiconj f ga' gb')
-  proof: fun x => by
-  simp only [comp_apply, h.eq, h'.eq]
-
-中文:
-定理 comp_right
-  条件: (h : Semiconj f ga gb) (h' : Semiconj f ga' gb')
-  证明: fun x => by
-  simp only [comp_apply, h.eq, h'.eq]
-
-Depends on / 依赖: comp_apply, h.eq
+--- 原说明 ---
+If `f` semiconjugates `ga` to `gb` and `ga'` to `gb'`,
+then it semiconjugates `ga ∘ ga'` to `gb ∘ gb'`.
 -/
 theorem comp_right (h : Semiconj f ga gb) (h' : Semiconj f ga' gb') :
-    Semiconj f (ga ∘ ga') (gb ∘ gb') := fun x => by
+    Semiconj f (ga ∘ ga') (gb ∘ gb') := fun x ↦ by
   simp only [comp_apply, h.eq, h'.eq]
 
-/--
-theorem `trans` / 定理 `trans`
+/-- If `fab : α → β` semiconjugates `ga` to `gb` and `fbc : β → γ` semiconjugates `gb` to `gc`,
+then `fbc ∘ fab` semiconjugates `ga` to `gc`.
 
-English:
-theorem trans
-  given: (hab : Semiconj fab ga gb) (hbc : Semiconj fbc gb gc)
-  proof: fun x => by
-  simp only [comp_apply, hab.eq, hbc.eq]
+See also `Function.Semiconj.comp_left` for a version with reversed arguments. -/
+/-
+**Function.Semiconj.trans** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {fab : α → β} {fbc : β → γ}
+ {ga : α → α} {gb : β → β} {gc : γ → γ},   Function.Semiconj fab ga gb → Functio
+n.Semiconj fbc gb gc → Function.Semiconj (fbc ∘ fab) ga gc
+参数：fbc ∘ fab。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : 
+α → α} {gb : β → β},   Function.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x
+)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 trans
-  条件: (hab : Semiconj fab ga gb) (hbc : Semiconj fbc gb gc)
-  证明: fun x => by
-  simp only [comp_apply, hab.eq, hbc.eq]
+--- 原说明 ---
+If `fab : α → β` semiconjugates `ga` to `gb` and `fbc : β → γ` semiconjugates `g
+b` to `gc`,
+then `fbc ∘ fab` semiconjugates `ga` to `gc`.
+
+See also `Function.Semiconj.comp_left` for a version with reversed arguments.
 -/
 protected theorem trans (hab : Semiconj fab ga gb) (hbc : Semiconj fbc gb gc) :
-    Semiconj (fbc ∘ fab) ga gc := fun x => by
+    Semiconj (fbc ∘ fab) ga gc := fun x ↦ by
   simp only [comp_apply, hab.eq, hbc.eq]
 
-/--
-theorem `comp_left` / 定理 `comp_left`
+/-- If `fbc : β → γ` semiconjugates `gb` to `gc` and `fab : α → β` semiconjugates `ga` to `gb`,
+then `fbc ∘ fab` semiconjugates `ga` to `gc`.
 
-English:
-theorem comp_left
-  given: (hbc : Semiconj fbc gb gc) (hab : Semiconj fab ga gb)
-  proof: hab.trans hbc
+See also `Function.Semiconj.trans` for a version with reversed arguments.
 
-中文:
-定理 comp_left
-  条件: (hbc : Semiconj fbc gb gc) (hab : Semiconj fab ga gb)
-  证明: hab.trans hbc
+**Backward compatibility note:** before 2024-01-13,
+this lemma used to have the same order of arguments that `Function.Semiconj.trans` has now. -/
+/-
+**Function.Semiconj.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：comp_left (hbc : Semiconj fbc gb gc) (hab : Semiconj fab ga gb) : Semiconj
+ (fbc ∘ fab) ga gc
+参数：hbc : Semiconj fbc gb gc；hab : Semiconj fab ga gb。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.trans`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{fab : α → β} {fbc : β → γ} {ga : α → α} {gb : β → β} {gc : γ → γ},   Function.S
+emiconj fab g…
 
-Depends on / 依赖: hab.trans
+--- 原说明 ---
+If `fbc : β → γ` semiconjugates `gb` to `gc` and `fab : α → β` semiconjugates `g
+a` to `gb`,
+then `fbc ∘ fab` semiconjugates `ga` to `gc`.
+
+See also `Function.Semiconj.trans` for a version with reversed arguments.
+
+**Backward compatibility note:** before 2024-01-13,
+this lemma used to have the same order of arguments that `Function.Semiconj.tran
+s` has now.
 -/
 theorem comp_left (hbc : Semiconj fbc gb gc) (hab : Semiconj fab ga gb) :
     Semiconj (fbc ∘ fab) ga gc :=
   hab.trans hbc
 
-/--
-theorem `id_right` / 定理 `id_right`
+/-- Any function semiconjugates the identity function to the identity function. -/
+/-
+**Function.Semiconj.id_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：id_right : Semiconj f id id
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem id_right
-  statement: Semiconj f id id
-  proof: fun _ => rfl
-
-中文:
-定理 id_right
-  结论: Semiconj f id id
-  证明: fun _ => rfl
+--- 原说明 ---
+Any function semiconjugates the identity function to the identity function.
 -/
-theorem id_right : Semiconj f id id := fun _ => rfl
+theorem id_right : Semiconj f id id := fun _ ↦ rfl
 
-/--
-theorem `id_left` / 定理 `id_left`
+/-- The identity function semiconjugates any function to itself. -/
+/-
+**Function.Semiconj.id_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：id_left : Semiconj id ga ga
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem id_left
-  statement: Semiconj id ga ga
-  proof: fun _ => rfl
-
-中文:
-定理 id_left
-  结论: Semiconj id ga ga
-  证明: fun _ => rfl
+--- 原说明 ---
+The identity function semiconjugates any function to itself.
 -/
-theorem id_left : Semiconj id ga ga := fun _ => rfl
+theorem id_left : Semiconj id ga ga := fun _ ↦ rfl
 
-/--
-theorem `inverses_right` / 定理 `inverses_right`
+/-- If `f : α → β` semiconjugates `ga : α → α` to `gb : β → β`,
+`ga'` is a right inverse of `ga`, and `gb'` is a left inverse of `gb`,
+then `f` semiconjugates `ga'` to `gb'` as well. -/
+/-
+**Function.Semiconj.inverses_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`
+。
+形式化陈述：inverses_right (h : Semiconj f ga gb) (ha : RightInverse ga' ga) (hb : Lef
+tInverse gb' gb) : Semiconj f ga' gb'
+参数：h : Semiconj f ga gb；ha : RightInverse ga' ga；hb : LeftInverse gb' gb。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Semiconj.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : 
+α → α} {gb : β → β},   Function.Semiconj f ga gb → ∀ (x : α), f (ga x) = gb (f x
+)
 
-English:
-theorem inverses_right
-  given: (h : Semiconj f ga gb) (ha : RightInverse ga' ga) (hb : LeftInverse gb' gb)
-  proof: fun x => by
-  rw [← hb (f (ga' x))]; rw [← h.eq]; rw [ha x]
-
-中文:
-定理 inverses_right
-  条件: (h : Semiconj f ga gb) (ha : 右逆 ga' ga) (hb : 左逆 gb' gb)
-  证明: fun x => by
-  rw [← hb (f (ga' x))]; rw [← h.eq]; rw [ha x]
-
-Depends on / 依赖: h.eq
+--- 原说明 ---
+If `f : α → β` semiconjugates `ga : α → α` to `gb : β → β`,
+`ga'` is a right inverse of `ga`, and `gb'` is a left inverse of `gb`,
+then `f` semiconjugates `ga'` to `gb'` as well.
 -/
 theorem inverses_right (h : Semiconj f ga gb) (ha : RightInverse ga' ga) (hb : LeftInverse gb' gb) :
-    Semiconj f ga' gb' := fun x => by
-  rw [← hb (f (ga' x))]; rw [← h.eq]; rw [ha x]
+    Semiconj f ga' gb' := fun x ↦ by
+  rw [← hb (f (ga' x)), ← h.eq, ha x]
 
-/--
-lemma `inverse_left` / 引理 `inverse_left`
+/-- If `f` semiconjugates `ga` to `gb` and `f'` is both a left and a right inverse of `f`,
+then `f'` semiconjugates `gb` to `ga`. -/
+/-
+**Function.Semiconj.inverse_left** 是 Mathlib 中的一个引理，位于命名空间 `Function.Semiconj`。
+形式化陈述：inverse_left {f' : β -> α} (h : Semiconj f ga gb) (hf₁ : LeftInverse f' f)
+ (hf₂ : RightInverse f' f) : Semiconj f' gb ga
+参数：h : Semiconj f ga gb；hf₁ : LeftInverse f' f；hf₂ : RightInverse f' f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
 
-English:
-lemma inverse_left
-  statement: {f' : β -> α} (h : Semiconj f ga gb)
-  proof: fun x => by
-  rw [← hf₁.injective.eq_iff]; rw [h]; rw [hf₂]; rw [hf₂]
-
-中文:
-引理 inverse_left
-  结论: {f' : β -> α} (h : Semiconj f ga gb)
-  证明: fun x => by
-  rw [← hf₁.injective.eq_iff]; rw [h]; rw [hf₂]; rw [hf₂]
-
-Depends on / 依赖: eq_iff, injective, injective.eq_iff
+--- 原说明 ---
+If `f` semiconjugates `ga` to `gb` and `f'` is both a left and a right inverse o
+f `f`,
+then `f'` semiconjugates `gb` to `ga`.
 -/
-lemma inverse_left {f' : β -> α} (h : Semiconj f ga gb)
-    (hf₁ : LeftInverse f' f) (hf₂ : RightInverse f' f) : Semiconj f' gb ga := fun x => by
-  rw [← hf₁.injective.eq_iff]; rw [h]; rw [hf₂]; rw [hf₂]
+lemma inverse_left {f' : β → α} (h : Semiconj f ga gb)
+    (hf₁ : LeftInverse f' f) (hf₂ : RightInverse f' f) : Semiconj f' gb ga := fun x ↦ by
+  rw [← hf₁.injective.eq_iff, h, hf₂, hf₂]
 
-/--
-theorem `option_map` / 定理 `option_map`
+/-- If `f : α → β` semiconjugates `ga : α → α` to `gb : β → β`,
+then `Option.map f` semiconjugates `Option.map ga` to `Option.map gb`. -/
+/-
+**Function.Semiconj.option_map** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : α → α} {gb : β → β},   F
+unction.Semiconj f ga gb → Function.Semiconj (Option.map f) (Option.map ga) (Opt
+ion.map gb)
+参数：Option.map f；Option.map ga；Option.map gb。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-theorem option_map
-  given: {f : α -> β} {ga : α -> α} {gb : β -> β} (h : Semiconj f ga gb)
-
-中文:
-定理 option_map
-  条件: {f : α -> β} {ga : α -> α} {gb : β -> β} (h : Semiconj f ga gb)
+--- 原说明 ---
+If `f : α → β` semiconjugates `ga : α → α` to `gb : β → β`,
+then `Option.map f` semiconjugates `Option.map ga` to `Option.map gb`.
 -/
-theorem option_map {f : α -> β} {ga : α -> α} {gb : β -> β} (h : Semiconj f ga gb) :
+theorem option_map {f : α → β} {ga : α → α} {gb : β → β} (h : Semiconj f ga gb) :
     Semiconj (Option.map f) (Option.map ga) (Option.map gb)
   | none => rfl
-| some _ => congr_arg some h _
+  | some _ => congr_arg some <| h _
 
 end Semiconj
 
 /--
-Definition of `Commute` / `Commute` 的定义
-
-English:
-definition Commute
-  signature: (f g : α -> α)
-  body: Semiconj f g g
-
-中文:
-定义 Commute
-  签名: (f g : α -> α)
-  定义体: Semiconj f g g
+Two maps `f g : α → α` commute if `f (g x) = g (f x)` for all `x : α`.
+Given `h : Function.commute f g` and `a : α`, we have `h a : f (g a) = g (f a)` and
+`h.comp_eq : f ∘ g = g ∘ f`.
 -/
-protected def Commute (f g : α -> α) : Prop :=
+/-
+**Function.Commute** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：{α : Type u_1} → (α → α) → (α → α) → Prop
+参数：α → α；α → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Two maps `f g : α → α` commute if `f (g x) = g (f x)` for all `x : α`.
+Given `h : Function.commute f g` and `a : α`, we have `h a : f (g a) = g (f a)` 
+and
+`h.comp_eq : f ∘ g = g ∘ f`.
+-/
+protected def Commute (f g : α → α) : Prop :=
   Semiconj f g g
 
 open Function (Commute)
 
-/--
-theorem `Semiconj.commute` / 定理 `Semiconj.commute`
+/-- Reinterpret `Function.Semiconj f g g` as `Function.Commute f g`. These two predicates are
+definitionally equal but have different dot-notation lemmas. -/
+/-
+**Function.Semiconj.commute** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj`。
+形式化陈述：∀ {α : Type u_1} {f g : α → α}, Function.Semiconj f g g → Function.Commute
+ f g
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Semiconj.commute
-  given: {f g : α -> α} (h : Semiconj f g g)
-  statement: Commute f g
-  proof: h
-
-中文:
-定理 Semiconj.commute
-  条件: {f g : α -> α} (h : Semiconj f g g)
-  结论: Commute f g
-  证明: h
+--- 原说明 ---
+Reinterpret `Function.Semiconj f g g` as `Function.Commute f g`. These two predi
+cates are
+definitionally equal but have different dot-notation lemmas.
 -/
-theorem Semiconj.commute {f g : α -> α} (h : Semiconj f g g) : Commute f g := h
+theorem Semiconj.commute {f g : α → α} (h : Semiconj f g g) : Commute f g := h
 
 namespace Commute
 
-variable {f f' g g' : α -> α}
+variable {f f' g g' : α → α}
 
-/--
-theorem `semiconj` / 定理 `semiconj`
+/-- Reinterpret `Function.Commute f g` as `Function.Semiconj f g g`. These two predicates are
+definitionally equal but have different dot-notation lemmas. -/
+/-
+**Function.Commute.semiconj** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：semiconj (h : Commute f g) : Semiconj f g g
+参数：h : Commute f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem semiconj
-  given: (h : Commute f g)
-  statement: Semiconj f g g
-  proof: h
-
-@[refl]
-
-中文:
-定理 semiconj
-  条件: (h : Commute f g)
-  结论: Semiconj f g g
-  证明: h
-
-@[refl]
+--- 原说明 ---
+Reinterpret `Function.Commute f g` as `Function.Semiconj f g g`. These two predi
+cates are
+definitionally equal but have different dot-notation lemmas.
 -/
 theorem semiconj (h : Commute f g) : Semiconj f g g := h
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (f : α -> α)
-  statement: Commute f f
-  proof: fun _ => Eq.refl _
-
-@[symm]
-
-中文:
-定理 refl
-  条件: (f : α -> α)
-  结论: Commute f f
-  证明: fun _ => Eq.refl _
-
-@[symm]
-
-Depends on / 依赖: Eq.refl
+/-
+**Function.Commute.refl** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：refl (f : α -> α) : Commute f f
+参数：f : α -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem refl (f : α -> α) : Commute f f := fun _ => Eq.refl _
+theorem refl (f : α → α) : Commute f f := fun _ ↦ Eq.refl _
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: (h : Commute f g)
-  statement: Commute g f
-  proof: fun x => (h x).symm
-
-中文:
-定理 symm
-  条件: (h : Commute f g)
-  结论: Commute g f
-  证明: fun x => (h x).symm
+/-
+**Function.Commute.symm** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：symm (h : Commute f g) : Commute g f
+参数：h : Commute f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem symm (h : Commute f g) : Commute g f := fun x => (h x).symm
+theorem symm (h : Commute f g) : Commute g f := fun x ↦ (h x).symm
 
-/--
-theorem `comp_right` / 定理 `comp_right`
+/-- If `f` commutes with `g` and `g'`, then it commutes with `g ∘ g'`. -/
+/-
+**Function.Commute.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：comp_right (h : Commute f g) (h' : Commute f g') : Commute f (g ∘ g')
+参数：h : Commute f g；h' : Commute f g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.comp_right`：comp_right (h : Semiconj f ga gb) (h' : Se
+miconj f ga' gb') : Semiconj f (ga ∘ ga') (gb ∘ gb')
 
-English:
-theorem comp_right
-  given: (h : Commute f g) (h' : Commute f g')
-  statement: Commute f (g ∘ g')
-  proof: Semiconj.comp_right h h'
-
-中文:
-定理 comp_right
-  条件: (h : Commute f g) (h' : Commute f g')
-  结论: Commute f (g ∘ g')
-  证明: Semiconj.comp_right h h'
-
-Depends on / 依赖: Semiconj, Semiconj.comp_right, comp_right
+--- 原说明 ---
+If `f` commutes with `g` and `g'`, then it commutes with `g ∘ g'`.
 -/
 theorem comp_right (h : Commute f g) (h' : Commute f g') : Commute f (g ∘ g') :=
   Semiconj.comp_right h h'
@@ -361,214 +365,218 @@ theorem comp_right (h : Commute f g) (h' : Commute f g') : Commute f (g ∘ g') 
 nonrec theorem comp_left (h : Commute f g) (h' : Commute f' g) : Commute (f ∘ f') g :=
   h.comp_left h'
 
-/--
-theorem `id_right` / 定理 `id_right`
+/-- Any self-map commutes with the identity map. -/
+/-
+**Function.Commute.id_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：id_right : Commute f id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.id_right`：id_right : Semiconj f id id
 
-English:
-theorem id_right
-  statement: Commute f id
-  proof: Semiconj.id_right
-
-中文:
-定理 id_right
-  结论: Commute f id
-  证明: Semiconj.id_right
-
-Depends on / 依赖: Semiconj, Semiconj.id_right, id_right
+--- 原说明 ---
+Any self-map commutes with the identity map.
 -/
 theorem id_right : Commute f id := Semiconj.id_right
 
-/--
-theorem `id_left` / 定理 `id_left`
+/-- The identity map commutes with any self-map. -/
+/-
+**Function.Commute.id_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Commute`。
+形式化陈述：id_left : Commute id f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.id_left`：id_left : Semiconj id ga ga
 
-English:
-theorem id_left
-  statement: Commute id f
-  proof: Semiconj.id_left
-
-中文:
-定理 id_left
-  结论: Commute id f
-  证明: Semiconj.id_left
-
-Depends on / 依赖: Semiconj, Semiconj.id_left, id_left
+--- 原说明 ---
+The identity map commutes with any self-map.
 -/
 theorem id_left : Commute id f :=
   Semiconj.id_left
 
 /-- If `f` commutes with `g`, then `Option.map f` commutes with `Option.map g`. -/
-nonrec theorem option_map {f g : α -> α} (h : Commute f g) : Commute (Option.map f) (Option.map g) :=
+nonrec theorem option_map {f g : α → α} (h : Commute f g) : Commute (Option.map f) (Option.map g) :=
   h.option_map
 
 end Commute
 
 /--
-Definition of `Semiconj₂` / `Semiconj₂` 的定义
-
-English:
-definition Semiconj₂
-  signature: (f : α -> β) (ga : α -> α -> α) (gb : β -> β -> β)
-  body: forall x y, f (ga x y) = gb (f x) (f y)
-
-中文:
-定义 Semiconj₂
-  签名: (f : α -> β) (ga : α -> α -> α) (gb : β -> β -> β)
-  定义体: forall x y, f (ga x y) = gb (f x) (f y)
+A map `f` semiconjugates a binary operation `ga` to a binary operation `gb` if
+for all `x`, `y` we have `f (ga x y) = gb (f x) (f y)`. E.g., a `MonoidHom`
+semiconjugates `(*)` to `(*)`.
 -/
-def Semiconj₂ (f : α -> β) (ga : α -> α -> α) (gb : β -> β -> β) : Prop :=
-  forall x y, f (ga x y) = gb (f x) (f y)
+/-
+**Function.Semiconj** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：Semiconj (f : α -> β) (ga : α -> α) (gb : β -> β) : Prop
+参数：f : α -> β；ga : α -> α；gb : β -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A map `f` semiconjugates a binary operation `ga` to a binary operation `gb` if
+for all `x`, `y` we have `f (ga x y) = gb (f x) (f y)`. E.g., a `MonoidHom`
+semiconjugates `(*)` to `(*)`.
+-/
+def Semiconj₂ (f : α → β) (ga : α → α → α) (gb : β → β → β) : Prop :=
+  ∀ x y, f (ga x y) = gb (f x) (f y)
 
 namespace Semiconj₂
 
-variable {f : α -> β} {ga : α -> α -> α} {gb : β -> β -> β}
+variable {f : α → β} {ga : α → α → α} {gb : β → β → β}
 
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (h : Semiconj₂ f ga gb) (x y : α)
-  statement: f (ga x y) = gb (f x) (f y)
-  proof: h x y
-
-中文:
-定理 eq
-  条件: (h : Semiconj₂ f ga gb) (x y : α)
-  结论: f (ga x y) = gb (f x) (f y)
-  证明: h x y
+/-
+**Function.Semiconj₂.eq** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj₂`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : α → α → α} {gb : β → β →
+ β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga x y) = gb (f x) (f y)
+参数：x y : α；ga x y；f x；f y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem eq (h : Semiconj₂ f ga gb) (x y : α) : f (ga x y) = gb (f x) (f y) :=
   h x y
-
-/--
-theorem `comp_eq` / 定理 `comp_eq`
-
-English:
-theorem comp_eq
-  given: (h : Semiconj₂ f ga gb)
-  statement: bicompr f ga = bicompl gb f f
-  proof: funext fun x => funext h x
-
-中文:
-定理 comp_eq
-  条件: (h : Semiconj₂ f ga gb)
-  结论: bicompr f ga = bicompl gb f f
-  证明: funext fun x => funext h x
+/-
+**Function.Semiconj₂.comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj₂`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga : α → α → α} {gb : β → β →
+ β},   Function.Semiconj₂ f ga gb → Function.bicompr f ga = Function.bicompl gb 
+f f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 protected theorem comp_eq (h : Semiconj₂ f ga gb) : bicompr f ga = bicompl gb f f :=
-funext fun x => funext h x
-
-/--
-theorem `id_left` / 定理 `id_left`
-
-English:
-theorem id_left
-  given: (op : α -> α -> α)
-  statement: Semiconj₂ id op op
-  proof: fun _ _ => rfl
-
-中文:
-定理 id_left
-  条件: (op : α -> α -> α)
-  结论: Semiconj₂ id op op
-  证明: fun _ _ => rfl
+  funext fun x ↦ funext <| h x
+/-
+**Function.Semiconj₂.id_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj₂`。
+形式化陈述：id_left (op : α -> α -> α) : Semiconj₂ id op op
+参数：op : α -> α -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_left (op : α -> α -> α) : Semiconj₂ id op op := fun _ _ => rfl
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: {f' : β -> γ} {gc : γ -> γ -> γ} (hf' : Semiconj₂ f' gb gc) (hf : Semiconj₂ f ga gb)
-  proof: fun x y => by simp only [hf'.eq, hf.eq, comp_apply]
-
-中文:
-定理 comp
-  条件: {f' : β -> γ} {gc : γ -> γ -> γ} (hf' : Semiconj₂ f' gb gc) (hf : Semiconj₂ f ga gb)
-  证明: fun x y => by simp only [hf'.eq, hf.eq, comp_apply]
-
-Depends on / 依赖: comp_apply, hf.eq
+theorem id_left (op : α → α → α) : Semiconj₂ id op op := fun _ _ ↦ rfl
+/-
+**Function.Semiconj₂.comp** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semiconj₂`。
+形式化陈述：comp {f' : β -> γ} {gc : γ -> γ -> γ} (hf' : Semiconj₂ f' gb gc) (hf : Sem
+iconj₂ f ga gb) : Semiconj₂ (f' ∘ f) ga gc
+参数：hf' : Semiconj₂ f' gb gc；hf : Semiconj₂ f ga gb。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj₂.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga :
+ α → α → α} {gb : β → β → β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga 
+x y) = gb (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp {f' : β -> γ} {gc : γ -> γ -> γ} (hf' : Semiconj₂ f' gb gc) (hf : Semiconj₂ f ga gb) :
-    Semiconj₂ (f' ∘ f) ga gc := fun x y => by simp only [hf'.eq, hf.eq, comp_apply]
-
-/--
-theorem `isAssociative_right` / 定理 `isAssociative_right`
-
-English:
-theorem isAssociative_right
-  given: [Std.Associative ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f)
-  proof: ⟨h_surj.forall₃.2 fun x₁ x₂ x₃ => by simp only [← h.eq, Std.Associative.assoc (op := ga)]⟩
-
-中文:
-定理 isAssociative_right
-  条件: [Std.结合 ga] (h : Semiconj₂ f ga gb) (h_surj : 满射 f)
-  证明: ⟨h_surj.forall₃.2 fun x₁ x₂ x₃ => by simp only [← h.eq, Std.Associative.assoc (op := ga)]⟩
-
-Depends on / 依赖: Associative, Std.Associative.assoc, h.eq, h_surj, h_surj.forall
+theorem comp {f' : β → γ} {gc : γ → γ → γ} (hf' : Semiconj₂ f' gb gc) (hf : Semiconj₂ f ga gb) :
+    Semiconj₂ (f' ∘ f) ga gc := fun x y ↦ by simp only [hf'.eq, hf.eq, comp_apply]
+/-
+**Function.Semiconj₂.isAssociative_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Sem
+iconj₂`。
+形式化陈述：isAssociative_right [Std.Associative ga] (h : Semiconj₂ f ga gb) (h_surj :
+ Surjective f) : Std.Associative gb
+参数：h : Semiconj₂ f ga gb；h_surj : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₃`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f →     ∀ {p : β → β → β → Prop}, (∀ (y₁ y₂ y₃ : β), p y
+₁ y₂ y₃) ↔ ∀ (x₁ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Semiconj₂.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga :
+ α → α → α} {gb : β → β → β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga 
+x y) = gb (…
+· 使用定理 `Std.Associative.assoc`：∀ {α : Sort u} {op : α → α → α} [self : Std.Assoc
+iative op] (a b c : α), op (op a b) c = op a (op b c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isAssociative_right [Std.Associative ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f) :
     Std.Associative gb :=
-  ⟨h_surj.forall₃.2 fun x₁ x₂ x₃ => by simp only [← h.eq, Std.Associative.assoc (op := ga)]⟩
-
-/--
-theorem `isAssociative_left` / 定理 `isAssociative_left`
-
-English:
-theorem isAssociative_left
-  given: [Std.Associative gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f)
-  proof: ⟨fun x₁ x₂ x₃ => h_inj by simp only [h.eq, Std.Associative.assoc (op := gb)]⟩
-
-中文:
-定理 isAssociative_left
-  条件: [Std.结合 gb] (h : Semiconj₂ f ga gb) (h_inj : 单射 f)
-  证明: ⟨fun x₁ x₂ x₃ => h_inj by simp only [h.eq, Std.Associative.assoc (op := gb)]⟩
-
-Depends on / 依赖: Associative, Std.Associative.assoc, h.eq, h_inj
+  ⟨h_surj.forall₃.2 fun x₁ x₂ x₃ ↦ by simp only [← h.eq, Std.Associative.assoc (op := ga)]⟩
+/-
+**Function.Semiconj₂.isAssociative_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semi
+conj₂`。
+形式化陈述：isAssociative_left [Std.Associative gb] (h : Semiconj₂ f ga gb) (h_inj : I
+njective f) : Std.Associative ga
+参数：h : Semiconj₂ f ga gb；h_inj : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj₂.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga :
+ α → α → α} {gb : β → β → β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga 
+x y) = gb (…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Std.Associative.assoc`：∀ {α : Sort u} {op : α → α → α} [self : Std.Assoc
+iative op] (a b c : α), op (op a b) c = op a (op b c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isAssociative_left [Std.Associative gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f) :
     Std.Associative ga :=
-⟨fun x₁ x₂ x₃ => h_inj by simp only [h.eq, Std.Associative.assoc (op := gb)]⟩
-
-/--
-theorem `isIdempotent_right` / 定理 `isIdempotent_right`
-
-English:
-theorem isIdempotent_right
-  given: [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f)
-  proof: ⟨h_surj.forall.2 fun x => by simp only [← h.eq, Std.IdempotentOp.idempotent (op := ga)]⟩
-
-中文:
-定理 isIdempotent_right
-  条件: [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj : 满射 f)
-  证明: ⟨h_surj.forall.2 fun x => by simp only [← h.eq, Std.IdempotentOp.idempotent (op := ga)]⟩
-
-Depends on / 依赖: IdempotentOp, Std.IdempotentOp.idempotent, h.eq, h_surj, h_surj.forall, idempotent
+  ⟨fun x₁ x₂ x₃ ↦ h_inj <| by simp only [h.eq, Std.Associative.assoc (op := gb)]⟩
+/-
+**Function.Semiconj₂.isIdempotent_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semi
+conj₂`。
+形式化陈述：isIdempotent_right [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj :
+ Surjective f) : Std.IdempotentOp gb
+参数：h : Semiconj₂ f ga gb；h_surj : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Semiconj₂.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga :
+ α → α → α} {gb : β → β → β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga 
+x y) = gb (…
+· 使用定理 `Std.IdempotentOp.idempotent`：∀ {α : Sort u} {op : α → α → α} [self : Std
+.IdempotentOp op] (x : α), op x x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isIdempotent_right [Std.IdempotentOp ga] (h : Semiconj₂ f ga gb) (h_surj : Surjective f) :
     Std.IdempotentOp gb :=
-  ⟨h_surj.forall.2 fun x => by simp only [← h.eq, Std.IdempotentOp.idempotent (op := ga)]⟩
-
-/--
-theorem `isIdempotent_left` / 定理 `isIdempotent_left`
-
-English:
-theorem isIdempotent_left
-  given: [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f)
-  proof: ⟨fun x => h_inj by rw [h.eq, Std.IdempotentOp.idempotent (op := gb)]⟩
-
-中文:
-定理 isIdempotent_left
-  条件: [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : 单射 f)
-  证明: ⟨fun x => h_inj by rw [h.eq, Std.IdempotentOp.idempotent (op := gb)]⟩
-
-Depends on / 依赖: IdempotentOp, Std.IdempotentOp.idempotent, h.eq, h_inj, idempotent
+  ⟨h_surj.forall.2 fun x ↦ by simp only [← h.eq, Std.IdempotentOp.idempotent (op := ga)]⟩
+/-
+**Function.Semiconj₂.isIdempotent_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.Semic
+onj₂`。
+形式化陈述：isIdempotent_left [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : I
+njective f) : Std.IdempotentOp ga
+参数：h : Semiconj₂ f ga gb；h_inj : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Semiconj₂.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {ga :
+ α → α → α} {gb : β → β → β},   Function.Semiconj₂ f ga gb → ∀ (x y : α), f (ga 
+x y) = gb (…
+· 使用定理 `Std.IdempotentOp.idempotent`：∀ {α : Sort u} {op : α → α → α} [self : Std
+.IdempotentOp op] (x : α), op x x = x
 -/
 theorem isIdempotent_left [Std.IdempotentOp gb] (h : Semiconj₂ f ga gb) (h_inj : Injective f) :
     Std.IdempotentOp ga :=
-⟨fun x => h_inj by rw [h.eq, Std.IdempotentOp.idempotent (op := gb)]⟩
+  ⟨fun x ↦ h_inj <| by rw [h.eq, Std.IdempotentOp.idempotent (op := gb)]⟩
 
 end Semiconj₂
 
 end Function
+

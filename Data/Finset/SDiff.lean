@@ -46,1224 +46,710 @@ section Sdiff
 
 variable [DecidableEq α] {s t u v : Finset α} {a b : α}
 
-/--
-Instance `instSDiff` / 实例 `instSDiff`
+/-- `s \ t` is the set consisting of the elements of `s` that are not in `t`. -/
+/-
+**Finset.instSDiff** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instSDiff : SDiff (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSDiff
-  signature: : SDiff (Finset α)
-  body: ⟨fun s₁ s₂ => ⟨s₁.1 - s₂.1, nodup_of_le (Multiset.sub_le_self ..) s₁.2⟩⟩
-
-@[simp]
-
-中文:
-实例 instSDiff
-  签名: : 对称差 (有限集 α)
-  定义体: ⟨fun s₁ s₂ => ⟨s₁.1 - s₂.1, nodup_of_le (Multiset.sub_le_self ..) s₁.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.sub_le_self, nodup_of_le, sub_le_self
+--- 原说明 ---
+`s \ t` is the set consisting of the elements of `s` that are not in `t`.
 -/
 instance instSDiff : SDiff (Finset α) :=
   ⟨fun s₁ s₂ => ⟨s₁.1 - s₂.1, nodup_of_le (Multiset.sub_le_self ..) s₁.2⟩⟩
 
 @[simp]
-/--
-theorem `sdiff_val` / 定理 `sdiff_val`
-
-English:
-theorem sdiff_val
-  given: (s₁ s₂ : Finset α)
-  statement: (s₁ \ s₂).val = s₁.val - s₂.val
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 sdiff_val
-  条件: (s₁ s₂ : 有限集 α)
-  结论: (s₁ \ s₂).val = s₁.val - s₂.val
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finset.sdiff_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_val (s₁ s₂ : Finset α) : (s₁ \ s₂).val = s₁.val - s₂.val
+参数：s₁ s₂ : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sdiff_val (s₁ s₂ : Finset α) : (s₁ \ s₂).val = s₁.val - s₂.val :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `mem_sdiff` / 定理 `mem_sdiff`
-
-English:
-theorem mem_sdiff
-  statement: a in s \ t ↔ a in s ∧ a ∉ t
-  proof: mem_sub_of_nodup s.2
-
-@[simp]
-
-中文:
-定理 mem_sdiff
-  结论: a in s \ t ↔ a in s ∧ a ∉ t
-  证明: mem_sub_of_nodup s.2
-
-@[simp]
-
-Depends on / 依赖: mem_sub_of_nodup
+/-
+**Finset.mem_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_sdiff : a in s \ t ↔ a in s ∧ a ∉ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_sub_of_nodup`：mem_sub_of_nodup [DecidableEq α] {a : α} {s t
+ : Multiset α} (d : Nodup s) : a in s - t ↔ a in s ∧ a ∉ t
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
-theorem mem_sdiff : a in s \ t ↔ a in s ∧ a ∉ t :=
+theorem mem_sdiff : a ∈ s \ t ↔ a ∈ s ∧ a ∉ t :=
   mem_sub_of_nodup s.2
 
 @[simp]
-/--
-theorem `inter_sdiff_self` / 定理 `inter_sdiff_self`
-
-English:
-theorem inter_sdiff_self
-  given: (s₁ s₂ : Finset α)
-  statement: s₁ inter (s₂ \ s₁) = ∅
-  proof: by grind
-
-中文:
-定理 inter_sdiff_self
-  条件: (s₁ s₂ : 有限集 α)
-  结论: s₁ inter (s₂ \ s₁) = ∅
-  证明: by grind
+/-
+**Finset.inter_sdiff_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inter_sdiff_self (s₁ s₂ : Finset α) : s₁ inter (s₂ \ s₁) = ∅
+参数：s₁ s₂ : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inter_sdiff_self (s₁ s₂ : Finset α) : s₁ inter (s₂ \ s₁) = ∅ := by grind
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: GeneralizedBooleanAlgebra (Finset α)
-  body: by grind
-  inf_inf_sdiff := by grind
-
-中文:
-实例 :
-  签名: Generalized布尔ean代数 (有限集 α)
-  定义体: by grind
-  inf_inf_sdiff := by grind
-
-Depends on / 依赖: inf_inf_sdiff
+theorem inter_sdiff_self (s₁ s₂ : Finset α) : s₁ ∩ (s₂ \ s₁) = ∅ := by grind
+/-
+**Finset.** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : GeneralizedBooleanAlgebra (Finset α) where
   sup_inf_sdiff := by grind
   inf_inf_sdiff := by grind
-
-/--
-theorem `notMem_sdiff_of_mem_right` / 定理 `notMem_sdiff_of_mem_right`
-
-English:
-theorem notMem_sdiff_of_mem_right
-  given: (h : a in t)
-  statement: a ∉ s \ t
-  proof: by grind
-
-中文:
-定理 notMem_sdiff_of_mem_right
-  条件: (h : a in t)
-  结论: a ∉ s \ t
-  证明: by grind
+/-
+**Finset.notMem_sdiff_of_mem_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：notMem_sdiff_of_mem_right (h : a in t) : a ∉ s \ t
+参数：h : a in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem notMem_sdiff_of_mem_right (h : a in t) : a ∉ s \ t := by grind
-
-/--
-theorem `notMem_sdiff_of_notMem_left` / 定理 `notMem_sdiff_of_notMem_left`
-
-English:
-theorem notMem_sdiff_of_notMem_left
-  given: (h : a ∉ s)
-  statement: a ∉ s \ t
-  proof: by simp [h]
-
-中文:
-定理 notMem_sdiff_of_notMem_left
-  条件: (h : a ∉ s)
-  结论: a ∉ s \ t
-  证明: by simp [h]
+theorem notMem_sdiff_of_mem_right (h : a ∈ t) : a ∉ s \ t := by grind
+/-
+**Finset.notMem_sdiff_of_notMem_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：notMem_sdiff_of_notMem_left (h : a ∉ s) : a ∉ s \ t
+参数：h : a ∉ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem notMem_sdiff_of_notMem_left (h : a ∉ s) : a ∉ s \ t := by simp [h]
-
-/--
-theorem `union_sdiff_of_subset` / 定理 `union_sdiff_of_subset`
-
-English:
-theorem union_sdiff_of_subset
-  given: (h : s subseteq t)
-  statement: s union t \ s = t
-  proof: by grind
-
-中文:
-定理 union_sdiff_of_subset
-  条件: (h : s subseteq t)
-  结论: s union t \ s = t
-  证明: by grind
+/-
+**Finset.union_sdiff_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_of_subset (h : s subseteq t) : s union t \ s = t
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem union_sdiff_of_subset (h : s subseteq t) : s union t \ s = t := by grind
-
-/--
-theorem `sdiff_union_of_subset` / 定理 `sdiff_union_of_subset`
-
-English:
-theorem sdiff_union_of_subset
-  given: {s₁ s₂ : Finset α} (h : s₁ subseteq s₂)
-  statement: s₂ \ s₁ union s₁ = s₂
-  proof: by grind
-
-中文:
-定理 sdiff_union_of_subset
-  条件: {s₁ s₂ : 有限集 α} (h : s₁ subseteq s₂)
-  结论: s₂ \ s₁ union s₁ = s₂
-  证明: by grind
+theorem union_sdiff_of_subset (h : s ⊆ t) : s ∪ t \ s = t := by grind
+/-
+**Finset.sdiff_union_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_union_of_subset {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₂ \ s₁ un
+ion s₁ = s₂
+参数：h : s₁ subseteq s₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sdiff_union_of_subset {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₂ \ s₁ union s₁ = s₂ := by grind
+theorem sdiff_union_of_subset {s₁ s₂ : Finset α} (h : s₁ ⊆ s₂) : s₂ \ s₁ ∪ s₁ = s₂ := by grind
 
-/--
-lemma `inter_sdiff_assoc` / 引理 `inter_sdiff_assoc`
+/-- See also `Finset.sdiff_inter_right_comm`. -/
+/-
+**Finset.inter_sdiff_assoc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：inter_sdiff_assoc (s t u : Finset α) : (s inter t) \ u = s inter (t \ u)
+参数：s t u : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_sdiff_assoc`：inf_sdiff_assoc (x y z : α) : (x ⊓ y) \ z = x ⊓ y \ z
 
-English:
-lemma inter_sdiff_assoc
-  given: (s t u : Finset α)
-  statement: (s inter t) \ u = s inter (t \ u)
-  proof: inf_sdiff_assoc ..
-
-中文:
-引理 inter_sdiff_assoc
-  条件: (s t u : 有限集 α)
-  结论: (s inter t) \ u = s inter (t \ u)
-  证明: inf_sdiff_assoc ..
-
-Depends on / 依赖: inf_sdiff_assoc
+--- 原说明 ---
+See also `Finset.sdiff_inter_right_comm`.
 -/
-lemma inter_sdiff_assoc (s t u : Finset α) : (s inter t) \ u = s inter (t \ u) := inf_sdiff_assoc ..
+lemma inter_sdiff_assoc (s t u : Finset α) : (s ∩ t) \ u = s ∩ (t \ u) := inf_sdiff_assoc ..
 
-/--
-lemma `sdiff_inter_right_comm` / 引理 `sdiff_inter_right_comm`
+/-- See also `Finset.inter_sdiff_assoc`. -/
+/-
+**Finset.sdiff_inter_right_comm** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：sdiff_inter_right_comm (s t u : Finset α) : s \ t inter u = (s inter u) \ 
+t
+参数：s t u : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_inf_right_comm`：sdiff_inf_right_comm (x y z : α) : x \ z ⊓ y = (x 
+⊓ y) \ z
 
-English:
-lemma sdiff_inter_right_comm
-  given: (s t u : Finset α)
-  statement: s \ t inter u = (s inter u) \ t
-  proof: sdiff_inf_right_comm ..
-
-中文:
-引理 sdiff_inter_right_comm
-  条件: (s t u : 有限集 α)
-  结论: s \ t inter u = (s inter u) \ t
-  证明: sdiff_inf_right_comm ..
-
-Depends on / 依赖: sdiff_inf_right_comm
+--- 原说明 ---
+See also `Finset.inter_sdiff_assoc`.
 -/
-lemma sdiff_inter_right_comm (s t u : Finset α) : s \ t inter u = (s inter u) \ t := sdiff_inf_right_comm ..
-
-/--
-lemma `inter_sdiff_left_comm` / 引理 `inter_sdiff_left_comm`
-
-English:
-lemma inter_sdiff_left_comm
-  given: (s t u : Finset α)
-  statement: s inter (t \ u) = t inter (s \ u)
-  proof: inf_sdiff_left_comm ..
+lemma sdiff_inter_right_comm (s t u : Finset α) : s \ t ∩ u = (s ∩ u) \ t := sdiff_inf_right_comm ..
+/-
+**Finset.inter_sdiff_left_comm** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：inter_sdiff_left_comm (s t u : Finset α) : s inter (t \ u) = t inter (s \ 
+u)
+参数：s t u : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `inf_sdiff_left_comm`：inf_sdiff_left_comm (a b c : α) : a ⊓ (b \ c) = b ⊓
+ (a \ c)
+-/
+lemma inter_sdiff_left_comm (s t u : Finset α) : s ∩ (t \ u) = t ∩ (s \ u) := inf_sdiff_left_comm ..
 
 @[simp]
-
-中文:
-引理 inter_sdiff_left_comm
-  条件: (s t u : 有限集 α)
-  结论: s inter (t \ u) = t inter (s \ u)
-  证明: inf_sdiff_left_comm ..
-
-@[simp]
-
-Depends on / 依赖: inf_sdiff_left_comm
+/-
+**Finset.sdiff_inter_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_inter_self (s₁ s₂ : Finset α) : s₂ \ s₁ inter s₁ = ∅
+参数：s₁ s₂ : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_sdiff_self_left`：inf_sdiff_self_left : y \ x ⊓ x = ⊥
 -/
-lemma inter_sdiff_left_comm (s t u : Finset α) : s inter (t \ u) = t inter (s \ u) := inf_sdiff_left_comm ..
-
-@[simp]
-/--
-theorem `sdiff_inter_self` / 定理 `sdiff_inter_self`
-
-English:
-theorem sdiff_inter_self
-  given: (s₁ s₂ : Finset α)
-  statement: s₂ \ s₁ inter s₁ = ∅
-  proof: inf_sdiff_self_left
-
-中文:
-定理 sdiff_inter_self
-  条件: (s₁ s₂ : 有限集 α)
-  结论: s₂ \ s₁ inter s₁ = ∅
-  证明: inf_sdiff_self_left
-
-Depends on / 依赖: inf_sdiff_self_left
--/
-theorem sdiff_inter_self (s₁ s₂ : Finset α) : s₂ \ s₁ inter s₁ = ∅ :=
+theorem sdiff_inter_self (s₁ s₂ : Finset α) : s₂ \ s₁ ∩ s₁ = ∅ :=
   inf_sdiff_self_left
-
-/--
-theorem `sdiff_self` / 定理 `sdiff_self`
-
-English:
-theorem sdiff_self
-  given: (s₁ : Finset α)
-  statement: s₁ \ s₁ = ∅
-  proof: _root_.sdiff_self
-
-中文:
-定理 sdiff_self
-  条件: (s₁ : 有限集 α)
-  结论: s₁ \ s₁ = ∅
-  证明: _root_.sdiff_self
+/-
+**Finset.sdiff_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] (s₁ : Finset α), s₁ \ s₁ = ∅
+参数：s₁ : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a :
+ α}, a \ a = ⊥
 -/
 protected theorem sdiff_self (s₁ : Finset α) : s₁ \ s₁ = ∅ :=
   _root_.sdiff_self
-
-/--
-theorem `sdiff_inter_distrib_right` / 定理 `sdiff_inter_distrib_right`
-
-English:
-theorem sdiff_inter_distrib_right
-  given: (s t u : Finset α)
-  statement: s \ (t inter u) = s \ t union s \ u
-  proof: sdiff_inf
-
-@[simp]
-
-中文:
-定理 sdiff_inter_distrib_right
-  条件: (s t u : 有限集 α)
-  结论: s \ (t inter u) = s \ t union s \ u
-  证明: sdiff_inf
-
-@[simp]
-
-Depends on / 依赖: sdiff_inf
+/-
+**Finset.sdiff_inter_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_inter_distrib_right (s t u : Finset α) : s \ (t inter u) = s \ t uni
+on s \ u
+参数：s t u : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_inf`：sdiff_inf : a \ (b ⊓ c) = a \ b ⊔ a \ c
 -/
-theorem sdiff_inter_distrib_right (s t u : Finset α) : s \ (t inter u) = s \ t union s \ u :=
+theorem sdiff_inter_distrib_right (s t u : Finset α) : s \ (t ∩ u) = s \ t ∪ s \ u :=
   sdiff_inf
 
 @[simp]
-/--
-theorem `sdiff_inter_self_left` / 定理 `sdiff_inter_self_left`
-
-English:
-theorem sdiff_inter_self_left
-  given: (s t : Finset α)
-  statement: s \ (s inter t) = s \ t
-  proof: sdiff_inf_self_left _ _
-
-@[simp]
-
-中文:
-定理 sdiff_inter_self_left
-  条件: (s t : 有限集 α)
-  结论: s \ (s inter t) = s \ t
-  证明: sdiff_inf_self_left _ _
-
-@[simp]
-
-Depends on / 依赖: Nat.binaryRec, binaryRec, sdiff_inf_self_left
+/-
+**Finset.sdiff_inter_self_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_inter_self_left (s t : Finset α) : s \ (s inter t) = s \ t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_inf_self_left`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebr
+a α] (a b : α), a \ (a ⊓ b) = a \ b
 -/
-theorem sdiff_inter_self_left (s t : Finset α) : s \ (s inter t) = s \ t :=
+theorem sdiff_inter_self_left (s t : Finset α) : s \ (s ∩ t) = s \ t :=
   sdiff_inf_self_left _ _
 
 @[simp]
-/--
-theorem `sdiff_inter_self_right` / 定理 `sdiff_inter_self_right`
-
-English:
-theorem sdiff_inter_self_right
-  given: (s t : Finset α)
-  statement: s \ (t inter s) = s \ t
-  proof: sdiff_inf_self_right _ _
-
-@[simp]
-
-中文:
-定理 sdiff_inter_self_right
-  条件: (s t : 有限集 α)
-  结论: s \ (t inter s) = s \ t
-  证明: sdiff_inf_self_right _ _
-
-@[simp]
-
-Depends on / 依赖: sdiff_inf_self_right
+/-
+**Finset.sdiff_inter_self_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_inter_self_right (s t : Finset α) : s \ (t inter s) = s \ t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_inf_self_right`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgeb
+ra α] (a b : α), b \ (a ⊓ b) = b \ a
 -/
-theorem sdiff_inter_self_right (s t : Finset α) : s \ (t inter s) = s \ t :=
+theorem sdiff_inter_self_right (s t : Finset α) : s \ (t ∩ s) = s \ t :=
   sdiff_inf_self_right _ _
 
 @[simp]
-/--
-theorem `sdiff_empty` / 定理 `sdiff_empty`
-
-English:
-theorem sdiff_empty
-  statement: s \ ∅ = s
-  proof: sdiff_bot
-
-@[mono, gcongr]
-
-中文:
-定理 sdiff_empty
-  结论: s \ ∅ = s
-  证明: sdiff_bot
-
-@[mono, gcongr]
-
-Depends on / 依赖: sdiff_bot
+/-
+**Finset.sdiff_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_empty : s \ ∅ = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_bot`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a : 
+α}, a \ ⊥ = a
 -/
 theorem sdiff_empty : s \ ∅ = s :=
   sdiff_bot
 
 @[mono, gcongr]
-/--
-theorem `sdiff_subset_sdiff` / 定理 `sdiff_subset_sdiff`
-
-English:
-theorem sdiff_subset_sdiff
-  given: (hst : s subseteq t) (hvu : v subseteq u)
-  statement: s \ u subseteq t \ v
-  proof: by grind
-
-中文:
-定理 sdiff_subset_sdiff
-  条件: (hst : s subseteq t) (hvu : v subseteq u)
-  结论: s \ u subseteq t \ v
-  证明: by grind
+/-
+**Finset.sdiff_subset_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_subset_sdiff (hst : s subseteq t) (hvu : v subseteq u) : s \ u subse
+teq t \ v
+参数：hst : s subseteq t；hvu : v subseteq u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sdiff_subset_sdiff (hst : s subseteq t) (hvu : v subseteq u) : s \ u subseteq t \ v := by grind
+theorem sdiff_subset_sdiff (hst : s ⊆ t) (hvu : v ⊆ u) : s \ u ⊆ t \ v := by grind
 
 variable (u) in
-/--
-lemma `sdiff_subset_sdiff_left` / 引理 `sdiff_subset_sdiff_left`
-
-English:
-lemma sdiff_subset_sdiff_left
-  given: (h : s subseteq t)
-  statement: s \ u subseteq t \ u
-  proof: by gcongr
-
-中文:
-引理 sdiff_subset_sdiff_left
-  条件: (h : s subseteq t)
-  结论: s \ u subseteq t \ u
-  证明: by gcongr
+/-
+**Finset.sdiff_subset_sdiff_left** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：sdiff_subset_sdiff_left (h : s subseteq t) : s \ u subseteq t \ u
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sdiff_subset_sdiff`：sdiff_subset_sdiff (hst : s subseteq t) (hvu 
+: v subseteq u) : s \ u subseteq t \ v
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma sdiff_subset_sdiff_left (h : s subseteq t) : s \ u subseteq t \ u := by gcongr
+lemma sdiff_subset_sdiff_left (h : s ⊆ t) : s \ u ⊆ t \ u := by gcongr
 
 variable (u) in
-/--
-lemma `sdiff_subset_sdiff_right` / 引理 `sdiff_subset_sdiff_right`
-
-English:
-lemma sdiff_subset_sdiff_right
-  given: (h : s subseteq t)
-  statement: u \ t subseteq u \ s
-  proof: by gcongr
-
-中文:
-引理 sdiff_subset_sdiff_right
-  条件: (h : s subseteq t)
-  结论: u \ t subseteq u \ s
-  证明: by gcongr
+/-
+**Finset.sdiff_subset_sdiff_right** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：sdiff_subset_sdiff_right (h : s subseteq t) : u \ t subseteq u \ s
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sdiff_subset_sdiff`：sdiff_subset_sdiff (hst : s subseteq t) (hvu 
+: v subseteq u) : s \ u subseteq t \ v
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma sdiff_subset_sdiff_right (h : s subseteq t) : u \ t subseteq u \ s := by gcongr
-
-/--
-theorem `sdiff_subset_sdiff_iff_subset` / 定理 `sdiff_subset_sdiff_iff_subset`
-
-English:
-theorem sdiff_subset_sdiff_iff_subset
-  given: {r : Finset α} (hs : s subseteq r) (ht : t subseteq r)
-  proof: sdiff_le_sdiff_iff_le hs ht
-
-@[simp, grind =, norm_cast]
-
-中文:
-定理 sdiff_subset_sdiff_iff_subset
-  条件: {r : 有限集 α} (hs : s subseteq r) (ht : t subseteq r)
-  证明: sdiff_le_sdiff_iff_le hs ht
-
-@[simp, grind =, norm_cast]
-
-Depends on / 依赖: sdiff_le_sdiff_iff_le
+lemma sdiff_subset_sdiff_right (h : s ⊆ t) : u \ t ⊆ u \ s := by gcongr
+/-
+**Finset.sdiff_subset_sdiff_iff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_subset_sdiff_iff_subset {r : Finset α} (hs : s subseteq r) (ht : t s
+ubseteq r) : r \ s subseteq r \ t ↔ t subseteq s
+参数：hs : s subseteq r；ht : t subseteq r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_le_sdiff_iff_le`：sdiff_le_sdiff_iff_le (hx : x <= z) (hy : y <= z)
+ : z \ x <= z \ y ↔ y <= x
 -/
-theorem sdiff_subset_sdiff_iff_subset {r : Finset α} (hs : s subseteq r) (ht : t subseteq r) :
-    r \ s subseteq r \ t ↔ t subseteq s :=
+theorem sdiff_subset_sdiff_iff_subset {r : Finset α} (hs : s ⊆ r) (ht : t ⊆ r) :
+    r \ s ⊆ r \ t ↔ t ⊆ s :=
   sdiff_le_sdiff_iff_le hs ht
 
 @[simp, grind =, norm_cast]
-/--
-theorem `coe_sdiff` / 定理 `coe_sdiff`
-
-English:
-theorem coe_sdiff
-  given: (s₁ s₂ : Finset α)
-  statement: ↑(s₁ \ s₂) = (s₁ \ s₂ : Set α)
-  proof: Set.ext fun _ => mem_sdiff
-
-@[simp]
-
-中文:
-定理 coe_sdiff
-  条件: (s₁ s₂ : 有限集 α)
-  结论: ↑(s₁ \ s₂) = (s₁ \ s₂ : 集合 α)
-  证明: Set.ext fun _ => mem_sdiff
-
-@[simp]
-
-Depends on / 依赖: Set.ext, mem_sdiff
+/-
+**Finset.coe_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_sdiff (s₁ s₂ : Finset α) : ↑(s₁ \ s₂) = (s₁ \ s₂ : Set α)
+参数：s₁ s₂ : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Finset.mem_sdiff`：mem_sdiff : a in s \ t ↔ a in s ∧ a ∉ t
 -/
 theorem coe_sdiff (s₁ s₂ : Finset α) : ↑(s₁ \ s₂) = (s₁ \ s₂ : Set α) :=
   Set.ext fun _ => mem_sdiff
 
 @[simp]
-/--
-theorem `union_sdiff_self_eq_union` / 定理 `union_sdiff_self_eq_union`
-
-English:
-theorem union_sdiff_self_eq_union
-  statement: s union t \ s = s union t
-  proof: sup_sdiff_self_right _ _
-
-@[simp]
-
-中文:
-定理 union_sdiff_self_eq_union
-  结论: s union t \ s = s union t
-  证明: sup_sdiff_self_right _ _
-
-@[simp]
-
-Depends on / 依赖: sup_sdiff_self_right
+/-
+**Finset.union_sdiff_self_eq_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_self_eq_union : s union t \ s = s union t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_self_right`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgeb
+ra α] (a b : α), a ⊔ b \ a = a ⊔ b
 -/
-theorem union_sdiff_self_eq_union : s union t \ s = s union t :=
+theorem union_sdiff_self_eq_union : s ∪ t \ s = s ∪ t :=
   sup_sdiff_self_right _ _
 
 @[simp]
-/--
-theorem `sdiff_union_self_eq_union` / 定理 `sdiff_union_self_eq_union`
-
-English:
-theorem sdiff_union_self_eq_union
-  statement: s \ t union t = s union t
-  proof: sup_sdiff_self_left _ _
-
-中文:
-定理 sdiff_union_self_eq_union
-  结论: s \ t union t = s union t
-  证明: sup_sdiff_self_left _ _
-
-Depends on / 依赖: sup_sdiff_self_left
+/-
+**Finset.sdiff_union_self_eq_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_union_self_eq_union : s \ t union t = s union t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_self_left`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebr
+a α] (a b : α), b \ a ⊔ a = b ⊔ a
 -/
-theorem sdiff_union_self_eq_union : s \ t union t = s union t :=
+theorem sdiff_union_self_eq_union : s \ t ∪ t = s ∪ t :=
   sup_sdiff_self_left _ _
-
-/--
-theorem `union_sdiff_left` / 定理 `union_sdiff_left`
-
-English:
-theorem union_sdiff_left
-  given: (s t : Finset α)
-  statement: (s union t) \ s = t \ s
-  proof: sup_sdiff_left_self
-
-中文:
-定理 union_sdiff_left
-  条件: (s t : 有限集 α)
-  结论: (s union t) \ s = t \ s
-  证明: sup_sdiff_left_self
-
-Depends on / 依赖: sup_sdiff_left_self
+/-
+**Finset.union_sdiff_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_left (s t : Finset α) : (s union t) \ s = t \ s
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_left_self`：sup_sdiff_left_self : (a ⊔ b) \ a = b \ a
 -/
-theorem union_sdiff_left (s t : Finset α) : (s union t) \ s = t \ s :=
+theorem union_sdiff_left (s t : Finset α) : (s ∪ t) \ s = t \ s :=
   sup_sdiff_left_self
-
-/--
-theorem `union_sdiff_right` / 定理 `union_sdiff_right`
-
-English:
-theorem union_sdiff_right
-  given: (s t : Finset α)
-  statement: (s union t) \ t = s \ t
-  proof: sup_sdiff_right_self
-
-中文:
-定理 union_sdiff_right
-  条件: (s t : 有限集 α)
-  结论: (s union t) \ t = s \ t
-  证明: sup_sdiff_right_self
-
-Depends on / 依赖: sup_sdiff_right_self
+/-
+**Finset.union_sdiff_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_right (s t : Finset α) : (s union t) \ t = s \ t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_right_self`：sup_sdiff_right_self : (a ⊔ b) \ b = a \ b
 -/
-theorem union_sdiff_right (s t : Finset α) : (s union t) \ t = s \ t :=
+theorem union_sdiff_right (s t : Finset α) : (s ∪ t) \ t = s \ t :=
   sup_sdiff_right_self
-
-/--
-theorem `union_sdiff_cancel_left` / 定理 `union_sdiff_cancel_left`
-
-English:
-theorem union_sdiff_cancel_left
-  given: (h : Disjoint s t)
-  statement: (s union t) \ s = t
-  proof: h.sup_sdiff_cancel_left
-
-中文:
-定理 union_sdiff_cancel_left
-  条件: (h : Disjoint s t)
-  结论: (s union t) \ s = t
-  证明: h.sup_sdiff_cancel_left
-
-Depends on / 依赖: h.sup_sdiff_cancel_left, sup_sdiff_cancel_left
+/-
+**Finset.union_sdiff_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_cancel_left (h : Disjoint s t) : (s union t) \ s = t
+参数：h : Disjoint s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.sup_sdiff_cancel_left`：∀ {α : Type u_2} [inst : GeneralizedCohe
+ytingAlgebra α] {a b : α}, Disjoint a b → (a ⊔ b) \ a = b
 -/
-theorem union_sdiff_cancel_left (h : Disjoint s t) : (s union t) \ s = t :=
+theorem union_sdiff_cancel_left (h : Disjoint s t) : (s ∪ t) \ s = t :=
   h.sup_sdiff_cancel_left
-
-/--
-theorem `union_sdiff_cancel_right` / 定理 `union_sdiff_cancel_right`
-
-English:
-theorem union_sdiff_cancel_right
-  given: (h : Disjoint s t)
-  statement: (s union t) \ t = s
-  proof: h.sup_sdiff_cancel_right
-
-中文:
-定理 union_sdiff_cancel_right
-  条件: (h : Disjoint s t)
-  结论: (s union t) \ t = s
-  证明: h.sup_sdiff_cancel_right
-
-Depends on / 依赖: h.sup_sdiff_cancel_right, sup_sdiff_cancel_right
+/-
+**Finset.union_sdiff_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_cancel_right (h : Disjoint s t) : (s union t) \ t = s
+参数：h : Disjoint s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.sup_sdiff_cancel_right`：∀ {α : Type u_2} [inst : GeneralizedCoh
+eytingAlgebra α] {a b : α}, Disjoint a b → (a ⊔ b) \ b = a
 -/
-theorem union_sdiff_cancel_right (h : Disjoint s t) : (s union t) \ t = s :=
+theorem union_sdiff_cancel_right (h : Disjoint s t) : (s ∪ t) \ t = s :=
   h.sup_sdiff_cancel_right
 
-/--
-lemma `disjoint_injOn_union_left` / 引理 `disjoint_injOn_union_left`
+/-- `· ∪ s` is injective on finsets disjoint from `s`. -/
+/-
+**Finset.disjoint_injOn_union_left** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：disjoint_injOn_union_left (s : Finset α) : {t | Disjoint s t}.InjOn (· uni
+on s)
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma disjoint_injOn_union_left
-  given: (s : Finset α)
-  statement: {t | Disjoint s t}.InjOn (· union s)
-  proof: by
+--- 原说明 ---
+`· ∪ s` is injective on finsets disjoint from `s`.
+-/
+lemma disjoint_injOn_union_left (s : Finset α) : {t | Disjoint s t}.InjOn (· ∪ s) := by
   grind [Set.InjOn, union_sdiff_cancel_right]
 
-中文:
-引理 disjoint_injOn_union_left
-  条件: (s : 有限集 α)
-  结论: {t | Disjoint s t}.单射限制 (· union s)
-  证明: by
-  grind [Set.InjOn, union_sdiff_cancel_right]
+/-- `· \ s` is injective on finsets containing `s`. -/
+/-
+**Finset.superset_injOn_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：superset_injOn_sdiff (s : Finset α) : {t | s subseteq t}.InjOn (· \ s)
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Set.InjOn, union_sdiff_cancel_right
+--- 原说明 ---
+`· \ s` is injective on finsets containing `s`.
 -/
-lemma disjoint_injOn_union_left (s : Finset α) : {t | Disjoint s t}.InjOn (· union s) := by
-  grind [Set.InjOn, union_sdiff_cancel_right]
-
-/--
-lemma `superset_injOn_sdiff` / 引理 `superset_injOn_sdiff`
-
-English:
-lemma superset_injOn_sdiff
-  given: (s : Finset α)
-  statement: {t | s subseteq t}.InjOn (· \ s)
-  proof: by
+lemma superset_injOn_sdiff (s : Finset α) : {t | s ⊆ t}.InjOn (· \ s) := by
   grind [Set.InjOn, sdiff_union_of_subset]
-
-中文:
-引理 superset_injOn_sdiff
-  条件: (s : 有限集 α)
-  结论: {t | s subseteq t}.单射限制 (· \ s)
-  证明: by
-  grind [Set.InjOn, sdiff_union_of_subset]
-
-Depends on / 依赖: Set.InjOn, sdiff_union_of_subset
+/-
+**Finset.union_sdiff_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_symm : s union t \ s = t union s \ t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_sdiff_self_eq_union`：union_sdiff_self_eq_union : s union t 
+\ s = s union t
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma superset_injOn_sdiff (s : Finset α) : {t | s subseteq t}.InjOn (· \ s) := by
-  grind [Set.InjOn, sdiff_union_of_subset]
-
-/--
-theorem `union_sdiff_symm` / 定理 `union_sdiff_symm`
-
-English:
-theorem union_sdiff_symm
-  statement: s union t \ s = t union s \ t
-  proof: by simp [union_comm]
-
-中文:
-定理 union_sdiff_symm
-  结论: s union t \ s = t union s \ t
-  证明: by simp [union_comm]
-
-Depends on / 依赖: union_comm
+theorem union_sdiff_symm : s ∪ t \ s = t ∪ s \ t := by simp [union_comm]
+/-
+**Finset.sdiff_union_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_union_inter (s t : Finset α) : s \ t union s inter t = s
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_inf`：sup_sdiff_inf (x y : α) : x \ y ⊔ x ⊓ y = x
 -/
-theorem union_sdiff_symm : s union t \ s = t union s \ t := by simp [union_comm]
-
-/--
-theorem `sdiff_union_inter` / 定理 `sdiff_union_inter`
-
-English:
-theorem sdiff_union_inter
-  given: (s t : Finset α)
-  statement: s \ t union s inter t = s
-  proof: sup_sdiff_inf _ _
-
-中文:
-定理 sdiff_union_inter
-  条件: (s t : 有限集 α)
-  结论: s \ t union s inter t = s
-  证明: sup_sdiff_inf _ _
-
-Depends on / 依赖: sup_sdiff_inf
--/
-theorem sdiff_union_inter (s t : Finset α) : s \ t union s inter t = s :=
+theorem sdiff_union_inter (s t : Finset α) : s \ t ∪ s ∩ t = s :=
   sup_sdiff_inf _ _
-
-/--
-theorem `sdiff_idem` / 定理 `sdiff_idem`
-
-English:
-theorem sdiff_idem
-  given: (s t : Finset α)
-  statement: (s \ t) \ t = s \ t
-  proof: _root_.sdiff_idem
-
-中文:
-定理 sdiff_idem
-  条件: (s t : 有限集 α)
-  结论: (s \ t) \ t = s \ t
-  证明: _root_.sdiff_idem
-
-Depends on / 依赖: _root_, _root_.sdiff_idem, sdiff_idem
+/-
+**Finset.sdiff_idem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_idem (s t : Finset α) : (s \ t) \ t = s \ t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_idem`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a b
+ : α}, (a \ b) \ b = a \ b
 -/
 theorem sdiff_idem (s t : Finset α) : (s \ t) \ t = s \ t :=
   _root_.sdiff_idem
-
-/--
-theorem `subset_sdiff` / 定理 `subset_sdiff`
-
-English:
-theorem subset_sdiff
-  statement: s subseteq t \ u ↔ s subseteq t ∧ Disjoint s u
-  proof: le_sdiff
-
-@[simp]
-
-中文:
-定理 subset_sdiff
-  结论: s subseteq t \ u ↔ s subseteq t ∧ Disjoint s u
-  证明: le_sdiff
-
-@[simp]
-
-Depends on / 依赖: le_sdiff
+/-
+**Finset.subset_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjoint s u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_sdiff`：le_sdiff : x <= y \ z ↔ x <= y ∧ Disjoint x z
 -/
-theorem subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjoint s u :=
+theorem subset_sdiff : s ⊆ t \ u ↔ s ⊆ t ∧ Disjoint s u :=
   le_sdiff
 
 @[simp]
-/--
-theorem `sdiff_eq_empty_iff_subset` / 定理 `sdiff_eq_empty_iff_subset`
-
-English:
-theorem sdiff_eq_empty_iff_subset
-  statement: s \ t = ∅ ↔ s subseteq t
-  proof: sdiff_eq_bot_iff
-
-@[grind =]
-
-中文:
-定理 sdiff_eq_empty_iff_subset
-  结论: s \ t = ∅ ↔ s subseteq t
-  证明: sdiff_eq_bot_iff
-
-@[grind =]
-
-Depends on / 依赖: sdiff_eq_bot_iff
+/-
+**Finset.sdiff_eq_empty_iff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_eq_empty_iff_subset : s \ t = ∅ ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_eq_bot_iff`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α
+] {a b : α}, b \ a = ⊥ ↔ b ≤ a
 -/
-theorem sdiff_eq_empty_iff_subset : s \ t = ∅ ↔ s subseteq t :=
+theorem sdiff_eq_empty_iff_subset : s \ t = ∅ ↔ s ⊆ t :=
   sdiff_eq_bot_iff
 
 @[grind =]
-/--
-theorem `sdiff_nonempty` / 定理 `sdiff_nonempty`
-
-English:
-theorem sdiff_nonempty
-  statement: (s \ t).Nonempty ↔ ¬s subseteq t
-  proof: nonempty_iff_ne_empty.trans sdiff_eq_empty_iff_subset.not
-
-@[simp]
-
-中文:
-定理 sdiff_nonempty
-  结论: (s \ t).非空 ↔ ¬s subseteq t
-  证明: nonempty_iff_ne_empty.trans sdiff_eq_empty_iff_subset.not
-
-@[simp]
-
-Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans, sdiff_eq_empty_iff_subset, sdiff_eq_empty_iff_subset.not
+/-
+**Finset.sdiff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_nonempty : (s \ t).Nonempty ↔ ¬s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Finset.sdiff_eq_empty_iff_subset`：sdiff_eq_empty_iff_subset : s \ t = ∅ 
+↔ s subseteq t
 -/
-theorem sdiff_nonempty : (s \ t).Nonempty ↔ ¬s subseteq t :=
+theorem sdiff_nonempty : (s \ t).Nonempty ↔ ¬s ⊆ t :=
   nonempty_iff_ne_empty.trans sdiff_eq_empty_iff_subset.not
 
 @[simp]
-/--
-theorem `empty_sdiff` / 定理 `empty_sdiff`
-
-English:
-theorem empty_sdiff
-  given: (s : Finset α)
-  statement: ∅ \ s = ∅
-  proof: bot_sdiff
-
-中文:
-定理 empty_sdiff
-  条件: (s : 有限集 α)
-  结论: ∅ \ s = ∅
-  证明: bot_sdiff
-
-Depends on / 依赖: bot_sdiff
+/-
+**Finset.empty_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_sdiff (s : Finset α) : ∅ \ s = ∅
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_sdiff`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a : 
+α}, ⊥ \ a = ⊥
 -/
 theorem empty_sdiff (s : Finset α) : ∅ \ s = ∅ :=
   bot_sdiff
-
-/--
-theorem `insert_sdiff_of_notMem` / 定理 `insert_sdiff_of_notMem`
-
-English:
-theorem insert_sdiff_of_notMem
-  given: (s : Finset α) {t : Finset α} {x : α} (h : x ∉ t)
-  proof: by grind
-
-中文:
-定理 insert_sdiff_of_notMem
-  条件: (s : 有限集 α) {t : 有限集 α} {x : α} (h : x ∉ t)
-  证明: by grind
+/-
+**Finset.insert_sdiff_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_sdiff_of_notMem (s : Finset α) {t : Finset α} {x : α} (h : x ∉ t) :
+ insert x s \ t = insert x (s \ t)
+参数：s : Finset α；h : x ∉ t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem insert_sdiff_of_notMem (s : Finset α) {t : Finset α} {x : α} (h : x ∉ t) :
     insert x s \ t = insert x (s \ t) := by grind
-
-/--
-theorem `insert_sdiff_of_mem` / 定理 `insert_sdiff_of_mem`
-
-English:
-theorem insert_sdiff_of_mem
-  given: (s : Finset α) {x : α} (h : x in t)
-  statement: insert x s \ t = s \ t
-  proof: by grind
-
-中文:
-定理 insert_sdiff_of_mem
-  条件: (s : 有限集 α) {x : α} (h : x in t)
-  结论: insert x s \ t = s \ t
-  证明: by grind
+/-
+**Finset.insert_sdiff_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_sdiff_of_mem (s : Finset α) {x : α} (h : x in t) : insert x s \ t =
+ s \ t
+参数：s : Finset α；h : x in t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem insert_sdiff_of_mem (s : Finset α) {x : α} (h : x in t) : insert x s \ t = s \ t := by grind
-
-/--
-lemma `insert_sdiff_self_of_mem` / 引理 `insert_sdiff_self_of_mem`
-
-English:
-lemma insert_sdiff_self_of_mem
-  given: (ha : a in s)
-  statement: insert a (s \ {a}) = s
-  proof: by grind
-
-中文:
-引理 insert_sdiff_self_of_mem
-  条件: (ha : a in s)
-  结论: insert a (s \ {a}) = s
-  证明: by grind
+theorem insert_sdiff_of_mem (s : Finset α) {x : α} (h : x ∈ t) : insert x s \ t = s \ t := by grind
+/-
+**Finset.insert_sdiff_self_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset α} {a : α}, a ∈ s → in
+sert a (s \ {a}) = s
+参数：s \ {a}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma insert_sdiff_self_of_mem (ha : a in s) : insert a (s \ {a}) = s := by grind
-
-/--
-lemma `insert_sdiff_cancel` / 引理 `insert_sdiff_cancel`
-
-English:
-lemma insert_sdiff_cancel
-  given: (ha : a ∉ s)
-  statement: insert a s \ s = {a}
-  proof: by grind
-
-@[simp]
-
-中文:
-引理 insert_sdiff_cancel
-  条件: (ha : a ∉ s)
-  结论: insert a s \ s = {a}
-  证明: by grind
-
-@[simp]
+@[simp] lemma insert_sdiff_self_of_mem (ha : a ∈ s) : insert a (s \ {a}) = s := by grind
+/-
+**Finset.insert_sdiff_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset α} {a : α}, a ∉ s → in
+sert a s \ s = {a}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma insert_sdiff_cancel (ha : a ∉ s) : insert a s \ s = {a} := by grind
 
 @[simp]
-/--
-theorem `insert_sdiff_insert` / 定理 `insert_sdiff_insert`
-
-English:
-theorem insert_sdiff_insert
-  given: (s t : Finset α) (x : α)
-  statement: insert x s \ insert x t = s \ insert x t
-  proof: insert_sdiff_of_mem _ (mem_insert_self _ _)
-
-中文:
-定理 insert_sdiff_insert
-  条件: (s t : 有限集 α) (x : α)
-  结论: insert x s \ insert x t = s \ insert x t
-  证明: insert_sdiff_of_mem _ (mem_insert_self _ _)
-
-Depends on / 依赖: insert_sdiff_of_mem, mem_insert_self
+/-
+**Finset.insert_sdiff_insert** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：insert_sdiff_insert (s t : Finset α) (x : α) : insert x s \ insert x t = s
+ \ insert x t
+参数：s t : Finset α；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.insert_sdiff_of_mem`：insert_sdiff_of_mem (s : Finset α) {x : α} (
+h : x in t) : insert x s \ t = s \ t
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
 -/
 theorem insert_sdiff_insert (s t : Finset α) (x : α) : insert x s \ insert x t = s \ insert x t :=
   insert_sdiff_of_mem _ (mem_insert_self _ _)
-
-/--
-lemma `insert_sdiff_insert'` / 引理 `insert_sdiff_insert'`
-
-English:
-lemma insert_sdiff_insert'
-  given: (hab : a != b) (ha : a ∉ s)
-  statement: insert a s \ insert b s = {a}
-  proof: by
-  ext; aesop
-
-中文:
-引理 insert_sdiff_insert'
-  条件: (hab : a != b) (ha : a ∉ s)
-  结论: insert a s \ insert b s = {a}
-  证明: by
-  ext; aesop
+/-
+**Finset.insert_sdiff_insert'** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_sdiff_insert' (hab : a != b) (ha : a ∉ s) : insert a s \ insert b s
+ = {a}
+参数：hab : a != b；ha : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma insert_sdiff_insert' (hab : a != b) (ha : a ∉ s) : insert a s \ insert b s = {a} := by
+lemma insert_sdiff_insert' (hab : a ≠ b) (ha : a ∉ s) : insert a s \ insert b s = {a} := by
   ext; aesop
-
-/--
-lemma `cons_sdiff_cons` / 引理 `cons_sdiff_cons`
-
-English:
-lemma cons_sdiff_cons
-  given: (hab : a != b) (ha hb)
-  statement: s.cons a ha \ s.cons b hb = {a}
-  proof: by grind
-
-中文:
-引理 cons_sdiff_cons
-  条件: (hab : a != b) (ha hb)
-  结论: s.cons a ha \ s.cons b hb = {a}
-  证明: by grind
+/-
+**Finset.cons_sdiff_cons** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：cons_sdiff_cons (hab : a != b) (ha hb) : s.cons a ha \ s.cons b hb = {a}
+参数：hab : a != b；ha hb。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cons_sdiff_cons (hab : a != b) (ha hb) : s.cons a ha \ s.cons b hb = {a} := by grind
-
-/--
-theorem `sdiff_insert_of_notMem` / 定理 `sdiff_insert_of_notMem`
-
-English:
-theorem sdiff_insert_of_notMem
-  given: {x : α} (h : x ∉ s) (t : Finset α)
-  statement: s \ insert x t = s \ t
-  proof: by
-  grind
-
-中文:
-定理 sdiff_insert_of_notMem
-  条件: {x : α} (h : x ∉ s) (t : 有限集 α)
-  结论: s \ insert x t = s \ t
-  证明: by
-  grind
+lemma cons_sdiff_cons (hab : a ≠ b) (ha hb) : s.cons a ha \ s.cons b hb = {a} := by grind
+/-
+**Finset.sdiff_insert_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_insert_of_notMem {x : α} (h : x ∉ s) (t : Finset α) : s \ insert x t
+ = s \ t
+参数：h : x ∉ s；t : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sdiff_insert_of_notMem {x : α} (h : x ∉ s) (t : Finset α) : s \ insert x t = s \ t := by
   grind
-
-/--
-theorem `sdiff_subset` / 定理 `sdiff_subset`
-
-English:
-theorem sdiff_subset
-  given: {s t : Finset α}
-  statement: s \ t subseteq s
-  proof: by simp
-
-中文:
-定理 sdiff_subset
-  条件: {s t : 有限集 α}
-  结论: s \ t subseteq s
-  证明: by simp
+/-
+**Finset.sdiff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_subset {s t : Finset α} : s \ t subseteq s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem sdiff_subset {s t : Finset α} : s \ t subseteq s := by simp
-
-/--
-theorem `sdiff_ssubset` / 定理 `sdiff_ssubset`
-
-English:
-theorem sdiff_ssubset
-  given: (h : t subseteq s) (ht : t.Nonempty)
-  statement: s \ t ⊂ s
-  proof: by grind
-
-中文:
-定理 sdiff_ssubset
-  条件: (h : t subseteq s) (ht : t.非空)
-  结论: s \ t ⊂ s
-  证明: by grind
+theorem sdiff_subset {s t : Finset α} : s \ t ⊆ s := by simp
+/-
+**Finset.sdiff_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_ssubset (h : t subseteq s) (ht : t.Nonempty) : s \ t ⊂ s
+参数：h : t subseteq s；ht : t.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sdiff_ssubset (h : t subseteq s) (ht : t.Nonempty) : s \ t ⊂ s := by grind
-
-/--
-theorem `union_sdiff_distrib` / 定理 `union_sdiff_distrib`
-
-English:
-theorem union_sdiff_distrib
-  given: (s₁ s₂ t : Finset α)
-  statement: (s₁ union s₂) \ t = s₁ \ t union s₂ \ t
-  proof: sup_sdiff
-
-中文:
-定理 union_sdiff_distrib
-  条件: (s₁ s₂ t : 有限集 α)
-  结论: (s₁ union s₂) \ t = s₁ \ t union s₂ \ t
-  证明: sup_sdiff
-
-Depends on / 依赖: sup_sdiff
+theorem sdiff_ssubset (h : t ⊆ s) (ht : t.Nonempty) : s \ t ⊂ s := by grind
+/-
+**Finset.union_sdiff_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_distrib (s₁ s₂ t : Finset α) : (s₁ union s₂) \ t = s₁ \ t unio
+n s₂ \ t
+参数：s₁ s₂ t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff`：sup_sdiff : (a ⊔ b) \ c = a \ c ⊔ b \ c
 -/
-theorem union_sdiff_distrib (s₁ s₂ t : Finset α) : (s₁ union s₂) \ t = s₁ \ t union s₂ \ t :=
+theorem union_sdiff_distrib (s₁ s₂ t : Finset α) : (s₁ ∪ s₂) \ t = s₁ \ t ∪ s₂ \ t :=
   sup_sdiff
-
-/--
-theorem `sdiff_union_distrib` / 定理 `sdiff_union_distrib`
-
-English:
-theorem sdiff_union_distrib
-  given: (s t₁ t₂ : Finset α)
-  statement: s \ (t₁ union t₂) = s \ t₁ inter (s \ t₂)
-  proof: sdiff_sup
-
-中文:
-定理 sdiff_union_distrib
-  条件: (s t₁ t₂ : 有限集 α)
-  结论: s \ (t₁ union t₂) = s \ t₁ inter (s \ t₂)
-  证明: sdiff_sup
-
-Depends on / 依赖: sdiff_sup
+/-
+**Finset.sdiff_union_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_union_distrib (s t₁ t₂ : Finset α) : s \ (t₁ union t₂) = s \ t₁ inte
+r (s \ t₂)
+参数：s t₁ t₂ : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sup`：sdiff_sup : y \ (x ⊔ z) = y \ x ⊓ y \ z
 -/
-theorem sdiff_union_distrib (s t₁ t₂ : Finset α) : s \ (t₁ union t₂) = s \ t₁ inter (s \ t₂) :=
+theorem sdiff_union_distrib (s t₁ t₂ : Finset α) : s \ (t₁ ∪ t₂) = s \ t₁ ∩ (s \ t₂) :=
   sdiff_sup
-
-/--
-theorem `union_sdiff_self` / 定理 `union_sdiff_self`
-
-English:
-theorem union_sdiff_self
-  given: (s t : Finset α)
-  statement: (s union t) \ t = s \ t
-  proof: sup_sdiff_right_self
-
-中文:
-定理 union_sdiff_self
-  条件: (s t : 有限集 α)
-  结论: (s union t) \ t = s \ t
-  证明: sup_sdiff_right_self
-
-Depends on / 依赖: sup_sdiff_right_self
+/-
+**Finset.union_sdiff_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：union_sdiff_self (s t : Finset α) : (s union t) \ t = s \ t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sdiff_right_self`：sup_sdiff_right_self : (a ⊔ b) \ b = a \ b
 -/
-theorem union_sdiff_self (s t : Finset α) : (s union t) \ t = s \ t :=
+theorem union_sdiff_self (s t : Finset α) : (s ∪ t) \ t = s \ t :=
   sup_sdiff_right_self
-
-/--
-theorem `Nontrivial.sdiff_singleton_nonempty` / 定理 `Nontrivial.sdiff_singleton_nonempty`
-
-English:
-theorem Nontrivial.sdiff_singleton_nonempty
-  given: {c : α} {s : Finset α} (hS : s.Nontrivial)
-  proof: by grind
-
-中文:
-定理 非平凡.sdiff_singleton_nonempty
-  条件: {c : α} {s : 有限集 α} (hS : s.非平凡)
-  证明: by grind
+/-
+**Finset.Nontrivial.sdiff_singleton_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset.N
+ontrivial`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {c : α} {s : Finset α}, s.Nontrivi
+al → (s \ {c}).Nonempty
+参数：s \ {c}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Nontrivial.sdiff_singleton_nonempty {c : α} {s : Finset α} (hS : s.Nontrivial) :
     (s \ {c}).Nonempty := by grind
-
-/--
-theorem `sdiff_sdiff_left'` / 定理 `sdiff_sdiff_left'`
-
-English:
-theorem sdiff_sdiff_left'
-  given: (s t u : Finset α)
-  statement: (s \ t) \ u = s \ t inter (s \ u)
-  proof: _root_.sdiff_sdiff_left'
-
-中文:
-定理 sdiff_sdiff_left'
-  条件: (s t u : 有限集 α)
-  结论: (s \ t) \ u = s \ t inter (s \ u)
-  证明: _root_.sdiff_sdiff_left'
-
-Depends on / 依赖: _root_, _root_.sdiff_sdiff_left, sdiff_sdiff_left
+/-
+**Finset.sdiff_sdiff_left'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_sdiff_left' (s t u : Finset α) : (s \ t) \ u = s \ t inter (s \ u)
+参数：s t u : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sdiff_left'`：sdiff_sdiff_left' : (x \ y) \ z = x \ y ⊓ x \ z
 -/
-theorem sdiff_sdiff_left' (s t u : Finset α) : (s \ t) \ u = s \ t inter (s \ u) :=
+theorem sdiff_sdiff_left' (s t u : Finset α) : (s \ t) \ u = s \ t ∩ (s \ u) :=
   _root_.sdiff_sdiff_left'
-
-/--
-theorem `sdiff_union_sdiff_cancel` / 定理 `sdiff_union_sdiff_cancel`
-
-English:
-theorem sdiff_union_sdiff_cancel
-  given: (hts : t subseteq s) (hut : u subseteq t)
-  statement: s \ t union t \ u = s \ u
-  proof: sdiff_sup_sdiff_cancel hts hut
-
-中文:
-定理 sdiff_union_sdiff_cancel
-  条件: (hts : t subseteq s) (hut : u subseteq t)
-  结论: s \ t union t \ u = s \ u
-  证明: sdiff_sup_sdiff_cancel hts hut
-
-Depends on / 依赖: sdiff_sup_sdiff_cancel
+/-
+**Finset.sdiff_union_sdiff_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_union_sdiff_cancel (hts : t subseteq s) (hut : u subseteq t) : s \ t
+ union t \ u = s \ u
+参数：hts : t subseteq s；hut : u subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sup_sdiff_cancel`：sdiff_sup_sdiff_cancel (hba : b <= a) (hcb : c <
+= b) : a \ b ⊔ b \ c = a \ c
 -/
-theorem sdiff_union_sdiff_cancel (hts : t subseteq s) (hut : u subseteq t) : s \ t union t \ u = s \ u :=
+theorem sdiff_union_sdiff_cancel (hts : t ⊆ s) (hut : u ⊆ t) : s \ t ∪ t \ u = s \ u :=
   sdiff_sup_sdiff_cancel hts hut
-
-/--
-theorem `sdiff_sdiff_eq_sdiff_union` / 定理 `sdiff_sdiff_eq_sdiff_union`
-
-English:
-theorem sdiff_sdiff_eq_sdiff_union
-  given: (h : u subseteq s)
-  statement: s \ (t \ u) = s \ t union u
-  proof: sdiff_sdiff_eq_sdiff_sup h
-
-中文:
-定理 sdiff_sdiff_eq_sdiff_union
-  条件: (h : u subseteq s)
-  结论: s \ (t \ u) = s \ t union u
-  证明: sdiff_sdiff_eq_sdiff_sup h
-
-Depends on / 依赖: sdiff_sdiff_eq_sdiff_sup
+/-
+**Finset.sdiff_sdiff_eq_sdiff_union** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_sdiff_eq_sdiff_union (h : u subseteq s) : s \ (t \ u) = s \ t union 
+u
+参数：h : u subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sdiff_eq_sdiff_sup`：sdiff_sdiff_eq_sdiff_sup (h : z <= x) : x \ (y
+ \ z) = x \ y ⊔ z
 -/
-theorem sdiff_sdiff_eq_sdiff_union (h : u subseteq s) : s \ (t \ u) = s \ t union u :=
+theorem sdiff_sdiff_eq_sdiff_union (h : u ⊆ s) : s \ (t \ u) = s \ t ∪ u :=
   sdiff_sdiff_eq_sdiff_sup h
-
-/--
-theorem `sdiff_sdiff_self_left` / 定理 `sdiff_sdiff_self_left`
-
-English:
-theorem sdiff_sdiff_self_left
-  given: (s t : Finset α)
-  statement: s \ (s \ t) = s inter t
-  proof: sdiff_sdiff_right_self
-
-中文:
-定理 sdiff_sdiff_self_left
-  条件: (s t : 有限集 α)
-  结论: s \ (s \ t) = s inter t
-  证明: sdiff_sdiff_right_self
-
-Depends on / 依赖: sdiff_sdiff_right_self
+/-
+**Finset.sdiff_sdiff_self_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_sdiff_self_left (s t : Finset α) : s \ (s \ t) = s inter t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sdiff_right_self`：sdiff_sdiff_right_self : x \ (x \ y) = x ⊓ y
 -/
-theorem sdiff_sdiff_self_left (s t : Finset α) : s \ (s \ t) = s inter t :=
+theorem sdiff_sdiff_self_left (s t : Finset α) : s \ (s \ t) = s ∩ t :=
   sdiff_sdiff_right_self
-
-/--
-theorem `sdiff_sdiff_eq_self` / 定理 `sdiff_sdiff_eq_self`
-
-English:
-theorem sdiff_sdiff_eq_self
-  given: (h : t subseteq s)
-  statement: s \ (s \ t) = t
-  proof: _root_.sdiff_sdiff_eq_self h
-
-中文:
-定理 sdiff_sdiff_eq_self
-  条件: (h : t subseteq s)
-  结论: s \ (s \ t) = t
-  证明: _root_.sdiff_sdiff_eq_self h
-
-Depends on / 依赖: _root_, _root_.sdiff_sdiff_eq_self, sdiff_sdiff_eq_self
+/-
+**Finset.sdiff_sdiff_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_sdiff_eq_self (h : t subseteq s) : s \ (s \ t) = t
+参数：h : t subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_sdiff_eq_self`：sdiff_sdiff_eq_self (h : y <= x) : x \ (x \ y) = y
 -/
-theorem sdiff_sdiff_eq_self (h : t subseteq s) : s \ (s \ t) = t :=
+theorem sdiff_sdiff_eq_self (h : t ⊆ s) : s \ (s \ t) = t :=
   _root_.sdiff_sdiff_eq_self h
-
-/--
-theorem `sdiff_eq_sdiff_iff_inter_eq_inter` / 定理 `sdiff_eq_sdiff_iff_inter_eq_inter`
-
-English:
-theorem sdiff_eq_sdiff_iff_inter_eq_inter
-  given: {s t₁ t₂ : Finset α}
-  proof: sdiff_eq_sdiff_iff_inf_eq_inf
-
-中文:
-定理 sdiff_eq_sdiff_iff_inter_eq_inter
-  条件: {s t₁ t₂ : 有限集 α}
-  证明: sdiff_eq_sdiff_iff_inf_eq_inf
-
-Depends on / 依赖: sdiff_eq_sdiff_iff_inf_eq_inf
+/-
+**Finset.sdiff_eq_sdiff_iff_inter_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_eq_sdiff_iff_inter_eq_inter {s t₁ t₂ : Finset α} : s \ t₁ = s \ t₂ ↔
+ s inter t₁ = s inter t₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_eq_sdiff_iff_inf_eq_inf`：sdiff_eq_sdiff_iff_inf_eq_inf : y \ x = y
+ \ z ↔ y ⊓ x = y ⊓ z
 -/
 theorem sdiff_eq_sdiff_iff_inter_eq_inter {s t₁ t₂ : Finset α} :
-    s \ t₁ = s \ t₂ ↔ s inter t₁ = s inter t₂ :=
+    s \ t₁ = s \ t₂ ↔ s ∩ t₁ = s ∩ t₂ :=
   sdiff_eq_sdiff_iff_inf_eq_inf
-
-/--
-theorem `union_eq_sdiff_union_sdiff_union_inter` / 定理 `union_eq_sdiff_union_sdiff_union_inter`
-
-English:
-theorem union_eq_sdiff_union_sdiff_union_inter
-  given: (s t : Finset α)
-  statement: s union t = s \ t union t \ s union s inter t
-  proof: sup_eq_sdiff_sup_sdiff_sup_inf
-
-中文:
-定理 union_eq_sdiff_union_sdiff_union_inter
-  条件: (s t : 有限集 α)
-  结论: s union t = s \ t union t \ s union s inter t
-  证明: sup_eq_sdiff_sup_sdiff_sup_inf
-
-Depends on / 依赖: sup_eq_sdiff_sup_sdiff_sup_inf
+/-
+**Finset.union_eq_sdiff_union_sdiff_union_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finse
+t`。
+形式化陈述：union_eq_sdiff_union_sdiff_union_inter (s t : Finset α) : s union t = s \ 
+t union t \ s union s inter t
+参数：s t : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_sdiff_sup_sdiff_sup_inf`：sup_eq_sdiff_sup_sdiff_sup_inf : x ⊔ y =
+ x \ y ⊔ y \ x ⊔ x ⊓ y
 -/
-theorem union_eq_sdiff_union_sdiff_union_inter (s t : Finset α) : s union t = s \ t union t \ s union s inter t :=
+theorem union_eq_sdiff_union_sdiff_union_inter (s t : Finset α) : s ∪ t = s \ t ∪ t \ s ∪ s ∩ t :=
   sup_eq_sdiff_sup_sdiff_sup_inf
-
-/--
-theorem `sdiff_eq_self_iff_disjoint` / 定理 `sdiff_eq_self_iff_disjoint`
-
-English:
-theorem sdiff_eq_self_iff_disjoint
-  statement: s \ t = s ↔ Disjoint s t
-  proof: sdiff_eq_left
-
-中文:
-定理 sdiff_eq_self_iff_disjoint
-  结论: s \ t = s ↔ Disjoint s t
-  证明: sdiff_eq_left
-
-Depends on / 依赖: sdiff_eq_left
+/-
+**Finset.sdiff_eq_self_iff_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_eq_self_iff_disjoint : s \ t = s ↔ Disjoint s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sdiff_eq_left`：∀ {α : Type u} {x y : α} [inst : GeneralizedBooleanAlgebr
+a α], x \ y = x ↔ Disjoint x y
 -/
 theorem sdiff_eq_self_iff_disjoint : s \ t = s ↔ Disjoint s t :=
   sdiff_eq_left
-
-/--
-theorem `sdiff_eq_self_of_disjoint` / 定理 `sdiff_eq_self_of_disjoint`
-
-English:
-theorem sdiff_eq_self_of_disjoint
-  given: (h : Disjoint s t)
-  statement: s \ t = s
-  proof: sdiff_eq_self_iff_disjoint.2 h
-
-中文:
-定理 sdiff_eq_self_of_disjoint
-  条件: (h : Disjoint s t)
-  结论: s \ t = s
-  证明: sdiff_eq_self_iff_disjoint.2 h
-
-Depends on / 依赖: sdiff_eq_self_iff_disjoint
+/-
+**Finset.sdiff_eq_self_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sdiff_eq_self_of_disjoint (h : Disjoint s t) : s \ t = s
+参数：h : Disjoint s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.sdiff_eq_self_iff_disjoint`：sdiff_eq_self_iff_disjoint : s \ t = 
+s ↔ Disjoint s t
 -/
 theorem sdiff_eq_self_of_disjoint (h : Disjoint s t) : s \ t = s :=
   sdiff_eq_self_iff_disjoint.2 h
@@ -1271,3 +757,4 @@ theorem sdiff_eq_self_of_disjoint (h : Disjoint s t) : s \ t = s :=
 end Sdiff
 
 end Finset
+

@@ -38,56 +38,49 @@ open Subgroup
 variable (G : Type*) [CommGroup G] [Group.FG G]
 
 @[to_additive]
-/--
-theorem `card_dvd_exponent_pow_rank` / 定理 `card_dvd_exponent_pow_rank`
-
-English:
-theorem card_dvd_exponent_pow_rank
-  statement: Nat.card G ∣ Monoid.exponent G ^ Group.rank G
-  proof: by
-  classical
-  obtain ⟨S, hS1, hS2⟩ := Group.rank_spec G
-  rw [← hS1]; rw [← Fintype.card_coe]; rw [← Finset.card_univ]; rw [← Finset.prod_const]
-  let f : (forall g : S, zpowers (g : G)) ->* G := noncommPiCoprod fun s t _ x y _ _ => mul_comm x _
-  have hf : Function.Surjective f := by
-    rw [← MonoidHom.range_eq_top]; rw [eq_top_iff]; rw [← hS2]; rw [closure_le]
-    exact fun g hg => ⟨Pi.mulSingle ⟨g, hg⟩ ⟨g, mem_zpowers g⟩, noncommPiCoprod_mulSingle _ _⟩
-  replace hf := card_dvd_of_surjective f hf
-  rw [Nat.card_pi] at hf
-  refine hf.trans (Finset.prod_dvd_prod_of_dvd _ _ fun g _ => ?_)
-  rw [Nat.card_zpowers]
-  exact Monoid.order_dvd_exponent (g : G)
-
-@[to_additive]
-
-中文:
-定理 card_dvd_exponent_pow_rank
-  结论: 自然数.card G ∣ 幺半群.exponent G ^ 群.rank G
-  证明: by
-  classical
-  obtain ⟨S, hS1, hS2⟩ := Group.rank_spec G
-  rw [← hS1]; rw [← Fintype.card_coe]; rw [← Finset.card_univ]; rw [← Finset.prod_const]
-  let f : (forall g : S, zpowers (g : G)) ->* G := noncommPiCoprod fun s t _ x y _ _ => mul_comm x _
-  have hf : Function.Surjective f := by
-    rw [← MonoidHom.range_eq_top]; rw [eq_top_iff]; rw [← hS2]; rw [closure_le]
-    exact fun g hg => ⟨Pi.mulSingle ⟨g, hg⟩ ⟨g, mem_zpowers g⟩, noncommPiCoprod_mulSingle _ _⟩
-  replace hf := card_dvd_of_surjective f hf
-  rw [Nat.card_pi] at hf
-  refine hf.trans (Finset.prod_dvd_prod_of_dvd _ _ fun g _ => ?_)
-  rw [Nat.card_zpowers]
-  exact Monoid.order_dvd_exponent (g : G)
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.card_univ, Finset.prod_const, Fintype, Fintype.card_coe, Function, Function.Surjective, Group.rank_spec, MonoidHom, MonoidHom.range_eq_top, Nat.card, Pi.mulSingle, Surjective, card_coe, card_dvd_of_surjective, card_univ, classical, closure_le, eq_top_iff, mem_zpowers
+/-
+**card_dvd_exponent_pow_rank** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：card_dvd_exponent_pow_rank : Nat.card G ∣ Monoid.exponent G ^ Group.rank G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Group.rank_spec`：rank_spec [h : FG G] : exists S : Finset G, S.card = ra
+nk G ∧ .closure S = (⊤ : Subgroup G)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Finset.card_univ`：Finset.card_univ [Fintype α] : #(univ : Finset α) = Fi
+ntype.card α
+· 使用定理 `Finset.prod_const`：prod_const (b : M) : ∏ _x in s, b = b ^ #s
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `Subgroup.mem_zpowers`：mem_zpowers (g : G) : g in zpowers g
+· 使用定理 `Subgroup.noncommPiCoprod_mulSingle`：noncommPiCoprod_mulSingle [Decidable
+Eq ι] {hcomm : Pairwise fun i j : ι => forall x y : G, x in H i -> y in H j -> C
+ommute x y} (i : ι) (y :…
+· 使用定理 `Subgroup.card_dvd_of_surjective`：card_dvd_of_surjective (f : G ->* G') (
+hf : Function.Surjective f) : Nat.card G' ∣ Nat.card G
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Nat.card_pi`：card_pi {β : α -> Type*} [Fintype α] : Nat.card (forall a, 
+β a) = ∏ a, Nat.card (β a)
+· 使用引理 `Finset.prod_dvd_prod_of_dvd`：prod_dvd_prod_of_dvd (f g : ι -> M) (h : fo
+rall i in s, f i ∣ g i) : ∏ i in s, f i ∣ ∏ i in s, g i
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
+· 使用定理 `Monoid.order_dvd_exponent`：order_dvd_exponent (g : G) : orderOf g ∣ expo
+nent G
 -/
 theorem card_dvd_exponent_pow_rank : Nat.card G ∣ Monoid.exponent G ^ Group.rank G := by
   classical
   obtain ⟨S, hS1, hS2⟩ := Group.rank_spec G
-  rw [← hS1]; rw [← Fintype.card_coe]; rw [← Finset.card_univ]; rw [← Finset.prod_const]
-  let f : (forall g : S, zpowers (g : G)) ->* G := noncommPiCoprod fun s t _ x y _ _ => mul_comm x _
+  rw [← hS1, ← Fintype.card_coe, ← Finset.card_univ, ← Finset.prod_const]
+  let f : (∀ g : S, zpowers (g : G)) →* G := noncommPiCoprod fun s t _ x y _ _ => mul_comm x _
   have hf : Function.Surjective f := by
-    rw [← MonoidHom.range_eq_top]; rw [eq_top_iff]; rw [← hS2]; rw [closure_le]
+    rw [← MonoidHom.range_eq_top, eq_top_iff, ← hS2, closure_le]
     exact fun g hg => ⟨Pi.mulSingle ⟨g, hg⟩ ⟨g, mem_zpowers g⟩, noncommPiCoprod_mulSingle _ _⟩
   replace hf := card_dvd_of_surjective f hf
   rw [Nat.card_pi] at hf
@@ -96,24 +89,23 @@ theorem card_dvd_exponent_pow_rank : Nat.card G ∣ Monoid.exponent G ^ Group.ra
   exact Monoid.order_dvd_exponent (g : G)
 
 @[to_additive]
-/--
-theorem `card_dvd_exponent_pow_rank'` / 定理 `card_dvd_exponent_pow_rank'`
-
-English:
-theorem card_dvd_exponent_pow_rank'
-  given: {n : Nat} (hG : forall g : G, g ^ n = 1)
-  proof: (card_dvd_exponent_pow_rank G).trans
-    (pow_dvd_pow_of_dvd (Monoid.exponent_dvd_of_forall_pow_eq_one hG) (Group.rank G))
-
-中文:
-定理 card_dvd_exponent_pow_rank'
-  条件: {n : 自然数} (hG : 对任意 g : G, g ^ n = 1)
-  证明: (card_dvd_exponent_pow_rank G).trans
-    (pow_dvd_pow_of_dvd (Monoid.exponent_dvd_of_forall_pow_eq_one hG) (Group.rank G))
-
-Depends on / 依赖: Group.rank, Monoid, Monoid.exponent_dvd_of_forall_pow_eq_one, card_dvd_exponent_pow_rank, exponent_dvd_of_forall_pow_eq_one, pow_dvd_pow_of_dvd
+/-
+**card_dvd_exponent_pow_rank'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：card_dvd_exponent_pow_rank' {n : Nat} (hG : forall g : G, g ^ n = 1) : Nat
+.card G ∣ n ^ Group.rank G
+参数：hG : forall g : G, g ^ n = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `card_dvd_exponent_pow_rank`：card_dvd_exponent_pow_rank : Nat.card G ∣ Mo
+noid.exponent G ^ Group.rank G
+· 使用定理 `pow_dvd_pow_of_dvd`：pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b
+ ^ n
+· 使用定理 `Monoid.exponent_dvd_of_forall_pow_eq_one`：∀ {G : Type u} [inst : Monoid 
+G] {n : ℕ}, (∀ (g : G), g ^ n = 1) → Monoid.exponent G ∣ n
 -/
-theorem card_dvd_exponent_pow_rank' {n : Nat} (hG : forall g : G, g ^ n = 1) :
+theorem card_dvd_exponent_pow_rank' {n : ℕ} (hG : ∀ g : G, g ^ n = 1) :
     Nat.card G ∣ n ^ Group.rank G :=
   (card_dvd_exponent_pow_rank G).trans
     (pow_dvd_pow_of_dvd (Monoid.exponent_dvd_of_forall_pow_eq_one hG) (Group.rank G))
@@ -125,61 +117,62 @@ namespace Subgroup
 variable {G : Type*} [Group G] {H : Subgroup G} {R S : Set G}
 
 @[to_additive]
-/--
-theorem `closure_mul_image_mul_eq_top` / 定理 `closure_mul_image_mul_eq_top`
-
-English:
-theorem closure_mul_image_mul_eq_top
-  proof: by
-  let f : G -> R := hR.toRightFun
-  let U : Set G := (R * S).image fun g => g * (f g : G)⁻¹
-  change (closure U : Set G) * R = ⊤
-  refine top_le_iff.mp fun g _ => ?_
-  refine closure_induction_right ?_ ?_ ?_ (eq_top_iff.mp hS (mem_top g))
-  · exact ⟨1, (closure U).one_mem, 1, hR1, one_mul 1⟩
-  · rintro - - s hs ⟨u, hu, r, hr, rfl⟩
-    rw [show u * r * s = u * (r * s * (f (r * s) : G)⁻¹) * f (r * s) by group]
-    refine Set.mul_mem_mul ((closure U).mul_mem hu ?_) (f (r * s)).coe_prop
-    exact subset_closure ⟨r * s, Set.mul_mem_mul hr hs, rfl⟩
-  · rintro - - s hs ⟨u, hu, r, hr, rfl⟩
-    rw [show u * r * s⁻¹ = u * (f (r * s⁻¹) * s * r⁻¹)⁻¹ * f (r * s⁻¹) by group]
-    refine Set.mul_mem_mul ((closure U).mul_mem hu ((closure U).inv_mem ?_)) (f (r * s⁻¹)).2
-    refine subset_closure ⟨f (r * s⁻¹) * s, Set.mul_mem_mul (f (r * s⁻¹)).2 hs, ?_⟩
-    rw [mul_right_inj]; rw [inv_inj]; rw [← Subtype.coe_mk r hr]; rw [← Subtype.ext_iff]; rw [Subtype.coe_mk]
-    apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR (f (r * s⁻¹) * s)).unique
-      (hR.mul_inv_toRightFun_mem (f (r * s⁻¹) * s))
-    rw [mul_assoc]; rw [← inv_inv s]; rw [← mul_inv_rev]; rw [inv_inv]
-    exact hR.toRightFun_mul_inv_mem (r * s⁻¹)
-
-中文:
-定理 closure_mul_image_mul_eq_top
-  证明: by
-  let f : G -> R := hR.toRightFun
-  let U : Set G := (R * S).image fun g => g * (f g : G)⁻¹
-  change (closure U : Set G) * R = ⊤
-  refine top_le_iff.mp fun g _ => ?_
-  refine closure_induction_right ?_ ?_ ?_ (eq_top_iff.mp hS (mem_top g))
-  · exact ⟨1, (closure U).one_mem, 1, hR1, one_mul 1⟩
-  · rintro - - s hs ⟨u, hu, r, hr, rfl⟩
-    rw [show u * r * s = u * (r * s * (f (r * s) : G)⁻¹) * f (r * s) by group]
-    refine Set.mul_mem_mul ((closure U).mul_mem hu ?_) (f (r * s)).coe_prop
-    exact subset_closure ⟨r * s, Set.mul_mem_mul hr hs, rfl⟩
-  · rintro - - s hs ⟨u, hu, r, hr, rfl⟩
-    rw [show u * r * s⁻¹ = u * (f (r * s⁻¹) * s * r⁻¹)⁻¹ * f (r * s⁻¹) by group]
-    refine Set.mul_mem_mul ((closure U).mul_mem hu ((closure U).inv_mem ?_)) (f (r * s⁻¹)).2
-    refine subset_closure ⟨f (r * s⁻¹) * s, Set.mul_mem_mul (f (r * s⁻¹)).2 hs, ?_⟩
-    rw [mul_right_inj]; rw [inv_inj]; rw [← Subtype.coe_mk r hr]; rw [← Subtype.ext_iff]; rw [Subtype.coe_mk]
-    apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR (f (r * s⁻¹) * s)).unique
-      (hR.mul_inv_toRightFun_mem (f (r * s⁻¹) * s))
-    rw [mul_assoc]; rw [← inv_inv s]; rw [← mul_inv_rev]; rw [inv_inv]
-    exact hR.toRightFun_mul_inv_mem (r * s⁻¹)
-
-Depends on / 依赖: Set.mul_mem_mul, closure, closure_induction_right, coe_prop, eq_top_iff, eq_top_iff.mp, hR.toRightFun, mem_top, mul_mem, mul_mem_mul, one_mem, one_mul, subset_closure, toRightFun, top_le_iff, top_le_iff.mp
+/-
+**Subgroup.closure_mul_image_mul_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_mul_image_mul_eq_top (hR : IsComplement H R) (hR1 : (1 : G) in R) 
+(hS : closure S = ⊤) : (closure ((R * S).image fun g => g * (hR.toRightFun g : G
+)⁻¹)) * R = ⊤
+参数：hR : IsComplement H R；hR1 : (1 : G) in R；hS : closure S = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Subgroup.closure_induction_right`：closure_induction_right {p : (x : G) -
+> x in closure s -> Prop} (one : p 1 (one_mem _)) (mul_right : forall (x) hx, fo
+rall y (hy : y in s), …
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Tactic.Group._zpow_trick_one'`：_zpow_trick_one' {G : Type*} [Gro
+up G] (a b : G) (n : Int) : a * b ^ n * b = a * b ^ (n + 1)
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.mul_mem_mul`：mul_mem_mul : a in s -> b in t -> a * b in s * t
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `mul_zpow_neg_one`：mul_zpow_neg_one (a b : α) : (a * b) ^ (-1 : Int) = b 
+^ (-1 : Int) * a ^ (-1 : Int)
+· 使用定理 `Int.mul_neg`：∀ (a b : ℤ), a * -b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `mul_right_inj`：mul_right_inj (a : G) {b c : G} : a * b = a * c ↔ b = c
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `inv_inj`：inv_inj : a⁻¹ = b⁻¹ ↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+（共 40 条，此处仅展示前 30 条）
 -/
 theorem closure_mul_image_mul_eq_top
-    (hR : IsComplement H R) (hR1 : (1 : G) in R) (hS : closure S = ⊤) :
+    (hR : IsComplement H R) (hR1 : (1 : G) ∈ R) (hS : closure S = ⊤) :
     (closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹)) * R = ⊤ := by
-  let f : G -> R := hR.toRightFun
+  let f : G → R := hR.toRightFun
   let U : Set G := (R * S).image fun g => g * (f g : G)⁻¹
   change (closure U : Set G) * R = ⊤
   refine top_le_iff.mp fun g _ => ?_
@@ -193,10 +186,10 @@ theorem closure_mul_image_mul_eq_top
     rw [show u * r * s⁻¹ = u * (f (r * s⁻¹) * s * r⁻¹)⁻¹ * f (r * s⁻¹) by group]
     refine Set.mul_mem_mul ((closure U).mul_mem hu ((closure U).inv_mem ?_)) (f (r * s⁻¹)).2
     refine subset_closure ⟨f (r * s⁻¹) * s, Set.mul_mem_mul (f (r * s⁻¹)).2 hs, ?_⟩
-    rw [mul_right_inj]; rw [inv_inj]; rw [← Subtype.coe_mk r hr]; rw [← Subtype.ext_iff]; rw [Subtype.coe_mk]
+    rw [mul_right_inj, inv_inj, ← Subtype.coe_mk r hr, ← Subtype.ext_iff, Subtype.coe_mk]
     apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR (f (r * s⁻¹) * s)).unique
       (hR.mul_inv_toRightFun_mem (f (r * s⁻¹) * s))
-    rw [mul_assoc]; rw [← inv_inv s]; rw [← mul_inv_rev]; rw [inv_inv]
+    rw [mul_assoc, ← inv_inv s, ← mul_inv_rev, inv_inv]
     exact hR.toRightFun_mul_inv_mem (r * s⁻¹)
 
 /-- **Schreier's Lemma**: If `R : Set G` and `H : Subgroup G` are complements with `1 ∈ R`, and if
@@ -205,58 +198,51 @@ theorem closure_mul_image_mul_eq_top
 @[wikidata Q3229345, to_additive /-- **Schreier's Lemma**: If `R : Set G` and `H : AddSubgroup G`
 are complements with `0 ∈ R`, and if `G` is generated by `S : Set G`,
 then `H` is generated by the `Set` `(R + S).image (fun g ↦ g - (hR.toRightFun g))`. -/]
-/--
-theorem `closure_mul_image_eq` / 定理 `closure_mul_image_eq`
-
-English:
-theorem closure_mul_image_eq
-  statement: (hR : IsComplement H R) (hR1 : (1 : G) in R)
-  proof: by
-  have hU : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) <= H := by
-    rw [closure_le]
-    rintro - ⟨g, -, rfl⟩
-    exact hR.mul_inv_toRightFun_mem g
-  refine le_antisymm hU fun h hh => ?_
-  obtain ⟨g, hg, r, hr, rfl⟩ :=
-    show h in _ from eq_top_iff.mp (closure_mul_image_mul_eq_top hR hR1 hS) (mem_top h)
-  suffices (⟨r, hr⟩ : R) = (⟨1, hR1⟩ : R) by
-    simpa only [show r = 1 from Subtype.ext_iff.mp this, mul_one]
-  apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR r).unique
-  · rw [Subtype.coe_mk, mul_inv_cancel]
-    exact H.one_mem
-  · rw [Subtype.coe_mk, inv_one, mul_one]
-    exact (H.mul_mem_cancel_left (hU hg)).mp hh
-
-中文:
-定理 closure_mul_image_eq
-  结论: (hR : IsComplement H R) (hR1 : (1 : G) in R)
-  证明: by
-  have hU : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) <= H := by
-    rw [closure_le]
-    rintro - ⟨g, -, rfl⟩
-    exact hR.mul_inv_toRightFun_mem g
-  refine le_antisymm hU fun h hh => ?_
-  obtain ⟨g, hg, r, hr, rfl⟩ :=
-    show h in _ from eq_top_iff.mp (closure_mul_image_mul_eq_top hR hR1 hS) (mem_top h)
-  suffices (⟨r, hr⟩ : R) = (⟨1, hR1⟩ : R) by
-    simpa only [show r = 1 from Subtype.ext_iff.mp this, mul_one]
-  apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR r).unique
-  · rw [Subtype.coe_mk, mul_inv_cancel]
-    exact H.one_mem
-  · rw [Subtype.coe_mk, inv_one, mul_one]
-    exact (H.mul_mem_cancel_left (hU hg)).mp hh
-
-Depends on / 依赖: Subtype, Subtype.coe_mk, Subtype.ext_iff.mp, closure, closure_le, closure_mul_image_mul_eq_top, coe_mk, eq_top_iff, eq_top_iff.mp, ext_iff, hR.mul_inv_toRightFun_mem, hR.toRightFun, isComplement_iff_existsUnique_mul_inv_mem, isComplement_iff_existsUnique_mul_inv_mem.mp, le_antisymm, mem_top, mul_inv_toRightFun_mem, mul_one, toRightFun, unique
+/-
+**Subgroup.closure_mul_image_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_mul_image_eq (hR : IsComplement H R) (hR1 : (1 : G) in R) (hS : cl
+osure S = ⊤) : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) = H
+参数：hR : IsComplement H R；hR1 : (1 : G) in R；hS : closure S = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `Subgroup.IsComplement.mul_inv_toRightFun_mem`：mul_inv_toRightFun_mem (hT
+ : IsComplement H T) (g : G) : g * (toRightFun hT g : G)⁻¹ in H
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Subgroup.closure_mul_image_mul_eq_top`：closure_mul_image_mul_eq_top (hR 
+: IsComplement H R) (hR1 : (1 : G) in R) (hS : closure S = ⊤) : (closure ((R * S
+).image fun g => g * (hR.to…
+· 使用定理 `Subgroup.mem_top`：mem_top (x : G) : x in (⊤ : Subgroup G)
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用引理 `Subgroup.isComplement_iff_existsUnique_mul_inv_mem`：isComplement_iff_exi
+stsUnique_mul_inv_mem : IsComplement S T ↔ forall g, exists! t : T, g * (t : G)⁻
+¹ in S
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Subgroup.mul_mem_cancel_left`：∀ {G : Type u_1} [inst : Group G] (H : Sub
+group G) {x y : G}, x ∈ H → (x * y ∈ H ↔ y ∈ H)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
-theorem closure_mul_image_eq (hR : IsComplement H R) (hR1 : (1 : G) in R)
+theorem closure_mul_image_eq (hR : IsComplement H R) (hR1 : (1 : G) ∈ R)
     (hS : closure S = ⊤) : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) = H := by
-  have hU : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) <= H := by
+  have hU : closure ((R * S).image fun g => g * (hR.toRightFun g : G)⁻¹) ≤ H := by
     rw [closure_le]
     rintro - ⟨g, -, rfl⟩
     exact hR.mul_inv_toRightFun_mem g
   refine le_antisymm hU fun h hh => ?_
   obtain ⟨g, hg, r, hr, rfl⟩ :=
-    show h in _ from eq_top_iff.mp (closure_mul_image_mul_eq_top hR hR1 hS) (mem_top h)
+    show h ∈ _ from eq_top_iff.mp (closure_mul_image_mul_eq_top hR hR1 hS) (mem_top h)
   suffices (⟨r, hr⟩ : R) = (⟨1, hR1⟩ : R) by
     simpa only [show r = 1 from Subtype.ext_iff.mp this, mul_one]
   apply (isComplement_iff_existsUnique_mul_inv_mem.mp hR r).unique
@@ -271,29 +257,39 @@ theorem closure_mul_image_eq (hR : IsComplement H R) (hR1 : (1 : G) in R)
 @[to_additive /-- **Schreier's Lemma**: If `R : Set G` and `H : AddSubgroup G` are complements with
 `0 ∈ R`, and if `G` is generated by `S : Set G`, then `H` is generated by the `Set`
   `(R + S).image (fun g ↦ g - (hR.toRightFun g))`. -/]
-/--
-theorem `closure_mul_image_eq_top` / 定理 `closure_mul_image_eq_top`
-
-English:
-theorem closure_mul_image_eq_top
-  statement: (hR : IsComplement H R) (hR1 : (1 : G) in R)
-  proof: by
-  rw [eq_top_iff]; rw [← map_subtype_le_map_subtype]; rw [MonoidHom.map_closure]; rw [Set.image_image]
-  exact (map_subtype_le ⊤).trans (ge_of_eq (closure_mul_image_eq hR hR1 hS))
-
-中文:
-定理 closure_mul_image_eq_top
-  结论: (hR : IsComplement H R) (hR1 : (1 : G) in R)
-  证明: by
-  rw [eq_top_iff]; rw [← map_subtype_le_map_subtype]; rw [MonoidHom.map_closure]; rw [Set.image_image]
-  exact (map_subtype_le ⊤).trans (ge_of_eq (closure_mul_image_eq hR hR1 hS))
-
-Depends on / 依赖: MonoidHom, MonoidHom.map_closure, Set.image_image, closure_mul_image_eq, eq_top_iff, ge_of_eq, image_image, map_closure, map_subtype_le, map_subtype_le_map_subtype
+/-
+**Subgroup.closure_mul_image_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_mul_image_eq_top (hR : IsComplement H R) (hR1 : (1 : G) in R) (hS 
+: closure S = ⊤) : closure ((R * S).image fun g => ⟨g * (hR.toRightFun g : G)⁻¹,
+ hR.mul_inv_toRightFun_mem g⟩ : Set H) = ⊤
+参数：hR : IsComplement H R；hR1 : (1 : G) in R；hS : closure S = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.IsComplement.mul_inv_toRightFun_mem`：mul_inv_toRightFun_mem (hT
+ : IsComplement H T) (g : G) : g * (toRightFun hT g : G)⁻¹ in H
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.map_subtype_le_map_subtype`：map_subtype_le_map_subtype {G' : Su
+bgroup G} {H K : Subgroup G'} : H.map G'.subtype <= K.map G'.subtype ↔ H <= K
+· 使用定理 `MonoidHom.map_closure`：map_closure (f : G ->* N) (s : Set G) : (closure 
+s).map f = closure (f '' s)
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subgroup.map_subtype_le`：map_subtype_le {H : Subgroup G} (K : Subgroup H
+) : K.map H.subtype <= H
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Subgroup.closure_mul_image_eq`：closure_mul_image_eq (hR : IsComplement H
+ R) (hR1 : (1 : G) in R) (hS : closure S = ⊤) : closure ((R * S).image fun g => 
+g * (hR.toRightFun …
 -/
-theorem closure_mul_image_eq_top (hR : IsComplement H R) (hR1 : (1 : G) in R)
+theorem closure_mul_image_eq_top (hR : IsComplement H R) (hR1 : (1 : G) ∈ R)
     (hS : closure S = ⊤) : closure ((R * S).image fun g =>
       ⟨g * (hR.toRightFun g : G)⁻¹, hR.mul_inv_toRightFun_mem g⟩ : Set H) = ⊤ := by
-  rw [eq_top_iff]; rw [← map_subtype_le_map_subtype]; rw [MonoidHom.map_closure]; rw [Set.image_image]
+  rw [eq_top_iff, ← map_subtype_le_map_subtype, MonoidHom.map_closure, Set.image_image]
   exact (map_subtype_le ⊤).trans (ge_of_eq (closure_mul_image_eq hR hR1 hS))
 
 /-- **Schreier's Lemma**: If `R : Finset G` and `H : Subgroup G` are complements with `1 ∈ R`, and
@@ -302,97 +298,86 @@ if `G` is generated by `S : Finset G`, then `H` is generated by the `Finset`
 @[to_additive /-- **Schreier's Lemma**: If `R : Finset G` and `H : AddSubgroup G` are complements
 with `0 ∈ R`, and if `G` is generated by `S : Finset G`, then `H` is generated by the `Finset`
   `(R + S).image (fun g ↦ g - (hR.toRightFun g))`. -/]
-/--
-theorem `closure_mul_image_eq_top'` / 定理 `closure_mul_image_eq_top'`
-
-English:
-theorem closure_mul_image_eq_top'
-  statement: [DecidableEq G] {R S : Finset G}
-  proof: by
-  rw [Finset.coe_image]; rw [Finset.coe_mul]
-  exact closure_mul_image_eq_top hR hR1 hS
-
-中文:
-定理 closure_mul_image_eq_top'
-  结论: [DecidableEq G] {R S : 有限集 G}
-  证明: by
-  rw [Finset.coe_image]; rw [Finset.coe_mul]
-  exact closure_mul_image_eq_top hR hR1 hS
-
-Depends on / 依赖: Finset, Finset.coe_image, Finset.coe_mul, closure_mul_image_eq_top, coe_image, coe_mul
+/-
+**Subgroup.closure_mul_image_eq_top'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：closure_mul_image_eq_top' [DecidableEq G] {R S : Finset G} (hR : IsComplem
+ent (H : Set G) R) (hR1 : (1 : G) in R) (hS : closure (S : Set G) = ⊤) : closure
+ (((R * S).image fun g => ⟨_, hR.mul_inv_toRightFun_mem g⟩ : Finset H) : Set H) 
+= ⊤
+参数：hR : IsComplement (H : Set G) R；hR1 : (1 : G) in R；hS : closure (S : Set G) =
+ ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.IsComplement.mul_inv_toRightFun_mem`：mul_inv_toRightFun_mem (hT
+ : IsComplement H T) (g : G) : g * (toRightFun hT g : G)⁻¹ in H
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Subgroup.closure_mul_image_eq_top`：closure_mul_image_eq_top (hR : IsComp
+lement H R) (hR1 : (1 : G) in R) (hS : closure S = ⊤) : closure ((R * S).image f
+un g => ⟨g * (hR.toRigh…
 -/
 theorem closure_mul_image_eq_top' [DecidableEq G] {R S : Finset G}
-    (hR : IsComplement (H : Set G) R) (hR1 : (1 : G) in R)
+    (hR : IsComplement (H : Set G) R) (hR1 : (1 : G) ∈ R)
     (hS : closure (S : Set G) = ⊤) :
     closure (((R * S).image fun g => ⟨_, hR.mul_inv_toRightFun_mem g⟩ : Finset H) : Set H) = ⊤ := by
-  rw [Finset.coe_image]; rw [Finset.coe_mul]
+  rw [Finset.coe_image, Finset.coe_mul]
   exact closure_mul_image_eq_top hR hR1 hS
 
 variable (H)
 
 @[to_additive]
-/--
-theorem `exists_finset_card_le_mul` / 定理 `exists_finset_card_le_mul`
-
-English:
-theorem exists_finset_card_le_mul
-  given: [FiniteIndex H] {S : Finset G} (hS : closure (S : Set G) = ⊤)
-  proof: by
-  let := H.fintypeQuotientOfFiniteIndex
-  have : DecidableEq G := Classical.decEq G
-  obtain ⟨R₀, hR, hR1⟩ := H.exists_isComplement_right 1
-  have : Fintype R₀ := Fintype.ofEquiv _ hR.rightQuotientEquiv
-  let R : Finset G := Set.toFinset R₀
-  replace hR : IsComplement (H : Set G) R := by rwa [Set.coe_toFinset]
-  replace hR1 : (1 : G) in R := by rwa [Set.mem_toFinset]
-  refine ⟨_, ?_, closure_mul_image_eq_top' hR hR1 hS⟩
-  calc
-    _ <= #(R * S) := Finset.card_image_le
-    _ <= #R * #S := Finset.card_mul_le
-    _ = H.index * S.card := congr_arg (· * S.card) ?_
-  calc
-    #R = Fintype.card R := (Fintype.card_coe R).symm
-    _ = _ := (Fintype.card_congr hR.rightQuotientEquiv).symm
-    _ = Fintype.card (G ⧸ H) := QuotientGroup.card_quotient_rightRel H
-    _ = H.index := by rw [index_eq_card, Nat.card_eq_fintype_card]
-
-中文:
-定理 存在_finset_card_le_mul
-  条件: [FiniteIndex H] {S : 有限集 G} (hS : closure (S : 集合 G) = ⊤)
-  证明: by
-  let := H.fintypeQuotientOfFiniteIndex
-  have : DecidableEq G := Classical.decEq G
-  obtain ⟨R₀, hR, hR1⟩ := H.exists_isComplement_right 1
-  have : Fintype R₀ := Fintype.ofEquiv _ hR.rightQuotientEquiv
-  let R : Finset G := Set.toFinset R₀
-  replace hR : IsComplement (H : Set G) R := by rwa [Set.coe_toFinset]
-  replace hR1 : (1 : G) in R := by rwa [Set.mem_toFinset]
-  refine ⟨_, ?_, closure_mul_image_eq_top' hR hR1 hS⟩
-  calc
-    _ <= #(R * S) := Finset.card_image_le
-    _ <= #R * #S := Finset.card_mul_le
-    _ = H.index * S.card := congr_arg (· * S.card) ?_
-  calc
-    #R = Fintype.card R := (Fintype.card_coe R).symm
-    _ = _ := (Fintype.card_congr hR.rightQuotientEquiv).symm
-    _ = Fintype.card (G ⧸ H) := QuotientGroup.card_quotient_rightRel H
-    _ = H.index := by rw [index_eq_card, Nat.card_eq_fintype_card]
-
-Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Finset, Finset.card_image_le, Finset.card_mul_le, Fintype, Fintype.ofEquiv, H.exists_isComplement_right, H.fintypeQuotientOfFiniteIndex, H.index, IsComplement, Set.coe_toFinset, Set.mem_toFinset, Set.toFinset, card_image_le, card_mul_le, closure_mul_image_eq_top, coe_toFinset, exists_isComplement_right
+/-
+**Subgroup.exists_finset_card_le_mul** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：exists_finset_card_le_mul [FiniteIndex H] {S : Finset G} (hS : closure (S 
+: Set G) = ⊤) : exists T : Finset H, #T <= H.index * #S ∧ closure (T : Set H) = 
+⊤
+参数：hS : closure (S : Set G) = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Subgroup.exists_isComplement_right`：exists_isComplement_right (H : Subgr
+oup G) (g : G) : exists T, IsComplement H T ∧ g in T
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
+· 使用定理 `Subgroup.IsComplement.mul_inv_toRightFun_mem`：mul_inv_toRightFun_mem (hT
+ : IsComplement H T) (g : G) : g * (toRightFun hT g : G)⁻¹ in H
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
+· 使用定理 `Finset.card_mul_le`：card_mul_le : #(s * t) <= #s * #t
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用引理 `QuotientGroup.card_quotient_rightRel`：card_quotient_rightRel [Fintype (α
+ ⧸ s)] : Fintype.card (Quotient (QuotientGroup.rightRel s)) = Fintype.card (α ⧸ 
+s)
+· 使用定理 `Subgroup.index_eq_card`：index_eq_card : H.index = Nat.card (G ⧸ H)
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Subgroup.closure_mul_image_eq_top'`：closure_mul_image_eq_top' [Decidable
+Eq G] {R S : Finset G} (hR : IsComplement (H : Set G) R) (hR1 : (1 : G) in R) (h
+S : closure (S : Set G) …
 -/
 theorem exists_finset_card_le_mul [FiniteIndex H] {S : Finset G} (hS : closure (S : Set G) = ⊤) :
-    exists T : Finset H, #T <= H.index * #S ∧ closure (T : Set H) = ⊤ := by
+    ∃ T : Finset H, #T ≤ H.index * #S ∧ closure (T : Set H) = ⊤ := by
   let := H.fintypeQuotientOfFiniteIndex
   have : DecidableEq G := Classical.decEq G
   obtain ⟨R₀, hR, hR1⟩ := H.exists_isComplement_right 1
   have : Fintype R₀ := Fintype.ofEquiv _ hR.rightQuotientEquiv
   let R : Finset G := Set.toFinset R₀
   replace hR : IsComplement (H : Set G) R := by rwa [Set.coe_toFinset]
-  replace hR1 : (1 : G) in R := by rwa [Set.mem_toFinset]
+  replace hR1 : (1 : G) ∈ R := by rwa [Set.mem_toFinset]
   refine ⟨_, ?_, closure_mul_image_eq_top' hR hR1 hS⟩
   calc
-    _ <= #(R * S) := Finset.card_image_le
-    _ <= #R * #S := Finset.card_mul_le
+    _ ≤ #(R * S) := Finset.card_image_le
+    _ ≤ #R * #S := Finset.card_mul_le
     _ = H.index * S.card := congr_arg (· * S.card) ?_
   calc
     #R = Fintype.card R := (Fintype.card_coe R).symm
@@ -404,138 +389,111 @@ theorem exists_finset_card_le_mul [FiniteIndex H] {S : Finset G} (hS : closure (
   group is finitely generated. -/
 @[to_additive /-- **Schreier's Lemma**: A finite index additive subgroup of a finitely generated
   additive group is finitely generated. -/]
-/--
-Instance `fg_of_index_ne_zero` / 实例 `fg_of_index_ne_zero`
-
-English:
-instance fg_of_index_ne_zero
-  signature: [hG : Group.FG G] [FiniteIndex H]
-  body: by
-  obtain ⟨S, hS⟩ := hG.1
-  obtain ⟨T, -, hT⟩ := exists_finset_card_le_mul H hS
-  exact ⟨⟨T, hT⟩⟩
-
-中文:
-实例 fg_of_index_ne_zero
-  签名: [hG : 群.FG G] [FiniteIndex H]
-  定义体: by
-  obtain ⟨S, hS⟩ := hG.1
-  obtain ⟨T, -, hT⟩ := exists_finset_card_le_mul H hS
-  exact ⟨⟨T, hT⟩⟩
-
-Depends on / 依赖: exists_finset_card_le_mul
+/-
+**Subgroup.fg_of_index_ne_zero** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：fg_of_index_ne_zero [hG : Group.FG G] [FiniteIndex H] : Group.FG H
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Group.FG.out`：∀ {G : Type u_3} {inst : Group G} [self : Group.FG G], ⊤.F
+G
+· 使用定理 `Subgroup.exists_finset_card_le_mul`：exists_finset_card_le_mul [FiniteInd
+ex H] {S : Finset G} (hS : closure (S : Set G) = ⊤) : exists T : Finset H, #T <=
+ H.index * #S ∧ closure …
 -/
 instance fg_of_index_ne_zero [hG : Group.FG G] [FiniteIndex H] : Group.FG H := by
   obtain ⟨S, hS⟩ := hG.1
   obtain ⟨T, -, hT⟩ := exists_finset_card_le_mul H hS
   exact ⟨⟨T, hT⟩⟩
-
-/--
-theorem `rank_le_index_mul_rank` / 定理 `rank_le_index_mul_rank`
-
-English:
-theorem rank_le_index_mul_rank
-  given: [hG : Group.FG G] [FiniteIndex H]
-  proof: by
-  have := H.fg_of_index_ne_zero
-  obtain ⟨S, hS₀, hS⟩ := Group.rank_spec G
-  obtain ⟨T, hT₀, hT⟩ := exists_finset_card_le_mul H hS
-  calc
-    Group.rank H <= #T := Group.rank_le hT
-    _ <= H.index * #S := hT₀
-    _ = H.index * Group.rank G := congr_arg (H.index * ·) hS₀
-
-中文:
-定理 rank_le_index_mul_rank
-  条件: [hG : 群.FG G] [FiniteIndex H]
-  证明: by
-  have := H.fg_of_index_ne_zero
-  obtain ⟨S, hS₀, hS⟩ := Group.rank_spec G
-  obtain ⟨T, hT₀, hT⟩ := exists_finset_card_le_mul H hS
-  calc
-    Group.rank H <= #T := Group.rank_le hT
-    _ <= H.index * #S := hT₀
-    _ = H.index * Group.rank G := congr_arg (H.index * ·) hS₀
-
-Depends on / 依赖: Group.rank, Group.rank_le, Group.rank_spec, H.fg_of_index_ne_zero, H.index, congr_arg, exists_finset_card_le_mul, fg_of_index_ne_zero, rank_le, rank_spec
+/-
+**Subgroup.rank_le_index_mul_rank** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：rank_le_index_mul_rank [hG : Group.FG G] [FiniteIndex H] : Group.rank H <=
+ H.index * Group.rank G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Group.rank_spec`：rank_spec [h : FG G] : exists S : Finset G, S.card = ra
+nk G ∧ .closure S = (⊤ : Subgroup G)
+· 使用定理 `Subgroup.exists_finset_card_le_mul`：exists_finset_card_le_mul [FiniteInd
+ex H] {S : Finset G} (hS : closure (S : Set G) = ⊤) : exists T : Finset H, #T <=
+ H.index * #S ∧ closure …
+· 使用引理 `Group.rank_le`：rank_le [h : FG G] {S : Finset G} (hS : .closure S = (⊤ :
+ Subgroup G)) : rank G <= S.card
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem rank_le_index_mul_rank [hG : Group.FG G] [FiniteIndex H] :
-    Group.rank H <= H.index * Group.rank G := by
+    Group.rank H ≤ H.index * Group.rank G := by
   have := H.fg_of_index_ne_zero
   obtain ⟨S, hS₀, hS⟩ := Group.rank_spec G
   obtain ⟨T, hT₀, hT⟩ := exists_finset_card_le_mul H hS
   calc
-    Group.rank H <= #T := Group.rank_le hT
-    _ <= H.index * #S := hT₀
+    Group.rank H ≤ #T := Group.rank_le hT
+    _ ≤ H.index * #S := hT₀
     _ = H.index * Group.rank G := congr_arg (H.index * ·) hS₀
 
 variable (G)
 
 open scoped IsMulCommutative in
-/--
-theorem `card_commutator_dvd_index_center_pow` / 定理 `card_commutator_dvd_index_center_pow`
+/-- If `G` has `n` commutators `[g₁, g₂]`, then `|G'| ∣ [G : Z(G)] ^ ([G : Z(G)] * n + 1)`,
+where `G'` denotes the commutator of `G`. -/
+/-
+**Subgroup.card_commutator_dvd_index_center_pow** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup`。
+形式化陈述：card_commutator_dvd_index_center_pow [Finite (commutatorSet G)] : Nat.card
+ (_root_.commutator G) ∣ (center G).index ^ ((center G).index * Nat.card (commut
+atorSet G) + 1)
+参数：commutatorSet G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.card_mul_index`：card_mul_index : Nat.card H * H.index = Nat.car
+d G
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Subgroup.relIndex_dvd_index_of_normal`：relIndex_dvd_index_of_normal [H.N
+ormal] : H.relIndex K ∣ H.index
+· 使用定理 `mul_dvd_mul`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a 
+∣ b → c ∣ d → a * c ∣ b * d
+· 使用定理 `ne_zero_of_dvd_ne_zero`：ne_zero_of_dvd_ne_zero {p q : α} (h₁ : q != 0) (
+h₂ : p ∣ q) : p != 0
+· 使用定理 `Subgroup.instFGSubtypeMemCommutator`：∀ {G : Type u_1} [inst : Group G] [
+Finite ↑(commutatorSet G)], Group.FG ↥(commutator G)
+· 使用定理 `Subgroup.rank_le_index_mul_rank`：rank_le_index_mul_rank [hG : Group.FG G
+] [FiniteIndex H] : Group.rank H <= H.index * Group.rank G
+· 使用定理 `Nat.mul_le_mul`：∀ {n₁ m₁ n₂ m₂ : ℕ}, n₁ ≤ n₂ → m₁ ≤ m₂ → n₁ * m₁ ≤ n₂ * 
+m₂
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用引理 `Subgroup.rank_commutator_le_card`：rank_commutator_le_card : Group.rank (
+_root_.commutator G) <= Nat.card (commutatorSet G)
+· 使用定理 `dvd_trans`：dvd_trans : a ∣ b -> b ∣ c -> a ∣ c | ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨d 
+* e, h₁ ▸ h₂.trans mul_assoc a d e⟩  alias Dvd.dvd.trans
+· 使用定理 `card_dvd_exponent_pow_rank'`：card_dvd_exponent_pow_rank' {n : Nat} (hG :
+ forall g : G, g ^ n = 1) : Nat.card G ∣ n ^ Group.rank G
+· 使用定理 `Subgroup.center.isMulCommutative`：∀ (G : Type u_1) [inst : Group G], IsM
+ulCommutative ↥(Subgroup.center G)
+· 使用定理 `Abelianization.commutator_subset_ker`：commutator_subset_ker : commutator
+ G <= f.ker
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 
-English:
-theorem card_commutator_dvd_index_center_pow
-  given: [Finite (commutatorSet G)]
-  proof: by
-  -- First handle the case when `Z(G)` has infinite index and `[G : Z(G)]` is defined to be `0`
-  by_cases hG : (center G).index = 0
-  · simp_rw [hG, zero_mul, zero_add, pow_one, dvd_zero]
-  have : FiniteIndex (center G) := ⟨hG⟩
-  -- Rewrite as `|Z(G) ∩ G'| * [G' : Z(G) ∩ G'] ∣ [G : Z(G)] ^ ([G : Z(G)] * n) * [G : Z(G)]`
-  rw [← ((center G).subgroupOf (_root_.commutator G)).card_mul_index]; rw [pow_succ]
-  -- We have `h1 : [G' : Z(G) ∩ G'] ∣ [G : Z(G)]`
-  have h1 := relIndex_dvd_index_of_normal (center G) (_root_.commutator G)
-  -- So we can reduce to proving `|Z(G) ∩ G'| ∣ [G : Z(G)] ^ ([G : Z(G)] * n)`
-  refine mul_dvd_mul ?_ h1
-  -- We know that `[G' : Z(G) ∩ G'] < ∞` by `h1` and `hG`
-  have : FiniteIndex ((center G).subgroupOf (_root_.commutator G)) :=
-    ⟨ne_zero_of_dvd_ne_zero hG h1⟩
-  -- We have `h2 : rank (Z(G) ∩ G') ≤ [G' : Z(G) ∩ G'] * rank G'` by Schreier's lemma
-  have h2 := rank_le_index_mul_rank ((center G).subgroupOf (_root_.commutator G))
-  -- We have `h3 : [G' : Z(G) ∩ G'] * rank G' ≤ [G : Z(G)] * n` by `h1` and `rank G' ≤ n`
-  have h3 := Nat.mul_le_mul (Nat.le_of_dvd (Nat.pos_of_ne_zero hG) h1) (rank_commutator_le_card G)
-  -- So we can reduce to proving `|Z(G) ∩ G'| ∣ [G : Z(G)] ^ rank (Z(G) ∩ G')`
-  refine dvd_trans ?_ (pow_dvd_pow (center G).index (h2.trans h3))
-  -- `Z(G) ∩ G'` is abelian, so it enough to prove that `g ^ [G : Z(G)] = 1` for `g ∈ Z(G) ∩ G'`
-  apply card_dvd_exponent_pow_rank'
-  intro g
-  -- `Z(G)` is abelian, so `g ∈ Z(G) ∩ G' ≤ G' ≤ ker (transfer : G → Z(G))`
-  have := Abelianization.commutator_subset_ker (MonoidHom.transferCenterPow G) g.1.2
-  -- `transfer g` is defeq to `g ^ [G : Z(G)]`, so we are done
-  simpa only [MonoidHom.mem_ker, Subtype.ext_iff] using! this
-
-中文:
-定理 card_commutator_dvd_index_center_pow
-  条件: [有限 (commutatorSet G)]
-  证明: by
-  -- First handle the case when `Z(G)` has infinite index and `[G : Z(G)]` is defined to be `0`
-  by_cases hG : (center G).index = 0
-  · simp_rw [hG, zero_mul, zero_add, pow_one, dvd_zero]
-  have : FiniteIndex (center G) := ⟨hG⟩
-  -- Rewrite as `|Z(G) ∩ G'| * [G' : Z(G) ∩ G'] ∣ [G : Z(G)] ^ ([G : Z(G)] * n) * [G : Z(G)]`
-  rw [← ((center G).subgroupOf (_root_.commutator G)).card_mul_index]; rw [pow_succ]
-  -- We have `h1 : [G' : Z(G) ∩ G'] ∣ [G : Z(G)]`
-  have h1 := relIndex_dvd_index_of_normal (center G) (_root_.commutator G)
-  -- So we can reduce to proving `|Z(G) ∩ G'| ∣ [G : Z(G)] ^ ([G : Z(G)] * n)`
-  refine mul_dvd_mul ?_ h1
-  -- We know that `[G' : Z(G) ∩ G'] < ∞` by `h1` and `hG`
-  have : FiniteIndex ((center G).subgroupOf (_root_.commutator G)) :=
-    ⟨ne_zero_of_dvd_ne_zero hG h1⟩
-  -- We have `h2 : rank (Z(G) ∩ G') ≤ [G' : Z(G) ∩ G'] * rank G'` by Schreier's lemma
-  have h2 := rank_le_index_mul_rank ((center G).subgroupOf (_root_.commutator G))
-  -- We have `h3 : [G' : Z(G) ∩ G'] * rank G' ≤ [G : Z(G)] * n` by `h1` and `rank G' ≤ n`
-  have h3 := Nat.mul_le_mul (Nat.le_of_dvd (Nat.pos_of_ne_zero hG) h1) (rank_commutator_le_card G)
-  -- So we can reduce to proving `|Z(G) ∩ G'| ∣ [G : Z(G)] ^ rank (Z(G) ∩ G')`
-  refine dvd_trans ?_ (pow_dvd_pow (center G).index (h2.trans h3))
-  -- `Z(G) ∩ G'` is abelian, so it enough to prove that `g ^ [G : Z(G)] = 1` for `g ∈ Z(G) ∩ G'`
-  apply card_dvd_exponent_pow_rank'
-  intro g
-  -- `Z(G)` is abelian, so `g ∈ Z(G) ∩ G' ≤ G' ≤ ker (transfer : G → Z(G))`
-  have := Abelianization.commutator_subset_ker (MonoidHom.transferCenterPow G) g.1.2
-  -- `transfer g` is defeq to `g ^ [G : Z(G)]`, so we are done
-  simpa only [MonoidHom.mem_ker, Subtype.ext_iff] using! this
+--- 原说明 ---
+If `G` has `n` commutators `[g₁, g₂]`, then `|G'| ∣ [G : Z(G)] ^ ([G : Z(G)] * n
+ + 1)`,
+where `G'` denotes the commutator of `G`.
 -/
 theorem card_commutator_dvd_index_center_pow [Finite (commutatorSet G)] :
     Nat.card (_root_.commutator G) ∣
@@ -545,7 +503,7 @@ theorem card_commutator_dvd_index_center_pow [Finite (commutatorSet G)] :
   · simp_rw [hG, zero_mul, zero_add, pow_one, dvd_zero]
   have : FiniteIndex (center G) := ⟨hG⟩
   -- Rewrite as `|Z(G) ∩ G'| * [G' : Z(G) ∩ G'] ∣ [G : Z(G)] ^ ([G : Z(G)] * n) * [G : Z(G)]`
-  rw [← ((center G).subgroupOf (_root_.commutator G)).card_mul_index]; rw [pow_succ]
+  rw [← ((center G).subgroupOf (_root_.commutator G)).card_mul_index, pow_succ]
   -- We have `h1 : [G' : Z(G) ∩ G'] ∣ [G : Z(G)]`
   have h1 := relIndex_dvd_index_of_normal (center G) (_root_.commutator G)
   -- So we can reduce to proving `|Z(G) ∩ G'| ∣ [G : Z(G)] ^ ([G : Z(G)] * n)`
@@ -567,61 +525,88 @@ theorem card_commutator_dvd_index_center_pow [Finite (commutatorSet G)] :
   -- `transfer g` is defeq to `g ^ [G : Z(G)]`, so we are done
   simpa only [MonoidHom.mem_ker, Subtype.ext_iff] using! this
 
-/--
-Definition of `cardCommutatorBound` / `cardCommutatorBound` 的定义
+/-- A bound for the size of the commutator subgroup in terms of the number of commutators. -/
+/-
+**Subgroup.cardCommutatorBound** 是 Mathlib 中的一个定义，位于命名空间 `Subgroup`。
+形式化陈述：cardCommutatorBound (n : Nat)
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cardCommutatorBound
-  signature: (n : Nat)
-  body: (n ^ (2 * n)) ^ (n ^ (2 * n + 1) + 1)
-
-中文:
-定义 cardCommutatorBound
-  签名: (n : 自然数)
-  定义体: (n ^ (2 * n)) ^ (n ^ (2 * n + 1) + 1)
+--- 原说明 ---
+A bound for the size of the commutator subgroup in terms of the number of commut
+ators.
 -/
-def cardCommutatorBound (n : Nat) :=
+def cardCommutatorBound (n : ℕ) :=
   (n ^ (2 * n)) ^ (n ^ (2 * n + 1) + 1)
 
-/--
-theorem `card_commutator_le_of_finite_commutatorSet` / 定理 `card_commutator_le_of_finite_commutatorSet`
+/-- A theorem of Schur: The size of the commutator subgroup is bounded in terms of the number of
+  commutators. -/
+/-
+**Subgroup.card_commutator_le_of_finite_commutatorSet** 是 Mathlib 中的一个定理，位于命名空间 
+`Subgroup`。
+形式化陈述：card_commutator_le_of_finite_commutatorSet [Finite (commutatorSet G)] : Na
+t.card (_root_.commutator G) <= cardCommutatorBound (Nat.card (commutatorSet G))
+参数：commutatorSet G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Subgroup.index_center_le_pow`：index_center_le_pow : (center G).index <= 
+Nat.card (commutatorSet G) ^ Group.rank G
+· 使用定理 `instFiniteElemSubtypeMemSubgroupClosureCommutatorRepresentativesCommutat
+orSet`：∀ {G : Type u_1} [inst : Group G] [Finite ↑(commutatorSet G)],   Finite ↑
+(commutatorSet ↥(closureCommutatorRepresentatives G))
+· 使用定理 `Subgroup.card_commutator_dvd_index_center_pow`：card_commutator_dvd_index
+_center_pow [Finite (commutatorSet G)] : Nat.card (_root_.commutator G) ∣ (cente
+r G).index ^ ((center G).index * Na…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `card_commutatorSet_closureCommutatorRepresentatives`：card_commutatorSet_
+closureCommutatorRepresentatives : Nat.card (commutatorSet (closureCommutatorRep
+resentatives G)) = Nat.card (commutatorSe…
+· 使用定理 `Nat.pow_le_pow_right`：∀ {n : ℕ}, n > 0 → ∀ {i j : ℕ}, i ≤ j → n ^ i ≤ n 
+^ j
+· 使用定理 `Finite.card_pos`：Finite.card_pos [Finite α] [h : Nonempty α] : 0 < Nat.c
+ard α
+· 使用定理 `instNonemptyElemCommutatorSet`：∀ (G : Type u_1) [inst : Group G], Nonemp
+ty ↑(commutatorSet G)
+· 使用引理 `rank_closureCommutatorRepresentatives_le`：rank_closureCommutatorRepresen
+tatives_le : Group.rank (closureCommutatorRepresentatives G) <= 2 * Nat.card (co
+mmutatorSet G)
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用引理 `card_commutator_closureCommutatorRepresentatives`：card_commutator_closur
+eCommutatorRepresentatives : Nat.card (commutator (closureCommutatorRepresentati
+ves G)) = Nat.card (commutator G)
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `mul_le_mul_left`：mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b 
+<= c) (a : α) : b * a <= c * a
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Subgroup.FiniteIndex.index_ne_zero`：∀ {G : Type u_1} {inst : Group G} {H
+ : Subgroup G} [self : H.FiniteIndex], H.index ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Nat.pow_le_pow_left`：∀ {n m : ℕ}, n ≤ m → ∀ (i : ℕ), n ^ i ≤ m ^ i
 
-English:
-theorem card_commutator_le_of_finite_commutatorSet
-  given: [Finite (commutatorSet G)]
-  proof: by
-  have h1 := index_center_le_pow (closureCommutatorRepresentatives G)
-  have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
-  rw [card_commutatorSet_closureCommutatorRepresentatives] at h1 h2
-  rw [card_commutator_closureCommutatorRepresentatives] at h2
-  replace h1 :=
-    h1.trans
-      (Nat.pow_le_pow_right Finite.card_pos (rank_closureCommutatorRepresentatives_le G))
-  replace h2 := h2.trans (pow_dvd_pow _ (add_le_add_left (mul_le_mul_left h1 _) 1))
-  rw [← pow_succ] at h2
-  refine (Nat.le_of_dvd ?_ h2).trans (Nat.pow_le_pow_left h1 _)
-  exact pow_pos (Nat.pos_of_ne_zero FiniteIndex.index_ne_zero) _
-
-中文:
-定理 card_commutator_le_of_finite_commutatorSet
-  条件: [有限 (commutatorSet G)]
-  证明: by
-  have h1 := index_center_le_pow (closureCommutatorRepresentatives G)
-  have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
-  rw [card_commutatorSet_closureCommutatorRepresentatives] at h1 h2
-  rw [card_commutator_closureCommutatorRepresentatives] at h2
-  replace h1 :=
-    h1.trans
-      (Nat.pow_le_pow_right Finite.card_pos (rank_closureCommutatorRepresentatives_le G))
-  replace h2 := h2.trans (pow_dvd_pow _ (add_le_add_left (mul_le_mul_left h1 _) 1))
-  rw [← pow_succ] at h2
-  refine (Nat.le_of_dvd ?_ h2).trans (Nat.pow_le_pow_left h1 _)
-  exact pow_pos (Nat.pos_of_ne_zero FiniteIndex.index_ne_zero) _
-
-Depends on / 依赖: Finite, Finite.card_pos, Nat.pow_le_pow_right, add_le_add_left, card_commutatorSet_closureCommutatorRepresentatives, card_commutator_closureCommutatorRepresentatives, card_commutator_dvd_index_center_pow, card_pos, closureCommutatorRepresentatives, h1.trans, h2.trans, index_center_le_pow, mul_le_mul_left, pow_dvd_pow, pow_le_pow_right, pow_succ, rank_closureCommutatorRepresentatives_le, replace
+--- 原说明 ---
+A theorem of Schur: The size of the commutator subgroup is bounded in terms of t
+he number of
+  commutators.
 -/
 theorem card_commutator_le_of_finite_commutatorSet [Finite (commutatorSet G)] :
-    Nat.card (_root_.commutator G) <= cardCommutatorBound (Nat.card (commutatorSet G)) := by
+    Nat.card (_root_.commutator G) ≤ cardCommutatorBound (Nat.card (commutatorSet G)) := by
   have h1 := index_center_le_pow (closureCommutatorRepresentatives G)
   have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
   rw [card_commutatorSet_closureCommutatorRepresentatives] at h1 h2
@@ -634,33 +619,20 @@ theorem card_commutator_le_of_finite_commutatorSet [Finite (commutatorSet G)] :
   refine (Nat.le_of_dvd ?_ h2).trans (Nat.pow_le_pow_left h1 _)
   exact pow_pos (Nat.pos_of_ne_zero FiniteIndex.index_ne_zero) _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A theorem of Schur: A group with finitely many commutators has finite commutator subgroup. -/
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Finite
-  signature: (commutatorSet G)] : Finite (_root_.commutator G)
-  body: by
-  have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
-  refine Nat.finite_of_card_ne_zero fun h => ?_
-  rw [card_commutator_closureCommutatorRepresentatives]; rw [h]; rw [zero_dvd_iff] at h2
-  exact FiniteIndex.index_ne_zero (eq_zero_of_pow_eq_zero h2)
-
-中文:
-实例 [有限
-  签名: (commutatorSet G)] : 有限 (_root_.commutator G)
-  定义体: by
-  have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
-  refine Nat.finite_of_card_ne_zero fun h => ?_
-  rw [card_commutator_closureCommutatorRepresentatives]; rw [h]; rw [zero_dvd_iff] at h2
-  exact FiniteIndex.index_ne_zero (eq_zero_of_pow_eq_zero h2)
-
-Depends on / 依赖: FiniteIndex, FiniteIndex.index_ne_zero, Nat.finite_of_card_ne_zero, card_commutator_closureCommutatorRepresentatives, card_commutator_dvd_index_center_pow, closureCommutatorRepresentatives, eq_zero_of_pow_eq_zero, finite_of_card_ne_zero, index_ne_zero, zero_dvd_iff
+--- 原说明 ---
+A theorem of Schur: A group with finitely many commutators has finite commutator
+ subgroup.
 -/
 instance [Finite (commutatorSet G)] : Finite (_root_.commutator G) := by
   have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
   refine Nat.finite_of_card_ne_zero fun h => ?_
-  rw [card_commutator_closureCommutatorRepresentatives]; rw [h]; rw [zero_dvd_iff] at h2
+  rw [card_commutator_closureCommutatorRepresentatives, h, zero_dvd_iff] at h2
   exact FiniteIndex.index_ne_zero (eq_zero_of_pow_eq_zero h2)
 
 end Subgroup
+

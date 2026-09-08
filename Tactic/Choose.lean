@@ -22,21 +22,32 @@ open Lean Meta Elab Tactic
 
 namespace Mathlib.Tactic.Choose
 
-/--
-Definition of `mkSometimes` / `mkSometimes` 的定义
+/-- Given `α : Sort u`, `nonemp : Nonempty α`, `p : α → Prop`, a context of free variables
+`ctx`, and a pair of an element `val : α` and `spec : p val`,
+`mkSometimes u α nonemp p ctx (val, spec)` produces another pair `val', spec'`
+such that `val'` does not have any free variables from elements of `ctx` whose types are
+propositions. This is done by applying `Function.sometimes` to abstract over all the propositional
+arguments. -/
+/-
+**Mathlib.Tactic.Choose.mkSometimes** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Ch
+oose`。
+形式化陈述：Level → Expr → Expr → Expr → List Expr → Expr × Expr → MetaM (Expr × Expr)
+参数：Expr × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkSometimes
-  signature: (u : Level) (α nonemp p : Expr)
-  body: mkSometimes
-
-中文:
-定义 mkSometimes
-  签名: (u : Level) (α nonemp p : Expr)
-  定义体: mkSometimes
+--- 原说明 ---
+Given `α : Sort u`, `nonemp : Nonempty α`, `p : α → Prop`, a context of free var
+iables
+`ctx`, and a pair of an element `val : α` and `spec : p val`,
+`mkSometimes u α nonemp p ctx (val, spec)` produces another pair `val', spec'`
+such that `val'` does not have any free variables from elements of `ctx` whose t
+ypes are
+propositions. This is done by applying `Function.sometimes` to abstract over all
+ the propositional
+arguments.
 -/
 def mkSometimes (u : Level) (α nonemp p : Expr) :
-    List Expr -> Expr × Expr -> MetaM (Expr × Expr)
+    List Expr → Expr × Expr → MetaM (Expr × Expr)
 | [], (val, spec) => pure (val, spec)
 | (e :: ctx), (val, spec) => do
   let (val, spec) ← mkSometimes u α nonemp p ctx (val, spec)
@@ -51,79 +62,87 @@ def mkSometimes (u : Level) (α nonemp p : Expr) :
 
 @[deprecated (since := "2026-05-27")] alias mk_sometimes := mkSometimes
 
-/--
-Inductive type `ElimStatus` / 归纳类型 `ElimStatus`
+/-- Results of searching for nonempty instances,
+to eliminate dependencies on propositions (`choose!`).
+`success` means we found at least one instance;
+`failure ts` means we didn't find instances for any `t ∈ ts`.
+(`failure []` means we didn't look for instances at all.)
 
-English:
-inductive ElimStatus
-  constructors (2):
-    - success: 
-    - failure: (ts : List Expr)
+Rationale:
+`choose!` means we are expected to succeed at least once
+in eliminating dependencies on propositions.
+-/
+/-
+**Mathlib.Tactic.Choose.ElimStatus** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.C
+hoose`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 ElimStatus
-  构造子 (2 个):
-    - success: 
-    - failure: (ts : 列表 Expr)
+--- 原说明 ---
+Results of searching for nonempty instances,
+to eliminate dependencies on propositions (`choose!`).
+`success` means we found at least one instance;
+`failure ts` means we didn't find instances for any `t ∈ ts`.
+(`failure []` means we didn't look for instances at all.)
+
+Rationale:
+`choose!` means we are expected to succeed at least once
+in eliminating dependencies on propositions.
 -/
 inductive ElimStatus
   | success
   | failure (ts : List Expr)
 
-/--
-Definition of `ElimStatus.merge` / `ElimStatus.merge` 的定义
+/-- Combine two statuses, keeping a success from either side
+or merging the failures. -/
+/-
+**Mathlib.Tactic.Choose.ElimStatus.merge** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Choose.ElimStatus`。
+形式化陈述：Mathlib.Tactic.Choose.ElimStatus → Mathlib.Tactic.Choose.ElimStatus → Math
+lib.Tactic.Choose.ElimStatus
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ElimStatus.merge
-  signature: : ElimStatus -> ElimStatus -> ElimStatus
-
-中文:
-定义 ElimStatus.merge
-  签名: : ElimStatus -> ElimStatus -> ElimStatus
+--- 原说明 ---
+Combine two statuses, keeping a success from either side
+or merging the failures.
 -/
-def ElimStatus.merge : ElimStatus -> ElimStatus -> ElimStatus
+def ElimStatus.merge : ElimStatus → ElimStatus → ElimStatus
   | success, _ => success
   | _, success => success
   | failure ts₁, failure ts₂ => failure (ts₁ ++ ts₂)
 
-/--
-Definition of `mkFreshNameFrom` / `mkFreshNameFrom` 的定义
+/-- `mkFreshNameFrom orig base` returns `mkFreshUserName base` if ``orig = `_``
+and `orig` otherwise. -/
+/-
+**Mathlib.Tactic.Choose.mkFreshNameFrom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Choose`。
+形式化陈述：mkFreshNameFrom (orig base : Name) : CoreM Name
+参数：orig base : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFreshNameFrom
-  signature: (orig base : Name)
-  body: if orig = `_ then mkFreshUserName base else pure orig
-
-中文:
-定义 mkFreshNameFrom
-  签名: (orig base : Name)
-  定义体: if orig = `_ then mkFreshUserName base else pure orig
-
-Depends on / 依赖: mkFreshUserName
+--- 原说明 ---
+`mkFreshNameFrom orig base` returns `mkFreshUserName base` if ``orig = `_``
+and `orig` otherwise.
 -/
 def mkFreshNameFrom (orig base : Name) : CoreM Name :=
   if orig = `_ then mkFreshUserName base else pure orig
 
-/--
-Definition of `ChooseArg` / `ChooseArg` 的定义
+/-- Parsed information from a `choose` argument, which may include a type annotation. -/
+/-
+**Mathlib.Tactic.Choose.ChooseArg** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.Choo
+se`。
+形式化陈述：ChooseArg where /-- The syntax reference for the identifier (for hover inf
+o) -/ ref : Syntax /-- The name to use for the introduced variable -/ name : Nam
+e /-- Optional expected type annotation -/ expectedType? : Option Term deriving 
+Inhabited  /-- A `choose` argument is either a bare identifier or a parenthesize
+d extended binder -/ syntax chooseBinder
+参数：for hover info。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ChooseArg
-  parameters: where
-  axioms and operations (3):
-    - ref : Syntax
-    - name : Name
-    - expectedType? : Option Term
-
-中文:
-结构 ChooseArg
-  参数: where
-  公理与运算 (3 个):
-    - ref : Syntax
-    - name : Name
-    - expectedType? : 选项类型 项
-
-Depends on / 依赖: Batteries, Batteries.ExtendedBinder.extBinderParenthesized, ExtendedBinder, binderIdent, extBinderParenthesized
+--- 原说明 ---
+Parsed information from a `choose` argument, which may include a type annotation
+.
 -/
 structure ChooseArg where
   /-- The syntax reference for the identifier (for hover info) -/
@@ -135,37 +154,28 @@ structure ChooseArg where
   deriving Inhabited
 
 /-- A `choose` argument is either a bare identifier or a parenthesized extended binder -/
-syntax chooseBinder := binderIdent > Batteries.ExtendedBinder.extBinderParenthesized
+syntax chooseBinder := binderIdent <|> Batteries.ExtendedBinder.extBinderParenthesized
 
 open Batteries.ExtendedBinder in
-/--
-Definition of `parseChooseArg` / `parseChooseArg` 的定义
+/-- Parse a `choose` argument from `chooseBinder` syntax. Accepts:
+- `x` - plain identifier
+- `_` - anonymous
+- `(x : T)` - identifier with type annotation
+- `(_ : T)` - anonymous with type annotation -/
+/-
+**Mathlib.Tactic.Choose.parseChooseArg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Choose`。
+形式化陈述：parseChooseArg (stx : TSyntax ``chooseBinder) : MetaM ChooseArg
+参数：stx : TSyntax ``chooseBinder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseChooseArg
-  signature: (stx : TSyntax ``chooseBinder)
-  body: do
-  match stx with
-  | `(chooseBinder| $id:binderIdent) => return parseBinderIdent id
-  | `(chooseBinder| ($id:binderIdent : $ty:term)) =>
-    return { parseBinderIdent id with expectedType? := some ty }
-  | `(chooseBinder| ($_id:binderIdent $bp:binderPred)) =>
-    throwErrorAt bp "binder predicates like '< n' are not supported by choose; \
-      use a type annotation like '(h : x < n)' instead"
-  | _ => return ⟨stx, `_, none⟩
-
-中文:
-定义 parseChooseArg
-  签名: (stx : TSyntax ``chooseBinder)
-  定义体: do
-  match stx with
-  | `(chooseBinder| $id:binderIdent) => return parseBinderIdent id
-  | `(chooseBinder| ($id:binderIdent : $ty:term)) =>
-    return { parseBinderIdent id with expectedType? := some ty }
-  | `(chooseBinder| ($_id:binderIdent $bp:binderPred)) =>
-    throwErrorAt bp "binder predicates like '< n' are not supported by choose; \
-      use a type annotation like '(h : x < n)' instead"
-  | _ => return ⟨stx, `_, none⟩
+--- 原说明 ---
+Parse a `choose` argument from `chooseBinder` syntax. Accepts:
+- `x` - plain identifier
+- `_` - anonymous
+- `(x : T)` - identifier with type annotation
+- `(_ : T)` - anonymous with type annotation
 -/
 def parseChooseArg (stx : TSyntax ``chooseBinder) : MetaM ChooseArg := do
   match stx with
@@ -182,156 +192,53 @@ where
     | `(binderIdent| $h:ident) => ⟨h, h.getId, none⟩
     | _ => ⟨id, `_, none⟩
 
-/--
-Definition of `choose1` / `choose1` 的定义
+/-- Changes `(h : ∀ xs, ∃ a:α, p a) ⊢ g` to `(d : ∀ xs, a) ⊢ (s : ∀ xs, p (d xs)) → g` and
+`(h : ∀ xs, p xs ∧ q xs) ⊢ g` to `(d : ∀ xs, p xs) ⊢ (s : ∀ xs, q xs) → g`.
+`choose1` returns a tuple of
 
-English:
-definition choose1
-  signature: (g : MVarId) (nondep : Bool) (h : Option Expr) (data : Name)
-  body: do
-  let (g, h) ← match h with
-  | some e => pure (g, e)
-  | none => do
-    let (e, g) ← g.intro1P
-    pure (g, .fvar e)
-  g.withContext do
-    let h ← instantiateMVars h
-    let t ← inferType h
-    forallTelescopeReducing t fun ctx t => do
-      (← withTransparency .all (whnf t)).withApp fun
-      | .const ``Exists [u], #[α, p] => do
-        let data ← mkFreshNameFrom data ((← p.getBinderName).getD `h)
-        let ((neFail : ElimStatus), (nonemp : Option Expr)) ← if nondep then
-          let ne := (Expr.const ``Nonempty [u]).app α
-          let m ← mkFreshExprMVar ne
-          let mut g' := m.mvarId!
-          for e in ctx do
-            if (← isProof e) then continue
-            let ty ← whnf (← inferType e)
-            let nety := (Expr.const ``Nonempty [u]).app ty
-            let neval := mkApp2 (Expr.const ``Nonempty.intro [u]) ty e
-            g' ← g'.assert .anonymous nety neval
-          (_, g') ← g'.intros
-          g'.withContext do
-            match ← synthInstance? (← g'.getType) with
-            | some e => do
-              g'.assign e
-              let m ← instantiateMVars m
-              pure (.success, some m)
-            | none => pure (.failure [ne], none)
-        else pure (.failure [], none)
-        let ctx' ← if nonemp.isSome then ctx.filterM (not <$> isProof ·) else pure ctx
-        let dataTy ← mkForallFVars ctx' α
-        let mut dataVal := mkApp3 (.const ``Classical.choose [u]) α p (mkAppN h ctx)
-        let mut specVal := mkApp3 (.const ``Classical.choose_spec [u]) α p (mkAppN h ctx)
-        if let some nonemp := nonemp then
-          (dataVal, specVal) ← mkSometimes u α nonemp p ctx.toList (dataVal, specVal)
-        dataVal ← mkLambdaFVars ctx' dataVal
-        specVal ← mkLambdaFVars ctx specVal
-        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d => do
-          let specTy ← mkForallFVars ctx (p.app (mkAppN d ctx')).headBeta
-g.withContext withLocalDeclD data dataTy fun d' => do
-            let mvarTy ← mkArrow (specTy.replaceFVar d d') (← g.getType)
-            let newMVar ← mkFreshExprSyntheticOpaqueMVar mvarTy (← g.getTag)
-g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
-            pure (d', newMVar.mvarId!)
-        let g ← match h with
-        | .fvar v => g.clear v
-        | _ => pure g
-        return (neFail, fvar, g)
-      | .const ``And _, #[p, q] => do
-        let data ← mkFreshNameFrom data `h
-let e1 ← mkLambdaFVars ctx mkApp3 (.const ``And.left []) p q (mkAppN h ctx)
-let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
-        let t1 ← inferType e1
-        let t2 ← inferType e2
-        let (fvar, g) ← (← (← g.assert .anonymous t2 e2).assert data t1 e1).intro1P
-        let g ← match h with
-        | .fvar v => g.clear v
-        | _ => pure g
-        return (.success, .fvar fvar, g)
-      -- TODO: support Σ, ×, or even any inductive type with 1 constructor ?
-      | _, _ => throwError "expected a term of the shape `forall xs, exists a, p xs a` or `forall xs, p xs ∧ q xs`"
+- the error result (see `ElimStatus`)
+- the data new free variable that was "chosen"
+- the new goal (which contains the spec of the data as domain of an arrow type)
 
-中文:
-定义 choose1
-  签名: (g : MVarId) (nondep : 布尔值) (h : 选项类型 Expr) (data : Name)
-  定义体: do
-  let (g, h) ← match h with
-  | some e => pure (g, e)
-  | none => do
-    let (e, g) ← g.intro1P
-    pure (g, .fvar e)
-  g.withContext do
-    let h ← instantiateMVars h
-    let t ← inferType h
-    forallTelescopeReducing t fun ctx t => do
-      (← withTransparency .all (whnf t)).withApp fun
-      | .const ``Exists [u], #[α, p] => do
-        let data ← mkFreshNameFrom data ((← p.getBinderName).getD `h)
-        let ((neFail : ElimStatus), (nonemp : Option Expr)) ← if nondep then
-          let ne := (Expr.const ``Nonempty [u]).app α
-          let m ← mkFreshExprMVar ne
-          let mut g' := m.mvarId!
-          for e in ctx do
-            if (← isProof e) then continue
-            let ty ← whnf (← inferType e)
-            let nety := (Expr.const ``Nonempty [u]).app ty
-            let neval := mkApp2 (Expr.const ``Nonempty.intro [u]) ty e
-            g' ← g'.assert .anonymous nety neval
-          (_, g') ← g'.intros
-          g'.withContext do
-            match ← synthInstance? (← g'.getType) with
-            | some e => do
-              g'.assign e
-              let m ← instantiateMVars m
-              pure (.success, some m)
-            | none => pure (.failure [ne], none)
-        else pure (.failure [], none)
-        let ctx' ← if nonemp.isSome then ctx.filterM (not <$> isProof ·) else pure ctx
-        let dataTy ← mkForallFVars ctx' α
-        let mut dataVal := mkApp3 (.const ``Classical.choose [u]) α p (mkAppN h ctx)
-        let mut specVal := mkApp3 (.const ``Classical.choose_spec [u]) α p (mkAppN h ctx)
-        if let some nonemp := nonemp then
-          (dataVal, specVal) ← mkSometimes u α nonemp p ctx.toList (dataVal, specVal)
-        dataVal ← mkLambdaFVars ctx' dataVal
-        specVal ← mkLambdaFVars ctx specVal
-        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d => do
-          let specTy ← mkForallFVars ctx (p.app (mkAppN d ctx')).headBeta
-g.withContext withLocalDeclD data dataTy fun d' => do
-            let mvarTy ← mkArrow (specTy.replaceFVar d d') (← g.getType)
-            let newMVar ← mkFreshExprSyntheticOpaqueMVar mvarTy (← g.getTag)
-g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
-            pure (d', newMVar.mvarId!)
-        let g ← match h with
-        | .fvar v => g.clear v
-        | _ => pure g
-        return (neFail, fvar, g)
-      | .const ``And _, #[p, q] => do
-        let data ← mkFreshNameFrom data `h
-let e1 ← mkLambdaFVars ctx mkApp3 (.const ``And.left []) p q (mkAppN h ctx)
-let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
-        let t1 ← inferType e1
-        let t2 ← inferType e2
-        let (fvar, g) ← (← (← g.assert .anonymous t2 e2).assert data t1 e1).intro1P
-        let g ← match h with
-        | .fvar v => g.clear v
-        | _ => pure g
-        return (.success, .fvar fvar, g)
-      -- TODO: support Σ, ×, or even any inductive type with 1 constructor ?
-      | _, _ => throwError "expected a term of the shape `forall xs, exists a, p xs a` or `forall xs, p xs ∧ q xs`"
+If `nondep` is true and `α` is inhabited, then it will remove the dependency of `d` on
+all propositional assumptions in `xs`. For example if `ys` are propositions then
+`(h : ∀ xs ys, ∃ a:α, p a) ⊢ g` becomes `(d : ∀ xs, a) (s : ∀ xs ys, p (d xs)) ⊢ g`. -/
+/-
+**Mathlib.Tactic.Choose.choose1** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Choose
+`。
+形式化陈述：choose1 (g : MVarId) (nondep : Bool) (h : Option Expr) (data : Name) : Met
+aM (ElimStatus × Expr × MVarId)
+参数：g : MVarId；nondep : Bool；h : Option Expr；data : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Changes `(h : ∀ xs, ∃ a:α, p a) ⊢ g` to `(d : ∀ xs, a) ⊢ (s : ∀ xs, p (d xs)) → 
+g` and
+`(h : ∀ xs, p xs ∧ q xs) ⊢ g` to `(d : ∀ xs, p xs) ⊢ (s : ∀ xs, q xs) → g`.
+`choose1` returns a tuple of
+
+- the error result (see `ElimStatus`)
+- the data new free variable that was "chosen"
+- the new goal (which contains the spec of the data as domain of an arrow type)
+
+If `nondep` is true and `α` is inhabited, then it will remove the dependency of 
+`d` on
+all propositional assumptions in `xs`. For example if `ys` are propositions then
+`(h : ∀ xs ys, ∃ a:α, p a) ⊢ g` becomes `(d : ∀ xs, a) (s : ∀ xs ys, p (d xs)) ⊢
+ g`.
 -/
 def choose1 (g : MVarId) (nondep : Bool) (h : Option Expr) (data : Name) :
     MetaM (ElimStatus × Expr × MVarId) := do
   let (g, h) ← match h with
   | some e => pure (g, e)
-  | none => do
+  | none   => do
     let (e, g) ← g.intro1P
     pure (g, .fvar e)
   g.withContext do
     let h ← instantiateMVars h
     let t ← inferType h
-    forallTelescopeReducing t fun ctx t => do
+    forallTelescopeReducing t fun ctx t ↦ do
       (← withTransparency .all (whnf t)).withApp fun
       | .const ``Exists [u], #[α, p] => do
         let data ← mkFreshNameFrom data ((← p.getBinderName).getD `h)
@@ -362,12 +269,12 @@ def choose1 (g : MVarId) (nondep : Bool) (h : Option Expr) (data : Name) :
           (dataVal, specVal) ← mkSometimes u α nonemp p ctx.toList (dataVal, specVal)
         dataVal ← mkLambdaFVars ctx' dataVal
         specVal ← mkLambdaFVars ctx specVal
-        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d => do
+        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d ↦ do
           let specTy ← mkForallFVars ctx (p.app (mkAppN d ctx')).headBeta
-g.withContext withLocalDeclD data dataTy fun d' => do
+          g.withContext <| withLocalDeclD data dataTy fun d' ↦ do
             let mvarTy ← mkArrow (specTy.replaceFVar d d') (← g.getType)
             let newMVar ← mkFreshExprSyntheticOpaqueMVar mvarTy (← g.getTag)
-g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
+            g.assign <| mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
             pure (d', newMVar.mvarId!)
         let g ← match h with
         | .fvar v => g.clear v
@@ -375,8 +282,8 @@ g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
         return (neFail, fvar, g)
       | .const ``And _, #[p, q] => do
         let data ← mkFreshNameFrom data `h
-let e1 ← mkLambdaFVars ctx mkApp3 (.const ``And.left []) p q (mkAppN h ctx)
-let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
+        let e1 ← mkLambdaFVars ctx <| mkApp3 (.const ``And.left  []) p q (mkAppN h ctx)
+        let e2 ← mkLambdaFVars ctx <| mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
         let t1 ← inferType e1
         let t2 ← inferType e2
         let (fvar, g) ← (← (← g.assert .anonymous t2 e2).assert data t1 e1).intro1P
@@ -385,48 +292,23 @@ let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
         | _ => pure g
         return (.success, .fvar fvar, g)
       -- TODO: support Σ, ×, or even any inductive type with 1 constructor ?
-      | _, _ => throwError "expected a term of the shape `forall xs, exists a, p xs a` or `forall xs, p xs ∧ q xs`"
+      | _, _ => throwError "expected a term of the shape `∀ xs, ∃ a, p xs a` or `∀ xs, p xs ∧ q xs`"
 
-/--
-Definition of `choose1WithInfo` / `choose1WithInfo` 的定义
+/-- A wrapper around `choose1` that parses identifiers, adds variable info to new variables,
+and optionally checks the type annotation. -/
+/-
+**Mathlib.Tactic.Choose.choose1WithInfo** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Choose`。
+形式化陈述：choose1WithInfo (g : MVarId) (nondep : Bool) (h : Option Expr) (arg : Choo
+seArg) : TermElabM (ElimStatus × MVarId)
+参数：g : MVarId；nondep : Bool；h : Option Expr；arg : ChooseArg。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition choose1WithInfo
-  signature: (g : MVarId) (nondep : Bool) (h : Option Expr) (arg : ChooseArg)
-  body: do
-  let (status, fvar, g) ← choose1 g nondep h arg.name
-  let g ← g.withContext do
-    Term.addLocalVarInfo arg.ref fvar
-    -- Check type annotation if provided, and use the user-specified type
-    if let some expectedTypeStx := arg.expectedType? then
-      let actualType ← inferType fvar
-      let expectedType ← Term.elabType expectedTypeStx
-      unless ← isDefEq actualType expectedType do
-        throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
-          {← mkHasTypeButIsExpectedMsg actualType expectedType}"
-      -- Change the local declaration to use the user-specified type
-      return ← g.changeLocalDecl fvar.fvarId! expectedType
-    return g
-  pure (status, g)
-
-中文:
-定义 choose1WithInfo
-  签名: (g : MVarId) (nondep : 布尔值) (h : 选项类型 Expr) (arg : ChooseArg)
-  定义体: do
-  let (status, fvar, g) ← choose1 g nondep h arg.name
-  let g ← g.withContext do
-    Term.addLocalVarInfo arg.ref fvar
-    -- Check type annotation if provided, and use the user-specified type
-    if let some expectedTypeStx := arg.expectedType? then
-      let actualType ← inferType fvar
-      let expectedType ← Term.elabType expectedTypeStx
-      unless ← isDefEq actualType expectedType do
-        throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
-          {← mkHasTypeButIsExpectedMsg actualType expectedType}"
-      -- Change the local declaration to use the user-specified type
-      return ← g.changeLocalDecl fvar.fvarId! expectedType
-    return g
-  pure (status, g)
+--- 原说明 ---
+A wrapper around `choose1` that parses identifiers, adds variable info to new va
+riables,
+and optionally checks the type annotation.
 -/
 def choose1WithInfo (g : MVarId) (nondep : Bool) (h : Option Expr) (arg : ChooseArg) :
     TermElabM (ElimStatus × MVarId) := do
@@ -445,63 +327,23 @@ def choose1WithInfo (g : MVarId) (nondep : Bool) (h : Option Expr) (arg : Choose
     return g
   pure (status, g)
 
-/--
-Definition of `elabChoose` / `elabChoose` 的定义
+/-- A loop around `choose1`. The main entry point for the `choose` tactic. -/
+/-
+**Mathlib.Tactic.Choose.elabChoose** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Cho
+ose`。
+形式化陈述：elabChoose (nondep : Bool) (h : Option Expr) : List ChooseArg -> ElimStatu
+s -> MVarId -> TermElabM MVarId | [], _, _ => throwError "expect list of variabl
+es" | [arg], status, g => match nondep, status with | true, .failure tys => do -
+- We expected some elimination, but it didn't happen. let mut msg
+参数：nondep : Bool；h : Option Expr。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabChoose
-  signature: (nondep : Bool) (h : Option Expr)
-  body: m!"choose!: failed to synthesize any nonempty instances"
-      for ty in tys do
-        msg := msg ++ m!"{(← mkFreshExprMVar ty).mvarId!}"
-      throwError msg
-    | _, _ => do
-      let (fvar, g) ← if arg.name == `_ then g.intro1 else g.intro arg.name
-      g.withContext do
-        Term.addLocalVarInfo arg.ref (.fvar fvar)
-        -- Check type annotation if provided, and use the user-specified type
-        if let some expectedTypeStx := arg.expectedType? then
-          let actualType ← inferType (.fvar fvar)
-          let expectedType ← Term.elabType expectedTypeStx
-          unless ← isDefEq actualType expectedType do
-            throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
-              {← mkHasTypeButIsExpectedMsg actualType expectedType}"
-          -- Change the local declaration to use the user-specified type
-          return ← g.changeLocalDecl fvar expectedType
-        return g
-  | arg::args, status, g => do
-    let (status', g) ← choose1WithInfo g nondep h arg
-    elabChoose nondep none args (status.merge status') g
-
-中文:
-定义 elabChoose
-  签名: (nondep : 布尔值) (h : 选项类型 Expr)
-  定义体: m!"choose!: failed to synthesize any nonempty instances"
-      for ty in tys do
-        msg := msg ++ m!"{(← mkFreshExprMVar ty).mvarId!}"
-      throwError msg
-    | _, _ => do
-      let (fvar, g) ← if arg.name == `_ then g.intro1 else g.intro arg.name
-      g.withContext do
-        Term.addLocalVarInfo arg.ref (.fvar fvar)
-        -- Check type annotation if provided, and use the user-specified type
-        if let some expectedTypeStx := arg.expectedType? then
-          let actualType ← inferType (.fvar fvar)
-          let expectedType ← Term.elabType expectedTypeStx
-          unless ← isDefEq actualType expectedType do
-            throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
-              {← mkHasTypeButIsExpectedMsg actualType expectedType}"
-          -- Change the local declaration to use the user-specified type
-          return ← g.changeLocalDecl fvar expectedType
-        return g
-  | arg::args, status, g => do
-    let (status', g) ← choose1WithInfo g nondep h arg
-    elabChoose nondep none args (status.merge status') g
-
-Depends on / 依赖: failed, instances, nonempty, synthesize
+--- 原说明 ---
+A loop around `choose1`. The main entry point for the `choose` tactic.
 -/
 def elabChoose (nondep : Bool) (h : Option Expr) :
-    List ChooseArg -> ElimStatus -> MVarId -> TermElabM MVarId
+    List ChooseArg → ElimStatus → MVarId → TermElabM MVarId
   | [], _, _ => throwError "expect list of variables"
   | [arg], status, g =>
     match nondep, status with
@@ -593,3 +435,4 @@ macro_rules
     `(tactic| choose ! $[$ids]* $[using $h]?)
 
 end Mathlib.Tactic.Choose
+

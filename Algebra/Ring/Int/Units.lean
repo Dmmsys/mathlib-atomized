@@ -27,49 +27,41 @@ assert_not_exists DenselyOrdered Set.Subsingleton
 
 namespace Int
 
+/-! #### Units -/
 
-/--
-lemma `units_eq_one_or` / 引理 `units_eq_one_or`
+/-
+**Int.units_eq_one_or** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：units_eq_one_or (u : Intˣ) : u = 1 ∨ u = -1
+参数：u : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.isUnit_eq_one_or`：isUnit_eq_one_or (hu : IsUnit u) : u = 1 ∨ u = -1
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 
-English:
-lemma units_eq_one_or
-  given: (u : Intˣ)
-  statement: u = 1 ∨ u = -1
-  proof: by
-  simpa only [Units.ext_iff] using! isUnit_eq_one_or u.isUnit
-
-中文:
-引理 units_eq_one_or
-  条件: (u : 整数ˣ)
-  结论: u = 1 ∨ u = -1
-  证明: by
-  simpa only [Units.ext_iff] using! isUnit_eq_one_or u.isUnit
-
-Depends on / 依赖: Units.ext_iff, ext_iff, isUnit, isUnit_eq_one_or, u.isUnit
+--- 原说明 ---
+#### Units
 -/
-lemma units_eq_one_or (u : Intˣ) : u = 1 ∨ u = -1 := by
+lemma units_eq_one_or (u : ℤˣ) : u = 1 ∨ u = -1 := by
   simpa only [Units.ext_iff] using! isUnit_eq_one_or u.isUnit
-
-/--
-lemma `units_ne_iff_eq_neg` / 引理 `units_ne_iff_eq_neg`
-
-English:
-lemma units_ne_iff_eq_neg
-  given: {u v : Intˣ}
-  statement: u != v ↔ u = -v
-  proof: by
-  simpa only [Ne, Units.ext_iff] using! isUnit_ne_iff_eq_neg u.isUnit v.isUnit
-
-中文:
-引理 units_ne_iff_eq_neg
-  条件: {u v : 整数ˣ}
-  结论: u != v ↔ u = -v
-  证明: by
-  simpa only [Ne, Units.ext_iff] using! isUnit_ne_iff_eq_neg u.isUnit v.isUnit
-
-Depends on / 依赖: Units.ext_iff, ext_iff, isUnit, isUnit_ne_iff_eq_neg, u.isUnit, v.isUnit
+/-
+**Int.units_ne_iff_eq_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：units_ne_iff_eq_neg {u v : Intˣ} : u != v ↔ u = -v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.isUnit_ne_iff_eq_neg`：isUnit_ne_iff_eq_neg (hu : IsUnit u) (hv : IsU
+nit v) : u != v ↔ u = -v
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-lemma units_ne_iff_eq_neg {u v : Intˣ} : u != v ↔ u = -v := by
+lemma units_ne_iff_eq_neg {u v : ℤˣ} : u ≠ v ↔ u = -v := by
   simpa only [Ne, Units.ext_iff] using! isUnit_ne_iff_eq_neg u.isUnit v.isUnit
 
 end Int
+

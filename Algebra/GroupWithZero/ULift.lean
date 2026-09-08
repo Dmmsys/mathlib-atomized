@@ -26,100 +26,48 @@ variable {α : Type u}
 
 namespace ULift
 
-/--
-Instance `mulZeroOneClass` / 实例 `mulZeroOneClass`
-
-English:
-instance mulZeroOneClass
-  signature: [MulZeroOneClass α]
-  body: Equiv.ulift.injective.mulZeroOneClass _ rfl rfl (by intros; rfl)
-
-中文:
-实例 mulZeroOneClass
-  签名: [乘零幺类 α]
-  定义体: Equiv.ulift.injective.mulZeroOneClass _ rfl rfl (by intros; rfl)
-
-Depends on / 依赖: Equiv.ulift.injective.mulZeroOneClass, injective, intros, mulZeroOneClass
+/-
+**ULift.mulZeroOneClass** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulZeroOneClass [MulZeroOneClass α] : MulZeroOneClass (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulZeroOneClass [MulZeroOneClass α] : MulZeroOneClass (ULift α) :=
   Equiv.ulift.injective.mulZeroOneClass _ rfl rfl (by intros; rfl)
-
-/--
-Instance `monoidWithZero` / 实例 `monoidWithZero`
-
-English:
-instance monoidWithZero
-  signature: [MonoidWithZero α]
-  body: Equiv.ulift.injective.monoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 monoidWithZero
-  签名: [带零幺半群 α]
-  定义体: Equiv.ulift.injective.monoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Equiv.ulift.injective.monoidWithZero, injective, monoidWithZero
+/-
+**ULift.monoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：monoidWithZero [MonoidWithZero α] : MonoidWithZero (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance monoidWithZero [MonoidWithZero α] : MonoidWithZero (ULift α) :=
   Equiv.ulift.injective.monoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `commMonoidWithZero` / 实例 `commMonoidWithZero`
-
-English:
-instance commMonoidWithZero
-  signature: [CommMonoidWithZero α]
-  body: Equiv.ulift.injective.commMonoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 commMonoidWithZero
-  签名: [带零交换幺半群 α]
-  定义体: Equiv.ulift.injective.commMonoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Equiv.ulift.injective.commMonoidWithZero, commMonoidWithZero, injective
+/-
+**ULift.commMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：commMonoidWithZero [CommMonoidWithZero α] : CommMonoidWithZero (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commMonoidWithZero [CommMonoidWithZero α] : CommMonoidWithZero (ULift α) :=
   Equiv.ulift.injective.commMonoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `groupWithZero` / 实例 `groupWithZero`
-
-English:
-instance groupWithZero
-  signature: [GroupWithZero α]
-  body: Equiv.ulift.injective.groupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 groupWithZero
-  签名: [带零群 α]
-  定义体: Equiv.ulift.injective.groupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Equiv.ulift.injective.groupWithZero, groupWithZero, injective
+/-
+**ULift.groupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：groupWithZero [GroupWithZero α] : GroupWithZero (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance groupWithZero [GroupWithZero α] : GroupWithZero (ULift α) :=
   Equiv.ulift.injective.groupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `commGroupWithZero` / 实例 `commGroupWithZero`
-
-English:
-instance commGroupWithZero
-  signature: [CommGroupWithZero α]
-  body: Equiv.ulift.injective.commGroupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 commGroupWithZero
-  签名: [带零交换群 α]
-  定义体: Equiv.ulift.injective.commGroupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Equiv.ulift.injective.commGroupWithZero, commGroupWithZero, injective
+/-
+**ULift.commGroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：commGroupWithZero [CommGroupWithZero α] : CommGroupWithZero (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commGroupWithZero [CommGroupWithZero α] : CommGroupWithZero (ULift α) :=
   Equiv.ulift.injective.commGroupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
 end ULift
+

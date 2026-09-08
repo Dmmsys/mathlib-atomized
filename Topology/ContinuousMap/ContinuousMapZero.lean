@@ -12,7 +12,7 @@ public import Mathlib.Topology.ContinuousMap.Compact
 # Continuous maps sending zero to zero
 
 This is the type of continuous maps from `X` to `R` such that `(0 : X) ↦ (0 : R)` for which we
-provide the scoped notation `C(X, R)₀`. We provide this as a dedicated type solely for the
+provide the scoped notation `C(X, R)₀`.  We provide this as a dedicated type solely for the
 non-unital continuous functional calculus, as using various terms of type `Ideal C(X, R)` were
 overly burdensome on type class synthesis.
 
@@ -26,22 +26,29 @@ assert_not_exists StarOrderedRing
 
 open Function Set Topology
 
-/--
-Definition of `ContinuousMapZero` / `ContinuousMapZero` 的定义
+/-- The type of continuous maps which map zero to zero.
 
-English:
-structure ContinuousMapZero
-  parameters: (X R : Type*) [Zero X] [Zero R] [TopologicalSpace X]
-  extends: C(X, R)
-  axioms and operations (1):
-    - map_zero' : toContinuousMap 0 = 0
+Note that one should never use the structure projection `ContinuousMapZero.toContinuousMap` and
+instead favor the coercion `(↑) : C(X, R)₀ → C(X, R)` available from the instance of
+`ContinuousMapClass`. All the instances on `C(X, R)₀` from `C(X, R)` passes through this coercion,
+not the structure projection. Of course, the two are definitionally equal, but not reducibly so. -/
+/-
+**ContinuousMapZero** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → (R : Type u_2) → [Zero X] → [Zero R] → [TopologicalSpace 
+X] → [TopologicalSpace R] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 余ntinuousMapZero
-  参数: (X R : 类型) [零 X] [零 R] [拓扑空间 X]
-  继承: C(X, R)
-  公理与运算 (1 个):
-    - map_zero' : toContinuousMap 0 = 0
+--- 原说明 ---
+The type of continuous maps which map zero to zero.
+
+Note that one should never use the structure projection `ContinuousMapZero.toCon
+tinuousMap` and
+instead favor the coercion `(↑) : C(X, R)₀ → C(X, R)` available from the instanc
+e of
+`ContinuousMapClass`. All the instances on `C(X, R)₀` from `C(X, R)` passes thro
+ugh this coercion,
+not the structure projection. Of course, the two are definitionally equal, but n
+ot reducibly so.
 -/
 structure ContinuousMapZero (X R : Type*) [Zero X] [Zero R] [TopologicalSpace X]
     [TopologicalSpace R] extends C(X, R) where
@@ -57,59 +64,36 @@ section Basic
 variable {X Y R : Type*} [Zero X] [Zero Y] [Zero R]
 variable [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace R]
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike C(X, R)₀ X R where
-  body: f.toFun
-  coe_injective _ _ h := congr(⟨⟨$(h), _⟩, _⟩)
-
-中文:
-实例 instFunLike
-  签名: : 函数状 C(X, R)₀ X R where
-  定义体: f.toFun
-  coe_injective _ _ h := congr(⟨⟨$(h), _⟩, _⟩)
-
-Depends on / 依赖: f.toFun
+/-
+**ContinuousMapZero.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instFunLike : FunLike C(X, R)₀ X R where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike C(X, R)₀ X R where
   coe f := f.toFun
   coe_injective _ _ h := congr(⟨⟨$(h), _⟩, _⟩)
-
-/--
-Instance `instContinuousMapClass` / 实例 `instContinuousMapClass`
-
-English:
-instance instContinuousMapClass
-  signature: : ContinuousMapClass C(X, R)₀ X R where
-  body: f.continuous
-
-中文:
-实例 instContinuousMapClass
-  签名: : 连续映射类 C(X, R)₀ X R where
-  定义体: f.continuous
-
-Depends on / 依赖: continuous, f.continuous
+/-
+**ContinuousMapZero.instContinuousMapClass** 是 Mathlib 中的一个实例，位于命名空间 `Continuous
+MapZero`。
+形式化陈述：instContinuousMapClass : ContinuousMapClass C(X, R)₀ X R where map_continu
+ous f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 -/
 instance instContinuousMapClass : ContinuousMapClass C(X, R)₀ X R where
   map_continuous f := f.continuous
-
-/--
-Instance `instZeroHomClass` / 实例 `instZeroHomClass`
-
-English:
-instance instZeroHomClass
-  signature: : ZeroHomClass C(X, R)₀ X R where
-  body: f.map_zero'
-
-中文:
-实例 instZeroHomClass
-  签名: : 保零态射类 C(X, R)₀ X R where
-  定义体: f.map_zero'
-
-Depends on / 依赖: f.map_zero, map_zero
+/-
+**ContinuousMapZero.instZeroHomClass** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZer
+o`。
+形式化陈述：instZeroHomClass : ZeroHomClass C(X, R)₀ X R where map_zero f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMapZero.map_zero'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zer
+o X] [inst_1 : Zero R] [inst_2 : TopologicalSpace X]   [inst_3 : TopologicalSpac
+e R] (self : Cont…
 -/
 instance instZeroHomClass : ZeroHomClass C(X, R)₀ X R where
   map_zero f := f.map_zero'
@@ -118,531 +102,346 @@ instance instZeroHomClass : ZeroHomClass C(X, R)₀ X R where
 be useful when working with `ContinuousMapZero` and the non-unital continuous
 functional calculus. -/
 @[instance_reducible]
-/--
-Definition of `_root_.Set.zeroOfFactMem` / `_root_.Set.zeroOfFactMem` 的定义
+/-
+**ContinuousMapZero._root_.Set.zeroOfFactMem** 是 Mathlib 中的一个定义，位于命名空间 `Continuo
+usMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Set.zeroOfFactMem
-  signature: {X : Type*} [Zero X] (s : Set X) [Fact (0 in s)]
-  body: ⟨0, Fact.out⟩
-
-scoped[ContinuousMapZero] attribute [instance] Set.zeroOfFactMem
-
-@[ext]
-
-中文:
-定义 _root_.集合.zeroOfFactMem
-  签名: {X : 类型} [零 X] (s : 集合 X) [Fact (0 in s)]
-  定义体: ⟨0, Fact.out⟩
-
-scoped[ContinuousMapZero] attribute [instance] Set.zeroOfFactMem
-
-@[ext]
-
-Depends on / 依赖: Fact.out
+--- 原说明 ---
+not marked as an instance because it would be a bad one in general, but it can
+be useful when working with `ContinuousMapZero` and the non-unital continuous
+functional calculus.
 -/
-def _root_.Set.zeroOfFactMem {X : Type*} [Zero X] (s : Set X) [Fact (0 in s)] :
+def _root_.Set.zeroOfFactMem {X : Type*} [Zero X] (s : Set X) [Fact (0 ∈ s)] :
     Zero s where
   zero := ⟨0, Fact.out⟩
 
 scoped[ContinuousMapZero] attribute [instance] Set.zeroOfFactMem
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {f g : C(X, R)₀} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-@[simp]
-
-中文:
-引理 ext
-  条件: {f g : C(X, R)₀} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContinuousMapZero.ext** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : f = g
+参数：X, R；h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-lemma ext {f g : C(X, R)₀} (h : forall x, f x = g x) : f = g := DFunLike.ext f g h
+lemma ext {f g : C(X, R)₀} (h : ∀ x, f x = g x) : f = g := DFunLike.ext f g h
 
 @[simp]
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: {f : C(X, R)} {h0 : f 0 = 0}
-  statement: ⇑(mk f h0) = f
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: {f : C(X, R)} {h0 : f 0 = 0}
-  结论: ⇑(mk f h0) = f
-  证明: rfl
+/-
+**ContinuousMapZero.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：coe_mk {f : C(X, R)} {h0 : f 0 = 0} : ⇑(mk f h0) = f
+参数：X, R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk {f : C(X, R)} {h0 : f 0 = 0} : ⇑(mk f h0) = f := rfl
-
-/--
-lemma `toContinuousMap_injective` / 引理 `toContinuousMap_injective`
-
-English:
-lemma toContinuousMap_injective
-  statement: Injective ((↑) : C(X, R)₀ -> C(X, R))
-  proof: fun _ _ h => congr(.mk $(h) _)
-
-中文:
-引理 toContinuousMap_injective
-  结论: 单射 ((↑) : C(X, R)₀ -> C(X, R))
-  证明: fun _ _ h => congr(.mk $(h) _)
+/-
+**ContinuousMapZero.toContinuousMap_injective** 是 Mathlib 中的一个引理，位于命名空间 `Continu
+ousMapZero`。
+形式化陈述：toContinuousMap_injective : Injective ((↑) : C(X, R)₀ -> C(X, R))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `ContinuousMapZero.map_zero'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zer
+o X] [inst_1 : Zero R] [inst_2 : TopologicalSpace X]   [inst_3 : TopologicalSpac
+e R] (self : Cont…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma toContinuousMap_injective : Injective ((↑) : C(X, R)₀ -> C(X, R)) :=
-  fun _ _ h => congr(.mk $(h) _)
-
-/--
-lemma `range_toContinuousMap` / 引理 `range_toContinuousMap`
-
-English:
-lemma range_toContinuousMap
-  statement: range ((↑) : C(X, R)₀ -> C(X, R)) = {f : C(X, R) | f 0 = 0}
-  proof: Set.ext fun f => ⟨fun ⟨f', hf'⟩ => hf' ▸ map_zero f', fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
-
-中文:
-引理 range_toContinuousMap
-  结论: range ((↑) : C(X, R)₀ -> C(X, R)) = {f : C(X, R) | f 0 = 0}
-  证明: Set.ext fun f => ⟨fun ⟨f', hf'⟩ => hf' ▸ map_zero f', fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
-
-Depends on / 依赖: Set.ext, map_zero
+lemma toContinuousMap_injective : Injective ((↑) : C(X, R)₀ → C(X, R)) :=
+  fun _ _ h ↦ congr(.mk $(h) _)
+/-
+**ContinuousMapZero.range_toContinuousMap** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousM
+apZero`。
+形式化陈述：range_toContinuousMap : range ((↑) : C(X, R)₀ -> C(X, R)) = {f : C(X, R) |
+ f 0 = 0}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
 -/
-lemma range_toContinuousMap : range ((↑) : C(X, R)₀ -> C(X, R)) = {f : C(X, R) | f 0 = 0} :=
-  Set.ext fun f => ⟨fun ⟨f', hf'⟩ => hf' ▸ map_zero f', fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
+lemma range_toContinuousMap : range ((↑) : C(X, R)₀ → C(X, R)) = {f : C(X, R) | f 0 = 0} :=
+  Set.ext fun f ↦ ⟨fun ⟨f', hf'⟩ ↦ hf' ▸ map_zero f', fun hf ↦ ⟨⟨f, hf⟩, rfl⟩⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of continuous maps which map zero to zero. -/
+/-
+**ContinuousMapZero.comp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZero`。
+形式化陈述：comp (g : C(Y, R)₀) (f : C(X, Y)₀) : C(X, R)₀ where toContinuousMap
+参数：g : C(Y, R)₀；f : C(X, Y)₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : C(Y, R)₀) (f : C(X, Y)₀)
-  body: (g : C(Y, R)).comp (f : C(X, Y))
-  map_zero' := show g (f 0) = 0 from map_zero f ▸ map_zero g
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : C(Y, R)₀) (f : C(X, Y)₀)
-  定义体: (g : C(Y, R)).comp (f : C(X, Y))
-  map_zero' := show g (f 0) = 0 from map_zero f ▸ map_zero g
-
-@[simp]
+--- 原说明 ---
+Composition of continuous maps which map zero to zero.
 -/
 def comp (g : C(Y, R)₀) (f : C(X, Y)₀) : C(X, R)₀ where
   toContinuousMap := (g : C(Y, R)).comp (f : C(X, Y))
   map_zero' := show g (f 0) = 0 from map_zero f ▸ map_zero g
 
 @[simp]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
-
-English:
-lemma comp_apply
-  given: (g : C(Y, R)₀) (f : C(X, Y)₀) (x : X)
-  statement: g.comp f x = g (f x)
-  proof: rfl
-
-中文:
-引理 comp_apply
-  条件: (g : C(Y, R)₀) (f : C(X, Y)₀) (x : X)
-  结论: g.comp f x = g (f x)
-  证明: rfl
+/-
+**ContinuousMapZero.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：comp_apply (g : C(Y, R)₀) (f : C(X, Y)₀) (x : X) : g.comp f x = g (f x)
+参数：g : C(Y, R)₀；f : C(X, Y)₀；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_apply (g : C(Y, R)₀) (f : C(X, Y)₀) (x : X) : g.comp f x = g (f x) := rfl
-
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: [PartialOrder R]
-  body: fast_instance%
-  .lift _ DFunLike.coe_injective
-
-中文:
-实例 instPartialOrder
-  签名: [偏序 R]
-  定义体: fast_instance%
-  .lift _ DFunLike.coe_injective
-
-Depends on / 依赖: fast_instance
+/-
+**ContinuousMapZero.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZer
+o`。
+形式化陈述：instPartialOrder [PartialOrder R] : PartialOrder C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrder [PartialOrder R] : PartialOrder C(X, R)₀ := fast_instance%
   .lift _ DFunLike.coe_injective
-
-/--
-lemma `le_def` / 引理 `le_def`
-
-English:
-lemma le_def
-  given: [PartialOrder R] (f g : C(X, R)₀)
-  statement: f <= g ↔ forall x, f x <= g x
-  proof: Iff.rfl
-
-中文:
-引理 le_def
-  条件: [偏序 R] (f g : C(X, R)₀)
-  结论: f <= g ↔ 对任意 x, f x <= g x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**ContinuousMapZero.le_def** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：le_def [PartialOrder R] (f g : C(X, R)₀) : f <= g ↔ forall x, f x <= g x
+参数：f g : C(X, R)₀。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_def [PartialOrder R] (f g : C(X, R)₀) : f <= g ↔ forall x, f x <= g x := Iff.rfl
-
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
-
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace C(X, R)₀
-  body: fast_instance%
-  TopologicalSpace.induced ((↑) : C(X, R)₀ -> C(X, R)) inferInstance
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 C(X, R)₀
-  定义体: fast_instance%
-  TopologicalSpace.induced ((↑) : C(X, R)₀ -> C(X, R)) inferInstance
+lemma le_def [PartialOrder R] (f g : C(X, R)₀) : f ≤ g ↔ ∀ x, f x ≤ g x := Iff.rfl
+/-
+**ContinuousMapZero.instTopologicalSpace** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMa
+pZero`。
+形式化陈述：{X : Type u_1} →   {R : Type u_3} →     [inst : Zero X] →       [inst_1 : 
+Zero R] →         [inst_2 : TopologicalSpace X] → [inst_3 : TopologicalSpace R] 
+→ TopologicalSpace (ContinuousMapZero X R)
+参数：ContinuousMapZero X R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance instTopologicalSpace : TopologicalSpace C(X, R)₀ := fast_instance%
-  TopologicalSpace.induced ((↑) : C(X, R)₀ -> C(X, R)) inferInstance
-
-/--
-lemma `isEmbedding_toContinuousMap` / 引理 `isEmbedding_toContinuousMap`
-
-English:
-lemma isEmbedding_toContinuousMap
-  statement: IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where
-  proof: rfl
-  injective _ _ h := ext fun x => congr($(h) x)
-
-中文:
-引理 isEmbedding_toContinuousMap
-  结论: 是嵌入 ((↑) : C(X, R)₀ -> C(X, R)) where
-  证明: rfl
-  injective _ _ h := ext fun x => congr($(h) x)
+  TopologicalSpace.induced ((↑) : C(X, R)₀ → C(X, R)) inferInstance
+/-
+**ContinuousMapZero.isEmbedding_toContinuousMap** 是 Mathlib 中的一个引理，位于命名空间 `Conti
+nuousMapZero`。
+形式化陈述：isEmbedding_toContinuousMap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) wher
+e eq_induced
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma isEmbedding_toContinuousMap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where
+lemma isEmbedding_toContinuousMap : IsEmbedding ((↑) : C(X, R)₀ → C(X, R)) where
   eq_induced := rfl
-  injective _ _ h := ext fun x => congr($(h) x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T0Space
-  signature: R] : T0Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.t0Space
-
-中文:
-实例 [T0空间
-  签名: R] : T0空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.t0Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t0Space, t0Space
+  injective _ _ h := ext fun x ↦ congr($(h) x)
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T0Space R] : T0Space C(X, R)₀ := isEmbedding_toContinuousMap.t0Space
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [R0Space
-  signature: R] : R0Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.r0Space
-
-中文:
-实例 [R0空间
-  签名: R] : R0空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.r0Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.r0Space, r0Space
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [R0Space R] : R0Space C(X, R)₀ := isEmbedding_toContinuousMap.r0Space
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T1Space
-  signature: R] : T1Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.t1Space
-
-中文:
-实例 [T1空间
-  签名: R] : T1空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.t1Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t1Space, t1Space
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T1Space R] : T1Space C(X, R)₀ := isEmbedding_toContinuousMap.t1Space
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [R1Space
-  signature: R] : R1Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.r1Space
-
-中文:
-实例 [R1空间
-  签名: R] : R1空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.r1Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.r1Space, r1Space
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [R1Space R] : R1Space C(X, R)₀ := isEmbedding_toContinuousMap.r1Space
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T2Space
-  signature: R] : T2Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.t2Space
-
-中文:
-实例 [T2空间
-  签名: R] : T2空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.t2Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t2Space, t2Space
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T2Space R] : T2Space C(X, R)₀ := isEmbedding_toContinuousMap.t2Space
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [RegularSpace
-  signature: R] : RegularSpace C(X, R)₀
-  body: isEmbedding_toContinuousMap.regularSpace
-
-中文:
-实例 [正则空间
-  签名: R] : 正则空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.regularSpace
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.regularSpace, regularSpace
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [RegularSpace R] : RegularSpace C(X, R)₀ := isEmbedding_toContinuousMap.regularSpace
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T3Space
-  signature: R] : T3Space C(X, R)₀
-  body: isEmbedding_toContinuousMap.t3Space
-
-中文:
-实例 [T3空间
-  签名: R] : T3空间 C(X, R)₀
-  定义体: isEmbedding_toContinuousMap.t3Space
-
-Depends on / 依赖: isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.t3Space, t3Space
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T3Space R] : T3Space C(X, R)₀ := isEmbedding_toContinuousMap.t3Space
-
-/--
-Instance `instContinuousEvalConst` / 实例 `instContinuousEvalConst`
-
-English:
-instance instContinuousEvalConst
-  signature: : ContinuousEvalConst C(X, R)₀ X R
-  body: .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-中文:
-实例 instContinuousEvalConst
-  签名: : 余ntinuousEvalConst C(X, R)₀ X R
-  定义体: .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-Depends on / 依赖: continuous, isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.continuous, of_continuous_forget
+/-
+**ContinuousMapZero.instContinuousEvalConst** 是 Mathlib 中的一个实例，位于命名空间 `Continuou
+sMapZero`。
+形式化陈述：instContinuousEvalConst : ContinuousEvalConst C(X, R)₀ X R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousEvalConst.of_continuous_forget`：ContinuousEvalConst.of_continu
+ous_forget {F' : Type*} [FunLike F' α X] [TopologicalSpace F'] {f : F' -> F} (hc
+ : Continuous f) (hf : forall …
+· 使用定理 `ContinuousMap.instContinuousEvalConst`：∀ {X : Type u_2} {Y : Type u_3} [
+inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   ContinuousEvalConst 
+C(X, Y) X Y
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用引理 `ContinuousMapZero.isEmbedding_toContinuousMap`：isEmbedding_toContinuousM
+ap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where eq_induced
 -/
 instance instContinuousEvalConst : ContinuousEvalConst C(X, R)₀ X R :=
   .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-/--
-Instance `instContinuousEval` / 实例 `instContinuousEval`
-
-English:
-instance instContinuousEval
-  signature: [LocallyCompactPair X R]
-  body: .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-中文:
-实例 instContinuousEval
-  签名: [LocallyCompactPair X R]
-  定义体: .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-Depends on / 依赖: continuous, isEmbedding_toContinuousMap, isEmbedding_toContinuousMap.continuous, of_continuous_forget
+/-
+**ContinuousMapZero.instContinuousEval** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：instContinuousEval [LocallyCompactPair X R] : ContinuousEval C(X, R)₀ X R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousEval.of_continuous_forget`：ContinuousEval.of_continuous_forget
+ {F' : Type*} [FunLike F' X Y] [TopologicalSpace F'] {f : F' -> F} (hc : Continu
+ous f) (hf : forall g, ⇑(…
+· 使用定理 `ContinuousMap.instContinuousEvalOfLocallyCompactPair`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [Locally
+CompactPair X Y],   ContinuousEval C(X, Y)…
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用引理 `ContinuousMapZero.isEmbedding_toContinuousMap`：isEmbedding_toContinuousM
+ap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where eq_induced
 -/
 instance instContinuousEval [LocallyCompactPair X R] : ContinuousEval C(X, R)₀ X R :=
   .of_continuous_forget isEmbedding_toContinuousMap.continuous
-
-/--
-lemma `isClosedEmbedding_toContinuousMap` / 引理 `isClosedEmbedding_toContinuousMap`
-
-English:
-lemma isClosedEmbedding_toContinuousMap
-  given: [T1Space R]
-  proof: isEmbedding_toContinuousMap
-  isClosed_range := by
-    rw [range_toContinuousMap]
-exact isClosed_singleton.preimage continuous_eval_const 0
-
-@[fun_prop]
-
-中文:
-引理 isClosedEmbedding_toContinuousMap
-  条件: [T1空间 R]
-  证明: isEmbedding_toContinuousMap
-  isClosed_range := by
-    rw [range_toContinuousMap]
-exact isClosed_singleton.preimage continuous_eval_const 0
-
-@[fun_prop]
-
-Depends on / 依赖: isEmbedding_toContinuousMap
+/-
+**ContinuousMapZero.isClosedEmbedding_toContinuousMap** 是 Mathlib 中的一个引理，位于命名空间 
+`ContinuousMapZero`。
+形式化陈述：isClosedEmbedding_toContinuousMap [T1Space R] : IsClosedEmbedding ((↑) : C
+(X, R)₀ -> C(X, R)) where toIsEmbedding
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.isEmbedding_toContinuousMap`：isEmbedding_toContinuousM
+ap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where eq_induced
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMapZero.range_toContinuousMap`：range_toContinuousMap : range (
+(↑) : C(X, R)₀ -> C(X, R)) = {f : C(X, R) | f 0 = 0}
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `ContinuousEvalConst.continuous_eval_const`：∀ {F : Type u_1} {α : outPara
+m (Type u_2)} {X : outParam (Type u_3)} {inst : FunLike F α X}   {inst_1 : Topol
+ogicalSpace F} {inst_2 : Topolo…
+· 使用定理 `ContinuousMap.instContinuousEvalConst`：∀ {X : Type u_2} {Y : Type u_3} [
+inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   ContinuousEvalConst 
+C(X, Y) X Y
+· 使用定理 `isClosed_singleton`：isClosed_singleton [T1Space X] {x : X} : IsClosed ({
+x} : Set X)
 -/
 lemma isClosedEmbedding_toContinuousMap [T1Space R] :
-    IsClosedEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where
+    IsClosedEmbedding ((↑) : C(X, R)₀ → C(X, R)) where
   toIsEmbedding := isEmbedding_toContinuousMap
   isClosed_range := by
     rw [range_toContinuousMap]
-exact isClosed_singleton.preimage continuous_eval_const 0
+    exact isClosed_singleton.preimage <| continuous_eval_const 0
 
 @[fun_prop]
-/--
-lemma `continuous_precomp` / 引理 `continuous_precomp`
-
-English:
-lemma continuous_precomp
-  given: (f : C(X, Y)₀)
-  statement: Continuous fun g : C(Y, R)₀ => g.comp f
-  proof: by
-  rw [continuous_induced_rng]
-  change Continuous fun g : C(Y, R)₀ => (g : C(Y, R)).comp (f : C(X, Y))
-  fun_prop
-
-@[deprecated (since := "2026-02-20")] alias continuous_comp_left := continuous_precomp
-
-中文:
-引理 continuous_precomp
-  条件: (f : C(X, Y)₀)
-  结论: 连续 fun g : C(Y, R)₀ => g.comp f
-  证明: by
-  rw [continuous_induced_rng]
-  change Continuous fun g : C(Y, R)₀ => (g : C(Y, R)).comp (f : C(X, Y))
-  fun_prop
-
-@[deprecated (since := "2026-02-20")] alias continuous_comp_left := continuous_precomp
-
-Depends on / 依赖: Continuous, continuous_induced_rng, fun_prop
+/-
+**ContinuousMapZero.continuous_precomp** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：continuous_precomp (f : C(X, Y)₀) : Continuous fun g : C(Y, R)₀ => g.comp 
+f
+参数：f : C(X, Y)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `ContinuousMap.continuous_precomp`：continuous_precomp (f : C(X, Y)) : Con
+tinuous (fun g => g.comp f : C(Y, Z) -> C(X, Z))
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
-lemma continuous_precomp (f : C(X, Y)₀) : Continuous fun g : C(Y, R)₀ => g.comp f := by
+lemma continuous_precomp (f : C(X, Y)₀) : Continuous fun g : C(Y, R)₀ ↦ g.comp f := by
   rw [continuous_induced_rng]
-  change Continuous fun g : C(Y, R)₀ => (g : C(Y, R)).comp (f : C(X, Y))
+  change Continuous fun g : C(Y, R)₀ ↦ (g : C(Y, R)).comp (f : C(X, Y))
   fun_prop
 
 @[deprecated (since := "2026-02-20")] alias continuous_comp_left := continuous_precomp
-
-/--
-theorem `postcomp_injective` / 定理 `postcomp_injective`
-
-English:
-theorem postcomp_injective
-  given: (g : C(Y, R)₀) (hg : Injective g)
-  proof: fun _ _ h => ext fun x => hg congr($h x)
-
-@[fun_prop]
-
-中文:
-定理 postcomp_injective
-  条件: (g : C(Y, R)₀) (hg : 单射 g)
-  证明: fun _ _ h => ext fun x => hg congr($h x)
-
-@[fun_prop]
+/-
+**ContinuousMapZero.postcomp_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：postcomp_injective (g : C(Y, R)₀) (hg : Injective g) : Injective (g.comp :
+ C(X, Y)₀ -> C(X, R)₀)
+参数：g : C(Y, R)₀；hg : Injective g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem postcomp_injective (g : C(Y, R)₀) (hg : Injective g) :
-    Injective (g.comp : C(X, Y)₀ -> C(X, R)₀) :=
-  fun _ _ h => ext fun x => hg congr($h x)
+    Injective (g.comp : C(X, Y)₀ → C(X, R)₀) :=
+  fun _ _ h ↦ ext fun x ↦ hg congr($h x)
 
 @[fun_prop]
-/--
-theorem `continuous_postcomp` / 定理 `continuous_postcomp`
-
-English:
-theorem continuous_postcomp
-  given: (g : C(Y, R)₀)
-  statement: Continuous (g.comp : C(X, Y)₀ -> C(X, R)₀)
-  proof: by
-  rw [ContinuousMapZero.isEmbedding_toContinuousMap.continuous_iff]
-.comp exact g.toContinuousMap.continuous_postcomp
-    ContinuousMapZero.isEmbedding_toContinuousMap.continuous
-
-中文:
-定理 continuous_postcomp
-  条件: (g : C(Y, R)₀)
-  结论: 连续 (g.comp : C(X, Y)₀ -> C(X, R)₀)
-  证明: by
-  rw [ContinuousMapZero.isEmbedding_toContinuousMap.continuous_iff]
-.comp exact g.toContinuousMap.continuous_postcomp
-    ContinuousMapZero.isEmbedding_toContinuousMap.continuous
-
-Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.isEmbedding_toContinuousMap.continuous, ContinuousMapZero.isEmbedding_toContinuousMap.continuous_iff, continuous, continuous_iff, continuous_postcomp, g.toContinuousMap.continuous_postcomp, isEmbedding_toContinuousMap, toContinuousMap
+/-
+**ContinuousMapZero.continuous_postcomp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap
+Zero`。
+形式化陈述：continuous_postcomp (g : C(Y, R)₀) : Continuous (g.comp : C(X, Y)₀ -> C(X,
+ R)₀)
+参数：g : C(Y, R)₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsEmbedding.continuous_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z 
+: Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topo
+logicalSpace Y] [inst_2 :…
+· 使用引理 `ContinuousMapZero.isEmbedding_toContinuousMap`：isEmbedding_toContinuousM
+ap : IsEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where eq_induced
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousMap.continuous_postcomp`：continuous_postcomp (g : C(Y, Z)) : C
+ontinuous (ContinuousMap.comp g : C(X, Y) -> C(X, Z))
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
 -/
-theorem continuous_postcomp (g : C(Y, R)₀) : Continuous (g.comp : C(X, Y)₀ -> C(X, R)₀) := by
+theorem continuous_postcomp (g : C(Y, R)₀) : Continuous (g.comp : C(X, Y)₀ → C(X, R)₀) := by
   rw [ContinuousMapZero.isEmbedding_toContinuousMap.continuous_iff]
-.comp exact g.toContinuousMap.continuous_postcomp
+  exact g.toContinuousMap.continuous_postcomp |>.comp <|
     ContinuousMapZero.isEmbedding_toContinuousMap.continuous
 
 /-- The identity function as an element of `C(s, R)₀` when `0 ∈ (s : Set R)`. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**ContinuousMapZero.id** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZero`。
+形式化陈述：{R : Type u_3} →   [inst : Zero R] → [inst_1 : TopologicalSpace R] → (s : 
+Set R) → [inst_2 : Fact (0 ∈ s)] → ContinuousMapZero (↑s) R
+参数：s : Set R；0 ∈ s；↑s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (s : Set R) [Fact (0 in s)]
-  body: ⟨.restrict s (.id R), rfl⟩
-
-@[simp]
-
-中文:
-定义 id
-  签名: (s : 集合 R) [Fact (0 in s)]
-  定义体: ⟨.restrict s (.id R), rfl⟩
-
-@[simp]
+--- 原说明 ---
+The identity function as an element of `C(s, R)₀` when `0 ∈ (s : Set R)`.
 -/
-protected def id (s : Set R) [Fact (0 in s)] : C(s, R)₀ :=
+protected def id (s : Set R) [Fact (0 ∈ s)] : C(s, R)₀ :=
   ⟨.restrict s (.id R), rfl⟩
 
 @[simp]
-/--
-lemma `toContinuousMap_id` / 引理 `toContinuousMap_id`
-
-English:
-lemma toContinuousMap_id
-  given: {s : Set R} [Fact (0 in s)]
-  proof: rfl
-
-中文:
-引理 toContinuousMap_id
-  条件: {s : 集合 R} [Fact (0 in s)]
-  证明: rfl
+/-
+**ContinuousMapZero.toContinuousMap_id** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：toContinuousMap_id {s : Set R} [Fact (0 in s)] : (ContinuousMapZero.id s :
+ C(s, R)) = .restrict s (.id R)
+参数：0 in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toContinuousMap_id {s : Set R} [Fact (0 in s)] :
+lemma toContinuousMap_id {s : Set R} [Fact (0 ∈ s)] :
     (ContinuousMapZero.id s : C(s, R)) = .restrict s (.id R) :=
   rfl
 
@@ -655,223 +454,254 @@ variable [TopologicalSpace X] [TopologicalSpace R]
 
 open scoped Classical in
 /--
-Definition of `mkD` / `mkD` 的定义
-
-English:
-definition mkD
-  signature: [Zero X] (f : X -> R) (default : C(X, R)₀)
-  body: if h : Continuous f ∧ f 0 = 0 then ⟨⟨_, h.1⟩, h.2⟩ else default
-
-中文:
-定义 mkD
-  签名: [零 X] (f : X -> R) (default : C(X, R)₀)
-  定义体: if h : Continuous f ∧ f 0 = 0 then ⟨⟨_, h.1⟩, h.2⟩ else default
-
-Depends on / 依赖: Continuous
+Interpret `f : α → β` as an element of `C(α, β)₀`, falling back to the default value
+`default : C(α, β)₀` if `f` is not continuous or does not map `0` to `0`.
+This is mainly intended to be used for `C(α, β)₀`-valued integration. For example, if a family of
+functions `f : ι → α → β` satisfies that `f i` is continuous and maps `0` to `0` for almost every
+`i`, you can write the `C(α, β)₀`-valued integral "`∫ i, f i`" as
+`∫ i, ContinuousMapZero.mkD (f i) 0`.
 -/
-noncomputable def mkD [Zero X] (f : X -> R) (default : C(X, R)₀) : C(X, R)₀ :=
+/-
+**ContinuousMapZero.mkD** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZero`。
+形式化陈述：mkD [Zero X] (f : X -> R) (default : C(X, R)₀) : C(X, R)₀
+参数：f : X -> R；default : C(X, R)₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Interpret `f : α → β` as an element of `C(α, β)₀`, falling back to the default v
+alue
+`default : C(α, β)₀` if `f` is not continuous or does not map `0` to `0`.
+This is mainly intended to be used for `C(α, β)₀`-valued integration. For exampl
+e, if a family of
+functions `f : ι → α → β` satisfies that `f i` is continuous and maps `0` to `0`
+ for almost every
+`i`, you can write the `C(α, β)₀`-valued integral "`∫ i, f i`" as
+`∫ i, ContinuousMapZero.mkD (f i) 0`.
+-/
+noncomputable def mkD [Zero X] (f : X → R) (default : C(X, R)₀) : C(X, R)₀ :=
   if h : Continuous f ∧ f 0 = 0 then ⟨⟨_, h.1⟩, h.2⟩ else default
-
-/--
-lemma `mkD_of_continuous` / 引理 `mkD_of_continuous`
-
-English:
-lemma mkD_of_continuous
-  given: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0)
-  proof: by
-  simp only [mkD, And.intro hf hf₀, true_and, ↓reduceDIte]
-
-中文:
-引理 mkD_of_continuous
-  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : 连续 f) (hf₀ : f 0 = 0)
-  证明: by
-  simp only [mkD, And.intro hf hf₀, true_and, ↓reduceDIte]
-
-Depends on / 依赖: And.intro, reduceDIte, true_and
+/-
+**ContinuousMapZero.mkD_of_continuous** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：mkD_of_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : Continuous f)
+ (hf₀ : f 0 = 0) : mkD f g = ⟨⟨f, hf⟩, hf₀⟩
+参数：X, R；hf : Continuous f；hf₀ : f 0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
 -/
-lemma mkD_of_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) :
+lemma mkD_of_continuous [Zero X] {f : X → R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) :
     mkD f g = ⟨⟨f, hf⟩, hf₀⟩ := by
   simp only [mkD, And.intro hf hf₀, true_and, ↓reduceDIte]
-
-/--
-lemma `mkD_of_not_continuous` / 引理 `mkD_of_not_continuous`
-
-English:
-lemma mkD_of_not_continuous
-  given: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ Continuous f)
-  proof: by
-  simp only [mkD, not_and_of_not_left _ hf, ↓reduceDIte]
-
-中文:
-引理 mkD_of_not_continuous
-  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ 连续 f)
-  证明: by
-  simp only [mkD, not_and_of_not_left _ hf, ↓reduceDIte]
-
-Depends on / 依赖: not_and_of_not_left, reduceDIte
+/-
+**ContinuousMapZero.mkD_of_not_continuous** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousM
+apZero`。
+形式化陈述：mkD_of_not_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ Continu
+ous f) : mkD f g = g
+参数：X, R；hf : ¬ Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_and_of_not_left`：∀ {a : Prop} (b : Prop), ¬a → ¬(a ∧ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mkD_of_not_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : ¬ Continuous f) :
+lemma mkD_of_not_continuous [Zero X] {f : X → R} {g : C(X, R)₀} (hf : ¬ Continuous f) :
     mkD f g = g := by
   simp only [mkD, not_and_of_not_left _ hf, ↓reduceDIte]
-
-/--
-lemma `mkD_of_not_zero` / 引理 `mkD_of_not_zero`
-
-English:
-lemma mkD_of_not_zero
-  given: [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0)
-  proof: by
-  simp only [mkD, not_and_of_not_right _ hf, ↓reduceDIte]
-
-中文:
-引理 mkD_of_not_zero
-  条件: [零 X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0)
-  证明: by
-  simp only [mkD, not_and_of_not_right _ hf, ↓reduceDIte]
-
-Depends on / 依赖: not_and_of_not_right, reduceDIte
+/-
+**ContinuousMapZero.mkD_of_not_zero** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero
+`。
+形式化陈述：mkD_of_not_zero [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0) : mkD
+ f g = g
+参数：X, R；hf : f 0 != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_and_of_not_right`：∀ (a : Prop) {b : Prop}, ¬b → ¬(a ∧ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mkD_of_not_zero [Zero X] {f : X -> R} {g : C(X, R)₀} (hf : f 0 != 0) :
+lemma mkD_of_not_zero [Zero X] {f : X → R} {g : C(X, R)₀} (hf : f 0 ≠ 0) :
     mkD f g = g := by
   simp only [mkD, not_and_of_not_right _ hf, ↓reduceDIte]
-
-/--
-lemma `mkD_apply_of_continuous` / 引理 `mkD_apply_of_continuous`
-
-English:
-lemma mkD_apply_of_continuous
-  statement: [Zero X] {f : X -> R} {g : C(X, R)₀} {x : X}
-  proof: by
-  rw [mkD_of_continuous hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]
-
-中文:
-引理 mkD_apply_of_continuous
-  结论: [零 X] {f : X -> R} {g : C(X, R)₀} {x : X}
-  证明: by
-  rw [mkD_of_continuous hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, coe_mk, mkD_of_continuous
+/-
+**ContinuousMapZero.mkD_apply_of_continuous** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sMapZero`。
+形式化陈述：mkD_apply_of_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} {x : X} (hf :
+ Continuous f) (hf₀ : f 0 = 0) : mkD f g x = f x
+参数：X, R；hf : Continuous f；hf₀ : f 0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMapZero.mkD_of_continuous`：mkD_of_continuous [Zero X] {f : X -
+> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) : mkD f g = ⟨⟨f, hf⟩, hf
+₀⟩
+· 使用引理 `ContinuousMapZero.coe_mk`：coe_mk {f : C(X, R)} {h0 : f 0 = 0} : ⇑(mk f h
+0) = f
+· 使用定理 `ContinuousMap.coe_mk`：coe_mk (f : X -> Y) (h : Continuous f) : ⇑(⟨f, h⟩ 
+: C(X, Y)) = f
 -/
-lemma mkD_apply_of_continuous [Zero X] {f : X -> R} {g : C(X, R)₀} {x : X}
+lemma mkD_apply_of_continuous [Zero X] {f : X → R} {g : C(X, R)₀} {x : X}
     (hf : Continuous f) (hf₀ : f 0 = 0) :
     mkD f g x = f x := by
-  rw [mkD_of_continuous hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]
-
-/--
-lemma `mkD_of_continuousOn` / 引理 `mkD_of_continuousOn`
-
-English:
-lemma mkD_of_continuousOn
-  statement: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
-  proof: mkD_of_continuous hf.domRestrict hf₀
-
-中文:
-引理 mkD_of_continuousOn
-  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀}
-  证明: mkD_of_continuous hf.domRestrict hf₀
-
-Depends on / 依赖: domRestrict, hf.domRestrict, mkD_of_continuous
+  rw [mkD_of_continuous hf hf₀, coe_mk, ContinuousMap.coe_mk]
+/-
+**ContinuousMapZero.mkD_of_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap
+Zero`。
+形式化陈述：mkD_of_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀} (hf :
+ ContinuousOn f s) (hf₀ : f (0 : s) = 0) : mkD (s.domRestrict f) g = ⟨⟨s.domRest
+rict f, hf.domRestrict⟩, hf₀⟩
+参数：s, R；hf : ContinuousOn f s；hf₀ : f (0 : s) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.mkD_of_continuous`：mkD_of_continuous [Zero X] {f : X -
+> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) : mkD f g = ⟨⟨f, hf⟩, hf
+₀⟩
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
 -/
-lemma mkD_of_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
+lemma mkD_of_continuousOn {s : Set X} [Zero s] {f : X → R} {g : C(s, R)₀}
     (hf : ContinuousOn f s) (hf₀ : f (0 : s) = 0) :
     mkD (s.domRestrict f) g = ⟨⟨s.domRestrict f, hf.domRestrict⟩, hf₀⟩ :=
   mkD_of_continuous hf.domRestrict hf₀
-
-/--
-lemma `mkD_of_not_continuousOn` / 引理 `mkD_of_not_continuousOn`
-
-English:
-lemma mkD_of_not_continuousOn
-  statement: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
-  proof: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf
-  exact mkD_of_not_continuous hf
-
-中文:
-引理 mkD_of_not_continuousOn
-  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀}
-  证明: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf
-  exact mkD_of_not_continuous hf
-
-Depends on / 依赖: continuousOn_iff_continuous_domRestrict, mkD_of_not_continuous
+/-
+**ContinuousMapZero.mkD_of_not_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sMapZero`。
+形式化陈述：mkD_of_not_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀} (
+hf : ¬ ContinuousOn f s) : mkD (s.domRestrict f) g = g
+参数：s, R；hf : ¬ ContinuousOn f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.mkD_of_not_continuous`：mkD_of_not_continuous [Zero X] 
+{f : X -> R} {g : C(X, R)₀} (hf : ¬ Continuous f) : mkD f g = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuousOn_iff_continuous_domRestrict`：continuousOn_iff_continuous_dom
+Restrict : ContinuousOn f s ↔ Continuous (s.domRestrict f)
 -/
-lemma mkD_of_not_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
+lemma mkD_of_not_continuousOn {s : Set X} [Zero s] {f : X → R} {g : C(s, R)₀}
     (hf : ¬ ContinuousOn f s) :
     mkD (s.domRestrict f) g = g := by
   rw [continuousOn_iff_continuous_domRestrict] at hf
   exact mkD_of_not_continuous hf
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mkD_apply_of_continuousOn` / 引理 `mkD_apply_of_continuousOn`
-
-English:
-lemma mkD_apply_of_continuousOn
-  statement: {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀} {x : s}
-  proof: by
-  rw [mkD_of_continuousOn hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]; rw [domRestrict_apply]
-
-中文:
-引理 mkD_apply_of_continuousOn
-  结论: {s : 集合 X} [零 s] {f : X -> R} {g : C(s, R)₀} {x : s}
-  证明: by
-  rw [mkD_of_continuousOn hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]; rw [domRestrict_apply]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, coe_mk, domRestrict_apply, mkD_of_continuousOn
+/-
+**ContinuousMapZero.mkD_apply_of_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `Continu
+ousMapZero`。
+形式化陈述：mkD_apply_of_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀}
+ {x : s} (hf : ContinuousOn f s) (hf₀ : f (0 : s) = 0) : mkD (s.domRestrict f) g
+ x = f x
+参数：s, R；hf : ContinuousOn f s；hf₀ : f (0 : s) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMapZero.mkD_of_continuousOn`：mkD_of_continuousOn {s : Set X} [
+Zero s] {f : X -> R} {g : C(s, R)₀} (hf : ContinuousOn f s) (hf₀ : f (0 : s) = 0
+) : mkD (s.domRestrict f) g…
+· 使用引理 `ContinuousMapZero.coe_mk`：coe_mk {f : C(X, R)} {h0 : f 0 = 0} : ⇑(mk f h
+0) = f
+· 使用定理 `ContinuousMap.coe_mk`：coe_mk (f : X -> Y) (h : Continuous f) : ⇑(⟨f, h⟩ 
+: C(X, Y)) = f
+· 使用定理 `Set.domRestrict_apply`：domRestrict_apply (f : (a : α) -> π a) (s : Set α
+) (x : s) : s.domRestrict f x = f x
 -/
-lemma mkD_apply_of_continuousOn {s : Set X} [Zero s] {f : X -> R} {g : C(s, R)₀} {x : s}
+lemma mkD_apply_of_continuousOn {s : Set X} [Zero s] {f : X → R} {g : C(s, R)₀} {x : s}
     (hf : ContinuousOn f s) (hf₀ : f (0 : s) = 0) :
     mkD (s.domRestrict f) g x = f x := by
-  rw [mkD_of_continuousOn hf hf₀]; rw [coe_mk]; rw [ContinuousMap.coe_mk]; rw [domRestrict_apply]
+  rw [mkD_of_continuousOn hf hf₀, coe_mk, ContinuousMap.coe_mk, domRestrict_apply]
 
 open ContinuousMap in
-/--
-lemma `mkD_eq_mkD_of_map_zero` / 引理 `mkD_eq_mkD_of_map_zero`
+/-- Link between `ContinuousMapZero.mkD` and `ContinuousMap.mkD`. -/
+/-
+**ContinuousMapZero.mkD_eq_mkD_of_map_zero** 是 Mathlib 中的一个引理，位于命名空间 `Continuous
+MapZero`。
+形式化陈述：mkD_eq_mkD_of_map_zero [Zero X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 
+= 0) : mkD f g = ContinuousMap.mkD f g
+参数：f : X -> R；g : C(X, R)₀；f_zero : f 0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `toContinuousMap.congr_simp`：∀ {F : Type u_1} {X : Type u_2} {Y : Type u_
+3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : FunLike
+ F X Y] [inst_3 …
+· 使用引理 `ContinuousMapZero.mkD_of_continuous`：mkD_of_continuous [Zero X] {f : X -
+> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) : mkD f g = ⟨⟨f, hf⟩, hf
+₀⟩
+· 使用引理 `ContinuousMap.mkD_of_continuous`：mkD_of_continuous {f : α -> β} {g : C(α
+, β)} (hf : Continuous f) : mkD f g = ⟨f, hf⟩
+· 使用引理 `ContinuousMapZero.mkD_of_not_continuous`：mkD_of_not_continuous [Zero X] 
+{f : X -> R} {g : C(X, R)₀} (hf : ¬ Continuous f) : mkD f g = g
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `ContinuousMap.mkD_of_not_continuous`：mkD_of_not_continuous {f : α -> β} 
+{g : C(α, β)} (hf : ¬ Continuous f) : mkD f g = g
 
-English:
-lemma mkD_eq_mkD_of_map_zero
-  given: [Zero X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 = 0)
-  proof: by
-  ext
-  by_cases f_cont : Continuous f <;>
-    simp [*, ContinuousMap.mkD_of_continuous, mkD_of_continuous, mkD_of_not_continuous,
-      ContinuousMap.mkD_of_not_continuous]
-
-中文:
-引理 mkD_eq_mkD_of_map_zero
-  条件: [零 X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 = 0)
-  证明: by
-  ext
-  by_cases f_cont : Continuous f <;>
-    simp [*, ContinuousMap.mkD_of_continuous, mkD_of_continuous, mkD_of_not_continuous,
-      ContinuousMap.mkD_of_not_continuous]
-
-Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.mkD_of_continuous, ContinuousMap.mkD_of_not_continuous, f_cont, mkD_of_continuous, mkD_of_not_continuous
+--- 原说明 ---
+Link between `ContinuousMapZero.mkD` and `ContinuousMap.mkD`.
 -/
-lemma mkD_eq_mkD_of_map_zero [Zero X] (f : X -> R) (g : C(X, R)₀) (f_zero : f 0 = 0) :
+lemma mkD_eq_mkD_of_map_zero [Zero X] (f : X → R) (g : C(X, R)₀) (f_zero : f 0 = 0) :
     mkD f g = ContinuousMap.mkD f g := by
   ext
   by_cases f_cont : Continuous f <;>
     simp [*, ContinuousMap.mkD_of_continuous, mkD_of_continuous, mkD_of_not_continuous,
       ContinuousMap.mkD_of_not_continuous]
-
-/--
-lemma `mkD_eq_self` / 引理 `mkD_eq_self`
-
-English:
-lemma mkD_eq_self
-  given: [Zero X] {f g : C(X, R)₀}
-  statement: mkD f g = f
-  proof: mkD_of_continuous f.continuous (map_zero f)
-
-中文:
-引理 mkD_eq_self
-  条件: [零 X] {f g : C(X, R)₀}
-  结论: mkD f g = f
-  证明: mkD_of_continuous f.continuous (map_zero f)
-
-Depends on / 依赖: continuous, f.continuous, map_zero, mkD_of_continuous
+/-
+**ContinuousMapZero.mkD_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：mkD_eq_self [Zero X] {f g : C(X, R)₀} : mkD f g = f
+参数：X, R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.mkD_of_continuous`：mkD_of_continuous [Zero X] {f : X -
+> R} {g : C(X, R)₀} (hf : Continuous f) (hf₀ : f 0 = 0) : mkD f g = ⟨⟨f, hf⟩, hf
+₀⟩
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
 -/
 lemma mkD_eq_self [Zero X] {f g : C(X, R)₀} : mkD f g = f :=
   mkD_of_continuous f.continuous (map_zero f)
@@ -883,199 +713,109 @@ section Algebra
 variable {X R : Type*} [Zero X] [TopologicalSpace X]
 variable [TopologicalSpace R]
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: [Zero R]
-  body: ⟨0, rfl⟩
-
-中文:
-实例 instZero
-  签名: [零 R]
-  定义体: ⟨0, rfl⟩
+/-
+**ContinuousMapZero.instZero** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instZero [Zero R] : Zero C(X, R)₀ where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero [Zero R] : Zero C(X, R)₀ where
   zero := ⟨0, rfl⟩
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  given: [Zero R]
-  statement: ⇑(0 : C(X, R)₀) = 0
-  proof: rfl
-
-中文:
-引理 coe_zero
-  条件: [零 R]
-  结论: ⇑(0 : C(X, R)₀) = 0
-  证明: rfl
+/-
+**ContinuousMapZero.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : Zero R], ⇑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_zero [Zero R] : ⇑(0 : C(X, R)₀) = 0 := rfl
-
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: [AddZeroClass R] [ContinuousAdd R]
-  body: ⟨f + g, by simp⟩
-
-中文:
-实例 instAdd
-  签名: [加法零类 R] [连续加法 R]
-  定义体: ⟨f + g, by simp⟩
+/-
+**ContinuousMapZero.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instAdd [AddZeroClass R] [ContinuousAdd R] : Add C(X, R)₀ where add f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd [AddZeroClass R] [ContinuousAdd R] : Add C(X, R)₀ where
   add f g := ⟨f + g, by simp⟩
-
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: [AddZeroClass R] [ContinuousAdd R] (f g : C(X, R)₀)
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: [加法零类 R] [连续加法 R] (f g : C(X, R)₀)
-  结论: ⇑(f + g) = f + g
-  证明: rfl
+/-
+**ContinuousMapZero.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : AddZeroClass R] [inst_4 : Continuo
+usAdd R] (f g : ContinuousMapZero X R), ⇑(f + g) = ⇑f + ⇑g
+参数：f g : ContinuousMapZero X R；f + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_add [AddZeroClass R] [ContinuousAdd R] (f g : C(X, R)₀) : ⇑(f + g) = f + g := rfl
-
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: [NegZeroClass R] [ContinuousNeg R]
-  body: ⟨- f, by simp⟩
-
-中文:
-实例 instNeg
-  签名: [NegZero类 R] [连续取负 R]
-  定义体: ⟨- f, by simp⟩
+/-
+**ContinuousMapZero.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instNeg [NegZeroClass R] [ContinuousNeg R] : Neg C(X, R)₀ where neg f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg [NegZeroClass R] [ContinuousNeg R] : Neg C(X, R)₀ where
   neg f := ⟨- f, by simp⟩
-
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: [NegZeroClass R] [ContinuousNeg R] (f : C(X, R)₀)
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-中文:
-引理 coe_neg
-  条件: [NegZero类 R] [连续取负 R] (f : C(X, R)₀)
-  结论: ⇑(-f) = -f
-  证明: rfl
+/-
+**ContinuousMapZero.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : NegZeroClass R] [inst_4 : Continuo
+usNeg R] (f : ContinuousMapZero X R), ⇑(-f) = -⇑f
+参数：f : ContinuousMapZero X R；-f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_neg [NegZeroClass R] [ContinuousNeg R] (f : C(X, R)₀) : ⇑(-f) = -f := rfl
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: [SubNegZeroMonoid R] [ContinuousSub R]
-  body: ⟨f - g, by simp⟩
-
-中文:
-实例 instSub
-  签名: [SubNegZero幺半群 R] [余ntinuousSub R]
-  定义体: ⟨f - g, by simp⟩
+/-
+**ContinuousMapZero.instSub** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instSub [SubNegZeroMonoid R] [ContinuousSub R] : Sub C(X, R)₀ where sub f 
+g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub [SubNegZeroMonoid R] [ContinuousSub R] : Sub C(X, R)₀ where
   sub f g := ⟨f - g, by simp⟩
-
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: [SubNegZeroMonoid R] [ContinuousSub R] (f g : C(X, R)₀)
-  proof: rfl
-
-中文:
-引理 coe_sub
-  条件: [SubNegZero幺半群 R] [余ntinuousSub R] (f g : C(X, R)₀)
-  证明: rfl
+/-
+**ContinuousMapZero.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : SubNegZeroMonoid R] [inst_4 : Cont
+inuousSub R] (f g : ContinuousMapZero X R), ⇑(f - g) = ⇑f - ⇑g
+参数：f g : ContinuousMapZero X R；f - g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_sub [SubNegZeroMonoid R] [ContinuousSub R] (f g : C(X, R)₀) :
     ⇑(f - g) = f - g := rfl
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: [MulZeroClass R] [ContinuousMul R]
-  body: ⟨f * g, by simp⟩
-
-中文:
-实例 instMul
-  签名: [乘零类 R] [连续乘法 R]
-  定义体: ⟨f * g, by simp⟩
+/-
+**ContinuousMapZero.instMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instMul [MulZeroClass R] [ContinuousMul R] : Mul C(X, R)₀ where mul f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul [MulZeroClass R] [ContinuousMul R] : Mul C(X, R)₀ where
   mul f g := ⟨f * g, by simp⟩
-
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: [MulZeroClass R] [ContinuousMul R] (f g : C(X, R)₀)
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-中文:
-引理 coe_mul
-  条件: [乘零类 R] [连续乘法 R] (f g : C(X, R)₀)
-  结论: ⇑(f * g) = f * g
-  证明: rfl
+/-
+**ContinuousMapZero.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : MulZeroClass R] [inst_4 : Continuo
+usMul R] (f g : ContinuousMapZero X R), ⇑(f * g) = ⇑f * ⇑g
+参数：f g : ContinuousMapZero X R；f * g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_mul [MulZeroClass R] [ContinuousMul R] (f g : C(X, R)₀) : ⇑(f * g) = f * g := rfl
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
-  body: ⟨m • f, by simp⟩
-
-中文:
-实例 instSMul
-  签名: {M : 类型} [零 R] [SMulZero类 M R] [连续常数标量乘法 M R]
-  定义体: ⟨m • f, by simp⟩
+/-
+**ContinuousMapZero.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instSMul {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R
+] : SMul M C(X, R)₀ where smul m f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R] :
     SMul M C(X, R)₀ where
   smul m f := ⟨m • f, by simp⟩
-
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  statement: {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
-  proof: rfl
-
-中文:
-引理 coe_smul
-  结论: {M : 类型} [零 R] [SMulZero类 M R] [连续常数标量乘法 M R]
-  证明: rfl
+/-
+**ContinuousMapZero.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   {M : Type u_3} [inst_3 : Zero R] [inst_4 : S
+MulZeroClass M R] [inst_5 : ContinuousConstSMul M R] (m : M)   (f : ContinuousMa
+pZero X R), ⇑(m • f) = m • ⇑f
+参数：m : M；f : ContinuousMapZero X R；m • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_smul {M : Type*} [Zero R] [SMulZeroClass M R] [ContinuousConstSMul M R]
     (m : M) (f : C(X, R)₀) : ⇑(m • f) = m • f := rfl
@@ -1084,85 +824,61 @@ section AddCommMonoid
 
 variable [AddCommMonoid R] [ContinuousAdd R]
 
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid C(X, R)₀
-  body: fast_instance% toContinuousMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 C(X, R)₀
-  定义体: fast_instance% toContinuousMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: addCommMonoid, fast_instance, toContinuousMap_injective, toContinuousMap_injective.addCommMonoid
+/-
+**ContinuousMapZero.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：instAddCommMonoid : AddCommMonoid C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid : AddCommMonoid C(X, R)₀ :=
-  fast_instance% toContinuousMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: {M : Type*} [Semiring M] [Module M R] [ContinuousConstSMul M R]
-  body: fast_instance% toContinuousMap_injective.module M
-    { toFun := _, map_add' := fun _ _ => rfl, map_zero' := rfl } (fun _ _ => rfl)
-
-中文:
-实例 instModule
-  签名: {M : 类型} [半环 M] [模 M R] [连续常数标量乘法 M R]
-  定义体: fast_instance% toContinuousMap_injective.module M
-    { toFun := _, map_add' := fun _ _ => rfl, map_zero' := rfl } (fun _ _ => rfl)
-
-Depends on / 依赖: fast_instance, map_add, map_zero, module, toContinuousMap_injective, toContinuousMap_injective.module
+  fast_instance% toContinuousMap_injective.addCommMonoid _ rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**ContinuousMapZero.instModule** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instModule {M : Type*} [Semiring M] [Module M R] [ContinuousConstSMul M R]
+ : Module M C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule {M : Type*} [Semiring M] [Module M R] [ContinuousConstSMul M R] :
     Module M C(X, R)₀ :=
   fast_instance% toContinuousMap_injective.module M
-    { toFun := _, map_add' := fun _ _ => rfl, map_zero' := rfl } (fun _ _ => rfl)
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
-  body: ext fun _ => smul_comm ..
-
-中文:
-实例 instSMulCommClass
-  签名: {M N : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
-  定义体: ext fun _ => smul_comm ..
-
-Depends on / 依赖: smul_comm
+    { toFun := _, map_add' := fun _ _ ↦ rfl, map_zero' := rfl } (fun _ _ ↦ rfl)
+/-
+**ContinuousMapZero.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：instSMulCommClass {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M
+ R] [SMulZeroClass N R] [ContinuousConstSMul N R] [SMulCommClass M N R] : SMulCo
+mmClass M N C(X, R)₀ where smul_comm _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance instSMulCommClass {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
     [SMulZeroClass N R] [ContinuousConstSMul N R] [SMulCommClass M N R] :
     SMulCommClass M N C(X, R)₀ where
-  smul_comm _ _ _ := ext fun _ => smul_comm ..
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
-  body: ext fun _ => smul_assoc ..
-
-中文:
-实例 instIsScalarTower
-  签名: {M N : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
-  定义体: ext fun _ => smul_assoc ..
-
-Depends on / 依赖: smul_assoc
+  smul_comm _ _ _ := ext fun _ ↦ smul_comm ..
+/-
+**ContinuousMapZero.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：instIsScalarTower {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M
+ R] [SMulZeroClass N R] [ContinuousConstSMul N R] [SMul M N] [IsScalarTower M N 
+R] : IsScalarTower M N C(X, R)₀ where smul_assoc _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTower {M N : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
     [SMulZeroClass N R] [ContinuousConstSMul N R] [SMul M N] [IsScalarTower M N R] :
     IsScalarTower M N C(X, R)₀ where
-  smul_assoc _ _ _ := ext fun _ => smul_assoc ..
+  smul_assoc _ _ _ := ext fun _ ↦ smul_assoc ..
 
 end AddCommMonoid
 
@@ -1170,26 +886,16 @@ section AddCommGroup
 
 variable [AddCommGroup R] [IsTopologicalAddGroup R]
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup C(X, R)₀
-  body: fast_instance% toContinuousMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 C(X, R)₀
-  定义体: fast_instance% toContinuousMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: addCommGroup, fast_instance, toContinuousMap_injective, toContinuousMap_injective.addCommGroup
+/-
+**ContinuousMapZero.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZer
+o`。
+形式化陈述：instAddCommGroup : AddCommGroup C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup : AddCommGroup C(X, R)₀ :=
-  fast_instance% toContinuousMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
+  fast_instance% toContinuousMap_injective.addCommGroup _ rfl (fun _ _ ↦ rfl) (fun _ ↦ rfl)
+    (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
 
 end AddCommGroup
 
@@ -1197,205 +903,148 @@ section Semiring
 
 variable [CommSemiring R] [IsTopologicalSemiring R]
 
-/--
-Instance `instNonUnitalCommSemiring` / 实例 `instNonUnitalCommSemiring`
-
-English:
-instance instNonUnitalCommSemiring
-  signature: : NonUnitalCommSemiring C(X, R)₀
-  body: fast_instance% toContinuousMap_injective.nonUnitalCommSemiring
-    _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 instNonUnitalCommSemiring
-  签名: : 非幺交换半环 C(X, R)₀
-  定义体: fast_instance% toContinuousMap_injective.nonUnitalCommSemiring
-    _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: fast_instance, nonUnitalCommSemiring, toContinuousMap_injective, toContinuousMap_injective.nonUnitalCommSemiring
+/-
+**ContinuousMapZero.instNonUnitalCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Continu
+ousMapZero`。
+形式化陈述：instNonUnitalCommSemiring : NonUnitalCommSemiring C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommSemiring : NonUnitalCommSemiring C(X, R)₀ :=
   fast_instance% toContinuousMap_injective.nonUnitalCommSemiring
-    _ rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `instSMulCommClass'` / 实例 `instSMulCommClass'`
-
-English:
-instance instSMulCommClass'
-  signature: {M : Type*} [SMulZeroClass M R] [SMulCommClass M R R]
-  body: ext fun x => smul_comm m (f x) (g x)
-
-中文:
-实例 instSMulCommClass'
-  签名: {M : 类型} [SMulZero类 M R] [标量交换类 M R R]
-  定义体: ext fun x => smul_comm m (f x) (g x)
-
-Depends on / 依赖: smul_comm
+    _ rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**ContinuousMapZero.instSMulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：instSMulCommClass' {M : Type*} [SMulZeroClass M R] [SMulCommClass M R R] [
+ContinuousConstSMul M R] : SMulCommClass M C(X, R)₀ C(X, R)₀ where smul_comm m f
+ g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance instSMulCommClass' {M : Type*} [SMulZeroClass M R] [SMulCommClass M R R]
     [ContinuousConstSMul M R] : SMulCommClass M C(X, R)₀ C(X, R)₀ where
-  smul_comm m f g := ext fun x => smul_comm m (f x) (g x)
-
-/--
-Instance `instIsScalarTower'` / 实例 `instIsScalarTower'`
-
-English:
-instance instIsScalarTower'
-  signature: {M : Type*} [SMulZeroClass M R] [IsScalarTower M R R]
-  body: ext fun x => smul_assoc m (f x) (g x)
-
-中文:
-实例 instIsScalarTower'
-  签名: {M : 类型} [SMulZero类 M R] [标量塔 M R R]
-  定义体: ext fun x => smul_assoc m (f x) (g x)
-
-Depends on / 依赖: smul_assoc
+  smul_comm m f g := ext fun x ↦ smul_comm m (f x) (g x)
+/-
+**ContinuousMapZero.instIsScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：instIsScalarTower' {M : Type*} [SMulZeroClass M R] [IsScalarTower M R R] [
+ContinuousConstSMul M R] : IsScalarTower M C(X, R)₀ C(X, R)₀ where smul_assoc m 
+f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTower' {M : Type*} [SMulZeroClass M R] [IsScalarTower M R R]
     [ContinuousConstSMul M R] : IsScalarTower M C(X, R)₀ C(X, R)₀ where
-  smul_assoc m f g := ext fun x => smul_assoc m (f x) (g x)
-
-/--
-Instance `instStarRing` / 实例 `instStarRing`
-
-English:
-instance instStarRing
-  signature: [StarRing R] [ContinuousStar R]
-  body: ⟨star f, by simp⟩
-  star_involutive _ := ext fun _ => star_star _
-  star_mul _ _ := ext fun _ => star_mul ..
-  star_add _ _ := ext fun _ => star_add ..
-
-中文:
-实例 instStarRing
-  签名: [对合环 R] [余ntinuousStar R]
-  定义体: ⟨star f, by simp⟩
-  star_involutive _ := ext fun _ => star_star _
-  star_mul _ _ := ext fun _ => star_mul ..
-  star_add _ _ := ext fun _ => star_add ..
+  smul_assoc m f g := ext fun x ↦ smul_assoc m (f x) (g x)
+/-
+**ContinuousMapZero.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instStarRing [StarRing R] [ContinuousStar R] : StarRing C(X, R)₀ where sta
+r f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStarRing [StarRing R] [ContinuousStar R] : StarRing C(X, R)₀ where
   star f := ⟨star f, by simp⟩
-  star_involutive _ := ext fun _ => star_star _
-  star_mul _ _ := ext fun _ => star_mul ..
-  star_add _ _ := ext fun _ => star_add ..
-
-/--
-Instance `instStarModule` / 实例 `instStarModule`
-
-English:
-instance instStarModule
-  signature: [StarRing R] {M : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
-  body: ext fun x => star_smul r (f x)
-
-中文:
-实例 instStarModule
-  签名: [对合环 R] {M : 类型} [SMulZero类 M R] [连续常数标量乘法 M R]
-  定义体: ext fun x => star_smul r (f x)
-
-Depends on / 依赖: star_smul
+  star_involutive _ := ext fun _ ↦ star_star _
+  star_mul _ _ := ext fun _ ↦ star_mul ..
+  star_add _ _ := ext fun _ ↦ star_add ..
+/-
+**ContinuousMapZero.instStarModule** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`
+。
+形式化陈述：instStarModule [StarRing R] {M : Type*} [SMulZeroClass M R] [ContinuousCon
+stSMul M R] [Star M] [StarModule M R] [ContinuousStar R] : StarModule M C(X, R)₀
+ where star_smul r f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
 -/
 instance instStarModule [StarRing R] {M : Type*} [SMulZeroClass M R] [ContinuousConstSMul M R]
     [Star M] [StarModule M R] [ContinuousStar R] : StarModule M C(X, R)₀ where
-  star_smul r f := ext fun x => star_smul r (f x)
-
-/--
-lemma `coe_star` / 引理 `coe_star`
-
-English:
-lemma coe_star
-  given: [StarRing R] [ContinuousStar R] (f : C(X, R)₀)
-  statement: ⇑(star f) = star ⇑f
-  proof: rfl
-
-中文:
-引理 coe_star
-  条件: [对合环 R] [余ntinuousStar R] (f : C(X, R)₀)
-  结论: ⇑(star f) = star ⇑f
-  证明: rfl
+  star_smul r f := ext fun x ↦ star_smul r (f x)
+/-
+**ContinuousMapZero.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : CommSemiring R] [inst_4 : IsTopolo
+gicalSemiring R] [inst_5 : StarRing R] [inst_6 : ContinuousStar R]   (f : Contin
+uousMapZero X R), ⇑(star f) = star ⇑f
+参数：f : ContinuousMapZero X R；star f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_star [StarRing R] [ContinuousStar R] (f : C(X, R)₀) : ⇑(star f) = star ⇑f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [StarRing
-  signature: R] [ContinuousStar R] [TrivialStar R] : TrivialStar C(X, R)₀ where
-  body: DFunLike.ext _ _ fun _ => star_trivial _
-
-中文:
-实例 [对合环
-  签名: R] [余ntinuousStar R] [TrivialStar R] : TrivialStar C(X, R)₀ where
-  定义体: DFunLike.ext _ _ fun _ => star_trivial _
-
-Depends on / 依赖: DFunLike, DFunLike.ext, star_trivial
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [StarRing R] [ContinuousStar R] [TrivialStar R] : TrivialStar C(X, R)₀ where
-  star_trivial _ := DFunLike.ext _ _ fun _ => star_trivial _
-
-/--
-Instance `instCanLift` / 实例 `instCanLift`
-
-English:
-instance instCanLift
-  signature: : CanLift C(X, R) C(X, R)₀ (↑) (fun f => f 0 = 0) where
-  body: ⟨⟨f, hf⟩, rfl⟩
-
-中文:
-实例 instCanLift
-  签名: : CanLift C(X, R) C(X, R)₀ (↑) (fun f => f 0 = 0) where
-  定义体: ⟨⟨f, hf⟩, rfl⟩
+  star_trivial _ := DFunLike.ext _ _ fun _ ↦ star_trivial _
+/-
+**ContinuousMapZero.instCanLift** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+形式化陈述：instCanLift : CanLift C(X, R) C(X, R)₀ (↑) (fun f => f 0 = 0) where prf f 
+hf
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCanLift : CanLift C(X, R) C(X, R)₀ (↑) (fun f => f 0 = 0) where
+instance instCanLift : CanLift C(X, R) C(X, R)₀ (↑) (fun f ↦ f 0 = 0) where
   prf f hf := ⟨⟨f, hf⟩, rfl⟩
 
 /-- The coercion `C(X, R)₀ → C(X, R)` bundled as a non-unital star algebra homomorphism. -/
 @[simps]
-/--
-Definition of `toContinuousMapHom` / `toContinuousMapHom` 的定义
+/-
+**ContinuousMapZero.toContinuousMapHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：toContinuousMapHom [StarRing R] [ContinuousStar R] : C(X, R)₀ ->⋆ₙₐ[R] C(X
+, R) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toContinuousMapHom
-  signature: [StarRing R] [ContinuousStar R]
-  body: f
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-  map_star' _ := rfl
-
-中文:
-定义 toContinuousMapHom
-  签名: [对合环 R] [余ntinuousStar R]
-  定义体: f
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-  map_star' _ := rfl
+--- 原说明 ---
+The coercion `C(X, R)₀ → C(X, R)` bundled as a non-unital star algebra homomorph
+ism.
 -/
-def toContinuousMapHom [StarRing R] [ContinuousStar R] : C(X, R)₀ ->⋆ₙₐ[R] C(X, R) where
+def toContinuousMapHom [StarRing R] [ContinuousStar R] : C(X, R)₀ →⋆ₙₐ[R] C(X, R) where
   toFun f := f
   map_smul' _ _ := rfl
   map_zero' := rfl
   map_add' _ _ := rfl
   map_mul' _ _ := rfl
   map_star' _ := rfl
-
-/--
-lemma `coe_toContinuousMapHom` / 引理 `coe_toContinuousMapHom`
-
-English:
-lemma coe_toContinuousMapHom
-  given: [StarRing R] [ContinuousStar R]
-  proof: rfl
-
-中文:
-引理 coe_toContinuousMapHom
-  条件: [对合环 R] [余ntinuousStar R]
-  证明: rfl
+/-
+**ContinuousMapZero.coe_toContinuousMapHom** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+MapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : CommSemiring R] [inst_4 : IsTopolo
+gicalSemiring R] [inst_5 : StarRing R] [inst_6 : ContinuousStar R],   ⇑Continuou
+sMapZero.toContinuousMapHom = toContinuousMap
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
 -/
 @[simp] lemma coe_toContinuousMapHom [StarRing R] [ContinuousStar R] :
     ⇑(toContinuousMapHom (X := X) (R := R)) = (↑) :=
@@ -1403,128 +1052,112 @@ lemma coe_toContinuousMapHom
 
 /-- The coercion `C(X, R)₀ → C(X, R)` bundled as a continuous linear map. -/
 @[simps]
-/--
-Definition of `toContinuousMapCLM` / `toContinuousMapCLM` 的定义
+/-
+**ContinuousMapZero.toContinuousMapCLM** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZ
+ero`。
+形式化陈述：toContinuousMapCLM (M : Type*) [Semiring M] [Module M R] [ContinuousConstS
+Mul M R] : C(X, R)₀ ->L[M] C(X, R) where toFun f
+参数：M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toContinuousMapCLM
-  signature: (M : Type*) [Semiring M] [Module M R] [ContinuousConstSMul M R]
-  body: f
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 toContinuousMapCLM
-  签名: (M : 类型) [半环 M] [模 M R] [连续常数标量乘法 M R]
-  定义体: f
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
+--- 原说明 ---
+The coercion `C(X, R)₀ → C(X, R)` bundled as a continuous linear map.
 -/
 def toContinuousMapCLM (M : Type*) [Semiring M] [Module M R] [ContinuousConstSMul M R] :
-    C(X, R)₀ ->L[M] C(X, R) where
+    C(X, R)₀ →L[M] C(X, R) where
   toFun f := f
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/--
-Definition of `evalCLM` / `evalCLM` 的定义
+/-- The evaluation at a point, as a continuous linear map from `C(X, R)₀` to `R`. -/
+/-
+**ContinuousMapZero.evalCLM** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZero`。
+形式化陈述：evalCLM (𝕜 : Type*) [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R] (x
+ : X) : C(X, R)₀ ->L[𝕜] R
+参数：𝕜 : Type*；x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalCLM
-  signature: (𝕜 : Type*) [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R] (x : X)
-  body: (ContinuousMap.evalCLM 𝕜 x).comp (toContinuousMapCLM 𝕜)
-
-@[simp]
-
-中文:
-定义 evalCLM
-  签名: (𝕜 : 类型) [半环 𝕜] [模 𝕜 R] [连续常数标量乘法 𝕜 R] (x : X)
-  定义体: (ContinuousMap.evalCLM 𝕜 x).comp (toContinuousMapCLM 𝕜)
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.evalCLM, evalCLM, toContinuousMapCLM
+--- 原说明 ---
+The evaluation at a point, as a continuous linear map from `C(X, R)₀` to `R`.
 -/
 def evalCLM (𝕜 : Type*) [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R] (x : X) :
-    C(X, R)₀ ->L[𝕜] R :=
+    C(X, R)₀ →L[𝕜] R :=
   (ContinuousMap.evalCLM 𝕜 x).comp (toContinuousMapCLM 𝕜)
 
 @[simp]
-/--
-lemma `evalCLM_apply` / 引理 `evalCLM_apply`
-
-English:
-lemma evalCLM_apply
-  statement: {𝕜 : Type*} [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R]
-  proof: rfl
-
-中文:
-引理 evalCLM_apply
-  结论: {𝕜 : 类型} [半环 𝕜] [模 𝕜 R] [连续常数标量乘法 𝕜 R]
-  证明: rfl
+/-
+**ContinuousMapZero.evalCLM_apply** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：evalCLM_apply {𝕜 : Type*} [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜
+ R] (x : X) (f : C(X, R)₀) : evalCLM 𝕜 x f = f x
+参数：x : X；f : C(X, R)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
 -/
 lemma evalCLM_apply {𝕜 : Type*} [Semiring 𝕜] [Module 𝕜 R] [ContinuousConstSMul 𝕜 R]
     (x : X) (f : C(X, R)₀) : evalCLM 𝕜 x f = f x := rfl
 
-/--
-Definition of `coeFnAddMonoidHom` / `coeFnAddMonoidHom` 的定义
+/-- Coercion to a function as an `AddMonoidHom`. Similar to `ContinuousMap.coeFnAddMonoidHom`. -/
+/-
+**ContinuousMapZero.coeFnAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZe
+ro`。
+形式化陈述：coeFnAddMonoidHom : C(X, R)₀ ->+ X -> R where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnAddMonoidHom
-  signature: : C(X, R)₀ ->+ X -> R where
-  body: f
-  map_zero' := coe_zero
-  map_add' f g := by simp
-
-@[simp]
-
-中文:
-定义 coeFnAddMonoidHom
-  签名: : C(X, R)₀ ->+ X -> R where
-  定义体: f
-  map_zero' := coe_zero
-  map_add' f g := by simp
-
-@[simp]
+--- 原说明 ---
+Coercion to a function as an `AddMonoidHom`. Similar to `ContinuousMap.coeFnAddM
+onoidHom`.
 -/
-def coeFnAddMonoidHom : C(X, R)₀ ->+ X -> R where
+def coeFnAddMonoidHom : C(X, R)₀ →+ X → R where
   toFun f := f
   map_zero' := coe_zero
   map_add' f g := by simp
 
 @[simp]
-/--
-lemma `coeFnAddMonoidHom_apply` / 引理 `coeFnAddMonoidHom_apply`
-
-English:
-lemma coeFnAddMonoidHom_apply
-  given: (f : C(X, R)₀)
-  statement: coeFnAddMonoidHom f = f
-  proof: rfl
-
-中文:
-引理 coeFnAddMonoidHom_apply
-  条件: (f : C(X, R)₀)
-  结论: coeFnAddMonoidHom f = f
-  证明: rfl
+/-
+**ContinuousMapZero.coeFnAddMonoidHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sMapZero`。
+形式化陈述：coeFnAddMonoidHom_apply (f : C(X, R)₀) : coeFnAddMonoidHom f = f
+参数：f : C(X, R)₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
 -/
 lemma coeFnAddMonoidHom_apply (f : C(X, R)₀) : coeFnAddMonoidHom f = f := rfl
-
-/--
-lemma `coe_sum` / 引理 `coe_sum`
-
-English:
-lemma coe_sum
-  statement: {ι : Type*} (s : Finset ι)
-  proof: map_sum coeFnAddMonoidHom f s
-
-中文:
-引理 coe_sum
-  结论: {ι : 类型} (s : 有限集 ι)
-  证明: map_sum coeFnAddMonoidHom f s
+/-
+**ContinuousMapZero.coe_sum** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero X] [inst_1 : TopologicalSpace
+ X] [inst_2 : TopologicalSpace R]   [inst_3 : CommSemiring R] [inst_4 : IsTopolo
+gicalSemiring R] {ι : Type u_3} (s : Finset ι)   (f : ι → ContinuousMapZero X R)
+, ⇑(s.sum f) = ∑ i ∈ s, ⇑(f i)
+参数：s : Finset ι；f : ι → ContinuousMapZero X R；s.sum f；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 @[simp] lemma coe_sum {ι : Type*} (s : Finset ι)
-    (f : ι -> C(X, R)₀) : ⇑(s.sum f) = s.sum (fun i => ⇑(f i)) :=
+    (f : ι → C(X, R)₀) : ⇑(s.sum f) = s.sum (fun i => ⇑(f i)) :=
   map_sum coeFnAddMonoidHom f s
 
 end Semiring
@@ -1534,45 +1167,19 @@ section Ring
 variable {X R : Type*} [Zero X] [TopologicalSpace X]
 variable [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
 
-/--
-Instance `instNonUnitalCommRing` / 实例 `instNonUnitalCommRing`
-
-English:
-instance instNonUnitalCommRing
-  signature: : NonUnitalCommRing C(X, R)₀
-  body: fast_instance% toContinuousMap_injective.nonUnitalCommRing _ rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 instNonUnitalCommRing
-  签名: : 非幺交换环 C(X, R)₀
-  定义体: fast_instance% toContinuousMap_injective.nonUnitalCommRing _ rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: fast_instance, nonUnitalCommRing, toContinuousMap_injective, toContinuousMap_injective.nonUnitalCommRing
+/-
+**ContinuousMapZero.instNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousM
+apZero`。
+形式化陈述：instNonUnitalCommRing : NonUnitalCommRing C(X, R)₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommRing : NonUnitalCommRing C(X, R)₀ :=
   fast_instance% toContinuousMap_injective.nonUnitalCommRing _ rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousNeg C(X, R)₀
-  body: by
-    rw [continuous_induced_rng]
-    exact continuous_neg.comp continuous_induced_dom
-
-中文:
-实例 :
-  签名: 连续取负 C(X, R)₀
-  定义体: by
-    rw [continuous_induced_rng]
-    exact continuous_neg.comp continuous_induced_dom
-
-Depends on / 依赖: continuous_induced_dom, continuous_induced_rng, continuous_neg, continuous_neg.comp
+    (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousNeg C(X, R)₀ where
   continuous_neg := by
@@ -1588,130 +1195,92 @@ section UniformSpace
 variable {X R : Type*} [Zero X] [TopologicalSpace X]
 variable [Zero R] [UniformSpace R]
 
-/--
-Instance `instUniformSpace` / 实例 `instUniformSpace`
-
-English:
-instance instUniformSpace
-  signature: : UniformSpace C(X, R)₀
-  body: fast_instance% .comap toContinuousMap inferInstance
-
-中文:
-实例 instUniformSpace
-  签名: : 一致空间 C(X, R)₀
-  定义体: fast_instance% .comap toContinuousMap inferInstance
+/-
+**ContinuousMapZero.instUniformSpace** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMapZer
+o`。
+形式化陈述：{X : Type u_1} →   {R : Type u_2} →     [inst : Zero X] →       [inst_1 : 
+TopologicalSpace X] →         [inst_2 : Zero R] → [inst_3 : UniformSpace R] → Un
+iformSpace (ContinuousMapZero X R)
+参数：ContinuousMapZero X R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance instUniformSpace : UniformSpace C(X, R)₀ :=
   fast_instance% .comap toContinuousMap inferInstance
-
-/--
-lemma `isUniformEmbedding_toContinuousMap` / 引理 `isUniformEmbedding_toContinuousMap`
-
-English:
-lemma isUniformEmbedding_toContinuousMap
-  proof: rfl
-  injective _ _ h := ext fun x => congr($(h) x)
-
-中文:
-引理 isUniformEmbedding_toContinuousMap
-  证明: rfl
-  injective _ _ h := ext fun x => congr($(h) x)
+/-
+**ContinuousMapZero.isUniformEmbedding_toContinuousMap** 是 Mathlib 中的一个引理，位于命名空间
+ `ContinuousMapZero`。
+形式化陈述：isUniformEmbedding_toContinuousMap : IsUniformEmbedding ((↑) : C(X, R)₀ ->
+ C(X, R)) where comap_uniformity
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMapZero.ext`：ext {f g : C(X, R)₀} (h : forall x, f x = g x) : 
+f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma isUniformEmbedding_toContinuousMap :
-    IsUniformEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where
+    IsUniformEmbedding ((↑) : C(X, R)₀ → C(X, R)) where
   comap_uniformity := rfl
-  injective _ _ h := ext fun x => congr($(h) x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T1Space
-  signature: R] [CompleteSpace C(X, R)] : CompleteSpace C(X, R)₀
-  body: completeSpace_iff_isComplete_range isUniformEmbedding_toContinuousMap.isUniformInducing
-.mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
-
-中文:
-实例 [T1空间
-  签名: R] [完备空间 C(X, R)] : 完备空间 C(X, R)₀
-  定义体: completeSpace_iff_isComplete_range isUniformEmbedding_toContinuousMap.isUniformInducing
-.mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
-
-Depends on / 依赖: completeSpace_iff_isComplete_range, isClosedEmbedding_toContinuousMap, isClosedEmbedding_toContinuousMap.isClosed_range.isComplete, isClosed_range, isComplete, isUniformEmbedding_toContinuousMap, isUniformEmbedding_toContinuousMap.isUniformInducing, isUniformInducing
+  injective _ _ h := ext fun x ↦ congr($(h) x)
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T1Space R] [CompleteSpace C(X, R)] : CompleteSpace C(X, R)₀ :=
   completeSpace_iff_isComplete_range isUniformEmbedding_toContinuousMap.isUniformInducing
-.mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
-
-/--
-lemma `isUniformEmbedding_comp` / 引理 `isUniformEmbedding_comp`
-
-English:
-lemma isUniformEmbedding_comp
-  statement: {Y : Type*} [UniformSpace Y] [Zero Y] (g : C(Y, R)₀)
-  proof: isUniformEmbedding_toContinuousMap.of_comp_iff.mp
-.comp ContinuousMap.isUniformEmbedding_comp g.toContinuousMap hg
-      isUniformEmbedding_toContinuousMap
-
-中文:
-引理 isUniformEmbedding_comp
-  结论: {Y : 类型} [一致空间 Y] [零 Y] (g : C(Y, R)₀)
-  证明: isUniformEmbedding_toContinuousMap.of_comp_iff.mp
-.comp ContinuousMap.isUniformEmbedding_comp g.toContinuousMap hg
-      isUniformEmbedding_toContinuousMap
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.isUniformEmbedding_comp, g.toContinuousMap, isUniformEmbedding_comp, isUniformEmbedding_toContinuousMap, isUniformEmbedding_toContinuousMap.of_comp_iff.mp, of_comp_iff, toContinuousMap
+    |>.mpr isClosedEmbedding_toContinuousMap.isClosed_range.isComplete
+/-
+**ContinuousMapZero.isUniformEmbedding_comp** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sMapZero`。
+形式化陈述：isUniformEmbedding_comp {Y : Type*} [UniformSpace Y] [Zero Y] (g : C(Y, R)
+₀) (hg : IsUniformEmbedding g) : IsUniformEmbedding (g.comp · : C(X, Y)₀ -> C(X,
+ R)₀)
+参数：g : C(Y, R)₀；hg : IsUniformEmbedding g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsUniformEmbedding.of_comp_iff`：IsUniformEmbedding.of_comp_iff {g : β ->
+ γ} (hg : IsUniformEmbedding g) {f : α -> β} : IsUniformEmbedding (g ∘ f) ↔ IsUn
+iformEmbedding f
+· 使用引理 `ContinuousMapZero.isUniformEmbedding_toContinuousMap`：isUniformEmbedding
+_toContinuousMap : IsUniformEmbedding ((↑) : C(X, R)₀ -> C(X, R)) where comap_un
+iformity
+· 使用定理 `IsUniformEmbedding.comp`：IsUniformEmbedding.comp {g : β -> γ} (hg : IsUn
+iformEmbedding g) {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformEmbedding 
+(g ∘ f) where…
+· 使用定理 `ContinuousMap.isUniformEmbedding_comp`：isUniformEmbedding_comp (g : C(β,
+ δ)) (hg : IsUniformEmbedding g) : IsUniformEmbedding (ContinuousMap.comp g : C(
+α, β) -> C(α, δ))
 -/
 lemma isUniformEmbedding_comp {Y : Type*} [UniformSpace Y] [Zero Y] (g : C(Y, R)₀)
-    (hg : IsUniformEmbedding g) : IsUniformEmbedding (g.comp · : C(X, Y)₀ -> C(X, R)₀) :=
-isUniformEmbedding_toContinuousMap.of_comp_iff.mp
-.comp ContinuousMap.isUniformEmbedding_comp g.toContinuousMap hg
+    (hg : IsUniformEmbedding g) : IsUniformEmbedding (g.comp · : C(X, Y)₀ → C(X, R)₀) :=
+  isUniformEmbedding_toContinuousMap.of_comp_iff.mp <|
+    ContinuousMap.isUniformEmbedding_comp g.toContinuousMap hg |>.comp
       isUniformEmbedding_toContinuousMap
 
-/--
-Definition of `_root_.UniformEquiv.arrowCongrLeft₀` / `_root_.UniformEquiv.arrowCongrLeft₀` 的定义
+/-- The uniform equivalence `C(X, R)₀ ≃ᵤ C(Y, R)₀` induced by a homeomorphism of the domains
+sending `0 : X` to `0 : Y`. -/
+/-
+**ContinuousMapZero._root_.UniformEquiv.arrowCongrLeft** 是 Mathlib 中的一个定义，位于命名空间
+ `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.UniformEquiv.arrowCongrLeft₀
-  signature: {Y : Type*} [TopologicalSpace Y] [Zero Y] (f : X ≃ₜ Y)
-  body: g.comp ⟨f.symm, (f.eq_symm_apply.eq ▸ hf).symm⟩
-  invFun g := g.comp ⟨f, hf⟩
-left_inv g := ext fun _ => congrArg g f.left_inv _
-right_inv g := ext fun _ => congrArg g f.right_inv _
-uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X))
-    isUniformEmbedding_toContinuousMap.uniformContinuous
-uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f : C(X, Y))
-    isUniformEmbedding_toContinuousMap.uniformContinuous
-
-中文:
-定义 _root_.一致等价.arrowCongrLeft₀
-  签名: {Y : 类型} [拓扑空间 Y] [零 Y] (f : X ≃ₜ Y)
-  定义体: g.comp ⟨f.symm, (f.eq_symm_apply.eq ▸ hf).symm⟩
-  invFun g := g.comp ⟨f, hf⟩
-left_inv g := ext fun _ => congrArg g f.left_inv _
-right_inv g := ext fun _ => congrArg g f.right_inv _
-uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X))
-    isUniformEmbedding_toContinuousMap.uniformContinuous
-uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f : C(X, Y))
-    isUniformEmbedding_toContinuousMap.uniformContinuous
-
-Depends on / 依赖: eq_symm_apply, f.eq_symm_apply.eq, f.symm, g.comp
+--- 原说明 ---
+The uniform equivalence `C(X, R)₀ ≃ᵤ C(Y, R)₀` induced by a homeomorphism of the
+ domains
+sending `0 : X` to `0 : Y`.
 -/
 def _root_.UniformEquiv.arrowCongrLeft₀ {Y : Type*} [TopologicalSpace Y] [Zero Y] (f : X ≃ₜ Y)
     (hf : f 0 = 0) : C(X, R)₀ ≃ᵤ C(Y, R)₀ where
   toFun g := g.comp ⟨f.symm, (f.eq_symm_apply.eq ▸ hf).symm⟩
   invFun g := g.comp ⟨f, hf⟩
-left_inv g := ext fun _ => congrArg g f.left_inv _
-right_inv g := ext fun _ => congrArg g f.right_inv _
-uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X))
+  left_inv g := ext fun _ ↦ congrArg g <| f.left_inv _
+  right_inv g := ext fun _ ↦ congrArg g <| f.right_inv _
+  uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr <|
+    ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X)) |>.comp
     isUniformEmbedding_toContinuousMap.uniformContinuous
-uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformContinuous_comp_left (f : C(X, Y))
+  uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr <|
+    ContinuousMap.uniformContinuous_comp_left (f : C(X, Y)) |>.comp
     isUniformEmbedding_toContinuousMap.uniformContinuous
 
 end UniformSpace
@@ -1728,32 +1297,21 @@ variable (R) in
 /-- The functor `C(·, R)₀` from topological spaces with zero (and `ContinuousMapZero` maps) to
 non-unital star algebras. -/
 @[simps]
-/--
-Definition of `nonUnitalStarAlgHom_precomp` / `nonUnitalStarAlgHom_precomp` 的定义
+/-
+**ContinuousMapZero.nonUnitalStarAlgHom_precomp** 是 Mathlib 中的一个定义，位于命名空间 `Conti
+nuousMapZero`。
+形式化陈述：nonUnitalStarAlgHom_precomp (f : C(X, Y)₀) : C(Y, R)₀ ->⋆ₙₐ[R] C(X, R)₀ wh
+ere toFun g
+参数：f : C(X, Y)₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonUnitalStarAlgHom_precomp
-  signature: (f : C(X, Y)₀)
-  body: g.comp f
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-  map_star' _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 nonUnitalStarAlgHom_precomp
-  签名: (f : C(X, Y)₀)
-  定义体: g.comp f
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-  map_star' _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: g.comp
+--- 原说明 ---
+The functor `C(·, R)₀` from topological spaces with zero (and `ContinuousMapZero
+` maps) to
+non-unital star algebras.
 -/
-def nonUnitalStarAlgHom_precomp (f : C(X, Y)₀) : C(Y, R)₀ ->⋆ₙₐ[R] C(X, R)₀ where
+def nonUnitalStarAlgHom_precomp (f : C(X, Y)₀) : C(Y, R)₀ →⋆ₙₐ[R] C(X, R)₀ where
   toFun g := g.comp f
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -1766,37 +1324,28 @@ variable (X) in
 /-- The functor `C(X, ·)₀` from non-unital topological star algebras (with non-unital continuous
 star homomorphisms) to non-unital star algebras. -/
 @[simps apply]
-/--
-Definition of `nonUnitalStarAlgHom_postcomp` / `nonUnitalStarAlgHom_postcomp` 的定义
+/-
+**ContinuousMapZero.nonUnitalStarAlgHom_postcomp** 是 Mathlib 中的一个定义，位于命名空间 `Cont
+inuousMapZero`。
+形式化陈述：nonUnitalStarAlgHom_postcomp (φ : R ->⋆ₙₐ[M] S) (hφ : Continuous φ) : C(X,
+ R)₀ ->⋆ₙₐ[M] C(X, S)₀ where toFun
+参数：φ : R ->⋆ₙₐ[M] S；hφ : Continuous φ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonUnitalStarAlgHom_postcomp
-  signature: (φ : R ->⋆ₙₐ[M] S) (hφ : Continuous φ)
-  body: .comp ⟨⟨φ, hφ⟩, by simp⟩
-map_zero' := ext by simp
-map_add' _ _ := ext by simp
-map_mul' _ _ := ext by simp
-map_star' _ := ext by simp [map_star]
-map_smul' r f := ext by simp
-
-中文:
-定义 nonUnitalStarAlgHom_postcomp
-  签名: (φ : R ->⋆ₙₐ[M] S) (hφ : 连续 φ)
-  定义体: .comp ⟨⟨φ, hφ⟩, by simp⟩
-map_zero' := ext by simp
-map_add' _ _ := ext by simp
-map_mul' _ _ := ext by simp
-map_star' _ := ext by simp [map_star]
-map_smul' r f := ext by simp
+--- 原说明 ---
+The functor `C(X, ·)₀` from non-unital topological star algebras (with non-unita
+l continuous
+star homomorphisms) to non-unital star algebras.
 -/
-def nonUnitalStarAlgHom_postcomp (φ : R ->⋆ₙₐ[M] S) (hφ : Continuous φ) :
-    C(X, R)₀ ->⋆ₙₐ[M] C(X, S)₀ where
+def nonUnitalStarAlgHom_postcomp (φ : R →⋆ₙₐ[M] S) (hφ : Continuous φ) :
+    C(X, R)₀ →⋆ₙₐ[M] C(X, S)₀ where
   toFun := .comp ⟨⟨φ, hφ⟩, by simp⟩
-map_zero' := ext by simp
-map_add' _ _ := ext by simp
-map_mul' _ _ := ext by simp
-map_star' _ := ext by simp [map_star]
-map_smul' r f := ext by simp
+  map_zero' := ext <| by simp
+  map_add' _ _ := ext <| by simp
+  map_mul' _ _ := ext <| by simp
+  map_star' _ := ext <| by simp [map_star]
+  map_smul' r f := ext <| by simp
 
 end CompHoms
 
@@ -1804,150 +1353,62 @@ section Norm
 
 variable {α : Type*} {𝕜 : Type*} {R : Type*} [TopologicalSpace α] [CompactSpace α] [Zero α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MetricSpace
-  signature: R] [Zero R] : MetricSpace C(α, R)₀
-  body: ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace _
-
-中文:
-实例 [度量空间
-  签名: R] [零 R] : 度量空间 C(α, R)₀
-  定义体: ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace _
-
-Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace, comapMetricSpace, isUniformEmbedding_toContinuousMap
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [MetricSpace R] [Zero R] : MetricSpace C(α, R)₀ :=
   ContinuousMapZero.isUniformEmbedding_toContinuousMap.comapMetricSpace _
-
-/--
-lemma `isometry_toContinuousMap` / 引理 `isometry_toContinuousMap`
-
-English:
-lemma isometry_toContinuousMap
-  given: [MetricSpace R] [Zero R]
-  proof: fun _ _ => rfl
-
-中文:
-引理 isometry_toContinuousMap
-  条件: [度量空间 R] [零 R]
-  证明: fun _ _ => rfl
+/-
+**ContinuousMapZero.isometry_toContinuousMap** 是 Mathlib 中的一个引理，位于命名空间 `Continuo
+usMapZero`。
+形式化陈述：isometry_toContinuousMap [MetricSpace R] [Zero R] : Isometry (toContinuous
+Map : C(α, R)₀ -> C(α, R))
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isometry_toContinuousMap [MetricSpace R] [Zero R] :
-    Isometry (toContinuousMap : C(α, R)₀ -> C(α, R)) :=
-  fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedAddCommGroup
-  signature: R] : Norm C(α, R)₀ where
-  body: ‖(f : C(α, R))‖
-
-中文:
-实例 [赋范交换加群
-  签名: R] : 范数 C(α, R)₀ where
-  定义体: ‖(f : C(α, R))‖
+    Isometry (toContinuousMap : C(α, R)₀ → C(α, R)) :=
+  fun _ _ ↦ rfl
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [NormedAddCommGroup R] : Norm C(α, R)₀ where
   norm f := ‖(f : C(α, R))‖
-
-/--
-lemma `norm_def` / 引理 `norm_def`
-
-English:
-lemma norm_def
-  given: [NormedAddCommGroup R] (f : C(α, R)₀)
-  statement: ‖f‖ = ‖(f : C(α, R))‖
-  proof: rfl
-
-中文:
-引理 norm_def
-  条件: [赋范交换加群 R] (f : C(α, R)₀)
-  结论: ‖f‖ = ‖(f : C(α, R))‖
-  证明: rfl
+/-
+**ContinuousMapZero.norm_def** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMapZero`。
+形式化陈述：norm_def [NormedAddCommGroup R] (f : C(α, R)₀) : ‖f‖ = ‖(f : C(α, R))‖
+参数：f : C(α, R)₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma norm_def [NormedAddCommGroup R] (f : C(α, R)₀) : ‖f‖ = ‖(f : C(α, R))‖ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedAddCommGroup
-  signature: R] : NormedAddCommGroup C(α, R)₀ where
-  body: NormedAddGroup.dist_eq (f : C(α, R)) g
-
-中文:
-实例 [赋范交换加群
-  签名: R] : 赋范交换加群 C(α, R)₀ where
-  定义体: NormedAddGroup.dist_eq (f : C(α, R)) g
-
-Depends on / 依赖: NormedAddGroup, NormedAddGroup.dist_eq, dist_eq
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [NormedAddCommGroup R] : NormedAddCommGroup C(α, R)₀ where
   dist_eq f g := NormedAddGroup.dist_eq (f : C(α, R)) g
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedCommRing
-  signature: R] : NonUnitalNormedCommRing C(α, R)₀ where
-  body: NormedAddGroup.dist_eq (f : C(α, R)) g
-  norm_mul_le f g := norm_mul_le (f : C(α, R)) g
-  mul_comm f g := mul_comm f g
-
-中文:
-实例 [NormedComm环
-  签名: R] : 非幺NormedComm环 C(α, R)₀ where
-  定义体: NormedAddGroup.dist_eq (f : C(α, R)) g
-  norm_mul_le f g := norm_mul_le (f : C(α, R)) g
-  mul_comm f g := mul_comm f g
-
-Depends on / 依赖: NormedAddGroup, NormedAddGroup.dist_eq, dist_eq
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [NormedCommRing R] : NonUnitalNormedCommRing C(α, R)₀ where
   dist_eq f g := NormedAddGroup.dist_eq (f : C(α, R)) g
   norm_mul_le f g := norm_mul_le (f : C(α, R)) g
   mul_comm f g := mul_comm f g
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedField
-  signature: 𝕜] [NormedCommRing R] [NormedAlgebra 𝕜 R] :
-  body: norm_smul_le r (f : C(α, R))
-
-中文:
-实例 [赋范域
-  签名: 𝕜] [NormedComm环 R] [赋范代数 𝕜 R] :
-  定义体: norm_smul_le r (f : C(α, R))
-
-Depends on / 依赖: norm_smul_le
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [NormedField 𝕜] [NormedCommRing R] [NormedAlgebra 𝕜 R] :
     NormedSpace 𝕜 C(α, R)₀ where
   norm_smul_le r f := norm_smul_le r (f : C(α, R))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedCommRing
-  signature: R] [StarRing R] [CStarRing R] : CStarRing C(α, R)₀ where
-  body: CStarRing.norm_mul_self_le (f : C(α, R))
-
-中文:
-实例 [NormedComm环
-  签名: R] [对合环 R] [CStar环 R] : CStar环 C(α, R)₀ where
-  定义体: CStarRing.norm_mul_self_le (f : C(α, R))
-
-Depends on / 依赖: CStarRing, CStarRing.norm_mul_self_le, norm_mul_self_le
+/-
+**ContinuousMapZero.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMapZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NormedCommRing R] [StarRing R] [CStarRing R] : CStarRing C(α, R)₀ where
   norm_mul_self_le f := CStarRing.norm_mul_self_le (f : C(α, R))
@@ -1955,3 +1416,4 @@ instance [NormedCommRing R] [StarRing R] [CStarRing R] : CStarRing C(α, R)₀ w
 end Norm
 
 end ContinuousMapZero
+

@@ -41,107 +41,73 @@ consists of all non-`1` elements of the free monoid (`FreeSemigroup.eq_one_or_to
 free additive monoid. This is injective (`FreeAddSemigroup.toFreeAddMonoid_injective`), and its
 image consists of all non-`0` elements of the free additive monoid
 (`FreeAddSemigroup.eq_zero_or_toFreeAddMonoid`). -/]
-/--
-Definition of `toFreeMonoid` / `toFreeMonoid` 的定义
-
-English:
-definition toFreeMonoid
-  signature: : FreeSemigroup α ->ₙ* FreeMonoid α
-  body: lift FreeMonoid.of
-
-@[to_additive (attr := simp, grind =)]
-
-中文:
-定义 toFreeMonoid
-  签名: : 自由半群 α ->ₙ* 自由幺半群 α
-  定义体: lift FreeMonoid.of
-
-@[to_additive (attr := simp, grind =)]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.of
+/-
+**FreeSemigroup.toFreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 `FreeSemigroup`。
+形式化陈述：toFreeMonoid : FreeSemigroup α ->ₙ* FreeMonoid α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def toFreeMonoid : FreeSemigroup α ->ₙ* FreeMonoid α :=
+def toFreeMonoid : FreeSemigroup α →ₙ* FreeMonoid α :=
   lift FreeMonoid.of
 
 @[to_additive (attr := simp, grind =)]
-/--
-lemma `toFreeMonoid_of` / 引理 `toFreeMonoid_of`
-
-English:
-lemma toFreeMonoid_of
-  given: (x : α)
-  statement: toFreeMonoid (.of x) = .of x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 toFreeMonoid_of
-  条件: (x : α)
-  结论: toFreeMonoid (.of x) = .of x
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeSemigroup.toFreeMonoid_of** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup`。
+形式化陈述：toFreeMonoid_of (x : α) : toFreeMonoid (.of x) = .of x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toFreeMonoid_of (x : α) : toFreeMonoid (.of x) = .of x := rfl
 
 @[to_additive]
-/--
-lemma `toFreeMonoid_mk_eq_cons` / 引理 `toFreeMonoid_mk_eq_cons`
-
-English:
-lemma toFreeMonoid_mk_eq_cons
-  given: (x : α) (xs : List α)
-  proof: by
-  suffices forall x : FreeMonoid α, (xs.map FreeMonoid.of).foldl (· * ·) x = x * ofList xs by
-    simpa [← List.foldl_map, lift_mk_eq_foldl, toFreeMonoid, lift] using this (FreeMonoid.of x)
-  induction xs with grind [ofList_nil, ofList_cons]
-
-@[to_additive (attr := grind .)]
-
-中文:
-引理 toFreeMonoid_mk_eq_cons
-  条件: (x : α) (xs : 列表 α)
-  证明: by
-  suffices forall x : FreeMonoid α, (xs.map FreeMonoid.of).foldl (· * ·) x = x * ofList xs by
-    simpa [← List.foldl_map, lift_mk_eq_foldl, toFreeMonoid, lift] using this (FreeMonoid.of x)
-  induction xs with grind [ofList_nil, ofList_cons]
-
-@[to_additive (attr := grind .)]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.of, List.foldl_map, foldl_map, lift_mk_eq_foldl, ofList, ofList_cons, ofList_nil, toFreeMonoid, xs.map
+/-
+**FreeSemigroup.toFreeMonoid_mk_eq_cons** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup
+`。
+形式化陈述：toFreeMonoid_mk_eq_cons (x : α) (xs : List α) : toFreeMonoid ⟨x, xs⟩ = Fre
+eMonoid.ofList (x :: xs)
+参数：x : α；xs : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : Mul M] [
+inst_1 : Mul N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_mul' 
+: ∀ (x y :…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
 -/
 lemma toFreeMonoid_mk_eq_cons (x : α) (xs : List α) :
     toFreeMonoid ⟨x, xs⟩ = FreeMonoid.ofList (x :: xs) := by
-  suffices forall x : FreeMonoid α, (xs.map FreeMonoid.of).foldl (· * ·) x = x * ofList xs by
+  suffices ∀ x : FreeMonoid α, (xs.map FreeMonoid.of).foldl (· * ·) x = x * ofList xs by
     simpa [← List.foldl_map, lift_mk_eq_foldl, toFreeMonoid, lift] using this (FreeMonoid.of x)
   induction xs with grind [ofList_nil, ofList_cons]
 
 @[to_additive (attr := grind .)]
-/--
-lemma `toFreeMonoid_injective` / 引理 `toFreeMonoid_injective`
-
-English:
-lemma toFreeMonoid_injective
-  statement: Function.Injective (@toFreeMonoid α)
-  proof: by
-  rintro ⟨x, xs⟩ ⟨y, ys⟩ h
-  simp only [toFreeMonoid_mk_eq_cons, Equiv.apply_eq_iff_eq] at h
-  simpa using h
-
-@[to_additive (attr := simp, grind .)]
-
-中文:
-引理 toFreeMonoid_injective
-  结论: 函数.单射 (@toFreeMonoid α)
-  证明: by
-  rintro ⟨x, xs⟩ ⟨y, ys⟩ h
-  simp only [toFreeMonoid_mk_eq_cons, Equiv.apply_eq_iff_eq] at h
-  simpa using h
-
-@[to_additive (attr := simp, grind .)]
-
-Depends on / 依赖: Equiv.apply_eq_iff_eq, apply_eq_iff_eq, toFreeMonoid_mk_eq_cons
+/-
+**FreeSemigroup.toFreeMonoid_injective** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup`
+。
+形式化陈述：toFreeMonoid_injective : Function.Injective (@toFreeMonoid α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeSemigroup.mk.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_
+1 : α) (tail_1 : List α),   ({ head := head, tail := tail } = { head := head_1, 
+tail := tail…
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `FreeSemigroup.toFreeMonoid_mk_eq_cons`：toFreeMonoid_mk_eq_cons (x : α) (
+xs : List α) : toFreeMonoid ⟨x, xs⟩ = FreeMonoid.ofList (x :: xs)
 -/
 lemma toFreeMonoid_injective : Function.Injective (@toFreeMonoid α) := by
   rintro ⟨x, xs⟩ ⟨y, ys⟩ h
@@ -149,81 +115,69 @@ lemma toFreeMonoid_injective : Function.Injective (@toFreeMonoid α) := by
   simpa using h
 
 @[to_additive (attr := simp, grind .)]
-/--
-lemma `toFreeMonoid_ne_one` / 引理 `toFreeMonoid_ne_one`
-
-English:
-lemma toFreeMonoid_ne_one
-  given: (x : FreeSemigroup α)
-  statement: toFreeMonoid x != 1
-  proof: by
-  induction x with simp
-
-@[to_additive]
-
-中文:
-引理 toFreeMonoid_ne_one
-  条件: (x : 自由半群 α)
-  结论: toFreeMonoid x != 1
-  证明: by
-  induction x with simp
-
-@[to_additive]
+/-
+**FreeSemigroup.toFreeMonoid_ne_one** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup`。
+形式化陈述：toFreeMonoid_ne_one (x : FreeSemigroup α) : toFreeMonoid x != 1
+参数：x : FreeSemigroup α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
 -/
-lemma toFreeMonoid_ne_one (x : FreeSemigroup α) : toFreeMonoid x != 1 := by
+lemma toFreeMonoid_ne_one (x : FreeSemigroup α) : toFreeMonoid x ≠ 1 := by
   induction x with simp
 
 @[to_additive]
-/--
-lemma `eq_one_or_toFreeMonoid` / 引理 `eq_one_or_toFreeMonoid`
-
-English:
-lemma eq_one_or_toFreeMonoid
-  given: (x : FreeMonoid α)
-  statement: x = 1 ∨ exists y, toFreeMonoid y = x
-  proof: x.inductionOn' (by simp) by
-    rintro b _ (rfl | ⟨y, rfl⟩)
-    · exact Or.inr ⟨of b, by simp⟩
-    · exact Or.inr ⟨of b * y, by simp⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 eq_one_or_toFreeMonoid
-  条件: (x : 自由幺半群 α)
-  结论: x = 1 ∨ 存在 y, toFreeMonoid y = x
-  证明: x.inductionOn' (by simp) by
-    rintro b _ (rfl | ⟨y, rfl⟩)
-    · exact Or.inr ⟨of b, by simp⟩
-    · exact Or.inr ⟨of b * y, by simp⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Or.inr, inductionOn, x.inductionOn
+/-
+**FreeSemigroup.eq_one_or_toFreeMonoid** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup`
+。
+形式化陈述：eq_one_or_toFreeMonoid (x : FreeMonoid α) : x = 1 ∨ exists y, toFreeMonoid
+ y = x
+参数：x : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.inductionOn'`：∀ {α : Type u_1} {motive : FreeMonoid α → Prop}
+ (a : FreeMonoid α),   motive 1 → (∀ (b : α) (a : FreeMonoid α), motive a → moti
+ve (FreeMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
 -/
-lemma eq_one_or_toFreeMonoid (x : FreeMonoid α) : x = 1 ∨ exists y, toFreeMonoid y = x :=
-x.inductionOn' (by simp) by
+lemma eq_one_or_toFreeMonoid (x : FreeMonoid α) : x = 1 ∨ ∃ y, toFreeMonoid y = x :=
+  x.inductionOn' (by simp) <| by
     rintro b _ (rfl | ⟨y, rfl⟩)
     · exact Or.inr ⟨of b, by simp⟩
     · exact Or.inr ⟨of b * y, by simp⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `range_toFreeMonoid` / 引理 `range_toFreeMonoid`
-
-English:
-lemma range_toFreeMonoid
-  statement: Set.range (@toFreeMonoid α) = {1}ᶜ
-  proof: by
-  ext x; grind [eq_one_or_toFreeMonoid x]
-
-中文:
-引理 range_toFreeMonoid
-  结论: 集合.range (@toFreeMonoid α) = {1}ᶜ
-  证明: by
-  ext x; grind [eq_one_or_toFreeMonoid x]
-
-Depends on / 依赖: eq_one_or_toFreeMonoid
+/-
+**FreeSemigroup.range_toFreeMonoid** 是 Mathlib 中的一个引理，位于命名空间 `FreeSemigroup`。
+形式化陈述：range_toFreeMonoid : Set.range (@toFreeMonoid α) = {1}ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
 lemma range_toFreeMonoid : Set.range (@toFreeMonoid α) = {1}ᶜ := by
   ext x; grind [eq_one_or_toFreeMonoid x]
@@ -237,37 +191,15 @@ The free monoid on `α` is isomorphic to the free semigroup on `α` with a `1` a
 -/
 @[expose, to_additive (attr := simps) /-- The free additive monoid on `α` is isomorphic to
 the free additive semigroup on `α` with a `0` added. -/]
-/--
-Definition of `FreeMonoid.equivWithOneFreeSemigroup` / `FreeMonoid.equivWithOneFreeSemigroup` 的定义
-
-English:
-definition FreeMonoid.equivWithOneFreeSemigroup
-  signature: : FreeMonoid α ≃* WithOne (FreeSemigroup α) where
-  body: lift fun x => ↑(FreeSemigroup.of x)
-  invFun := WithOne.lift toFreeMonoid
-  left_inv x := by induction x with simp [*]
-  right_inv x := by
-    induction x with
-    | one => simp
-    | coe a => induction a with simp_all
-  map_mul' := by simp
-
-中文:
-定义 自由幺半群.equivWithOneFreeSemigroup
-  签名: : 自由幺半群 α ≃* WithOne (自由半群 α) where
-  定义体: lift fun x => ↑(FreeSemigroup.of x)
-  invFun := WithOne.lift toFreeMonoid
-  left_inv x := by induction x with simp [*]
-  right_inv x := by
-    induction x with
-    | one => simp
-    | coe a => induction a with simp_all
-  map_mul' := by simp
-
-Depends on / 依赖: FreeSemigroup, FreeSemigroup.of
+/-
+**FreeMonoid.equivWithOneFreeSemigroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeMonoid.equivWithOneFreeSemigroup : FreeMonoid α ≃* WithOne (FreeSemigr
+oup α) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def FreeMonoid.equivWithOneFreeSemigroup : FreeMonoid α ≃* WithOne (FreeSemigroup α) where
-  toFun := lift fun x => ↑(FreeSemigroup.of x)
+  toFun := lift fun x ↦ ↑(FreeSemigroup.of x)
   invFun := WithOne.lift toFreeMonoid
   left_inv x := by induction x with simp [*]
   right_inv x := by

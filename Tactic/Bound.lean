@@ -15,17 +15,17 @@ public import Mathlib.Tactic.Linarith.Frontend
 ## The `bound` tactic
 
 `bound` is an `aesop` wrapper that proves inequalities by straightforward recursion on structure,
-assuming that intermediate terms are nonnegative or positive as needed. It also has some support
+assuming that intermediate terms are nonnegative or positive as needed.  It also has some support
 for guessing where it is unclear where to recurse, such as which side of a `min` or `max` to use
 as the bound or whether to assume a power is less than or greater than one.
 
 The functionality of `bound` overlaps with `positivity` and `gcongr`, but can jump back and forth
-between `0 ≤ x` and `x ≤ y`-type inequalities. For example, `bound` proves
+between `0 ≤ x` and `x ≤ y`-type inequalities.  For example, `bound` proves
   `0 ≤ c → b ≤ a → 0 ≤ a * c - b * c`
-by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`. `bound` also
+by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`.  `bound` also
 uses specialized lemmas for goals of the form `1 ≤ x, 1 < x, x ≤ 1, x < 1`.
 
-Additional hypotheses can be passed as `bound [h0, h1 n, ...]`. This is equivalent to declaring
+Additional hypotheses can be passed as `bound [h0, h1 n, ...]`.  This is equivalent to declaring
 them via `have` before calling `bound`.
 
 See `MathlibTest/Bound/bound.lean` for tests.
@@ -33,7 +33,7 @@ See `MathlibTest/Bound/bound.lean` for tests.
 ### Calc usage
 
 Since `bound` requires the inequality proof to exactly match the structure of the expression, it is
-often useful to iterate between `bound` and `rw / simp` using `calc`. Here is an example:
+often useful to iterate between `bound` and `rw / simp` using `calc`.  Here is an example:
 
 ```
 -- Calc example: A weak lower bound for `z ↦ z^2 + c`
@@ -48,8 +48,8 @@ lemma le_sqr_add {c z : ℂ} (cz : abs c ≤ abs z) (z3 : 3 ≤ abs z) :
 
 ### Aesop rules
 
-`bound` uses threes types of aesop rules: `apply`, `forward`, and closing `tactic`s. To register a
-lemma as an `apply` rule, tag it with `@[bound]`. It will be automatically converted into either a
+`bound` uses threes types of aesop rules: `apply`, `forward`, and closing `tactic`s.  To register a
+lemma as an `apply` rule, tag it with `@[bound]`.  It will be automatically converted into either a
 `norm apply` or `safe apply` rule depending on the number and type of its hypotheses:
 
 1. Nonnegativity/positivity/nonpositivity/negativity hypotheses get score 1 (those involving `0`).
@@ -57,24 +57,24 @@ lemma as an `apply` rule, tag it with `@[bound]`. It will be automatically conve
 3. Disjunctions `a ∨ b` get score 100, plus the score of `a` and `b`.
 
 Score `0` lemmas turn into `norm apply` rules, and score `0 < s` lemmas turn into `safe apply s`
-rules. The score is roughly lexicographic ordering on the counts of the three type (guessing,
+rules.  The score is roughly lexicographic ordering on the counts of the three type (guessing,
 general, involving-zero), and tries to minimize the complexity of hypotheses we have to prove.
 See `Mathlib/Tactic/Bound/Attribute.lean` for the full algorithm.
 
-To register a lemma as a `forward` rule, tag it with `@[bound_forward]`. The most important
+To register a lemma as a `forward` rule, tag it with `@[bound_forward]`.  The most important
 builtin forward rule is `le_of_lt`, so that strict inequalities can be used to prove weak
-inequalities. Another example is `HasFPowerSeriesOnBall.r_pos`, so that `bound` knows that any
-power series present in the context have positive radius of convergence. Custom `@[bound_forward]`
+inequalities.  Another example is `HasFPowerSeriesOnBall.r_pos`, so that `bound` knows that any
+power series present in the context have positive radius of convergence.  Custom `@[bound_forward]`
 rules that similarly expose inequalities inside structures are often useful.
 
 ### Guessing apply rules
 
 There are several cases where there are two standard ways to recurse down an inequality, and it is
-not obvious which is correct without more information. For example, `a ≤ min b c` is registered as
-a `safe apply 4` rule, since we always need to prove `a ≤ b ∧ a ≤ c`. But if we see `min a b ≤ c`,
+not obvious which is correct without more information.  For example, `a ≤ min b c` is registered as
+a `safe apply 4` rule, since we always need to prove `a ≤ b ∧ a ≤ c`.  But if we see `min a b ≤ c`,
 either `a ≤ c` or `b ≤ c` suffices, and we don't know which.
 
-In these cases we declare a new lemma with an `∨` hypotheses that covers the two cases. Tagging
+In these cases we declare a new lemma with an `∨` hypotheses that covers the two cases.  Tagging
 it as `@[bound]` will add a +100 penalty to the score, so that it will be used only if necessary.
 Aesop will then try both ways by splitting on the resulting `∨` hypothesis.
 
@@ -94,44 +94,46 @@ open Lean.Elab.Tactic (liftMetaTactic liftMetaTactic' TacticM getMainGoal)
 
 namespace Mathlib.Tactic.Bound
 
+/-!
+### `.mpr` lemmas of iff statements for use as Aesop apply rules
 
-/--
-lemma `Nat.cast_pos_of_pos` / 引理 `Nat.cast_pos_of_pos`
+Once Aesop can do general terms directly, we can remove these:
 
-English:
-lemma Nat.cast_pos_of_pos
-  statement: {R : Type} [Semiring R] [PartialOrder R] [IsOrderedRing R] [Nontrivial R]
-  proof: Nat.cast_pos.mpr
+  https://github.com/leanprover-community/aesop/issues/107
+-/
 
-中文:
-引理 自然数.cast_pos_of_pos
-  结论: {R : 类型} [半环 R] [偏序 R] [是Ordered环 R] [非平凡 R]
-  证明: Nat.cast_pos.mpr
+/-
+**Mathlib.Tactic.Bound.Nat.cast_pos_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Ta
+ctic.Bound.Nat`。
+形式化陈述：∀ {R : Type} [inst : Semiring R] [inst_1 : PartialOrder R] [IsOrderedRing 
+R] [Nontrivial R] {n : ℕ}, 0 < n → 0 < ↑n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
 
-Depends on / 依赖: Nat.cast_pos.mpr, cast_pos
+--- 原说明 ---
+### `.mpr` lemmas of iff statements for use as Aesop apply rules
+
+Once Aesop can do general terms directly, we can remove these:
+
+  https://github.com/leanprover-community/aesop/issues/107
 -/
 lemma Nat.cast_pos_of_pos {R : Type} [Semiring R] [PartialOrder R] [IsOrderedRing R] [Nontrivial R]
-    {n : Nat} : 0 < n -> 0 < (n : R) :=
+    {n : ℕ} : 0 < n → 0 < (n : R) :=
   Nat.cast_pos.mpr
-
-/--
-lemma `Nat.one_le_cast_of_le` / 引理 `Nat.one_le_cast_of_le`
-
-English:
-lemma Nat.one_le_cast_of_le
-  statement: {α : Type} [AddCommMonoidWithOne α] [PartialOrder α]
-  proof: Nat.one_le_cast.mpr
-
-中文:
-引理 自然数.one_le_cast_of_le
-  结论: {α : 类型} [加法交换带幺幺半群 α] [偏序 α]
-  证明: Nat.one_le_cast.mpr
-
-Depends on / 依赖: Nat.one_le_cast.mpr, one_le_cast
+/-
+**Mathlib.Tactic.Bound.Nat.one_le_cast_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.Bound.Nat`。
+形式化陈述：∀ {α : Type} [inst : AddCommMonoidWithOne α] [inst_1 : PartialOrder α] [Ad
+dLeftMono α] [ZeroLEOneClass α] [CharZero α]   {n : ℕ}, 1 ≤ n → 1 ≤ ↑n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.one_le_cast`：one_le_cast : 1 <= (n : α) ↔ 1 <= n
 -/
 lemma Nat.one_le_cast_of_le {α : Type} [AddCommMonoidWithOne α] [PartialOrder α]
     [AddLeftMono α] [ZeroLEOneClass α]
-    [CharZero α] {n : Nat} : 1 <= n -> 1 <= (n : α) :=
+    [CharZero α] {n : ℕ} : 1 ≤ n → 1 ≤ (n : α) :=
   Nat.one_le_cast.mpr
 
 /-!
@@ -183,70 +185,48 @@ section Guessing
 variable {α : Type} [LinearOrder α] {a b c : α}
 
 -- `min` and `max` guessing lemmas
-/--
-lemma `le_max_of_le_left_or_le_right` / 引理 `le_max_of_le_left_or_le_right`
-
-English:
-lemma le_max_of_le_left_or_le_right
-  statement: a <= b ∨ a <= c -> a <= max b c
-  proof: le_max_iff.mpr
-
-中文:
-引理 le_max_of_le_left_or_le_right
-  结论: a <= b ∨ a <= c -> a <= 最大值 b c
-  证明: le_max_iff.mpr
-
-Depends on / 依赖: le_max_iff, le_max_iff.mpr
+/-
+**Mathlib.Tactic.Bound.le_max_of_le_left_or_le_right** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Bound`。
+形式化陈述：le_max_of_le_left_or_le_right : a <= b ∨ a <= c -> a <= max b c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_max_iff`：le_max_iff : a <= max b c ↔ a <= b ∨ a <= c
 -/
-lemma le_max_of_le_left_or_le_right : a <= b ∨ a <= c -> a <= max b c := le_max_iff.mpr
-/--
-lemma `lt_max_of_lt_left_or_lt_right` / 引理 `lt_max_of_lt_left_or_lt_right`
-
-English:
-lemma lt_max_of_lt_left_or_lt_right
-  statement: a < b ∨ a < c -> a < max b c
-  proof: lt_max_iff.mpr
-
-中文:
-引理 lt_max_of_lt_left_or_lt_right
-  结论: a < b ∨ a < c -> a < 最大值 b c
-  证明: lt_max_iff.mpr
-
-Depends on / 依赖: lt_max_iff, lt_max_iff.mpr
+lemma le_max_of_le_left_or_le_right : a ≤ b ∨ a ≤ c → a ≤ max b c := le_max_iff.mpr
+/-
+**Mathlib.Tactic.Bound.lt_max_of_lt_left_or_lt_right** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Bound`。
+形式化陈述：lt_max_of_lt_left_or_lt_right : a < b ∨ a < c -> a < max b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `lt_max_iff`：lt_max_iff : a < max b c ↔ a < b ∨ a < c
 -/
-lemma lt_max_of_lt_left_or_lt_right : a < b ∨ a < c -> a < max b c := lt_max_iff.mpr
-/--
-lemma `min_le_of_left_le_or_right_le` / 引理 `min_le_of_left_le_or_right_le`
-
-English:
-lemma min_le_of_left_le_or_right_le
-  statement: a <= c ∨ b <= c -> min a b <= c
-  proof: min_le_iff.mpr
-
-中文:
-引理 min_le_of_left_le_or_right_le
-  结论: a <= c ∨ b <= c -> 最小值 a b <= c
-  证明: min_le_iff.mpr
-
-Depends on / 依赖: min_le_iff, min_le_iff.mpr
+lemma lt_max_of_lt_left_or_lt_right : a < b ∨ a < c → a < max b c := lt_max_iff.mpr
+/-
+**Mathlib.Tactic.Bound.min_le_of_left_le_or_right_le** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Bound`。
+形式化陈述：min_le_of_left_le_or_right_le : a <= c ∨ b <= c -> min a b <= c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `min_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, min b c ≤
+ a ↔ b ≤ a ∨ c ≤ a
 -/
-lemma min_le_of_left_le_or_right_le : a <= c ∨ b <= c -> min a b <= c := min_le_iff.mpr
-/--
-lemma `min_lt_of_left_lt_or_right_lt` / 引理 `min_lt_of_left_lt_or_right_lt`
-
-English:
-lemma min_lt_of_left_lt_or_right_lt
-  statement: a < c ∨ b < c -> min a b < c
-  proof: min_lt_iff.mpr
-
-中文:
-引理 min_lt_of_left_lt_or_right_lt
-  结论: a < c ∨ b < c -> 最小值 a b < c
-  证明: min_lt_iff.mpr
-
-Depends on / 依赖: min_lt_iff, min_lt_iff.mpr
+lemma min_le_of_left_le_or_right_le : a ≤ c ∨ b ≤ c → min a b ≤ c := min_le_iff.mpr
+/-
+**Mathlib.Tactic.Bound.min_lt_of_left_lt_or_right_lt** 是 Mathlib 中的一个引理，位于命名空间 `
+Mathlib.Tactic.Bound`。
+形式化陈述：min_lt_of_left_lt_or_right_lt : a < c ∨ b < c -> min a b < c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `min_lt_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, min b c <
+ a ↔ b < a ∨ c < a
 -/
-lemma min_lt_of_left_lt_or_right_lt : a < c ∨ b < c -> min a b < c := min_lt_iff.mpr
+lemma min_lt_of_left_lt_or_right_lt : a < c ∨ b < c → min a b < c := min_lt_iff.mpr
 
 -- Register guessing rules
 attribute [bound]
@@ -269,7 +249,7 @@ TODO: Kim Morrison noted that we could check for `ℕ` or `ℤ` and try `lia` as
 meta def boundNormNum : Aesop.RuleTac :=
   Aesop.SingleRuleTac.toRuleTac fun i => do
     let tac := do Mathlib.Meta.NormNum.elabNormNum .missing .missing .missing
-.run' let goals ← Lean.Elab.Tactic.run i.goal tac
+    let goals ← Lean.Elab.Tactic.run i.goal tac |>.run'
     if !goals.isEmpty then failure
     return (#[], none, some .hundred)
 attribute [aesop unsafe 10% tactic (rule_sets := [Bound])] boundNormNum
@@ -285,24 +265,16 @@ attribute [aesop unsafe 5% tactic (rule_sets := [Bound])] boundLinarith
 ### `bound` tactic implementation
 -/
 
-/--
-Definition of `boundConfig` / `boundConfig` 的定义
+/-- Aesop configuration for `bound` -/
+/-
+**Mathlib.Tactic.Bound.boundConfig** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bou
+nd`。
+形式化陈述：boundConfig : Aesop.Options
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boundConfig
-  signature: : Aesop.Options
-  body: {
-  enableSimp := false,
-  terminal := true
-}
-
-中文:
-定义 boundConfig
-  签名: : Aesop.Options
-  定义体: {
-  enableSimp := false,
-  terminal := true
-}
+--- 原说明 ---
+Aesop configuration for `bound`
 -/
 def boundConfig : Aesop.Options := {
   enableSimp := false,
@@ -321,9 +293,9 @@ lemma le_sqr_add (c z : ℝ) (cz : ‖c‖ ≤ ‖z‖) (z3 : 3 ≤ ‖z‖) :
     2 * ‖z‖ ≤ ‖z^2 + c‖ := by
   calc ‖z^2 + c‖
     _ ≥ ‖z^2‖ - ‖c‖ := by bound
-    _ ≥ ‖z^2‖ - ‖z‖ := by bound
+    _ ≥ ‖z^2‖ - ‖z‖ := by  bound
     _ ≥ (‖z‖ - 1) * ‖z‖ := by
-      rw [mul_comm]; rw [mul_sub_one]; rw [← pow_two]; rw [← norm_pow]
+      rw [mul_comm, mul_sub_one, ← pow_two, ← norm_pow]
     _ ≥ 2 * ‖z‖ := by bound
 ```
 
@@ -335,10 +307,10 @@ lemma le_sqr_add (c z : ℝ) (cz : ‖c‖ ≤ ‖z‖) (z3 : 3 ≤ ‖z‖) :
    context as if by `have := hᵢ`.
 
 The functionality of `bound` overlaps with `positivity` and `gcongr`, but can jump back and forth
-between `0 ≤ x` and `x ≤ y`-type inequalities. For example, `bound` proves
+between `0 ≤ x` and `x ≤ y`-type inequalities.  For example, `bound` proves
   `0 ≤ c → b ≤ a → 0 ≤ a * c - b * c`
-by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`. `bound` also
-contains lemmas for goals of the form `1 ≤ x, 1 < x, x ≤ 1, x < 1`. Conversely, `gcongr` can prove
+by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`.  `bound` also
+contains lemmas for goals of the form `1 ≤ x, 1 < x, x ≤ 1, x < 1`.  Conversely, `gcongr` can prove
 inequalities for more types of relations, supports all `positivity` functionality, and is likely
 faster since it is more specialized (not built atop `aesop`). -/
 syntax "bound" (" [" term,* "]")? : tactic
@@ -347,7 +319,7 @@ syntax "bound" (" [" term,* "]")? : tactic
 elab_rules : tactic
   | `(tactic| bound) => do
     let tac ← `(tactic| aesop (rule_sets := [Bound, -default]) (config := Bound.boundConfig))
-    liftMetaTactic fun g => do return (← Lean.Elab.runTactic g tac.raw).1
+    liftMetaTactic fun g ↦ do return (← Lean.Elab.runTactic g tac.raw).1
 
 -- Rewrite `bound [h₀, h₁]` into `have := h₀, have := h₁, bound`, and similar
 macro_rules
@@ -361,3 +333,4 @@ We register `bound` with the `hint` tactic.
 
 register_hint 70 bound
 register_try?_tactic (priority := 70) bound
+

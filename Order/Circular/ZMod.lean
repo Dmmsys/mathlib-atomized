@@ -17,98 +17,58 @@ This file defines the circular order on `ZMod n`.
 
 public section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CircularOrder Int
-  body: LinearOrder.toCircularOrder _
-
-中文:
-实例 :
-  签名: Circular序 整数
-  定义体: LinearOrder.toCircularOrder _
-
-Depends on / 依赖: LinearOrder, LinearOrder.toCircularOrder, toCircularOrder
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CircularOrder Int := LinearOrder.toCircularOrder _
+instance : CircularOrder ℤ := LinearOrder.toCircularOrder _
 
-variable {a b c : Int}
-
-/--
-lemma `Int.btw_iff` / 引理 `Int.btw_iff`
-
-English:
-lemma Int.btw_iff
-  statement: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
-  proof: .rfl
-
-中文:
-引理 整数.btw_iff
-  结论: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
-  证明: .rfl
+variable {a b c : ℤ}
+/-
+**Int.btw_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.btw_iff : btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <
+= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma Int.btw_iff : btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b := .rfl
-/--
-lemma `Int.sbtw_iff` / 引理 `Int.sbtw_iff`
-
-English:
-lemma Int.sbtw_iff
-  statement: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
-  proof: .rfl
-
-中文:
-引理 整数.sbtw_iff
-  结论: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
-  证明: .rfl
+lemma Int.btw_iff : btw a b c ↔ a ≤ b ∧ b ≤ c ∨ b ≤ c ∧ c ≤ a ∨ c ≤ a ∧ a ≤ b := .rfl
+/-
+**Int.sbtw_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.sbtw_iff : sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Int.sbtw_iff : sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b := .rfl
-
-instance (n : Nat) : CircularOrder (Fin n) := LinearOrder.toCircularOrder _
-
-variable {n : Nat} {a b c : Fin n}
-
-/--
-lemma `Fin.btw_iff` / 引理 `Fin.btw_iff`
-
-English:
-lemma Fin.btw_iff
-  statement: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
-  proof: .rfl
-
-中文:
-引理 有限集.btw_iff
-  结论: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
-  证明: .rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Fin.btw_iff : btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b := .rfl
-/--
-lemma `Fin.sbtw_iff` / 引理 `Fin.sbtw_iff`
+instance (n : ℕ) : CircularOrder (Fin n) := LinearOrder.toCircularOrder _
 
-English:
-lemma Fin.sbtw_iff
-  statement: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
-  proof: .rfl
-
-中文:
-引理 有限集.sbtw_iff
-  结论: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
-  证明: .rfl
+variable {n : ℕ} {a b c : Fin n}
+/-
+**Fin.btw_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.btw_iff : btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <
+= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+lemma Fin.btw_iff : btw a b c ↔ a ≤ b ∧ b ≤ c ∨ b ≤ c ∧ c ≤ a ∨ c ≤ a ∧ a ≤ b := .rfl
+/-
+**Fin.sbtw_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.sbtw_iff : sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Fin.sbtw_iff : sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: forall (n : Nat), CircularOrder (ZMod n)
-
-中文:
-实例 :
-  签名: 对任意 (n : 自然数), Circular序 (ZMod n)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : forall (n : Nat), CircularOrder (ZMod n)
-| 0 => inferInstanceAs CircularOrder Int
-| n + 1 => inferInstanceAs CircularOrder Fin n + 1
+instance : ∀ (n : ℕ), CircularOrder (ZMod n)
+  | 0 => inferInstanceAs <| CircularOrder ℤ
+  | n + 1 => inferInstanceAs <| CircularOrder <| Fin <| n + 1

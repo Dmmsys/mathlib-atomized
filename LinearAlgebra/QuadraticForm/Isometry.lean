@@ -31,423 +31,291 @@ variable [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddComm
 variable [AddCommMonoid N]
 variable [Module R M] [Module R M₁] [Module R M₂] [Module R M₃] [Module R M₄] [Module R N]
 
-/--
-Definition of `Isometry` / `Isometry` 的定义
+/-- An isometry between two quadratic spaces `M₁, Q₁` and `M₂, Q₂` over a ring `R`,
+is a linear map between `M₁` and `M₂` that commutes with the quadratic forms. -/
+/-
+**QuadraticMap.Isometry** 是 Mathlib 中的一个归纳类型，位于命名空间 `QuadraticMap`。
+形式化陈述：{R : Type u_1} →   {M₁ : Type u_3} →     {M₂ : Type u_4} →       {N : Type
+ u_7} →         [inst : CommSemiring R] →           [inst_1 : AddCommMonoid M₁] 
+→             [inst_2 : AddCommMonoid M₂] →               [inst_3 : AddCommMonoi
+d N] →                 [inst_4 : _root_.Module R M₁] →                   [inst_5
+ : _root_.Module R M₂] →                     [inst_6 : _root_.Module R N] → Quad
+raticMap R M₁ N → QuadraticMap R M₂ N → Type (max u_3 u_4)
+参数：max u_3 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Isometry
-  parameters: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
-  extends: M₁ ->ₗ[R] M₂
-  axioms and operations (1):
-    - map_app' : forall m, Q₂ (toFun m) = Q₁ m
-
-中文:
-结构 等距
-  参数: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
-  继承: M₁ ->ₗ[R] M₂
-  公理与运算 (1 个):
-    - map_app' : 对任意 m, Q₂ (toFun m) = Q₁ m
+--- 原说明 ---
+An isometry between two quadratic spaces `M₁, Q₁` and `M₂, Q₂` over a ring `R`,
+is a linear map between `M₁` and `M₂` that commutes with the quadratic forms.
 -/
-structure Isometry (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) extends M₁ ->ₗ[R] M₂ where
+structure Isometry (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) extends M₁ →ₗ[R] M₂ where
   /-- The quadratic form agrees across the map. -/
-  map_app' : forall m, Q₂ (toFun m) = Q₁ m
+  map_app' : ∀ m, Q₂ (toFun m) = Q₁ m
 
 namespace Isometry
 
 @[inherit_doc]
-notation:25 Q₁ " ->qᵢ " Q₂:0 => Isometry Q₁ Q₂
+notation:25 Q₁ " →qᵢ " Q₂:0 => Isometry Q₁ Q₂
 
 variable {Q₁ : QuadraticMap R M₁ N} {Q₂ : QuadraticMap R M₂ N}
 variable {Q₃ : QuadraticMap R M₃ N} {Q₄ : QuadraticMap R M₄ N}
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (Q₁ ->qᵢ Q₂) M₁ M₂ where
-  body: f.toLinearMap
-  coe_injective f g h := by cases f; cases g; congr; exact DFunLike.coe_injective h
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (Q₁ ->qᵢ Q₂) M₁ M₂ where
-  定义体: f.toLinearMap
-  coe_injective f g h := by cases f; cases g; congr; exact DFunLike.coe_injective h
-
-Depends on / 依赖: f.toLinearMap, toLinearMap
+/-
+**QuadraticMap.Isometry.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.Isom
+etry`。
+形式化陈述：instFunLike : FunLike (Q₁ ->qᵢ Q₂) M₁ M₂ where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instFunLike : FunLike (Q₁ ->qᵢ Q₂) M₁ M₂ where
+instance instFunLike : FunLike (Q₁ →qᵢ Q₂) M₁ M₂ where
   coe f := f.toLinearMap
   coe_injective f g h := by cases f; cases g; congr; exact DFunLike.coe_injective h
-
-/--
-Instance `instLinearMapClass` / 实例 `instLinearMapClass`
-
-English:
-instance instLinearMapClass
-  signature: : LinearMapClass (Q₁ ->qᵢ Q₂) R M₁ M₂ where
-  body: f.toLinearMap.map_add
-  map_smulₛₗ f := f.toLinearMap.map_smul
-
-中文:
-实例 instLinearMapClass
-  签名: : 线性映射类 (Q₁ ->qᵢ Q₂) R M₁ M₂ where
-  定义体: f.toLinearMap.map_add
-  map_smulₛₗ f := f.toLinearMap.map_smul
-
-Depends on / 依赖: f.toLinearMap.map_add, map_add, toLinearMap
+/-
+**QuadraticMap.Isometry.instLinearMapClass** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticM
+ap.Isometry`。
+形式化陈述：instLinearMapClass : LinearMapClass (Q₁ ->qᵢ Q₂) R M₁ M₂ where map_add f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_add`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
-instance instLinearMapClass : LinearMapClass (Q₁ ->qᵢ Q₂) R M₁ M₂ where
+instance instLinearMapClass : LinearMapClass (Q₁ →qᵢ Q₂) R M₁ M₂ where
   map_add f := f.toLinearMap.map_add
   map_smulₛₗ f := f.toLinearMap.map_smul
-
-/--
-theorem `toLinearMap_injective` / 定理 `toLinearMap_injective`
-
-English:
-theorem toLinearMap_injective
-  proof: fun _f _g h =>
-  DFunLike.coe_injective (congr_arg DFunLike.coe h :)
-
-@[ext]
-
-中文:
-定理 toLinearMap_injective
-  证明: fun _f _g h =>
-  DFunLike.coe_injective (congr_arg DFunLike.coe h :)
-
-@[ext]
+/-
+**QuadraticMap.Isometry.toLinearMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `Quadrat
+icMap.Isometry`。
+形式化陈述：toLinearMap_injective : Function.Injective (Isometry.toLinearMap : (Q₁ ->q
+ᵢ Q₂) -> M₁ ->ₗ[R] M₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem toLinearMap_injective :
-    Function.Injective (Isometry.toLinearMap : (Q₁ ->qᵢ Q₂) -> M₁ ->ₗ[R] M₂) := fun _f _g h =>
+    Function.Injective (Isometry.toLinearMap : (Q₁ →qᵢ Q₂) → M₁ →ₗ[R] M₂) := fun _f _g h =>
   DFunLike.coe_injective (congr_arg DFunLike.coe h :)
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: ⦃f g
-  statement: Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g x) : f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: ⦃f g
-  结论: Q₁ ->qᵢ Q₂⦄ (h : 对任意 x, f x = g x) : f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**QuadraticMap.Isometry.ext** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isometry`。
+形式化陈述：ext ⦃f g : Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g x) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext ⦃f g : Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g x) : f = g :=
+theorem ext ⦃f g : Q₁ →qᵢ Q₂⦄ (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**QuadraticMap.Isometry.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isom
+etry.Simps`。
+形式化陈述：{R : Type u_1} →   {M₁ : Type u_3} →     {M₂ : Type u_4} →       {N : Type
+ u_7} →         [inst : CommSemiring R] →           [inst_1 : AddCommMonoid M₁] 
+→             [inst_2 : AddCommMonoid M₂] →               [inst_3 : AddCommMonoi
+d N] →                 [inst_4 : _root_.Module R M₁] →                   [inst_5
+ : _root_.Module R M₂] →                     [inst_6 : _root_.Module R N] →     
+                  {Q₁ : QuadraticMap R M₁ N} → {Q₂ : QuadraticMap R M₂ N} → (Q₁ 
+→qᵢ Q₂) → M₁ → M₂
+参数：Q₁ →qᵢ Q₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (f : Q₁ ->qᵢ Q₂)
-  body: f
-
-initialize_simps_projections Isometry (toFun -> apply)
-
-@[simp]
-
-中文:
-定义 Simps.apply
-  签名: (f : Q₁ ->qᵢ Q₂)
-  定义体: f
-
-initialize_simps_projections Isometry (toFun -> apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection].
 -/
-protected def Simps.apply (f : Q₁ ->qᵢ Q₂) : M₁ -> M₂ := f
+protected def Simps.apply (f : Q₁ →qᵢ Q₂) : M₁ → M₂ := f
 
-initialize_simps_projections Isometry (toFun -> apply)
-
-@[simp]
-/--
-theorem `map_app` / 定理 `map_app`
-
-English:
-theorem map_app
-  given: (f : Q₁ ->qᵢ Q₂) (m : M₁)
-  statement: Q₂ (f m) = Q₁ m
-  proof: f.map_app' m
+initialize_simps_projections Isometry (toFun → apply)
 
 @[simp]
-
-中文:
-定理 map_app
-  条件: (f : Q₁ ->qᵢ Q₂) (m : M₁)
-  结论: Q₂ (f m) = Q₁ m
-  证明: f.map_app' m
-
-@[simp]
-
-Depends on / 依赖: f.map_app, map_app
+/-
+**QuadraticMap.Isometry.map_app** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isometry
+`。
+形式化陈述：map_app (f : Q₁ ->qᵢ Q₂) (m : M₁) : Q₂ (f m) = Q₁ m
+参数：f : Q₁ ->qᵢ Q₂；m : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.Isometry.map_app'`：∀ {R : Type u_1} {M₁ : Type u_3} {M₂ : T
+ype u_4} {N : Type u_7} [inst : CommSemiring R] [inst_1 : AddCommMonoid M₁]   [i
+nst_2 : AddCommMonoi…
 -/
-theorem map_app (f : Q₁ ->qᵢ Q₂) (m : M₁) : Q₂ (f m) = Q₁ m :=
+theorem map_app (f : Q₁ →qᵢ Q₂) (m : M₁) : Q₂ (f m) = Q₁ m :=
   f.map_app' m
 
 @[simp]
-/--
-theorem `coe_toLinearMap` / 定理 `coe_toLinearMap`
-
-English:
-theorem coe_toLinearMap
-  given: (f : Q₁ ->qᵢ Q₂)
-  statement: ⇑f.toLinearMap = f
-  proof: rfl
-
-中文:
-定理 coe_toLinearMap
-  条件: (f : Q₁ ->qᵢ Q₂)
-  结论: ⇑f.toLinearMap = f
-  证明: rfl
+/-
+**QuadraticMap.Isometry.coe_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.
+Isometry`。
+形式化陈述：coe_toLinearMap (f : Q₁ ->qᵢ Q₂) : ⇑f.toLinearMap = f
+参数：f : Q₁ ->qᵢ Q₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toLinearMap (f : Q₁ ->qᵢ Q₂) : ⇑f.toLinearMap = f :=
+theorem coe_toLinearMap (f : Q₁ →qᵢ Q₂) : ⇑f.toLinearMap = f :=
   rfl
 
 /-- The identity isometry from a quadratic form to itself. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**QuadraticMap.Isometry.id** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isometry`。
+形式化陈述：id (Q : QuadraticMap R M N) : Q ->qᵢ Q where __
+参数：Q : QuadraticMap R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (Q : QuadraticMap R M N)
-  body: LinearMap.id
-  map_app' _ := rfl
-
-中文:
-定义 id
-  签名: (Q : 二次映射 R M N)
-  定义体: LinearMap.id
-  map_app' _ := rfl
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+The identity isometry from a quadratic form to itself.
 -/
-def id (Q : QuadraticMap R M N) : Q ->qᵢ Q where
+def id (Q : QuadraticMap R M N) : Q →qᵢ Q where
   __ := LinearMap.id
   map_app' _ := rfl
 
 /-- The identity isometry between equal quadratic forms. -/
 @[simps!]
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-
+**QuadraticMap.Isometry.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isometry`。
+形式化陈述：ofEq {Q₁ Q₂ : QuadraticMap R M₁ N} (h : Q₁ = Q₂) : Q₁ ->qᵢ Q₂ where __
+参数：h : Q₁ = Q₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: {Q₁ Q₂ : QuadraticMap R M₁ N} (h : Q₁ = Q₂)
-  body: LinearMap.id
-  map_app' _ := h ▸ rfl
-
-@[simp]
-
-中文:
-定义 ofEq
-  签名: {Q₁ Q₂ : 二次映射 R M₁ N} (h : Q₁ = Q₂)
-  定义体: LinearMap.id
-  map_app' _ := h ▸ rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+The identity isometry between equal quadratic forms.
 -/
-def ofEq {Q₁ Q₂ : QuadraticMap R M₁ N} (h : Q₁ = Q₂) : Q₁ ->qᵢ Q₂ where
+def ofEq {Q₁ Q₂ : QuadraticMap R M₁ N} (h : Q₁ = Q₂) : Q₁ →qᵢ Q₂ where
   __ := LinearMap.id
   map_app' _ := h ▸ rfl
 
 @[simp]
-/--
-theorem `ofEq_rfl` / 定理 `ofEq_rfl`
-
-English:
-theorem ofEq_rfl
-  given: {Q : QuadraticMap R M₁ N}
-  statement: ofEq (rfl : Q = Q) = .id Q
-  proof: rfl
-
-中文:
-定理 ofEq_rfl
-  条件: {Q : 二次映射 R M₁ N}
-  结论: ofEq (rfl : Q = Q) = .id Q
-  证明: rfl
+/-
+**QuadraticMap.Isometry.ofEq_rfl** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isometr
+y`。
+形式化陈述：ofEq_rfl {Q : QuadraticMap R M₁ N} : ofEq (rfl : Q = Q) = .id Q
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofEq_rfl {Q : QuadraticMap R M₁ N} : ofEq (rfl : Q = Q) = .id Q := rfl
 
 /-- The composition of two isometries between quadratic forms. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**QuadraticMap.Isometry.comp** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap.Isometry`。
+形式化陈述：comp (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) : Q₁ ->qᵢ Q₃ where toFun x
+参数：g : Q₂ ->qᵢ Q₃；f : Q₁ ->qᵢ Q₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  body: g (f x)
-  map_app' x := by rw [← f.map_app, ← g.map_app]
-  __ := (g.toLinearMap : M₂ ->ₗ[R] M₃) ∘ₗ (f.toLinearMap : M₁ ->ₗ[R] M₂)
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  定义体: g (f x)
-  map_app' x := by rw [← f.map_app, ← g.map_app]
-  __ := (g.toLinearMap : M₂ ->ₗ[R] M₃) ∘ₗ (f.toLinearMap : M₁ ->ₗ[R] M₂)
-
-@[simp]
+--- 原说明 ---
+The composition of two isometries between quadratic forms.
 -/
-def comp (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) : Q₁ ->qᵢ Q₃ where
+def comp (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) : Q₁ →qᵢ Q₃ where
   toFun x := g (f x)
   map_app' x := by rw [← f.map_app, ← g.map_app]
-  __ := (g.toLinearMap : M₂ ->ₗ[R] M₃) ∘ₗ (f.toLinearMap : M₁ ->ₗ[R] M₂)
+  __ := (g.toLinearMap : M₂ →ₗ[R] M₃) ∘ₗ (f.toLinearMap : M₁ →ₗ[R] M₂)
 
 @[simp]
-/--
-theorem `toLinearMap_comp` / 定理 `toLinearMap_comp`
-
-English:
-theorem toLinearMap_comp
-  given: (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearMap_comp
-  条件: (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticMap.Isometry.toLinearMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap
+.Isometry`。
+形式化陈述：toLinearMap_comp (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) : (g.comp f).toLinearMa
+p = g.toLinearMap.comp f.toLinearMap
+参数：g : Q₂ ->qᵢ Q₃；f : Q₁ ->qᵢ Q₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_comp (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) :
+theorem toLinearMap_comp (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) :
     (g.comp f).toLinearMap = g.toLinearMap.comp f.toLinearMap :=
   rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : Q₁ ->qᵢ Q₂)
-  statement: (id Q₂).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : Q₁ ->qᵢ Q₂)
-  结论: (id Q₂).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**QuadraticMap.Isometry.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isometry
+`。
+形式化陈述：id_comp (f : Q₁ ->qᵢ Q₂) : (id Q₂).comp f = f
+参数：f : Q₁ ->qᵢ Q₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.Isometry.ext`：ext ⦃f g : Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g
+ x) : f = g
 -/
-theorem id_comp (f : Q₁ ->qᵢ Q₂) : (id Q₂).comp f = f :=
+theorem id_comp (f : Q₁ →qᵢ Q₂) : (id Q₂).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : Q₁ ->qᵢ Q₂)
-  statement: f.comp (id Q₁) = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_id
-  条件: (f : Q₁ ->qᵢ Q₂)
-  结论: f.comp (id Q₁) = f
-  证明: ext fun _ => rfl
+/-
+**QuadraticMap.Isometry.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isometry
+`。
+形式化陈述：comp_id (f : Q₁ ->qᵢ Q₂) : f.comp (id Q₁) = f
+参数：f : Q₁ ->qᵢ Q₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.Isometry.ext`：ext ⦃f g : Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g
+ x) : f = g
 -/
-theorem comp_id (f : Q₁ ->qᵢ Q₂) : f.comp (id Q₁) = f :=
+theorem comp_id (f : Q₁ →qᵢ Q₂) : f.comp (id Q₁) = f :=
   ext fun _ => rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (h : Q₃ ->qᵢ Q₄) (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_assoc
-  条件: (h : Q₃ ->qᵢ Q₄) (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂)
-  证明: ext fun _ => rfl
+/-
+**QuadraticMap.Isometry.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.Isome
+try`。
+形式化陈述：comp_assoc (h : Q₃ ->qᵢ Q₄) (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) : (h.comp g)
+.comp f = h.comp (g.comp f)
+参数：h : Q₃ ->qᵢ Q₄；g : Q₂ ->qᵢ Q₃；f : Q₁ ->qᵢ Q₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.Isometry.ext`：ext ⦃f g : Q₁ ->qᵢ Q₂⦄ (h : forall x, f x = g
+ x) : f = g
 -/
-theorem comp_assoc (h : Q₃ ->qᵢ Q₄) (g : Q₂ ->qᵢ Q₃) (f : Q₁ ->qᵢ Q₂) :
+theorem comp_assoc (h : Q₃ →qᵢ Q₄) (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) :
     (h.comp g).comp f = h.comp (g.comp f) :=
   ext fun _ => rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- There is a zero map from any module with the zero form. -/
+/-
+**QuadraticMap.Isometry.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.Isometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Zero ((0 : QuadraticMap R M₁ N) ->qᵢ Q₂)
-  body: { (0 : M₁ ->ₗ[R] M₂) with map_app' := fun _ => map_zero _ }
-
-中文:
-实例 :
-  签名: 零 ((0 : 二次映射 R M₁ N) ->qᵢ Q₂)
-  定义体: { (0 : M₁ ->ₗ[R] M₂) with map_app' := fun _ => map_zero _ }
-
-Depends on / 依赖: map_app, map_zero
+--- 原说明 ---
+There is a zero map from any module with the zero form.
 -/
-instance : Zero ((0 : QuadraticMap R M₁ N) ->qᵢ Q₂) where
-  zero := { (0 : M₁ ->ₗ[R] M₂) with map_app' := fun _ => map_zero _ }
+instance : Zero ((0 : QuadraticMap R M₁ N) →qᵢ Q₂) where
+  zero := { (0 : M₁ →ₗ[R] M₂) with map_app' := fun _ => map_zero _ }
 
-/--
-Instance `hasZeroOfSubsingleton` / 实例 `hasZeroOfSubsingleton`
+/-- There is a zero map from the trivial module. -/
+/-
+**QuadraticMap.Isometry.hasZeroOfSubsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Quadrat
+icMap.Isometry`。
+形式化陈述：hasZeroOfSubsingleton [Subsingleton M₁] : Zero (Q₁ ->qᵢ Q₂) where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasZeroOfSubsingleton
-  signature: [Subsingleton M₁]
-  body: { (0 : M₁ ->ₗ[R] M₂) with
-    map_app' := fun m => Subsingleton.elim 0 m ▸ (map_zero _).trans (map_zero _).symm }
-
-中文:
-实例 hasZeroOfSubsingleton
-  签名: [子单例 M₁]
-  定义体: { (0 : M₁ ->ₗ[R] M₂) with
-    map_app' := fun m => Subsingleton.elim 0 m ▸ (map_zero _).trans (map_zero _).symm }
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, map_app, map_zero
+--- 原说明 ---
+There is a zero map from the trivial module.
 -/
-instance hasZeroOfSubsingleton [Subsingleton M₁] : Zero (Q₁ ->qᵢ Q₂) where
+instance hasZeroOfSubsingleton [Subsingleton M₁] : Zero (Q₁ →qᵢ Q₂) where
   zero :=
-  { (0 : M₁ ->ₗ[R] M₂) with
+  { (0 : M₁ →ₗ[R] M₂) with
     map_app' := fun m => Subsingleton.elim 0 m ▸ (map_zero _).trans (map_zero _).symm }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Maps into the zero module are trivial -/
+/-
+**QuadraticMap.Isometry.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap.Isometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Subsingleton
-  signature: M₂] : Subsingleton (Q₁ ->qᵢ Q₂)
-  body: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
-
-中文:
-实例 [子单例
-  签名: M₂] : 子单例 (Q₁ ->qᵢ Q₂)
-  定义体: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+--- 原说明 ---
+Maps into the zero module are trivial
 -/
-instance [Subsingleton M₂] : Subsingleton (Q₁ ->qᵢ Q₂) :=
+instance [Subsingleton M₂] : Subsingleton (Q₁ →qᵢ Q₂) :=
   ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
 
 end Isometry
 
 end QuadraticMap
+

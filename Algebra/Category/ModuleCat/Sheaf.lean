@@ -28,22 +28,19 @@ open CategoryTheory
 variable {C : Type u₁} [Category.{v₁} C] {J : GrothendieckTopology C}
   (R : Sheaf J RingCat.{u})
 
-/--
-Definition of `SheafOfModules` / `SheafOfModules` 的定义
+/-- A sheaf of modules is a presheaf of modules such that the underlying presheaf
+of abelian groups is a sheaf. -/
+/-
+**SheafOfModules** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {J : C
+ategoryTheory.GrothendieckTopology C} →       CategoryTheory.Sheaf J RingCat → T
+ype (max (max (max u u₁) (v + 1)) v₁)
+参数：max (max (max u u₁) (v + 1)) v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SheafOfModules
-  parameters: where
-  axioms and operations (2):
-    - val : PresheafOfModules.{v} R.obj
-    - isSheaf : Presheaf.IsSheaf J val.presheaf
-
-中文:
-结构 模层
-  参数: where
-  公理与运算 (2 个):
-    - val : 预模层.{v} R.obj
-    - isSheaf : 预层.是层 J val.presheaf
+--- 原说明 ---
+A sheaf of modules is a presheaf of modules such that the underlying presheaf
+of abelian groups is a sheaf.
 -/
 structure SheafOfModules where
   /-- the underlying presheaf of modules of a sheaf of modules -/
@@ -57,45 +54,24 @@ variable {R}
 /-- A morphism between sheaves of modules is a morphism between the underlying
 presheaves of modules. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**SheafOfModules.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `SheafOfModules`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {J : C
+ategoryTheory.GrothendieckTopology C} →       {R : CategoryTheory.Sheaf J RingCa
+t} → SheafOfModules R → SheafOfModules R → Type (max u₁ v)
+参数：max u₁ v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : SheafOfModules.{v} R)
-  axioms and operations (1):
-    - val : X.val ⟶ Y.val
-
-中文:
-结构 态射
-  参数: (X Y : 模层.{v} R)
-  公理与运算 (1 个):
-    - val : X.val ⟶ Y.val
+--- 原说明 ---
+A morphism between sheaves of modules is a morphism between the underlying
+presheaves of modules.
 -/
 structure Hom (X Y : SheafOfModules.{v} R) where
   /-- a morphism between the underlying presheaves of modules -/
   val : X.val ⟶ Y.val
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (SheafOfModules.{v} R)
-  body: Hom
-  id _ := ⟨𝟙 _⟩
-  comp f g := ⟨f.val ≫ g.val⟩
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (模层.{v} R)
-  定义体: Hom
-  id _ := ⟨𝟙 _⟩
-  comp f g := ⟨f.val ≫ g.val⟩
-
-@[ext]
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (SheafOfModules.{v} R) where
   Hom := Hom
@@ -103,65 +79,38 @@ instance : Category (SheafOfModules.{v} R) where
   comp f g := ⟨f.val ≫ g.val⟩
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : SheafOfModules.{v} R} {f g : X ⟶ Y} (h : f.val = g.val)
-  statement: f = g
-  proof: Hom.ext h
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 模层.{v} R} {f g : X ⟶ Y} (h : f.val = g.val)
-  结论: f = g
-  证明: Hom.ext h
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**SheafOfModules.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：hom_ext {X Y : SheafOfModules.{v} R} {f g : X ⟶ Y} (h : f.val = g.val) : f
+ = g
+参数：h : f.val = g.val。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Category.
+{v₁, u₁} C} {J : CategoryTheory.GrothendieckTopology C}   {R : CategoryTheory.Sh
+eaf J RingCa…
 -/
 lemma hom_ext {X Y : SheafOfModules.{v} R} {f g : X ⟶ Y} (h : f.val = g.val) : f = g :=
   Hom.ext h
 
 @[simp]
-/--
-lemma `id_val` / 引理 `id_val`
-
-English:
-lemma id_val
-  given: (X : SheafOfModules.{v} R)
-  statement: Hom.val (𝟙 X) = 𝟙 X.val
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-引理 id_val
-  条件: (X : 模层.{v} R)
-  结论: 态射.val (𝟙 X) = 𝟙 X.val
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**SheafOfModules.id_val** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：id_val (X : SheafOfModules.{v} R) : Hom.val (𝟙 X) = 𝟙 X.val
+参数：X : SheafOfModules.{v} R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_val (X : SheafOfModules.{v} R) : Hom.val (𝟙 X) = 𝟙 X.val := rfl
 
 @[simp, reassoc]
-/--
-lemma `comp_val` / 引理 `comp_val`
-
-English:
-lemma comp_val
-  given: {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 comp_val
-  条件: {X Y Z : 模层.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**SheafOfModules.comp_val** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：comp_val {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).
+val = f.val ≫ g.val
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_val {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).val = f.val ≫ g.val := rfl
@@ -169,22 +118,14 @@ lemma comp_val {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
 variable (R)
 /-- The forgetful functor `SheafOfModules.{v} R ⥤ PresheafOfModules R.val`. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**SheafOfModules.forget** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：forget : SheafOfModules.{v} R ⥤ PresheafOfModules R.obj where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : SheafOfModules.{v} R ⥤ PresheafOfModules R.obj where
-  body: F.val
-  map φ := φ.val
-
-中文:
-定义 forget
-  签名: : 模层.{v} R ⥤ 预模层 R.obj where
-  定义体: F.val
-  map φ := φ.val
-
-Depends on / 依赖: F.val, addCommGroup, fullyFaithfulForget, homEquiv, homEquiv.addCommGroup
+--- 原说明 ---
+The forgetful functor `SheafOfModules.{v} R ⥤ PresheafOfModules R.val`.
 -/
 def forget : SheafOfModules.{v} R ⥤ PresheafOfModules R.obj where
   obj F := F.val
@@ -192,109 +133,63 @@ def forget : SheafOfModules.{v} R ⥤ PresheafOfModules R.obj where
 
 /-- The forget functor `SheafOfModules R ⥤ PresheafOfModules R.val` is fully faithful. -/
 @[simps]
-/--
-Definition of `fullyFaithfulForget` / `fullyFaithfulForget` 的定义
+/-
+**SheafOfModules.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：fullyFaithfulForget : (forget.{v} R).FullyFaithful where preimage φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget
-  signature: : (forget.{v} R).FullyFaithful where
-  body: ⟨φ⟩
-
-中文:
-定义 fullyFaithfulForget
-  签名: : (forget.{v} R).满忠实 where
-  定义体: ⟨φ⟩
+--- 原说明 ---
+The forget functor `SheafOfModules R ⥤ PresheafOfModules R.val` is fully faithfu
+l.
 -/
 def fullyFaithfulForget : (forget.{v} R).FullyFaithful where
   preimage φ := ⟨φ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget.{v} R).Faithful
-  body: (fullyFaithfulForget R).faithful
-
-中文:
-实例 :
-  签名: (forget.{v} R).忠实
-  定义体: (fullyFaithfulForget R).faithful
-
-Depends on / 依赖: faithful, fullyFaithfulForget
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget.{v} R).Faithful := (fullyFaithfulForget R).faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget.{v} R).Full
-  body: (fullyFaithfulForget R).full
-
-中文:
-实例 :
-  签名: (forget.{v} R).满
-  定义体: (fullyFaithfulForget R).full
-
-Depends on / 依赖: fullyFaithfulForget
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget.{v} R).Full := (fullyFaithfulForget R).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget.{v} R).ReflectsIsomorphisms
-  body: (fullyFaithfulForget R).reflectsIsomorphisms
-
-中文:
-实例 :
-  签名: (forget.{v} R).反映同构
-  定义体: (fullyFaithfulForget R).reflectsIsomorphisms
-
-Depends on / 依赖: fullyFaithfulForget, reflectsIsomorphisms
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget.{v} R).ReflectsIsomorphisms := (fullyFaithfulForget R).reflectsIsomorphisms
 
-/--
-Definition of `evaluation` / `evaluation` 的定义
+/-- Evaluation on an object `X` gives a functor
+`SheafOfModules R ⥤ ModuleCat (R.val.obj X)`. -/
+/-
+**SheafOfModules.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：evaluation (X : Cᵒᵖ) : SheafOfModules.{v} R ⥤ ModuleCat.{v} (R.obj.obj X)
+参数：X : Cᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation
-  signature: (X : Cᵒᵖ)
-  body: forget _ ⋙ PresheafOfModules.evaluation _ X
-
-中文:
-定义 evaluation
-  签名: (X : Cᵒᵖ)
-  定义体: forget _ ⋙ PresheafOfModules.evaluation _ X
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.evaluation, evaluation, forget
+--- 原说明 ---
+Evaluation on an object `X` gives a functor
+`SheafOfModules R ⥤ ModuleCat (R.val.obj X)`.
 -/
 def evaluation (X : Cᵒᵖ) : SheafOfModules.{v} R ⥤ ModuleCat.{v} (R.obj.obj X) :=
   forget _ ⋙ PresheafOfModules.evaluation _ X
 
 /-- The forget functor `SheafOfModules R ⥤ Sheaf J AddCommGrpCat`. -/
 @[simps]
-/--
-Definition of `toSheaf` / `toSheaf` 的定义
+/-
+**SheafOfModules.toSheaf** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：toSheaf : SheafOfModules.{v} R ⥤ Sheaf J AddCommGrpCat.{v} where obj M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.isSheaf`：∀ {C : Type u₁} [inst : CategoryTheory.Category.
+{v₁, u₁} C] {J : CategoryTheory.GrothendieckTopology C}   {R : CategoryTheory.Sh
+eaf J RingCa…
 
-English:
-definition toSheaf
-  signature: : SheafOfModules.{v} R ⥤ Sheaf J AddCommGrpCat.{v} where
-  body: ⟨_, M.isSheaf⟩
-  map f := { hom := (forget R ⋙ PresheafOfModules.toPresheaf R.obj).map f }
-
-中文:
-定义 toSheaf
-  签名: : 模层.{v} R ⥤ 层 J 加法交换群范畴.{v} where
-  定义体: ⟨_, M.isSheaf⟩
-  map f := { hom := (forget R ⋙ PresheafOfModules.toPresheaf R.obj).map f }
-
-Depends on / 依赖: M.isSheaf, isSheaf
+--- 原说明 ---
+The forget functor `SheafOfModules R ⥤ Sheaf J AddCommGrpCat`.
 -/
 noncomputable def toSheaf : SheafOfModules.{v} R ⥤ Sheaf J AddCommGrpCat.{v} where
   obj M := ⟨_, M.isSheaf⟩
@@ -305,24 +200,19 @@ The forgetful functor from sheaves of modules over sheaf of ring `R` to sheaves 
 when `X` is initial.
 -/
 @[simps]
-/--
-Definition of `forgetToSheafModuleCat` / `forgetToSheafModuleCat` 的定义
+/-
+**SheafOfModules.forgetToSheafModuleCat** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModule
+s`。
+形式化陈述：forgetToSheafModuleCat (X : Cᵒᵖ) (hX : Limits.IsInitial X) : SheafOfModule
+s.{w} R ⥤ Sheaf J (ModuleCat.{w} (R.1.obj X)) where obj M
+参数：X : Cᵒᵖ；hX : Limits.IsInitial X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetToSheafModuleCat
-  body: ⟨(PresheafOfModules.forgetToPresheafModuleCat X hX).obj M.1,
-    Presheaf.isSheaf_of_isSheaf_comp _ _
-      (forget₂ (ModuleCat.{w} (R.1.obj X)) AddCommGrpCat.{w}) M.isSheaf⟩
-  map f := { hom := (PresheafOfModules.forgetToPresheafModuleCat X hX).map f.1 }
-
-中文:
-定义 forgetToSheafModuleCat
-  定义体: ⟨(PresheafOfModules.forgetToPresheafModuleCat X hX).obj M.1,
-    Presheaf.isSheaf_of_isSheaf_comp _ _
-      (forget₂ (ModuleCat.{w} (R.1.obj X)) AddCommGrpCat.{w}) M.isSheaf⟩
-  map f := { hom := (PresheafOfModules.forgetToPresheafModuleCat X hX).map f.1 }
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.forgetToPresheafModuleCat, forgetToPresheafModuleCat
+--- 原说明 ---
+The forgetful functor from sheaves of modules over sheaf of ring `R` to sheaves 
+of `R(X)`-module
+when `X` is initial.
 -/
 noncomputable def forgetToSheafModuleCat
       (X : Cᵒᵖ) (hX : Limits.IsInitial X) :
@@ -333,226 +223,148 @@ noncomputable def forgetToSheafModuleCat
   map f := { hom := (PresheafOfModules.forgetToPresheafModuleCat X hX).map f.1 }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `forgetToSheafModuleCatOfIso` / `forgetToSheafModuleCatOfIso` 的定义
+/-- Isomorphism on `forgetToSheafModuleCat` when given isomorphic initial objects. -/
+/-
+**SheafOfModules.forgetToSheafModuleCatOfIso** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfM
+odules`。
+形式化陈述：forgetToSheafModuleCatOfIso (X Y : Cᵒᵖ) (hX : Limits.IsInitial X) (hY : Li
+mits.IsInitial Y) (φ : X ≅ Y) : forgetToSheafModuleCat R X hX ≅ forgetToSheafMod
+uleCat R Y hY ⋙ sheafCompose J (ModuleCat.restrictScalars (R.obj.map φ.hom).hom)
+参数：X Y : Cᵒᵖ；hX : Limits.IsInitial X；hY : Limits.IsInitial Y；φ : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetToSheafModuleCatOfIso
-  signature: (X Y : Cᵒᵖ) (hX : Limits.IsInitial X)
-  body: by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
-    · dsimp [PresheafOfModules.forgetToPresheafModuleCatObjObj]
-      refine ModuleCat.restrictScalarsComp'App _ _ _ ?_ _
-      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) (φ.hom ≫ hY.to U))).hom)
-    cat_disch
-  cat_disch
-
-中文:
-定义 forgetToSheafModuleCatOfIso
-  签名: (X Y : Cᵒᵖ) (hX : Limits.IsInitial X)
-  定义体: by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
-    · dsimp [PresheafOfModules.forgetToPresheafModuleCatObjObj]
-      refine ModuleCat.restrictScalarsComp'App _ _ _ ?_ _
-      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) (φ.hom ≫ hY.to U))).hom)
-    cat_disch
-  cat_disch
-
-Depends on / 依赖: ModuleCat, ModuleCat.restrictScalarsComp, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, PresheafOfModules, PresheafOfModules.forgetToPresheafModuleCatObjObj, R.obj.map, cat_disch, forgetToPresheafModuleCatObjObj, hX.hom_ext, hX.to, hY.to, hom_ext, ofComponents, restrictScalarsComp
+--- 原说明 ---
+Isomorphism on `forgetToSheafModuleCat` when given isomorphic initial objects.
 -/
 noncomputable def forgetToSheafModuleCatOfIso (X Y : Cᵒᵖ) (hX : Limits.IsInitial X)
     (hY : Limits.IsInitial Y) (φ : X ≅ Y) :
     forgetToSheafModuleCat R X hX ≅ forgetToSheafModuleCat R Y hY ⋙
       sheafCompose J (ModuleCat.restrictScalars (R.obj.map φ.hom).hom) := by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
+  refine NatIso.ofComponents (fun M ↦ ObjectProperty.isoMk _ ?_) ?_
+  · refine NatIso.ofComponents (fun U ↦ ?_) ?_
     · dsimp [PresheafOfModules.forgetToPresheafModuleCatObjObj]
       refine ModuleCat.restrictScalarsComp'App _ _ _ ?_ _
       simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) (φ.hom ≫ hY.to U))).hom)
     cat_disch
   cat_disch
 
-/--
-Definition of `toSheafCompSheafToPresheafIso` / `toSheafCompSheafToPresheafIso` 的定义
+/-- The canonical isomorphism between
+`SheafOfModules.toSheaf R ⋙ sheafToPresheaf J AddCommGrpCat.{v}`
+and `SheafOfModules.forget R ⋙ PresheafOfModules.toPresheaf R.val`. -/
+/-
+**SheafOfModules.toSheafCompSheafToPresheafIso** 是 Mathlib 中的一个定义，位于命名空间 `SheafO
+fModules`。
+形式化陈述：toSheafCompSheafToPresheafIso : toSheaf R ⋙ sheafToPresheaf J AddCommGrpCa
+t.{v} ≅ forget R ⋙ PresheafOfModules.toPresheaf R.obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSheafCompSheafToPresheafIso
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 toSheafCompSheafToPresheafIso
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The canonical isomorphism between
+`SheafOfModules.toSheaf R ⋙ sheafToPresheaf J AddCommGrpCat.{v}`
+and `SheafOfModules.forget R ⋙ PresheafOfModules.toPresheaf R.val`.
 -/
 noncomputable def toSheafCompSheafToPresheafIso :
     toSheaf R ⋙ sheafToPresheaf J AddCommGrpCat.{v} ≅
       forget R ⋙ PresheafOfModules.toPresheaf R.obj := Iso.refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toSheaf.{v} R).Faithful
-  body: Functor.Faithful.of_comp_iso (toSheafCompSheafToPresheafIso.{v} R)
-
-中文:
-实例 :
-  签名: (toSheaf.{v} R).忠实
-  定义体: Functor.Faithful.of_comp_iso (toSheafCompSheafToPresheafIso.{v} R)
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_iso, of_comp_iso, toSheafCompSheafToPresheafIso
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toSheaf.{v} R).Faithful :=
   Functor.Faithful.of_comp_iso (toSheafCompSheafToPresheafIso.{v} R)
-
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M N : SheafOfModules.{v} R) : AddCommGroup (M ⟶ N) :=
   (fullyFaithfulForget R).homEquiv.addCommGroup
 
 @[simp]
-/--
-lemma `add_val` / 引理 `add_val`
-
-English:
-lemma add_val
-  given: {M N : SheafOfModules.{v} R} (f g : M ⟶ N)
-  proof: rfl
-
-中文:
-引理 add_val
-  条件: {M N : 模层.{v} R} (f g : M ⟶ N)
-  证明: rfl
+/-
+**SheafOfModules.add_val** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：add_val {M N : SheafOfModules.{v} R} (f g : M ⟶ N) : (f + g).val = f.val +
+ g.val
+参数：f g : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma add_val {M N : SheafOfModules.{v} R} (f g : M ⟶ N) :
     (f + g).val = f.val + g.val := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (SheafOfModules.{v} R)
-  body: by intros; ext1; dsimp; simp only [Preadditive.add_comp]
-  comp_add := by tauto
-
-中文:
-实例 :
-  签名: 预加性 (模层.{v} R)
-  定义体: by intros; ext1; dsimp; simp only [Preadditive.add_comp]
-  comp_add := by tauto
-
-Depends on / 依赖: Preadditive, Preadditive.add_comp, add_comp, comp_add, intros
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (SheafOfModules.{v} R) where
   add_comp := by intros; ext1; dsimp; simp only [Preadditive.add_comp]
   comp_add := by tauto
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget R).Additive
-
-中文:
-实例 :
-  签名: (forget R).加性
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget R).Additive where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toSheaf R).Additive
-
-中文:
-实例 :
-  签名: (toSheaf R).加性
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toSheaf R).Additive where
 
 variable {R}
 
-/--
-Definition of `sections` / `sections` 的定义
+/-- The type of sections of a sheaf of modules. -/
+/-
+**SheafOfModules.sections** 是 Mathlib 中的一个缩写定义，位于命名空间 `SheafOfModules`。
+形式化陈述：sections (M : SheafOfModules.{v} R) : Type _
+参数：M : SheafOfModules.{v} R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sections
-  signature: (M : SheafOfModules.{v} R)
-  body: M.val.sections
-
-中文:
-缩写 sections
-  签名: (M : 模层.{v} R)
-  定义体: M.val.sections
-
-Depends on / 依赖: M.val.sections, sections
+--- 原说明 ---
+The type of sections of a sheaf of modules.
 -/
 abbrev sections (M : SheafOfModules.{v} R) : Type _ := M.val.sections
 
-/--
-Definition of `sectionsMap` / `sectionsMap` 的定义
+/-- The map `M.sections → N.sections` induced by a morphism `M ⟶ N` of sheaves of modules. -/
+/-
+**SheafOfModules.sectionsMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `SheafOfModules`。
+形式化陈述：sectionsMap {M N : SheafOfModules.{v} R} (f : M ⟶ N) (s : M.sections) : N.
+sections
+参数：f : M ⟶ N；s : M.sections。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sectionsMap
-  signature: {M N : SheafOfModules.{v} R} (f : M ⟶ N) (s : M.sections)
-  body: PresheafOfModules.sectionsMap f.val s
-
-@[simp]
-
-中文:
-缩写 sectionsMap
-  签名: {M N : 模层.{v} R} (f : M ⟶ N) (s : M.sections)
-  定义体: PresheafOfModules.sectionsMap f.val s
-
-@[simp]
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.sectionsMap, f.val, sectionsMap
+--- 原说明 ---
+The map `M.sections → N.sections` induced by a morphism `M ⟶ N` of sheaves of mo
+dules.
 -/
 abbrev sectionsMap {M N : SheafOfModules.{v} R} (f : M ⟶ N) (s : M.sections) : N.sections :=
   PresheafOfModules.sectionsMap f.val s
 
 @[simp]
-/--
-lemma `sectionsMap_comp` / 引理 `sectionsMap_comp`
-
-English:
-lemma sectionsMap_comp
-  given: {M N P : SheafOfModules.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 sectionsMap_comp
-  条件: {M N P : 模层.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
-  证明: rfl
-
-@[simp]
+/-
+**SheafOfModules.sectionsMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `SheafOfModules`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryT
+heory.GrothendieckTopology C}   {R : CategoryTheory.Sheaf J RingCat} {M N P : Sh
+eafOfModules R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections),   SheafOfModules.secti
+onsMap (CategoryTheory.CategoryStruct.comp f g) s =     SheafOfModules.sectionsM
+ap g (SheafOfModules.sectionsMap f s)
+参数：f : M ⟶ N；g : N ⟶ P；s : M.sections；CategoryTheory.CategoryStruct.comp f g；She
+afOfModules.sectionsMap f s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectionsMap_comp {M N P : SheafOfModules.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections) :
     sectionsMap (f ≫ g) s = sectionsMap g (sectionsMap f s) := rfl
 
 @[simp]
-/--
-lemma `sectionsMap_id` / 引理 `sectionsMap_id`
-
-English:
-lemma sectionsMap_id
-  given: {M : SheafOfModules.{v} R} (s : M.sections)
-  proof: rfl
-
-中文:
-引理 sectionsMap_id
-  条件: {M : 模层.{v} R} (s : M.sections)
-  证明: rfl
+/-
+**SheafOfModules.sectionsMap_id** 是 Mathlib 中的一个定理，位于命名空间 `SheafOfModules`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryT
+heory.GrothendieckTopology C}   {R : CategoryTheory.Sheaf J RingCat} {M : SheafO
+fModules R} (s : M.sections),   SheafOfModules.sectionsMap (CategoryTheory.Categ
+oryStruct.id M) s = s
+参数：s : M.sections；CategoryTheory.CategoryStruct.id M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectionsMap_id {M : SheafOfModules.{v} R} (s : M.sections) :
     sectionsMap (𝟙 M) s = s := rfl
@@ -560,22 +372,14 @@ lemma sectionsMap_id {M : SheafOfModules.{v} R} (s : M.sections) :
 variable (R) in
 /-- The functor which sends a sheaf of modules to its type of sections. -/
 @[simps]
-/--
-Definition of `sectionsFunctor` / `sectionsFunctor` 的定义
+/-
+**SheafOfModules.sectionsFunctor** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：sectionsFunctor : SheafOfModules.{v} R ⥤ Type _ where obj M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsFunctor
-  signature: : SheafOfModules.{v} R ⥤ Type _ where
-  body: M.sections
-  map f := ↾(sectionsMap f)
-
-中文:
-定义 sectionsFunctor
-  签名: : 模层.{v} R ⥤ 类型 _ where
-  定义体: M.sections
-  map f := ↾(sectionsMap f)
-
-Depends on / 依赖: M.sections, sections
+--- 原说明 ---
+The functor which sends a sheaf of modules to its type of sections.
 -/
 def sectionsFunctor : SheafOfModules.{v} R ⥤ Type _ where
   obj M := M.sections
@@ -584,98 +388,80 @@ def sectionsFunctor : SheafOfModules.{v} R ⥤ Type _ where
 variable (R) in
 /-- The obvious free sheaf of modules of rank `1`. -/
 @[simps]
-/--
-Definition of `unit` / `unit` 的定义
+/-
+**SheafOfModules.unit** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：unit : SheafOfModules R where val
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unit
-  signature: : SheafOfModules R where
-  body: PresheafOfModules.unit R.obj
-  isSheaf := ((sheafCompose J (forget₂ RingCat.{u} AddCommGrpCat.{u})).obj R).property
-
-中文:
-定义 unit
-  签名: : 模层 R where
-  定义体: PresheafOfModules.unit R.obj
-  isSheaf := ((sheafCompose J (forget₂ RingCat.{u} AddCommGrpCat.{u})).obj R).property
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.unit, R.obj
+--- 原说明 ---
+The obvious free sheaf of modules of rank `1`.
 -/
 noncomputable def unit : SheafOfModules R where
   val := PresheafOfModules.unit R.obj
   isSheaf := ((sheafCompose J (forget₂ RingCat.{u} AddCommGrpCat.{u})).obj R).property
 
-/--
-Definition of `unitHomEquiv` / `unitHomEquiv` 的定义
+/-- The bijection `(unit R ⟶ M) ≃ M.sections` for `M : SheafOfModules R`. -/
+/-
+**SheafOfModules.unitHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：unitHomEquiv (M : SheafOfModules R) : (unit R ⟶ M) ≃ M.sections
+参数：M : SheafOfModules R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition unitHomEquiv
-  signature: (M : SheafOfModules R)
-  body: (fullyFaithfulForget R).homEquiv.trans M.val.unitHomEquiv
-
-@[simp]
-
-中文:
-定义 unitHomEquiv
-  签名: (M : 模层 R)
-  定义体: (fullyFaithfulForget R).homEquiv.trans M.val.unitHomEquiv
-
-@[simp]
-
-Depends on / 依赖: M.val.unitHomEquiv, fullyFaithfulForget, homEquiv, homEquiv.trans, unitHomEquiv
+--- 原说明 ---
+The bijection `(unit R ⟶ M) ≃ M.sections` for `M : SheafOfModules R`.
 -/
 noncomputable def unitHomEquiv (M : SheafOfModules R) :
     (unit R ⟶ M) ≃ M.sections :=
   (fullyFaithfulForget R).homEquiv.trans M.val.unitHomEquiv
 
 @[simp]
-/--
-lemma `unitHomEquiv_apply_coe` / 引理 `unitHomEquiv_apply_coe`
-
-English:
-lemma unitHomEquiv_apply_coe
-  given: (M : SheafOfModules R) (f : unit R ⟶ M) (X : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 unitHomEquiv_apply_coe
-  条件: (M : 模层 R) (f : unit R ⟶ M) (X : Cᵒᵖ)
-  证明: rfl
+/-
+**SheafOfModules.unitHomEquiv_apply_coe** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModule
+s`。
+形式化陈述：unitHomEquiv_apply_coe (M : SheafOfModules R) (f : unit R ⟶ M) (X : Cᵒᵖ) :
+ (M.unitHomEquiv f).val X = f.val.app X (1 : R.obj.obj X)
+参数：M : SheafOfModules R；f : unit R ⟶ M；X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unitHomEquiv_apply_coe (M : SheafOfModules R) (f : unit R ⟶ M) (X : Cᵒᵖ) :
     (M.unitHomEquiv f).val X = f.val.app X (1 : R.obj.obj X) := rfl
-
-/--
-lemma `unitHomEquiv_comp_apply` / 引理 `unitHomEquiv_comp_apply`
-
-English:
-lemma unitHomEquiv_comp_apply
-  statement: {M N : SheafOfModules.{u} R}
-  proof: rfl
-
-中文:
-引理 unitHomEquiv_comp_apply
-  结论: {M N : 模层.{u} R}
-  证明: rfl
+/-
+**SheafOfModules.unitHomEquiv_comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModul
+es`。
+形式化陈述：unitHomEquiv_comp_apply {M N : SheafOfModules.{u} R} (f : unit R ⟶ M) (p :
+ M ⟶ N) : N.unitHomEquiv (f ≫ p) = sectionsMap p (M.unitHomEquiv f)
+参数：f : unit R ⟶ M；p : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unitHomEquiv_comp_apply {M N : SheafOfModules.{u} R}
     (f : unit R ⟶ M) (p : M ⟶ N) :
     N.unitHomEquiv (f ≫ p) = sectionsMap p (M.unitHomEquiv f) := rfl
-
-/--
-lemma `unitHomEquiv_symm_comp` / 引理 `unitHomEquiv_symm_comp`
-
-English:
-lemma unitHomEquiv_symm_comp
-  given: {M N : SheafOfModules.{u} R} (s : M.sections) (p : M ⟶ N)
-  proof: N.unitHomEquiv.injective (by simp [unitHomEquiv_comp_apply])
-
-中文:
-引理 unitHomEquiv_symm_comp
-  条件: {M N : 模层.{u} R} (s : M.sections) (p : M ⟶ N)
-  证明: N.unitHomEquiv.injective (by simp [unitHomEquiv_comp_apply])
-
-Depends on / 依赖: N.unitHomEquiv.injective, injective, unitHomEquiv, unitHomEquiv_comp_apply
+/-
+**SheafOfModules.unitHomEquiv_symm_comp** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModule
+s`。
+形式化陈述：unitHomEquiv_symm_comp {M N : SheafOfModules.{u} R} (s : M.sections) (p : 
+M ⟶ N) : M.unitHomEquiv.symm s ≫ p = N.unitHomEquiv.symm (sectionsMap p s)
+参数：s : M.sections；p : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma unitHomEquiv_symm_comp {M N : SheafOfModules.{u} R} (s : M.sections) (p : M ⟶ N) :
     M.unitHomEquiv.symm s ≫ p = N.unitHomEquiv.symm (sectionsMap p s) :=
@@ -688,38 +474,38 @@ namespace PresheafOfModules
 variable (J)
 variable {R : Cᵒᵖ ⥤ RingCat.{u}} {M₁ M₂ : PresheafOfModules.{v} R} (f : M₁ ⟶ M₂)
 
-/--
-Definition of `IsLocallySurjective` / `IsLocallySurjective` 的定义
+/-- A morphism of presheaves of modules is locally surjective
+if the underlying morphism of presheaves of abelian groups is. -/
+/-
+**PresheafOfModules.IsLocallySurjective** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfMod
+ules`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     Catego
+ryTheory.GrothendieckTopology C →       {R : CategoryTheory.Functor Cᵒᵖ RingCat}
+ → {M₁ M₂ : PresheafOfModules R} → (M₁ ⟶ M₂) → Prop
+参数：M₁ ⟶ M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLocallySurjective
-  signature: : Prop
-  body: Presheaf.IsLocallySurjective J ((PresheafOfModules.toPresheaf R).map f)
-
-中文:
-缩写 是LocallySurjective
-  签名: : 命题
-  定义体: Presheaf.IsLocallySurjective J ((PresheafOfModules.toPresheaf R).map f)
-
-Depends on / 依赖: IsColimit, IsLocallySurjective, Limits, Limits.IsColimit.module, Limits.colimit.isColimit, Limits.isColimitOfPreserves, M.map_smul, M.presheaf, Module, OpenNhds, OpenNhds.inclusion, Presheaf, Presheaf.IsLocallySurjective, PresheafOfModules, PresheafOfModules.toPresheaf, RingCat, colimit, inclusion, infer_instance, isColimit
+--- 原说明 ---
+A morphism of presheaves of modules is locally surjective
+if the underlying morphism of presheaves of abelian groups is.
 -/
 abbrev IsLocallySurjective : Prop :=
   Presheaf.IsLocallySurjective J ((PresheafOfModules.toPresheaf R).map f)
 
-/--
-Definition of `IsLocallyInjective` / `IsLocallyInjective` 的定义
+/-- A morphism of presheaves of modules is locally injective
+if the underlying morphism of presheaves of abelian groups is. -/
+/-
+**PresheafOfModules.IsLocallyInjective** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     Catego
+ryTheory.GrothendieckTopology C →       {R : CategoryTheory.Functor Cᵒᵖ RingCat}
+ → {M₁ M₂ : PresheafOfModules R} → (M₁ ⟶ M₂) → Prop
+参数：M₁ ⟶ M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLocallyInjective
-  signature: : Prop
-  body: Presheaf.IsLocallyInjective J ((PresheafOfModules.toPresheaf R).map f)
-
-中文:
-缩写 是LocallyInjective
-  签名: : 命题
-  定义体: Presheaf.IsLocallyInjective J ((PresheafOfModules.toPresheaf R).map f)
-
-Depends on / 依赖: IsLocallyInjective, Presheaf, Presheaf.IsLocallyInjective, PresheafOfModules, PresheafOfModules.toPresheaf, toPresheaf
+--- 原说明 ---
+A morphism of presheaves of modules is locally injective
+if the underlying morphism of presheaves of abelian groups is.
 -/
 abbrev IsLocallyInjective : Prop :=
   Presheaf.IsLocallyInjective J ((PresheafOfModules.toPresheaf R).map f)
@@ -734,68 +520,23 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The bijection `(M₂ ⟶ N) ≃ (M₁ ⟶ N)` induced by a locally bijective morphism
 `f : M₁ ⟶ M₂` of presheaves of modules, when `N` is a sheaf. -/
 @[simps]
-/--
-Definition of `homEquivOfIsLocallyBijective` / `homEquivOfIsLocallyBijective` 的定义
+/-
+**PresheafOfModules.homEquivOfIsLocallyBijective** 是 Mathlib 中的一个定义，位于命名空间 `Pres
+heafOfModules`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {J : C
+ategoryTheory.GrothendieckTopology C} →       {R : CategoryTheory.Functor Cᵒᵖ Ri
+ngCat} →         {M₁ M₂ : PresheafOfModules R} →           (f : M₁ ⟶ M₂) →      
+       {N : PresheafOfModules R} →               CategoryTheory.Presheaf.IsSheaf
+ J N.presheaf →                 [J.WEqualsLocallyBijective AddCommGrpCat] →     
+              [PresheafOfModules.IsLocallySurjective J f] →                     
+[PresheafOfModules.IsLocallyInjective J f] → (M₂ ⟶ N) ≃ (M₁ ⟶ N)
+参数：f : M₁ ⟶ M₂；M₂ ⟶ N；M₁ ⟶ N。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homEquivOfIsLocallyBijective
-  signature: : (M₂ ⟶ N) ≃ (M₁ ⟶ N) where
-  body: f ≫ φ
-  invFun ψ := homMk (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).symm
-      ((PresheafOfModules.toPresheaf R).map ψ)) (by
-        obtain ⟨φ, hφ⟩ := ((J.W_of_isLocallyBijective
-          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surjective
-          ((PresheafOfModules.toPresheaf R).map ψ)
-        simp only [← hφ, Equiv.symm_apply_apply]
-        replace hφ : forall (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
-          fun Z x => CategoryTheory.congr_fun (congr_app hφ Z) x
-        intro X r y
-        apply hN.isSeparated _ _
-          (Presheaf.imageSieve_mem J ((toPresheaf R).map f) y)
-        rintro Y p ⟨x : M₁.obj _, hx : f.app _ x = M₂.map p.op y⟩
-        have hφ' : forall (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
-            N.map p.op (φ.app _ z) := CategoryTheory.congr_fun (φ.naturality p.op)
-        change N.map p.op (φ.app X (r • y)) = N.map p.op (r • φ.app X y)
-        rw [← hφ']; rw [M₂.map_smul]; rw [← hx]; rw [← (f.app _).hom.map_smul]; rw [hφ]; rw [(ψ.app _).hom.map_smul]; rw [← hφ]; rw [hx]; rw [N.map_smul]; rw [hφ'])
-  left_inv φ := (toPresheaf _).map_injective
-    (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).left_inv
-      ((PresheafOfModules.toPresheaf R).map φ))
-  right_inv ψ := (toPresheaf _).map_injective
-    (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).right_inv
-      ((PresheafOfModules.toPresheaf R).map ψ))
-
-中文:
-定义 homEquivOfIsLocallyBijective
-  签名: : (M₂ ⟶ N) ≃ (M₁ ⟶ N) where
-  定义体: f ≫ φ
-  invFun ψ := homMk (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).symm
-      ((PresheafOfModules.toPresheaf R).map ψ)) (by
-        obtain ⟨φ, hφ⟩ := ((J.W_of_isLocallyBijective
-          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surjective
-          ((PresheafOfModules.toPresheaf R).map ψ)
-        simp only [← hφ, Equiv.symm_apply_apply]
-        replace hφ : forall (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
-          fun Z x => CategoryTheory.congr_fun (congr_app hφ Z) x
-        intro X r y
-        apply hN.isSeparated _ _
-          (Presheaf.imageSieve_mem J ((toPresheaf R).map f) y)
-        rintro Y p ⟨x : M₁.obj _, hx : f.app _ x = M₂.map p.op y⟩
-        have hφ' : forall (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
-            N.map p.op (φ.app _ z) := CategoryTheory.congr_fun (φ.naturality p.op)
-        change N.map p.op (φ.app X (r • y)) = N.map p.op (r • φ.app X y)
-        rw [← hφ']; rw [M₂.map_smul]; rw [← hx]; rw [← (f.app _).hom.map_smul]; rw [hφ]; rw [(ψ.app _).hom.map_smul]; rw [← hφ]; rw [hx]; rw [N.map_smul]; rw [hφ'])
-  left_inv φ := (toPresheaf _).map_injective
-    (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).left_inv
-      ((PresheafOfModules.toPresheaf R).map φ))
-  right_inv ψ := (toPresheaf _).map_injective
-    (((J.W_of_isLocallyBijective
-      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).right_inv
-      ((PresheafOfModules.toPresheaf R).map ψ))
+--- 原说明 ---
+The bijection `(M₂ ⟶ N) ≃ (M₁ ⟶ N)` induced by a locally bijective morphism
+`f : M₁ ⟶ M₂` of presheaves of modules, when `N` is a sheaf.
 -/
 noncomputable def homEquivOfIsLocallyBijective : (M₂ ⟶ N) ≃ (M₁ ⟶ N) where
   toFun φ := f ≫ φ
@@ -806,16 +547,17 @@ noncomputable def homEquivOfIsLocallyBijective : (M₂ ⟶ N) ≃ (M₁ ⟶ N) w
           ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surjective
           ((PresheafOfModules.toPresheaf R).map ψ)
         simp only [← hφ, Equiv.symm_apply_apply]
-        replace hφ : forall (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
-          fun Z x => CategoryTheory.congr_fun (congr_app hφ Z) x
+        replace hφ : ∀ (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
+          fun Z x ↦ CategoryTheory.congr_fun (congr_app hφ Z) x
         intro X r y
         apply hN.isSeparated _ _
           (Presheaf.imageSieve_mem J ((toPresheaf R).map f) y)
         rintro Y p ⟨x : M₁.obj _, hx : f.app _ x = M₂.map p.op y⟩
-        have hφ' : forall (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
+        have hφ' : ∀ (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
             N.map p.op (φ.app _ z) := CategoryTheory.congr_fun (φ.naturality p.op)
         change N.map p.op (φ.app X (r • y)) = N.map p.op (r • φ.app X y)
-        rw [← hφ']; rw [M₂.map_smul]; rw [← hx]; rw [← (f.app _).hom.map_smul]; rw [hφ]; rw [(ψ.app _).hom.map_smul]; rw [← hφ]; rw [hx]; rw [N.map_smul]; rw [hφ'])
+        rw [← hφ', M₂.map_smul, ← hx, ← (f.app _).hom.map_smul, hφ, (ψ.app _).hom.map_smul,
+          ← hφ, hx, N.map_smul, hφ'])
   left_inv φ := (toPresheaf _).map_injective
     (((J.W_of_isLocallyBijective
       ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).left_inv
@@ -826,3 +568,4 @@ noncomputable def homEquivOfIsLocallyBijective : (M₂ ⟶ N) ≃ (M₁ ⟶ N) w
       ((PresheafOfModules.toPresheaf R).map ψ))
 
 end PresheafOfModules
+

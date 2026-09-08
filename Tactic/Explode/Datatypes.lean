@@ -22,68 +22,38 @@ namespace Mathlib.Explode
 
 initialize registerTraceClass `explode
 
-/--
-Inductive type `Status` / 归纳类型 `Status`
+/-- How to display pipes (`│`) for this entry in the Fitch table . -/
+/-
+**Mathlib.Explode.Status** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Explode`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Status
-  parameters: where
-  constructors (5):
-    - sintro: Status
-    - intro: Status
-    - cintro: Status
-    - lam: Status
-    - reg: Status
-
-中文:
-归纳类型 Status
-  参数: where
-  构造子 (5 个):
-    - sintro: Status
-    - intro: Status
-    - cintro: Status
-    - lam: Status
-    - reg: Status
+--- 原说明 ---
+How to display pipes (`│`) for this entry in the Fitch table .
 -/
 inductive Status where
   /-- `├` Start intro (top-level) -/
   | sintro : Status
   /-- `Entry.depth` * `│` + `┌` Normal intro -/
-  | intro : Status
+  | intro  : Status
   /-- `Entry.depth` * `│` + `├` Continuation intro -/
   | cintro : Status
   /-- `Entry.depth` * `│` -/
-  | lam : Status
+  | lam    : Status
   /-- `Entry.depth` * `│` -/
-  | reg : Status
+  | reg    : Status
   deriving Inhabited
 
-/--
-Definition of `Entry` / `Entry` 的定义
+/-- The row in the Fitch table. -/
+/-
+**Mathlib.Explode.Entry** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Explode`。
+形式化陈述：Entry where /-- A type of this expression as a `MessageData`. Make sure to
+ use `addMessageContext`. -/ type : MessageData /-- The row number, starting fro
+m `0`. This is set by `Entries.add`. -/ line : Option Nat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Entry
-  parameters: where
-  axioms and operations (7):
-    - type : MessageData
-    - line : Option Nat  [default: none]
-    - depth : Nat
-    - status : Status
-    - thm : MessageData
-    - deps : List (Option Nat)
-    - useAsDep : Bool
-
-中文:
-结构 Entry
-  参数: where
-  公理与运算 (7 个):
-    - type : MessageData
-    - line : 选项类型 自然数  [默认: none]
-    - depth : 自然数
-    - status : Status
-    - thm : MessageData
-    - deps : 列表 (选项类型 自然数)
-    - useAsDep : 布尔值
+--- 原说明 ---
+The row in the Fitch table.
 -/
 structure Entry where
   /-- A type of this expression as a `MessageData`. Make sure to use `addMessageContext`. -/
@@ -104,39 +74,28 @@ structure Entry where
   passed to `explodeCore`. Exception: `∀I` may ignore this for introduced hypotheses. -/
   useAsDep : Bool
 
-/--
-Definition of `Entry.line!` / `Entry.line!` 的定义
+/-- Get the `line` for an `Entry` that has been added to the `Entries` structure. -/
+/-
+**Mathlib.Explode.Entry.line** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode.Entry`。
+形式化陈述：Mathlib.Explode.Entry → Option ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entry.line!
-  signature: (entry : Entry)
-  body: entry.line.get!
-
-中文:
-定义 Entry.line!
-  签名: (entry : Entry)
-  定义体: entry.line.get!
-
-Depends on / 依赖: entry.line.get
+--- 原说明 ---
+Get the `line` for an `Entry` that has been added to the `Entries` structure.
 -/
 def Entry.line! (entry : Entry) : Nat := entry.line.get!
 
-/--
-Definition of `Entries` / `Entries` 的定义
+/-- Instead of simply keeping a list of entries (`List Entry`), we create a datatype `Entries`
+that allows us to compare expressions faster. -/
+/-
+**Mathlib.Explode.Entries** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Explode`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Entries
-  parameters: : Type where
-  axioms and operations (2):
-    - s : ExprMap Entry
-    - l : List Entry
-
-中文:
-结构 Entries
-  参数: : 类型 where
-  公理与运算 (2 个):
-    - s : ExprMap Entry
-    - l : 列表 Entry
+--- 原说明 ---
+Instead of simply keeping a list of entries (`List Entry`), we create a datatype
+ `Entries`
+that allows us to compare expressions faster.
 -/
 structure Entries : Type where
   /-- Allows us to compare `Expr`s fast. -/
@@ -145,64 +104,42 @@ structure Entries : Type where
   l : List Entry
   deriving Inhabited
 
-/--
-Definition of `Entries.find?` / `Entries.find?` 的定义
+/-- Find a row where `Entry.expr` == `e`. -/
+/-
+**Mathlib.Explode.Entries.find** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.find?
-  signature: (es : Entries) (e : Expr)
-  body: es.s[e]?
-
-中文:
-定义 Entries.find?
-  签名: (es : Entries) (e : Expr)
-  定义体: es.s[e]?
-
-Depends on / 依赖: es.s
+--- 原说明 ---
+Find a row where `Entry.expr` == `e`.
 -/
 def Entries.find? (es : Entries) (e : Expr) : Option Entry :=
   es.s[e]?
 
-/--
-Definition of `Entries.size` / `Entries.size` 的定义
+/-- Length of our entries. -/
+/-
+**Mathlib.Explode.Entries.size** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode.Entrie
+s`。
+形式化陈述：Mathlib.Explode.Entries → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.size
-  signature: (es : Entries)
-  body: es.s.size
-
-中文:
-定义 Entries.size
-  签名: (es : Entries)
-  定义体: es.s.size
-
-Depends on / 依赖: es.s.size
+--- 原说明 ---
+Length of our entries.
 -/
 def Entries.size (es : Entries) : Nat :=
   es.s.size
 
-/--
-Definition of `Entries.add` / `Entries.add` 的定义
+/-- Add the entry unless it already exists. Sets the `line` field to the next
+available value. -/
+/-
+**Mathlib.Explode.Entries.add** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode.Entries
+`。
+形式化陈述：Mathlib.Explode.Entries → Expr → Mathlib.Explode.Entry → Mathlib.Explode.E
+ntry × Mathlib.Explode.Entries
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.add
-  signature: (entries : Entries) (expr : Expr) (entry : Entry)
-  body: if let some entry' := entries.find? expr then
-    (entry', entries)
-  else
-    let entry := { entry with line := entries.size }
-    (entry, ⟨entries.s.insert expr entry, entry :: entries.l⟩)
-
-中文:
-定义 Entries.add
-  签名: (entries : Entries) (expr : Expr) (entry : Entry)
-  定义体: if let some entry' := entries.find? expr then
-    (entry', entries)
-  else
-    let entry := { entry with line := entries.size }
-    (entry, ⟨entries.s.insert expr entry, entry :: entries.l⟩)
-
-Depends on / 依赖: entries, entries.find, entries.l, entries.s.insert, entries.size, insert
+--- 原说明 ---
+Add the entry unless it already exists. Sets the `line` field to the next
+available value.
 -/
 def Entries.add (entries : Entries) (expr : Expr) (entry : Entry) : Entry × Entries :=
   if let some entry' := entries.find? expr then
@@ -211,20 +148,18 @@ def Entries.add (entries : Entries) (expr : Expr) (entry : Entry) : Entry × Ent
     let entry := { entry with line := entries.size }
     (entry, ⟨entries.s.insert expr entry, entry :: entries.l⟩)
 
-/--
-Definition of `Entries.addSynonym` / `Entries.addSynonym` 的定义
+/-- Add a pre-existing entry to the `ExprMap` for an additional expression.
+This is used by `let` bindings where `expr` is an fvar. -/
+/-
+**Mathlib.Explode.Entries.addSynonym** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Explode.
+Entries`。
+形式化陈述：Mathlib.Explode.Entries → Expr → Mathlib.Explode.Entry → Mathlib.Explode.E
+ntries
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.addSynonym
-  signature: (entries : Entries) (expr : Expr) (entry : Entry)
-  body: ⟨entries.s.insert expr entry, entries.l⟩
-
-中文:
-定义 Entries.addSynonym
-  签名: (entries : Entries) (expr : Expr) (entry : Entry)
-  定义体: ⟨entries.s.insert expr entry, entries.l⟩
-
-Depends on / 依赖: entries, entries.l, entries.s.insert, insert
+--- 原说明 ---
+Add a pre-existing entry to the `ExprMap` for an additional expression.
+This is used by `let` bindings where `expr` is an fvar.
 -/
 def Entries.addSynonym (entries : Entries) (expr : Expr) (entry : Entry) : Entries :=
   ⟨entries.s.insert expr entry, entries.l⟩
@@ -232,3 +167,4 @@ def Entries.addSynonym (entries : Entries) (expr : Expr) (entry : Entry) : Entri
 end Explode
 
 end Mathlib
+

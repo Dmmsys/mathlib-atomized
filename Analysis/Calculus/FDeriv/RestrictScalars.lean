@@ -41,354 +41,346 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedSpace �
 variable [IsScalarTower 𝕜 𝕜' E]
 variable {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [NormedSpace 𝕜' F]
 variable [IsScalarTower 𝕜 𝕜' F]
-variable {f : E -> F} {f' : E ->L[𝕜'] F} {s : Set E} {x : E}
+variable {f : E → F} {f' : E →L[𝕜'] F} {s : Set E} {x : E}
 
-/--
-theorem `HasFDerivAtFilter.restrictScalars` / 定理 `HasFDerivAtFilter.restrictScalars`
-
-English:
-theorem HasFDerivAtFilter.restrictScalars
-  given: {L} (h : HasFDerivAtFilter f f' L)
-  proof: .of_isLittleO h.isLittleO
-
-@[fun_prop]
-
-中文:
-定理 有FDerivAtFilter.restrictScalars
-  条件: {L} (h : 有FDerivAtFilter f f' L)
-  证明: .of_isLittleO h.isLittleO
-
-@[fun_prop]
-
-Depends on / 依赖: h.isLittleO, isLittleO, of_isLittleO
+/-
+**HasFDerivAtFilter.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAtFilter.restrictScalars {L} (h : HasFDerivAtFilter f f' L) : Has
+FDerivAtFilter f (f'.restrictScalars 𝕜) L
+参数：h : HasFDerivAtFilter f f' L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAtFilter.of_isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : Norme
+dSpace 𝕜 E] {F : Typ…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivAtFilter.isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormed
+Field 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Typ…
 -/
 theorem HasFDerivAtFilter.restrictScalars {L} (h : HasFDerivAtFilter f f' L) :
     HasFDerivAtFilter f (f'.restrictScalars 𝕜) L :=
   .of_isLittleO h.isLittleO
 
 @[fun_prop]
-/--
-theorem `HasStrictFDerivAt.restrictScalars` / 定理 `HasStrictFDerivAt.restrictScalars`
-
-English:
-theorem HasStrictFDerivAt.restrictScalars
-  given: (h : HasStrictFDerivAt f f' x)
-  proof: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-中文:
-定理 HasStrictFDerivAt.restrictScalars
-  条件: (h : HasStrictFDerivAt f f' x)
-  证明: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-Depends on / 依赖: HasFDerivAtFilter, HasFDerivAtFilter.restrictScalars, restrictScalars
+/-
+**HasStrictFDerivAt.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.restrictScalars (h : HasStrictFDerivAt f f' x) : HasStri
+ctFDerivAt f (f'.restrictScalars 𝕜) x
+参数：h : HasStrictFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAtFilter.restrictScalars`：HasFDerivAtFilter.restrictScalars {L}
+ (h : HasFDerivAtFilter f f' L) : HasFDerivAtFilter f (f'.restrictScalars 𝕜) L
 -/
 theorem HasStrictFDerivAt.restrictScalars (h : HasStrictFDerivAt f f' x) :
     HasStrictFDerivAt f (f'.restrictScalars 𝕜) x :=
   HasFDerivAtFilter.restrictScalars 𝕜 h
 
 @[fun_prop]
-/--
-theorem `HasFDerivAt.restrictScalars` / 定理 `HasFDerivAt.restrictScalars`
-
-English:
-theorem HasFDerivAt.restrictScalars
-  given: (h : HasFDerivAt f f' x)
-  proof: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-中文:
-定理 在点处Fréchet可导.restrictScalars
-  条件: (h : 在点处Fréchet可导 f f' x)
-  证明: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-Depends on / 依赖: HasFDerivAtFilter, HasFDerivAtFilter.restrictScalars, restrictScalars
+/-
+**HasFDerivAt.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.restrictScalars (h : HasFDerivAt f f' x) : HasFDerivAt f (f'.r
+estrictScalars 𝕜) x
+参数：h : HasFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAtFilter.restrictScalars`：HasFDerivAtFilter.restrictScalars {L}
+ (h : HasFDerivAtFilter f f' L) : HasFDerivAtFilter f (f'.restrictScalars 𝕜) L
 -/
 theorem HasFDerivAt.restrictScalars (h : HasFDerivAt f f' x) :
     HasFDerivAt f (f'.restrictScalars 𝕜) x :=
   HasFDerivAtFilter.restrictScalars 𝕜 h
 
 @[fun_prop]
-/--
-theorem `HasFDerivWithinAt.restrictScalars` / 定理 `HasFDerivWithinAt.restrictScalars`
-
-English:
-theorem HasFDerivWithinAt.restrictScalars
-  given: (h : HasFDerivWithinAt f f' s x)
-  proof: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-中文:
-定理 HasFDerivWithinAt.restrictScalars
-  条件: (h : HasFDerivWithinAt f f' s x)
-  证明: HasFDerivAtFilter.restrictScalars 𝕜 h
-
-@[fun_prop]
-
-Depends on / 依赖: HasFDerivAtFilter, HasFDerivAtFilter.restrictScalars, restrictScalars
+/-
+**HasFDerivWithinAt.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.restrictScalars (h : HasFDerivWithinAt f f' s x) : HasFD
+erivWithinAt f (f'.restrictScalars 𝕜) s x
+参数：h : HasFDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAtFilter.restrictScalars`：HasFDerivAtFilter.restrictScalars {L}
+ (h : HasFDerivAtFilter f f' L) : HasFDerivAtFilter f (f'.restrictScalars 𝕜) L
 -/
 theorem HasFDerivWithinAt.restrictScalars (h : HasFDerivWithinAt f f' s x) :
     HasFDerivWithinAt f (f'.restrictScalars 𝕜) s x :=
   HasFDerivAtFilter.restrictScalars 𝕜 h
 
 @[fun_prop]
-/--
-theorem `DifferentiableAt.restrictScalars` / 定理 `DifferentiableAt.restrictScalars`
-
-English:
-theorem DifferentiableAt.restrictScalars
-  given: (h : DifferentiableAt 𝕜' f x)
-  statement: DifferentiableAt 𝕜 f x
-  proof: (h.hasFDerivAt.restrictScalars 𝕜).differentiableAt
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableAt.restrictScalars
-  条件: (h : DifferentiableAt 𝕜' f x)
-  结论: DifferentiableAt 𝕜 f x
-  证明: (h.hasFDerivAt.restrictScalars 𝕜).differentiableAt
-
-@[fun_prop]
-
-Depends on / 依赖: differentiableAt, h.hasFDerivAt.restrictScalars, hasFDerivAt, restrictScalars
+/-
+**DifferentiableAt.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.restrictScalars (h : DifferentiableAt 𝕜' f x) : Different
+iableAt 𝕜 f x
+参数：h : DifferentiableAt 𝕜' f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivAt.restrictScalars`：HasFDerivAt.restrictScalars (h : HasFDerivA
+t f f' x) : HasFDerivAt f (f'.restrictScalars 𝕜) x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
 theorem DifferentiableAt.restrictScalars (h : DifferentiableAt 𝕜' f x) : DifferentiableAt 𝕜 f x :=
   (h.hasFDerivAt.restrictScalars 𝕜).differentiableAt
 
 @[fun_prop]
-/--
-theorem `DifferentiableWithinAt.restrictScalars` / 定理 `DifferentiableWithinAt.restrictScalars`
-
-English:
-theorem DifferentiableWithinAt.restrictScalars
-  given: (h : DifferentiableWithinAt 𝕜' f s x)
-  proof: (h.hasFDerivWithinAt.restrictScalars 𝕜).differentiableWithinAt
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.restrictScalars
-  条件: (h : DifferentiableWithinAt 𝕜' f s x)
-  证明: (h.hasFDerivWithinAt.restrictScalars 𝕜).differentiableWithinAt
-
-@[fun_prop]
-
-Depends on / 依赖: differentiableWithinAt, h.hasFDerivWithinAt.restrictScalars, hasFDerivWithinAt, restrictScalars
+/-
+**DifferentiableWithinAt.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.restrictScalars (h : DifferentiableWithinAt 𝕜' f s 
+x) : DifferentiableWithinAt 𝕜 f s x
+参数：h : DifferentiableWithinAt 𝕜' f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivWithinAt.restrictScalars`：HasFDerivWithinAt.restrictScalars (h 
+: HasFDerivWithinAt f f' s x) : HasFDerivWithinAt f (f'.restrictScalars 𝕜) s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
 theorem DifferentiableWithinAt.restrictScalars (h : DifferentiableWithinAt 𝕜' f s x) :
     DifferentiableWithinAt 𝕜 f s x :=
   (h.hasFDerivWithinAt.restrictScalars 𝕜).differentiableWithinAt
 
 @[fun_prop]
-/--
-theorem `DifferentiableOn.restrictScalars` / 定理 `DifferentiableOn.restrictScalars`
-
-English:
-theorem DifferentiableOn.restrictScalars
-  given: (h : DifferentiableOn 𝕜' f s)
-  statement: DifferentiableOn 𝕜 f s
-  proof: fun x hx => (h x hx).restrictScalars 𝕜
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableOn.restrictScalars
-  条件: (h : DifferentiableOn 𝕜' f s)
-  结论: DifferentiableOn 𝕜 f s
-  证明: fun x hx => (h x hx).restrictScalars 𝕜
-
-@[fun_prop]
-
-Depends on / 依赖: restrictScalars
+/-
+**DifferentiableOn.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.restrictScalars (h : DifferentiableOn 𝕜' f s) : Different
+iableOn 𝕜 f s
+参数：h : DifferentiableOn 𝕜' f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.restrictScalars`：DifferentiableWithinAt.restrictS
+calars (h : DifferentiableWithinAt 𝕜' f s x) : DifferentiableWithinAt 𝕜 f s x
 -/
 theorem DifferentiableOn.restrictScalars (h : DifferentiableOn 𝕜' f s) : DifferentiableOn 𝕜 f s :=
   fun x hx => (h x hx).restrictScalars 𝕜
 
 @[fun_prop]
-/--
-theorem `Differentiable.restrictScalars` / 定理 `Differentiable.restrictScalars`
-
-English:
-theorem Differentiable.restrictScalars
-  given: (h : Differentiable 𝕜' f)
-  statement: Differentiable 𝕜 f
-  proof: fun x =>
-  (h x).restrictScalars 𝕜
-
-@[fun_prop]
-
-中文:
-定理 可微.restrictScalars
-  条件: (h : 可微 𝕜' f)
-  结论: 可微 𝕜 f
-  证明: fun x =>
-  (h x).restrictScalars 𝕜
-
-@[fun_prop]
+/-
+**Differentiable.restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.restrictScalars (h : Differentiable 𝕜' f) : Differentiable 
+𝕜 f
+参数：h : Differentiable 𝕜' f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.restrictScalars`：DifferentiableAt.restrictScalars (h : 
+DifferentiableAt 𝕜' f x) : DifferentiableAt 𝕜 f x
 -/
 theorem Differentiable.restrictScalars (h : Differentiable 𝕜' f) : Differentiable 𝕜 f := fun x =>
   (h x).restrictScalars 𝕜
 
 @[fun_prop]
-/--
-theorem `HasFDerivWithinAt.of_restrictScalars` / 定理 `HasFDerivWithinAt.of_restrictScalars`
-
-English:
-theorem HasFDerivWithinAt.of_restrictScalars
-  statement: {g' : E ->L[𝕜] F} (h : HasFDerivWithinAt f g' s x)
-  proof: by
-  rw [← H] at h
-  exact .of_isLittleO h.isLittleO
-
-@[fun_prop]
-
-中文:
-定理 HasFDerivWithinAt.of_restrictScalars
-  结论: {g' : E ->L[𝕜] F} (h : HasFDerivWithinAt f g' s x)
-  证明: by
-  rw [← H] at h
-  exact .of_isLittleO h.isLittleO
-
-@[fun_prop]
-
-Depends on / 依赖: h.isLittleO, isLittleO, of_isLittleO
+/-
+**HasFDerivWithinAt.of_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.of_restrictScalars {g' : E ->L[𝕜] F} (h : HasFDerivWithi
+nAt f g' s x) (H : f'.restrictScalars 𝕜 = g') : HasFDerivWithinAt f f' s x
+参数：h : HasFDerivWithinAt f g' s x；H : f'.restrictScalars 𝕜 = g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivWithinAt.of_isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : Norme
+dSpace 𝕜 E] {F : Typ…
+· 使用定理 `HasFDerivWithinAt.isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormed
+Field 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Typ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem HasFDerivWithinAt.of_restrictScalars {g' : E ->L[𝕜] F} (h : HasFDerivWithinAt f g' s x)
+theorem HasFDerivWithinAt.of_restrictScalars {g' : E →L[𝕜] F} (h : HasFDerivWithinAt f g' s x)
     (H : f'.restrictScalars 𝕜 = g') : HasFDerivWithinAt f f' s x := by
   rw [← H] at h
   exact .of_isLittleO h.isLittleO
 
 @[fun_prop]
-/--
-theorem `hasFDerivAt_of_restrictScalars` / 定理 `hasFDerivAt_of_restrictScalars`
-
-English:
-theorem hasFDerivAt_of_restrictScalars
-  statement: {g' : E ->L[𝕜] F} (h : HasFDerivAt f g' x)
-  proof: by
-  rw [← H] at h
-  exact .of_isLittleO h.isLittleO
-
-中文:
-定理 hasFDerivAt_of_restrictScalars
-  结论: {g' : E ->L[𝕜] F} (h : 在点处Fréchet可导 f g' x)
-  证明: by
-  rw [← H] at h
-  exact .of_isLittleO h.isLittleO
-
-Depends on / 依赖: h.isLittleO, isLittleO, of_isLittleO
+/-
+**hasFDerivAt_of_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAt_of_restrictScalars {g' : E ->L[𝕜] F} (h : HasFDerivAt f g' x) 
+(H : f'.restrictScalars 𝕜 = g') : HasFDerivAt f f' x
+参数：h : HasFDerivAt f g' x；H : f'.restrictScalars 𝕜 = g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivAt.of_isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFie
+ld 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : NormedSpace
+ 𝕜 E] {F : Typ…
+· 使用定理 `HasFDerivAt.isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 
+𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {F : Typ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem hasFDerivAt_of_restrictScalars {g' : E ->L[𝕜] F} (h : HasFDerivAt f g' x)
+theorem hasFDerivAt_of_restrictScalars {g' : E →L[𝕜] F} (h : HasFDerivAt f g' x)
     (H : f'.restrictScalars 𝕜 = g') : HasFDerivAt f f' x := by
   rw [← H] at h
   exact .of_isLittleO h.isLittleO
-
-/--
-theorem `DifferentiableAt.fderiv_restrictScalars` / 定理 `DifferentiableAt.fderiv_restrictScalars`
-
-English:
-theorem DifferentiableAt.fderiv_restrictScalars
-  given: (h : DifferentiableAt 𝕜' f x)
-  proof: (h.hasFDerivAt.restrictScalars 𝕜).fderiv
-
-中文:
-定理 DifferentiableAt.fderiv_restrictScalars
-  条件: (h : DifferentiableAt 𝕜' f x)
-  证明: (h.hasFDerivAt.restrictScalars 𝕜).fderiv
-
-Depends on / 依赖: fderiv, h.hasFDerivAt.restrictScalars, hasFDerivAt, restrictScalars
+/-
+**DifferentiableAt.fderiv_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.fderiv_restrictScalars (h : DifferentiableAt 𝕜' f x) : fd
+eriv 𝕜 f x = (fderiv 𝕜' f x).restrictScalars 𝕜
+参数：h : DifferentiableAt 𝕜' f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivAt.restrictScalars`：HasFDerivAt.restrictScalars (h : HasFDerivA
+t f f' x) : HasFDerivAt f (f'.restrictScalars 𝕜) x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
 theorem DifferentiableAt.fderiv_restrictScalars (h : DifferentiableAt 𝕜' f x) :
     fderiv 𝕜 f x = (fderiv 𝕜' f x).restrictScalars 𝕜 :=
   (h.hasFDerivAt.restrictScalars 𝕜).fderiv
-
-/--
-theorem `DifferentiableWithinAt.restrictScalars_fderivWithin` / 定理 `DifferentiableWithinAt.restrictScalars_fderivWithin`
-
-English:
-theorem DifferentiableWithinAt.restrictScalars_fderivWithin
-  statement: (hf : DifferentiableWithinAt 𝕜' f s x)
-  proof: ((hf.hasFDerivWithinAt.restrictScalars 𝕜).fderivWithin hs).symm
-
-中文:
-定理 DifferentiableWithinAt.restrictScalars_fderivWithin
-  结论: (hf : DifferentiableWithinAt 𝕜' f s x)
-  证明: ((hf.hasFDerivWithinAt.restrictScalars 𝕜).fderivWithin hs).symm
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.restrictScalars, restrictScalars
+/-
+**DifferentiableWithinAt.restrictScalars_fderivWithin** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：DifferentiableWithinAt.restrictScalars_fderivWithin (hf : DifferentiableWi
+thinAt 𝕜' f s x) (hs : UniqueDiffWithinAt 𝕜 s x) : (fderivWithin 𝕜' f s x).restr
+ictScalars 𝕜 = fderivWithin 𝕜 f s x
+参数：hf : DifferentiableWithinAt 𝕜' f s x；hs : UniqueDiffWithinAt 𝕜 s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.restrictScalars`：HasFDerivWithinAt.restrictScalars (h 
+: HasFDerivWithinAt f f' s x) : HasFDerivWithinAt f (f'.restrictScalars 𝕜) s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
 theorem DifferentiableWithinAt.restrictScalars_fderivWithin (hf : DifferentiableWithinAt 𝕜' f s x)
     (hs : UniqueDiffWithinAt 𝕜 s x) :
     (fderivWithin 𝕜' f s x).restrictScalars 𝕜 = fderivWithin 𝕜 f s x :=
   ((hf.hasFDerivWithinAt.restrictScalars 𝕜).fderivWithin hs).symm
-
-/--
-theorem `differentiableWithinAt_iff_restrictScalars` / 定理 `differentiableWithinAt_iff_restrictScalars`
-
-English:
-theorem differentiableWithinAt_iff_restrictScalars
-  statement: (hf : DifferentiableWithinAt 𝕜 f s x)
-  proof: by
-  constructor
-  · rintro ⟨g', hg'⟩
-    exact ⟨g', hs.eq (hg'.restrictScalars 𝕜) hf.hasFDerivWithinAt⟩
-  · rintro ⟨f', hf'⟩
-    exact ⟨f', hf.hasFDerivWithinAt.of_restrictScalars 𝕜 hf'⟩
-
-中文:
-定理 differentiableWithinAt_iff_restrictScalars
-  结论: (hf : DifferentiableWithinAt 𝕜 f s x)
-  证明: by
-  constructor
-  · rintro ⟨g', hg'⟩
-    exact ⟨g', hs.eq (hg'.restrictScalars 𝕜) hf.hasFDerivWithinAt⟩
-  · rintro ⟨f', hf'⟩
-    exact ⟨f', hf.hasFDerivWithinAt.of_restrictScalars 𝕜 hf'⟩
-
-Depends on / 依赖: hasFDerivWithinAt, hf.hasFDerivWithinAt, hf.hasFDerivWithinAt.of_restrictScalars, hs.eq, of_restrictScalars, restrictScalars
+/-
+**differentiableWithinAt_iff_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAt_iff_restrictScalars (hf : DifferentiableWithinAt 𝕜 
+f s x) (hs : UniqueDiffWithinAt 𝕜 s x) : DifferentiableWithinAt 𝕜' f s x ↔ exist
+s g' : E ->L[𝕜'] F, g'.restrictScalars 𝕜 = fderivWithin 𝕜 f s x
+参数：hf : DifferentiableWithinAt 𝕜 f s x；hs : UniqueDiffWithinAt 𝕜 s x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `UniqueDiffWithinAt.eq`：UniqueDiffWithinAt.eq (H : UniqueDiffWithinAt 𝕜 s
+ x) (hf : HasFDerivWithinAt f f' s x) (hg : HasFDerivWithinAt f f₁' s x) : f' = 
+f₁'
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.restrictScalars`：HasFDerivWithinAt.restrictScalars (h 
+: HasFDerivWithinAt f f' s x) : HasFDerivWithinAt f (f'.restrictScalars 𝕜) s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
+· 使用定理 `HasFDerivWithinAt.of_restrictScalars`：HasFDerivWithinAt.of_restrictScala
+rs {g' : E ->L[𝕜] F} (h : HasFDerivWithinAt f g' s x) (H : f'.restrictScalars 𝕜 
+= g') : HasFDerivWithinAt …
 -/
 theorem differentiableWithinAt_iff_restrictScalars (hf : DifferentiableWithinAt 𝕜 f s x)
     (hs : UniqueDiffWithinAt 𝕜 s x) : DifferentiableWithinAt 𝕜' f s x ↔
-      exists g' : E ->L[𝕜'] F, g'.restrictScalars 𝕜 = fderivWithin 𝕜 f s x := by
+      ∃ g' : E →L[𝕜'] F, g'.restrictScalars 𝕜 = fderivWithin 𝕜 f s x := by
   constructor
   · rintro ⟨g', hg'⟩
     exact ⟨g', hs.eq (hg'.restrictScalars 𝕜) hf.hasFDerivWithinAt⟩
   · rintro ⟨f', hf'⟩
     exact ⟨f', hf.hasFDerivWithinAt.of_restrictScalars 𝕜 hf'⟩
-
-/--
-theorem `differentiableAt_iff_restrictScalars` / 定理 `differentiableAt_iff_restrictScalars`
-
-English:
-theorem differentiableAt_iff_restrictScalars
-  given: (hf : DifferentiableAt 𝕜 f x)
-  proof: by
-  rw [← differentiableWithinAt_univ]; rw [← fderivWithin_univ]
-  exact
-    differentiableWithinAt_iff_restrictScalars 𝕜 hf.differentiableWithinAt uniqueDiffWithinAt_univ
-
-中文:
-定理 differentiableAt_iff_restrictScalars
-  条件: (hf : DifferentiableAt 𝕜 f x)
-  证明: by
-  rw [← differentiableWithinAt_univ]; rw [← fderivWithin_univ]
-  exact
-    differentiableWithinAt_iff_restrictScalars 𝕜 hf.differentiableWithinAt uniqueDiffWithinAt_univ
-
-Depends on / 依赖: differentiableWithinAt, differentiableWithinAt_iff_restrictScalars, differentiableWithinAt_univ, fderivWithin_univ, hf.differentiableWithinAt, uniqueDiffWithinAt_univ
+/-
+**differentiableAt_iff_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableAt_iff_restrictScalars (hf : DifferentiableAt 𝕜 f x) : Diffe
+rentiableAt 𝕜' f x ↔ exists g' : E ->L[𝕜'] F, g'.restrictScalars 𝕜 = fderiv 𝕜 f 
+x
+参数：hf : DifferentiableAt 𝕜 f x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `differentiableWithinAt_univ`：differentiableWithinAt_univ : Differentiabl
+eWithinAt 𝕜 f univ x ↔ DifferentiableAt 𝕜 f x
+· 使用定理 `fderivWithin_univ`：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 
+f
+· 使用定理 `differentiableWithinAt_iff_restrictScalars`：differentiableWithinAt_iff_r
+estrictScalars (hf : DifferentiableWithinAt 𝕜 f s x) (hs : UniqueDiffWithinAt 𝕜 
+s x) : DifferentiableWithinAt 𝕜'…
+· 使用定理 `DifferentiableAt.differentiableWithinAt`：DifferentiableAt.differentiable
+WithinAt (h : DifferentiableAt 𝕜 f x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `uniqueDiffWithinAt_univ`：uniqueDiffWithinAt_univ : UniqueDiffWithinAt 𝕜 
+univ x
+· 使用定理 `NormedField.nhdsNE_neBot`：nhdsNE_neBot (x : α) : NeBot (𝓝[!=] x)
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 -/
 theorem differentiableAt_iff_restrictScalars (hf : DifferentiableAt 𝕜 f x) :
-    DifferentiableAt 𝕜' f x ↔ exists g' : E ->L[𝕜'] F, g'.restrictScalars 𝕜 = fderiv 𝕜 f x := by
-  rw [← differentiableWithinAt_univ]; rw [← fderivWithin_univ]
+    DifferentiableAt 𝕜' f x ↔ ∃ g' : E →L[𝕜'] F, g'.restrictScalars 𝕜 = fderiv 𝕜 f x := by
+  rw [← differentiableWithinAt_univ, ← fderivWithin_univ]
   exact
     differentiableWithinAt_iff_restrictScalars 𝕜 hf.differentiableWithinAt uniqueDiffWithinAt_univ
 
 end RestrictScalars
+

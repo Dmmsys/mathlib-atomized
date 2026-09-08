@@ -44,295 +44,251 @@ section SemilatticeSup
 
 variable [SemilatticeSup α] {a b c : α}
 
-/--
-Definition of `SupIrred` / `SupIrred` 的定义
+/-- A sup-irreducible element is a non-bottom element which isn't the supremum of anything smaller.
+-/
+/-
+**SupIrred** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SupIrred (a : α) : Prop
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SupIrred
-  signature: (a : α)
-  body: ¬IsMin a ∧ forall ⦃b c⦄, b ⊔ c = a -> b = a ∨ c = a
-
-中文:
-定义 SupIrred
-  签名: (a : α)
-  定义体: ¬IsMin a ∧ forall ⦃b c⦄, b ⊔ c = a -> b = a ∨ c = a
+--- 原说明 ---
+A sup-irreducible element is a non-bottom element which isn't the supremum of an
+ything smaller.
 -/
 def SupIrred (a : α) : Prop :=
-  ¬IsMin a ∧ forall ⦃b c⦄, b ⊔ c = a -> b = a ∨ c = a
+  ¬IsMin a ∧ ∀ ⦃b c⦄, b ⊔ c = a → b = a ∨ c = a
 
-/--
-Definition of `SupPrime` / `SupPrime` 的定义
+/-- A sup-prime element is a non-bottom element which isn't less than the supremum of anything
+smaller. -/
+/-
+**SupPrime** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SupPrime (a : α) : Prop
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SupPrime
-  signature: (a : α)
-  body: ¬IsMin a ∧ forall ⦃b c⦄, a <= b ⊔ c -> a <= b ∨ a <= c
-
-中文:
-定义 SupPrime
-  签名: (a : α)
-  定义体: ¬IsMin a ∧ forall ⦃b c⦄, a <= b ⊔ c -> a <= b ∨ a <= c
+--- 原说明 ---
+A sup-prime element is a non-bottom element which isn't less than the supremum o
+f anything
+smaller.
 -/
 def SupPrime (a : α) : Prop :=
-  ¬IsMin a ∧ forall ⦃b c⦄, a <= b ⊔ c -> a <= b ∨ a <= c
-
-/--
-theorem `SupIrred.not_isMin` / 定理 `SupIrred.not_isMin`
-
-English:
-theorem SupIrred.not_isMin
-  given: (ha : SupIrred a)
-  statement: ¬IsMin a
-  proof: ha.1
-
-中文:
-定理 SupIrred.not_isMin
-  条件: (ha : SupIrred a)
-  结论: ¬IsMin a
-  证明: ha.1
+  ¬IsMin a ∧ ∀ ⦃b c⦄, a ≤ b ⊔ c → a ≤ b ∨ a ≤ c
+/-
+**SupIrred.not_isMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupIrred.not_isMin (ha : SupIrred a) : ¬IsMin a
+参数：ha : SupIrred a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem SupIrred.not_isMin (ha : SupIrred a) : ¬IsMin a :=
   ha.1
-
-/--
-theorem `SupPrime.not_isMin` / 定理 `SupPrime.not_isMin`
-
-English:
-theorem SupPrime.not_isMin
-  given: (ha : SupPrime a)
-  statement: ¬IsMin a
-  proof: ha.1
-
-中文:
-定理 SupPrime.not_isMin
-  条件: (ha : SupPrime a)
-  结论: ¬IsMin a
-  证明: ha.1
+/-
+**SupPrime.not_isMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupPrime.not_isMin (ha : SupPrime a) : ¬IsMin a
+参数：ha : SupPrime a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem SupPrime.not_isMin (ha : SupPrime a) : ¬IsMin a :=
   ha.1
-
-/--
-theorem `IsMin.not_supIrred` / 定理 `IsMin.not_supIrred`
-
-English:
-theorem IsMin.not_supIrred
-  given: (ha : IsMin a)
-  statement: ¬SupIrred a
-  proof: fun h => h.1 ha
-
-中文:
-定理 IsMin.not_supIrred
-  条件: (ha : IsMin a)
-  结论: ¬SupIrred a
-  证明: fun h => h.1 ha
-
-Depends on / 依赖: IsTwoSided, K.IsTwoSided
+/-
+**IsMin.not_supIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMin.not_supIrred (ha : IsMin a) : ¬SupIrred a
+参数：ha : IsMin a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMin.not_supIrred (ha : IsMin a) : ¬SupIrred a := fun h => h.1 ha
-
-/--
-theorem `IsMin.not_supPrime` / 定理 `IsMin.not_supPrime`
-
-English:
-theorem IsMin.not_supPrime
-  given: (ha : IsMin a)
-  statement: ¬SupPrime a
-  proof: fun h => h.1 ha
-
-@[simp]
-
-中文:
-定理 IsMin.not_supPrime
-  条件: (ha : IsMin a)
-  结论: ¬SupPrime a
-  证明: fun h => h.1 ha
-
-@[simp]
+/-
+**IsMin.not_supPrime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMin.not_supPrime (ha : IsMin a) : ¬SupPrime a
+参数：ha : IsMin a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMin.not_supPrime (ha : IsMin a) : ¬SupPrime a := fun h => h.1 ha
 
 @[simp]
-/--
-theorem `not_supIrred` / 定理 `not_supIrred`
-
-English:
-theorem not_supIrred
-  statement: ¬SupIrred a ↔ IsMin a ∨ exists b c, b ⊔ c = a ∧ b < a ∧ c < a
-  proof: by
-  rw [SupIrred]; rw [not_and_or]
+/-
+**not_supIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_supIrred : ¬SupIrred a ↔ IsMin a ∨ exists b c, b ⊔ c = a ∧ b < a ∧ c <
+ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SupIrred.eq_1`：∀ {α : Type u_2} [inst : SemilatticeSup α] (a : α), SupIr
+red a = (¬IsMin a ∧ ∀ ⦃b c : α⦄, b ⊔ c = a → b = a ∨ c = a)
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∃ a b, p a b) ↔ ∃ a b, q a b
+)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ ∃ b c, b ⊔ c = a ∧ b < a ∧ c < a := by
+  rw [SupIrred, not_and_or]
   push Not
   rw [exists₂_congr]
   simp +contextual [@eq_comm _ _ a]
 
 @[simp]
-
-中文:
-定理 not_supIrred
-  结论: ¬SupIrred a ↔ IsMin a ∨ 存在 b c, b ⊔ c = a ∧ b < a ∧ c < a
-  证明: by
-  rw [SupIrred]; rw [not_and_or]
-  push Not
-  rw [exists₂_congr]
-  simp +contextual [@eq_comm _ _ a]
-
-@[simp]
-
-Depends on / 依赖: SupIrred, contextual, eq_comm, not_and_or
+/-
+**not_supPrime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_supPrime : ¬SupPrime a ↔ IsMin a ∨ exists b c, a <= b ⊔ c ∧ ¬a <= b ∧ 
+¬a <= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SupPrime.eq_1`：∀ {α : Type u_2} [inst : SemilatticeSup α] (a : α), SupPr
+ime a = (¬IsMin a ∧ ∀ ⦃b c : α⦄, a ≤ b ⊔ c → a ≤ b ∨ a ≤ c)
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem not_supIrred : ¬SupIrred a ↔ IsMin a ∨ exists b c, b ⊔ c = a ∧ b < a ∧ c < a := by
-  rw [SupIrred]; rw [not_and_or]
-  push Not
-  rw [exists₂_congr]
-  simp +contextual [@eq_comm _ _ a]
-
-@[simp]
-/--
-theorem `not_supPrime` / 定理 `not_supPrime`
-
-English:
-theorem not_supPrime
-  statement: ¬SupPrime a ↔ IsMin a ∨ exists b c, a <= b ⊔ c ∧ ¬a <= b ∧ ¬a <= c
-  proof: by
-  rw [SupPrime]; rw [not_and_or]; push Not; rfl
-
-中文:
-定理 not_supPrime
-  结论: ¬SupPrime a ↔ IsMin a ∨ 存在 b c, a <= b ⊔ c ∧ ¬a <= b ∧ ¬a <= c
-  证明: by
-  rw [SupPrime]; rw [not_and_or]; push Not; rfl
-
-Depends on / 依赖: SupPrime, not_and_or
+theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ ∃ b c, a ≤ b ⊔ c ∧ ¬a ≤ b ∧ ¬a ≤ c := by
+  rw [SupPrime, not_and_or]; push Not; rfl
+/-
+**SupPrime.supIrred** 是 Mathlib 中的一个定理，位于命名空间 `SupPrime`。
+形式化陈述：∀ {α : Type u_2} [inst : SemilatticeSup α] {a : α}, SupPrime a → SupIrred 
+a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
-theorem not_supPrime : ¬SupPrime a ↔ IsMin a ∨ exists b c, a <= b ⊔ c ∧ ¬a <= b ∧ ¬a <= c := by
-  rw [SupPrime]; rw [not_and_or]; push Not; rfl
-
-/--
-theorem `SupPrime.supIrred` / 定理 `SupPrime.supIrred`
-
-English:
-theorem SupPrime.supIrred
-  statement: SupPrime a -> SupIrred a
-  proof: And.imp_right fun h b c ha => by simpa [← ha] using h ha.ge
-
-中文:
-定理 SupPrime.supIrred
-  结论: SupPrime a -> SupIrred a
-  证明: And.imp_right fun h b c ha => by simpa [← ha] using h ha.ge
--/
-protected theorem SupPrime.supIrred : SupPrime a -> SupIrred a :=
+protected theorem SupPrime.supIrred : SupPrime a → SupIrred a :=
   And.imp_right fun h b c ha => by simpa [← ha] using h ha.ge
-
-/--
-theorem `SupPrime.le_sup` / 定理 `SupPrime.le_sup`
-
-English:
-theorem SupPrime.le_sup
-  given: (ha : SupPrime a)
-  statement: a <= b ⊔ c ↔ a <= b ∨ a <= c
-  proof: ⟨fun h => ha.2 h, fun h => h.elim le_sup_of_le_left le_sup_of_le_right⟩
-
-中文:
-定理 SupPrime.le_sup
-  条件: (ha : SupPrime a)
-  结论: a <= b ⊔ c ↔ a <= b ∨ a <= c
-  证明: ⟨fun h => ha.2 h, fun h => h.elim le_sup_of_le_left le_sup_of_le_right⟩
-
-Depends on / 依赖: h.elim, le_sup_of_le_left, le_sup_of_le_right
+/-
+**SupPrime.le_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupPrime.le_sup (ha : SupPrime a) : a <= b ⊔ c ↔ a <= b ∨ a <= c
+参数：ha : SupPrime a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_sup_of_le_left`：le_sup_of_le_left (h : c <= a) : c <= a ⊔ b
+· 使用定理 `le_sup_of_le_right`：le_sup_of_le_right (h : c <= b) : c <= a ⊔ b
 -/
-theorem SupPrime.le_sup (ha : SupPrime a) : a <= b ⊔ c ↔ a <= b ∨ a <= c :=
+theorem SupPrime.le_sup (ha : SupPrime a) : a ≤ b ⊔ c ↔ a ≤ b ∨ a ≤ c :=
   ⟨fun h => ha.2 h, fun h => h.elim le_sup_of_le_left le_sup_of_le_right⟩
 
-variable [OrderBot α] {s : Finset ι} {f : ι -> α}
+variable [OrderBot α] {s : Finset ι} {f : ι → α}
 
 @[simp]
-/--
-theorem `not_supIrred_bot` / 定理 `not_supIrred_bot`
-
-English:
-theorem not_supIrred_bot
-  statement: ¬SupIrred (⊥ : α)
-  proof: isMin_bot.not_supIrred
-
-@[simp]
-
-中文:
-定理 not_supIrred_bot
-  结论: ¬SupIrred (⊥ : α)
-  证明: isMin_bot.not_supIrred
-
-@[simp]
-
-Depends on / 依赖: isMin_bot, isMin_bot.not_supIrred, not_supIrred
+/-
+**not_supIrred_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_supIrred_bot : ¬SupIrred (⊥ : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMin.not_supIrred`：IsMin.not_supIrred (ha : IsMin a) : ¬SupIrred a
+· 使用定理 `isMin_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α], IsM
+in ⊥
 -/
 theorem not_supIrred_bot : ¬SupIrred (⊥ : α) :=
   isMin_bot.not_supIrred
 
 @[simp]
-/--
-theorem `not_supPrime_bot` / 定理 `not_supPrime_bot`
-
-English:
-theorem not_supPrime_bot
-  statement: ¬SupPrime (⊥ : α)
-  proof: isMin_bot.not_supPrime
-
-中文:
-定理 not_supPrime_bot
-  结论: ¬SupPrime (⊥ : α)
-  证明: isMin_bot.not_supPrime
-
-Depends on / 依赖: isMin_bot, isMin_bot.not_supPrime, not_supPrime
+/-
+**not_supPrime_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_supPrime_bot : ¬SupPrime (⊥ : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMin.not_supPrime`：IsMin.not_supPrime (ha : IsMin a) : ¬SupPrime a
+· 使用定理 `isMin_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α], IsM
+in ⊥
 -/
 theorem not_supPrime_bot : ¬SupPrime (⊥ : α) :=
   isMin_bot.not_supPrime
-
-/--
-theorem `SupIrred.ne_bot` / 定理 `SupIrred.ne_bot`
-
-English:
-theorem SupIrred.ne_bot
-  given: (ha : SupIrred a)
-  statement: a != ⊥
-  proof: by rintro rfl; exact not_supIrred_bot ha
-
-中文:
-定理 SupIrred.ne_bot
-  条件: (ha : SupIrred a)
-  结论: a != ⊥
-  证明: by rintro rfl; exact not_supIrred_bot ha
-
-Depends on / 依赖: not_supIrred_bot
+/-
+**SupIrred.ne_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupIrred.ne_bot (ha : SupIrred a) : a != ⊥
+参数：ha : SupIrred a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_supIrred_bot`：not_supIrred_bot : ¬SupIrred (⊥ : α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem SupIrred.ne_bot (ha : SupIrred a) : a != ⊥ := by rintro rfl; exact not_supIrred_bot ha
-
-/--
-theorem `SupPrime.ne_bot` / 定理 `SupPrime.ne_bot`
-
-English:
-theorem SupPrime.ne_bot
-  given: (ha : SupPrime a)
-  statement: a != ⊥
-  proof: by rintro rfl; exact not_supPrime_bot ha
-
-中文:
-定理 SupPrime.ne_bot
-  条件: (ha : SupPrime a)
-  结论: a != ⊥
-  证明: by rintro rfl; exact not_supPrime_bot ha
-
-Depends on / 依赖: not_supPrime_bot
+theorem SupIrred.ne_bot (ha : SupIrred a) : a ≠ ⊥ := by rintro rfl; exact not_supIrred_bot ha
+/-
+**SupPrime.ne_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupPrime.ne_bot (ha : SupPrime a) : a != ⊥
+参数：ha : SupPrime a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_supPrime_bot`：not_supPrime_bot : ¬SupPrime (⊥ : α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem SupPrime.ne_bot (ha : SupPrime a) : a != ⊥ := by rintro rfl; exact not_supPrime_bot ha
-
-/--
-theorem `SupIrred.finset_sup_eq` / 定理 `SupIrred.finset_sup_eq`
-
-English:
-theorem SupIrred.finset_sup_eq
-  given: (ha : SupIrred a) (h : s.sup f = a)
-  statement: exists i in s, f i = a
-  proof: by
+theorem SupPrime.ne_bot (ha : SupPrime a) : a ≠ ⊥ := by rintro rfl; exact not_supPrime_bot ha
+/-
+**SupIrred.finset_sup_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupIrred.finset_sup_eq (ha : SupIrred a) (h : s.sup f = a) : exists i in s
+, f i = a
+参数：ha : SupIrred a；h : s.sup f = a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `SupIrred.ne_bot`：SupIrred.ne_bot (ha : SupIrred a) : a != ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+-/
+theorem SupIrred.finset_sup_eq (ha : SupIrred a) (h : s.sup f = a) : ∃ i ∈ s, f i = a := by
   classical
   induction s using Finset.induction with
   | empty => simpa [ha.ne_bot] using h.symm
@@ -340,57 +296,37 @@ theorem SupIrred.finset_sup_eq
     simp only [exists_mem_insert] at ih ⊢
     rw [sup_insert] at h
     exact (ha.2 h).imp_right ih
-
-中文:
-定理 SupIrred.finset_sup_eq
-  条件: (ha : SupIrred a) (h : s.上确界 f = a)
-  结论: 存在 i in s, f i = a
-  证明: by
-  classical
-  induction s using Finset.induction with
-  | empty => simpa [ha.ne_bot] using h.symm
-  | insert i s _ ih =>
-    simp only [exists_mem_insert] at ih ⊢
-    rw [sup_insert] at h
-    exact (ha.2 h).imp_right ih
-
-Depends on / 依赖: Finset, Finset.induction, classical, exists_mem_insert, h.symm, ha.ne_bot, imp_right, insert, ne_bot, sup_insert
+/-
+**SupPrime.le_finset_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SupPrime.le_finset_sup (ha : SupPrime a) : a <= s.sup f ↔ exists i in s, a
+ <= f i
+参数：ha : SupPrime a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `SupPrime.ne_bot`：SupPrime.ne_bot (ha : SupPrime a) : a != ⊥
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `SupPrime.le_sup`：SupPrime.le_sup (ha : SupPrime a) : a <= b ⊔ c ↔ a <= b
+ ∨ a <= c
 -/
-theorem SupIrred.finset_sup_eq (ha : SupIrred a) (h : s.sup f = a) : exists i in s, f i = a := by
-  classical
-  induction s using Finset.induction with
-  | empty => simpa [ha.ne_bot] using h.symm
-  | insert i s _ ih =>
-    simp only [exists_mem_insert] at ih ⊢
-    rw [sup_insert] at h
-    exact (ha.2 h).imp_right ih
-
-/--
-theorem `SupPrime.le_finset_sup` / 定理 `SupPrime.le_finset_sup`
-
-English:
-theorem SupPrime.le_finset_sup
-  given: (ha : SupPrime a)
-  statement: a <= s.sup f ↔ exists i in s, a <= f i
-  proof: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp [ha.ne_bot]
-  | insert i s _ ih => simp only [exists_mem_insert, sup_insert, ha.le_sup, ih]
-
-中文:
-定理 SupPrime.le_finset_sup
-  条件: (ha : SupPrime a)
-  结论: a <= s.上确界 f ↔ 存在 i in s, a <= f i
-  证明: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp [ha.ne_bot]
-  | insert i s _ ih => simp only [exists_mem_insert, sup_insert, ha.le_sup, ih]
-
-Depends on / 依赖: Finset, Finset.induction, classical, exists_mem_insert, ha.le_sup, ha.ne_bot, insert, le_sup, ne_bot, sup_insert
--/
-theorem SupPrime.le_finset_sup (ha : SupPrime a) : a <= s.sup f ↔ exists i in s, a <= f i := by
+theorem SupPrime.le_finset_sup (ha : SupPrime a) : a ≤ s.sup f ↔ ∃ i ∈ s, a ≤ f i := by
   classical
   induction s using Finset.induction with
   | empty => simp [ha.ne_bot]
@@ -398,47 +334,54 @@ theorem SupPrime.le_finset_sup (ha : SupPrime a) : a <= s.sup f ↔ exists i in 
 
 variable [WellFoundedLT α]
 
-/--
-theorem `exists_supIrred_decomposition` / 定理 `exists_supIrred_decomposition`
+/-- In a well-founded lattice, any element is the supremum of finitely many sup-irreducible
+elements. This is the order-theoretic analogue of prime factorisation. -/
+/-
+**exists_supIrred_decomposition** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_supIrred_decomposition (a : α) : exists s : Finset α, s.sup id = a 
+∧ forall ⦃b⦄, b in s -> SupIrred b
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `not_supIrred`：not_supIrred : ¬SupIrred a ↔ IsMin a ∨ exists b c, b ⊔ c =
+ a ∧ b < a ∧ c < a
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `IsMin.eq_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot 
+α] {a : α}, IsMin a → a = ⊥
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.sup_union`：sup_union [DecidableEq β] : (s₁ union s₂).sup f = s₁.s
+up f ⊔ s₂.sup f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.forall_mem_union`：forall_mem_union {p : α -> Prop} : (forall a in
+ s union t, p a) ↔ (forall a in s, p a) ∧ forall a in t, p a
 
-English:
-theorem exists_supIrred_decomposition
-  given: (a : α)
-  proof: by
-  classical
-  apply WellFoundedLT.induction a _
-  clear a
-  rintro a ih
-  by_cases ha : SupIrred a
-  · exact ⟨{a}, by simp [ha]⟩
-  rw [not_supIrred] at ha
-  obtain ha | ⟨b, c, rfl, hb, hc⟩ := ha
-  · exact ⟨∅, by simp [ha.eq_bot]⟩
-  obtain ⟨s, rfl, hs⟩ := ih _ hb
-  obtain ⟨t, rfl, ht⟩ := ih _ hc
-  exact ⟨s union t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
-
-中文:
-定理 存在_supIrred_decomposition
-  条件: (a : α)
-  证明: by
-  classical
-  apply WellFoundedLT.induction a _
-  clear a
-  rintro a ih
-  by_cases ha : SupIrred a
-  · exact ⟨{a}, by simp [ha]⟩
-  rw [not_supIrred] at ha
-  obtain ha | ⟨b, c, rfl, hb, hc⟩ := ha
-  · exact ⟨∅, by simp [ha.eq_bot]⟩
-  obtain ⟨s, rfl, hs⟩ := ih _ hb
-  obtain ⟨t, rfl, ht⟩ := ih _ hc
-  exact ⟨s union t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
-
-Depends on / 依赖: SupIrred, WellFoundedLT, WellFoundedLT.induction, classical, eq_bot, forall_mem_union, ha.eq_bot, not_supIrred, sup_union
+--- 原说明 ---
+In a well-founded lattice, any element is the supremum of finitely many sup-irre
+ducible
+elements. This is the order-theoretic analogue of prime factorisation.
 -/
 theorem exists_supIrred_decomposition (a : α) :
-    exists s : Finset α, s.sup id = a ∧ forall ⦃b⦄, b in s -> SupIrred b := by
+    ∃ s : Finset α, s.sup id = a ∧ ∀ ⦃b⦄, b ∈ s → SupIrred b := by
   classical
   apply WellFoundedLT.induction a _
   clear a
@@ -450,7 +393,7 @@ theorem exists_supIrred_decomposition (a : α) :
   · exact ⟨∅, by simp [ha.eq_bot]⟩
   obtain ⟨s, rfl, hs⟩ := ih _ hb
   obtain ⟨t, rfl, ht⟩ := ih _ hc
-  exact ⟨s union t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
+  exact ⟨s ∪ t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
 
 end SemilatticeSup
 
@@ -458,297 +401,209 @@ section SemilatticeInf
 
 variable [SemilatticeInf α] {a b c : α}
 
-/--
-Definition of `InfIrred` / `InfIrred` 的定义
+/-- An inf-irreducible element is a non-top element which isn't the infimum of anything bigger. -/
+/-
+**InfIrred** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：InfIrred (a : α) : Prop
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InfIrred
-  signature: (a : α)
-  body: ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c = a -> b = a ∨ c = a
-
-中文:
-定义 InfIrred
-  签名: (a : α)
-  定义体: ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c = a -> b = a ∨ c = a
+--- 原说明 ---
+An inf-irreducible element is a non-top element which isn't the infimum of anyth
+ing bigger.
 -/
 def InfIrred (a : α) : Prop :=
-  ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c = a -> b = a ∨ c = a
+  ¬IsMax a ∧ ∀ ⦃b c⦄, b ⊓ c = a → b = a ∨ c = a
 
-/--
-Definition of `InfPrime` / `InfPrime` 的定义
+/-- An inf-prime element is a non-top element which isn't bigger than the infimum of anything
+bigger. -/
+/-
+**InfPrime** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：InfPrime (a : α) : Prop
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InfPrime
-  signature: (a : α)
-  body: ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c <= a -> b <= a ∨ c <= a
-
-@[simp]
-
-中文:
-定义 InfPrime
-  签名: (a : α)
-  定义体: ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c <= a -> b <= a ∨ c <= a
-
-@[simp]
+--- 原说明 ---
+An inf-prime element is a non-top element which isn't bigger than the infimum of
+ anything
+bigger.
 -/
 def InfPrime (a : α) : Prop :=
-  ¬IsMax a ∧ forall ⦃b c⦄, b ⊓ c <= a -> b <= a ∨ c <= a
+  ¬IsMax a ∧ ∀ ⦃b c⦄, b ⊓ c ≤ a → b ≤ a ∨ c ≤ a
 
 @[simp]
-/--
-theorem `IsMax.not_infIrred` / 定理 `IsMax.not_infIrred`
-
-English:
-theorem IsMax.not_infIrred
-  given: (ha : IsMax a)
-  statement: ¬InfIrred a
-  proof: fun h => h.1 ha
-
-@[simp]
-
-中文:
-定理 IsMax.not_infIrred
-  条件: (ha : IsMax a)
-  结论: ¬InfIrred a
-  证明: fun h => h.1 ha
-
-@[simp]
+/-
+**IsMax.not_infIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMax.not_infIrred (ha : IsMax a) : ¬InfIrred a
+参数：ha : IsMax a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMax.not_infIrred (ha : IsMax a) : ¬InfIrred a := fun h => h.1 ha
 
 @[simp]
-/--
-theorem `IsMax.not_infPrime` / 定理 `IsMax.not_infPrime`
-
-English:
-theorem IsMax.not_infPrime
-  given: (ha : IsMax a)
-  statement: ¬InfPrime a
-  proof: fun h => h.1 ha
-
-@[simp]
-
-中文:
-定理 IsMax.not_infPrime
-  条件: (ha : IsMax a)
-  结论: ¬InfPrime a
-  证明: fun h => h.1 ha
-
-@[simp]
+/-
+**IsMax.not_infPrime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMax.not_infPrime (ha : IsMax a) : ¬InfPrime a
+参数：ha : IsMax a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMax.not_infPrime (ha : IsMax a) : ¬InfPrime a := fun h => h.1 ha
 
 @[simp]
-/--
-theorem `not_infIrred` / 定理 `not_infIrred`
-
-English:
-theorem not_infIrred
-  statement: ¬InfIrred a ↔ IsMax a ∨ exists b c, b ⊓ c = a ∧ a < b ∧ a < c
-  proof: @not_supIrred αᵒᵈ _ _
-
-@[simp]
-
-中文:
-定理 not_infIrred
-  结论: ¬InfIrred a ↔ IsMax a ∨ 存在 b c, b ⊓ c = a ∧ a < b ∧ a < c
-  证明: @not_supIrred αᵒᵈ _ _
-
-@[simp]
-
-Depends on / 依赖: not_supIrred
+/-
+**not_infIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_infIrred : ¬InfIrred a ↔ IsMax a ∨ exists b c, b ⊓ c = a ∧ a < b ∧ a <
+ c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_supIrred`：not_supIrred : ¬SupIrred a ↔ IsMin a ∨ exists b c, b ⊔ c =
+ a ∧ b < a ∧ c < a
 -/
-theorem not_infIrred : ¬InfIrred a ↔ IsMax a ∨ exists b c, b ⊓ c = a ∧ a < b ∧ a < c :=
+theorem not_infIrred : ¬InfIrred a ↔ IsMax a ∨ ∃ b c, b ⊓ c = a ∧ a < b ∧ a < c :=
   @not_supIrred αᵒᵈ _ _
 
 @[simp]
-/--
-theorem `not_infPrime` / 定理 `not_infPrime`
-
-English:
-theorem not_infPrime
-  statement: ¬InfPrime a ↔ IsMax a ∨ exists b c, b ⊓ c <= a ∧ ¬b <= a ∧ ¬c <= a
-  proof: @not_supPrime αᵒᵈ _ _
-
-中文:
-定理 not_infPrime
-  结论: ¬InfPrime a ↔ IsMax a ∨ 存在 b c, b ⊓ c <= a ∧ ¬b <= a ∧ ¬c <= a
-  证明: @not_supPrime αᵒᵈ _ _
-
-Depends on / 依赖: not_supPrime
+/-
+**not_infPrime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_infPrime : ¬InfPrime a ↔ IsMax a ∨ exists b c, b ⊓ c <= a ∧ ¬b <= a ∧ 
+¬c <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_supPrime`：not_supPrime : ¬SupPrime a ↔ IsMin a ∨ exists b c, a <= b 
+⊔ c ∧ ¬a <= b ∧ ¬a <= c
 -/
-theorem not_infPrime : ¬InfPrime a ↔ IsMax a ∨ exists b c, b ⊓ c <= a ∧ ¬b <= a ∧ ¬c <= a :=
+theorem not_infPrime : ¬InfPrime a ↔ IsMax a ∨ ∃ b c, b ⊓ c ≤ a ∧ ¬b ≤ a ∧ ¬c ≤ a :=
   @not_supPrime αᵒᵈ _ _
-
-/--
-theorem `InfPrime.infIrred` / 定理 `InfPrime.infIrred`
-
-English:
-theorem InfPrime.infIrred
-  statement: InfPrime a -> InfIrred a
-  proof: And.imp_right fun h b c ha => by simpa [← ha] using h ha.le
-
-中文:
-定理 InfPrime.infIrred
-  结论: InfPrime a -> InfIrred a
-  证明: And.imp_right fun h b c ha => by simpa [← ha] using h ha.le
+/-
+**InfPrime.infIrred** 是 Mathlib 中的一个定理，位于命名空间 `InfPrime`。
+形式化陈述：∀ {α : Type u_2} [inst : SemilatticeInf α] {a : α}, InfPrime a → InfIrred 
+a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-protected theorem InfPrime.infIrred : InfPrime a -> InfIrred a :=
+protected theorem InfPrime.infIrred : InfPrime a → InfIrred a :=
   And.imp_right fun h b c ha => by simpa [← ha] using h ha.le
-
-/--
-theorem `InfPrime.inf_le` / 定理 `InfPrime.inf_le`
-
-English:
-theorem InfPrime.inf_le
-  given: (ha : InfPrime a)
-  statement: b ⊓ c <= a ↔ b <= a ∨ c <= a
-  proof: ⟨fun h => ha.2 h, fun h => h.elim inf_le_of_left_le inf_le_of_right_le⟩
-
-中文:
-定理 InfPrime.inf_le
-  条件: (ha : InfPrime a)
-  结论: b ⊓ c <= a ↔ b <= a ∨ c <= a
-  证明: ⟨fun h => ha.2 h, fun h => h.elim inf_le_of_left_le inf_le_of_right_le⟩
-
-Depends on / 依赖: h.elim, inf_le_of_left_le, inf_le_of_right_le
+/-
+**InfPrime.inf_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：InfPrime.inf_le (ha : InfPrime a) : b ⊓ c <= a ↔ b <= a ∨ c <= a
+参数：ha : InfPrime a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `inf_le_of_left_le`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : α},
+ a ≤ c → a ⊓ b ≤ c
+· 使用定理 `inf_le_of_right_le`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : α}
+, b ≤ c → a ⊓ b ≤ c
 -/
-theorem InfPrime.inf_le (ha : InfPrime a) : b ⊓ c <= a ↔ b <= a ∨ c <= a :=
+theorem InfPrime.inf_le (ha : InfPrime a) : b ⊓ c ≤ a ↔ b ≤ a ∨ c ≤ a :=
   ⟨fun h => ha.2 h, fun h => h.elim inf_le_of_left_le inf_le_of_right_le⟩
 
-variable [OrderTop α] {s : Finset ι} {f : ι -> α}
-
-/--
-theorem `not_infIrred_top` / 定理 `not_infIrred_top`
-
-English:
-theorem not_infIrred_top
-  statement: ¬InfIrred (⊤ : α)
-  proof: isMax_top.not_infIrred
-
-中文:
-定理 not_infIrred_top
-  结论: ¬InfIrred (⊤ : α)
-  证明: isMax_top.not_infIrred
-
-Depends on / 依赖: isMax_top, isMax_top.not_infIrred, not_infIrred
+variable [OrderTop α] {s : Finset ι} {f : ι → α}
+/-
+**not_infIrred_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_infIrred_top : ¬InfIrred (⊤ : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMax.not_infIrred`：IsMax.not_infIrred (ha : IsMax a) : ¬InfIrred a
+· 使用定理 `isMax_top`：isMax_top : IsMax (⊤ : α)
 -/
 theorem not_infIrred_top : ¬InfIrred (⊤ : α) :=
   isMax_top.not_infIrred
-
-/--
-theorem `not_infPrime_top` / 定理 `not_infPrime_top`
-
-English:
-theorem not_infPrime_top
-  statement: ¬InfPrime (⊤ : α)
-  proof: isMax_top.not_infPrime
-
-中文:
-定理 not_infPrime_top
-  结论: ¬InfPrime (⊤ : α)
-  证明: isMax_top.not_infPrime
-
-Depends on / 依赖: isMax_top, isMax_top.not_infPrime, not_infPrime
+/-
+**not_infPrime_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_infPrime_top : ¬InfPrime (⊤ : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMax.not_infPrime`：IsMax.not_infPrime (ha : IsMax a) : ¬InfPrime a
+· 使用定理 `isMax_top`：isMax_top : IsMax (⊤ : α)
 -/
 theorem not_infPrime_top : ¬InfPrime (⊤ : α) :=
   isMax_top.not_infPrime
-
-/--
-theorem `InfIrred.ne_top` / 定理 `InfIrred.ne_top`
-
-English:
-theorem InfIrred.ne_top
-  given: (ha : InfIrred a)
-  statement: a != ⊤
-  proof: by rintro rfl; exact not_infIrred_top ha
-
-中文:
-定理 InfIrred.ne_top
-  条件: (ha : InfIrred a)
-  结论: a != ⊤
-  证明: by rintro rfl; exact not_infIrred_top ha
-
-Depends on / 依赖: not_infIrred_top
+/-
+**InfIrred.ne_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：InfIrred.ne_top (ha : InfIrred a) : a != ⊤
+参数：ha : InfIrred a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_infIrred_top`：not_infIrred_top : ¬InfIrred (⊤ : α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem InfIrred.ne_top (ha : InfIrred a) : a != ⊤ := by rintro rfl; exact not_infIrred_top ha
-
-/--
-theorem `InfPrime.ne_top` / 定理 `InfPrime.ne_top`
-
-English:
-theorem InfPrime.ne_top
-  given: (ha : InfPrime a)
-  statement: a != ⊤
-  proof: by rintro rfl; exact not_infPrime_top ha
-
-中文:
-定理 InfPrime.ne_top
-  条件: (ha : InfPrime a)
-  结论: a != ⊤
-  证明: by rintro rfl; exact not_infPrime_top ha
-
-Depends on / 依赖: not_infPrime_top
+theorem InfIrred.ne_top (ha : InfIrred a) : a ≠ ⊤ := by rintro rfl; exact not_infIrred_top ha
+/-
+**InfPrime.ne_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：InfPrime.ne_top (ha : InfPrime a) : a != ⊤
+参数：ha : InfPrime a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_infPrime_top`：not_infPrime_top : ¬InfPrime (⊤ : α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem InfPrime.ne_top (ha : InfPrime a) : a != ⊤ := by rintro rfl; exact not_infPrime_top ha
-
-/--
-theorem `InfIrred.finset_inf_eq` / 定理 `InfIrred.finset_inf_eq`
-
-English:
-theorem InfIrred.finset_inf_eq
-  statement: InfIrred a -> s.inf f = a -> exists i in s, f i = a
-  proof: @SupIrred.finset_sup_eq _ αᵒᵈ _ _ _ _ _
-
-中文:
-定理 InfIrred.finset_inf_eq
-  结论: InfIrred a -> s.下确界 f = a -> 存在 i in s, f i = a
-  证明: @SupIrred.finset_sup_eq _ αᵒᵈ _ _ _ _ _
-
-Depends on / 依赖: SupIrred, SupIrred.finset_sup_eq, finset_sup_eq
+theorem InfPrime.ne_top (ha : InfPrime a) : a ≠ ⊤ := by rintro rfl; exact not_infPrime_top ha
+/-
+**InfIrred.finset_inf_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：InfIrred.finset_inf_eq : InfIrred a -> s.inf f = a -> exists i in s, f i =
+ a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupIrred.finset_sup_eq`：SupIrred.finset_sup_eq (ha : SupIrred a) (h : s.
+sup f = a) : exists i in s, f i = a
 -/
-theorem InfIrred.finset_inf_eq : InfIrred a -> s.inf f = a -> exists i in s, f i = a :=
+theorem InfIrred.finset_inf_eq : InfIrred a → s.inf f = a → ∃ i ∈ s, f i = a :=
   @SupIrred.finset_sup_eq _ αᵒᵈ _ _ _ _ _
-
-/--
-theorem `InfPrime.finset_inf_le` / 定理 `InfPrime.finset_inf_le`
-
-English:
-theorem InfPrime.finset_inf_le
-  given: (ha : InfPrime a)
-  statement: s.inf f <= a ↔ exists i in s, f i <= a
-  proof: @SupPrime.le_finset_sup _ αᵒᵈ _ _ _ _ _ ha
-
-中文:
-定理 InfPrime.finset_inf_le
-  条件: (ha : InfPrime a)
-  结论: s.下确界 f <= a ↔ 存在 i in s, f i <= a
-  证明: @SupPrime.le_finset_sup _ αᵒᵈ _ _ _ _ _ ha
-
-Depends on / 依赖: SupPrime, SupPrime.le_finset_sup, le_finset_sup
+/-
+**InfPrime.finset_inf_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：InfPrime.finset_inf_le (ha : InfPrime a) : s.inf f <= a ↔ exists i in s, f
+ i <= a
+参数：ha : InfPrime a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupPrime.le_finset_sup`：SupPrime.le_finset_sup (ha : SupPrime a) : a <= 
+s.sup f ↔ exists i in s, a <= f i
 -/
-theorem InfPrime.finset_inf_le (ha : InfPrime a) : s.inf f <= a ↔ exists i in s, f i <= a :=
+theorem InfPrime.finset_inf_le (ha : InfPrime a) : s.inf f ≤ a ↔ ∃ i ∈ s, f i ≤ a :=
   @SupPrime.le_finset_sup _ αᵒᵈ _ _ _ _ _ ha
 
 variable [WellFoundedGT α]
 
-/--
-theorem `exists_infIrred_decomposition` / 定理 `exists_infIrred_decomposition`
+/-- In a cowell-founded lattice, any element is the infimum of finitely many inf-irreducible
+elements. This is the order-theoretic analogue of prime factorisation. -/
+/-
+**exists_infIrred_decomposition** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_infIrred_decomposition (a : α) : exists s : Finset α, s.inf id = a 
+∧ forall ⦃b⦄, b in s -> InfIrred b
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_supIrred_decomposition`：exists_supIrred_decomposition (a : α) : e
+xists s : Finset α, s.sup id = a ∧ forall ⦃b⦄, b in s -> SupIrred b
+· 使用定理 `instWellFoundedLTOrderDualOfWellFoundedGT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedGT α], WellFoundedLT αᵒᵈ
 
-English:
-theorem exists_infIrred_decomposition
-  given: (a : α)
-  proof: exists_supIrred_decomposition (α := αᵒᵈ) _
-
-中文:
-定理 存在_infIrred_decomposition
-  条件: (a : α)
-  证明: exists_supIrred_decomposition (α := αᵒᵈ) _
-
-Depends on / 依赖: exists_supIrred_decomposition
+--- 原说明 ---
+In a cowell-founded lattice, any element is the infimum of finitely many inf-irr
+educible
+elements. This is the order-theoretic analogue of prime factorisation.
 -/
 theorem exists_infIrred_decomposition (a : α) :
-    exists s : Finset α, s.inf id = a ∧ forall ⦃b⦄, b in s -> InfIrred b :=
+    ∃ s : Finset α, s.inf id = a ∧ ∀ ⦃b⦄, b ∈ s → InfIrred b :=
   exists_supIrred_decomposition (α := αᵒᵈ) _
 
 end SemilatticeInf
@@ -758,113 +613,45 @@ section SemilatticeSup
 variable [SemilatticeSup α]
 
 @[simp]
-/--
-theorem `infIrred_toDual` / 定理 `infIrred_toDual`
-
-English:
-theorem infIrred_toDual
-  given: {a : α}
-  statement: InfIrred (toDual a) ↔ SupIrred a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 infIrred_toDual
-  条件: {a : α}
-  结论: InfIrred (toDual a) ↔ SupIrred a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**infIrred_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infIrred_toDual {a : α} : InfIrred (toDual a) ↔ SupIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem infIrred_toDual {a : α} : InfIrred (toDual a) ↔ SupIrred a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `infPrime_toDual` / 定理 `infPrime_toDual`
-
-English:
-theorem infPrime_toDual
-  given: {a : α}
-  statement: InfPrime (toDual a) ↔ SupPrime a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 infPrime_toDual
-  条件: {a : α}
-  结论: InfPrime (toDual a) ↔ SupPrime a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**infPrime_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infPrime_toDual {a : α} : InfPrime (toDual a) ↔ SupPrime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem infPrime_toDual {a : α} : InfPrime (toDual a) ↔ SupPrime a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `supIrred_ofDual` / 定理 `supIrred_ofDual`
-
-English:
-theorem supIrred_ofDual
-  given: {a : αᵒᵈ}
-  statement: SupIrred (ofDual a) ↔ InfIrred a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 supIrred_ofDual
-  条件: {a : αᵒᵈ}
-  结论: SupIrred (ofDual a) ↔ InfIrred a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**supIrred_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supIrred_ofDual {a : αᵒᵈ} : SupIrred (ofDual a) ↔ InfIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem supIrred_ofDual {a : αᵒᵈ} : SupIrred (ofDual a) ↔ InfIrred a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `supPrime_ofDual` / 定理 `supPrime_ofDual`
-
-English:
-theorem supPrime_ofDual
-  given: {a : αᵒᵈ}
-  statement: SupPrime (ofDual a) ↔ InfPrime a
-  proof: Iff.rfl
-
-alias ⟨_, SupIrred.dual⟩ := infIrred_toDual
-
-alias ⟨_, SupPrime.dual⟩ := infPrime_toDual
-
-alias ⟨_, InfIrred.ofDual⟩ := supIrred_ofDual
-
-alias ⟨_, InfPrime.ofDual⟩ := supPrime_ofDual
-
-中文:
-定理 supPrime_ofDual
-  条件: {a : αᵒᵈ}
-  结论: SupPrime (ofDual a) ↔ InfPrime a
-  证明: Iff.rfl
-
-alias ⟨_, SupIrred.dual⟩ := infIrred_toDual
-
-alias ⟨_, SupPrime.dual⟩ := infPrime_toDual
-
-alias ⟨_, InfIrred.ofDual⟩ := supIrred_ofDual
-
-alias ⟨_, InfPrime.ofDual⟩ := supPrime_ofDual
-
-Depends on / 依赖: Iff.rfl
+/-
+**supPrime_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supPrime_ofDual {a : αᵒᵈ} : SupPrime (ofDual a) ↔ InfPrime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem supPrime_ofDual {a : αᵒᵈ} : SupPrime (ofDual a) ↔ InfPrime a :=
   Iff.rfl
@@ -884,113 +671,45 @@ section SemilatticeInf
 variable [SemilatticeInf α]
 
 @[simp]
-/--
-theorem `supIrred_toDual` / 定理 `supIrred_toDual`
-
-English:
-theorem supIrred_toDual
-  given: {a : α}
-  statement: SupIrred (toDual a) ↔ InfIrred a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 supIrred_toDual
-  条件: {a : α}
-  结论: SupIrred (toDual a) ↔ InfIrred a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**supIrred_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supIrred_toDual {a : α} : SupIrred (toDual a) ↔ InfIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem supIrred_toDual {a : α} : SupIrred (toDual a) ↔ InfIrred a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `supPrime_toDual` / 定理 `supPrime_toDual`
-
-English:
-theorem supPrime_toDual
-  given: {a : α}
-  statement: SupPrime (toDual a) ↔ InfPrime a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 supPrime_toDual
-  条件: {a : α}
-  结论: SupPrime (toDual a) ↔ InfPrime a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**supPrime_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supPrime_toDual {a : α} : SupPrime (toDual a) ↔ InfPrime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem supPrime_toDual {a : α} : SupPrime (toDual a) ↔ InfPrime a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `infIrred_ofDual` / 定理 `infIrred_ofDual`
-
-English:
-theorem infIrred_ofDual
-  given: {a : αᵒᵈ}
-  statement: InfIrred (ofDual a) ↔ SupIrred a
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 infIrred_ofDual
-  条件: {a : αᵒᵈ}
-  结论: InfIrred (ofDual a) ↔ SupIrred a
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**infIrred_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infIrred_ofDual {a : αᵒᵈ} : InfIrred (ofDual a) ↔ SupIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem infIrred_ofDual {a : αᵒᵈ} : InfIrred (ofDual a) ↔ SupIrred a :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `infPrime_ofDual` / 定理 `infPrime_ofDual`
-
-English:
-theorem infPrime_ofDual
-  given: {a : αᵒᵈ}
-  statement: InfPrime (ofDual a) ↔ SupPrime a
-  proof: Iff.rfl
-
-alias ⟨_, InfIrred.dual⟩ := supIrred_toDual
-
-alias ⟨_, InfPrime.dual⟩ := supPrime_toDual
-
-alias ⟨_, SupIrred.ofDual⟩ := infIrred_ofDual
-
-alias ⟨_, SupPrime.ofDual⟩ := infPrime_ofDual
-
-中文:
-定理 infPrime_ofDual
-  条件: {a : αᵒᵈ}
-  结论: InfPrime (ofDual a) ↔ SupPrime a
-  证明: Iff.rfl
-
-alias ⟨_, InfIrred.dual⟩ := supIrred_toDual
-
-alias ⟨_, InfPrime.dual⟩ := supPrime_toDual
-
-alias ⟨_, SupIrred.ofDual⟩ := infIrred_ofDual
-
-alias ⟨_, SupPrime.ofDual⟩ := infPrime_ofDual
-
-Depends on / 依赖: Iff.rfl
+/-
+**infPrime_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infPrime_ofDual {a : αᵒᵈ} : InfPrime (ofDual a) ↔ SupPrime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem infPrime_ofDual {a : αᵒᵈ} : InfPrime (ofDual a) ↔ SupPrime a :=
   Iff.rfl
@@ -1010,54 +729,46 @@ section DistribLattice
 variable [DistribLattice α] {a : α}
 
 @[simp]
-/--
-theorem `supPrime_iff_supIrred` / 定理 `supPrime_iff_supIrred`
-
-English:
-theorem supPrime_iff_supIrred
-  statement: SupPrime a ↔ SupIrred a
-  proof: ⟨SupPrime.supIrred,
-    And.imp_right fun h b c => by simp_rw [← inf_eq_left, inf_sup_left]; exact @h _ _⟩
-
-@[simp]
-
-中文:
-定理 supPrime_iff_supIrred
-  结论: SupPrime a ↔ SupIrred a
-  证明: ⟨SupPrime.supIrred,
-    And.imp_right fun h b c => by simp_rw [← inf_eq_left, inf_sup_left]; exact @h _ _⟩
-
-@[simp]
-
-Depends on / 依赖: And.imp_right, SupPrime, SupPrime.supIrred, imp_right, inf_eq_left, inf_sup_left, simp_rw, supIrred
+/-
+**supPrime_iff_supIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supPrime_iff_supIrred : SupPrime a ↔ SupIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupPrime.supIrred`：∀ {α : Type u_2} [inst : SemilatticeSup α] {a : α}, S
+upPrime a → SupIrred a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inf_sup_left`：inf_sup_left (a b c : α) : a ⊓ (b ⊔ c) = a ⊓ b ⊔ a ⊓ c
 -/
 theorem supPrime_iff_supIrred : SupPrime a ↔ SupIrred a :=
   ⟨SupPrime.supIrred,
     And.imp_right fun h b c => by simp_rw [← inf_eq_left, inf_sup_left]; exact @h _ _⟩
 
 @[simp]
-/--
-theorem `infPrime_iff_infIrred` / 定理 `infPrime_iff_infIrred`
-
-English:
-theorem infPrime_iff_infIrred
-  statement: InfPrime a ↔ InfIrred a
-  proof: ⟨InfPrime.infIrred,
-    And.imp_right fun h b c => by simp_rw [← sup_eq_left, sup_inf_left]; exact @h _ _⟩
-
-protected alias ⟨_, SupIrred.supPrime⟩ := supPrime_iff_supIrred
-protected alias ⟨_, InfIrred.infPrime⟩ := infPrime_iff_infIrred
-
-中文:
-定理 infPrime_iff_infIrred
-  结论: InfPrime a ↔ InfIrred a
-  证明: ⟨InfPrime.infIrred,
-    And.imp_right fun h b c => by simp_rw [← sup_eq_left, sup_inf_left]; exact @h _ _⟩
-
-protected alias ⟨_, SupIrred.supPrime⟩ := supPrime_iff_supIrred
-protected alias ⟨_, InfIrred.infPrime⟩ := infPrime_iff_infIrred
-
-Depends on / 依赖: And.imp_right, InfPrime, InfPrime.infIrred, imp_right, infIrred, simp_rw, sup_eq_left, sup_inf_left
+/-
+**infPrime_iff_infIrred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infPrime_iff_infIrred : InfPrime a ↔ InfIrred a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfPrime.infIrred`：∀ {α : Type u_2} [inst : SemilatticeInf α] {a : α}, I
+nfPrime a → InfIrred a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_inf_left`：sup_inf_left (a b c : α) : a ⊔ b ⊓ c = (a ⊔ b) ⊓ (a ⊔ c)
 -/
 theorem infPrime_iff_infIrred : InfPrime a ↔ InfIrred a :=
   ⟨InfPrime.infIrred,
@@ -1072,86 +783,68 @@ section LinearOrder
 
 variable [LinearOrder α] {a : α}
 
-/--
-theorem `supPrime_iff_not_isMin` / 定理 `supPrime_iff_not_isMin`
-
-English:
-theorem supPrime_iff_not_isMin
-  statement: SupPrime a ↔ ¬IsMin a
-  proof: and_iff_left by simp
-
-中文:
-定理 supPrime_iff_not_isMin
-  结论: SupPrime a ↔ ¬IsMin a
-  证明: and_iff_left by simp
-
-Depends on / 依赖: and_iff_left
+/-
+**supPrime_iff_not_isMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supPrime_iff_not_isMin : SupPrime a ↔ ¬IsMin a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem supPrime_iff_not_isMin : SupPrime a ↔ ¬IsMin a :=
-and_iff_left by simp
-
-/--
-theorem `infPrime_iff_not_isMax` / 定理 `infPrime_iff_not_isMax`
-
-English:
-theorem infPrime_iff_not_isMax
-  statement: InfPrime a ↔ ¬IsMax a
-  proof: and_iff_left by simp
-
-@[simp]
-
-中文:
-定理 infPrime_iff_not_isMax
-  结论: InfPrime a ↔ ¬IsMax a
-  证明: and_iff_left by simp
-
-@[simp]
-
-Depends on / 依赖: and_iff_left
+  and_iff_left <| by simp
+/-
+**infPrime_iff_not_isMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infPrime_iff_not_isMax : InfPrime a ↔ ¬IsMax a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem infPrime_iff_not_isMax : InfPrime a ↔ ¬IsMax a :=
-and_iff_left by simp
+  and_iff_left <| by simp
 
 @[simp]
-/--
-theorem `supIrred_iff_not_isMin` / 定理 `supIrred_iff_not_isMin`
-
-English:
-theorem supIrred_iff_not_isMin
-  statement: SupIrred a ↔ ¬IsMin a
-  proof: and_iff_left fun _ _ => by simpa only [max_eq_iff] using Or.imp And.left And.left
-
-@[simp]
-
-中文:
-定理 supIrred_iff_not_isMin
-  结论: SupIrred a ↔ ¬IsMin a
-  证明: and_iff_left fun _ _ => by simpa only [max_eq_iff] using Or.imp And.left And.left
-
-@[simp]
-
-Depends on / 依赖: And.left, Or.imp, and_iff_left, max_eq_iff
+/-
+**supIrred_iff_not_isMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：supIrred_iff_not_isMin : SupIrred a ↔ ¬IsMin a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem supIrred_iff_not_isMin : SupIrred a ↔ ¬IsMin a :=
   and_iff_left fun _ _ => by simpa only [max_eq_iff] using Or.imp And.left And.left
 
 @[simp]
-/--
-theorem `infIrred_iff_not_isMax` / 定理 `infIrred_iff_not_isMax`
-
-English:
-theorem infIrred_iff_not_isMax
-  statement: InfIrred a ↔ ¬IsMax a
-  proof: and_iff_left fun _ _ => by simpa only [min_eq_iff] using Or.imp And.left And.left
-
-中文:
-定理 infIrred_iff_not_isMax
-  结论: InfIrred a ↔ ¬IsMax a
-  证明: and_iff_left fun _ _ => by simpa only [min_eq_iff] using Or.imp And.left And.left
-
-Depends on / 依赖: And.left, Or.imp, and_iff_left, min_eq_iff
+/-
+**infIrred_iff_not_isMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infIrred_iff_not_isMax : InfIrred a ↔ ¬IsMax a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem infIrred_iff_not_isMax : InfIrred a ↔ ¬IsMax a :=
   and_iff_left fun _ _ => by simpa only [min_eq_iff] using Or.imp And.left And.left
 
 end LinearOrder
+

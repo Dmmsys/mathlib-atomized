@@ -28,42 +28,35 @@ assert_not_exists Field Finset Set.Icc GaloisConnection
 
 namespace Rat
 
-/--
-Instance `instIsOrderedAddMonoid` / 实例 `instIsOrderedAddMonoid`
-
-English:
-instance instIsOrderedAddMonoid
-  signature: : IsOrderedAddMonoid Rat where
-  body: fun _ _ ab _ => Rat.add_le_add_right.2 ab
-
-中文:
-实例 instIsOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 有理数 where
-  定义体: fun _ _ ab _ => Rat.add_le_add_right.2 ab
-
-Depends on / 依赖: Rat.add_le_add_right, add_le_add_right
+/-
+**Rat.instIsOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instIsOrderedAddMonoid : IsOrderedAddMonoid Rat where add_le_add_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.add_le_add_right`：∀ {a b c : ℚ}, a + c ≤ b + c ↔ a ≤ b
 -/
-instance instIsOrderedAddMonoid : IsOrderedAddMonoid Rat where
+instance instIsOrderedAddMonoid : IsOrderedAddMonoid ℚ where
   add_le_add_left := fun _ _ ab _ => Rat.add_le_add_right.2 ab
-
-/--
-Instance `instIsStrictOrderedRing` / 实例 `instIsStrictOrderedRing`
-
-English:
-instance instIsStrictOrderedRing
-  signature: : IsStrictOrderedRing Rat
-  body: .of_mul_pos fun _ _ ha hb =>
-  (Rat.mul_nonneg ha.le hb.le).lt_of_ne' (mul_ne_zero ha.ne' hb.ne')
-
-中文:
-实例 instIsStrictOrderedRing
-  签名: : 是StrictOrdered环 有理数
-  定义体: .of_mul_pos fun _ _ ha hb =>
-  (Rat.mul_nonneg ha.le hb.le).lt_of_ne' (mul_ne_zero ha.ne' hb.ne')
-
-Depends on / 依赖: of_mul_pos
+/-
+**Rat.instIsStrictOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instIsStrictOrderedRing : IsStrictOrderedRing Rat
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsStrictOrderedRing.of_mul_pos`：IsStrictOrderedRing.of_mul_pos [Ring R] 
+[PartialOrder R] [IsOrderedAddMonoid R] [ZeroLEOneClass R] [Nontrivial R] (mul_p
+os : forall a b : R,…
+· 使用定理 `LE.le.lt_of_ne'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≠ b → b < a
+· 使用定理 `Rat.mul_nonneg`：∀ {a b : ℚ}, 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-instance instIsStrictOrderedRing : IsStrictOrderedRing Rat := .of_mul_pos fun _ _ ha hb =>
+instance instIsStrictOrderedRing : IsStrictOrderedRing ℚ := .of_mul_pos fun _ _ ha hb ↦
   (Rat.mul_nonneg ha.le hb.le).lt_of_ne' (mul_ne_zero ha.ne' hb.ne')
 
 end Rat
+

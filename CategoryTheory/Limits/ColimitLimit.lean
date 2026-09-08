@@ -40,35 +40,24 @@ variable (F : J × K ⥤ C)
 
 open CategoryTheory.prod CategoryTheory.Prod
 
-/--
-theorem `map_id_left_eq_curry_map` / 定理 `map_id_left_eq_curry_map`
-
-English:
-theorem map_id_left_eq_curry_map
-  given: {j : J} {k k' : K} {f : k ⟶ k'}
-  proof: rfl
-
-中文:
-定理 map_id_left_eq_curry_map
-  条件: {j : J} {k k' : K} {f : k ⟶ k'}
-  证明: rfl
+/-
+**CategoryTheory.Limits.map_id_left_eq_curry_map** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：map_id_left_eq_curry_map {j : J} {k k' : K} {f : k ⟶ k'} : F.map (𝟙 j ×ₘ f
+) = ((curry.obj F).obj j).map f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_id_left_eq_curry_map {j : J} {k k' : K} {f : k ⟶ k'} :
     F.map (𝟙 j ×ₘ f) = ((curry.obj F).obj j).map f :=
   rfl
-
-/--
-theorem `map_id_right_eq_curry_swap_map` / 定理 `map_id_right_eq_curry_swap_map`
-
-English:
-theorem map_id_right_eq_curry_swap_map
-  given: {j j' : J} {f : j ⟶ j'} {k : K}
-  proof: rfl
-
-中文:
-定理 map_id_right_eq_curry_swap_map
-  条件: {j j' : J} {f : j ⟶ j'} {k : K}
-  证明: rfl
+/-
+**CategoryTheory.Limits.map_id_right_eq_curry_swap_map** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：map_id_right_eq_curry_swap_map {j j' : J} {f : j ⟶ j'} {k : K} : F.map (f 
+×ₘ 𝟙 k) = ((curry.obj (Prod.swap K J ⋙ F)).obj k).map f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_id_right_eq_curry_swap_map {j j' : J} {f : j ⟶ j'} {k : K} :
     F.map (f ×ₘ 𝟙 k) = ((curry.obj (Prod.swap K J ⋙ F)).obj k).map f :=
@@ -79,68 +68,20 @@ variable [HasColimitsOfShape K C]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `colimitLimitToLimitColimit` / `colimitLimitToLimitColimit` 的定义
+/-- The universal morphism
+$\colim_k \lim_j F(j,k) → \lim_j \colim_k F(j, k)$.
+-/
+/-
+**CategoryTheory.Limits.colimitLimitToLimitColimit** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：colimitLimitToLimitColimit : colimit (curry.obj (Prod.swap K J ⋙ F) ⋙ lim)
+ ⟶ limit (curry.obj F ⋙ colim)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitLimitToLimitColimit
-  signature: :
-  body: limit.lift (curry.obj F ⋙ colim)
-    { pt := _
-      π :=
-        { app := fun j =>
-            colimit.desc (curry.obj (Prod.swap K J ⋙ F) ⋙ lim)
-              { pt := _
-                ι :=
-                  { app := fun k =>
-                      limit.π ((curry.obj (Prod.swap K J ⋙ F)).obj k) j ≫
-                        colimit.ι ((curry.obj F).obj j) k
-                    naturality := by
-                      intro k k' f
-                      simp only [Functor.comp_obj, lim_obj, colimit.cocone_x,
-                        Functor.const_obj_obj, Functor.comp_map, lim_map,
-                        curry_obj_obj_obj, Prod.swap_obj, limMap_π_assoc, curry_obj_map_app,
-                        Prod.swap_map, Functor.const_obj_map, Category.comp_id]
-                      rw [map_id_left_eq_curry_map]; rw [colimit.w] } }
-          naturality := by
-            intro j j' f
-            dsimp
-            ext k
-            simp only [Functor.comp_obj, lim_obj, Category.id_comp, colimit.ι_desc,
-              colimit.ι_desc_assoc, Category.assoc, ι_colimMap,
-              curry_obj_obj_obj, curry_obj_map_app]
-            rw [map_id_right_eq_curry_swap_map]; rw [limit.w_assoc] } }
-
-中文:
-定义 colimitLimitToLimitColimit
-  签名: :
-  定义体: limit.lift (curry.obj F ⋙ colim)
-    { pt := _
-      π :=
-        { app := fun j =>
-            colimit.desc (curry.obj (Prod.swap K J ⋙ F) ⋙ lim)
-              { pt := _
-                ι :=
-                  { app := fun k =>
-                      limit.π ((curry.obj (Prod.swap K J ⋙ F)).obj k) j ≫
-                        colimit.ι ((curry.obj F).obj j) k
-                    naturality := by
-                      intro k k' f
-                      simp only [Functor.comp_obj, lim_obj, colimit.cocone_x,
-                        Functor.const_obj_obj, Functor.comp_map, lim_map,
-                        curry_obj_obj_obj, Prod.swap_obj, limMap_π_assoc, curry_obj_map_app,
-                        Prod.swap_map, Functor.const_obj_map, Category.comp_id]
-                      rw [map_id_left_eq_curry_map]; rw [colimit.w] } }
-          naturality := by
-            intro j j' f
-            dsimp
-            ext k
-            simp only [Functor.comp_obj, lim_obj, Category.id_comp, colimit.ι_desc,
-              colimit.ι_desc_assoc, Category.assoc, ι_colimMap,
-              curry_obj_obj_obj, curry_obj_map_app]
-            rw [map_id_right_eq_curry_swap_map]; rw [limit.w_assoc] } }
-
-Depends on / 依赖: Category, Category.comp_id, Functor, Functor.comp_map, Functor.comp_obj, Functor.const_obj_map, Functor.const_obj_obj, Prod.swap, Prod.swap_map, Prod.swap_obj, cocone_x, colimit, colimit.cocone_x, colimit.desc, comp_id, comp_map, comp_obj, const_obj_map, const_obj_obj, curry.obj
+--- 原说明 ---
+The universal morphism
+$\colim_k \lim_j F(j,k) → \lim_j \colim_k F(j, k)$.
 -/
 noncomputable def colimitLimitToLimitColimit :
     colimit (curry.obj (Prod.swap K J ⋙ F) ⋙ lim) ⟶ limit (curry.obj F ⋙ colim) :=
@@ -160,7 +101,7 @@ noncomputable def colimitLimitToLimitColimit :
                         Functor.const_obj_obj, Functor.comp_map, lim_map,
                         curry_obj_obj_obj, Prod.swap_obj, limMap_π_assoc, curry_obj_map_app,
                         Prod.swap_map, Functor.const_obj_map, Category.comp_id]
-                      rw [map_id_left_eq_curry_map]; rw [colimit.w] } }
+                      rw [map_id_left_eq_curry_map, colimit.w] } }
           naturality := by
             intro j j' f
             dsimp
@@ -168,31 +109,20 @@ noncomputable def colimitLimitToLimitColimit :
             simp only [Functor.comp_obj, lim_obj, Category.id_comp, colimit.ι_desc,
               colimit.ι_desc_assoc, Category.assoc, ι_colimMap,
               curry_obj_obj_obj, curry_obj_map_app]
-            rw [map_id_right_eq_curry_swap_map]; rw [limit.w_assoc] } }
+            rw [map_id_right_eq_curry_swap_map, limit.w_assoc] } }
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Since `colimit_limit_to_limit_colimit` is a morphism from a colimit to a limit,
 this lemma characterises it.
 -/
 @[reassoc (attr := simp), elementwise (attr := simp)]
-/--
-theorem `ι_colimitLimitToLimitColimit_π` / 定理 `ι_colimitLimitToLimitColimit_π`
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ι_colimitLimitToLimitColimit_π
-  given: (j) (k)
-  proof: by
-  dsimp [colimitLimitToLimitColimit]
-  simp
-
-中文:
-定理 ι_colimitLimitToLimitColimit_π
-  条件: (j) (k)
-  证明: by
-  dsimp [colimitLimitToLimitColimit]
-  simp
-
-Depends on / 依赖: colimitLimitToLimitColimit
+--- 原说明 ---
+Since `colimit_limit_to_limit_colimit` is a morphism from a colimit to a limit,
+this lemma characterises it.
 -/
 theorem ι_colimitLimitToLimitColimit_π (j) (k) :
     colimit.ι _ k ≫ colimitLimitToLimitColimit F ≫ limit.π _ j =
@@ -204,42 +134,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The map `colimit_limit_to_limit_colimit` realized as a map of cones. -/
 @[simps]
-/--
-Definition of `colimitLimitToLimitColimitCone` / `colimitLimitToLimitColimitCone` 的定义
+/-
+**CategoryTheory.Limits.colimitLimitToLimitColimitCone** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：colimitLimitToLimitColimitCone (G : J ⥤ K ⥤ C) [HasLimit G] : colim.mapCon
+e (limit.cone G) ⟶ limit.cone (G ⋙ colim) where hom
+参数：G : J ⥤ K ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitLimitToLimitColimitCone
-  signature: (G : J ⥤ K ⥤ C) [HasLimit G]
-  body: colim.map (limitIsoSwapCompLim G).hom ≫
-      colimitLimitToLimitColimit (uncurry.obj G :) ≫
-        lim.map (whiskerRight (currying.unitIso.app G).inv colim)
-  w j := by
-    dsimp
-    ext1 k
-    simp only [Category.assoc, limMap_π, Functor.comp_obj, colim_obj, whiskerRight_app,
-      colim_map, ι_colimMap_assoc, lim_obj, limitIsoSwapCompLim_hom_app,
-      ι_colimitLimitToLimitColimit_π_assoc, curry_obj_obj_obj, Prod.swap_obj,
-      uncurry_obj_obj, ι_colimMap, currying_unitIso_inv_app_app_app, Category.id_comp,
-      limMap_π_assoc, Functor.flip_obj_obj, flipIsoCurrySwapUncurry_hom_app_app]
-    simp only [← comp_evaluation G k, limitObjIsoLimitCompEvaluation_hom_π_assoc]
-
-中文:
-定义 colimitLimitToLimitColimitCone
-  签名: (G : J ⥤ K ⥤ C) [有极限 G]
-  定义体: colim.map (limitIsoSwapCompLim G).hom ≫
-      colimitLimitToLimitColimit (uncurry.obj G :) ≫
-        lim.map (whiskerRight (currying.unitIso.app G).inv colim)
-  w j := by
-    dsimp
-    ext1 k
-    simp only [Category.assoc, limMap_π, Functor.comp_obj, colim_obj, whiskerRight_app,
-      colim_map, ι_colimMap_assoc, lim_obj, limitIsoSwapCompLim_hom_app,
-      ι_colimitLimitToLimitColimit_π_assoc, curry_obj_obj_obj, Prod.swap_obj,
-      uncurry_obj_obj, ι_colimMap, currying_unitIso_inv_app_app_app, Category.id_comp,
-      limMap_π_assoc, Functor.flip_obj_obj, flipIsoCurrySwapUncurry_hom_app_app]
-    simp only [← comp_evaluation G k, limitObjIsoLimitCompEvaluation_hom_π_assoc]
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Functor, Functor.comp_obj, Functor.flip, Prod.swap_obj, colim.map, colim_map, colim_obj, colimitLimitToLimitColimit, comp_obj, curry_obj_obj_obj, currying, currying.unitIso.app, currying_unitIso_inv_app_app_app, id_comp, lim.map, lim_obj, limitIsoSwapCompLim
+--- 原说明 ---
+The map `colimit_limit_to_limit_colimit` realized as a map of cones.
 -/
 noncomputable def colimitLimitToLimitColimitCone (G : J ⥤ K ⥤ C) [HasLimit G] :
     colim.mapCone (limit.cone G) ⟶ limit.cone (G ⋙ colim) where
@@ -258,3 +163,4 @@ noncomputable def colimitLimitToLimitColimitCone (G : J ⥤ K ⥤ C) [HasLimit G
     simp only [← comp_evaluation G k, limitObjIsoLimitCompEvaluation_hom_π_assoc]
 
 end CategoryTheory.Limits
+

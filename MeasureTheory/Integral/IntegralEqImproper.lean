@@ -86,24 +86,40 @@ section AECover
 
 variable {α ι : Type*} [MeasurableSpace α] (μ : Measure α) (l : Filter ι)
 
-/--
-Definition of `AECover` / `AECover` 的定义
+/-- A sequence `φ` of subsets of `α` is a `MeasureTheory.AECover` w.r.t. a measure `μ` and a filter
+`l` if almost every point (w.r.t. `μ`) of `α` eventually belongs to `φ n` (w.r.t. `l`), and if
+each `φ n` is measurable.  This definition is a technical way to avoid duplicating a lot of
+proofs.  It should be thought of as a sufficient condition for being able to interpret
+`∫ x, f x ∂μ` (if it exists) as the limit of `∫ x in φ n, f x ∂μ` as `n` tends to `l`.
+See for example `MeasureTheory.AECover.lintegral_tendsto_of_countably_generated`,
+`MeasureTheory.AECover.integrable_of_integral_norm_tendsto` and
+`MeasureTheory.AECover.integral_tendsto_of_countably_generated`. -/
+/-
+**MeasureTheory.AECover** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{α : Type u_1} → {ι : Type u_2} → [inst : MeasurableSpace α] → MeasureTheo
+ry.Measure α → Filter ι → (ι → Set α) → Prop
+参数：ι → Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AECover
-  parameters: (φ : ι -> Set α)
-  axioms and operations (1):
-    - ae_eventually_mem : forallᵐ x ∂μ, forallᶠ i in l, x in φ i
-
-中文:
-结构 AECover
-  参数: (φ : ι -> 集合 α)
-  公理与运算 (1 个):
-    - ae_eventually_mem : 对任意ᵐ x ∂μ, 对任意ᶠ i in l, x in φ i
+--- 原说明 ---
+A sequence `φ` of subsets of `α` is a `MeasureTheory.AECover` w.r.t. a measure `
+μ` and a filter
+`l` if almost every point (w.r.t. `μ`) of `α` eventually belongs to `φ n` (w.r.t
+. `l`), and if
+each `φ n` is measurable.  This definition is a technical way to avoid duplicati
+ng a lot of
+proofs.  It should be thought of as a sufficient condition for being able to int
+erpret
+`∫ x, f x ∂μ` (if it exists) as the limit of `∫ x in φ n, f x ∂μ` as `n` tends t
+o `l`.
+See for example `MeasureTheory.AECover.lintegral_tendsto_of_countably_generated`
+,
+`MeasureTheory.AECover.integrable_of_integral_norm_tendsto` and
+`MeasureTheory.AECover.integral_tendsto_of_countably_generated`.
 -/
-structure AECover (φ : ι -> Set α) : Prop where
-  ae_eventually_mem : forallᵐ x ∂μ, forallᶠ i in l, x in φ i
-protected measurableSet : forall i, MeasurableSet φ i
+structure AECover (φ : ι → Set α) : Prop where
+  ae_eventually_mem : ∀ᵐ x ∂μ, ∀ᶠ i in l, x ∈ φ i
+  protected measurableSet : ∀ i, MeasurableSet <| φ i
 
 variable {μ} {l}
 
@@ -113,79 +129,88 @@ namespace AECover
 ## Operations on `AECover`s
 -/
 
-/--
-theorem `inter` / 定理 `inter`
+/-- Elementwise intersection of two `AECover`s is an `AECover`. -/
+/-
+**MeasureTheory.AECover.inter** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：inter {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ) : AECov
+er μ l (fun i => φ i inter ψ i) where ae_eventually_mem
+参数：hφ : AECover μ l φ；hψ : AECover μ l ψ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 
-English:
-theorem inter
-  given: {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ)
-  proof: hψ.1.mp hφ.1.mono fun _ => Eventually.and
-  measurableSet _ := (hφ.2 _).inter (hψ.2 _)
-
-中文:
-定理 inter
-  条件: {φ ψ : ι -> 集合 α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ)
-  证明: hψ.1.mp hφ.1.mono fun _ => Eventually.and
-  measurableSet _ := (hφ.2 _).inter (hψ.2 _)
-
-Depends on / 依赖: Eventually, Eventually.and
+--- 原说明 ---
+Elementwise intersection of two `AECover`s is an `AECover`.
 -/
-theorem inter {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ) :
-    AECover μ l (fun i => φ i inter ψ i) where
-ae_eventually_mem := hψ.1.mp hφ.1.mono fun _ => Eventually.and
+theorem inter {φ ψ : ι → Set α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ) :
+    AECover μ l (fun i ↦ φ i ∩ ψ i) where
+  ae_eventually_mem := hψ.1.mp <| hφ.1.mono fun _ ↦ Eventually.and
   measurableSet _ := (hφ.2 _).inter (hψ.2 _)
-
-/--
-theorem `superset` / 定理 `superset`
-
-English:
-theorem superset
-  statement: {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hsub : forall i, φ i subseteq ψ i)
-  proof: ⟨hφ.1.mono fun _x hx => hx.mono fun i hi => hsub i hi, hmeas⟩
-
-中文:
-定理 superset
-  结论: {φ ψ : ι -> 集合 α} (hφ : AECover μ l φ) (hsub : 对任意 i, φ i subseteq ψ i)
-  证明: ⟨hφ.1.mono fun _x hx => hx.mono fun i hi => hsub i hi, hmeas⟩
-
-Depends on / 依赖: hx.mono
+/-
+**MeasureTheory.AECover.superset** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AECove
+r`。
+形式化陈述：superset {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hsub : forall i, φ i sub
+seteq ψ i) (hmeas : forall i, MeasurableSet (ψ i)) : AECover μ l ψ
+参数：hφ : AECover μ l φ；hsub : forall i, φ i subseteq ψ i；hmeas : forall i, Measur
+ableSet (ψ i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
 -/
-theorem superset {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hsub : forall i, φ i subseteq ψ i)
-    (hmeas : forall i, MeasurableSet (ψ i)) : AECover μ l ψ :=
-  ⟨hφ.1.mono fun _x hx => hx.mono fun i hi => hsub i hi, hmeas⟩
-
-/--
-theorem `mono_ac` / 定理 `mono_ac`
-
-English:
-theorem mono_ac
-  given: {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ)
-  proof: ⟨hle hφ.1, hφ.2⟩
-
-中文:
-定理 mono_ac
-  条件: {ν : 测度 α} {φ : ι -> 集合 α} (hφ : AECover μ l φ) (hle : ν ≪ μ)
-  证明: ⟨hle hφ.1, hφ.2⟩
+theorem superset {φ ψ : ι → Set α} (hφ : AECover μ l φ) (hsub : ∀ i, φ i ⊆ ψ i)
+    (hmeas : ∀ i, MeasurableSet (ψ i)) : AECover μ l ψ :=
+  ⟨hφ.1.mono fun _x hx ↦ hx.mono fun i hi ↦ hsub i hi, hmeas⟩
+/-
+**MeasureTheory.AECover.mono_ac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AECover
+`。
+形式化陈述：mono_ac {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ
+) : AECover ν l φ
+参数：hφ : AECover μ l φ；hle : ν ≪ μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 -/
-theorem mono_ac {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ) :
+theorem mono_ac {ν : Measure α} {φ : ι → Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ) :
     AECover ν l φ := ⟨hle hφ.1, hφ.2⟩
-
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν <= μ)
-  proof: hφ.mono_ac hle.absolutelyContinuous
-
-中文:
-定理 mono
-  条件: {ν : 测度 α} {φ : ι -> 集合 α} (hφ : AECover μ l φ) (hle : ν <= μ)
-  证明: hφ.mono_ac hle.absolutelyContinuous
-
-Depends on / 依赖: absolutelyContinuous, hle.absolutelyContinuous, mono_ac
+/-
+**MeasureTheory.AECover.mono** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：mono {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν <= μ) 
+: AECover ν l φ
+参数：hφ : AECover μ l φ；hle : ν <= μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono_ac`：mono_ac {ν : Measure α} {φ : ι -> Set α} 
+(hφ : AECover μ l φ) (hle : ν ≪ μ) : AECover ν l φ
+· 使用定理 `LE.le.absolutelyContinuous`：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ
+ ν : MeasureTheory.Measure α}, μ ≤ ν → μ.AbsolutelyContinuous ν
 -/
-theorem mono {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν <= μ) :
+theorem mono {ν : Measure α} {φ : ι → Set α} (hφ : AECover μ l φ) (hle : ν ≤ μ) :
     AECover ν l φ := hφ.mono_ac hle.absolutelyContinuous
 
 end AECover
@@ -194,57 +219,68 @@ section MetricSpace
 
 variable [PseudoMetricSpace α] [OpensMeasurableSpace α]
 
-/--
-theorem `aecover_ball` / 定理 `aecover_ball`
-
-English:
-theorem aecover_ball
-  given: {x : α} {r : ι -> Real} (hr : Tendsto r l atTop)
-  proof: Metric.isOpen_ball.measurableSet
-  ae_eventually_mem := by
-    filter_upwards with y
-    filter_upwards [hr (Ioi_mem_atTop (dist x y))] with a ha using by simpa [dist_comm] using ha
-
-中文:
-定理 aecover_ball
-  条件: {x : α} {r : ι -> 实数} (hr : 收敛 r l atTop)
-  证明: Metric.isOpen_ball.measurableSet
-  ae_eventually_mem := by
-    filter_upwards with y
-    filter_upwards [hr (Ioi_mem_atTop (dist x y))] with a ha using by simpa [dist_comm] using ha
-
-Depends on / 依赖: Metric, Metric.isOpen_ball.measurableSet, isOpen_ball, measurableSet
+/-
+**MeasureTheory.aecover_ball** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_ball {x : α} {r : ι -> Real} (hr : Tendsto r l atTop) : AECover μ 
+l (fun i => Metric.ball x (r i)) where measurableSet _
+参数：hr : Tendsto r l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `Metric.isOpen_ball`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x : α} 
+{ε : ℝ}, IsOpen (Metric.ball x ε)
 -/
-theorem aecover_ball {x : α} {r : ι -> Real} (hr : Tendsto r l atTop) :
-    AECover μ l (fun i => Metric.ball x (r i)) where
+theorem aecover_ball {x : α} {r : ι → ℝ} (hr : Tendsto r l atTop) :
+    AECover μ l (fun i ↦ Metric.ball x (r i)) where
   measurableSet _ := Metric.isOpen_ball.measurableSet
   ae_eventually_mem := by
     filter_upwards with y
     filter_upwards [hr (Ioi_mem_atTop (dist x y))] with a ha using by simpa [dist_comm] using ha
-
-/--
-theorem `aecover_closedBall` / 定理 `aecover_closedBall`
-
-English:
-theorem aecover_closedBall
-  given: {x : α} {r : ι -> Real} (hr : Tendsto r l atTop)
-  proof: Metric.isClosed_closedBall.measurableSet
-  ae_eventually_mem := by
-    filter_upwards with y
-    filter_upwards [hr (Ici_mem_atTop (dist x y))] with a ha using by simpa [dist_comm] using ha
-
-中文:
-定理 aecover_closedBall
-  条件: {x : α} {r : ι -> 实数} (hr : 收敛 r l atTop)
-  证明: Metric.isClosed_closedBall.measurableSet
-  ae_eventually_mem := by
-    filter_upwards with y
-    filter_upwards [hr (Ici_mem_atTop (dist x y))] with a ha using by simpa [dist_comm] using ha
-
-Depends on / 依赖: Metric, Metric.isClosed_closedBall.measurableSet, isClosed_closedBall, measurableSet
+/-
+**MeasureTheory.aecover_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_closedBall {x : α} {r : ι -> Real} (hr : Tendsto r l atTop) : AECo
+ver μ l (fun i => Metric.closedBall x (r i)) where measurableSet _
+参数：hr : Tendsto r l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用引理 `Metric.isClosed_closedBall`：isClosed_closedBall : IsClosed (closedBall x
+ ε)
 -/
-theorem aecover_closedBall {x : α} {r : ι -> Real} (hr : Tendsto r l atTop) :
-    AECover μ l (fun i => Metric.closedBall x (r i)) where
+theorem aecover_closedBall {x : α} {r : ι → ℝ} (hr : Tendsto r l atTop) :
+    AECover μ l (fun i ↦ Metric.closedBall x (r i)) where
   measurableSet _ := Metric.isClosed_closedBall.measurableSet
   ae_eventually_mem := by
     filter_upwards with y
@@ -255,65 +291,60 @@ end MetricSpace
 section Preorderα
 
 variable [Preorder α] [TopologicalSpace α] [OrderClosedTopology α] [OpensMeasurableSpace α]
-  {a b : ι -> α}
+  {a b : ι → α}
 
-/--
-theorem `aecover_Ici` / 定理 `aecover_Ici`
-
-English:
-theorem aecover_Ici
-  given: (ha : Tendsto a l atBot)
-  statement: AECover μ l fun i => Ici (a i) where
-  proof: ae_of_all μ ha.eventually_le_atBot
-  measurableSet _ := measurableSet_Ici
-
-中文:
-定理 aecover_Ici
-  条件: (ha : 收敛 a l atBot)
-  结论: AECover μ l fun i => 左闭右无界区间 (a i) where
-  证明: ae_of_all μ ha.eventually_le_atBot
-  measurableSet _ := measurableSet_Ici
-
-Depends on / 依赖: ae_of_all, eventually_le_atBot, ha.eventually_le_atBot
+/-
+**MeasureTheory.aecover_Ici** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ici (ha : Tendsto a l atBot) : AECover μ l fun i => Ici (a i) wher
+e ae_eventually_mem
+参数：ha : Tendsto a l atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.Tendsto.eventually_le_atBot`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l Filter.atBot → 
+∀ (c : β), ∀ᶠ (x : α) in…
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
 -/
 theorem aecover_Ici (ha : Tendsto a l atBot) : AECover μ l fun i => Ici (a i) where
   ae_eventually_mem := ae_of_all μ ha.eventually_le_atBot
   measurableSet _ := measurableSet_Ici
-
-/--
-theorem `aecover_Iic` / 定理 `aecover_Iic`
-
-English:
-theorem aecover_Iic
-  given: (hb : Tendsto b l atTop)
-  statement: AECover μ l fun i => Iic b i
-  proof: aecover_Ici (α := αᵒᵈ) hb
-
-中文:
-定理 aecover_Iic
-  条件: (hb : 收敛 b l atTop)
-  结论: AECover μ l fun i => 左无界右闭区间 b i
-  证明: aecover_Ici (α := αᵒᵈ) hb
-
-Depends on / 依赖: aecover_Ici
+/-
+**MeasureTheory.aecover_Iic** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Iic (hb : Tendsto b l atTop) : AECover μ l fun i => Iic b i
+参数：hb : Tendsto b l atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ici`：aecover_Ici (ha : Tendsto a l atBot) : AECove
+r μ l fun i => Ici (a i) where ae_eventually_mem
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `OrderDual.opensMeasurableSpace`：∀ {α : Type u_6} [inst : TopologicalSpac
+e α] [inst_1 : MeasurableSpace α] [h : OpensMeasurableSpace α],   OpensMeasurabl
+eSpace αᵒᵈ
 -/
-theorem aecover_Iic (hb : Tendsto b l atTop) : AECover μ l fun i => Iic b i :=
+theorem aecover_Iic (hb : Tendsto b l atTop) : AECover μ l fun i => Iic <| b i :=
   aecover_Ici (α := αᵒᵈ) hb
-
-/--
-theorem `aecover_Icc` / 定理 `aecover_Icc`
-
-English:
-theorem aecover_Icc
-  given: (ha : Tendsto a l atBot) (hb : Tendsto b l atTop)
-  proof: (aecover_Ici ha).inter (aecover_Iic hb)
-
-中文:
-定理 aecover_Icc
-  条件: (ha : 收敛 a l atBot) (hb : 收敛 b l atTop)
-  证明: (aecover_Ici ha).inter (aecover_Iic hb)
-
-Depends on / 依赖: aecover_Ici, aecover_Iic
+/-
+**MeasureTheory.aecover_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Icc (ha : Tendsto a l atBot) (hb : Tendsto b l atTop) : AECover μ 
+l fun i => Icc (a i) (b i)
+参数：ha : Tendsto a l atBot；hb : Tendsto b l atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.inter`：inter {φ ψ : ι -> Set α} (hφ : AECover μ l 
+φ) (hψ : AECover μ l ψ) : AECover μ l (fun i => φ i inter ψ i) where ae_eventual
+ly_mem
+· 使用定理 `MeasureTheory.aecover_Ici`：aecover_Ici (ha : Tendsto a l atBot) : AECove
+r μ l fun i => Ici (a i) where ae_eventually_mem
+· 使用定理 `MeasureTheory.aecover_Iic`：aecover_Iic (hb : Tendsto b l atTop) : AECove
+r μ l fun i => Iic b i
 -/
 theorem aecover_Icc (ha : Tendsto a l atBot) (hb : Tendsto b l atTop) :
     AECover μ l fun i => Icc (a i) (b i) :=
@@ -324,118 +355,93 @@ end Preorderα
 section LinearOrderα
 
 variable [LinearOrder α] [TopologicalSpace α] [OrderClosedTopology α] [OpensMeasurableSpace α]
-  {a b : ι -> α} (ha : Tendsto a l atBot) (hb : Tendsto b l atTop)
+  {a b : ι → α} (ha : Tendsto a l atBot) (hb : Tendsto b l atTop)
 
 include ha in
-/--
-theorem `aecover_Ioi` / 定理 `aecover_Ioi`
-
-English:
-theorem aecover_Ioi
-  given: [NoMinOrder α]
-  statement: AECover μ l fun i => Ioi (a i) where
-  proof: ae_of_all μ ha.eventually_lt_atBot
-  measurableSet _ := measurableSet_Ioi
-
-include hb in
-
-中文:
-定理 aecover_Ioi
-  条件: [NoMin序 α]
-  结论: AECover μ l fun i => 左开右无界区间 (a i) where
-  证明: ae_of_all μ ha.eventually_lt_atBot
-  measurableSet _ := measurableSet_Ioi
-
-include hb in
-
-Depends on / 依赖: ae_of_all, eventually_lt_atBot, ha.eventually_lt_atBot
+/-
+**MeasureTheory.aecover_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioi [NoMinOrder α] : AECover μ l fun i => Ioi (a i) where ae_event
+ually_mem
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.Tendsto.eventually_lt_atBot`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] [NoBotOrder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l 
+Filter.atBot → ∀ (c : β)…
+· 使用定理 `instNoBotOrderOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMinO
+rder α], NoBotOrder α
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
 -/
 theorem aecover_Ioi [NoMinOrder α] : AECover μ l fun i => Ioi (a i) where
   ae_eventually_mem := ae_of_all μ ha.eventually_lt_atBot
   measurableSet _ := measurableSet_Ioi
 
 include hb in
-/--
-theorem `aecover_Iio` / 定理 `aecover_Iio`
-
-English:
-theorem aecover_Iio
-  given: [NoMaxOrder α]
-  statement: AECover μ l fun i => Iio (b i)
-  proof: aecover_Ioi (α := αᵒᵈ) hb
-
-include ha hb
-
-中文:
-定理 aecover_Iio
-  条件: [NoMax序 α]
-  结论: AECover μ l fun i => 左无界右开区间 (b i)
-  证明: aecover_Ioi (α := αᵒᵈ) hb
-
-include ha hb
-
-Depends on / 依赖: aecover_Ioi
+/-
+**MeasureTheory.aecover_Iio** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Iio [NoMaxOrder α] : AECover μ l fun i => Iio (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioi`：aecover_Ioi [NoMinOrder α] : AECover μ l fun 
+i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `OrderDual.opensMeasurableSpace`：∀ {α : Type u_6} [inst : TopologicalSpac
+e α] [inst_1 : MeasurableSpace α] [h : OpensMeasurableSpace α],   OpensMeasurabl
+eSpace αᵒᵈ
 -/
 theorem aecover_Iio [NoMaxOrder α] : AECover μ l fun i => Iio (b i) := aecover_Ioi (α := αᵒᵈ) hb
 
 include ha hb
-
-/--
-theorem `aecover_Ioo` / 定理 `aecover_Ioo`
-
-English:
-theorem aecover_Ioo
-  given: [NoMinOrder α] [NoMaxOrder α]
-  statement: AECover μ l fun i => Ioo (a i) (b i)
-  proof: (aecover_Ioi ha).inter (aecover_Iio hb)
-
-中文:
-定理 aecover_Ioo
-  条件: [NoMin序 α] [NoMax序 α]
-  结论: AECover μ l fun i => 开区间 (a i) (b i)
-  证明: (aecover_Ioi ha).inter (aecover_Iio hb)
-
-Depends on / 依赖: aecover_Iio, aecover_Ioi
+/-
+**MeasureTheory.aecover_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioo [NoMinOrder α] [NoMaxOrder α] : AECover μ l fun i => Ioo (a i)
+ (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.inter`：inter {φ ψ : ι -> Set α} (hφ : AECover μ l 
+φ) (hψ : AECover μ l ψ) : AECover μ l (fun i => φ i inter ψ i) where ae_eventual
+ly_mem
+· 使用定理 `MeasureTheory.aecover_Ioi`：aecover_Ioi [NoMinOrder α] : AECover μ l fun 
+i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `MeasureTheory.aecover_Iio`：aecover_Iio [NoMaxOrder α] : AECover μ l fun 
+i => Iio (b i)
 -/
 theorem aecover_Ioo [NoMinOrder α] [NoMaxOrder α] : AECover μ l fun i => Ioo (a i) (b i) :=
   (aecover_Ioi ha).inter (aecover_Iio hb)
-
-/--
-theorem `aecover_Ioc` / 定理 `aecover_Ioc`
-
-English:
-theorem aecover_Ioc
-  given: [NoMinOrder α]
-  statement: AECover μ l fun i => Ioc (a i) (b i)
-  proof: (aecover_Ioi ha).inter (aecover_Iic hb)
-
-中文:
-定理 aecover_Ioc
-  条件: [NoMin序 α]
-  结论: AECover μ l fun i => 左开右闭区间 (a i) (b i)
-  证明: (aecover_Ioi ha).inter (aecover_Iic hb)
-
-Depends on / 依赖: aecover_Iic, aecover_Ioi
+/-
+**MeasureTheory.aecover_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioc [NoMinOrder α] : AECover μ l fun i => Ioc (a i) (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.inter`：inter {φ ψ : ι -> Set α} (hφ : AECover μ l 
+φ) (hψ : AECover μ l ψ) : AECover μ l (fun i => φ i inter ψ i) where ae_eventual
+ly_mem
+· 使用定理 `MeasureTheory.aecover_Ioi`：aecover_Ioi [NoMinOrder α] : AECover μ l fun 
+i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `MeasureTheory.aecover_Iic`：aecover_Iic (hb : Tendsto b l atTop) : AECove
+r μ l fun i => Iic b i
 -/
 theorem aecover_Ioc [NoMinOrder α] : AECover μ l fun i => Ioc (a i) (b i) :=
   (aecover_Ioi ha).inter (aecover_Iic hb)
-
-/--
-theorem `aecover_Ico` / 定理 `aecover_Ico`
-
-English:
-theorem aecover_Ico
-  given: [NoMaxOrder α]
-  statement: AECover μ l fun i => Ico (a i) (b i)
-  proof: (aecover_Ici ha).inter (aecover_Iio hb)
-
-中文:
-定理 aecover_Ico
-  条件: [NoMax序 α]
-  结论: AECover μ l fun i => 左闭右开区间 (a i) (b i)
-  证明: (aecover_Ici ha).inter (aecover_Iio hb)
-
-Depends on / 依赖: aecover_Ici, aecover_Iio
+/-
+**MeasureTheory.aecover_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ico [NoMaxOrder α] : AECover μ l fun i => Ico (a i) (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.inter`：inter {φ ψ : ι -> Set α} (hφ : AECover μ l 
+φ) (hψ : AECover μ l ψ) : AECover μ l (fun i => φ i inter ψ i) where ae_eventual
+ly_mem
+· 使用定理 `MeasureTheory.aecover_Ici`：aecover_Ici (ha : Tendsto a l atBot) : AECove
+r μ l fun i => Ici (a i) where ae_eventually_mem
+· 使用定理 `MeasureTheory.aecover_Iio`：aecover_Iio [NoMaxOrder α] : AECover μ l fun 
+i => Iio (b i)
 -/
 theorem aecover_Ico [NoMaxOrder α] : AECover μ l fun i => Ico (a i) (b i) :=
   (aecover_Ici ha).inter (aecover_Iio hb)
@@ -445,495 +451,498 @@ end LinearOrderα
 section FiniteIntervals
 
 variable [LinearOrder α] [TopologicalSpace α] [OrderClosedTopology α] [OpensMeasurableSpace α]
-  {a b c d : ι -> α} {A B : α} (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  {a b c d : ι → α} {A B : α} (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
   (hc : Tendsto c l atBot) (hd : Tendsto d l atTop)
 
 include ha in
-/--
-theorem `aecover_Ioi_of_Ioi` / 定理 `aecover_Ioi_of_Ioi`
-
-English:
-theorem aecover_Ioi_of_Ioi
-  statement: AECover (μ.restrict (Ioi A)) l fun i => Ioi (a i) where
-  proof: (ae_restrict_mem measurableSet_Ioi).mono fun _x hx => ha.eventually
-    eventually_lt_nhds hx
-  measurableSet _ := measurableSet_Ioi
-
-include hb in
-
-中文:
-定理 aecover_Ioi_of_Ioi
-  结论: AECover (μ.restrict (左开右无界区间 A)) l fun i => 左开右无界区间 (a i) where
-  证明: (ae_restrict_mem measurableSet_Ioi).mono fun _x hx => ha.eventually
-    eventually_lt_nhds hx
-  measurableSet _ := measurableSet_Ioi
-
-include hb in
-
-Depends on / 依赖: ae_restrict_mem, eventually, ha.eventually, measurableSet_Ioi
+/-
+**MeasureTheory.aecover_Ioi_of_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioi_of_Ioi : AECover (μ.restrict (Ioi A)) l fun i => Ioi (a i) whe
+re ae_eventually_mem
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_restrict_mem`：ae_restrict_mem (hs : MeasurableSet s) : 
+forallᵐ x ∂μ.restrict s, x in s
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `eventually_lt_nhds`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 :
+ LinearOrder α] [ClosedIciTopology α] {a b : α},   a < b → ∀ᶠ (x : α) in nhds a,
+ x < b
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
 -/
-theorem aecover_Ioi_of_Ioi : AECover (μ.restrict (Ioi A)) l fun i => Ioi (a i) where
-ae_eventually_mem := (ae_restrict_mem measurableSet_Ioi).mono fun _x hx => ha.eventually
+theorem aecover_Ioi_of_Ioi : AECover (μ.restrict (Ioi A)) l fun i ↦ Ioi (a i) where
+  ae_eventually_mem := (ae_restrict_mem measurableSet_Ioi).mono fun _x hx ↦ ha.eventually <|
     eventually_lt_nhds hx
   measurableSet _ := measurableSet_Ioi
 
 include hb in
-/--
-theorem `aecover_Iio_of_Iio` / 定理 `aecover_Iio_of_Iio`
-
-English:
-theorem aecover_Iio_of_Iio
-  statement: AECover (μ.restrict (Iio B)) l fun i => Iio (b i)
-  proof: aecover_Ioi_of_Ioi (α := αᵒᵈ) hb
-
-include ha in
-
-中文:
-定理 aecover_Iio_of_Iio
-  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左无界右开区间 (b i)
-  证明: aecover_Ioi_of_Ioi (α := αᵒᵈ) hb
-
-include ha in
-
-Depends on / 依赖: aecover_Ioi_of_Ioi
+/-
+**MeasureTheory.aecover_Iio_of_Iio** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Iio_of_Iio : AECover (μ.restrict (Iio B)) l fun i => Iio (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioi_of_Ioi`：aecover_Ioi_of_Ioi : AECover (μ.restri
+ct (Ioi A)) l fun i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `OrderDual.opensMeasurableSpace`：∀ {α : Type u_6} [inst : TopologicalSpac
+e α] [inst_1 : MeasurableSpace α] [h : OpensMeasurableSpace α],   OpensMeasurabl
+eSpace αᵒᵈ
 -/
-theorem aecover_Iio_of_Iio : AECover (μ.restrict (Iio B)) l fun i => Iio (b i) :=
+theorem aecover_Iio_of_Iio : AECover (μ.restrict (Iio B)) l fun i ↦ Iio (b i) :=
   aecover_Ioi_of_Ioi (α := αᵒᵈ) hb
 
 include ha in
-/--
-theorem `aecover_Ioi_of_Ici` / 定理 `aecover_Ioi_of_Ici`
-
-English:
-theorem aecover_Ioi_of_Ici
-  statement: AECover (μ.restrict (Ioi A)) l fun i => Ici (a i)
-  proof: (aecover_Ioi_of_Ioi ha).superset (fun _ => Ioi_subset_Ici_self) fun _ => measurableSet_Ici
-
-include hb in
-
-中文:
-定理 aecover_Ioi_of_Ici
-  结论: AECover (μ.restrict (左开右无界区间 A)) l fun i => 左闭右无界区间 (a i)
-  证明: (aecover_Ioi_of_Ioi ha).superset (fun _ => Ioi_subset_Ici_self) fun _ => measurableSet_Ici
-
-include hb in
-
-Depends on / 依赖: Ioi_subset_Ici_self, aecover_Ioi_of_Ioi, measurableSet_Ici, superset
+/-
+**MeasureTheory.aecover_Ioi_of_Ici** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioi_of_Ici : AECover (μ.restrict (Ioi A)) l fun i => Ici (a i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.superset`：superset {φ ψ : ι -> Set α} (hφ : AECove
+r μ l φ) (hsub : forall i, φ i subseteq ψ i) (hmeas : forall i, MeasurableSet (ψ
+ i)) : AECover μ l ψ
+· 使用定理 `MeasureTheory.aecover_Ioi_of_Ioi`：aecover_Ioi_of_Ioi : AECover (μ.restri
+ct (Ioi A)) l fun i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `Set.Ioi_subset_Ici_self`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, S
+et.Ioi a ⊆ Set.Ici a
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
 -/
-theorem aecover_Ioi_of_Ici : AECover (μ.restrict (Ioi A)) l fun i => Ici (a i) :=
-  (aecover_Ioi_of_Ioi ha).superset (fun _ => Ioi_subset_Ici_self) fun _ => measurableSet_Ici
+theorem aecover_Ioi_of_Ici : AECover (μ.restrict (Ioi A)) l fun i ↦ Ici (a i) :=
+  (aecover_Ioi_of_Ioi ha).superset (fun _ ↦ Ioi_subset_Ici_self) fun _ ↦ measurableSet_Ici
 
 include hb in
-/--
-theorem `aecover_Iio_of_Iic` / 定理 `aecover_Iio_of_Iic`
-
-English:
-theorem aecover_Iio_of_Iic
-  statement: AECover (μ.restrict (Iio B)) l fun i => Iic (b i)
-  proof: aecover_Ioi_of_Ici (α := αᵒᵈ) hb
-
-include hb hc in
-
-中文:
-定理 aecover_Iio_of_Iic
-  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左无界右闭区间 (b i)
-  证明: aecover_Ioi_of_Ici (α := αᵒᵈ) hb
-
-include hb hc in
-
-Depends on / 依赖: aecover_Ioi_of_Ici
+/-
+**MeasureTheory.aecover_Iio_of_Iic** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Iio_of_Iic : AECover (μ.restrict (Iio B)) l fun i => Iic (b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioi_of_Ici`：aecover_Ioi_of_Ici : AECover (μ.restri
+ct (Ioi A)) l fun i => Ici (a i)
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `OrderDual.opensMeasurableSpace`：∀ {α : Type u_6} [inst : TopologicalSpac
+e α] [inst_1 : MeasurableSpace α] [h : OpensMeasurableSpace α],   OpensMeasurabl
+eSpace αᵒᵈ
 -/
-theorem aecover_Iio_of_Iic : AECover (μ.restrict (Iio B)) l fun i => Iic (b i) :=
+theorem aecover_Iio_of_Iic : AECover (μ.restrict (Iio B)) l fun i ↦ Iic (b i) :=
   aecover_Ioi_of_Ici (α := αᵒᵈ) hb
 
 include hb hc in
-/--
-theorem `aecover_Iio_of_Ico` / 定理 `aecover_Iio_of_Ico`
-
-English:
-theorem aecover_Iio_of_Ico
-  statement: AECover (μ.restrict (Iio B)) l fun i => Ico (c i) (b i) where
-  proof: by
-    refine (ae_restrict_mem measurableSet_Iio).mono fun _x hx => ?_
-    simp only [mem_Ico, eventually_and]
-    exact ⟨hc.eventually (eventually_le_atBot _x), hb.eventually (eventually_gt_nhds hx)⟩
-  measurableSet _ := measurableSet_Ico
-
-include hd in
-
-中文:
-定理 aecover_Iio_of_Ico
-  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左闭右开区间 (c i) (b i) where
-  证明: by
-    refine (ae_restrict_mem measurableSet_Iio).mono fun _x hx => ?_
-    simp only [mem_Ico, eventually_and]
-    exact ⟨hc.eventually (eventually_le_atBot _x), hb.eventually (eventually_gt_nhds hx)⟩
-  measurableSet _ := measurableSet_Ico
-
-include hd in
-
-Depends on / 依赖: ae_restrict_mem, eventually, eventually_and, eventually_gt_nhds, eventually_le_atBot, hb.eventually, hc.eventually, measurableSet, measurableSet_Ico, measurableSet_Iio, mem_Ico
+/-
+**MeasureTheory.aecover_Iio_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Iio_of_Ico : AECover (μ.restrict (Iio B)) l fun i => Ico (c i) (b 
+i) where ae_eventually_mem
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_restrict_mem`：ae_restrict_mem (hs : MeasurableSet s) : 
+forallᵐ x ∂μ.restrict s, x in s
+· 使用定理 `measurableSet_Iio`：measurableSet_Iio [ClosedIciTopology α] : MeasurableS
+et (Iio a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `eventually_gt_nhds`：eventually_gt_nhds (hab : b < a) : forallᶠ x in 𝓝 a,
+ b < x
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `measurableSet_Ico`：measurableSet_Ico [ClosedIciTopology α] : MeasurableS
+et (Ico a b)
 -/
-theorem aecover_Iio_of_Ico : AECover (μ.restrict (Iio B)) l fun i => Ico (c i) (b i) where
+theorem aecover_Iio_of_Ico : AECover (μ.restrict (Iio B)) l fun i ↦ Ico (c i) (b i) where
   ae_eventually_mem := by
-    refine (ae_restrict_mem measurableSet_Iio).mono fun _x hx => ?_
+    refine (ae_restrict_mem measurableSet_Iio).mono fun _x hx ↦ ?_
     simp only [mem_Ico, eventually_and]
     exact ⟨hc.eventually (eventually_le_atBot _x), hb.eventually (eventually_gt_nhds hx)⟩
   measurableSet _ := measurableSet_Ico
 
 include hd in
-/--
-theorem `aecover_Ici_of_Ico` / 定理 `aecover_Ici_of_Ico`
-
-English:
-theorem aecover_Ici_of_Ico
-  given: [NoMaxOrder α]
-  statement: AECover (μ.restrict (Ici B)) l fun i => Ico B (d i) where
-  proof: by
-    refine (ae_restrict_mem measurableSet_Ici).mono fun _x hx => ?_
-    simp only [mem_Ico, eventually_and]
-    exact⟨.of_forall fun i => hx, hd.eventually (eventually_gt_atTop _x)⟩
-  measurableSet _ := measurableSet_Ico
-
-include ha hb in
-
-中文:
-定理 aecover_Ici_of_Ico
-  条件: [NoMax序 α]
-  结论: AECover (μ.restrict (左闭右无界区间 B)) l fun i => 左闭右开区间 B (d i) where
-  证明: by
-    refine (ae_restrict_mem measurableSet_Ici).mono fun _x hx => ?_
-    simp only [mem_Ico, eventually_and]
-    exact⟨.of_forall fun i => hx, hd.eventually (eventually_gt_atTop _x)⟩
-  measurableSet _ := measurableSet_Ico
-
-include ha hb in
-
-Depends on / 依赖: ae_restrict_mem, eventually, eventually_and, eventually_gt_atTop, hd.eventually, measurableSet, measurableSet_Ici, measurableSet_Ico, mem_Ico, of_forall
+/-
+**MeasureTheory.aecover_Ici_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ici_of_Ico [NoMaxOrder α] : AECover (μ.restrict (Ici B)) l fun i =
+> Ico B (d i) where ae_eventually_mem
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_restrict_mem`：ae_restrict_mem (hs : MeasurableSet s) : 
+forallᵐ x ∂μ.restrict s, x in s
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_gt_atTop`：eventually_gt_atTop [Preorder α] [NoTopOrder
+ α] (a : α) : forallᶠ x in atTop, a < x
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `measurableSet_Ico`：measurableSet_Ico [ClosedIciTopology α] : MeasurableS
+et (Ico a b)
 -/
-theorem aecover_Ici_of_Ico [NoMaxOrder α] : AECover (μ.restrict (Ici B)) l fun i => Ico B (d i) where
+theorem aecover_Ici_of_Ico [NoMaxOrder α] : AECover (μ.restrict (Ici B)) l fun i ↦ Ico B (d i) where
   ae_eventually_mem := by
-    refine (ae_restrict_mem measurableSet_Ici).mono fun _x hx => ?_
+    refine (ae_restrict_mem measurableSet_Ici).mono fun _x hx ↦ ?_
     simp only [mem_Ico, eventually_and]
     exact⟨.of_forall fun i => hx, hd.eventually (eventually_gt_atTop _x)⟩
   measurableSet _ := measurableSet_Ico
 
 include ha hb in
-/--
-theorem `aecover_Ioo_of_Ioo` / 定理 `aecover_Ioo_of_Ioo`
-
-English:
-theorem aecover_Ioo_of_Ioo
-  statement: AECover (μ.restrict <| Ioo A B) l fun i => Ioo (a i) (b i)
-  proof: ((aecover_Ioi_of_Ioi ha).mono <| Measure.restrict_mono Ioo_subset_Ioi_self le_rfl).inter
-    ((aecover_Iio_of_Iio hb).mono <| Measure.restrict_mono Ioo_subset_Iio_self le_rfl)
-
-include ha hb in
-
-中文:
-定理 aecover_Ioo_of_Ioo
-  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 开区间 (a i) (b i)
-  证明: ((aecover_Ioi_of_Ioi ha).mono <| Measure.restrict_mono Ioo_subset_Ioi_self le_rfl).inter
-    ((aecover_Iio_of_Iio hb).mono <| Measure.restrict_mono Ioo_subset_Iio_self le_rfl)
-
-include ha hb in
-
-Depends on / 依赖: Ioo_subset_Iio_self, Ioo_subset_Ioi_self, Measure, Measure.restrict_mono, aecover_Iio_of_Iio, aecover_Ioi_of_Ioi, le_rfl, restrict_mono
+/-
+**MeasureTheory.aecover_Ioo_of_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioo_of_Ioo : AECover (μ.restrict <| Ioo A B) l fun i => Ioo (a i) 
+(b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.inter`：inter {φ ψ : ι -> Set α} (hφ : AECover μ l 
+φ) (hψ : AECover μ l ψ) : AECover μ l (fun i => φ i inter ψ i) where ae_eventual
+ly_mem
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioi_of_Ioi`：aecover_Ioi_of_Ioi : AECover (μ.restri
+ct (Ioi A)) l fun i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `MeasureTheory.Measure.restrict_mono`：restrict_mono {_m0 : MeasurableSpac
+e α} ⦃s s' : Set α⦄ (hs : s subseteq s') ⦃μ ν : Measure α⦄ (hμν : μ <= ν) : μ.re
+strict s <= ν.restrict s'
+· 使用定理 `Set.Ioo_subset_Ioi_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioi b
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.aecover_Iio_of_Iio`：aecover_Iio_of_Iio : AECover (μ.restri
+ct (Iio B)) l fun i => Iio (b i)
+· 使用定理 `Set.Ioo_subset_Iio_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Iio b
 -/
 theorem aecover_Ioo_of_Ioo : AECover (μ.restrict <| Ioo A B) l fun i => Ioo (a i) (b i) :=
   ((aecover_Ioi_of_Ioi ha).mono <| Measure.restrict_mono Ioo_subset_Ioi_self le_rfl).inter
     ((aecover_Iio_of_Iio hb).mono <| Measure.restrict_mono Ioo_subset_Iio_self le_rfl)
 
 include ha hb in
-/--
-theorem `aecover_Ioo_of_Icc` / 定理 `aecover_Ioo_of_Icc`
-
-English:
-theorem aecover_Ioo_of_Icc
-  statement: AECover (μ.restrict <| Ioo A B) l fun i => Icc (a i) (b i)
-  proof: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Icc_self) fun _ => measurableSet_Icc
-
-include ha hb in
-
-中文:
-定理 aecover_Ioo_of_Icc
-  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 闭区间 (a i) (b i)
-  证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Icc_self) fun _ => measurableSet_Icc
-
-include ha hb in
-
-Depends on / 依赖: Ioo_subset_Icc_self, aecover_Ioo_of_Ioo, measurableSet_Icc, superset
+/-
+**MeasureTheory.aecover_Ioo_of_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioo_of_Icc : AECover (μ.restrict <| Ioo A B) l fun i => Icc (a i) 
+(b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.superset`：superset {φ ψ : ι -> Set α} (hφ : AECove
+r μ l φ) (hsub : forall i, φ i subseteq ψ i) (hmeas : forall i, MeasurableSet (ψ
+ i)) : AECover μ l ψ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用定理 `measurableSet_Icc`：measurableSet_Icc [OrderClosedTopology α] : Measurabl
+eSet (Icc a b)
 -/
 theorem aecover_Ioo_of_Icc : AECover (μ.restrict <| Ioo A B) l fun i => Icc (a i) (b i) :=
-  (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Icc_self) fun _ => measurableSet_Icc
+  (aecover_Ioo_of_Ioo ha hb).superset (fun _ ↦ Ioo_subset_Icc_self) fun _ ↦ measurableSet_Icc
 
 include ha hb in
-/--
-theorem `aecover_Ioo_of_Ico` / 定理 `aecover_Ioo_of_Ico`
-
-English:
-theorem aecover_Ioo_of_Ico
-  statement: AECover (μ.restrict <| Ioo A B) l fun i => Ico (a i) (b i)
-  proof: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ico_self) fun _ => measurableSet_Ico
-
-include ha hb in
-
-中文:
-定理 aecover_Ioo_of_Ico
-  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 左闭右开区间 (a i) (b i)
-  证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ico_self) fun _ => measurableSet_Ico
-
-include ha hb in
-
-Depends on / 依赖: Ioo_subset_Ico_self, aecover_Ioo_of_Ioo, measurableSet_Ico, superset
+/-
+**MeasureTheory.aecover_Ioo_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioo_of_Ico : AECover (μ.restrict <| Ioo A B) l fun i => Ico (a i) 
+(b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.superset`：superset {φ ψ : ι -> Set α} (hφ : AECove
+r μ l φ) (hsub : forall i, φ i subseteq ψ i) (hmeas : forall i, MeasurableSet (ψ
+ i)) : AECover μ l ψ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
+· 使用定理 `measurableSet_Ico`：measurableSet_Ico [ClosedIciTopology α] : MeasurableS
+et (Ico a b)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
 -/
 theorem aecover_Ioo_of_Ico : AECover (μ.restrict <| Ioo A B) l fun i => Ico (a i) (b i) :=
-  (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ico_self) fun _ => measurableSet_Ico
+  (aecover_Ioo_of_Ioo ha hb).superset (fun _ ↦ Ioo_subset_Ico_self) fun _ ↦ measurableSet_Ico
 
 include ha hb in
-/--
-theorem `aecover_Ioo_of_Ioc` / 定理 `aecover_Ioo_of_Ioc`
-
-English:
-theorem aecover_Ioo_of_Ioc
-  statement: AECover (μ.restrict <| Ioo A B) l fun i => Ioc (a i) (b i)
-  proof: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ioc_self) fun _ => measurableSet_Ioc
-
-中文:
-定理 aecover_Ioo_of_Ioc
-  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 左开右闭区间 (a i) (b i)
-  证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ioc_self) fun _ => measurableSet_Ioc
-
-Depends on / 依赖: Ioo_subset_Ioc_self, aecover_Ioo_of_Ioo, measurableSet_Ioc, superset
+/-
+**MeasureTheory.aecover_Ioo_of_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioo_of_Ioc : AECover (μ.restrict <| Ioo A B) l fun i => Ioc (a i) 
+(b i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.superset`：superset {φ ψ : ι -> Set α} (hφ : AECove
+r μ l φ) (hsub : forall i, φ i subseteq ψ i) (hmeas : forall i, MeasurableSet (ψ
+ i)) : AECover μ l ψ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Set.Ioo_subset_Ioc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioc b a
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
 -/
 theorem aecover_Ioo_of_Ioc : AECover (μ.restrict <| Ioo A B) l fun i => Ioc (a i) (b i) :=
-  (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ioc_self) fun _ => measurableSet_Ioc
+  (aecover_Ioo_of_Ioo ha hb).superset (fun _ ↦ Ioo_subset_Ioc_self) fun _ ↦ measurableSet_Ioc
 
 variable [NullSingletonClass μ]
-
-/--
-theorem `aecover_Ioc_of_Icc` / 定理 `aecover_Ioc_of_Icc`
-
-English:
-theorem aecover_Ioc_of_Icc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-中文:
-定理 aecover_Ioc_of_Icc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ioc_of_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioc_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ioc A B) l fun i => Icc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Icc`：aecover_Ioo_of_Icc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Icc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ioc`：Ioo_ae_eq_Ioc : Ioo a b =ᵐ[μ] Ioc a b
 -/
 theorem aecover_Ioc_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ioc A B) l fun i => Icc (a i) (b i) :=
   (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-/--
-theorem `aecover_Ioc_of_Ico` / 定理 `aecover_Ioc_of_Ico`
-
-English:
-theorem aecover_Ioc_of_Ico
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-中文:
-定理 aecover_Ioc_of_Ico
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ioc_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioc_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ioc A B) l fun i => Ico (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ico`：aecover_Ioo_of_Ico : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ico (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ioc`：Ioo_ae_eq_Ioc : Ioo a b =ᵐ[μ] Ioc a b
 -/
 theorem aecover_Ioc_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ioc A B) l fun i => Ico (a i) (b i) :=
   (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-/--
-theorem `aecover_Ioc_of_Ioc` / 定理 `aecover_Ioc_of_Ioc`
-
-English:
-theorem aecover_Ioc_of_Ioc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-中文:
-定理 aecover_Ioc_of_Ioc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ioc_of_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioc_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ioc A B) l fun i => Ioc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioc`：aecover_Ioo_of_Ioc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ioc`：Ioo_ae_eq_Ioc : Ioo a b =ᵐ[μ] Ioc a b
 -/
 theorem aecover_Ioc_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ioc A B) l fun i => Ioc (a i) (b i) :=
   (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-/--
-theorem `aecover_Ioc_of_Ioo` / 定理 `aecover_Ioc_of_Ioo`
-
-English:
-theorem aecover_Ioc_of_Ioo
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-中文:
-定理 aecover_Ioc_of_Ioo
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ioc_of_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ioc_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ioc A B) l fun i => Ioo (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ioc`：Ioo_ae_eq_Ioc : Ioo a b =ᵐ[μ] Ioc a b
 -/
 theorem aecover_Ioc_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ioc A B) l fun i => Ioo (a i) (b i) :=
   (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
-
-/--
-theorem `aecover_Ico_of_Icc` / 定理 `aecover_Ico_of_Icc`
-
-English:
-theorem aecover_Ico_of_Icc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-中文:
-定理 aecover_Ico_of_Icc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ico_of_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ico_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ico A B) l fun i => Icc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Icc`：aecover_Ioo_of_Icc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Icc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ico`：Ioo_ae_eq_Ico : Ioo a b =ᵐ[μ] Ico a b
 -/
 theorem aecover_Ico_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ico A B) l fun i => Icc (a i) (b i) :=
   (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-/--
-theorem `aecover_Ico_of_Ico` / 定理 `aecover_Ico_of_Ico`
-
-English:
-theorem aecover_Ico_of_Ico
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-中文:
-定理 aecover_Ico_of_Ico
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ico_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ico_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ico A B) l fun i => Ico (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ico`：aecover_Ioo_of_Ico : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ico (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ico`：Ioo_ae_eq_Ico : Ioo a b =ᵐ[μ] Ico a b
 -/
 theorem aecover_Ico_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ico A B) l fun i => Ico (a i) (b i) :=
   (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-/--
-theorem `aecover_Ico_of_Ioc` / 定理 `aecover_Ico_of_Ioc`
-
-English:
-theorem aecover_Ico_of_Ioc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-中文:
-定理 aecover_Ico_of_Ioc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ico_of_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ico_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ico A B) l fun i => Ioc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioc`：aecover_Ioo_of_Ioc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ico`：Ioo_ae_eq_Ico : Ioo a b =ᵐ[μ] Ico a b
 -/
 theorem aecover_Ico_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ico A B) l fun i => Ioc (a i) (b i) :=
   (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-/--
-theorem `aecover_Ico_of_Ioo` / 定理 `aecover_Ico_of_Ioo`
-
-English:
-theorem aecover_Ico_of_Ioo
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-中文:
-定理 aecover_Ico_of_Ioo
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
+/-
+**MeasureTheory.aecover_Ico_of_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Ico_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Ico A B) l fun i => Ioo (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Ico`：Ioo_ae_eq_Ico : Ioo a b =ᵐ[μ] Ico a b
 -/
 theorem aecover_Ico_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Ico A B) l fun i => Ioo (a i) (b i) :=
   (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
-
-/--
-theorem `aecover_Icc_of_Icc` / 定理 `aecover_Icc_of_Icc`
-
-English:
-theorem aecover_Icc_of_Icc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-中文:
-定理 aecover_Icc_of_Icc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Icc_of_Icc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Icc_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Icc A B) l fun i => Icc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Icc`：aecover_Ioo_of_Icc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Icc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Icc`：Ioo_ae_eq_Icc : Ioo a b =ᵐ[μ] Icc a b
 -/
 theorem aecover_Icc_of_Icc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Icc A B) l fun i => Icc (a i) (b i) :=
   (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-/--
-theorem `aecover_Icc_of_Ico` / 定理 `aecover_Icc_of_Ico`
-
-English:
-theorem aecover_Icc_of_Ico
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-中文:
-定理 aecover_Icc_of_Ico
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
+/-
+**MeasureTheory.aecover_Icc_of_Ico** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Icc_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Icc A B) l fun i => Ico (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ico`：aecover_Ioo_of_Ico : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ico (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Icc`：Ioo_ae_eq_Icc : Ioo a b =ᵐ[μ] Icc a b
 -/
 theorem aecover_Icc_of_Ico (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Icc A B) l fun i => Ico (a i) (b i) :=
   (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-/--
-theorem `aecover_Icc_of_Ioc` / 定理 `aecover_Icc_of_Ioc`
-
-English:
-theorem aecover_Icc_of_Ioc
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-中文:
-定理 aecover_Icc_of_Ioc
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
+/-
+**MeasureTheory.aecover_Icc_of_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Icc_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Icc A B) l fun i => Ioc (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioc`：aecover_Ioo_of_Ioc : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioc (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Icc`：Ioo_ae_eq_Icc : Ioo a b =ᵐ[μ] Icc a b
 -/
 theorem aecover_Icc_of_Ioc (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Icc A B) l fun i => Ioc (a i) (b i) :=
   (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-/--
-theorem `aecover_Icc_of_Ioo` / 定理 `aecover_Icc_of_Ioo`
-
-English:
-theorem aecover_Icc_of_Ioo
-  given: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
-  proof: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-中文:
-定理 aecover_Icc_of_Ioo
-  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
-  证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
-
-Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
+/-
+**MeasureTheory.aecover_Icc_of_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：aecover_Icc_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AEC
+over (μ.restrict <| Icc A B) l fun i => Ioo (a i) (b i)
+参数：ha : Tendsto a l (𝓝 A)；hb : Tendsto b l (𝓝 B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.aecover_Ioo_of_Ioo`：aecover_Ioo_of_Ioo : AECover (μ.restri
+ct <| Ioo A B) l fun i => Ioo (a i) (b i)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioo_ae_eq_Icc`：Ioo_ae_eq_Icc : Ioo a b =ᵐ[μ] Icc a b
 -/
 theorem aecover_Icc_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B)) :
     AECover (μ.restrict <| Icc A B) l fun i => Ioo (a i) (b i) :=
@@ -941,180 +950,237 @@ theorem aecover_Icc_of_Ioo (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B
 
 end FiniteIntervals
 
-/--
-theorem `AECover.restrict` / 定理 `AECover.restrict`
-
-English:
-theorem AECover.restrict
-  given: {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α}
-  proof: hφ.mono Measure.restrict_le_self
-
-中文:
-定理 AECover.restrict
-  条件: {φ : ι -> 集合 α} (hφ : AECover μ l φ) {s : 集合 α}
-  证明: hφ.mono Measure.restrict_le_self
+/-
+**MeasureTheory.AECover.restrict** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AECove
+r`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} {φ : ι → Set α},   MeasureTheory.AECover μ l φ → ∀
+ {s : Set α}, MeasureTheory.AECover (μ.restrict s) l φ
+参数：μ.restrict s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.mono`：mono {ν : Measure α} {φ : ι -> Set α} (hφ : 
+AECover μ l φ) (hle : ν <= μ) : AECover ν l φ
+· 使用定理 `MeasureTheory.Measure.restrict_le_self`：restrict_le_self : μ.restrict s 
+<= μ
 -/
-protected theorem AECover.restrict {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α} :
+protected theorem AECover.restrict {φ : ι → Set α} (hφ : AECover μ l φ) {s : Set α} :
     AECover (μ.restrict s) l φ :=
   hφ.mono Measure.restrict_le_self
-
-/--
-theorem `aecover_restrict_of_ae_imp` / 定理 `aecover_restrict_of_ae_imp`
-
-English:
-theorem aecover_restrict_of_ae_imp
-  statement: {s : Set α} {φ : ι -> Set α} (hs : MeasurableSet s)
-  proof: by rwa [ae_restrict_iff' hs]
-  measurableSet := measurable
-
-中文:
-定理 aecover_restrict_of_ae_imp
-  结论: {s : 集合 α} {φ : ι -> 集合 α} (hs : 可测集 s)
-  证明: by rwa [ae_restrict_iff' hs]
-  measurableSet := measurable
-
-Depends on / 依赖: ae_restrict_iff, measurable, measurableSet
+/-
+**MeasureTheory.aecover_restrict_of_ae_imp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory`。
+形式化陈述：aecover_restrict_of_ae_imp {s : Set α} {φ : ι -> Set α} (hs : MeasurableSe
+t s) (ae_eventually_mem : forallᵐ x ∂μ, x in s -> forallᶠ n in l, x in φ n) (mea
+surable : forall n, MeasurableSet <| φ n) : AECover (μ.restrict s) l φ where ae_
+eventually_mem
+参数：hs : MeasurableSet s；ae_eventually_mem : forallᵐ x ∂μ, x in s -> forallᶠ n in
+ l, x in φ n；measurable : forall n, MeasurableSet <| φ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_restrict_iff'`：ae_restrict_iff'₀ {p : α -> Prop} (hs : 
+NullMeasurableSet s μ) : (forallᵐ x ∂μ.restrict s, p x) ↔ forallᵐ x ∂μ, x in s -
+> p x
 -/
-theorem aecover_restrict_of_ae_imp {s : Set α} {φ : ι -> Set α} (hs : MeasurableSet s)
-    (ae_eventually_mem : forallᵐ x ∂μ, x in s -> forallᶠ n in l, x in φ n)
-    (measurable : forall n, MeasurableSet <| φ n) : AECover (μ.restrict s) l φ where
+theorem aecover_restrict_of_ae_imp {s : Set α} {φ : ι → Set α} (hs : MeasurableSet s)
+    (ae_eventually_mem : ∀ᵐ x ∂μ, x ∈ s → ∀ᶠ n in l, x ∈ φ n)
+    (measurable : ∀ n, MeasurableSet <| φ n) : AECover (μ.restrict s) l φ where
   ae_eventually_mem := by rwa [ae_restrict_iff' hs]
   measurableSet := measurable
-
-/--
-theorem `AECover.inter_restrict` / 定理 `AECover.inter_restrict`
-
-English:
-theorem AECover.inter_restrict
-  statement: {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α}
-  proof: aecover_restrict_of_ae_imp hs
-    (hφ.ae_eventually_mem.mono fun _x hx hxs => hx.mono fun _i hi => ⟨hi, hxs⟩) fun i =>
-    (hφ.measurableSet i).inter hs
-
-中文:
-定理 AECover.inter_restrict
-  结论: {φ : ι -> 集合 α} (hφ : AECover μ l φ) {s : 集合 α}
-  证明: aecover_restrict_of_ae_imp hs
-    (hφ.ae_eventually_mem.mono fun _x hx hxs => hx.mono fun _i hi => ⟨hi, hxs⟩) fun i =>
-    (hφ.measurableSet i).inter hs
-
-Depends on / 依赖: ae_eventually_mem, ae_eventually_mem.mono, aecover_restrict_of_ae_imp, hx.mono, measurableSet
+/-
+**MeasureTheory.AECover.inter_restrict** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} {φ : ι → Set α},   MeasureTheory.AECover μ l φ → ∀
+ {s : Set α}, MeasurableSet s → MeasureTheory.AECover (μ.restrict s) l fun i => 
+φ i ∩ s
+参数：μ.restrict s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_restrict_of_ae_imp`：aecover_restrict_of_ae_imp {s 
+: Set α} {φ : ι -> Set α} (hs : MeasurableSet s) (ae_eventually_mem : forallᵐ x 
+∂μ, x in s -> forallᶠ n in l, …
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 -/
-theorem AECover.inter_restrict {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α}
-    (hs : MeasurableSet s) : AECover (μ.restrict s) l fun i => φ i inter s :=
+theorem AECover.inter_restrict {φ : ι → Set α} (hφ : AECover μ l φ) {s : Set α}
+    (hs : MeasurableSet s) : AECover (μ.restrict s) l fun i => φ i ∩ s :=
   aecover_restrict_of_ae_imp hs
     (hφ.ae_eventually_mem.mono fun _x hx hxs => hx.mono fun _i hi => ⟨hi, hxs⟩) fun i =>
     (hφ.measurableSet i).inter hs
-
-/--
-theorem `AECover.ae_tendsto_indicator` / 定理 `AECover.ae_tendsto_indicator`
-
-English:
-theorem AECover.ae_tendsto_indicator
-  statement: {β : Type*} [Zero β] [TopologicalSpace β] (f : α -> β)
-  proof: hφ.ae_eventually_mem.mono fun _x hx =>
-tendsto_const_nhds.congr' hx.mono fun _n hn => (indicator_of_mem hn _).symm
-
-中文:
-定理 AECover.ae_tendsto_indicator
-  结论: {β : 类型} [零 β] [拓扑空间 β] (f : α -> β)
-  证明: hφ.ae_eventually_mem.mono fun _x hx =>
-tendsto_const_nhds.congr' hx.mono fun _n hn => (indicator_of_mem hn _).symm
-
-Depends on / 依赖: ae_eventually_mem, ae_eventually_mem.mono, hx.mono, indicator_of_mem, tendsto_const_nhds, tendsto_const_nhds.congr
+/-
+**MeasureTheory.AECover.ae_tendsto_indicator** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} {β : Type u_3}   [inst_1 : Zero β] [inst_2 : Topol
+ogicalSpace β] (f : α → β) {φ : ι → Set α},   MeasureTheory.AECover μ l φ → ∀ᵐ (
+x : α) ∂μ, Filter.Tendsto (fun i => (φ i).indicator f x) l (nhds (f x))
+参数：f : α → β；x : α；fun i => (φ i).indicator f x；nhds (f x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
-theorem AECover.ae_tendsto_indicator {β : Type*} [Zero β] [TopologicalSpace β] (f : α -> β)
-    {φ : ι -> Set α} (hφ : AECover μ l φ) :
-    forallᵐ x ∂μ, Tendsto (fun i => (φ i).indicator f x) l (𝓝 <| f x) :=
+theorem AECover.ae_tendsto_indicator {β : Type*} [Zero β] [TopologicalSpace β] (f : α → β)
+    {φ : ι → Set α} (hφ : AECover μ l φ) :
+    ∀ᵐ x ∂μ, Tendsto (fun i => (φ i).indicator f x) l (𝓝 <| f x) :=
   hφ.ae_eventually_mem.mono fun _x hx =>
-tendsto_const_nhds.congr' hx.mono fun _n hn => (indicator_of_mem hn _).symm
-
-/--
-theorem `AECover.aemeasurable` / 定理 `AECover.aemeasurable`
-
-English:
-theorem AECover.aemeasurable
-  statement: {β : Type*} [MeasurableSpace β] [l.IsCountablyGenerated] [l.NeBot]
-  proof: by
-  obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aemeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
-  rwa [Measure.restrict_eq_self_of_ae_mem] at this
-  filter_upwards [hφ.ae_eventually_mem] with x hx using
-    mem_iUnion.mpr (hu.eventually hx).exists
-
-中文:
-定理 AECover.aemeasurable
-  结论: {β : 类型} [可测空间 β] [l.是余untablyGenerated] [l.NeBot]
-  证明: by
-  obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aemeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
-  rwa [Measure.restrict_eq_self_of_ae_mem] at this
-  filter_upwards [hφ.ae_eventually_mem] with x hx using
-    mem_iUnion.mpr (hu.eventually hx).exists
-
-Depends on / 依赖: Measure, Measure.restrict_eq_self_of_ae_mem, ae_eventually_mem, aemeasurable_iUnion_iff, aemeasurable_iUnion_iff.mpr, eventually, exists_seq_tendsto, filter_upwards, hu.eventually, l.exists_seq_tendsto, mem_iUnion, mem_iUnion.mpr, restrict_eq_self_of_ae_mem
+    tendsto_const_nhds.congr' <| hx.mono fun _n hn => (indicator_of_mem hn _).symm
+/-
+**MeasureTheory.AECover.aemeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+Cover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} {β : Type u_3}   [inst_1 : MeasurableSpace β] [l.I
+sCountablyGenerated] [l.NeBot] {f : α → β} {φ : ι → Set α},   MeasureTheory.AECo
+ver μ l φ → (∀ (i : ι), AEMeasurable f (μ.restrict (φ i))) → AEMeasurable f μ
+参数：∀ (i : ι), AEMeasurable f (μ.restrict (φ i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_seq_tendsto`：exists_seq_tendsto (f : Filter α) [IsCountabl
+yGenerated f] [NeBot f] : exists x : Nat -> α, Tendsto x atTop f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `aemeasurable_iUnion_iff`：∀ {ι : Type u_1} {α : Type u_2} {β : Type u_3} 
+{m0 : MeasurableSpace α} [inst : MeasurableSpace β] {f : α → β}   {μ : MeasureTh
+eory.Measure …
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_eq_self_of_ae_mem`：restrict_eq_self_of_ae
+_mem {_m0 : MeasurableSpace α} ⦃s : Set α⦄ ⦃μ : Measure α⦄ (hs : forallᵐ x ∂μ, x
+ in s) : μ.restrict s = μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
 -/
 theorem AECover.aemeasurable {β : Type*} [MeasurableSpace β] [l.IsCountablyGenerated] [l.NeBot]
-    {f : α -> β} {φ : ι -> Set α} (hφ : AECover μ l φ)
-    (hfm : forall i, AEMeasurable f (μ.restrict <| φ i)) : AEMeasurable f μ := by
+    {f : α → β} {φ : ι → Set α} (hφ : AECover μ l φ)
+    (hfm : ∀ i, AEMeasurable f (μ.restrict <| φ i)) : AEMeasurable f μ := by
   obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aemeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
+  have := aemeasurable_iUnion_iff.mpr fun n : ℕ => hfm (u n)
   rwa [Measure.restrict_eq_self_of_ae_mem] at this
   filter_upwards [hφ.ae_eventually_mem] with x hx using
     mem_iUnion.mpr (hu.eventually hx).exists
-
-/--
-theorem `AECover.aestronglyMeasurable` / 定理 `AECover.aestronglyMeasurable`
-
-English:
-theorem AECover.aestronglyMeasurable
-  statement: {β : Type*} [TopologicalSpace β] [PseudoMetrizableSpace β]
-  proof: by
-  obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aestronglyMeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
-  rwa [Measure.restrict_eq_self_of_ae_mem] at this
-  filter_upwards [hφ.ae_eventually_mem] with x hx using mem_iUnion.mpr (hu.eventually hx).exists
-
-中文:
-定理 AECover.aestronglyMeasurable
-  结论: {β : 类型} [拓扑空间 β] [PseudoMetrizable空间 β]
-  证明: by
-  obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aestronglyMeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
-  rwa [Measure.restrict_eq_self_of_ae_mem] at this
-  filter_upwards [hφ.ae_eventually_mem] with x hx using mem_iUnion.mpr (hu.eventually hx).exists
-
-Depends on / 依赖: Measure, Measure.restrict_eq_self_of_ae_mem, ae_eventually_mem, aestronglyMeasurable_iUnion_iff, aestronglyMeasurable_iUnion_iff.mpr, eventually, exists_seq_tendsto, filter_upwards, hu.eventually, l.exists_seq_tendsto, mem_iUnion, mem_iUnion.mpr, restrict_eq_self_of_ae_mem
+/-
+**MeasureTheory.AECover.aestronglyMeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} {β : Type u_3}   [inst_1 : TopologicalSpace β] [To
+pologicalSpace.PseudoMetrizableSpace β] [l.IsCountablyGenerated] [l.NeBot]   {f 
+: α → β} {φ : ι → Set α},   MeasureTheory.AECover μ l φ →     (∀ (i : ι), Measur
+eTheory.AEStronglyMeasurable f (μ.restrict (φ i))) → MeasureTheory.AEStronglyMea
+surable f μ
+参数：∀ (i : ι), MeasureTheory.AEStronglyMeasurable f (μ.restrict (φ i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_seq_tendsto`：exists_seq_tendsto (f : Filter α) [IsCountabl
+yGenerated f] [NeBot f] : exists x : Nat -> α, Tendsto x atTop f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `aestronglyMeasurable_iUnion_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Ty
+pe u_4} [Countable ι] [inst : TopologicalSpace β] {m₀ : MeasurableSpace α}   {μ 
+: MeasureTheory.Measu…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_eq_self_of_ae_mem`：restrict_eq_self_of_ae
+_mem {_m0 : MeasurableSpace α} ⦃s : Set α⦄ ⦃μ : Measure α⦄ (hs : forallᵐ x ∂μ, x
+ in s) : μ.restrict s = μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
 -/
 theorem AECover.aestronglyMeasurable {β : Type*} [TopologicalSpace β] [PseudoMetrizableSpace β]
-    [l.IsCountablyGenerated] [l.NeBot] {f : α -> β} {φ : ι -> Set α} (hφ : AECover μ l φ)
-    (hfm : forall i, AEStronglyMeasurable f (μ.restrict <| φ i)) : AEStronglyMeasurable f μ := by
+    [l.IsCountablyGenerated] [l.NeBot] {f : α → β} {φ : ι → Set α} (hφ : AECover μ l φ)
+    (hfm : ∀ i, AEStronglyMeasurable f (μ.restrict <| φ i)) : AEStronglyMeasurable f μ := by
   obtain ⟨u, hu⟩ := l.exists_seq_tendsto
-  have := aestronglyMeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
+  have := aestronglyMeasurable_iUnion_iff.mpr fun n : ℕ => hfm (u n)
   rwa [Measure.restrict_eq_self_of_ae_mem] at this
   filter_upwards [hφ.ae_eventually_mem] with x hx using mem_iUnion.mpr (hu.eventually hx).exists
 
 end AECover
 
-/--
-theorem `AECover.comp_tendsto` / 定理 `AECover.comp_tendsto`
-
-English:
-theorem AECover.comp_tendsto
-  statement: {α ι ι' : Type*} [MeasurableSpace α] {μ : Measure α} {l : Filter ι}
-  proof: hφ.ae_eventually_mem.mono fun _x hx => hu.eventually hx
-  measurableSet i := hφ.measurableSet (u i)
-
-中文:
-定理 AECover.comp_tendsto
-  结论: {α ι ι' : 类型} [可测空间 α] {μ : 测度 α} {l : 滤子 ι}
-  证明: hφ.ae_eventually_mem.mono fun _x hx => hu.eventually hx
-  measurableSet i := hφ.measurableSet (u i)
-
-Depends on / 依赖: ae_eventually_mem, ae_eventually_mem.mono, eventually, hu.eventually
+/-
+**MeasureTheory.AECover.comp_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+Cover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {ι' : Type u_3} [inst : MeasurableSpace α]
+ {μ : MeasureTheory.Measure α} {l : Filter ι}   {l' : Filter ι'} {φ : ι → Set α}
+,   MeasureTheory.AECover μ l φ → ∀ {u : ι' → ι}, Filter.Tendsto u l' l → Measur
+eTheory.AECover μ l' (φ ∘ u)
+参数：φ ∘ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 -/
 theorem AECover.comp_tendsto {α ι ι' : Type*} [MeasurableSpace α] {μ : Measure α} {l : Filter ι}
-    {l' : Filter ι'} {φ : ι -> Set α} (hφ : AECover μ l φ) {u : ι' -> ι} (hu : Tendsto u l' l) :
+    {l' : Filter ι'} {φ : ι → Set α} (hφ : AECover μ l φ) {u : ι' → ι} (hu : Tendsto u l' l) :
     AECover μ l' (φ ∘ u) where
   ae_eventually_mem := hφ.ae_eventually_mem.mono fun _x hx => hu.eventually hx
   measurableSet i := hφ.measurableSet (u i)
@@ -1123,50 +1189,74 @@ section AECoverUnionInterCountable
 
 variable {α ι : Type*} [Countable ι] [MeasurableSpace α] {μ : Measure α}
 
-/--
-theorem `AECover.biUnion_Iic_aecover` / 定理 `AECover.biUnion_Iic_aecover`
-
-English:
-theorem AECover.biUnion_Iic_aecover
-  given: [Preorder ι] {φ : ι -> Set α} (hφ : AECover μ atTop φ)
-  proof: hφ.superset (fun _ => subset_biUnion_of_mem self_mem_Iic) fun _ => .biUnion (to_countable _)
-    fun _ _ => (hφ.2 _)
-
-中文:
-定理 AECover.biUnion_Iic_aecover
-  条件: [预序 ι] {φ : ι -> 集合 α} (hφ : AECover μ atTop φ)
-  证明: hφ.superset (fun _ => subset_biUnion_of_mem self_mem_Iic) fun _ => .biUnion (to_countable _)
-    fun _ _ => (hφ.2 _)
-
-Depends on / 依赖: biUnion, self_mem_Iic, subset_biUnion_of_mem, superset, to_countable
+/-
+**MeasureTheory.AECover.biUnion_Iic_aecover** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [Countable ι] [inst : MeasurableSpace α] {
+μ : MeasureTheory.Measure α}   [inst_1 : Preorder ι] {φ : ι → Set α},   MeasureT
+heory.AECover μ Filter.atTop φ → MeasureTheory.AECover μ Filter.atTop fun n => ⋃
+ k ∈ Set.Iic n, φ k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.superset`：superset {φ ψ : ι -> Set α} (hφ : AECove
+r μ l φ) (hsub : forall i, φ i subseteq ψ i) (hmeas : forall i, MeasurableSet (ψ
+ i)) : AECover μ l ψ
+· 使用定理 `Set.subset_biUnion_of_mem`：subset_biUnion_of_mem {s : Set α} {u : α -> S
+et β} {x : α} (xs : x in s) : u x subseteq ⋃ x in s, u x
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 -/
-theorem AECover.biUnion_Iic_aecover [Preorder ι] {φ : ι -> Set α} (hφ : AECover μ atTop φ) :
-    AECover μ atTop fun n : ι => ⋃ (k) (_h : k in Iic n), φ k :=
-  hφ.superset (fun _ => subset_biUnion_of_mem self_mem_Iic) fun _ => .biUnion (to_countable _)
-    fun _ _ => (hφ.2 _)
-
-/--
-theorem `AECover.biInter_Ici_aecover` / 定理 `AECover.biInter_Ici_aecover`
-
-English:
-theorem AECover.biInter_Ici_aecover
-  statement: [Preorder ι] {φ : ι -> Set α}
-  proof: hφ.ae_eventually_mem.mono fun x h => by
-    simpa only [mem_iInter, mem_Ici, eventually_forall_ge_atTop]
-  measurableSet _ := .biInter (to_countable _) fun n _ => hφ.measurableSet n
-
-中文:
-定理 AECover.bi整数er_Ici_aecover
-  结论: [预序 ι] {φ : ι -> 集合 α}
-  证明: hφ.ae_eventually_mem.mono fun x h => by
-    simpa only [mem_iInter, mem_Ici, eventually_forall_ge_atTop]
-  measurableSet _ := .biInter (to_countable _) fun n _ => hφ.measurableSet n
-
-Depends on / 依赖: ae_eventually_mem, ae_eventually_mem.mono, biInter, eventually_forall_ge_atTop, measurableSet, mem_Ici, mem_iInter, to_countable
+theorem AECover.biUnion_Iic_aecover [Preorder ι] {φ : ι → Set α} (hφ : AECover μ atTop φ) :
+    AECover μ atTop fun n : ι => ⋃ (k) (_h : k ∈ Iic n), φ k :=
+  hφ.superset (fun _ ↦ subset_biUnion_of_mem self_mem_Iic) fun _ ↦ .biUnion (to_countable _)
+    fun _ _ ↦ (hφ.2 _)
+/-
+**MeasureTheory.AECover.biInter_Ici_aecover** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [Countable ι] [inst : MeasurableSpace α] {
+μ : MeasureTheory.Measure α}   [inst_1 : Preorder ι] {φ : ι → Set α},   MeasureT
+heory.AECover μ Filter.atTop φ → MeasureTheory.AECover μ Filter.atTop fun n => ⋂
+ k ∈ Set.Ici n, φ k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.ae_eventually_mem`：∀ {α : Type u_1} {ι : Type u_2}
+ [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι 
+→ Set α},   MeasureTheory.AEC…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `MeasurableSet.biInter`：MeasurableSet.biInter {f : β -> Set α} {s : Set β
+} (hs : s.Countable) (h : forall b in s, MeasurableSet (f b)) : MeasurableSet (⋂
+ b in s, f …
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
 -/
-theorem AECover.biInter_Ici_aecover [Preorder ι] {φ : ι -> Set α}
-    (hφ : AECover μ atTop φ) : AECover μ atTop fun n : ι => ⋂ (k) (_h : k in Ici n), φ k where
-  ae_eventually_mem := hφ.ae_eventually_mem.mono fun x h => by
+theorem AECover.biInter_Ici_aecover [Preorder ι] {φ : ι → Set α}
+    (hφ : AECover μ atTop φ) : AECover μ atTop fun n : ι => ⋂ (k) (_h : k ∈ Ici n), φ k where
+  ae_eventually_mem := hφ.ae_eventually_mem.mono fun x h ↦ by
     simpa only [mem_iInter, mem_Ici, eventually_forall_ge_atTop]
   measurableSet _ := .biInter (to_countable _) fun n _ => hφ.measurableSet n
 
@@ -1176,146 +1266,153 @@ section Lintegral
 
 variable {α ι : Type*} [MeasurableSpace α] {μ : Measure α} {l : Filter ι}
 
-/--
-theorem `lintegral_tendsto_of_monotone_of_nat` / 定理 `lintegral_tendsto_of_monotone_of_nat`
-
-English:
-theorem lintegral_tendsto_of_monotone_of_nat
-  statement: {φ : Nat -> Set α} (hφ : AECover μ atTop φ)
-  proof: let F n := (φ n).indicator f
-  have key₁ : forall n, AEMeasurable (F n) μ := fun n => hfm.indicator (hφ.measurableSet n)
-  have key₂ : forallᵐ x : α ∂μ, Monotone fun n => F n x := ae_of_all _ fun x _i _j hij => by
-    dsimp [F]; grw [hmono hij]
-  have key₃ : forallᵐ x : α ∂μ, Tendsto (fun n => F n x) atTop (𝓝 (f x)) := hφ.ae_tendsto_indicator f
-  (lintegral_tendsto_of_tendsto_of_monotone key₁ key₂ key₃).congr fun n =>
-    lintegral_indicator (hφ.measurableSet n) _
-
-中文:
-定理 lintegral_tendsto_of_monotone_of_nat
-  结论: {φ : 自然数 -> 集合 α} (hφ : AECover μ atTop φ)
-  证明: let F n := (φ n).indicator f
-  have key₁ : forall n, AEMeasurable (F n) μ := fun n => hfm.indicator (hφ.measurableSet n)
-  have key₂ : forallᵐ x : α ∂μ, Monotone fun n => F n x := ae_of_all _ fun x _i _j hij => by
-    dsimp [F]; grw [hmono hij]
-  have key₃ : forallᵐ x : α ∂μ, Tendsto (fun n => F n x) atTop (𝓝 (f x)) := hφ.ae_tendsto_indicator f
-  (lintegral_tendsto_of_tendsto_of_monotone key₁ key₂ key₃).congr fun n =>
-    lintegral_indicator (hφ.measurableSet n) _
+/-
+**MeasureTheory.lintegral_tendsto_of_monotone_of_nat** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem lintegral_tendsto_of_monotone_of_nat {φ : Nat -> Set α} (hφ : AECover μ atTop φ)
-    (hmono : Monotone φ) {f : α -> Real>=0∞} (hfm : AEMeasurable f μ) :
+private theorem lintegral_tendsto_of_monotone_of_nat {φ : ℕ → Set α} (hφ : AECover μ atTop φ)
+    (hmono : Monotone φ) {f : α → ℝ≥0∞} (hfm : AEMeasurable f μ) :
     Tendsto (fun i => ∫⁻ x in φ i, f x ∂μ) atTop (𝓝 <| ∫⁻ x, f x ∂μ) :=
   let F n := (φ n).indicator f
-  have key₁ : forall n, AEMeasurable (F n) μ := fun n => hfm.indicator (hφ.measurableSet n)
-  have key₂ : forallᵐ x : α ∂μ, Monotone fun n => F n x := ae_of_all _ fun x _i _j hij => by
+  have key₁ : ∀ n, AEMeasurable (F n) μ := fun n => hfm.indicator (hφ.measurableSet n)
+  have key₂ : ∀ᵐ x : α ∂μ, Monotone fun n => F n x := ae_of_all _ fun x _i _j hij => by
     dsimp [F]; grw [hmono hij]
-  have key₃ : forallᵐ x : α ∂μ, Tendsto (fun n => F n x) atTop (𝓝 (f x)) := hφ.ae_tendsto_indicator f
+  have key₃ : ∀ᵐ x : α ∂μ, Tendsto (fun n => F n x) atTop (𝓝 (f x)) := hφ.ae_tendsto_indicator f
   (lintegral_tendsto_of_tendsto_of_monotone key₁ key₂ key₃).congr fun n =>
     lintegral_indicator (hφ.measurableSet n) _
-
-/--
-theorem `AECover.lintegral_tendsto_of_nat` / 定理 `AECover.lintegral_tendsto_of_nat`
-
-English:
-theorem AECover.lintegral_tendsto_of_nat
-  statement: {φ : Nat -> Set α} (hφ : AECover μ atTop φ) {f : α -> Real>=0∞}
-  proof: by
-  have lim₁ := lintegral_tendsto_of_monotone_of_nat hφ.biInter_Ici_aecover
-    (fun i j hij => biInter_subset_biInter_left (Ici_subset_Ici.mpr hij)) hfm
-  have lim₂ := lintegral_tendsto_of_monotone_of_nat hφ.biUnion_Iic_aecover
-    (fun i j hij => biUnion_subset_biUnion_left (Iic_subset_Iic.mpr hij)) hfm
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le lim₁ lim₂ (fun n => ?_) fun n => ?_
-  exacts [lintegral_mono_set (biInter_subset_of_mem self_mem_Ici),
-    lintegral_mono_set (subset_biUnion_of_mem self_mem_Iic)]
-
-中文:
-定理 AECover.lintegral_tendsto_of_nat
-  结论: {φ : 自然数 -> 集合 α} (hφ : AECover μ atTop φ) {f : α -> 实数>=0∞}
-  证明: by
-  have lim₁ := lintegral_tendsto_of_monotone_of_nat hφ.biInter_Ici_aecover
-    (fun i j hij => biInter_subset_biInter_left (Ici_subset_Ici.mpr hij)) hfm
-  have lim₂ := lintegral_tendsto_of_monotone_of_nat hφ.biUnion_Iic_aecover
-    (fun i j hij => biUnion_subset_biUnion_left (Iic_subset_Iic.mpr hij)) hfm
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le lim₁ lim₂ (fun n => ?_) fun n => ?_
-  exacts [lintegral_mono_set (biInter_subset_of_mem self_mem_Ici),
-    lintegral_mono_set (subset_biUnion_of_mem self_mem_Iic)]
-
-Depends on / 依赖: Ici_subset_Ici, Ici_subset_Ici.mpr, Iic_subset_Iic, Iic_subset_Iic.mpr, biInter_Ici_aecover, biInter_subset_biInter_left, biInter_subset_of_mem, biUnion_Iic_aecover, biUnion_subset_biUnion_left, exacts, lintegral_mono_set, lintegral_tendsto_of_monotone_of_nat, self_mem_Ici, self_mem_Ii, subset_biUnion_of_mem, tendsto_of_tendsto_of_tendsto_of_le_of_le
+/-
+**MeasureTheory.AECover.lintegral_tendsto_of_nat** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} 
+{φ : ℕ → Set α},   MeasureTheory.AECover μ Filter.atTop φ →     ∀ {f : α → ENNRe
+al},       AEMeasurable f μ → Filter.Tendsto (fun x => ∫⁻ (x : α) in φ x, f x ∂μ
+) Filter.atTop (nhds (∫⁻ (x : α), f x ∂μ))
+参数：fun x => ∫⁻ (x : α) in φ x, f x ∂μ；nhds (∫⁻ (x : α), f x ∂μ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.MeasureTheory.Integral.IntegralEqImproper.0.MeasureTheo
+ry.lintegral_tendsto_of_monotone_of_nat`：∀ {α : Type u_1} [inst : MeasurableSpac
+e α] {μ : MeasureTheory.Measure α} {φ : ℕ → Set α},   MeasureTheory.AECover μ Fi
+lter.atTop φ →     Mo…
+· 使用定理 `MeasureTheory.AECover.biInter_Ici_aecover`：∀ {α : Type u_1} {ι : Type u_
+2} [Countable ι] [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α}   [ins
+t_1 : Preorder ι] {φ : ι → Set …
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.biInter_subset_biInter_left`：biInter_subset_biInter_left {s s' : Set
+ α} {t : α -> Set β} (h : s' subseteq s) : ⋂ x in s, t x subseteq ⋂ x in s', t x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Ici_subset_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.
+Ici a ⊆ Set.Ici b ↔ b ≤ a
+· 使用定理 `MeasureTheory.AECover.biUnion_Iic_aecover`：∀ {α : Type u_1} {ι : Type u_
+2} [Countable ι] [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α}   [ins
+t_1 : Preorder ι] {φ : ι → Set …
+· 使用定理 `Set.biUnion_subset_biUnion_left`：biUnion_subset_biUnion_left {s s' : Set
+ α} {t : α -> Set β} (h : s subseteq s') : ⋃ x in s, t x subseteq ⋃ x in s', t x
+· 使用定理 `Set.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
+· 使用定理 `tendsto_of_tendsto_of_tendsto_of_le_of_le`：tendsto_of_tendsto_of_tendsto
+_of_le_of_le [OrderTopology α] {f g h : β -> α} {b : Filter β} {a : α} (hg : Ten
+dsto g b (𝓝 a)) (hh : Tendsto h…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `MeasureTheory.lintegral_mono_set`：lintegral_mono_set {_ : MeasurableSpac
+e α} ⦃μ : Measure α⦄ {s t : Set α} {f : α -> Real>=0∞} (hst : s subseteq t) : ∫⁻
+ x in s, f x ∂μ <= ∫⁻ …
+· 使用定理 `Set.biInter_subset_of_mem`：biInter_subset_of_mem {s : Set α} {t : α -> S
+et β} {x : α} (xs : x in s) : ⋂ x in s, t x subseteq t x
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `Set.subset_biUnion_of_mem`：subset_biUnion_of_mem {s : Set α} {u : α -> S
+et β} {x : α} (xs : x in s) : u x subseteq ⋃ x in s, u x
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
 -/
-theorem AECover.lintegral_tendsto_of_nat {φ : Nat -> Set α} (hφ : AECover μ atTop φ) {f : α -> Real>=0∞}
+theorem AECover.lintegral_tendsto_of_nat {φ : ℕ → Set α} (hφ : AECover μ atTop φ) {f : α → ℝ≥0∞}
     (hfm : AEMeasurable f μ) : Tendsto (∫⁻ x in φ ·, f x ∂μ) atTop (𝓝 <| ∫⁻ x, f x ∂μ) := by
   have lim₁ := lintegral_tendsto_of_monotone_of_nat hφ.biInter_Ici_aecover
     (fun i j hij => biInter_subset_biInter_left (Ici_subset_Ici.mpr hij)) hfm
   have lim₂ := lintegral_tendsto_of_monotone_of_nat hφ.biUnion_Iic_aecover
     (fun i j hij => biUnion_subset_biUnion_left (Iic_subset_Iic.mpr hij)) hfm
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le lim₁ lim₂ (fun n => ?_) fun n => ?_
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le lim₁ lim₂ (fun n ↦ ?_) fun n ↦ ?_
   exacts [lintegral_mono_set (biInter_subset_of_mem self_mem_Ici),
     lintegral_mono_set (subset_biUnion_of_mem self_mem_Iic)]
-
-/--
-theorem `AECover.lintegral_tendsto_of_countably_generated` / 定理 `AECover.lintegral_tendsto_of_countably_generated`
-
-English:
-theorem AECover.lintegral_tendsto_of_countably_generated
-  statement: [l.IsCountablyGenerated] {φ : ι -> Set α}
-  proof: tendsto_of_seq_tendsto fun _u hu => (hφ.comp_tendsto hu).lintegral_tendsto_of_nat hfm
-
-中文:
-定理 AECover.lintegral_tendsto_of_countably_generated
-  结论: [l.是余untablyGenerated] {φ : ι -> 集合 α}
-  证明: tendsto_of_seq_tendsto fun _u hu => (hφ.comp_tendsto hu).lintegral_tendsto_of_nat hfm
-
-Depends on / 依赖: comp_tendsto, lintegral_tendsto_of_nat, tendsto_of_seq_tendsto
+/-
+**MeasureTheory.AECover.lintegral_tendsto_of_countably_generated** 是 Mathlib 中的一
+个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [l.IsCountablyGenerated] {φ : ι → Set α},   Meas
+ureTheory.AECover μ l φ →     ∀ {f : α → ENNReal},       AEMeasurable f μ → Filt
+er.Tendsto (fun i => ∫⁻ (x : α) in φ i, f x ∂μ) l (nhds (∫⁻ (x : α), f x ∂μ))
+参数：fun i => ∫⁻ (x : α) in φ i, f x ∂μ；nhds (∫⁻ (x : α), f x ∂μ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_of_seq_tendsto`：tendsto_of_seq_tendsto {f : α -> β} {k : 
+Filter α} {l : Filter β} [k.IsCountablyGenerated] : (forall x : Nat -> α, Tendst
+o x atTop k -> Tend…
+· 使用定理 `MeasureTheory.AECover.lintegral_tendsto_of_nat`：∀ {α : Type u_1} [inst :
+ MeasurableSpace α] {μ : MeasureTheory.Measure α} {φ : ℕ → Set α},   MeasureTheo
+ry.AECover μ Filter.atTop φ →     ∀ …
+· 使用定理 `MeasureTheory.AECover.comp_tendsto`：∀ {α : Type u_1} {ι : Type u_2} {ι' 
+: Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter
+ ι}   {l' : Filter ι'} {…
 -/
-theorem AECover.lintegral_tendsto_of_countably_generated [l.IsCountablyGenerated] {φ : ι -> Set α}
-    (hφ : AECover μ l φ) {f : α -> Real>=0∞} (hfm : AEMeasurable f μ) :
+theorem AECover.lintegral_tendsto_of_countably_generated [l.IsCountablyGenerated] {φ : ι → Set α}
+    (hφ : AECover μ l φ) {f : α → ℝ≥0∞} (hfm : AEMeasurable f μ) :
     Tendsto (fun i => ∫⁻ x in φ i, f x ∂μ) l (𝓝 <| ∫⁻ x, f x ∂μ) :=
   tendsto_of_seq_tendsto fun _u hu => (hφ.comp_tendsto hu).lintegral_tendsto_of_nat hfm
-
-/--
-theorem `AECover.lintegral_eq_of_tendsto` / 定理 `AECover.lintegral_eq_of_tendsto`
-
-English:
-theorem AECover.lintegral_eq_of_tendsto
-  statement: [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
-  proof: tendsto_nhds_unique (hφ.lintegral_tendsto_of_countably_generated hfm) htendsto
-
-中文:
-定理 AECover.lintegral_eq_of_tendsto
-  结论: [l.NeBot] [l.是余untablyGenerated] {φ : ι -> 集合 α}
-  证明: tendsto_nhds_unique (hφ.lintegral_tendsto_of_countably_generated hfm) htendsto
-
-Depends on / 依赖: htendsto, lintegral_tendsto_of_countably_generated, tendsto_nhds_unique
+/-
+**MeasureTheory.AECover.lintegral_eq_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated] {φ : ι → Set 
+α},   MeasureTheory.AECover μ l φ →     ∀ {f : α → ENNReal} (I : ENNReal),      
+ AEMeasurable f μ → Filter.Tendsto (fun i => ∫⁻ (x : α) in φ i, f x ∂μ) l (nhds 
+I) → ∫⁻ (x : α), f x ∂μ = I
+参数：I : ENNReal；fun i => ∫⁻ (x : α) in φ i, f x ∂μ；nhds I；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `MeasureTheory.AECover.lintegral_tendsto_of_countably_generated`：∀ {α : T
+ype u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α}
+ {l : Filter ι}   [l.IsCountablyGenerated] {φ : ι → …
 -/
-theorem AECover.lintegral_eq_of_tendsto [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
-    (hφ : AECover μ l φ) {f : α -> Real>=0∞} (I : Real>=0∞) (hfm : AEMeasurable f μ)
+theorem AECover.lintegral_eq_of_tendsto [l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α}
+    (hφ : AECover μ l φ) {f : α → ℝ≥0∞} (I : ℝ≥0∞) (hfm : AEMeasurable f μ)
     (htendsto : Tendsto (fun i => ∫⁻ x in φ i, f x ∂μ) l (𝓝 I)) : ∫⁻ x, f x ∂μ = I :=
   tendsto_nhds_unique (hφ.lintegral_tendsto_of_countably_generated hfm) htendsto
-
-/--
-theorem `AECover.iSup_lintegral_eq_of_countably_generated` / 定理 `AECover.iSup_lintegral_eq_of_countably_generated`
-
-English:
-theorem AECover.iSup_lintegral_eq_of_countably_generated
-  statement: [Nonempty ι] [l.NeBot]
-  proof: by
-  have := hφ.lintegral_tendsto_of_countably_generated hfm
-  refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt
-    (fun i => lintegral_mono' Measure.restrict_le_self le_rfl) fun w hw => ?_
-  exact (this.eventually_const_lt hw).exists
-
-中文:
-定理 AECover.iSup_lintegral_eq_of_countably_generated
-  结论: [非空 ι] [l.NeBot]
-  证明: by
-  have := hφ.lintegral_tendsto_of_countably_generated hfm
-  refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt
-    (fun i => lintegral_mono' Measure.restrict_le_self le_rfl) fun w hw => ?_
-  exact (this.eventually_const_lt hw).exists
-
-Depends on / 依赖: Measure, Measure.restrict_le_self, ciSup_eq_of_forall_le_of_forall_lt_exists_gt, eventually_const_lt, le_rfl, lintegral_mono, lintegral_tendsto_of_countably_generated, restrict_le_self, this.eventually_const_lt
+/-
+**MeasureTheory.AECover.iSup_lintegral_eq_of_countably_generated** 是 Mathlib 中的一
+个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} [Nonempty ι]   [l.NeBot] [l.IsCountablyGenerated] 
+{φ : ι → Set α},   MeasureTheory.AECover μ l φ →     ∀ {f : α → ENNReal}, AEMeas
+urable f μ → ⨆ i, ∫⁻ (x : α) in φ i, f x ∂μ = ∫⁻ (x : α), f x ∂μ
+参数：x : α；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.lintegral_tendsto_of_countably_generated`：∀ {α : T
+ype u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α}
+ {l : Filter ι}   [l.IsCountablyGenerated] {φ : ι → …
+· 使用定理 `ciSup_eq_of_forall_le_of_forall_lt_exists_gt`：ciSup_eq_of_forall_le_of_f
+orall_lt_exists_gt [Nonempty ι] {f : ι -> α} (h₁ : forall i, f i <= b) (h₂ : for
+all w, w < b -> exists i, w < f i)…
+· 使用定理 `MeasureTheory.lintegral_mono'`：lintegral_mono' {m : MeasurableSpace α} ⦃
+μ ν : Measure α⦄ (hμν : μ <= ν) ⦃f g : α -> Real>=0∞⦄ (hfg : f <= g) : ∫⁻ a, f a
+ ∂μ <= ∫⁻ a, g a ∂ν
+· 使用定理 `MeasureTheory.Measure.restrict_le_self`：restrict_le_self : μ.restrict s 
+<= μ
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Tendsto.eventually_const_lt`：Filter.Tendsto.eventually_const_lt {
+l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v) (h : Filter.Tendsto f l (𝓝 v))
+ : forallᶠ a in l, u < f…
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
 -/
 theorem AECover.iSup_lintegral_eq_of_countably_generated [Nonempty ι] [l.NeBot]
-    [l.IsCountablyGenerated] {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> Real>=0∞}
+    [l.IsCountablyGenerated] {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → ℝ≥0∞}
     (hfm : AEMeasurable f μ) : ⨆ i : ι, ∫⁻ x in φ i, f x ∂μ = ∫⁻ x, f x ∂μ := by
   have := hφ.lintegral_tendsto_of_countably_generated hfm
   refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt
@@ -1328,149 +1425,202 @@ section Integrable
 
 variable {α ι E : Type*} [MeasurableSpace α] {μ : Measure α} {l : Filter ι} [NormedAddCommGroup E]
 
-/--
-theorem `AECover.integrable_of_lintegral_enorm_bounded` / 定理 `AECover.integrable_of_lintegral_enorm_bounded`
-
-English:
-theorem AECover.integrable_of_lintegral_enorm_bounded
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: by
-  refine ⟨hfm, (le_of_tendsto ?_ hbounded).trans_lt ENNReal.ofReal_lt_top⟩
-  exact hφ.lintegral_tendsto_of_countably_generated hfm.enorm
-
-中文:
-定理 AECover.integrable_of_lintegral_enorm_bounded
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: by
-  refine ⟨hfm, (le_of_tendsto ?_ hbounded).trans_lt ENNReal.ofReal_lt_top⟩
-  exact hφ.lintegral_tendsto_of_countably_generated hfm.enorm
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_lt_top, hbounded, hfm.enorm, le_of_tendsto, lintegral_tendsto_of_countably_generated, ofReal_lt_top, trans_lt
+/-
+**MeasureTheory.AECover.integrable_of_lintegral_enorm_bounded** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : ℝ),       MeasureTheory.AEStronglyMeasurable f μ →    
+     (∀ᶠ (i : ι) in l, ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ ≤ ENNReal.ofReal I) → Measur
+eTheory.Integrable f μ
+参数：I : ℝ；∀ᶠ (i : ι) in l, ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ ≤ ENNReal.ofReal I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `le_of_tendsto`：le_of_tendsto {x : Filter β} [hx : NeBot x] (lim : Tendst
+o f x (𝓝 a)) (h : forallᶠ c in x, f c <= b) : a <= b
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `MeasureTheory.AECover.lintegral_tendsto_of_countably_generated`：∀ {α : T
+ype u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α}
+ {l : Filter ι}   [l.IsCountablyGenerated] {φ : ι → …
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.enorm`：∀ {α : Type u_1} {m₀ : Measura
+bleSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : TopologicalSpac
+e β]   [inst_1 : ContinuousENo…
+· 使用定理 `ENNReal.ofReal_lt_top`：∀ {r : ℝ}, ENNReal.ofReal r < ⊤
 -/
 theorem AECover.integrable_of_lintegral_enorm_bounded [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real) (hfm : AEStronglyMeasurable f μ)
-    (hbounded : forallᶠ i in l, ∫⁻ x in φ i, ‖f x‖ₑ ∂μ <= ENNReal.ofReal I) : Integrable f μ := by
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ) (hfm : AEStronglyMeasurable f μ)
+    (hbounded : ∀ᶠ i in l, ∫⁻ x in φ i, ‖f x‖ₑ ∂μ ≤ ENNReal.ofReal I) : Integrable f μ := by
   refine ⟨hfm, (le_of_tendsto ?_ hbounded).trans_lt ENNReal.ofReal_lt_top⟩
   exact hφ.lintegral_tendsto_of_countably_generated hfm.enorm
-
-/--
-theorem `AECover.integrable_of_lintegral_enorm_tendsto` / 定理 `AECover.integrable_of_lintegral_enorm_tendsto`
-
-English:
-theorem AECover.integrable_of_lintegral_enorm_tendsto
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: by
-  refine hφ.integrable_of_lintegral_enorm_bounded (max 1 (I + 1)) hfm ?_
-  refine htendsto.eventually (ge_mem_nhds ?_)
-  refine (ENNReal.ofReal_lt_ofReal_iff (lt_max_of_lt_left zero_lt_one)).2 ?_
-  exact lt_max_of_lt_right (lt_add_one I)
-
-中文:
-定理 AECover.integrable_of_lintegral_enorm_tendsto
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: by
-  refine hφ.integrable_of_lintegral_enorm_bounded (max 1 (I + 1)) hfm ?_
-  refine htendsto.eventually (ge_mem_nhds ?_)
-  refine (ENNReal.ofReal_lt_ofReal_iff (lt_max_of_lt_left zero_lt_one)).2 ?_
-  exact lt_max_of_lt_right (lt_add_one I)
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_lt_ofReal_iff, eventually, ge_mem_nhds, htendsto, htendsto.eventually, integrable_of_lintegral_enorm_bounded, lt_add_one, lt_max_of_lt_left, lt_max_of_lt_right, ofReal_lt_ofReal_iff, zero_lt_one
+/-
+**MeasureTheory.AECover.integrable_of_lintegral_enorm_tendsto** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : ℝ),       MeasureTheory.AEStronglyMeasurable f μ →    
+     Filter.Tendsto (fun i => ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ) l (nhds (ENNReal.ofR
+eal I)) →           MeasureTheory.Integrable f μ
+参数：I : ℝ；fun i => ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ；nhds (ENNReal.ofReal I)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.integrable_of_lintegral_enorm_bounded`：∀ {α : Type
+ u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheor
+y.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `ge_mem_nhds`：∀ {α : Type u} [ts : TopologicalSpace α] [inst : Preorder α
+] [OrderTopology α] {a b : α},   b < a → ∀ᶠ (x : α) in nhds b, x ≤ a
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.ofReal_lt_ofReal_iff`：ofReal_lt_ofReal_iff {p q : Real} (h : 0 <
+ q) : ENNReal.ofReal p < ENNReal.ofReal q ↔ p < q
+· 使用定理 `lt_max_of_lt_left`：lt_max_of_lt_left (h : a < b) : a < max b c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `lt_max_of_lt_right`：lt_max_of_lt_right (h : a < c) : a < max b c
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem AECover.integrable_of_lintegral_enorm_tendsto [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real) (hfm : AEStronglyMeasurable f μ)
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ) (hfm : AEStronglyMeasurable f μ)
     (htendsto : Tendsto (fun i => ∫⁻ x in φ i, ‖f x‖ₑ ∂μ) l (𝓝 <| .ofReal I)) :
     Integrable f μ := by
   refine hφ.integrable_of_lintegral_enorm_bounded (max 1 (I + 1)) hfm ?_
   refine htendsto.eventually (ge_mem_nhds ?_)
   refine (ENNReal.ofReal_lt_ofReal_iff (lt_max_of_lt_left zero_lt_one)).2 ?_
   exact lt_max_of_lt_right (lt_add_one I)
-
-/--
-theorem `AECover.integrable_of_lintegral_enorm_bounded'` / 定理 `AECover.integrable_of_lintegral_enorm_bounded'`
-
-English:
-theorem AECover.integrable_of_lintegral_enorm_bounded'
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: hφ.integrable_of_lintegral_enorm_bounded I hfm
-    (by simpa only [ENNReal.ofReal_coe_nnreal] using hbounded)
-
-中文:
-定理 AECover.integrable_of_lintegral_enorm_bounded'
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: hφ.integrable_of_lintegral_enorm_bounded I hfm
-    (by simpa only [ENNReal.ofReal_coe_nnreal] using hbounded)
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_coe_nnreal, hbounded, integrable_of_lintegral_enorm_bounded, ofReal_coe_nnreal
+/-
+**MeasureTheory.AECover.integrable_of_lintegral_enorm_bounded'** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : NNReal),       MeasureTheory.AEStronglyMeasurable f μ 
+→         (∀ᶠ (i : ι) in l, ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ ≤ ↑I) → MeasureTheory.I
+ntegrable f μ
+参数：I : NNReal；∀ᶠ (i : ι) in l, ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ ≤ ↑I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.integrable_of_lintegral_enorm_bounded`：∀ {α : Type
+ u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheor
+y.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.ofReal_coe_nnreal`：∀ {p : NNReal}, ENNReal.ofReal ↑p = ↑p
 -/
 theorem AECover.integrable_of_lintegral_enorm_bounded' [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real>=0) (hfm : AEStronglyMeasurable f μ)
-    (hbounded : forallᶠ i in l, ∫⁻ x in φ i, ‖f x‖ₑ ∂μ <= I) : Integrable f μ :=
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ≥0) (hfm : AEStronglyMeasurable f μ)
+    (hbounded : ∀ᶠ i in l, ∫⁻ x in φ i, ‖f x‖ₑ ∂μ ≤ I) : Integrable f μ :=
   hφ.integrable_of_lintegral_enorm_bounded I hfm
     (by simpa only [ENNReal.ofReal_coe_nnreal] using hbounded)
-
-/--
-theorem `AECover.integrable_of_lintegral_enorm_tendsto'` / 定理 `AECover.integrable_of_lintegral_enorm_tendsto'`
-
-English:
-theorem AECover.integrable_of_lintegral_enorm_tendsto'
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: hφ.integrable_of_lintegral_enorm_tendsto I hfm
-    (by simpa only [ENNReal.ofReal_coe_nnreal] using htendsto)
-
-中文:
-定理 AECover.integrable_of_lintegral_enorm_tendsto'
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: hφ.integrable_of_lintegral_enorm_tendsto I hfm
-    (by simpa only [ENNReal.ofReal_coe_nnreal] using htendsto)
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_coe_nnreal, htendsto, integrable_of_lintegral_enorm_tendsto, ofReal_coe_nnreal
+/-
+**MeasureTheory.AECover.integrable_of_lintegral_enorm_tendsto'** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : NNReal),       MeasureTheory.AEStronglyMeasurable f μ 
+→         Filter.Tendsto (fun i => ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ) l (nhds ↑I) → M
+easureTheory.Integrable f μ
+参数：I : NNReal；fun i => ∫⁻ (x : α) in φ i, ‖f x‖ₑ ∂μ；nhds ↑I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.integrable_of_lintegral_enorm_tendsto`：∀ {α : Type
+ u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheor
+y.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal_coe_nnreal`：∀ {p : NNReal}, ENNReal.ofReal ↑p = ↑p
 -/
 theorem AECover.integrable_of_lintegral_enorm_tendsto' [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real>=0) (hfm : AEStronglyMeasurable f μ)
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ≥0) (hfm : AEStronglyMeasurable f μ)
     (htendsto : Tendsto (fun i => ∫⁻ x in φ i, ‖f x‖ₑ ∂μ) l (𝓝 I)) : Integrable f μ :=
   hφ.integrable_of_lintegral_enorm_tendsto I hfm
     (by simpa only [ENNReal.ofReal_coe_nnreal] using htendsto)
-
-/--
-theorem `AECover.integrable_of_integral_norm_bounded` / 定理 `AECover.integrable_of_integral_norm_bounded`
-
-English:
-theorem AECover.integrable_of_integral_norm_bounded
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: by
-  have hfm : AEStronglyMeasurable f μ :=
-    hφ.aestronglyMeasurable fun i => (hfi i).aestronglyMeasurable
-  refine hφ.integrable_of_lintegral_enorm_bounded I hfm ?_
-  conv at hbounded in integral _ _ =>
-    rw [integral_eq_lintegral_of_nonneg_ae (ae_of_all _ fun x => @norm_nonneg E _ (f x))
-        hfm.norm.restrict]
-  conv at hbounded in ENNReal.ofReal _ =>
-    rw [← coe_nnnorm]; rw [ENNReal.ofReal_coe_nnreal]
-  refine hbounded.mono fun i hi => ?_
-  rw [← ENNReal.ofReal_toReal <| ne_top_of_lt <| hasFiniteIntegral_iff_enorm.mp (hfi i).2]
-  apply ENNReal.ofReal_le_ofReal hi
-
-中文:
-定理 AECover.integrable_of_integral_norm_bounded
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: by
-  have hfm : AEStronglyMeasurable f μ :=
-    hφ.aestronglyMeasurable fun i => (hfi i).aestronglyMeasurable
-  refine hφ.integrable_of_lintegral_enorm_bounded I hfm ?_
-  conv at hbounded in integral _ _ =>
-    rw [integral_eq_lintegral_of_nonneg_ae (ae_of_all _ fun x => @norm_nonneg E _ (f x))
-        hfm.norm.restrict]
-  conv at hbounded in ENNReal.ofReal _ =>
-    rw [← coe_nnnorm]; rw [ENNReal.ofReal_coe_nnreal]
-  refine hbounded.mono fun i hi => ?_
-  rw [← ENNReal.ofReal_toReal <| ne_top_of_lt <| hasFiniteIntegral_iff_enorm.mp (hfi i).2]
-  apply ENNReal.ofReal_le_ofReal hi
-
-Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.ofReal, ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_toReal, ae_of_all, aestronglyMeasurable, coe_nnnorm, hasFiniteIntegral_iff_enor, hbounded, hbounded.mono, hfm.norm.restrict, integrable_of_lintegral_enorm_bounded, integral, integral_eq_lintegral_of_nonneg_ae, ne_top_of_lt, norm_nonneg, ofReal, ofReal_coe_nnreal, ofReal_toReal
+/-
+**MeasureTheory.AECover.integrable_of_integral_norm_bounded** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : ℝ),       (∀ (i : ι), MeasureTheory.IntegrableOn f (φ 
+i) μ) →         (∀ᶠ (i : ι) in l, ∫ (x : α) in φ i, ‖f x‖ ∂μ ≤ I) → MeasureTheor
+y.Integrable f μ
+参数：I : ℝ；∀ (i : ι), MeasureTheory.IntegrableOn f (φ i) μ；∀ᶠ (i : ι) in l, ∫ (x :
+ α) in φ i, ‖f x‖ ∂μ ≤ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.aestronglyMeasurable`：∀ {α : Type u_1} {ι : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {β :
+ Type u_3}   [inst_1 : Topologic…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.Integrable.aestronglyMeasurable`：∀ {α : Type u_1} {ε : Typ
+e u_5} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : Topological
+Space ε]   [inst_1 : ContinuousENor…
+· 使用定理 `MeasureTheory.AECover.integrable_of_lintegral_enorm_bounded`：∀ {α : Type
+ u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheor
+y.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `coe_nnnorm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ↑‖a‖
+₊ = ‖a‖
+· 使用定理 `ENNReal.ofReal_coe_nnreal`：∀ {p : NNReal}, ENNReal.ofReal ↑p = ↑p
+· 使用定理 `MeasureTheory.integral_eq_lintegral_of_nonneg_ae`：integral_eq_lintegral_
+of_nonneg_ae {f : α -> Real} (hf : 0 <=ᵐ[μ] f) (hfm : AEStronglyMeasurable f μ) 
+: ∫ a, f a ∂μ = ENNReal.toReal (∫⁻ a, …
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.restrict`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.M
+easure α}   {f : α → β},   Measur…
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.norm`：∀ {α : Type u_1} {m₀ : Measurab
+leSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : SeminormedAddCom
+mGroup β]   {f : α → β}, Meas…
+· 使用定理 `ENNReal.ofReal_toReal`：ofReal_toReal {a : Real>=0∞} (h : a != ∞) : ENNRe
+al.ofReal a.toReal = a
+· 使用定理 `ne_top_of_lt`：ne_top_of_lt (h : a < b) : a != ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.hasFiniteIntegral_iff_enorm`：hasFiniteIntegral_iff_enorm {
+f : α -> ε} : HasFiniteIntegral f μ ↔ ∫⁻ a, ‖f a‖ₑ ∂μ < ∞
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
 -/
 theorem AECover.integrable_of_integral_norm_bounded [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real) (hfi : forall i, IntegrableOn f (φ i) μ)
-    (hbounded : forallᶠ i in l, (∫ x in φ i, ‖f x‖ ∂μ) <= I) : Integrable f μ := by
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ) (hfi : ∀ i, IntegrableOn f (φ i) μ)
+    (hbounded : ∀ᶠ i in l, (∫ x in φ i, ‖f x‖ ∂μ) ≤ I) : Integrable f μ := by
   have hfm : AEStronglyMeasurable f μ :=
     hφ.aestronglyMeasurable fun i => (hfi i).aestronglyMeasurable
   refine hφ.integrable_of_lintegral_enorm_bounded I hfm ?_
@@ -1478,77 +1628,106 @@ theorem AECover.integrable_of_integral_norm_bounded [l.NeBot] [l.IsCountablyGene
     rw [integral_eq_lintegral_of_nonneg_ae (ae_of_all _ fun x => @norm_nonneg E _ (f x))
         hfm.norm.restrict]
   conv at hbounded in ENNReal.ofReal _ =>
-    rw [← coe_nnnorm]; rw [ENNReal.ofReal_coe_nnreal]
+    rw [← coe_nnnorm, ENNReal.ofReal_coe_nnreal]
   refine hbounded.mono fun i hi => ?_
   rw [← ENNReal.ofReal_toReal <| ne_top_of_lt <| hasFiniteIntegral_iff_enorm.mp (hfi i).2]
   apply ENNReal.ofReal_le_ofReal hi
-
-/--
-theorem `AECover.integrable_of_integral_norm_tendsto` / 定理 `AECover.integrable_of_integral_norm_tendsto`
-
-English:
-theorem AECover.integrable_of_integral_norm_tendsto
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
-  hφ.integrable_of_integral_norm_bounded I' hfi hI'
-
-中文:
-定理 AECover.integrable_of_integral_norm_tendsto
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
-  hφ.integrable_of_integral_norm_bounded I' hfi hI'
-
-Depends on / 依赖: btw_total, htendsto, htendsto.isBoundedUnder_le, integrable_of_integral_norm_bounded, isBoundedUnder_le
+/-
+**MeasureTheory.AECover.integrable_of_integral_norm_tendsto** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureTheory.AECover μ l φ
+ →     ∀ {f : α → E} (I : ℝ),       (∀ (i : ι), MeasureTheory.IntegrableOn f (φ 
+i) μ) →         Filter.Tendsto (fun i => ∫ (x : α) in φ i, ‖f x‖ ∂μ) l (nhds I) 
+→ MeasureTheory.Integrable f μ
+参数：I : ℝ；∀ (i : ι), MeasureTheory.IntegrableOn f (φ i) μ；fun i => ∫ (x : α) in φ
+ i, ‖f x‖ ∂μ；nhds I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le`：Filter.Tendsto.isBoundedUnder_le (h : 
+Tendsto u f (𝓝 a)) : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `BoundedLENhdsClass.of_closedIciTopology`：∀ {α : Type u_2} [inst : Linear
+Order α] [inst_1 : TopologicalSpace α] [ClosedIciTopology α], BoundedLENhdsClass
+ α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
 -/
 theorem AECover.integrable_of_integral_norm_tendsto [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> E} (I : Real) (hfi : forall i, IntegrableOn f (φ i) μ)
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → E} (I : ℝ) (hfi : ∀ i, IntegrableOn f (φ i) μ)
     (htendsto : Tendsto (fun i => ∫ x in φ i, ‖f x‖ ∂μ) l (𝓝 I)) : Integrable f μ :=
   let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
   hφ.integrable_of_integral_norm_bounded I' hfi hI'
-
-/--
-theorem `AECover.integrable_of_integral_bounded_of_nonneg_ae` / 定理 `AECover.integrable_of_integral_bounded_of_nonneg_ae`
-
-English:
-theorem AECover.integrable_of_integral_bounded_of_nonneg_ae
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: hφ.integrable_of_integral_norm_bounded I hfi hbounded.mono fun _i hi =>
-    (integral_congr_ae <| ae_restrict_of_ae <| hnng.mono fun _ => Real.norm_of_nonneg).le.trans hi
-
-中文:
-定理 AECover.integrable_of_integral_bounded_of_nonneg_ae
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: hφ.integrable_of_integral_norm_bounded I hfi hbounded.mono fun _i hi =>
-    (integral_congr_ae <| ae_restrict_of_ae <| hnng.mono fun _ => Real.norm_of_nonneg).le.trans hi
-
-Depends on / 依赖: Real.norm_of_nonneg, ae_restrict_of_ae, hbounded, hbounded.mono, hnng.mono, integrable_of_integral_norm_bounded, integral_congr_ae, le.trans, norm_of_nonneg
+/-
+**MeasureTheory.AECover.integrable_of_integral_bounded_of_nonneg_ae** 是 Mathlib 
+中的一个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated] {φ : ι → Set 
+α},   MeasureTheory.AECover μ l φ →     ∀ {f : α → ℝ} (I : ℝ),       (∀ (i : ι),
+ MeasureTheory.IntegrableOn f (φ i) μ) →         (∀ᵐ (x : α) ∂μ, 0 ≤ f x) → (∀ᶠ 
+(i : ι) in l, ∫ (x : α) in φ i, f x ∂μ ≤ I) → MeasureTheory.Integrable f μ
+参数：I : ℝ；∀ (i : ι), MeasureTheory.IntegrableOn f (φ i) μ；∀ᵐ (x : α) ∂μ, 0 ≤ f x；
+∀ᶠ (i : ι) in l, ∫ (x : α) in φ i, f x ∂μ ≤ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `MeasureTheory.integral_congr_ae`：integral_congr_ae {f g : α -> G} (h : f
+ =ᵐ[μ] g) : ∫ a, f a ∂μ = ∫ a, g a ∂μ
+· 使用定理 `MeasureTheory.ae_restrict_of_ae`：ae_restrict_of_ae {s : Set α} {p : α ->
+ Prop} (h : forallᵐ x ∂μ, p x) : forallᵐ x ∂μ.restrict s, p x
+· 使用定理 `Real.norm_of_nonneg`：norm_of_nonneg (hr : 0 <= r) : ‖r‖ = r
 -/
 theorem AECover.integrable_of_integral_bounded_of_nonneg_ae [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> Real} (I : Real) (hfi : forall i, IntegrableOn f (φ i) μ)
-    (hnng : forallᵐ x ∂μ, 0 <= f x) (hbounded : forallᶠ i in l, (∫ x in φ i, f x ∂μ) <= I) : Integrable f μ :=
-hφ.integrable_of_integral_norm_bounded I hfi hbounded.mono fun _i hi =>
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → ℝ} (I : ℝ) (hfi : ∀ i, IntegrableOn f (φ i) μ)
+    (hnng : ∀ᵐ x ∂μ, 0 ≤ f x) (hbounded : ∀ᶠ i in l, (∫ x in φ i, f x ∂μ) ≤ I) : Integrable f μ :=
+  hφ.integrable_of_integral_norm_bounded I hfi <| hbounded.mono fun _i hi =>
     (integral_congr_ae <| ae_restrict_of_ae <| hnng.mono fun _ => Real.norm_of_nonneg).le.trans hi
-
-/--
-theorem `AECover.integrable_of_integral_tendsto_of_nonneg_ae` / 定理 `AECover.integrable_of_integral_tendsto_of_nonneg_ae`
-
-English:
-theorem AECover.integrable_of_integral_tendsto_of_nonneg_ae
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
-  hφ.integrable_of_integral_bounded_of_nonneg_ae I' hfi hnng hI'
-
-中文:
-定理 AECover.integrable_of_integral_tendsto_of_nonneg_ae
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
-  hφ.integrable_of_integral_bounded_of_nonneg_ae I' hfi hnng hI'
-
-Depends on / 依赖: htendsto, htendsto.isBoundedUnder_le, integrable_of_integral_bounded_of_nonneg_ae, isBoundedUnder_le
+/-
+**MeasureTheory.AECover.integrable_of_integral_tendsto_of_nonneg_ae** 是 Mathlib 
+中的一个定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated] {φ : ι → Set 
+α},   MeasureTheory.AECover μ l φ →     ∀ {f : α → ℝ} (I : ℝ),       (∀ (i : ι),
+ MeasureTheory.IntegrableOn f (φ i) μ) →         (∀ᵐ (x : α) ∂μ, 0 ≤ f x) →     
+      Filter.Tendsto (fun i => ∫ (x : α) in φ i, f x ∂μ) l (nhds I) → MeasureThe
+ory.Integrable f μ
+参数：I : ℝ；∀ (i : ι), MeasureTheory.IntegrableOn f (φ i) μ；∀ᵐ (x : α) ∂μ, 0 ≤ f x；
+fun i => ∫ (x : α) in φ i, f x ∂μ；nhds I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le`：Filter.Tendsto.isBoundedUnder_le (h : 
+Tendsto u f (𝓝 a)) : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `BoundedLENhdsClass.of_closedIciTopology`：∀ {α : Type u_2} [inst : Linear
+Order α] [inst_1 : TopologicalSpace α] [ClosedIciTopology α], BoundedLENhdsClass
+ α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_bounded_of_nonneg_ae`：∀ {α 
+: Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure
+ α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated]…
 -/
 theorem AECover.integrable_of_integral_tendsto_of_nonneg_ae [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> Real} (I : Real) (hfi : forall i, IntegrableOn f (φ i) μ)
-    (hnng : forallᵐ x ∂μ, 0 <= f x) (htendsto : Tendsto (fun i => ∫ x in φ i, f x ∂μ) l (𝓝 I)) :
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → ℝ} (I : ℝ) (hfi : ∀ i, IntegrableOn f (φ i) μ)
+    (hnng : ∀ᵐ x ∂μ, 0 ≤ f x) (htendsto : Tendsto (fun i => ∫ x in φ i, f x ∂μ) l (𝓝 I)) :
     Integrable f μ :=
   let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
   hφ.integrable_of_integral_bounded_of_nonneg_ae I' hfi hnng hI'
@@ -1558,35 +1737,55 @@ end Integrable
 section Integral
 
 variable {α ι E : Type*} [MeasurableSpace α] {μ : Measure α} {l : Filter ι} [NormedAddCommGroup E]
-  [NormedSpace Real E]
+  [NormedSpace ℝ E]
 
-/--
-theorem `AECover.integral_tendsto_of_countably_generated` / 定理 `AECover.integral_tendsto_of_countably_generated`
-
-English:
-theorem AECover.integral_tendsto_of_countably_generated
-  statement: [l.IsCountablyGenerated] {φ : ι -> Set α}
-  proof: suffices h : Tendsto (fun i => ∫ x : α, (φ i).indicator f x ∂μ) l (𝓝 (∫ x : α, f x ∂μ)) from by
-    convert! h using 2; rw [integral_indicator (hφ.measurableSet _)]
-  tendsto_integral_filter_of_dominated_convergence (fun x => ‖f x‖)
-    (Eventually.of_forall fun i => hfi.aestronglyMeasurable.indicator <| hφ.measurableSet i)
-    (Eventually.of_forall fun _ => ae_of_all _ fun _ => norm_indicator_le_norm_self _ _) hfi.norm
-    (hφ.ae_tendsto_indicator f)
-
-中文:
-定理 AECover.integral_tendsto_of_countably_generated
-  结论: [l.是余untablyGenerated] {φ : ι -> 集合 α}
-  证明: suffices h : Tendsto (fun i => ∫ x : α, (φ i).indicator f x ∂μ) l (𝓝 (∫ x : α, f x ∂μ)) from by
-    convert! h using 2; rw [integral_indicator (hφ.measurableSet _)]
-  tendsto_integral_filter_of_dominated_convergence (fun x => ‖f x‖)
-    (Eventually.of_forall fun i => hfi.aestronglyMeasurable.indicator <| hφ.measurableSet i)
-    (Eventually.of_forall fun _ => ae_of_all _ fun _ => norm_indicator_le_norm_self _ _) hfi.norm
-    (hφ.ae_tendsto_indicator f)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Tendsto, ae_of_all, ae_tendsto_indicator, aestronglyMeasurable, convert, hfi.aestronglyMeasurable.indicator, hfi.norm, indicator, integral_indicator, measurableSet, norm_indicator_le_norm_self, of_forall, tendsto_integral_filter_of_dominated_convergence
+/-
+**MeasureTheory.AECover.integral_tendsto_of_countably_generated** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+inst_2 : NormedSpace ℝ E] [l.IsCountablyGenerated] {φ : ι → Set α},   MeasureThe
+ory.AECover μ l φ →     ∀ {f : α → E},       MeasureTheory.Integrable f μ → Filt
+er.Tendsto (fun i => ∫ (x : α) in φ i, f x ∂μ) l (nhds (∫ (x : α), f x ∂μ))
+参数：fun i => ∫ (x : α) in φ i, f x ∂μ；nhds (∫ (x : α), f x ∂μ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.tendsto_integral_filter_of_dominated_convergence`：tendsto_
+integral_filter_of_dominated_convergence {ι} {l : Filter ι} [l.IsCountablyGenera
+ted] {F : ι -> α -> G} {f : α -> G} (bound : α -> Re…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.indicator`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Me
+asure α}   {f : α → β} [inst_1 : Z…
+· 使用定理 `MeasureTheory.Integrable.aestronglyMeasurable`：∀ {α : Type u_1} {ε : Typ
+e u_5} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : Topological
+Space ε]   [inst_1 : ContinuousENor…
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `norm_indicator_le_norm_self`：norm_indicator_le_norm_self : ‖indicator s 
+f a‖ <= ‖f a‖
+· 使用定理 `MeasureTheory.Integrable.norm`：∀ {α : Type u_1} {β : Type u_2} {m : Meas
+urableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f 
+: α → β}, MeasureTh…
+· 使用定理 `MeasureTheory.AECover.ae_tendsto_indicator`：∀ {α : Type u_1} {ι : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {β :
+ Type u_3}   [inst_1 : Zero β] […
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_indicator`：integral_indicator (hs : MeasurableSet
+ s) : ∫ x, indicator s f x ∂μ = ∫ x in s, f x ∂μ
 -/
-theorem AECover.integral_tendsto_of_countably_generated [l.IsCountablyGenerated] {φ : ι -> Set α}
-    (hφ : AECover μ l φ) {f : α -> E} (hfi : Integrable f μ) :
+theorem AECover.integral_tendsto_of_countably_generated [l.IsCountablyGenerated] {φ : ι → Set α}
+    (hφ : AECover μ l φ) {f : α → E} (hfi : Integrable f μ) :
     Tendsto (fun i => ∫ x in φ i, f x ∂μ) l (𝓝 <| ∫ x, f x ∂μ) :=
   suffices h : Tendsto (fun i => ∫ x : α, (φ i).indicator f x ∂μ) l (𝓝 (∫ x : α, f x ∂μ)) from by
     convert! h using 2; rw [integral_indicator (hφ.measurableSet _)]
@@ -1595,46 +1794,60 @@ theorem AECover.integral_tendsto_of_countably_generated [l.IsCountablyGenerated]
     (Eventually.of_forall fun _ => ae_of_all _ fun _ => norm_indicator_le_norm_self _ _) hfi.norm
     (hφ.ae_tendsto_indicator f)
 
-/--
-theorem `AECover.integral_eq_of_tendsto` / 定理 `AECover.integral_eq_of_tendsto`
+/-- Slight reformulation of `MeasureTheory.AECover.integral_tendsto_of_countably_generated`. -/
+/-
+**MeasureTheory.AECover.integral_eq_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] 
+{μ : MeasureTheory.Measure α} {l : Filter ι}   [inst_1 : NormedAddCommGroup E] [
+inst_2 : NormedSpace ℝ E] [l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α},   
+MeasureTheory.AECover μ l φ →     ∀ {f : α → E} (I : E),       MeasureTheory.Int
+egrable f μ →         Filter.Tendsto (fun n => ∫ (x : α) in φ n, f x ∂μ) l (nhds
+ I) → ∫ (x : α), f x ∂μ = I
+参数：I : E；fun n => ∫ (x : α) in φ n, f x ∂μ；nhds I；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
 
-English:
-theorem AECover.integral_eq_of_tendsto
-  statement: [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
-  proof: tendsto_nhds_unique (hφ.integral_tendsto_of_countably_generated hfi) h
-
-中文:
-定理 AECover.integral_eq_of_tendsto
-  结论: [l.NeBot] [l.是余untablyGenerated] {φ : ι -> 集合 α}
-  证明: tendsto_nhds_unique (hφ.integral_tendsto_of_countably_generated hfi) h
-
-Depends on / 依赖: integral_tendsto_of_countably_generated, tendsto_nhds_unique
+--- 原说明 ---
+Slight reformulation of `MeasureTheory.AECover.integral_tendsto_of_countably_gen
+erated`.
 -/
-theorem AECover.integral_eq_of_tendsto [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
-    (hφ : AECover μ l φ) {f : α -> E} (I : E) (hfi : Integrable f μ)
+theorem AECover.integral_eq_of_tendsto [l.NeBot] [l.IsCountablyGenerated] {φ : ι → Set α}
+    (hφ : AECover μ l φ) {f : α → E} (I : E) (hfi : Integrable f μ)
     (h : Tendsto (fun n => ∫ x in φ n, f x ∂μ) l (𝓝 I)) : ∫ x, f x ∂μ = I :=
   tendsto_nhds_unique (hφ.integral_tendsto_of_countably_generated hfi) h
-
-/--
-theorem `AECover.integral_eq_of_tendsto_of_nonneg_ae` / 定理 `AECover.integral_eq_of_tendsto_of_nonneg_ae`
-
-English:
-theorem AECover.integral_eq_of_tendsto_of_nonneg_ae
-  statement: [l.NeBot] [l.IsCountablyGenerated]
-  proof: have hfi' : Integrable f μ := hφ.integrable_of_integral_tendsto_of_nonneg_ae I hfi hnng htendsto
-  hφ.integral_eq_of_tendsto I hfi' htendsto
-
-中文:
-定理 AECover.integral_eq_of_tendsto_of_nonneg_ae
-  结论: [l.NeBot] [l.是余untablyGenerated]
-  证明: have hfi' : Integrable f μ := hφ.integrable_of_integral_tendsto_of_nonneg_ae I hfi hnng htendsto
-  hφ.integral_eq_of_tendsto I hfi' htendsto
-
-Depends on / 依赖: Integrable, htendsto, integrable_of_integral_tendsto_of_nonneg_ae, integral_eq_of_tendsto
+/-
+**MeasureTheory.AECover.integral_eq_of_tendsto_of_nonneg_ae** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.AECover`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated] {φ : ι → Set 
+α},   MeasureTheory.AECover μ l φ →     ∀ {f : α → ℝ} (I : ℝ),       0 ≤ᵐ[μ] f →
+         (∀ (n : ι), MeasureTheory.IntegrableOn f (φ n) μ) →           Filter.Te
+ndsto (fun n => ∫ (x : α) in φ n, f x ∂μ) l (nhds I) → ∫ (x : α), f x ∂μ = I
+参数：I : ℝ；∀ (n : ι), MeasureTheory.IntegrableOn f (φ n) μ；fun n => ∫ (x : α) in φ
+ n, f x ∂μ；nhds I；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_tendsto_of_nonneg_ae`：∀ {α 
+: Type u_1} {ι : Type u_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure
+ α} {l : Filter ι} [l.NeBot]   [l.IsCountablyGenerated]…
+· 使用定理 `MeasureTheory.AECover.integral_eq_of_tendsto`：∀ {α : Type u_1} {ι : Type
+ u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l
+ : Filter ι}   [inst_1 : NormedAdd…
 -/
 theorem AECover.integral_eq_of_tendsto_of_nonneg_ae [l.NeBot] [l.IsCountablyGenerated]
-    {φ : ι -> Set α} (hφ : AECover μ l φ) {f : α -> Real} (I : Real) (hnng : 0 <=ᵐ[μ] f)
-    (hfi : forall n, IntegrableOn f (φ n) μ) (htendsto : Tendsto (fun n => ∫ x in φ n, f x ∂μ) l (𝓝 I)) :
+    {φ : ι → Set α} (hφ : AECover μ l φ) {f : α → ℝ} (I : ℝ) (hnng : 0 ≤ᵐ[μ] f)
+    (hfi : ∀ n, IntegrableOn f (φ n) μ) (htendsto : Tendsto (fun n => ∫ x in φ n, f x ∂μ) l (𝓝 I)) :
     ∫ x, f x ∂μ = I :=
   have hfi' : Integrable f μ := hφ.integrable_of_integral_tendsto_of_nonneg_ae I hfi hnng htendsto
   hφ.integral_eq_of_tendsto I hfi' htendsto
@@ -1643,244 +1856,374 @@ end Integral
 
 section IntegrableOfIntervalIntegral
 
-variable {ι E : Type*} {μ : Measure Real} {l : Filter ι} [Filter.NeBot l] [IsCountablyGenerated l]
-  [NormedAddCommGroup E] {a b : ι -> Real} {f : Real -> E}
+variable {ι E : Type*} {μ : Measure ℝ} {l : Filter ι} [Filter.NeBot l] [IsCountablyGenerated l]
+  [NormedAddCommGroup E] {a b : ι → ℝ} {f : ℝ → E}
 
-/--
-theorem `integrable_of_intervalIntegral_norm_bounded` / 定理 `integrable_of_intervalIntegral_norm_bounded`
-
-English:
-theorem integrable_of_intervalIntegral_norm_bounded
-  statement: (I : Real)
-  proof: by
-  have hφ : AECover μ l _ := aecover_Ioc ha hb
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [ha.eventually (eventually_le_atBot 0),
-    hb.eventually (eventually_ge_atTop 0)] with i hai hbi ht
-  rwa [← intervalIntegral.integral_of_le (hai.trans hbi)]
-
-中文:
-定理 integrable_of_interval整数egral_norm_bounded
-  结论: (I : 实数)
-  证明: by
-  have hφ : AECover μ l _ := aecover_Ioc ha hb
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [ha.eventually (eventually_le_atBot 0),
-    hb.eventually (eventually_ge_atTop 0)] with i hai hbi ht
-  rwa [← intervalIntegral.integral_of_le (hai.trans hbi)]
-
-Depends on / 依赖: AECover, aecover_Ioc, eventually, eventually_ge_atTop, eventually_le_atBot, filter_upwards, h.mp, ha.eventually, hai.trans, hb.eventually, integrable_of_integral_norm_bounded, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le
+/-
+**MeasureTheory.integrable_of_intervalIntegral_norm_bounded** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory`。
+形式化陈述：integrable_of_intervalIntegral_norm_bounded (I : Real) (hfi : forall i, In
+tegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot) (hb : Tendsto b l atT
+op) (h : forallᶠ i in l, (∫ x in a i..b i, ‖f x‖ ∂μ) <= I) : Integrable f μ
+参数：I : Real；hfi : forall i, IntegrableOn f (Ioc (a i) (b i)) μ；ha : Tendsto a l 
+atBot；hb : Tendsto b l atTop；h : forallᶠ i in l, (∫ x in a i..b i, ‖f x‖ ∂μ) <= 
+I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioc`：aecover_Ioc [NoMinOrder α] : AECover μ l fun 
+i => Ioc (a i) (b i)
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem integrable_of_intervalIntegral_norm_bounded (I : Real)
-    (hfi : forall i, IntegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot)
-    (hb : Tendsto b l atTop) (h : forallᶠ i in l, (∫ x in a i..b i, ‖f x‖ ∂μ) <= I) : Integrable f μ := by
+theorem integrable_of_intervalIntegral_norm_bounded (I : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot)
+    (hb : Tendsto b l atTop) (h : ∀ᶠ i in l, (∫ x in a i..b i, ‖f x‖ ∂μ) ≤ I) : Integrable f μ := by
   have hφ : AECover μ l _ := aecover_Ioc ha hb
   refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
   filter_upwards [ha.eventually (eventually_le_atBot 0),
     hb.eventually (eventually_ge_atTop 0)] with i hai hbi ht
   rwa [← intervalIntegral.integral_of_le (hai.trans hbi)]
 
-/--
-theorem `integrable_of_intervalIntegral_norm_tendsto` / 定理 `integrable_of_intervalIntegral_norm_tendsto`
+/-- If `f` is integrable on intervals `Ioc (a i) (b i)`,
+where `a i` tends to -∞ and `b i` tends to ∞, and
+`∫ x in a i .. b i, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (-∞, ∞) -/
+/-
+**MeasureTheory.integrable_of_intervalIntegral_norm_tendsto** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory`。
+形式化陈述：integrable_of_intervalIntegral_norm_tendsto (I : Real) (hfi : forall i, In
+tegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot) (hb : Tendsto b l atT
+op) (h : Tendsto (fun i => ∫ x in a i..b i, ‖f x‖ ∂μ) l (𝓝 I)) : Integrable f μ
+参数：I : Real；hfi : forall i, IntegrableOn f (Ioc (a i) (b i)) μ；ha : Tendsto a l 
+atBot；hb : Tendsto b l atTop；h : Tendsto (fun i => ∫ x in a i..b i, ‖f x‖ ∂μ) l 
+(𝓝 I)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le`：Filter.Tendsto.isBoundedUnder_le (h : 
+Tendsto u f (𝓝 a)) : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `BoundedLENhdsClass.of_closedIciTopology`：∀ {α : Type u_2} [inst : Linear
+Order α] [inst_1 : TopologicalSpace α] [ClosedIciTopology α], BoundedLENhdsClass
+ α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.integrable_of_intervalIntegral_norm_bounded`：integrable_of
+_intervalIntegral_norm_bounded (I : Real) (hfi : forall i, IntegrableOn f (Ioc (
+a i) (b i)) μ) (ha : Tendsto a l atBot) (hb : T…
 
-English:
-theorem integrable_of_intervalIntegral_norm_tendsto
-  statement: (I : Real)
-  proof: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrable_of_intervalIntegral_norm_bounded I' hfi ha hb hI'
-
-中文:
-定理 integrable_of_interval整数egral_norm_tendsto
-  结论: (I : 实数)
-  证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrable_of_intervalIntegral_norm_bounded I' hfi ha hb hI'
-
-Depends on / 依赖: h.isBoundedUnder_le, integrable_of_intervalIntegral_norm_bounded, isBoundedUnder_le
+--- 原说明 ---
+If `f` is integrable on intervals `Ioc (a i) (b i)`,
+where `a i` tends to -∞ and `b i` tends to ∞, and
+`∫ x in a i .. b i, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (-∞, ∞)
 -/
-theorem integrable_of_intervalIntegral_norm_tendsto (I : Real)
-    (hfi : forall i, IntegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot)
+theorem integrable_of_intervalIntegral_norm_tendsto (I : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc (a i) (b i)) μ) (ha : Tendsto a l atBot)
     (hb : Tendsto b l atTop) (h : Tendsto (fun i => ∫ x in a i..b i, ‖f x‖ ∂μ) l (𝓝 I)) :
     Integrable f μ :=
   let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrable_of_intervalIntegral_norm_bounded I' hfi ha hb hI'
-
-/--
-theorem `integrableOn_Iic_of_intervalIntegral_norm_bounded` / 定理 `integrableOn_Iic_of_intervalIntegral_norm_bounded`
-
-English:
-theorem integrableOn_Iic_of_intervalIntegral_norm_bounded
-  statement: (I b : Real)
-  proof: by
-  have hφ : AECover (μ.restrict <| Iic b) l _ := aecover_Ioi ha
-  have hfi : forall i, IntegrableOn f (Ioi (a i)) (μ.restrict <| Iic b) := by
-    intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-    exact hfi i
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [ha.eventually (eventually_le_atBot b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-  exact id
-
-中文:
-定理 integrableOn_Iic_of_interval整数egral_norm_bounded
-  结论: (I b : 实数)
-  证明: by
-  have hφ : AECover (μ.restrict <| Iic b) l _ := aecover_Ioi ha
-  have hfi : forall i, IntegrableOn f (Ioi (a i)) (μ.restrict <| Iic b) := by
-    intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-    exact hfi i
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [ha.eventually (eventually_le_atBot b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-  exact id
-
-Depends on / 依赖: AECover, IntegrableOn, Measure, Measure.restrict_restrict, aecover_Ioi, eventually, eventually_le_atBot, filter_upwards, h.mp, ha.eventually, integrable_of_integral_norm_bounded, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le, measurableSet, restrict, restrict_restrict
+/-
+**MeasureTheory.integrableOn_Iic_of_intervalIntegral_norm_bounded** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Iic_of_intervalIntegral_norm_bounded (I b : Real) (hfi : fora
+ll i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot) (h : forallᶠ i in
+ l, (∫ x in a i..b, ‖f x‖ ∂μ) <= I) : IntegrableOn f (Iic b) μ
+参数：I b : Real；hfi : forall i, IntegrableOn f (Ioc (a i) b) μ；ha : Tendsto a l at
+Bot；h : forallᶠ i in l, (∫ x in a i..b, ‖f x‖ ∂μ) <= I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioi`：aecover_Ioi [NoMinOrder α] : AECover μ l fun 
+i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.IntegrableOn.eq_1`：∀ {α : Type u_1} {ε : Type u_3} {mα : M
+easurableSpace α} [inst : TopologicalSpace ε] [inst_1 : ContinuousENorm ε]   (f 
+: α → ε) (s : Set α) …
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
 -/
-theorem integrableOn_Iic_of_intervalIntegral_norm_bounded (I b : Real)
-    (hfi : forall i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot)
-    (h : forallᶠ i in l, (∫ x in a i..b, ‖f x‖ ∂μ) <= I) : IntegrableOn f (Iic b) μ := by
+theorem integrableOn_Iic_of_intervalIntegral_norm_bounded (I b : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot)
+    (h : ∀ᶠ i in l, (∫ x in a i..b, ‖f x‖ ∂μ) ≤ I) : IntegrableOn f (Iic b) μ := by
   have hφ : AECover (μ.restrict <| Iic b) l _ := aecover_Ioi ha
-  have hfi : forall i, IntegrableOn f (Ioi (a i)) (μ.restrict <| Iic b) := by
+  have hfi : ∀ i, IntegrableOn f (Ioi (a i)) (μ.restrict <| Iic b) := by
     intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
+    rw [IntegrableOn, Measure.restrict_restrict (hφ.measurableSet i)]
     exact hfi i
   refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
   filter_upwards [ha.eventually (eventually_le_atBot b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
+  rw [intervalIntegral.integral_of_le hai, Measure.restrict_restrict (hφ.measurableSet i)]
   exact id
 
-/--
-theorem `integrableOn_Iic_of_intervalIntegral_norm_tendsto` / 定理 `integrableOn_Iic_of_intervalIntegral_norm_tendsto`
+/-- If `f` is integrable on intervals `Ioc (a i) b`,
+where `a i` tends to -∞, and
+`∫ x in a i .. b, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (-∞, b) -/
+/-
+**MeasureTheory.integrableOn_Iic_of_intervalIntegral_norm_tendsto** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Iic_of_intervalIntegral_norm_tendsto (I b : Real) (hfi : fora
+ll i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot) (h : Tendsto (fun
+ i => ∫ x in a i..b, ‖f x‖ ∂μ) l (𝓝 I)) : IntegrableOn f (Iic b) μ
+参数：I b : Real；hfi : forall i, IntegrableOn f (Ioc (a i) b) μ；ha : Tendsto a l at
+Bot；h : Tendsto (fun i => ∫ x in a i..b, ‖f x‖ ∂μ) l (𝓝 I)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le`：Filter.Tendsto.isBoundedUnder_le (h : 
+Tendsto u f (𝓝 a)) : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `BoundedLENhdsClass.of_closedIciTopology`：∀ {α : Type u_2} [inst : Linear
+Order α] [inst_1 : TopologicalSpace α] [ClosedIciTopology α], BoundedLENhdsClass
+ α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.integrableOn_Iic_of_intervalIntegral_norm_bounded`：integra
+bleOn_Iic_of_intervalIntegral_norm_bounded (I b : Real) (hfi : forall i, Integra
+bleOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot) (h …
 
-English:
-theorem integrableOn_Iic_of_intervalIntegral_norm_tendsto
-  statement: (I b : Real)
-  proof: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrableOn_Iic_of_intervalIntegral_norm_bounded I' b hfi ha hI'
-
-中文:
-定理 integrableOn_Iic_of_interval整数egral_norm_tendsto
-  结论: (I b : 实数)
-  证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrableOn_Iic_of_intervalIntegral_norm_bounded I' b hfi ha hI'
-
-Depends on / 依赖: h.isBoundedUnder_le, integrableOn_Iic_of_intervalIntegral_norm_bounded, isBoundedUnder_le
+--- 原说明 ---
+If `f` is integrable on intervals `Ioc (a i) b`,
+where `a i` tends to -∞, and
+`∫ x in a i .. b, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (-∞, b)
 -/
-theorem integrableOn_Iic_of_intervalIntegral_norm_tendsto (I b : Real)
-    (hfi : forall i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot)
+theorem integrableOn_Iic_of_intervalIntegral_norm_tendsto (I b : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc (a i) b) μ) (ha : Tendsto a l atBot)
     (h : Tendsto (fun i => ∫ x in a i..b, ‖f x‖ ∂μ) l (𝓝 I)) : IntegrableOn f (Iic b) μ :=
   let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrableOn_Iic_of_intervalIntegral_norm_bounded I' b hfi ha hI'
-
-/--
-theorem `integrableOn_Ioi_of_intervalIntegral_norm_bounded` / 定理 `integrableOn_Ioi_of_intervalIntegral_norm_bounded`
-
-English:
-theorem integrableOn_Ioi_of_intervalIntegral_norm_bounded
-  statement: (I a : Real)
-  proof: by
-  have hφ : AECover (μ.restrict <| Ioi a) l _ := aecover_Iic hb
-  have hfi : forall i, IntegrableOn f (Iic (b i)) (μ.restrict <| Ioi a) := by
-    intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-    exact hfi i
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [hb.eventually (eventually_ge_atTop a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-  exact id
-
-中文:
-定理 integrableOn_Ioi_of_interval整数egral_norm_bounded
-  结论: (I a : 实数)
-  证明: by
-  have hφ : AECover (μ.restrict <| Ioi a) l _ := aecover_Iic hb
-  have hfi : forall i, IntegrableOn f (Iic (b i)) (μ.restrict <| Ioi a) := by
-    intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-    exact hfi i
-  refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
-  filter_upwards [hb.eventually (eventually_ge_atTop a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-  exact id
-
-Depends on / 依赖: AECover, IntegrableOn, Measure, Measure.restrict_restrict, aecover_Iic, eventually, eventually_ge_atTop, filter_upwards, h.mp, hb.eventually, integrable_of_integral_norm_bounded, integral_of_le, inter_comm, intervalIntegral, intervalIntegral.integral_of_le, measurableSet, restrict, restrict_restrict
+/-
+**MeasureTheory.integrableOn_Ioi_of_intervalIntegral_norm_bounded** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Ioi_of_intervalIntegral_norm_bounded (I a : Real) (hfi : fora
+ll i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop) (h : forallᶠ i in
+ l, (∫ x in a..b i, ‖f x‖ ∂μ) <= I) : IntegrableOn f (Ioi a) μ
+参数：I a : Real；hfi : forall i, IntegrableOn f (Ioc a (b i)) μ；hb : Tendsto b l at
+Top；h : forallᶠ i in l, (∫ x in a..b i, ‖f x‖ ∂μ) <= I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Iic`：aecover_Iic (hb : Tendsto b l atTop) : AECove
+r μ l fun i => Iic b i
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.IntegrableOn.eq_1`：∀ {α : Type u_1} {ε : Type u_3} {mα : M
+easurableSpace α} [inst : TopologicalSpace ε] [inst_1 : ContinuousENorm ε]   (f 
+: α → ε) (s : Set α) …
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
 -/
-theorem integrableOn_Ioi_of_intervalIntegral_norm_bounded (I a : Real)
-    (hfi : forall i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop)
-    (h : forallᶠ i in l, (∫ x in a..b i, ‖f x‖ ∂μ) <= I) : IntegrableOn f (Ioi a) μ := by
+theorem integrableOn_Ioi_of_intervalIntegral_norm_bounded (I a : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop)
+    (h : ∀ᶠ i in l, (∫ x in a..b i, ‖f x‖ ∂μ) ≤ I) : IntegrableOn f (Ioi a) μ := by
   have hφ : AECover (μ.restrict <| Ioi a) l _ := aecover_Iic hb
-  have hfi : forall i, IntegrableOn f (Iic (b i)) (μ.restrict <| Ioi a) := by
+  have hfi : ∀ i, IntegrableOn f (Iic (b i)) (μ.restrict <| Ioi a) := by
     intro i
-    rw [IntegrableOn]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
+    rw [IntegrableOn, Measure.restrict_restrict (hφ.measurableSet i), inter_comm]
     exact hfi i
   refine hφ.integrable_of_integral_norm_bounded I hfi (h.mp ?_)
   filter_upwards [hb.eventually (eventually_ge_atTop a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
+  rw [intervalIntegral.integral_of_le hbi, Measure.restrict_restrict (hφ.measurableSet i),
+    inter_comm]
   exact id
 
-/--
-theorem `integrableOn_Ioi_of_intervalIntegral_norm_tendsto` / 定理 `integrableOn_Ioi_of_intervalIntegral_norm_tendsto`
+/-- If `f` is integrable on intervals `Ioc a (b i)`,
+where `b i` tends to ∞, and
+`∫ x in a .. b i, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (a, ∞) -/
+/-
+**MeasureTheory.integrableOn_Ioi_of_intervalIntegral_norm_tendsto** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Ioi_of_intervalIntegral_norm_tendsto (I a : Real) (hfi : fora
+ll i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop) (h : Tendsto (fun
+ i => ∫ x in a..b i, ‖f x‖ ∂μ) l (𝓝 <| I)) : IntegrableOn f (Ioi a) μ
+参数：I a : Real；hfi : forall i, IntegrableOn f (Ioc a (b i)) μ；hb : Tendsto b l at
+Top；h : Tendsto (fun i => ∫ x in a..b i, ‖f x‖ ∂μ) l (𝓝 <| I)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le`：Filter.Tendsto.isBoundedUnder_le (h : 
+Tendsto u f (𝓝 a)) : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `BoundedLENhdsClass.of_closedIciTopology`：∀ {α : Type u_2} [inst : Linear
+Order α] [inst_1 : TopologicalSpace α] [ClosedIciTopology α], BoundedLENhdsClass
+ α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.integrableOn_Ioi_of_intervalIntegral_norm_bounded`：integra
+bleOn_Ioi_of_intervalIntegral_norm_bounded (I a : Real) (hfi : forall i, Integra
+bleOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop) (h …
 
-English:
-theorem integrableOn_Ioi_of_intervalIntegral_norm_tendsto
-  statement: (I a : Real)
-  proof: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrableOn_Ioi_of_intervalIntegral_norm_bounded I' a hfi hb hI'
-
-中文:
-定理 integrableOn_Ioi_of_interval整数egral_norm_tendsto
-  结论: (I a : 实数)
-  证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
-  integrableOn_Ioi_of_intervalIntegral_norm_bounded I' a hfi hb hI'
-
-Depends on / 依赖: h.isBoundedUnder_le, integrableOn_Ioi_of_intervalIntegral_norm_bounded, isBoundedUnder_le
+--- 原说明 ---
+If `f` is integrable on intervals `Ioc a (b i)`,
+where `b i` tends to ∞, and
+`∫ x in a .. b i, ‖f x‖ ∂μ` converges to `I : ℝ` along a filter `l`,
+then `f` is integrable on the interval (a, ∞)
 -/
-theorem integrableOn_Ioi_of_intervalIntegral_norm_tendsto (I a : Real)
-    (hfi : forall i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop)
+theorem integrableOn_Ioi_of_intervalIntegral_norm_tendsto (I a : ℝ)
+    (hfi : ∀ i, IntegrableOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop)
     (h : Tendsto (fun i => ∫ x in a..b i, ‖f x‖ ∂μ) l (𝓝 <| I)) : IntegrableOn f (Ioi a) μ :=
   let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrableOn_Ioi_of_intervalIntegral_norm_bounded I' a hfi hb hI'
-
-/--
-theorem `integrableOn_Ioc_of_intervalIntegral_norm_bounded` / 定理 `integrableOn_Ioc_of_intervalIntegral_norm_bounded`
-
-English:
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded
-  statement: {I a₀ b₀ : Real}
-  proof: by
-  refine (aecover_Ioc_of_Ioc ha hb).integrable_of_integral_norm_bounded I
-    (fun i => (hfi i).restrict) (h.mono fun i hi => ?_)
-  rw [Measure.restrict_restrict measurableSet_Ioc]
-  grw [← hi]
-  gcongr
-  · apply ae_of_all
-    simp
-  · exact (hfi i).norm
-  · exact inter_subset_left
-
-中文:
-定理 integrableOn_Ioc_of_interval整数egral_norm_bounded
-  结论: {I a₀ b₀ : 实数}
-  证明: by
-  refine (aecover_Ioc_of_Ioc ha hb).integrable_of_integral_norm_bounded I
-    (fun i => (hfi i).restrict) (h.mono fun i hi => ?_)
-  rw [Measure.restrict_restrict measurableSet_Ioc]
-  grw [← hi]
-  gcongr
-  · apply ae_of_all
-    simp
-  · exact (hfi i).norm
-  · exact inter_subset_left
-
-Depends on / 依赖: Measure, Measure.restrict_restrict, ae_of_all, aecover_Ioc_of_Ioc, h.mono, integrable_of_integral_norm_bounded, inter_subset_left, measurableSet_Ioc, restrict, restrict_restrict
+/-
+**MeasureTheory.integrableOn_Ioc_of_intervalIntegral_norm_bounded** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : Real} (hfi : 
+forall i, IntegrableOn f <| Ioc (a i) (b i)) (ha : Tendsto a l <| 𝓝 a₀) (hb : Te
+ndsto b l <| 𝓝 b₀) (h : forallᶠ i in l, (∫ x in Ioc (a i) (b i), ‖f x‖) <= I) : 
+IntegrableOn f (Ioc a₀ b₀)
+参数：hfi : forall i, IntegrableOn f <| Ioc (a i) (b i)；ha : Tendsto a l <| 𝓝 a₀；hb
+ : Tendsto b l <| 𝓝 b₀；h : forallᶠ i in l, (∫ x in Ioc (a i) (b i), ‖f x‖) <= I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AECover.integrable_of_integral_norm_bounded`：∀ {α : Type u
+_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheory.
+Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `MeasureTheory.aecover_Ioc_of_Ioc`：aecover_Ioc_of_Ioc (ha : Tendsto a l (
+𝓝 A)) (hb : Tendsto b l (𝓝 B)) : AECover (μ.restrict <| Ioc A B) l fun i => Ioc 
+(a i) (b i)
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `MeasureTheory.IntegrableOn.restrict`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `MeasureTheory.integral_mono_measure`：integral_mono_measure [OrderClosedT
+opology E] {f : α -> E} {ν : Measure α} (hle : μ <= ν) (hf : 0 <=ᵐ[ν] f) (hfi : 
+Integrable f ν) : ∫ (a : …
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
+· 使用定理 `MeasureTheory.Measure.restrict_mono`：restrict_mono {_m0 : MeasurableSpac
+e α} ⦃s s' : Set α⦄ (hs : s subseteq s') ⦃μ ν : Measure α⦄ (hμν : μ <= ν) : μ.re
+strict s <= ν.restrict s'
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `MeasureTheory.Integrable.norm`：∀ {α : Type u_1} {β : Type u_2} {m : Meas
+urableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f 
+: α → β}, MeasureTh…
 -/
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : Real}
-    (hfi : forall i, IntegrableOn f <| Ioc (a i) (b i)) (ha : Tendsto a l <| 𝓝 a₀)
-    (hb : Tendsto b l <| 𝓝 b₀) (h : forallᶠ i in l, (∫ x in Ioc (a i) (b i), ‖f x‖) <= I) :
+theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : ℝ}
+    (hfi : ∀ i, IntegrableOn f <| Ioc (a i) (b i)) (ha : Tendsto a l <| 𝓝 a₀)
+    (hb : Tendsto b l <| 𝓝 b₀) (h : ∀ᶠ i in l, (∫ x in Ioc (a i) (b i), ‖f x‖) ≤ I) :
     IntegrableOn f (Ioc a₀ b₀) := by
   refine (aecover_Ioc_of_Ioc ha hb).integrable_of_integral_norm_bounded I
-    (fun i => (hfi i).restrict) (h.mono fun i hi => ?_)
+    (fun i => (hfi i).restrict) (h.mono fun i hi ↦ ?_)
   rw [Measure.restrict_restrict measurableSet_Ioc]
   grw [← hi]
   gcongr
@@ -1888,80 +2231,94 @@ theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : Real}
     simp
   · exact (hfi i).norm
   · exact inter_subset_left
-
-/--
-theorem `integrableOn_Ioc_of_intervalIntegral_norm_bounded_left` / 定理 `integrableOn_Ioc_of_intervalIntegral_norm_bounded_left`
-
-English:
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_left
-  statement: {I a₀ b : Real}
-  proof: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi ha tendsto_const_nhds h
-
-中文:
-定理 integrableOn_Ioc_of_interval整数egral_norm_bounded_left
-  结论: {I a₀ b : 实数}
-  证明: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi ha tendsto_const_nhds h
-
-Depends on / 依赖: integrableOn_Ioc_of_intervalIntegral_norm_bounded, tendsto_const_nhds
+/-
+**MeasureTheory.integrableOn_Ioc_of_intervalIntegral_norm_bounded_left** 是 Mathl
+ib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Ioc_of_intervalIntegral_norm_bounded_left {I a₀ b : Real} (hf
+i : forall i, IntegrableOn f <| Ioc (a i) b) (ha : Tendsto a l <| 𝓝 a₀) (h : for
+allᶠ i in l, (∫ x in Ioc (a i) b, ‖f x‖) <= I) : IntegrableOn f (Ioc a₀ b)
+参数：hfi : forall i, IntegrableOn f <| Ioc (a i) b；ha : Tendsto a l <| 𝓝 a₀；h : fo
+rallᶠ i in l, (∫ x in Ioc (a i) b, ‖f x‖) <= I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.integrableOn_Ioc_of_intervalIntegral_norm_bounded`：integra
+bleOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : Real} (hfi : forall i, Int
+egrableOn f <| Ioc (a i) (b i)) (ha : Tendsto a l <| …
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_left {I a₀ b : Real}
-    (hfi : forall i, IntegrableOn f <| Ioc (a i) b) (ha : Tendsto a l <| 𝓝 a₀)
-    (h : forallᶠ i in l, (∫ x in Ioc (a i) b, ‖f x‖) <= I) : IntegrableOn f (Ioc a₀ b) :=
+theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_left {I a₀ b : ℝ}
+    (hfi : ∀ i, IntegrableOn f <| Ioc (a i) b) (ha : Tendsto a l <| 𝓝 a₀)
+    (h : ∀ᶠ i in l, (∫ x in Ioc (a i) b, ‖f x‖) ≤ I) : IntegrableOn f (Ioc a₀ b) :=
   integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi ha tendsto_const_nhds h
-
-/--
-theorem `integrableOn_Ioc_of_intervalIntegral_norm_bounded_right` / 定理 `integrableOn_Ioc_of_intervalIntegral_norm_bounded_right`
-
-English:
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_right
-  statement: {I a b₀ : Real}
-  proof: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi tendsto_const_nhds hb h
-
-中文:
-定理 integrableOn_Ioc_of_interval整数egral_norm_bounded_right
-  结论: {I a b₀ : 实数}
-  证明: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi tendsto_const_nhds hb h
-
-Depends on / 依赖: integrableOn_Ioc_of_intervalIntegral_norm_bounded, tendsto_const_nhds
+/-
+**MeasureTheory.integrableOn_Ioc_of_intervalIntegral_norm_bounded_right** 是 Math
+lib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integrableOn_Ioc_of_intervalIntegral_norm_bounded_right {I a b₀ : Real} (h
+fi : forall i, IntegrableOn f <| Ioc a (b i)) (hb : Tendsto b l <| 𝓝 b₀) (h : fo
+rallᶠ i in l, (∫ x in Ioc a (b i), ‖f x‖) <= I) : IntegrableOn f (Ioc a b₀)
+参数：hfi : forall i, IntegrableOn f <| Ioc a (b i)；hb : Tendsto b l <| 𝓝 b₀；h : fo
+rallᶠ i in l, (∫ x in Ioc a (b i), ‖f x‖) <= I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.integrableOn_Ioc_of_intervalIntegral_norm_bounded`：integra
+bleOn_Ioc_of_intervalIntegral_norm_bounded {I a₀ b₀ : Real} (hfi : forall i, Int
+egrableOn f <| Ioc (a i) (b i)) (ha : Tendsto a l <| …
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
-theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_right {I a b₀ : Real}
-    (hfi : forall i, IntegrableOn f <| Ioc a (b i)) (hb : Tendsto b l <| 𝓝 b₀)
-    (h : forallᶠ i in l, (∫ x in Ioc a (b i), ‖f x‖) <= I) : IntegrableOn f (Ioc a b₀) :=
+theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_right {I a b₀ : ℝ}
+    (hfi : ∀ i, IntegrableOn f <| Ioc a (b i)) (hb : Tendsto b l <| 𝓝 b₀)
+    (h : ∀ᶠ i in l, (∫ x in Ioc a (b i), ‖f x‖) ≤ I) : IntegrableOn f (Ioc a b₀) :=
   integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi tendsto_const_nhds hb h
 
 end IntegrableOfIntervalIntegral
 
 section IntegralOfIntervalIntegral
 
-variable {ι E : Type*} {μ : Measure Real} {l : Filter ι} [IsCountablyGenerated l]
-  [NormedAddCommGroup E] [NormedSpace Real E] {a b : ι -> Real} {f : Real -> E}
+variable {ι E : Type*} {μ : Measure ℝ} {l : Filter ι} [IsCountablyGenerated l]
+  [NormedAddCommGroup E] [NormedSpace ℝ E] {a b : ι → ℝ} {f : ℝ → E}
 
-/--
-theorem `intervalIntegral_tendsto_integral` / 定理 `intervalIntegral_tendsto_integral`
-
-English:
-theorem intervalIntegral_tendsto_integral
-  statement: (hfi : Integrable f μ) (ha : Tendsto a l atBot)
-  proof: by
-  let φ i := Ioc (a i) (b i)
-  have hφ : AECover μ l φ := aecover_Ioc ha hb
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [ha.eventually (eventually_le_atBot 0),
-    hb.eventually (eventually_ge_atTop 0)] with i hai hbi
-  exact (intervalIntegral.integral_of_le (hai.trans hbi)).symm
-
-中文:
-定理 interval整数egral_tendsto_integral
-  结论: (hfi : 可积 f μ) (ha : 收敛 a l atBot)
-  证明: by
-  let φ i := Ioc (a i) (b i)
-  have hφ : AECover μ l φ := aecover_Ioc ha hb
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [ha.eventually (eventually_le_atBot 0),
-    hb.eventually (eventually_ge_atTop 0)] with i hai hbi
-  exact (intervalIntegral.integral_of_le (hai.trans hbi)).symm
-
-Depends on / 依赖: AECover, aecover_Ioc, eventually, eventually_ge_atTop, eventually_le_atBot, filter_upwards, ha.eventually, hai.trans, hb.eventually, integral_of_le, integral_tendsto_of_countably_generated, intervalIntegral, intervalIntegral.integral_of_le
+/-
+**MeasureTheory.intervalIntegral_tendsto_integral** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：intervalIntegral_tendsto_integral (hfi : Integrable f μ) (ha : Tendsto a l
+ atBot) (hb : Tendsto b l atTop) : Tendsto (fun i => ∫ x in a i..b i, f x ∂μ) l 
+(𝓝 <| ∫ x, f x ∂μ)
+参数：hfi : Integrable f μ；ha : Tendsto a l atBot；hb : Tendsto b l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioc`：aecover_Ioc [NoMinOrder α] : AECover μ l fun 
+i => Ioc (a i) (b i)
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
 -/
 theorem intervalIntegral_tendsto_integral (hfi : Integrable f μ) (ha : Tendsto a l atBot)
     (hb : Tendsto b l atTop) : Tendsto (fun i => ∫ x in a i..b i, f x ∂μ) l (𝓝 <| ∫ x, f x ∂μ) := by
@@ -1971,296 +2328,457 @@ theorem intervalIntegral_tendsto_integral (hfi : Integrable f μ) (ha : Tendsto 
   filter_upwards [ha.eventually (eventually_le_atBot 0),
     hb.eventually (eventually_ge_atTop 0)] with i hai hbi
   exact (intervalIntegral.integral_of_le (hai.trans hbi)).symm
-
-/--
-theorem `intervalIntegral_tendsto_integral_Iic` / 定理 `intervalIntegral_tendsto_integral_Iic`
-
-English:
-theorem intervalIntegral_tendsto_integral_Iic
-  statement: (b : Real) (hfi : IntegrableOn f (Iic b) μ)
-  proof: by
-  let φ i := Ioi (a i)
-  have hφ : AECover (μ.restrict <| Iic b) l φ := aecover_Ioi ha
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [ha.eventually (eventually_le_atBot <| b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-  rfl
-
-中文:
-定理 interval整数egral_tendsto_integral_Iic
-  结论: (b : 实数) (hfi : 整数egrableOn f (左无界右闭区间 b) μ)
-  证明: by
-  let φ i := Ioi (a i)
-  have hφ : AECover (μ.restrict <| Iic b) l φ := aecover_Ioi ha
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [ha.eventually (eventually_le_atBot <| b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
-  rfl
-
-Depends on / 依赖: AECover, Measure, Measure.restrict_restrict, aecover_Ioi, eventually, eventually_le_atBot, filter_upwards, ha.eventually, integral_of_le, integral_tendsto_of_countably_generated, intervalIntegral, intervalIntegral.integral_of_le, measurableSet, restrict, restrict_restrict
+/-
+**MeasureTheory.intervalIntegral_tendsto_integral_Iic** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：intervalIntegral_tendsto_integral_Iic (b : Real) (hfi : IntegrableOn f (Ii
+c b) μ) (ha : Tendsto a l atBot) : Tendsto (fun i => ∫ x in a i..b, f x ∂μ) l (𝓝
+ <| ∫ x in Iic b, f x ∂μ)
+参数：b : Real；hfi : IntegrableOn f (Iic b) μ；ha : Tendsto a l atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Ioi`：aecover_Ioi [NoMinOrder α] : AECover μ l fun 
+i => Ioi (a i) where ae_eventually_mem
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
 -/
-theorem intervalIntegral_tendsto_integral_Iic (b : Real) (hfi : IntegrableOn f (Iic b) μ)
+theorem intervalIntegral_tendsto_integral_Iic (b : ℝ) (hfi : IntegrableOn f (Iic b) μ)
     (ha : Tendsto a l atBot) :
     Tendsto (fun i => ∫ x in a i..b, f x ∂μ) l (𝓝 <| ∫ x in Iic b, f x ∂μ) := by
   let φ i := Ioi (a i)
   have hφ : AECover (μ.restrict <| Iic b) l φ := aecover_Ioi ha
   refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
   filter_upwards [ha.eventually (eventually_le_atBot <| b)] with i hai
-  rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restrict (hφ.measurableSet i)]
+  rw [intervalIntegral.integral_of_le hai, Measure.restrict_restrict (hφ.measurableSet i)]
   rfl
-
-/--
-theorem `tendsto_integral_Iic_zero` / 定理 `tendsto_integral_Iic_zero`
-
-English:
-theorem tendsto_integral_Iic_zero
-  given: (ha : Tendsto a l atBot)
-  proof: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iic b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iic b, f x ∂μ - ∫ x in a i..b, f x ∂μ = ∫ x in Iic (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iic_sub_Iic (hb.mono_set (Iic_subset_Iic.2 hi)) hb]
-  rw [← sub_self (∫ x in Iic b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Iic b hb ha)
-
-中文:
-定理 tendsto_integral_Iic_zero
-  条件: (ha : 收敛 a l atBot)
-  证明: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iic b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iic b, f x ∂μ - ∫ x in a i..b, f x ∂μ = ∫ x in Iic (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iic_sub_Iic (hb.mono_set (Iic_subset_Iic.2 hi)) hb]
-  rw [← sub_self (∫ x in Iic b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Iic b hb ha)
-
-Depends on / 依赖: Iic_mem_atBot, Iic_subset_Iic, IntegrableOn, Tendsto, Tendsto.con, Tendsto.congr, eventually_mem, filter_upwards, ha.eventually_mem, hb.mono_set, integral_Iic_sub_Iic, integral_undef, intervalIntegral, intervalIntegral.integral_Iic_sub_Iic, mono_set, sub_eq_iff_comm, sub_self, tendsto_const_nhds, tendsto_const_nhds.congr
+/-
+**MeasureTheory.tendsto_integral_Iic_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：tendsto_integral_Iic_zero (ha : Tendsto a l atBot) : Tendsto (fun i => ∫ x
+ in Iic (a i), f x ∂μ) l (𝓝 0)
+参数：ha : Tendsto a l atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_undef`：integral_undef {f : α -> G} (h : ¬Integrab
+le f μ) : ∫ a, f a ∂μ = 0
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually_mem`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β},   Filter.Tendsto f l₁ l₂ → s ∈ l
+₂ → ∀ᶠ (x : α) in l…
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sub_eq_iff_comm`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}, a
+ - b = c ↔ a - c = b
+· 使用定理 `intervalIntegral.integral_Iic_sub_Iic`：integral_Iic_sub_Iic (ha : Integr
+ableOn f (Iic a) μ) (hb : IntegrableOn f (Iic b) μ) : ((∫ x in Iic b, f x ∂μ) - 
+∫ x in Iic a, f x ∂μ) = ∫ x…
+· 使用定理 `MeasureTheory.IntegrableOn.mono_set`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Tendsto.const_sub`：∀ {G : Type w} {α : Type u} [inst : Topologica
+lSpace G] [inst_1 : Sub G] [ContinuousSub G] (b : G) {c : G} {f : α → G}   {l : 
+Filter α}, Fil…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `MeasureTheory.intervalIntegral_tendsto_integral_Iic`：intervalIntegral_te
+ndsto_integral_Iic (b : Real) (hfi : IntegrableOn f (Iic b) μ) (ha : Tendsto a l
+ atBot) : Tendsto (fun i => ∫ x in a i..b…
 -/
 theorem tendsto_integral_Iic_zero (ha : Tendsto a l atBot) :
     Tendsto (fun i => ∫ x in Iic (a i), f x ∂μ) l (𝓝 0) := by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iic b) μ
+  by_cases! h : ∀ b, ¬ IntegrableOn f (Iic b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
   obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iic b, f x ∂μ - ∫ x in a i..b, f x ∂μ = ∫ x in Iic (a i), f x ∂μ := by
+  have : ∀ᶠ i in l, ∫ x in Iic b, f x ∂μ - ∫ x in a i..b, f x ∂μ = ∫ x in Iic (a i), f x ∂μ := by
     filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iic_sub_Iic (hb.mono_set (Iic_subset_Iic.2 hi)) hb]
-  rw [← sub_self (∫ x in Iic b]; rw [f x ∂μ)]
+    rw [sub_eq_iff_comm,
+      intervalIntegral.integral_Iic_sub_Iic (hb.mono_set (Iic_subset_Iic.2 hi)) hb]
+  rw [← sub_self (∫ x in Iic b, f x ∂μ)]
   exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Iic b hb ha)
-
-/--
-theorem `tendsto_integral_Ico_integral_Iio` / 定理 `tendsto_integral_Ico_integral_Iio`
-
-English:
-theorem tendsto_integral_Ico_integral_Iio
-  statement: (b : Real) (hfi : IntegrableOn f (Iio b) μ)
-  proof: ((aecover_Iio_of_Ico tendsto_const_nhds ha).integral_tendsto_of_countably_generated hfi).congr'
-    (by simp)
-
-中文:
-定理 tendsto_integral_Ico_integral_Iio
-  结论: (b : 实数) (hfi : 整数egrableOn f (左无界右开区间 b) μ)
-  证明: ((aecover_Iio_of_Ico tendsto_const_nhds ha).integral_tendsto_of_countably_generated hfi).congr'
-    (by simp)
-
-Depends on / 依赖: aecover_Iio_of_Ico, integral_tendsto_of_countably_generated, tendsto_const_nhds
+/-
+**MeasureTheory.tendsto_integral_Ico_integral_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：tendsto_integral_Ico_integral_Iio (b : Real) (hfi : IntegrableOn f (Iio b)
+ μ) (ha : Tendsto a l atBot) : Tendsto (fun i => ∫ x in Ico (a i) b, f x ∂μ) l (
+𝓝 <| ∫ x in Iio b, f x ∂μ)
+参数：b : Real；hfi : IntegrableOn f (Iio b) μ；ha : Tendsto a l atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Set.Ico_inter_Iio`：Ico_inter_Iio : Ico a b inter Iio c = Ico a (min b c)
+· 使用定理 `min_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), min a a = a
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `MeasureTheory.aecover_Iio_of_Ico`：aecover_Iio_of_Ico : AECover (μ.restri
+ct (Iio B)) l fun i => Ico (c i) (b i) where ae_eventually_mem
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
-theorem tendsto_integral_Ico_integral_Iio (b : Real) (hfi : IntegrableOn f (Iio b) μ)
+theorem tendsto_integral_Ico_integral_Iio (b : ℝ) (hfi : IntegrableOn f (Iio b) μ)
     (ha : Tendsto a l atBot) :
     Tendsto (fun i => ∫ x in Ico (a i) b, f x ∂μ) l (𝓝 <| ∫ x in Iio b, f x ∂μ) :=
   ((aecover_Iio_of_Ico tendsto_const_nhds ha).integral_tendsto_of_countably_generated hfi).congr'
     (by simp)
-
-/--
-theorem `tendsto_integral_Iio_zero` / 定理 `tendsto_integral_Iio_zero`
-
-English:
-theorem tendsto_integral_Iio_zero
-  given: (ha : Tendsto a l atBot)
-  proof: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iio b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iio b, f x ∂μ - ∫ x in Ico (a i) b, f x ∂μ =
-      ∫ x in Iio (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iio_sub_Iio hb hi]
-  rw [← sub_self (∫ x in Iio b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Iio b hb ha)
-
-中文:
-定理 tendsto_integral_Iio_zero
-  条件: (ha : 收敛 a l atBot)
-  证明: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iio b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iio b, f x ∂μ - ∫ x in Ico (a i) b, f x ∂μ =
-      ∫ x in Iio (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iio_sub_Iio hb hi]
-  rw [← sub_self (∫ x in Iio b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Iio b hb ha)
-
-Depends on / 依赖: Iic_mem_atBot, IntegrableOn, Tendsto, Tendsto.congr, Tendsto.const_sub, const_sub, eventually_mem, filter_upwards, ha.eventually_mem, integral_Iio_sub_Iio, integral_undef, intervalIntegral, intervalIntegral.integral_Iio_sub_Iio, sub_eq_iff_comm, sub_self, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_integral
+/-
+**MeasureTheory.tendsto_integral_Iio_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：tendsto_integral_Iio_zero (ha : Tendsto a l atBot) : Tendsto (fun i => ∫ x
+ in Iio (a i), f x ∂μ) l (𝓝 0)
+参数：ha : Tendsto a l atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_undef`：integral_undef {f : α -> G} (h : ¬Integrab
+le f μ) : ∫ a, f a ∂μ = 0
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually_mem`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β},   Filter.Tendsto f l₁ l₂ → s ∈ l
+₂ → ∀ᶠ (x : α) in l…
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sub_eq_iff_comm`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}, a
+ - b = c ↔ a - c = b
+· 使用定理 `intervalIntegral.integral_Iio_sub_Iio`：integral_Iio_sub_Iio (hf : Integr
+ableOn f (Iio b) μ) (hab : a <= b) : ∫ x in Iio b, f x ∂μ - ∫ x in Iio a, f x ∂μ
+ = ∫ x in Ico a b, f x ∂μ
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Tendsto.const_sub`：∀ {G : Type w} {α : Type u} [inst : Topologica
+lSpace G] [inst_1 : Sub G] [ContinuousSub G] (b : G) {c : G} {f : α → G}   {l : 
+Filter α}, Fil…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `MeasureTheory.tendsto_integral_Ico_integral_Iio`：tendsto_integral_Ico_in
+tegral_Iio (b : Real) (hfi : IntegrableOn f (Iio b) μ) (ha : Tendsto a l atBot) 
+: Tendsto (fun i => ∫ x in Ico (a i) …
 -/
 theorem tendsto_integral_Iio_zero (ha : Tendsto a l atBot) :
     Tendsto (fun i => ∫ x in Iio (a i), f x ∂μ) l (𝓝 0) := by
-  by_cases! h : forall b, ¬ IntegrableOn f (Iio b) μ
+  by_cases! h : ∀ b, ¬ IntegrableOn f (Iio b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
   obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Iio b, f x ∂μ - ∫ x in Ico (a i) b, f x ∂μ =
+  have : ∀ᶠ i in l, ∫ x in Iio b, f x ∂μ - ∫ x in Ico (a i) b, f x ∂μ =
       ∫ x in Iio (a i), f x ∂μ := by
     filter_upwards [ha.eventually_mem (Iic_mem_atBot b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Iio_sub_Iio hb hi]
-  rw [← sub_self (∫ x in Iio b]; rw [f x ∂μ)]
+    rw [sub_eq_iff_comm, intervalIntegral.integral_Iio_sub_Iio hb hi]
+  rw [← sub_self (∫ x in Iio b, f x ∂μ)]
   exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Iio b hb ha)
-
-/--
-theorem `intervalIntegral_tendsto_integral_Ioi` / 定理 `intervalIntegral_tendsto_integral_Ioi`
-
-English:
-theorem intervalIntegral_tendsto_integral_Ioi
-  statement: (a : Real) (hfi : IntegrableOn f (Ioi a) μ)
-  proof: by
-  let φ i := Iic (b i)
-  have hφ : AECover (μ.restrict <| Ioi a) l φ := aecover_Iic hb
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [hb.eventually (eventually_ge_atTop <| a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-  rfl
-
-中文:
-定理 interval整数egral_tendsto_integral_Ioi
-  结论: (a : 实数) (hfi : 整数egrableOn f (左开右无界区间 a) μ)
-  证明: by
-  let φ i := Iic (b i)
-  have hφ : AECover (μ.restrict <| Ioi a) l φ := aecover_Iic hb
-  refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
-  filter_upwards [hb.eventually (eventually_ge_atTop <| a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
-  rfl
-
-Depends on / 依赖: AECover, Measure, Measure.restrict_restrict, aecover_Iic, eventually, eventually_ge_atTop, filter_upwards, hb.eventually, integral_of_le, integral_tendsto_of_countably_generated, inter_comm, intervalIntegral, intervalIntegral.integral_of_le, measurableSet, restrict, restrict_restrict
+/-
+**MeasureTheory.intervalIntegral_tendsto_integral_Ioi** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：intervalIntegral_tendsto_integral_Ioi (a : Real) (hfi : IntegrableOn f (Io
+i a) μ) (hb : Tendsto b l atTop) : Tendsto (fun i => ∫ x in a..b i, f x ∂μ) l (𝓝
+ <| ∫ x in Ioi a, f x ∂μ)
+参数：a : Real；hfi : IntegrableOn f (Ioi a) μ；hb : Tendsto b l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aecover_Iic`：aecover_Iic (hb : Tendsto b l atTop) : AECove
+r μ l fun i => Iic b i
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `MeasureTheory.AECover.measurableSet`：∀ {α : Type u_1} {ι : Type u_2} [in
+st : MeasurableSpace α] {μ : MeasureTheory.Measure α} {l : Filter ι} {φ : ι → Se
+t α},   MeasureTheory.AEC…
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
 -/
-theorem intervalIntegral_tendsto_integral_Ioi (a : Real) (hfi : IntegrableOn f (Ioi a) μ)
+theorem intervalIntegral_tendsto_integral_Ioi (a : ℝ) (hfi : IntegrableOn f (Ioi a) μ)
     (hb : Tendsto b l atTop) :
     Tendsto (fun i => ∫ x in a..b i, f x ∂μ) l (𝓝 <| ∫ x in Ioi a, f x ∂μ) := by
   let φ i := Iic (b i)
   have hφ : AECover (μ.restrict <| Ioi a) l φ := aecover_Iic hb
   refine (hφ.integral_tendsto_of_countably_generated hfi).congr' ?_
   filter_upwards [hb.eventually (eventually_ge_atTop <| a)] with i hbi
-  rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restrict (hφ.measurableSet i)]; rw [inter_comm]
+  rw [intervalIntegral.integral_of_le hbi, Measure.restrict_restrict (hφ.measurableSet i),
+    inter_comm]
   rfl
-
-/--
-theorem `tendsto_integral_Ioi_zero` / 定理 `tendsto_integral_Ioi_zero`
-
-English:
-theorem tendsto_integral_Ioi_zero
-  given: (hb : Tendsto b l atTop)
-  proof: by
-  by_cases! h : forall a, ¬ IntegrableOn f (Ioi a) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (b i))).symm)
-  obtain ⟨a, ha⟩ := h
-  have : forallᶠ i in l, ∫ x in Ioi a, f x ∂μ - ∫ x in a..b i, f x ∂μ = ∫ x in Ioi (b i), f x ∂μ := by
-    filter_upwards [hb.eventually_mem (Ici_mem_atTop a)] with i hi
-    rw [sub_eq_iff_eq_add']; rw [intervalIntegral.integral_interval_add_Ioi ha (ha.mono_set (Ioi_subset_Ioi hi))]
-  rw [← sub_self (∫ x in Ioi a]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Ioi a ha hb)
-
-中文:
-定理 tendsto_integral_Ioi_zero
-  条件: (hb : 收敛 b l atTop)
-  证明: by
-  by_cases! h : forall a, ¬ IntegrableOn f (Ioi a) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (b i))).symm)
-  obtain ⟨a, ha⟩ := h
-  have : forallᶠ i in l, ∫ x in Ioi a, f x ∂μ - ∫ x in a..b i, f x ∂μ = ∫ x in Ioi (b i), f x ∂μ := by
-    filter_upwards [hb.eventually_mem (Ici_mem_atTop a)] with i hi
-    rw [sub_eq_iff_eq_add']; rw [intervalIntegral.integral_interval_add_Ioi ha (ha.mono_set (Ioi_subset_Ioi hi))]
-  rw [← sub_self (∫ x in Ioi a]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Ioi a ha hb)
-
-Depends on / 依赖: Ici_mem_atTop, IntegrableOn, Ioi_subset_Ioi, Tendsto, Tendsto.congr, eventually_mem, filter_upwards, ha.mono_set, hb.eventually_mem, integral_interval_add_Ioi, integral_undef, intervalIntegral, intervalIntegral.integral_interval_add_Ioi, mono_set, sub_eq_iff_eq_add, sub_self, tendsto_const_nhds, tendsto_const_nhds.congr
+/-
+**MeasureTheory.tendsto_integral_Ioi_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：tendsto_integral_Ioi_zero (hb : Tendsto b l atTop) : Tendsto (fun i => ∫ x
+ in Ioi (b i), f x ∂μ) l (𝓝 0)
+参数：hb : Tendsto b l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_undef`：integral_undef {f : α -> G} (h : ¬Integrab
+le f μ) : ∫ a, f a ∂μ = 0
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually_mem`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β},   Filter.Tendsto f l₁ l₂ → s ∈ l
+₂ → ∀ᶠ (x : α) in l…
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sub_eq_iff_eq_add'`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}
+, a - b = c ↔ a = b + c
+· 使用定理 `intervalIntegral.integral_interval_add_Ioi`：integral_interval_add_Ioi (h
+a : IntegrableOn f (Ioi a) μ) (hb : IntegrableOn f (Ioi b) μ) : ∫ (x : Real) in 
+a..b, f x ∂μ + ∫ (x : Real) in I…
+· 使用定理 `MeasureTheory.IntegrableOn.mono_set`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `Set.Ioi_subset_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b ≤ 
+a → Set.Ioi a ⊆ Set.Ioi b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Tendsto.const_sub`：∀ {G : Type w} {α : Type u} [inst : Topologica
+lSpace G] [inst_1 : Sub G] [ContinuousSub G] (b : G) {c : G} {f : α → G}   {l : 
+Filter α}, Fil…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `MeasureTheory.intervalIntegral_tendsto_integral_Ioi`：intervalIntegral_te
+ndsto_integral_Ioi (a : Real) (hfi : IntegrableOn f (Ioi a) μ) (hb : Tendsto b l
+ atTop) : Tendsto (fun i => ∫ x in a..b i…
 -/
 theorem tendsto_integral_Ioi_zero (hb : Tendsto b l atTop) :
     Tendsto (fun i => ∫ x in Ioi (b i), f x ∂μ) l (𝓝 0) := by
-  by_cases! h : forall a, ¬ IntegrableOn f (Ioi a) μ
+  by_cases! h : ∀ a, ¬ IntegrableOn f (Ioi a) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (b i))).symm)
   obtain ⟨a, ha⟩ := h
-  have : forallᶠ i in l, ∫ x in Ioi a, f x ∂μ - ∫ x in a..b i, f x ∂μ = ∫ x in Ioi (b i), f x ∂μ := by
+  have : ∀ᶠ i in l, ∫ x in Ioi a, f x ∂μ - ∫ x in a..b i, f x ∂μ = ∫ x in Ioi (b i), f x ∂μ := by
     filter_upwards [hb.eventually_mem (Ici_mem_atTop a)] with i hi
-    rw [sub_eq_iff_eq_add']; rw [intervalIntegral.integral_interval_add_Ioi ha (ha.mono_set (Ioi_subset_Ioi hi))]
-  rw [← sub_self (∫ x in Ioi a]; rw [f x ∂μ)]
+    rw [sub_eq_iff_eq_add',
+      intervalIntegral.integral_interval_add_Ioi ha (ha.mono_set (Ioi_subset_Ioi hi))]
+  rw [← sub_self (∫ x in Ioi a, f x ∂μ)]
   exact Tendsto.congr' this (Tendsto.const_sub _ <| intervalIntegral_tendsto_integral_Ioi a ha hb)
-
-/--
-theorem `tendsto_integral_Ico_integral_Ici` / 定理 `tendsto_integral_Ico_integral_Ici`
-
-English:
-theorem tendsto_integral_Ico_integral_Ici
-  statement: (b : Real) (hfi : IntegrableOn f (Ici b) μ)
-  proof: ((aecover_Ici_of_Ico ha).integral_tendsto_of_countably_generated hfi).congr' (by simp)
-
-中文:
-定理 tendsto_integral_Ico_integral_Ici
-  结论: (b : 实数) (hfi : 整数egrableOn f (左闭右无界区间 b) μ)
-  证明: ((aecover_Ici_of_Ico ha).integral_tendsto_of_countably_generated hfi).congr' (by simp)
-
-Depends on / 依赖: aecover_Ici_of_Ico, integral_tendsto_of_countably_generated
+/-
+**MeasureTheory.tendsto_integral_Ico_integral_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：tendsto_integral_Ico_integral_Ici (b : Real) (hfi : IntegrableOn f (Ici b)
+ μ) (ha : Tendsto a l atTop) : Tendsto (fun i => ∫ x in Ico b (a i), f x ∂μ) l (
+𝓝 <| ∫ x in Ici b, f x ∂μ)
+参数：b : Real；hfi : IntegrableOn f (Ici b) μ；ha : Tendsto a l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.restrict_restrict`：restrict_restrict (hs : Measura
+bleSet s) : (μ.restrict t).restrict s = μ.restrict (s inter t)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Set.Ico_inter_Ici`：∀ {α : Type u_1} [inst : SemilatticeSup α] (b a c : α
+), Set.Ico b a ∩ Set.Ici c = Set.Ico (b ⊔ c) a
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
+· 使用定理 `MeasureTheory.AECover.integral_tendsto_of_countably_generated`：∀ {α : Ty
+pe u_1} {ι : Type u_2} {E : Type u_3} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} {l : Filter ι}   [inst_1 : NormedAdd…
+· 使用定理 `MeasureTheory.aecover_Ici_of_Ico`：aecover_Ici_of_Ico [NoMaxOrder α] : AE
+Cover (μ.restrict (Ici B)) l fun i => Ico B (d i) where ae_eventually_mem
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
 -/
-theorem tendsto_integral_Ico_integral_Ici (b : Real) (hfi : IntegrableOn f (Ici b) μ)
+theorem tendsto_integral_Ico_integral_Ici (b : ℝ) (hfi : IntegrableOn f (Ici b) μ)
     (ha : Tendsto a l atTop) :
     Tendsto (fun i => ∫ x in Ico b (a i), f x ∂μ) l (𝓝 <| ∫ x in Ici b, f x ∂μ) :=
   ((aecover_Ici_of_Ico ha).integral_tendsto_of_countably_generated hfi).congr' (by simp)
-
-/--
-theorem `tendsto_integral_Ici_zero` / 定理 `tendsto_integral_Ici_zero`
-
-English:
-theorem tendsto_integral_Ici_zero
-  given: (ha : Tendsto a l atTop)
-  proof: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Ici b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Ici b, f x ∂μ - ∫ x in Ico b (a i), f x ∂μ =
-      ∫ x in Ici (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Ici_mem_atTop b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Ici_sub_Ici hb hi]
-  rw [← sub_self (∫ x in Ici b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Ici b hb ha)
-
-中文:
-定理 tendsto_integral_Ici_zero
-  条件: (ha : 收敛 a l atTop)
-  证明: by
-  by_cases! h : forall b, ¬ IntegrableOn f (Ici b) μ
-  · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
-  obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Ici b, f x ∂μ - ∫ x in Ico b (a i), f x ∂μ =
-      ∫ x in Ici (a i), f x ∂μ := by
-    filter_upwards [ha.eventually_mem (Ici_mem_atTop b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Ici_sub_Ici hb hi]
-  rw [← sub_self (∫ x in Ici b]; rw [f x ∂μ)]
-  exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Ici b hb ha)
-
-Depends on / 依赖: Ici_mem_atTop, IntegrableOn, Tendsto, Tendsto.congr, Tendsto.const_sub, const_sub, eventually_mem, filter_upwards, ha.eventually_mem, integral_Ici_sub_Ici, integral_undef, intervalIntegral, intervalIntegral.integral_Ici_sub_Ici, sub_eq_iff_comm, sub_self, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_integral
+/-
+**MeasureTheory.tendsto_integral_Ici_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：tendsto_integral_Ici_zero (ha : Tendsto a l atTop) : Tendsto (fun i => ∫ x
+ in Ici (a i), f x ∂μ) l (𝓝 0)
+参数：ha : Tendsto a l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_undef`：integral_undef {f : α -> G} (h : ¬Integrab
+le f μ) : ∫ a, f a ∂μ = 0
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Tendsto.eventually_mem`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {l₁ : Filter α} {l₂ : Filter β} {s : Set β},   Filter.Tendsto f l₁ l₂ → s ∈ l
+₂ → ∀ᶠ (x : α) in l…
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sub_eq_iff_comm`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}, a
+ - b = c ↔ a - c = b
+· 使用定理 `intervalIntegral.integral_Ici_sub_Ici`：integral_Ici_sub_Ici (hf : Integr
+ableOn f (Ici a) μ) (hab : a <= b) : ∫ x in Ici a, f x ∂μ - ∫ x in Ici b, f x ∂μ
+ = ∫ x in Ico a b, f x ∂μ
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Tendsto.const_sub`：∀ {G : Type w} {α : Type u} [inst : Topologica
+lSpace G] [inst_1 : Sub G] [ContinuousSub G] (b : G) {c : G} {f : α → G}   {l : 
+Filter α}, Fil…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `MeasureTheory.tendsto_integral_Ico_integral_Ici`：tendsto_integral_Ico_in
+tegral_Ici (b : Real) (hfi : IntegrableOn f (Ici b) μ) (ha : Tendsto a l atTop) 
+: Tendsto (fun i => ∫ x in Ico b (a i…
 -/
 theorem tendsto_integral_Ici_zero (ha : Tendsto a l atTop) :
     Tendsto (fun i => ∫ x in Ici (a i), f x ∂μ) l (𝓝 0) := by
-  by_cases! h : forall b, ¬ IntegrableOn f (Ici b) μ
+  by_cases! h : ∀ b, ¬ IntegrableOn f (Ici b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
   obtain ⟨b, hb⟩ := h
-  have : forallᶠ i in l, ∫ x in Ici b, f x ∂μ - ∫ x in Ico b (a i), f x ∂μ =
+  have : ∀ᶠ i in l, ∫ x in Ici b, f x ∂μ - ∫ x in Ico b (a i), f x ∂μ =
       ∫ x in Ici (a i), f x ∂μ := by
     filter_upwards [ha.eventually_mem (Ici_mem_atTop b)] with i hi
-    rw [sub_eq_iff_comm]; rw [intervalIntegral.integral_Ici_sub_Ici hb hi]
-  rw [← sub_self (∫ x in Ici b]; rw [f x ∂μ)]
+    rw [sub_eq_iff_comm, intervalIntegral.integral_Ici_sub_Ici hb hi]
+  rw [← sub_self (∫ x in Ici b, f x ∂μ)]
   exact Tendsto.congr' this (Tendsto.const_sub _ <| tendsto_integral_Ico_integral_Ici b hb ha)
 
 end IntegralOfIntervalIntegral
@@ -2271,198 +2789,216 @@ open scoped Interval
 
 section IoiFTC
 
-variable {E : Type*} {f f' : Real -> E} {g g' : Real -> Real} {a l : Real} {m : E} [NormedAddCommGroup E]
-  [NormedSpace Real E]
+variable {E : Type*} {f f' : ℝ → E} {g g' : ℝ → ℝ} {a l : ℝ} {m : E} [NormedAddCommGroup E]
+  [NormedSpace ℝ E]
 
-/--
-theorem `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi` / 定理 `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`
+/-- If the derivative of a function defined on the real line is integrable close to `+∞`, then
+the function has a limit at `+∞`. -/
+/-
+**MeasureTheory.tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi** 是 Mathlib 中
+的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi [CompleteSpace E] (hder
+iv : forall x in Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a))
+ : Tendsto f atTop (𝓝 (limUnder atTop f))
+参数：hderiv : forall x in Ioi a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Io
+i a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.cauchySeq_iff'`：Metric.cauchySeq_iff' {u : β -> α} : CauchySeq u 
+↔ forall ε > 0, exists N, forall n >= N, dist (u n) (u N) < ε
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `MeasureTheory.tendsto_setIntegral_of_antitone`：tendsto_setIntegral_of_an
+titone {ι : Type*} [Preorder ι] [(atTop : Filter ι).IsCountablyGenerated] {s : ι
+ -> Set X} (hsm : forall i, Measura…
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `measurableSet_Ici`：measurableSet_Ici [ClosedIciTopology α] : MeasurableS
+et (Ici a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Set.Ici_subset_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.
+Ici a ⊆ Set.Ici b ↔ b ≤ a
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `exists_nat_gt`：exists_nat_gt (x : R) : exists n : Nat, x < n
+· 使用定理 `MeasureTheory.IntegrableOn.mono_set`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `MeasureTheory.Integrable.norm`：∀ {α : Type u_1} {β : Type u_2} {m : Meas
+urableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f 
+: α → β}, MeasureTh…
+· 使用定理 `Set.Ici_subset_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.
+Ici a ⊆ Set.Ioi b ↔ b < a
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+（共 69 条，此处仅展示前 30 条）
 
-English:
-theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi
-  statement: [CompleteSpace E]
-  proof: by
-  suffices exists a, Tendsto f atTop (𝓝 a) from tendsto_nhds_limUnder this
-  suffices CauchySeq f from cauchySeq_tendsto_of_complete this
-  apply Metric.cauchySeq_iff'.2 (fun ε εpos => ?_)
-  have A : forallᶠ (n : Nat) in atTop, ∫ (x : Real) in Ici ↑n, ‖f' x‖ < ε := by
-    have L : Tendsto (fun (n : Nat) => ∫ x in Ici (n : Real), ‖f' x‖) atTop
-        (𝓝 (∫ x in ⋂ (n : Nat), Ici (n : Real), ‖f' x‖)) := by
-      apply tendsto_setIntegral_of_antitone (fun n => measurableSet_Ici)
-      · intro m n hmn
-        exact Ici_subset_Ici.2 (Nat.cast_le.mpr hmn)
-      · rcases exists_nat_gt a with ⟨n, hn⟩
-        exact ⟨n, IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 hn)⟩
-    have B : ⋂ (n : Nat), Ici (n : Real) = ∅ := by
-      apply eq_empty_of_forall_notMem (fun x => ?_)
-      simpa only [mem_iInter, mem_Ici, not_forall, not_le] using exists_nat_gt x
-    simp only [B, Measure.restrict_empty, integral_zero_measure] at L
-    exact (tendsto_order.1 L).2 _ εpos
-  have B : forallᶠ (n : Nat) in atTop, a < n := by
-    rcases exists_nat_gt a with ⟨n, hn⟩
-    filter_upwards [Ioi_mem_atTop n] with m (hm : n < m) using hn.trans (Nat.cast_lt.mpr hm)
-  rcases (A.and B).exists with ⟨N, hN, h'N⟩
-  refine ⟨N, fun x hx => ?_⟩
-  calc
-  dist (f x) (f ↑N)
-    = ‖f x - f N‖ := dist_eq_norm _ _
-  _ = ‖∫ t in Ioc ↑N x, f' t‖ := by
-      rw [← intervalIntegral.integral_of_le hx]; rw [intervalIntegral.integral_eq_sub_of_hasDerivAt]
-      · intro y hy
-        simp only [hx, uIcc_of_le, mem_Icc] at hy
-        exact hderiv _ (h'N.trans_le hy.1)
-      · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
-        exact f'int.mono_set (Ioc_subset_Ioi_self.trans (Ioi_subset_Ioi h'N.le))
-  _ <= ∫ t in Ioc ↑N x, ‖f' t‖ := norm_integral_le_integral_norm fun a => f' a
-  _ <= ∫ t in Ici ↑N, ‖f' t‖ := by
-      apply setIntegral_mono_set
-      · apply IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 h'N)
-      · filter_upwards with x using norm_nonneg _
-      · have : Ioc (↑N) x subseteq Ici ↑N := Ioc_subset_Ioi_self.trans Ioi_subset_Ici_self
-        exact this.eventuallyLE
-  _ < ε := hN
-
-中文:
-定理 tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi
-  结论: [完备空间 E]
-  证明: by
-  suffices exists a, Tendsto f atTop (𝓝 a) from tendsto_nhds_limUnder this
-  suffices CauchySeq f from cauchySeq_tendsto_of_complete this
-  apply Metric.cauchySeq_iff'.2 (fun ε εpos => ?_)
-  have A : forallᶠ (n : Nat) in atTop, ∫ (x : Real) in Ici ↑n, ‖f' x‖ < ε := by
-    have L : Tendsto (fun (n : Nat) => ∫ x in Ici (n : Real), ‖f' x‖) atTop
-        (𝓝 (∫ x in ⋂ (n : Nat), Ici (n : Real), ‖f' x‖)) := by
-      apply tendsto_setIntegral_of_antitone (fun n => measurableSet_Ici)
-      · intro m n hmn
-        exact Ici_subset_Ici.2 (Nat.cast_le.mpr hmn)
-      · rcases exists_nat_gt a with ⟨n, hn⟩
-        exact ⟨n, IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 hn)⟩
-    have B : ⋂ (n : Nat), Ici (n : Real) = ∅ := by
-      apply eq_empty_of_forall_notMem (fun x => ?_)
-      simpa only [mem_iInter, mem_Ici, not_forall, not_le] using exists_nat_gt x
-    simp only [B, Measure.restrict_empty, integral_zero_measure] at L
-    exact (tendsto_order.1 L).2 _ εpos
-  have B : forallᶠ (n : Nat) in atTop, a < n := by
-    rcases exists_nat_gt a with ⟨n, hn⟩
-    filter_upwards [Ioi_mem_atTop n] with m (hm : n < m) using hn.trans (Nat.cast_lt.mpr hm)
-  rcases (A.and B).exists with ⟨N, hN, h'N⟩
-  refine ⟨N, fun x hx => ?_⟩
-  calc
-  dist (f x) (f ↑N)
-    = ‖f x - f N‖ := dist_eq_norm _ _
-  _ = ‖∫ t in Ioc ↑N x, f' t‖ := by
-      rw [← intervalIntegral.integral_of_le hx]; rw [intervalIntegral.integral_eq_sub_of_hasDerivAt]
-      · intro y hy
-        simp only [hx, uIcc_of_le, mem_Icc] at hy
-        exact hderiv _ (h'N.trans_le hy.1)
-      · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
-        exact f'int.mono_set (Ioc_subset_Ioi_self.trans (Ioi_subset_Ioi h'N.le))
-  _ <= ∫ t in Ioc ↑N x, ‖f' t‖ := norm_integral_le_integral_norm fun a => f' a
-  _ <= ∫ t in Ici ↑N, ‖f' t‖ := by
-      apply setIntegral_mono_set
-      · apply IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 h'N)
-      · filter_upwards with x using norm_nonneg _
-      · have : Ioc (↑N) x subseteq Ici ↑N := Ioc_subset_Ioi_self.trans Ioi_subset_Ici_self
-        exact this.eventuallyLE
-  _ < ε := hN
-
-Depends on / 依赖: CauchySeq, Ici_subset_Ici, Metric, Metric.cauchySeq_iff, Tendsto, cauchySeq_iff, cauchySeq_tendsto_of_complete, measurableSet_Ici, tendsto_nhds_limUnder, tendsto_setIntegral_of_antitone
+--- 原说明 ---
+If the derivative of a function defined on the real line is integrable close to 
+`+∞`, then
+the function has a limit at `+∞`.
 -/
 theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi [CompleteSpace E]
-    (hderiv : forall x in Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a)) :
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a)) :
     Tendsto f atTop (𝓝 (limUnder atTop f)) := by
-  suffices exists a, Tendsto f atTop (𝓝 a) from tendsto_nhds_limUnder this
+  suffices ∃ a, Tendsto f atTop (𝓝 a) from tendsto_nhds_limUnder this
   suffices CauchySeq f from cauchySeq_tendsto_of_complete this
-  apply Metric.cauchySeq_iff'.2 (fun ε εpos => ?_)
-  have A : forallᶠ (n : Nat) in atTop, ∫ (x : Real) in Ici ↑n, ‖f' x‖ < ε := by
-    have L : Tendsto (fun (n : Nat) => ∫ x in Ici (n : Real), ‖f' x‖) atTop
-        (𝓝 (∫ x in ⋂ (n : Nat), Ici (n : Real), ‖f' x‖)) := by
-      apply tendsto_setIntegral_of_antitone (fun n => measurableSet_Ici)
+  apply Metric.cauchySeq_iff'.2 (fun ε εpos ↦ ?_)
+  have A : ∀ᶠ (n : ℕ) in atTop, ∫ (x : ℝ) in Ici ↑n, ‖f' x‖ < ε := by
+    have L : Tendsto (fun (n : ℕ) ↦ ∫ x in Ici (n : ℝ), ‖f' x‖) atTop
+        (𝓝 (∫ x in ⋂ (n : ℕ), Ici (n : ℝ), ‖f' x‖)) := by
+      apply tendsto_setIntegral_of_antitone (fun n ↦ measurableSet_Ici)
       · intro m n hmn
         exact Ici_subset_Ici.2 (Nat.cast_le.mpr hmn)
       · rcases exists_nat_gt a with ⟨n, hn⟩
         exact ⟨n, IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 hn)⟩
-    have B : ⋂ (n : Nat), Ici (n : Real) = ∅ := by
-      apply eq_empty_of_forall_notMem (fun x => ?_)
+    have B : ⋂ (n : ℕ), Ici (n : ℝ) = ∅ := by
+      apply eq_empty_of_forall_notMem (fun x ↦ ?_)
       simpa only [mem_iInter, mem_Ici, not_forall, not_le] using exists_nat_gt x
     simp only [B, Measure.restrict_empty, integral_zero_measure] at L
     exact (tendsto_order.1 L).2 _ εpos
-  have B : forallᶠ (n : Nat) in atTop, a < n := by
+  have B : ∀ᶠ (n : ℕ) in atTop, a < n := by
     rcases exists_nat_gt a with ⟨n, hn⟩
     filter_upwards [Ioi_mem_atTop n] with m (hm : n < m) using hn.trans (Nat.cast_lt.mpr hm)
   rcases (A.and B).exists with ⟨N, hN, h'N⟩
-  refine ⟨N, fun x hx => ?_⟩
+  refine ⟨N, fun x hx ↦ ?_⟩
   calc
   dist (f x) (f ↑N)
     = ‖f x - f N‖ := dist_eq_norm _ _
   _ = ‖∫ t in Ioc ↑N x, f' t‖ := by
-      rw [← intervalIntegral.integral_of_le hx]; rw [intervalIntegral.integral_eq_sub_of_hasDerivAt]
+      rw [← intervalIntegral.integral_of_le hx, intervalIntegral.integral_eq_sub_of_hasDerivAt]
       · intro y hy
         simp only [hx, uIcc_of_le, mem_Icc] at hy
         exact hderiv _ (h'N.trans_le hy.1)
       · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
         exact f'int.mono_set (Ioc_subset_Ioi_self.trans (Ioi_subset_Ioi h'N.le))
-  _ <= ∫ t in Ioc ↑N x, ‖f' t‖ := norm_integral_le_integral_norm fun a => f' a
-  _ <= ∫ t in Ici ↑N, ‖f' t‖ := by
+  _ ≤ ∫ t in Ioc ↑N x, ‖f' t‖ := norm_integral_le_integral_norm fun a ↦ f' a
+  _ ≤ ∫ t in Ici ↑N, ‖f' t‖ := by
       apply setIntegral_mono_set
       · apply IntegrableOn.mono_set f'int.norm (Ici_subset_Ioi.2 h'N)
       · filter_upwards with x using norm_nonneg _
-      · have : Ioc (↑N) x subseteq Ici ↑N := Ioc_subset_Ioi_self.trans Ioi_subset_Ici_self
+      · have : Ioc (↑N) x ⊆ Ici ↑N := Ioc_subset_Ioi_self.trans Ioi_subset_Ici_self
         exact this.eventuallyLE
   _ < ε := hN
 
 open UniformSpace in
-/--
-theorem `tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi` / 定理 `tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi`
+/-- If a function and its derivative are integrable on `(a, +∞)`, then the function tends to zero
+at `+∞`. -/
+/-
+**MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory`。
+形式化陈述：tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (hderiv : forall x in Ioi a
+, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a)) (fint : IntegrableOn 
+f (Ioi a)) : Tendsto f atTop (𝓝 0)
+参数：hderiv : forall x in Ioi a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Io
+i a)；fint : IntegrableOn f (Ioi a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `UniformSpace.Completion.instIsBoundedSMul`：∀ {α : Type u} [inst : Pseudo
+MetricSpace α] {M : Type u_1} [inst_1 : Zero M] [inst_2 : Zero α] [inst_3 : SMul
+ M α]   [inst_4 : PseudoMetricS…
+· 使用定理 `HasFDerivAt.comp_hasDerivAt`：HasFDerivAt.comp_hasDerivAt (hl : HasFDeriv
+At l l' (f x)) (hf : HasDerivAt f f' x) : HasDerivAt (l ∘ f) (l' f') x
+· 使用定理 `ContinuousLinearMap.hasFDerivAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 
+𝕜 E] [inst_3 : Topolo…
+· 使用定理 `ContinuousLinearMap.integrable_comp`：ContinuousLinearMap.integrable_comp
+ {φ : α -> H} (L : H ->SL[σ] E) (φ_int : Integrable φ μ) : Integrable (fun a : α
+ => L (φ a)) μ
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `MeasureTheory.tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`：tendst
+o_limUnder_of_hasDerivAt_of_integrableOn_Ioi [CompleteSpace E] (hderiv : forall 
+x in Ioi a, HasDerivAt f (f' x) x) (f'int : Integrable…
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `MeasureTheory.IntegrableAtFilter.eq_zero_of_tendsto`：∀ {α : Type u_1} {E
+ : Type u_5} {mα : MeasurableSpace α} [inst : NormedAddCommGroup E] {μ : Measure
+Theory.Measure α}   {l : Filter α} {f : α…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Filter.mem_atTop_sets`：mem_atTop_sets {s : Set α} : s in (atTop : Filter
+ α) ↔ exists a : α, forall b, a <= b -> b in s
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Real.volume_Ici`：volume_Ici {a : Real} : volume (Ici a) = ∞
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Topology.IsEmbedding.tendsto_nhds_iff`：∀ {Y : Type u_2} {Z : Type u_3} {
+ι : Type u_4} {g : Y → Z} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace
+ Z]   {f : ι → Y} {l : Filt…
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `UniformSpace.Completion.isUniformEmbedding_coe`：isUniformEmbedding_coe [
+T0Space α] : IsUniformEmbedding ((↑) : α -> Completion α)
+· 使用定理 `T6Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T6
+Space X], T0Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 
-English:
-theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
-  proof: by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Ioi a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
-  have Fint : IntegrableOn (F ∘ f) (Ioi a) := by apply F.integrable_comp fint
-  have F'int : IntegrableOn (F ∘ f') (Ioi a) := by apply F.integrable_comp f'int
-  have A : Tendsto (F ∘ f) atTop (𝓝 (limUnder atTop (F ∘ f))) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi Fderiv F'int
-  have B : limUnder atTop (F ∘ f) = F 0 := by
-    have : IntegrableAtFilter (F ∘ f) atTop := by exact ⟨Ioi a, Ioi_mem_atTop _, Fint⟩
-    apply IntegrableAtFilter.eq_zero_of_tendsto this ?_ A
-    intro s hs
-    rcases mem_atTop_sets.1 hs with ⟨b, hb⟩
-    rw [← top_le_iff]; rw [← volume_Ici (a := b)]
-    exact measure_mono hb
-  rwa [B, ← IsEmbedding.tendsto_nhds_iff] at A
-  exact (Completion.isUniformEmbedding_coe E).isEmbedding
-
-中文:
-定理 tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
-  证明: by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Ioi a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
-  have Fint : IntegrableOn (F ∘ f) (Ioi a) := by apply F.integrable_comp fint
-  have F'int : IntegrableOn (F ∘ f') (Ioi a) := by apply F.integrable_comp f'int
-  have A : Tendsto (F ∘ f) atTop (𝓝 (limUnder atTop (F ∘ f))) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi Fderiv F'int
-  have B : limUnder atTop (F ∘ f) = F 0 := by
-    have : IntegrableAtFilter (F ∘ f) atTop := by exact ⟨Ioi a, Ioi_mem_atTop _, Fint⟩
-    apply IntegrableAtFilter.eq_zero_of_tendsto this ?_ A
-    intro s hs
-    rcases mem_atTop_sets.1 hs with ⟨b, hb⟩
-    rw [← top_le_iff]; rw [← volume_Ici (a := b)]
-    exact measure_mono hb
-  rwa [B, ← IsEmbedding.tendsto_nhds_iff] at A
-  exact (Completion.isUniformEmbedding_coe E).isEmbedding
-
-Depends on / 依赖: Completion, Completion.toComplL, F.hasFDerivAt.comp_hasDerivAt, F.integrable_comp, Fderiv, HasDerivAt, IntegrableOn, Tendsto, comp_hasDerivAt, hasFDerivAt, hderiv, integrable_comp, limUnder, tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi, toComplL
+--- 原说明 ---
+If a function and its derivative are integrable on `(a, +∞)`, then the function 
+tends to zero
+at `+∞`.
 -/
 theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
-    (hderiv : forall x in Ioi a, HasDerivAt f (f' x) x)
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt f (f' x) x)
     (f'int : IntegrableOn f' (Ioi a)) (fint : IntegrableOn f (Ioi a)) :
     Tendsto f atTop (𝓝 0) := by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Ioi a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
+  let F : E →L[ℝ] Completion E := Completion.toComplL
+  have Fderiv : ∀ x ∈ Ioi a, HasDerivAt (F ∘ f) (F (f' x)) x :=
+    fun x hx ↦ F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
   have Fint : IntegrableOn (F ∘ f) (Ioi a) := by apply F.integrable_comp fint
   have F'int : IntegrableOn (F ∘ f') (Ioi a) := by apply F.integrable_comp f'int
   have A : Tendsto (F ∘ f) atTop (𝓝 (limUnder atTop (F ∘ f))) := by
@@ -2472,60 +3008,104 @@ theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
     apply IntegrableAtFilter.eq_zero_of_tendsto this ?_ A
     intro s hs
     rcases mem_atTop_sets.1 hs with ⟨b, hb⟩
-    rw [← top_le_iff]; rw [← volume_Ici (a := b)]
+    rw [← top_le_iff, ← volume_Ici (a := b)]
     exact measure_mono hb
   rwa [B, ← IsEmbedding.tendsto_nhds_iff] at A
   exact (Completion.isUniformEmbedding_coe E).isEmbedding
 
 variable [CompleteSpace E]
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_tendsto` / 定理 `integral_Ioi_of_hasDerivAt_of_tendsto`
+/-- **Fundamental theorem of calculus-2**, on semi-infinite intervals `(a, +∞)`.
+When a function has a limit at infinity `m`, and its derivative is integrable, then the
+integral of the derivative on `(a, +∞)` is `m - f a`. Version assuming differentiability
+on `(a, +∞)` and continuity at `a⁺`.
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_tendsto
-  statement: (hcont : ContinuousWithinAt f (Ici a) a)
-  proof: by
-  have hcont : ContinuousOn f (Ici a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Ioi a f'int tendsto_id) ?_
-  apply Tendsto.congr' _ (hf.sub_const _)
-  filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
-  symm
-  apply
-    intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le h'x (hcont.mono Icc_subset_Ici_self)
-      fun y hy => hderiv y hy.1
-  rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x]
-  exact f'int.mono (fun y hy => hy.1) le_rfl
+Note that such a function always has a limit at infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a
+) a) (hderiv : forall x in Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f
+' (Ioi a)) (hf : Tendsto f atTop (𝓝 m)) : ∫ x in Ioi a, f' x = m - f a
+参数：hcont : ContinuousWithinAt f (Ici a) a；hderiv : forall x in Ioi a, HasDerivAt
+ f (f' x) x；f'int : IntegrableOn f' (Ioi a)；hf : Tendsto f atTop (𝓝 m)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `MeasureTheory.intervalIntegral_tendsto_integral_Ioi`：intervalIntegral_te
+ndsto_integral_Ioi (a : Real) (hfi : IntegrableOn f (Ioi a) μ) (hb : Tendsto b l
+ atTop) : Tendsto (fun i => ∫ x in a..b i…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le`：integral_eq_sub_of
+_hasDerivAt_of_le (hab : a <= b) (hcont : ContinuousOn f (Icc a b)) (hderiv : fo
+rall x in Ioo a b, HasDerivAt f (f' x) x) …
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Icc_subset_Ici_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Icc b a ⊆ Set.Ici b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegrable_iff_integrableOn_Ioc_of_le`：intervalIntegrable_iff_in
+tegrableOn_Ioc_of_le (hab : a <= b) : IntervalIntegrable f μ a b ↔ IntegrableOn 
+f (Ioc a b) μ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+（共 35 条，此处仅展示前 30 条）
 
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_tendsto
-  结论: (hcont : ContinuousWithinAt f (左闭右无界区间 a) a)
-  证明: by
-  have hcont : ContinuousOn f (Ici a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Ioi a f'int tendsto_id) ?_
-  apply Tendsto.congr' _ (hf.sub_const _)
-  filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
-  symm
-  apply
-    intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le h'x (hcont.mono Icc_subset_Ici_self)
-      fun y hy => hderiv y hy.1
-  rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x]
-  exact f'int.mono (fun y hy => hy.1) le_rfl
+--- 原说明 ---
+**Fundamental theorem of calculus-2**, on semi-infinite intervals `(a, +∞)`.
+When a function has a limit at infinity `m`, and its derivative is integrable, t
+hen the
+integral of the derivative on `(a, +∞)` is `m - f a`. Version assuming different
+iability
+on `(a, +∞)` and continuity at `a⁺`.
 
-Depends on / 依赖: ContinuousOn, Icc_subset_Ici_self, Ioi_mem_atTop, Tendsto, Tendsto.congr, continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, eq_or_lt, filter_upwards, hcont.mono, hderiv, hf.sub_const, hx.out.eq_or_lt, integral_eq_sub_of_hasDerivAt_of_le, intervalIntegral, intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le, intervalIntegral_tendsto_integral_Ioi, le_of_lt, sub_const
+Note that such a function always has a limit at infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`.
 -/
 theorem integral_Ioi_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a) a)
-    (hderiv : forall x in Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a))
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a))
     (hf : Tendsto f atTop (𝓝 m)) : ∫ x in Ioi a, f' x = m - f a := by
   have hcont : ContinuousOn f (Ici a) := by
     intro x hx
@@ -2535,7 +3115,7 @@ theorem integral_Ioi_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici
   refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Ioi a f'int tendsto_id) ?_
   apply Tendsto.congr' _ (hf.sub_const _)
   filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
+  have h'x : a ≤ id x := le_of_lt hx
   symm
   apply
     intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le h'x (hcont.mono Icc_subset_Ici_self)
@@ -2543,134 +3123,158 @@ theorem integral_Ioi_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici
   rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x]
   exact f'int.mono (fun y hy => hy.1) le_rfl
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_tendsto'` / 定理 `integral_Ioi_of_hasDerivAt_of_tendsto'`
+/-- **Fundamental theorem of calculus-2**, on semi-infinite intervals `(a, +∞)`.
+When a function has a limit at infinity `m`, and its derivative is integrable, then the
+integral of the derivative on `(a, +∞)` is `m - f a`. Version assuming differentiability
+on `[a, +∞)`.
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_tendsto'
-  statement: (hderiv : forall x in Ici a, HasDerivAt f (f' x) x)
-  proof: by
-  refine integral_Ioi_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
-    f'int hf
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
+Note that such a function always has a limit at infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto'** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_tendsto' (hderiv : forall x in Ici a, HasDer
+ivAt f (f' x) x) (f'int : IntegrableOn f' (Ioi a)) (hf : Tendsto f atTop (𝓝 m)) 
+: ∫ x in Ioi a, f' x = m - f a
+参数：hderiv : forall x in Ici a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Io
+i a)；hf : Tendsto f atTop (𝓝 m)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto`：integral_Ioi_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a) a) (hderiv : forall x i
+n Ioi a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
 
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_tendsto'
-  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 f (f' x) x)
-  证明: by
-  refine integral_Ioi_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
-    f'int hf
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
+--- 原说明 ---
+**Fundamental theorem of calculus-2**, on semi-infinite intervals `(a, +∞)`.
+When a function has a limit at infinity `m`, and its derivative is integrable, t
+hen the
+integral of the derivative on `(a, +∞)` is `m - f a`. Version assuming different
+iability
+on `[a, +∞)`.
 
-Depends on / 依赖: continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, hderiv, hx.out.le, integral_Ioi_of_hasDerivAt_of_tendsto, self_mem_Ici
+Note that such a function always has a limit at infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`.
 -/
-theorem integral_Ioi_of_hasDerivAt_of_tendsto' (hderiv : forall x in Ici a, HasDerivAt f (f' x) x)
+theorem integral_Ioi_of_hasDerivAt_of_tendsto' (hderiv : ∀ x ∈ Ici a, HasDerivAt f (f' x) x)
     (f'int : IntegrableOn f' (Ioi a)) (hf : Tendsto f atTop (𝓝 m)) :
     ∫ x in Ioi a, f' x = m - f a := by
   refine integral_Ioi_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
     f'int hf
   exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
 
-/--
-theorem `_root_.HasCompactSupport.integral_Ioi_deriv_eq` / 定理 `_root_.HasCompactSupport.integral_Ioi_deriv_eq`
+/-- A special case of `integral_Ioi_of_hasDerivAt_of_tendsto` where we assume that `f` is C^1 with
+compact support. -/
+/-
+**MeasureTheory._root_.HasCompactSupport.integral_Ioi_deriv_eq** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.HasCompactSupport.integral_Ioi_deriv_eq
-  statement: (hf : ContDiff Real 1 f)
-  proof: by
-.hasDerivAt have := fun x (_ : x in Ioi b) => hf.differentiable one_ne_zero x
-  rw [integral_Ioi_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [zero_sub]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atTop_le_cocompact
-
-中文:
-定理 _root_.HasCompactSupport.integral_Ioi_deriv_eq
-  结论: (hf : 连续可微 实数 1 f)
-  证明: by
-.hasDerivAt have := fun x (_ : x in Ioi b) => hf.differentiable one_ne_zero x
-  rw [integral_Ioi_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [zero_sub]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atTop_le_cocompact
-
-Depends on / 依赖: Filter, Filter.coclosedCompact_eq_cocompact, _root_, _root_.atTop_le_cocompact, atTop_le_cocompact, coclosedCompact_eq_cocompact, continuous, continuousWithinAt, continuous_deriv, differentiable, filter_mono, h2f.deriv, h2f.filter_mono, hasCompactSupport_iff_eventuallyEq, hasDerivAt, hf.continuous.continuousWithinAt, hf.continuous_deriv, hf.differentiable, integrableOn, integrable_of_hasCompactSupport
+--- 原说明 ---
+A special case of `integral_Ioi_of_hasDerivAt_of_tendsto` where we assume that `
+f` is C^1 with
+compact support.
 -/
-theorem _root_.HasCompactSupport.integral_Ioi_deriv_eq (hf : ContDiff Real 1 f)
-    (h2f : HasCompactSupport f) (b : Real) : ∫ x in Ioi b, deriv f x = - f b := by
-.hasDerivAt have := fun x (_ : x in Ioi b) => hf.differentiable one_ne_zero x
-  rw [integral_Ioi_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [zero_sub]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atTop_le_cocompact
+theorem _root_.HasCompactSupport.integral_Ioi_deriv_eq (hf : ContDiff ℝ 1 f)
+    (h2f : HasCompactSupport f) (b : ℝ) : ∫ x in Ioi b, deriv f x = - f b := by
+  have := fun x (_ : x ∈ Ioi b) ↦ hf.differentiable one_ne_zero x |>.hasDerivAt
+  rw [integral_Ioi_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this, zero_sub]
+  · refine hf.continuous_deriv le_rfl |>.integrable_of_hasCompactSupport h2f.deriv |>.integrableOn
+  rw [hasCompactSupport_iff_eventuallyEq, Filter.coclosedCompact_eq_cocompact] at h2f
+  exact h2f.filter_mono _root_.atTop_le_cocompact |>.tendsto
 
-/--
-theorem `integrableOn_Ioi_deriv_of_nonneg` / 定理 `integrableOn_Ioi_deriv_of_nonneg`
+/-- When a function has a limit at infinity, and its derivative is nonnegative, then the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `(a, +∞)` and continuity at `a⁺`. -/
+/-
+**MeasureTheory.integrableOn_Ioi_deriv_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：integrableOn_Ioi_deriv_of_nonneg (hcont : ContinuousWithinAt g (Ici a) a) 
+(hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'pos : forall x in Ioi a, 
+0 <= g' x) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a)
+参数：hcont : ContinuousWithinAt g (Ici a) a；hderiv : forall x in Ioi a, HasDerivAt
+ g (g' x) x；g'pos : forall x in Ioi a, 0 <= g' x；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `MeasureTheory.integrableOn_Ioi_of_intervalIntegral_norm_tendsto`：integra
+bleOn_Ioi_of_intervalIntegral_norm_tendsto (I a : Real) (hfi : forall i, Integra
+bleOn f (Ioc a (b i)) μ) (hb : Tendsto b l atTop) (h …
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `intervalIntegral.integrableOn_deriv_of_nonneg`：integrableOn_deriv_of_non
+neg (hcont : ContinuousOn g (Icc a b)) (hderiv : forall x in Ioo a b, HasDerivAt
+ g (g' x) x) (g'pos : forall x in I…
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Icc_subset_Ici_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Icc b a ⊆ Set.Ici b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le`：integral_eq_sub_of
+_hasDerivAt_of_le (hab : a <= b) (hcont : ContinuousOn f (Icc a b)) (hderiv : fo
+rall x in Ioo a b, HasDerivAt f (f' x) x) …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegrable_iff_integrableOn_Ioc_of_le`：intervalIntegrable_iff_in
+tegrableOn_Ioc_of_le (hab : a <= b) : IntervalIntegrable f μ a b ↔ IntegrableOn 
+f (Ioc a b) μ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+（共 43 条，此处仅展示前 30 条）
 
-English:
-theorem integrableOn_Ioi_deriv_of_nonneg
-  statement: (hcont : ContinuousWithinAt g (Ici a) a)
-  proof: by
-  have hcont : ContinuousOn g (Ici a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine integrableOn_Ioi_of_intervalIntegral_norm_tendsto (l - g a) a (fun x => ?_) tendsto_id ?_
-  · exact intervalIntegral.integrableOn_deriv_of_nonneg (hcont.mono Icc_subset_Ici_self)
-      (fun y hy => hderiv y hy.1) fun y hy => g'pos y hy.1
-  apply Tendsto.congr' _ (hg.sub_const _)
-  filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
-  calc
-    g x - g a = ∫ y in a..id x, g' y := by
-      symm
-      apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le h'x
-        (hcont.mono Icc_subset_Ici_self) fun y hy => hderiv y hy.1
-      rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x]
-      exact intervalIntegral.integrableOn_deriv_of_nonneg (hcont.mono Icc_subset_Ici_self)
-        (fun y hy => hderiv y hy.1) fun y hy => g'pos y hy.1
-    _ = ∫ y in a..id x, ‖g' y‖ := by
-      simp_rw [intervalIntegral.integral_of_le h'x]
-      refine setIntegral_congr_fun measurableSet_Ioc fun y hy => ?_
-      dsimp
-      rw [abs_of_nonneg]
-      exact g'pos _ hy.1
-
-中文:
-定理 integrableOn_Ioi_deriv_of_nonneg
-  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
-  证明: by
-  have hcont : ContinuousOn g (Ici a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine integrableOn_Ioi_of_intervalIntegral_norm_tendsto (l - g a) a (fun x => ?_) tendsto_id ?_
-  · exact intervalIntegral.integrableOn_deriv_of_nonneg (hcont.mono Icc_subset_Ici_self)
-      (fun y hy => hderiv y hy.1) fun y hy => g'pos y hy.1
-  apply Tendsto.congr' _ (hg.sub_const _)
-  filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
-  calc
-    g x - g a = ∫ y in a..id x, g' y := by
-      symm
-      apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le h'x
-        (hcont.mono Icc_subset_Ici_self) fun y hy => hderiv y hy.1
-      rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x]
-      exact intervalIntegral.integrableOn_deriv_of_nonneg (hcont.mono Icc_subset_Ici_self)
-        (fun y hy => hderiv y hy.1) fun y hy => g'pos y hy.1
-    _ = ∫ y in a..id x, ‖g' y‖ := by
-      simp_rw [intervalIntegral.integral_of_le h'x]
-      refine setIntegral_congr_fun measurableSet_Ioc fun y hy => ?_
-      dsimp
-      rw [abs_of_nonneg]
-      exact g'pos _ hy.1
-
-Depends on / 依赖: ContinuousOn, Icc_subset_Ici_self, Ioi_mem_atTop, Tendsto, Tendsto.congr, continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, eq_or_lt, filter_upwards, hcont.mono, hderiv, hg.sub_const, hx.out.eq_or_lt, integrableOn_Ioi_of_intervalIntegral_norm_tendsto, integrableOn_deriv_of_nonneg, intervalIntegral, intervalIntegral.integrableOn_deriv_of_nonneg, sub_const, tendsto_id
+--- 原说明 ---
+When a function has a limit at infinity, and its derivative is nonnegative, then
+ the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `(a, +∞)` and continuity at `a⁺`.
 -/
 theorem integrableOn_Ioi_deriv_of_nonneg (hcont : ContinuousWithinAt g (Ici a) a)
-    (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'pos : forall x in Ioi a, 0 <= g' x)
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt g (g' x) x) (g'pos : ∀ x ∈ Ioi a, 0 ≤ g' x)
     (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
   have hcont : ContinuousOn g (Ici a) := by
     intro x hx
@@ -2682,7 +3286,7 @@ theorem integrableOn_Ioi_deriv_of_nonneg (hcont : ContinuousWithinAt g (Ici a) a
       (fun y hy => hderiv y hy.1) fun y hy => g'pos y hy.1
   apply Tendsto.congr' _ (hg.sub_const _)
   filter_upwards [Ioi_mem_atTop a] with x hx
-  have h'x : a <= id x := le_of_lt hx
+  have h'x : a ≤ id x := le_of_lt hx
   calc
     g x - g a = ∫ y in a..id x, g' y := by
       symm
@@ -2698,169 +3302,306 @@ theorem integrableOn_Ioi_deriv_of_nonneg (hcont : ContinuousWithinAt g (Ici a) a
       rw [abs_of_nonneg]
       exact g'pos _ hy.1
 
-/--
-theorem `integrableOn_Ioi_deriv_of_nonneg'` / 定理 `integrableOn_Ioi_deriv_of_nonneg'`
+/-- When a function has a limit at infinity, and its derivative is nonnegative, then the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `[a, +∞)`. -/
+/-
+**MeasureTheory.integrableOn_Ioi_deriv_of_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：integrableOn_Ioi_deriv_of_nonneg' (hderiv : forall x in Ici a, HasDerivAt 
+g (g' x) x) (g'pos : forall x in Ioi a, 0 <= g' x) (hg : Tendsto g atTop (𝓝 l)) 
+: IntegrableOn g' (Ioi a)
+参数：hderiv : forall x in Ici a, HasDerivAt g (g' x) x；g'pos : forall x in Ioi a, 
+0 <= g' x；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonneg`：integrableOn_Ioi_deriv_o
+f_nonneg (hcont : ContinuousWithinAt g (Ici a) a) (hderiv : forall x in Ioi a, H
+asDerivAt g (g' x) x) (g'pos : foral…
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
 
-English:
-theorem integrableOn_Ioi_deriv_of_nonneg'
-  statement: (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-  proof: by
-  refine integrableOn_Ioi_deriv_of_nonneg ?_ (fun x hx => hderiv x hx.out.le) g'pos hg
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
-
-中文:
-定理 integrableOn_Ioi_deriv_of_nonneg'
-  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
-  证明: by
-  refine integrableOn_Ioi_deriv_of_nonneg ?_ (fun x hx => hderiv x hx.out.le) g'pos hg
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
-
-Depends on / 依赖: continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, hderiv, hx.out.le, integrableOn_Ioi_deriv_of_nonneg, self_mem_Ici
+--- 原说明 ---
+When a function has a limit at infinity, and its derivative is nonnegative, then
+ the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `[a, +∞)`.
 -/
-theorem integrableOn_Ioi_deriv_of_nonneg' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-    (g'pos : forall x in Ioi a, 0 <= g' x) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
+theorem integrableOn_Ioi_deriv_of_nonneg' (hderiv : ∀ x ∈ Ici a, HasDerivAt g (g' x) x)
+    (g'pos : ∀ x ∈ Ioi a, 0 ≤ g' x) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
   refine integrableOn_Ioi_deriv_of_nonneg ?_ (fun x hx => hderiv x hx.out.le) g'pos hg
   exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_nonneg` / 定理 `integral_Ioi_of_hasDerivAt_of_nonneg`
+/-- When a function has a limit at infinity `l`, and its derivative is nonnegative, then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is integrable, see
+`integrable_on_Ioi_deriv_of_nonneg`). Version assuming differentiability on `(a, +∞)` and
+continuity at `a⁺`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_nonneg (hcont : ContinuousWithinAt g (Ici a)
+ a) (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'pos : forall x in Ioi
+ a, 0 <= g' x) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a
+参数：hcont : ContinuousWithinAt g (Ici a) a；hderiv : forall x in Ioi a, HasDerivAt
+ g (g' x) x；g'pos : forall x in Ioi a, 0 <= g' x；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto`：integral_Ioi_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a) a) (hderiv : forall x i
+n Ioi a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonneg`：integrableOn_Ioi_deriv_o
+f_nonneg (hcont : ContinuousWithinAt g (Ici a) a) (hderiv : forall x in Ioi a, H
+asDerivAt g (g' x) x) (g'pos : foral…
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_nonneg
-  statement: (hcont : ContinuousWithinAt g (Ici a) a)
-  proof: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
-    (integrableOn_Ioi_deriv_of_nonneg hcont hderiv g'pos hg) hg
-
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_nonneg
-  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
-  证明: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
-    (integrableOn_Ioi_deriv_of_nonneg hcont hderiv g'pos hg) hg
-
-Depends on / 依赖: hderiv, integrableOn_Ioi_deriv_of_nonneg, integral_Ioi_of_hasDerivAt_of_tendsto
+--- 原说明 ---
+When a function has a limit at infinity `l`, and its derivative is nonnegative, 
+then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is inte
+grable, see
+`integrable_on_Ioi_deriv_of_nonneg`). Version assuming differentiability on `(a,
+ +∞)` and
+continuity at `a⁺`.
 -/
 theorem integral_Ioi_of_hasDerivAt_of_nonneg (hcont : ContinuousWithinAt g (Ici a) a)
-    (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'pos : forall x in Ioi a, 0 <= g' x)
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt g (g' x) x) (g'pos : ∀ x ∈ Ioi a, 0 ≤ g' x)
     (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
   integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
     (integrableOn_Ioi_deriv_of_nonneg hcont hderiv g'pos hg) hg
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_nonneg'` / 定理 `integral_Ioi_of_hasDerivAt_of_nonneg'`
+/-- When a function has a limit at infinity `l`, and its derivative is nonnegative, then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is integrable, see
+`integrable_on_Ioi_deriv_of_nonneg'`). Version assuming differentiability on `[a, +∞)`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_nonneg' (hderiv : forall x in Ici a, HasDeri
+vAt g (g' x) x) (g'pos : forall x in Ioi a, 0 <= g' x) (hg : Tendsto g atTop (𝓝 
+l)) : ∫ x in Ioi a, g' x = l - g a
+参数：hderiv : forall x in Ici a, HasDerivAt g (g' x) x；g'pos : forall x in Ioi a, 
+0 <= g' x；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto'`：integral_Ioi_of_ha
+sDerivAt_of_tendsto' (hderiv : forall x in Ici a, HasDerivAt f (f' x) x) (f'int 
+: IntegrableOn f' (Ioi a)) (hf : Tendsto f…
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonneg'`：integrableOn_Ioi_deriv_
+of_nonneg' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x) (g'pos : forall x
+ in Ioi a, 0 <= g' x) (hg : Tendsto g…
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_nonneg'
-  statement: (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-  proof: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonneg' hderiv g'pos hg)
-    hg
-
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_nonneg'
-  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
-  证明: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonneg' hderiv g'pos hg)
-    hg
-
-Depends on / 依赖: hderiv, integrableOn_Ioi_deriv_of_nonneg, integral_Ioi_of_hasDerivAt_of_tendsto
+--- 原说明 ---
+When a function has a limit at infinity `l`, and its derivative is nonnegative, 
+then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is inte
+grable, see
+`integrable_on_Ioi_deriv_of_nonneg'`). Version assuming differentiability on `[a
+, +∞)`.
 -/
-theorem integral_Ioi_of_hasDerivAt_of_nonneg' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-    (g'pos : forall x in Ioi a, 0 <= g' x) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
+theorem integral_Ioi_of_hasDerivAt_of_nonneg' (hderiv : ∀ x ∈ Ici a, HasDerivAt g (g' x) x)
+    (g'pos : ∀ x ∈ Ioi a, 0 ≤ g' x) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
   integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonneg' hderiv g'pos hg)
     hg
 
-/--
-theorem `integrableOn_Ioi_deriv_of_nonpos` / 定理 `integrableOn_Ioi_deriv_of_nonpos`
+/-- When a function has a limit at infinity, and its derivative is nonpositive, then the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `(a, +∞)` and continuity at `a⁺`. -/
+/-
+**MeasureTheory.integrableOn_Ioi_deriv_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：integrableOn_Ioi_deriv_of_nonpos (hcont : ContinuousWithinAt g (Ici a) a) 
+(hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'neg : forall x in Ioi a, 
+g' x <= 0) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a)
+参数：hcont : ContinuousWithinAt g (Ici a) a；hderiv : forall x in Ioi a, HasDerivAt
+ g (g' x) x；g'neg : forall x in Ioi a, g' x <= 0；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.integrable_neg_iff`：integrable_neg_iff {f : α -> β} : Inte
+grable (-f) μ ↔ Integrable f μ
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonneg`：integrableOn_Ioi_deriv_o
+f_nonneg (hcont : ContinuousWithinAt g (Ici a) a) (hderiv : forall x in Ioi a, H
+asDerivAt g (g' x) x) (g'pos : foral…
+· 使用定理 `ContinuousWithinAt.neg`：∀ {G : Type u_1} {X : Type u_3} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace G] [inst_2 : Neg G]   [ContinuousNeg G] {
+f : X → G} {…
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `HasDerivAt.neg`：HasDerivAt.neg (h : HasDerivAt f f' x) : HasDerivAt (-f)
+ (-f') x
+· 使用定理 `neg_nonneg_of_nonpos`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : P
+artialOrder α] [IsOrderedAddMonoid α] {a : α}, a ≤ 0 → 0 ≤ -a
+· 使用定理 `Filter.Tendsto.neg`：∀ {G : Type u_1} {α : Type u_2} [inst : TopologicalS
+pace G] [inst_1 : Neg G] [ContinuousNeg G] {f : α → G}   {l : Filter α} {y : G},
+ Filter.…
 
-English:
-theorem integrableOn_Ioi_deriv_of_nonpos
-  statement: (hcont : ContinuousWithinAt g (Ici a) a)
-  proof: by
-  apply integrable_neg_iff.1
-  exact integrableOn_Ioi_deriv_of_nonneg hcont.neg (fun x hx => (hderiv x hx).neg)
-    (fun x hx => neg_nonneg_of_nonpos (g'neg x hx)) hg.neg
-
-中文:
-定理 integrableOn_Ioi_deriv_of_nonpos
-  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
-  证明: by
-  apply integrable_neg_iff.1
-  exact integrableOn_Ioi_deriv_of_nonneg hcont.neg (fun x hx => (hderiv x hx).neg)
-    (fun x hx => neg_nonneg_of_nonpos (g'neg x hx)) hg.neg
-
-Depends on / 依赖: hcont.neg, hderiv, hg.neg, integrableOn_Ioi_deriv_of_nonneg, integrable_neg_iff, neg_nonneg_of_nonpos
+--- 原说明 ---
+When a function has a limit at infinity, and its derivative is nonpositive, then
+ the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `(a, +∞)` and continuity at `a⁺`.
 -/
 theorem integrableOn_Ioi_deriv_of_nonpos (hcont : ContinuousWithinAt g (Ici a) a)
-    (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'neg : forall x in Ioi a, g' x <= 0)
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt g (g' x) x) (g'neg : ∀ x ∈ Ioi a, g' x ≤ 0)
     (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
   apply integrable_neg_iff.1
   exact integrableOn_Ioi_deriv_of_nonneg hcont.neg (fun x hx => (hderiv x hx).neg)
     (fun x hx => neg_nonneg_of_nonpos (g'neg x hx)) hg.neg
 
-/--
-theorem `integrableOn_Ioi_deriv_of_nonpos'` / 定理 `integrableOn_Ioi_deriv_of_nonpos'`
+/-- When a function has a limit at infinity, and its derivative is nonpositive, then the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `[a, +∞)`. -/
+/-
+**MeasureTheory.integrableOn_Ioi_deriv_of_nonpos'** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：integrableOn_Ioi_deriv_of_nonpos' (hderiv : forall x in Ici a, HasDerivAt 
+g (g' x) x) (g'neg : forall x in Ioi a, g' x <= 0) (hg : Tendsto g atTop (𝓝 l)) 
+: IntegrableOn g' (Ioi a)
+参数：hderiv : forall x in Ici a, HasDerivAt g (g' x) x；g'neg : forall x in Ioi a, 
+g' x <= 0；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonpos`：integrableOn_Ioi_deriv_o
+f_nonpos (hcont : ContinuousWithinAt g (Ici a) a) (hderiv : forall x in Ioi a, H
+asDerivAt g (g' x) x) (g'neg : foral…
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
 
-English:
-theorem integrableOn_Ioi_deriv_of_nonpos'
-  statement: (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-  proof: by
-  refine integrableOn_Ioi_deriv_of_nonpos ?_ (fun x hx => hderiv x hx.out.le) g'neg hg
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
-
-中文:
-定理 integrableOn_Ioi_deriv_of_nonpos'
-  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
-  证明: by
-  refine integrableOn_Ioi_deriv_of_nonpos ?_ (fun x hx => hderiv x hx.out.le) g'neg hg
-  exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
-
-Depends on / 依赖: continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, hderiv, hx.out.le, integrableOn_Ioi_deriv_of_nonpos, self_mem_Ici
+--- 原说明 ---
+When a function has a limit at infinity, and its derivative is nonpositive, then
+ the derivative
+is automatically integrable on `(a, +∞)`. Version assuming differentiability
+on `[a, +∞)`.
 -/
-theorem integrableOn_Ioi_deriv_of_nonpos' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-    (g'neg : forall x in Ioi a, g' x <= 0) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
-  refine integrableOn_Ioi_deriv_of_nonpos ?_ (fun x hx => hderiv x hx.out.le) g'neg hg
+theorem integrableOn_Ioi_deriv_of_nonpos' (hderiv : ∀ x ∈ Ici a, HasDerivAt g (g' x) x)
+    (g'neg : ∀ x ∈ Ioi a, g' x ≤ 0) (hg : Tendsto g atTop (𝓝 l)) : IntegrableOn g' (Ioi a) := by
+  refine integrableOn_Ioi_deriv_of_nonpos ?_ (fun x hx ↦ hderiv x hx.out.le) g'neg hg
   exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_nonpos` / 定理 `integral_Ioi_of_hasDerivAt_of_nonpos`
+/-- When a function has a limit at infinity `l`, and its derivative is nonpositive, then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is integrable, see
+`integrable_on_Ioi_deriv_of_nonneg`). Version assuming differentiability on `(a, +∞)` and
+continuity at `a⁺`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_nonpos (hcont : ContinuousWithinAt g (Ici a)
+ a) (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'neg : forall x in Ioi
+ a, g' x <= 0) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a
+参数：hcont : ContinuousWithinAt g (Ici a) a；hderiv : forall x in Ioi a, HasDerivAt
+ g (g' x) x；g'neg : forall x in Ioi a, g' x <= 0；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto`：integral_Ioi_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a) a) (hderiv : forall x i
+n Ioi a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonpos`：integrableOn_Ioi_deriv_o
+f_nonpos (hcont : ContinuousWithinAt g (Ici a) a) (hderiv : forall x in Ioi a, H
+asDerivAt g (g' x) x) (g'neg : foral…
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_nonpos
-  statement: (hcont : ContinuousWithinAt g (Ici a) a)
-  proof: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
-    (integrableOn_Ioi_deriv_of_nonpos hcont hderiv g'neg hg) hg
-
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_nonpos
-  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
-  证明: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
-    (integrableOn_Ioi_deriv_of_nonpos hcont hderiv g'neg hg) hg
-
-Depends on / 依赖: hderiv, integrableOn_Ioi_deriv_of_nonpos, integral_Ioi_of_hasDerivAt_of_tendsto
+--- 原说明 ---
+When a function has a limit at infinity `l`, and its derivative is nonpositive, 
+then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is inte
+grable, see
+`integrable_on_Ioi_deriv_of_nonneg`). Version assuming differentiability on `(a,
+ +∞)` and
+continuity at `a⁺`.
 -/
 theorem integral_Ioi_of_hasDerivAt_of_nonpos (hcont : ContinuousWithinAt g (Ici a) a)
-    (hderiv : forall x in Ioi a, HasDerivAt g (g' x) x) (g'neg : forall x in Ioi a, g' x <= 0)
+    (hderiv : ∀ x ∈ Ioi a, HasDerivAt g (g' x) x) (g'neg : ∀ x ∈ Ioi a, g' x ≤ 0)
     (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
   integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
     (integrableOn_Ioi_deriv_of_nonpos hcont hderiv g'neg hg) hg
 
-/--
-theorem `integral_Ioi_of_hasDerivAt_of_nonpos'` / 定理 `integral_Ioi_of_hasDerivAt_of_nonpos'`
+/-- When a function has a limit at infinity `l`, and its derivative is nonpositive, then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is integrable, see
+`integrable_on_Ioi_deriv_of_nonneg'`). Version assuming differentiability on `[a, +∞)`. -/
+/-
+**MeasureTheory.integral_Ioi_of_hasDerivAt_of_nonpos'** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：integral_Ioi_of_hasDerivAt_of_nonpos' (hderiv : forall x in Ici a, HasDeri
+vAt g (g' x) x) (g'neg : forall x in Ioi a, g' x <= 0) (hg : Tendsto g atTop (𝓝 
+l)) : ∫ x in Ioi a, g' x = l - g a
+参数：hderiv : forall x in Ici a, HasDerivAt g (g' x) x；g'neg : forall x in Ioi a, 
+g' x <= 0；hg : Tendsto g atTop (𝓝 l)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto'`：integral_Ioi_of_ha
+sDerivAt_of_tendsto' (hderiv : forall x in Ici a, HasDerivAt f (f' x) x) (f'int 
+: IntegrableOn f' (Ioi a)) (hf : Tendsto f…
+· 使用定理 `MeasureTheory.integrableOn_Ioi_deriv_of_nonpos'`：integrableOn_Ioi_deriv_
+of_nonpos' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x) (g'neg : forall x
+ in Ioi a, g' x <= 0) (hg : Tendsto g…
 
-English:
-theorem integral_Ioi_of_hasDerivAt_of_nonpos'
-  statement: (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-  proof: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonpos' hderiv g'neg hg)
-    hg
-
-中文:
-定理 integral_Ioi_of_hasDerivAt_of_nonpos'
-  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
-  证明: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonpos' hderiv g'neg hg)
-    hg
-
-Depends on / 依赖: hderiv, integrableOn_Ioi_deriv_of_nonpos, integral_Ioi_of_hasDerivAt_of_tendsto
+--- 原说明 ---
+When a function has a limit at infinity `l`, and its derivative is nonpositive, 
+then the
+integral of the derivative on `(a, +∞)` is `l - g a` (and the derivative is inte
+grable, see
+`integrable_on_Ioi_deriv_of_nonneg'`). Version assuming differentiability on `[a
+, +∞)`.
 -/
-theorem integral_Ioi_of_hasDerivAt_of_nonpos' (hderiv : forall x in Ici a, HasDerivAt g (g' x) x)
-    (g'neg : forall x in Ioi a, g' x <= 0) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
+theorem integral_Ioi_of_hasDerivAt_of_nonpos' (hderiv : ∀ x ∈ Ici a, HasDerivAt g (g' x) x)
+    (g'neg : ∀ x ∈ Ioi a, g' x ≤ 0) (hg : Tendsto g atTop (𝓝 l)) : ∫ x in Ioi a, g' x = l - g a :=
   integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonpos' hderiv g'neg hg)
     hg
 
@@ -2868,122 +3609,196 @@ end IoiFTC
 
 section IicFTC
 
-variable {E : Type*} {f f' : Real -> E} {a : Real} {m : E} [NormedAddCommGroup E]
-  [NormedSpace Real E]
+variable {E : Type*} {f f' : ℝ → E} {a : ℝ} {m : E} [NormedAddCommGroup E]
+  [NormedSpace ℝ E]
 
-/--
-theorem `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic` / 定理 `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`
+/-- If the derivative of a function defined on the real line is integrable close to `-∞`, then
+the function has a limit at `-∞`. -/
+/-
+**MeasureTheory.tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic** 是 Mathlib 中
+的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic [CompleteSpace E] (hder
+iv : forall x in Iic a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a))
+ : Tendsto f atBot (𝓝 (limUnder atBot f))
+参数：hderiv : forall x in Iic a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Ii
+c a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `HasDerivAt.congr_simp`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜]
+ {F : Type v} [inst_1 : AddCommGroup F] [inst_2 : _root_.Module 𝕜 F]   [inst_3 :
+ Topologica…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `HasDerivAt.scomp`：HasDerivAt.scomp (hg : HasDerivAt g₁ g₁' (h x)) (hh : 
+HasDerivAt h h' x) : HasDerivAt (g₁ ∘ h) (h' • g₁') x
+· 使用定理 `hasDerivAt_neg'`：hasDerivAt_neg' : HasDerivAt (fun x => -x) (-1) x
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `MeasureTheory.tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`：tendst
+o_limUnder_of_hasDerivAt_of_integrableOn_Ioi [CompleteSpace E] (hderiv : forall 
+x in Ioi a, HasDerivAt f (f' x) x) (f'int : Integrable…
+· 使用定理 `MeasureTheory.IntegrableOn.mono_set`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.MeasurePreserving.integrableOn_comp_preimage`：∀ {α : Type 
+u_1} {β : Type u_2} {ε : Type u_3} {mα : MeasurableSpace α} {μ : MeasureTheory.M
+easure α}   [inst : TopologicalSpace ε] [inst_1 …
+· 使用定理 `MeasureTheory.Measure.measurePreserving_neg`：∀ {G : Type u_1} [inst : Me
+asurableSpace G] [inst_1 : Neg G] [MeasurableNeg G] (μ : MeasureTheory.Measure G
+)   [μ.IsNegInvariant], MeasureTh…
+· 使用定理 `ContinuousNeg.measurableNeg`：∀ {γ : Type u_3} [inst : TopologicalSpace γ
+] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [inst_3 : Neg γ]   [ContinuousNeg 
+γ], MeasurableNeg…
+· 使用定理 `IsSemitopologicalRing.toContinuousNeg`：∀ {R : Type u_2} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopologicalRing R],
+   ContinuousNeg R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.isNegInvariant_of_innerRegular`：∀
+ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : TopologicalSpace G] [IsTopolog
+icalAddGroup G]   [inst_3 : MeasurableSpace G] [BorelSpace …
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `instIsAddHaarMeasureVolume`：∀ {E : Type u_3} [inst : NormedAddCommGroup 
+E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : FiniteDimensional ℝ E]   [inst_3 :
+ MeasurableSpace…
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+· 使用定理 `MeasureTheory.Measure.instInnerRegularOfPseudoMetrizableSpaceOfSigmaComp
+actSpaceOfBorelSpaceOfSigmaFinite`：∀ {X : Type u_3} [inst : TopologicalSpace X] 
+[TopologicalSpace.PseudoMetrizableSpace X] [SigmaCompactSpace X]   [inst_3 : Mea
+surableSpace X]…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace`：∀ {G : Type w} 
+[inst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G]   [T
+opologicalSpace.SeparableSpace G] [WeaklyLoca…
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.sigmaFinite`：∀ {G : Type u_1} [in
+st : MeasurableSpace G] [inst_1 : AddGroup G] [inst_2 : TopologicalSpace G]   (μ
+ : MeasureTheory.Measure G) [μ.IsAddHaar…
+（共 44 条，此处仅展示前 30 条）
 
-English:
-theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic
-  statement: [CompleteSpace E]
-  proof: by
-  suffices exists a, Tendsto f atBot (𝓝 a) from tendsto_nhds_limUnder this
-  let g := f ∘ (fun x => -x)
-  have hdg : forall x in Ioi (-a), HasDerivAt g (-f' (-x)) x := by
-    intro x hx
-    have : -x in Iic a := by grind
-    simpa using HasDerivAt.scomp x (hderiv (-x) this) (hasDerivAt_neg' x)
-  have L : Tendsto g atTop (𝓝 (limUnder atTop g)) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi hdg
-    exact ((MeasurePreserving.integrableOn_comp_preimage (Measure.measurePreserving_neg _)
-      (Homeomorph.neg Real).measurableEmbedding).2 f'int.neg).mono_set (by simp)
-  refine ⟨limUnder atTop g, ?_⟩
-  have : Tendsto (fun x => g (-x)) atBot (𝓝 (limUnder atTop g)) := L.comp tendsto_neg_atBot_atTop
-  simpa [g] using this
-
-中文:
-定理 tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic
-  结论: [完备空间 E]
-  证明: by
-  suffices exists a, Tendsto f atBot (𝓝 a) from tendsto_nhds_limUnder this
-  let g := f ∘ (fun x => -x)
-  have hdg : forall x in Ioi (-a), HasDerivAt g (-f' (-x)) x := by
-    intro x hx
-    have : -x in Iic a := by grind
-    simpa using HasDerivAt.scomp x (hderiv (-x) this) (hasDerivAt_neg' x)
-  have L : Tendsto g atTop (𝓝 (limUnder atTop g)) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi hdg
-    exact ((MeasurePreserving.integrableOn_comp_preimage (Measure.measurePreserving_neg _)
-      (Homeomorph.neg Real).measurableEmbedding).2 f'int.neg).mono_set (by simp)
-  refine ⟨limUnder atTop g, ?_⟩
-  have : Tendsto (fun x => g (-x)) atBot (𝓝 (limUnder atTop g)) := L.comp tendsto_neg_atBot_atTop
-  simpa [g] using this
-
-Depends on / 依赖: HasDerivAt, HasDerivAt.scomp, Homeomorph, Homeomorph.neg, Measure, Measure.measurePreserving_neg, MeasurePreserving, MeasurePreserving.integrableOn_comp_preimage, Tendsto, hasDerivAt_neg, hderiv, integrableOn_comp_preimage, limUnder, measurePreserving_neg, tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi, tendsto_nhds_limUnder
+--- 原说明 ---
+If the derivative of a function defined on the real line is integrable close to 
+`-∞`, then
+the function has a limit at `-∞`.
 -/
 theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic [CompleteSpace E]
-    (hderiv : forall x in Iic a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a)) :
+    (hderiv : ∀ x ∈ Iic a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a)) :
     Tendsto f atBot (𝓝 (limUnder atBot f)) := by
-  suffices exists a, Tendsto f atBot (𝓝 a) from tendsto_nhds_limUnder this
-  let g := f ∘ (fun x => -x)
-  have hdg : forall x in Ioi (-a), HasDerivAt g (-f' (-x)) x := by
+  suffices ∃ a, Tendsto f atBot (𝓝 a) from tendsto_nhds_limUnder this
+  let g := f ∘ (fun x ↦ -x)
+  have hdg : ∀ x ∈ Ioi (-a), HasDerivAt g (-f' (-x)) x := by
     intro x hx
-    have : -x in Iic a := by grind
+    have : -x ∈ Iic a := by grind
     simpa using HasDerivAt.scomp x (hderiv (-x) this) (hasDerivAt_neg' x)
   have L : Tendsto g atTop (𝓝 (limUnder atTop g)) := by
     apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi hdg
     exact ((MeasurePreserving.integrableOn_comp_preimage (Measure.measurePreserving_neg _)
-      (Homeomorph.neg Real).measurableEmbedding).2 f'int.neg).mono_set (by simp)
+      (Homeomorph.neg ℝ).measurableEmbedding).2 f'int.neg).mono_set (by simp)
   refine ⟨limUnder atTop g, ?_⟩
-  have : Tendsto (fun x => g (-x)) atBot (𝓝 (limUnder atTop g)) := L.comp tendsto_neg_atBot_atTop
+  have : Tendsto (fun x ↦ g (-x)) atBot (𝓝 (limUnder atTop g)) := L.comp tendsto_neg_atBot_atTop
   simpa [g] using this
 
 open UniformSpace in
-/--
-theorem `tendsto_zero_of_hasDerivAt_of_integrableOn_Iic` / 定理 `tendsto_zero_of_hasDerivAt_of_integrableOn_Iic`
+/-- If a function and its derivative are integrable on `(-∞, a]`, then the function tends to zero
+at `-∞`. -/
+/-
+**MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Iic** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory`。
+形式化陈述：tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (hderiv : forall x in Iic a
+, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a)) (fint : IntegrableOn 
+f (Iic a)) : Tendsto f atBot (𝓝 0)
+参数：hderiv : forall x in Iic a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Ii
+c a)；fint : IntegrableOn f (Iic a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `UniformSpace.Completion.instIsBoundedSMul`：∀ {α : Type u} [inst : Pseudo
+MetricSpace α] {M : Type u_1} [inst_1 : Zero M] [inst_2 : Zero α] [inst_3 : SMul
+ M α]   [inst_4 : PseudoMetricS…
+· 使用定理 `HasFDerivAt.comp_hasDerivAt`：HasFDerivAt.comp_hasDerivAt (hl : HasFDeriv
+At l l' (f x)) (hf : HasDerivAt f f' x) : HasDerivAt (l ∘ f) (l' f') x
+· 使用定理 `ContinuousLinearMap.hasFDerivAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 
+𝕜 E] [inst_3 : Topolo…
+· 使用定理 `ContinuousLinearMap.integrable_comp`：ContinuousLinearMap.integrable_comp
+ {φ : α -> H} (L : H ->SL[σ] E) (φ_int : Integrable φ μ) : Integrable (fun a : α
+ => L (φ a)) μ
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `MeasureTheory.tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`：tendst
+o_limUnder_of_hasDerivAt_of_integrableOn_Iic [CompleteSpace E] (hderiv : forall 
+x in Iic a, HasDerivAt f (f' x) x) (f'int : Integrable…
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `MeasureTheory.IntegrableAtFilter.eq_zero_of_tendsto`：∀ {α : Type u_1} {E
+ : Type u_5} {mα : MeasurableSpace α} [inst : NormedAddCommGroup E] {μ : Measure
+Theory.Measure α}   {l : Filter α} {f : α…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.mem_atBot_sets`：∀ {α : Type u_3} [inst : Preorder α] [IsCodirecte
+dOrder α] [Nonempty α] {s : Set α},   s ∈ Filter.atBot ↔ ∃ a, ∀ b ≤ a, b ∈ s
+· 使用定理 `instIsCodirectedOrder`：∀ {R : Type u_3} [inst : Ring R] [inst_1 : Partia
+lOrder R] [IsOrderedRing R] [Archimedean R], IsCodirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.volume_Iic`：volume_Iic {a : Real} : volume (Iic a) = ∞
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Topology.IsEmbedding.tendsto_nhds_iff`：∀ {Y : Type u_2} {Z : Type u_3} {
+ι : Type u_4} {g : Y → Z} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace
+ Z]   {f : ι → Y} {l : Filt…
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `UniformSpace.Completion.isUniformEmbedding_coe`：isUniformEmbedding_coe [
+T0Space α] : IsUniformEmbedding ((↑) : α -> Completion α)
+· 使用定理 `T6Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T6
+Space X], T0Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 
-English:
-theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Iic
-  proof: by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Iic a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
-  have Fint : IntegrableOn (F ∘ f) (Iic a) := by apply F.integrable_comp fint
-  have F'int : IntegrableOn (F ∘ f') (Iic a) := by apply F.integrable_comp f'int
-  have A : Tendsto (F ∘ f) atBot (𝓝 (limUnder atBot (F ∘ f))) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic Fderiv F'int
-  have B : limUnder atBot (F ∘ f) = F 0 := by
-    have : IntegrableAtFilter (F ∘ f) atBot := by exact ⟨Iic a, Iic_mem_atBot _, Fint⟩
-    apply IntegrableAtFilter.eq_zero_of_tendsto this ?_ A
-    intro s hs
-    rcases mem_atBot_sets.1 hs with ⟨b, hb⟩
-    apply le_antisymm (le_top)
-    rw [← volume_Iic (a := b)]
-    exact measure_mono hb
-  rwa [B, ← IsEmbedding.tendsto_nhds_iff] at A
-  exact (Completion.isUniformEmbedding_coe E).isEmbedding
-
-中文:
-定理 tendsto_zero_of_hasDerivAt_of_integrableOn_Iic
-  证明: by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Iic a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
-  have Fint : IntegrableOn (F ∘ f) (Iic a) := by apply F.integrable_comp fint
-  have F'int : IntegrableOn (F ∘ f') (Iic a) := by apply F.integrable_comp f'int
-  have A : Tendsto (F ∘ f) atBot (𝓝 (limUnder atBot (F ∘ f))) := by
-    apply tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic Fderiv F'int
-  have B : limUnder atBot (F ∘ f) = F 0 := by
-    have : IntegrableAtFilter (F ∘ f) atBot := by exact ⟨Iic a, Iic_mem_atBot _, Fint⟩
-    apply IntegrableAtFilter.eq_zero_of_tendsto this ?_ A
-    intro s hs
-    rcases mem_atBot_sets.1 hs with ⟨b, hb⟩
-    apply le_antisymm (le_top)
-    rw [← volume_Iic (a := b)]
-    exact measure_mono hb
-  rwa [B, ← IsEmbedding.tendsto_nhds_iff] at A
-  exact (Completion.isUniformEmbedding_coe E).isEmbedding
-
-Depends on / 依赖: Completion, Completion.toComplL, F.hasFDerivAt.comp_hasDerivAt, F.integrable_comp, Fderiv, HasDerivAt, IntegrableOn, Tendsto, comp_hasDerivAt, hasFDerivAt, hderiv, integrable_comp, limUnder, tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic, toComplL
+--- 原说明 ---
+If a function and its derivative are integrable on `(-∞, a]`, then the function 
+tends to zero
+at `-∞`.
 -/
 theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Iic
-    (hderiv : forall x in Iic a, HasDerivAt f (f' x) x)
+    (hderiv : ∀ x ∈ Iic a, HasDerivAt f (f' x) x)
     (f'int : IntegrableOn f' (Iic a)) (fint : IntegrableOn f (Iic a)) :
     Tendsto f atBot (𝓝 0) := by
-  let F : E ->L[Real] Completion E := Completion.toComplL
-  have Fderiv : forall x in Iic a, HasDerivAt (F ∘ f) (F (f' x)) x :=
-    fun x hx => F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
+  let F : E →L[ℝ] Completion E := Completion.toComplL
+  have Fderiv : ∀ x ∈ Iic a, HasDerivAt (F ∘ f) (F (f' x)) x :=
+    fun x hx ↦ F.hasFDerivAt.comp_hasDerivAt _ (hderiv x hx)
   have Fint : IntegrableOn (F ∘ f) (Iic a) := by apply F.integrable_comp fint
   have F'int : IntegrableOn (F ∘ f') (Iic a) := by apply F.integrable_comp f'int
   have A : Tendsto (F ∘ f) atBot (𝓝 (limUnder atBot (F ∘ f))) := by
@@ -3001,49 +3816,100 @@ theorem tendsto_zero_of_hasDerivAt_of_integrableOn_Iic
 
 variable [CompleteSpace E]
 
-/--
-theorem `integral_Iic_of_hasDerivAt_of_tendsto` / 定理 `integral_Iic_of_hasDerivAt_of_tendsto`
+/-- **Fundamental theorem of calculus-2**, on semi-infinite intervals `(-∞, a)`.
+When a function has a limit `m` at `-∞`, and its derivative is integrable, then the
+integral of the derivative on `(-∞, a)` is `f a - m`. Version assuming differentiability
+on `(-∞, a)` and continuity at `a⁻`.
 
-English:
-theorem integral_Iic_of_hasDerivAt_of_tendsto
-  statement: (hcont : ContinuousWithinAt f (Iic a) a)
-  proof: by
-  have hcont : ContinuousOn f (Iic a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Iic a f'int tendsto_id) ?_
-  apply Tendsto.congr' _ (hf.const_sub _)
-  filter_upwards [Iic_mem_atBot a] with x hx
-  symm
-  apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hx
-    (hcont.mono Icc_subset_Iic_self) fun y hy => hderiv y hy.2
-  rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
-  exact f'int.mono (fun y hy => hy.2) le_rfl
+Note that such a function always has a limit at minus infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`. -/
+/-
+**MeasureTheory.integral_Iic_of_hasDerivAt_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：integral_Iic_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Iic a
+) a) (hderiv : forall x in Iio a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f
+' (Iic a)) (hf : Tendsto f atBot (𝓝 m)) : ∫ x in Iic a, f' x = f a - m
+参数：hcont : ContinuousWithinAt f (Iic a) a；hderiv : forall x in Iio a, HasDerivAt
+ f (f' x) x；f'int : IntegrableOn f' (Iic a)；hf : Tendsto f atBot (𝓝 m)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Filter.atBot_neBot`：∀ {α : Type u_3} [inst : Preorder α] [IsCodirectedOr
+der α] [Nonempty α], Filter.atBot.NeBot
+· 使用定理 `instIsCodirectedOrder`：∀ {R : Type u_3} [inst : Ring R] [inst_1 : Partia
+lOrder R] [IsOrderedRing R] [Archimedean R], IsCodirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `MeasureTheory.intervalIntegral_tendsto_integral_Iic`：intervalIntegral_te
+ndsto_integral_Iic (b : Real) (hfi : IntegrableOn f (Iic b) μ) (ha : Tendsto a l
+ atBot) : Tendsto (fun i => ∫ x in a i..b…
+· 使用定理 `instIsCountablyGenerated_atBot`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : LinearOrder α] [OrderTopology α]   [TopologicalSpace.SeparableSpace
+ α], Filter.atBot.Is…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le`：integral_eq_sub_of
+_hasDerivAt_of_le (hab : a <= b) (hcont : ContinuousOn f (Icc a b)) (hderiv : fo
+rall x in Ioo a b, HasDerivAt f (f' x) x) …
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Icc_subset_Iic_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Icc a b ⊆ Set.Iic b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegrable_iff_integrableOn_Ioc_of_le`：intervalIntegrable_iff_in
+tegrableOn_Ioc_of_le (hab : a <= b) : IntervalIntegrable f μ a b ↔ IntegrableOn 
+f (Ioc a b) μ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.IntegrableOn.mono`：∀ {α : Type u_1} {ε : Type u_3} {mα : M
+easurableSpace α} {f : α → ε} {s t : Set α} {μ ν : MeasureTheory.Measure α}   [i
+nst : TopologicalSpac…
+（共 34 条，此处仅展示前 30 条）
 
-中文:
-定理 integral_Iic_of_hasDerivAt_of_tendsto
-  结论: (hcont : ContinuousWithinAt f (左无界右闭区间 a) a)
-  证明: by
-  have hcont : ContinuousOn f (Iic a) := by
-    intro x hx
-    rcases hx.out.eq_or_lt with rfl | hx
-    · exact hcont
-    · exact (hderiv x hx).continuousAt.continuousWithinAt
-  refine tendsto_nhds_unique (intervalIntegral_tendsto_integral_Iic a f'int tendsto_id) ?_
-  apply Tendsto.congr' _ (hf.const_sub _)
-  filter_upwards [Iic_mem_atBot a] with x hx
-  symm
-  apply intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hx
-    (hcont.mono Icc_subset_Iic_self) fun y hy => hderiv y hy.2
-  rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
-  exact f'int.mono (fun y hy => hy.2) le_rfl
+--- 原说明 ---
+**Fundamental theorem of calculus-2**, on semi-infinite intervals `(-∞, a)`.
+When a function has a limit `m` at `-∞`, and its derivative is integrable, then 
+the
+integral of the derivative on `(-∞, a)` is `f a - m`. Version assuming different
+iability
+on `(-∞, a)` and continuity at `a⁻`.
 
-Depends on / 依赖: ContinuousOn, Icc_subset_Iic_self, Iic_mem_atBot, Tendsto, Tendsto.congr, const_sub, continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, eq_or_lt, filter_upwards, hcont.mono, hderiv, hf.const_sub, hx.out.eq_or_lt, integral_eq_sub_of_hasDerivAt_of_le, intervalIntegrable_iff_integrableOn_I, intervalIntegral, intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le, intervalIntegral_tendsto_integral_Iic
+Note that such a function always has a limit at minus infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`.
 -/
 theorem integral_Iic_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Iic a) a)
-    (hderiv : forall x in Iio a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a))
+    (hderiv : ∀ x ∈ Iio a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a))
     (hf : Tendsto f atBot (𝓝 m)) : ∫ x in Iic a, f' x = f a - m := by
   have hcont : ContinuousOn f (Iic a) := by
     intro x hx
@@ -3059,112 +3925,92 @@ theorem integral_Iic_of_hasDerivAt_of_tendsto (hcont : ContinuousWithinAt f (Iic
   rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hx]
   exact f'int.mono (fun y hy => hy.2) le_rfl
 
-/--
-theorem `integral_Iic_of_hasDerivAt_of_tendsto'` / 定理 `integral_Iic_of_hasDerivAt_of_tendsto'`
+/-- **Fundamental theorem of calculus-2**, on semi-infinite intervals `(-∞, a)`.
+When a function has a limit `m` at `-∞`, and its derivative is integrable, then the
+integral of the derivative on `(-∞, a)` is `f a - m`. Version assuming differentiability
+on `(-∞, a]`.
 
-English:
-theorem integral_Iic_of_hasDerivAt_of_tendsto'
-  proof: by
-  refine integral_Iic_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
-    f'int hf
-  exact (hderiv a self_mem_Iic).continuousAt.continuousWithinAt
+Note that such a function always has a limit at minus infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`. -/
+/-
+**MeasureTheory.integral_Iic_of_hasDerivAt_of_tendsto'** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory`。
+形式化陈述：integral_Iic_of_hasDerivAt_of_tendsto' (hderiv : forall x in Iic a, HasDer
+ivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a)) (hf : Tendsto f atBot (𝓝 m)) 
+: ∫ x in Iic a, f' x = f a - m
+参数：hderiv : forall x in Iic a, HasDerivAt f (f' x) x；f'int : IntegrableOn f' (Ii
+c a)；hf : Tendsto f atBot (𝓝 m)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_Iic_of_hasDerivAt_of_tendsto`：integral_Iic_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Iic a) a) (hderiv : forall x i
+n Iio a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `HasDerivAt.continuousAt`：HasDerivAt.continuousAt (h : HasDerivAt f f' x)
+ : ContinuousAt f x
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Membership.mem.out`：∀ {α : Type u} {a : α} {p : α → Prop}, a ∈ {x | p x}
+ → p a
 
-中文:
-定理 integral_Iic_of_hasDerivAt_of_tendsto'
-  证明: by
-  refine integral_Iic_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
-    f'int hf
-  exact (hderiv a self_mem_Iic).continuousAt.continuousWithinAt
+--- 原说明 ---
+**Fundamental theorem of calculus-2**, on semi-infinite intervals `(-∞, a)`.
+When a function has a limit `m` at `-∞`, and its derivative is integrable, then 
+the
+integral of the derivative on `(-∞, a)` is `f a - m`. Version assuming different
+iability
+on `(-∞, a]`.
 
-Depends on / 依赖: continuousAt, continuousAt.continuousWithinAt, continuousWithinAt, hderiv, hx.out.le, integral_Iic_of_hasDerivAt_of_tendsto, self_mem_Iic
+Note that such a function always has a limit at minus infinity,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic`.
 -/
 theorem integral_Iic_of_hasDerivAt_of_tendsto'
-    (hderiv : forall x in Iic a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a))
+    (hderiv : ∀ x ∈ Iic a, HasDerivAt f (f' x) x) (f'int : IntegrableOn f' (Iic a))
     (hf : Tendsto f atBot (𝓝 m)) : ∫ x in Iic a, f' x = f a - m := by
   refine integral_Iic_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
     f'int hf
   exact (hderiv a self_mem_Iic).continuousAt.continuousWithinAt
 
-/--
-theorem `_root_.HasCompactSupport.integral_Iic_deriv_eq` / 定理 `_root_.HasCompactSupport.integral_Iic_deriv_eq`
+/-- A special case of `integral_Iic_of_hasDerivAt_of_tendsto` where we assume that `f` is C^1 with
+compact support. -/
+/-
+**MeasureTheory._root_.HasCompactSupport.integral_Iic_deriv_eq** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.HasCompactSupport.integral_Iic_deriv_eq
-  statement: (hf : ContDiff Real 1 f)
-  proof: by
-.hasDerivAt have := fun x (_ : x in Iio b) => hf.differentiable one_ne_zero x
-  rw [integral_Iic_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [sub_zero]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atBot_le_cocompact
-
-中文:
-定理 _root_.HasCompactSupport.integral_Iic_deriv_eq
-  结论: (hf : 连续可微 实数 1 f)
-  证明: by
-.hasDerivAt have := fun x (_ : x in Iio b) => hf.differentiable one_ne_zero x
-  rw [integral_Iic_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [sub_zero]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atBot_le_cocompact
-
-Depends on / 依赖: Filter, Filter.coclosedCompact_eq_cocompact, _root_, _root_.atBot_le_cocompact, atBot_le_cocompact, coclosedCompact_eq_cocompact, continuous, continuousWithinAt, continuous_deriv, differentiable, filter_mono, h2f.deriv, h2f.filter_mono, hasCompactSupport_iff_eventuallyEq, hasDerivAt, hf.continuous.continuousWithinAt, hf.continuous_deriv, hf.differentiable, integrableOn, integrable_of_hasCompactSupport
+--- 原说明 ---
+A special case of `integral_Iic_of_hasDerivAt_of_tendsto` where we assume that `
+f` is C^1 with
+compact support.
 -/
-theorem _root_.HasCompactSupport.integral_Iic_deriv_eq (hf : ContDiff Real 1 f)
-    (h2f : HasCompactSupport f) (b : Real) : ∫ x in Iic b, deriv f x = f b := by
-.hasDerivAt have := fun x (_ : x in Iio b) => hf.differentiable one_ne_zero x
-  rw [integral_Iic_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [sub_zero]
-.integrableOn .integrable_of_hasCompactSupport h2f.deriv · refine hf.continuous_deriv le_rfl
-  rw [hasCompactSupport_iff_eventuallyEq]; rw [Filter.coclosedCompact_eq_cocompact] at h2f
-.tendsto exact h2f.filter_mono _root_.atBot_le_cocompact
+theorem _root_.HasCompactSupport.integral_Iic_deriv_eq (hf : ContDiff ℝ 1 f)
+    (h2f : HasCompactSupport f) (b : ℝ) : ∫ x in Iic b, deriv f x = f b := by
+  have := fun x (_ : x ∈ Iio b) ↦ hf.differentiable one_ne_zero x |>.hasDerivAt
+  rw [integral_Iic_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this, sub_zero]
+  · refine hf.continuous_deriv le_rfl |>.integrable_of_hasCompactSupport h2f.deriv |>.integrableOn
+  rw [hasCompactSupport_iff_eventuallyEq, Filter.coclosedCompact_eq_cocompact] at h2f
+  exact h2f.filter_mono _root_.atBot_le_cocompact |>.tendsto
 
 open UniformSpace in
-/--
-lemma `_root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv` / 引理 `_root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv`
-
-English:
-lemma _root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv
-  proof: by
-  let I : F ->L[Real] Completion F := Completion.toComplL
-  let f' : Real -> Completion F := I ∘ f
-  have hf' : ContDiff Real 1 f' := hf.continuousLinearMap_comp I
-  have h'f' : HasCompactSupport f' := h'f.comp_left rfl
-  have : ‖f' x‖ₑ <= ∫⁻ y in Iic x, ‖deriv f' y‖ₑ := by
-    rw [← HasCompactSupport.integral_Iic_deriv_eq hf' h'f' x]
-    exact enorm_integral_le_lintegral_enorm _
-  convert! this with y
-  · simp [f', I, Completion.enorm_coe]
-  · rw [fderiv_comp_deriv _ I.differentiableAt (hf.differentiable one_ne_zero _)]
-    simp only [ContinuousLinearMap.fderiv]
-    simp [I]
-
-中文:
-引理 _root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv
-  证明: by
-  let I : F ->L[Real] Completion F := Completion.toComplL
-  let f' : Real -> Completion F := I ∘ f
-  have hf' : ContDiff Real 1 f' := hf.continuousLinearMap_comp I
-  have h'f' : HasCompactSupport f' := h'f.comp_left rfl
-  have : ‖f' x‖ₑ <= ∫⁻ y in Iic x, ‖deriv f' y‖ₑ := by
-    rw [← HasCompactSupport.integral_Iic_deriv_eq hf' h'f' x]
-    exact enorm_integral_le_lintegral_enorm _
-  convert! this with y
-  · simp [f', I, Completion.enorm_coe]
-  · rw [fderiv_comp_deriv _ I.differentiableAt (hf.differentiable one_ne_zero _)]
-    simp only [ContinuousLinearMap.fderiv]
-    simp [I]
-
-Depends on / 依赖: Completion, Completion.enorm_coe, Completion.toComplL, ContDiff, HasCompactSupport, HasCompactSupport.integral_Iic_deriv_eq, I.differentiableAt, comp_left, continuousLinearMap_comp, convert, differentiable, differentiableAt, enorm_coe, enorm_integral_le_lintegral_enorm, f.comp_left, fderiv_comp_deriv, hf.continuousLinearMap_comp, hf.differentiable, integral_Iic_deriv_eq, one_ne_zer
+/-
+**MeasureTheory._root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv** 是 Mathli
+b 中的一个引理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.HasCompactSupport.enorm_le_lintegral_Ici_deriv
-    {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F]
-    {f : Real -> F} (hf : ContDiff Real 1 f) (h'f : HasCompactSupport f) (x : Real) :
-    ‖f x‖ₑ <= ∫⁻ y in Iic x, ‖deriv f y‖ₑ := by
-  let I : F ->L[Real] Completion F := Completion.toComplL
-  let f' : Real -> Completion F := I ∘ f
-  have hf' : ContDiff Real 1 f' := hf.continuousLinearMap_comp I
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {f : ℝ → F} (hf : ContDiff ℝ 1 f) (h'f : HasCompactSupport f) (x : ℝ) :
+    ‖f x‖ₑ ≤ ∫⁻ y in Iic x, ‖deriv f y‖ₑ := by
+  let I : F →L[ℝ] Completion F := Completion.toComplL
+  let f' : ℝ → Completion F := I ∘ f
+  have hf' : ContDiff ℝ 1 f' := hf.continuousLinearMap_comp I
   have h'f' : HasCompactSupport f' := h'f.comp_left rfl
-  have : ‖f' x‖ₑ <= ∫⁻ y in Iic x, ‖deriv f' y‖ₑ := by
+  have : ‖f' x‖ₑ ≤ ∫⁻ y in Iic x, ‖deriv f' y‖ₑ := by
     rw [← HasCompactSupport.integral_Iic_deriv_eq hf' h'f' x]
     exact enorm_integral_le_lintegral_enorm _
   convert! this with y
@@ -3177,75 +4023,139 @@ end IicFTC
 
 section UnivFTC
 
-variable {E : Type*} {f f' : Real -> E} {m n : E} [NormedAddCommGroup E]
-  [NormedSpace Real E]
+variable {E : Type*} {f f' : ℝ → E} {m n : E} [NormedAddCommGroup E]
+  [NormedSpace ℝ E]
 
-/--
-theorem `integral_of_hasDerivAt_of_tendsto` / 定理 `integral_of_hasDerivAt_of_tendsto`
+/-- **Fundamental theorem of calculus-2**, on the whole real line
+When a function has a limit `m` at `-∞` and `n` at `+∞`, and its derivative is integrable, then the
+integral of the derivative is `n - m`.
 
-English:
-theorem integral_of_hasDerivAt_of_tendsto
-  statement: [CompleteSpace E]
-  proof: by
-  rw [← setIntegral_univ]; rw [← Set.Iic_union_Ioi (a := 0)]; rw [setIntegral_union (Iic_disjoint_Ioi le_rfl) measurableSet_Ioi hf'.integrableOn hf'.integrableOn]; rw [integral_Iic_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn hbot]; rw [integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn htop]
-  abel
+Note that such a function always has a limit at `-∞` and `+∞`,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic` and
+`tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`. -/
+/-
+**MeasureTheory.integral_of_hasDerivAt_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：integral_of_hasDerivAt_of_tendsto [CompleteSpace E] (hderiv : forall x, Ha
+sDerivAt f (f' x) x) (hf' : Integrable f') (hbot : Tendsto f atBot (𝓝 m)) (htop 
+: Tendsto f atTop (𝓝 n)) : ∫ x, f' x = n - m
+参数：hderiv : forall x, HasDerivAt f (f' x) x；hf' : Integrable f'；hbot : Tendsto f
+ atBot (𝓝 m)；htop : Tendsto f atTop (𝓝 n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.setIntegral_univ`：setIntegral_univ : ∫ x in univ, f x ∂μ =
+ ∫ x, f x ∂μ
+· 使用定理 `Set.Iic_union_Ioi`：Iic_union_Ioi : Iic a union Ioi a = univ
+· 使用定理 `MeasureTheory.setIntegral_union`：setIntegral_union (hst : Disjoint s t) 
+(ht : MeasurableSet t) (hfs : IntegrableOn f s μ) (hft : IntegrableOn f t μ) : ∫
+ x in s union t, f x …
+· 使用定理 `Set.Iic_disjoint_Ioi`：Iic_disjoint_Ioi (h : a <= b) : Disjoint (Iic a) (
+Ioi b)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `MeasureTheory.integral_Iic_of_hasDerivAt_of_tendsto'`：integral_Iic_of_ha
+sDerivAt_of_tendsto' (hderiv : forall x in Iic a, HasDerivAt f (f' x) x) (f'int 
+: IntegrableOn f' (Iic a)) (hf : Tendsto f…
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto'`：integral_Ioi_of_ha
+sDerivAt_of_tendsto' (hderiv : forall x in Ici a, HasDerivAt f (f' x) x) (f'int 
+: IntegrableOn f' (Ioi a)) (hf : Tendsto f…
+· 使用定理 `_private.Mathlib.MeasureTheory.Integral.IntegralEqImproper.0.MeasureTheo
+ry.integral_of_hasDerivAt_of_tendsto._abel_1_1`：∀ {E : Type u_1} {f : ℝ → E} {m 
+n : E} [inst : NormedAddCommGroup E], f 0 - m + (n - f 0) = n - m
 
-中文:
-定理 integral_of_hasDerivAt_of_tendsto
-  结论: [完备空间 E]
-  证明: by
-  rw [← setIntegral_univ]; rw [← Set.Iic_union_Ioi (a := 0)]; rw [setIntegral_union (Iic_disjoint_Ioi le_rfl) measurableSet_Ioi hf'.integrableOn hf'.integrableOn]; rw [integral_Iic_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn hbot]; rw [integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn htop]
-  abel
+--- 原说明 ---
+**Fundamental theorem of calculus-2**, on the whole real line
+When a function has a limit `m` at `-∞` and `n` at `+∞`, and its derivative is i
+ntegrable, then the
+integral of the derivative is `n - m`.
 
-Depends on / 依赖: Iic_disjoint_Ioi, Iic_union_Ioi, Set.Iic_union_Ioi, hderiv, integrableOn, integral_Iic_of_hasDerivAt_of_tendsto, integral_Ioi_of_hasDerivAt_of_tendsto, le_rfl, measurableSet_Ioi, setIntegral_union, setIntegral_univ
+Note that such a function always has a limit at `-∞` and `+∞`,
+see `tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic` and
+`tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi`.
 -/
 theorem integral_of_hasDerivAt_of_tendsto [CompleteSpace E]
-    (hderiv : forall x, HasDerivAt f (f' x) x) (hf' : Integrable f')
+    (hderiv : ∀ x, HasDerivAt f (f' x) x) (hf' : Integrable f')
     (hbot : Tendsto f atBot (𝓝 m)) (htop : Tendsto f atTop (𝓝 n)) : ∫ x, f' x = n - m := by
-  rw [← setIntegral_univ]; rw [← Set.Iic_union_Ioi (a := 0)]; rw [setIntegral_union (Iic_disjoint_Ioi le_rfl) measurableSet_Ioi hf'.integrableOn hf'.integrableOn]; rw [integral_Iic_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn hbot]; rw [integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn htop]
+  rw [← setIntegral_univ, ← Set.Iic_union_Ioi (a := 0),
+    setIntegral_union (Iic_disjoint_Ioi le_rfl) measurableSet_Ioi hf'.integrableOn hf'.integrableOn,
+    integral_Iic_of_hasDerivAt_of_tendsto' (fun x _ ↦ hderiv x) hf'.integrableOn hbot,
+    integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ ↦ hderiv x) hf'.integrableOn htop]
   abel
 
-/--
-theorem `integral_eq_zero_of_hasDerivAt_of_integrable` / 定理 `integral_eq_zero_of_hasDerivAt_of_integrable`
+/-- If a function and its derivative are integrable on the real line, then the integral of the
+derivative is zero. -/
+/-
+**MeasureTheory.integral_eq_zero_of_hasDerivAt_of_integrable** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory`。
+形式化陈述：integral_eq_zero_of_hasDerivAt_of_integrable (hderiv : forall x, HasDerivA
+t f (f' x) x) (hf' : Integrable f') (hf : Integrable f) : ∫ x, f' x = 0
+参数：hderiv : forall x, HasDerivAt f (f' x) x；hf' : Integrable f'；hf : Integrable 
+f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Iic`：tendsto_ze
+ro_of_hasDerivAt_of_integrableOn_Iic (hderiv : forall x in Iic a, HasDerivAt f (
+f' x) x) (f'int : IntegrableOn f' (Iic a)) (fint :…
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi`：tendsto_ze
+ro_of_hasDerivAt_of_integrableOn_Ioi (hderiv : forall x in Ioi a, HasDerivAt f (
+f' x) x) (f'int : IntegrableOn f' (Ioi a)) (fint :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `MeasureTheory.integral_of_hasDerivAt_of_tendsto`：integral_of_hasDerivAt_
+of_tendsto [CompleteSpace E] (hderiv : forall x, HasDerivAt f (f' x) x) (hf' : I
+ntegrable f') (hbot : Tendsto f atBot…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.integral_def`：∀ {α : Type u_6} {G : Type u_7} [inst : Norm
+edAddCommGroup G] [inst_1 : NormedSpace ℝ G] {x : MeasurableSpace α}   (μ : Meas
+ureTheory.Measur…
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem integral_eq_zero_of_hasDerivAt_of_integrable
-  proof: by
-  by_cases hE : CompleteSpace E; swap
-  · simp [integral, hE]
-  have A : Tendsto f atBot (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0) (fun x _hx => hderiv x)
-      hf'.integrableOn hf.integrableOn
-  have B : Tendsto f atTop (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0) (fun x _hx => hderiv x)
-      hf'.integrableOn hf.integrableOn
-  simpa using integral_of_hasDerivAt_of_tendsto hderiv hf' A B
-
-中文:
-定理 integral_eq_zero_of_hasDerivAt_of_integrable
-  证明: by
-  by_cases hE : CompleteSpace E; swap
-  · simp [integral, hE]
-  have A : Tendsto f atBot (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0) (fun x _hx => hderiv x)
-      hf'.integrableOn hf.integrableOn
-  have B : Tendsto f atTop (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0) (fun x _hx => hderiv x)
-      hf'.integrableOn hf.integrableOn
-  simpa using integral_of_hasDerivAt_of_tendsto hderiv hf' A B
-
-Depends on / 依赖: CompleteSpace, Tendsto, hderiv, hf.integrableOn, integrableOn, integral, integral_of_hasDerivAt_of_tendsto, tendsto_zero_of_hasDerivAt_of_integrableOn_Iic, tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
+--- 原说明 ---
+If a function and its derivative are integrable on the real line, then the integ
+ral of the
+derivative is zero.
 -/
 theorem integral_eq_zero_of_hasDerivAt_of_integrable
-    (hderiv : forall x, HasDerivAt f (f' x) x) (hf' : Integrable f') (hf : Integrable f) :
+    (hderiv : ∀ x, HasDerivAt f (f' x) x) (hf' : Integrable f') (hf : Integrable f) :
     ∫ x, f' x = 0 := by
   by_cases hE : CompleteSpace E; swap
   · simp [integral, hE]
   have A : Tendsto f atBot (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0) (fun x _hx => hderiv x)
+    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0) (fun x _hx ↦ hderiv x)
       hf'.integrableOn hf.integrableOn
   have B : Tendsto f atTop (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0) (fun x _hx => hderiv x)
+    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0) (fun x _hx ↦ hderiv x)
       hf'.integrableOn hf.integrableOn
   simpa using integral_of_hasDerivAt_of_tendsto hderiv hf' A B
 
@@ -3257,82 +4167,110 @@ open Real
 
 open scoped Interval
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 
-/--
-theorem `integral_deriv_smul_comp_Ioi` / 定理 `integral_deriv_smul_comp_Ioi`
+/-- Change-of-variables formula for `Ioi` integrals of vector-valued functions, proved by taking
+limits from the result for finite intervals. -/
+/-
+**MeasureTheory.integral_deriv_smul_comp_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：integral_deriv_smul_comp_Ioi {f f' : Real -> Real} {g : Real -> E} {a : Re
+al} (hf : ContinuousOn f <| Ici a) (hft : Tendsto f atTop atTop) (hff' : forall 
+x in Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x) (hg_cont : ContinuousOn g <| f 
+'' Ioi a) (hg1 : IntegrableOn g <| f '' Ici a) (hg2 : IntegrableOn (fun x => f' 
+x • (g ∘ f) x) (Ici a)) : (∫ x in Ioi a, f' x • (g ∘ f) x) = ∫ u in Ioi (f a), g
+ u
+参数：hf : ContinuousOn f <| Ici a；hft : Tendsto f atTop atTop；hff' : forall x in I
+oi a, HasDerivWithinAt f (f' x) (Ioi x) x；hg_cont : ContinuousOn g <| f '' Ioi a
+；hg1 : IntegrableOn g <| f '' Ici a；hg2 : IntegrableOn (fun x => f' x • (g ∘ f) 
+x) (Ici a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.Ioo_subset_Ioi_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioi b
+· 使用引理 `Set.uIcc_of_le`：uIcc_of_le (h : a <= b) : [[a, b]] = Icc a b
+· 使用定理 `Set.Icc_subset_Ici_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Icc b a ⊆ Set.Ici b
+· 使用定理 `intervalIntegral.integral_deriv_smul_comp'''`：integral_deriv_smul_comp''
+' (hf : ContinuousOn f [[a, b]]) (hff' : forall x in Ioo (min a b) (max a b), Ha
+sDerivWithinAt f (f' x) (Ioi x) x)…
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.mem_of_mem_of_subset`：mem_of_mem_of_subset {x : α} {s t : Set α} (hx
+ : x in s) (h : s subseteq t) : x in t
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `MeasureTheory.IntegrableOn.mono_set`：∀ {α : Type u_1} {ε : Type u_3} {mα
+ : MeasurableSpace α} {f : α → ε} {s t : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace …
+· 使用定理 `MeasureTheory.intervalIntegral_tendsto_integral_Ioi`：intervalIntegral_te
+ndsto_integral_Ioi (a : Real) (hfi : IntegrableOn f (Ioi a) μ) (hb : Tendsto b l
+ atTop) : Tendsto (fun i => ∫ x in a..b i…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `integrableOn_Ici_iff_integrableOn_Ioi`：integrableOn_Ici_iff_integrableOn
+_Ioi (hb : ‖f b‖ₑ != ∞
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `StandardBorelSpace.instMeasurableEq`：∀ {α : Type u_1} [inst : Measurable
+Space α] [StandardBorelSpace α], MeasurableEq α
+· 使用定理 `standardBorel_of_polish`：∀ {α : Type u_1} [inst : MeasurableSpace α] [τ 
+: TopologicalSpace α] [BorelSpace α] [PolishSpace α],   StandardBorelSpace α
+· 使用定理 `instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace`：∀ {α : Typ
+e u_1} [inst : TopologicalSpace α] [TopologicalSpace.SeparableSpace α]   [Topolo
+gicalSpace.IsCompletelyMetrizableSpace α], PolishS…
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.of_completeSpace_metrizable
+`：∀ {X : Type u_1} [inst : UniformSpace X] [CompleteSpace X] [(uniformity X).IsC
+ountablyGenerated] [T0Space X],   TopologicalSpace.IsCompletel…
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `T6Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T6
+Space X], T0Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用引理 `enorm_ne_top`：enorm_ne_top : ‖x‖ₑ != ∞
+（共 55 条，此处仅展示前 30 条）
 
-English:
-theorem integral_deriv_smul_comp_Ioi
-  statement: {f f' : Real -> Real} {g : Real -> E} {a : Real}
-  proof: by
-  have eq : forall b : Real, a < b -> (∫ x in a..b, f' x • (g ∘ f) x) = ∫ u in f a..f b, g u := fun b hb => by
-    have i1 : Ioo (min a b) (max a b) subseteq Ioi a := by
-      rw [min_eq_left hb.le]
-      exact Ioo_subset_Ioi_self
-    have i2 : [[a, b]] subseteq Ici a := by rw [uIcc_of_le hb.le]; exact Icc_subset_Ici_self
-    refine
-      intervalIntegral.integral_deriv_smul_comp''' (hf.mono i2)
-        (fun x hx => hff' x <| mem_of_mem_of_subset hx i1) (hg_cont.mono <| image_mono ?_)
-        (hg1.mono_set <| image_mono ?_) (hg2.mono_set i2) <;> assumption
-  rw [integrableOn_Ici_iff_integrableOn_Ioi] at hg2
-  have t2 := intervalIntegral_tendsto_integral_Ioi _ hg2 tendsto_id
-  have : Ioi (f a) subseteq f '' Ici a :=
-Ioi_subset_Ici_self.trans
-      IsPreconnected.intermediate_value_Ici isPreconnected_Ici self_mem_Ici
-        (le_principal_iff.mpr <| Ici_mem_atTop _) hf hft
-  have t1 := (intervalIntegral_tendsto_integral_Ioi _ (hg1.mono_set this) tendsto_id).comp hft
-  exact tendsto_nhds_unique (Tendsto.congr' (eventuallyEq_of_mem (Ioi_mem_atTop a) eq) t2) t1
-
-@[deprecated (since := "2026-03-19")]
-alias integral_comp_smul_deriv_Ioi := integral_deriv_smul_comp_Ioi
-
-中文:
-定理 integral_deriv_smul_comp_Ioi
-  结论: {f f' : 实数 -> 实数} {g : 实数 -> E} {a : 实数}
-  证明: by
-  have eq : forall b : Real, a < b -> (∫ x in a..b, f' x • (g ∘ f) x) = ∫ u in f a..f b, g u := fun b hb => by
-    have i1 : Ioo (min a b) (max a b) subseteq Ioi a := by
-      rw [min_eq_left hb.le]
-      exact Ioo_subset_Ioi_self
-    have i2 : [[a, b]] subseteq Ici a := by rw [uIcc_of_le hb.le]; exact Icc_subset_Ici_self
-    refine
-      intervalIntegral.integral_deriv_smul_comp''' (hf.mono i2)
-        (fun x hx => hff' x <| mem_of_mem_of_subset hx i1) (hg_cont.mono <| image_mono ?_)
-        (hg1.mono_set <| image_mono ?_) (hg2.mono_set i2) <;> assumption
-  rw [integrableOn_Ici_iff_integrableOn_Ioi] at hg2
-  have t2 := intervalIntegral_tendsto_integral_Ioi _ hg2 tendsto_id
-  have : Ioi (f a) subseteq f '' Ici a :=
-Ioi_subset_Ici_self.trans
-      IsPreconnected.intermediate_value_Ici isPreconnected_Ici self_mem_Ici
-        (le_principal_iff.mpr <| Ici_mem_atTop _) hf hft
-  have t1 := (intervalIntegral_tendsto_integral_Ioi _ (hg1.mono_set this) tendsto_id).comp hft
-  exact tendsto_nhds_unique (Tendsto.congr' (eventuallyEq_of_mem (Ioi_mem_atTop a) eq) t2) t1
-
-@[deprecated (since := "2026-03-19")]
-alias integral_comp_smul_deriv_Ioi := integral_deriv_smul_comp_Ioi
-
-Depends on / 依赖: Icc_subset_Ici_self, Ioo_subset_Ioi_self, hb.le, hf.mono, hg1.mono_set, hg2.mono_set, hg_cont, hg_cont.mono, image_mono, integral_deriv_smul_comp, intervalIntegral, intervalIntegral.integral_deriv_smul_comp, mem_of_mem_of_subset, min_eq_left, mono_set, subseteq, uIcc_of_le
+--- 原说明 ---
+Change-of-variables formula for `Ioi` integrals of vector-valued functions, prov
+ed by taking
+limits from the result for finite intervals.
 -/
-theorem integral_deriv_smul_comp_Ioi {f f' : Real -> Real} {g : Real -> E} {a : Real}
+theorem integral_deriv_smul_comp_Ioi {f f' : ℝ → ℝ} {g : ℝ → E} {a : ℝ}
     (hf : ContinuousOn f <| Ici a) (hft : Tendsto f atTop atTop)
-    (hff' : forall x in Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x)
+    (hff' : ∀ x ∈ Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x)
     (hg_cont : ContinuousOn g <| f '' Ioi a) (hg1 : IntegrableOn g <| f '' Ici a)
     (hg2 : IntegrableOn (fun x => f' x • (g ∘ f) x) (Ici a)) :
     (∫ x in Ioi a, f' x • (g ∘ f) x) = ∫ u in Ioi (f a), g u := by
-  have eq : forall b : Real, a < b -> (∫ x in a..b, f' x • (g ∘ f) x) = ∫ u in f a..f b, g u := fun b hb => by
-    have i1 : Ioo (min a b) (max a b) subseteq Ioi a := by
+  have eq : ∀ b : ℝ, a < b → (∫ x in a..b, f' x • (g ∘ f) x) = ∫ u in f a..f b, g u := fun b hb ↦ by
+    have i1 : Ioo (min a b) (max a b) ⊆ Ioi a := by
       rw [min_eq_left hb.le]
       exact Ioo_subset_Ioi_self
-    have i2 : [[a, b]] subseteq Ici a := by rw [uIcc_of_le hb.le]; exact Icc_subset_Ici_self
+    have i2 : [[a, b]] ⊆ Ici a := by rw [uIcc_of_le hb.le]; exact Icc_subset_Ici_self
     refine
       intervalIntegral.integral_deriv_smul_comp''' (hf.mono i2)
         (fun x hx => hff' x <| mem_of_mem_of_subset hx i1) (hg_cont.mono <| image_mono ?_)
         (hg1.mono_set <| image_mono ?_) (hg2.mono_set i2) <;> assumption
   rw [integrableOn_Ici_iff_integrableOn_Ioi] at hg2
   have t2 := intervalIntegral_tendsto_integral_Ioi _ hg2 tendsto_id
-  have : Ioi (f a) subseteq f '' Ici a :=
-Ioi_subset_Ici_self.trans
+  have : Ioi (f a) ⊆ f '' Ici a :=
+    Ioi_subset_Ici_self.trans <|
       IsPreconnected.intermediate_value_Ici isPreconnected_Ici self_mem_Ici
         (le_principal_iff.mpr <| Ici_mem_atTop _) hf hft
   have t1 := (intervalIntegral_tendsto_integral_Ioi _ (hg1.mono_set this) tendsto_id).comp hft
@@ -3341,352 +4279,533 @@ Ioi_subset_Ici_self.trans
 @[deprecated (since := "2026-03-19")]
 alias integral_comp_smul_deriv_Ioi := integral_deriv_smul_comp_Ioi
 
-/--
-theorem `integral_comp_mul_deriv_Ioi` / 定理 `integral_comp_mul_deriv_Ioi`
+/-- Change-of-variables formula for `Ioi` integrals of scalar-valued functions -/
+/-
+**MeasureTheory.integral_comp_mul_deriv_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：integral_comp_mul_deriv_Ioi {f f' : Real -> Real} {g : Real -> Real} {a : 
+Real} (hf : ContinuousOn f <| Ici a) (hft : Tendsto f atTop atTop) (hff' : foral
+l x in Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x) (hg_cont : ContinuousOn g <| 
+f '' Ioi a) (hg1 : IntegrableOn g <| f '' Ici a) (hg2 : IntegrableOn (fun x => (
+g ∘ f) x * f' x) (Ici a)) : (∫ x in Ioi a, (g ∘ f) x * f' x) = ∫ u in Ioi (f a),
+ g u
+参数：hf : ContinuousOn f <| Ici a；hft : Tendsto f atTop atTop；hff' : forall x in I
+oi a, HasDerivWithinAt f (f' x) (Ioi x) x；hg_cont : ContinuousOn g <| f '' Ioi a
+；hg1 : IntegrableOn g <| f '' Ici a；hg2 : IntegrableOn (fun x => (g ∘ f) x * f' 
+x) (Ici a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MeasureTheory.integral_deriv_smul_comp_Ioi`：integral_deriv_smul_comp_Ioi
+ {f f' : Real -> Real} {g : Real -> E} {a : Real} (hf : ContinuousOn f <| Ici a)
+ (hft : Tendsto f atTop atTop) (…
 
-English:
-theorem integral_comp_mul_deriv_Ioi
-  statement: {f f' : Real -> Real} {g : Real -> Real} {a : Real}
-  proof: by
-  have hg2' : IntegrableOn (fun x => f' x • (g ∘ f) x) (Ici a) := by simpa [mul_comm] using hg2
-  simpa [mul_comm] using integral_deriv_smul_comp_Ioi hf hft hff' hg_cont hg1 hg2'
-
-中文:
-定理 integral_comp_mul_deriv_Ioi
-  结论: {f f' : 实数 -> 实数} {g : 实数 -> 实数} {a : 实数}
-  证明: by
-  have hg2' : IntegrableOn (fun x => f' x • (g ∘ f) x) (Ici a) := by simpa [mul_comm] using hg2
-  simpa [mul_comm] using integral_deriv_smul_comp_Ioi hf hft hff' hg_cont hg1 hg2'
-
-Depends on / 依赖: IntegrableOn, hg_cont, integral_deriv_smul_comp_Ioi, mul_comm
+--- 原说明 ---
+Change-of-variables formula for `Ioi` integrals of scalar-valued functions
 -/
-theorem integral_comp_mul_deriv_Ioi {f f' : Real -> Real} {g : Real -> Real} {a : Real}
+theorem integral_comp_mul_deriv_Ioi {f f' : ℝ → ℝ} {g : ℝ → ℝ} {a : ℝ}
     (hf : ContinuousOn f <| Ici a) (hft : Tendsto f atTop atTop)
-    (hff' : forall x in Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x)
+    (hff' : ∀ x ∈ Ioi a, HasDerivWithinAt f (f' x) (Ioi x) x)
     (hg_cont : ContinuousOn g <| f '' Ioi a) (hg1 : IntegrableOn g <| f '' Ici a)
     (hg2 : IntegrableOn (fun x => (g ∘ f) x * f' x) (Ici a)) :
     (∫ x in Ioi a, (g ∘ f) x * f' x) = ∫ u in Ioi (f a), g u := by
   have hg2' : IntegrableOn (fun x => f' x • (g ∘ f) x) (Ici a) := by simpa [mul_comm] using hg2
   simpa [mul_comm] using integral_deriv_smul_comp_Ioi hf hft hff' hg_cont hg1 hg2'
 
-/--
-theorem `integral_comp_rpow_Ioi` / 定理 `integral_comp_rpow_Ioi`
+/-- Substitution `y = x ^ p` in integrals over `Ioi 0` -/
+/-
+**MeasureTheory.integral_comp_rpow_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：integral_comp_rpow_Ioi (g : Real -> E) {p : Real} (hp : p != 0) : ∫ x in I
+oi 0, (|p| * x ^ (p - 1)) • g (x ^ p) = ∫ y in Ioi 0, g y
+参数：g : Real -> E；hp : p != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Real.rpow_pos_of_pos`：rpow_pos_of_pos {x : Real} (hx : 0 < x) (y : Real)
+ : 0 < x ^ y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.rpow_mul`：rpow_mul {x : Real} (hx : 0 <= x) (y z : Real) : x ^ (y *
+ z) = (x ^ y) ^ z
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Real.rpow_one`：rpow_one (x : Real) : x ^ (1 : Real) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.integral_image_eq_integral_abs_deriv_smul`：integral_image_
+eq_integral_abs_deriv_smul (hs : MeasurableSet s) (hf' : forall x in s, HasDeriv
+WithinAt f (f' x) s x) (hf : InjOn f s) (g : …
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `HasDerivAt.hasDerivWithinAt`：HasDerivAt.hasDerivWithinAt (h : HasDerivAt
+ f f' x) : HasDerivWithinAt f f' s x
+· 使用定理 `Real.hasDerivAt_rpow_const`：hasDerivAt_rpow_const {x p : Real} (h : x !=
+ 0 ∨ 1 <= p) : HasDerivAt (fun x => x ^ p) (p * x ^ (p - 1)) x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Ioi
+ b ↔ b < x
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Real.rpow_left_injOn`：rpow_left_injOn {x : Real} (hx : x != 0) : InjOn (
+fun y : Real => y ^ x) { y : Real | 0 <= y }
+· 使用定理 `MeasureTheory.setIntegral_congr_fun`：setIntegral_congr_fun (hs : Measura
+bleSet s) (h : EqOn f g s) : ∫ x in s, f x ∂μ = ∫ x in s, g x ∂μ
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem integral_comp_rpow_Ioi
-  given: (g : Real -> E) {p : Real} (hp : p != 0)
-  proof: by
-  have a : (· ^ p) '' (Ioi 0) = Ioi (0 : Real) := by
-    ext1 x; rw [mem_image]; constructor
-    · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
-    · exact fun hx => ⟨x ^ (1 / p), rpow_pos_of_pos hx _, by simp [← rpow_mul (le_of_lt hx), hp]⟩
-  have := integral_image_eq_integral_abs_deriv_smul measurableSet_Ioi
-    (fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt)
-    ((rpow_left_injOn hp).mono (by grind)) g
-  rw [a] at this; rw [this]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x hx => ?_)
-  rw [abs_mul]; rw [abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
-
-中文:
-定理 integral_comp_rpow_Ioi
-  条件: (g : 实数 -> E) {p : 实数} (hp : p != 0)
-  证明: by
-  have a : (· ^ p) '' (Ioi 0) = Ioi (0 : Real) := by
-    ext1 x; rw [mem_image]; constructor
-    · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
-    · exact fun hx => ⟨x ^ (1 / p), rpow_pos_of_pos hx _, by simp [← rpow_mul (le_of_lt hx), hp]⟩
-  have := integral_image_eq_integral_abs_deriv_smul measurableSet_Ioi
-    (fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt)
-    ((rpow_left_injOn hp).mono (by grind)) g
-  rw [a] at this; rw [this]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x hx => ?_)
-  rw [abs_mul]; rw [abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
-
-Depends on / 依赖: Or.inl, hasDerivAt_rpow_const, hasDerivWithinAt, integral_image_eq_integral_abs_deriv_smul, le_of_lt, measurableSet_Ioi, mem_Ioi, mem_Ioi.mp, mem_image, rpow_left_injOn, rpow_mul, rpow_pos_of_pos, setIntegral_congr_fun
+--- 原说明 ---
+Substitution `y = x ^ p` in integrals over `Ioi 0`
 -/
-theorem integral_comp_rpow_Ioi (g : Real -> E) {p : Real} (hp : p != 0) :
+theorem integral_comp_rpow_Ioi (g : ℝ → E) {p : ℝ} (hp : p ≠ 0) :
     ∫ x in Ioi 0, (|p| * x ^ (p - 1)) • g (x ^ p) = ∫ y in Ioi 0, g y := by
-  have a : (· ^ p) '' (Ioi 0) = Ioi (0 : Real) := by
+  have a : (· ^ p) '' (Ioi 0) = Ioi (0 : ℝ) := by
     ext1 x; rw [mem_image]; constructor
     · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
-    · exact fun hx => ⟨x ^ (1 / p), rpow_pos_of_pos hx _, by simp [← rpow_mul (le_of_lt hx), hp]⟩
+    · exact fun hx ↦ ⟨x ^ (1 / p), rpow_pos_of_pos hx _, by simp [← rpow_mul (le_of_lt hx), hp]⟩
   have := integral_image_eq_integral_abs_deriv_smul measurableSet_Ioi
-    (fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt)
+    (fun x hx ↦ (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt)
     ((rpow_left_injOn hp).mono (by grind)) g
   rw [a] at this; rw [this]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x hx => ?_)
-  rw [abs_mul]; rw [abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
-
-/--
-theorem `integral_comp_rpow_Ioi_of_pos` / 定理 `integral_comp_rpow_Ioi_of_pos`
-
-English:
-theorem integral_comp_rpow_Ioi_of_pos
-  given: {g : Real -> E} {p : Real} (hp : 0 < p)
-  proof: by
-  simpa [abs_of_nonneg hp.le] using integral_comp_rpow_Ioi g hp.ne'
-
-中文:
-定理 integral_comp_rpow_Ioi_of_pos
-  条件: {g : 实数 -> E} {p : 实数} (hp : 0 < p)
-  证明: by
-  simpa [abs_of_nonneg hp.le] using integral_comp_rpow_Ioi g hp.ne'
-
-Depends on / 依赖: abs_of_nonneg, hp.le, hp.ne, integral_comp_rpow_Ioi
+  refine setIntegral_congr_fun measurableSet_Ioi (fun x hx ↦ ?_)
+  rw [abs_mul, abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
+/-
+**MeasureTheory.integral_comp_rpow_Ioi_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：integral_comp_rpow_Ioi_of_pos {g : Real -> E} {p : Real} (hp : 0 < p) : ∫ 
+x in Ioi 0, (p * x ^ (p - 1)) • g (x ^ p) = ∫ y in Ioi 0, g y
+参数：hp : 0 < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `MeasureTheory.integral_comp_rpow_Ioi`：integral_comp_rpow_Ioi (g : Real -
+> E) {p : Real} (hp : p != 0) : ∫ x in Ioi 0, (|p| * x ^ (p - 1)) • g (x ^ p) = 
+∫ y in Ioi 0, g y
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem integral_comp_rpow_Ioi_of_pos {g : Real -> E} {p : Real} (hp : 0 < p) :
+theorem integral_comp_rpow_Ioi_of_pos {g : ℝ → E} {p : ℝ} (hp : 0 < p) :
     ∫ x in Ioi 0, (p * x ^ (p - 1)) • g (x ^ p) = ∫ y in Ioi 0, g y := by
   simpa [abs_of_nonneg hp.le] using integral_comp_rpow_Ioi g hp.ne'
-
-/--
-theorem `integral_comp_rpow_Ioi_of_pos'` / 定理 `integral_comp_rpow_Ioi_of_pos'`
-
-English:
-theorem integral_comp_rpow_Ioi_of_pos'
-  given: {g : Real -> E} {p : Real} (hp : 0 < p) {c : Real} (hc : 0 <= c)
-  proof: by
-  have : 0 <= c ^ p⁻¹ := by positivity
-  have : Ioi c = (· ^ p) '' Ioi (c ^ p⁻¹) := by
-    rw [(continuous_rpow_const hp.le).continuousOn.image_Ioi_of_strictMonoOn
-          ((strictMonoOn_rpow_Ici_of_exponent_pos hp).mono (by grind)) (tendsto_rpow_atTop hp)]
-    simp [← rpow_mul hc, hp.ne.symm]
-  rw [this]; rw [integral_image_eq_integral_abs_deriv_smul (measurableSet_Ioi (a := c ^ p⁻¹))
-      (fun _ _ => (hasDerivAt_rpow_const (by grind)).hasDerivWithinAt)
-      ((rpow_left_injOn hp.ne.symm).mono (Set.Ioi_subset_Ici (by positivity)))]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x _ => ?_)
-  have : 0 <= x := by grind
-  rw [abs_of_nonneg (by positivity)]
-
-中文:
-定理 integral_comp_rpow_Ioi_of_pos'
-  条件: {g : 实数 -> E} {p : 实数} (hp : 0 < p) {c : 实数} (hc : 0 <= c)
-  证明: by
-  have : 0 <= c ^ p⁻¹ := by positivity
-  have : Ioi c = (· ^ p) '' Ioi (c ^ p⁻¹) := by
-    rw [(continuous_rpow_const hp.le).continuousOn.image_Ioi_of_strictMonoOn
-          ((strictMonoOn_rpow_Ici_of_exponent_pos hp).mono (by grind)) (tendsto_rpow_atTop hp)]
-    simp [← rpow_mul hc, hp.ne.symm]
-  rw [this]; rw [integral_image_eq_integral_abs_deriv_smul (measurableSet_Ioi (a := c ^ p⁻¹))
-      (fun _ _ => (hasDerivAt_rpow_const (by grind)).hasDerivWithinAt)
-      ((rpow_left_injOn hp.ne.symm).mono (Set.Ioi_subset_Ici (by positivity)))]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x _ => ?_)
-  have : 0 <= x := by grind
-  rw [abs_of_nonneg (by positivity)]
-
-Depends on / 依赖: Ioi_subset_Ici, Set.Ioi_subset_Ici, continuousOn, continuousOn.image_Ioi_of_strictMonoOn, continuous_rpow_const, hasDerivAt_rpow_const, hasDerivWithinAt, hp.le, hp.ne.symm, image_Ioi_of_strictMonoOn, integral_image_eq_integral_abs_deriv_smul, measurableSet_Ioi, positi, rpow_left_injOn, rpow_mul, strictMonoOn_rpow_Ici_of_exponent_pos, tendsto_rpow_atTop
+/-
+**MeasureTheory.integral_comp_rpow_Ioi_of_pos'** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：integral_comp_rpow_Ioi_of_pos' {g : Real -> E} {p : Real} (hp : 0 < p) {c 
+: Real} (hc : 0 <= c) : ∫ x in Ioi (c ^ p⁻¹), (p * x ^ (p - 1)) • g (x ^ p) = ∫ 
+y in Ioi c, g y
+参数：hp : 0 < p；hc : 0 <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.rpow_nonneg`：rpow_nonneg {x : Real} (hx : 0 <= x) (y : Real) : 0 <=
+ x ^ y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousOn.image_Ioi_of_strictMonoOn`：ContinuousOn.image_Ioi_of_strict
+MonoOn (hf : ContinuousOn f (Ici a)) (hmono : StrictMonoOn f (Ici a)) (htop : Te
+ndsto f atTop atTop) : f '' …
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Real.continuous_rpow_const`：continuous_rpow_const {q : Real} (h : 0 <= q
+) : Continuous (fun x : Real => x ^ q)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `StrictMonoOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s s₂ : Set α} {f : α
+ → β} [inst : Preorder α] [inst_1 : Preorder β],   StrictMonoOn f s → s₂ ⊆ s → S
+trictMo…
+· 使用定理 `Real.strictMonoOn_rpow_Ici_of_exponent_pos`：strictMonoOn_rpow_Ici_of_exp
+onent_pos {r : Real} (hr : 0 < r) : StrictMonoOn (fun (x : Real) => x ^ r) (Set.
+Ici 0)
+· 使用定理 `tendsto_rpow_atTop`：tendsto_rpow_atTop {y : Real} (hy : 0 < y) : Tendsto
+ (fun x : Real => x ^ y) atTop atTop
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.rpow_mul`：rpow_mul {x : Real} (hx : 0 <= x) (y z : Real) : x ^ (y *
+ z) = (x ^ y) ^ z
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Real.rpow_one`：rpow_one (x : Real) : x ^ (1 : Real) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.integral_image_eq_integral_abs_deriv_smul`：integral_image_
+eq_integral_abs_deriv_smul (hs : MeasurableSet s) (hf' : forall x in s, HasDeriv
+WithinAt f (f' x) s x) (hf : InjOn f s) (g : …
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+（共 42 条，此处仅展示前 30 条）
 -/
-theorem integral_comp_rpow_Ioi_of_pos' {g : Real -> E} {p : Real} (hp : 0 < p) {c : Real} (hc : 0 <= c) :
+theorem integral_comp_rpow_Ioi_of_pos' {g : ℝ → E} {p : ℝ} (hp : 0 < p) {c : ℝ} (hc : 0 ≤ c) :
     ∫ x in Ioi (c ^ p⁻¹), (p * x ^ (p - 1)) • g (x ^ p) = ∫ y in Ioi c, g y := by
-  have : 0 <= c ^ p⁻¹ := by positivity
+  have : 0 ≤ c ^ p⁻¹ := by positivity
   have : Ioi c = (· ^ p) '' Ioi (c ^ p⁻¹) := by
     rw [(continuous_rpow_const hp.le).continuousOn.image_Ioi_of_strictMonoOn
           ((strictMonoOn_rpow_Ici_of_exponent_pos hp).mono (by grind)) (tendsto_rpow_atTop hp)]
     simp [← rpow_mul hc, hp.ne.symm]
-  rw [this]; rw [integral_image_eq_integral_abs_deriv_smul (measurableSet_Ioi (a := c ^ p⁻¹))
-      (fun _ _ => (hasDerivAt_rpow_const (by grind)).hasDerivWithinAt)
+  rw [this, integral_image_eq_integral_abs_deriv_smul (measurableSet_Ioi (a := c ^ p⁻¹))
+      (fun _ _ ↦ (hasDerivAt_rpow_const (by grind)).hasDerivWithinAt)
       ((rpow_left_injOn hp.ne.symm).mono (Set.Ioi_subset_Ici (by positivity)))]
-  refine setIntegral_congr_fun measurableSet_Ioi (fun x _ => ?_)
-  have : 0 <= x := by grind
+  refine setIntegral_congr_fun measurableSet_Ioi (fun x _ ↦ ?_)
+  have : 0 ≤ x := by grind
   rw [abs_of_nonneg (by positivity)]
 
-/--
-theorem `integral_comp_exp_Ioi` / 定理 `integral_comp_exp_Ioi`
+/-- Substitution `y = exp x` in integrals over `Ioi a` -/
+/-
+**MeasureTheory.integral_comp_exp_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integral_comp_exp_Ioi (g : Real -> E) (a : Real) : ∫ x in Ioi a, exp x • g
+ (exp x) = ∫ y in Ioi (exp a), g y
+参数：g : Real -> E；a : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.image_exp_Ioi`：image_exp_Ioi (a : Real) : exp '' Ioi a = Ioi (exp a
+)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.exp_pos`：exp_pos (x : Real) : 0 < exp x
+· 使用定理 `MeasureTheory.integral_image_eq_integral_abs_deriv_smul`：integral_image_
+eq_integral_abs_deriv_smul (hs : MeasurableSet s) (hf' : forall x in s, HasDeriv
+WithinAt f (f' x) s x) (hf : InjOn f s) (g : …
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `HasDerivAt.hasDerivWithinAt`：HasDerivAt.hasDerivWithinAt (h : HasDerivAt
+ f f' x) : HasDerivWithinAt f f' s x
+· 使用定理 `Real.hasDerivAt_exp`：hasDerivAt_exp (x : Real) : HasDerivAt exp (exp x) 
+x
+· 使用定理 `Real.exp_injective`：exp_injective : Function.Injective exp
 
-English:
-theorem integral_comp_exp_Ioi
-  given: (g : Real -> E) (a : Real)
-  proof: by
-  symm; rw [← image_exp_Ioi]
-  simpa [abs_of_pos (exp_pos _)] using integral_image_eq_integral_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
-
-中文:
-定理 integral_comp_exp_Ioi
-  条件: (g : 实数 -> E) (a : 实数)
-  证明: by
-  symm; rw [← image_exp_Ioi]
-  simpa [abs_of_pos (exp_pos _)] using integral_image_eq_integral_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
-
-Depends on / 依赖: abs_of_pos, exp_injective, exp_pos, hasDerivAt_exp, hasDerivWithinAt, image_exp_Ioi, integral_image_eq_integral_abs_deriv_smul, measurableSet_Ioi
+--- 原说明 ---
+Substitution `y = exp x` in integrals over `Ioi a`
 -/
-theorem integral_comp_exp_Ioi (g : Real -> E) (a : Real) :
+theorem integral_comp_exp_Ioi (g : ℝ → E) (a : ℝ) :
     ∫ x in Ioi a, exp x • g (exp x) = ∫ y in Ioi (exp a), g y := by
   symm; rw [← image_exp_Ioi]
   simpa [abs_of_pos (exp_pos _)] using integral_image_eq_integral_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
-
-/--
-theorem `integrableOn_comp_exp_Ioi` / 定理 `integrableOn_comp_exp_Ioi`
-
-English:
-theorem integrableOn_comp_exp_Ioi
-  given: (g : Real -> E) (a : Real)
-  proof: by
-  symm; rw [← image_exp_Ioi]
-  simpa [abs_of_pos (exp_pos _)] using integrableOn_image_iff_integrableOn_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
-
-中文:
-定理 integrableOn_comp_exp_Ioi
-  条件: (g : 实数 -> E) (a : 实数)
-  证明: by
-  symm; rw [← image_exp_Ioi]
-  simpa [abs_of_pos (exp_pos _)] using integrableOn_image_iff_integrableOn_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
-
-Depends on / 依赖: abs_of_pos, exp_injective, exp_pos, hasDerivAt_exp, hasDerivWithinAt, image_exp_Ioi, integrableOn_image_iff_integrableOn_abs_deriv_smul, measurableSet_Ioi
+      (measurableSet_Ioi (a := a)) (fun x _ ↦ (hasDerivAt_exp x).hasDerivWithinAt)
+      (fun x _ y _ hxy ↦ exp_injective hxy) g
+/-
+**MeasureTheory.integrableOn_comp_exp_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：integrableOn_comp_exp_Ioi (g : Real -> E) (a : Real) : IntegrableOn (fun x
+ => exp x • g (exp x)) (Ioi a) ↔ IntegrableOn g (Ioi (exp a))
+参数：g : Real -> E；a : Real。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.image_exp_Ioi`：image_exp_Ioi (a : Real) : exp '' Ioi a = Ioi (exp a
+)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.exp_pos`：exp_pos (x : Real) : 0 < exp x
+· 使用定理 `MeasureTheory.integrableOn_image_iff_integrableOn_abs_deriv_smul`：integr
+ableOn_image_iff_integrableOn_abs_deriv_smul (hs : MeasurableSet s) (hf' : foral
+l x in s, HasDerivWithinAt f (f' x) s x) (hf : InjOn f…
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `HasDerivAt.hasDerivWithinAt`：HasDerivAt.hasDerivWithinAt (h : HasDerivAt
+ f f' x) : HasDerivWithinAt f f' s x
+· 使用定理 `Real.hasDerivAt_exp`：hasDerivAt_exp (x : Real) : HasDerivAt exp (exp x) 
+x
+· 使用定理 `Real.exp_injective`：exp_injective : Function.Injective exp
 -/
-theorem integrableOn_comp_exp_Ioi (g : Real -> E) (a : Real) :
-    IntegrableOn (fun x => exp x • g (exp x)) (Ioi a) ↔ IntegrableOn g (Ioi (exp a)) := by
+theorem integrableOn_comp_exp_Ioi (g : ℝ → E) (a : ℝ) :
+    IntegrableOn (fun x ↦ exp x • g (exp x)) (Ioi a) ↔ IntegrableOn g (Ioi (exp a)) := by
   symm; rw [← image_exp_Ioi]
   simpa [abs_of_pos (exp_pos _)] using integrableOn_image_iff_integrableOn_abs_deriv_smul
-      (measurableSet_Ioi (a := a)) (fun x _ => (hasDerivAt_exp x).hasDerivWithinAt)
-      (fun x _ y _ hxy => exp_injective hxy) g
+      (measurableSet_Ioi (a := a)) (fun x _ ↦ (hasDerivAt_exp x).hasDerivWithinAt)
+      (fun x _ y _ hxy ↦ exp_injective hxy) g
 
-/--
-theorem `integral_comp_log_Ioi` / 定理 `integral_comp_log_Ioi`
+/-- Substitution `y = log x` in integrals over `Ioi a` -/
+/-
+**MeasureTheory.integral_comp_log_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integral_comp_log_Ioi (g : Real -> E) {a : Real} (ha : 0 < a) : ∫ x in Ioi
+ a, x⁻¹ • g (log x) = ∫ y in Ioi (log a), g y
+参数：g : Real -> E；ha : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.exp_log`：exp_log (hx : 0 < x) : exp (log x) = x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.log_exp`：log_exp (x : Real) : log (exp x) = x
+· 使用引理 `smul_inv_smul₀`：smul_inv_smul₀ (ha : a != 0) (x : β) : a • a⁻¹ • x = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_comp_exp_Ioi`：integral_comp_exp_Ioi (g : Real -> 
+E) (a : Real) : ∫ x in Ioi a, exp x • g (exp x) = ∫ y in Ioi (exp a), g y
 
-English:
-theorem integral_comp_log_Ioi
-  given: (g : Real -> E) {a : Real} (ha : 0 < a)
-  proof: by
-  simpa [exp_log ha] using (integral_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)).symm
-
-中文:
-定理 integral_comp_log_Ioi
-  条件: (g : 实数 -> E) {a : 实数} (ha : 0 < a)
-  证明: by
-  simpa [exp_log ha] using (integral_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)).symm
-
-Depends on / 依赖: exp_log, integral_comp_exp_Ioi
+--- 原说明 ---
+Substitution `y = log x` in integrals over `Ioi a`
 -/
-theorem integral_comp_log_Ioi (g : Real -> E) {a : Real} (ha : 0 < a) :
+theorem integral_comp_log_Ioi (g : ℝ → E) {a : ℝ} (ha : 0 < a) :
     ∫ x in Ioi a, x⁻¹ • g (log x) = ∫ y in Ioi (log a), g y := by
-  simpa [exp_log ha] using (integral_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)).symm
-
-/--
-theorem `integrableOn_comp_log_Ioi` / 定理 `integrableOn_comp_log_Ioi`
-
-English:
-theorem integrableOn_comp_log_Ioi
-  given: (g : Real -> E) {a : Real} (ha : 0 < a)
-  proof: by
-  symm
-  simpa [exp_log ha] using integrableOn_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)
-
-中文:
-定理 integrableOn_comp_log_Ioi
-  条件: (g : 实数 -> E) {a : 实数} (ha : 0 < a)
-  证明: by
-  symm
-  simpa [exp_log ha] using integrableOn_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)
-
-Depends on / 依赖: exp_log, integrableOn_comp_exp_Ioi
+  simpa [exp_log ha] using (integral_comp_exp_Ioi (fun x ↦ x⁻¹ • g (log x)) (log a)).symm
+/-
+**MeasureTheory.integrableOn_comp_log_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：integrableOn_comp_log_Ioi (g : Real -> E) {a : Real} (ha : 0 < a) : Integr
+ableOn (fun x => x⁻¹ • g (log x)) (Ioi a) ↔ IntegrableOn g (Ioi (log a))
+参数：g : Real -> E；ha : 0 < a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.log_exp`：log_exp (x : Real) : log (exp x) = x
+· 使用引理 `smul_inv_smul₀`：smul_inv_smul₀ (ha : a != 0) (x : β) : a • a⁻¹ • x = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Real.exp_log`：exp_log (hx : 0 < x) : exp (log x) = x
+· 使用定理 `MeasureTheory.integrableOn_comp_exp_Ioi`：integrableOn_comp_exp_Ioi (g : 
+Real -> E) (a : Real) : IntegrableOn (fun x => exp x • g (exp x)) (Ioi a) ↔ Inte
+grableOn g (Ioi (exp a))
 -/
-theorem integrableOn_comp_log_Ioi (g : Real -> E) {a : Real} (ha : 0 < a) :
-    IntegrableOn (fun x => x⁻¹ • g (log x)) (Ioi a) ↔ IntegrableOn g (Ioi (log a)) := by
+theorem integrableOn_comp_log_Ioi (g : ℝ → E) {a : ℝ} (ha : 0 < a) :
+    IntegrableOn (fun x ↦ x⁻¹ • g (log x)) (Ioi a) ↔ IntegrableOn g (Ioi (log a)) := by
   symm
-  simpa [exp_log ha] using integrableOn_comp_exp_Ioi (fun x => x⁻¹ • g (log x)) (log a)
-
-/--
-theorem `integral_comp_mul_left_Ioi` / 定理 `integral_comp_mul_left_Ioi`
-
-English:
-theorem integral_comp_mul_left_Ioi
-  given: (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b)
-  proof: by
-  have : forall c : Real, MeasurableSet (Ioi c) := fun c => measurableSet_Ioi
-  rw [← integral_indicator (this _)]; rw [← integral_indicator (this _)]; rw [← abs_of_pos (inv_pos.mpr hb)]; rw [← Measure.integral_comp_mul_left]
-  congr
-  ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ hb]; rw [mul_div_cancel_left₀ _ hb.ne']; rw [Function.comp_def]
-
-中文:
-定理 integral_comp_mul_left_Ioi
-  条件: (g : 实数 -> E) (a : 实数) {b : 实数} (hb : 0 < b)
-  证明: by
-  have : forall c : Real, MeasurableSet (Ioi c) := fun c => measurableSet_Ioi
-  rw [← integral_indicator (this _)]; rw [← integral_indicator (this _)]; rw [← abs_of_pos (inv_pos.mpr hb)]; rw [← Measure.integral_comp_mul_left]
-  congr
-  ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ hb]; rw [mul_div_cancel_left₀ _ hb.ne']; rw [Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, MeasurableSet, Measure, Measure.integral_comp_mul_left, abs_of_pos, comp_def, hb.ne, indicator_comp_right, integral_comp_mul_left, integral_indicator, inv_pos, inv_pos.mpr, measurableSet_Ioi
+  simpa  [exp_log ha] using integrableOn_comp_exp_Ioi (fun x ↦ x⁻¹ • g (log x)) (log a)
+/-
+**MeasureTheory.integral_comp_mul_left_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory`。
+形式化陈述：integral_comp_mul_left_Ioi (g : Real -> E) (a : Real) {b : Real} (hb : 0 <
+ b) : ∫ x in Ioi a, g (b * x) = b⁻¹ • ∫ x in Ioi (b * a), g x
+参数：g : Real -> E；a : Real；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_indicator`：integral_indicator (hs : MeasurableSet
+ s) : ∫ x, indicator s f x ∂μ = ∫ x in s, f x ∂μ
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `MeasureTheory.Measure.integral_comp_mul_left`：integral_comp_mul_left (g 
+: Real -> F) (a : Real) : (∫ x : Real, g (a * x)) = |a⁻¹| • ∫ y : Real, g y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.indicator_comp_right`：∀ {α : Type u_1} {β : Type u_2} {M : Type u_3}
+ [inst : Zero M] {s : Set α} (f : β → α) {g : α → M} {x : β},   (f ⁻¹' s).indica
+tor (g ∘ f) x …
+· 使用定理 `Set.preimage_const_mul_Ioi₀`：preimage_const_mul_Ioi₀ (a : G₀) (h : 0 < c
+) : (c * ·) ⁻¹' Ioi a = Ioi (a / c)
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `EuclideanDomain.toMulDivCancelClass`：∀ {R : Type u} [inst : EuclideanDom
+ain R], MulDivCancelClass R
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
 -/
-theorem integral_comp_mul_left_Ioi (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b) :
+theorem integral_comp_mul_left_Ioi (g : ℝ → E) (a : ℝ) {b : ℝ} (hb : 0 < b) :
     ∫ x in Ioi a, g (b * x) = b⁻¹ • ∫ x in Ioi (b * a), g x := by
-  have : forall c : Real, MeasurableSet (Ioi c) := fun c => measurableSet_Ioi
-  rw [← integral_indicator (this _)]; rw [← integral_indicator (this _)]; rw [← abs_of_pos (inv_pos.mpr hb)]; rw [← Measure.integral_comp_mul_left]
+  have : ∀ c : ℝ, MeasurableSet (Ioi c) := fun c => measurableSet_Ioi
+  rw [← integral_indicator (this _), ← integral_indicator (this _),
+    ← abs_of_pos (inv_pos.mpr hb), ← Measure.integral_comp_mul_left]
   congr
   ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ hb]; rw [mul_div_cancel_left₀ _ hb.ne']; rw [Function.comp_def]
-
-/--
-theorem `integral_comp_mul_left_Ioi'` / 定理 `integral_comp_mul_left_Ioi'`
-
-English:
-theorem integral_comp_mul_left_Ioi'
-  given: (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b)
-  proof: by
-  simp [integral_comp_mul_left_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
-
-中文:
-定理 integral_comp_mul_left_Ioi'
-  条件: (g : 实数 -> E) (a : 实数) {b : 实数} (hb : 0 < b)
-  证明: by
-  simp [integral_comp_mul_left_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
-
-Depends on / 依赖: hb.ne, integral_comp_mul_left_Ioi, smul_smul
+  rw [← indicator_comp_right, preimage_const_mul_Ioi₀ _ hb, mul_div_cancel_left₀ _ hb.ne',
+    Function.comp_def]
+/-
+**MeasureTheory.integral_comp_mul_left_Ioi'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：integral_comp_mul_left_Ioi' (g : Real -> E) (a : Real) {b : Real} (hb : 0 
+< b) : b • ∫ x in Ioi a, g (b * x) = ∫ x in Ioi (b * a), g x
+参数：g : Real -> E；a : Real；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_comp_mul_left_Ioi`：integral_comp_mul_left_Ioi (g 
+: Real -> E) (a : Real) {b : Real} (hb : 0 < b) : ∫ x in Ioi a, g (b * x) = b⁻¹ 
+• ∫ x in Ioi (b * a), g x
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_comp_mul_left_Ioi' (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b) :
+theorem integral_comp_mul_left_Ioi' (g : ℝ → E) (a : ℝ) {b : ℝ} (hb : 0 < b) :
     b • ∫ x in Ioi a, g (b * x) = ∫ x in Ioi (b * a), g x := by
   simp [integral_comp_mul_left_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
-
-/--
-theorem `integral_comp_mul_right_Ioi` / 定理 `integral_comp_mul_right_Ioi`
-
-English:
-theorem integral_comp_mul_right_Ioi
-  given: (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b)
-  proof: by
-  simpa [mul_comm] using integral_comp_mul_left_Ioi g a hb
-
-中文:
-定理 integral_comp_mul_right_Ioi
-  条件: (g : 实数 -> E) (a : 实数) {b : 实数} (hb : 0 < b)
-  证明: by
-  simpa [mul_comm] using integral_comp_mul_left_Ioi g a hb
-
-Depends on / 依赖: integral_comp_mul_left_Ioi, mul_comm
+/-
+**MeasureTheory.integral_comp_mul_right_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：integral_comp_mul_right_Ioi (g : Real -> E) (a : Real) {b : Real} (hb : 0 
+< b) : ∫ x in Ioi a, g (x * b) = b⁻¹ • ∫ x in Ioi (a * b), g x
+参数：g : Real -> E；a : Real；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MeasureTheory.integral_comp_mul_left_Ioi`：integral_comp_mul_left_Ioi (g 
+: Real -> E) (a : Real) {b : Real} (hb : 0 < b) : ∫ x in Ioi a, g (b * x) = b⁻¹ 
+• ∫ x in Ioi (b * a), g x
 -/
-theorem integral_comp_mul_right_Ioi (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b) :
+theorem integral_comp_mul_right_Ioi (g : ℝ → E) (a : ℝ) {b : ℝ} (hb : 0 < b) :
     ∫ x in Ioi a, g (x * b) = b⁻¹ • ∫ x in Ioi (a * b), g x := by
   simpa [mul_comm] using integral_comp_mul_left_Ioi g a hb
-
-/--
-theorem `integral_comp_mul_right_Ioi'` / 定理 `integral_comp_mul_right_Ioi'`
-
-English:
-theorem integral_comp_mul_right_Ioi'
-  given: (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b)
-  proof: by
-  simp [integral_comp_mul_right_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
-
-中文:
-定理 integral_comp_mul_right_Ioi'
-  条件: (g : 实数 -> E) (a : 实数) {b : 实数} (hb : 0 < b)
-  证明: by
-  simp [integral_comp_mul_right_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
-
-Depends on / 依赖: hb.ne, integral_comp_mul_right_Ioi, smul_smul
+/-
+**MeasureTheory.integral_comp_mul_right_Ioi'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：integral_comp_mul_right_Ioi' (g : Real -> E) (a : Real) {b : Real} (hb : 0
+ < b) : b • ∫ x in Ioi a, g (x * b) = ∫ x in Ioi (a * b), g x
+参数：g : Real -> E；a : Real；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_comp_mul_right_Ioi`：integral_comp_mul_right_Ioi (
+g : Real -> E) (a : Real) {b : Real} (hb : 0 < b) : ∫ x in Ioi a, g (x * b) = b⁻
+¹ • ∫ x in Ioi (a * b), g x
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_comp_mul_right_Ioi' (g : Real -> E) (a : Real) {b : Real} (hb : 0 < b) :
+theorem integral_comp_mul_right_Ioi' (g : ℝ → E) (a : ℝ) {b : ℝ} (hb : 0 < b) :
     b • ∫ x in Ioi a, g (x * b) = ∫ x in Ioi (a * b), g x := by
   simp [integral_comp_mul_right_Ioi g a hb, smul_smul, mul_inv_cancel₀ hb.ne']
 
@@ -3700,162 +4819,227 @@ open scoped Interval
 
 variable {E : Type*} [NormedAddCommGroup E]
 
-/--
-theorem `integrableOn_Ioi_comp_rpow_iff` / 定理 `integrableOn_Ioi_comp_rpow_iff`
+/-- The substitution `y = x ^ p` in integrals over `Ioi 0` preserves integrability. -/
+/-
+**MeasureTheory.integrableOn_Ioi_comp_rpow_iff** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：integrableOn_Ioi_comp_rpow_iff [NormedSpace Real E] (f : Real -> E) {p : R
+eal} (hp : p != 0) : IntegrableOn (fun x => (|p| * x ^ (p - 1)) • f (x ^ p)) (Io
+i 0) ↔ IntegrableOn f (Ioi 0)
+参数：f : Real -> E；hp : p != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.hasDerivWithinAt`：HasDerivAt.hasDerivWithinAt (h : HasDerivAt
+ f f' x) : HasDerivWithinAt f f' s x
+· 使用定理 `Real.hasDerivAt_rpow_const`：hasDerivAt_rpow_const {x p : Real} (h : x !=
+ 0 ∨ 1 <= p) : HasDerivAt (fun x => x ^ p) (p * x ^ (p - 1)) x
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Ioi
+ b ↔ b < x
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+· 使用引理 `StrictAntiOn.injOn`：StrictAntiOn.injOn (hf : StrictAntiOn f s) : s.InjOn
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `inv_lt_inv₀`：inv_lt_inv₀ (ha : 0 < a) (hb : 0 < b) : a⁻¹ < b⁻¹ ↔ b < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Real.rpow_pos_of_pos`：rpow_pos_of_pos {x : Real} (hx : 0 < x) (y : Real)
+ : 0 < x ^ y
+· 使用定理 `Real.rpow_neg`：rpow_neg {x : Real} (hx : 0 <= x) (y : Real) : x ^ (-y) =
+ (x ^ y)⁻¹
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.rpow_lt_rpow`：rpow_lt_rpow (hx : 0 <= x) (hxy : x < y) (hz : 0 < z)
+ : x ^ z < y ^ z
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddLeftStri
+ctMono α] {a : α}, 0 < -a ↔ a < 0
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `StrictMonoOn.injOn`：StrictMonoOn.injOn (hf : StrictMonoOn f s) : s.InjOn
+ f
+（共 50 条，此处仅展示前 30 条）
 
-English:
-theorem integrableOn_Ioi_comp_rpow_iff
-  given: [NormedSpace Real E] (f : Real -> E) {p : Real} (hp : p != 0)
-  proof: by
-  let S := Ioi (0 : Real)
-  have a1 : forall x : Real, x in S -> HasDerivWithinAt (fun t : Real => t ^ p) (p * x ^ (p - 1)) S x :=
-    fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt
-  have a2 : InjOn (fun x : Real => x ^ p) S := by
-    rcases lt_or_gt_of_ne hp with (h | h)
-    · apply StrictAntiOn.injOn
-      intro x hx y hy hxy
-      rw [← inv_lt_inv₀ (rpow_pos_of_pos hx p) (rpow_pos_of_pos hy p)]; rw [← rpow_neg (le_of_lt hx)]; rw [←
-        rpow_neg (le_of_lt hy)]
-      exact rpow_lt_rpow (le_of_lt hx) hxy (neg_pos.mpr h)
-    exact StrictMonoOn.injOn fun x hx y _hy hxy => rpow_lt_rpow (mem_Ioi.mp hx).le hxy h
-  have a3 : (fun t : Real => t ^ p) '' S = S := by
-    ext1 x; rw [mem_image]; constructor
-    · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
-    · intro hx; refine ⟨x ^ (1 / p), rpow_pos_of_pos hx _, ?_⟩
-      rw [← rpow_mul (le_of_lt hx)]; rw [one_div_mul_cancel hp]; rw [rpow_one]
-  have := integrableOn_image_iff_integrableOn_abs_deriv_smul measurableSet_Ioi a1 a2 f
-  rw [a3] at this
-  rw [this]
-  refine integrableOn_congr_fun (fun x hx => ?_) measurableSet_Ioi
-  simp_rw [abs_mul, abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
-
-中文:
-定理 integrableOn_Ioi_comp_rpow_iff
-  条件: [赋范空间 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
-  证明: by
-  let S := Ioi (0 : Real)
-  have a1 : forall x : Real, x in S -> HasDerivWithinAt (fun t : Real => t ^ p) (p * x ^ (p - 1)) S x :=
-    fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt
-  have a2 : InjOn (fun x : Real => x ^ p) S := by
-    rcases lt_or_gt_of_ne hp with (h | h)
-    · apply StrictAntiOn.injOn
-      intro x hx y hy hxy
-      rw [← inv_lt_inv₀ (rpow_pos_of_pos hx p) (rpow_pos_of_pos hy p)]; rw [← rpow_neg (le_of_lt hx)]; rw [←
-        rpow_neg (le_of_lt hy)]
-      exact rpow_lt_rpow (le_of_lt hx) hxy (neg_pos.mpr h)
-    exact StrictMonoOn.injOn fun x hx y _hy hxy => rpow_lt_rpow (mem_Ioi.mp hx).le hxy h
-  have a3 : (fun t : Real => t ^ p) '' S = S := by
-    ext1 x; rw [mem_image]; constructor
-    · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
-    · intro hx; refine ⟨x ^ (1 / p), rpow_pos_of_pos hx _, ?_⟩
-      rw [← rpow_mul (le_of_lt hx)]; rw [one_div_mul_cancel hp]; rw [rpow_one]
-  have := integrableOn_image_iff_integrableOn_abs_deriv_smul measurableSet_Ioi a1 a2 f
-  rw [a3] at this
-  rw [this]
-  refine integrableOn_congr_fun (fun x hx => ?_) measurableSet_Ioi
-  simp_rw [abs_mul, abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
-
-Depends on / 依赖: HasDerivWithinAt, Or.inl, StrictAntiOn, StrictAntiOn.injOn, hasDerivAt_rpow_const, hasDerivWithinAt, le_of_lt, lt_or_gt_of_ne, mem_Ioi, mem_Ioi.mp, rpow_lt_rpow, rpow_neg, rpow_pos_of_pos
+--- 原说明 ---
+The substitution `y = x ^ p` in integrals over `Ioi 0` preserves integrability.
 -/
-theorem integrableOn_Ioi_comp_rpow_iff [NormedSpace Real E] (f : Real -> E) {p : Real} (hp : p != 0) :
+theorem integrableOn_Ioi_comp_rpow_iff [NormedSpace ℝ E] (f : ℝ → E) {p : ℝ} (hp : p ≠ 0) :
     IntegrableOn (fun x => (|p| * x ^ (p - 1)) • f (x ^ p)) (Ioi 0) ↔ IntegrableOn f (Ioi 0) := by
-  let S := Ioi (0 : Real)
-  have a1 : forall x : Real, x in S -> HasDerivWithinAt (fun t : Real => t ^ p) (p * x ^ (p - 1)) S x :=
+  let S := Ioi (0 : ℝ)
+  have a1 : ∀ x : ℝ, x ∈ S → HasDerivWithinAt (fun t : ℝ => t ^ p) (p * x ^ (p - 1)) S x :=
     fun x hx => (hasDerivAt_rpow_const (Or.inl (mem_Ioi.mp hx).ne')).hasDerivWithinAt
-  have a2 : InjOn (fun x : Real => x ^ p) S := by
+  have a2 : InjOn (fun x : ℝ => x ^ p) S := by
     rcases lt_or_gt_of_ne hp with (h | h)
     · apply StrictAntiOn.injOn
       intro x hx y hy hxy
-      rw [← inv_lt_inv₀ (rpow_pos_of_pos hx p) (rpow_pos_of_pos hy p)]; rw [← rpow_neg (le_of_lt hx)]; rw [←
+      rw [← inv_lt_inv₀ (rpow_pos_of_pos hx p) (rpow_pos_of_pos hy p), ← rpow_neg (le_of_lt hx), ←
         rpow_neg (le_of_lt hy)]
       exact rpow_lt_rpow (le_of_lt hx) hxy (neg_pos.mpr h)
     exact StrictMonoOn.injOn fun x hx y _hy hxy => rpow_lt_rpow (mem_Ioi.mp hx).le hxy h
-  have a3 : (fun t : Real => t ^ p) '' S = S := by
+  have a3 : (fun t : ℝ => t ^ p) '' S = S := by
     ext1 x; rw [mem_image]; constructor
     · rintro ⟨y, hy, rfl⟩; exact rpow_pos_of_pos hy p
     · intro hx; refine ⟨x ^ (1 / p), rpow_pos_of_pos hx _, ?_⟩
-      rw [← rpow_mul (le_of_lt hx)]; rw [one_div_mul_cancel hp]; rw [rpow_one]
+      rw [← rpow_mul (le_of_lt hx), one_div_mul_cancel hp, rpow_one]
   have := integrableOn_image_iff_integrableOn_abs_deriv_smul measurableSet_Ioi a1 a2 f
   rw [a3] at this
   rw [this]
   refine integrableOn_congr_fun (fun x hx => ?_) measurableSet_Ioi
   simp_rw [abs_mul, abs_of_nonneg (rpow_nonneg (le_of_lt hx) _)]
 
-/--
-theorem `integrableOn_Ioi_comp_rpow_iff'` / 定理 `integrableOn_Ioi_comp_rpow_iff'`
+/-- The substitution `y = x ^ p` in integrals over `Ioi 0` preserves integrability (version
+without `|p|` factor) -/
+/-
+**MeasureTheory.integrableOn_Ioi_comp_rpow_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：integrableOn_Ioi_comp_rpow_iff' [NormedSpace Real E] (f : Real -> E) {p : 
+Real} (hp : p != 0) : IntegrableOn (fun x => x ^ (p - 1) • f (x ^ p)) (Ioi 0) ↔ 
+IntegrableOn f (Ioi 0)
+参数：f : Real -> E；hp : p != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integrableOn_Ioi_comp_rpow_iff`：integrableOn_Ioi_comp_rpow
+_iff [NormedSpace Real E] (f : Real -> E) {p : Real} (hp : p != 0) : IntegrableO
+n (fun x => (|p| * x ^ (p - 1)) • …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MeasureTheory.integrable_smul_iff`：integrable_smul_iff [NormedDivisionRi
+ng 𝕜] [MulActionWithZero 𝕜 β] [IsBoundedSMul 𝕜 β] {c : 𝕜} (hc : c != 0) (f : α -
+> β) : Integrable (c • …
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_pos`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [
+AddLeftMono α] {a : α}, 0 < |a| ↔ a ≠ 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem integrableOn_Ioi_comp_rpow_iff'
-  given: [NormedSpace Real E] (f : Real -> E) {p : Real} (hp : p != 0)
-  proof: by
-  simpa only [← integrableOn_Ioi_comp_rpow_iff f hp, mul_smul] using!
-    (integrable_smul_iff (abs_pos.mpr hp).ne' _).symm
-
-中文:
-定理 integrableOn_Ioi_comp_rpow_iff'
-  条件: [赋范空间 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
-  证明: by
-  simpa only [← integrableOn_Ioi_comp_rpow_iff f hp, mul_smul] using!
-    (integrable_smul_iff (abs_pos.mpr hp).ne' _).symm
-
-Depends on / 依赖: abs_pos, abs_pos.mpr, integrableOn_Ioi_comp_rpow_iff, integrable_smul_iff, mul_smul
+--- 原说明 ---
+The substitution `y = x ^ p` in integrals over `Ioi 0` preserves integrability (
+version
+without `|p|` factor)
 -/
-theorem integrableOn_Ioi_comp_rpow_iff' [NormedSpace Real E] (f : Real -> E) {p : Real} (hp : p != 0) :
+theorem integrableOn_Ioi_comp_rpow_iff' [NormedSpace ℝ E] (f : ℝ → E) {p : ℝ} (hp : p ≠ 0) :
     IntegrableOn (fun x => x ^ (p - 1) • f (x ^ p)) (Ioi 0) ↔ IntegrableOn f (Ioi 0) := by
   simpa only [← integrableOn_Ioi_comp_rpow_iff f hp, mul_smul] using!
     (integrable_smul_iff (abs_pos.mpr hp).ne' _).symm
-
-/--
-theorem `integrableOn_Ioi_comp_mul_left_iff` / 定理 `integrableOn_Ioi_comp_mul_left_iff`
-
-English:
-theorem integrableOn_Ioi_comp_mul_left_iff
-  given: (f : Real -> E) (c : Real) {a : Real} (ha : 0 < a)
-  proof: by
-  rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi c)]
-  rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi <| a * c)]
-  convert! integrable_comp_mul_left_iff ((Ioi (a * c)).indicator f) ha.ne' using 2
-  ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ ha]; rw [mul_comm a c]; rw [mul_div_cancel_right₀ _ ha.ne']; rw [Function.comp_def]
-
-中文:
-定理 integrableOn_Ioi_comp_mul_left_iff
-  条件: (f : 实数 -> E) (c : 实数) {a : 实数} (ha : 0 < a)
-  证明: by
-  rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi c)]
-  rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi <| a * c)]
-  convert! integrable_comp_mul_left_iff ((Ioi (a * c)).indicator f) ha.ne' using 2
-  ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ ha]; rw [mul_comm a c]; rw [mul_div_cancel_right₀ _ ha.ne']; rw [Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, MeasurableSet, comp_def, convert, ha.ne, indicator, indicator_comp_right, integrable_comp_mul_left_iff, integrable_indicator_iff, measurableSet_Ioi, mul_comm
+/-
+**MeasureTheory.integrableOn_Ioi_comp_mul_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory`。
+形式化陈述：integrableOn_Ioi_comp_mul_left_iff (f : Real -> E) (c : Real) {a : Real} (
+ha : 0 < a) : IntegrableOn (fun x => f (a * x)) (Ioi c) ↔ IntegrableOn f (Ioi <|
+ a * c)
+参数：f : Real -> E；c : Real；ha : 0 < a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integrable_indicator_iff`：integrable_indicator_iff (hs : M
+easurableSet s) : Integrable (indicator s f) μ ↔ IntegrableOn f s μ
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.indicator_comp_right`：∀ {α : Type u_1} {β : Type u_2} {M : Type u_3}
+ [inst : Zero M] {s : Set α} (f : β → α) {g : α → M} {x : β},   (f ⁻¹' s).indica
+tor (g ∘ f) x …
+· 使用定理 `Set.preimage_const_mul_Ioi₀`：preimage_const_mul_Ioi₀ (a : G₀) (h : 0 < c
+) : (c * ·) ⁻¹' Ioi a = Ioi (a / c)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_div_cancel_right₀`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀] [ins
+t_1 : Div M₀] [MulDivCancelClass M₀] (a : M₀) {b : M₀},   b ≠ 0 → a * b / b = a
+· 使用定理 `EuclideanDomain.toMulDivCancelClass`：∀ {R : Type u} [inst : EuclideanDom
+ain R], MulDivCancelClass R
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `MeasureTheory.integrable_comp_mul_left_iff`：integrable_comp_mul_left_iff
+ (g : Real -> F) {R : Real} (hR : R != 0) : (Integrable fun x => g (R * x)) ↔ In
+tegrable g
 -/
-theorem integrableOn_Ioi_comp_mul_left_iff (f : Real -> E) (c : Real) {a : Real} (ha : 0 < a) :
+theorem integrableOn_Ioi_comp_mul_left_iff (f : ℝ → E) (c : ℝ) {a : ℝ} (ha : 0 < a) :
     IntegrableOn (fun x => f (a * x)) (Ioi c) ↔ IntegrableOn f (Ioi <| a * c) := by
   rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi c)]
   rw [← integrable_indicator_iff (measurableSet_Ioi : MeasurableSet <| Ioi <| a * c)]
   convert! integrable_comp_mul_left_iff ((Ioi (a * c)).indicator f) ha.ne' using 2
   ext1 x
-  rw [← indicator_comp_right]; rw [preimage_const_mul_Ioi₀ _ ha]; rw [mul_comm a c]; rw [mul_div_cancel_right₀ _ ha.ne']; rw [Function.comp_def]
-
-/--
-theorem `integrableOn_Ioi_comp_mul_right_iff` / 定理 `integrableOn_Ioi_comp_mul_right_iff`
-
-English:
-theorem integrableOn_Ioi_comp_mul_right_iff
-  given: (f : Real -> E) (c : Real) {a : Real} (ha : 0 < a)
-  proof: by
-  simpa only [mul_comm, mul_zero] using integrableOn_Ioi_comp_mul_left_iff f c ha
-
-中文:
-定理 integrableOn_Ioi_comp_mul_right_iff
-  条件: (f : 实数 -> E) (c : 实数) {a : 实数} (ha : 0 < a)
-  证明: by
-  simpa only [mul_comm, mul_zero] using integrableOn_Ioi_comp_mul_left_iff f c ha
-
-Depends on / 依赖: integrableOn_Ioi_comp_mul_left_iff, mul_comm, mul_zero
+  rw [← indicator_comp_right, preimage_const_mul_Ioi₀ _ ha, mul_comm a c,
+    mul_div_cancel_right₀ _ ha.ne', Function.comp_def]
+/-
+**MeasureTheory.integrableOn_Ioi_comp_mul_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory`。
+形式化陈述：integrableOn_Ioi_comp_mul_right_iff (f : Real -> E) (c : Real) {a : Real} 
+(ha : 0 < a) : IntegrableOn (fun x => f (x * a)) (Ioi c) ↔ IntegrableOn f (Ioi <
+| c * a)
+参数：f : Real -> E；c : Real；ha : 0 < a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MeasureTheory.integrableOn_Ioi_comp_mul_left_iff`：integrableOn_Ioi_comp_
+mul_left_iff (f : Real -> E) (c : Real) {a : Real} (ha : 0 < a) : IntegrableOn (
+fun x => f (a * x)) (Ioi c) ↔ Integrab…
 -/
-theorem integrableOn_Ioi_comp_mul_right_iff (f : Real -> E) (c : Real) {a : Real} (ha : 0 < a) :
+theorem integrableOn_Ioi_comp_mul_right_iff (f : ℝ → E) (c : ℝ) {a : ℝ} (ha : 0 < a) :
     IntegrableOn (fun x => f (x * a)) (Ioi c) ↔ IntegrableOn f (Ioi <| c * a) := by
   simpa only [mul_comm, mul_zero] using integrableOn_Ioi_comp_mul_left_iff f c ha
 
@@ -3867,117 +5051,205 @@ end IoiIntegrability
 
 section IntegrationByPartsBilinear
 
-variable {E F G : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
-  [NormedAddCommGroup F] [NormedSpace Real F] [NormedAddCommGroup G] [NormedSpace Real G]
-  {L : E ->L[Real] F ->L[Real] G} {u : Real -> E} {v : Real -> F} {u' : Real -> E} {v' : Real -> F}
+variable {E F G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup F] [NormedSpace ℝ F] [NormedAddCommGroup G] [NormedSpace ℝ G]
+  {L : E →L[ℝ] F →L[ℝ] G} {u : ℝ → E} {v : ℝ → F} {u' : ℝ → E} {v' : ℝ → F}
   {m n : G}
 
-/--
-theorem `integral_bilinear_hasDerivAt_eq_sub` / 定理 `integral_bilinear_hasDerivAt_eq_sub`
-
-English:
-theorem integral_bilinear_hasDerivAt_eq_sub
-  statement: [CompleteSpace G]
-  proof: integral_of_hasDerivAt_of_tendsto (fun x => L.hasDerivAt_of_bilinear (hu x) (hv x))
-    huv h_bot h_top
-
-中文:
-定理 integral_bilinear_hasDerivAt_eq_sub
-  结论: [完备空间 G]
-  证明: integral_of_hasDerivAt_of_tendsto (fun x => L.hasDerivAt_of_bilinear (hu x) (hv x))
-    huv h_bot h_top
-
-Depends on / 依赖: L.hasDerivAt_of_bilinear, h_bot, h_top, hasDerivAt_of_bilinear, integral_of_hasDerivAt_of_tendsto
+/-
+**MeasureTheory.integral_bilinear_hasDerivAt_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory`。
+形式化陈述：integral_bilinear_hasDerivAt_eq_sub [CompleteSpace G] (hu : forall x in ts
+upport v, HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt v (v' 
+x) x) (huv : Integrable (fun x => L (u x) (v' x) + L (u' x) (v x))) (h_bot : Ten
+dsto (fun x => L (u x) (v x)) atBot (𝓝 m)) (h_top : Tendsto (fun x => L (u x) (v
+ x)) atTop (𝓝 n)) : ∫ (x : Real), L (u x) (v' x) + L (u' x) (v x) = n - m
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv : Integrable (fun x => L (u x) (v' x) + L (u' x) (v
+ x))；h_bot : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 m)；h_top : Tendsto (fun x
+ => L (u x) (v x)) atTop (𝓝 n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_of_hasDerivAt_of_tendsto`：integral_of_hasDerivAt_
+of_tendsto [CompleteSpace E] (hderiv : forall x, HasDerivAt f (f' x) x) (hf' : I
+ntegrable f') (hbot : Tendsto f atBot…
+· 使用定理 `ContinuousLinearMap.hasDerivAt_of_bilinear`：hasDerivAt_of_bilinear (hu :
+ x in tsupport v -> HasDerivAt u u' x) (hv : x in tsupport u -> HasDerivAt v v' 
+x) : HasDerivAt (fun x => B (u x…
 -/
 theorem integral_bilinear_hasDerivAt_eq_sub [CompleteSpace G]
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
-    (huv : Integrable (fun x => L (u x) (v' x) + L (u' x) (v x)))
-    (h_bot : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 m))
-    (h_top : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 n)) :
-    ∫ (x : Real), L (u x) (v' x) + L (u' x) (v x) = n - m :=
-  integral_of_hasDerivAt_of_tendsto (fun x => L.hasDerivAt_of_bilinear (hu x) (hv x))
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
+    (huv : Integrable (fun x ↦ L (u x) (v' x) + L (u' x) (v x)))
+    (h_bot : Tendsto (fun x ↦ L (u x) (v x)) atBot (𝓝 m))
+    (h_top : Tendsto (fun x ↦ L (u x) (v x)) atTop (𝓝 n)) :
+    ∫ (x : ℝ), L (u x) (v' x) + L (u' x) (v x) = n - m :=
+  integral_of_hasDerivAt_of_tendsto (fun x ↦ L.hasDerivAt_of_bilinear (hu x) (hv x))
     huv h_bot h_top
 
-/--
-theorem `integral_bilinear_hasDerivAt_right_eq_sub` / 定理 `integral_bilinear_hasDerivAt_right_eq_sub`
+/-- **Integration by parts on (-∞, ∞).**
+With respect to a general bilinear form. For the specific case of multiplication, see
+`integral_mul_deriv_eq_deriv_mul`. -/
+/-
+**MeasureTheory.integral_bilinear_hasDerivAt_right_eq_sub** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory`。
+形式化陈述：integral_bilinear_hasDerivAt_right_eq_sub [CompleteSpace G] (hu : forall x
+ in tsupport v, HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt 
+v (v' x) x) (huv' : Integrable (fun x => L (u x) (v' x))) (hu'v : Integrable (fu
+n x => L (u' x) (v x))) (h_bot : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 m)) (
+h_top : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 n)) : ∫ (x : Real), L (u x) (v
+' x) = n - m - ∫ (x : Real), L (u' x) (v x)
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv' : Integrable (fun x => L (u x) (v' x))；hu'v : Inte
+grable (fun x => L (u' x) (v x))；h_bot : Tendsto (fun x => L (u x) (v x)) atBot 
+(𝓝 m)；h_top : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_add`：integral_add {f g : α -> G} (hf : Integrable
+ f μ) (hg : Integrable g μ) : ∫ a, f a + g a ∂μ = ∫ a, f a ∂μ + ∫ a, g a ∂μ
+· 使用定理 `MeasureTheory.integral_bilinear_hasDerivAt_eq_sub`：integral_bilinear_has
+DerivAt_eq_sub [CompleteSpace G] (hu : forall x in tsupport v, HasDerivAt u (u' 
+x) x) (hv : forall x in tsupport u, Has…
+· 使用定理 `MeasureTheory.Integrable.add`：∀ {α : Type u_1} {m : MeasurableSpace α} {
+μ : MeasureTheory.Measure α} {ε' : Type u_8} [inst : TopologicalSpace ε']   [ins
+t_1 : ESeminormedA…
 
-English:
-theorem integral_bilinear_hasDerivAt_right_eq_sub
-  statement: [CompleteSpace G]
-  proof: by
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  exact integral_bilinear_hasDerivAt_eq_sub hu hv (huv'.add hu'v) h_bot h_top
-
-中文:
-定理 integral_bilinear_hasDerivAt_right_eq_sub
-  结论: [完备空间 G]
-  证明: by
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  exact integral_bilinear_hasDerivAt_eq_sub hu hv (huv'.add hu'v) h_bot h_top
-
-Depends on / 依赖: eq_sub_iff_add_eq, h_bot, h_top, integral_add, integral_bilinear_hasDerivAt_eq_sub
+--- 原说明 ---
+**Integration by parts on (-∞, ∞).**
+With respect to a general bilinear form. For the specific case of multiplication
+, see
+`integral_mul_deriv_eq_deriv_mul`.
 -/
 theorem integral_bilinear_hasDerivAt_right_eq_sub [CompleteSpace G]
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
-    (huv' : Integrable (fun x => L (u x) (v' x))) (hu'v : Integrable (fun x => L (u' x) (v x)))
-    (h_bot : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 m))
-    (h_top : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 n)) :
-    ∫ (x : Real), L (u x) (v' x) = n - m - ∫ (x : Real), L (u' x) (v x) := by
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
+    (huv' : Integrable (fun x ↦ L (u x) (v' x))) (hu'v : Integrable (fun x ↦ L (u' x) (v x)))
+    (h_bot : Tendsto (fun x ↦ L (u x) (v x)) atBot (𝓝 m))
+    (h_top : Tendsto (fun x ↦ L (u x) (v x)) atTop (𝓝 n)) :
+    ∫ (x : ℝ), L (u x) (v' x) = n - m - ∫ (x : ℝ), L (u' x) (v x) := by
+  rw [eq_sub_iff_add_eq, ← integral_add huv' hu'v]
   exact integral_bilinear_hasDerivAt_eq_sub hu hv (huv'.add hu'v) h_bot h_top
 
-/--
-theorem `integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable` / 定理 `integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable`
+/-- **Integration by parts on (-∞, ∞).**
+With respect to a general bilinear form, assuming moreover that the total function is integrable.
+-/
+/-
+**MeasureTheory.integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable** 是
+ Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (hu : forall 
+x in tsupport v, HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt
+ v (v' x) x) (huv' : Integrable (fun x => L (u x) (v' x))) (hu'v : Integrable (f
+un x => L (u' x) (v x))) (huv : Integrable (fun x => L (u x) (v x))) : ∫ (x : Re
+al), L (u x) (v' x) = - ∫ (x : Real), L (u' x) (v x)
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv' : Integrable (fun x => L (u x) (v' x))；hu'v : Inte
+grable (fun x => L (u' x) (v x))；huv : Integrable (fun x => L (u x) (v x))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Iic`：tendsto_ze
+ro_of_hasDerivAt_of_integrableOn_Iic (hderiv : forall x in Iic a, HasDerivAt f (
+f' x) x) (f'int : IntegrableOn f' (Iic a)) (fint :…
+· 使用定理 `ContinuousLinearMap.hasDerivAt_of_bilinear`：hasDerivAt_of_bilinear (hu :
+ x in tsupport v -> HasDerivAt u u' x) (hv : x in tsupport u -> HasDerivAt v v' 
+x) : HasDerivAt (fun x => B (u x…
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `MeasureTheory.Integrable.add`：∀ {α : Type u_1} {m : MeasurableSpace α} {
+μ : MeasureTheory.Measure α} {ε' : Type u_8} [inst : TopologicalSpace ε']   [ins
+t_1 : ESeminormedA…
+· 使用定理 `MeasureTheory.tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi`：tendsto_ze
+ro_of_hasDerivAt_of_integrableOn_Ioi (hderiv : forall x in Ioi a, HasDerivAt f (
+f' x) x) (f'int : IntegrableOn f' (Ioi a)) (fint :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_bilinear_hasDerivAt_right_eq_sub`：integral_biline
+ar_hasDerivAt_right_eq_sub [CompleteSpace G] (hu : forall x in tsupport v, HasDe
+rivAt u (u' x) x) (hv : forall x in tsupport …
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.integral_def`：∀ {α : Type u_6} {G : Type u_7} [inst : Norm
+edAddCommGroup G] [inst_1 : NormedSpace ℝ G] {x : MeasurableSpace α}   (μ : Meas
+ureTheory.Measur…
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 
-English:
-theorem integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable
-  proof: by
-  by_cases hG : CompleteSpace G; swap
-  · simp [integral, hG]
-  have I : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
-      (huv'.add hu'v).integrableOn huv.integrableOn
-  have J : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
-      (huv'.add hu'v).integrableOn huv.integrableOn
-  simp [integral_bilinear_hasDerivAt_right_eq_sub hu hv huv' hu'v I J]
-
-中文:
-定理 integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable
-  证明: by
-  by_cases hG : CompleteSpace G; swap
-  · simp [integral, hG]
-  have I : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
-      (huv'.add hu'v).integrableOn huv.integrableOn
-  have J : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 0) :=
-    tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
-      (huv'.add hu'v).integrableOn huv.integrableOn
-  simp [integral_bilinear_hasDerivAt_right_eq_sub hu hv huv' hu'v I J]
-
-Depends on / 依赖: CompleteSpace, L.hasDerivAt_of_bilinear, Tendsto, hasDerivAt_of_bilinear, huv.integrableOn, integra, integrableOn, integral, tendsto_zero_of_hasDerivAt_of_integrableOn_Iic, tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi
+--- 原说明 ---
+**Integration by parts on (-∞, ∞).**
+With respect to a general bilinear form, assuming moreover that the total functi
+on is integrable.
 -/
 theorem integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
-    (huv' : Integrable (fun x => L (u x) (v' x))) (hu'v : Integrable (fun x => L (u' x) (v x)))
-    (huv : Integrable (fun x => L (u x) (v x))) :
-    ∫ (x : Real), L (u x) (v' x) = - ∫ (x : Real), L (u' x) (v x) := by
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
+    (huv' : Integrable (fun x ↦ L (u x) (v' x))) (hu'v : Integrable (fun x ↦ L (u' x) (v x)))
+    (huv : Integrable (fun x ↦ L (u x) (v x))) :
+    ∫ (x : ℝ), L (u x) (v' x) = - ∫ (x : ℝ), L (u' x) (v x) := by
   by_cases hG : CompleteSpace G; swap
   · simp [integral, hG]
-  have I : Tendsto (fun x => L (u x) (v x)) atBot (𝓝 0) :=
+  have I : Tendsto (fun x ↦ L (u x) (v x)) atBot (𝓝 0) :=
     tendsto_zero_of_hasDerivAt_of_integrableOn_Iic (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
+      (fun x _hx ↦ L.hasDerivAt_of_bilinear (hu x) (hv x))
       (huv'.add hu'v).integrableOn huv.integrableOn
-  have J : Tendsto (fun x => L (u x) (v x)) atTop (𝓝 0) :=
+  have J : Tendsto (fun x ↦ L (u x) (v x)) atTop (𝓝 0) :=
     tendsto_zero_of_hasDerivAt_of_integrableOn_Ioi (a := 0)
-      (fun x _hx => L.hasDerivAt_of_bilinear (hu x) (hv x))
+      (fun x _hx ↦ L.hasDerivAt_of_bilinear (hu x) (hv x))
       (huv'.add hu'v).integrableOn huv.integrableOn
   simp [integral_bilinear_hasDerivAt_right_eq_sub hu hv huv' hu'v I J]
 
@@ -3985,137 +5257,206 @@ end IntegrationByPartsBilinear
 
 section IntegrationByPartsAlgebra
 
-variable {A : Type*} [NormedRing A] [NormedAlgebra Real A]
-  {a : Real} {a' b' : A} {u : Real -> A} {v : Real -> A} {u' : Real -> A} {v' : Real -> A}
+variable {A : Type*} [NormedRing A] [NormedAlgebra ℝ A]
+  {a : ℝ} {a' b' : A} {u : ℝ → A} {v : ℝ → A} {u' : ℝ → A} {v' : ℝ → A}
 
-/--
-theorem `integral_deriv_mul_eq_sub` / 定理 `integral_deriv_mul_eq_sub`
+/-- For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`. -/
+/-
+**MeasureTheory.integral_deriv_mul_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：integral_deriv_mul_eq_sub [CompleteSpace A] (hu : forall x in tsupport v, 
+HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt v (v' x) x) (huv
+ : Integrable (u' * v + u * v')) (h_bot : Tendsto (u * v) atBot (𝓝 a')) (h_top :
+ Tendsto (u * v) atTop (𝓝 b')) : ∫ (x : Real), u' x * v x + u x * v' x = b' - a'
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv : Integrable (u' * v + u * v')；h_bot : Tendsto (u *
+ v) atBot (𝓝 a')；h_top : Tendsto (u * v) atTop (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_of_hasDerivAt_of_tendsto`：integral_of_hasDerivAt_
+of_tendsto [CompleteSpace E] (hderiv : forall x, HasDerivAt f (f' x) x) (hf' : I
+ntegrable f') (hbot : Tendsto f atBot…
+· 使用定理 `HasDerivAt.congr_simp`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜]
+ {F : Type v} [inst_1 : AddCommGroup F] [inst_2 : _root_.Module 𝕜 F]   [inst_3 :
+ Topologica…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `ContinuousLinearMap.hasDerivAt_of_bilinear`：hasDerivAt_of_bilinear (hu :
+ x in tsupport v -> HasDerivAt u u' x) (hv : x in tsupport u -> HasDerivAt v v' 
+x) : HasDerivAt (fun x => B (u x…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-theorem integral_deriv_mul_eq_sub
-  statement: [CompleteSpace A]
-  proof: by
-  refine integral_of_hasDerivAt_of_tendsto (fun x => ?_) huv h_bot h_top
-  simpa [add_comm] using! (ContinuousLinearMap.mul Real A).hasDerivAt_of_bilinear (hu x) (hv x)
-
-中文:
-定理 integral_deriv_mul_eq_sub
-  结论: [完备空间 A]
-  证明: by
-  refine integral_of_hasDerivAt_of_tendsto (fun x => ?_) huv h_bot h_top
-  simpa [add_comm] using! (ContinuousLinearMap.mul Real A).hasDerivAt_of_bilinear (hu x) (hv x)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mul, add_comm, h_bot, h_top, hasDerivAt_of_bilinear, integral_of_hasDerivAt_of_tendsto
+--- 原说明 ---
+For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`.
 -/
 theorem integral_deriv_mul_eq_sub [CompleteSpace A]
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
     (huv : Integrable (u' * v + u * v'))
     (h_bot : Tendsto (u * v) atBot (𝓝 a')) (h_top : Tendsto (u * v) atTop (𝓝 b')) :
-    ∫ (x : Real), u' x * v x + u x * v' x = b' - a' := by
-  refine integral_of_hasDerivAt_of_tendsto (fun x => ?_) huv h_bot h_top
-  simpa [add_comm] using! (ContinuousLinearMap.mul Real A).hasDerivAt_of_bilinear (hu x) (hv x)
+    ∫ (x : ℝ), u' x * v x + u x * v' x = b' - a' := by
+  refine integral_of_hasDerivAt_of_tendsto (fun x ↦ ?_) huv h_bot h_top
+  simpa [add_comm] using! (ContinuousLinearMap.mul ℝ A).hasDerivAt_of_bilinear (hu x) (hv x)
 
-/--
-theorem `integral_mul_deriv_eq_deriv_mul` / 定理 `integral_mul_deriv_eq_deriv_mul`
+/-- **Integration by parts on (-∞, ∞).**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`. -/
+/-
+**MeasureTheory.integral_mul_deriv_eq_deriv_mul** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：integral_mul_deriv_eq_deriv_mul [CompleteSpace A] (hu : forall x in tsuppo
+rt v, HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt v (v' x) x
+) (huv' : Integrable (u * v')) (hu'v : Integrable (u' * v)) (h_bot : Tendsto (u 
+* v) atBot (𝓝 a')) (h_top : Tendsto (u * v) atTop (𝓝 b')) : ∫ (x : Real), u x * 
+v' x = b' - a' - ∫ (x : Real), u' x * v x
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv' : Integrable (u * v')；hu'v : Integrable (u' * v)；h
+_bot : Tendsto (u * v) atBot (𝓝 a')；h_top : Tendsto (u * v) atTop (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_bilinear_hasDerivAt_right_eq_sub`：integral_biline
+ar_hasDerivAt_right_eq_sub [CompleteSpace G] (hu : forall x in tsupport v, HasDe
+rivAt u (u' x) x) (hv : forall x in tsupport …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-theorem integral_mul_deriv_eq_deriv_mul
-  statement: [CompleteSpace A]
-  proof: integral_bilinear_hasDerivAt_right_eq_sub (L := ContinuousLinearMap.mul Real A)
-    hu hv huv' hu'v h_bot h_top
-
-中文:
-定理 integral_mul_deriv_eq_deriv_mul
-  结论: [完备空间 A]
-  证明: integral_bilinear_hasDerivAt_right_eq_sub (L := ContinuousLinearMap.mul Real A)
-    hu hv huv' hu'v h_bot h_top
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mul, h_bot, h_top, integral_bilinear_hasDerivAt_right_eq_sub
+--- 原说明 ---
+**Integration by parts on (-∞, ∞).**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`.
 -/
 theorem integral_mul_deriv_eq_deriv_mul [CompleteSpace A]
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
     (huv' : Integrable (u * v')) (hu'v : Integrable (u' * v))
     (h_bot : Tendsto (u * v) atBot (𝓝 a')) (h_top : Tendsto (u * v) atTop (𝓝 b')) :
-    ∫ (x : Real), u x * v' x = b' - a' - ∫ (x : Real), u' x * v x :=
-  integral_bilinear_hasDerivAt_right_eq_sub (L := ContinuousLinearMap.mul Real A)
+    ∫ (x : ℝ), u x * v' x = b' - a' - ∫ (x : ℝ), u' x * v x :=
+  integral_bilinear_hasDerivAt_right_eq_sub (L := ContinuousLinearMap.mul ℝ A)
     hu hv huv' hu'v h_bot h_top
 
-/--
-theorem `integral_mul_deriv_eq_deriv_mul_of_integrable` / 定理 `integral_mul_deriv_eq_deriv_mul_of_integrable`
+/-- **Integration by parts on (-∞, ∞).**
+Version assuming that the total function is integrable -/
+/-
+**MeasureTheory.integral_mul_deriv_eq_deriv_mul_of_integrable** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory`。
+形式化陈述：integral_mul_deriv_eq_deriv_mul_of_integrable (hu : forall x in tsupport v
+, HasDerivAt u (u' x) x) (hv : forall x in tsupport u, HasDerivAt v (v' x) x) (h
+uv' : Integrable (u * v')) (hu'v : Integrable (u' * v)) (huv : Integrable (u * v
+)) : ∫ (x : Real), u x * v' x = - ∫ (x : Real), u' x * v x
+参数：hu : forall x in tsupport v, HasDerivAt u (u' x) x；hv : forall x in tsupport 
+u, HasDerivAt v (v' x) x；huv' : Integrable (u * v')；hu'v : Integrable (u' * v)；h
+uv : Integrable (u * v)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrab
+le`：integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (hu : forall x 
+in tsupport v, HasDerivAt u (u' x) x) (hv : forall x in tsupport…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-theorem integral_mul_deriv_eq_deriv_mul_of_integrable
-  proof: integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (L := ContinuousLinearMap.mul Real A)
-    hu hv huv' hu'v huv
-
-中文:
-定理 integral_mul_deriv_eq_deriv_mul_of_integrable
-  证明: integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (L := ContinuousLinearMap.mul Real A)
-    hu hv huv' hu'v huv
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.mul, integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable
+--- 原说明 ---
+**Integration by parts on (-∞, ∞).**
+Version assuming that the total function is integrable
 -/
 theorem integral_mul_deriv_eq_deriv_mul_of_integrable
-    (hu : forall x in tsupport v, HasDerivAt u (u' x) x)
-    (hv : forall x in tsupport u, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ tsupport v, HasDerivAt u (u' x) x)
+    (hv : ∀ x ∈ tsupport u, HasDerivAt v (v' x) x)
     (huv' : Integrable (u * v')) (hu'v : Integrable (u' * v)) (huv : Integrable (u * v)) :
-    ∫ (x : Real), u x * v' x = - ∫ (x : Real), u' x * v x :=
-  integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (L := ContinuousLinearMap.mul Real A)
+    ∫ (x : ℝ), u x * v' x = - ∫ (x : ℝ), u' x * v x :=
+  integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable (L := ContinuousLinearMap.mul ℝ A)
     hu hv huv' hu'v huv
 
 variable [CompleteSpace A]
 
 -- TODO: also apply `Tendsto _ (𝓝[>] a) (𝓝 a')` generalization to
 -- `integral_Ioi_of_hasDerivAt_of_tendsto` and `integral_Iic_of_hasDerivAt_of_tendsto`
-/--
-theorem `integral_Ioi_deriv_mul_eq_sub` / 定理 `integral_Ioi_deriv_mul_eq_sub`
+/-- For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`. -/
+/-
+**MeasureTheory.integral_Ioi_deriv_mul_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：integral_Ioi_deriv_mul_eq_sub (hu : forall x in Ioi a, HasDerivAt u (u' x)
+ x) (hv : forall x in Ioi a, HasDerivAt v (v' x) x) (huv : IntegrableOn (u' * v 
++ u * v') (Ioi a)) (h_zero : Tendsto (u * v) (𝓝[>] a) (𝓝 a')) (h_infty : Tendsto
+ (u * v) atTop (𝓝 b')) : ∫ (x : Real) in Ioi a, u' x * v x + u x * v' x = b' - a
+'
+参数：hu : forall x in Ioi a, HasDerivAt u (u' x) x；hv : forall x in Ioi a, HasDeri
+vAt v (v' x) x；huv : IntegrableOn (u' * v + u * v') (Ioi a)；h_zero : Tendsto (u 
+* v) (𝓝[>] a) (𝓝 a')；h_infty : Tendsto (u * v) atTop (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `HasDerivAt.congr_of_eventuallyEq`：HasDerivAt.congr_of_eventuallyEq (h : 
+HasDerivAt f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f) : HasDerivAt f₁ f' x
+· 使用定理 `HasDerivAt.mul`：HasDerivAt.mul (hc : HasDerivAt c c' x) (hd : HasDerivAt
+ d d' x) : HasDerivAt (c * d) (c' * d x + c x * d') x
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `eventually_ne_nhds`：eventually_ne_nhds [T1Space X] {a b : X} (h : a != b
+) : forallᶠ x in 𝓝 a, x != b
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `T6Space.toT5Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T6Space
+ X], T5Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.eventually_ne_atTop`：eventually_ne_atTop [Preorder α] [NoTopOrder
+ α] (a : α) : forallᶠ x in atTop, x != a
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `MeasureTheory.integral_Ioi_of_hasDerivAt_of_tendsto`：integral_Ioi_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Ici a) a) (hderiv : forall x i
+n Ioi a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousWithinAt_update_same`：continuousWithinAt_update_same [Decidabl
+eEq α] {y : β} : ContinuousWithinAt (update f x y) s x ↔ Tendsto f (𝓝[s \ {x}] x
+) (𝓝 y)
+· 使用定理 `Set.Ici_sdiff_left`：∀ {α : Type u_1} [inst : PartialOrder α] {a : α}, Se
+t.Ici a \ {a} = Set.Ioi a
 
-English:
-theorem integral_Ioi_deriv_mul_eq_sub
-  proof: by
-  rw [← Ici_sdiff_left] at h_zero
-  let f := Function.update (u * v) a a'
-  have hderiv : forall x in Ioi a, HasDerivAt f (u' x * v x + u x * v' x) x := by
-    intro x (hx : a < x)
-    apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
-    filter_upwards [eventually_ne_nhds hx.ne.symm] with y hy
-    exact Function.update_of_ne hy a' (u * v)
-  have htendsto : Tendsto f atTop (𝓝 b') := by
-    apply h_infty.congr'
-    filter_upwards [eventually_ne_atTop a] with x hx
-    exact (Function.update_of_ne hx a' (u * v)).symm
-  simpa using integral_Ioi_of_hasDerivAt_of_tendsto
-    (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
-
-中文:
-定理 integral_Ioi_deriv_mul_eq_sub
-  证明: by
-  rw [← Ici_sdiff_left] at h_zero
-  let f := Function.update (u * v) a a'
-  have hderiv : forall x in Ioi a, HasDerivAt f (u' x * v x + u x * v' x) x := by
-    intro x (hx : a < x)
-    apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
-    filter_upwards [eventually_ne_nhds hx.ne.symm] with y hy
-    exact Function.update_of_ne hy a' (u * v)
-  have htendsto : Tendsto f atTop (𝓝 b') := by
-    apply h_infty.congr'
-    filter_upwards [eventually_ne_atTop a] with x hx
-    exact (Function.update_of_ne hx a' (u * v)).symm
-  simpa using integral_Ioi_of_hasDerivAt_of_tendsto
-    (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
-
-Depends on / 依赖: Function, Function.update, Function.update_of_ne, HasDerivAt, Ici_sdiff_left, Tendsto, congr_of_eventuallyEq, eventually_ne_atTop, eventually_ne_nhds, filter_upwards, h_infty, h_infty.congr, h_zero, hderiv, htendsto, hx.ne.symm, update, update_of_ne
+--- 原说明 ---
+For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`.
 -/
 theorem integral_Ioi_deriv_mul_eq_sub
-    (hu : forall x in Ioi a, HasDerivAt u (u' x) x) (hv : forall x in Ioi a, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ Ioi a, HasDerivAt u (u' x) x) (hv : ∀ x ∈ Ioi a, HasDerivAt v (v' x) x)
     (huv : IntegrableOn (u' * v + u * v') (Ioi a))
     (h_zero : Tendsto (u * v) (𝓝[>] a) (𝓝 a')) (h_infty : Tendsto (u * v) atTop (𝓝 b')) :
-    ∫ (x : Real) in Ioi a, u' x * v x + u x * v' x = b' - a' := by
+    ∫ (x : ℝ) in Ioi a, u' x * v x + u x * v' x = b' - a' := by
   rw [← Ici_sdiff_left] at h_zero
   let f := Function.update (u * v) a a'
-  have hderiv : forall x in Ioi a, HasDerivAt f (u' x * v x + u x * v' x) x := by
+  have hderiv : ∀ x ∈ Ioi a, HasDerivAt f (u' x * v x + u x * v' x) x := by
     intro x (hx : a < x)
     apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
     filter_upwards [eventually_ne_nhds hx.ne.symm] with y hy
@@ -4127,81 +5468,141 @@ theorem integral_Ioi_deriv_mul_eq_sub
   simpa using integral_Ioi_of_hasDerivAt_of_tendsto
     (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
 
-/--
-theorem `integral_Ioi_mul_deriv_eq_deriv_mul` / 定理 `integral_Ioi_mul_deriv_eq_deriv_mul`
+/-- **Integration by parts on (a, ∞).**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`. -/
+/-
+**MeasureTheory.integral_Ioi_mul_deriv_eq_deriv_mul** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory`。
+形式化陈述：integral_Ioi_mul_deriv_eq_deriv_mul (hu : forall x in Ioi a, HasDerivAt u 
+(u' x) x) (hv : forall x in Ioi a, HasDerivAt v (v' x) x) (huv' : IntegrableOn (
+u * v') (Ioi a)) (hu'v : IntegrableOn (u' * v) (Ioi a)) (h_zero : Tendsto (u * v
+) (𝓝[>] a) (𝓝 a')) (h_infty : Tendsto (u * v) atTop (𝓝 b')) : ∫ (x : Real) in Io
+i a, u x * v' x = b' - a' - ∫ (x : Real) in Ioi a, u' x * v x
+参数：hu : forall x in Ioi a, HasDerivAt u (u' x) x；hv : forall x in Ioi a, HasDeri
+vAt v (v' x) x；huv' : IntegrableOn (u * v') (Ioi a)；hu'v : IntegrableOn (u' * v)
+ (Ioi a)；h_zero : Tendsto (u * v) (𝓝[>] a) (𝓝 a')；h_infty : Tendsto (u * v) atTo
+p (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_add`：integral_add {f g : α -> G} (hf : Integrable
+ f μ) (hg : Integrable g μ) : ∫ a, f a + g a ∂μ = ∫ a, f a ∂μ + ∫ a, g a ∂μ
+· 使用引理 `Pi.mul_def`：mul_def (f g : forall i, M i) : f * g = fun i => f i * g i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `MeasureTheory.integral_Ioi_deriv_mul_eq_sub`：integral_Ioi_deriv_mul_eq_s
+ub (hu : forall x in Ioi a, HasDerivAt u (u' x) x) (hv : forall x in Ioi a, HasD
+erivAt v (v' x) x) (huv : Integra…
+· 使用定理 `MeasureTheory.IntegrableOn.add`：∀ {α : Type u_1} {ε' : Type u_4} {mα : M
+easurableSpace α} {s : Set α} {μ : MeasureTheory.Measure α}   [inst : Topologica
+lSpace ε'] [inst_1 :…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
 
-English:
-theorem integral_Ioi_mul_deriv_eq_deriv_mul
-  proof: by
-  rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  simpa only [add_comm] using integral_Ioi_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
-
-中文:
-定理 integral_Ioi_mul_deriv_eq_deriv_mul
-  证明: by
-  rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  simpa only [add_comm] using integral_Ioi_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
-
-Depends on / 依赖: Pi.mul_def, add_comm, eq_sub_iff_add_eq, h_infty, h_zero, integral_Ioi_deriv_mul_eq_sub, integral_add, mul_def, v.add
+--- 原说明 ---
+**Integration by parts on (a, ∞).**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`.
 -/
 theorem integral_Ioi_mul_deriv_eq_deriv_mul
-    (hu : forall x in Ioi a, HasDerivAt u (u' x) x) (hv : forall x in Ioi a, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ Ioi a, HasDerivAt u (u' x) x) (hv : ∀ x ∈ Ioi a, HasDerivAt v (v' x) x)
     (huv' : IntegrableOn (u * v') (Ioi a)) (hu'v : IntegrableOn (u' * v) (Ioi a))
     (h_zero : Tendsto (u * v) (𝓝[>] a) (𝓝 a')) (h_infty : Tendsto (u * v) atTop (𝓝 b')) :
-    ∫ (x : Real) in Ioi a, u x * v' x = b' - a' - ∫ (x : Real) in Ioi a, u' x * v x := by
+    ∫ (x : ℝ) in Ioi a, u x * v' x = b' - a' - ∫ (x : ℝ) in Ioi a, u' x * v x := by
   rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
+  rw [eq_sub_iff_add_eq, ← integral_add huv' hu'v]
   simpa only [add_comm] using integral_Ioi_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
 
-/--
-theorem `integral_Iic_deriv_mul_eq_sub` / 定理 `integral_Iic_deriv_mul_eq_sub`
+/-- For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`. -/
+/-
+**MeasureTheory.integral_Iic_deriv_mul_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：integral_Iic_deriv_mul_eq_sub (hu : forall x in Iio a, HasDerivAt u (u' x)
+ x) (hv : forall x in Iio a, HasDerivAt v (v' x) x) (huv : IntegrableOn (u' * v 
++ u * v') (Iic a)) (h_zero : Tendsto (u * v) (𝓝[<] a) (𝓝 a')) (h_infty : Tendsto
+ (u * v) atBot (𝓝 b')) : ∫ (x : Real) in Iic a, u' x * v x + u x * v' x = a' - b
+'
+参数：hu : forall x in Iio a, HasDerivAt u (u' x) x；hv : forall x in Iio a, HasDeri
+vAt v (v' x) x；huv : IntegrableOn (u' * v + u * v') (Iic a)；h_zero : Tendsto (u 
+* v) (𝓝[<] a) (𝓝 a')；h_infty : Tendsto (u * v) atBot (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `HasDerivAt.congr_of_eventuallyEq`：HasDerivAt.congr_of_eventuallyEq (h : 
+HasDerivAt f f' x) (h₁ : f₁ =ᶠ[𝓝 x] f) : HasDerivAt f₁ f' x
+· 使用定理 `HasDerivAt.mul`：HasDerivAt.mul (hc : HasDerivAt c c' x) (hd : HasDerivAt
+ d d' x) : HasDerivAt (c * d) (c' * d x + c x * d') x
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Iio_mem_nhds`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Linea
+rOrder α] [ClosedIciTopology α] {a b : α},   b < a → Set.Iio a ∈ nhds b
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Iio_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] [NoBotOrder α
+] (x : α), Set.Iio x ∈ Filter.atBot
+· 使用定理 `instNoBotOrderOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMinO
+rder α], NoBotOrder α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `MeasureTheory.integral_Iic_of_hasDerivAt_of_tendsto`：integral_Iic_of_has
+DerivAt_of_tendsto (hcont : ContinuousWithinAt f (Iic a) a) (hderiv : forall x i
+n Iio a, HasDerivAt f (f' x) x) (f'int : …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousWithinAt_update_same`：continuousWithinAt_update_same [Decidabl
+eEq α] {y : β} : ContinuousWithinAt (update f x y) s x ↔ Tendsto f (𝓝[s \ {x}] x
+) (𝓝 y)
+· 使用定理 `Set.Iic_sdiff_right`：Iic_sdiff_right : Iic a \ {a} = Iio a
 
-English:
-theorem integral_Iic_deriv_mul_eq_sub
-  proof: by
-  rw [← Iic_sdiff_right] at h_zero
-  let f := Function.update (u * v) a a'
-  have hderiv : forall x in Iio a, HasDerivAt f (u' x * v x + u x * v' x) x := by
-    intro x hx
-    apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
-    filter_upwards [Iio_mem_nhds hx] with x (hx : x < a)
-    exact Function.update_of_ne (ne_of_lt hx) a' (u * v)
-  have htendsto : Tendsto f atBot (𝓝 b') := by
-    apply h_infty.congr'
-    filter_upwards [Iio_mem_atBot a] with x (hx : x < a)
-    exact (Function.update_of_ne (ne_of_lt hx) a' (u * v)).symm
-  simpa using integral_Iic_of_hasDerivAt_of_tendsto
-    (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
-
-中文:
-定理 integral_Iic_deriv_mul_eq_sub
-  证明: by
-  rw [← Iic_sdiff_right] at h_zero
-  let f := Function.update (u * v) a a'
-  have hderiv : forall x in Iio a, HasDerivAt f (u' x * v x + u x * v' x) x := by
-    intro x hx
-    apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
-    filter_upwards [Iio_mem_nhds hx] with x (hx : x < a)
-    exact Function.update_of_ne (ne_of_lt hx) a' (u * v)
-  have htendsto : Tendsto f atBot (𝓝 b') := by
-    apply h_infty.congr'
-    filter_upwards [Iio_mem_atBot a] with x (hx : x < a)
-    exact (Function.update_of_ne (ne_of_lt hx) a' (u * v)).symm
-  simpa using integral_Iic_of_hasDerivAt_of_tendsto
-    (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
-
-Depends on / 依赖: Function, Function.update, Function.update_of_ne, HasDerivAt, Iic_sdiff_right, Iio_mem_atBot, Iio_mem_nhds, Tendsto, congr_of_eventuallyEq, filter_upwards, h_infty, h_infty.congr, h_zero, hderiv, htendsto, ne_of_lt, update, update_of_ne
+--- 原说明 ---
+For finite intervals, see: `intervalIntegral.integral_deriv_mul_eq_sub`.
 -/
 theorem integral_Iic_deriv_mul_eq_sub
-    (hu : forall x in Iio a, HasDerivAt u (u' x) x) (hv : forall x in Iio a, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ Iio a, HasDerivAt u (u' x) x) (hv : ∀ x ∈ Iio a, HasDerivAt v (v' x) x)
     (huv : IntegrableOn (u' * v + u * v') (Iic a))
     (h_zero : Tendsto (u * v) (𝓝[<] a) (𝓝 a')) (h_infty : Tendsto (u * v) atBot (𝓝 b')) :
-    ∫ (x : Real) in Iic a, u' x * v x + u x * v' x = a' - b' := by
+    ∫ (x : ℝ) in Iic a, u' x * v x + u x * v' x = a' - b' := by
   rw [← Iic_sdiff_right] at h_zero
   let f := Function.update (u * v) a a'
-  have hderiv : forall x in Iio a, HasDerivAt f (u' x * v x + u x * v' x) x := by
+  have hderiv : ∀ x ∈ Iio a, HasDerivAt f (u' x * v x + u x * v' x) x := by
     intro x hx
     apply ((hu x hx).mul (hv x hx)).congr_of_eventuallyEq
     filter_upwards [Iio_mem_nhds hx] with x (hx : x < a)
@@ -4213,34 +5614,71 @@ theorem integral_Iic_deriv_mul_eq_sub
   simpa using integral_Iic_of_hasDerivAt_of_tendsto
     (continuousWithinAt_update_same.mpr h_zero) hderiv huv htendsto
 
-/--
-theorem `integral_Iic_mul_deriv_eq_deriv_mul` / 定理 `integral_Iic_mul_deriv_eq_deriv_mul`
+/-- **Integration by parts on $(∞, a]$.**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`. -/
+/-
+**MeasureTheory.integral_Iic_mul_deriv_eq_deriv_mul** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory`。
+形式化陈述：integral_Iic_mul_deriv_eq_deriv_mul (hu : forall x in Iio a, HasDerivAt u 
+(u' x) x) (hv : forall x in Iio a, HasDerivAt v (v' x) x) (huv' : IntegrableOn (
+u * v') (Iic a)) (hu'v : IntegrableOn (u' * v) (Iic a)) (h_zero : Tendsto (u * v
+) (𝓝[<] a) (𝓝 a')) (h_infty : Tendsto (u * v) atBot (𝓝 b')) : ∫ (x : Real) in Ii
+c a, u x * v' x = a' - b' - ∫ (x : Real) in Iic a, u' x * v x
+参数：hu : forall x in Iio a, HasDerivAt u (u' x) x；hv : forall x in Iio a, HasDeri
+vAt v (v' x) x；huv' : IntegrableOn (u * v') (Iic a)；hu'v : IntegrableOn (u' * v)
+ (Iic a)；h_zero : Tendsto (u * v) (𝓝[<] a) (𝓝 a')；h_infty : Tendsto (u * v) atBo
+t (𝓝 b')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_add`：integral_add {f g : α -> G} (hf : Integrable
+ f μ) (hg : Integrable g μ) : ∫ a, f a + g a ∂μ = ∫ a, f a ∂μ + ∫ a, g a ∂μ
+· 使用引理 `Pi.mul_def`：mul_def (f g : forall i, M i) : f * g = fun i => f i * g i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `MeasureTheory.integral_Iic_deriv_mul_eq_sub`：integral_Iic_deriv_mul_eq_s
+ub (hu : forall x in Iio a, HasDerivAt u (u' x) x) (hv : forall x in Iio a, HasD
+erivAt v (v' x) x) (huv : Integra…
+· 使用定理 `MeasureTheory.IntegrableOn.add`：∀ {α : Type u_1} {ε' : Type u_4} {mα : M
+easurableSpace α} {s : Set α} {μ : MeasureTheory.Measure α}   [inst : Topologica
+lSpace ε'] [inst_1 :…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
 
-English:
-theorem integral_Iic_mul_deriv_eq_deriv_mul
-  proof: by
-  rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  simpa only [add_comm] using integral_Iic_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
-
-中文:
-定理 integral_Iic_mul_deriv_eq_deriv_mul
-  证明: by
-  rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
-  simpa only [add_comm] using integral_Iic_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
-
-Depends on / 依赖: Pi.mul_def, add_comm, eq_sub_iff_add_eq, h_infty, h_zero, integral_Iic_deriv_mul_eq_sub, integral_add, mul_def, v.add
+--- 原说明 ---
+**Integration by parts on $(∞, a]$.**
+For finite intervals, see: `intervalIntegral.integral_mul_deriv_eq_deriv_mul`.
 -/
 theorem integral_Iic_mul_deriv_eq_deriv_mul
-    (hu : forall x in Iio a, HasDerivAt u (u' x) x) (hv : forall x in Iio a, HasDerivAt v (v' x) x)
+    (hu : ∀ x ∈ Iio a, HasDerivAt u (u' x) x) (hv : ∀ x ∈ Iio a, HasDerivAt v (v' x) x)
     (huv' : IntegrableOn (u * v') (Iic a)) (hu'v : IntegrableOn (u' * v) (Iic a))
     (h_zero : Tendsto (u * v) (𝓝[<] a) (𝓝 a')) (h_infty : Tendsto (u * v) atBot (𝓝 b')) :
-    ∫ (x : Real) in Iic a, u x * v' x = a' - b' - ∫ (x : Real) in Iic a, u' x * v x := by
+    ∫ (x : ℝ) in Iic a, u x * v' x = a' - b' - ∫ (x : ℝ) in Iic a, u' x * v x := by
   rw [Pi.mul_def] at huv' hu'v
-  rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
+  rw [eq_sub_iff_add_eq, ← integral_add huv' hu'v]
   simpa only [add_comm] using integral_Iic_deriv_mul_eq_sub hu hv (hu'v.add huv') h_zero h_infty
 
 end IntegrationByPartsAlgebra
 
 end MeasureTheory
+

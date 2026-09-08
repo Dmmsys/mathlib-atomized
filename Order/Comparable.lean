@@ -45,342 +45,168 @@ variable {α : Type*} {a b c d : α}
 
 section Relation
 
-variable {r : α -> α -> Prop}
+variable {r : α → α → Prop}
 
 /-- The comparability relation `CompRel r a b` means that either `r a b` or `r b a`. -/
 @[deprecated SymmGen (since := "2026-01-25")]
-/--
-Definition of `CompRel` / `CompRel` 的定义
+/-
+**CompRel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CompRel (r : α -> α -> Prop) (a b : α) : Prop
+参数：r : α -> α -> Prop；a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CompRel
-  signature: (r : α -> α -> Prop) (a b : α)
-  body: r a b ∨ r b a
-
-@[deprecated SymmGen.of_rel (since := "2026-01-25")]
-
-中文:
-定义 CompRel
-  签名: (r : α -> α -> 命题) (a b : α)
-  定义体: r a b ∨ r b a
-
-@[deprecated SymmGen.of_rel (since := "2026-01-25")]
+--- 原说明 ---
+The comparability relation `CompRel r a b` means that either `r a b` or `r b a`.
 -/
-def CompRel (r : α -> α -> Prop) (a b : α) : Prop :=
+def CompRel (r : α → α → Prop) (a b : α) : Prop :=
   r a b ∨ r b a
 
 @[deprecated SymmGen.of_rel (since := "2026-01-25")]
-/--
-theorem `CompRel.of_rel` / 定理 `CompRel.of_rel`
-
-English:
-theorem CompRel.of_rel
-  given: (h : r a b)
-  statement: CompRel r a b
-  proof: SymmGen.of_rel h
-
-@[deprecated SymmGen.of_rel_symm (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_rel
-  条件: (h : r a b)
-  结论: CompRel r a b
-  证明: SymmGen.of_rel h
-
-@[deprecated SymmGen.of_rel_symm (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_rel, of_rel
+/-
+**CompRel.of_rel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_rel (h : r a b) : CompRel r a b
+参数：h : r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_rel`：of_rel (h : r a b) : SymmGen r a b
 -/
 theorem CompRel.of_rel (h : r a b) : CompRel r a b :=
   SymmGen.of_rel h
 
 @[deprecated SymmGen.of_rel_symm (since := "2026-01-25")]
-/--
-theorem `CompRel.of_rel_symm` / 定理 `CompRel.of_rel_symm`
-
-English:
-theorem CompRel.of_rel_symm
-  given: (h : r b a)
-  statement: CompRel r a b
-  proof: SymmGen.of_rel_symm h
-
-@[deprecated symmGen_swap (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_rel_symm
-  条件: (h : r b a)
-  结论: CompRel r a b
-  证明: SymmGen.of_rel_symm h
-
-@[deprecated symmGen_swap (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_rel_symm, of_rel_symm
+/-
+**CompRel.of_rel_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_rel_symm (h : r b a) : CompRel r a b
+参数：h : r b a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_rel_symm`：of_rel_symm (h : r b a) : SymmGen r a b
 -/
 theorem CompRel.of_rel_symm (h : r b a) : CompRel r a b :=
   SymmGen.of_rel_symm h
 
 @[deprecated symmGen_swap (since := "2026-01-25")]
-/--
-theorem `compRel_swap` / 定理 `compRel_swap`
-
-English:
-theorem compRel_swap
-  given: (r : α -> α -> Prop)
-  statement: CompRel (swap r) = CompRel r
-  proof: symmGen_swap r
-
-@[deprecated symmGen_swap_apply (since := "2026-01-25")]
-
-中文:
-定理 compRel_swap
-  条件: (r : α -> α -> 命题)
-  结论: CompRel (swap r) = CompRel r
-  证明: symmGen_swap r
-
-@[deprecated symmGen_swap_apply (since := "2026-01-25")]
-
-Depends on / 依赖: symmGen_swap
+/-
+**compRel_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：compRel_swap (r : α -> α -> Prop) : CompRel (swap r) = CompRel r
+参数：r : α -> α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.symmGen_swap`：symmGen_swap (r : α -> α -> Prop) : SymmGen (swap
+ r) = SymmGen r
 -/
-theorem compRel_swap (r : α -> α -> Prop) : CompRel (swap r) = CompRel r :=
+theorem compRel_swap (r : α → α → Prop) : CompRel (swap r) = CompRel r :=
   symmGen_swap r
 
 @[deprecated symmGen_swap_apply (since := "2026-01-25")]
-/--
-theorem `compRel_swap_apply` / 定理 `compRel_swap_apply`
-
-English:
-theorem compRel_swap_apply
-  given: (r : α -> α -> Prop)
-  statement: CompRel (swap r) a b ↔ CompRel r a b
-  proof: symmGen_swap_apply r
-
-@[simp, refl, deprecated SymmGen.refl (since := "2026-01-25")]
-
-中文:
-定理 compRel_swap_apply
-  条件: (r : α -> α -> 命题)
-  结论: CompRel (swap r) a b ↔ CompRel r a b
-  证明: symmGen_swap_apply r
-
-@[simp, refl, deprecated SymmGen.refl (since := "2026-01-25")]
-
-Depends on / 依赖: symmGen_swap_apply
+/-
+**compRel_swap_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：compRel_swap_apply (r : α -> α -> Prop) : CompRel (swap r) a b ↔ CompRel r
+ a b
+参数：r : α -> α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.symmGen_swap_apply`：symmGen_swap_apply (r : α -> α -> Prop) : S
+ymmGen (swap r) a b ↔ SymmGen r a b
 -/
-theorem compRel_swap_apply (r : α -> α -> Prop) : CompRel (swap r) a b ↔ CompRel r a b :=
+theorem compRel_swap_apply (r : α → α → Prop) : CompRel (swap r) a b ↔ CompRel r a b :=
   symmGen_swap_apply r
 
 @[simp, refl, deprecated SymmGen.refl (since := "2026-01-25")]
-/--
-theorem `CompRel.refl` / 定理 `CompRel.refl`
-
-English:
-theorem CompRel.refl
-  given: (r : α -> α -> Prop) [Std.Refl r] (a : α)
-  statement: CompRel r a a
-  proof: SymmGen.refl r a
-
-@[deprecated SymmGen.rfl (since := "2026-01-25")]
-
-中文:
-定理 CompRel.refl
-  条件: (r : α -> α -> 命题) [Std.Refl r] (a : α)
-  结论: CompRel r a a
-  证明: SymmGen.refl r a
-
-@[deprecated SymmGen.rfl (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.refl
+/-
+**CompRel.refl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.refl (r : α -> α -> Prop) [Std.Refl r] (a : α) : CompRel r a a
+参数：r : α -> α -> Prop；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.refl`：refl (r : α -> α -> Prop) [Std.Refl r] (a : α) : 
+SymmGen r a a
 -/
-theorem CompRel.refl (r : α -> α -> Prop) [Std.Refl r] (a : α) : CompRel r a a :=
+theorem CompRel.refl (r : α → α → Prop) [Std.Refl r] (a : α) : CompRel r a a :=
   SymmGen.refl r a
 
 @[deprecated SymmGen.rfl (since := "2026-01-25")]
-/--
-theorem `CompRel.rfl` / 定理 `CompRel.rfl`
-
-English:
-theorem CompRel.rfl
-  given: [Std.Refl r]
-  statement: CompRel r a a
-  proof: SymmGen.rfl
-
-@[deprecated SymmGen.instRefl (since := "2026-01-25")]
-
-中文:
-定理 CompRel.rfl
-  条件: [Std.Refl r]
-  结论: CompRel r a a
-  证明: SymmGen.rfl
-
-@[deprecated SymmGen.instRefl (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.rfl
+/-
+**CompRel.rfl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.rfl [Std.Refl r] : CompRel r a a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.rfl`：rfl [Std.Refl r] : SymmGen r a a
 -/
 theorem CompRel.rfl [Std.Refl r] : CompRel r a a := SymmGen.rfl
 
 @[deprecated SymmGen.instRefl (since := "2026-01-25")]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Refl
-  signature: r] : Std.Refl (CompRel r)
-  body: SymmGen.instRefl
-
-@[symm, deprecated SymmGen.symm (since := "2026-01-25")]
-
-中文:
-实例 [Std.Refl
-  签名: r] : Std.Refl (CompRel r)
-  定义体: SymmGen.instRefl
-
-@[symm, deprecated SymmGen.symm (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.instRefl, instRefl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Std.Refl r] : Std.Refl (CompRel r) :=
   SymmGen.instRefl
 
 @[symm, deprecated SymmGen.symm (since := "2026-01-25")]
-/--
-theorem `CompRel.symm` / 定理 `CompRel.symm`
-
-English:
-theorem CompRel.symm
-  statement: CompRel r a b -> CompRel r b a
-  proof: SymmGen.symm
-
-@[deprecated SymmGen.instSymm (since := "2026-01-25")]
-
-中文:
-定理 CompRel.symm
-  结论: CompRel r a b -> CompRel r b a
-  证明: SymmGen.symm
-
-@[deprecated SymmGen.instSymm (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.symm
+/-
+**CompRel.symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.symm : CompRel r a b -> CompRel r b a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.symm`：symm : SymmGen r a b -> SymmGen r b a
 -/
-theorem CompRel.symm : CompRel r a b -> CompRel r b a :=
+theorem CompRel.symm : CompRel r a b → CompRel r b a :=
   SymmGen.symm
 
 @[deprecated SymmGen.instSymm (since := "2026-01-25")]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.Symm (CompRel r)
-  body: SymmGen.instSymm
-
-@[deprecated symmGen_comm (since := "2026-01-25")]
-
-中文:
-实例 :
-  签名: Std.Symm (CompRel r)
-  定义体: SymmGen.instSymm
-
-@[deprecated symmGen_comm (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.instSymm, instSymm
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.Symm (CompRel r) :=
   SymmGen.instSymm
 
 @[deprecated symmGen_comm (since := "2026-01-25")]
-/--
-theorem `compRel_comm` / 定理 `compRel_comm`
-
-English:
-theorem compRel_comm
-  given: {a b : α}
-  statement: CompRel r a b ↔ CompRel r b a
-  proof: symmGen_comm
-
-@[deprecated SymmGen.decidableRel (since := "2026-01-25")]
-
-中文:
-定理 compRel_comm
-  条件: {a b : α}
-  结论: CompRel r a b ↔ CompRel r b a
-  证明: symmGen_comm
-
-@[deprecated SymmGen.decidableRel (since := "2026-01-25")]
-
-Depends on / 依赖: symmGen_comm
+/-
+**compRel_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：compRel_comm {a b : α} : CompRel r a b ↔ CompRel r b a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.symmGen_comm`：symmGen_comm {a b : α} : SymmGen r a b ↔ SymmGen 
+r b a
 -/
 theorem compRel_comm {a b : α} : CompRel r a b ↔ CompRel r b a :=
   symmGen_comm
 
 @[deprecated SymmGen.decidableRel (since := "2026-01-25")]
-/--
-Instance `CompRel.decidableRel` / 实例 `CompRel.decidableRel`
-
-English:
-instance CompRel.decidableRel
-  signature: [DecidableRel r]
-  body: SymmGen.decidableRel
-
-@[deprecated AntisymmRel.symmGen (since := "2026-01-25")]
-
-中文:
-实例 CompRel.decidableRel
-  签名: [DecidableRel r]
-  定义体: SymmGen.decidableRel
-
-@[deprecated AntisymmRel.symmGen (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.decidableRel, decidableRel
+/-
+**CompRel.decidableRel** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CompRel.decidableRel [DecidableRel r] : DecidableRel (CompRel r)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance CompRel.decidableRel [DecidableRel r] : DecidableRel (CompRel r) :=
   SymmGen.decidableRel
 
 @[deprecated AntisymmRel.symmGen (since := "2026-01-25")]
-/--
-theorem `AntisymmRel.compRel` / 定理 `AntisymmRel.compRel`
-
-English:
-theorem AntisymmRel.compRel
-  given: (h : AntisymmRel r a b)
-  statement: CompRel r a b
-  proof: AntisymmRel.symmGen h
-
-@[simp, deprecated symmGen_of_total (since := "2026-01-25")]
-
-中文:
-定理 AntisymmRel.compRel
-  条件: (h : AntisymmRel r a b)
-  结论: CompRel r a b
-  证明: AntisymmRel.symmGen h
-
-@[simp, deprecated symmGen_of_total (since := "2026-01-25")]
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.symmGen, symmGen
+/-
+**AntisymmRel.compRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.compRel (h : AntisymmRel r a b) : CompRel r a b
+参数：h : AntisymmRel r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.symmGen`：AntisymmRel.symmGen (h : AntisymmRel r a b) : SymmG
+en r a b
 -/
 theorem AntisymmRel.compRel (h : AntisymmRel r a b) : CompRel r a b :=
   AntisymmRel.symmGen h
 
 @[simp, deprecated symmGen_of_total (since := "2026-01-25")]
-/--
-theorem `compRel_of_total` / 定理 `compRel_of_total`
-
-English:
-theorem compRel_of_total
-  given: [Std.Total r] (a b : α)
-  statement: CompRel r a b
-  proof: symmGen_of_total a b
-
-@[deprecated (since := "2026-01-13")] alias IsTotal.compRel := symmGen_of_total
-
-中文:
-定理 compRel_of_total
-  条件: [Std.全 r] (a b : α)
-  结论: CompRel r a b
-  证明: symmGen_of_total a b
-
-@[deprecated (since := "2026-01-13")] alias IsTotal.compRel := symmGen_of_total
-
-Depends on / 依赖: symmGen_of_total
+/-
+**compRel_of_total** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：compRel_of_total [Std.Total r] (a b : α) : CompRel r a b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.symmGen_of_total`：symmGen_of_total [Std.Total r] (a b : α) : Sy
+mmGen r a b
 -/
 theorem compRel_of_total [Std.Total r] (a b : α) : CompRel r a b :=
   symmGen_of_total a b
@@ -394,54 +220,28 @@ section LE
 variable [LE α]
 
 @[deprecated SymmGen.of_le (since := "2026-01-25")]
-/--
-theorem `CompRel.of_le` / 定理 `CompRel.of_le`
-
-English:
-theorem CompRel.of_le
-  given: (h : a <= b)
-  statement: CompRel (· <= ·) a b
-  proof: SymmGen.of_le h
-
-@[deprecated SymmGen.of_ge (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_le
-  条件: (h : a <= b)
-  结论: CompRel (· <= ·) a b
-  证明: SymmGen.of_le h
-
-@[deprecated SymmGen.of_ge (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_le, of_le
+/-
+**CompRel.of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_le (h : a <= b) : CompRel (· <= ·) a b
+参数：h : a <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_le`：of_le {α : Type*} [LE α] {a b : α} (h : a <= b) 
+: SymmGen (· <= ·) a b
 -/
-theorem CompRel.of_le (h : a <= b) : CompRel (· <= ·) a b := SymmGen.of_le h
+theorem CompRel.of_le (h : a ≤ b) : CompRel (· ≤ ·) a b := SymmGen.of_le h
 
 @[deprecated SymmGen.of_ge (since := "2026-01-25")]
-/--
-theorem `CompRel.of_ge` / 定理 `CompRel.of_ge`
-
-English:
-theorem CompRel.of_ge
-  given: (h : b <= a)
-  statement: CompRel (· <= ·) a b
-  proof: SymmGen.of_ge h
-
-alias LE.le.compRel := CompRel.of_le
-alias LE.le.compRel_symm := CompRel.of_ge
-
-中文:
-定理 CompRel.of_ge
-  条件: (h : b <= a)
-  结论: CompRel (· <= ·) a b
-  证明: SymmGen.of_ge h
-
-alias LE.le.compRel := CompRel.of_le
-alias LE.le.compRel_symm := CompRel.of_ge
-
-Depends on / 依赖: SymmGen, SymmGen.of_ge, of_ge
+/-
+**CompRel.of_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_ge (h : b <= a) : CompRel (· <= ·) a b
+参数：h : b <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_ge`：of_ge {α : Type*} [LE α] {a b : α} (h : b <= a) 
+: SymmGen (· <= ·) a b
 -/
-theorem CompRel.of_ge (h : b <= a) : CompRel (· <= ·) a b := SymmGen.of_ge h
+theorem CompRel.of_ge (h : b ≤ a) : CompRel (· ≤ ·) a b := SymmGen.of_ge h
 
 alias LE.le.compRel := CompRel.of_le
 alias LE.le.compRel_symm := CompRel.of_ge
@@ -453,255 +253,148 @@ section Preorder
 variable [Preorder α]
 
 @[deprecated SymmGen.of_lt (since := "2026-01-25")]
-/--
-theorem `CompRel.of_lt` / 定理 `CompRel.of_lt`
-
-English:
-theorem CompRel.of_lt
-  given: (h : a < b)
-  statement: CompRel (· <= ·) a b
-  proof: SymmGen.of_lt h
-
-@[deprecated SymmGen.of_gt (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_lt
-  条件: (h : a < b)
-  结论: CompRel (· <= ·) a b
-  证明: SymmGen.of_lt h
-
-@[deprecated SymmGen.of_gt (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_lt, of_lt
+/-
+**CompRel.of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_lt (h : a < b) : CompRel (· <= ·) a b
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_lt`：Relation.SymmGen.of_lt (h : a < b) : SymmGen (· 
+<= ·) a b
 -/
-theorem CompRel.of_lt (h : a < b) : CompRel (· <= ·) a b := SymmGen.of_lt h
+theorem CompRel.of_lt (h : a < b) : CompRel (· ≤ ·) a b := SymmGen.of_lt h
 
 @[deprecated SymmGen.of_gt (since := "2026-01-25")]
-/--
-theorem `CompRel.of_gt` / 定理 `CompRel.of_gt`
-
-English:
-theorem CompRel.of_gt
-  given: (h : b < a)
-  statement: CompRel (· <= ·) a b
-  proof: SymmGen.of_gt h
-
-alias LT.lt.compRel := CompRel.of_lt
-alias LT.lt.compRel_symm := CompRel.of_gt
-
-@[trans, deprecated SymmGen.of_symmGen_of_antisymmRel (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_gt
-  条件: (h : b < a)
-  结论: CompRel (· <= ·) a b
-  证明: SymmGen.of_gt h
-
-alias LT.lt.compRel := CompRel.of_lt
-alias LT.lt.compRel_symm := CompRel.of_gt
-
-@[trans, deprecated SymmGen.of_symmGen_of_antisymmRel (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_gt, of_gt
+/-
+**CompRel.of_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_gt (h : b < a) : CompRel (· <= ·) a b
+参数：h : b < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_gt`：Relation.SymmGen.of_gt (h : b < a) : SymmGen (· 
+<= ·) a b
 -/
-theorem CompRel.of_gt (h : b < a) : CompRel (· <= ·) a b := SymmGen.of_gt h
+theorem CompRel.of_gt (h : b < a) : CompRel (· ≤ ·) a b := SymmGen.of_gt h
 
 alias LT.lt.compRel := CompRel.of_lt
 alias LT.lt.compRel_symm := CompRel.of_gt
 
 @[trans, deprecated SymmGen.of_symmGen_of_antisymmRel (since := "2026-01-25")]
-/--
-theorem `CompRel.of_compRel_of_antisymmRel` / 定理 `CompRel.of_compRel_of_antisymmRel`
-
-English:
-theorem CompRel.of_compRel_of_antisymmRel
-  proof: SymmGen.of_symmGen_of_antisymmRel h₁ h₂
-
-alias CompRel.trans_antisymmRel := CompRel.of_compRel_of_antisymmRel
-
-@[deprecated instTransSymmGenLeAntisymmRel (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_compRel_of_antisymmRel
-  证明: SymmGen.of_symmGen_of_antisymmRel h₁ h₂
-
-alias CompRel.trans_antisymmRel := CompRel.of_compRel_of_antisymmRel
-
-@[deprecated instTransSymmGenLeAntisymmRel (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_symmGen_of_antisymmRel, of_symmGen_of_antisymmRel
+/-
+**CompRel.of_compRel_of_antisymmRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_compRel_of_antisymmRel (h₁ : CompRel (· <= ·) a b) (h₂ : Antisy
+mmRel (· <= ·) b c) : CompRel (· <= ·) a c
+参数：h₁ : CompRel (· <= ·) a b；h₂ : AntisymmRel (· <= ·) b c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_symmGen_of_antisymmRel`：Relation.SymmGen.of_symmGen_
+of_antisymmRel (h₁ : SymmGen (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) b c) : Sym
+mGen (· <= ·) a c
 -/
 theorem CompRel.of_compRel_of_antisymmRel
-    (h₁ : CompRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) b c) : CompRel (· <= ·) a c :=
+    (h₁ : CompRel (· ≤ ·) a b) (h₂ : AntisymmRel (· ≤ ·) b c) : CompRel (· ≤ ·) a c :=
   SymmGen.of_symmGen_of_antisymmRel h₁ h₂
 
 alias CompRel.trans_antisymmRel := CompRel.of_compRel_of_antisymmRel
 
 @[deprecated instTransSymmGenLeAntisymmRel (since := "2026-01-25")]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Trans α α α (CompRel (· <= ·)) (AntisymmRel (· <= ·)) (CompRel (· <= ·))
-  body: instTransSymmGenLeAntisymmRel
-
-@[trans, deprecated SymmGen.of_antisymmRel_of_symmGen (since := "2026-01-25")]
-
-中文:
-实例 :
-  签名: @Trans α α α (CompRel (· <= ·)) (AntisymmRel (· <= ·)) (CompRel (· <= ·))
-  定义体: instTransSymmGenLeAntisymmRel
-
-@[trans, deprecated SymmGen.of_antisymmRel_of_symmGen (since := "2026-01-25")]
-
-Depends on / 依赖: instTransSymmGenLeAntisymmRel
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : @Trans α α α (CompRel (· <= ·)) (AntisymmRel (· <= ·)) (CompRel (· <= ·)) :=
+instance : @Trans α α α (CompRel (· ≤ ·)) (AntisymmRel (· ≤ ·)) (CompRel (· ≤ ·)) :=
   instTransSymmGenLeAntisymmRel
 
 @[trans, deprecated SymmGen.of_antisymmRel_of_symmGen (since := "2026-01-25")]
-/--
-theorem `CompRel.of_antisymmRel_of_compRel` / 定理 `CompRel.of_antisymmRel_of_compRel`
-
-English:
-theorem CompRel.of_antisymmRel_of_compRel
-  proof: SymmGen.of_antisymmRel_of_symmGen h₁ h₂
-
-alias AntisymmRel.trans_compRel := CompRel.of_antisymmRel_of_compRel
-@[deprecated instTransAntisymmRelLeSymmGen (since := "2026-01-25")]
-
-中文:
-定理 CompRel.of_antisymmRel_of_compRel
-  证明: SymmGen.of_antisymmRel_of_symmGen h₁ h₂
-
-alias AntisymmRel.trans_compRel := CompRel.of_antisymmRel_of_compRel
-@[deprecated instTransAntisymmRelLeSymmGen (since := "2026-01-25")]
-
-Depends on / 依赖: SymmGen, SymmGen.of_antisymmRel_of_symmGen, of_antisymmRel_of_symmGen
+/-
+**CompRel.of_antisymmRel_of_compRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompRel.of_antisymmRel_of_compRel (h₁ : AntisymmRel (· <= ·) a b) (h₂ : Co
+mpRel (· <= ·) b c) : CompRel (· <= ·) a c
+参数：h₁ : AntisymmRel (· <= ·) a b；h₂ : CompRel (· <= ·) b c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.SymmGen.of_antisymmRel_of_symmGen`：Relation.SymmGen.of_antisymm
+Rel_of_symmGen (h₁ : AntisymmRel (· <= ·) a b) (h₂ : SymmGen (· <= ·) b c) : Sym
+mGen (· <= ·) a c
 -/
 theorem CompRel.of_antisymmRel_of_compRel
-    (h₁ : AntisymmRel (· <= ·) a b) (h₂ : CompRel (· <= ·) b c) : CompRel (· <= ·) a c :=
+    (h₁ : AntisymmRel (· ≤ ·) a b) (h₂ : CompRel (· ≤ ·) b c) : CompRel (· ≤ ·) a c :=
   SymmGen.of_antisymmRel_of_symmGen h₁ h₂
 
 alias AntisymmRel.trans_compRel := CompRel.of_antisymmRel_of_compRel
 @[deprecated instTransAntisymmRelLeSymmGen (since := "2026-01-25")]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Trans α α α (AntisymmRel (· <= ·)) (CompRel (· <= ·)) (CompRel (· <= ·))
-  body: instTransAntisymmRelLeSymmGen
-
-@[deprecated AntisymmRel.symmGen_congr (since := "2026-01-25")]
-
-中文:
-实例 :
-  签名: @Trans α α α (AntisymmRel (· <= ·)) (CompRel (· <= ·)) (CompRel (· <= ·))
-  定义体: instTransAntisymmRelLeSymmGen
-
-@[deprecated AntisymmRel.symmGen_congr (since := "2026-01-25")]
-
-Depends on / 依赖: instTransAntisymmRelLeSymmGen
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : @Trans α α α (AntisymmRel (· <= ·)) (CompRel (· <= ·)) (CompRel (· <= ·)) :=
+instance : @Trans α α α (AntisymmRel (· ≤ ·)) (CompRel (· ≤ ·)) (CompRel (· ≤ ·)) :=
   instTransAntisymmRelLeSymmGen
 
 @[deprecated AntisymmRel.symmGen_congr (since := "2026-01-25")]
-/--
-theorem `AntisymmRel.compRel_congr` / 定理 `AntisymmRel.compRel_congr`
-
-English:
-theorem AntisymmRel.compRel_congr
-  given: (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d)
-  proof: AntisymmRel.symmGen_congr h₁ h₂
-
-@[deprecated AntisymmRel.symmGen_congr_left (since := "2026-01-25")]
-
-中文:
-定理 AntisymmRel.compRel_congr
-  条件: (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d)
-  证明: AntisymmRel.symmGen_congr h₁ h₂
-
-@[deprecated AntisymmRel.symmGen_congr_left (since := "2026-01-25")]
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.symmGen_congr, symmGen_congr
+/-
+**AntisymmRel.compRel_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.compRel_congr (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRe
+l (· <= ·) c d) : CompRel (· <= ·) a c ↔ CompRel (· <= ·) b d
+参数：h₁ : AntisymmRel (· <= ·) a b；h₂ : AntisymmRel (· <= ·) c d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.symmGen_congr`：AntisymmRel.symmGen_congr (h₁ : AntisymmRel (
+· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d) : SymmGen (· <= ·) a c ↔ SymmGen (·
+ <= ·) b d wher…
 -/
-theorem AntisymmRel.compRel_congr (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d) :
-    CompRel (· <= ·) a c ↔ CompRel (· <= ·) b d :=
+theorem AntisymmRel.compRel_congr (h₁ : AntisymmRel (· ≤ ·) a b) (h₂ : AntisymmRel (· ≤ ·) c d) :
+    CompRel (· ≤ ·) a c ↔ CompRel (· ≤ ·) b d :=
   AntisymmRel.symmGen_congr h₁ h₂
 
 @[deprecated AntisymmRel.symmGen_congr_left (since := "2026-01-25")]
-/--
-theorem `AntisymmRel.compRel_congr_left` / 定理 `AntisymmRel.compRel_congr_left`
-
-English:
-theorem AntisymmRel.compRel_congr_left
-  given: (h : AntisymmRel (· <= ·) a b)
-  proof: AntisymmRel.symmGen_congr_left h
-
-@[deprecated AntisymmRel.symmGen_congr_right (since := "2026-01-25")]
-
-中文:
-定理 AntisymmRel.compRel_congr_left
-  条件: (h : AntisymmRel (· <= ·) a b)
-  证明: AntisymmRel.symmGen_congr_left h
-
-@[deprecated AntisymmRel.symmGen_congr_right (since := "2026-01-25")]
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.symmGen_congr_left, symmGen_congr_left
+/-
+**AntisymmRel.compRel_congr_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.compRel_congr_left (h : AntisymmRel (· <= ·) a b) : CompRel (·
+ <= ·) a c ↔ CompRel (· <= ·) b c
+参数：h : AntisymmRel (· <= ·) a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.symmGen_congr_left`：AntisymmRel.symmGen_congr_left (h : Anti
+symmRel (· <= ·) a b) : SymmGen (· <= ·) a c ↔ SymmGen (· <= ·) b c
 -/
-theorem AntisymmRel.compRel_congr_left (h : AntisymmRel (· <= ·) a b) :
-    CompRel (· <= ·) a c ↔ CompRel (· <= ·) b c :=
+theorem AntisymmRel.compRel_congr_left (h : AntisymmRel (· ≤ ·) a b) :
+    CompRel (· ≤ ·) a c ↔ CompRel (· ≤ ·) b c :=
   AntisymmRel.symmGen_congr_left h
 
 @[deprecated AntisymmRel.symmGen_congr_right (since := "2026-01-25")]
-/--
-theorem `AntisymmRel.compRel_congr_right` / 定理 `AntisymmRel.compRel_congr_right`
-
-English:
-theorem AntisymmRel.compRel_congr_right
-  given: (h : AntisymmRel (· <= ·) b c)
-  proof: AntisymmRel.symmGen_congr_right h
-
-中文:
-定理 AntisymmRel.compRel_congr_right
-  条件: (h : AntisymmRel (· <= ·) b c)
-  证明: AntisymmRel.symmGen_congr_right h
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.symmGen_congr_right, symmGen_congr_right
+/-
+**AntisymmRel.compRel_congr_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.compRel_congr_right (h : AntisymmRel (· <= ·) b c) : CompRel (
+· <= ·) a b ↔ CompRel (· <= ·) a c
+参数：h : AntisymmRel (· <= ·) b c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.symmGen_congr_right`：AntisymmRel.symmGen_congr_right (h : An
+tisymmRel (· <= ·) b c) : SymmGen (· <= ·) a b ↔ SymmGen (· <= ·) a c
 -/
-theorem AntisymmRel.compRel_congr_right (h : AntisymmRel (· <= ·) b c) :
-    CompRel (· <= ·) a b ↔ CompRel (· <= ·) a c :=
+theorem AntisymmRel.compRel_congr_right (h : AntisymmRel (· ≤ ·) b c) :
+    CompRel (· ≤ ·) a b ↔ CompRel (· ≤ ·) a c :=
   AntisymmRel.symmGen_congr_right h
 
 end Preorder
 
 /-- A partial order where any two elements are comparable is a linear order. -/
 @[instance_reducible]
-/--
-Definition of `Relation.linearOrderOfSymmGen` / `Relation.linearOrderOfSymmGen` 的定义
+/-
+**Relation.linearOrderOfSymmGen** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Relation.linearOrderOfSymmGen [PartialOrder α] [decLE : DecidableLE α] [de
+cLT : DecidableLT α] [decEq : DecidableEq α] (h : forall a b : α, Relation.SymmG
+en (· <= ·) a b) : LinearOrder α where le_total
+参数：h : forall a b : α, Relation.SymmGen (· <= ·) a b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Relation.linearOrderOfSymmGen
-  signature: [PartialOrder α]
-  body: h
-  toDecidableLE := decLE
-  toDecidableEq := decEq
-  toDecidableLT := decLT
-
-中文:
-定义 关系.linearOrderOfSymmGen
-  签名: [偏序 α]
-  定义体: h
-  toDecidableLE := decLE
-  toDecidableEq := decEq
-  toDecidableLT := decLT
+--- 原说明 ---
+A partial order where any two elements are comparable is a linear order.
 -/
 def Relation.linearOrderOfSymmGen [PartialOrder α]
     [decLE : DecidableLE α] [decLT : DecidableLT α] [decEq : DecidableEq α]
-    (h : forall a b : α, Relation.SymmGen (· <= ·) a b) : LinearOrder α where
+    (h : ∀ a b : α, Relation.SymmGen (· ≤ ·) a b) : LinearOrder α where
   le_total := h
   toDecidableLE := decLE
   toDecidableEq := decEq
@@ -709,488 +402,289 @@ def Relation.linearOrderOfSymmGen [PartialOrder α]
 
 /-- A partial order where any two elements are comparable is a linear order. -/
 @[deprecated linearOrderOfSymmGen (since := "2026-01-25"), instance_reducible]
-/--
-Definition of `linearOrderOfComprel` / `linearOrderOfComprel` 的定义
+/-
+**linearOrderOfComprel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：linearOrderOfComprel [PartialOrder α] [decLE : DecidableLE α] [decLT : Dec
+idableLT α] [decEq : DecidableEq α] (h : forall a b : α, CompRel (· <= ·) a b) :
+ LinearOrder α
+参数：h : forall a b : α, CompRel (· <= ·) a b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearOrderOfComprel
-  signature: [PartialOrder α]
-  body: linearOrderOfSymmGen h
-
-中文:
-定义 linearOrderOfComprel
-  签名: [偏序 α]
-  定义体: linearOrderOfSymmGen h
-
-Depends on / 依赖: linearOrderOfSymmGen
+--- 原说明 ---
+A partial order where any two elements are comparable is a linear order.
 -/
 def linearOrderOfComprel [PartialOrder α]
     [decLE : DecidableLE α] [decLT : DecidableLT α] [decEq : DecidableEq α]
-    (h : forall a b : α, CompRel (· <= ·) a b) : LinearOrder α :=
+    (h : ∀ a b : α, CompRel (· ≤ ·) a b) : LinearOrder α :=
   linearOrderOfSymmGen h
 
 /-! ### Incomparability relation -/
 
 section Relation
 
-variable (r : α -> α -> Prop)
+variable (r : α → α → Prop)
 
-/--
-Definition of `IncompRel` / `IncompRel` 的定义
+/-- The incomparability relation `IncompRel r a b` means `¬ r a b` and `¬ r b a`. -/
+/-
+**IncompRel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IncompRel (a b : α) : Prop
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IncompRel
-  signature: (a b : α)
-  body: ¬ r a b ∧ ¬ r b a
-
-@[simp]
-
-中文:
-定义 IncompRel
-  签名: (a b : α)
-  定义体: ¬ r a b ∧ ¬ r b a
-
-@[simp]
+--- 原说明 ---
+The incomparability relation `IncompRel r a b` means `¬ r a b` and `¬ r b a`.
 -/
 def IncompRel (a b : α) : Prop :=
   ¬ r a b ∧ ¬ r b a
 
 @[simp]
-/--
-theorem `antisymmRel_compl` / 定理 `antisymmRel_compl`
-
-English:
-theorem antisymmRel_compl
-  statement: AntisymmRel rᶜ = IncompRel r
-  proof: rfl
-
-中文:
-定理 antisymmRel_compl
-  结论: AntisymmRel rᶜ = IncompRel r
-  证明: rfl
+/-
+**antisymmRel_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antisymmRel_compl : AntisymmRel rᶜ = IncompRel r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem antisymmRel_compl : AntisymmRel rᶜ = IncompRel r :=
   rfl
-
-/--
-theorem `antisymmRel_compl_apply` / 定理 `antisymmRel_compl_apply`
-
-English:
-theorem antisymmRel_compl_apply
-  statement: AntisymmRel rᶜ a b ↔ IncompRel r a b
-  proof: .rfl
-
-@[simp]
-
-中文:
-定理 antisymmRel_compl_apply
-  结论: AntisymmRel rᶜ a b ↔ IncompRel r a b
-  证明: .rfl
-
-@[simp]
+/-
+**antisymmRel_compl_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antisymmRel_compl_apply : AntisymmRel rᶜ a b ↔ IncompRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem antisymmRel_compl_apply : AntisymmRel rᶜ a b ↔ IncompRel r a b :=
   .rfl
 
 @[simp]
-/--
-theorem `incompRel_compl` / 定理 `incompRel_compl`
-
-English:
-theorem incompRel_compl
-  statement: IncompRel rᶜ = AntisymmRel r
-  proof: by
-  simp [← antisymmRel_compl, compl]
-
-@[simp]
-
-中文:
-定理 incompRel_compl
-  结论: IncompRel rᶜ = AntisymmRel r
-  证明: by
-  simp [← antisymmRel_compl, compl]
-
-@[simp]
-
-Depends on / 依赖: antisymmRel_compl
+/-
+**incompRel_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_compl : IncompRel rᶜ = AntisymmRel r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem incompRel_compl : IncompRel rᶜ = AntisymmRel r := by
   simp [← antisymmRel_compl, compl]
 
 @[simp]
-/--
-theorem `incompRel_compl_apply` / 定理 `incompRel_compl_apply`
-
-English:
-theorem incompRel_compl_apply
-  statement: IncompRel rᶜ a b ↔ AntisymmRel r a b
-  proof: by
-  simp
-
-中文:
-定理 incompRel_compl_apply
-  结论: IncompRel rᶜ a b ↔ AntisymmRel r a b
-  证明: by
-  simp
+/-
+**incompRel_compl_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_compl_apply : IncompRel rᶜ a b ↔ AntisymmRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `incompRel_compl`：incompRel_compl : IncompRel rᶜ = AntisymmRel r
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem incompRel_compl_apply : IncompRel rᶜ a b ↔ AntisymmRel r a b := by
   simp
-
-/--
-theorem `incompRel_swap` / 定理 `incompRel_swap`
-
-English:
-theorem incompRel_swap
-  statement: IncompRel (swap r) = IncompRel r
-  proof: antisymmRel_swap rᶜ
-
-中文:
-定理 incompRel_swap
-  结论: IncompRel (swap r) = IncompRel r
-  证明: antisymmRel_swap rᶜ
-
-Depends on / 依赖: antisymmRel_swap
+/-
+**incompRel_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_swap : IncompRel (swap r) = IncompRel r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `antisymmRel_swap`：antisymmRel_swap : AntisymmRel (swap r) = AntisymmRel 
+r
 -/
 theorem incompRel_swap : IncompRel (swap r) = IncompRel r :=
   antisymmRel_swap rᶜ
-
-/--
-theorem `incompRel_swap_apply` / 定理 `incompRel_swap_apply`
-
-English:
-theorem incompRel_swap_apply
-  statement: IncompRel (swap r) a b ↔ IncompRel r a b
-  proof: antisymmRel_swap_apply rᶜ
-
-@[simp, refl]
-
-中文:
-定理 incompRel_swap_apply
-  结论: IncompRel (swap r) a b ↔ IncompRel r a b
-  证明: antisymmRel_swap_apply rᶜ
-
-@[simp, refl]
-
-Depends on / 依赖: antisymmRel_swap_apply
+/-
+**incompRel_swap_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_swap_apply : IncompRel (swap r) a b ↔ IncompRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `antisymmRel_swap_apply`：antisymmRel_swap_apply : AntisymmRel (swap r) a 
+b ↔ AntisymmRel r a b
 -/
 theorem incompRel_swap_apply : IncompRel (swap r) a b ↔ IncompRel r a b :=
   antisymmRel_swap_apply rᶜ
 
 @[simp, refl]
-/--
-theorem `IncompRel.refl` / 定理 `IncompRel.refl`
-
-English:
-theorem IncompRel.refl
-  given: [Std.Irrefl r] (a : α)
-  statement: IncompRel r a a
-  proof: AntisymmRel.refl rᶜ a
-
-中文:
-定理 IncompRel.refl
-  条件: [Std.Irrefl r] (a : α)
-  结论: IncompRel r a a
-  证明: AntisymmRel.refl rᶜ a
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.refl, ConcreteCategory, ConcreteCategory.hom, TopRep
+/-
+**IncompRel.refl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.refl [Std.Irrefl r] (a : α) : IncompRel r a a
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.refl`：AntisymmRel.refl [Std.Refl r] (a : α) : AntisymmRel r 
+a a
 -/
 theorem IncompRel.refl [Std.Irrefl r] (a : α) : IncompRel r a a :=
   AntisymmRel.refl rᶜ a
 
 variable {r}
-
-/--
-theorem `IncompRel.rfl` / 定理 `IncompRel.rfl`
-
-English:
-theorem IncompRel.rfl
-  given: [Std.Irrefl r] {a : α}
-  statement: IncompRel r a a
-  proof: .refl ..
-
-中文:
-定理 IncompRel.rfl
-  条件: [Std.Irrefl r] {a : α}
-  结论: IncompRel r a a
-  证明: .refl ..
+/-
+**IncompRel.rfl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.rfl [Std.Irrefl r] {a : α} : IncompRel r a a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.refl`：IncompRel.refl [Std.Irrefl r] (a : α) : IncompRel r a a
 -/
 theorem IncompRel.rfl [Std.Irrefl r] {a : α} : IncompRel r a a := .refl ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Irrefl
-  signature: r] : Std.Refl (IncompRel r) where
-  body: .refl r
-
-@[symm]
-
-中文:
-实例 [Std.Irrefl
-  签名: r] : Std.Refl (IncompRel r) where
-  定义体: .refl r
-
-@[symm]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Std.Irrefl r] : Std.Refl (IncompRel r) where
   refl := .refl r
 
 @[symm]
-/--
-theorem `IncompRel.symm` / 定理 `IncompRel.symm`
-
-English:
-theorem IncompRel.symm
-  statement: IncompRel r a b -> IncompRel r b a
-  proof: And.symm
-
-中文:
-定理 IncompRel.symm
-  结论: IncompRel r a b -> IncompRel r b a
-  证明: And.symm
-
-Depends on / 依赖: And.symm
+/-
+**IncompRel.symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.symm : IncompRel r a b -> IncompRel r b a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.symm`：∀ {a b : Prop}, a ∧ b → b ∧ a
 -/
-theorem IncompRel.symm : IncompRel r a b -> IncompRel r b a :=
+theorem IncompRel.symm : IncompRel r a b → IncompRel r b a :=
   And.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.Symm (IncompRel r)
-  body: IncompRel.symm
-
-中文:
-实例 :
-  签名: Std.Symm (IncompRel r)
-  定义体: IncompRel.symm
-
-Depends on / 依赖: IncompRel, IncompRel.symm
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.Symm (IncompRel r) where
   symm _ _ := IncompRel.symm
-
-/--
-theorem `incompRel_comm` / 定理 `incompRel_comm`
-
-English:
-theorem incompRel_comm
-  given: {a b : α}
-  statement: IncompRel r a b ↔ IncompRel r b a
-  proof: comm
-
-中文:
-定理 incompRel_comm
-  条件: {a b : α}
-  结论: IncompRel r a b ↔ IncompRel r b a
-  证明: comm
+/-
+**incompRel_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_comm {a b : α} : IncompRel r a b ↔ IncompRel r b a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comm`：comm [Std.Symm r] {a b : α} : r a b ↔ r b a
+· 使用定理 `instSymmIncompRel`：∀ {α : Type u_1} {r : α → α → Prop}, Std.Symm (Incomp
+Rel r)
 -/
 theorem incompRel_comm {a b : α} : IncompRel r a b ↔ IncompRel r b a :=
   comm
-
-/--
-Instance `IncompRel.decidableRel` / 实例 `IncompRel.decidableRel`
-
-English:
-instance IncompRel.decidableRel
-  signature: [DecidableRel r]
-  body: fun _ _ => inferInstanceAs (Decidable (¬ _ ∧ ¬ _))
-
-中文:
-实例 IncompRel.decidableRel
-  签名: [DecidableRel r]
-  定义体: fun _ _ => inferInstanceAs (Decidable (¬ _ ∧ ¬ _))
-
-Depends on / 依赖: Decidable
+/-
+**IncompRel.decidableRel** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IncompRel.decidableRel [DecidableRel r] : DecidableRel (IncompRel r)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IncompRel.decidableRel [DecidableRel r] : DecidableRel (IncompRel r) :=
-  fun _ _ => inferInstanceAs (Decidable (¬ _ ∧ ¬ _))
-
-/--
-theorem `IncompRel.not_antisymmRel` / 定理 `IncompRel.not_antisymmRel`
-
-English:
-theorem IncompRel.not_antisymmRel
-  given: (h : IncompRel r a b)
-  statement: ¬ AntisymmRel r a b
-  proof: fun h' => h.1 h'.1
-
-中文:
-定理 IncompRel.not_antisymmRel
-  条件: (h : IncompRel r a b)
-  结论: ¬ AntisymmRel r a b
-  证明: fun h' => h.1 h'.1
+  fun _ _ ↦ inferInstanceAs (Decidable (¬ _ ∧ ¬ _))
+/-
+**IncompRel.not_antisymmRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.not_antisymmRel (h : IncompRel r a b) : ¬ AntisymmRel r a b
+参数：h : IncompRel r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IncompRel.not_antisymmRel (h : IncompRel r a b) : ¬ AntisymmRel r a b :=
-  fun h' => h.1 h'.1
-
-/--
-theorem `AntisymmRel.not_incompRel` / 定理 `AntisymmRel.not_incompRel`
-
-English:
-theorem AntisymmRel.not_incompRel
-  given: (h : AntisymmRel r a b)
-  statement: ¬ IncompRel r a b
-  proof: fun h' => h'.1 h.1
-
-中文:
-定理 AntisymmRel.not_incompRel
-  条件: (h : AntisymmRel r a b)
-  结论: ¬ IncompRel r a b
-  证明: fun h' => h'.1 h.1
+  fun h' ↦ h.1 h'.1
+/-
+**AntisymmRel.not_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.not_incompRel (h : AntisymmRel r a b) : ¬ IncompRel r a b
+参数：h : AntisymmRel r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem AntisymmRel.not_incompRel (h : AntisymmRel r a b) : ¬ IncompRel r a b :=
-  fun h' => h'.1 h.1
-
-/--
-theorem `not_symmGen_iff` / 定理 `not_symmGen_iff`
-
-English:
-theorem not_symmGen_iff
-  statement: ¬ Relation.SymmGen r a b ↔ IncompRel r a b
-  proof: by
-  simp [Relation.SymmGen, IncompRel]
-
-@[deprecated not_symmGen_iff (since := "2026-01-25")]
-
-中文:
-定理 not_symmGen_iff
-  结论: ¬ 关系.SymmGen r a b ↔ IncompRel r a b
-  证明: by
-  simp [Relation.SymmGen, IncompRel]
-
-@[deprecated not_symmGen_iff (since := "2026-01-25")]
-
-Depends on / 依赖: IncompRel, Relation, Relation.SymmGen, SymmGen
+  fun h' ↦ h'.1 h.1
+/-
+**not_symmGen_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_symmGen_iff : ¬ Relation.SymmGen r a b ↔ IncompRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem not_symmGen_iff : ¬ Relation.SymmGen r a b ↔ IncompRel r a b := by
   simp [Relation.SymmGen, IncompRel]
 
 @[deprecated not_symmGen_iff (since := "2026-01-25")]
-/--
-theorem `not_compRel_iff` / 定理 `not_compRel_iff`
-
-English:
-theorem not_compRel_iff
-  statement: ¬ CompRel r a b ↔ IncompRel r a b
-  proof: not_symmGen_iff
-
-中文:
-定理 not_compRel_iff
-  结论: ¬ CompRel r a b ↔ IncompRel r a b
-  证明: not_symmGen_iff
-
-Depends on / 依赖: not_symmGen_iff
+/-
+**not_compRel_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_compRel_iff : ¬ CompRel r a b ↔ IncompRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_symmGen_iff`：not_symmGen_iff : ¬ Relation.SymmGen r a b ↔ IncompRel 
+r a b
 -/
 theorem not_compRel_iff : ¬ CompRel r a b ↔ IncompRel r a b :=
   not_symmGen_iff
-
-/--
-theorem `not_incompRel_iff_symmGen` / 定理 `not_incompRel_iff_symmGen`
-
-English:
-theorem not_incompRel_iff_symmGen
-  statement: ¬ IncompRel r a b ↔ Relation.SymmGen r a b
-  proof: by
-  rw [← not_symmGen_iff]; rw [not_not]
-
-@[deprecated not_incompRel_iff_symmGen (since := "2026-01-25")]
-
-中文:
-定理 not_incompRel_iff_symmGen
-  结论: ¬ IncompRel r a b ↔ 关系.SymmGen r a b
-  证明: by
-  rw [← not_symmGen_iff]; rw [not_not]
-
-@[deprecated not_incompRel_iff_symmGen (since := "2026-01-25")]
-
-Depends on / 依赖: not_not, not_symmGen_iff
+/-
+**not_incompRel_iff_symmGen** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_incompRel_iff_symmGen : ¬ IncompRel r a b ↔ Relation.SymmGen r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_symmGen_iff`：not_symmGen_iff : ¬ Relation.SymmGen r a b ↔ IncompRel 
+r a b
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem not_incompRel_iff_symmGen : ¬ IncompRel r a b ↔ Relation.SymmGen r a b := by
-  rw [← not_symmGen_iff]; rw [not_not]
+  rw [← not_symmGen_iff, not_not]
 
 @[deprecated not_incompRel_iff_symmGen (since := "2026-01-25")]
-/--
-theorem `not_incompRel_iff` / 定理 `not_incompRel_iff`
-
-English:
-theorem not_incompRel_iff
-  statement: ¬ IncompRel r a b ↔ CompRel r a b
-  proof: not_incompRel_iff_symmGen
-
-@[simp]
-
-中文:
-定理 not_incompRel_iff
-  结论: ¬ IncompRel r a b ↔ CompRel r a b
-  证明: not_incompRel_iff_symmGen
-
-@[simp]
-
-Depends on / 依赖: not_incompRel_iff_symmGen
+/-
+**not_incompRel_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_incompRel_iff : ¬ IncompRel r a b ↔ CompRel r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_incompRel_iff_symmGen`：not_incompRel_iff_symmGen : ¬ IncompRel r a b
+ ↔ Relation.SymmGen r a b
 -/
 theorem not_incompRel_iff : ¬ IncompRel r a b ↔ CompRel r a b :=
   not_incompRel_iff_symmGen
 
 @[simp]
-/--
-theorem `not_incompRel_of_total` / 定理 `not_incompRel_of_total`
-
-English:
-theorem not_incompRel_of_total
-  given: [Std.Total r] (a b : α)
-  statement: ¬ IncompRel r a b
-  proof: by
-  rw [not_incompRel_iff_symmGen]
-  exact symmGen_of_total a b
-
-@[deprecated (since := "2026-01-13")] alias IsTotal.not_incompRel := not_incompRel_of_total
-
-中文:
-定理 not_incompRel_of_total
-  条件: [Std.全 r] (a b : α)
-  结论: ¬ IncompRel r a b
-  证明: by
-  rw [not_incompRel_iff_symmGen]
-  exact symmGen_of_total a b
-
-@[deprecated (since := "2026-01-13")] alias IsTotal.not_incompRel := not_incompRel_of_total
-
-Depends on / 依赖: not_incompRel_iff_symmGen, symmGen_of_total
+/-
+**not_incompRel_of_total** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_incompRel_of_total [Std.Total r] (a b : α) : ¬ IncompRel r a b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_incompRel_iff_symmGen`：not_incompRel_iff_symmGen : ¬ IncompRel r a b
+ ↔ Relation.SymmGen r a b
+· 使用定理 `Relation.symmGen_of_total`：symmGen_of_total [Std.Total r] (a b : α) : Sy
+mmGen r a b
 -/
 theorem not_incompRel_of_total [Std.Total r] (a b : α) : ¬ IncompRel r a b := by
   rw [not_incompRel_iff_symmGen]
   exact symmGen_of_total a b
 
 @[deprecated (since := "2026-01-13")] alias IsTotal.not_incompRel := not_incompRel_of_total
-
-/--
-theorem `IncompRel.ne` / 定理 `IncompRel.ne`
-
-English:
-theorem IncompRel.ne
-  given: [Std.Refl r] {a b : α} (h : IncompRel r a b)
-  statement: a != b
-  proof: by
-  rintro rfl
-exact h.1 refl_of r a
-
-中文:
-定理 IncompRel.ne
-  条件: [Std.Refl r] {a b : α} (h : IncompRel r a b)
-  结论: a != b
-  证明: by
-  rintro rfl
-exact h.1 refl_of r a
-
-Depends on / 依赖: refl_of
+/-
+**IncompRel.ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.ne [Std.Refl r] {a b : α} (h : IncompRel r a b) : a != b
+参数：h : IncompRel r a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `refl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Refl r] (a : α), r a a
 -/
-theorem IncompRel.ne [Std.Refl r] {a b : α} (h : IncompRel r a b) : a != b := by
+theorem IncompRel.ne [Std.Refl r] {a b : α} (h : IncompRel r a b) : a ≠ b := by
   rintro rfl
-exact h.1 refl_of r a
+  exact h.1 <| refl_of r a
 
 end Relation
 
@@ -1198,56 +692,34 @@ section LE
 
 variable [LE α]
 
-/--
-theorem `IncompRel.not_le` / 定理 `IncompRel.not_le`
-
-English:
-theorem IncompRel.not_le
-  given: (h : IncompRel (· <= ·) a b)
-  statement: ¬ a <= b
-  proof: h.1
-
-中文:
-定理 IncompRel.not_le
-  条件: (h : IncompRel (· <= ·) a b)
-  结论: ¬ a <= b
-  证明: h.1
+/-
+**IncompRel.not_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.not_le (h : IncompRel (· <= ·) a b) : ¬ a <= b
+参数：h : IncompRel (· <= ·) a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IncompRel.not_le (h : IncompRel (· <= ·) a b) : ¬ a <= b := h.1
-/--
-theorem `IncompRel.not_ge` / 定理 `IncompRel.not_ge`
-
-English:
-theorem IncompRel.not_ge
-  given: (h : IncompRel (· <= ·) a b)
-  statement: ¬ b <= a
-  proof: h.2
-
-中文:
-定理 IncompRel.not_ge
-  条件: (h : IncompRel (· <= ·) a b)
-  结论: ¬ b <= a
-  证明: h.2
+theorem IncompRel.not_le (h : IncompRel (· ≤ ·) a b) : ¬ a ≤ b := h.1
+/-
+**IncompRel.not_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.not_ge (h : IncompRel (· <= ·) a b) : ¬ b <= a
+参数：h : IncompRel (· <= ·) a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IncompRel.not_ge (h : IncompRel (· <= ·) a b) : ¬ b <= a := h.2
-/--
-theorem `LE.le.not_incompRel` / 定理 `LE.le.not_incompRel`
-
-English:
-theorem LE.le.not_incompRel
-  given: (h : a <= b)
-  statement: ¬ IncompRel (· <= ·) a b
-  proof: fun h' => h'.not_le h
-
-中文:
-定理 LE.le.not_incompRel
-  条件: (h : a <= b)
-  结论: ¬ IncompRel (· <= ·) a b
-  证明: fun h' => h'.not_le h
-
-Depends on / 依赖: not_le
+theorem IncompRel.not_ge (h : IncompRel (· ≤ ·) a b) : ¬ b ≤ a := h.2
+/-
+**LE.le.not_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LE.le.not_incompRel (h : a <= b) : ¬ IncompRel (· <= ·) a b
+参数：h : a <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.not_le`：IncompRel.not_le (h : IncompRel (· <= ·) a b) : ¬ a <=
+ b
 -/
-theorem LE.le.not_incompRel (h : a <= b) : ¬ IncompRel (· <= ·) a b := fun h' => h'.not_le h
+theorem LE.le.not_incompRel (h : a ≤ b) : ¬ IncompRel (· ≤ ·) a b := fun h' ↦ h'.not_le h
 
 end LE
 
@@ -1255,279 +727,217 @@ section Preorder
 
 variable [Preorder α]
 
-/--
-theorem `IncompRel.not_lt` / 定理 `IncompRel.not_lt`
-
-English:
-theorem IncompRel.not_lt
-  given: (h : IncompRel (· <= ·) a b)
-  statement: ¬ a < b
-  proof: mt le_of_lt h.not_le
-
-中文:
-定理 IncompRel.not_lt
-  条件: (h : IncompRel (· <= ·) a b)
-  结论: ¬ a < b
-  证明: mt le_of_lt h.not_le
-
-Depends on / 依赖: h.not_le, le_of_lt, not_le
+/-
+**IncompRel.not_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.not_lt (h : IncompRel (· <= ·) a b) : ¬ a < b
+参数：h : IncompRel (· <= ·) a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `IncompRel.not_le`：IncompRel.not_le (h : IncompRel (· <= ·) a b) : ¬ a <=
+ b
 -/
-theorem IncompRel.not_lt (h : IncompRel (· <= ·) a b) : ¬ a < b := mt le_of_lt h.not_le
-/--
-theorem `IncompRel.not_gt` / 定理 `IncompRel.not_gt`
-
-English:
-theorem IncompRel.not_gt
-  given: (h : IncompRel (· <= ·) a b)
-  statement: ¬ b < a
-  proof: mt le_of_lt h.not_ge
-
-中文:
-定理 IncompRel.not_gt
-  条件: (h : IncompRel (· <= ·) a b)
-  结论: ¬ b < a
-  证明: mt le_of_lt h.not_ge
-
-Depends on / 依赖: h.not_ge, le_of_lt, not_ge
+theorem IncompRel.not_lt (h : IncompRel (· ≤ ·) a b) : ¬ a < b := mt le_of_lt h.not_le
+/-
+**IncompRel.not_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IncompRel.not_gt (h : IncompRel (· <= ·) a b) : ¬ b < a
+参数：h : IncompRel (· <= ·) a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `IncompRel.not_ge`：IncompRel.not_ge (h : IncompRel (· <= ·) a b) : ¬ b <=
+ a
 -/
-theorem IncompRel.not_gt (h : IncompRel (· <= ·) a b) : ¬ b < a := mt le_of_lt h.not_ge
-/--
-theorem `LT.lt.not_incompRel` / 定理 `LT.lt.not_incompRel`
-
-English:
-theorem LT.lt.not_incompRel
-  given: (h : a < b)
-  statement: ¬ IncompRel (· <= ·) a b
-  proof: fun h' => h'.not_lt h
-
-中文:
-定理 LT.lt.not_incompRel
-  条件: (h : a < b)
-  结论: ¬ IncompRel (· <= ·) a b
-  证明: fun h' => h'.not_lt h
-
-Depends on / 依赖: not_lt
+theorem IncompRel.not_gt (h : IncompRel (· ≤ ·) a b) : ¬ b < a := mt le_of_lt h.not_ge
+/-
+**LT.lt.not_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LT.lt.not_incompRel (h : a < b) : ¬ IncompRel (· <= ·) a b
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.not_lt`：IncompRel.not_lt (h : IncompRel (· <= ·) a b) : ¬ a < 
+b
 -/
-theorem LT.lt.not_incompRel (h : a < b) : ¬ IncompRel (· <= ·) a b := fun h' => h'.not_lt h
-
-/--
-theorem `not_le_iff_lt_or_incompRel` / 定理 `not_le_iff_lt_or_incompRel`
-
-English:
-theorem not_le_iff_lt_or_incompRel
-  statement: ¬ b <= a ↔ a < b ∨ IncompRel (· <= ·) a b
-  proof: by
-  rw [lt_iff_le_not_ge]; rw [IncompRel]
-  tauto
-
-中文:
-定理 not_le_iff_lt_or_incompRel
-  结论: ¬ b <= a ↔ a < b ∨ IncompRel (· <= ·) a b
-  证明: by
-  rw [lt_iff_le_not_ge]; rw [IncompRel]
-  tauto
-
-Depends on / 依赖: IncompRel, lt_iff_le_not_ge
+theorem LT.lt.not_incompRel (h : a < b) : ¬ IncompRel (· ≤ ·) a b := fun h' ↦ h'.not_lt h
+/-
+**not_le_iff_lt_or_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_le_iff_lt_or_incompRel : ¬ b <= a ↔ a < b ∨ IncompRel (· <= ·) a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `lt_iff_le_not_ge`：lt_iff_le_not_ge : a < b ↔ a <= b ∧ ¬b <= a
+· 使用定理 `IncompRel.eq_1`：∀ {α : Type u_1} (r : α → α → Prop) (a b : α), IncompRel
+ r a b = (¬r a b ∧ ¬r b a)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.not_and_iff_not_or_not'`：∀ {b a : Prop} [Decidable b], ¬(a ∧ b
+) ↔ ¬a ∨ ¬b
 -/
-theorem not_le_iff_lt_or_incompRel : ¬ b <= a ↔ a < b ∨ IncompRel (· <= ·) a b := by
-  rw [lt_iff_le_not_ge]; rw [IncompRel]
+theorem not_le_iff_lt_or_incompRel : ¬ b ≤ a ↔ a < b ∨ IncompRel (· ≤ ·) a b := by
+  rw [lt_iff_le_not_ge, IncompRel]
   tauto
 
-/--
-theorem `lt_or_antisymmRel_or_gt_or_incompRel` / 定理 `lt_or_antisymmRel_or_gt_or_incompRel`
+/-- Exactly one of the following is true. -/
+/-
+**lt_or_antisymmRel_or_gt_or_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_or_antisymmRel_or_gt_or_incompRel (a b : α) : a < b ∨ AntisymmRel (· <=
+ ·) a b ∨ b < a ∨ IncompRel (· <= ·) a b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.not_and_iff_not_or_not'`：∀ {b a : Prop} [Decidable b], ¬(a ∧ b
+) ↔ ¬a ∨ ¬b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 
-English:
-theorem lt_or_antisymmRel_or_gt_or_incompRel
-  given: (a b : α)
-  proof: by
-  simp_rw [lt_iff_le_not_ge]
-  tauto
-
-@[trans]
-
-中文:
-定理 lt_or_antisymmRel_or_gt_or_incompRel
-  条件: (a b : α)
-  证明: by
-  simp_rw [lt_iff_le_not_ge]
-  tauto
-
-@[trans]
-
-Depends on / 依赖: lt_iff_le_not_ge, simp_rw
+--- 原说明 ---
+Exactly one of the following is true.
 -/
 theorem lt_or_antisymmRel_or_gt_or_incompRel (a b : α) :
-    a < b ∨ AntisymmRel (· <= ·) a b ∨ b < a ∨ IncompRel (· <= ·) a b := by
+    a < b ∨ AntisymmRel (· ≤ ·) a b ∨ b < a ∨ IncompRel (· ≤ ·) a b := by
   simp_rw [lt_iff_le_not_ge]
   tauto
 
 @[trans]
-/--
-theorem `incompRel_of_incompRel_of_antisymmRel` / 定理 `incompRel_of_incompRel_of_antisymmRel`
-
-English:
-theorem incompRel_of_incompRel_of_antisymmRel
-  proof: ⟨fun h => h₁.not_le (h.trans h₂.ge), fun h => h₁.not_ge (h₂.le.trans h)⟩
-
-alias IncompRel.trans_antisymmRel := incompRel_of_incompRel_of_antisymmRel
-
-中文:
-定理 incompRel_of_incompRel_of_antisymmRel
-  证明: ⟨fun h => h₁.not_le (h.trans h₂.ge), fun h => h₁.not_ge (h₂.le.trans h)⟩
-
-alias IncompRel.trans_antisymmRel := incompRel_of_incompRel_of_antisymmRel
-
-Depends on / 依赖: h.trans, le.trans, not_ge, not_le
+/-
+**incompRel_of_incompRel_of_antisymmRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_of_incompRel_of_antisymmRel (h₁ : IncompRel (· <= ·) a b) (h₂ : 
+AntisymmRel (· <= ·) b c) : IncompRel (· <= ·) a c
+参数：h₁ : IncompRel (· <= ·) a b；h₂ : AntisymmRel (· <= ·) b c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.not_le`：IncompRel.not_le (h : IncompRel (· <= ·) a b) : ¬ a <=
+ b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `AntisymmRel.ge`：AntisymmRel.ge (h : AntisymmRel (· <= ·) a b) : b <= a
+· 使用定理 `IncompRel.not_ge`：IncompRel.not_ge (h : IncompRel (· <= ·) a b) : ¬ b <=
+ a
+· 使用定理 `AntisymmRel.le`：AntisymmRel.le (h : AntisymmRel (· <= ·) a b) : a <= b
 -/
 theorem incompRel_of_incompRel_of_antisymmRel
-    (h₁ : IncompRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) b c) : IncompRel (· <= ·) a c :=
-  ⟨fun h => h₁.not_le (h.trans h₂.ge), fun h => h₁.not_ge (h₂.le.trans h)⟩
+    (h₁ : IncompRel (· ≤ ·) a b) (h₂ : AntisymmRel (· ≤ ·) b c) : IncompRel (· ≤ ·) a c :=
+  ⟨fun h ↦ h₁.not_le (h.trans h₂.ge), fun h ↦ h₁.not_ge (h₂.le.trans h)⟩
 
 alias IncompRel.trans_antisymmRel := incompRel_of_incompRel_of_antisymmRel
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Trans α α α (IncompRel (· <= ·)) (AntisymmRel (· <= ·)) (IncompRel (· <= ·))
-  body: incompRel_of_incompRel_of_antisymmRel
-
-@[trans]
-
-中文:
-实例 :
-  签名: @Trans α α α (IncompRel (· <= ·)) (AntisymmRel (· <= ·)) (IncompRel (· <= ·))
-  定义体: incompRel_of_incompRel_of_antisymmRel
-
-@[trans]
-
-Depends on / 依赖: incompRel_of_incompRel_of_antisymmRel
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : @Trans α α α (IncompRel (· <= ·)) (AntisymmRel (· <= ·)) (IncompRel (· <= ·)) where
+instance : @Trans α α α (IncompRel (· ≤ ·)) (AntisymmRel (· ≤ ·)) (IncompRel (· ≤ ·)) where
   trans := incompRel_of_incompRel_of_antisymmRel
 
 @[trans]
-/--
-theorem `incompRel_of_antisymmRel_of_incompRel` / 定理 `incompRel_of_antisymmRel_of_incompRel`
-
-English:
-theorem incompRel_of_antisymmRel_of_incompRel
-  proof: (h₂.symm.trans_antisymmRel h₁.symm).symm
-
-alias AntisymmRel.trans_incompRel := incompRel_of_antisymmRel_of_incompRel
-
-中文:
-定理 incompRel_of_antisymmRel_of_incompRel
-  证明: (h₂.symm.trans_antisymmRel h₁.symm).symm
-
-alias AntisymmRel.trans_incompRel := incompRel_of_antisymmRel_of_incompRel
-
-Depends on / 依赖: symm.trans_antisymmRel, trans_antisymmRel
+/-
+**incompRel_of_antisymmRel_of_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：incompRel_of_antisymmRel_of_incompRel (h₁ : AntisymmRel (· <= ·) a b) (h₂ 
+: IncompRel (· <= ·) b c) : IncompRel (· <= ·) a c
+参数：h₁ : AntisymmRel (· <= ·) a b；h₂ : IncompRel (· <= ·) b c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.symm`：IncompRel.symm : IncompRel r a b -> IncompRel r b a
+· 使用定理 `IncompRel.trans_antisymmRel`：∀ {α : Type u_1} {a b c : α} [inst : Preord
+er α],   IncompRel (fun x1 x2 => x1 ≤ x2) a b → AntisymmRel (fun x1 x2 => x1 ≤ x
+2) b c → IncompRe…
+· 使用定理 `AntisymmRel.symm`：AntisymmRel.symm : AntisymmRel r a b -> AntisymmRel r 
+b a
 -/
 theorem incompRel_of_antisymmRel_of_incompRel
-    (h₁ : AntisymmRel (· <= ·) a b) (h₂ : IncompRel (· <= ·) b c) : IncompRel (· <= ·) a c :=
+    (h₁ : AntisymmRel (· ≤ ·) a b) (h₂ : IncompRel (· ≤ ·) b c) : IncompRel (· ≤ ·) a c :=
   (h₂.symm.trans_antisymmRel h₁.symm).symm
 
 alias AntisymmRel.trans_incompRel := incompRel_of_antisymmRel_of_incompRel
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Trans α α α (AntisymmRel (· <= ·)) (IncompRel (· <= ·)) (IncompRel (· <= ·))
-  body: incompRel_of_antisymmRel_of_incompRel
-
-中文:
-实例 :
-  签名: @Trans α α α (AntisymmRel (· <= ·)) (IncompRel (· <= ·)) (IncompRel (· <= ·))
-  定义体: incompRel_of_antisymmRel_of_incompRel
-
-Depends on / 依赖: incompRel_of_antisymmRel_of_incompRel
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : @Trans α α α (AntisymmRel (· <= ·)) (IncompRel (· <= ·)) (IncompRel (· <= ·)) where
+instance : @Trans α α α (AntisymmRel (· ≤ ·)) (IncompRel (· ≤ ·)) (IncompRel (· ≤ ·)) where
   trans := incompRel_of_antisymmRel_of_incompRel
-
-/--
-theorem `AntisymmRel.incompRel_congr` / 定理 `AntisymmRel.incompRel_congr`
-
-English:
-theorem AntisymmRel.incompRel_congr
-  given: (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d)
-  proof: (h₁.symm.trans_incompRel h).trans_antisymmRel h₂
-  mpr h := (h₁.trans_incompRel h).trans_antisymmRel h₂.symm
-
-中文:
-定理 AntisymmRel.incompRel_congr
-  条件: (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d)
-  证明: (h₁.symm.trans_incompRel h).trans_antisymmRel h₂
-  mpr h := (h₁.trans_incompRel h).trans_antisymmRel h₂.symm
-
-Depends on / 依赖: symm.trans_incompRel, trans_antisymmRel, trans_incompRel
+/-
+**AntisymmRel.incompRel_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.incompRel_congr (h₁ : AntisymmRel (· <= ·) a b) (h₂ : Antisymm
+Rel (· <= ·) c d) : IncompRel (· <= ·) a c ↔ IncompRel (· <= ·) b d where mp h
+参数：h₁ : AntisymmRel (· <= ·) a b；h₂ : AntisymmRel (· <= ·) c d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncompRel.trans_antisymmRel`：∀ {α : Type u_1} {a b c : α} [inst : Preord
+er α],   IncompRel (fun x1 x2 => x1 ≤ x2) a b → AntisymmRel (fun x1 x2 => x1 ≤ x
+2) b c → IncompRe…
+· 使用定理 `AntisymmRel.trans_incompRel`：∀ {α : Type u_1} {a b c : α} [inst : Preord
+er α],   AntisymmRel (fun x1 x2 => x1 ≤ x2) a b → IncompRel (fun x1 x2 => x1 ≤ x
+2) b c → IncompRe…
+· 使用定理 `AntisymmRel.symm`：AntisymmRel.symm : AntisymmRel r a b -> AntisymmRel r 
+b a
 -/
-theorem AntisymmRel.incompRel_congr (h₁ : AntisymmRel (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d) :
-    IncompRel (· <= ·) a c ↔ IncompRel (· <= ·) b d where
+theorem AntisymmRel.incompRel_congr (h₁ : AntisymmRel (· ≤ ·) a b) (h₂ : AntisymmRel (· ≤ ·) c d) :
+    IncompRel (· ≤ ·) a c ↔ IncompRel (· ≤ ·) b d where
   mp h := (h₁.symm.trans_incompRel h).trans_antisymmRel h₂
   mpr h := (h₁.trans_incompRel h).trans_antisymmRel h₂.symm
-
-/--
-theorem `AntisymmRel.incompRel_congr_left` / 定理 `AntisymmRel.incompRel_congr_left`
-
-English:
-theorem AntisymmRel.incompRel_congr_left
-  given: (h : AntisymmRel (· <= ·) a b)
-  proof: h.incompRel_congr AntisymmRel.rfl
-
-中文:
-定理 AntisymmRel.incompRel_congr_left
-  条件: (h : AntisymmRel (· <= ·) a b)
-  证明: h.incompRel_congr AntisymmRel.rfl
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.rfl, h.incompRel_congr, incompRel_congr
+/-
+**AntisymmRel.incompRel_congr_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.incompRel_congr_left (h : AntisymmRel (· <= ·) a b) : IncompRe
+l (· <= ·) a c ↔ IncompRel (· <= ·) b c
+参数：h : AntisymmRel (· <= ·) a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.incompRel_congr`：AntisymmRel.incompRel_congr (h₁ : AntisymmR
+el (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d) : IncompRel (· <= ·) a c ↔ Inco
+mpRel (· <= ·) b …
+· 使用引理 `AntisymmRel.rfl`：AntisymmRel.rfl [Std.Refl r] {a : α} : AntisymmRel r a 
+a
 -/
-theorem AntisymmRel.incompRel_congr_left (h : AntisymmRel (· <= ·) a b) :
-    IncompRel (· <= ·) a c ↔ IncompRel (· <= ·) b c :=
+theorem AntisymmRel.incompRel_congr_left (h : AntisymmRel (· ≤ ·) a b) :
+    IncompRel (· ≤ ·) a c ↔ IncompRel (· ≤ ·) b c :=
   h.incompRel_congr AntisymmRel.rfl
-
-/--
-theorem `AntisymmRel.incompRel_congr_right` / 定理 `AntisymmRel.incompRel_congr_right`
-
-English:
-theorem AntisymmRel.incompRel_congr_right
-  given: (h : AntisymmRel (· <= ·) b c)
-  proof: AntisymmRel.rfl.incompRel_congr h
-
-中文:
-定理 AntisymmRel.incompRel_congr_right
-  条件: (h : AntisymmRel (· <= ·) b c)
-  证明: AntisymmRel.rfl.incompRel_congr h
-
-Depends on / 依赖: AntisymmRel, AntisymmRel.rfl.incompRel_congr, incompRel_congr
+/-
+**AntisymmRel.incompRel_congr_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntisymmRel.incompRel_congr_right (h : AntisymmRel (· <= ·) b c) : IncompR
+el (· <= ·) a b ↔ IncompRel (· <= ·) a c
+参数：h : AntisymmRel (· <= ·) b c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntisymmRel.incompRel_congr`：AntisymmRel.incompRel_congr (h₁ : AntisymmR
+el (· <= ·) a b) (h₂ : AntisymmRel (· <= ·) c d) : IncompRel (· <= ·) a c ↔ Inco
+mpRel (· <= ·) b …
+· 使用引理 `AntisymmRel.rfl`：AntisymmRel.rfl [Std.Refl r] {a : α} : AntisymmRel r a 
+a
 -/
-theorem AntisymmRel.incompRel_congr_right (h : AntisymmRel (· <= ·) b c) :
-    IncompRel (· <= ·) a b ↔ IncompRel (· <= ·) a c :=
+theorem AntisymmRel.incompRel_congr_right (h : AntisymmRel (· ≤ ·) b c) :
+    IncompRel (· ≤ ·) a b ↔ IncompRel (· ≤ ·) a c :=
   AntisymmRel.rfl.incompRel_congr h
 
 end Preorder
 
-/--
-theorem `lt_or_eq_or_gt_or_incompRel` / 定理 `lt_or_eq_or_gt_or_incompRel`
+/-- Exactly one of the following is true. -/
+/-
+**lt_or_eq_or_gt_or_incompRel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_or_eq_or_gt_or_incompRel [PartialOrder α] (a b : α) : a < b ∨ a = b ∨ b
+ < a ∨ IncompRel (· <= ·) a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `lt_or_antisymmRel_or_gt_or_incompRel`：lt_or_antisymmRel_or_gt_or_incompR
+el (a b : α) : a < b ∨ AntisymmRel (· <= ·) a b ∨ b < a ∨ IncompRel (· <= ·) a b
 
-English:
-theorem lt_or_eq_or_gt_or_incompRel
-  given: [PartialOrder α] (a b : α)
-  proof: by
-  simpa using lt_or_antisymmRel_or_gt_or_incompRel a b
-
-中文:
-定理 lt_or_eq_or_gt_or_incompRel
-  条件: [偏序 α] (a b : α)
-  证明: by
-  simpa using lt_or_antisymmRel_or_gt_or_incompRel a b
-
-Depends on / 依赖: lt_or_antisymmRel_or_gt_or_incompRel
+--- 原说明 ---
+Exactly one of the following is true.
 -/
 theorem lt_or_eq_or_gt_or_incompRel [PartialOrder α] (a b : α) :
-    a < b ∨ a = b ∨ b < a ∨ IncompRel (· <= ·) a b := by
+    a < b ∨ a = b ∨ b < a ∨ IncompRel (· ≤ ·) a b := by
   simpa using lt_or_antisymmRel_or_gt_or_incompRel a b

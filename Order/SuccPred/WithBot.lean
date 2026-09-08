@@ -18,153 +18,110 @@ This file defines the successor of `a : WithBot α` as an element of `α`, and d
 namespace WithBot
 variable {α : Type*} [Preorder α] [OrderBot α] [SuccOrder α] {x y : WithBot α}
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The successor of `a : WithBot α` as an element of `α`. -/
+/-
+**WithBot.succ** 是 Mathlib 中的一个定义，位于命名空间 `WithBot`。
+形式化陈述：succ (a : WithBot α) : α
+参数：a : WithBot α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ
-  signature: (a : WithBot α)
-  body: a.recBotCoe ⊥ Order.succ
-
-中文:
-定义 succ
-  签名: (a : WithBot α)
-  定义体: a.recBotCoe ⊥ Order.succ
-
-Depends on / 依赖: Order.succ, a.recBotCoe, recBotCoe
+--- 原说明 ---
+The successor of `a : WithBot α` as an element of `α`.
 -/
 def succ (a : WithBot α) : α := a.recBotCoe ⊥ Order.succ
 
-/--
-lemma `succ_bot` / 引理 `succ_bot`
+/-- Not to be confused with `WithBot.orderSucc_bot`, which is about `Order.succ`. -/
+/-
+**WithBot.succ_bot** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α], ⊥.succ = ⊥
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma succ_bot
-  statement: succ (⊥ : WithBot α) = ⊥
-  proof: rfl
-
-中文:
-引理 succ_bot
-  结论: succ (⊥ : WithBot α) = ⊥
-  证明: rfl
+--- 原说明 ---
+Not to be confused with `WithBot.orderSucc_bot`, which is about `Order.succ`.
 -/
 @[simp] lemma succ_bot : succ (⊥ : WithBot α) = ⊥ := rfl
 
-/--
-lemma `succ_coe` / 引理 `succ_coe`
+/-- Not to be confused with `WithBot.orderSucc_coe`, which is about `Order.succ`. -/
+/-
+**WithBot.succ_coe** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α] (a : α), (↑a).succ = Order.succ a
+参数：a : α；↑a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma succ_coe
-  given: (a : α)
-  statement: succ (a : WithBot α) = Order.succ a
-  proof: rfl
-
-中文:
-引理 succ_coe
-  条件: (a : α)
-  结论: succ (a : WithBot α) = Order.succ a
-  证明: rfl
+--- 原说明 ---
+Not to be confused with `WithBot.orderSucc_coe`, which is about `Order.succ`.
 -/
 @[simp] lemma succ_coe (a : α) : succ (a : WithBot α) = Order.succ a := rfl
+/-
+**WithBot.succ_eq_succ** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α] (a : WithBot α),   ↑a.succ = Order.succ a
+参数：a : WithBot α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `succ_eq_succ` / 引理 `succ_eq_succ`
-
-English:
-lemma succ_eq_succ
-  statement: forall a : WithBot α, succ a = Order.succ a
-
-中文:
-引理 succ_eq_succ
-  结论: 对任意 a : WithBot α, succ a = Order.succ a
+--- 原说明 ---
+Not to be confused with `WithBot.orderSucc_coe`, which is about `Order.succ`.
 -/
-lemma succ_eq_succ : forall a : WithBot α, succ a = Order.succ a
+lemma succ_eq_succ : ∀ a : WithBot α, succ a = Order.succ a
   | ⊥ => rfl
   | (a : α) => rfl
-
-/--
-lemma `lt_succ` / 引理 `lt_succ`
-
-English:
-lemma lt_succ
-  given: [NoMaxOrder α] (x : WithBot α)
-  statement: x < x.succ
-  proof: succ_eq_succ x ▸ Order.lt_succ x
-
-中文:
-引理 lt_succ
-  条件: [NoMax序 α] (x : WithBot α)
-  结论: x < x.succ
-  证明: succ_eq_succ x ▸ Order.lt_succ x
-
-Depends on / 依赖: Order.lt_succ, lt_succ, succ_eq_succ
+/-
+**WithBot.lt_succ** 是 Mathlib 中的一个引理，位于命名空间 `WithBot`。
+形式化陈述：lt_succ [NoMaxOrder α] (x : WithBot α) : x < x.succ
+参数：x : WithBot α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.succ_eq_succ`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Ord
+erBot α] [inst_2 : SuccOrder α] (a : WithBot α),   ↑a.succ = Order.succ a
 -/
 lemma lt_succ [NoMaxOrder α] (x : WithBot α) : x < x.succ :=
   succ_eq_succ x ▸ Order.lt_succ x
-
-/--
-lemma `succ_mono` / 引理 `succ_mono`
-
-English:
-lemma succ_mono
-  statement: Monotone (succ : WithBot α -> α)
-
-中文:
-引理 succ_mono
-  结论: 递增 (succ : WithBot α -> α)
+/-
+**WithBot.succ_mono** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α], Monotone WithBot.succ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Order.succ_le_succ`：succ_le_succ (h : a <= b) : succ a <= succ b
 -/
-lemma succ_mono : Monotone (succ : WithBot α -> α)
+lemma succ_mono : Monotone (succ : WithBot α → α)
   | ⊥, _, _ => by simp
   | (a : α), ⊥, hab => by simp at hab
   | (a : α), (b : α), hab => Order.succ_le_succ (by simpa using hab)
-
-/--
-lemma `succ_strictMono` / 引理 `succ_strictMono`
-
-English:
-lemma succ_strictMono
-  given: [NoMaxOrder α]
-  statement: StrictMono (succ : WithBot α -> α)
-
-中文:
-引理 succ_strictMono
-  条件: [NoMax序 α]
-  结论: 严格递增 (succ : WithBot α -> α)
+/-
+**WithBot.succ_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α] [NoMaxOrder α],   StrictMono WithBot.succ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Order.succ_lt_succ`：succ_lt_succ (hab : a < b) : succ a < succ b
 -/
-lemma succ_strictMono [NoMaxOrder α] : StrictMono (succ : WithBot α -> α)
+lemma succ_strictMono [NoMaxOrder α] : StrictMono (succ : WithBot α → α)
   | ⊥, (b : α), hab => by simp
   | (a : α), (b : α), hab => Order.succ_lt_succ (by simpa using hab)
-
-/--
-lemma `succ_le_succ` / 引理 `succ_le_succ`
-
-English:
-lemma succ_le_succ
-  given: (hxy : x <= y)
-  statement: x.succ <= y.succ
-  proof: succ_mono hxy
-
-中文:
-引理 succ_le_succ
-  条件: (hxy : x <= y)
-  结论: x.succ <= y.succ
-  证明: succ_mono hxy
+/-
+**WithBot.succ_le_succ** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α] {x y : WithBot α},   x ≤ y → x.succ ≤ y.succ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WithBot.succ_mono`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderB
+ot α] [inst_2 : SuccOrder α], Monotone WithBot.succ
 -/
-@[gcongr] lemma succ_le_succ (hxy : x <= y) : x.succ <= y.succ := succ_mono hxy
-/--
-lemma `succ_lt_succ` / 引理 `succ_lt_succ`
-
-English:
-lemma succ_lt_succ
-  given: [NoMaxOrder α] (hxy : x < y)
-  statement: x.succ < y.succ
-  proof: succ_strictMono hxy
-
-中文:
-引理 succ_lt_succ
-  条件: [NoMax序 α] (hxy : x < y)
-  结论: x.succ < y.succ
-  证明: succ_strictMono hxy
+@[gcongr] lemma succ_le_succ (hxy : x ≤ y) : x.succ ≤ y.succ := succ_mono hxy
+/-
+**WithBot.succ_lt_succ** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : SuccO
+rder α] {x y : WithBot α} [NoMaxOrder α],   x < y → x.succ < y.succ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WithBot.succ_strictMono`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : 
+OrderBot α] [inst_2 : SuccOrder α] [NoMaxOrder α],   StrictMono WithBot.succ
 -/
 @[gcongr] lemma succ_lt_succ [NoMaxOrder α] (hxy : x < y) : x.succ < y.succ := succ_strictMono hxy
 
@@ -173,28 +130,23 @@ section LinearOrder
 variable {α : Type*} [Nontrivial α] [LinearOrder α] [OrderBot α] [SuccOrder α]
 
 @[simp]
-/--
-theorem `succ_eq_bot` / 定理 `succ_eq_bot`
-
-English:
-theorem succ_eq_bot
-  given: (a : WithBot α)
-  statement: WithBot.succ a = ⊥ ↔ a = ⊥
-  proof: by
-  cases a
-  · simp
-  · simpa [WithBot.succ_coe, WithBot.coe_ne_bot, iff_false] using Order.succ_ne_bot _
-
-中文:
-定理 succ_eq_bot
-  条件: (a : WithBot α)
-  结论: WithBot.succ a = ⊥ ↔ a = ⊥
-  证明: by
-  cases a
-  · simp
-  · simpa [WithBot.succ_coe, WithBot.coe_ne_bot, iff_false] using Order.succ_ne_bot _
-
-Depends on / 依赖: Order.succ_ne_bot, WithBot, WithBot.coe_ne_bot, WithBot.succ_coe, coe_ne_bot, iff_false, succ_coe, succ_ne_bot
+/-
+**WithBot.succ_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：succ_eq_bot (a : WithBot α) : WithBot.succ a = ⊥ ↔ a = ⊥
+参数：a : WithBot α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `Order.succ_ne_bot`：succ_ne_bot (a : α) : succ a != ⊥
 -/
 theorem succ_eq_bot (a : WithBot α) : WithBot.succ a = ⊥ ↔ a = ⊥ := by
   cases a
@@ -207,133 +159,98 @@ end WithBot
 namespace WithTop
 variable {α : Type*} [Preorder α] [OrderTop α] [PredOrder α] {x y : WithTop α}
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- The predecessor of `a : WithTop α` as an element of `α`. -/
+/-
+**WithTop.pred** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：pred (a : WithTop α) : α
+参数：a : WithTop α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pred
-  signature: (a : WithTop α)
-  body: a.recTopCoe ⊤ Order.pred
-
-中文:
-定义 pred
-  签名: (a : WithTop α)
-  定义体: a.recTopCoe ⊤ Order.pred
-
-Depends on / 依赖: Order.pred, a.recTopCoe, recTopCoe
+--- 原说明 ---
+The predecessor of `a : WithTop α` as an element of `α`.
 -/
 def pred (a : WithTop α) : α := a.recTopCoe ⊤ Order.pred
 
-/--
-lemma `pred_top` / 引理 `pred_top`
+/-- Not to be confused with `WithTop.orderPred_top`, which is about `Order.pred`. -/
+/-
+**WithTop.pred_top** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α], ⊤.pred = ⊤
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma pred_top
-  statement: pred (⊤ : WithTop α) = ⊤
-  proof: rfl
-
-中文:
-引理 pred_top
-  结论: pred (⊤ : WithTop α) = ⊤
-  证明: rfl
+--- 原说明 ---
+Not to be confused with `WithTop.orderPred_top`, which is about `Order.pred`.
 -/
 @[simp] lemma pred_top : pred (⊤ : WithTop α) = ⊤ := rfl
 
-/--
-lemma `pred_coe` / 引理 `pred_coe`
+/-- Not to be confused with `WithTop.orderPred_coe`, which is about `Order.pred`. -/
+/-
+**WithTop.pred_coe** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α] (a : α), (↑a).pred = Order.pred a
+参数：a : α；↑a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma pred_coe
-  given: (a : α)
-  statement: pred (a : WithTop α) = Order.pred a
-  proof: rfl
-
-中文:
-引理 pred_coe
-  条件: (a : α)
-  结论: pred (a : WithTop α) = Order.pred a
-  证明: rfl
+--- 原说明 ---
+Not to be confused with `WithTop.orderPred_coe`, which is about `Order.pred`.
 -/
 @[simp] lemma pred_coe (a : α) : pred (a : WithTop α) = Order.pred a := rfl
+/-
+**WithTop.pred_eq_pred** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α] (a : WithTop α),   ↑a.pred = Order.pred a
+参数：a : WithTop α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `pred_eq_pred` / 引理 `pred_eq_pred`
-
-English:
-lemma pred_eq_pred
-  statement: forall a : WithTop α, pred a = Order.pred a
-
-中文:
-引理 pred_eq_pred
-  结论: 对任意 a : WithTop α, pred a = Order.pred a
+--- 原说明 ---
+Not to be confused with `WithTop.orderPred_coe`, which is about `Order.pred`.
 -/
-lemma pred_eq_pred : forall a : WithTop α, pred a = Order.pred a
+lemma pred_eq_pred : ∀ a : WithTop α, pred a = Order.pred a
   | ⊤ => rfl
   | (a : α) => rfl
-
-/--
-lemma `pred_mono` / 引理 `pred_mono`
-
-English:
-lemma pred_mono
-  statement: Monotone (pred : WithTop α -> α)
-
-中文:
-引理 pred_mono
-  结论: 递增 (pred : WithTop α -> α)
+/-
+**WithTop.pred_mono** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α], Monotone WithTop.pred
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Order.pred_le_pred`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredO
+rder α] {a b : α}, b ≤ a → Order.pred b ≤ Order.pred a
 -/
-lemma pred_mono : Monotone (pred : WithTop α -> α)
+lemma pred_mono : Monotone (pred : WithTop α → α)
   | _, ⊤, _ => by simp
   | ⊤, (a : α), hab => by simp at hab
   | (a : α), (b : α), hab => Order.pred_le_pred (by simpa using hab)
-
-/--
-lemma `pred_strictMono` / 引理 `pred_strictMono`
-
-English:
-lemma pred_strictMono
-  given: [NoMinOrder α]
-  statement: StrictMono (pred : WithTop α -> α)
-
-中文:
-引理 pred_strictMono
-  条件: [NoMin序 α]
-  结论: 严格递增 (pred : WithTop α -> α)
+/-
+**WithTop.pred_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α] [NoMinOrder α],   StrictMono WithTop.pred
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Order.pred_lt_pred`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredO
+rder α] {a b : α} [NoMinOrder α],   b < a → Order.pred b < Order.pred a
 -/
-lemma pred_strictMono [NoMinOrder α] : StrictMono (pred : WithTop α -> α)
+lemma pred_strictMono [NoMinOrder α] : StrictMono (pred : WithTop α → α)
   | (b : α), ⊤, hab => by simp
   | (a : α), (b : α), hab => Order.pred_lt_pred (by simpa using hab)
-
-/--
-lemma `pred_le_pred` / 引理 `pred_le_pred`
-
-English:
-lemma pred_le_pred
-  given: (hxy : x <= y)
-  statement: x.pred <= y.pred
-  proof: pred_mono hxy
-
-中文:
-引理 pred_le_pred
-  条件: (hxy : x <= y)
-  结论: x.pred <= y.pred
-  证明: pred_mono hxy
+/-
+**WithTop.pred_le_pred** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α] {x y : WithTop α},   x ≤ y → x.pred ≤ y.pred
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WithTop.pred_mono`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderT
+op α] [inst_2 : PredOrder α], Monotone WithTop.pred
 -/
-@[gcongr] lemma pred_le_pred (hxy : x <= y) : x.pred <= y.pred := pred_mono hxy
-/--
-lemma `pred_lt_pred` / 引理 `pred_lt_pred`
-
-English:
-lemma pred_lt_pred
-  given: [NoMinOrder α] (hxy : x < y)
-  statement: x.pred < y.pred
-  proof: pred_strictMono hxy
-
-中文:
-引理 pred_lt_pred
-  条件: [NoMin序 α] (hxy : x < y)
-  结论: x.pred < y.pred
-  证明: pred_strictMono hxy
+@[gcongr] lemma pred_le_pred (hxy : x ≤ y) : x.pred ≤ y.pred := pred_mono hxy
+/-
+**WithTop.pred_lt_pred** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTop α] [inst_2 : PredO
+rder α] {x y : WithTop α} [NoMinOrder α],   x < y → x.pred < y.pred
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WithTop.pred_strictMono`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : 
+OrderTop α] [inst_2 : PredOrder α] [NoMinOrder α],   StrictMono WithTop.pred
 -/
 @[gcongr] lemma pred_lt_pred [NoMinOrder α] (hxy : x < y) : x.pred < y.pred := pred_strictMono hxy
 
@@ -342,27 +259,25 @@ section LinearOrder
 variable {α : Type*} [Nontrivial α] [LinearOrder α] [OrderTop α] [PredOrder α]
 
 @[simp]
-/--
-theorem `pred_eq_top` / 定理 `pred_eq_top`
-
-English:
-theorem pred_eq_top
-  given: (a : WithTop α)
-  statement: WithTop.pred a = ⊤ ↔ a = ⊤
-  proof: by
-  cases a <;> simp [Order.pred_ne_top]
-
-中文:
-定理 pred_eq_top
-  条件: (a : WithTop α)
-  结论: WithTop.pred a = ⊤ ↔ a = ⊤
-  证明: by
-  cases a <;> simp [Order.pred_ne_top]
-
-Depends on / 依赖: Order.pred_ne_top, pred_ne_top
+/-
+**WithTop.pred_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `WithTop`。
+形式化陈述：pred_eq_top (a : WithTop α) : WithTop.pred a = ⊤ ↔ a = ⊤
+参数：a : WithTop α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem pred_eq_top (a : WithTop α) : WithTop.pred a = ⊤ ↔ a = ⊤ := by
   cases a <;> simp [Order.pred_ne_top]
 
 end LinearOrder
 end WithTop
+

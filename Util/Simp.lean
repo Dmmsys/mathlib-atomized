@@ -27,21 +27,20 @@ on the proof expression returned by `discharge?`
 `dischargeQ? (a : Q(Prop))` attempts to prove `a` using the discharger, returning
 `some (pf : Q(a))` if a proof is found and `none` otherwise. -/
 @[inline]
-/--
-Definition of `Methods.dischargeQ?` / `Methods.dischargeQ?` 的定义
+/-
+**Lean.Meta.Simp.Methods.dischargeQ** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Simp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Methods.dischargeQ?
-  signature: (M : Methods) (a : Q(Prop))
-  body: M.discharge? a
+--- 原说明 ---
+`Qq` version of `Lean.Meta.Simp.Methods.discharge?`, which avoids having to use 
+`~q` matching
+on the proof expression returned by `discharge?`
 
-中文:
-定义 Methods.dischargeQ?
-  签名: (M : Methods) (a : Q(命题))
-  定义体: M.discharge? a
-
-Depends on / 依赖: M.discharge, discharge
+`dischargeQ? (a : Q(Prop))` attempts to prove `a` using the discharger, returnin
+g
+`some (pf : Q(a))` if a proof is found and `none` otherwise.
 -/
-def Methods.dischargeQ? (M : Methods) (a : Q(Prop)) : SimpM Option Q($a) := M.discharge? a
+def Methods.dischargeQ? (M : Methods) (a : Q(Prop)) : SimpM <| Option Q($a) := M.discharge? a
 
 end Lean.Meta.Simp
+

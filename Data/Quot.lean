@@ -30,48 +30,30 @@ run_cmd Lean.Elab.Command.liftTermElabM do
   Lean.Meta.registerCoercion ``Setoid.r
     (some { numArgs := 2, coercee := 1, type := .coeFun })
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- When writing a lemma about `someSetoid x y` (which uses this instance),
+call it `someSetoid_apply` not `someSetoid_r`. -/
+/-
+**Setoid.** 是 Mathlib 中的一个实例，位于命名空间 `Setoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeFun (Setoid α) (fun _ => α -> α -> Prop)
-  body: @Setoid.r _
-
-中文:
-实例 :
-  签名: CoeFun (集合等价关系 α) (fun _ => α -> α -> 命题)
-  定义体: @Setoid.r _
-
-Depends on / 依赖: Setoid, Setoid.r
+--- 原说明 ---
+When writing a lemma about `someSetoid x y` (which uses this instance),
+call it `someSetoid_apply` not `someSetoid_r`.
 -/
-instance : CoeFun (Setoid α) (fun _ => α -> α -> Prop) where
+instance : CoeFun (Setoid α) (fun _ ↦ α → α → Prop) where
   coe := @Setoid.r _
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {α : Sort*}
-  statement: forall {s t : Setoid α}, (forall a b, s a b ↔ t a b) -> s = t
-  proof: funext fun a => funext fun b => propext Eq a b
-     subst this
-     rfl
-
-中文:
-定理 ext
-  条件: {α : 类型层*}
-  结论: 对任意 {s t : 集合等价关系 α}, (对任意 a b, s a b ↔ t a b) -> s = t
-  证明: funext fun a => funext fun b => propext Eq a b
-     subst this
-     rfl
-
-Depends on / 依赖: propext
+/-
+**Setoid.ext** 是 Mathlib 中的一个定理，位于命名空间 `Setoid`。
+形式化陈述：ext {α : Sort*} : forall {s t : Setoid α}, (forall a b, s a b ↔ t a b) -> 
+s = t | ⟨r, _⟩, ⟨p, _⟩, Eq => by have : r = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem ext {α : Sort*} : forall {s t : Setoid α}, (forall a b, s a b ↔ t a b) -> s = t
+theorem ext {α : Sort*} : ∀ {s t : Setoid α}, (∀ a b, s a b ↔ t a b) → s = t
   | ⟨r, _⟩, ⟨p, _⟩, Eq =>
-by have : r = p := funext fun a => funext fun b => propext Eq a b
+  by have : r = p := funext fun a ↦ funext fun b ↦ propext <| Eq a b
      subst this
      rfl
 
@@ -79,480 +61,356 @@ end Setoid
 
 namespace Quot
 
-variable {ra : α -> α -> Prop} {rb : β -> β -> Prop} {φ : Quot ra -> Quot rb -> Sort*}
+variable {ra : α → α → Prop} {rb : β → β → Prop} {φ : Quot ra → Quot rb → Sort*}
 
 @[inherit_doc Quot.mk]
 local notation3:arg "⟦" a "⟧" => Quot.mk _ a
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  statement: {α : Sort*} {r : α -> α -> Prop} {β : Quot r -> Prop} (q : Quot r)
-  proof: ind h q
-
-中文:
-定理 induction_on
-  结论: {α : 类型层*} {r : α -> α -> 命题} {β : 商 r -> 命题} (q : 商 r)
-  证明: ind h q
+/-
+**Quot.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Prop} (q : Quot r), (∀ (
+a : α), β (Quot.mk r a)) → β q
+参数：q : Quot r；∀ (a : α), β (Quot.mk r a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem induction_on {α : Sort*} {r : α -> α -> Prop} {β : Quot r -> Prop} (q : Quot r)
-    (h : forall a, β (Quot.mk r a)) : β q :=
+protected theorem induction_on {α : Sort*} {r : α → α → Prop} {β : Quot r → Prop} (q : Quot r)
+    (h : ∀ a, β (Quot.mk r a)) : β q :=
   ind h q
-
-instance (r : α -> α -> Prop) [Inhabited α] : Inhabited (Quot r) :=
+/-
+**Quot.** 是 Mathlib 中的一个实例，位于命名空间 `Quot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (r : α → α → Prop) [Inhabited α] : Inhabited (Quot r) :=
   ⟨⟦default⟧⟩
-
-/--
-Instance `Subsingleton` / 实例 `Subsingleton`
-
-English:
-instance Subsingleton
-  signature: [Subsingleton α]
-  body: ⟨fun x => Quot.induction_on x fun _ => Quot.ind fun _ => congr_arg _ (Subsingleton.elim _ _)⟩
-
-中文:
-实例 子单例
-  签名: [子单例 α]
-  定义体: ⟨fun x => Quot.induction_on x fun _ => Quot.ind fun _ => congr_arg _ (Subsingleton.elim _ _)⟩
+/-
+**Quot.Subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u_1} {ra : α → α → Prop} [Subsingleton α], Subsingleton (Quot 
+ra)
+参数：Quot ra。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 protected instance Subsingleton [Subsingleton α] : Subsingleton (Quot ra) :=
-  ⟨fun x => Quot.induction_on x fun _ => Quot.ind fun _ => congr_arg _ (Subsingleton.elim _ _)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique (Quot ra)
-  body: Unique.mk' _
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 (商 ra)
-  定义体: Unique.mk' _
-
-Depends on / 依赖: Unique, Unique.mk
+  ⟨fun x ↦ Quot.induction_on x fun _ ↦ Quot.ind fun _ ↦ congr_arg _ (Subsingleton.elim _ _)⟩
+/-
+**Quot.** 是 Mathlib 中的一个实例，位于命名空间 `Quot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique (Quot ra) := Unique.mk' _
 
-/--
-Definition of `hrecOn₂` / `hrecOn₂` 的定义
+/-- Recursion on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` and `⟦b⟧`. -/
+/-
+**Quot.hrecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} →   {r : α → α → Prop} →     {motive : Quot r → Sort v} →    
+   (q : Quot r) → (f : (a : α) → motive (Quot.mk r a)) → (∀ (a b : α), r a b → f
+ a ≍ f b) → motive q
+参数：q : Quot r；f : (a : α) → motive (Quot.mk r a)；∀ (a b : α), r a b → f a ≍ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hrecOn₂
-  signature: (qa : Quot ra) (qb : Quot rb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
-  body: Quot.hrecOn (motive := fun qa => φ qa qb) qa
-    (fun a => Quot.hrecOn qb (f a) (fun _ _ pb => cb pb))
-    fun a₁ a₂ pa =>
-      Quot.induction_on qb fun b =>
-        have h₁ : @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₁) (@cb _) ≍ f a₁ b := by
-          simp
-        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₂) (@cb _) := by
-          simp
-        (h₁.trans (ca pa)).trans h₂
-
-中文:
-定义 hrecOn₂
-  签名: (qa : 商 ra) (qb : 商 rb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
-  定义体: Quot.hrecOn (motive := fun qa => φ qa qb) qa
-    (fun a => Quot.hrecOn qb (f a) (fun _ _ pb => cb pb))
-    fun a₁ a₂ pa =>
-      Quot.induction_on qb fun b =>
-        have h₁ : @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₁) (@cb _) ≍ f a₁ b := by
-          simp
-        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₂) (@cb _) := by
-          simp
-        (h₁.trans (ca pa)).trans h₂
+--- 原说明 ---
+Recursion on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` 
+and `⟦b⟧`.
 -/
-protected def hrecOn₂ (qa : Quot ra) (qb : Quot rb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
-    (ca : forall {b a₁ a₂}, ra a₁ a₂ -> f a₁ b ≍ f a₂ b)
-    (cb : forall {a b₁ b₂}, rb b₁ b₂ -> f a b₁ ≍ f a b₂) :
+protected def hrecOn₂ (qa : Quot ra) (qb : Quot rb) (f : ∀ a b, φ ⟦a⟧ ⟦b⟧)
+    (ca : ∀ {b a₁ a₂}, ra a₁ a₂ → f a₁ b ≍ f a₂ b)
+    (cb : ∀ {a b₁ b₂}, rb b₁ b₂ → f a b₁ ≍ f a b₂) :
     φ qa qb :=
-  Quot.hrecOn (motive := fun qa => φ qa qb) qa
-    (fun a => Quot.hrecOn qb (f a) (fun _ _ pb => cb pb))
-    fun a₁ a₂ pa =>
-      Quot.induction_on qb fun b =>
+  Quot.hrecOn (motive := fun qa ↦ φ qa qb) qa
+    (fun a ↦ Quot.hrecOn qb (f a) (fun _ _ pb ↦ cb pb))
+    fun a₁ a₂ pa ↦
+      Quot.induction_on qb fun b ↦
         have h₁ : @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₁) (@cb _) ≍ f a₁ b := by
           simp
         have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₂) (@cb _) := by
           simp
         (h₁.trans (ca pa)).trans h₂
 
-/--
-Definition of `map` / `map` 的定义
+/-- Map a function `f : α → β` such that `ra x y` implies `rb (f x) (f y)`
+to a map `Quot ra → Quot rb`. -/
+/-
+**Quot.map** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {ra : α → α → Prop} → {rb : β → β 
+→ Prop} → (f : α → β) → (∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)) → Quot ra → Quot 
+rb
+参数：f : α → β；∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b))
-  body: Quot.lift (fun x => Quot.mk rb (f x)) fun _ _ hra => Quot.sound h hra
-
-中文:
-定义 map
-  签名: (f : α -> β) (h : 对任意 ⦃a b : α⦄, ra a b -> rb (f a) (f b))
-  定义体: Quot.lift (fun x => Quot.mk rb (f x)) fun _ _ hra => Quot.sound h hra
+--- 原说明 ---
+Map a function `f : α → β` such that `ra x y` implies `rb (f x) (f y)`
+to a map `Quot ra → Quot rb`.
 -/
-protected def map (f : α -> β) (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b)) : Quot ra -> Quot rb :=
-Quot.lift (fun x => Quot.mk rb (f x)) fun _ _ hra => Quot.sound h hra
+protected def map (f : α → β) (h : ∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)) : Quot ra → Quot rb :=
+  Quot.lift (fun x => Quot.mk rb (f x)) fun _ _ hra ↦ Quot.sound <| h hra
 
-/--
-Definition of `mapRight` / `mapRight` 的定义
+/-- If `ra` is a subrelation of `ra'`, then we have a natural map `Quot ra → Quot ra'`. -/
+/-
+**Quot.mapRight** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u_1} → {ra ra' : α → α → Prop} → (∀ (a₁ a₂ : α), ra a₁ a₂ → ra' 
+a₁ a₂) → Quot ra → Quot ra'
+参数：∀ (a₁ a₂ : α), ra a₁ a₂ → ra' a₁ a₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRight
-  signature: {ra' : α -> α -> Prop} (h : forall a₁ a₂, ra a₁ a₂ -> ra' a₁ a₂)
-  body: Quot.map id h
-
-中文:
-定义 mapRight
-  签名: {ra' : α -> α -> 命题} (h : 对任意 a₁ a₂, ra a₁ a₂ -> ra' a₁ a₂)
-  定义体: Quot.map id h
+--- 原说明 ---
+If `ra` is a subrelation of `ra'`, then we have a natural map `Quot ra → Quot ra
+'`.
 -/
-protected def mapRight {ra' : α -> α -> Prop} (h : forall a₁ a₂, ra a₁ a₂ -> ra' a₁ a₂) :
-    Quot ra -> Quot ra' :=
+protected def mapRight {ra' : α → α → Prop} (h : ∀ a₁ a₂, ra a₁ a₂ → ra' a₁ a₂) :
+    Quot ra → Quot ra' :=
   Quot.map id h
 
-/--
-Definition of `factor` / `factor` 的定义
+/-- Weaken the relation of a quotient. This is the same as `Quot.map id`. -/
+/-
+**Quot.factor** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：factor {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> s x y)
+ : Quot r -> Quot s
+参数：r s : α -> α -> Prop；h : forall x y, r x y -> s x y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factor
-  signature: {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> s x y)
-  body: Quot.lift (Quot.mk s) fun x y rxy => Quot.sound (h x y rxy)
-
-中文:
-定义 factor
-  签名: {α : 类型} (r s : α -> α -> 命题) (h : 对任意 x y, r x y -> s x y)
-  定义体: Quot.lift (Quot.mk s) fun x y rxy => Quot.sound (h x y rxy)
-
-Depends on / 依赖: Quot.lift, Quot.mk, Quot.sound
+--- 原说明 ---
+Weaken the relation of a quotient. This is the same as `Quot.map id`.
 -/
-def factor {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> s x y) : Quot r -> Quot s :=
-  Quot.lift (Quot.mk s) fun x y rxy => Quot.sound (h x y rxy)
-
-/--
-theorem `factor_mk_eq` / 定理 `factor_mk_eq`
-
-English:
-theorem factor_mk_eq
-  given: {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> s x y)
-  proof: rfl
-
-中文:
-定理 factor_mk_eq
-  条件: {α : 类型} (r s : α -> α -> 命题) (h : 对任意 x y, r x y -> s x y)
-  证明: rfl
+def factor {α : Type*} (r s : α → α → Prop) (h : ∀ x y, r x y → s x y) : Quot r → Quot s :=
+  Quot.lift (Quot.mk s) fun x y rxy ↦ Quot.sound (h x y rxy)
+/-
+**Quot.factor_mk_eq** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：factor_mk_eq {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> 
+s x y) : factor r s h ∘ Quot.mk _ = Quot.mk _
+参数：r s : α -> α -> Prop；h : forall x y, r x y -> s x y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem factor_mk_eq {α : Type*} (r s : α -> α -> Prop) (h : forall x y, r x y -> s x y) :
+theorem factor_mk_eq {α : Type*} (r s : α → α → Prop) (h : ∀ x y, r x y → s x y) :
     factor r s h ∘ Quot.mk _ = Quot.mk _ :=
   rfl
 
-variable {γ : Sort*} {r : α -> α -> Prop} {s : β -> β -> Prop}
-
-/--
-theorem `lift_mk` / 定理 `lift_mk`
-
-English:
-theorem lift_mk
-  given: (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) (a : α)
-  proof: rfl
-
-中文:
-定理 lift_mk
-  条件: (f : α -> γ) (h : 对任意 a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) (a : α)
-  证明: rfl
+variable {γ : Sort*} {r : α → α → Prop} {s : β → β → Prop}
+/-
+**Quot.lift_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：lift_mk (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) (a : α) : 
+Quot.lift f h (Quot.mk r a) = f a
+参数：f : α -> γ；h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_mk (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) (a : α) :
+theorem lift_mk (f : α → γ) (h : ∀ a₁ a₂, r a₁ a₂ → f a₁ = f a₂) (a : α) :
     Quot.lift f h (Quot.mk r a) = f a :=
   rfl
-
-/--
-theorem `liftOn_mk` / 定理 `liftOn_mk`
-
-English:
-theorem liftOn_mk
-  given: (a : α) (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂)
-  proof: rfl
-
-中文:
-定理 liftOn_mk
-  条件: (a : α) (f : α -> γ) (h : 对任意 a₁ a₂, r a₁ a₂ -> f a₁ = f a₂)
-  证明: rfl
+/-
+**Quot.liftOn_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：liftOn_mk (a : α) (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) 
+: Quot.liftOn (Quot.mk r a) f h = f a
+参数：a : α；f : α -> γ；h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftOn_mk (a : α) (f : α -> γ) (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) :
+theorem liftOn_mk (a : α) (f : α → γ) (h : ∀ a₁ a₂, r a₁ a₂ → f a₁ = f a₂) :
     Quot.liftOn (Quot.mk r a) f h = f a :=
   rfl
-
-/--
-theorem `surjective_lift` / 定理 `surjective_lift`
-
-English:
-theorem surjective_lift
-  given: {f : α -> γ} (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂)
-  proof: ⟨fun hf => hf.comp Quot.exists_rep, fun hf y => let ⟨x, hx⟩ := hf y; ⟨Quot.mk _ x, hx⟩⟩
-
-中文:
-定理 surjective_lift
-  条件: {f : α -> γ} (h : 对任意 a₁ a₂, r a₁ a₂ -> f a₁ = f a₂)
-  证明: ⟨fun hf => hf.comp Quot.exists_rep, fun hf y => let ⟨x, hx⟩ := hf y; ⟨Quot.mk _ x, hx⟩⟩
+/-
+**Quot.surjective_lift** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u_1} {γ : Sort u_4} {r : α → α → Prop} {f : α → γ} (h : ∀ (a₁ 
+a₂ : α), r a₁ a₂ → f a₁ = f a₂),   Function.Surjective (Quot.lift f h) ↔ Functio
+n.Surjective f
+参数：h : ∀ (a₁ a₂ : α), r a₁ a₂ → f a₁ = f a₂；Quot.lift f h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
-@[simp] theorem surjective_lift {f : α -> γ} (h : forall a₁ a₂, r a₁ a₂ -> f a₁ = f a₂) :
+@[simp] theorem surjective_lift {f : α → γ} (h : ∀ a₁ a₂, r a₁ a₂ → f a₁ = f a₂) :
     Function.Surjective (lift f h) ↔ Function.Surjective f :=
   ⟨fun hf => hf.comp Quot.exists_rep, fun hf y => let ⟨x, hx⟩ := hf y; ⟨Quot.mk _ x, hx⟩⟩
 
-/--
-Definition of `lift₂` / `lift₂` 的定义
+/-- Descends a function `f : α → β → γ` to quotients of `α` and `β`. -/
+/-
+**Quot.lift** 是 Mathlib 中的一个quot，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {r : α → α → Prop} → {β : Sort v} → (f : α → β) → (∀ (a b :
+ α), r a b → f a = f b) → Quot r → β
+参数：f : α → β；∀ (a b : α), r a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift₂
-  signature: (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  body: Quot.lift (fun a => Quot.lift (f a) (hr a))
-    (fun a₁ a₂ ha => funext fun q => Quot.induction_on q fun b => hs a₁ a₂ b ha) q₁ q₂
-
-@[simp]
-
-中文:
-定义 lift₂
-  签名: (f : α -> β -> γ) (hr : 对任意 a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  定义体: Quot.lift (fun a => Quot.lift (f a) (hr a))
-    (fun a₁ a₂ ha => funext fun q => Quot.induction_on q fun b => hs a₁ a₂ b ha) q₁ q₂
-
-@[simp]
+--- 原说明 ---
+Descends a function `f : α → β → γ` to quotients of `α` and `β`.
 -/
-protected def lift₂ (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-    (hs : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b) (q₁ : Quot r) (q₂ : Quot s) : γ :=
-  Quot.lift (fun a => Quot.lift (f a) (hr a))
-    (fun a₁ a₂ ha => funext fun q => Quot.induction_on q fun b => hs a₁ a₂ b ha) q₁ q₂
+protected def lift₂ (f : α → β → γ) (hr : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂)
+    (hs : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b) (q₁ : Quot r) (q₂ : Quot s) : γ :=
+  Quot.lift (fun a ↦ Quot.lift (f a) (hr a))
+    (fun a₁ a₂ ha ↦ funext fun q ↦ Quot.induction_on q fun b ↦ hs a₁ a₂ b ha) q₁ q₂
 
 @[simp]
-/--
-theorem `lift₂_mk` / 定理 `lift₂_mk`
-
-English:
-theorem lift₂_mk
-  statement: (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  proof: rfl
-
-中文:
-定理 lift₂_mk
-  结论: (f : α -> β -> γ) (hr : 对任意 a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  证明: rfl
+/-
+**Quot.lift** 是 Mathlib 中的一个quot，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {r : α → α → Prop} → {β : Sort v} → (f : α → β) → (∀ (a b :
+ α), r a b → f a = f b) → Quot r → β
+参数：f : α → β；∀ (a b : α), r a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift₂_mk (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-    (hs : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b)
+theorem lift₂_mk (f : α → β → γ) (hr : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂)
+    (hs : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b)
     (a : α) (b : β) : Quot.lift₂ f hr hs (Quot.mk r a) (Quot.mk s b) = f a b :=
   rfl
 
-/--
-Definition of `liftOn₂` / `liftOn₂` 的定义
+/-- Descends a function `f : α → β → γ` to quotients of `α` and `β` and applies it. -/
+/-
+**Quot.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {r : α → α → Prop} → Quot r → (f : α → β) → 
+(∀ (a b : α), r a b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), r a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOn₂
-  signature: (p : Quot r) (q : Quot s) (f : α -> β -> γ)
-  body: Quot.lift₂ f hr hs p q
-
-@[simp]
-
-中文:
-定义 liftOn₂
-  签名: (p : 商 r) (q : 商 s) (f : α -> β -> γ)
-  定义体: Quot.lift₂ f hr hs p q
-
-@[simp]
+--- 原说明 ---
+Descends a function `f : α → β → γ` to quotients of `α` and `β` and applies it.
 -/
-protected def liftOn₂ (p : Quot r) (q : Quot s) (f : α -> β -> γ)
-    (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂) (hs : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b) : γ :=
+protected def liftOn₂ (p : Quot r) (q : Quot s) (f : α → β → γ)
+    (hr : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂) (hs : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b) : γ :=
   Quot.lift₂ f hr hs p q
 
 @[simp]
-/--
-theorem `liftOn₂_mk` / 定理 `liftOn₂_mk`
-
-English:
-theorem liftOn₂_mk
-  statement: (a : α) (b : β) (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  proof: rfl
-
-中文:
-定理 liftOn₂_mk
-  结论: (a : α) (b : β) (f : α -> β -> γ) (hr : 对任意 a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-  证明: rfl
+/-
+**Quot.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {r : α → α → Prop} → Quot r → (f : α → β) → 
+(∀ (a b : α), r a b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), r a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftOn₂_mk (a : α) (b : β) (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂)
-    (hs : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b) :
+theorem liftOn₂_mk (a : α) (b : β) (f : α → β → γ) (hr : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂)
+    (hs : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b) :
     Quot.liftOn₂ (Quot.mk r a) (Quot.mk s b) f hr hs = f a b :=
   rfl
 
-variable {t : γ -> γ -> Prop}
+variable {t : γ → γ → Prop}
 
-/--
-Definition of `map₂` / `map₂` 的定义
+/-- Descends a function `f : α → β → γ` to quotients of `α` and `β` with values in a quotient of
+`γ`. -/
+/-
+**Quot.map** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {ra : α → α → Prop} → {rb : β → β 
+→ Prop} → (f : α → β) → (∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)) → Quot ra → Quot 
+rb
+参数：f : α → β；∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-  body: Quot.lift₂ (fun a b => Quot.mk t <| f a b) (fun a b₁ b₂ hb => Quot.sound (hr a b₁ b₂ hb))
-    (fun a₁ a₂ b ha => Quot.sound (hs a₁ a₂ b ha)) q₁ q₂
-
-@[simp]
-
-中文:
-定义 map₂
-  签名: (f : α -> β -> γ) (hr : 对任意 a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-  定义体: Quot.lift₂ (fun a b => Quot.mk t <| f a b) (fun a b₁ b₂ hb => Quot.sound (hr a b₁ b₂ hb))
-    (fun a₁ a₂ b ha => Quot.sound (hs a₁ a₂ b ha)) q₁ q₂
-
-@[simp]
+--- 原说明 ---
+Descends a function `f : α → β → γ` to quotients of `α` and `β` with values in a
+ quotient of
+`γ`.
 -/
-protected def map₂ (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-    (hs : forall a₁ a₂ b, r a₁ a₂ -> t (f a₁ b) (f a₂ b)) (q₁ : Quot r) (q₂ : Quot s) : Quot t :=
-  Quot.lift₂ (fun a b => Quot.mk t <| f a b) (fun a b₁ b₂ hb => Quot.sound (hr a b₁ b₂ hb))
-    (fun a₁ a₂ b ha => Quot.sound (hs a₁ a₂ b ha)) q₁ q₂
+protected def map₂ (f : α → β → γ) (hr : ∀ a b₁ b₂, s b₁ b₂ → t (f a b₁) (f a b₂))
+    (hs : ∀ a₁ a₂ b, r a₁ a₂ → t (f a₁ b) (f a₂ b)) (q₁ : Quot r) (q₂ : Quot s) : Quot t :=
+  Quot.lift₂ (fun a b ↦ Quot.mk t <| f a b) (fun a b₁ b₂ hb ↦ Quot.sound (hr a b₁ b₂ hb))
+    (fun a₁ a₂ b ha ↦ Quot.sound (hs a₁ a₂ b ha)) q₁ q₂
 
 @[simp]
-/--
-theorem `map₂_mk` / 定理 `map₂_mk`
-
-English:
-theorem map₂_mk
-  statement: (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-  proof: rfl
-
-中文:
-定理 map₂_mk
-  结论: (f : α -> β -> γ) (hr : 对任意 a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-  证明: rfl
+/-
+**Quot.map** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {ra : α → α → Prop} → {rb : β → β 
+→ Prop} → (f : α → β) → (∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)) → Quot ra → Quot 
+rb
+参数：f : α → β；∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂_mk (f : α -> β -> γ) (hr : forall a b₁ b₂, s b₁ b₂ -> t (f a b₁) (f a b₂))
-    (hs : forall a₁ a₂ b, r a₁ a₂ -> t (f a₁ b) (f a₂ b)) (a : α) (b : β) :
+theorem map₂_mk (f : α → β → γ) (hr : ∀ a b₁ b₂, s b₁ b₂ → t (f a b₁) (f a b₂))
+    (hs : ∀ a₁ a₂ b, r a₁ a₂ → t (f a₁ b) (f a₂ b)) (a : α) (b : β) :
     Quot.map₂ f hr hs (Quot.mk r a) (Quot.mk s b) = Quot.mk t (f a b) :=
   rfl
 
 /-- A binary version of `Quot.recOnSubsingleton`. -/
 @[elab_as_elim]
-/--
-Definition of `recOnSubsingleton₂` / `recOnSubsingleton₂` 的定义
+/-
+**Quot.recOnSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} →   {r : α → α → Prop} →     {motive : Quot r → Sort v} →    
+   [h : ∀ (a : α), Subsingleton (motive (Quot.mk r a))] → (q : Quot r) → ((a : α
+) → motive (Quot.mk r a)) → motive q
+参数：a : α；motive (Quot.mk r a)；q : Quot r；(a : α) → motive (Quot.mk r a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOnSubsingleton₂
-  signature: {φ : Quot r -> Quot s -> Sort*}
-  body: @Quot.recOnSubsingleton _ r (fun q => φ q q₂)
-    (fun a => Quot.ind (β := fun b => Subsingleton (φ (mk r a) b)) (h a) q₂) q₁
-    fun a => Quot.recOnSubsingleton q₂ fun b => f a b
-
-@[elab_as_elim]
-
-中文:
-定义 recOnSubsingleton₂
-  签名: {φ : 商 r -> 商 s -> 类型层*}
-  定义体: @Quot.recOnSubsingleton _ r (fun q => φ q q₂)
-    (fun a => Quot.ind (β := fun b => Subsingleton (φ (mk r a) b)) (h a) q₂) q₁
-    fun a => Quot.recOnSubsingleton q₂ fun b => f a b
-
-@[elab_as_elim]
+--- 原说明 ---
+A binary version of `Quot.recOnSubsingleton`.
 -/
-protected def recOnSubsingleton₂ {φ : Quot r -> Quot s -> Sort*}
-    [h : forall a b, Subsingleton (φ ⟦a⟧ ⟦b⟧)] (q₁ : Quot r)
-    (q₂ : Quot s) (f : forall a b, φ ⟦a⟧ ⟦b⟧) : φ q₁ q₂ :=
-  @Quot.recOnSubsingleton _ r (fun q => φ q q₂)
-    (fun a => Quot.ind (β := fun b => Subsingleton (φ (mk r a) b)) (h a) q₂) q₁
-    fun a => Quot.recOnSubsingleton q₂ fun b => f a b
+protected def recOnSubsingleton₂ {φ : Quot r → Quot s → Sort*}
+    [h : ∀ a b, Subsingleton (φ ⟦a⟧ ⟦b⟧)] (q₁ : Quot r)
+    (q₂ : Quot s) (f : ∀ a b, φ ⟦a⟧ ⟦b⟧) : φ q₁ q₂ :=
+  @Quot.recOnSubsingleton _ r (fun q ↦ φ q q₂)
+    (fun a ↦ Quot.ind (β := fun b ↦ Subsingleton (φ (mk r a) b)) (h a) q₂) q₁
+    fun a ↦ Quot.recOnSubsingleton q₂ fun b ↦ f a b
 
 @[elab_as_elim]
-/--
-theorem `induction_on₂` / 定理 `induction_on₂`
-
-English:
-theorem induction_on₂
-  statement: {δ : Quot r -> Quot s -> Prop} (q₁ : Quot r) (q₂ : Quot s)
-  proof: Quot.ind (β := fun a => δ a q₂) (fun a₁ => Quot.ind (fun a₂ => h a₁ a₂) q₂) q₁
-
-@[elab_as_elim]
-
-中文:
-定理 induction_on₂
-  结论: {δ : 商 r -> 商 s -> 命题} (q₁ : 商 r) (q₂ : 商 s)
-  证明: Quot.ind (β := fun a => δ a q₂) (fun a₁ => Quot.ind (fun a₂ => h a₁ a₂) q₂) q₁
-
-@[elab_as_elim]
+/-
+**Quot.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Prop} (q : Quot r), (∀ (
+a : α), β (Quot.mk r a)) → β q
+参数：q : Quot r；∀ (a : α), β (Quot.mk r a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem induction_on₂ {δ : Quot r -> Quot s -> Prop} (q₁ : Quot r) (q₂ : Quot s)
-    (h : forall a b, δ (Quot.mk r a) (Quot.mk s b)) : δ q₁ q₂ :=
-  Quot.ind (β := fun a => δ a q₂) (fun a₁ => Quot.ind (fun a₂ => h a₁ a₂) q₂) q₁
+protected theorem induction_on₂ {δ : Quot r → Quot s → Prop} (q₁ : Quot r) (q₂ : Quot s)
+    (h : ∀ a b, δ (Quot.mk r a) (Quot.mk s b)) : δ q₁ q₂ :=
+  Quot.ind (β := fun a ↦ δ a q₂) (fun a₁ ↦ Quot.ind (fun a₂ ↦ h a₁ a₂) q₂) q₁
 
 @[elab_as_elim]
-/--
-theorem `induction_on₃` / 定理 `induction_on₃`
-
-English:
-theorem induction_on₃
-  statement: {δ : Quot r -> Quot s -> Quot t -> Prop} (q₁ : Quot r)
-  proof: Quot.ind (β := fun a => δ a q₂ q₃) (fun a₁ => Quot.ind (β := fun b => δ _ b q₃)
-    (fun a₂ => Quot.ind (fun a₃ => h a₁ a₂ a₃) q₃) q₂) q₁
-
-中文:
-定理 induction_on₃
-  结论: {δ : 商 r -> 商 s -> 商 t -> 命题} (q₁ : 商 r)
-  证明: Quot.ind (β := fun a => δ a q₂ q₃) (fun a₁ => Quot.ind (β := fun b => δ _ b q₃)
-    (fun a₂ => Quot.ind (fun a₃ => h a₁ a₂ a₃) q₃) q₂) q₁
+/-
+**Quot.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Prop} (q : Quot r), (∀ (
+a : α), β (Quot.mk r a)) → β q
+参数：q : Quot r；∀ (a : α), β (Quot.mk r a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem induction_on₃ {δ : Quot r -> Quot s -> Quot t -> Prop} (q₁ : Quot r)
-    (q₂ : Quot s) (q₃ : Quot t) (h : forall a b c, δ (Quot.mk r a) (Quot.mk s b) (Quot.mk t c)) :
+protected theorem induction_on₃ {δ : Quot r → Quot s → Quot t → Prop} (q₁ : Quot r)
+    (q₂ : Quot s) (q₃ : Quot t) (h : ∀ a b c, δ (Quot.mk r a) (Quot.mk s b) (Quot.mk t c)) :
     δ q₁ q₂ q₃ :=
-  Quot.ind (β := fun a => δ a q₂ q₃) (fun a₁ => Quot.ind (β := fun b => δ _ b q₃)
-    (fun a₂ => Quot.ind (fun a₃ => h a₁ a₂ a₃) q₃) q₂) q₁
-
-/--
-Instance `lift.decidablePred` / 实例 `lift.decidablePred`
-
-English:
-instance lift.decidablePred
-  signature: (r : α -> α -> Prop) (f : α -> Prop) (h : forall a b, r a b -> f a = f b)
-  body: fun q => Quot.recOnSubsingleton (motive := fun _ => Decidable _) q hf
-
-中文:
-实例 lift.decidablePred
-  签名: (r : α -> α -> 命题) (f : α -> 命题) (h : 对任意 a b, r a b -> f a = f b)
-  定义体: fun q => Quot.recOnSubsingleton (motive := fun _ => Decidable _) q hf
-
-Depends on / 依赖: Decidable, Quot.recOnSubsingleton, motive, recOnSubsingleton
+  Quot.ind (β := fun a ↦ δ a q₂ q₃) (fun a₁ ↦ Quot.ind (β := fun b ↦ δ _ b q₃)
+    (fun a₂ ↦ Quot.ind (fun a₃ ↦ h a₁ a₂ a₃) q₃) q₂) q₁
+/-
+**Quot.lift.decidablePred** 是 Mathlib 中的一个定义，位于命名空间 `Quot.lift`。
+形式化陈述：{α : Sort u_1} →   (r : α → α → Prop) →     (f : α → Prop) → (h : ∀ (a b :
+ α), r a b → f a = f b) → [hf : DecidablePred f] → DecidablePred (Quot.lift f h)
+参数：r : α → α → Prop；f : α → Prop；h : ∀ (a b : α), r a b → f a = f b；Quot.lift f 
+h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance lift.decidablePred (r : α -> α -> Prop) (f : α -> Prop) (h : forall a b, r a b -> f a = f b)
+instance lift.decidablePred (r : α → α → Prop) (f : α → Prop) (h : ∀ a b, r a b → f a = f b)
     [hf : DecidablePred f] :
     DecidablePred (Quot.lift f h) :=
-  fun q => Quot.recOnSubsingleton (motive := fun _ => Decidable _) q hf
+  fun q ↦ Quot.recOnSubsingleton (motive := fun _ ↦ Decidable _) q hf
 
-/--
-Instance `lift₂.decidablePred` / 实例 `lift₂.decidablePred`
+/-- Note that this provides `DecidableRel (Quot.Lift₂ f ha hb)` when `α = β`. -/
+/-
+**Quot.lift** 是 Mathlib 中的一个quot，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {r : α → α → Prop} → {β : Sort v} → (f : α → β) → (∀ (a b :
+ α), r a b → f a = f b) → Quot r → β
+参数：f : α → β；∀ (a b : α), r a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lift₂.decidablePred
-  signature: (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β -> Prop)
-  body: fun q₂ => Quot.recOnSubsingleton₂ q₁ q₂ hf
-
-中文:
-实例 lift₂.decidablePred
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) (f : α -> β -> 命题)
-  定义体: fun q₂ => Quot.recOnSubsingleton₂ q₁ q₂ hf
-
-Depends on / 依赖: Quot.recOnSubsingleton
+--- 原说明 ---
+Note that this provides `DecidableRel (Quot.Lift₂ f ha hb)` when `α = β`.
 -/
-instance lift₂.decidablePred (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β -> Prop)
-    (ha : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂) (hb : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b)
-    [hf : forall a, DecidablePred (f a)] (q₁ : Quot r) :
+instance lift₂.decidablePred (r : α → α → Prop) (s : β → β → Prop) (f : α → β → Prop)
+    (ha : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂) (hb : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b)
+    [hf : ∀ a, DecidablePred (f a)] (q₁ : Quot r) :
     DecidablePred (Quot.lift₂ f ha hb q₁) :=
-  fun q₂ => Quot.recOnSubsingleton₂ q₁ q₂ hf
-
-instance (r : α -> α -> Prop) (q : Quot r) (f : α -> Prop) (h : forall a b, r a b -> f a = f b)
+  fun q₂ ↦ Quot.recOnSubsingleton₂ q₁ q₂ hf
+/-
+**Quot.** 是 Mathlib 中的一个实例，位于命名空间 `Quot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (r : α → α → Prop) (q : Quot r) (f : α → Prop) (h : ∀ a b, r a b → f a = f b)
     [DecidablePred f] :
     Decidable (Quot.liftOn q f h) :=
   Quot.lift.decidablePred _ _ _ _
-
-instance (r : α -> α -> Prop) (s : β -> β -> Prop) (q₁ : Quot r) (q₂ : Quot s) (f : α -> β -> Prop)
-    (ha : forall a b₁ b₂, s b₁ b₂ -> f a b₁ = f a b₂) (hb : forall a₁ a₂ b, r a₁ a₂ -> f a₁ b = f a₂ b)
-    [forall a, DecidablePred (f a)] :
+/-
+**Quot.** 是 Mathlib 中的一个实例，位于命名空间 `Quot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (r : α → α → Prop) (s : β → β → Prop) (q₁ : Quot r) (q₂ : Quot s) (f : α → β → Prop)
+    (ha : ∀ a b₁ b₂, s b₁ b₂ → f a b₁ = f a b₂) (hb : ∀ a₁ a₂ b, r a₁ a₂ → f a₁ b = f a₂ b)
+    [∀ a, DecidablePred (f a)] :
     Decidable (Quot.liftOn₂ q₁ q₂ f ha hb) :=
   Quot.lift₂.decidablePred _ _ _ _ _ _ _
 
@@ -561,7 +419,7 @@ end Quot
 namespace Quotient
 
 variable {sa : Setoid α} {sb : Setoid β}
-variable {φ : Quotient sa -> Quotient sb -> Sort*}
+variable {φ : Quotient sa → Quotient sb → Sort*}
 
 -- TODO: in mathlib3 this notation took the Setoid as an instance-implicit argument,
 -- now it's explicit but left as a metavariable.
@@ -571,715 +429,543 @@ variable {φ : Quotient sa -> Quotient sb -> Sort*}
 @[inherit_doc Quotient.mk]
 notation3:arg "⟦" a "⟧" => Quotient.mk _ a
 
-/--
-Instance `instInhabitedQuotient` / 实例 `instInhabitedQuotient`
-
-English:
-instance instInhabitedQuotient
-  signature: (s : Setoid α) [Inhabited α]
-  body: ⟨⟦default⟧⟩
-
-中文:
-实例 instInhabitedQuotient
-  签名: (s : 集合等价关系 α) [可居 α]
-  定义体: ⟨⟦default⟧⟩
+/-
+**Quotient.instInhabitedQuotient** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+形式化陈述：instInhabitedQuotient (s : Setoid α) [Inhabited α] : Inhabited (Quotient s
+)
+参数：s : Setoid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabitedQuotient (s : Setoid α) [Inhabited α] : Inhabited (Quotient s) :=
   ⟨⟦default⟧⟩
-
-/--
-Instance `instSubsingletonQuotient` / 实例 `instSubsingletonQuotient`
-
-English:
-instance instSubsingletonQuotient
-  signature: (s : Setoid α) [Subsingleton α]
-  body: Quot.Subsingleton
-
-中文:
-实例 instSubsingletonQuotient
-  签名: (s : 集合等价关系 α) [子单例 α]
-  定义体: Quot.Subsingleton
-
-Depends on / 依赖: Quot.Subsingleton, Subsingleton
+/-
+**Quotient.instSubsingletonQuotient** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+形式化陈述：instSubsingletonQuotient (s : Setoid α) [Subsingleton α] : Subsingleton (Q
+uotient s)
+参数：s : Setoid α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.Subsingleton`：∀ {α : Sort u_1} {ra : α → α → Prop} [Subsingleton α]
+, Subsingleton (Quot ra)
 -/
 instance instSubsingletonQuotient (s : Setoid α) [Subsingleton α] : Subsingleton (Quotient s) :=
   Quot.Subsingleton
-
-/--
-Instance `instUniqueQuotient` / 实例 `instUniqueQuotient`
-
-English:
-instance instUniqueQuotient
-  signature: (s : Setoid α) [Unique α]
-  body: Unique.mk' _
-
-中文:
-实例 instUniqueQuotient
-  签名: (s : 集合等价关系 α) [唯一 α]
-  定义体: Unique.mk' _
-
-Depends on / 依赖: Unique, Unique.mk
+/-
+**Quotient.instUniqueQuotient** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+形式化陈述：instUniqueQuotient (s : Setoid α) [Unique α] : Unique (Quotient s)
+参数：s : Setoid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUniqueQuotient (s : Setoid α) [Unique α] : Unique (Quotient s) := Unique.mk' _
-
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type*} [Setoid α] : IsEquiv α (· ≈ ·) where
   refl := Setoid.refl
   symm _ _ := Setoid.symm
   trans _ _ _ := Setoid.trans
 
-/--
-Definition of `hrecOn₂` / `hrecOn₂` 的定义
+/-- Induction on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` and `⟦b⟧`. -/
+/-
+**Quotient.hrecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} →   {s : Setoid α} →     {motive : Quotient s → Sort v} →    
+   (q : Quotient s) → (f : (a : α) → motive ⟦a⟧) → (∀ (a b : α), a ≈ b → f a ≍ f
+ b) → motive q
+参数：q : Quotient s；f : (a : α) → motive ⟦a⟧；∀ (a b : α), a ≈ b → f a ≍ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hrecOn₂
-  signature: (qa : Quotient sa) (qb : Quotient sb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
-  body: Quot.hrecOn₂ qa qb f (fun p => c _ _ _ _ p (Setoid.refl _)) fun p => c _ _ _ _ (Setoid.refl _) p
-
-中文:
-定义 hrecOn₂
-  签名: (qa : 商 sa) (qb : 商 sb) (f : 对任意 a b, φ ⟦a⟧ ⟦b⟧)
-  定义体: Quot.hrecOn₂ qa qb f (fun p => c _ _ _ _ p (Setoid.refl _)) fun p => c _ _ _ _ (Setoid.refl _) p
+--- 原说明 ---
+Induction on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` 
+and `⟦b⟧`.
 -/
-protected def hrecOn₂ (qa : Quotient sa) (qb : Quotient sb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
-    (c : forall a₁ b₁ a₂ b₂, a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ ≍ f a₂ b₂) : φ qa qb :=
-  Quot.hrecOn₂ qa qb f (fun p => c _ _ _ _ p (Setoid.refl _)) fun p => c _ _ _ _ (Setoid.refl _) p
+protected def hrecOn₂ (qa : Quotient sa) (qb : Quotient sb) (f : ∀ a b, φ ⟦a⟧ ⟦b⟧)
+    (c : ∀ a₁ b₁ a₂ b₂, a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ ≍ f a₂ b₂) : φ qa qb :=
+  Quot.hrecOn₂ qa qb f (fun p ↦ c _ _ _ _ p (Setoid.refl _)) fun p ↦ c _ _ _ _ (Setoid.refl _) p
 
-/--
-Definition of `map` / `map` 的定义
+/-- Map a function `f : α → β` that sends equivalent elements to equivalent elements
+to a function `Quotient sa → Quotient sb`. Useful to define unary operations on quotients. -/
+/-
+**Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {sa : Setoid α} → {sb : Setoid β} 
+→ (f : α → β) → (∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) → Quotient sa → Quotient sb
+参数：f : α → β；∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b)
-  body: Quot.map f h
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : α -> β) (h : 对任意 ⦃a b : α⦄, a ≈ b -> f a ≈ f b)
-  定义体: Quot.map f h
-
-@[simp]
+--- 原说明 ---
+Map a function `f : α → β` that sends equivalent elements to equivalent elements
+to a function `Quotient sa → Quotient sb`. Useful to define unary operations on 
+quotients.
 -/
-protected def map (f : α -> β) (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b) : Quotient sa -> Quotient sb :=
+protected def map (f : α → β) (h : ∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) : Quotient sa → Quotient sb :=
   Quot.map f h
 
 @[simp]
-/--
-theorem `map_mk` / 定理 `map_mk`
-
-English:
-theorem map_mk
-  given: (f : α -> β) (h) (x : α)
-  proof: rfl
-
-中文:
-定理 map_mk
-  条件: (f : α -> β) (h) (x : α)
-  证明: rfl
+/-
+**Quotient.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：map_mk (f : α -> β) (h) (x : α) : Quotient.map f h (⟦x⟧ : Quotient sa) = (
+⟦f x⟧ : Quotient sb)
+参数：f : α -> β；h；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_mk (f : α -> β) (h) (x : α) :
+theorem map_mk (f : α → β) (h) (x : α) :
     Quotient.map f h (⟦x⟧ : Quotient sa) = (⟦f x⟧ : Quotient sb) :=
   rfl
 
 variable {γ : Sort*} {sc : Setoid γ}
 
-/--
-Definition of `map₂` / `map₂` 的定义
+/-- Map a function `f : α → β → γ` that sends equivalent elements to equivalent elements
+to a function `f : Quotient sa → Quotient sb → Quotient sc`.
+Useful to define binary operations on quotients. -/
+/-
+**Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {sa : Setoid α} → {sb : Setoid β} 
+→ (f : α → β) → (∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) → Quotient sa → Quotient sb
+参数：f : α → β；∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (f : α -> β -> γ)
-  body: Quotient.lift₂ (fun x y => ⟦f x y⟧) fun _ _ _ _ h₁ h₂ => Quot.sound h h₁ h₂
-
-@[simp]
-
-中文:
-定义 map₂
-  签名: (f : α -> β -> γ)
-  定义体: Quotient.lift₂ (fun x y => ⟦f x y⟧) fun _ _ _ _ h₁ h₂ => Quot.sound h h₁ h₂
-
-@[simp]
+--- 原说明 ---
+Map a function `f : α → β → γ` that sends equivalent elements to equivalent elem
+ents
+to a function `f : Quotient sa → Quotient sb → Quotient sc`.
+Useful to define binary operations on quotients.
 -/
-protected def map₂ (f : α -> β -> γ)
-    (h : forall ⦃a₁ a₂⦄, a₁ ≈ a₂ -> forall ⦃b₁ b₂⦄, b₁ ≈ b₂ -> f a₁ b₁ ≈ f a₂ b₂) :
-    Quotient sa -> Quotient sb -> Quotient sc :=
-Quotient.lift₂ (fun x y => ⟦f x y⟧) fun _ _ _ _ h₁ h₂ => Quot.sound h h₁ h₂
+protected def map₂ (f : α → β → γ)
+    (h : ∀ ⦃a₁ a₂⦄, a₁ ≈ a₂ → ∀ ⦃b₁ b₂⦄, b₁ ≈ b₂ → f a₁ b₁ ≈ f a₂ b₂) :
+    Quotient sa → Quotient sb → Quotient sc :=
+  Quotient.lift₂ (fun x y ↦ ⟦f x y⟧) fun _ _ _ _ h₁ h₂ ↦ Quot.sound <| h h₁ h₂
 
 @[simp]
-/--
-theorem `map₂_mk` / 定理 `map₂_mk`
-
-English:
-theorem map₂_mk
-  given: (f : α -> β -> γ) (h) (x : α) (y : β)
-  proof: rfl
-
-中文:
-定理 map₂_mk
-  条件: (f : α -> β -> γ) (h) (x : α) (y : β)
-  证明: rfl
+/-
+**Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {sa : Setoid α} → {sb : Setoid β} 
+→ (f : α → β) → (∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) → Quotient sa → Quotient sb
+参数：f : α → β；∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂_mk (f : α -> β -> γ) (h) (x : α) (y : β) :
+theorem map₂_mk (f : α → β → γ) (h) (x : α) (y : β) :
     Quotient.map₂ f h (⟦x⟧ : Quotient sa) (⟦y⟧ : Quotient sb) = (⟦f x y⟧ : Quotient sc) :=
   rfl
-
-/--
-Instance `lift.decidablePred` / 实例 `lift.decidablePred`
-
-English:
-instance lift.decidablePred
-  signature: (f : α -> Prop) (h : forall a b, a ≈ b -> f a = f b) [DecidablePred f]
-  body: Quot.lift.decidablePred _ _ _
-
-中文:
-实例 lift.decidablePred
-  签名: (f : α -> 命题) (h : 对任意 a b, a ≈ b -> f a = f b) [DecidablePred f]
-  定义体: Quot.lift.decidablePred _ _ _
+/-
+**Quotient.lift.decidablePred** 是 Mathlib 中的一个定义，位于命名空间 `Quotient.lift`。
+形式化陈述：{α : Sort u_1} →   {sa : Setoid α} →     (f : α → Prop) → (h : ∀ (a b : α)
+, a ≈ b → f a = f b) → [DecidablePred f] → DecidablePred (Quotient.lift f h)
+参数：f : α → Prop；h : ∀ (a b : α), a ≈ b → f a = f b；Quotient.lift f h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance lift.decidablePred (f : α -> Prop) (h : forall a b, a ≈ b -> f a = f b) [DecidablePred f] :
+instance lift.decidablePred (f : α → Prop) (h : ∀ a b, a ≈ b → f a = f b) [DecidablePred f] :
     DecidablePred (Quotient.lift f h) :=
   Quot.lift.decidablePred _ _ _
 
-/--
-Instance `lift₂.decidablePred` / 实例 `lift₂.decidablePred`
+/-- Note that this provides `DecidableRel (Quotient.lift₂ f h)` when `α = β`. -/
+/-
+**Quotient.lift** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → (f : α → β) → (∀ (a b : α),
+ a ≈ b → f a = f b) → Quotient s → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lift₂.decidablePred
-  signature: (f : α -> β -> Prop)
-  body: fun q₂ => Quotient.recOnSubsingleton₂ q₁ q₂ hf
-
-中文:
-实例 lift₂.decidablePred
-  签名: (f : α -> β -> 命题)
-  定义体: fun q₂ => Quotient.recOnSubsingleton₂ q₁ q₂ hf
+--- 原说明 ---
+Note that this provides `DecidableRel (Quotient.lift₂ f h)` when `α = β`.
 -/
-instance lift₂.decidablePred (f : α -> β -> Prop)
-    (h : forall a₁ b₁ a₂ b₂, a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ = f a₂ b₂)
-    [hf : forall a, DecidablePred (f a)]
+instance lift₂.decidablePred (f : α → β → Prop)
+    (h : ∀ a₁ b₁ a₂ b₂, a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ = f a₂ b₂)
+    [hf : ∀ a, DecidablePred (f a)]
     (q₁ : Quotient sa) : DecidablePred (Quotient.lift₂ f h q₁) :=
-  fun q₂ => Quotient.recOnSubsingleton₂ q₁ q₂ hf
-
-instance (q : Quotient sa) (f : α -> Prop) (h : forall a b, a ≈ b -> f a = f b) [DecidablePred f] :
+  fun q₂ ↦ Quotient.recOnSubsingleton₂ q₁ q₂ hf
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (q : Quotient sa) (f : α → Prop) (h : ∀ a b, a ≈ b → f a = f b) [DecidablePred f] :
     Decidable (Quotient.liftOn q f h) :=
   Quotient.lift.decidablePred _ _ _
-
-instance (q₁ : Quotient sa) (q₂ : Quotient sb) (f : α -> β -> Prop)
-    (h : forall a₁ b₁ a₂ b₂, a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ = f a₂ b₂) [forall a, DecidablePred (f a)] :
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (q₁ : Quotient sa) (q₂ : Quotient sb) (f : α → β → Prop)
+    (h : ∀ a₁ b₁ a₂ b₂, a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ = f a₂ b₂) [∀ a, DecidablePred (f a)] :
     Decidable (Quotient.liftOn₂ q₁ q₂ f h) :=
   Quotient.lift₂.decidablePred _ _ _ _
 
 end Quotient
 
-/--
-theorem `Quot.eq` / 定理 `Quot.eq`
-
-English:
-theorem Quot.eq
-  given: {α : Type*} {r : α -> α -> Prop} {x y : α}
-  proof: ⟨Quot.eqvGen_exact, Quot.eqvGen_sound⟩
-
-中文:
-定理 商.eq
-  条件: {α : 类型} {r : α -> α -> 命题} {x y : α}
-  证明: ⟨Quot.eqvGen_exact, Quot.eqvGen_sound⟩
-
-Depends on / 依赖: Quot.eqvGen_exact, Quot.eqvGen_sound, eqvGen_exact, eqvGen_sound
+/-
+**Quot.eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quot.eq {α : Type*} {r : α -> α -> Prop} {x y : α} : Quot.mk r x = Quot.mk
+ r y ↔ Relation.EqvGen r x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.eqvGen_exact`：Quot.eqvGen_exact (H : Quot.mk r a = Quot.mk r b) : E
+qvGen r a b
+· 使用定理 `Quot.eqvGen_sound`：Quot.eqvGen_sound (H : EqvGen r a b) : Quot.mk r a = 
+Quot.mk r b
 -/
-theorem Quot.eq {α : Type*} {r : α -> α -> Prop} {x y : α} :
+theorem Quot.eq {α : Type*} {r : α → α → Prop} {x y : α} :
     Quot.mk r x = Quot.mk r y ↔ Relation.EqvGen r x y :=
   ⟨Quot.eqvGen_exact, Quot.eqvGen_sound⟩
 
 -- This should not be a `@[simp]` lemma,
 -- as this prevents us from using `simp` reliably in the quotient,
 -- because this might bump us back out from equality to the underlying relation.
-/--
-theorem `Quotient.eq` / 定理 `Quotient.eq`
-
-English:
-theorem Quotient.eq
-  given: {r : Setoid α} {x y : α}
-  statement: Quotient.mk r x = ⟦y⟧ ↔ r x y
-  proof: ⟨Quotient.exact, Quotient.sound⟩
-
-中文:
-定理 商.eq
-  条件: {r : 集合等价关系 α} {x y : α}
-  结论: 商.mk r x = ⟦y⟧ ↔ r x y
-  证明: ⟨Quotient.exact, Quotient.sound⟩
-
-Depends on / 依赖: Quotient, Quotient.exact, Quotient.sound
+/-
+**Quotient.eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y⟧ ↔ r x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y⟧ ↔ r x y :=
   ⟨Quotient.exact, Quotient.sound⟩
-
-/--
-theorem `Quotient.eq_iff_equiv` / 定理 `Quotient.eq_iff_equiv`
-
-English:
-theorem Quotient.eq_iff_equiv
-  given: {r : Setoid α} {x y : α}
-  statement: Quotient.mk r x = ⟦y⟧ ↔ x ≈ y
-  proof: Quotient.eq
-
-中文:
-定理 商.eq_iff_equiv
-  条件: {r : 集合等价关系 α} {x y : α}
-  结论: 商.mk r x = ⟦y⟧ ↔ x ≈ y
-  证明: Quotient.eq
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**Quotient.eq_iff_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.eq_iff_equiv {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y⟧ ↔ x
+ ≈ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 theorem Quotient.eq_iff_equiv {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y⟧ ↔ x ≈ y :=
   Quotient.eq
-
-/--
-theorem `Quotient.forall` / 定理 `Quotient.forall`
-
-English:
-theorem Quotient.forall
-  given: {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop}
-  proof: ⟨fun h _ => h _, fun h a => a.ind h⟩
-
-中文:
-定理 商.对任意
-  条件: {α : 类型层*} {s : 集合等价关系 α} {p : 商 s -> 命题}
-  证明: ⟨fun h _ => h _, fun h a => a.ind h⟩
-
-Depends on / 依赖: a.ind
+/-
+**Quotient.forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.forall {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop} : (for
+all a, p a) ↔ forall a : α, p ⟦a⟧
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-theorem Quotient.forall {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop} :
-    (forall a, p a) ↔ forall a : α, p ⟦a⟧ :=
-  ⟨fun h _ => h _, fun h a => a.ind h⟩
-
-/--
-theorem `Quotient.exists` / 定理 `Quotient.exists`
-
-English:
-theorem Quotient.exists
-  given: {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop}
-  proof: ⟨fun ⟨q, hq⟩ => q.ind (motive := (p · -> _)) .intro hq, fun ⟨a, ha⟩ => ⟨⟦a⟧, ha⟩⟩
-
-@[simp]
-
-中文:
-定理 商.存在
-  条件: {α : 类型层*} {s : 集合等价关系 α} {p : 商 s -> 命题}
-  证明: ⟨fun ⟨q, hq⟩ => q.ind (motive := (p · -> _)) .intro hq, fun ⟨a, ha⟩ => ⟨⟦a⟧, ha⟩⟩
-
-@[simp]
-
-Depends on / 依赖: motive, q.ind
+theorem Quotient.forall {α : Sort*} {s : Setoid α} {p : Quotient s → Prop} :
+    (∀ a, p a) ↔ ∀ a : α, p ⟦a⟧ :=
+  ⟨fun h _ ↦ h _, fun h a ↦ a.ind h⟩
+/-
+**Quotient.exists** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.exists {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop} : (exi
+sts a, p a) ↔ exists a : α, p ⟦a⟧
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-theorem Quotient.exists {α : Sort*} {s : Setoid α} {p : Quotient s -> Prop} :
-    (exists a, p a) ↔ exists a : α, p ⟦a⟧ :=
-  ⟨fun ⟨q, hq⟩ => q.ind (motive := (p · -> _)) .intro hq, fun ⟨a, ha⟩ => ⟨⟦a⟧, ha⟩⟩
+theorem Quotient.exists {α : Sort*} {s : Setoid α} {p : Quotient s → Prop} :
+    (∃ a, p a) ↔ ∃ a : α, p ⟦a⟧ :=
+  ⟨fun ⟨q, hq⟩ ↦ q.ind (motive := (p · → _)) .intro hq, fun ⟨a, ha⟩ ↦ ⟨⟦a⟧, ha⟩⟩
 
 @[simp]
-/--
-theorem `Quotient.lift_mk` / 定理 `Quotient.lift_mk`
-
-English:
-theorem Quotient.lift_mk
-  given: {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b) (x : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 商.lift_mk
-  条件: {s : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
-  证明: rfl
-
-@[simp]
+/-
+**Quotient.lift_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.lift_mk {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b ->
+ f a = f b) (x : α) : Quotient.lift f h (Quotient.mk s x) = f x
+参数：f : α -> β；h : forall a b : α, a ≈ b -> f a = f b；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Quotient.lift_mk {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b) (x : α) :
+theorem Quotient.lift_mk {s : Setoid α} (f : α → β) (h : ∀ a b : α, a ≈ b → f a = f b) (x : α) :
     Quotient.lift f h (Quotient.mk s x) = f x :=
   rfl
 
 @[simp]
-/--
-theorem `Quotient.lift_comp_mk` / 定理 `Quotient.lift_comp_mk`
-
-English:
-theorem Quotient.lift_comp_mk
-  given: {_ : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 商.lift_comp_mk
-  条件: {_ : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b)
-  证明: rfl
-
-@[simp]
+/-
+**Quotient.lift_comp_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.lift_comp_mk {_ : Setoid α} (f : α -> β) (h : forall a b : α, a ≈
+ b -> f a = f b) : Quotient.lift f h ∘ Quotient.mk _ = f
+参数：f : α -> β；h : forall a b : α, a ≈ b -> f a = f b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Quotient.lift_comp_mk {_ : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b) :
+theorem Quotient.lift_comp_mk {_ : Setoid α} (f : α → β) (h : ∀ a b : α, a ≈ b → f a = f b) :
     Quotient.lift f h ∘ Quotient.mk _ = f :=
   rfl
 
 @[simp]
-/--
-theorem `Quotient.lift_surjective_iff` / 定理 `Quotient.lift_surjective_iff`
-
-English:
-theorem Quotient.lift_surjective_iff
-  statement: {α β : Sort*} {s : Setoid α} (f : α -> β)
-  proof: Quot.surjective_lift h
-
-中文:
-定理 商.lift_surjective_iff
-  结论: {α β : 类型层*} {s : 集合等价关系 α} (f : α -> β)
-  证明: Quot.surjective_lift h
-
-Depends on / 依赖: Quot.surjective_lift, surjective_lift
+/-
+**Quotient.lift_surjective_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.lift_surjective_iff {α β : Sort*} {s : Setoid α} (f : α -> β) (h 
+: forall (a b : α), a ≈ b -> f a = f b) : Function.Surjective (Quotient.lift f h
+ : Quotient s -> β) ↔ Function.Surjective f
+参数：f : α -> β；h : forall (a b : α), a ≈ b -> f a = f b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.surjective_lift`：∀ {α : Sort u_1} {γ : Sort u_4} {r : α → α → Prop}
+ {f : α → γ} (h : ∀ (a₁ a₂ : α), r a₁ a₂ → f a₁ = f a₂),   Function.Surjective (
+Quot.lift …
 -/
-theorem Quotient.lift_surjective_iff {α β : Sort*} {s : Setoid α} (f : α -> β)
-    (h : forall (a b : α), a ≈ b -> f a = f b) :
-    Function.Surjective (Quotient.lift f h : Quotient s -> β) ↔ Function.Surjective f :=
+theorem Quotient.lift_surjective_iff {α β : Sort*} {s : Setoid α} (f : α → β)
+    (h : ∀ (a b : α), a ≈ b → f a = f b) :
+    Function.Surjective (Quotient.lift f h : Quotient s → β) ↔ Function.Surjective f :=
   Quot.surjective_lift h
-
-/--
-theorem `Quotient.lift_surjective` / 定理 `Quotient.lift_surjective`
-
-English:
-theorem Quotient.lift_surjective
-  statement: {α β : Sort*} {s : Setoid α} (f : α -> β)
-  proof: (Quot.surjective_lift h).mpr hf
-
-@[simp]
-
-中文:
-定理 商.lift_surjective
-  结论: {α β : 类型层*} {s : 集合等价关系 α} (f : α -> β)
-  证明: (Quot.surjective_lift h).mpr hf
-
-@[simp]
-
-Depends on / 依赖: Quot.surjective_lift, surjective_lift
+/-
+**Quotient.lift_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.lift_surjective {α β : Sort*} {s : Setoid α} (f : α -> β) (h : fo
+rall (a b : α), a ≈ b -> f a = f b) (hf : Function.Surjective f) : Function.Surj
+ective (Quotient.lift f h : Quotient s -> β)
+参数：f : α -> β；h : forall (a b : α), a ≈ b -> f a = f b；hf : Function.Surjective 
+f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quot.surjective_lift`：∀ {α : Sort u_1} {γ : Sort u_4} {r : α → α → Prop}
+ {f : α → γ} (h : ∀ (a₁ a₂ : α), r a₁ a₂ → f a₁ = f a₂),   Function.Surjective (
+Quot.lift …
 -/
-theorem Quotient.lift_surjective {α β : Sort*} {s : Setoid α} (f : α -> β)
-    (h : forall (a b : α), a ≈ b -> f a = f b) (hf : Function.Surjective f) :
-    Function.Surjective (Quotient.lift f h : Quotient s -> β) :=
+theorem Quotient.lift_surjective {α β : Sort*} {s : Setoid α} (f : α → β)
+    (h : ∀ (a b : α), a ≈ b → f a = f b) (hf : Function.Surjective f) :
+    Function.Surjective (Quotient.lift f h : Quotient s → β) :=
   (Quot.surjective_lift h).mpr hf
 
 @[simp]
-/--
-theorem `Quotient.lift₂_mk` / 定理 `Quotient.lift₂_mk`
-
-English:
-theorem Quotient.lift₂_mk
-  statement: {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
-  proof: rfl
-
-中文:
-定理 商.lift₂_mk
-  结论: {α : 类型层*} {β : 类型层*} {γ : 类型层*} {_ : 集合等价关系 α} {_ : 集合等价关系 β}
-  证明: rfl
+/-
+**Quotient.lift** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → (f : α → β) → (∀ (a b : α),
+ a ≈ b → f a = f b) → Quotient s → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Quotient.lift₂_mk {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
-    (f : α -> β -> γ)
-    (h : forall (a₁ : α) (a₂ : β) (b₁ : α) (b₂ : β), a₁ ≈ b₁ -> a₂ ≈ b₂ -> f a₁ a₂ = f b₁ b₂)
+    (f : α → β → γ)
+    (h : ∀ (a₁ : α) (a₂ : β) (b₁ : α) (b₂ : β), a₁ ≈ b₁ → a₂ ≈ b₂ → f a₁ a₂ = f b₁ b₂)
     (a : α) (b : β) :
     Quotient.lift₂ f h (Quotient.mk _ a) (Quotient.mk _ b) = f a b :=
   rfl
-
-/--
-theorem `Quotient.liftOn_mk` / 定理 `Quotient.liftOn_mk`
-
-English:
-theorem Quotient.liftOn_mk
-  given: {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b) (x : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 商.liftOn_mk
-  条件: {s : 集合等价关系 α} (f : α -> β) (h : 对任意 a b : α, a ≈ b -> f a = f b) (x : α)
-  证明: rfl
-
-@[simp]
+/-
+**Quotient.liftOn_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.liftOn_mk {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b 
+-> f a = f b) (x : α) : Quotient.liftOn (Quotient.mk s x) f h = f x
+参数：f : α -> β；h : forall a b : α, a ≈ b -> f a = f b；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Quotient.liftOn_mk {s : Setoid α} (f : α -> β) (h : forall a b : α, a ≈ b -> f a = f b) (x : α) :
+theorem Quotient.liftOn_mk {s : Setoid α} (f : α → β) (h : ∀ a b : α, a ≈ b → f a = f b) (x : α) :
     Quotient.liftOn (Quotient.mk s x) f h = f x :=
   rfl
 
 @[simp]
-/--
-theorem `Quotient.liftOn₂_mk` / 定理 `Quotient.liftOn₂_mk`
-
-English:
-theorem Quotient.liftOn₂_mk
-  statement: {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
-  proof: rfl
-
-中文:
-定理 商.liftOn₂_mk
-  结论: {α : 类型层*} {β : 类型层*} {γ : 类型层*} {_ : 集合等价关系 α} {_ : 集合等价关系 β}
-  证明: rfl
+/-
+**Quotient.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → Quotient s → (f : α → β) → 
+(∀ (a b : α), a ≈ b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Quotient.liftOn₂_mk {α : Sort*} {β : Sort*} {γ : Sort*} {_ : Setoid α} {_ : Setoid β}
-    (f : α -> β -> γ)
-    (h : forall (a₁ : α) (b₁ : β) (a₂ : α) (b₂ : β), a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ = f a₂ b₂)
+    (f : α → β → γ)
+    (h : ∀ (a₁ : α) (b₁ : β) (a₂ : α) (b₂ : β), a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ = f a₂ b₂)
     (x : α) (y : β) :
     Quotient.liftOn₂ (Quotient.mk _ x) (Quotient.mk _ y) f h = f x y :=
   rfl
 
-/--
-theorem `Quot.mk_surjective` / 定理 `Quot.mk_surjective`
+/-- `Quot.mk r` is a surjective function. -/
+/-
+**Quot.mk_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quot.mk_surjective {r : α -> α -> Prop} : Function.Surjective (Quot.mk r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 
-English:
-theorem Quot.mk_surjective
-  given: {r : α -> α -> Prop}
-  statement: Function.Surjective (Quot.mk r)
-  proof: Quot.exists_rep
-
-中文:
-定理 商.mk_surjective
-  条件: {r : α -> α -> 命题}
-  结论: 函数.满射 (商.mk r)
-  证明: Quot.exists_rep
-
-Depends on / 依赖: Quot.exists_rep, exists_rep
+--- 原说明 ---
+`Quot.mk r` is a surjective function.
 -/
-theorem Quot.mk_surjective {r : α -> α -> Prop} : Function.Surjective (Quot.mk r) :=
+theorem Quot.mk_surjective {r : α → α → Prop} : Function.Surjective (Quot.mk r) :=
   Quot.exists_rep
 
-/--
-theorem `Quotient.mk_surjective` / 定理 `Quotient.mk_surjective`
+/-- `Quotient.mk` is a surjective function. -/
+/-
+**Quotient.mk_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.mk_surjective {s : Setoid α} : Function.Surjective (Quotient.mk s
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.mk_surjective`：Quot.mk_surjective {r : α -> α -> Prop} : Function.S
+urjective (Quot.mk r)
 
-English:
-theorem Quotient.mk_surjective
-  given: {s : Setoid α}
-  proof: Quot.mk_surjective
-
-中文:
-定理 商.mk_surjective
-  条件: {s : 集合等价关系 α}
-  证明: Quot.mk_surjective
-
-Depends on / 依赖: Quot.mk_surjective, mk_surjective
+--- 原说明 ---
+`Quotient.mk` is a surjective function.
 -/
 theorem Quotient.mk_surjective {s : Setoid α} :
     Function.Surjective (Quotient.mk s) :=
   Quot.mk_surjective
 
-/--
-theorem `Quotient.mk'_surjective` / 定理 `Quotient.mk'_surjective`
+/-- `Quotient.mk'` is a surjective function. -/
+/-
+**Quotient.mk'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} [s : Setoid α], Function.Surjective Quotient.mk'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.mk_surjective`：Quot.mk_surjective {r : α -> α -> Prop} : Function.S
+urjective (Quot.mk r)
 
-English:
-theorem Quotient.mk'_surjective
-  given: [s : Setoid α]
-  proof: Quot.mk_surjective
-
-中文:
-定理 商.mk'_surjective
-  条件: [s : 集合等价关系 α]
-  证明: Quot.mk_surjective
-
-Depends on / 依赖: Quot.mk_surjective, mk_surjective
+--- 原说明 ---
+`Quotient.mk'` is a surjective function.
 -/
 theorem Quotient.mk'_surjective [s : Setoid α] :
-    Function.Surjective (Quotient.mk' : α -> Quotient s) :=
+    Function.Surjective (Quotient.mk' : α → Quotient s) :=
   Quot.mk_surjective
-
-/--
-theorem `Quot.map_surjective` / 定理 `Quot.map_surjective`
-
-English:
-theorem Quot.map_surjective
-  statement: {ra : α -> α -> Prop} {rb : β -> β -> Prop} {f : α -> β}
-  proof: (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b)) (hf : f.Surjective) : Quot.map f h
-.mpr .comp Quot.mk_surjective hf surjective_lift _
-
-中文:
-定理 商.map_surjective
-  结论: {ra : α -> α -> 命题} {rb : β -> β -> 命题} {f : α -> β}
-  证明: (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b)) (hf : f.Surjective) : Quot.map f h
-.mpr .comp Quot.mk_surjective hf surjective_lift _
-
-Depends on / 依赖: Quot.map, Surjective, f.Surjective
+/-
+**Quot.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quot.map_surjective {ra : α -> α -> Prop} {rb : β -> β -> Prop} {f : α -> 
+β} .Surjective
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quot.surjective_lift`：∀ {α : Sort u_1} {γ : Sort u_4} {r : α → α → Prop}
+ {f : α → γ} (h : ∀ (a₁ a₂ : α), r a₁ a₂ → f a₁ = f a₂),   Function.Surjective (
+Quot.lift …
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `Quot.mk_surjective`：Quot.mk_surjective {r : α -> α -> Prop} : Function.S
+urjective (Quot.mk r)
 -/
-theorem Quot.map_surjective {ra : α -> α -> Prop} {rb : β -> β -> Prop} {f : α -> β}
-.Surjective := (h : forall ⦃a b : α⦄, ra a b -> rb (f a) (f b)) (hf : f.Surjective) : Quot.map f h
-.mpr .comp Quot.mk_surjective hf surjective_lift _
-
-/--
-theorem `Quotient.map_surjective` / 定理 `Quotient.map_surjective`
-
-English:
-theorem Quotient.map_surjective
-  statement: {sa : Setoid α} {sb : Setoid β} {f : α -> β}
-  proof: (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b) (hf : f.Surjective) : Quotient.map f h
-lift_surjective _ _ .comp Quot.mk_surjective hf
-
-中文:
-定理 商.map_surjective
-  结论: {sa : 集合等价关系 α} {sb : 集合等价关系 β} {f : α -> β}
-  证明: (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b) (hf : f.Surjective) : Quotient.map f h
-lift_surjective _ _ .comp Quot.mk_surjective hf
-
-Depends on / 依赖: Quotient, Quotient.map, Surjective, f.Surjective
+theorem Quot.map_surjective {ra : α → α → Prop} {rb : β → β → Prop} {f : α → β}
+    (h : ∀ ⦃a b : α⦄, ra a b → rb (f a) (f b)) (hf : f.Surjective) : Quot.map f h |>.Surjective :=
+  surjective_lift _ |>.mpr <| .comp Quot.mk_surjective hf
+/-
+**Quotient.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.map_surjective {sa : Setoid α} {sb : Setoid β} {f : α -> β} .Surj
+ective
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.lift_surjective`：Quotient.lift_surjective {α β : Sort*} {s : Se
+toid α} (f : α -> β) (h : forall (a b : α), a ≈ b -> f a = f b) (hf : Function.S
+urjective f) :…
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `Quot.mk_surjective`：Quot.mk_surjective {r : α -> α -> Prop} : Function.S
+urjective (Quot.mk r)
 -/
-theorem Quotient.map_surjective {sa : Setoid α} {sb : Setoid β} {f : α -> β}
-.Surjective := (h : forall ⦃a b : α⦄, a ≈ b -> f a ≈ f b) (hf : f.Surjective) : Quotient.map f h
-lift_surjective _ _ .comp Quot.mk_surjective hf
+theorem Quotient.map_surjective {sa : Setoid α} {sb : Setoid β} {f : α → β}
+    (h : ∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) (hf : f.Surjective) : Quotient.map f h |>.Surjective :=
+  lift_surjective _ _ <| .comp Quot.mk_surjective hf
 
-/--
-Definition of `Quot.out` / `Quot.out` 的定义
+/-- Choose an element of the equivalence class using the axiom of choice.
+  Sound but noncomputable. -/
+/-
+**Quot.out** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Quot.out {r : α -> α -> Prop} (q : Quot r) : α
+参数：q : Quot r。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 
-English:
-definition Quot.out
-  signature: {r : α -> α -> Prop} (q : Quot r)
-  body: Classical.choose (Quot.exists_rep q)
-
-中文:
-定义 商.out
-  签名: {r : α -> α -> 命题} (q : 商 r)
-  定义体: Classical.choose (Quot.exists_rep q)
-
-Depends on / 依赖: Classical, Classical.choose, Quot.exists_rep, exists_rep
+--- 原说明 ---
+Choose an element of the equivalence class using the axiom of choice.
+  Sound but noncomputable.
 -/
-noncomputable def Quot.out {r : α -> α -> Prop} (q : Quot r) : α :=
+noncomputable def Quot.out {r : α → α → Prop} (q : Quot r) : α :=
   Classical.choose (Quot.exists_rep q)
 
 /-- Unwrap the VM representation of a quotient to obtain an element of the equivalence class.
   Computable but unsound. -/
-unsafe def Quot.unquot {r : α -> α -> Prop} : Quot r -> α :=
+/-
+**Quot.unquot** 是 Mathlib 中的一个unsafe-def，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u_1} → {r : α → α → Prop} → Quot r → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Unwrap the VM representation of a quotient to obtain an element of the equivalen
+ce class.
+  Computable but unsound.
+-/
+unsafe def Quot.unquot {r : α → α → Prop} : Quot r → α :=
   cast lcProof
 
 @[simp]
-/--
-theorem `Quot.out_eq` / 定理 `Quot.out_eq`
-
-English:
-theorem Quot.out_eq
-  given: {r : α -> α -> Prop} (q : Quot r)
-  statement: Quot.mk r q.out = q
-  proof: Classical.choose_spec (Quot.exists_rep q)
-
-中文:
-定理 商.out_eq
-  条件: {r : α -> α -> 命题} (q : 商 r)
-  结论: 商.mk r q.out = q
-  证明: Classical.choose_spec (Quot.exists_rep q)
-
-Depends on / 依赖: Classical, Classical.choose_spec, Quot.exists_rep, choose_spec, exists_rep
+/-
+**Quot.out_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quot.out_eq {r : α -> α -> Prop} (q : Quot r) : Quot.mk r q.out = q
+参数：q : Quot r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
-theorem Quot.out_eq {r : α -> α -> Prop} (q : Quot r) : Quot.mk r q.out = q :=
+theorem Quot.out_eq {r : α → α → Prop} (q : Quot r) : Quot.mk r q.out = q :=
   Classical.choose_spec (Quot.exists_rep q)
 
-/--
-Definition of `Quotient.out` / `Quotient.out` 的定义
+/-- Choose an element of the equivalence class using the axiom of choice.
+  Sound but noncomputable. -/
+/-
+**Quotient.out** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Quotient.out {s : Setoid α} : Quotient s -> α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient.out
-  signature: {s : Setoid α}
-  body: Quot.out
-
-@[simp]
-
-中文:
-定义 商.out
-  签名: {s : 集合等价关系 α}
-  定义体: Quot.out
-
-@[simp]
-
-Depends on / 依赖: Quot.out
+--- 原说明 ---
+Choose an element of the equivalence class using the axiom of choice.
+  Sound but noncomputable.
 -/
-noncomputable def Quotient.out {s : Setoid α} : Quotient s -> α :=
+noncomputable def Quotient.out {s : Setoid α} : Quotient s → α :=
   Quot.out
 
 @[simp]
-/--
-theorem `Quotient.out_eq` / 定理 `Quotient.out_eq`
-
-English:
-theorem Quotient.out_eq
-  given: {s : Setoid α} (q : Quotient s)
-  statement: ⟦q.out⟧ = q
-  proof: Quot.out_eq q
-
-中文:
-定理 商.out_eq
-  条件: {s : 集合等价关系 α} (q : 商 s)
-  结论: ⟦q.out⟧ = q
-  证明: Quot.out_eq q
-
-Depends on / 依赖: Quot.out_eq, out_eq
+/-
+**Quotient.out_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.out⟧ = q
+参数：q : Quotient s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.out_eq`：Quot.out_eq {r : α -> α -> Prop} (q : Quot r) : Quot.mk r q
+.out = q
 -/
 theorem Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.out⟧ = q :=
   Quot.out_eq q
-
-/--
-theorem `Quotient.mk_out` / 定理 `Quotient.mk_out`
-
-English:
-theorem Quotient.mk_out
-  given: {s : Setoid α} (a : α)
-  statement: s (⟦a⟧ : Quotient s).out a
-  proof: Quotient.exact (Quotient.out_eq _)
-
-中文:
-定理 商.mk_out
-  条件: {s : 集合等价关系 α} (a : α)
-  结论: s (⟦a⟧ : 商 s).out a
-  证明: Quotient.exact (Quotient.out_eq _)
-
-Depends on / 依赖: Quotient, Quotient.exact, Quotient.out_eq, out_eq
+/-
+**Quotient.mk_out** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.mk_out {s : Setoid α} (a : α) : s (⟦a⟧ : Quotient s).out a
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 theorem Quotient.mk_out {s : Setoid α} (a : α) : s (⟦a⟧ : Quotient s).out a :=
   Quotient.exact (Quotient.out_eq _)
-
-/--
-theorem `Quotient.mk_eq_iff_out` / 定理 `Quotient.mk_eq_iff_out`
-
-English:
-theorem Quotient.mk_eq_iff_out
-  given: {s : Setoid α} {x : α} {y : Quotient s}
-  proof: by
-  refine Iff.trans ?_ Quotient.eq
-  rw [Quotient.out_eq y]
-
-中文:
-定理 商.mk_eq_iff_out
-  条件: {s : 集合等价关系 α} {x : α} {y : 商 s}
-  证明: by
-  refine Iff.trans ?_ Quotient.eq
-  rw [Quotient.out_eq y]
-
-Depends on / 依赖: Iff.trans, Quotient, Quotient.eq, Quotient.out_eq, out_eq
+/-
+**Quotient.mk_eq_iff_out** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.mk_eq_iff_out {s : Setoid α} {x : α} {y : Quotient s} : ⟦x⟧ = y ↔
+ x ≈ Quotient.out y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 theorem Quotient.mk_eq_iff_out {s : Setoid α} {x : α} {y : Quotient s} :
     ⟦x⟧ = y ↔ x ≈ Quotient.out y := by
   refine Iff.trans ?_ Quotient.eq
   rw [Quotient.out_eq y]
-
-/--
-theorem `Quotient.eq_mk_iff_out` / 定理 `Quotient.eq_mk_iff_out`
-
-English:
-theorem Quotient.eq_mk_iff_out
-  given: {s : Setoid α} {x : Quotient s} {y : α}
-  proof: by
-  refine Iff.trans ?_ Quotient.eq
-  rw [Quotient.out_eq x]
-
-@[simp]
-
-中文:
-定理 商.eq_mk_iff_out
-  条件: {s : 集合等价关系 α} {x : 商 s} {y : α}
-  证明: by
-  refine Iff.trans ?_ Quotient.eq
-  rw [Quotient.out_eq x]
-
-@[simp]
-
-Depends on / 依赖: Iff.trans, Quotient, Quotient.eq, Quotient.out_eq, out_eq
+/-
+**Quotient.eq_mk_iff_out** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.eq_mk_iff_out {s : Setoid α} {x : Quotient s} {y : α} : x = ⟦y⟧ ↔
+ Quotient.out x ≈ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 theorem Quotient.eq_mk_iff_out {s : Setoid α} {x : Quotient s} {y : α} :
     x = ⟦y⟧ ↔ Quotient.out x ≈ y := by
@@ -1287,587 +973,390 @@ theorem Quotient.eq_mk_iff_out {s : Setoid α} {x : Quotient s} {y : α} :
   rw [Quotient.out_eq x]
 
 @[simp]
-/--
-theorem `Quotient.out_equiv_out` / 定理 `Quotient.out_equiv_out`
-
-English:
-theorem Quotient.out_equiv_out
-  given: {s : Setoid α} {x y : Quotient s}
-  statement: x.out ≈ y.out ↔ x = y
-  proof: by
-  rw [← Quotient.eq_mk_iff_out]; rw [Quotient.out_eq]
-
-中文:
-定理 商.out_equiv_out
-  条件: {s : 集合等价关系 α} {x y : 商 s}
-  结论: x.out ≈ y.out ↔ x = y
-  证明: by
-  rw [← Quotient.eq_mk_iff_out]; rw [Quotient.out_eq]
-
-Depends on / 依赖: Quotient, Quotient.eq_mk_iff_out, Quotient.out_eq, eq_mk_iff_out, out_eq
+/-
+**Quotient.out_equiv_out** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.out_equiv_out {s : Setoid α} {x y : Quotient s} : x.out ≈ y.out ↔
+ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quotient.eq_mk_iff_out`：Quotient.eq_mk_iff_out {s : Setoid α} {x : Quoti
+ent s} {y : α} : x = ⟦y⟧ ↔ Quotient.out x ≈ y
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Quotient.out_equiv_out {s : Setoid α} {x y : Quotient s} : x.out ≈ y.out ↔ x = y := by
-  rw [← Quotient.eq_mk_iff_out]; rw [Quotient.out_eq]
-
-/--
-theorem `Quotient.out_injective` / 定理 `Quotient.out_injective`
-
-English:
-theorem Quotient.out_injective
-  given: {s : Setoid α}
-  statement: Function.Injective (@Quotient.out α s)
-  proof: fun _ _ h => Quotient.out_equiv_out.1 h ▸ Setoid.refl _
-
-@[simp]
-
-中文:
-定理 商.out_injective
-  条件: {s : 集合等价关系 α}
-  结论: 函数.单射 (@商.out α s)
-  证明: fun _ _ h => Quotient.out_equiv_out.1 h ▸ Setoid.refl _
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.out_equiv_out, Setoid, Setoid.refl, out_equiv_out
+  rw [← Quotient.eq_mk_iff_out, Quotient.out_eq]
+/-
+**Quotient.out_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.out_injective {s : Setoid α} : Function.Injective (@Quotient.out 
+α s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Quotient.out_equiv_out`：Quotient.out_equiv_out {s : Setoid α} {x y : Quo
+tient s} : x.out ≈ y.out ↔ x = y
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
 -/
 theorem Quotient.out_injective {s : Setoid α} : Function.Injective (@Quotient.out α s) :=
-fun _ _ h => Quotient.out_equiv_out.1 h ▸ Setoid.refl _
+  fun _ _ h ↦ Quotient.out_equiv_out.1 <| h ▸ Setoid.refl _
 
 @[simp]
-/--
-theorem `Quotient.out_inj` / 定理 `Quotient.out_inj`
-
-English:
-theorem Quotient.out_inj
-  given: {s : Setoid α} {x y : Quotient s}
-  statement: x.out = y.out ↔ x = y
-  proof: ⟨fun h => Quotient.out_injective h, fun h => h ▸ rfl⟩
-
-中文:
-定理 商.out_inj
-  条件: {s : 集合等价关系 α} {x y : 商 s}
-  结论: x.out = y.out ↔ x = y
-  证明: ⟨fun h => Quotient.out_injective h, fun h => h ▸ rfl⟩
-
-Depends on / 依赖: Quotient, Quotient.out_injective, out_injective
+/-
+**Quotient.out_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.out_inj {s : Setoid α} {x y : Quotient s} : x.out = y.out ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_injective`：Quotient.out_injective {s : Setoid α} : Function
+.Injective (@Quotient.out α s)
 -/
 theorem Quotient.out_inj {s : Setoid α} {x y : Quotient s} : x.out = y.out ↔ x = y :=
-  ⟨fun h => Quotient.out_injective h, fun h => h ▸ rfl⟩
+  ⟨fun h ↦ Quotient.out_injective h, fun h ↦ h ▸ rfl⟩
 
 section Pi
 
-/--
-Instance `piSetoid` / 实例 `piSetoid`
-
-English:
-instance piSetoid
-  signature: {ι : Sort*} {α : ι -> Sort*} [forall i, Setoid (α i)]
-  body: forall i, a i ≈ b i
-  iseqv := ⟨fun _ _ => Setoid.refl _,
-            fun h _ => Setoid.symm (h _),
-            fun h₁ h₂ _ => Setoid.trans (h₁ _) (h₂ _)⟩
-
-中文:
-实例 piSetoid
-  签名: {ι : 类型层*} {α : ι -> 类型层*} [对任意 i, 集合等价关系 (α i)]
-  定义体: forall i, a i ≈ b i
-  iseqv := ⟨fun _ _ => Setoid.refl _,
-            fun h _ => Setoid.symm (h _),
-            fun h₁ h₂ _ => Setoid.trans (h₁ _) (h₂ _)⟩
+/-
+**piSetoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：piSetoid {ι : Sort*} {α : ι -> Sort*} [forall i, Setoid (α i)] : Setoid (f
+orall i, α i) where r a b
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance piSetoid {ι : Sort*} {α : ι -> Sort*} [forall i, Setoid (α i)] : Setoid (forall i, α i) where
-  r a b := forall i, a i ≈ b i
-  iseqv := ⟨fun _ _ => Setoid.refl _,
-            fun h _ => Setoid.symm (h _),
-            fun h₁ h₂ _ => Setoid.trans (h₁ _) (h₂ _)⟩
+instance piSetoid {ι : Sort*} {α : ι → Sort*} [∀ i, Setoid (α i)] : Setoid (∀ i, α i) where
+  r a b := ∀ i, a i ≈ b i
+  iseqv := ⟨fun _ _ ↦ Setoid.refl _,
+            fun h _ ↦ Setoid.symm (h _),
+            fun h₁ h₂ _ ↦ Setoid.trans (h₁ _) (h₂ _)⟩
 
-/--
-Definition of `Quotient.eval` / `Quotient.eval` 的定义
+/-- Given a class of functions `q : @Quotient (∀ i, α i) _`, returns the class of `i`-th projection
+`Quotient (S i)`. -/
+/-
+**Quotient.eval** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Quotient.eval {ι : Type*} {α : ι -> Sort*} {S : forall i, Setoid (α i)} (q
+ : @Quotient (forall i, α i) (by infer_instance)) (i : ι) : Quotient (S i)
+参数：α i；q : @Quotient (forall i, α i) (by infer_instance)；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient.eval
-  signature: {ι : Type*} {α : ι -> Sort*} {S : forall i, Setoid (α i)}
-  body: q.map (· i) fun _ _ h => by exact h i
+--- 原说明 ---
+Given a class of functions `q : @Quotient (∀ i, α i) _`, returns the class of `i
+`-th projection
+`Quotient (S i)`.
+-/
+def Quotient.eval {ι : Type*} {α : ι → Sort*} {S : ∀ i, Setoid (α i)}
+    (q : @Quotient (∀ i, α i) (by infer_instance)) (i : ι) : Quotient (S i) :=
+  q.map (· i) fun _ _ h ↦ by exact h i
 
 @[simp]
-
-中文:
-定义 商.eval
-  签名: {ι : 类型} {α : ι -> 类型层*} {S : 对任意 i, 集合等价关系 (α i)}
-  定义体: q.map (· i) fun _ _ h => by exact h i
-
-@[simp]
-
-Depends on / 依赖: q.map
+/-
+**Quotient.eval_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.eval_mk {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)}
+ (f : forall i, α i) : Quotient.eval (S
+参数：α i；f : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Quotient.eval {ι : Type*} {α : ι -> Sort*} {S : forall i, Setoid (α i)}
-    (q : @Quotient (forall i, α i) (by infer_instance)) (i : ι) : Quotient (S i) :=
-  q.map (· i) fun _ _ h => by exact h i
-
-@[simp]
-/--
-theorem `Quotient.eval_mk` / 定理 `Quotient.eval_mk`
-
-English:
-theorem Quotient.eval_mk
-  given: {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} (f : forall i, α i)
-  proof: rfl
-
-中文:
-定理 商.eval_mk
-  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)} (f : 对任意 i, α i)
-  证明: rfl
--/
-theorem Quotient.eval_mk {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} (f : forall i, α i) :
-    Quotient.eval (S := S) ⟦f⟧ = fun i => ⟦f i⟧ :=
+theorem Quotient.eval_mk {ι : Type*} {α : ι → Type*} {S : ∀ i, Setoid (α i)} (f : ∀ i, α i) :
+    Quotient.eval (S := S) ⟦f⟧ = fun i ↦ ⟦f i⟧ :=
   rfl
 
-/--
-Definition of `Quotient.choice` / `Quotient.choice` 的定义
+/-- Given a function `f : Π i, Quotient (S i)`, returns the class of functions `Π i, α i` sending
+each `i` to an element of the class `f i`. -/
+/-
+**Quotient.choice** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Quotient.choice {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} 
+(f : forall i, Quotient (S i)) : @Quotient (forall i, α i) (by infer_instance)
+参数：α i；f : forall i, Quotient (S i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient.choice
-  signature: {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)}
-  body: ⟦fun i => (f i).out⟧
+--- 原说明 ---
+Given a function `f : Π i, Quotient (S i)`, returns the class of functions `Π i,
+ α i` sending
+each `i` to an element of the class `f i`.
+-/
+noncomputable def Quotient.choice {ι : Type*} {α : ι → Type*} {S : ∀ i, Setoid (α i)}
+    (f : ∀ i, Quotient (S i)) :
+    @Quotient (∀ i, α i) (by infer_instance) :=
+  ⟦fun i ↦ (f i).out⟧
 
 @[simp]
-
-中文:
-定义 商.choice
-  签名: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)}
-  定义体: ⟦fun i => (f i).out⟧
-
-@[simp]
+/-
+**Quotient.choice_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.choice_eq {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i
+)} (f : forall i, α i) : (Quotient.choice (S
+参数：α i；f : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `Quotient.mk_out`：Quotient.mk_out {s : Setoid α} (a : α) : s (⟦a⟧ : Quoti
+ent s).out a
 -/
-noncomputable def Quotient.choice {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)}
-    (f : forall i, Quotient (S i)) :
-    @Quotient (forall i, α i) (by infer_instance) :=
-  ⟦fun i => (f i).out⟧
-
-@[simp]
-/--
-theorem `Quotient.choice_eq` / 定理 `Quotient.choice_eq`
-
-English:
-theorem Quotient.choice_eq
-  given: {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} (f : forall i, α i)
-  proof: Quotient.sound fun _ => Quotient.mk_out _
+theorem Quotient.choice_eq {ι : Type*} {α : ι → Type*} {S : ∀ i, Setoid (α i)} (f : ∀ i, α i) :
+    (Quotient.choice (S := S) fun i ↦ ⟦f i⟧) = ⟦f⟧ :=
+  Quotient.sound fun _ ↦ Quotient.mk_out _
 
 @[elab_as_elim]
-
-中文:
-定理 商.choice_eq
-  条件: {ι : 类型} {α : ι -> 类型} {S : 对任意 i, 集合等价关系 (α i)} (f : 对任意 i, α i)
-  证明: Quotient.sound fun _ => Quotient.mk_out _
-
-@[elab_as_elim]
+/-
+**Quotient.induction_on_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Quotient.induction_on_pi {ι : Type*} {α : ι -> Sort*} {s : forall i, Setoi
+d (α i)} {p : (forall i, Quotient (s i)) -> Prop} (f : forall i, Quotient (s i))
+ (h : forall a : forall i, α i, p fun i => ⟦a i⟧) : p f
+参数：α i；forall i, Quotient (s i)；f : forall i, Quotient (s i)；h : forall a : fora
+ll i, α i, p fun i => ⟦a i⟧。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
-theorem Quotient.choice_eq {ι : Type*} {α : ι -> Type*} {S : forall i, Setoid (α i)} (f : forall i, α i) :
-    (Quotient.choice (S := S) fun i => ⟦f i⟧) = ⟦f⟧ :=
-  Quotient.sound fun _ => Quotient.mk_out _
-
-@[elab_as_elim]
-/--
-theorem `Quotient.induction_on_pi` / 定理 `Quotient.induction_on_pi`
-
-English:
-theorem Quotient.induction_on_pi
-  statement: {ι : Type*} {α : ι -> Sort*} {s : forall i, Setoid (α i)}
-  proof: by
-  rw [← (funext fun i => Quotient.out_eq (f i) : (fun i => ⟦(f i).out⟧) = f)]
-  apply h
-
-中文:
-定理 商.induction_on_pi
-  结论: {ι : 类型} {α : ι -> 类型层*} {s : 对任意 i, 集合等价关系 (α i)}
-  证明: by
-  rw [← (funext fun i => Quotient.out_eq (f i) : (fun i => ⟦(f i).out⟧) = f)]
-  apply h
-
-Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
--/
-theorem Quotient.induction_on_pi {ι : Type*} {α : ι -> Sort*} {s : forall i, Setoid (α i)}
-    {p : (forall i, Quotient (s i)) -> Prop} (f : forall i, Quotient (s i))
-    (h : forall a : forall i, α i, p fun i => ⟦a i⟧) : p f := by
-  rw [← (funext fun i => Quotient.out_eq (f i) : (fun i => ⟦(f i).out⟧) = f)]
+theorem Quotient.induction_on_pi {ι : Type*} {α : ι → Sort*} {s : ∀ i, Setoid (α i)}
+    {p : (∀ i, Quotient (s i)) → Prop} (f : ∀ i, Quotient (s i))
+    (h : ∀ a : ∀ i, α i, p fun i ↦ ⟦a i⟧) : p f := by
+  rw [← (funext fun i ↦ Quotient.out_eq (f i) : (fun i ↦ ⟦(f i).out⟧) = f)]
   apply h
 
 end Pi
 
-/--
-theorem `nonempty_quotient_iff` / 定理 `nonempty_quotient_iff`
-
-English:
-theorem nonempty_quotient_iff
-  given: (s : Setoid α)
-  statement: Nonempty (Quotient s) ↔ Nonempty α
-  proof: ⟨fun ⟨a⟩ => Quotient.inductionOn a Nonempty.intro, fun ⟨a⟩ => ⟨⟦a⟧⟩⟩
-
-中文:
-定理 nonempty_quotient_iff
-  条件: (s : 集合等价关系 α)
-  结论: 非空 (商 s) ↔ 非空 α
-  证明: ⟨fun ⟨a⟩ => Quotient.inductionOn a Nonempty.intro, fun ⟨a⟩ => ⟨⟦a⟧⟩⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro, Quotient, Quotient.inductionOn, inductionOn
+/-
+**nonempty_quotient_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_quotient_iff (s : Setoid α) : Nonempty (Quotient s) ↔ Nonempty α
+参数：s : Setoid α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 -/
 theorem nonempty_quotient_iff (s : Setoid α) : Nonempty (Quotient s) ↔ Nonempty α :=
-  ⟨fun ⟨a⟩ => Quotient.inductionOn a Nonempty.intro, fun ⟨a⟩ => ⟨⟦a⟧⟩⟩
+  ⟨fun ⟨a⟩ ↦ Quotient.inductionOn a Nonempty.intro, fun ⟨a⟩ ↦ ⟨⟦a⟧⟩⟩
+
+/-! ### Truncation -/
 
 
+/-
+**true_equivalence** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：true_equivalence : @Equivalence α fun _ _ => True
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-/--
-theorem `true_equivalence` / 定理 `true_equivalence`
-
-English:
-theorem true_equivalence
-  statement: @Equivalence α fun _ _ => True
-  proof: ⟨fun _ => trivial, fun _ => trivial, fun _ _ => trivial⟩
-
-中文:
-定理 true_equivalence
-  结论: @等价 α fun _ _ => 真
-  证明: ⟨fun _ => trivial, fun _ => trivial, fun _ _ => trivial⟩
+--- 原说明 ---
+### Truncation
 -/
-theorem true_equivalence : @Equivalence α fun _ _ => True :=
-  ⟨fun _ => trivial, fun _ => trivial, fun _ _ => trivial⟩
+theorem true_equivalence : @Equivalence α fun _ _ ↦ True :=
+  ⟨fun _ ↦ trivial, fun _ ↦ trivial, fun _ _ ↦ trivial⟩
 
 /-- Always-true relation as a `Setoid`.
 
 Note that in later files the preferred spelling is `⊤ : Setoid α`. -/
 @[instance_reducible]
-/--
-Definition of `trueSetoid` / `trueSetoid` 的定义
+/-
+**trueSetoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：trueSetoid : Setoid α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `true_equivalence`：true_equivalence : @Equivalence α fun _ _ => True
 
-English:
-definition trueSetoid
-  signature: : Setoid α
-  body: ⟨_, true_equivalence⟩
+--- 原说明 ---
+Always-true relation as a `Setoid`.
 
-中文:
-定义 trueSetoid
-  签名: : 集合等价关系 α
-  定义体: ⟨_, true_equivalence⟩
-
-Depends on / 依赖: true_equivalence
+Note that in later files the preferred spelling is `⊤ : Setoid α`.
 -/
 def trueSetoid : Setoid α :=
   ⟨_, true_equivalence⟩
 
-/--
-Definition of `Trunc.` / `Trunc.` 的定义
+/-- `Trunc α` is the quotient of `α` by the always-true relation. This
+  is related to the propositional truncation in HoTT, and is similar
+  in effect to `Nonempty α`, but unlike `Nonempty α`, `Trunc α` is data,
+  so the VM representation is the same as `α`, and so this can be used to
+  maintain computability. -/
+/-
+**Trunc.** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trunc.{u}
-  signature: (α : Sort u)
-  body: @Quotient α trueSetoid
-
-中文:
-定义 Trunc.{u}
-  签名: (α : 类型层 u)
-  定义体: @Quotient α trueSetoid
-
-Depends on / 依赖: Quotient, trueSetoid
+--- 原说明 ---
+`Trunc α` is the quotient of `α` by the always-true relation. This
+  is related to the propositional truncation in HoTT, and is similar
+  in effect to `Nonempty α`, but unlike `Nonempty α`, `Trunc α` is data,
+  so the VM representation is the same as `α`, and so this can be used to
+  maintain computability.
 -/
 def Trunc.{u} (α : Sort u) : Sort u :=
   @Quotient α trueSetoid
 
 namespace Trunc
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for `Trunc α` -/
+/-
+**Trunc.mk** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：mk (a : α) : Trunc α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (a : α)
-  body: Quot.mk _ a
-
-中文:
-定义 mk
-  签名: (a : α)
-  定义体: Quot.mk _ a
-
-Depends on / 依赖: Quot.mk
+--- 原说明 ---
+Constructor for `Trunc α`
 -/
 def mk (a : α) : Trunc α :=
   Quot.mk _ a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Trunc α)
-  body: ⟨mk default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (Trunc α)
-  定义体: ⟨mk default⟩
+/-
+**Trunc.** 是 Mathlib 中的一个实例，位于命名空间 `Trunc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Trunc α) :=
   ⟨mk default⟩
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Any constant function lifts to a function out of the truncation -/
+/-
+**Trunc.lift** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：lift (f : α -> β) (c : forall a b : α, f a = f b) : Trunc α -> β
+参数：f : α -> β；c : forall a b : α, f a = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (f : α -> β) (c : forall a b : α, f a = f b)
-  body: Quot.lift f fun a b _ => c a b
-
-中文:
-定义 lift
-  签名: (f : α -> β) (c : 对任意 a b : α, f a = f b)
-  定义体: Quot.lift f fun a b _ => c a b
-
-Depends on / 依赖: Quot.lift
+--- 原说明 ---
+Any constant function lifts to a function out of the truncation
 -/
-def lift (f : α -> β) (c : forall a b : α, f a = f b) : Trunc α -> β :=
-  Quot.lift f fun a b _ => c a b
-
-/--
-theorem `ind` / 定理 `ind`
-
-English:
-theorem ind
-  given: {β : Trunc α -> Prop}
-  statement: (forall a : α, β (mk a)) -> forall q : Trunc α, β q
-  proof: Quot.ind
-
-中文:
-定理 ind
-  条件: {β : Trunc α -> 命题}
-  结论: (对任意 a : α, β (mk a)) -> 对任意 q : Trunc α, β q
-  证明: Quot.ind
-
-Depends on / 依赖: Quot.ind
+def lift (f : α → β) (c : ∀ a b : α, f a = f b) : Trunc α → β :=
+  Quot.lift f fun a b _ ↦ c a b
+/-
+**Trunc.ind** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：ind {β : Trunc α -> Prop} : (forall a : α, β (mk a)) -> forall q : Trunc α
+, β q
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ind {β : Trunc α -> Prop} : (forall a : α, β (mk a)) -> forall q : Trunc α, β q :=
+theorem ind {β : Trunc α → Prop} : (∀ a : α, β (mk a)) → ∀ q : Trunc α, β q :=
   Quot.ind
-
-/--
-theorem `lift_mk` / 定理 `lift_mk`
-
-English:
-theorem lift_mk
-  given: (f : α -> β) (c) (a : α)
-  statement: lift f c (mk a) = f a
-  proof: rfl
-
-中文:
-定理 lift_mk
-  条件: (f : α -> β) (c) (a : α)
-  结论: lift f c (mk a) = f a
-  证明: rfl
+/-
+**Trunc.lift_mk** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (c : ∀ (a b : α), f a = f b) (
+a : α), Trunc.lift f c (Trunc.mk a) = f a
+参数：f : α → β；c : ∀ (a b : α), f a = f b；a : α；Trunc.mk a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem lift_mk (f : α -> β) (c) (a : α) : lift f c (mk a) = f a :=
+protected theorem lift_mk (f : α → β) (c) (a : α) : lift f c (mk a) = f a :=
   rfl
 
-/--
-Definition of `liftOn` / `liftOn` 的定义
+/-- Lift a constant function on `q : Trunc α`. -/
+/-
+**Trunc.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：{α : Sort u_1} → {β : Sort u_2} → Trunc α → (f : α → β) → (∀ (a b : α), f 
+a = f b) → β
+参数：f : α → β；∀ (a b : α), f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOn
-  signature: (q : Trunc α) (f : α -> β) (c : forall a b : α, f a = f b)
-  body: lift f c q
-
-@[elab_as_elim]
-
-中文:
-定义 liftOn
-  签名: (q : Trunc α) (f : α -> β) (c : 对任意 a b : α, f a = f b)
-  定义体: lift f c q
-
-@[elab_as_elim]
+--- 原说明 ---
+Lift a constant function on `q : Trunc α`.
 -/
-protected def liftOn (q : Trunc α) (f : α -> β) (c : forall a b : α, f a = f b) : β :=
+protected def liftOn (q : Trunc α) (f : α → β) (c : ∀ a b : α, f a = f b) : β :=
   lift f c q
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  given: {β : Trunc α -> Prop} (q : Trunc α) (h : forall a, β (mk a))
-  statement: β q
-  proof: ind h q
-
-中文:
-定理 induction_on
-  条件: {β : Trunc α -> 命题} (q : Trunc α) (h : 对任意 a, β (mk a))
-  结论: β q
-  证明: ind h q
+/-
+**Trunc.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：∀ {α : Sort u_1} {β : Trunc α → Prop} (q : Trunc α), (∀ (a : α), β (Trunc.
+mk a)) → β q
+参数：q : Trunc α；∀ (a : α), β (Trunc.mk a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.ind`：ind {β : Trunc α -> Prop} : (forall a : α, β (mk a)) -> foral
+l q : Trunc α, β q
 -/
-protected theorem induction_on {β : Trunc α -> Prop} (q : Trunc α) (h : forall a, β (mk a)) : β q :=
+protected theorem induction_on {β : Trunc α → Prop} (q : Trunc α) (h : ∀ a, β (mk a)) : β q :=
   ind h q
-
-/--
-theorem `exists_rep` / 定理 `exists_rep`
-
-English:
-theorem exists_rep
-  given: (q : Trunc α)
-  statement: exists a : α, mk a = q
-  proof: Quot.exists_rep q
-
-@[elab_as_elim]
-
-中文:
-定理 存在_rep
-  条件: (q : Trunc α)
-  结论: 存在 a : α, mk a = q
-  证明: Quot.exists_rep q
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quot.exists_rep, exists_rep
+/-
+**Trunc.exists_rep** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：exists_rep (q : Trunc α) : exists a : α, mk a = q
+参数：q : Trunc α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
-theorem exists_rep (q : Trunc α) : exists a : α, mk a = q :=
+theorem exists_rep (q : Trunc α) : ∃ a : α, mk a = q :=
   Quot.exists_rep q
 
 @[elab_as_elim]
-/--
-theorem `induction_on₂` / 定理 `induction_on₂`
-
-English:
-theorem induction_on₂
-  statement: {C : Trunc α -> Trunc β -> Prop} (q₁ : Trunc α) (q₂ : Trunc β)
-  proof: Trunc.induction_on q₁ fun a₁ => Trunc.induction_on q₂ (h a₁)
-
-中文:
-定理 induction_on₂
-  结论: {C : Trunc α -> Trunc β -> 命题} (q₁ : Trunc α) (q₂ : Trunc β)
-  证明: Trunc.induction_on q₁ fun a₁ => Trunc.induction_on q₂ (h a₁)
+/-
+**Trunc.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：∀ {α : Sort u_1} {β : Trunc α → Prop} (q : Trunc α), (∀ (a : α), β (Trunc.
+mk a)) → β q
+参数：q : Trunc α；∀ (a : α), β (Trunc.mk a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.ind`：ind {β : Trunc α -> Prop} : (forall a : α, β (mk a)) -> foral
+l q : Trunc α, β q
 -/
-protected theorem induction_on₂ {C : Trunc α -> Trunc β -> Prop} (q₁ : Trunc α) (q₂ : Trunc β)
-    (h : forall a b, C (mk a) (mk b)) : C q₁ q₂ :=
-  Trunc.induction_on q₁ fun a₁ => Trunc.induction_on q₂ (h a₁)
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (a b : Trunc α)
-  statement: a = b
-  proof: Trunc.induction_on₂ a b fun _ _ => Quot.sound trivial
-
-中文:
-定理 eq
-  条件: (a b : Trunc α)
-  结论: a = b
-  证明: Trunc.induction_on₂ a b fun _ _ => Quot.sound trivial
+protected theorem induction_on₂ {C : Trunc α → Trunc β → Prop} (q₁ : Trunc α) (q₂ : Trunc β)
+    (h : ∀ a b, C (mk a) (mk b)) : C q₁ q₂ :=
+  Trunc.induction_on q₁ fun a₁ ↦ Trunc.induction_on q₂ (h a₁)
+/-
+**Trunc.eq** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：∀ {α : Sort u_1} (a b : Trunc α), a = b
+参数：a b : Trunc α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.induction_on₂`：∀ {α : Sort u_1} {β : Sort u_2} {C : Trunc α → Trun
+c β → Prop} (q₁ : Trunc α) (q₂ : Trunc β),   (∀ (a : α) (b : β), C (Trunc.mk a) 
+(Trunc.mk…
+· 使用定理 `trivial`：True
 -/
 protected theorem eq (a b : Trunc α) : a = b :=
-  Trunc.induction_on₂ a b fun _ _ => Quot.sound trivial
-
-/--
-Instance `instSubsingletonTrunc` / 实例 `instSubsingletonTrunc`
-
-English:
-instance instSubsingletonTrunc
-  signature: : Subsingleton (Trunc α)
-  body: ⟨Trunc.eq⟩
-
-中文:
-实例 instSubsingletonTrunc
-  签名: : 子单例 (Trunc α)
-  定义体: ⟨Trunc.eq⟩
-
-Depends on / 依赖: Trunc.eq
+  Trunc.induction_on₂ a b fun _ _ ↦ Quot.sound trivial
+/-
+**Trunc.instSubsingletonTrunc** 是 Mathlib 中的一个实例，位于命名空间 `Trunc`。
+形式化陈述：instSubsingletonTrunc : Subsingleton (Trunc α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.eq`：∀ {α : Sort u_1} (a b : Trunc α), a = b
 -/
 instance instSubsingletonTrunc : Subsingleton (Trunc α) :=
   ⟨Trunc.eq⟩
 
-/--
-Definition of `bind` / `bind` 的定义
+/-- The `bind` operator for the `Trunc` monad. -/
+/-
+**Trunc.bind** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：bind (q : Trunc α) (f : α -> Trunc β) : Trunc β
+参数：q : Trunc α；f : α -> Trunc β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bind
-  signature: (q : Trunc α) (f : α -> Trunc β)
-  body: Trunc.liftOn q f fun _ _ => Trunc.eq _ _
-
-中文:
-定义 bind
-  签名: (q : Trunc α) (f : α -> Trunc β)
-  定义体: Trunc.liftOn q f fun _ _ => Trunc.eq _ _
-
-Depends on / 依赖: Trunc.eq, Trunc.liftOn, liftOn
+--- 原说明 ---
+The `bind` operator for the `Trunc` monad.
 -/
-def bind (q : Trunc α) (f : α -> Trunc β) : Trunc β :=
-  Trunc.liftOn q f fun _ _ => Trunc.eq _ _
+def bind (q : Trunc α) (f : α → Trunc β) : Trunc β :=
+  Trunc.liftOn q f fun _ _ ↦ Trunc.eq _ _
 
-/--
-Definition of `map` / `map` 的定义
+/-- A function `f : α → β` defines a function `map f : Trunc α → Trunc β`. -/
+/-
+**Trunc.map** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：map (f : α -> β) (q : Trunc α) : Trunc β
+参数：f : α -> β；q : Trunc α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (q : Trunc α)
-  body: bind q (Trunc.mk ∘ f)
-
-中文:
-定义 map
-  签名: (f : α -> β) (q : Trunc α)
-  定义体: bind q (Trunc.mk ∘ f)
-
-Depends on / 依赖: Trunc.mk
+--- 原说明 ---
+A function `f : α → β` defines a function `map f : Trunc α → Trunc β`.
 -/
-def map (f : α -> β) (q : Trunc α) : Trunc β :=
+def map (f : α → β) (q : Trunc α) : Trunc β :=
   bind q (Trunc.mk ∘ f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monad Trunc
-  body: @Trunc.mk
-  bind := @Trunc.bind
-
-中文:
-实例 :
-  签名: 单子 Trunc
-  定义体: @Trunc.mk
-  bind := @Trunc.bind
-
-Depends on / 依赖: Trunc.mk
+/-
+**Trunc.** 是 Mathlib 中的一个实例，位于命名空间 `Trunc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monad Trunc where
   pure := @Trunc.mk
   bind := @Trunc.bind
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulMonad Trunc
-  body: Trunc.eq _ _
-  pure_bind _ _ := rfl
-  bind_assoc _ _ _ := Trunc.eq _ _
-  map_const := rfl
-  seqLeft_eq _ _ := Trunc.eq _ _
-  seqRight_eq _ _ := Trunc.eq _ _
-  pure_seq _ _ := rfl
-  bind_pure_comp _ _ := rfl
-  bind_map _ _ := rfl
-
-中文:
-实例 :
-  签名: 合法单子 Trunc
-  定义体: Trunc.eq _ _
-  pure_bind _ _ := rfl
-  bind_assoc _ _ _ := Trunc.eq _ _
-  map_const := rfl
-  seqLeft_eq _ _ := Trunc.eq _ _
-  seqRight_eq _ _ := Trunc.eq _ _
-  pure_seq _ _ := rfl
-  bind_pure_comp _ _ := rfl
-  bind_map _ _ := rfl
-
-Depends on / 依赖: Trunc.eq
+/-
+**Trunc.** 是 Mathlib 中的一个实例，位于命名空间 `Trunc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulMonad Trunc where
   id_map _ := Trunc.eq _ _
@@ -1880,123 +1369,89 @@ instance : LawfulMonad Trunc where
   bind_pure_comp _ _ := rfl
   bind_map _ _ := rfl
 
-variable {C : Trunc α -> Sort*}
+variable {C : Trunc α → Sort*}
 
 /-- Recursion/induction principle for `Trunc`. -/
 @[elab_as_elim]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**Trunc.rec** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：{α : Sort u_1} →   {C : Trunc α → Sort u_3} → (f : (a : α) → C (Trunc.mk a
+)) → (∀ (a b : α), ⋯ ▸ f a = f b) → (q : Trunc α) → C q
+参数：f : (a : α) → C (Trunc.mk a)；∀ (a b : α), ⋯ ▸ f a = f b；q : Trunc α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: (f : forall a, C (mk a))
-  body: Quot.rec f (fun a b _ => h a b) q
-
-中文:
-定义 rec
-  签名: (f : 对任意 a, C (mk a))
-  定义体: Quot.rec f (fun a b _ => h a b) q
+--- 原说明 ---
+Recursion/induction principle for `Trunc`.
 -/
-protected def rec (f : forall a, C (mk a))
-    (h : forall a b : α, (Eq.ndrec (f a) (Trunc.eq (mk a) (mk b)) : C (mk b)) = f b)
+protected def rec (f : ∀ a, C (mk a))
+    (h : ∀ a b : α, (Eq.ndrec (f a) (Trunc.eq (mk a) (mk b)) : C (mk b)) = f b)
     (q : Trunc α) : C q :=
-  Quot.rec f (fun a b _ => h a b) q
+  Quot.rec f (fun a b _ ↦ h a b) q
 
 /-- A version of `Trunc.rec` taking `q : Trunc α` as the first argument. -/
 @[elab_as_elim]
-/--
-Definition of `recOn` / `recOn` 的定义
+/-
+**Trunc.recOn** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：{α : Sort u_1} →   {C : Trunc α → Sort u_3} → (q : Trunc α) → (f : (a : α)
+ → C (Trunc.mk a)) → (∀ (a b : α), ⋯ ▸ f a = f b) → C q
+参数：q : Trunc α；f : (a : α) → C (Trunc.mk a)；∀ (a b : α), ⋯ ▸ f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOn
-  signature: (q : Trunc α) (f : forall a, C (mk a))
-  body: Trunc.rec f h q
-
-中文:
-定义 recOn
-  签名: (q : Trunc α) (f : 对任意 a, C (mk a))
-  定义体: Trunc.rec f h q
+--- 原说明 ---
+A version of `Trunc.rec` taking `q : Trunc α` as the first argument.
 -/
-protected def recOn (q : Trunc α) (f : forall a, C (mk a))
-    (h : forall a b : α, (Eq.ndrec (f a) (Trunc.eq (mk a) (mk b)) : C (mk b)) = f b) : C q :=
+protected def recOn (q : Trunc α) (f : ∀ a, C (mk a))
+    (h : ∀ a b : α, (Eq.ndrec (f a) (Trunc.eq (mk a) (mk b)) : C (mk b)) = f b) : C q :=
   Trunc.rec f h q
 
 /-- A version of `Trunc.recOn` assuming the codomain is a `Subsingleton`. -/
 @[elab_as_elim]
-/--
-Definition of `recOnSubsingleton` / `recOnSubsingleton` 的定义
+/-
+**Trunc.recOnSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：{α : Sort u_1} →   {C : Trunc α → Sort u_3} →     [∀ (a : α), Subsingleton
+ (C (Trunc.mk a))] → (q : Trunc α) → ((a : α) → C (Trunc.mk a)) → C q
+参数：a : α；C (Trunc.mk a)；q : Trunc α；(a : α) → C (Trunc.mk a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOnSubsingleton
-  signature: [forall a, Subsingleton (C (mk a))] (q : Trunc α) (f : forall a, C (mk a))
-  body: Trunc.rec f (fun _ b => Subsingleton.elim _ (f b)) q
-
-中文:
-定义 recOnSubsingleton
-  签名: [对任意 a, 子单例 (C (mk a))] (q : Trunc α) (f : 对任意 a, C (mk a))
-  定义体: Trunc.rec f (fun _ b => Subsingleton.elim _ (f b)) q
+--- 原说明 ---
+A version of `Trunc.recOn` assuming the codomain is a `Subsingleton`.
 -/
-protected def recOnSubsingleton [forall a, Subsingleton (C (mk a))] (q : Trunc α) (f : forall a, C (mk a)) :
+protected def recOnSubsingleton [∀ a, Subsingleton (C (mk a))] (q : Trunc α) (f : ∀ a, C (mk a)) :
     C q :=
-  Trunc.rec f (fun _ b => Subsingleton.elim _ (f b)) q
+  Trunc.rec f (fun _ b ↦ Subsingleton.elim _ (f b)) q
 
-/--
-Definition of `out` / `out` 的定义
+/-- Noncomputably extract a representative of `Trunc α` (using the axiom of choice). -/
+/-
+**Trunc.out** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：out : Trunc α -> α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition out
-  signature: : Trunc α -> α
-  body: Quot.out
-
-@[simp]
-
-中文:
-定义 out
-  签名: : Trunc α -> α
-  定义体: Quot.out
-
-@[simp]
-
-Depends on / 依赖: Quot.out
+--- 原说明 ---
+Noncomputably extract a representative of `Trunc α` (using the axiom of choice).
 -/
-noncomputable def out : Trunc α -> α :=
+noncomputable def out : Trunc α → α :=
   Quot.out
 
 @[simp]
-/--
-theorem `out_eq` / 定理 `out_eq`
-
-English:
-theorem out_eq
-  given: (q : Trunc α)
-  statement: mk q.out = q
-  proof: Trunc.eq _ _
-
-中文:
-定理 out_eq
-  条件: (q : Trunc α)
-  结论: mk q.out = q
-  证明: Trunc.eq _ _
-
-Depends on / 依赖: Trunc.eq
+/-
+**Trunc.out_eq** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：out_eq (q : Trunc α) : mk q.out = q
+参数：q : Trunc α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.eq`：∀ {α : Sort u_1} (a b : Trunc α), a = b
 -/
 theorem out_eq (q : Trunc α) : mk q.out = q :=
   Trunc.eq _ _
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  given: (q : Trunc α)
-  statement: Nonempty α
-  proof: q.exists_rep.nonempty
-
-中文:
-定理 nonempty
-  条件: (q : Trunc α)
-  结论: 非空 α
-  证明: q.exists_rep.nonempty
+/-
+**Trunc.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：∀ {α : Sort u_1} (q : Trunc α), Nonempty α
+参数：q : Trunc α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.nonempty`：∀ {α : Sort u_1} {p : α → Prop}, (∃ x, p x) → Nonempty 
+α
+· 使用定理 `Trunc.exists_rep`：exists_rep (q : Trunc α) : exists a : α, mk a = q
 -/
 protected theorem nonempty (q : Trunc α) : Nonempty α :=
   q.exists_rep.nonempty
@@ -2016,560 +1471,496 @@ several different quotient relations on a type, for example quotient groups, rin
 
 -- TODO: this whole section can probably be replaced `Quotient.mk`, with explicit parameter
 
-/--
-Definition of `mk''` / `mk''` 的定义
+/-- A version of `Quotient.mk` taking `{s : Setoid α}` as an implicit argument instead of an
+/-
+**Quotient.argument.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance argument. -/
+/-
+**Quotient.mk''** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：mk''_surjective : Function.Surjective (Quotient.mk'' : α -> Quotient s₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk''
-  signature: (a : α)
-  body: ⟦a⟧
-
-中文:
-缩写 mk''
-  签名: (a : α)
-  定义体: ⟦a⟧
+--- 原说明 ---
+A version of `Quotient.mk` taking `{s : Setoid α}` as an implicit argument inste
+ad of an
+instance argument.
 -/
 protected abbrev mk'' (a : α) : Quotient s₁ :=
   ⟦a⟧
 
-/--
-theorem `mk''_surjective` / 定理 `mk''_surjective`
+/-- `Quotient.mk''` is a surjective function. -/
+/-
+**Quotient.mk''_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α}, Function.Surjective Quotient.mk''
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 
-English:
-theorem mk''_surjective
-  statement: Function.Surjective (Quotient.mk'' : α -> Quotient s₁)
-  proof: Quot.exists_rep
-
-中文:
-定理 mk''_surjective
-  结论: 函数.满射 (商.mk'' : α -> 商 s₁)
-  证明: Quot.exists_rep
-
-Depends on / 依赖: Quot.exists_rep, exists_rep
+--- 原说明 ---
+`Quotient.mk''` is a surjective function.
 -/
-theorem mk''_surjective : Function.Surjective (Quotient.mk'' : α -> Quotient s₁) :=
+theorem mk''_surjective : Function.Surjective (Quotient.mk'' : α → Quotient s₁) :=
   Quot.exists_rep
 
-/--
-Definition of `liftOn'` / `liftOn'` 的定义
-
-English:
-definition liftOn'
-  signature: (q : Quotient s₁) (f : α -> φ) (h : forall a b, s₁ a b -> f a = f b)
-  body: Quotient.liftOn q f h
-
-@[simp]
-
-中文:
-定义 liftOn'
-  签名: (q : 商 s₁) (f : α -> φ) (h : 对任意 a b, s₁ a b -> f a = f b)
-  定义体: Quotient.liftOn q f h
-
-@[simp]
+/-- A version of `Quotient.liftOn` taking `{s : Setoid α}` as an implicit argument instead of an
+/-
+**Quotient.argument.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def liftOn' (q : Quotient s₁) (f : α -> φ) (h : forall a b, s₁ a b -> f a = f b) :
+instance argument. -/
+/-
+**Quotient.liftOn'** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} → {φ : Sort u_4} → {s₁ : Setoid α} → Quotient s₁ → (f : α →
+ φ) → (∀ (a b : α), s₁ a b → f a = f b) → φ
+参数：f : α → φ；∀ (a b : α), s₁ a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A version of `Quotient.liftOn` taking `{s : Setoid α}` as an implicit argument i
+nstead of an
+instance argument.
+-/
+protected def liftOn' (q : Quotient s₁) (f : α → φ) (h : ∀ a b, s₁ a b → f a = f b) :
     φ :=
   Quotient.liftOn q f h
 
 @[simp]
-/--
-theorem `liftOn'_mk''` / 定理 `liftOn'_mk''`
-
-English:
-theorem liftOn'_mk''
-  given: (f : α -> φ) (h) (x : α)
-  proof: rfl
-
-中文:
-定理 liftOn'_mk''
-  条件: (f : α -> φ) (h) (x : α)
-  证明: rfl
+/-
+**Quotient.liftOn'_mk''** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoid α} (f : α → φ) (h : ∀ (a b : 
+α), s₁ a b → f a = f b) (x : α),   (Quotient.mk'' x).liftOn' f h = f x
+参数：f : α → φ；h : ∀ (a b : α), s₁ a b → f a = f b；x : α；Quotient.mk'' x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
-protected theorem liftOn'_mk'' (f : α -> φ) (h) (x : α) :
+protected theorem liftOn'_mk'' (f : α → φ) (h) (x : α) :
     Quotient.liftOn' (@Quotient.mk'' _ s₁ x) f h = f x :=
   rfl
-
-/--
-lemma `surjective_liftOn'` / 引理 `surjective_liftOn'`
-
-English:
-lemma surjective_liftOn'
-  given: {f : α -> φ} (h)
-  proof: Quot.surjective_lift _
-
-中文:
-引理 surjective_liftOn'
-  条件: {f : α -> φ} (h)
-  证明: Quot.surjective_lift _
+/-
+**Quotient.surjective_liftOn'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoid α} {f : α → φ} (h : ∀ (a b : 
+α), s₁ a b → f a = f b),   (Function.Surjective fun x => x.liftOn' f h) ↔ Functi
+on.Surjective f
+参数：h : ∀ (a b : α), s₁ a b → f a = f b；Function.Surjective fun x => x.liftOn' f 
+h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.surjective_lift`：∀ {α : Sort u_1} {γ : Sort u_4} {r : α → α → Prop}
+ {f : α → γ} (h : ∀ (a₁ a₂ : α), r a₁ a₂ → f a₁ = f a₂),   Function.Surjective (
+Quot.lift …
 -/
-@[simp] lemma surjective_liftOn' {f : α -> φ} (h) :
-    Function.Surjective (fun x : Quotient s₁ => x.liftOn' f h) ↔ Function.Surjective f :=
+@[simp] lemma surjective_liftOn' {f : α → φ} (h) :
+    Function.Surjective (fun x : Quotient s₁ ↦ x.liftOn' f h) ↔ Function.Surjective f :=
   Quot.surjective_lift _
 
-/--
-Definition of `liftOn₂'` / `liftOn₂'` 的定义
+/-- A version of `Quotient.liftOn₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as implicit arguments
+instead of instance arguments. -/
+/-
+**Quotient.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → Quotient s → (f : α → β) → 
+(∀ (a b : α), a ≈ b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOn₂'
-  signature: (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α -> β -> γ)
-  body: Quotient.liftOn₂ q₁ q₂ f h
-
-@[simp]
-
-中文:
-定义 liftOn₂'
-  签名: (q₁ : 商 s₁) (q₂ : 商 s₂) (f : α -> β -> γ)
-  定义体: Quotient.liftOn₂ q₁ q₂ f h
-
-@[simp]
+--- 原说明 ---
+A version of `Quotient.liftOn₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as impl
+icit arguments
+instead of instance arguments.
 -/
-protected def liftOn₂' (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α -> β -> γ)
-    (h : forall a₁ a₂ b₁ b₂, s₁ a₁ b₁ -> s₂ a₂ b₂ -> f a₁ a₂ = f b₁ b₂) : γ :=
+protected def liftOn₂' (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α → β → γ)
+    (h : ∀ a₁ a₂ b₁ b₂, s₁ a₁ b₁ → s₂ a₂ b₂ → f a₁ a₂ = f b₁ b₂) : γ :=
   Quotient.liftOn₂ q₁ q₂ f h
 
 @[simp]
-/--
-theorem `liftOn₂'_mk''` / 定理 `liftOn₂'_mk''`
-
-English:
-theorem liftOn₂'_mk''
-  given: (f : α -> β -> γ) (h) (a : α) (b : β)
-  proof: rfl
-
-中文:
-定理 liftOn₂'_mk''
-  条件: (f : α -> β -> γ) (h) (a : α) (b : β)
-  证明: rfl
+/-
+**Quotient.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → Quotient s → (f : α → β) → 
+(∀ (a b : α), a ≈ b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem liftOn₂'_mk'' (f : α -> β -> γ) (h) (a : α) (b : β) :
+protected theorem liftOn₂'_mk'' (f : α → β → γ) (h) (a : α) (b : β) :
     Quotient.liftOn₂' (@Quotient.mk'' _ s₁ a) (@Quotient.mk'' _ s₂ b) f h = f a b :=
   rfl
 
 /-- A version of `Quotient.ind` taking `{s : Setoid α}` as an implicit argument instead of an
+/-
+**Quotient.argument.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance argument. -/
 @[elab_as_elim]
-/--
-theorem `ind'` / 定理 `ind'`
+/-
+**Quotient.ind'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop}, (∀ (a : α), p (
+Quotient.mk'' a)) → ∀ (q : Quotient s₁), p q
+参数：∀ (a : α), p (Quotient.mk'' a)；q : Quotient s₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 
-English:
-theorem ind'
-  given: {p : Quotient s₁ -> Prop} (h : forall a, p (Quotient.mk'' a)) (q : Quotient s₁)
-  proof: Quotient.ind h q
-
-中文:
-定理 ind'
-  条件: {p : 商 s₁ -> 命题} (h : 对任意 a, p (商.mk'' a)) (q : 商 s₁)
-  证明: Quotient.ind h q
+--- 原说明 ---
+A version of `Quotient.ind` taking `{s : Setoid α}` as an implicit argument inst
+ead of an
+instance argument.
 -/
-protected theorem ind' {p : Quotient s₁ -> Prop} (h : forall a, p (Quotient.mk'' a)) (q : Quotient s₁) :
+protected theorem ind' {p : Quotient s₁ → Prop} (h : ∀ a, p (Quotient.mk'' a)) (q : Quotient s₁) :
     p q :=
   Quotient.ind h q
 
 /-- A version of `Quotient.ind₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as implicit arguments
 instead of instance arguments. -/
 @[elab_as_elim]
-/--
-theorem `ind₂'` / 定理 `ind₂'`
+/-
+**Quotient.ind** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}, (∀ (a : α), mo
+tive ⟦a⟧) → ∀ (q : Quotient s), motive q
+参数：∀ (a : α), motive ⟦a⟧；q : Quotient s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ind₂'
-  statement: {p : Quotient s₁ -> Quotient s₂ -> Prop}
-  proof: Quotient.ind₂ h q₁ q₂
-
-中文:
-定理 ind₂'
-  结论: {p : 商 s₁ -> 商 s₂ -> 命题}
-  证明: Quotient.ind₂ h q₁ q₂
+--- 原说明 ---
+A version of `Quotient.ind₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as implici
+t arguments
+instead of instance arguments.
 -/
-protected theorem ind₂' {p : Quotient s₁ -> Quotient s₂ -> Prop}
-    (h : forall a₁ a₂, p (Quotient.mk'' a₁) (Quotient.mk'' a₂))
+protected theorem ind₂' {p : Quotient s₁ → Quotient s₂ → Prop}
+    (h : ∀ a₁ a₂, p (Quotient.mk'' a₁) (Quotient.mk'' a₂))
     (q₁ : Quotient s₁) (q₂ : Quotient s₂) : p q₁ q₂ :=
   Quotient.ind₂ h q₁ q₂
 
 /-- A version of `Quotient.inductionOn` taking `{s : Setoid α}` as an implicit argument instead
 of an instance argument. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn'` / 定理 `inductionOn'`
+/-
+**Quotient.inductionOn'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop} (q : Quotient s₁
+), (∀ (a : α), p (Quotient.mk'' a)) → p q
+参数：q : Quotient s₁；∀ (a : α), p (Quotient.mk'' a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 
-English:
-theorem inductionOn'
-  statement: {p : Quotient s₁ -> Prop} (q : Quotient s₁)
-  proof: Quotient.inductionOn q h
-
-中文:
-定理 inductionOn'
-  结论: {p : 商 s₁ -> 命题} (q : 商 s₁)
-  证明: Quotient.inductionOn q h
+--- 原说明 ---
+A version of `Quotient.inductionOn` taking `{s : Setoid α}` as an implicit argum
+ent instead
+of an instance argument.
 -/
-protected theorem inductionOn' {p : Quotient s₁ -> Prop} (q : Quotient s₁)
-    (h : forall a, p (Quotient.mk'' a)) : p q :=
+protected theorem inductionOn' {p : Quotient s₁ → Prop} (q : Quotient s₁)
+    (h : ∀ a, p (Quotient.mk'' a)) : p q :=
   Quotient.inductionOn q h
 
 /-- A version of `Quotient.inductionOn₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as implicit
 arguments instead of instance arguments. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn₂'` / 定理 `inductionOn₂'`
+/-
+**Quotient.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop} (q : Quotient s
+), (∀ (a : α), motive ⟦a⟧) → motive q
+参数：q : Quotient s；∀ (a : α), motive ⟦a⟧。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 
-English:
-theorem inductionOn₂'
-  statement: {p : Quotient s₁ -> Quotient s₂ -> Prop} (q₁ : Quotient s₁)
-  proof: Quotient.inductionOn₂ q₁ q₂ h
-
-中文:
-定理 inductionOn₂'
-  结论: {p : 商 s₁ -> 商 s₂ -> 命题} (q₁ : 商 s₁)
-  证明: Quotient.inductionOn₂ q₁ q₂ h
+--- 原说明 ---
+A version of `Quotient.inductionOn₂` taking `{s₁ : Setoid α} {s₂ : Setoid β}` as
+ implicit
+arguments instead of instance arguments.
 -/
-protected theorem inductionOn₂' {p : Quotient s₁ -> Quotient s₂ -> Prop} (q₁ : Quotient s₁)
+protected theorem inductionOn₂' {p : Quotient s₁ → Quotient s₂ → Prop} (q₁ : Quotient s₁)
     (q₂ : Quotient s₂)
-    (h : forall a₁ a₂, p (Quotient.mk'' a₁) (Quotient.mk'' a₂)) : p q₁ q₂ :=
+    (h : ∀ a₁ a₂, p (Quotient.mk'' a₁) (Quotient.mk'' a₂)) : p q₁ q₂ :=
   Quotient.inductionOn₂ q₁ q₂ h
 
 /-- A version of `Quotient.inductionOn₃` taking `{s₁ : Setoid α} {s₂ : Setoid β} {s₃ : Setoid γ}`
 as implicit arguments instead of instance arguments. -/
 @[elab_as_elim]
-/--
-theorem `inductionOn₃'` / 定理 `inductionOn₃'`
+/-
+**Quotient.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop} (q : Quotient s
+), (∀ (a : α), motive ⟦a⟧) → motive q
+参数：q : Quotient s；∀ (a : α), motive ⟦a⟧。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 
-English:
-theorem inductionOn₃'
-  statement: {p : Quotient s₁ -> Quotient s₂ -> Quotient s₃ -> Prop}
-  proof: Quotient.inductionOn₃ q₁ q₂ q₃ h
-
-中文:
-定理 inductionOn₃'
-  结论: {p : 商 s₁ -> 商 s₂ -> 商 s₃ -> 命题}
-  证明: Quotient.inductionOn₃ q₁ q₂ q₃ h
+--- 原说明 ---
+A version of `Quotient.inductionOn₃` taking `{s₁ : Setoid α} {s₂ : Setoid β} {s₃
+ : Setoid γ}`
+as implicit arguments instead of instance arguments.
 -/
-protected theorem inductionOn₃' {p : Quotient s₁ -> Quotient s₂ -> Quotient s₃ -> Prop}
+protected theorem inductionOn₃' {p : Quotient s₁ → Quotient s₂ → Quotient s₃ → Prop}
     (q₁ : Quotient s₁) (q₂ : Quotient s₂) (q₃ : Quotient s₃)
-    (h : forall a₁ a₂ a₃, p (Quotient.mk'' a₁) (Quotient.mk'' a₂) (Quotient.mk'' a₃)) :
+    (h : ∀ a₁ a₂ a₃, p (Quotient.mk'' a₁) (Quotient.mk'' a₂) (Quotient.mk'' a₃)) :
     p q₁ q₂ q₃ :=
   Quotient.inductionOn₃ q₁ q₂ q₃ h
 
 /-- A version of `Quotient.recOnSubsingleton` taking `{s₁ : Setoid α}` as an implicit argument
 instead of an instance argument. -/
 @[elab_as_elim]
-/--
-Definition of `recOnSubsingleton'` / `recOnSubsingleton'` 的定义
+/-
+**Quotient.recOnSubsingleton'** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {s₁ : Setoid α} →     {φ : Quotient s₁ → Sort u_5} →   
+    [∀ (a : α), Subsingleton (φ ⟦a⟧)] → (q : Quotient s₁) → ((a : α) → φ (Quotie
+nt.mk'' a)) → φ q
+参数：a : α；φ ⟦a⟧；q : Quotient s₁；(a : α) → φ (Quotient.mk'' a)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-definition recOnSubsingleton'
-  signature: {φ : Quotient s₁ -> Sort*} [forall a, Subsingleton (φ ⟦a⟧)]
-  body: Quotient.recOnSubsingleton q f
-
-中文:
-定义 recOnSubsingleton'
-  签名: {φ : 商 s₁ -> 类型层*} [对任意 a, 子单例 (φ ⟦a⟧)]
-  定义体: Quotient.recOnSubsingleton q f
+--- 原说明 ---
+A version of `Quotient.recOnSubsingleton` taking `{s₁ : Setoid α}` as an implici
+t argument
+instead of an instance argument.
 -/
-protected def recOnSubsingleton' {φ : Quotient s₁ -> Sort*} [forall a, Subsingleton (φ ⟦a⟧)]
+protected def recOnSubsingleton' {φ : Quotient s₁ → Sort*} [∀ a, Subsingleton (φ ⟦a⟧)]
     (q : Quotient s₁)
-    (f : forall a, φ (Quotient.mk'' a)) : φ q :=
+    (f : ∀ a, φ (Quotient.mk'' a)) : φ q :=
   Quotient.recOnSubsingleton q f
 
 /-- A version of `Quotient.recOnSubsingleton₂` taking `{s₁ : Setoid α} {s₂ : Setoid α}`
 as implicit arguments instead of instance arguments. -/
 @[elab_as_elim]
-/--
-Definition of `recOnSubsingleton₂'` / `recOnSubsingleton₂'` 的定义
+/-
+**Quotient.recOnSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} →   {s : Setoid α} →     {motive : Quotient s → Sort v} →    
+   [h : ∀ (a : α), Subsingleton (motive ⟦a⟧)] → (q : Quotient s) → ((a : α) → mo
+tive ⟦a⟧) → motive q
+参数：a : α；motive ⟦a⟧；q : Quotient s；(a : α) → motive ⟦a⟧。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOnSubsingleton₂'
-  signature: {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
-  body: Quotient.recOnSubsingleton₂ q₁ q₂ f
-
-中文:
-定义 recOnSubsingleton₂'
-  签名: {φ : 商 s₁ -> 商 s₂ -> 类型层*}
-  定义体: Quotient.recOnSubsingleton₂ q₁ q₂ f
+--- 原说明 ---
+A version of `Quotient.recOnSubsingleton₂` taking `{s₁ : Setoid α} {s₂ : Setoid 
+α}`
+as implicit arguments instead of instance arguments.
 -/
-protected def recOnSubsingleton₂' {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
-    [forall a b, Subsingleton (φ ⟦a⟧ ⟦b⟧)]
-    (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : forall a₁ a₂, φ (Quotient.mk'' a₁) (Quotient.mk'' a₂)) :
+protected def recOnSubsingleton₂' {φ : Quotient s₁ → Quotient s₂ → Sort*}
+    [∀ a b, Subsingleton (φ ⟦a⟧ ⟦b⟧)]
+    (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : ∀ a₁ a₂, φ (Quotient.mk'' a₁) (Quotient.mk'' a₂)) :
     φ q₁ q₂ :=
   Quotient.recOnSubsingleton₂ q₁ q₂ f
 
-/--
-Definition of `hrecOn'` / `hrecOn'` 的定义
+/-- Recursion on a `Quotient` argument `a`, result type depends on `⟦a⟧`. -/
+/-
+**Quotient.hrecOn'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：hrecOn'_mk'' {φ : Quotient s₁ -> Sort*} (f : forall a, φ (Quotient.mk'' a)
+) (c : forall a₁ a₂, a₁ ≈ a₂ -> f a₁ ≍ f a₂) (x : α) : (Quotient.mk'' x).hrecOn'
+ f c = f x
+参数：f : forall a, φ (Quotient.mk'' a)；c : forall a₁ a₂, a₁ ≈ a₂ -> f a₁ ≍ f a₂；x 
+: α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-definition hrecOn'
-  signature: {φ : Quotient s₁ -> Sort*} (qa : Quotient s₁) (f : forall a, φ (Quotient.mk'' a))
-  body: Quot.hrecOn qa f c
-
-@[simp]
-
-中文:
-定义 hrecOn'
-  签名: {φ : 商 s₁ -> 类型层*} (qa : 商 s₁) (f : 对任意 a, φ (商.mk'' a))
-  定义体: Quot.hrecOn qa f c
-
-@[simp]
+--- 原说明 ---
+Recursion on a `Quotient` argument `a`, result type depends on `⟦a⟧`.
 -/
-protected def hrecOn' {φ : Quotient s₁ -> Sort*} (qa : Quotient s₁) (f : forall a, φ (Quotient.mk'' a))
-    (c : forall a₁ a₂, a₁ ≈ a₂ -> f a₁ ≍ f a₂) : φ qa :=
+protected def hrecOn' {φ : Quotient s₁ → Sort*} (qa : Quotient s₁) (f : ∀ a, φ (Quotient.mk'' a))
+    (c : ∀ a₁ a₂, a₁ ≈ a₂ → f a₁ ≍ f a₂) : φ qa :=
   Quot.hrecOn qa f c
 
 @[simp]
-/--
-theorem `hrecOn'_mk''` / 定理 `hrecOn'_mk''`
-
-English:
-theorem hrecOn'_mk''
-  statement: {φ : Quotient s₁ -> Sort*} (f : forall a, φ (Quotient.mk'' a))
-  proof: rfl
-
-中文:
-定理 hrecOn'_mk''
-  结论: {φ : 商 s₁ -> 类型层*} (f : 对任意 a, φ (商.mk'' a))
-  证明: rfl
+/-
+**Quotient.hrecOn'_mk''** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α} {φ : Quotient s₁ → Sort u_5} (f : (a : α)
+ → φ (Quotient.mk'' a))   (c : ∀ (a₁ a₂ : α), a₁ ≈ a₂ → f a₁ ≍ f a₂) (x : α), (Q
+uotient.mk'' x).hrecOn' f c = f x
+参数：f : (a : α) → φ (Quotient.mk'' a)；c : ∀ (a₁ a₂ : α), a₁ ≈ a₂ → f a₁ ≍ f a₂；x 
+: α；Quotient.mk'' x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.hrecOn'`：hrecOn'_mk'' {φ : Quotient s₁ -> Sort*} (f : forall a,
+ φ (Quotient.mk'' a)) (c : forall a₁ a₂, a₁ ≈ a₂ -> f a₁ ≍ f a₂) (x : α) : (Quot
+ient.m…
 -/
-theorem hrecOn'_mk'' {φ : Quotient s₁ -> Sort*} (f : forall a, φ (Quotient.mk'' a))
-    (c : forall a₁ a₂, a₁ ≈ a₂ -> f a₁ ≍ f a₂)
+theorem hrecOn'_mk'' {φ : Quotient s₁ → Sort*} (f : ∀ a, φ (Quotient.mk'' a))
+    (c : ∀ a₁ a₂, a₁ ≈ a₂ → f a₁ ≍ f a₂)
     (x : α) : (Quotient.mk'' x).hrecOn' f c = f x :=
   rfl
 
-/--
-Definition of `hrecOn₂'` / `hrecOn₂'` 的定义
+/-- Recursion on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` and `⟦b⟧`. -/
+/-
+**Quotient.hrecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} →   {s : Setoid α} →     {motive : Quotient s → Sort v} →    
+   (q : Quotient s) → (f : (a : α) → motive ⟦a⟧) → (∀ (a b : α), a ≈ b → f a ≍ f
+ b) → motive q
+参数：q : Quotient s；f : (a : α) → motive ⟦a⟧；∀ (a b : α), a ≈ b → f a ≍ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hrecOn₂'
-  signature: {φ : Quotient s₁ -> Quotient s₂ -> Sort*} (qa : Quotient s₁)
-  body: Quotient.hrecOn₂ qa qb f c
-
-@[simp]
-
-中文:
-定义 hrecOn₂'
-  签名: {φ : 商 s₁ -> 商 s₂ -> 类型层*} (qa : 商 s₁)
-  定义体: Quotient.hrecOn₂ qa qb f c
-
-@[simp]
+--- 原说明 ---
+Recursion on two `Quotient` arguments `a` and `b`, result type depends on `⟦a⟧` 
+and `⟦b⟧`.
 -/
-protected def hrecOn₂' {φ : Quotient s₁ -> Quotient s₂ -> Sort*} (qa : Quotient s₁)
-    (qb : Quotient s₂) (f : forall a b, φ (Quotient.mk'' a) (Quotient.mk'' b))
-    (c : forall a₁ b₁ a₂ b₂, a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ ≍ f a₂ b₂) :
+protected def hrecOn₂' {φ : Quotient s₁ → Quotient s₂ → Sort*} (qa : Quotient s₁)
+    (qb : Quotient s₂) (f : ∀ a b, φ (Quotient.mk'' a) (Quotient.mk'' b))
+    (c : ∀ a₁ b₁ a₂ b₂, a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ ≍ f a₂ b₂) :
     φ qa qb :=
   Quotient.hrecOn₂ qa qb f c
 
 @[simp]
-/--
-theorem `hrecOn₂'_mk''` / 定理 `hrecOn₂'_mk''`
-
-English:
-theorem hrecOn₂'_mk''
-  statement: {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
-  proof: rfl
-
-中文:
-定理 hrecOn₂'_mk''
-  结论: {φ : 商 s₁ -> 商 s₂ -> 类型层*}
-  证明: rfl
+/-
+**Quotient.hrecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} →   {s : Setoid α} →     {motive : Quotient s → Sort v} →    
+   (q : Quotient s) → (f : (a : α) → motive ⟦a⟧) → (∀ (a b : α), a ≈ b → f a ≍ f
+ b) → motive q
+参数：q : Quotient s；f : (a : α) → motive ⟦a⟧；∀ (a b : α), a ≈ b → f a ≍ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem hrecOn₂'_mk'' {φ : Quotient s₁ -> Quotient s₂ -> Sort*}
-    (f : forall a b, φ (Quotient.mk'' a) (Quotient.mk'' b))
-    (c : forall a₁ b₁ a₂ b₂, a₁ ≈ a₂ -> b₁ ≈ b₂ -> f a₁ b₁ ≍ f a₂ b₂) (x : α) (qb : Quotient s₂) :
-    (Quotient.mk'' x).hrecOn₂' qb f c = qb.hrecOn' (f x) fun _ _ => c _ _ _ _ (Setoid.refl _) :=
+theorem hrecOn₂'_mk'' {φ : Quotient s₁ → Quotient s₂ → Sort*}
+    (f : ∀ a b, φ (Quotient.mk'' a) (Quotient.mk'' b))
+    (c : ∀ a₁ b₁ a₂ b₂, a₁ ≈ a₂ → b₁ ≈ b₂ → f a₁ b₁ ≍ f a₂ b₂) (x : α) (qb : Quotient s₂) :
+    (Quotient.mk'' x).hrecOn₂' qb f c = qb.hrecOn' (f x) fun _ _ ↦ c _ _ _ _ (Setoid.refl _) :=
   rfl
 
-/--
-Definition of `map'` / `map'` 的定义
+/-- Map a function `f : α → β` that sends equivalent elements to equivalent elements
+to a function `Quotient sa → Quotient sb`. Useful to define unary operations on quotients.
+This is a version of `Quotient.map` using `Setoid.r` instead of `≈`. -/
+/-
+**Quotient.map'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Quotient s₁).map' 
+f h = (Quotient.mk'' (f x) : Quotient s₂)
+参数：f : α -> β；h；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map'
-  signature: (f : α -> β) (h : forall a b, s₁.r a b -> s₂.r (f a) (f b))
-  body: Quot.map f h
-
-@[simp]
-
-中文:
-定义 map'
-  签名: (f : α -> β) (h : 对任意 a b, s₁.r a b -> s₂.r (f a) (f b))
-  定义体: Quot.map f h
-
-@[simp]
+--- 原说明 ---
+Map a function `f : α → β` that sends equivalent elements to equivalent elements
+to a function `Quotient sa → Quotient sb`. Useful to define unary operations on 
+quotients.
+This is a version of `Quotient.map` using `Setoid.r` instead of `≈`.
 -/
-protected def map' (f : α -> β) (h : forall a b, s₁.r a b -> s₂.r (f a) (f b)) :
-    Quotient s₁ -> Quotient s₂ :=
+protected def map' (f : α → β) (h : ∀ a b, s₁.r a b → s₂.r (f a) (f b)) :
+    Quotient s₁ → Quotient s₂ :=
   Quot.map f h
 
 @[simp]
-/--
-theorem `map'_mk''` / 定理 `map'_mk''`
-
-English:
-theorem map'_mk''
-  given: (f : α -> β) (h) (x : α)
-  proof: rfl
-
-中文:
-定理 map'_mk''
-  条件: (f : α -> β) (h) (x : α)
-  证明: rfl
+/-
+**Quotient.map'_mk''** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {s₁ : Setoid α} {s₂ : Setoid β} (f : α → β
+) (h : ∀ (a b : α), s₁ a b → s₂ (f a) (f b))   (x : α), Quotient.map' f h (Quoti
+ent.mk'' x) = Quotient.mk'' (f x)
+参数：f : α → β；h : ∀ (a b : α), s₁ a b → s₂ (f a) (f b)；x : α；Quotient.mk'' x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
-theorem map'_mk'' (f : α -> β) (h) (x : α) :
+theorem map'_mk'' (f : α → β) (h) (x : α) :
     (Quotient.mk'' x : Quotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂) :=
   rfl
 
-/--
-Definition of `map₂'` / `map₂'` 的定义
+/-- Map a function `f : α → β → γ` that sends equivalent elements to equivalent elements
+to a function `f : Quotient sa → Quotient sb → Quotient sc`. Useful to define binary operations
+on quotients. This is a version of `Quotient.map₂` using `Setoid.r` instead of `≈`. -/
+/-
+**Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {sa : Setoid α} → {sb : Setoid β} 
+→ (f : α → β) → (∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) → Quotient sa → Quotient sb
+参数：f : α → β；∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂'
-  signature: (f : α -> β -> γ)
-  body: Quotient.map₂ f h
-
-@[simp]
-
-中文:
-定义 map₂'
-  签名: (f : α -> β -> γ)
-  定义体: Quotient.map₂ f h
-
-@[simp]
+--- 原说明 ---
+Map a function `f : α → β → γ` that sends equivalent elements to equivalent elem
+ents
+to a function `f : Quotient sa → Quotient sb → Quotient sc`. Useful to define bi
+nary operations
+on quotients. This is a version of `Quotient.map₂` using `Setoid.r` instead of `
+≈`.
 -/
-protected def map₂' (f : α -> β -> γ)
-    (h : forall ⦃a₁ a₂ : α⦄, s₁.r a₁ a₂ -> forall ⦃b₁ b₂ : β⦄, s₂.r b₁ b₂ -> s₃.r (f a₁ b₁) (f a₂ b₂)) :
-    Quotient s₁ -> Quotient s₂ -> Quotient s₃ :=
+protected def map₂' (f : α → β → γ)
+    (h : ∀ ⦃a₁ a₂ : α⦄, s₁.r a₁ a₂ → ∀ ⦃b₁ b₂ : β⦄, s₂.r b₁ b₂ → s₃.r (f a₁ b₁) (f a₂ b₂)) :
+    Quotient s₁ → Quotient s₂ → Quotient s₃ :=
   Quotient.map₂ f h
 
 @[simp]
-/--
-theorem `map₂'_mk''` / 定理 `map₂'_mk''`
-
-English:
-theorem map₂'_mk''
-  given: (f : α -> β -> γ) (h) (x : α)
-  proof: rfl
-
-中文:
-定理 map₂'_mk''
-  条件: (f : α -> β -> γ) (h) (x : α)
-  证明: rfl
+/-
+**Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u_1} →   {β : Sort u_2} →     {sa : Setoid α} → {sb : Setoid β} 
+→ (f : α → β) → (∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b) → Quotient sa → Quotient sb
+参数：f : α → β；∀ ⦃a b : α⦄, a ≈ b → f a ≈ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂'_mk'' (f : α -> β -> γ) (h) (x : α) :
+theorem map₂'_mk'' (f : α → β → γ) (h) (x : α) :
     (Quotient.mk'' x : Quotient s₁).map₂' f h =
-      (Quotient.map' (f x) (h (Setoid.refl x)) : Quotient s₂ -> Quotient s₃) :=
+      (Quotient.map' (f x) (h (Setoid.refl x)) : Quotient s₂ → Quotient s₃) :=
   rfl
-
-/--
-theorem `exact'` / 定理 `exact'`
-
-English:
-theorem exact'
-  given: {a b : α}
-  proof: Quotient.exact
-
-中文:
-定理 exact'
-  条件: {a b : α}
-  证明: Quotient.exact
-
-Depends on / 依赖: Quotient, Quotient.exact
+/-
+**Quotient.exact'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：exact' {a b : α} : (Quotient.mk'' a : Quotient s₁) = Quotient.mk'' b -> s₁
+ a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
 -/
 theorem exact' {a b : α} :
-    (Quotient.mk'' a : Quotient s₁) = Quotient.mk'' b -> s₁ a b :=
+    (Quotient.mk'' a : Quotient s₁) = Quotient.mk'' b → s₁ a b :=
   Quotient.exact
-
-/--
-theorem `sound'` / 定理 `sound'`
-
-English:
-theorem sound'
-  given: {a b : α}
-  statement: s₁ a b -> @Quotient.mk'' α s₁ a = Quotient.mk'' b
-  proof: Quotient.sound
-
-@[simp]
-
-中文:
-定理 sound'
-  条件: {a b : α}
-  结论: s₁ a b -> @商.mk'' α s₁ a = 商.mk'' b
-  证明: Quotient.sound
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.sound
+/-
+**Quotient.sound'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：sound' {a b : α} : s₁ a b -> @Quotient.mk'' α s₁ a = Quotient.mk'' b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
-theorem sound' {a b : α} : s₁ a b -> @Quotient.mk'' α s₁ a = Quotient.mk'' b :=
+theorem sound' {a b : α} : s₁ a b → @Quotient.mk'' α s₁ a = Quotient.mk'' b :=
   Quotient.sound
 
 @[simp]
-/--
-theorem `eq'` / 定理 `eq'`
-
-English:
-theorem eq'
-  given: {s₁ : Setoid α} {a b : α}
-  proof: Quotient.eq
-
-中文:
-定理 eq'
-  条件: {s₁ : 集合等价关系 α} {a b : α}
-  证明: Quotient.eq
+/-
+**Quotient.eq'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk' a = Quotient.mk' 
+b ↔ s₁ a b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 protected theorem eq' {s₁ : Setoid α} {a b : α} :
     @Quotient.mk' α s₁ a = @Quotient.mk' α s₁ b ↔ s₁ a b :=
   Quotient.eq
-
-/--
-theorem `eq''` / 定理 `eq''`
-
-English:
-theorem eq''
-  given: {a b : α}
-  statement: @Quotient.mk'' α s₁ a = Quotient.mk'' b ↔ s₁ a b
-  proof: Quotient.eq
-
-中文:
-定理 eq''
-  条件: {a b : α}
-  结论: @商.mk'' α s₁ a = 商.mk'' b ↔ s₁ a b
-  证明: Quotient.eq
+/-
+**Quotient.eq''** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk'' a = Quotient.mk'
+' b ↔ s₁ a b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 protected theorem eq'' {a b : α} : @Quotient.mk'' α s₁ a = Quotient.mk'' b ↔ s₁ a b :=
   Quotient.eq
-
-/--
-theorem `out_eq'` / 定理 `out_eq'`
-
-English:
-theorem out_eq'
-  given: (q : Quotient s₁)
-  statement: Quotient.mk'' q.out = q
-  proof: q.out_eq
-
-中文:
-定理 out_eq'
-  条件: (q : 商 s₁)
-  结论: 商.mk'' q.out = q
-  证明: q.out_eq
-
-Depends on / 依赖: out_eq, q.out_eq
+/-
+**Quotient.out_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q
+参数：q : Quotient s₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 theorem out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q :=
   q.out_eq
-
-/--
-theorem `mk_out'` / 定理 `mk_out'`
-
-English:
-theorem mk_out'
-  given: (a : α)
-  statement: s₁ (Quotient.mk'' a : Quotient s₁).out a
-  proof: Quotient.exact (Quotient.out_eq _)
-
-中文:
-定理 mk_out'
-  条件: (a : α)
-  结论: s₁ (商.mk'' a : 商 s₁).out a
-  证明: Quotient.exact (Quotient.out_eq _)
-
-Depends on / 依赖: Quotient, Quotient.exact, Quotient.out_eq, out_eq
+/-
+**Quotient.mk_out'** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：mk_out' (a : α) : s₁ (Quotient.mk'' a : Quotient s₁).out a
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 theorem mk_out' (a : α) : s₁ (Quotient.mk'' a : Quotient s₁).out a :=
   Quotient.exact (Quotient.out_eq _)
@@ -2578,115 +1969,85 @@ section
 
 variable {s : Setoid α}
 
-/--
-theorem `mk''_eq_mk` / 定理 `mk''_eq_mk`
-
-English:
-theorem mk''_eq_mk
-  statement: Quotient.mk'' = Quotient.mk s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk''_eq_mk
-  结论: 商.mk'' = 商.mk s
-  证明: rfl
-
-@[simp]
+/-
+**Quotient.mk''_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {s : Setoid α}, Quotient.mk'' = Quotient.mk s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
 protected theorem mk''_eq_mk : Quotient.mk'' = Quotient.mk s :=
   rfl
 
 @[simp]
-/--
-theorem `liftOn'_mk` / 定理 `liftOn'_mk`
-
-English:
-theorem liftOn'_mk
-  given: (x : α) (f : α -> β) (h)
-  statement: (Quotient.mk s x).liftOn' f h = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 liftOn'_mk
-  条件: (x : α) (f : α -> β) (h)
-  结论: (商.mk s x).liftOn' f h = f x
-  证明: rfl
-
-@[simp]
+/-
+**Quotient.liftOn'_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {s : Setoid α} (x : α) (f : α → β) (h : ∀ 
+(a b : α), s a b → f a = f b),   ⟦x⟧.liftOn' f h = f x
+参数：x : α；f : α → β；h : ∀ (a b : α), s a b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem liftOn'_mk (x : α) (f : α -> β) (h) : (Quotient.mk s x).liftOn' f h = f x :=
+protected theorem liftOn'_mk (x : α) (f : α → β) (h) : (Quotient.mk s x).liftOn' f h = f x :=
   rfl
 
 @[simp]
-/--
-theorem `liftOn₂'_mk` / 定理 `liftOn₂'_mk`
-
-English:
-theorem liftOn₂'_mk
-  given: {t : Setoid β} (f : α -> β -> γ) (h) (a : α) (b : β)
-  proof: rfl
-
-中文:
-定理 liftOn₂'_mk
-  条件: {t : 集合等价关系 β} (f : α -> β -> γ) (h) (a : α) (b : β)
-  证明: rfl
+/-
+**Quotient.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {s : Setoid α} → Quotient s → (f : α → β) → 
+(∀ (a b : α), a ≈ b → f a = f b) → β
+参数：f : α → β；∀ (a b : α), a ≈ b → f a = f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem liftOn₂'_mk {t : Setoid β} (f : α -> β -> γ) (h) (a : α) (b : β) :
+protected theorem liftOn₂'_mk {t : Setoid β} (f : α → β → γ) (h) (a : α) (b : β) :
     Quotient.liftOn₂' (Quotient.mk s a) (Quotient.mk t b) f h = f a b :=
   rfl
-
-/--
-theorem `map'_mk` / 定理 `map'_mk`
-
-English:
-theorem map'_mk
-  given: {t : Setoid β} (f : α -> β) (h) (x : α)
-  proof: rfl
-
-中文:
-定理 map'_mk
-  条件: {t : 集合等价关系 β} (f : α -> β) (h) (x : α)
-  证明: rfl
+/-
+**Quotient.map'_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {s : Setoid α} {t : Setoid β} (f : α → β) 
+(h : ∀ (a b : α), s a b → t (f a) (f b))   (x : α), Quotient.map' f h ⟦x⟧ = ⟦f x
+⟧
+参数：f : α → β；h : ∀ (a b : α), s a b → t (f a) (f b)；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
 -/
-theorem map'_mk {t : Setoid β} (f : α -> β) (h) (x : α) :
+theorem map'_mk {t : Setoid β} (f : α → β) (h) (x : α) :
     (Quotient.mk s x).map' f h = (Quotient.mk t (f x)) :=
   rfl
 
 end
 
-instance (q : Quotient s₁) (f : α -> Prop) (h : forall a b, s₁ a b -> f a = f b)
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (q : Quotient s₁) (f : α → Prop) (h : ∀ a b, s₁ a b → f a = f b)
     [DecidablePred f] :
     Decidable (Quotient.liftOn' q f h) :=
   Quotient.lift.decidablePred _ _ q
-
-instance (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α -> β -> Prop)
-    (h : forall a₁ b₁ a₂ b₂, s₁ a₁ a₂ -> s₂ b₁ b₂ -> f a₁ b₁ = f a₂ b₂)
-    [forall a, DecidablePred (f a)] :
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (q₁ : Quotient s₁) (q₂ : Quotient s₂) (f : α → β → Prop)
+    (h : ∀ a₁ b₁ a₂ b₂, s₁ a₁ a₂ → s₂ b₁ b₂ → f a₁ b₁ = f a₂ b₂)
+    [∀ a, DecidablePred (f a)] :
     Decidable (Quotient.liftOn₂' q₁ q₂ f h) :=
   Quotient.lift₂.decidablePred _ h _ _
 
 end Quotient
 
 @[simp]
-/--
-lemma `Equivalence.quot_mk_eq_iff` / 引理 `Equivalence.quot_mk_eq_iff`
-
-English:
-lemma Equivalence.quot_mk_eq_iff
-  given: {α : Type*} {r : α -> α -> Prop} (h : Equivalence r) (x y : α)
-  proof: Quotient.eq (r := ⟨r, h⟩)
-
-中文:
-引理 等价.quot_mk_eq_iff
-  条件: {α : 类型} {r : α -> α -> 命题} (h : 等价 r) (x y : α)
-  证明: Quotient.eq (r := ⟨r, h⟩)
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**Equivalence.quot_mk_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Equivalence.quot_mk_eq_iff {α : Type*} {r : α -> α -> Prop} (h : Equivalen
+ce r) (x y : α) : Quot.mk r x = Quot.mk r y ↔ r x y
+参数：h : Equivalence r；x y : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
-lemma Equivalence.quot_mk_eq_iff {α : Type*} {r : α -> α -> Prop} (h : Equivalence r) (x y : α) :
+lemma Equivalence.quot_mk_eq_iff {α : Type*} {r : α → α → Prop} (h : Equivalence r) (x y : α) :
     Quot.mk r x = Quot.mk r y ↔ r x y :=
   Quotient.eq (r := ⟨r, h⟩)

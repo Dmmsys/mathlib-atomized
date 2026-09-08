@@ -26,20 +26,15 @@ variable (C : Type u) [Category.{v} C]
 
 /-- The left unitor functor `1 × C ⥤ C` -/
 @[simps]
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-
+**CategoryTheory.prod.leftUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.prod`
+。
+形式化陈述：leftUnitor : Discrete (PUnit : Type w) × C ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitor
-  signature: : Discrete (PUnit : Type w) × C ⥤ C where
-  body: X.2
-  map f := f.2
-
-中文:
-定义 leftUnitor
-  签名: : 离散 (命题单元 : 类型 w) × C ⥤ C where
-  定义体: X.2
-  map f := f.2
+--- 原说明 ---
+The left unitor functor `1 × C ⥤ C`
 -/
 def leftUnitor : Discrete (PUnit : Type w) × C ⥤ C where
   obj X := X.2
@@ -47,20 +42,15 @@ def leftUnitor : Discrete (PUnit : Type w) × C ⥤ C where
 
 /-- The right unitor functor `C × 1 ⥤ C` -/
 @[simps]
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-
+**CategoryTheory.prod.rightUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.prod
+`。
+形式化陈述：rightUnitor : C × Discrete (PUnit : Type w) ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitor
-  signature: : C × Discrete (PUnit : Type w) ⥤ C where
-  body: X.1
-  map f := f.1
-
-中文:
-定义 rightUnitor
-  签名: : C × 离散 (命题单元 : 类型 w) ⥤ C where
-  定义体: X.1
-  map f := f.1
+--- 原说明 ---
+The right unitor functor `C × 1 ⥤ C`
 -/
 def rightUnitor : C × Discrete (PUnit : Type w) ⥤ C where
   obj X := X.1
@@ -68,22 +58,15 @@ def rightUnitor : C × Discrete (PUnit : Type w) ⥤ C where
 
 /-- The left inverse unitor `C ⥤ 1 × C` -/
 @[simps]
-/--
-Definition of `leftInverseUnitor` / `leftInverseUnitor` 的定义
+/-
+**CategoryTheory.prod.leftInverseUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.prod`。
+形式化陈述：leftInverseUnitor : C ⥤ Discrete (PUnit : Type w) × C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftInverseUnitor
-  signature: : C ⥤ Discrete (PUnit : Type w) × C where
-  body: ⟨⟨PUnit.unit⟩, X⟩
-  map f := 𝟙 _ ×ₘ f
-
-中文:
-定义 leftInverseUnitor
-  签名: : C ⥤ 离散 (命题单元 : 类型 w) × C where
-  定义体: ⟨⟨PUnit.unit⟩, X⟩
-  map f := 𝟙 _ ×ₘ f
-
-Depends on / 依赖: PUnit.unit
+--- 原说明 ---
+The left inverse unitor `C ⥤ 1 × C`
 -/
 def leftInverseUnitor : C ⥤ Discrete (PUnit : Type w) × C where
   obj X := ⟨⟨PUnit.unit⟩, X⟩
@@ -91,22 +74,15 @@ def leftInverseUnitor : C ⥤ Discrete (PUnit : Type w) × C where
 
 /-- The right inverse unitor `C ⥤ C × 1` -/
 @[simps]
-/--
-Definition of `rightInverseUnitor` / `rightInverseUnitor` 的定义
+/-
+**CategoryTheory.prod.rightInverseUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.prod`。
+形式化陈述：rightInverseUnitor : C ⥤ C × Discrete (PUnit : Type w) where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightInverseUnitor
-  signature: : C ⥤ C × Discrete (PUnit : Type w) where
-  body: ⟨X, ⟨PUnit.unit⟩⟩
-  map f := f ×ₘ 𝟙 _
-
-中文:
-定义 rightInverseUnitor
-  签名: : C ⥤ C × 离散 (命题单元 : 类型 w) where
-  定义体: ⟨X, ⟨PUnit.unit⟩⟩
-  map f := f ×ₘ 𝟙 _
-
-Depends on / 依赖: PUnit.unit
+--- 原说明 ---
+The right inverse unitor `C ⥤ C × 1`
 -/
 def rightInverseUnitor : C ⥤ C × Discrete (PUnit : Type w) where
   obj X := ⟨X, ⟨PUnit.unit⟩⟩
@@ -115,26 +91,15 @@ def rightInverseUnitor : C ⥤ C × Discrete (PUnit : Type w) where
 set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence of categories expressing left unity of products of categories. -/
 @[simps]
-/--
-Definition of `leftUnitorEquivalence` / `leftUnitorEquivalence` 的定义
+/-
+**CategoryTheory.prod.leftUnitorEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.prod`。
+形式化陈述：leftUnitorEquivalence : Discrete (PUnit : Type w) × C ≌ C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitorEquivalence
-  signature: : Discrete (PUnit : Type w) × C ≌ C where
-  body: leftUnitor C
-  inverse := leftInverseUnitor C
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 leftUnitorEquivalence
-  签名: : 离散 (命题单元 : 类型 w) × C ≌ C where
-  定义体: leftUnitor C
-  inverse := leftInverseUnitor C
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: leftUnitor
+--- 原说明 ---
+The equivalence of categories expressing left unity of products of categories.
 -/
 def leftUnitorEquivalence : Discrete (PUnit : Type w) × C ≌ C where
   functor := leftUnitor C
@@ -145,67 +110,45 @@ def leftUnitorEquivalence : Discrete (PUnit : Type w) × C ≌ C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence of categories expressing right unity of products of categories. -/
 @[simps]
-/--
-Definition of `rightUnitorEquivalence` / `rightUnitorEquivalence` 的定义
+/-
+**CategoryTheory.prod.rightUnitorEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.prod`。
+形式化陈述：rightUnitorEquivalence : C × Discrete (PUnit : Type w) ≌ C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitorEquivalence
-  signature: : C × Discrete (PUnit : Type w) ≌ C where
-  body: rightUnitor C
-  inverse := rightInverseUnitor C
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 rightUnitorEquivalence
-  签名: : C × 离散 (命题单元 : 类型 w) ≌ C where
-  定义体: rightUnitor C
-  inverse := rightInverseUnitor C
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: rightUnitor
+--- 原说明 ---
+The equivalence of categories expressing right unity of products of categories.
 -/
 def rightUnitorEquivalence : C × Discrete (PUnit : Type w) ≌ C where
   functor := rightUnitor C
   inverse := rightInverseUnitor C
   unitIso := Iso.refl _
   counitIso := Iso.refl _
-
-/--
-Instance `leftUnitor_isEquivalence` / 实例 `leftUnitor_isEquivalence`
-
-English:
-instance leftUnitor_isEquivalence
-  signature: : (leftUnitor C).IsEquivalence
-  body: (leftUnitorEquivalence C).isEquivalence_functor
-
-中文:
-实例 leftUnitor_isEquivalence
-  签名: : (leftUnitor C).是等价
-  定义体: (leftUnitorEquivalence C).isEquivalence_functor
-
-Depends on / 依赖: isEquivalence_functor, leftUnitorEquivalence
+/-
+**CategoryTheory.prod.leftUnitor_isEquivalence** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.prod`。
+形式化陈述：leftUnitor_isEquivalence : (leftUnitor C).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance leftUnitor_isEquivalence : (leftUnitor C).IsEquivalence :=
   (leftUnitorEquivalence C).isEquivalence_functor
-
-/--
-Instance `rightUnitor_isEquivalence` / 实例 `rightUnitor_isEquivalence`
-
-English:
-instance rightUnitor_isEquivalence
-  signature: : (rightUnitor C).IsEquivalence
-  body: (rightUnitorEquivalence C).isEquivalence_functor
-
-中文:
-实例 rightUnitor_isEquivalence
-  签名: : (rightUnitor C).是等价
-  定义体: (rightUnitorEquivalence C).isEquivalence_functor
-
-Depends on / 依赖: isEquivalence_functor, rightUnitorEquivalence
+/-
+**CategoryTheory.prod.rightUnitor_isEquivalence** 是 Mathlib 中的一个实例，位于命名空间 `Categ
+oryTheory.prod`。
+形式化陈述：rightUnitor_isEquivalence : (rightUnitor C).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance rightUnitor_isEquivalence : (rightUnitor C).IsEquivalence :=
   (rightUnitorEquivalence C).isEquivalence_functor
 
 end CategoryTheory.prod
+

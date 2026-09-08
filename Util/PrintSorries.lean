@@ -35,24 +35,15 @@ open Lean Meta Elab Command
 
 namespace Mathlib.PrintSorries
 
-/--
-Definition of `State` / `State` 的定义
+/-- Type of intermediate computation of sorry-tracking. -/
+/-
+**Mathlib.PrintSorries.State** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.PrintSorries`。
+形式化陈述：State where /-- The set of already visited declarations. -/ visited : Name
+Set
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure State
-  parameters: where
-  axioms and operations (3):
-    - visited : NameSet  [default: {}]
-    - sorries : Std.HashSet Expr  [default: {}]
-    - sorryMsgs : Array MessageData  [default: #[]]
-
-中文:
-结构 State
-  参数: where
-  公理与运算 (3 个):
-    - visited : NameSet  [默认: {}]
-    - sorries : Std.HashSet Expr  [默认: {}]
-    - sorryMsgs : 数组 MessageData  [默认: #[]]
+--- 原说明 ---
+Type of intermediate computation of sorry-tracking.
 -/
 structure State where
   /-- The set of already visited declarations. -/
@@ -65,121 +56,25 @@ structure State where
   sorryMsgs : Array MessageData := #[]
 
 /--
-Definition of `collect` / `collect` 的定义
+Collects all uses of `sorry` by the declaration `c`.
+It finds all transitive uses as well.
 
-English:
-definition collect
-  signature: (c : Name)
-  body: do
-  let collectExpr (e : Expr) : StateT State MetaM Unit := do
-    /-
-    We assume most declarations do not contain sorry.
-    The `getUsedConstants` function is very efficient compared to `forEachExpr'`,
-    since `forEachExpr'` needs to instantiate fvars.
-    Visiting constants first also guarantees that we attribute sorries to the first
-    declaration that included it. Recall that `sorry` might appear in the type of a theorem,
-    which leads to the `sorry` appearing directly in any declarations that use it.
-    This is one reason we need the `State.sorries` set as well.
-    The other reason is that we match entire sorry applications,
-    so `forEachExpr'`'s cache won't prevent over-reporting if `sorry` is a function.
-    -/
-    let consts := e.getUsedConstants
-    consts.forM collect
-    if consts.contains ``sorryAx then
-      let visitSorry (e : Expr) : StateT State MetaM Unit := do
-        unless (← get).sorries.contains e do
-          let mut msg := m!"{.ofConstName c} has {e}"
-          if e.isSyntheticSorry then
-            msg := msg ++ " (from error)"
-          try
-            msg := msg ++ " of type" ++ indentExpr (← inferType e)
-          catch _ => pure ()
-          msg ← addMessageContext msg
-          modify fun s =>
-            { s with
-              sorries := s.sorries.insert e
-              sorryMsgs := s.sorryMsgs.push msg }
-      Meta.forEachExpr' e fun e => do
-        if e.isSorry then
-          if let some _ := isLabeledSorry? e then
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 3)
-          else
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
-          return false
-        else
-          -- Otherwise continue visiting subexpressions
-          return true
-  let s ← get
-  unless s.visited.contains c do
-    modify fun s => { s with visited := s.visited.insert c }
-    let env ← getEnv
-    match env.checked.get.find? c with
-    | some (.axiomInfo v) => collectExpr v.type
-    | some (.defnInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.thmInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.quotInfo _) => pure ()
-    | some (.ctorInfo v) => collectExpr v.type
-    | some (.recInfo v) => collectExpr v.type
-    | some (.inductInfo v) => collectExpr v.type *> v.ctors.forM collect
-    | none => pure ()
+This is a version of `Lean.CollectAxioms.collect` that keeps track of enough information to print
+each use of `sorry`.
+-/
+/-
+**Mathlib.PrintSorries.collect** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.PrintSorrie
+s`。
+形式化陈述：Name → StateT Mathlib.PrintSorries.State MetaM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 collect
-  签名: (c : Name)
-  定义体: do
-  let collectExpr (e : Expr) : StateT State MetaM Unit := do
-    /-
-    We assume most declarations do not contain sorry.
-    The `getUsedConstants` function is very efficient compared to `forEachExpr'`,
-    since `forEachExpr'` needs to instantiate fvars.
-    Visiting constants first also guarantees that we attribute sorries to the first
-    declaration that included it. Recall that `sorry` might appear in the type of a theorem,
-    which leads to the `sorry` appearing directly in any declarations that use it.
-    This is one reason we need the `State.sorries` set as well.
-    The other reason is that we match entire sorry applications,
-    so `forEachExpr'`'s cache won't prevent over-reporting if `sorry` is a function.
-    -/
-    let consts := e.getUsedConstants
-    consts.forM collect
-    if consts.contains ``sorryAx then
-      let visitSorry (e : Expr) : StateT State MetaM Unit := do
-        unless (← get).sorries.contains e do
-          let mut msg := m!"{.ofConstName c} has {e}"
-          if e.isSyntheticSorry then
-            msg := msg ++ " (from error)"
-          try
-            msg := msg ++ " of type" ++ indentExpr (← inferType e)
-          catch _ => pure ()
-          msg ← addMessageContext msg
-          modify fun s =>
-            { s with
-              sorries := s.sorries.insert e
-              sorryMsgs := s.sorryMsgs.push msg }
-      Meta.forEachExpr' e fun e => do
-        if e.isSorry then
-          if let some _ := isLabeledSorry? e then
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 3)
-          else
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
-          return false
-        else
-          -- Otherwise continue visiting subexpressions
-          return true
-  let s ← get
-  unless s.visited.contains c do
-    modify fun s => { s with visited := s.visited.insert c }
-    let env ← getEnv
-    match env.checked.get.find? c with
-    | some (.axiomInfo v) => collectExpr v.type
-    | some (.defnInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.thmInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.quotInfo _) => pure ()
-    | some (.ctorInfo v) => collectExpr v.type
-    | some (.recInfo v) => collectExpr v.type
-    | some (.inductInfo v) => collectExpr v.type *> v.ctors.forM collect
-    | none => pure ()
+--- 原说明 ---
+Collects all uses of `sorry` by the declaration `c`.
+It finds all transitive uses as well.
+
+This is a version of `Lean.CollectAxioms.collect` that keeps track of enough inf
+ormation to print
+each use of `sorry`.
 -/
 partial def collect (c : Name) : StateT State MetaM Unit := do
   let collectExpr (e : Expr) : StateT State MetaM Unit := do
@@ -213,9 +108,9 @@ partial def collect (c : Name) : StateT State MetaM Unit := do
       Meta.forEachExpr' e fun e => do
         if e.isSorry then
           if let some _ := isLabeledSorry? e then
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 3)
+            visitSorry <| e.getBoundedAppFn (e.getAppNumArgs - 3)
           else
-visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
+            visitSorry <| e.getBoundedAppFn (e.getAppNumArgs - 2)
           return false
         else
           -- Otherwise continue visiting subexpressions
@@ -225,32 +120,31 @@ visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
     modify fun s => { s with visited := s.visited.insert c }
     let env ← getEnv
     match env.checked.get.find? c with
-    | some (.axiomInfo v) => collectExpr v.type
-    | some (.defnInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.thmInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.axiomInfo v)  => collectExpr v.type
+    | some (.defnInfo v)   => collectExpr v.type *> collectExpr v.value
+    | some (.thmInfo v)    => collectExpr v.type *> collectExpr v.value
     | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value
-    | some (.quotInfo _) => pure ()
-    | some (.ctorInfo v) => collectExpr v.type
-    | some (.recInfo v) => collectExpr v.type
+    | some (.quotInfo _)   => pure ()
+    | some (.ctorInfo v)   => collectExpr v.type
+    | some (.recInfo v)    => collectExpr v.type
     | some (.inductInfo v) => collectExpr v.type *> v.ctors.forM collect
-    | none => pure ()
+    | none                 => pure ()
 
 /--
-Definition of `collectSorries` / `collectSorries` 的定义
+Prints all uses of `sorry` inside a list of declarations.
+Displayed sorries are hoverable and support "go to definition".
+-/
+/-
+**Mathlib.PrintSorries.collectSorries** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.PrintSo
+rries`。
+形式化陈述：collectSorries (constNames : Array Name) : MetaM (Array MessageData)
+参数：constNames : Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition collectSorries
-  signature: (constNames : Array Name)
-  body: do
-  let (_, s) ← (constNames.forM collect).run {}
-  pure s.sorryMsgs
-
-中文:
-定义 collectSorries
-  签名: (constNames : 数组 Name)
-  定义体: do
-  let (_, s) ← (constNames.forM collect).run {}
-  pure s.sorryMsgs
+--- 原说明 ---
+Prints all uses of `sorry` inside a list of declarations.
+Displayed sorries are hoverable and support "go to definition".
 -/
 def collectSorries (constNames : Array Name) : MetaM (Array MessageData) := do
   let (_, s) ← (constNames.forM collect).run {}
@@ -266,65 +160,34 @@ Displayed sorries are hoverable and support "go to definition".
 syntax (name := printSorriesStx) "#print " &"sorries" (ppSpace ident)* : command
 
 /--
-Definition of `evalCollectSorries` / `evalCollectSorries` 的定义
+Collects sorries in the given constants and logs a message.
+-/
+/-
+**Mathlib.PrintSorries.evalCollectSorries** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Pri
+ntSorries`。
+形式化陈述：evalCollectSorries (names : Array Name) : CommandElabM Unit
+参数：names : Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalCollectSorries
-  signature: (names : Array Name)
-  body: do
-let msgs ← liftTermElabM collectSorries names
-  if msgs.isEmpty then
-    logInfo m!"Declarations are sorry-free!"
-  else
-logInfo MessageData.joinSep msgs.toList "\n"
-
-elab_rules : command
-  | `(#print%$tk1 sorries%$tk2 $idents*) => do
-let mut names ← liftCoreM idents.flatMapM fun id =>
-      return (← realizeGlobalConstWithInfos id).toArray
-    if names.isEmpty then
-      names ← (← getEnv).checked.get.constants.map₂.foldlM (init := #[]) fun acc name _ =>
-        return if ← name.isBlackListed then acc else acc.push name
-withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
-
-@[inherit_doc printSorriesStx]
-
-中文:
-定义 evalCollectSorries
-  签名: (names : 数组 Name)
-  定义体: do
-let msgs ← liftTermElabM collectSorries names
-  if msgs.isEmpty then
-    logInfo m!"Declarations are sorry-free!"
-  else
-logInfo MessageData.joinSep msgs.toList "\n"
-
-elab_rules : command
-  | `(#print%$tk1 sorries%$tk2 $idents*) => do
-let mut names ← liftCoreM idents.flatMapM fun id =>
-      return (← realizeGlobalConstWithInfos id).toArray
-    if names.isEmpty then
-      names ← (← getEnv).checked.get.constants.map₂.foldlM (init := #[]) fun acc name _ =>
-        return if ← name.isBlackListed then acc else acc.push name
-withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
-
-@[inherit_doc printSorriesStx]
+--- 原说明 ---
+Collects sorries in the given constants and logs a message.
 -/
 def evalCollectSorries (names : Array Name) : CommandElabM Unit := do
-let msgs ← liftTermElabM collectSorries names
+  let msgs ← liftTermElabM <| collectSorries names
   if msgs.isEmpty then
     logInfo m!"Declarations are sorry-free!"
   else
-logInfo MessageData.joinSep msgs.toList "\n"
+    logInfo <| MessageData.joinSep msgs.toList "\n"
 
 elab_rules : command
   | `(#print%$tk1 sorries%$tk2 $idents*) => do
-let mut names ← liftCoreM idents.flatMapM fun id =>
+    let mut names ← liftCoreM <| idents.flatMapM fun id =>
       return (← realizeGlobalConstWithInfos id).toArray
     if names.isEmpty then
       names ← (← getEnv).checked.get.constants.map₂.foldlM (init := #[]) fun acc name _ =>
         return if ← name.isBlackListed then acc else acc.push name
-withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
+    withRef (mkNullNode #[tk1, tk2]) <| evalCollectSorries names
 
 @[inherit_doc printSorriesStx]
 syntax "#print " &"sorries" " in " command : command
@@ -343,6 +206,7 @@ elab_rules : command
           return acc
         else
           return acc.push name
-withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
+      withRef (mkNullNode #[tk1, tk2]) <| evalCollectSorries names
 
 end Mathlib.PrintSorries
+

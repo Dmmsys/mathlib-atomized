@@ -31,7 +31,7 @@ function theorem, and is defined here only to avoid proving theorems like
 `HasStrictFDerivAt`.
 
 This file `Defs.lean` is intended to just contain the definitions and the bare minimum of
-supporting lemmas; a much wider range of elementary properties are proved in the file `Basic.lean`.
+supporting lemmas; a much wider range of elementary properties are proved in the file  `Basic.lean`.
 
 Other files in the folder `Analysis/Calculus/FDeriv/` contain the usual formulas
 (and existence assertions) for the derivative of
@@ -105,65 +105,66 @@ This definition is designed to be specialized
   giving rise to the notion of Fréchet derivative along the set `s`.
 -/
 @[mk_iff hasFDerivAtFilter_iff_isLittleOTVS]
-/--
-Definition of `HasFDerivAtFilter` / `HasFDerivAtFilter` 的定义
+/-
+**HasFDerivAtFilter** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{𝕜 : Type u_1} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type u_2}
+ →       [inst_1 : AddCommGroup E] →         [inst_2 : _root_.Module 𝕜 E] →     
+      [inst_3 : TopologicalSpace E] →             {F : Type u_3} →              
+ [inst_4 : AddCommGroup F] →                 [inst_5 : _root_.Module 𝕜 F] →     
+              [inst_6 : TopologicalSpace F] → (E → F) → (E →L[𝕜] F) → Filter (E 
+× E) → Prop
+参数：E → F；E →L[𝕜] F；E × E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HasFDerivAtFilter
-  parameters: (f : E -> F) (f' : E ->L[𝕜] F) (L : Filter (E × E))
-  axioms and operations (1):
-    - of_isLittleOTVS : : isLittleOTVS : (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p => p.1 - p.2)
+--- 原说明 ---
+A function `f` has the continuous linear map `f'` as derivative along the filter
+ `L` if
+`f x₁ = f x₂ + f' (x₁ - x₂) + o (x₁ - x₂)` when `x = (x₁, x₂)` converges along t
+he filter `L`.
+This definition is designed to be specialized
 
-中文:
-结构 有FDerivAtFilter
-  参数: (f : E -> F) (f' : E ->L[𝕜] F) (L : 滤子 (E × E))
-  公理与运算 (1 个):
-    - of_isLittleOTVS : : isLittleOTVS : (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p => p.1 - p.2)
+- for `L = 𝓝 (x, x)` (in `HasStrictFDerivAt`),
+  giving rise to the derivative in the sense of strict differentiability;
+- for `L = 𝓝 x ×ˢ pure x` (in `HasFDerivAt`), giving rise to the usual notion of
+ Fréchet derivative;
+- for `L = 𝓝[s] x ×ˢ pure x` (in `HasFDerivWithinAt`),
+  giving rise to the notion of Fréchet derivative along the set `s`.
 -/
-structure HasFDerivAtFilter (f : E -> F) (f' : E ->L[𝕜] F) (L : Filter (E × E)) : Prop where
+structure HasFDerivAtFilter (f : E → F) (f' : E →L[𝕜] F) (L : Filter (E × E)) : Prop where
   of_isLittleOTVS ::
-    isLittleOTVS : (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p => p.1 - p.2)
+    isLittleOTVS : (fun p ↦ f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p ↦ p.1 - p.2)
 
 /-- A function `f` has the continuous linear map `f'` as derivative at `x` within a set `s` if
 `f x' = f x + f' (x' - x) + o (x' - x)` when `x'` tends to `x` inside `s`. -/
 @[fun_prop]
-/--
-Definition of `HasFDerivWithinAt` / `HasFDerivWithinAt` 的定义
+/-
+**HasFDerivWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (x : E)
+参数：f : E -> F；f' : E ->L[𝕜] F；s : Set E；x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasFDerivWithinAt
-  signature: (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (x : E)
-  body: HasFDerivAtFilter f f' (𝓝[s] x ×ˢ pure x)
-
-中文:
-定义 HasFDerivWithinAt
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : 集合 E) (x : E)
-  定义体: HasFDerivAtFilter f f' (𝓝[s] x ×ˢ pure x)
-
-Depends on / 依赖: HasFDerivAtFilter
+--- 原说明 ---
+A function `f` has the continuous linear map `f'` as derivative at `x` within a 
+set `s` if
+`f x' = f x + f' (x' - x) + o (x' - x)` when `x'` tends to `x` inside `s`.
 -/
-def HasFDerivWithinAt (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (x : E) :=
+def HasFDerivWithinAt (f : E → F) (f' : E →L[𝕜] F) (s : Set E) (x : E) :=
   HasFDerivAtFilter f f' (𝓝[s] x ×ˢ pure x)
 
 /-- A function `f` has the continuous linear map `f'` as derivative at `x` if
 `f x' = f x + f' (x' - x) + o (x' - x)` when `x'` tends to `x`. -/
 @[fun_prop]
-/--
-Definition of `HasFDerivAt` / `HasFDerivAt` 的定义
+/-
+**HasFDerivAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasFDerivAt (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
+参数：f : E -> F；f' : E ->L[𝕜] F；x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasFDerivAt
-  signature: (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
-  body: HasFDerivAtFilter f f' (𝓝 x ×ˢ pure x)
-
-中文:
-定义 在点处Fréchet可导
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
-  定义体: HasFDerivAtFilter f f' (𝓝 x ×ˢ pure x)
-
-Depends on / 依赖: HasFDerivAtFilter
+--- 原说明 ---
+A function `f` has the continuous linear map `f'` as derivative at `x` if
+`f x' = f x + f' (x' - x) + o (x' - x)` when `x'` tends to `x`.
 -/
-def HasFDerivAt (f : E -> F) (f' : E ->L[𝕜] F) (x : E) :=
+def HasFDerivAt (f : E → F) (f' : E →L[𝕜] F) (x : E) :=
   HasFDerivAtFilter f f' (𝓝 x ×ˢ pure x)
 
 /-- A function `f` has derivative `f'` at `a` in the sense of *strict differentiability*
@@ -171,22 +172,23 @@ if `f x - f y - f' (x - y) = o(x - y)` as `x, y → a`. This form of differentia
 e.g., by the inverse function theorem. Any `C^1` function on a vector space over `ℝ` is strictly
 differentiable but this definition works, e.g., for vector spaces over `p`-adic numbers. -/
 @[fun_prop]
-/--
-Definition of `HasStrictFDerivAt` / `HasStrictFDerivAt` 的定义
+/-
+**HasStrictFDerivAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
+参数：f : E -> F；f' : E ->L[𝕜] F；x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasStrictFDerivAt
-  signature: (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
-  body: HasFDerivAtFilter f f' (𝓝 (x, x))
-
-中文:
-定义 HasStrictFDerivAt
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
-  定义体: HasFDerivAtFilter f f' (𝓝 (x, x))
-
-Depends on / 依赖: HasFDerivAtFilter
+--- 原说明 ---
+A function `f` has derivative `f'` at `a` in the sense of *strict differentiabil
+ity*
+if `f x - f y - f' (x - y) = o(x - y)` as `x, y → a`. This form of differentiabi
+lity is required,
+e.g., by the inverse function theorem. Any `C^1` function on a vector space over
+ `ℝ` is strictly
+differentiable but this definition works, e.g., for vector spaces over `p`-adic 
+numbers.
 -/
-def HasStrictFDerivAt (f : E -> F) (f' : E ->L[𝕜] F) (x : E) :=
+def HasStrictFDerivAt (f : E → F) (f' : E →L[𝕜] F) (x : E) :=
   HasFDerivAtFilter f f' (𝓝 (x, x))
 
 variable (𝕜)
@@ -194,50 +196,42 @@ variable (𝕜)
 /-- A function `f` is differentiable at a point `x` within a set `s` if it admits a derivative
 there (possibly non-unique). -/
 @[fun_prop]
-/--
-Definition of `DifferentiableWithinAt` / `DifferentiableWithinAt` 的定义
+/-
+**DifferentiableWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt (f : E -> F) (s : Set E) (x : E)
+参数：f : E -> F；s : Set E；x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DifferentiableWithinAt
-  signature: (f : E -> F) (s : Set E) (x : E)
-  body: exists f' : E ->L[𝕜] F, HasFDerivWithinAt f f' s x
-
-中文:
-定义 DifferentiableWithinAt
-  签名: (f : E -> F) (s : 集合 E) (x : E)
-  定义体: exists f' : E ->L[𝕜] F, HasFDerivWithinAt f f' s x
-
-Depends on / 依赖: HasFDerivWithinAt
+--- 原说明 ---
+A function `f` is differentiable at a point `x` within a set `s` if it admits a 
+derivative
+there (possibly non-unique).
 -/
-def DifferentiableWithinAt (f : E -> F) (s : Set E) (x : E) :=
-  exists f' : E ->L[𝕜] F, HasFDerivWithinAt f f' s x
+def DifferentiableWithinAt (f : E → F) (s : Set E) (x : E) :=
+  ∃ f' : E →L[𝕜] F, HasFDerivWithinAt f f' s x
 
 /-- A function `f` is differentiable at a point `x` if it admits a derivative there (possibly
 non-unique). -/
 @[fun_prop]
-/--
-Definition of `DifferentiableAt` / `DifferentiableAt` 的定义
+/-
+**DifferentiableAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DifferentiableAt (f : E -> F) (x : E)
+参数：f : E -> F；x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DifferentiableAt
-  signature: (f : E -> F) (x : E)
-  body: exists f' : E ->L[𝕜] F, HasFDerivAt f f' x
-
-中文:
-定义 DifferentiableAt
-  签名: (f : E -> F) (x : E)
-  定义体: exists f' : E ->L[𝕜] F, HasFDerivAt f f' x
-
-Depends on / 依赖: HasFDerivAt
+--- 原说明 ---
+A function `f` is differentiable at a point `x` if it admits a derivative there 
+(possibly
+non-unique).
 -/
-def DifferentiableAt (f : E -> F) (x : E) :=
-  exists f' : E ->L[𝕜] F, HasFDerivAt f f' x
+def DifferentiableAt (f : E → F) (x : E) :=
+  ∃ f' : E →L[𝕜] F, HasFDerivAt f f' x
 
 open scoped Classical in
 /-- If `f` has a derivative at `x` within `s`, then `fderivWithin 𝕜 f s x` is such a derivative.
 Otherwise, it is set to `0`. We also set it to be zero, if zero is one of possible derivatives. -/
-irreducible_def fderivWithin (f : E -> F) (s : Set E) (x : E) : E ->L[𝕜] F :=
-  if HasFDerivWithinAt f (0 : E ->L[𝕜] F) s x
+irreducible_def fderivWithin (f : E → F) (s : Set E) (x : E) : E →L[𝕜] F :=
+  if HasFDerivWithinAt f (0 : E →L[𝕜] F) s x
     then 0
   else if h : DifferentiableWithinAt 𝕜 f s x
     then Classical.choose h
@@ -245,172 +239,177 @@ irreducible_def fderivWithin (f : E -> F) (s : Set E) (x : E) : E ->L[𝕜] F :=
 
 /-- If `f` has a derivative at `x`, then `fderiv 𝕜 f x` is such a derivative. Otherwise, it is
 set to `0`. -/
-irreducible_def fderiv (f : E -> F) (x : E) : E ->L[𝕜] F :=
+irreducible_def fderiv (f : E → F) (x : E) : E →L[𝕜] F :=
   fderivWithin 𝕜 f univ x
 
 /-- `DifferentiableOn 𝕜 f s` means that `f` is differentiable within `s` at any point of `s`. -/
 @[fun_prop]
-/--
-Definition of `DifferentiableOn` / `DifferentiableOn` 的定义
+/-
+**DifferentiableOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DifferentiableOn (f : E -> F) (s : Set E)
+参数：f : E -> F；s : Set E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DifferentiableOn
-  signature: (f : E -> F) (s : Set E)
-  body: forall x in s, DifferentiableWithinAt 𝕜 f s x
-
-中文:
-定义 DifferentiableOn
-  签名: (f : E -> F) (s : 集合 E)
-  定义体: forall x in s, DifferentiableWithinAt 𝕜 f s x
-
-Depends on / 依赖: DifferentiableWithinAt
+--- 原说明 ---
+`DifferentiableOn 𝕜 f s` means that `f` is differentiable within `s` at any poin
+t of `s`.
 -/
-def DifferentiableOn (f : E -> F) (s : Set E) :=
-  forall x in s, DifferentiableWithinAt 𝕜 f s x
+def DifferentiableOn (f : E → F) (s : Set E) :=
+  ∀ x ∈ s, DifferentiableWithinAt 𝕜 f s x
 
 /-- `Differentiable 𝕜 f` means that `f` is differentiable at any point. -/
 @[fun_prop]
-/--
-Definition of `Differentiable` / `Differentiable` 的定义
+/-
+**Differentiable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Differentiable (f : E -> F)
+参数：f : E -> F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Differentiable
-  signature: (f : E -> F)
-  body: forall x, DifferentiableAt 𝕜 f x
-
-中文:
-定义 可微
-  签名: (f : E -> F)
-  定义体: forall x, DifferentiableAt 𝕜 f x
-
-Depends on / 依赖: DifferentiableAt
+--- 原说明 ---
+`Differentiable 𝕜 f` means that `f` is differentiable at any point.
 -/
-def Differentiable (f : E -> F) :=
-  forall x, DifferentiableAt 𝕜 f x
+def Differentiable (f : E → F) :=
+  ∀ x, DifferentiableAt 𝕜 f x
 
 variable {𝕜}
-variable {f f₀ f₁ g : E -> F}
-variable {f' f₀' f₁' g' : E ->L[𝕜] F}
+variable {f f₀ f₁ g : E → F}
+variable {f' f₀' f₁' g' : E →L[𝕜] F}
 variable {x : E}
 variable {s : Set E}
 variable {L : Filter E}
-
-/--
-theorem `hasFDerivAt_iff_isLittleOTVS` / 定理 `hasFDerivAt_iff_isLittleOTVS`
-
-English:
-theorem hasFDerivAt_iff_isLittleOTVS
-  proof: by
-  simp [HasFDerivAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
-
-alias ⟨HasFDerivAt.isLittleOTVS, HasFDerivAt.of_isLittleOTVS⟩ := hasFDerivAt_iff_isLittleOTVS
-
-中文:
-定理 hasFDerivAt_iff_isLittleOTVS
-  证明: by
-  simp [HasFDerivAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
-
-alias ⟨HasFDerivAt.isLittleOTVS, HasFDerivAt.of_isLittleOTVS⟩ := hasFDerivAt_iff_isLittleOTVS
-
-Depends on / 依赖: Function, Function.comp_def, HasFDerivAt, comp_def, hasFDerivAtFilter_iff_isLittleOTVS
+/-
+**hasFDerivAt_iff_isLittleOTVS** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAt_iff_isLittleOTVS : HasFDerivAt f f' x ↔ (fun x' => f x' - f x 
+- f' (x' - x)) =o[𝕜; 𝓝 x] (fun x' => x' - x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.prod_pure`：prod_pure {b : β} : f ×ˢ pure b = map (fun a => (a, b)
+) f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hasFDerivAt_iff_isLittleOTVS :
-    HasFDerivAt f f' x ↔ (fun x' => f x' - f x - f' (x' - x)) =o[𝕜; 𝓝 x] (fun x' => x' - x) := by
+    HasFDerivAt f f' x ↔ (fun x' ↦ f x' - f x - f' (x' - x)) =o[𝕜; 𝓝 x] (fun x' ↦ x' - x) := by
   simp [HasFDerivAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
 
 alias ⟨HasFDerivAt.isLittleOTVS, HasFDerivAt.of_isLittleOTVS⟩ := hasFDerivAt_iff_isLittleOTVS
-
-/--
-theorem `hasFDerivWithinAt_iff_isLittleOTVS` / 定理 `hasFDerivWithinAt_iff_isLittleOTVS`
-
-English:
-theorem hasFDerivWithinAt_iff_isLittleOTVS
-  proof: by
-  simp [HasFDerivWithinAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
-
-alias ⟨HasFDerivWithinAt.isLittleOTVS, HasFDerivWithinAt.of_isLittleOTVS⟩ :=
-  hasFDerivWithinAt_iff_isLittleOTVS
-
-中文:
-定理 hasFDerivWithinAt_iff_isLittleOTVS
-  证明: by
-  simp [HasFDerivWithinAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
-
-alias ⟨HasFDerivWithinAt.isLittleOTVS, HasFDerivWithinAt.of_isLittleOTVS⟩ :=
-  hasFDerivWithinAt_iff_isLittleOTVS
-
-Depends on / 依赖: Function, Function.comp_def, HasFDerivWithinAt, comp_def, hasFDerivAtFilter_iff_isLittleOTVS
+/-
+**hasFDerivWithinAt_iff_isLittleOTVS** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivWithinAt_iff_isLittleOTVS : HasFDerivWithinAt f f' s x ↔ (fun x' 
+=> f x' - f x - f' (x' - x)) =o[𝕜; 𝓝[s] x] (fun x' => x' - x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.prod_pure`：prod_pure {b : β} : f ×ˢ pure b = map (fun a => (a, b)
+) f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hasFDerivWithinAt_iff_isLittleOTVS :
     HasFDerivWithinAt f f' s x ↔
-      (fun x' => f x' - f x - f' (x' - x)) =o[𝕜; 𝓝[s] x] (fun x' => x' - x) := by
+      (fun x' ↦ f x' - f x - f' (x' - x)) =o[𝕜; 𝓝[s] x] (fun x' ↦ x' - x) := by
   simp [HasFDerivWithinAt, hasFDerivAtFilter_iff_isLittleOTVS, Function.comp_def]
 
 alias ⟨HasFDerivWithinAt.isLittleOTVS, HasFDerivWithinAt.of_isLittleOTVS⟩ :=
   hasFDerivWithinAt_iff_isLittleOTVS
-
-/--
-theorem `hasStrictFDerivAt_iff_isLittleOTVS` / 定理 `hasStrictFDerivAt_iff_isLittleOTVS`
-
-English:
-theorem hasStrictFDerivAt_iff_isLittleOTVS
-  proof: hasFDerivAtFilter_iff_isLittleOTVS ..
-
-中文:
-定理 hasStrictFDerivAt_iff_isLittleOTVS
-  证明: hasFDerivAtFilter_iff_isLittleOTVS ..
-
-Depends on / 依赖: hasFDerivAtFilter_iff_isLittleOTVS
+/-
+**hasStrictFDerivAt_iff_isLittleOTVS** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasStrictFDerivAt_iff_isLittleOTVS : HasStrictFDerivAt f f' x ↔ (fun p => 
+f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; 𝓝 (x, x)] (fun p => p.1 - p.2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hasFDerivAtFilter_iff_isLittleOTVS`：∀ {𝕜 : Type u_1} [inst : Nontriviall
+yNormedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Modu
+le 𝕜 E] [inst_3 : Topolo…
 -/
 theorem hasStrictFDerivAt_iff_isLittleOTVS :
     HasStrictFDerivAt f f' x ↔
-      (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; 𝓝 (x, x)] (fun p => p.1 - p.2) :=
+      (fun p ↦ f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; 𝓝 (x, x)] (fun p ↦ p.1 - p.2) :=
   hasFDerivAtFilter_iff_isLittleOTVS ..
-
-/--
-theorem `fderivWithin_zero_of_not_differentiableWithinAt` / 定理 `fderivWithin_zero_of_not_differentiableWithinAt`
-
-English:
-theorem fderivWithin_zero_of_not_differentiableWithinAt
-  given: (h : ¬DifferentiableWithinAt 𝕜 f s x)
-  proof: by
-  simp [fderivWithin, h]
-
-@[simp]
-
-中文:
-定理 fderivWithin_zero_of_not_differentiableWithinAt
-  条件: (h : ¬DifferentiableWithinAt 𝕜 f s x)
-  证明: by
-  simp [fderivWithin, h]
-
-@[simp]
-
-Depends on / 依赖: fderivWithin
+/-
+**fderivWithin_zero_of_not_differentiableWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_zero_of_not_differentiableWithinAt (h : ¬DifferentiableWithin
+At 𝕜 f s x) : fderivWithin 𝕜 f s x = 0
+参数：h : ¬DifferentiableWithinAt 𝕜 f s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderivWithin_def`：∀ (𝕜 : Type u_4) [inst : NontriviallyNormedField 𝕜] {E
+ : Type u_5} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 : 
+Topolo…
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fderivWithin_zero_of_not_differentiableWithinAt (h : ¬DifferentiableWithinAt 𝕜 f s x) :
     fderivWithin 𝕜 f s x = 0 := by
   simp [fderivWithin, h]
 
 @[simp]
-/--
-theorem `fderivWithin_univ` / 定理 `fderivWithin_univ`
-
-English:
-theorem fderivWithin_univ
-  statement: fderivWithin 𝕜 f univ = fderiv 𝕜 f
-  proof: by
-  ext
-  rw [fderiv]
-
-中文:
-定理 fderivWithin_univ
-  结论: fderivWithin 𝕜 f univ = fderiv 𝕜 f
-  证明: by
-  ext
-  rw [fderiv]
-
-Depends on / 依赖: fderiv
+/-
+**fderivWithin_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderiv_def`：∀ (𝕜 : Type u_4) [inst : NontriviallyNormedField 𝕜] {E : Typ
+e u_5} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 : Topolo
+…
 -/
 theorem fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 f := by
   ext
@@ -425,28 +424,21 @@ section Normed
 
 variable {E : Type*} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable {F : Type*} [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
-variable {f : E -> F} {f' : E ->L[𝕜] F} {s : Set E} {x : E}
+variable {f : E → F} {f' : E →L[𝕜] F} {s : Set E} {x : E}
 
-/--
-theorem `hasFDerivAtFilter_iff_isLittleO` / 定理 `hasFDerivAtFilter_iff_isLittleO`
-
-English:
-theorem hasFDerivAtFilter_iff_isLittleO
-  given: {L : Filter (E × E)}
-  proof: (hasFDerivAtFilter_iff_isLittleOTVS ..).trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivAtFilter.isLittleO, HasFDerivAtFilter.of_isLittleO⟩ :=
-  hasFDerivAtFilter_iff_isLittleO
-
-中文:
-定理 hasFDerivAtFilter_iff_isLittleO
-  条件: {L : 滤子 (E × E)}
-  证明: (hasFDerivAtFilter_iff_isLittleOTVS ..).trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivAtFilter.isLittleO, HasFDerivAtFilter.of_isLittleO⟩ :=
-  hasFDerivAtFilter_iff_isLittleO
-
-Depends on / 依赖: hasFDerivAtFilter_iff_isLittleOTVS, isLittleOTVS_iff_isLittleO
+/-
+**hasFDerivAtFilter_iff_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAtFilter_iff_isLittleO {L : Filter (E × E)} : HasFDerivAtFilter f
+ f' L ↔ (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[L] fun p => p.1 - p.2
+参数：E × E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `hasFDerivAtFilter_iff_isLittleOTVS`：∀ {𝕜 : Type u_1} [inst : Nontriviall
+yNormedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Modu
+le 𝕜 E] [inst_3 : Topolo…
+· 使用引理 `Asymptotics.isLittleOTVS_iff_isLittleO`：isLittleOTVS_iff_isLittleO : f =
+o[𝕜; l] g ↔ f =o[l] g
 -/
 theorem hasFDerivAtFilter_iff_isLittleO {L : Filter (E × E)} :
     HasFDerivAtFilter f f' L ↔ (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[L] fun p => p.1 - p.2 :=
@@ -454,75 +446,55 @@ theorem hasFDerivAtFilter_iff_isLittleO {L : Filter (E × E)} :
 
 alias ⟨HasFDerivAtFilter.isLittleO, HasFDerivAtFilter.of_isLittleO⟩ :=
   hasFDerivAtFilter_iff_isLittleO
-
-/--
-theorem `hasFDerivAt_iff_isLittleO` / 定理 `hasFDerivAt_iff_isLittleO`
-
-English:
-theorem hasFDerivAt_iff_isLittleO
-  proof: hasFDerivAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivAt.isLittleO, HasFDerivAt.of_isLittleO⟩ := hasFDerivAt_iff_isLittleO
-
-中文:
-定理 hasFDerivAt_iff_isLittleO
-  证明: hasFDerivAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivAt.isLittleO, HasFDerivAt.of_isLittleO⟩ := hasFDerivAt_iff_isLittleO
-
-Depends on / 依赖: hasFDerivAt_iff_isLittleOTVS, hasFDerivAt_iff_isLittleOTVS.trans, isLittleOTVS_iff_isLittleO
+/-
+**hasFDerivAt_iff_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAt_iff_isLittleO : HasFDerivAt f f' x ↔ (fun x' => f x' - f x - f
+' (x' - x)) =o[𝓝 x] (fun x' => x' - x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `hasFDerivAt_iff_isLittleOTVS`：hasFDerivAt_iff_isLittleOTVS : HasFDerivAt
+ f f' x ↔ (fun x' => f x' - f x - f' (x' - x)) =o[𝕜; 𝓝 x] (fun x' => x' - x)
+· 使用引理 `Asymptotics.isLittleOTVS_iff_isLittleO`：isLittleOTVS_iff_isLittleO : f =
+o[𝕜; l] g ↔ f =o[l] g
 -/
 theorem hasFDerivAt_iff_isLittleO :
-    HasFDerivAt f f' x ↔ (fun x' => f x' - f x - f' (x' - x)) =o[𝓝 x] (fun x' => x' - x) :=
+    HasFDerivAt f f' x ↔ (fun x' ↦ f x' - f x - f' (x' - x)) =o[𝓝 x] (fun x' ↦ x' - x) :=
   hasFDerivAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
 
 alias ⟨HasFDerivAt.isLittleO, HasFDerivAt.of_isLittleO⟩ := hasFDerivAt_iff_isLittleO
-
-/--
-theorem `hasFDerivWithinAt_iff_isLittleO` / 定理 `hasFDerivWithinAt_iff_isLittleO`
-
-English:
-theorem hasFDerivWithinAt_iff_isLittleO
-  proof: hasFDerivWithinAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivWithinAt.isLittleO, HasFDerivWithinAt.of_isLittleO⟩ :=
-  hasFDerivWithinAt_iff_isLittleO
-
-中文:
-定理 hasFDerivWithinAt_iff_isLittleO
-  证明: hasFDerivWithinAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasFDerivWithinAt.isLittleO, HasFDerivWithinAt.of_isLittleO⟩ :=
-  hasFDerivWithinAt_iff_isLittleO
-
-Depends on / 依赖: hasFDerivWithinAt_iff_isLittleOTVS, hasFDerivWithinAt_iff_isLittleOTVS.trans, isLittleOTVS_iff_isLittleO
+/-
+**hasFDerivWithinAt_iff_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivWithinAt_iff_isLittleO : HasFDerivWithinAt f f' s x ↔ (fun x' => 
+f x' - f x - f' (x' - x)) =o[𝓝[s] x] (fun x' => x' - x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `hasFDerivWithinAt_iff_isLittleOTVS`：hasFDerivWithinAt_iff_isLittleOTVS :
+ HasFDerivWithinAt f f' s x ↔ (fun x' => f x' - f x - f' (x' - x)) =o[𝕜; 𝓝[s] x]
+ (fun x' => x' - x)
+· 使用引理 `Asymptotics.isLittleOTVS_iff_isLittleO`：isLittleOTVS_iff_isLittleO : f =
+o[𝕜; l] g ↔ f =o[l] g
 -/
 theorem hasFDerivWithinAt_iff_isLittleO :
     HasFDerivWithinAt f f' s x ↔
-      (fun x' => f x' - f x - f' (x' - x)) =o[𝓝[s] x] (fun x' => x' - x) :=
+      (fun x' ↦ f x' - f x - f' (x' - x)) =o[𝓝[s] x] (fun x' ↦ x' - x) :=
   hasFDerivWithinAt_iff_isLittleOTVS.trans isLittleOTVS_iff_isLittleO
 
 alias ⟨HasFDerivWithinAt.isLittleO, HasFDerivWithinAt.of_isLittleO⟩ :=
   hasFDerivWithinAt_iff_isLittleO
-
-/--
-theorem `hasStrictFDerivAt_iff_isLittleO` / 定理 `hasStrictFDerivAt_iff_isLittleO`
-
-English:
-theorem hasStrictFDerivAt_iff_isLittleO
-  proof: (hasStrictFDerivAt_iff_isLittleOTVS ..).trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasStrictFDerivAt.isLittleO, HasStrictFDerivAt.of_isLittleO⟩ :=
-  hasStrictFDerivAt_iff_isLittleO
-
-中文:
-定理 hasStrictFDerivAt_iff_isLittleO
-  证明: (hasStrictFDerivAt_iff_isLittleOTVS ..).trans isLittleOTVS_iff_isLittleO
-
-alias ⟨HasStrictFDerivAt.isLittleO, HasStrictFDerivAt.of_isLittleO⟩ :=
-  hasStrictFDerivAt_iff_isLittleO
-
-Depends on / 依赖: hasStrictFDerivAt_iff_isLittleOTVS, isLittleOTVS_iff_isLittleO
+/-
+**hasStrictFDerivAt_iff_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasStrictFDerivAt_iff_isLittleO : HasStrictFDerivAt f f' x ↔ (fun p : E × 
+E => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝓝 (x, x)] fun p : E × E => p.1 - p.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `hasStrictFDerivAt_iff_isLittleOTVS`：hasStrictFDerivAt_iff_isLittleOTVS :
+ HasStrictFDerivAt f f' x ↔ (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; 𝓝 (x
+, x)] (fun p => p.1 - p.…
+· 使用引理 `Asymptotics.isLittleOTVS_iff_isLittleO`：isLittleOTVS_iff_isLittleO : f =
+o[𝕜; l] g ↔ f =o[l] g
 -/
 theorem hasStrictFDerivAt_iff_isLittleO :
     HasStrictFDerivAt f f' x ↔
@@ -533,3 +505,4 @@ alias ⟨HasStrictFDerivAt.isLittleO, HasStrictFDerivAt.of_isLittleO⟩ :=
   hasStrictFDerivAt_iff_isLittleO
 
 end Normed
+

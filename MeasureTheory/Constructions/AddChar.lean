@@ -25,38 +25,27 @@ namespace AddChar
 variable {A M : Type*} [AddMonoid A] [Monoid M] [MeasurableSpace A] [MeasurableSpace M]
 
 @[nolint unusedArguments]
-/--
-Instance `instMeasurableSpace` / 实例 `instMeasurableSpace`
-
-English:
-instance instMeasurableSpace
-  signature: [DiscreteMeasurableSpace A] [Finite A]
-  body: ⊤
-
-中文:
-实例 instMeasurableSpace
-  签名: [DiscreteMeasurable空间 A] [有限 A]
-  定义体: ⊤
+/-
+**AddChar.instMeasurableSpace** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] : MeasurableSpa
+ce (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] :
     MeasurableSpace (AddChar A M) :=
   ⊤
-
-/--
-Instance `instDiscreteMeasurableSpace` / 实例 `instDiscreteMeasurableSpace`
-
-English:
-instance instDiscreteMeasurableSpace
-  signature: [DiscreteMeasurableSpace A] [Finite A]
-  body: ⟨fun _ => trivial⟩
-
-中文:
-实例 instDiscreteMeasurableSpace
-  签名: [DiscreteMeasurable空间 A] [有限 A]
-  定义体: ⟨fun _ => trivial⟩
+/-
+**AddChar.instDiscreteMeasurableSpace** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instDiscreteMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] : Discr
+eteMeasurableSpace (AddChar A M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 instance instDiscreteMeasurableSpace [DiscreteMeasurableSpace A] [Finite A] :
     DiscreteMeasurableSpace (AddChar A M) :=
-  ⟨fun _ => trivial⟩
+  ⟨fun _ ↦ trivial⟩
 
 end AddChar
+

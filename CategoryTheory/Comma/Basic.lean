@@ -20,11 +20,11 @@ with a common codomain. Specifically, for functors `L : A ⥤ T` and `R : B ⥤ 
 `hom' : L.obj left' ⟶ R.obj right'` is a commutative square
 
 ```
-L.obj left ⟶ L.obj left'
-      | |
-  hom | | hom'
-      ↓ ↓
-R.obj right ⟶ R.obj right',
+L.obj left  ⟶  L.obj left'
+      |               |
+  hom |               | hom'
+      ↓               ↓
+R.obj right ⟶  R.obj right',
 ```
 
 where the top and bottom morphism come from morphisms `left ⟶ left'` and `right ⟶ right'`,
@@ -68,24 +68,18 @@ set_option linter.translate.warnInvalid false in
 /-- The objects of the comma category are triples of an object `left : A`, an object
 `right : B` and a morphism `hom : L.obj left ⟶ R.obj right`. -/
 @[to_dual self (reorder := A B, 2 4, L R), wikidata Q1780005]
-/--
-Definition of `Comma` / `Comma` 的定义
+/-
+**CategoryTheory.Comma** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{A : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} A] →     {B : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} B] →         {T : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} T] →             Ca
+tegoryTheory.Functor A T → CategoryTheory.Functor B T → Type (max u₁ u₂ v₃)
+参数：max u₁ u₂ v₃。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Comma
-  parameters: (L : A ⥤ T) (R : B ⥤ T)
-  axioms and operations (3):
-    - left : A
-    - right : B
-    - hom : L.obj left ⟶ R.obj right
-
-中文:
-结构 交换a
-  参数: (L : A ⥤ T) (R : B ⥤ T)
-  公理与运算 (3 个):
-    - left : A
-    - right : B
-    - hom : L.obj left ⟶ R.obj right
+--- 原说明 ---
+The objects of the comma category are triples of an object `left : A`, an object
+`right : B` and a morphism `hom : L.obj left ⟶ R.obj right`.
 -/
 structure Comma (L : A ⥤ T) (R : B ⥤ T) : Type max u₁ u₂ v₃ where
   /-- The left subobject -/
@@ -99,22 +93,15 @@ attribute [to_dual existing] Comma.left
 attribute [to_dual self] Comma.hom Comma.mk
 
 -- Satisfying the inhabited linter
-/--
-Instance `Comma.inhabited` / 实例 `Comma.inhabited`
-
-English:
-instance Comma.inhabited
-  signature: [Inhabited T]
-  body: { left := default
-      right := default
-      hom := 𝟙 default }
-
-中文:
-实例 交换a.inhabited
-  签名: [可居 T]
-  定义体: { left := default
-      right := default
-      hom := 𝟙 default }
+/-
+**CategoryTheory.Comma.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：{T : Type u₃} →   [inst : CategoryTheory.Category.{v₃, u₃} T] →     [Inhab
+ited T] → Inhabited (CategoryTheory.Comma (CategoryTheory.Functor.id T) (Categor
+yTheory.Functor.id T))
+参数：CategoryTheory.Comma (CategoryTheory.Functor.id T) (CategoryTheory.Functor.id
+ T)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Comma.inhabited [Inhabited T] : Inhabited (Comma (𝟭 T) (𝟭 T)) where
   default :=
@@ -129,26 +116,19 @@ set_option linter.translate.warnInvalid false in
 morphisms coming from the two objects using morphisms in the image of the functors `L` and `R`.
 -/
 @[ext, to_dual self (reorder := A B, 2 4, L R, X Y)]
-/--
-Definition of `CommaMorphism` / `CommaMorphism` 的定义
+/-
+**CategoryTheory.CommaMorphism** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：CommaMorphism (X Y : Comma L R) where /-- Morphism on left objects -/ left
+ : X.left ⟶ Y.left /-- Morphism on right objects -/ right : X.right ⟶ Y.right w 
+: L.map left ≫ Y.hom = X.hom ≫ R.map right
+参数：X Y : Comma L R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommaMorphism
-  parameters: (X Y : Comma L R)
-  axioms and operations (3):
-    - left : X.left ⟶ Y.left
-    - right : X.right ⟶ Y.right
-    - w : L.map left ≫ Y.hom = X.hom ≫ R.map right  [default: by cat_disch]
-
-中文:
-结构 交换a态射
-  参数: (X Y : 交换a L R)
-  公理与运算 (3 个):
-    - left : X.left ⟶ Y.left
-    - right : X.right ⟶ Y.right
-    - w : L.map left ≫ Y.hom = X.hom ≫ R.map right  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism between two objects in the comma category is a commutative square con
+necting the
+morphisms coming from the two objects using morphisms in the image of the functo
+rs `L` and `R`.
 -/
 structure CommaMorphism (X Y : Comma L R) where
   /-- Morphism on left objects -/
@@ -160,20 +140,21 @@ structure CommaMorphism (X Y : Comma L R) where
 attribute [to_dual existing] CommaMorphism.left
 
 @[to_dual existing w]
-/--
-theorem `CommaMorphism.w'` / 定理 `CommaMorphism.w'`
-
-English:
-theorem CommaMorphism.w'
-  given: {X Y : Comma R L} (self : CommaMorphism Y X)
-  proof: self.w.symm
-
-中文:
-定理 交换a态射.w'
-  条件: {X Y : 交换a R L} (self : 交换a态射 Y X)
-  证明: self.w.symm
-
-Depends on / 依赖: self.w.symm
+/-
+**CategoryTheory.CommaMorphism.w'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+aMorphism`。
+形式化陈述：∀ {A : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} B]   {T : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} T] {L : CategoryTheory.Functor A T}   {R : CategoryTheo
+ry.Functor B T} {X Y : CategoryTheory.Comma R L} (self : CategoryTheory.CommaMor
+phism Y X),   CategoryTheory.CategoryStruct.comp Y.hom (L.map self.right) =     
+CategoryTheory.CategoryStruct.comp (R.map self.left) X.hom
+参数：self : CategoryTheory.CommaMorphism Y X；L.map self.right；R.map self.left。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
 -/
 theorem CommaMorphism.w' {X Y : Comma R L} (self : CommaMorphism Y X) :
     Y.hom ≫ L.map self.right = R.map self.left ≫ X.hom :=
@@ -182,20 +163,25 @@ theorem CommaMorphism.w' {X Y : Comma R L} (self : CommaMorphism Y X) :
 /-- `CommaMorphism.mk'` is the dual of `CommaMorphism.mk`, which we need for `to_dual`.
 Please avoid using this directly. -/
 @[to_dual existing mk]
-/--
-Definition of `CommaMorphism.mk'` / `CommaMorphism.mk'` 的定义
+/-
+**CategoryTheory.CommaMorphism.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+maMorphism`。
+形式化陈述：{A : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} A] →     {B : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} B] →         {T : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} T] →             {L
+ : CategoryTheory.Functor A T} →               {R : CategoryTheory.Functor B T} 
+→                 {X Y : CategoryTheory.Comma R L} →                   (right : 
+Y.right ⟶ X.right) →                     (left : Y.left ⟶ X.left) →             
+          CategoryTheory.CategoryStruct.comp Y.hom (L.map right) =              
+             CategoryTheory.CategoryStruct.comp (R.map left) X.hom →            
+             CategoryTheory.CommaMorphism Y X
+参数：right : Y.right ⟶ X.right；left : Y.left ⟶ X.left；L.map right；R.map left。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CommaMorphism.mk'
-  signature: {X Y : Comma R L}
-  body: w.symm
-
-中文:
-缩写 交换a态射.mk'
-  签名: {X Y : 交换a R L}
-  定义体: w.symm
-
-Depends on / 依赖: w.symm
+--- 原说明 ---
+`CommaMorphism.mk'` is the dual of `CommaMorphism.mk`, which we need for `to_dua
+l`.
+Please avoid using this directly.
 -/
 abbrev CommaMorphism.mk' {X Y : Comma R L}
     (right : Y.right ⟶ X.right) (left : Y.left ⟶ X.left)
@@ -204,18 +190,17 @@ abbrev CommaMorphism.mk' {X Y : Comma R L}
   left; right; w := w.symm
 
 -- Satisfying the inhabited linter
-/--
-Instance `CommaMorphism.inhabited` / 实例 `CommaMorphism.inhabited`
-
-English:
-instance CommaMorphism.inhabited
-  signature: [Inhabited (Comma L R)]
-  body: ⟨{ left := 𝟙 _, right := 𝟙 _}⟩
-
-中文:
-实例 交换a态射.inhabited
-  签名: [可居 (交换a L R)]
-  定义体: ⟨{ left := 𝟙 _, right := 𝟙 _}⟩
+/-
+**CategoryTheory.CommaMorphism.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.CommaMorphism`。
+形式化陈述：{A : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} A] →     {B : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} B] →         {T : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} T] →             {L
+ : CategoryTheory.Functor A T} →               {R : CategoryTheory.Functor B T} 
+→                 [inst_3 : Inhabited (CategoryTheory.Comma L R)] →             
+      Inhabited (CategoryTheory.CommaMorphism default default)
+参数：CategoryTheory.Comma L R；CategoryTheory.CommaMorphism default default。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance CommaMorphism.inhabited [Inhabited (Comma L R)] :
     Inhabited (CommaMorphism (default : Comma L R) default) :=
@@ -224,32 +209,11 @@ instance CommaMorphism.inhabited [Inhabited (Comma L R)] :
 attribute [reassoc (attr := simp)] CommaMorphism.w
 
 @[to_dual self]
-/--
-Instance `commaCategory` / 实例 `commaCategory`
-
-English:
-instance commaCategory
-  signature: : Category (Comma L R) where
-  body: CommaMorphism X Y
-  id X :=
-    { left := 𝟙 X.left
-      right := 𝟙 X.right }
-  comp f g :=
-    { left := f.left ≫ g.left
-      right := f.right ≫ g.right }
-
-中文:
-实例 commaCategory
-  签名: : 范畴 (交换a L R) where
-  定义体: CommaMorphism X Y
-  id X :=
-    { left := 𝟙 X.left
-      right := 𝟙 X.right }
-  comp f g :=
-    { left := f.left ≫ g.left
-      right := f.right ≫ g.right }
-
-Depends on / 依赖: CommaMorphism
+/-
+**CategoryTheory.commaCategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：commaCategory : Category (Comma L R) where Hom X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commaCategory : Category (Comma L R) where
   Hom X Y := CommaMorphism X Y
@@ -267,64 +231,37 @@ section
 variable {X Y Z : Comma L R} {f : X ⟶ Y} {g : Y ⟶ Z}
 
 @[ext, to_dual self (reorder := A B, 2 4, L R, X Y, h₁ h₂)]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right)
-  statement: f = g
-  proof: CommaMorphism.ext h₁ h₂
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 hom_ext
-  条件: (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right)
-  结论: f = g
-  证明: CommaMorphism.ext h₁ h₂
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.ext
+/-
+**CategoryTheory.Comma.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right) : f 
+= g
+参数：f g : X ⟶ Y；h₁ : f.left = g.left；h₂ : f.right = g.right。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommaMorphism.ext`：∀ {A : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} A} {B : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} B
+}   {T : Type u₃} {ins…
 -/
 lemma hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.left) (h₂ : f.right = g.right) : f = g :=
   CommaMorphism.ext h₁ h₂
 
 @[to_dual (attr := simp)]
-/--
-theorem `id_left` / 定理 `id_left`
-
-English:
-theorem id_left
-  statement: (𝟙 X : CommaMorphism X X).left = 𝟙 X.left
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 id_left
-  结论: (𝟙 X : 交换a态射 X X).left = 𝟙 X.left
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**CategoryTheory.Comma.id_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：id_left : (𝟙 X : CommaMorphism X X).left = 𝟙 X.left
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_left : (𝟙 X : CommaMorphism X X).left = 𝟙 X.left :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `comp_left` / 定理 `comp_left`
-
-English:
-theorem comp_left
-  statement: (f ≫ g).left = f.left ≫ g.left
-  proof: rfl
-
-中文:
-定理 comp_left
-  结论: (f ≫ g).left = f.left ≫ g.left
-  证明: rfl
+/-
+**CategoryTheory.Comma.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：comp_left : (f ≫ g).left = f.left ≫ g.left
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_left : (f ≫ g).left = f.left ≫ g.left :=
   rfl
@@ -337,22 +274,11 @@ set_option linter.translate.warnInvalid false in
 /-- The functor sending an object `X` in the comma category to `X.left`. -/
 @[to_dual (reorder := L R) (attr := simps, implicit_reducible)
 /-- The functor sending an object `X` in the comma category to `X.right`. -/]
-/--
-Definition of `fst` / `fst` 的定义
-
-English:
-definition fst
-  signature: : Comma L R ⥤ A where
-  body: X.left
-  map f := f.left
-
-中文:
-定义 fst
-  签名: : 交换a L R ⥤ A where
-  定义体: X.left
-  map f := f.left
-
-Depends on / 依赖: X.left
+/-
+**CategoryTheory.Comma.fst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：fst : Comma L R ⥤ A where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def fst : Comma L R ⥤ A where
   obj X := X.left
@@ -366,48 +292,35 @@ natural transformation between the functors `fst ⋙ L` and `snd ⋙ R` from the
 to `T`, where the components are given by the morphism that constitutes an object of the comma
 category. -/
 @[simps, to_dual self]
-/--
-Definition of `natTrans` / `natTrans` 的定义
+/-
+**CategoryTheory.Comma.natTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`
+。
+形式化陈述：natTrans : fst L R ⋙ L ⟶ snd L R ⋙ R where app X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natTrans
-  signature: : fst L R ⋙ L ⟶ snd L R ⋙ R where app X
-  body: X.hom
-
-@[simp]
-
-中文:
-定义 natTrans
-  签名: : fst L R ⋙ L ⟶ snd L R ⋙ R where app X
-  定义体: X.hom
-
-@[simp]
-
-Depends on / 依赖: X.hom
+--- 原说明 ---
+We can interpret the commutative square constituting a morphism in the comma cat
+egory as a
+natural transformation between the functors `fst ⋙ L` and `snd ⋙ R` from the com
+ma category
+to `T`, where the components are given by the morphism that constitutes an objec
+t of the comma
+category.
 -/
 def natTrans : fst L R ⋙ L ⟶ snd L R ⋙ R where app X := X.hom
 
 @[simp]
-/--
-theorem `eqToHom_left` / 定理 `eqToHom_left`
-
-English:
-theorem eqToHom_left
-  given: (X Y : Comma L R) (H : X = Y)
-  proof: by
-  cases H
-  rfl
-
-@[simp]
-
-中文:
-定理 eqToHom_left
-  条件: (X Y : 交换a L R) (H : X = Y)
-  证明: by
-  cases H
-  rfl
-
-@[simp]
+/-
+**CategoryTheory.Comma.eqToHom_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Co
+mma`。
+形式化陈述：eqToHom_left (X Y : Comma L R) (H : X = Y) : CommaMorphism.left (eqToHom H
+) = eqToHom (by cases H; rfl)
+参数：X Y : Comma L R；H : X = Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem eqToHom_left (X Y : Comma L R) (H : X = Y) :
     CommaMorphism.left (eqToHom H) = eqToHom (by cases H; rfl) := by
@@ -415,24 +328,16 @@ theorem eqToHom_left (X Y : Comma L R) (H : X = Y) :
   rfl
 
 @[simp]
-/--
-theorem `eqToHom_right` / 定理 `eqToHom_right`
-
-English:
-theorem eqToHom_right
-  given: (X Y : Comma L R) (H : X = Y)
-  proof: by
-  cases H
-  rfl
-
-中文:
-定理 eqToHom_right
-  条件: (X Y : 交换a L R) (H : X = Y)
-  证明: by
-  cases H
-  rfl
-
-Depends on / 依赖: hasInitial, isInitialElementsMkShrinkYonedaObjObjEquivId
+/-
+**CategoryTheory.Comma.eqToHom_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.C
+omma`。
+形式化陈述：eqToHom_right (X Y : Comma L R) (H : X = Y) : CommaMorphism.right (eqToHom
+ H) = eqToHom (by cases H; rfl)
+参数：X Y : Comma L R；H : X = Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem eqToHom_right (X Y : Comma L R) (H : X = Y) :
     CommaMorphism.right (eqToHom H) = eqToHom (by cases H; rfl) := by
@@ -444,75 +349,67 @@ section
 variable {L R} {X Y : Comma L R} (e : X ⟶ Y)
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIso
-  signature: e] : IsIso e.left
-  body: (Comma.fst L R).map_isIso e
-
-@[to_dual (attr := simp, push ←)]
-
-中文:
-实例 [是同构
-  签名: e] : 是同构 e.left
-  定义体: (Comma.fst L R).map_isIso e
-
-@[to_dual (attr := simp, push ←)]
-
-Depends on / 依赖: Comma.fst, map_isIso
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIso e] : IsIso e.left :=
   (Comma.fst L R).map_isIso e
 
 @[to_dual (attr := simp, push ←)]
-/--
-lemma `inv_left` / 引理 `inv_left`
-
-English:
-lemma inv_left
-  given: [IsIso e]
-  statement: (inv e).left = inv e.left
-  proof: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  rw [← Comma.comp_left]; rw [IsIso.hom_inv_id]; rw [id_left]
-
-@[to_dual inv_left_hom_right]
-
-中文:
-引理 inv_left
-  条件: [是同构 e]
-  结论: (inv e).left = inv e.left
-  证明: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  rw [← Comma.comp_left]; rw [IsIso.hom_inv_id]; rw [id_left]
-
-@[to_dual inv_left_hom_right]
-
-Depends on / 依赖: Comma.comp_left, IsIso.eq_inv_of_hom_inv_id, IsIso.hom_inv_id, comp_left, eq_inv_of_hom_inv_id, hom_inv_id, id_left
+/-
+**CategoryTheory.Comma.inv_left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Comma`
+。
+形式化陈述：inv_left [IsIso e] : (inv e).left = inv e.left
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_hom_inv_id`：eq_inv_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : g = inv f
+· 使用定理 `CategoryTheory.Comma.instIsIsoLeft`：∀ {A : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ B]   {T : Type u₃} [ins…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Comma.comp_left`：comp_left : (f ≫ g).left = f.left ≫ g.le
+ft
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Comma.id_left`：id_left : (𝟙 X : CommaMorphism X X).left =
+ 𝟙 X.left
 -/
 lemma inv_left [IsIso e] : (inv e).left = inv e.left := by
   apply IsIso.eq_inv_of_hom_inv_id
-  rw [← Comma.comp_left]; rw [IsIso.hom_inv_id]; rw [id_left]
+  rw [← Comma.comp_left, IsIso.hom_inv_id, id_left]
 
 @[to_dual inv_left_hom_right]
-/--
-lemma `left_hom_inv_right` / 引理 `left_hom_inv_right`
-
-English:
-lemma left_hom_inv_right
-  given: [IsIso e]
-  statement: L.map (e.left) ≫ Y.hom ≫ R.map (inv e.right) = X.hom
-  proof: by
-  simp
-
-中文:
-引理 left_hom_inv_right
-  条件: [是同构 e]
-  结论: L.map (e.left) ≫ Y.hom ≫ R.map (inv e.right) = X.hom
-  证明: by
-  simp
+/-
+**CategoryTheory.Comma.left_hom_inv_right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Comma`。
+形式化陈述：left_hom_inv_right [IsIso e] : L.map (e.left) ≫ Y.hom ≫ R.map (inv e.right
+) = X.hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Comma.instIsIsoRight`：∀ {B : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} B] {A : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} A]   {T : Type u₃} [ins…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.CommaMorphism.w_assoc`：∀ {A : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma left_hom_inv_right [IsIso e] : L.map (e.left) ≫ Y.hom ≫ R.map (inv e.right) = X.hom := by
   simp
@@ -527,20 +424,12 @@ set_option linter.translate.warnInvalid false in
 /-- Extract the isomorphism between the left objects from an isomorphism in the comma category. -/
 @[to_dual (attr := simps!)
 /-- Extract the isomorphism between the right objects from an isomorphism in the comma category. -/]
-/--
-Definition of `leftIso` / `leftIso` 的定义
-
-English:
-definition leftIso
-  signature: {X Y : Comma L₁ R₁} (α : X ≅ Y)
-  body: (fst L₁ R₁).mapIso α
-
-中文:
-定义 leftIso
-  签名: {X Y : 交换a L₁ R₁} (α : X ≅ Y)
-  定义体: (fst L₁ R₁).mapIso α
-
-Depends on / 依赖: mapIso
+/-
+**CategoryTheory.Comma.leftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：leftIso {X Y : Comma L₁ R₁} (α : X ≅ Y) : X.left ≅ Y.left
+参数：α : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def leftIso {X Y : Comma L₁ R₁} (α : X ≅ Y) : X.left ≅ Y.left := (fst L₁ R₁).mapIso α
 
@@ -551,36 +440,17 @@ attribute [to_dual existing rightIso_hom] leftIso_inv
 directions give a commutative square.
 -/
 @[to_dual none, simps (attr := to_dual none)]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Comma.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：isoMk {X Y : Comma L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right) (h
+ : L₁.map l.hom ≫ Y.hom = X.hom ≫ R₁.map r.hom
+参数：l : X.left ≅ Y.left；r : X.right ≅ Y.right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {X Y : Comma L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right)
-  body: { left := l.hom
-      right := r.hom
-      w := h }
-  inv :=
-    { left := l.inv
-      right := r.inv
-      w := by
-        rw [← L₁.mapIso_inv l]; rw [Iso.inv_comp_eq]; rw [L₁.mapIso_hom]; rw [← Category.assoc]; rw [h]; rw [Category.assoc]; rw [← R₁.map_comp]
-        simp }
-
-中文:
-定义 isoMk
-  签名: {X Y : 交换a L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right)
-  定义体: { left := l.hom
-      right := r.hom
-      w := h }
-  inv :=
-    { left := l.inv
-      right := r.inv
-      w := by
-        rw [← L₁.mapIso_inv l]; rw [Iso.inv_comp_eq]; rw [L₁.mapIso_hom]; rw [← Category.assoc]; rw [h]; rw [Category.assoc]; rw [← R₁.map_comp]
-        simp }
-
-Depends on / 依赖: Category, Category.assoc, Iso.inv_comp_eq, cat_disch, inv_comp_eq, l.hom, l.inv, mapIso_hom, mapIso_inv, map_comp, r.hom, r.inv
+--- 原说明 ---
+Construct an isomorphism in the comma category given isomorphisms of the objects
+ whose forward
+directions give a commutative square.
 -/
 def isoMk {X Y : Comma L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right)
     (h : L₁.map l.hom ≫ Y.hom = X.hom ≫ R₁.map r.hom := by cat_disch) : X ≅ Y where
@@ -592,7 +462,8 @@ def isoMk {X Y : Comma L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.rig
     { left := l.inv
       right := r.inv
       w := by
-        rw [← L₁.mapIso_inv l]; rw [Iso.inv_comp_eq]; rw [L₁.mapIso_hom]; rw [← Category.assoc]; rw [h]; rw [Category.assoc]; rw [← R₁.map_comp]
+        rw [← L₁.mapIso_inv l, Iso.inv_comp_eq, L₁.mapIso_hom, ← Category.assoc, h,
+          Category.assoc, ← R₁.map_comp]
         simp }
 
 section
@@ -606,40 +477,11 @@ variable {L' : A' ⥤ T'} {R' : B' ⥤ T'}
 and two natural transformations `F₁ ⋙ L' ⟶ L ⋙ F` and `R ⋙ F ⟶ F₂ ⋙ R'`. -/
 @[simps, implicit_reducible,
   to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β)]
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: : Comma L R ⥤ Comma L' R' where
-  body: { left := F₁.obj X.left
-      right := F₂.obj X.right
-      hom := α.app X.left ≫ F.map X.hom ≫ β.app X.right }
-  map {X Y} φ :=
-    { left := F₁.map φ.left
-      right := F₂.map φ.right
-      w := by
-        dsimp
-        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw [← Functor.comp_map]; rw [← β.naturality]
-        dsimp
-        rw [← F.map_comp_assoc]; rw [← F.map_comp_assoc]; rw [φ.w] }
-
-中文:
-定义 map
-  签名: : 交换a L R ⥤ 交换a L' R' where
-  定义体: { left := F₁.obj X.left
-      right := F₂.obj X.right
-      hom := α.app X.left ≫ F.map X.hom ≫ β.app X.right }
-  map {X Y} φ :=
-    { left := F₁.map φ.left
-      right := F₂.map φ.right
-      w := by
-        dsimp
-        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw [← Functor.comp_map]; rw [← β.naturality]
-        dsimp
-        rw [← F.map_comp_assoc]; rw [← F.map_comp_assoc]; rw [φ.w] }
-
-Depends on / 依赖: F.map, F.map_comp_assoc, Functor, Functor.comp_map, X.hom, X.left, X.right, comp_map, map_comp_assoc, naturality, naturality_assoc
+/-
+**CategoryTheory.Comma.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：map : Comma L R ⥤ Comma L' R' where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def map : Comma L R ⥤ Comma L' R' where
   obj X :=
@@ -651,60 +493,50 @@ def map : Comma L R ⥤ Comma L' R' where
       right := F₂.map φ.right
       w := by
         dsimp
-        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw [← Functor.comp_map]; rw [← β.naturality]
+        rw [assoc, assoc, ← Functor.comp_map, α.naturality_assoc, ← Functor.comp_map,
+          ← β.naturality]
         dsimp
-        rw [← F.map_comp_assoc]; rw [← F.map_comp_assoc]; rw [φ.w] }
+        rw [← F.map_comp_assoc, ← F.map_comp_assoc, φ.w] }
 
 attribute [to_dual existing] map_obj_left
 attribute [to_dual existing (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, X Y)]
   map_map_left
 
 @[to_dual existing (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β) map_obj_hom]
-/--
-theorem `map_obj_hom'` / 定理 `map_obj_hom'`
-
-English:
-theorem map_obj_hom'
-  given: (X : Comma L R)
-  proof: by simp
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23)]
-
-中文:
-定理 map_obj_hom'
-  条件: (X : 交换a L R)
-  证明: by simp
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23)]
+/-
+**CategoryTheory.Comma.map_obj_hom'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Co
+mma`。
+形式化陈述：map_obj_hom' (X : Comma L R) : ((map α β).obj X).hom = (α.app X.left ≫ F.m
+ap X.hom) ≫ β.app X.right
+参数：X : Comma L R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_obj_hom' (X : Comma L R) :
     ((map α β).obj X).hom = (α.app X.left ≫ F.map X.hom) ≫ β.app X.right := by simp
 
 @[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23)]
-/--
-Instance `faithful_map` / 实例 `faithful_map`
-
-English:
-instance faithful_map
-  signature: [F₁.Faithful] [F₂.Faithful]
-  body: by
-    ext
-    · exact F₁.map_injective (congr_arg CommaMorphism.left h)
-    · exact F₂.map_injective (congr_arg CommaMorphism.right h)
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 23 24, 25 26)]
-
-中文:
-实例 faithful_map
-  签名: [F₁.忠实] [F₂.忠实]
-  定义体: by
-    ext
-    · exact F₁.map_injective (congr_arg CommaMorphism.left h)
-    · exact F₂.map_injective (congr_arg CommaMorphism.right h)
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 23 24, 25 26)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, CommaMorphism.right, congr_arg, map_injective
+/-
+**CategoryTheory.Comma.faithful_map** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+mma`。
+形式化陈述：faithful_map [F₁.Faithful] [F₂.Faithful] : (map α β).Faithful where map_in
+jective {X Y} f g h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance faithful_map [F₁.Faithful] [F₂.Faithful] : (map α β).Faithful where
   map_injective {X Y} f g h := by
@@ -713,52 +545,70 @@ instance faithful_map [F₁.Faithful] [F₂.Faithful] : (map α β).Faithful whe
     · exact F₂.map_injective (congr_arg CommaMorphism.right h)
 
 @[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 23 24, 25 26)]
-/--
-Instance `full_map` / 实例 `full_map`
-
-English:
-instance full_map
-  signature: [F.Faithful] [F₁.Full] [F₂.Full] [IsIso α] [IsIso β]
-  body: ⟨{left := F₁.preimage φ.left
-      right := F₂.preimage φ.right
-      w := F.map_injective (by
-        rw [← cancel_mono (β.app _)]; rw [← cancel_epi (α.app _)]; rw [F.map_comp]; rw [F.map_comp]; rw [assoc]; rw [assoc]
-        calc
-        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.map Y.hom ≫ β.app Y.right := by
-          rw [← Functor.comp_map]; rw [← α.naturality_assoc]
-        _ = α.app X.left ≫ F.map X.hom ≫ β.app X.right ≫ (F₂ ⋙ R').map (F₂.preimage φ.right) := by
-          simp only [Functor.comp_map, Functor.map_preimage, ← map_obj_hom α β Y, φ.w,
-            map_obj_hom α β X, assoc]
-        _ = _ := by rw [← Functor.comp_map, β.naturality] )},
-      by cat_disch⟩
-
-中文:
-实例 full_map
-  签名: [F.忠实] [F₁.满] [F₂.满] [是同构 α] [是同构 β]
-  定义体: ⟨{left := F₁.preimage φ.left
-      right := F₂.preimage φ.right
-      w := F.map_injective (by
-        rw [← cancel_mono (β.app _)]; rw [← cancel_epi (α.app _)]; rw [F.map_comp]; rw [F.map_comp]; rw [assoc]; rw [assoc]
-        calc
-        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.map Y.hom ≫ β.app Y.right := by
-          rw [← Functor.comp_map]; rw [← α.naturality_assoc]
-        _ = α.app X.left ≫ F.map X.hom ≫ β.app X.right ≫ (F₂ ⋙ R').map (F₂.preimage φ.right) := by
-          simp only [Functor.comp_map, Functor.map_preimage, ← map_obj_hom α β Y, φ.w,
-            map_obj_hom α β X, assoc]
-        _ = _ := by rw [← Functor.comp_map, β.naturality] )},
-      by cat_disch⟩
-
-Depends on / 依赖: F.map, F.map_comp, F.map_injective, Functor, Functor.comp_map, Functor.map_preimage, X.hom, X.left, X.right, Y.hom, Y.left, Y.right, cancel_epi, cancel_mono, comp_map, map_comp, map_injective, map_obj_hom, map_preimage, naturality_assoc
+/-
+**CategoryTheory.Comma.full_map** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`
+。
+形式化陈述：full_map [F.Faithful] [F₁.Full] [F₂.Full] [IsIso α] [IsIso β] : (map α β).
+Full where map_surjective {X Y} φ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.comp_map`：comp_map (F : C ⥤ D) (G : D ⥤ E) {X Y :
+ C} (f : X ⟶ Y) : (F ⋙ G).map f = G.map (F.map f)
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
 -/
 instance full_map [F.Faithful] [F₁.Full] [F₂.Full] [IsIso α] [IsIso β] : (map α β).Full where
   map_surjective {X Y} φ :=
     ⟨{left := F₁.preimage φ.left
       right := F₂.preimage φ.right
       w := F.map_injective (by
-        rw [← cancel_mono (β.app _)]; rw [← cancel_epi (α.app _)]; rw [F.map_comp]; rw [F.map_comp]; rw [assoc]; rw [assoc]
+        rw [← cancel_mono (β.app _), ← cancel_epi (α.app _), F.map_comp, F.map_comp, assoc, assoc]
         calc
         _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.map Y.hom ≫ β.app Y.right := by
-          rw [← Functor.comp_map]; rw [← α.naturality_assoc]
+          rw [← Functor.comp_map, ← α.naturality_assoc]
         _ = α.app X.left ≫ F.map X.hom ≫ β.app X.right ≫ (F₂ ⋙ R').map (F₂.preimage φ.right) := by
           simp only [Functor.comp_map, Functor.map_preimage, ← map_obj_hom α β Y, φ.w,
             map_obj_hom α β X, assoc]
@@ -767,40 +617,52 @@ instance full_map [F.Faithful] [F₁.Full] [F₂.Full] [IsIso α] [IsIso β] : (
 
 set_option backward.defeqAttrib.useBackward true in
 @[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 25 26)]
-/--
-Instance `essSurj_map` / 实例 `essSurj_map`
-
-English:
-instance essSurj_map
-  signature: [F₁.EssSurj] [F₂.EssSurj] [F.Full] [IsIso α] [IsIso β]
-  body: ⟨{left := F₁.objPreimage X.left
-      right := F₂.objPreimage X.right
-      hom := F.preimage ((inv α).app _ ≫ L'.map (F₁.objObjPreimageIso X.left).hom ≫
-        X.hom ≫ R'.map (F₂.objObjPreimageIso X.right).inv ≫ (inv β).app _) },
-          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso X.right) (by
-            dsimp
-            simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.map_preimage, assoc,
-              IsIso.inv_hom_id, comp_id, IsIso.hom_inv_id_assoc]
-            rw [← R'.map_comp]; rw [Iso.inv_hom_id]; rw [R'.map_id]; rw [comp_id])⟩⟩
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 26 27)]
-
-中文:
-实例 essSurj_map
-  签名: [F₁.本质满射] [F₂.本质满射] [F.满] [是同构 α] [是同构 β]
-  定义体: ⟨{left := F₁.objPreimage X.left
-      right := F₂.objPreimage X.right
-      hom := F.preimage ((inv α).app _ ≫ L'.map (F₁.objObjPreimageIso X.left).hom ≫
-        X.hom ≫ R'.map (F₂.objObjPreimageIso X.right).inv ≫ (inv β).app _) },
-          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso X.right) (by
-            dsimp
-            simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.map_preimage, assoc,
-              IsIso.inv_hom_id, comp_id, IsIso.hom_inv_id_assoc]
-            rw [← R'.map_comp]; rw [Iso.inv_hom_id]; rw [R'.map_id]; rw [comp_id])⟩⟩
-
-@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 26 27)]
-
-Depends on / 依赖: F.preimage, Functor, Functor.comp_obj, Functor.map_preimage, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id, Iso.inv_hom_id, NatIso, NatIso.isIso_inv_app, X.hom, X.left, X.right, comp_id, comp_obj, hom_inv_id_assoc, inv_hom_id, isIso_inv_app, map_comp, map_id, map_preimage
+/-
+**CategoryTheory.Comma.essSurj_map** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Com
+ma`。
+形式化陈述：essSurj_map [F₁.EssSurj] [F₂.EssSurj] [F.Full] [IsIso α] [IsIso β] : (map 
+α β).EssSurj where mem_essImage X
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.preimage.congr_simp`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {X Y : C} (F : Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.NatIso.isIso_inv_app`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
 instance essSurj_map [F₁.EssSurj] [F₂.EssSurj] [F.Full] [IsIso α] [IsIso β] :
     (map α β).EssSurj where
@@ -813,17 +675,35 @@ instance essSurj_map [F₁.EssSurj] [F₂.EssSurj] [F.Full] [IsIso α] [IsIso β
             dsimp
             simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.map_preimage, assoc,
               IsIso.inv_hom_id, comp_id, IsIso.hom_inv_id_assoc]
-            rw [← R'.map_comp]; rw [Iso.inv_hom_id]; rw [R'.map_id]; rw [comp_id])⟩⟩
+            rw [← R'.map_comp, Iso.inv_hom_id, R'.map_id, comp_id])⟩⟩
 
 @[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 26 27)]
-/--
-Instance `isEquivalenceMap` / 实例 `isEquivalenceMap`
-
-English:
-instance isEquivalenceMap
-
-中文:
-实例 isEquivalenceMap
+/-
+**CategoryTheory.Comma.isEquivalenceMap** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Comma`。
+形式化陈述：∀ {A : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} B]   {T : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} T] {A' : Type u₄}   [inst_3 : CategoryTheory.Category.{
+v₄, u₄} A'] {B' : Type u₅} [inst_4 : CategoryTheory.Category.{v₅, u₅} B']   {T' 
+: Type u₆} [inst_5 : CategoryTheory.Category.{v₆, u₆} T'] {L : CategoryTheory.Fu
+nctor A T}   {R : CategoryTheory.Functor B T} {L' : CategoryTheory.Functor A' T'
+} {R' : CategoryTheory.Functor B' T'}   {F₁ : CategoryTheory.Functor A A'} {F₂ :
+ CategoryTheory.Functor B B'} {F : CategoryTheory.Functor T T'}   (α : F₁.comp L
+' ⟶ L.comp F) (β : R.comp F ⟶ F₂.comp R') [F₁.IsEquivalence] [F₂.IsEquivalence] 
+[F.Faithful] [F.Full]   [CategoryTheory.IsIso α] [CategoryTheory.IsIso β], (Cate
+goryTheory.Comma.map α β).IsEquivalence
+参数：α : F₁.comp L' ⟶ L.comp F；β : R.comp F ⟶ F₂.comp R'；CategoryTheory.Comma.map 
+α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 noncomputable instance isEquivalenceMap
     [F₁.IsEquivalence] [F₂.IsEquivalence] [F.Faithful] [F.Full] [IsIso α] [IsIso β] :
@@ -834,18 +714,11 @@ where `α : F₁ ⋙ L' ⟶ L ⋙ F`. -/
 @[to_dual (attr := simp) (reorder := α β)
 /-- The equality between `map α β ⋙ snd L' R'` and `snd L R ⋙ F₂`,
 where `β : R ⋙ F ⟶ F₂ ⋙ R'`. -/]
-/--
-theorem `map_fst` / 定理 `map_fst`
-
-English:
-theorem map_fst
-  statement: map α β ⋙ fst L' R' = fst L R ⋙ F₁
-  proof: rfl
-
-中文:
-定理 map_fst
-  结论: map α β ⋙ fst L' R' = fst L R ⋙ F₁
-  证明: rfl
+/-
+**CategoryTheory.Comma.map_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：map_fst : map α β ⋙ fst L' R' = fst L R ⋙ F₁
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_fst : map α β ⋙ fst L' R' = fst L R ⋙ F₁ :=
   rfl
@@ -856,20 +729,11 @@ where `α : F₁ ⋙ L' ⟶ L ⋙ F`. -/
 @[to_dual (attr := simps!) (reorder := α β)
 /-- The isomorphism between `map α β ⋙ snd L' R'` and `snd L R ⋙ F₂`,
 where `β : R ⋙ F ⟶ F₂ ⋙ R'`. -/]
-/--
-Definition of `mapFst` / `mapFst` 的定义
-
-English:
-definition mapFst
-  signature: : map α β ⋙ fst L' R' ≅ fst L R ⋙ F₁
-  body: NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
-
-中文:
-定义 mapFst
-  签名: : map α β ⋙ fst L' R' ≅ fst L R ⋙ F₁
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Comma.mapFst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：mapFst : map α β ⋙ fst L' R' ≅ fst L R ⋙ F₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapFst : map α β ⋙ fst L' R' ≅ fst L R ⋙ F₁ :=
   NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
@@ -880,30 +744,12 @@ set_option linter.translate.warnInvalid false in
 /-- A natural transformation `L₁ ⟶ L₂` induces a functor `Comma L₂ R ⥤ Comma L₁ R`. -/
 @[to_dual (attr := simps, implicit_reducible)
 /-- A natural transformation `R₁ ⟶ R₂` induces a functor `Comma L R₁ ⥤ Comma L R₂`. -/]
-/--
-Definition of `mapLeft` / `mapLeft` 的定义
-
-English:
-definition mapLeft
-  signature: (l : L₁ ⟶ L₂)
-  body: { left := X.left
-      right := X.right
-      hom := l.app X.left ≫ X.hom }
-  map f :=
-    { left := f.left
-      right := f.right }
-
-中文:
-定义 mapLeft
-  签名: (l : L₁ ⟶ L₂)
-  定义体: { left := X.left
-      right := X.right
-      hom := l.app X.left ≫ X.hom }
-  map f :=
-    { left := f.left
-      right := f.right }
-
-Depends on / 依赖: X.hom, X.left, X.right, f.left, f.right, l.app
+/-
+**CategoryTheory.Comma.mapLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：mapLeft (l : L₁ ⟶ L₂) : Comma L₂ R ⥤ Comma L₁ R where obj X
+参数：l : L₁ ⟶ L₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapLeft (l : L₁ ⟶ L₂) : Comma L₂ R ⥤ Comma L₁ R where
   obj X :=
@@ -923,20 +769,12 @@ naturally isomorphic to the identity functor. -/
 @[to_dual (attr := simps!)
 /-- The functor `Comma L R ⥤ Comma L R` induced by the identity natural transformation on `R` is
 naturally isomorphic to the identity functor. -/]
-/--
-Definition of `mapLeftId` / `mapLeftId` 的定义
-
-English:
-definition mapLeftId
-  signature: : mapLeft R (𝟙 L) ≅ 𝟭 _
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftId
-  签名: : mapLeft R (𝟙 L) ≅ 𝟭 _
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Comma.mapLeftId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：mapLeftId : mapLeft R (𝟙 L) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapLeftId : mapLeft R (𝟙 L) ≅ 𝟭 _ :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
@@ -949,20 +787,14 @@ induced by these natural transformations. -/
 /-- The functor `Comma L R₁ ⥤ Comma L R₃` induced by the composition of the natural transformations
 `r : R₁ ⟶ R₂` and `r' : R₂ ⟶ R₃` is naturally isomorphic to the composition of the functors
 induced by these natural transformations. -/]
-/--
-Definition of `mapLeftComp` / `mapLeftComp` 的定义
-
-English:
-definition mapLeftComp
-  signature: (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃)
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftComp
-  签名: (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃)
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Comma.mapLeftComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+ma`。
+形式化陈述：mapLeftComp (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃) : mapLeft R (l ≫ l') ≅ mapLeft R 
+l' ⋙ mapLeft R l
+参数：l : L₁ ⟶ L₂；l' : L₂ ⟶ L₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapLeftComp (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃) :
     mapLeft R (l ≫ l') ≅ mapLeft R l' ⋙ mapLeft R l :=
@@ -974,20 +806,13 @@ set_option linter.translate.warnInvalid false in
 @[to_dual (attr := simps!)
 /-- Two equal natural transformations `R₁ ⟶ R₂` yield naturally isomorphic functors
 `Comma L R₁ ⥤ Comma L R₂`. -/]
-/--
-Definition of `mapLeftEq` / `mapLeftEq` 的定义
-
-English:
-definition mapLeftEq
-  signature: (l l' : L₁ ⟶ L₂) (h : l = l')
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftEq
-  签名: (l l' : L₁ ⟶ L₂) (h : l = l')
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Comma.mapLeftEq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：mapLeftEq (l l' : L₁ ⟶ L₂) (h : l = l') : mapLeft R l ≅ mapLeft R l'
+参数：l l' : L₁ ⟶ L₂；h : l = l'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapLeftEq (l l' : L₁ ⟶ L₂) (h : l = l') : mapLeft R l ≅ mapLeft R l' :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
@@ -999,26 +824,13 @@ set_option linter.translate.warnInvalid false in
 @[to_dual (attr := simps!, implicit_reducible)
 /-- A natural isomorphism `R₁ ≅ R₂` induces an equivalence of categories
 `Comma L R₁ ≌ Comma L R₂`. -/]
-/--
-Definition of `mapLeftIso` / `mapLeftIso` 的定义
-
-English:
-definition mapLeftIso
-  signature: (i : L₁ ≅ L₂)
-  body: mapLeft _ i.inv
-  inverse := mapLeft _ i.hom
-  unitIso := (mapLeftId _ _).symm ≪≫ mapLeftEq _ _ _ i.hom_inv_id.symm ≪≫ mapLeftComp _ _ _
-  counitIso := (mapLeftComp _ _ _).symm ≪≫ mapLeftEq _ _ _ i.inv_hom_id ≪≫ mapLeftId _ _
-
-中文:
-定义 mapLeftIso
-  签名: (i : L₁ ≅ L₂)
-  定义体: mapLeft _ i.inv
-  inverse := mapLeft _ i.hom
-  unitIso := (mapLeftId _ _).symm ≪≫ mapLeftEq _ _ _ i.hom_inv_id.symm ≪≫ mapLeftComp _ _ _
-  counitIso := (mapLeftComp _ _ _).symm ≪≫ mapLeftEq _ _ _ i.inv_hom_id ≪≫ mapLeftId _ _
-
-Depends on / 依赖: i.inv, mapLeft
+/-
+**CategoryTheory.Comma.mapLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comm
+a`。
+形式化陈述：mapLeftIso (i : L₁ ≅ L₂) : Comma L₁ R ≌ Comma L₂ R where functor
+参数：i : L₁ ≅ L₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapLeftIso (i : L₁ ≅ L₂) : Comma L₁ R ≌ Comma L₂ R where
   functor := mapLeft _ i.inv
@@ -1036,32 +848,13 @@ set_option linter.translate.warnInvalid false in
 /-- The functor `(F ⋙ L, R) ⥤ (L, R)` -/
 @[to_dual (attr := simps,
   implicit_reducible) (reorder := F L R) /-- The functor `(L, F ⋙ R) ⥤ (L, R)` -/]
-/--
-Definition of `preLeft` / `preLeft` 的定义
-
-English:
-definition preLeft
-  signature: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T)
-  body: { left := F.obj X.left
-      right := X.right
-      hom := X.hom }
-  map f :=
-    { left := F.map f.left
-      right := f.right
-      w := by simpa using! f.w }
-
-中文:
-定义 preLeft
-  签名: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T)
-  定义体: { left := F.obj X.left
-      right := X.right
-      hom := X.hom }
-  map f :=
-    { left := F.map f.left
-      right := f.right
-      w := by simpa using! f.w }
-
-Depends on / 依赖: F.map, F.obj, X.hom, X.left, X.right, f.left, f.right
+/-
+**CategoryTheory.Comma.preLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：preLeft (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) : Comma (F ⋙ L) R ⥤ Comma L R 
+where obj X
+参数：F : C ⥤ A；L : A ⥤ T；R : B ⥤ T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def preLeft (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) : Comma (F ⋙ L) R ⥤ Comma L R where
   obj X :=
@@ -1079,85 +872,94 @@ but with better definitional properties. -/
 @[to_dual (reorder := F L R)
 /-- `Comma.preRight` is a particular case of `Comma.map`,
 but with better definitional properties. -/]
-/--
-Definition of `preLeftIso` / `preLeftIso` 的定义
-
-English:
-definition preLeftIso
-  signature: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T)
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _) (by simp -implicitDefEqProofs))
-
-@[to_dual]
-
-中文:
-定义 preLeftIso
-  签名: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T)
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _) (by simp -implicitDefEqProofs))
-
-@[to_dual]
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, implicitDefEqProofs, ofComponents
+/-
+**CategoryTheory.Comma.preLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comm
+a`。
+形式化陈述：preLeftIso (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) : preLeft F L R ≅ map (F ⋙ 
+L).rightUnitor.inv (R.rightUnitor.hom ≫ R.leftUnitor.inv)
+参数：F : C ⥤ A；L : A ⥤ T；R : B ⥤ T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def preLeftIso (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) :
     preLeft F L R ≅ map (F ⋙ L).rightUnitor.inv (R.rightUnitor.hom ≫ R.leftUnitor.inv) :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _) (by simp -implicitDefEqProofs))
 
 @[to_dual]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.Faithful] : (preLeft F L R).Faithful :=
   Functor.Faithful.of_iso (preLeftIso F L R).symm
 
 @[to_dual]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.Full] : (preLeft F L R).Full :=
   Functor.Full.of_iso (preLeftIso F L R).symm
 
 @[to_dual]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.EssSurj] : (preLeft F L R).EssSurj :=
   Functor.essSurj_of_iso (preLeftIso F L R).symm
 
 /-- If `F` is an equivalence, then so is `preLeft F L R`. -/
 @[to_dual /-- If `F` is an equivalence, then so is `preRight L F R`. -/]
-/--
-Instance `isEquivalence_preLeft` / 实例 `isEquivalence_preLeft`
+/-
+**CategoryTheory.Comma.isEquivalence_preLeft** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Comma`。
+形式化陈述：∀ {A : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} B]   {T : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} T] {C : Type u₄}   [inst_3 : CategoryTheory.Category.{v
+₄, u₄} C] (F : CategoryTheory.Functor C A) (L : CategoryTheory.Functor A T)   (R
+ : CategoryTheory.Functor B T) [F.IsEquivalence], (CategoryTheory.Comma.preLeft 
+F L R).IsEquivalence
+参数：F : CategoryTheory.Functor C A；L : CategoryTheory.Functor A T；R : CategoryThe
+ory.Functor B T；CategoryTheory.Comma.preLeft F L R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comma.instFaithfulCompPreLeft`：∀ {A : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Comma.instFullCompPreLeft`：∀ {A : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Comma.instEssSurjCompPreLeft`：∀ {A : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-instance isEquivalence_preLeft
-  signature: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.IsEquivalence]
-
-中文:
-实例 isEquivalence_preLeft
-  签名: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.是等价]
+--- 原说明 ---
+If `F` is an equivalence, then so is `preLeft F L R`.
 -/
 instance isEquivalence_preLeft (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.IsEquivalence] :
     (preLeft F L R).IsEquivalence where
 
 /-- The functor `(L, R) ⥤ (L ⋙ F, R ⋙ F)` -/
 @[implicit_reducible, to_dual self, simps]
-/--
-Definition of `post` / `post` 的定义
+/-
+**CategoryTheory.Comma.post** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：post (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) : Comma L R ⥤ Comma (L ⋙ F) (R ⋙ 
+F) where obj X
+参数：L : A ⥤ T；R : B ⥤ T；F : T ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition post
-  signature: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C)
-  body: { left := X.left
-      right := X.right
-      hom := F.map X.hom }
-  map f :=
-    { left := f.left
-      right := f.right
-      w := by simp only [Functor.comp_map, ← F.map_comp, f.w] }
-
-中文:
-定义 post
-  签名: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C)
-  定义体: { left := X.left
-      right := X.right
-      hom := F.map X.hom }
-  map f :=
-    { left := f.left
-      right := f.right
-      w := by simp only [Functor.comp_map, ← F.map_comp, f.w] }
-
-Depends on / 依赖: F.map, F.map_comp, Functor, Functor.comp_map, X.hom, X.left, X.right, comp_map, f.left, f.right, map_comp
+--- 原说明 ---
+The functor `(L, R) ⥤ (L ⋙ F, R ⋙ F)`
 -/
 def post (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) : Comma L R ⥤ Comma (L ⋙ F) (R ⋙ F) where
   obj X :=
@@ -1174,53 +976,77 @@ attribute [to_dual self] post_obj_hom
 
 /-- `Comma.post` is a particular case of `Comma.map`, but with better definitional properties. -/
 @[to_dual self]
-/--
-Definition of `postIso` / `postIso` 的定义
+/-
+**CategoryTheory.Comma.postIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：postIso (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) : post L R F ≅ map (F₁
+参数：L : A ⥤ T；R : B ⥤ T；F : T ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postIso
-  signature: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C)
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-@[to_dual self]
-
-中文:
-定义 postIso
-  签名: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C)
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-@[to_dual self]
-
-Depends on / 依赖: leftUnitor, leftUnitor.hom, leftUnitor.inv
+--- 原说明 ---
+`Comma.post` is a particular case of `Comma.map`, but with better definitional p
+roperties.
 -/
 def postIso (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) :
     post L R F ≅ map (F₁ := 𝟭 _) (F₂ := 𝟭 _) (L ⋙ F).leftUnitor.hom (R ⋙ F).leftUnitor.inv :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
 
 @[to_dual self]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) : (post L R F).Faithful :=
   Functor.Faithful.of_iso (postIso L R F).symm
 
 @[to_dual self]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.Faithful] : (post L R F).Full :=
   Functor.Full.of_iso (postIso L R F).symm
 
 @[to_dual self]
+/-
+**CategoryTheory.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.Full] : (post L R F).EssSurj :=
   Functor.essSurj_of_iso (postIso L R F).symm
 
 /-- If `F` is an equivalence, then so is `post L R F`. -/
 @[to_dual self]
-/--
-Instance `isEquivalence_post` / 实例 `isEquivalence_post`
+/-
+**CategoryTheory.Comma.isEquivalence_post** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Comma`。
+形式化陈述：∀ {A : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} B]   {T : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} T] {C : Type u₄}   [inst_3 : CategoryTheory.Category.{v
+₄, u₄} C] (L : CategoryTheory.Functor A T) (R : CategoryTheory.Functor B T)   (F
+ : CategoryTheory.Functor T C) [F.IsEquivalence], (CategoryTheory.Comma.post L R
+ F).IsEquivalence
+参数：L : CategoryTheory.Functor A T；R : CategoryTheory.Functor B T；F : CategoryThe
+ory.Functor T C；CategoryTheory.Comma.post L R F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comma.instFaithfulCompPost`：∀ {A : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Comma.instFullCompPostOfFaithful`：∀ {A : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Comma.instEssSurjCompPostOfFull`：∀ {A : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} B]   {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-instance isEquivalence_post
-  signature: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.IsEquivalence]
-
-中文:
-实例 isEquivalence_post
-  签名: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.是等价]
+--- 原说明 ---
+If `F` is an equivalence, then so is `post L R F`.
 -/
 instance isEquivalence_post (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.IsEquivalence] :
     (post L R F).IsEquivalence where
@@ -1228,30 +1054,19 @@ instance isEquivalence_post (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.IsEquiv
 /-- The canonical functor from the product of two categories to the comma category of their
 respective functors into `Discrete PUnit`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `fromProd` / `fromProd` 的定义
+/-
+**CategoryTheory.Comma.fromProd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`
+。
+形式化陈述：fromProd (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) : A × B ⥤ Comma
+ L R where obj X
+参数：L : A ⥤ Discrete PUnit；R : B ⥤ Discrete PUnit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromProd
-  signature: (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
-  body: { left := X.1
-      right := X.2
-      hom := Discrete.eqToHom rfl }
-  map {X} {Y} f :=
-    { left := f.1
-      right := f.2 }
-
-中文:
-定义 fromProd
-  签名: (L : A ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
-  定义体: { left := X.1
-      right := X.2
-      hom := Discrete.eqToHom rfl }
-  map {X} {Y} f :=
-    { left := f.1
-      right := f.2 }
-
-Depends on / 依赖: Discrete, Discrete.eqToHom, eqToHom
+--- 原说明 ---
+The canonical functor from the product of two categories to the comma category o
+f their
+respective functors into `Discrete PUnit`.
 -/
 def fromProd (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) :
     A × B ⥤ Comma L R where
@@ -1267,24 +1082,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Taking the comma category of two functors into `Discrete PUnit` results in something
 is equivalent to their product. -/
 @[simps!]
-/--
-Definition of `equivProd` / `equivProd` 的定义
+/-
+**CategoryTheory.Comma.equivProd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：equivProd (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) : Comma L R ≌ 
+A × B where functor
+参数：L : A ⥤ Discrete PUnit；R : B ⥤ Discrete PUnit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivProd
-  signature: (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
-  body: (fst L R).prod' (snd L R)
-  inverse := fromProd L R
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 equivProd
-  签名: (L : A ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
-  定义体: (fst L R).prod' (snd L R)
-  inverse := fromProd L R
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
+--- 原说明 ---
+Taking the comma category of two functors into `Discrete PUnit` results in somet
+hing
+is equivalent to their product.
 -/
 def equivProd (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) :
     Comma L R ≌ A × B where
@@ -1293,86 +1103,67 @@ def equivProd (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) :
   unitIso := Iso.refl _
   counitIso := Iso.refl _
 
-/--
-Definition of `toPUnitIdEquiv` / `toPUnitIdEquiv` 的定义
+/-- Taking the comma category of a functor into `A ⥤ Discrete PUnit` and the identity
+`Discrete PUnit ⥤ Discrete PUnit` results in a category equivalent to `A`. -/
+/-
+**CategoryTheory.Comma.toPUnitIdEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Comma`。
+形式化陈述：toPUnitIdEquiv (L : A ⥤ Discrete PUnit) (R : Discrete PUnit ⥤ Discrete PUn
+it) : Comma L R ≌ A
+参数：L : A ⥤ Discrete PUnit；R : Discrete PUnit ⥤ Discrete PUnit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPUnitIdEquiv
-  signature: (L : A ⥤ Discrete PUnit) (R : Discrete PUnit ⥤ Discrete PUnit)
-  body: (equivProd L _).trans (prod.rightUnitorEquivalence A)
-
-@[simp]
-
-中文:
-定义 toPUnitIdEquiv
-  签名: (L : A ⥤ 离散 命题单元) (R : 离散 命题单元 ⥤ 离散 命题单元)
-  定义体: (equivProd L _).trans (prod.rightUnitorEquivalence A)
-
-@[simp]
-
-Depends on / 依赖: equivProd, prod.rightUnitorEquivalence, rightUnitorEquivalence
+--- 原说明 ---
+Taking the comma category of a functor into `A ⥤ Discrete PUnit` and the identit
+y
+`Discrete PUnit ⥤ Discrete PUnit` results in a category equivalent to `A`.
 -/
 def toPUnitIdEquiv (L : A ⥤ Discrete PUnit) (R : Discrete PUnit ⥤ Discrete PUnit) :
     Comma L R ≌ A :=
   (equivProd L _).trans (prod.rightUnitorEquivalence A)
 
 @[simp]
-/--
-theorem `toPUnitIdEquiv_functor_iso` / 定理 `toPUnitIdEquiv_functor_iso`
-
-English:
-theorem toPUnitIdEquiv_functor_iso
-  statement: {L : A ⥤ Discrete PUnit}
-  proof: rfl
-
-中文:
-定理 toPUnitIdEquiv_functor_iso
-  结论: {L : A ⥤ 离散 命题单元}
-  证明: rfl
+/-
+**CategoryTheory.Comma.toPUnitIdEquiv_functor_iso** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Comma`。
+形式化陈述：toPUnitIdEquiv_functor_iso {L : A ⥤ Discrete PUnit} {R : Discrete PUnit ⥤ 
+Discrete PUnit} : (toPUnitIdEquiv L R).functor = fst L R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toPUnitIdEquiv_functor_iso {L : A ⥤ Discrete PUnit}
     {R : Discrete PUnit ⥤ Discrete PUnit} :
     (toPUnitIdEquiv L R).functor = fst L R :=
   rfl
 
-/--
-Definition of `toIdPUnitEquiv` / `toIdPUnitEquiv` 的定义
+/-- Taking the comma category of the identity `Discrete PUnit ⥤ Discrete PUnit`
+and a functor `B ⥤ Discrete PUnit` results in a category equivalent to `B`. -/
+/-
+**CategoryTheory.Comma.toIdPUnitEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Comma`。
+形式化陈述：toIdPUnitEquiv (L : Discrete PUnit ⥤ Discrete PUnit) (R : B ⥤ Discrete PUn
+it) : Comma L R ≌ B
+参数：L : Discrete PUnit ⥤ Discrete PUnit；R : B ⥤ Discrete PUnit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIdPUnitEquiv
-  signature: (L : Discrete PUnit ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
-  body: (equivProd _ R).trans (prod.leftUnitorEquivalence B)
-
-@[simp]
-
-中文:
-定义 toIdPUnitEquiv
-  签名: (L : 离散 命题单元 ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
-  定义体: (equivProd _ R).trans (prod.leftUnitorEquivalence B)
-
-@[simp]
-
-Depends on / 依赖: equivProd, leftUnitorEquivalence, prod.leftUnitorEquivalence
+--- 原说明 ---
+Taking the comma category of the identity `Discrete PUnit ⥤ Discrete PUnit`
+and a functor `B ⥤ Discrete PUnit` results in a category equivalent to `B`.
 -/
 def toIdPUnitEquiv (L : Discrete PUnit ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit) :
     Comma L R ≌ B :=
   (equivProd _ R).trans (prod.leftUnitorEquivalence B)
 
 @[simp]
-/--
-theorem `toIdPUnitEquiv_functor_iso` / 定理 `toIdPUnitEquiv_functor_iso`
-
-English:
-theorem toIdPUnitEquiv_functor_iso
-  statement: {L : Discrete PUnit ⥤ Discrete PUnit}
-  proof: rfl
-
-中文:
-定理 toIdPUnitEquiv_functor_iso
-  结论: {L : 离散 命题单元 ⥤ 离散 命题单元}
-  证明: rfl
-
-Depends on / 依赖: IsThin, Quiver, Quiver.IsThin
+/-
+**CategoryTheory.Comma.toIdPUnitEquiv_functor_iso** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Comma`。
+形式化陈述：toIdPUnitEquiv_functor_iso {L : Discrete PUnit ⥤ Discrete PUnit} {R : B ⥤ 
+Discrete PUnit} : (toIdPUnitEquiv L R).functor = snd L R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdPUnitEquiv_functor_iso {L : Discrete PUnit ⥤ Discrete PUnit}
     {R : B ⥤ Discrete PUnit} :
@@ -1388,22 +1179,15 @@ open Opposite
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical functor from `Comma L R` to `(Comma R.op L.op)ᵒᵖ`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `opFunctor` / `opFunctor` 的定义
+/-
+**CategoryTheory.Comma.opFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma
+`。
+形式化陈述：opFunctor : Comma L R ⥤ (Comma R.op L.op)ᵒᵖ where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctor
-  signature: : Comma L R ⥤ (Comma R.op L.op)ᵒᵖ where
-  body: ⟨op X.right, op X.left, op X.hom⟩
-  map f := ⟨op f.right, op f.left, Quiver.Hom.unop_inj (by simp)⟩
-
-中文:
-定义 opFunctor
-  签名: : 交换a L R ⥤ (交换a R.op L.op)ᵒᵖ where
-  定义体: ⟨op X.right, op X.left, op X.hom⟩
-  map f := ⟨op f.right, op f.left, Quiver.Hom.unop_inj (by simp)⟩
-
-Depends on / 依赖: X.hom, X.left, X.right
+--- 原说明 ---
+The canonical functor from `Comma L R` to `(Comma R.op L.op)ᵒᵖ`.
 -/
 def opFunctor : Comma L R ⥤ (Comma R.op L.op)ᵒᵖ where
   obj X := ⟨op X.right, op X.left, op X.hom⟩
@@ -1412,20 +1196,17 @@ def opFunctor : Comma L R ⥤ (Comma R.op L.op)ᵒᵖ where
 /-- Composing the `leftOp` of `opFunctor L R` with `fst L.op R.op` is naturally isomorphic
 to `snd L R`. -/
 @[simps!]
-/--
-Definition of `opFunctorCompFst` / `opFunctorCompFst` 的定义
+/-
+**CategoryTheory.Comma.opFunctorCompFst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Comma`。
+形式化陈述：opFunctorCompFst : (opFunctor L R).leftOp ⋙ fst _ _ ≅ (snd _ _).op
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctorCompFst
-  signature: : (opFunctor L R).leftOp ⋙ fst _ _ ≅ (snd _ _).op
-  body: Iso.refl _
-
-中文:
-定义 opFunctorCompFst
-  签名: : (opFunctor L R).leftOp ⋙ fst _ _ ≅ (snd _ _).op
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Composing the `leftOp` of `opFunctor L R` with `fst L.op R.op` is naturally isom
+orphic
+to `snd L R`.
 -/
 def opFunctorCompFst : (opFunctor L R).leftOp ⋙ fst _ _ ≅ (snd _ _).op :=
   Iso.refl _
@@ -1433,42 +1214,32 @@ def opFunctorCompFst : (opFunctor L R).leftOp ⋙ fst _ _ ≅ (snd _ _).op :=
 /-- Composing the `leftOp` of `opFunctor L R` with `snd L.op R.op` is naturally isomorphic
 to `fst L R`. -/
 @[simps!]
-/--
-Definition of `opFunctorCompSnd` / `opFunctorCompSnd` 的定义
+/-
+**CategoryTheory.Comma.opFunctorCompSnd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Comma`。
+形式化陈述：opFunctorCompSnd : (opFunctor L R).leftOp ⋙ snd _ _ ≅ (fst _ _).op
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctorCompSnd
-  signature: : (opFunctor L R).leftOp ⋙ snd _ _ ≅ (fst _ _).op
-  body: Iso.refl _
-
-中文:
-定义 opFunctorCompSnd
-  签名: : (opFunctor L R).leftOp ⋙ snd _ _ ≅ (fst _ _).op
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Composing the `leftOp` of `opFunctor L R` with `snd L.op R.op` is naturally isom
+orphic
+to `fst L R`.
 -/
 def opFunctorCompSnd : (opFunctor L R).leftOp ⋙ snd _ _ ≅ (fst _ _).op :=
   Iso.refl _
 
 /-- The canonical functor from `Comma L.op R.op` to `(Comma R L)ᵒᵖ`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `unopFunctor` / `unopFunctor` 的定义
+/-
+**CategoryTheory.Comma.unopFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+ma`。
+形式化陈述：unopFunctor : Comma L.op R.op ⥤ (Comma R L)ᵒᵖ where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopFunctor
-  signature: : Comma L.op R.op ⥤ (Comma R L)ᵒᵖ where
-  body: ⟨X.right.unop, X.left.unop, X.hom.unop⟩
-  map f := ⟨f.right.unop, f.left.unop, Quiver.Hom.op_inj (by simpa using! f.w.symm)⟩
-
-中文:
-定义 unopFunctor
-  签名: : 交换a L.op R.op ⥤ (交换a R L)ᵒᵖ where
-  定义体: ⟨X.right.unop, X.left.unop, X.hom.unop⟩
-  map f := ⟨f.right.unop, f.left.unop, Quiver.Hom.op_inj (by simpa using! f.w.symm)⟩
-
-Depends on / 依赖: X.hom.unop, X.left.unop, X.right.unop
+--- 原说明 ---
+The canonical functor from `Comma L.op R.op` to `(Comma R L)ᵒᵖ`.
 -/
 def unopFunctor : Comma L.op R.op ⥤ (Comma R L)ᵒᵖ where
   obj X := ⟨X.right.unop, X.left.unop, X.hom.unop⟩
@@ -1476,66 +1247,46 @@ def unopFunctor : Comma L.op R.op ⥤ (Comma R L)ᵒᵖ where
 
 /-- Composing `unopFunctor L R` with `(fst L R).op` is isomorphic to `snd L.op R.op`. -/
 @[simps!]
-/--
-Definition of `unopFunctorCompFst` / `unopFunctorCompFst` 的定义
+/-
+**CategoryTheory.Comma.unopFunctorCompFst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Comma`。
+形式化陈述：unopFunctorCompFst : unopFunctor L R ⋙ (fst _ _).op ≅ snd _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopFunctorCompFst
-  signature: : unopFunctor L R ⋙ (fst _ _).op ≅ snd _ _
-  body: Iso.refl _
-
-中文:
-定义 unopFunctorCompFst
-  签名: : unopFunctor L R ⋙ (fst _ _).op ≅ snd _ _
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Composing `unopFunctor L R` with `(fst L R).op` is isomorphic to `snd L.op R.op`
+.
 -/
 def unopFunctorCompFst : unopFunctor L R ⋙ (fst _ _).op ≅ snd _ _ :=
   Iso.refl _
 
 /-- Composing `unopFunctor L R` with `(snd L R).op` is isomorphic to `fst L.op R.op`. -/
 @[simps!]
-/--
-Definition of `unopFunctorCompSnd` / `unopFunctorCompSnd` 的定义
+/-
+**CategoryTheory.Comma.unopFunctorCompSnd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Comma`。
+形式化陈述：unopFunctorCompSnd : unopFunctor L R ⋙ (snd _ _).op ≅ fst _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopFunctorCompSnd
-  signature: : unopFunctor L R ⋙ (snd _ _).op ≅ fst _ _
-  body: Iso.refl _
-
-中文:
-定义 unopFunctorCompSnd
-  签名: : unopFunctor L R ⋙ (snd _ _).op ≅ fst _ _
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Composing `unopFunctor L R` with `(snd L R).op` is isomorphic to `fst L.op R.op`
+.
 -/
 def unopFunctorCompSnd : unopFunctor L R ⋙ (snd _ _).op ≅ fst _ _ :=
   Iso.refl _
 
 /-- The canonical equivalence between `Comma L R` and `(Comma R.op L.op)ᵒᵖ`. -/
 @[simps]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**CategoryTheory.Comma.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comma`。
+形式化陈述：opEquiv : Comma L R ≌ (Comma R.op L.op)ᵒᵖ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquiv
-  signature: : Comma L R ≌ (Comma R.op L.op)ᵒᵖ where
-  body: opFunctor L R
-  inverse := (unopFunctor R L).leftOp
-  unitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  counitIso := NatIso.ofComponents (fun X => Iso.refl _)
-
-中文:
-定义 opEquiv
-  签名: : 交换a L R ≌ (交换a R.op L.op)ᵒᵖ where
-  定义体: opFunctor L R
-  inverse := (unopFunctor R L).leftOp
-  unitIso := NatIso.ofComponents (fun X => Iso.refl _)
-  counitIso := NatIso.ofComponents (fun X => Iso.refl _)
-
-Depends on / 依赖: opFunctor
+--- 原说明 ---
+The canonical equivalence between `Comma L R` and `(Comma R.op L.op)ᵒᵖ`.
 -/
 def opEquiv : Comma L R ≌ (Comma R.op L.op)ᵒᵖ where
   functor := opFunctor L R
@@ -1548,3 +1299,4 @@ end Opposite
 end Comma
 
 end CategoryTheory
+

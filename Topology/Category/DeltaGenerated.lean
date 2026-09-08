@@ -33,117 +33,94 @@ universe u
 
 open CategoryTheory
 
-/--
-Definition of `DeltaGenerated` / `DeltaGenerated` 的定义
+/-- The category of delta-generated topological spaces. -/
+/-
+**DeltaGenerated** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：DeltaGenerated
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation DeltaGenerated
-  body: GeneratedByTopCat.{u} (fun n => Fin n -> Real)
-
-中文:
-缩写 DeltaGenerated
-  定义体: GeneratedByTopCat.{u} (fun n => Fin n -> Real)
-
-Depends on / 依赖: GeneratedByTopCat
+--- 原说明 ---
+The category of delta-generated topological spaces.
 -/
-abbrev DeltaGenerated := GeneratedByTopCat.{u} (fun n => Fin n -> Real)
+abbrev DeltaGenerated := GeneratedByTopCat.{u} (fun n ↦ Fin n → ℝ)
 
-/--
-Definition of `TopCat.toDeltaGenerated` / `TopCat.toDeltaGenerated` 的定义
+/-- The faithful (but not full) functor taking each topological space to its delta-generated
+  coreflection. -/
+/-
+**TopCat.toDeltaGenerated** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：TopCat.toDeltaGenerated : TopCat.{u} ⥤ DeltaGenerated.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TopCat.toDeltaGenerated
-  signature: : TopCat.{u} ⥤ DeltaGenerated.{u}
-  body: TopCat.toGeneratedByTopCat
-
-中文:
-缩写 顶元素范畴.toDeltaGenerated
-  签名: : 顶元素范畴.{u} ⥤ DeltaGenerated.{u}
-  定义体: TopCat.toGeneratedByTopCat
-
-Depends on / 依赖: TopCat, TopCat.toGeneratedByTopCat, toGeneratedByTopCat
+--- 原说明 ---
+The faithful (but not full) functor taking each topological space to its delta-g
+enerated
+  coreflection.
 -/
 abbrev TopCat.toDeltaGenerated : TopCat.{u} ⥤ DeltaGenerated.{u} :=
   TopCat.toGeneratedByTopCat
 
 namespace DeltaGenerated
 
-/--
-Definition of `of` / `of` 的定义
+/-- Constructor for objects of the category `DeltaGenerated` -/
+/-
+**DeltaGenerated.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `DeltaGenerated`。
+形式化陈述：of (X : Type u) [TopologicalSpace X] [DeltaGeneratedSpace X] : DeltaGenera
+ted.{u}
+参数：X : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type u) [TopologicalSpace X] [DeltaGeneratedSpace X]
-  body: GeneratedByTopCat.of X
-
-中文:
-缩写 of
-  签名: (X : 类型u) [拓扑空间 X] [DeltaGeneratedSpace X]
-  定义体: GeneratedByTopCat.of X
-
-Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.of
+--- 原说明 ---
+Constructor for objects of the category `DeltaGenerated`
 -/
 abbrev of (X : Type u) [TopologicalSpace X] [DeltaGeneratedSpace X] : DeltaGenerated.{u} :=
   GeneratedByTopCat.of X
 
-/--
-Definition of `deltaGeneratedToTop` / `deltaGeneratedToTop` 的定义
+/-- The forgetful functor `DeltaGenerated ⥤ TopCat` -/
+/-
+**DeltaGenerated.deltaGeneratedToTop** 是 Mathlib 中的一个缩写定义，位于命名空间 `DeltaGenerated
+`。
+形式化陈述：deltaGeneratedToTop : DeltaGenerated.{u} ⥤ TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation deltaGeneratedToTop
-  signature: : DeltaGenerated.{u} ⥤ TopCat.{u}
-  body: GeneratedByTopCat.toTopCat
-
-中文:
-缩写 deltaGeneratedToTop
-  签名: : DeltaGenerated.{u} ⥤ 顶元素范畴.{u}
-  定义体: GeneratedByTopCat.toTopCat
-
-Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.toTopCat, toTopCat
+--- 原说明 ---
+The forgetful functor `DeltaGenerated ⥤ TopCat`
 -/
 abbrev deltaGeneratedToTop : DeltaGenerated.{u} ⥤ TopCat.{u} :=
   GeneratedByTopCat.toTopCat
 
-/--
-Definition of `fullyFaithfulDeltaGeneratedToTop` / `fullyFaithfulDeltaGeneratedToTop` 的定义
+/-- `deltaGeneratedToTop` is fully faithful. -/
+/-
+**DeltaGenerated.fullyFaithfulDeltaGeneratedToTop** 是 Mathlib 中的一个缩写定义，位于命名空间 `D
+eltaGenerated`。
+形式化陈述：fullyFaithfulDeltaGeneratedToTop : deltaGeneratedToTop.{u}.FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fullyFaithfulDeltaGeneratedToTop
-  signature: : deltaGeneratedToTop.{u}.FullyFaithful
-  body: GeneratedByTopCat.fullyFaithfulToTopCat _
-
-@[deprecated (since := "2026-04-23")] alias topToDeltaGenerated := TopCat.toDeltaGenerated
-
-中文:
-缩写 fullyFaithfulDeltaGeneratedToTop
-  签名: : deltaGeneratedToTop.{u}.满忠实
-  定义体: GeneratedByTopCat.fullyFaithfulToTopCat _
-
-@[deprecated (since := "2026-04-23")] alias topToDeltaGenerated := TopCat.toDeltaGenerated
-
-Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.fullyFaithfulToTopCat, fullyFaithfulToTopCat
+--- 原说明 ---
+`deltaGeneratedToTop` is fully faithful.
 -/
 abbrev fullyFaithfulDeltaGeneratedToTop : deltaGeneratedToTop.{u}.FullyFaithful :=
   GeneratedByTopCat.fullyFaithfulToTopCat _
 
 @[deprecated (since := "2026-04-23")] alias topToDeltaGenerated := TopCat.toDeltaGenerated
 
-/--
-Definition of `coreflectorAdjunction` / `coreflectorAdjunction` 的定义
+/-- The adjunction between the forgetful functor `DeltaGenerated ⥤ TopCat` and its coreflector. -/
+/-
+**DeltaGenerated.coreflectorAdjunction** 是 Mathlib 中的一个缩写定义，位于命名空间 `DeltaGenerat
+ed`。
+形式化陈述：coreflectorAdjunction : deltaGeneratedToTop ⊣ TopCat.toDeltaGenerated
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coreflectorAdjunction
-  signature: : deltaGeneratedToTop ⊣ TopCat.toDeltaGenerated
-  body: GeneratedByTopCat.adj
-
-中文:
-缩写 coreflectorAdjunction
-  签名: : deltaGeneratedToTop ⊣ 顶元素范畴.toDeltaGenerated
-  定义体: GeneratedByTopCat.adj
-
-Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.adj
+--- 原说明 ---
+The adjunction between the forgetful functor `DeltaGenerated ⥤ TopCat` and its c
+oreflector.
 -/
 abbrev coreflectorAdjunction : deltaGeneratedToTop ⊣ TopCat.toDeltaGenerated :=
   GeneratedByTopCat.adj
 
 end DeltaGenerated
+

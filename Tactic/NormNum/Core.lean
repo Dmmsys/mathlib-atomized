@@ -9,7 +9,7 @@ public meta import Mathlib.Lean.Expr.Rat
 public import Mathlib.Tactic.Hint
 public import Mathlib.Tactic.NormNum.Result
 public meta import Mathlib.Util.Qq
-public import Lean.Elab.Tactic.Try -- shake: keep (`register_try?_tactic` command dependency)
+public import Lean.Elab.Tactic.Try  -- shake: keep (`register_try?_tactic` command dependency)
 
 /-!
 ## `norm_num` core functionality
@@ -49,27 +49,17 @@ namespace Meta.NormNum
 initialize registerTraceClass `Tactic.norm_num
 
 /--
-Definition of `NormNumExt` / `NormNumExt` 的定义
+An extension for `norm_num`.
+-/
+/-
+**Mathlib.Meta.NormNum.NormNumExt** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.NormNu
+m`。
+形式化陈述：NormNumExt where /-- The extension should be run in the `pre` phase when u
+sed as simp plugin. -/ pre
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NormNumExt
-  parameters: where
-  axioms and operations (4):
-    - pre : = true
-    - post : = true
-    - eval({u : Level} {α : Q(Type u)} (e : Q($α))) : MetaM (Result e)
-    - name : Name  [default: by exact decl_name%]
-
-中文:
-结构 NormNumExt
-  参数: where
-  公理与运算 (4 个):
-    - pre : = true
-    - post : = true
-    - eval({u : Level} {α : Q(类型u)} (e : Q($α))) : MetaM (Result e)
-    - name : Name  [默认: by exact decl_name%]
-
-Depends on / 依赖: induced
+--- 原说明 ---
+An extension for `norm_num`.
 -/
 structure NormNumExt where
   /-- The extension should be run in the `pre` phase when used as simp plugin. -/
@@ -83,58 +73,45 @@ structure NormNumExt where
 
 variable {u : Level}
 
-/--
-Definition of `mkNormNumExt` / `mkNormNumExt` 的定义
+/-- Read a `norm_num` extension from a declaration of the right type. -/
+/-
+**Mathlib.Meta.NormNum.mkNormNumExt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Norm
+Num`。
+形式化陈述：mkNormNumExt (n : Name) : ImportM NormNumExt
+参数：n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNormNumExt
-  signature: (n : Name)
-  body: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck NormNumExt opts ``NormNumExt n
-
-中文:
-定义 mkNormNumExt
-  签名: (n : Name)
-  定义体: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck NormNumExt opts ``NormNumExt n
+--- 原说明 ---
+Read a `norm_num` extension from a declaration of the right type.
 -/
 def mkNormNumExt (n : Name) : ImportM NormNumExt := do
   let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck NormNumExt opts ``NormNumExt n
+  IO.ofExcept <| unsafe env.evalConstCheck NormNumExt opts ``NormNumExt n
 
-/--
-Definition of `Entry` / `Entry` 的定义
+/-- Each `norm_num` extension is labelled with a collection of patterns
+which determine the expressions to which it should be applied. -/
+/-
+**Mathlib.Meta.NormNum.Entry** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Meta.NormNum`。
+形式化陈述：Entry
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Entry
-  body: Array (Array DiscrTree.Key) × Name
-
-中文:
-缩写 Entry
-  定义体: Array (Array DiscrTree.Key) × Name
-
-Depends on / 依赖: DiscrTree, DiscrTree.Key, TopologicalSpace, WeaklyLocallyCompactSpace
+--- 原说明 ---
+Each `norm_num` extension is labelled with a collection of patterns
+which determine the expressions to which it should be applied.
 -/
 abbrev Entry := Array (Array DiscrTree.Key) × Name
 
-/--
-Definition of `NormNums` / `NormNums` 的定义
+/-- The state of the `norm_num` extension environment -/
+/-
+**Mathlib.Meta.NormNum.NormNums** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.NormNum`
+。
+形式化陈述：NormNums where /-- The tree of `norm_num` extensions. -/ tree : DiscrTree 
+NormNumExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NormNums
-  parameters: where
-  axioms and operations (2):
-    - tree : DiscrTree NormNumExt  [default: {}]
-    - erased : PHashSet Name  [default: {}]
-
-中文:
-结构 NormNums
-  参数: where
-  公理与运算 (2 个):
-    - tree : DiscrTree NormNumExt  [默认: {}]
-    - erased : PHashSet Name  [默认: {}]
+--- 原说明 ---
+The state of the `norm_num` extension environment
 -/
 structure NormNums where
   /-- The tree of `norm_num` extensions. -/
@@ -146,72 +123,32 @@ structure NormNums where
 /-- Environment extensions for `norm_num` declarations -/
 initialize normNumExt : ScopedEnvExtension Entry (Entry × NormNumExt) NormNums ←
   -- we only need this to deduplicate entries in the DiscrTree
-  have : BEq NormNumExt := ⟨fun _ _ => false⟩
+  have : BEq NormNumExt := ⟨fun _ _ ↦ false⟩
   /- Insert `v : NormNumExt` into the tree `dt` on all key sequences given in `kss`. -/
-  let insert kss v dt := kss.foldl (fun dt ks => dt.insertKeyValue ks v) dt
+  let insert kss v dt := kss.foldl (fun dt ks ↦ dt.insertKeyValue ks v) dt
   registerScopedEnvExtension {
     mkInitial := pure {}
-    ofOLeanEntry := fun _ e@(_, n) => return (e, ← mkNormNumExt n)
+    ofOLeanEntry := fun _ e@(_, n) ↦ return (e, ← mkNormNumExt n)
     toOLeanEntry := (·.1)
-    addEntry := fun { tree, erased } ((kss, n), ext) =>
+    addEntry := fun { tree, erased } ((kss, n), ext) ↦
       { tree := insert kss ext tree, erased := erased.erase n }
   }
 
-/--
-Definition of `derive` / `derive` 的定义
+/-- Run each registered `norm_num` extension on an expression, returning a `NormNum.Result`. -/
+/-
+**Mathlib.Meta.NormNum.derive** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum`。
+形式化陈述：derive {α : Q(Type u)} (e : Q($α)) (post
+参数：Type u；e : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derive
-  signature: {α : Q(Type u)} (e : Q($α)) (post := false)
-  body: do
-  if e.isRawNatLit then
-    let lit : Q(Nat) := e
-    return .isNat (q(Nat.instAddMonoidWithOne) : Q(AddMonoidWithOne Nat))
-      lit (q(IsNat.raw_refl $lit) : Expr)
-  profileitM Exception "norm_num" (← getOptions) do
-    let s ← saveState
-    let normNums := normNumExt.getState (← getEnv)
-    let arr ← normNums.tree.getMatch e
-    for ext in arr do
-      if (bif post then ext.post else ext.pre) && ! normNums.erased.contains ext.name then
-        try
-let new ← withReducibleAndInstances ext.eval e
-          trace[Tactic.norm_num] "{ext.name}:\n{e} ==> {new}"
-          return new
-        catch err =>
-          trace[Tactic.norm_num] "{ext.name} failed {e}: {err.toMessageData}"
-          s.restore
-    throwError "{e}: no norm_nums apply"
-
-中文:
-定义 derive
-  签名: {α : Q(类型u)} (e : Q($α)) (post := false)
-  定义体: do
-  if e.isRawNatLit then
-    let lit : Q(Nat) := e
-    return .isNat (q(Nat.instAddMonoidWithOne) : Q(AddMonoidWithOne Nat))
-      lit (q(IsNat.raw_refl $lit) : Expr)
-  profileitM Exception "norm_num" (← getOptions) do
-    let s ← saveState
-    let normNums := normNumExt.getState (← getEnv)
-    let arr ← normNums.tree.getMatch e
-    for ext in arr do
-      if (bif post then ext.post else ext.pre) && ! normNums.erased.contains ext.name then
-        try
-let new ← withReducibleAndInstances ext.eval e
-          trace[Tactic.norm_num] "{ext.name}:\n{e} ==> {new}"
-          return new
-        catch err =>
-          trace[Tactic.norm_num] "{ext.name} failed {e}: {err.toMessageData}"
-          s.restore
-    throwError "{e}: no norm_nums apply"
-
-Depends on / 依赖: Result
+--- 原说明 ---
+Run each registered `norm_num` extension on an expression, returning a `NormNum.
+Result`.
 -/
 def derive {α : Q(Type u)} (e : Q($α)) (post := false) : MetaM (Result e) := do
   if e.isRawNatLit then
-    let lit : Q(Nat) := e
-    return .isNat (q(Nat.instAddMonoidWithOne) : Q(AddMonoidWithOne Nat))
+    let lit : Q(ℕ) := e
+    return .isNat (q(Nat.instAddMonoidWithOne) : Q(AddMonoidWithOne ℕ))
       lit (q(IsNat.raw_refl $lit) : Expr)
   profileitM Exception "norm_num" (← getOptions) do
     let s ← saveState
@@ -220,7 +157,7 @@ def derive {α : Q(Type u)} (e : Q($α)) (post := false) : MetaM (Result e) := d
     for ext in arr do
       if (bif post then ext.post else ext.pre) && ! normNums.erased.contains ext.name then
         try
-let new ← withReducibleAndInstances ext.eval e
+          let new ← withReducibleAndInstances <| ext.eval e
           trace[Tactic.norm_num] "{ext.name}:\n{e} ==> {new}"
           return new
         catch err =>
@@ -228,198 +165,160 @@ let new ← withReducibleAndInstances ext.eval e
           s.restore
     throwError "{e}: no norm_nums apply"
 
-/--
-Definition of `deriveNat` / `deriveNat` 的定义
+/-- Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a typed expression `lit : ℕ`, and a proof of `isNat e lit`. -/
+/-
+**Mathlib.Meta.NormNum.deriveNat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum
+`。
+形式化陈述：deriveNat {α : Q(Type u)} (e : Q($α)) (_inst : Q(AddMonoidWithOne $α)
+参数：Type u；e : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveNat
-  signature: {α : Q(Type u)} (e : Q($α))
-  body: do
-  let .isNat _ lit proof ← derive e | failure
-  pure ⟨lit, proof⟩
-
-中文:
-定义 derive自然数
-  签名: {α : Q(类型u)} (e : Q($α))
-  定义体: do
-  let .isNat _ lit proof ← derive e | failure
-  pure ⟨lit, proof⟩
-
-Depends on / 依赖: derive, failure, with_reducible
+--- 原说明 ---
+Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a typed expression `lit : ℕ`, and a proof of `isNat e lit`.
 -/
 def deriveNat {α : Q(Type u)} (e : Q($α))
     (_inst : Q(AddMonoidWithOne $α) := by with_reducible assumption) :
-    MetaM ((lit : Q(Nat)) × Q(IsNat $e $lit)) := do
+    MetaM ((lit : Q(ℕ)) × Q(IsNat $e $lit)) := do
   let .isNat _ lit proof ← derive e | failure
   pure ⟨lit, proof⟩
 
-/--
-Definition of `deriveInt` / `deriveInt` 的定义
+/-- Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a typed expression `lit : ℤ`, and a proof of `IsInt e lit` in expression form. -/
+/-
+**Mathlib.Meta.NormNum.deriveInt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum
+`。
+形式化陈述：deriveInt {α : Q(Type u)} (e : Q($α)) (_inst : Q(Ring $α)
+参数：Type u；e : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveInt
-  signature: {α : Q(Type u)} (e : Q($α))
-  body: do
-  let some ⟨_, lit, proof⟩ := (← derive e).toInt | failure
-  pure ⟨lit, proof⟩
-
-中文:
-定义 derive整数
-  签名: {α : Q(类型u)} (e : Q($α))
-  定义体: do
-  let some ⟨_, lit, proof⟩ := (← derive e).toInt | failure
-  pure ⟨lit, proof⟩
-
-Depends on / 依赖: derive, failure, with_reducible
+--- 原说明 ---
+Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a typed expression `lit : ℤ`, and a proof of `IsInt e lit` in expressi
+on form.
 -/
 def deriveInt {α : Q(Type u)} (e : Q($α))
     (_inst : Q(Ring $α) := by with_reducible assumption) :
-    MetaM ((lit : Q(Int)) × Q(IsInt $e $lit)) := do
+    MetaM ((lit : Q(ℤ)) × Q(IsInt $e $lit)) := do
   let some ⟨_, lit, proof⟩ := (← derive e).toInt | failure
   pure ⟨lit, proof⟩
 
-/--
-Definition of `deriveRat` / `deriveRat` 的定义
+/-- Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a rational number, typed expressions `n : ℤ` and `d : ℕ` for the numerator and
+denominator, and a proof of `IsRat e n d` in expression form. -/
+/-
+**Mathlib.Meta.NormNum.deriveRat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum
+`。
+形式化陈述：deriveRat {α : Q(Type u)} (e : Q($α)) (_inst : Q(DivisionRing $α)
+参数：Type u；e : Q($α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveRat
-  signature: {α : Q(Type u)} (e : Q($α))
-  body: do
-  let some res := (← derive e).toRat' | failure
-  pure res
-
-中文:
-定义 deriveRat
-  签名: {α : Q(类型u)} (e : Q($α))
-  定义体: do
-  let some res := (← derive e).toRat' | failure
-  pure res
-
-Depends on / 依赖: derive, failure, with_reducible
+--- 原说明 ---
+Run each registered `norm_num` extension on a typed expression `e : α`,
+returning a rational number, typed expressions `n : ℤ` and `d : ℕ` for the numer
+ator and
+denominator, and a proof of `IsRat e n d` in expression form.
 -/
 def deriveRat {α : Q(Type u)} (e : Q($α))
     (_inst : Q(DivisionRing $α) := by with_reducible assumption) :
-    MetaM (Rat × (n : Q(Int)) × (d : Q(Nat)) × Q(IsRat $e $n $d)) := do
+    MetaM (ℚ × (n : Q(ℤ)) × (d : Q(ℕ)) × Q(IsRat $e $n $d)) := do
   let some res := (← derive e).toRat' | failure
   pure res
 
-/--
-Definition of `deriveBool` / `deriveBool` 的定义
+/-- Run each registered `norm_num` extension on a typed expression `p : Prop`,
+and returning the truth or falsity of `p' : Prop` from an equivalence `p ↔ p'`. -/
+/-
+**Mathlib.Meta.NormNum.deriveBool** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNu
+m`。
+形式化陈述：deriveBool (p : Q(Prop)) : MetaM ((b : Bool) × BoolResult p b)
+参数：p : Q(Prop)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveBool
-  signature: (p : Q(Prop))
-  body: do
-  let .isBool b prf ← derive q($p) | failure
-  pure ⟨b, prf⟩
-
-中文:
-定义 derive布尔
-  签名: (p : Q(命题))
-  定义体: do
-  let .isBool b prf ← derive q($p) | failure
-  pure ⟨b, prf⟩
-
-Depends on / 依赖: LocallyCompactSpace, WeaklyLocallyCompactSpace, WeaklyLocallyCompactSpace.locallyCompactSpace, locallyCompactSpace
+--- 原说明 ---
+Run each registered `norm_num` extension on a typed expression `p : Prop`,
+and returning the truth or falsity of `p' : Prop` from an equivalence `p ↔ p'`.
 -/
 def deriveBool (p : Q(Prop)) : MetaM ((b : Bool) × BoolResult p b) := do
   let .isBool b prf ← derive q($p) | failure
   pure ⟨b, prf⟩
 
-/--
-Definition of `deriveBoolOfIff` / `deriveBoolOfIff` 的定义
+/-- Run each registered `norm_num` extension on a typed expression `p : Prop`,
+and returning the truth or falsity of `p' : Prop` from an equivalence `p ↔ p'`. -/
+/-
+**Mathlib.Meta.NormNum.deriveBoolOfIff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+形式化陈述：deriveBoolOfIff (p p' : Q(Prop)) (hp : Q($p ↔ $p')) : MetaM ((b : Bool) × 
+BoolResult p' b)
+参数：p p' : Q(Prop)；hp : Q($p ↔ $p')。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveBoolOfIff
-  signature: (p p' : Q(Prop)) (hp : Q($p ↔ $p'))
-  body: do
-  let ⟨b, pb⟩ ← deriveBool p
-  match (dependent := true) b with
-  | true => return ⟨true, q(Iff.mp $hp $pb)⟩
-  | false => return ⟨false, q((Iff.not $hp).mp $pb)⟩
-
-中文:
-定义 derive布尔OfIff
-  签名: (p p' : Q(命题)) (hp : Q($p ↔ $p'))
-  定义体: do
-  let ⟨b, pb⟩ ← deriveBool p
-  match (dependent := true) b with
-  | true => return ⟨true, q(Iff.mp $hp $pb)⟩
-  | false => return ⟨false, q((Iff.not $hp).mp $pb)⟩
+--- 原说明 ---
+Run each registered `norm_num` extension on a typed expression `p : Prop`,
+and returning the truth or falsity of `p' : Prop` from an equivalence `p ↔ p'`.
 -/
 def deriveBoolOfIff (p p' : Q(Prop)) (hp : Q($p ↔ $p')) :
     MetaM ((b : Bool) × BoolResult p' b) := do
   let ⟨b, pb⟩ ← deriveBool p
   match (dependent := true) b with
-  | true => return ⟨true, q(Iff.mp $hp $pb)⟩
+  | true  => return ⟨true, q(Iff.mp $hp $pb)⟩
   | false => return ⟨false, q((Iff.not $hp).mp $pb)⟩
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Run each registered `norm_num` extension on an expression,
+returning a `Simp.Result`. -/
+/-
+**Mathlib.Meta.NormNum.eval** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum`。
+形式化陈述：eval (e : Expr) (post
+参数：e : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (e : Expr) (post := false)
-  body: do
-  if e.isExplicitNumber then return { expr := e }
-  let ⟨_, _, e⟩ ← inferTypeQ' e
-  (← derive e post).toSimpResult
-
-中文:
-定义 eval
-  签名: (e : Expr) (post := false)
-  定义体: do
-  if e.isExplicitNumber then return { expr := e }
-  let ⟨_, _, e⟩ ← inferTypeQ' e
-  (← derive e post).toSimpResult
-
-Depends on / 依赖: Result, Simp.Result
+--- 原说明 ---
+Run each registered `norm_num` extension on an expression,
+returning a `Simp.Result`.
 -/
 def eval (e : Expr) (post := false) : MetaM Simp.Result := do
   if e.isExplicitNumber then return { expr := e }
   let ⟨_, _, e⟩ ← inferTypeQ' e
   (← derive e post).toSimpResult
 
-/--
-Definition of `NormNums.eraseCore` / `NormNums.eraseCore` 的定义
+/-- Erases a name marked `norm_num` by adding it to the state's `erased` field and
+  removing it from the state's list of `Entry`s. -/
+/-
+**Mathlib.Meta.NormNum.NormNums.eraseCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.NormNum.NormNums`。
+形式化陈述：Mathlib.Meta.NormNum.NormNums → Name → Mathlib.Meta.NormNum.NormNums
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormNums.eraseCore
-  signature: (d : NormNums) (declName : Name)
-  body: { d with erased := d.erased.insert declName }
-
-中文:
-定义 NormNums.eraseCore
-  签名: (d : NormNums) (declName : Name)
-  定义体: { d with erased := d.erased.insert declName }
-
-Depends on / 依赖: d.erased.insert, declName, erased, insert
+--- 原说明 ---
+Erases a name marked `norm_num` by adding it to the state's `erased` field and
+  removing it from the state's list of `Entry`s.
 -/
 def NormNums.eraseCore (d : NormNums) (declName : Name) : NormNums :=
   { d with erased := d.erased.insert declName }
 
 /--
-Definition of `NormNums.erase` / `NormNums.erase` 的定义
+Erase a name marked as a `norm_num` attribute.
 
-English:
-definition NormNums.erase
-  signature: {m : Type -> Type} [Monad m] [MonadError m] (d : NormNums) (declName : Name)
-  body: do
-  unless d.tree.values.any (·.name == declName) && ! d.erased.contains declName
-  do
-    throwError "'{declName}' does not have [norm_num] attribute"
-  return d.eraseCore declName
-
-中文:
-定义 NormNums.erase
-  签名: {m : 类型 -> 类型} [单子 m] [MonadError m] (d : NormNums) (declName : Name)
-  定义体: do
-  unless d.tree.values.any (·.name == declName) && ! d.erased.contains declName
-  do
-    throwError "'{declName}' does not have [norm_num] attribute"
-  return d.eraseCore declName
+Check that it does in fact have the `norm_num` attribute by making sure it names a `NormNumExt`
+found somewhere in the state's tree, and is not erased.
 -/
-def NormNums.erase {m : Type -> Type} [Monad m] [MonadError m] (d : NormNums) (declName : Name) :
+/-
+**Mathlib.Meta.NormNum.NormNums.erase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum.NormNums`。
+形式化陈述：{m : Type → Type} → [Monad m] → [MonadError m] → Mathlib.Meta.NormNum.Norm
+Nums → Name → m Mathlib.Meta.NormNum.NormNums
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Erase a name marked as a `norm_num` attribute.
+
+Check that it does in fact have the `norm_num` attribute by making sure it names
+ a `NormNumExt`
+found somewhere in the state's tree, and is not erased.
+-/
+def NormNums.erase {m : Type → Type} [Monad m] [MonadError m] (d : NormNums) (declName : Name) :
     m NormNums := do
   unless d.tree.values.any (·.name == declName) && ! d.erased.contains declName
   do
@@ -430,7 +329,7 @@ initialize registerBuiltinAttribute {
   name := `norm_num
   descr := "adds a norm_num extension"
   applicationTime := .afterCompilation
-  add := fun declName stx kind => match stx with
+  add := fun declName stx kind ↦ match stx with
     | `(attr| norm_num $es,*) => do
       let env ← getEnv
       ensureAttrDeclIsMeta `norm_num declName kind
@@ -438,8 +337,8 @@ initialize registerBuiltinAttribute {
         throwError "invalid attribute 'norm_num', declaration is in an imported module"
       if (IR.getSorryDep env declName).isSome then return -- ignore in progress definitions
       let ext ← mkNormNumExt declName
-let keys ← MetaM.run' es.getElems.mapM fun stx => do
-let e ← TermElabM.run' withSaveInfoContext withAutoBoundImplicit
+      let keys ← MetaM.run' <| es.getElems.mapM fun stx ↦ do
+        let e ← TermElabM.run' <| withSaveInfoContext <| withAutoBoundImplicit <|
           withReader ({ · with ignoreTCFailures := true }) do
             let e ← elabTerm stx none
             let (_, _, e) ← lambdaMetaTelescope (← mkLambdaFVars (← getLCtx).getFVars e)
@@ -455,28 +354,15 @@ let e ← TermElabM.run' withSaveInfoContext withAutoBoundImplicit
     modifyEnv fun env => normNumExt.modifyState env fun _ => s
 }
 
-/--
-Definition of `tryNormNum` / `tryNormNum` 的定义
+/-- A simp plugin which calls `NormNum.eval`. -/
+/-
+**Mathlib.Meta.NormNum.tryNormNum** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNu
+m`。
+形式化陈述：tryNormNum (post
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryNormNum
-  signature: (post := false) (e : Expr)
-  body: do
-  try
-    return .done (← eval e post)
-  catch _ =>
-    return .continue
-
-中文:
-定义 tryNormNum
-  签名: (post := false) (e : Expr)
-  定义体: do
-  try
-    return .done (← eval e post)
-  catch _ =>
-    return .continue
-
-Depends on / 依赖: Simp.Step
+--- 原说明 ---
+A simp plugin which calls `NormNum.eval`.
 -/
 def tryNormNum (post := false) (e : Expr) : SimpM Simp.Step := do
   try
@@ -484,36 +370,14 @@ def tryNormNum (post := false) (e : Expr) : SimpM Simp.Step := do
   catch _ =>
     return .continue
 
-/--
-Definition of `methods` / `methods` 的定义
+/-- A `Methods` implementation which calls `norm_num`. -/
+/-
+**Mathlib.Meta.NormNum.methods** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum`。
+形式化陈述：methods (useSimp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition methods
-  signature: (useSimp := true)
-  body: if useSimp then {
-    pre := Simp.preDefault #[] >> tryNormNum
-    post := Simp.postDefault #[] >> tryNormNum (post := true)
-    discharge? := Simp.dischargeGround
-  } else {
-    pre := tryNormNum
-    post := tryNormNum (post := true)
-    discharge? := Simp.dischargeGround
-  }
-
-中文:
-定义 methods
-  签名: (useSimp := true)
-  定义体: if useSimp then {
-    pre := Simp.preDefault #[] >> tryNormNum
-    post := Simp.postDefault #[] >> tryNormNum (post := true)
-    discharge? := Simp.dischargeGround
-  } else {
-    pre := tryNormNum
-    post := tryNormNum (post := true)
-    discharge? := Simp.dischargeGround
-  }
-
-Depends on / 依赖: Methods, Simp.Methods
+--- 原说明 ---
+A `Methods` implementation which calls `norm_num`.
 -/
 def methods (useSimp := true) : Simp.Methods :=
   if useSimp then {
@@ -526,75 +390,45 @@ def methods (useSimp := true) : Simp.Methods :=
     discharge? := Simp.dischargeGround
   }
 
-/--
-Definition of `deriveSimp` / `deriveSimp` 的定义
+/-- Traverses the given expression using simp and normalises any numbers it finds. -/
+/-
+**Mathlib.Meta.NormNum.deriveSimp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNu
+m`。
+形式化陈述：deriveSimp (ctx : Simp.Context) (useSimp
+参数：ctx : Simp.Context。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deriveSimp
-  signature: (ctx : Simp.Context) (useSimp := true) (e : Expr)
-  body: (·.1) < > Simp.main e ctx (methods := methods useSimp)
-
-中文:
-定义 deriveSimp
-  签名: (ctx : Simp.余ntext) (useSimp := true) (e : Expr)
-  定义体: (·.1) < > Simp.main e ctx (methods := methods useSimp)
-
-Depends on / 依赖: Result, Simp.Result
+--- 原说明 ---
+Traverses the given expression using simp and normalises any numbers it finds.
 -/
 def deriveSimp (ctx : Simp.Context) (useSimp := true) (e : Expr) : MetaM Simp.Result :=
-(·.1) < > Simp.main e ctx (methods := methods useSimp)
+  (·.1) <$> Simp.main e ctx (methods := methods useSimp)
 
-/--
-Definition of `discharge` / `discharge` 的定义
+/-- A discharger which calls `norm_num`, for use in downstream tactics populating `Simp.Methods`. -/
+/-
+**Mathlib.Meta.NormNum.discharge** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormNum
+`。
+形式化陈述：discharge (useSimp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discharge
-  signature: (useSimp := true) (e : Expr)
-  body: do
-  (← deriveSimp (← readThe Simp.Context) useSimp e).ofTrue
-
-中文:
-定义 discharge
-  签名: (useSimp := true) (e : Expr)
-  定义体: do
-  (← deriveSimp (← readThe Simp.Context) useSimp e).ofTrue
-
-Depends on / 依赖: IsInducing, Topology, Topology.IsInducing.subtypeVal.completelyRegularSpace, completelyRegularSpace, subtypeVal
+--- 原说明 ---
+A discharger which calls `norm_num`, for use in downstream tactics populating `S
+imp.Methods`.
 -/
 def discharge (useSimp := true) (e : Expr) : SimpM (Option Expr) := do
   (← deriveSimp (← readThe Simp.Context) useSimp e).ofTrue
 
 open Tactic in
-/--
-Definition of `getSimpContext` / `getSimpContext` 的定义
+/-- Constructs a simp context from the simp argument syntax. -/
+/-
+**Mathlib.Meta.NormNum.getSimpContext** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：getSimpContext (cfg args : Syntax) (simpOnly
+参数：cfg args : Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getSimpContext
-  signature: (cfg args : Syntax) (simpOnly := false)
-  body: do
-  let { config, userConfig } ← elabSimpConfigCore cfg
-  let simpTheorems ←
-    if simpOnly then simpOnlyBuiltins.foldlM (·.addConst ·) {} else getSimpTheorems
-  let { ctx, .. } ←
-    elabSimpArgs args[0] (eraseLocal := false) (kind := .simp) (simprocs := {})
-      (← Simp.mkContext config (simpTheorems := #[simpTheorems])
-        (congrTheorems := ← getSimpCongrTheorems) (userConfig := userConfig))
-  return ctx
-
-中文:
-定义 getSimpContext
-  签名: (cfg args : Syntax) (simpOnly := false)
-  定义体: do
-  let { config, userConfig } ← elabSimpConfigCore cfg
-  let simpTheorems ←
-    if simpOnly then simpOnlyBuiltins.foldlM (·.addConst ·) {} else getSimpTheorems
-  let { ctx, .. } ←
-    elabSimpArgs args[0] (eraseLocal := false) (kind := .simp) (simprocs := {})
-      (← Simp.mkContext config (simpTheorems := #[simpTheorems])
-        (congrTheorems := ← getSimpCongrTheorems) (userConfig := userConfig))
-  return ctx
-
-Depends on / 依赖: Context, Simp.Context, TacticM
+--- 原说明 ---
+Constructs a simp context from the simp argument syntax.
 -/
 def getSimpContext (cfg args : Syntax) (simpOnly := false) : TacticM Simp.Context := do
   let { config, userConfig } ← elabSimpConfigCore cfg
@@ -608,33 +442,35 @@ def getSimpContext (cfg args : Syntax) (simpOnly := false) : TacticM Simp.Contex
 
 open Elab Tactic in
 /--
-Definition of `elabNormNum` / `elabNormNum` 的定义
+Elaborates a call to `norm_num only? [args]` or `norm_num1`.
+* `args`: the `(simpArgs)?` syntax for simp arguments
+* `loc`: the `(location)?` syntax for the optional location argument
+* `simpOnly`: true if `only` was used in `norm_num`
+* `useSimp`: false if `norm_num1` was used, in which case only the structural parts
+  of `simp` will be used, not any of the post-processing that `simp only` does without lemmas
+-/
+/-
+**Mathlib.Meta.NormNum.elabNormNum** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.NormN
+um`。
+形式化陈述：elabNormNum (cfg args loc : Syntax) (simpOnly
+参数：cfg args loc : Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabNormNum
-  signature: (cfg args loc : Syntax) (simpOnly := false) (useSimp := true)
-  body: withMainContext do
-  let ctx ← getSimpContext cfg args (!useSimp || simpOnly)
-  let loc := expandOptLocation loc
-  transformAtNondepPropLocation (fun e ctx => deriveSimp ctx useSimp e) "norm_num" loc
-    (ifUnchanged := .silent) (mayCloseGoalFromHyp := true) ctx
-
-中文:
-定义 elabNormNum
-  签名: (cfg args loc : Syntax) (simpOnly := false) (useSimp := true)
-  定义体: withMainContext do
-  let ctx ← getSimpContext cfg args (!useSimp || simpOnly)
-  let loc := expandOptLocation loc
-  transformAtNondepPropLocation (fun e ctx => deriveSimp ctx useSimp e) "norm_num" loc
-    (ifUnchanged := .silent) (mayCloseGoalFromHyp := true) ctx
-
-Depends on / 依赖: useSimp
+--- 原说明 ---
+Elaborates a call to `norm_num only? [args]` or `norm_num1`.
+* `args`: the `(simpArgs)?` syntax for simp arguments
+* `loc`: the `(location)?` syntax for the optional location argument
+* `simpOnly`: true if `only` was used in `norm_num`
+* `useSimp`: false if `norm_num1` was used, in which case only the structural pa
+rts
+  of `simp` will be used, not any of the post-processing that `simp only` does w
+ithout lemmas
 -/
 def elabNormNum (cfg args loc : Syntax) (simpOnly := false) (useSimp := true) :
     TacticM Unit := withMainContext do
   let ctx ← getSimpContext cfg args (!useSimp || simpOnly)
   let loc := expandOptLocation loc
-  transformAtNondepPropLocation (fun e ctx => deriveSimp ctx useSimp e) "norm_num" loc
+  transformAtNondepPropLocation (fun e ctx ↦ deriveSimp ctx useSimp e) "norm_num" loc
     (ifUnchanged := .silent) (mayCloseGoalFromHyp := true) ctx
 
 end Meta.NormNum
@@ -702,56 +538,32 @@ open Lean Elab Tactic
 
 @[inherit_doc normNum1] syntax (name := normNum1Conv) "norm_num1" : conv
 
-/--
-Definition of `elabNormNum1Conv` / `elabNormNum1Conv` 的定义
+/-- Elaborator for `norm_num1` conv tactic. -/
+/-
+**Mathlib.Tactic.elabNormNum1Conv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Elab.Tactic.Tactic
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabNormNum1Conv
-  signature: : Tactic
-  body: fun _ => withMainContext do
-  let ctx ← getSimpContext mkNullNode mkNullNode true
-  Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := false))
-
-@[inherit_doc normNum] syntax (name := normNumConv)
-    "norm_num" optConfig &" only"? (simpArgs)? : conv
-
-中文:
-定义 elabNormNum1Conv
-  签名: : Tactic
-  定义体: fun _ => withMainContext do
-  let ctx ← getSimpContext mkNullNode mkNullNode true
-  Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := false))
-
-@[inherit_doc normNum] syntax (name := normNumConv)
-    "norm_num" optConfig &" only"? (simpArgs)? : conv
+--- 原说明 ---
+Elaborator for `norm_num1` conv tactic.
 -/
-@[tactic normNum1Conv] def elabNormNum1Conv : Tactic := fun _ => withMainContext do
+@[tactic normNum1Conv] def elabNormNum1Conv : Tactic := fun _ ↦ withMainContext do
   let ctx ← getSimpContext mkNullNode mkNullNode true
   Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := false))
 
 @[inherit_doc normNum] syntax (name := normNumConv)
     "norm_num" optConfig &" only"? (simpArgs)? : conv
 
-/--
-Definition of `elabNormNumConv` / `elabNormNumConv` 的定义
+/-- Elaborator for `norm_num` conv tactic. -/
+/-
+**Mathlib.Tactic.elabNormNumConv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Elab.Tactic.Tactic
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabNormNumConv
-  signature: : Tactic
-  body: fun stx => withMainContext do
-  let ctx ← getSimpContext stx[1] stx[3] !stx[2].isNone
-  Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := true))
-
-中文:
-定义 elabNormNumConv
-  签名: : Tactic
-  定义体: fun stx => withMainContext do
-  let ctx ← getSimpContext stx[1] stx[3] !stx[2].isNone
-  Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := true))
-
-Depends on / 依赖: completelyRegularSpace_iInf, completelyRegularSpace_induced
+--- 原说明 ---
+Elaborator for `norm_num` conv tactic.
 -/
-@[tactic normNumConv] def elabNormNumConv : Tactic := fun stx => withMainContext do
+@[tactic normNumConv] def elabNormNumConv : Tactic := fun stx ↦ withMainContext do
   let ctx ← getSimpContext stx[1] stx[3] !stx[2].isNone
   Conv.applySimpResult (← deriveSimp ctx (← instantiateMVars (← Conv.getLhs)) (useSimp := true))
 
@@ -781,3 +593,4 @@ We register `norm_num` with the `hint` tactic.
 
 register_hint 1000 norm_num
 register_try?_tactic (priority := 1000) norm_num
+

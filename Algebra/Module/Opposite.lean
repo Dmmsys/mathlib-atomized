@@ -26,6 +26,13 @@ variable {R M : Type*} [Semiring R] [AddCommMonoid M]
 
 -- see Note [lower instance priority]
 /-- Like `Semiring.toModule`, but multiplies on the right. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Like `Semiring.toModule`, but multiplies on the right.
+-/
 instance (priority := 910) Semiring.toOppositeModule : Module Rᵐᵒᵖ R :=
   { MonoidWithZero.toOppositeMulActionWithZero R with
     smul_add := fun _ _ _ => add_mul _ _ _
@@ -39,25 +46,19 @@ universe u v
 
 variable (R : Type u) {M : Type v} [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Instance `instModule` / 实例 `instModule`
+/-- `MulOpposite.distribMulAction` extends to a `Module` -/
+/-
+**MulOpposite.instModule** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instModule : Module R Mᵐᵒᵖ where add_smul _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instModule
-  signature: : Module R Mᵐᵒᵖ where
-  body: unop_injective add_smul _ _ _
-zero_smul _ := unop_injective zero_smul _ _
-
-中文:
-实例 instModule
-  签名: : 模 R Mᵐᵒᵖ where
-  定义体: unop_injective add_smul _ _ _
-zero_smul _ := unop_injective zero_smul _ _
-
-Depends on / 依赖: add_smul, unop_injective
+--- 原说明 ---
+`MulOpposite.distribMulAction` extends to a `Module`
 -/
 instance instModule : Module R Mᵐᵒᵖ where
-add_smul _ _ _ := unop_injective add_smul _ _ _
-zero_smul _ := unop_injective zero_smul _ _
+  add_smul _ _ _ := unop_injective <| add_smul _ _ _
+  zero_smul _ := unop_injective <| zero_smul _ _
 
 end MulOpposite
+

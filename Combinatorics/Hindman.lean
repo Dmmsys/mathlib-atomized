@@ -51,20 +51,13 @@ open Filter
 /-- Multiplication of ultrafilters given by `∀ᶠ m in U*V, p m ↔ ∀ᶠ m in U, ∀ᶠ m' in V, p (m*m')`. -/
 @[to_additive (attr := instance_reducible)
 /-- Addition of ultrafilters given by `∀ᶠ m in U+V, p m ↔ ∀ᶠ m in U, ∀ᶠ m' in V, p (m+m')`. -/]
-/--
-Definition of `Ultrafilter.mul` / `Ultrafilter.mul` 的定义
-
-English:
-definition Ultrafilter.mul
-  signature: {M} [Mul M]
-  body: (· * ·) < > U <*> V
-
-中文:
-定义 Ultrafilter.mul
-  签名: {M} [乘法 M]
-  定义体: (· * ·) < > U <*> V
+/-
+**Ultrafilter.mul** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ultrafilter.mul {M} [Mul M] : Mul (Ultrafilter M) where mul U V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Ultrafilter.mul {M} [Mul M] : Mul (Ultrafilter M) where mul U V := (· * ·) < > U <*> V
+def Ultrafilter.mul {M} [Mul M] : Mul (Ultrafilter M) where mul U V := (· * ·) <$> U <*> V
 
 attribute [local instance] Ultrafilter.mul Ultrafilter.add
 
@@ -72,104 +65,82 @@ attribute [local instance] Ultrafilter.mul Ultrafilter.add
 defines an ultrafilter. -/
 @[to_additive /-- We could have taken this as the definition of `U + V`, but then we would have to
 prove that it defines an ultrafilter. -/]
-/--
-theorem `Ultrafilter.eventually_mul` / 定理 `Ultrafilter.eventually_mul`
-
-English:
-theorem Ultrafilter.eventually_mul
-  given: {M} [Mul M] (U V : Ultrafilter M) (p : M -> Prop)
-  proof: Iff.rfl
-
-中文:
-定理 Ultrafilter.eventually_mul
-  条件: {M} [乘法 M] (U V : Ultrafilter M) (p : M -> 命题)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Ultrafilter.eventually_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ultrafilter.eventually_mul {M} [Mul M] (U V : Ultrafilter M) (p : M -> Pro
+p) : (forallᶠ m in ↑(U * V), p m) ↔ forallᶠ m in U, forallᶠ m' in V, p (m * m')
+参数：U V : Ultrafilter M；p : M -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Ultrafilter.eventually_mul {M} [Mul M] (U V : Ultrafilter M) (p : M -> Prop) :
-    (forallᶠ m in ↑(U * V), p m) ↔ forallᶠ m in U, forallᶠ m' in V, p (m * m') :=
+theorem Ultrafilter.eventually_mul {M} [Mul M] (U V : Ultrafilter M) (p : M → Prop) :
+    (∀ᶠ m in ↑(U * V), p m) ↔ ∀ᶠ m in U, ∀ᶠ m' in V, p (m * m') :=
   Iff.rfl
 
 /-- Semigroup structure on `Ultrafilter M` induced by a semigroup structure on `M`. -/
 @[to_additive (attr := instance_reducible)
 /-- Additive semigroup structure on `Ultrafilter M` induced by an additive semigroup
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure on `M`. -/]
-/--
-Definition of `Ultrafilter.semigroup` / `Ultrafilter.semigroup` 的定义
-
-English:
-definition Ultrafilter.semigroup
-  signature: {M} [Semigroup M]
-  body: { Ultrafilter.mul with
-    mul_assoc := fun U V W =>
-Ultrafilter.coe_inj.mp
-        Filter.ext' fun p => by simp [Ultrafilter.eventually_mul, mul_assoc] }
-
-中文:
-定义 Ultrafilter.semigroup
-  签名: {M} [半群 M]
-  定义体: { Ultrafilter.mul with
-    mul_assoc := fun U V W =>
-Ultrafilter.coe_inj.mp
-        Filter.ext' fun p => by simp [Ultrafilter.eventually_mul, mul_assoc] }
-
-Depends on / 依赖: Filter, Filter.ext, Ultrafilter, Ultrafilter.coe_inj.mp, Ultrafilter.eventually_mul, Ultrafilter.mul, coe_inj, eventually_mul, mul_assoc
+/-
+**Ultrafilter.semigroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ultrafilter.semigroup {M} [Semigroup M] : Semigroup (Ultrafilter M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Ultrafilter.semigroup {M} [Semigroup M] : Semigroup (Ultrafilter M) :=
   { Ultrafilter.mul with
     mul_assoc := fun U V W =>
-Ultrafilter.coe_inj.mp
+      Ultrafilter.coe_inj.mp <|
         Filter.ext' fun p => by simp [Ultrafilter.eventually_mul, mul_assoc] }
 
 attribute [local instance] Ultrafilter.semigroup Ultrafilter.addSemigroup
 
 -- We don't prove `continuous_mul_right`, because in general it is false!
 @[to_additive]
-/--
-theorem `Ultrafilter.continuous_mul_left` / 定理 `Ultrafilter.continuous_mul_left`
-
-English:
-theorem Ultrafilter.continuous_mul_left
-  given: {M} [Mul M] (V : Ultrafilter M)
-  proof: ultrafilterBasis_is_basis.continuous_iff.2 Set.forall_mem_range.mpr fun s =>
-    ultrafilter_isOpen_basic { m : M | forallᶠ m' in V, m * m' in s }
-
-中文:
-定理 Ultrafilter.continuous_mul_left
-  条件: {M} [乘法 M] (V : Ultrafilter M)
-  证明: ultrafilterBasis_is_basis.continuous_iff.2 Set.forall_mem_range.mpr fun s =>
-    ultrafilter_isOpen_basic { m : M | forallᶠ m' in V, m * m' in s }
-
-Depends on / 依赖: Set.forall_mem_range.mpr, continuous_iff, forall_mem_range, ultrafilterBasis_is_basis, ultrafilterBasis_is_basis.continuous_iff, ultrafilter_isOpen_basic
+/-
+**Ultrafilter.continuous_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ultrafilter.continuous_mul_left {M} [Mul M] (V : Ultrafilter M) : Continuo
+us (· * V)
+参数：V : Ultrafilter M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.continuous_iff`：∀ {α : Type u} {β : 
+Type u_1} [t : TopologicalSpace α] [inst : TopologicalSpace β] {B : Set (Set β)}
+,   TopologicalSpace.IsTopologicalBasis …
+· 使用定理 `ultrafilterBasis_is_basis`：ultrafilterBasis_is_basis : TopologicalSpace.
+IsTopologicalBasis (ultrafilterBasis α)
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `ultrafilter_isOpen_basic`：ultrafilter_isOpen_basic (s : Set α) : IsOpen 
+{ u : Ultrafilter α | s in u }
 -/
 theorem Ultrafilter.continuous_mul_left {M} [Mul M] (V : Ultrafilter M) :
     Continuous (· * V) :=
-ultrafilterBasis_is_basis.continuous_iff.2 Set.forall_mem_range.mpr fun s =>
-    ultrafilter_isOpen_basic { m : M | forallᶠ m' in V, m * m' in s }
+  ultrafilterBasis_is_basis.continuous_iff.2 <| Set.forall_mem_range.mpr fun s ↦
+    ultrafilter_isOpen_basic { m : M | ∀ᶠ m' in V, m * m' ∈ s }
 
 namespace Hindman
 
-/--
-Inductive type `FS` / 归纳类型 `FS`
+/-- `FS a` is the set of finite sums in `a`, i.e. `m ∈ FS a` if `m` is the sum of a nonempty
+subsequence of `a`. We give a direct inductive definition instead of talking about subsequences. -/
+/-
+**Hindman.FS** 是 Mathlib 中的一个归纳类型，位于命名空间 `Hindman`。
+形式化陈述：{M : Type u_1} → [AddSemigroup M] → Stream' M → Set M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive FS
-  parameters: {M} [AddSemigroup M]
-  constructors (3):
-    - head': (a : Stream' M) : FS a a.head
-    - tail': (a : Stream' M) (m : M) (h : FS a.tail m) : FS a m
-    - cons': (a : Stream' M) (m : M) (h : FS a.tail m) : FS a (a.head + m)
-
-中文:
-归纳类型 FS
-  参数: {M} [加法半群 M]
-  构造子 (3 个):
-    - head': (a : Stream' M) : FS a a.head
-    - tail': (a : Stream' M) (m : M) (h : FS a.tail m) : FS a m
-    - cons': (a : Stream' M) (m : M) (h : FS a.tail m) : FS a (a.head + m)
+--- 原说明 ---
+`FS a` is the set of finite sums in `a`, i.e. `m ∈ FS a` if `m` is the sum of a 
+nonempty
+subsequence of `a`. We give a direct inductive definition instead of talking abo
+ut subsequences.
 -/
-inductive FS {M} [AddSemigroup M] : Stream' M -> Set M
+inductive FS {M} [AddSemigroup M] : Stream' M → Set M
   | head' (a : Stream' M) : FS a a.head
   | tail' (a : Stream' M) (m : M) (h : FS a.tail m) : FS a m
   | cons' (a : Stream' M) (m : M) (h : FS a.tail m) : FS a (a.head + m)
@@ -177,26 +148,18 @@ inductive FS {M} [AddSemigroup M] : Stream' M -> Set M
 /-- `FP a` is the set of finite products in `a`, i.e. `m ∈ FP a` if `m` is the product of a nonempty
 subsequence of `a`. We give a direct inductive definition instead of talking about subsequences. -/
 @[to_additive FS]
-/--
-Inductive type `FP` / 归纳类型 `FP`
+/-
+**Hindman.FP** 是 Mathlib 中的一个归纳类型，位于命名空间 `Hindman`。
+形式化陈述：{M : Type u_1} → [Semigroup M] → Stream' M → Set M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive FP
-  parameters: {M} [Semigroup M]
-  constructors (3):
-    - head': (a : Stream' M) : FP a a.head
-    - tail': (a : Stream' M) (m : M) (h : FP a.tail m) : FP a m
-    - cons': (a : Stream' M) (m : M) (h : FP a.tail m) : FP a (a.head * m)
-
-中文:
-归纳类型 FP
-  参数: {M} [半群 M]
-  构造子 (3 个):
-    - head': (a : Stream' M) : FP a a.head
-    - tail': (a : Stream' M) (m : M) (h : FP a.tail m) : FP a m
-    - cons': (a : Stream' M) (m : M) (h : FP a.tail m) : FP a (a.head * m)
+--- 原说明 ---
+`FP a` is the set of finite products in `a`, i.e. `m ∈ FP a` if `m` is the produ
+ct of a nonempty
+subsequence of `a`. We give a direct inductive definition instead of talking abo
+ut subsequences.
 -/
-inductive FP {M} [Semigroup M] : Stream' M -> Set M
+inductive FP {M} [Semigroup M] : Stream' M → Set M
   | head' (a : Stream' M) : FP a a.head
   | tail' (a : Stream' M) (m : M) (h : FP a.tail m) : FP a m
   | cons' (a : Stream' M) (m : M) (h : FP a.tail m) : FP a (a.head * m)
@@ -212,62 +175,38 @@ set_option linter.defProp false in
 /-- Constructor for `FP`. This is the preferred spelling over `FP.head'`. -/
 @[to_additive (attr := match_pattern)
   /-- Constructor for `FS`. This is the preferred spelling over `FS.head'`. -/]
-/--
-Definition of `FP.head` / `FP.head` 的定义
-
-English:
-abbreviation FP.head
-  signature: : a.head in FP a
-  body: FP.head' a
-
-中文:
-缩写 FP.head
-  签名: : a.head in FP a
-  定义体: FP.head' a
-
-Depends on / 依赖: FP.head
+/-
+**Hindman.FP.head** 是 Mathlib 中的一个定义，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream' M), a.head ∈ Hindman.FP
+ a
+参数：a : Stream' M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev FP.head : a.head in FP a := FP.head' a
+abbrev FP.head : a.head ∈ FP a := FP.head' a
 set_option linter.defProp false in
 /-- Constructor for `FP`. This is the preferred spelling over `FP.tail'`. -/
 @[to_additive (attr := match_pattern)
   /-- Constructor for `FS`. This is the preferred spelling over `FS.tail'`. -/]
-/--
-Definition of `FP.tail` / `FP.tail` 的定义
-
-English:
-abbreviation FP.tail
-  signature: : m in FP a
-  body: FP.tail' a m h
-
-中文:
-缩写 FP.tail
-  签名: : m in FP a
-  定义体: FP.tail' a m h
-
-Depends on / 依赖: FP.tail
+/-
+**Hindman.FP.tail** 是 Mathlib 中的一个定义，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream' M) (m : M), Hindman.FP 
+a.tail m → m ∈ Hindman.FP a
+参数：a : Stream' M；m : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev FP.tail : m in FP a := FP.tail' a m h
+abbrev FP.tail : m ∈ FP a := FP.tail' a m h
 set_option linter.defProp false in
 /-- Constructor for `FP`. This is the preferred spelling over `FP.cons'`. -/
 @[to_additive (attr := match_pattern)
   /-- Constructor for `FS`. This is the preferred spelling over `FS.cons'`. -/]
-/--
-Definition of `FP.cons` / `FP.cons` 的定义
-
-English:
-abbreviation FP.cons
-  signature: : a.head * m in FP a
-  body: FP.cons' a m h
-
-中文:
-缩写 FP.cons
-  签名: : a.head * m in FP a
-  定义体: FP.cons' a m h
-
-Depends on / 依赖: FP.cons
+/-
+**Hindman.FP.cons** 是 Mathlib 中的一个定义，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream' M) (m : M), Hindman.FP 
+a.tail m → a.head * m ∈ Hindman.FP a
+参数：a : Stream' M；m : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev FP.cons : a.head * m in FP a := FP.cons' a m h
+abbrev FP.cons : a.head * m ∈ FP a := FP.cons' a m h
 
 end Aliases
 
@@ -275,53 +214,18 @@ end Aliases
 from a subsequence of `M` starting sufficiently late. -/
 @[to_additive /-- If `m` and `m'` are finite sums in `M`, then so is `m + m'`, provided that `m'`
 is obtained from a subsequence of `M` starting sufficiently late. -/]
-/--
-theorem `FP.mul` / 定理 `FP.mul`
-
-English:
-theorem FP.mul
-  given: {M} [Semigroup M] {a : Stream' M} {m : M} (hm : m in FP a)
-  proof: by
-  induction hm with
-  | head' a => exact ⟨1, fun m hm => FP.cons a m hm⟩
-  | tail' a m _ ih =>
-    obtain ⟨n, hn⟩ := ih
-    use n + 1
-    intro m' hm'
-    exact FP.tail _ _ (hn _ hm')
-  | cons' a m _ ih =>
-    obtain ⟨n, hn⟩ := ih
-    use n + 1
-    intro m' hm'
-    rw [mul_assoc]
-    exact FP.cons _ _ (hn _ hm')
-
-@[to_additive exists_idempotent_ultrafilter_le_FS]
-
-中文:
-定理 FP.mul
-  条件: {M} [半群 M] {a : Stream' M} {m : M} (hm : m in FP a)
-  证明: by
-  induction hm with
-  | head' a => exact ⟨1, fun m hm => FP.cons a m hm⟩
-  | tail' a m _ ih =>
-    obtain ⟨n, hn⟩ := ih
-    use n + 1
-    intro m' hm'
-    exact FP.tail _ _ (hn _ hm')
-  | cons' a m _ ih =>
-    obtain ⟨n, hn⟩ := ih
-    use n + 1
-    intro m' hm'
-    rw [mul_assoc]
-    exact FP.cons _ _ (hn _ hm')
-
-@[to_additive exists_idempotent_ultrafilter_le_FS]
-
-Depends on / 依赖: FP.cons, FP.tail, mul_assoc
+/-
+**Hindman.FP.mul** 是 Mathlib 中的一个定理，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] {a : Stream' M} {m : M},   m ∈ Hindm
+an.FP a → ∃ n, ∀ m' ∈ Hindman.FP (Stream'.drop n a), m * m' ∈ Hindman.FP a
+参数：Stream'.drop n a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem FP.mul {M} [Semigroup M] {a : Stream' M} {m : M} (hm : m in FP a) :
-    exists n, forall m' in FP (a.drop n), m * m' in FP a := by
+theorem FP.mul {M} [Semigroup M] {a : Stream' M} {m : M} (hm : m ∈ FP a) :
+    ∃ n, ∀ m' ∈ FP (a.drop n), m * m' ∈ FP a := by
   induction hm with
   | head' a => exact ⟨1, fun m hm => FP.cons a m hm⟩
   | tail' a m _ ih =>
@@ -337,80 +241,59 @@ theorem FP.mul {M} [Semigroup M] {a : Stream' M} {m : M} (hm : m in FP a) :
     exact FP.cons _ _ (hn _ hm')
 
 @[to_additive exists_idempotent_ultrafilter_le_FS]
-/--
-theorem `exists_idempotent_ultrafilter_le_FP` / 定理 `exists_idempotent_ultrafilter_le_FP`
-
-English:
-theorem exists_idempotent_ultrafilter_le_FP
-  given: {M} [Semigroup M] (a : Stream' M)
-  proof: by
-  let S : Set (Ultrafilter M) := ⋂ n, { U | forallᶠ m in U, m in FP (a.drop n) }
-  have h := exists_idempotent_in_compact_subsemigroup ?_ S ?_ ?_ ?_
-  · rcases h with ⟨U, hU, U_idem⟩
-    refine ⟨U, U_idem, ?_⟩
-    convert! Set.mem_iInter.mp hU 0
-  · exact Ultrafilter.continuous_mul_left
-  · apply IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
-    · intro n U hU
-      filter_upwards [hU]
-      rw [← Stream'.drop_drop]; rw [← Stream'.tail_eq_drop]
-      exact FP.tail _
-    · intro n
-exact ⟨pure _, mem_pure.mpr FP.head _⟩
-    · exact (ultrafilter_isClosed_basic _).isCompact
-    · intro n
-      apply ultrafilter_isClosed_basic
-  · exact IsClosed.isCompact (isClosed_iInter fun i => ultrafilter_isClosed_basic _)
-  · intro U hU V hV
-    rw [Set.mem_iInter] at *
-    intro n
-    rw [Set.mem_ofPred_eq]; rw [Ultrafilter.eventually_mul]
-    filter_upwards [hU n] with m hm
-    obtain ⟨n', hn⟩ := FP.mul hm
-    filter_upwards [hV (n' + n)] with m' hm'
-    apply hn
-    simpa only [Stream'.drop_drop, add_comm] using hm'
-
-@[to_additive exists_FS_of_large]
-
-中文:
-定理 存在_idempotent_ultrafilter_le_FP
-  条件: {M} [半群 M] (a : Stream' M)
-  证明: by
-  let S : Set (Ultrafilter M) := ⋂ n, { U | forallᶠ m in U, m in FP (a.drop n) }
-  have h := exists_idempotent_in_compact_subsemigroup ?_ S ?_ ?_ ?_
-  · rcases h with ⟨U, hU, U_idem⟩
-    refine ⟨U, U_idem, ?_⟩
-    convert! Set.mem_iInter.mp hU 0
-  · exact Ultrafilter.continuous_mul_left
-  · apply IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
-    · intro n U hU
-      filter_upwards [hU]
-      rw [← Stream'.drop_drop]; rw [← Stream'.tail_eq_drop]
-      exact FP.tail _
-    · intro n
-exact ⟨pure _, mem_pure.mpr FP.head _⟩
-    · exact (ultrafilter_isClosed_basic _).isCompact
-    · intro n
-      apply ultrafilter_isClosed_basic
-  · exact IsClosed.isCompact (isClosed_iInter fun i => ultrafilter_isClosed_basic _)
-  · intro U hU V hV
-    rw [Set.mem_iInter] at *
-    intro n
-    rw [Set.mem_ofPred_eq]; rw [Ultrafilter.eventually_mul]
-    filter_upwards [hU n] with m hm
-    obtain ⟨n', hn⟩ := FP.mul hm
-    filter_upwards [hV (n' + n)] with m' hm'
-    apply hn
-    simpa only [Stream'.drop_drop, add_comm] using hm'
-
-@[to_additive exists_FS_of_large]
-
-Depends on / 依赖: FP.head, FP.tail, IsCompact, IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, Set.mem_iInter.mp, Stream, U_idem, Ultrafilter, Ultrafilter.continuous_mul_left, a.drop, continuous_mul_left, convert, drop_drop, exists_idempotent_in_compact_subsemigroup, filter_upwards, mem_iInter, mem_pure, mem_pure.mpr, nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, tail_eq_drop
+/-
+**Hindman.exists_idempotent_ultrafilter_le_FP** 是 Mathlib 中的一个定理，位于命名空间 `Hindman
+`。
+形式化陈述：exists_idempotent_ultrafilter_le_FP {M} [Semigroup M] (a : Stream' M) : ex
+ists U : Ultrafilter M, U * U = U ∧ forallᶠ m in U, m in FP a
+参数：a : Stream' M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_idempotent_in_compact_subsemigroup`：exists_idempotent_in_compact_
+subsemigroup {M} [Semigroup M] [TopologicalSpace M] [T2Space M] (continuous_cons
+t_mul : forall r : M, Continuou…
+· 使用定理 `Ultrafilter.continuous_mul_left`：Ultrafilter.continuous_mul_left {M} [Mu
+l M] (V : Ultrafilter M) : Continuous (· * V)
+· 使用定理 `IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed`：IsCom
+pact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed (t : Nat -> Set X) 
+(htd : forall i, t (i + 1) subseteq t i) (htn : forall …
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Stream'.drop_drop`：drop_drop (n m : Nat) (s : Stream' α) : drop n (drop 
+m s) = drop (m + n) s
+· 使用定理 `Stream'.tail_eq_drop`：tail_eq_drop (s : Stream' α) : tail s = drop 1 s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_pure`：mem_pure {a : α} {s : Set α} : s in (pure a : Filter α)
+ ↔ a in s
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用定理 `ultrafilter_isClosed_basic`：ultrafilter_isClosed_basic (s : Set α) : IsC
+losed { u : Ultrafilter α | s in u }
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `Set.mem_iInter`：mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ 
+forall i, x in s i
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
+· 使用定理 `Ultrafilter.eventually_mul`：Ultrafilter.eventually_mul {M} [Mul M] (U V 
+: Ultrafilter M) (p : M -> Prop) : (forallᶠ m in ↑(U * V), p m) ↔ forallᶠ m in U
+, forallᶠ m' in …
+· 使用定理 `Hindman.FP.mul`：∀ {M : Type u_1} [inst : Semigroup M] {a : Stream' M} {m
+ : M},   m ∈ Hindman.FP a → ∃ n, ∀ m' ∈ Hindman.FP (Stream'.drop n a), m * m' ∈ 
+Hind…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem exists_idempotent_ultrafilter_le_FP {M} [Semigroup M] (a : Stream' M) :
-    exists U : Ultrafilter M, U * U = U ∧ forallᶠ m in U, m in FP a := by
-  let S : Set (Ultrafilter M) := ⋂ n, { U | forallᶠ m in U, m in FP (a.drop n) }
+    ∃ U : Ultrafilter M, U * U = U ∧ ∀ᶠ m in U, m ∈ FP a := by
+  let S : Set (Ultrafilter M) := ⋂ n, { U | ∀ᶠ m in U, m ∈ FP (a.drop n) }
   have h := exists_idempotent_in_compact_subsemigroup ?_ S ?_ ?_ ?_
   · rcases h with ⟨U, hU, U_idem⟩
     refine ⟨U, U_idem, ?_⟩
@@ -419,10 +302,10 @@ theorem exists_idempotent_ultrafilter_le_FP {M} [Semigroup M] (a : Stream' M) :
   · apply IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
     · intro n U hU
       filter_upwards [hU]
-      rw [← Stream'.drop_drop]; rw [← Stream'.tail_eq_drop]
+      rw [← Stream'.drop_drop, ← Stream'.tail_eq_drop]
       exact FP.tail _
     · intro n
-exact ⟨pure _, mem_pure.mpr FP.head _⟩
+      exact ⟨pure _, mem_pure.mpr <| FP.head _⟩
     · exact (ultrafilter_isClosed_basic _).isCompact
     · intro n
       apply ultrafilter_isClosed_basic
@@ -430,7 +313,7 @@ exact ⟨pure _, mem_pure.mpr FP.head _⟩
   · intro U hU V hV
     rw [Set.mem_iInter] at *
     intro n
-    rw [Set.mem_ofPred_eq]; rw [Ultrafilter.eventually_mul]
+    rw [Set.mem_ofPred_eq, Ultrafilter.eventually_mul]
     filter_upwards [hU n] with m hm
     obtain ⟨n', hn⟩ := FP.mul hm
     filter_upwards [hV (n' + n)] with m' hm'
@@ -438,102 +321,48 @@ exact ⟨pure _, mem_pure.mpr FP.head _⟩
     simpa only [Stream'.drop_drop, add_comm] using hm'
 
 @[to_additive exists_FS_of_large]
-/--
-theorem `exists_FP_of_large` / 定理 `exists_FP_of_large`
-
-English:
-theorem exists_FP_of_large
-  statement: {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : Set M)
-  proof: by
-  /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
-  `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
-  let `s₁` be the intersection `s₀ ∩ { m | a₀ * m ∈ s₀ }`. By choice of `a₀`, this is again
-  `U`-large, so we can repeat the argument starting from `s₁`, obtaining `a₁`, `s₂`, etc.
-  This gives the desired infinite sequence. -/
-  have exists_elem : forall {s : Set M} (_hs : s in U), (s inter { m | forallᶠ m' in U, m * m' in s }).Nonempty :=
-    fun {s} hs => Ultrafilter.nonempty_of_mem (inter_mem hs <| by rwa [← U_idem] at hs)
-  let elem : { s // s in U } -> M := fun p => (exists_elem p.property).some
-  let succ : {s // s in U} -> {s // s in U} := fun (p : {s // s in U}) =>
-        ⟨p.val inter {m : M | elem p * m in p.val},
-         inter_mem p.property
-           (show (exists_elem p.property).some in {m : M | forallᶠ (m' : M) in ↑U, m * m' in p.val} from
-              p.val.inter_subset_right (exists_elem p.property).some_mem)⟩
-  use Stream'.corec elem succ (Subtype.mk s₀ sU)
-  suffices forall (a : Stream' M), forall m in FP a, forall p, a = Stream'.corec elem succ p -> m in p.val by
-    intro m hm
-    exact this _ m hm ⟨s₀, sU⟩ rfl
-  clear sU s₀
-  intro a m h
-  induction h with
-  | head' b =>
-    rintro p rfl
-    rw [Stream'.corec_eq]; rw [Stream'.head_cons]
-    exact Set.inter_subset_left (Set.Nonempty.some_mem _)
-  | tail' b n h ih =>
-    rintro p rfl
-    refine Set.inter_subset_left (ih (succ p) ?_)
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
-  | cons' b n h ih =>
-    rintro p rfl
-    have := Set.inter_subset_right (ih (succ p) ?_)
-    · simpa only using! this
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
-
-中文:
-定理 存在_FP_of_large
-  结论: {M} [半群 M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : 集合 M)
-  证明: by
-  /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
-  `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
-  let `s₁` be the intersection `s₀ ∩ { m | a₀ * m ∈ s₀ }`. By choice of `a₀`, this is again
-  `U`-large, so we can repeat the argument starting from `s₁`, obtaining `a₁`, `s₂`, etc.
-  This gives the desired infinite sequence. -/
-  have exists_elem : forall {s : Set M} (_hs : s in U), (s inter { m | forallᶠ m' in U, m * m' in s }).Nonempty :=
-    fun {s} hs => Ultrafilter.nonempty_of_mem (inter_mem hs <| by rwa [← U_idem] at hs)
-  let elem : { s // s in U } -> M := fun p => (exists_elem p.property).some
-  let succ : {s // s in U} -> {s // s in U} := fun (p : {s // s in U}) =>
-        ⟨p.val inter {m : M | elem p * m in p.val},
-         inter_mem p.property
-           (show (exists_elem p.property).some in {m : M | forallᶠ (m' : M) in ↑U, m * m' in p.val} from
-              p.val.inter_subset_right (exists_elem p.property).some_mem)⟩
-  use Stream'.corec elem succ (Subtype.mk s₀ sU)
-  suffices forall (a : Stream' M), forall m in FP a, forall p, a = Stream'.corec elem succ p -> m in p.val by
-    intro m hm
-    exact this _ m hm ⟨s₀, sU⟩ rfl
-  clear sU s₀
-  intro a m h
-  induction h with
-  | head' b =>
-    rintro p rfl
-    rw [Stream'.corec_eq]; rw [Stream'.head_cons]
-    exact Set.inter_subset_left (Set.Nonempty.some_mem _)
-  | tail' b n h ih =>
-    rintro p rfl
-    refine Set.inter_subset_left (ih (succ p) ?_)
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
-  | cons' b n h ih =>
-    rintro p rfl
-    have := Set.inter_subset_right (ih (succ p) ?_)
-    · simpa only using! this
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
+/-
+**Hindman.exists_FP_of_large** 是 Mathlib 中的一个定理，位于命名空间 `Hindman`。
+形式化陈述：exists_FP_of_large {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U =
+ U) (s₀ : Set M) (sU : s₀ in U) : exists a, FP a subseteq s₀
+参数：U : Ultrafilter M；U_idem : U * U = U；s₀ : Set M；sU : s₀ in U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ultrafilter.nonempty_of_mem`：nonempty_of_mem (hs : s in f) : s.Nonempty
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Stream'.corec_eq`：corec_eq (f : α -> β) (g : α -> α) (a : α) : corec f g
+ a = f a :: corec f g (g a)
+· 使用定理 `Stream'.head_cons`：head_cons (a : α) (s : Stream' α) : head (a::s) = a
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Stream'.tail_cons`：tail_cons (a : α) (s : Stream' α) : tail (a::s) = s
 -/
 theorem exists_FP_of_large {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : Set M)
-    (sU : s₀ in U) : exists a, FP a subseteq s₀ := by
+    (sU : s₀ ∈ U) : ∃ a, FP a ⊆ s₀ := by
   /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
   `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
   let `s₁` be the intersection `s₀ ∩ { m | a₀ * m ∈ s₀ }`. By choice of `a₀`, this is again
   `U`-large, so we can repeat the argument starting from `s₁`, obtaining `a₁`, `s₂`, etc.
   This gives the desired infinite sequence. -/
-  have exists_elem : forall {s : Set M} (_hs : s in U), (s inter { m | forallᶠ m' in U, m * m' in s }).Nonempty :=
+  have exists_elem : ∀ {s : Set M} (_hs : s ∈ U), (s ∩ { m | ∀ᶠ m' in U, m * m' ∈ s }).Nonempty :=
     fun {s} hs => Ultrafilter.nonempty_of_mem (inter_mem hs <| by rwa [← U_idem] at hs)
-  let elem : { s // s in U } -> M := fun p => (exists_elem p.property).some
-  let succ : {s // s in U} -> {s // s in U} := fun (p : {s // s in U}) =>
-        ⟨p.val inter {m : M | elem p * m in p.val},
+  let elem : { s // s ∈ U } → M := fun p => (exists_elem p.property).some
+  let succ : {s // s ∈ U} → {s // s ∈ U} := fun (p : {s // s ∈ U}) =>
+        ⟨p.val ∩ {m : M | elem p * m ∈ p.val},
          inter_mem p.property
-           (show (exists_elem p.property).some in {m : M | forallᶠ (m' : M) in ↑U, m * m' in p.val} from
+           (show (exists_elem p.property).some ∈ {m : M | ∀ᶠ (m' : M) in ↑U, m * m' ∈ p.val} from
               p.val.inter_subset_right (exists_elem p.property).some_mem)⟩
   use Stream'.corec elem succ (Subtype.mk s₀ sU)
-  suffices forall (a : Stream' M), forall m in FP a, forall p, a = Stream'.corec elem succ p -> m in p.val by
+  suffices ∀ (a : Stream' M), ∀ m ∈ FP a, ∀ p, a = Stream'.corec elem succ p → m ∈ p.val by
     intro m hm
     exact this _ m hm ⟨s₀, sU⟩ rfl
   clear sU s₀
@@ -541,43 +370,44 @@ theorem exists_FP_of_large {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U
   induction h with
   | head' b =>
     rintro p rfl
-    rw [Stream'.corec_eq]; rw [Stream'.head_cons]
+    rw [Stream'.corec_eq, Stream'.head_cons]
     exact Set.inter_subset_left (Set.Nonempty.some_mem _)
   | tail' b n h ih =>
     rintro p rfl
     refine Set.inter_subset_left (ih (succ p) ?_)
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
+    rw [Stream'.corec_eq, Stream'.tail_cons]
   | cons' b n h ih =>
     rintro p rfl
     have := Set.inter_subset_right (ih (succ p) ?_)
     · simpa only using! this
-    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
+    rw [Stream'.corec_eq, Stream'.tail_cons]
 
 /-- The strong form of **Hindman's theorem**: in any finite cover of an FP-set, one the parts
 contains an FP-set. -/
 @[to_additive FS_partition_regular /-- The strong form of **Hindman's theorem**: in any finite
 cover of an FS-set, one the parts contains an FS-set. -/]
-/--
-theorem `FP_partition_regular` / 定理 `FP_partition_regular`
-
-English:
-theorem FP_partition_regular
-  statement: {M} [Semigroup M] (a : Stream' M) (s : Set (Set M)) (sfin : s.Finite)
-  proof: let ⟨U, idem, aU⟩ := exists_idempotent_ultrafilter_le_FP a
-  let ⟨c, cs, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset aU scov)
-  ⟨c, cs, exists_FP_of_large U idem c hc⟩
-
-中文:
-定理 FP_partition_regular
-  结论: {M} [半群 M] (a : Stream' M) (s : 集合 (集合 M)) (sfin : s.有限)
-  证明: let ⟨U, idem, aU⟩ := exists_idempotent_ultrafilter_le_FP a
-  let ⟨c, cs, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset aU scov)
-  ⟨c, cs, exists_FP_of_large U idem c hc⟩
-
-Depends on / 依赖: TotalSpace, TotalSpace.mk, Ultrafilter, Ultrafilter.finite_sUnion_mem_iff, exists_FP_of_large, exists_idempotent_ultrafilter_le_FP, finite_sUnion_mem_iff, mem_of_superset
+/-
+**Hindman.FP_partition_regular** 是 Mathlib 中的一个定理，位于命名空间 `Hindman`。
+形式化陈述：FP_partition_regular {M} [Semigroup M] (a : Stream' M) (s : Set (Set M)) (
+sfin : s.Finite) (scov : FP a subseteq ⋃₀ s) : exists c in s, exists b : Stream'
+ M, FP b subseteq c
+参数：a : Stream' M；s : Set (Set M)；sfin : s.Finite；scov : FP a subseteq ⋃₀ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hindman.exists_idempotent_ultrafilter_le_FP`：exists_idempotent_ultrafilt
+er_le_FP {M} [Semigroup M] (a : Stream' M) : exists U : Ultrafilter M, U * U = U
+ ∧ forallᶠ m in U, m in FP a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ultrafilter.finite_sUnion_mem_iff`：finite_sUnion_mem_iff {s : Set (Set α
+)} (hs : s.Finite) : ⋃₀ s in f ↔ exists t in s, t in f
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Hindman.exists_FP_of_large`：exists_FP_of_large {M} [Semigroup M] (U : Ul
+trafilter M) (U_idem : U * U = U) (s₀ : Set M) (sU : s₀ in U) : exists a, FP a s
+ubseteq s₀
 -/
 theorem FP_partition_regular {M} [Semigroup M] (a : Stream' M) (s : Set (Set M)) (sfin : s.Finite)
-    (scov : FP a subseteq ⋃₀ s) : exists c in s, exists b : Stream' M, FP b subseteq c :=
+    (scov : FP a ⊆ ⋃₀ s) : ∃ c ∈ s, ∃ b : Stream' M, FP b ⊆ c :=
   let ⟨U, idem, aU⟩ := exists_idempotent_ultrafilter_le_FP a
   let ⟨c, cs, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset aU scov)
   ⟨c, cs, exists_FP_of_large U idem c hc⟩
@@ -586,47 +416,57 @@ theorem FP_partition_regular {M} [Semigroup M] (a : Stream' M) (s : Set (Set M))
 parts contains an FP-set. -/
 @[to_additive exists_FS_of_finite_cover /-- The weak form of **Hindman's theorem**: in any finite
 cover of a nonempty additive semigroup, one of the parts contains an FS-set. -/]
-/--
-theorem `exists_FP_of_finite_cover` / 定理 `exists_FP_of_finite_cover`
-
-English:
-theorem exists_FP_of_finite_cover
-  statement: {M} [Semigroup M] [Nonempty M] (s : Set (Set M)) (sfin : s.Finite)
-  proof: let ⟨U, hU⟩ :=
-    exists_idempotent_of_compact_t2_of_continuous_mul_left (@Ultrafilter.continuous_mul_left M _)
-  let ⟨c, c_s, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset univ_mem scov)
-  ⟨c, c_s, exists_FP_of_large U hU c hc⟩
-
-@[to_additive FS_iter_tail_sub_FS]
-
-中文:
-定理 存在_FP_of_finite_cover
-  结论: {M} [半群 M] [非空 M] (s : 集合 (集合 M)) (sfin : s.有限)
-  证明: let ⟨U, hU⟩ :=
-    exists_idempotent_of_compact_t2_of_continuous_mul_left (@Ultrafilter.continuous_mul_left M _)
-  let ⟨c, c_s, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset univ_mem scov)
-  ⟨c, c_s, exists_FP_of_large U hU c hc⟩
-
-@[to_additive FS_iter_tail_sub_FS]
-
-Depends on / 依赖: Ultrafilter, Ultrafilter.continuous_mul_left, Ultrafilter.finite_sUnion_mem_iff, continuous_mul_left, exists_FP_of_large, exists_idempotent_of_compact_t2_of_continuous_mul_left, finite_sUnion_mem_iff, mem_of_superset, univ_mem
+/-
+**Hindman.exists_FP_of_finite_cover** 是 Mathlib 中的一个定理，位于命名空间 `Hindman`。
+形式化陈述：exists_FP_of_finite_cover {M} [Semigroup M] [Nonempty M] (s : Set (Set M))
+ (sfin : s.Finite) (scov : ⊤ subseteq ⋃₀ s) : exists c in s, exists a : Stream' 
+M, FP a subseteq c
+参数：s : Set (Set M)；sfin : s.Finite；scov : ⊤ subseteq ⋃₀ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_idempotent_of_compact_t2_of_continuous_mul_left`：exists_idempoten
+t_of_compact_t2_of_continuous_mul_left {M} [Nonempty M] [Semigroup M] [Topologic
+alSpace M] [CompactSpace M] [T2Space M] (con…
+· 使用定理 `Ultrafilter.instNonempty`：∀ {α : Type u} [Nonempty α], Nonempty (Ultrafi
+lter α)
+· 使用定理 `Ultrafilter.continuous_mul_left`：Ultrafilter.continuous_mul_left {M} [Mu
+l M] (V : Ultrafilter M) : Continuous (· * V)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ultrafilter.finite_sUnion_mem_iff`：finite_sUnion_mem_iff {s : Set (Set α
+)} (hs : s.Finite) : ⋃₀ s in f ↔ exists t in s, t in f
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
+· 使用定理 `Hindman.exists_FP_of_large`：exists_FP_of_large {M} [Semigroup M] (U : Ul
+trafilter M) (U_idem : U * U = U) (s₀ : Set M) (sU : s₀ in U) : exists a, FP a s
+ubseteq s₀
 -/
 theorem exists_FP_of_finite_cover {M} [Semigroup M] [Nonempty M] (s : Set (Set M)) (sfin : s.Finite)
-    (scov : ⊤ subseteq ⋃₀ s) : exists c in s, exists a : Stream' M, FP a subseteq c :=
+    (scov : ⊤ ⊆ ⋃₀ s) : ∃ c ∈ s, ∃ a : Stream' M, FP a ⊆ c :=
   let ⟨U, hU⟩ :=
     exists_idempotent_of_compact_t2_of_continuous_mul_left (@Ultrafilter.continuous_mul_left M _)
   let ⟨c, c_s, hc⟩ := (Ultrafilter.finite_sUnion_mem_iff sfin).mp (mem_of_superset univ_mem scov)
   ⟨c, c_s, exists_FP_of_large U hU c hc⟩
 
 @[to_additive FS_iter_tail_sub_FS]
-/--
-theorem `FP_drop_subset_FP` / 定理 `FP_drop_subset_FP`
-
-English:
-theorem FP_drop_subset_FP
-  given: {M} [Semigroup M] (a : Stream' M) (n : Nat)
-  statement: FP (a.drop n) subseteq FP a
-  proof: by
+/-
+**Hindman.FP_drop_subset_FP** 是 Mathlib 中的一个定理，位于命名空间 `Hindman`。
+形式化陈述：FP_drop_subset_FP {M} [Semigroup M] (a : Stream' M) (n : Nat) : FP (a.drop
+ n) subseteq FP a
+参数：a : Stream' M；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Stream'.drop_drop`：drop_drop (n m : Nat) (s : Stream' α) : drop n (drop 
+m s) = drop (m + n) s
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+-/
+theorem FP_drop_subset_FP {M} [Semigroup M] (a : Stream' M) (n : ℕ) : FP (a.drop n) ⊆ FP a := by
   induction n with
   | zero => rfl
   | succ n ih =>
@@ -634,178 +474,107 @@ theorem FP_drop_subset_FP
     exact _root_.trans (FP.tail _) ih
 
 @[to_additive]
-
-中文:
-定理 FP_drop_subset_FP
-  条件: {M} [半群 M] (a : Stream' M) (n : 自然数)
-  结论: FP (a.drop n) subseteq FP a
-  证明: by
-  induction n with
-  | zero => rfl
-  | succ n ih =>
-    rw [← Stream'.drop_drop]
-    exact _root_.trans (FP.tail _) ih
-
-@[to_additive]
-
-Depends on / 依赖: FP.tail, Stream, _root_, _root_.trans, drop_drop
+/-
+**Hindman.FP.singleton** 是 Mathlib 中的一个定理，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream' M) (i : ℕ), a.get i ∈ H
+indman.FP a
+参数：a : Stream' M；i : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem FP_drop_subset_FP {M} [Semigroup M] (a : Stream' M) (n : Nat) : FP (a.drop n) subseteq FP a := by
-  induction n with
-  | zero => rfl
-  | succ n ih =>
-    rw [← Stream'.drop_drop]
-    exact _root_.trans (FP.tail _) ih
-
-@[to_additive]
-/--
-theorem `FP.singleton` / 定理 `FP.singleton`
-
-English:
-theorem FP.singleton
-  given: {M} [Semigroup M] (a : Stream' M) (i : Nat)
-  statement: a.get i in FP a
-  proof: by
+theorem FP.singleton {M} [Semigroup M] (a : Stream' M) (i : ℕ) : a.get i ∈ FP a := by
   induction i generalizing a with
   | zero => exact FP.head _
   | succ i ih => exact FP.tail _ _ (ih _)
 
 @[to_additive]
-
-中文:
-定理 FP.singleton
-  条件: {M} [半群 M] (a : Stream' M) (i : 自然数)
-  结论: a.get i in FP a
-  证明: by
-  induction i generalizing a with
-  | zero => exact FP.head _
-  | succ i ih => exact FP.tail _ _ (ih _)
-
-@[to_additive]
-
-Depends on / 依赖: FP.head, FP.tail, generalizing
+/-
+**Hindman.FP.mul_two** 是 Mathlib 中的一个定理，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream' M) (i j : ℕ), i < j → a
+.get i * a.get j ∈ Hindman.FP a
+参数：a : Stream' M；i j : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hindman.FP_drop_subset_FP`：FP_drop_subset_FP {M} [Semigroup M] (a : Stre
+am' M) (n : Nat) : FP (a.drop n) subseteq FP a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Stream'.head_drop`：head_drop (a : Stream' α) (n : Nat) : (a.drop n).head
+ = a.get n
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `Hindman.FP.singleton`：∀ {M : Type u_1} [inst : Semigroup M] (a : Stream'
+ M) (i : ℕ), a.get i ∈ Hindman.FP a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Stream'.get_drop`：get_drop (n m : Nat) (s : Stream' α) : get (drop m s) 
+n = get s (m + n)
+· 使用定理 `Stream'.tail_eq_drop`：tail_eq_drop (s : Stream' α) : tail s = drop 1 s
 -/
-theorem FP.singleton {M} [Semigroup M] (a : Stream' M) (i : Nat) : a.get i in FP a := by
-  induction i generalizing a with
-  | zero => exact FP.head _
-  | succ i ih => exact FP.tail _ _ (ih _)
-
-@[to_additive]
-/--
-theorem `FP.mul_two` / 定理 `FP.mul_two`
-
-English:
-theorem FP.mul_two
-  given: {M} [Semigroup M] (a : Stream' M) (i j : Nat) (ij : i < j)
-  proof: by
+theorem FP.mul_two {M} [Semigroup M] (a : Stream' M) (i j : ℕ) (ij : i < j) :
+    a.get i * a.get j ∈ FP a := by
   refine FP_drop_subset_FP _ i ?_
   rw [← Stream'.head_drop]
   apply FP.cons
   rcases Nat.exists_eq_add_of_le (Nat.succ_le_of_lt ij) with ⟨d, hd⟩
   have := FP.singleton (a.drop i).tail d
-  rw [Stream'.tail_eq_drop]; rw [Stream'.get_drop]; rw [Stream'.get_drop] at this
+  rw [Stream'.tail_eq_drop, Stream'.get_drop, Stream'.get_drop] at this
   convert! this
   lia
 
 @[to_additive]
-
-中文:
-定理 FP.mul_two
-  条件: {M} [半群 M] (a : Stream' M) (i j : 自然数) (ij : i < j)
-  证明: by
-  refine FP_drop_subset_FP _ i ?_
-  rw [← Stream'.head_drop]
-  apply FP.cons
-  rcases Nat.exists_eq_add_of_le (Nat.succ_le_of_lt ij) with ⟨d, hd⟩
-  have := FP.singleton (a.drop i).tail d
-  rw [Stream'.tail_eq_drop]; rw [Stream'.get_drop]; rw [Stream'.get_drop] at this
-  convert! this
-  lia
-
-@[to_additive]
-
-Depends on / 依赖: FP.cons, FP.singleton, FP_drop_subset_FP, Nat.exists_eq_add_of_le, Nat.succ_le_of_lt, Stream, a.drop, convert, exists_eq_add_of_le, get_drop, head_drop, singleton, succ_le_of_lt, tail_eq_drop
+/-
+**Hindman.FP.finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `Hindman.FP`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] (a : Stream' M) (s : Finset ℕ), s.N
+onempty → ∏ i ∈ s, a.get i ∈ Hindman.FP a
+参数：a : Stream' M；s : Finset ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hindman.FP_drop_subset_FP`：FP_drop_subset_FP {M} [Semigroup M] (a : Stre
+am' M) (n : Nat) : FP (a.drop n) subseteq FP a
+· 使用引理 `Finset.min'`：min'_one [LinearOrder α] : (1 : Finset α).min' one_nonempty
+ = 1
+· 使用定理 `Finset.eraseInduction`：eraseInduction [DecidableEq α] {p : Finset α -> P
+rop} (H : (S : Finset α) -> (forall s in S, p (S.erase s)) -> p S) (S : Finset α
+) : p S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mul_prod_erase`：mul_prod_erase [DecidableEq ι] (s : Finset ι) (f 
+: ι -> M) {a : ι} (h : a in s) : (f a * ∏ x in s.erase a, f x) = ∏ x in s, f x
+· 使用定理 `Finset.min'_mem`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) 
+(H : s.Nonempty), s.min' H ∈ s
+· 使用定理 `Stream'.head_drop`：head_drop (a : Stream' α) (n : Nat) : (a.drop n).head
+ = a.get n
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Stream'.tail_eq_drop`：tail_eq_drop (s : Stream' α) : tail s = drop 1 s
+· 使用定理 `Stream'.drop_drop`：drop_drop (n m : Nat) (s : Stream' α) : drop n (drop 
+m s) = drop (m + n) s
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Set.mem_of_subset_of_mem`：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s
+₂ → a ∈ s₁ → a ∈ s₂
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `Finset.min'_lt_of_mem_erase_min'`：∀ {α : Type u_2} [inst : LinearOrder α
+] (s : Finset α) (H : s.Nonempty) [inst_1 : DecidableEq α] {a : α},   a ∈ s.eras
+e (s.min' H) → s.min' …
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
 -/
-theorem FP.mul_two {M} [Semigroup M] (a : Stream' M) (i j : Nat) (ij : i < j) :
-    a.get i * a.get j in FP a := by
-  refine FP_drop_subset_FP _ i ?_
-  rw [← Stream'.head_drop]
-  apply FP.cons
-  rcases Nat.exists_eq_add_of_le (Nat.succ_le_of_lt ij) with ⟨d, hd⟩
-  have := FP.singleton (a.drop i).tail d
-  rw [Stream'.tail_eq_drop]; rw [Stream'.get_drop]; rw [Stream'.get_drop] at this
-  convert! this
-  lia
-
-@[to_additive]
-/--
-theorem `FP.finsetProd` / 定理 `FP.finsetProd`
-
-English:
-theorem FP.finsetProd
-  given: {M} [CommMonoid M] (a : Stream' M) (s : Finset Nat) (hs : s.Nonempty)
-  proof: by
+theorem FP.finsetProd {M} [CommMonoid M] (a : Stream' M) (s : Finset ℕ) (hs : s.Nonempty) :
+    (s.prod fun i => a.get i) ∈ FP a := by
   refine FP_drop_subset_FP _ (s.min' hs) ?_
   induction s using Finset.eraseInduction with | H s ih => _
-  rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs)]; rw [← Stream'.head_drop]
+  rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs), ← Stream'.head_drop]
   rcases (s.erase (s.min' hs)).eq_empty_or_nonempty with h | h
   · rw [h, Finset.prod_empty, mul_one]
     exact FP.head _
   · apply FP.cons
-    rw [Stream'.tail_eq_drop]; rw [Stream'.drop_drop]; rw [add_comm]
+    rw [Stream'.tail_eq_drop, Stream'.drop_drop, add_comm]
     refine Set.mem_of_subset_of_mem ?_ (ih _ (s.min'_mem hs) h)
-    have : s.min' hs + 1 <= (s.erase (s.min' hs)).min' h :=
+    have : s.min' hs + 1 ≤ (s.erase (s.min' hs)).min' h :=
       Nat.succ_le_of_lt (Finset.min'_lt_of_mem_erase_min' _ _ <| Finset.min'_mem _ _)
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le this
-    rw [hd]; rw [← Stream'.drop_drop]; rw [add_comm]
-    apply FP_drop_subset_FP
-
-@[deprecated (since := "2026-04-08")] alias FS.finset_sum := FS.finsetSum
-
-@[to_additive existing, deprecated (since := "2026-04-08")]
-alias FP.finset_prod := FP.finsetProd
-
-中文:
-定理 FP.finsetProd
-  条件: {M} [交换幺半群 M] (a : Stream' M) (s : 有限集 自然数) (hs : s.非空)
-  证明: by
-  refine FP_drop_subset_FP _ (s.min' hs) ?_
-  induction s using Finset.eraseInduction with | H s ih => _
-  rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs)]; rw [← Stream'.head_drop]
-  rcases (s.erase (s.min' hs)).eq_empty_or_nonempty with h | h
-  · rw [h, Finset.prod_empty, mul_one]
-    exact FP.head _
-  · apply FP.cons
-    rw [Stream'.tail_eq_drop]; rw [Stream'.drop_drop]; rw [add_comm]
-    refine Set.mem_of_subset_of_mem ?_ (ih _ (s.min'_mem hs) h)
-    have : s.min' hs + 1 <= (s.erase (s.min' hs)).min' h :=
-      Nat.succ_le_of_lt (Finset.min'_lt_of_mem_erase_min' _ _ <| Finset.min'_mem _ _)
-    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le this
-    rw [hd]; rw [← Stream'.drop_drop]; rw [add_comm]
-    apply FP_drop_subset_FP
-
-@[deprecated (since := "2026-04-08")] alias FS.finset_sum := FS.finsetSum
-
-@[to_additive existing, deprecated (since := "2026-04-08")]
-alias FP.finset_prod := FP.finsetProd
-
-Depends on / 依赖: FP.cons, FP.head, FP_drop_subset_FP, Finset, Finset.eraseInduction, Finset.mul_prod_erase, Finset.prod_empty, Nat.succ_l, Set.mem_of_subset_of_mem, Stream, _mem, add_comm, drop_drop, eq_empty_or_nonempty, eraseInduction, head_drop, mem_of_subset_of_mem, mul_one, mul_prod_erase, prod_empty
--/
-theorem FP.finsetProd {M} [CommMonoid M] (a : Stream' M) (s : Finset Nat) (hs : s.Nonempty) :
-    (s.prod fun i => a.get i) in FP a := by
-  refine FP_drop_subset_FP _ (s.min' hs) ?_
-  induction s using Finset.eraseInduction with | H s ih => _
-  rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs)]; rw [← Stream'.head_drop]
-  rcases (s.erase (s.min' hs)).eq_empty_or_nonempty with h | h
-  · rw [h, Finset.prod_empty, mul_one]
-    exact FP.head _
-  · apply FP.cons
-    rw [Stream'.tail_eq_drop]; rw [Stream'.drop_drop]; rw [add_comm]
-    refine Set.mem_of_subset_of_mem ?_ (ih _ (s.min'_mem hs) h)
-    have : s.min' hs + 1 <= (s.erase (s.min' hs)).min' h :=
-      Nat.succ_le_of_lt (Finset.min'_lt_of_mem_erase_min' _ _ <| Finset.min'_mem _ _)
-    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le this
-    rw [hd]; rw [← Stream'.drop_drop]; rw [add_comm]
+    rw [hd, ← Stream'.drop_drop, add_comm]
     apply FP_drop_subset_FP
 
 @[deprecated (since := "2026-04-08")] alias FS.finset_sum := FS.finsetSum
@@ -814,3 +583,4 @@ theorem FP.finsetProd {M} [CommMonoid M] (a : Stream' M) (s : Finset Nat) (hs : 
 alias FP.finset_prod := FP.finsetProd
 
 end Hindman
+

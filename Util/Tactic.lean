@@ -20,96 +20,128 @@ namespace Mathlib.Tactic
 
 open Lean Meta Tactic
 
-variable {m : Type -> Type}
+variable {m : Type → Type}
 
 /--
-Definition of `modifyMetavarDecl` / `modifyMetavarDecl` 的定义
+`modifyMetavarDecl mvarId f` updates the `MetavarDecl` for `mvarId` with `f`.
+Conditions on `f`:
 
-English:
-definition modifyMetavarDecl
-  signature: [MonadMCtx m] (mvarId : MVarId)
-  body: modifyMCtx fun mctx =>
-    match mctx.decls.find? mvarId with
-    | none => mctx
-    | some mdecl => { mctx with decls := mctx.decls.insert mvarId (f mdecl) }
+- The target of `f mdecl` is defeq to the target of `mdecl`.
+- The local context of `f mdecl` must contain the same fvars as the local
+  context of `mdecl`. For each fvar in the local context of `f mdecl`, the type
+  (and value, if any) of the fvar must be defeq to the corresponding fvar in
+  the local context of `mdecl`.
 
-中文:
-定义 modifyMetavarDecl
-  签名: [MonadMCtx m] (mvarId : MVarId)
-  定义体: modifyMCtx fun mctx =>
-    match mctx.decls.find? mvarId with
-    | none => mctx
-    | some mdecl => { mctx with decls := mctx.decls.insert mvarId (f mdecl) }
+If `mvarId` does not refer to a declared metavariable, nothing happens.
+-/
+/-
+**Mathlib.Tactic.modifyMetavarDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：modifyMetavarDecl [MonadMCtx m] (mvarId : MVarId) (f : MetavarDecl -> Meta
+varDecl) : m Unit
+参数：mvarId : MVarId；f : MetavarDecl -> MetavarDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: insert, mctx.decls.find, mctx.decls.insert, modifyMCtx, mvarId
+--- 原说明 ---
+`modifyMetavarDecl mvarId f` updates the `MetavarDecl` for `mvarId` with `f`.
+Conditions on `f`:
+
+- The target of `f mdecl` is defeq to the target of `mdecl`.
+- The local context of `f mdecl` must contain the same fvars as the local
+  context of `mdecl`. For each fvar in the local context of `f mdecl`, the type
+  (and value, if any) of the fvar must be defeq to the corresponding fvar in
+  the local context of `mdecl`.
+
+If `mvarId` does not refer to a declared metavariable, nothing happens.
 -/
 def modifyMetavarDecl [MonadMCtx m] (mvarId : MVarId)
-    (f : MetavarDecl -> MetavarDecl) : m Unit :=
-  modifyMCtx fun mctx =>
+    (f : MetavarDecl → MetavarDecl) : m Unit :=
+  modifyMCtx fun mctx ↦
     match mctx.decls.find? mvarId with
     | none => mctx
     | some mdecl => { mctx with decls := mctx.decls.insert mvarId (f mdecl) }
 
 /--
-Definition of `modifyTarget` / `modifyTarget` 的定义
-
-English:
-definition modifyTarget
-  signature: [MonadMCtx m] (mvarId : MVarId) (f : Expr -> Expr)
-  body: modifyMetavarDecl mvarId fun mdecl =>
-    { mdecl with type := f mdecl.type }
-
-中文:
-定义 modifyTarget
-  签名: [MonadMCtx m] (mvarId : MVarId) (f : Expr -> Expr)
-  定义体: modifyMetavarDecl mvarId fun mdecl =>
-    { mdecl with type := f mdecl.type }
-
-Depends on / 依赖: mdecl.type, modifyMetavarDecl, mvarId
+`modifyTarget mvarId f` updates the target of the metavariable `mvarId` with
+`f`. For any `e`, `f e` must be defeq to `e`. If `mvarId` does not refer to
+a declared metavariable, nothing happens.
 -/
-def modifyTarget [MonadMCtx m] (mvarId : MVarId) (f : Expr -> Expr) : m Unit :=
-  modifyMetavarDecl mvarId fun mdecl =>
+/-
+**Mathlib.Tactic.modifyTarget** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：modifyTarget [MonadMCtx m] (mvarId : MVarId) (f : Expr -> Expr) : m Unit
+参数：mvarId : MVarId；f : Expr -> Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`modifyTarget mvarId f` updates the target of the metavariable `mvarId` with
+`f`. For any `e`, `f e` must be defeq to `e`. If `mvarId` does not refer to
+a declared metavariable, nothing happens.
+-/
+def modifyTarget [MonadMCtx m] (mvarId : MVarId) (f : Expr → Expr) : m Unit :=
+  modifyMetavarDecl mvarId fun mdecl ↦
     { mdecl with type := f mdecl.type }
 
 /--
-Definition of `modifyLocalContext` / `modifyLocalContext` 的定义
+`modifyLocalContext mvarId f` updates the local context of the metavariable
+`mvarId` with `f`. The new local context must contain the same fvars as the old
+local context and the types (and values, if any) of the fvars in the new local
+context must be defeq to their equivalents in the old local context.
 
-English:
-definition modifyLocalContext
-  signature: [MonadMCtx m] (mvarId : MVarId)
-  body: modifyMetavarDecl mvarId fun mdecl =>
-    { mdecl with lctx := f mdecl.lctx }
+If `mvarId` does not refer to a declared metavariable, nothing happens.
+-/
+/-
+**Mathlib.Tactic.modifyLocalContext** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：modifyLocalContext [MonadMCtx m] (mvarId : MVarId) (f : LocalContext -> Lo
+calContext) : m Unit
+参数：mvarId : MVarId；f : LocalContext -> LocalContext。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 modifyLocalContext
-  签名: [MonadMCtx m] (mvarId : MVarId)
-  定义体: modifyMetavarDecl mvarId fun mdecl =>
-    { mdecl with lctx := f mdecl.lctx }
+--- 原说明 ---
+`modifyLocalContext mvarId f` updates the local context of the metavariable
+`mvarId` with `f`. The new local context must contain the same fvars as the old
+local context and the types (and values, if any) of the fvars in the new local
+context must be defeq to their equivalents in the old local context.
 
-Depends on / 依赖: mdecl.lctx, modifyMetavarDecl, mvarId
+If `mvarId` does not refer to a declared metavariable, nothing happens.
 -/
 def modifyLocalContext [MonadMCtx m] (mvarId : MVarId)
-    (f : LocalContext -> LocalContext) : m Unit :=
-  modifyMetavarDecl mvarId fun mdecl =>
+    (f : LocalContext → LocalContext) : m Unit :=
+  modifyMetavarDecl mvarId fun mdecl ↦
     { mdecl with lctx := f mdecl.lctx }
 
 /--
-Definition of `modifyLocalDecl` / `modifyLocalDecl` 的定义
+`modifyLocalDecl mvarId fvarId f` updates the local decl `fvarId` in the local
+context of `mvarId` with `f`. `f` must leave the `fvarId` and `index` of the
+`LocalDecl` unchanged. The type of the new `LocalDecl` must be defeq to the type
+of the old `LocalDecl` (and the same applies to the value of the `LocalDecl`, if
+any).
 
-English:
-definition modifyLocalDecl
-  signature: [MonadMCtx m] (mvarId : MVarId) (fvarId : FVarId)
-  body: modifyLocalContext mvarId fun lctx => lctx.modifyLocalDecl fvarId f
+If `mvarId` does not refer to a declared metavariable or if `fvarId` does not
+exist in the local context of `mvarId`, nothing happens.
+-/
+/-
+**Mathlib.Tactic.modifyLocalDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：modifyLocalDecl [MonadMCtx m] (mvarId : MVarId) (fvarId : FVarId) (f : Loc
+alDecl -> LocalDecl) : m Unit
+参数：mvarId : MVarId；fvarId : FVarId；f : LocalDecl -> LocalDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 modifyLocalDecl
-  签名: [MonadMCtx m] (mvarId : MVarId) (fvarId : FVarId)
-  定义体: modifyLocalContext mvarId fun lctx => lctx.modifyLocalDecl fvarId f
+--- 原说明 ---
+`modifyLocalDecl mvarId fvarId f` updates the local decl `fvarId` in the local
+context of `mvarId` with `f`. `f` must leave the `fvarId` and `index` of the
+`LocalDecl` unchanged. The type of the new `LocalDecl` must be defeq to the type
+of the old `LocalDecl` (and the same applies to the value of the `LocalDecl`, if
+any).
 
-Depends on / 依赖: fvarId, lctx.modifyLocalDecl, modifyLocalContext, modifyLocalDecl, mvarId
+If `mvarId` does not refer to a declared metavariable or if `fvarId` does not
+exist in the local context of `mvarId`, nothing happens.
 -/
 def modifyLocalDecl [MonadMCtx m] (mvarId : MVarId) (fvarId : FVarId)
-    (f : LocalDecl -> LocalDecl) : m Unit :=
-  modifyLocalContext mvarId fun lctx => lctx.modifyLocalDecl fvarId f
+    (f : LocalDecl → LocalDecl) : m Unit :=
+  modifyLocalContext mvarId fun lctx ↦ lctx.modifyLocalDecl fvarId f
 
 end Mathlib.Tactic
+

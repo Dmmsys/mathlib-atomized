@@ -31,115 +31,71 @@ attribute [enat_to_nat_top] OfNat.ofNat_ne_zero ne_eq not_false_eq_true ENat.nat
   ENat.top_ne_natCast ENat.natCast_lt_top top_le_iff le_top
 attribute [enat_to_nat_top] top_add ENat.sub_top ENat.top_sub_natCast ENat.mul_top ENat.top_mul
 
-/--
-lemma `not_lt_top` / 引理 `not_lt_top`
-
-English:
-lemma not_lt_top
-  given: (x : ENat)
-  proof: by cases x <;> simp
-
-中文:
-引理 not_lt_top
-  条件: (x : E自然数)
-  证明: by cases x <;> simp
+/-
+**Mathlib.Tactic.ENatToNat.not_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+ENatToNat`。
+形式化陈述：∀ (x : ℕ∞), ¬⊤ < x
+参数：x : ℕ∞。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[enat_to_nat_top] lemma not_lt_top (x : ENat) :
     ¬(⊤ < x) := by cases x <;> simp
-
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: (m n : Nat)
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: (m n : 自然数)
-  证明: rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.ENa
+tToNat`。
+形式化陈述：∀ (m n : ℕ), ↑m + ↑n = ↑(m + n)
+参数：m n : ℕ；m + n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_add (m n : Nat) :
-    (m : ENat) + (n : ENat) = ((m + n : Nat) : ENat) := rfl
-
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: (m n : Nat)
-  proof: rfl
-
-中文:
-引理 coe_sub
-  条件: (m n : 自然数)
-  证明: rfl
+@[enat_to_nat_coe] lemma coe_add (m n : ℕ) :
+    (m : ENat) + (n : ENat) = ((m + n : ℕ) : ENat) := rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.ENa
+tToNat`。
+形式化陈述：∀ (m n : ℕ), ↑m - ↑n = ↑(m - n)
+参数：m n : ℕ；m - n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_sub (m n : Nat) :
-    (m : ENat) - (n : ENat) = ((m - n : Nat) : ENat) := rfl
-
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: (m n : Nat)
-  proof: rfl
-
-中文:
-引理 coe_mul
-  条件: (m n : 自然数)
-  证明: rfl
+@[enat_to_nat_coe] lemma coe_sub (m n : ℕ) :
+    (m : ENat) - (n : ENat) = ((m - n : ℕ) : ENat) := rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.ENa
+tToNat`。
+形式化陈述：∀ (m n : ℕ), ↑m * ↑n = ↑(m * n)
+参数：m n : ℕ；m * n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_mul (m n : Nat) :
-    (m : ENat) * (n : ENat) = ((m * n : Nat) : ENat) := rfl
-
-/--
-lemma `coe_ofNat` / 引理 `coe_ofNat`
-
-English:
-lemma coe_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-引理 coe_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
+@[enat_to_nat_coe] lemma coe_mul (m n : ℕ) :
+    (m : ENat) * (n : ENat) = ((m * n : ℕ) : ENat) := rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.E
+NatToNat`。
+形式化陈述：∀ (n : ℕ) [inst : n.AtLeastTwo], OfNat.ofNat n = ↑(OfNat.ofNat n)
+参数：n : ℕ；OfNat.ofNat n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_ofNat (n : Nat) [n.AtLeastTwo] :
-    (OfNat.ofNat n : ENat) = (OfNat.ofNat n : Nat) := rfl
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: (0 : ENat) = ((0 : Nat) : ENat)
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: (0 : E自然数) = ((0 : 自然数) : E自然数)
-  证明: rfl
+@[enat_to_nat_coe] lemma coe_ofNat (n : ℕ) [n.AtLeastTwo] :
+    (OfNat.ofNat n : ENat) = (OfNat.ofNat n : ℕ) := rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.EN
+atToNat`。
+形式化陈述：0 = ↑0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_zero : (0 : ENat) = ((0 : Nat) : ENat) := rfl
-
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  statement: (1 : ENat) = ((1 : Nat) : ENat)
-  proof: rfl
-
-中文:
-引理 coe_one
-  结论: (1 : E自然数) = ((1 : 自然数) : E自然数)
-  证明: rfl
+@[enat_to_nat_coe] lemma coe_zero : (0 : ENat) = ((0 : ℕ) : ENat) := rfl
+/-
+**Mathlib.Tactic.ENatToNat.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.ENa
+tToNat`。
+形式化陈述：1 = ↑1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[enat_to_nat_coe] lemma coe_one : (1 : ENat) = ((1 : Nat) : ENat) := rfl
+@[enat_to_nat_coe] lemma coe_one : (1 : ENat) = ((1 : ℕ) : ENat) := rfl
 
 attribute [enat_to_nat_coe] ENat.natCast_inj ENat.natCast_le_natCast ENat.natCast_lt_natCast
 
@@ -156,7 +112,7 @@ elab "cases_first_enat" : tactic => focus do
       else
         return Option.none
     let some decl := decl? | throwError "No ENats"
-.isSome let isInaccessible := ctx.inaccessibleFVars.find? (·.fvarId == decl.fvarId)
+    let isInaccessible := ctx.inaccessibleFVars.find? (·.fvarId == decl.fvarId) |>.isSome
     if isInaccessible then
       let name : Name := `enat_to_nat_aux
       setGoals [← g.rename decl.fvarId name]
@@ -177,3 +133,4 @@ macro "enat_to_nat" : tactic => `(tactic| focus (
 )
 
 end Mathlib.Tactic.ENatToNat
+

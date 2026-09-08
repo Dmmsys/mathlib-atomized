@@ -43,88 +43,103 @@ universe u u' u'' v
 
 variable {S : Type u'} {T : Type u''} {R : Type u} {M : Type v}
 
-/--
-Definition of `SMulMemClass` / `SMulMemClass` 的定义
+/-- `SMulMemClass S R M` says `S` is a type of subsets `s ≤ M` that are closed under the
+scalar action of `R` on `M`.
 
-English:
-class SMulMemClass
-  parameters: (S : Type*) (R : outParam Type*) (M : Type*) [SMul R M] [SetLike S M]
-  axioms and operations (1):
-    - smul_mem : forall {s : S} (r : R) {m : M}, m in s -> r • m in s
+Note that only `R` is marked as an `outParam` here, since `M` is supplied by the `SetLike`
+class instead.
+-/
+/-
+**SMulMemClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_1) → (R : outParam (Type u_2)) → (M : Type u_3) → [SMul R M] →
+ [SetLike S M] → Prop
+参数：Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 SMulMem类
-  参数: (S : 类型) (R : outParam 类型) (M : 类型) [标量乘法 R M] [集合状 S M]
-  公理与运算 (1 个):
-    - smul_mem : 对任意 {s : S} (r : R) {m : M}, m in s -> r • m in s
+--- 原说明 ---
+`SMulMemClass S R M` says `S` is a type of subsets `s ≤ M` that are closed under
+ the
+scalar action of `R` on `M`.
+
+Note that only `R` is marked as an `outParam` here, since `M` is supplied by the
+ `SetLike`
+class instead.
 -/
 class SMulMemClass (S : Type*) (R : outParam Type*) (M : Type*) [SMul R M] [SetLike S M] :
     Prop where
   /-- Multiplication by a scalar on an element of the set remains in the set. -/
-  smul_mem : forall {s : S} (r : R) {m : M}, m in s -> r • m in s
+  smul_mem : ∀ {s : S} (r : R) {m : M}, m ∈ s → r • m ∈ s
 
-/--
-Definition of `VAddMemClass` / `VAddMemClass` 的定义
+/-- `VAddMemClass S R M` says `S` is a type of subsets `s ≤ M` that are closed under the
+additive action of `R` on `M`.
 
-English:
-class VAddMemClass
-  parameters: (S : Type*) (R : outParam Type*) (M : Type*) [VAdd R M] [SetLike S M]
-  axioms and operations (1):
-    - vadd_mem : forall {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in s
+Note that only `R` is marked as an `outParam` here, since `M` is supplied by the `SetLike`
+/-
+**instead.** 是 Mathlib 中的一个类，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+class instead. -/
+/-
+**VAddMemClass** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：VAddMemClass (S : Type*) (R : outParam Type*) (M : Type*) [VAdd R M] [SetL
+ike S M] : Prop where /-- Addition by a scalar with an element of the set remain
+s in the set. -/ vadd_mem : forall {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in 
+s  attribute [to_additive] SMulMemClass  attribute [aesop 90% (rule_sets
+参数：S : Type*；R : outParam Type*；M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 VAddMem类
-  参数: (S : 类型) (R : outParam 类型) (M : 类型) [向量加法 R M] [集合状 S M]
-  公理与运算 (1 个):
-    - vadd_mem : 对任意 {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in s
+--- 原说明 ---
+`VAddMemClass S R M` says `S` is a type of subsets `s ≤ M` that are closed under
+ the
+additive action of `R` on `M`.
 
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, SetLike, VAddMemClass, VAddMemClass.vadd_mem, smul_mem, vadd_mem
+Note that only `R` is marked as an `outParam` here, since `M` is supplied by the
+ `SetLike`
+class instead.
 -/
 class VAddMemClass (S : Type*) (R : outParam Type*) (M : Type*) [VAdd R M] [SetLike S M] :
     Prop where
   /-- Addition by a scalar with an element of the set remains in the set. -/
-  vadd_mem : forall {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in s
+  vadd_mem : ∀ {s : S} (r : R) {m : M}, m ∈ s → r +ᵥ m ∈ s
 
 attribute [to_additive] SMulMemClass
 
 attribute [aesop 90% (rule_sets := [SetLike])] SMulMemClass.smul_mem VAddMemClass.vadd_mem
 
-/--
-lemma `AddSubmonoidClass.nsmulMemClass` / 引理 `AddSubmonoidClass.nsmulMemClass`
+/-- Not registered as an instance because `R` is an `outParam` in `SMulMemClass S R M`. -/
+/-
+**AddSubmonoidClass.nsmulMemClass** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddSubmonoidClass.nsmulMemClass {S M : Type*} [AddMonoid M] [SetLike S M] 
+[AddSubmonoidClass S M] : SMulMemClass S Nat M where smul_mem n _x hx
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : AddMonoid M] [inst_1 
+: SetLike A M] [AddSubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), n …
 
-English:
-lemma AddSubmonoidClass.nsmulMemClass
-  statement: {S M : Type*} [AddMonoid M] [SetLike S M]
-  proof: nsmul_mem hx n
-
-中文:
-引理 加法子幺半群类.nsmulMemClass
-  结论: {S M : 类型} [加法幺半群 M] [集合状 S M]
-  证明: nsmul_mem hx n
-
-Depends on / 依赖: nsmul_mem
+--- 原说明 ---
+Not registered as an instance because `R` is an `outParam` in `SMulMemClass S R 
+M`.
 -/
 lemma AddSubmonoidClass.nsmulMemClass {S M : Type*} [AddMonoid M] [SetLike S M]
-    [AddSubmonoidClass S M] : SMulMemClass S Nat M where
+    [AddSubmonoidClass S M] : SMulMemClass S ℕ M where
   smul_mem n _x hx := nsmul_mem hx n
 
-/--
-lemma `AddSubgroupClass.zsmulMemClass` / 引理 `AddSubgroupClass.zsmulMemClass`
+/-- Not registered as an instance because `R` is an `outParam` in `SMulMemClass S R M`. -/
+/-
+**AddSubgroupClass.zsmulMemClass** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddSubgroupClass.zsmulMemClass {S M : Type*} [SubNegMonoid M] [SetLike S M
+] [AddSubgroupClass S M] : SMulMemClass S Int M where smul_mem n _x hx
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zsmul_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : SubNegMonoid M] [inst
+_1 : SetLike S M] [hSM : AddSubgroupClass S M] {K : S}   {x : M}, x ∈ K → ∀ (n …
 
-English:
-lemma AddSubgroupClass.zsmulMemClass
-  statement: {S M : Type*} [SubNegMonoid M] [SetLike S M]
-  proof: zsmul_mem hx n
-
-中文:
-引理 加法子群类.zsmulMemClass
-  结论: {S M : 类型} [SubNeg幺半群 M] [集合状 S M]
-  证明: zsmul_mem hx n
-
-Depends on / 依赖: zsmul_mem
+--- 原说明 ---
+Not registered as an instance because `R` is an `outParam` in `SMulMemClass S R 
+M`.
 -/
 lemma AddSubgroupClass.zsmulMemClass {S M : Type*} [SubNegMonoid M] [SetLike S M]
-    [AddSubgroupClass S M] : SMulMemClass S Int M where
+    [AddSubgroupClass S M] : SMulMemClass S ℤ M where
   smul_mem n _x hx := zsmul_mem hx n
 
 namespace SetLike
@@ -138,216 +153,177 @@ variable [SMul R M] [SetLike S M] [hS : SMulMemClass S R M] (s : S)
 -- lower priority so other instances are found first
 /-- A subset closed under the scalar action inherits that action. -/
 @[to_additive /-- A subset closed under the additive action inherits that action. -/]
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A subset closed under the scalar action inherits that action.
+-/
 instance (priority := 50) smul : SMul R s :=
   ⟨fun r x => ⟨r • x.1, smul_mem r x.2⟩⟩
-
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 @[to_additive] instance (priority := 50) [SMul T M] [SMulMemClass S T M] [SMulCommClass T R M] :
     SMulCommClass T R s where
   smul_comm _ _ _ := Subtype.ext (smul_comm ..)
-
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 @[to_additive] instance (priority := 50) [IsLeftCancelSMul R M] : IsLeftCancelSMul R s where
-left_cancel' x _ _ eq := Subtype.ext IsLeftCancelSMul.left_cancel x _ _ congr($eq)
-
+  left_cancel' x _ _ eq := Subtype.ext <| IsLeftCancelSMul.left_cancel x _ _ congr($eq)
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 @[to_additive] instance (priority := 50) [IsCancelSMul R M] : IsCancelSMul R s where
   right_cancel' _ _ x eq := IsCancelSMul.right_cancel _ _ x.1 congr($eq)
 
-/--
-theorem `_root_.SMulMemClass.ofIsScalarTower` / 定理 `_root_.SMulMemClass.ofIsScalarTower`
+/-- This can't be an instance because Lean wouldn't know how to find `N`, but we can still use
+this to manually derive `SMulMemClass` on specific types. -/
+/-
+**SetLike._root_.SMulMemClass.ofIsScalarTower** 是 Mathlib 中的一个定理，位于命名空间 `SetLike
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.SMulMemClass.ofIsScalarTower
-  statement: (S M N α : Type*) [SetLike S α]
-  proof: { smul_mem := fun m a ha => smul_one_smul N m a ▸ SMulMemClass.smul_mem _ ha }
-
-中文:
-定理 _root_.SMulMem类.ofIsScalarTower
-  结论: (S M N α : 类型) [集合状 S α]
-  证明: { smul_mem := fun m a ha => smul_one_smul N m a ▸ SMulMemClass.smul_mem _ ha }
+--- 原说明 ---
+This can't be an instance because Lean wouldn't know how to find `N`, but we can
+ still use
+this to manually derive `SMulMemClass` on specific types.
 -/
 @[to_additive] theorem _root_.SMulMemClass.ofIsScalarTower (S M N α : Type*) [SetLike S α]
     [SMul M N] [SMul M α] [Monoid N] [MulAction N α] [SMulMemClass S N α] [IsScalarTower M N α] :
     SMulMemClass S M α :=
   { smul_mem := fun m a ha => smul_one_smul N m a ▸ SMulMemClass.smul_mem _ ha }
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [Mul M] [MulMemClass S M] [IsScalarTower R M M]
-  body: Subtype.ext smul_assoc r (x : M) (y : M)
-
-中文:
-实例 instIsScalarTower
-  签名: [乘法 M] [MulMem类 S M] [标量塔 R M M]
-  定义体: Subtype.ext smul_assoc r (x : M) (y : M)
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
+/-
+**SetLike.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+形式化陈述：instIsScalarTower [Mul M] [MulMemClass S M] [IsScalarTower R M M] (s : S) 
+: IsScalarTower R s s where smul_assoc r x y
+参数：s : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTower [Mul M] [MulMemClass S M] [IsScalarTower R M M]
     (s : S) : IsScalarTower R s s where
-smul_assoc r x y := Subtype.ext smul_assoc r (x : M) (y : M)
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [Mul M] [MulMemClass S M] [SMulCommClass R M M]
-  body: Subtype.ext smul_comm r (x : M) (y : M)
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instSMulCommClass
-  签名: [乘法 M] [MulMem类 S M] [标量交换类 R M M]
-  定义体: Subtype.ext smul_comm r (x : M) (y : M)
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_comm
+  smul_assoc r x y := Subtype.ext <| smul_assoc r (x : M) (y : M)
+/-
+**SetLike.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+形式化陈述：instSMulCommClass [Mul M] [MulMemClass S M] [SMulCommClass R M M] (s : S) 
+: SMulCommClass R s s where smul_comm r x y
+参数：s : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance instSMulCommClass [Mul M] [MulMemClass S M] [SMulCommClass R M M]
     (s : S) : SMulCommClass R s s where
-smul_comm r x y := Subtype.ext smul_comm r (x : M) (y : M)
+  smul_comm r x y := Subtype.ext <| smul_comm r (x : M) (y : M)
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `val_smul` / 定理 `val_smul`
-
-English:
-theorem val_smul
-  given: (r : R) (x : s)
-  statement: (↑(r • x) : M) = r • (x : M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 val_smul
-  条件: (r : R) (x : s)
-  结论: (↑(r • x) : M) = r • (x : M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SetLike.val_smul** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：∀ {S : Type u'} {R : Type u} {M : Type v} [inst : SMul R M] [inst_1 : SetL
+ike S M] [hS : SMulMemClass S R M] (s : S)   (r : R) (x : ↥s), ↑(r • x) = r • ↑x
+参数：s : S；r : R；x : ↥s；r • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem val_smul (r : R) (x : s) : (↑(r • x) : M) = r • (x : M) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_smul_mk` / 定理 `mk_smul_mk`
-
-English:
-theorem mk_smul_mk
-  given: (r : R) (x : M) (hx : x in s)
-  statement: r • (⟨x, hx⟩ : s) = ⟨r • x, smul_mem r hx⟩
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk_smul_mk
-  条件: (r : R) (x : M) (hx : x in s)
-  结论: r • (⟨x, hx⟩ : s) = ⟨r • x, smul_mem r hx⟩
-  证明: rfl
-
-@[to_additive]
+/-
+**SetLike.mk_smul_mk** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：mk_smul_mk (r : R) (x : M) (hx : x in s) : r • (⟨x, hx⟩ : s) = ⟨r • x, smu
+l_mem r hx⟩
+参数：r : R；x : M；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_smul_mk (r : R) (x : M) (hx : x in s) : r • (⟨x, hx⟩ : s) = ⟨r • x, smul_mem r hx⟩ :=
+theorem mk_smul_mk (r : R) (x : M) (hx : x ∈ s) : r • (⟨x, hx⟩ : s) = ⟨r • x, smul_mem r hx⟩ :=
   rfl
 
 @[to_additive]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (r : R) (x : s)
-  statement: r • x = ⟨r • x, smul_mem r x.2⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_def
-  条件: (r : R) (x : s)
-  结论: r • x = ⟨r • x, smul_mem r x.2⟩
-  证明: rfl
-
-@[simp]
+/-
+**SetLike.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：smul_def (r : R) (x : s) : r • x = ⟨r • x, smul_mem r x.2⟩
+参数：r : R；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def (r : R) (x : s) : r • x = ⟨r • x, smul_mem r x.2⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `forall_smul_mem_iff` / 定理 `forall_smul_mem_iff`
-
-English:
-theorem forall_smul_mem_iff
-  statement: {R M S : Type*} [Monoid R] [MulAction R M] [SetLike S M]
-  proof: ⟨fun h => by simpa using h 1, fun h a => SMulMemClass.smul_mem a h⟩
-
-中文:
-定理 对任意_smul_mem_iff
-  结论: {R M S : 类型} [幺半群 R] [乘法作用 R M] [集合状 S M]
-  证明: ⟨fun h => by simpa using h 1, fun h a => SMulMemClass.smul_mem a h⟩
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, smul_mem
+/-
+**SetLike.forall_smul_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：forall_smul_mem_iff {R M S : Type*} [Monoid R] [MulAction R M] [SetLike S 
+M] [SMulMemClass S R M] {N : S} {x : M} : (forall a : R, a • x in N) ↔ x in N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
 -/
 theorem forall_smul_mem_iff {R M S : Type*} [Monoid R] [MulAction R M] [SetLike S M]
-    [SMulMemClass S R M] {N : S} {x : M} : (forall a : R, a • x in N) ↔ x in N :=
+    [SMulMemClass S R M] {N : S} {x : M} : (∀ a : R, a • x ∈ N) ↔ x ∈ N :=
   ⟨fun h => by simpa using h 1, fun h a => SMulMemClass.smul_mem a h⟩
 
 open scoped Pointwise in
 @[to_additive]
-/--
-theorem `smul_subset_self` / 定理 `smul_subset_self`
-
-English:
-theorem smul_subset_self
-  statement: {S R M : Type*} [SetLike S M] [SMul R M] [SMulMemClass S R M]
-  proof: by
-  rintro _ ⟨x, hx, rfl⟩
-  simpa using SMulMemClass.smul_mem (r : R) hx
-
-中文:
-定理 smul_subset_self
-  结论: {S R M : 类型} [集合状 S M] [标量乘法 R M] [SMulMem类 S R M]
-  证明: by
-  rintro _ ⟨x, hx, rfl⟩
-  simpa using SMulMemClass.smul_mem (r : R) hx
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, smul_mem
+/-
+**SetLike.smul_subset_self** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：smul_subset_self {S R M : Type*} [SetLike S M] [SMul R M] [SMulMemClass S 
+R M] (r : R) (s : S) : (r • s : Set M) subseteq s
+参数：r : R；s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
 -/
 theorem smul_subset_self {S R M : Type*} [SetLike S M] [SMul R M] [SMulMemClass S R M]
-    (r : R) (s : S) : (r • s : Set M) subseteq s := by
+    (r : R) (s : S) : (r • s : Set M) ⊆ s := by
   rintro _ ⟨x, hx, rfl⟩
   simpa using SMulMemClass.smul_mem (r : R) hx
 
 open scoped Pointwise in
 @[to_additive (attr := simp)]
-/--
-theorem `units_smul` / 定理 `units_smul`
-
-English:
-theorem units_smul
-  statement: {S R M : Type*} [SetLike S M] [Monoid R] [MulAction R M] [SMulMemClass S R M]
-  proof: by
-  apply subset_antisymm (smul_subset_self _ s)
-  rintro x hx
-  exact ⟨r⁻¹ • x, SMulMemClass.smul_mem (↑r⁻¹ : R) hx, by simp [← Units.smul_def]⟩
-
-中文:
-定理 units_smul
-  结论: {S R M : 类型} [集合状 S M] [幺半群 R] [乘法作用 R M] [SMulMem类 S R M]
-  证明: by
-  apply subset_antisymm (smul_subset_self _ s)
-  rintro x hx
-  exact ⟨r⁻¹ • x, SMulMemClass.smul_mem (↑r⁻¹ : R) hx, by simp [← Units.smul_def]⟩
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, Units.smul_def, smul_def, smul_mem, smul_subset_self, subset_antisymm
+/-
+**SetLike.units_smul** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：units_smul {S R M : Type*} [SetLike S M] [Monoid R] [MulAction R M] [SMulM
+emClass S R M] (s : S) (r : Rˣ) : r • s = (s : Set M)
+参数：s : S；r : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `SetLike.smul_subset_self`：smul_subset_self {S R M : Type*} [SetLike S M]
+ [SMul R M] [SMulMemClass S R M] (r : R) (s : S) : (r • s : Set M) subseteq s
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem units_smul {S R M : Type*} [SetLike S M] [Monoid R] [MulAction R M] [SMulMemClass S R M]
     (s : S) (r : Rˣ) : r • s = (s : Set M) := by
@@ -365,78 +341,70 @@ variable {N α : Type*} [SetLike S α] [SMul M N] [SMul M α] [Monoid N]
 -- lower priority so other instances are found first
 /-- A subset closed under the scalar action inherits that action. -/
 @[to_additive /-- A subset closed under the additive action inherits that action. -/]
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A subset closed under the scalar action inherits that action.
+-/
 instance (priority := 50) smul' : SMul M s where
   smul r x := ⟨r • x.1, smul_one_smul N r x.1 ▸ smul_mem _ x.2⟩
-
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) : IsScalarTower M N s where
   smul_assoc m n x := Subtype.ext (smul_assoc m n x.1)
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `val_smul_of_tower` / 定理 `val_smul_of_tower`
-
-English:
-theorem val_smul_of_tower
-  given: (r : M) (x : s)
-  statement: (↑(r • x) : α) = r • (x : α)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 val_smul_of_tower
-  条件: (r : M) (x : s)
-  结论: (↑(r • x) : α) = r • (x : α)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SetLike.val_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：∀ {S : Type u'} {M : Type v} {N : Type u_1} {α : Type u_2} [inst : SetLike
+ S α] [inst_1 : SMul M N] [inst_2 : SMul M α]   [inst_3 : Monoid N] [inst_4 : Mu
+lAction N α] [inst_5 : SMulMemClass S N α] [inst_6 : IsScalarTower M N α] (s : S
+)   (r : M) (x : ↥s), ↑(r • x) = r • ↑x
+参数：s : S；r : M；x : ↥s；r • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem val_smul_of_tower (r : M) (x : s) : (↑(r • x) : α) = r • (x : α) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_smul_of_tower_mk` / 定理 `mk_smul_of_tower_mk`
-
-English:
-theorem mk_smul_of_tower_mk
-  given: (r : M) (x : α) (hx : x in s)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk_smul_of_tower_mk
-  条件: (r : M) (x : α) (hx : x in s)
-  证明: rfl
-
-@[to_additive]
+/-
+**SetLike.mk_smul_of_tower_mk** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：mk_smul_of_tower_mk (r : M) (x : α) (hx : x in s) : r • (⟨x, hx⟩ : s) = ⟨r
+ • x, smul_one_smul N r x ▸ smul_mem _ hx⟩
+参数：r : M；x : α；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_smul_of_tower_mk (r : M) (x : α) (hx : x in s) :
+theorem mk_smul_of_tower_mk (r : M) (x : α) (hx : x ∈ s) :
     r • (⟨x, hx⟩ : s) = ⟨r • x, smul_one_smul N r x ▸ smul_mem _ hx⟩ :=
   rfl
 
 @[to_additive]
-/--
-theorem `smul_of_tower_def` / 定理 `smul_of_tower_def`
-
-English:
-theorem smul_of_tower_def
-  given: (r : M) (x : s)
-  proof: rfl
-
-中文:
-定理 smul_of_tower_def
-  条件: (r : M) (x : s)
-  证明: rfl
+/-
+**SetLike.smul_of_tower_def** 是 Mathlib 中的一个定理，位于命名空间 `SetLike`。
+形式化陈述：smul_of_tower_def (r : M) (x : s) : r • x = ⟨r • x, smul_one_smul N r x.1 
+▸ smul_mem _ x.2⟩
+参数：r : M；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_of_tower_def (r : M) (x : s) :
     r • x = ⟨r • x, smul_one_smul N r x.1 ▸ smul_mem _ x.2⟩ :=
   rfl
-
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 @[to_additive] instance (priority := 50) [SMulCommClass M N α] : SMulCommClass M N s where
   smul_comm _ _ _ := Subtype.ext (smul_comm ..)
-
+/-
+**SetLike.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 @[to_additive] instance (priority := 50) [SMulCommClass N M α] : SMulCommClass N M s where
   smul_comm _ _ _ := Subtype.ext (smul_comm ..)
 
@@ -444,466 +412,250 @@ end OfTower
 
 end SetLike
 
-/--
-Definition of `SubAddAction` / `SubAddAction` 的定义
+/-- A SubAddAction is a set which is closed under scalar multiplication. -/
+/-
+**SubAddAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (M : Type v) → [VAdd R M] → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubAddAction
-  parameters: (R : Type u) (M : Type v) [VAdd R M]
-  axioms and operations (2):
-    - carrier : Set M
-    - vadd_mem' : forall (c : R) {x : M}, x in carrier -> c +ᵥ x in carrier
-
-中文:
-结构 SubAdd作用
-  参数: (R : 类型u) (M : 类型v) [向量加法 R M]
-  公理与运算 (2 个):
-    - carrier : 集合 M
-    - vadd_mem' : 对任意 (c : R) {x : M}, x in carrier -> c +ᵥ x in carrier
+--- 原说明 ---
+A SubAddAction is a set which is closed under scalar multiplication.
 -/
 structure SubAddAction (R : Type u) (M : Type v) [VAdd R M] : Type v where
   /-- The underlying set of a `SubAddAction`. -/
   carrier : Set M
   /-- The carrier set is closed under scalar multiplication. -/
-  vadd_mem' : forall (c : R) {x : M}, x in carrier -> c +ᵥ x in carrier
+  vadd_mem' : ∀ (c : R) {x : M}, x ∈ carrier → c +ᵥ x ∈ carrier
 
 /-- A SubMulAction is a set which is closed under scalar multiplication. -/
 @[to_additive]
-/--
-Definition of `SubMulAction` / `SubMulAction` 的定义
+/-
+**SubMulAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (M : Type v) → [SMul R M] → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubMulAction
-  parameters: (R : Type u) (M : Type v) [SMul R M]
-  axioms and operations (2):
-    - carrier : Set M
-    - smul_mem' : forall (c : R) {x : M}, x in carrier -> c • x in carrier
-
-中文:
-结构 SubMul作用
-  参数: (R : 类型u) (M : 类型v) [标量乘法 R M]
-  公理与运算 (2 个):
-    - carrier : 集合 M
-    - smul_mem' : 对任意 (c : R) {x : M}, x in carrier -> c • x in carrier
+--- 原说明 ---
+A SubMulAction is a set which is closed under scalar multiplication.
 -/
 structure SubMulAction (R : Type u) (M : Type v) [SMul R M] : Type v where
   /-- The underlying set of a `SubMulAction`. -/
   carrier : Set M
   /-- The carrier set is closed under scalar multiplication. -/
-  smul_mem' : forall (c : R) {x : M}, x in carrier -> c • x in carrier
+  smul_mem' : ∀ (c : R) {x : M}, x ∈ carrier → c • x ∈ carrier
 
 namespace SubMulAction
 
 variable [SMul R M]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (SubMulAction R M) M
-  body: ⟨SubMulAction.carrier, fun p q h => by cases p; cases q; congr⟩
-
-中文:
-实例 :
-  签名: 集合状 (SubMul作用 R M) M
-  定义体: ⟨SubMulAction.carrier, fun p q h => by cases p; cases q; congr⟩
-
-Depends on / 依赖: SubMulAction, SubMulAction.carrier, carrier
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (SubMulAction R M) M :=
   ⟨SubMulAction.carrier, fun p q h => by cases p; cases q; congr⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (SubMulAction R M)
-  body: .ofSetLike (SubMulAction R M) M
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 偏序 (SubMul作用 R M)
-  定义体: .ofSetLike (SubMulAction R M) M
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : PartialOrder (SubMulAction R M) := .ofSetLike (SubMulAction R M) M
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulMemClass (SubMulAction R M) R M
-  body: smul_mem' _
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: SMulMem类 (SubMul作用 R M) R M
-  定义体: smul_mem' _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: smul_mem
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulMemClass (SubMulAction R M) R M where smul_mem := smul_mem' _
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_carrier` / 定理 `mem_carrier`
-
-English:
-theorem mem_carrier
-  given: {p : SubMulAction R M} {x : M}
-  statement: x in p.carrier ↔ x in (p : Set M)
-  proof: Iff.rfl
-
-@[to_additive (attr := ext)]
-
-中文:
-定理 mem_carrier
-  条件: {p : SubMul作用 R M} {x : M}
-  结论: x in p.carrier ↔ x in (p : 集合 M)
-  证明: Iff.rfl
-
-@[to_additive (attr := ext)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SubMulAction.mem_carrier** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：mem_carrier {p : SubMulAction R M} {x : M} : x in p.carrier ↔ x in (p : Se
+t M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_carrier {p : SubMulAction R M} {x : M} : x in p.carrier ↔ x in (p : Set M) :=
+theorem mem_carrier {p : SubMulAction R M} {x : M} : x ∈ p.carrier ↔ x ∈ (p : Set M) :=
   Iff.rfl
 
 @[to_additive (attr := ext)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {p q : SubMulAction R M} (h : forall x, x in p ↔ x in q)
-  statement: p = q
-  proof: SetLike.ext h
-
-中文:
-定理 ext
-  条件: {p q : SubMul作用 R M} (h : 对任意 x, x in p ↔ x in q)
-  结论: p = q
-  证明: SetLike.ext h
-
-Depends on / 依赖: SetLike, SetLike.ext
+/-
+**SubMulAction.ext** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：ext {p q : SubMulAction R M} (h : forall x, x in p ↔ x in q) : p = q
+参数：h : forall x, x in p ↔ x in q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 -/
-theorem ext {p q : SubMulAction R M} (h : forall x, x in p ↔ x in q) : p = q :=
+theorem ext {p q : SubMulAction R M} (h : ∀ x, x ∈ p ↔ x ∈ q) : p = q :=
   SetLike.ext h
 
 /-- Copy of a sub_mul_action with a new `carrier` equal to the old one. Useful to fix definitional
 equalities. -/
 @[to_additive /-- Copy of a sub_mul_action with a new `carrier` equal to the old one.
   Useful to fix definitional equalities. -/]
-/--
-Definition of `copy` / `copy` 的定义
-
-English:
-definition copy
-  signature: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
-  body: s
-  smul_mem' := hs.symm ▸ p.smul_mem'
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 copy
-  签名: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
-  定义体: s
-  smul_mem' := hs.symm ▸ p.smul_mem'
-
-@[to_additive (attr := simp)]
+/-
+**SubMulAction.copy** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction`。
+形式化陈述：{R : Type u} → {M : Type v} → [inst : SMul R M] → (p : SubMulAction R M) →
+ (s : Set M) → s = ↑p → SubMulAction R M
+参数：p : SubMulAction R M；s : Set M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def copy (p : SubMulAction R M) (s : Set M) (hs : s = ↑p) : SubMulAction R M where
   carrier := s
   smul_mem' := hs.symm ▸ p.smul_mem'
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
-  statement: (p.copy s hs : Set M) = s
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_copy
-  条件: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
-  结论: (p.copy s hs : 集合 M) = s
-  证明: rfl
-
-@[to_additive]
+/-
+**SubMulAction.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：coe_copy (p : SubMulAction R M) (s : Set M) (hs : s = ↑p) : (p.copy s hs :
+ Set M) = s
+参数：p : SubMulAction R M；s : Set M；hs : s = ↑p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_copy (p : SubMulAction R M) (s : Set M) (hs : s = ↑p) : (p.copy s hs : Set M) = s :=
   rfl
 
 @[to_additive]
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
-  statement: p.copy s hs = p
-  proof: SetLike.coe_injective hs
-
-@[to_additive]
-
-中文:
-定理 copy_eq
-  条件: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
-  结论: p.copy s hs = p
-  证明: SetLike.coe_injective hs
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**SubMulAction.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：copy_eq (p : SubMulAction R M) (s : Set M) (hs : s = ↑p) : p.copy s hs = p
+参数：p : SubMulAction R M；s : Set M；hs : s = ↑p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem copy_eq (p : SubMulAction R M) (s : Set M) (hs : s = ↑p) : p.copy s hs = p :=
   SetLike.coe_injective hs
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (SubMulAction R M)
-  body: ⟨⟨∅, by simp⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 底元素 (SubMul作用 R M)
-  定义体: ⟨⟨∅, by simp⟩⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (SubMulAction R M) :=
   ⟨⟨∅, by simp⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (SubMulAction R M)
-  body: ⟨⊥⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 (SubMul作用 R M)
-  定义体: ⟨⊥⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (SubMulAction R M) :=
   ⟨⊥⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (SubMulAction R M)
-  body: ⟨⟨Set.univ, by simp⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 顶元素 (SubMul作用 R M)
-  定义体: ⟨⟨Set.univ, by simp⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: Set.univ
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (SubMulAction R M) :=
   ⟨⟨Set.univ, by simp⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (SubMulAction R M)
-  body: ⟨fun s t => ⟨s union t, by aesop⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 最大值 (SubMul作用 R M)
-  定义体: ⟨fun s t => ⟨s union t, by aesop⟩⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (SubMulAction R M) :=
-  ⟨fun s t => ⟨s union t, by aesop⟩⟩
+  ⟨fun s t => ⟨s ∪ t, by aesop⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (SubMulAction R M)
-  body: ⟨fun s t => ⟨s inter t, by aesop⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 最小值 (SubMul作用 R M)
-  定义体: ⟨fun s t => ⟨s inter t, by aesop⟩⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (SubMulAction R M) :=
-  ⟨fun s t => ⟨s inter t, by aesop⟩⟩
+  ⟨fun s t => ⟨s ∩ t, by aesop⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (SubMulAction R M)
-  body: ⟨fun S => ⟨⋃ s in S, s, by aesop⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 上确界集 (SubMul作用 R M)
-  定义体: ⟨fun S => ⟨⋃ s in S, s, by aesop⟩⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (SubMulAction R M) :=
-  ⟨fun S => ⟨⋃ s in S, s, by aesop⟩⟩
+  ⟨fun S => ⟨⋃ s ∈ S, s, by aesop⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (SubMulAction R M)
-  body: ⟨fun S => ⟨⋂ s in S, ↑s, by aesop⟩⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 下确界集 (SubMul作用 R M)
-  定义体: ⟨fun S => ⟨⋂ s in S, ↑s, by aesop⟩⟩
-
-@[to_additive]
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (SubMulAction R M) :=
-  ⟨fun S => ⟨⋂ s in S, ↑s, by aesop⟩⟩
+  ⟨fun S => ⟨⋂ s ∈ S, ↑s, by aesop⟩⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (SubMulAction R M)
-  body: SetLike.coe_injective.completeLattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ => rfl) rfl rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 完备格 (SubMul作用 R M)
-  定义体: SetLike.coe_injective.completeLattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ => rfl) rfl rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.completeLattice, coe_injective, completeLattice
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (SubMulAction R M) :=
-  SetLike.coe_injective.completeLattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
-    (fun _ => rfl) rfl rfl
+  SetLike.coe_injective.completeLattice _ .rfl .rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ ↦ rfl)
+    (fun _ ↦ rfl) rfl rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_iSup` / 定理 `mem_iSup`
-
-English:
-theorem mem_iSup
-  given: {ι : Sort*} {p : ι -> SubMulAction R M} {x : M}
-  proof: by
-  change x in ⋃ s in Set.range p, s ↔ _
-  simp
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_iSup
-  条件: {ι : 类型层*} {p : ι -> SubMul作用 R M} {x : M}
-  证明: by
-  change x in ⋃ s in Set.range p, s ↔ _
-  simp
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.range
+/-
+**SubMulAction.mem_iSup** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：mem_iSup {ι : Sort*} {p : ι -> SubMulAction R M} {x : M} : x in ⨆ i, p i ↔
+ exists i, x in p i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup {ι : Sort*} {p : ι -> SubMulAction R M} {x : M} :
-    x in ⨆ i, p i ↔ exists i, x in p i := by
-  change x in ⋃ s in Set.range p, s ↔ _
+theorem mem_iSup {ι : Sort*} {p : ι → SubMulAction R M} {x : M} :
+    x ∈ ⨆ i, p i ↔ ∃ i, x ∈ p i := by
+  change x ∈ ⋃ s ∈ Set.range p, s ↔ _
   simp
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_iInf` / 定理 `mem_iInf`
-
-English:
-theorem mem_iInf
-  given: {ι : Sort*} {p : ι -> SubMulAction R M} {x : M}
-  proof: by
-  change x in ⋂ s in Set.range p, s ↔ _
-  simp
-
-中文:
-定理 mem_iInf
-  条件: {ι : 类型层*} {p : ι -> SubMul作用 R M} {x : M}
-  证明: by
-  change x in ⋂ s in Set.range p, s ↔ _
-  simp
-
-Depends on / 依赖: Set.range
+/-
+**SubMulAction.mem_iInf** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：mem_iInf {ι : Sort*} {p : ι -> SubMulAction R M} {x : M} : x in ⨅ i, p i ↔
+ forall i, x in p i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iInter_iInter_eq'`：iInter_iInter_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋂ (x) (y) (_ : f y = x), g x = ⋂ y, g (f y)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iInf {ι : Sort*} {p : ι -> SubMulAction R M} {x : M} :
-    x in ⨅ i, p i ↔ forall i, x in p i := by
-  change x in ⋂ s in Set.range p, s ↔ _
+theorem mem_iInf {ι : Sort*} {p : ι → SubMulAction R M} {x : M} :
+    x ∈ ⨅ i, p i ↔ ∀ i, x ∈ p i := by
+  change x ∈ ⋂ s ∈ Set.range p, s ↔ _
   simp
 
 end SubMulAction
@@ -917,145 +669,85 @@ variable (p : SubMulAction R M)
 variable {r : R} {x : M}
 
 @[to_additive]
-/--
-theorem `smul_mem` / 定理 `smul_mem`
-
-English:
-theorem smul_mem
-  given: (r : R) (h : x in p)
-  statement: r • x in p
-  proof: p.smul_mem' r h
-
-@[to_additive]
-
-中文:
-定理 smul_mem
-  条件: (r : R) (h : x in p)
-  结论: r • x in p
-  证明: p.smul_mem' r h
-
-@[to_additive]
-
-Depends on / 依赖: p.smul_mem, smul_mem
+/-
+**SubMulAction.smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：smul_mem (r : R) (h : x in p) : r • x in p
+参数：r : R；h : x in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubMulAction.smul_mem'`：∀ {R : Type u} {M : Type v} [inst : SMul R M] (s
+elf : SubMulAction R M) (c : R) {x : M},   x ∈ self.carrier → c • x ∈ self.carri
+er
 -/
-theorem smul_mem (r : R) (h : x in p) : r • x in p :=
+theorem smul_mem (r : R) (h : x ∈ p) : r • x ∈ p :=
   p.smul_mem' r h
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul R p
-  body: ⟨c • x.1, smul_mem _ c x.2⟩
-
-中文:
-实例 :
-  签名: 标量乘法 R p
-  定义体: ⟨c • x.1, smul_mem _ c x.2⟩
-
-Depends on / 依赖: smul_mem
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul R p where smul c x := ⟨c • x.1, smul_mem _ c x.2⟩
 
 variable {p} in
 @[to_additive (attr := norm_cast, simp)]
-/--
-theorem `val_smul` / 定理 `val_smul`
-
-English:
-theorem val_smul
-  given: (r : R) (x : p)
-  statement: (↑(r • x) : M) = r • (x : M)
-  proof: rfl
-
-中文:
-定理 val_smul
-  条件: (r : R) (x : p)
-  结论: (↑(r • x) : M) = r • (x : M)
-  证明: rfl
+/-
+**SubMulAction.val_smul** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：val_smul (r : R) (x : p) : (↑(r • x) : M) = r • (x : M)
+参数：r : R；x : p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_smul (r : R) (x : p) : (↑(r • x) : M) = r • (x : M) :=
   rfl
 
 /-- Embedding of a submodule `p` to the ambient space `M`. -/
 @[to_additive /-- Embedding of a submodule `p` to the ambient space `M`. -/]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**SubMulAction.subtype** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction`。
+形式化陈述：{R : Type u} → {M : Type v} → [inst : SMul R M] → (p : SubMulAction R M) →
+ ↥p →ₑ[id] M
+参数：p : SubMulAction R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: : p ->[R] M where
-  body: Subtype.val
-  map_smul' := by simp
-
-中文:
-定义 subtype
-  签名: : p ->[R] M where
-  定义体: Subtype.val
-  map_smul' := by simp
+--- 原说明 ---
+Embedding of a submodule `p` to the ambient space `M`.
 -/
-protected def subtype : p ->[R] M where
+protected def subtype : p →[R] M where
   toFun := Subtype.val
   map_smul' := by simp
 
 variable {p} in
 @[to_additive (attr := simp)]
-/--
-theorem `subtype_apply` / 定理 `subtype_apply`
-
-English:
-theorem subtype_apply
-  given: (x : p)
-  statement: p.subtype x = x
-  proof: rfl
-
-中文:
-定理 subtype_apply
-  条件: (x : p)
-  结论: p.subtype x = x
-  证明: rfl
+/-
+**SubMulAction.subtype_apply** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：subtype_apply (x : p) : p.subtype x = x
+参数：x : p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem subtype_apply (x : p) : p.subtype x = x :=
   rfl
-
-/--
-lemma `subtype_injective` / 引理 `subtype_injective`
-
-English:
-lemma subtype_injective
-  proof: Subtype.coe_injective
-
-@[to_additive]
-
-中文:
-引理 subtype_injective
-  证明: Subtype.coe_injective
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**SubMulAction.subtype_injective** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：subtype_injective : Function.Injective p.subtype
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 lemma subtype_injective :
     Function.Injective p.subtype :=
   Subtype.coe_injective
 
 @[to_additive]
-/--
-theorem `subtype_eq_val` / 定理 `subtype_eq_val`
-
-English:
-theorem subtype_eq_val
-  statement: (SubMulAction.subtype p : p -> M) = Subtype.val
-  proof: rfl
-
-中文:
-定理 subtype_eq_val
-  结论: (SubMul作用.subtype p : p -> M) = 子类型.val
-  证明: rfl
+/-
+**SubMulAction.subtype_eq_val** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：subtype_eq_val : (SubMulAction.subtype p : p -> M) = Subtype.val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subtype_eq_val : (SubMulAction.subtype p : p -> M) = Subtype.val :=
+theorem subtype_eq_val : (SubMulAction.subtype p : p → M) = Subtype.val :=
   rfl
 
 end SMul
@@ -1068,81 +760,70 @@ variable [hA : SMulMemClass A R M] (S' : A)
 -- Prefer subclasses of `MulAction` over `SMulMemClass`.
 /-- A `SubMulAction` of a `MulAction` is a `MulAction`. -/
 @[to_additive /-- A `SubAddAction` of an `AddAction` is an `AddAction`. -/]
+/-
+**SubMulAction.SMulMemClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction.SMulMemClas
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `SubMulAction` of a `MulAction` is a `MulAction`.
+-/
 instance (priority := 75) toMulAction : MulAction R S' :=
   Subtype.coe_injective.mulAction Subtype.val (SetLike.val_smul S')
 
 /-- The natural `MulActionHom` over `R` from a `SubMulAction` of `M` to `M`. -/
 @[to_additive /-- The natural `AddActionHom` over `R` from a `SubAddAction` of `M` to `M`. -/]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**SubMulAction.SMulMemClass.subtype** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction.SMul
+MemClass`。
+形式化陈述：{R : Type u} →   {M : Type v} →     [inst : Monoid R] →       [inst_1 : Mu
+lAction R M] →         {A : Type u_1} → [inst_2 : SetLike A M] → [hA : SMulMemCl
+ass A R M] → (S' : A) → ↥S' →ₑ[id] M
+参数：S' : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: : S' ->[R] M where
-  body: Subtype.val; map_smul' _ _ := rfl
-
-中文:
-定义 subtype
-  签名: : S' ->[R] M where
-  定义体: Subtype.val; map_smul' _ _ := rfl
+--- 原说明 ---
+The natural `MulActionHom` over `R` from a `SubMulAction` of `M` to `M`.
 -/
-protected def subtype : S' ->[R] M where
+protected def subtype : S' →[R] M where
   toFun := Subtype.val; map_smul' _ _ := rfl
 
 variable {S'} in
 @[simp]
-/--
-lemma `subtype_apply` / 引理 `subtype_apply`
-
-English:
-lemma subtype_apply
-  given: (x : S')
-  proof: rfl
-
-中文:
-引理 subtype_apply
-  条件: (x : S')
-  证明: rfl
+/-
+**SubMulAction.SMulMemClass.subtype_apply** 是 Mathlib 中的一个引理，位于命名空间 `SubMulActio
+n.SMulMemClass`。
+形式化陈述：subtype_apply (x : S') : SMulMemClass.subtype S' x = x
+参数：x : S'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma subtype_apply (x : S') :
     SMulMemClass.subtype S' x = x := rfl
-
-/--
-lemma `subtype_injective` / 引理 `subtype_injective`
-
-English:
-lemma subtype_injective
-  proof: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 subtype_injective
-  证明: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**SubMulAction.SMulMemClass.subtype_injective** 是 Mathlib 中的一个引理，位于命名空间 `SubMulA
+ction.SMulMemClass`。
+形式化陈述：subtype_injective : Function.Injective (SMulMemClass.subtype S')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 lemma subtype_injective :
     Function.Injective (SMulMemClass.subtype S') :=
   Subtype.coe_injective
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_subtype` / 定理 `coe_subtype`
-
-English:
-theorem coe_subtype
-  statement: (SMulMemClass.subtype S' : S' -> M) = Subtype.val
-  proof: rfl
-
-中文:
-定理 coe_subtype
-  结论: (SMulMem类.subtype S' : S' -> M) = 子类型.val
-  证明: rfl
+/-
+**SubMulAction.SMulMemClass.coe_subtype** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction.
+SMulMemClass`。
+形式化陈述：∀ {R : Type u} {M : Type v} [inst : Monoid R] [inst_1 : MulAction R M] {A 
+: Type u_1} [inst_2 : SetLike A M]   [hA : SMulMemClass A R M] (S' : A), ⇑(SubMu
+lAction.SMulMemClass.subtype S') = Subtype.val
+参数：S' : A；SubMulAction.SMulMemClass.subtype S'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_subtype : (SMulMemClass.subtype S' : S' -> M) = Subtype.val :=
+protected theorem coe_subtype : (SMulMemClass.subtype S' : S' → M) = Subtype.val :=
   rfl
 
 end SMulMemClass
@@ -1157,171 +838,108 @@ variable [SMul S R] [SMul S M] [IsScalarTower S R M]
 variable (p : SubMulAction R M)
 
 @[to_additive]
-/--
-theorem `smul_of_tower_mem` / 定理 `smul_of_tower_mem`
-
-English:
-theorem smul_of_tower_mem
-  given: (s : S) {x : M} (h : x in p)
-  statement: s • x in p
-  proof: by
-  rw [← one_smul R x]; rw [← smul_assoc]
-  exact p.smul_mem _ h
-
-@[to_additive]
-
-中文:
-定理 smul_of_tower_mem
-  条件: (s : S) {x : M} (h : x in p)
-  结论: s • x in p
-  证明: by
-  rw [← one_smul R x]; rw [← smul_assoc]
-  exact p.smul_mem _ h
-
-@[to_additive]
-
-Depends on / 依赖: one_smul, p.smul_mem, smul_assoc, smul_mem
+/-
+**SubMulAction.smul_of_tower_mem** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：smul_of_tower_mem (s : S) {x : M} (h : x in p) : s • x in p
+参数：s : S；h : x in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `SubMulAction.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 -/
-theorem smul_of_tower_mem (s : S) {x : M} (h : x in p) : s • x in p := by
-  rw [← one_smul R x]; rw [← smul_assoc]
+theorem smul_of_tower_mem (s : S) {x : M} (h : x ∈ p) : s • x ∈ p := by
+  rw [← one_smul R x, ← smul_assoc]
   exact p.smul_mem _ h
 
 @[to_additive]
-/--
-Instance `smul'` / 实例 `smul'`
-
-English:
-instance smul'
-  signature: : SMul S p where smul c x
-  body: ⟨c • x.1, smul_of_tower_mem _ c x.2⟩
-
-@[to_additive]
-
-中文:
-实例 smul'
-  签名: : 标量乘法 S p where smul c x
-  定义体: ⟨c • x.1, smul_of_tower_mem _ c x.2⟩
-
-@[to_additive]
-
-Depends on / 依赖: smul_of_tower_mem
+/-
+**SubMulAction.smul'** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：smul' : SMul S p where smul c x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul' : SMul S p where smul c x := ⟨c • x.1, smul_of_tower_mem _ c x.2⟩
 
 @[to_additive]
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: : IsScalarTower S R p where
-  body: Subtype.ext smul_assoc s r (x : M)
-
-@[to_additive]
-
-中文:
-实例 isScalarTower
-  签名: : 标量塔 S R p where
-  定义体: Subtype.ext smul_assoc s r (x : M)
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
+/-
+**SubMulAction.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：isScalarTower : IsScalarTower S R p where smul_assoc s r x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower : IsScalarTower S R p where
-smul_assoc s r x := Subtype.ext smul_assoc s r (x : M)
+  smul_assoc s r x := Subtype.ext <| smul_assoc s r (x : M)
 
 @[to_additive]
-/--
-Instance `isScalarTower'` / 实例 `isScalarTower'`
-
-English:
-instance isScalarTower'
-  signature: {S' : Type*} [SMul S' R] [SMul S' S] [SMul S' M] [IsScalarTower S' R M]
-  body: Subtype.ext smul_assoc s r (x : M)
-
-@[to_additive (attr := norm_cast, simp)]
-
-中文:
-实例 isScalarTower'
-  签名: {S' : 类型} [标量乘法 S' R] [标量乘法 S' S] [标量乘法 S' M] [标量塔 S' R M]
-  定义体: Subtype.ext smul_assoc s r (x : M)
-
-@[to_additive (attr := norm_cast, simp)]
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
+/-
+**SubMulAction.isScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：isScalarTower' {S' : Type*} [SMul S' R] [SMul S' S] [SMul S' M] [IsScalarT
+ower S' R M] [IsScalarTower S' S M] : IsScalarTower S' S p where smul_assoc s r 
+x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower' {S' : Type*} [SMul S' R] [SMul S' S] [SMul S' M] [IsScalarTower S' R M]
     [IsScalarTower S' S M] : IsScalarTower S' S p where
-smul_assoc s r x := Subtype.ext smul_assoc s r (x : M)
+  smul_assoc s r x := Subtype.ext <| smul_assoc s r (x : M)
 
 @[to_additive (attr := norm_cast, simp)]
-/--
-theorem `val_smul_of_tower` / 定理 `val_smul_of_tower`
-
-English:
-theorem val_smul_of_tower
-  given: (s : S) (x : p)
-  statement: ((s • x : p) : M) = s • (x : M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 val_smul_of_tower
-  条件: (s : S) (x : p)
-  结论: ((s • x : p) : M) = s • (x : M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SubMulAction.val_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：val_smul_of_tower (s : S) (x : p) : ((s • x : p) : M) = s • (x : M)
+参数：s : S；x : p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_smul_of_tower (s : S) (x : p) : ((s • x : p) : M) = s • (x : M) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_mem_iff'` / 定理 `smul_mem_iff'`
-
-English:
-theorem smul_mem_iff'
-  statement: {G} [Group G] [SMul G R] [MulAction G M] [IsScalarTower G R M] (g : G)
-  proof: ⟨fun h => inv_smul_smul g x ▸ p.smul_of_tower_mem g⁻¹ h, p.smul_of_tower_mem g⟩
-
-@[to_additive]
-
-中文:
-定理 smul_mem_iff'
-  结论: {G} [群 G] [标量乘法 G R] [乘法作用 G M] [标量塔 G R M] (g : G)
-  证明: ⟨fun h => inv_smul_smul g x ▸ p.smul_of_tower_mem g⁻¹ h, p.smul_of_tower_mem g⟩
-
-@[to_additive]
-
-Depends on / 依赖: inv_smul_smul, p.smul_of_tower_mem, smul_of_tower_mem
+/-
+**SubMulAction.smul_mem_iff'** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：smul_mem_iff' {G} [Group G] [SMul G R] [MulAction G M] [IsScalarTower G R 
+M] (g : G) {x : M} : g • x in p ↔ x in p
+参数：g : G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubMulAction.smul_of_tower_mem`：smul_of_tower_mem (s : S) {x : M} (h : x
+ in p) : s • x in p
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
 theorem smul_mem_iff' {G} [Group G] [SMul G R] [MulAction G M] [IsScalarTower G R M] (g : G)
-    {x : M} : g • x in p ↔ x in p :=
+    {x : M} : g • x ∈ p ↔ x ∈ p :=
   ⟨fun h => inv_smul_smul g x ▸ p.smul_of_tower_mem g⁻¹ h, p.smul_of_tower_mem g⟩
 
 @[to_additive]
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
-  body: Subtype.ext op_smul_eq_smul r (x : M)
-
-中文:
-实例 isCentralScalar
-  签名: [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M] [标量塔 Sᵐᵒᵖ R M]
-  定义体: Subtype.ext op_smul_eq_smul r (x : M)
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk_surjective, Subtype, Subtype.ext, mk_surjective, op_smul_eq_smul, small_of_surjective
+/-
+**SubMulAction.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：isCentralScalar [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M] [IsCe
+ntralScalar S M] : IsCentralScalar S p where op_smul_eq_smul r x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance isCentralScalar [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
     [IsCentralScalar S M] :
     IsCentralScalar S p where
-op_smul_eq_smul r x := Subtype.ext op_smul_eq_smul r (x : M)
+  op_smul_eq_smul r x := Subtype.ext <| op_smul_eq_smul r (x : M)
 
 end
 
@@ -1332,46 +950,25 @@ variable (p : SubMulAction R M)
 
 /-- If the scalar product forms a `MulAction`, then the subset inherits this action -/
 @[to_additive]
-/--
-Instance `mulAction'` / 实例 `mulAction'`
+/-
+**SubMulAction.mulAction'** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：mulAction' : MulAction S p where one_smul x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mulAction'
-  signature: : MulAction S p where
-  body: Subtype.ext one_smul _ (x : M)
-mul_smul c₁ c₂ x := Subtype.ext mul_smul c₁ c₂ (x : M)
-
-@[to_additive]
-
-中文:
-实例 mulAction'
-  签名: : 乘法作用 S p where
-  定义体: Subtype.ext one_smul _ (x : M)
-mul_smul c₁ c₂ x := Subtype.ext mul_smul c₁ c₂ (x : M)
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.ext, one_smul
+--- 原说明 ---
+If the scalar product forms a `MulAction`, then the subset inherits this action
 -/
 instance mulAction' : MulAction S p where
-one_smul x := Subtype.ext one_smul _ (x : M)
-mul_smul c₁ c₂ x := Subtype.ext mul_smul c₁ c₂ (x : M)
+  one_smul x := Subtype.ext <| one_smul _ (x : M)
+  mul_smul c₁ c₂ x := Subtype.ext <| mul_smul c₁ c₂ (x : M)
 
 @[to_additive]
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: : MulAction R p
-  body: p.mulAction'
-
-中文:
-实例 mulAction
-  签名: : 乘法作用 R p
-  定义体: p.mulAction'
-
-Depends on / 依赖: mulAction, p.mulAction
+/-
+**SubMulAction.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+形式化陈述：mulAction : MulAction R p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction : MulAction R p :=
   p.mulAction'
@@ -1380,97 +977,89 @@ end
 
 /-- Orbits in a `SubMulAction` coincide with orbits in the ambient space. -/
 @[to_additive]
-/--
-theorem `val_image_orbit` / 定理 `val_image_orbit`
+/-
+**SubMulAction.val_image_orbit** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：val_image_orbit {p : SubMulAction R M} (m : p) : Subtype.val '' MulAction.
+orbit R m = MulAction.orbit R (m : M)
+参数：m : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 
-English:
-theorem val_image_orbit
-  given: {p : SubMulAction R M} (m : p)
-  proof: (Set.range_comp _ _).symm
-
-@[to_additive]
-
-中文:
-定理 val_image_orbit
-  条件: {p : SubMul作用 R M} (m : p)
-  证明: (Set.range_comp _ _).symm
-
-@[to_additive]
-
-Depends on / 依赖: Set.range_comp, range_comp
+--- 原说明 ---
+Orbits in a `SubMulAction` coincide with orbits in the ambient space.
 -/
 theorem val_image_orbit {p : SubMulAction R M} (m : p) :
     Subtype.val '' MulAction.orbit R m = MulAction.orbit R (m : M) :=
   (Set.range_comp _ _).symm
 
 @[to_additive]
-/--
-theorem `val_preimage_orbit` / 定理 `val_preimage_orbit`
-
-English:
-theorem val_preimage_orbit
-  given: {p : SubMulAction R M} (m : p)
-  proof: by
-  rw [← val_image_orbit]; rw [Subtype.val_injective.preimage_image]
-
-@[to_additive]
-
-中文:
-定理 val_preimage_orbit
-  条件: {p : SubMul作用 R M} (m : p)
-  证明: by
-  rw [← val_image_orbit]; rw [Subtype.val_injective.preimage_image]
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.val_injective.preimage_image, preimage_image, val_image_orbit, val_injective
+/-
+**SubMulAction.val_preimage_orbit** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：val_preimage_orbit {p : SubMulAction R M} (m : p) : Subtype.val ⁻¹' MulAct
+ion.orbit R (m : M) = MulAction.orbit R m
+参数：m : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SubMulAction.val_image_orbit`：val_image_orbit {p : SubMulAction R M} (m 
+: p) : Subtype.val '' MulAction.orbit R m = MulAction.orbit R (m : M)
+· 使用定理 `Function.Injective.preimage_image`：∀ {α : Type u_1} {β : Type u_2} {f : 
+α → β}, Function.Injective f → ∀ (s : Set α), f ⁻¹' f '' s = s
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 -/
 theorem val_preimage_orbit {p : SubMulAction R M} (m : p) :
     Subtype.val ⁻¹' MulAction.orbit R (m : M) = MulAction.orbit R m := by
-  rw [← val_image_orbit]; rw [Subtype.val_injective.preimage_image]
+  rw [← val_image_orbit, Subtype.val_injective.preimage_image]
 
 @[to_additive]
-/--
-lemma `mem_orbit_subMul_iff` / 引理 `mem_orbit_subMul_iff`
-
-English:
-lemma mem_orbit_subMul_iff
-  given: {p : SubMulAction R M} {x m : p}
-  proof: by
-  rw [← val_preimage_orbit]; rw [Set.mem_preimage]
-
-中文:
-引理 mem_orbit_subMul_iff
-  条件: {p : SubMul作用 R M} {x m : p}
-  证明: by
-  rw [← val_preimage_orbit]; rw [Set.mem_preimage]
-
-Depends on / 依赖: Set.mem_preimage, mem_preimage, val_preimage_orbit
+/-
+**SubMulAction.mem_orbit_subMul_iff** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：mem_orbit_subMul_iff {p : SubMulAction R M} {x m : p} : x in MulAction.orb
+it R m ↔ (x : M) in MulAction.orbit R (m : M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SubMulAction.val_preimage_orbit`：val_preimage_orbit {p : SubMulAction R 
+M} (m : p) : Subtype.val ⁻¹' MulAction.orbit R (m : M) = MulAction.orbit R m
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_orbit_subMul_iff {p : SubMulAction R M} {x m : p} :
-    x in MulAction.orbit R m ↔ (x : M) in MulAction.orbit R (m : M) := by
-  rw [← val_preimage_orbit]; rw [Set.mem_preimage]
+    x ∈ MulAction.orbit R m ↔ (x : M) ∈ MulAction.orbit R (m : M) := by
+  rw [← val_preimage_orbit, Set.mem_preimage]
 
 /-- Stabilizers in monoid SubMulAction coincide with stabilizers in the ambient space -/
 @[to_additive]
-/--
-theorem `stabilizer_of_subMul.submonoid` / 定理 `stabilizer_of_subMul.submonoid`
+/-
+**SubMulAction.stabilizer_of_subMul.submonoid** 是 Mathlib 中的一个定理，位于命名空间 `SubMulA
+ction.stabilizer_of_subMul`。
+形式化陈述：∀ {R : Type u} {M : Type v} [inst : Monoid R] [inst_1 : MulAction R M] {p 
+: SubMulAction R M} (m : ↥p),   MulAction.stabilizerSubmonoid R m = MulAction.st
+abilizerSubmonoid R ↑m
+参数：m : ↥p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem stabilizer_of_subMul.submonoid
-  given: {p : SubMulAction R M} (m : p)
-  proof: by
-  ext
-  simp only [MulAction.mem_stabilizerSubmonoid_iff, ← SubMulAction.val_smul, SetLike.coe_eq_coe]
-
-中文:
-定理 stabilizer_of_subMul.submonoid
-  条件: {p : SubMul作用 R M} (m : p)
-  证明: by
-  ext
-  simp only [MulAction.mem_stabilizerSubmonoid_iff, ← SubMulAction.val_smul, SetLike.coe_eq_coe]
-
-Depends on / 依赖: MulAction, MulAction.mem_stabilizerSubmonoid_iff, SetLike, SetLike.coe_eq_coe, SubMulAction, SubMulAction.val_smul, coe_eq_coe, mem_stabilizerSubmonoid_iff, val_smul
+--- 原说明 ---
+Stabilizers in monoid SubMulAction coincide with stabilizers in the ambient spac
+e
 -/
 theorem stabilizer_of_subMul.submonoid {p : SubMulAction R M} (m : p) :
     MulAction.stabilizerSubmonoid R m = MulAction.stabilizerSubmonoid R (m : M) := by
@@ -1484,53 +1073,50 @@ section MulActionGroup
 variable [Group R] [MulAction R M]
 
 @[to_additive]
-/--
-lemma `orbitRel_of_subMul` / 引理 `orbitRel_of_subMul`
-
-English:
-lemma orbitRel_of_subMul
-  given: (p : SubMulAction R M)
-  proof: by
-  refine Setoid.ext_iff.2 (fun x y => ?_)
-  rw [Setoid.comap_rel]
-  exact mem_orbit_subMul_iff
-
-中文:
-引理 orbitRel_of_subMul
-  条件: (p : SubMul作用 R M)
-  证明: by
-  refine Setoid.ext_iff.2 (fun x y => ?_)
-  rw [Setoid.comap_rel]
-  exact mem_orbit_subMul_iff
-
-Depends on / 依赖: Setoid, Setoid.comap_rel, Setoid.ext_iff, comap_rel, ext_iff, mem_orbit_subMul_iff
+/-
+**SubMulAction.orbitRel_of_subMul** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：orbitRel_of_subMul (p : SubMulAction R M) : MulAction.orbitRel R p = (MulA
+ction.orbitRel R M).comap Subtype.val
+参数：p : SubMulAction R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Setoid.ext_iff`：∀ {α : Sort u_3} {s t : Setoid α}, s = t ↔ ∀ (a b : α), 
+s a b ↔ t a b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Setoid.comap_rel`：comap_rel (f : α -> β) (r : Setoid β) (x y : α) : coma
+p f r x y ↔ r (f x) (f y)
+· 使用引理 `SubMulAction.mem_orbit_subMul_iff`：mem_orbit_subMul_iff {p : SubMulActio
+n R M} {x m : p} : x in MulAction.orbit R m ↔ (x : M) in MulAction.orbit R (m : 
+M)
 -/
 lemma orbitRel_of_subMul (p : SubMulAction R M) :
     MulAction.orbitRel R p = (MulAction.orbitRel R M).comap Subtype.val := by
-  refine Setoid.ext_iff.2 (fun x y => ?_)
+  refine Setoid.ext_iff.2 (fun x y ↦ ?_)
   rw [Setoid.comap_rel]
   exact mem_orbit_subMul_iff
 
 /-- Stabilizers in group SubMulAction coincide with stabilizers in the ambient space -/
 @[to_additive]
-/--
-theorem `stabilizer_of_subMul` / 定理 `stabilizer_of_subMul`
+/-
+**SubMulAction.stabilizer_of_subMul** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：stabilizer_of_subMul {p : SubMulAction R M} (m : p) : MulAction.stabilizer
+ R m = MulAction.stabilizer R (m : M)
+参数：m : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.toSubmonoid_inj`：toSubmonoid_inj {p q : Subgroup G} : p.toSubmo
+noid = q.toSubmonoid ↔ p = q
+· 使用定理 `SubMulAction.stabilizer_of_subMul.submonoid`：∀ {R : Type u} {M : Type v}
+ [inst : Monoid R] [inst_1 : MulAction R M] {p : SubMulAction R M} (m : ↥p),   M
+ulAction.stabilizerSubmonoid R m …
 
-English:
-theorem stabilizer_of_subMul
-  given: {p : SubMulAction R M} (m : p)
-  proof: by
-  rw [← Subgroup.toSubmonoid_inj]
-  exact stabilizer_of_subMul.submonoid m
-
-中文:
-定理 stabilizer_of_subMul
-  条件: {p : SubMul作用 R M} (m : p)
-  证明: by
-  rw [← Subgroup.toSubmonoid_inj]
-  exact stabilizer_of_subMul.submonoid m
-
-Depends on / 依赖: Subgroup, Subgroup.toSubmonoid_inj, stabilizer_of_subMul, stabilizer_of_subMul.submonoid, submonoid, toSubmonoid_inj
+--- 原说明 ---
+Stabilizers in group SubMulAction coincide with stabilizers in the ambient space
 -/
 theorem stabilizer_of_subMul {p : SubMulAction R M} (m : p) :
     MulAction.stabilizer R m = MulAction.stabilizer R (m : M) := by
@@ -1539,41 +1125,23 @@ theorem stabilizer_of_subMul {p : SubMulAction R M} (m : p) :
 
 /-- SubMulAction on the complement of an invariant subset -/
 @[to_additive /-- SubAddAction on the complement of an invariant subset -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Compl (SubMulAction R M)
-  body: ⟨sᶜ, by simp⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 补集 (SubMul作用 R M)
-  定义体: ⟨sᶜ, by simp⟩
-
-@[to_additive]
+--- 原说明 ---
+SubMulAction on the complement of an invariant subset
 -/
 instance : Compl (SubMulAction R M) where
   compl s := ⟨sᶜ, by simp⟩
 
 @[to_additive]
-/--
-theorem `compl_def` / 定理 `compl_def`
-
-English:
-theorem compl_def
-  given: (s : SubMulAction R M)
-  statement: sᶜ.carrier = (s : Set M)ᶜ
-  proof: rfl
-
-中文:
-定理 compl_def
-  条件: (s : SubMul作用 R M)
-  结论: sᶜ.carrier = (s : 集合 M)ᶜ
-  证明: rfl
+/-
+**SubMulAction.compl_def** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：compl_def (s : SubMulAction R M) : sᶜ.carrier = (s : Set M)ᶜ
+参数：s : SubMulAction R M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compl_def (s : SubMulAction R M) : sᶜ.carrier = (s : Set M)ᶜ := rfl
 
@@ -1585,43 +1153,29 @@ variable [Semiring R] [AddCommMonoid M]
 variable [Module R M]
 variable (p : SubMulAction R M)
 
-/--
-theorem `zero_mem` / 定理 `zero_mem`
-
-English:
-theorem zero_mem
-  given: (h : (p : Set M).Nonempty)
-  statement: (0 : M) in p
-  proof: let ⟨x, hx⟩ := h
-  zero_smul R (x : M) ▸ p.smul_mem 0 hx
-
-中文:
-定理 zero_mem
-  条件: (h : (p : 集合 M).非空)
-  结论: (0 : M) in p
-  证明: let ⟨x, hx⟩ := h
-  zero_smul R (x : M) ▸ p.smul_mem 0 hx
-
-Depends on / 依赖: p.smul_mem, smul_mem, zero_smul
+/-
+**SubMulAction.zero_mem** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：zero_mem (h : (p : Set M).Nonempty) : (0 : M) in p
+参数：h : (p : Set M).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubMulAction.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
-theorem zero_mem (h : (p : Set M).Nonempty) : (0 : M) in p :=
+theorem zero_mem (h : (p : Set M).Nonempty) : (0 : M) ∈ p :=
   let ⟨x, hx⟩ := h
   zero_smul R (x : M) ▸ p.smul_mem 0 hx
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If the scalar product forms a `Module`, and the `SubMulAction` is not `⊥`, then the
+subset inherits the zero. -/
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [n_empty
-  signature: : Nonempty p] : Zero p where
-  body: ⟨0, n_empty.elim fun x => p.zero_mem ⟨x, x.prop⟩⟩
-
-中文:
-实例 [n_empty
-  签名: : 非空 p] : 零 p where
-  定义体: ⟨0, n_empty.elim fun x => p.zero_mem ⟨x, x.prop⟩⟩
-
-Depends on / 依赖: n_empty, n_empty.elim, p.zero_mem, x.prop, zero_mem
+--- 原说明 ---
+If the scalar product forms a `Module`, and the `SubMulAction` is not `⊥`, then 
+the
+subset inherits the zero.
 -/
 instance [n_empty : Nonempty p] : Zero p where
   zero := ⟨0, n_empty.elim fun x => p.zero_mem ⟨x, x.prop⟩⟩
@@ -1635,97 +1189,52 @@ variable [Module R M]
 variable (p p' : SubMulAction R M)
 variable {r : R} {x y : M}
 
-/--
-theorem `neg_mem` / 定理 `neg_mem`
-
-English:
-theorem neg_mem
-  given: (hx : x in p)
-  statement: -x in p
-  proof: by
-  rw [← neg_one_smul R]
-  exact p.smul_mem _ hx
-
-@[simp]
-
-中文:
-定理 neg_mem
-  条件: (hx : x in p)
-  结论: -x in p
-  证明: by
-  rw [← neg_one_smul R]
-  exact p.smul_mem _ hx
-
-@[simp]
-
-Depends on / 依赖: neg_one_smul, p.smul_mem, smul_mem
+/-
+**SubMulAction.neg_mem** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：neg_mem (hx : x in p) : -x in p
+参数：hx : x in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_one_smul`：neg_one_smul (x : M) : (-1 : R) • x = -x
+· 使用定理 `SubMulAction.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 -/
-theorem neg_mem (hx : x in p) : -x in p := by
+theorem neg_mem (hx : x ∈ p) : -x ∈ p := by
   rw [← neg_one_smul R]
   exact p.smul_mem _ hx
 
 @[simp]
-/--
-theorem `neg_mem_iff` / 定理 `neg_mem_iff`
-
-English:
-theorem neg_mem_iff
-  statement: -x in p ↔ x in p
-  proof: ⟨fun h => by
-    rw [← neg_neg x]
-    exact neg_mem _ h, neg_mem _⟩
-
-中文:
-定理 neg_mem_iff
-  结论: -x in p ↔ x in p
-  证明: ⟨fun h => by
-    rw [← neg_neg x]
-    exact neg_mem _ h, neg_mem _⟩
-
-Depends on / 依赖: neg_mem, neg_neg
+/-
+**SubMulAction.neg_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：neg_mem_iff : -x in p ↔ x in p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `SubMulAction.neg_mem`：neg_mem (hx : x in p) : -x in p
 -/
-theorem neg_mem_iff : -x in p ↔ x in p :=
+theorem neg_mem_iff : -x ∈ p ↔ x ∈ p :=
   ⟨fun h => by
     rw [← neg_neg x]
     exact neg_mem _ h, neg_mem _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg p
-  body: ⟨fun x => ⟨-x.1, neg_mem _ x.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 取负 p
-  定义体: ⟨fun x => ⟨-x.1, neg_mem _ x.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: neg_mem
+/-
+**SubMulAction.** 是 Mathlib 中的一个实例，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg p :=
   ⟨fun x => ⟨-x.1, neg_mem _ x.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `val_neg` / 定理 `val_neg`
-
-English:
-theorem val_neg
-  given: (x : p)
-  statement: ((-x : p) : M) = -x
-  proof: rfl
-
-中文:
-定理 val_neg
-  条件: (x : p)
-  结论: ((-x : p) : M) = -x
-  证明: rfl
+/-
+**SubMulAction.val_neg** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：val_neg (x : p) : ((-x : p) : M) = -x
+参数：x : p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_neg (x : p) : ((-x : p) : M) = -x :=
   rfl
@@ -1740,24 +1249,19 @@ variable [GroupWithZero S] [Monoid R] [MulAction R M]
 variable [SMul S R] [MulAction S M] [IsScalarTower S R M]
 variable (p : SubMulAction R M) {s : S} {x y : M}
 
-/--
-theorem `smul_mem_iff` / 定理 `smul_mem_iff`
-
-English:
-theorem smul_mem_iff
-  given: (s0 : s != 0)
-  statement: s • x in p ↔ x in p
-  proof: p.smul_mem_iff' (Units.mk0 s s0)
-
-中文:
-定理 smul_mem_iff
-  条件: (s0 : s != 0)
-  结论: s • x in p ↔ x in p
-  证明: p.smul_mem_iff' (Units.mk0 s s0)
-
-Depends on / 依赖: Units.mk0, p.smul_mem_iff, smul_mem_iff
+/-
+**SubMulAction.smul_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：smul_mem_iff (s0 : s != 0) : s • x in p ↔ x in p
+参数：s0 : s != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubMulAction.smul_mem_iff'`：smul_mem_iff' {G} [Group G] [SMul G R] [MulA
+ction G M] [IsScalarTower G R M] (g : G) {x : M} : g • x in p ↔ x in p
+· 使用定理 `Units.instIsScalarTower`：∀ {M : Type u_3} {N : Type u_4} {α : Type u_5} 
+[inst : Monoid M] [inst_1 : SMul M N] [inst_2 : SMul M α]   [inst_3 : SMul N α] 
+[IsScalarTowe…
 -/
-theorem smul_mem_iff (s0 : s != 0) : s • x in p ↔ x in p :=
+theorem smul_mem_iff (s0 : s ≠ 0) : s • x ∈ p ↔ x ∈ p :=
   p.smul_mem_iff' (Units.mk0 s s0)
 
 end SubMulAction
@@ -1770,90 +1274,60 @@ variable {M α : Type*} [Monoid M] [MulAction M α]
 
 /-- The inclusion of a SubMulAction into the ambient set, as an equivariant map -/
 @[to_additive /-- The inclusion of a SubAddAction into the ambient set, as an equivariant map. -/]
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-
+**SubMulAction.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction`。
+形式化陈述：inclusion (s : SubMulAction M α) : s ->[M] α where -- The inclusion map of
+ the inclusion of a SubMulAction toFun
+参数：s : SubMulAction M α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: (s : SubMulAction M α)
-
-中文:
-定义 inclusion
-  签名: (s : SubMul作用 M α)
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+The inclusion of a SubMulAction into the ambient set, as an equivariant map
 -/
-def inclusion (s : SubMulAction M α) : s ->[M] α where
+def inclusion (s : SubMulAction M α) : s →[M] α where
 -- The inclusion map of the inclusion of a SubMulAction
   toFun := Subtype.val
 -- The commutation property
   map_smul' _ _ := rfl
 
 @[to_additive]
-/--
-theorem `inclusion.toFun_eq_coe` / 定理 `inclusion.toFun_eq_coe`
-
-English:
-theorem inclusion.toFun_eq_coe
-  given: (s : SubMulAction M α)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 inclusion.toFun_eq_coe
-  条件: (s : SubMul作用 M α)
-  证明: rfl
-
-@[to_additive]
+/-
+**SubMulAction.inclusion.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction.in
+clusion`。
+形式化陈述：∀ {M : Type u_1} {α : Type u_2} [inst : Monoid M] [inst_1 : MulAction M α]
+ (s : SubMulAction M α),   s.inclusion.toFun = Subtype.val
+参数：s : SubMulAction M α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inclusion.toFun_eq_coe (s : SubMulAction M α) :
     s.inclusion.toFun = Subtype.val := rfl
 
 @[to_additive]
-/--
-theorem `inclusion.coe_eq` / 定理 `inclusion.coe_eq`
-
-English:
-theorem inclusion.coe_eq
-  given: (s : SubMulAction M α)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 inclusion.coe_eq
-  条件: (s : SubMul作用 M α)
-  证明: rfl
-
-@[to_additive]
+/-
+**SubMulAction.inclusion.coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction.inclusio
+n`。
+形式化陈述：∀ {M : Type u_1} {α : Type u_2} [inst : Monoid M] [inst_1 : MulAction M α]
+ (s : SubMulAction M α),   ⇑s.inclusion = Subtype.val
+参数：s : SubMulAction M α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inclusion.coe_eq (s : SubMulAction M α) :
     ⇑s.inclusion = Subtype.val := rfl
 
 @[to_additive]
-/--
-lemma `image_inclusion` / 引理 `image_inclusion`
-
-English:
-lemma image_inclusion
-  given: (s : SubMulAction M α)
-  proof: by
-  rw [inclusion.coe_eq]
-  exact Subtype.range_coe
-
-@[to_additive]
-
-中文:
-引理 image_inclusion
-  条件: (s : SubMul作用 M α)
-  证明: by
-  rw [inclusion.coe_eq]
-  exact Subtype.range_coe
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.range_coe, coe_eq, inclusion, inclusion.coe_eq, range_coe
+/-
+**SubMulAction.image_inclusion** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：image_inclusion (s : SubMulAction M α) : Set.range s.inclusion = s.carrier
+参数：s : SubMulAction M α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubMulAction.inclusion.coe_eq`：∀ {M : Type u_1} {α : Type u_2} [inst : M
+onoid M] [inst_1 : MulAction M α] (s : SubMulAction M α),   ⇑s.inclusion = Subty
+pe.val
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 -/
 lemma image_inclusion (s : SubMulAction M α) :
     Set.range s.inclusion = s.carrier := by
@@ -1861,20 +1335,15 @@ lemma image_inclusion (s : SubMulAction M α) :
   exact Subtype.range_coe
 
 @[to_additive]
-/--
-lemma `inclusion_injective` / 引理 `inclusion_injective`
-
-English:
-lemma inclusion_injective
-  given: (s : SubMulAction M α)
-  proof: Subtype.val_injective
-
-中文:
-引理 inclusion_injective
-  条件: (s : SubMul作用 M α)
-  证明: Subtype.val_injective
-
-Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
+/-
+**SubMulAction.inclusion_injective** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：inclusion_injective (s : SubMulAction M α) : Function.Injective s.inclusio
+n
+参数：s : SubMulAction M α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 -/
 lemma inclusion_injective (s : SubMulAction M α) :
     Function.Injective s.inclusion :=
@@ -1886,80 +1355,51 @@ namespace Units
 
 variable (R M : Type*) [Monoid R] [AddCommMonoid M] [DistribMulAction R M]
 
-/--
-Definition of `nonZeroSubMul` / `nonZeroSubMul` 的定义
+/-- The non-zero elements of `M` are invariant under the action by the units of `R`. -/
+/-
+**Units.nonZeroSubMul** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：nonZeroSubMul : SubMulAction Rˣ M where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonZeroSubMul
-  signature: : SubMulAction Rˣ M where
-  body: { x : M | x != 0 }
-  smul_mem' := by simp [Units.smul_def]
-
-中文:
-定义 nonZeroSubMul
-  签名: : SubMul作用 Rˣ M where
-  定义体: { x : M | x != 0 }
-  smul_mem' := by simp [Units.smul_def]
+--- 原说明 ---
+The non-zero elements of `M` are invariant under the action by the units of `R`.
 -/
 def nonZeroSubMul : SubMulAction Rˣ M where
-  carrier := { x : M | x != 0 }
+  carrier := { x : M | x ≠ 0 }
   smul_mem' := by simp [Units.smul_def]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction Rˣ { x : M // x != 0 }
-  body: inferInstanceAs MulAction Rˣ (nonZeroSubMul R M)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法作用 Rˣ { x : M // x != 0 }
-  定义体: inferInstanceAs MulAction Rˣ (nonZeroSubMul R M)
-
-@[simp]
-
-Depends on / 依赖: MulAction, nonZeroSubMul
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulAction Rˣ { x : M // x != 0 } :=
-inferInstanceAs MulAction Rˣ (nonZeroSubMul R M)
+instance : MulAction Rˣ { x : M // x ≠ 0 } :=
+  inferInstanceAs <| MulAction Rˣ (nonZeroSubMul R M)
 
 @[simp]
-/--
-lemma `smul_coe` / 引理 `smul_coe`
-
-English:
-lemma smul_coe
-  given: (a : Rˣ) (x : { x : M // x != 0 })
-  proof: rfl
-
-中文:
-引理 smul_coe
-  条件: (a : Rˣ) (x : { x : M // x != 0 })
-  证明: rfl
+/-
+**Units.smul_coe** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_coe (a : Rˣ) (x : { x : M // x != 0 }) : (a • x).val = a • x.val
+参数：a : Rˣ；x : { x : M // x != 0 }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_coe (a : Rˣ) (x : { x : M // x != 0 }) :
+lemma smul_coe (a : Rˣ) (x : { x : M // x ≠ 0 }) :
     (a • x).val = a • x.val :=
   rfl
-
-/--
-lemma `orbitRel_nonZero_iff` / 引理 `orbitRel_nonZero_iff`
-
-English:
-lemma orbitRel_nonZero_iff
-  given: (x y : { v : M // v != 0 })
-  proof: ⟨by rintro ⟨a, rfl⟩; exact ⟨a, by simp⟩, by intro ⟨a, ha⟩; exact ⟨a, by ext; simpa⟩⟩
-
-中文:
-引理 orbitRel_nonZero_iff
-  条件: (x y : { v : M // v != 0 })
-  证明: ⟨by rintro ⟨a, rfl⟩; exact ⟨a, by simp⟩, by intro ⟨a, ha⟩; exact ⟨a, by ext; simpa⟩⟩
+/-
+**Units.orbitRel_nonZero_iff** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：orbitRel_nonZero_iff (x y : { v : M // v != 0 }) : MulAction.orbitRel Rˣ {
+ v // v != 0 } x y ↔ MulAction.orbitRel Rˣ M x y
+参数：x y : { v : M // v != 0 }。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-lemma orbitRel_nonZero_iff (x y : { v : M // v != 0 }) :
-    MulAction.orbitRel Rˣ { v // v != 0 } x y ↔ MulAction.orbitRel Rˣ M x y :=
+lemma orbitRel_nonZero_iff (x y : { v : M // v ≠ 0 }) :
+    MulAction.orbitRel Rˣ { v // v ≠ 0 } x y ↔ MulAction.orbitRel Rˣ M x y :=
   ⟨by rintro ⟨a, rfl⟩; exact ⟨a, by simp⟩, by intro ⟨a, ha⟩; exact ⟨a, by ext; simpa⟩⟩
 
 end Units
@@ -1969,92 +1409,65 @@ section FixedPoints
 variable {G : Type*} [Group G] {α : Type*} [MulAction G α] {H : Subgroup G}
 
 @[to_additive]
-/--
-lemma `smul_mem_fixedPoints_of_normal` / 引理 `smul_mem_fixedPoints_of_normal`
-
-English:
-lemma smul_mem_fixedPoints_of_normal
-  statement: [hH : H.Normal]
-  proof: by
-  intro h
-  rw [Subgroup.smul_def]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [smul_smul]
-  exact ha ⟨_, hH.conj_mem' _ h.2 _⟩
-
-中文:
-引理 smul_mem_fixedPoints_of_normal
-  结论: [hH : H.正规]
-  证明: by
-  intro h
-  rw [Subgroup.smul_def]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [smul_smul]
-  exact ha ⟨_, hH.conj_mem' _ h.2 _⟩
-
-Depends on / 依赖: Subgroup, Subgroup.smul_def, conj_mem, hH.conj_mem, inv_smul_eq_iff, smul_def, smul_smul
+/-
+**smul_mem_fixedPoints_of_normal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_mem_fixedPoints_of_normal [hH : H.Normal] (g : G) {a : α} (ha : a in 
+MulAction.fixedPoints H α) : g • a in MulAction.fixedPoints H α
+参数：g : G；ha : a in MulAction.fixedPoints H α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.smul_def`：∀ {G : Type u_1} {α : Type u_2} [inst : Group G] [ins
+t_1 : MulAction G α] {S : Subgroup G} (g : ↥S) (m : α),   g • m = ↑g • m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_smul_eq_iff`：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_
+1 : MulAction G α] {g : G} {a b : α}, g⁻¹ • a = b ↔ a = g • b
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Subgroup.Normal.conj_mem'`：conj_mem' (nH : H.Normal) (n : G) (hn : n in 
+H) (g : G) : g⁻¹ * n * g in H
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma smul_mem_fixedPoints_of_normal [hH : H.Normal]
-    (g : G) {a : α} (ha : a in MulAction.fixedPoints H α) :
-    g • a in MulAction.fixedPoints H α := by
+    (g : G) {a : α} (ha : a ∈ MulAction.fixedPoints H α) :
+    g • a ∈ MulAction.fixedPoints H α := by
   intro h
-  rw [Subgroup.smul_def]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [smul_smul]
+  rw [Subgroup.smul_def, ← inv_smul_eq_iff, smul_smul, smul_smul]
   exact ha ⟨_, hH.conj_mem' _ h.2 _⟩
 
 /-- The set of fixed points of a normal subgroup is stable under the group action. -/
 @[to_additive /-- The set of fixed points of a normal subgroup is stable under the group action. -/]
-/--
-Definition of `fixedPointsSubMulOfNormal` / `fixedPointsSubMulOfNormal` 的定义
+/-
+**fixedPointsSubMulOfNormal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：fixedPointsSubMulOfNormal [hH : H.Normal] : SubMulAction G α where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_mem_fixedPoints_of_normal`：smul_mem_fixedPoints_of_normal [hH : H.N
+ormal] (g : G) {a : α} (ha : a in MulAction.fixedPoints H α) : g • a in MulActio
+n.fixedPoints H α
 
-English:
-definition fixedPointsSubMulOfNormal
-  signature: [hH : H.Normal]
-  body: MulAction.fixedPoints H α
-  smul_mem' := smul_mem_fixedPoints_of_normal
-
-中文:
-定义 fixedPointsSubMulOfNormal
-  签名: [hH : H.正规]
-  定义体: MulAction.fixedPoints H α
-  smul_mem' := smul_mem_fixedPoints_of_normal
-
-Depends on / 依赖: MulAction, MulAction.fixedPoints, fixedPoints
+--- 原说明 ---
+The set of fixed points of a normal subgroup is stable under the group action.
 -/
 def fixedPointsSubMulOfNormal [hH : H.Normal] : SubMulAction G α where
   carrier := MulAction.fixedPoints H α
   smul_mem' := smul_mem_fixedPoints_of_normal
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [hH
-  signature: : H.Normal] : MulAction G (MulAction.fixedPoints H α)
-  body: inferInstanceAs MulAction G fixedPointsSubMulOfNormal
-
-@[simp]
-
-中文:
-实例 [hH
-  签名: : H.正规] : 乘法作用 G (乘法作用.fixedPoints H α)
-  定义体: inferInstanceAs MulAction G fixedPointsSubMulOfNormal
-
-@[simp]
-
-Depends on / 依赖: MulAction, fixedPointsSubMulOfNormal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [hH : H.Normal] : MulAction G (MulAction.fixedPoints H α) :=
-inferInstanceAs MulAction G fixedPointsSubMulOfNormal
+  inferInstanceAs <| MulAction G fixedPointsSubMulOfNormal
 
 @[simp]
-/--
-lemma `coe_smul_fixedPoints_of_normal` / 引理 `coe_smul_fixedPoints_of_normal`
-
-English:
-lemma coe_smul_fixedPoints_of_normal
-  statement: [hH : H.Normal]
-  proof: rfl
-
-中文:
-引理 coe_smul_fixedPoints_of_normal
-  结论: [hH : H.正规]
-  证明: rfl
+/-
+**coe_smul_fixedPoints_of_normal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：coe_smul_fixedPoints_of_normal [hH : H.Normal] (g : G) (a : MulAction.fixe
+dPoints H α) : (g • a : MulAction.fixedPoints H α) = g • (a : α)
+参数：g : G；a : MulAction.fixedPoints H α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_smul_fixedPoints_of_normal [hH : H.Normal]
     (g : G) (a : MulAction.fixedPoints H α) :
@@ -2062,3 +1475,4 @@ lemma coe_smul_fixedPoints_of_normal [hH : H.Normal]
   rfl
 
 end FixedPoints
+

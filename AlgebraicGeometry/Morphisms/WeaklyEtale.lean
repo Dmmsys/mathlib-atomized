@@ -41,24 +41,13 @@ variable {W X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
 
 /-- A morphism is weakly étale if it is flat and the diagonal map is flat. -/
 @[mk_iff, stacks 094P]
-/--
-Definition of `WeaklyEtale` / `WeaklyEtale` 的定义
+/-
+**AlgebraicGeometry.WeaklyEtale** 是 Mathlib 中的一个类，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：WeaklyEtale : Prop where flat : Flat f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class WeaklyEtale
-  parameters: : Prop where
-  axioms and operations (2):
-    - flat : Flat f  [default: by infer_instance]
-    - flat_diagonal : Flat (pullback.diagonal f)  [default: by infer_instance]
-
-中文:
-类 弱平展
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - flat : 平坦 f  [默认: by infer_instance]
-    - flat_diagonal : 平坦 (pullback.diagonal f)  [默认: by infer_instance]
-
-Depends on / 依赖: diagonal, flat_diagonal, infer_instance, pullback, pullback.diagonal
+--- 原说明 ---
+A morphism is weakly étale if it is flat and the diagonal map is flat.
 -/
 class WeaklyEtale : Prop where
   flat : Flat f := by infer_instance
@@ -68,22 +57,20 @@ namespace WeaklyEtale
 
 attribute [instance] flat flat_diagonal
 
-/--
-theorem `weaklyEtale_eq_flat_inf_diagonal_flat` / 定理 `weaklyEtale_eq_flat_inf_diagonal_flat`
-
-English:
-theorem weaklyEtale_eq_flat_inf_diagonal_flat
-  proof: by
-  ext
-  exact weaklyEtale_iff _
-
-中文:
-定理 weaklyEtale_eq_flat_inf_diagonal_flat
-  证明: by
-  ext
-  exact weaklyEtale_iff _
-
-Depends on / 依赖: weaklyEtale_iff
+/-
+**AlgebraicGeometry.WeaklyEtale.weaklyEtale_eq_flat_inf_diagonal_flat** 是 Mathli
+b 中的一个定理，位于命名空间 `AlgebraicGeometry.WeaklyEtale`。
+形式化陈述：weaklyEtale_eq_flat_inf_diagonal_flat : @WeaklyEtale = (@Flat ⊓ MorphismPr
+operty.diagonal @Flat : MorphismProperty Scheme.{u})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.weaklyEtale_iff`：∀ {X Y : AlgebraicGeometry.Scheme} (f
+ : X ⟶ Y),   AlgebraicGeometry.WeaklyEtale f ↔     autoParam (AlgebraicGeometry.
+Flat f) AlgebraicGeomet…
 -/
 theorem weaklyEtale_eq_flat_inf_diagonal_flat :
     @WeaklyEtale = (@Flat ⊓ MorphismProperty.diagonal @Flat : MorphismProperty Scheme.{u}) := by
@@ -91,232 +78,165 @@ theorem weaklyEtale_eq_flat_inf_diagonal_flat :
   exact weaklyEtale_iff _
 
 /-- Etale morphisms are weakly étale. -/
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Etale morphisms are weakly étale.
+-/
 instance (priority := 900) [Etale f] : WeaklyEtale f where
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.RespectsIso @WeaklyEtale
-  body: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-中文:
-实例 :
-  签名: MorphismProperty.RespectsIso @弱平展
-  定义体: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-Depends on / 依赖: infer_instance, weaklyEtale_eq_flat_inf_diagonal_flat
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.RespectsIso @WeaklyEtale := by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsMultiplicative @WeaklyEtale
-  body: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-中文:
-实例 :
-  签名: MorphismProperty.是Multiplicative @弱平展
-  定义体: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-Depends on / 依赖: infer_instance, weaklyEtale_eq_flat_inf_diagonal_flat
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsMultiplicative @WeaklyEtale := by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [WeaklyEtale
-  signature: f] [WeaklyEtale g] : WeaklyEtale (f ≫ g)
-  body: MorphismProperty.comp_mem _ f g inferInstance inferInstance
-
-中文:
-实例 [弱平展
-  签名: f] [弱平展 g] : 弱平展 (f ≫ g)
-  定义体: MorphismProperty.comp_mem _ f g inferInstance inferInstance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [WeaklyEtale f] [WeaklyEtale g] : WeaklyEtale (f ≫ g) :=
   MorphismProperty.comp_mem _ f g inferInstance inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsStableUnderBaseChange @WeaklyEtale
-  body: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-中文:
-实例 :
-  签名: MorphismProperty.是StableUnderBaseChange @弱平展
-  定义体: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-Depends on / 依赖: infer_instance, weaklyEtale_eq_flat_inf_diagonal_flat
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsStableUnderBaseChange @WeaklyEtale := by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZariskiLocalAtSource @WeaklyEtale
-  body: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-中文:
-实例 :
-  签名: IsZariskiLocalAtSource @弱平展
-  定义体: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-Depends on / 依赖: infer_instance, weaklyEtale_eq_flat_inf_diagonal_flat
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZariskiLocalAtSource @WeaklyEtale := by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZariskiLocalAtTarget @WeaklyEtale
-  body: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-中文:
-实例 :
-  签名: IsZariskiLocalAtTarget @弱平展
-  定义体: by
-  rw [weaklyEtale_eq_flat_inf_diagonal_flat]
-  infer_instance
-
-Depends on / 依赖: infer_instance, weaklyEtale_eq_flat_inf_diagonal_flat
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZariskiLocalAtTarget @WeaklyEtale := by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y S : Scheme} (f : X ⟶ S) (g : Y ⟶ S) [WeaklyEtale g] :
     WeaklyEtale (pullback.fst f g) :=
   MorphismProperty.pullback_fst f g inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y S : Scheme} (f : X ⟶ S) (g : Y ⟶ S) [WeaklyEtale f] :
     WeaklyEtale (pullback.snd f g) :=
   MorphismProperty.pullback_snd f g inferInstance
-
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (V : Y.Opens) [WeaklyEtale f] : WeaklyEtale (f ∣_ V) :=
   IsZariskiLocalAtTarget.restrict ‹_› V
-
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (U : X.Opens) (V : Y.Opens) (e) [WeaklyEtale f] :
     WeaklyEtale (f.resLE V U e) := by
   delta Scheme.Hom.resLE; infer_instance
 
 /-- This proof is by `inferInstance` and the argument goes through
 `IsImmersion (diagonal f) → Mono (diagonal f) → IsIso (diagonal (diagonal f))`. -/
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This proof is by `inferInstance` and the argument goes through
+`IsImmersion (diagonal f) → Mono (diagonal f) → IsIso (diagonal (diagonal f))`.
+-/
 instance (f : X ⟶ Y) [WeaklyEtale f] : WeaklyEtale (pullback.diagonal f) where
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[stacks 0951]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.HasOfPostcompProperty @WeaklyEtale @WeaklyEtale
-  body: by
-  rw [MorphismProperty.hasOfPostcompProperty_iff_le_diagonal]
-  intro X Y f hf
-exact inferInstanceAs WeaklyEtale (pullback.diagonal f)
-
-中文:
-实例 :
-  签名: MorphismProperty.有OfPostcompProperty @弱平展 @弱平展
-  定义体: by
-  rw [MorphismProperty.hasOfPostcompProperty_iff_le_diagonal]
-  intro X Y f hf
-exact inferInstanceAs WeaklyEtale (pullback.diagonal f)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.hasOfPostcompProperty_iff_le_diagonal, WeaklyEtale, diagonal, hasOfPostcompProperty_iff_le_diagonal, pullback, pullback.diagonal, truncation
+/-
+**AlgebraicGeometry.WeaklyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.We
+aklyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.HasOfPostcompProperty @WeaklyEtale @WeaklyEtale := by
   rw [MorphismProperty.hasOfPostcompProperty_iff_le_diagonal]
   intro X Y f hf
-exact inferInstanceAs WeaklyEtale (pullback.diagonal f)
-
-/--
-lemma `of_comp` / 引理 `of_comp`
-
-English:
-lemma of_comp
-  given: (f : X ⟶ Y) (g : Y ⟶ Z) [WeaklyEtale (f ≫ g)] [WeaklyEtale g]
-  statement: WeaklyEtale f
-  proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-中文:
-引理 of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [弱平展 (f ≫ g)] [弱平展 g]
-  结论: 弱平展 f
-  证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
+  exact inferInstanceAs <| WeaklyEtale (pullback.diagonal f)
+/-
+**AlgebraicGeometry.WeaklyEtale.of_comp** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.WeaklyEtale`。
+形式化陈述：of_comp (f : X ⟶ Y) (g : Y ⟶ Z) [WeaklyEtale (f ≫ g)] [WeaklyEtale g] : We
+aklyEtale f
+参数：f : X ⟶ Y；g : Y ⟶ Z；f ≫ g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.of_postcomp`：of_postcomp [W.HasOfPostcom
+pProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g) (hfg : W (f ≫ g)) 
+: W f
+· 使用定理 `AlgebraicGeometry.WeaklyEtale.instHasOfPostcompPropertyScheme`：CategoryT
+heory.MorphismProperty.HasOfPostcompProperty @AlgebraicGeometry.WeaklyEtale @Alg
+ebraicGeometry.WeaklyEtale
 -/
 lemma of_comp (f : X ⟶ Y) (g : Y ⟶ Z) [WeaklyEtale (f ≫ g)] [WeaklyEtale g] : WeaklyEtale f :=
   MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 end WeaklyEtale
 
-/--
-lemma `etale_le_weaklyEtale` / 引理 `etale_le_weaklyEtale`
-
-English:
-lemma etale_le_weaklyEtale
-  statement: @Etale <= @WeaklyEtale
-  proof: fun _ _ _ _ => inferInstance
-
-中文:
-引理 etale_le_weaklyEtale
-  结论: @平展 <= @弱平展
-  证明: fun _ _ _ _ => inferInstance
+/-
+**AlgebraicGeometry.etale_le_weaklyEtale** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：etale_le_weaklyEtale : @Etale <= @WeaklyEtale
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.WeaklyEtale.instOfEtale`：∀ {X Y : AlgebraicGeometry.Sc
+heme} (f : X ⟶ Y) [AlgebraicGeometry.Etale f], AlgebraicGeometry.WeaklyEtale f
 -/
-lemma etale_le_weaklyEtale : @Etale <= @WeaklyEtale :=
-  fun _ _ _ _ => inferInstance
+lemma etale_le_weaklyEtale : @Etale ≤ @WeaklyEtale :=
+  fun _ _ _ _ ↦ inferInstance
 
 end AlgebraicGeometry
+

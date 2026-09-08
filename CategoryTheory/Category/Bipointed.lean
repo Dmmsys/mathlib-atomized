@@ -24,22 +24,15 @@ open CategoryTheory
 
 universe u
 
-/--
-Definition of `Bipointed` / `Bipointed` 的定义
+/-- The category of bipointed types. -/
+/-
+**Bipointed** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Bipointed
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - X : Type u
-    - toProd : X × X
-
-中文:
-结构 Bipointed
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - X : 类型u
-    - toProd : X × X
+--- 原说明 ---
+The category of bipointed types.
 -/
 structure Bipointed : Type (u + 1) where
   /-- The underlying type of a bipointed type. -/
@@ -49,105 +42,56 @@ structure Bipointed : Type (u + 1) where
 
 namespace Bipointed
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort Bipointed Type*
-  body: ⟨Bipointed.X⟩
-
-中文:
-实例 :
-  签名: CoeSort Bipointed 类型
-  定义体: ⟨Bipointed.X⟩
-
-Depends on / 依赖: Bipointed, Bipointed.X
+/-
+**Bipointed.** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort Bipointed Type* := ⟨Bipointed.X⟩
 
-/--
-Definition of `of` / `of` 的定义
+/-- Turns a bipointing into a bipointed type. -/
+/-
+**Bipointed.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Bipointed`。
+形式化陈述：of {X : Type*} (to_prod : X × X) : Bipointed
+参数：to_prod : X × X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: {X : Type*} (to_prod : X × X)
-  body: ⟨X, to_prod⟩
-
-中文:
-缩写 of
-  签名: {X : 类型} (to_prod : X × X)
-  定义体: ⟨X, to_prod⟩
-
-Depends on / 依赖: to_prod
+--- 原说明 ---
+Turns a bipointing into a bipointed type.
 -/
 abbrev of {X : Type*} (to_prod : X × X) : Bipointed :=
   ⟨X, to_prod⟩
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: {X : Type*} (to_prod : X × X)
-  statement: ↥(of to_prod) = X
-  proof: rfl
-
-alias _root_.Prod.Bipointed := of
-
-中文:
-定理 coe_of
-  条件: {X : 类型} (to_prod : X × X)
-  结论: ↥(of to_prod) = X
-  证明: rfl
-
-alias _root_.Prod.Bipointed := of
+/-
+**Bipointed.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `Bipointed`。
+形式化陈述：coe_of {X : Type*} (to_prod : X × X) : ↥(of to_prod) = X
+参数：to_prod : X × X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of {X : Type*} (to_prod : X × X) : ↥(of to_prod) = X :=
   rfl
 
 alias _root_.Prod.Bipointed := of
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Bipointed
-  body: ⟨of ((), ())⟩
-
-中文:
-实例 :
-  签名: 可居 Bipointed
-  定义体: ⟨of ((), ())⟩
+/-
+**Bipointed.** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Bipointed :=
   ⟨of ((), ())⟩
 
 /-- Morphisms in `Bipointed`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**Bipointed.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Bipointed`。
+形式化陈述：Bipointed → Bipointed → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : Bipointed.{u})
-  axioms and operations (3):
-    - toFun : X -> Y
-    - map_fst : toFun X.toProd.1 = Y.toProd.1
-    - map_snd : toFun X.toProd.2 = Y.toProd.2
-
-中文:
-结构 态射
-  参数: (X Y : Bipointed.{u})
-  公理与运算 (3 个):
-    - toFun : X -> Y
-    - map_fst : toFun X.toProd.1 = Y.toProd.1
-    - map_snd : toFun X.toProd.2 = Y.toProd.2
+--- 原说明 ---
+Morphisms in `Bipointed`.
 -/
 protected structure Hom (X Y : Bipointed.{u}) : Type u where
   /-- The underlying function of a morphism of bipointed types. -/
-  toFun : X -> Y
+  toFun : X → Y
   map_fst : toFun X.toProd.1 = Y.toProd.1
   map_snd : toFun X.toProd.2 = Y.toProd.2
 
@@ -158,95 +102,68 @@ namespace Hom
 nonrec def id (X : Bipointed) : Bipointed.Hom X X :=
   ⟨id, rfl, rfl⟩
 
+/-
+**Bipointed.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Bipointed) : Inhabited (Bipointed.Hom X X) :=
   ⟨id X⟩
 
 /-- Composition of morphisms of `Bipointed`. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**Bipointed.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `Bipointed.Hom`。
+形式化陈述：comp {X Y Z : Bipointed.{u}} (f : Bipointed.Hom X Y) (g : Bipointed.Hom Y 
+Z) : Bipointed.Hom X Z
+参数：f : Bipointed.Hom X Y；g : Bipointed.Hom Y Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {X Y Z : Bipointed.{u}} (f : Bipointed.Hom X Y) (g : Bipointed.Hom Y Z)
-  body: ⟨g.toFun ∘ f.toFun, by rw [Function.comp_apply, f.map_fst, g.map_fst], by
-    rw [Function.comp_apply]; rw [f.map_snd]; rw [g.map_snd]⟩
-
-中文:
-定义 comp
-  签名: {X Y Z : Bipointed.{u}} (f : Bipointed.态射 X Y) (g : Bipointed.态射 Y Z)
-  定义体: ⟨g.toFun ∘ f.toFun, by rw [Function.comp_apply, f.map_fst, g.map_fst], by
-    rw [Function.comp_apply]; rw [f.map_snd]; rw [g.map_snd]⟩
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, f.map_fst, f.map_snd, f.toFun, g.map_fst, g.map_snd, g.toFun, map_fst, map_snd
+--- 原说明 ---
+Composition of morphisms of `Bipointed`.
 -/
 def comp {X Y Z : Bipointed.{u}} (f : Bipointed.Hom X Y) (g : Bipointed.Hom Y Z) :
     Bipointed.Hom X Z :=
   ⟨g.toFun ∘ f.toFun, by rw [Function.comp_apply, f.map_fst, g.map_fst], by
-    rw [Function.comp_apply]; rw [f.map_snd]; rw [g.map_snd]⟩
+    rw [Function.comp_apply, f.map_snd, g.map_snd]⟩
 
 end Hom
 
-/--
-Instance `largeCategory` / 实例 `largeCategory`
-
-English:
-instance largeCategory
-  signature: : LargeCategory Bipointed where
-  body: Bipointed.Hom
-  id := Hom.id
-  comp := @Hom.comp
-
-中文:
-实例 largeCategory
-  签名: : 大范畴 Bipointed where
-  定义体: Bipointed.Hom
-  id := Hom.id
-  comp := @Hom.comp
-
-Depends on / 依赖: Bipointed, Bipointed.Hom
+/-
+**Bipointed.largeCategory** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed`。
+形式化陈述：largeCategory : LargeCategory Bipointed where Hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance largeCategory : LargeCategory Bipointed where
   Hom := Bipointed.Hom
   id := Hom.id
   comp := @Hom.comp
 
-/--
-Definition of `HomSubtype` / `HomSubtype` 的定义
+/-- The subtype of functions corresponding to the morphisms in `Bipointed`. -/
+/-
+**Bipointed.HomSubtype** 是 Mathlib 中的一个缩写定义，位于命名空间 `Bipointed`。
+形式化陈述：HomSubtype (X Y : Bipointed)
+参数：X Y : Bipointed。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomSubtype
-  signature: (X Y : Bipointed)
-  body: { f : X -> Y // f X.toProd.1 = Y.toProd.1 ∧ f X.toProd.2 = Y.toProd.2 }
-
-中文:
-缩写 HomSubtype
-  签名: (X Y : Bipointed)
-  定义体: { f : X -> Y // f X.toProd.1 = Y.toProd.1 ∧ f X.toProd.2 = Y.toProd.2 }
-
-Depends on / 依赖: X.toProd, Y.toProd, toProd
+--- 原说明 ---
+The subtype of functions corresponding to the morphisms in `Bipointed`.
 -/
 abbrev HomSubtype (X Y : Bipointed) :=
-  { f : X -> Y // f X.toProd.1 = Y.toProd.1 ∧ f X.toProd.2 = Y.toProd.2 }
-
+  { f : X → Y // f X.toProd.1 = Y.toProd.1 ∧ f X.toProd.2 = Y.toProd.2 }
+/-
+**Bipointed.** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : Bipointed) : FunLike (HomSubtype X Y) X Y where
   coe f := f
   coe_injective _ _ := Subtype.ext
-
-/--
-Instance `hasForget` / 实例 `hasForget`
-
-English:
-instance hasForget
-  signature: : ConcreteCategory Bipointed HomSubtype where
-  body: ⟨f.1, ⟨f.2, f.3⟩⟩
-  ofHom f := ⟨f.1, f.2.1, f.2.2⟩
-
-中文:
-实例 hasForget
-  签名: : 余ncrete范畴 Bipointed HomSubtype where
-  定义体: ⟨f.1, ⟨f.2, f.3⟩⟩
-  ofHom f := ⟨f.1, f.2.1, f.2.2⟩
+/-
+**Bipointed.hasForget** 是 Mathlib 中的一个实例，位于命名空间 `Bipointed`。
+形式化陈述：hasForget : ConcreteCategory Bipointed HomSubtype where hom f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForget : ConcreteCategory Bipointed HomSubtype where
   hom f := ⟨f.1, ⟨f.2, f.3⟩⟩
@@ -254,26 +171,18 @@ instance hasForget : ConcreteCategory Bipointed HomSubtype where
 
 /-- Swaps the pointed elements of a bipointed type. `Prod.swap` as a functor. -/
 @[simps]
-/--
-Definition of `swap` / `swap` 的定义
+/-
+**Bipointed.swap** 是 Mathlib 中的一个定义，位于命名空间 `Bipointed`。
+形式化陈述：swap : Bipointed ⥤ Bipointed where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bipointed.Hom.map_snd`：∀ {X Y : Bipointed} (self : X.Hom Y), self.toFun 
+X.toProd.2 = Y.toProd.2
+· 使用定理 `Bipointed.Hom.map_fst`：∀ {X Y : Bipointed} (self : X.Hom Y), self.toFun 
+X.toProd.1 = Y.toProd.1
 
-English:
-definition swap
-  signature: : Bipointed ⥤ Bipointed where
-  body: ⟨X, X.toProd.swap⟩
-  map f := ⟨f.toFun, f.map_snd, f.map_fst⟩
-
-#adaptation_note
-
-中文:
-定义 swap
-  签名: : Bipointed ⥤ Bipointed where
-  定义体: ⟨X, X.toProd.swap⟩
-  map f := ⟨f.toFun, f.map_snd, f.map_fst⟩
-
-#adaptation_note
-
-Depends on / 依赖: X.toProd.swap, toProd
+--- 原说明 ---
+Swaps the pointed elements of a bipointed type. `Prod.swap` as a functor.
 -/
 def swap : Bipointed ⥤ Bipointed where
   obj X := ⟨X, X.toProd.swap⟩
@@ -284,28 +193,14 @@ def swap : Bipointed ⥤ Bipointed where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The equivalence between `Bipointed` and itself induced by `Prod.swap` both ways. -/
 @[simps!]
-/--
-Definition of `swapEquiv` / `swapEquiv` 的定义
+/-
+**Bipointed.swapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Bipointed`。
+形式化陈述：swapEquiv : Bipointed ≌ Bipointed where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition swapEquiv
-  signature: : Bipointed ≌ Bipointed where
-  body: swap
-  inverse := swap
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-@[simp]
-
-中文:
-定义 swapEquiv
-  签名: : Bipointed ≌ Bipointed where
-  定义体: swap
-  inverse := swap
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-@[simp]
+--- 原说明 ---
+The equivalence between `Bipointed` and itself induced by `Prod.swap` both ways.
 -/
 def swapEquiv : Bipointed ≌ Bipointed where
   functor := swap
@@ -314,187 +209,124 @@ def swapEquiv : Bipointed ≌ Bipointed where
   counitIso := Iso.refl _
 
 @[simp]
-/--
-theorem `swapEquiv_symm` / 定理 `swapEquiv_symm`
-
-English:
-theorem swapEquiv_symm
-  statement: swapEquiv.symm = swapEquiv
-  proof: rfl
-
-中文:
-定理 swapEquiv_symm
-  结论: swapEquiv.symm = swapEquiv
-  证明: rfl
+/-
+**Bipointed.swapEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Bipointed`。
+形式化陈述：swapEquiv_symm : swapEquiv.symm = swapEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swapEquiv_symm : swapEquiv.symm = swapEquiv :=
   rfl
 
 end Bipointed
 
-/--
-Definition of `bipointedToPointedFst` / `bipointedToPointedFst` 的定义
+/-- The forgetful functor from `Bipointed` to `Pointed` which forgets about the second point. -/
+/-
+**bipointedToPointedFst** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：bipointedToPointedFst : Bipointed ⥤ Pointed where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bipointed.Hom.map_fst`：∀ {X Y : Bipointed} (self : X.Hom Y), self.toFun 
+X.toProd.1 = Y.toProd.1
 
-English:
-definition bipointedToPointedFst
-  signature: : Bipointed ⥤ Pointed where
-  body: ⟨X, X.toProd.1⟩
-  map f := ⟨f.toFun, f.map_fst⟩
-
-中文:
-定义 bipointedToPointedFst
-  签名: : Bipointed ⥤ Pointed where
-  定义体: ⟨X, X.toProd.1⟩
-  map f := ⟨f.toFun, f.map_fst⟩
-
-Depends on / 依赖: X.toProd, toProd
+--- 原说明 ---
+The forgetful functor from `Bipointed` to `Pointed` which forgets about the seco
+nd point.
 -/
 def bipointedToPointedFst : Bipointed ⥤ Pointed where
   obj X := ⟨X, X.toProd.1⟩
   map f := ⟨f.toFun, f.map_fst⟩
 
-/--
-Definition of `bipointedToPointedSnd` / `bipointedToPointedSnd` 的定义
+/-- The forgetful functor from `Bipointed` to `Pointed` which forgets about the first point. -/
+/-
+**bipointedToPointedSnd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：bipointedToPointedSnd : Bipointed ⥤ Pointed where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bipointed.Hom.map_snd`：∀ {X Y : Bipointed} (self : X.Hom Y), self.toFun 
+X.toProd.2 = Y.toProd.2
 
-English:
-definition bipointedToPointedSnd
-  signature: : Bipointed ⥤ Pointed where
-  body: ⟨X, X.toProd.2⟩
-  map f := ⟨f.toFun, f.map_snd⟩
-
-@[simp]
-
-中文:
-定义 bipointedToPointedSnd
-  签名: : Bipointed ⥤ Pointed where
-  定义体: ⟨X, X.toProd.2⟩
-  map f := ⟨f.toFun, f.map_snd⟩
-
-@[simp]
-
-Depends on / 依赖: X.toProd, toProd
+--- 原说明 ---
+The forgetful functor from `Bipointed` to `Pointed` which forgets about the firs
+t point.
 -/
 def bipointedToPointedSnd : Bipointed ⥤ Pointed where
   obj X := ⟨X, X.toProd.2⟩
   map f := ⟨f.toFun, f.map_snd⟩
 
 @[simp]
-/--
-theorem `bipointedToPointedFst_comp_forget` / 定理 `bipointedToPointedFst_comp_forget`
-
-English:
-theorem bipointedToPointedFst_comp_forget
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bipointedToPointedFst_comp_forget
-  证明: rfl
-
-@[simp]
+/-
+**bipointedToPointedFst_comp_forget** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bipointedToPointedFst_comp_forget : bipointedToPointedFst ⋙ forget Pointed
+ = forget Bipointed
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bipointedToPointedFst_comp_forget :
     bipointedToPointedFst ⋙ forget Pointed = forget Bipointed :=
   rfl
 
 @[simp]
-/--
-theorem `bipointedToPointedSnd_comp_forget` / 定理 `bipointedToPointedSnd_comp_forget`
-
-English:
-theorem bipointedToPointedSnd_comp_forget
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bipointedToPointedSnd_comp_forget
-  证明: rfl
-
-@[simp]
+/-
+**bipointedToPointedSnd_comp_forget** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bipointedToPointedSnd_comp_forget : bipointedToPointedSnd ⋙ forget Pointed
+ = forget Bipointed
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bipointedToPointedSnd_comp_forget :
     bipointedToPointedSnd ⋙ forget Pointed = forget Bipointed :=
   rfl
 
 @[simp]
-/--
-theorem `swap_comp_bipointedToPointedFst` / 定理 `swap_comp_bipointedToPointedFst`
-
-English:
-theorem swap_comp_bipointedToPointedFst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 swap_comp_bipointedToPointedFst
-  证明: rfl
-
-@[simp]
+/-
+**swap_comp_bipointedToPointedFst** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：swap_comp_bipointedToPointedFst : Bipointed.swap ⋙ bipointedToPointedFst =
+ bipointedToPointedSnd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swap_comp_bipointedToPointedFst :
     Bipointed.swap ⋙ bipointedToPointedFst = bipointedToPointedSnd :=
   rfl
 
 @[simp]
-/--
-theorem `swap_comp_bipointedToPointedSnd` / 定理 `swap_comp_bipointedToPointedSnd`
-
-English:
-theorem swap_comp_bipointedToPointedSnd
-  proof: rfl
-
-中文:
-定理 swap_comp_bipointedToPointedSnd
-  证明: rfl
+/-
+**swap_comp_bipointedToPointedSnd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：swap_comp_bipointedToPointedSnd : Bipointed.swap ⋙ bipointedToPointedSnd =
+ bipointedToPointedFst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swap_comp_bipointedToPointedSnd :
     Bipointed.swap ⋙ bipointedToPointedSnd = bipointedToPointedFst :=
   rfl
 
-/--
-Definition of `pointedToBipointed` / `pointedToBipointed` 的定义
+/-- The functor from `Pointed` to `Bipointed` which bipoints the point. -/
+/-
+**pointedToBipointed** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pointedToBipointed : Pointed.{u} ⥤ Bipointed where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Pointed.Hom.map_point`：∀ {X Y : Pointed} (self : X.Hom Y), self.toFun X.
+point = Y.point
 
-English:
-definition pointedToBipointed
-  signature: : Pointed.{u} ⥤ Bipointed where
-  body: ⟨X, X.point, X.point⟩
-  map f := ⟨f.toFun, f.map_point, f.map_point⟩
-
-中文:
-定义 pointedToBipointed
-  签名: : Pointed.{u} ⥤ Bipointed where
-  定义体: ⟨X, X.point, X.point⟩
-  map f := ⟨f.toFun, f.map_point, f.map_point⟩
-
-Depends on / 依赖: X.point
+--- 原说明 ---
+The functor from `Pointed` to `Bipointed` which bipoints the point.
 -/
 def pointedToBipointed : Pointed.{u} ⥤ Bipointed where
   obj X := ⟨X, X.point, X.point⟩
   map f := ⟨f.toFun, f.map_point, f.map_point⟩
 
-/--
-Definition of `pointedToBipointedFst` / `pointedToBipointedFst` 的定义
+/-- The functor from `Pointed` to `Bipointed` which adds a second point. -/
+/-
+**pointedToBipointedFst** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pointedToBipointedFst : Pointed.{u} ⥤ Bipointed where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedFst
-  signature: : Pointed.{u} ⥤ Bipointed where
-  body: ⟨Option X, X.point, none⟩
-  map f := ⟨Option.map f.toFun, congr_arg _ f.map_point, rfl⟩
-  map_id _ := Bipointed.Hom.ext Option.map_id
-  map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
-
-中文:
-定义 pointedToBipointedFst
-  签名: : Pointed.{u} ⥤ Bipointed where
-  定义体: ⟨Option X, X.point, none⟩
-  map f := ⟨Option.map f.toFun, congr_arg _ f.map_point, rfl⟩
-  map_id _ := Bipointed.Hom.ext Option.map_id
-  map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
-
-Depends on / 依赖: X.point
+--- 原说明 ---
+The functor from `Pointed` to `Bipointed` which adds a second point.
 -/
 def pointedToBipointedFst : Pointed.{u} ⥤ Bipointed where
   obj X := ⟨Option X, X.point, none⟩
@@ -502,30 +334,15 @@ def pointedToBipointedFst : Pointed.{u} ⥤ Bipointed where
   map_id _ := Bipointed.Hom.ext Option.map_id
   map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
 
-/--
-Definition of `pointedToBipointedSnd` / `pointedToBipointedSnd` 的定义
+/-- The functor from `Pointed` to `Bipointed` which adds a first point. -/
+/-
+**pointedToBipointedSnd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pointedToBipointedSnd : Pointed.{u} ⥤ Bipointed where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedSnd
-  signature: : Pointed.{u} ⥤ Bipointed where
-  body: ⟨Option X, none, X.point⟩
-  map f := ⟨Option.map f.toFun, rfl, congr_arg _ f.map_point⟩
-  map_id _ := Bipointed.Hom.ext Option.map_id
-  map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
-
-@[simp]
-
-中文:
-定义 pointedToBipointedSnd
-  签名: : Pointed.{u} ⥤ Bipointed where
-  定义体: ⟨Option X, none, X.point⟩
-  map f := ⟨Option.map f.toFun, rfl, congr_arg _ f.map_point⟩
-  map_id _ := Bipointed.Hom.ext Option.map_id
-  map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
-
-@[simp]
-
-Depends on / 依赖: X.point
+--- 原说明 ---
+The functor from `Pointed` to `Bipointed` which adds a first point.
 -/
 def pointedToBipointedSnd : Pointed.{u} ⥤ Bipointed where
   obj X := ⟨Option X, none, X.point⟩
@@ -534,36 +351,24 @@ def pointedToBipointedSnd : Pointed.{u} ⥤ Bipointed where
   map_comp f g := Bipointed.Hom.ext (Option.map_comp_map f.1 g.1).symm
 
 @[simp]
-/--
-theorem `pointedToBipointedFst_comp_swap` / 定理 `pointedToBipointedFst_comp_swap`
-
-English:
-theorem pointedToBipointedFst_comp_swap
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 pointedToBipointedFst_comp_swap
-  证明: rfl
-
-@[simp]
+/-
+**pointedToBipointedFst_comp_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pointedToBipointedFst_comp_swap : pointedToBipointedFst ⋙ Bipointed.swap =
+ pointedToBipointedSnd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointedToBipointedFst_comp_swap :
     pointedToBipointedFst ⋙ Bipointed.swap = pointedToBipointedSnd :=
   rfl
 
 @[simp]
-/--
-theorem `pointedToBipointedSnd_comp_swap` / 定理 `pointedToBipointedSnd_comp_swap`
-
-English:
-theorem pointedToBipointedSnd_comp_swap
-  proof: rfl
-
-中文:
-定理 pointedToBipointedSnd_comp_swap
-  证明: rfl
+/-
+**pointedToBipointedSnd_comp_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pointedToBipointedSnd_comp_swap : pointedToBipointedSnd ⋙ Bipointed.swap =
+ pointedToBipointedFst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointedToBipointedSnd_comp_swap :
     pointedToBipointedSnd ⋙ Bipointed.swap = pointedToBipointedFst :=
@@ -571,24 +376,15 @@ theorem pointedToBipointedSnd_comp_swap :
 
 /-- `BipointedToPointed_fst` is inverse to `PointedToBipointed`. -/
 @[simps!]
-/--
-Definition of `pointedToBipointedCompBipointedToPointedFst` / `pointedToBipointedCompBipointedToPointedFst` 的定义
+/-
+**pointedToBipointedCompBipointedToPointedFst** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pointedToBipointedCompBipointedToPointedFst : pointedToBipointed ⋙ bipoint
+edToPointedFst ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedCompBipointedToPointedFst
-  signature: :
-  body: NatIso.ofComponents fun X =>
-    { hom := ⟨id, rfl⟩
-      inv := ⟨id, rfl⟩ }
-
-中文:
-定义 pointedToBipointedCompBipointedToPointedFst
-  签名: :
-  定义体: NatIso.ofComponents fun X =>
-    { hom := ⟨id, rfl⟩
-      inv := ⟨id, rfl⟩ }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+`BipointedToPointed_fst` is inverse to `PointedToBipointed`.
 -/
 def pointedToBipointedCompBipointedToPointedFst :
     pointedToBipointed ⋙ bipointedToPointedFst ≅ 𝟭 _ :=
@@ -598,24 +394,15 @@ def pointedToBipointedCompBipointedToPointedFst :
 
 /-- `BipointedToPointed_snd` is inverse to `PointedToBipointed`. -/
 @[simps!]
-/--
-Definition of `pointedToBipointedCompBipointedToPointedSnd` / `pointedToBipointedCompBipointedToPointedSnd` 的定义
+/-
+**pointedToBipointedCompBipointedToPointedSnd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：pointedToBipointedCompBipointedToPointedSnd : pointedToBipointed ⋙ bipoint
+edToPointedSnd ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedCompBipointedToPointedSnd
-  signature: :
-  body: NatIso.ofComponents fun X =>
-    { hom := ⟨id, rfl⟩
-      inv := ⟨id, rfl⟩ }
-
-中文:
-定义 pointedToBipointedCompBipointedToPointedSnd
-  签名: :
-  定义体: NatIso.ofComponents fun X =>
-    { hom := ⟨id, rfl⟩
-      inv := ⟨id, rfl⟩ }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+`BipointedToPointed_snd` is inverse to `PointedToBipointed`.
 -/
 def pointedToBipointedCompBipointedToPointedSnd :
     pointedToBipointed ⋙ bipointedToPointedSnd ≅ 𝟭 _ :=
@@ -623,46 +410,19 @@ def pointedToBipointedCompBipointedToPointedSnd :
     { hom := ⟨id, rfl⟩
       inv := ⟨id, rfl⟩ }
 
-/--
-Definition of `pointedToBipointedFstBipointedToPointedFstAdjunction` / `pointedToBipointedFstBipointedToPointedFstAdjunction` 的定义
+/-- The free/forgetful adjunction between `PointedToBipointed_fst` and `BipointedToPointed_fst`.
+-/
+/-
+**pointedToBipointedFstBipointedToPointedFstAdjunction** 是 Mathlib 中的一个定义，位于命名空间
+ ``。
+形式化陈述：pointedToBipointedFstBipointedToPointedFstAdjunction : pointedToBipointedF
+st ⊣ bipointedToPointedFst
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedFstBipointedToPointedFstAdjunction
-  signature: :
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => ⟨f.toFun ∘ Option.some, f.map_fst⟩
-          invFun := fun f => ⟨fun o => o.elim Y.toProd.2 f.toFun, f.map_point, rfl⟩
-          left_inv := fun f => by
-            apply Bipointed.Hom.ext
-            funext x
-            cases x
-            · exact f.map_snd.symm
-            · rfl }
-      homEquiv_naturality_left_symm := fun f g => by
-        apply Bipointed.Hom.ext
-        funext x
-        cases x <;> rfl }
-
-中文:
-定义 pointedToBipointedFstBipointedToPointedFstAdjunction
-  签名: :
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => ⟨f.toFun ∘ Option.some, f.map_fst⟩
-          invFun := fun f => ⟨fun o => o.elim Y.toProd.2 f.toFun, f.map_point, rfl⟩
-          left_inv := fun f => by
-            apply Bipointed.Hom.ext
-            funext x
-            cases x
-            · exact f.map_snd.symm
-            · rfl }
-      homEquiv_naturality_left_symm := fun f g => by
-        apply Bipointed.Hom.ext
-        funext x
-        cases x <;> rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Bipointed, Bipointed.Hom.ext, Option.some, Y.toProd, f.map_fst, f.map_point, f.map_snd.symm, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd
+--- 原说明 ---
+The free/forgetful adjunction between `PointedToBipointed_fst` and `BipointedToP
+ointed_fst`.
 -/
 def pointedToBipointedFstBipointedToPointedFstAdjunction :
     pointedToBipointedFst ⊣ bipointedToPointedFst :=
@@ -681,46 +441,19 @@ def pointedToBipointedFstBipointedToPointedFstAdjunction :
         funext x
         cases x <;> rfl }
 
-/--
-Definition of `pointedToBipointedSndBipointedToPointedSndAdjunction` / `pointedToBipointedSndBipointedToPointedSndAdjunction` 的定义
+/-- The free/forgetful adjunction between `PointedToBipointed_snd` and `BipointedToPointed_snd`.
+-/
+/-
+**pointedToBipointedSndBipointedToPointedSndAdjunction** 是 Mathlib 中的一个定义，位于命名空间
+ ``。
+形式化陈述：pointedToBipointedSndBipointedToPointedSndAdjunction : pointedToBipointedS
+nd ⊣ bipointedToPointedSnd
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointedToBipointedSndBipointedToPointedSndAdjunction
-  signature: :
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => ⟨f.toFun ∘ Option.some, f.map_snd⟩
-          invFun := fun f => ⟨fun o => o.elim Y.toProd.1 f.toFun, rfl, f.map_point⟩
-          left_inv := fun f => by
-            apply Bipointed.Hom.ext
-            funext x
-            cases x
-            · exact f.map_fst.symm
-            · rfl }
-      homEquiv_naturality_left_symm := fun f g => by
-        apply Bipointed.Hom.ext
-        funext x
-        cases x <;> rfl }
-
-中文:
-定义 pointedToBipointedSndBipointedToPointedSndAdjunction
-  签名: :
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => ⟨f.toFun ∘ Option.some, f.map_snd⟩
-          invFun := fun f => ⟨fun o => o.elim Y.toProd.1 f.toFun, rfl, f.map_point⟩
-          left_inv := fun f => by
-            apply Bipointed.Hom.ext
-            funext x
-            cases x
-            · exact f.map_fst.symm
-            · rfl }
-      homEquiv_naturality_left_symm := fun f g => by
-        apply Bipointed.Hom.ext
-        funext x
-        cases x <;> rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Bipointed, Bipointed.Hom.ext, Option.some, Y.toProd, f.map_fst.symm, f.map_point, f.map_snd, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd
+--- 原说明 ---
+The free/forgetful adjunction between `PointedToBipointed_snd` and `BipointedToP
+ointed_snd`.
 -/
 def pointedToBipointedSndBipointedToPointedSndAdjunction :
     pointedToBipointedSnd ⊣ bipointedToPointedSnd :=

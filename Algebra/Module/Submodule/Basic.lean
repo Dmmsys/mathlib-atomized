@@ -37,103 +37,64 @@ variable [Semiring R] [AddCommMonoid M] [Module R M]
 variable {p q : Submodule R M}
 
 @[gcongr, mono]
-/--
-theorem `toAddSubmonoid_strictMono` / 定理 `toAddSubmonoid_strictMono`
-
-English:
-theorem toAddSubmonoid_strictMono
-  statement: StrictMono (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
-  proof: fun _ _ => id
-
-中文:
-定理 toAddSubmonoid_strictMono
-  结论: 严格递增 (toAddSubmonoid : 子模 R M -> 加法子幺半群 M)
-  证明: fun _ _ => id
+/-
+**Submodule.toAddSubmonoid_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubmonoid_strictMono : StrictMono (toAddSubmonoid : Submodule R M -> 
+AddSubmonoid M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAddSubmonoid_strictMono : StrictMono (toAddSubmonoid : Submodule R M -> AddSubmonoid M) :=
+theorem toAddSubmonoid_strictMono : StrictMono (toAddSubmonoid : Submodule R M → AddSubmonoid M) :=
   fun _ _ => id
-
-/--
-theorem `toAddSubmonoid_le` / 定理 `toAddSubmonoid_le`
-
-English:
-theorem toAddSubmonoid_le
-  statement: p.toAddSubmonoid <= q.toAddSubmonoid ↔ p <= q
-  proof: Iff.rfl
-
-@[gcongr, mono]
-
-中文:
-定理 toAddSubmonoid_le
-  结论: p.toAddSubmonoid <= q.toAddSubmonoid ↔ p <= q
-  证明: Iff.rfl
-
-@[gcongr, mono]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.toAddSubmonoid_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubmonoid_le : p.toAddSubmonoid <= q.toAddSubmonoid ↔ p <= q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toAddSubmonoid_le : p.toAddSubmonoid <= q.toAddSubmonoid ↔ p <= q :=
+theorem toAddSubmonoid_le : p.toAddSubmonoid ≤ q.toAddSubmonoid ↔ p ≤ q :=
   Iff.rfl
 
 @[gcongr, mono]
-/--
-theorem `toAddSubmonoid_mono` / 定理 `toAddSubmonoid_mono`
-
-English:
-theorem toAddSubmonoid_mono
-  statement: Monotone (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
-  proof: toAddSubmonoid_strictMono.monotone
-
-@[gcongr, mono]
-
-中文:
-定理 toAddSubmonoid_mono
-  结论: 递增 (toAddSubmonoid : 子模 R M -> 加法子幺半群 M)
-  证明: toAddSubmonoid_strictMono.monotone
-
-@[gcongr, mono]
-
-Depends on / 依赖: monotone, toAddSubmonoid_strictMono, toAddSubmonoid_strictMono.monotone
+/-
+**Submodule.toAddSubmonoid_mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubmonoid_mono : Monotone (toAddSubmonoid : Submodule R M -> AddSubmo
+noid M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Submodule.toAddSubmonoid_strictMono`：toAddSubmonoid_strictMono : StrictM
+ono (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
 -/
-theorem toAddSubmonoid_mono : Monotone (toAddSubmonoid : Submodule R M -> AddSubmonoid M) :=
+theorem toAddSubmonoid_mono : Monotone (toAddSubmonoid : Submodule R M → AddSubmonoid M) :=
   toAddSubmonoid_strictMono.monotone
 
 @[gcongr, mono]
-/--
-theorem `toSubMulAction_strictMono` / 定理 `toSubMulAction_strictMono`
-
-English:
-theorem toSubMulAction_strictMono
-  proof: fun _ _ => id
-
-@[gcongr, mono]
-
-中文:
-定理 toSubMulAction_strictMono
-  证明: fun _ _ => id
-
-@[gcongr, mono]
+/-
+**Submodule.toSubMulAction_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toSubMulAction_strictMono : StrictMono (toSubMulAction : Submodule R M -> 
+SubMulAction R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubMulAction_strictMono :
-    StrictMono (toSubMulAction : Submodule R M -> SubMulAction R M) := fun _ _ => id
+    StrictMono (toSubMulAction : Submodule R M → SubMulAction R M) := fun _ _ => id
 
 @[gcongr, mono]
-/--
-theorem `toSubMulAction_mono` / 定理 `toSubMulAction_mono`
-
-English:
-theorem toSubMulAction_mono
-  statement: Monotone (toSubMulAction : Submodule R M -> SubMulAction R M)
-  proof: toSubMulAction_strictMono.monotone
-
-中文:
-定理 toSubMulAction_mono
-  结论: 递增 (toSubMulAction : 子模 R M -> SubMul作用 R M)
-  证明: toSubMulAction_strictMono.monotone
-
-Depends on / 依赖: monotone, toSubMulAction_strictMono, toSubMulAction_strictMono.monotone
+/-
+**Submodule.toSubMulAction_mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toSubMulAction_mono : Monotone (toSubMulAction : Submodule R M -> SubMulAc
+tion R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Submodule.toSubMulAction_strictMono`：toSubMulAction_strictMono : StrictM
+ono (toSubMulAction : Submodule R M -> SubMulAction R M)
 -/
-theorem toSubMulAction_mono : Monotone (toSubMulAction : Submodule R M -> SubMulAction R M) :=
+theorem toSubMulAction_mono : Monotone (toSubMulAction : Submodule R M → SubMulAction R M) :=
   toSubMulAction_strictMono.monotone
 
 end Submodule
@@ -151,76 +112,59 @@ variable {p q : Submodule R M}
 variable {r : R} {x y : M}
 variable (p)
 
-/--
-theorem `sum_mem` / 定理 `sum_mem`
-
-English:
-theorem sum_mem
-  given: {t : Finset ι} {f : ι -> M}
-  statement: (forall c in t, f c in p) -> (∑ i in t, f i) in p
-  proof: sum_mem
-
-中文:
-定理 sum_mem
-  条件: {t : 有限集 ι} {f : ι -> M}
-  结论: (对任意 c in t, f c in p) -> (∑ i in t, f i) in p
-  证明: sum_mem
+/-
+**Submodule.sum_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {M : Type v} {ι : Type w} [inst : Semiring R] [inst_1 : Add
+CommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M) {t : Finset ι
+} {f : ι → M}, (∀ c ∈ t, f c ∈ p) → ∑ i ∈ t, f i ∈ p
+参数：p : Submodule R M；∀ c ∈ t, f c ∈ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
 -/
-protected theorem sum_mem {t : Finset ι} {f : ι -> M} : (forall c in t, f c in p) -> (∑ i in t, f i) in p :=
+protected theorem sum_mem {t : Finset ι} {f : ι → M} : (∀ c ∈ t, f c ∈ p) → (∑ i ∈ t, f i) ∈ p :=
   sum_mem
-
-/--
-theorem `sum_smul_mem` / 定理 `sum_smul_mem`
-
-English:
-theorem sum_smul_mem
-  given: {t : Finset ι} {f : ι -> M} (r : ι -> R) (hyp : forall c in t, f c in p)
-  proof: sum_mem fun i hi => smul_mem _ _ (hyp i hi)
-
-中文:
-定理 sum_smul_mem
-  条件: {t : 有限集 ι} {f : ι -> M} (r : ι -> R) (hyp : 对任意 c in t, f c in p)
-  证明: sum_mem fun i hi => smul_mem _ _ (hyp i hi)
-
-Depends on / 依赖: smul_mem, sum_mem
+/-
+**Submodule.sum_smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：sum_smul_mem {t : Finset ι} {f : ι -> M} (r : ι -> R) (hyp : forall c in t
+, f c in p) : (∑ i in t, r i • f i) in p
+参数：r : ι -> R；hyp : forall c in t, f c in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 -/
-theorem sum_smul_mem {t : Finset ι} {f : ι -> M} (r : ι -> R) (hyp : forall c in t, f c in p) :
-    (∑ i in t, r i • f i) in p :=
+theorem sum_smul_mem {t : Finset ι} {f : ι → M} (r : ι → R) (hyp : ∀ c ∈ t, f c ∈ p) :
+    (∑ i ∈ t, r i • f i) ∈ p :=
   sum_mem fun i hi => smul_mem _ _ (hyp i hi)
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [SMul S R] [SMul S M] [IsScalarTower S R M] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M]
-  body: p.toSubMulAction.isCentralScalar
-
-中文:
-实例 isCentralScalar
-  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M]
-  定义体: p.toSubMulAction.isCentralScalar
-
-Depends on / 依赖: isCentralScalar, p.toSubMulAction.isCentralScalar, toSubMulAction
+/-
+**Submodule.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：isCentralScalar [SMul S R] [SMul S M] [IsScalarTower S R M] [SMul Sᵐᵒᵖ R] 
+[SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M] [IsCentralScalar S M] : IsCentralScalar S
+ p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isCentralScalar [SMul S R] [SMul S M] [IsScalarTower S R M] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M]
     [IsScalarTower Sᵐᵒᵖ R M] [IsCentralScalar S M] : IsCentralScalar S p :=
   p.toSubMulAction.isCentralScalar
-
-/--
-Instance `instIsTorsionFree` / 实例 `instIsTorsionFree`
-
-English:
-instance instIsTorsionFree
-  signature: [Module.IsTorsionFree R M]
-  body: Subtype.coe_injective.moduleIsTorsionFree _ (by simp)
-
-中文:
-实例 instIsTorsionFree
-  签名: [模.是无挠 R M]
-  定义体: Subtype.coe_injective.moduleIsTorsionFree _ (by simp)
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.moduleIsTorsionFree, coe_injective, moduleIsTorsionFree
+/-
+**Submodule.instIsTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：instIsTorsionFree [Module.IsTorsionFree R M] : Module.IsTorsionFree R p
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.Injective.moduleIsTorsionFree`：Function.Injective.moduleIsTorsi
+onFree [IsTorsionFree R N] (f : M -> N) (hf : f.Injective) (smul : forall (r : R
+) (m : M), f (r • m) = r • f…
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance instIsTorsionFree [Module.IsTorsionFree R M] : Module.IsTorsionFree R p :=
   Subtype.coe_injective.moduleIsTorsionFree _ (by simp)
@@ -238,76 +182,38 @@ These instances work particularly well in conjunction with `AddGroup.toAddAction
 
 variable {α β : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [VAdd
-  signature: M α] : VAdd p α
-  body: AddSubmonoid.instVAddSubtypeMem p
-
-中文:
-实例 [向量加法
-  签名: M α] : 向量加法 p α
-  定义体: AddSubmonoid.instVAddSubtypeMem p
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.instVAddSubtypeMem, instVAddSubtypeMem
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [VAdd M α] : VAdd p α :=
   AddSubmonoid.instVAddSubtypeMem p
-
-/--
-Instance `vaddCommClass` / 实例 `vaddCommClass`
-
-English:
-instance vaddCommClass
-  signature: [VAdd M β] [VAdd α β] [VAddCommClass M α β]
-  body: ⟨fun a => vadd_comm (a : M)⟩
-
-中文:
-实例 vaddCommClass
-  签名: [向量加法 M β] [向量加法 α β] [VAddComm类 M α β]
-  定义体: ⟨fun a => vadd_comm (a : M)⟩
-
-Depends on / 依赖: vadd_comm
+/-
+**Submodule.vaddCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：vaddCommClass [VAdd M β] [VAdd α β] [VAddCommClass M α β] : VAddCommClass 
+p α β
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `VAddCommClass.vadd_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : VAdd M α} {inst_1 : VAdd N α} [self : VAddCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance vaddCommClass [VAdd M β] [VAdd α β] [VAddCommClass M α β] : VAddCommClass p α β :=
   ⟨fun a => vadd_comm (a : M)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [VAdd
-  signature: M α] [FaithfulVAdd M α] : FaithfulVAdd p α
-  body: ⟨fun h => Subtype.ext eq_of_vadd_eq_vadd h⟩
-
-中文:
-实例 [向量加法
-  签名: M α] [忠实向量加法 M α] : 忠实向量加法 p α
-  定义体: ⟨fun h => Subtype.ext eq_of_vadd_eq_vadd h⟩
-
-Depends on / 依赖: Subtype, Subtype.ext, eq_of_vadd_eq_vadd
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [VAdd M α] [FaithfulVAdd M α] : FaithfulVAdd p α :=
-⟨fun h => Subtype.ext eq_of_vadd_eq_vadd h⟩
+  ⟨fun h => Subtype.ext <| eq_of_vadd_eq_vadd h⟩
 
 variable {p}
-
-/--
-theorem `vadd_def` / 定理 `vadd_def`
-
-English:
-theorem vadd_def
-  given: [VAdd M α] (g : p) (m : α)
-  statement: g +ᵥ m = (g : M) +ᵥ m
-  proof: rfl
-
-中文:
-定理 vadd_def
-  条件: [向量加法 M α] (g : p) (m : α)
-  结论: g +ᵥ m = (g : M) +ᵥ m
-  证明: rfl
+/-
+**Submodule.vadd_def** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：vadd_def [VAdd M α] (g : p) (m : α) : g +ᵥ m = (g : M) +ᵥ m
+参数：g : p；m : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem vadd_def [VAdd M α] (g : p) (m : α) : g +ᵥ m = (g : M) +ᵥ m :=
   rfl
@@ -325,105 +231,65 @@ variable {r : R} {x y : M}
 
 
 @[gcongr, mono]
-/--
-theorem `toAddSubgroup_strictMono` / 定理 `toAddSubgroup_strictMono`
-
-English:
-theorem toAddSubgroup_strictMono
-  statement: StrictMono (toAddSubgroup : Submodule R M -> AddSubgroup M)
-  proof: fun _ _ => id
-
-@[gcongr]
-
-中文:
-定理 toAddSubgroup_strictMono
-  结论: 严格递增 (toAddSubgroup : 子模 R M -> 加法子群 M)
-  证明: fun _ _ => id
-
-@[gcongr]
+/-
+**Submodule.toAddSubgroup_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubgroup_strictMono : StrictMono (toAddSubgroup : Submodule R M -> Ad
+dSubgroup M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAddSubgroup_strictMono : StrictMono (toAddSubgroup : Submodule R M -> AddSubgroup M) :=
+theorem toAddSubgroup_strictMono : StrictMono (toAddSubgroup : Submodule R M → AddSubgroup M) :=
   fun _ _ => id
 
 @[gcongr]
-/--
-theorem `toAddSubgroup_le` / 定理 `toAddSubgroup_le`
-
-English:
-theorem toAddSubgroup_le
-  statement: p.toAddSubgroup <= p'.toAddSubgroup ↔ p <= p'
-  proof: Iff.rfl
-
-@[mono]
-
-中文:
-定理 toAddSubgroup_le
-  结论: p.toAddSubgroup <= p'.toAddSubgroup ↔ p <= p'
-  证明: Iff.rfl
-
-@[mono]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.toAddSubgroup_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubgroup_le : p.toAddSubgroup <= p'.toAddSubgroup ↔ p <= p'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toAddSubgroup_le : p.toAddSubgroup <= p'.toAddSubgroup ↔ p <= p' :=
+theorem toAddSubgroup_le : p.toAddSubgroup ≤ p'.toAddSubgroup ↔ p ≤ p' :=
   Iff.rfl
 
 @[mono]
-/--
-theorem `toAddSubgroup_mono` / 定理 `toAddSubgroup_mono`
-
-English:
-theorem toAddSubgroup_mono
-  statement: Monotone (toAddSubgroup : Submodule R M -> AddSubgroup M)
-  proof: toAddSubgroup_strictMono.monotone
-
-@[simp]
-
-中文:
-定理 toAddSubgroup_mono
-  结论: 递增 (toAddSubgroup : 子模 R M -> 加法子群 M)
-  证明: toAddSubgroup_strictMono.monotone
-
-@[simp]
-
-Depends on / 依赖: monotone, toAddSubgroup_strictMono, toAddSubgroup_strictMono.monotone
+/-
+**Submodule.toAddSubgroup_mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubgroup_mono : Monotone (toAddSubgroup : Submodule R M -> AddSubgrou
+p M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Submodule.toAddSubgroup_strictMono`：toAddSubgroup_strictMono : StrictMon
+o (toAddSubgroup : Submodule R M -> AddSubgroup M)
 -/
-theorem toAddSubgroup_mono : Monotone (toAddSubgroup : Submodule R M -> AddSubgroup M) :=
+theorem toAddSubgroup_mono : Monotone (toAddSubgroup : Submodule R M → AddSubgroup M) :=
   toAddSubgroup_strictMono.monotone
 
 @[simp]
-/--
-theorem `toAddSubgroup_toAddSubmonoid` / 定理 `toAddSubgroup_toAddSubmonoid`
-
-English:
-theorem toAddSubgroup_toAddSubmonoid
-  given: (p : Submodule R M)
-  proof: rfl
-
-中文:
-定理 toAddSubgroup_toAddSubmonoid
-  条件: (p : 子模 R M)
-  证明: rfl
+/-
+**Submodule.toAddSubgroup_toAddSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toAddSubgroup_toAddSubmonoid (p : Submodule R M) : p.toAddSubgroup.toAddSu
+bmonoid = p.toAddSubmonoid
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAddSubgroup_toAddSubmonoid (p : Submodule R M) :
     p.toAddSubgroup.toAddSubmonoid = p.toAddSubmonoid :=
   rfl
 
 -- See `neg_coe_set`
-/--
-theorem `neg_coe` / 定理 `neg_coe`
-
-English:
-theorem neg_coe
-  statement: -(p : Set M) = p
-  proof: Set.ext fun _ => p.neg_mem_iff
-
-中文:
-定理 neg_coe
-  结论: -(p : 集合 M) = p
-  证明: Set.ext fun _ => p.neg_mem_iff
-
-Depends on / 依赖: Set.ext, neg_mem_iff, p.neg_mem_iff
+/-
+**Submodule.neg_coe** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：neg_coe : -(p : Set M) = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Submodule.neg_mem_iff`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst
+_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x : M
+}, -x ∈ p ↔…
 -/
 theorem neg_coe : -(p : Set M) = p :=
   Set.ext fun _ => p.neg_mem_iff
@@ -433,48 +299,52 @@ end AddCommGroup
 section IsDomain
 
 variable [Ring R] [IsDomain R]
-variable [AddCommGroup M] [Module R M] {b : ι -> M}
+variable [AddCommGroup M] [Module R M] {b : ι → M}
 
-/--
-theorem `notMem_of_ortho` / 定理 `notMem_of_ortho`
-
-English:
-theorem notMem_of_ortho
-  statement: {x : M} {N : Submodule R M}
-  proof: by
-  intro hx
-  simpa using ortho (-1) x hx
-
-中文:
-定理 notMem_of_ortho
-  结论: {x : M} {N : 子模 R M}
-  证明: by
-  intro hx
-  simpa using ortho (-1) x hx
+/-
+**Submodule.notMem_of_ortho** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：notMem_of_ortho {x : M} {N : Submodule R M} (ortho : forall (c : R), foral
+l y in N, c • x + y = (0 : M) -> c = 0) : x ∉ N
+参数：ortho : forall (c : R), forall y in N, c • x + y = (0 : M) -> c = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem notMem_of_ortho {x : M} {N : Submodule R M}
-    (ortho : forall (c : R), forall y in N, c • x + y = (0 : M) -> c = 0) : x ∉ N := by
+    (ortho : ∀ (c : R), ∀ y ∈ N, c • x + y = (0 : M) → c = 0) : x ∉ N := by
   intro hx
   simpa using ortho (-1) x hx
-
-/--
-theorem `ne_zero_of_ortho` / 定理 `ne_zero_of_ortho`
-
-English:
-theorem ne_zero_of_ortho
-  statement: {x : M} {N : Submodule R M}
-  proof: mt (fun h => show x in N from h.symm ▸ N.zero_mem) (notMem_of_ortho ortho)
-
-中文:
-定理 ne_zero_of_ortho
-  结论: {x : M} {N : 子模 R M}
-  证明: mt (fun h => show x in N from h.symm ▸ N.zero_mem) (notMem_of_ortho ortho)
-
-Depends on / 依赖: N.zero_mem, h.symm, notMem_of_ortho, zero_mem
+/-
+**Submodule.ne_zero_of_ortho** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ne_zero_of_ortho {x : M} {N : Submodule R M} (ortho : forall (c : R), fora
+ll y in N, c • x + y = (0 : M) -> c = 0) : x != 0
+参数：ortho : forall (c : R), forall y in N, c • x + y = (0 : M) -> c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.notMem_of_ortho`：notMem_of_ortho {x : M} {N : Submodule R M} (
+ortho : forall (c : R), forall y in N, c • x + y = (0 : M) -> c = 0) : x ∉ N
 -/
 theorem ne_zero_of_ortho {x : M} {N : Submodule R M}
-    (ortho : forall (c : R), forall y in N, c • x + y = (0 : M) -> c = 0) : x != 0 :=
-  mt (fun h => show x in N from h.symm ▸ N.zero_mem) (notMem_of_ortho ortho)
+    (ortho : ∀ (c : R), ∀ y ∈ N, c • x + y = (0 : M) → c = 0) : x ≠ 0 :=
+  mt (fun h => show x ∈ N from h.symm ▸ N.zero_mem) (notMem_of_ortho ortho)
 
 end IsDomain
 
@@ -486,42 +356,30 @@ variable [DivisionSemiring S] [Semiring R] [AddCommMonoid M] [Module R M]
 variable [SMul S R] [Module S M] [IsScalarTower S R M]
 variable (p : Submodule R M) {s : S} {x y : M}
 
-/--
-theorem `smul_mem_iff` / 定理 `smul_mem_iff`
-
-English:
-theorem smul_mem_iff
-  given: (s0 : s != 0)
-  statement: s • x in p ↔ x in p
-  proof: p.toSubMulAction.smul_mem_iff s0
-
-中文:
-定理 smul_mem_iff
-  条件: (s0 : s != 0)
-  结论: s • x in p ↔ x in p
-  证明: p.toSubMulAction.smul_mem_iff s0
-
-Depends on / 依赖: p.toSubMulAction.smul_mem_iff, smul_mem_iff, toSubMulAction
+/-
+**Submodule.smul_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：smul_mem_iff (s0 : s != 0) : s • x in p ↔ x in p
+参数：s0 : s != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubMulAction.smul_mem_iff`：smul_mem_iff (s0 : s != 0) : s • x in p ↔ x i
+n p
 -/
-theorem smul_mem_iff (s0 : s != 0) : s • x in p ↔ x in p :=
+theorem smul_mem_iff (s0 : s ≠ 0) : s • x ∈ p ↔ x ∈ p :=
   p.toSubMulAction.smul_mem_iff s0
 
 end Submodule
 
-/--
-Definition of `Subspace` / `Subspace` 的定义
+/-- Subspace of a vector space. Defined to equal `Submodule`. -/
+/-
+**Subspace** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Subspace (R : Type u) (M : Type v) [DivisionRing R] [AddCommGroup M] [Modu
+le R M]
+参数：R : Type u；M : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Subspace
-  signature: (R : Type u) (M : Type v) [DivisionRing R] [AddCommGroup M] [Module R M]
-  body: Submodule R M
-
-中文:
-缩写 子空间
-  签名: (R : 类型u) (M : 类型v) [除环 R] [加法交换群 M] [模 R M]
-  定义体: Submodule R M
-
-Depends on / 依赖: Submodule
+--- 原说明 ---
+Subspace of a vector space. Defined to equal `Submodule`.
 -/
 abbrev Subspace (R : Type u) (M : Type v) [DivisionRing R] [AddCommGroup M] [Module R M] :=
   Submodule R M

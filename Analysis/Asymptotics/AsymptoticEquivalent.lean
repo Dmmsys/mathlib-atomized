@@ -68,293 +68,259 @@ section NormedAddCommGroup
 
 variable {α β : Type*} [NormedAddCommGroup β]
 
-variable {u v w : α -> β} {l : Filter α}
+variable {u v w : α → β} {l : Filter α}
 
-/--
-theorem `IsEquivalent.isLittleO` / 定理 `IsEquivalent.isLittleO`
-
-English:
-theorem IsEquivalent.isLittleO
-  given: (h : u ~[l] v)
-  statement: (u - v) =o[l] v
-  proof: h
-
-nonrec theorem IsEquivalent.isBigO (h : u ~[l] v) : u =O[l] v :=
-  (IsBigO.congr_of_sub h.isBigO.symm).mp (isBigO_refl _ _)
-
-中文:
-定理 IsEquivalent.isLittleO
-  条件: (h : u ~[l] v)
-  结论: (u - v) =o[l] v
-  证明: h
-
-nonrec theorem IsEquivalent.isBigO (h : u ~[l] v) : u =O[l] v :=
-  (IsBigO.congr_of_sub h.isBigO.symm).mp (isBigO_refl _ _)
+/-
+**Asymptotics.IsEquivalent.isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEq
+uivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → (u - v) =o[l] v
+参数：u - v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsEquivalent.isLittleO (h : u ~[l] v) : (u - v) =o[l] v := h
 
 nonrec theorem IsEquivalent.isBigO (h : u ~[l] v) : u =O[l] v :=
   (IsBigO.congr_of_sub h.isBigO.symm).mp (isBigO_refl _ _)
-
-/--
-theorem `IsEquivalent.isBigO_symm` / 定理 `IsEquivalent.isBigO_symm`
-
-English:
-theorem IsEquivalent.isBigO_symm
-  given: (h : u ~[l] v)
-  statement: v =O[l] u
-  proof: by
-  convert! h.isLittleO.right_isBigO_add
-  simp
-
-中文:
-定理 IsEquivalent.isBigO_symm
-  条件: (h : u ~[l] v)
-  结论: v =O[l] u
-  证明: by
-  convert! h.isLittleO.right_isBigO_add
-  simp
-
-Depends on / 依赖: convert, h.isLittleO.right_isBigO_add, isLittleO, right_isBigO_add
+/-
+**Asymptotics.IsEquivalent.isBigO_symm** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.Is
+Equivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → v =O[l] u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Asymptotics.IsLittleO.right_isBigO_add`：∀ {α : Type u_1} {E' : Type u_6}
+ [inst : SeminormedAddCommGroup E'] {l : Filter α} {f₁ f₂ : α → E'},   f₁ =o[l] 
+f₂ → f₂ =O[l] fun x => f₁ x …
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
 -/
 theorem IsEquivalent.isBigO_symm (h : u ~[l] v) : v =O[l] u := by
   convert! h.isLittleO.right_isBigO_add
   simp
-
-/--
-theorem `IsEquivalent.isTheta` / 定理 `IsEquivalent.isTheta`
-
-English:
-theorem IsEquivalent.isTheta
-  given: (h : u ~[l] v)
-  statement: u =Θ[l] v
-  proof: ⟨h.isBigO, h.isBigO_symm⟩
-
-中文:
-定理 IsEquivalent.isTheta
-  条件: (h : u ~[l] v)
-  结论: u =Θ[l] v
-  证明: ⟨h.isBigO, h.isBigO_symm⟩
-
-Depends on / 依赖: h.isBigO, h.isBigO_symm, isBigO, isBigO_symm
+/-
+**Asymptotics.IsEquivalent.isTheta** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEqui
+valent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → u =Θ[l] v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
+· 使用定理 `Asymptotics.IsEquivalent.isBigO_symm`：∀ {α : Type u_1} {β : Type u_2} [i
+nst : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquiva
+lent l u v → v =O[l] u
 -/
 theorem IsEquivalent.isTheta (h : u ~[l] v) : u =Θ[l] v :=
   ⟨h.isBigO, h.isBigO_symm⟩
-
-/--
-theorem `IsEquivalent.isTheta_symm` / 定理 `IsEquivalent.isTheta_symm`
-
-English:
-theorem IsEquivalent.isTheta_symm
-  given: (h : u ~[l] v)
-  statement: v =Θ[l] u
-  proof: ⟨h.isBigO_symm, h.isBigO⟩
-
-@[refl]
-
-中文:
-定理 IsEquivalent.isTheta_symm
-  条件: (h : u ~[l] v)
-  结论: v =Θ[l] u
-  证明: ⟨h.isBigO_symm, h.isBigO⟩
-
-@[refl]
-
-Depends on / 依赖: h.isBigO, h.isBigO_symm, isBigO, isBigO_symm
+/-
+**Asymptotics.IsEquivalent.isTheta_symm** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → v =Θ[l] u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.isBigO_symm`：∀ {α : Type u_1} {β : Type u_2} [i
+nst : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquiva
+lent l u v → v =O[l] u
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
 theorem IsEquivalent.isTheta_symm (h : u ~[l] v) : v =Θ[l] u :=
   ⟨h.isBigO_symm, h.isBigO⟩
 
 @[refl]
-/--
-theorem `IsEquivalent.refl` / 定理 `IsEquivalent.refl`
-
-English:
-theorem IsEquivalent.refl
-  statement: u ~[l] u
-  proof: by
-  rw [IsEquivalent]; rw [sub_self]
-  exact isLittleO_zero _ _
-
-@[symm]
-
-中文:
-定理 IsEquivalent.refl
-  结论: u ~[l] u
-  证明: by
-  rw [IsEquivalent]; rw [sub_self]
-  exact isLittleO_zero _ _
-
-@[symm]
-
-Depends on / 依赖: IsEquivalent, isLittleO_zero, sub_self
+/-
+**Asymptotics.IsEquivalent.refl** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquival
+ent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u : α → β} 
+{l : Filter α}, Asymptotics.IsEquivalent l u u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.IsEquivalent.eq_1`：∀ {α : Type u_1} {E' : Type u_6} [inst : 
+SeminormedAddCommGroup E'] (l : Filter α) (u v : α → E'),   Asymptotics.IsEquiva
+lent l u v = (u - v…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Asymptotics.isLittleO_zero`：isLittleO_zero : (fun _x => (0 : E')) =o[l] 
+g'
 -/
 theorem IsEquivalent.refl : u ~[l] u := by
-  rw [IsEquivalent]; rw [sub_self]
+  rw [IsEquivalent, sub_self]
   exact isLittleO_zero _ _
 
 @[symm]
-/--
-theorem `IsEquivalent.symm` / 定理 `IsEquivalent.symm`
-
-English:
-theorem IsEquivalent.symm
-  given: (h : u ~[l] v)
-  statement: v ~[l] u
-  proof: (h.isLittleO.trans_isBigO h.isBigO_symm).symm
-
-@[trans]
-
-中文:
-定理 IsEquivalent.symm
-  条件: (h : u ~[l] v)
-  结论: v ~[l] u
-  证明: (h.isLittleO.trans_isBigO h.isBigO_symm).symm
-
-@[trans]
-
-Depends on / 依赖: h.isBigO_symm, h.isLittleO.trans_isBigO, isBigO_symm, isLittleO, trans_isBigO
+/-
+**Asymptotics.IsEquivalent.symm** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquival
+ent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → Asymptotics.IsEquivalent l 
+v u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.symm`：∀ {α : Type u_1} {F : Type u_4} {E' : Type u
+_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {l : Filt
+er α} {f₁ f₂ : α…
+· 使用定理 `Asymptotics.IsLittleO.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {F :
+ Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Seminor
+medAddCommGroup G'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO_symm`：∀ {α : Type u_1} {β : Type u_2} [i
+nst : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquiva
+lent l u v → v =O[l] u
 -/
 theorem IsEquivalent.symm (h : u ~[l] v) : v ~[l] u :=
   (h.isLittleO.trans_isBigO h.isBigO_symm).symm
 
 @[trans]
-/--
-theorem `IsEquivalent.trans` / 定理 `IsEquivalent.trans`
-
-English:
-theorem IsEquivalent.trans
-  given: {l : Filter α} {u v w : α -> β} (huv : u ~[l] v) (hvw : v ~[l] w)
-  proof: (huv.isLittleO.trans_isBigO hvw.isBigO).triangle hvw.isLittleO
-
-中文:
-定理 IsEquivalent.trans
-  条件: {l : 滤子 α} {u v w : α -> β} (huv : u ~[l] v) (hvw : v ~[l] w)
-  证明: (huv.isLittleO.trans_isBigO hvw.isBigO).triangle hvw.isLittleO
-
-Depends on / 依赖: huv.isLittleO.trans_isBigO, hvw.isBigO, hvw.isLittleO, isBigO, isLittleO, trans_isBigO, triangle
+/-
+**Asymptotics.IsEquivalent.trans** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquiva
+lent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {l : Filter 
+α} {u v w : α → β},   Asymptotics.IsEquivalent l u v → Asymptotics.IsEquivalent 
+l v w → Asymptotics.IsEquivalent l u w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.triangle`：∀ {α : Type u_1} {F : Type u_4} {E' : Ty
+pe u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {l : 
+Filter α} {f₁ f₂ f₃ …
+· 使用定理 `Asymptotics.IsLittleO.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {F :
+ Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Seminor
+medAddCommGroup G'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
-theorem IsEquivalent.trans {l : Filter α} {u v w : α -> β} (huv : u ~[l] v) (hvw : v ~[l] w) :
+theorem IsEquivalent.trans {l : Filter α} {u v w : α → β} (huv : u ~[l] v) (hvw : v ~[l] w) :
     u ~[l] w :=
   (huv.isLittleO.trans_isBigO hvw.isBigO).triangle hvw.isLittleO
-
-/--
-theorem `IsEquivalent.congr_left` / 定理 `IsEquivalent.congr_left`
-
-English:
-theorem IsEquivalent.congr_left
-  given: {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (huw : u =ᶠ[l] w)
-  proof: huv.congr' (huw.sub (EventuallyEq.refl _ _)) (EventuallyEq.refl _ _)
-
-中文:
-定理 IsEquivalent.congr_left
-  条件: {u v w : α -> β} {l : 滤子 α} (huv : u ~[l] v) (huw : u =ᶠ[l] w)
-  证明: huv.congr' (huw.sub (EventuallyEq.refl _ _)) (EventuallyEq.refl _ _)
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.refl, huv.congr, huw.sub
+/-
+**Asymptotics.IsEquivalent.congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsE
+quivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v w : α →
+ β} {l : Filter α},   Asymptotics.IsEquivalent l u v → u =ᶠ[l] w → Asymptotics.I
+sEquivalent l w v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.congr'`：∀ {α : Type u_1} {E : Type u_3} {F : Type 
+u_4} [inst : Norm E] [inst_1 : Norm F] {l : Filter α} {f₁ f₂ : α → E}   {g₁ g₂ :
+ α → F}, f₁ =o[l] …
+· 使用定理 `Filter.EventuallyEq.sub`：∀ {α : Type u} {β : Type v} [inst : Sub β] {f f
+' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → f - f' =ᶠ[l] g - g'
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
-theorem IsEquivalent.congr_left {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (huw : u =ᶠ[l] w) :
+theorem IsEquivalent.congr_left {u v w : α → β} {l : Filter α} (huv : u ~[l] v) (huw : u =ᶠ[l] w) :
     w ~[l] v :=
   huv.congr' (huw.sub (EventuallyEq.refl _ _)) (EventuallyEq.refl _ _)
-
-/--
-theorem `IsEquivalent.congr_right` / 定理 `IsEquivalent.congr_right`
-
-English:
-theorem IsEquivalent.congr_right
-  given: {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w)
-  proof: (huv.symm.congr_left hvw).symm
-
-中文:
-定理 IsEquivalent.congr_right
-  条件: {u v w : α -> β} {l : 滤子 α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w)
-  证明: (huv.symm.congr_left hvw).symm
-
-Depends on / 依赖: congr_left, huv.symm.congr_left
+/-
+**Asymptotics.IsEquivalent.congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.Is
+Equivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v w : α →
+ β} {l : Filter α},   Asymptotics.IsEquivalent l u v → v =ᶠ[l] w → Asymptotics.I
+sEquivalent l u w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
+· 使用定理 `Asymptotics.IsEquivalent.congr_left`：∀ {α : Type u_1} {β : Type u_2} [in
+st : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   Asymptotics.IsEquiv
+alent l u v → u =ᶠ[l] w →…
 -/
-theorem IsEquivalent.congr_right {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w) :
+theorem IsEquivalent.congr_right {u v w : α → β} {l : Filter α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w) :
     u ~[l] w :=
   (huv.symm.congr_left hvw).symm
-
-/--
-theorem `isEquivalent_zero_iff_eventually_zero` / 定理 `isEquivalent_zero_iff_eventually_zero`
-
-English:
-theorem isEquivalent_zero_iff_eventually_zero
-  statement: u ~[l] 0 ↔ u =ᶠ[l] 0
-  proof: by
-  rw [IsEquivalent]; rw [sub_zero]
-  exact isLittleO_zero_right_iff
-
-中文:
-定理 isEquivalent_zero_iff_eventually_zero
-  结论: u ~[l] 0 ↔ u =ᶠ[l] 0
-  证明: by
-  rw [IsEquivalent]; rw [sub_zero]
-  exact isLittleO_zero_right_iff
-
-Depends on / 依赖: IsEquivalent, isLittleO_zero_right_iff, sub_zero
+/-
+**Asymptotics.isEquivalent_zero_iff_eventually_zero** 是 Mathlib 中的一个定理，位于命名空间 `A
+symptotics`。
+形式化陈述：isEquivalent_zero_iff_eventually_zero : u ~[l] 0 ↔ u =ᶠ[l] 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.IsEquivalent.eq_1`：∀ {α : Type u_1} {E' : Type u_6} [inst : 
+SeminormedAddCommGroup E'] (l : Filter α) (u v : α → E'),   Asymptotics.IsEquiva
+lent l u v = (u - v…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Asymptotics.isLittleO_zero_right_iff`：isLittleO_zero_right_iff : (f'' =o
+[l] fun _x => (0 : F')) ↔ f'' =ᶠ[l] 0
 -/
 theorem isEquivalent_zero_iff_eventually_zero : u ~[l] 0 ↔ u =ᶠ[l] 0 := by
-  rw [IsEquivalent]; rw [sub_zero]
+  rw [IsEquivalent, sub_zero]
   exact isLittleO_zero_right_iff
-
-/--
-theorem `isEquivalent_zero_iff_isBigO_zero` / 定理 `isEquivalent_zero_iff_isBigO_zero`
-
-English:
-theorem isEquivalent_zero_iff_isBigO_zero
-  statement: u ~[l] 0 ↔ u =O[l] (0 : α -> β)
-  proof: by
-  refine ⟨IsEquivalent.isBigO, fun h => ?_⟩
-  rw [isEquivalent_zero_iff_eventually_zero]; rw [eventuallyEq_iff_exists_mem]
-  exact ⟨{ x : α | u x = 0 }, isBigO_zero_right_iff.mp h, fun x hx => hx⟩
-
-中文:
-定理 isEquivalent_zero_iff_isBigO_zero
-  结论: u ~[l] 0 ↔ u =O[l] (0 : α -> β)
-  证明: by
-  refine ⟨IsEquivalent.isBigO, fun h => ?_⟩
-  rw [isEquivalent_zero_iff_eventually_zero]; rw [eventuallyEq_iff_exists_mem]
-  exact ⟨{ x : α | u x = 0 }, isBigO_zero_right_iff.mp h, fun x hx => hx⟩
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.isBigO, eventuallyEq_iff_exists_mem, isBigO, isBigO_zero_right_iff, isBigO_zero_right_iff.mp, isEquivalent_zero_iff_eventually_zero
+/-
+**Asymptotics.isEquivalent_zero_iff_isBigO_zero** 是 Mathlib 中的一个定理，位于命名空间 `Asymp
+totics`。
+形式化陈述：isEquivalent_zero_iff_isBigO_zero : u ~[l] 0 ↔ u =O[l] (0 : α -> β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.isEquivalent_zero_iff_eventually_zero`：isEquivalent_zero_iff
+_eventually_zero : u ~[l] 0 ↔ u =ᶠ[l] 0
+· 使用定理 `Filter.eventuallyEq_iff_exists_mem`：eventuallyEq_iff_exists_mem {l : Fil
+ter α} {f g : α -> β} : f =ᶠ[l] g ↔ exists s in l, EqOn f g s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Asymptotics.isBigO_zero_right_iff`：isBigO_zero_right_iff : (f'' =O[l] fu
+n _x => (0 : F')) ↔ f'' =ᶠ[l] 0
 -/
-theorem isEquivalent_zero_iff_isBigO_zero : u ~[l] 0 ↔ u =O[l] (0 : α -> β) := by
-  refine ⟨IsEquivalent.isBigO, fun h => ?_⟩
-  rw [isEquivalent_zero_iff_eventually_zero]; rw [eventuallyEq_iff_exists_mem]
-  exact ⟨{ x : α | u x = 0 }, isBigO_zero_right_iff.mp h, fun x hx => hx⟩
-
-/--
-theorem `isEquivalent_const_iff_tendsto` / 定理 `isEquivalent_const_iff_tendsto`
-
-English:
-theorem isEquivalent_const_iff_tendsto
-  given: {c : β} (h : c != 0)
-  proof: by
-  simp +unfoldPartialApp only [IsEquivalent, const, isLittleO_const_iff h]
-  constructor <;> intro h
-  · have := h.sub (tendsto_const_nhds (x := -c))
-    simp only [Pi.sub_apply, sub_neg_eq_add, sub_add_cancel, zero_add] at this
-    exact this
-  · have := h.sub (tendsto_const_nhds (x := c))
-    rwa [sub_self] at this
-
-中文:
-定理 isEquivalent_const_iff_tendsto
-  条件: {c : β} (h : c != 0)
-  证明: by
-  simp +unfoldPartialApp only [IsEquivalent, const, isLittleO_const_iff h]
-  constructor <;> intro h
-  · have := h.sub (tendsto_const_nhds (x := -c))
-    simp only [Pi.sub_apply, sub_neg_eq_add, sub_add_cancel, zero_add] at this
-    exact this
-  · have := h.sub (tendsto_const_nhds (x := c))
-    rwa [sub_self] at this
-
-Depends on / 依赖: IsEquivalent, Pi.sub_apply, h.sub, isLittleO_const_iff, sub_add_cancel, sub_apply, sub_neg_eq_add, sub_self, tendsto_const_nhds, unfoldPartialApp, zero_add
+theorem isEquivalent_zero_iff_isBigO_zero : u ~[l] 0 ↔ u =O[l] (0 : α → β) := by
+  refine ⟨IsEquivalent.isBigO, fun h ↦ ?_⟩
+  rw [isEquivalent_zero_iff_eventually_zero, eventuallyEq_iff_exists_mem]
+  exact ⟨{ x : α | u x = 0 }, isBigO_zero_right_iff.mp h, fun x hx ↦ hx⟩
+/-
+**Asymptotics.isEquivalent_const_iff_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics`。
+形式化陈述：isEquivalent_const_iff_tendsto {c : β} (h : c != 0) : u ~[l] const _ c ↔ T
+endsto u l (𝓝 c)
+参数：h : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.isLittleO_const_iff`：isLittleO_const_iff {c : F''} (hc : c !
+= 0) : (f'' =o[l] fun _x => c) ↔ Tendsto f'' l (𝓝 0)
+· 使用定理 `Filter.Tendsto.sub`：∀ {G : Type u_1} {α : Type u_2} [inst : TopologicalS
+pace G] [inst_1 : Sub G] [ContinuousSub G] {f g : α → G}   {l : Filter α} {a b :
+ G},   F…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
-theorem isEquivalent_const_iff_tendsto {c : β} (h : c != 0) :
+theorem isEquivalent_const_iff_tendsto {c : β} (h : c ≠ 0) :
     u ~[l] const _ c ↔ Tendsto u l (𝓝 c) := by
   simp +unfoldPartialApp only [IsEquivalent, const, isLittleO_const_iff h]
   constructor <;> intro h
@@ -363,235 +329,242 @@ theorem isEquivalent_const_iff_tendsto {c : β} (h : c != 0) :
     exact this
   · have := h.sub (tendsto_const_nhds (x := c))
     rwa [sub_self] at this
-
-/--
-theorem `IsEquivalent.tendsto_const` / 定理 `IsEquivalent.tendsto_const`
-
-English:
-theorem IsEquivalent.tendsto_const
-  given: {c : β} (hu : u ~[l] const _ c)
-  statement: Tendsto u l (𝓝 c)
-  proof: by
-rcases em c = 0 with rfl | h
-  · exact (tendsto_congr' <| isEquivalent_zero_iff_eventually_zero.mp hu).mpr tendsto_const_nhds
-  · exact (isEquivalent_const_iff_tendsto h).mp hu
-
-中文:
-定理 IsEquivalent.tendsto_const
-  条件: {c : β} (hu : u ~[l] const _ c)
-  结论: 收敛 u l (𝓝 c)
-  证明: by
-rcases em c = 0 with rfl | h
-  · exact (tendsto_congr' <| isEquivalent_zero_iff_eventually_zero.mp hu).mpr tendsto_const_nhds
-  · exact (isEquivalent_const_iff_tendsto h).mp hu
-
-Depends on / 依赖: isEquivalent_const_iff_tendsto, isEquivalent_zero_iff_eventually_zero, isEquivalent_zero_iff_eventually_zero.mp, tendsto_congr, tendsto_const_nhds
+/-
+**Asymptotics.IsEquivalent.tendsto_const** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u : α → β} 
+{l : Filter α} {c : β},   Asymptotics.IsEquivalent l u (Function.const α c) → Fi
+lter.Tendsto u l (nhds c)
+参数：Function.const α c；nhds c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_congr'`：tendsto_congr' {f₁ f₂ : α -> β} {l₁ : Filter α} {
+l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Asymptotics.isEquivalent_zero_iff_eventually_zero`：isEquivalent_zero_iff
+_eventually_zero : u ~[l] 0 ↔ u =ᶠ[l] 0
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isEquivalent_const_iff_tendsto`：isEquivalent_const_iff_tends
+to {c : β} (h : c != 0) : u ~[l] const _ c ↔ Tendsto u l (𝓝 c)
 -/
 theorem IsEquivalent.tendsto_const {c : β} (hu : u ~[l] const _ c) : Tendsto u l (𝓝 c) := by
-rcases em c = 0 with rfl | h
+  rcases em <| c = 0 with rfl | h
   · exact (tendsto_congr' <| isEquivalent_zero_iff_eventually_zero.mp hu).mpr tendsto_const_nhds
   · exact (isEquivalent_const_iff_tendsto h).mp hu
-
-/--
-theorem `IsEquivalent.tendsto_nhds` / 定理 `IsEquivalent.tendsto_nhds`
-
-English:
-theorem IsEquivalent.tendsto_nhds
-  given: {c : β} (huv : u ~[l] v) (hu : Tendsto u l (𝓝 c))
-  proof: by
-  by_cases h : c = 0
-  · subst c
-    rw [← isLittleO_one_iff Real] at hu ⊢
-    simpa using (huv.symm.isLittleO.trans hu).add hu
-  · rw [← isEquivalent_const_iff_tendsto h] at hu ⊢
-    exact huv.symm.trans hu
-
-中文:
-定理 IsEquivalent.tendsto_nhds
-  条件: {c : β} (huv : u ~[l] v) (hu : 收敛 u l (𝓝 c))
-  证明: by
-  by_cases h : c = 0
-  · subst c
-    rw [← isLittleO_one_iff Real] at hu ⊢
-    simpa using (huv.symm.isLittleO.trans hu).add hu
-  · rw [← isEquivalent_const_iff_tendsto h] at hu ⊢
-    exact huv.symm.trans hu
-
-Depends on / 依赖: huv.symm.isLittleO.trans, huv.symm.trans, isEquivalent_const_iff_tendsto, isLittleO, isLittleO_one_iff
+/-
+**Asymptotics.IsEquivalent.tendsto_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α} {c : β},   Asymptotics.IsEquivalent l u v → Filter.Tendsto u l 
+(nhds c) → Filter.Tendsto v l (nhds c)
+参数：nhds c；nhds c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isLittleO_one_iff`：isLittleO_one_iff {f : α -> E'''} : f =o[
+l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Asymptotics.IsLittleO.add`：∀ {α : Type u_1} {F : Type u_4} {E' : Type u_
+6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {l : Filte
+r α} {f₁ f₂ : α…
+· 使用定理 `Asymptotics.IsLittleO.trans`：∀ {α : Type u_1} {E : Type u_3} {F : Type u
+_4} {G : Type u_5} [inst : Norm E] [inst_1 : Norm F] [inst_2 : Norm G]   {l : Fi
+lter α} {f : α → …
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
+· 使用定理 `Asymptotics.isEquivalent_const_iff_tendsto`：isEquivalent_const_iff_tends
+to {c : β} (h : c != 0) : u ~[l] const _ c ↔ Tendsto u l (𝓝 c)
+· 使用定理 `Asymptotics.IsEquivalent.trans`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+NormedAddCommGroup β] {l : Filter α} {u v w : α → β},   Asymptotics.IsEquivalent
+ l u v → Asymptotics…
 -/
 theorem IsEquivalent.tendsto_nhds {c : β} (huv : u ~[l] v) (hu : Tendsto u l (𝓝 c)) :
     Tendsto v l (𝓝 c) := by
   by_cases h : c = 0
   · subst c
-    rw [← isLittleO_one_iff Real] at hu ⊢
+    rw [← isLittleO_one_iff ℝ] at hu ⊢
     simpa using (huv.symm.isLittleO.trans hu).add hu
   · rw [← isEquivalent_const_iff_tendsto h] at hu ⊢
     exact huv.symm.trans hu
-
-/--
-theorem `IsEquivalent.tendsto_nhds_iff` / 定理 `IsEquivalent.tendsto_nhds_iff`
-
-English:
-theorem IsEquivalent.tendsto_nhds_iff
-  given: {c : β} (huv : u ~[l] v)
-  proof: ⟨huv.tendsto_nhds, huv.symm.tendsto_nhds⟩
-
-中文:
-定理 IsEquivalent.tendsto_nhds_iff
-  条件: {c : β} (huv : u ~[l] v)
-  证明: ⟨huv.tendsto_nhds, huv.symm.tendsto_nhds⟩
-
-Depends on / 依赖: huv.symm.tendsto_nhds, huv.tendsto_nhds, tendsto_nhds
+/-
+**Asymptotics.IsEquivalent.tendsto_nhds_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptoti
+cs.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α} {c : β},   Asymptotics.IsEquivalent l u v → (Filter.Tendsto u l
+ (nhds c) ↔ Filter.Tendsto v l (nhds c))
+参数：Filter.Tendsto u l (nhds c) ↔ Filter.Tendsto v l (nhds c)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.tendsto_nhds`：∀ {α : Type u_1} {β : Type u_2} [
+inst : NormedAddCommGroup β] {u v : α → β} {l : Filter α} {c : β},   Asymptotics
+.IsEquivalent l u v → Filte…
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
 -/
 theorem IsEquivalent.tendsto_nhds_iff {c : β} (huv : u ~[l] v) :
     Tendsto u l (𝓝 c) ↔ Tendsto v l (𝓝 c) :=
   ⟨huv.tendsto_nhds, huv.symm.tendsto_nhds⟩
-
-/--
-theorem `IsEquivalent.add_isLittleO` / 定理 `IsEquivalent.add_isLittleO`
-
-English:
-theorem IsEquivalent.add_isLittleO
-  given: (huv : u ~[l] v) (hwv : w =o[l] v)
-  statement: u + w ~[l] v
-  proof: by
-  simpa only [IsEquivalent, add_sub_right_comm] using! huv.add hwv
-
-中文:
-定理 IsEquivalent.add_isLittleO
-  条件: (huv : u ~[l] v) (hwv : w =o[l] v)
-  结论: u + w ~[l] v
-  证明: by
-  simpa only [IsEquivalent, add_sub_right_comm] using! huv.add hwv
-
-Depends on / 依赖: IsEquivalent, add_sub_right_comm, huv.add
+/-
+**Asymptotics.IsEquivalent.add_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v w : α →
+ β} {l : Filter α},   Asymptotics.IsEquivalent l u v → w =o[l] v → Asymptotics.I
+sEquivalent l (u + w) v
+参数：u + w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a + b - c = a - c + b
+· 使用定理 `Asymptotics.IsLittleO.add`：∀ {α : Type u_1} {F : Type u_4} {E' : Type u_
+6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {l : Filte
+r α} {f₁ f₂ : α…
 -/
 theorem IsEquivalent.add_isLittleO (huv : u ~[l] v) (hwv : w =o[l] v) : u + w ~[l] v := by
   simpa only [IsEquivalent, add_sub_right_comm] using! huv.add hwv
-
-/--
-theorem `IsEquivalent.sub_isLittleO` / 定理 `IsEquivalent.sub_isLittleO`
-
-English:
-theorem IsEquivalent.sub_isLittleO
-  given: (huv : u ~[l] v) (hwv : w =o[l] v)
-  statement: u - w ~[l] v
-  proof: by
-  simpa only [sub_eq_add_neg] using! huv.add_isLittleO hwv.neg_left
-
-中文:
-定理 IsEquivalent.sub_isLittleO
-  条件: (huv : u ~[l] v) (hwv : w =o[l] v)
-  结论: u - w ~[l] v
-  证明: by
-  simpa only [sub_eq_add_neg] using! huv.add_isLittleO hwv.neg_left
-
-Depends on / 依赖: add_isLittleO, huv.add_isLittleO, hwv.neg_left, neg_left, sub_eq_add_neg
+/-
+**Asymptotics.IsEquivalent.sub_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v w : α →
+ β} {l : Filter α},   Asymptotics.IsEquivalent l u v → w =o[l] v → Asymptotics.I
+sEquivalent l (u - w) v
+参数：u - w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Asymptotics.IsEquivalent.add_isLittleO`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   Asymptotics.IsEq
+uivalent l u v → w =o[l] v →…
+· 使用定理 `Asymptotics.IsLittleO.neg_left`：∀ {α : Type u_1} {F : Type u_4} {E' : Ty
+pe u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {f' :
+ α → E'} {l : Filter…
 -/
 theorem IsEquivalent.sub_isLittleO (huv : u ~[l] v) (hwv : w =o[l] v) : u - w ~[l] v := by
   simpa only [sub_eq_add_neg] using! huv.add_isLittleO hwv.neg_left
-
-/--
-theorem `IsLittleO.add_isEquivalent` / 定理 `IsLittleO.add_isEquivalent`
-
-English:
-theorem IsLittleO.add_isEquivalent
-  given: (hu : u =o[l] w) (hv : v ~[l] w)
-  statement: u + v ~[l] w
-  proof: add_comm v u ▸ hv.add_isLittleO hu
-
-中文:
-定理 IsLittleO.add_isEquivalent
-  条件: (hu : u =o[l] w) (hv : v ~[l] w)
-  结论: u + v ~[l] w
-  证明: add_comm v u ▸ hv.add_isLittleO hu
-
-Depends on / 依赖: add_comm, add_isLittleO, hv.add_isLittleO
+/-
+**Asymptotics.IsLittleO.add_isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsLittleO`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v w : α →
+ β} {l : Filter α},   u =o[l] w → Asymptotics.IsEquivalent l v w → Asymptotics.I
+sEquivalent l (u + v) w
+参数：u + v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.add_isLittleO`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   Asymptotics.IsEq
+uivalent l u v → w =o[l] v →…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 theorem IsLittleO.add_isEquivalent (hu : u =o[l] w) (hv : v ~[l] w) : u + v ~[l] w :=
   add_comm v u ▸ hv.add_isLittleO hu
-
-/--
-theorem `IsEquivalent.add_const_of_norm_tendsto_atTop` / 定理 `IsEquivalent.add_const_of_norm_tendsto_atTop`
-
-English:
-theorem IsEquivalent.add_const_of_norm_tendsto_atTop
-  statement: {c : β}
-  proof: huv.add_isLittleO isLittleO_const_left.mpr (Or.inr hv)
-
-中文:
-定理 IsEquivalent.add_const_of_norm_tendsto_atTop
-  结论: {c : β}
-  证明: huv.add_isLittleO isLittleO_const_left.mpr (Or.inr hv)
-
-Depends on / 依赖: Or.inr, add_isLittleO, huv.add_isLittleO, isLittleO_const_left, isLittleO_const_left.mpr
+/-
+**Asymptotics.IsEquivalent.add_const_of_norm_tendsto_atTop** 是 Mathlib 中的一个定理，位于
+命名空间 `Asymptotics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α} {c : β},   Asymptotics.IsEquivalent l u v →     Filter.Tendsto 
+(norm ∘ v) l Filter.atTop → Asymptotics.IsEquivalent l (fun x => u x + c) v
+参数：norm ∘ v；fun x => u x + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.add_isLittleO`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   Asymptotics.IsEq
+uivalent l u v → w =o[l] v →…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Asymptotics.isLittleO_const_left`：isLittleO_const_left {c : E''} : (fun 
+_x => c) =o[l] g'' ↔ c = 0 ∨ Tendsto (norm ∘ g'') l atTop
 -/
 theorem IsEquivalent.add_const_of_norm_tendsto_atTop {c : β}
     (huv : u ~[l] v) (hv : Tendsto (norm ∘ v) l atTop) :
     (u · + c) ~[l] v :=
-huv.add_isLittleO isLittleO_const_left.mpr (Or.inr hv)
-
-/--
-theorem `IsEquivalent.const_add_of_norm_tendsto_atTop` / 定理 `IsEquivalent.const_add_of_norm_tendsto_atTop`
-
-English:
-theorem IsEquivalent.const_add_of_norm_tendsto_atTop
-  statement: {c : β}
-  proof: (isLittleO_const_left.mpr (Or.inr hv)).add_isEquivalent huv
-
-中文:
-定理 IsEquivalent.const_add_of_norm_tendsto_atTop
-  结论: {c : β}
-  证明: (isLittleO_const_left.mpr (Or.inr hv)).add_isEquivalent huv
-
-Depends on / 依赖: Or.inr, add_isEquivalent, isLittleO_const_left, isLittleO_const_left.mpr
+  huv.add_isLittleO <| isLittleO_const_left.mpr (Or.inr hv)
+/-
+**Asymptotics.IsEquivalent.const_add_of_norm_tendsto_atTop** 是 Mathlib 中的一个定理，位于
+命名空间 `Asymptotics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α} {c : β},   Asymptotics.IsEquivalent l u v →     Filter.Tendsto 
+(norm ∘ v) l Filter.atTop → Asymptotics.IsEquivalent l (fun x => c + u x) v
+参数：norm ∘ v；fun x => c + u x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.add_isEquivalent`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   u =o[l] w → Asym
+ptotics.IsEquivalent l v w →…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Asymptotics.isLittleO_const_left`：isLittleO_const_left {c : E''} : (fun 
+_x => c) =o[l] g'' ↔ c = 0 ∨ Tendsto (norm ∘ g'') l atTop
 -/
 theorem IsEquivalent.const_add_of_norm_tendsto_atTop {c : β}
     (huv : u ~[l] v) (hv : Tendsto (norm ∘ v) l atTop) :
     (c + u ·) ~[l] v :=
   (isLittleO_const_left.mpr (Or.inr hv)).add_isEquivalent huv
-
-/--
-theorem `IsLittleO.isEquivalent` / 定理 `IsLittleO.isEquivalent`
-
-English:
-theorem IsLittleO.isEquivalent
-  given: (huv : (u - v) =o[l] v)
-  statement: u ~[l] v
-  proof: huv
-
-中文:
-定理 IsLittleO.isEquivalent
-  条件: (huv : (u - v) =o[l] v)
-  结论: u ~[l] v
-  证明: huv
+/-
+**Asymptotics.IsLittleO.isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsLi
+ttleO`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   (u - v) =o[l] v → Asymptotics.IsEquivalent l u v
+参数：u - v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsLittleO.isEquivalent (huv : (u - v) =o[l] v) : u ~[l] v := huv
-
-/--
-theorem `IsEquivalent.neg` / 定理 `IsEquivalent.neg`
-
-English:
-theorem IsEquivalent.neg
-  given: (huv : u ~[l] v)
-  statement: (fun x => -u x) ~[l] fun x => -v x
-  proof: by
-  rw [IsEquivalent]
-  convert! huv.isLittleO.neg_left.neg_right
-  simp [neg_add_eq_sub]
-
-中文:
-定理 IsEquivalent.neg
-  条件: (huv : u ~[l] v)
-  结论: (fun x => -u x) ~[l] fun x => -v x
-  证明: by
-  rw [IsEquivalent]
-  convert! huv.isLittleO.neg_left.neg_right
-  simp [neg_add_eq_sub]
-
-Depends on / 依赖: IsEquivalent, convert, huv.isLittleO.neg_left.neg_right, isLittleO, neg_add_eq_sub, neg_left, neg_right
+/-
+**Asymptotics.IsEquivalent.neg** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquivale
+nt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {u v : α → β
+} {l : Filter α},   Asymptotics.IsEquivalent l u v → Asymptotics.IsEquivalent l 
+(fun x => -u x) fun x => -v x
+参数：fun x => -u x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.IsEquivalent.eq_1`：∀ {α : Type u_1} {E' : Type u_6} [inst : 
+SeminormedAddCommGroup E'] (l : Filter α) (u v : α → E'),   Asymptotics.IsEquiva
+lent l u v = (u - v…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `neg_add_eq_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), -a + b = b - a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Asymptotics.IsLittleO.neg_right`：∀ {α : Type u_1} {E : Type u_3} {F' : T
+ype u_7} [inst : Norm E] [inst_1 : SeminormedAddCommGroup F'] {f : α → E}   {g' 
+: α → F'} {l : Filter…
+· 使用定理 `Asymptotics.IsLittleO.neg_left`：∀ {α : Type u_1} {F : Type u_4} {E' : Ty
+pe u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {f' :
+ α → E'} {l : Filter…
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
 -/
-theorem IsEquivalent.neg (huv : u ~[l] v) : (fun x => -u x) ~[l] fun x => -v x := by
+theorem IsEquivalent.neg (huv : u ~[l] v) : (fun x ↦ -u x) ~[l] fun x ↦ -v x := by
   rw [IsEquivalent]
   convert! huv.isLittleO.neg_left.neg_right
   simp [neg_add_eq_sub]
@@ -602,40 +575,80 @@ open Asymptotics
 
 section NormedField
 
-variable {α β : Type*} [NormedField β] {u v : α -> β} {l : Filter α}
+variable {α β : Type*} [NormedField β] {u v : α → β} {l : Filter α}
 
-/--
-theorem `isEquivalent_iff_exists_eq_mul` / 定理 `isEquivalent_iff_exists_eq_mul`
-
-English:
-theorem isEquivalent_iff_exists_eq_mul
-  proof: by
-  rw [IsEquivalent]; rw [isLittleO_iff_exists_eq_mul]
-  constructor <;> rintro ⟨φ, hφ, h⟩ <;> [refine ⟨φ + 1, ?_, ?_⟩; refine ⟨φ - 1, ?_, ?_⟩]
-  · conv in 𝓝 _ => rw [← zero_add (1 : β)]
-    exact hφ.add tendsto_const_nhds
-  · convert! h.fun_add (EventuallyEq.refl l v) <;> simp [add_mul]
-  · conv in 𝓝 _ => rw [← sub_self (1 : β)]
-    exact hφ.sub tendsto_const_nhds
-  · convert! h.fun_sub (EventuallyEq.refl l v); simp [sub_mul]
-
-中文:
-定理 isEquivalent_iff_存在_eq_mul
-  证明: by
-  rw [IsEquivalent]; rw [isLittleO_iff_exists_eq_mul]
-  constructor <;> rintro ⟨φ, hφ, h⟩ <;> [refine ⟨φ + 1, ?_, ?_⟩; refine ⟨φ - 1, ?_, ?_⟩]
-  · conv in 𝓝 _ => rw [← zero_add (1 : β)]
-    exact hφ.add tendsto_const_nhds
-  · convert! h.fun_add (EventuallyEq.refl l v) <;> simp [add_mul]
-  · conv in 𝓝 _ => rw [← sub_self (1 : β)]
-    exact hφ.sub tendsto_const_nhds
-  · convert! h.fun_sub (EventuallyEq.refl l v); simp [sub_mul]
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.refl, IsEquivalent, add_mul, convert, fun_add, fun_sub, h.fun_add, h.fun_sub, isLittleO_iff_exists_eq_mul, sub_mul, sub_self, tendsto_const_nhds, zero_add
+/-
+**Asymptotics.isEquivalent_iff_exists_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics`。
+形式化陈述：isEquivalent_iff_exists_eq_mul : u ~[l] v ↔ exists (φ : α -> β) (_ : Tends
+to φ l (𝓝 1)), u =ᶠ[l] φ * v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.IsEquivalent.eq_1`：∀ {α : Type u_1} {E' : Type u_6} [inst : 
+SeminormedAddCommGroup E'] (l : Filter α) (u v : α → E'),   Asymptotics.IsEquiva
+lent l u v = (u - v…
+· 使用定理 `Asymptotics.isLittleO_iff_exists_eq_mul`：isLittleO_iff_exists_eq_mul : u
+ =o[l] v ↔ exists φ : α -> 𝕜, Tendsto φ l (𝓝 0) ∧ u =ᶠ[l] φ * v
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Filter.Tendsto.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst_1
+ : Add M] [ContinuousAdd M] {α : Type u_2} {f g : α → M}   {x : Filter α} {a b :
+ M},   F…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Filter.EventuallyEq.fun_add`：∀ {α : Type u} {β : Type v} [inst : Add β] 
+{f f' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → (fun i => f i + 
+f' i) =ᶠ[l] fun i…
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Filter.Tendsto.sub`：∀ {G : Type u_1} {α : Type u_2} [inst : TopologicalS
+pace G] [inst_1 : Sub G] [ContinuousSub G] {f g : α → G}   {l : Filter α} {a b :
+ G},   F…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `Filter.EventuallyEq.fun_sub`：∀ {α : Type u} {β : Type v} [inst : Sub β] 
+{f f' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → (fun i => f i - 
+f' i) =ᶠ[l] fun i…
 -/
 theorem isEquivalent_iff_exists_eq_mul :
-    u ~[l] v ↔ exists (φ : α -> β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v := by
-  rw [IsEquivalent]; rw [isLittleO_iff_exists_eq_mul]
+    u ~[l] v ↔ ∃ (φ : α → β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v := by
+  rw [IsEquivalent, isLittleO_iff_exists_eq_mul]
   constructor <;> rintro ⟨φ, hφ, h⟩ <;> [refine ⟨φ + 1, ?_, ?_⟩; refine ⟨φ - 1, ?_, ?_⟩]
   · conv in 𝓝 _ => rw [← zero_add (1 : β)]
     exact hφ.add tendsto_const_nhds
@@ -643,114 +656,137 @@ theorem isEquivalent_iff_exists_eq_mul :
   · conv in 𝓝 _ => rw [← sub_self (1 : β)]
     exact hφ.sub tendsto_const_nhds
   · convert! h.fun_sub (EventuallyEq.refl l v); simp [sub_mul]
-
-/--
-theorem `IsEquivalent.exists_eq_mul` / 定理 `IsEquivalent.exists_eq_mul`
-
-English:
-theorem IsEquivalent.exists_eq_mul
-  given: (huv : u ~[l] v)
-  proof: isEquivalent_iff_exists_eq_mul.mp huv
-
-中文:
-定理 IsEquivalent.存在_eq_mul
-  条件: (huv : u ~[l] v)
-  证明: isEquivalent_iff_exists_eq_mul.mp huv
-
-Depends on / 依赖: isEquivalent_iff_exists_eq_mul, isEquivalent_iff_exists_eq_mul.mp
+/-
+**Asymptotics.IsEquivalent.exists_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] {u v : α → β} {l : 
+Filter α},   Asymptotics.IsEquivalent l u v → ∃ φ, ∃ (_ : Filter.Tendsto φ l (nh
+ds 1)), u =ᶠ[l] φ * v
+参数：_ : Filter.Tendsto φ l (nhds 1)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Asymptotics.isEquivalent_iff_exists_eq_mul`：isEquivalent_iff_exists_eq_m
+ul : u ~[l] v ↔ exists (φ : α -> β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v
 -/
 theorem IsEquivalent.exists_eq_mul (huv : u ~[l] v) :
-    exists (φ : α -> β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v :=
+    ∃ (φ : α → β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v :=
   isEquivalent_iff_exists_eq_mul.mp huv
-
-/--
-theorem `isEquivalent_of_tendsto_one` / 定理 `isEquivalent_of_tendsto_one`
-
-English:
-theorem isEquivalent_of_tendsto_one
-  given: (huv : Tendsto (u / v) l (𝓝 1))
-  proof: by
-  suffices forallᶠ x in l, v x = 0 -> u x = 0 by
-    rw [isEquivalent_iff_exists_eq_mul]
-    exact ⟨u / v, huv, this.mono fun x hz' => (div_mul_cancel_of_imp hz').symm⟩
-  by_contra! h
-  replace h : existsᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ => by simp [hv]
-  simpa using tendsto_nhds_unique_of_frequently_eq (b := 0) huv tendsto_const_nhds h
-
-@[deprecated (since := "2026-01-26")] alias isEquivalent_of_tendsto_one' :=
-  isEquivalent_of_tendsto_one
-
-中文:
-定理 isEquivalent_of_tendsto_one
-  条件: (huv : 收敛 (u / v) l (𝓝 1))
-  证明: by
-  suffices forallᶠ x in l, v x = 0 -> u x = 0 by
-    rw [isEquivalent_iff_exists_eq_mul]
-    exact ⟨u / v, huv, this.mono fun x hz' => (div_mul_cancel_of_imp hz').symm⟩
-  by_contra! h
-  replace h : existsᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ => by simp [hv]
-  simpa using tendsto_nhds_unique_of_frequently_eq (b := 0) huv tendsto_const_nhds h
-
-@[deprecated (since := "2026-01-26")] alias isEquivalent_of_tendsto_one' :=
-  isEquivalent_of_tendsto_one
-
-Depends on / 依赖: div_mul_cancel_of_imp, h.mono, isEquivalent_iff_exists_eq_mul, replace, tendsto_const_nhds, tendsto_nhds_unique_of_frequently_eq, this.mono
+/-
+**Asymptotics.isEquivalent_of_tendsto_one** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics
+`。
+形式化陈述：isEquivalent_of_tendsto_one (huv : Tendsto (u / v) l (𝓝 1)) : u ~[l] v
+参数：huv : Tendsto (u / v) l (𝓝 1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `tendsto_nhds_unique_of_frequently_eq`：tendsto_nhds_unique_of_frequently_
+eq [T2Space X] {f g : Y -> X} {l : Filter Y} {a b : X} (ha : Tendsto f l (𝓝 a)) 
+(hb : Tendsto g l (𝓝 b)) (…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Asymptotics.isEquivalent_iff_exists_eq_mul`：isEquivalent_iff_exists_eq_m
+ul : u ~[l] v ↔ exists (φ : α -> β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `div_mul_cancel_of_imp`：div_mul_cancel_of_imp (h : b = 0 -> a = 0) : a / 
+b * b = a
 -/
 theorem isEquivalent_of_tendsto_one (huv : Tendsto (u / v) l (𝓝 1)) :
     u ~[l] v := by
-  suffices forallᶠ x in l, v x = 0 -> u x = 0 by
+  suffices ∀ᶠ x in l, v x = 0 → u x = 0 by
     rw [isEquivalent_iff_exists_eq_mul]
-    exact ⟨u / v, huv, this.mono fun x hz' => (div_mul_cancel_of_imp hz').symm⟩
+    exact ⟨u / v, huv, this.mono fun x hz' ↦ (div_mul_cancel_of_imp hz').symm⟩
   by_contra! h
-  replace h : existsᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ => by simp [hv]
+  replace h : ∃ᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ ↦ by simp [hv]
   simpa using tendsto_nhds_unique_of_frequently_eq (b := 0) huv tendsto_const_nhds h
 
 @[deprecated (since := "2026-01-26")] alias isEquivalent_of_tendsto_one' :=
   isEquivalent_of_tendsto_one
-
-/--
-theorem `isEquivalent_iff_tendsto_one` / 定理 `isEquivalent_iff_tendsto_one`
-
-English:
-theorem isEquivalent_iff_tendsto_one
-  given: (hz : forallᶠ x in l, v x != 0)
-  proof: by
-  constructor
-  · intro hequiv
-    have := hequiv.isLittleO.tendsto_div_nhds_zero
-    simp only [Pi.sub_apply, sub_div] at this
-    have key : Tendsto (fun x => v x / v x) l (𝓝 1) :=
-      (tendsto_congr' <| hz.mono fun x hnz => @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
-    convert! this.add key
-    · simp
-    · simp
-  · exact isEquivalent_of_tendsto_one
-
-中文:
-定理 isEquivalent_iff_tendsto_one
-  条件: (hz : 对任意ᶠ x in l, v x != 0)
-  证明: by
-  constructor
-  · intro hequiv
-    have := hequiv.isLittleO.tendsto_div_nhds_zero
-    simp only [Pi.sub_apply, sub_div] at this
-    have key : Tendsto (fun x => v x / v x) l (𝓝 1) :=
-      (tendsto_congr' <| hz.mono fun x hnz => @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
-    convert! this.add key
-    · simp
-    · simp
-  · exact isEquivalent_of_tendsto_one
-
-Depends on / 依赖: Pi.sub_apply, Tendsto, convert, div_self, hequiv, hequiv.isLittleO.tendsto_div_nhds_zero, hz.mono, isEquivalent_of_tendsto_one, isLittleO, sub_apply, sub_div, tendsto_congr, tendsto_const_nhds, tendsto_div_nhds_zero, this.add
+/-
+**Asymptotics.isEquivalent_iff_tendsto_one** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s`。
+形式化陈述：isEquivalent_iff_tendsto_one (hz : forallᶠ x in l, v x != 0) : u ~[l] v ↔ 
+Tendsto (u / v) l (𝓝 1)
+参数：hz : forallᶠ x in l, v x != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.tendsto_div_nhds_zero`：∀ {α : Type u_1} {𝕜 : Type 
+u_15} [inst : NormedDivisionRing 𝕜] {l : Filter α} {f g : α → 𝕜},   f =o[l] g → 
+Filter.Tendsto (fun x => f x / g …
+· 使用定理 `Asymptotics.IsEquivalent.isLittleO`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivale
+nt l u v → (u - v) =o[l]…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_congr'`：tendsto_congr' {f₁ f₂ : α -> β} {l₁ : Filter α} {
+l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Filter.Tendsto.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst_1
+ : Add M] [ContinuousAdd M] {α : Type u_2} {f g : α → M}   {x : Filter α} {a b :
+ M},   F…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_div`：sub_div (a b c : K) : (a - b) / c = a / c - b / c
+· 使用定理 `Asymptotics.isEquivalent_of_tendsto_one`：isEquivalent_of_tendsto_one (hu
+v : Tendsto (u / v) l (𝓝 1)) : u ~[l] v
 -/
-theorem isEquivalent_iff_tendsto_one (hz : forallᶠ x in l, v x != 0) :
+theorem isEquivalent_iff_tendsto_one (hz : ∀ᶠ x in l, v x ≠ 0) :
     u ~[l] v ↔ Tendsto (u / v) l (𝓝 1) := by
   constructor
   · intro hequiv
     have := hequiv.isLittleO.tendsto_div_nhds_zero
     simp only [Pi.sub_apply, sub_div] at this
-    have key : Tendsto (fun x => v x / v x) l (𝓝 1) :=
-      (tendsto_congr' <| hz.mono fun x hnz => @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
+    have key : Tendsto (fun x ↦ v x / v x) l (𝓝 1) :=
+      (tendsto_congr' <| hz.mono fun x hnz ↦ @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
     convert! this.add key
     · simp
     · simp
@@ -760,91 +796,87 @@ end NormedField
 
 section SMul
 
-/--
-theorem `IsEquivalent.smul` / 定理 `IsEquivalent.smul`
-
-English:
-theorem IsEquivalent.smul
-  statement: {α E 𝕜 : Type*} [NormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-  proof: by
-  rcases hab.exists_eq_mul with ⟨φ, hφ, habφ⟩
-  have : ((fun x => a x • u x) - (fun x => b x • v x)) =ᶠ[l] fun x => b x • (φ x • u x - v x) := by
-    convert!
-      (habφ.comp₂ (· • ·) <| EventuallyEq.refl _ u).fun_sub
-        (EventuallyEq.refl _ fun x => b x • v x) using 1
-    ext
-    rw [Pi.mul_apply]; rw [mul_comm]; rw [mul_smul]; rw [← smul_sub]
-  refine (isLittleO_congr this.symm <| EventuallyEq.rfl).mp ((isBigO_refl b l).smul_isLittleO ?_)
-  rcases huv.isBigO.exists_pos with ⟨C, hC, hCuv⟩
-  rw [IsEquivalent] at *
-  rw [isLittleO_iff] at *
-  rw [IsBigOWith] at hCuv
-  simp only [Metric.tendsto_nhds, dist_eq_norm] at hφ
-  intro c hc
-  specialize hφ (c / 2 / C) (div_pos (div_pos hc zero_lt_two) hC)
-  specialize huv (div_pos hc zero_lt_two)
-  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx => ?_)
-  have key :=
-    calc
-      ‖φ x - 1‖ * ‖u x‖ <= c / 2 / C * ‖u x‖ := by gcongr
-      _ <= c / 2 / C * (C * ‖v x‖) := by gcongr
-      _ = c / 2 * ‖v x‖ := by field
-  calc
-    ‖((fun x : α => φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
-      simp [sub_smul, sub_add]
-    _ <= ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
-    _ = ‖φ x - 1‖ * ‖u x‖ + ‖u x - v x‖ := by rw [norm_smul]
-    _ <= c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
-    _ <= c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
-    _ = c * ‖v x‖ := by ring
-
-中文:
-定理 IsEquivalent.smul
-  结论: {α E 𝕜 : 类型} [赋范域 𝕜] [赋范交换加群 E] [赋范空间 𝕜 E]
-  证明: by
-  rcases hab.exists_eq_mul with ⟨φ, hφ, habφ⟩
-  have : ((fun x => a x • u x) - (fun x => b x • v x)) =ᶠ[l] fun x => b x • (φ x • u x - v x) := by
-    convert!
-      (habφ.comp₂ (· • ·) <| EventuallyEq.refl _ u).fun_sub
-        (EventuallyEq.refl _ fun x => b x • v x) using 1
-    ext
-    rw [Pi.mul_apply]; rw [mul_comm]; rw [mul_smul]; rw [← smul_sub]
-  refine (isLittleO_congr this.symm <| EventuallyEq.rfl).mp ((isBigO_refl b l).smul_isLittleO ?_)
-  rcases huv.isBigO.exists_pos with ⟨C, hC, hCuv⟩
-  rw [IsEquivalent] at *
-  rw [isLittleO_iff] at *
-  rw [IsBigOWith] at hCuv
-  simp only [Metric.tendsto_nhds, dist_eq_norm] at hφ
-  intro c hc
-  specialize hφ (c / 2 / C) (div_pos (div_pos hc zero_lt_two) hC)
-  specialize huv (div_pos hc zero_lt_two)
-  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx => ?_)
-  have key :=
-    calc
-      ‖φ x - 1‖ * ‖u x‖ <= c / 2 / C * ‖u x‖ := by gcongr
-      _ <= c / 2 / C * (C * ‖v x‖) := by gcongr
-      _ = c / 2 * ‖v x‖ := by field
-  calc
-    ‖((fun x : α => φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
-      simp [sub_smul, sub_add]
-    _ <= ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
-    _ = ‖φ x - 1‖ * ‖u x‖ + ‖u x - v x‖ := by rw [norm_smul]
-    _ <= c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
-    _ <= c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
-    _ = c * ‖v x‖ := by ring
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.refl, EventuallyEq.rfl, IsEquivalent, Pi.mul_apply, convert, exists_eq_mul, exists_pos, fun_sub, hab.exists_eq_mul, huv.isBigO.exists_pos, isBigO, isBigO_refl, isLittleO_congr, mul_apply, mul_comm, mul_smul, smul_isLittleO, smul_sub, this.symm
+/-
+**Asymptotics.IsEquivalent.smul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquival
+ent`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_2} {𝕜 : Type u_3} [inst : NormedField 𝕜] [ins
+t_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {a b : α → 𝕜} {u v : α 
+→ E} {l : Filter α},   Asymptotics.IsEquivalent l a b →     Asymptotics.IsEquiva
+lent l u v → Asymptotics.IsEquivalent l (fun x => a x • u x) fun x => b x • v x
+参数：fun x => a x • u x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_eq_mul`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → ∃ φ, ∃ (_ : Filter.T…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `Filter.EventuallyEq.fun_sub`：∀ {α : Type u} {β : Type v} [inst : Sub β] 
+{f f' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → (fun i => f i - 
+f' i) =ᶠ[l] fun i…
+· 使用定理 `Filter.EventuallyEq.comp₂`：∀ {α : Type u} {β : Type v} {γ : Type w} {δ :
+ Type u_2} {f f' : α → β} {g g' : α → γ} {l : Filter α},   f =ᶠ[l] f' → ∀ (h : β
+ → γ → δ), g =ᶠ…
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Asymptotics.isLittleO_congr`：isLittleO_congr (hf : f₁ =ᶠ[l] f₂) (hg : g₁
+ =ᶠ[l] g₂) : f₁ =o[l] g₁ ↔ f₂ =o[l] g₂
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.rfl`：∀ {α : Type u} {β : Type v} {l : Filter α} {f :
+ α → β}, f =ᶠ[l] f
+· 使用定理 `Asymptotics.IsBigO.smul_isLittleO`：∀ {α : Type u_1} {E' : Type u_6} {F' 
+: Type u_7} {R : Type u_13} {𝕜' : Type u_16} [inst : SeminormedAddCommGroup E'] 
+  [inst_1 : SeminormedA…
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Asymptotics.isBigO_refl`：isBigO_refl (f : α -> E) (l : Filter α) : f =O[
+l] f
+· 使用定理 `Asymptotics.IsBigO.exists_pos`：∀ {α : Type u_1} {E : Type u_3} {F' : Typ
+e u_7} [inst : Norm E] [inst_1 : SeminormedAddCommGroup F'] {f : α → E}   {g' : 
+α → F'} {l : Filter…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
+· 使用定理 `Asymptotics.isLittleO_iff`：isLittleO_iff : f =o[l] g ↔ forall ⦃c : Real⦄
+, 0 < c -> forallᶠ x in l, ‖f x‖ <= c * ‖g x‖
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+（共 118 条，此处仅展示前 30 条）
 -/
 theorem IsEquivalent.smul {α E 𝕜 : Type*} [NormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-    {a b : α -> 𝕜} {u v : α -> E} {l : Filter α} (hab : a ~[l] b) (huv : u ~[l] v) :
-    (fun x => a x • u x) ~[l] fun x => b x • v x := by
+    {a b : α → 𝕜} {u v : α → E} {l : Filter α} (hab : a ~[l] b) (huv : u ~[l] v) :
+    (fun x ↦ a x • u x) ~[l] fun x ↦ b x • v x := by
   rcases hab.exists_eq_mul with ⟨φ, hφ, habφ⟩
-  have : ((fun x => a x • u x) - (fun x => b x • v x)) =ᶠ[l] fun x => b x • (φ x • u x - v x) := by
+  have : ((fun x ↦ a x • u x) - (fun x ↦ b x • v x)) =ᶠ[l] fun x ↦ b x • (φ x • u x - v x) := by
     convert!
       (habφ.comp₂ (· • ·) <| EventuallyEq.refl _ u).fun_sub
-        (EventuallyEq.refl _ fun x => b x • v x) using 1
+        (EventuallyEq.refl _ fun x ↦ b x • v x) using 1
     ext
-    rw [Pi.mul_apply]; rw [mul_comm]; rw [mul_smul]; rw [← smul_sub]
+    rw [Pi.mul_apply, mul_comm, mul_smul, ← smul_sub]
   refine (isLittleO_congr this.symm <| EventuallyEq.rfl).mp ((isBigO_refl b l).smul_isLittleO ?_)
   rcases huv.isBigO.exists_pos with ⟨C, hC, hCuv⟩
   rw [IsEquivalent] at *
@@ -854,223 +886,228 @@ theorem IsEquivalent.smul {α E 𝕜 : Type*} [NormedField 𝕜] [NormedAddCommG
   intro c hc
   specialize hφ (c / 2 / C) (div_pos (div_pos hc zero_lt_two) hC)
   specialize huv (div_pos hc zero_lt_two)
-  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx => ?_)
+  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx ↦ ?_)
   have key :=
     calc
-      ‖φ x - 1‖ * ‖u x‖ <= c / 2 / C * ‖u x‖ := by gcongr
-      _ <= c / 2 / C * (C * ‖v x‖) := by gcongr
+      ‖φ x - 1‖ * ‖u x‖ ≤ c / 2 / C * ‖u x‖ := by gcongr
+      _ ≤ c / 2 / C * (C * ‖v x‖) := by gcongr
       _ = c / 2 * ‖v x‖ := by field
   calc
-    ‖((fun x : α => φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
+    ‖((fun x : α ↦ φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
       simp [sub_smul, sub_add]
-    _ <= ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
+    _ ≤ ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
     _ = ‖φ x - 1‖ * ‖u x‖ + ‖u x - v x‖ := by rw [norm_smul]
-    _ <= c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
-    _ <= c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
+    _ ≤ c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
+    _ ≤ c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
     _ = c * ‖v x‖ := by ring
 
 end SMul
 
 section mul_inv
 
-variable {α ι β : Type*} [NormedField β] {t u v w : α -> β} {l : Filter α}
+variable {α ι β : Type*} [NormedField β] {t u v w : α → β} {l : Filter α}
 
-/--
-theorem `IsEquivalent.mul` / 定理 `IsEquivalent.mul`
-
-English:
-theorem IsEquivalent.mul
-  given: (htu : t ~[l] u) (hvw : v ~[l] w)
-  statement: t * v ~[l] u * w
-  proof: htu.smul hvw
-
-中文:
-定理 IsEquivalent.mul
-  条件: (htu : t ~[l] u) (hvw : v ~[l] w)
-  结论: t * v ~[l] u * w
-  证明: htu.smul hvw
+/-
+**Asymptotics.IsEquivalent.mul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquivale
+nt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} [inst : NormedField β] {t u v w : α → β} {
+l : Filter α},   Asymptotics.IsEquivalent l t u → Asymptotics.IsEquivalent l v w
+ → Asymptotics.IsEquivalent l (t * v) (u * w)
+参数：t * v；u * w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.smul`：∀ {α : Type u_1} {E : Type u_2} {𝕜 : Type
+ u_3} [inst : NormedField 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {a b : α …
 -/
 protected theorem IsEquivalent.mul (htu : t ~[l] u) (hvw : v ~[l] w) : t * v ~[l] u * w :=
   htu.smul hvw
-
-/--
-theorem `IsEquivalent.listProd` / 定理 `IsEquivalent.listProd`
-
-English:
-theorem IsEquivalent.listProd
-  given: {L : List ι} {f g : ι -> α -> β} (h : forall i in L, f i ~[l] g i)
-  proof: by
+/-
+**Asymptotics.IsEquivalent.listProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEqu
+ivalent`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {β : Type u_3} [inst : NormedField β] {l :
+ Filter α} {L : List ι} {f g : ι → α → β},   (∀ i ∈ L, Asymptotics.IsEquivalent 
+l (f i) (g i)) →     Asymptotics.IsEquivalent l (fun x => (List.map (fun x_1 => 
+f x_1 x) L).prod) fun x =>       (List.map (fun x_1 => g x_1 x) L).prod
+参数：∀ i ∈ L, Asymptotics.IsEquivalent l (f i) (g i)；fun x => (List.map (fun x_1 =
+> f x_1 x) L).prod；List.map (fun x_1 => g x_1 x) L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Asymptotics.IsEquivalent.mul`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {t u v w : α → β} {l : Filter α},   Asymptotics.IsEquivalent l t u 
+→ Asymptotics.IsEq…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+theorem IsEquivalent.listProd {L : List ι} {f g : ι → α → β} (h : ∀ i ∈ L, f i ~[l] g i) :
+    (fun x ↦ (L.map (f · x)).prod) ~[l] (fun x ↦ (L.map (g · x)).prod) := by
   induction L with
   | nil => simp [IsEquivalent.refl]
   | cons i L ihL =>
     simp only [List.forall_mem_cons, List.map_cons, List.prod_cons] at h ⊢
     exact h.1.mul (ihL h.2)
-
-中文:
-定理 IsEquivalent.listProd
-  条件: {L : 列表 ι} {f g : ι -> α -> β} (h : 对任意 i in L, f i ~[l] g i)
-  证明: by
-  induction L with
-  | nil => simp [IsEquivalent.refl]
-  | cons i L ihL =>
-    simp only [List.forall_mem_cons, List.map_cons, List.prod_cons] at h ⊢
-    exact h.1.mul (ihL h.2)
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.refl, List.forall_mem_cons, List.map_cons, List.prod_cons, forall_mem_cons, map_cons, prod_cons
+/-
+**Asymptotics.IsEquivalent.multisetProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sEquivalent`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {β : Type u_3} [inst : NormedField β] {l :
+ Filter α} {s : Multiset ι} {f g : ι → α → β},   (∀ i ∈ s, Asymptotics.IsEquival
+ent l (f i) (g i)) →     Asymptotics.IsEquivalent l (fun x => (Multiset.map (fun
+ x_1 => f x_1 x) s).prod) fun x =>       (Multiset.map (fun x_1 => g x_1 x) s).p
+rod
+参数：∀ i ∈ s, Asymptotics.IsEquivalent l (f i) (g i)；fun x => (Multiset.map (fun x
+_1 => f x_1 x) s).prod；Multiset.map (fun x_1 => g x_1 x) s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk_surjective`：Quotient.mk_surjective {s : Setoid α} : Function
+.Surjective (Quotient.mk s)
+· 使用定理 `Asymptotics.IsEquivalent.listProd`：∀ {α : Type u_1} {ι : Type u_2} {β : 
+Type u_3} [inst : NormedField β] {l : Filter α} {L : List ι} {f g : ι → α → β}, 
+  (∀ i ∈ L, Asymptotics…
 -/
-theorem IsEquivalent.listProd {L : List ι} {f g : ι -> α -> β} (h : forall i in L, f i ~[l] g i) :
-    (fun x => (L.map (f · x)).prod) ~[l] (fun x => (L.map (g · x)).prod) := by
-  induction L with
-  | nil => simp [IsEquivalent.refl]
-  | cons i L ihL =>
-    simp only [List.forall_mem_cons, List.map_cons, List.prod_cons] at h ⊢
-    exact h.1.mul (ihL h.2)
-
-/--
-theorem `IsEquivalent.multisetProd` / 定理 `IsEquivalent.multisetProd`
-
-English:
-theorem IsEquivalent.multisetProd
-  given: {s : Multiset ι} {f g : ι -> α -> β} (h : forall i in s, f i ~[l] g i)
-  proof: by
-  obtain ⟨l, rfl⟩ : exists l : List ι, ↑l = s := Quotient.mk_surjective s
+theorem IsEquivalent.multisetProd {s : Multiset ι} {f g : ι → α → β} (h : ∀ i ∈ s, f i ~[l] g i) :
+    (fun x ↦ (s.map (f · x)).prod) ~[l] (fun x ↦ (s.map (g · x)).prod) := by
+  obtain ⟨l, rfl⟩ : ∃ l : List ι, ↑l = s := Quotient.mk_surjective s
   exact listProd h
-
-中文:
-定理 IsEquivalent.multisetProd
-  条件: {s : Multiset ι} {f g : ι -> α -> β} (h : 对任意 i in s, f i ~[l] g i)
-  证明: by
-  obtain ⟨l, rfl⟩ : exists l : List ι, ↑l = s := Quotient.mk_surjective s
-  exact listProd h
-
-Depends on / 依赖: Quotient, Quotient.mk_surjective, listProd, mk_surjective
+/-
+**Asymptotics.IsEquivalent.finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsE
+quivalent`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {β : Type u_3} [inst : NormedField β] {l :
+ Filter α} {s : Finset ι} {f g : ι → α → β},   (∀ i ∈ s, Asymptotics.IsEquivalen
+t l (f i) (g i)) →     Asymptotics.IsEquivalent l (fun x => ∏ i ∈ s, f i x) fun 
+x => ∏ i ∈ s, g i x
+参数：∀ i ∈ s, Asymptotics.IsEquivalent l (f i) (g i)；fun x => ∏ i ∈ s, f i x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.multisetProd`：∀ {α : Type u_1} {ι : Type u_2} {
+β : Type u_3} [inst : NormedField β] {l : Filter α} {s : Multiset ι} {f g : ι → 
+α → β},   (∀ i ∈ s, Asympto…
 -/
-theorem IsEquivalent.multisetProd {s : Multiset ι} {f g : ι -> α -> β} (h : forall i in s, f i ~[l] g i) :
-    (fun x => (s.map (f · x)).prod) ~[l] (fun x => (s.map (g · x)).prod) := by
-  obtain ⟨l, rfl⟩ : exists l : List ι, ↑l = s := Quotient.mk_surjective s
-  exact listProd h
-
-/--
-theorem `IsEquivalent.finsetProd` / 定理 `IsEquivalent.finsetProd`
-
-English:
-theorem IsEquivalent.finsetProd
-  given: {s : Finset ι} {f g : ι -> α -> β} (h : forall i in s, f i ~[l] g i)
-  proof: multisetProd h
-
-中文:
-定理 IsEquivalent.finsetProd
-  条件: {s : 有限集 ι} {f g : ι -> α -> β} (h : 对任意 i in s, f i ~[l] g i)
-  证明: multisetProd h
-
-Depends on / 依赖: multisetProd
--/
-theorem IsEquivalent.finsetProd {s : Finset ι} {f g : ι -> α -> β} (h : forall i in s, f i ~[l] g i) :
-    (∏ i in s, f i ·) ~[l] (∏ i in s, g i ·) :=
+theorem IsEquivalent.finsetProd {s : Finset ι} {f g : ι → α → β} (h : ∀ i ∈ s, f i ~[l] g i) :
+    (∏ i ∈ s, f i ·) ~[l] (∏ i ∈ s, g i ·) :=
   multisetProd h
-
-/--
-theorem `IsEquivalent.inv` / 定理 `IsEquivalent.inv`
-
-English:
-theorem IsEquivalent.inv
-  given: (huv : u ~[l] v)
-  statement: u⁻¹ ~[l] v⁻¹
-  proof: by
-  rw [isEquivalent_iff_exists_eq_mul] at *
-  rcases huv with ⟨φ, hφ, h⟩
-  rw [← inv_one]
-  refine ⟨fun x => (φ x)⁻¹, Tendsto.inv₀ hφ (by simp), ?_⟩
-  convert! h.fun_inv
-  simp [mul_comm]
-
-中文:
-定理 IsEquivalent.inv
-  条件: (huv : u ~[l] v)
-  结论: u⁻¹ ~[l] v⁻¹
-  证明: by
-  rw [isEquivalent_iff_exists_eq_mul] at *
-  rcases huv with ⟨φ, hφ, h⟩
-  rw [← inv_one]
-  refine ⟨fun x => (φ x)⁻¹, Tendsto.inv₀ hφ (by simp), ?_⟩
-  convert! h.fun_inv
-  simp [mul_comm]
+/-
+**Asymptotics.IsEquivalent.inv** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquivale
+nt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} [inst : NormedField β] {u v : α → β} {l : 
+Filter α},   Asymptotics.IsEquivalent l u v → Asymptotics.IsEquivalent l u⁻¹ v⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Asymptotics.isEquivalent_iff_exists_eq_mul`：isEquivalent_iff_exists_eq_m
+ul : u ~[l] v ↔ exists (φ : α -> β) (_ : Tendsto φ l (𝓝 1)), u =ᶠ[l] φ * v
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `Filter.Tendsto.inv₀`：Filter.Tendsto.inv₀ {a : G₀} (hf : Tendsto f l (𝓝 a
+)) (ha : a != 0) : Tendsto (fun x => (f x)⁻¹) l (𝓝 a⁻¹)
+· 使用定理 `IsTopologicalDivisionRing.toContinuousInv₀`：∀ {K : Type u_1} {inst : Div
+isionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing K],
+   ContinuousInv₀ K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.EventuallyEq.fun_inv`：∀ {α : Type u} {β : Type v} [inst : Inv β] 
+{f g : α → β} {l : Filter α},   f =ᶠ[l] g → (fun i => (f i)⁻¹) =ᶠ[l] fun i => (g
+ i)⁻¹
 -/
 protected theorem IsEquivalent.inv (huv : u ~[l] v) : u⁻¹ ~[l] v⁻¹ := by
   rw [isEquivalent_iff_exists_eq_mul] at *
   rcases huv with ⟨φ, hφ, h⟩
   rw [← inv_one]
-  refine ⟨fun x => (φ x)⁻¹, Tendsto.inv₀ hφ (by simp), ?_⟩
+  refine ⟨fun x ↦ (φ x)⁻¹, Tendsto.inv₀ hφ (by simp), ?_⟩
   convert! h.fun_inv
   simp [mul_comm]
-
-/--
-theorem `IsEquivalent.div` / 定理 `IsEquivalent.div`
-
-English:
-theorem IsEquivalent.div
-  given: (htu : t ~[l] u) (hvw : v ~[l] w)
-  proof: by
-  simpa only [div_eq_mul_inv] using htu.mul hvw.inv
-
-中文:
-定理 IsEquivalent.div
-  条件: (htu : t ~[l] u) (hvw : v ~[l] w)
-  证明: by
-  simpa only [div_eq_mul_inv] using htu.mul hvw.inv
+/-
+**Asymptotics.IsEquivalent.div** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquivale
+nt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} [inst : NormedField β] {t u v w : α → β} {
+l : Filter α},   Asymptotics.IsEquivalent l t u → Asymptotics.IsEquivalent l v w
+ → Asymptotics.IsEquivalent l (t / v) (u / w)
+参数：t / v；u / w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Asymptotics.IsEquivalent.mul`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {t u v w : α → β} {l : Filter α},   Asymptotics.IsEquivalent l t u 
+→ Asymptotics.IsEq…
+· 使用定理 `Asymptotics.IsEquivalent.inv`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l u v → As
+ymptotics.IsEquiva…
 -/
 protected theorem IsEquivalent.div (htu : t ~[l] u) (hvw : v ~[l] w) :
     t / v ~[l] u / w := by
   simpa only [div_eq_mul_inv] using htu.mul hvw.inv
-
-/--
-theorem `IsEquivalent.pow` / 定理 `IsEquivalent.pow`
-
-English:
-theorem IsEquivalent.pow
-  given: (h : t ~[l] u) (n : Nat)
-  statement: t ^ n ~[l] u ^ n
-  proof: by
-  induction n with
-  | zero => simpa using IsEquivalent.refl
-  | succ _ ih => simpa [pow_succ] using ih.mul h
-
-中文:
-定理 IsEquivalent.pow
-  条件: (h : t ~[l] u) (n : 自然数)
-  结论: t ^ n ~[l] u ^ n
-  证明: by
-  induction n with
-  | zero => simpa using IsEquivalent.refl
-  | succ _ ih => simpa [pow_succ] using ih.mul h
+/-
+**Asymptotics.IsEquivalent.pow** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquivale
+nt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} [inst : NormedField β] {t u : α → β} {l : 
+Filter α},   Asymptotics.IsEquivalent l t u → ∀ (n : ℕ), Asymptotics.IsEquivalen
+t l (t ^ n) (u ^ n)
+参数：n : ℕ；t ^ n；u ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Asymptotics.IsEquivalent.refl`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u : α → β} {l : Filter α}, Asymptotics.IsEquivalent l u u
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Asymptotics.IsEquivalent.mul`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {t u v w : α → β} {l : Filter α},   Asymptotics.IsEquivalent l t u 
+→ Asymptotics.IsEq…
 -/
-protected theorem IsEquivalent.pow (h : t ~[l] u) (n : Nat) : t ^ n ~[l] u ^ n := by
+protected theorem IsEquivalent.pow (h : t ~[l] u) (n : ℕ) : t ^ n ~[l] u ^ n := by
   induction n with
   | zero => simpa using IsEquivalent.refl
   | succ _ ih => simpa [pow_succ] using ih.mul h
-
-/--
-theorem `IsEquivalent.zpow` / 定理 `IsEquivalent.zpow`
-
-English:
-theorem IsEquivalent.zpow
-  given: (h : t ~[l] u) (z : Int)
-  statement: t ^ z ~[l] u ^ z
-  proof: by
-  match z with
-  | Int.ofNat _ => simpa using h.pow _
-  | Int.negSucc _ => simpa using (h.pow _).inv
-
-中文:
-定理 IsEquivalent.zpow
-  条件: (h : t ~[l] u) (z : 整数)
-  结论: t ^ z ~[l] u ^ z
-  证明: by
-  match z with
-  | Int.ofNat _ => simpa using h.pow _
-  | Int.negSucc _ => simpa using (h.pow _).inv
+/-
+**Asymptotics.IsEquivalent.zpow** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquival
+ent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_3} [inst : NormedField β] {t u : α → β} {l : 
+Filter α},   Asymptotics.IsEquivalent l t u → ∀ (z : ℤ), Asymptotics.IsEquivalen
+t l (t ^ z) (u ^ z)
+参数：z : ℤ；t ^ z；u ^ z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Asymptotics.IsEquivalent.pow`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {t u : α → β} {l : Filter α},   Asymptotics.IsEquivalent l t u → ∀ 
+(n : ℕ), Asymptoti…
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用定理 `Asymptotics.IsEquivalent.inv`：∀ {α : Type u_1} {β : Type u_3} [inst : No
+rmedField β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l u v → As
+ymptotics.IsEquiva…
 -/
-protected theorem IsEquivalent.zpow (h : t ~[l] u) (z : Int) : t ^ z ~[l] u ^ z := by
+protected theorem IsEquivalent.zpow (h : t ~[l] u) (z : ℤ) : t ^ z ~[l] u ^ z := by
   match z with
   | Int.ofNat _ => simpa using h.pow _
   | Int.negSucc _ => simpa using (h.pow _).inv
@@ -1080,90 +1117,119 @@ end mul_inv
 section NormedLinearOrderedField
 
 variable {α β : Type*} [NormedField β] [LinearOrder β] [IsStrictOrderedRing β]
-  {u v : α -> β} {l : Filter α}
+  {u v : α → β} {l : Filter α}
 
-/--
-theorem `IsEquivalent.tendsto_atTop` / 定理 `IsEquivalent.tendsto_atTop`
-
-English:
-theorem IsEquivalent.tendsto_atTop
-  given: [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atTop)
-  proof: let ⟨φ, hφ, h⟩ := huv.symm.exists_eq_mul
-  Tendsto.congr' h.symm (mul_comm u φ ▸ hu.atTop_mul_pos zero_lt_one hφ)
-
-中文:
-定理 IsEquivalent.tendsto_atTop
-  条件: [Order拓扑 β] (huv : u ~[l] v) (hu : 收敛 u l atTop)
-  证明: let ⟨φ, hφ, h⟩ := huv.symm.exists_eq_mul
-  Tendsto.congr' h.symm (mul_comm u φ ▸ hu.atTop_mul_pos zero_lt_one hφ)
-
-Depends on / 依赖: Tendsto, Tendsto.congr, atTop_mul_pos, exists_eq_mul, h.symm, hu.atTop_mul_pos, huv.symm.exists_eq_mul, mul_comm, zero_lt_one
+/-
+**Asymptotics.IsEquivalent.tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [OrderTopology β], 
+  Asymptotics.IsEquivalent l u v → Filter.Tendsto u l Filter.atTop → Filter.Tend
+sto v l Filter.atTop
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_eq_mul`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → ∃ φ, ∃ (_ : Filter.T…
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `Filter.Tendsto.atTop_mul_pos`：Filter.Tendsto.atTop_mul_pos {C : 𝕜} (hC :
+ 0 < C) (hf : Tendsto f l atTop) (hg : Tendsto g l (𝓝 C)) : Tendsto (fun x => f 
+x * g x) l atTop
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem IsEquivalent.tendsto_atTop [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atTop) :
     Tendsto v l atTop :=
   let ⟨φ, hφ, h⟩ := huv.symm.exists_eq_mul
   Tendsto.congr' h.symm (mul_comm u φ ▸ hu.atTop_mul_pos zero_lt_one hφ)
-
-/--
-theorem `IsEquivalent.tendsto_atTop_iff` / 定理 `IsEquivalent.tendsto_atTop_iff`
-
-English:
-theorem IsEquivalent.tendsto_atTop_iff
-  given: [OrderTopology β] (huv : u ~[l] v)
-  proof: ⟨huv.tendsto_atTop, huv.symm.tendsto_atTop⟩
-
-中文:
-定理 IsEquivalent.tendsto_atTop_iff
-  条件: [Order拓扑 β] (huv : u ~[l] v)
-  证明: ⟨huv.tendsto_atTop, huv.symm.tendsto_atTop⟩
-
-Depends on / 依赖: huv.symm.tendsto_atTop, huv.tendsto_atTop, tendsto_atTop
+/-
+**Asymptotics.IsEquivalent.tendsto_atTop_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [OrderTopology β], 
+  Asymptotics.IsEquivalent l u v → (Filter.Tendsto u l Filter.atTop ↔ Filter.Ten
+dsto v l Filter.atTop)
+参数：Filter.Tendsto u l Filter.atTop ↔ Filter.Tendsto v l Filter.atTop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.tendsto_atTop`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v : α
+ → β}   {l : Filter α} [Orde…
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
 -/
 theorem IsEquivalent.tendsto_atTop_iff [OrderTopology β] (huv : u ~[l] v) :
     Tendsto u l atTop ↔ Tendsto v l atTop :=
   ⟨huv.tendsto_atTop, huv.symm.tendsto_atTop⟩
-
-/--
-theorem `IsEquivalent.tendsto_atBot` / 定理 `IsEquivalent.tendsto_atBot`
-
-English:
-theorem IsEquivalent.tendsto_atBot
-  given: [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atBot)
-  proof: by
-  convert! tendsto_neg_atTop_atBot.comp (huv.neg.tendsto_atTop <| tendsto_neg_atBot_atTop.comp hu)
-  ext
-  simp
-
-中文:
-定理 IsEquivalent.tendsto_atBot
-  条件: [Order拓扑 β] (huv : u ~[l] v) (hu : 收敛 u l atBot)
-  证明: by
-  convert! tendsto_neg_atTop_atBot.comp (huv.neg.tendsto_atTop <| tendsto_neg_atBot_atTop.comp hu)
-  ext
-  simp
-
-Depends on / 依赖: convert, huv.neg.tendsto_atTop, tendsto_atTop, tendsto_neg_atBot_atTop, tendsto_neg_atBot_atTop.comp, tendsto_neg_atTop_atBot, tendsto_neg_atTop_atBot.comp
+/-
+**Asymptotics.IsEquivalent.tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [OrderTopology β], 
+  Asymptotics.IsEquivalent l u v → Filter.Tendsto u l Filter.atBot → Filter.Tend
+sto v l Filter.atBot
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Filter.tendsto_neg_atTop_atBot`：∀ {G : Type u_2} [inst : AddCommGroup G]
+ [inst_1 : PartialOrder G] [IsOrderedAddMonoid G],   Filter.Tendsto Neg.neg Filt
+er.atTop Filter.atBo…
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Asymptotics.IsEquivalent.tendsto_atTop`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v : α
+ → β}   {l : Filter α} [Orde…
+· 使用定理 `Asymptotics.IsEquivalent.neg`：∀ {α : Type u_1} {β : Type u_2} [inst : No
+rmedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l u
+ v → Asymptotics.I…
+· 使用定理 `Filter.tendsto_neg_atBot_atTop`：∀ {G : Type u_2} [inst : AddCommGroup G]
+ [inst_1 : PartialOrder G] [IsOrderedAddMonoid G],   Filter.Tendsto Neg.neg Filt
+er.atBot Filter.atTo…
 -/
 theorem IsEquivalent.tendsto_atBot [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atBot) :
     Tendsto v l atBot := by
   convert! tendsto_neg_atTop_atBot.comp (huv.neg.tendsto_atTop <| tendsto_neg_atBot_atTop.comp hu)
   ext
   simp
-
-/--
-theorem `IsEquivalent.tendsto_atBot_iff` / 定理 `IsEquivalent.tendsto_atBot_iff`
-
-English:
-theorem IsEquivalent.tendsto_atBot_iff
-  given: [OrderTopology β] (huv : u ~[l] v)
-  proof: ⟨huv.tendsto_atBot, huv.symm.tendsto_atBot⟩
-
-中文:
-定理 IsEquivalent.tendsto_atBot_iff
-  条件: [Order拓扑 β] (huv : u ~[l] v)
-  证明: ⟨huv.tendsto_atBot, huv.symm.tendsto_atBot⟩
-
-Depends on / 依赖: huv.symm.tendsto_atBot, huv.tendsto_atBot, tendsto_atBot
+/-
+**Asymptotics.IsEquivalent.tendsto_atBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [OrderTopology β], 
+  Asymptotics.IsEquivalent l u v → (Filter.Tendsto u l Filter.atBot ↔ Filter.Ten
+dsto v l Filter.atBot)
+参数：Filter.Tendsto u l Filter.atBot ↔ Filter.Tendsto v l Filter.atBot。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.tendsto_atBot`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v : α
+ → β}   {l : Filter α} [Orde…
+· 使用定理 `Asymptotics.IsEquivalent.symm`：∀ {α : Type u_1} {β : Type u_2} [inst : N
+ormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent l 
+u v → Asymptotics.I…
 -/
 theorem IsEquivalent.tendsto_atBot_iff [OrderTopology β] (huv : u ~[l] v) :
     Tendsto u l atBot ↔ Tendsto v l atBot :=
@@ -1173,128 +1239,144 @@ section ClosedIicTopology
 
 variable [ClosedIicTopology β]
 
-/--
-lemma `IsEquivalent.exists_pos_eq_mul` / 引理 `IsEquivalent.exists_pos_eq_mul`
-
-English:
-lemma IsEquivalent.exists_pos_eq_mul
-  given: (h : u ~[l] v)
-  proof: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_eq_mul
-  exact ⟨φ, hφ.eventually_const_lt (zero_lt_one' β), h_eq⟩
-
-中文:
-引理 IsEquivalent.存在_pos_eq_mul
-  条件: (h : u ~[l] v)
-  证明: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_eq_mul
-  exact ⟨φ, hφ.eventually_const_lt (zero_lt_one' β), h_eq⟩
-
-Depends on / 依赖: eventually_const_lt, exists_eq_mul, h.exists_eq_mul, h_eq, zero_lt_one
+/-
+**Asymptotics.IsEquivalent.exists_pos_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [ClosedIicTopology 
+β], Asymptotics.IsEquivalent l u v → ∃ φ, (∀ᶠ (x : α) in l, 0 < φ x) ∧ u =ᶠ[l] φ
+ * v
+参数：∀ᶠ (x : α) in l, 0 < φ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_eq_mul`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : NormedField β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → ∃ φ, ∃ (_ : Filter.T…
+· 使用定理 `Filter.Tendsto.eventually_const_lt`：Filter.Tendsto.eventually_const_lt {
+l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v) (h : Filter.Tendsto f l (𝓝 v))
+ : forallᶠ a in l, u < f…
+· 使用引理 `zero_lt_one'`：zero_lt_one' : (0 : α) < 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 -/
 lemma IsEquivalent.exists_pos_eq_mul (h : u ~[l] v) :
-    exists φ, (forallᶠ x in l, 0 < φ x) ∧ (u =ᶠ[l] φ * v) := by
+    ∃ φ, (∀ᶠ x in l, 0 < φ x) ∧ (u =ᶠ[l] φ * v) := by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_eq_mul
   exact ⟨φ, hφ.eventually_const_lt (zero_lt_one' β), h_eq⟩
-
-/--
-theorem `IsEquivalent.eventually_nonneg` / 定理 `IsEquivalent.eventually_nonneg`
-
-English:
-theorem IsEquivalent.eventually_nonneg
-  given: (h : u ~[l] v) (hv : forallᶠ t in l, 0 <= v t)
-  proof: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_nonneg hφ.le hv)
-
-中文:
-定理 IsEquivalent.eventually_nonneg
-  条件: (h : u ~[l] v) (hv : 对任意ᶠ t in l, 0 <= v t)
-  证明: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_nonneg hφ.le hv)
-
-Depends on / 依赖: exists_pos_eq_mul, h.exists_pos_eq_mul, h_eq, hv.and, mul_nonneg
+/-
+**Asymptotics.IsEquivalent.eventually_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [ClosedIicTopology 
+β],   Asymptotics.IsEquivalent l u v → (∀ᶠ (t : α) in l, 0 ≤ v t) → ∀ᶠ (x : α) i
+n l, 0 ≤ u x
+参数：∀ᶠ (t : α) in l, 0 ≤ v t；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_pos_eq_mul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v
+ : α → β}   {l : Filter α} [Clos…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsEquivalent.eventually_nonneg (h : u ~[l] v) (hv : forallᶠ t in l, 0 <= v t) :
-    forallᶠ x in l, 0 <= u x := by
+theorem IsEquivalent.eventually_nonneg (h : u ~[l] v) (hv : ∀ᶠ t in l, 0 ≤ v t) :
+    ∀ᶠ x in l, 0 ≤ u x := by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_nonneg hφ.le hv)
-
-/--
-theorem `IsEquivalent.eventually_pos` / 定理 `IsEquivalent.eventually_pos`
-
-English:
-theorem IsEquivalent.eventually_pos
-  given: (h : u ~[l] v) (hv : forallᶠ t in l, 0 < v t)
-  proof: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_pos hφ hv)
-
-中文:
-定理 IsEquivalent.eventually_pos
-  条件: (h : u ~[l] v) (hv : 对任意ᶠ t in l, 0 < v t)
-  证明: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_pos hφ hv)
-
-Depends on / 依赖: exists_pos_eq_mul, h.exists_pos_eq_mul, h_eq, hv.and, mul_pos
+  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ ↦ h_eq ▸ mul_nonneg hφ.le hv)
+/-
+**Asymptotics.IsEquivalent.eventually_pos** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics
+.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [ClosedIicTopology 
+β],   Asymptotics.IsEquivalent l u v → (∀ᶠ (t : α) in l, 0 < v t) → ∀ᶠ (x : α) i
+n l, 0 < u x
+参数：∀ᶠ (t : α) in l, 0 < v t；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_pos_eq_mul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v
+ : α → β}   {l : Filter α} [Clos…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsEquivalent.eventually_pos (h : u ~[l] v) (hv : forallᶠ t in l, 0 < v t) :
-    forallᶠ x in l, 0 < u x := by
+theorem IsEquivalent.eventually_pos (h : u ~[l] v) (hv : ∀ᶠ t in l, 0 < v t) :
+    ∀ᶠ x in l, 0 < u x := by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_pos hφ hv)
-
-/--
-theorem `IsEquivalent.eventually_nonpos` / 定理 `IsEquivalent.eventually_nonpos`
-
-English:
-theorem IsEquivalent.eventually_nonpos
-  given: (h : u ~[l] v) (hv : forallᶠ t in l, v t <= 0)
-  proof: by
+  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ ↦ h_eq ▸ mul_pos hφ hv)
+/-
+**Asymptotics.IsEquivalent.eventually_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [ClosedIicTopology 
+β],   Asymptotics.IsEquivalent l u v → (∀ᶠ (t : α) in l, v t ≤ 0) → ∀ᶠ (x : α) i
+n l, u x ≤ 0
+参数：∀ᶠ (t : α) in l, v t ≤ 0；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_pos_eq_mul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v
+ : α → β}   {l : Filter α} [Clos…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `mul_nonpos_of_nonneg_of_nonpos`：mul_nonpos_of_nonneg_of_nonpos [PosMulMo
+no α] (ha : 0 <= a) (hb : b <= 0) : a * b <= 0
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem IsEquivalent.eventually_nonpos (h : u ~[l] v) (hv : ∀ᶠ t in l, v t ≤ 0) :
+    ∀ᶠ x in l, u x ≤ 0 := by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ =>
+  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ ↦
     h_eq ▸ mul_nonpos_of_nonneg_of_nonpos hφ.le hv)
-
-中文:
-定理 IsEquivalent.eventually_nonpos
-  条件: (h : u ~[l] v) (hv : 对任意ᶠ t in l, v t <= 0)
-  证明: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ =>
-    h_eq ▸ mul_nonpos_of_nonneg_of_nonpos hφ.le hv)
-
-Depends on / 依赖: exists_pos_eq_mul, h.exists_pos_eq_mul, h_eq, hv.and, mul_nonpos_of_nonneg_of_nonpos
+/-
+**Asymptotics.IsEquivalent.eventually_neg** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics
+.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedField β] [inst_1 : LinearOrd
+er β] [IsStrictOrderedRing β] {u v : α → β}   {l : Filter α} [ClosedIicTopology 
+β],   Asymptotics.IsEquivalent l u v → (∀ᶠ (t : α) in l, v t < 0) → ∀ᶠ (x : α) i
+n l, u x < 0
+参数：∀ᶠ (t : α) in l, v t < 0；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.exists_pos_eq_mul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : NormedField β] [inst_1 : LinearOrder β] [IsStrictOrderedRing β] {u v
+ : α → β}   {l : Filter α} [Clos…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `mul_neg_of_pos_of_neg`：mul_neg_of_pos_of_neg [PosMulStrictMono α] (ha : 
+0 < a) (hb : b < 0) : a * b < 0
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsEquivalent.eventually_nonpos (h : u ~[l] v) (hv : forallᶠ t in l, v t <= 0) :
-    forallᶠ x in l, u x <= 0 := by
+theorem IsEquivalent.eventually_neg (h : u ~[l] v) (hv : ∀ᶠ t in l, v t < 0) :
+    ∀ᶠ x in l, u x < 0 := by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ =>
-    h_eq ▸ mul_nonpos_of_nonneg_of_nonpos hφ.le hv)
-
-/--
-theorem `IsEquivalent.eventually_neg` / 定理 `IsEquivalent.eventually_neg`
-
-English:
-theorem IsEquivalent.eventually_neg
-  given: (h : u ~[l] v) (hv : forallᶠ t in l, v t < 0)
-  proof: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_neg_of_pos_of_neg hφ hv)
-
-中文:
-定理 IsEquivalent.eventually_neg
-  条件: (h : u ~[l] v) (hv : 对任意ᶠ t in l, v t < 0)
-  证明: by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_neg_of_pos_of_neg hφ hv)
-
-Depends on / 依赖: exists_pos_eq_mul, h.exists_pos_eq_mul, h_eq, hv.and, mul_neg_of_pos_of_neg
--/
-theorem IsEquivalent.eventually_neg (h : u ~[l] v) (hv : forallᶠ t in l, v t < 0) :
-    forallᶠ x in l, u x < 0 := by
-  obtain ⟨φ, hφ, h_eq⟩ := h.exists_pos_eq_mul
-  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ => h_eq ▸ mul_neg_of_pos_of_neg hφ hv)
+  exact (hφ.and (hv.and h_eq)).mono (fun x ⟨hφ, hv, h_eq⟩ ↦ h_eq ▸ mul_neg_of_pos_of_neg hφ hv)
 
 end ClosedIicTopology
 
@@ -1302,34 +1384,36 @@ end NormedLinearOrderedField
 
 section Real
 
-/--
-theorem `IsEquivalent.add_add_of_nonneg` / 定理 `IsEquivalent.add_add_of_nonneg`
-
-English:
-theorem IsEquivalent.add_add_of_nonneg
-  statement: {α : Type*} {u v t w : α -> Real} {l : Filter α}
-  proof: by
-  simp only [IsEquivalent, add_sub_add_comm]
-  change (fun x => (u - v) x + (t - w) x) =o[l] (fun x => v x + w x)
-  conv => enter [3, x]; rw [← abs_eq_self.mpr (hu x), ← abs_eq_self.mpr (hw x)]
-  simpa [← Real.norm_eq_abs] using .add_add htu hvw
-
-中文:
-定理 IsEquivalent.add_add_of_nonneg
-  结论: {α : 类型} {u v t w : α -> 实数} {l : 滤子 α}
-  证明: by
-  simp only [IsEquivalent, add_sub_add_comm]
-  change (fun x => (u - v) x + (t - w) x) =o[l] (fun x => v x + w x)
-  conv => enter [3, x]; rw [← abs_eq_self.mpr (hu x), ← abs_eq_self.mpr (hw x)]
-  simpa [← Real.norm_eq_abs] using .add_add htu hvw
-
-Depends on / 依赖: IsEquivalent, Real.norm_eq_abs, abs_eq_self, abs_eq_self.mpr, add_add, add_sub_add_comm, norm_eq_abs
+/-
+**Asymptotics.IsEquivalent.add_add_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {u v t w : α → ℝ} {l : Filter α},   0 ≤ v →     0 ≤ w → A
+symptotics.IsEquivalent l u v → Asymptotics.IsEquivalent l t w → Asymptotics.IsE
+quivalent l (u + t) (v + w)
+参数：u + t；v + w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_add_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b
+ c d : α), a + b - (c + d) = a - c + (b - d)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
+· 使用定理 `Asymptotics.IsLittleO.add_add`：∀ {α : Type u_1} {E' : Type u_6} {F' : Ty
+pe u_7} [inst : SeminormedAddCommGroup E'] [inst_1 : SeminormedAddCommGroup F'] 
+  {l : Filter α} {f…
 -/
-theorem IsEquivalent.add_add_of_nonneg {α : Type*} {u v t w : α -> Real} {l : Filter α}
-    (hu : 0 <= v) (hw : 0 <= w) (htu : u ~[l] v) (hvw : t ~[l] w) :
+theorem IsEquivalent.add_add_of_nonneg {α : Type*} {u v t w : α → ℝ} {l : Filter α}
+    (hu : 0 ≤ v) (hw : 0 ≤ w) (htu : u ~[l] v) (hvw : t ~[l] w) :
     u + t ~[l] v + w := by
   simp only [IsEquivalent, add_sub_add_comm]
-  change (fun x => (u - v) x + (t - w) x) =o[l] (fun x => v x + w x)
+  change (fun x ↦ (u - v) x + (t - w) x) =o[l] (fun x ↦ v x + w x)
   conv => enter [3, x]; rw [← abs_eq_self.mpr (hu x), ← abs_eq_self.mpr (hw x)]
   simpa [← Real.norm_eq_abs] using .add_add htu hvw
 
@@ -1343,451 +1427,338 @@ open Asymptotics
 
 variable {α β β₂ : Type*} [NormedAddCommGroup β] [Norm β₂] {l : Filter α}
 
-/--
-theorem `Filter.EventuallyEq.isEquivalent` / 定理 `Filter.EventuallyEq.isEquivalent`
-
-English:
-theorem Filter.EventuallyEq.isEquivalent
-  given: {u v : α -> β} (h : u =ᶠ[l] v)
-  statement: u ~[l] v
-  proof: IsEquivalent.congr_right (isLittleO_refl_left _ _) h
-
-@[trans]
-
-中文:
-定理 滤子.EventuallyEq.isEquivalent
-  条件: {u v : α -> β} (h : u =ᶠ[l] v)
-  结论: u ~[l] v
-  证明: IsEquivalent.congr_right (isLittleO_refl_left _ _) h
-
-@[trans]
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.congr_right, congr_right, isLittleO_refl_left
+/-
+**Filter.EventuallyEq.isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isEquivalent {u v : α -> β} (h : u =ᶠ[l] v) : u ~[l] v
+参数：h : u =ᶠ[l] v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.congr_right`：∀ {α : Type u_1} {β : Type u_2} [i
+nst : NormedAddCommGroup β] {u v w : α → β} {l : Filter α},   Asymptotics.IsEqui
+valent l u v → v =ᶠ[l] w →…
+· 使用定理 `Asymptotics.isLittleO_refl_left`：isLittleO_refl_left : (fun x => f' x - 
+f' x) =o[l] g'
 -/
-theorem Filter.EventuallyEq.isEquivalent {u v : α -> β} (h : u =ᶠ[l] v) : u ~[l] v :=
+theorem Filter.EventuallyEq.isEquivalent {u v : α → β} (h : u =ᶠ[l] v) : u ~[l] v :=
   IsEquivalent.congr_right (isLittleO_refl_left _ _) h
 
 @[trans]
-/--
-theorem `Filter.EventuallyEq.trans_isEquivalent` / 定理 `Filter.EventuallyEq.trans_isEquivalent`
-
-English:
-theorem Filter.EventuallyEq.trans_isEquivalent
-  statement: {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁)
-  proof: h.isEquivalent.trans h₂
-
-中文:
-定理 滤子.EventuallyEq.trans_isEquivalent
-  结论: {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁)
-  证明: h.isEquivalent.trans h₂
-
-Depends on / 依赖: h.isEquivalent.trans, isEquivalent
+/-
+**Filter.EventuallyEq.trans_isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.trans_isEquivalent {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁)
+ (h₂ : g₁ ~[l] g₂) : f ~[l] g₂
+参数：h : f =ᶠ[l] g₁；h₂ : g₁ ~[l] g₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+NormedAddCommGroup β] {l : Filter α} {u v w : α → β},   Asymptotics.IsEquivalent
+ l u v → Asymptotics…
+· 使用定理 `Filter.EventuallyEq.isEquivalent`：Filter.EventuallyEq.isEquivalent {u v 
+: α -> β} (h : u =ᶠ[l] v) : u ~[l] v
 -/
-theorem Filter.EventuallyEq.trans_isEquivalent {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁)
+theorem Filter.EventuallyEq.trans_isEquivalent {f g₁ g₂ : α → β} (h : f =ᶠ[l] g₁)
     (h₂ : g₁ ~[l] g₂) : f ~[l] g₂ :=
   h.isEquivalent.trans h₂
 
 namespace Asymptotics
 
-/--
-Instance `transIsEquivalentIsEquivalent` / 实例 `transIsEquivalentIsEquivalent`
-
-English:
-instance transIsEquivalentIsEquivalent
-  signature: :
-  body: IsEquivalent.trans
-
-中文:
-实例 transIsEquivalentIsEquivalent
-  签名: :
-  定义体: IsEquivalent.trans
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.trans
+/-
+**Asymptotics.transIsEquivalentIsEquivalent** 是 Mathlib 中的一个实例，位于命名空间 `Asymptoti
+cs`。
+形式化陈述：transIsEquivalentIsEquivalent : @Trans (α -> β) (α -> β) (α -> β) (IsEquiv
+alent l) (IsEquivalent l) (IsEquivalent l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+NormedAddCommGroup β] {l : Filter α} {u v w : α → β},   Asymptotics.IsEquivalent
+ l u v → Asymptotics…
 -/
 instance transIsEquivalentIsEquivalent :
-    @Trans (α -> β) (α -> β) (α -> β) (IsEquivalent l) (IsEquivalent l) (IsEquivalent l) where
+    @Trans (α → β) (α → β) (α → β) (IsEquivalent l) (IsEquivalent l) (IsEquivalent l) where
   trans := IsEquivalent.trans
-
-/--
-Instance `transEventuallyEqIsEquivalent` / 实例 `transEventuallyEqIsEquivalent`
-
-English:
-instance transEventuallyEqIsEquivalent
-  signature: :
-  body: EventuallyEq.trans_isEquivalent
-
-@[trans]
-
-中文:
-实例 transEventuallyEqIsEquivalent
-  签名: :
-  定义体: EventuallyEq.trans_isEquivalent
-
-@[trans]
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.trans_isEquivalent, trans_isEquivalent
+/-
+**Asymptotics.transEventuallyEqIsEquivalent** 是 Mathlib 中的一个实例，位于命名空间 `Asymptoti
+cs`。
+形式化陈述：transEventuallyEqIsEquivalent : @Trans (α -> β) (α -> β) (α -> β) (Eventua
+llyEq l) (IsEquivalent l) (IsEquivalent l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.trans_isEquivalent`：Filter.EventuallyEq.trans_isEqui
+valent {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁) (h₂ : g₁ ~[l] g₂) : f ~[l] g₂
 -/
 instance transEventuallyEqIsEquivalent :
-    @Trans (α -> β) (α -> β) (α -> β) (EventuallyEq l) (IsEquivalent l) (IsEquivalent l) where
+    @Trans (α → β) (α → β) (α → β) (EventuallyEq l) (IsEquivalent l) (IsEquivalent l) where
   trans := EventuallyEq.trans_isEquivalent
 
 @[trans]
-/--
-theorem `IsEquivalent.trans_eventuallyEq` / 定理 `IsEquivalent.trans_eventuallyEq`
-
-English:
-theorem IsEquivalent.trans_eventuallyEq
-  statement: {f g₁ g₂ : α -> β} (h : f ~[l] g₁)
-  proof: h.trans h₂.isEquivalent
-
-中文:
-定理 IsEquivalent.trans_eventuallyEq
-  结论: {f g₁ g₂ : α -> β} (h : f ~[l] g₁)
-  证明: h.trans h₂.isEquivalent
-
-Depends on / 依赖: h.trans, isEquivalent
+/-
+**Asymptotics.IsEquivalent.trans_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 `Asympto
+tics.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {l : Filter 
+α} {f g₁ g₂ : α → β},   Asymptotics.IsEquivalent l f g₁ → g₁ =ᶠ[l] g₂ → Asymptot
+ics.IsEquivalent l f g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+NormedAddCommGroup β] {l : Filter α} {u v w : α → β},   Asymptotics.IsEquivalent
+ l u v → Asymptotics…
+· 使用定理 `Filter.EventuallyEq.isEquivalent`：Filter.EventuallyEq.isEquivalent {u v 
+: α -> β} (h : u =ᶠ[l] v) : u ~[l] v
 -/
-theorem IsEquivalent.trans_eventuallyEq {f g₁ g₂ : α -> β} (h : f ~[l] g₁)
+theorem IsEquivalent.trans_eventuallyEq {f g₁ g₂ : α → β} (h : f ~[l] g₁)
     (h₂ : g₁ =ᶠ[l] g₂) : f ~[l] g₂ :=
   h.trans h₂.isEquivalent
-
-/--
-Instance `transIsEquivalentEventuallyEq` / 实例 `transIsEquivalentEventuallyEq`
-
-English:
-instance transIsEquivalentEventuallyEq
-  signature: :
-  body: IsEquivalent.trans_eventuallyEq
-
-@[trans]
-
-中文:
-实例 transIsEquivalentEventuallyEq
-  签名: :
-  定义体: IsEquivalent.trans_eventuallyEq
-
-@[trans]
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.trans_eventuallyEq, trans_eventuallyEq
+/-
+**Asymptotics.transIsEquivalentEventuallyEq** 是 Mathlib 中的一个实例，位于命名空间 `Asymptoti
+cs`。
+形式化陈述：transIsEquivalentEventuallyEq : @Trans (α -> β) (α -> β) (α -> β) (IsEquiv
+alent l) (EventuallyEq l) (IsEquivalent l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans_eventuallyEq`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : NormedAddCommGroup β] {l : Filter α} {f g₁ g₂ : α → β},   Asymptoti
+cs.IsEquivalent l f g₁ → g₁ =ᶠ[l]…
 -/
 instance transIsEquivalentEventuallyEq :
-    @Trans (α -> β) (α -> β) (α -> β) (IsEquivalent l) (EventuallyEq l) (IsEquivalent l) where
+    @Trans (α → β) (α → β) (α → β) (IsEquivalent l) (EventuallyEq l) (IsEquivalent l) where
   trans := IsEquivalent.trans_eventuallyEq
 
 @[trans]
-/--
-theorem `IsEquivalent.trans_isBigO` / 定理 `IsEquivalent.trans_isBigO`
-
-English:
-theorem IsEquivalent.trans_isBigO
-  given: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁) (h₂ : g₁ =O[l] g₂)
-  proof: IsBigO.trans h.isBigO h₂
-
-中文:
-定理 IsEquivalent.trans_isBigO
-  条件: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁) (h₂ : g₁ =O[l] g₂)
-  证明: IsBigO.trans h.isBigO h₂
-
-Depends on / 依赖: IsBigO, IsBigO.trans, h.isBigO, isBigO
+/-
+**Asymptotics.IsEquivalent.trans_isBigO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f g₁ : α → β} {g₂ : α → β₂}, Asymptotic
+s.IsEquivalent l f g₁ → g₁ =O[l] g₂ → f =O[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5}
+ {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddComm
+Group F'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
-theorem IsEquivalent.trans_isBigO {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁) (h₂ : g₁ =O[l] g₂) :
+theorem IsEquivalent.trans_isBigO {f g₁ : α → β} {g₂ : α → β₂} (h : f ~[l] g₁) (h₂ : g₁ =O[l] g₂) :
     f =O[l] g₂ :=
   IsBigO.trans h.isBigO h₂
-
-/--
-Instance `transIsEquivalentIsBigO` / 实例 `transIsEquivalentIsBigO`
-
-English:
-instance transIsEquivalentIsBigO
-  signature: :
-  body: IsEquivalent.trans_isBigO
-
-@[trans]
-
-中文:
-实例 transIsEquivalentIsBigO
-  签名: :
-  定义体: IsEquivalent.trans_isBigO
-
-@[trans]
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.trans_isBigO, trans_isBigO
+/-
+**Asymptotics.transIsEquivalentIsBigO** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+形式化陈述：transIsEquivalentIsBigO : @Trans (α -> β) (α -> β) (α -> β₂) (IsEquivalent
+ l) (IsBigO l) (IsBigO l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans_isBigO`：∀ {α : Type u_1} {β : Type u_2} {
+β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α}  
+ {f g₁ : α → β} {g₂ : α → β…
 -/
 instance transIsEquivalentIsBigO :
-    @Trans (α -> β) (α -> β) (α -> β₂) (IsEquivalent l) (IsBigO l) (IsBigO l) where
+    @Trans (α → β) (α → β) (α → β₂) (IsEquivalent l) (IsBigO l) (IsBigO l) where
   trans := IsEquivalent.trans_isBigO
 
 @[trans]
-/--
-theorem `IsBigO.trans_isEquivalent` / 定理 `IsBigO.trans_isEquivalent`
-
-English:
-theorem IsBigO.trans_isEquivalent
-  given: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =O[l] g₁) (h₂ : g₁ ~[l] g₂)
-  proof: IsBigO.trans h h₂.isBigO
-
-中文:
-定理 IsBigO.trans_isEquivalent
-  条件: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =O[l] g₁) (h₂ : g₁ ~[l] g₂)
-  证明: IsBigO.trans h h₂.isBigO
-
-Depends on / 依赖: IsBigO, IsBigO.trans, isBigO
+/-
+**Asymptotics.IsBigO.trans_isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sBigO`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f : α → β₂} {g₁ g₂ : α → β}, f =O[l] g₁
+ → Asymptotics.IsEquivalent l g₁ g₂ → f =O[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5}
+ {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddComm
+Group F'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
-theorem IsBigO.trans_isEquivalent {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =O[l] g₁) (h₂ : g₁ ~[l] g₂) :
+theorem IsBigO.trans_isEquivalent {f : α → β₂} {g₁ g₂ : α → β} (h : f =O[l] g₁) (h₂ : g₁ ~[l] g₂) :
     f =O[l] g₂ :=
   IsBigO.trans h h₂.isBigO
-
-/--
-Instance `transIsBigOIsEquivalent` / 实例 `transIsBigOIsEquivalent`
-
-English:
-instance transIsBigOIsEquivalent
-  signature: :
-  body: IsBigO.trans_isEquivalent
-
-@[trans]
-
-中文:
-实例 transIsBigOIsEquivalent
-  签名: :
-  定义体: IsBigO.trans_isEquivalent
-
-@[trans]
-
-Depends on / 依赖: IsBigO, IsBigO.trans_isEquivalent, trans_isEquivalent
+/-
+**Asymptotics.transIsBigOIsEquivalent** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+形式化陈述：transIsBigOIsEquivalent : @Trans (α -> β₂) (α -> β) (α -> β) (IsBigO l) (I
+sEquivalent l) (IsBigO l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans_isEquivalent`：∀ {α : Type u_1} {β : Type u_2} {
+β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α}  
+ {f : α → β₂} {g₁ g₂ : α → …
 -/
 instance transIsBigOIsEquivalent :
-    @Trans (α -> β₂) (α -> β) (α -> β) (IsBigO l) (IsEquivalent l) (IsBigO l) where
+    @Trans (α → β₂) (α → β) (α → β) (IsBigO l) (IsEquivalent l) (IsBigO l) where
   trans := IsBigO.trans_isEquivalent
 
 @[trans]
-/--
-theorem `IsEquivalent.trans_isLittleO` / 定理 `IsEquivalent.trans_isLittleO`
-
-English:
-theorem IsEquivalent.trans_isLittleO
-  statement: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
-  proof: IsBigO.trans_isLittleO h.isBigO h₂
-
-中文:
-定理 IsEquivalent.trans_isLittleO
-  结论: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
-  证明: IsBigO.trans_isLittleO h.isBigO h₂
-
-Depends on / 依赖: IsBigO, IsBigO.trans_isLittleO, h.isBigO, isBigO, trans_isLittleO
+/-
+**Asymptotics.IsEquivalent.trans_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s.IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f g₁ : α → β} {g₂ : α → β₂}, Asymptotic
+s.IsEquivalent l f g₁ → g₁ =o[l] g₂ → f =o[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans_isLittleO`：∀ {α : Type u_1} {E : Type u_3} {G :
+ Type u_5} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : Seminor
+medAddCommGroup F'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
-theorem IsEquivalent.trans_isLittleO {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
+theorem IsEquivalent.trans_isLittleO {f g₁ : α → β} {g₂ : α → β₂} (h : f ~[l] g₁)
     (h₂ : g₁ =o[l] g₂) : f =o[l] g₂ :=
   IsBigO.trans_isLittleO h.isBigO h₂
-
-/--
-Instance `transIsEquivalentIsLittleO` / 实例 `transIsEquivalentIsLittleO`
-
-English:
-instance transIsEquivalentIsLittleO
-  signature: :
-  body: IsEquivalent.trans_isLittleO
-
-@[trans]
-
-中文:
-实例 transIsEquivalentIsLittleO
-  签名: :
-  定义体: IsEquivalent.trans_isLittleO
-
-@[trans]
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.trans_isLittleO, trans_isLittleO
+/-
+**Asymptotics.transIsEquivalentIsLittleO** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`
+。
+形式化陈述：transIsEquivalentIsLittleO : @Trans (α -> β) (α -> β) (α -> β₂) (IsEquival
+ent l) (IsLittleO l) (IsLittleO l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans_isLittleO`：∀ {α : Type u_1} {β : Type u_2
+} {β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α
+}   {f g₁ : α → β} {g₂ : α → β…
 -/
 instance transIsEquivalentIsLittleO :
-    @Trans (α -> β) (α -> β) (α -> β₂) (IsEquivalent l) (IsLittleO l) (IsLittleO l) where
+    @Trans (α → β) (α → β) (α → β₂) (IsEquivalent l) (IsLittleO l) (IsLittleO l) where
   trans := IsEquivalent.trans_isLittleO
 
 @[trans]
-/--
-theorem `IsLittleO.trans_isEquivalent` / 定理 `IsLittleO.trans_isEquivalent`
-
-English:
-theorem IsLittleO.trans_isEquivalent
-  statement: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =o[l] g₁)
-  proof: IsLittleO.trans_isBigO h h₂.isBigO
-
-中文:
-定理 IsLittleO.trans_isEquivalent
-  结论: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =o[l] g₁)
-  证明: IsLittleO.trans_isBigO h h₂.isBigO
-
-Depends on / 依赖: IsLittleO, IsLittleO.trans_isBigO, isBigO, trans_isBigO
+/-
+**Asymptotics.IsLittleO.trans_isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s.IsLittleO`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f : α → β₂} {g₁ g₂ : α → β}, f =o[l] g₁
+ → Asymptotics.IsEquivalent l g₁ g₂ → f =o[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {F :
+ Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Seminor
+medAddCommGroup G'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isBigO`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent 
+l u v → u =O[l] v
 -/
-theorem IsLittleO.trans_isEquivalent {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =o[l] g₁)
+theorem IsLittleO.trans_isEquivalent {f : α → β₂} {g₁ g₂ : α → β} (h : f =o[l] g₁)
     (h₂ : g₁ ~[l] g₂) : f =o[l] g₂ :=
   IsLittleO.trans_isBigO h h₂.isBigO
-
-/--
-Instance `transIsLittleOIsEquivalent` / 实例 `transIsLittleOIsEquivalent`
-
-English:
-instance transIsLittleOIsEquivalent
-  signature: :
-  body: IsLittleO.trans_isEquivalent
-
-@[trans]
-
-中文:
-实例 transIsLittleOIsEquivalent
-  签名: :
-  定义体: IsLittleO.trans_isEquivalent
-
-@[trans]
-
-Depends on / 依赖: IsLittleO, IsLittleO.trans_isEquivalent, trans_isEquivalent
+/-
+**Asymptotics.transIsLittleOIsEquivalent** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`
+。
+形式化陈述：transIsLittleOIsEquivalent : @Trans (α -> β₂) (α -> β) (α -> β) (IsLittleO
+ l) (IsEquivalent l) (IsLittleO l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.trans_isEquivalent`：∀ {α : Type u_1} {β : Type u_2
+} {β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α
+}   {f : α → β₂} {g₁ g₂ : α → …
 -/
 instance transIsLittleOIsEquivalent :
-    @Trans (α -> β₂) (α -> β) (α -> β) (IsLittleO l) (IsEquivalent l) (IsLittleO l) where
+    @Trans (α → β₂) (α → β) (α → β) (IsLittleO l) (IsEquivalent l) (IsLittleO l) where
   trans := IsLittleO.trans_isEquivalent
 
 @[trans]
-/--
-theorem `IsEquivalent.trans_isTheta` / 定理 `IsEquivalent.trans_isTheta`
-
-English:
-theorem IsEquivalent.trans_isTheta
-  statement: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
-  proof: IsTheta.trans h.isTheta h₂
-
-中文:
-定理 IsEquivalent.trans_isTheta
-  结论: {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
-  证明: IsTheta.trans h.isTheta h₂
-
-Depends on / 依赖: IsTheta, IsTheta.trans, h.isTheta, isTheta
+/-
+**Asymptotics.IsEquivalent.trans_isTheta** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f g₁ : α → β} {g₂ : α → β₂}, Asymptotic
+s.IsEquivalent l f g₁ → g₁ =Θ[l] g₂ → f =Θ[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5
+} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCom
+mGroup F'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isTheta`：∀ {α : Type u_1} {β : Type u_2} [inst 
+: NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent
+ l u v → u =Θ[l] v
 -/
-theorem IsEquivalent.trans_isTheta {f g₁ : α -> β} {g₂ : α -> β₂} (h : f ~[l] g₁)
+theorem IsEquivalent.trans_isTheta {f g₁ : α → β} {g₂ : α → β₂} (h : f ~[l] g₁)
     (h₂ : g₁ =Θ[l] g₂) : f =Θ[l] g₂ :=
   IsTheta.trans h.isTheta h₂
-
-/--
-Instance `transIsEquivalentIsTheta` / 实例 `transIsEquivalentIsTheta`
-
-English:
-instance transIsEquivalentIsTheta
-  signature: :
-  body: IsEquivalent.trans_isTheta
-
-@[trans]
-
-中文:
-实例 transIsEquivalentIsTheta
-  签名: :
-  定义体: IsEquivalent.trans_isTheta
-
-@[trans]
-
-Depends on / 依赖: IsEquivalent, IsEquivalent.trans_isTheta, trans_isTheta
+/-
+**Asymptotics.transIsEquivalentIsTheta** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+形式化陈述：transIsEquivalentIsTheta : @Trans (α -> β) (α -> β) (α -> β₂) (IsEquivalen
+t l) (IsTheta l) (IsTheta l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsEquivalent.trans_isTheta`：∀ {α : Type u_1} {β : Type u_2} 
+{β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α} 
+  {f g₁ : α → β} {g₂ : α → β…
 -/
 instance transIsEquivalentIsTheta :
-    @Trans (α -> β) (α -> β) (α -> β₂) (IsEquivalent l) (IsTheta l) (IsTheta l) where
+    @Trans (α → β) (α → β) (α → β₂) (IsEquivalent l) (IsTheta l) (IsTheta l) where
   trans := IsEquivalent.trans_isTheta
 
 @[trans]
-/--
-theorem `IsTheta.trans_isEquivalent` / 定理 `IsTheta.trans_isEquivalent`
-
-English:
-theorem IsTheta.trans_isEquivalent
-  statement: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =Θ[l] g₁)
-  proof: IsTheta.trans h h₂.isTheta
-
-中文:
-定理 IsTheta.trans_isEquivalent
-  结论: {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =Θ[l] g₁)
-  证明: IsTheta.trans h h₂.isTheta
-
-Depends on / 依赖: IsTheta, IsTheta.trans, isTheta
+/-
+**Asymptotics.IsTheta.trans_isEquivalent** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsTheta`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {β₂ : Type u_3} [inst : NormedAddCommGroup
+ β] [inst_1 : Norm β₂] {l : Filter α}   {f : α → β₂} {g₁ g₂ : α → β}, f =Θ[l] g₁
+ → Asymptotics.IsEquivalent l g₁ g₂ → f =Θ[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5
+} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCom
+mGroup F'] {l :…
+· 使用定理 `Asymptotics.IsEquivalent.isTheta`：∀ {α : Type u_1} {β : Type u_2} [inst 
+: NormedAddCommGroup β] {u v : α → β} {l : Filter α},   Asymptotics.IsEquivalent
+ l u v → u =Θ[l] v
 -/
-theorem IsTheta.trans_isEquivalent {f : α -> β₂} {g₁ g₂ : α -> β} (h : f =Θ[l] g₁)
+theorem IsTheta.trans_isEquivalent {f : α → β₂} {g₁ g₂ : α → β} (h : f =Θ[l] g₁)
     (h₂ : g₁ ~[l] g₂) : f =Θ[l] g₂ :=
   IsTheta.trans h h₂.isTheta
-
-/--
-Instance `transIsThetaIsEquivalent` / 实例 `transIsThetaIsEquivalent`
-
-English:
-instance transIsThetaIsEquivalent
-  signature: :
-  body: IsTheta.trans_isEquivalent
-
-中文:
-实例 transIsThetaIsEquivalent
-  签名: :
-  定义体: IsTheta.trans_isEquivalent
-
-Depends on / 依赖: IsTheta, IsTheta.trans_isEquivalent, trans_isEquivalent
+/-
+**Asymptotics.transIsThetaIsEquivalent** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+形式化陈述：transIsThetaIsEquivalent : @Trans (α -> β₂) (α -> β) (α -> β) (IsTheta l) 
+(IsEquivalent l) (IsTheta l) where trans
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans_isEquivalent`：∀ {α : Type u_1} {β : Type u_2} 
+{β₂ : Type u_3} [inst : NormedAddCommGroup β] [inst_1 : Norm β₂] {l : Filter α} 
+  {f : α → β₂} {g₁ g₂ : α → …
 -/
 instance transIsThetaIsEquivalent :
-    @Trans (α -> β₂) (α -> β) (α -> β) (IsTheta l) (IsEquivalent l) (IsTheta l) where
+    @Trans (α → β₂) (α → β) (α → β) (IsTheta l) (IsEquivalent l) (IsTheta l) where
   trans := IsTheta.trans_isEquivalent
-
-/--
-theorem `IsEquivalent.comp_tendsto` / 定理 `IsEquivalent.comp_tendsto`
-
-English:
-theorem IsEquivalent.comp_tendsto
-  statement: {α₂ : Type*} {f g : α₂ -> β} {l' : Filter α₂}
-  proof: IsLittleO.comp_tendsto hfg hk
-
-@[simp]
-
-中文:
-定理 IsEquivalent.comp_tendsto
-  结论: {α₂ : 类型} {f g : α₂ -> β} {l' : 滤子 α₂}
-  证明: IsLittleO.comp_tendsto hfg hk
-
-@[simp]
-
-Depends on / 依赖: IsLittleO, IsLittleO.comp_tendsto, comp_tendsto
+/-
+**Asymptotics.IsEquivalent.comp_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sEquivalent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {l : Filter 
+α} {α₂ : Type u_4} {f g : α₂ → β}   {l' : Filter α₂},   Asymptotics.IsEquivalent
+ l' f g → ∀ {k : α → α₂}, Filter.Tendsto k l l' → Asymptotics.IsEquivalent l (f 
+∘ k) (g ∘ k)
+参数：f ∘ k；g ∘ k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.comp_tendsto`：∀ {α : Type u_1} {β : Type u_2} {E :
+ Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α →
+ F}   {l : Filter α}, f …
 -/
-theorem IsEquivalent.comp_tendsto {α₂ : Type*} {f g : α₂ -> β} {l' : Filter α₂}
-    (hfg : f ~[l'] g) {k : α -> α₂} (hk : Filter.Tendsto k l l') : (f ∘ k) ~[l] (g ∘ k) :=
+theorem IsEquivalent.comp_tendsto {α₂ : Type*} {f g : α₂ → β} {l' : Filter α₂}
+    (hfg : f ~[l'] g) {k : α → α₂} (hk : Filter.Tendsto k l l') : (f ∘ k) ~[l] (g ∘ k) :=
   IsLittleO.comp_tendsto hfg hk
 
 @[simp]
-/--
-theorem `isEquivalent_map` / 定理 `isEquivalent_map`
-
-English:
-theorem isEquivalent_map
-  given: {α₂ : Type*} {f g : α₂ -> β} {k : α -> α₂}
-  proof: isLittleO_map
-
-中文:
-定理 isEquivalent_map
-  条件: {α₂ : 类型} {f g : α₂ -> β} {k : α -> α₂}
-  证明: isLittleO_map
-
-Depends on / 依赖: isLittleO_map
+/-
+**Asymptotics.isEquivalent_map** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isEquivalent_map {α₂ : Type*} {f g : α₂ -> β} {k : α -> α₂} : f ~[Filter.m
+ap k l] g ↔ (f ∘ k) ~[l] (g ∘ k)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isLittleO_map`：isLittleO_map {k : β -> α} {l : Filter β} : f
+ =o[map k l] g ↔ (f ∘ k) =o[l] (g ∘ k)
 -/
-theorem isEquivalent_map {α₂ : Type*} {f g : α₂ -> β} {k : α -> α₂} :
+theorem isEquivalent_map {α₂ : Type*} {f g : α₂ → β} {k : α → α₂} :
     f ~[Filter.map k l] g ↔ (f ∘ k) ~[l] (g ∘ k) :=
   isLittleO_map
-
-/--
-theorem `IsEquivalent.mono` / 定理 `IsEquivalent.mono`
-
-English:
-theorem IsEquivalent.mono
-  given: {f g : α -> β} {l' : Filter α} (h : f ~[l'] g) (hl : l <= l')
-  proof: IsLittleO.mono h hl
-
-中文:
-定理 IsEquivalent.mono
-  条件: {f g : α -> β} {l' : 滤子 α} (h : f ~[l'] g) (hl : l <= l')
-  证明: IsLittleO.mono h hl
-
-Depends on / 依赖: IsLittleO, IsLittleO.mono
+/-
+**Asymptotics.IsEquivalent.mono** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsEquival
+ent`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : NormedAddCommGroup β] {l : Filter 
+α} {f g : α → β} {l' : Filter α},   Asymptotics.IsEquivalent l' f g → l ≤ l' → A
+symptotics.IsEquivalent l f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.mono`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_
+4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {l l' : Filter α}
+, f =o[l'] g → l…
 -/
-theorem IsEquivalent.mono {f g : α -> β} {l' : Filter α} (h : f ~[l'] g) (hl : l <= l') :
+theorem IsEquivalent.mono {f g : α → β} {l' : Filter α} (h : f ~[l'] g) (hl : l ≤ l') :
     f ~[l] g :=
   IsLittleO.mono h hl
 
 end Asymptotics
+

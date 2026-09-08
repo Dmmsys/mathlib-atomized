@@ -31,22 +31,30 @@ gives the identification `C(α, β) ≃ C_c(α, β)`.
 
 variable {F α β γ : Type*} [TopologicalSpace α]
 
-/--
-Definition of `CompactlySupportedContinuousMap` / `CompactlySupportedContinuousMap` 的定义
+/-- `C_c(α, β)` is the type of continuous functions `α → β` with compact support from a topological
+space to a topological space with a zero element.
 
-English:
-structure CompactlySupportedContinuousMap
-  parameters: (α β : Type*) [TopologicalSpace α] [Zero β]
-  extends: ContinuousMap α β
-  axioms and operations (1):
-    - hasCompactSupport' : HasCompactSupport toFun
+When possible, instead of parametrizing results over `f : C_c(α, β)`,
+you should parametrize over `{F : Type*} [CompactlySupportedContinuousMapClass F α β] (f : F)`.
 
-中文:
-结构 余mpactlySupportedContinuous映射
-  参数: (α β : 类型) [拓扑空间 α] [零 β]
-  继承: 连续映射 α β
-  公理与运算 (1 个):
-    - hasCompactSupport' : HasCompactSupport toFun
+When you extend this structure, make sure to extend `CompactlySupportedContinuousMapClass`. -/
+/-
+**CompactlySupportedContinuousMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_5) → (β : Type u_6) → [TopologicalSpace α] → [Zero β] → [Topol
+ogicalSpace β] → Type (max u_5 u_6)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`C_c(α, β)` is the type of continuous functions `α → β` with compact support fro
+m a topological
+space to a topological space with a zero element.
+
+When possible, instead of parametrizing results over `f : C_c(α, β)`,
+you should parametrize over `{F : Type*} [CompactlySupportedContinuousMapClass F
+ α β] (f : F)`.
+
+When you extend this structure, make sure to extend `CompactlySupportedContinuou
+sMapClass`.
 -/
 structure CompactlySupportedContinuousMap (α β : Type*) [TopologicalSpace α] [Zero β]
     [TopologicalSpace β] extends ContinuousMap α β where
@@ -58,28 +66,31 @@ scoped[CompactlySupported] notation (priority := 2000)
   "C_c(" α ", " β ")" => CompactlySupportedContinuousMap α β
 
 @[inherit_doc]
-scoped[CompactlySupported] notation α " ->C_c " β => CompactlySupportedContinuousMap α β
+scoped[CompactlySupported] notation α " →C_c " β => CompactlySupportedContinuousMap α β
 
 open CompactlySupported
 
 section
 
-/--
-Definition of `CompactlySupportedContinuousMapClass` / `CompactlySupportedContinuousMapClass` 的定义
+/-- `CompactlySupportedContinuousMapClass F α β` states that `F` is a type of continuous maps with
+compact support.
 
-English:
-class CompactlySupportedContinuousMapClass
-  parameters: (F : Type*) (α β : outParam <| Type*)
-  extends: ContinuousMapClass F α β
-  axioms and operations (1):
-    - hasCompactSupport((f : F)) : HasCompactSupport f
+You should also extend this typeclass when you extend `CompactlySupportedContinuousMap`. -/
+/-
+**CompactlySupportedContinuousMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_5) →   (α : outParam (Type u_6)) →     (β : outParam (Type u_7
+)) → [TopologicalSpace α] → [Zero β] → [TopologicalSpace β] → [FunLike F α β] → 
+Prop
+参数：Type u_6；Type u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余mpactlySupportedContinuous映射类
-  参数: (F : 类型) (α β : outParam <| 类型)
-  继承: 连续映射类 F α β
-  公理与运算 (1 个):
-    - hasCompactSupport((f : F)) : HasCompactSupport f
+--- 原说明 ---
+`CompactlySupportedContinuousMapClass F α β` states that `F` is a type of contin
+uous maps with
+compact support.
+
+You should also extend this typeclass when you extend `CompactlySupportedContinu
+ousMap`.
 -/
 class CompactlySupportedContinuousMapClass (F : Type*) (α β : outParam <| Type*)
     [TopologicalSpace α] [Zero β] [TopologicalSpace β] [FunLike F α β] : Prop
@@ -95,28 +106,10 @@ section Basics
 
 variable [TopologicalSpace β] [Zero β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike C_c(α, β) α β
-  body: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-中文:
-实例 :
-  签名: 函数状 C_c(α, β) α β
-  定义体: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike C_c(α, β) α β where
   coe f := f.toFun
@@ -124,146 +117,83 @@ instance : FunLike C_c(α, β) α β where
     obtain ⟨⟨_, _⟩, _⟩ := f
     obtain ⟨⟨_, _⟩, _⟩ := g
     congr
-
-/--
-lemma `hasCompactSupport` / 引理 `hasCompactSupport`
-
-English:
-lemma hasCompactSupport
-  given: (f : C_c(α, β))
-  statement: HasCompactSupport f
-  proof: f.hasCompactSupport'
-
-中文:
-引理 hasCompactSupport
-  条件: (f : C_c(α, β))
-  结论: HasCompactSupport f
-  证明: f.hasCompactSupport'
+/-
+**CompactlySupportedContinuousMap.hasCompactSupport** 是 Mathlib 中的一个定理，位于命名空间 `C
+ompactlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β] [inst_2 : Zero β]   (f : CompactlySupportedContinuousMap α β), H
+asCompactSupport ⇑f
+参数：f : CompactlySupportedContinuousMap α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.hasCompactSupport'`：∀ {α : Type u_5} {β 
+: Type u_6} [inst : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : TopologicalS
+pace β]   (self : CompactlySupportedCont…
 -/
 protected lemma hasCompactSupport (f : C_c(α, β)) : HasCompactSupport f := f.hasCompactSupport'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompactlySupportedContinuousMapClass C_c(α, β) α β
-  body: f.continuous_toFun
-  hasCompactSupport f := f.hasCompactSupport'
-
-@[simp]
-
-中文:
-实例 :
-  签名: 余mpactlySupportedContinuous映射类 C_c(α, β) α β
-  定义体: f.continuous_toFun
-  hasCompactSupport f := f.hasCompactSupport'
-
-@[simp]
-
-Depends on / 依赖: continuous_toFun, f.continuous_toFun
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompactlySupportedContinuousMapClass C_c(α, β) α β where
   map_continuous f := f.continuous_toFun
   hasCompactSupport f := f.hasCompactSupport'
 
 @[simp]
-/--
-theorem `coe_toContinuousMap` / 定理 `coe_toContinuousMap`
-
-English:
-theorem coe_toContinuousMap
-  given: (f : C_c(α, β))
-  statement: (f.toContinuousMap : α -> β) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_toContinuousMap
-  条件: (f : C_c(α, β))
-  结论: (f.toContinuousMap : α -> β) = f
-  证明: rfl
-
-@[ext]
+/-
+**CompactlySupportedContinuousMap.coe_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 
+`CompactlySupportedContinuousMap`。
+形式化陈述：coe_toContinuousMap (f : C_c(α, β)) : (f.toContinuousMap : α -> β) = f
+参数：f : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toContinuousMap (f : C_c(α, β)) : (f.toContinuousMap : α -> β) = f :=
+theorem coe_toContinuousMap (f : C_c(α, β)) : (f.toContinuousMap : α → β) = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : C_c(α, β)} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {f g : C_c(α, β)} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CompactlySupportedContinuousMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySuppor
+tedContinuousMap`。
+形式化陈述：ext {f g : C_c(α, β)} (h : forall x, f x = g x) : f = g
+参数：α, β；h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : C_c(α, β)} (h : forall x, f x = g x) : f = g :=
+theorem ext {f g : C_c(α, β)} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : C(α, β)) (h : HasCompactSupport f)
-  statement: ⇑(⟨f, h⟩ : C_c(α, β)) = f
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : C(α, β)) (h : HasCompactSupport f)
-  结论: ⇑(⟨f, h⟩ : C_c(α, β)) = f
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySup
+portedContinuousMap`。
+形式化陈述：coe_mk (f : C(α, β)) (h : HasCompactSupport f) : ⇑(⟨f, h⟩ : C_c(α, β)) = f
+参数：f : C(α, β)；h : HasCompactSupport f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (f : C(α, β)) (h : HasCompactSupport f) : ⇑(⟨f, h⟩ : C_c(α, β)) = f :=
   rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `CompactlySupportedContinuousMap` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities. -/
+/-
+**CompactlySupportedContinuousMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `CompactlySuppo
+rtedContinuousMap`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : TopologicalSpace α] →     
+  [inst_1 : TopologicalSpace β] →         [inst_2 : Zero β] →           (f : Com
+pactlySupportedContinuousMap α β) → (f' : α → β) → f' = ⇑f → CompactlySupportedC
+ontinuousMap α β
+参数：f : CompactlySupportedContinuousMap α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  body: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  hasCompactSupport' := by
-    simp_rw [h]
-    exact f.hasCompactSupport'
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  hasCompactSupport' := by
-    simp_rw [h]
-    exact f.hasCompactSupport'
-
-@[simp]
+--- 原说明 ---
+Copy of a `CompactlySupportedContinuousMap` with a new `toFun` equal to the old 
+one. Useful
+to fix definitional equalities.
 -/
-protected def copy (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : C_c(α, β) where
+protected def copy (f : C_c(α, β)) (f' : α → β) (h : f' = f) : C_c(α, β) where
   toFun := f'
   continuous_toFun := by
     rw [h]
@@ -273,84 +203,52 @@ protected def copy (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : C_c(α, β) 
     exact f.hasCompactSupport'
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `CompactlyS
+upportedContinuousMap`。
+形式化陈述：coe_copy (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f'
+参数：f : C_c(α, β)；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : C_c(α, β)) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : C_c(α, β)) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CompactlySupportedContinuousMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：copy_eq (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : f.copy f' h = f
+参数：f : C_c(α, β)；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : C_c(α, β)) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : C_c(α, β)) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
-
-/--
-theorem `eq_of_empty` / 定理 `eq_of_empty`
-
-English:
-theorem eq_of_empty
-  given: [IsEmpty α] (f g : C_c(α, β))
-  statement: f = g
-  proof: ext IsEmpty.elim ‹_›
-
-中文:
-定理 eq_of_empty
-  条件: [是空 α] (f g : C_c(α, β))
-  结论: f = g
-  证明: ext IsEmpty.elim ‹_›
-
-Depends on / 依赖: IsEmpty, IsEmpty.elim
+/-
+**CompactlySupportedContinuousMap.eq_of_empty** 是 Mathlib 中的一个定理，位于命名空间 `Compact
+lySupportedContinuousMap`。
+形式化陈述：eq_of_empty [IsEmpty α] (f g : C_c(α, β)) : f = g
+参数：f g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
 -/
 theorem eq_of_empty [IsEmpty α] (f g : C_c(α, β)) : f = g :=
-ext IsEmpty.elim ‹_›
+  ext <| IsEmpty.elim ‹_›
 
 /-- A continuous function on a compact space automatically has compact support. -/
 @[simps]
-/--
-Definition of `continuousMapEquiv` / `continuousMapEquiv` 的定义
+/-
+**CompactlySupportedContinuousMap.continuousMapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CompactlySupportedContinuousMap`。
+形式化陈述：continuousMapEquiv [CompactSpace α] : C(α, β) ≃ C_c(α, β) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition continuousMapEquiv
-  signature: [CompactSpace α]
-  body: { toFun := f
-      hasCompactSupport' := HasCompactSupport.of_compactSpace f }
-  invFun f := f
-
-中文:
-定义 continuousMapEquiv
-  签名: [紧空间 α]
-  定义体: { toFun := f
-      hasCompactSupport' := HasCompactSupport.of_compactSpace f }
-  invFun f := f
-
-Depends on / 依赖: HasCompactSupport, HasCompactSupport.of_compactSpace, hasCompactSupport, invFun, of_compactSpace
+--- 原说明 ---
+A continuous function on a compact space automatically has compact support.
 -/
 def continuousMapEquiv [CompactSpace α] : C(α, β) ≃ C_c(α, β) where
   toFun f :=
@@ -360,28 +258,27 @@ def continuousMapEquiv [CompactSpace α] : C(α, β) ≃ C_c(α, β) where
 
 variable {γ : Type*} [TopologicalSpace γ] [Zero γ]
 
-/--
-Definition of `compLeft` / `compLeft` 的定义
+/-- Composition of a continuous function `f` with compact support with another continuous function
+`g` sending `0` to `0` from the left yields another continuous function `g ∘ f` with compact
+support.
 
-English:
-definition compLeft
-  signature: (g : C(β, γ)) (f : C_c(α, β))
-  body: by classical exact if g 0 = 0 then g.comp f else 0
-  hasCompactSupport' := by
-    split_ifs with hg
-    · exact f.hasCompactSupport'.comp_left hg
-    · exact .zero
+If `g` doesn't send `0` to `0`, `f.compLeft g` defaults to `0`. -/
+/-
+**CompactlySupportedContinuousMap.compLeft** 是 Mathlib 中的一个定义，位于命名空间 `CompactlyS
+upportedContinuousMap`。
+形式化陈述：compLeft (g : C(β, γ)) (f : C_c(α, β)) : C_c(α, γ) where toContinuousMap
+参数：g : C(β, γ)；f : C_c(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 compLeft
-  签名: (g : C(β, γ)) (f : C_c(α, β))
-  定义体: by classical exact if g 0 = 0 then g.comp f else 0
-  hasCompactSupport' := by
-    split_ifs with hg
-    · exact f.hasCompactSupport'.comp_left hg
-    · exact .zero
+--- 原说明 ---
+Composition of a continuous function `f` with compact support with another conti
+nuous function
+`g` sending `0` to `0` from the left yields another continuous function `g ∘ f` 
+with compact
+support.
 
-Depends on / 依赖: classical, comp_left, f.hasCompactSupport, g.comp, hasCompactSupport, split_ifs
+If `g` doesn't send `0` to `0`, `f.compLeft g` defaults to `0`.
 -/
 noncomputable def compLeft (g : C(β, γ)) (f : C_c(α, β)) : C_c(α, γ) where
   toContinuousMap := by classical exact if g 0 = 0 then g.comp f else 0
@@ -389,85 +286,77 @@ noncomputable def compLeft (g : C(β, γ)) (f : C_c(α, β)) : C_c(α, γ) where
     split_ifs with hg
     · exact f.hasCompactSupport'.comp_left hg
     · exact .zero
-
-/--
-lemma `toContinuousMap_compLeft` / 引理 `toContinuousMap_compLeft`
-
-English:
-lemma toContinuousMap_compLeft
-  given: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β))
-  proof: if_pos hg
-
-中文:
-引理 toContinuousMap_compLeft
-  条件: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β))
-  证明: if_pos hg
-
-Depends on / 依赖: if_pos
+/-
+**CompactlySupportedContinuousMap.toContinuousMap_compLeft** 是 Mathlib 中的一个引理，位于
+命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：toContinuousMap_compLeft {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) : (f
+.compLeft g).toContinuousMap = g.comp f
+参数：β, γ；hg : g 0 = 0；f : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 lemma toContinuousMap_compLeft {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) :
     (f.compLeft g).toContinuousMap = g.comp f := if_pos hg
-
-/--
-lemma `coe_compLeft` / 引理 `coe_compLeft`
-
-English:
-lemma coe_compLeft
-  given: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β))
-  statement: f.compLeft g = g ∘ f
-  proof: by
-  simp [compLeft, if_pos hg]
-
-中文:
-引理 coe_compLeft
-  条件: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β))
-  结论: f.compLeft g = g ∘ f
-  证明: by
-  simp [compLeft, if_pos hg]
-
-Depends on / 依赖: compLeft, if_pos
+/-
+**CompactlySupportedContinuousMap.coe_compLeft** 是 Mathlib 中的一个引理，位于命名空间 `Compac
+tlySupportedContinuousMap`。
+形式化陈述：coe_compLeft {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) : f.compLeft g =
+ g ∘ f
+参数：β, γ；hg : g 0 = 0；f : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CompactlySupportedContinuousMap.mk.congr_simp`：∀ {α : Type u_5} {β : Typ
+e u_6} [inst : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : TopologicalSpace 
+β]   (toContinuousMap toContinuousM…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coe_compLeft {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) : f.compLeft g = g ∘ f := by
   simp [compLeft, if_pos hg]
-
-/--
-lemma `compLeft_apply` / 引理 `compLeft_apply`
-
-English:
-lemma compLeft_apply
-  given: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) (a : α)
-  proof: by simp [coe_compLeft hg f]
-
-中文:
-引理 compLeft_apply
-  条件: {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) (a : α)
-  证明: by simp [coe_compLeft hg f]
-
-Depends on / 依赖: coe_compLeft
+/-
+**CompactlySupportedContinuousMap.compLeft_apply** 是 Mathlib 中的一个引理，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：compLeft_apply {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) (a : α) : f.co
+mpLeft g a = g (f a)
+参数：β, γ；hg : g 0 = 0；f : C_c(α, β)；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CompactlySupportedContinuousMap.coe_compLeft`：coe_compLeft {g : C(β, γ)}
+ (hg : g 0 = 0) (f : C_c(α, β)) : f.compLeft g = g ∘ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma compLeft_apply {g : C(β, γ)} (hg : g 0 = 0) (f : C_c(α, β)) (a : α) :
     f.compLeft g a = g (f a) := by simp [coe_compLeft hg f]
 
-/--
-Definition of `toBoundedContinuousFunction` / `toBoundedContinuousFunction` 的定义
+/-- A compactly supported continuous function gives rise to a bounded continuous function. -/
+/-
+**CompactlySupportedContinuousMap.toBoundedContinuousFunction** 是 Mathlib 中的一个定义
+，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：{α : Type u_2} →   [inst : TopologicalSpace α] →     {β : Type u_6} →     
+  [inst_1 : PseudoMetricSpace β] →         [inst_2 : Zero β] → CompactlySupporte
+dContinuousMap α β → BoundedContinuousFunction α β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBoundedContinuousFunction
-  signature: {β : Type*} [PseudoMetricSpace β] [Zero β]
-  body: f
-  map_bounded' := by
-    have : IsCompact (Set.range f) := f.hasCompactSupport.isCompact_range f.continuous
-    rcases Metric.isBounded_iff.1 this.isBounded with ⟨C, hC⟩
-    exact ⟨C, by grind⟩
-
-中文:
-定义 toBoundedContinuousFunction
-  签名: {β : 类型} [伪度量空间 β] [零 β]
-  定义体: f
-  map_bounded' := by
-    have : IsCompact (Set.range f) := f.hasCompactSupport.isCompact_range f.continuous
-    rcases Metric.isBounded_iff.1 this.isBounded with ⟨C, hC⟩
-    exact ⟨C, by grind⟩
+--- 原说明 ---
+A compactly supported continuous function gives rise to a bounded continuous fun
+ction.
 -/
 @[simps] def toBoundedContinuousFunction {β : Type*} [PseudoMetricSpace β] [Zero β]
     (f : C_c(α, β)) : BoundedContinuousFunction α β where
@@ -490,402 +379,220 @@ section AlgebraicStructure
 
 variable [TopologicalSpace β] (x : α)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] : Zero C_c(α, β) where
-  body: { toFun := (0 : C(α, β))
-            continuous_toFun := (0 : C(α, β)).2
-            hasCompactSupport' := by simp [HasCompactSupport, tsupport] }
-
-中文:
-实例 [零
-  签名: β] : 零 C_c(α, β) where
-  定义体: { toFun := (0 : C(α, β))
-            continuous_toFun := (0 : C(α, β)).2
-            hasCompactSupport' := by simp [HasCompactSupport, tsupport] }
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] : Zero C_c(α, β) where
   zero := { toFun := (0 : C(α, β))
             continuous_toFun := (0 : C(α, β)).2
             hasCompactSupport' := by simp [HasCompactSupport, tsupport] }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] : Inhabited C_c(α, β)
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 [零
-  签名: β] : 可居 C_c(α, β)
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] : Inhabited C_c(α, β) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  given: [Zero β]
-  statement: ⇑(0 : C_c(α, β)) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  条件: [零 β]
-  结论: ⇑(0 : C_c(α, β)) = 0
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `CompactlyS
+upportedContinuousMap`。
+形式化陈述：coe_zero [Zero β] : ⇑(0 : C_c(α, β)) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero [Zero β] : ⇑(0 : C_c(α, β)) = 0 :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: [Zero β]
-  statement: (0 : C_c(α, β)) x = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: [零 β]
-  结论: (0 : C_c(α, β)) x = 0
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：zero_apply [Zero β] : (0 : C_c(α, β)) x = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply [Zero β] : (0 : C_c(α, β)) x = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulZeroClass
-  signature: β] [ContinuousMul β] : Mul C_c(α, β)
-  body: ⟨fun f g => ⟨f * g, HasCompactSupport.mul_left g.2⟩⟩
-
-@[simp]
-
-中文:
-实例 [乘零类
-  签名: β] [连续乘法 β] : 乘法 C_c(α, β)
-  定义体: ⟨fun f g => ⟨f * g, HasCompactSupport.mul_left g.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: HasCompactSupport, HasCompactSupport.mul_left, mul_left
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulZeroClass β] [ContinuousMul β] : Mul C_c(α, β) :=
   ⟨fun f g => ⟨f * g, HasCompactSupport.mul_left g.2⟩⟩
 
 @[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β))
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: [乘零类 β] [连续乘法 β] (f g : C_c(α, β))
-  结论: ⇑(f * g) = f * g
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：coe_mul [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β)) : ⇑(f * g) = 
+f * g
+参数：f g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β)) : ⇑(f * g) = f * g :=
   rfl
-
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β))
-  statement: (f * g) x = f x * g x
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: [乘零类 β] [连续乘法 β] (f g : C_c(α, β))
-  结论: (f * g) x = f x * g x
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：mul_apply [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β)) : (f * g) x
+ = f x * g x
+参数：f g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply [MulZeroClass β] [ContinuousMul β] (f g : C_c(α, β)) : (f * g) x = f x * g x :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- the product of `f : F` assuming `ContinuousMapClass F α γ` and `ContinuousSMul γ β` and
+`g : C_c(α, β)` is in `C_c(α, β)` -/
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Zero
-  signature: β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
-  body: ⟨⟨fun x => f x • g x, (map_continuous f).smul (map_continuous g)⟩, g.hasCompactSupport.smul_left⟩
-
-@[simp]
-
-中文:
-实例 [零
-  签名: β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
-  定义体: ⟨⟨fun x => f x • g x, (map_continuous f).smul (map_continuous g)⟩, g.hasCompactSupport.smul_left⟩
-
-@[simp]
-
-Depends on / 依赖: g.hasCompactSupport.smul_left, hasCompactSupport, map_continuous, smul_left
+--- 原说明 ---
+the product of `f : F` assuming `ContinuousMapClass F α γ` and `ContinuousSMul γ
+ β` and
+`g : C_c(α, β)` is in `C_c(α, β)`
 -/
 instance [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
     {F : Type*} [FunLike F α γ] [ContinuousMapClass F α γ] : SMul F C_c(α, β) where
   smul f g :=
-    ⟨⟨fun x => f x • g x, (map_continuous f).smul (map_continuous g)⟩, g.hasCompactSupport.smul_left⟩
+    ⟨⟨fun x ↦ f x • g x, (map_continuous f).smul (map_continuous g)⟩, g.hasCompactSupport.smul_left⟩
 
 @[simp]
-/--
-theorem `coe_smulc` / 定理 `coe_smulc`
-
-English:
-theorem coe_smulc
-  statement: [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
-  proof: rfl
-
-中文:
-定理 coe_smulc
-  结论: [零 β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_smulc** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：coe_smulc [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMu
+l γ β] {F : Type*} [FunLike F α γ] [ContinuousMapClass F α γ] (f : F) (g : C_c(α
+, β)) : ⇑(f • g) = fun x => f x • g x
+参数：f : F；g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smulc [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
     {F : Type*} [FunLike F α γ] [ContinuousMapClass F α γ] (f : F) (g : C_c(α, β)) :
     ⇑(f • g) = fun x => f x • g x :=
   rfl
-
-/--
-theorem `smulc_apply` / 定理 `smulc_apply`
-
-English:
-theorem smulc_apply
-  statement: [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
-  proof: rfl
-
-中文:
-定理 smulc_apply
-  结论: [零 β] [拓扑空间 γ] [SMulZero类 γ β] [连续标量乘法 γ β]
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.smulc_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compact
+lySupportedContinuousMap`。
+形式化陈述：smulc_apply [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousS
+Mul γ β] {F : Type*} [FunLike F α γ] [ContinuousMapClass F α γ] (f : F) (g : C_c
+(α, β)) (x : α) : (f • g) x = f x • g x
+参数：f : F；g : C_c(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smulc_apply [Zero β] [TopologicalSpace γ] [SMulZeroClass γ β] [ContinuousSMul γ β]
     {F : Type*} [FunLike F α γ] [ContinuousMapClass F α γ] (f : F) (g : C_c(α, β)) (x : α) :
     (f • g) x = f x • g x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulZeroClass
-  signature: β] [ContinuousMul β] : MulZeroClass C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-中文:
-实例 [乘零类
-  签名: β] [连续乘法 β] : 乘零类 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulZeroClass β] [ContinuousMul β] : MulZeroClass C_c(α, β) := fast_instance%
   DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SemigroupWithZero
-  signature: β] [ContinuousMul β] :
-  body: fast_instance%
-  DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-中文:
-实例 [带零半群
-  签名: β] [连续乘法 β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SemigroupWithZero β] [ContinuousMul β] :
     SemigroupWithZero C_c(α, β) := fast_instance%
   DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: β] [ContinuousAdd β] : Add C_c(α, β)
-  body: ⟨fun f g => ⟨f + g, HasCompactSupport.add f.2 g.2⟩⟩
-
-@[simp]
-
-中文:
-实例 [加法零类
-  签名: β] [连续加法 β] : 加法 C_c(α, β)
-  定义体: ⟨fun f g => ⟨f + g, HasCompactSupport.add f.2 g.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: HasCompactSupport, HasCompactSupport.add
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass β] [ContinuousAdd β] : Add C_c(α, β) :=
   ⟨fun f g => ⟨f + g, HasCompactSupport.add f.2 g.2⟩⟩
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β))
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-中文:
-定理 coe_add
-  条件: [加法零类 β] [连续加法 β] (f g : C_c(α, β))
-  结论: ⇑(f + g) = f + g
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：coe_add [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β)) : ⇑(f + g) = 
+f + g
+参数：f g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β)) : ⇑(f + g) = f + g :=
   rfl
-
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β))
-  statement: (f + g) x = f x + g x
-  proof: rfl
-
-中文:
-定理 add_apply
-  条件: [加法零类 β] [连续加法 β] (f g : C_c(α, β))
-  结论: (f + g) x = f x + g x
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：add_apply [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β)) : (f + g) x
+ = f x + g x
+参数：f g : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply [AddZeroClass β] [ContinuousAdd β] (f g : C_c(α, β)) : (f + g) x = f x + g x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: β] [ContinuousAdd β] : AddZeroClass C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-中文:
-实例 [加法零类
-  签名: β] [连续加法 β] : 加法零类 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass β] [ContinuousAdd β] : AddZeroClass C_c(α, β) := fast_instance%
   DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
-/--
-Definition of `coeFnMonoidHom` / `coeFnMonoidHom` 的定义
+/-- Coercion to a function as a `AddMonoidHom`. Similar to `AddMonoidHom.coeFn`. -/
+/-
+**CompactlySupportedContinuousMap.coeFnMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：coeFnMonoidHom [AddMonoid β] [ContinuousAdd β] : C_c(α, β) ->+ α -> β wher
+e toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnMonoidHom
-  signature: [AddMonoid β] [ContinuousAdd β]
-  body: f
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-中文:
-定义 coeFnMonoidHom
-  签名: [加法幺半群 β] [连续加法 β]
-  定义体: f
-  map_zero' := coe_zero
-  map_add' := coe_add
+--- 原说明 ---
+Coercion to a function as a `AddMonoidHom`. Similar to `AddMonoidHom.coeFn`.
 -/
-def coeFnMonoidHom [AddMonoid β] [ContinuousAdd β] : C_c(α, β) ->+ α -> β where
+def coeFnMonoidHom [AddMonoid β] [ContinuousAdd β] : C_c(α, β) →+ α → β where
   toFun f := f
   map_zero' := coe_zero
   map_add' := coe_add
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] {R
-  body: fast_instance%
-  ⟨fun r f => ⟨⟨r • ⇑f, (map_continuous f).const_smul r⟩, HasCompactSupport.smul_left f.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 [零
-  签名: β] {R
-  定义体: fast_instance%
-  ⟨fun r f => ⟨⟨r • ⇑f, (map_continuous f).const_smul r⟩, HasCompactSupport.smul_left f.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] :
     SMul R C_c(α, β) := fast_instance%
   ⟨fun r f => ⟨⟨r • ⇑f, (map_continuous f).const_smul r⟩, HasCompactSupport.smul_left f.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  statement: [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
-  proof: rfl
-
-中文:
-定理 coe_smul
-  结论: [零 β] {R : 类型} [SMulZero类 R β] [连续常数标量乘法 R β] (r : R)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `CompactlyS
+upportedContinuousMap`。
+形式化陈述：coe_smul [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β
+] (r : R) (f : C_c(α, β)) : ⇑(r • f) = r • ⇑f
+参数：r : R；f : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
     (f : C_c(α, β)) : ⇑(r • f) = r • ⇑f :=
   rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  statement: [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
-  proof: rfl
-
-中文:
-定理 smul_apply
-  结论: [零 β] {R : 类型} [SMulZero类 R β] [连续常数标量乘法 R β] (r : R)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：smul_apply [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R
+ β] (r : R) (f : C_c(α, β)) (x : α) : (r • f) x = r • f x
+参数：r : R；f : C_c(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSMul R β] (r : R)
     (f : C_c(α, β)) (x : α) : (r • f) x = r • f x :=
@@ -893,112 +600,76 @@ theorem smul_apply [Zero β] {R : Type*} [SMulZeroClass R β] [ContinuousConstSM
 
 section AddMonoid
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: β] [ContinuousAdd β] : AddMonoid C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 [加法幺半群
-  签名: β] [连续加法 β] : 加法幺半群 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid β] [ContinuousAdd β] : AddMonoid C_c(α, β) := fast_instance%
   DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
 end AddMonoid
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: β] [ContinuousAdd β] : AddCommMonoid C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-@[simp]
-
-中文:
-实例 [加法交换幺半群
-  签名: β] [连续加法 β] : 加法交换幺半群 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-@[simp]
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid β] [ContinuousAdd β] : AddCommMonoid C_c(α, β) := fast_instance%
   DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
 @[simp]
-/--
-theorem `coe_sum` / 定理 `coe_sum`
-
-English:
-theorem coe_sum
-  given: [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β))
-  proof: map_sum coeFnMonoidHom f s
-
-中文:
-定理 coe_sum
-  条件: [加法交换幺半群 β] [连续加法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C_c(α, β))
-  证明: map_sum coeFnMonoidHom f s
-
-Depends on / 依赖: coeFnMonoidHom, map_sum
+/-
+**CompactlySupportedContinuousMap.coe_sum** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：coe_sum [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f 
+: ι -> C_c(α, β)) : ⇑(∑ i in s, f i) = ∑ i in s, (f i : α -> β)
+参数：s : Finset ι；f : ι -> C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem coe_sum [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β)) :
-    ⇑(∑ i in s, f i) = ∑ i in s, (f i : α -> β) :=
+theorem coe_sum [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι → C_c(α, β)) :
+    ⇑(∑ i ∈ s, f i) = ∑ i ∈ s, (f i : α → β) :=
   map_sum coeFnMonoidHom f s
-
-/--
-theorem `sum_apply` / 定理 `sum_apply`
-
-English:
-theorem sum_apply
-  statement: [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β))
-  proof: by simp
-
-中文:
-定理 sum_apply
-  结论: [加法交换幺半群 β] [连续加法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C_c(α, β))
-  证明: by simp
+/-
+**CompactlySupportedContinuousMap.sum_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：sum_apply [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (
+f : ι -> C_c(α, β)) (a : α) : (∑ i in s, f i) a = ∑ i in s, f i a
+参数：s : Finset ι；f : ι -> C_c(α, β)；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CompactlySupportedContinuousMap.coe_sum`：coe_sum [AddCommMonoid β] [Cont
+inuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β)) : ⇑(∑ i in s, f i) 
+= ∑ i in s, (f i : α -> β)
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_apply [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι -> C_c(α, β))
-    (a : α) : (∑ i in s, f i) a = ∑ i in s, f i a := by simp
+theorem sum_apply [AddCommMonoid β] [ContinuousAdd β] {ι : Type*} (s : Finset ι) (f : ι → C_c(α, β))
+    (a : α) : (∑ i ∈ s, f i) a = ∑ i ∈ s, f i a := by simp
 
 section AddGroup
 
 variable [AddGroup β] [IsTopologicalAddGroup β] (f g : C_c(α, β))
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg C_c(α, β)
-  body: { toFun := -f.1
-             continuous_toFun := map_continuous (-f.1)
-             hasCompactSupport' := by simpa [HasCompactSupport, tsupport] using f.2 }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 C_c(α, β)
-  定义体: { toFun := -f.1
-             continuous_toFun := map_continuous (-f.1)
-             hasCompactSupport' := by simpa [HasCompactSupport, tsupport] using f.2 }
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg C_c(α, β) where
   neg f := { toFun := -f.1
@@ -1006,60 +677,28 @@ instance : Neg C_c(α, β) where
              hasCompactSupport' := by simpa [HasCompactSupport, tsupport] using f.2 }
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-中文:
-定理 coe_neg
-  结论: ⇑(-f) = -f
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：coe_neg : ⇑(-f) = -f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg : ⇑(-f) = -f :=
   rfl
-
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-f) x = -f x
-  proof: rfl
-
-中文:
-定理 neg_apply
-  结论: (-f) x = -f x
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：neg_apply : (-f) x = -f x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-f) x = -f x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub C_c(α, β)
-  body: { toFun := f.1 - g.1
-               continuous_toFun := map_continuous (f.1 - g.1)
-               hasCompactSupport' := by
-                 simpa [sub_eq_add_neg] using HasCompactSupport.add f.2 (-g).2 }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 减法 C_c(α, β)
-  定义体: { toFun := f.1 - g.1
-               continuous_toFun := map_continuous (f.1 - g.1)
-               hasCompactSupport' := by
-                 simpa [sub_eq_add_neg] using HasCompactSupport.add f.2 (-g).2 }
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub C_c(α, β) where
   sub f g := { toFun := f.1 - g.1
@@ -1068,314 +707,148 @@ instance : Sub C_c(α, β) where
                  simpa [sub_eq_add_neg] using HasCompactSupport.add f.2 (-g).2 }
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  statement: ⇑(f - g) = f - g
-  proof: rfl
-
-中文:
-定理 coe_sub
-  结论: ⇑(f - g) = f - g
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：coe_sub : ⇑(f - g) = f - g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub : ⇑(f - g) = f - g :=
   rfl
-
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  statement: (f - g) x = f x - g x
-  proof: rfl
-
-中文:
-定理 sub_apply
-  结论: (f - g) x = f x - g x
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：sub_apply : (f - g) x = f x - g x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply : (f - g) x = f x - g x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddGroup C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 加法群 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddGroup C_c(α, β) := fast_instance%
   DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 end AddGroup
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: β] [IsTopologicalAddGroup β] : AddCommGroup C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-中文:
-实例 [加法交换群
-  签名: β] [是拓扑加群 β] : 加法交换群 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup β] [IsTopologicalAddGroup β] : AddCommGroup C_c(α, β) := fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
     rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] {R
-  body: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-中文:
-实例 [零
-  签名: β] {R
-  定义体: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [SMulWithZero Rᵐᵒᵖ β]
     [ContinuousConstSMul R β] [IsCentralScalar R β] : IsCentralScalar R C_c(α, β) :=
   ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] {R
-  body: fast_instance%
-  Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 [零
-  签名: β] {R
-  定义体: fast_instance%
-  Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] {R : Type*} [Zero R] [SMulWithZero R β]
     [ContinuousConstSMul R β] : SMulWithZero R C_c(α, β) := fast_instance%
   Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: β] {R
-  body: fast_instance%
-  Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 [零
-  签名: β] {R
-  定义体: fast_instance%
-  Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero β] {R : Type*} [MonoidWithZero R] [MulActionWithZero R β]
     [ContinuousConstSMul R β] : MulActionWithZero R C_c(α, β) := fast_instance%
   Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: β] [ContinuousAdd β] {R
-  body: fast_instance%
-  Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 [加法交换幺半群
-  签名: β] [连续加法 β] {R
-  定义体: fast_instance%
-  Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid β] [ContinuousAdd β] {R : Type*} [Semiring R] [Module R β]
     [ContinuousConstSMul R β] : Module R C_c(α, β) := fast_instance%
   Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocSemiring
-  signature: β] [IsTopologicalSemiring β] :
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 [非幺非结合半环
-  签名: β] [是TopologicalSemiring β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocSemiring β] [IsTopologicalSemiring β] :
     NonUnitalNonAssocSemiring C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: β] [IsTopologicalSemiring β] :
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 [非幺半环
-  签名: β] [是TopologicalSemiring β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalSemiring β] [IsTopologicalSemiring β] :
     NonUnitalSemiring C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommSemiring
-  signature: β] [IsTopologicalSemiring β] :
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 [非幺交换半环
-  签名: β] [是TopologicalSemiring β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommSemiring β] [IsTopologicalSemiring β] :
     NonUnitalCommSemiring C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocRing
-  signature: β] [IsTopologicalRing β] :
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺非结合环
-  签名: β] [是拓扑环 β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocRing β] [IsTopologicalRing β] :
     NonUnitalNonAssocRing C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalRing
-  signature: β] [IsTopologicalRing β] : NonUnitalRing C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-中文:
-实例 [非幺环
-  签名: β] [是拓扑环 β] : 非幺环 C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalRing β] [IsTopologicalRing β] : NonUnitalRing C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommRing
-  signature: β] [IsTopologicalRing β] :
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺交换环
-  签名: β] [是拓扑环 β] :
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommRing β] [IsTopologicalRing β] :
     NonUnitalCommRing C_c(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
-
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
     [IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [IsScalarTower R β β] :
     IsScalarTower R C_c(α, β) C_c(α, β) where
   smul_assoc r f g := by
     ext
     simp only [smul_eq_mul, coe_mul, coe_smul, Pi.mul_apply, Pi.smul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_assoc]
-
+    rw [← smul_eq_mul, ← smul_eq_mul, smul_assoc]
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
     [IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [SMulCommClass R β β] :
     SMulCommClass R C_c(α, β) C_c(α, β) where
   smul_comm r f g := by
     ext
     simp only [smul_eq_mul, coe_smul, coe_mul, Pi.smul_apply, Pi.mul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_comm]
+    rw [← smul_eq_mul, ← smul_eq_mul, smul_comm]
 
 end AlgebraicStructure
 
@@ -1393,47 +866,17 @@ The `StarAddMonoid` class on `C_c(α, β)` is inherited from their counterparts 
 
 variable [TopologicalSpace β] [AddMonoid β] [StarAddMonoid β] [ContinuousStar β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star C_c(α, β)
-  body: { toFun := fun x => star (f x)
-      continuous_toFun := (map_continuous f).star
-      hasCompactSupport' := by
-        rw [HasCompactSupport]; rw [tsupport]
-        have support_star : (Function.support fun (x : α) => star (f x)) = Function.support f := by
-          ext x
-          simp only [Function.mem_support, ne_eq, star_eq_zero]
-        rw [support_star]
-        exact f.2 }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 对合 C_c(α, β)
-  定义体: { toFun := fun x => star (f x)
-      continuous_toFun := (map_continuous f).star
-      hasCompactSupport' := by
-        rw [HasCompactSupport]; rw [tsupport]
-        have support_star : (Function.support fun (x : α) => star (f x)) = Function.support f := by
-          ext x
-          simp only [Function.mem_support, ne_eq, star_eq_zero]
-        rw [support_star]
-        exact f.2 }
-
-@[simp]
-
-Depends on / 依赖: Function, Function.mem_support, Function.support, HasCompactSupport, continuous_toFun, hasCompactSupport, map_continuous, mem_support, ne_eq, star_eq_zero, support, support_star, tsupport
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Star C_c(α, β) where
   star f :=
     { toFun := fun x => star (f x)
       continuous_toFun := (map_continuous f).star
       hasCompactSupport' := by
-        rw [HasCompactSupport]; rw [tsupport]
+        rw [HasCompactSupport, tsupport]
         have support_star : (Function.support fun (x : α) => star (f x)) = Function.support f := by
           ext x
           simp only [Function.mem_support, ne_eq, star_eq_zero]
@@ -1441,76 +884,37 @@ instance : Star C_c(α, β) where
         exact f.2 }
 
 @[simp]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: (f : C_c(α, β))
-  statement: ⇑(star f) = star (⇑f)
-  proof: rfl
-
-中文:
-定理 coe_star
-  条件: (f : C_c(α, β))
-  结论: ⇑(star f) = star (⇑f)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `CompactlyS
+upportedContinuousMap`。
+形式化陈述：coe_star (f : C_c(α, β)) : ⇑(star f) = star (⇑f)
+参数：f : C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star (f : C_c(α, β)) : ⇑(star f) = star (⇑f) :=
   rfl
-
-/--
-theorem `star_apply` / 定理 `star_apply`
-
-English:
-theorem star_apply
-  given: (f : C_c(α, β)) (x : α)
-  statement: (star f) x = star (f x)
-  proof: rfl
-
-中文:
-定理 star_apply
-  条件: (f : C_c(α, β)) (x : α)
-  结论: (star f) x = star (f x)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.star_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：star_apply (f : C_c(α, β)) (x : α) : (star f) x = star (f x)
+参数：f : C_c(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_apply (f : C_c(α, β)) (x : α) : (star f) x = star (f x) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TrivialStar
-  signature: β] : TrivialStar C_c(α, β) where
-  body: ext fun x => star_trivial (f x)
-
-中文:
-实例 [TrivialStar
-  签名: β] : TrivialStar C_c(α, β) where
-  定义体: ext fun x => star_trivial (f x)
-
-Depends on / 依赖: star_trivial
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TrivialStar β] : TrivialStar C_c(α, β) where
     star_trivial f := ext fun x => star_trivial (f x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ContinuousAdd
-  signature: β] : StarAddMonoid C_c(α, β) where
-  body: ext fun x => star_star (f x)
-  star_add f g := ext fun x => star_add (f x) (g x)
-
-中文:
-实例 [连续加法
-  签名: β] : StarAdd幺半群 C_c(α, β) where
-  定义体: ext fun x => star_star (f x)
-  star_add f g := ext fun x => star_add (f x) (g x)
-
-Depends on / 依赖: star_star
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ContinuousAdd β] : StarAddMonoid C_c(α, β) where
   star_involutive f := ext fun x => star_star (f x)
@@ -1523,20 +927,10 @@ section StarModule
 variable {𝕜 : Type*} [Zero 𝕜] [Star 𝕜] [AddMonoid β] [StarAddMonoid β] [TopologicalSpace β]
   [ContinuousStar β] [SMulWithZero 𝕜 β] [ContinuousConstSMul 𝕜 β] [StarModule 𝕜 β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule 𝕜 C_c(α, β)
-  body: ext fun x => star_smul k (f x)
-
-中文:
-实例 :
-  签名: 对合模 𝕜 C_c(α, β)
-  定义体: ext fun x => star_smul k (f x)
-
-Depends on / 依赖: star_smul
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarModule 𝕜 C_c(α, β) where
   star_smul k f := ext fun x => star_smul k (f x)
@@ -1548,22 +942,10 @@ section StarRing
 variable [NonUnitalSemiring β] [StarRing β] [TopologicalSpace β] [ContinuousStar β]
   [IsTopologicalSemiring β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarRing C_c(α, β)
-  body: { CompactlySupportedContinuousMap.instStarAddMonoid with
-    star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
-
-中文:
-实例 :
-  签名: 对合环 C_c(α, β)
-  定义体: { CompactlySupportedContinuousMap.instStarAddMonoid with
-    star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
-
-Depends on / 依赖: CompactlySupportedContinuousMap, CompactlySupportedContinuousMap.instStarAddMonoid, instStarAddMonoid, star_mul
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarRing C_c(α, β) :=
   { CompactlySupportedContinuousMap.instStarAddMonoid with
@@ -1579,61 +961,38 @@ When `β` is equipped with a partial order, `C_c(α, β)` is given the pointwise
 
 variable {β : Type*} [TopologicalSpace β] [Zero β] [PartialOrder β]
 
-/--
-Instance `partialOrder` / 实例 `partialOrder`
-
-English:
-instance partialOrder
-  signature: : PartialOrder C_c(α, β)
-  body: fast_instance% PartialOrder.lift (⇑) DFunLike.coe_injective
-
-中文:
-实例 partialOrder
-  签名: : 偏序 C_c(α, β)
-  定义体: fast_instance% PartialOrder.lift (⇑) DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective, fast_instance
+/-
+**CompactlySupportedContinuousMap.partialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Compac
+tlySupportedContinuousMap`。
+形式化陈述：partialOrder : PartialOrder C_c(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance partialOrder : PartialOrder C_c(α, β) :=
   fast_instance% PartialOrder.lift (⇑) DFunLike.coe_injective
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {f g : C_c(α, β)}
-  statement: f <= g ↔ forall a, f a <= g a
-  proof: Pi.le_def
-
-中文:
-定理 le_def
-  条件: {f g : C_c(α, β)}
-  结论: f <= g ↔ 对任意 a, f a <= g a
-  证明: Pi.le_def
-
-Depends on / 依赖: Pi.le_def, le_def
+/-
+**CompactlySupportedContinuousMap.le_def** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySup
+portedContinuousMap`。
+形式化陈述：le_def {f g : C_c(α, β)} : f <= g ↔ forall a, f a <= g a
+参数：α, β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.le_def`：Pi.le_def {ι : Type*} {π : ι -> Type*} [forall i, LE (π i)] {
+x y : forall i, π i} : x <= y ↔ forall i, x i <= y i
 -/
-theorem le_def {f g : C_c(α, β)} : f <= g ↔ forall a, f a <= g a := Pi.le_def
-
-/--
-theorem `lt_def` / 定理 `lt_def`
-
-English:
-theorem lt_def
-  given: {f g : C_c(α, β)}
-  statement: f < g ↔ (forall a, f a <= g a) ∧ exists a, f a < g a
-  proof: Pi.lt_def
-
-中文:
-定理 lt_def
-  条件: {f g : C_c(α, β)}
-  结论: f < g ↔ (对任意 a, f a <= g a) ∧ 存在 a, f a < g a
-  证明: Pi.lt_def
-
-Depends on / 依赖: Pi.lt_def, lt_def
+theorem le_def {f g : C_c(α, β)} : f ≤ g ↔ ∀ a, f a ≤ g a := Pi.le_def
+/-
+**CompactlySupportedContinuousMap.lt_def** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySup
+portedContinuousMap`。
+形式化陈述：lt_def {f g : C_c(α, β)} : f < g ↔ (forall a, f a <= g a) ∧ exists a, f a 
+< g a
+参数：α, β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.lt_def`：Pi.lt_def [forall i, Preorder (π i)] {x y : forall i, π i} : 
+x < y ↔ x <= y ∧ exists i, x i < y i
 -/
-theorem lt_def {f g : C_c(α, β)} : f < g ↔ (forall a, f a <= g a) ∧ exists a, f a < g a := Pi.lt_def
+theorem lt_def {f g : C_c(α, β)} : f < g ↔ (∀ a, f a ≤ g a) ∧ ∃ a, f a < g a := Pi.lt_def
 
 end PartialOrder
 
@@ -1641,125 +1000,94 @@ section SemilatticeSup
 
 variable [SemilatticeSup β] [Zero β] [TopologicalSpace β] [ContinuousSup β]
 
-/--
-Instance `instSup` / 实例 `instSup`
-
-English:
-instance instSup
-  signature: : Max C_c(α, β) where max f g
-  body: { toFun := f ⊔ g
-    continuous_toFun := Continuous.sup f.continuous g.continuous
-    hasCompactSupport' := f.hasCompactSupport.sup g.hasCompactSupport }
-
-中文:
-实例 instSup
-  签名: : 最大值 C_c(α, β) where 最大值 f g
-  定义体: { toFun := f ⊔ g
-    continuous_toFun := Continuous.sup f.continuous g.continuous
-    hasCompactSupport' := f.hasCompactSupport.sup g.hasCompactSupport }
-
-Depends on / 依赖: Continuous, Continuous.sup, continuous, continuous_toFun, f.continuous, f.hasCompactSupport.sup, g.continuous, g.hasCompactSupport, hasCompactSupport
+/-
+**CompactlySupportedContinuousMap.instSup** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：instSup : Max C_c(α, β) where max f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSup : Max C_c(α, β) where max f g :=
   { toFun := f ⊔ g
     continuous_toFun := Continuous.sup f.continuous g.continuous
     hasCompactSupport' := f.hasCompactSupport.sup g.hasCompactSupport }
-
-/--
-lemma `coe_sup` / 引理 `coe_sup`
-
-English:
-lemma coe_sup
-  given: (f g : C_c(α, β))
-  statement: ⇑(f ⊔ g) = ⇑f ⊔ g
-  proof: rfl
-
-中文:
-引理 coe_sup
-  条件: (f g : C_c(α, β))
-  结论: ⇑(f ⊔ g) = ⇑f ⊔ g
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeSup β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousSup β] (f g : CompactlySupportedContinuousMap α β),   ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
+参数：f g : CompactlySupportedContinuousMap α β；f ⊔ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_sup (f g : C_c(α, β)) : ⇑(f ⊔ g) = ⇑f ⊔ g := rfl
-
-/--
-lemma `sup_apply` / 引理 `sup_apply`
-
-English:
-lemma sup_apply
-  given: (f g : C_c(α, β)) (a : α)
-  statement: (f ⊔ g) a = f a ⊔ g a
-  proof: rfl
-
-中文:
-引理 sup_apply
-  条件: (f g : C_c(α, β)) (a : α)
-  结论: (f ⊔ g) a = f a ⊔ g a
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.sup_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeSup β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousSup β] (f g : CompactlySupportedContinuousMap α β) (a : α),   (f ⊔ g) a = f 
+a ⊔ g a
+参数：f g : CompactlySupportedContinuousMap α β；a : α；f ⊔ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma sup_apply (f g : C_c(α, β)) (a : α) : (f ⊔ g) a = f a ⊔ g a := rfl
-
-/--
-Instance `semilatticeSup` / 实例 `semilatticeSup`
-
-English:
-instance semilatticeSup
-  signature: : SemilatticeSup C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-中文:
-实例 semilatticeSup
-  签名: : SemilatticeSup C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.semilatticeSup** 是 Mathlib 中的一个实例，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：semilatticeSup : SemilatticeSup C_c(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semilatticeSup : SemilatticeSup C_c(α, β) := fast_instance%
   DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-/--
-lemma `finsetSup'_apply` / 引理 `finsetSup'_apply`
-
-English:
-lemma finsetSup'_apply
-  given: {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α)
-  proof: Finset.apply_sup'_eq_sup'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 finsetSup'_apply
-  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β)) (a : α)
-  证明: Finset.apply_sup'_eq_sup'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.apply_sup, _comp, _eq_sup, apply_sup
+/-
+**CompactlySupportedContinuousMap.finsetSup'_apply** 是 Mathlib 中的一个定理，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeSup β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousSup β] {ι : Type u_5} {s : Finset ι} (H : s.Nonempty)   (f : ι → CompactlySu
+pportedContinuousMap α β) (a : α), (s.sup' H f) a = s.sup' H fun i => (f i) a
+参数：H : s.Nonempty；f : ι → CompactlySupportedContinuousMap α β；a : α；s.sup' H f；f
+ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_sup'_eq_sup'_comp`：∀ {α : Type u_2} {β : Type u_3} {γ : Typ
+e u_4} [inst : SemilatticeSup α] [inst_1 : SemilatticeSup γ] {s : Finset β}   (H
+ : s.Nonempty) {f : …
 -/
-lemma finsetSup'_apply {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α) :
-    s.sup' H f a = s.sup' H fun i => f i a :=
-  Finset.apply_sup'_eq_sup'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
+lemma finsetSup'_apply {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι → C_c(α, β)) (a : α) :
+    s.sup' H f a = s.sup' H fun i ↦ f i a :=
+  Finset.apply_sup'_eq_sup'_comp H (fun g : C_c(α, β) ↦ g a) fun _ _ ↦ rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_finsetSup'` / 引理 `coe_finsetSup'`
-
-English:
-lemma coe_finsetSup'
-  given: {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β))
-  proof: by ext; simp [finsetSup'_apply]
-
-中文:
-引理 coe_finsetSup'
-  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β))
-  证明: by ext; simp [finsetSup'_apply]
-
-Depends on / 依赖: _apply, finsetSup
+/-
+**CompactlySupportedContinuousMap.coe_finsetSup'** 是 Mathlib 中的一个引理，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：coe_finsetSup' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α
+, β)) : ⇑(s.sup' H f) = s.sup' H fun i => ⇑(f i)
+参数：H : s.Nonempty；f : ι -> C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.finsetSup'_apply`：∀ {α : Type u_2} {β : 
+Type u_3} [inst : TopologicalSpace α] [inst_1 : SemilatticeSup β] [inst_2 : Zero
+ β]   [inst_3 : TopologicalSpace β] [i…
+· 使用定理 `Finset.sup'_apply`：∀ {α : Type u_2} {β : Type u_3} {C : β → Type u_7} [i
+nst : (b : β) → SemilatticeSup (C b)] {s : Finset α}   (H : s.Nonempty) (f : α →
+ (b : β…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma coe_finsetSup' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) :
-    ⇑(s.sup' H f) = s.sup' H fun i => ⇑(f i) := by ext; simp [finsetSup'_apply]
+lemma coe_finsetSup' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι → C_c(α, β)) :
+    ⇑(s.sup' H f) = s.sup' H fun i ↦ ⇑(f i) := by ext; simp [finsetSup'_apply]
 
 end SemilatticeSup
 
@@ -1767,125 +1095,94 @@ section SemilatticeInf
 
 variable [SemilatticeInf β] [Zero β] [TopologicalSpace β] [ContinuousInf β]
 
-/--
-Instance `instInf` / 实例 `instInf`
-
-English:
-instance instInf
-  signature: : Min C_c(α, β) where min f g
-  body: { toFun := f ⊓ g
-    continuous_toFun := Continuous.inf f.continuous g.continuous
-    hasCompactSupport' := f.hasCompactSupport.inf g.hasCompactSupport }
-
-中文:
-实例 instInf
-  签名: : 最小值 C_c(α, β) where 最小值 f g
-  定义体: { toFun := f ⊓ g
-    continuous_toFun := Continuous.inf f.continuous g.continuous
-    hasCompactSupport' := f.hasCompactSupport.inf g.hasCompactSupport }
-
-Depends on / 依赖: Continuous, Continuous.inf, continuous, continuous_toFun, f.continuous, f.hasCompactSupport.inf, g.continuous, g.hasCompactSupport, hasCompactSupport
+/-
+**CompactlySupportedContinuousMap.instInf** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：instInf : Min C_c(α, β) where min f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInf : Min C_c(α, β) where min f g :=
   { toFun := f ⊓ g
     continuous_toFun := Continuous.inf f.continuous g.continuous
     hasCompactSupport' := f.hasCompactSupport.inf g.hasCompactSupport }
-
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (f g : C_c(α, β))
-  statement: ⇑(f ⊓ g) = ⇑f ⊓ g
-  proof: rfl
-
-中文:
-引理 coe_inf
-  条件: (f g : C_c(α, β))
-  结论: ⇑(f ⊓ g) = ⇑f ⊓ g
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeInf β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousInf β] (f g : CompactlySupportedContinuousMap α β),   ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
+参数：f g : CompactlySupportedContinuousMap α β；f ⊓ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_inf (f g : C_c(α, β)) : ⇑(f ⊓ g) = ⇑f ⊓ g := rfl
-
-/--
-lemma `inf_apply` / 引理 `inf_apply`
-
-English:
-lemma inf_apply
-  given: (f g : C_c(α, β)) (a : α)
-  statement: (f ⊓ g) a = f a ⊓ g a
-  proof: rfl
-
-中文:
-引理 inf_apply
-  条件: (f g : C_c(α, β)) (a : α)
-  结论: (f ⊓ g) a = f a ⊓ g a
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.inf_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeInf β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousInf β] (f g : CompactlySupportedContinuousMap α β) (a : α),   (f ⊓ g) a = f 
+a ⊓ g a
+参数：f g : CompactlySupportedContinuousMap α β；a : α；f ⊓ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inf_apply (f g : C_c(α, β)) (a : α) : (f ⊓ g) a = f a ⊓ g a := rfl
-
-/--
-Instance `semilatticeInf` / 实例 `semilatticeInf`
-
-English:
-instance semilatticeInf
-  signature: : SemilatticeInf C_c(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-中文:
-实例 semilatticeInf
-  签名: : SemilatticeInf C_c(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-Depends on / 依赖: fast_instance
+/-
+**CompactlySupportedContinuousMap.semilatticeInf** 是 Mathlib 中的一个实例，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：semilatticeInf : SemilatticeInf C_c(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semilatticeInf : SemilatticeInf C_c(α, β) := fast_instance%
   DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-/--
-lemma `finsetInf'_apply` / 引理 `finsetInf'_apply`
-
-English:
-lemma finsetInf'_apply
-  given: {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α)
-  proof: Finset.apply_inf'_eq_inf'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 finsetInf'_apply
-  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β)) (a : α)
-  证明: Finset.apply_inf'_eq_inf'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.apply_inf, _comp, _eq_inf, apply_inf
+/-
+**CompactlySupportedContinuousMap.finsetInf'_apply** 是 Mathlib 中的一个定理，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Semi
+latticeInf β] [inst_2 : Zero β]   [inst_3 : TopologicalSpace β] [inst_4 : Contin
+uousInf β] {ι : Type u_5} {s : Finset ι} (H : s.Nonempty)   (f : ι → CompactlySu
+pportedContinuousMap α β) (a : α), (s.inf' H f) a = s.inf' H fun i => (f i) a
+参数：H : s.Nonempty；f : ι → CompactlySupportedContinuousMap α β；a : α；s.inf' H f；f
+ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_inf'_eq_inf'_comp`：∀ {α : Type u_2} {β : Type u_3} {γ : Typ
+e u_4} [inst : SemilatticeInf α] [inst_1 : SemilatticeInf γ] {s : Finset β}   (H
+ : s.Nonempty) {f : …
 -/
-lemma finsetInf'_apply {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) (a : α) :
-    s.inf' H f a = s.inf' H fun i => f i a :=
-  Finset.apply_inf'_eq_inf'_comp H (fun g : C_c(α, β) => g a) fun _ _ => rfl
+lemma finsetInf'_apply {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι → C_c(α, β)) (a : α) :
+    s.inf' H f a = s.inf' H fun i ↦ f i a :=
+  Finset.apply_inf'_eq_inf'_comp H (fun g : C_c(α, β) ↦ g a) fun _ _ ↦ rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_finsetInf'` / 引理 `coe_finsetInf'`
-
-English:
-lemma coe_finsetInf'
-  given: {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β))
-  proof: by ext; simp [finsetInf'_apply]
-
-中文:
-引理 coe_finsetInf'
-  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C_c(α, β))
-  证明: by ext; simp [finsetInf'_apply]
-
-Depends on / 依赖: _apply, finsetInf
+/-
+**CompactlySupportedContinuousMap.coe_finsetInf'** 是 Mathlib 中的一个引理，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：coe_finsetInf' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α
+, β)) : ⇑(s.inf' H f) = s.inf' H fun i => ⇑(f i)
+参数：H : s.Nonempty；f : ι -> C_c(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.finsetInf'_apply`：∀ {α : Type u_2} {β : 
+Type u_3} [inst : TopologicalSpace α] [inst_1 : SemilatticeInf β] [inst_2 : Zero
+ β]   [inst_3 : TopologicalSpace β] [i…
+· 使用定理 `Finset.inf'_apply`：∀ {α : Type u_2} {β : Type u_3} {C : β → Type u_7} [i
+nst : (b : β) → SemilatticeInf (C b)] {s : Finset α}   (H : s.Nonempty) (f : α →
+ (b : β…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma coe_finsetInf' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι -> C_c(α, β)) :
-    ⇑(s.inf' H f) = s.inf' H fun i => ⇑(f i) := by ext; simp [finsetInf'_apply]
+lemma coe_finsetInf' {ι : Type*} {s : Finset ι} (H : s.Nonempty) (f : ι → C_c(α, β)) :
+    ⇑(s.inf' H f) = s.inf' H fun i ↦ ⇑(f i) := by ext; simp [finsetInf'_apply]
 
 end SemilatticeInf
 
@@ -1893,90 +1190,60 @@ section Lattice
 
 variable [TopologicalSpace β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Lattice
-  signature: β] [TopologicalLattice β] [Zero β] : Lattice C_c(α, β) where
-
-中文:
-实例 [格
-  签名: β] [拓扑格 β] [零 β] : 格 C_c(α, β) where
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Lattice β] [TopologicalLattice β] [Zero β] : Lattice C_c(α, β) where
-
-/--
-Instance `instMulLeftMono` / 实例 `instMulLeftMono`
-
-English:
-instance instMulLeftMono
-  signature: [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulLeftMono β]
-  body: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_right (hg₁₂ x) _⟩
-
-中文:
-实例 instMulLeftMono
-  签名: [偏序 β] [乘零类 β] [连续乘法 β] [MulLeftMono β]
-  定义体: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_right (hg₁₂ x) _⟩
-
-Depends on / 依赖: mul_le_mul_right
+/-
+**CompactlySupportedContinuousMap.instMulLeftMono** 是 Mathlib 中的一个实例，位于命名空间 `Com
+pactlySupportedContinuousMap`。
+形式化陈述：instMulLeftMono [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulLe
+ftMono β] : MulLeftMono C_c(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_right`：mul_le_mul_right [MulLeftMono α] {b c : α} (bc : b <= 
+c) (a : α) : a * b <= a * c
 -/
 instance instMulLeftMono [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulLeftMono β] :
     MulLeftMono C_c(α, β) :=
   ⟨fun _ _ _ hg₁₂ x => mul_le_mul_right (hg₁₂ x) _⟩
-
-/--
-Instance `instMulRightMono` / 实例 `instMulRightMono`
-
-English:
-instance instMulRightMono
-  signature: [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulRightMono β]
-  body: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_left (hg₁₂ x) _⟩
-
-中文:
-实例 instMulRightMono
-  签名: [偏序 β] [乘零类 β] [连续乘法 β] [MulRightMono β]
-  定义体: ⟨fun _ _ _ hg₁₂ x => mul_le_mul_left (hg₁₂ x) _⟩
-
-Depends on / 依赖: mul_le_mul_left
+/-
+**CompactlySupportedContinuousMap.instMulRightMono** 是 Mathlib 中的一个实例，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：instMulRightMono [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulR
+ightMono β] : MulRightMono C_c(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_left`：mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b 
+<= c) (a : α) : b * a <= c * a
 -/
 instance instMulRightMono [PartialOrder β] [MulZeroClass β] [ContinuousMul β] [MulRightMono β] :
     MulRightMono C_c(α, β) :=
   ⟨fun _ _ _ hg₁₂ x => mul_le_mul_left (hg₁₂ x) _⟩
-
-/--
-Instance `instAddLeftMono` / 实例 `instAddLeftMono`
-
-English:
-instance instAddLeftMono
-  signature: [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddLeftMono β]
-  body: ⟨fun _ _ _ hg₁₂ x => add_le_add_right (hg₁₂ x) _⟩
-
-中文:
-实例 instAddLeftMono
-  签名: [偏序 β] [加法零类 β] [连续加法 β] [AddLeftMono β]
-  定义体: ⟨fun _ _ _ hg₁₂ x => add_le_add_right (hg₁₂ x) _⟩
-
-Depends on / 依赖: add_le_add_right
+/-
+**CompactlySupportedContinuousMap.instAddLeftMono** 是 Mathlib 中的一个实例，位于命名空间 `Com
+pactlySupportedContinuousMap`。
+形式化陈述：instAddLeftMono [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddLe
+ftMono β] : AddLeftMono C_c(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [AddLe
+ftMono α] {b c : α}, b ≤ c → ∀ (a : α), a + b ≤ a + c
 -/
 instance instAddLeftMono [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddLeftMono β] :
     AddLeftMono C_c(α, β) :=
   ⟨fun _ _ _ hg₁₂ x => add_le_add_right (hg₁₂ x) _⟩
-
-/--
-Instance `instAddRightMono` / 实例 `instAddRightMono`
-
-English:
-instance instAddRightMono
-  signature: [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddRightMono β]
-  body: ⟨fun _ _ _ hg₁₂ x => add_le_add_left (hg₁₂ x) _⟩
-
-中文:
-实例 instAddRightMono
-  签名: [偏序 β] [加法零类 β] [连续加法 β] [AddRightMono β]
-  定义体: ⟨fun _ _ _ hg₁₂ x => add_le_add_left (hg₁₂ x) _⟩
-
-Depends on / 依赖: add_le_add_left
+/-
+**CompactlySupportedContinuousMap.instAddRightMono** 是 Mathlib 中的一个实例，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：instAddRightMono [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddR
+ightMono β] : AddRightMono C_c(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
 -/
 instance instAddRightMono [PartialOrder β] [AddZeroClass β] [ContinuousAdd β] [AddRightMono β] :
     AddRightMono C_c(α, β) :=
@@ -1991,20 +1258,10 @@ section IsOrderedAddMonoid
 variable [TopologicalSpace β] [AddCommMonoid β] [ContinuousAdd β]
 variable [PartialOrder β] [IsOrderedAddMonoid β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOrderedAddMonoid C_c(α, β)
-  body: add_le_add_left hfg c
-
-中文:
-实例 :
-  签名: 是OrderedAdd幺半群 C_c(α, β)
-  定义体: add_le_add_left hfg c
-
-Depends on / 依赖: add_le_add_left
+/-
+**CompactlySupportedContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupported
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsOrderedAddMonoid C_c(α, β) where
   add_le_add_left _ _ hfg c := add_le_add_left hfg c
@@ -2020,244 +1277,165 @@ category of topological spaces with morphisms given by `CocompactMap`s.
 
 variable {δ : Type*} [TopologicalSpace β] [TopologicalSpace γ] [TopologicalSpace δ]
 
-local notation α " ->co " β => CocompactMap α β
+local notation α " →co " β => CocompactMap α β
 
 section
 
 variable [Zero δ]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of a continuous function with compact support with a cocompact map
+yields another continuous function with compact support. -/
+/-
+**CompactlySupportedContinuousMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `CompactlySuppo
+rtedContinuousMap`。
+形式化陈述：comp (f : C_c(γ, δ)) (g : β ->co γ) : C_c(β, δ) where toContinuousMap
+参数：f : C_c(γ, δ)；g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : C_c(γ, δ)) (g : β ->co γ)
-  body: (f : C(γ, δ)).comp g
-  hasCompactSupport' := by
-    apply IsCompact.of_isClosed_subset (g.isCompact_preimage_of_isClosed f.2 (isClosed_tsupport _))
-      (isClosed_tsupport (f ∘ g))
-    intro x hx
-    rw [tsupport]; rw [Set.mem_preimage]; rw [_root_.mem_closure_iff]
-    intro o ho hgxo
-    rw [tsupport]; rw [_root_.mem_closure_iff] at hx
-    obtain ⟨y, hy⟩ := hx (g ⁻¹' o) (IsOpen.preimage g.1.2 ho) hgxo
-    exact ⟨g y, hy⟩
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : C_c(γ, δ)) (g : β ->co γ)
-  定义体: (f : C(γ, δ)).comp g
-  hasCompactSupport' := by
-    apply IsCompact.of_isClosed_subset (g.isCompact_preimage_of_isClosed f.2 (isClosed_tsupport _))
-      (isClosed_tsupport (f ∘ g))
-    intro x hx
-    rw [tsupport]; rw [Set.mem_preimage]; rw [_root_.mem_closure_iff]
-    intro o ho hgxo
-    rw [tsupport]; rw [_root_.mem_closure_iff] at hx
-    obtain ⟨y, hy⟩ := hx (g ⁻¹' o) (IsOpen.preimage g.1.2 ho) hgxo
-    exact ⟨g y, hy⟩
-
-@[simp]
+--- 原说明 ---
+Composition of a continuous function with compact support with a cocompact map
+yields another continuous function with compact support.
 -/
-def comp (f : C_c(γ, δ)) (g : β ->co γ) : C_c(β, δ) where
+def comp (f : C_c(γ, δ)) (g : β →co γ) : C_c(β, δ) where
   toContinuousMap := (f : C(γ, δ)).comp g
   hasCompactSupport' := by
     apply IsCompact.of_isClosed_subset (g.isCompact_preimage_of_isClosed f.2 (isClosed_tsupport _))
       (isClosed_tsupport (f ∘ g))
     intro x hx
-    rw [tsupport]; rw [Set.mem_preimage]; rw [_root_.mem_closure_iff]
+    rw [tsupport, Set.mem_preimage, _root_.mem_closure_iff]
     intro o ho hgxo
-    rw [tsupport]; rw [_root_.mem_closure_iff] at hx
+    rw [tsupport, _root_.mem_closure_iff] at hx
     obtain ⟨y, hy⟩ := hx (g ⁻¹' o) (IsOpen.preimage g.1.2 ho) hgxo
     exact ⟨g y, hy⟩
 
 @[simp]
-/--
-theorem `coe_comp_to_continuous_fun` / 定理 `coe_comp_to_continuous_fun`
-
-English:
-theorem coe_comp_to_continuous_fun
-  given: (f : C_c(γ, δ)) (g : β ->co γ)
-  statement: ((f.comp g) : β -> δ) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp_to_continuous_fun
-  条件: (f : C_c(γ, δ)) (g : β ->co γ)
-  结论: ((f.comp g) : β -> δ) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.coe_comp_to_continuous_fun** 是 Mathlib 中的一个定理，
+位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：coe_comp_to_continuous_fun (f : C_c(γ, δ)) (g : β ->co γ) : ((f.comp g) : 
+β -> δ) = f ∘ g
+参数：f : C_c(γ, δ)；g : β ->co γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp_to_continuous_fun (f : C_c(γ, δ)) (g : β ->co γ) : ((f.comp g) : β -> δ) = f ∘ g :=
+theorem coe_comp_to_continuous_fun (f : C_c(γ, δ)) (g : β →co γ) : ((f.comp g) : β → δ) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : C_c(γ, δ))
-  statement: f.comp (CocompactMap.id γ) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : C_c(γ, δ))
-  结论: f.comp (余compact映射.id γ) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CompactlySu
+pportedContinuousMap`。
+形式化陈述：comp_id (f : C_c(γ, δ)) : f.comp (CocompactMap.id γ) = f
+参数：f : C_c(γ, δ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
 -/
 theorem comp_id (f : C_c(γ, δ)) : f.comp (CocompactMap.id γ) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : C_c(γ, δ)) (g : β ->co γ) (h : α ->co β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : C_c(γ, δ)) (g : β ->co γ) (h : α ->co β)
-  证明: rfl
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：comp_assoc (f : C_c(γ, δ)) (g : β ->co γ) (h : α ->co β) : (f.comp g).comp
+ h = f.comp (g.comp h)
+参数：f : C_c(γ, δ)；g : β ->co γ；h : α ->co β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc (f : C_c(γ, δ)) (g : β ->co γ) (h : α ->co β) :
+theorem comp_assoc (f : C_c(γ, δ)) (g : β →co γ) (h : α →co β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `zero_comp` / 定理 `zero_comp`
-
-English:
-theorem zero_comp
-  given: (g : β ->co γ)
-  statement: (0 : C_c(γ, δ)).comp g = 0
-  proof: rfl
-
-中文:
-定理 zero_comp
-  条件: (g : β ->co γ)
-  结论: (0 : C_c(γ, δ)).comp g = 0
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.zero_comp** 是 Mathlib 中的一个定理，位于命名空间 `Compactly
+SupportedContinuousMap`。
+形式化陈述：zero_comp (g : β ->co γ) : (0 : C_c(γ, δ)).comp g = 0
+参数：g : β ->co γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_comp (g : β ->co γ) : (0 : C_c(γ, δ)).comp g = 0 :=
+theorem zero_comp (g : β →co γ) : (0 : C_c(γ, δ)).comp g = 0 :=
   rfl
 
 end
 
-/--
-Definition of `compAddMonoidHom` / `compAddMonoidHom` 的定义
+/-- Composition as an additive monoid homomorphism. -/
+/-
+**CompactlySupportedContinuousMap.compAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ) : C_c(γ, δ
+) ->+ C_c(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compAddMonoidHom
-  signature: [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ)
-  body: f.comp g
-  map_zero' := zero_comp g
-  map_add' _ _ := rfl
-
-中文:
-定义 compAddMonoidHom
-  签名: [加法幺半群 δ] [连续加法 δ] (g : β ->co γ)
-  定义体: f.comp g
-  map_zero' := zero_comp g
-  map_add' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as an additive monoid homomorphism.
 -/
-def compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ) : C_c(γ, δ) ->+ C_c(β, δ) where
+def compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β →co γ) : C_c(γ, δ) →+ C_c(β, δ) where
   toFun f := f.comp g
   map_zero' := zero_comp g
   map_add' _ _ := rfl
 
-/--
-Definition of `compMulHom` / `compMulHom` 的定义
+/-- Composition as a semigroup homomorphism. -/
+/-
+**CompactlySupportedContinuousMap.compMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ) : C_c(γ, δ) -
+>ₙ* C_c(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compMulHom
-  signature: [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ)
-  body: f.comp g
-  map_mul' _ _ := rfl
-
-中文:
-定义 compMulHom
-  签名: [乘零类 δ] [连续乘法 δ] (g : β ->co γ)
-  定义体: f.comp g
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a semigroup homomorphism.
 -/
-def compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ) : C_c(γ, δ) ->ₙ* C_c(β, δ) where
+def compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β →co γ) : C_c(γ, δ) →ₙ* C_c(β, δ) where
   toFun f := f.comp g
   map_mul' _ _ := rfl
 
-/--
-Definition of `compLinearMap` / `compLinearMap` 的定义
+/-- Composition as a linear map. -/
+/-
+**CompactlySupportedContinuousMap.compLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Compa
+ctlySupportedContinuousMap`。
+形式化陈述：compLinearMap [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R]
+ [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ) : C_c(γ, δ) ->ₗ[R] C_c(β,
+ δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compLinearMap
-  signature: [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R] [Module R δ]
-  body: f.comp g
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 compLinearMap
-  签名: [加法交换幺半群 δ] [连续加法 δ] {R : 类型} [半环 R] [模 R δ]
-  定义体: f.comp g
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a linear map.
 -/
 def compLinearMap [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R] [Module R δ]
-    [ContinuousConstSMul R δ] (g : β ->co γ) : C_c(γ, δ) ->ₗ[R] C_c(β, δ) where
+    [ContinuousConstSMul R δ] (g : β →co γ) : C_c(γ, δ) →ₗ[R] C_c(β, δ) where
   toFun f := f.comp g
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/--
-Definition of `compNonUnitalAlgHom` / `compNonUnitalAlgHom` 的定义
+/-- Composition as a non-unital algebra homomorphism. -/
+/-
+**CompactlySupportedContinuousMap.compNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 
+`CompactlySupportedContinuousMap`。
+形式化陈述：compNonUnitalAlgHom {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
+ [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ)
+ : C_c(γ, δ) ->ₙₐ[R] C_c(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compNonUnitalAlgHom
-  signature: {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
-  body: f.comp g
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 compNonUnitalAlgHom
-  签名: {R : 类型} [半环 R] [非幺非结合半环 δ]
-  定义体: f.comp g
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a non-unital algebra homomorphism.
 -/
 def compNonUnitalAlgHom {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
-    [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ) :
-    C_c(γ, δ) ->ₙₐ[R] C_c(β, δ) where
+    [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β →co γ) :
+    C_c(γ, δ) →ₙₐ[R] C_c(β, δ) where
   toFun f := f.comp g
   map_smul' _ _ := rfl
   map_zero' := rfl
@@ -2272,26 +1450,10 @@ section Basic
 
 variable [Zero β] [TopologicalSpace β] [FunLike F α β] [CompactlySupportedContinuousMapClass F α β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeTC F (CompactlySupportedContinuousMap α β)
-  body: ⟨fun f =>
-    { toFun := f
-      continuous_toFun := map_continuous f
-      hasCompactSupport' := hasCompactSupport f }⟩
-
-中文:
-实例 :
-  签名: CoeTC F (余mpactlySupportedContinuous映射 α β)
-  定义体: ⟨fun f =>
-    { toFun := f
-      continuous_toFun := map_continuous f
-      hasCompactSupport' := hasCompactSupport f }⟩
-
-Depends on / 依赖: continuous_toFun, hasCompactSupport, map_continuous
+/-
+**CompactlySupportedContinuousMapClass.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupp
+ortedContinuousMapClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeTC F (CompactlySupportedContinuousMap α β) :=
   ⟨fun f =>
@@ -2299,26 +1461,29 @@ instance : CoeTC F (CompactlySupportedContinuousMap α β) :=
       continuous_toFun := map_continuous f
       hasCompactSupport' := hasCompactSupport f }⟩
 
-/--
-lemma `of_compactSpace` / 引理 `of_compactSpace`
+/-- A continuous function on a compact space has automatically compact support. This is not an
+/-
+**CompactlySupportedContinuousMapClass.to** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySu
+pportedContinuousMapClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance to avoid type class loops. -/
+/-
+**CompactlySupportedContinuousMapClass.of_compactSpace** 是 Mathlib 中的一个引理，位于命名空间
+ `CompactlySupportedContinuousMapClass`。
+形式化陈述：of_compactSpace (G : Type*) [FunLike G α β] [ContinuousMapClass G α β] [Co
+mpactSpace α] : CompactlySupportedContinuousMapClass G α β where map_continuous
+参数：G : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasCompactSupport.of_compactSpace`：∀ {α : Type u_2} {γ : Type u_5} [inst
+ : TopologicalSpace α] [inst_1 : Zero γ] [CompactSpace α] (f : α → γ),   HasComp
+actSupport f
 
-English:
-lemma of_compactSpace
-  statement: (G : Type*) [FunLike G α β]
-  proof: map_continuous
-  hasCompactSupport := by
-    intro f
-    exact HasCompactSupport.of_compactSpace f
-
-中文:
-引理 of_compactSpace
-  结论: (G : 类型) [函数状 G α β]
-  证明: map_continuous
-  hasCompactSupport := by
-    intro f
-    exact HasCompactSupport.of_compactSpace f
-
-Depends on / 依赖: map_continuous
+--- 原说明 ---
+A continuous function on a compact space has automatically compact support. This
+ is not an
+instance to avoid type class loops.
 -/
 lemma of_compactSpace (G : Type*) [FunLike G α β]
     [ContinuousMapClass G α β] [CompactSpace α] : CompactlySupportedContinuousMapClass G α β where
@@ -2334,26 +1499,30 @@ section Uniform
 variable [UniformSpace β] [UniformSpace γ] [Zero γ] [FunLike F β γ]
   [CompactlySupportedContinuousMapClass F β γ]
 
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  given: (f : F)
-  statement: UniformContinuous (f : β -> γ)
-  proof: (map_continuous f).uniformContinuous_of_tendsto_cocompact
-  (HasCompactSupport.is_zero_at_infty (hasCompactSupport f))
-
-中文:
-定理 uniformContinuous
-  条件: (f : F)
-  结论: 一致连续 (f : β -> γ)
-  证明: (map_continuous f).uniformContinuous_of_tendsto_cocompact
-  (HasCompactSupport.is_zero_at_infty (hasCompactSupport f))
-
-Depends on / 依赖: HasCompactSupport, HasCompactSupport.is_zero_at_infty, hasCompactSupport, is_zero_at_infty, map_continuous, uniformContinuous_of_tendsto_cocompact
+/-
+**CompactlySupportedContinuousMapClass.uniformContinuous** 是 Mathlib 中的一个定理，位于命名
+空间 `CompactlySupportedContinuousMapClass`。
+形式化陈述：uniformContinuous (f : F) : UniformContinuous (f : β -> γ)
+参数：f : F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.uniformContinuous_of_tendsto_cocompact`：Continuous.uniformCon
+tinuous_of_tendsto_cocompact {f : α -> β} {x : β} (h_cont : Continuous f) (hx : 
+Tendsto f (cocompact α) (𝓝 x)) : Unifor…
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `CompactlySupportedContinuousMapClass.toContinuousMapClass`：∀ {F : Type u
+_5} {α : outParam (Type u_6)} {β : outParam (Type u_7)} {inst : TopologicalSpace
+ α} {inst_1 : Zero β}   {inst_2 : TopologicalSp…
+· 使用定理 `HasCompactSupport.is_zero_at_infty`：∀ {α : Type u_2} {γ : Type u_5} [ins
+t : TopologicalSpace α] [inst_1 : Zero γ] {f : α → γ} [inst_2 : TopologicalSpace
+ γ],   HasCompactSupport…
+· 使用定理 `CompactlySupportedContinuousMapClass.hasCompactSupport`：∀ {F : Type u_5}
+ {α : outParam (Type u_6)} {β : outParam (Type u_7)} {inst : TopologicalSpace α}
+ {inst_1 : Zero β}   {inst_2 : TopologicalSp…
 -/
-theorem uniformContinuous (f : F) : UniformContinuous (f : β -> γ) :=
+theorem uniformContinuous (f : F) : UniformContinuous (f : β → γ) :=
   (map_continuous f).uniformContinuous_of_tendsto_cocompact
   (HasCompactSupport.is_zero_at_infty (hasCompactSupport f))
 
@@ -2364,20 +1533,10 @@ section ZeroAtInfty
 variable [TopologicalSpace β] [TopologicalSpace γ] [Zero γ]
   [FunLike F β γ] [CompactlySupportedContinuousMapClass F β γ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ZeroAtInftyContinuousMapClass F β γ
-  body: HasCompactSupport.is_zero_at_infty (hasCompactSupport f)
-
-中文:
-实例 :
-  签名: ZeroAtInftyContinuous映射类 F β γ
-  定义体: HasCompactSupport.is_zero_at_infty (hasCompactSupport f)
-
-Depends on / 依赖: HasCompactSupport, HasCompactSupport.is_zero_at_infty, hasCompactSupport, is_zero_at_infty
+/-
+**CompactlySupportedContinuousMapClass.** 是 Mathlib 中的一个实例，位于命名空间 `CompactlySupp
+ortedContinuousMapClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ZeroAtInftyContinuousMapClass F β γ where
   zero_at_infty f := HasCompactSupport.is_zero_at_infty (hasCompactSupport f)
@@ -2393,48 +1552,64 @@ open NNReal
 namespace CompactlySupportedContinuousMap
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `exists_add_of_le` / 引理 `exists_add_of_le`
-
-English:
-lemma exists_add_of_le
-  given: {f₁ f₂ : C_c(α, Real>=0)} (h : f₁ <= f₂)
-  statement: exists (g : C_c(α, Real>=0)),
-  proof: by
-  refine ⟨⟨f₂.1 - f₁.1, ?_⟩, ?_⟩
-  · apply (f₁.hasCompactSupport'.union f₂.hasCompactSupport').of_isClosed_subset isClosed_closure
-    rw [tsupport]; rw [tsupport]; rw [← closure_union]
-    apply closure_mono
-    intro x hx
-    contrapose hx
-    simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, Set.mem_union, Function.mem_support,
-      ne_eq, not_or, Decidable.not_not, ContinuousMap.coe_sub, Pi.sub_apply] at hx ⊢
-    simp [hx.1, hx.2]
-  · ext x
-    simpa [← NNReal.coe_add] using add_tsub_cancel_of_le (h x)
-
-中文:
-引理 存在_add_of_le
-  条件: {f₁ f₂ : C_c(α, 实数>=0)} (h : f₁ <= f₂)
-  结论: 存在 (g : C_c(α, 实数>=0)),
-  证明: by
-  refine ⟨⟨f₂.1 - f₁.1, ?_⟩, ?_⟩
-  · apply (f₁.hasCompactSupport'.union f₂.hasCompactSupport').of_isClosed_subset isClosed_closure
-    rw [tsupport]; rw [tsupport]; rw [← closure_union]
-    apply closure_mono
-    intro x hx
-    contrapose hx
-    simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, Set.mem_union, Function.mem_support,
-      ne_eq, not_or, Decidable.not_not, ContinuousMap.coe_sub, Pi.sub_apply] at hx ⊢
-    simp [hx.1, hx.2]
-  · ext x
-    simpa [← NNReal.coe_add] using add_tsub_cancel_of_le (h x)
+/-
+**CompactlySupportedContinuousMap.exists_add_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {f₁ f₂ : CompactlySupportedCo
+ntinuousMap α NNReal},   f₁ ≤ f₂ → ∃ g, f₁ + g = f₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousSub`：ContinuousSub NNReal
+· 使用定理 `IsCompact.of_isClosed_subset`：IsCompact.of_isClosed_subset (hs : IsCompa
+ct s) (ht : IsClosed t) (h : t subseteq s) : IsCompact t
+· 使用定理 `IsCompact.union`：IsCompact.union (hs : IsCompact s) (ht : IsCompact t) :
+ IsCompact (s union t)
+· 使用定理 `CompactlySupportedContinuousMap.hasCompactSupport'`：∀ {α : Type u_5} {β 
+: Type u_6} [inst : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : TopologicalS
+pace β]   (self : CompactlySupportedCont…
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsupport.eq_1`：∀ {X : Type u_1} {α : Type u_2} [inst : Zero α] [inst_1 :
+ TopologicalSpace X] (f : X → α),   tsupport f = closure (Function.support f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `closure_union`：closure_union : closure (s union t) = closure s union clo
+sure t
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `add_tsub_cancel_of_le`：add_tsub_cancel_of_le (h : a <= b) : a + (b - a) 
+= b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
 -/
-protected lemma exists_add_of_le {f₁ f₂ : C_c(α, Real>=0)} (h : f₁ <= f₂) : exists (g : C_c(α, Real>=0)),
+protected lemma exists_add_of_le {f₁ f₂ : C_c(α, ℝ≥0)} (h : f₁ ≤ f₂) : ∃ (g : C_c(α, ℝ≥0)),
     f₁ + g = f₂ := by
   refine ⟨⟨f₂.1 - f₁.1, ?_⟩, ?_⟩
   · apply (f₁.hasCompactSupport'.union f₂.hasCompactSupport').of_isClosed_subset isClosed_closure
-    rw [tsupport]; rw [tsupport]; rw [← closure_union]
+    rw [tsupport, tsupport, ← closure_union]
     apply closure_mono
     intro x hx
     contrapose hx
@@ -2444,102 +1619,121 @@ protected lemma exists_add_of_le {f₁ f₂ : C_c(α, Real>=0)} (h : f₁ <= f�
   · ext x
     simpa [← NNReal.coe_add] using add_tsub_cancel_of_le (h x)
 
-/--
-Definition of `nnrealPart` / `nnrealPart` 的定义
+/-- The nonnegative part of a continuous compactly supported `ℝ`-valued function as a
+continuous compactly supported `ℝ≥0`-valued function. -/
+/-
+**CompactlySupportedContinuousMap.nnrealPart** 是 Mathlib 中的一个定义，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：nnrealPart (f : C_c(α, Real)) : C_c(α, Real>=0) where toFun
+参数：f : C_c(α, Real)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nnrealPart
-  signature: (f : C_c(α, Real))
-  body: Real.toNNReal.comp f.toFun
-  continuous_toFun := Continuous.comp continuous_real_toNNReal f.continuous
-  hasCompactSupport' := HasCompactSupport.comp_left f.hasCompactSupport' Real.toNNReal_zero
-
-@[simp]
-
-中文:
-定义 nnrealPart
-  签名: (f : C_c(α, 实数))
-  定义体: Real.toNNReal.comp f.toFun
-  continuous_toFun := Continuous.comp continuous_real_toNNReal f.continuous
-  hasCompactSupport' := HasCompactSupport.comp_left f.hasCompactSupport' Real.toNNReal_zero
-
-@[simp]
-
-Depends on / 依赖: Real.toNNReal.comp, f.toFun, toNNReal
+--- 原说明 ---
+The nonnegative part of a continuous compactly supported `ℝ`-valued function as 
+a
+continuous compactly supported `ℝ≥0`-valued function.
 -/
-noncomputable def nnrealPart (f : C_c(α, Real)) : C_c(α, Real>=0) where
+noncomputable def nnrealPart (f : C_c(α, ℝ)) : C_c(α, ℝ≥0) where
   toFun := Real.toNNReal.comp f.toFun
   continuous_toFun := Continuous.comp continuous_real_toNNReal f.continuous
   hasCompactSupport' := HasCompactSupport.comp_left f.hasCompactSupport' Real.toNNReal_zero
 
 @[simp]
-/--
-lemma `nnrealPart_apply` / 引理 `nnrealPart_apply`
-
-English:
-lemma nnrealPart_apply
-  given: (f : C_c(α, Real)) (x : α)
-  proof: rfl
-
-中文:
-引理 nnrealPart_apply
-  条件: (f : C_c(α, 实数)) (x : α)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.nnrealPart_apply** 是 Mathlib 中的一个引理，位于命名空间 `Co
+mpactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_apply (f : C_c(α, Real)) (x : α) : f.nnrealPart x = Real.toNNRe
+al (f x)
+参数：f : C_c(α, Real)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nnrealPart_apply (f : C_c(α, Real)) (x : α) :
+lemma nnrealPart_apply (f : C_c(α, ℝ)) (x : α) :
     f.nnrealPart x = Real.toNNReal (f x) := rfl
-
-/--
-lemma `nnrealPart_neg_eq_zero_of_nonneg` / 引理 `nnrealPart_neg_eq_zero_of_nonneg`
-
-English:
-lemma nnrealPart_neg_eq_zero_of_nonneg
-  given: {f : C_c(α, Real)} (hf : 0 <= f)
-  statement: (-f).nnrealPart = 0
-  proof: by
-  ext x
-  simpa using hf x
-
-中文:
-引理 nnrealPart_neg_eq_zero_of_nonneg
-  条件: {f : C_c(α, 实数)} (hf : 0 <= f)
-  结论: (-f).nnrealPart = 0
-  证明: by
-  ext x
-  simpa using hf x
+/-
+**CompactlySupportedContinuousMap.nnrealPart_neg_eq_zero_of_nonneg** 是 Mathlib 中
+的一个引理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_neg_eq_zero_of_nonneg {f : C_c(α, Real)} (hf : 0 <= f) : (-f).n
+nrealPart = 0
+参数：α, Real；hf : 0 <= f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-lemma nnrealPart_neg_eq_zero_of_nonneg {f : C_c(α, Real)} (hf : 0 <= f) : (-f).nnrealPart = 0 := by
+lemma nnrealPart_neg_eq_zero_of_nonneg {f : C_c(α, ℝ)} (hf : 0 ≤ f) : (-f).nnrealPart = 0 := by
   ext x
   simpa using hf x
-
-/--
-lemma `nnrealPart_smul_pos` / 引理 `nnrealPart_smul_pos`
-
-English:
-lemma nnrealPart_smul_pos
-  given: (f : C_c(α, Real)) {a : Real} (ha : 0 <= a)
-  proof: by
-  ext x
-  simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, Real.coe_toNNReal', smul_eq_mul,
-    NNReal.coe_mul, ha, sup_of_le_left]
-  rcases le_total 0 (f x) with hfx | hfx
-  · simp [ha, hfx, mul_nonneg]
-  · simp [mul_nonpos_iff, ha, hfx]
-
-中文:
-引理 nnrealPart_smul_pos
-  条件: (f : C_c(α, 实数)) {a : 实数} (ha : 0 <= a)
-  证明: by
-  ext x
-  simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, Real.coe_toNNReal', smul_eq_mul,
-    NNReal.coe_mul, ha, sup_of_le_left]
-  rcases le_total 0 (f x) with hfx | hfx
-  · simp [ha, hfx, mul_nonneg]
-  · simp [mul_nonpos_iff, ha, hfx]
-
-Depends on / 依赖: NNReal, NNReal.coe_mul, Pi.smul_apply, Real.coe_toNNReal, coe_mul, coe_smul, coe_toNNReal, le_total, mul_nonneg, mul_nonpos_iff, nnrealPart_apply, smul_apply, smul_eq_mul, sup_of_le_left
+/-
+**CompactlySupportedContinuousMap.nnrealPart_smul_pos** 是 Mathlib 中的一个引理，位于命名空间 
+`CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_smul_pos (f : C_c(α, Real)) {a : Real} (ha : 0 <= a) : (a • f).
+nnrealPart = a.toNNReal • f.nnrealPart
+参数：f : C_c(α, Real)；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-lemma nnrealPart_smul_pos (f : C_c(α, Real)) {a : Real} (ha : 0 <= a) :
+lemma nnrealPart_smul_pos (f : C_c(α, ℝ)) {a : ℝ} (ha : 0 ≤ a) :
     (a • f).nnrealPart = a.toNNReal • f.nnrealPart := by
   ext x
   simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, Real.coe_toNNReal', smul_eq_mul,
@@ -2547,35 +1741,75 @@ lemma nnrealPart_smul_pos (f : C_c(α, Real)) {a : Real} (ha : 0 <= a) :
   rcases le_total 0 (f x) with hfx | hfx
   · simp [ha, hfx, mul_nonneg]
   · simp [mul_nonpos_iff, ha, hfx]
-
-/--
-lemma `nnrealPart_smul_neg` / 引理 `nnrealPart_smul_neg`
-
-English:
-lemma nnrealPart_smul_neg
-  given: (f : C_c(α, Real)) {a : Real} (ha : a <= 0)
-  proof: by
-  ext x
-  simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, smul_eq_mul, Real.coe_toNNReal', coe_neg,
-    Pi.neg_apply, NNReal.coe_mul]
-  rcases le_total 0 (f x) with hfx | hfx
-  · simp [mul_nonpos_iff, ha, hfx]
-  · simp [ha, hfx, mul_nonneg_of_nonpos_of_nonpos]
-
-中文:
-引理 nnrealPart_smul_neg
-  条件: (f : C_c(α, 实数)) {a : 实数} (ha : a <= 0)
-  证明: by
-  ext x
-  simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, smul_eq_mul, Real.coe_toNNReal', coe_neg,
-    Pi.neg_apply, NNReal.coe_mul]
-  rcases le_total 0 (f x) with hfx | hfx
-  · simp [mul_nonpos_iff, ha, hfx]
-  · simp [ha, hfx, mul_nonneg_of_nonpos_of_nonpos]
-
-Depends on / 依赖: NNReal, NNReal.coe_mul, Pi.neg_apply, Pi.smul_apply, Real.coe_toNNReal, coe_mul, coe_neg, coe_smul, coe_toNNReal, le_total, mul_nonneg_of_nonpos_of_nonpos, mul_nonpos_iff, neg_apply, nnrealPart_apply, smul_apply, smul_eq_mul
+/-
+**CompactlySupportedContinuousMap.nnrealPart_smul_neg** 是 Mathlib 中的一个引理，位于命名空间 
+`CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_smul_neg (f : C_c(α, Real)) {a : Real} (ha : a <= 0) : (a • f).
+nnrealPart = (-a).toNNReal • (-f).nnrealPart
+参数：f : C_c(α, Real)；ha : a <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+（共 38 条，此处仅展示前 30 条）
 -/
-lemma nnrealPart_smul_neg (f : C_c(α, Real)) {a : Real} (ha : a <= 0) :
+lemma nnrealPart_smul_neg (f : C_c(α, ℝ)) {a : ℝ} (ha : a ≤ 0) :
     (a • f).nnrealPart = (-a).toNNReal • (-f).nnrealPart := by
   ext x
   simp only [nnrealPart_apply, coe_smul, Pi.smul_apply, smul_eq_mul, Real.coe_toNNReal', coe_neg,
@@ -2583,67 +1817,109 @@ lemma nnrealPart_smul_neg (f : C_c(α, Real)) {a : Real} (ha : a <= 0) :
   rcases le_total 0 (f x) with hfx | hfx
   · simp [mul_nonpos_iff, ha, hfx]
   · simp [ha, hfx, mul_nonneg_of_nonpos_of_nonpos]
-
-/--
-lemma `nnrealPart_add_le_add_nnrealPart` / 引理 `nnrealPart_add_le_add_nnrealPart`
-
-English:
-lemma nnrealPart_add_le_add_nnrealPart
-  given: (f g : C_c(α, Real))
-  proof: by
-  intro x
-  simpa using Real.toNNReal_add_le
-
-中文:
-引理 nnrealPart_add_le_add_nnrealPart
-  条件: (f g : C_c(α, 实数))
-  证明: by
-  intro x
-  simpa using Real.toNNReal_add_le
-
-Depends on / 依赖: Real.toNNReal_add_le, toNNReal_add_le
+/-
+**CompactlySupportedContinuousMap.nnrealPart_add_le_add_nnrealPart** 是 Mathlib 中
+的一个引理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_add_le_add_nnrealPart (f g : C_c(α, Real)) : (f + g).nnrealPart
+ <= f.nnrealPart + g.nnrealPart
+参数：f g : C_c(α, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `Real.toNNReal_add_le`：toNNReal_add_le {r p : Real} : Real.toNNReal (r + 
+p) <= Real.toNNReal r + Real.toNNReal p
 -/
-lemma nnrealPart_add_le_add_nnrealPart (f g : C_c(α, Real)) :
-    (f + g).nnrealPart <= f.nnrealPart + g.nnrealPart := by
+lemma nnrealPart_add_le_add_nnrealPart (f g : C_c(α, ℝ)) :
+    (f + g).nnrealPart ≤ f.nnrealPart + g.nnrealPart := by
   intro x
   simpa using Real.toNNReal_add_le
-
-/--
-lemma `exists_add_nnrealPart_add_eq` / 引理 `exists_add_nnrealPart_add_eq`
-
-English:
-lemma exists_add_nnrealPart_add_eq
-  given: (f g : C_c(α, Real))
-  statement: exists (h : C_c(α, Real>=0)),
-  proof: by
-  obtain ⟨h, hh⟩ := CompactlySupportedContinuousMap.exists_add_of_le
-    (nnrealPart_add_le_add_nnrealPart f g)
-  use h
-  refine ⟨hh, ?_⟩
-  ext x
-  have hhx := congr(($hh x : Real))
-  simp only [coe_add, Pi.add_apply, nnrealPart_apply, coe_neg, Pi.neg_apply, NNReal.coe_add,
-    Real.coe_toNNReal', ← neg_add, max_neg_zero] at hhx ⊢
-  linear_combination hhx
-
-中文:
-引理 存在_add_nnrealPart_add_eq
-  条件: (f g : C_c(α, 实数))
-  结论: 存在 (h : C_c(α, 实数>=0)),
-  证明: by
-  obtain ⟨h, hh⟩ := CompactlySupportedContinuousMap.exists_add_of_le
-    (nnrealPart_add_le_add_nnrealPart f g)
-  use h
-  refine ⟨hh, ?_⟩
-  ext x
-  have hhx := congr(($hh x : Real))
-  simp only [coe_add, Pi.add_apply, nnrealPart_apply, coe_neg, Pi.neg_apply, NNReal.coe_add,
-    Real.coe_toNNReal', ← neg_add, max_neg_zero] at hhx ⊢
-  linear_combination hhx
-
-Depends on / 依赖: CompactlySupportedContinuousMap, CompactlySupportedContinuousMap.exists_add_of_le, NNReal, NNReal.coe_add, Pi.add_apply, Pi.neg_apply, Real.coe_toNNReal, add_apply, coe_add, coe_neg, coe_toNNReal, exists_add_of_le, linear_combination, max_neg_zero, neg_add, neg_apply, nnrealPart_add_le_add_nnrealPart, nnrealPart_apply
+/-
+**CompactlySupportedContinuousMap.exists_add_nnrealPart_add_eq** 是 Mathlib 中的一个引
+理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：exists_add_nnrealPart_add_eq (f g : C_c(α, Real)) : exists (h : C_c(α, Rea
+l>=0)), (f + g).nnrealPart + h = f.nnrealPart + g.nnrealPart ∧ (-f + -g).nnrealP
+art + h = (-f).nnrealPart + (-g).nnrealPart
+参数：f g : C_c(α, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `CompactlySupportedContinuousMap.exists_add_of_le`：∀ {α : Type u_2} [inst
+ : TopologicalSpace α] {f₁ f₂ : CompactlySupportedContinuousMap α NNReal},   f₁ 
+≤ f₂ → ∃ g, f₁ + g = f₂
+· 使用引理 `CompactlySupportedContinuousMap.nnrealPart_add_le_add_nnrealPart`：nnreal
+Part_add_le_add_nnrealPart (f g : C_c(α, Real)) : (f + g).nnrealPart <= f.nnreal
+Part + g.nnrealPart
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `max_neg_zero`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder
+ α] [AddLeftMono α] (a : α), max (-a) 0 = -a + max a 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_of_eq`：eq_of_eq [Add α] [IsRightCanc
+elAdd α] (p : (a : α) = b) (H : a' + b = b' + a) : a' = b'
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_rearrange`：∀ {G : Type u_3} [inst : 
+AddGroup G] {a b : G}, a - b = 0 → a = b
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+（共 50 条，此处仅展示前 30 条）
 -/
-lemma exists_add_nnrealPart_add_eq (f g : C_c(α, Real)) : exists (h : C_c(α, Real>=0)),
+lemma exists_add_nnrealPart_add_eq (f g : C_c(α, ℝ)) : ∃ (h : C_c(α, ℝ≥0)),
     (f + g).nnrealPart + h = f.nnrealPart + g.nnrealPart ∧
     (-f + -g).nnrealPart + h = (-f).nnrealPart + (-g).nnrealPart := by
   obtain ⟨h, hh⟩ := CompactlySupportedContinuousMap.exists_add_of_le
@@ -2651,320 +1927,431 @@ lemma exists_add_nnrealPart_add_eq (f g : C_c(α, Real)) : exists (h : C_c(α, R
   use h
   refine ⟨hh, ?_⟩
   ext x
-  have hhx := congr(($hh x : Real))
+  have hhx := congr(($hh x : ℝ))
   simp only [coe_add, Pi.add_apply, nnrealPart_apply, coe_neg, Pi.neg_apply, NNReal.coe_add,
     Real.coe_toNNReal', ← neg_add, max_neg_zero] at hhx ⊢
   linear_combination hhx
 
-/--
-Definition of `toReal` / `toReal` 的定义
+/-- The compactly supported continuous `ℝ≥0`-valued function as a compactly supported `ℝ`-valued
+function. -/
+/-
+**CompactlySupportedContinuousMap.toReal** 是 Mathlib 中的一个定义，位于命名空间 `CompactlySup
+portedContinuousMap`。
+形式化陈述：toReal (f : C_c(α, Real>=0)) : C_c(α, Real)
+参数：f : C_c(α, Real>=0)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toReal
-  signature: (f : C_c(α, Real>=0))
-  body: f.compLeft ContinuousMap.coeNNRealReal
-
-中文:
-定义 to实数
-  签名: (f : C_c(α, 实数>=0))
-  定义体: f.compLeft ContinuousMap.coeNNRealReal
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coeNNRealReal, coeNNRealReal, compLeft, f.compLeft
+--- 原说明 ---
+The compactly supported continuous `ℝ≥0`-valued function as a compactly supporte
+d `ℝ`-valued
+function.
 -/
-noncomputable def toReal (f : C_c(α, Real>=0)) : C_c(α, Real) :=
+noncomputable def toReal (f : C_c(α, ℝ≥0)) : C_c(α, ℝ) :=
   f.compLeft ContinuousMap.coeNNRealReal
-
-/--
-lemma `toReal_apply` / 引理 `toReal_apply`
-
-English:
-lemma toReal_apply
-  given: (f : C_c(α, Real>=0)) (x : α)
-  statement: f.toReal x = f x
-  proof: compLeft_apply rfl _ _
-
-中文:
-引理 to实数_apply
-  条件: (f : C_c(α, 实数>=0)) (x : α)
-  结论: f.to实数 x = f x
-  证明: compLeft_apply rfl _ _
+/-
+**CompactlySupportedContinuousMap.toReal_apply** 是 Mathlib 中的一个定理，位于命名空间 `Compac
+tlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (f : CompactlySupportedContin
+uousMap α NNReal) (x : α), f.toReal x = ↑(f x)
+参数：f : CompactlySupportedContinuousMap α NNReal；x : α；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CompactlySupportedContinuousMap.compLeft_apply`：compLeft_apply {g : C(β,
+ γ)} (hg : g 0 = 0) (f : C_c(α, β)) (a : α) : f.compLeft g a = g (f a)
 -/
-@[simp] lemma toReal_apply (f : C_c(α, Real>=0)) (x : α) : f.toReal x = f x := compLeft_apply rfl _ _
-/--
-lemma `toReal_nonneg` / 引理 `toReal_nonneg`
-
-English:
-lemma toReal_nonneg
-  given: {f : C_c(α, Real>=0)}
-  statement: 0 <= f.toReal
-  proof: fun _ => by simp
-
-中文:
-引理 to实数_nonneg
-  条件: {f : C_c(α, 实数>=0)}
-  结论: 0 <= f.to实数
-  证明: fun _ => by simp
+@[simp] lemma toReal_apply (f : C_c(α, ℝ≥0)) (x : α) : f.toReal x = f x := compLeft_apply rfl _ _
+/-
+**CompactlySupportedContinuousMap.toReal_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Compa
+ctlySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {f : CompactlySupportedContin
+uousMap α NNReal}, 0 ≤ f.toReal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
 -/
-@[simp] lemma toReal_nonneg {f : C_c(α, Real>=0)} : 0 <= f.toReal := fun _ => by simp
-/--
-lemma `toReal_add` / 引理 `toReal_add`
-
-English:
-lemma toReal_add
-  given: (f g : C_c(α, Real>=0))
-  statement: (f + g).toReal = f.toReal + g.toReal
-  proof: by ext; simp
-
-中文:
-引理 to实数_add
-  条件: (f g : C_c(α, 实数>=0))
-  结论: (f + g).to实数 = f.to实数 + g.to实数
-  证明: by ext; simp
+@[simp] lemma toReal_nonneg {f : C_c(α, ℝ≥0)} : 0 ≤ f.toReal := fun _ ↦ by simp
+/-
+**CompactlySupportedContinuousMap.toReal_add** 是 Mathlib 中的一个定理，位于命名空间 `Compactl
+ySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (f g : CompactlySupportedCont
+inuousMap α NNReal),   (f + g).toReal = f.toReal + g.toReal
+参数：f g : CompactlySupportedContinuousMap α NNReal；f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma toReal_add (f g : C_c(α, Real>=0)) : (f + g).toReal = f.toReal + g.toReal := by ext; simp
-/--
-lemma `toReal_smul` / 引理 `toReal_smul`
-
-English:
-lemma toReal_smul
-  given: (r : Real>=0) (f : C_c(α, Real>=0))
-  statement: (r • f).toReal = r • f.toReal
-  proof: by
+@[simp] lemma toReal_add (f g : C_c(α, ℝ≥0)) : (f + g).toReal = f.toReal + g.toReal := by ext; simp
+/-
+**CompactlySupportedContinuousMap.toReal_smul** 是 Mathlib 中的一个定理，位于命名空间 `Compact
+lySupportedContinuousMap`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (r : NNReal) (f : CompactlySu
+pportedContinuousMap α NNReal),   (r • f).toReal = r • f.toReal
+参数：r : NNReal；f : CompactlySupportedContinuousMap α NNReal；r • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+@[simp] lemma toReal_smul (r : ℝ≥0) (f : C_c(α, ℝ≥0)) : (r • f).toReal = r • f.toReal := by
   ext; simp [NNReal.smul_def]
 
 @[simp]
-
-中文:
-引理 to实数_smul
-  条件: (r : 实数>=0) (f : C_c(α, 实数>=0))
-  结论: (r • f).to实数 = r • f.to实数
-  证明: by
-  ext; simp [NNReal.smul_def]
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.nnrealPart_sub_nnrealPart_neg** 是 Mathlib 中的一个
+引理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_sub_nnrealPart_neg (f : C_c(α, Real)) : (nnrealPart f).toReal -
+ (nnrealPart (-f)).toReal = f
+参数：f : C_c(α, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `max_zero_sub_max_neg_zero_eq_self`：∀ {α : Type u_1} [inst : AddGroup α] 
+[inst_1 : LinearOrder α] [AddLeftMono α] (a : α), max a 0 - max (-a) 0 = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma toReal_smul (r : Real>=0) (f : C_c(α, Real>=0)) : (r • f).toReal = r • f.toReal := by
-  ext; simp [NNReal.smul_def]
-
-@[simp]
-/--
-lemma `nnrealPart_sub_nnrealPart_neg` / 引理 `nnrealPart_sub_nnrealPart_neg`
-
-English:
-lemma nnrealPart_sub_nnrealPart_neg
-  given: (f : C_c(α, Real))
-  proof: by ext x; simp
-
-中文:
-引理 nnrealPart_sub_nnrealPart_neg
-  条件: (f : C_c(α, 实数))
-  证明: by ext x; simp
--/
-lemma nnrealPart_sub_nnrealPart_neg (f : C_c(α, Real)) :
+lemma nnrealPart_sub_nnrealPart_neg (f : C_c(α, ℝ)) :
     (nnrealPart f).toReal - (nnrealPart (-f)).toReal = f := by ext x; simp
 
-/--
-Definition of `toRealLinearMap` / `toRealLinearMap` 的定义
+/-- The map `toReal` defined as a `ℝ≥0`-linear map. -/
+/-
+**CompactlySupportedContinuousMap.toRealLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Com
+pactlySupportedContinuousMap`。
+形式化陈述：toRealLinearMap : C_c(α, Real>=0) ->ₗ[Real>=0] C_c(α, Real) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRealLinearMap
-  signature: : C_c(α, Real>=0) ->ₗ[Real>=0] C_c(α, Real) where
-  body: toReal
-  map_add' f g := by ext x; simp
-  map_smul' a f := by ext x; simp
-
-@[simp, norm_cast]
-
-中文:
-定义 to实数LinearMap
-  签名: : C_c(α, 实数>=0) ->ₗ[实数>=0] C_c(α, 实数) where
-  定义体: toReal
-  map_add' f g := by ext x; simp
-  map_smul' a f := by ext x; simp
-
-@[simp, norm_cast]
-
-Depends on / 依赖: toReal
+--- 原说明 ---
+The map `toReal` defined as a `ℝ≥0`-linear map.
 -/
-noncomputable def toRealLinearMap : C_c(α, Real>=0) ->ₗ[Real>=0] C_c(α, Real) where
+noncomputable def toRealLinearMap : C_c(α, ℝ≥0) →ₗ[ℝ≥0] C_c(α, ℝ) where
   toFun := toReal
   map_add' f g := by ext x; simp
   map_smul' a f := by ext x; simp
 
 @[simp, norm_cast]
-/--
-lemma `coe_toRealLinearMap` / 引理 `coe_toRealLinearMap`
-
-English:
-lemma coe_toRealLinearMap
-  statement: (toRealLinearMap : C_c(α, Real>=0) -> C_c(α, Real)) = toReal
-  proof: rfl
-
-中文:
-引理 coe_to实数LinearMap
-  结论: (to实数LinearMap : C_c(α, 实数>=0) -> C_c(α, 实数)) = to实数
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.coe_toRealLinearMap** 是 Mathlib 中的一个引理，位于命名空间 
+`CompactlySupportedContinuousMap`。
+形式化陈述：coe_toRealLinearMap : (toRealLinearMap : C_c(α, Real>=0) -> C_c(α, Real)) 
+= toReal
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
 -/
-lemma coe_toRealLinearMap : (toRealLinearMap : C_c(α, Real>=0) -> C_c(α, Real)) = toReal := rfl
-
-/--
-lemma `toRealLinearMap_apply` / 引理 `toRealLinearMap_apply`
-
-English:
-lemma toRealLinearMap_apply
-  given: (f : C_c(α, Real>=0))
-  statement: toRealLinearMap f = f.toReal
-  proof: rfl
-
-中文:
-引理 to实数LinearMap_apply
-  条件: (f : C_c(α, 实数>=0))
-  结论: to实数LinearMap f = f.to实数
-  证明: rfl
+lemma coe_toRealLinearMap : (toRealLinearMap : C_c(α, ℝ≥0) → C_c(α, ℝ)) = toReal := rfl
+/-
+**CompactlySupportedContinuousMap.toRealLinearMap_apply** 是 Mathlib 中的一个引理，位于命名空
+间 `CompactlySupportedContinuousMap`。
+形式化陈述：toRealLinearMap_apply (f : C_c(α, Real>=0)) : toRealLinearMap f = f.toReal
+参数：f : C_c(α, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
 -/
-lemma toRealLinearMap_apply (f : C_c(α, Real>=0)) : toRealLinearMap f = f.toReal := rfl
-
-/--
-lemma `toRealLinearMap_apply_apply` / 引理 `toRealLinearMap_apply_apply`
-
-English:
-lemma toRealLinearMap_apply_apply
-  given: (f : C_c(α, Real>=0)) (x : α)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 to实数LinearMap_apply_apply
-  条件: (f : C_c(α, 实数>=0)) (x : α)
-  证明: by simp
-
-@[simp]
+lemma toRealLinearMap_apply (f : C_c(α, ℝ≥0)) : toRealLinearMap f = f.toReal := rfl
+/-
+**CompactlySupportedContinuousMap.toRealLinearMap_apply_apply** 是 Mathlib 中的一个引理
+，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：toRealLinearMap_apply_apply (f : C_c(α, Real>=0)) (x : α) : toRealLinearMa
+p f x = (f x).toReal
+参数：f : C_c(α, Real>=0)；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toRealLinearMap_apply_apply (f : C_c(α, Real>=0)) (x : α) :
+lemma toRealLinearMap_apply_apply (f : C_c(α, ℝ≥0)) (x : α) :
     toRealLinearMap f x = (f x).toReal := by simp
 
 @[simp]
-/--
-lemma `nnrealPart_toReal_eq` / 引理 `nnrealPart_toReal_eq`
-
-English:
-lemma nnrealPart_toReal_eq
-  given: (f : C_c(α, Real>=0))
-  statement: nnrealPart (toReal f) = f
-  proof: by ext x; simp
-
-@[simp]
-
-中文:
-引理 nnrealPart_to实数_eq
-  条件: (f : C_c(α, 实数>=0))
-  结论: nnrealPart (to实数 f) = f
-  证明: by ext x; simp
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.nnrealPart_toReal_eq** 是 Mathlib 中的一个引理，位于命名空间
+ `CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_toReal_eq (f : C_c(α, Real>=0)) : nnrealPart (toReal f) = f
+参数：f : C_c(α, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma nnrealPart_toReal_eq (f : C_c(α, Real>=0)) : nnrealPart (toReal f) = f := by ext x; simp
+lemma nnrealPart_toReal_eq (f : C_c(α, ℝ≥0)) : nnrealPart (toReal f) = f := by ext x; simp
 
 @[simp]
-/--
-lemma `nnrealPart_neg_toReal_eq` / 引理 `nnrealPart_neg_toReal_eq`
-
-English:
-lemma nnrealPart_neg_toReal_eq
-  given: (f : C_c(α, Real>=0))
-  statement: nnrealPart (-toReal f) = 0
-  proof: by ext x; simp
-
-中文:
-引理 nnrealPart_neg_to实数_eq
-  条件: (f : C_c(α, 实数>=0))
-  结论: nnrealPart (-to实数 f) = 0
-  证明: by ext x; simp
+/-
+**CompactlySupportedContinuousMap.nnrealPart_neg_toReal_eq** 是 Mathlib 中的一个引理，位于
+命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：nnrealPart_neg_toReal_eq (f : C_c(α, Real>=0)) : nnrealPart (-toReal f) = 
+0
+参数：f : C_c(α, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlySupportedContinuousMap.ext`：ext {f g : C_c(α, β)} (h : forall x
+, f x = g x) : f = g
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompactlySupportedContinuousMap.toReal_apply`：∀ {α : Type u_2} [inst : T
+opologicalSpace α] (f : CompactlySupportedContinuousMap α NNReal) (x : α), f.toR
+eal x = ↑(f x)
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma nnrealPart_neg_toReal_eq (f : C_c(α, Real>=0)) : nnrealPart (-toReal f) = 0 := by ext x; simp
+lemma nnrealPart_neg_toReal_eq (f : C_c(α, ℝ≥0)) : nnrealPart (-toReal f) = 0 := by ext x; simp
 
 section toNNRealLinear
 
-/--
-Definition of `toNNRealLinear` / `toNNRealLinear` 的定义
+/-- For a positive linear functional `Λ : C_c(α, ℝ) → ℝ`, define a `ℝ≥0`-linear map. -/
+/-
+**CompactlySupportedContinuousMap.toNNRealLinear** 是 Mathlib 中的一个定义，位于命名空间 `Comp
+actlySupportedContinuousMap`。
+形式化陈述：toNNRealLinear (Λ : C_c(α, Real) ->ₚ[Real] Real) : C_c(α, Real>=0) ->ₗ[Rea
+l>=0] Real>=0 where toFun f
+参数：Λ : C_c(α, Real) ->ₚ[Real] Real。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNNRealLinear
-  signature: (Λ : C_c(α, Real) ->ₚ[Real] Real)
-  body: .mk (Λ (toRealLinearMap f)) (Λ.map_nonneg (by simp))
-  map_add' f g := by simp; rfl
-  map_smul' a f := by simp [NNReal.smul_def]; rfl
-
-@[simp]
-
-中文:
-定义 toNN实数Linear
-  签名: (Λ : C_c(α, 实数) ->ₚ[实数] 实数)
-  定义体: .mk (Λ (toRealLinearMap f)) (Λ.map_nonneg (by simp))
-  map_add' f g := by simp; rfl
-  map_smul' a f := by simp [NNReal.smul_def]; rfl
-
-@[simp]
-
-Depends on / 依赖: map_nonneg, toRealLinearMap
+--- 原说明 ---
+For a positive linear functional `Λ : C_c(α, ℝ) → ℝ`, define a `ℝ≥0`-linear map.
 -/
-noncomputable def toNNRealLinear (Λ : C_c(α, Real) ->ₚ[Real] Real) :
-    C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0 where
+noncomputable def toNNRealLinear (Λ : C_c(α, ℝ) →ₚ[ℝ] ℝ) :
+    C_c(α, ℝ≥0) →ₗ[ℝ≥0] ℝ≥0 where
   toFun f := .mk (Λ (toRealLinearMap f)) (Λ.map_nonneg (by simp))
   map_add' f g := by simp; rfl
   map_smul' a f := by simp [NNReal.smul_def]; rfl
 
 @[simp]
-/--
-lemma `toNNRealLinear_apply` / 引理 `toNNRealLinear_apply`
-
-English:
-lemma toNNRealLinear_apply
-  given: (Λ : C_c(α, Real) ->ₚ[Real] Real) (f : C_c(α, Real>=0))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toNN实数Linear_apply
-  条件: (Λ : C_c(α, 实数) ->ₚ[实数] 实数) (f : C_c(α, 实数>=0))
-  证明: rfl
-
-@[simp]
+/-
+**CompactlySupportedContinuousMap.toNNRealLinear_apply** 是 Mathlib 中的一个引理，位于命名空间
+ `CompactlySupportedContinuousMap`。
+形式化陈述：toNNRealLinear_apply (Λ : C_c(α, Real) ->ₚ[Real] Real) (f : C_c(α, Real>=0
+)) : toNNRealLinear Λ f = Λ (toReal f)
+参数：Λ : C_c(α, Real) ->ₚ[Real] Real；f : C_c(α, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
 -/
-lemma toNNRealLinear_apply (Λ : C_c(α, Real) ->ₚ[Real] Real) (f : C_c(α, Real>=0)) :
+lemma toNNRealLinear_apply (Λ : C_c(α, ℝ) →ₚ[ℝ] ℝ) (f : C_c(α, ℝ≥0)) :
     toNNRealLinear Λ f = Λ (toReal f) := rfl
 
 @[simp]
-/--
-lemma `toNNRealLinear_inj` / 引理 `toNNRealLinear_inj`
-
-English:
-lemma toNNRealLinear_inj
-  given: (Λ₁ Λ₂ : C_c(α, Real) ->ₚ[Real] Real)
-  proof: by
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
-  ext f
-  rw [← nnrealPart_sub_nnrealPart_neg f]
-  simp only [LinearMap.ext_iff, NNReal.eq_iff, toNNRealLinear_apply] at h
-  simp_rw [map_sub, h]
-
-中文:
-引理 toNN实数Linear_inj
-  条件: (Λ₁ Λ₂ : C_c(α, 实数) ->ₚ[实数] 实数)
-  证明: by
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
-  ext f
-  rw [← nnrealPart_sub_nnrealPart_neg f]
-  simp only [LinearMap.ext_iff, NNReal.eq_iff, toNNRealLinear_apply] at h
-  simp_rw [map_sub, h]
-
-Depends on / 依赖: LinearMap, LinearMap.ext_iff, NNReal, NNReal.eq_iff, eq_iff, ext_iff, map_sub, nnrealPart_sub_nnrealPart_neg, simp_rw, toNNRealLinear_apply
+/-
+**CompactlySupportedContinuousMap.toNNRealLinear_inj** 是 Mathlib 中的一个引理，位于命名空间 `
+CompactlySupportedContinuousMap`。
+形式化陈述：toNNRealLinear_inj (Λ₁ Λ₂ : C_c(α, Real) ->ₚ[Real] Real) : toNNRealLinear 
+Λ₁ = toNNRealLinear Λ₂ ↔ Λ₁ = Λ₂
+参数：Λ₁ Λ₂ : C_c(α, Real) ->ₚ[Real] Real。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用引理 `PositiveLinearMap.ext`：ext {f g : E₁ ->ₚ[R] E₂} (h : forall x, f x = g x
+) : f = g
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CompactlySupportedContinuousMap.nnrealPart_sub_nnrealPart_neg`：nnrealPar
+t_sub_nnrealPart_neg (f : C_c(α, Real)) : (nnrealPart f).toReal - (nnrealPart (-
+f)).toReal = f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `PositiveLinearMap.instLinearMapClass`：∀ {R : Type u_1} {E₁ : Type u_2} {
+E₂ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid E₁]   [inst_2 : Parti
+alOrder E₁] [inst_3 : AddC…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toNNRealLinear_inj (Λ₁ Λ₂ : C_c(α, Real) ->ₚ[Real] Real) :
+lemma toNNRealLinear_inj (Λ₁ Λ₂ : C_c(α, ℝ) →ₚ[ℝ] ℝ) :
     toNNRealLinear Λ₁ = toNNRealLinear Λ₂ ↔ Λ₁ = Λ₂ := by
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ by rw [h]⟩
   ext f
   rw [← nnrealPart_sub_nnrealPart_neg f]
   simp only [LinearMap.ext_iff, NNReal.eq_iff, toNNRealLinear_apply] at h
@@ -2975,62 +2362,30 @@ end toNNRealLinear
 section toRealPositiveLinear
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toRealPositiveLinear` / `toRealPositiveLinear` 的定义
+/-- For a positive linear functional `Λ : C_c(α, ℝ≥0) → ℝ≥0`, define a positive `ℝ`-linear map. -/
+/-
+**CompactlySupportedContinuousMap.toRealPositiveLinear** 是 Mathlib 中的一个定义，位于命名空间
+ `CompactlySupportedContinuousMap`。
+形式化陈述：toRealPositiveLinear (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) : C_c(α, R
+eal) ->ₚ[Real] Real
+参数：Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
 
-English:
-definition toRealPositiveLinear
-  signature: (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0)
-  body: PositiveLinearMap.mk₀
-    { toFun := fun f => Λ (nnrealPart f) - Λ (nnrealPart (- f))
-      map_add' f g := by
-        simp only [neg_add_rev]
-        obtain ⟨h, hh⟩ := exists_add_nnrealPart_add_eq f g
-        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← sub_self (Λ h).toReal]; rw [sub_add_sub_comm]; rw [← NNReal.coe_add]; rw [← NNReal.coe_add]; rw [← map_add]; rw [← map_add]; rw [hh.1]; rw [add_comm (-g) (-f)]; rw [hh.2]
-        simp only [map_add, NNReal.coe_add]
-        ring
-      map_smul' a f := by
-        rcases le_total 0 a with ha | ha
-        · rw [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f), nnrealPart_smul_pos f ha,
-            nnrealPart_smul_pos (-f) ha]
-          simp [sup_of_le_left ha, mul_sub]
-        · simp only [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f),
-            nnrealPart_smul_neg f ha, nnrealPart_smul_neg (-f) ha, map_smul,
-            NNReal.coe_mul, Real.coe_toNNReal', neg_neg, sup_of_le_left (neg_nonneg.mpr ha)]
-          ring }
-    (fun g hg => by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
-
-中文:
-定义 to实数PositiveLinear
-  签名: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0)
-  定义体: PositiveLinearMap.mk₀
-    { toFun := fun f => Λ (nnrealPart f) - Λ (nnrealPart (- f))
-      map_add' f g := by
-        simp only [neg_add_rev]
-        obtain ⟨h, hh⟩ := exists_add_nnrealPart_add_eq f g
-        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← sub_self (Λ h).toReal]; rw [sub_add_sub_comm]; rw [← NNReal.coe_add]; rw [← NNReal.coe_add]; rw [← map_add]; rw [← map_add]; rw [hh.1]; rw [add_comm (-g) (-f)]; rw [hh.2]
-        simp only [map_add, NNReal.coe_add]
-        ring
-      map_smul' a f := by
-        rcases le_total 0 a with ha | ha
-        · rw [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f), nnrealPart_smul_pos f ha,
-            nnrealPart_smul_pos (-f) ha]
-          simp [sup_of_le_left ha, mul_sub]
-        · simp only [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f),
-            nnrealPart_smul_neg f ha, nnrealPart_smul_neg (-f) ha, map_smul,
-            NNReal.coe_mul, Real.coe_toNNReal', neg_neg, sup_of_le_left (neg_nonneg.mpr ha)]
-          ring }
-    (fun g hg => by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
-
-Depends on / 依赖: NNReal, NNReal.coe_add, PositiveLinearMap, PositiveLinearMap.mk, add_comm, add_zero, coe_add, exists_add_nnrealPart_add_eq, map_add, map_smul, neg_add_rev, nnrealPart, sub_add_sub_comm, sub_self, toReal
+--- 原说明 ---
+For a positive linear functional `Λ : C_c(α, ℝ≥0) → ℝ≥0`, define a positive `ℝ`-
+linear map.
 -/
-noncomputable def toRealPositiveLinear (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) : C_c(α, Real) ->ₚ[Real] Real :=
+noncomputable def toRealPositiveLinear (Λ : C_c(α, ℝ≥0) →ₗ[ℝ≥0] ℝ≥0) : C_c(α, ℝ) →ₚ[ℝ] ℝ :=
   PositiveLinearMap.mk₀
     { toFun := fun f => Λ (nnrealPart f) - Λ (nnrealPart (- f))
       map_add' f g := by
         simp only [neg_add_rev]
         obtain ⟨h, hh⟩ := exists_add_nnrealPart_add_eq f g
-        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← sub_self (Λ h).toReal]; rw [sub_add_sub_comm]; rw [← NNReal.coe_add]; rw [← NNReal.coe_add]; rw [← map_add]; rw [← map_add]; rw [hh.1]; rw [add_comm (-g) (-f)]; rw [hh.2]
+        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal),
+          ← sub_self (Λ h).toReal, sub_add_sub_comm, ← NNReal.coe_add, ← NNReal.coe_add,
+          ← map_add, ← map_add, hh.1, add_comm (-g) (-f), hh.2]
         simp only [map_add, NNReal.coe_add]
         ring
       map_smul' a f := by
@@ -3042,73 +2397,129 @@ noncomputable def toRealPositiveLinear (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Rea
             nnrealPart_smul_neg f ha, nnrealPart_smul_neg (-f) ha, map_smul,
             NNReal.coe_mul, Real.coe_toNNReal', neg_neg, sup_of_le_left (neg_nonneg.mpr ha)]
           ring }
-    (fun g hg => by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
-
-/--
-lemma `toRealPositiveLinear_apply` / 引理 `toRealPositiveLinear_apply`
-
-English:
-lemma toRealPositiveLinear_apply
-  given: {Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0} (f : C_c(α, Real))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 to实数PositiveLinear_apply
-  条件: {Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0} (f : C_c(α, 实数))
-  证明: rfl
-
-@[simp]
+    (fun g hg ↦ by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
+/-
+**CompactlySupportedContinuousMap.toRealPositiveLinear_apply** 是 Mathlib 中的一个引理，
+位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：toRealPositiveLinear_apply {Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0} (f :
+ C_c(α, Real)) : toRealPositiveLinear Λ f = Λ (nnrealPart f) - Λ (nnrealPart (-f
+))
+参数：α, Real>=0；f : C_c(α, Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
 -/
-lemma toRealPositiveLinear_apply {Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0} (f : C_c(α, Real)) :
+lemma toRealPositiveLinear_apply {Λ : C_c(α, ℝ≥0) →ₗ[ℝ≥0] ℝ≥0} (f : C_c(α, ℝ)) :
     toRealPositiveLinear Λ f = Λ (nnrealPart f) - Λ (nnrealPart (-f)) := rfl
 
 @[simp]
-/--
-lemma `eq_toRealPositiveLinear_toReal` / 引理 `eq_toRealPositiveLinear_toReal`
-
-English:
-lemma eq_toRealPositiveLinear_toReal
-  given: (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) (f : C_c(α, Real>=0))
-  proof: by
-  simp [toRealPositiveLinear_apply]
-
-@[simp]
-
-中文:
-引理 eq_to实数PositiveLinear_to实数
-  条件: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0) (f : C_c(α, 实数>=0))
-  证明: by
-  simp [toRealPositiveLinear_apply]
-
-@[simp]
-
-Depends on / 依赖: toRealPositiveLinear_apply
+/-
+**CompactlySupportedContinuousMap.eq_toRealPositiveLinear_toReal** 是 Mathlib 中的一
+个引理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：eq_toRealPositiveLinear_toReal (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) 
+(f : C_c(α, Real>=0)) : toRealPositiveLinear Λ (toReal f) = Λ f
+参数：Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0；f : C_c(α, Real>=0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CompactlySupportedContinuousMap.nnrealPart_toReal_eq`：nnrealPart_toReal_
+eq (f : C_c(α, Real>=0)) : nnrealPart (toReal f) = f
+· 使用引理 `CompactlySupportedContinuousMap.nnrealPart_neg_toReal_eq`：nnrealPart_neg
+_toReal_eq (f : C_c(α, Real>=0)) : nnrealPart (-toReal f) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma eq_toRealPositiveLinear_toReal (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) (f : C_c(α, Real>=0)) :
+lemma eq_toRealPositiveLinear_toReal (Λ : C_c(α, ℝ≥0) →ₗ[ℝ≥0] ℝ≥0) (f : C_c(α, ℝ≥0)) :
     toRealPositiveLinear Λ (toReal f) = Λ f := by
   simp [toRealPositiveLinear_apply]
 
 @[simp]
-/--
-lemma `eq_toNNRealLinear_toRealPositiveLinear` / 引理 `eq_toNNRealLinear_toRealPositiveLinear`
-
-English:
-lemma eq_toNNRealLinear_toRealPositiveLinear
-  given: (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0)
-  proof: by
-  ext f
-  simp
-
-中文:
-引理 eq_toNN实数Linear_to实数PositiveLinear
-  条件: (Λ : C_c(α, 实数>=0) ->ₗ[实数>=0] 实数>=0)
-  证明: by
-  ext f
-  simp
+/-
+**CompactlySupportedContinuousMap.eq_toNNRealLinear_toRealPositiveLinear** 是 Mat
+hlib 中的一个引理，位于命名空间 `CompactlySupportedContinuousMap`。
+形式化陈述：eq_toNNRealLinear_toRealPositiveLinear (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] R
+eal>=0) : toNNRealLinear (toRealPositiveLinear Λ) = Λ
+参数：Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CompactlySupportedContinuousMap.eq_toRealPositiveLinear_toReal`：eq_toRea
+lPositiveLinear_toReal (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) (f : C_c(α, Re
+al>=0)) : toRealPositiveLinear Λ (toReal f) = Λ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma eq_toNNRealLinear_toRealPositiveLinear (Λ : C_c(α, Real>=0) ->ₗ[Real>=0] Real>=0) :
+lemma eq_toNNRealLinear_toRealPositiveLinear (Λ : C_c(α, ℝ≥0) →ₗ[ℝ≥0] ℝ≥0) :
     toNNRealLinear (toRealPositiveLinear Λ) = Λ := by
   ext f
   simp
@@ -3118,41 +2529,21 @@ end toRealPositiveLinear
 section pullback
 
 variable [R1Space α] [Group α] [TopologicalSpace β] [R1Space β] [Group β] [ContinuousMul β]
-  [NormedAddCommGroup γ] {φ : α ->* β} (hφ : Topology.IsClosedEmbedding φ)
+  [NormedAddCommGroup γ] {φ : α →* β} (hφ : Topology.IsClosedEmbedding φ)
 
 open scoped Pointwise in
 /-- Pull back a continuous compactly supported function `f` on `β` along a closed embedding
 `φ : α →* β` to the continuous compactly supported function `a ↦ f (b * φ a)` on `A`. -/
 @[to_additive /-- Pull back a continuous compactly supported function `f` on `β` along a closed
 embedding `φ : α →+ β` to the continuous compactly supported function `a ↦ f (b + φ a)` on `A`. -/]
-/--
-Definition of `pullback_monoidHom` / `pullback_monoidHom` 的定义
-
-English:
-definition pullback_monoidHom
-  signature: (f : CompactlySupportedContinuousMap β γ) (b : β)
-  body: f (b * φ a)
-  hasCompactSupport' := by
-    obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
-    refine exists_compact_iff_hasCompactSupport.mp ⟨φ ⁻¹' (b⁻¹ • K),
-      hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx => hf _ ?_⟩
-    simpa [Set.mem_smul_set_iff_inv_smul_mem] using hx
-  continuous_toFun := by fun_prop
-
-@[to_additive]
-
-中文:
-定义 pullback_monoidHom
-  签名: (f : 余mpactlySupportedContinuous映射 β γ) (b : β)
-  定义体: f (b * φ a)
-  hasCompactSupport' := by
-    obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
-    refine exists_compact_iff_hasCompactSupport.mp ⟨φ ⁻¹' (b⁻¹ • K),
-      hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx => hf _ ?_⟩
-    simpa [Set.mem_smul_set_iff_inv_smul_mem] using hx
-  continuous_toFun := by fun_prop
-
-@[to_additive]
+/-
+**CompactlySupportedContinuousMap.pullback_monoidHom** 是 Mathlib 中的一个定义，位于命名空间 `
+CompactlySupportedContinuousMap`。
+形式化陈述：pullback_monoidHom (f : CompactlySupportedContinuousMap β γ) (b : β) : Com
+pactlySupportedContinuousMap α γ where toFun a
+参数：f : CompactlySupportedContinuousMap β γ；b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def pullback_monoidHom (f : CompactlySupportedContinuousMap β γ) (b : β) :
     CompactlySupportedContinuousMap α γ where
@@ -3160,23 +2551,19 @@ noncomputable def pullback_monoidHom (f : CompactlySupportedContinuousMap β γ)
   hasCompactSupport' := by
     obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
     refine exists_compact_iff_hasCompactSupport.mp ⟨φ ⁻¹' (b⁻¹ • K),
-      hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx => hf _ ?_⟩
+      hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx ↦ hf _ ?_⟩
     simpa [Set.mem_smul_set_iff_inv_smul_mem] using hx
   continuous_toFun := by fun_prop
 
 @[to_additive]
-/--
-theorem `pullback_monoidHom_def` / 定理 `pullback_monoidHom_def`
-
-English:
-theorem pullback_monoidHom_def
-  given: (f : CompactlySupportedContinuousMap β γ) (b : β) (a : α)
-  proof: rfl
-
-中文:
-定理 pullback_monoidHom_def
-  条件: (f : 余mpactlySupportedContinuous映射 β γ) (b : β) (a : α)
-  证明: rfl
+/-
+**CompactlySupportedContinuousMap.pullback_monoidHom_def** 是 Mathlib 中的一个定理，位于命名
+空间 `CompactlySupportedContinuousMap`。
+形式化陈述：pullback_monoidHom_def (f : CompactlySupportedContinuousMap β γ) (b : β) (
+a : α) : pullback_monoidHom hφ f b a = f (b * φ a)
+参数：f : CompactlySupportedContinuousMap β γ；b : β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pullback_monoidHom_def (f : CompactlySupportedContinuousMap β γ) (b : β) (a : α) :
     pullback_monoidHom hφ f b a = f (b * φ a) :=
@@ -3187,3 +2574,4 @@ end pullback
 end CompactlySupportedContinuousMap
 
 end NonnegativePart
+

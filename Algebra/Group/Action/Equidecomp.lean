@@ -64,276 +64,216 @@ section SMul
 
 variable [SMul G X]
 
-/--
-Definition of `IsDecompOn` / `IsDecompOn` 的定义
+/-- Let `G` act on a space `X` and `A : Set X`. We say `f : X → X` is a decomposition on `A`
+as witnessed by some `S : Finset G` if for all `a ∈ A`, the value `f a` can be obtained
+by applying some element of `S` to `a` instead.
 
-English:
-definition IsDecompOn
-  signature: (f : X -> X) (A : Set X) (S : Finset G)
-  body: forall a in A, exists g in S, f a = g • a
+More familiarly, the restriction of `f` to `A` is the result of partitioning `A` into finitely many
+pieces, then applying a single element of `G` to each piece. -/
+/-
+**Equidecomp.IsDecompOn** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：IsDecompOn (f : X -> X) (A : Set X) (S : Finset G) : Prop
+参数：f : X -> X；A : Set X；S : Finset G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 IsDecompOn
-  签名: (f : X -> X) (A : 集合 X) (S : 有限集 G)
-  定义体: forall a in A, exists g in S, f a = g • a
+--- 原说明 ---
+Let `G` act on a space `X` and `A : Set X`. We say `f : X → X` is a decompositio
+n on `A`
+as witnessed by some `S : Finset G` if for all `a ∈ A`, the value `f a` can be o
+btained
+by applying some element of `S` to `a` instead.
+
+More familiarly, the restriction of `f` to `A` is the result of partitioning `A`
+ into finitely many
+pieces, then applying a single element of `G` to each piece.
 -/
-def IsDecompOn (f : X -> X) (A : Set X) (S : Finset G) : Prop := forall a in A, exists g in S, f a = g • a
+def IsDecompOn (f : X → X) (A : Set X) (S : Finset G) : Prop := ∀ a ∈ A, ∃ g ∈ S, f a = g • a
 
 variable (X G)
 
-/--
-Definition of `_root_.Equidecomp` / `_root_.Equidecomp` 的定义
+/-- Let `G` act on a space `X`. An `Equidecomposition` with respect to `X` and `G` is a partial
+bijection `f : PartialEquiv X X` with the property that for some set `elements : Finset G`,
+(which we record), for each `a ∈ f.source`, `f a` can be obtained by applying some `g ∈ elements`
+instead. We call `f` an equidecomposition of `f.source` with `f.target`.
 
-English:
-structure _root_.Equidecomp
-  parameters: extends PartialEquiv X X
-  extends: PartialEquiv X X
-  axioms and operations (1):
-    - isDecompOn' : exists S : Finset G, IsDecompOn toFun source S
+More familiarly, `f` is the result of partitioning `f.source` into finitely many pieces,
+then applying a single element of `G` to each to get a partition of `f.target`.
+-/
+/-
+**Equidecomp._root_.Equidecomp** 是 Mathlib 中的一个结构，位于命名空间 `Equidecomp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 _root_.Equidecomp
-  参数: extends 部分等价 X X
-  继承: 部分等价 X X
-  公理与运算 (1 个):
-    - isDecompOn' : 存在 S : 有限集 G, IsDecompOn toFun source S
+--- 原说明 ---
+Let `G` act on a space `X`. An `Equidecomposition` with respect to `X` and `G` i
+s a partial
+bijection `f : PartialEquiv X X` with the property that for some set `elements :
+ Finset G`,
+(which we record), for each `a ∈ f.source`, `f a` can be obtained by applying so
+me `g ∈ elements`
+instead. We call `f` an equidecomposition of `f.source` with `f.target`.
+
+More familiarly, `f` is the result of partitioning `f.source` into finitely many
+ pieces,
+then applying a single element of `G` to each to get a partition of `f.target`.
 -/
 structure _root_.Equidecomp extends PartialEquiv X X where
-  isDecompOn' : exists S : Finset G, IsDecompOn toFun source S
+  isDecompOn' : ∃ S : Finset G, IsDecompOn toFun source S
 
 variable {X G}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Note that `Equidecomp X G` is not `FunLike`. -/
+/-
+**Equidecomp.** 是 Mathlib 中的一个实例，位于命名空间 `Equidecomp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeFun (Equidecomp X G) fun _ => X -> X
-  body: ⟨fun f => f.toFun⟩
-
-中文:
-实例 :
-  签名: CoeFun (Equidecomp X G) fun _ => X -> X
-  定义体: ⟨fun f => f.toFun⟩
-
-Depends on / 依赖: f.toFun
+--- 原说明 ---
+Note that `Equidecomp X G` is not `FunLike`.
 -/
-instance : CoeFun (Equidecomp X G) fun _ => X -> X := ⟨fun f => f.toFun⟩
+instance : CoeFun (Equidecomp X G) fun _ => X → X := ⟨fun f => f.toFun⟩
 
 /-- A finite set of group elements witnessing that `f` is an equidecomposition. -/
 noncomputable
-/--
-Definition of `witness` / `witness` 的定义
-
-English:
-definition witness
-  signature: (f : Equidecomp X G)
-  body: f.isDecompOn'.choose
-
-中文:
-定义 witness
-  签名: (f : Equidecomp X G)
-  定义体: f.isDecompOn'.choose
-
-Depends on / 依赖: f.isDecompOn, isDecompOn
+/-
+**Equidecomp.witness** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：witness (f : Equidecomp X G) : Finset G
+参数：f : Equidecomp X G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equidecomp.isDecompOn'`：∀ {X : Type u_1} {G : Type u_2} [inst : SMul G X
+] (self : Equidecomp X G),   ∃ S, Equidecomp.IsDecompOn (↑self.toPartialEquiv) s
+elf.source S
 -/
 def witness (f : Equidecomp X G) : Finset G := f.isDecompOn'.choose
-
-/--
-theorem `isDecompOn` / 定理 `isDecompOn`
-
-English:
-theorem isDecompOn
-  given: (f : Equidecomp X G)
-  statement: IsDecompOn f f.source f.witness
-  proof: f.isDecompOn'.choose_spec
-
-中文:
-定理 isDecompOn
-  条件: (f : Equidecomp X G)
-  结论: IsDecompOn f f.source f.witness
-  证明: f.isDecompOn'.choose_spec
-
-Depends on / 依赖: choose_spec, f.isDecompOn, isDecompOn
+/-
+**Equidecomp.isDecompOn** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：isDecompOn (f : Equidecomp X G) : IsDecompOn f f.source f.witness
+参数：f : Equidecomp X G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Equidecomp.isDecompOn'`：∀ {X : Type u_1} {G : Type u_2} [inst : SMul G X
+] (self : Equidecomp X G),   ∃ S, Equidecomp.IsDecompOn (↑self.toPartialEquiv) s
+elf.source S
 -/
 theorem isDecompOn (f : Equidecomp X G) : IsDecompOn f f.source f.witness :=
   f.isDecompOn'.choose_spec
-
-/--
-theorem `apply_mem_target` / 定理 `apply_mem_target`
-
-English:
-theorem apply_mem_target
-  given: {f : Equidecomp X G} {x : X} (h : x in f.source)
-  proof: by simp [h]
-
-中文:
-定理 apply_mem_target
-  条件: {f : Equidecomp X G} {x : X} (h : x in f.source)
-  证明: by simp [h]
+/-
+**Equidecomp.apply_mem_target** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：apply_mem_target {f : Equidecomp X G} {x : X} (h : x in f.source) : f x in
+ f.target
+参数：h : x in f.source。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem apply_mem_target {f : Equidecomp X G} {x : X} (h : x in f.source) :
-    f x in f.target := by simp [h]
-
-/--
-theorem `toPartialEquiv_injective` / 定理 `toPartialEquiv_injective`
-
-English:
-theorem toPartialEquiv_injective
-  statement: Injective toPartialEquiv (X := X) (G := G)
-  proof: by
+theorem apply_mem_target {f : Equidecomp X G} {x : X} (h : x ∈ f.source) :
+    f x ∈ f.target := by simp [h]
+/-
+**Equidecomp.toPartialEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：toPartialEquiv_injective : Injective toPartialEquiv (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem toPartialEquiv_injective : Injective <| toPartialEquiv (X := X) (G := G) := by
   intro ⟨_, _, _⟩ _ _
   congr
-
-中文:
-定理 toPartialEquiv_injective
-  结论: 单射 toPartialEquiv (X := X) (G := G)
-  证明: by
-  intro ⟨_, _, _⟩ _ _
-  congr
+/-
+**Equidecomp.IsDecompOn.mono** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp.IsDecompOn`。
+形式化陈述：∀ {X : Type u_1} {G : Type u_2} [inst : SMul G X] {f f' : X → X} {A A' : S
+et X} {S : Finset G},   Equidecomp.IsDecompOn f A S → A' ⊆ A → Set.EqOn f f' A' 
+→ Equidecomp.IsDecompOn f' A' S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem toPartialEquiv_injective : Injective toPartialEquiv (X := X) (G := G) := by
-  intro ⟨_, _, _⟩ _ _
-  congr
-
-/--
-theorem `IsDecompOn.mono` / 定理 `IsDecompOn.mono`
-
-English:
-theorem IsDecompOn.mono
-  statement: {f f' : X -> X} {A A' : Set X} {S : Finset G} (h : IsDecompOn f A S)
-  proof: by
-  intro a ha
-  rw [← hf' ha]
-  exact h a (hA' ha)
-
-中文:
-定理 IsDecompOn.mono
-  结论: {f f' : X -> X} {A A' : 集合 X} {S : 有限集 G} (h : IsDecompOn f A S)
-  证明: by
-  intro a ha
-  rw [← hf' ha]
-  exact h a (hA' ha)
--/
-theorem IsDecompOn.mono {f f' : X -> X} {A A' : Set X} {S : Finset G} (h : IsDecompOn f A S)
-    (hA' : A' subseteq A) (hf' : EqOn f f' A') : IsDecompOn f' A' S := by
+theorem IsDecompOn.mono {f f' : X → X} {A A' : Set X} {S : Finset G} (h : IsDecompOn f A S)
+    (hA' : A' ⊆ A) (hf' : EqOn f f' A') : IsDecompOn f' A' S := by
   intro a ha
   rw [← hf' ha]
   exact h a (hA' ha)
 
 /-- The restriction of an equidecomposition as an equidecomposition. -/
 @[simps!]
-/--
-Definition of `restr` / `restr` 的定义
+/-
+**Equidecomp.restr** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：restr (f : Equidecomp X G) (A : Set X) : Equidecomp X G where toPartialEqu
+iv
+参数：f : Equidecomp X G；A : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restr
-  signature: (f : Equidecomp X G) (A : Set X)
-  body: f.toPartialEquiv.restr A
-  isDecompOn' := ⟨f.witness,
-    f.isDecompOn.mono (source_restr_subset_source _ _) fun _ => congrFun rfl⟩
-
-@[simp]
-
-中文:
-定义 restr
-  签名: (f : Equidecomp X G) (A : 集合 X)
-  定义体: f.toPartialEquiv.restr A
-  isDecompOn' := ⟨f.witness,
-    f.isDecompOn.mono (source_restr_subset_source _ _) fun _ => congrFun rfl⟩
-
-@[simp]
-
-Depends on / 依赖: f.toPartialEquiv.restr, toPartialEquiv
+--- 原说明 ---
+The restriction of an equidecomposition as an equidecomposition.
 -/
 def restr (f : Equidecomp X G) (A : Set X) : Equidecomp X G where
   toPartialEquiv := f.toPartialEquiv.restr A
   isDecompOn' := ⟨f.witness,
-    f.isDecompOn.mono (source_restr_subset_source _ _) fun _ => congrFun rfl⟩
+    f.isDecompOn.mono (source_restr_subset_source _ _) fun _ ↦ congrFun rfl⟩
 
 @[simp]
-/--
-theorem `toPartialEquiv_restr` / 定理 `toPartialEquiv_restr`
-
-English:
-theorem toPartialEquiv_restr
-  given: (f : Equidecomp X G) (A : Set X)
-  proof: rfl
-
-中文:
-定理 toPartialEquiv_restr
-  条件: (f : Equidecomp X G) (A : 集合 X)
-  证明: rfl
+/-
+**Equidecomp.toPartialEquiv_restr** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：toPartialEquiv_restr (f : Equidecomp X G) (A : Set X) : (f.restr A).toPart
+ialEquiv = f.toPartialEquiv.restr A
+参数：f : Equidecomp X G；A : Set X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toPartialEquiv_restr (f : Equidecomp X G) (A : Set X) :
     (f.restr A).toPartialEquiv = f.toPartialEquiv.restr A := rfl
-
-/--
-theorem `source_restr` / 定理 `source_restr`
-
-English:
-theorem source_restr
-  given: (f : Equidecomp X G) {A : Set X} (hA : A subseteq f.source)
-  proof: by rw [restr_source, inter_eq_self_of_subset_right hA]
-
-中文:
-定理 source_restr
-  条件: (f : Equidecomp X G) {A : 集合 X} (hA : A subseteq f.source)
-  证明: by rw [restr_source, inter_eq_self_of_subset_right hA]
-
-Depends on / 依赖: inter_eq_self_of_subset_right, restr_source
+/-
+**Equidecomp.source_restr** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：source_restr (f : Equidecomp X G) {A : Set X} (hA : A subseteq f.source) :
+ (f.restr A).source = A
+参数：f : Equidecomp X G；hA : A subseteq f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equidecomp.restr_source`：∀ {X : Type u_1} {G : Type u_2} [inst : SMul G 
+X] (f : Equidecomp X G) (A : Set X), (f.restr A).source = f.source ∩ A
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
 -/
-theorem source_restr (f : Equidecomp X G) {A : Set X} (hA : A subseteq f.source) :
+theorem source_restr (f : Equidecomp X G) {A : Set X} (hA : A ⊆ f.source) :
     (f.restr A).source = A := by rw [restr_source, inter_eq_self_of_subset_right hA]
-
-/--
-theorem `restr_of_source_subset` / 定理 `restr_of_source_subset`
-
-English:
-theorem restr_of_source_subset
-  given: {f : Equidecomp X G} {A : Set X} (hA : f.source subseteq A)
-  proof: by
-  apply toPartialEquiv_injective
-  rw [toPartialEquiv_restr]; rw [PartialEquiv.restr_eq_of_source_subset hA]
-
-@[simp]
-
-中文:
-定理 restr_of_source_subset
-  条件: {f : Equidecomp X G} {A : 集合 X} (hA : f.source subseteq A)
-  证明: by
-  apply toPartialEquiv_injective
-  rw [toPartialEquiv_restr]; rw [PartialEquiv.restr_eq_of_source_subset hA]
-
-@[simp]
-
-Depends on / 依赖: PartialEquiv, PartialEquiv.restr_eq_of_source_subset, restr_eq_of_source_subset, toPartialEquiv_injective, toPartialEquiv_restr
+/-
+**Equidecomp.restr_of_source_subset** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source sub
+seteq A) : f.restr A = f
+参数：hA : f.source subseteq A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equidecomp.toPartialEquiv_injective`：toPartialEquiv_injective : Injectiv
+e toPartialEquiv (X
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equidecomp.toPartialEquiv_restr`：toPartialEquiv_restr (f : Equidecomp X 
+G) (A : Set X) : (f.restr A).toPartialEquiv = f.toPartialEquiv.restr A
+· 使用定理 `PartialEquiv.restr_eq_of_source_subset`：restr_eq_of_source_subset {e : P
+artialEquiv α β} {s : Set α} (h : e.source subseteq s) : e.restr s = e
 -/
-theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source subseteq A) :
+theorem restr_of_source_subset {f : Equidecomp X G} {A : Set X} (hA : f.source ⊆ A) :
     f.restr A = f := by
   apply toPartialEquiv_injective
-  rw [toPartialEquiv_restr]; rw [PartialEquiv.restr_eq_of_source_subset hA]
+  rw [toPartialEquiv_restr, PartialEquiv.restr_eq_of_source_subset hA]
 
 @[simp]
-/--
-theorem `restr_univ` / 定理 `restr_univ`
-
-English:
-theorem restr_univ
-  given: (f : Equidecomp X G)
-  statement: f.restr univ = f
-  proof: restr_of_source_subset subset_univ _
-
-中文:
-定理 restr_univ
-  条件: (f : Equidecomp X G)
-  结论: f.restr univ = f
-  证明: restr_of_source_subset subset_univ _
-
-Depends on / 依赖: restr_of_source_subset, subset_univ
+/-
+**Equidecomp.restr_univ** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：restr_univ (f : Equidecomp X G) : f.restr univ = f
+参数：f : Equidecomp X G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equidecomp.restr_of_source_subset`：restr_of_source_subset {f : Equidecom
+p X G} {A : Set X} (hA : f.source subseteq A) : f.restr A = f
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem restr_univ (f : Equidecomp X G) : f.restr univ = f :=
-restr_of_source_subset subset_univ _
+  restr_of_source_subset <| subset_univ _
 
 end SMul
 
@@ -345,20 +285,14 @@ variable (X G)
 
 /-- The identity function is an equidecomposition of the space with itself. -/
 @[simps toPartialEquiv]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**Equidecomp.refl** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：refl : Equidecomp X G where toPartialEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : Equidecomp X G where
-  body: .refl _
-  isDecompOn' := ⟨{1}, by simp [IsDecompOn]⟩
-
-中文:
-定义 refl
-  签名: : Equidecomp X G where
-  定义体: .refl _
-  isDecompOn' := ⟨{1}, by simp [IsDecompOn]⟩
+--- 原说明 ---
+The identity function is an equidecomposition of the space with itself.
 -/
 def refl : Equidecomp X G where
   toPartialEquiv := .refl _
@@ -367,34 +301,24 @@ def refl : Equidecomp X G where
 variable {X} {G}
 
 open scoped Classical in
-/--
-theorem `IsDecompOn.comp'` / 定理 `IsDecompOn.comp'`
-
-English:
-theorem IsDecompOn.comp'
-  statement: {g f : X -> X} {B A : Set X} {T S : Finset G}
-  proof: by
-  intro _ ⟨aA, aB⟩
-  rcases hf _ aA with ⟨γ, γ_mem, hγ⟩
-  rcases hg _ aB with ⟨δ, δ_mem, hδ⟩
-  use δ * γ, Finset.mul_mem_mul δ_mem γ_mem
-  rwa [mul_smul, ← hγ]
-
-中文:
-定理 IsDecompOn.comp'
-  结论: {g f : X -> X} {B A : 集合 X} {T S : 有限集 G}
-  证明: by
-  intro _ ⟨aA, aB⟩
-  rcases hf _ aA with ⟨γ, γ_mem, hγ⟩
-  rcases hg _ aB with ⟨δ, δ_mem, hδ⟩
-  use δ * γ, Finset.mul_mem_mul δ_mem γ_mem
-  rwa [mul_smul, ← hγ]
-
-Depends on / 依赖: Finset, Finset.mul_mem_mul, mul_mem_mul, mul_smul
+/-
+**Equidecomp.IsDecompOn.comp'** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp.IsDecompOn`。
+形式化陈述：∀ {X : Type u_1} {G : Type u_2} [inst : Monoid G] [inst_1 : MulAction G X]
+ {g f : X → X} {B A : Set X} {T S : Finset G},   Equidecomp.IsDecompOn g B T → E
+quidecomp.IsDecompOn f A S → Equidecomp.IsDecompOn (g ∘ f) (A ∩ f ⁻¹' B) (T * S)
+参数：g ∘ f；A ∩ f ⁻¹' B；T * S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mul_mem_mul`：mul_mem_mul : a in s -> b in t -> a * b in s * t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsDecompOn.comp' {g f : X -> X} {B A : Set X} {T S : Finset G}
+theorem IsDecompOn.comp' {g f : X → X} {B A : Set X} {T S : Finset G}
     (hg : IsDecompOn g B T) (hf : IsDecompOn f A S) :
-    IsDecompOn (g ∘ f) (A inter f ⁻¹' B) (T * S) := by
+    IsDecompOn (g ∘ f) (A ∩ f ⁻¹' B) (T * S) := by
   intro _ ⟨aA, aB⟩
   rcases hf _ aA with ⟨γ, γ_mem, hγ⟩
   rcases hg _ aB with ⟨δ, δ_mem, hδ⟩
@@ -402,26 +326,23 @@ theorem IsDecompOn.comp' {g f : X -> X} {B A : Set X} {T S : Finset G}
   rwa [mul_smul, ← hγ]
 
 open scoped Classical in
-/--
-theorem `IsDecompOn.comp` / 定理 `IsDecompOn.comp`
-
-English:
-theorem IsDecompOn.comp
-  statement: {g f : X -> X} {B A : Set X} {T S : Finset G}
-  proof: by
-  rw [left_eq_inter.mpr h]
-  exact hg.comp' hf
-
-中文:
-定理 IsDecompOn.comp
-  结论: {g f : X -> X} {B A : 集合 X} {T S : 有限集 G}
-  证明: by
-  rw [left_eq_inter.mpr h]
-  exact hg.comp' hf
-
-Depends on / 依赖: hg.comp, left_eq_inter, left_eq_inter.mpr
+/-
+**Equidecomp.IsDecompOn.comp** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp.IsDecompOn`。
+形式化陈述：∀ {X : Type u_1} {G : Type u_2} [inst : Monoid G] [inst_1 : MulAction G X]
+ {g f : X → X} {B A : Set X} {T S : Finset G},   Equidecomp.IsDecompOn g B T → E
+quidecomp.IsDecompOn f A S → Set.MapsTo f A B → Equidecomp.IsDecompOn (g ∘ f) A 
+(T * S)
+参数：g ∘ f；T * S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_eq_inter`：∀ {α : Type u} {s t : Set α}, s = s ∩ t ↔ s ⊆ t
+· 使用定理 `Equidecomp.IsDecompOn.comp'`：∀ {X : Type u_1} {G : Type u_2} [inst : Mon
+oid G] [inst_1 : MulAction G X] {g f : X → X} {B A : Set X} {T S : Finset G},   
+Equidecomp.IsDeco…
 -/
-theorem IsDecompOn.comp {g f : X -> X} {B A : Set X} {T S : Finset G}
+theorem IsDecompOn.comp {g f : X → X} {B A : Set X} {T S : Finset G}
     (hg : IsDecompOn g B T) (hf : IsDecompOn f A S) (h : MapsTo f A B) :
     IsDecompOn (g ∘ f) A (T * S) := by
   rw [left_eq_inter.mpr h]
@@ -429,22 +350,15 @@ theorem IsDecompOn.comp {g f : X -> X} {B A : Set X} {T S : Finset G}
 
 /-- The composition of two equidecompositions as an equidecomposition. -/
 @[simps toPartialEquiv, trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**Equidecomp.trans** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：trans (f g : Equidecomp X G) : Equidecomp X G where toPartialEquiv
+参数：f g : Equidecomp X G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (f g : Equidecomp X G)
-  body: f.toPartialEquiv.trans g.toPartialEquiv
-  isDecompOn' := by classical exact ⟨g.witness * f.witness, g.isDecompOn.comp' f.isDecompOn⟩
-
-中文:
-定义 trans
-  签名: (f g : Equidecomp X G)
-  定义体: f.toPartialEquiv.trans g.toPartialEquiv
-  isDecompOn' := by classical exact ⟨g.witness * f.witness, g.isDecompOn.comp' f.isDecompOn⟩
-
-Depends on / 依赖: f.toPartialEquiv.trans, g.toPartialEquiv, toPartialEquiv
+--- 原说明 ---
+The composition of two equidecompositions as an equidecomposition.
 -/
 noncomputable def trans (f g : Equidecomp X G) : Equidecomp X G where
   toPartialEquiv := f.toPartialEquiv.trans g.toPartialEquiv
@@ -457,246 +371,169 @@ section Group
 variable [Group G] [MulAction G X]
 
 open scoped Classical in
-/--
-theorem `IsDecompOn.of_leftInvOn` / 定理 `IsDecompOn.of_leftInvOn`
-
-English:
-theorem IsDecompOn.of_leftInvOn
-  statement: {f g : X -> X} {A : Set X} {S : Finset G}
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩
-  rcases hf a ha with ⟨γ, γ_mem, hγ⟩
-  use γ⁻¹, Finset.inv_mem_inv γ_mem
-  rw [hγ]; rw [inv_smul_smul]; rw [← hγ]; rw [h ha]
-
-中文:
-定理 IsDecompOn.of_leftInvOn
-  结论: {f g : X -> X} {A : 集合 X} {S : 有限集 G}
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩
-  rcases hf a ha with ⟨γ, γ_mem, hγ⟩
-  use γ⁻¹, Finset.inv_mem_inv γ_mem
-  rw [hγ]; rw [inv_smul_smul]; rw [← hγ]; rw [h ha]
-
-Depends on / 依赖: Finset, Finset.inv_mem_inv, inv_mem_inv, inv_smul_smul
+/-
+**Equidecomp.IsDecompOn.of_leftInvOn** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp.IsDec
+ompOn`。
+形式化陈述：∀ {X : Type u_1} {G : Type u_2} [inst : Group G] [inst_1 : MulAction G X] 
+{f g : X → X} {A : Set X} {S : Finset G},   Equidecomp.IsDecompOn f A S → Set.Le
+ftInvOn g f A → Equidecomp.IsDecompOn g (f '' A) S⁻¹
+参数：f '' A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.inv_mem_inv`：inv_mem_inv (ha : a in s) : a⁻¹ in s⁻¹
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsDecompOn.of_leftInvOn {f g : X -> X} {A : Set X} {S : Finset G}
+theorem IsDecompOn.of_leftInvOn {f g : X → X} {A : Set X} {S : Finset G}
     (hf : IsDecompOn f A S) (h : LeftInvOn g f A) : IsDecompOn g (f '' A) S⁻¹ := by
   rintro _ ⟨a, ha, rfl⟩
   rcases hf a ha with ⟨γ, γ_mem, hγ⟩
   use γ⁻¹, Finset.inv_mem_inv γ_mem
-  rw [hγ]; rw [inv_smul_smul]; rw [← hγ]; rw [h ha]
+  rw [hγ, inv_smul_smul, ← hγ, h ha]
 
 /-- The inverse function of an equidecomposition as an equidecomposition. -/
 @[symm, simps toPartialEquiv]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**Equidecomp.symm** 是 Mathlib 中的一个定义，位于命名空间 `Equidecomp`。
+形式化陈述：symm (f : Equidecomp X G) : Equidecomp X G where toPartialEquiv
+参数：f : Equidecomp X G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (f : Equidecomp X G)
-  body: f.toPartialEquiv.symm
-  isDecompOn' := by classical exact ⟨f.witness⁻¹, by
-    convert! f.isDecompOn.of_leftInvOn f.leftInvOn
-    rw [image_source_eq_target]; rw [symm_source]⟩
-
-中文:
-定义 symm
-  签名: (f : Equidecomp X G)
-  定义体: f.toPartialEquiv.symm
-  isDecompOn' := by classical exact ⟨f.witness⁻¹, by
-    convert! f.isDecompOn.of_leftInvOn f.leftInvOn
-    rw [image_source_eq_target]; rw [symm_source]⟩
-
-Depends on / 依赖: f.toPartialEquiv.symm, toPartialEquiv
+--- 原说明 ---
+The inverse function of an equidecomposition as an equidecomposition.
 -/
 noncomputable def symm (f : Equidecomp X G) : Equidecomp X G where
   toPartialEquiv := f.toPartialEquiv.symm
   isDecompOn' := by classical exact ⟨f.witness⁻¹, by
     convert! f.isDecompOn.of_leftInvOn f.leftInvOn
-    rw [image_source_eq_target]; rw [symm_source]⟩
-
-/--
-theorem `map_target` / 定理 `map_target`
-
-English:
-theorem map_target
-  given: {f : Equidecomp X G} {x : X} (h : x in f.target)
-  proof: f.toPartialEquiv.map_target h
-
-中文:
-定理 map_target
-  条件: {f : Equidecomp X G} {x : X} (h : x in f.target)
-  证明: f.toPartialEquiv.map_target h
-
-Depends on / 依赖: f.toPartialEquiv.map_target, map_target, toPartialEquiv
+    rw [image_source_eq_target, symm_source]⟩
+/-
+**Equidecomp.map_target** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：map_target {f : Equidecomp X G} {x : X} (h : x in f.target) : f.symm x in 
+f.source
+参数：h : x in f.target。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.map_target`：map_target {x : β} (h : x in e.target) : e.symm
+ x in e.source
 -/
-theorem map_target {f : Equidecomp X G} {x : X} (h : x in f.target) :
-    f.symm x in f.source := f.toPartialEquiv.map_target h
-
-/--
-theorem `left_inv` / 定理 `left_inv`
-
-English:
-theorem left_inv
-  given: {f : Equidecomp X G} {x : X} (h : x in f.source)
-  proof: by simp [h]
-
-中文:
-定理 left_inv
-  条件: {f : Equidecomp X G} {x : X} (h : x in f.source)
-  证明: by simp [h]
+theorem map_target {f : Equidecomp X G} {x : X} (h : x ∈ f.target) :
+    f.symm x ∈ f.source := f.toPartialEquiv.map_target h
+/-
+**Equidecomp.left_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：left_inv {f : Equidecomp X G} {x : X} (h : x in f.source) : f.toPartialEqu
+iv.symm (f x) = x
+参数：h : x in f.source。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem left_inv {f : Equidecomp X G} {x : X} (h : x in f.source) :
+theorem left_inv {f : Equidecomp X G} {x : X} (h : x ∈ f.source) :
     f.toPartialEquiv.symm (f x) = x := by simp [h]
-
-/--
-theorem `right_inv` / 定理 `right_inv`
-
-English:
-theorem right_inv
-  given: {f : Equidecomp X G} {x : X} (h : x in f.target)
-  proof: by simp [h]
-
-@[simp]
-
-中文:
-定理 right_inv
-  条件: {f : Equidecomp X G} {x : X} (h : x in f.target)
-  证明: by simp [h]
-
-@[simp]
+/-
+**Equidecomp.right_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：right_inv {f : Equidecomp X G} {x : X} (h : x in f.target) : f (f.toPartia
+lEquiv.symm x) = x
+参数：h : x in f.target。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PartialEquiv.right_inv`：right_inv {x : β} (h : x in e.target) : e (e.sym
+m x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem right_inv {f : Equidecomp X G} {x : X} (h : x in f.target) :
+theorem right_inv {f : Equidecomp X G} {x : X} (h : x ∈ f.target) :
     f (f.toPartialEquiv.symm x) = x := by simp [h]
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (f : Equidecomp X G)
-  statement: f.symm.symm = f
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (f : Equidecomp X G)
-  结论: f.symm.symm = f
-  证明: rfl
+/-
+**Equidecomp.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：symm_symm (f : Equidecomp X G) : f.symm.symm = f
+参数：f : Equidecomp X G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (f : Equidecomp X G) : f.symm.symm = f := rfl
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  statement: (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-  proof: f.toPartialEquiv.symm_apply_eq hy hx
-
-中文:
-定理 symm_apply_eq
-  结论: (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-  证明: f.toPartialEquiv.symm_apply_eq hy hx
-
-Depends on / 依赖: f.toPartialEquiv.symm_apply_eq, symm_apply_eq, toPartialEquiv
+/-
+**Equidecomp.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：symm_apply_eq (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.targe
+t) (hy : y in f.toPartialEquiv.source) : f.symm x = y ↔ x = f y
+参数：f : Equidecomp X G；hx : x in f.toPartialEquiv.target；hy : y in f.toPartialEqu
+iv.source。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.symm_apply_eq`：symm_apply_eq {x : α} {y : β} (hx : x in e.s
+ource) (hy : y in e.target) : e.symm y = x ↔ y = e x
 -/
-theorem symm_apply_eq (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-    (hy : y in f.toPartialEquiv.source) : f.symm x = y ↔ x = f y :=
+theorem symm_apply_eq (f : Equidecomp X G) {x y} (hx : x ∈ f.toPartialEquiv.target)
+    (hy : y ∈ f.toPartialEquiv.source) : f.symm x = y ↔ x = f y :=
   f.toPartialEquiv.symm_apply_eq hy hx
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  statement: (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-  proof: f.toPartialEquiv.eq_symm_apply hy hx
-
-中文:
-定理 eq_symm_apply
-  结论: (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-  证明: f.toPartialEquiv.eq_symm_apply hy hx
-
-Depends on / 依赖: eq_symm_apply, f.toPartialEquiv.eq_symm_apply, toPartialEquiv
+/-
+**Equidecomp.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：eq_symm_apply (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.targe
+t) (hy : y in f.toPartialEquiv.source) : y = f.symm x ↔ f y = x
+参数：f : Equidecomp X G；hx : x in f.toPartialEquiv.target；hy : y in f.toPartialEqu
+iv.source。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartialEquiv.eq_symm_apply`：eq_symm_apply {x : α} {y : β} (hx : x in e.s
+ource) (hy : y in e.target) : x = e.symm y ↔ e x = y
 -/
-theorem eq_symm_apply (f : Equidecomp X G) {x y} (hx : x in f.toPartialEquiv.target)
-    (hy : y in f.toPartialEquiv.source) : y = f.symm x ↔ f y = x :=
+theorem eq_symm_apply (f : Equidecomp X G) {x y} (hx : x ∈ f.toPartialEquiv.target)
+    (hy : y ∈ f.toPartialEquiv.source) : y = f.symm x ↔ f y = x :=
   f.toPartialEquiv.eq_symm_apply hy hx
-
-/--
-theorem `symm_involutive` / 定理 `symm_involutive`
-
-English:
-theorem symm_involutive
-  statement: Function.Involutive (symm : Equidecomp X G -> _)
-  proof: symm_symm
-
-中文:
-定理 symm_involutive
-  结论: 函数.对合 (symm : Equidecomp X G -> _)
-  证明: symm_symm
-
-Depends on / 依赖: symm_symm
+/-
+**Equidecomp.symm_involutive** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：symm_involutive : Function.Involutive (symm : Equidecomp X G -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equidecomp.symm_symm`：symm_symm (f : Equidecomp X G) : f.symm.symm = f
 -/
-theorem symm_involutive : Function.Involutive (symm : Equidecomp X G -> _) := symm_symm
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (symm : Equidecomp X G -> _)
-  proof: symm_involutive.bijective
-
-@[simp]
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (symm : Equidecomp X G -> _)
-  证明: symm_involutive.bijective
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.recOnSubsingleton, bijective, conjugatesOf, conjugatesOf.fintype, fintype, recOnSubsingleton, symm_involutive, symm_involutive.bijective
+theorem symm_involutive : Function.Involutive (symm : Equidecomp X G → _) := symm_symm
+/-
+**Equidecomp.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：symm_bijective : Function.Bijective (symm : Equidecomp X G -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用定理 `Equidecomp.symm_involutive`：symm_involutive : Function.Involutive (symm 
+: Equidecomp X G -> _)
 -/
-theorem symm_bijective : Function.Bijective (symm : Equidecomp X G -> _) := symm_involutive.bijective
+theorem symm_bijective : Function.Bijective (symm : Equidecomp X G → _) := symm_involutive.bijective
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (refl X G).symm = refl X G
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_symm
-  结论: (refl X G).symm = refl X G
-  证明: rfl
-
-@[simp]
+/-
+**Equidecomp.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：refl_symm : (refl X G).symm = refl X G
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm : (refl X G).symm = refl X G := rfl
 
 @[simp]
-/--
-theorem `restr_refl_symm` / 定理 `restr_refl_symm`
-
-English:
-theorem restr_refl_symm
-  given: (A : Set X)
-  proof: rfl
-
-中文:
-定理 restr_refl_symm
-  条件: (A : 集合 X)
-  证明: rfl
+/-
+**Equidecomp.restr_refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equidecomp`。
+形式化陈述：restr_refl_symm (A : Set X) : ((Equidecomp.refl X G).restr A).symm = (Equi
+decomp.refl X G).restr A
+参数：A : Set X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem restr_refl_symm (A : Set X) :
     ((Equidecomp.refl X G).restr A).symm = (Equidecomp.refl X G).restr A := rfl
@@ -704,3 +541,4 @@ theorem restr_refl_symm (A : Set X) :
 end Group
 
 end Equidecomp
+

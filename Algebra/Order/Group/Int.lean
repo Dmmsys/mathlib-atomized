@@ -22,20 +22,13 @@ public section
 -- We should need only a minimal development of sets in order to get here.
 assert_not_exists Set.Subsingleton Ring
 
-/--
-Instance `Int.instIsOrderedAddMonoid` / 实例 `Int.instIsOrderedAddMonoid`
-
-English:
-instance Int.instIsOrderedAddMonoid
-  signature: : IsOrderedAddMonoid Int where
-  body: Int.add_le_add_right
-
-中文:
-实例 整数.instIsOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 整数 where
-  定义体: Int.add_le_add_right
-
-Depends on / 依赖: Int.add_le_add_right, add_le_add_right
+/-
+**Int.instIsOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.instIsOrderedAddMonoid : IsOrderedAddMonoid Int where add_le_add_left 
+_ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.add_le_add_right`：∀ {a b : ℤ}, a ≤ b → ∀ (c : ℤ), a + c ≤ b + c
 -/
-instance Int.instIsOrderedAddMonoid : IsOrderedAddMonoid Int where
+instance Int.instIsOrderedAddMonoid : IsOrderedAddMonoid ℤ where
   add_le_add_left _ _ := Int.add_le_add_right

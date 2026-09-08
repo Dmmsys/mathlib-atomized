@@ -40,44 +40,20 @@ variable (A) in
 unique positive real number `Δ(g)` such that `μ (g • s) = Δ(g) * μ s` for all Haar
 measures `μ : Measure A`, set `s : Set A` and `g : G`. -/
 @[simps -isSimp]
-/--
-Definition of `distribHaarChar` / `distribHaarChar` 的定义
+/-
+**MeasureTheory.distribHaarChar** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：distribHaarChar : G ->* Real>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition distribHaarChar
-  signature: : G ->* Real>=0
-  body: letI := borel A
-  haveI : BorelSpace A := ⟨rfl⟩
-  {
-    toFun g := addHaarScalarFactor (DomMulAct.mk g • addHaar) (addHaar (G := A))
-    map_one' := by simp
-    map_mul' g g' := by
-      simp_rw [DomMulAct.mk_mul]
-      rw [addHaarScalarFactor_eq_mul _ (DomMulAct.mk g' • addHaar (G := A))]
-      congr 1
-      simp_rw [mul_smul]
-      rw [addHaarScalarFactor_domSMul]
-  }
-
-中文:
-定义 distribHaarChar
-  签名: : G ->* 实数>=0
-  定义体: letI := borel A
-  haveI : BorelSpace A := ⟨rfl⟩
-  {
-    toFun g := addHaarScalarFactor (DomMulAct.mk g • addHaar) (addHaar (G := A))
-    map_one' := by simp
-    map_mul' g g' := by
-      simp_rw [DomMulAct.mk_mul]
-      rw [addHaarScalarFactor_eq_mul _ (DomMulAct.mk g' • addHaar (G := A))]
-      congr 1
-      simp_rw [mul_smul]
-      rw [addHaarScalarFactor_domSMul]
-  }
-
-Depends on / 依赖: BorelSpace, DomMulAct, DomMulAct.mk, DomMulAct.mk_mul, addHaar, addHaarScalarFactor, addHaarScalarFactor_domSMul, addHaarScalarFactor_eq_mul, map_mul, map_one, mk_mul, mul_smul, simp_rw
+--- 原说明 ---
+The distributive Haar character of a group `G` acting distributively on a group 
+`A` is the
+unique positive real number `Δ(g)` such that `μ (g • s) = Δ(g) * μ s` for all Ha
+ar
+measures `μ : Measure A`, set `s : Set A` and `g : G`.
 -/
-noncomputable def distribHaarChar : G ->* Real>=0 :=
+noncomputable def distribHaarChar : G →* ℝ≥0 :=
   letI := borel A
   haveI : BorelSpace A := ⟨rfl⟩
   {
@@ -90,21 +66,22 @@ noncomputable def distribHaarChar : G ->* Real>=0 :=
       simp_rw [mul_smul]
       rw [addHaarScalarFactor_domSMul]
   }
-
-/--
-lemma `distribHaarChar_pos` / 引理 `distribHaarChar_pos`
-
-English:
-lemma distribHaarChar_pos
-  statement: 0 < distribHaarChar A g
-  proof: pos_iff_ne_zero.mpr ((Group.isUnit g).map (distribHaarChar A)).ne_zero
-
-中文:
-引理 distribHaarChar_pos
-  结论: 0 < distribHaarChar A g
-  证明: pos_iff_ne_zero.mpr ((Group.isUnit g).map (distribHaarChar A)).ne_zero
-
-Depends on / 依赖: Group.isUnit, distribHaarChar, isUnit, ne_zero, pos_iff_ne_zero, pos_iff_ne_zero.mpr
+/-
+**MeasureTheory.distribHaarChar_pos** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：distribHaarChar_pos : 0 < distribHaarChar A g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `IsUnit.ne_zero`：ne_zero [Nontrivial M₀] {a : M₀} (ha : IsUnit a) : a != 
+0
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
 -/
 lemma distribHaarChar_pos : 0 < distribHaarChar A g :=
   pos_iff_ne_zero.mpr ((Group.isUnit g).map (distribHaarChar A)).ne_zero
@@ -112,24 +89,35 @@ lemma distribHaarChar_pos : 0 < distribHaarChar A g :=
 variable [MeasurableSpace A] [BorelSpace A] {μ : Measure A} [μ.IsAddHaarMeasure]
 
 variable (μ) in
-/--
-lemma `addHaarScalarFactor_smul_eq_distribHaarChar` / 引理 `addHaarScalarFactor_smul_eq_distribHaarChar`
-
-English:
-lemma addHaarScalarFactor_smul_eq_distribHaarChar
-  given: (g : G)
-  proof: by
-  borelize A
-  exact addHaarScalarFactor_smul_congr' ..
-
-中文:
-引理 addHaarScalarFactor_smul_eq_distribHaarChar
-  条件: (g : G)
-  证明: by
-  borelize A
-  exact addHaarScalarFactor_smul_congr' ..
-
-Depends on / 依赖: addHaarScalarFactor_smul_congr, borelize
+/-
+**MeasureTheory.addHaarScalarFactor_smul_eq_distribHaarChar** 是 Mathlib 中的一个引理，位
+于命名空间 `MeasureTheory`。
+形式化陈述：addHaarScalarFactor_smul_eq_distribHaarChar (g : G) : addHaarScalarFactor 
+(DomMulAct.mk g • μ) μ = distribHaarChar A g
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
+· 使用定理 `ContinuousConstSMul.toMeasurableConstSMul`：∀ {M : Type u_7} {α : Type u_
+8} [inst : TopologicalSpace α] [inst_1 : MeasurableSpace α] [BorelSpace α]   [in
+st_3 : SMul M α] [ContinuousCon…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsFiniteMeasureOnCompacts`：∀ {G
+ : Type u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : Measura
+bleSpace G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.domSMul`：∀ {G : Type u_3} {A : Ty
+pe u_4} [inst : Group G] [inst_1 : AddCommGroup A] [inst_2 : DistribMulAction G 
+A]   [inst_3 : MeasurableSpace A] [i…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsAddLeftInvariant`：∀ {G : Type
+ u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : MeasurableSpac
+e G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用引理 `MeasureTheory.Measure.addHaarScalarFactor_smul_congr'`：addHaarScalarFact
+or_smul_congr' (g : Gᵈᵐᵃ) : addHaarScalarFactor (g • μ) μ = addHaarScalarFactor 
+(g • ν) ν
+· 使用定理 `MeasureTheory.Measure.isAddHaarMeasure_addHaarMeasure`：∀ {G : Type u_1} 
+[inst : AddGroup G] [inst_1 : TopologicalSpace G] [inst_2 : IsTopologicalAddGrou
+p G]   [inst_3 : MeasurableSpace G] [inst_4…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma addHaarScalarFactor_smul_eq_distribHaarChar (g : G) :
     addHaarScalarFactor (DomMulAct.mk g • μ) μ = distribHaarChar A g := by
@@ -137,26 +125,42 @@ lemma addHaarScalarFactor_smul_eq_distribHaarChar (g : G) :
   exact addHaarScalarFactor_smul_congr' ..
 
 variable (μ) in
-/--
-lemma `addHaarScalarFactor_smul_inv_eq_distribHaarChar` / 引理 `addHaarScalarFactor_smul_inv_eq_distribHaarChar`
-
-English:
-lemma addHaarScalarFactor_smul_inv_eq_distribHaarChar
-  given: (g : G)
-  proof: by
-  rw [← addHaarScalarFactor_domSMul _ _ (DomMulAct.mk g)]
-  simp_rw [← mul_smul, mul_inv_cancel, one_smul]
-  exact addHaarScalarFactor_smul_eq_distribHaarChar ..
-
-中文:
-引理 addHaarScalarFactor_smul_inv_eq_distribHaarChar
-  条件: (g : G)
-  证明: by
-  rw [← addHaarScalarFactor_domSMul _ _ (DomMulAct.mk g)]
-  simp_rw [← mul_smul, mul_inv_cancel, one_smul]
-  exact addHaarScalarFactor_smul_eq_distribHaarChar ..
-
-Depends on / 依赖: DomMulAct, DomMulAct.mk, addHaarScalarFactor_domSMul, addHaarScalarFactor_smul_eq_distribHaarChar, mul_inv_cancel, mul_smul, one_smul, simp_rw
+/-
+**MeasureTheory.addHaarScalarFactor_smul_inv_eq_distribHaarChar** 是 Mathlib 中的一个
+引理，位于命名空间 `MeasureTheory`。
+形式化陈述：addHaarScalarFactor_smul_inv_eq_distribHaarChar (g : G) : addHaarScalarFac
+tor μ ((DomMulAct.mk g)⁻¹ • μ) = distribHaarChar A g
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousConstSMul.toMeasurableConstSMul`：∀ {M : Type u_7} {α : Type u_
+8} [inst : TopologicalSpace α] [inst_1 : MeasurableSpace α] [BorelSpace α]   [in
+st_3 : SMul M α] [ContinuousCon…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.domSMul`：∀ {G : Type u_3} {A : Ty
+pe u_4} [inst : Group G] [inst_1 : AddCommGroup A] [inst_2 : DistribMulAction G 
+A]   [inst_3 : MeasurableSpace A] [i…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsFiniteMeasureOnCompacts`：∀ {G
+ : Type u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : Measura
+bleSpace G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsAddLeftInvariant`：∀ {G : Type
+ u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : MeasurableSpac
+e G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.Measure.addHaarScalarFactor_domSMul`：addHaarScalarFactor_d
+omSMul (g : Gᵈᵐᵃ) : addHaarScalarFactor (g • μ) (g • ν) = addHaarScalarFactor μ 
+ν
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.addHaarScalarFactor.congr_simp`：∀ {G : Type u_1} [
+inst : TopologicalSpace G] [inst_1 : AddGroup G] [inst_2 : IsTopologicalAddGroup
+ G]   [inst_3 : MeasurableSpace G] [inst_4…
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `MeasureTheory.addHaarScalarFactor_smul_eq_distribHaarChar`：addHaarScalar
+Factor_smul_eq_distribHaarChar (g : G) : addHaarScalarFactor (DomMulAct.mk g • μ
+) μ = distribHaarChar A g
 -/
 lemma addHaarScalarFactor_smul_inv_eq_distribHaarChar (g : G) :
     addHaarScalarFactor μ ((DomMulAct.mk g)⁻¹ • μ) = distribHaarChar A g := by
@@ -165,98 +169,149 @@ lemma addHaarScalarFactor_smul_inv_eq_distribHaarChar (g : G) :
   exact addHaarScalarFactor_smul_eq_distribHaarChar ..
 
 variable (μ) in
-/--
-lemma `addHaarScalarFactor_smul_eq_distribHaarChar_inv` / 引理 `addHaarScalarFactor_smul_eq_distribHaarChar_inv`
-
-English:
-lemma addHaarScalarFactor_smul_eq_distribHaarChar_inv
-  given: (g : G)
-  proof: by
-  rw [← map_inv]; rw [← addHaarScalarFactor_smul_inv_eq_distribHaarChar μ]; rw [DomMulAct.mk_inv]; rw [inv_inv]
-
-中文:
-引理 addHaarScalarFactor_smul_eq_distribHaarChar_inv
-  条件: (g : G)
-  证明: by
-  rw [← map_inv]; rw [← addHaarScalarFactor_smul_inv_eq_distribHaarChar μ]; rw [DomMulAct.mk_inv]; rw [inv_inv]
-
-Depends on / 依赖: DomMulAct, DomMulAct.mk_inv, addHaarScalarFactor_smul_inv_eq_distribHaarChar, inv_inv, map_inv, mk_inv
+/-
+**MeasureTheory.addHaarScalarFactor_smul_eq_distribHaarChar_inv** 是 Mathlib 中的一个
+引理，位于命名空间 `MeasureTheory`。
+形式化陈述：addHaarScalarFactor_smul_eq_distribHaarChar_inv (g : G) : addHaarScalarFac
+tor μ (DomMulAct.mk g • μ) = (distribHaarChar A g)⁻¹
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousConstSMul.toMeasurableConstSMul`：∀ {M : Type u_7} {α : Type u_
+8} [inst : TopologicalSpace α] [inst_1 : MeasurableSpace α] [BorelSpace α]   [in
+st_3 : SMul M α] [ContinuousCon…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.domSMul`：∀ {G : Type u_3} {A : Ty
+pe u_4} [inst : Group G] [inst_1 : AddCommGroup A] [inst_2 : DistribMulAction G 
+A]   [inst_3 : MeasurableSpace A] [i…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsFiniteMeasureOnCompacts`：∀ {G
+ : Type u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : Measura
+bleSpace G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsAddLeftInvariant`：∀ {G : Type
+ u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : MeasurableSpac
+e G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用引理 `MeasureTheory.addHaarScalarFactor_smul_inv_eq_distribHaarChar`：addHaarSc
+alarFactor_smul_inv_eq_distribHaarChar (g : G) : addHaarScalarFactor μ ((DomMulA
+ct.mk g)⁻¹ • μ) = distribHaarChar A g
+· 使用引理 `DomMulAct.mk_inv`：mk_inv [Inv M] (a : M) : mk (a⁻¹) = (mk a)⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 lemma addHaarScalarFactor_smul_eq_distribHaarChar_inv (g : G) :
     addHaarScalarFactor μ (DomMulAct.mk g • μ) = (distribHaarChar A g)⁻¹ := by
-  rw [← map_inv]; rw [← addHaarScalarFactor_smul_inv_eq_distribHaarChar μ]; rw [DomMulAct.mk_inv]; rw [inv_inv]
+  rw [← map_inv, ← addHaarScalarFactor_smul_inv_eq_distribHaarChar μ, DomMulAct.mk_inv, inv_inv]
 
 variable [Regular μ] {s : Set A}
 
 variable (μ) in
-/--
-lemma `distribHaarChar_mul` / 引理 `distribHaarChar_mul`
-
-English:
-lemma distribHaarChar_mul
-  given: (g : G) (s : Set A)
-  statement: distribHaarChar A g * μ s = μ (g • s)
-  proof: by
-  have : (DomMulAct.mk g • μ) s = μ (g • s) := by simp [domSMul_apply]
-  rw [eq_comm]; rw [← nnreal_smul_coe_apply]; rw [← addHaarScalarFactor_smul_eq_distribHaarChar μ]; rw [← this]; rw [← Measure.smul_apply]; rw [← isAddLeftInvariant_eq_smul_of_regular]
-
-中文:
-引理 distribHaarChar_mul
-  条件: (g : G) (s : 集合 A)
-  结论: distribHaarChar A g * μ s = μ (g • s)
-  证明: by
-  have : (DomMulAct.mk g • μ) s = μ (g • s) := by simp [domSMul_apply]
-  rw [eq_comm]; rw [← nnreal_smul_coe_apply]; rw [← addHaarScalarFactor_smul_eq_distribHaarChar μ]; rw [← this]; rw [← Measure.smul_apply]; rw [← isAddLeftInvariant_eq_smul_of_regular]
-
-Depends on / 依赖: DomMulAct, DomMulAct.mk, Measure, Measure.smul_apply, addHaarScalarFactor_smul_eq_distribHaarChar, domSMul_apply, eq_comm, isAddLeftInvariant_eq_smul_of_regular, nnreal_smul_coe_apply, smul_apply
+/-
+**MeasureTheory.distribHaarChar_mul** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：distribHaarChar_mul (g : G) (s : Set A) : distribHaarChar A g * μ s = μ (g
+ • s)
+参数：g : G；s : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousConstSMul.toMeasurableConstSMul`：∀ {M : Type u_7} {α : Type u_
+8} [inst : TopologicalSpace α] [inst_1 : MeasurableSpace α] [BorelSpace α]   [in
+st_3 : SMul M α] [ContinuousCon…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `MeasureTheory.Measure.domSMul_apply`：domSMul_apply (μ : Measure A) (g : 
+Gᵈᵐᵃ) (s : Set A) : (g • μ) s = μ (DomMulAct.mk.symm g • s)
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.nnreal_smul_coe_apply`：nnreal_smul_coe_apply {_m :
+ MeasurableSpace α} (c : Real>=0) (μ : Measure α) (s : Set α) : c • μ s = c * μ 
+s
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsFiniteMeasureOnCompacts`：∀ {G
+ : Type u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : Measura
+bleSpace G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.domSMul`：∀ {G : Type u_3} {A : Ty
+pe u_4} [inst : Group G] [inst_1 : AddCommGroup A] [inst_2 : DistribMulAction G 
+A]   [inst_3 : MeasurableSpace A] [i…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.toIsAddLeftInvariant`：∀ {G : Type
+ u_3} {inst : AddGroup G} {inst_1 : TopologicalSpace G} {inst_2 : MeasurableSpac
+e G}   {μ : MeasureTheory.Measure G} [self : μ.Is…
+· 使用引理 `MeasureTheory.addHaarScalarFactor_smul_eq_distribHaarChar`：addHaarScalar
+Factor_smul_eq_distribHaarChar (g : G) : addHaarScalarFactor (DomMulAct.mk g • μ
+) μ = distribHaarChar A g
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.smul_apply`：smul_apply {_m : MeasurableSpace α} (c
+ : R) (μ : Measure α) (s : Set α) : (c • μ) s = c • μ s
+· 使用定理 `MeasureTheory.Measure.Regular.toIsFiniteMeasureOnCompacts`：∀ {α : Type u
+_1} {inst : MeasurableSpace α} {inst_1 : TopologicalSpace α} {μ : MeasureTheory.
+Measure α}   [self : μ.Regular], MeasureTheory.…
+· 使用定理 `MeasureTheory.Measure.Regular.domSMul`：∀ {G : Type u_3} {A : Type u_4} [
+inst : Group G] [inst_1 : AddCommGroup A] [inst_2 : DistribMulAction G A]   [ins
+t_3 : MeasurableSpace A] [i…
+· 使用定理 `MeasureTheory.Measure.isAddLeftInvariant_eq_smul_of_regular`：∀ {G : Type
+ u_1} [inst : TopologicalSpace G] [inst_1 : AddGroup G] [inst_2 : IsTopologicalA
+ddGroup G]   [inst_3 : MeasurableSpace G] [inst_4…
 -/
 lemma distribHaarChar_mul (g : G) (s : Set A) : distribHaarChar A g * μ s = μ (g • s) := by
   have : (DomMulAct.mk g • μ) s = μ (g • s) := by simp [domSMul_apply]
-  rw [eq_comm]; rw [← nnreal_smul_coe_apply]; rw [← addHaarScalarFactor_smul_eq_distribHaarChar μ]; rw [← this]; rw [← Measure.smul_apply]; rw [← isAddLeftInvariant_eq_smul_of_regular]
-
-/--
-lemma `distribHaarChar_eq_div` / 引理 `distribHaarChar_eq_div`
-
-English:
-lemma distribHaarChar_eq_div
-  given: (hs₀ : μ s != 0) (hs : μ s != ∞) (g : G)
-  proof: by
-  rw [← distribHaarChar_mul]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
-
-中文:
-引理 distribHaarChar_eq_div
-  条件: (hs₀ : μ s != 0) (hs : μ s != ∞) (g : G)
-  证明: by
-  rw [← distribHaarChar_mul]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
-
-Depends on / 依赖: ENNReal, ENNReal.mul_div_cancel_right, distribHaarChar_mul, mul_div_cancel_right
+  rw [eq_comm, ← nnreal_smul_coe_apply, ← addHaarScalarFactor_smul_eq_distribHaarChar μ,
+    ← this, ← Measure.smul_apply, ← isAddLeftInvariant_eq_smul_of_regular]
+/-
+**MeasureTheory.distribHaarChar_eq_div** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：distribHaarChar_eq_div (hs₀ : μ s != 0) (hs : μ s != ∞) (g : G) : distribH
+aarChar A g = μ (g • s) / μ s
+参数：hs₀ : μ s != 0；hs : μ s != ∞；g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.distribHaarChar_mul`：distribHaarChar_mul (g : G) (s : Set 
+A) : distribHaarChar A g * μ s = μ (g • s)
+· 使用定理 `ENNReal.mul_div_cancel_right`：∀ {a b : ENNReal}, b ≠ 0 → b ≠ ⊤ → a * b /
+ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma distribHaarChar_eq_div (hs₀ : μ s != 0) (hs : μ s != ∞) (g : G) :
+lemma distribHaarChar_eq_div (hs₀ : μ s ≠ 0) (hs : μ s ≠ ∞) (g : G) :
     distribHaarChar A g = μ (g • s) / μ s := by
-  rw [← distribHaarChar_mul]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
-
-/--
-lemma `distribHaarChar_eq_of_measure_smul_eq_mul` / 引理 `distribHaarChar_eq_of_measure_smul_eq_mul`
-
-English:
-lemma distribHaarChar_eq_of_measure_smul_eq_mul
-  statement: (hs₀ : μ s != 0) (hs : μ s != ∞) {r : Real>=0}
-  proof: by
-  refine ENNReal.coe_injective ?_
-  rw [distribHaarChar_eq_div hs₀ hs]; rw [hμgs]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
-
-中文:
-引理 distribHaarChar_eq_of_measure_smul_eq_mul
-  结论: (hs₀ : μ s != 0) (hs : μ s != ∞) {r : 实数>=0}
-  证明: by
-  refine ENNReal.coe_injective ?_
-  rw [distribHaarChar_eq_div hs₀ hs]; rw [hμgs]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_injective, ENNReal.mul_div_cancel_right, coe_injective, distribHaarChar_eq_div, mul_div_cancel_right
+  rw [← distribHaarChar_mul, ENNReal.mul_div_cancel_right] <;> simp [*]
+/-
+**MeasureTheory.distribHaarChar_eq_of_measure_smul_eq_mul** 是 Mathlib 中的一个引理，位于命
+名空间 `MeasureTheory`。
+形式化陈述：distribHaarChar_eq_of_measure_smul_eq_mul (hs₀ : μ s != 0) (hs : μ s != ∞)
+ {r : Real>=0} (hμgs : μ (g • s) = r * μ s) : distribHaarChar A g = r
+参数：hs₀ : μ s != 0；hs : μ s != ∞；hμgs : μ (g • s) = r * μ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.coe_injective`：coe_injective : Injective ((↑) : Real>=0 -> Real>
+=0∞)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.distribHaarChar_eq_div`：distribHaarChar_eq_div (hs₀ : μ s 
+!= 0) (hs : μ s != ∞) (g : G) : distribHaarChar A g = μ (g • s) / μ s
+· 使用定理 `ENNReal.mul_div_cancel_right`：∀ {a b : ENNReal}, b ≠ 0 → b ≠ ⊤ → a * b /
+ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma distribHaarChar_eq_of_measure_smul_eq_mul (hs₀ : μ s != 0) (hs : μ s != ∞) {r : Real>=0}
+lemma distribHaarChar_eq_of_measure_smul_eq_mul (hs₀ : μ s ≠ 0) (hs : μ s ≠ ∞) {r : ℝ≥0}
     (hμgs : μ (g • s) = r * μ s) : distribHaarChar A g = r := by
   refine ENNReal.coe_injective ?_
-  rw [distribHaarChar_eq_div hs₀ hs]; rw [hμgs]; rw [ENNReal.mul_div_cancel_right] <;> simp [*]
+  rw [distribHaarChar_eq_div hs₀ hs, hμgs, ENNReal.mul_div_cancel_right] <;> simp [*]
 
 end MeasureTheory
+

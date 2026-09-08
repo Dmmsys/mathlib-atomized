@@ -41,583 +41,416 @@ variable {α : Type*} {M M' N : Matroid α} {e f : α} {I C D : Set α}
 
 /-! ### Minors -/
 
-/--
-Definition of `IsMinor` / `IsMinor` 的定义
+/-- `N` is a minor of `M` if `N = M ／ C ＼ D` for some `C` and `D`.
+The definition itself does not require `C` and `D` to be disjoint,
+or even to be subsets of the ground set. See `Matroid.IsMinor.exists_eq_contract_delete_disjoint`
+for the fact that we can choose `C` and `D` with these properties. -/
+/-
+**Matroid.IsMinor** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：IsMinor (N M : Matroid α) : Prop
+参数：N M : Matroid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsMinor
-  signature: (N M : Matroid α)
-  body: exists C D, N = M ／ C ＼ D
-
-中文:
-定义 IsMinor
-  签名: (N M : 拟阵 α)
-  定义体: exists C D, N = M ／ C ＼ D
+--- 原说明 ---
+`N` is a minor of `M` if `N = M ／ C ＼ D` for some `C` and `D`.
+The definition itself does not require `C` and `D` to be disjoint,
+or even to be subsets of the ground set. See `Matroid.IsMinor.exists_eq_contract
+_delete_disjoint`
+for the fact that we can choose `C` and `D` with these properties.
 -/
-def IsMinor (N M : Matroid α) : Prop := exists C D, N = M ／ C ＼ D
+def IsMinor (N M : Matroid α) : Prop := ∃ C D, N = M ／ C ＼ D
 
 /-- `≤m` denotes the minor relation on matroids. -/
-infixl:50 " <=m " => Matroid.IsMinor
+infixl:50 " ≤m " => Matroid.IsMinor
 
 @[simp]
-/--
-lemma `contract_delete_isMinor` / 引理 `contract_delete_isMinor`
-
-English:
-lemma contract_delete_isMinor
-  given: (M : Matroid α) (C D : Set α)
-  statement: M ／ C ＼ D <=m M
-  proof: ⟨C, D, rfl⟩
-
-中文:
-引理 contract_delete_isMinor
-  条件: (M : 拟阵 α) (C D : 集合 α)
-  结论: M ／ C ＼ D <=m M
-  证明: ⟨C, D, rfl⟩
+/-
+**Matroid.contract_delete_isMinor** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：contract_delete_isMinor (M : Matroid α) (C D : Set α) : M ／ C ＼ D <=m M
+参数：M : Matroid α；C D : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contract_delete_isMinor (M : Matroid α) (C D : Set α) : M ／ C ＼ D <=m M :=
+lemma contract_delete_isMinor (M : Matroid α) (C D : Set α) : M ／ C ＼ D ≤m M :=
   ⟨C, D, rfl⟩
-
-/--
-lemma `IsMinor.exists_eq_contract_delete_disjoint` / 引理 `IsMinor.exists_eq_contract_delete_disjoint`
-
-English:
-lemma IsMinor.exists_eq_contract_delete_disjoint
-  given: (h : N <=m M)
-  proof: by
-  obtain ⟨C, D, rfl⟩ := h
-  exact ⟨C inter M.E, (D inter M.E) \ C, inter_subset_right, sdiff_subset.trans inter_subset_right,
-    disjoint_sdiff_right.mono_left inter_subset_left,
-    by simp [delete_eq_delete_iff, inter_assoc, inter_sdiff_assoc]⟩
-
-中文:
-引理 IsMinor.存在_eq_contract_delete_disjoint
-  条件: (h : N <=m M)
-  证明: by
-  obtain ⟨C, D, rfl⟩ := h
-  exact ⟨C inter M.E, (D inter M.E) \ C, inter_subset_right, sdiff_subset.trans inter_subset_right,
-    disjoint_sdiff_right.mono_left inter_subset_left,
-    by simp [delete_eq_delete_iff, inter_assoc, inter_sdiff_assoc]⟩
-
-Depends on / 依赖: delete_eq_delete_iff, disjoint_sdiff_right, disjoint_sdiff_right.mono_left, inter_assoc, inter_sdiff_assoc, inter_subset_left, inter_subset_right, mono_left, sdiff_subset, sdiff_subset.trans
+/-
+**Matroid.IsMinor.exists_eq_contract_delete_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `
+Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → ∃ C D, C ⊆ M.E ∧ D ⊆ M.E ∧ Di
+sjoint C D ∧ N = (M.contract C).delete D
+参数：M.contract C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用引理 `Set.disjoint_sdiff_right`：disjoint_sdiff_right : Disjoint s (t \ s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matroid.contract_inter_ground_eq`：∀ {α : Type u_1} (M : Matroid α) (C : 
+Set α), M.contract (C ∩ M.E) = M.contract C
+· 使用引理 `Set.inter_sdiff_assoc`：inter_sdiff_assoc (a b c : Set α) : (a inter b) \
+ c = a inter (b \ c)
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma IsMinor.exists_eq_contract_delete_disjoint (h : N <=m M) :
-    exists (C D : Set α), C subseteq M.E ∧ D subseteq M.E ∧ Disjoint C D ∧ N = M ／ C ＼ D := by
+lemma IsMinor.exists_eq_contract_delete_disjoint (h : N ≤m M) :
+    ∃ (C D : Set α), C ⊆ M.E ∧ D ⊆ M.E ∧ Disjoint C D ∧ N = M ／ C ＼ D := by
   obtain ⟨C, D, rfl⟩ := h
-  exact ⟨C inter M.E, (D inter M.E) \ C, inter_subset_right, sdiff_subset.trans inter_subset_right,
+  exact ⟨C ∩ M.E, (D ∩ M.E) \ C, inter_subset_right, sdiff_subset.trans inter_subset_right,
     disjoint_sdiff_right.mono_left inter_subset_left,
     by simp [delete_eq_delete_iff, inter_assoc, inter_sdiff_assoc]⟩
 
-/--
-Definition of `IsStrictMinor` / `IsStrictMinor` 的定义
+/-- `N` is a strict minor of `M` if `N` is a minor of `M` and `N ≠ M`.
+Equivalently, `N` is obtained from `M` by deleting/contracting subsets of the ground set
+that are not both empty. -/
+/-
+**Matroid.IsStrictMinor** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：IsStrictMinor (N M : Matroid α) : Prop
+参数：N M : Matroid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsStrictMinor
-  signature: (N M : Matroid α)
-  body: N <=m M ∧ ¬ M <=m N
-
-中文:
-定义 IsStrictMinor
-  签名: (N M : 拟阵 α)
-  定义体: N <=m M ∧ ¬ M <=m N
+--- 原说明 ---
+`N` is a strict minor of `M` if `N` is a minor of `M` and `N ≠ M`.
+Equivalently, `N` is obtained from `M` by deleting/contracting subsets of the gr
+ound set
+that are not both empty.
 -/
-def IsStrictMinor (N M : Matroid α) : Prop := N <=m M ∧ ¬ M <=m N
+def IsStrictMinor (N M : Matroid α) : Prop := N ≤m M ∧ ¬ M ≤m N
 
 /-- `<m` denotes the strict minor relation on matroids. -/
 infixl:50 " <m " => Matroid.IsStrictMinor
 
-/--
-lemma `IsMinor.subset` / 引理 `IsMinor.subset`
-
-English:
-lemma IsMinor.subset
-  given: (h : N <=m M)
-  statement: N.E subseteq M.E
-  proof: by
+/-
+**Matroid.IsMinor.subset** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → N.E ⊆ M.E
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+lemma IsMinor.subset (h : N ≤m M) : N.E ⊆ M.E := by
   obtain ⟨C, D, rfl⟩ := h
   exact sdiff_subset.trans sdiff_subset
-
-中文:
-引理 IsMinor.subset
-  条件: (h : N <=m M)
-  结论: N.E subseteq M.E
-  证明: by
-  obtain ⟨C, D, rfl⟩ := h
-  exact sdiff_subset.trans sdiff_subset
-
-Depends on / 依赖: sdiff_subset, sdiff_subset.trans
+/-
+**Matroid.IsMinor.refl** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α}, M ≤m M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matroid.contract_empty`：∀ {α : Type u_1} (M : Matroid α), M.contract ∅ =
+ M
+· 使用引理 `Matroid.delete_empty`：delete_empty (M : Matroid α) : M ＼ ∅ = M
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma IsMinor.subset (h : N <=m M) : N.E subseteq M.E := by
-  obtain ⟨C, D, rfl⟩ := h
-  exact sdiff_subset.trans sdiff_subset
-
-/--
-lemma `IsMinor.refl` / 引理 `IsMinor.refl`
-
-English:
-lemma IsMinor.refl
-  given: {M : Matroid α}
-  statement: M <=m M
-  proof: ⟨∅, ∅, by simp⟩
-
-中文:
-引理 IsMinor.refl
-  条件: {M : 拟阵 α}
-  结论: M <=m M
-  证明: ⟨∅, ∅, by simp⟩
+lemma IsMinor.refl {M : Matroid α} : M ≤m M := ⟨∅, ∅, by simp⟩
+/-
+**Matroid.IsMinor.trans** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M₁ M₂ M₃ : Matroid α}, M₁ ≤m M₂ → M₂ ≤m M₃ → M₁ ≤m M₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.contract_delete_contract_delete'`：contract_delete_contract_delet
+e' (M : Matroid α) (C D C' D' : Set α) : M ／ C ＼ D ／ C' ＼ D' = M ／ (C union C' \
+ D) ＼ (D union D')
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma IsMinor.refl {M : Matroid α} : M <=m M := ⟨∅, ∅, by simp⟩
-
-/--
-lemma `IsMinor.trans` / 引理 `IsMinor.trans`
-
-English:
-lemma IsMinor.trans
-  given: {M₁ M₂ M₃ : Matroid α} (h : M₁ <=m M₂) (h' : M₂ <=m M₃)
-  statement: M₁ <=m M₃
-  proof: by
+lemma IsMinor.trans {M₁ M₂ M₃ : Matroid α} (h : M₁ ≤m M₂) (h' : M₂ ≤m M₃) : M₁ ≤m M₃ := by
   obtain ⟨C₁, D₁, rfl⟩ := h
   obtain ⟨C₂, D₂, rfl⟩ := h'
-  exact ⟨C₂ union C₁ \ D₂, D₂ union D₁, by rw [contract_delete_contract_delete']⟩
-
-中文:
-引理 IsMinor.trans
-  条件: {M₁ M₂ M₃ : 拟阵 α} (h : M₁ <=m M₂) (h' : M₂ <=m M₃)
-  结论: M₁ <=m M₃
-  证明: by
-  obtain ⟨C₁, D₁, rfl⟩ := h
-  obtain ⟨C₂, D₂, rfl⟩ := h'
-  exact ⟨C₂ union C₁ \ D₂, D₂ union D₁, by rw [contract_delete_contract_delete']⟩
-
-Depends on / 依赖: contract_delete_contract_delete
+  exact ⟨C₂ ∪ C₁ \ D₂, D₂ ∪ D₁, by rw [contract_delete_contract_delete']⟩
+/-
+**Matroid.IsMinor.eq_of_ground_subset** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor
+`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → M.E ⊆ N.E → M = N
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matroid.contract_inter_ground_eq`：∀ {α : Type u_1} (M : Matroid α) (C : 
+Set α), M.contract (C ∩ M.E) = M.contract C
+· 使用定理 `Disjoint.inter_eq`：∀ {α : Type u} {s t : Set α}, Disjoint s t → s ∩ t = 
+∅
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `Matroid.contract_ground`：∀ {α : Type u_1} (M : Matroid α) (C : Set α), (
+M.contract C).E = M.E \ C
+· 使用引理 `Matroid.delete_ground`：delete_ground (M : Matroid α) (D : Set α) : (M ＼ 
+D).E = M.E \ D
+· 使用定理 `Matroid.contract_empty`：∀ {α : Type u_1} (M : Matroid α), M.contract ∅ =
+ M
+· 使用引理 `Matroid.delete_inter_ground_eq`：delete_inter_ground_eq (M : Matroid α) (
+D : Set α) : M ＼ (D inter M.E) = M ＼ D
+· 使用引理 `Matroid.delete_empty`：delete_empty (M : Matroid α) : M ＼ ∅ = M
 -/
-lemma IsMinor.trans {M₁ M₂ M₃ : Matroid α} (h : M₁ <=m M₂) (h' : M₂ <=m M₃) : M₁ <=m M₃ := by
-  obtain ⟨C₁, D₁, rfl⟩ := h
-  obtain ⟨C₂, D₂, rfl⟩ := h'
-  exact ⟨C₂ union C₁ \ D₂, D₂ union D₁, by rw [contract_delete_contract_delete']⟩
-
-/--
-lemma `IsMinor.eq_of_ground_subset` / 引理 `IsMinor.eq_of_ground_subset`
-
-English:
-lemma IsMinor.eq_of_ground_subset
-  given: (h : N <=m M) (hE : M.E subseteq N.E)
-  statement: M = N
-  proof: by
+lemma IsMinor.eq_of_ground_subset (h : N ≤m M) (hE : M.E ⊆ N.E) : M = N := by
   obtain ⟨C, D, rfl⟩ := h
-  rw [delete_ground]; rw [contract_ground]; rw [subset_sdiff]; rw [subset_sdiff] at hE
-  rw [← contract_inter_ground_eq]; rw [hE.1.2.symm.inter_eq]; rw [contract_empty]; rw [← delete_inter_ground_eq]; rw [hE.2.symm.inter_eq]; rw [delete_empty]
-
-中文:
-引理 IsMinor.eq_of_ground_subset
-  条件: (h : N <=m M) (hE : M.E subseteq N.E)
-  结论: M = N
-  证明: by
-  obtain ⟨C, D, rfl⟩ := h
-  rw [delete_ground]; rw [contract_ground]; rw [subset_sdiff]; rw [subset_sdiff] at hE
-  rw [← contract_inter_ground_eq]; rw [hE.1.2.symm.inter_eq]; rw [contract_empty]; rw [← delete_inter_ground_eq]; rw [hE.2.symm.inter_eq]; rw [delete_empty]
-
-Depends on / 依赖: contract_empty, contract_ground, contract_inter_ground_eq, delete_empty, delete_ground, delete_inter_ground_eq, inter_eq, subset_sdiff, symm.inter_eq
+  rw [delete_ground, contract_ground, subset_sdiff, subset_sdiff] at hE
+  rw [← contract_inter_ground_eq, hE.1.2.symm.inter_eq, contract_empty, ← delete_inter_ground_eq,
+    hE.2.symm.inter_eq, delete_empty]
+/-
+**Matroid.IsMinor.antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → M ≤m N → N = M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsMinor.eq_of_ground_subset`：∀ {α : Type u_1} {M N : Matroid α},
+ N ≤m M → M.E ⊆ N.E → M = N
+· 使用定理 `Matroid.IsMinor.subset`：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → N.E
+ ⊆ M.E
 -/
-lemma IsMinor.eq_of_ground_subset (h : N <=m M) (hE : M.E subseteq N.E) : M = N := by
-  obtain ⟨C, D, rfl⟩ := h
-  rw [delete_ground]; rw [contract_ground]; rw [subset_sdiff]; rw [subset_sdiff] at hE
-  rw [← contract_inter_ground_eq]; rw [hE.1.2.symm.inter_eq]; rw [contract_empty]; rw [← delete_inter_ground_eq]; rw [hE.2.symm.inter_eq]; rw [delete_empty]
-
-/--
-lemma `IsMinor.antisymm` / 引理 `IsMinor.antisymm`
-
-English:
-lemma IsMinor.antisymm
-  given: (h : N <=m M) (h' : M <=m N)
-  statement: N = M
-  proof: h'.eq_of_ground_subset h.subset
-
-中文:
-引理 IsMinor.antisymm
-  条件: (h : N <=m M) (h' : M <=m N)
-  结论: N = M
-  证明: h'.eq_of_ground_subset h.subset
-
-Depends on / 依赖: eq_of_ground_subset, h.subset, subset
--/
-lemma IsMinor.antisymm (h : N <=m M) (h' : M <=m N) : N = M :=
+lemma IsMinor.antisymm (h : N ≤m M) (h' : M ≤m N) : N = M :=
   h'.eq_of_ground_subset h.subset
 
 /-- The minor order is a `PartialOrder` on `Matroid α`.
 We prefer the spelling `N ≤m M` over `N ≤ M` for the dot notation. -/
+/-
+**Matroid.** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The minor order is a `PartialOrder` on `Matroid α`.
+We prefer the spelling `N ≤m M` over `N ≤ M` for the dot notation.
+-/
 instance (α : Type*) : PartialOrder (Matroid α) where
-  le N M := N <=m M
+  le N M := N ≤m M
   lt N M := N <m M
   le_refl _ := IsMinor.refl
   le_trans _ _ _ := IsMinor.trans
   le_antisymm _ _ := IsMinor.antisymm
-
-/--
-lemma `IsMinor.le` / 引理 `IsMinor.le`
-
-English:
-lemma IsMinor.le
-  given: (h : N <=m M)
-  statement: N <= M
-  proof: h
-
-中文:
-引理 IsMinor.le
-  条件: (h : N <=m M)
-  结论: N <= M
-  证明: h
+/-
+**Matroid.IsMinor.le** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → N ≤ M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsMinor.le (h : N <=m M) : N <= M := h
-
-/--
-lemma `IsStrictMinor.lt` / 引理 `IsStrictMinor.lt`
-
-English:
-lemma IsStrictMinor.lt
-  given: (h : N <m M)
-  statement: N < M
-  proof: h
-
-@[simp]
-
-中文:
-引理 IsStrictMinor.lt
-  条件: (h : N <m M)
-  结论: N < M
-  证明: h
-
-@[simp]
+lemma IsMinor.le (h : N ≤m M) : N ≤ M := h
+/-
+**Matroid.IsStrictMinor.lt** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N < M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsStrictMinor.lt (h : N <m M) : N < M := h
 
 @[simp]
-/--
-lemma `le_eq_isMinor` / 引理 `le_eq_isMinor`
-
-English:
-lemma le_eq_isMinor
-  statement: (fun M M' : Matroid α => M <= M') = Matroid.IsMinor
-  proof: rfl
+/-
+**Matroid.le_eq_isMinor** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：le_eq_isMinor : (fun M M' : Matroid α => M <= M') = Matroid.IsMinor
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma le_eq_isMinor : (fun M M' : Matroid α ↦ M ≤ M') = Matroid.IsMinor := rfl
 
 @[simp]
-
-中文:
-引理 le_eq_isMinor
-  结论: (fun M M' : 拟阵 α => M <= M') = 拟阵.IsMinor
-  证明: rfl
-
-@[simp]
+/-
+**Matroid.lt_eq_isStrictMinor** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：lt_eq_isStrictMinor : (fun M M' : Matroid α => M < M') = Matroid.IsStrictM
+inor
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_eq_isMinor : (fun M M' : Matroid α => M <= M') = Matroid.IsMinor := rfl
-
-@[simp]
-/--
-lemma `lt_eq_isStrictMinor` / 引理 `lt_eq_isStrictMinor`
-
-English:
-lemma lt_eq_isStrictMinor
-  statement: (fun M M' : Matroid α => M < M') = Matroid.IsStrictMinor
-  proof: rfl
-
-中文:
-引理 lt_eq_isStrictMinor
-  结论: (fun M M' : 拟阵 α => M < M') = 拟阵.IsStrictMinor
-  证明: rfl
+lemma lt_eq_isStrictMinor : (fun M M' : Matroid α ↦ M < M') = Matroid.IsStrictMinor := rfl
+/-
+**Matroid.isStrictMinor_iff_isMinor_ne** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isStrictMinor_iff_isMinor_ne : N <m M ↔ N <=m M ∧ N != M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
 -/
-lemma lt_eq_isStrictMinor : (fun M M' : Matroid α => M < M') = Matroid.IsStrictMinor := rfl
-
-/--
-lemma `isStrictMinor_iff_isMinor_ne` / 引理 `isStrictMinor_iff_isMinor_ne`
-
-English:
-lemma isStrictMinor_iff_isMinor_ne
-  statement: N <m M ↔ N <=m M ∧ N != M
-  proof: lt_iff_le_and_ne (α := Matroid α)
-
-中文:
-引理 isStrictMinor_iff_isMinor_ne
-  结论: N <m M ↔ N <=m M ∧ N != M
-  证明: lt_iff_le_and_ne (α := Matroid α)
-
-Depends on / 依赖: Matroid, lt_iff_le_and_ne
--/
-lemma isStrictMinor_iff_isMinor_ne : N <m M ↔ N <=m M ∧ N != M :=
+lemma isStrictMinor_iff_isMinor_ne : N <m M ↔ N ≤m M ∧ N ≠ M :=
   lt_iff_le_and_ne (α := Matroid α)
-
-/--
-lemma `IsStrictMinor.ne` / 引理 `IsStrictMinor.ne`
-
-English:
-lemma IsStrictMinor.ne
-  given: (h : N <m M)
-  statement: N != M
-  proof: h.lt.ne
-
-中文:
-引理 IsStrictMinor.ne
-  条件: (h : N <m M)
-  结论: N != M
-  证明: h.lt.ne
-
-Depends on / 依赖: h.lt.ne
+/-
+**Matroid.IsStrictMinor.ne** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictMinor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N ≠ M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Matroid.IsStrictMinor.lt`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ < M
 -/
-lemma IsStrictMinor.ne (h : N <m M) : N != M :=
+lemma IsStrictMinor.ne (h : N <m M) : N ≠ M :=
   h.lt.ne
-
-/--
-lemma `isStrictMinor_irrefl` / 引理 `isStrictMinor_irrefl`
-
-English:
-lemma isStrictMinor_irrefl
-  given: (M : Matroid α)
-  statement: ¬ (M <m M)
-  proof: lt_irrefl M
-
-中文:
-引理 isStrictMinor_irrefl
-  条件: (M : 拟阵 α)
-  结论: ¬ (M <m M)
-  证明: lt_irrefl M
-
-Depends on / 依赖: lt_irrefl
+/-
+**Matroid.isStrictMinor_irrefl** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isStrictMinor_irrefl (M : Matroid α) : ¬ (M <m M)
+参数：M : Matroid α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
 -/
 lemma isStrictMinor_irrefl (M : Matroid α) : ¬ (M <m M) :=
   lt_irrefl M
-
-/--
-lemma `IsStrictMinor.isMinor` / 引理 `IsStrictMinor.isMinor`
-
-English:
-lemma IsStrictMinor.isMinor
-  given: (h : N <m M)
-  statement: N <=m M
-  proof: h.lt.le
-
-中文:
-引理 IsStrictMinor.isMinor
-  条件: (h : N <m M)
-  结论: N <=m M
-  证明: h.lt.le
-
-Depends on / 依赖: h.lt.le
+/-
+**Matroid.IsStrictMinor.isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictMinor
+`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N ≤m M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Matroid.IsStrictMinor.lt`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ < M
 -/
-lemma IsStrictMinor.isMinor (h : N <m M) : N <=m M :=
+lemma IsStrictMinor.isMinor (h : N <m M) : N ≤m M :=
   h.lt.le
-
-/--
-lemma `IsStrictMinor.not_isMinor` / 引理 `IsStrictMinor.not_isMinor`
-
-English:
-lemma IsStrictMinor.not_isMinor
-  given: (h : N <m M)
-  statement: ¬ (M <=m N)
-  proof: h.lt.not_ge
-
-中文:
-引理 IsStrictMinor.not_isMinor
-  条件: (h : N <m M)
-  结论: ¬ (M <=m N)
-  证明: h.lt.not_ge
-
-Depends on / 依赖: h.lt.not_ge, not_ge
+/-
+**Matroid.IsStrictMinor.not_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictM
+inor`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N <m M → ¬M ≤m N
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Matroid.IsStrictMinor.lt`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ < M
 -/
-lemma IsStrictMinor.not_isMinor (h : N <m M) : ¬ (M <=m N) :=
+lemma IsStrictMinor.not_isMinor (h : N <m M) : ¬ (M ≤m N) :=
   h.lt.not_ge
-
-/--
-lemma `IsStrictMinor.ssubset` / 引理 `IsStrictMinor.ssubset`
-
-English:
-lemma IsStrictMinor.ssubset
-  given: (h : N <m M)
-  statement: N.E ⊂ M.E
-  proof: h.isMinor.subset.ssubset_of_ne (fun hE => h.ne (h.isMinor.eq_of_ground_subset hE.symm.subset).symm)
-
-中文:
-引理 IsStrictMinor.ssubset
-  条件: (h : N <m M)
-  结论: N.E ⊂ M.E
-  证明: h.isMinor.subset.ssubset_of_ne (fun hE => h.ne (h.isMinor.eq_of_ground_subset hE.symm.subset).symm)
-
-Depends on / 依赖: eq_of_ground_subset, h.isMinor.eq_of_ground_subset, h.isMinor.subset.ssubset_of_ne, h.ne, hE.symm.subset, isMinor, ssubset_of_ne, subset
+/-
+**Matroid.IsStrictMinor.ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictMinor
+`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N.E ⊂ M.E
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.ssubset_of_ne`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst 
+: PartialOrder α] {a b : α}, a ⊆ b → a ≠ b → a ⊂ b
+· 使用定理 `Matroid.IsMinor.subset`：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → N.E
+ ⊆ M.E
+· 使用定理 `Matroid.IsStrictMinor.isMinor`：∀ {α : Type u_1} {M N : Matroid α}, N <m 
+M → N ≤m M
+· 使用定理 `Matroid.IsStrictMinor.ne`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ ≠ M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matroid.IsMinor.eq_of_ground_subset`：∀ {α : Type u_1} {M N : Matroid α},
+ N ≤m M → M.E ⊆ N.E → M = N
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
 -/
 lemma IsStrictMinor.ssubset (h : N <m M) : N.E ⊂ M.E :=
-  h.isMinor.subset.ssubset_of_ne (fun hE => h.ne (h.isMinor.eq_of_ground_subset hE.symm.subset).symm)
-
-/--
-lemma `isStrictMinor_iff_isMinor_ssubset` / 引理 `isStrictMinor_iff_isMinor_ssubset`
-
-English:
-lemma isStrictMinor_iff_isMinor_ssubset
-  statement: N <m M ↔ N <=m M ∧ N.E ⊂ M.E
-  proof: ⟨fun h => ⟨h.isMinor, h.ssubset⟩, fun ⟨h, hss⟩ => ⟨h, fun h' => hss.ne by rw [h'.antisymm h]⟩⟩
-
-中文:
-引理 isStrictMinor_iff_isMinor_ssubset
-  结论: N <m M ↔ N <=m M ∧ N.E ⊂ M.E
-  证明: ⟨fun h => ⟨h.isMinor, h.ssubset⟩, fun ⟨h, hss⟩ => ⟨h, fun h' => hss.ne by rw [h'.antisymm h]⟩⟩
-
-Depends on / 依赖: antisymm, h.isMinor, h.ssubset, hss.ne, isMinor, ssubset
+  h.isMinor.subset.ssubset_of_ne (fun hE ↦ h.ne (h.isMinor.eq_of_ground_subset hE.symm.subset).symm)
+/-
+**Matroid.isStrictMinor_iff_isMinor_ssubset** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isStrictMinor_iff_isMinor_ssubset : N <m M ↔ N <=m M ∧ N.E ⊂ M.E
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsStrictMinor.isMinor`：∀ {α : Type u_1} {M N : Matroid α}, N <m 
+M → N ≤m M
+· 使用定理 `Matroid.IsStrictMinor.ssubset`：∀ {α : Type u_1} {M N : Matroid α}, N <m 
+M → N.E ⊂ M.E
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.IsMinor.antisymm`：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → M
+ ≤m N → N = M
 -/
-lemma isStrictMinor_iff_isMinor_ssubset : N <m M ↔ N <=m M ∧ N.E ⊂ M.E :=
-⟨fun h => ⟨h.isMinor, h.ssubset⟩, fun ⟨h, hss⟩ => ⟨h, fun h' => hss.ne by rw [h'.antisymm h]⟩⟩
-
-/--
-lemma `IsStrictMinor.trans_isMinor` / 引理 `IsStrictMinor.trans_isMinor`
-
-English:
-lemma IsStrictMinor.trans_isMinor
-  given: (h : N <m M) (h' : M <=m M')
-  statement: N <m M'
-  proof: h.lt.trans_le h'
-
-中文:
-引理 IsStrictMinor.trans_isMinor
-  条件: (h : N <m M) (h' : M <=m M')
-  结论: N <m M'
-  证明: h.lt.trans_le h'
-
-Depends on / 依赖: h.lt.trans_le, trans_le
+lemma isStrictMinor_iff_isMinor_ssubset : N <m M ↔ N ≤m M ∧ N.E ⊂ M.E :=
+  ⟨fun h ↦ ⟨h.isMinor, h.ssubset⟩, fun ⟨h, hss⟩ ↦ ⟨h, fun h' ↦ hss.ne <| by rw [h'.antisymm h]⟩⟩
+/-
+**Matroid.IsStrictMinor.trans_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStric
+tMinor`。
+形式化陈述：∀ {α : Type u_1} {M M' N : Matroid α}, N <m M → M ≤m M' → N <m M'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Matroid.IsStrictMinor.lt`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ < M
 -/
-lemma IsStrictMinor.trans_isMinor (h : N <m M) (h' : M <=m M') : N <m M' :=
+lemma IsStrictMinor.trans_isMinor (h : N <m M) (h' : M ≤m M') : N <m M' :=
   h.lt.trans_le h'
-
-/--
-lemma `IsMinor.trans_isStrictMinor` / 引理 `IsMinor.trans_isStrictMinor`
-
-English:
-lemma IsMinor.trans_isStrictMinor
-  given: (h : N <=m M) (h' : M <m M')
-  statement: N <m M'
-  proof: h.le.trans_lt h'
-
-中文:
-引理 IsMinor.trans_isStrictMinor
-  条件: (h : N <=m M) (h' : M <m M')
-  结论: N <m M'
-  证明: h.le.trans_lt h'
-
-Depends on / 依赖: Realizer, Realizer.principal, h.le.trans_lt, principal, trans_lt
+/-
+**Matroid.IsMinor.trans_isStrictMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsMinor
+`。
+形式化陈述：∀ {α : Type u_1} {M M' N : Matroid α}, N ≤m M → M <m M' → N <m M'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Matroid.IsMinor.le`：∀ {α : Type u_1} {M N : Matroid α}, N ≤m M → N ≤ M
 -/
-lemma IsMinor.trans_isStrictMinor (h : N <=m M) (h' : M <m M') : N <m M' :=
+lemma IsMinor.trans_isStrictMinor (h : N ≤m M) (h' : M <m M') : N <m M' :=
   h.le.trans_lt h'
-
-/--
-lemma `IsStrictMinor.trans` / 引理 `IsStrictMinor.trans`
-
-English:
-lemma IsStrictMinor.trans
-  given: (h : N <m M) (h' : M <m M')
-  statement: N <m M'
-  proof: h.lt.trans h'
-
-中文:
-引理 IsStrictMinor.trans
-  条件: (h : N <m M) (h' : M <m M')
-  结论: N <m M'
-  证明: h.lt.trans h'
-
-Depends on / 依赖: h.lt.trans
+/-
+**Matroid.IsStrictMinor.trans** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsStrictMinor`。
+形式化陈述：∀ {α : Type u_1} {M M' N : Matroid α}, N <m M → M <m M' → N <m M'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Matroid.IsStrictMinor.lt`：∀ {α : Type u_1} {M N : Matroid α}, N <m M → N
+ < M
 -/
 lemma IsStrictMinor.trans (h : N <m M) (h' : M <m M') : N <m M' :=
   h.lt.trans h'
-
-/--
-lemma `Indep.of_isMinor` / 引理 `Indep.of_isMinor`
-
-English:
-lemma Indep.of_isMinor
-  given: (hI : N.Indep I) (hNM : N <=m M)
-  statement: M.Indep I
-  proof: by
+/-
+**Matroid.Indep.of_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Indep`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {I : Set α}, N.Indep I → N ≤m M → M.Ind
+ep I
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.Indep.of_contract`：∀ {α : Type u_1} {M : Matroid α} {I C : Set α
+}, (M.contract C).Indep I → M.Indep I
+· 使用定理 `Matroid.Indep.of_delete`：∀ {α : Type u_1} {M : Matroid α} {I D : Set α},
+ (M.delete D).Indep I → M.Indep I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+lemma Indep.of_isMinor (hI : N.Indep I) (hNM : N ≤m M) : M.Indep I := by
   obtain ⟨C, D, rfl⟩ := hNM
   exact hI.of_delete.of_contract
-
-中文:
-引理 Indep.of_isMinor
-  条件: (hI : N.Indep I) (hNM : N <=m M)
-  结论: M.Indep I
-  证明: by
-  obtain ⟨C, D, rfl⟩ := hNM
-  exact hI.of_delete.of_contract
-
-Depends on / 依赖: hI.of_delete.of_contract, of_contract, of_delete
+/-
+**Matroid.IsNonloop.of_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsNonloop`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {e : α}, N.IsNonloop e → N ≤m M → M.IsN
+onloop e
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsNonloop.of_contract`：∀ {α : Type u_1} {M : Matroid α} {e : α} 
+{C : Set α}, (M.contract C).IsNonloop e → M.IsNonloop e
+· 使用定理 `Matroid.IsNonloop.of_delete`：∀ {α : Type u_1} {M : Matroid α} {e : α} {D
+ : Set α}, (M.delete D).IsNonloop e → M.IsNonloop e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma Indep.of_isMinor (hI : N.Indep I) (hNM : N <=m M) : M.Indep I := by
-  obtain ⟨C, D, rfl⟩ := hNM
-  exact hI.of_delete.of_contract
-
-/--
-lemma `IsNonloop.of_isMinor` / 引理 `IsNonloop.of_isMinor`
-
-English:
-lemma IsNonloop.of_isMinor
-  given: (h : N.IsNonloop e) (hNM : N <=m M)
-  statement: M.IsNonloop e
-  proof: by
+lemma IsNonloop.of_isMinor (h : N.IsNonloop e) (hNM : N ≤m M) : M.IsNonloop e := by
   obtain ⟨C, D, rfl⟩ := hNM
   exact h.of_delete.of_contract
-
-中文:
-引理 是Nonloop.of_isMinor
-  条件: (h : N.是Nonloop e) (hNM : N <=m M)
-  结论: M.是Nonloop e
-  证明: by
-  obtain ⟨C, D, rfl⟩ := hNM
-  exact h.of_delete.of_contract
-
-Depends on / 依赖: h.of_delete.of_contract, of_contract, of_delete
+/-
+**Matroid.Dep.of_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Dep`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {D : Set α}, M.Dep D → D ⊆ N.E → N ≤m M
+ → N.Dep D
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.Dep.not_indep`：∀ {α : Type u_1} {M : Matroid α} {D : Set α}, M.D
+ep D → ¬M.Indep D
+· 使用定理 `Matroid.Indep.of_isMinor`：∀ {α : Type u_1} {M N : Matroid α} {I : Set α}
+, N.Indep I → N ≤m M → M.Indep I
 -/
-lemma IsNonloop.of_isMinor (h : N.IsNonloop e) (hNM : N <=m M) : M.IsNonloop e := by
-  obtain ⟨C, D, rfl⟩ := hNM
-  exact h.of_delete.of_contract
-
-/--
-lemma `Dep.of_isMinor` / 引理 `Dep.of_isMinor`
-
-English:
-lemma Dep.of_isMinor
-  given: {D : Set α} (hD : M.Dep D) (hDN : D subseteq N.E) (hNM : N <=m M)
-  statement: N.Dep D
-  proof: ⟨fun h => hD.not_indep h.of_isMinor hNM, hDN⟩
-
-中文:
-引理 Dep.of_isMinor
-  条件: {D : 集合 α} (hD : M.Dep D) (hDN : D subseteq N.E) (hNM : N <=m M)
-  结论: N.Dep D
-  证明: ⟨fun h => hD.not_indep h.of_isMinor hNM, hDN⟩
-
-Depends on / 依赖: h.of_isMinor, hD.not_indep, not_indep, of_isMinor
+lemma Dep.of_isMinor {D : Set α} (hD : M.Dep D) (hDN : D ⊆ N.E) (hNM : N ≤m M) : N.Dep D :=
+  ⟨fun h ↦ hD.not_indep <| h.of_isMinor hNM, hDN⟩
+/-
+**Matroid.IsLoop.of_isMinor** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsLoop`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {e : α}, M.IsLoop e → e ∈ N.E → N ≤m M 
+→ N.IsLoop e
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.singleton_dep`：singleton_dep : M.Dep {e} ↔ M.IsLoop e
+· 使用定理 `Matroid.Dep.of_isMinor`：∀ {α : Type u_1} {M N : Matroid α} {D : Set α}, 
+M.Dep D → D ⊆ N.E → N ≤m M → N.Dep D
 -/
-lemma Dep.of_isMinor {D : Set α} (hD : M.Dep D) (hDN : D subseteq N.E) (hNM : N <=m M) : N.Dep D :=
-⟨fun h => hD.not_indep h.of_isMinor hNM, hDN⟩
-
-/--
-lemma `IsLoop.of_isMinor` / 引理 `IsLoop.of_isMinor`
-
-English:
-lemma IsLoop.of_isMinor
-  given: (he : M.IsLoop e) (heN : e in N.E) (hNM : N <=m M)
-  statement: N.IsLoop e
-  proof: by
-  rw [← singleton_dep] at he ⊢
-  exact he.of_isMinor (by simpa) hNM
-
-中文:
-引理 IsLoop.of_isMinor
-  条件: (he : M.IsLoop e) (heN : e in N.E) (hNM : N <=m M)
-  结论: N.IsLoop e
-  证明: by
-  rw [← singleton_dep] at he ⊢
-  exact he.of_isMinor (by simpa) hNM
-
-Depends on / 依赖: he.of_isMinor, of_isMinor, singleton_dep
--/
-lemma IsLoop.of_isMinor (he : M.IsLoop e) (heN : e in N.E) (hNM : N <=m M) : N.IsLoop e := by
+lemma IsLoop.of_isMinor (he : M.IsLoop e) (heN : e ∈ N.E) (hNM : N ≤m M) : N.IsLoop e := by
   rw [← singleton_dep] at he ⊢
   exact he.of_isMinor (by simpa) hNM
 
 end Minor
 
 end Matroid
+

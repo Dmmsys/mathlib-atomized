@@ -143,259 +143,157 @@ open scoped Uniformity
 
 section TypeAlias
 
-/--
-Definition of `UniformFun` / `UniformFun` 的定义
+/-- The type of functions from `α` to `β` equipped with the uniform structure and topology of
+uniform convergence. We denote it `α →ᵤ β`. -/
+/-
+**UniformFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformFun (α β : Type*)
+参数：α β : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformFun
-  signature: (α β : Type*)
-  body: α -> β
-
-中文:
-定义 UniformFun
-  签名: (α β : 类型)
-  定义体: α -> β
+--- 原说明 ---
+The type of functions from `α` to `β` equipped with the uniform structure and to
+pology of
+uniform convergence. We denote it `α →ᵤ β`.
 -/
 def UniformFun (α β : Type*) :=
-  α -> β
+  α → β
 
 /-- The type of functions from `α` to `β` equipped with the uniform structure and topology of
 uniform convergence on some family `𝔖` of subsets of `α`. We denote it `α →ᵤ[𝔖] β`. -/
 @[nolint unusedArguments]
-/--
-Definition of `UniformOnFun` / `UniformOnFun` 的定义
+/-
+**UniformOnFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformOnFun (α β : Type*) (_ : Set (Set α))
+参数：α β : Type*；_ : Set (Set α)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformOnFun
-  signature: (α β : Type*) (_ : Set (Set α))
-  body: α -> β
-
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ " β:0 => UniformFun α β
-
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ[" 𝔖 "] " β:0 => UniformOnFun α β 𝔖
-
-中文:
-定义 UniformOnFun
-  签名: (α β : 类型) (_ : 集合 (集合 α))
-  定义体: α -> β
-
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ " β:0 => UniformFun α β
-
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ[" 𝔖 "] " β:0 => UniformOnFun α β 𝔖
+--- 原说明 ---
+The type of functions from `α` to `β` equipped with the uniform structure and to
+pology of
+uniform convergence on some family `𝔖` of subsets of `α`. We denote it `α →ᵤ[𝔖] 
+β`.
 -/
 def UniformOnFun (α β : Type*) (_ : Set (Set α)) :=
-  α -> β
+  α → β
 
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ " β:0 => UniformFun α β
+@[inherit_doc] scoped[UniformConvergence] notation:25 α " →ᵤ " β:0 => UniformFun α β
 
-@[inherit_doc] scoped[UniformConvergence] notation:25 α " ->ᵤ[" 𝔖 "] " β:0 => UniformOnFun α β 𝔖
+@[inherit_doc] scoped[UniformConvergence] notation:25 α " →ᵤ[" 𝔖 "] " β:0 => UniformOnFun α β 𝔖
 
 open UniformConvergence
 
 variable {α β : Type*} {𝔖 : Set (Set α)}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: β] : Nonempty (α ->ᵤ β)
-  body: Pi.instNonempty
-
-中文:
-实例 [非空
-  签名: β] : 非空 (α ->ᵤ β)
-  定义体: Pi.instNonempty
-
-Depends on / 依赖: Pi.instNonempty, instNonempty
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nonempty β] : Nonempty (α ->ᵤ β) := Pi.instNonempty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: β] : Nonempty (α ->ᵤ[𝔖] β)
-  body: Pi.instNonempty
-
-中文:
-实例 [非空
-  签名: β] : 非空 (α ->ᵤ[𝔖] β)
-  定义体: Pi.instNonempty
-
-Depends on / 依赖: Pi.instNonempty, instNonempty
+instance [Nonempty β] : Nonempty (α →ᵤ β) := Pi.instNonempty
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nonempty β] : Nonempty (α ->ᵤ[𝔖] β) := Pi.instNonempty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: β] : Subsingleton (α ->ᵤ β)
-  body: inferInstanceAs Subsingleton α -> β
-
-中文:
-实例 [子单例
-  签名: β] : 子单例 (α ->ᵤ β)
-  定义体: inferInstanceAs Subsingleton α -> β
-
-Depends on / 依赖: Subsingleton
+instance [Nonempty β] : Nonempty (α →ᵤ[𝔖] β) := Pi.instNonempty
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Subsingleton β] : Subsingleton (α ->ᵤ β) :=
-inferInstanceAs Subsingleton α -> β
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: β] : Subsingleton (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Subsingleton α -> β
-
-中文:
-实例 [子单例
-  签名: β] : 子单例 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Subsingleton α -> β
-
-Depends on / 依赖: Subsingleton
+instance [Subsingleton β] : Subsingleton (α →ᵤ β) :=
+  inferInstanceAs <| Subsingleton <| α → β
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Subsingleton β] : Subsingleton (α ->ᵤ[𝔖] β) :=
-inferInstanceAs Subsingleton α -> β
+instance [Subsingleton β] : Subsingleton (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| Subsingleton <| α → β
 
-/--
-Definition of `UniformFun.ofFun` / `UniformFun.ofFun` 的定义
+/-- Reinterpret `f : α → β` as an element of `α →ᵤ β`. -/
+/-
+**UniformFun.ofFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun : (α -> β) ≃ (α ->ᵤ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformFun.ofFun
-  signature: : (α -> β) ≃ (α ->ᵤ β)
-  body: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 UniformFun.ofFun
-  签名: : (α -> β) ≃ (α ->ᵤ β)
-  定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+Reinterpret `f : α → β` as an element of `α →ᵤ β`.
 -/
-def UniformFun.ofFun : (α -> β) ≃ (α ->ᵤ β) :=
+def UniformFun.ofFun : (α → β) ≃ (α →ᵤ β) :=
   ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 
-/--
-Definition of `UniformOnFun.ofFun` / `UniformOnFun.ofFun` 的定义
+/-- Reinterpret `f : α → β` as an element of `α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.ofFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun (𝔖) : (α -> β) ≃ (α ->ᵤ[𝔖] β)
+参数：𝔖。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformOnFun.ofFun
-  signature: (𝔖)
-  body: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 UniformOnFun.ofFun
-  签名: (𝔖)
-  定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+Reinterpret `f : α → β` as an element of `α →ᵤ[𝔖] β`.
 -/
-def UniformOnFun.ofFun (𝔖) : (α -> β) ≃ (α ->ᵤ[𝔖] β) :=
+def UniformOnFun.ofFun (𝔖) : (α → β) ≃ (α →ᵤ[𝔖] β) :=
   ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 
-/--
-Definition of `UniformFun.toFun` / `UniformFun.toFun` 的定义
+/-- Reinterpret `f : α →ᵤ β` as an element of `α → β`. -/
+/-
+**UniformFun.toFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformFun.toFun : (α ->ᵤ β) ≃ (α -> β)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition UniformFun.toFun
-  signature: : (α ->ᵤ β) ≃ (α -> β)
-  body: UniformFun.ofFun.symm
-
-中文:
-定义 UniformFun.toFun
-  签名: : (α ->ᵤ β) ≃ (α -> β)
-  定义体: UniformFun.ofFun.symm
-
-Depends on / 依赖: UniformFun, UniformFun.ofFun.symm
+--- 原说明 ---
+Reinterpret `f : α →ᵤ β` as an element of `α → β`.
 -/
-def UniformFun.toFun : (α ->ᵤ β) ≃ (α -> β) :=
+def UniformFun.toFun : (α →ᵤ β) ≃ (α → β) :=
   UniformFun.ofFun.symm
 
-/--
-Definition of `UniformOnFun.toFun` / `UniformOnFun.toFun` 的定义
+/-- Reinterpret `f : α →ᵤ[𝔖] β` as an element of `α → β`. -/
+/-
+**UniformOnFun.toFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun (𝔖) : (α ->ᵤ[𝔖] β) ≃ (α -> β)
+参数：𝔖。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition UniformOnFun.toFun
-  signature: (𝔖)
-  body: (UniformOnFun.ofFun 𝔖).symm
-
-中文:
-定义 UniformOnFun.toFun
-  签名: (𝔖)
-  定义体: (UniformOnFun.ofFun 𝔖).symm
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.ofFun
+--- 原说明 ---
+Reinterpret `f : α →ᵤ[𝔖] β` as an element of `α → β`.
 -/
-def UniformOnFun.toFun (𝔖) : (α ->ᵤ[𝔖] β) ≃ (α -> β) :=
+def UniformOnFun.toFun (𝔖) : (α →ᵤ[𝔖] β) ≃ (α → β) :=
   (UniformOnFun.ofFun 𝔖).symm
-
-/--
-lemma `UniformFun.toFun_ofFun` / 引理 `UniformFun.toFun_ofFun`
-
-English:
-lemma UniformFun.toFun_ofFun
-  given: (f : α -> β)
-  statement: toFun (ofFun f) = f
-  proof: rfl
-
-中文:
-引理 UniformFun.toFun_ofFun
-  条件: (f : α -> β)
-  结论: toFun (ofFun f) = f
-  证明: rfl
+/-
+**UniformFun.toFun_ofFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (f : α → β), UniformFun.toFun (UniformFun.
+ofFun f) = f
+参数：f : α → β；UniformFun.ofFun f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma UniformFun.toFun_ofFun (f : α -> β) : toFun (ofFun f) = f := rfl
-/--
-lemma `UniformFun.ofFun_toFun` / 引理 `UniformFun.ofFun_toFun`
-
-English:
-lemma UniformFun.ofFun_toFun
-  given: (f : α ->ᵤ β)
-  statement: ofFun (toFun f) = f
-  proof: rfl
-
-中文:
-引理 UniformFun.ofFun_toFun
-  条件: (f : α ->ᵤ β)
-  结论: ofFun (toFun f) = f
-  证明: rfl
+@[simp] lemma UniformFun.toFun_ofFun (f : α → β) : toFun (ofFun f) = f := rfl
+/-
+**UniformFun.ofFun_toFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (f : UniformFun α β), UniformFun.ofFun (Un
+iformFun.toFun f) = f
+参数：f : UniformFun α β；UniformFun.toFun f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma UniformFun.ofFun_toFun (f : α ->ᵤ β) : ofFun (toFun f) = f := rfl
-/--
-lemma `UniformOnFun.toFun_ofFun` / 引理 `UniformOnFun.toFun_ofFun`
-
-English:
-lemma UniformOnFun.toFun_ofFun
-  given: (f : α -> β)
-  statement: toFun 𝔖 (ofFun 𝔖 f) = f
-  proof: rfl
-
-中文:
-引理 UniformOnFun.toFun_ofFun
-  条件: (f : α -> β)
-  结论: toFun 𝔖 (ofFun 𝔖 f) = f
-  证明: rfl
+@[simp] lemma UniformFun.ofFun_toFun (f : α →ᵤ β) : ofFun (toFun f) = f := rfl
+/-
+**UniformOnFun.toFun_ofFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)} (f : α → β), (UniformOnF
+un.toFun 𝔖) ((UniformOnFun.ofFun 𝔖) f) = f
+参数：Set α；f : α → β；UniformOnFun.toFun 𝔖；(UniformOnFun.ofFun 𝔖) f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma UniformOnFun.toFun_ofFun (f : α -> β) : toFun 𝔖 (ofFun 𝔖 f) = f := rfl
-/--
-lemma `UniformOnFun.ofFun_toFun` / 引理 `UniformOnFun.ofFun_toFun`
-
-English:
-lemma UniformOnFun.ofFun_toFun
-  given: (f : α ->ᵤ[𝔖] β)
-  statement: ofFun 𝔖 (toFun 𝔖 f) = f
-  proof: rfl
-
-中文:
-引理 UniformOnFun.ofFun_toFun
-  条件: (f : α ->ᵤ[𝔖] β)
-  结论: ofFun 𝔖 (toFun 𝔖 f) = f
-  证明: rfl
+@[simp] lemma UniformOnFun.toFun_ofFun (f : α → β) : toFun 𝔖 (ofFun 𝔖 f) = f := rfl
+/-
+**UniformOnFun.ofFun_toFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)} (f : UniformOnFun α β 𝔖)
+,   (UniformOnFun.ofFun 𝔖) ((UniformOnFun.toFun 𝔖) f) = f
+参数：Set α；f : UniformOnFun α β 𝔖；UniformOnFun.ofFun 𝔖；(UniformOnFun.toFun 𝔖) f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma UniformOnFun.ofFun_toFun (f : α ->ᵤ[𝔖] β) : ofFun 𝔖 (toFun 𝔖 f) = f := rfl
+@[simp] lemma UniformOnFun.ofFun_toFun (f : α →ᵤ[𝔖] β) : ofFun 𝔖 (toFun 𝔖 f) = f := rfl
 
 -- Note: we don't declare a `CoeFun` instance because Lean wouldn't insert it when writing
 -- `f x` (because of definitional equality with `α → β`).
@@ -408,91 +306,102 @@ namespace UniformFun
 variable (α β : Type*) {γ ι : Type*}
 variable {p : Filter ι}
 
-/--
-Definition of `gen` / `gen` 的定义
+/-- Basis sets for the uniformity of uniform convergence: `gen α β V` is the set of pairs `(f, g)`
+of functions `α →ᵤ β` such that `∀ x, (f x, g x) ∈ V`. -/
+/-
+**UniformFun.gen** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_1) → (β : Type u_2) → Set (β × β) → Set (UniformFun α β × Unif
+ormFun α β)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gen
-  signature: (V : Set (β × β))
-  body: { uv : (α ->ᵤ β) × (α ->ᵤ β) | forall x, (toFun uv.1 x, toFun uv.2 x) in V }
-
-中文:
-定义 gen
-  签名: (V : 集合 (β × β))
-  定义体: { uv : (α ->ᵤ β) × (α ->ᵤ β) | forall x, (toFun uv.1 x, toFun uv.2 x) in V }
+--- 原说明 ---
+Basis sets for the uniformity of uniform convergence: `gen α β V` is the set of 
+pairs `(f, g)`
+of functions `α →ᵤ β` such that `∀ x, (f x, g x) ∈ V`.
 -/
-protected def gen (V : Set (β × β)) : Set ((α ->ᵤ β) × (α ->ᵤ β)) :=
-  { uv : (α ->ᵤ β) × (α ->ᵤ β) | forall x, (toFun uv.1 x, toFun uv.2 x) in V }
+protected def gen (V : Set (β × β)) : Set ((α →ᵤ β) × (α →ᵤ β)) :=
+  { uv : (α →ᵤ β) × (α →ᵤ β) | ∀ x, (toFun uv.1 x, toFun uv.2 x) ∈ V }
 
-/--
-theorem `isBasis_gen` / 定理 `isBasis_gen`
+/-- If `𝓕` is a filter on `β × β`, then the set of all `UniformFun.gen α β V` for
+`V ∈ 𝓕` is a filter basis on `(α →ᵤ β) × (α →ᵤ β)`. This will only be applied to `𝓕 = 𝓤 β` when
+`β` is equipped with a `UniformSpace` structure, but it is useful to define it for any filter in
+order to be able to state that it has a lower adjoint (see `UniformFun.gc`). -/
+/-
+**UniformFun.isBasis_gen** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) (𝓑 : Filter (β × β)), Filter.IsBasis (fun 
+V => V ∈ 𝓑) (UniformFun.gen α β)
+参数：α : Type u_1；β : Type u_2；𝓑 : Filter (β × β)；fun V => V ∈ 𝓑；UniformFun.gen α 
+β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem isBasis_gen
-  given: (𝓑 : Filter <| β × β)
-  proof: ⟨⟨univ, univ_mem⟩, @fun U V hU hV =>
-    ⟨U inter V, inter_mem hU hV, fun _ huv => ⟨fun x => (huv x).left, fun x => (huv x).right⟩⟩⟩
-
-中文:
-定理 isBasis_gen
-  条件: (𝓑 : 滤子 <| β × β)
-  证明: ⟨⟨univ, univ_mem⟩, @fun U V hU hV =>
-    ⟨U inter V, inter_mem hU hV, fun _ huv => ⟨fun x => (huv x).left, fun x => (huv x).right⟩⟩⟩
+--- 原说明 ---
+If `𝓕` is a filter on `β × β`, then the set of all `UniformFun.gen α β V` for
+`V ∈ 𝓕` is a filter basis on `(α →ᵤ β) × (α →ᵤ β)`. This will only be applied to
+ `𝓕 = 𝓤 β` when
+`β` is equipped with a `UniformSpace` structure, but it is useful to define it f
+or any filter in
+order to be able to state that it has a lower adjoint (see `UniformFun.gc`).
 -/
 protected theorem isBasis_gen (𝓑 : Filter <| β × β) :
-    IsBasis (fun V : Set (β × β) => V in 𝓑) (UniformFun.gen α β) :=
+    IsBasis (fun V : Set (β × β) => V ∈ 𝓑) (UniformFun.gen α β) :=
   ⟨⟨univ, univ_mem⟩, @fun U V hU hV =>
-    ⟨U inter V, inter_mem hU hV, fun _ huv => ⟨fun x => (huv x).left, fun x => (huv x).right⟩⟩⟩
+    ⟨U ∩ V, inter_mem hU hV, fun _ huv => ⟨fun x => (huv x).left, fun x => (huv x).right⟩⟩⟩
 
-/--
-Definition of `basis` / `basis` 的定义
+/-- For `𝓕 : Filter (β × β)`, this is the set of all `UniformFun.gen α β V` for
+`V ∈ 𝓕` as a bundled `FilterBasis` over `(α →ᵤ β) × (α →ᵤ β)`. This will only be applied to
+`𝓕 = 𝓤 β` when `β` is equipped with a `UniformSpace` structure, but it is useful to define it for
+any filter in order to be able to state that it has a lower adjoint
+(see `UniformFun.gc`). -/
+/-
+**UniformFun.basis** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_1) → (β : Type u_2) → Filter (β × β) → FilterBasis (UniformFun
+ α β × UniformFun α β)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.isBasis_gen`：∀ (α : Type u_1) (β : Type u_2) (𝓑 : Filter (β ×
+ β)), Filter.IsBasis (fun V => V ∈ 𝓑) (UniformFun.gen α β)
 
-English:
-definition basis
-  signature: (𝓕 : Filter <| β × β)
-  body: (UniformFun.isBasis_gen α β 𝓕).filterBasis
-
-中文:
-定义 basis
-  签名: (𝓕 : 滤子 <| β × β)
-  定义体: (UniformFun.isBasis_gen α β 𝓕).filterBasis
+--- 原说明 ---
+For `𝓕 : Filter (β × β)`, this is the set of all `UniformFun.gen α β V` for
+`V ∈ 𝓕` as a bundled `FilterBasis` over `(α →ᵤ β) × (α →ᵤ β)`. This will only be
+ applied to
+`𝓕 = 𝓤 β` when `β` is equipped with a `UniformSpace` structure, but it is useful
+ to define it for
+any filter in order to be able to state that it has a lower adjoint
+(see `UniformFun.gc`).
 -/
-protected def basis (𝓕 : Filter <| β × β) : FilterBasis ((α ->ᵤ β) × (α ->ᵤ β)) :=
+protected def basis (𝓕 : Filter <| β × β) : FilterBasis ((α →ᵤ β) × (α →ᵤ β)) :=
   (UniformFun.isBasis_gen α β 𝓕).filterBasis
 
-/--
-Definition of `filter` / `filter` 的定义
+/-- For `𝓕 : Filter (β × β)`, this is the filter generated by the filter basis
+`UniformFun.basis α β 𝓕`. For `𝓕 = 𝓤 β`, this will be the uniformity of uniform
+convergence on `α`. -/
+/-
+**UniformFun.filter** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_1) → (β : Type u_2) → Filter (β × β) → Filter (UniformFun α β 
+× UniformFun α β)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filter
-  signature: (𝓕 : Filter <| β × β)
-  body: (UniformFun.basis α β 𝓕).filter
-
-中文:
-定义 filter
-  签名: (𝓕 : 滤子 <| β × β)
-  定义体: (UniformFun.basis α β 𝓕).filter
+--- 原说明 ---
+For `𝓕 : Filter (β × β)`, this is the filter generated by the filter basis
+`UniformFun.basis α β 𝓕`. For `𝓕 = 𝓤 β`, this will be the uniformity of uniform
+convergence on `α`.
 -/
-protected def filter (𝓕 : Filter <| β × β) : Filter ((α ->ᵤ β) × (α ->ᵤ β)) :=
+protected def filter (𝓕 : Filter <| β × β) : Filter ((α →ᵤ β) × (α →ᵤ β)) :=
   (UniformFun.basis α β 𝓕).filter
 
 --local notation "Φ" => fun (α β : Type*) (uvx : ((α →ᵤ β) × (α →ᵤ β)) × α) =>
   --(uvx.fst.fst uvx.2, uvx.1.2 uvx.2)
-
-/--
-Definition of `phi` / `phi` 的定义
-
-English:
-definition phi
-  signature: (α β : Type*) (uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α)
-  body: (uvx.fst.fst uvx.2, uvx.1.2 uvx.2)
-
-中文:
-定义 phi
-  签名: (α β : 类型) (uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α)
-  定义体: (uvx.fst.fst uvx.2, uvx.1.2 uvx.2)
+/-
+**UniformFun.phi** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_5) → (β : Type u_6) → (UniformFun α β × UniformFun α β) × α → 
+β × β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def phi (α β : Type*) (uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α) : β × β :=
+protected def phi (α β : Type*) (uvx : ((α →ᵤ β) × (α →ᵤ β)) × α) : β × β :=
   (uvx.fst.fst uvx.2, uvx.1.2 uvx.2)
 
 set_option quotPrecheck false -- Porting note: we need a `[quot_precheck]` instance on fbinop%
@@ -503,100 +412,78 @@ The exact definition of the lower adjoint `l` is not interesting; we will only u
 `𝓕 : Filter (γ × γ)` and `f : γ → α` (in `UniformFun.comap_eq`). -/
 local notation "lowerAdjoint" => fun 𝓐 => map (UniformFun.phi α β) (𝓐 ×ˢ ⊤)
 
-/--
-theorem `gc` / 定理 `gc`
+/-- The function `UniformFun.filter α β : Filter (β × β) → Filter ((α →ᵤ β) × (α →ᵤ β))`
+has a lower adjoint `l` (in the sense of `GaloisConnection`). The exact definition of `l` is not
+interesting; we will only use that it exists (in `UniformFun.mono` and
+`UniformFun.iInf_eq`) and that
+`l (Filter.map (Prod.map f f) 𝓕) = Filter.map (Prod.map ((∘) f) ((∘) f)) (l 𝓕)` for each
+`𝓕 : Filter (γ × γ)` and `f : γ → α` (in `UniformFun.comap_eq`). -/
+/-
+**UniformFun.gc** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2),   GaloisConnection (fun 𝓐 => Filter.map (
+UniformFun.phi α β) (𝓐 ×ˢ ⊤)) fun 𝓕 => UniformFun.filter α β 𝓕
+参数：α : Type u_1；β : Type u_2；fun 𝓐 => Filter.map (UniformFun.phi α β) (𝓐 ×ˢ ⊤)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformFun.filter.eq_1`：∀ (α : Type u_1) (β : Type u_2) (𝓕 : Filter (β ×
+ β)), UniformFun.filter α β 𝓕 = (UniformFun.basis α β 𝓕).filter
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FilterBasis.generate`：∀ {α : Type u_1} (B : FilterBasis α), Filter.gener
+ate B.sets = B.filter
+· 使用定理 `Filter.le_generate_iff`：le_generate_iff {s : Set (Set α)} {f : Filter α}
+ : f <= generate s ↔ s subseteq f.sets
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Filter.mem_prod_top`：mem_prod_top {s : Set (α × β)} : s in f ×ˢ (⊤ : Fil
+ter β) ↔ { a | forall b, (a, b) in s } in f
 
-English:
-theorem gc
-  statement: GaloisConnection lowerAdjoint fun 𝓕 => UniformFun.filter α β 𝓕
-  proof: by
-  intro 𝓐 𝓕
-  symm
-  calc
-    𝓐 <= UniformFun.filter α β 𝓕 ↔ (UniformFun.basis α β 𝓕).sets subseteq 𝓐.sets := by
-      rw [UniformFun.filter]; rw [← FilterBasis.generate]; rw [le_generate_iff]
-    _ ↔ forall U in 𝓕, UniformFun.gen α β U in 𝓐 := image_subset_iff
-    _ ↔ forall U in 𝓕,
-          { uv | forall x, (uv, x) in { t : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) in U } } in
-            𝓐 :=
-      Iff.rfl
-    _ ↔ forall U in 𝓕,
-          { uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) in U } in
-            𝓐 ×ˢ (⊤ : Filter α) :=
-      forall₂_congr fun U _hU => mem_prod_top.symm
-    _ ↔ lowerAdjoint 𝓐 <= 𝓕 := Iff.rfl
-
-中文:
-定理 gc
-  结论: GaloisConnection lowerAdjoint fun 𝓕 => UniformFun.filter α β 𝓕
-  证明: by
-  intro 𝓐 𝓕
-  symm
-  calc
-    𝓐 <= UniformFun.filter α β 𝓕 ↔ (UniformFun.basis α β 𝓕).sets subseteq 𝓐.sets := by
-      rw [UniformFun.filter]; rw [← FilterBasis.generate]; rw [le_generate_iff]
-    _ ↔ forall U in 𝓕, UniformFun.gen α β U in 𝓐 := image_subset_iff
-    _ ↔ forall U in 𝓕,
-          { uv | forall x, (uv, x) in { t : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) in U } } in
-            𝓐 :=
-      Iff.rfl
-    _ ↔ forall U in 𝓕,
-          { uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) in U } in
-            𝓐 ×ˢ (⊤ : Filter α) :=
-      forall₂_congr fun U _hU => mem_prod_top.symm
-    _ ↔ lowerAdjoint 𝓐 <= 𝓕 := Iff.rfl
+--- 原说明 ---
+The function `UniformFun.filter α β : Filter (β × β) → Filter ((α →ᵤ β) × (α →ᵤ 
+β))`
+has a lower adjoint `l` (in the sense of `GaloisConnection`). The exact definiti
+on of `l` is not
+interesting; we will only use that it exists (in `UniformFun.mono` and
+`UniformFun.iInf_eq`) and that
+`l (Filter.map (Prod.map f f) 𝓕) = Filter.map (Prod.map ((∘) f) ((∘) f)) (l 𝓕)` 
+for each
+`𝓕 : Filter (γ × γ)` and `f : γ → α` (in `UniformFun.comap_eq`).
 -/
 protected theorem gc : GaloisConnection lowerAdjoint fun 𝓕 => UniformFun.filter α β 𝓕 := by
   intro 𝓐 𝓕
   symm
   calc
-    𝓐 <= UniformFun.filter α β 𝓕 ↔ (UniformFun.basis α β 𝓕).sets subseteq 𝓐.sets := by
-      rw [UniformFun.filter]; rw [← FilterBasis.generate]; rw [le_generate_iff]
-    _ ↔ forall U in 𝓕, UniformFun.gen α β U in 𝓐 := image_subset_iff
-    _ ↔ forall U in 𝓕,
-          { uv | forall x, (uv, x) in { t : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) in U } } in
+    𝓐 ≤ UniformFun.filter α β 𝓕 ↔ (UniformFun.basis α β 𝓕).sets ⊆ 𝓐.sets := by
+      rw [UniformFun.filter, ← FilterBasis.generate, le_generate_iff]
+    _ ↔ ∀ U ∈ 𝓕, UniformFun.gen α β U ∈ 𝓐 := image_subset_iff
+    _ ↔ ∀ U ∈ 𝓕,
+          { uv | ∀ x, (uv, x) ∈ { t : ((α →ᵤ β) × (α →ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) ∈ U } } ∈
             𝓐 :=
       Iff.rfl
-    _ ↔ forall U in 𝓕,
-          { uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) in U } in
+    _ ↔ ∀ U ∈ 𝓕,
+          { uvx : ((α →ᵤ β) × (α →ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) ∈ U } ∈
             𝓐 ×ˢ (⊤ : Filter α) :=
       forall₂_congr fun U _hU => mem_prod_top.symm
-    _ ↔ lowerAdjoint 𝓐 <= 𝓕 := Iff.rfl
+    _ ↔ lowerAdjoint 𝓐 ≤ 𝓕 := Iff.rfl
 
 variable [UniformSpace β]
 
-/--
-Definition of `uniformCore` / `uniformCore` 的定义
+/-- Core of the uniform structure of uniform convergence. -/
+/-
+**UniformFun.uniformCore** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_1) → (β : Type u_2) → [UniformSpace β] → UniformSpace.Core (Un
+iformFun α β)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformCore
-  signature: : UniformSpace.Core (α ->ᵤ β)
-  body: UniformSpace.Core.mkOfBasis (UniformFun.basis α β (𝓤 β))
-    (fun _ ⟨_, hV, hVU⟩ _ => hVU ▸ fun _ => refl_mem_uniformity hV)
-    (fun _ ⟨V, hV, hVU⟩ =>
-      hVU ▸
-        ⟨UniformFun.gen α β (Prod.swap ⁻¹' V), ⟨Prod.swap ⁻¹' V, tendsto_swap_uniformity hV, rfl⟩,
-          fun _ huv x => huv x⟩)
-    fun _ ⟨_, hV, hVU⟩ =>
-    hVU ▸
-      let ⟨W, hW, hWV⟩ := comp_mem_uniformity_sets hV
-      ⟨UniformFun.gen α β W, ⟨W, hW, rfl⟩, fun _ ⟨w, huw, hwv⟩ x => hWV ⟨w x, ⟨huw x, hwv x⟩⟩⟩
-
-中文:
-定义 uniformCore
-  签名: : 一致空间.核 (α ->ᵤ β)
-  定义体: UniformSpace.Core.mkOfBasis (UniformFun.basis α β (𝓤 β))
-    (fun _ ⟨_, hV, hVU⟩ _ => hVU ▸ fun _ => refl_mem_uniformity hV)
-    (fun _ ⟨V, hV, hVU⟩ =>
-      hVU ▸
-        ⟨UniformFun.gen α β (Prod.swap ⁻¹' V), ⟨Prod.swap ⁻¹' V, tendsto_swap_uniformity hV, rfl⟩,
-          fun _ huv x => huv x⟩)
-    fun _ ⟨_, hV, hVU⟩ =>
-    hVU ▸
-      let ⟨W, hW, hWV⟩ := comp_mem_uniformity_sets hV
-      ⟨UniformFun.gen α β W, ⟨W, hW, rfl⟩, fun _ ⟨w, huw, hwv⟩ x => hWV ⟨w x, ⟨huw x, hwv x⟩⟩⟩
+--- 原说明 ---
+Core of the uniform structure of uniform convergence.
 -/
-protected def uniformCore : UniformSpace.Core (α ->ᵤ β) :=
+protected def uniformCore : UniformSpace.Core (α →ᵤ β) :=
   UniformSpace.Core.mkOfBasis (UniformFun.basis α β (𝓤 β))
     (fun _ ⟨_, hV, hVU⟩ _ => hVU ▸ fun _ => refl_mem_uniformity hV)
     (fun _ ⟨V, hV, hVU⟩ =>
@@ -608,550 +495,614 @@ protected def uniformCore : UniformSpace.Core (α ->ᵤ β) :=
       let ⟨W, hW, hWV⟩ := comp_mem_uniformity_sets hV
       ⟨UniformFun.gen α β W, ⟨W, hW, rfl⟩, fun _ ⟨w, huw, hwv⟩ x => hWV ⟨w x, ⟨huw x, hwv x⟩⟩⟩
 
-/--
-Instance `uniformSpace` / 实例 `uniformSpace`
+/-- Uniform structure of uniform convergence, declared as an instance on `α →ᵤ β`.
+We will denote it `𝒰(α, β, uβ)` in the rest of this file. -/
+/-
+**UniformFun.uniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `UniformFun`。
+形式化陈述：uniformSpace : UniformSpace (α ->ᵤ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance uniformSpace
-  signature: : UniformSpace (α ->ᵤ β)
-  body: UniformSpace.ofCore (UniformFun.uniformCore α β)
-
-中文:
-实例 uniformSpace
-  签名: : 一致空间 (α ->ᵤ β)
-  定义体: UniformSpace.ofCore (UniformFun.uniformCore α β)
-
-Depends on / 依赖: UniformFun, UniformFun.uniformCore, UniformSpace, UniformSpace.ofCore, ofCore, uniformCore
+--- 原说明 ---
+Uniform structure of uniform convergence, declared as an instance on `α →ᵤ β`.
+We will denote it `𝒰(α, β, uβ)` in the rest of this file.
 -/
-instance uniformSpace : UniformSpace (α ->ᵤ β) :=
+instance uniformSpace : UniformSpace (α →ᵤ β) :=
   UniformSpace.ofCore (UniformFun.uniformCore α β)
 
-/--
-Instance `topologicalSpace` / 实例 `topologicalSpace`
+/-- Topology of uniform convergence, declared as an instance on `α →ᵤ β`. -/
+/-
+**UniformFun.topologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `UniformFun`。
+形式化陈述：topologicalSpace : TopologicalSpace (α ->ᵤ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance topologicalSpace
-  signature: : TopologicalSpace (α ->ᵤ β)
-  body: inferInstance
-
-local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
-
-中文:
-实例 topologicalSpace
-  签名: : 拓扑空间 (α ->ᵤ β)
-  定义体: inferInstance
-
-local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
+--- 原说明 ---
+Topology of uniform convergence, declared as an instance on `α →ᵤ β`.
 -/
-instance topologicalSpace : TopologicalSpace (α ->ᵤ β) :=
+instance topologicalSpace : TopologicalSpace (α →ᵤ β) :=
   inferInstance
 
 local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
 
-/--
-theorem `hasBasis_uniformity` / 定理 `hasBasis_uniformity`
+/-- By definition, the uniformity of `α →ᵤ β` admits the family `{(f, g) | ∀ x, (f x, g x) ∈ V}`
+for `V ∈ 𝓤 β` as a filter basis. -/
+/-
+**UniformFun.hasBasis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β],   (uniformity (Un
+iformFun α β)).HasBasis (fun x => x ∈ uniformity β) (UniformFun.gen α β)
+参数：α : Type u_1；β : Type u_2；uniformity (UniformFun α β)；fun x => x ∈ uniformity
+ β；UniformFun.gen α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBasis.hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {p : ι → Prop} 
+{s : ι → Set α} (h : Filter.IsBasis p s), h.filter.HasBasis p s
+· 使用定理 `UniformFun.isBasis_gen`：∀ (α : Type u_1) (β : Type u_2) (𝓑 : Filter (β ×
+ β)), Filter.IsBasis (fun V => V ∈ 𝓑) (UniformFun.gen α β)
 
-English:
-theorem hasBasis_uniformity
-  proof: (UniformFun.isBasis_gen α β (𝓤 β)).hasBasis
-
-中文:
-定理 hasBasis_uniformity
-  证明: (UniformFun.isBasis_gen α β (𝓤 β)).hasBasis
+--- 原说明 ---
+By definition, the uniformity of `α →ᵤ β` admits the family `{(f, g) | ∀ x, (f x
+, g x) ∈ V}`
+for `V ∈ 𝓤 β` as a filter basis.
 -/
 protected theorem hasBasis_uniformity :
-    (𝓤 (α ->ᵤ β)).HasBasis (· in 𝓤 β) (UniformFun.gen α β) :=
+    (𝓤 (α →ᵤ β)).HasBasis (· ∈ 𝓤 β) (UniformFun.gen α β) :=
   (UniformFun.isBasis_gen α β (𝓤 β)).hasBasis
 
-/--
-theorem `hasBasis_uniformity_of_basis` / 定理 `hasBasis_uniformity_of_basis`
+/-- The uniformity of `α →ᵤ β` admits the family `{(f, g) | ∀ x, (f x, g x) ∈ V}` for `V ∈ 𝓑` as
+a filter basis, for any basis `𝓑` of `𝓤 β` (in the case `𝓑 = (𝓤 β).as_basis` this is true by
+definition). -/
+/-
+**UniformFun.hasBasis_uniformity_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`
+。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β] {ι : Sort u_5} {p 
+: ι → Prop} {s : ι → Set (β × β)},   (uniformity β).HasBasis p s → (uniformity (
+UniformFun α β)).HasBasis p (UniformFun.gen α β ∘ s)
+参数：α : Type u_1；β : Type u_2；β × β；uniformity β；uniformity (UniformFun α β)；Unif
+ormFun.gen α β ∘ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 
-English:
-theorem hasBasis_uniformity_of_basis
-  statement: {ι : Sort*} {p : ι -> Prop} {s : ι -> Set (β × β)}
-  proof: (UniformFun.hasBasis_uniformity α β).to_hasBasis
-    (fun _ hU =>
-      let ⟨i, hi, hiU⟩ := h.mem_iff.mp hU
-      ⟨i, hi, fun _ huv x => hiU (huv x)⟩)
-    fun i hi => ⟨s i, h.mem_of_mem hi, subset_rfl⟩
-
-中文:
-定理 hasBasis_uniformity_of_basis
-  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 (β × β)}
-  证明: (UniformFun.hasBasis_uniformity α β).to_hasBasis
-    (fun _ hU =>
-      let ⟨i, hi, hiU⟩ := h.mem_iff.mp hU
-      ⟨i, hi, fun _ huv x => hiU (huv x)⟩)
-    fun i hi => ⟨s i, h.mem_of_mem hi, subset_rfl⟩
+--- 原说明 ---
+The uniformity of `α →ᵤ β` admits the family `{(f, g) | ∀ x, (f x, g x) ∈ V}` fo
+r `V ∈ 𝓑` as
+a filter basis, for any basis `𝓑` of `𝓤 β` (in the case `𝓑 = (𝓤 β).as_basis` thi
+s is true by
+definition).
 -/
-protected theorem hasBasis_uniformity_of_basis {ι : Sort*} {p : ι -> Prop} {s : ι -> Set (β × β)}
-    (h : (𝓤 β).HasBasis p s) : (𝓤 (α ->ᵤ β)).HasBasis p (UniformFun.gen α β ∘ s) :=
+protected theorem hasBasis_uniformity_of_basis {ι : Sort*} {p : ι → Prop} {s : ι → Set (β × β)}
+    (h : (𝓤 β).HasBasis p s) : (𝓤 (α →ᵤ β)).HasBasis p (UniformFun.gen α β ∘ s) :=
   (UniformFun.hasBasis_uniformity α β).to_hasBasis
     (fun _ hU =>
       let ⟨i, hi, hiU⟩ := h.mem_iff.mp hU
       ⟨i, hi, fun _ huv x => hiU (huv x)⟩)
     fun i hi => ⟨s i, h.mem_of_mem hi, subset_rfl⟩
 
-/--
-theorem `hasBasis_nhds_of_basis` / 定理 `hasBasis_nhds_of_basis`
+/-- For `f : α →ᵤ β`, `𝓝 f` admits the family `{g | ∀ x, (f x, g x) ∈ V}` for `V ∈ 𝓑` as a filter
+basis, for any basis `𝓑` of `𝓤 β`. -/
+/-
+**UniformFun.hasBasis_nhds_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) {ι : Type u_4} [inst : UniformSpace β] (f 
+: UniformFun α β) {p : ι → Prop}   {s : ι → Set (β × β)},   (uniformity β).HasBa
+sis p s → (nhds f).HasBasis p fun i => {g | (f, g) ∈ UniformFun.gen α β (s i)}
+参数：α : Type u_1；β : Type u_2；f : UniformFun α β；β × β；uniformity β；nhds f；f, g；s
+ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhds_basis_uniformity'`：nhds_basis_uniformity' {p : ι -> Prop} {s : ι ->
+ SetRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => ball x
+ (s i)
+· 使用定理 `UniformFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_2)
+ [inst : UniformSpace β] {ι : Sort u_5} {p : ι → Prop} {s : ι → Set (β × β)},   
+(uniformity β).HasBasis p s →…
 
-English:
-theorem hasBasis_nhds_of_basis
-  statement: (f) {p : ι -> Prop} {s : ι -> Set (β × β)}
-  proof: nhds_basis_uniformity' (UniformFun.hasBasis_uniformity_of_basis α β h)
-
-中文:
-定理 hasBasis_nhds_of_basis
-  结论: (f) {p : ι -> 命题} {s : ι -> 集合 (β × β)}
-  证明: nhds_basis_uniformity' (UniformFun.hasBasis_uniformity_of_basis α β h)
+--- 原说明 ---
+For `f : α →ᵤ β`, `𝓝 f` admits the family `{g | ∀ x, (f x, g x) ∈ V}` for `V ∈ 𝓑
+` as a filter
+basis, for any basis `𝓑` of `𝓤 β`.
 -/
-protected theorem hasBasis_nhds_of_basis (f) {p : ι -> Prop} {s : ι -> Set (β × β)}
+protected theorem hasBasis_nhds_of_basis (f) {p : ι → Prop} {s : ι → Set (β × β)}
     (h : HasBasis (𝓤 β) p s) :
-    (𝓝 f).HasBasis p fun i => { g | (f, g) in UniformFun.gen α β (s i) } :=
+    (𝓝 f).HasBasis p fun i => { g | (f, g) ∈ UniformFun.gen α β (s i) } :=
   nhds_basis_uniformity' (UniformFun.hasBasis_uniformity_of_basis α β h)
 
-/--
-theorem `hasBasis_nhds` / 定理 `hasBasis_nhds`
+/-- For `f : α →ᵤ β`, `𝓝 f` admits the family `{g | ∀ x, (f x, g x) ∈ V}` for `V ∈ 𝓤 β` as a
+filter basis. -/
+/-
+**UniformFun.hasBasis_nhds** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β] (f : UniformFun α 
+β),   (nhds f).HasBasis (fun V => V ∈ uniformity β) fun V => {g | (f, g) ∈ Unifo
+rmFun.gen α β V}
+参数：α : Type u_1；β : Type u_2；f : UniformFun α β；nhds f；fun V => V ∈ uniformity β
+；f, g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.hasBasis_nhds_of_basis`：∀ (α : Type u_1) (β : Type u_2) {ι : 
+Type u_4} [inst : UniformSpace β] (f : UniformFun α β) {p : ι → Prop}   {s : ι →
+ Set (β × β)},   (unifo…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-English:
-theorem hasBasis_nhds
-  given: (f)
-  proof: UniformFun.hasBasis_nhds_of_basis α β f (Filter.basis_sets _)
-
-中文:
-定理 hasBasis_nhds
-  条件: (f)
-  证明: UniformFun.hasBasis_nhds_of_basis α β f (Filter.basis_sets _)
+--- 原说明 ---
+For `f : α →ᵤ β`, `𝓝 f` admits the family `{g | ∀ x, (f x, g x) ∈ V}` for `V ∈ 𝓤
+ β` as a
+filter basis.
 -/
 protected theorem hasBasis_nhds (f) :
-    (𝓝 f).HasBasis (fun V => V in 𝓤 β) fun V => { g | (f, g) in UniformFun.gen α β V } :=
+    (𝓝 f).HasBasis (fun V => V ∈ 𝓤 β) fun V => { g | (f, g) ∈ UniformFun.gen α β V } :=
   UniformFun.hasBasis_nhds_of_basis α β f (Filter.basis_sets _)
 
 variable {α}
 
-/--
-theorem `uniformContinuous_eval` / 定理 `uniformContinuous_eval`
+/-- Evaluation at a fixed point is uniformly continuous on `α →ᵤ β`. -/
+/-
+**UniformFun.uniformContinuous_eval** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：uniformContinuous_eval (x : α) : UniformContinuous (Function.eval x ∘ toFu
+n : (α ->ᵤ β) -> β)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.map_le_iff_le_comap`：map_le_iff_le_comap : map m f <= g ↔ f <= co
+map m g
+· 使用定理 `Filter.HasBasis.le_basis_iff`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : 
+ι' → Set α}, l.Has…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-English:
-theorem uniformContinuous_eval
-  given: (x : α)
-  proof: by
-  change _ <= _
-  rw [map_le_iff_le_comap]; rw [(UniformFun.hasBasis_uniformity α β).le_basis_iff ((𝓤 _).basis_sets.comap _)]
-  exact fun U hU => ⟨U, hU, fun uv huv => huv x⟩
-
-中文:
-定理 uniformContinuous_eval
-  条件: (x : α)
-  证明: by
-  change _ <= _
-  rw [map_le_iff_le_comap]; rw [(UniformFun.hasBasis_uniformity α β).le_basis_iff ((𝓤 _).basis_sets.comap _)]
-  exact fun U hU => ⟨U, hU, fun uv huv => huv x⟩
-
-Depends on / 依赖: UniformFun, UniformFun.hasBasis_uniformity, basis_sets, basis_sets.comap, hasBasis_uniformity, le_basis_iff, map_le_iff_le_comap
+--- 原说明 ---
+Evaluation at a fixed point is uniformly continuous on `α →ᵤ β`.
 -/
 theorem uniformContinuous_eval (x : α) :
-    UniformContinuous (Function.eval x ∘ toFun : (α ->ᵤ β) -> β) := by
-  change _ <= _
-  rw [map_le_iff_le_comap]; rw [(UniformFun.hasBasis_uniformity α β).le_basis_iff ((𝓤 _).basis_sets.comap _)]
+    UniformContinuous (Function.eval x ∘ toFun : (α →ᵤ β) → β) := by
+  change _ ≤ _
+  rw [map_le_iff_le_comap,
+    (UniformFun.hasBasis_uniformity α β).le_basis_iff ((𝓤 _).basis_sets.comap _)]
   exact fun U hU => ⟨U, hU, fun uv huv => huv x⟩
 
 variable {β}
 
 @[simp]
-/--
-lemma `mem_gen` / 引理 `mem_gen`
-
-English:
-lemma mem_gen
-  given: {β} {f g : α ->ᵤ β} {V : Set (β × β)}
-  proof: .rfl
-
-中文:
-引理 mem_gen
-  条件: {β} {f g : α ->ᵤ β} {V : 集合 (β × β)}
-  证明: .rfl
+/-
+**UniformFun.mem_gen** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_5} {f g : UniformFun α β} {V : Set (β × β)}, 
+  (f, g) ∈ UniformFun.gen α β V ↔ ∀ (x : α), (UniformFun.toFun f x, UniformFun.t
+oFun g x) ∈ V
+参数：β × β；f, g；x : α；UniformFun.toFun f x, UniformFun.toFun g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected lemma mem_gen {β} {f g : α ->ᵤ β} {V : Set (β × β)} :
-    (f, g) in UniformFun.gen α β V ↔ forall x, (toFun f x, toFun g x) in V :=
+protected lemma mem_gen {β} {f g : α →ᵤ β} {V : Set (β × β)} :
+    (f, g) ∈ UniformFun.gen α β V ↔ ∀ x, (toFun f x, toFun g x) ∈ V :=
   .rfl
 
-/--
-theorem `mono` / 定理 `mono`
+/-- If `u₁` and `u₂` are two uniform structures on `γ` and `u₁ ≤ u₂`, then
+`𝒰(α, γ, u₁) ≤ 𝒰(α, γ, u₂)`. -/
+/-
+**UniformFun.mono** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3}, Monotone (@UniformFun.uniformSpace α γ)
+参数：@UniformFun.uniformSpace α γ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_u`：monotone_u : Monotone u
+· 使用定理 `UniformFun.gc`：∀ (α : Type u_1) (β : Type u_2),   GaloisConnection (fun 
+𝓐 => Filter.map (UniformFun.phi α β) (𝓐 ×ˢ ⊤)) fun 𝓕 => UniformFun.filter α β 𝓕
 
-English:
-theorem mono
-  statement: Monotone (@UniformFun.uniformSpace α γ)
-  proof: fun _ _ hu =>
-  (UniformFun.gc α γ).monotone_u hu
-
-中文:
-定理 mono
-  结论: 递增 (@UniformFun.uniformSpace α γ)
-  证明: fun _ _ hu =>
-  (UniformFun.gc α γ).monotone_u hu
+--- 原说明 ---
+If `u₁` and `u₂` are two uniform structures on `γ` and `u₁ ≤ u₂`, then
+`𝒰(α, γ, u₁) ≤ 𝒰(α, γ, u₂)`.
 -/
 protected theorem mono : Monotone (@UniformFun.uniformSpace α γ) := fun _ _ hu =>
   (UniformFun.gc α γ).monotone_u hu
 
-/--
-theorem `iInf_eq` / 定理 `iInf_eq`
+/-- If `u` is a family of uniform structures on `γ`, then
+`𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i)`. -/
+/-
+**UniformFun.iInf_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {ι : Type u_4} {u : ι → UniformSpace γ},  
+ UniformFun.uniformSpace α γ = ⨅ i, UniformFun.uniformSpace α γ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_uniformity`：iInf_uniformity {ι : Sort*} {u : ι -> UniformSpace α} :
+ 𝓤[iInf u] = ⨅ i, 𝓤[u i]
+· 使用定理 `GaloisConnection.u_iInf`：∀ {α : Type u} {β : Type v} {ι : Sort x} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] {u : α → β}   {l : β → α}, Gal
+oisConnection…
+· 使用定理 `UniformFun.gc`：∀ (α : Type u_1) (β : Type u_2),   GaloisConnection (fun 
+𝓐 => Filter.map (UniformFun.phi α β) (𝓐 ×ˢ ⊤)) fun 𝓕 => UniformFun.filter α β 𝓕
 
-English:
-theorem iInf_eq
-  given: {u : ι -> UniformSpace γ}
-  statement: 𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i)
-  proof: by
-  -- This follows directly from the fact that the upper adjoint in a Galois connection maps
-  -- infimas to infimas.
-  ext : 1
-  change UniformFun.filter α γ 𝓤[⨅ i, u i] = 𝓤[⨅ i, 𝒰(α, γ, u i)]
-  rw [iInf_uniformity]; rw [iInf_uniformity]
-  exact (UniformFun.gc α γ).u_iInf
-
-中文:
-定理 iInf_eq
-  条件: {u : ι -> 一致空间 γ}
-  结论: 𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i)
-  证明: by
-  -- This follows directly from the fact that the upper adjoint in a Galois connection maps
-  -- infimas to infimas.
-  ext : 1
-  change UniformFun.filter α γ 𝓤[⨅ i, u i] = 𝓤[⨅ i, 𝒰(α, γ, u i)]
-  rw [iInf_uniformity]; rw [iInf_uniformity]
-  exact (UniformFun.gc α γ).u_iInf
+--- 原说明 ---
+If `u` is a family of uniform structures on `γ`, then
+`𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i)`.
 -/
-protected theorem iInf_eq {u : ι -> UniformSpace γ} : 𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i) := by
+protected theorem iInf_eq {u : ι → UniformSpace γ} : 𝒰(α, γ, (⨅ i, u i)) = ⨅ i, 𝒰(α, γ, u i) := by
   -- This follows directly from the fact that the upper adjoint in a Galois connection maps
   -- infimas to infimas.
   ext : 1
   change UniformFun.filter α γ 𝓤[⨅ i, u i] = 𝓤[⨅ i, 𝒰(α, γ, u i)]
-  rw [iInf_uniformity]; rw [iInf_uniformity]
+  rw [iInf_uniformity, iInf_uniformity]
   exact (UniformFun.gc α γ).u_iInf
 
-/--
-theorem `inf_eq` / 定理 `inf_eq`
+/-- If `u₁` and `u₂` are two uniform structures on `γ`, then
+`𝒰(α, γ, u₁ ⊓ u₂) = 𝒰(α, γ, u₁) ⊓ 𝒰(α, γ, u₂)`. -/
+/-
+**UniformFun.inf_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {u₁ u₂ : UniformSpace γ},   UniformFun.uni
+formSpace α γ = UniformFun.uniformSpace α γ ⊓ UniformFun.uniformSpace α γ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] (x y : α), x ⊓ 
+y = ⨅ b, bif b then x else y
+· 使用定理 `UniformFun.iInf_eq`：∀ {α : Type u_1} {γ : Type u_3} {ι : Type u_4} {u : 
+ι → UniformSpace γ},   UniformFun.uniformSpace α γ = ⨅ i, UniformFun.uniformSpac
+e α γ
+· 使用定理 `iInf_congr`：∀ {α : Type u_1} {ι : Sort u_4} [inst : InfSet α] {f g : ι →
+ α}, (∀ (i : ι), f i = g i) → ⨅ i, f i = ⨅ i, g i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem inf_eq
-  given: {u₁ u₂ : UniformSpace γ}
-  proof: by
-  -- This follows directly from the fact that the upper adjoint in a Galois connection maps
-  -- infimas to infimas.
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformFun.iInf_eq]
-  refine iInf_congr fun i => ?_
-  cases i <;> rfl
-
-中文:
-定理 inf_eq
-  条件: {u₁ u₂ : 一致空间 γ}
-  证明: by
-  -- This follows directly from the fact that the upper adjoint in a Galois connection maps
-  -- infimas to infimas.
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformFun.iInf_eq]
-  refine iInf_congr fun i => ?_
-  cases i <;> rfl
+--- 原说明 ---
+If `u₁` and `u₂` are two uniform structures on `γ`, then
+`𝒰(α, γ, u₁ ⊓ u₂) = 𝒰(α, γ, u₁) ⊓ 𝒰(α, γ, u₂)`.
 -/
 protected theorem inf_eq {u₁ u₂ : UniformSpace γ} :
     𝒰(α, γ, u₁ ⊓ u₂) = 𝒰(α, γ, u₁) ⊓ 𝒰(α, γ, u₂) := by
   -- This follows directly from the fact that the upper adjoint in a Galois connection maps
   -- infimas to infimas.
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformFun.iInf_eq]
+  rw [inf_eq_iInf, inf_eq_iInf, UniformFun.iInf_eq]
   refine iInf_congr fun i => ?_
   cases i <;> rfl
 
-/--
-lemma `postcomp_isUniformInducing` / 引理 `postcomp_isUniformInducing`
+/-- Post-composition by a uniform inducing function is
+a uniform inducing function for the uniform structures of uniform convergence.
 
-English:
-lemma postcomp_isUniformInducing
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: ⟨((UniformFun.hasBasis_uniformity _ _).comap _).eq_of_same_basis
-    UniformFun.hasBasis_uniformity_of_basis _ _ (hf.basis_uniformity (𝓤 β).basis_sets)⟩
+More precisely, if `f : γ → β` is uniform inducing,
+then `(f ∘ ·) : (α →ᵤ γ) → (α →ᵤ β)` is uniform inducing. -/
+/-
+**UniformFun.postcomp_isUniformInducing** 是 Mathlib 中的一个引理，位于命名空间 `UniformFun`。
+形式化陈述：postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β} (hf : IsUniformIn
+ducing f) : IsUniformInducing (ofFun ∘ (f ∘ ·) ∘ toFun : (α ->ᵤ γ) -> α ->ᵤ β)
+参数：hf : IsUniformInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_of_same_basis`：∀ {α : Type u_1} {ι : Sort u_4} {l l' 
+: Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l'.HasBasis p s →
+ l = l'
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
+· 使用定理 `UniformFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_2)
+ [inst : UniformSpace β] {ι : Sort u_5} {p : ι → Prop} {s : ι → Set (β × β)},   
+(uniformity β).HasBasis p s →…
+· 使用定理 `IsUniformInducing.basis_uniformity`：IsUniformInducing.basis_uniformity {
+f : α -> β} (hf : IsUniformInducing f) {ι : Sort*} {p : ι -> Prop} {s : ι -> Set
+ (β × β)} (H : (𝓤 β).Has…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-中文:
-引理 postcomp_isUniformInducing
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: ⟨((UniformFun.hasBasis_uniformity _ _).comap _).eq_of_same_basis
-    UniformFun.hasBasis_uniformity_of_basis _ _ (hf.basis_uniformity (𝓤 β).basis_sets)⟩
+--- 原说明 ---
+Post-composition by a uniform inducing function is
+a uniform inducing function for the uniform structures of uniform convergence.
 
-Depends on / 依赖: UniformFun, UniformFun.hasBasis_uniformity, UniformFun.hasBasis_uniformity_of_basis, basis_sets, basis_uniformity, eq_of_same_basis, hasBasis_uniformity, hasBasis_uniformity_of_basis, hf.basis_uniformity
+More precisely, if `f : γ → β` is uniform inducing,
+then `(f ∘ ·) : (α →ᵤ γ) → (α →ᵤ β)` is uniform inducing.
 -/
-lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β}
-    (hf : IsUniformInducing f) : IsUniformInducing (ofFun ∘ (f ∘ ·) ∘ toFun : (α ->ᵤ γ) -> α ->ᵤ β) :=
-⟨((UniformFun.hasBasis_uniformity _ _).comap _).eq_of_same_basis
+lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ → β}
+    (hf : IsUniformInducing f) : IsUniformInducing (ofFun ∘ (f ∘ ·) ∘ toFun : (α →ᵤ γ) → α →ᵤ β) :=
+  ⟨((UniformFun.hasBasis_uniformity _ _).comap _).eq_of_same_basis <|
     UniformFun.hasBasis_uniformity_of_basis _ _ (hf.basis_uniformity (𝓤 β).basis_sets)⟩
 
-/--
-theorem `postcomp_isUniformEmbedding` / 定理 `postcomp_isUniformEmbedding`
+/-- Post-composition by a uniform embedding is
+a uniform embedding for the uniform structures of uniform convergence.
 
-English:
-theorem postcomp_isUniformEmbedding
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: UniformFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+More precisely, if `f : γ → β` is a uniform embedding,
+then `(f ∘ ·) : (α →ᵤ γ) → (α →ᵤ β)` is a uniform embedding. -/
+/-
+**UniformFun.postcomp_isUniformEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] [in
+st_1 : UniformSpace γ] {f : γ → β},   IsUniformEmbedding f → IsUniformEmbedding 
+(⇑UniformFun.ofFun ∘ (fun x => f ∘ x) ∘ ⇑UniformFun.toFun)
+参数：⇑UniformFun.ofFun ∘ (fun x => f ∘ x) ∘ ⇑UniformFun.toFun。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `UniformFun.postcomp_isUniformInducing`：postcomp_isUniformInducing [Unifo
+rmSpace γ] {f : γ -> β} (hf : IsUniformInducing f) : IsUniformInducing (ofFun ∘ 
+(f ∘ ·) ∘ toFun : (α ->ᵤ γ)…
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsUniformEmbedding.injective`：∀ {α : Type ua} {β : Type ub} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Func
+tion.Injective f
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 
-中文:
-定理 postcomp_isUniformEmbedding
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: UniformFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+--- 原说明 ---
+Post-composition by a uniform embedding is
+a uniform embedding for the uniform structures of uniform convergence.
+
+More precisely, if `f : γ → β` is a uniform embedding,
+then `(f ∘ ·) : (α →ᵤ γ) → (α →ᵤ β)` is a uniform embedding.
 -/
-protected theorem postcomp_isUniformEmbedding [UniformSpace γ] {f : γ -> β}
+protected theorem postcomp_isUniformEmbedding [UniformSpace γ] {f : γ → β}
     (hf : IsUniformEmbedding f) :
-    IsUniformEmbedding (ofFun ∘ (f ∘ ·) ∘ toFun : (α ->ᵤ γ) -> α ->ᵤ β) where
+    IsUniformEmbedding (ofFun ∘ (f ∘ ·) ∘ toFun : (α →ᵤ γ) → α →ᵤ β) where
   toIsUniformInducing := UniformFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+  injective _ _ H := funext fun _ ↦ hf.injective (congrFun H _)
 
-/--
-theorem `comap_eq` / 定理 `comap_eq`
+/-- If `u` is a uniform structures on `β` and `f : γ → β`, then
+`𝒰(α, γ, comap f u) = comap (fun g ↦ f ∘ g) 𝒰(α, γ, u₁)`. -/
+/-
+**UniformFun.comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {f 
+: γ → β},   UniformFun.uniformSpace α γ = UniformSpace.comap (fun x => f ∘ x) (U
+niformFun.uniformSpace α β)
+参数：fun x => f ∘ x；UniformFun.uniformSpace α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsUniformInducing.comap_uniformSpace`：∀ {α : Type u} {β : Type v} [inst 
+: UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformInducing f →
+ UniformSpace.comap f inst…
+· 使用引理 `UniformFun.postcomp_isUniformInducing`：postcomp_isUniformInducing [Unifo
+rmSpace γ] {f : γ -> β} (hf : IsUniformInducing f) : IsUniformInducing (ofFun ∘ 
+(f ∘ ·) ∘ toFun : (α ->ᵤ γ)…
 
-English:
-theorem comap_eq
-  given: {f : γ -> β}
-  proof: by
-  let : UniformSpace γ := .comap f ‹_›
-  exact (UniformFun.postcomp_isUniformInducing (f := f) ⟨rfl⟩).comap_uniformSpace.symm
-
-中文:
-定理 comap_eq
-  条件: {f : γ -> β}
-  证明: by
-  let : UniformSpace γ := .comap f ‹_›
-  exact (UniformFun.postcomp_isUniformInducing (f := f) ⟨rfl⟩).comap_uniformSpace.symm
+--- 原说明 ---
+If `u` is a uniform structures on `β` and `f : γ → β`, then
+`𝒰(α, γ, comap f u) = comap (fun g ↦ f ∘ g) 𝒰(α, γ, u₁)`.
 -/
-protected theorem comap_eq {f : γ -> β} :
+protected theorem comap_eq {f : γ → β} :
     𝒰(α, γ, ‹UniformSpace β›.comap f) = 𝒰(α, β, _).comap (f ∘ ·) := by
   let : UniformSpace γ := .comap f ‹_›
   exact (UniformFun.postcomp_isUniformInducing (f := f) ⟨rfl⟩).comap_uniformSpace.symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `postcomp_uniformContinuous` / 定理 `postcomp_uniformContinuous`
+/-- Post-composition by a uniformly continuous function is uniformly continuous on `α →ᵤ β`.
 
-English:
-theorem postcomp_uniformContinuous
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: by
-  -- This is a direct consequence of `UniformFun.comap_eq`
-    refine uniformContinuous_iff_le_comap.mpr ?_
-    calc
-      𝒰(α, γ, _) <= 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
-        UniformFun.mono (uniformContinuous_iff_le_comap.mp hf)
-      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.comap_eq
+More precisely, if `f : γ → β` is uniformly continuous, then `(fun g ↦ f ∘ g) : (α →ᵤ γ) → (α →ᵤ β)`
+is uniformly continuous. -/
+/-
+**UniformFun.postcomp_uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] [in
+st_1 : UniformSpace γ] {f : γ → β},   UniformContinuous f → UniformContinuous (⇑
+UniformFun.ofFun ∘ (fun x => f ∘ x) ∘ ⇑UniformFun.toFun)
+参数：⇑UniformFun.ofFun ∘ (fun x => f ∘ x) ∘ ⇑UniformFun.toFun。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `uniformContinuous_iff_le_comap`：uniformContinuous_iff_le_comap {α β} {uα
+ : UniformSpace α} {uβ : UniformSpace β} {f : α -> β} : UniformContinuous f ↔ uα
+ <= uβ.comap f
+· 使用定理 `UniformFun.mono`：∀ {α : Type u_1} {γ : Type u_3}, Monotone (@UniformFun.
+uniformSpace α γ)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `UniformFun.comap_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [ins
+t : UniformSpace β] {f : γ → β},   UniformFun.uniformSpace α γ = UniformSpace.co
+map (fun …
 
-中文:
-定理 postcomp_uniformContinuous
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: by
-  -- This is a direct consequence of `UniformFun.comap_eq`
-    refine uniformContinuous_iff_le_comap.mpr ?_
-    calc
-      𝒰(α, γ, _) <= 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
-        UniformFun.mono (uniformContinuous_iff_le_comap.mp hf)
-      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.comap_eq
+--- 原说明 ---
+Post-composition by a uniformly continuous function is uniformly continuous on `
+α →ᵤ β`.
+
+More precisely, if `f : γ → β` is uniformly continuous, then `(fun g ↦ f ∘ g) : 
+(α →ᵤ γ) → (α →ᵤ β)`
+is uniformly continuous.
 -/
-protected theorem postcomp_uniformContinuous [UniformSpace γ] {f : γ -> β}
+protected theorem postcomp_uniformContinuous [UniformSpace γ] {f : γ → β}
     (hf : UniformContinuous f) :
-    UniformContinuous (ofFun ∘ (f ∘ ·) ∘ toFun : (α ->ᵤ γ) -> α ->ᵤ β) := by
+    UniformContinuous (ofFun ∘ (f ∘ ·) ∘ toFun : (α →ᵤ γ) → α →ᵤ β) := by
   -- This is a direct consequence of `UniformFun.comap_eq`
     refine uniformContinuous_iff_le_comap.mpr ?_
     calc
-      𝒰(α, γ, _) <= 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
+      𝒰(α, γ, _) ≤ 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
         UniformFun.mono (uniformContinuous_iff_le_comap.mp hf)
       _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.comap_eq
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Turn a uniform isomorphism `γ ≃ᵤ β` into a uniform isomorphism `(α →ᵤ γ) ≃ᵤ (α →ᵤ β)` by
+post-composing. -/
+/-
+**UniformFun.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {γ : Type u_3} → [inst : UniformSp
+ace β] → [inst_1 : UniformSpace γ] → γ ≃ᵤ β → UniformFun α γ ≃ᵤ UniformFun α β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: [UniformSpace γ] (e : γ ≃ᵤ β)
-  body: { Equiv.piCongrRight fun _ => e.toEquiv with
-    uniformContinuous_toFun := UniformFun.postcomp_uniformContinuous e.uniformContinuous
-    uniformContinuous_invFun := UniformFun.postcomp_uniformContinuous e.symm.uniformContinuous }
-
-中文:
-定义 congrRight
-  签名: [一致空间 γ] (e : γ ≃ᵤ β)
-  定义体: { Equiv.piCongrRight fun _ => e.toEquiv with
-    uniformContinuous_toFun := UniformFun.postcomp_uniformContinuous e.uniformContinuous
-    uniformContinuous_invFun := UniformFun.postcomp_uniformContinuous e.symm.uniformContinuous }
+--- 原说明 ---
+Turn a uniform isomorphism `γ ≃ᵤ β` into a uniform isomorphism `(α →ᵤ γ) ≃ᵤ (α →
+ᵤ β)` by
+post-composing.
 -/
-protected def congrRight [UniformSpace γ] (e : γ ≃ᵤ β) : (α ->ᵤ γ) ≃ᵤ (α ->ᵤ β) :=
+protected def congrRight [UniformSpace γ] (e : γ ≃ᵤ β) : (α →ᵤ γ) ≃ᵤ (α →ᵤ β) :=
   { Equiv.piCongrRight fun _ => e.toEquiv with
     uniformContinuous_toFun := UniformFun.postcomp_uniformContinuous e.uniformContinuous
     uniformContinuous_invFun := UniformFun.postcomp_uniformContinuous e.symm.uniformContinuous }
 
-/--
-theorem `precomp_uniformContinuous` / 定理 `precomp_uniformContinuous`
+/-- Pre-composition by any function is uniformly continuous for the uniform structures of
+uniform convergence.
 
-English:
-theorem precomp_uniformContinuous
-  given: {f : γ -> α}
-  proof: by
-  -- Here we simply go back to filter bases.
-  rw [UniformContinuous]; rw [(UniformFun.hasBasis_uniformity α β).tendsto_iff (UniformFun.hasBasis_uniformity γ β)]
-  exact fun U hU => ⟨U, hU, fun uv huv x => huv (f x)⟩
+More precisely, for any `f : γ → α`, the function `(· ∘ f) : (α →ᵤ β) → (γ →ᵤ β)` is uniformly
+continuous. -/
+/-
+**UniformFun.precomp_uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {f 
+: γ → α},   UniformContinuous fun g => UniformFun.ofFun (UniformFun.toFun g ∘ f)
+参数：UniformFun.toFun g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformContinuous.eq_1`：∀ {α : Type ua} {β : Type ub} [inst : UniformSpa
+ce α] [inst_1 : UniformSpace β] (f : α → β),   UniformContinuous f = Filter.Tend
+sto (fun x =…
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
 
-中文:
-定理 precomp_uniformContinuous
-  条件: {f : γ -> α}
-  证明: by
-  -- Here we simply go back to filter bases.
-  rw [UniformContinuous]; rw [(UniformFun.hasBasis_uniformity α β).tendsto_iff (UniformFun.hasBasis_uniformity γ β)]
-  exact fun U hU => ⟨U, hU, fun uv huv x => huv (f x)⟩
+--- 原说明 ---
+Pre-composition by any function is uniformly continuous for the uniform structur
+es of
+uniform convergence.
+
+More precisely, for any `f : γ → α`, the function `(· ∘ f) : (α →ᵤ β) → (γ →ᵤ β)
+` is uniformly
+continuous.
 -/
-protected theorem precomp_uniformContinuous {f : γ -> α} :
-    UniformContinuous fun g : α ->ᵤ β => ofFun (toFun g ∘ f) := by
+protected theorem precomp_uniformContinuous {f : γ → α} :
+    UniformContinuous fun g : α →ᵤ β => ofFun (toFun g ∘ f) := by
   -- Here we simply go back to filter bases.
-  rw [UniformContinuous]; rw [(UniformFun.hasBasis_uniformity α β).tendsto_iff (UniformFun.hasBasis_uniformity γ β)]
+  rw [UniformContinuous,
+      (UniformFun.hasBasis_uniformity α β).tendsto_iff (UniformFun.hasBasis_uniformity γ β)]
   exact fun U hU => ⟨U, hU, fun uv huv x => huv (f x)⟩
 
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-- Turn a bijection `γ ≃ α` into a uniform isomorphism
+`(γ →ᵤ β) ≃ᵤ (α →ᵤ β)` by pre-composing. -/
+/-
+**UniformFun.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → {γ : Type u_3} → [inst : UniformSpace β]
+ → γ ≃ α → UniformFun γ β ≃ᵤ UniformFun α β
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition congrLeft
-  signature: (e : γ ≃ α)
-  body: e.arrowCongr (.refl _)
-  uniformContinuous_toFun := UniformFun.precomp_uniformContinuous
-  uniformContinuous_invFun := UniformFun.precomp_uniformContinuous
-
-中文:
-定义 congrLeft
-  签名: (e : γ ≃ α)
-  定义体: e.arrowCongr (.refl _)
-  uniformContinuous_toFun := UniformFun.precomp_uniformContinuous
-  uniformContinuous_invFun := UniformFun.precomp_uniformContinuous
+--- 原说明 ---
+Turn a bijection `γ ≃ α` into a uniform isomorphism
+`(γ →ᵤ β) ≃ᵤ (α →ᵤ β)` by pre-composing.
 -/
-protected def congrLeft (e : γ ≃ α) : (γ ->ᵤ β) ≃ᵤ (α ->ᵤ β) where
+protected def congrLeft (e : γ ≃ α) : (γ →ᵤ β) ≃ᵤ (α →ᵤ β) where
   toEquiv := e.arrowCongr (.refl _)
   uniformContinuous_toFun := UniformFun.precomp_uniformContinuous
   uniformContinuous_invFun := UniformFun.precomp_uniformContinuous
 
-/--
-theorem `uniformContinuous_toFun` / 定理 `uniformContinuous_toFun`
+/-- The natural map `UniformFun.toFun` from `α →ᵤ β` to `α → β` is uniformly continuous.
 
-English:
-theorem uniformContinuous_toFun
-  statement: UniformContinuous (toFun : (α ->ᵤ β) -> α -> β)
-  proof: by
-  -- By definition of the product uniform structure, this is just `uniform_continuous_eval`.
-  rw [uniformContinuous_pi]
-  intro x
-  exact uniformContinuous_eval β x
+In other words, the uniform structure of uniform convergence is finer than that of pointwise
+convergence, aka the product uniform structure. -/
+/-
+**UniformFun.uniformContinuous_toFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β], UniformContinuous
+ ⇑UniformFun.toFun
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `uniformContinuous_pi`：uniformContinuous_pi {β : Type*} [UniformSpace β] 
+{f : β -> forall i, α i} : UniformContinuous f ↔ forall i, UniformContinuous fun
+ x => f x …
+· 使用定理 `UniformFun.uniformContinuous_eval`：uniformContinuous_eval (x : α) : Unif
+ormContinuous (Function.eval x ∘ toFun : (α ->ᵤ β) -> β)
 
-中文:
-定理 uniformContinuous_toFun
-  结论: 一致连续 (toFun : (α ->ᵤ β) -> α -> β)
-  证明: by
-  -- By definition of the product uniform structure, this is just `uniform_continuous_eval`.
-  rw [uniformContinuous_pi]
-  intro x
-  exact uniformContinuous_eval β x
+--- 原说明 ---
+The natural map `UniformFun.toFun` from `α →ᵤ β` to `α → β` is uniformly continu
+ous.
+
+In other words, the uniform structure of uniform convergence is finer than that 
+of pointwise
+convergence, aka the product uniform structure.
 -/
-protected theorem uniformContinuous_toFun : UniformContinuous (toFun : (α ->ᵤ β) -> α -> β) := by
+protected theorem uniformContinuous_toFun : UniformContinuous (toFun : (α →ᵤ β) → α → β) := by
   -- By definition of the product uniform structure, this is just `uniform_continuous_eval`.
   rw [uniformContinuous_pi]
   intro x
   exact uniformContinuous_eval β x
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The topology of uniform convergence is T₂. -/
+/-
+**UniformFun.** 是 Mathlib 中的一个实例，位于命名空间 `UniformFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [T2Space
-  signature: β] : T2Space (α ->ᵤ β)
-  body: .of_injective_continuous toFun.injective UniformFun.uniformContinuous_toFun.continuous
-
-中文:
-实例 [T2空间
-  签名: β] : T2空间 (α ->ᵤ β)
-  定义体: .of_injective_continuous toFun.injective UniformFun.uniformContinuous_toFun.continuous
-
-Depends on / 依赖: UniformFun, UniformFun.uniformContinuous_toFun.continuous, continuous, injective, of_injective_continuous, toFun.injective, uniformContinuous_toFun
+--- 原说明 ---
+The topology of uniform convergence is T₂.
 -/
-instance [T2Space β] : T2Space (α ->ᵤ β) :=
+instance [T2Space β] : T2Space (α →ᵤ β) :=
   .of_injective_continuous toFun.injective UniformFun.uniformContinuous_toFun.continuous
 
-/--
-theorem `tendsto_iff_tendstoUniformly` / 定理 `tendsto_iff_tendstoUniformly`
+/-- The topology of uniform convergence indeed gives the same notion of convergence as
+`TendstoUniformly`. -/
+/-
+**UniformFun.tendsto_iff_tendstoUniformly** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {ι : Type u_4} {p : Filter ι} [inst : Unif
+ormSpace β] {F : ι → UniformFun α β}   {f : UniformFun α β}, Filter.Tendsto F p 
+(nhds f) ↔ TendstoUniformly (⇑UniformFun.toFun ∘ F) (UniformFun.toFun f) p
+参数：nhds f；⇑UniformFun.toFun ∘ F；UniformFun.toFun f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.tendsto_right_iff`：∀ {α : Type u_1} {β : Type u_2} {ι' :
+ Sort u_5} {la : Filter α} {lb : Filter β} {pb : ι' → Prop} {sb : ι' → Set β}   
+{f : α → β}, lb.HasBasi…
+· 使用定理 `UniformFun.hasBasis_nhds`：∀ (α : Type u_1) (β : Type u_2) [inst : Unifor
+mSpace β] (f : UniformFun α β),   (nhds f).HasBasis (fun V => V ∈ uniformity β) 
+fun V => {g | …
+· 使用定理 `TendstoUniformly.eq_1`：∀ {α : Type u_1} {β : Type u_2} {ι : Type u_4} [i
+nst : UniformSpace β] (F : ι → α → β) (f : α → β) (p : Filter ι),   TendstoUnifo
+rmly F f p …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem tendsto_iff_tendstoUniformly
-  given: {F : ι -> α ->ᵤ β} {f : α ->ᵤ β}
-  proof: by
-  rw [(UniformFun.hasBasis_nhds α β f).tendsto_right_iff]; rw [TendstoUniformly]
-  simp only [mem_ofPred, UniformFun.gen, Function.comp_def]
-
-中文:
-定理 tendsto_iff_tendstoUniformly
-  条件: {F : ι -> α ->ᵤ β} {f : α ->ᵤ β}
-  证明: by
-  rw [(UniformFun.hasBasis_nhds α β f).tendsto_right_iff]; rw [TendstoUniformly]
-  simp only [mem_ofPred, UniformFun.gen, Function.comp_def]
+--- 原说明 ---
+The topology of uniform convergence indeed gives the same notion of convergence 
+as
+`TendstoUniformly`.
 -/
-protected theorem tendsto_iff_tendstoUniformly {F : ι -> α ->ᵤ β} {f : α ->ᵤ β} :
+protected theorem tendsto_iff_tendstoUniformly {F : ι → α →ᵤ β} {f : α →ᵤ β} :
     Tendsto F p (𝓝 f) ↔ TendstoUniformly (toFun ∘ F) (toFun f) p := by
-  rw [(UniformFun.hasBasis_nhds α β f).tendsto_right_iff]; rw [TendstoUniformly]
+  rw [(UniformFun.hasBasis_nhds α β f).tendsto_right_iff, TendstoUniformly]
   simp only [mem_ofPred, UniformFun.gen, Function.comp_def]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uniformEquivProdArrow` / `uniformEquivProdArrow` 的定义
+/-- The natural bijection between `α → β × γ` and `(α → β) × (α → γ)`, upgraded to a uniform
+isomorphism between `α →ᵤ β × γ` and `(α →ᵤ β) × (α →ᵤ γ)`. -/
+/-
+**UniformFun.uniformEquivProdArrow** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {γ : Type u_3} →       [inst : Uni
+formSpace β] → [inst_1 : UniformSpace γ] → UniformFun α (β × γ) ≃ᵤ UniformFun α 
+β × UniformFun α γ
+参数：β × γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformEquivProdArrow
-  signature: [UniformSpace γ]
-  body: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
-  -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
-  -- `UniformFun.inf_eq` and `UniformFun.comap_eq`, which leaves us to check
-  -- that some square commutes.
-Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
-    constructor
-    change
-      comap (Prod.map (Equiv.arrowProdEquivProdArrow _ _ _) (Equiv.arrowProdEquivProdArrow _ _ _))
-          _ = _
-    simp_rw [UniformFun]
-    rw [← uniformity_comap]
-    congr
-    unfold instUniformSpaceProd
-    rw [UniformSpace.comap_inf]; rw [← UniformSpace.comap_comap]; rw [← UniformSpace.comap_comap]
-    have := (@UniformFun.inf_eq α (β × γ)
-      (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)).symm
-    rwa [UniformFun.comap_eq, UniformFun.comap_eq] at this
-
-中文:
-定义 uniformEquivProdArrow
-  签名: [一致空间 γ]
-  定义体: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
-  -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
-  -- `UniformFun.inf_eq` and `UniformFun.comap_eq`, which leaves us to check
-  -- that some square commutes.
-Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
-    constructor
-    change
-      comap (Prod.map (Equiv.arrowProdEquivProdArrow _ _ _) (Equiv.arrowProdEquivProdArrow _ _ _))
-          _ = _
-    simp_rw [UniformFun]
-    rw [← uniformity_comap]
-    congr
-    unfold instUniformSpaceProd
-    rw [UniformSpace.comap_inf]; rw [← UniformSpace.comap_comap]; rw [← UniformSpace.comap_comap]
-    have := (@UniformFun.inf_eq α (β × γ)
-      (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)).symm
-    rwa [UniformFun.comap_eq, UniformFun.comap_eq] at this
+--- 原说明 ---
+The natural bijection between `α → β × γ` and `(α → β) × (α → γ)`, upgraded to a
+ uniform
+isomorphism between `α →ᵤ β × γ` and `(α →ᵤ β) × (α →ᵤ γ)`.
 -/
-protected def uniformEquivProdArrow [UniformSpace γ] : (α ->ᵤ β × γ) ≃ᵤ (α ->ᵤ β) × (α ->ᵤ γ) :=
+protected def uniformEquivProdArrow [UniformSpace γ] : (α →ᵤ β × γ) ≃ᵤ (α →ᵤ β) × (α →ᵤ γ) :=
   -- Denote `φ` this bijection. We want to show that
   -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
   -- `UniformFun.inf_eq` and `UniformFun.comap_eq`, which leaves us to check
   -- that some square commutes.
-Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
+  Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) <| by
     constructor
     change
       comap (Prod.map (Equiv.arrowProdEquivProdArrow _ _ _) (Equiv.arrowProdEquivProdArrow _ _ _))
@@ -1160,159 +1111,135 @@ Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
     rw [← uniformity_comap]
     congr
     unfold instUniformSpaceProd
-    rw [UniformSpace.comap_inf]; rw [← UniformSpace.comap_comap]; rw [← UniformSpace.comap_comap]
+    rw [UniformSpace.comap_inf, ← UniformSpace.comap_comap, ← UniformSpace.comap_comap]
     have := (@UniformFun.inf_eq α (β × γ)
       (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)).symm
     rwa [UniformFun.comap_eq, UniformFun.comap_eq] at this
 
 -- the relevant diagram commutes by definition
-variable (α) (δ : ι -> Type*) [forall i, UniformSpace (δ i)]
+variable (α) (δ : ι → Type*) [∀ i, UniformSpace (δ i)]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uniformEquivPiComm` / `uniformEquivPiComm` 的定义
+/-- The natural bijection between `α → Π i, δ i` and `Π i, α → δ i`, upgraded to a uniform
+isomorphism between `α →ᵤ (Π i, δ i)` and `Π i, α →ᵤ δ i`. -/
+/-
+**UniformFun.uniformEquivPiComm** 是 Mathlib 中的一个定义，位于命名空间 `UniformFun`。
+形式化陈述：(α : Type u_1) →   {ι : Type u_4} →     (δ : ι → Type u_5) →       [inst :
+ (i : ι) → UniformSpace (δ i)] → UniformFun α ((i : ι) → δ i) ≃ᵤ ((i : ι) → Unif
+ormFun α (δ i))
+参数：i : ι；i : ι；δ i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformEquivPiComm
-  signature: : UniformEquiv (α ->ᵤ forall i, δ i) (forall i, α ->ᵤ δ i)
-  body: -- Denote `φ` this bijection. We want to show that
-    -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
-    -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
-    -- `UniformFun.iInf_eq` and `UniformFun.comap_eq`, which leaves us to check
-    -- that some square commutes.
-    @Equiv.toUniformEquivOfIsUniformInducing
-    _ _ 𝒰(α, forall i, δ i, Pi.uniformSpace δ)
-(@Pi.uniformSpace ι (fun i => α -> δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) by
-      refine @IsUniformInducing.mk ?_ ?_ ?_ ?_ ?_ ?_
-      change comap (Prod.map Function.swap Function.swap) _ = _
-      rw [← uniformity_comap]
-      congr
-      unfold Pi.uniformSpace
-      rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformFun.iInf_eq]
-      refine iInf_congr fun i => ?_
-      rw [← UniformSpace.comap_comap]; rw [UniformFun.comap_eq]
-      rfl
-
-中文:
-定义 uniformEquivPiComm
-  签名: : 一致等价 (α ->ᵤ 对任意 i, δ i) (对任意 i, α ->ᵤ δ i)
-  定义体: -- Denote `φ` this bijection. We want to show that
-    -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
-    -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
-    -- `UniformFun.iInf_eq` and `UniformFun.comap_eq`, which leaves us to check
-    -- that some square commutes.
-    @Equiv.toUniformEquivOfIsUniformInducing
-    _ _ 𝒰(α, forall i, δ i, Pi.uniformSpace δ)
-(@Pi.uniformSpace ι (fun i => α -> δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) by
-      refine @IsUniformInducing.mk ?_ ?_ ?_ ?_ ?_ ?_
-      change comap (Prod.map Function.swap Function.swap) _ = _
-      rw [← uniformity_comap]
-      congr
-      unfold Pi.uniformSpace
-      rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformFun.iInf_eq]
-      refine iInf_congr fun i => ?_
-      rw [← UniformSpace.comap_comap]; rw [UniformFun.comap_eq]
-      rfl
+--- 原说明 ---
+The natural bijection between `α → Π i, δ i` and `Π i, α → δ i`, upgraded to a u
+niform
+isomorphism between `α →ᵤ (Π i, δ i)` and `Π i, α →ᵤ δ i`.
 -/
-protected def uniformEquivPiComm : UniformEquiv (α ->ᵤ forall i, δ i) (forall i, α ->ᵤ δ i) :=
+protected def uniformEquivPiComm : UniformEquiv (α →ᵤ ∀ i, δ i) (∀ i, α →ᵤ δ i) :=
   -- Denote `φ` this bijection. We want to show that
     -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
     -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
     -- `UniformFun.iInf_eq` and `UniformFun.comap_eq`, which leaves us to check
     -- that some square commutes.
     @Equiv.toUniformEquivOfIsUniformInducing
-    _ _ 𝒰(α, forall i, δ i, Pi.uniformSpace δ)
-(@Pi.uniformSpace ι (fun i => α -> δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) by
+    _ _ 𝒰(α, ∀ i, δ i, Pi.uniformSpace δ)
+    (@Pi.uniformSpace ι (fun i => α → δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) <| by
       refine @IsUniformInducing.mk ?_ ?_ ?_ ?_ ?_ ?_
       change comap (Prod.map Function.swap Function.swap) _ = _
       rw [← uniformity_comap]
       congr
       unfold Pi.uniformSpace
-      rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformFun.iInf_eq]
+      rw [UniformSpace.ofCoreEq_toCore, UniformSpace.ofCoreEq_toCore,
+        UniformSpace.comap_iInf, UniformFun.iInf_eq]
       refine iInf_congr fun i => ?_
-      rw [← UniformSpace.comap_comap]; rw [UniformFun.comap_eq]
+      rw [← UniformSpace.comap_comap, UniformFun.comap_eq]
       rfl
 
 -- Like in the previous lemma, the diagram actually commutes by definition
 
-/--
-theorem `isClosed_setOfPred_continuous` / 定理 `isClosed_setOfPred_continuous`
+/-- The set of continuous functions is closed in the uniform convergence topology.
+This is a simple wrapper over `TendstoUniformly.continuous`. -/
+/-
+**UniformFun.isClosed_setOfPred_continuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun
+`。
+形式化陈述：isClosed_setOfPred_continuous [TopologicalSpace α] : IsClosed {f : α ->ᵤ β
+ | Continuous (toFun f)}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `isClosed_iff_forall_filter`：isClosed_iff_forall_filter : IsClosed s ↔ fo
+rall x, forall F : Filter X, F.NeBot -> F <= 𝓟 s -> F <= 𝓝 x -> x in s
+· 使用定理 `TendstoUniformly.continuous`：∀ {α : Type u_1} {β : Type u_2} {ι : Type u
+_3} [inst : TopologicalSpace α] [inst_1 : UniformSpace β] {F : ι → α → β}   {f :
+ α → β} {p : Filt…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformFun.tendsto_iff_tendstoUniformly`：∀ {α : Type u_1} {β : Type u_2}
+ {ι : Type u_4} {p : Filter ι} [inst : UniformSpace β] {F : ι → UniformFun α β} 
+  {f : UniformFun α β}, Filte…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.tendsto_id'`：tendsto_id' {x y : Filter α} : Tendsto id x y ↔ x <=
+ y
+· 使用定理 `Filter.Eventually.frequently`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p
+ : α → Prop}, (∀ᶠ (x : α) in f, p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
 
-English:
-theorem isClosed_setOfPred_continuous
-  given: [TopologicalSpace α]
-  proof: by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => ?_
-  rw [← tendsto_id']; rw [UniformFun.tendsto_iff_tendstoUniformly] at huf
-exact huf.continuous Eventually.frequently (le_principal_iff.mp hu)
-
-@[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
-
-中文:
-定理 isClosed_setOfPred_continuous
-  条件: [拓扑空间 α]
-  证明: by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => ?_
-  rw [← tendsto_id']; rw [UniformFun.tendsto_iff_tendstoUniformly] at huf
-exact huf.continuous Eventually.frequently (le_principal_iff.mp hu)
-
-@[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
-
-Depends on / 依赖: Eventually, Eventually.frequently, UniformFun, UniformFun.tendsto_iff_tendstoUniformly, continuous, frequently, huf.continuous, isClosed_iff_forall_filter, le_principal_iff, le_principal_iff.mp, tendsto_id, tendsto_iff_tendstoUniformly
+--- 原说明 ---
+The set of continuous functions is closed in the uniform convergence topology.
+This is a simple wrapper over `TendstoUniformly.continuous`.
 -/
 theorem isClosed_setOfPred_continuous [TopologicalSpace α] :
-    IsClosed {f : α ->ᵤ β | Continuous (toFun f)} := by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => ?_
-  rw [← tendsto_id']; rw [UniformFun.tendsto_iff_tendstoUniformly] at huf
-exact huf.continuous Eventually.frequently (le_principal_iff.mp hu)
+    IsClosed {f : α →ᵤ β | Continuous (toFun f)} := by
+  refine isClosed_iff_forall_filter.2 fun f u _ hu huf ↦ ?_
+  rw [← tendsto_id', UniformFun.tendsto_iff_tendstoUniformly] at huf
+  exact huf.continuous <| Eventually.frequently (le_principal_iff.mp hu)
 
 @[deprecated (since := "2026-07-09")]
 alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 variable {α} (β) in
-/--
-theorem `uniformSpace_eq_inf_precomp_of_cover` / 定理 `uniformSpace_eq_inf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_inf_precomp_of_cover
-  statement: {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
-  proof: by
-  ext : 1
-  refine le_antisymm (le_inf ?_ ?_) ?_
-  · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
-  · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
-  · refine
-      (UniformFun.hasBasis_uniformity δ₁ β |>.comap _).inf
-      (UniformFun.hasBasis_uniformity δ₂ β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases h_cover.ge mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
-    · exact hfg.1 y
-    · exact hfg.2 y
-
-中文:
-定理 uniformSpace_eq_inf_precomp_of_cover
-  结论: {δ₁ δ₂ : 类型} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
-  证明: by
-  ext : 1
-  refine le_antisymm (le_inf ?_ ?_) ?_
-  · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
-  · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
-  · refine
-      (UniformFun.hasBasis_uniformity δ₁ β |>.comap _).inf
-      (UniformFun.hasBasis_uniformity δ₂ β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases h_cover.ge mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
-    · exact hfg.1 y
-    · exact hfg.2 y
-
-Depends on / 依赖: UniformFun, UniformFun.hasBasis_uniformity, UniformFun.precomp_uniformContinuous, h_cover, h_cover.ge, hasBasis_uniformity, le_antisymm, le_basis_iff, le_inf, mem_univ, precomp_uniformContinuous, tendsto_iff_comap, tendsto_iff_comap.mp
+/-
+**UniformFun.uniformSpace_eq_inf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 `Uni
+formFun`。
+形式化陈述：uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : 
+δ₂ -> α) (h_cover : range φ₁ union range φ₂ = univ) : 𝒰(α, β, _) = .comap (ofFun
+ ∘ (· ∘ φ₁) ∘ toFun) 𝒰(δ₁, β, _) ⊓ .comap (ofFun ∘ (· ∘ φ₂) ∘ toFun) 𝒰(δ₂, β, _)
+参数：φ₁ : δ₁ -> α；φ₂ : δ₂ -> α；h_cover : range φ₁ union range φ₂ = univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_iff_comap`：tendsto_iff_comap {f : α -> β} {l₁ : Filter α}
+ {l₂ : Filter β} : Tendsto f l₁ l₂ ↔ l₁ <= l₂.comap f
+· 使用定理 `UniformFun.precomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : UniformSpace β] {f : γ → α},   UniformContinuous fun g => U
+niformFun.ofFun (UniformFu…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.le_basis_iff`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : 
+ι' → Set α}, l.Has…
+· 使用定理 `Filter.HasBasis.inf`：∀ {α : Type u_1} {l l' : Filter α} {ι : Type u_6} {
+ι' : Type u_7} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' → Set 
+α},   l.H…
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
-    (h_cover : range φ₁ union range φ₂ = univ) :
+theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ → α) (φ₂ : δ₂ → α)
+    (h_cover : range φ₁ ∪ range φ₂ = univ) :
     𝒰(α, β, _) =
       .comap (ofFun ∘ (· ∘ φ₁) ∘ toFun) 𝒰(δ₁, β, _) ⊓
       .comap (ofFun ∘ (· ∘ φ₂) ∘ toFun) 𝒰(δ₂, β, _) := by
@@ -1323,57 +1250,69 @@ theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ�
   · refine
       (UniformFun.hasBasis_uniformity δ₁ β |>.comap _).inf
       (UniformFun.hasBasis_uniformity δ₂ β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases h_cover.ge mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
+        |>.le_basis_iff (UniformFun.hasBasis_uniformity α β) |>.mpr fun U hU ↦
+        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x ↦ ?_⟩
+    rcases h_cover.ge <| mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
     · exact hfg.1 y
     · exact hfg.2 y
 
 variable {α} (β) in
-/--
-theorem `uniformSpace_eq_iInf_precomp_of_cover` / 定理 `uniformSpace_eq_iInf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_iInf_precomp_of_cover
-  statement: {δ : ι -> Type*} (φ : Π i, δ i -> α)
-  proof: by
-  ext : 1
-  simp_rw [iInf_uniformity, uniformity_comap]
-  refine le_antisymm (le_iInf fun i => tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
-  rcases h_cover with ⟨I, I_finite, I_cover⟩
-  refine HasBasis.iInf (fun i : ι => UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-    ⟨⟨I, fun _ => U⟩, ⟨I_finite, fun _ => hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases mem_iUnion₂.mp I_cover.ge mem_univ x with ⟨i, hi, y, rfl⟩
-  exact mem_iInter.mp hfg ⟨i, hi⟩ y
-
-中文:
-定理 uniformSpace_eq_iInf_precomp_of_cover
-  结论: {δ : ι -> 类型} (φ : Π i, δ i -> α)
-  证明: by
-  ext : 1
-  simp_rw [iInf_uniformity, uniformity_comap]
-  refine le_antisymm (le_iInf fun i => tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
-  rcases h_cover with ⟨I, I_finite, I_cover⟩
-  refine HasBasis.iInf (fun i : ι => UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-    ⟨⟨I, fun _ => U⟩, ⟨I_finite, fun _ => hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases mem_iUnion₂.mp I_cover.ge mem_univ x with ⟨i, hi, y, rfl⟩
-  exact mem_iInter.mp hfg ⟨i, hi⟩ y
-
-Depends on / 依赖: HasBasis, HasBasis.iInf, I_cover, I_cover.ge, I_finite, UniformFun, UniformFun.hasBasis_uniformity, UniformFun.precomp_uniformContinuous, h_cover, hasBasis_uniformity, iInf_uniformity, le_antisymm, le_basis_iff, le_iInf, mem_iInter, mem_univ, precomp_uniformContinuous, simp_rw, tendsto_iff_comap, tendsto_iff_comap.mp
+/-
+**UniformFun.uniformSpace_eq_iInf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 `Un
+iformFun`。
+形式化陈述：uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α)
+ (h_cover : exists I : Set ι, I.Finite ∧ ⋃ i in I, range (φ i) = univ) : 𝒰(α, β,
+ _) = ⨅ i, .comap (ofFun ∘ (· ∘ φ i) ∘ toFun) 𝒰(δ i, β, _)
+参数：φ : Π i, δ i -> α；h_cover : exists I : Set ι, I.Finite ∧ ⋃ i in I, range (φ i
+) = univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_uniformity`：iInf_uniformity {ι : Sort*} {u : ι -> UniformSpace α} :
+ 𝓤[iInf u] = ⨅ i, 𝓤[u i]
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_iff_comap`：tendsto_iff_comap {f : α -> β} {l₁ : Filter α}
+ {l₂ : Filter β} : Tendsto f l₁ l₂ ↔ l₁ <= l₂.comap f
+· 使用定理 `UniformFun.precomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : UniformSpace β] {f : γ → α},   UniformContinuous fun g => U
+niformFun.ofFun (UniformFu…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.le_basis_iff`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : 
+ι' → Set α}, l.Has…
+· 使用定理 `Filter.HasBasis.iInf`：∀ {α : Type u_1} {ι : Type u_6} {ι' : ι → Type u_7
+} {l : ι → Filter α} {p : (i : ι) → ι' i → Prop}   {s : (i : ι) → ι' i → Set α},
+   (∀ (i :…
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
+· 使用定理 `Set.mem_iUnion₂`：mem_iUnion₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋃ (i) (j), s i j) ↔ exists i j, x in s i j
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `Set.mem_iInter`：mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ 
+forall i, x in s i
 -/
-theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α)
-    (h_cover : exists I : Set ι, I.Finite ∧ ⋃ i in I, range (φ i) = univ) :
+theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι → Type*} (φ : Π i, δ i → α)
+    (h_cover : ∃ I : Set ι, I.Finite ∧ ⋃ i ∈ I, range (φ i) = univ) :
     𝒰(α, β, _) = ⨅ i, .comap (ofFun ∘ (· ∘ φ i) ∘ toFun) 𝒰(δ i, β, _) := by
   ext : 1
   simp_rw [iInf_uniformity, uniformity_comap]
-  refine le_antisymm (le_iInf fun i => tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
+  refine le_antisymm (le_iInf fun i ↦ tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
   rcases h_cover with ⟨I, I_finite, I_cover⟩
-  refine HasBasis.iInf (fun i : ι => UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
-.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
-    ⟨⟨I, fun _ => U⟩, ⟨I_finite, fun _ => hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
-rcases mem_iUnion₂.mp I_cover.ge mem_univ x with ⟨i, hi, y, rfl⟩
+  refine HasBasis.iInf (fun i : ι ↦ UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
+      |>.le_basis_iff (UniformFun.hasBasis_uniformity α β) |>.mpr fun U hU ↦
+    ⟨⟨I, fun _ ↦ U⟩, ⟨I_finite, fun _ ↦ hU⟩, fun ⟨f, g⟩ hfg x ↦ ?_⟩
+  rcases mem_iUnion₂.mp <| I_cover.ge <| mem_univ x with ⟨i, hi, y, rfl⟩
   exact mem_iInter.mp hfg ⟨i, hi⟩ y
 
 end UniformFun
@@ -1385,38 +1324,54 @@ variable {s : Set α} {p : Filter ι}
 
 local notation "𝒰(" α ", " β ", " u ")" => @UniformFun.uniformSpace α β u
 
-/--
-Definition of `gen` / `gen` 的定义
+/-- Basis sets for the uniformity of `𝔖`-convergence: for `S : Set α` and `V : Set (β × β)`,
+`gen 𝔖 S V` is the set of pairs `(f, g)` of functions `α →ᵤ[𝔖] β` such that
+`∀ x ∈ S, (f x, g x) ∈ V`. Note that the family `𝔖 : Set (Set α)` is only used to specify which
+type alias of `α → β` to use here. -/
+/-
+**UniformOnFun.gen** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → (𝔖 : Set (Set α)) → Set α → Set (β × β
+) → Set (UniformOnFun α β 𝔖 × UniformOnFun α β 𝔖)
+参数：𝔖 : Set (Set α)；β × β；UniformOnFun α β 𝔖 × UniformOnFun α β 𝔖。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gen
-  signature: (𝔖) (S : Set α) (V : Set (β × β))
-  body: { uv : (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β) | forall x in S, (toFun 𝔖 uv.1 x, toFun 𝔖 uv.2 x) in V }
-
-中文:
-定义 gen
-  签名: (𝔖) (S : 集合 α) (V : 集合 (β × β))
-  定义体: { uv : (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β) | forall x in S, (toFun 𝔖 uv.1 x, toFun 𝔖 uv.2 x) in V }
+--- 原说明 ---
+Basis sets for the uniformity of `𝔖`-convergence: for `S : Set α` and `V : Set (
+β × β)`,
+`gen 𝔖 S V` is the set of pairs `(f, g)` of functions `α →ᵤ[𝔖] β` such that
+`∀ x ∈ S, (f x, g x) ∈ V`. Note that the family `𝔖 : Set (Set α)` is only used t
+o specify which
+type alias of `α → β` to use here.
 -/
-protected def gen (𝔖) (S : Set α) (V : Set (β × β)) : Set ((α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β)) :=
-  { uv : (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] β) | forall x in S, (toFun 𝔖 uv.1 x, toFun 𝔖 uv.2 x) in V }
+protected def gen (𝔖) (S : Set α) (V : Set (β × β)) : Set ((α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] β)) :=
+  { uv : (α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] β) | ∀ x ∈ S, (toFun 𝔖 uv.1 x, toFun 𝔖 uv.2 x) ∈ V }
 
-/--
-theorem `gen_eq_preimage_restrict` / 定理 `gen_eq_preimage_restrict`
+/-- For `S : Set α` and `V : Set (β × β)`, we have
+`UniformOnFun.gen 𝔖 S V = (S.domRestrict × S.domRestrict) ⁻¹' (UniformFun.gen S β V)`.
+This is the crucial fact for proving that the family `UniformOnFun.gen S V` for `S ∈ 𝔖` and
+`V ∈ 𝓤 β` is indeed a basis for the uniformity `α →ᵤ[𝔖] β` endowed with `𝒱(α, β, 𝔖, uβ)`
+the uniform structure of `𝔖`-convergence, as defined in `UniformOnFun.uniformSpace`. -/
+/-
+**UniformOnFun.gen_eq_preimage_restrict** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)} (S : Set α) (V : Set (β 
+× β)),   UniformOnFun.gen 𝔖 S V =     Prod.map (S.domRestrict ∘ ⇑UniformFun.toFu
+n) (S.domRestrict ∘ ⇑UniformFun.toFun) ⁻¹' UniformFun.gen (↑S) β V
+参数：Set α；S : Set α；V : Set (β × β)；S.domRestrict ∘ ⇑UniformFun.toFun；S.domRestri
+ct ∘ ⇑UniformFun.toFun；↑S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 
-English:
-theorem gen_eq_preimage_restrict
-  given: {𝔖} (S : Set α) (V : Set (β × β))
-  proof: by
-  ext uv
-  exact ⟨fun h ⟨x, hx⟩ => h x hx, fun h x hx => h ⟨x, hx⟩⟩
-
-中文:
-定理 gen_eq_preimage_restrict
-  条件: {𝔖} (S : 集合 α) (V : 集合 (β × β))
-  证明: by
-  ext uv
-  exact ⟨fun h ⟨x, hx⟩ => h x hx, fun h x hx => h ⟨x, hx⟩⟩
+--- 原说明 ---
+For `S : Set α` and `V : Set (β × β)`, we have
+`UniformOnFun.gen 𝔖 S V = (S.domRestrict × S.domRestrict) ⁻¹' (UniformFun.gen S 
+β V)`.
+This is the crucial fact for proving that the family `UniformOnFun.gen S V` for 
+`S ∈ 𝔖` and
+`V ∈ 𝓤 β` is indeed a basis for the uniformity `α →ᵤ[𝔖] β` endowed with `𝒱(α, β,
+ 𝔖, uβ)`
+the uniform structure of `𝔖`-convergence, as defined in `UniformOnFun.uniformSpa
+ce`.
 -/
 protected theorem gen_eq_preimage_restrict {𝔖} (S : Set α) (V : Set (β × β)) :
     UniformOnFun.gen 𝔖 S V =
@@ -1425,48 +1380,55 @@ protected theorem gen_eq_preimage_restrict {𝔖} (S : Set α) (V : Set (β × �
   ext uv
   exact ⟨fun h ⟨x, hx⟩ => h x hx, fun h x hx => h ⟨x, hx⟩⟩
 
-/--
-theorem `gen_mono` / 定理 `gen_mono`
+/-- `UniformOnFun.gen` is antitone in the first argument and monotone in the second. -/
+/-
+**UniformOnFun.gen_mono** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)} {S S' : Set α} {V V' : S
+et (β × β)},   S' ⊆ S → V ⊆ V' → UniformOnFun.gen 𝔖 S V ⊆ UniformOnFun.gen 𝔖 S' 
+V'
+参数：Set α；β × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem gen_mono
-  given: {𝔖} {S S' : Set α} {V V' : Set (β × β)} (hS : S' subseteq S) (hV : V subseteq V')
-  proof: fun _uv h x hx => hV (h x <| hS hx)
-
-中文:
-定理 gen_mono
-  条件: {𝔖} {S S' : 集合 α} {V V' : 集合 (β × β)} (hS : S' subseteq S) (hV : V subseteq V')
-  证明: fun _uv h x hx => hV (h x <| hS hx)
+--- 原说明 ---
+`UniformOnFun.gen` is antitone in the first argument and monotone in the second.
 -/
-protected theorem gen_mono {𝔖} {S S' : Set α} {V V' : Set (β × β)} (hS : S' subseteq S) (hV : V subseteq V') :
-    UniformOnFun.gen 𝔖 S V subseteq UniformOnFun.gen 𝔖 S' V' := fun _uv h x hx => hV (h x <| hS hx)
+protected theorem gen_mono {𝔖} {S S' : Set α} {V V' : Set (β × β)} (hS : S' ⊆ S) (hV : V ⊆ V') :
+    UniformOnFun.gen 𝔖 S V ⊆ UniformOnFun.gen 𝔖 S' V' := fun _uv h x hx => hV (h x <| hS hx)
 
-/--
-theorem `isBasis_gen` / 定理 `isBasis_gen`
+/-- If `𝔖 : Set (Set α)` is nonempty and directed and `𝓑` is a filter basis on `β × β`, then the
+family `UniformOnFun.gen 𝔖 S V` for `S ∈ 𝔖` and `V ∈ 𝓑` is a filter basis on
+`(α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] β)`.
+We will show in `has_basis_uniformity_of_basis` that, if `𝓑` is a basis for `𝓤 β`, then the
+corresponding filter is the uniformity of `α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.isBasis_gen** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (𝔖 : Set (Set α)),   𝔖.Nonempty →     Dire
+ctedOn (fun x1 x2 => x1 ⊆ x2) 𝔖 →       ∀ (𝓑 : FilterBasis (β × β)), Filter.IsBa
+sis (fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ 𝓑) fun SV => UniformOnFun.gen 𝔖 SV.1 SV.2
+参数：𝔖 : Set (Set α)；fun x1 x2 => x1 ⊆ x2；𝓑 : FilterBasis (β × β)；fun SV => SV.1 ∈
+ 𝔖 ∧ SV.2 ∈ 𝓑。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.prod`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set 
+β}, s.Nonempty → t.Nonempty → (s ×ˢ t).Nonempty
+· 使用定理 `FilterBasis.nonempty`：∀ {α : Type u_6} (self : FilterBasis α), self.sets
+.Nonempty
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `FilterBasis.inter_sets`：∀ {α : Type u_6} (self : FilterBasis α) {x y : S
+et α}, x ∈ self.sets → y ∈ self.sets → ∃ z ∈ self.sets, z ⊆ x ∩ y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem isBasis_gen
-  statement: (𝔖 : Set (Set α)) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
-  proof: ⟨h.prod 𝓑.nonempty, fun {U₁V₁ U₂V₂} h₁ h₂ =>
-    let ⟨U₃, hU₃, hU₁₃, hU₂₃⟩ := h' U₁V₁.1 h₁.1 U₂V₂.1 h₂.1
-    let ⟨V₃, hV₃, hV₁₂₃⟩ := 𝓑.inter_sets h₁.2 h₂.2
-    ⟨⟨U₃, V₃⟩,
-      ⟨⟨hU₃, hV₃⟩, fun _ H =>
-        ⟨fun x hx => (hV₁₂₃ <| H x <| hU₁₃ hx).1, fun x hx => (hV₁₂₃ <| H x <| hU₂₃ hx).2⟩⟩⟩⟩
-
-中文:
-定理 isBasis_gen
-  结论: (𝔖 : 集合 (集合 α)) (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
-  证明: ⟨h.prod 𝓑.nonempty, fun {U₁V₁ U₂V₂} h₁ h₂ =>
-    let ⟨U₃, hU₃, hU₁₃, hU₂₃⟩ := h' U₁V₁.1 h₁.1 U₂V₂.1 h₂.1
-    let ⟨V₃, hV₃, hV₁₂₃⟩ := 𝓑.inter_sets h₁.2 h₂.2
-    ⟨⟨U₃, V₃⟩,
-      ⟨⟨hU₃, hV₃⟩, fun _ H =>
-        ⟨fun x hx => (hV₁₂₃ <| H x <| hU₁₃ hx).1, fun x hx => (hV₁₂₃ <| H x <| hU₂₃ hx).2⟩⟩⟩⟩
+--- 原说明 ---
+If `𝔖 : Set (Set α)` is nonempty and directed and `𝓑` is a filter basis on `β × 
+β`, then the
+family `UniformOnFun.gen 𝔖 S V` for `S ∈ 𝔖` and `V ∈ 𝓑` is a filter basis on
+`(α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] β)`.
+We will show in `has_basis_uniformity_of_basis` that, if `𝓑` is a basis for `𝓤 β
+`, then the
+corresponding filter is the uniformity of `α →ᵤ[𝔖] β`.
 -/
-protected theorem isBasis_gen (𝔖 : Set (Set α)) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
+protected theorem isBasis_gen (𝔖 : Set (Set α)) (h : 𝔖.Nonempty) (h' : DirectedOn (· ⊆ ·) 𝔖)
     (𝓑 : FilterBasis <| β × β) :
-    IsBasis (fun SV : Set α × Set (β × β) => SV.1 in 𝔖 ∧ SV.2 in 𝓑) fun SV =>
+    IsBasis (fun SV : Set α × Set (β × β) => SV.1 ∈ 𝔖 ∧ SV.2 ∈ 𝓑) fun SV =>
       UniformOnFun.gen 𝔖 SV.1 SV.2 :=
   ⟨h.prod 𝓑.nonempty, fun {U₁V₁ U₂V₂} h₁ h₂ =>
     let ⟨U₃, hU₃, hU₁₃, hU₂₃⟩ := h' U₁V₁.1 h₁.1 U₂V₂.1 h₂.1
@@ -1477,123 +1439,112 @@ protected theorem isBasis_gen (𝔖 : Set (Set α)) (h : 𝔖.Nonempty) (h' : Di
 
 variable (α β) [UniformSpace β] (𝔖 : Set (Set α))
 
-/--
-Instance `uniformSpace` / 实例 `uniformSpace`
+/-- Uniform structure of `𝔖`-convergence, i.e uniform convergence on the elements of `𝔖`,
+declared as an instance on `α →ᵤ[𝔖] β`. It is defined as the infimum, for `S ∈ 𝔖`, of the pullback
+by `S.domRestrict`, the map of restriction to `S`, of the uniform structure `𝒰(s, β, uβ)` on
+`↥S →ᵤ β`. We will denote it `𝒱(α, β, 𝔖, uβ)`, where `uβ` is the uniform structure on `β`. -/
+/-
+**UniformOnFun.uniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `UniformOnFun`。
+形式化陈述：uniformSpace : UniformSpace (α ->ᵤ[𝔖] β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance uniformSpace
-  signature: : UniformSpace (α ->ᵤ[𝔖] β)
-  body: ⨅ (s : Set α) (_ : s in 𝔖),
-    .comap (UniformFun.ofFun ∘ s.domRestrict ∘ UniformOnFun.toFun 𝔖) 𝒰(s, β, _)
-
-local notation "𝒱(" α ", " β ", " 𝔖 ", " u ")" => @UniformOnFun.uniformSpace α β u 𝔖
-
-中文:
-实例 uniformSpace
-  签名: : 一致空间 (α ->ᵤ[𝔖] β)
-  定义体: ⨅ (s : Set α) (_ : s in 𝔖),
-    .comap (UniformFun.ofFun ∘ s.domRestrict ∘ UniformOnFun.toFun 𝔖) 𝒰(s, β, _)
-
-local notation "𝒱(" α ", " β ", " 𝔖 ", " u ")" => @UniformOnFun.uniformSpace α β u 𝔖
-
-Depends on / 依赖: UniformFun, UniformFun.ofFun, UniformOnFun, UniformOnFun.toFun, domRestrict, s.domRestrict
+--- 原说明 ---
+Uniform structure of `𝔖`-convergence, i.e uniform convergence on the elements of
+ `𝔖`,
+declared as an instance on `α →ᵤ[𝔖] β`. It is defined as the infimum, for `S ∈ 𝔖
+`, of the pullback
+by `S.domRestrict`, the map of restriction to `S`, of the uniform structure `𝒰(s
+, β, uβ)` on
+`↥S →ᵤ β`. We will denote it `𝒱(α, β, 𝔖, uβ)`, where `uβ` is the uniform structu
+re on `β`.
 -/
-instance uniformSpace : UniformSpace (α ->ᵤ[𝔖] β) :=
-  ⨅ (s : Set α) (_ : s in 𝔖),
+instance uniformSpace : UniformSpace (α →ᵤ[𝔖] β) :=
+  ⨅ (s : Set α) (_ : s ∈ 𝔖),
     .comap (UniformFun.ofFun ∘ s.domRestrict ∘ UniformOnFun.toFun 𝔖) 𝒰(s, β, _)
 
 local notation "𝒱(" α ", " β ", " 𝔖 ", " u ")" => @UniformOnFun.uniformSpace α β u 𝔖
 
-/--
-Instance `topologicalSpace` / 实例 `topologicalSpace`
-
-English:
-instance topologicalSpace
-  signature: : TopologicalSpace (α ->ᵤ[𝔖] β)
-  body: 𝒱(α, β, 𝔖, _).toTopologicalSpace
-
-中文:
-实例 topologicalSpace
-  签名: : 拓扑空间 (α ->ᵤ[𝔖] β)
-  定义体: 𝒱(α, β, 𝔖, _).toTopologicalSpace
-
-Depends on / 依赖: toTopologicalSpace
+/-- Topology of `𝔖`-convergence, i.e uniform convergence on the elements of `𝔖`, declared as an
+/-
+**UniformOnFun.on** 是 Mathlib 中的一个实例，位于命名空间 `UniformOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance topologicalSpace : TopologicalSpace (α ->ᵤ[𝔖] β) :=
+instance on `α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.topologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `UniformOnFun`。
+形式化陈述：topologicalSpace : TopologicalSpace (α ->ᵤ[𝔖] β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Topology of `𝔖`-convergence, i.e uniform convergence on the elements of `𝔖`, dec
+lared as an
+instance on `α →ᵤ[𝔖] β`.
+-/
+instance topologicalSpace : TopologicalSpace (α →ᵤ[𝔖] β) :=
   𝒱(α, β, 𝔖, _).toTopologicalSpace
 
-/--
-theorem `topologicalSpace_eq` / 定理 `topologicalSpace_eq`
+/-- The topology of `𝔖`-convergence is the infimum, for `S ∈ 𝔖`, of topology induced by the map
+of `S.domRestrict : (α →ᵤ[𝔖] β) → (↥S →ᵤ β)` of restriction to `S`, where `↥S →ᵤ β` is endowed with
+the topology of uniform convergence. -/
+/-
+**UniformOnFun.topologicalSpace_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)),
+   UniformOnFun.topologicalSpace α β 𝔖 =     ⨅ s ∈ 𝔖,       TopologicalSpace.ind
+uced (⇑UniformFun.ofFun ∘ s.domRestrict ∘ ⇑(UniformOnFun.toFun 𝔖))         (Unif
+ormFun.topologicalSpace (↑s) β)
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；⇑UniformFun.ofFun ∘ s.domRestrict ∘
+ ⇑(UniformOnFun.toFun 𝔖)；UniformFun.topologicalSpace (↑s) β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformSpace.toTopologicalSpace_iInf`：toTopologicalSpace_iInf {ι : Sort*
+} {u : ι -> UniformSpace α} : (iInf u).toTopologicalSpace = ⨅ i, (u i).toTopolog
+icalSpace
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem topologicalSpace_eq
-  proof: by
-  simp only [UniformOnFun.topologicalSpace, UniformSpace.toTopologicalSpace_iInf]
-  rfl
-
-中文:
-定理 topologicalSpace_eq
-  证明: by
-  simp only [UniformOnFun.topologicalSpace, UniformSpace.toTopologicalSpace_iInf]
-  rfl
+--- 原说明 ---
+The topology of `𝔖`-convergence is the infimum, for `S ∈ 𝔖`, of topology induced
+ by the map
+of `S.domRestrict : (α →ᵤ[𝔖] β) → (↥S →ᵤ β)` of restriction to `S`, where `↥S →ᵤ
+ β` is endowed with
+the topology of uniform convergence.
 -/
 protected theorem topologicalSpace_eq :
     UniformOnFun.topologicalSpace α β 𝔖 =
-      ⨅ (s : Set α) (_ : s in 𝔖), TopologicalSpace.induced
+      ⨅ (s : Set α) (_ : s ∈ 𝔖), TopologicalSpace.induced
         (UniformFun.ofFun ∘ s.domRestrict ∘ toFun 𝔖) (UniformFun.topologicalSpace s β) := by
   simp only [UniformOnFun.topologicalSpace, UniformSpace.toTopologicalSpace_iInf]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasBasis_uniformity_of_basis_aux₁` / 定理 `hasBasis_uniformity_of_basis_aux₁`
-
-English:
-theorem hasBasis_uniformity_of_basis_aux₁
-  statement: {p : ι -> Prop} {s : ι -> Set (β × β)}
-  proof: by
-  simp_rw [UniformOnFun.gen_eq_preimage_restrict, uniformity_comap]
-  exact (UniformFun.hasBasis_uniformity_of_basis S β hb).comap _
-
-中文:
-定理 hasBasis_uniformity_of_basis_aux₁
-  结论: {p : ι -> 命题} {s : ι -> 集合 (β × β)}
-  证明: by
-  simp_rw [UniformOnFun.gen_eq_preimage_restrict, uniformity_comap]
-  exact (UniformFun.hasBasis_uniformity_of_basis S β hb).comap _
+/-
+**UniformOnFun.hasBasis_uniformity_of_basis_aux** 是 Mathlib 中的一个定理，位于命名空间 `Unifo
+rmOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem hasBasis_uniformity_of_basis_aux₁ {p : ι -> Prop} {s : ι -> Set (β × β)}
+protected theorem hasBasis_uniformity_of_basis_aux₁ {p : ι → Prop} {s : ι → Set (β × β)}
     (hb : HasBasis (𝓤 β) p s) (S : Set α) :
-    (@uniformity (α ->ᵤ[𝔖] β) ((UniformFun.uniformSpace S β).comap S.domRestrict)).HasBasis p
+    (@uniformity (α →ᵤ[𝔖] β) ((UniformFun.uniformSpace S β).comap S.domRestrict)).HasBasis p
       fun i =>
       UniformOnFun.gen 𝔖 S (s i) := by
   simp_rw [UniformOnFun.gen_eq_preimage_restrict, uniformity_comap]
   exact (UniformFun.hasBasis_uniformity_of_basis S β hb).comap _
-
-/--
-theorem `hasBasis_uniformity_of_basis_aux₂` / 定理 `hasBasis_uniformity_of_basis_aux₂`
-
-English:
-theorem hasBasis_uniformity_of_basis_aux₂
-  statement: (h : DirectedOn (· subseteq ·) 𝔖) {p : ι -> Prop}
-  proof: h.mono fun _ _ hst =>
-    ((UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb _).le_basis_iff
-          (UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb _)).mpr
-      fun V hV => ⟨V, hV, UniformOnFun.gen_mono hst subset_rfl⟩
-
-中文:
-定理 hasBasis_uniformity_of_basis_aux₂
-  结论: (h : DirectedOn (· subseteq ·) 𝔖) {p : ι -> 命题}
-  证明: h.mono fun _ _ hst =>
-    ((UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb _).le_basis_iff
-          (UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb _)).mpr
-      fun V hV => ⟨V, hV, UniformOnFun.gen_mono hst subset_rfl⟩
+/-
+**UniformOnFun.hasBasis_uniformity_of_basis_aux** 是 Mathlib 中的一个定理，位于命名空间 `Unifo
+rmOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem hasBasis_uniformity_of_basis_aux₂ (h : DirectedOn (· subseteq ·) 𝔖) {p : ι -> Prop}
-    {s : ι -> Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
+protected theorem hasBasis_uniformity_of_basis_aux₂ (h : DirectedOn (· ⊆ ·) 𝔖) {p : ι → Prop}
+    {s : ι → Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
     DirectedOn
       ((fun s : Set α =>
-        (UniformFun.uniformSpace s β).comap (s.domRestrict : (α ->ᵤ β) -> s ->ᵤ β)) ⁻¹'o
+        (UniformFun.uniformSpace s β).comap (s.domRestrict : (α →ᵤ β) → s →ᵤ β)) ⁻¹'o
         GE.ge)
       𝔖 :=
   h.mono fun _ _ hst =>
@@ -1601,32 +1552,49 @@ protected theorem hasBasis_uniformity_of_basis_aux₂ (h : DirectedOn (· subset
           (UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb _)).mpr
       fun V hV => ⟨V, hV, UniformOnFun.gen_mono hst subset_rfl⟩
 
-/--
-theorem `hasBasis_uniformity_of_basis` / 定理 `hasBasis_uniformity_of_basis`
+/-- If `𝔖 : Set (Set α)` is nonempty and directed and `𝓑` is a filter basis of `𝓤 β`, then the
+uniformity of `α →ᵤ[𝔖] β` admits the family `{(f, g) | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and
+`V ∈ 𝓑` as a filter basis. -/
+/-
+**UniformOnFun.hasBasis_uniformity_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformOn
+Fun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 
+: Set (Set α)),   𝔖.Nonempty →     DirectedOn (fun x1 x2 => x1 ⊆ x2) 𝔖 →       ∀
+ {p : ι → Prop} {s : ι → Set (β × β)},         (uniformity β).HasBasis p s →    
+       (uniformity (UniformOnFun α β 𝔖)).HasBasis (fun Si => Si.1 ∈ 𝔖 ∧ p Si.2) 
+fun Si =>             UniformOnFun.gen 𝔖 Si.1 (s Si.2)
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；fun x1 x2 => x1 ⊆ x2；β × β；uniformi
+ty β；uniformity (UniformOnFun α β 𝔖)；fun Si => Si.1 ∈ 𝔖 ∧ p Si.2；s Si.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_uniformity`：iInf_uniformity {ι : Sort*} {u : ι -> UniformSpace α} :
+ 𝓤[iInf u] = ⨅ i, 𝓤[u i]
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.hasBasis_biInf_of_directed`：hasBasis_biInf_of_directed {ι : Type*
+} {ι' : Sort _} {dom : Set ι} (hdom : dom.Nonempty) {l : ι -> Filter α} (s : ι -
+> ι' -> Set α) (p : ι -…
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_basis_aux₁`：∀ (α : Type u_1) (β : Ty
+pe u_2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)) {p : ι → Prop} 
+  {s : ι → Set (β × β)},   (uniformi…
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_basis_aux₂`：∀ (α : Type u_1) (β : Ty
+pe u_2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)),   DirectedOn (
+fun x1 x2 => x1 ⊆ x2) 𝔖 →     ∀ {p :…
 
-English:
-theorem hasBasis_uniformity_of_basis
-  statement: (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
-  proof: by
-  simp only [iInf_uniformity]
-  exact
-    hasBasis_biInf_of_directed h (fun S => UniformOnFun.gen 𝔖 S ∘ s) _
-      (fun S _hS => UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb S)
-      (UniformOnFun.hasBasis_uniformity_of_basis_aux₂ α β 𝔖 h' hb)
-
-中文:
-定理 hasBasis_uniformity_of_basis
-  结论: (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
-  证明: by
-  simp only [iInf_uniformity]
-  exact
-    hasBasis_biInf_of_directed h (fun S => UniformOnFun.gen 𝔖 S ∘ s) _
-      (fun S _hS => UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb S)
-      (UniformOnFun.hasBasis_uniformity_of_basis_aux₂ α β 𝔖 h' hb)
+--- 原说明 ---
+If `𝔖 : Set (Set α)` is nonempty and directed and `𝓑` is a filter basis of `𝓤 β`
+, then the
+uniformity of `α →ᵤ[𝔖] β` admits the family `{(f, g) | ∀ x ∈ S, (f x, g x) ∈ V}`
+ for `S ∈ 𝔖` and
+`V ∈ 𝓑` as a filter basis.
 -/
-protected theorem hasBasis_uniformity_of_basis (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
-    {p : ι -> Prop} {s : ι -> Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
-    (𝓤 (α ->ᵤ[𝔖] β)).HasBasis (fun Si : Set α × ι => Si.1 in 𝔖 ∧ p Si.2) fun Si =>
+protected theorem hasBasis_uniformity_of_basis (h : 𝔖.Nonempty) (h' : DirectedOn (· ⊆ ·) 𝔖)
+    {p : ι → Prop} {s : ι → Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
+    (𝓤 (α →ᵤ[𝔖] β)).HasBasis (fun Si : Set α × ι => Si.1 ∈ 𝔖 ∧ p Si.2) fun Si =>
       UniformOnFun.gen 𝔖 Si.1 (s Si.2) := by
   simp only [iInf_uniformity]
   exact
@@ -1634,706 +1602,899 @@ protected theorem hasBasis_uniformity_of_basis (h : 𝔖.Nonempty) (h' : Directe
       (fun S _hS => UniformOnFun.hasBasis_uniformity_of_basis_aux₁ α β 𝔖 hb S)
       (UniformOnFun.hasBasis_uniformity_of_basis_aux₂ α β 𝔖 h' hb)
 
-/--
-theorem `hasBasis_uniformity` / 定理 `hasBasis_uniformity`
+/-- If `𝔖 : Set (Set α)` is nonempty and directed, then the uniformity of `α →ᵤ[𝔖] β` admits the
+family `{(f, g) | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓤 β` as a filter basis. -/
+/-
+**UniformOnFun.hasBasis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)),
+   𝔖.Nonempty →     DirectedOn (fun x1 x2 => x1 ⊆ x2) 𝔖 →       (uniformity (Uni
+formOnFun α β 𝔖)).HasBasis (fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ uniformity β) fun SV => 
+        UniformOnFun.gen 𝔖 SV.1 SV.2
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；fun x1 x2 => x1 ⊆ x2；uniformity (Un
+iformOnFun α β 𝔖)；fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ uniformity β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_
+2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)),   𝔖.Nonempty →     
+DirectedOn (fun x1 x2 => x1 ⊆ x…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-English:
-theorem hasBasis_uniformity
-  given: (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
-  proof: UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' (𝓤 β).basis_sets
-
-中文:
-定理 hasBasis_uniformity
-  条件: (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
-  证明: UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' (𝓤 β).basis_sets
+--- 原说明 ---
+If `𝔖 : Set (Set α)` is nonempty and directed, then the uniformity of `α →ᵤ[𝔖] β
+` admits the
+family `{(f, g) | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓤 β` as a filte
+r basis.
 -/
-protected theorem hasBasis_uniformity (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖) :
-    (𝓤 (α ->ᵤ[𝔖] β)).HasBasis (fun SV : Set α × Set (β × β) => SV.1 in 𝔖 ∧ SV.2 in 𝓤 β) fun SV =>
+protected theorem hasBasis_uniformity (h : 𝔖.Nonempty) (h' : DirectedOn (· ⊆ ·) 𝔖) :
+    (𝓤 (α →ᵤ[𝔖] β)).HasBasis (fun SV : Set α × Set (β × β) => SV.1 ∈ 𝔖 ∧ SV.2 ∈ 𝓤 β) fun SV =>
       UniformOnFun.gen 𝔖 SV.1 SV.2 :=
   UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' (𝓤 β).basis_sets
 
 variable {α β}
 
-/--
-theorem `hasBasis_uniformity_of_covering_of_basis` / 定理 `hasBasis_uniformity_of_covering_of_basis`
+/-- Let `t i` be a nonempty directed subfamily of `𝔖`
+such that every `s ∈ 𝔖` is included in some `t i`.
+Let `V` bounded by `p` be a basis of entourages of `β`.
 
-English:
-theorem hasBasis_uniformity_of_covering_of_basis
-  statement: {ι ι' : Type*} [Nonempty ι]
-  proof: by
-  have hne : 𝔖.Nonempty := (range_nonempty t).mono (range_subset_iff.2 ht)
-  have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
-    rcases hex s₁ hs₁, hex s₂ hs₂ with ⟨⟨i₁, his₁⟩, i₂, his₂⟩
-    rcases hdir i₁ i₂ with ⟨i, hi₁, hi₂⟩
-    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂⟩
-  refine (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 hne hd hb).to_hasBasis
-    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ => ?_) fun ⟨i, i'⟩ hi' => ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
-  rcases hex s hs with ⟨i, hi⟩
-  exact ⟨(i, i'), hi', UniformOnFun.gen_mono hi Subset.rfl⟩
+Then `UniformOnFun.gen 𝔖 (t i) (V j)` bounded by `p j` is a basis of entourages of `α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.hasBasis_uniformity_of_covering_of_basis** 是 Mathlib 中的一个定理，位于命名空
+间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+{ι : Type u_5} {ι' : Type u_6} [Nonempty ι]   {t : ι → Set α} {p : ι' → Prop} {V
+ : ι' → Set (β × β)},   (∀ (i : ι), t i ∈ 𝔖) →     Directed (fun x1 x2 => x1 ⊆ x
+2) t →       (∀ s ∈ 𝔖, ∃ i, s ⊆ t i) →         (uniformity β).HasBasis p V →    
+       (uniformity (UniformOnFun α β 𝔖)).HasBasis (fun i => p i.2) fun i => Unif
+ormOnFun.gen 𝔖 (t i.1) (V i.2)
+参数：𝔖 : Set (Set α)；β × β；∀ (i : ι), t i ∈ 𝔖；fun x1 x2 => x1 ⊆ x2；∀ s ∈ 𝔖, ∃ i, s
+ ⊆ t i；uniformity β；uniformity (UniformOnFun α β 𝔖)；fun i => p i.2；t i.1；V i.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Set.range_nonempty`：range_nonempty [h : Nonempty ι] (f : ι -> α) : (rang
+e f).Nonempty
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_
+2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)),   𝔖.Nonempty →     
+DirectedOn (fun x1 x2 => x1 ⊆ x…
+· 使用定理 `UniformOnFun.gen_mono`：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)}
+ {S S' : Set α} {V V' : Set (β × β)},   S' ⊆ S → V ⊆ V' → UniformOnFun.gen 𝔖 S V
+ ⊆ UniformO…
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 
-中文:
-定理 hasBasis_uniformity_of_covering_of_basis
-  结论: {ι ι' : 类型} [非空 ι]
-  证明: by
-  have hne : 𝔖.Nonempty := (range_nonempty t).mono (range_subset_iff.2 ht)
-  have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
-    rcases hex s₁ hs₁, hex s₂ hs₂ with ⟨⟨i₁, his₁⟩, i₂, his₂⟩
-    rcases hdir i₁ i₂ with ⟨i, hi₁, hi₂⟩
-    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂⟩
-  refine (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 hne hd hb).to_hasBasis
-    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ => ?_) fun ⟨i, i'⟩ hi' => ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
-  rcases hex s hs with ⟨i, hi⟩
-  exact ⟨(i, i'), hi', UniformOnFun.gen_mono hi Subset.rfl⟩
+--- 原说明 ---
+Let `t i` be a nonempty directed subfamily of `𝔖`
+such that every `s ∈ 𝔖` is included in some `t i`.
+Let `V` bounded by `p` be a basis of entourages of `β`.
+
+Then `UniformOnFun.gen 𝔖 (t i) (V j)` bounded by `p j` is a basis of entourages 
+of `α →ᵤ[𝔖] β`.
 -/
 protected theorem hasBasis_uniformity_of_covering_of_basis {ι ι' : Type*} [Nonempty ι]
-    {t : ι -> Set α} {p : ι' -> Prop} {V : ι' -> Set (β × β)} (ht : forall i, t i in 𝔖)
-    (hdir : Directed (· subseteq ·) t) (hex : forall s in 𝔖, exists i, s subseteq t i) (hb : HasBasis (𝓤 β) p V) :
-    (𝓤 (α ->ᵤ[𝔖] β)).HasBasis (fun i : ι × ι' => p i.2) fun i =>
+    {t : ι → Set α} {p : ι' → Prop} {V : ι' → Set (β × β)} (ht : ∀ i, t i ∈ 𝔖)
+    (hdir : Directed (· ⊆ ·) t) (hex : ∀ s ∈ 𝔖, ∃ i, s ⊆ t i) (hb : HasBasis (𝓤 β) p V) :
+    (𝓤 (α →ᵤ[𝔖] β)).HasBasis (fun i : ι × ι' ↦ p i.2) fun i ↦
       UniformOnFun.gen 𝔖 (t i.1) (V i.2) := by
   have hne : 𝔖.Nonempty := (range_nonempty t).mono (range_subset_iff.2 ht)
-  have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
+  have hd : DirectedOn (· ⊆ ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ ↦ by
     rcases hex s₁ hs₁, hex s₂ hs₂ with ⟨⟨i₁, his₁⟩, i₂, his₂⟩
     rcases hdir i₁ i₂ with ⟨i, hi₁, hi₂⟩
     exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂⟩
   refine (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 hne hd hb).to_hasBasis
-    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ => ?_) fun ⟨i, i'⟩ hi' => ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
+    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ ↦ ?_) fun ⟨i, i'⟩ hi' ↦ ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
   rcases hex s hs with ⟨i, hi⟩
   exact ⟨(i, i'), hi', UniformOnFun.gen_mono hi Subset.rfl⟩
 
-/--
-theorem `hasAntitoneBasis_uniformity` / 定理 `hasAntitoneBasis_uniformity`
+/-- If `t n` is a monotone sequence of sets in `𝔖`
+such that each `s ∈ 𝔖` is included in some `t n`
+and `V n` is an antitone basis of entourages of `β`,
+then `UniformOnFun.gen 𝔖 (t n) (V n)` is an antitone basis of entourages of `α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.hasAntitoneBasis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnF
+un`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+{ι : Type u_5} [inst_1 : Preorder ι]   [IsDirectedOrder ι] {t : ι → Set α} {V : 
+ι → Set (β × β)},   (∀ (n : ι), t n ∈ 𝔖) →     Monotone t →       (∀ s ∈ 𝔖, ∃ n,
+ s ⊆ t n) →         (uniformity β).HasAntitoneBasis V →           (uniformity (U
+niformOnFun α β 𝔖)).HasAntitoneBasis fun n => UniformOnFun.gen 𝔖 (t n) (V n)
+参数：𝔖 : Set (Set α)；β × β；∀ (n : ι), t n ∈ 𝔖；∀ s ∈ 𝔖, ∃ n, s ⊆ t n；uniformity β；u
+niformity (UniformOnFun α β 𝔖)；t n；V n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.nonempty`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α}
+ {p : ι → Prop} {s : ι → Set α}, l.HasBasis p s → Nonempty ι
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_covering_of_basis`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : UniformSpace β] (𝔖 : Set (Set α)) {ι : Type u_5} {ι' : Ty
+pe u_6} [Nonempty ι]   {t : ι → Set α} {p :…
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `directed_of`：directed_of (r : α -> α -> Prop) [IsDirected α r] (a b : α)
+ : exists c, r a c ∧ r b c
+· 使用定理 `trivial`：True
+· 使用定理 `UniformOnFun.gen_mono`：∀ {α : Type u_1} {β : Type u_2} {𝔖 : Set (Set α)}
+ {S S' : Set α} {V V' : Set (β × β)},   S' ⊆ S → V ⊆ V' → UniformOnFun.gen 𝔖 S V
+ ⊆ UniformO…
+· 使用定理 `Filter.HasAntitoneBasis.antitone`：∀ {α : Type u_1} {ι'' : Type u_6} [ins
+t : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → Ant
+itone s
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 
-English:
-theorem hasAntitoneBasis_uniformity
-  statement: {ι : Type*} [Preorder ι] [IsDirectedOrder ι]
-  proof: by
-  have := hb.nonempty
-  refine ⟨(UniformOnFun.hasBasis_uniformity_of_covering_of_basis 𝔖
-    ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ => ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
-  · rintro ⟨k, l⟩ -
-    rcases directed_of (· <= ·) k l with ⟨n, hkn, hln⟩
-    exact ⟨n, trivial, UniformOnFun.gen_mono (hmono hkn) (hb.2 <| hln)⟩
-  · exact fun k l h => UniformOnFun.gen_mono (hmono h) (hb.2 h)
-
-中文:
-定理 hasAntitoneBasis_uniformity
-  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
-  证明: by
-  have := hb.nonempty
-  refine ⟨(UniformOnFun.hasBasis_uniformity_of_covering_of_basis 𝔖
-    ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ => ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
-  · rintro ⟨k, l⟩ -
-    rcases directed_of (· <= ·) k l with ⟨n, hkn, hln⟩
-    exact ⟨n, trivial, UniformOnFun.gen_mono (hmono hkn) (hb.2 <| hln)⟩
-  · exact fun k l h => UniformOnFun.gen_mono (hmono h) (hb.2 h)
+--- 原说明 ---
+If `t n` is a monotone sequence of sets in `𝔖`
+such that each `s ∈ 𝔖` is included in some `t n`
+and `V n` is an antitone basis of entourages of `β`,
+then `UniformOnFun.gen 𝔖 (t n) (V n)` is an antitone basis of entourages of `α →
+ᵤ[𝔖] β`.
 -/
 protected theorem hasAntitoneBasis_uniformity {ι : Type*} [Preorder ι] [IsDirectedOrder ι]
-    {t : ι -> Set α} {V : ι -> Set (β × β)}
-    (ht : forall n, t n in 𝔖) (hmono : Monotone t) (hex : forall s in 𝔖, exists n, s subseteq t n)
+    {t : ι → Set α} {V : ι → Set (β × β)}
+    (ht : ∀ n, t n ∈ 𝔖) (hmono : Monotone t) (hex : ∀ s ∈ 𝔖, ∃ n, s ⊆ t n)
     (hb : HasAntitoneBasis (𝓤 β) V) :
-    (𝓤 (α ->ᵤ[𝔖] β)).HasAntitoneBasis fun n => UniformOnFun.gen 𝔖 (t n) (V n) := by
+    (𝓤 (α →ᵤ[𝔖] β)).HasAntitoneBasis fun n ↦ UniformOnFun.gen 𝔖 (t n) (V n) := by
   have := hb.nonempty
   refine ⟨(UniformOnFun.hasBasis_uniformity_of_covering_of_basis 𝔖
-    ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ => ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
+    ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ ↦ ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
   · rintro ⟨k, l⟩ -
-    rcases directed_of (· <= ·) k l with ⟨n, hkn, hln⟩
+    rcases directed_of (· ≤ ·) k l with ⟨n, hkn, hln⟩
     exact ⟨n, trivial, UniformOnFun.gen_mono (hmono hkn) (hb.2 <| hln)⟩
-  · exact fun k l h => UniformOnFun.gen_mono (hmono h) (hb.2 h)
-
-/--
-theorem `isCountablyGenerated_uniformity` / 定理 `isCountablyGenerated_uniformity`
-
-English:
-theorem isCountablyGenerated_uniformity
-  statement: [IsCountablyGenerated (𝓤 β)] {t : Nat -> Set α}
-  proof: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
-  (UniformOnFun.hasAntitoneBasis_uniformity 𝔖 ht hmono hex hV).isCountablyGenerated
-
-中文:
-定理 isCountablyGenerated_uniformity
-  结论: [是余untablyGenerated (𝓤 β)] {t : 自然数 -> 集合 α}
-  证明: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
-  (UniformOnFun.hasAntitoneBasis_uniformity 𝔖 ht hmono hex hV).isCountablyGenerated
+  · exact fun k l h ↦ UniformOnFun.gen_mono (hmono h) (hb.2 h)
+/-
+**UniformOnFun.isCountablyGenerated_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `Unifor
+mOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+[(uniformity β).IsCountablyGenerated]   {t : ℕ → Set α},   (∀ (n : ℕ), t n ∈ 𝔖) 
+→ Monotone t → (∀ s ∈ 𝔖, ∃ n, s ⊆ t n) → (uniformity (UniformOnFun α β 𝔖)).IsCou
+ntablyGenerated
+参数：𝔖 : Set (Set α)；uniformity β；∀ (n : ℕ), t n ∈ 𝔖；∀ s ∈ 𝔖, ∃ n, s ⊆ t n；uniform
+ity (UniformOnFun α β 𝔖)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Type u_4} [C
+ountable ι] {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasBasis p s → f.
+IsCountablyGenerated
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `UniformOnFun.hasAntitoneBasis_uniformity`：∀ {α : Type u_1} {β : Type u_2
+} [inst : UniformSpace β] (𝔖 : Set (Set α)) {ι : Type u_5} [inst_1 : Preorder ι]
+   [IsDirectedOrder ι] {t : ι …
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
 -/
-protected theorem isCountablyGenerated_uniformity [IsCountablyGenerated (𝓤 β)] {t : Nat -> Set α}
-    (ht : forall n, t n in 𝔖) (hmono : Monotone t) (hex : forall s in 𝔖, exists n, s subseteq t n) :
-    IsCountablyGenerated (𝓤 (α ->ᵤ[𝔖] β)) :=
+protected theorem isCountablyGenerated_uniformity [IsCountablyGenerated (𝓤 β)] {t : ℕ → Set α}
+    (ht : ∀ n, t n ∈ 𝔖) (hmono : Monotone t) (hex : ∀ s ∈ 𝔖, ∃ n, s ⊆ t n) :
+    IsCountablyGenerated (𝓤 (α →ᵤ[𝔖] β)) :=
   let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
   (UniformOnFun.hasAntitoneBasis_uniformity 𝔖 ht hmono hex hV).isCountablyGenerated
 
 variable (α β)
 
-/--
-theorem `hasBasis_nhds_of_basis` / 定理 `hasBasis_nhds_of_basis`
+/-- For `f : α →ᵤ[𝔖] β`, where `𝔖 : Set (Set α)` is nonempty and directed, `𝓝 f` admits the
+family `{g | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓑` as a filter basis, for any basis
+`𝓑` of `𝓤 β`. -/
+/-
+**UniformOnFun.hasBasis_nhds_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 
+: Set (Set α)) (f : UniformOnFun α β 𝔖),   𝔖.Nonempty →     DirectedOn (fun x1 x
+2 => x1 ⊆ x2) 𝔖 →       ∀ {p : ι → Prop} {s : ι → Set (β × β)},         (uniform
+ity β).HasBasis p s →           (nhds f).HasBasis (fun Si => Si.1 ∈ 𝔖 ∧ p Si.2) 
+fun Si => {g | (g, f) ∈ UniformOnFun.gen 𝔖 Si.1 (s Si.2)}
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；f : UniformOnFun α β 𝔖；fun x1 x2 =>
+ x1 ⊆ x2；β × β；uniformity β；nhds f；fun Si => Si.1 ∈ 𝔖 ∧ p Si.2；g, f；s Si.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhds_basis_uniformity`：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> S
+etRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y
+, x) in s i…
+· 使用定理 `UniformOnFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_
+2) {ι : Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)),   𝔖.Nonempty →     
+DirectedOn (fun x1 x2 => x1 ⊆ x…
 
-English:
-theorem hasBasis_nhds_of_basis
-  statement: (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty)
-  proof: letI : UniformSpace (α -> β) := UniformOnFun.uniformSpace α β 𝔖
-  nhds_basis_uniformity (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' hb)
-
-中文:
-定理 hasBasis_nhds_of_basis
-  结论: (f : α ->ᵤ[𝔖] β) (h : 𝔖.非空)
-  证明: letI : UniformSpace (α -> β) := UniformOnFun.uniformSpace α β 𝔖
-  nhds_basis_uniformity (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' hb)
+--- 原说明 ---
+For `f : α →ᵤ[𝔖] β`, where `𝔖 : Set (Set α)` is nonempty and directed, `𝓝 f` adm
+its the
+family `{g | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓑` as a filter basis
+, for any basis
+`𝓑` of `𝓤 β`.
 -/
-protected theorem hasBasis_nhds_of_basis (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty)
-    (h' : DirectedOn (· subseteq ·) 𝔖) {p : ι -> Prop} {s : ι -> Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
-    (𝓝 f).HasBasis (fun Si : Set α × ι => Si.1 in 𝔖 ∧ p Si.2) fun Si =>
-      { g | (g, f) in UniformOnFun.gen 𝔖 Si.1 (s Si.2) } :=
-  letI : UniformSpace (α -> β) := UniformOnFun.uniformSpace α β 𝔖
+protected theorem hasBasis_nhds_of_basis (f : α →ᵤ[𝔖] β) (h : 𝔖.Nonempty)
+    (h' : DirectedOn (· ⊆ ·) 𝔖) {p : ι → Prop} {s : ι → Set (β × β)} (hb : HasBasis (𝓤 β) p s) :
+    (𝓝 f).HasBasis (fun Si : Set α × ι => Si.1 ∈ 𝔖 ∧ p Si.2) fun Si =>
+      { g | (g, f) ∈ UniformOnFun.gen 𝔖 Si.1 (s Si.2) } :=
+  letI : UniformSpace (α → β) := UniformOnFun.uniformSpace α β 𝔖
   nhds_basis_uniformity (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 h h' hb)
 
-/--
-theorem `hasBasis_nhds` / 定理 `hasBasis_nhds`
+/-- For `f : α →ᵤ[𝔖] β`, where `𝔖 : Set (Set α)` is nonempty and directed, `𝓝 f` admits the
+family `{g | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓤 β` as a filter basis. -/
+/-
+**UniformOnFun.hasBasis_nhds** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+(f : UniformOnFun α β 𝔖),   𝔖.Nonempty →     DirectedOn (fun x1 x2 => x1 ⊆ x2) 𝔖
+ →       (nhds f).HasBasis (fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ uniformity β) fun SV => 
+{g | (g, f) ∈ UniformOnFun.gen 𝔖 SV.1 SV.2}
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；f : UniformOnFun α β 𝔖；fun x1 x2 =>
+ x1 ⊆ x2；nhds f；fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ uniformity β；g, f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.hasBasis_nhds_of_basis`：∀ (α : Type u_1) (β : Type u_2) {ι 
+: Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)) (f : UniformOnFun α β 𝔖), 
+  𝔖.Nonempty →     Direct…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-English:
-theorem hasBasis_nhds
-  given: (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖)
-  proof: UniformOnFun.hasBasis_nhds_of_basis α β 𝔖 f h h' (Filter.basis_sets _)
-
-中文:
-定理 hasBasis_nhds
-  条件: (f : α ->ᵤ[𝔖] β) (h : 𝔖.非空) (h' : DirectedOn (· subseteq ·) 𝔖)
-  证明: UniformOnFun.hasBasis_nhds_of_basis α β 𝔖 f h h' (Filter.basis_sets _)
+--- 原说明 ---
+For `f : α →ᵤ[𝔖] β`, where `𝔖 : Set (Set α)` is nonempty and directed, `𝓝 f` adm
+its the
+family `{g | ∀ x ∈ S, (f x, g x) ∈ V}` for `S ∈ 𝔖` and `V ∈ 𝓤 β` as a filter bas
+is.
 -/
-protected theorem hasBasis_nhds (f : α ->ᵤ[𝔖] β) (h : 𝔖.Nonempty) (h' : DirectedOn (· subseteq ·) 𝔖) :
-    (𝓝 f).HasBasis (fun SV : Set α × Set (β × β) => SV.1 in 𝔖 ∧ SV.2 in 𝓤 β) fun SV =>
-      { g | (g, f) in UniformOnFun.gen 𝔖 SV.1 SV.2 } :=
+protected theorem hasBasis_nhds (f : α →ᵤ[𝔖] β) (h : 𝔖.Nonempty) (h' : DirectedOn (· ⊆ ·) 𝔖) :
+    (𝓝 f).HasBasis (fun SV : Set α × Set (β × β) => SV.1 ∈ 𝔖 ∧ SV.2 ∈ 𝓤 β) fun SV =>
+      { g | (g, f) ∈ UniformOnFun.gen 𝔖 SV.1 SV.2 } :=
   UniformOnFun.hasBasis_nhds_of_basis α β 𝔖 f h h' (Filter.basis_sets _)
 
-/--
-theorem `uniformContinuous_restrict` / 定理 `uniformContinuous_restrict`
+/-- If `S ∈ 𝔖`, then the restriction to `S` is a uniformly continuous map from `α →ᵤ[𝔖] β` to
+`↥S →ᵤ β`. -/
+/-
+**UniformOnFun.uniformContinuous_restrict** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFu
+n`。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) {s : Set α} [inst : UniformSpace β] (𝔖 : S
+et (Set α)),   s ∈ 𝔖 → UniformContinuous (⇑UniformFun.ofFun ∘ s.domRestrict ∘ ⇑(
+UniformOnFun.toFun 𝔖))
+参数：α : Type u_1；β : Type u_2；𝔖 : Set (Set α)；⇑UniformFun.ofFun ∘ s.domRestrict ∘
+ ⇑(UniformOnFun.toFun 𝔖)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_uniformity`：iInf_uniformity {ι : Sort*} {u : ι -> UniformSpace α} :
+ 𝓤[iInf u] = ⨅ i, 𝓤[u i]
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
 
-English:
-theorem uniformContinuous_restrict
-  given: (h : s in 𝔖)
-  proof: by
-  change _ <= _
-  simp only [map_le_iff_le_comap, iInf_uniformity]
-  exact iInf₂_le s h
-
-中文:
-定理 uniformContinuous_restrict
-  条件: (h : s in 𝔖)
-  证明: by
-  change _ <= _
-  simp only [map_le_iff_le_comap, iInf_uniformity]
-  exact iInf₂_le s h
+--- 原说明 ---
+If `S ∈ 𝔖`, then the restriction to `S` is a uniformly continuous map from `α →ᵤ
+[𝔖] β` to
+`↥S →ᵤ β`.
 -/
-protected theorem uniformContinuous_restrict (h : s in 𝔖) :
-    UniformContinuous (UniformFun.ofFun ∘ (s.domRestrict : (α -> β) -> s -> β) ∘ toFun 𝔖) := by
-  change _ <= _
+protected theorem uniformContinuous_restrict (h : s ∈ 𝔖) :
+    UniformContinuous (UniformFun.ofFun ∘ (s.domRestrict : (α → β) → s → β) ∘ toFun 𝔖) := by
+  change _ ≤ _
   simp only [map_le_iff_le_comap, iInf_uniformity]
   exact iInf₂_le s h
-
-/--
-theorem `isUniformEmbedding_toFun_finite` / 定理 `isUniformEmbedding_toFun_finite`
-
-English:
-theorem isUniformEmbedding_toFun_finite
-  proof: by
-  refine ⟨⟨?_⟩, Function.injective_id⟩
-  simp_rw [Pi.uniformity, comap_iInf, comap_comap]
-  refine HasBasis.ext (HasBasis.iInf' fun i => (basis_sets _).comap _)
-    (UniformOnFun.hasBasis_uniformity α β _ ⟨∅, finite_empty⟩
-      (directedOn_of_sup_mem fun _ _ => .union))
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, ⋂ x in S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
-      fun f hf => mem_iInter₂.mpr fun x hx => mem_iInter₂.mp (hf x hx) x hx⟩⟩)
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, fun _ => U⟩, ⟨hS, fun _ _ => hU⟩, fun f hf x hx =>
-      mem_iInter₂.mp hf x hx⟩)
-
-中文:
-定理 isUniformEmbedding_toFun_finite
-  证明: by
-  refine ⟨⟨?_⟩, Function.injective_id⟩
-  simp_rw [Pi.uniformity, comap_iInf, comap_comap]
-  refine HasBasis.ext (HasBasis.iInf' fun i => (basis_sets _).comap _)
-    (UniformOnFun.hasBasis_uniformity α β _ ⟨∅, finite_empty⟩
-      (directedOn_of_sup_mem fun _ _ => .union))
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, ⋂ x in S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
-      fun f hf => mem_iInter₂.mpr fun x hx => mem_iInter₂.mp (hf x hx) x hx⟩⟩)
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, fun _ => U⟩, ⟨hS, fun _ _ => hU⟩, fun f hf x hx =>
-      mem_iInter₂.mp hf x hx⟩)
-
-Depends on / 依赖: Function, Function.injective_id, HasBasis, HasBasis.ext, HasBasis.iInf, Pi.uniformity, UniformOnFun, UniformOnFun.hasBasis_uniformity, basis_sets, biInter_mem, comap_comap, comap_iInf, directedOn_of_sup_mem, finite_empty, hasBasis_uniformity, injective_id, mem_iInter, simp_rw, uniformity
+/-
+**UniformOnFun.isUniformEmbedding_toFun_finite** 是 Mathlib 中的一个定理，位于命名空间 `Unifor
+mOnFun`。
+形式化陈述：isUniformEmbedding_toFun_finite : IsUniformEmbedding (toFun _ : (α ->ᵤ[{s 
+| s.Finite}] β) -> (α -> β))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.uniformity`：Pi.uniformity : 𝓤 (forall i, α i) = ⨅ i : ι, (Filter.coma
+p fun a => (a.1 i, a.2 i)) (𝓤 (α i))
+· 使用定理 `Filter.comap_iInf`：comap_iInf {f : ι -> Filter β} : comap m (⨅ i, f i) =
+ ⨅ i, comap m (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.comap_comap`：comap_comap {m : γ -> β} {n : β -> α} : comap m (com
+ap n f) = comap (n ∘ m) f
+· 使用定理 `Filter.HasBasis.ext`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} {l 
+l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' → Set 
+α},   l.H…
+· 使用定理 `Filter.HasBasis.iInf'`：∀ {α : Type u_1} {ι : Type u_6} {ι' : ι → Type u_
+7} {l : ι → Filter α} {p : (i : ι) → ι' i → Prop}   {s : (i : ι) → ι' i → Set α}
+,   (∀ (i :…
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `UniformOnFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst 
+: UniformSpace β] (𝔖 : Set (Set α)),   𝔖.Nonempty →     DirectedOn (fun x1 x2 =>
+ x1 ⊆ x2) 𝔖 →       (u…
+· 使用定理 `Set.finite_empty`：finite_empty : (∅ : Set α).Finite
+· 使用定理 `directedOn_of_sup_mem`：directedOn_of_sup_mem [SemilatticeSup α] {S : Set
+ α} (H : forall ⦃i j⦄, i in S -> j in S -> i ⊔ j in S) : DirectedOn (· <= ·) S
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.biInter_mem`：biInter_mem {β : Type v} {s : β -> Set α} {is : Set 
+β} (hf : is.Finite) : (⋂ i in is, s i) in f ↔ forall i in is, s i in f
+· 使用定理 `Set.mem_iInter₂`：mem_iInter₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋂ (i) (j), s i j) ↔ forall i j, x in s i j
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
 theorem isUniformEmbedding_toFun_finite :
-    IsUniformEmbedding (toFun _ : (α ->ᵤ[{s | s.Finite}] β) -> (α -> β)) := by
+    IsUniformEmbedding (toFun _ : (α →ᵤ[{s | s.Finite}] β) → (α → β)) := by
   refine ⟨⟨?_⟩, Function.injective_id⟩
   simp_rw [Pi.uniformity, comap_iInf, comap_comap]
-  refine HasBasis.ext (HasBasis.iInf' fun i => (basis_sets _).comap _)
+  refine HasBasis.ext (HasBasis.iInf' fun i ↦ (basis_sets _).comap _)
     (UniformOnFun.hasBasis_uniformity α β _ ⟨∅, finite_empty⟩
-      (directedOn_of_sup_mem fun _ _ => .union))
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, ⋂ x in S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
-      fun f hf => mem_iInter₂.mpr fun x hx => mem_iInter₂.mp (hf x hx) x hx⟩⟩)
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, fun _ => U⟩, ⟨hS, fun _ _ => hU⟩, fun f hf x hx =>
+      (directedOn_of_sup_mem fun _ _ ↦ .union))
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ ↦ ⟨⟨S, ⋂ x ∈ S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
+      fun f hf ↦ mem_iInter₂.mpr fun x hx ↦ mem_iInter₂.mp (hf x hx) x hx⟩⟩)
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ ↦ ⟨⟨S, fun _ ↦ U⟩, ⟨hS, fun _ _ ↦ hU⟩, fun f hf x hx ↦
       mem_iInter₂.mp hf x hx⟩)
-
-/--
-theorem `isEmbedding_toFun_finite` / 定理 `isEmbedding_toFun_finite`
-
-English:
-theorem isEmbedding_toFun_finite
-  proof: (isUniformEmbedding_toFun_finite α β).isEmbedding
-
-中文:
-定理 isEmbedding_toFun_finite
-  证明: (isUniformEmbedding_toFun_finite α β).isEmbedding
-
-Depends on / 依赖: isEmbedding, isUniformEmbedding_toFun_finite
+/-
+**UniformOnFun.isEmbedding_toFun_finite** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`
+。
+形式化陈述：isEmbedding_toFun_finite : IsEmbedding (toFun _ : (α ->ᵤ[{s | s.Finite}] β
+) -> (α -> β))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `UniformOnFun.isUniformEmbedding_toFun_finite`：isUniformEmbedding_toFun_f
+inite : IsUniformEmbedding (toFun _ : (α ->ᵤ[{s | s.Finite}] β) -> (α -> β))
 -/
 theorem isEmbedding_toFun_finite :
-    IsEmbedding (toFun _ : (α ->ᵤ[{s | s.Finite}] β) -> (α -> β)) :=
+    IsEmbedding (toFun _ : (α →ᵤ[{s | s.Finite}] β) → (α → β)) :=
   (isUniformEmbedding_toFun_finite α β).isEmbedding
 
 variable {α}
 
-/--
-theorem `uniformity_eq_of_basis` / 定理 `uniformity_eq_of_basis`
+/-- A version of `UniformOnFun.hasBasis_uniformity_of_basis`
+with weaker conclusion and weaker assumptions.
 
-English:
-theorem uniformity_eq_of_basis
-  statement: {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)}
-  proof: by
-  simp_rw [iInf_uniformity, uniformity_comap,
-    (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
-    Function.comp_apply, UniformFun.gen, Subtype.forall, UniformOnFun.gen, preimage_ofPred_eq,
-    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.toFun_ofFun, domRestrict_apply]
+We make no assumptions about the set `𝔖`
+but conclude only that the uniformity is equal to some indexed infimum. -/
+/-
+**UniformOnFun.uniformity_eq_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+{ι : Sort u_5} {p : ι → Prop}   {V : ι → Set (β × β)},   (uniformity β).HasBasis
+ p V →     uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ i, ⨅ (_ : p i), Filter.p
+rincipal (UniformOnFun.gen 𝔖 s (V i))
+参数：β : Type u_2；𝔖 : Set (Set α)；β × β；uniformity β；UniformOnFun α β 𝔖；_ : p i；Un
+iformOnFun.gen 𝔖 s (V i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_uniformity`：iInf_uniformity {ι : Sort*} {u : ι -> UniformSpace α} :
+ 𝓤[iInf u] = ⨅ i, 𝓤[u i]
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Filter.HasBasis.eq_biInf`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α}
+ {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l = ⨅ i, ⨅ (_ : p i), Filter
+.principal (s …
+· 使用定理 `UniformFun.hasBasis_uniformity_of_basis`：∀ (α : Type u_1) (β : Type u_2)
+ [inst : UniformSpace β] {ι : Sort u_5} {p : ι → Prop} {s : ι → Set (β × β)},   
+(uniformity β).HasBasis p s →…
+· 使用定理 `Filter.comap_iInf`：comap_iInf {f : ι -> Filter β} : comap m (⨅ i, f i) =
+ ⨅ i, comap m (f i)
+· 使用定理 `Filter.comap_principal`：comap_principal {t : Set β} : comap m (𝓟 t) = 𝓟 
+(m ⁻¹' t)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 uniformity_eq_of_basis
-  结论: {ι : 类型层*} {p : ι -> 命题} {V : ι -> 集合 (β × β)}
-  证明: by
-  simp_rw [iInf_uniformity, uniformity_comap,
-    (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
-    Function.comp_apply, UniformFun.gen, Subtype.forall, UniformOnFun.gen, preimage_ofPred_eq,
-    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.toFun_ofFun, domRestrict_apply]
+--- 原说明 ---
+A version of `UniformOnFun.hasBasis_uniformity_of_basis`
+with weaker conclusion and weaker assumptions.
+
+We make no assumptions about the set `𝔖`
+but conclude only that the uniformity is equal to some indexed infimum.
 -/
-protected theorem uniformity_eq_of_basis {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)}
+protected theorem uniformity_eq_of_basis {ι : Sort*} {p : ι → Prop} {V : ι → Set (β × β)}
     (h : (𝓤 β).HasBasis p V) :
-    𝓤 (α ->ᵤ[𝔖] β) = ⨅ s in 𝔖, ⨅ (i) (_ : p i), 𝓟 (UniformOnFun.gen 𝔖 s (V i)) := by
+    𝓤 (α →ᵤ[𝔖] β) = ⨅ s ∈ 𝔖, ⨅ (i) (_ : p i), 𝓟 (UniformOnFun.gen 𝔖 s (V i)) := by
   simp_rw [iInf_uniformity, uniformity_comap,
     (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
     Function.comp_apply, UniformFun.gen, Subtype.forall, UniformOnFun.gen, preimage_ofPred_eq,
     Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.toFun_ofFun, domRestrict_apply]
-
-/--
-theorem `uniformity_eq` / 定理 `uniformity_eq`
-
-English:
-theorem uniformity_eq
-  statement: 𝓤 (α ->ᵤ[𝔖] β) = ⨅ s in 𝔖, ⨅ V in 𝓤 β, 𝓟 (UniformOnFun.gen 𝔖 s V)
-  proof: UniformOnFun.uniformity_eq_of_basis _ _ (𝓤 β).basis_sets
-
-中文:
-定理 uniformity_eq
-  结论: 𝓤 (α ->ᵤ[𝔖] β) = ⨅ s in 𝔖, ⨅ V in 𝓤 β, 𝓟 (UniformOnFun.gen 𝔖 s V)
-  证明: UniformOnFun.uniformity_eq_of_basis _ _ (𝓤 β).basis_sets
+/-
+**UniformOnFun.uniformity_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)),
+   uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ V ∈ uniformity β, Filter.princip
+al (UniformOnFun.gen 𝔖 s V)
+参数：β : Type u_2；𝔖 : Set (Set α)；UniformOnFun α β 𝔖；UniformOnFun.gen 𝔖 s V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.uniformity_eq_of_basis`：∀ {α : Type u_1} (β : Type u_2) [in
+st : UniformSpace β] (𝔖 : Set (Set α)) {ι : Sort u_5} {p : ι → Prop}   {V : ι → 
+Set (β × β)},   (uniformi…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
-protected theorem uniformity_eq : 𝓤 (α ->ᵤ[𝔖] β) = ⨅ s in 𝔖, ⨅ V in 𝓤 β, 𝓟 (UniformOnFun.gen 𝔖 s V) :=
+protected theorem uniformity_eq : 𝓤 (α →ᵤ[𝔖] β) = ⨅ s ∈ 𝔖, ⨅ V ∈ 𝓤 β, 𝓟 (UniformOnFun.gen 𝔖 s V) :=
   UniformOnFun.uniformity_eq_of_basis _ _ (𝓤 β).basis_sets
-
-/--
-theorem `gen_mem_uniformity` / 定理 `gen_mem_uniformity`
-
-English:
-theorem gen_mem_uniformity
-  given: (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β)
-  proof: by
+/-
+**UniformOnFun.gen_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) {s : Set α} [inst : UniformSpace β] (𝔖 : S
+et (Set α)),   s ∈ 𝔖 → ∀ {V : Set (β × β)}, V ∈ uniformity β → UniformOnFun.gen 
+𝔖 s V ∈ uniformity (UniformOnFun α β 𝔖)
+参数：β : Type u_2；𝔖 : Set (Set α)；β × β；UniformOnFun α β 𝔖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.uniformity_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : Unif
+ormSpace β] (𝔖 : Set (Set α)),   uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ V 
+∈ uniformity β, …
+· 使用定理 `Filter.mem_iInf_of_mem`：mem_iInf_of_mem {f : ι -> Filter α} (i : ι) {s} 
+(hs : s in f i) : s in ⨅ i, f i
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
+-/
+protected theorem gen_mem_uniformity (hs : s ∈ 𝔖) {V : Set (β × β)} (hV : V ∈ 𝓤 β) :
+    UniformOnFun.gen 𝔖 s V ∈ 𝓤 (α →ᵤ[𝔖] β) := by
   rw [UniformOnFun.uniformity_eq]
   apply_rules [mem_iInf_of_mem, mem_principal_self]
 
-中文:
-定理 gen_mem_uniformity
-  条件: (hs : s in 𝔖) {V : 集合 (β × β)} (hV : V in 𝓤 β)
-  证明: by
-  rw [UniformOnFun.uniformity_eq]
-  apply_rules [mem_iInf_of_mem, mem_principal_self]
+/-- A version of `UniformOnFun.hasBasis_nhds_of_basis`
+with weaker conclusion and weaker assumptions.
+
+We make no assumptions about the set `𝔖`
+but conclude only that the neighbourhoods filter is equal to some indexed infimum. -/
+/-
+**UniformOnFun.nhds_eq_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+{ι : Sort u_5} {p : ι → Prop}   {V : ι → Set (β × β)},   (uniformity β).HasBasis
+ p V →     ∀ (f : UniformOnFun α β 𝔖),       nhds f =         ⨅ s ∈ 𝔖,          
+ ⨅ i,             ⨅ (_ : p i), Filter.principal {g | ∀ x ∈ s, ((UniformOnFun.toF
+un 𝔖) f x, (UniformOnFun.toFun 𝔖) g x) ∈ V i}
+参数：β : Type u_2；𝔖 : Set (Set α)；β × β；uniformity β；f : UniformOnFun α β 𝔖；_ : p 
+i；(UniformOnFun.toFun 𝔖) f x, (UniformOnFun.toFun 𝔖) g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `UniformOnFun.uniformity_eq_of_basis`：∀ {α : Type u_1} (β : Type u_2) [in
+st : UniformSpace β] (𝔖 : Set (Set α)) {ι : Sort u_5} {p : ι → Prop}   {V : ι → 
+Set (β × β)},   (uniformi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Filter.comap_iInf`：comap_iInf {f : ι -> Filter β} : comap m (⨅ i, f i) =
+ ⨅ i, comap m (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Filter.comap_principal`：comap_principal {t : Set β} : comap m (𝓟 t) = 𝓟 
+(m ⁻¹' t)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+
+--- 原说明 ---
+A version of `UniformOnFun.hasBasis_nhds_of_basis`
+with weaker conclusion and weaker assumptions.
+
+We make no assumptions about the set `𝔖`
+but conclude only that the neighbourhoods filter is equal to some indexed infimu
+m.
 -/
-protected theorem gen_mem_uniformity (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β) :
-    UniformOnFun.gen 𝔖 s V in 𝓤 (α ->ᵤ[𝔖] β) := by
-  rw [UniformOnFun.uniformity_eq]
-  apply_rules [mem_iInf_of_mem, mem_principal_self]
-
-/--
-theorem `nhds_eq_of_basis` / 定理 `nhds_eq_of_basis`
-
-English:
-theorem nhds_eq_of_basis
-  statement: {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)}
-  proof: by
+protected theorem nhds_eq_of_basis {ι : Sort*} {p : ι → Prop} {V : ι → Set (β × β)}
+    (h : (𝓤 β).HasBasis p V) (f : α →ᵤ[𝔖] β) :
+    𝓝 f = ⨅ s ∈ 𝔖, ⨅ (i) (_ : p i), 𝓟 {g | ∀ x ∈ s, (toFun 𝔖 f x, toFun 𝔖 g x) ∈ V i} := by
   simp_rw [nhds_eq_comap_uniformity, UniformOnFun.uniformity_eq_of_basis _ _ h, comap_iInf,
     comap_principal, UniformOnFun.gen, preimage_ofPred_eq]
-
-中文:
-定理 nhds_eq_of_basis
-  结论: {ι : 类型层*} {p : ι -> 命题} {V : ι -> 集合 (β × β)}
-  证明: by
-  simp_rw [nhds_eq_comap_uniformity, UniformOnFun.uniformity_eq_of_basis _ _ h, comap_iInf,
-    comap_principal, UniformOnFun.gen, preimage_ofPred_eq]
+/-
+**UniformOnFun.nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpace β] (𝔖 : Set (Set α)) 
+(f : UniformOnFun α β 𝔖),   nhds f =     ⨅ s ∈ 𝔖,       ⨅ V ∈ uniformity β, Filt
+er.principal {g | ∀ x ∈ s, ((UniformOnFun.toFun 𝔖) f x, (UniformOnFun.toFun 𝔖) g
+ x) ∈ V}
+参数：β : Type u_2；𝔖 : Set (Set α)；f : UniformOnFun α β 𝔖；(UniformOnFun.toFun 𝔖) f 
+x, (UniformOnFun.toFun 𝔖) g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.nhds_eq_of_basis`：∀ {α : Type u_1} (β : Type u_2) [inst : U
+niformSpace β] (𝔖 : Set (Set α)) {ι : Sort u_5} {p : ι → Prop}   {V : ι → Set (β
+ × β)},   (uniformi…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
-protected theorem nhds_eq_of_basis {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)}
-    (h : (𝓤 β).HasBasis p V) (f : α ->ᵤ[𝔖] β) :
-    𝓝 f = ⨅ s in 𝔖, ⨅ (i) (_ : p i), 𝓟 {g | forall x in s, (toFun 𝔖 f x, toFun 𝔖 g x) in V i} := by
-  simp_rw [nhds_eq_comap_uniformity, UniformOnFun.uniformity_eq_of_basis _ _ h, comap_iInf,
-    comap_principal, UniformOnFun.gen, preimage_ofPred_eq]
-
-/--
-theorem `nhds_eq` / 定理 `nhds_eq`
-
-English:
-theorem nhds_eq
-  given: (f : α ->ᵤ[𝔖] β)
-  proof: UniformOnFun.nhds_eq_of_basis _ _ (𝓤 β).basis_sets f
-
-中文:
-定理 nhds_eq
-  条件: (f : α ->ᵤ[𝔖] β)
-  证明: UniformOnFun.nhds_eq_of_basis _ _ (𝓤 β).basis_sets f
--/
-protected theorem nhds_eq (f : α ->ᵤ[𝔖] β) :
-    𝓝 f = ⨅ s in 𝔖, ⨅ V in 𝓤 β, 𝓟 {g | forall x in s, (toFun 𝔖 f x, toFun 𝔖 g x) in V} :=
+protected theorem nhds_eq (f : α →ᵤ[𝔖] β) :
+    𝓝 f = ⨅ s ∈ 𝔖, ⨅ V ∈ 𝓤 β, 𝓟 {g | ∀ x ∈ s, (toFun 𝔖 f x, toFun 𝔖 g x) ∈ V} :=
   UniformOnFun.nhds_eq_of_basis _ _ (𝓤 β).basis_sets f
-
-/--
-theorem `gen_mem_nhds` / 定理 `gen_mem_nhds`
-
-English:
-theorem gen_mem_nhds
-  given: (f : α ->ᵤ[𝔖] β) (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β)
-  proof: by
-  rw [UniformOnFun.nhds_eq]
-  apply_rules [mem_iInf_of_mem, mem_principal_self]
-
-中文:
-定理 gen_mem_nhds
-  条件: (f : α ->ᵤ[𝔖] β) (hs : s in 𝔖) {V : 集合 (β × β)} (hV : V in 𝓤 β)
-  证明: by
-  rw [UniformOnFun.nhds_eq]
-  apply_rules [mem_iInf_of_mem, mem_principal_self]
+/-
+**UniformOnFun.gen_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} (β : Type u_2) {s : Set α} [inst : UniformSpace β] (𝔖 : S
+et (Set α)) (f : UniformOnFun α β 𝔖),   s ∈ 𝔖 →     ∀ {V : Set (β × β)},       V
+ ∈ uniformity β → {g | ∀ x ∈ s, ((UniformOnFun.toFun 𝔖) f x, (UniformOnFun.toFun
+ 𝔖) g x) ∈ V} ∈ nhds f
+参数：β : Type u_2；𝔖 : Set (Set α)；f : UniformOnFun α β 𝔖；β × β；(UniformOnFun.toFun
+ 𝔖) f x, (UniformOnFun.toFun 𝔖) g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.nhds_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpa
+ce β] (𝔖 : Set (Set α)) (f : UniformOnFun α β 𝔖),   nhds f =     ⨅ s ∈ 𝔖,       
+⨅ V ∈ unif…
+· 使用定理 `Filter.mem_iInf_of_mem`：mem_iInf_of_mem {f : ι -> Filter α} (i : ι) {s} 
+(hs : s in f i) : s in ⨅ i, f i
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
 -/
-protected theorem gen_mem_nhds (f : α ->ᵤ[𝔖] β) (hs : s in 𝔖) {V : Set (β × β)} (hV : V in 𝓤 β) :
-    {g | forall x in s, (toFun 𝔖 f x, toFun 𝔖 g x) in V} in 𝓝 f := by
+protected theorem gen_mem_nhds (f : α →ᵤ[𝔖] β) (hs : s ∈ 𝔖) {V : Set (β × β)} (hV : V ∈ 𝓤 β) :
+    {g | ∀ x ∈ s, (toFun 𝔖 f x, toFun 𝔖 g x) ∈ V} ∈ 𝓝 f := by
   rw [UniformOnFun.nhds_eq]
   apply_rules [mem_iInf_of_mem, mem_principal_self]
-
-/--
-theorem `uniformContinuous_ofUniformFun` / 定理 `uniformContinuous_ofUniformFun`
-
-English:
-theorem uniformContinuous_ofUniformFun
-  proof: by
-  simp only [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf, tendsto_principal,
-    (UniformFun.hasBasis_uniformity _ _).eventually_iff]
-  exact fun _ _ U hU => ⟨U, hU, fun f hf x _ => hf x⟩
-
-中文:
-定理 uniformContinuous_ofUniformFun
-  证明: by
-  simp only [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf, tendsto_principal,
-    (UniformFun.hasBasis_uniformity _ _).eventually_iff]
-  exact fun _ _ U hU => ⟨U, hU, fun f hf x _ => hf x⟩
-
-Depends on / 依赖: UniformContinuous, UniformFun, UniformFun.hasBasis_uniformity, UniformOnFun, UniformOnFun.uniformity_eq, eventually_iff, hasBasis_uniformity, tendsto_iInf, tendsto_principal, uniformity_eq
+/-
+**UniformOnFun.uniformContinuous_ofUniformFun** 是 Mathlib 中的一个定理，位于命名空间 `Uniform
+OnFun`。
+形式化陈述：uniformContinuous_ofUniformFun : UniformContinuous fun f : α ->ᵤ β => ofFu
+n 𝔖 (UniformFun.toFun f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.uniformity_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : Unif
+ormSpace β] (𝔖 : Set (Set α)),   uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ V 
+∈ uniformity β, …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Filter.HasBasis.eventually_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Fil
+ter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {q : α → Prop}, (∀ᶠ 
+(x : α) in l, q x) ↔…
+· 使用定理 `UniformFun.hasBasis_uniformity`：∀ (α : Type u_1) (β : Type u_2) [inst : 
+UniformSpace β],   (uniformity (UniformFun α β)).HasBasis (fun x => x ∈ uniformi
+ty β) (UniformFun.ge…
 -/
 theorem uniformContinuous_ofUniformFun :
-    UniformContinuous fun f : α ->ᵤ β => ofFun 𝔖 (UniformFun.toFun f) := by
+    UniformContinuous fun f : α →ᵤ β ↦ ofFun 𝔖 (UniformFun.toFun f) := by
   simp only [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf, tendsto_principal,
     (UniformFun.hasBasis_uniformity _ _).eventually_iff]
-  exact fun _ _ U hU => ⟨U, hU, fun f hf x _ => hf x⟩
+  exact fun _ _ U hU ↦ ⟨U, hU, fun f hf x _ ↦ hf x⟩
 
-/--
-Definition of `uniformEquivUniformFun` / `uniformEquivUniformFun` 的定义
+/-- The uniformity on `α →ᵤ[𝔖] β` is the same as the uniformity on `α →ᵤ β`,
+provided that `Set.univ ∈ 𝔖`.
 
-English:
-definition uniformEquivUniformFun
-  signature: (h : univ in 𝔖)
-  body: UniformFun.ofFun toFun _ f
-invFun f := ofFun _ UniformFun.toFun f
+Here we formulate it as a `UniformEquiv`. -/
+/-
+**UniformOnFun.uniformEquivUniformFun** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：uniformEquivUniformFun (h : univ in 𝔖) : (α ->ᵤ[𝔖] β) ≃ᵤ (α ->ᵤ β) where t
+oFun f
+参数：h : univ in 𝔖。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.uniformContinuous_ofUniformFun`：uniformContinuous_ofUniform
+Fun : UniformContinuous fun f : α ->ᵤ β => ofFun 𝔖 (UniformFun.toFun f)
+
+--- 原说明 ---
+The uniformity on `α →ᵤ[𝔖] β` is the same as the uniformity on `α →ᵤ β`,
+provided that `Set.univ ∈ 𝔖`.
+
+Here we formulate it as a `UniformEquiv`.
+-/
+def uniformEquivUniformFun (h : univ ∈ 𝔖) : (α →ᵤ[𝔖] β) ≃ᵤ (α →ᵤ β) where
+  toFun f := UniformFun.ofFun <| toFun _ f
+  invFun f := ofFun _ <| UniformFun.toFun f
   uniformContinuous_toFun := by
     simp only [UniformContinuous, (UniformFun.hasBasis_uniformity _ _).tendsto_right_iff]
     intro U hU
     filter_upwards [UniformOnFun.gen_mem_uniformity _ _ h hU] with f hf x using hf x (mem_univ _)
   uniformContinuous_invFun := uniformContinuous_ofUniformFun _ _
 
-中文:
-定义 uniformEquivUniformFun
-  签名: (h : univ in 𝔖)
-  定义体: UniformFun.ofFun toFun _ f
-invFun f := ofFun _ UniformFun.toFun f
-  uniformContinuous_toFun := by
-    simp only [UniformContinuous, (UniformFun.hasBasis_uniformity _ _).tendsto_right_iff]
-    intro U hU
-    filter_upwards [UniformOnFun.gen_mem_uniformity _ _ h hU] with f hf x using hf x (mem_univ _)
-  uniformContinuous_invFun := uniformContinuous_ofUniformFun _ _
+/-- If `𝔖` and `𝔗` are families of sets in `α`, then the identity map
+`(α →ᵤ[𝔗] β) → (α →ᵤ[𝔖] β)` is uniformly continuous if every `s ∈ 𝔖` is contained in a finite
+union of elements of `𝔗`.
 
-Depends on / 依赖: UniformFun, UniformFun.ofFun
+With more API around `Order.Ideal`, this could be phrased in that language instead. -/
+/-
+**UniformOnFun.uniformContinuous_ofFun_toFun** 是 Mathlib 中的一个引理，位于命名空间 `UniformO
+nFun`。
+形式化陈述：uniformContinuous_ofFun_toFun (𝔗 : Set (Set α)) (h : forall s in 𝔖, exists
+ T subseteq 𝔗, T.Finite ∧ s subseteq ⋃₀ T) : UniformContinuous (ofFun 𝔗 ∘ toFun 
+𝔖 : (α ->ᵤ[𝔗] β) -> α ->ᵤ[𝔖] β)
+参数：𝔗 : Set (Set α)；h : forall s in 𝔖, exists T subseteq 𝔗, T.Finite ∧ s subseteq
+ ⋃₀ T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformOnFun.uniformity_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : Unif
+ormSpace β] (𝔖 : Set (Set α)),   uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ V 
+∈ uniformity β, …
+· 使用定理 `iInf₂_comm`：∀ {α : Type u_1} [inst : CompleteLattice α] {ι₁ : Sort u_8} 
+{ι₂ : Sort u_9} {κ₁ : ι₁ → Sort u_10} {κ₂ : ι₂ → Sort u_11}   (f : (i₁ : ι₁) → κ
+…
+· 使用定理 `Filter.tendsto_iInf_iInf`：tendsto_iInf_iInf {f : α -> β} {x : ι -> Filte
+r α} {y : ι -> Filter β} (h : forall i, Tendsto f (x i) (y i)) : Tendsto f (iInf
+ x) (iInf y)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_sUnion`：mem_sUnion {x : α} {S : Set (Set α)} : x in ⋃₀ S ↔ exist
+s t in S, x in t
+
+--- 原说明 ---
+If `𝔖` and `𝔗` are families of sets in `α`, then the identity map
+`(α →ᵤ[𝔗] β) → (α →ᵤ[𝔖] β)` is uniformly continuous if every `s ∈ 𝔖` is containe
+d in a finite
+union of elements of `𝔗`.
+
+With more API around `Order.Ideal`, this could be phrased in that language inste
+ad.
 -/
-def uniformEquivUniformFun (h : univ in 𝔖) : (α ->ᵤ[𝔖] β) ≃ᵤ (α ->ᵤ β) where
-toFun f := UniformFun.ofFun toFun _ f
-invFun f := ofFun _ UniformFun.toFun f
-  uniformContinuous_toFun := by
-    simp only [UniformContinuous, (UniformFun.hasBasis_uniformity _ _).tendsto_right_iff]
-    intro U hU
-    filter_upwards [UniformOnFun.gen_mem_uniformity _ _ h hU] with f hf x using hf x (mem_univ _)
-  uniformContinuous_invFun := uniformContinuous_ofUniformFun _ _
-
-/--
-lemma `uniformContinuous_ofFun_toFun` / 引理 `uniformContinuous_ofFun_toFun`
-
-English:
-lemma uniformContinuous_ofFun_toFun
-  given: (𝔗 : Set (Set α)) (h : forall s in 𝔖, exists T subseteq 𝔗, T.Finite ∧ s subseteq ⋃₀ T)
-  proof: by
+lemma uniformContinuous_ofFun_toFun (𝔗 : Set (Set α)) (h : ∀ s ∈ 𝔖, ∃ T ⊆ 𝔗, T.Finite ∧ s ⊆ ⋃₀ T) :
+    UniformContinuous (ofFun 𝔗 ∘ toFun 𝔖 : (α →ᵤ[𝔗] β) → α →ᵤ[𝔖] β) := by
   simp only [UniformContinuous, UniformOnFun.uniformity_eq, iInf₂_comm (ι₂ := Set (β × β))]
-  refine tendsto_iInf_iInf fun V => tendsto_iInf_iInf fun hV => ?_
+  refine tendsto_iInf_iInf fun V ↦ tendsto_iInf_iInf fun hV ↦ ?_
   simp only [tendsto_iInf, tendsto_principal, Filter.Eventually, mem_biInf_principal]
   intro s hs
   obtain ⟨T, hT𝔗, hT, hsT⟩ := h s hs
-  refine ⟨T, hT, hT𝔗, fun f hf => ?_⟩
+  refine ⟨T, hT, hT𝔗, fun f hf ↦ ?_⟩
   simp only [UniformOnFun.gen, Set.mem_iInter, Set.mem_ofPred_eq] at hf ⊢
   intro x hx
-obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hsT hx
+  obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp <| hsT hx
   exact hf t ht x hxt
 
-中文:
-引理 uniformContinuous_ofFun_toFun
-  条件: (𝔗 : 集合 (集合 α)) (h : 对任意 s in 𝔖, 存在 T subseteq 𝔗, T.有限 ∧ s subseteq ⋃₀ T)
-  证明: by
-  simp only [UniformContinuous, UniformOnFun.uniformity_eq, iInf₂_comm (ι₂ := Set (β × β))]
-  refine tendsto_iInf_iInf fun V => tendsto_iInf_iInf fun hV => ?_
-  simp only [tendsto_iInf, tendsto_principal, Filter.Eventually, mem_biInf_principal]
-  intro s hs
-  obtain ⟨T, hT𝔗, hT, hsT⟩ := h s hs
-  refine ⟨T, hT, hT𝔗, fun f hf => ?_⟩
-  simp only [UniformOnFun.gen, Set.mem_iInter, Set.mem_ofPred_eq] at hf ⊢
-  intro x hx
-obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hsT hx
-  exact hf t ht x hxt
+/-- A specialized version of `UniformOnFun.uniformContinuous_ofFun_toFun` for convenience. -/
+/-
+**UniformOnFun.uniformContinuous_ofFun_toFun_of_subset** 是 Mathlib 中的一个定理，位于命名空间
+ `UniformOnFun`。
+形式化陈述：uniformContinuous_ofFun_toFun_of_subset (𝔗 : Set (Set α)) (h : 𝔖 subseteq 
+𝔗) : UniformContinuous (ofFun 𝔗 ∘ toFun 𝔖 : (α ->ᵤ[𝔗] β) -> α ->ᵤ[𝔖] β)
+参数：𝔗 : Set (Set α)；h : 𝔖 subseteq 𝔗。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `UniformOnFun.uniformContinuous_ofFun_toFun`：uniformContinuous_ofFun_toFu
+n (𝔗 : Set (Set α)) (h : forall s in 𝔖, exists T subseteq 𝔗, T.Finite ∧ s subset
+eq ⋃₀ T) : UniformContinuous (of…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sUnion_singleton`：sUnion_singleton (s : Set α) : ⋃₀ {s} = s
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-Depends on / 依赖: Eventually, Filter, Filter.Eventually, Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_sUnion.mp, UniformContinuous, UniformOnFun, UniformOnFun.gen, UniformOnFun.uniformity_eq, mem_biInf_principal, mem_iInter, mem_ofPred_eq, mem_sUnion, tendsto_iInf, tendsto_iInf_iInf, tendsto_principal, uniformity_eq
+--- 原说明 ---
+A specialized version of `UniformOnFun.uniformContinuous_ofFun_toFun` for conven
+ience.
 -/
-lemma uniformContinuous_ofFun_toFun (𝔗 : Set (Set α)) (h : forall s in 𝔖, exists T subseteq 𝔗, T.Finite ∧ s subseteq ⋃₀ T) :
-    UniformContinuous (ofFun 𝔗 ∘ toFun 𝔖 : (α ->ᵤ[𝔗] β) -> α ->ᵤ[𝔖] β) := by
-  simp only [UniformContinuous, UniformOnFun.uniformity_eq, iInf₂_comm (ι₂ := Set (β × β))]
-  refine tendsto_iInf_iInf fun V => tendsto_iInf_iInf fun hV => ?_
-  simp only [tendsto_iInf, tendsto_principal, Filter.Eventually, mem_biInf_principal]
-  intro s hs
-  obtain ⟨T, hT𝔗, hT, hsT⟩ := h s hs
-  refine ⟨T, hT, hT𝔗, fun f hf => ?_⟩
-  simp only [UniformOnFun.gen, Set.mem_iInter, Set.mem_ofPred_eq] at hf ⊢
-  intro x hx
-obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hsT hx
-  exact hf t ht x hxt
+theorem uniformContinuous_ofFun_toFun_of_subset (𝔗 : Set (Set α)) (h : 𝔖 ⊆ 𝔗) :
+    UniformContinuous (ofFun 𝔗 ∘ toFun 𝔖 : (α →ᵤ[𝔗] β) → α →ᵤ[𝔖] β) :=
+  uniformContinuous_ofFun_toFun _ _ _ fun s _ ↦ ⟨{s}, by grind, by simp⟩
 
-/--
-theorem `uniformContinuous_ofFun_toFun_of_subset` / 定理 `uniformContinuous_ofFun_toFun_of_subset`
+/-- A specialized version of `UniformOnFun.uniformContinuous_ofFun_toFun` for convenience. -/
+/-
+**UniformOnFun.uniformContinuous_ofFun_toFun_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `U
+niformOnFun`。
+形式化陈述：uniformContinuous_ofFun_toFun_of_mem (s : Set α) (h : s in 𝔖) : UniformCon
+tinuous (ofFun 𝔖 ∘ toFun {s} : (α ->ᵤ[𝔖] β) -> α ->ᵤ[{s}] β)
+参数：s : Set α；h : s in 𝔖。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.uniformContinuous_ofFun_toFun_of_subset`：uniformContinuous_
+ofFun_toFun_of_subset (𝔗 : Set (Set α)) (h : 𝔖 subseteq 𝔗) : UniformContinuous (
+ofFun 𝔗 ∘ toFun 𝔖 : (α ->ᵤ[𝔗] β) -> α ->ᵤ[…
 
-English:
-theorem uniformContinuous_ofFun_toFun_of_subset
-  given: (𝔗 : Set (Set α)) (h : 𝔖 subseteq 𝔗)
-  proof: uniformContinuous_ofFun_toFun _ _ _ fun s _ => ⟨{s}, by grind, by simp⟩
-
-中文:
-定理 uniformContinuous_ofFun_toFun_of_subset
-  条件: (𝔗 : 集合 (集合 α)) (h : 𝔖 subseteq 𝔗)
-  证明: uniformContinuous_ofFun_toFun _ _ _ fun s _ => ⟨{s}, by grind, by simp⟩
-
-Depends on / 依赖: uniformContinuous_ofFun_toFun
+--- 原说明 ---
+A specialized version of `UniformOnFun.uniformContinuous_ofFun_toFun` for conven
+ience.
 -/
-theorem uniformContinuous_ofFun_toFun_of_subset (𝔗 : Set (Set α)) (h : 𝔖 subseteq 𝔗) :
-    UniformContinuous (ofFun 𝔗 ∘ toFun 𝔖 : (α ->ᵤ[𝔗] β) -> α ->ᵤ[𝔖] β) :=
-  uniformContinuous_ofFun_toFun _ _ _ fun s _ => ⟨{s}, by grind, by simp⟩
-
-/--
-theorem `uniformContinuous_ofFun_toFun_of_mem` / 定理 `uniformContinuous_ofFun_toFun_of_mem`
-
-English:
-theorem uniformContinuous_ofFun_toFun_of_mem
-  given: (s : Set α) (h : s in 𝔖)
-  proof: uniformContinuous_ofFun_toFun_of_subset _ _ _ (by simpa)
-
-中文:
-定理 uniformContinuous_ofFun_toFun_of_mem
-  条件: (s : 集合 α) (h : s in 𝔖)
-  证明: uniformContinuous_ofFun_toFun_of_subset _ _ _ (by simpa)
-
-Depends on / 依赖: uniformContinuous_ofFun_toFun_of_subset
--/
-theorem uniformContinuous_ofFun_toFun_of_mem (s : Set α) (h : s in 𝔖) :
-    UniformContinuous (ofFun 𝔖 ∘ toFun {s} : (α ->ᵤ[𝔖] β) -> α ->ᵤ[{s}] β) :=
+theorem uniformContinuous_ofFun_toFun_of_mem (s : Set α) (h : s ∈ 𝔖) :
+    UniformContinuous (ofFun 𝔖 ∘ toFun {s} : (α →ᵤ[𝔖] β) → α →ᵤ[{s}] β) :=
   uniformContinuous_ofFun_toFun_of_subset _ _ _ (by simpa)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mono` / 定理 `mono`
+/-- Let `u₁`, `u₂` be two uniform structures on `γ` and `𝔖₁ 𝔖₂ : Set (Set α)`. If `u₁ ≤ u₂` and
+`𝔖₂ ⊆ 𝔖₁` then `𝒱(α, γ, 𝔖₁, u₁) ≤ 𝒱(α, γ, 𝔖₂, u₂)`. -/
+/-
+**UniformOnFun.mono** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} ⦃u₁ u₂ : UniformSpace γ⦄,   u₁ ≤ u₂ → ∀ ⦃𝔖
+₁ 𝔖₂ : Set (Set α)⦄, 𝔖₂ ⊆ 𝔖₁ → UniformOnFun.uniformSpace α γ 𝔖₁ ≤ UniformOnFun.u
+niformSpace α γ 𝔖₂
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_le_iInf_of_subset`：∀ {α : Type u_1} {β : Type u_2} [inst : Complete
+Lattice α] {f : β → α} {s t : Set β},   s ⊆ t → ⨅ x ∈ t, f x ≤ ⨅ x ∈ s, f x
+· 使用定理 `iInf₂_mono`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : C
+ompleteLattice α] {f g : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), g i j ≤ f i
+…
+· 使用定理 `UniformSpace.comap_mono`：UniformSpace.comap_mono {α γ} {f : α -> γ} : Mo
+notone fun u : UniformSpace γ => u.comap f
+· 使用定理 `UniformFun.mono`：∀ {α : Type u_1} {γ : Type u_3}, Monotone (@UniformFun.
+uniformSpace α γ)
 
-English:
-theorem mono
-  given: ⦃u₁ u₂
-  statement: UniformSpace γ⦄ (hu : u₁ <= u₂) ⦃𝔖₁ 𝔖₂ : Set (Set α)⦄
-  proof: calc
-    𝒱(α, γ, 𝔖₁, u₁) <= 𝒱(α, γ, 𝔖₂, u₁) := iInf_le_iInf_of_subset h𝔖
-_ <= 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.comap_mono UniformFun.mono hu
-
-中文:
-定理 mono
-  条件: ⦃u₁ u₂
-  结论: 一致空间 γ⦄ (hu : u₁ <= u₂) ⦃𝔖₁ 𝔖₂ : 集合 (集合 α)⦄
-  证明: calc
-    𝒱(α, γ, 𝔖₁, u₁) <= 𝒱(α, γ, 𝔖₂, u₁) := iInf_le_iInf_of_subset h𝔖
-_ <= 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.comap_mono UniformFun.mono hu
+--- 原说明 ---
+Let `u₁`, `u₂` be two uniform structures on `γ` and `𝔖₁ 𝔖₂ : Set (Set α)`. If `u
+₁ ≤ u₂` and
+`𝔖₂ ⊆ 𝔖₁` then `𝒱(α, γ, 𝔖₁, u₁) ≤ 𝒱(α, γ, 𝔖₂, u₂)`.
 -/
-protected theorem mono ⦃u₁ u₂ : UniformSpace γ⦄ (hu : u₁ <= u₂) ⦃𝔖₁ 𝔖₂ : Set (Set α)⦄
-    (h𝔖 : 𝔖₂ subseteq 𝔖₁) : 𝒱(α, γ, 𝔖₁, u₁) <= 𝒱(α, γ, 𝔖₂, u₂) :=
+protected theorem mono ⦃u₁ u₂ : UniformSpace γ⦄ (hu : u₁ ≤ u₂) ⦃𝔖₁ 𝔖₂ : Set (Set α)⦄
+    (h𝔖 : 𝔖₂ ⊆ 𝔖₁) : 𝒱(α, γ, 𝔖₁, u₁) ≤ 𝒱(α, γ, 𝔖₂, u₂) :=
   calc
-    𝒱(α, γ, 𝔖₁, u₁) <= 𝒱(α, γ, 𝔖₂, u₁) := iInf_le_iInf_of_subset h𝔖
-_ <= 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.comap_mono UniformFun.mono hu
+    𝒱(α, γ, 𝔖₁, u₁) ≤ 𝒱(α, γ, 𝔖₂, u₁) := iInf_le_iInf_of_subset h𝔖
+    _ ≤ 𝒱(α, γ, 𝔖₂, u₂) := iInf₂_mono fun _i _hi => UniformSpace.comap_mono <| UniformFun.mono hu
 
-/--
-theorem `uniformContinuous_eval_of_mem` / 定理 `uniformContinuous_eval_of_mem`
+/-- If `x : α` is in some `S ∈ 𝔖`, then evaluation at `x` is uniformly continuous on
+`α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.uniformContinuous_eval_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `UniformO
+nFun`。
+形式化陈述：uniformContinuous_eval_of_mem {x : α} (hxs : x in s) (hs : s in 𝔖) : Unifo
+rmContinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖)
+参数：hxs : x in s；hs : s in 𝔖。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `UniformFun.uniformContinuous_eval`：uniformContinuous_eval (x : α) : Unif
+ormContinuous (Function.eval x ∘ toFun : (α ->ᵤ β) -> β)
+· 使用定理 `UniformOnFun.uniformContinuous_restrict`：∀ (α : Type u_1) (β : Type u_2)
+ {s : Set α} [inst : UniformSpace β] (𝔖 : Set (Set α)),   s ∈ 𝔖 → UniformContinu
+ous (⇑UniformFun.ofFun ∘ s.do…
 
-English:
-theorem uniformContinuous_eval_of_mem
-  given: {x : α} (hxs : x in s) (hs : s in 𝔖)
-  proof: (UniformFun.uniformContinuous_eval β (⟨x, hxs⟩ : s)).comp
-    (UniformOnFun.uniformContinuous_restrict α β 𝔖 hs)
-
-中文:
-定理 uniformContinuous_eval_of_mem
-  条件: {x : α} (hxs : x in s) (hs : s in 𝔖)
-  证明: (UniformFun.uniformContinuous_eval β (⟨x, hxs⟩ : s)).comp
-    (UniformOnFun.uniformContinuous_restrict α β 𝔖 hs)
-
-Depends on / 依赖: UniformFun, UniformFun.uniformContinuous_eval, UniformOnFun, UniformOnFun.uniformContinuous_restrict, uniformContinuous_eval, uniformContinuous_restrict
+--- 原说明 ---
+If `x : α` is in some `S ∈ 𝔖`, then evaluation at `x` is uniformly continuous on
+`α →ᵤ[𝔖] β`.
 -/
-theorem uniformContinuous_eval_of_mem {x : α} (hxs : x in s) (hs : s in 𝔖) :
-    UniformContinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖) :=
+theorem uniformContinuous_eval_of_mem {x : α} (hxs : x ∈ s) (hs : s ∈ 𝔖) :
+    UniformContinuous ((Function.eval x : (α → β) → β) ∘ toFun 𝔖) :=
   (UniformFun.uniformContinuous_eval β (⟨x, hxs⟩ : s)).comp
     (UniformOnFun.uniformContinuous_restrict α β 𝔖 hs)
-
-/--
-theorem `uniformContinuous_eval_of_mem_sUnion` / 定理 `uniformContinuous_eval_of_mem_sUnion`
-
-English:
-theorem uniformContinuous_eval_of_mem_sUnion
-  given: {x : α} (hx : x in ⋃₀ 𝔖)
-  proof: let ⟨_s, hs, hxs⟩ := hx
-  uniformContinuous_eval_of_mem _ _ hxs hs
-
-中文:
-定理 uniformContinuous_eval_of_mem_sUnion
-  条件: {x : α} (hx : x in ⋃₀ 𝔖)
-  证明: let ⟨_s, hs, hxs⟩ := hx
-  uniformContinuous_eval_of_mem _ _ hxs hs
-
-Depends on / 依赖: uniformContinuous_eval_of_mem
+/-
+**UniformOnFun.uniformContinuous_eval_of_mem_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `U
+niformOnFun`。
+形式化陈述：uniformContinuous_eval_of_mem_sUnion {x : α} (hx : x in ⋃₀ 𝔖) : UniformCon
+tinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖)
+参数：hx : x in ⋃₀ 𝔖。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.uniformContinuous_eval_of_mem`：uniformContinuous_eval_of_me
+m {x : α} (hxs : x in s) (hs : s in 𝔖) : UniformContinuous ((Function.eval x : (
+α -> β) -> β) ∘ toFun 𝔖)
 -/
-theorem uniformContinuous_eval_of_mem_sUnion {x : α} (hx : x in ⋃₀ 𝔖) :
-    UniformContinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖) :=
+theorem uniformContinuous_eval_of_mem_sUnion {x : α} (hx : x ∈ ⋃₀ 𝔖) :
+    UniformContinuous ((Function.eval x : (α → β) → β) ∘ toFun 𝔖) :=
   let ⟨_s, hs, hxs⟩ := hx
   uniformContinuous_eval_of_mem _ _ hxs hs
 
 variable {β} {𝔖}
-
-/--
-theorem `uniformContinuous_eval` / 定理 `uniformContinuous_eval`
-
-English:
-theorem uniformContinuous_eval
-  given: (h : ⋃₀ 𝔖 = univ) (x : α)
-  proof: uniformContinuous_eval_of_mem_sUnion _ _ h.symm ▸ mem_univ _
-
-中文:
-定理 uniformContinuous_eval
-  条件: (h : ⋃₀ 𝔖 = univ) (x : α)
-  证明: uniformContinuous_eval_of_mem_sUnion _ _ h.symm ▸ mem_univ _
-
-Depends on / 依赖: h.symm, mem_univ, uniformContinuous_eval_of_mem_sUnion
+/-
+**UniformOnFun.uniformContinuous_eval** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：uniformContinuous_eval (h : ⋃₀ 𝔖 = univ) (x : α) : UniformContinuous ((Fun
+ction.eval x : (α -> β) -> β) ∘ toFun 𝔖)
+参数：h : ⋃₀ 𝔖 = univ；x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.uniformContinuous_eval_of_mem_sUnion`：uniformContinuous_eva
+l_of_mem_sUnion {x : α} (hx : x in ⋃₀ 𝔖) : UniformContinuous ((Function.eval x :
+ (α -> β) -> β) ∘ toFun 𝔖)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem uniformContinuous_eval (h : ⋃₀ 𝔖 = univ) (x : α) :
-    UniformContinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖) :=
-uniformContinuous_eval_of_mem_sUnion _ _ h.symm ▸ mem_univ _
+    UniformContinuous ((Function.eval x : (α → β) → β) ∘ toFun 𝔖) :=
+  uniformContinuous_eval_of_mem_sUnion _ _ <| h.symm ▸ mem_univ _
 
-/--
-theorem `iInf_eq` / 定理 `iInf_eq`
+/-- If `u` is a family of uniform structures on `γ`, then
+`𝒱(α, γ, 𝔖, (⨅ i, u i)) = ⨅ i, 𝒱(α, γ, 𝔖, u i)`. -/
+/-
+**UniformOnFun.iInf_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {ι : Type u_4} {𝔖 : Set (Set α)} {u : ι → 
+UniformSpace γ},   UniformOnFun.uniformSpace α γ 𝔖 = ⨅ i, UniformOnFun.uniformSp
+ace α γ 𝔖
+参数：Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `UniformFun.iInf_eq`：∀ {α : Type u_1} {γ : Type u_3} {ι : Type u_4} {u : 
+ι → UniformSpace γ},   UniformFun.uniformSpace α γ = ⨅ i, UniformFun.uniformSpac
+e α γ
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
+· 使用定理 `iInf_comm`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} [inst : Compl
+eteLattice α] {f : ι → ι' → α},   ⨅ i, ⨅ j, f i j = ⨅ j, ⨅ i, f i j
+· 使用定理 `iInf_congr`：∀ {α : Type u_1} {ι : Sort u_4} [inst : InfSet α] {f g : ι →
+ α}, (∀ (i : ι), f i = g i) → ⨅ i, f i = ⨅ i, g i
 
-English:
-theorem iInf_eq
-  given: {u : ι -> UniformSpace γ}
-  proof: by
-  simp_rw [UniformOnFun.uniformSpace, UniformFun.iInf_eq, UniformSpace.comap_iInf]
-  rw [iInf_comm]
-  exact iInf_congr fun s => iInf_comm
-
-中文:
-定理 iInf_eq
-  条件: {u : ι -> 一致空间 γ}
-  证明: by
-  simp_rw [UniformOnFun.uniformSpace, UniformFun.iInf_eq, UniformSpace.comap_iInf]
-  rw [iInf_comm]
-  exact iInf_congr fun s => iInf_comm
+--- 原说明 ---
+If `u` is a family of uniform structures on `γ`, then
+`𝒱(α, γ, 𝔖, (⨅ i, u i)) = ⨅ i, 𝒱(α, γ, 𝔖, u i)`.
 -/
-protected theorem iInf_eq {u : ι -> UniformSpace γ} :
+protected theorem iInf_eq {u : ι → UniformSpace γ} :
     𝒱(α, γ, 𝔖, ⨅ i, u i) = ⨅ i, 𝒱(α, γ, 𝔖, u i) := by
   simp_rw [UniformOnFun.uniformSpace, UniformFun.iInf_eq, UniformSpace.comap_iInf]
   rw [iInf_comm]
   exact iInf_congr fun s => iInf_comm
 
-/--
-theorem `inf_eq` / 定理 `inf_eq`
+/-- If `u₁` and `u₂` are two uniform structures on `γ`, then
+`𝒱(α, γ, 𝔖, u₁ ⊓ u₂) = 𝒱(α, γ, 𝔖, u₁) ⊓ 𝒱(α, γ, 𝔖, u₂)`. -/
+/-
+**UniformOnFun.inf_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {𝔖 : Set (Set α)} {u₁ u₂ : UniformSpace γ}
+,   UniformOnFun.uniformSpace α γ 𝔖 = UniformOnFun.uniformSpace α γ 𝔖 ⊓ UniformO
+nFun.uniformSpace α γ 𝔖
+参数：Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] (x y : α), x ⊓ 
+y = ⨅ b, bif b then x else y
+· 使用定理 `UniformOnFun.iInf_eq`：∀ {α : Type u_1} {γ : Type u_3} {ι : Type u_4} {𝔖 
+: Set (Set α)} {u : ι → UniformSpace γ},   UniformOnFun.uniformSpace α γ 𝔖 = ⨅ i
+, UniformO…
+· 使用定理 `iInf_congr`：∀ {α : Type u_1} {ι : Sort u_4} [inst : InfSet α] {f g : ι →
+ α}, (∀ (i : ι), f i = g i) → ⨅ i, f i = ⨅ i, g i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem inf_eq
-  given: {u₁ u₂ : UniformSpace γ}
-  proof: by
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformOnFun.iInf_eq]
-  refine iInf_congr fun i => ?_
-  cases i <;> rfl
-
-中文:
-定理 inf_eq
-  条件: {u₁ u₂ : 一致空间 γ}
-  证明: by
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformOnFun.iInf_eq]
-  refine iInf_congr fun i => ?_
-  cases i <;> rfl
+--- 原说明 ---
+If `u₁` and `u₂` are two uniform structures on `γ`, then
+`𝒱(α, γ, 𝔖, u₁ ⊓ u₂) = 𝒱(α, γ, 𝔖, u₁) ⊓ 𝒱(α, γ, 𝔖, u₂)`.
 -/
 protected theorem inf_eq {u₁ u₂ : UniformSpace γ} :
     𝒱(α, γ, 𝔖, u₁ ⊓ u₂) = 𝒱(α, γ, 𝔖, u₁) ⊓ 𝒱(α, γ, 𝔖, u₂) := by
-  rw [inf_eq_iInf]; rw [inf_eq_iInf]; rw [UniformOnFun.iInf_eq]
+  rw [inf_eq_iInf, inf_eq_iInf, UniformOnFun.iInf_eq]
   refine iInf_congr fun i => ?_
   cases i <;> rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comap_eq` / 定理 `comap_eq`
+/-- If `u` is a uniform structure on `β` and `f : γ → β`, then
+`𝒱(α, γ, 𝔖, comap f u) = comap (fun g ↦ f ∘ g) 𝒱(α, γ, 𝔖, u₁)`. -/
+/-
+**UniformOnFun.comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {𝔖 
+: Set (Set α)} {f : γ → β},   UniformOnFun.uniformSpace α γ 𝔖 = UniformSpace.com
+ap (fun x => f ∘ x) (UniformOnFun.uniformSpace α β 𝔖)
+参数：Set α；fun x => f ∘ x；UniformOnFun.uniformSpace α β 𝔖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `UniformFun.comap_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [ins
+t : UniformSpace β] {f : γ → β},   UniformFun.uniformSpace α γ = UniformSpace.co
+map (fun …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 
-English:
-theorem comap_eq
-  given: {f : γ -> β}
-  proof: by
-  -- We reduce this to `UniformFun.comap_eq` using the fact that `comap` distributes
-  -- on `iInf`.
-  simp_rw [UniformOnFun.uniformSpace, UniformSpace.comap_iInf, UniformFun.comap_eq, ←
-    UniformSpace.comap_comap]
-  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`.
-  rfl
-
-中文:
-定理 comap_eq
-  条件: {f : γ -> β}
-  证明: by
-  -- We reduce this to `UniformFun.comap_eq` using the fact that `comap` distributes
-  -- on `iInf`.
-  simp_rw [UniformOnFun.uniformSpace, UniformSpace.comap_iInf, UniformFun.comap_eq, ←
-    UniformSpace.comap_comap]
-  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`.
-  rfl
+--- 原说明 ---
+If `u` is a uniform structure on `β` and `f : γ → β`, then
+`𝒱(α, γ, 𝔖, comap f u) = comap (fun g ↦ f ∘ g) 𝒱(α, γ, 𝔖, u₁)`.
 -/
-protected theorem comap_eq {f : γ -> β} :
+protected theorem comap_eq {f : γ → β} :
     𝒱(α, γ, 𝔖, ‹UniformSpace β›.comap f) = 𝒱(α, β, 𝔖, _).comap (f ∘ ·) := by
   -- We reduce this to `UniformFun.comap_eq` using the fact that `comap` distributes
   -- on `iInf`.
@@ -2342,64 +2503,89 @@ protected theorem comap_eq {f : γ -> β} :
   -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`.
   rfl
 
-/--
-theorem `postcomp_uniformContinuous` / 定理 `postcomp_uniformContinuous`
+/-- Post-composition by a uniformly continuous function is uniformly continuous for the
+uniform structures of `𝔖`-convergence.
 
-English:
-theorem postcomp_uniformContinuous
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: by
-  -- This is a direct consequence of `UniformOnFun.comap_eq`
-  rw [uniformContinuous_iff_le_comap]
-  exact (UniformOnFun.mono (uniformContinuous_iff_le_comap.mp hf)
-    subset_rfl).trans_eq UniformOnFun.comap_eq
+More precisely, if `f : γ → β` is uniformly continuous, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is uniformly continuous. -/
+/-
+**UniformOnFun.postcomp_uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFu
+n`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {𝔖 
+: Set (Set α)} [inst_1 : UniformSpace γ]   {f : γ → β},   UniformContinuous f → 
+UniformContinuous (⇑(UniformOnFun.ofFun 𝔖) ∘ (fun x => f ∘ x) ∘ ⇑(UniformOnFun.t
+oFun 𝔖))
+参数：Set α；⇑(UniformOnFun.ofFun 𝔖) ∘ (fun x => f ∘ x) ∘ ⇑(UniformOnFun.toFun 𝔖)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `uniformContinuous_iff_le_comap`：uniformContinuous_iff_le_comap {α β} {uα
+ : UniformSpace α} {uβ : UniformSpace β} {f : α -> β} : UniformContinuous f ↔ uα
+ <= uβ.comap f
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `UniformOnFun.mono`：∀ {α : Type u_1} {γ : Type u_3} ⦃u₁ u₂ : UniformSpace
+ γ⦄,   u₁ ≤ u₂ → ∀ ⦃𝔖₁ 𝔖₂ : Set (Set α)⦄, 𝔖₂ ⊆ 𝔖₁ → UniformOnFun.uniformSpace α 
+γ 𝔖₁ ≤ …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `UniformOnFun.comap_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [i
+nst : UniformSpace β] {𝔖 : Set (Set α)} {f : γ → β},   UniformOnFun.uniformSpace
+ α γ 𝔖 = Un…
 
-中文:
-定理 postcomp_uniformContinuous
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: by
-  -- This is a direct consequence of `UniformOnFun.comap_eq`
-  rw [uniformContinuous_iff_le_comap]
-  exact (UniformOnFun.mono (uniformContinuous_iff_le_comap.mp hf)
-    subset_rfl).trans_eq UniformOnFun.comap_eq
+--- 原说明 ---
+Post-composition by a uniformly continuous function is uniformly continuous for 
+the
+uniform structures of `𝔖`-convergence.
+
+More precisely, if `f : γ → β` is uniformly continuous, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is uniformly continuous.
 -/
-protected theorem postcomp_uniformContinuous [UniformSpace γ] {f : γ -> β}
+protected theorem postcomp_uniformContinuous [UniformSpace γ] {f : γ → β}
     (hf : UniformContinuous f) : UniformContinuous (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) := by
   -- This is a direct consequence of `UniformOnFun.comap_eq`
   rw [uniformContinuous_iff_le_comap]
   exact (UniformOnFun.mono (uniformContinuous_iff_le_comap.mp hf)
     subset_rfl).trans_eq UniformOnFun.comap_eq
 
-/--
-lemma `postcomp_isUniformInducing` / 引理 `postcomp_isUniformInducing`
+/-- Post-composition by a uniform inducing is a uniform inducing for the
+uniform structures of `𝔖`-convergence.
 
-English:
-lemma postcomp_isUniformInducing
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: by
-  -- This is a direct consequence of `UniformOnFun.comap_eq`
-  constructor
-  replace hf : (𝓤 β).comap (Prod.map f f) = _ := hf.comap_uniformity
-  change comap (Prod.map (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)) _ = _
-  rw [← uniformity_comap] at hf ⊢
-  congr
-  rw [← UniformSpace.ext hf]; rw [UniformOnFun.comap_eq]
-  rfl
+More precisely, if `f : γ → β` is a uniform inducing, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is a uniform inducing. -/
+/-
+**UniformOnFun.postcomp_isUniformInducing** 是 Mathlib 中的一个引理，位于命名空间 `UniformOnFu
+n`。
+形式化陈述：postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β} (hf : IsUniformIn
+ducing f) : IsUniformInducing (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)
+参数：hf : IsUniformInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.comap_uniformity`：∀ {α : Type ua} {β : Type ub} [inst 
+: UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformInducing f →
+ Filter.comap (fun x => …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `uniformity_comap`：uniformity_comap {_ : UniformSpace β} (f : α -> β) : 𝓤
+[UniformSpace.comap f ‹_›] = comap (Prod.map f f) (𝓤 β)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用定理 `UniformOnFun.comap_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [i
+nst : UniformSpace β] {𝔖 : Set (Set α)} {f : γ → β},   UniformOnFun.uniformSpace
+ α γ 𝔖 = Un…
 
-中文:
-引理 postcomp_isUniformInducing
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: by
-  -- This is a direct consequence of `UniformOnFun.comap_eq`
-  constructor
-  replace hf : (𝓤 β).comap (Prod.map f f) = _ := hf.comap_uniformity
-  change comap (Prod.map (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)) _ = _
-  rw [← uniformity_comap] at hf ⊢
-  congr
-  rw [← UniformSpace.ext hf]; rw [UniformOnFun.comap_eq]
-  rfl
+--- 原说明 ---
+Post-composition by a uniform inducing is a uniform inducing for the
+uniform structures of `𝔖`-convergence.
+
+More precisely, if `f : γ → β` is a uniform inducing, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is a uniform inducing.
 -/
-lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β}
+lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ → β}
     (hf : IsUniformInducing f) : IsUniformInducing (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) := by
   -- This is a direct consequence of `UniformOnFun.comap_eq`
   constructor
@@ -2407,444 +2593,438 @@ lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β}
   change comap (Prod.map (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)) _ = _
   rw [← uniformity_comap] at hf ⊢
   congr
-  rw [← UniformSpace.ext hf]; rw [UniformOnFun.comap_eq]
+  rw [← UniformSpace.ext hf, UniformOnFun.comap_eq]
   rfl
 
-/--
-theorem `postcomp_isUniformEmbedding` / 定理 `postcomp_isUniformEmbedding`
+/-- Post-composition by a uniform embedding is a uniform embedding for the
+uniform structures of `𝔖`-convergence.
 
-English:
-theorem postcomp_isUniformEmbedding
-  statement: [UniformSpace γ] {f : γ -> β}
-  proof: UniformOnFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+More precisely, if `f : γ → β` is a uniform embedding, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is a uniform embedding. -/
+/-
+**UniformOnFun.postcomp_isUniformEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnF
+un`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {𝔖 
+: Set (Set α)} [inst_1 : UniformSpace γ]   {f : γ → β},   IsUniformEmbedding f →
+ IsUniformEmbedding (⇑(UniformOnFun.ofFun 𝔖) ∘ (fun x => f ∘ x) ∘ ⇑(UniformOnFun
+.toFun 𝔖))
+参数：Set α；⇑(UniformOnFun.ofFun 𝔖) ∘ (fun x => f ∘ x) ∘ ⇑(UniformOnFun.toFun 𝔖)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `UniformOnFun.postcomp_isUniformInducing`：postcomp_isUniformInducing [Uni
+formSpace γ] {f : γ -> β} (hf : IsUniformInducing f) : IsUniformInducing (ofFun 
+𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsUniformEmbedding.injective`：∀ {α : Type ua} {β : Type ub} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Func
+tion.Injective f
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 
-中文:
-定理 postcomp_isUniformEmbedding
-  结论: [一致空间 γ] {f : γ -> β}
-  证明: UniformOnFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+--- 原说明 ---
+Post-composition by a uniform embedding is a uniform embedding for the
+uniform structures of `𝔖`-convergence.
+
+More precisely, if `f : γ → β` is a uniform embedding, then
+`(fun g ↦ f ∘ g) : (α →ᵤ[𝔖] γ) → (α →ᵤ[𝔖] β)` is a uniform embedding.
 -/
-protected theorem postcomp_isUniformEmbedding [UniformSpace γ] {f : γ -> β}
+protected theorem postcomp_isUniformEmbedding [UniformSpace γ] {f : γ → β}
     (hf : IsUniformEmbedding f) : IsUniformEmbedding (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) where
   toIsUniformInducing := UniformOnFun.postcomp_isUniformInducing hf.isUniformInducing
-  injective _ _ H := funext fun _ => hf.injective (congrFun H _)
+  injective _ _ H := funext fun _ ↦ hf.injective (congrFun H _)
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Turn a uniform isomorphism `γ ≃ᵤ β` into a uniform isomorphism `(α →ᵤ[𝔖] γ) ≃ᵤ (α →ᵤ[𝔖] β)`
+by post-composing. -/
+/-
+**UniformOnFun.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {γ : Type u_3} →       [inst : Uni
+formSpace β] →         {𝔖 : Set (Set α)} → [inst_1 : UniformSpace γ] → γ ≃ᵤ β → 
+UniformOnFun α γ 𝔖 ≃ᵤ UniformOnFun α β 𝔖
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: [UniformSpace γ] (e : γ ≃ᵤ β)
-  body: { Equiv.piCongrRight fun _a => e.toEquiv with
-    uniformContinuous_toFun := UniformOnFun.postcomp_uniformContinuous e.uniformContinuous
-    uniformContinuous_invFun := UniformOnFun.postcomp_uniformContinuous e.symm.uniformContinuous }
-
-中文:
-定义 congrRight
-  签名: [一致空间 γ] (e : γ ≃ᵤ β)
-  定义体: { Equiv.piCongrRight fun _a => e.toEquiv with
-    uniformContinuous_toFun := UniformOnFun.postcomp_uniformContinuous e.uniformContinuous
-    uniformContinuous_invFun := UniformOnFun.postcomp_uniformContinuous e.symm.uniformContinuous }
+--- 原说明 ---
+Turn a uniform isomorphism `γ ≃ᵤ β` into a uniform isomorphism `(α →ᵤ[𝔖] γ) ≃ᵤ (
+α →ᵤ[𝔖] β)`
+by post-composing.
 -/
-protected def congrRight [UniformSpace γ] (e : γ ≃ᵤ β) : (α ->ᵤ[𝔖] γ) ≃ᵤ (α ->ᵤ[𝔖] β) :=
+protected def congrRight [UniformSpace γ] (e : γ ≃ᵤ β) : (α →ᵤ[𝔖] γ) ≃ᵤ (α →ᵤ[𝔖] β) :=
   { Equiv.piCongrRight fun _a => e.toEquiv with
     uniformContinuous_toFun := UniformOnFun.postcomp_uniformContinuous e.uniformContinuous
     uniformContinuous_invFun := UniformOnFun.postcomp_uniformContinuous e.symm.uniformContinuous }
 
-/--
-theorem `precomp_uniformContinuous` / 定理 `precomp_uniformContinuous`
+/-- Let `f : γ → α`, `𝔖 : Set (Set α)`, `𝔗 : Set (Set γ)`, and assume that `∀ T ∈ 𝔗, f '' T ∈ 𝔖`.
+Then, the function `(fun g ↦ g ∘ f) : (α →ᵤ[𝔖] β) → (γ →ᵤ[𝔗] β)` is uniformly continuous.
 
-English:
-theorem precomp_uniformContinuous
-  statement: {𝔗 : Set (Set γ)} {f : γ -> α}
-  proof: by
-  -- This follows from the fact that `(· ∘ f) × (· ∘ f)` maps `gen (f '' t) V` to `gen t V`.
-  simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
-refine fun t ht V hV => tendsto_iInf' (f '' t) tendsto_iInf' (hf ht)
-tendsto_iInf' V tendsto_iInf' hV ?_
-  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ => forall_mem_image.1
+Note that one can easily see that assuming `∀ T ∈ 𝔗, ∃ S ∈ 𝔖, f '' T ⊆ S` would work too, but
+we will get this for free when we prove that `𝒱(α, β, 𝔖, uβ) = 𝒱(α, β, 𝔖', uβ)` where `𝔖'` is the
+***noncovering*** bornology generated by `𝔖`. -/
+/-
+**UniformOnFun.precomp_uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : UniformSpace β] {𝔖 
+: Set (Set α)} {𝔗 : Set (Set γ)} {f : γ → α},   Set.MapsTo (fun x => f '' x) 𝔗 𝔖
+ → UniformContinuous fun g => (UniformOnFun.ofFun 𝔗) ((UniformOnFun.toFun 𝔖) g ∘
+ f)
+参数：Set α；Set γ；fun x => f '' x；UniformOnFun.ofFun 𝔗；(UniformOnFun.toFun 𝔖) g ∘ f
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.uniformity_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : Unif
+ormSpace β] (𝔖 : Set (Set α)),   uniformity (UniformOnFun α β 𝔖) = ⨅ s ∈ 𝔖, ⨅ V 
+∈ uniformity β, …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Filter.tendsto_iInf'`：tendsto_iInf' {f : α -> β} {x : ι -> Filter α} {y 
+: Filter β} (i : ι) (hi : Tendsto f (x i) y) : Tendsto f (⨅ i, x i) y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
 
-中文:
-定理 precomp_uniformContinuous
-  结论: {𝔗 : 集合 (集合 γ)} {f : γ -> α}
-  证明: by
-  -- This follows from the fact that `(· ∘ f) × (· ∘ f)` maps `gen (f '' t) V` to `gen t V`.
-  simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
-refine fun t ht V hV => tendsto_iInf' (f '' t) tendsto_iInf' (hf ht)
-tendsto_iInf' V tendsto_iInf' hV ?_
-  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ => forall_mem_image.1
+--- 原说明 ---
+Let `f : γ → α`, `𝔖 : Set (Set α)`, `𝔗 : Set (Set γ)`, and assume that `∀ T ∈ 𝔗,
+ f '' T ∈ 𝔖`.
+Then, the function `(fun g ↦ g ∘ f) : (α →ᵤ[𝔖] β) → (γ →ᵤ[𝔗] β)` is uniformly co
+ntinuous.
+
+Note that one can easily see that assuming `∀ T ∈ 𝔗, ∃ S ∈ 𝔖, f '' T ⊆ S` would 
+work too, but
+we will get this for free when we prove that `𝒱(α, β, 𝔖, uβ) = 𝒱(α, β, 𝔖', uβ)` 
+where `𝔖'` is the
+***noncovering*** bornology generated by `𝔖`.
 -/
-protected theorem precomp_uniformContinuous {𝔗 : Set (Set γ)} {f : γ -> α}
+protected theorem precomp_uniformContinuous {𝔗 : Set (Set γ)} {f : γ → α}
     (hf : MapsTo (f '' ·) 𝔗 𝔖) :
-    UniformContinuous fun g : α ->ᵤ[𝔖] β => ofFun 𝔗 (toFun 𝔖 g ∘ f) := by
+    UniformContinuous fun g : α →ᵤ[𝔖] β => ofFun 𝔗 (toFun 𝔖 g ∘ f) := by
   -- This follows from the fact that `(· ∘ f) × (· ∘ f)` maps `gen (f '' t) V` to `gen t V`.
   simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
-refine fun t ht V hV => tendsto_iInf' (f '' t) tendsto_iInf' (hf ht)
-tendsto_iInf' V tendsto_iInf' hV ?_
-  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ => forall_mem_image.1
+  refine fun t ht V hV ↦ tendsto_iInf' (f '' t) <| tendsto_iInf' (hf ht) <|
+    tendsto_iInf' V <| tendsto_iInf' hV ?_
+  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ ↦ forall_mem_image.1
 
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-- Turn a bijection `e : γ ≃ α` such that we have both `∀ T ∈ 𝔗, e '' T ∈ 𝔖` and
+`∀ S ∈ 𝔖, e ⁻¹' S ∈ 𝔗` into a uniform isomorphism `(γ →ᵤ[𝔗] β) ≃ᵤ (α →ᵤ[𝔖] β)` by pre-composing. -/
+/-
+**UniformOnFun.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {γ : Type u_3} →       [inst : Uni
+formSpace β] →         {𝔖 : Set (Set α)} →           {𝔗 : Set (Set γ)} →        
+     (e : γ ≃ α) → 𝔗 ⊆ Set.image ⇑e ⁻¹' 𝔖 → 𝔖 ⊆ Set.preimage ⇑e ⁻¹' 𝔗 → UniformO
+nFun γ β 𝔗 ≃ᵤ UniformOnFun α β 𝔖
+参数：Set α；Set γ；e : γ ≃ α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition congrLeft
-  signature: {𝔗 : Set (Set γ)} (e : γ ≃ α) (he : 𝔗 subseteq image e ⁻¹' 𝔖)
-  body: { Equiv.arrowCongr e (Equiv.refl _) with
-    uniformContinuous_toFun := UniformOnFun.precomp_uniformContinuous fun s hs => by
-      change e.symm '' s in 𝔗
-      rw [Equiv.image_symm_eq_preimage]
-      exact he' hs
-    uniformContinuous_invFun := UniformOnFun.precomp_uniformContinuous he }
-
-中文:
-定义 congrLeft
-  签名: {𝔗 : 集合 (集合 γ)} (e : γ ≃ α) (he : 𝔗 subseteq 像 e ⁻¹' 𝔖)
-  定义体: { Equiv.arrowCongr e (Equiv.refl _) with
-    uniformContinuous_toFun := UniformOnFun.precomp_uniformContinuous fun s hs => by
-      change e.symm '' s in 𝔗
-      rw [Equiv.image_symm_eq_preimage]
-      exact he' hs
-    uniformContinuous_invFun := UniformOnFun.precomp_uniformContinuous he }
+--- 原说明 ---
+Turn a bijection `e : γ ≃ α` such that we have both `∀ T ∈ 𝔗, e '' T ∈ 𝔖` and
+`∀ S ∈ 𝔖, e ⁻¹' S ∈ 𝔗` into a uniform isomorphism `(γ →ᵤ[𝔗] β) ≃ᵤ (α →ᵤ[𝔖] β)` b
+y pre-composing.
 -/
-protected def congrLeft {𝔗 : Set (Set γ)} (e : γ ≃ α) (he : 𝔗 subseteq image e ⁻¹' 𝔖)
-    (he' : 𝔖 subseteq preimage e ⁻¹' 𝔗) : (γ ->ᵤ[𝔗] β) ≃ᵤ (α ->ᵤ[𝔖] β) :=
+protected def congrLeft {𝔗 : Set (Set γ)} (e : γ ≃ α) (he : 𝔗 ⊆ image e ⁻¹' 𝔖)
+    (he' : 𝔖 ⊆ preimage e ⁻¹' 𝔗) : (γ →ᵤ[𝔗] β) ≃ᵤ (α →ᵤ[𝔖] β) :=
   { Equiv.arrowCongr e (Equiv.refl _) with
-    uniformContinuous_toFun := UniformOnFun.precomp_uniformContinuous fun s hs => by
-      change e.symm '' s in 𝔗
+    uniformContinuous_toFun := UniformOnFun.precomp_uniformContinuous fun s hs ↦ by
+      change e.symm '' s ∈ 𝔗
       rw [Equiv.image_symm_eq_preimage]
       exact he' hs
     uniformContinuous_invFun := UniformOnFun.precomp_uniformContinuous he }
 
-/--
-theorem `t2Space_of_covering` / 定理 `t2Space_of_covering`
+/-- If `𝔖` covers `α`, then the topology of `𝔖`-convergence is T₂. -/
+/-
+**UniformOnFun.t2Space_of_covering** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：t2Space_of_covering [T2Space β] (h : ⋃₀ 𝔖 = univ) : T2Space (α ->ᵤ[𝔖] β) w
+here t2 f g hfg
+参数：h : ⋃₀ 𝔖 = univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.mem_sUnion`：mem_sUnion {x : α} {S : Set (Set α)} : x in ⋃₀ S ↔ exist
+s t in S, x in t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `separated_by_continuous`：separated_by_continuous [TopologicalSpace Y] [T
+2Space Y] {f : X -> Y} (hf : Continuous f) {x y : X} (h : f x != f y) : exists u
+ v : Set X, I…
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `UniformOnFun.uniformContinuous_eval_of_mem`：uniformContinuous_eval_of_me
+m {x : α} (hxs : x in s) (hs : s in 𝔖) : UniformContinuous ((Function.eval x : (
+α -> β) -> β) ∘ toFun 𝔖)
 
-English:
-theorem t2Space_of_covering
-  given: [T2Space β] (h : ⋃₀ 𝔖 = univ)
-  statement: T2Space (α ->ᵤ[𝔖] β) where
-  proof: by
-    obtain ⟨x, hx⟩ := not_forall.mp (mt funext hfg)
-    obtain ⟨s, hs, hxs⟩ : exists s in 𝔖, x in s := mem_sUnion.mp (h.symm ▸ True.intro)
-    exact separated_by_continuous (uniformContinuous_eval_of_mem β 𝔖 hxs hs).continuous hx
-
-中文:
-定理 t2Space_of_covering
-  条件: [T2空间 β] (h : ⋃₀ 𝔖 = univ)
-  结论: T2空间 (α ->ᵤ[𝔖] β) where
-  证明: by
-    obtain ⟨x, hx⟩ := not_forall.mp (mt funext hfg)
-    obtain ⟨s, hs, hxs⟩ : exists s in 𝔖, x in s := mem_sUnion.mp (h.symm ▸ True.intro)
-    exact separated_by_continuous (uniformContinuous_eval_of_mem β 𝔖 hxs hs).continuous hx
-
-Depends on / 依赖: True.intro, continuous, h.symm, mem_sUnion, mem_sUnion.mp, not_forall, not_forall.mp, separated_by_continuous, uniformContinuous_eval_of_mem
+--- 原说明 ---
+If `𝔖` covers `α`, then the topology of `𝔖`-convergence is T₂.
 -/
-theorem t2Space_of_covering [T2Space β] (h : ⋃₀ 𝔖 = univ) : T2Space (α ->ᵤ[𝔖] β) where
+theorem t2Space_of_covering [T2Space β] (h : ⋃₀ 𝔖 = univ) : T2Space (α →ᵤ[𝔖] β) where
   t2 f g hfg := by
     obtain ⟨x, hx⟩ := not_forall.mp (mt funext hfg)
-    obtain ⟨s, hs, hxs⟩ : exists s in 𝔖, x in s := mem_sUnion.mp (h.symm ▸ True.intro)
+    obtain ⟨s, hs, hxs⟩ : ∃ s ∈ 𝔖, x ∈ s := mem_sUnion.mp (h.symm ▸ True.intro)
     exact separated_by_continuous (uniformContinuous_eval_of_mem β 𝔖 hxs hs).continuous hx
 
-/--
-theorem `uniformContinuous_restrict_toFun` / 定理 `uniformContinuous_restrict_toFun`
+/-- The restriction map from `α →ᵤ[𝔖] β` to `⋃₀ 𝔖 → β` is uniformly continuous. -/
+/-
+**UniformOnFun.uniformContinuous_restrict_toFun** 是 Mathlib 中的一个定理，位于命名空间 `Unifo
+rmOnFun`。
+形式化陈述：uniformContinuous_restrict_toFun : UniformContinuous ((⋃₀ 𝔖).domRestrict ∘
+ toFun 𝔖 : (α ->ᵤ[𝔖] β) -> ⋃₀ 𝔖 -> β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `uniformContinuous_pi`：uniformContinuous_pi {β : Type*} [UniformSpace β] 
+{f : β -> forall i, α i} : UniformContinuous f ↔ forall i, UniformContinuous fun
+ x => f x …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_sUnion`：mem_sUnion {x : α} {S : Set (Set α)} : x in ⋃₀ S ↔ exist
+s t in S, x in t
+· 使用定理 `UniformOnFun.uniformContinuous_eval_of_mem`：uniformContinuous_eval_of_me
+m {x : α} (hxs : x in s) (hs : s in 𝔖) : UniformContinuous ((Function.eval x : (
+α -> β) -> β) ∘ toFun 𝔖)
 
-English:
-theorem uniformContinuous_restrict_toFun
-  proof: by
-  rw [uniformContinuous_pi]
-  intro ⟨x, hx⟩
-  obtain ⟨s : Set α, hs : s in 𝔖, hxs : x in s⟩ := mem_sUnion.mpr hx
-  exact uniformContinuous_eval_of_mem β 𝔖 hxs hs
-
-中文:
-定理 uniformContinuous_restrict_toFun
-  证明: by
-  rw [uniformContinuous_pi]
-  intro ⟨x, hx⟩
-  obtain ⟨s : Set α, hs : s in 𝔖, hxs : x in s⟩ := mem_sUnion.mpr hx
-  exact uniformContinuous_eval_of_mem β 𝔖 hxs hs
-
-Depends on / 依赖: mem_sUnion, mem_sUnion.mpr, uniformContinuous_eval_of_mem, uniformContinuous_pi
+--- 原说明 ---
+The restriction map from `α →ᵤ[𝔖] β` to `⋃₀ 𝔖 → β` is uniformly continuous.
 -/
 theorem uniformContinuous_restrict_toFun :
-    UniformContinuous ((⋃₀ 𝔖).domRestrict ∘ toFun 𝔖 : (α ->ᵤ[𝔖] β) -> ⋃₀ 𝔖 -> β) := by
+    UniformContinuous ((⋃₀ 𝔖).domRestrict ∘ toFun 𝔖 : (α →ᵤ[𝔖] β) → ⋃₀ 𝔖 → β) := by
   rw [uniformContinuous_pi]
   intro ⟨x, hx⟩
-  obtain ⟨s : Set α, hs : s in 𝔖, hxs : x in s⟩ := mem_sUnion.mpr hx
+  obtain ⟨s : Set α, hs : s ∈ 𝔖, hxs : x ∈ s⟩ := mem_sUnion.mpr hx
   exact uniformContinuous_eval_of_mem β 𝔖 hxs hs
 
-/--
-lemma `isUniformInducing_pi_restrict` / 引理 `isUniformInducing_pi_restrict`
+/-- The map sending a function `f : α →ᵤ[𝔖] β` to the family of restrictions of `f` to each `s ∈ 𝔖`
+(each coordinate equipped with its respective uniform structure `s →ᵤ β`) induces the uniformity on
+`α →ᵤ[𝔖] β`. -/
+/-
+**UniformOnFun.isUniformInducing_pi_restrict** 是 Mathlib 中的一个引理，位于命名空间 `UniformO
+nFun`。
+形式化陈述：isUniformInducing_pi_restrict : IsUniformInducing (fun f : α ->ᵤ[𝔖] β => f
+un s : 𝔖 => UniformFun.ofFun ((s : Set α).domRestrict (toFun 𝔖 f)))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Pi.uniformSpace_eq`：Pi.uniformSpace_eq : Pi.uniformSpace α = ⨅ i, Unifor
+mSpace.comap (eval i) (U i)
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_subtype`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α]
+ {p : ι → Prop} {f : Subtype p → α},   iInf f = ⨅ i, ⨅ (h : p i), f ⟨i, h⟩
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
 
-English:
-lemma isUniformInducing_pi_restrict
-  proof: by
-  simp_rw [isUniformInducing_iff_uniformSpace, Pi.uniformSpace_eq, UniformSpace.comap_iInf,
-    ← UniformSpace.comap_comap, iInf_subtype]
-  rfl
-
-中文:
-引理 isUniformInducing_pi_restrict
-  证明: by
-  simp_rw [isUniformInducing_iff_uniformSpace, Pi.uniformSpace_eq, UniformSpace.comap_iInf,
-    ← UniformSpace.comap_comap, iInf_subtype]
-  rfl
-
-Depends on / 依赖: Pi.uniformSpace_eq, UniformSpace, UniformSpace.comap_comap, UniformSpace.comap_iInf, comap_comap, comap_iInf, iInf_subtype, isUniformInducing_iff_uniformSpace, simp_rw, uniformSpace_eq
+--- 原说明 ---
+The map sending a function `f : α →ᵤ[𝔖] β` to the family of restrictions of `f` 
+to each `s ∈ 𝔖`
+(each coordinate equipped with its respective uniform structure `s →ᵤ β`) induce
+s the uniformity on
+`α →ᵤ[𝔖] β`.
 -/
 lemma isUniformInducing_pi_restrict :
     IsUniformInducing
-      (fun f : α ->ᵤ[𝔖] β =>
-        fun s : 𝔖 => UniformFun.ofFun ((s : Set α).domRestrict (toFun 𝔖 f))) := by
+      (fun f : α →ᵤ[𝔖] β ↦
+        fun s : 𝔖 ↦ UniformFun.ofFun ((s : Set α).domRestrict (toFun 𝔖 f))) := by
   simp_rw [isUniformInducing_iff_uniformSpace, Pi.uniformSpace_eq, UniformSpace.comap_iInf,
     ← UniformSpace.comap_comap, iInf_subtype]
   rfl
 
-/--
-theorem `uniformContinuous_toFun` / 定理 `uniformContinuous_toFun`
+/-- If `𝔖` covers `α`, the natural map `UniformOnFun.toFun` from `α →ᵤ[𝔖] β` to `α → β` is
+uniformly continuous.
 
-English:
-theorem uniformContinuous_toFun
-  given: (h : ⋃₀ 𝔖 = univ)
-  proof: by
-  rw [uniformContinuous_pi]
-  exact uniformContinuous_eval h
+In other words, if `𝔖` covers `α`, then the uniform structure of `𝔖`-convergence is finer than
+that of pointwise convergence. -/
+/-
+**UniformOnFun.uniformContinuous_toFun** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β] {𝔖 : Set (Set α)},
+   ⋃₀ 𝔖 = Set.univ → UniformContinuous ⇑(UniformOnFun.toFun 𝔖)
+参数：Set α；UniformOnFun.toFun 𝔖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `uniformContinuous_pi`：uniformContinuous_pi {β : Type*} [UniformSpace β] 
+{f : β -> forall i, α i} : UniformContinuous f ↔ forall i, UniformContinuous fun
+ x => f x …
+· 使用定理 `UniformOnFun.uniformContinuous_eval`：uniformContinuous_eval (h : ⋃₀ 𝔖 = 
+univ) (x : α) : UniformContinuous ((Function.eval x : (α -> β) -> β) ∘ toFun 𝔖)
 
-中文:
-定理 uniformContinuous_toFun
-  条件: (h : ⋃₀ 𝔖 = univ)
-  证明: by
-  rw [uniformContinuous_pi]
-  exact uniformContinuous_eval h
+--- 原说明 ---
+If `𝔖` covers `α`, the natural map `UniformOnFun.toFun` from `α →ᵤ[𝔖] β` to `α →
+ β` is
+uniformly continuous.
+
+In other words, if `𝔖` covers `α`, then the uniform structure of `𝔖`-convergence
+ is finer than
+that of pointwise convergence.
 -/
 protected theorem uniformContinuous_toFun (h : ⋃₀ 𝔖 = univ) :
-    UniformContinuous (toFun 𝔖 : (α ->ᵤ[𝔖] β) -> α -> β) := by
+    UniformContinuous (toFun 𝔖 : (α →ᵤ[𝔖] β) → α → β) := by
   rw [uniformContinuous_pi]
   exact uniformContinuous_eval h
 
-/--
-theorem `continuousAt_eval₂` / 定理 `continuousAt_eval₂`
+/-- If `f : α →ᵤ[𝔖] β` is continuous at `x` and `x` admits a neighbourhood `V ∈ 𝔖`,
+then evaluation of `g : α →ᵤ[𝔖] β` at `y : α` is continuous in `(g, y)` at `(f, x)`. -/
+/-
+**UniformOnFun.continuousAt_eval** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem continuousAt_eval₂
-  statement: [TopologicalSpace α] {f : α ->ᵤ[𝔖] β} {x : α}
-  proof: by
-  rw [ContinuousAt]; rw [nhds_eq_comap_uniformity]; rw [tendsto_comap_iff]; rw [← lift'_comp_uniformity]; rw [tendsto_lift']
+--- 原说明 ---
+If `f : α →ᵤ[𝔖] β` is continuous at `x` and `x` admits a neighbourhood `V ∈ 𝔖`,
+then evaluation of `g : α →ᵤ[𝔖] β` at `y : α` is continuous in `(g, y)` at `(f, 
+x)`.
+-/
+protected theorem continuousAt_eval₂ [TopologicalSpace α] {f : α →ᵤ[𝔖] β} {x : α}
+    (h𝔖 : ∃ V ∈ 𝔖, V ∈ 𝓝 x) (hc : ContinuousAt (toFun 𝔖 f) x) :
+    ContinuousAt (fun fx : (α →ᵤ[𝔖] β) × α ↦ toFun 𝔖 fx.1 fx.2) (f, x) := by
+  rw [ContinuousAt, nhds_eq_comap_uniformity, tendsto_comap_iff, ← lift'_comp_uniformity,
+    tendsto_lift']
   intro U hU
   rcases h𝔖 with ⟨V, hV, hVx⟩
   filter_upwards [prod_mem_nhds (UniformOnFun.gen_mem_nhds _ _ _ hV hU)
     (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ hU)]
     with ⟨g, y⟩ ⟨hg, hyV, hy⟩ using ⟨toFun 𝔖 f y, hy, hg y hyV⟩
 
-中文:
-定理 continuousAt_eval₂
-  结论: [拓扑空间 α] {f : α ->ᵤ[𝔖] β} {x : α}
-  证明: by
-  rw [ContinuousAt]; rw [nhds_eq_comap_uniformity]; rw [tendsto_comap_iff]; rw [← lift'_comp_uniformity]; rw [tendsto_lift']
-  intro U hU
-  rcases h𝔖 with ⟨V, hV, hVx⟩
-  filter_upwards [prod_mem_nhds (UniformOnFun.gen_mem_nhds _ _ _ hV hU)
-    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ hU)]
-    with ⟨g, y⟩ ⟨hg, hyV, hy⟩ using ⟨toFun 𝔖 f y, hy, hg y hyV⟩
+/-- If each point of `α` admits a neighbourhood `V ∈ 𝔖`,
+then the evaluation of `f : α →ᵤ[𝔖] β` at `x : α` is continuous in `(f, x)`
+on the set of `(f, x)` such that `f` is continuous at `x`. -/
+/-
+**UniformOnFun.continuousOn_eval** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If each point of `α` admits a neighbourhood `V ∈ 𝔖`,
+then the evaluation of `f : α →ᵤ[𝔖] β` at `x : α` is continuous in `(f, x)`
+on the set of `(f, x)` such that `f` is continuous at `x`.
 -/
-protected theorem continuousAt_eval₂ [TopologicalSpace α] {f : α ->ᵤ[𝔖] β} {x : α}
-    (h𝔖 : exists V in 𝔖, V in 𝓝 x) (hc : ContinuousAt (toFun 𝔖 f) x) :
-    ContinuousAt (fun fx : (α ->ᵤ[𝔖] β) × α => toFun 𝔖 fx.1 fx.2) (f, x) := by
-  rw [ContinuousAt]; rw [nhds_eq_comap_uniformity]; rw [tendsto_comap_iff]; rw [← lift'_comp_uniformity]; rw [tendsto_lift']
-  intro U hU
-  rcases h𝔖 with ⟨V, hV, hVx⟩
-  filter_upwards [prod_mem_nhds (UniformOnFun.gen_mem_nhds _ _ _ hV hU)
-    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ hU)]
-    with ⟨g, y⟩ ⟨hg, hyV, hy⟩ using ⟨toFun 𝔖 f y, hy, hg y hyV⟩
-
-/--
-theorem `continuousOn_eval₂` / 定理 `continuousOn_eval₂`
-
-English:
-theorem continuousOn_eval₂
-  given: [TopologicalSpace α] (h𝔖 : forall x, exists V in 𝔖, V in 𝓝 x)
-  proof: fun (_f, x) hc =>
+protected theorem continuousOn_eval₂ [TopologicalSpace α] (h𝔖 : ∀ x, ∃ V ∈ 𝔖, V ∈ 𝓝 x) :
+    ContinuousOn (fun fx : (α →ᵤ[𝔖] β) × α ↦ toFun 𝔖 fx.1 fx.2)
+      {fx | ContinuousAt (toFun 𝔖 fx.1) fx.2} := fun (_f, x) hc ↦
   (UniformOnFun.continuousAt_eval₂ (h𝔖 x) hc).continuousWithinAt
 
-中文:
-定理 continuousOn_eval₂
-  条件: [拓扑空间 α] (h𝔖 : 对任意 x, 存在 V in 𝔖, V in 𝓝 x)
-  证明: fun (_f, x) hc =>
-  (UniformOnFun.continuousAt_eval₂ (h𝔖 x) hc).continuousWithinAt
+/-- Convergence in the topology of `𝔖`-convergence means uniform convergence on `S` (in the sense
+of `TendstoUniformlyOn`) for all `S ∈ 𝔖`. -/
+/-
+**UniformOnFun.tendsto_iff_tendstoUniformlyOn** 是 Mathlib 中的一个定理，位于命名空间 `Uniform
+OnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {ι : Type u_4} {p : Filter ι} [inst : Unif
+ormSpace β] {𝔖 : Set (Set α)}   {F : ι → UniformOnFun α β 𝔖} {f : UniformOnFun α
+ β 𝔖},   Filter.Tendsto F p (nhds f) ↔ ∀ s ∈ 𝔖, TendstoUniformlyOn (⇑(UniformOnF
+un.toFun 𝔖) ∘ F) ((UniformOnFun.toFun 𝔖) f) p s
+参数：Set α；nhds f；⇑(UniformOnFun.toFun 𝔖) ∘ F；(UniformOnFun.toFun 𝔖) f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.nhds_eq`：∀ {α : Type u_1} (β : Type u_2) [inst : UniformSpa
+ce β] (𝔖 : Set (Set α)) (f : UniformOnFun α β 𝔖),   nhds f =     ⨅ s ∈ 𝔖,       
+⨅ V ∈ unif…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+
+--- 原说明 ---
+Convergence in the topology of `𝔖`-convergence means uniform convergence on `S` 
+(in the sense
+of `TendstoUniformlyOn`) for all `S ∈ 𝔖`.
 -/
-protected theorem continuousOn_eval₂ [TopologicalSpace α] (h𝔖 : forall x, exists V in 𝔖, V in 𝓝 x) :
-    ContinuousOn (fun fx : (α ->ᵤ[𝔖] β) × α => toFun 𝔖 fx.1 fx.2)
-      {fx | ContinuousAt (toFun 𝔖 fx.1) fx.2} := fun (_f, x) hc =>
-  (UniformOnFun.continuousAt_eval₂ (h𝔖 x) hc).continuousWithinAt
-
-/--
-theorem `tendsto_iff_tendstoUniformlyOn` / 定理 `tendsto_iff_tendstoUniformlyOn`
-
-English:
-theorem tendsto_iff_tendstoUniformlyOn
-  given: {F : ι -> α ->ᵤ[𝔖] β} {f : α ->ᵤ[𝔖] β}
-  proof: by
+protected theorem tendsto_iff_tendstoUniformlyOn {F : ι → α →ᵤ[𝔖] β} {f : α →ᵤ[𝔖] β} :
+    Tendsto F p (𝓝 f) ↔ ∀ s ∈ 𝔖, TendstoUniformlyOn (toFun 𝔖 ∘ F) (toFun 𝔖 f) p s := by
   simp only [UniformOnFun.nhds_eq, tendsto_iInf, tendsto_principal, TendstoUniformlyOn,
     Function.comp_apply, mem_ofPred]
-
-中文:
-定理 tendsto_iff_tendstoUniformlyOn
-  条件: {F : ι -> α ->ᵤ[𝔖] β} {f : α ->ᵤ[𝔖] β}
-  证明: by
-  simp only [UniformOnFun.nhds_eq, tendsto_iInf, tendsto_principal, TendstoUniformlyOn,
-    Function.comp_apply, mem_ofPred]
+/-
+**UniformOnFun.continuous_rng_iff** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : UniformSpace β] {𝔖 : Set (Set α)} 
+{X : Type u_5} [inst_1 : TopologicalSpace X]   {f : X → UniformOnFun α β 𝔖},   C
+ontinuous f ↔ ∀ s ∈ 𝔖, Continuous (⇑UniformFun.ofFun ∘ s.domRestrict ∘ ⇑(Uniform
+OnFun.toFun 𝔖) ∘ f)
+参数：Set α；⇑UniformFun.ofFun ∘ s.domRestrict ∘ ⇑(UniformOnFun.toFun 𝔖) ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected theorem tendsto_iff_tendstoUniformlyOn {F : ι -> α ->ᵤ[𝔖] β} {f : α ->ᵤ[𝔖] β} :
-    Tendsto F p (𝓝 f) ↔ forall s in 𝔖, TendstoUniformlyOn (toFun 𝔖 ∘ F) (toFun 𝔖 f) p s := by
-  simp only [UniformOnFun.nhds_eq, tendsto_iInf, tendsto_principal, TendstoUniformlyOn,
-    Function.comp_apply, mem_ofPred]
-
-/--
-lemma `continuous_rng_iff` / 引理 `continuous_rng_iff`
-
-English:
-lemma continuous_rng_iff
-  given: {X : Type*} [TopologicalSpace X] {f : X -> (α ->ᵤ[𝔖] β)}
-  proof: by
-  simp only [continuous_iff_continuousAt, ContinuousAt,
-    UniformOnFun.tendsto_iff_tendstoUniformlyOn, UniformFun.tendsto_iff_tendstoUniformly,
-    tendstoUniformlyOn_iff_tendstoUniformly_comp_coe, @forall_comm X,
-    Function.comp_def, domRestrict_eq, UniformFun.toFun_ofFun]
-
-中文:
-引理 continuous_rng_iff
-  条件: {X : 类型} [拓扑空间 X] {f : X -> (α ->ᵤ[𝔖] β)}
-  证明: by
-  simp only [continuous_iff_continuousAt, ContinuousAt,
-    UniformOnFun.tendsto_iff_tendstoUniformlyOn, UniformFun.tendsto_iff_tendstoUniformly,
-    tendstoUniformlyOn_iff_tendstoUniformly_comp_coe, @forall_comm X,
-    Function.comp_def, domRestrict_eq, UniformFun.toFun_ofFun]
--/
-protected lemma continuous_rng_iff {X : Type*} [TopologicalSpace X] {f : X -> (α ->ᵤ[𝔖] β)} :
-    Continuous f ↔ forall s in 𝔖,
+protected lemma continuous_rng_iff {X : Type*} [TopologicalSpace X] {f : X → (α →ᵤ[𝔖] β)} :
+    Continuous f ↔ ∀ s ∈ 𝔖,
       Continuous (UniformFun.ofFun ∘ s.domRestrict ∘ UniformOnFun.toFun 𝔖 ∘ f) := by
   simp only [continuous_iff_continuousAt, ContinuousAt,
     UniformOnFun.tendsto_iff_tendstoUniformlyOn, UniformFun.tendsto_iff_tendstoUniformly,
     tendstoUniformlyOn_iff_tendstoUniformly_comp_coe, @forall_comm X,
     Function.comp_def, domRestrict_eq, UniformFun.toFun_ofFun]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompleteSpace
-  signature: β] : CompleteSpace (α ->ᵤ[𝔖] β)
-  body: by
-  rcases isEmpty_or_nonempty β
-  · infer_instance
-  · refine ⟨fun {F} hF => ?_⟩
-    have := hF.1
-    have : forall x in ⋃₀ 𝔖, exists y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx =>
-      CompleteSpace.complete (hF.map (uniformContinuous_eval_of_mem_sUnion _ _ hx))
-    choose! g hg using this
-    use ofFun 𝔖 g
-    simp_rw [UniformOnFun.nhds_eq_of_basis _ _ uniformity_hasBasis_closed, le_iInf₂_iff,
-      le_principal_iff]
-    intro s hs U ⟨hU, hUc⟩
-.2 _ UniformOnFun.gen_mem_uniformity _ _ hs hU rcases cauchy_iff.mp hF
-      with ⟨V, hV, hVU⟩
-    filter_upwards [hV] with f hf x hx
-    refine hUc.mem_of_tendsto ((hg x ⟨s, hs, hx⟩).prodMk_nhds tendsto_const_nhds) ?_
-    filter_upwards [hV] with g' hg' using hVU (mk_mem_prod hg' hf) _ hx
-
-中文:
-实例 [完备空间
-  签名: β] : 完备空间 (α ->ᵤ[𝔖] β)
-  定义体: by
-  rcases isEmpty_or_nonempty β
-  · infer_instance
-  · refine ⟨fun {F} hF => ?_⟩
-    have := hF.1
-    have : forall x in ⋃₀ 𝔖, exists y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx =>
-      CompleteSpace.complete (hF.map (uniformContinuous_eval_of_mem_sUnion _ _ hx))
-    choose! g hg using this
-    use ofFun 𝔖 g
-    simp_rw [UniformOnFun.nhds_eq_of_basis _ _ uniformity_hasBasis_closed, le_iInf₂_iff,
-      le_principal_iff]
-    intro s hs U ⟨hU, hUc⟩
-.2 _ UniformOnFun.gen_mem_uniformity _ _ hs hU rcases cauchy_iff.mp hF
-      with ⟨V, hV, hVU⟩
-    filter_upwards [hV] with f hf x hx
-    refine hUc.mem_of_tendsto ((hg x ⟨s, hs, hx⟩).prodMk_nhds tendsto_const_nhds) ?_
-    filter_upwards [hV] with g' hg' using hVU (mk_mem_prod hg' hf) _ hx
-
-Depends on / 依赖: CompleteSpace, CompleteSpace.complete, Tendsto, UniformOnFun, UniformOnFun.gen_mem_uniformity, UniformOnFun.nhds_eq_of_basis, cauchy_iff, cauchy_iff.mp, complete, gen_mem_uniformity, hF.map, infer_instance, isEmpty_or_nonempty, le_principal_iff, nhds_eq_of_basis, simp_rw, uniformContinuous_eval_of_mem_sUnion, uniformity_hasBasis_closed
+/-
+**UniformOnFun.** 是 Mathlib 中的一个实例，位于命名空间 `UniformOnFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CompleteSpace β] : CompleteSpace (α ->ᵤ[𝔖] β) := by
+instance [CompleteSpace β] : CompleteSpace (α →ᵤ[𝔖] β) := by
   rcases isEmpty_or_nonempty β
   · infer_instance
-  · refine ⟨fun {F} hF => ?_⟩
+  · refine ⟨fun {F} hF ↦ ?_⟩
     have := hF.1
-    have : forall x in ⋃₀ 𝔖, exists y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx =>
+    have : ∀ x ∈ ⋃₀ 𝔖, ∃ y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx ↦
       CompleteSpace.complete (hF.map (uniformContinuous_eval_of_mem_sUnion _ _ hx))
     choose! g hg using this
     use ofFun 𝔖 g
     simp_rw [UniformOnFun.nhds_eq_of_basis _ _ uniformity_hasBasis_closed, le_iInf₂_iff,
       le_principal_iff]
     intro s hs U ⟨hU, hUc⟩
-.2 _ UniformOnFun.gen_mem_uniformity _ _ hs hU rcases cauchy_iff.mp hF
+    rcases cauchy_iff.mp hF |>.2 _ <| UniformOnFun.gen_mem_uniformity _ _ hs hU
       with ⟨V, hV, hVU⟩
     filter_upwards [hV] with f hf x hx
     refine hUc.mem_of_tendsto ((hg x ⟨s, hs, hx⟩).prodMk_nhds tendsto_const_nhds) ?_
     filter_upwards [hV] with g' hg' using hVU (mk_mem_prod hg' hf) _ hx
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uniformEquivProdArrow` / `uniformEquivProdArrow` 的定义
+/-- The natural bijection between `α → β × γ` and `(α → β) × (α → γ)`, upgraded to a uniform
+isomorphism between `α →ᵤ[𝔖] β × γ` and `(α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] γ)`. -/
+/-
+**UniformOnFun.uniformEquivProdArrow** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {γ : Type u_3} →       [inst : Uni
+formSpace β] →         {𝔖 : Set (Set α)} →           [inst_1 : UniformSpace γ] →
+ UniformOnFun α (β × γ) 𝔖 ≃ᵤ UniformOnFun α β 𝔖 × UniformOnFun α γ 𝔖
+参数：Set α；β × γ。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uniformEquivProdArrow
-  signature: [UniformSpace γ]
-  body: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
-  -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
-  -- `UniformOnFun.inf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to check that some square commutes.
-  -- We could also deduce this from `UniformFun.uniformEquivProdArrow`,
-  -- but it turns out to be more annoying.
-  ((UniformOnFun.ofFun 𝔖).symm.trans <| (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
-    (UniformOnFun.ofFun 𝔖).prodCongr (UniformOnFun.ofFun 𝔖)).toUniformEquivOfIsUniformInducing <| by
-      constructor
-      rw [uniformity_prod]; rw [comap_inf]; rw [comap_comap]; rw [comap_comap]
-      have H := @UniformOnFun.inf_eq α (β × γ) 𝔖
-        (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)
-      apply_fun (fun u => @uniformity (α ->ᵤ[𝔖] β × γ) u) at H
-      convert! H.symm using 1
-      rw [UniformOnFun.comap_eq]; rw [UniformOnFun.comap_eq]
-      erw [inf_uniformity]
-      rw [uniformity_comap]; rw [uniformity_comap]
-      rfl
-
-中文:
-定义 uniformEquivProdArrow
-  签名: [一致空间 γ]
-  定义体: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
-  -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
-  -- `UniformOnFun.inf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to check that some square commutes.
-  -- We could also deduce this from `UniformFun.uniformEquivProdArrow`,
-  -- but it turns out to be more annoying.
-  ((UniformOnFun.ofFun 𝔖).symm.trans <| (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
-    (UniformOnFun.ofFun 𝔖).prodCongr (UniformOnFun.ofFun 𝔖)).toUniformEquivOfIsUniformInducing <| by
-      constructor
-      rw [uniformity_prod]; rw [comap_inf]; rw [comap_comap]; rw [comap_comap]
-      have H := @UniformOnFun.inf_eq α (β × γ) 𝔖
-        (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)
-      apply_fun (fun u => @uniformity (α ->ᵤ[𝔖] β × γ) u) at H
-      convert! H.symm using 1
-      rw [UniformOnFun.comap_eq]; rw [UniformOnFun.comap_eq]
-      erw [inf_uniformity]
-      rw [uniformity_comap]; rw [uniformity_comap]
-      rfl
+--- 原说明 ---
+The natural bijection between `α → β × γ` and `(α → β) × (α → γ)`, upgraded to a
+ uniform
+isomorphism between `α →ᵤ[𝔖] β × γ` and `(α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] γ)`.
 -/
 protected def uniformEquivProdArrow [UniformSpace γ] :
-    (α ->ᵤ[𝔖] β × γ) ≃ᵤ (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] γ) :=
+    (α →ᵤ[𝔖] β × γ) ≃ᵤ (α →ᵤ[𝔖] β) × (α →ᵤ[𝔖] γ) :=
   -- Denote `φ` this bijection. We want to show that
   -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
@@ -2855,65 +3035,36 @@ protected def uniformEquivProdArrow [UniformSpace γ] :
   ((UniformOnFun.ofFun 𝔖).symm.trans <| (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
     (UniformOnFun.ofFun 𝔖).prodCongr (UniformOnFun.ofFun 𝔖)).toUniformEquivOfIsUniformInducing <| by
       constructor
-      rw [uniformity_prod]; rw [comap_inf]; rw [comap_comap]; rw [comap_comap]
+      rw [uniformity_prod, comap_inf, comap_comap, comap_comap]
       have H := @UniformOnFun.inf_eq α (β × γ) 𝔖
         (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)
-      apply_fun (fun u => @uniformity (α ->ᵤ[𝔖] β × γ) u) at H
+      apply_fun (fun u ↦ @uniformity (α →ᵤ[𝔖] β × γ) u) at H
       convert! H.symm using 1
-      rw [UniformOnFun.comap_eq]; rw [UniformOnFun.comap_eq]
+      rw [UniformOnFun.comap_eq, UniformOnFun.comap_eq]
       erw [inf_uniformity]
-      rw [uniformity_comap]; rw [uniformity_comap]
+      rw [uniformity_comap, uniformity_comap]
       rfl
 -- the relevant diagram commutes by definition
 
 set_option backward.isDefEq.respectTransparency false in
-variable (𝔖) (δ : ι -> Type*) [forall i, UniformSpace (δ i)] in
-/--
-Definition of `uniformEquivPiComm` / `uniformEquivPiComm` 的定义
+variable (𝔖) (δ : ι → Type*) [∀ i, UniformSpace (δ i)] in
+/-- The natural bijection between `α → Π i, δ i` and `Π i, α → δ i`, upgraded to a uniform
+isomorphism between `α →ᵤ[𝔖] (Π i, δ i)` and `Π i, α →ᵤ[𝔖] δ i`. -/
+/-
+**UniformOnFun.uniformEquivPiComm** 是 Mathlib 中的一个定义，位于命名空间 `UniformOnFun`。
+形式化陈述：{α : Type u_1} →   {ι : Type u_4} →     (𝔖 : Set (Set α)) →       (δ : ι →
+ Type u_5) →         [inst : (i : ι) → UniformSpace (δ i)] → UniformOnFun α ((i 
+: ι) → δ i) 𝔖 ≃ᵤ ((i : ι) → UniformOnFun α (δ i) 𝔖)
+参数：𝔖 : Set (Set α)；δ : ι → Type u_5；i : ι；δ i；(i : ι) → δ i；(i : ι) → UniformOnF
+un α (δ i) 𝔖。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformEquivPiComm
-  signature: : (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ≃ᵤ ((i : ι) -> α ->ᵤ[𝔖] δ i)
-  body: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (Π i, 𝒱(α, δ i, 𝔖, uδ i)) = 𝒱(α, (Π i, δ i), 𝔖, (Π i, uδ i))`.
-  -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
-  -- `UniformOnFun.iInf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to check that some square commutes.
-  -- We could also deduce this from `UniformFun.uniformEquivPiComm`, but it turns out
-  -- to be more annoying.
-  @Equiv.toUniformEquivOfIsUniformInducing (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ((i : ι) -> α ->ᵤ[𝔖] δ i)
-_ _ (Equiv.piComm _) by
-    constructor
-    change comap (Prod.map Function.swap Function.swap) _ = _
-    erw [← uniformity_comap]
-    congr
-    rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformOnFun.iInf_eq]
-    refine iInf_congr fun i => ?_
-    rw [← UniformSpace.comap_comap]; rw [UniformOnFun.comap_eq]
-    rfl
-
-中文:
-定义 uniformEquivPiComm
-  签名: : (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ≃ᵤ ((i : ι) -> α ->ᵤ[𝔖] δ i)
-  定义体: -- Denote `φ` this bijection. We want to show that
-  -- `comap φ (Π i, 𝒱(α, δ i, 𝔖, uδ i)) = 𝒱(α, (Π i, δ i), 𝔖, (Π i, uδ i))`.
-  -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
-  -- `UniformOnFun.iInf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to check that some square commutes.
-  -- We could also deduce this from `UniformFun.uniformEquivPiComm`, but it turns out
-  -- to be more annoying.
-  @Equiv.toUniformEquivOfIsUniformInducing (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ((i : ι) -> α ->ᵤ[𝔖] δ i)
-_ _ (Equiv.piComm _) by
-    constructor
-    change comap (Prod.map Function.swap Function.swap) _ = _
-    erw [← uniformity_comap]
-    congr
-    rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformOnFun.iInf_eq]
-    refine iInf_congr fun i => ?_
-    rw [← UniformSpace.comap_comap]; rw [UniformOnFun.comap_eq]
-    rfl
+--- 原说明 ---
+The natural bijection between `α → Π i, δ i` and `Π i, α → δ i`, upgraded to a u
+niform
+isomorphism between `α →ᵤ[𝔖] (Π i, δ i)` and `Π i, α →ᵤ[𝔖] δ i`.
 -/
-protected def uniformEquivPiComm : (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ≃ᵤ ((i : ι) -> α ->ᵤ[𝔖] δ i) :=
+protected def uniformEquivPiComm : (α →ᵤ[𝔖] ((i : ι) → δ i)) ≃ᵤ ((i : ι) → α →ᵤ[𝔖] δ i) :=
   -- Denote `φ` this bijection. We want to show that
   -- `comap φ (Π i, 𝒱(α, δ i, 𝔖, uδ i)) = 𝒱(α, (Π i, δ i), 𝔖, (Π i, uδ i))`.
   -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
@@ -2921,118 +3072,144 @@ protected def uniformEquivPiComm : (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ≃ᵤ ((
   -- which leaves us to check that some square commutes.
   -- We could also deduce this from `UniformFun.uniformEquivPiComm`, but it turns out
   -- to be more annoying.
-  @Equiv.toUniformEquivOfIsUniformInducing (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ((i : ι) -> α ->ᵤ[𝔖] δ i)
-_ _ (Equiv.piComm _) by
+  @Equiv.toUniformEquivOfIsUniformInducing (α →ᵤ[𝔖] ((i : ι) → δ i)) ((i : ι) → α →ᵤ[𝔖] δ i)
+      _ _ (Equiv.piComm _) <| by
     constructor
     change comap (Prod.map Function.swap Function.swap) _ = _
     erw [← uniformity_comap]
     congr
-    rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformOnFun.iInf_eq]
+    rw [Pi.uniformSpace, UniformSpace.ofCoreEq_toCore, Pi.uniformSpace,
+      UniformSpace.ofCoreEq_toCore, UniformSpace.comap_iInf, UniformOnFun.iInf_eq]
     refine iInf_congr fun i => ?_
-    rw [← UniformSpace.comap_comap]; rw [UniformOnFun.comap_eq]
+    rw [← UniformSpace.comap_comap, UniformOnFun.comap_eq]
     rfl
 -- Like in the previous lemma, the diagram actually commutes by definition
 
-/--
-theorem `isClosed_setOfPred_continuous` / 定理 `isClosed_setOfPred_continuous`
+/-- Suppose that the topology on `α` is defined by its restrictions to the sets of `𝔖`.
 
-English:
-theorem isClosed_setOfPred_continuous
-  given: [TopologicalSpace α] (h : IsCoherentWith 𝔖)
-  proof: by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => h.continuous_iff.2 fun s hs => ?_
-  rw [← tendsto_id']; rw [UniformOnFun.tendsto_iff_tendstoUniformlyOn] at huf
-exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.continuousOn
+Then the set of continuous functions is closed
+in the topology of uniform convergence on the sets of `𝔖`. -/
+/-
+**UniformOnFun.isClosed_setOfPred_continuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformO
+nFun`。
+形式化陈述：isClosed_setOfPred_continuous [TopologicalSpace α] (h : IsCoherentWith 𝔖) 
+: IsClosed {f : α ->ᵤ[𝔖] β | Continuous (toFun 𝔖 f)}
+参数：h : IsCoherentWith 𝔖。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `isClosed_iff_forall_filter`：isClosed_iff_forall_filter : IsClosed s ↔ fo
+rall x, forall F : Filter X, F.NeBot -> F <= 𝓟 s -> F <= 𝓝 x -> x in s
+· 使用定理 `Topology.IsCoherentWith.continuous_iff`：∀ {X : Type u_1} [inst : Topolog
+icalSpace X] {S : Set (Set X)} {Y : Type u_2} [inst_1 : TopologicalSpace Y] {f :
+ X → Y},   Topology.IsCohere…
+· 使用定理 `TendstoUniformlyOn.continuousOn`：∀ {α : Type u_1} {β : Type u_2} {ι : Ty
+pe u_3} [inst : TopologicalSpace α] [inst_1 : UniformSpace β] {F : ι → α → β}   
+{f : α → β} {s : Set …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformOnFun.tendsto_iff_tendstoUniformlyOn`：∀ {α : Type u_1} {β : Type 
+u_2} {ι : Type u_4} {p : Filter ι} [inst : UniformSpace β] {𝔖 : Set (Set α)}   {
+F : ι → UniformOnFun α β 𝔖} {f : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.tendsto_id'`：tendsto_id' {x y : Filter α} : Tendsto id x y ↔ x <=
+ y
+· 使用定理 `Filter.Eventually.frequently`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p
+ : α → Prop}, (∀ᶠ (x : α) in f, p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
 
-@[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
+--- 原说明 ---
+Suppose that the topology on `α` is defined by its restrictions to the sets of `
+𝔖`.
 
-中文:
-定理 isClosed_setOfPred_continuous
-  条件: [拓扑空间 α] (h : 是余herentWith 𝔖)
-  证明: by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => h.continuous_iff.2 fun s hs => ?_
-  rw [← tendsto_id']; rw [UniformOnFun.tendsto_iff_tendstoUniformlyOn] at huf
-exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.continuousOn
-
-@[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
-
-Depends on / 依赖: Continuous, Continuous.continuousOn, Eventually, Eventually.frequently, UniformOnFun, UniformOnFun.tendsto_iff_tendstoUniformlyOn, continuousOn, continuous_iff, frequently, h.continuous_iff, isClosed_iff_forall_filter, tendsto_id, tendsto_iff_tendstoUniformlyOn
+Then the set of continuous functions is closed
+in the topology of uniform convergence on the sets of `𝔖`.
 -/
 theorem isClosed_setOfPred_continuous [TopologicalSpace α] (h : IsCoherentWith 𝔖) :
-    IsClosed {f : α ->ᵤ[𝔖] β | Continuous (toFun 𝔖 f)} := by
-  refine isClosed_iff_forall_filter.2 fun f u _ hu huf => h.continuous_iff.2 fun s hs => ?_
-  rw [← tendsto_id']; rw [UniformOnFun.tendsto_iff_tendstoUniformlyOn] at huf
-exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.continuousOn
+    IsClosed {f : α →ᵤ[𝔖] β | Continuous (toFun 𝔖 f)} := by
+  refine isClosed_iff_forall_filter.2 fun f u _ hu huf ↦ h.continuous_iff.2 fun s hs ↦ ?_
+  rw [← tendsto_id', UniformOnFun.tendsto_iff_tendstoUniformlyOn] at huf
+  exact (huf s hs).continuousOn <| Eventually.frequently <| hu fun _ ↦ Continuous.continuousOn
 
 @[deprecated (since := "2026-07-09")]
 alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 set_option backward.isDefEq.respectTransparency false in
 variable (𝔖) in
-/--
-theorem `uniformSpace_eq_inf_precomp_of_cover` / 定理 `uniformSpace_eq_inf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_inf_precomp_of_cover
-  statement: {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
-  proof: by
-  set ψ₁ : Π S : Set α, φ₁ ⁻¹' S -> S := fun S => S.restrictPreimage φ₁
-  set ψ₂ : Π S : Set α, φ₂ ⁻¹' S -> S := fun S => S.restrictPreimage φ₂
-  have : forall S in 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
-    refine fun S hS => UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
-    simpa only [← univ_subset_iff, ψ₁, ψ₂, range_restrictPreimage, ← preimage_union,
-      ← image_subset_iff, image_univ, Subtype.range_val] using h_cover S hS
-  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS => ?_)
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous h_image₁
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous h_image₂
-  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, UniformSpace.comap_inf,
-      ← UniformSpace.comap_comap]
-    exact inf_le_inf
-      (iInf₂_le_of_le _ (h_preimage₁ hS) le_rfl)
-      (iInf₂_le_of_le _ (h_preimage₂ hS) le_rfl)
-
-中文:
-定理 uniformSpace_eq_inf_precomp_of_cover
-  结论: {δ₁ δ₂ : 类型} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
-  证明: by
-  set ψ₁ : Π S : Set α, φ₁ ⁻¹' S -> S := fun S => S.restrictPreimage φ₁
-  set ψ₂ : Π S : Set α, φ₂ ⁻¹' S -> S := fun S => S.restrictPreimage φ₂
-  have : forall S in 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
-    refine fun S hS => UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
-    simpa only [← univ_subset_iff, ψ₁, ψ₂, range_restrictPreimage, ← preimage_union,
-      ← image_subset_iff, image_univ, Subtype.range_val] using h_cover S hS
-  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS => ?_)
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous h_image₁
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous h_image₂
-  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, UniformSpace.comap_inf,
-      ← UniformSpace.comap_comap]
-    exact inf_le_inf
-      (iInf₂_le_of_le _ (h_preimage₁ hS) le_rfl)
-      (iInf₂_le_of_le _ (h_preimage₂ hS) le_rfl)
-
-Depends on / 依赖: S.restrictPreimage, Subtype, Subtype.range_val, UniformFun, UniformFun.uniformSpace_eq_inf_precomp_of_cover, h_cover, image_subset_iff, image_univ, le_antisymm, le_inf, preimage_union, range_restrictPreimage, range_val, restrictPreimage, uniformSpace_eq_inf_precomp_of_cover, univ_subset_iff
+/-
+**UniformOnFun.uniformSpace_eq_inf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 `U
+niformOnFun`。
+形式化陈述：uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : 
+δ₂ -> α) (𝔗₁ : Set (Set δ₁)) (𝔗₂ : Set (Set δ₂)) (h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁
+ 𝔖) (h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖) (h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁) (h
+_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂) (h_cover : forall S in 𝔖, S subseteq range 
+φ₁ union range φ₂) : 𝒱(α, β, 𝔖, _) = .comap (ofFun 𝔗₁ ∘ (· ∘ φ₁) ∘ toFun 𝔖) 𝒱(δ₁
+, β, 𝔗₁, _) ⊓ .comap (ofFun 𝔗₂ ∘ (· ∘ φ₂) ∘ toFun 𝔖) 𝒱(δ₂, β, 𝔗₂, _)
+参数：φ₁ : δ₁ -> α；φ₂ : δ₂ -> α；𝔗₁ : Set (Set δ₁)；𝔗₂ : Set (Set δ₂)；h_image₁ : Maps
+To (φ₁ '' ·) 𝔗₁ 𝔖；h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖；h_preimage₁ : MapsTo (φ₁ ⁻¹' 
+·) 𝔖 𝔗₁；h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂；h_cover : forall S in 𝔖, S subseteq
+ range φ₁ union range φ₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.uniformSpace_eq_inf_precomp_of_cover`：uniformSpace_eq_inf_pre
+comp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α) (h_cover : range φ₁ 
+union range φ₂ = univ) : 𝒰(α, β, _) =…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.range_restrictPreimage`：range_restrictPreimage : range (t.restrictPr
+eimage f) = Subtype.val ⁻¹' range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `uniformContinuous_iff_le_comap`：uniformContinuous_iff_le_comap {α β} {uα
+ : UniformSpace α} {uβ : UniformSpace β} {f : α -> β} : UniformContinuous f ↔ uα
+ <= uβ.comap f
+· 使用定理 `UniformOnFun.precomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} {𝔗 : Set (Set γ)} {f : 
+γ → α},   Set.MapsTo (fun x …
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UniformSpace.comap_inf`：UniformSpace.comap_inf {α γ} {u₁ u₂ : UniformSpa
+ce γ} {f : α -> γ} : (u₁ ⊓ u₂).comap f = u₁.comap f ⊓ u₂.comap f
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `inf_le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c d : α}, b ≤ 
+a → d ≤ c → b ⊓ d ≤ a ⊓ c
+· 使用定理 `iInf₂_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst
+ : CompleteLattice α] {a : α} {f : (i : ι) → κ i → α} (i : ι)   (j : κ i), f i j
+ ≤ a…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α)
+theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ → α) (φ₂ : δ₂ → α)
     (𝔗₁ : Set (Set δ₁)) (𝔗₂ : Set (Set δ₂))
     (h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖) (h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖)
     (h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁) (h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂)
-    (h_cover : forall S in 𝔖, S subseteq range φ₁ union range φ₂) :
+    (h_cover : ∀ S ∈ 𝔖, S ⊆ range φ₁ ∪ range φ₂) :
     𝒱(α, β, 𝔖, _) =
       .comap (ofFun 𝔗₁ ∘ (· ∘ φ₁) ∘ toFun 𝔖) 𝒱(δ₁, β, 𝔗₁, _) ⊓
       .comap (ofFun 𝔗₂ ∘ (· ∘ φ₂) ∘ toFun 𝔖) 𝒱(δ₂, β, 𝔗₂, _) := by
-  set ψ₁ : Π S : Set α, φ₁ ⁻¹' S -> S := fun S => S.restrictPreimage φ₁
-  set ψ₂ : Π S : Set α, φ₂ ⁻¹' S -> S := fun S => S.restrictPreimage φ₂
-  have : forall S in 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
-    refine fun S hS => UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
+  set ψ₁ : Π S : Set α, φ₁ ⁻¹' S → S := fun S ↦ S.restrictPreimage φ₁
+  set ψ₂ : Π S : Set α, φ₂ ⁻¹' S → S := fun S ↦ S.restrictPreimage φ₂
+  have : ∀ S ∈ 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
+    refine fun S hS ↦ UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
     simpa only [← univ_subset_iff, ψ₁, ψ₂, range_restrictPreimage, ← preimage_union,
       ← image_subset_iff, image_univ, Subtype.range_val] using h_cover S hS
-  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS => ?_)
+  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS ↦ ?_)
   · rw [← uniformContinuous_iff_le_comap]
     exact UniformOnFun.precomp_uniformContinuous h_image₁
   · rw [← uniformContinuous_iff_le_comap]
@@ -3045,71 +3222,91 @@ theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ�
 
 set_option backward.isDefEq.respectTransparency false in
 variable (𝔖) in
-/--
-theorem `uniformSpace_eq_iInf_precomp_of_cover` / 定理 `uniformSpace_eq_iInf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_iInf_precomp_of_cover
-  statement: {δ : ι -> Type*} (φ : Π i, δ i -> α)
-  proof: by
-  set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S -> S := fun S i => S.restrictPreimage (φ i)
-  have : forall S in 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS => by
-    rcases h_cover S hS with ⟨I, I_finite, I_cover⟩
-    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I, I_finite, ?_⟩
-    simpa only [← univ_subset_iff, ψ, range_restrictPreimage, ← preimage_iUnion₂,
-      ← image_subset_iff, image_univ, Subtype.range_val] using I_cover
-  -- With a better theory of ideals we may be able to simplify the following by replacing `𝔗 i`
-  -- by `(φ i ⁻¹' ·) '' 𝔖`.
-  refine le_antisymm (le_iInf fun i => ?_) (le_iInf₂ fun S hS => ?_)
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous (h_image i)
-  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
-    exact iInf_mono fun i => iInf₂_le_of_le _ (h_preimage i hS) le_rfl
-
-中文:
-定理 uniformSpace_eq_iInf_precomp_of_cover
-  结论: {δ : ι -> 类型} (φ : Π i, δ i -> α)
-  证明: by
-  set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S -> S := fun S i => S.restrictPreimage (φ i)
-  have : forall S in 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS => by
-    rcases h_cover S hS with ⟨I, I_finite, I_cover⟩
-    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I, I_finite, ?_⟩
-    simpa only [← univ_subset_iff, ψ, range_restrictPreimage, ← preimage_iUnion₂,
-      ← image_subset_iff, image_univ, Subtype.range_val] using I_cover
-  -- With a better theory of ideals we may be able to simplify the following by replacing `𝔗 i`
-  -- by `(φ i ⁻¹' ·) '' 𝔖`.
-  refine le_antisymm (le_iInf fun i => ?_) (le_iInf₂ fun S hS => ?_)
-  · rw [← uniformContinuous_iff_le_comap]
-    exact UniformOnFun.precomp_uniformContinuous (h_image i)
-  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
-    exact iInf_mono fun i => iInf₂_le_of_le _ (h_preimage i hS) le_rfl
-
-Depends on / 依赖: I_cover, I_finite, S.restrictPreimage, Subtype, Subtype.range_val, UniformFun, UniformFun.uniformSpace_eq_iInf_precomp_of_cover, h_cover, image_subset_iff, image_univ, range_restrictPreimage, range_val, restrictPreimage, uniformSpace_eq_iInf_precomp_of_cover, univ_subset_iff
+/-
+**UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 `
+UniformOnFun`。
+形式化陈述：uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α)
+ (𝔗 : forall i, Set (Set (δ i))) (h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖)
+ (h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i)) (h_cover : forall S in 𝔖, e
+xists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i)) : 𝒱(α, β, 𝔖, _) = 
+⨅ i, .comap (ofFun (𝔗 i) ∘ (· ∘ φ i) ∘ toFun 𝔖) 𝒱(δ i, β, 𝔗 i, _)
+参数：φ : Π i, δ i -> α；𝔗 : forall i, Set (Set (δ i))；h_image : forall i, MapsTo (φ
+ i '' ·) (𝔗 i) 𝔖；h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i)；h_cover : for
+all S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.uniformSpace_eq_iInf_precomp_of_cover`：uniformSpace_eq_iInf_p
+recomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α) (h_cover : exists I : Set ι
+, I.Finite ∧ ⋃ i in I, range (φ i) = u…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.range_restrictPreimage`：range_restrictPreimage : range (t.restrictPr
+eimage f) = Subtype.val ⁻¹' range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `uniformContinuous_iff_le_comap`：uniformContinuous_iff_le_comap {α β} {uα
+ : UniformSpace α} {uβ : UniformSpace β} {f : α -> β} : UniformContinuous f ↔ uα
+ <= uβ.comap f
+· 使用定理 `UniformOnFun.precomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} {𝔗 : Set (Set γ)} {f : 
+γ → α},   Set.MapsTo (fun x …
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `iInf_mono`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f
+ g : ι → α}, (∀ (i : ι), g i ≤ f i) → iInf g ≤ iInf f
+· 使用定理 `iInf₂_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst
+ : CompleteLattice α] {a : α} {f : (i : ι) → κ i → α} (i : ι)   (j : κ i), f i j
+ ≤ a…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α)
-    (𝔗 : forall i, Set (Set (δ i))) (h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖)
-    (h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i))
-    (h_cover : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i)) :
+theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι → Type*} (φ : Π i, δ i → α)
+    (𝔗 : ∀ i, Set (Set (δ i))) (h_image : ∀ i, MapsTo (φ i '' ·) (𝔗 i) 𝔖)
+    (h_preimage : ∀ i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i))
+    (h_cover : ∀ S ∈ 𝔖, ∃ I : Set ι, I.Finite ∧ S ⊆ ⋃ i ∈ I, range (φ i)) :
     𝒱(α, β, 𝔖, _) = ⨅ i, .comap (ofFun (𝔗 i) ∘ (· ∘ φ i) ∘ toFun 𝔖) 𝒱(δ i, β, 𝔗 i, _) := by
-  set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S -> S := fun S i => S.restrictPreimage (φ i)
-  have : forall S in 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS => by
+  set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S → S := fun S i ↦ S.restrictPreimage (φ i)
+  have : ∀ S ∈ 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS ↦ by
     rcases h_cover S hS with ⟨I, I_finite, I_cover⟩
     refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I, I_finite, ?_⟩
     simpa only [← univ_subset_iff, ψ, range_restrictPreimage, ← preimage_iUnion₂,
       ← image_subset_iff, image_univ, Subtype.range_val] using I_cover
   -- With a better theory of ideals we may be able to simplify the following by replacing `𝔗 i`
   -- by `(φ i ⁻¹' ·) '' 𝔖`.
-  refine le_antisymm (le_iInf fun i => ?_) (le_iInf₂ fun S hS => ?_)
+  refine le_antisymm (le_iInf fun i ↦ ?_) (le_iInf₂ fun S hS ↦ ?_)
   · rw [← uniformContinuous_iff_le_comap]
     exact UniformOnFun.precomp_uniformContinuous (h_image i)
   · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
-    exact iInf_mono fun i => iInf₂_le_of_le _ (h_preimage i hS) le_rfl
+    exact iInf_mono fun i ↦ iInf₂_le_of_le _ (h_preimage i hS) le_rfl
 
 end UniformOnFun
 
 namespace UniformFun
 
-instance {α β : Type*} [UniformSpace β] [CompleteSpace β] : CompleteSpace (α ->ᵤ β) :=
+/-
+**UniformFun.** 是 Mathlib 中的一个实例，位于命名空间 `UniformFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {α β : Type*} [UniformSpace β] [CompleteSpace β] : CompleteSpace (α →ᵤ β) :=
   (UniformOnFun.uniformEquivUniformFun β {univ} (mem_singleton _)).completeSpace_iff.1 inferInstance
 
 end UniformFun
@@ -3117,94 +3314,97 @@ end UniformFun
 section UniformComposition
 
 variable {α β γ ι : Type*} [UniformSpace β] [UniformSpace γ] {p : Filter ι} {s : Set β}
-  {F : ι -> α -> β} {f : α -> β} {g : β -> γ}
+  {F : ι → α → β} {f : α → β} {g : β → γ}
 
-/--
-theorem `UniformContinuousOn.comp_tendstoUniformly` / 定理 `UniformContinuousOn.comp_tendstoUniformly`
+/-- Composing on the left by a uniformly continuous function preserves uniform convergence -/
+/-
+**UniformContinuousOn.comp_tendstoUniformly** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformContinuousOn.comp_tendstoUniformly (hF : forall i x, F i x in s) (h
+f : forall x, f x in s) (hg : UniformContinuousOn g s) (h : TendstoUniformly F f
+ p) : TendstoUniformly (fun i x => g (F i x)) (fun x => g (f x)) p
+参数：hF : forall i x, F i x in s；hf : forall x, f x in s；hg : UniformContinuousOn 
+g s；h : TendstoUniformly F f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.Tendsto.of_tendsto_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Typ
+e u_3} {f : α → β} {g : β → γ} {a : Filter α} {b : Filter β} {c : Filter γ},   F
+ilter.Tendsto (g ∘ f…
+· 使用定理 `tendstoUniformly_iff_tendsto`：tendstoUniformly_iff_tendsto : TendstoUnif
+ormly F f p ↔ Tendsto (fun q : ι × α => (f q.2, F q.1 q.2)) (p ×ˢ ⊤) (𝓤 β)
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `IsUniformInducing.comap_uniformity`：∀ {α : Type ua} {β : Type ub} [inst 
+: UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformInducing f →
+ Filter.comap (fun x => …
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `isUniformEmbedding_subtype_val`：isUniformEmbedding_subtype_val {p : α ->
+ Prop} : IsUniformEmbedding (Subtype.val : Subtype p -> α)
+· 使用定理 `UniformContinuous.comp_tendstoUniformly`：UniformContinuous.comp_tendstoU
+niformly [UniformSpace γ] {g : β -> γ} (hg : UniformContinuous g) (h : TendstoUn
+iformly F f p) : TendstoUnifo…
+· 使用定理 `uniformContinuousOn_iff_restrict`：uniformContinuousOn_iff_restrict [Unif
+ormSpace α] [UniformSpace β] {f : α -> β} {s : Set α} : UniformContinuousOn f s 
+↔ UniformContinuous (s…
 
-English:
-theorem UniformContinuousOn.comp_tendstoUniformly
-  proof: by
-  rw [uniformContinuousOn_iff_restrict] at hg
-  lift F to ι -> α -> s using hF with F' hF'
-  lift f to α -> s using hf with f' hf'
-  rw [tendstoUniformly_iff_tendsto] at h
-  have : Tendsto (fun q => (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
-    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap_uniformity.le
-  apply UniformContinuous.comp_tendstoUniformly hg ?_
-  rwa [← tendstoUniformly_iff_tendsto] at this
-
-中文:
-定理 UniformContinuousOn.comp_tendstoUniformly
-  证明: by
-  rw [uniformContinuousOn_iff_restrict] at hg
-  lift F to ι -> α -> s using hF with F' hF'
-  lift f to α -> s using hf with f' hf'
-  rw [tendstoUniformly_iff_tendsto] at h
-  have : Tendsto (fun q => (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
-    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap_uniformity.le
-  apply UniformContinuous.comp_tendstoUniformly hg ?_
-  rwa [← tendstoUniformly_iff_tendsto] at this
-
-Depends on / 依赖: Tendsto, UniformContinuous, UniformContinuous.comp_tendstoUniformly, comap_uniformity, comp_tendstoUniformly, h.of_tendsto_comp, isUniformEmbedding_subtype_val, isUniformEmbedding_subtype_val.comap_uniformity.le, of_tendsto_comp, tendstoUniformly_iff_tendsto, uniformContinuousOn_iff_restrict
+--- 原说明 ---
+Composing on the left by a uniformly continuous function preserves uniform conve
+rgence
 -/
 theorem UniformContinuousOn.comp_tendstoUniformly
-    (hF : forall i x, F i x in s) (hf : forall x, f x in s) (hg : UniformContinuousOn g s)
+    (hF : ∀ i x, F i x ∈ s) (hf : ∀ x, f x ∈ s) (hg : UniformContinuousOn g s)
     (h : TendstoUniformly F f p) :
     TendstoUniformly (fun i x => g (F i x)) (fun x => g (f x)) p := by
   rw [uniformContinuousOn_iff_restrict] at hg
-  lift F to ι -> α -> s using hF with F' hF'
-  lift f to α -> s using hf with f' hf'
+  lift F to ι → α → s using hF with F' hF'
+  lift f to α → s using hf with f' hf'
   rw [tendstoUniformly_iff_tendsto] at h
-  have : Tendsto (fun q => (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
+  have : Tendsto (fun q ↦ (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
     h.of_tendsto_comp isUniformEmbedding_subtype_val.comap_uniformity.le
   apply UniformContinuous.comp_tendstoUniformly hg ?_
   rwa [← tendstoUniformly_iff_tendsto] at this
-
-/--
-theorem `UniformContinuousOn.comp_tendstoUniformly_eventually` / 定理 `UniformContinuousOn.comp_tendstoUniformly_eventually`
-
-English:
-theorem UniformContinuousOn.comp_tendstoUniformly_eventually
-  proof: by
-  classical
-  obtain ⟨s', hs', hs⟩ := eventually_iff_exists_mem.mp hF
-  let F' : ι -> α -> β := fun i x => if i in s' then F i x else f x
-  have hF : F =ᶠ[p] F' := by
-    rw [eventuallyEq_iff_exists_mem]
-    refine ⟨s', hs', fun y hy => by grind⟩
-  have h' : TendstoUniformly F' f p := by
-    rwa [tendstoUniformly_congr hF] at h
-  apply (tendstoUniformly_congr _).mpr
-    (UniformContinuousOn.comp_tendstoUniformly (by grind) hf hg h')
-  rw [eventuallyEq_iff_exists_mem]
-  refine ⟨s', hs', fun i hi => by grind⟩
-
-中文:
-定理 UniformContinuousOn.comp_tendstoUniformly_eventually
-  证明: by
-  classical
-  obtain ⟨s', hs', hs⟩ := eventually_iff_exists_mem.mp hF
-  let F' : ι -> α -> β := fun i x => if i in s' then F i x else f x
-  have hF : F =ᶠ[p] F' := by
-    rw [eventuallyEq_iff_exists_mem]
-    refine ⟨s', hs', fun y hy => by grind⟩
-  have h' : TendstoUniformly F' f p := by
-    rwa [tendstoUniformly_congr hF] at h
-  apply (tendstoUniformly_congr _).mpr
-    (UniformContinuousOn.comp_tendstoUniformly (by grind) hf hg h')
-  rw [eventuallyEq_iff_exists_mem]
-  refine ⟨s', hs', fun i hi => by grind⟩
-
-Depends on / 依赖: TendstoUniformly, UniformContinuousOn, UniformContinuousOn.comp_tendstoUniformly, classical, comp_tendstoUniformly, eventuallyEq_iff_exists_mem, eventually_iff_exists_mem, eventually_iff_exists_mem.mp, tendstoUniformly_congr
+/-
+**UniformContinuousOn.comp_tendstoUniformly_eventually** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：UniformContinuousOn.comp_tendstoUniformly_eventually (hF : forallᶠ i in p,
+ forall x, F i x in s) (hf : forall x, f x in s) (hg : UniformContinuousOn g s) 
+(h : TendstoUniformly F f p) : TendstoUniformly (fun i x => g (F i x)) (fun x =>
+ g (f x)) p
+参数：hF : forallᶠ i in p, forall x, F i x in s；hf : forall x, f x in s；hg : Unifor
+mContinuousOn g s；h : TendstoUniformly F f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.eventually_iff_exists_mem`：eventually_iff_exists_mem {p : α -> Pr
+op} {f : Filter α} : (forallᶠ x in f, p x) ↔ exists v in f, forall y in v, p y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.eventuallyEq_iff_exists_mem`：eventuallyEq_iff_exists_mem {l : Fil
+ter α} {f g : α -> β} : f =ᶠ[l] g ↔ exists s in l, EqOn f g s
+· 使用引理 `tendstoUniformly_congr`：tendstoUniformly_congr {F' : ι -> α -> β} (hF : 
+F =ᶠ[p] F') : TendstoUniformly F f p ↔ TendstoUniformly F' f p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `UniformContinuousOn.comp_tendstoUniformly`：UniformContinuousOn.comp_tend
+stoUniformly (hF : forall i x, F i x in s) (hf : forall x, f x in s) (hg : Unifo
+rmContinuousOn g s) (h : Tendst…
 -/
 theorem UniformContinuousOn.comp_tendstoUniformly_eventually
-    (hF : forallᶠ i in p, forall x, F i x in s) (hf : forall x, f x in s) (hg : UniformContinuousOn g s)
+    (hF : ∀ᶠ i in p, ∀ x, F i x ∈ s) (hf : ∀ x, f x ∈ s) (hg : UniformContinuousOn g s)
     (h : TendstoUniformly F f p) :
-    TendstoUniformly (fun i x => g (F i x)) (fun x => g (f x)) p := by
+    TendstoUniformly (fun i x ↦ g (F i x)) (fun x ↦ g (f x)) p := by
   classical
   obtain ⟨s', hs', hs⟩ := eventually_iff_exists_mem.mp hF
-  let F' : ι -> α -> β := fun i x => if i in s' then F i x else f x
+  let F' : ι → α → β := fun i x => if i ∈ s' then F i x else f x
   have hF : F =ᶠ[p] F' := by
     rw [eventuallyEq_iff_exists_mem]
     refine ⟨s', hs', fun y hy => by grind⟩
@@ -3214,34 +3414,38 @@ theorem UniformContinuousOn.comp_tendstoUniformly_eventually
     (UniformContinuousOn.comp_tendstoUniformly (by grind) hf hg h')
   rw [eventuallyEq_iff_exists_mem]
   refine ⟨s', hs', fun i hi => by grind⟩
-
-/--
-theorem `UniformContinuousOn.comp_tendstoUniformlyOn_eventually` / 定理 `UniformContinuousOn.comp_tendstoUniformlyOn_eventually`
-
-English:
-theorem UniformContinuousOn.comp_tendstoUniformlyOn_eventually
-  statement: {t : Set α}
-  proof: by
-  rw [tendstoUniformlyOn_iff_restrict]
-  apply UniformContinuousOn.comp_tendstoUniformly_eventually (by simpa using hF)
-     (by simpa using hf) hg (tendstoUniformlyOn_iff_restrict.mp h)
-
-中文:
-定理 UniformContinuousOn.comp_tendstoUniformlyOn_eventually
-  结论: {t : 集合 α}
-  证明: by
-  rw [tendstoUniformlyOn_iff_restrict]
-  apply UniformContinuousOn.comp_tendstoUniformly_eventually (by simpa using hF)
-     (by simpa using hf) hg (tendstoUniformlyOn_iff_restrict.mp h)
-
-Depends on / 依赖: UniformContinuousOn, UniformContinuousOn.comp_tendstoUniformly_eventually, comp_tendstoUniformly_eventually, tendstoUniformlyOn_iff_restrict, tendstoUniformlyOn_iff_restrict.mp
+/-
+**UniformContinuousOn.comp_tendstoUniformlyOn_eventually** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：UniformContinuousOn.comp_tendstoUniformlyOn_eventually {t : Set α} (hF : f
+orallᶠ i in p, forall x in t, F i x in s) (hf : forall x in t, f x in s) {g : β 
+-> γ} (hg : UniformContinuousOn g s) (h : TendstoUniformlyOn F f p t) : TendstoU
+niformlyOn (fun i x => g (F i x)) (fun x => g (f x)) p t
+参数：hF : forallᶠ i in p, forall x in t, F i x in s；hf : forall x in t, f x in s；h
+g : UniformContinuousOn g s；h : TendstoUniformlyOn F f p t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `tendstoUniformlyOn_iff_restrict`：tendstoUniformlyOn_iff_restrict {K : Se
+t α} : TendstoUniformlyOn F f p K ↔ TendstoUniformly (fun n : ι => K.domRestrict
+ (F n)) (K.domRestric…
+· 使用定理 `UniformContinuousOn.comp_tendstoUniformly_eventually`：UniformContinuousO
+n.comp_tendstoUniformly_eventually (hF : forallᶠ i in p, forall x, F i x in s) (
+hf : forall x, f x in s) (hg : UniformCont…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem UniformContinuousOn.comp_tendstoUniformlyOn_eventually {t : Set α}
-    (hF : forallᶠ i in p, forall x in t, F i x in s) (hf : forall x in t, f x in s)
-    {g : β -> γ} (hg : UniformContinuousOn g s) (h : TendstoUniformlyOn F f p t) :
-    TendstoUniformlyOn (fun i x => g (F i x)) (fun x => g (f x)) p t := by
+    (hF : ∀ᶠ i in p, ∀ x ∈ t, F i x ∈ s) (hf : ∀ x ∈ t, f x ∈ s)
+    {g : β → γ} (hg : UniformContinuousOn g s) (h : TendstoUniformlyOn F f p t) :
+    TendstoUniformlyOn (fun i x ↦ g (F i x)) (fun x => g (f x)) p t := by
   rw [tendstoUniformlyOn_iff_restrict]
   apply UniformContinuousOn.comp_tendstoUniformly_eventually (by simpa using hF)
      (by simpa using hf) hg (tendstoUniformlyOn_iff_restrict.mp h)
 
 end UniformComposition
+

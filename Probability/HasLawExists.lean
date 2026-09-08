@@ -23,89 +23,82 @@ namespace ProbabilityTheory
 
 universe u v
 
-/--
-lemma `_root_.MeasureTheory.Measure.exists_hasLaw` / 引理 `_root_.MeasureTheory.Measure.exists_hasLaw`
-
-English:
-lemma _root_.MeasureTheory.Measure.exists_hasLaw
-  statement: {𝓧 : Type u} {m𝓧 : MeasurableSpace 𝓧}
-  proof: ⟨𝓧, m𝓧, μ, id, measurable_id, .id⟩
-
-中文:
-引理 _root_.测度论.测度.存在_hasLaw
-  结论: {𝓧 : 类型u} {m𝓧 : 可测空间 𝓧}
-  证明: ⟨𝓧, m𝓧, μ, id, measurable_id, .id⟩
-
-Depends on / 依赖: measurable_id
+/-
+**ProbabilityTheory._root_.MeasureTheory.Measure.exists_hasLaw** 是 Mathlib 中的一个引
+理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.MeasureTheory.Measure.exists_hasLaw {𝓧 : Type u} {m𝓧 : MeasurableSpace 𝓧}
     (μ : Measure 𝓧) :
-    exists Ω : Type u, exists _ : MeasurableSpace Ω, exists P : Measure Ω, exists X : Ω -> 𝓧,
+    ∃ Ω : Type u, ∃ _ : MeasurableSpace Ω, ∃ P : Measure Ω, ∃ X : Ω → 𝓧,
       Measurable X ∧ HasLaw X μ P :=
   ⟨𝓧, m𝓧, μ, id, measurable_id, .id⟩
-
-/--
-lemma `exists_hasLaw_indepFun` / 引理 `exists_hasLaw_indepFun`
-
-English:
-lemma exists_hasLaw_indepFun
-  statement: {ι : Type v} (𝓧 : ι -> Type u)
-  proof: by
-  use Π i, (𝓧 i), .pi, infinitePi μ, fun i => Function.eval i
-  refine ⟨by fun_prop, fun i => MeasurePreserving.hasLaw (measurePreserving_eval_infinitePi _ _),
-    ?_, by infer_instance⟩
-  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [map_id']
-  congr
-  funext i
-  exact ((measurePreserving_eval_infinitePi μ i).map_eq).symm
-
-中文:
-引理 存在_hasLaw_indepFun
-  结论: {ι : 类型v} (𝓧 : ι -> 类型u)
-  证明: by
-  use Π i, (𝓧 i), .pi, infinitePi μ, fun i => Function.eval i
-  refine ⟨by fun_prop, fun i => MeasurePreserving.hasLaw (measurePreserving_eval_infinitePi _ _),
-    ?_, by infer_instance⟩
-  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [map_id']
-  congr
-  funext i
-  exact ((measurePreserving_eval_infinitePi μ i).map_eq).symm
-
-Depends on / 依赖: Function, Function.eval, MeasurePreserving, MeasurePreserving.hasLaw, fun_prop, hasLaw, iIndepFun_iff_map_fun_eq_infinitePi_map, infer_instance, infinitePi, map_eq, map_id, measurePreserving_eval_infinitePi
+/-
+**ProbabilityTheory.exists_hasLaw_indepFun** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：exists_hasLaw_indepFun {ι : Type v} (𝓧 : ι -> Type u) {m𝓧 : forall i, Meas
+urableSpace (𝓧 i)} (μ : (i : ι) -> Measure (𝓧 i)) [hμ : forall i, IsProbabilityM
+easure (μ i)] : exists Ω : Type (max u v), exists _ : MeasurableSpace Ω, exists 
+P : Measure Ω, exists X : (i : ι) -> Ω -> (𝓧 i), (forall i, Measurable (X i)) ∧ 
+(forall i, HasLaw (X i) (μ i) P) ∧ iIndepFun X P ∧ IsProbabilityMeasure P
+参数：𝓧 : ι -> Type u；𝓧 i；μ : (i : ι) -> Measure (𝓧 i)；μ i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_pi_apply`：measurable_pi_apply (a : δ) : Measurable fun f : fo
+rall a, X a => f a
+· 使用定理 `MeasureTheory.MeasurePreserving.hasLaw`：∀ {Ω : Type u_1} {𝓧 : Type u_2} 
+{mΩ : MeasurableSpace Ω} {m𝓧 : MeasurableSpace 𝓧} {X : Ω → 𝓧}   {μ : MeasureTheo
+ry.Measure 𝓧} {P : MeasureTh…
+· 使用定理 `measurePreserving_eval_infinitePi`：∀ {ι : Type u_1} {X : ι → Type u_2} {
+mX : (i : ι) → MeasurableSpace (X i)} (μ : (i : ι) → MeasureTheory.Measure (X i)
+)   [hμ : ∀ (i : ι), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.iIndepFun_iff_map_fun_eq_infinitePi_map`：iIndepFun_iff
+_map_fun_eq_infinitePi_map [IsProbabilityMeasure P] (mX : forall i, Measurable (
+X i)) : iIndepFun X P ↔ P.map (fun ω i => X i ω…
+· 使用定理 `MeasureTheory.Measure.instIsProbabilityMeasureForallInfinitePi`：∀ {ι : T
+ype u_1} {X : ι → Type u_2} {mX : (i : ι) → MeasurableSpace (X i)} (μ : (i : ι) 
+→ MeasureTheory.Measure (X i))   [hμ : ∀ (i : ι), Me…
+· 使用定理 `MeasureTheory.Measure.map_id'`：map_id' : map (fun x => x) μ = μ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.MeasurePreserving.map_eq`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β}   {μa : auto
+Param (MeasureTheory.Measure…
 -/
-lemma exists_hasLaw_indepFun {ι : Type v} (𝓧 : ι -> Type u)
-    {m𝓧 : forall i, MeasurableSpace (𝓧 i)} (μ : (i : ι) -> Measure (𝓧 i))
-    [hμ : forall i, IsProbabilityMeasure (μ i)] :
-    exists Ω : Type (max u v), exists _ : MeasurableSpace Ω, exists P : Measure Ω, exists X : (i : ι) -> Ω -> (𝓧 i),
-      (forall i, Measurable (X i)) ∧ (forall i, HasLaw (X i) (μ i) P)
+lemma exists_hasLaw_indepFun {ι : Type v} (𝓧 : ι → Type u)
+    {m𝓧 : ∀ i, MeasurableSpace (𝓧 i)} (μ : (i : ι) → Measure (𝓧 i))
+    [hμ : ∀ i, IsProbabilityMeasure (μ i)] :
+    ∃ Ω : Type (max u v), ∃ _ : MeasurableSpace Ω, ∃ P : Measure Ω, ∃ X : (i : ι) → Ω → (𝓧 i),
+      (∀ i, Measurable (X i)) ∧ (∀ i, HasLaw (X i) (μ i) P)
         ∧ iIndepFun X P ∧ IsProbabilityMeasure P := by
-  use Π i, (𝓧 i), .pi, infinitePi μ, fun i => Function.eval i
-  refine ⟨by fun_prop, fun i => MeasurePreserving.hasLaw (measurePreserving_eval_infinitePi _ _),
+  use Π i, (𝓧 i), .pi, infinitePi μ, fun i ↦ Function.eval i
+  refine ⟨by fun_prop, fun i ↦ MeasurePreserving.hasLaw (measurePreserving_eval_infinitePi _ _),
     ?_, by infer_instance⟩
-  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [map_id']
+  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop), map_id']
   congr
   funext i
   exact ((measurePreserving_eval_infinitePi μ i).map_eq).symm
-
-/--
-lemma `exists_iid` / 引理 `exists_iid`
-
-English:
-lemma exists_iid
-  statement: (ι : Type v) {𝓧 : Type u} {m𝓧 : MeasurableSpace 𝓧}
-  proof: exists_hasLaw_indepFun (fun _ => 𝓧) (fun _ => μ)
-
-中文:
-引理 存在_iid
-  结论: (ι : 类型v) {𝓧 : 类型u} {m𝓧 : 可测空间 𝓧}
-  证明: exists_hasLaw_indepFun (fun _ => 𝓧) (fun _ => μ)
-
-Depends on / 依赖: exists_hasLaw_indepFun
+/-
+**ProbabilityTheory.exists_iid** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：exists_iid (ι : Type v) {𝓧 : Type u} {m𝓧 : MeasurableSpace 𝓧} (μ : Measure
+ 𝓧) [IsProbabilityMeasure μ] : exists Ω : Type (max u v), exists _ : MeasurableS
+pace Ω, exists P : Measure Ω, exists X : ι -> Ω -> 𝓧, (forall i, Measurable (X i
+)) ∧ (forall i, HasLaw (X i) μ P) ∧ iIndepFun X P ∧ IsProbabilityMeasure P
+参数：ι : Type v；μ : Measure 𝓧。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.exists_hasLaw_indepFun`：exists_hasLaw_indepFun {ι : Ty
+pe v} (𝓧 : ι -> Type u) {m𝓧 : forall i, MeasurableSpace (𝓧 i)} (μ : (i : ι) -> M
+easure (𝓧 i)) [hμ : forall i, …
 -/
 lemma exists_iid (ι : Type v) {𝓧 : Type u} {m𝓧 : MeasurableSpace 𝓧}
     (μ : Measure 𝓧) [IsProbabilityMeasure μ] :
-    exists Ω : Type (max u v), exists _ : MeasurableSpace Ω, exists P : Measure Ω, exists X : ι -> Ω -> 𝓧,
-      (forall i, Measurable (X i)) ∧ (forall i, HasLaw (X i) μ P) ∧ iIndepFun X P ∧ IsProbabilityMeasure P :=
-  exists_hasLaw_indepFun (fun _ => 𝓧) (fun _ => μ)
+    ∃ Ω : Type (max u v), ∃ _ : MeasurableSpace Ω, ∃ P : Measure Ω, ∃ X : ι → Ω → 𝓧,
+      (∀ i, Measurable (X i)) ∧ (∀ i, HasLaw (X i) μ P) ∧ iIndepFun X P ∧ IsProbabilityMeasure P :=
+  exists_hasLaw_indepFun (fun _ ↦ 𝓧) (fun _ ↦ μ)
 
 end ProbabilityTheory
+

@@ -50,32 +50,35 @@ variable {R S T : Type*} [CommRing R] [Ring S] [Algebra R S]
 variable {A B : Type*} [CommRing A] [CommRing B] [Algebra A B]
 variable {K : Type*} [Field K]
 
-/--
-Definition of `PowerBasis` / `PowerBasis` 的定义
+/-- `pb : PowerBasis R S` states that `1, pb.gen, ..., pb.gen ^ (pb.dim - 1)`
+is a basis for the `R`-algebra `S` (viewed as `R`-module).
 
-English:
-structure PowerBasis
-  parameters: (R S : Type*) [CommRing R] [Ring S] [Algebra R S]
-  axioms and operations (4):
-    - gen : S
-    - dim : Nat
-    - basis : Basis (Fin dim) R S
-    - basis_eq_pow : forall (i), basis i = gen ^ (i : Nat)
+This is a structure, not a class, since the same algebra can have many power bases.
+For the common case where `S` is defined by adjoining an integral element to `R`,
+the canonical power basis is given by `{Algebra,IntermediateField}.adjoin.powerBasis`.
+-/
+/-
+**PowerBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_7) → (S : Type u_8) → [inst : CommRing R] → [inst_1 : Ring S] 
+→ [Algebra R S] → Type (max u_7 u_8)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 PowerBasis
-  参数: (R S : 类型) [交换环 R] [环 S] [代数 R S]
-  公理与运算 (4 个):
-    - gen : S
-    - dim : 自然数
-    - basis : 基 (有限集 dim) R S
-    - basis_eq_pow : 对任意 (i), basis i = gen ^ (i : 自然数)
+--- 原说明 ---
+`pb : PowerBasis R S` states that `1, pb.gen, ..., pb.gen ^ (pb.dim - 1)`
+is a basis for the `R`-algebra `S` (viewed as `R`-module).
+
+This is a structure, not a class, since the same algebra can have many power bas
+es.
+For the common case where `S` is defined by adjoining an integral element to `R`
+,
+the canonical power basis is given by `{Algebra,IntermediateField}.adjoin.powerB
+asis`.
 -/
 structure PowerBasis (R S : Type*) [CommRing R] [Ring S] [Algebra R S] where
   gen : S
-  dim : Nat
+  dim : ℕ
   basis : Basis (Fin dim) R S
-  basis_eq_pow : forall (i), basis i = gen ^ (i : Nat)
+  basis_eq_pow : ∀ (i), basis i = gen ^ (i : ℕ)
 
 -- this is usually not needed because of `basis_eq_pow` but can be needed in some cases;
 -- in such circumstances, add it manually using `@[simps dim gen basis]`.
@@ -84,154 +87,156 @@ initialize_simps_projections PowerBasis (-basis)
 namespace PowerBasis
 
 @[simp]
-/--
-theorem `coe_basis` / 定理 `coe_basis`
-
-English:
-theorem coe_basis
-  given: (pb : PowerBasis R S)
-  statement: ⇑pb.basis = fun i : Fin pb.dim => pb.gen ^ (i : Nat)
-  proof: funext pb.basis_eq_pow
-
-中文:
-定理 coe_basis
-  条件: (pb : PowerBasis R S)
-  结论: ⇑pb.basis = fun i : 有限集 pb.dim => pb.gen ^ (i : 自然数)
-  证明: funext pb.basis_eq_pow
-
-Depends on / 依赖: basis_eq_pow, pb.basis_eq_pow
+/-
+**PowerBasis.coe_basis** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun i : Fin pb.dim => pb.gen
+ ^ (i : Nat)
+参数：pb : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `PowerBasis.basis_eq_pow`：∀ {R : Type u_7} {S : Type u_8} [inst : CommRin
+g R] [inst_1 : Ring S] [inst_2 : Algebra R S] (self : PowerBasis R S)   (i : Fin
+ self.dim), s…
 -/
-theorem coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun i : Fin pb.dim => pb.gen ^ (i : Nat) :=
+theorem coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun i : Fin pb.dim => pb.gen ^ (i : ℕ) :=
   funext pb.basis_eq_pow
 
-/--
-theorem `finite` / 定理 `finite`
+/-- Cannot be an instance because `PowerBasis` cannot be a class. -/
+/-
+**PowerBasis.finite** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：finite (pb : PowerBasis R S) : Module.Finite R S
+参数：pb : PowerBasis R S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.of_basis`：Module.Finite.of_basis {R M ι : Type*} [Semiring
+ R] [AddCommMonoid M] [Module R M] [_root_.Finite ι] (b : Basis ι R M) : Module.
+Finite R M
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem finite
-  given: (pb : PowerBasis R S)
-  statement: Module.Finite R S
-  proof: .of_basis pb.basis
-
-中文:
-定理 finite
-  条件: (pb : PowerBasis R S)
-  结论: 模.有限 R S
-  证明: .of_basis pb.basis
-
-Depends on / 依赖: of_basis, pb.basis
+--- 原说明 ---
+Cannot be an instance because `PowerBasis` cannot be a class.
 -/
 theorem finite (pb : PowerBasis R S) : Module.Finite R S := .of_basis pb.basis
 
 /--
-Definition of `noncomputable` / `noncomputable` 的定义
+Construct a power basis from a basis consisting of powers of an element.
+-/
+/-
+**PowerBasis._root_.Module.Basis.PowerBasis** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasi
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def _root_.Module.Basis.PowerBasis {ι : Type*} [Fintype ι] (B : Basis ι R S)
-  body: ⟨x, Fintype.card ι, B.reindex e, fun i => by simp [hx]⟩
-
-@[simp]
-
-中文:
-定义 noncomputable
-  签名: def _root_.模.基.PowerBasis {ι : 类型} [有限类型 ι] (B : 基 ι R S)
-  定义体: ⟨x, Fintype.card ι, B.reindex e, fun i => by simp [hx]⟩
-
-@[simp]
-
-Depends on / 依赖: WithVal, WithVal.algEquiv, algEquiv, of_algEquiv
+--- 原说明 ---
+Construct a power basis from a basis consisting of powers of an element.
 -/
 protected noncomputable def _root_.Module.Basis.PowerBasis {ι : Type*} [Fintype ι] (B : Basis ι R S)
-    {x : S} (e : ι ≃ Fin (Fintype.card ι)) (hx : forall i, B i = x ^ (e i : Nat)) :
-    PowerBasis R S := ⟨x, Fintype.card ι, B.reindex e, fun i => by simp [hx]⟩
+    {x : S} (e : ι ≃ Fin (Fintype.card ι)) (hx : ∀ i, B i = x ^ (e i : ℕ)) :
+    PowerBasis R S := ⟨x, Fintype.card ι, B.reindex e, fun i ↦ by simp [hx]⟩
 
 @[simp]
-/--
-theorem `_root_.Module.Basis.PowerBasis_gen` / 定理 `_root_.Module.Basis.PowerBasis_gen`
-
-English:
-theorem _root_.Module.Basis.PowerBasis_gen
-  statement: {ι : Type*} [Fintype ι] (B : Basis ι R S) {x : S}
-  proof: rfl
-
-中文:
-定理 _root_.模.基.PowerBasis_gen
-  结论: {ι : 类型} [有限类型 ι] (B : 基 ι R S) {x : S}
-  证明: rfl
+/-
+**PowerBasis._root_.Module.Basis.PowerBasis_gen** 是 Mathlib 中的一个定理，位于命名空间 `Power
+Basis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Module.Basis.PowerBasis_gen {ι : Type*} [Fintype ι] (B : Basis ι R S) {x : S}
-    (e : ι ≃ Fin (Fintype.card ι)) (hx : forall i, B i = x ^ (e i : Nat)) :
+    (e : ι ≃ Fin (Fintype.card ι)) (hx : ∀ i, B i = x ^ (e i : ℕ)) :
     (B.PowerBasis e hx).gen = x := rfl
-
-/--
-theorem `finrank` / 定理 `finrank`
-
-English:
-theorem finrank
-  given: [StrongRankCondition R] (pb : PowerBasis R S)
-  proof: by
-  rw [Module.finrank_eq_card_basis pb.basis]; rw [Fintype.card_fin]
-
-中文:
-定理 finrank
-  条件: [StrongRankCondition R] (pb : PowerBasis R S)
-  证明: by
-  rw [Module.finrank_eq_card_basis pb.basis]; rw [Fintype.card_fin]
-
-Depends on / 依赖: Fintype, Fintype.card_fin, Module, Module.finrank_eq_card_basis, card_fin, finrank_eq_card_basis, pb.basis
+/-
+**PowerBasis.finrank** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：finrank [StrongRankCondition R] (pb : PowerBasis R S) : Module.finrank R S
+ = pb.dim
+参数：pb : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.finrank_eq_card_basis`：finrank_eq_card_basis {ι : Type w} [Fintyp
+e ι] (h : Basis ι R M) : finrank R M = Fintype.card ι
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
 -/
 theorem finrank [StrongRankCondition R] (pb : PowerBasis R S) :
     Module.finrank R S = pb.dim := by
-  rw [Module.finrank_eq_card_basis pb.basis]; rw [Fintype.card_fin]
-
-/--
-theorem `mem_span_pow'` / 定理 `mem_span_pow'`
-
-English:
-theorem mem_span_pow'
-  given: {x y : S} {d : Nat}
-  proof: by
-  have : (Set.range fun i : Fin d => x ^ (i : Nat)) = (fun i : Nat => x ^ i) '' ↑(Finset.range d) := by
-    ext n
-    simp_rw [Set.mem_range, Set.mem_image, Finset.mem_coe, Finset.mem_range]
-    exact ⟨fun ⟨⟨i, hi⟩, hy⟩ => ⟨i, hi, hy⟩, fun ⟨i, hi, hy⟩ => ⟨⟨i, hi⟩, hy⟩⟩
-  simp [this, mem_span_image_iff_linearCombination, degree_lt_iff_coeff_zero, eq_comm,
-    exists_iff_exists_finsupp, coeff, aeval_def, eval₂_eq_sum, Polynomial.sum, mem_supported',
-    Finsupp.sum, linearCombination, Algebra.smul_def, AddMonoidAlgebra.coeffEquiv.exists_congr_left]
-
-中文:
-定理 mem_span_pow'
-  条件: {x y : S} {d : 自然数}
-  证明: by
-  have : (Set.range fun i : Fin d => x ^ (i : Nat)) = (fun i : Nat => x ^ i) '' ↑(Finset.range d) := by
-    ext n
-    simp_rw [Set.mem_range, Set.mem_image, Finset.mem_coe, Finset.mem_range]
-    exact ⟨fun ⟨⟨i, hi⟩, hy⟩ => ⟨i, hi, hy⟩, fun ⟨i, hi, hy⟩ => ⟨⟨i, hi⟩, hy⟩⟩
-  simp [this, mem_span_image_iff_linearCombination, degree_lt_iff_coeff_zero, eq_comm,
-    exists_iff_exists_finsupp, coeff, aeval_def, eval₂_eq_sum, Polynomial.sum, mem_supported',
-    Finsupp.sum, linearCombination, Algebra.smul_def, AddMonoidAlgebra.coeffEquiv.exists_congr_left]
-
-Depends on / 依赖: AddMonoidAlgebr, Algebra, Algebra.smul_def, Finset, Finset.mem_coe, Finset.mem_range, Finset.range, Finsupp, Finsupp.sum, Polynomial, Polynomial.sum, Set.mem_image, Set.mem_range, Set.range, aeval_def, degree_lt_iff_coeff_zero, eq_comm, exists_iff_exists_finsupp, linearCombination, mem_coe
+  rw [Module.finrank_eq_card_basis pb.basis, Fintype.card_fin]
+/-
+**PowerBasis.mem_span_pow'** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：mem_span_pow' {x y : S} {d : Nat} : y in Submodule.span R (Set.range fun i
+ : Fin d => x ^ (i : Nat)) ↔ exists f : R[X], f.degree < d ∧ y = aeval x f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.coe_range`：coe_range (n : Nat) : (range n : Set Nat) = Set.Iio n
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Polynomial.eval₂_eq_sum`：eval₂_eq_sum {f : R ->+* S} {x : S} : p.eval₂ f
+ x = p.sum fun e a => f a * x ^ e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.support_ofFinsupp`：support_ofFinsupp (p) : support (⟨p⟩ : R[X
+]) = p.coeff.support
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `AddMonoidAlgebra.coeffEquiv_symm_apply`：∀ {R : Type u_1} {M : Type u_4} 
+[inst : Semiring R] (coeff : M →₀ R),   AddMonoidAlgebra.coeffEquiv.symm coeff =
+ AddMonoidAlgebra.ofCoeff co…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_span_pow' {x y : S} {d : Nat} :
-    y in Submodule.span R (Set.range fun i : Fin d => x ^ (i : Nat)) ↔
-      exists f : R[X], f.degree < d ∧ y = aeval x f := by
-  have : (Set.range fun i : Fin d => x ^ (i : Nat)) = (fun i : Nat => x ^ i) '' ↑(Finset.range d) := by
+theorem mem_span_pow' {x y : S} {d : ℕ} :
+    y ∈ Submodule.span R (Set.range fun i : Fin d => x ^ (i : ℕ)) ↔
+      ∃ f : R[X], f.degree < d ∧ y = aeval x f := by
+  have : (Set.range fun i : Fin d => x ^ (i : ℕ)) = (fun i : ℕ => x ^ i) '' ↑(Finset.range d) := by
     ext n
     simp_rw [Set.mem_range, Set.mem_image, Finset.mem_coe, Finset.mem_range]
     exact ⟨fun ⟨⟨i, hi⟩, hy⟩ => ⟨i, hi, hy⟩, fun ⟨i, hi, hy⟩ => ⟨⟨i, hi⟩, hy⟩⟩
   simp [this, mem_span_image_iff_linearCombination, degree_lt_iff_coeff_zero, eq_comm,
     exists_iff_exists_finsupp, coeff, aeval_def, eval₂_eq_sum, Polynomial.sum, mem_supported',
     Finsupp.sum, linearCombination, Algebra.smul_def, AddMonoidAlgebra.coeffEquiv.exists_congr_left]
-
-/--
-theorem `mem_span_pow` / 定理 `mem_span_pow`
-
-English:
-theorem mem_span_pow
-  given: {x y : S} {d : Nat} (hd : d != 0)
-  proof: by
+/-
+**PowerBasis.mem_span_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：mem_span_pow {x y : S} {d : Nat} (hd : d != 0) : y in Submodule.span R (Se
+t.range fun i : Fin d => x ^ (i : Nat)) ↔ exists f : R[X], f.natDegree < d ∧ y =
+ aeval x f
+参数：hd : d != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerBasis.mem_span_pow'`：mem_span_pow' {x y : S} {d : Nat} : y in Submo
+dule.span R (Set.range fun i : Fin d => x ^ (i : Nat)) ↔ exists f : R[X], f.degr
+ee < d ∧ y = a…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
+-/
+theorem mem_span_pow {x y : S} {d : ℕ} (hd : d ≠ 0) :
+    y ∈ Submodule.span R (Set.range fun i : Fin d => x ^ (i : ℕ)) ↔
+      ∃ f : R[X], f.natDegree < d ∧ y = aeval x f := by
   rw [mem_span_pow']
   constructor <;>
   · rintro ⟨f, h, hy⟩
@@ -240,586 +245,601 @@ theorem mem_span_pow
     · simp only [hf, natDegree_zero, Polynomial.degree_zero] at h ⊢
       first | exact lt_of_le_of_ne (Nat.zero_le d) hd.symm | exact WithBot.bot_lt_coe d
     simpa [degree_eq_natDegree hf] using h
-
-中文:
-定理 mem_span_pow
-  条件: {x y : S} {d : 自然数} (hd : d != 0)
-  证明: by
-  rw [mem_span_pow']
-  constructor <;>
-  · rintro ⟨f, h, hy⟩
-    refine ⟨f, ?_, hy⟩
-    by_cases hf : f = 0
-    · simp only [hf, natDegree_zero, Polynomial.degree_zero] at h ⊢
-      first | exact lt_of_le_of_ne (Nat.zero_le d) hd.symm | exact WithBot.bot_lt_coe d
-    simpa [degree_eq_natDegree hf] using h
-
-Depends on / 依赖: Nat.zero_le, Polynomial, Polynomial.degree_zero, WithBot, WithBot.bot_lt_coe, bot_lt_coe, degree_eq_natDegree, degree_zero, hd.symm, lt_of_le_of_ne, mem_span_pow, natDegree_zero, zero_le
+/-
+**PowerBasis.dim_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：dim_ne_zero [Nontrivial S] (pb : PowerBasis R S) : pb.dim != 0
+参数：pb : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_nonempty_iff`：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.index_nonempty`：index_nonempty (b : Basis ι R M) [Nontrivia
+l M] : Nonempty ι
 -/
-theorem mem_span_pow {x y : S} {d : Nat} (hd : d != 0) :
-    y in Submodule.span R (Set.range fun i : Fin d => x ^ (i : Nat)) ↔
-      exists f : R[X], f.natDegree < d ∧ y = aeval x f := by
-  rw [mem_span_pow']
-  constructor <;>
-  · rintro ⟨f, h, hy⟩
-    refine ⟨f, ?_, hy⟩
-    by_cases hf : f = 0
-    · simp only [hf, natDegree_zero, Polynomial.degree_zero] at h ⊢
-      first | exact lt_of_le_of_ne (Nat.zero_le d) hd.symm | exact WithBot.bot_lt_coe d
-    simpa [degree_eq_natDegree hf] using h
-
-/--
-theorem `dim_ne_zero` / 定理 `dim_ne_zero`
-
-English:
-theorem dim_ne_zero
-  given: [Nontrivial S] (pb : PowerBasis R S)
-  statement: pb.dim != 0
-  proof: fun h =>
+theorem dim_ne_zero [Nontrivial S] (pb : PowerBasis R S) : pb.dim ≠ 0 := fun h =>
   not_nonempty_iff.mpr (h.symm ▸ Fin.isEmpty : IsEmpty (Fin pb.dim)) pb.basis.index_nonempty
-
-中文:
-定理 dim_ne_zero
-  条件: [非平凡 S] (pb : PowerBasis R S)
-  结论: pb.dim != 0
-  证明: fun h =>
-  not_nonempty_iff.mpr (h.symm ▸ Fin.isEmpty : IsEmpty (Fin pb.dim)) pb.basis.index_nonempty
--/
-theorem dim_ne_zero [Nontrivial S] (pb : PowerBasis R S) : pb.dim != 0 := fun h =>
-  not_nonempty_iff.mpr (h.symm ▸ Fin.isEmpty : IsEmpty (Fin pb.dim)) pb.basis.index_nonempty
-
-/--
-theorem `dim_pos` / 定理 `dim_pos`
-
-English:
-theorem dim_pos
-  given: [Nontrivial S] (pb : PowerBasis R S)
-  statement: 0 < pb.dim
-  proof: Nat.pos_of_ne_zero pb.dim_ne_zero
-
-中文:
-定理 dim_pos
-  条件: [非平凡 S] (pb : PowerBasis R S)
-  结论: 0 < pb.dim
-  证明: Nat.pos_of_ne_zero pb.dim_ne_zero
-
-Depends on / 依赖: Nat.pos_of_ne_zero, dim_ne_zero, pb.dim_ne_zero, pos_of_ne_zero
+/-
+**PowerBasis.dim_pos** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：dim_pos [Nontrivial S] (pb : PowerBasis R S) : 0 < pb.dim
+参数：pb : PowerBasis R S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `PowerBasis.dim_ne_zero`：dim_ne_zero [Nontrivial S] (pb : PowerBasis R S)
+ : pb.dim != 0
 -/
 theorem dim_pos [Nontrivial S] (pb : PowerBasis R S) : 0 < pb.dim :=
   Nat.pos_of_ne_zero pb.dim_ne_zero
-
-/--
-theorem `exists_eq_aeval` / 定理 `exists_eq_aeval`
-
-English:
-theorem exists_eq_aeval
-  given: [Nontrivial S] (pb : PowerBasis R S) (y : S)
-  proof: (mem_span_pow pb.dim_ne_zero).mp (by simpa using pb.basis.mem_span y)
-
-中文:
-定理 存在_eq_aeval
-  条件: [非平凡 S] (pb : PowerBasis R S) (y : S)
-  证明: (mem_span_pow pb.dim_ne_zero).mp (by simpa using pb.basis.mem_span y)
-
-Depends on / 依赖: dim_ne_zero, mem_span, mem_span_pow, pb.basis.mem_span, pb.dim_ne_zero
+/-
+**PowerBasis.exists_eq_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：exists_eq_aeval [Nontrivial S] (pb : PowerBasis R S) (y : S) : exists f : 
+R[X], f.natDegree < pb.dim ∧ y = aeval pb.gen f
+参数：pb : PowerBasis R S；y : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PowerBasis.mem_span_pow`：mem_span_pow {x y : S} {d : Nat} (hd : d != 0) 
+: y in Submodule.span R (Set.range fun i : Fin d => x ^ (i : Nat)) ↔ exists f : 
+R[X], f.natDe…
+· 使用定理 `PowerBasis.dim_ne_zero`：dim_ne_zero [Nontrivial S] (pb : PowerBasis R S)
+ : pb.dim != 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerBasis.coe_basis`：coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun 
+i : Fin pb.dim => pb.gen ^ (i : Nat)
+· 使用定理 `Module.Basis.mem_span`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b :
+ Module.Bas…
 -/
 theorem exists_eq_aeval [Nontrivial S] (pb : PowerBasis R S) (y : S) :
-    exists f : R[X], f.natDegree < pb.dim ∧ y = aeval pb.gen f :=
+    ∃ f : R[X], f.natDegree < pb.dim ∧ y = aeval pb.gen f :=
   (mem_span_pow pb.dim_ne_zero).mp (by simpa using pb.basis.mem_span y)
-
-/--
-theorem `exists_eq_aeval'` / 定理 `exists_eq_aeval'`
-
-English:
-theorem exists_eq_aeval'
-  given: (pb : PowerBasis R S) (y : S)
-  statement: exists f : R[X], y = aeval pb.gen f
-  proof: by
-  nontriviality S
-  obtain ⟨f, _, hf⟩ := exists_eq_aeval pb y
-  exact ⟨f, hf⟩
-
-中文:
-定理 存在_eq_aeval'
-  条件: (pb : PowerBasis R S) (y : S)
-  结论: 存在 f : R[X], y = aeval pb.gen f
-  证明: by
-  nontriviality S
-  obtain ⟨f, _, hf⟩ := exists_eq_aeval pb y
-  exact ⟨f, hf⟩
-
-Depends on / 依赖: exists_eq_aeval, nontriviality
+/-
+**PowerBasis.exists_eq_aeval'** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：exists_eq_aeval' (pb : PowerBasis R S) (y : S) : exists f : R[X], y = aeva
+l pb.gen f
+参数：pb : PowerBasis R S；y : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `PowerBasis.exists_eq_aeval`：exists_eq_aeval [Nontrivial S] (pb : PowerBa
+sis R S) (y : S) : exists f : R[X], f.natDegree < pb.dim ∧ y = aeval pb.gen f
 -/
-theorem exists_eq_aeval' (pb : PowerBasis R S) (y : S) : exists f : R[X], y = aeval pb.gen f := by
+theorem exists_eq_aeval' (pb : PowerBasis R S) (y : S) : ∃ f : R[X], y = aeval pb.gen f := by
   nontriviality S
   obtain ⟨f, _, hf⟩ := exists_eq_aeval pb y
   exact ⟨f, hf⟩
-
-/--
-theorem `algHom_ext` / 定理 `algHom_ext`
-
-English:
-theorem algHom_ext
-  statement: {S' : Type*} [Semiring S'] [Algebra R S'] (pb : PowerBasis R S)
-  proof: by
-  ext x
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  rw [← Polynomial.aeval_algHom_apply]; rw [← Polynomial.aeval_algHom_apply]; rw [h]
-
-中文:
-定理 algHom_ext
-  结论: {S' : 类型} [半环 S'] [代数 R S'] (pb : PowerBasis R S)
-  证明: by
-  ext x
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  rw [← Polynomial.aeval_algHom_apply]; rw [← Polynomial.aeval_algHom_apply]; rw [h]
-
-Depends on / 依赖: Polynomial, Polynomial.aeval_algHom_apply, aeval_algHom_apply, exists_eq_aeval, pb.exists_eq_aeval
+/-
+**PowerBasis.algHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：algHom_ext {S' : Type*} [Semiring S'] [Algebra R S'] (pb : PowerBasis R S)
+ ⦃f g : S ->ₐ[R] S'⦄ (h : f pb.gen = g pb.gen) : f = g
+参数：pb : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `PowerBasis.exists_eq_aeval'`：exists_eq_aeval' (pb : PowerBasis R S) (y :
+ S) : exists f : R[X], y = aeval pb.gen f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.aeval_algHom_apply`：aeval_algHom_apply {F : Type*} [FunLike F
+ A B] [AlgHomClass F R A B] (f : F) (x : A) (p : R[X]) : aeval (f x) p = f (aeva
+l x p)
 -/
 theorem algHom_ext {S' : Type*} [Semiring S'] [Algebra R S'] (pb : PowerBasis R S)
-    ⦃f g : S ->ₐ[R] S'⦄ (h : f pb.gen = g pb.gen) : f = g := by
+    ⦃f g : S →ₐ[R] S'⦄ (h : f pb.gen = g pb.gen) : f = g := by
   ext x
   obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  rw [← Polynomial.aeval_algHom_apply]; rw [← Polynomial.aeval_algHom_apply]; rw [h]
+  rw [← Polynomial.aeval_algHom_apply, ← Polynomial.aeval_algHom_apply, h]
 
 open Ideal Finset Submodule in
-/--
-theorem `exists_smodEq` / 定理 `exists_smodEq`
-
-English:
-theorem exists_smodEq
-  given: (pb : PowerBasis A B) (b : B)
-  proof: by
-  rcases subsingleton_or_nontrivial B
-  · exact ⟨0, by rw [SModEq, Subsingleton.eq_zero b, map_zero]⟩
-  refine ⟨pb.basis.repr b ⟨0, pb.dim_pos⟩, ?_⟩
-  have H := pb.basis.sum_repr b
-  rw [← insert_erase (mem_univ ⟨0]; rw [pb.dim_pos⟩)]; rw [sum_insert (notMem_erase _ _)] at H
-  rw [SModEq]; rw [← add_zero (algebraMap _ _ _)]; rw [Quotient.mk_add]
-  nth_rewrite 1 [← H]
-  rw [Quotient.mk_add]
-  congr 1
-  · simp [Algebra.algebraMap_eq_smul_one ((pb.basis.repr b) _)]
-  · rw [Quotient.mk_zero, Quotient.mk_eq_zero, coe_basis]
-    refine sum_mem _ (fun i hi => ?_)
-    rw [Algebra.smul_def']
-refine Ideal.mul_mem_left _ _ Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _
-Nat.pos_of_ne_zero fun h => notMem_erase i univ Fin.eq_mk_iff_val_eq.2 h ▸ hi
-
-中文:
-定理 存在_smodEq
-  条件: (pb : PowerBasis A B) (b : B)
-  证明: by
-  rcases subsingleton_or_nontrivial B
-  · exact ⟨0, by rw [SModEq, Subsingleton.eq_zero b, map_zero]⟩
-  refine ⟨pb.basis.repr b ⟨0, pb.dim_pos⟩, ?_⟩
-  have H := pb.basis.sum_repr b
-  rw [← insert_erase (mem_univ ⟨0]; rw [pb.dim_pos⟩)]; rw [sum_insert (notMem_erase _ _)] at H
-  rw [SModEq]; rw [← add_zero (algebraMap _ _ _)]; rw [Quotient.mk_add]
-  nth_rewrite 1 [← H]
-  rw [Quotient.mk_add]
-  congr 1
-  · simp [Algebra.algebraMap_eq_smul_one ((pb.basis.repr b) _)]
-  · rw [Quotient.mk_zero, Quotient.mk_eq_zero, coe_basis]
-    refine sum_mem _ (fun i hi => ?_)
-    rw [Algebra.smul_def']
-refine Ideal.mul_mem_left _ _ Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _
-Nat.pos_of_ne_zero fun h => notMem_erase i univ Fin.eq_mk_iff_val_eq.2 h ▸ hi
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Quotient, Quotient.mk_add, Quotient.mk_eq_zero, Quotient.mk_zero, SModEq, Subsingleton, Subsingleton.eq_zero, add_zero, algebraMap, algebraMap_eq_smul_one, coe_b, dim_pos, eq_zero, insert_erase, map_zero, mem_univ, mk_add, mk_eq_zero
+/-
+**PowerBasis.exists_smodEq** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：exists_smodEq (pb : PowerBasis A B) (b : B) : exists a, SModEq (Ideal.span
+ ({pb.gen})) b (algebraMap A B a)
+参数：pb : PowerBasis A B；b : B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SModEq.eq_1`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_4} [inst_1 : A
+ddCommGroup M] [inst_2 : _root_.Module R M]   (U : Submodule R M) (x y : M), (x 
+≡…
+· 使用定理 `Subsingleton.eq_zero`：∀ {α : Type u} [inst : Zero α] [Subsingleton α] (a
+ : α), a = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `PowerBasis.dim_pos`：dim_pos [Nontrivial S] (pb : PowerBasis R S) : 0 < p
+b.dim
+· 使用定理 `Module.Basis.sum_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [ins
+t_3 : Finty…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Submodule.Quotient.mk_add`：mk_add : (mk (x + y) : M ⧸ p) = mk x + mk y
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.notMem_erase`：notMem_erase (a : α) (s : Finset α) : a ∉ erase s a
+· 使用定理 `Finset.insert_erase`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset
+ α} {a : α}, a ∈ s → insert a (s.erase a) = s
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerBasis.coe_basis`：coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun 
+i : Fin pb.dim => pb.gen ^ (i : Nat)
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.Quotient.mk_zero`：mk_zero : mk 0 = (0 : M ⧸ p)
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Ideal.sum_mem`：sum_mem (I : Ideal α) {ι : Type*} {t : Finset ι} {f : ι -
+> α} : (forall c in t, f c in I) -> (∑ i in t, f i) in I
+· 使用定理 `Algebra.smul_def'`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R} {
+inst_1 : Semiring A} [self : Algebra R A] (r : R) (x : A),   r • x = (algebraMap
+ R A) r…
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+（共 35 条，此处仅展示前 30 条）
 -/
 theorem exists_smodEq (pb : PowerBasis A B) (b : B) :
-    exists a, SModEq (Ideal.span ({pb.gen})) b (algebraMap A B a) := by
+    ∃ a, SModEq (Ideal.span ({pb.gen})) b (algebraMap A B a) := by
   rcases subsingleton_or_nontrivial B
   · exact ⟨0, by rw [SModEq, Subsingleton.eq_zero b, map_zero]⟩
   refine ⟨pb.basis.repr b ⟨0, pb.dim_pos⟩, ?_⟩
   have H := pb.basis.sum_repr b
-  rw [← insert_erase (mem_univ ⟨0]; rw [pb.dim_pos⟩)]; rw [sum_insert (notMem_erase _ _)] at H
-  rw [SModEq]; rw [← add_zero (algebraMap _ _ _)]; rw [Quotient.mk_add]
+  rw [← insert_erase (mem_univ ⟨0, pb.dim_pos⟩), sum_insert (notMem_erase _ _)] at H
+  rw [SModEq, ← add_zero (algebraMap _ _ _), Quotient.mk_add]
   nth_rewrite 1 [← H]
   rw [Quotient.mk_add]
   congr 1
   · simp [Algebra.algebraMap_eq_smul_one ((pb.basis.repr b) _)]
   · rw [Quotient.mk_zero, Quotient.mk_eq_zero, coe_basis]
-    refine sum_mem _ (fun i hi => ?_)
+    refine sum_mem _ (fun i hi ↦ ?_)
     rw [Algebra.smul_def']
-refine Ideal.mul_mem_left _ _ Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _
-Nat.pos_of_ne_zero fun h => notMem_erase i univ Fin.eq_mk_iff_val_eq.2 h ▸ hi
+    refine Ideal.mul_mem_left _ _ <| Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _ <|
+      Nat.pos_of_ne_zero <| fun h ↦ notMem_erase i univ <| Fin.eq_mk_iff_val_eq.2 h ▸ hi
 
 open Submodule.Quotient in
-/--
-theorem `exists_gen_dvd_sub` / 定理 `exists_gen_dvd_sub`
-
-English:
-theorem exists_gen_dvd_sub
-  given: (pb : PowerBasis A B) (b : B)
-  statement: exists a, pb.gen ∣ b - algebraMap A B a
-  proof: by
-  simpa [← Ideal.mem_span_singleton, ← mk_eq_zero, mk_sub, sub_eq_zero] using! pb.exists_smodEq b
-
-中文:
-定理 存在_gen_dvd_sub
-  条件: (pb : PowerBasis A B) (b : B)
-  结论: 存在 a, pb.gen ∣ b - algebraMap A B a
-  证明: by
-  simpa [← Ideal.mem_span_singleton, ← mk_eq_zero, mk_sub, sub_eq_zero] using! pb.exists_smodEq b
-
-Depends on / 依赖: Ideal.mem_span_singleton, exists_smodEq, mem_span_singleton, mk_eq_zero, mk_sub, pb.exists_smodEq, sub_eq_zero
+/-
+**PowerBasis.exists_gen_dvd_sub** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：exists_gen_dvd_sub (pb : PowerBasis A B) (b : B) : exists a, pb.gen ∣ b - 
+algebraMap A B a
+参数：pb : PowerBasis A B；b : B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `PowerBasis.exists_smodEq`：exists_smodEq (pb : PowerBasis A B) (b : B) : 
+exists a, SModEq (Ideal.span ({pb.gen})) b (algebraMap A B a)
 -/
-theorem exists_gen_dvd_sub (pb : PowerBasis A B) (b : B) : exists a, pb.gen ∣ b - algebraMap A B a := by
+theorem exists_gen_dvd_sub (pb : PowerBasis A B) (b : B) : ∃ a, pb.gen ∣ b - algebraMap A B a := by
   simpa [← Ideal.mem_span_singleton, ← mk_eq_zero, mk_sub, sub_eq_zero] using! pb.exists_smodEq b
 
 section minpoly
 
 variable [Algebra A S]
 
-/--
-Definition of `minpolyGen` / `minpolyGen` 的定义
+/-- `pb.minpolyGen` is the minimal polynomial for `pb.gen`. -/
+/-
+**PowerBasis.minpolyGen** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：minpolyGen (pb : PowerBasis A S) : A[X]
+参数：pb : PowerBasis A S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition minpolyGen
-  signature: (pb : PowerBasis A S)
-  body: X ^ pb.dim - ∑ i : Fin pb.dim, C (pb.basis.repr (pb.gen ^ pb.dim) i) * X ^ (i : Nat)
-
-中文:
-定义 minpolyGen
-  签名: (pb : PowerBasis A S)
-  定义体: X ^ pb.dim - ∑ i : Fin pb.dim, C (pb.basis.repr (pb.gen ^ pb.dim) i) * X ^ (i : Nat)
-
-Depends on / 依赖: pb.basis.repr, pb.dim, pb.gen
+--- 原说明 ---
+`pb.minpolyGen` is the minimal polynomial for `pb.gen`.
 -/
 noncomputable def minpolyGen (pb : PowerBasis A S) : A[X] :=
-  X ^ pb.dim - ∑ i : Fin pb.dim, C (pb.basis.repr (pb.gen ^ pb.dim) i) * X ^ (i : Nat)
-
-/--
-theorem `aeval_minpolyGen` / 定理 `aeval_minpolyGen`
-
-English:
-theorem aeval_minpolyGen
-  given: (pb : PowerBasis A S)
-  statement: aeval pb.gen (minpolyGen pb) = 0
-  proof: by
-  simp_rw [minpolyGen, map_sub, map_sum, map_mul, map_pow, aeval_C, ← Algebra.smul_def, aeval_X]
-  refine sub_eq_zero.mpr ((pb.basis.linearCombination_repr (pb.gen ^ pb.dim)).symm.trans ?_)
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype] <;>
-    simp only [pb.coe_basis, zero_smul, imp_true_iff]
-
-中文:
-定理 aeval_minpolyGen
-  条件: (pb : PowerBasis A S)
-  结论: aeval pb.gen (minpolyGen pb) = 0
-  证明: by
-  simp_rw [minpolyGen, map_sub, map_sum, map_mul, map_pow, aeval_C, ← Algebra.smul_def, aeval_X]
-  refine sub_eq_zero.mpr ((pb.basis.linearCombination_repr (pb.gen ^ pb.dim)).symm.trans ?_)
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype] <;>
-    simp only [pb.coe_basis, zero_smul, imp_true_iff]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum_fintype, aeval_C, aeval_X, coe_basis, imp_true_iff, linearCombination_apply, linearCombination_repr, map_mul, map_pow, map_sub, map_sum, minpolyGen, pb.basis.linearCombination_repr, pb.coe_basis, pb.dim, pb.gen
+  X ^ pb.dim - ∑ i : Fin pb.dim, C (pb.basis.repr (pb.gen ^ pb.dim) i) * X ^ (i : ℕ)
+/-
+**PowerBasis.aeval_minpolyGen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：aeval_minpolyGen (pb : PowerBasis A S) : aeval pb.gen (minpolyGen pb) = 0
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Polynomial.aeval_C`：aeval_C (r : R) : aeval x (C r) = algebraMap R A r
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.linearCombination_repr`：linearCombination_repr : Finsupp.li
+nearCombination _ b (b.repr x) = x
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum_fintype`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [in
+st : Zero M] [inst_1 : AddCommMonoid N] [inst_2 : Fintype α]   (f : α →₀ M) (g :
+ α → M → …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerBasis.coe_basis`：coe_basis (pb : PowerBasis R S) : ⇑pb.basis = fun 
+i : Fin pb.dim => pb.gen ^ (i : Nat)
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem aeval_minpolyGen (pb : PowerBasis A S) : aeval pb.gen (minpolyGen pb) = 0 := by
   simp_rw [minpolyGen, map_sub, map_sum, map_mul, map_pow, aeval_C, ← Algebra.smul_def, aeval_X]
   refine sub_eq_zero.mpr ((pb.basis.linearCombination_repr (pb.gen ^ pb.dim)).symm.trans ?_)
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype] <;>
+  rw [Finsupp.linearCombination_apply, Finsupp.sum_fintype] <;>
     simp only [pb.coe_basis, zero_smul, imp_true_iff]
-
-/--
-theorem `minpolyGen_monic` / 定理 `minpolyGen_monic`
-
-English:
-theorem minpolyGen_monic
-  given: (pb : PowerBasis A S)
-  statement: Monic (minpolyGen pb)
-  proof: by
-  nontriviality A
-  apply (monic_X_pow _).sub_of_left _
-  rw [degree_X_pow]
-  exact degree_sum_fin_lt _
-
-中文:
-定理 minpolyGen_monic
-  条件: (pb : PowerBasis A S)
-  结论: Monic (minpolyGen pb)
-  证明: by
-  nontriviality A
-  apply (monic_X_pow _).sub_of_left _
-  rw [degree_X_pow]
-  exact degree_sum_fin_lt _
-
-Depends on / 依赖: degree_X_pow, degree_sum_fin_lt, monic_X_pow, nontriviality, sub_of_left
+/-
+**PowerBasis.minpolyGen_monic** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：minpolyGen_monic (pb : PowerBasis A S) : Monic (minpolyGen pb)
+参数：pb : PowerBasis A S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Polynomial.Monic.sub_of_left`：∀ {R : Type u} [inst : Ring R] {p q : Poly
+nomial R}, p.Monic → q.degree < p.degree → (p - q).Monic
+· 使用定理 `Polynomial.monic_X_pow`：monic_X_pow (n : Nat) : Monic (X ^ n : R[X])
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_X_pow`：degree_X_pow : degree ((X : R[X]) ^ n) = n
+· 使用定理 `Polynomial.degree_sum_fin_lt`：degree_sum_fin_lt {n : Nat} (f : Fin n -> 
+R) : degree (∑ i : Fin n, C (f i) * X ^ (i : Nat)) < n
 -/
 theorem minpolyGen_monic (pb : PowerBasis A S) : Monic (minpolyGen pb) := by
   nontriviality A
   apply (monic_X_pow _).sub_of_left _
   rw [degree_X_pow]
   exact degree_sum_fin_lt _
-
-/--
-theorem `dim_le_natDegree_of_root` / 定理 `dim_le_natDegree_of_root`
-
-English:
-theorem dim_le_natDegree_of_root
-  statement: (pb : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-  proof: by
-  refine le_of_not_gt fun hlt => ne_zero ?_
-  rw [p.as_sum_range' _ hlt]; rw [Finset.sum_range]
-  refine Fintype.sum_eq_zero _ fun i => ?_
-  simp_rw [aeval_eq_sum_range' hlt, Finset.sum_range, ← pb.basis_eq_pow] at root
-  have := Fintype.linearIndependent_iff.1 pb.basis.linearIndependent _ root
-  rw [this]; rw [monomial_zero_right]
-
-中文:
-定理 dim_le_natDegree_of_root
-  结论: (pb : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-  证明: by
-  refine le_of_not_gt fun hlt => ne_zero ?_
-  rw [p.as_sum_range' _ hlt]; rw [Finset.sum_range]
-  refine Fintype.sum_eq_zero _ fun i => ?_
-  simp_rw [aeval_eq_sum_range' hlt, Finset.sum_range, ← pb.basis_eq_pow] at root
-  have := Fintype.linearIndependent_iff.1 pb.basis.linearIndependent _ root
-  rw [this]; rw [monomial_zero_right]
-
-Depends on / 依赖: Finset, Finset.sum_range, Fintype, Fintype.linearIndependent_iff, Fintype.sum_eq_zero, aeval_eq_sum_range, as_sum_range, basis_eq_pow, le_of_not_gt, linearIndependent, linearIndependent_iff, monomial_zero_right, ne_zero, p.as_sum_range, pb.basis.linearIndependent, pb.basis_eq_pow, simp_rw, sum_eq_zero, sum_range
+/-
+**PowerBasis.dim_le_natDegree_of_root** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：dim_le_natDegree_of_root (pb : PowerBasis A S) {p : A[X]} (ne_zero : p != 
+0) (root : aeval pb.gen p = 0) : pb.dim <= p.natDegree
+参数：pb : PowerBasis A S；ne_zero : p != 0；root : aeval pb.gen p = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.as_sum_range'`：as_sum_range' (p : R[X]) (n : Nat) (hn : p.nat
+Degree < n) : p = ∑ i in range n, monomial i (coeff p i)
+· 使用定理 `Finset.sum_range`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f :
+ ℕ → M), ∑ i ∈ Finset.range n, f i = ∑ i, f ↑i
+· 使用定理 `Fintype.sum_eq_zero`：∀ {α : Type u_1} {M : Type u_4} [inst : Fintype α] 
+[inst_1 : AddCommMonoid M] (f : α → M),   (∀ (a : α), f a = 0) → ∑ a, f a = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.linearIndependent_iff`：Fintype.linearIndependent_iff [Fintype ι]
+ : LinearIndependent R v ↔ forall g : ι -> R, ∑ i, g i • v i = 0 -> forall i, g 
+i = 0
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerBasis.basis_eq_pow`：∀ {R : Type u_7} {S : Type u_8} [inst : CommRin
+g R] [inst_1 : Ring S] [inst_2 : Algebra R S] (self : PowerBasis R S)   (i : Fin
+ self.dim), s…
+· 使用定理 `Polynomial.aeval_eq_sum_range'`：aeval_eq_sum_range' [Algebra R S] {p : R
+[X]} {n : Nat} (hn : p.natDegree < n) (x : S) : aeval x p = ∑ i in Finset.range 
+n, p.coeff i • x ^ i
+· 使用定理 `Polynomial.monomial_zero_right`：monomial_zero_right (n : Nat) : monomial
+ n (0 : R) = 0
 -/
-theorem dim_le_natDegree_of_root (pb : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-    (root : aeval pb.gen p = 0) : pb.dim <= p.natDegree := by
+theorem dim_le_natDegree_of_root (pb : PowerBasis A S) {p : A[X]} (ne_zero : p ≠ 0)
+    (root : aeval pb.gen p = 0) : pb.dim ≤ p.natDegree := by
   refine le_of_not_gt fun hlt => ne_zero ?_
-  rw [p.as_sum_range' _ hlt]; rw [Finset.sum_range]
+  rw [p.as_sum_range' _ hlt, Finset.sum_range]
   refine Fintype.sum_eq_zero _ fun i => ?_
   simp_rw [aeval_eq_sum_range' hlt, Finset.sum_range, ← pb.basis_eq_pow] at root
   have := Fintype.linearIndependent_iff.1 pb.basis.linearIndependent _ root
-  rw [this]; rw [monomial_zero_right]
-
-/--
-theorem `dim_le_degree_of_root` / 定理 `dim_le_degree_of_root`
-
-English:
-theorem dim_le_degree_of_root
-  statement: (h : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-  proof: by
-  rw [degree_eq_natDegree ne_zero]
-  exact WithBot.coe_le_coe.2 (h.dim_le_natDegree_of_root ne_zero root)
-
-中文:
-定理 dim_le_degree_of_root
-  结论: (h : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-  证明: by
-  rw [degree_eq_natDegree ne_zero]
-  exact WithBot.coe_le_coe.2 (h.dim_le_natDegree_of_root ne_zero root)
-
-Depends on / 依赖: WithBot, WithBot.coe_le_coe, coe_le_coe, degree_eq_natDegree, dim_le_natDegree_of_root, h.dim_le_natDegree_of_root, ne_zero
+  rw [this, monomial_zero_right]
+/-
+**PowerBasis.dim_le_degree_of_root** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：dim_le_degree_of_root (h : PowerBasis A S) {p : A[X]} (ne_zero : p != 0) (
+root : aeval h.gen p = 0) : ↑h.dim <= p.degree
+参数：h : PowerBasis A S；ne_zero : p != 0；root : aeval h.gen p = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用定理 `PowerBasis.dim_le_natDegree_of_root`：dim_le_natDegree_of_root (pb : Powe
+rBasis A S) {p : A[X]} (ne_zero : p != 0) (root : aeval pb.gen p = 0) : pb.dim <
+= p.natDegree
 -/
-theorem dim_le_degree_of_root (h : PowerBasis A S) {p : A[X]} (ne_zero : p != 0)
-    (root : aeval h.gen p = 0) : ↑h.dim <= p.degree := by
+theorem dim_le_degree_of_root (h : PowerBasis A S) {p : A[X]} (ne_zero : p ≠ 0)
+    (root : aeval h.gen p = 0) : ↑h.dim ≤ p.degree := by
   rw [degree_eq_natDegree ne_zero]
   exact WithBot.coe_le_coe.2 (h.dim_le_natDegree_of_root ne_zero root)
-
-/--
-theorem `degree_minpolyGen` / 定理 `degree_minpolyGen`
-
-English:
-theorem degree_minpolyGen
-  given: [Nontrivial A] (pb : PowerBasis A S)
-  proof: by
-  unfold minpolyGen
-  rw [degree_sub_eq_left_of_degree_lt] <;> rw [degree_X_pow]
-  apply degree_sum_fin_lt
-
-中文:
-定理 degree_minpolyGen
-  条件: [非平凡 A] (pb : PowerBasis A S)
-  证明: by
-  unfold minpolyGen
-  rw [degree_sub_eq_left_of_degree_lt] <;> rw [degree_X_pow]
-  apply degree_sum_fin_lt
-
-Depends on / 依赖: degree_X_pow, degree_sub_eq_left_of_degree_lt, degree_sum_fin_lt, minpolyGen
+/-
+**PowerBasis.degree_minpolyGen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：degree_minpolyGen [Nontrivial A] (pb : PowerBasis A S) : degree (minpolyGe
+n pb) = pb.dim
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_sub_eq_left_of_degree_lt`：degree_sub_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p - q) = degree p
+· 使用定理 `Polynomial.degree_X_pow`：degree_X_pow : degree ((X : R[X]) ^ n) = n
+· 使用定理 `Polynomial.degree_sum_fin_lt`：degree_sum_fin_lt {n : Nat} (f : Fin n -> 
+R) : degree (∑ i : Fin n, C (f i) * X ^ (i : Nat)) < n
 -/
 theorem degree_minpolyGen [Nontrivial A] (pb : PowerBasis A S) :
     degree (minpolyGen pb) = pb.dim := by
   unfold minpolyGen
   rw [degree_sub_eq_left_of_degree_lt] <;> rw [degree_X_pow]
   apply degree_sum_fin_lt
-
-/--
-theorem `natDegree_minpolyGen` / 定理 `natDegree_minpolyGen`
-
-English:
-theorem natDegree_minpolyGen
-  given: [Nontrivial A] (pb : PowerBasis A S)
-  proof: natDegree_eq_of_degree_eq_some pb.degree_minpolyGen
-
-@[simp]
-
-中文:
-定理 natDegree_minpolyGen
-  条件: [非平凡 A] (pb : PowerBasis A S)
-  证明: natDegree_eq_of_degree_eq_some pb.degree_minpolyGen
-
-@[simp]
-
-Depends on / 依赖: degree_minpolyGen, natDegree_eq_of_degree_eq_some, pb.degree_minpolyGen
+/-
+**PowerBasis.natDegree_minpolyGen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：natDegree_minpolyGen [Nontrivial A] (pb : PowerBasis A S) : natDegree (min
+polyGen pb) = pb.dim
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `PowerBasis.degree_minpolyGen`：degree_minpolyGen [Nontrivial A] (pb : Pow
+erBasis A S) : degree (minpolyGen pb) = pb.dim
 -/
 theorem natDegree_minpolyGen [Nontrivial A] (pb : PowerBasis A S) :
     natDegree (minpolyGen pb) = pb.dim :=
   natDegree_eq_of_degree_eq_some pb.degree_minpolyGen
 
 @[simp]
-/--
-theorem `minpolyGen_eq` / 定理 `minpolyGen_eq`
-
-English:
-theorem minpolyGen_eq
-  given: (pb : PowerBasis A S)
-  statement: pb.minpolyGen = minpoly A pb.gen
-  proof: by
-  nontriviality A
-  refine minpoly.unique' A _ pb.minpolyGen_monic pb.aeval_minpolyGen fun q hq =>
-    or_iff_not_imp_left.2 fun hn0 h0 => ?_
-  exact (pb.dim_le_degree_of_root hn0 h0).not_gt (pb.degree_minpolyGen ▸ hq)
-
-中文:
-定理 minpolyGen_eq
-  条件: (pb : PowerBasis A S)
-  结论: pb.minpolyGen = minpoly A pb.gen
-  证明: by
-  nontriviality A
-  refine minpoly.unique' A _ pb.minpolyGen_monic pb.aeval_minpolyGen fun q hq =>
-    or_iff_not_imp_left.2 fun hn0 h0 => ?_
-  exact (pb.dim_le_degree_of_root hn0 h0).not_gt (pb.degree_minpolyGen ▸ hq)
-
-Depends on / 依赖: aeval_minpolyGen, degree_minpolyGen, dim_le_degree_of_root, minpoly, minpoly.unique, minpolyGen_monic, nontriviality, not_gt, or_iff_not_imp_left, pb.aeval_minpolyGen, pb.degree_minpolyGen, pb.dim_le_degree_of_root, pb.minpolyGen_monic, unique
+/-
+**PowerBasis.minpolyGen_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：minpolyGen_eq (pb : PowerBasis A S) : pb.minpolyGen = minpoly A pb.gen
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `minpoly.unique'`：unique' {p : A[X]} (hm : p.Monic) (hp : Polynomial.aeva
+l x p = 0) (hl : forall q : A[X], degree q < degree p -> q = 0 ∨ Polynomial.aeva
+l x q…
+· 使用定理 `PowerBasis.minpolyGen_monic`：minpolyGen_monic (pb : PowerBasis A S) : Mo
+nic (minpolyGen pb)
+· 使用定理 `PowerBasis.aeval_minpolyGen`：aeval_minpolyGen (pb : PowerBasis A S) : ae
+val pb.gen (minpolyGen pb) = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `PowerBasis.dim_le_degree_of_root`：dim_le_degree_of_root (h : PowerBasis 
+A S) {p : A[X]} (ne_zero : p != 0) (root : aeval h.gen p = 0) : ↑h.dim <= p.degr
+ee
+· 使用定理 `PowerBasis.degree_minpolyGen`：degree_minpolyGen [Nontrivial A] (pb : Pow
+erBasis A S) : degree (minpolyGen pb) = pb.dim
 -/
 theorem minpolyGen_eq (pb : PowerBasis A S) : pb.minpolyGen = minpoly A pb.gen := by
   nontriviality A
   refine minpoly.unique' A _ pb.minpolyGen_monic pb.aeval_minpolyGen fun q hq =>
     or_iff_not_imp_left.2 fun hn0 h0 => ?_
   exact (pb.dim_le_degree_of_root hn0 h0).not_gt (pb.degree_minpolyGen ▸ hq)
-
-/--
-theorem `isIntegral_gen` / 定理 `isIntegral_gen`
-
-English:
-theorem isIntegral_gen
-  given: (pb : PowerBasis A S)
-  statement: IsIntegral A pb.gen
-  proof: ⟨minpolyGen pb, minpolyGen_monic pb, aeval_minpolyGen pb⟩
-
-@[simp]
-
-中文:
-定理 is整数egral_gen
-  条件: (pb : PowerBasis A S)
-  结论: 是整 A pb.gen
-  证明: ⟨minpolyGen pb, minpolyGen_monic pb, aeval_minpolyGen pb⟩
-
-@[simp]
-
-Depends on / 依赖: aeval_minpolyGen, minpolyGen, minpolyGen_monic
+/-
+**PowerBasis.isIntegral_gen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：isIntegral_gen (pb : PowerBasis A S) : IsIntegral A pb.gen
+参数：pb : PowerBasis A S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.minpolyGen_monic`：minpolyGen_monic (pb : PowerBasis A S) : Mo
+nic (minpolyGen pb)
+· 使用定理 `PowerBasis.aeval_minpolyGen`：aeval_minpolyGen (pb : PowerBasis A S) : ae
+val pb.gen (minpolyGen pb) = 0
 -/
 theorem isIntegral_gen (pb : PowerBasis A S) : IsIntegral A pb.gen :=
   ⟨minpolyGen pb, minpolyGen_monic pb, aeval_minpolyGen pb⟩
 
 @[simp]
-/--
-theorem `degree_minpoly` / 定理 `degree_minpoly`
-
-English:
-theorem degree_minpoly
-  given: [Nontrivial A] (pb : PowerBasis A S)
-  proof: by rw [← minpolyGen_eq, degree_minpolyGen]
-
-@[simp]
-
-中文:
-定理 degree_minpoly
-  条件: [非平凡 A] (pb : PowerBasis A S)
-  证明: by rw [← minpolyGen_eq, degree_minpolyGen]
-
-@[simp]
-
-Depends on / 依赖: degree_minpolyGen, minpolyGen_eq
+/-
+**PowerBasis.degree_minpoly** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：degree_minpoly [Nontrivial A] (pb : PowerBasis A S) : degree (minpoly A pb
+.gen) = pb.dim
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerBasis.minpolyGen_eq`：minpolyGen_eq (pb : PowerBasis A S) : pb.minpo
+lyGen = minpoly A pb.gen
+· 使用定理 `PowerBasis.degree_minpolyGen`：degree_minpolyGen [Nontrivial A] (pb : Pow
+erBasis A S) : degree (minpolyGen pb) = pb.dim
 -/
 theorem degree_minpoly [Nontrivial A] (pb : PowerBasis A S) :
     degree (minpoly A pb.gen) = pb.dim := by rw [← minpolyGen_eq, degree_minpolyGen]
 
 @[simp]
-/--
-theorem `natDegree_minpoly` / 定理 `natDegree_minpoly`
-
-English:
-theorem natDegree_minpoly
-  given: [Nontrivial A] (pb : PowerBasis A S)
-  proof: by rw [← minpolyGen_eq, natDegree_minpolyGen]
-
-中文:
-定理 natDegree_minpoly
-  条件: [非平凡 A] (pb : PowerBasis A S)
-  证明: by rw [← minpolyGen_eq, natDegree_minpolyGen]
-
-Depends on / 依赖: minpolyGen_eq, natDegree_minpolyGen
+/-
+**PowerBasis.natDegree_minpoly** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：natDegree_minpoly [Nontrivial A] (pb : PowerBasis A S) : (minpoly A pb.gen
+).natDegree = pb.dim
+参数：pb : PowerBasis A S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerBasis.minpolyGen_eq`：minpolyGen_eq (pb : PowerBasis A S) : pb.minpo
+lyGen = minpoly A pb.gen
+· 使用定理 `PowerBasis.natDegree_minpolyGen`：natDegree_minpolyGen [Nontrivial A] (pb
+ : PowerBasis A S) : natDegree (minpolyGen pb) = pb.dim
 -/
 theorem natDegree_minpoly [Nontrivial A] (pb : PowerBasis A S) :
     (minpoly A pb.gen).natDegree = pb.dim := by rw [← minpolyGen_eq, natDegree_minpolyGen]
-
-/--
-theorem `leftMulMatrix` / 定理 `leftMulMatrix`
-
-English:
-theorem leftMulMatrix
-  given: (pb : PowerBasis A S)
-  statement: Algebra.leftMulMatrix pb.basis pb.gen =
-  proof: by
-  cases subsingleton_or_nontrivial A; · subsingleton
-  rw [Algebra.leftMulMatrix_apply]; rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix_symm]
-  refine pb.basis.ext fun k => ?_
-  simp_rw [Matrix.toLin_self, Matrix.of_apply, pb.basis_eq_pow]
-  apply (pow_succ' _ _).symm.trans
-  split_ifs with h
-  · simp_rw [h, neg_smul, Finset.sum_neg_distrib, eq_neg_iff_add_eq_zero]
-    convert! pb.aeval_minpolyGen
-    rw [add_comm]; rw [aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [← leadingCoeff]; rw [pb.minpolyGen_monic.leadingCoeff]; rw [one_smul]; rw [natDegree_minpolyGen]; rw [Finset.sum_range]
-  · rw [Fintype.sum_eq_single (⟨(k : Nat) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
-    · rfl
-    intro x hx
-    rw [if_neg]; rw [zero_smul]
-    apply mt Fin.ext hx
-
-中文:
-定理 leftMulMatrix
-  条件: (pb : PowerBasis A S)
-  结论: 代数.leftMulMatrix pb.basis pb.gen =
-  证明: by
-  cases subsingleton_or_nontrivial A; · subsingleton
-  rw [Algebra.leftMulMatrix_apply]; rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix_symm]
-  refine pb.basis.ext fun k => ?_
-  simp_rw [Matrix.toLin_self, Matrix.of_apply, pb.basis_eq_pow]
-  apply (pow_succ' _ _).symm.trans
-  split_ifs with h
-  · simp_rw [h, neg_smul, Finset.sum_neg_distrib, eq_neg_iff_add_eq_zero]
-    convert! pb.aeval_minpolyGen
-    rw [add_comm]; rw [aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [← leadingCoeff]; rw [pb.minpolyGen_monic.leadingCoeff]; rw [one_smul]; rw [natDegree_minpolyGen]; rw [Finset.sum_range]
-  · rw [Fintype.sum_eq_single (⟨(k : Nat) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
-    · rfl
-    intro x hx
-    rw [if_neg]; rw [zero_smul]
-    apply mt Fin.ext hx
+/-
+**PowerBasis.leftMulMatrix** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：∀ {S : Type u_2} [inst : Ring S] {A : Type u_4} [inst_1 : CommRing A] [ins
+t_2 : Algebra A S] (pb : PowerBasis A S),   (Algebra.leftMulMatrix pb.basis) pb.
+gen =     Matrix.of fun i j => if ↑j + 1 = pb.dim then -pb.minpolyGen.coeff ↑i e
+lse if ↑i = ↑j + 1 then 1 else 0
+参数：pb : PowerBasis A S；Algebra.leftMulMatrix pb.basis。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.leftMulMatrix_apply`：leftMulMatrix_apply (x : S) : leftMulMatrix
+ b x = LinearMap.toMatrix b b (lmul R S x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.eq_symm_apply`：eq_symm_apply {x y} : y = e.symm x ↔ e y = x
+· 使用定理 `LinearMap.toMatrix_symm`：LinearMap.toMatrix_symm : (LinearMap.toMatrix v
+₁ v₂).symm = Matrix.toLin v₁ v₂
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `Matrix.toLin_self`：Matrix.toLin_self [Fintype m] (M : Matrix m n R) (i :
+ n) : Matrix.toLin v₁ v₂ M (v₁ i) = ∑ j, M j i • v₂ j
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerBasis.basis_eq_pow`：∀ {R : Type u_7} {S : Type u_8} [inst : CommRin
+g R] [inst_1 : Ring S] [inst_2 : Algebra R S] (self : PowerBasis R S)   (i : Fin
+ self.dim), s…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `Finset.sum_neg_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f : ι → G),   ∑ x ∈ s, -f x = -∑ x ∈ s, f x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Polynomial.aeval_eq_sum_range`：aeval_eq_sum_range [Algebra R S] {p : R[X
+]} (x : S) : aeval x p = ∑ i in Finset.range (p.natDegree + 1), p.coeff i • x ^ 
+i
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Polynomial.Monic.leadingCoeff`：∀ {R : Type u} [inst : Semiring R] {p : P
+olynomial R}, p.Monic → p.leadingCoeff = 1
+· 使用定理 `PowerBasis.minpolyGen_monic`：minpolyGen_monic (pb : PowerBasis A S) : Mo
+nic (minpolyGen pb)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `PowerBasis.natDegree_minpolyGen`：natDegree_minpolyGen [Nontrivial A] (pb
+ : PowerBasis A S) : natDegree (minpolyGen pb) = pb.dim
+· 使用定理 `Finset.sum_range`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f :
+ ℕ → M), ∑ i ∈ Finset.range n, f i = ∑ i, f ↑i
+· 使用定理 `PowerBasis.aeval_minpolyGen`：aeval_minpolyGen (pb : PowerBasis A S) : ae
+val pb.gen (minpolyGen pb) = 0
+（共 37 条，此处仅展示前 30 条）
 -/
 protected theorem leftMulMatrix (pb : PowerBasis A S) : Algebra.leftMulMatrix pb.basis pb.gen =
     @Matrix.of (Fin pb.dim) (Fin pb.dim) _ fun i j =>
-      if ↑j + 1 = pb.dim then -pb.minpolyGen.coeff ↑i else if (i : Nat) = j + 1 then 1 else 0 := by
+      if ↑j + 1 = pb.dim then -pb.minpolyGen.coeff ↑i else if (i : ℕ) = j + 1 then 1 else 0 := by
   cases subsingleton_or_nontrivial A; · subsingleton
-  rw [Algebra.leftMulMatrix_apply]; rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix_symm]
+  rw [Algebra.leftMulMatrix_apply, ← LinearEquiv.eq_symm_apply, LinearMap.toMatrix_symm]
   refine pb.basis.ext fun k => ?_
   simp_rw [Matrix.toLin_self, Matrix.of_apply, pb.basis_eq_pow]
   apply (pow_succ' _ _).symm.trans
   split_ifs with h
   · simp_rw [h, neg_smul, Finset.sum_neg_distrib, eq_neg_iff_add_eq_zero]
     convert! pb.aeval_minpolyGen
-    rw [add_comm]; rw [aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [← leadingCoeff]; rw [pb.minpolyGen_monic.leadingCoeff]; rw [one_smul]; rw [natDegree_minpolyGen]; rw [Finset.sum_range]
-  · rw [Fintype.sum_eq_single (⟨(k : Nat) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
+    rw [add_comm, aeval_eq_sum_range, Finset.sum_range_succ, ← leadingCoeff,
+      pb.minpolyGen_monic.leadingCoeff, one_smul, natDegree_minpolyGen, Finset.sum_range]
+  · rw [Fintype.sum_eq_single (⟨(k : ℕ) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
     · rfl
     intro x hx
-    rw [if_neg]; rw [zero_smul]
+    rw [if_neg, zero_smul]
     apply mt Fin.ext hx
 
 end minpoly
@@ -828,213 +848,225 @@ section Equiv
 
 variable [Algebra A S] {S' : Type*} [Ring S'] [Algebra A S']
 
-/--
-theorem `constr_pow_aeval` / 定理 `constr_pow_aeval`
-
-English:
-theorem constr_pow_aeval
-  statement: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  proof: by
-  cases subsingleton_or_nontrivial A
-  · rw [(Subsingleton.elim _ _ : f = 0), aeval_zero, map_zero, aeval_zero]
-  rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _)]; rw [← aeval_modByMonic_eq_self_of_root hy]
-  by_cases hf : f %ₘ minpoly A pb.gen = 0
-  · simp only [hf, map_zero]
-  have : (f %ₘ minpoly A pb.gen).natDegree < pb.dim := by
-    rw [← pb.natDegree_minpoly]
-    apply natDegree_lt_natDegree hf
-    exact degree_modByMonic_lt _ (minpoly.monic pb.isIntegral_gen)
-  rw [aeval_eq_sum_range' this]; rw [aeval_eq_sum_range' this]; rw [map_sum]
-  refine Finset.sum_congr rfl fun i (hi : i in Finset.range pb.dim) => ?_
-  rw [Finset.mem_range] at hi
-  rw [map_smul]
-  congr
-  rw [← Fin.val_mk hi]; rw [← pb.basis_eq_pow ⟨i]; rw [hi⟩]; rw [Basis.constr_basis]
-
-中文:
-定理 constr_pow_aeval
-  结论: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  证明: by
-  cases subsingleton_or_nontrivial A
-  · rw [(Subsingleton.elim _ _ : f = 0), aeval_zero, map_zero, aeval_zero]
-  rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _)]; rw [← aeval_modByMonic_eq_self_of_root hy]
-  by_cases hf : f %ₘ minpoly A pb.gen = 0
-  · simp only [hf, map_zero]
-  have : (f %ₘ minpoly A pb.gen).natDegree < pb.dim := by
-    rw [← pb.natDegree_minpoly]
-    apply natDegree_lt_natDegree hf
-    exact degree_modByMonic_lt _ (minpoly.monic pb.isIntegral_gen)
-  rw [aeval_eq_sum_range' this]; rw [aeval_eq_sum_range' this]; rw [map_sum]
-  refine Finset.sum_congr rfl fun i (hi : i in Finset.range pb.dim) => ?_
-  rw [Finset.mem_range] at hi
-  rw [map_smul]
-  congr
-  rw [← Fin.val_mk hi]; rw [← pb.basis_eq_pow ⟨i]; rw [hi⟩]; rw [Basis.constr_basis]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, aeval_eq_sum_range, aeval_modByMonic_eq_self_of_root, aeval_zero, degree_modByMonic_lt, isIntegral_gen, map_zero, minpoly, minpoly.aeval, minpoly.monic, natDegree, natDegree_lt_natDegree, natDegree_minpoly, pb.dim, pb.gen, pb.isIntegral_gen, pb.natDegree_minpoly, subsingleton_or_nontrivial
+/-
+**PowerBasis.constr_pow_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：constr_pow_aeval (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A p
+b.gen) = 0) (f : A[X]) : pb.basis.constr A (fun i => y ^ (i : Nat)) (aeval pb.ge
+n f) = aeval y f
+参数：pb : PowerBasis A S；hy : aeval y (minpoly A pb.gen) = 0；f : A[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Polynomial.aeval_zero`：aeval_zero : aeval x (0 : R[X]) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.aeval_modByMonic_eq_self_of_root`：aeval_modByMonic_eq_self_of
+_root [Algebra R S] {p q : R[X]} {x : S} (hx : aeval x q = 0) : aeval x (p %ₘ q)
+ = aeval x p
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerBasis.natDegree_minpoly`：natDegree_minpoly [Nontrivial A] (pb : Pow
+erBasis A S) : (minpoly A pb.gen).natDegree = pb.dim
+· 使用定理 `Polynomial.natDegree_lt_natDegree`：natDegree_lt_natDegree {q : S[X]} (hp
+ : p != 0) (hpq : p.degree < q.degree) : p.natDegree < q.natDegree
+· 使用定理 `Polynomial.degree_modByMonic_lt`：degree_modByMonic_lt [Nontrivial R] : f
+orall (p : R[X]) {q : R[X]} (_hq : Monic q), degree (p %ₘ q) < degree q | p, q, 
+hq => letI
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `PowerBasis.isIntegral_gen`：isIntegral_gen (pb : PowerBasis A S) : IsInte
+gral A pb.gen
+· 使用定理 `Polynomial.aeval_eq_sum_range'`：aeval_eq_sum_range' [Algebra R S] {p : R
+[X]} {n : Nat} (hn : p.natDegree < n) (x : S) : aeval x p = ∑ i in Finset.range 
+n, p.coeff i • x ^ i
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem constr_pow_aeval (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-    (f : A[X]) : pb.basis.constr A (fun i => y ^ (i : Nat)) (aeval pb.gen f) = aeval y f := by
+    (f : A[X]) : pb.basis.constr A (fun i => y ^ (i : ℕ)) (aeval pb.gen f) = aeval y f := by
   cases subsingleton_or_nontrivial A
   · rw [(Subsingleton.elim _ _ : f = 0), aeval_zero, map_zero, aeval_zero]
-  rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _)]; rw [← aeval_modByMonic_eq_self_of_root hy]
+  rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _), ← aeval_modByMonic_eq_self_of_root hy]
   by_cases hf : f %ₘ minpoly A pb.gen = 0
   · simp only [hf, map_zero]
   have : (f %ₘ minpoly A pb.gen).natDegree < pb.dim := by
     rw [← pb.natDegree_minpoly]
     apply natDegree_lt_natDegree hf
     exact degree_modByMonic_lt _ (minpoly.monic pb.isIntegral_gen)
-  rw [aeval_eq_sum_range' this]; rw [aeval_eq_sum_range' this]; rw [map_sum]
-  refine Finset.sum_congr rfl fun i (hi : i in Finset.range pb.dim) => ?_
+  rw [aeval_eq_sum_range' this, aeval_eq_sum_range' this, map_sum]
+  refine Finset.sum_congr rfl fun i (hi : i ∈ Finset.range pb.dim) => ?_
   rw [Finset.mem_range] at hi
   rw [map_smul]
   congr
-  rw [← Fin.val_mk hi]; rw [← pb.basis_eq_pow ⟨i]; rw [hi⟩]; rw [Basis.constr_basis]
-
-/--
-theorem `constr_pow_gen` / 定理 `constr_pow_gen`
-
-English:
-theorem constr_pow_gen
-  given: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  proof: by
-  convert! pb.constr_pow_aeval hy X <;> rw [aeval_X]
-
-中文:
-定理 constr_pow_gen
-  条件: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  证明: by
-  convert! pb.constr_pow_aeval hy X <;> rw [aeval_X]
-
-Depends on / 依赖: aeval_X, constr_pow_aeval, convert, pb.constr_pow_aeval
+  rw [← Fin.val_mk hi, ← pb.basis_eq_pow ⟨i, hi⟩, Basis.constr_basis]
+/-
+**PowerBasis.constr_pow_gen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：constr_pow_gen (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.
+gen) = 0) : pb.basis.constr A (fun i => y ^ (i : Nat)) pb.gen = y
+参数：pb : PowerBasis A S；hy : aeval y (minpoly A pb.gen) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `PowerBasis.constr_pow_aeval`：constr_pow_aeval (pb : PowerBasis A S) {y :
+ S'} (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X]) : pb.basis.constr A (fun i
+ => y ^ (i : Nat)…
 -/
 theorem constr_pow_gen (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0) :
-    pb.basis.constr A (fun i => y ^ (i : Nat)) pb.gen = y := by
+    pb.basis.constr A (fun i => y ^ (i : ℕ)) pb.gen = y := by
   convert! pb.constr_pow_aeval hy X <;> rw [aeval_X]
-
-/--
-theorem `constr_pow_algebraMap` / 定理 `constr_pow_algebraMap`
-
-English:
-theorem constr_pow_algebraMap
-  statement: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  proof: by
-  convert! pb.constr_pow_aeval hy (C x) <;> rw [aeval_C]
-
-中文:
-定理 constr_pow_algebraMap
-  结论: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  证明: by
-  convert! pb.constr_pow_aeval hy (C x) <;> rw [aeval_C]
-
-Depends on / 依赖: aeval_C, constr_pow_aeval, convert, pb.constr_pow_aeval
+/-
+**PowerBasis.constr_pow_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：constr_pow_algebraMap (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpol
+y A pb.gen) = 0) (x : A) : pb.basis.constr A (fun i => y ^ (i : Nat)) (algebraMa
+p A S x) = algebraMap A S' x
+参数：pb : PowerBasis A S；hy : aeval y (minpoly A pb.gen) = 0；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.aeval_C`：aeval_C (r : R) : aeval x (C r) = algebraMap R A r
+· 使用定理 `PowerBasis.constr_pow_aeval`：constr_pow_aeval (pb : PowerBasis A S) {y :
+ S'} (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X]) : pb.basis.constr A (fun i
+ => y ^ (i : Nat)…
 -/
 theorem constr_pow_algebraMap (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-    (x : A) : pb.basis.constr A (fun i => y ^ (i : Nat)) (algebraMap A S x) = algebraMap A S' x := by
+    (x : A) : pb.basis.constr A (fun i => y ^ (i : ℕ)) (algebraMap A S x) = algebraMap A S' x := by
   convert! pb.constr_pow_aeval hy (C x) <;> rw [aeval_C]
-
-/--
-theorem `constr_pow_mul` / 定理 `constr_pow_mul`
-
-English:
-theorem constr_pow_mul
-  statement: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  proof: by
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  obtain ⟨g, rfl⟩ := pb.exists_eq_aeval' x'
-  simp only [← aeval_mul, pb.constr_pow_aeval hy]
-
-中文:
-定理 constr_pow_mul
-  结论: (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-  证明: by
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  obtain ⟨g, rfl⟩ := pb.exists_eq_aeval' x'
-  simp only [← aeval_mul, pb.constr_pow_aeval hy]
-
-Depends on / 依赖: aeval_mul, constr_pow_aeval, exists_eq_aeval, pb.constr_pow_aeval, pb.exists_eq_aeval
+/-
+**PowerBasis.constr_pow_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：constr_pow_mul (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.
+gen) = 0) (x x' : S) : pb.basis.constr A (fun i => y ^ (i : Nat)) (x * x') = pb.
+basis.constr A (fun i => y ^ (i : Nat)) x * pb.basis.constr A (fun i => y ^ (i :
+ Nat)) x'
+参数：pb : PowerBasis A S；hy : aeval y (minpoly A pb.gen) = 0；x x' : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.exists_eq_aeval'`：exists_eq_aeval' (pb : PowerBasis R S) (y :
+ S) : exists f : R[X], y = aeval pb.gen f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerBasis.constr_pow_aeval`：constr_pow_aeval (pb : PowerBasis A S) {y :
+ S'} (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X]) : pb.basis.constr A (fun i
+ => y ^ (i : Nat)…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem constr_pow_mul (pb : PowerBasis A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0)
-    (x x' : S) : pb.basis.constr A (fun i => y ^ (i : Nat)) (x * x') =
-      pb.basis.constr A (fun i => y ^ (i : Nat)) x * pb.basis.constr A (fun i => y ^ (i : Nat)) x' := by
+    (x x' : S) : pb.basis.constr A (fun i => y ^ (i : ℕ)) (x * x') =
+      pb.basis.constr A (fun i => y ^ (i : ℕ)) x * pb.basis.constr A (fun i => y ^ (i : ℕ)) x' := by
   obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
   obtain ⟨g, rfl⟩ := pb.exists_eq_aeval' x'
   simp only [← aeval_mul, pb.constr_pow_aeval hy]
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- `pb.lift y hy` is the algebra map sending `pb.gen` to `y`,
+where `hy` states the higher powers of `y` are the same as the higher powers of `pb.gen`.
 
-English:
-definition lift
-  signature: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0)
-  body: { pb.basis.constr A fun i => y ^ (i : Nat) with
-    map_one' := by convert! pb.constr_pow_algebraMap hy 1 using 2 <;> rw [map_one]
-    map_zero' := by convert! pb.constr_pow_algebraMap hy 0 using 2 <;> rw [map_zero]
-    map_mul' := pb.constr_pow_mul hy
-    commutes' := pb.constr_pow_algebraMap hy }
+See `PowerBasis.liftEquiv` for a bundled equiv sending `⟨y, hy⟩` to the algebra map.
+-/
+/-
+**PowerBasis.lift** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：lift (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) 
+: S ->ₐ[A] S'
+参数：pb : PowerBasis A S；y : S'；hy : aeval y (minpoly A pb.gen) = 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.constr_pow_mul`：constr_pow_mul (pb : PowerBasis A S) {y : S'}
+ (hy : aeval y (minpoly A pb.gen) = 0) (x x' : S) : pb.basis.constr A (fun i => 
+y ^ (i : Nat)) …
+· 使用定理 `PowerBasis.constr_pow_algebraMap`：constr_pow_algebraMap (pb : PowerBasis
+ A S) {y : S'} (hy : aeval y (minpoly A pb.gen) = 0) (x : A) : pb.basis.constr A
+ (fun i => y ^ (i : Na…
 
-@[simp]
+--- 原说明 ---
+`pb.lift y hy` is the algebra map sending `pb.gen` to `y`,
+where `hy` states the higher powers of `y` are the same as the higher powers of 
+`pb.gen`.
 
-中文:
-定义 lift
-  签名: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0)
-  定义体: { pb.basis.constr A fun i => y ^ (i : Nat) with
-    map_one' := by convert! pb.constr_pow_algebraMap hy 1 using 2 <;> rw [map_one]
-    map_zero' := by convert! pb.constr_pow_algebraMap hy 0 using 2 <;> rw [map_zero]
-    map_mul' := pb.constr_pow_mul hy
-    commutes' := pb.constr_pow_algebraMap hy }
-
-@[simp]
-
-Depends on / 依赖: commutes, constr, constr_pow_algebraMap, constr_pow_mul, convert, map_mul, map_one, map_zero, pb.basis.constr, pb.constr_pow_algebraMap, pb.constr_pow_mul
+See `PowerBasis.liftEquiv` for a bundled equiv sending `⟨y, hy⟩` to the algebra 
+map.
 -/
 noncomputable def lift (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) :
-    S ->ₐ[A] S' :=
-  { pb.basis.constr A fun i => y ^ (i : Nat) with
+    S →ₐ[A] S' :=
+  { pb.basis.constr A fun i => y ^ (i : ℕ) with
     map_one' := by convert! pb.constr_pow_algebraMap hy 1 using 2 <;> rw [map_one]
     map_zero' := by convert! pb.constr_pow_algebraMap hy 0 using 2 <;> rw [map_zero]
     map_mul' := pb.constr_pow_mul hy
     commutes' := pb.constr_pow_algebraMap hy }
 
 @[simp]
-/--
-theorem `lift_gen` / 定理 `lift_gen`
-
-English:
-theorem lift_gen
-  given: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0)
-  proof: pb.constr_pow_gen hy
-
-@[simp]
-
-中文:
-定理 lift_gen
-  条件: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0)
-  证明: pb.constr_pow_gen hy
-
-@[simp]
-
-Depends on / 依赖: constr_pow_gen, pb.constr_pow_gen
+/-
+**PowerBasis.lift_gen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：lift_gen (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) =
+ 0) : pb.lift y hy pb.gen = y
+参数：pb : PowerBasis A S；y : S'；hy : aeval y (minpoly A pb.gen) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.constr_pow_gen`：constr_pow_gen (pb : PowerBasis A S) {y : S'}
+ (hy : aeval y (minpoly A pb.gen) = 0) : pb.basis.constr A (fun i => y ^ (i : Na
+t)) pb.gen = y
 -/
 theorem lift_gen (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) :
     pb.lift y hy pb.gen = y :=
   pb.constr_pow_gen hy
 
 @[simp]
-/--
-theorem `lift_aeval` / 定理 `lift_aeval`
-
-English:
-theorem lift_aeval
-  given: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X])
-  proof: pb.constr_pow_aeval hy f
-
-中文:
-定理 lift_aeval
-  条件: (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X])
-  证明: pb.constr_pow_aeval hy f
-
-Depends on / 依赖: constr_pow_aeval, pb.constr_pow_aeval
+/-
+**PowerBasis.lift_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：lift_aeval (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen)
+ = 0) (f : A[X]) : pb.lift y hy (aeval pb.gen f) = aeval y f
+参数：pb : PowerBasis A S；y : S'；hy : aeval y (minpoly A pb.gen) = 0；f : A[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.constr_pow_aeval`：constr_pow_aeval (pb : PowerBasis A S) {y :
+ S'} (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X]) : pb.basis.constr A (fun i
+ => y ^ (i : Nat)…
 -/
 theorem lift_aeval (pb : PowerBasis A S) (y : S') (hy : aeval y (minpoly A pb.gen) = 0) (f : A[X]) :
     pb.lift y hy (aeval pb.gen f) = aeval y f :=
@@ -1048,37 +1080,30 @@ If the codomain of the `AlgHom`s is an integral domain, then the roots form a mu
 see `liftEquiv'` for the corresponding statement.
 -/
 @[simps]
-/--
-Definition of `liftEquiv` / `liftEquiv` 的定义
+/-
+**PowerBasis.liftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：liftEquiv (pb : PowerBasis A S) : (S ->ₐ[A] S') ≃ { y : S' // aeval y (min
+poly A pb.gen) = 0 } where toFun f
+参数：pb : PowerBasis A S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftEquiv
-  signature: (pb : PowerBasis A S)
-  body: ⟨f pb.gen, by rw [aeval_algHom_apply, minpoly.aeval, map_zero]⟩
-  invFun y := pb.lift y y.2
-left_inv _ := pb.algHom_ext lift_gen _ _ _
-right_inv y := Subtype.ext lift_gen _ _ y.prop
+--- 原说明 ---
+`pb.liftEquiv` states that roots of the minimal polynomial of `pb.gen` correspon
+d to
+maps sending `pb.gen` to that root.
 
-#adaptation_note
-
-中文:
-定义 liftEquiv
-  签名: (pb : PowerBasis A S)
-  定义体: ⟨f pb.gen, by rw [aeval_algHom_apply, minpoly.aeval, map_zero]⟩
-  invFun y := pb.lift y y.2
-left_inv _ := pb.algHom_ext lift_gen _ _ _
-right_inv y := Subtype.ext lift_gen _ _ y.prop
-
-#adaptation_note
-
-Depends on / 依赖: aeval_algHom_apply, map_zero, minpoly, minpoly.aeval, pb.gen
+This is the bundled equiv version of `PowerBasis.lift`.
+If the codomain of the `AlgHom`s is an integral domain, then the roots form a mu
+ltiset,
+see `liftEquiv'` for the corresponding statement.
 -/
 noncomputable def liftEquiv (pb : PowerBasis A S) :
-    (S ->ₐ[A] S') ≃ { y : S' // aeval y (minpoly A pb.gen) = 0 } where
+    (S →ₐ[A] S') ≃ { y : S' // aeval y (minpoly A pb.gen) = 0 } where
   toFun f := ⟨f pb.gen, by rw [aeval_algHom_apply, minpoly.aeval, map_zero]⟩
   invFun y := pb.lift y y.2
-left_inv _ := pb.algHom_ext lift_gen _ _ _
-right_inv y := Subtype.ext lift_gen _ _ y.prop
+  left_inv _ := pb.algHom_ext <| lift_gen _ _ _
+  right_inv y := Subtype.ext <| lift_gen _ _ y.prop
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
@@ -1086,53 +1111,47 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- `pb.liftEquiv'` states that elements of the root set of the minimal
 polynomial of `pb.gen` correspond to maps sending `pb.gen` to that root. -/
 @[simps! -fullyApplied]
-/--
-Definition of `liftEquiv'` / `liftEquiv'` 的定义
+/-
+**PowerBasis.liftEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：liftEquiv' [IsDomain B] (pb : PowerBasis A S) : (S ->ₐ[A] B) ≃ { y : B // 
+y in (minpoly A pb.gen).aroots B }
+参数：pb : PowerBasis A S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition liftEquiv'
-  signature: [IsDomain B] (pb : PowerBasis A S)
-  body: pb.liftEquiv.trans ((Equiv.refl _).subtypeEquiv fun x => by
-    rw [Equiv.refl_apply]; rw [mem_roots_iff_aeval_eq_zero]
-    · simp
-    · exact map_monic_ne_zero (minpoly.monic pb.isIntegral_gen))
-
-中文:
-定义 liftEquiv'
-  签名: [是整环 B] (pb : PowerBasis A S)
-  定义体: pb.liftEquiv.trans ((Equiv.refl _).subtypeEquiv fun x => by
-    rw [Equiv.refl_apply]; rw [mem_roots_iff_aeval_eq_zero]
-    · simp
-    · exact map_monic_ne_zero (minpoly.monic pb.isIntegral_gen))
-
-Depends on / 依赖: BaireSpace, BaireSpace.of_completelyPseudoMetrizable, ENNReal, ENNReal.div_pos, Equiv.refl, Equiv.refl_apply, div_pos, finiteness, isIntegral_gen, liftEquiv, map_monic_ne_zero, mem_roots_iff_aeval_eq_zero, minpoly, minpoly.monic, of_completelyPseudoMetrizable, one_ne_zero, pb.isIntegral_gen, pb.liftEquiv.trans, refl_apply, subtypeEquiv
+--- 原说明 ---
+`pb.liftEquiv'` states that elements of the root set of the minimal
+polynomial of `pb.gen` correspond to maps sending `pb.gen` to that root.
 -/
 noncomputable def liftEquiv' [IsDomain B] (pb : PowerBasis A S) :
-    (S ->ₐ[A] B) ≃ { y : B // y in (minpoly A pb.gen).aroots B } :=
+    (S →ₐ[A] B) ≃ { y : B // y ∈ (minpoly A pb.gen).aroots B } :=
   pb.liftEquiv.trans ((Equiv.refl _).subtypeEquiv fun x => by
-    rw [Equiv.refl_apply]; rw [mem_roots_iff_aeval_eq_zero]
+    rw [Equiv.refl_apply, mem_roots_iff_aeval_eq_zero]
     · simp
     · exact map_monic_ne_zero (minpoly.monic pb.isIntegral_gen))
 
 /-- There are finitely many algebra homomorphisms `S →ₐ[A] B` if `S` is of the form `A[x]`
 and `B` is an integral domain. -/
 @[instance_reducible]
-/--
-Definition of `AlgHom.fintype` / `AlgHom.fintype` 的定义
+/-
+**PowerBasis.AlgHom.fintype** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis.AlgHom`。
+形式化陈述：{S : Type u_2} →   [inst : Ring S] →     {A : Type u_4} →       {B : Type 
+u_5} →         [inst_1 : CommRing A] →           [inst_2 : CommRing B] →        
+     [inst_3 : Algebra A B] → [inst_4 : Algebra A S] → [IsDomain B] → PowerBasis
+ A S → Fintype (S →ₐ[A] B)
+参数：S →ₐ[A] B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition AlgHom.fintype
-  signature: [IsDomain B] (pb : PowerBasis A S)
-  body: letI := Classical.decEq B
-  Fintype.ofEquiv _ pb.liftEquiv'.symm
-
-中文:
-定义 代数态射.fintype
-  签名: [是整环 B] (pb : PowerBasis A S)
-  定义体: letI := Classical.decEq B
-  Fintype.ofEquiv _ pb.liftEquiv'.symm
+--- 原说明 ---
+There are finitely many algebra homomorphisms `S →ₐ[A] B` if `S` is of the form 
+`A[x]`
+and `B` is an integral domain.
 -/
-noncomputable def AlgHom.fintype [IsDomain B] (pb : PowerBasis A S) : Fintype (S ->ₐ[A] B) :=
+noncomputable def AlgHom.fintype [IsDomain B] (pb : PowerBasis A S) : Fintype (S →ₐ[A] B) :=
   letI := Classical.decEq B
   Fintype.ofEquiv _ pb.liftEquiv'.symm
 
@@ -1143,40 +1162,24 @@ See also `PowerBasis.equivOfMinpoly` which takes the hypothesis that the
 minimal polynomials are identical.
 -/
 @[simps! -isSimp apply]
-/--
-Definition of `equivOfRoot` / `equivOfRoot` 的定义
+/-
+**PowerBasis.equivOfRoot** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfRoot (pb : PowerBasis A S) (pb' : PowerBasis A S') (h₁ : aeval pb.g
+en (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) : S ≃ₐ[A
+] S'
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h₁ : aeval pb.gen (minpoly A pb'.ge
+n) = 0；h₂ : aeval pb'.gen (minpoly A pb.gen) = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivOfRoot
-  signature: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  body: AlgEquiv.ofAlgHom (pb.lift pb'.gen h₂) (pb'.lift pb.gen h₁)
-    (by
-      ext x
-      obtain ⟨f, hf, rfl⟩ := pb'.exists_eq_aeval' x
-      simp)
-    (by
-      ext x
-      obtain ⟨f, hf, rfl⟩ := pb.exists_eq_aeval' x
-      simp)
+--- 原说明 ---
+`pb.equivOfRoot pb' h₁ h₂` is an equivalence of algebras with the same power bas
+is,
+where "the same" means that `pb` is a root of `pb'`s minimal polynomial and vice
+ versa.
 
-@[simp]
-
-中文:
-定义 equivOfRoot
-  签名: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  定义体: AlgEquiv.ofAlgHom (pb.lift pb'.gen h₂) (pb'.lift pb.gen h₁)
-    (by
-      ext x
-      obtain ⟨f, hf, rfl⟩ := pb'.exists_eq_aeval' x
-      simp)
-    (by
-      ext x
-      obtain ⟨f, hf, rfl⟩ := pb.exists_eq_aeval' x
-      simp)
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, exists_eq_aeval, ofAlgHom, pb.exists_eq_aeval, pb.gen, pb.lift
+See also `PowerBasis.equivOfMinpoly` which takes the hypothesis that the
+minimal polynomials are identical.
 -/
 noncomputable def equivOfRoot (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) :
@@ -1192,24 +1195,18 @@ noncomputable def equivOfRoot (pb : PowerBasis A S) (pb' : PowerBasis A S')
       simp)
 
 @[simp]
-/--
-theorem `equivOfRoot_aeval` / 定理 `equivOfRoot_aeval`
-
-English:
-theorem equivOfRoot_aeval
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: pb.lift_aeval _ h₂ _
-
-@[simp]
-
-中文:
-定理 equivOfRoot_aeval
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: pb.lift_aeval _ h₂ _
-
-@[simp]
-
-Depends on / 依赖: lift_aeval, pb.lift_aeval
+/-
+**PowerBasis.equivOfRoot_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfRoot_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S') (h₁ : aeva
+l pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) (f
+ : A[X]) : pb.equivOfRoot pb' h₁ h₂ (aeval pb.gen f) = aeval pb'.gen f
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h₁ : aeval pb.gen (minpoly A pb'.ge
+n) = 0；h₂ : aeval pb'.gen (minpoly A pb.gen) = 0；f : A[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.lift_aeval`：lift_aeval (pb : PowerBasis A S) (y : S') (hy : a
+eval y (minpoly A pb.gen) = 0) (f : A[X]) : pb.lift y hy (aeval pb.gen f) = aeva
+l y f
 -/
 theorem equivOfRoot_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0)
@@ -1217,24 +1214,17 @@ theorem equivOfRoot_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S')
   pb.lift_aeval _ h₂ _
 
 @[simp]
-/--
-theorem `equivOfRoot_gen` / 定理 `equivOfRoot_gen`
-
-English:
-theorem equivOfRoot_gen
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: pb.lift_gen _ h₂
-
-@[simp]
-
-中文:
-定理 equivOfRoot_gen
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: pb.lift_gen _ h₂
-
-@[simp]
-
-Depends on / 依赖: lift_gen, pb.lift_gen
+/-
+**PowerBasis.equivOfRoot_gen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfRoot_gen (pb : PowerBasis A S) (pb' : PowerBasis A S') (h₁ : aeval 
+pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) : pb
+.equivOfRoot pb' h₁ h₂ pb.gen = pb'.gen
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h₁ : aeval pb.gen (minpoly A pb'.ge
+n) = 0；h₂ : aeval pb'.gen (minpoly A pb.gen) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.lift_gen`：lift_gen (pb : PowerBasis A S) (y : S') (hy : aeval
+ y (minpoly A pb.gen) = 0) : pb.lift y hy pb.gen = y
 -/
 theorem equivOfRoot_gen (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) :
@@ -1242,18 +1232,15 @@ theorem equivOfRoot_gen (pb : PowerBasis A S) (pb' : PowerBasis A S')
   pb.lift_gen _ h₂
 
 @[simp]
-/--
-theorem `equivOfRoot_symm` / 定理 `equivOfRoot_symm`
-
-English:
-theorem equivOfRoot_symm
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: rfl
-
-中文:
-定理 equivOfRoot_symm
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: rfl
+/-
+**PowerBasis.equivOfRoot_symm** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfRoot_symm (pb : PowerBasis A S) (pb' : PowerBasis A S') (h₁ : aeval
+ pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) : (
+pb.equivOfRoot pb' h₁ h₂).symm = pb'.equivOfRoot pb h₂ h₁
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h₁ : aeval pb.gen (minpoly A pb'.ge
+n) = 0；h₂ : aeval pb'.gen (minpoly A pb.gen) = 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivOfRoot_symm (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.gen (minpoly A pb.gen) = 0) :
@@ -1267,48 +1254,42 @@ See also `PowerBasis.equivOfRoot` which takes the hypothesis that each generator
 other basis' minimal polynomial; `PowerBasis.equivOfRoot` is more general if `A` is not a field.
 -/
 @[simps! -isSimp apply]
-/--
-Definition of `equivOfMinpoly` / `equivOfMinpoly` 的定义
+/-
+**PowerBasis.equivOfMinpoly** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfMinpoly (pb : PowerBasis A S) (pb' : PowerBasis A S') (h : minpoly 
+A pb.gen = minpoly A pb'.gen) : S ≃ₐ[A] S'
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h : minpoly A pb.gen = minpoly A pb
+'.gen。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivOfMinpoly
-  signature: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  body: pb.equivOfRoot pb' (h ▸ minpoly.aeval _ _) (h.symm ▸ minpoly.aeval _ _)
+--- 原说明 ---
+`pb.equivOfMinpoly pb' h` is an equivalence of algebras with the same power basi
+s,
+where "the same" means that they have identical minimal polynomials.
 
-@[simp]
-
-中文:
-定义 equivOfMinpoly
-  签名: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  定义体: pb.equivOfRoot pb' (h ▸ minpoly.aeval _ _) (h.symm ▸ minpoly.aeval _ _)
-
-@[simp]
-
-Depends on / 依赖: equivOfRoot, h.symm, minpoly, minpoly.aeval, pb.equivOfRoot
+See also `PowerBasis.equivOfRoot` which takes the hypothesis that each generator
+ is a root of the
+other basis' minimal polynomial; `PowerBasis.equivOfRoot` is more general if `A`
+ is not a field.
 -/
 noncomputable def equivOfMinpoly (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h : minpoly A pb.gen = minpoly A pb'.gen) : S ≃ₐ[A] S' :=
   pb.equivOfRoot pb' (h ▸ minpoly.aeval _ _) (h.symm ▸ minpoly.aeval _ _)
 
 @[simp]
-/--
-theorem `equivOfMinpoly_aeval` / 定理 `equivOfMinpoly_aeval`
-
-English:
-theorem equivOfMinpoly_aeval
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: pb.equivOfRoot_aeval pb' _ _ _
-
-@[simp]
-
-中文:
-定理 equivOfMinpoly_aeval
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: pb.equivOfRoot_aeval pb' _ _ _
-
-@[simp]
-
-Depends on / 依赖: equivOfRoot_aeval, pb.equivOfRoot_aeval
+/-
+**PowerBasis.equivOfMinpoly_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfMinpoly_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S') (h : mi
+npoly A pb.gen = minpoly A pb'.gen) (f : A[X]) : pb.equivOfMinpoly pb' h (aeval 
+pb.gen f) = aeval pb'.gen f
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h : minpoly A pb.gen = minpoly A pb
+'.gen；f : A[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.equivOfRoot_aeval`：equivOfRoot_aeval (pb : PowerBasis A S) (p
+b' : PowerBasis A S') (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb
+'.gen (minpoly A p…
 -/
 theorem equivOfMinpoly_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h : minpoly A pb.gen = minpoly A pb'.gen) (f : A[X]) :
@@ -1316,42 +1297,32 @@ theorem equivOfMinpoly_aeval (pb : PowerBasis A S) (pb' : PowerBasis A S')
   pb.equivOfRoot_aeval pb' _ _ _
 
 @[simp]
-/--
-theorem `equivOfMinpoly_gen` / 定理 `equivOfMinpoly_gen`
-
-English:
-theorem equivOfMinpoly_gen
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: pb.equivOfRoot_gen pb' _ _
-
-@[simp]
-
-中文:
-定理 equivOfMinpoly_gen
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: pb.equivOfRoot_gen pb' _ _
-
-@[simp]
-
-Depends on / 依赖: equivOfRoot_gen, pb.equivOfRoot_gen
+/-
+**PowerBasis.equivOfMinpoly_gen** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfMinpoly_gen (pb : PowerBasis A S) (pb' : PowerBasis A S') (h : minp
+oly A pb.gen = minpoly A pb'.gen) : pb.equivOfMinpoly pb' h pb.gen = pb'.gen
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h : minpoly A pb.gen = minpoly A pb
+'.gen。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.equivOfRoot_gen`：equivOfRoot_gen (pb : PowerBasis A S) (pb' :
+ PowerBasis A S') (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb'.ge
+n (minpoly A pb.…
 -/
 theorem equivOfMinpoly_gen (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h : minpoly A pb.gen = minpoly A pb'.gen) : pb.equivOfMinpoly pb' h pb.gen = pb'.gen :=
   pb.equivOfRoot_gen pb' _ _
 
 @[simp]
-/--
-theorem `equivOfMinpoly_symm` / 定理 `equivOfMinpoly_symm`
-
-English:
-theorem equivOfMinpoly_symm
-  statement: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  proof: rfl
-
-中文:
-定理 equivOfMinpoly_symm
-  结论: (pb : PowerBasis A S) (pb' : PowerBasis A S')
-  证明: rfl
+/-
+**PowerBasis.equivOfMinpoly_symm** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfMinpoly_symm (pb : PowerBasis A S) (pb' : PowerBasis A S') (h : min
+poly A pb.gen = minpoly A pb'.gen) : (pb.equivOfMinpoly pb' h).symm = pb'.equivO
+fMinpoly pb h.symm
+参数：pb : PowerBasis A S；pb' : PowerBasis A S'；h : minpoly A pb.gen = minpoly A pb
+'.gen。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivOfMinpoly_symm (pb : PowerBasis A S) (pb' : PowerBasis A S')
     (h : minpoly A pb.gen = minpoly A pb'.gen) :
@@ -1364,45 +1335,81 @@ end PowerBasis
 
 open PowerBasis
 
-/--
-theorem `linearIndependent_pow` / 定理 `linearIndependent_pow`
+/-- Useful lemma to show `x` generates a power basis:
+the powers of `x` less than the degree of `x`'s minimal polynomial are linearly independent. -/
+/-
+**linearIndependent_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：linearIndependent_pow [Algebra K S] (x : S) : LinearIndependent K fun i : 
+Fin (minpoly K x).natDegree => x ^ (i : Nat)
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.linearIndependent_iff`：Fintype.linearIndependent_iff [Fintype ι]
+ : LinearIndependent R v ↔ forall g : ι -> R, ∑ i, g i • v i = 0 -> forall i, g 
+i = 0
+· 使用定理 `Function.mtr`：∀ {a b : Prop}, (¬a → ¬b) → b → a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `minpoly.degree_le_of_ne_zero`：degree_le_of_ne_zero {p : A[X]} (pnz : p !
+= 0) (hp : Polynomial.aeval x p = 0) : degree (minpoly A x) <= degree p
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Polynomial.coeff_monomial`：coeff_monomial : coeff (monomial n a) m = if 
+n = m then a else 0
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Polynomial.degree_sum_fin_lt`：degree_sum_fin_lt {n : Nat} (f : Fin n -> 
+R) : degree (∑ i : Fin n, C (f i) * X ^ (i : Nat)) < n
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `minpoly.ne_zero`：ne_zero [Nontrivial A] (hx : IsIntegral A x) : minpoly 
+A x != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `minpoly.eq_zero`：eq_zero (hx : ¬IsIntegral A x) : minpoly A x = 0
+· 使用定理 `Polynomial.natDegree_zero`：natDegree_zero : natDegree (0 : R[X]) = 0
+· 使用定理 `linearIndependent_empty_type`：linearIndependent_empty_type [IsEmpty ι] :
+ LinearIndependent R v
 
-English:
-theorem linearIndependent_pow
-  given: [Algebra K S] (x : S)
-  proof: by
-  by_cases h : IsIntegral K x; swap
-  · rw [minpoly.eq_zero h, natDegree_zero]
-    exact linearIndependent_empty_type
-  refine Fintype.linearIndependent_iff.2 fun g hg i => ?_
-  simp_rw [Algebra.smul_def, ← aeval_monomial, ← map_sum] at hg
-  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt (fun h0 => ?_) hn0) hg).not_gt).mtr
-  · simp_rw [← C_mul_X_pow_eq_monomial]
-    exact (degree_eq_natDegree <| minpoly.ne_zero h).symm ▸ degree_sum_fin_lt _
-  · apply_fun lcoeff K i at h0
-    simp_rw [map_sum, lcoeff_apply, coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq'] at h0
-    exact (if_pos <| Finset.mem_univ _).symm.trans h0
-
-中文:
-定理 linearIndependent_pow
-  条件: [代数 K S] (x : S)
-  证明: by
-  by_cases h : IsIntegral K x; swap
-  · rw [minpoly.eq_zero h, natDegree_zero]
-    exact linearIndependent_empty_type
-  refine Fintype.linearIndependent_iff.2 fun g hg i => ?_
-  simp_rw [Algebra.smul_def, ← aeval_monomial, ← map_sum] at hg
-  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt (fun h0 => ?_) hn0) hg).not_gt).mtr
-  · simp_rw [← C_mul_X_pow_eq_monomial]
-    exact (degree_eq_natDegree <| minpoly.ne_zero h).symm ▸ degree_sum_fin_lt _
-  · apply_fun lcoeff K i at h0
-    simp_rw [map_sum, lcoeff_apply, coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq'] at h0
-    exact (if_pos <| Finset.mem_univ _).symm.trans h0
-
-Depends on / 依赖: Algebra, Algebra.smul_def, C_mul_X_pow_eq_monomial, Fintype, Fintype.linearIndependent_iff, IsIntegral, aeval_monomial, apply_fun, degree_eq_natDegree, degree_le_of_ne_zero, degree_sum_fin_lt, eq_zero, lcoeff, lcoeff_apply, linearIndependent_empty_type, linearIndependent_iff, map_sum, minpoly, minpoly.degree_le_of_ne_zero, minpoly.eq_zero
+--- 原说明 ---
+Useful lemma to show `x` generates a power basis:
+the powers of `x` less than the degree of `x`'s minimal polynomial are linearly 
+independent.
 -/
 theorem linearIndependent_pow [Algebra K S] (x : S) :
-    LinearIndependent K fun i : Fin (minpoly K x).natDegree => x ^ (i : Nat) := by
+    LinearIndependent K fun i : Fin (minpoly K x).natDegree => x ^ (i : ℕ) := by
   by_cases h : IsIntegral K x; swap
   · rw [minpoly.eq_zero h, natDegree_zero]
     exact linearIndependent_empty_type
@@ -1414,37 +1421,54 @@ theorem linearIndependent_pow [Algebra K S] (x : S) :
   · apply_fun lcoeff K i at h0
     simp_rw [map_sum, lcoeff_apply, coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq'] at h0
     exact (if_pos <| Finset.mem_univ _).symm.trans h0
-
-/--
-theorem `IsIntegral.mem_span_pow` / 定理 `IsIntegral.mem_span_pow`
-
-English:
-theorem IsIntegral.mem_span_pow
-  statement: [Nontrivial R] {x y : S} (hx : IsIntegral R x)
-  proof: by
-  obtain ⟨f, rfl⟩ := hy
-  apply mem_span_pow'.mpr _
-  have := minpoly.monic hx
-  refine ⟨f %ₘ minpoly R x, (degree_modByMonic_lt _ this).trans_le degree_le_natDegree, ?_⟩
-  conv_lhs => rw [← modByMonic_add_div f (minpoly R x)]
-  simp only [add_zero, zero_mul, minpoly.aeval, aeval_add, map_mul]
-
-中文:
-定理 是整.mem_span_pow
-  结论: [非平凡 R] {x y : S} (hx : 是整 R x)
-  证明: by
-  obtain ⟨f, rfl⟩ := hy
-  apply mem_span_pow'.mpr _
-  have := minpoly.monic hx
-  refine ⟨f %ₘ minpoly R x, (degree_modByMonic_lt _ this).trans_le degree_le_natDegree, ?_⟩
-  conv_lhs => rw [← modByMonic_add_div f (minpoly R x)]
-  simp only [add_zero, zero_mul, minpoly.aeval, aeval_add, map_mul]
-
-Depends on / 依赖: add_zero, aeval_add, conv_lhs, degree_le_natDegree, degree_modByMonic_lt, map_mul, mem_span_pow, minpoly, minpoly.aeval, minpoly.monic, modByMonic_add_div, trans_le, zero_mul
+/-
+**IsIntegral.mem_span_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIntegral.mem_span_pow [Nontrivial R] {x y : S} (hx : IsIntegral R x) (hy
+ : exists f : R[X], y = aeval x f) : y in Submodule.span R (Set.range fun i : Fi
+n (minpoly R x).natDegree => x ^ (i : Nat))
+参数：hx : IsIntegral R x；hy : exists f : R[X], y = aeval x f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PowerBasis.mem_span_pow'`：mem_span_pow' {x y : S} {d : Nat} : y in Submo
+dule.span R (Set.range fun i : Fin d => x ^ (i : Nat)) ↔ exists f : R[X], f.degr
+ee < d ∧ y = a…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Polynomial.degree_modByMonic_lt`：degree_modByMonic_lt [Nontrivial R] : f
+orall (p : R[X]) {q : R[X]} (_hq : Monic q), degree (p %ₘ q) < degree q | p, q, 
+hq => letI
+· 使用定理 `Polynomial.degree_le_natDegree`：degree_le_natDegree : degree p <= natDeg
+ree p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.modByMonic_add_div`：modByMonic_add_div (p q : R[X]) : p %ₘ q 
++ q * (p /ₘ q) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.aeval_add`：aeval_add : aeval x (p + q) = aeval x p + aeval x 
+q
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsIntegral.mem_span_pow [Nontrivial R] {x y : S} (hx : IsIntegral R x)
-    (hy : exists f : R[X], y = aeval x f) :
-    y in Submodule.span R (Set.range fun i : Fin (minpoly R x).natDegree => x ^ (i : Nat)) := by
+    (hy : ∃ f : R[X], y = aeval x f) :
+    y ∈ Submodule.span R (Set.range fun i : Fin (minpoly R x).natDegree => x ^ (i : ℕ)) := by
   obtain ⟨f, rfl⟩ := hy
   apply mem_span_pow'.mpr _
   have := minpoly.monic hx
@@ -1460,26 +1484,16 @@ variable {S' : Type*} [CommRing S'] [Algebra R S']
 
 /-- `PowerBasis.map pb (e : S ≃ₐ[R] S')` is the power basis for `S'` generated by `e pb.gen`. -/
 @[simps dim gen basis]
-/--
-Definition of `map` / `map` 的定义
+/-
+**PowerBasis.map** 是 Mathlib 中的一个定义，位于命名空间 `PowerBasis`。
+形式化陈述：map (pb : PowerBasis R S) (e : S ≃ₐ[R] S') : PowerBasis R S' where dim
+参数：pb : PowerBasis R S；e : S ≃ₐ[R] S'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (pb : PowerBasis R S) (e : S ≃ₐ[R] S')
-  body: pb.dim
-  basis := pb.basis.map e.toLinearEquiv
-  gen := e pb.gen
-  basis_eq_pow i := by rw [Basis.map_apply, pb.basis_eq_pow, e.toLinearEquiv_apply, map_pow]
-
-中文:
-定义 map
-  签名: (pb : PowerBasis R S) (e : S ≃ₐ[R] S')
-  定义体: pb.dim
-  basis := pb.basis.map e.toLinearEquiv
-  gen := e pb.gen
-  basis_eq_pow i := by rw [Basis.map_apply, pb.basis_eq_pow, e.toLinearEquiv_apply, map_pow]
-
-Depends on / 依赖: pb.dim
+--- 原说明 ---
+`PowerBasis.map pb (e : S ≃ₐ[R] S')` is the power basis for `S'` generated by `e
+ pb.gen`.
 -/
 noncomputable def map (pb : PowerBasis R S) (e : S ≃ₐ[R] S') : PowerBasis R S' where
   dim := pb.dim
@@ -1488,55 +1502,59 @@ noncomputable def map (pb : PowerBasis R S) (e : S ≃ₐ[R] S') : PowerBasis R 
   basis_eq_pow i := by rw [Basis.map_apply, pb.basis_eq_pow, e.toLinearEquiv_apply, map_pow]
 
 variable [Algebra A S] [Algebra A S']
-
-/--
-theorem `minpolyGen_map` / 定理 `minpolyGen_map`
-
-English:
-theorem minpolyGen_map
-  given: (pb : PowerBasis A S) (e : S ≃ₐ[A] S')
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 minpolyGen_map
-  条件: (pb : PowerBasis A S) (e : S ≃ₐ[A] S')
-  证明: by
-  simp
-
-@[simp]
+/-
+**PowerBasis.minpolyGen_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：minpolyGen_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') : (pb.map e).minpoly
+Gen = pb.minpolyGen
+参数：pb : PowerBasis A S；e : S ≃ₐ[A] S'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerBasis.minpolyGen_eq`：minpolyGen_eq (pb : PowerBasis A S) : pb.minpo
+lyGen = minpoly A pb.gen
+· 使用定理 `PowerBasis.map_gen`：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] 
+[inst_1 : Ring S] [inst_2 : Algebra R S] {S' : Type u_7}   [inst_3 : CommRing S'
+] [inst_…
+· 使用定理 `minpoly.algEquiv_eq`：algEquiv_eq (f : B ≃ₐ[A] B') (x : B) : minpoly A (f
+ x) = minpoly A x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem minpolyGen_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') :
     (pb.map e).minpolyGen = pb.minpolyGen := by
   simp
 
 @[simp]
-/--
-theorem `equivOfRoot_map` / 定理 `equivOfRoot_map`
-
-English:
-theorem equivOfRoot_map
-  given: (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h₁ h₂)
-  proof: by
-  ext x
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  simp [aeval_algEquiv]
-
-@[simp]
-
-中文:
-定理 equivOfRoot_map
-  条件: (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h₁ h₂)
-  证明: by
-  ext x
-  obtain ⟨f, rfl⟩ := pb.exists_eq_aeval' x
-  simp [aeval_algEquiv]
-
-@[simp]
-
-Depends on / 依赖: aeval_algEquiv, exists_eq_aeval, pb.exists_eq_aeval
+/-
+**PowerBasis.equivOfRoot_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfRoot_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h₁ h₂) : pb.equivO
+fRoot (pb.map e) h₁ h₂ = e
+参数：pb : PowerBasis A S；e : S ≃ₐ[A] S'；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `PowerBasis.exists_eq_aeval'`：exists_eq_aeval' (pb : PowerBasis R S) (y :
+ S) : exists f : R[X], y = aeval pb.gen f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerBasis.equivOfRoot_aeval`：equivOfRoot_aeval (pb : PowerBasis A S) (p
+b' : PowerBasis A S') (h₁ : aeval pb.gen (minpoly A pb'.gen) = 0) (h₂ : aeval pb
+'.gen (minpoly A p…
+· 使用定理 `PowerBasis.map_gen`：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] 
+[inst_1 : Ring S] [inst_2 : Algebra R S] {S' : Type u_7}   [inst_3 : CommRing S'
+] [inst_…
+· 使用定理 `Polynomial.aeval_algEquiv`：aeval_algEquiv (f : A ≃ₐ[R] B) (x : A) : aeva
+l (f x) = (f : A ->ₐ[R] B).comp (aeval x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem equivOfRoot_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h₁ h₂) :
     pb.equivOfRoot (pb.map e) h₁ h₂ = e := by
@@ -1545,20 +1563,16 @@ theorem equivOfRoot_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h₁ h₂) :
   simp [aeval_algEquiv]
 
 @[simp]
-/--
-theorem `equivOfMinpoly_map` / 定理 `equivOfMinpoly_map`
-
-English:
-theorem equivOfMinpoly_map
-  statement: (pb : PowerBasis A S) (e : S ≃ₐ[A] S')
-  proof: pb.equivOfRoot_map _ _ _
-
-中文:
-定理 equivOfMinpoly_map
-  结论: (pb : PowerBasis A S) (e : S ≃ₐ[A] S')
-  证明: pb.equivOfRoot_map _ _ _
-
-Depends on / 依赖: equivOfRoot_map, pb.equivOfRoot_map
+/-
+**PowerBasis.equivOfMinpoly_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：equivOfMinpoly_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S') (h : minpoly A p
+b.gen = minpoly A (pb.map e).gen) : pb.equivOfMinpoly (pb.map e) h = e
+参数：pb : PowerBasis A S；e : S ≃ₐ[A] S'；h : minpoly A pb.gen = minpoly A (pb.map e
+).gen。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.equivOfRoot_map`：equivOfRoot_map (pb : PowerBasis A S) (e : S
+ ≃ₐ[A] S') (h₁ h₂) : pb.equivOfRoot (pb.map e) h₁ h₂ = e
 -/
 theorem equivOfMinpoly_map (pb : PowerBasis A S) (e : S ≃ₐ[A] S')
     (h : minpoly A pb.gen = minpoly A (pb.map e).gen) : pb.equivOfMinpoly (pb.map e) h = e :=
@@ -1570,64 +1584,63 @@ section Adjoin
 
 open Algebra
 
-/--
-theorem `adjoin_gen_eq_top` / 定理 `adjoin_gen_eq_top`
-
-English:
-theorem adjoin_gen_eq_top
-  given: (B : PowerBasis R S)
-  statement: adjoin R ({B.gen} : Set S) = ⊤
-  proof: by
-  rw [← toSubmodule_eq_top]; rw [_root_.eq_top_iff]; rw [← B.basis.span_eq]; rw [Submodule.span_le]
-  rintro x ⟨i, rfl⟩
-  rw [B.basis_eq_pow i]
-  exact Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _
-
-中文:
-定理 adjoin_gen_eq_top
-  条件: (B : PowerBasis R S)
-  结论: adjoin R ({B.gen} : 集合 S) = ⊤
-  证明: by
-  rw [← toSubmodule_eq_top]; rw [_root_.eq_top_iff]; rw [← B.basis.span_eq]; rw [Submodule.span_le]
-  rintro x ⟨i, rfl⟩
-  rw [B.basis_eq_pow i]
-  exact Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _
-
-Depends on / 依赖: B.basis.span_eq, B.basis_eq_pow, Set.mem_singleton, Subalgebra, Subalgebra.pow_mem, Submodule, Submodule.span_le, _root_, _root_.eq_top_iff, basis_eq_pow, eq_top_iff, mem_singleton, pow_mem, span_eq, span_le, subset_adjoin, toSubmodule_eq_top
+/-
+**PowerBasis.adjoin_gen_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `PowerBasis`。
+形式化陈述：adjoin_gen_eq_top (B : PowerBasis R S) : adjoin R ({B.gen} : Set S) = ⊤
+参数：B : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.toSubmodule_eq_top`：toSubmodule_eq_top {S : Subalgebra R A} : Su
+balgebra.toSubmodule S = ⊤ ↔ S = ⊤
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `PowerBasis.basis_eq_pow`：∀ {R : Type u_7} {S : Type u_8} [inst : CommRin
+g R] [inst_1 : Ring S] [inst_2 : Algebra R S] (self : PowerBasis R S)   (i : Fin
+ self.dim), s…
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem adjoin_gen_eq_top (B : PowerBasis R S) : adjoin R ({B.gen} : Set S) = ⊤ := by
-  rw [← toSubmodule_eq_top]; rw [_root_.eq_top_iff]; rw [← B.basis.span_eq]; rw [Submodule.span_le]
+  rw [← toSubmodule_eq_top, _root_.eq_top_iff, ← B.basis.span_eq, Submodule.span_le]
   rintro x ⟨i, rfl⟩
   rw [B.basis_eq_pow i]
   exact Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _
-
-/--
-theorem `adjoin_eq_top_of_gen_mem_adjoin` / 定理 `adjoin_eq_top_of_gen_mem_adjoin`
-
-English:
-theorem adjoin_eq_top_of_gen_mem_adjoin
-  statement: {B : PowerBasis R S} {x : S}
-  proof: by
-  rw [_root_.eq_top_iff]; rw [← B.adjoin_gen_eq_top]
-  refine adjoin_le ?_
-  simp [hx]
-
-中文:
-定理 adjoin_eq_top_of_gen_mem_adjoin
-  结论: {B : PowerBasis R S} {x : S}
-  证明: by
-  rw [_root_.eq_top_iff]; rw [← B.adjoin_gen_eq_top]
-  refine adjoin_le ?_
-  simp [hx]
-
-Depends on / 依赖: B.adjoin_gen_eq_top, _root_, _root_.eq_top_iff, adjoin_gen_eq_top, adjoin_le, eq_top_iff
+/-
+**PowerBasis.adjoin_eq_top_of_gen_mem_adjoin** 是 Mathlib 中的一个定理，位于命名空间 `PowerBas
+is`。
+形式化陈述：adjoin_eq_top_of_gen_mem_adjoin {B : PowerBasis R S} {x : S} (hx : B.gen i
+n adjoin R ({x} : Set S)) : adjoin R ({x} : Set S) = ⊤
+参数：hx : B.gen in adjoin R ({x} : Set S)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerBasis.adjoin_gen_eq_top`：adjoin_gen_eq_top (B : PowerBasis R S) : a
+djoin R ({B.gen} : Set S) = ⊤
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem adjoin_eq_top_of_gen_mem_adjoin {B : PowerBasis R S} {x : S}
-    (hx : B.gen in adjoin R ({x} : Set S)) : adjoin R ({x} : Set S) = ⊤ := by
-  rw [_root_.eq_top_iff]; rw [← B.adjoin_gen_eq_top]
+    (hx : B.gen ∈ adjoin R ({x} : Set S)) : adjoin R ({x} : Set S) = ⊤ := by
+  rw [_root_.eq_top_iff, ← B.adjoin_gen_eq_top]
   refine adjoin_le ?_
   simp [hx]
 
 end Adjoin
 
 end PowerBasis
+

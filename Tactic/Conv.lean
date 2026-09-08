@@ -75,46 +75,15 @@ macro "conv" " in " occs?:(occs)? p:term " => " code:convSeq : conv =>
 -/
 syntax (name := dischargeConv) "discharge" (" => " tacticSeq)? : conv
 
-/--
-Definition of `elabDischargeConv` / `elabDischargeConv` 的定义
+/-- Elaborator for the `discharge` tactic. -/
+/-
+**Mathlib.Tactic.Conv.elabDischargeConv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Conv`。
+形式化陈述：Elab.Tactic.Tactic
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabDischargeConv
-  signature: : Tactic
-  body: fun
-  | `(conv| discharge $[=> $tac]?) => do
-    let g :: gs ← getGoals | throwNoGoalsToBeSolved
-    let (theLhs, theRhs) ← Conv.getLhsRhsCore g
-    let .true ← isProp theLhs | throwError "target is not a proposition"
-    theRhs.mvarId!.assign (mkConst ``True)
-    let m ← mkFreshExprMVar theLhs
-    g.assign (← mkEqTrue m)
-    if let some tac := tac then
-      setGoals [m.mvarId!]
-      evalTactic tac; done
-      setGoals gs
-    else
-      setGoals (m.mvarId! :: gs)
-  | _ => Elab.throwUnsupportedSyntax
-
-中文:
-定义 elabDischargeConv
-  签名: : Tactic
-  定义体: fun
-  | `(conv| discharge $[=> $tac]?) => do
-    let g :: gs ← getGoals | throwNoGoalsToBeSolved
-    let (theLhs, theRhs) ← Conv.getLhsRhsCore g
-    let .true ← isProp theLhs | throwError "target is not a proposition"
-    theRhs.mvarId!.assign (mkConst ``True)
-    let m ← mkFreshExprMVar theLhs
-    g.assign (← mkEqTrue m)
-    if let some tac := tac then
-      setGoals [m.mvarId!]
-      evalTactic tac; done
-      setGoals gs
-    else
-      setGoals (m.mvarId! :: gs)
-  | _ => Elab.throwUnsupportedSyntax
+--- 原说明 ---
+Elaborator for the `discharge` tactic.
 -/
 @[tactic dischargeConv] def elabDischargeConv : Tactic := fun
   | `(conv| discharge $[=> $tac]?) => do
@@ -148,13 +117,13 @@ There are also shorthand commands for several common conv tactics:
 * `#push c => e` is short for `#conv push c => e`
 -/
 elab tk:"#conv " conv:conv " => " e:term : command =>
-  Command.runTermElabM fun _ => do
+  Command.runTermElabM fun _ ↦ do
     let e ← Elab.Term.elabTermAndSynthesize e none
     let (rhs, g) ← Conv.mkConvGoalFor e
     _ ← Tactic.run g.mvarId! do
       evalTactic conv
       for mvarId in (← getGoals) do
-liftM mvarId.refl > mvarId.inferInstance > pure ()
+        liftM <| mvarId.refl <|> mvarId.inferInstance <|> pure ()
       pruneSolvedGoals
       let e' ← instantiateMVars rhs
       logInfoAt tk e'
@@ -202,3 +171,4 @@ macro_rules
     `(#conv%$tk simp $[only%$o]? $[[$args,*]]? => $e)
 
 end Mathlib.Tactic.Conv
+

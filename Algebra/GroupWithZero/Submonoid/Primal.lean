@@ -16,24 +16,19 @@ public import Mathlib.Algebra.GroupWithZero.Divisibility
 
 assert_not_exists RelIso Ring
 
-/--
-Definition of `Submonoid.isPrimal` / `Submonoid.isPrimal` 的定义
+/-- The submonoid of primal elements in a cancellative commutative monoid with zero. -/
+/-
+**Submonoid.isPrimal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Submonoid.isPrimal (M₀ : Type*) [CommMonoidWithZero M₀] [IsCancelMulZero M
+₀] : Submonoid M₀ where carrier
+参数：M₀ : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimal.mul`：IsPrimal.mul {α} [CommMonoidWithZero α] [IsCancelMulZero α
+] {m n : α} (hm : IsPrimal m) (hn : IsPrimal n) : IsPrimal (m * n)
 
-English:
-definition Submonoid.isPrimal
-  signature: (M₀ : Type*) [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
-  body: {a | IsPrimal a}
-  mul_mem' := .mul
-  one_mem' := isUnit_one.isPrimal
-
-中文:
-定义 子幺半群.isPrimal
-  签名: (M₀ : 类型) [带零交换幺半群 M₀] [是乘零消去 M₀]
-  定义体: {a | IsPrimal a}
-  mul_mem' := .mul
-  one_mem' := isUnit_one.isPrimal
-
-Depends on / 依赖: IsPrimal
+--- 原说明 ---
+The submonoid of primal elements in a cancellative commutative monoid with zero.
 -/
 def Submonoid.isPrimal (M₀ : Type*) [CommMonoidWithZero M₀] [IsCancelMulZero M₀] :
     Submonoid M₀ where

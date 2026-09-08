@@ -25,43 +25,22 @@ open Lean Meta
 
 namespace Lean.Elab.Term.CoeImpl
 
-/--
-Definition of `elabPartiallyAppliedCoe` / `elabPartiallyAppliedCoe` 的定义
+/-- Elaborator for the `(↑)`, `(⇑)`, and `(↥)` notations. -/
+/-
+**Lean.Elab.Term.CoeImpl.elabPartiallyAppliedCoe** 是 Mathlib 中的一个定义，位于命名空间 `Lean
+.Elab.Term.CoeImpl`。
+形式化陈述：elabPartiallyAppliedCoe (sym : String) (expectedType : Expr) (mkCoe : (exp
+ectedType x : Expr) -> TermElabM Expr) : TermElabM Expr
+参数：sym : String；expectedType : Expr；mkCoe : (expectedType x : Expr) -> TermElabM
+ Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabPartiallyAppliedCoe
-  signature: (sym : String) (expectedType : Expr)
-  body: do
-  let expectedType ← instantiateMVars expectedType
-  let Expr.forallE _ a b .. := expectedType | do
-    tryPostpone
-    throwError "({sym}) must have a function type, not{indentExpr expectedType}"
-  if b.hasLooseBVars then
-    tryPostpone
-    throwError "({sym}) must have a non-dependent function type, not{indentExpr expectedType}"
-  if a.hasExprMVar then tryPostpone
-  let f ← withLocalDeclD `x a fun x => do
-    mkLambdaFVars #[x] (← mkCoe b x)
-  return f.etaExpanded?.getD f
-
-中文:
-定义 elabPartiallyAppliedCoe
-  签名: (sym : String) (expectedType : Expr)
-  定义体: do
-  let expectedType ← instantiateMVars expectedType
-  let Expr.forallE _ a b .. := expectedType | do
-    tryPostpone
-    throwError "({sym}) must have a function type, not{indentExpr expectedType}"
-  if b.hasLooseBVars then
-    tryPostpone
-    throwError "({sym}) must have a non-dependent function type, not{indentExpr expectedType}"
-  if a.hasExprMVar then tryPostpone
-  let f ← withLocalDeclD `x a fun x => do
-    mkLambdaFVars #[x] (← mkCoe b x)
-  return f.etaExpanded?.getD f
+--- 原说明 ---
+Elaborator for the `(↑)`, `(⇑)`, and `(↥)` notations.
 -/
 def elabPartiallyAppliedCoe (sym : String) (expectedType : Expr)
-    (mkCoe : (expectedType x : Expr) -> TermElabM Expr) : TermElabM Expr := do
+    (mkCoe : (expectedType x : Expr) → TermElabM Expr) : TermElabM Expr := do
   let expectedType ← instantiateMVars expectedType
   let Expr.forallE _ a b .. := expectedType | do
     tryPostpone
@@ -70,11 +49,11 @@ def elabPartiallyAppliedCoe (sym : String) (expectedType : Expr)
     tryPostpone
     throwError "({sym}) must have a non-dependent function type, not{indentExpr expectedType}"
   if a.hasExprMVar then tryPostpone
-  let f ← withLocalDeclD `x a fun x => do
+  let f ← withLocalDeclD `x a fun x ↦ do
     mkLambdaFVars #[x] (← mkCoe b x)
   return f.etaExpanded?.getD f
 
-/-- Partially applied coercion. Equivalent to the η-reduction of `(↑ ·)` -/
+/-- Partially applied coercion.  Equivalent to the η-reduction of `(↑ ·)` -/
 elab "(" "↑" ")" : term <= expectedType =>
   elabPartiallyAppliedCoe "↑" expectedType fun b x => do
     if b.hasExprMVar then tryPostpone
@@ -83,7 +62,7 @@ elab "(" "↑" ")" : term <= expectedType =>
     else
       throwError "cannot coerce{indentExpr x}\nto type{indentExpr b}"
 
-/-- Partially applied function coercion. Equivalent to the η-reduction of `(⇑ ·)` -/
+/-- Partially applied function coercion.  Equivalent to the η-reduction of `(⇑ ·)` -/
 elab "(" "⇑" ")" : term <= expectedType =>
   elabPartiallyAppliedCoe "⇑" expectedType fun b x => do
     if let some ty ← coerceToFunction? x then
@@ -91,7 +70,7 @@ elab "(" "⇑" ")" : term <= expectedType =>
     else
       throwError "cannot coerce to function{indentExpr x}"
 
-/-- Partially applied type coercion. Equivalent to the η-reduction of `(↥ ·)` -/
+/-- Partially applied type coercion.  Equivalent to the η-reduction of `(↥ ·)` -/
 elab "(" "↥" ")" : term <= expectedType =>
   elabPartiallyAppliedCoe "↥" expectedType fun b x => do
     if let some ty ← coerceToSort? x then
@@ -100,3 +79,4 @@ elab "(" "↥" ")" : term <= expectedType =>
       throwError "cannot coerce to sort{indentExpr x}"
 
 end Lean.Elab.Term.CoeImpl
+

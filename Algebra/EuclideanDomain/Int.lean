@@ -18,56 +18,25 @@ public import Mathlib.Algebra.Ring.Int.Defs
 
 public section
 
-/--
-Instance `Int.euclideanDomain` / 实例 `Int.euclideanDomain`
-
-English:
-instance Int.euclideanDomain
-  signature: : EuclideanDomain Int
-  body: { (inferInstance : CommRing Int), (inferInstance : Nontrivial Int) with
-    quotient := (· / ·), quotient_zero := Int.ediv_zero, remainder := (· % ·),
-    quotient_mul_add_remainder_eq := Int.mul_ediv_add_emod,
-    r := fun a b => a.natAbs < b.natAbs,
-    r_wellFounded := (measure natAbs).wf
-remainder_lt := fun a b b0 => Int.ofNat_lt.1 by
-      rw [Int.natAbs_of_nonneg (Int.emod_nonneg _ b0)]; rw [← Int.abs_eq_natAbs]
-      exact Int.emod_lt_abs _ b0
-    mul_left_not_lt := fun a b b0 =>
-not_lt_of_ge by
-        rw [← mul_one a.natAbs]; rw [Int.natAbs_mul]
-        rw [← Int.natAbs_pos] at b0
-        exact Nat.mul_le_mul_left _ b0 }
-
-中文:
-实例 整数.euclideanDomain
-  签名: : 欧几里得整环 整数
-  定义体: { (inferInstance : CommRing Int), (inferInstance : Nontrivial Int) with
-    quotient := (· / ·), quotient_zero := Int.ediv_zero, remainder := (· % ·),
-    quotient_mul_add_remainder_eq := Int.mul_ediv_add_emod,
-    r := fun a b => a.natAbs < b.natAbs,
-    r_wellFounded := (measure natAbs).wf
-remainder_lt := fun a b b0 => Int.ofNat_lt.1 by
-      rw [Int.natAbs_of_nonneg (Int.emod_nonneg _ b0)]; rw [← Int.abs_eq_natAbs]
-      exact Int.emod_lt_abs _ b0
-    mul_left_not_lt := fun a b b0 =>
-not_lt_of_ge by
-        rw [← mul_one a.natAbs]; rw [Int.natAbs_mul]
-        rw [← Int.natAbs_pos] at b0
-        exact Nat.mul_le_mul_left _ b0 }
-
-Depends on / 依赖: CommRing, Int.abs_eq_natAbs, Int.ediv_zero, Int.emod_lt_abs, Int.emod_nonneg, Int.mul_ediv_add_emod, Int.natAbs_of_nonneg, Int.ofNat_lt, Nontrivial, a.natAbs, abs_eq_natAbs, b.natAbs, ediv_zero, emod_lt_abs, emod_nonneg, measure, mul_ediv_add_emod, mul_left_not_lt, mul_one, natAbs
+/-
+**Int.euclideanDomain** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.euclideanDomain : EuclideanDomain Int
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_zero`：∀ (a : ℤ), a / 0 = 0
+· 使用定理 `Int.mul_ediv_add_emod`：∀ (a b : ℤ), b * (a / b) + a % b = a
 -/
-instance Int.euclideanDomain : EuclideanDomain Int :=
+instance Int.euclideanDomain : EuclideanDomain ℤ :=
   { (inferInstance : CommRing Int), (inferInstance : Nontrivial Int) with
     quotient := (· / ·), quotient_zero := Int.ediv_zero, remainder := (· % ·),
     quotient_mul_add_remainder_eq := Int.mul_ediv_add_emod,
     r := fun a b => a.natAbs < b.natAbs,
     r_wellFounded := (measure natAbs).wf
-remainder_lt := fun a b b0 => Int.ofNat_lt.1 by
-      rw [Int.natAbs_of_nonneg (Int.emod_nonneg _ b0)]; rw [← Int.abs_eq_natAbs]
+    remainder_lt := fun a b b0 => Int.ofNat_lt.1 <| by
+      rw [Int.natAbs_of_nonneg (Int.emod_nonneg _ b0), ← Int.abs_eq_natAbs]
       exact Int.emod_lt_abs _ b0
     mul_left_not_lt := fun a b b0 =>
-not_lt_of_ge by
-        rw [← mul_one a.natAbs]; rw [Int.natAbs_mul]
+      not_lt_of_ge <| by
+        rw [← mul_one a.natAbs, Int.natAbs_mul]
         rw [← Int.natAbs_pos] at b0
         exact Nat.mul_le_mul_left _ b0 }

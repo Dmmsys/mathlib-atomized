@@ -24,58 +24,47 @@ open Limits
 
 variable {C D : Type*} [Category* C] [Category* D]
 
-/--
-Definition of `isTerminal` / `isTerminal` 的定义
+/-- If `F : C ⥤ D` is such that `F.obj X` is terminal for any `X : C`,
+then `F` is a terminal object. -/
+/-
+**CategoryTheory.Functor.isTerminal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：isTerminal {F : C ⥤ D} (hF : forall (X : C), IsTerminal (F.obj X)) : IsTer
+minal F
+参数：hF : forall (X : C), IsTerminal (F.obj X)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminal
-  signature: {F : C ⥤ D} (hF : forall (X : C), IsTerminal (F.obj X))
-  body: by
-  refine evaluationJointlyReflectsLimits _
-    fun X => IsLimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
-  exact Cone.ext (Iso.refl _)
-
-中文:
-定义 isTerminal
-  签名: {F : C ⥤ D} (hF : 对任意 (X : C), 是终止 (F.obj X))
-  定义体: by
-  refine evaluationJointlyReflectsLimits _
-    fun X => IsLimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
-  exact Cone.ext (Iso.refl _)
-
-Depends on / 依赖: Cone.ext, Functor, Functor.emptyExt, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, emptyExt, equivOfNatIsoOfIso, evaluationJointlyReflectsLimits
+--- 原说明 ---
+If `F : C ⥤ D` is such that `F.obj X` is terminal for any `X : C`,
+then `F` is a terminal object.
 -/
-def isTerminal {F : C ⥤ D} (hF : forall (X : C), IsTerminal (F.obj X)) :
+def isTerminal {F : C ⥤ D} (hF : ∀ (X : C), IsTerminal (F.obj X)) :
     IsTerminal F := by
   refine evaluationJointlyReflectsLimits _
-    fun X => IsLimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
+    fun X ↦ IsLimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
   exact Cone.ext (Iso.refl _)
 
-/--
-Definition of `isInitial` / `isInitial` 的定义
+/-- If `F : C ⥤ D` is such that `F.obj X` is initial for any `X : C`,
+then `F` is an initial object. -/
+/-
+**CategoryTheory.Functor.isInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：isInitial {F : C ⥤ D} (hF : forall (X : C), IsInitial (F.obj X)) : IsIniti
+al F
+参数：hF : forall (X : C), IsInitial (F.obj X)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitial
-  signature: {F : C ⥤ D} (hF : forall (X : C), IsInitial (F.obj X))
-  body: by
-  refine evaluationJointlyReflectsColimits _
-    fun X => IsColimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
-  exact Cocone.ext (Iso.refl _)
-
-中文:
-定义 isInitial
-  签名: {F : C ⥤ D} (hF : 对任意 (X : C), IsInitial (F.obj X))
-  定义体: by
-  refine evaluationJointlyReflectsColimits _
-    fun X => IsColimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
-  exact Cocone.ext (Iso.refl _)
-
-Depends on / 依赖: Cocone, Cocone.ext, Functor, Functor.emptyExt, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, emptyExt, equivOfNatIsoOfIso, evaluationJointlyReflectsColimits
+--- 原说明 ---
+If `F : C ⥤ D` is such that `F.obj X` is initial for any `X : C`,
+then `F` is an initial object.
 -/
-def isInitial {F : C ⥤ D} (hF : forall (X : C), IsInitial (F.obj X)) :
+def isInitial {F : C ⥤ D} (hF : ∀ (X : C), IsInitial (F.obj X)) :
     IsInitial F := by
   refine evaluationJointlyReflectsColimits _
-    fun X => IsColimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
+    fun X ↦ IsColimit.equivOfNatIsoOfIso (Functor.emptyExt _ _) _ _ ?_ (hF X)
   exact Cocone.ext (Iso.refl _)
 
 end CategoryTheory.Functor
+

@@ -126,195 +126,159 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCom
   [TopologicalSpace M'] [ChartedSpace H' M']
 
 variable (I I') in
-/--
-Definition of `DifferentiableWithinAtProp` / `DifferentiableWithinAtProp` 的定义
+/-- Property in the model space of a model with corners of being differentiable within a set at a
+point, when read in the model vector space. This property will be lifted to manifolds to define
+differentiable functions between manifolds. -/
+/-
+**DifferentiableWithinAtProp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAtProp (f : H -> H') (s : Set H) (x : H) : Prop
+参数：f : H -> H'；s : Set H；x : H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DifferentiableWithinAtProp
-  signature: (f : H -> H') (s : Set H) (x : H)
-  body: DifferentiableWithinAt 𝕜 (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s inter Set.range I) (I x)
-
-中文:
-定义 DifferentiableWithinAtProp
-  签名: (f : H -> H') (s : 集合 H) (x : H)
-  定义体: DifferentiableWithinAt 𝕜 (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s inter Set.range I) (I x)
-
-Depends on / 依赖: DifferentiableWithinAt, I.symm, LinearEquiv, LinearEquiv.ext, Set.range, mapRange_id
+--- 原说明 ---
+Property in the model space of a model with corners of being differentiable with
+in a set at a
+point, when read in the model vector space. This property will be lifted to mani
+folds to define
+differentiable functions between manifolds.
 -/
-def DifferentiableWithinAtProp (f : H -> H') (s : Set H) (x : H) : Prop :=
-  DifferentiableWithinAt 𝕜 (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s inter Set.range I) (I x)
+def DifferentiableWithinAtProp (f : H → H') (s : Set H) (x : H) : Prop :=
+  DifferentiableWithinAt 𝕜 (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s ∩ Set.range I) (I x)
 
 open scoped Manifold
-
-/--
-theorem `differentiableWithinAtProp_self_source` / 定理 `differentiableWithinAtProp_self_source`
-
-English:
-theorem differentiableWithinAtProp_self_source
-  given: {f : E -> H'} {s : Set E} {x : E}
-  proof: by
-  simp_rw [DifferentiableWithinAtProp, modelWithCornersSelf_coe, range_id, inter_univ,
-    modelWithCornersSelf_coe_symm, CompTriple.comp_eq, preimage_id_eq, id_eq]
-
-中文:
-定理 differentiableWithinAtProp_self_source
-  条件: {f : E -> H'} {s : 集合 E} {x : E}
-  证明: by
-  simp_rw [DifferentiableWithinAtProp, modelWithCornersSelf_coe, range_id, inter_univ,
-    modelWithCornersSelf_coe_symm, CompTriple.comp_eq, preimage_id_eq, id_eq]
-
-Depends on / 依赖: CompTriple, CompTriple.comp_eq, DifferentiableWithinAtProp, LinearEquiv, LinearEquiv.ext, comp_eq, f.map_zero, f.trans, id_eq, inter_univ, mapRange_comp, map_zero, modelWithCornersSelf_coe, modelWithCornersSelf_coe_symm, preimage_id_eq, range_id, simp_rw
+/-
+**differentiableWithinAtProp_self_source** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAtProp_self_source {f : E -> H'} {s : Set E} {x : E} :
+ DifferentiableWithinAtProp 𝓘(𝕜, E) I' f s x ↔ DifferentiableWithinAt 𝕜 (I' ∘ f)
+ s x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `CompTriple.comp_eq`：∀ {M : Type u_1} {N : Type u_2} {P : Type u_3} {φ : 
+M → N} {ψ : N → P} {χ : outParam (M → P)} [self : CompTriple φ ψ χ],   ψ ∘ φ = χ
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem differentiableWithinAtProp_self_source {f : E -> H'} {s : Set E} {x : E} :
+theorem differentiableWithinAtProp_self_source {f : E → H'} {s : Set E} {x : E} :
     DifferentiableWithinAtProp 𝓘(𝕜, E) I' f s x ↔ DifferentiableWithinAt 𝕜 (I' ∘ f) s x := by
   simp_rw [DifferentiableWithinAtProp, modelWithCornersSelf_coe, range_id, inter_univ,
     modelWithCornersSelf_coe_symm, CompTriple.comp_eq, preimage_id_eq, id_eq]
-
-/--
-theorem `DifferentiableWithinAtProp_self` / 定理 `DifferentiableWithinAtProp_self`
-
-English:
-theorem DifferentiableWithinAtProp_self
-  given: {f : E -> E'} {s : Set E} {x : E}
-  proof: differentiableWithinAtProp_self_source
-
-中文:
-定理 DifferentiableWithinAtProp_self
-  条件: {f : E -> E'} {s : 集合 E} {x : E}
-  证明: differentiableWithinAtProp_self_source
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ext, differentiableWithinAtProp_self_source
+/-
+**DifferentiableWithinAtProp_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAtProp_self {f : E -> E'} {s : Set E} {x : E} : Differ
+entiableWithinAtProp 𝓘(𝕜, E) 𝓘(𝕜, E') f s x ↔ DifferentiableWithinAt 𝕜 f s x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `differentiableWithinAtProp_self_source`：differentiableWithinAtProp_self_
+source {f : E -> H'} {s : Set E} {x : E} : DifferentiableWithinAtProp 𝓘(𝕜, E) I'
+ f s x ↔ DifferentiableWithi…
 -/
-theorem DifferentiableWithinAtProp_self {f : E -> E'} {s : Set E} {x : E} :
+theorem DifferentiableWithinAtProp_self {f : E → E'} {s : Set E} {x : E} :
     DifferentiableWithinAtProp 𝓘(𝕜, E) 𝓘(𝕜, E') f s x ↔ DifferentiableWithinAt 𝕜 f s x :=
   differentiableWithinAtProp_self_source
-
-/--
-theorem `differentiableWithinAtProp_self_target` / 定理 `differentiableWithinAtProp_self_target`
-
-English:
-theorem differentiableWithinAtProp_self_target
-  given: {f : H -> E'} {s : Set H} {x : H}
-  proof: Iff.rfl
-
-中文:
-定理 differentiableWithinAtProp_self_target
-  条件: {f : H -> E'} {s : 集合 H} {x : H}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**differentiableWithinAtProp_self_target** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAtProp_self_target {f : H -> E'} {s : Set H} {x : H} :
+ DifferentiableWithinAtProp I 𝓘(𝕜, E') f s x ↔ DifferentiableWithinAt 𝕜 (f ∘ I.s
+ymm) (I.symm ⁻¹' s inter range I) (I x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem differentiableWithinAtProp_self_target {f : H -> E'} {s : Set H} {x : H} :
+theorem differentiableWithinAtProp_self_target {f : H → E'} {s : Set H} {x : H} :
     DifferentiableWithinAtProp I 𝓘(𝕜, E') f s x ↔
-      DifferentiableWithinAt 𝕜 (f ∘ I.symm) (I.symm ⁻¹' s inter range I) (I x) :=
+      DifferentiableWithinAt 𝕜 (f ∘ I.symm) (I.symm ⁻¹' s ∩ range I) (I x) :=
   Iff.rfl
 
-/--
-theorem `differentiableWithinAt_localInvariantProp` / 定理 `differentiableWithinAt_localInvariantProp`
+/-- Being differentiable in the model space is a local property, invariant under smooth maps.
+Therefore, it will lift nicely to manifolds. -/
+/-
+**differentiableWithinAt_localInvariantProp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAt_localInvariantProp : (contDiffGroupoid 1 I).LocalIn
+variantProp (contDiffGroupoid 1 I') (DifferentiableWithinAtProp I I')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_right_comm`：inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ inter s₂ 
+inter s₃ = s₁ inter s₃ inter s₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DifferentiableWithinAtProp.eq_1`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {H : Type u_…
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `differentiableWithinAt_inter`：differentiableWithinAt_inter (ht : t in 𝓝 
+x) : DifferentiableWithinAt 𝕜 f (s inter t) x ↔ DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `ModelWithCorners.left_inv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `ModelWithCorners.continuous_symm`：continuous_symm : Continuous I.symm
+· 使用定理 `OpenPartialHomeomorph.left_inv`：left_inv {x : X} (h : x in e.source) : e
+.symm (e x) = x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `ContDiffOn.contDiffWithinAt`：ContDiffOn.contDiffWithinAt (h : ContDiffOn
+ 𝕜 n f s) (hx : x in s) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_groupoid_of_pregroupoid`：mem_groupoid_of_pregroupoid {PG : Pregroupo
+id H} {e : OpenPartialHomeomorph H H} : e in PG.groupoid ↔ PG.property e e.sourc
+e ∧ PG.property e…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DifferentiableWithinAt.mono_of_mem_nhdsWithin`：DifferentiableWithinAt.mo
+no_of_mem_nhdsWithin (h : DifferentiableWithinAt 𝕜 f s x) {t : Set E} (hst : s i
+n 𝓝[t] x) : DifferentiableWithinAt …
+· 使用定理 `DifferentiableWithinAt.comp'`：DifferentiableWithinAt.comp' {g : F -> G} 
+{t : Set F} (hg : DifferentiableWithinAt 𝕜 g t (f x)) (hf : DifferentiableWithin
+At 𝕜 f s x) : Diff…
+· 使用定理 `ContDiffWithinAt.differentiableWithinAt`：ContDiffWithinAt.differentiable
+WithinAt (h : ContDiffWithinAt 𝕜 n f s x) (hn : n != 0) : DifferentiableWithinAt
+ 𝕜 f s x
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `mem_nhdsWithin`：mem_nhdsWithin {t : Set α} {a : α} {s : Set α} : t in 𝓝[
+s] a ↔ exists u, IsOpen u ∧ a in u ∧ u inter s subseteq t
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `OpenPartialHomeomorph.open_target`：∀ {X : Type u_7} {Y : Type u_8} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : OpenPartialHomeom
+orph X Y), IsOpen self.…
+（共 37 条，此处仅展示前 30 条）
 
-English:
-theorem differentiableWithinAt_localInvariantProp
-  proof: { is_local := by
-      intro s x u f u_open xu
-      have : I.symm ⁻¹' (s inter u) inter Set.range I = I.symm ⁻¹' s inter Set.range I inter I.symm ⁻¹' u := by
-        simp only [Set.inter_right_comm, Set.preimage_inter]
-      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this]
-      symm
-      apply differentiableWithinAt_inter
-      have : u in 𝓝 (I.symm (I x)) := by
-        rw [ModelWithCorners.left_inv]
-        exact u_open.mem_nhds xu
-      apply I.continuous_symm.continuousAt this
-    right_invariance' := by
-      intro s x f e he hx h
-      rw [DifferentiableWithinAtProp] at h ⊢
-      have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
-      rw [this] at h
-      have : I (e x) in I.symm ⁻¹' e.target inter Set.range I := by simp only [hx, mfld_simps]
-      have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
-      convert! (h.comp' _ (this.differentiableWithinAt one_ne_zero)).mono_of_mem_nhdsWithin _
-        using 1
-      · ext y; simp only [mfld_simps]
-      refine
-        mem_nhdsWithin.mpr
-          ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
-            simp_rw [Set.mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
-      mfld_set_tac
-    congr_of_forall := by
-      intro s x f g h hx hf
-      apply hf.congr
-      · intro y hy
-        simp only [mfld_simps] at hy
-        simp only [h, hy, mfld_simps]
-      · simp only [hx, mfld_simps]
-    left_invariance' := by
-      intro s x f e' he' hs hx h
-      rw [DifferentiableWithinAtProp] at h ⊢
-      have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter Set.range I' := by
-        simp only [hx, mfld_simps]
-      have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
-      convert! (this.differentiableWithinAt one_ne_zero).comp _ h _
-      · ext y; simp only [mfld_simps]
-      · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1 }
-
-中文:
-定理 differentiableWithinAt_localInvariantProp
-  证明: { is_local := by
-      intro s x u f u_open xu
-      have : I.symm ⁻¹' (s inter u) inter Set.range I = I.symm ⁻¹' s inter Set.range I inter I.symm ⁻¹' u := by
-        simp only [Set.inter_right_comm, Set.preimage_inter]
-      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this]
-      symm
-      apply differentiableWithinAt_inter
-      have : u in 𝓝 (I.symm (I x)) := by
-        rw [ModelWithCorners.left_inv]
-        exact u_open.mem_nhds xu
-      apply I.continuous_symm.continuousAt this
-    right_invariance' := by
-      intro s x f e he hx h
-      rw [DifferentiableWithinAtProp] at h ⊢
-      have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
-      rw [this] at h
-      have : I (e x) in I.symm ⁻¹' e.target inter Set.range I := by simp only [hx, mfld_simps]
-      have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
-      convert! (h.comp' _ (this.differentiableWithinAt one_ne_zero)).mono_of_mem_nhdsWithin _
-        using 1
-      · ext y; simp only [mfld_simps]
-      refine
-        mem_nhdsWithin.mpr
-          ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
-            simp_rw [Set.mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
-      mfld_set_tac
-    congr_of_forall := by
-      intro s x f g h hx hf
-      apply hf.congr
-      · intro y hy
-        simp only [mfld_simps] at hy
-        simp only [h, hy, mfld_simps]
-      · simp only [hx, mfld_simps]
-    left_invariance' := by
-      intro s x f e' he' hs hx h
-      rw [DifferentiableWithinAtProp] at h ⊢
-      have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter Set.range I' := by
-        simp only [hx, mfld_simps]
-      have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
-      convert! (this.differentiableWithinAt one_ne_zero).comp _ h _
-      · ext y; simp only [mfld_simps]
-      · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1 }
-
-Depends on / 依赖: DifferentiableWithinAtProp, I.continuous_symm.continuousAt, I.symm, ModelWithCorners, ModelWithCorners.left_inv, Set.inter_right_comm, Set.preimage_inter, Set.range, continuousAt, continuous_symm, differentiableWithinAt_inter, inter_right_comm, is_local, left_inv, mem_nhds, preimage_inter, right_invariance, u_open, u_open.mem_nhds
+--- 原说明 ---
+Being differentiable in the model space is a local property, invariant under smo
+oth maps.
+Therefore, it will lift nicely to manifolds.
 -/
 theorem differentiableWithinAt_localInvariantProp :
     (contDiffGroupoid 1 I).LocalInvariantProp (contDiffGroupoid 1 I')
       (DifferentiableWithinAtProp I I') :=
   { is_local := by
       intro s x u f u_open xu
-      have : I.symm ⁻¹' (s inter u) inter Set.range I = I.symm ⁻¹' s inter Set.range I inter I.symm ⁻¹' u := by
+      have : I.symm ⁻¹' (s ∩ u) ∩ Set.range I = I.symm ⁻¹' s ∩ Set.range I ∩ I.symm ⁻¹' u := by
         simp only [Set.inter_right_comm, Set.preimage_inter]
-      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this]
+      rw [DifferentiableWithinAtProp, DifferentiableWithinAtProp, this]
       symm
       apply differentiableWithinAt_inter
-      have : u in 𝓝 (I.symm (I x)) := by
+      have : u ∈ 𝓝 (I.symm (I x)) := by
         rw [ModelWithCorners.left_inv]
         exact u_open.mem_nhds xu
       apply I.continuous_symm.continuousAt this
@@ -323,7 +287,7 @@ theorem differentiableWithinAt_localInvariantProp :
       rw [DifferentiableWithinAtProp] at h ⊢
       have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
       rw [this] at h
-      have : I (e x) in I.symm ⁻¹' e.target inter Set.range I := by simp only [hx, mfld_simps]
+      have : I (e x) ∈ I.symm ⁻¹' e.target ∩ Set.range I := by simp only [hx, mfld_simps]
       have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
       convert! (h.comp' _ (this.differentiableWithinAt one_ne_zero)).mono_of_mem_nhdsWithin _
         using 1
@@ -343,7 +307,7 @@ theorem differentiableWithinAt_localInvariantProp :
     left_invariance' := by
       intro s x f e' he' hs hx h
       rw [DifferentiableWithinAtProp] at h ⊢
-      have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter Set.range I' := by
+      have A : (I' ∘ f ∘ I.symm) (I x) ∈ I'.symm ⁻¹' e'.source ∩ Set.range I' := by
         simp only [hx, mfld_simps]
       have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
       convert! (this.differentiableWithinAt one_ne_zero).comp _ h _
@@ -351,409 +315,441 @@ theorem differentiableWithinAt_localInvariantProp :
       · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1 }
 
 variable (I) in
-/--
-Definition of `UniqueMDiffWithinAt` / `UniqueMDiffWithinAt` 的定义
+/-- Predicate ensuring that, at a point and within a set, a function can have at most one
+derivative. This is expressed using the preferred chart at the considered point. -/
+/-
+**UniqueMDiffWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniqueMDiffWithinAt (s : Set M) (x : M)
+参数：s : Set M；x : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniqueMDiffWithinAt
-  signature: (s : Set M) (x : M)
-  body: UniqueDiffWithinAt 𝕜 ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
-
-中文:
-定义 UniqueMDiffWithinAt
-  签名: (s : 集合 M) (x : M)
-  定义体: UniqueDiffWithinAt 𝕜 ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
-
-Depends on / 依赖: UniqueDiffWithinAt, extChartAt
+--- 原说明 ---
+Predicate ensuring that, at a point and within a set, a function can have at mos
+t one
+derivative. This is expressed using the preferred chart at the considered point.
 -/
 def UniqueMDiffWithinAt (s : Set M) (x : M) :=
-  UniqueDiffWithinAt 𝕜 ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
+  UniqueDiffWithinAt 𝕜 ((extChartAt I x).symm ⁻¹' s ∩ range I) ((extChartAt I x) x)
 
 variable (I) in
-/--
-Definition of `UniqueMDiffOn` / `UniqueMDiffOn` 的定义
+/-- Predicate ensuring that, at all points of a set, a function can have at most one derivative. -/
+/-
+**UniqueMDiffOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniqueMDiffOn (s : Set M)
+参数：s : Set M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniqueMDiffOn
-  signature: (s : Set M)
-  body: forall x in s, UniqueMDiffWithinAt I s x
-
-中文:
-定义 UniqueMDiffOn
-  签名: (s : 集合 M)
-  定义体: forall x in s, UniqueMDiffWithinAt I s x
-
-Depends on / 依赖: UniqueMDiffWithinAt
+--- 原说明 ---
+Predicate ensuring that, at all points of a set, a function can have at most one
+ derivative.
 -/
 def UniqueMDiffOn (s : Set M) :=
-  forall x in s, UniqueMDiffWithinAt I s x
+  ∀ x ∈ s, UniqueMDiffWithinAt I s x
 
 variable (I I') in
-/--
-Definition of `MDifferentiableWithinAt` / `MDifferentiableWithinAt` 的定义
+/-- `MDifferentiableWithinAt I I' f s x` indicates that the function `f` between manifolds
+has a derivative at the point `x` within the set `s`.
+This is a generalization of `DifferentiableWithinAt` to manifolds.
 
-English:
-definition MDifferentiableWithinAt
-  signature: (f : M -> M') (s : Set M) (x : M)
-  body: LiftPropWithinAt (DifferentiableWithinAtProp I I') f s x
+We require continuity in the definition, as otherwise points close to `x` in `s` could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything to the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differentiable, while
+this would not mean anything relevant. -/
+/-
+**MDifferentiableWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MDifferentiableWithinAt (f : M -> M') (s : Set M) (x : M)
+参数：f : M -> M'；s : Set M；x : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 MDifferentiableWithinAt
-  签名: (f : M -> M') (s : 集合 M) (x : M)
-  定义体: LiftPropWithinAt (DifferentiableWithinAtProp I I') f s x
+--- 原说明 ---
+`MDifferentiableWithinAt I I' f s x` indicates that the function `f` between man
+ifolds
+has a derivative at the point `x` within the set `s`.
+This is a generalization of `DifferentiableWithinAt` to manifolds.
 
-Depends on / 依赖: DifferentiableWithinAtProp, LiftPropWithinAt
+We require continuity in the definition, as otherwise points close to `x` in `s`
+ could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything t
+o the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differe
+ntiable, while
+this would not mean anything relevant.
 -/
-def MDifferentiableWithinAt (f : M -> M') (s : Set M) (x : M) :=
+def MDifferentiableWithinAt (f : M → M') (s : Set M) (x : M) :=
   LiftPropWithinAt (DifferentiableWithinAtProp I I') f s x
-
-/--
-theorem `mdifferentiableWithinAt_iff'` / 定理 `mdifferentiableWithinAt_iff'`
-
-English:
-theorem mdifferentiableWithinAt_iff'
-  given: (f : M -> M') (s : Set M) (x : M)
-  proof: by
-  rw [MDifferentiableWithinAt]; rw [liftPropWithinAt_iff']; rfl
-
-中文:
-定理 mdifferentiableWithinAt_iff'
-  条件: (f : M -> M') (s : 集合 M) (x : M)
-  证明: by
-  rw [MDifferentiableWithinAt]; rw [liftPropWithinAt_iff']; rfl
-
-Depends on / 依赖: MDifferentiableWithinAt, liftPropWithinAt_iff
+/-
+**mdifferentiableWithinAt_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mdifferentiableWithinAt_iff' (f : M -> M') (s : Set M) (x : M) : MDifferen
+tiableWithinAt I I' f s x ↔ ContinuousWithinAt f s x ∧ DifferentiableWithinAt 𝕜 
+(writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inter range I) ((ext
+ChartAt I x) x)
+参数：f : M -> M'；s : Set M；x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MDifferentiableWithinAt.eq_1`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorme
+dField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace
+ 𝕜 E] {H : Type u_…
+· 使用定理 `ChartedSpace.liftPropWithinAt_iff'`：∀ {H : Type u_1} {M : Type u_2} {H' 
+: Type u_3} {M' : Type u_4} [inst : TopologicalSpace H]   [inst_1 : TopologicalS
+pace M] [inst_2 : Charte…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mdifferentiableWithinAt_iff' (f : M -> M') (s : Set M) (x : M) :
+theorem mdifferentiableWithinAt_iff' (f : M → M') (s : Set M) (x : M) :
     MDifferentiableWithinAt I I' f s x ↔ ContinuousWithinAt f s x ∧
     DifferentiableWithinAt 𝕜 (writtenInExtChartAt I I' x f)
-      ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x) := by
-  rw [MDifferentiableWithinAt]; rw [liftPropWithinAt_iff']; rfl
-
-/--
-theorem `MDifferentiableWithinAt.continuousWithinAt` / 定理 `MDifferentiableWithinAt.continuousWithinAt`
-
-English:
-theorem MDifferentiableWithinAt.continuousWithinAt
-  statement: {f : M -> M'} {s : Set M} {x : M}
-  proof: .1 .1 hf mdifferentiableWithinAt_iff' ..
-
-中文:
-定理 MDifferentiableWithinAt.continuousWithinAt
-  结论: {f : M -> M'} {s : 集合 M} {x : M}
-  证明: .1 .1 hf mdifferentiableWithinAt_iff' ..
-
-Depends on / 依赖: mdifferentiableWithinAt_iff
+      ((extChartAt I x).symm ⁻¹' s ∩ range I) ((extChartAt I x) x) := by
+  rw [MDifferentiableWithinAt, liftPropWithinAt_iff']; rfl
+/-
+**MDifferentiableWithinAt.continuousWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MDifferentiableWithinAt.continuousWithinAt {f : M -> M'} {s : Set M} {x : 
+M} (hf : MDifferentiableWithinAt I I' f s x) : ContinuousWithinAt f s x
+参数：hf : MDifferentiableWithinAt I I' f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mdifferentiableWithinAt_iff'`：mdifferentiableWithinAt_iff' (f : M -> M')
+ (s : Set M) (x : M) : MDifferentiableWithinAt I I' f s x ↔ ContinuousWithinAt f
+ s x ∧ Differentia…
 -/
-theorem MDifferentiableWithinAt.continuousWithinAt {f : M -> M'} {s : Set M} {x : M}
+theorem MDifferentiableWithinAt.continuousWithinAt {f : M → M'} {s : Set M} {x : M}
     (hf : MDifferentiableWithinAt I I' f s x) :
     ContinuousWithinAt f s x :=
-.1 .1 hf mdifferentiableWithinAt_iff' ..
-
-/--
-theorem `MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt` / 定理 `MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt`
-
-English:
-theorem MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt
-  proof: .2 .1 hf mdifferentiableWithinAt_iff' ..
-
-中文:
-定理 MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt
-  证明: .2 .1 hf mdifferentiableWithinAt_iff' ..
-
-Depends on / 依赖: mdifferentiableWithinAt_iff
+  mdifferentiableWithinAt_iff' .. |>.1 hf |>.1
+/-
+**MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt** 是 Mathlib
+ 中的一个定理，位于命名空间 ``。
+形式化陈述：MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt {f : M 
+-> M'} {s : Set M} {x : M} (hf : MDifferentiableWithinAt I I' f s x) : Different
+iableWithinAt 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inte
+r range I) ((extChartAt I x) x)
+参数：hf : MDifferentiableWithinAt I I' f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mdifferentiableWithinAt_iff'`：mdifferentiableWithinAt_iff' (f : M -> M')
+ (s : Set M) (x : M) : MDifferentiableWithinAt I I' f s x ↔ ContinuousWithinAt f
+ s x ∧ Differentia…
 -/
 theorem MDifferentiableWithinAt.differentiableWithinAt_writtenInExtChartAt
-    {f : M -> M'} {s : Set M} {x : M} (hf : MDifferentiableWithinAt I I' f s x) :
+    {f : M → M'} {s : Set M} {x : M} (hf : MDifferentiableWithinAt I I' f s x) :
     DifferentiableWithinAt 𝕜 (writtenInExtChartAt I I' x f)
-      ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x) :=
-.2 .1 hf mdifferentiableWithinAt_iff' ..
+      ((extChartAt I x).symm ⁻¹' s ∩ range I) ((extChartAt I x) x) :=
+  mdifferentiableWithinAt_iff' .. |>.1 hf |>.2
 
 variable (I I') in
-/--
-Definition of `MDifferentiableAt` / `MDifferentiableAt` 的定义
+/-- `MDifferentiableAt I I' f x` indicates that the function `f` between manifolds
+has a derivative at the point `x`.
+This is a generalization of `DifferentiableAt` to manifolds.
 
-English:
-definition MDifferentiableAt
-  signature: (f : M -> M') (x : M)
-  body: LiftPropAt (DifferentiableWithinAtProp I I') f x
+We require continuity in the definition, as otherwise points close to `x` could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything to the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differentiable, while
+this would not mean anything relevant. -/
+/-
+**MDifferentiableAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MDifferentiableAt (f : M -> M') (x : M)
+参数：f : M -> M'；x : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 MDifferentiableAt
-  签名: (f : M -> M') (x : M)
-  定义体: LiftPropAt (DifferentiableWithinAtProp I I') f x
+--- 原说明 ---
+`MDifferentiableAt I I' f x` indicates that the function `f` between manifolds
+has a derivative at the point `x`.
+This is a generalization of `DifferentiableAt` to manifolds.
 
-Depends on / 依赖: DifferentiableWithinAtProp, LiftPropAt
+We require continuity in the definition, as otherwise points close to `x` could 
+be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything t
+o the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differe
+ntiable, while
+this would not mean anything relevant.
 -/
-def MDifferentiableAt (f : M -> M') (x : M) :=
+def MDifferentiableAt (f : M → M') (x : M) :=
   LiftPropAt (DifferentiableWithinAtProp I I') f x
-
-/--
-theorem `mdifferentiableAt_iff` / 定理 `mdifferentiableAt_iff`
-
-English:
-theorem mdifferentiableAt_iff
-  given: (f : M -> M') (x : M)
-  proof: by
-  rw [MDifferentiableAt]; rw [liftPropAt_iff]
-  congrm _ ∧ ?_
-  simp [DifferentiableWithinAtProp, Set.univ_inter, Function.comp_assoc]
-
-中文:
-定理 mdifferentiableAt_iff
-  条件: (f : M -> M') (x : M)
-  证明: by
-  rw [MDifferentiableAt]; rw [liftPropAt_iff]
-  congrm _ ∧ ?_
-  simp [DifferentiableWithinAtProp, Set.univ_inter, Function.comp_assoc]
-
-Depends on / 依赖: DifferentiableWithinAtProp, Function, Function.comp_assoc, MDifferentiableAt, Set.univ_inter, comp_assoc, congrm, liftPropAt_iff, univ_inter
+/-
+**mdifferentiableAt_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mdifferentiableAt_iff (f : M -> M') (x : M) : MDifferentiableAt I I' f x ↔
+ ContinuousAt f x ∧ DifferentiableWithinAt 𝕜 (writtenInExtChartAt I I' x f) (ran
+ge I) ((extChartAt I x) x)
+参数：f : M -> M'；x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MDifferentiableAt.eq_1`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField
+ 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] 
+{H : Type u_…
+· 使用定理 `ChartedSpace.liftPropAt_iff`：liftPropAt_iff {P : (H -> H') -> Set H -> H
+ -> Prop} {f : M -> M'} {x : M} : LiftPropAt P f x ↔ ContinuousAt f x ∧ P (chart
+At H' (f x) ∘ f ∘…
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mdifferentiableAt_iff (f : M -> M') (x : M) :
+theorem mdifferentiableAt_iff (f : M → M') (x : M) :
     MDifferentiableAt I I' f x ↔ ContinuousAt f x ∧
     DifferentiableWithinAt 𝕜 (writtenInExtChartAt I I' x f) (range I) ((extChartAt I x) x) := by
-  rw [MDifferentiableAt]; rw [liftPropAt_iff]
+  rw [MDifferentiableAt, liftPropAt_iff]
   congrm _ ∧ ?_
   simp [DifferentiableWithinAtProp, Set.univ_inter, Function.comp_assoc]
-
-/--
-theorem `MDifferentiableAt.continuousAt` / 定理 `MDifferentiableAt.continuousAt`
-
-English:
-theorem MDifferentiableAt.continuousAt
-  given: {f : M -> M'} {x : M} (hf : MDifferentiableAt I I' f x)
-  proof: .1 .1 hf mdifferentiableAt_iff ..
-
-中文:
-定理 MDifferentiableAt.continuousAt
-  条件: {f : M -> M'} {x : M} (hf : MDifferentiableAt I I' f x)
-  证明: .1 .1 hf mdifferentiableAt_iff ..
-
-Depends on / 依赖: mdifferentiableAt_iff
+/-
+**MDifferentiableAt.continuousAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MDifferentiableAt.continuousAt {f : M -> M'} {x : M} (hf : MDifferentiable
+At I I' f x) : ContinuousAt f x
+参数：hf : MDifferentiableAt I I' f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mdifferentiableAt_iff`：mdifferentiableAt_iff (f : M -> M') (x : M) : MDi
+fferentiableAt I I' f x ↔ ContinuousAt f x ∧ DifferentiableWithinAt 𝕜 (writtenIn
+ExtChartAt …
 -/
-theorem MDifferentiableAt.continuousAt {f : M -> M'} {x : M} (hf : MDifferentiableAt I I' f x) :
+theorem MDifferentiableAt.continuousAt {f : M → M'} {x : M} (hf : MDifferentiableAt I I' f x) :
     ContinuousAt f x :=
-.1 .1 hf mdifferentiableAt_iff ..
-
-/--
-theorem `MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt` / 定理 `MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt`
-
-English:
-theorem MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt
-  statement: {f : M -> M'} {x : M}
-  proof: .2 .1 hf mdifferentiableAt_iff ..
-
-中文:
-定理 MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt
-  结论: {f : M -> M'} {x : M}
-  证明: .2 .1 hf mdifferentiableAt_iff ..
-
-Depends on / 依赖: mdifferentiableAt_iff
+  mdifferentiableAt_iff .. |>.1 hf |>.1
+/-
+**MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt {f : M -> M'}
+ {x : M} (hf : MDifferentiableAt I I' f x) : DifferentiableWithinAt 𝕜 (writtenIn
+ExtChartAt I I' x f) (range I) ((extChartAt I x) x)
+参数：hf : MDifferentiableAt I I' f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mdifferentiableAt_iff`：mdifferentiableAt_iff (f : M -> M') (x : M) : MDi
+fferentiableAt I I' f x ↔ ContinuousAt f x ∧ DifferentiableWithinAt 𝕜 (writtenIn
+ExtChartAt …
 -/
-theorem MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt {f : M -> M'} {x : M}
+theorem MDifferentiableAt.differentiableWithinAt_writtenInExtChartAt {f : M → M'} {x : M}
     (hf : MDifferentiableAt I I' f x) :
     DifferentiableWithinAt 𝕜 (writtenInExtChartAt I I' x f) (range I) ((extChartAt I x) x) :=
-.2 .1 hf mdifferentiableAt_iff ..
+  mdifferentiableAt_iff .. |>.1 hf |>.2
 
 variable (I I') in
-/--
-Definition of `MDifferentiableOn` / `MDifferentiableOn` 的定义
+/-- `MDifferentiableOn I I' f s` indicates that the function `f` between manifolds
+has a derivative within `s` at all points of `s`.
+This is a generalization of `DifferentiableOn` to manifolds. -/
+/-
+**MDifferentiableOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MDifferentiableOn (f : M -> M') (s : Set M)
+参数：f : M -> M'；s : Set M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MDifferentiableOn
-  signature: (f : M -> M') (s : Set M)
-  body: forall x in s, MDifferentiableWithinAt I I' f s x
-
-中文:
-定义 MDifferentiableOn
-  签名: (f : M -> M') (s : 集合 M)
-  定义体: forall x in s, MDifferentiableWithinAt I I' f s x
-
-Depends on / 依赖: MDifferentiableWithinAt
+--- 原说明 ---
+`MDifferentiableOn I I' f s` indicates that the function `f` between manifolds
+has a derivative within `s` at all points of `s`.
+This is a generalization of `DifferentiableOn` to manifolds.
 -/
-def MDifferentiableOn (f : M -> M') (s : Set M) :=
-  forall x in s, MDifferentiableWithinAt I I' f s x
+def MDifferentiableOn (f : M → M') (s : Set M) :=
+  ∀ x ∈ s, MDifferentiableWithinAt I I' f s x
 
 variable (I I') in
-/--
-Definition of `MDifferentiable` / `MDifferentiable` 的定义
+/-- `MDifferentiable I I' f` indicates that the function `f` between manifolds
+has a derivative everywhere.
+This is a generalization of `Differentiable` to manifolds. -/
+/-
+**MDifferentiable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MDifferentiable (f : M -> M')
+参数：f : M -> M'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MDifferentiable
-  signature: (f : M -> M')
-  body: forall x, MDifferentiableAt I I' f x
-
-中文:
-定义 MDifferentiable
-  签名: (f : M -> M')
-  定义体: forall x, MDifferentiableAt I I' f x
-
-Depends on / 依赖: MDifferentiableAt
+--- 原说明 ---
+`MDifferentiable I I' f` indicates that the function `f` between manifolds
+has a derivative everywhere.
+This is a generalization of `Differentiable` to manifolds.
 -/
-def MDifferentiable (f : M -> M') :=
-  forall x, MDifferentiableAt I I' f x
+def MDifferentiable (f : M → M') :=
+  ∀ x, MDifferentiableAt I I' f x
 
 variable (I I') in
-/--
-Definition of `OpenPartialHomeomorph.MDifferentiable` / `OpenPartialHomeomorph.MDifferentiable` 的定义
+/-- Prop registering if an open partial homeomorphism is a local diffeomorphism on its source -/
+/-
+**OpenPartialHomeomorph.MDifferentiable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OpenPartialHomeomorph.MDifferentiable (f : OpenPartialHomeomorph M M')
+参数：f : OpenPartialHomeomorph M M'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OpenPartialHomeomorph.MDifferentiable
-  signature: (f : OpenPartialHomeomorph M M')
-  body: MDifferentiableOn I I' f f.source ∧ MDifferentiableOn I' I f.symm f.target
-
-中文:
-定义 OpenPartialHomeomorph.MDifferentiable
-  签名: (f : OpenPartialHomeomorph M M')
-  定义体: MDifferentiableOn I I' f f.source ∧ MDifferentiableOn I' I f.symm f.target
-
-Depends on / 依赖: MDifferentiableOn, f.source, f.symm, f.target, source, target
+--- 原说明 ---
+Prop registering if an open partial homeomorphism is a local diffeomorphism on i
+ts source
 -/
 def OpenPartialHomeomorph.MDifferentiable (f : OpenPartialHomeomorph M M') :=
   MDifferentiableOn I I' f f.source ∧ MDifferentiableOn I' I f.symm f.target
 
 variable (I I') in
-/--
-Definition of `HasMFDerivWithinAt` / `HasMFDerivWithinAt` 的定义
+/-- `HasMFDerivWithinAt I I' f s x f'` indicates that the function `f` between manifolds
+has, at the point `x` and within the set `s`, the derivative `f'`. Here, `f'` is a continuous linear
+map from the tangent space at `x` to the tangent space at `f x`.
 
-English:
-definition HasMFDerivWithinAt
-  signature: (f : M -> M') (s : Set M) (x : M)
-  body: ContinuousWithinAt f s x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f'
-      ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
+This is a generalization of `HasFDerivWithinAt` to manifolds (as indicated by the prefix `m`).
+The order of arguments is changed as the type of the derivative `f'` depends on the choice of `x`.
 
-中文:
-定义 HasMFDerivWithinAt
-  签名: (f : M -> M') (s : 集合 M) (x : M)
-  定义体: ContinuousWithinAt f s x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f'
-      ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
+We require continuity in the definition, as otherwise points close to `x` in `s` could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything to the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differentiable, while
+this would not mean anything relevant. -/
+/-
+**HasMFDerivWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasMFDerivWithinAt (f : M -> M') (s : Set M) (x : M) (f' : TangentSpace I 
+x ->L[𝕜] TangentSpace I' (f x))
+参数：f : M -> M'；s : Set M；x : M；f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x
+)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: ContinuousWithinAt, HasFDerivWithinAt, extChartAt, writtenInExtChartAt
+--- 原说明 ---
+`HasMFDerivWithinAt I I' f s x f'` indicates that the function `f` between manif
+olds
+has, at the point `x` and within the set `s`, the derivative `f'`. Here, `f'` is
+ a continuous linear
+map from the tangent space at `x` to the tangent space at `f x`.
+
+This is a generalization of `HasFDerivWithinAt` to manifolds (as indicated by th
+e prefix `m`).
+The order of arguments is changed as the type of the derivative `f'` depends on 
+the choice of `x`.
+
+We require continuity in the definition, as otherwise points close to `x` in `s`
+ could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything t
+o the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differe
+ntiable, while
+this would not mean anything relevant.
 -/
-def HasMFDerivWithinAt (f : M -> M') (s : Set M) (x : M)
-    (f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x)) :=
+def HasMFDerivWithinAt (f : M → M') (s : Set M) (x : M)
+    (f' : TangentSpace I x →L[𝕜] TangentSpace I' (f x)) :=
   ContinuousWithinAt f s x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f'
-      ((extChartAt I x).symm ⁻¹' s inter range I) ((extChartAt I x) x)
+    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E → E') f'
+      ((extChartAt I x).symm ⁻¹' s ∩ range I) ((extChartAt I x) x)
 
 variable (I I') in
-/--
-Definition of `HasMFDerivAt` / `HasMFDerivAt` 的定义
+/-- `HasMFDerivAt I I' f x f'` indicates that the function `f` between manifolds
+has, at the point `x`, the derivative `f'`. Here, `f'` is a continuous linear
+map from the tangent space at `x` to the tangent space at `f x`.
 
-English:
-definition HasMFDerivAt
-  signature: (f : M -> M') (x : M) (f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x))
-  body: ContinuousAt f x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f' (range I) ((extChartAt I x) x)
+We require continuity in the definition, as otherwise points close to `x` in `s` could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything to the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differentiable, while
+this would not mean anything relevant. -/
+/-
+**HasMFDerivAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasMFDerivAt (f : M -> M') (x : M) (f' : TangentSpace I x ->L[𝕜] TangentSp
+ace I' (f x))
+参数：f : M -> M'；x : M；f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 HasMFDerivAt
-  签名: (f : M -> M') (x : M) (f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x))
-  定义体: ContinuousAt f x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f' (range I) ((extChartAt I x) x)
+--- 原说明 ---
+`HasMFDerivAt I I' f x f'` indicates that the function `f` between manifolds
+has, at the point `x`, the derivative `f'`. Here, `f'` is a continuous linear
+map from the tangent space at `x` to the tangent space at `f x`.
 
-Depends on / 依赖: ContinuousAt, HasFDerivWithinAt, extChartAt, writtenInExtChartAt
+We require continuity in the definition, as otherwise points close to `x` in `s`
+ could be sent by
+`f` outside of the chart domain around `f x`. Then the chart could do anything t
+o the image points,
+and in particular by coincidence `writtenInExtChartAt I I' x f` could be differe
+ntiable, while
+this would not mean anything relevant.
 -/
-def HasMFDerivAt (f : M -> M') (x : M) (f' : TangentSpace I x ->L[𝕜] TangentSpace I' (f x)) :=
+def HasMFDerivAt (f : M → M') (x : M) (f' : TangentSpace I x →L[𝕜] TangentSpace I' (f x)) :=
   ContinuousAt f x ∧
-    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E -> E') f' (range I) ((extChartAt I x) x)
+    HasFDerivWithinAt (writtenInExtChartAt I I' x f : E → E') f' (range I) ((extChartAt I x) x)
 
 open scoped Classical in
 variable (I I') in
-/--
-Definition of `mfderivWithin` / `mfderivWithin` 的定义
+/-- `mfderivWithin I I' f s x`, given a function `f` between two manifolds,
+is the derivative of `f` at `x` within `s`,
+as a continuous linear map from the tangent space at `x` to the tangent space at `f x`. -/
+/-
+**mfderivWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mfderivWithin (f : M -> M') (s : Set M) (x : M) : TangentSpace I x ->L[𝕜] 
+TangentSpace I' (f x)
+参数：f : M -> M'；s : Set M；x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mfderivWithin
-  signature: (f : M -> M') (s : Set M) (x : M)
-  body: if MDifferentiableWithinAt I I' f s x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inter range I)
-        ((extChartAt I x) x) :
-      _)
-  else 0
-
-中文:
-定义 mfderivWithin
-  签名: (f : M -> M') (s : 集合 M) (x : M)
-  定义体: if MDifferentiableWithinAt I I' f s x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inter range I)
-        ((extChartAt I x) x) :
-      _)
-  else 0
-
-Depends on / 依赖: MDifferentiableWithinAt, extChartAt, fderivWithin, writtenInExtChartAt
+--- 原说明 ---
+`mfderivWithin I I' f s x`, given a function `f` between two manifolds,
+is the derivative of `f` at `x` within `s`,
+as a continuous linear map from the tangent space at `x` to the tangent space at
+ `f x`.
 -/
-def mfderivWithin (f : M -> M') (s : Set M) (x : M) : TangentSpace I x ->L[𝕜] TangentSpace I' (f x) :=
+def mfderivWithin (f : M → M') (s : Set M) (x : M) : TangentSpace I x →L[𝕜] TangentSpace I' (f x) :=
   if MDifferentiableWithinAt I I' f s x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s inter range I)
+    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f) ((extChartAt I x).symm ⁻¹' s ∩ range I)
         ((extChartAt I x) x) :
       _)
   else 0
 
 open scoped Classical in
 variable (I I') in
-/--
-Definition of `mfderiv` / `mfderiv` 的定义
+/-- `mfderiv I I' f x`, given a function `f` between two manifolds, is the derivative of `f` at `x`,
+as a continuous linear map from the tangent space at `x` to the tangent space at `f x`. -/
+/-
+**mfderiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mfderiv (f : M -> M') (x : M) : TangentSpace I x ->L[𝕜] TangentSpace I' (f
+ x)
+参数：f : M -> M'；x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mfderiv
-  signature: (f : M -> M') (x : M)
-  body: if MDifferentiableAt I I' f x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f : E -> E') (range I) ((extChartAt I x) x) :)
-  else 0
-
-中文:
-定义 mfderiv
-  签名: (f : M -> M') (x : M)
-  定义体: if MDifferentiableAt I I' f x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f : E -> E') (range I) ((extChartAt I x) x) :)
-  else 0
-
-Depends on / 依赖: MDifferentiableAt, extChartAt, fderivWithin, writtenInExtChartAt
+--- 原说明 ---
+`mfderiv I I' f x`, given a function `f` between two manifolds, is the derivativ
+e of `f` at `x`,
+as a continuous linear map from the tangent space at `x` to the tangent space at
+ `f x`.
 -/
-def mfderiv (f : M -> M') (x : M) : TangentSpace I x ->L[𝕜] TangentSpace I' (f x) :=
+def mfderiv (f : M → M') (x : M) : TangentSpace I x →L[𝕜] TangentSpace I' (f x) :=
   if MDifferentiableAt I I' f x then
-    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f : E -> E') (range I) ((extChartAt I x) x) :)
+    (fderivWithin 𝕜 (writtenInExtChartAt I I' x f : E → E') (range I) ((extChartAt I x) x) :)
   else 0
 
 variable (I I') in
-/--
-Definition of `tangentMapWithin` / `tangentMapWithin` 的定义
+/-- `tangentMapWithin I I' f s` is the derivative of `f : M → M'` within a set `s`,
+as a map between the tangent bundles `TM` and `TM'`. -/
+/-
+**tangentMapWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：tangentMapWithin (f : M -> M') (s : Set M) : TangentBundle I M -> TangentB
+undle I' M'
+参数：f : M -> M'；s : Set M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tangentMapWithin
-  signature: (f : M -> M') (s : Set M)
-  body: fun p =>
-  ⟨f p.1, (mfderivWithin I I' f s p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
-
-中文:
-定义 tangentMapWithin
-  签名: (f : M -> M') (s : 集合 M)
-  定义体: fun p =>
-  ⟨f p.1, (mfderivWithin I I' f s p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
+--- 原说明 ---
+`tangentMapWithin I I' f s` is the derivative of `f : M → M'` within a set `s`,
+as a map between the tangent bundles `TM` and `TM'`.
 -/
-def tangentMapWithin (f : M -> M') (s : Set M) : TangentBundle I M -> TangentBundle I' M' := fun p =>
-  ⟨f p.1, (mfderivWithin I I' f s p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
+def tangentMapWithin (f : M → M') (s : Set M) : TangentBundle I M → TangentBundle I' M' := fun p =>
+  ⟨f p.1, (mfderivWithin I I' f s p.1 : TangentSpace I p.1 → TangentSpace I' (f p.1)) p.2⟩
 
 variable (I I') in
-/--
-Definition of `tangentMap` / `tangentMap` 的定义
+/-- `tangentMap I I' f` is the derivative of `f : M → M'` as a map between the tangent bundles
+`TM` and `TM'`. -/
+/-
+**tangentMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：tangentMap (f : M -> M') : TangentBundle I M -> TangentBundle I' M'
+参数：f : M -> M'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tangentMap
-  signature: (f : M -> M')
-  body: fun p =>
-  ⟨f p.1, (mfderiv I I' f p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
-
-中文:
-定义 tangentMap
-  签名: (f : M -> M')
-  定义体: fun p =>
-  ⟨f p.1, (mfderiv I I' f p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
+--- 原说明 ---
+`tangentMap I I' f` is the derivative of `f : M → M'` as a map between the tange
+nt bundles
+`TM` and `TM'`.
 -/
-def tangentMap (f : M -> M') : TangentBundle I M -> TangentBundle I' M' := fun p =>
-  ⟨f p.1, (mfderiv I I' f p.1 : TangentSpace I p.1 -> TangentSpace I' (f p.1)) p.2⟩
+def tangentMap (f : M → M') : TangentBundle I M → TangentBundle I' M' := fun p =>
+  ⟨f p.1, (mfderiv I I' f p.1 : TangentSpace I p.1 → TangentSpace I' (f p.1)) p.2⟩
 
 end DerivativesDefinitions
+

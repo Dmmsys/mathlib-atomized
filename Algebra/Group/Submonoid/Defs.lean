@@ -58,47 +58,41 @@ section NonAssoc
 
 variable [MulOneClass M] {s : Set M}
 
-/--
-Definition of `OneMemClass` / `OneMemClass` 的定义
+/-- `OneMemClass S M` says `S` is a type of subsets `s ≤ M`, such that `1 ∈ s` for all `s`. -/
+/-
+**OneMemClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_3) → (M : outParam (Type u_4)) → [One M] → [SetLike S M] → Pro
+p
+参数：Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OneMemClass
-  parameters: (S : Type*) (M : outParam Type*) [One M] [SetLike S M]
-  axioms and operations (1):
-    - one_mem : forall s : S, (1 : M) in s
-
-中文:
-类 OneMem类
-  参数: (S : 类型) (M : outParam 类型) [幺 M] [集合状 S M]
-  公理与运算 (1 个):
-    - one_mem : 对任意 s : S, (1 : M) in s
+--- 原说明 ---
+`OneMemClass S M` says `S` is a type of subsets `s ≤ M`, such that `1 ∈ s` for a
+ll `s`.
 -/
 class OneMemClass (S : Type*) (M : outParam Type*) [One M] [SetLike S M] : Prop where
   /-- By definition, if we have `OneMemClass S M`, we have `1 ∈ s` for all `s : S`. -/
-  one_mem : forall s : S, (1 : M) in s
+  one_mem : ∀ s : S, (1 : M) ∈ s
 
 export OneMemClass (one_mem)
 
-/--
-Definition of `ZeroMemClass` / `ZeroMemClass` 的定义
+/-- `ZeroMemClass S M` says `S` is a type of subsets `s ≤ M`, such that `0 ∈ s` for all `s`. -/
+/-
+**ZeroMemClass** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：ZeroMemClass (S : Type*) (M : outParam Type*) [Zero M] [SetLike S M] : Pro
+p where /-- By definition, if we have `ZeroMemClass S M`, we have `0 ∈ s` for al
+l `s : S`. -/ zero_mem : forall s : S, (0 : M) in s  export ZeroMemClass (zero_m
+em)  attribute [to_additive] OneMemClass  attribute [simp, aesop safe (rule_sets
+参数：S : Type*；M : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ZeroMemClass
-  parameters: (S : Type*) (M : outParam Type*) [Zero M] [SetLike S M]
-  axioms and operations (1):
-    - zero_mem : forall s : S, (0 : M) in s
-
-中文:
-类 ZeroMem类
-  参数: (S : 类型) (M : outParam 类型) [零 M] [集合状 S M]
-  公理与运算 (1 个):
-    - zero_mem : 对任意 s : S, (0 : M) in s
-
-Depends on / 依赖: SetLike, one_mem, zero_mem
+--- 原说明 ---
+`ZeroMemClass S M` says `S` is a type of subsets `s ≤ M`, such that `0 ∈ s` for 
+all `s`.
 -/
 class ZeroMemClass (S : Type*) (M : outParam Type*) [Zero M] [SetLike S M] : Prop where
   /-- By definition, if we have `ZeroMemClass S M`, we have `0 ∈ s` for all `s : S`. -/
-  zero_mem : forall s : S, (0 : M) in s
+  zero_mem : ∀ s : S, (0 : M) ∈ s
 
 export ZeroMemClass (zero_mem)
 
@@ -109,20 +103,15 @@ attribute [simp, aesop safe (rule_sets := [SetLike])] one_mem zero_mem
 /-- The underlying set of a term of a `OneMemClass` is nonempty. -/
 @[to_additive (attr := simp)
 /-- The underlying set of a term of a `ZeroMemClass` is nonempty. -/]
-/--
-theorem `OneMemClass.coe_nonempty` / 定理 `OneMemClass.coe_nonempty`
-
-English:
-theorem OneMemClass.coe_nonempty
-  given: {S M : Type*} [One M] [SetLike S M] [OneMemClass S M] (s : S)
-  proof: ⟨1, one_mem s⟩
-
-中文:
-定理 OneMem类.coe_nonempty
-  条件: {S M : 类型} [幺 M] [集合状 S M] [OneMem类 S M] (s : S)
-  证明: ⟨1, one_mem s⟩
-
-Depends on / 依赖: one_mem
+/-
+**OneMemClass.coe_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OneMemClass.coe_nonempty {S M : Type*} [One M] [SetLike S M] [OneMemClass 
+S M] (s : S) : (s : Set M).Nonempty
+参数：s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
 -/
 theorem OneMemClass.coe_nonempty {S M : Type*} [One M] [SetLike S M] [OneMemClass S M] (s : S) :
     (s : Set M).Nonempty :=
@@ -130,72 +119,57 @@ theorem OneMemClass.coe_nonempty {S M : Type*} [One M] [SetLike S M] [OneMemClas
 
 section
 
-/--
-Definition of `Submonoid` / `Submonoid` 的定义
+/-- A submonoid of a monoid `M` is a subset containing 1 and closed under multiplication. -/
+/-
+**Submonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_3) → [MulOneClass M] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Submonoid
-  parameters: (M : Type*) [MulOneClass M]
-  extends: Subsemigroup M
-  axioms and operations (1):
-    - one_mem' : (1 : M) in carrier
-
-中文:
-结构 子幺半群
-  参数: (M : 类型) [MulOne类 M]
-  继承: 子半群 M
-  公理与运算 (1 个):
-    - one_mem' : (1 : M) in carrier
+--- 原说明 ---
+A submonoid of a monoid `M` is a subset containing 1 and closed under multiplica
+tion.
 -/
 structure Submonoid (M : Type*) [MulOneClass M] extends Subsemigroup M where
   /-- A submonoid contains `1`. -/
-  one_mem' : (1 : M) in carrier
+  one_mem' : (1 : M) ∈ carrier
 
 end
 
 /-- A submonoid of a monoid `M` can be considered as a subsemigroup of that monoid. -/
 add_decl_doc Submonoid.toSubsemigroup
 
-/--
-Definition of `SubmonoidClass` / `SubmonoidClass` 的定义
+/-- `SubmonoidClass S M` says `S` is a type of subsets `s ≤ M` that contain `1`
+and are closed under `(*)` -/
+/-
+**SubmonoidClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_3) → (M : outParam (Type u_4)) → [MulOneClass M] → [SetLike S 
+M] → Prop
+参数：Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SubmonoidClass
-  parameters: (S : Type*) (M : outParam Type*) [MulOneClass M] [SetLike S M]
-  extends: MulMemClass S M, OneMemClass S M
-  (no additional axioms)
-
-中文:
-类 子幺半群类
-  参数: (S : 类型) (M : outParam 类型) [MulOne类 M] [集合状 S M]
-  继承: MulMem类 S M, OneMem类 S M
-  (无附加公理)
+--- 原说明 ---
+`SubmonoidClass S M` says `S` is a type of subsets `s ≤ M` that contain `1`
+and are closed under `(*)`
 -/
 class SubmonoidClass (S : Type*) (M : outParam Type*) [MulOneClass M] [SetLike S M] : Prop
     extends MulMemClass S M, OneMemClass S M
 
 section
 
-/--
-Definition of `AddSubmonoid` / `AddSubmonoid` 的定义
+/-- An additive submonoid of an additive monoid `M` is a subset containing 0 and
+  closed under addition. -/
+/-
+**AddSubmonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_3) → [AddZeroClass M] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddSubmonoid
-  parameters: (M : Type*) [AddZeroClass M]
-  extends: AddSubsemigroup M
-  axioms and operations (1):
-    - zero_mem' : (0 : M) in carrier
-
-中文:
-结构 加法子幺半群
-  参数: (M : 类型) [加法零类 M]
-  继承: 加法子半群 M
-  公理与运算 (1 个):
-    - zero_mem' : (0 : M) in carrier
+--- 原说明 ---
+An additive submonoid of an additive monoid `M` is a subset containing 0 and
+  closed under addition.
 -/
 structure AddSubmonoid (M : Type*) [AddZeroClass M] extends AddSubsemigroup M where
   /-- An additive submonoid contains `0`. -/
-  zero_mem' : (0 : M) in carrier
+  zero_mem' : (0 : M) ∈ carrier
 
 end
 
@@ -203,20 +177,18 @@ end
 additive subsemigroup of that additive monoid. -/
 add_decl_doc AddSubmonoid.toAddSubsemigroup
 
-/--
-Definition of `AddSubmonoidClass` / `AddSubmonoidClass` 的定义
+/-- `AddSubmonoidClass S M` says `S` is a type of subsets `s ≤ M` that contain `0`
+and are closed under `(+)` -/
+/-
+**AddSubmonoidClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_3) → (M : outParam (Type u_4)) → [AddZeroClass M] → [SetLike S
+ M] → Prop
+参数：Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddSubmonoidClass
-  parameters: (S : Type*) (M : outParam Type*) [AddZeroClass M] [SetLike S M]
-  extends: AddMemClass S M, ZeroMemClass S M
-  (no additional axioms)
-
-中文:
-类 加法子幺半群类
-  参数: (S : 类型) (M : outParam 类型) [加法零类 M] [集合状 S M]
-  继承: 加法Mem类 S M, ZeroMem类 S M
-  (无附加公理)
+--- 原说明 ---
+`AddSubmonoidClass S M` says `S` is a type of subsets `s ≤ M` that contain `0`
+and are closed under `(+)`
 -/
 class AddSubmonoidClass (S : Type*) (M : outParam Type*) [AddZeroClass M] [SetLike S M] : Prop
   extends AddMemClass S M, ZeroMemClass S M
@@ -224,19 +196,15 @@ class AddSubmonoidClass (S : Type*) (M : outParam Type*) [AddZeroClass M] [SetLi
 attribute [to_additive] Submonoid SubmonoidClass
 
 @[to_additive (attr := aesop 90% (rule_sets := [SetLike]))]
-/--
-theorem `pow_mem` / 定理 `pow_mem`
-
-English:
-theorem pow_mem
-  statement: {M A} [Monoid M] [SetLike A M] [SubmonoidClass A M] {S : A} {x : M}
-
-中文:
-定理 pow_mem
-  结论: {M A} [幺半群 M] [集合状 A M] [子幺半群类 A M] {S : A} {x : M}
+/-
+**pow_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : SetLike A M] [
+SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ S
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pow_mem {M A} [Monoid M] [SetLike A M] [SubmonoidClass A M] {S : A} {x : M}
-    (hx : x in S) : forall n : Nat, x ^ n in S
+    (hx : x ∈ S) : ∀ n : ℕ, x ^ n ∈ S
   | 0 => by
     rw [pow_zero]
     exact OneMemClass.one_mem S
@@ -247,360 +215,196 @@ theorem pow_mem {M A} [Monoid M] [SetLike A M] [SubmonoidClass A M] {S : A} {x :
 namespace Submonoid
 
 @[to_additive]
-/--
-lemma `toSubsemigroup_injective` / 引理 `toSubsemigroup_injective`
-
-English:
-lemma toSubsemigroup_injective
-  statement: (toSubsemigroup : Submonoid M -> Subsemigroup M).Injective
-  proof: fun ⟨s, hs⟩ ⟨t, ht⟩ => by congr!
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 toSubsemigroup_injective
-  结论: (toSubsemigroup : 子幺半群 M -> 子半群 M).单射
-  证明: fun ⟨s, hs⟩ ⟨t, ht⟩ => by congr!
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.toSubsemigroup_injective** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：toSubsemigroup_injective : (toSubsemigroup : Submonoid M -> Subsemigroup M
+).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma toSubsemigroup_injective : (toSubsemigroup : Submonoid M -> Subsemigroup M).Injective :=
-  fun ⟨s, hs⟩ ⟨t, ht⟩ => by congr!
+lemma toSubsemigroup_injective : (toSubsemigroup : Submonoid M → Subsemigroup M).Injective :=
+  fun ⟨s, hs⟩ ⟨t, ht⟩ ↦ by congr!
 
 @[to_additive (attr := simp)]
-/--
-lemma `toSubsemigroup_inj` / 引理 `toSubsemigroup_inj`
-
-English:
-lemma toSubsemigroup_inj
-  given: {s t : Submonoid M}
-  statement: s.toSubsemigroup = t.toSubsemigroup ↔ s = t
-  proof: toSubsemigroup_injective.eq_iff
-
-@[to_additive]
-
-中文:
-引理 toSubsemigroup_inj
-  条件: {s t : 子幺半群 M}
-  结论: s.toSubsemigroup = t.toSubsemigroup ↔ s = t
-  证明: toSubsemigroup_injective.eq_iff
-
-@[to_additive]
-
-Depends on / 依赖: eq_iff, toSubsemigroup_injective, toSubsemigroup_injective.eq_iff
+/-
+**Submonoid.toSubsemigroup_inj** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：toSubsemigroup_inj {s t : Submonoid M} : s.toSubsemigroup = t.toSubsemigro
+up ↔ s = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `Submonoid.toSubsemigroup_injective`：toSubsemigroup_injective : (toSubsem
+igroup : Submonoid M -> Subsemigroup M).Injective
 -/
 lemma toSubsemigroup_inj {s t : Submonoid M} : s.toSubsemigroup = t.toSubsemigroup ↔ s = t :=
   toSubsemigroup_injective.eq_iff
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Submonoid M) M
-  body: s.carrier
-  coe_injective := SetLike.coe_injective.comp toSubsemigroup_injective
-
-中文:
-实例 :
-  签名: 集合状 (子幺半群 M) M
-  定义体: s.carrier
-  coe_injective := SetLike.coe_injective.comp toSubsemigroup_injective
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Submonoid M) M where
   coe s := s.carrier
   coe_injective := SetLike.coe_injective.comp toSubsemigroup_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Submonoid M)
-  body: .ofSetLike (Submonoid M) M
-
-initialize_simps_projections Submonoid (carrier -> coe, as_prefix coe)
-initialize_simps_projections AddSubmonoid (carrier -> coe, as_prefix coe)
-
-中文:
-实例 :
-  签名: 偏序 (子幺半群 M)
-  定义体: .ofSetLike (Submonoid M) M
-
-initialize_simps_projections Submonoid (carrier -> coe, as_prefix coe)
-initialize_simps_projections AddSubmonoid (carrier -> coe, as_prefix coe)
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : PartialOrder (Submonoid M) := .ofSetLike (Submonoid M) M
 
-initialize_simps_projections Submonoid (carrier -> coe, as_prefix coe)
-initialize_simps_projections AddSubmonoid (carrier -> coe, as_prefix coe)
+initialize_simps_projections Submonoid (carrier → coe, as_prefix coe)
+initialize_simps_projections AddSubmonoid (carrier → coe, as_prefix coe)
 
 /-- The actual `Submonoid` obtained from an element of a `SubmonoidClass` -/
 @[to_additive (attr := simps) /-- The actual `AddSubmonoid` obtained from an element of a
 `AddSubmonoidClass` -/]
-/--
-Definition of `ofClass` / `ofClass` 的定义
-
-English:
-definition ofClass
-  signature: {S M : Type*} [Monoid M] [SetLike S M] [SubmonoidClass S M] (s : S)
-  body: ⟨⟨s, MulMemClass.mul_mem⟩, OneMemClass.one_mem s⟩
-
-@[to_additive]
-
-中文:
-定义 ofClass
-  签名: {S M : 类型} [幺半群 M] [集合状 S M] [子幺半群类 S M] (s : S)
-  定义体: ⟨⟨s, MulMemClass.mul_mem⟩, OneMemClass.one_mem s⟩
-
-@[to_additive]
-
-Depends on / 依赖: MulMemClass, MulMemClass.mul_mem, OneMemClass, OneMemClass.one_mem, mul_mem, one_mem
+/-
+**Submonoid.ofClass** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：ofClass {S M : Type*} [Monoid M] [SetLike S M] [SubmonoidClass S M] (s : S
+) : Submonoid M
+参数：s : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofClass {S M : Type*} [Monoid M] [SetLike S M] [SubmonoidClass S M] (s : S) : Submonoid M :=
   ⟨⟨s, MulMemClass.mul_mem⟩, OneMemClass.one_mem s⟩
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : CanLift (Set M) (Submonoid M) (↑)
-    (fun s => 1 in s ∧ forall {x y}, x in s -> y in s -> x * y in s) where
+    (fun s ↦ 1 ∈ s ∧ ∀ {x y}, x ∈ s → y ∈ s → x * y ∈ s) where
   prf s h := ⟨{ carrier := s, one_mem' := h.1, mul_mem' := h.2 }, rfl⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubmonoidClass (Submonoid M) M
-  body: Submonoid.one_mem'
-  mul_mem {s} := s.mul_mem'
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 子幺半群类 (子幺半群 M) M
-  定义体: Submonoid.one_mem'
-  mul_mem {s} := s.mul_mem'
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Submonoid, Submonoid.one_mem, one_mem
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubmonoidClass (Submonoid M) M where
   one_mem := Submonoid.one_mem'
   mul_mem {s} := s.mul_mem'
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_toSubsemigroup` / 定理 `mem_toSubsemigroup`
-
-English:
-theorem mem_toSubsemigroup
-  given: {s : Submonoid M} {x : M}
-  statement: x in s.toSubsemigroup ↔ x in s
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_toSubsemigroup
-  条件: {s : 子幺半群 M} {x : M}
-  结论: x in s.toSubsemigroup ↔ x in s
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submonoid.mem_toSubsemigroup** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_toSubsemigroup {s : Submonoid M} {x : M} : x in s.toSubsemigroup ↔ x i
+n s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toSubsemigroup {s : Submonoid M} {x : M} : x in s.toSubsemigroup ↔ x in s :=
+theorem mem_toSubsemigroup {s : Submonoid M} {x : M} : x ∈ s.toSubsemigroup ↔ x ∈ s :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `mem_carrier` / 定理 `mem_carrier`
-
-English:
-theorem mem_carrier
-  given: {s : Submonoid M} {x : M}
-  statement: x in s.carrier ↔ x in s
-  proof: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_carrier
-  条件: {s : 子幺半群 M} {x : M}
-  结论: x in s.carrier ↔ x in s
-  证明: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submonoid.mem_carrier** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_carrier {s : Submonoid M} {x : M} : x in s.carrier ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_carrier {s : Submonoid M} {x : M} : x in s.carrier ↔ x in s :=
+theorem mem_carrier {s : Submonoid M} {x : M} : x ∈ s.carrier ↔ x ∈ s :=
   Iff.rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {s : Subsemigroup M} {x : M} (h_one)
-  statement: x in mk s h_one ↔ x in s
-  proof: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_mk
-  条件: {s : 子半群 M} {x : M} (h_one)
-  结论: x in mk s h_one ↔ x in s
-  证明: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submonoid.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_mk {s : Subsemigroup M} {x : M} (h_one) : x in mk s h_one ↔ x in s
+参数：h_one。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk {s : Subsemigroup M} {x : M} (h_one) : x in mk s h_one ↔ x in s :=
+theorem mem_mk {s : Subsemigroup M} {x : M} (h_one) : x ∈ mk s h_one ↔ x ∈ s :=
   Iff.rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_set_mk` / 定理 `coe_set_mk`
-
-English:
-theorem coe_set_mk
-  given: {s : Subsemigroup M} (h_one)
-  statement: (mk s h_one : Set M) = s
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_set_mk
-  条件: {s : 子半群 M} (h_one)
-  结论: (mk s h_one : 集合 M) = s
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.coe_set_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_set_mk {s : Subsemigroup M} (h_one) : (mk s h_one : Set M) = s
+参数：h_one。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_set_mk {s : Subsemigroup M} (h_one) : (mk s h_one : Set M) = s :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  given: {s t : Subsemigroup M} (h_one) (h_one')
-  statement: mk s h_one <= mk t h_one' ↔ s <= t
-  proof: Iff.rfl
-
-中文:
-定理 mk_le_mk
-  条件: {s t : 子半群 M} (h_one) (h_one')
-  结论: mk s h_one <= mk t h_one' ↔ s <= t
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submonoid.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mk_le_mk {s t : Subsemigroup M} (h_one) (h_one') : mk s h_one <= mk t h_on
+e' ↔ s <= t
+参数：h_one；h_one'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mk_le_mk {s t : Subsemigroup M} (h_one) (h_one') : mk s h_one <= mk t h_one' ↔ s <= t :=
+theorem mk_le_mk {s t : Subsemigroup M} (h_one) (h_one') : mk s h_one ≤ mk t h_one' ↔ s ≤ t :=
   Iff.rfl
 
 /-- Two submonoids are equal if they have the same elements. -/
 @[to_additive (attr := ext) /-- Two `AddSubmonoid`s are equal if they have the same elements. -/]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**Submonoid.ext** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) : S = T
+参数：h : forall x, x in S ↔ x in T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 
-English:
-theorem ext
-  given: {S T : Submonoid M} (h : forall x, x in S ↔ x in T)
-  statement: S = T
-  proof: SetLike.ext h
-
-中文:
-定理 ext
-  条件: {S T : 子幺半群 M} (h : 对任意 x, x in S ↔ x in T)
-  结论: S = T
-  证明: SetLike.ext h
-
-Depends on / 依赖: SetLike, SetLike.ext
+--- 原说明 ---
+Two submonoids are equal if they have the same elements.
 -/
-theorem ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) : S = T :=
+theorem ext {S T : Submonoid M} (h : ∀ x, x ∈ S ↔ x ∈ T) : S = T :=
   SetLike.ext h
 
 /-- Copy a submonoid replacing `carrier` with a set that is equal to it. -/
 @[to_additive /-- Copy an additive submonoid replacing `carrier` with a set that is equal to it. -/]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**Submonoid.copy** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：{M : Type u_1} → [inst : MulOneClass M] → (S : Submonoid M) → (s : Set M) 
+→ s = ↑S → Submonoid M
+参数：S : Submonoid M；s : Set M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (S : Submonoid M) (s : Set M) (hs : s = S)
-  body: s
-  one_mem' := show 1 in s from hs.symm ▸ S.one_mem'
-  mul_mem' := hs.symm ▸ S.mul_mem'
-
-中文:
-定义 copy
-  签名: (S : 子幺半群 M) (s : 集合 M) (hs : s = S)
-  定义体: s
-  one_mem' := show 1 in s from hs.symm ▸ S.one_mem'
-  mul_mem' := hs.symm ▸ S.mul_mem'
+--- 原说明 ---
+Copy a submonoid replacing `carrier` with a set that is equal to it.
 -/
 protected def copy (S : Submonoid M) (s : Set M) (hs : s = S) : Submonoid M where
   carrier := s
-  one_mem' := show 1 in s from hs.symm ▸ S.one_mem'
+  one_mem' := show 1 ∈ s from hs.symm ▸ S.one_mem'
   mul_mem' := hs.symm ▸ S.mul_mem'
 
 variable {S : Submonoid M}
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: {s : Set M} (hs : s = S)
-  statement: (S.copy s hs : Set M) = s
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_copy
-  条件: {s : 集合 M} (hs : s = S)
-  结论: (S.copy s hs : 集合 M) = s
-  证明: rfl
-
-@[to_additive]
+/-
+**Submonoid.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_copy {s : Set M} (hs : s = S) : (S.copy s hs : Set M) = s
+参数：hs : s = S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_copy {s : Set M} (hs : s = S) : (S.copy s hs : Set M) = s :=
   rfl
 
 @[to_additive]
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: {s : Set M} (hs : s = S)
-  statement: S.copy s hs = S
-  proof: SetLike.coe_injective hs
-
-中文:
-定理 copy_eq
-  条件: {s : 集合 M} (hs : s = S)
-  结论: S.copy s hs = S
-  证明: SetLike.coe_injective hs
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**Submonoid.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：copy_eq {s : Set M} (hs : s = S) : S.copy s hs = S
+参数：hs : s = S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem copy_eq {s : Set M} (hs : s = S) : S.copy s hs = S :=
   SetLike.coe_injective hs
@@ -609,257 +413,164 @@ variable (S)
 
 /-- A submonoid contains the monoid's 1. -/
 @[to_additive /-- An `AddSubmonoid` contains the monoid's 0. -/]
-/--
-theorem `one_mem` / 定理 `one_mem`
+/-
+**Submonoid.one_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoid M), 1 ∈ S
+参数：S : Submonoid M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 
-English:
-theorem one_mem
-  statement: (1 : M) in S
-  proof: one_mem S
-
-中文:
-定理 one_mem
-  结论: (1 : M) in S
-  证明: one_mem S
+--- 原说明 ---
+A submonoid contains the monoid's 1.
 -/
-protected theorem one_mem : (1 : M) in S :=
+protected theorem one_mem : (1 : M) ∈ S :=
   one_mem S
 
 /-- A submonoid is closed under multiplication. -/
 @[to_additive /-- An `AddSubmonoid` is closed under addition. -/]
-/--
-theorem `mul_mem` / 定理 `mul_mem`
+/-
+**Submonoid.mul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoid M) {x y : M}, x ∈ S
+ → y ∈ S → x * y ∈ S
+参数：S : Submonoid M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 
-English:
-theorem mul_mem
-  given: {x y : M}
-  statement: x in S -> y in S -> x * y in S
-  proof: mul_mem
-
-中文:
-定理 mul_mem
-  条件: {x y : M}
-  结论: x in S -> y in S -> x * y in S
-  证明: mul_mem
+--- 原说明 ---
+A submonoid is closed under multiplication.
 -/
-protected theorem mul_mem {x y : M} : x in S -> y in S -> x * y in S :=
+protected theorem mul_mem {x y : M} : x ∈ S → y ∈ S → x * y ∈ S :=
   mul_mem
 
 /-- The submonoid `M` of the monoid `M`. -/
 @[to_additive /-- The additive submonoid `M` of the `AddMonoid M`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Top (Submonoid M)
-  body: ⟨{ carrier := Set.univ
-      one_mem' := Set.mem_univ 1
-      mul_mem' := fun _ _ => Set.mem_univ _ }⟩
-
-中文:
-实例 :
-  签名: 顶元素 (子幺半群 M)
-  定义体: ⟨{ carrier := Set.univ
-      one_mem' := Set.mem_univ 1
-      mul_mem' := fun _ _ => Set.mem_univ _ }⟩
-
-Depends on / 依赖: Set.mem_univ, Set.univ, carrier, mem_univ, mul_mem, one_mem
+--- 原说明 ---
+The submonoid `M` of the monoid `M`.
 -/
 instance : Top (Submonoid M) :=
-  ⟨{ carrier := Set.univ
+  ⟨{  carrier := Set.univ
       one_mem' := Set.mem_univ 1
       mul_mem' := fun _ _ => Set.mem_univ _ }⟩
 
 /-- The trivial submonoid `{1}` of a monoid `M`. -/
 @[to_additive /-- The trivial `AddSubmonoid` `{0}` of an `AddMonoid` `M`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Bot (Submonoid M)
-  body: ⟨{ carrier := {1}
-      one_mem' := Set.mem_singleton 1
-      mul_mem' := fun ha hb => by
-        push _ in _ at *
-        rw [ha]; rw [hb]; rw [mul_one] }⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 底元素 (子幺半群 M)
-  定义体: ⟨{ carrier := {1}
-      one_mem' := Set.mem_singleton 1
-      mul_mem' := fun ha hb => by
-        push _ in _ at *
-        rw [ha]; rw [hb]; rw [mul_one] }⟩
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_singleton, carrier, mem_singleton, mul_mem, mul_one, one_mem
+--- 原说明 ---
+The trivial submonoid `{1}` of a monoid `M`.
 -/
 instance : Bot (Submonoid M) :=
-  ⟨{ carrier := {1}
+  ⟨{  carrier := {1}
       one_mem' := Set.mem_singleton 1
       mul_mem' := fun ha hb => by
-        push _ in _ at *
-        rw [ha]; rw [hb]; rw [mul_one] }⟩
+        push _ ∈ _ at *
+        rw [ha, hb, mul_one] }⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Submonoid M)
-  body: ⟨⊥⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 可居 (子幺半群 M)
-  定义体: ⟨⊥⟩
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Submonoid M) :=
   ⟨⊥⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_bot` / 定理 `mem_bot`
-
-English:
-theorem mem_bot
-  given: {x : M}
-  statement: x in (⊥ : Submonoid M) ↔ x = 1
-  proof: Set.mem_singleton_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_bot
-  条件: {x : M}
-  结论: x in (⊥ : 子幺半群 M) ↔ x = 1
-  证明: Set.mem_singleton_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.mem_singleton_iff, mem_singleton_iff
+/-
+**Submonoid.mem_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_bot {x : M} : x in (⊥ : Submonoid M) ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
-theorem mem_bot {x : M} : x in (⊥ : Submonoid M) ↔ x = 1 :=
+theorem mem_bot {x : M} : x ∈ (⊥ : Submonoid M) ↔ x = 1 :=
   Set.mem_singleton_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: (x : M)
-  statement: x in (⊤ : Submonoid M)
-  proof: Set.mem_univ x
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 mem_top
-  条件: (x : M)
-  结论: x in (⊤ : 子幺半群 M)
-  证明: Set.mem_univ x
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+/-
+**Submonoid.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_top (x : M) : x in (⊤ : Submonoid M)
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem mem_top (x : M) : x in (⊤ : Submonoid M) :=
+theorem mem_top (x : M) : x ∈ (⊤ : Submonoid M) :=
   Set.mem_univ x
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : Submonoid M) : Set M) = Set.univ
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_top
-  结论: ((⊤ : 子幺半群 M) : 集合 M) = 集合.univ
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Submonoid.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_top : ((⊤ : Submonoid M) : Set M) = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : Submonoid M) : Set M) = Set.univ :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ((⊥ : Submonoid M) : Set M) = {1}
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_bot
-  结论: ((⊥ : 子幺半群 M) : 集合 M) = {1}
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_bot : ((⊥ : Submonoid M) : Set M) = {1}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : ((⊥ : Submonoid M) : Set M) = {1} :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_eq_top` / 引理 `mk_eq_top`
-
-English:
-lemma mk_eq_top
-  given: (toSubsemigroup : Subsemigroup M) (one_mem')
-  proof: by simp [← SetLike.coe_set_eq]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_eq_top
-  条件: (toSubsemigroup : 子半群 M) (one_mem')
-  证明: by simp [← SetLike.coe_set_eq]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
+/-
+**Submonoid.mk_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：mk_eq_top (toSubsemigroup : Subsemigroup M) (one_mem') : mk toSubsemigroup
+ one_mem' = ⊤ ↔ toSubsemigroup = ⊤
+参数：toSubsemigroup : Subsemigroup M；one_mem'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mk_eq_top (toSubsemigroup : Subsemigroup M) (one_mem') :
     mk toSubsemigroup one_mem' = ⊤ ↔ toSubsemigroup = ⊤ := by simp [← SetLike.coe_set_eq]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_eq_bot` / 引理 `mk_eq_bot`
-
-English:
-lemma mk_eq_bot
-  given: (toSubsemigroup : Subsemigroup M) (one_mem')
-  proof: by
-  simp [← SetLike.coe_set_eq]
-
-中文:
-引理 mk_eq_bot
-  条件: (toSubsemigroup : 子半群 M) (one_mem')
-  证明: by
-  simp [← SetLike.coe_set_eq]
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
+/-
+**Submonoid.mk_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：mk_eq_bot (toSubsemigroup : Subsemigroup M) (one_mem') : mk toSubsemigroup
+ one_mem' = ⊥ ↔ (toSubsemigroup : Set M) = {1}
+参数：toSubsemigroup : Subsemigroup M；one_mem'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mk_eq_bot (toSubsemigroup : Subsemigroup M) (one_mem') :
     mk toSubsemigroup one_mem' = ⊥ ↔ (toSubsemigroup : Set M) = {1} := by
@@ -867,146 +578,90 @@ lemma mk_eq_bot (toSubsemigroup : Subsemigroup M) (one_mem') :
 
 /-- The inf of two submonoids is their intersection. -/
 @[to_additive /-- The inf of two `AddSubmonoid`s is their intersection. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (Submonoid M)
-  body: ⟨fun S₁ S₂ =>
-    { carrier := S₁ inter S₂
-      one_mem' := ⟨S₁.one_mem, S₂.one_mem⟩
-      mul_mem' := fun ⟨hx, hx'⟩ ⟨hy, hy'⟩ => ⟨S₁.mul_mem hx hy, S₂.mul_mem hx' hy'⟩ }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 最小值 (子幺半群 M)
-  定义体: ⟨fun S₁ S₂ =>
-    { carrier := S₁ inter S₂
-      one_mem' := ⟨S₁.one_mem, S₂.one_mem⟩
-      mul_mem' := fun ⟨hx, hx'⟩ ⟨hy, hy'⟩ => ⟨S₁.mul_mem hx hy, S₂.mul_mem hx' hy'⟩ }⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: carrier, mul_mem, one_mem
+--- 原说明 ---
+The inf of two submonoids is their intersection.
 -/
 instance : Min (Submonoid M) :=
   ⟨fun S₁ S₂ =>
-    { carrier := S₁ inter S₂
+    { carrier := S₁ ∩ S₂
       one_mem' := ⟨S₁.one_mem, S₂.one_mem⟩
       mul_mem' := fun ⟨hx, hx'⟩ ⟨hy, hy'⟩ => ⟨S₁.mul_mem hx hy, S₂.mul_mem hx' hy'⟩ }⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (p p' : Submonoid M)
-  statement: ((p ⊓ p' : Submonoid M) : Set M) = (p : Set M) inter p'
-  proof: rfl
-
-@[to_additive (attr := simp, grind =)]
-
-中文:
-定理 coe_inf
-  条件: (p p' : 子幺半群 M)
-  结论: ((p ⊓ p' : 子幺半群 M) : 集合 M) = (p : 集合 M) inter p'
-  证明: rfl
-
-@[to_additive (attr := simp, grind =)]
+/-
+**Submonoid.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_inf (p p' : Submonoid M) : ((p ⊓ p' : Submonoid M) : Set M) = (p : Set
+ M) inter p'
+参数：p p' : Submonoid M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (p p' : Submonoid M) : ((p ⊓ p' : Submonoid M) : Set M) = (p : Set M) inter p' :=
+theorem coe_inf (p p' : Submonoid M) : ((p ⊓ p' : Submonoid M) : Set M) = (p : Set M) ∩ p' :=
   rfl
 
 @[to_additive (attr := simp, grind =)]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  given: {p p' : Submonoid M} {x : M}
-  statement: x in p ⊓ p' ↔ x in p ∧ x in p'
-  proof: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_inf
-  条件: {p p' : 子幺半群 M} {x : M}
-  结论: x in p ⊓ p' ↔ x in p ∧ x in p'
-  证明: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submonoid.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_inf {p p' : Submonoid M} {x : M} : x in p ⊓ p' ↔ x in p ∧ x in p'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf {p p' : Submonoid M} {x : M} : x in p ⊓ p' ↔ x in p ∧ x in p' :=
+theorem mem_inf {p p' : Submonoid M} {x : M} : x ∈ p ⊓ p' ↔ x ∈ p ∧ x ∈ p' :=
   Iff.rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `subsingleton_iff` / 定理 `subsingleton_iff`
-
-English:
-theorem subsingleton_iff
-  statement: Subsingleton (Submonoid M) ↔ Subsingleton M
-  proof: ⟨fun _ =>
-    ⟨fun x y =>
-      have : forall i : M, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Submonoid M) ⊥ ▸ mem_top i
-      (this x).trans (this y).symm⟩,
-    fun _ => ⟨fun x y => Submonoid.ext fun i => by simp [← Subsingleton.elim 1 i]⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 subsingleton_iff
-  结论: 子单例 (子幺半群 M) ↔ 子单例 M
-  证明: ⟨fun _ =>
-    ⟨fun x y =>
-      have : forall i : M, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Submonoid M) ⊥ ▸ mem_top i
-      (this x).trans (this y).symm⟩,
-    fun _ => ⟨fun x y => Submonoid.ext fun i => by simp [← Subsingleton.elim 1 i]⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Submonoid, Submonoid.ext, Subsingleton, Subsingleton.elim, mem_bot, mem_bot.mp, mem_top
+/-
+**Submonoid.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：subsingleton_iff : Subsingleton (Submonoid M) ↔ Subsingleton M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submonoid.mem_bot`：mem_bot {x : M} : x in (⊥ : Submonoid M) ↔ x = 1
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem subsingleton_iff : Subsingleton (Submonoid M) ↔ Subsingleton M :=
   ⟨fun _ =>
     ⟨fun x y =>
-      have : forall i : M, i = 1 := fun i =>
-mem_bot.mp Subsingleton.elim (⊤ : Submonoid M) ⊥ ▸ mem_top i
+      have : ∀ i : M, i = 1 := fun i =>
+        mem_bot.mp <| Subsingleton.elim (⊤ : Submonoid M) ⊥ ▸ mem_top i
       (this x).trans (this y).symm⟩,
-    fun _ => ⟨fun x y => Submonoid.ext fun i => by simp [← Subsingleton.elim 1 i]⟩⟩
+    fun _ ↦ ⟨fun x y ↦ Submonoid.ext fun i ↦ by simp [← Subsingleton.elim 1 i]⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `nontrivial_iff` / 定理 `nontrivial_iff`
-
-English:
-theorem nontrivial_iff
-  statement: Nontrivial (Submonoid M) ↔ Nontrivial M
-  proof: not_iff_not.mp
-    ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
-      not_nontrivial_iff_subsingleton.symm)
-
-@[to_additive]
-
-中文:
-定理 nontrivial_iff
-  结论: 非平凡 (子幺半群 M) ↔ 非平凡 M
-  证明: not_iff_not.mp
-    ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
-      not_nontrivial_iff_subsingleton.symm)
-
-@[to_additive]
-
-Depends on / 依赖: not_iff_not, not_iff_not.mp, not_nontrivial_iff_subsingleton, not_nontrivial_iff_subsingleton.symm, not_nontrivial_iff_subsingleton.trans, subsingleton_iff
+/-
+**Submonoid.nontrivial_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：nontrivial_iff : Nontrivial (Submonoid M) ↔ Nontrivial M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `not_nontrivial_iff_subsingleton`：not_nontrivial_iff_subsingleton : ¬Nont
+rivial α ↔ Subsingleton α
+· 使用定理 `Submonoid.subsingleton_iff`：subsingleton_iff : Subsingleton (Submonoid M
+) ↔ Subsingleton M
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 -/
 theorem nontrivial_iff : Nontrivial (Submonoid M) ↔ Nontrivial M :=
   not_iff_not.mp
@@ -1014,43 +669,17 @@ theorem nontrivial_iff : Nontrivial (Submonoid M) ↔ Nontrivial M :=
       not_nontrivial_iff_subsingleton.symm)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: M] : Unique (Submonoid M)
-  body: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
-
-@[to_additive]
-
-中文:
-实例 [子单例
-  签名: M] : 唯一 (子幺半群 M)
-  定义体: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, subsingleton_iff, subsingleton_iff.mpr
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton M] : Unique (Submonoid M) :=
   ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: M] : Nontrivial (Submonoid M)
-  body: nontrivial_iff.mpr ‹_›
-
-中文:
-实例 [非平凡
-  签名: M] : 非平凡 (子幺半群 M)
-  定义体: nontrivial_iff.mpr ‹_›
-
-Depends on / 依赖: nontrivial_iff, nontrivial_iff.mpr
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial M] : Nontrivial (Submonoid M) :=
   nontrivial_iff.mpr ‹_›
@@ -1065,98 +694,57 @@ open Submonoid
 
 /-- The submonoid of elements `x : M` such that `f x = g x` -/
 @[to_additive /-- The additive submonoid of elements `x : M` such that `f x = g x` -/]
-/--
-Definition of `eqLocusM` / `eqLocusM` 的定义
+/-
+**MonoidHom.eqLocusM** 是 Mathlib 中的一个定义，位于命名空间 `MonoidHom`。
+形式化陈述：eqLocusM (f g : M ->* N) : Submonoid M where carrier
+参数：f g : M ->* N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eqLocusM
-  signature: (f g : M ->* N)
-  body: { x | f x = g x }
-  one_mem' := by rw [Set.mem_ofPred_eq, f.map_one, g.map_one]
-  mul_mem' (hx : _ = _) (hy : _ = _) := by simp [*]
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 eqLocusM
-  签名: (f g : M ->* N)
-  定义体: { x | f x = g x }
-  one_mem' := by rw [Set.mem_ofPred_eq, f.map_one, g.map_one]
-  mul_mem' (hx : _ = _) (hy : _ = _) := by simp [*]
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The submonoid of elements `x : M` such that `f x = g x`
 -/
-def eqLocusM (f g : M ->* N) : Submonoid M where
+def eqLocusM (f g : M →* N) : Submonoid M where
   carrier := { x | f x = g x }
   one_mem' := by rw [Set.mem_ofPred_eq, f.map_one, g.map_one]
   mul_mem' (hx : _ = _) (hy : _ = _) := by simp [*]
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_eqLocusM` / 定理 `mem_eqLocusM`
-
-English:
-theorem mem_eqLocusM
-  given: {f g : M ->* N} {x : M}
-  statement: x in f.eqLocusM g ↔ f x = g x
-  proof: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_eqLocusM
-  条件: {f g : M ->* N} {x : M}
-  结论: x in f.eqLocusM g ↔ f x = g x
-  证明: Iff.rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**MonoidHom.mem_eqLocusM** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：mem_eqLocusM {f g : M ->* N} {x : M} : x in f.eqLocusM g ↔ f x = g x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_eqLocusM {f g : M ->* N} {x : M} : x in f.eqLocusM g ↔ f x = g x := Iff.rfl
+theorem mem_eqLocusM {f g : M →* N} {x : M} : x ∈ f.eqLocusM g ↔ f x = g x := Iff.rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `eqLocusM_same` / 定理 `eqLocusM_same`
-
-English:
-theorem eqLocusM_same
-  given: (f : M ->* N)
-  statement: f.eqLocusM f = ⊤
-  proof: SetLike.ext fun _ => eq_self_iff_true _
-
-@[to_additive]
-
-中文:
-定理 eqLocusM_same
-  条件: (f : M ->* N)
-  结论: f.eqLocusM f = ⊤
-  证明: SetLike.ext fun _ => eq_self_iff_true _
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.ext, eq_self_iff_true
+/-
+**MonoidHom.eqLocusM_same** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：eqLocusM_same (f : M ->* N) : f.eqLocusM f = ⊤
+参数：f : M ->* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `eq_self_iff_true`：∀ {α : Sort u_1} (a : α), a = a ↔ True
 -/
-theorem eqLocusM_same (f : M ->* N) : f.eqLocusM f = ⊤ :=
+theorem eqLocusM_same (f : M →* N) : f.eqLocusM f = ⊤ :=
   SetLike.ext fun _ => eq_self_iff_true _
 
 @[to_additive]
-/--
-theorem `eq_of_eqOn_topM` / 定理 `eq_of_eqOn_topM`
-
-English:
-theorem eq_of_eqOn_topM
-  given: {f g : M ->* N} (h : Set.EqOn f g (⊤ : Submonoid M))
-  statement: f = g
-  proof: ext fun _ => h trivial
-
-中文:
-定理 eq_of_eqOn_topM
-  条件: {f g : M ->* N} (h : 集合.EqOn f g (⊤ : 子幺半群 M))
-  结论: f = g
-  证明: ext fun _ => h trivial
+/-
+**MonoidHom.eq_of_eqOn_topM** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：eq_of_eqOn_topM {f g : M ->* N} (h : Set.EqOn f g (⊤ : Submonoid M)) : f =
+ g
+参数：h : Set.EqOn f g (⊤ : Submonoid M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `trivial`：True
 -/
-theorem eq_of_eqOn_topM {f g : M ->* N} (h : Set.EqOn f g (⊤ : Submonoid M)) : f = g :=
+theorem eq_of_eqOn_topM {f g : M →* N} (h : Set.EqOn f g (⊤ : Submonoid M)) : f = g :=
   ext fun _ => h trivial
 
 end MonoidHom
@@ -1169,41 +757,26 @@ variable {A M₁ : Type*} [SetLike A M₁] [One M₁] [hA : OneMemClass A M₁] 
 
 /-- A submonoid of a monoid inherits a 1. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits a zero. -/]
-/--
-Instance `one` / 实例 `one`
+/-
+**OneMemClass.one** 是 Mathlib 中的一个实例，位于命名空间 `OneMemClass`。
+形式化陈述：one : One S'
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
 
-English:
-instance one
-  signature: : One S'
-  body: ⟨⟨1, OneMemClass.one_mem S'⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 one
-  签名: : 幺 S'
-  定义体: ⟨⟨1, OneMemClass.one_mem S'⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: OneMemClass, OneMemClass.one_mem, one_mem
+--- 原说明 ---
+A submonoid of a monoid inherits a 1.
 -/
 instance one : One S' :=
   ⟨⟨1, OneMemClass.one_mem S'⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : S') : M₁) = 1
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ((1 : S') : M₁) = 1
-  证明: rfl
+/-
+**OneMemClass.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `OneMemClass`。
+形式化陈述：coe_one : ((1 : S') : M₁) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ((1 : S') : M₁) = 1 :=
   rfl
@@ -1211,22 +784,14 @@ theorem coe_one : ((1 : S') : M₁) = 1 :=
 variable {S'}
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_eq_one` / 定理 `coe_eq_one`
-
-English:
-theorem coe_eq_one
-  given: {x : S'}
-  statement: (↑x : M₁) = 1 ↔ x = 1
-  proof: (Subtype.ext_iff.symm : (x : M₁) = (1 : S') ↔ x = 1)
-
-中文:
-定理 coe_eq_one
-  条件: {x : S'}
-  结论: (↑x : M₁) = 1 ↔ x = 1
-  证明: (Subtype.ext_iff.symm : (x : M₁) = (1 : S') ↔ x = 1)
-
-Depends on / 依赖: Subtype, Subtype.ext_iff.symm, ext_iff
+/-
+**OneMemClass.coe_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `OneMemClass`。
+形式化陈述：coe_eq_one {x : S'} : (↑x : M₁) = 1 ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
 theorem coe_eq_one {x : S'} : (↑x : M₁) = 1 ↔ x = 1 :=
   (Subtype.ext_iff.symm : (x : M₁) = (1 : S') ↔ x = 1)
@@ -1234,18 +799,11 @@ theorem coe_eq_one {x : S'} : (↑x : M₁) = 1 ↔ x = 1 :=
 variable (S')
 
 @[to_additive]
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : S') = ⟨1, OneMemClass.one_mem S'⟩
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : S') = ⟨1, OneMem类.one_mem S'⟩
-  证明: rfl
+/-
+**OneMemClass.one_def** 是 Mathlib 中的一个定理，位于命名空间 `OneMemClass`。
+形式化陈述：one_def : (1 : S') = ⟨1, OneMemClass.one_mem S'⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : S') = ⟨1, OneMemClass.one_mem S'⟩ :=
   rfl
@@ -1258,82 +816,74 @@ namespace SubmonoidClass
 
 /-- A submonoid of a monoid inherits a power operator. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits a scalar multiplication. -/]
-/--
-Instance `instPow` / 实例 `instPow`
+/-
+**SubmonoidClass.instPow** 是 Mathlib 中的一个实例，位于命名空间 `SubmonoidClass`。
+形式化陈述：instPow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] (S :
+ A) : Pow S Nat
+参数：S : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instPow
-  signature: {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] (S : A)
-  body: ⟨fun a n => ⟨a.1 ^ n, pow_mem a.2 n⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instPow
-  签名: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] (S : A)
-  定义体: ⟨fun a n => ⟨a.1 ^ n, pow_mem a.2 n⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: pow_mem
+--- 原说明 ---
+A submonoid of a monoid inherits a power operator.
 -/
-instance instPow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] (S : A) : Pow S Nat :=
+instance instPow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] (S : A) : Pow S ℕ :=
   ⟨fun a n => ⟨a.1 ^ n, pow_mem a.2 n⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  statement: {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : A} (x : S)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_pow
-  结论: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] {S : A} (x : S)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**SubmonoidClass.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `SubmonoidClass`。
+形式化陈述：coe_pow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S :
+ A} (x : S) (n : Nat) : ↑(x ^ n) = (x : M) ^ n
+参数：x : S；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_pow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : A} (x : S)
-    (n : Nat) : ↑(x ^ n) = (x : M) ^ n :=
+    (n : ℕ) : ↑(x ^ n) = (x : M) ^ n :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_pow` / 定理 `mk_pow`
-
-English:
-theorem mk_pow
-  statement: {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : A} (x : M)
-  proof: rfl
-
-中文:
-定理 mk_pow
-  结论: {M} [幺半群 M] {A : 类型} [集合状 A M] [子幺半群类 A M] {S : A} (x : M)
-  证明: rfl
+/-
+**SubmonoidClass.mk_pow** 是 Mathlib 中的一个定理，位于命名空间 `SubmonoidClass`。
+形式化陈述：mk_pow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : 
+A} (x : M) (hx : x in S) (n : Nat) : (⟨x, hx⟩ : S) ^ n = ⟨x ^ n, pow_mem hx n⟩
+参数：x : M；hx : x in S；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_pow {M} [Monoid M] {A : Type*} [SetLike A M] [SubmonoidClass A M] {S : A} (x : M)
-    (hx : x in S) (n : Nat) : (⟨x, hx⟩ : S) ^ n = ⟨x ^ n, pow_mem hx n⟩ :=
+    (hx : x ∈ S) (n : ℕ) : (⟨x, hx⟩ : S) ^ n = ⟨x ^ n, pow_mem hx n⟩ :=
   rfl
 
 -- Prefer subclasses of `Monoid` over subclasses of `SubmonoidClass`.
 /-- A submonoid of a unital magma inherits a unital magma structure. -/
 @[to_additive
   /-- An `AddSubmonoid` of a unital additive magma inherits a unital additive magma structure. -/]
+/-
+**SubmonoidClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubmonoidClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 75) toMulOneClass {M : Type*} [MulOneClass M] {A : Type*} [SetLike A M]
     [SubmonoidClass A M] (S : A) : MulOneClass S := fast_instance%
   Subtype.coe_injective.mulOneClass Subtype.val rfl (fun _ _ => rfl)
-
+/-
+**SubmonoidClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubmonoidClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : A) [IsDedekindFiniteMonoid M] : IsDedekindFiniteMonoid S where
   mul_eq_one_symm eq := Subtype.ext (mul_eq_one_symm <| congr_arg (·.1) eq)
 
 -- Prefer subclasses of `Monoid` over subclasses of `SubmonoidClass`.
 /-- A submonoid of a monoid inherits a monoid structure. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits an `AddMonoid` structure. -/]
+/-
+**SubmonoidClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubmonoidClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A submonoid of a monoid inherits a monoid structure.
+-/
 instance (priority := 75) toMonoid {M : Type*} [Monoid M] {A : Type*} [SetLike A M]
     [SubmonoidClass A M] (S : A) : Monoid S := fast_instance%
   Subtype.coe_injective.monoid Subtype.val rfl (fun _ _ => rfl) (fun _ _ => rfl)
@@ -1341,89 +891,64 @@ instance (priority := 75) toMonoid {M : Type*} [Monoid M] {A : Type*} [SetLike A
 -- Prefer subclasses of `Monoid` over subclasses of `SubmonoidClass`.
 /-- A submonoid of a `CommMonoid` is a `CommMonoid`. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddCommMonoid` is an `AddCommMonoid`. -/]
+/-
+**SubmonoidClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubmonoidClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A submonoid of a `CommMonoid` is a `CommMonoid`.
+-/
 instance (priority := 75) toCommMonoid {M} [CommMonoid M] {A : Type*} [SetLike A M]
     [SubmonoidClass A M] (S : A) : CommMonoid S := fast_instance%
   Subtype.coe_injective.commMonoid Subtype.val rfl (fun _ _ => rfl) fun _ _ => rfl
 
 /-- The natural monoid hom from a submonoid of monoid `M` to `M`. -/
 @[to_additive /-- The natural monoid hom from an `AddSubmonoid` of `AddMonoid` `M` to `M`. -/]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**SubmonoidClass.subtype** 是 Mathlib 中的一个定义，位于命名空间 `SubmonoidClass`。
+形式化陈述：subtype : S' ->* M where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: : S' ->* M where
-  body: Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
-
-中文:
-定义 subtype
-  签名: : S' ->* M where
-  定义体: Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
-
-Depends on / 依赖: Subtype, Subtype.val, map_mul, map_one
+--- 原说明 ---
+The natural monoid hom from a submonoid of monoid `M` to `M`.
 -/
-def subtype : S' ->* M where
+def subtype : S' →* M where
   toFun := Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
 
 variable {S'} in
 @[to_additive (attr := simp)]
-/--
-lemma `subtype_apply` / 引理 `subtype_apply`
-
-English:
-lemma subtype_apply
-  given: (x : S')
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 subtype_apply
-  条件: (x : S')
-  证明: rfl
-
-@[to_additive]
+/-
+**SubmonoidClass.subtype_apply** 是 Mathlib 中的一个引理，位于命名空间 `SubmonoidClass`。
+形式化陈述：subtype_apply (x : S') : SubmonoidClass.subtype S' x = x
+参数：x : S'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma subtype_apply (x : S') :
     SubmonoidClass.subtype S' x = x := rfl
 
 @[to_additive]
-/--
-lemma `subtype_injective` / 引理 `subtype_injective`
-
-English:
-lemma subtype_injective
-  proof: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 subtype_injective
-  证明: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**SubmonoidClass.subtype_injective** 是 Mathlib 中的一个引理，位于命名空间 `SubmonoidClass`。
+形式化陈述：subtype_injective : Function.Injective (SubmonoidClass.subtype S')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 lemma subtype_injective :
     Function.Injective (SubmonoidClass.subtype S') :=
   Subtype.coe_injective
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_subtype` / 定理 `coe_subtype`
-
-English:
-theorem coe_subtype
-  statement: (SubmonoidClass.subtype S' : S' -> M) = Subtype.val
-  proof: rfl
-
-中文:
-定理 coe_subtype
-  结论: (子幺半群类.subtype S' : S' -> M) = 子类型.val
-  证明: rfl
+/-
+**SubmonoidClass.coe_subtype** 是 Mathlib 中的一个定理，位于命名空间 `SubmonoidClass`。
+形式化陈述：coe_subtype : (SubmonoidClass.subtype S' : S' -> M) = Subtype.val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_subtype : (SubmonoidClass.subtype S' : S' -> M) = Subtype.val :=
+theorem coe_subtype : (SubmonoidClass.subtype S' : S' → M) = Subtype.val :=
   rfl
 
 end SubmonoidClass
@@ -1434,174 +959,101 @@ variable {M : Type*} [MulOneClass M] (S : Submonoid M)
 
 /-- A submonoid of a monoid inherits a multiplication. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits an addition. -/]
-/--
-Instance `mul` / 实例 `mul`
+/-
+**Submonoid.mul** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：mul : Mul S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mul
-  signature: : Mul S
-  body: ⟨fun a b => ⟨a.1 * b.1, S.mul_mem a.2 b.2⟩⟩
-
-中文:
-实例 mul
-  签名: : 乘法 S
-  定义体: ⟨fun a b => ⟨a.1 * b.1, S.mul_mem a.2 b.2⟩⟩
-
-Depends on / 依赖: S.mul_mem, mul_mem
+--- 原说明 ---
+A submonoid of a monoid inherits a multiplication.
 -/
 instance mul : Mul S :=
   ⟨fun a b => ⟨a.1 * b.1, S.mul_mem a.2 b.2⟩⟩
 
 /-- A submonoid of a monoid inherits a 1. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits a zero. -/]
-/--
-Instance `one` / 实例 `one`
+/-
+**Submonoid.one** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：one : One S
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.one_mem`：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoi
+d M), 1 ∈ S
 
-English:
-instance one
-  signature: : One S
-  body: ⟨⟨_, S.one_mem⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 one
-  签名: : 幺 S
-  定义体: ⟨⟨_, S.one_mem⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: S.one_mem, one_mem
+--- 原说明 ---
+A submonoid of a monoid inherits a 1.
 -/
 instance one : One S :=
   ⟨⟨_, S.one_mem⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : S)
-  statement: (↑(x * y) : M) = ↑x * ↑y
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_mul
-  条件: (x y : S)
-  结论: (↑(x * y) : M) = ↑x * ↑y
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Submonoid.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_mul (x y : S) : (↑(x * y) : M) = ↑x * ↑y
+参数：x y : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : S) : (↑(x * y) : M) = ↑x * ↑y :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : S) : M) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_one
-  结论: ((1 : S) : M) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_one : ((1 : S) : M) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ((1 : S) : M) = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_eq_one` / 引理 `mk_eq_one`
-
-English:
-lemma mk_eq_one
-  given: {a : M} {ha}
-  statement: (⟨a, ha⟩ : S) = 1 ↔ a = 1
-  proof: by simp [← SetLike.coe_eq_coe]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_eq_one
-  条件: {a : M} {ha}
-  结论: (⟨a, ha⟩ : S) = 1 ↔ a = 1
-  证明: by simp [← SetLike.coe_eq_coe]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SetLike, SetLike.coe_eq_coe, coe_eq_coe
+/-
+**Submonoid.mk_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：mk_eq_one {a : M} {ha} : (⟨a, ha⟩ : S) = 1 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mk_eq_one {a : M} {ha} : (⟨a, ha⟩ : S) = 1 ↔ a = 1 := by simp [← SetLike.coe_eq_coe]
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_mul_mk` / 定理 `mk_mul_mk`
-
-English:
-theorem mk_mul_mk
-  given: (x y : M) (hx : x in S) (hy : y in S)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk_mul_mk
-  条件: (x y : M) (hx : x in S) (hy : y in S)
-  证明: rfl
-
-@[to_additive]
+/-
+**Submonoid.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mk_mul_mk (x y : M) (hx : x in S) (hy : y in S) : (⟨x, hx⟩ : S) * ⟨y, hy⟩ 
+= ⟨x * y, S.mul_mem hx hy⟩
+参数：x y : M；hx : x in S；hy : y in S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_mul_mk (x y : M) (hx : x in S) (hy : y in S) :
+theorem mk_mul_mk (x y : M) (hx : x ∈ S) (hy : y ∈ S) :
     (⟨x, hx⟩ : S) * ⟨y, hy⟩ = ⟨x * y, S.mul_mem hx hy⟩ :=
   rfl
 
 @[to_additive]
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (x y : S)
-  statement: x * y = ⟨x * y, S.mul_mem x.2 y.2⟩
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_def
-  条件: (x y : S)
-  结论: x * y = ⟨x * y, S.mul_mem x.2 y.2⟩
-  证明: rfl
-
-@[to_additive]
+/-
+**Submonoid.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mul_def (x y : S) : x * y = ⟨x * y, S.mul_mem x.2 y.2⟩
+参数：x y : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (x y : S) : x * y = ⟨x * y, S.mul_mem x.2 y.2⟩ :=
   rfl
 
 @[to_additive]
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : S) = ⟨1, S.one_mem⟩
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : S) = ⟨1, S.one_mem⟩
-  证明: rfl
+/-
+**Submonoid.one_def** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：one_def : (1 : S) = ⟨1, S.one_mem⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : S) = ⟨1, S.one_mem⟩ :=
   rfl
@@ -1609,170 +1061,113 @@ theorem one_def : (1 : S) = ⟨1, S.one_mem⟩ :=
 /-- A submonoid of a unital magma inherits a unital magma structure. -/
 @[to_additive
   /-- An `AddSubmonoid` of a unital additive magma inherits a unital additive magma structure. -/]
-/--
-Instance `toMulOneClass` / 实例 `toMulOneClass`
-
-English:
-instance toMulOneClass
-  signature: {M : Type*} [MulOneClass M] (S : Submonoid M)
-  body: SubmonoidClass.toMulOneClass S
-
-@[to_additive]
-
-中文:
-实例 toMulOneClass
-  签名: {M : 类型} [MulOne类 M] (S : 子幺半群 M)
-  定义体: SubmonoidClass.toMulOneClass S
-
-@[to_additive]
-
-Depends on / 依赖: SubmonoidClass, SubmonoidClass.toMulOneClass, toMulOneClass
+/-
+**Submonoid.toMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：toMulOneClass {M : Type*} [MulOneClass M] (S : Submonoid M) : MulOneClass 
+S
+参数：S : Submonoid M。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
 instance toMulOneClass {M : Type*} [MulOneClass M] (S : Submonoid M) : MulOneClass S :=
   SubmonoidClass.toMulOneClass S
 
 @[to_additive]
-/--
-theorem `pow_mem` / 定理 `pow_mem`
-
-English:
-theorem pow_mem
-  given: {M : Type*} [Monoid M] (S : Submonoid M) {x : M} (hx : x in S) (n : Nat)
-  proof: pow_mem hx n
-
-中文:
-定理 pow_mem
-  条件: {M : 类型} [幺半群 M] (S : 子幺半群 M) {x : M} (hx : x in S) (n : 自然数)
-  证明: pow_mem hx n
+/-
+**Submonoid.pow_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {M : Type u_5} [inst : Monoid M] (S : Submonoid M) {x : M}, x ∈ S → ∀ (n
+ : ℕ), x ^ n ∈ S
+参数：S : Submonoid M；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
-protected theorem pow_mem {M : Type*} [Monoid M] (S : Submonoid M) {x : M} (hx : x in S) (n : Nat) :
-    x ^ n in S :=
+protected theorem pow_mem {M : Type*} [Monoid M] (S : Submonoid M) {x : M} (hx : x ∈ S) (n : ℕ) :
+    x ^ n ∈ S :=
   pow_mem hx n
 
 /-- A submonoid of a monoid inherits a monoid structure. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddMonoid` inherits an `AddMonoid` structure. -/]
-/--
-Instance `toMonoid` / 实例 `toMonoid`
+/-
+**Submonoid.toMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：toMonoid {M : Type*} [Monoid M] (S : Submonoid M) : Monoid S
+参数：S : Submonoid M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toMonoid
-  signature: {M : Type*} [Monoid M] (S : Submonoid M)
-  body: SubmonoidClass.toMonoid S
-
-中文:
-实例 toMonoid
-  签名: {M : 类型} [幺半群 M] (S : 子幺半群 M)
-  定义体: SubmonoidClass.toMonoid S
-
-Depends on / 依赖: SubmonoidClass, SubmonoidClass.toMonoid, toMonoid
+--- 原说明 ---
+A submonoid of a monoid inherits a monoid structure.
 -/
 instance toMonoid {M : Type*} [Monoid M] (S : Submonoid M) : Monoid S :=
   SubmonoidClass.toMonoid S
 
 /-- A submonoid of a `CommMonoid` is a `CommMonoid`. -/
 @[to_additive /-- An `AddSubmonoid` of an `AddCommMonoid` is an `AddCommMonoid`. -/]
-/--
-Instance `toCommMonoid` / 实例 `toCommMonoid`
+/-
+**Submonoid.toCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：toCommMonoid {M} [CommMonoid M] (S : Submonoid M) : CommMonoid S
+参数：S : Submonoid M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toCommMonoid
-  signature: {M} [CommMonoid M] (S : Submonoid M)
-  body: SubmonoidClass.toCommMonoid S
-
-中文:
-实例 toCommMonoid
-  签名: {M} [交换幺半群 M] (S : 子幺半群 M)
-  定义体: SubmonoidClass.toCommMonoid S
-
-Depends on / 依赖: SubmonoidClass, SubmonoidClass.toCommMonoid, toCommMonoid
+--- 原说明 ---
+A submonoid of a `CommMonoid` is a `CommMonoid`.
 -/
 instance toCommMonoid {M} [CommMonoid M] (S : Submonoid M) : CommMonoid S :=
   SubmonoidClass.toCommMonoid S
 
 /-- The natural monoid hom from a submonoid of monoid `M` to `M`. -/
 @[to_additive /-- The natural monoid hom from an `AddSubmonoid` of `AddMonoid` `M` to `M`. -/]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**Submonoid.subtype** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：subtype : S ->* M where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: : S ->* M where
-  body: Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 subtype
-  签名: : S ->* M where
-  定义体: Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subtype, Subtype.val, map_mul, map_one
+--- 原说明 ---
+The natural monoid hom from a submonoid of monoid `M` to `M`.
 -/
-def subtype : S ->* M where
+def subtype : S →* M where
   toFun := Subtype.val; map_one' := rfl; map_mul' _ _ := by simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `subtype_apply` / 引理 `subtype_apply`
-
-English:
-lemma subtype_apply
-  given: {s : Submonoid M} (x : s)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 subtype_apply
-  条件: {s : 子幺半群 M} (x : s)
-  证明: rfl
-
-@[to_additive]
+/-
+**Submonoid.subtype_apply** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：subtype_apply {s : Submonoid M} (x : s) : s.subtype x = x
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma subtype_apply {s : Submonoid M} (x : s) :
     s.subtype x = x := rfl
 
 @[to_additive]
-/--
-lemma `subtype_injective` / 引理 `subtype_injective`
-
-English:
-lemma subtype_injective
-  given: (s : Submonoid M)
-  proof: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 subtype_injective
-  条件: (s : 子幺半群 M)
-  证明: Subtype.coe_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**Submonoid.subtype_injective** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：subtype_injective (s : Submonoid M) : Function.Injective s.subtype
+参数：s : Submonoid M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 lemma subtype_injective (s : Submonoid M) :
     Function.Injective s.subtype :=
   Subtype.coe_injective
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_subtype` / 定理 `coe_subtype`
-
-English:
-theorem coe_subtype
-  statement: ⇑S.subtype = Subtype.val
-  proof: rfl
-
-中文:
-定理 coe_subtype
-  结论: ⇑S.subtype = 子类型.val
-  证明: rfl
+/-
+**Submonoid.coe_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_subtype : ⇑S.subtype = Subtype.val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_subtype : ⇑S.subtype = Subtype.val :=
   rfl
 
 end Submonoid
+

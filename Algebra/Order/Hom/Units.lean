@@ -18,40 +18,24 @@ variable {α β : Type*} [Preorder α] [Monoid α] [Preorder β] [Monoid β] (e 
 
 /-- An isomorphism of ordered monoids descends to their units. -/
 @[simps!]
-/--
-Definition of `OrderMonoidIso.unitsCongr` / `OrderMonoidIso.unitsCongr` 的定义
+/-
+**OrderMonoidIso.unitsCongr** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderMonoidIso.unitsCongr : αˣ ≃*o βˣ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderMonoidIso.unitsCongr
-  signature: : αˣ ≃*o βˣ where
-  body: Units.mapEquiv e.toMulEquiv
-  map_le_map_iff' {x y} := by simp [← Units.val_le_val]
-
-中文:
-定义 OrderMonoidIso.unitsCongr
-  签名: : αˣ ≃*o βˣ where
-  定义体: Units.mapEquiv e.toMulEquiv
-  map_le_map_iff' {x y} := by simp [← Units.val_le_val]
-
-Depends on / 依赖: Units.mapEquiv, e.toMulEquiv, mapEquiv, toMulEquiv
+--- 原说明 ---
+An isomorphism of ordered monoids descends to their units.
 -/
 def OrderMonoidIso.unitsCongr : αˣ ≃*o βˣ where
   __ := Units.mapEquiv e.toMulEquiv
   map_le_map_iff' {x y} := by simp [← Units.val_le_val]
-
-/--
-lemma `OrderMonoidIso.unitsCongr_symm_apply` / 引理 `OrderMonoidIso.unitsCongr_symm_apply`
-
-English:
-lemma OrderMonoidIso.unitsCongr_symm_apply
-  given: (x : βˣ)
-  statement: e.unitsCongr.symm x = e.symm x
-  proof: rfl
-
-中文:
-引理 OrderMonoidIso.unitsCongr_symm_apply
-  条件: (x : βˣ)
-  结论: e.unitsCongr.symm x = e.symm x
-  证明: rfl
+/-
+**OrderMonoidIso.unitsCongr_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：OrderMonoidIso.unitsCongr_symm_apply (x : βˣ) : e.unitsCongr.symm x = e.sy
+mm x
+参数：x : βˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma OrderMonoidIso.unitsCongr_symm_apply (x : βˣ) : e.unitsCongr.symm x = e.symm x := rfl

@@ -42,224 +42,266 @@ variable [LocallyFiniteOrder α]
 section SuccOrder
 variable [SuccOrder α] {a b : α}
 
+/-!
+#### Orders possibly with maximal elements
 
-/--
-lemma `Ico_succ_left_eq_Ioo` / 引理 `Ico_succ_left_eq_Ioo`
+##### Equalities of intervals
+-/
 
-English:
-lemma Ico_succ_left_eq_Ioo
-  given: (a b : α)
-  statement: Ico (succ a) b = Ioo a b
-  proof: coe_injective by simpa using Set.Ico_succ_left_eq_Ioo _ _
+/-
+**Finset.Ico_succ_left_eq_Ioo** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ico_succ_left_eq_Ioo (a b : α) : Ico (succ a) b = Ioo a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用引理 `Set.Ico_succ_left_eq_Ioo`：Ico_succ_left_eq_Ioo (a b : α) : Ico (succ a) 
+b = Ioo a b
 
-中文:
-引理 Ico_succ_left_eq_Ioo
-  条件: (a b : α)
-  结论: 左闭右开区间 (succ a) b = 开区间 a b
-  证明: coe_injective by simpa using Set.Ico_succ_left_eq_Ioo _ _
+--- 原说明 ---
+#### Orders possibly with maximal elements
 
-Depends on / 依赖: Ico_succ_left_eq_Ioo, Set.Ico_succ_left_eq_Ioo, coe_injective
+##### Equalities of intervals
 -/
 lemma Ico_succ_left_eq_Ioo (a b : α) : Ico (succ a) b = Ioo a b :=
-coe_injective by simpa using Set.Ico_succ_left_eq_Ioo _ _
-
-/--
-lemma `Icc_succ_left_eq_Ioc_of_not_isMax` / 引理 `Icc_succ_left_eq_Ioc_of_not_isMax`
-
-English:
-lemma Icc_succ_left_eq_Ioc_of_not_isMax
-  given: (ha : ¬ IsMax a) (b : α)
-  statement: Icc (succ a) b = Ioc a b
-  proof: coe_injective by simpa using Set.Icc_succ_left_eq_Ioc_of_not_isMax ha _
-
-中文:
-引理 Icc_succ_left_eq_Ioc_of_not_isMax
-  条件: (ha : ¬ IsMax a) (b : α)
-  结论: 闭区间 (succ a) b = 左开右闭区间 a b
-  证明: coe_injective by simpa using Set.Icc_succ_left_eq_Ioc_of_not_isMax ha _
-
-Depends on / 依赖: Icc_succ_left_eq_Ioc_of_not_isMax, Set.Icc_succ_left_eq_Ioc_of_not_isMax, coe_injective
+  coe_injective <| by simpa using Set.Ico_succ_left_eq_Ioo _ _
+/-
+**Finset.Icc_succ_left_eq_Ioc_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Icc_succ_left_eq_Ioc_of_not_isMax (ha : ¬ IsMax a) (b : α) : Icc (succ a) 
+b = Ioc a b
+参数：ha : ¬ IsMax a；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.Icc_succ_left_eq_Ioc_of_not_isMax`：Icc_succ_left_eq_Ioc_of_not_isMax
+ (ha : ¬ IsMax a) (b : α) : Icc (succ a) b = Ioc a b
 -/
 lemma Icc_succ_left_eq_Ioc_of_not_isMax (ha : ¬ IsMax a) (b : α) : Icc (succ a) b = Ioc a b :=
-coe_injective by simpa using Set.Icc_succ_left_eq_Ioc_of_not_isMax ha _
-
-/--
-lemma `Ico_succ_right_eq_Icc_of_not_isMax` / 引理 `Ico_succ_right_eq_Icc_of_not_isMax`
-
-English:
-lemma Ico_succ_right_eq_Icc_of_not_isMax
-  given: (hb : ¬ IsMax b) (a : α)
-  statement: Ico a (succ b) = Icc a b
-  proof: coe_injective by simpa using Set.Ico_succ_right_eq_Icc_of_not_isMax hb _
-
-中文:
-引理 Ico_succ_right_eq_Icc_of_not_isMax
-  条件: (hb : ¬ IsMax b) (a : α)
-  结论: 左闭右开区间 a (succ b) = 闭区间 a b
-  证明: coe_injective by simpa using Set.Ico_succ_right_eq_Icc_of_not_isMax hb _
-
-Depends on / 依赖: Ico_succ_right_eq_Icc_of_not_isMax, Set.Ico_succ_right_eq_Icc_of_not_isMax, coe_injective
+  coe_injective <| by simpa using Set.Icc_succ_left_eq_Ioc_of_not_isMax ha _
+/-
+**Finset.Ico_succ_right_eq_Icc_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ico_succ_right_eq_Icc_of_not_isMax (hb : ¬ IsMax b) (a : α) : Ico a (succ 
+b) = Icc a b
+参数：hb : ¬ IsMax b；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.Ico_succ_right_eq_Icc_of_not_isMax`：Ico_succ_right_eq_Icc_of_not_isM
+ax (hb : ¬ IsMax b) (a : α) : Ico a (succ b) = Icc a b
 -/
 lemma Ico_succ_right_eq_Icc_of_not_isMax (hb : ¬ IsMax b) (a : α) : Ico a (succ b) = Icc a b :=
-coe_injective by simpa using Set.Ico_succ_right_eq_Icc_of_not_isMax hb _
-
-/--
-lemma `Ioo_succ_right_eq_Ioc_of_not_isMax` / 引理 `Ioo_succ_right_eq_Ioc_of_not_isMax`
-
-English:
-lemma Ioo_succ_right_eq_Ioc_of_not_isMax
-  given: (hb : ¬ IsMax b) (a : α)
-  statement: Ioo a (succ b) = Ioc a b
-  proof: coe_injective by simpa using Set.Ioo_succ_right_eq_Ioc_of_not_isMax hb _
-
-中文:
-引理 Ioo_succ_right_eq_Ioc_of_not_isMax
-  条件: (hb : ¬ IsMax b) (a : α)
-  结论: 开区间 a (succ b) = 左开右闭区间 a b
-  证明: coe_injective by simpa using Set.Ioo_succ_right_eq_Ioc_of_not_isMax hb _
-
-Depends on / 依赖: Ioo_succ_right_eq_Ioc_of_not_isMax, Set.Ioo_succ_right_eq_Ioc_of_not_isMax, coe_injective
+  coe_injective <| by simpa using Set.Ico_succ_right_eq_Icc_of_not_isMax hb _
+/-
+**Finset.Ioo_succ_right_eq_Ioc_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioo_succ_right_eq_Ioc_of_not_isMax (hb : ¬ IsMax b) (a : α) : Ioo a (succ 
+b) = Ioc a b
+参数：hb : ¬ IsMax b；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.Ioo_succ_right_eq_Ioc_of_not_isMax`：Ioo_succ_right_eq_Ioc_of_not_isM
+ax (hb : ¬ IsMax b) (a : α) : Ioo a (succ b) = Ioc a b
 -/
 lemma Ioo_succ_right_eq_Ioc_of_not_isMax (hb : ¬ IsMax b) (a : α) : Ioo a (succ b) = Ioc a b :=
-coe_injective by simpa using Set.Ioo_succ_right_eq_Ioc_of_not_isMax hb _
-
-/--
-lemma `Ico_succ_succ_eq_Ioc_of_not_isMax` / 引理 `Ico_succ_succ_eq_Ioc_of_not_isMax`
-
-English:
-lemma Ico_succ_succ_eq_Ioc_of_not_isMax
-  given: (hb : ¬ IsMax b) (a : α)
-  proof: coe_injective by simpa using Set.Ico_succ_succ_eq_Ioc_of_not_isMax hb _
-
-中文:
-引理 Ico_succ_succ_eq_Ioc_of_not_isMax
-  条件: (hb : ¬ IsMax b) (a : α)
-  证明: coe_injective by simpa using Set.Ico_succ_succ_eq_Ioc_of_not_isMax hb _
-
-Depends on / 依赖: Ico_succ_succ_eq_Ioc_of_not_isMax, Set.Ico_succ_succ_eq_Ioc_of_not_isMax, coe_injective
+  coe_injective <| by simpa using Set.Ioo_succ_right_eq_Ioc_of_not_isMax hb _
+/-
+**Finset.Ico_succ_succ_eq_Ioc_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ico_succ_succ_eq_Ioc_of_not_isMax (hb : ¬ IsMax b) (a : α) : Ico (succ a) 
+(succ b) = Ioc a b
+参数：hb : ¬ IsMax b；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.Ico_succ_succ_eq_Ioc_of_not_isMax`：Ico_succ_succ_eq_Ioc_of_not_isMax
+ (hb : ¬ IsMax b) (a : α) : Ico (succ a) (succ b) = Ioc a b
 -/
 lemma Ico_succ_succ_eq_Ioc_of_not_isMax (hb : ¬ IsMax b) (a : α) :
     Ico (succ a) (succ b) = Ioc a b :=
-coe_injective by simpa using Set.Ico_succ_succ_eq_Ioc_of_not_isMax hb _
+  coe_injective <| by simpa using Set.Ico_succ_succ_eq_Ioc_of_not_isMax hb _
 
+/-! ##### Inserting into intervals -/
 
-/--
-lemma `insert_Icc_succ_left_eq_Icc` / 引理 `insert_Icc_succ_left_eq_Icc`
+/-
+**Finset.insert_Icc_succ_left_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Icc_succ_left_eq_Icc (h : a <= b) : insert a (Icc (succ a) b) = Icc
+ a b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.insert_Icc_succ_left_eq_Icc`：insert_Icc_succ_left_eq_Icc (h : a <= b
+) : insert a (Icc (succ a) b) = Icc a b
 
-English:
-lemma insert_Icc_succ_left_eq_Icc
-  given: (h : a <= b)
-  statement: insert a (Icc (succ a) b) = Icc a b
-  proof: coe_injective by simpa using Set.insert_Icc_succ_left_eq_Icc h
-
-中文:
-引理 insert_Icc_succ_left_eq_Icc
-  条件: (h : a <= b)
-  结论: insert a (闭区间 (succ a) b) = 闭区间 a b
-  证明: coe_injective by simpa using Set.insert_Icc_succ_left_eq_Icc h
-
-Depends on / 依赖: Set.insert_Icc_succ_left_eq_Icc, coe_injective, insert_Icc_succ_left_eq_Icc
+--- 原说明 ---
+##### Inserting into intervals
 -/
-lemma insert_Icc_succ_left_eq_Icc (h : a <= b) : insert a (Icc (succ a) b) = Icc a b :=
-coe_injective by simpa using Set.insert_Icc_succ_left_eq_Icc h
-
-/--
-lemma `insert_Icc_right_eq_Icc_succ` / 引理 `insert_Icc_right_eq_Icc_succ`
-
-English:
-lemma insert_Icc_right_eq_Icc_succ
-  given: (h : a <= succ b)
-  statement: insert (succ b) (Icc a b) = Icc a (succ b)
-  proof: coe_injective by simpa using Set.insert_Icc_right_eq_Icc_succ h
-
-中文:
-引理 insert_Icc_right_eq_Icc_succ
-  条件: (h : a <= succ b)
-  结论: insert (succ b) (闭区间 a b) = 闭区间 a (succ b)
-  证明: coe_injective by simpa using Set.insert_Icc_right_eq_Icc_succ h
-
-Depends on / 依赖: Set.insert_Icc_right_eq_Icc_succ, coe_injective, insert_Icc_right_eq_Icc_succ
+lemma insert_Icc_succ_left_eq_Icc (h : a ≤ b) : insert a (Icc (succ a) b) = Icc a b :=
+  coe_injective <| by simpa using Set.insert_Icc_succ_left_eq_Icc h
+/-
+**Finset.insert_Icc_right_eq_Icc_succ** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Icc_right_eq_Icc_succ (h : a <= succ b) : insert (succ b) (Icc a b)
+ = Icc a (succ b)
+参数：h : a <= succ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.insert_Icc_right_eq_Icc_succ`：insert_Icc_right_eq_Icc_succ (h : a <=
+ succ b) : insert (succ b) (Icc a b) = Icc a (succ b)
 -/
-lemma insert_Icc_right_eq_Icc_succ (h : a <= succ b) : insert (succ b) (Icc a b) = Icc a (succ b) :=
-coe_injective by simpa using Set.insert_Icc_right_eq_Icc_succ h
-
-/--
-lemma `insert_Ico_right_eq_Ico_succ_of_not_isMax` / 引理 `insert_Ico_right_eq_Ico_succ_of_not_isMax`
-
-English:
-lemma insert_Ico_right_eq_Ico_succ_of_not_isMax
-  given: (h : a <= b) (hb : ¬ IsMax b)
-  proof: coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ_of_not_isMax h hb
-
-中文:
-引理 insert_Ico_right_eq_Ico_succ_of_not_isMax
-  条件: (h : a <= b) (hb : ¬ IsMax b)
-  证明: coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ_of_not_isMax h hb
-
-Depends on / 依赖: Set.insert_Ico_right_eq_Ico_succ_of_not_isMax, coe_injective, insert_Ico_right_eq_Ico_succ_of_not_isMax
+lemma insert_Icc_right_eq_Icc_succ (h : a ≤ succ b) : insert (succ b) (Icc a b) = Icc a (succ b) :=
+  coe_injective <| by simpa using Set.insert_Icc_right_eq_Icc_succ h
+/-
+**Finset.insert_Ico_right_eq_Ico_succ_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Fi
+nset`。
+形式化陈述：insert_Ico_right_eq_Ico_succ_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) : 
+insert b (Ico a b) = Ico a (succ b)
+参数：h : a <= b；hb : ¬ IsMax b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.insert_Ico_right_eq_Ico_succ_of_not_isMax`：insert_Ico_right_eq_Ico_s
+ucc_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) : insert b (Ico a b) = Ico a (suc
+c b)
 -/
-lemma insert_Ico_right_eq_Ico_succ_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) :
+lemma insert_Ico_right_eq_Ico_succ_of_not_isMax (h : a ≤ b) (hb : ¬ IsMax b) :
     insert b (Ico a b) = Ico a (succ b) :=
-coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ_of_not_isMax h hb
-
-/--
-lemma `insert_Ico_succ_left_eq_Ico` / 引理 `insert_Ico_succ_left_eq_Ico`
-
-English:
-lemma insert_Ico_succ_left_eq_Ico
-  given: (h : a < b)
-  statement: insert a (Ico (succ a) b) = Ico a b
-  proof: coe_injective by simpa using Set.insert_Ico_succ_left_eq_Ico h
-
-中文:
-引理 insert_Ico_succ_left_eq_Ico
-  条件: (h : a < b)
-  结论: insert a (左闭右开区间 (succ a) b) = 左闭右开区间 a b
-  证明: coe_injective by simpa using Set.insert_Ico_succ_left_eq_Ico h
-
-Depends on / 依赖: Set.insert_Ico_succ_left_eq_Ico, coe_injective, insert_Ico_succ_left_eq_Ico
+  coe_injective <| by simpa using Set.insert_Ico_right_eq_Ico_succ_of_not_isMax h hb
+/-
+**Finset.insert_Ico_succ_left_eq_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ico_succ_left_eq_Ico (h : a < b) : insert a (Ico (succ a) b) = Ico 
+a b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.insert_Ico_succ_left_eq_Ico`：insert_Ico_succ_left_eq_Ico (h : a < b)
+ : insert a (Ico (succ a) b) = Ico a b
 -/
 lemma insert_Ico_succ_left_eq_Ico (h : a < b) : insert a (Ico (succ a) b) = Ico a b :=
-coe_injective by simpa using Set.insert_Ico_succ_left_eq_Ico h
-
-/--
-lemma `insert_Ioc_right_eq_Ioc_succ_of_not_isMax` / 引理 `insert_Ioc_right_eq_Ioc_succ_of_not_isMax`
-
-English:
-lemma insert_Ioc_right_eq_Ioc_succ_of_not_isMax
-  given: (h : a <= b) (hb : ¬ IsMax b)
-  proof: coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax h hb
-
-中文:
-引理 insert_Ioc_right_eq_Ioc_succ_of_not_isMax
-  条件: (h : a <= b) (hb : ¬ IsMax b)
-  证明: coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax h hb
-
-Depends on / 依赖: Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax, coe_injective, insert_Ioc_right_eq_Ioc_succ_of_not_isMax
+  coe_injective <| by simpa using Set.insert_Ico_succ_left_eq_Ico h
+/-
+**Finset.insert_Ioc_right_eq_Ioc_succ_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Fi
+nset`。
+形式化陈述：insert_Ioc_right_eq_Ioc_succ_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) : 
+insert (succ b) (Ioc a b) = Ioc a (succ b)
+参数：h : a <= b；hb : ¬ IsMax b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax`：insert_Ioc_right_eq_Ioc_s
+ucc_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) : insert (succ b) (Ioc a b) = Ioc
+ a (succ b)
 -/
-lemma insert_Ioc_right_eq_Ioc_succ_of_not_isMax (h : a <= b) (hb : ¬ IsMax b) :
+lemma insert_Ioc_right_eq_Ioc_succ_of_not_isMax (h : a ≤ b) (hb : ¬ IsMax b) :
     insert (succ b) (Ioc a b) = Ioc a (succ b) :=
-coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax h hb
-
-/--
-lemma `insert_Ioc_succ_left_eq_Ioc` / 引理 `insert_Ioc_succ_left_eq_Ioc`
-
-English:
-lemma insert_Ioc_succ_left_eq_Ioc
-  given: (h : a < b)
-  statement: insert (succ a) (Ioc (succ a) b) = Ioc a b
-  proof: coe_injective by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
-
-中文:
-引理 insert_Ioc_succ_left_eq_Ioc
-  条件: (h : a < b)
-  结论: insert (succ a) (左开右闭区间 (succ a) b) = 左开右闭区间 a b
-  证明: coe_injective by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
-
-Depends on / 依赖: Set.insert_Ioc_succ_left_eq_Ioc, coe_injective, insert_Ioc_succ_left_eq_Ioc
+  coe_injective <| by simpa using Set.insert_Ioc_right_eq_Ioc_succ_of_not_isMax h hb
+/-
+**Finset.insert_Ioc_succ_left_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ioc_succ_left_eq_Ioc (h : a < b) : insert (succ a) (Ioc (succ a) b)
+ = Ioc a b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.insert_Ioc_succ_left_eq_Ioc`：insert_Ioc_succ_left_eq_Ioc (h : a < b)
+ : insert (succ a) (Ioc (succ a) b) = Ioc a b
 -/
 lemma insert_Ioc_succ_left_eq_Ioc (h : a < b) : insert (succ a) (Ioc (succ a) b) = Ioc a b :=
-coe_injective by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
+  coe_injective <| by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
 
 /-!
 #### Orders with no maximal elements
@@ -269,343 +311,412 @@ coe_injective by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
 
 variable [NoMaxOrder α]
 
-/--
-lemma `Icc_succ_left_eq_Ioc` / 引理 `Icc_succ_left_eq_Ioc`
-
-English:
-lemma Icc_succ_left_eq_Ioc
-  given: (a b : α)
-  statement: Icc (succ a) b = Ioc a b
-  proof: coe_injective by simp
-
-中文:
-引理 Icc_succ_left_eq_Ioc
-  条件: (a b : α)
-  结论: 闭区间 (succ a) b = 左开右闭区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Icc_succ_left_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Icc_succ_left_eq_Ioc (a b : α) : Icc (succ a) b = Ioc a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Order.Icc_succ_left`：Icc_succ_left (a b : α) : Icc (succ a) b = Ioc a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Icc_succ_left_eq_Ioc (a b : α) : Icc (succ a) b = Ioc a b := coe_injective by simp
-/--
-lemma `Ico_succ_right_eq_Icc` / 引理 `Ico_succ_right_eq_Icc`
-
-English:
-lemma Ico_succ_right_eq_Icc
-  given: (a b : α)
-  statement: Ico a (succ b) = Icc a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ico_succ_right_eq_Icc
-  条件: (a b : α)
-  结论: 左闭右开区间 a (succ b) = 闭区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Icc_succ_left_eq_Ioc (a b : α) : Icc (succ a) b = Ioc a b := coe_injective <| by simp
+/-
+**Finset.Ico_succ_right_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ico_succ_right_eq_Icc (a b : α) : Ico a (succ b) = Icc a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Order.Ico_succ_right`：Ico_succ_right (a b : α) : Ico a (succ b) = Icc a 
+b
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ico_succ_right_eq_Icc (a b : α) : Ico a (succ b) = Icc a b := coe_injective by simp
-/--
-lemma `Ioo_succ_right_eq_Ioc` / 引理 `Ioo_succ_right_eq_Ioc`
-
-English:
-lemma Ioo_succ_right_eq_Ioc
-  given: (a b : α)
-  statement: Ioo a (succ b) = Ioc a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ioo_succ_right_eq_Ioc
-  条件: (a b : α)
-  结论: 开区间 a (succ b) = 左开右闭区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Ico_succ_right_eq_Icc (a b : α) : Ico a (succ b) = Icc a b := coe_injective <| by simp
+/-
+**Finset.Ioo_succ_right_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioo_succ_right_eq_Ioc (a b : α) : Ioo a (succ b) = Ioc a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Order.Ioo_succ_right`：Ioo_succ_right (a b : α) : Ioo a (succ b) = Ioc a 
+b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ioo_succ_right_eq_Ioc (a b : α) : Ioo a (succ b) = Ioc a b := coe_injective by simp
-/--
-lemma `Ico_succ_succ_eq_Ioc` / 引理 `Ico_succ_succ_eq_Ioc`
-
-English:
-lemma Ico_succ_succ_eq_Ioc
-  given: (a b : α)
-  statement: Ico (succ a) (succ b) = Ioc a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ico_succ_succ_eq_Ioc
-  条件: (a b : α)
-  结论: 左闭右开区间 (succ a) (succ b) = 左开右闭区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Ioo_succ_right_eq_Ioc (a b : α) : Ioo a (succ b) = Ioc a b := coe_injective <| by simp
+/-
+**Finset.Ico_succ_succ_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ico_succ_succ_eq_Ioc (a b : α) : Ico (succ a) (succ b) = Ioc a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Order.Ico_succ_right`：Ico_succ_right (a b : α) : Ico a (succ b) = Icc a 
+b
+· 使用定理 `Order.Icc_succ_left`：Icc_succ_left (a b : α) : Icc (succ a) b = Ioc a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ico_succ_succ_eq_Ioc (a b : α) : Ico (succ a) (succ b) = Ioc a b := coe_injective by simp
+lemma Ico_succ_succ_eq_Ioc (a b : α) : Ico (succ a) (succ b) = Ioc a b := coe_injective <| by simp
 
+/-! ##### Inserting into intervals -/
 
-/--
-lemma `insert_Ico_right_eq_Ico_succ` / 引理 `insert_Ico_right_eq_Ico_succ`
+/-
+**Finset.insert_Ico_right_eq_Ico_succ** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ico_right_eq_Ico_succ (h : a <= b) : insert b (Ico a b) = Ico a (su
+cc b)
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Order.Ico_succ_right`：Ico_succ_right (a b : α) : Ico a (succ b) = Icc a 
+b
+· 使用引理 `Set.insert_Ico_right_eq_Ico_succ`：insert_Ico_right_eq_Ico_succ (h : a <=
+ b) : insert b (Ico a b) = Ico a (succ b)
 
-English:
-lemma insert_Ico_right_eq_Ico_succ
-  given: (h : a <= b)
-  statement: insert b (Ico a b) = Ico a (succ b)
-  proof: coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ h
-
-中文:
-引理 insert_Ico_right_eq_Ico_succ
-  条件: (h : a <= b)
-  结论: insert b (左闭右开区间 a b) = 左闭右开区间 a (succ b)
-  证明: coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ h
-
-Depends on / 依赖: Set.insert_Ico_right_eq_Ico_succ, coe_injective, insert_Ico_right_eq_Ico_succ
+--- 原说明 ---
+##### Inserting into intervals
 -/
-lemma insert_Ico_right_eq_Ico_succ (h : a <= b) : insert b (Ico a b) = Ico a (succ b) :=
-coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ h
-
-/--
-lemma `insert_Ioc_right_eq_Ioc_succ` / 引理 `insert_Ioc_right_eq_Ioc_succ`
-
-English:
-lemma insert_Ioc_right_eq_Ioc_succ
-  given: (h : a <= b)
-  statement: insert (succ b) (Ioc a b) = Ioc a (succ b)
-  proof: coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ h
-
-中文:
-引理 insert_Ioc_right_eq_Ioc_succ
-  条件: (h : a <= b)
-  结论: insert (succ b) (左开右闭区间 a b) = 左开右闭区间 a (succ b)
-  证明: coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ h
-
-Depends on / 依赖: Set.insert_Ioc_right_eq_Ioc_succ, coe_injective, insert_Ioc_right_eq_Ioc_succ
+lemma insert_Ico_right_eq_Ico_succ (h : a ≤ b) : insert b (Ico a b) = Ico a (succ b) :=
+  coe_injective <| by simpa using Set.insert_Ico_right_eq_Ico_succ h
+/-
+**Finset.insert_Ioc_right_eq_Ioc_succ** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ioc_right_eq_Ioc_succ (h : a <= b) : insert (succ b) (Ioc a b) = Io
+c a (succ b)
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.insert_Ioc_right_eq_Ioc_succ`：insert_Ioc_right_eq_Ioc_succ (h : a <=
+ b) : insert (succ b) (Ioc a b) = Ioc a (succ b)
 -/
-lemma insert_Ioc_right_eq_Ioc_succ (h : a <= b) : insert (succ b) (Ioc a b) = Ioc a (succ b) :=
-coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ h
+lemma insert_Ioc_right_eq_Ioc_succ (h : a ≤ b) : insert (succ b) (Ioc a b) = Ioc a (succ b) :=
+  coe_injective <| by simpa using Set.insert_Ioc_right_eq_Ioc_succ h
 
 end SuccOrder
 
 section PredOrder
 variable [PredOrder α] {a b : α}
 
+/-!
+#### Orders possibly with minimal elements
 
-/--
-lemma `Ioc_pred_right_eq_Ioo` / 引理 `Ioc_pred_right_eq_Ioo`
+##### Equalities of intervals
+-/
 
-English:
-lemma Ioc_pred_right_eq_Ioo
-  given: (a b : α)
-  statement: Ioc a (pred b) = Ioo a b
-  proof: coe_injective by simpa using Set.Ioc_pred_right_eq_Ioo _ _
+/-
+**Finset.Ioc_pred_right_eq_Ioo** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioc_pred_right_eq_Ioo (a b : α) : Ioc a (pred b) = Ioo a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用引理 `Set.Ioc_pred_right_eq_Ioo`：Ioc_pred_right_eq_Ioo (a b : α) : Ioc a (pred
+ b) = Ioo a b
 
-中文:
-引理 Ioc_pred_right_eq_Ioo
-  条件: (a b : α)
-  结论: 左开右闭区间 a (pred b) = 开区间 a b
-  证明: coe_injective by simpa using Set.Ioc_pred_right_eq_Ioo _ _
+--- 原说明 ---
+#### Orders possibly with minimal elements
 
-Depends on / 依赖: Ioc_pred_right_eq_Ioo, Set.Ioc_pred_right_eq_Ioo, coe_injective
+##### Equalities of intervals
 -/
 lemma Ioc_pred_right_eq_Ioo (a b : α) : Ioc a (pred b) = Ioo a b :=
-coe_injective by simpa using Set.Ioc_pred_right_eq_Ioo _ _
-
-/--
-lemma `Icc_pred_right_eq_Ico_of_not_isMin` / 引理 `Icc_pred_right_eq_Ico_of_not_isMin`
-
-English:
-lemma Icc_pred_right_eq_Ico_of_not_isMin
-  given: (hb : ¬ IsMin b) (a : α)
-  statement: Icc a (pred b) = Ico a b
-  proof: coe_injective by simpa using Set.Icc_pred_right_eq_Ico_of_not_isMin hb _
-
-中文:
-引理 Icc_pred_right_eq_Ico_of_not_isMin
-  条件: (hb : ¬ IsMin b) (a : α)
-  结论: 闭区间 a (pred b) = 左闭右开区间 a b
-  证明: coe_injective by simpa using Set.Icc_pred_right_eq_Ico_of_not_isMin hb _
-
-Depends on / 依赖: Icc_pred_right_eq_Ico_of_not_isMin, Set.Icc_pred_right_eq_Ico_of_not_isMin, coe_injective
+  coe_injective <| by simpa using Set.Ioc_pred_right_eq_Ioo _ _
+/-
+**Finset.Icc_pred_right_eq_Ico_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Icc_pred_right_eq_Ico_of_not_isMin (hb : ¬ IsMin b) (a : α) : Icc a (pred 
+b) = Ico a b
+参数：hb : ¬ IsMin b；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.Icc_pred_right_eq_Ico_of_not_isMin`：Icc_pred_right_eq_Ico_of_not_isM
+in (hb : ¬ IsMin b) (a : α) : Icc a (pred b) = Ico a b
 -/
 lemma Icc_pred_right_eq_Ico_of_not_isMin (hb : ¬ IsMin b) (a : α) : Icc a (pred b) = Ico a b :=
-coe_injective by simpa using Set.Icc_pred_right_eq_Ico_of_not_isMin hb _
-
-/--
-lemma `Ioc_pred_left_eq_Icc_of_not_isMin` / 引理 `Ioc_pred_left_eq_Icc_of_not_isMin`
-
-English:
-lemma Ioc_pred_left_eq_Icc_of_not_isMin
-  given: (ha : ¬ IsMin a) (b : α)
-  statement: Ioc (pred a) b = Icc a b
-  proof: coe_injective by simpa using Set.Ioc_pred_left_eq_Icc_of_not_isMin ha _
-
-中文:
-引理 Ioc_pred_left_eq_Icc_of_not_isMin
-  条件: (ha : ¬ IsMin a) (b : α)
-  结论: 左开右闭区间 (pred a) b = 闭区间 a b
-  证明: coe_injective by simpa using Set.Ioc_pred_left_eq_Icc_of_not_isMin ha _
-
-Depends on / 依赖: Ioc_pred_left_eq_Icc_of_not_isMin, Set.Ioc_pred_left_eq_Icc_of_not_isMin, coe_injective
+  coe_injective <| by simpa using Set.Icc_pred_right_eq_Ico_of_not_isMin hb _
+/-
+**Finset.Ioc_pred_left_eq_Icc_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioc_pred_left_eq_Icc_of_not_isMin (ha : ¬ IsMin a) (b : α) : Ioc (pred a) 
+b = Icc a b
+参数：ha : ¬ IsMin a；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.Ioc_pred_left_eq_Icc_of_not_isMin`：Ioc_pred_left_eq_Icc_of_not_isMin
+ (ha : ¬ IsMin a) (b : α) : Ioc (pred a) b = Icc a b
 -/
 lemma Ioc_pred_left_eq_Icc_of_not_isMin (ha : ¬ IsMin a) (b : α) : Ioc (pred a) b = Icc a b :=
-coe_injective by simpa using Set.Ioc_pred_left_eq_Icc_of_not_isMin ha _
-
-/--
-lemma `Ioo_pred_left_eq_Ioc_of_not_isMin` / 引理 `Ioo_pred_left_eq_Ioc_of_not_isMin`
-
-English:
-lemma Ioo_pred_left_eq_Ioc_of_not_isMin
-  given: (ha : ¬ IsMin a) (b : α)
-  statement: Ioo (pred a) b = Ico a b
-  proof: coe_injective by simpa using Set.Ioo_pred_left_eq_Ioc_of_not_isMin ha _
-
-中文:
-引理 Ioo_pred_left_eq_Ioc_of_not_isMin
-  条件: (ha : ¬ IsMin a) (b : α)
-  结论: 开区间 (pred a) b = 左闭右开区间 a b
-  证明: coe_injective by simpa using Set.Ioo_pred_left_eq_Ioc_of_not_isMin ha _
-
-Depends on / 依赖: Ioo_pred_left_eq_Ioc_of_not_isMin, Set.Ioo_pred_left_eq_Ioc_of_not_isMin, coe_injective
+  coe_injective <| by simpa using Set.Ioc_pred_left_eq_Icc_of_not_isMin ha _
+/-
+**Finset.Ioo_pred_left_eq_Ioc_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioo_pred_left_eq_Ioc_of_not_isMin (ha : ¬ IsMin a) (b : α) : Ioo (pred a) 
+b = Ico a b
+参数：ha : ¬ IsMin a；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.Ioo_pred_left_eq_Ioc_of_not_isMin`：Ioo_pred_left_eq_Ioc_of_not_isMin
+ (ha : ¬ IsMin a) (b : α) : Ioo (pred a) b = Ico a b
 -/
 lemma Ioo_pred_left_eq_Ioc_of_not_isMin (ha : ¬ IsMin a) (b : α) : Ioo (pred a) b = Ico a b :=
-coe_injective by simpa using Set.Ioo_pred_left_eq_Ioc_of_not_isMin ha _
-
-/--
-lemma `Ioc_pred_pred_eq_Ico_of_not_isMin` / 引理 `Ioc_pred_pred_eq_Ico_of_not_isMin`
-
-English:
-lemma Ioc_pred_pred_eq_Ico_of_not_isMin
-  given: (ha : ¬ IsMin a) (b : α)
-  proof: coe_injective by simpa using Set.Ioc_pred_pred_eq_Ico_of_not_isMin ha _
-
-中文:
-引理 Ioc_pred_pred_eq_Ico_of_not_isMin
-  条件: (ha : ¬ IsMin a) (b : α)
-  证明: coe_injective by simpa using Set.Ioc_pred_pred_eq_Ico_of_not_isMin ha _
-
-Depends on / 依赖: Ioc_pred_pred_eq_Ico_of_not_isMin, Set.Ioc_pred_pred_eq_Ico_of_not_isMin, coe_injective
+  coe_injective <| by simpa using Set.Ioo_pred_left_eq_Ioc_of_not_isMin ha _
+/-
+**Finset.Ioc_pred_pred_eq_Ico_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioc_pred_pred_eq_Ico_of_not_isMin (ha : ¬ IsMin a) (b : α) : Ioc (pred a) 
+(pred b) = Ico a b
+参数：ha : ¬ IsMin a；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.Ioc_pred_pred_eq_Ico_of_not_isMin`：Ioc_pred_pred_eq_Ico_of_not_isMin
+ (ha : ¬ IsMin a) (b : α) : Ioc (pred a) (pred b) = Ico a b
 -/
 lemma Ioc_pred_pred_eq_Ico_of_not_isMin (ha : ¬ IsMin a) (b : α) :
     Ioc (pred a) (pred b) = Ico a b :=
-coe_injective by simpa using Set.Ioc_pred_pred_eq_Ico_of_not_isMin ha _
+  coe_injective <| by simpa using Set.Ioc_pred_pred_eq_Ico_of_not_isMin ha _
 
+/-! ##### Inserting into intervals -/
 
-/--
-lemma `insert_Icc_pred_right_eq_Icc` / 引理 `insert_Icc_pred_right_eq_Icc`
+/-
+**Finset.insert_Icc_pred_right_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Icc_pred_right_eq_Icc (h : a <= b) : insert b (Icc a (pred b)) = Ic
+c a b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.insert_Icc_pred_right_eq_Icc`：insert_Icc_pred_right_eq_Icc (h : a <=
+ b) : insert b (Icc a (pred b)) = Icc a b
 
-English:
-lemma insert_Icc_pred_right_eq_Icc
-  given: (h : a <= b)
-  statement: insert b (Icc a (pred b)) = Icc a b
-  proof: coe_injective by simpa using Set.insert_Icc_pred_right_eq_Icc h
-
-中文:
-引理 insert_Icc_pred_right_eq_Icc
-  条件: (h : a <= b)
-  结论: insert b (闭区间 a (pred b)) = 闭区间 a b
-  证明: coe_injective by simpa using Set.insert_Icc_pred_right_eq_Icc h
-
-Depends on / 依赖: Set.insert_Icc_pred_right_eq_Icc, coe_injective, insert_Icc_pred_right_eq_Icc
+--- 原说明 ---
+##### Inserting into intervals
 -/
-lemma insert_Icc_pred_right_eq_Icc (h : a <= b) : insert b (Icc a (pred b)) = Icc a b :=
-coe_injective by simpa using Set.insert_Icc_pred_right_eq_Icc h
-
-/--
-lemma `insert_Icc_left_eq_Icc_pred` / 引理 `insert_Icc_left_eq_Icc_pred`
-
-English:
-lemma insert_Icc_left_eq_Icc_pred
-  given: (h : pred a <= b)
-  statement: insert (pred a) (Icc a b) = Icc (pred a) b
-  proof: coe_injective by simpa using Set.insert_Icc_left_eq_Icc_pred h
-
-中文:
-引理 insert_Icc_left_eq_Icc_pred
-  条件: (h : pred a <= b)
-  结论: insert (pred a) (闭区间 a b) = 闭区间 (pred a) b
-  证明: coe_injective by simpa using Set.insert_Icc_left_eq_Icc_pred h
-
-Depends on / 依赖: Set.insert_Icc_left_eq_Icc_pred, coe_injective, insert_Icc_left_eq_Icc_pred
+lemma insert_Icc_pred_right_eq_Icc (h : a ≤ b) : insert b (Icc a (pred b)) = Icc a b :=
+  coe_injective <| by simpa using Set.insert_Icc_pred_right_eq_Icc h
+/-
+**Finset.insert_Icc_left_eq_Icc_pred** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Icc_left_eq_Icc_pred (h : pred a <= b) : insert (pred a) (Icc a b) 
+= Icc (pred a) b
+参数：h : pred a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用引理 `Set.insert_Icc_left_eq_Icc_pred`：insert_Icc_left_eq_Icc_pred (h : pred a
+ <= b) : insert (pred a) (Icc a b) = Icc (pred a) b
 -/
-lemma insert_Icc_left_eq_Icc_pred (h : pred a <= b) : insert (pred a) (Icc a b) = Icc (pred a) b :=
-coe_injective by simpa using Set.insert_Icc_left_eq_Icc_pred h
-
-/--
-lemma `insert_Ioc_left_eq_Ioc_pred_of_not_isMin` / 引理 `insert_Ioc_left_eq_Ioc_pred_of_not_isMin`
-
-English:
-lemma insert_Ioc_left_eq_Ioc_pred_of_not_isMin
-  given: (h : a <= b) (ha : ¬ IsMin a)
-  proof: coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin h ha
-
-中文:
-引理 insert_Ioc_left_eq_Ioc_pred_of_not_isMin
-  条件: (h : a <= b) (ha : ¬ IsMin a)
-  证明: coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin h ha
-
-Depends on / 依赖: Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin, coe_injective, insert_Ioc_left_eq_Ioc_pred_of_not_isMin
+lemma insert_Icc_left_eq_Icc_pred (h : pred a ≤ b) : insert (pred a) (Icc a b) = Icc (pred a) b :=
+  coe_injective <| by simpa using Set.insert_Icc_left_eq_Icc_pred h
+/-
+**Finset.insert_Ioc_left_eq_Ioc_pred_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Fin
+set`。
+形式化陈述：insert_Ioc_left_eq_Ioc_pred_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) : i
+nsert a (Ioc a b) = Ioc (pred a) b
+参数：h : a <= b；ha : ¬ IsMin a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin`：insert_Ioc_left_eq_Ioc_pre
+d_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) : insert a (Ioc a b) = Ioc (pred a)
+ b
 -/
-lemma insert_Ioc_left_eq_Ioc_pred_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) :
+lemma insert_Ioc_left_eq_Ioc_pred_of_not_isMin (h : a ≤ b) (ha : ¬ IsMin a) :
     insert a (Ioc a b) = Ioc (pred a) b :=
-coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin h ha
-
-/--
-lemma `insert_Ioc_pred_right_eq_Ioc` / 引理 `insert_Ioc_pred_right_eq_Ioc`
-
-English:
-lemma insert_Ioc_pred_right_eq_Ioc
-  given: (h : a < b)
-  statement: insert b (Ioc a (pred b)) = Ioc a b
-  proof: coe_injective by simpa using Set.insert_Ioc_pred_right_eq_Ioc h
-
-中文:
-引理 insert_Ioc_pred_right_eq_Ioc
-  条件: (h : a < b)
-  结论: insert b (左开右闭区间 a (pred b)) = 左开右闭区间 a b
-  证明: coe_injective by simpa using Set.insert_Ioc_pred_right_eq_Ioc h
-
-Depends on / 依赖: Set.insert_Ioc_pred_right_eq_Ioc, coe_injective, insert_Ioc_pred_right_eq_Ioc
+  coe_injective <| by simpa using Set.insert_Ioc_left_eq_Ioc_pred_of_not_isMin h ha
+/-
+**Finset.insert_Ioc_pred_right_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ioc_pred_right_eq_Ioc (h : a < b) : insert b (Ioc a (pred b)) = Ioc
+ a b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用引理 `Set.insert_Ioc_pred_right_eq_Ioc`：insert_Ioc_pred_right_eq_Ioc (h : a < 
+b) : insert b (Ioc a (pred b)) = Ioc a b
 -/
 lemma insert_Ioc_pred_right_eq_Ioc (h : a < b) : insert b (Ioc a (pred b)) = Ioc a b :=
-coe_injective by simpa using Set.insert_Ioc_pred_right_eq_Ioc h
-
-/--
-lemma `insert_Ico_left_eq_Ico_pred_of_not_isMin` / 引理 `insert_Ico_left_eq_Ico_pred_of_not_isMin`
-
-English:
-lemma insert_Ico_left_eq_Ico_pred_of_not_isMin
-  given: (h : a <= b) (ha : ¬ IsMin a)
-  proof: coe_injective by simpa using Set.insert_Ico_left_eq_Ico_pred_of_not_isMin h ha
-
-中文:
-引理 insert_Ico_left_eq_Ico_pred_of_not_isMin
-  条件: (h : a <= b) (ha : ¬ IsMin a)
-  证明: coe_injective by simpa using Set.insert_Ico_left_eq_Ico_pred_of_not_isMin h ha
-
-Depends on / 依赖: Set.insert_Ico_left_eq_Ico_pred_of_not_isMin, coe_injective, insert_Ico_left_eq_Ico_pred_of_not_isMin
+  coe_injective <| by simpa using Set.insert_Ioc_pred_right_eq_Ioc h
+/-
+**Finset.insert_Ico_left_eq_Ico_pred_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Fin
+set`。
+形式化陈述：insert_Ico_left_eq_Ico_pred_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) : i
+nsert (pred a) (Ico a b) = Ico (pred a) b
+参数：h : a <= b；ha : ¬ IsMin a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.insert_Ico_left_eq_Ico_pred_of_not_isMin`：insert_Ico_left_eq_Ico_pre
+d_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) : insert (pred a) (Ico a b) = Ico (
+pred a) b
 -/
-lemma insert_Ico_left_eq_Ico_pred_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) :
+lemma insert_Ico_left_eq_Ico_pred_of_not_isMin (h : a ≤ b) (ha : ¬ IsMin a) :
     insert (pred a) (Ico a b) = Ico (pred a) b :=
-coe_injective by simpa using Set.insert_Ico_left_eq_Ico_pred_of_not_isMin h ha
-
-/--
-lemma `insert_Ico_pred_right_eq_Ico` / 引理 `insert_Ico_pred_right_eq_Ico`
-
-English:
-lemma insert_Ico_pred_right_eq_Ico
-  given: (h : a < b)
-  statement: insert (pred b) (Ico a (pred b)) = Ico a b
-  proof: coe_injective by simpa using Set.insert_Ico_pred_right_eq_Ico h
-
-中文:
-引理 insert_Ico_pred_right_eq_Ico
-  条件: (h : a < b)
-  结论: insert (pred b) (左闭右开区间 a (pred b)) = 左闭右开区间 a b
-  证明: coe_injective by simpa using Set.insert_Ico_pred_right_eq_Ico h
-
-Depends on / 依赖: Set.insert_Ico_pred_right_eq_Ico, coe_injective, insert_Ico_pred_right_eq_Ico
+  coe_injective <| by simpa using Set.insert_Ico_left_eq_Ico_pred_of_not_isMin h ha
+/-
+**Finset.insert_Ico_pred_right_eq_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ico_pred_right_eq_Ico (h : a < b) : insert (pred b) (Ico a (pred b)
+) = Ico a b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用引理 `Set.insert_Ico_pred_right_eq_Ico`：insert_Ico_pred_right_eq_Ico (h : a < 
+b) : insert (pred b) (Ico a (pred b)) = Ico a b
 -/
 lemma insert_Ico_pred_right_eq_Ico (h : a < b) : insert (pred b) (Ico a (pred b)) = Ico a b :=
-coe_injective by simpa using Set.insert_Ico_pred_right_eq_Ico h
+  coe_injective <| by simpa using Set.insert_Ico_pred_right_eq_Ico h
 
 /-!
 #### Orders with no minimal elements
@@ -615,118 +726,138 @@ coe_injective by simpa using Set.insert_Ico_pred_right_eq_Ico h
 
 variable [NoMinOrder α]
 
-/--
-lemma `Icc_pred_right_eq_Ico` / 引理 `Icc_pred_right_eq_Ico`
-
-English:
-lemma Icc_pred_right_eq_Ico
-  given: (a b : α)
-  statement: Icc a (pred b) = Ico a b
-  proof: coe_injective by simp
-
-中文:
-引理 Icc_pred_right_eq_Ico
-  条件: (a b : α)
-  结论: 闭区间 a (pred b) = 左闭右开区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Icc_pred_right_eq_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Icc_pred_right_eq_Ico (a b : α) : Icc a (pred b) = Ico a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Order.Icc_pred_right`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Pre
+dOrder α] [NoMinOrder α] (a b : α),   Set.Icc b (Order.pred a) = Set.Ico b a
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Icc_pred_right_eq_Ico (a b : α) : Icc a (pred b) = Ico a b := coe_injective by simp
-/--
-lemma `Ioc_pred_left_eq_Icc` / 引理 `Ioc_pred_left_eq_Icc`
-
-English:
-lemma Ioc_pred_left_eq_Icc
-  given: (a b : α)
-  statement: Ioc (pred a) b = Icc a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ioc_pred_left_eq_Icc
-  条件: (a b : α)
-  结论: 左开右闭区间 (pred a) b = 闭区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Icc_pred_right_eq_Ico (a b : α) : Icc a (pred b) = Ico a b := coe_injective <| by simp
+/-
+**Finset.Ioc_pred_left_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioc_pred_left_eq_Icc (a b : α) : Ioc (pred a) b = Icc a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Order.Ioc_pred_left`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : P
+redOrder α] [NoMinOrder α] (a b : α),   Set.Ioc (Order.pred b) a = Set.Icc b a
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ioc_pred_left_eq_Icc (a b : α) : Ioc (pred a) b = Icc a b := coe_injective by simp
-/--
-lemma `Ioo_pred_left_eq_Ioc` / 引理 `Ioo_pred_left_eq_Ioc`
-
-English:
-lemma Ioo_pred_left_eq_Ioc
-  given: (a b : α)
-  statement: Ioo (pred a) b = Ico a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ioo_pred_left_eq_Ioc
-  条件: (a b : α)
-  结论: 开区间 (pred a) b = 左闭右开区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Ioc_pred_left_eq_Icc (a b : α) : Ioc (pred a) b = Icc a b := coe_injective <| by simp
+/-
+**Finset.Ioo_pred_left_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioo_pred_left_eq_Ioc (a b : α) : Ioo (pred a) b = Ico a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Order.Ioo_pred_left`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : P
+redOrder α] [NoMinOrder α] (a b : α),   Set.Ioo (Order.pred b) a = Set.Ico b a
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ioo_pred_left_eq_Ioc (a b : α) : Ioo (pred a) b = Ico a b := coe_injective by simp
-/--
-lemma `Ioc_pred_pred_eq_Ico` / 引理 `Ioc_pred_pred_eq_Ico`
-
-English:
-lemma Ioc_pred_pred_eq_Ico
-  given: (a b : α)
-  statement: Ioc (pred a) (pred b) = Ico a b
-  proof: coe_injective by simp
-
-中文:
-引理 Ioc_pred_pred_eq_Ico
-  条件: (a b : α)
-  结论: 左开右闭区间 (pred a) (pred b) = 左闭右开区间 a b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+lemma Ioo_pred_left_eq_Ioc (a b : α) : Ioo (pred a) b = Ico a b := coe_injective <| by simp
+/-
+**Finset.Ioc_pred_pred_eq_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioc_pred_pred_eq_Ico (a b : α) : Ioc (pred a) (pred b) = Ico a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Order.Ioc_pred_right`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Pre
+dOrder α] [NoMinOrder α] (a b : α),   Set.Ioc b (Order.pred a) = Set.Ioo b a
+· 使用定理 `Order.Ioo_pred_left`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : P
+redOrder α] [NoMinOrder α] (a b : α),   Set.Ioo (Order.pred b) a = Set.Ico b a
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ioc_pred_pred_eq_Ico (a b : α) : Ioc (pred a) (pred b) = Ico a b := coe_injective by simp
+lemma Ioc_pred_pred_eq_Ico (a b : α) : Ioc (pred a) (pred b) = Ico a b := coe_injective <| by simp
 
+/-! ##### Inserting into intervals -/
 
-/--
-lemma `insert_Ioc_left_eq_Ioc_pred` / 引理 `insert_Ioc_left_eq_Ioc_pred`
+/-
+**Finset.insert_Ioc_left_eq_Ioc_pred** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ioc_left_eq_Ioc_pred (h : a <= b) : insert a (Ioc a b) = Ioc (pred 
+a) b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Order.Ioc_pred_left`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : P
+redOrder α] [NoMinOrder α] (a b : α),   Set.Ioc (Order.pred b) a = Set.Icc b a
+· 使用引理 `Set.insert_Ioc_left_eq_Ioc_pred`：insert_Ioc_left_eq_Ioc_pred (h : a <= b
+) : insert a (Ioc a b) = Ioc (pred a) b
 
-English:
-lemma insert_Ioc_left_eq_Ioc_pred
-  given: (h : a <= b)
-  statement: insert a (Ioc a b) = Ioc (pred a) b
-  proof: coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred h
-
-中文:
-引理 insert_Ioc_left_eq_Ioc_pred
-  条件: (h : a <= b)
-  结论: insert a (左开右闭区间 a b) = 左开右闭区间 (pred a) b
-  证明: coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred h
-
-Depends on / 依赖: Set.insert_Ioc_left_eq_Ioc_pred, coe_injective, insert_Ioc_left_eq_Ioc_pred
+--- 原说明 ---
+##### Inserting into intervals
 -/
-lemma insert_Ioc_left_eq_Ioc_pred (h : a <= b) : insert a (Ioc a b) = Ioc (pred a) b :=
-coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred h
-
-/--
-lemma `insert_Ico_left_eq_Ico_pred` / 引理 `insert_Ico_left_eq_Ico_pred`
-
-English:
-lemma insert_Ico_left_eq_Ico_pred
-  given: (h : a <= b)
-  statement: insert (pred a) (Ico a b) = Ico (pred a) b
-  proof: insert_Ico_left_eq_Ico_pred_of_not_isMin h (not_isMin _)
-
-中文:
-引理 insert_Ico_left_eq_Ico_pred
-  条件: (h : a <= b)
-  结论: insert (pred a) (左闭右开区间 a b) = 左闭右开区间 (pred a) b
-  证明: insert_Ico_left_eq_Ico_pred_of_not_isMin h (not_isMin _)
-
-Depends on / 依赖: insert_Ico_left_eq_Ico_pred_of_not_isMin, not_isMin
+lemma insert_Ioc_left_eq_Ioc_pred (h : a ≤ b) : insert a (Ioc a b) = Ioc (pred a) b :=
+  coe_injective <| by simpa using Set.insert_Ioc_left_eq_Ioc_pred h
+/-
+**Finset.insert_Ico_left_eq_Ico_pred** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：insert_Ico_left_eq_Ico_pred (h : a <= b) : insert (pred a) (Ico a b) = Ico
+ (pred a) b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.insert_Ico_left_eq_Ico_pred_of_not_isMin`：insert_Ico_left_eq_Ico_
+pred_of_not_isMin (h : a <= b) (ha : ¬ IsMin a) : insert (pred a) (Ico a b) = Ic
+o (pred a) b
+· 使用定理 `not_isMin`：not_isMin [NoMinOrder α] (a : α) : ¬IsMin a
 -/
-lemma insert_Ico_left_eq_Ico_pred (h : a <= b) : insert (pred a) (Ico a b) = Ico (pred a) b :=
+lemma insert_Ico_left_eq_Ico_pred (h : a ≤ b) : insert (pred a) (Ico a b) = Ico (pred a) b :=
   insert_Ico_left_eq_Ico_pred_of_not_isMin h (not_isMin _)
 
 end PredOrder
@@ -734,25 +865,25 @@ end PredOrder
 section SuccPredOrder
 variable [SuccOrder α] [PredOrder α] [Nontrivial α]
 
-/--
-lemma `Icc_succ_pred_eq_Ioo` / 引理 `Icc_succ_pred_eq_Ioo`
-
-English:
-lemma Icc_succ_pred_eq_Ioo
-  given: (a b : α)
-  statement: Icc (succ a) (pred b) = Ioo a b
-  proof: coe_injective by simpa using Set.Icc_succ_pred_eq_Ioo _ _
-
-中文:
-引理 Icc_succ_pred_eq_Ioo
-  条件: (a b : α)
-  结论: 闭区间 (succ a) (pred b) = 开区间 a b
-  证明: coe_injective by simpa using Set.Icc_succ_pred_eq_Ioo _ _
-
-Depends on / 依赖: Icc_succ_pred_eq_Ioo, Set.Icc_succ_pred_eq_Ioo, coe_injective
+/-
+**Finset.Icc_succ_pred_eq_Ioo** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Icc_succ_pred_eq_Ioo (a b : α) : Icc (succ a) (pred b) = Ioo a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用引理 `Set.Icc_succ_pred_eq_Ioo`：Icc_succ_pred_eq_Ioo (a b : α) : Icc (succ a) 
+(pred b) = Ioo a b
 -/
 lemma Icc_succ_pred_eq_Ioo (a b : α) : Icc (succ a) (pred b) = Ioo a b :=
-coe_injective by simpa using Set.Icc_succ_pred_eq_Ioo _ _
+  coe_injective <| by simpa using Set.Icc_succ_pred_eq_Ioo _ _
 
 end SuccPredOrder
 end LocallyFiniteOrder
@@ -765,92 +896,103 @@ variable [LocallyFiniteOrderBot α]
 section SuccOrder
 variable [SuccOrder α] {b : α}
 
-/--
-lemma `Iio_succ_eq_Iic_of_not_isMax` / 引理 `Iio_succ_eq_Iic_of_not_isMax`
-
-English:
-lemma Iio_succ_eq_Iic_of_not_isMax
-  given: (hb : ¬ IsMax b)
-  statement: Iio (succ b) = Iic b
-  proof: coe_injective by simpa using Set.Iio_succ_eq_Iic_of_not_isMax hb
-
-中文:
-引理 Iio_succ_eq_Iic_of_not_isMax
-  条件: (hb : ¬ IsMax b)
-  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
-  证明: coe_injective by simpa using Set.Iio_succ_eq_Iic_of_not_isMax hb
-
-Depends on / 依赖: Iio_succ_eq_Iic_of_not_isMax, Set.Iio_succ_eq_Iic_of_not_isMax, coe_injective
+/-
+**Finset.Iio_succ_eq_Iic_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Iio_succ_eq_Iic_of_not_isMax (hb : ¬ IsMax b) : Iio (succ b) = Iic b
+参数：hb : ¬ IsMax b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用引理 `Set.Iio_succ_eq_Iic_of_not_isMax`：Iio_succ_eq_Iic_of_not_isMax (hb : ¬ I
+sMax b) : Iio (succ b) = Iic b
 -/
 lemma Iio_succ_eq_Iic_of_not_isMax (hb : ¬ IsMax b) : Iio (succ b) = Iic b :=
-coe_injective by simpa using Set.Iio_succ_eq_Iic_of_not_isMax hb
+  coe_injective <| by simpa using Set.Iio_succ_eq_Iic_of_not_isMax hb
 
 variable [NoMaxOrder α]
-
-/--
-lemma `Iio_succ_eq_Iic` / 引理 `Iio_succ_eq_Iic`
-
-English:
-lemma Iio_succ_eq_Iic
-  given: (b : α)
-  statement: Iio (succ b) = Iic b
-  proof: coe_injective by simp
-
-中文:
-引理 Iio_succ_eq_Iic
-  条件: (b : α)
-  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Iio_succ_eq_Iic** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Iio_succ_eq_Iic (b : α) : Iio (succ b) = Iic b
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用定理 `Order.Iio_succ`：Iio_succ (a : α) : Iio (succ a) = Iic a
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Iio_succ_eq_Iic (b : α) : Iio (succ b) = Iic b := coe_injective by simp
+lemma Iio_succ_eq_Iic (b : α) : Iio (succ b) = Iic b := coe_injective <| by simp
 
 end SuccOrder
 
 section PredOrder
 variable [PredOrder α] {a b : α}
 
-/--
-lemma `Iic_pred_eq_Iio_of_not_isMin` / 引理 `Iic_pred_eq_Iio_of_not_isMin`
-
-English:
-lemma Iic_pred_eq_Iio_of_not_isMin
-  given: (hb : ¬ IsMin b)
-  statement: Iic (pred b) = Iio b
-  proof: coe_injective by simpa using Set.Iic_pred_eq_Iio_of_not_isMin hb
-
-中文:
-引理 Iic_pred_eq_Iio_of_not_isMin
-  条件: (hb : ¬ IsMin b)
-  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
-  证明: coe_injective by simpa using Set.Iic_pred_eq_Iio_of_not_isMin hb
-
-Depends on / 依赖: Iic_pred_eq_Iio_of_not_isMin, Set.Iic_pred_eq_Iio_of_not_isMin, coe_injective
+/-
+**Finset.Iic_pred_eq_Iio_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Iic_pred_eq_Iio_of_not_isMin (hb : ¬ IsMin b) : Iic (pred b) = Iio b
+参数：hb : ¬ IsMin b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用引理 `Set.Iic_pred_eq_Iio_of_not_isMin`：Iic_pred_eq_Iio_of_not_isMin (hb : ¬ I
+sMin b) : Iic (pred b) = Iio b
 -/
 lemma Iic_pred_eq_Iio_of_not_isMin (hb : ¬ IsMin b) : Iic (pred b) = Iio b :=
-coe_injective by simpa using Set.Iic_pred_eq_Iio_of_not_isMin hb
+  coe_injective <| by simpa using Set.Iic_pred_eq_Iio_of_not_isMin hb
 
 variable [NoMinOrder α]
-
-/--
-lemma `Iic_pred_eq_Iio` / 引理 `Iic_pred_eq_Iio`
-
-English:
-lemma Iic_pred_eq_Iio
-  given: (b : α)
-  statement: Iic (pred b) = Iio b
-  proof: coe_injective by simp
-
-中文:
-引理 Iic_pred_eq_Iio
-  条件: (b : α)
-  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Iic_pred_eq_Iio** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Iic_pred_eq_Iio (b : α) : Iic (pred b) = Iio b
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `Order.Iic_pred`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredOrder
+ α] [NoMinOrder α] (a : α), Set.Iic (Order.pred a) = Set.Iio a
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Iic_pred_eq_Iio (b : α) : Iic (pred b) = Iio b := coe_injective by simp
+lemma Iic_pred_eq_Iio (b : α) : Iic (pred b) = Iio b := coe_injective <| by simp
 
 end PredOrder
 end LocallyFiniteOrderBot
@@ -863,93 +1005,97 @@ variable [LocallyFiniteOrderTop α]
 section SuccOrder
 variable [SuccOrder α] {a : α}
 
-/--
-lemma `Ici_succ_eq_Ioi_of_not_isMax` / 引理 `Ici_succ_eq_Ioi_of_not_isMax`
-
-English:
-lemma Ici_succ_eq_Ioi_of_not_isMax
-  given: (ha : ¬ IsMax a)
-  statement: Ici (succ a) = Ioi a
-  proof: coe_injective by simpa using Set.Ici_succ_eq_Ioi_of_not_isMax ha
-
-中文:
-引理 Ici_succ_eq_Ioi_of_not_isMax
-  条件: (ha : ¬ IsMax a)
-  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
-  证明: coe_injective by simpa using Set.Ici_succ_eq_Ioi_of_not_isMax ha
-
-Depends on / 依赖: Ici_succ_eq_Ioi_of_not_isMax, Set.Ici_succ_eq_Ioi_of_not_isMax, coe_injective
+/-
+**Finset.Ici_succ_eq_Ioi_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ici_succ_eq_Ioi_of_not_isMax (ha : ¬ IsMax a) : Ici (succ a) = Ioi a
+参数：ha : ¬ IsMax a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用引理 `Set.Ici_succ_eq_Ioi_of_not_isMax`：Ici_succ_eq_Ioi_of_not_isMax (ha : ¬ I
+sMax a) : Ici (succ a) = Ioi a
 -/
 lemma Ici_succ_eq_Ioi_of_not_isMax (ha : ¬ IsMax a) : Ici (succ a) = Ioi a :=
-coe_injective by simpa using Set.Ici_succ_eq_Ioi_of_not_isMax ha
+  coe_injective <| by simpa using Set.Ici_succ_eq_Ioi_of_not_isMax ha
 
 variable [NoMaxOrder α]
-
-/--
-lemma `Ici_succ_eq_Ioi` / 引理 `Ici_succ_eq_Ioi`
-
-English:
-lemma Ici_succ_eq_Ioi
-  given: (a : α)
-  statement: Ici (succ a) = Ioi a
-  proof: coe_injective by simp
-
-中文:
-引理 Ici_succ_eq_Ioi
-  条件: (a : α)
-  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Ici_succ_eq_Ioi** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ici_succ_eq_Ioi (a : α) : Ici (succ a) = Ioi a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `Order.Ici_succ`：Ici_succ (a : α) : Ici (succ a) = Ioi a
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ici_succ_eq_Ioi (a : α) : Ici (succ a) = Ioi a := coe_injective by simp
+lemma Ici_succ_eq_Ioi (a : α) : Ici (succ a) = Ioi a := coe_injective <| by simp
 
 end SuccOrder
 
 section PredOrder
 variable [PredOrder α] {a a : α}
 
-/--
-lemma `Ioi_pred_eq_Ici_of_not_isMin` / 引理 `Ioi_pred_eq_Ici_of_not_isMin`
-
-English:
-lemma Ioi_pred_eq_Ici_of_not_isMin
-  given: (ha : ¬ IsMin a)
-  statement: Ioi (pred a) = Ici a
-  proof: coe_injective by simpa using Set.Ioi_pred_eq_Ici_of_not_isMin ha
-
-中文:
-引理 Ioi_pred_eq_Ici_of_not_isMin
-  条件: (ha : ¬ IsMin a)
-  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
-  证明: coe_injective by simpa using Set.Ioi_pred_eq_Ici_of_not_isMin ha
-
-Depends on / 依赖: Ioi_pred_eq_Ici_of_not_isMin, Set.Ioi_pred_eq_Ici_of_not_isMin, coe_injective
+/-
+**Finset.Ioi_pred_eq_Ici_of_not_isMin** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioi_pred_eq_Ici_of_not_isMin (ha : ¬ IsMin a) : Ioi (pred a) = Ici a
+参数：ha : ¬ IsMin a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用引理 `Set.Ioi_pred_eq_Ici_of_not_isMin`：Ioi_pred_eq_Ici_of_not_isMin (ha : ¬ I
+sMin a) : Ioi (pred a) = Ici a
 -/
 lemma Ioi_pred_eq_Ici_of_not_isMin (ha : ¬ IsMin a) : Ioi (pred a) = Ici a :=
-coe_injective by simpa using Set.Ioi_pred_eq_Ici_of_not_isMin ha
+  coe_injective <| by simpa using Set.Ioi_pred_eq_Ici_of_not_isMin ha
 
 variable [NoMinOrder α]
-
-/--
-lemma `Ioi_pred_eq_Ici` / 引理 `Ioi_pred_eq_Ici`
-
-English:
-lemma Ioi_pred_eq_Ici
-  given: (a : α)
-  statement: Ioi (pred a) = Ici a
-  proof: coe_injective by simp
-
-中文:
-引理 Ioi_pred_eq_Ici
-  条件: (a : α)
-  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
-  证明: coe_injective by simp
-
-Depends on / 依赖: coe_injective
+/-
+**Finset.Ioi_pred_eq_Ici** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Ioi_pred_eq_Ici (a : α) : Ioi (pred a) = Ici a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用定理 `Order.Ioi_pred`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : PredOr
+der α] [NoMinOrder α] (a : α),   Set.Ioi (Order.pred a) = Set.Ici a
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ioi_pred_eq_Ici (a : α) : Ioi (pred a) = Ici a := coe_injective by simp
+lemma Ioi_pred_eq_Ici (a : α) : Ioi (pred a) = Ici a := coe_injective <| by simp
 
 end PredOrder
 end LocallyFiniteOrderTop
 end Finset
+

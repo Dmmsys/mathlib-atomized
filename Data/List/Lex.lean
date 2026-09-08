@@ -38,113 +38,65 @@ universe u
 
 variable {α : Type u}
 
+/-! ### lexicographic ordering -/
 
-/--
-theorem `lex_cons_iff` / 定理 `lex_cons_iff`
+/-
+**List.lex_cons_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：lex_cons_iff {r : α -> α -> Prop} [Std.Irrefl r] {a l₁ l₂} : Lex r (a :: l
+₁) (a :: l₂) ↔ Lex r l₁ l₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `irrefl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Irrefl r] (a : α), ¬
+r a a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 
-English:
-theorem lex_cons_iff
-  given: {r : α -> α -> Prop} [Std.Irrefl r] {a l₁ l₂}
-  proof: ⟨fun h => by obtain - | h | h := h; exacts [(irrefl_of r a h).elim, h], Lex.cons⟩
-
-中文:
-定理 lex_cons_iff
-  条件: {r : α -> α -> 命题} [Std.Irrefl r] {a l₁ l₂}
-  证明: ⟨fun h => by obtain - | h | h := h; exacts [(irrefl_of r a h).elim, h], Lex.cons⟩
-
-Depends on / 依赖: Lex.cons, exacts, irrefl_of
+--- 原说明 ---
+### lexicographic ordering
 -/
-theorem lex_cons_iff {r : α -> α -> Prop} [Std.Irrefl r] {a l₁ l₂} :
+theorem lex_cons_iff {r : α → α → Prop} [Std.Irrefl r] {a l₁ l₂} :
     Lex r (a :: l₁) (a :: l₂) ↔ Lex r l₁ l₂ :=
   ⟨fun h => by obtain - | h | h := h; exacts [(irrefl_of r a h).elim, h], Lex.cons⟩
-
-/--
-theorem `lex_nil_or_eq_nil` / 定理 `lex_nil_or_eq_nil`
-
-English:
-theorem lex_nil_or_eq_nil
-  given: {r : α -> α -> Prop} (l : List α)
-  statement: List.Lex r [] l ∨ l = []
-  proof: match l with
-  | [] => Or.inr rfl
-  | _ :: _ => .inl .nil
-
-@[simp]
-
-中文:
-定理 lex_nil_or_eq_nil
-  条件: {r : α -> α -> 命题} (l : 列表 α)
-  结论: 列表.Lex r [] l ∨ l = []
-  证明: match l with
-  | [] => Or.inr rfl
-  | _ :: _ => .inl .nil
-
-@[simp]
-
-Depends on / 依赖: Or.inr
+/-
+**List.lex_nil_or_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：lex_nil_or_eq_nil {r : α -> α -> Prop} (l : List α) : List.Lex r [] l ∨ l 
+= []
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lex_nil_or_eq_nil {r : α -> α -> Prop} (l : List α) : List.Lex r [] l ∨ l = [] :=
+theorem lex_nil_or_eq_nil {r : α → α → Prop} (l : List α) : List.Lex r [] l ∨ l = [] :=
   match l with
   | [] => Or.inr rfl
   | _ :: _ => .inl .nil
 
 @[simp]
-/--
-theorem `lex_singleton_iff` / 定理 `lex_singleton_iff`
-
-English:
-theorem lex_singleton_iff
-  given: {r : α -> α -> Prop} (a b : α)
-  statement: List.Lex r [a] [b] ↔ r a b
-  proof: ⟨fun | .rel h => h, .rel⟩
-
-中文:
-定理 lex_singleton_iff
-  条件: {r : α -> α -> 命题} (a b : α)
-  结论: 列表.Lex r [a] [b] ↔ r a b
-  证明: ⟨fun | .rel h => h, .rel⟩
+/-
+**List.lex_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：lex_singleton_iff {r : α -> α -> Prop} (a b : α) : List.Lex r [a] [b] ↔ r 
+a b
+参数：a b : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lex_singleton_iff {r : α -> α -> Prop} (a b : α) : List.Lex r [a] [b] ↔ r a b :=
+theorem lex_singleton_iff {r : α → α → Prop} (a b : α) : List.Lex r [a] [b] ↔ r a b :=
   ⟨fun | .rel h => h, .rel⟩
 
 namespace Lex
 
-/--
-Instance `isOrderConnected` / 实例 `isOrderConnected`
-
-English:
-instance isOrderConnected
-  signature: (r : α -> α -> Prop) [IsOrderConnected α r] [Std.Trichotomous r]
-  body: aux where
-    aux
-    | _, [], _ :: _, nil => Or.inr nil
-    | _, [], _ :: _, rel _ => Or.inr nil
-    | _, [], _ :: _, cons _ => Or.inr nil
-    | _, _ :: _, _ :: _, nil => Or.inl nil
-    | _ :: _, b :: _, _ :: _, rel h => (IsOrderConnected.conn _ b _ h).imp rel rel
-    | a :: l₁, b :: l₂, _ :: l₃, cons h => by
-      rcases trichotomous_of r a b with (ab | rfl | ab)
-      · exact Or.inl (rel ab)
-      · exact (aux _ l₂ _ h).imp cons cons
-      · exact Or.inr (rel ab)
-
-中文:
-实例 isOrderConnected
-  签名: (r : α -> α -> 命题) [是OrderConnected α r] [Std.三歧 r]
-  定义体: aux where
-    aux
-    | _, [], _ :: _, nil => Or.inr nil
-    | _, [], _ :: _, rel _ => Or.inr nil
-    | _, [], _ :: _, cons _ => Or.inr nil
-    | _, _ :: _, _ :: _, nil => Or.inl nil
-    | _ :: _, b :: _, _ :: _, rel h => (IsOrderConnected.conn _ b _ h).imp rel rel
-    | a :: l₁, b :: l₂, _ :: l₃, cons h => by
-      rcases trichotomous_of r a b with (ab | rfl | ab)
-      · exact Or.inl (rel ab)
-      · exact (aux _ l₂ _ h).imp cons cons
-      · exact Or.inr (rel ab)
+/-
+**List.Lex.isOrderConnected** 是 Mathlib 中的一个实例，位于命名空间 `List.Lex`。
+形式化陈述：isOrderConnected (r : α -> α -> Prop) [IsOrderConnected α r] [Std.Trichoto
+mous r] : IsOrderConnected (List α) (Lex r) where conn
+参数：r : α -> α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Data.List.Lex.0.List.Lex.isOrderConnected.aux`：∀ {α : T
+ype u} (r : α → α → Prop) [IsOrderConnected α r] [Std.Trichotomous r] (x x_1 x_2
+ : List α),   List.Lex r x x_2 → List.Lex r x x_1 ∨ …
 -/
-instance isOrderConnected (r : α -> α -> Prop) [IsOrderConnected α r] [Std.Trichotomous r] :
+instance isOrderConnected (r : α → α → Prop) [IsOrderConnected α r] [Std.Trichotomous r] :
     IsOrderConnected (List α) (Lex r) where
   conn := aux where
     aux
@@ -158,105 +110,53 @@ instance isOrderConnected (r : α -> α -> Prop) [IsOrderConnected α r] [Std.Tr
       · exact Or.inl (rel ab)
       · exact (aux _ l₂ _ h).imp cons cons
       · exact Or.inr (rel ab)
-
-/--
-Instance `trichotomous` / 实例 `trichotomous`
-
-English:
-instance trichotomous
-  signature: (r : α -> α -> Prop) [Std.Trichotomous r]
-  body: aux where
-    aux
-    | [], [], _, _ => rfl
-.elim | [], _ :: _, hab, _ => hab nil
-.elim | _ :: _, [], _, hba => hba nil
-    | a :: l₁, b :: l₂, hab, hba => by
-      obtain rfl := Std.Trichotomous.trichotomous a b (mt rel hab) (mt rel hba)
-      rw [aux l₁ l₂ (mt cons hab) (mt cons hba)]
-
-中文:
-实例 trichotomous
-  签名: (r : α -> α -> 命题) [Std.三歧 r]
-  定义体: aux where
-    aux
-    | [], [], _, _ => rfl
-.elim | [], _ :: _, hab, _ => hab nil
-.elim | _ :: _, [], _, hba => hba nil
-    | a :: l₁, b :: l₂, hab, hba => by
-      obtain rfl := Std.Trichotomous.trichotomous a b (mt rel hab) (mt rel hba)
-      rw [aux l₁ l₂ (mt cons hab) (mt cons hba)]
+/-
+**List.Lex.trichotomous** 是 Mathlib 中的一个实例，位于命名空间 `List.Lex`。
+形式化陈述：trichotomous (r : α -> α -> Prop) [Std.Trichotomous r] : Std.Trichotomous 
+(Lex r) where trichotomous
+参数：r : α -> α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Data.List.Lex.0.List.Lex.trichotomous.aux`：∀ {α : Type 
+u} (r : α → α → Prop) [Std.Trichotomous r] (x x_1 : List α), ¬List.Lex r x x_1 →
+ ¬List.Lex r x_1 x → x = x_1
 -/
-instance trichotomous (r : α -> α -> Prop) [Std.Trichotomous r] : Std.Trichotomous (Lex r) where
+instance trichotomous (r : α → α → Prop) [Std.Trichotomous r] : Std.Trichotomous (Lex r) where
   trichotomous := aux where
     aux
     | [], [], _, _ => rfl
-.elim | [], _ :: _, hab, _ => hab nil
-.elim | _ :: _, [], _, hba => hba nil
+    | [], _ :: _, hab, _ => hab nil |>.elim
+    | _ :: _, [], _, hba => hba nil |>.elim
     | a :: l₁, b :: l₂, hab, hba => by
       obtain rfl := Std.Trichotomous.trichotomous a b (mt rel hab) (mt rel hba)
       rw [aux l₁ l₂ (mt cons hab) (mt cons hba)]
-
-/--
-Instance `asymm` / 实例 `asymm`
-
-English:
-instance asymm
-  signature: (r : α -> α -> Prop) [Std.Asymm r]
-  body: aux where
-    aux
-    | _, _, Lex.rel h₁, Lex.rel h₂ => _root_.asymm h₁ h₂
-    | _, _, Lex.rel h₁, Lex.cons _ => _root_.asymm h₁ h₁
-    | _, _, Lex.cons _, Lex.rel h₂ => _root_.asymm h₂ h₂
-    | _, _, Lex.cons h₁, Lex.cons h₂ => aux _ _ h₁ h₂
-
-中文:
-实例 asymm
-  签名: (r : α -> α -> 命题) [Std.Asymm r]
-  定义体: aux where
-    aux
-    | _, _, Lex.rel h₁, Lex.rel h₂ => _root_.asymm h₁ h₂
-    | _, _, Lex.rel h₁, Lex.cons _ => _root_.asymm h₁ h₁
-    | _, _, Lex.cons _, Lex.rel h₂ => _root_.asymm h₂ h₂
-    | _, _, Lex.cons h₁, Lex.cons h₂ => aux _ _ h₁ h₂
+/-
+**List.Lex.asymm** 是 Mathlib 中的一个实例，位于命名空间 `List.Lex`。
+形式化陈述：asymm (r : α -> α -> Prop) [Std.Asymm r] : Std.Asymm (Lex r) where asymm
+参数：r : α -> α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Data.List.Lex.0.List.Lex.asymm.aux`：∀ {α : Type u} (r :
+ α → α → Prop) [Std.Asymm r] (x x_1 : List α), List.Lex r x x_1 → List.Lex r x_1
+ x → False
 -/
-instance asymm (r : α -> α -> Prop) [Std.Asymm r] : Std.Asymm (Lex r) where
+instance asymm (r : α → α → Prop) [Std.Asymm r] : Std.Asymm (Lex r) where
   asymm := aux where
     aux
     | _, _, Lex.rel h₁, Lex.rel h₂ => _root_.asymm h₁ h₂
     | _, _, Lex.rel h₁, Lex.cons _ => _root_.asymm h₁ h₁
     | _, _, Lex.cons _, Lex.rel h₂ => _root_.asymm h₂ h₂
     | _, _, Lex.cons h₁, Lex.cons h₂ => aux _ _ h₁ h₂
-
-/--
-Instance `decidableRel` / 实例 `decidableRel`
-
-English:
-instance decidableRel
-  signature: [DecidableEq α] (r : α -> α -> Prop) [DecidableRel r]
-  body: decidableRel r l₁ l₂
-    refine decidable_of_iff (r a b ∨ a = b ∧ Lex r l₁ l₂) ⟨fun h => ?_, fun h => ?_⟩
-    · rcases h with (h | ⟨rfl, h⟩)
-      · exact Lex.rel h
-      · exact Lex.cons h
-    · rcases h with (_ | h | h)
-      · exact Or.inl h
-      · exact Or.inr ⟨rfl, h⟩
-
-中文:
-实例 decidableRel
-  签名: [DecidableEq α] (r : α -> α -> 命题) [DecidableRel r]
-  定义体: decidableRel r l₁ l₂
-    refine decidable_of_iff (r a b ∨ a = b ∧ Lex r l₁ l₂) ⟨fun h => ?_, fun h => ?_⟩
-    · rcases h with (h | ⟨rfl, h⟩)
-      · exact Lex.rel h
-      · exact Lex.cons h
-    · rcases h with (_ | h | h)
-      · exact Or.inl h
-      · exact Or.inr ⟨rfl, h⟩
-
-Depends on / 依赖: decidableRel
+/-
+**List.Lex.decidableRel** 是 Mathlib 中的一个实例，位于命名空间 `List.Lex`。
+形式化陈述：decidableRel [DecidableEq α] (r : α -> α -> Prop) [DecidableRel r] : Decid
+ableRel (Lex r) | l₁, [] => isFalse fun h => by cases h | [], _ :: _ => isTrue L
+ex.nil | a :: l₁, b :: l₂ => by haveI
+参数：r : α -> α -> Prop。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableRel [DecidableEq α] (r : α -> α -> Prop) [DecidableRel r] : DecidableRel (Lex r)
+instance decidableRel [DecidableEq α] (r : α → α → Prop) [DecidableRel r] : DecidableRel (Lex r)
   | l₁, [] => isFalse fun h => by cases h
   | [], _ :: _ => isTrue Lex.nil
   | a :: l₁, b :: l₂ => by
@@ -268,110 +168,66 @@ instance decidableRel [DecidableEq α] (r : α -> α -> Prop) [DecidableRel r] :
     · rcases h with (_ | h | h)
       · exact Or.inl h
       · exact Or.inr ⟨rfl, h⟩
-
-/--
-theorem `append_right` / 定理 `append_right`
-
-English:
-theorem append_right
-  given: (r : α -> α -> Prop)
-  statement: forall {s₁ s₂} (t), Lex r s₁ s₂ -> Lex r s₁ (s₂ ++ t)
-
-中文:
-定理 append_right
-  条件: (r : α -> α -> 命题)
-  结论: 对任意 {s₁ s₂} (t), Lex r s₁ s₂ -> Lex r s₁ (s₂ ++ t)
+/-
+**List.Lex.append_right** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`。
+形式化陈述：∀ {α : Type u} (r : α → α → Prop) {s₁ s₂ : List α} (t : List α), List.Lex 
+r s₁ s₂ → List.Lex r s₁ (s₂ ++ t)
+参数：r : α → α → Prop；t : List α；s₂ ++ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem append_right (r : α -> α -> Prop) : forall {s₁ s₂} (t), Lex r s₁ s₂ -> Lex r s₁ (s₂ ++ t)
+theorem append_right (r : α → α → Prop) : ∀ {s₁ s₂} (t), Lex r s₁ s₂ → Lex r s₁ (s₂ ++ t)
   | _, _, _, nil => nil
   | _, _, _, cons h => cons (append_right r _ h)
   | _, _, _, rel r => rel r
-
-/--
-theorem `append_left` / 定理 `append_left`
-
-English:
-theorem append_left
-  given: (R : α -> α -> Prop) {t₁ t₂} (h : Lex R t₁ t₂)
-  statement: forall s, Lex R (s ++ t₁) (s ++ t₂)
-
-中文:
-定理 append_left
-  条件: (R : α -> α -> 命题) {t₁ t₂} (h : Lex R t₁ t₂)
-  结论: 对任意 s, Lex R (s ++ t₁) (s ++ t₂)
+/-
+**List.Lex.append_left** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`。
+形式化陈述：∀ {α : Type u} (R : α → α → Prop) {t₁ t₂ : List α}, List.Lex R t₁ t₂ → ∀ (
+s : List α), List.Lex R (s ++ t₁) (s ++ t₂)
+参数：R : α → α → Prop；s : List α；s ++ t₁；s ++ t₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem append_left (R : α -> α -> Prop) {t₁ t₂} (h : Lex R t₁ t₂) : forall s, Lex R (s ++ t₁) (s ++ t₂)
+theorem append_left (R : α → α → Prop) {t₁ t₂} (h : Lex R t₁ t₂) : ∀ s, Lex R (s ++ t₁) (s ++ t₂)
   | [] => h
   | _ :: l => cons (append_left R h l)
-
-/--
-theorem `imp` / 定理 `imp`
-
-English:
-theorem imp
-  given: {r s : α -> α -> Prop} (H : forall a b, r a b -> s a b)
-  statement: forall l₁ l₂, Lex r l₁ l₂ -> Lex s l₁ l₂
-
-中文:
-定理 imp
-  条件: {r s : α -> α -> 命题} (H : 对任意 a b, r a b -> s a b)
-  结论: 对任意 l₁ l₂, Lex r l₁ l₂ -> Lex s l₁ l₂
+/-
+**List.Lex.imp** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`。
+形式化陈述：∀ {α : Type u} {r s : α → α → Prop},   (∀ (a b : α), r a b → s a b) → ∀ (l
+₁ l₂ : List α), List.Lex r l₁ l₂ → List.Lex s l₁ l₂
+参数：∀ (a b : α), r a b → s a b；l₁ l₂ : List α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Lex.brecOn`：∀ {α : Type u} {r : α → α → Prop} {motive : (as bs : Li
+st α) → List.Lex r as bs → Prop} {as bs : List α}   (t : List.Lex r as bs),   (∀
+ (as …
 -/
-theorem imp {r s : α -> α -> Prop} (H : forall a b, r a b -> s a b) : forall l₁ l₂, Lex r l₁ l₂ -> Lex s l₁ l₂
+theorem imp {r s : α → α → Prop} (H : ∀ a b, r a b → s a b) : ∀ l₁ l₂, Lex r l₁ l₂ → Lex s l₁ l₂
   | _, _, nil => nil
   | _, _, cons h => cons (imp H _ _ h)
   | _, _, rel r => rel (H _ _ r)
-
-/--
-theorem `to_ne` / 定理 `to_ne`
-
-English:
-theorem to_ne
-  statement: forall {l₁ l₂ : List α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
-
-中文:
-定理 to_ne
-  结论: 对任意 {l₁ l₂ : 列表 α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
+/-
+**List.Lex.to_ne** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`。
+形式化陈述：∀ {α : Type u} {l₁ l₂ : List α}, List.Lex (fun x1 x2 => x1 ≠ x2) l₁ l₂ → l
+₁ ≠ l₂
+参数：fun x1 x2 => x1 ≠ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Lex.brecOn`：∀ {α : Type u} {r : α → α → Prop} {motive : (as bs : Li
+st α) → List.Lex r as bs → Prop} {as bs : List α}   (t : List.Lex r as bs),   (∀
+ (as …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `List.cons.inj`：∀ {α : Type u} {head : α} {tail : List α} {head_1 : α} {t
+ail_1 : List α},   head :: tail = head_1 :: tail_1 → head = head_1 ∧ tail = tail
+_1
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem to_ne : forall {l₁ l₂ : List α}, Lex (· != ·) l₁ l₂ -> l₁ != l₂
+theorem to_ne : ∀ {l₁ l₂ : List α}, Lex (· ≠ ·) l₁ l₂ → l₁ ≠ l₂
   | _, _, cons h, e => to_ne h (List.cons.inj e).2
   | _, _, rel r, e => r (List.cons.inj e).1
-
-/--
-theorem `_root_.Decidable.List.Lex.ne_iff` / 定理 `_root_.Decidable.List.Lex.ne_iff`
-
-English:
-theorem _root_.Decidable.List.Lex.ne_iff
-  statement: [DecidableEq α] {l₁ l₂ : List α}
-  proof: ⟨to_ne, fun h => by
-    induction l₁ generalizing l₂ <;> rcases l₂ with - | ⟨b, l₂⟩
-    · contradiction
-    · apply nil
-    · exact (not_lt_of_ge H).elim (succ_pos _)
-    case cons.cons a l₁ IH =>
-      by_cases ab : a = b
-      · subst b
-exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
-      · exact .rel ab ⟩
-
-中文:
-定理 _root_.可判定.列表.Lex.ne_iff
-  结论: [DecidableEq α] {l₁ l₂ : 列表 α}
-  证明: ⟨to_ne, fun h => by
-    induction l₁ generalizing l₂ <;> rcases l₂ with - | ⟨b, l₂⟩
-    · contradiction
-    · apply nil
-    · exact (not_lt_of_ge H).elim (succ_pos _)
-    case cons.cons a l₁ IH =>
-      by_cases ab : a = b
-      · subst b
-exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
-      · exact .rel ab ⟩
-
-Depends on / 依赖: congr_arg, cons.cons, generalizing, le_of_succ_le_succ, not_lt_of_ge, succ_pos, to_ne
+/-
+**List.Lex._root_.Decidable.List.Lex.ne_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Decidable.List.Lex.ne_iff [DecidableEq α] {l₁ l₂ : List α}
-    (H : length l₁ <= length l₂) : Lex (· != ·) l₁ l₂ ↔ l₁ != l₂ :=
+    (H : length l₁ ≤ length l₂) : Lex (· ≠ ·) l₁ l₂ ↔ l₁ ≠ l₂ :=
   ⟨to_ne, fun h => by
     induction l₁ generalizing l₂ <;> rcases l₂ with - | ⟨b, l₂⟩
     · contradiction
@@ -380,179 +236,104 @@ theorem _root_.Decidable.List.Lex.ne_iff [DecidableEq α] {l₁ l₂ : List α}
     case cons.cons a l₁ IH =>
       by_cases ab : a = b
       · subst b
-exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
+        exact .cons <| IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
       · exact .rel ab ⟩
-
-/--
-theorem `ne_iff` / 定理 `ne_iff`
-
-English:
-theorem ne_iff
-  given: {l₁ l₂ : List α} (H : length l₁ <= length l₂)
-  statement: Lex (· != ·) l₁ l₂ ↔ l₁ != l₂
-  proof: by
-  classical
-  exact Decidable.List.Lex.ne_iff H
-
-中文:
-定理 ne_iff
-  条件: {l₁ l₂ : 列表 α} (H : length l₁ <= length l₂)
-  结论: Lex (· != ·) l₁ l₂ ↔ l₁ != l₂
-  证明: by
-  classical
-  exact Decidable.List.Lex.ne_iff H
-
-Depends on / 依赖: Decidable, Decidable.List.Lex.ne_iff, classical, ne_iff
+/-
+**List.Lex.ne_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.Lex`。
+形式化陈述：ne_iff {l₁ l₂ : List α} (H : length l₁ <= length l₂) : Lex (· != ·) l₁ l₂ 
+↔ l₁ != l₂
+参数：H : length l₁ <= length l₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.List.Lex.ne_iff`：∀ {α : Type u} [DecidableEq α] {l₁ l₂ : List 
+α},   l₁.length ≤ l₂.length → (List.Lex (fun x1 x2 => x1 ≠ x2) l₁ l₂ ↔ l₁ ≠ l₂)
 -/
-theorem ne_iff {l₁ l₂ : List α} (H : length l₁ <= length l₂) : Lex (· != ·) l₁ l₂ ↔ l₁ != l₂ := by
+theorem ne_iff {l₁ l₂ : List α} (H : length l₁ ≤ length l₂) : Lex (· ≠ ·) l₁ l₂ ↔ l₁ ≠ l₂ := by
   classical
   exact Decidable.List.Lex.ne_iff H
 
 end Lex
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LinearOrder
-  signature: α] : LinearOrder (List α)
-  body: have : forall {r} [IsStrictTotalOrder α r], IsStrictTotalOrder (List α) (Lex r) :=
-    { isStrictWeakOrder_of_isOrderConnected with }
-  linearOrderOfSTO (Lex (· < ·))
-
-中文:
-实例 [线性序
-  签名: α] : 线性序 (列表 α)
-  定义体: have : forall {r} [IsStrictTotalOrder α r], IsStrictTotalOrder (List α) (Lex r) :=
-    { isStrictWeakOrder_of_isOrderConnected with }
-  linearOrderOfSTO (Lex (· < ·))
-
-Depends on / 依赖: IsStrictTotalOrder, isStrictWeakOrder_of_isOrderConnected, linearOrderOfSTO
+/-
+**List.** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LinearOrder α] : LinearOrder (List α) :=
-  have : forall {r} [IsStrictTotalOrder α r], IsStrictTotalOrder (List α) (Lex r) :=
+  have : ∀ {r} [IsStrictTotalOrder α r], IsStrictTotalOrder (List α) (Lex r) :=
     { isStrictWeakOrder_of_isOrderConnected with }
   linearOrderOfSTO (Lex (· < ·))
 
 --Note: this overrides an instance in core lean
-/--
-Instance `LE'` / 实例 `LE'`
-
-English:
-instance LE'
-  signature: [LinearOrder α]
-  body: Preorder.toLE
-
-中文:
-实例 LE'
-  签名: [线性序 α]
-  定义体: Preorder.toLE
-
-Depends on / 依赖: Preorder, Preorder.toLE
+/-
+**List.LE'** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+形式化陈述：LE' [LinearOrder α] : LE (List α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance LE' [LinearOrder α] : LE (List α) :=
   Preorder.toLE
-
-/--
-theorem `lt_iff_lex_lt` / 定理 `lt_iff_lex_lt`
-
-English:
-theorem lt_iff_lex_lt
-  given: [LT α] (l l' : List α)
-  statement: List.lt l l' ↔ Lex (· < ·) l l'
-  proof: by
-  rw [List.lt]
-
-中文:
-定理 lt_iff_lex_lt
-  条件: [LT α] (l l' : 列表 α)
-  结论: 列表.lt l l' ↔ Lex (· < ·) l l'
-  证明: by
-  rw [List.lt]
-
-Depends on / 依赖: List.lt
+/-
+**List.lt_iff_lex_lt** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：lt_iff_lex_lt [LT α] (l l' : List α) : List.lt l l' ↔ Lex (· < ·) l l'
+参数：l l' : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.lt.eq_1`：∀ {α : Type u} [inst : LT α], List.lt = List.Lex fun x1 x2
+ => x1 < x2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_iff_lex_lt [LT α] (l l' : List α) : List.lt l l' ↔ Lex (· < ·) l l' := by
   rw [List.lt]
-
-/--
-theorem `head_le_of_lt` / 定理 `head_le_of_lt`
-
-English:
-theorem head_le_of_lt
-  given: [Preorder α] {a a' : α} {l l' : List α} (h : (a' :: l') < (a :: l))
-  proof: match h with
-  | .cons _ => le_rfl
-  | .rel h => h.le
-
-中文:
-定理 head_le_of_lt
-  条件: [预序 α] {a a' : α} {l l' : 列表 α} (h : (a' :: l') < (a :: l))
-  证明: match h with
-  | .cons _ => le_rfl
-  | .rel h => h.le
-
-Depends on / 依赖: h.le, le_rfl
+/-
+**List.head_le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：head_le_of_lt [Preorder α] {a a' : α} {l l' : List α} (h : (a' :: l') < (a
+ :: l)) : a' <= a
+参数：h : (a' :: l') < (a :: l)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem head_le_of_lt [Preorder α] {a a' : α} {l l' : List α} (h : (a' :: l') < (a :: l)) :
-    a' <= a :=
+    a' ≤ a :=
   match h with
   | .cons _ => le_rfl
   | .rel h => h.le
-
-/--
-theorem `head!_le_of_lt` / 定理 `head!_le_of_lt`
-
-English:
-theorem head!_le_of_lt
-  given: [Preorder α] [Inhabited α] (l l' : List α) (h : l' < l) (hl' : l' != [])
-  proof: by
-  replace h : List.Lex (· < ·) l' l := h
-  by_cases hl : l = []
-  · simp [hl] at h
-  · rw [← List.cons_head!_tail hl', ← List.cons_head!_tail hl] at h
-    exact head_le_of_lt h
-
-中文:
-定理 head!_le_of_lt
-  条件: [预序 α] [可居 α] (l l' : 列表 α) (h : l' < l) (hl' : l' != [])
-  证明: by
-  replace h : List.Lex (· < ·) l' l := h
-  by_cases hl : l = []
-  · simp [hl] at h
-  · rw [← List.cons_head!_tail hl', ← List.cons_head!_tail hl] at h
-    exact head_le_of_lt h
+/-
+**List.head** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) : (List.replic
+ate n l).flatten.head? = l.head?
+参数：h : n != 0；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem head!_le_of_lt [Preorder α] [Inhabited α] (l l' : List α) (h : l' < l) (hl' : l' != []) :
-    l'.head! <= l.head! := by
+theorem head!_le_of_lt [Preorder α] [Inhabited α] (l l' : List α) (h : l' < l) (hl' : l' ≠ []) :
+    l'.head! ≤ l.head! := by
   replace h : List.Lex (· < ·) l' l := h
   by_cases hl : l = []
   · simp [hl] at h
   · rw [← List.cons_head!_tail hl', ← List.cons_head!_tail hl] at h
     exact head_le_of_lt h
-
-/--
-theorem `cons_le_cons` / 定理 `cons_le_cons`
-
-English:
-theorem cons_le_cons
-  given: [LinearOrder α] (a : α) {l l' : List α} (h : l' <= l)
-  proof: by
-  rw [le_iff_lt_or_eq] at h ⊢
-  exact h.imp .cons (congr_arg _)
-
-中文:
-定理 cons_le_cons
-  条件: [线性序 α] (a : α) {l l' : 列表 α} (h : l' <= l)
-  证明: by
-  rw [le_iff_lt_or_eq] at h ⊢
-  exact h.imp .cons (congr_arg _)
-
-Depends on / 依赖: congr_arg, h.imp, le_iff_lt_or_eq
+/-
+**List.cons_le_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：cons_le_cons [LinearOrder α] (a : α) {l l' : List α} (h : l' <= l) : a :: 
+l' <= a :: l
+参数：a : α；h : l' <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_iff_lt_or_eq`：le_iff_lt_or_eq : a <= b ↔ a < b ∨ a = b
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem cons_le_cons [LinearOrder α] (a : α) {l l' : List α} (h : l' <= l) :
-    a :: l' <= a :: l := by
+theorem cons_le_cons [LinearOrder α] (a : α) {l l' : List α} (h : l' ≤ l) :
+    a :: l' ≤ a :: l := by
   rw [le_iff_lt_or_eq] at h ⊢
   exact h.imp .cons (congr_arg _)
 
 end List
+

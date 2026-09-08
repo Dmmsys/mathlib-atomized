@@ -21,49 +21,61 @@ public meta section
 
 namespace Mathlib.Tactic.Ring
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CSLift Nat+ Nat
-  body: PNat.val
-  inj := PNat.coe_injective
-
-中文:
-实例 :
-  签名: CSLift 自然数+ 自然数
-  定义体: PNat.val
-  inj := PNat.coe_injective
-
-Depends on / 依赖: PNat.val
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CSLift Nat+ Nat where
+instance : CSLift ℕ+ Nat where
   lift := PNat.val
   inj := PNat.coe_injective
 
 -- FIXME: this `no_index` seems to be in the wrong place, but
 -- #synth CSLiftVal (3 : ℕ+) _ doesn't work otherwise
-instance {n} : CSLiftVal (no_index (OfNat.ofNat (n + 1)) : Nat+) (n + 1) := ⟨rfl⟩
-
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n} : CSLiftVal (no_index (OfNat.ofNat (n + 1)) : ℕ+) (n + 1) := ⟨rfl⟩
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n h} : CSLiftVal (Nat.toPNat n h) n := ⟨rfl⟩
-
-
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n} : CSLiftVal (Nat.succPNat n) (n + 1) := ⟨rfl⟩
-
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n} : CSLiftVal (Nat.toPNat' n) (n.pred + 1) := ⟨rfl⟩
-
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n k} : CSLiftVal (PNat.divExact n k) (n.div k + 1) := ⟨rfl⟩
-
-instance {n n' k k'} [h1 : CSLiftVal (n : Nat+) n'] [h2 : CSLiftVal (k : Nat+) k'] :
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n n' k k'} [h1 : CSLiftVal (n : ℕ+) n'] [h2 : CSLiftVal (k : ℕ+) k'] :
     CSLiftVal (n + k) (n' + k') := ⟨by simp [h1.1, h2.1, CSLift.lift]⟩
-
-instance {n n' k k'} [h1 : CSLiftVal (n : Nat+) n'] [h2 : CSLiftVal (k : Nat+) k'] :
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n n' k k'} [h1 : CSLiftVal (n : ℕ+) n'] [h2 : CSLiftVal (k : ℕ+) k'] :
     CSLiftVal (n * k) (n' * k') := ⟨by simp [h1.1, h2.1, CSLift.lift]⟩
-
-instance {n n' k} [h1 : CSLiftVal (n : Nat+) n'] :
+/-
+**Mathlib.Tactic.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n n' k} [h1 : CSLiftVal (n : ℕ+) n'] :
     CSLiftVal (n ^ k) (n' ^ k) := ⟨by simp [h1.1, CSLift.lift]⟩
 
 end Ring
 
 end Mathlib.Tactic
+

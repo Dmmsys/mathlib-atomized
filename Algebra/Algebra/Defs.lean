@@ -88,49 +88,39 @@ assert_not_exists Field Finset Module.End
 
 universe u v w u₁ v₁
 
-/--
-Definition of `Algebra` / `Algebra` 的定义
+/-- An associative unital `R`-algebra is a semiring `A` equipped with a map into its center `R → A`.
 
-English:
-class Algebra
-  parameters: (R : Type u) (A : Type v) [CommSemiring R] [Semiring A]
-  extends: SMul R A
-  axioms and operations (3):
-    - algebraMap((R) (A)) : R ->+* A
-    - commutes' : forall r x, algebraMap r * x = x * algebraMap r
-    - smul_def' : forall r x, r • x = algebraMap r * x
+See the implementation notes in this file for discussion of the details of this definition.
+-/
+/-
+**Algebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (A : Type v) → [CommSemiring R] → [Semiring A] → Type (max 
+u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 代数
-  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
-  继承: 标量乘法 R A
-  公理与运算 (3 个):
-    - algebraMap((R) (A)) : R ->+* A
-    - commutes' : 对任意 r x, algebraMap r * x = x * algebraMap r
-    - smul_def' : 对任意 r x, r • x = algebraMap r * x
+--- 原说明 ---
+An associative unital `R`-algebra is a semiring `A` equipped with a map into its
+ center `R → A`.
+
+See the implementation notes in this file for discussion of the details of this 
+definition.
 -/
 class Algebra (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] extends SMul R A where
   /-- Embedding `R →+* A` given by `Algebra` structure. -/
-  algebraMap (R) (A) : R ->+* A
-  commutes' : forall r x, algebraMap r * x = x * algebraMap r
-  smul_def' : forall r x, r • x = algebraMap r * x
+  algebraMap (R) (A) : R →+* A
+  commutes' : ∀ r x, algebraMap r * x = x * algebraMap r
+  smul_def' : ∀ r x, r • x = algebraMap r * x
 
 export Algebra (algebraMap)
-
-/--
-theorem `Algebra.subsingleton` / 定理 `Algebra.subsingleton`
-
-English:
-theorem Algebra.subsingleton
-  statement: (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] [Algebra R A]
-  proof: (algebraMap R A).codomain_trivial
-
-中文:
-定理 代数.subsingleton
-  结论: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A] [代数 R A]
-  证明: (algebraMap R A).codomain_trivial
-
-Depends on / 依赖: algebraMap, codomain_trivial
+/-
+**Algebra.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Algebra.subsingleton (R : Type u) (A : Type v) [CommSemiring R] [Semiring 
+A] [Algebra R A] [Subsingleton R] : Subsingleton A
+参数：R : Type u；A : Type v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.codomain_trivial`：codomain_trivial (f : α ->+* β) [h : Subsingle
+ton α] : Subsingleton β
 -/
 theorem Algebra.subsingleton (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] [Algebra R A]
     [Subsingleton R] : Subsingleton A :=
@@ -138,26 +128,27 @@ theorem Algebra.subsingleton (R : Type u) (A : Type v) [CommSemiring R] [Semirin
 
 /-- Coercion from a commutative semiring to an algebra over this semiring. -/
 @[coe, reducible]
-/--
-Definition of `Algebra.cast` / `Algebra.cast` 的定义
+/-
+**Algebra.cast** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Algebra.cast {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] : R
+ -> A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Algebra.cast
-  signature: {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
-  body: algebraMap R A
-
-中文:
-定义 代数.cast
-  签名: {R A : 类型} [交换半环 R] [半环 A] [代数 R A]
-  定义体: algebraMap R A
-
-Depends on / 依赖: algebraMap
+--- 原说明 ---
+Coercion from a commutative semiring to an algebra over this semiring.
 -/
-def Algebra.cast {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] : R -> A :=
+def Algebra.cast {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] : R → A :=
   algebraMap R A
 
 namespace algebraMap
 
+/-
+**algebraMap.coeHTCT** 是 Mathlib 中的一个定义，位于命名空间 `algebraMap`。
+形式化陈述：(R : Type u_1) → (A : Type u_2) → [inst : CommSemiring R] → [inst_1 : Semi
+ring A] → [Algebra R A] → CoeHTCT R A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance coeHTCT (R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A] :
     CoeHTCT R A :=
   ⟨Algebra.cast⟩
@@ -167,145 +158,111 @@ section CommSemiringSemiring
 variable {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
 
 @[norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: (↑(0 : R) : A) = 0
-  proof: map_zero (algebraMap R A)
-
-@[norm_cast]
-
-中文:
-定理 coe_zero
-  结论: (↑(0 : R) : A) = 0
-  证明: map_zero (algebraMap R A)
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_zero
+/-
+**algebraMap.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_zero : (↑(0 : R) : A) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem coe_zero : (↑(0 : R) : A) = 0 :=
   map_zero (algebraMap R A)
 
 @[norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: (↑(1 : R) : A) = 1
-  proof: map_one (algebraMap R A)
-
-@[norm_cast]
-
-中文:
-定理 coe_one
-  结论: (↑(1 : R) : A) = 1
-  证明: map_one (algebraMap R A)
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_one
+/-
+**algebraMap.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_one : (↑(1 : R) : A) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem coe_one : (↑(1 : R) : A) = 1 :=
   map_one (algebraMap R A)
 
 @[norm_cast]
-/--
-theorem `coe_natCast` / 定理 `coe_natCast`
-
-English:
-theorem coe_natCast
-  given: (a : Nat)
-  statement: (↑(a : R) : A) = a
-  proof: map_natCast (algebraMap R A) a
-
-@[norm_cast]
-
-中文:
-定理 coe_natCast
-  条件: (a : 自然数)
-  结论: (↑(a : R) : A) = a
-  证明: map_natCast (algebraMap R A) a
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_natCast
+/-
+**algebraMap.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_natCast (a : Nat) : (↑(a : R) : A) = a
+参数：a : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 -/
-theorem coe_natCast (a : Nat) : (↑(a : R) : A) = a :=
+theorem coe_natCast (a : ℕ) : (↑(a : R) : A) = a :=
   map_natCast (algebraMap R A) a
 
 @[norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (a b : R)
-  statement: (↑(a + b : R) : A) = ↑a + ↑b
-  proof: map_add (algebraMap R A) a b
-
-@[norm_cast]
-
-中文:
-定理 coe_add
-  条件: (a b : R)
-  结论: (↑(a + b : R) : A) = ↑a + ↑b
-  证明: map_add (algebraMap R A) a b
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_add
+/-
+**algebraMap.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_add (a b : R) : (↑(a + b : R) : A) = ↑a + ↑b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem coe_add (a b : R) : (↑(a + b : R) : A) = ↑a + ↑b :=
   map_add (algebraMap R A) a b
 
 @[norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (a b : R)
-  statement: (↑(a * b : R) : A) = ↑a * ↑b
-  proof: map_mul (algebraMap R A) a b
-
-@[norm_cast]
-
-中文:
-定理 coe_mul
-  条件: (a b : R)
-  结论: (↑(a * b : R) : A) = ↑a * ↑b
-  证明: map_mul (algebraMap R A) a b
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_mul
+/-
+**algebraMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_mul (a b : R) : (↑(a * b : R) : A) = ↑a * ↑b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
 -/
 theorem coe_mul (a b : R) : (↑(a * b : R) : A) = ↑a * ↑b :=
   map_mul (algebraMap R A) a b
 
 @[norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (a : R) (n : Nat)
-  statement: (↑(a ^ n : R) : A) = (a : A) ^ n
-  proof: map_pow (algebraMap R A) _ _
-
-中文:
-定理 coe_pow
-  条件: (a : R) (n : 自然数)
-  结论: (↑(a ^ n : R) : A) = (a : A) ^ n
-  证明: map_pow (algebraMap R A) _ _
-
-Depends on / 依赖: algebraMap, map_pow
+/-
+**algebraMap.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_pow (a : R) (n : Nat) : (↑(a ^ n : R) : A) = (a : A) ^ n
+参数：a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_pow (a : R) (n : Nat) : (↑(a ^ n : R) : A) = (a : A) ^ n :=
+theorem coe_pow (a : R) (n : ℕ) : (↑(a ^ n : R) : A) = (a : A) ^ n :=
   map_pow (algebraMap R A) _ _
 
 end CommSemiringSemiring
@@ -315,45 +272,33 @@ section CommRingRing
 variable {R A : Type*} [CommRing R] [Ring A] [Algebra R A]
 
 @[norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (x : R)
-  statement: (↑(-x : R) : A) = -↑x
-  proof: map_neg (algebraMap R A) x
-
-@[norm_cast]
-
-中文:
-定理 coe_neg
-  条件: (x : R)
-  结论: (↑(-x : R) : A) = -↑x
-  证明: map_neg (algebraMap R A) x
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_neg
+/-
+**algebraMap.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_neg (x : R) : (↑(-x : R) : A) = -↑x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem coe_neg (x : R) : (↑(-x : R) : A) = -↑x :=
   map_neg (algebraMap R A) x
 
 @[norm_cast]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (a b : R)
-  proof: map_sub (algebraMap R A) a b
-
-中文:
-定理 coe_sub
-  条件: (a b : R)
-  证明: map_sub (algebraMap R A) a b
-
-Depends on / 依赖: algebraMap, map_sub
+/-
+**algebraMap.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `algebraMap`。
+形式化陈述：coe_sub (a b : R) : (↑(a - b : R) : A) = ↑a - ↑b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem coe_sub (a b : R) :
     (↑(a - b : R) : A) = ↑a - ↑b :=
@@ -363,27 +308,31 @@ end CommRingRing
 
 end algebraMap
 
-/--
-Definition of `RingHom.toAlgebra'` / `RingHom.toAlgebra'` 的定义
+/-- Creating an algebra from a morphism to the center of a semiring.
+See note [reducible non-instances].
 
-English:
-abbreviation RingHom.toAlgebra'
-  signature: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-  body: i c * x
-  commutes' := h
-  smul_def' _ _ := rfl
-  algebraMap := i
+*Warning:* In general this should not be used if `S` already has a `SMul R S`
+instance, since this creates another `SMul R S` instance from the supplied `RingHom` and
+this will likely create a diamond. -/
+/-
+**RingHom.toAlgebra'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RingHom.toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S) (h :
+ forall c x, i c * x = x * i c) : Algebra R S where smul c x
+参数：i : R ->+* S；h : forall c x, i c * x = x * i c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 环态射.toAlgebra'
-  签名: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
-  定义体: i c * x
-  commutes' := h
-  smul_def' _ _ := rfl
-  algebraMap := i
+--- 原说明 ---
+Creating an algebra from a morphism to the center of a semiring.
+See note [reducible non-instances].
+
+*Warning:* In general this should not be used if `S` already has a `SMul R S`
+instance, since this creates another `SMul R S` instance from the supplied `Ring
+Hom` and
+this will likely create a diamond.
 -/
-abbrev RingHom.toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-    (h : forall c x, i c * x = x * i c) : Algebra R S where
+abbrev RingHom.toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R →+* S)
+    (h : ∀ c x, i c * x = x * i c) : Algebra R S where
   smul c x := i c * x
   commutes' := h
   smul_def' _ _ := rfl
@@ -391,101 +340,80 @@ abbrev RingHom.toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
 
 -- just simple lemmas for a declaration that is itself primed, no need for docstrings
 set_option linter.docPrime false in
-/--
-theorem `RingHom.smul_toAlgebra'` / 定理 `RingHom.smul_toAlgebra'`
-
-English:
-theorem RingHom.smul_toAlgebra'
-  statement: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-  proof: RingHom.toAlgebra' i h
-    r • s = i r * s := rfl
-
-中文:
-定理 环态射.smul_toAlgebra'
-  结论: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
-  证明: RingHom.toAlgebra' i h
-    r • s = i r * s := rfl
-
-Depends on / 依赖: RingHom, RingHom.toAlgebra, toAlgebra
+/-
+**RingHom.smul_toAlgebra'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.smul_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
+ (h : forall c x, i c * x = x * i c) (r : R) (s : S) : let _
+参数：i : R ->+* S；h : forall c x, i c * x = x * i c；r : R；s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.smul_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-    (h : forall c x, i c * x = x * i c) (r : R) (s : S) :
+theorem RingHom.smul_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R →+* S)
+    (h : ∀ c x, i c * x = x * i c) (r : R) (s : S) :
     let _ := RingHom.toAlgebra' i h
     r • s = i r * s := rfl
 
 set_option linter.docPrime false in
-/--
-theorem `RingHom.algebraMap_toAlgebra'` / 定理 `RingHom.algebraMap_toAlgebra'`
-
-English:
-theorem RingHom.algebraMap_toAlgebra'
-  statement: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-  proof: rfl
-
-中文:
-定理 环态射.algebraMap_toAlgebra'
-  结论: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
-  证明: rfl
+/-
+**RingHom.algebraMap_toAlgebra'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.algebraMap_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R -
+>+* S) (h : forall c x, i c * x = x * i c) : @algebraMap R S _ _ (i.toAlgebra' h
+) = i
+参数：i : R ->+* S；h : forall c x, i c * x = x * i c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.algebraMap_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
-    (h : forall c x, i c * x = x * i c) :
+theorem RingHom.algebraMap_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R →+* S)
+    (h : ∀ c x, i c * x = x * i c) :
     @algebraMap R S _ _ (i.toAlgebra' h) = i :=
   rfl
 
-/--
-Definition of `RingHom.toAlgebra` / `RingHom.toAlgebra` 的定义
+/-- Creating an algebra from a morphism to a commutative semiring.
+See note [reducible non-instances].
 
-English:
-abbreviation RingHom.toAlgebra
-  signature: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
-  body: i.toAlgebra' fun _ => mul_comm _
+*Warning:* In general this should not be used if `S` already has a `SMul R S`
+instance, since this creates another `SMul R S` instance from the supplied `RingHom` and
+this will likely create a diamond. -/
+/-
+**RingHom.toAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RingHom.toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S) :
+ Algebra R S
+参数：i : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 环态射.toAlgebra
-  签名: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
-  定义体: i.toAlgebra' fun _ => mul_comm _
+--- 原说明 ---
+Creating an algebra from a morphism to a commutative semiring.
+See note [reducible non-instances].
 
-Depends on / 依赖: i.toAlgebra, mul_comm, toAlgebra
+*Warning:* In general this should not be used if `S` already has a `SMul R S`
+instance, since this creates another `SMul R S` instance from the supplied `Ring
+Hom` and
+this will likely create a diamond.
 -/
-abbrev RingHom.toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S) : Algebra R S :=
+abbrev RingHom.toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R →+* S) : Algebra R S :=
   i.toAlgebra' fun _ => mul_comm _
-
-/--
-theorem `RingHom.smul_toAlgebra` / 定理 `RingHom.smul_toAlgebra`
-
-English:
-theorem RingHom.smul_toAlgebra
-  statement: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
-  proof: RingHom.toAlgebra i
-    r • s = i r * s := rfl
-
-中文:
-定理 环态射.smul_toAlgebra
-  结论: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
-  证明: RingHom.toAlgebra i
-    r • s = i r * s := rfl
-
-Depends on / 依赖: RingHom, RingHom.toAlgebra, toAlgebra
+/-
+**RingHom.smul_toAlgebra** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.smul_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+*
+ S) (r : R) (s : S) : let _
+参数：i : R ->+* S；r : R；s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.smul_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
+theorem RingHom.smul_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R →+* S)
     (r : R) (s : S) :
     let _ := RingHom.toAlgebra i
     r • s = i r * s := rfl
-
-/--
-theorem `RingHom.algebraMap_toAlgebra` / 定理 `RingHom.algebraMap_toAlgebra`
-
-English:
-theorem RingHom.algebraMap_toAlgebra
-  given: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
-  proof: rfl
-
-中文:
-定理 环态射.algebraMap_toAlgebra
-  条件: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
-  证明: rfl
+/-
+**RingHom.algebraMap_toAlgebra** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.algebraMap_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : 
+R ->+* S) : @algebraMap R S _ _ i.toAlgebra = i
+参数：i : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.algebraMap_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S) :
+theorem RingHom.algebraMap_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R →+* S) :
     @algebraMap R S _ _ i.toAlgebra = i :=
   rfl
 
@@ -493,36 +421,33 @@ namespace Algebra
 
 variable {R : Type u} {S : Type v} {A : Type w} {B : Type*}
 
-/--
-Definition of `ofModule'` / `ofModule'` 的定义
+/-- Let `R` be a commutative semiring, let `A` be a semiring with a `Module R` structure.
+If `(r • 1) * x = x * (r • 1) = r • x` for all `r : R` and `x : A`, then `A` is an `Algebra`
+over `R`.
 
-English:
-abbreviation ofModule'
-  signature: [CommSemiring R] [Semiring A] [Module R A]
-  body: { toFun r := r • (1 : A)
-    map_one' := one_smul _ _
-    map_mul' r₁ r₂ := by simp only [h₁, mul_smul]
-    map_zero' := zero_smul _ _
-    map_add' r₁ r₂ := add_smul r₁ r₂ 1 }
-  commutes' r x := by simp [h₁, h₂]
-  smul_def' r x := by simp [h₁]
+See note [reducible non-instances]. -/
+/-
+**Algebra.ofModule'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra`。
+形式化陈述：ofModule' [CommSemiring R] [Semiring A] [Module R A] (h₁ : forall (r : R) 
+(x : A), r • (1 : A) * x = r • x) (h₂ : forall (r : R) (x : A), x * r • (1 : A) 
+= r • x) : Algebra R A where algebraMap
+参数：h₁ : forall (r : R) (x : A), r • (1 : A) * x = r • x；h₂ : forall (r : R) (x :
+ A), x * r • (1 : A) = r • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 ofModule'
-  签名: [交换半环 R] [半环 A] [模 R A]
-  定义体: { toFun r := r • (1 : A)
-    map_one' := one_smul _ _
-    map_mul' r₁ r₂ := by simp only [h₁, mul_smul]
-    map_zero' := zero_smul _ _
-    map_add' r₁ r₂ := add_smul r₁ r₂ 1 }
-  commutes' r x := by simp [h₁, h₂]
-  smul_def' r x := by simp [h₁]
+--- 原说明 ---
+Let `R` be a commutative semiring, let `A` be a semiring with a `Module R` struc
+ture.
+If `(r • 1) * x = x * (r • 1) = r • x` for all `r : R` and `x : A`, then `A` is 
+an `Algebra`
+over `R`.
 
-Depends on / 依赖: add_smul, commutes, map_add, map_mul, map_one, map_zero, mul_smul, one_smul, smul_def, zero_smul
+See note [reducible non-instances].
 -/
 abbrev ofModule' [CommSemiring R] [Semiring A] [Module R A]
-    (h₁ : forall (r : R) (x : A), r • (1 : A) * x = r • x)
-    (h₂ : forall (r : R) (x : A), x * r • (1 : A) = r • x) : Algebra R A where
+    (h₁ : ∀ (r : R) (x : A), r • (1 : A) * x = r • x)
+    (h₂ : ∀ (r : R) (x : A), x * r • (1 : A) = r • x) : Algebra R A where
   algebraMap :=
   { toFun r := r • (1 : A)
     map_one' := one_smul _ _
@@ -532,24 +457,33 @@ abbrev ofModule' [CommSemiring R] [Semiring A] [Module R A]
   commutes' r x := by simp [h₁, h₂]
   smul_def' r x := by simp [h₁]
 
-/--
-Definition of `ofModule` / `ofModule` 的定义
+/-- Let `R` be a commutative semiring, let `A` be a semiring with a `Module R` structure.
+If `(r • x) * y = x * (r • y) = r • (x * y)` for all `r : R` and `x y : A`, then `A`
+is an `Algebra` over `R`.
 
-English:
-abbreviation ofModule
-  signature: [CommSemiring R] [Semiring A] [Module R A]
-  body: ofModule' (fun r x => by rw [h₁, one_mul]) fun r x => by rw [h₂, mul_one]
+See note [reducible non-instances]. -/
+/-
+**Algebra.ofModule** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra`。
+形式化陈述：ofModule [CommSemiring R] [Semiring A] [Module R A] (h₁ : forall (r : R) (
+x y : A), r • x * y = r • (x * y)) (h₂ : forall (r : R) (x y : A), x * r • y = r
+ • (x * y)) : Algebra R A
+参数：h₁ : forall (r : R) (x y : A), r • x * y = r • (x * y)；h₂ : forall (r : R) (x
+ y : A), x * r • y = r • (x * y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 ofModule
-  签名: [交换半环 R] [半环 A] [模 R A]
-  定义体: ofModule' (fun r x => by rw [h₁, one_mul]) fun r x => by rw [h₂, mul_one]
+--- 原说明 ---
+Let `R` be a commutative semiring, let `A` be a semiring with a `Module R` struc
+ture.
+If `(r • x) * y = x * (r • y) = r • (x * y)` for all `r : R` and `x y : A`, then
+ `A`
+is an `Algebra` over `R`.
 
-Depends on / 依赖: mul_one, ofModule, one_mul
+See note [reducible non-instances].
 -/
 abbrev ofModule [CommSemiring R] [Semiring A] [Module R A]
-    (h₁ : forall (r : R) (x y : A), r • x * y = r • (x * y))
-    (h₂ : forall (r : R) (x y : A), x * r • y = r • (x * y)) : Algebra R A :=
+    (h₁ : ∀ (r : R) (x y : A), r • x * y = r • (x * y))
+    (h₂ : ∀ (r : R) (x y : A), x * r • y = r • (x * y)) : Algebra R A :=
   ofModule' (fun r x => by rw [h₁, one_mul]) fun r x => by rw [h₂, mul_one]
 
 section Semiring
@@ -562,63 +496,55 @@ variable [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
 it suffices to check the `algebraMap`s agree.
 -/
 @[ext]
-/--
-theorem `algebra_ext` / 定理 `algebra_ext`
+/-
+**Algebra.algebra_ext** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：algebra_ext {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] (P Q : A
+lgebra R A) (h : forall r : R, (haveI
+参数：P Q : Algebra R A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def'`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R} {
+inst_1 : Semiring A} [self : Algebra R A] (r : R) (x : A),   r • x = (algebraMap
+ R A) r…
 
-English:
-theorem algebra_ext
-  statement: {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] (P Q : Algebra R A)
-  proof: by
-  replace h : P.algebraMap = Q.algebraMap := DFunLike.ext _ _ h
-  have h' : (haveI := P; (· • ·) : R -> A -> A) = (haveI := Q; (· • ·) : R -> A -> A) := by
-    funext r a
-    rw [P.smul_def']; rw [Q.smul_def']; rw [h]
-  rcases P with @⟨⟨P⟩⟩
-  congr
-
-中文:
-定理 algebra_ext
-  结论: {R : 类型} [交换半环 R] {A : 类型} [半环 A] (P Q : 代数 R A)
-  证明: by
-  replace h : P.algebraMap = Q.algebraMap := DFunLike.ext _ _ h
-  have h' : (haveI := P; (· • ·) : R -> A -> A) = (haveI := Q; (· • ·) : R -> A -> A) := by
-    funext r a
-    rw [P.smul_def']; rw [Q.smul_def']; rw [h]
-  rcases P with @⟨⟨P⟩⟩
-  congr
-
-Depends on / 依赖: algebraMap
+--- 原说明 ---
+To prove two algebra structures on a fixed `[CommSemiring R] [Semiring A]` agree
+,
+it suffices to check the `algebraMap`s agree.
 -/
 theorem algebra_ext {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] (P Q : Algebra R A)
-    (h : forall r : R, (haveI := P; algebraMap R A r) = haveI := Q; algebraMap R A r) :
+    (h : ∀ r : R, (haveI := P; algebraMap R A r) = haveI := Q; algebraMap R A r) :
     P = Q := by
   replace h : P.algebraMap = Q.algebraMap := DFunLike.ext _ _ h
-  have h' : (haveI := P; (· • ·) : R -> A -> A) = (haveI := Q; (· • ·) : R -> A -> A) := by
+  have h' : (haveI := P; (· • ·) : R → A → A) = (haveI := Q; (· • ·) : R → A → A) := by
     funext r a
-    rw [P.smul_def']; rw [Q.smul_def']; rw [h]
+    rw [P.smul_def', Q.smul_def', h]
   rcases P with @⟨⟨P⟩⟩
   congr
 
-/--
-lemma `_root_.toAlgebra_algebraMap` / 引理 `_root_.toAlgebra_algebraMap`
+/-- An auxiliary lemma used to prove theorems of the form
+`RingHom.X (algebraMap R S) ↔ Algebra.X R S`. -/
+/-
+**Algebra._root_.toAlgebra_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.toAlgebra_algebraMap
-  given: [Algebra R S]
-  proof: algebra_ext _ _ fun _ => rfl
-
-中文:
-引理 _root_.toAlgebra_algebraMap
-  条件: [代数 R S]
-  证明: algebra_ext _ _ fun _ => rfl
-
-Depends on / 依赖: algebra_ext
+--- 原说明 ---
+An auxiliary lemma used to prove theorems of the form
+`RingHom.X (algebraMap R S) ↔ Algebra.X R S`.
 -/
 lemma _root_.toAlgebra_algebraMap [Algebra R S] :
     (algebraMap R S).toAlgebra = ‹_› :=
-  algebra_ext _ _ fun _ => rfl
+  algebra_ext _ _ fun _ ↦ rfl
 
 -- see Note [lower instance priority]
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 200) toModule {R A} {_ : CommSemiring R} {_ : Semiring A} [Algebra R A] :
     Module R A where
   one_smul _ := by simp [smul_def']
@@ -627,192 +553,147 @@ instance (priority := 200) toModule {R A} {_ : CommSemiring R} {_ : Semiring A} 
   smul_zero := by simp [smul_def']
   add_smul := by simp [smul_def', add_mul]
   zero_smul := by simp [smul_def']
-
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (r : R) (x : A)
-  statement: r • x = algebraMap R A r * x
-  proof: Algebra.smul_def' r x
-
-中文:
-定理 smul_def
-  条件: (r : R) (x : A)
-  结论: r • x = algebraMap R A r * x
-  证明: Algebra.smul_def' r x
-
-Depends on / 依赖: Algebra, Algebra.smul_def, smul_def
+/-
+**Algebra.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：smul_def (r : R) (x : A) : r • x = algebraMap R A r * x
+参数：r : R；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.smul_def'`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R} {
+inst_1 : Semiring A} [self : Algebra R A] (r : R) (x : A),   r • x = (algebraMap
+ R A) r…
 -/
 theorem smul_def (r : R) (x : A) : r • x = algebraMap R A r * x :=
   Algebra.smul_def' r x
-
-/--
-theorem `algebraMap_eq_smul_one` / 定理 `algebraMap_eq_smul_one`
-
-English:
-theorem algebraMap_eq_smul_one
-  given: (r : R)
-  statement: algebraMap R A r = r • (1 : A)
-  proof: calc
-    algebraMap R A r = algebraMap R A r * 1 := (mul_one _).symm
-    _ = r • (1 : A) := (Algebra.smul_def r 1).symm
-
-中文:
-定理 algebraMap_eq_smul_one
-  条件: (r : R)
-  结论: algebraMap R A r = r • (1 : A)
-  证明: calc
-    algebraMap R A r = algebraMap R A r * 1 := (mul_one _).symm
-    _ = r • (1 : A) := (Algebra.smul_def r 1).symm
-
-Depends on / 依赖: Algebra, Algebra.smul_def, algebraMap, mul_one, smul_def
+/-
+**Algebra.algebraMap_eq_smul_one** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：algebraMap_eq_smul_one (r : R) : algebraMap R A r = r • (1 : A)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 theorem algebraMap_eq_smul_one (r : R) : algebraMap R A r = r • (1 : A) :=
   calc
     algebraMap R A r = algebraMap R A r * 1 := (mul_one _).symm
     _ = r • (1 : A) := (Algebra.smul_def r 1).symm
-
-/--
-theorem `algebraMap_eq_smul_one'` / 定理 `algebraMap_eq_smul_one'`
-
-English:
-theorem algebraMap_eq_smul_one'
-  statement: ⇑(algebraMap R A) = fun r => r • (1 : A)
-  proof: funext algebraMap_eq_smul_one
-
-中文:
-定理 algebraMap_eq_smul_one'
-  结论: ⇑(algebraMap R A) = fun r => r • (1 : A)
-  证明: funext algebraMap_eq_smul_one
-
-Depends on / 依赖: algebraMap_eq_smul_one
+/-
+**Algebra.algebraMap_eq_smul_one'** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：algebraMap_eq_smul_one' : ⇑(algebraMap R A) = fun r => r • (1 : A)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
 -/
 theorem algebraMap_eq_smul_one' : ⇑(algebraMap R A) = fun r => r • (1 : A) :=
   funext algebraMap_eq_smul_one
 
-/--
-theorem `commutes` / 定理 `commutes`
+/-- `mul_comm` for `Algebra`s when one element is from the base ring. -/
+/-
+**Algebra.commutes** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：commutes (r : R) (x : A) : algebraMap R A r * x = x * algebraMap R A r
+参数：r : R；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.commutes'`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R} {
+inst_1 : Semiring A} [self : Algebra R A] (r : R) (x : A),   (algebraMap R A) r 
+* x = x…
 
-English:
-theorem commutes
-  given: (r : R) (x : A)
-  statement: algebraMap R A r * x = x * algebraMap R A r
-  proof: Algebra.commutes' r x
-
-中文:
-定理 commutes
-  条件: (r : R) (x : A)
-  结论: algebraMap R A r * x = x * algebraMap R A r
-  证明: Algebra.commutes' r x
-
-Depends on / 依赖: Algebra, Algebra.commutes, commutes
+--- 原说明 ---
+`mul_comm` for `Algebra`s when one element is from the base ring.
 -/
 theorem commutes (r : R) (x : A) : algebraMap R A r * x = x * algebraMap R A r :=
   Algebra.commutes' r x
-
-/--
-lemma `commute_algebraMap_left` / 引理 `commute_algebraMap_left`
-
-English:
-lemma commute_algebraMap_left
-  given: (r : R) (x : A)
-  statement: Commute (algebraMap R A r) x
-  proof: Algebra.commutes r x
-
-中文:
-引理 commute_algebraMap_left
-  条件: (r : R) (x : A)
-  结论: Commute (algebraMap R A r) x
-  证明: Algebra.commutes r x
-
-Depends on / 依赖: Algebra, Algebra.commutes, commutes
+/-
+**Algebra.commute_algebraMap_left** 是 Mathlib 中的一个引理，位于命名空间 `Algebra`。
+形式化陈述：commute_algebraMap_left (r : R) (x : A) : Commute (algebraMap R A r) x
+参数：r : R；x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.commutes`：commutes (r : R) (x : A) : algebraMap R A r * x = x * 
+algebraMap R A r
 -/
 lemma commute_algebraMap_left (r : R) (x : A) : Commute (algebraMap R A r) x :=
   Algebra.commutes r x
-
-/--
-lemma `commute_algebraMap_right` / 引理 `commute_algebraMap_right`
-
-English:
-lemma commute_algebraMap_right
-  given: (r : R) (x : A)
-  statement: Commute x (algebraMap R A r)
-  proof: (Algebra.commutes r x).symm
-
-中文:
-引理 commute_algebraMap_right
-  条件: (r : R) (x : A)
-  结论: Commute x (algebraMap R A r)
-  证明: (Algebra.commutes r x).symm
-
-Depends on / 依赖: Algebra, Algebra.commutes, commutes
+/-
+**Algebra.commute_algebraMap_right** 是 Mathlib 中的一个引理，位于命名空间 `Algebra`。
+形式化陈述：commute_algebraMap_right (r : R) (x : A) : Commute x (algebraMap R A r)
+参数：r : R；x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.commutes`：commutes (r : R) (x : A) : algebraMap R A r * x = x * 
+algebraMap R A r
 -/
 lemma commute_algebraMap_right (r : R) (x : A) : Commute x (algebraMap R A r) :=
   (Algebra.commutes r x).symm
 
-/--
-theorem `left_comm` / 定理 `left_comm`
+/-- `mul_left_comm` for `Algebra`s when one element is from the base ring. -/
+/-
+**Algebra.left_comm** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：left_comm (x : A) (r : R) (y : A) : x * (algebraMap R A r * y) = algebraMa
+p R A r * (x * y)
+参数：x : A；r : R；y : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Algebra.commutes`：commutes (r : R) (x : A) : algebraMap R A r * x = x * 
+algebraMap R A r
 
-English:
-theorem left_comm
-  given: (x : A) (r : R) (y : A)
-  proof: by
-  rw [← mul_assoc]; rw [← commutes]; rw [mul_assoc]
-
-中文:
-定理 left_comm
-  条件: (x : A) (r : R) (y : A)
-  证明: by
-  rw [← mul_assoc]; rw [← commutes]; rw [mul_assoc]
-
-Depends on / 依赖: commutes, mul_assoc
+--- 原说明 ---
+`mul_left_comm` for `Algebra`s when one element is from the base ring.
 -/
 theorem left_comm (x : A) (r : R) (y : A) :
     x * (algebraMap R A r * y) = algebraMap R A r * (x * y) := by
-  rw [← mul_assoc]; rw [← commutes]; rw [mul_assoc]
+  rw [← mul_assoc, ← commutes, mul_assoc]
 
-/--
-theorem `right_comm` / 定理 `right_comm`
+/-- `mul_right_comm` for `Algebra`s when one element is from the base ring. -/
+/-
+**Algebra.right_comm** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：right_comm (x : A) (r : R) (y : A) : x * algebraMap R A r * y = x * y * al
+gebraMap R A r
+参数：x : A；r : R；y : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Algebra.commutes`：commutes (r : R) (x : A) : algebraMap R A r * x = x * 
+algebraMap R A r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem right_comm
-  given: (x : A) (r : R) (y : A)
-  proof: by
-  rw [mul_assoc]; rw [commutes]; rw [← mul_assoc]
-
-中文:
-定理 right_comm
-  条件: (x : A) (r : R) (y : A)
-  证明: by
-  rw [mul_assoc]; rw [commutes]; rw [← mul_assoc]
-
-Depends on / 依赖: commutes, mul_assoc
+--- 原说明 ---
+`mul_right_comm` for `Algebra`s when one element is from the base ring.
 -/
 theorem right_comm (x : A) (r : R) (y : A) :
     x * algebraMap R A r * y = x * y * algebraMap R A r := by
-  rw [mul_assoc]; rw [commutes]; rw [← mul_assoc]
+  rw [mul_assoc, commutes, ← mul_assoc]
 
 /-- This has high priority because it is almost always the right instance when it applies. -/
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This has high priority because it is almost always the right instance when it ap
+plies.
+-/
 instance (priority := high) _root_.IsScalarTower.right : IsScalarTower R A A :=
   ⟨fun x y z => by rw [smul_eq_mul, smul_eq_mul, smul_def, smul_def, mul_assoc]⟩
 
 @[simp]
-/--
-theorem `_root_.RingHom.smulOneHom_eq_algebraMap` / 定理 `_root_.RingHom.smulOneHom_eq_algebraMap`
-
-English:
-theorem _root_.RingHom.smulOneHom_eq_algebraMap
-  statement: RingHom.smulOneHom = algebraMap R A
-  proof: RingHom.ext fun r => (algebraMap_eq_smul_one r).symm
-
-中文:
-定理 _root_.环态射.smulOneHom_eq_algebraMap
-  结论: 环态射.smulOneHom = algebraMap R A
-  证明: RingHom.ext fun r => (algebraMap_eq_smul_one r).symm
-
-Depends on / 依赖: RingHom, RingHom.ext, algebraMap_eq_smul_one
+/-
+**Algebra._root_.RingHom.smulOneHom_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.RingHom.smulOneHom_eq_algebraMap : RingHom.smulOneHom = algebraMap R A :=
   RingHom.ext fun r => (algebraMap_eq_smul_one r).symm
@@ -823,160 +704,108 @@ theorem _root_.RingHom.smulOneHom_eq_algebraMap : RingHom.smulOneHom = algebraMa
 /-- This is just a special case of the global `mul_smul_comm` lemma that requires less typeclass
 search (and was here first). -/
 @[simp]
-/--
-theorem `mul_smul_comm` / 定理 `mul_smul_comm`
+/-
+**Algebra.mul_smul_comm** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：∀ {R : Type u} {A : Type w} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Algebra R A] (s : R) (x y : A),   x * s • y = s • (x * y)
+参数：s : R；x y : A；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Algebra.left_comm`：left_comm (x : A) (r : R) (y : A) : x * (algebraMap R
+ A r * y) = algebraMap R A r * (x * y)
 
-English:
-theorem mul_smul_comm
-  given: (s : R) (x y : A)
-  statement: x * s • y = s • (x * y)
-  proof: by
-  rw [smul_def]; rw [smul_def]; rw [left_comm]
-
-中文:
-定理 mul_smul_comm
-  条件: (s : R) (x y : A)
-  结论: x * s • y = s • (x * y)
-  证明: by
-  rw [smul_def]; rw [smul_def]; rw [left_comm]
+--- 原说明 ---
+This is just a special case of the global `mul_smul_comm` lemma that requires le
+ss typeclass
+search (and was here first).
 -/
 protected theorem mul_smul_comm (s : R) (x y : A) : x * s • y = s • (x * y) := by
-  rw [smul_def]; rw [smul_def]; rw [left_comm]
+  rw [smul_def, smul_def, left_comm]
 
 /-- This is just a special case of the global `smul_mul_assoc` lemma that requires less typeclass
 search (and was here first). -/
 @[simp]
-/--
-theorem `smul_mul_assoc` / 定理 `smul_mul_assoc`
+/-
+**Algebra.smul_mul_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：∀ {R : Type u} {A : Type w} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Algebra R A] (r : R) (x y : A),   r • x * y = r • (x * y)
+参数：r : R；x y : A；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-theorem smul_mul_assoc
-  given: (r : R) (x y : A)
-  statement: r • x * y = r • (x * y)
-  proof: smul_mul_assoc r x y
-
-@[simp]
-
-中文:
-定理 smul_mul_assoc
-  条件: (r : R) (x y : A)
-  结论: r • x * y = r • (x * y)
-  证明: smul_mul_assoc r x y
-
-@[simp]
+--- 原说明 ---
+This is just a special case of the global `smul_mul_assoc` lemma that requires l
+ess typeclass
+search (and was here first).
 -/
 protected theorem smul_mul_assoc (r : R) (x y : A) : r • x * y = r • (x * y) :=
   smul_mul_assoc r x y
 
 @[simp]
-/--
-theorem `_root_.smul_algebraMap` / 定理 `_root_.smul_algebraMap`
-
-English:
-theorem _root_.smul_algebraMap
-  statement: {α : Type*} [Monoid α] [MulDistribMulAction α A]
-  proof: by
-  rw [algebraMap_eq_smul_one]; rw [smul_comm a r (1 : A)]; rw [smul_one]
-
-中文:
-定理 _root_.smul_algebraMap
-  结论: {α : 类型} [幺半群 α] [MulDistribMul作用 α A]
-  证明: by
-  rw [algebraMap_eq_smul_one]; rw [smul_comm a r (1 : A)]; rw [smul_one]
-
-Depends on / 依赖: algebraMap_eq_smul_one, smul_comm, smul_one
+/-
+**Algebra._root_.smul_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.smul_algebraMap {α : Type*} [Monoid α] [MulDistribMulAction α A]
     [SMulCommClass α R A] (a : α) (r : R) : a • algebraMap R A r = algebraMap R A r := by
-  rw [algebraMap_eq_smul_one]; rw [smul_comm a r (1 : A)]; rw [smul_one]
+  rw [algebraMap_eq_smul_one, smul_comm a r (1 : A), smul_one]
 
 section compHom
 
-variable (A) (f : S ->+* R)
+variable (A) (f : S →+* R)
 
 /--
-Definition of `compHom` / `compHom` 的定义
+Compose an `Algebra` with a `RingHom`, with action `f s • m`.
 
-English:
-abbreviation compHom
-  signature: : Algebra S A where
-  body: Module.compHom A f
-  algebraMap := (algebraMap R A).comp f
-  commutes' _ _ := Algebra.commutes _ _
-  smul_def' _ _ := Algebra.smul_def _ _
+This is the algebra version of `Module.compHom`.
+-/
+/-
+**Algebra.compHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra`。
+形式化陈述：compHom : Algebra S A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 compHom
-  签名: : 代数 S A where
-  定义体: Module.compHom A f
-  algebraMap := (algebraMap R A).comp f
-  commutes' _ _ := Algebra.commutes _ _
-  smul_def' _ _ := Algebra.smul_def _ _
+--- 原说明 ---
+Compose an `Algebra` with a `RingHom`, with action `f s • m`.
 
-Depends on / 依赖: Module, Module.compHom, compHom
+This is the algebra version of `Module.compHom`.
 -/
 abbrev compHom : Algebra S A where
   __ := Module.compHom A f
   algebraMap := (algebraMap R A).comp f
   commutes' _ _ := Algebra.commutes _ _
   smul_def' _ _ := Algebra.smul_def _ _
-
-/--
-theorem `compHom_smul_def` / 定理 `compHom_smul_def`
-
-English:
-theorem compHom_smul_def
-  given: (s : S) (x : A)
-  proof: compHom A f
-    s • x = f s • x := rfl
-
-中文:
-定理 compHom_smul_def
-  条件: (s : S) (x : A)
-  证明: compHom A f
-    s • x = f s • x := rfl
-
-Depends on / 依赖: compHom
+/-
+**Algebra.compHom_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：compHom_smul_def (s : S) (x : A) : letI
+参数：s : S；x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compHom_smul_def (s : S) (x : A) :
     letI := compHom A f
     s • x = f s • x := rfl
-
-/--
-theorem `compHom_algebraMap_eq` / 定理 `compHom_algebraMap_eq`
-
-English:
-theorem compHom_algebraMap_eq
-  proof: compHom A f
-    algebraMap S A = (algebraMap R A).comp f := rfl
-
-中文:
-定理 compHom_algebraMap_eq
-  证明: compHom A f
-    algebraMap S A = (algebraMap R A).comp f := rfl
-
-Depends on / 依赖: compHom
+/-
+**Algebra.compHom_algebraMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：compHom_algebraMap_eq : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compHom_algebraMap_eq :
     letI := compHom A f
     algebraMap S A = (algebraMap R A).comp f := rfl
-
-/--
-theorem `compHom_algebraMap_apply` / 定理 `compHom_algebraMap_apply`
-
-English:
-theorem compHom_algebraMap_apply
-  given: (s : S)
-  proof: compHom A f
-    algebraMap S A s = (algebraMap R A) (f s) := rfl
-
-中文:
-定理 compHom_algebraMap_apply
-  条件: (s : S)
-  证明: compHom A f
-    algebraMap S A s = (algebraMap R A) (f s) := rfl
-
-Depends on / 依赖: compHom
+/-
+**Algebra.compHom_algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：compHom_algebraMap_apply (s : S) : letI
+参数：s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compHom_algebraMap_apply (s : S) :
     letI := compHom A f
@@ -987,124 +816,82 @@ end compHom
 
 variable (R A)
 
-/--
-Definition of `linearMap` / `linearMap` 的定义
-
-English:
-definition linearMap
-  signature: : R ->ₗ[R] A
-  body: { algebraMap R A with map_smul' := fun x y => by simp [Algebra.smul_def] }
-
-@[inherit_doc] scoped[RingTheory.LinearMap] notation "η" => Algebra.linearMap _ _
-@[inherit_doc] scoped[RingTheory.LinearMap] notation "η[" R "]" => Algebra.linearMap R _
-
-@[simp]
-
-中文:
-定义 linearMap
-  签名: : R ->ₗ[R] A
-  定义体: { algebraMap R A with map_smul' := fun x y => by simp [Algebra.smul_def] }
-
-@[inherit_doc] scoped[RingTheory.LinearMap] notation "η" => Algebra.linearMap _ _
-@[inherit_doc] scoped[RingTheory.LinearMap] notation "η[" R "]" => Algebra.linearMap R _
-
-@[simp]
+/-- The canonical ring homomorphism `algebraMap R A : R →+* A` for any `R`-algebra `A`,
+packaged as an `R`-linear map.
 -/
-protected def linearMap : R ->ₗ[R] A :=
+/-
+**Algebra.linearMap** 是 Mathlib 中的一个定义，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u) → (A : Type w) → [inst : CommSemiring R] → [inst_1 : Semiring
+ A] → [inst_2 : Algebra R A] → R →ₗ[R] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The canonical ring homomorphism `algebraMap R A : R →+* A` for any `R`-algebra `
+A`,
+packaged as an `R`-linear map.
+-/
+protected def linearMap : R →ₗ[R] A :=
   { algebraMap R A with map_smul' := fun x y => by simp [Algebra.smul_def] }
 
 @[inherit_doc] scoped[RingTheory.LinearMap] notation "η" => Algebra.linearMap _ _
 @[inherit_doc] scoped[RingTheory.LinearMap] notation "η[" R "]" => Algebra.linearMap R _
 
 @[simp]
-/--
-theorem `linearMap_apply` / 定理 `linearMap_apply`
-
-English:
-theorem linearMap_apply
-  given: (r : R)
-  statement: Algebra.linearMap R A r = algebraMap R A r
-  proof: rfl
-
-中文:
-定理 linearMap_apply
-  条件: (r : R)
-  结论: 代数.linearMap R A r = algebraMap R A r
-  证明: rfl
+/-
+**Algebra.linearMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：linearMap_apply (r : R) : Algebra.linearMap R A r = algebraMap R A r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem linearMap_apply (r : R) : Algebra.linearMap R A r = algebraMap R A r :=
   rfl
-
-/--
-theorem `coe_linearMap` / 定理 `coe_linearMap`
-
-English:
-theorem coe_linearMap
-  statement: ⇑(Algebra.linearMap R A) = algebraMap R A
-  proof: rfl
-
-中文:
-定理 coe_linearMap
-  结论: ⇑(代数.linearMap R A) = algebraMap R A
-  证明: rfl
+/-
+**Algebra.coe_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：coe_linearMap : ⇑(Algebra.linearMap R A) = algebraMap R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_linearMap : ⇑(Algebra.linearMap R A) = algebraMap R A :=
   rfl
 
 -- see Note [higher instance priority]
 /-- The identity map inducing an `Algebra` structure. -/
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The identity map inducing an `Algebra` structure.
+-/
 instance (priority := 1100) id : Algebra R R where
   -- We override `toFun` and `toSMul` because `RingHom.id` is not reducible and cannot
   -- be made so without a significant performance hit.
   -- see library note [reducible non-instances].
   toSMul := instSMulOfMul
   __ := (RingHom.id R).toAlgebra
-
-/--
-lemma `linearMap_self` / 引理 `linearMap_self`
-
-English:
-lemma linearMap_self
-  statement: Algebra.linearMap R R = .id
-  proof: rfl
-
-中文:
-引理 linearMap_self
-  结论: 代数.linearMap R R = .id
-  证明: rfl
+/-
+**Algebra.linearMap_self** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：∀ (R : Type u) [inst : CommSemiring R], Algebra.linearMap R R = LinearMap.
+id
+参数：R : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma linearMap_self : Algebra.linearMap R R = .id := rfl
 
 variable {R A}
-
-/--
-lemma `algebraMap_self` / 引理 `algebraMap_self`
-
-English:
-lemma algebraMap_self
-  statement: algebraMap R R = .id _
-  proof: rfl
-
-中文:
-引理 algebraMap_self
-  结论: algebraMap R R = .id _
-  证明: rfl
+/-
+**Algebra.algebraMap_self** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：∀ {R : Type u} [inst : CommSemiring R], algebraMap R R = RingHom.id R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algebraMap_self : algebraMap R R = .id _ := rfl
-/--
-lemma `algebraMap_self_apply` / 引理 `algebraMap_self_apply`
-
-English:
-lemma algebraMap_self_apply
-  given: (x : R)
-  statement: algebraMap R R x = x
-  proof: rfl
-
-中文:
-引理 algebraMap_self_apply
-  条件: (x : R)
-  结论: algebraMap R R x = x
-  证明: rfl
+/-
+**Algebra.algebraMap_self_apply** 是 Mathlib 中的一个引理，位于命名空间 `Algebra`。
+形式化陈述：algebraMap_self_apply (x : R) : algebraMap R R x = x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma algebraMap_self_apply (x : R) : algebraMap R R x = x := rfl
 
@@ -1118,88 +905,75 @@ variable {A B : Type*} (a : A) (b : B) (C : Type*)
   [SMul A B] [CommSemiring B] [Semiring C] [Algebra B C]
 
 @[norm_cast]
-/--
-theorem `algebraMap.coe_smul` / 定理 `algebraMap.coe_smul`
-
-English:
-theorem algebraMap.coe_smul
-  given: [SMul A C] [IsScalarTower A B C]
-  statement: (a • b : B) = a • (b : C)
-  proof: by
-  simp [Algebra.algebraMap_eq_smul_one]
-
-@[norm_cast]
-
-中文:
-定理 algebraMap.coe_smul
-  条件: [标量乘法 A C] [标量塔 A B C]
-  结论: (a • b : B) = a • (b : C)
-  证明: by
-  simp [Algebra.algebraMap_eq_smul_one]
-
-@[norm_cast]
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap_eq_smul_one
+/-
+**algebraMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraMap.coe_smul [SMul A C] [IsScalarTower A B C] : (a • b : B) = a • (
+b : C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algebraMap.coe_smul [SMul A C] [IsScalarTower A B C] : (a • b : B) = a • (b : C) := by
   simp [Algebra.algebraMap_eq_smul_one]
 
 @[norm_cast]
-/--
-theorem `algebraMap.coe_smul'` / 定理 `algebraMap.coe_smul'`
-
-English:
-theorem algebraMap.coe_smul'
-  given: [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C]
-  proof: by
-  simp [Algebra.algebraMap_eq_smul_one, smul_distrib_smul]
-
-中文:
-定理 algebraMap.coe_smul'
-  条件: [幺半群 A] [MulDistribMul作用 A C] [SMulDistrib类 A B C]
-  证明: by
-  simp [Algebra.algebraMap_eq_smul_one, smul_distrib_smul]
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap_eq_smul_one, smul_distrib_smul
+/-
+**algebraMap.coe_smul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraMap.coe_smul' [Monoid A] [MulDistribMulAction A C] [SMulDistribClas
+s A B C] : (a • b : B) = a • (b : C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `SMulDistribClass.smul_distrib_smul`：∀ {G : Type u_9} {R : Type u_10} {S 
+: Type u_11} {inst : SMul G R} {inst_1 : SMul G S} {inst_2 : SMul R S}   [self :
+ SMulDistribClass G R S]…
+· 使用定理 `MulDistribMulAction.smul_one`：∀ {M : Type u_9} {N : Type u_10} {inst : M
+onoid M} {inst_1 : Monoid N} [self : MulDistribMulAction M N] (r : M),   r • 1 =
+ 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algebraMap.coe_smul' [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C] :
     (a • b : B) = a • (b : C) := by
   simp [Algebra.algebraMap_eq_smul_one, smul_distrib_smul]
-
-/--
-theorem `algebraMap.smul` / 定理 `algebraMap.smul`
-
-English:
-theorem algebraMap.smul
-  given: [SMul A C] [IsScalarTower A B C]
-  proof: coe_smul _ _ _
-
-中文:
-定理 algebraMap.smul
-  条件: [标量乘法 A C] [标量塔 A B C]
-  证明: coe_smul _ _ _
-
-Depends on / 依赖: coe_smul
+/-
+**algebraMap.smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraMap.smul [SMul A C] [IsScalarTower A B C] : algebraMap B C (a • b) 
+= a • (algebraMap B C b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_smul`：algebraMap.coe_smul [SMul A C] [IsScalarTower A B C
+] : (a • b : B) = a • (b : C)
 -/
 theorem algebraMap.smul [SMul A C] [IsScalarTower A B C] :
     algebraMap B C (a • b) = a • (algebraMap B C b) := coe_smul _ _ _
-
-/--
-theorem `algebraMap.smul'` / 定理 `algebraMap.smul'`
-
-English:
-theorem algebraMap.smul'
-  given: [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C]
-  proof: coe_smul' _ _ _
-
-中文:
-定理 algebraMap.smul'
-  条件: [幺半群 A] [MulDistribMul作用 A C] [SMulDistrib类 A B C]
-  证明: coe_smul' _ _ _
-
-Depends on / 依赖: coe_smul
+/-
+**algebraMap.smul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：algebraMap.smul' [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A 
+B C] : algebraMap B C (a • b) = a • (algebraMap B C b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_smul'`：algebraMap.coe_smul' [Monoid A] [MulDistribMulActi
+on A C] [SMulDistribClass A B C] : (a • b : B) = a • (b : C)
 -/
 theorem algebraMap.smul' [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C] :
     algebraMap B C (a • b) = a • (algebraMap B C b) := coe_smul' _ _ _
 
 end algebraMap
+

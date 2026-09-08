@@ -27,37 +27,26 @@ namespace MvQPF
 
 open MvFunctor
 
-variable (n : Nat)
+variable (n : ℕ)
 
 /-- Constant multivariate functor -/
 @[nolint unusedArguments]
-/--
-Definition of `Const` / `Const` 的定义
+/-
+**MvQPF.Const** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：Const (A : Type*) (_v : TypeVec.{u} n) : Type _
+参数：A : Type*；_v : TypeVec.{u} n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Const
-  signature: (A : Type*) (_v : TypeVec.{u} n)
-  body: A
-
-中文:
-定义 Const
-  签名: (A : 类型) (_v : TypeVec.{u} n)
-  定义体: A
+--- 原说明 ---
+Constant multivariate functor
 -/
 def Const (A : Type*) (_v : TypeVec.{u} n) : Type _ := A
-
-/--
-Instance `Const.inhabited` / 实例 `Const.inhabited`
-
-English:
-instance Const.inhabited
-  signature: {A α} [Inhabited A]
-  body: ⟨(default : A)⟩
-
-中文:
-实例 Const.inhabited
-  签名: {A α} [可居 A]
-  定义体: ⟨(default : A)⟩
+/-
+**MvQPF.Const.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Const`。
+形式化陈述：(n : ℕ) → {A : Type u_1} → {α : TypeVec.{u_2} n} → [Inhabited A] → Inhabit
+ed (MvQPF.Const n A α)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Const.inhabited {A α} [Inhabited A] : Inhabited (Const n A α) := ⟨(default : A)⟩
 
@@ -67,168 +56,90 @@ open MvPFunctor
 
 variable {n} {A : Type u} {α β : TypeVec.{u} n} (f : α ⟹ β)
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for constant functor -/
+/-
+**MvQPF.Const.mk** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Const`。
+形式化陈述：{n : ℕ} → {A : Type u} → {α : TypeVec.{u} n} → A → MvQPF.Const n A α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (x : A)
-  body: x
-
-中文:
-定义 mk
-  签名: (x : A)
-  定义体: x
+--- 原说明 ---
+Constructor for constant functor
 -/
 protected def mk (x : A) : Const n A α := x
 
-/--
-Definition of `get` / `get` 的定义
+/-- Destructor for constant functor -/
+/-
+**MvQPF.Const.get** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Const`。
+形式化陈述：{n : ℕ} → {A : Type u} → {α : TypeVec.{u} n} → MvQPF.Const n A α → A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition get
-  signature: (x : Const n A α)
-  body: x
-
-@[simp]
-
-中文:
-定义 get
-  签名: (x : Const n A α)
-  定义体: x
-
-@[simp]
+--- 原说明 ---
+Destructor for constant functor
 -/
 protected def get (x : Const n A α) : A := x
 
 @[simp]
-/--
-theorem `mk_get` / 定理 `mk_get`
-
-English:
-theorem mk_get
-  given: (x : Const n A α)
-  statement: Const.mk (Const.get x) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_get
-  条件: (x : Const n A α)
-  结论: Const.mk (Const.get x) = x
-  证明: rfl
-
-@[simp]
+/-
+**MvQPF.Const.mk_get** 是 Mathlib 中的一个定理，位于命名空间 `MvQPF.Const`。
+形式化陈述：∀ {n : ℕ} {A : Type u} {α : TypeVec.{u} n} (x : MvQPF.Const n A α), MvQPF.
+Const.mk x.get = x
+参数：x : MvQPF.Const n A α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem mk_get (x : Const n A α) : Const.mk (Const.get x) = x := rfl
 
 @[simp]
-/--
-theorem `get_mk` / 定理 `get_mk`
-
-English:
-theorem get_mk
-  given: (x : A)
-  statement: Const.get (Const.mk x : Const n A α) = x
-  proof: rfl
-
-中文:
-定理 get_mk
-  条件: (x : A)
-  结论: Const.get (Const.mk x : Const n A α) = x
-  证明: rfl
+/-
+**MvQPF.Const.get_mk** 是 Mathlib 中的一个定理，位于命名空间 `MvQPF.Const`。
+形式化陈述：∀ {n : ℕ} {A : Type u} {α : TypeVec.{u} n} (x : A), (MvQPF.Const.mk x).get
+ = x
+参数：x : A；MvQPF.Const.mk x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem get_mk (x : A) : Const.get (Const.mk x : Const n A α) = x := rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- `map` for constant functor -/
+/-
+**MvQPF.Const.map** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Const`。
+形式化陈述：{n : ℕ} → {A : Type u} → {α β : TypeVec.{u} n} → MvQPF.Const n A α → MvQPF
+.Const n A β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : Const n A α -> Const n A β
-  body: fun x => x
-
-中文:
-定义 map
-  签名: : Const n A α -> Const n A β
-  定义体: fun x => x
+--- 原说明 ---
+`map` for constant functor
 -/
-protected def map : Const n A α -> Const n A β := fun x => x
-
-/--
-Instance `MvFunctor` / 实例 `MvFunctor`
-
-English:
-instance MvFunctor
-  signature: : MvFunctor (Const n A) where map _f
-  body: Const.map
-
-中文:
-实例 Mv函子
-  签名: : Mv函子 (Const n A) where map _f
-  定义体: Const.map
-
-Depends on / 依赖: Const.map
+protected def map : Const n A α → Const n A β := fun x => x
+/-
+**MvQPF.Const.MvFunctor** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Const`。
+形式化陈述：MvFunctor : MvFunctor (Const n A) where map _f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance MvFunctor : MvFunctor (Const n A) where map _f := Const.map
-
-/--
-theorem `map_mk` / 定理 `map_mk`
-
-English:
-theorem map_mk
-  given: (x : A)
-  statement: f < > Const.mk x = Const.mk x
-  proof: rfl
-
-中文:
-定理 map_mk
-  条件: (x : A)
-  结论: f < > Const.mk x = Const.mk x
-  证明: rfl
+/-
+**MvQPF.Const.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `MvQPF.Const`。
+形式化陈述：map_mk (x : A) : f < > Const.mk x = Const.mk x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_mk (x : A) : f < > Const.mk x = Const.mk x := rfl
-
-/--
-theorem `get_map` / 定理 `get_map`
-
-English:
-theorem get_map
-  given: (x : (Const n A) α)
-  statement: Const.get (f <$$> x) = Const.get x
-  proof: rfl
-
-中文:
-定理 get_map
-  条件: (x : (Const n A) α)
-  结论: Const.get (f <$$> x) = Const.get x
-  证明: rfl
+theorem map_mk (x : A) : f <$$> Const.mk x = Const.mk x := rfl
+/-
+**MvQPF.Const.get_map** 是 Mathlib 中的一个定理，位于命名空间 `MvQPF.Const`。
+形式化陈述：get_map (x : (Const n A) α) : Const.get (f <$$> x) = Const.get x
+参数：x : (Const n A) α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem get_map (x : (Const n A) α) : Const.get (f <$$> x) = Const.get x := rfl
-
-/--
-Instance `mvqpf` / 实例 `mvqpf`
-
-English:
-instance mvqpf
-  signature: : @MvQPF _ (Const n A) where
-  body: MvPFunctor.const n A
-  abs x := MvPFunctor.const.get x
-  repr x := MvPFunctor.const.mk n x
-  abs_repr := fun _ => const.get_mk _
-  abs_map := fun _ => const.get_map _
-
-中文:
-实例 mvqpf
-  签名: : @MvQPF _ (Const n A) where
-  定义体: MvPFunctor.const n A
-  abs x := MvPFunctor.const.get x
-  repr x := MvPFunctor.const.mk n x
-  abs_repr := fun _ => const.get_mk _
-  abs_map := fun _ => const.get_map _
-
-Depends on / 依赖: MvPFunctor, MvPFunctor.const
+/-
+**MvQPF.Const.mvqpf** 是 Mathlib 中的一个实例，位于命名空间 `MvQPF.Const`。
+形式化陈述：mvqpf : @MvQPF _ (Const n A) where P
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPFunctor.const.get_map`：∀ {n : ℕ} {A : Type u} {α β : TypeVec.{u} n} (
+f : α.Arrow β) (x : ↑(MvPFunctor.const n A) α),   MvPFunctor.const.get (MvFuncto
+r.map f x) = M…
 -/
 instance mvqpf : @MvQPF _ (Const n A) where
   P := MvPFunctor.const n A
@@ -240,3 +151,4 @@ instance mvqpf : @MvQPF _ (Const n A) where
 end Const
 
 end MvQPF
+

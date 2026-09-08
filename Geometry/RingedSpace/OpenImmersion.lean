@@ -66,84 +66,81 @@ universe w v v₁ v₂ u
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `PresheafedSpace.IsOpenImmersion` / `PresheafedSpace.IsOpenImmersion` 的定义
+/-- An open immersion of PresheafedSpaces is an open embedding `f : X ⟶ U ⊆ Y` of the underlying
+spaces, such that the sheaf map `Y(V) ⟶ f _* X(V)` is an iso for each `V ⊆ U`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion** 是 Mathlib 中的一个归纳类型，位于命名空间 
+`AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : Algebrai
+cGeometry.PresheafedSpace C} → (X ⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class PresheafedSpace.IsOpenImmersion
-  parameters: {X Y : PresheafedSpace C} (f : X ⟶ Y)
-  axioms and operations (2):
-    - base_open : IsOpenEmbedding f.base
-    - c_iso : forall U : Opens X, IsIso (f.c.app (op (base_open.functor.obj U)))
-
-中文:
-类 Presheafed空间.是开浸入
-  参数: {X Y : Presheafed空间 C} (f : X ⟶ Y)
-  公理与运算 (2 个):
-    - base_open : 是开嵌入 f.base
-    - c_iso : 对任意 U : Opens X, 是同构 (f.c.app (op (base_open.functor.obj U)))
+--- 原说明 ---
+An open immersion of PresheafedSpaces is an open embedding `f : X ⟶ U ⊆ Y` of th
+e underlying
+spaces, such that the sheaf map `Y(V) ⟶ f _* X(V)` is an iso for each `V ⊆ U`.
 -/
 class PresheafedSpace.IsOpenImmersion {X Y : PresheafedSpace C} (f : X ⟶ Y) : Prop where
   /-- the underlying continuous map of underlying spaces from the source to an open subset of the
   target. -/
   base_open : IsOpenEmbedding f.base
   /-- the underlying sheaf morphism is an isomorphism on each open subset -/
-  c_iso : forall U : Opens X, IsIso (f.c.app (op (base_open.functor.obj U)))
+  c_iso : ∀ U : Opens X, IsIso (f.c.app (op (base_open.functor.obj U)))
 
-/--
-Definition of `SheafedSpace.IsOpenImmersion` / `SheafedSpace.IsOpenImmersion` 的定义
+/-- A morphism of SheafedSpaces is an open immersion if it is an open immersion as a morphism
+of PresheafedSpaces
+-/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.SheafedSpace`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : Algebrai
+cGeometry.SheafedSpace C} → (X ⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation SheafedSpace.IsOpenImmersion
-  signature: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  body: PresheafedSpace.IsOpenImmersion f.hom
-
-中文:
-缩写 Sheafed空间.是开浸入
-  签名: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  定义体: PresheafedSpace.IsOpenImmersion f.hom
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion, f.hom
+--- 原说明 ---
+A morphism of SheafedSpaces is an open immersion if it is an open immersion as a
+ morphism
+of PresheafedSpaces
 -/
 abbrev SheafedSpace.IsOpenImmersion {X Y : SheafedSpace C} (f : X ⟶ Y) : Prop :=
   PresheafedSpace.IsOpenImmersion f.hom
-
-/--
-lemma `SheafedSpace.isOpenImmersion_iff_hom` / 引理 `SheafedSpace.isOpenImmersion_iff_hom`
-
-English:
-lemma SheafedSpace.isOpenImmersion_iff_hom
-  given: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  proof: Iff.rfl
-
-中文:
-引理 Sheafed空间.isOpenImmersion_iff_hom
-  条件: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**AlgebraicGeometry.SheafedSpace.isOpenImmersion_iff_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicG
+eometry.SheafedSpace C} (f : X ⟶ Y),   AlgebraicGeometry.SheafedSpace.IsOpenImme
+rsion f ↔ AlgebraicGeometry.PresheafedSpace.IsOpenImmersion f.hom
+参数：f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma SheafedSpace.isOpenImmersion_iff_hom {X Y : SheafedSpace C} (f : X ⟶ Y) :
     SheafedSpace.IsOpenImmersion f ↔ PresheafedSpace.IsOpenImmersion f.hom := Iff.rfl
 
-/--
-Definition of `LocallyRingedSpace.IsOpenImmersion` / `LocallyRingedSpace.IsOpenImmersion` 的定义
+/-- A morphism of LocallyRingedSpaces is an open immersion if it is an open immersion as a morphism
+of SheafedSpaces
+-/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：{X Y : AlgebraicGeometry.LocallyRingedSpace} → (X ⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LocallyRingedSpace.IsOpenImmersion
-  signature: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
-  body: SheafedSpace.IsOpenImmersion f.toShHom
-
-中文:
-缩写 LocallyRinged空间.是开浸入
-  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
-  定义体: SheafedSpace.IsOpenImmersion f.toShHom
-
-Depends on / 依赖: IsOpenImmersion, SheafedSpace, SheafedSpace.IsOpenImmersion, f.toShHom, toShHom
+--- 原说明 ---
+A morphism of LocallyRingedSpaces is an open immersion if it is an open immersio
+n as a morphism
+of SheafedSpaces
 -/
 abbrev LocallyRingedSpace.IsOpenImmersion {X Y : LocallyRingedSpace} (f : X ⟶ Y) : Prop :=
   SheafedSpace.IsOpenImmersion f.toShHom
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : LocallyRingedSpace} (f : X ⟶ Y) [LocallyRingedSpace.IsOpenImmersion f] :
     PresheafedSpace.IsOpenImmersion f.toHom := by assumption
 
@@ -159,18 +156,18 @@ section
 
 variable {X Y : PresheafedSpace C} (f : X ⟶ Y) [H : IsOpenImmersion f]
 
-/--
-Definition of `opensFunctor` / `opensFunctor` 的定义
+/-- The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.opensFunctor** 是 Mathlib 中的一
+个缩写定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：opensFunctor
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 
-English:
-abbreviation opensFunctor
-  body: H.base_open.functor
-
-中文:
-缩写 opensFunctor
-  定义体: H.base_open.functor
-
-Depends on / 依赖: H.base_open.functor, base_open, functor
+--- 原说明 ---
+The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`.
 -/
 abbrev opensFunctor :=
   H.base_open.functor
@@ -179,55 +176,21 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- An open immersion `f : X ⟶ Y` induces an isomorphism `X ≅ Y|_{f(X)}`. -/
 @[simps! hom_c_app]
-/--
-Definition of `isoRestrict` / `isoRestrict` 的定义
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict** 是 Mathlib 中的一个
+定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict : X ≅ Y.restrict H.base_open
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 
-English:
-definition isoRestrict
-  signature: : X ≅ Y.restrict H.base_open
-  body: PresheafedSpace.isoOfComponents (Iso.refl _) by
-    symm
-    fapply NatIso.ofComponents
-    · intro U
-      refine asIso (f.c.app (op (opensFunctor f |>.obj (unop U)))) ≪≫ X.presheaf.mapIso (eqToIso ?_)
-      induction U with | op U => ?_
-      cases U
-      dsimp only [IsOpenMap.functor, Functor.op, Opens.map_def]
-      congr 2
-      erw [Set.preimage_image_eq _ H.base_open.injective]
-      rfl
-    · intro U V i
-      dsimp
-      simp only [NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_obj,
-        TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op, Category.assoc]
-      rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
-      congr 1
-
-中文:
-定义 isoRestrict
-  签名: : X ≅ Y.restrict H.base_open
-  定义体: PresheafedSpace.isoOfComponents (Iso.refl _) by
-    symm
-    fapply NatIso.ofComponents
-    · intro U
-      refine asIso (f.c.app (op (opensFunctor f |>.obj (unop U)))) ≪≫ X.presheaf.mapIso (eqToIso ?_)
-      induction U with | op U => ?_
-      cases U
-      dsimp only [IsOpenMap.functor, Functor.op, Opens.map_def]
-      congr 2
-      erw [Set.preimage_image_eq _ H.base_open.injective]
-      rfl
-    · intro U V i
-      dsimp
-      simp only [NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_obj,
-        TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op, Category.assoc]
-      rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
-      congr 1
-
-Depends on / 依赖: Functor, Functor.op, H.base_open.injective, IsOpenMap, IsOpenMap.functor, Iso.refl, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_assoc, Opens.map_def, Presheaf, PresheafedSpace, PresheafedSpace.isoOfComponents, Quiver, Quiver.Hom.unop_op, Set.preimage_image_eq, TopCat, TopCat.Presheaf.pushforward_obj_map, TopCat.Presheaf.pushforward_obj_obj
+--- 原说明 ---
+An open immersion `f : X ⟶ Y` induces an isomorphism `X ≅ Y|_{f(X)}`.
 -/
 noncomputable def isoRestrict : X ≅ Y.restrict H.base_open :=
-PresheafedSpace.isoOfComponents (Iso.refl _) by
+  PresheafedSpace.isoOfComponents (Iso.refl _) <| by
     symm
     fapply NatIso.ofComponents
     · intro U
@@ -242,48 +205,60 @@ PresheafedSpace.isoOfComponents (Iso.refl _) by
       dsimp
       simp only [NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_obj,
         TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op, Category.assoc]
-      rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
+      rw [← X.presheaf.map_comp, ← X.presheaf.map_comp]
       congr 1
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_hom_ofRestrict` / 定理 `isoRestrict_hom_ofRestrict`
-
-English:
-theorem isoRestrict_hom_ofRestrict
-  statement: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  proof: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
-  simp only [eqToHom_refl,
-    Functor.whiskerRight_id']
-  erw [Category.comp_id, comp_c_app, f.c.naturality_assoc, ← X.presheaf.map_comp]
-  trans f.c.app x ≫ X.presheaf.map (𝟙 _)
-  · congr 1
-  · simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 isoRestrict_hom_ofRestrict
-  结论: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  证明: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
-  simp only [eqToHom_refl,
-    Functor.whiskerRight_id']
-  erw [Category.comp_id, comp_c_app, f.c.naturality_assoc, ← X.presheaf.map_comp]
-  trans f.c.app x ≫ X.presheaf.map (𝟙 _)
-  · congr 1
-  · simp
-
-@[reassoc (attr := simp)]
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict**
+ 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.Hom.ext`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {X Y : AlgebraicGeometry.PresheafedSpace C}   
+(α β : X.Hom Y) (w : α.base = β…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.comp_c_app`：comp_c_app {X Y Z : Preshe
+afedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) : (α ≫ β).c.app U = β.c.app U ≫ α.c.app
+ (op ((Opens.map β.base).obj (unop…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
+  refine PresheafedSpace.Hom.ext _ _ rfl <| NatTrans.ext <| funext fun x => ?_
   simp only [eqToHom_refl,
     Functor.whiskerRight_id']
   erw [Category.comp_id, comp_c_app, f.c.naturality_assoc, ← X.presheaf.map_comp]
@@ -292,64 +267,70 @@ refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
   · simp
 
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_inv_ofRestrict` / 定理 `isoRestrict_inv_ofRestrict`
-
-English:
-theorem isoRestrict_inv_ofRestrict
-  statement: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  proof: by
-  rw [Iso.inv_comp_eq]; rw [isoRestrict_hom_ofRestrict]
-
-中文:
-定理 isoRestrict_inv_ofRestrict
-  结论: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  证明: by
-  rw [Iso.inv_comp_eq]; rw [isoRestrict_hom_ofRestrict]
-
-Depends on / 依赖: Iso.inv_comp_eq, inv_comp_eq, isoRestrict_hom_ofRestrict
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict**
+ 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRest
+rict`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
 -/
 theorem isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _ := by
-  rw [Iso.inv_comp_eq]; rw [isoRestrict_hom_ofRestrict]
-
-/--
-Instance `mono` / 实例 `mono`
-
-English:
-instance mono
-  signature: : Mono f
-  body: by
-  rw [← H.isoRestrict_hom_ofRestrict]; apply mono_comp
-
-中文:
-实例 mono
-  签名: : 单态射 f
-  定义体: by
-  rw [← H.isoRestrict_hom_ofRestrict]; apply mono_comp
-
-Depends on / 依赖: H.isoRestrict_hom_ofRestrict, isoRestrict_hom_ofRestrict, mono_comp
+  rw [Iso.inv_comp_eq, isoRestrict_hom_ofRestrict]
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.mono** 是 Mathlib 中的一个实例，位于命名
+空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：mono : Mono f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRest
+rict`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance mono : Mono f := by
   rw [← H.isoRestrict_hom_ofRestrict]; apply mono_comp
-
-/--
-lemma `c_iso'` / 引理 `c_iso'`
-
-English:
-lemma c_iso'
-  given: {V : Opens Y} (U : Opens X) (h : V = (opensFunctor f).obj U)
-  proof: by
-  subst h
-  infer_instance
-
-中文:
-引理 c_iso'
-  条件: {V : Opens Y} (U : Opens X) (h : V = (opensFunctor f).obj U)
-  证明: by
-  subst h
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso'** 是 Mathlib 中的一个引理，位于
+命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：c_iso' {V : Opens Y} (U : Opens X) (h : V = (opensFunctor f).obj U) : IsIs
+o (f.c.app (Opposite.op V))
+参数：U : Opens X；h : V = (opensFunctor f).obj U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma c_iso' {V : Opens Y} (U : Opens X) (h : V = (opensFunctor f).obj U) :
     IsIso (f.c.app (Opposite.op V)) := by
@@ -357,40 +338,55 @@ lemma c_iso' {V : Opens Y} (U : Opens X) (h : V = (opensFunctor f).obj U) :
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `comp` / 实例 `comp`
+/-- The composition of two open immersions is an open immersion. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.comp** 是 Mathlib 中的一个实例，位于命名
+空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：comp {Z : PresheafedSpace C} (g : Y ⟶ Z) [hg : IsOpenImmersion g] : IsOpen
+Immersion (f ≫ g) where base_open
+参数：g : Y ⟶ Z。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type
+ u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topologica
+lSpace Y] [inst_2 :…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用引理 `CategoryTheory.IsIso.comp_isIso'`：comp_isIso' (_ : IsIso f) (_ : IsIso h
+) : IsIso (f ≫ h)
+· 使用引理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso'`：c_iso' {V : Op
+ens Y} (U : Opens X) (h : V = (opensFunctor f).obj U) : IsIso (f.c.app (Opposite
+.op V))
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
 
-English:
-instance comp
-  signature: {Z : PresheafedSpace C} (g : Y ⟶ Z) [hg : IsOpenImmersion g]
-  body: hg.base_open.comp H.base_open
-  c_iso U := by
-    generalize_proofs h
-    dsimp only [AlgebraicGeometry.PresheafedSpace.comp_c_app, unop_op, Functor.op, comp_base,
-      Opens.map_comp_obj]
-    apply IsIso.comp_isIso'
-    · exact c_iso' g ((opensFunctor f).obj U) (by ext; simp)
-    · apply c_iso' f U
-      ext1
-      dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj, comp_base, TopCat.coe_comp]
-      rw [Set.image_comp]; rw [Set.preimage_image_eq _ hg.base_open.injective]
-
-中文:
-实例 comp
-  签名: {Z : Presheafed空间 C} (g : Y ⟶ Z) [hg : 是开浸入 g]
-  定义体: hg.base_open.comp H.base_open
-  c_iso U := by
-    generalize_proofs h
-    dsimp only [AlgebraicGeometry.PresheafedSpace.comp_c_app, unop_op, Functor.op, comp_base,
-      Opens.map_comp_obj]
-    apply IsIso.comp_isIso'
-    · exact c_iso' g ((opensFunctor f).obj U) (by ext; simp)
-    · apply c_iso' f U
-      ext1
-      dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj, comp_base, TopCat.coe_comp]
-      rw [Set.image_comp]; rw [Set.preimage_image_eq _ hg.base_open.injective]
-
-Depends on / 依赖: H.base_open, base_open, hg.base_open.comp
+--- 原说明 ---
+The composition of two open immersions is an open immersion.
 -/
 instance comp {Z : PresheafedSpace C} (g : Y ⟶ Z) [hg : IsOpenImmersion g] :
     IsOpenImmersion (f ≫ g) where
@@ -404,25 +400,25 @@ instance comp {Z : PresheafedSpace C} (g : Y ⟶ Z) [hg : IsOpenImmersion g] :
     · apply c_iso' f U
       ext1
       dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj, comp_base, TopCat.coe_comp]
-      rw [Set.image_comp]; rw [Set.preimage_image_eq _ hg.base_open.injective]
+      rw [Set.image_comp, Set.preimage_image_eq _ hg.base_open.injective]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `invApp` / `invApp` 的定义
+/-- For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U) ⟶ Y(U)`. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp** 是 Mathlib 中的一个定义，位于
+命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：invApp (U : Opens X) : X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFu
+nctor f |>.obj U))
+参数：U : Opens X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 
-English:
-definition invApp
-  signature: (U : Opens X)
-  body: X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage_image_eq _ H.base_open.injective]))
-    ≫ inv (f.c.app (op (opensFunctor f |>.obj U)))
-
-中文:
-定义 invApp
-  签名: (U : Opens X)
-  定义体: X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage_image_eq _ H.base_open.injective]))
-    ≫ inv (f.c.app (op (opensFunctor f |>.obj U)))
-
-Depends on / 依赖: H.base_open.injective, Opens.map_def, Set.preimage_image_eq, X.presheaf.map, base_open, eqToHom, f.c.app, injective, map_def, opensFunctor, preimage_image_eq, presheaf
+--- 原说明 ---
+For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U)
+ ⟶ Y(U)`.
 -/
 noncomputable def invApp (U : Opens X) :
     X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFunctor f |>.obj U)) :=
@@ -432,32 +428,40 @@ noncomputable def invApp (U : Opens X) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `inv_naturality` / 定理 `inv_naturality`
-
-English:
-theorem inv_naturality
-  given: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  proof: by
-  simp only [invApp, ← Category.assoc]
-  rw [IsIso.comp_inv_eq]
-  simp only [Functor.op_obj, op_unop, ← X.presheaf.map_comp, Functor.op_map, Category.assoc,
-    NatTrans.naturality, Quiver.Hom.unop_op, IsIso.inv_hom_id_assoc,
-    TopCat.Presheaf.pushforward_obj_map]
-  congr 1
-
-中文:
-定理 inv_naturality
-  条件: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  证明: by
-  simp only [invApp, ← Category.assoc]
-  rw [IsIso.comp_inv_eq]
-  simp only [Functor.op_obj, op_unop, ← X.presheaf.map_comp, Functor.op_map, Category.assoc,
-    NatTrans.naturality, Quiver.Hom.unop_op, IsIso.inv_hom_id_assoc,
-    TopCat.Presheaf.pushforward_obj_map]
-  congr 1
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.op_map, Functor.op_obj, IsIso.comp_inv_eq, IsIso.inv_hom_id_assoc, NatTrans, NatTrans.naturality, Presheaf, Quiver, Quiver.Hom.unop_op, TopCat, TopCat.Presheaf.pushforward_obj_map, X.presheaf.map_comp, comp_inv_eq, invApp, inv_hom_id_assoc, map_comp, naturality
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_naturality** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) : X.presheaf.map i ≫ H.invA
+pp _ (unop V) = invApp f (unop U) ≫ Y.presheaf.map (opensFunctor f |>.op.map i)
+参数：Opens X；i : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.comp_inv_eq`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
 -/
 theorem inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) :
     X.presheaf.map i ≫ H.invApp _ (unop V) =
@@ -470,117 +474,174 @@ theorem inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) :
   congr 1
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `
+AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : Opens X) : IsIso (invApp f U) := by delta invApp; infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `inv_invApp` / 定理 `inv_invApp`
-
-English:
-theorem inv_invApp
-  given: (U : Opens X)
-  proof: by
-  rw [← cancel_epi (H.invApp _ U)]; rw [IsIso.hom_inv_id]
-  delta invApp
-  simp [← Functor.map_comp]
-
-中文:
-定理 inv_invApp
-  条件: (U : Opens X)
-  证明: by
-  rw [← cancel_epi (H.invApp _ U)]; rw [IsIso.hom_inv_id]
-  delta invApp
-  simp [← Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, H.invApp, IsIso.hom_inv_id, cancel_epi, hom_inv_id, invApp, map_comp
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_invApp** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：inv_invApp (U : Opens X) : inv (H.invApp _ U) = f.c.app (op (opensFunctor 
+f |>.obj U)) ≫ X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage_ima
+ge_eq _ H.base_open.injective]))
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.instIsIsoInvApp`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.Pre
+sheafedSpace C} (f : X ⟶ Y)   [H : AlgebraicGeometry.Pr…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_invApp (U : Opens X) :
     inv (H.invApp _ U) =
       f.c.app (op (opensFunctor f |>.obj U)) ≫
         X.presheaf.map
           (eqToHom (by simp [Opens.map_def, Set.preimage_image_eq _ H.base_open.injective])) := by
-  rw [← cancel_epi (H.invApp _ U)]; rw [IsIso.hom_inv_id]
+  rw [← cancel_epi (H.invApp _ U), IsIso.hom_inv_id]
   delta invApp
   simp [← Functor.map_comp]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc, elementwise]
-/--
-theorem `invApp_app` / 定理 `invApp_app`
-
-English:
-theorem invApp_app
-  given: (U : Opens X)
-  proof: by
-  rw [invApp]; rw [Category.assoc]; rw [IsIso.inv_hom_id]; rw [Category.comp_id]
-
-中文:
-定理 invApp_app
-  条件: (U : Opens X)
-  证明: by
-  rw [invApp]; rw [Category.assoc]; rw [IsIso.inv_hom_id]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, IsIso.inv_hom_id, comp_id, invApp, inv_hom_id
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp_app** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：invApp_app (U : Opens X) : invApp f U ≫ f.c.app (op (opensFunctor f |>.obj
+ U)) = X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage_image_eq _ 
+H.base_open.injective]))
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp.eq_1`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.Preshea
+fedSpace C} (f : X ⟶ Y)   [H : AlgebraicGeometry.Pr…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem invApp_app (U : Opens X) :
     invApp f U ≫ f.c.app (op (opensFunctor f |>.obj U)) = X.presheaf.map
       (eqToHom (by simp [Opens.map_def, Set.preimage_image_eq _ H.base_open.injective])) := by
-  rw [invApp]; rw [Category.assoc]; rw [IsIso.inv_hom_id]; rw [Category.comp_id]
+  rw [invApp, Category.assoc, IsIso.inv_hom_id, Category.comp_id]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `app_invApp` / 定理 `app_invApp`
-
-English:
-theorem app_invApp
-  given: (U : Opens Y)
-  proof: by
-  rw [invApp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [f.c.naturality]
-  congr
-
-中文:
-定理 app_invApp
-  条件: (U : Opens Y)
-  证明: by
-  rw [invApp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [f.c.naturality]
-  congr
-
-Depends on / 依赖: Category, Category.assoc, IsIso.comp_inv_eq, comp_inv_eq, f.c.naturality, invApp, naturality
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：app_invApp (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base)
+.obj U) = Y.presheaf.map ((homOfLE (Set.image_preimage_subset f.base U.1)).op : 
+op U ⟶ op (opensFunctor f |>.obj ((Opens.map f.base).obj U)))
+参数：U : Opens Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp.eq_1`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.Preshea
+fedSpace C} (f : X ⟶ Y)   [H : AlgebraicGeometry.Pr…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.comp_inv_eq`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem app_invApp (U : Opens Y) :
     f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) =
       Y.presheaf.map
         ((homOfLE (Set.image_preimage_subset f.base U.1)).op :
           op U ⟶ op (opensFunctor f |>.obj ((Opens.map f.base).obj U))) := by
-  rw [invApp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [f.c.naturality]
+  rw [invApp, ← Category.assoc, IsIso.comp_inv_eq, f.c.naturality]
   congr
 
 /-- A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`. -/
 @[reassoc]
-/--
-theorem `app_inv_app'` / 定理 `app_inv_app'`
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_inv_app'** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base) : 
+f.c.app (op U) ≫ invApp f ((Opens.map f.base).obj U) = Y.presheaf.map (eqToHom (
+le_antisymm (Set.image_preimage_subset f.base U.1) <| (Set.image_preimage_eq_int
+er_range (f
+参数：U : Opens Y；hU : (U : Set Y) subseteq Set.range f.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp`：app_invApp
+ (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.pres
+heaf.map ((homOfLE (Set.image_preimage_subset f.ba…
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
 
-English:
-theorem app_inv_app'
-  given: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base)
-  proof: by
-  simp only [app_invApp, Opens.carrier_eq_coe,
-    homOfLE_leOfHom, eqToHom_op]
-  tauto
-
-中文:
-定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.base)
-  证明: by
-  simp only [app_invApp, Opens.carrier_eq_coe,
-    homOfLE_leOfHom, eqToHom_op]
-  tauto
-
-Depends on / 依赖: f.base
+--- 原说明 ---
+A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`.
 -/
-theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base) :
+theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) ⊆ Set.range f.base) :
     f.c.app (op U) ≫ invApp f ((Opens.map f.base).obj U) =
       Y.presheaf.map
         (eqToHom
@@ -592,83 +653,67 @@ theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base) 
   tauto
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `ofIso` / 实例 `ofIso`
+/-- An isomorphism is an open immersion. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofIso** 是 Mathlib 中的一个实例，位于命
+名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：ofIso {X Y : PresheafedSpace C} (H : X ≅ Y) : IsOpenImmersion H.hom where 
+base_open
+参数：H : X ≅ Y。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-instance ofIso
-  signature: {X Y : PresheafedSpace C} (H : X ≅ Y)
-  body: (TopCat.homeoOfIso ((forget C).mapIso H)).isOpenEmbedding
-  -- Porting note: `inferInstance` will fail if Lean is not told that `H.hom.c` is iso
-  c_iso _ := letI : IsIso H.hom.c := inferInstance;
-    inferInstance
-
-中文:
-实例 ofIso
-  签名: {X Y : Presheafed空间 C} (H : X ≅ Y)
-  定义体: (TopCat.homeoOfIso ((forget C).mapIso H)).isOpenEmbedding
-  -- Porting note: `inferInstance` will fail if Lean is not told that `H.hom.c` is iso
-  c_iso _ := letI : IsIso H.hom.c := inferInstance;
-    inferInstance
-
-Depends on / 依赖: TopCat, TopCat.homeoOfIso, forget, homeoOfIso, isOpenEmbedding, mapIso
+--- 原说明 ---
+An isomorphism is an open immersion.
 -/
 instance ofIso {X Y : PresheafedSpace C} (H : X ≅ Y) : IsOpenImmersion H.hom where
   base_open := (TopCat.homeoOfIso ((forget C).mapIso H)).isOpenEmbedding
   -- Porting note: `inferInstance` will fail if Lean is not told that `H.hom.c` is iso
   c_iso _ := letI : IsIso H.hom.c := inferInstance;
     inferInstance
-
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `
+AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ofIsIso {X Y : PresheafedSpace C} (f : X ⟶ Y) [IsIso f] :
     IsOpenImmersion f :=
   AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofIso (asIso f)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `ofRestrict` / 实例 `ofRestrict`
-
-English:
-instance ofRestrict
-  signature: {X : TopCat} (Y : PresheafedSpace C) {f : X ⟶ Y.carrier}
-  body: hf
-  c_iso U := by
-    dsimp
-    have : (Opens.map f).obj (hf.functor.obj U) = U := by
-      ext1
-      exact Set.preimage_image_eq _ hf.injective
-    convert_to IsIso (Y.presheaf.map (𝟙 _))
-    · congr
-    · -- Porting note: was `apply Subsingleton.helim; rw [this]`
-      -- See https://github.com/leanprover/lean4/issues/2273
-      congr
-      · simp only
-        congr
-      apply Subsingleton.helim
-      rw [this]
-    · infer_instance
-
-中文:
-实例 ofRestrict
-  签名: {X : 顶元素范畴} (Y : Presheafed空间 C) {f : X ⟶ Y.carrier}
-  定义体: hf
-  c_iso U := by
-    dsimp
-    have : (Opens.map f).obj (hf.functor.obj U) = U := by
-      ext1
-      exact Set.preimage_image_eq _ hf.injective
-    convert_to IsIso (Y.presheaf.map (𝟙 _))
-    · congr
-    · -- Porting note: was `apply Subsingleton.helim; rw [this]`
-      -- See https://github.com/leanprover/lean4/issues/2273
-      congr
-      · simp only
-        congr
-      apply Subsingleton.helim
-      rw [this]
-    · infer_instance
-
-Depends on / 依赖: IsStablyFiniteRing, OrzechProperty
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofRestrict** 是 Mathlib 中的一个实
+例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict {X : TopCat} (Y : PresheafedSpace C) {f : X ⟶ Y.carrier} (hf : 
+IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf) where base_open
+参数：Y : PresheafedSpace C；hf : IsOpenEmbedding f。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subsingleton.helim`：∀ {α β : Sort u} [h₁ : Subsingleton α], α = β → ∀ (a
+ : α) (b : β), a ≍ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 instance ofRestrict {X : TopCat} (Y : PresheafedSpace C) {f : X ⟶ Y.carrier}
     (hf : IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf) where
@@ -691,88 +736,81 @@ instance ofRestrict {X : TopCat} (Y : PresheafedSpace C) {f : X ⟶ Y.carrier}
 
 set_option backward.isDefEq.respectTransparency false in
 @[elementwise, simp]
-/--
-theorem `ofRestrict_invApp` / 定理 `ofRestrict_invApp`
-
-English:
-theorem ofRestrict_invApp
-  statement: {C : Type*} [Category* C] (X : PresheafedSpace C) {Y : TopCat.{w}}
-  proof: by
-  delta invApp
-  rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
-  change X.presheaf.map _ = X.presheaf.map _
-  congr 1
-
-中文:
-定理 ofRestrict_invApp
-  结论: {C : 类型} [范畴* C] (X : Presheafed空间 C) {Y : 顶元素范畴.{w}}
-  证明: by
-  delta invApp
-  rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
-  change X.presheaf.map _ = X.presheaf.map _
-  congr 1
-
-Depends on / 依赖: Category, Category.id_comp, IsIso.comp_inv_eq, IsStablyFiniteRing, Nontrivial, RankCondition, X.presheaf.map, comp_inv_eq, id_comp, invApp, presheaf
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofRestrict_invApp** 是 Mathli
+b 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict_invApp {C : Type*} [Category* C] (X : PresheafedSpace C) {Y : T
+opCat.{w}} {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.r
+estrict h).carrier) : (PresheafedSpace.IsOpenImmersion.ofRestrict X h).invApp _ 
+U = 𝟙 _
+参数：X : PresheafedSpace C；h : IsOpenEmbedding f；U : Opens (X.restrict h).carrier。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.comp_inv_eq`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem ofRestrict_invApp {C : Type*} [Category* C] (X : PresheafedSpace C) {Y : TopCat.{w}}
     {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.restrict h).carrier) :
     (PresheafedSpace.IsOpenImmersion.ofRestrict X h).invApp _ U = 𝟙 _ := by
   delta invApp
-  rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
+  rw [IsIso.comp_inv_eq, Category.id_comp]
   change X.presheaf.map _ = X.presheaf.map _
   congr 1
 
-/--
-theorem `to_iso` / 定理 `to_iso`
+/-- An open immersion is an iso if the underlying continuous map is epi. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.to_iso** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：to_iso [h' : Epi f.base] : IsIso f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_preimage_eq`：image_preimage_eq {f : α -> β} (s : Set β) (h : S
+urjective f) : f '' f ⁻¹' s = s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopCat.epi_iff_surjective`：epi_iff_surjective {X Y : TopCat.{u}} (f : X 
+⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.isIso_of_components`：isIso_of_componen
+ts (f : X ⟶ Y) [IsIso f.base] [IsIso f.c] : IsIso f
+· 使用定理 `Topology.IsOpenEmbedding.isEmbedding`：∀ {X : Type u_1} {Y : Type u_2} {f
+ : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.
+IsOpenEmbedding f → Topolo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-theorem to_iso
-  given: [h' : Epi f.base]
-  statement: IsIso f
-  proof: by
-  have : forall (U : (Opens Y)ᵒᵖ), IsIso (f.c.app U) := by
-    intro U
-    have : U = op (opensFunctor f |>.obj ((Opens.map f.base).obj (unop U))) := by
-      induction U with | op U => ?_
-      cases U
-      dsimp only [Functor.op, Opens.map]
-      congr
-      exact (Set.image_preimage_eq _ ((TopCat.epi_iff_surjective _).mp h')).symm
-    convert! H.c_iso (Opens.map f.base |>.obj <| unop U)
-  have : IsIso f.c := NatIso.isIso_of_isIso_app _
-  apply +allowSynthFailures isIso_of_components
-  let t : X ≃ₜ Y := H.base_open.isEmbedding.toHomeomorph.trans
-    { toFun := Subtype.val
-      invFun := fun x =>
-        ⟨x, by rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp h')]; trivial⟩ }
-  exact (TopCat.isoOfHomeo t).isIso_hom
-
-中文:
-定理 to_iso
-  条件: [h' : 满态射 f.base]
-  结论: 是同构 f
-  证明: by
-  have : forall (U : (Opens Y)ᵒᵖ), IsIso (f.c.app U) := by
-    intro U
-    have : U = op (opensFunctor f |>.obj ((Opens.map f.base).obj (unop U))) := by
-      induction U with | op U => ?_
-      cases U
-      dsimp only [Functor.op, Opens.map]
-      congr
-      exact (Set.image_preimage_eq _ ((TopCat.epi_iff_surjective _).mp h')).symm
-    convert! H.c_iso (Opens.map f.base |>.obj <| unop U)
-  have : IsIso f.c := NatIso.isIso_of_isIso_app _
-  apply +allowSynthFailures isIso_of_components
-  let t : X ≃ₜ Y := H.base_open.isEmbedding.toHomeomorph.trans
-    { toFun := Subtype.val
-      invFun := fun x =>
-        ⟨x, by rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp h')]; trivial⟩ }
-  exact (TopCat.isoOfHomeo t).isIso_hom
-
-Depends on / 依赖: Functor, Functor.op, H.base_open.isEmbedding.toHomeomorp, H.c_iso, NatIso, NatIso.isIso_of_isIso_app, Opens.map, Set.image_preimage_eq, TopCat, TopCat.epi_iff_surjective, allowSynthFailures, base_open, c_iso, convert, epi_iff_surjective, f.base, f.c.app, image_preimage_eq, isEmbedding, isIso_of_components
+--- 原说明 ---
+An open immersion is an iso if the underlying continuous map is epi.
 -/
 theorem to_iso [h' : Epi f.base] : IsIso f := by
-  have : forall (U : (Opens Y)ᵒᵖ), IsIso (f.c.app U) := by
+  have : ∀ (U : (Opens Y)ᵒᵖ), IsIso (f.c.app U) := by
     intro U
     have : U = op (opensFunctor f |>.obj ((Opens.map f.base).obj (unop U))) := by
       induction U with | op U => ?_
@@ -790,27 +828,29 @@ theorem to_iso [h' : Epi f.base] : IsIso f := by
   exact (TopCat.isoOfHomeo t).isIso_hom
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `stalk_iso` / 实例 `stalk_iso`
-
-English:
-instance stalk_iso
-  signature: [HasColimits C] (x : X)
-  body: by
-  rw [← H.isoRestrict_hom_ofRestrict]; rw [PresheafedSpace.stalkMap.comp]
-  infer_instance
-
-中文:
-实例 stalk_iso
-  签名: [有余极限 C] (x : X)
-  定义体: by
-  rw [← H.isoRestrict_hom_ofRestrict]; rw [PresheafedSpace.stalkMap.comp]
-  infer_instance
-
-Depends on / 依赖: H.isoRestrict_hom_ofRestrict, PresheafedSpace, PresheafedSpace.stalkMap.comp, infer_instance, isoRestrict_hom_ofRestrict, stalkMap
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.stalk_iso** 是 Mathlib 中的一个实例
+，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：stalk_iso [HasColimits C] (x : X) : IsIso (f.stalkMap x)
+参数：x : X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRest
+rict`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.comp`：comp {X Y Z : Presheafe
+dSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X) : (α ≫ β).stalkMap x = (β.st
+alkMap (α.base x) : Z.presheaf.stalk …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance stalk_iso [HasColimits C] (x : X) : IsIso (f.stalkMap x) := by
-  rw [← H.isoRestrict_hom_ofRestrict]; rw [PresheafedSpace.stalkMap.comp]
+  rw [← H.isoRestrict_hom_ofRestrict, PresheafedSpace.stalkMap.comp]
   infer_instance
 
 end
@@ -821,72 +861,22 @@ variable {X Y Z : PresheafedSpace C} (f : X ⟶ Z) [hf : IsOpenImmersion f] (g :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `pullbackConeOfLeftFst` / `pullbackConeOfLeftFst` 的定义
+/-- (Implementation.) The projection map when constructing the pullback along an open immersion.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst** 是 Ma
+thlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeftFst : Y.restrict (TopCat.snd_isOpenEmbedding_of_left hf.
+base_open g.base) ⟶ X where base
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 
-English:
-definition pullbackConeOfLeftFst
-  signature: :
-  body: pullback.fst _ _
-  c :=
-    { app := fun U =>
-        hf.invApp _ (unop U) ≫
-          g.c.app (op (hf.base_open.functor.obj (unop U))) ≫
-            Y.presheaf.map
-              (eqToHom
-                (by
-                  simp only [IsOpenMap.functor, op_inj_iff, Opens.map,
-                    Functor.op_obj]
-                  apply LE.le.antisymm
-                  · rintro _ ⟨_, h₁, h₂⟩
-                    use (TopCat.pullbackIsoProdSubtype _ _).inv ⟨⟨_, _⟩, h₂⟩
-                    simpa [(TopCat.pullbackIsoProdSubtype_inv_fst_apply),
-                      (TopCat.pullbackIsoProdSubtype_inv_snd_apply)]
-                  · rintro _ ⟨x, h₁, rfl⟩
-                    exact ⟨_, h₁, CategoryTheory.congr_fun pullback.condition x⟩))
-      naturality := by
-        intro U V i
-        induction U
-        induction V
-        simp only [(inv_naturality_assoc), restrict_carrier, restrict_presheaf,
-          TopCat.Presheaf.pushforward_obj_obj, Functor.comp_obj, Functor.op_obj,
-          TopCat.Presheaf.pushforward_obj_map, Functor.comp_map, Functor.op_map, Quiver.Hom.unop_op,
-          NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op,
-          ← Functor.map_comp, Category.assoc]
-        rfl }
-
-中文:
-定义 pullbackConeOfLeftFst
-  签名: :
-  定义体: pullback.fst _ _
-  c :=
-    { app := fun U =>
-        hf.invApp _ (unop U) ≫
-          g.c.app (op (hf.base_open.functor.obj (unop U))) ≫
-            Y.presheaf.map
-              (eqToHom
-                (by
-                  simp only [IsOpenMap.functor, op_inj_iff, Opens.map,
-                    Functor.op_obj]
-                  apply LE.le.antisymm
-                  · rintro _ ⟨_, h₁, h₂⟩
-                    use (TopCat.pullbackIsoProdSubtype _ _).inv ⟨⟨_, _⟩, h₂⟩
-                    simpa [(TopCat.pullbackIsoProdSubtype_inv_fst_apply),
-                      (TopCat.pullbackIsoProdSubtype_inv_snd_apply)]
-                  · rintro _ ⟨x, h₁, rfl⟩
-                    exact ⟨_, h₁, CategoryTheory.congr_fun pullback.condition x⟩))
-      naturality := by
-        intro U V i
-        induction U
-        induction V
-        simp only [(inv_naturality_assoc), restrict_carrier, restrict_presheaf,
-          TopCat.Presheaf.pushforward_obj_obj, Functor.comp_obj, Functor.op_obj,
-          TopCat.Presheaf.pushforward_obj_map, Functor.comp_map, Functor.op_map, Quiver.Hom.unop_op,
-          NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op,
-          ← Functor.map_comp, Category.assoc]
-        rfl }
-
-Depends on / 依赖: pullback, pullback.fst
+--- 原说明 ---
+(Implementation.) The projection map when constructing the pullback along an ope
+n immersion.
 -/
 def pullbackConeOfLeftFst :
     Y.restrict (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base) ⟶ X where
@@ -920,46 +910,77 @@ def pullbackConeOfLeftFst :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pullback_cone_of_left_condition` / 定理 `pullback_cone_of_left_condition`
-
-English:
-theorem pullback_cone_of_left_condition
-  statement: pullbackConeOfLeftFst f g ≫ f = Y.ofRestrict _ ≫ g
-  proof: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
-  · simpa using! pullback.condition
-  · induction U
-    simp only [(NatTrans.comp_app), comp_c_app, unop_op, Functor.whiskerRight_app,
-      pullbackConeOfLeftFst, app_invApp_assoc, eqToHom_app, Category.assoc,
-      NatTrans.naturality_assoc, restrict_carrier, comp_base, ofRestrict_base, restrict_presheaf,
-      Functor.comp_obj, Functor.op_obj, Opens.map_comp_obj, TopCat.Presheaf.pushforward_obj_obj,
-      Opens.carrier_eq_coe, homOfLE_leOfHom, TopCat.Presheaf.pushforward_obj_map, Functor.comp_map,
-      Functor.op_map, eqToHom_unop, ofRestrict_c_app, Functor.id_obj]
-    rw [← Y.presheaf.map_comp]; rw [← Y.presheaf.map_comp]
-    congr 1
-
-中文:
-定理 pullback_cone_of_left_condition
-  结论: pullbackConeOfLeftFst f g ≫ f = Y.ofRestrict _ ≫ g
-  证明: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
-  · simpa using! pullback.condition
-  · induction U
-    simp only [(NatTrans.comp_app), comp_c_app, unop_op, Functor.whiskerRight_app,
-      pullbackConeOfLeftFst, app_invApp_assoc, eqToHom_app, Category.assoc,
-      NatTrans.naturality_assoc, restrict_carrier, comp_base, ofRestrict_base, restrict_presheaf,
-      Functor.comp_obj, Functor.op_obj, Opens.map_comp_obj, TopCat.Presheaf.pushforward_obj_obj,
-      Opens.carrier_eq_coe, homOfLE_leOfHom, TopCat.Presheaf.pushforward_obj_map, Functor.comp_map,
-      Functor.op_map, eqToHom_unop, ofRestrict_c_app, Functor.id_obj]
-    rw [← Y.presheaf.map_comp]; rw [← Y.presheaf.map_comp]
-    congr 1
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condit
+ion** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion
+`。
+形式化陈述：pullback_cone_of_left_condition : pullbackConeOfLeftFst f g ≫ f = Y.ofRest
+rict _ ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.Hom.ext`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {X Y : AlgebraicGeometry.PresheafedSpace C}   
+(α β : X.Hom Y) (w : α.base = β…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `TopCat.snd_isOpenEmbedding_of_left`：snd_isOpenEmbedding_of_left {X Y S :
+ TopCat.{u}} {f : X ⟶ S} (H : IsOpenEmbedding f) (g : Y ⟶ S) : IsOpenEmbedding ⇑
+(pullback.snd f g)
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.NatTrans.comp_app`：comp_app {F G H : C ⥤ D} (α : F ⟶ G) (
+β : G ⟶ H) (X : C) : (α ≫ β).app X = α.app X ≫ β.app X
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.Pr
+esheafedSpace C} (f : X ⟶ Y)   [H : AlgebraicGeometry.Pr…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.eqToHom_app`：eqToHom_app {F G : C ⥤ D} (h : F = G) (X : C
+) : (eqToHom h : F ⟶ G).app X = eqToHom (Functor.congr_obj h X)
+· 使用定理 `CategoryTheory.eqToHom_unop`：eqToHom_unop {X Y : Cᵒᵖ} (h : X = Y) : (eqT
+oHom h).unop = eqToHom (congr_arg unop h.symm)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem pullback_cone_of_left_condition : pullbackConeOfLeftFst f g ≫ f = Y.ofRestrict _ ≫ g := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
+  refine PresheafedSpace.Hom.ext _ _ ?_ <| NatTrans.ext <| funext fun U => ?_
   · simpa using! pullback.condition
   · induction U
     simp only [(NatTrans.comp_app), comp_c_app, unop_op, Functor.whiskerRight_app,
@@ -968,25 +989,26 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
       Functor.comp_obj, Functor.op_obj, Opens.map_comp_obj, TopCat.Presheaf.pushforward_obj_obj,
       Opens.carrier_eq_coe, homOfLE_leOfHom, TopCat.Presheaf.pushforward_obj_map, Functor.comp_map,
       Functor.op_map, eqToHom_unop, ofRestrict_c_app, Functor.id_obj]
-    rw [← Y.presheaf.map_comp]; rw [← Y.presheaf.map_comp]
+    rw [← Y.presheaf.map_comp, ← Y.presheaf.map_comp]
     congr 1
 
-/--
-Definition of `pullbackConeOfLeft` / `pullbackConeOfLeft` 的定义
+/-- We construct the pullback along an open immersion via restricting along the pullback of the
+maps of underlying spaces (which is also an open embedding).
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeft** 是 Mathl
+ib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeft : PullbackCone f g
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_
+condition`：pullback_cone_of_left_condition : pullbackConeOfLeftFst f g ≫ f = Y.o
+fRestrict _ ≫ g
 
-English:
-definition pullbackConeOfLeft
-  signature: : PullbackCone f g
-  body: PullbackCone.mk (pullbackConeOfLeftFst f g) (Y.ofRestrict _)
-    (pullback_cone_of_left_condition f g)
-
-中文:
-定义 pullbackConeOfLeft
-  签名: : PullbackCone f g
-  定义体: PullbackCone.mk (pullbackConeOfLeftFst f g) (Y.ofRestrict _)
-    (pullback_cone_of_left_condition f g)
-
-Depends on / 依赖: PullbackCone, PullbackCone.mk, Y.ofRestrict, ofRestrict, pullbackConeOfLeftFst, pullback_cone_of_left_condition
+--- 原说明 ---
+We construct the pullback along an open immersion via restricting along the pull
+back of the
+maps of underlying spaces (which is also an open embedding).
 -/
 def pullbackConeOfLeft : PullbackCone f g :=
   PullbackCone.mk (pullbackConeOfLeftFst f g) (Y.ofRestrict _)
@@ -996,68 +1018,18 @@ variable (s : PullbackCone f g)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `pullbackConeOfLeftLift` / `pullbackConeOfLeftLift` 的定义
+/-- (Implementation.) Any cone over `cospan f g` indeed factors through the constructed cone.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift** 是 M
+athlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeftLift : s.pt ⟶ (pullbackConeOfLeft f g).pt where base
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackConeOfLeftLift
-  signature: : s.pt ⟶ (pullbackConeOfLeft f g).pt where
-  body: pullback.lift s.fst.base s.snd.base
-      (congr_arg (fun x => PresheafedSpace.Hom.base x) s.condition)
-  c :=
-    { app := fun U =>
-        s.snd.c.app _ ≫
-          s.pt.presheaf.map
-            (eqToHom
-              (by
-                dsimp only [Opens.map_def, IsOpenMap.functor, Functor.op]
-                congr 2
-                let s' : PullbackCone f.base g.base :=
-                  PullbackCone.mk s.fst.base s.snd.base (congr_arg Hom.base s.condition)
-                have : _ = s.snd.base := limit.lift_π s' WalkingCospan.right
-                conv_lhs =>
-                  rw [← this]
-                  dsimp [s']
-                  rw [Function.comp_def]; rw [← Set.preimage_preimage]
-                rw [Set.preimage_image_eq _
-                    (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base).injective]
-                rfl))
-      naturality := fun U V i => by
-        erw [s.snd.c.naturality_assoc]
-        rw [Category.assoc]
-        erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
-        congr 1 }
-
-中文:
-定义 pullbackConeOfLeftLift
-  签名: : s.pt ⟶ (pullbackConeOfLeft f g).pt where
-  定义体: pullback.lift s.fst.base s.snd.base
-      (congr_arg (fun x => PresheafedSpace.Hom.base x) s.condition)
-  c :=
-    { app := fun U =>
-        s.snd.c.app _ ≫
-          s.pt.presheaf.map
-            (eqToHom
-              (by
-                dsimp only [Opens.map_def, IsOpenMap.functor, Functor.op]
-                congr 2
-                let s' : PullbackCone f.base g.base :=
-                  PullbackCone.mk s.fst.base s.snd.base (congr_arg Hom.base s.condition)
-                have : _ = s.snd.base := limit.lift_π s' WalkingCospan.right
-                conv_lhs =>
-                  rw [← this]
-                  dsimp [s']
-                  rw [Function.comp_def]; rw [← Set.preimage_preimage]
-                rw [Set.preimage_image_eq _
-                    (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base).injective]
-                rfl))
-      naturality := fun U V i => by
-        erw [s.snd.c.naturality_assoc]
-        rw [Category.assoc]
-        erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
-        congr 1 }
-
-Depends on / 依赖: Function, Function.comp_def, Functor, Functor.op, Hom.base, IsOpenMap, IsOpenMap.functor, Opens.map_def, PresheafedSpace, PresheafedSpace.Hom.base, PullbackCone, PullbackCone.mk, Set.preimage_preimage, WalkingCospan, WalkingCospan.right, comp_def, condition, congr_arg, conv_lhs, eqToHom
+--- 原说明 ---
+(Implementation.) Any cone over `cospan f g` indeed factors through the construc
+ted cone.
 -/
 def pullbackConeOfLeftLift : s.pt ⟶ (pullbackConeOfLeft f g).pt where
   base :=
@@ -1077,7 +1049,7 @@ def pullbackConeOfLeftLift : s.pt ⟶ (pullbackConeOfLeft f g).pt where
                 conv_lhs =>
                   rw [← this]
                   dsimp [s']
-                  rw [Function.comp_def]; rw [← Set.preimage_preimage]
+                  rw [Function.comp_def, ← Set.preimage_preimage]
                 rw [Set.preimage_image_eq _
                     (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base).injective]
                 rfl))
@@ -1089,53 +1061,88 @@ def pullbackConeOfLeftLift : s.pt ⟶ (pullbackConeOfLeft f g).pt where
 
 set_option backward.isDefEq.respectTransparency false in
 -- this lemma is not a `simp` lemma, because it is an implementation detail
-/--
-theorem `pullbackConeOfLeftLift_fst` / 定理 `pullbackConeOfLeftLift_fst`
-
-English:
-theorem pullbackConeOfLeftLift_fst
-  proof: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
-  · change pullback.lift _ _ _ ≫ pullback.fst _ _ = _
-    simp
-  · induction x with | op x => ?_
-    change ((_ ≫ _) ≫ _ ≫ _) ≫ _ = _
-    simp_rw [Category.assoc]
-    erw [← s.pt.presheaf.map_comp]
-    erw [s.snd.c.naturality_assoc]
-    have := congr_app s.condition (op (opensFunctor f |>.obj x))
-    dsimp only [comp_c_app, unop_op] at this
-    rw [← IsIso.comp_inv_eq] at this
-    replace this := reassoc_of% this
-    erw [← this, hf.invApp_app_assoc, s.fst.c.naturality_assoc]
-    simp [eqToHom_map]
-
-中文:
-定理 pullbackConeOfLeftLift_fst
-  证明: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
-  · change pullback.lift _ _ _ ≫ pullback.fst _ _ = _
-    simp
-  · induction x with | op x => ?_
-    change ((_ ≫ _) ≫ _ ≫ _) ≫ _ = _
-    simp_rw [Category.assoc]
-    erw [← s.pt.presheaf.map_comp]
-    erw [s.snd.c.naturality_assoc]
-    have := congr_app s.condition (op (opensFunctor f |>.obj x))
-    dsimp only [comp_c_app, unop_op] at this
-    rw [← IsIso.comp_inv_eq] at this
-    replace this := reassoc_of% this
-    erw [← this, hf.invApp_app_assoc, s.fst.c.naturality_assoc]
-    simp [eqToHom_map]
-
-Depends on / 依赖: rankCondition_of_nontrivial_of_commSemiring
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst**
+ 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeftLift_fst : pullbackConeOfLeftLift f g s ≫ (pullbackConeO
+fLeft f g).fst = s.fst
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.Hom.ext`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {X Y : AlgebraicGeometry.PresheafedSpace C}   
+(α β : X.Hom Y) (w : α.base = β…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.congr_app`：congr_app {X Y : Presheafed
+Space C} {α β : X ⟶ Y} (h : α = β) (U) : α.c.app U = β.c.app U ≫ X.presheaf.map 
+(eqToHom (by subst h; rfl))
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.IsIso.comp_inv_eq`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp_app_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.Pr
+esheafedSpace C} (f : X ⟶ Y)   [H : AlgebraicGeometry.Pr…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.eqToHom_unop`：eqToHom_unop {X Y : Cᵒᵖ} (h : X = Y) : (eqT
+oHom h).unop = eqToHom (congr_arg unop h.symm)
+· 使用定理 `CategoryTheory.eqToHom_map`：eqToHom_map (F : C ⥤ D) {X Y : C} (p : X = Y
+) : F.map (eqToHom p) = eqToHom (congr_arg F.obj p)
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `CategoryTheory.inv.congr_simp`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (f f_1 : X ⟶ Y) (e_f : f = f_1)   [I : CategoryTheory.
+IsIso f], CategoryT…
+· 使用定理 `CategoryTheory.inv_eqToHom`：inv_eqToHom {X Y : C} (h : X = Y) : inv (eqT
+oHom h) = eqToHom h.symm
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem pullbackConeOfLeftLift_fst :
     pullbackConeOfLeftLift f g s ≫ (pullbackConeOfLeft f g).fst = s.fst := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
+  refine PresheafedSpace.Hom.ext _ _ ?_ <| NatTrans.ext <| funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.fst _ _ = _
     simp
   · induction x with | op x => ?_
@@ -1153,43 +1160,52 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 -- this lemma is not a `simp` lemma, because it is an implementation detail
-/--
-theorem `pullbackConeOfLeftLift_snd` / 定理 `pullbackConeOfLeftLift_snd`
-
-English:
-theorem pullbackConeOfLeftLift_snd
-  proof: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
-  · change pullback.lift _ _ _ ≫ pullback.snd _ _ = _
-    simp
-  · change (_ ≫ _ ≫ _) ≫ _ = _
-    simp_rw [Category.assoc]
-    erw [s.snd.c.naturality_assoc]
-    erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
-    trans s.snd.c.app x ≫ s.pt.presheaf.map (𝟙 _)
-    · congr 1
-    · simp
-
-中文:
-定理 pullbackConeOfLeftLift_snd
-  证明: by
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
-  · change pullback.lift _ _ _ ≫ pullback.snd _ _ = _
-    simp
-  · change (_ ≫ _ ≫ _) ≫ _ = _
-    simp_rw [Category.assoc]
-    erw [s.snd.c.naturality_assoc]
-    erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
-    trans s.snd.c.app x ≫ s.pt.presheaf.map (𝟙 _)
-    · congr 1
-    · simp
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd**
+ 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeftLift_snd : pullbackConeOfLeftLift f g s ≫ (pullbackConeO
+fLeft f g).snd = s.snd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.Hom.ext`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {X Y : AlgebraicGeometry.PresheafedSpace C}   
+(α β : X.Hom Y) (w : α.base = β…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem pullbackConeOfLeftLift_snd :
     pullbackConeOfLeftLift f g s ≫ (pullbackConeOfLeft f g).snd = s.snd := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
-refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
+  refine PresheafedSpace.Hom.ext _ _ ?_ <| NatTrans.ext <| funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.snd _ _ = _
     simp
   · change (_ ≫ _ ≫ _) ≫ _ = _
@@ -1201,59 +1217,36 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
     · simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullbackConeSndIsOpenImmersion` / 实例 `pullbackConeSndIsOpenImmersion`
-
-English:
-instance pullbackConeSndIsOpenImmersion
-  signature: : IsOpenImmersion (pullbackConeOfLeft f g).snd
-  body: by
-  erw [CategoryTheory.Limits.PullbackCone.mk_snd]
-  infer_instance
-
-中文:
-实例 pullbackConeSndIsOpenImmersion
-  签名: : 是开浸入 (pullbackConeOfLeft f g).snd
-  定义体: by
-  erw [CategoryTheory.Limits.PullbackCone.mk_snd]
-  infer_instance
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Limits.PullbackCone.mk_snd, Limits, PullbackCone, infer_instance, mk_snd
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeSndIsOpenImmersi
+on** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`
+。
+形式化陈述：pullbackConeSndIsOpenImmersion : IsOpenImmersion (pullbackConeOfLeft f g).
+snd
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_
+condition`：pullback_cone_of_left_condition : pullbackConeOfLeftFst f g ≫ f = Y.o
+fRestrict _ ≫ g
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_snd`：mk_snd {W : C} (fst : W ⟶ X) 
+(snd : W ⟶ Y) (eq : fst ≫ f = snd ≫ g) : (mk fst snd eq).snd = snd
 -/
 instance pullbackConeSndIsOpenImmersion : IsOpenImmersion (pullbackConeOfLeft f g).snd := by
   erw [CategoryTheory.Limits.PullbackCone.mk_snd]
   infer_instance
 
-/--
-Definition of `pullbackConeOfLeftIsLimit` / `pullbackConeOfLeftIsLimit` 的定义
+/-- The constructed pullback cone is indeed the pullback. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit** 
+是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackConeOfLeftIsLimit
-  signature: : IsLimit (pullbackConeOfLeft f g)
-  body: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  use pullbackConeOfLeftLift f g s
-  use pullbackConeOfLeftLift_fst f g s
-  use pullbackConeOfLeftLift_snd f g s
-  intro m _ h₂
-  rw [← cancel_mono (pullbackConeOfLeft f g).snd]
-  exact h₂.trans (pullbackConeOfLeftLift_snd f g s).symm
-
-中文:
-定义 pullbackConeOfLeftIsLimit
-  签名: : 是极限 (pullbackConeOfLeft f g)
-  定义体: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  use pullbackConeOfLeftLift f g s
-  use pullbackConeOfLeftLift_fst f g s
-  use pullbackConeOfLeftLift_snd f g s
-  intro m _ h₂
-  rw [← cancel_mono (pullbackConeOfLeft f g).snd]
-  exact h₂.trans (pullbackConeOfLeftLift_snd f g s).symm
-
-Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, cancel_mono, isLimitAux, pullbackConeOfLeft, pullbackConeOfLeftLift, pullbackConeOfLeftLift_fst, pullbackConeOfLeftLift_snd
+--- 原说明 ---
+The constructed pullback cone is indeed the pullback.
 -/
 def pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g) := by
   apply PullbackCone.isLimitAux'
@@ -1264,162 +1257,135 @@ def pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g) := by
   intro m _ h₂
   rw [← cancel_mono (pullbackConeOfLeft f g).snd]
   exact h₂.trans (pullbackConeOfLeftLift_snd f g s).symm
-
-/--
-Instance `hasPullback_of_left` / 实例 `hasPullback_of_left`
-
-English:
-instance hasPullback_of_left
-  signature: : HasPullback f g
-  body: ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-中文:
-实例 hasPullback_of_left
-  签名: : HasPullback f g
-  定义体: ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-Depends on / 依赖: pullbackConeOfLeftIsLimit
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.hasPullback_of_left** 是 Math
+lib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：hasPullback_of_left : HasPullback f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasPullback_of_left : HasPullback f g :=
   ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-/--
-Instance `hasPullback_of_right` / 实例 `hasPullback_of_right`
-
-English:
-instance hasPullback_of_right
-  signature: : HasPullback g f
-  body: hasPullback_symmetry f g
-
-中文:
-实例 hasPullback_of_right
-  签名: : HasPullback g f
-  定义体: hasPullback_symmetry f g
-
-Depends on / 依赖: hasPullback_symmetry
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.hasPullback_of_right** 是 Mat
+hlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：hasPullback_of_right : HasPullback g f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
 -/
 instance hasPullback_of_right : HasPullback g f :=
   hasPullback_symmetry f g
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullbackSndOfLeft` / 实例 `pullbackSndOfLeft`
+/-- Open immersions are stable under base-change. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackSndOfLeft** 是 Mathli
+b 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackSndOfLeft : IsOpenImmersion (pullback.snd f g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_hom_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
 
-English:
-instance pullbackSndOfLeft
-  signature: : IsOpenImmersion (pullback.snd f g)
-  body: by
-  delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-  infer_instance
-
-中文:
-实例 pullbackSndOfLeft
-  签名: : 是开浸入 (pullback.snd f g)
-  定义体: by
-  delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-  infer_instance
-
-Depends on / 依赖: WalkingCospan, WalkingCospan.right, infer_instance, limit.isoLimitCone_hom_, pullback, pullback.snd, pullbackConeOfLeftIsLimit
+--- 原说明 ---
+Open immersions are stable under base-change.
 -/
 instance pullbackSndOfLeft : IsOpenImmersion (pullback.snd f g) := by
   delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
+  rw [← limit.isoLimitCone_hom_π ⟨_, pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
   infer_instance
 
-/--
-Instance `pullbackFstOfRight` / 实例 `pullbackFstOfRight`
+/-- Open immersions are stable under base-change. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackFstOfRight** 是 Mathl
+ib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackFstOfRight : IsOpenImmersion (pullback.fst g f)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd`：pullbackSymmetry_ho
+m_comp_snd [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.snd g f = p
+ullback.fst f g
 
-English:
-instance pullbackFstOfRight
-  signature: : IsOpenImmersion (pullback.fst g f)
-  body: by
-  rw [← pullbackSymmetry_hom_comp_snd]
-  infer_instance
-
-中文:
-实例 pullbackFstOfRight
-  签名: : 是开浸入 (pullback.fst g f)
-  定义体: by
-  rw [← pullbackSymmetry_hom_comp_snd]
-  infer_instance
-
-Depends on / 依赖: infer_instance, pullbackSymmetry_hom_comp_snd
+--- 原说明 ---
+Open immersions are stable under base-change.
 -/
 instance pullbackFstOfRight : IsOpenImmersion (pullback.fst g f) := by
   rw [← pullbackSymmetry_hom_comp_snd]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullbackToBaseIsOpenImmersion` / 实例 `pullbackToBaseIsOpenImmersion`
-
-English:
-instance pullbackToBaseIsOpenImmersion
-  signature: [IsOpenImmersion g]
-  body: by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-中文:
-实例 pullbackToBaseIsOpenImmersion
-  签名: [是开浸入 g]
-  定义体: by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-Depends on / 依赖: WalkingCospan, WalkingCospan.Hom.inl, cospan, cospan_map_inl, infer_instance, limit.w
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullbackToBaseIsOpenImmersio
+n** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：pullbackToBaseIsOpenImmersion [IsOpenImmersion g] : IsOpenImmersion (limit
+.π (cospan f g) WalkingCospan.one)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.w`：∀ {J : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   (F
+ : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.cospan_map_inl`：cospan_map_inl {X Y Z : C} (f : X 
+⟶ Z) (g : Y ⟶ Z) : (cospan f g).map WalkingCospan.Hom.inl = f
 -/
 instance pullbackToBaseIsOpenImmersion [IsOpenImmersion g] :
     IsOpenImmersion (limit.π (cospan f g) WalkingCospan.one) := by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
+  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl, cospan_map_inl]
   infer_instance
-
-/--
-Instance `forget_preservesLimitsOfLeft` / 实例 `forget_preservesLimitsOfLeft`
-
-English:
-instance forget_preservesLimitsOfLeft
-  signature: : PreservesLimit (cospan f g) (forget C)
-  body: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g)
-    (by
-      apply (IsLimit.postcomposeHomEquiv (diagramIsoCospan _) _).toFun
-      refine (IsLimit.equivIsoLimit ?_).toFun (limit.isLimit (cospan f.base g.base))
-      fapply Cone.ext
-      · exact Iso.refl _
-      change forall j, _ = 𝟙 _ ≫ _ ≫ _
-      simp_rw [Category.id_comp]
-      rintro (_ | _ | _) <;> symm
-      · simp only [limit.cone_x, cospan_one, Functor.mapCone_π_app, PullbackCone.condition_one,
-        forget_map,
-          comp_base, cospan_left, cospan_right, Functor.comp_map, cospan_map_inl, cospan_map_inr,
-          diagramIsoCospan_hom_app, PullbackCone.fst_limit_cone]
-        tauto
-      · exact Category.comp_id _
-      · exact Category.comp_id _)
-
-中文:
-实例 forget_preservesLimitsOfLeft
-  签名: : 保持极限 (cospan f g) (forget C)
-  定义体: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g)
-    (by
-      apply (IsLimit.postcomposeHomEquiv (diagramIsoCospan _) _).toFun
-      refine (IsLimit.equivIsoLimit ?_).toFun (limit.isLimit (cospan f.base g.base))
-      fapply Cone.ext
-      · exact Iso.refl _
-      change forall j, _ = 𝟙 _ ≫ _ ≫ _
-      simp_rw [Category.id_comp]
-      rintro (_ | _ | _) <;> symm
-      · simp only [limit.cone_x, cospan_one, Functor.mapCone_π_app, PullbackCone.condition_one,
-        forget_map,
-          comp_base, cospan_left, cospan_right, Functor.comp_map, cospan_map_inl, cospan_map_inr,
-          diagramIsoCospan_hom_app, PullbackCone.fst_limit_cone]
-        tauto
-      · exact Category.comp_id _
-      · exact Category.comp_id _)
-
-Depends on / 依赖: Category, Category.id_comp, Cone.ext, Functor, Functor.comp_map, Functor.mapCone_, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, PullbackCone, PullbackCone.condition_one, comp_base, comp_map, condition_one, cone_x, cospan, cospan_left, cospan_one, cospan_right
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.forget_preservesLimitsOfLeft
+** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：forget_preservesLimitsOfLeft : PreservesLimit (cospan f g) (forget C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition_one`：condition_one (t : Pul
+lbackCone f g) : t.π.app WalkingCospan.one = t.fst ≫ f
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.forget_map`：∀ (C : Type u_1) [inst : C
+ategoryTheory.Category.{v_1, u_1} C] {X Y : AlgebraicGeometry.PresheafedSpace C}
+ (f : X ⟶ Y),   (AlgebraicGeometry…
+· 使用定理 `CategoryTheory.Limits.diagramIsoCospan_hom_app`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor CategoryTheory.Li
+mits.WalkingCospan C) (X : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 instance forget_preservesLimitsOfLeft : PreservesLimit (cospan f g) (forget C) :=
   preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g)
@@ -1428,7 +1394,7 @@ instance forget_preservesLimitsOfLeft : PreservesLimit (cospan f g) (forget C) :
       refine (IsLimit.equivIsoLimit ?_).toFun (limit.isLimit (cospan f.base g.base))
       fapply Cone.ext
       · exact Iso.refl _
-      change forall j, _ = 𝟙 _ ≫ _ ≫ _
+      change ∀ j, _ = 𝟙 _ ≫ _ ≫ _
       simp_rw [Category.id_comp]
       rintro (_ | _ | _) <;> symm
       · simp only [limit.cone_x, cospan_one, Functor.mapCone_π_app, PullbackCone.condition_one,
@@ -1438,156 +1404,164 @@ instance forget_preservesLimitsOfLeft : PreservesLimit (cospan f g) (forget C) :
         tauto
       · exact Category.comp_id _
       · exact Category.comp_id _)
-
-/--
-Instance `forget_preservesLimitsOfRight` / 实例 `forget_preservesLimitsOfRight`
-
-English:
-instance forget_preservesLimitsOfRight
-  signature: : PreservesLimit (cospan g f) (forget C)
-  body: preservesPullback_symmetry (forget C) f g
-
-中文:
-实例 forget_preservesLimitsOfRight
-  签名: : 保持极限 (cospan g f) (forget C)
-  定义体: preservesPullback_symmetry (forget C) f g
-
-Depends on / 依赖: forget, preservesPullback_symmetry
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.forget_preservesLimitsOfRigh
+t** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：forget_preservesLimitsOfRight : PreservesLimit (cospan g f) (forget C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesPullback_symmetry`：preservesPullback_symm
+etry : PreservesLimit (cospan g f) G where preserves {c} hc
 -/
 instance forget_preservesLimitsOfRight : PreservesLimit (cospan g f) (forget C) :=
   preservesPullback_symmetry (forget C) f g
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pullback_snd_isIso_of_range_subset` / 定理 `pullback_snd_isIso_of_range_subset`
-
-English:
-theorem pullback_snd_isIso_of_range_subset
-  given: (H : Set.range g.base subseteq Set.range f.base)
-  proof: by
-  have := TopCat.snd_iso_of_left_embedding_range_subset hf.base_open.isEmbedding g.base H
-  have : IsIso (pullback.snd f g).base := by
-    delta pullback.snd
-    rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-    change IsIso (_ ≫ pullback.snd _ _)
-    infer_instance
-  apply to_iso
-
-中文:
-定理 pullback_snd_isIso_of_range_subset
-  条件: (H : 集合.range g.base subseteq 集合.range f.base)
-  证明: by
-  have := TopCat.snd_iso_of_left_embedding_range_subset hf.base_open.isEmbedding g.base H
-  have : IsIso (pullback.snd f g).base := by
-    delta pullback.snd
-    rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-    change IsIso (_ ≫ pullback.snd _ _)
-    infer_instance
-  apply to_iso
-
-Depends on / 依赖: TopCat, TopCat.snd_iso_of_left_embedding_range_subset, WalkingCospan, WalkingCospan.right, base_open, g.base, hf.base_open.isEmbedding, infer_instance, isEmbedding, limit.isoLimitCone_hom_, pullback, pullback.snd, pullbackConeOfLeftIsLimit, snd_iso_of_left_embedding_range_subset, to_iso
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_
+subset** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmers
+ion`。
+形式化陈述：pullback_snd_isIso_of_range_subset (H : Set.range g.base subseteq Set.rang
+e f.base) : IsIso (pullback.snd f g)
+参数：H : Set.range g.base subseteq Set.range f.base。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `TopCat.snd_iso_of_left_embedding_range_subset`：snd_iso_of_left_embedding
+_range_subset {X Y S : TopCat.{u}} {f : X ⟶ S} (hf : IsEmbedding f) (g : Y ⟶ S) 
+(H : Set.range g subseteq Set.range…
+· 使用定理 `Topology.IsOpenEmbedding.isEmbedding`：∀ {X : Type u_1} {Y : Type u_2} {f
+ : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.
+IsOpenEmbedding f → Topolo…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_hom_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.to_iso`：to_iso [h' : E
+pi f.base] : IsIso f
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
 -/
-theorem pullback_snd_isIso_of_range_subset (H : Set.range g.base subseteq Set.range f.base) :
+theorem pullback_snd_isIso_of_range_subset (H : Set.range g.base ⊆ Set.range f.base) :
     IsIso (pullback.snd f g) := by
   have := TopCat.snd_iso_of_left_embedding_range_subset hf.base_open.isEmbedding g.base H
   have : IsIso (pullback.snd f g).base := by
     delta pullback.snd
-    rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
+    rw [← limit.isoLimitCone_hom_π ⟨_, pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
     change IsIso (_ ≫ pullback.snd _ _)
     infer_instance
   apply to_iso
 
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: (H : Set.range g.base subseteq Set.range f.base)
-  body: haveI := pullback_snd_isIso_of_range_subset f g H
-  inv (pullback.snd f g) ≫ pullback.fst _ _
-
-@[simp, reassoc]
-
-中文:
-定义 lift
-  签名: (H : 集合.range g.base subseteq 集合.range f.base)
-  定义体: haveI := pullback_snd_isIso_of_range_subset f g H
-  inv (pullback.snd f g) ≫ pullback.fst _ _
-
-@[simp, reassoc]
-
-Depends on / 依赖: pullback, pullback.fst, pullback.snd, pullback_snd_isIso_of_range_subset
+/-- The universal property of open immersions:
+For an open immersion `f : X ⟶ Z`, given any morphism of schemes `g : Y ⟶ Z` whose topological
+image is contained in the image of `f`, we can lift this morphism to a unique `Y ⟶ X` that
+commutes with these maps.
 -/
-def lift (H : Set.range g.base subseteq Set.range f.base) : Y ⟶ X :=
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：lift (H : Set.range g.base subseteq Set.range f.base) : Y ⟶ X
+参数：H : Set.range g.base subseteq Set.range f.base。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_
+range_subset`：pullback_snd_isIso_of_range_subset (H : Set.range g.base subseteq 
+Set.range f.base) : IsIso (pullback.snd f g)
+
+--- 原说明 ---
+The universal property of open immersions:
+For an open immersion `f : X ⟶ Z`, given any morphism of schemes `g : Y ⟶ Z` who
+se topological
+image is contained in the image of `f`, we can lift this morphism to a unique `Y
+ ⟶ X` that
+commutes with these maps.
+-/
+def lift (H : Set.range g.base ⊆ Set.range f.base) : Y ⟶ X :=
   haveI := pullback_snd_isIso_of_range_subset f g H
   inv (pullback.snd f g) ≫ pullback.fst _ _
 
 @[simp, reassoc]
-/--
-theorem `lift_fac` / 定理 `lift_fac`
-
-English:
-theorem lift_fac
-  given: (H : Set.range g.base subseteq Set.range f.base)
-  statement: lift f g H ≫ f = g
-  proof: by
-  simp [AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift,
-    CategoryTheory.Limits.pullback.condition]
-
-中文:
-定理 lift_fac
-  条件: (H : 集合.range g.base subseteq 集合.range f.base)
-  结论: lift f g H ≫ f = g
-  证明: by
-  simp [AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift,
-    CategoryTheory.Limits.pullback.condition]
-
-Depends on / 依赖: AlgebraicGeometry, AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift, CategoryTheory, CategoryTheory.Limits.pullback.condition, IsOpenImmersion, Limits, PresheafedSpace, condition, pullback
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift_fac** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：lift_fac (H : Set.range g.base subseteq Set.range f.base) : lift f g H ≫ f
+ = g
+参数：H : Set.range g.base subseteq Set.range f.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_
+range_subset`：pullback_snd_isIso_of_range_subset (H : Set.range g.base subseteq 
+Set.range f.base) : IsIso (pullback.snd f g)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_fac (H : Set.range g.base subseteq Set.range f.base) : lift f g H ≫ f = g := by
+theorem lift_fac (H : Set.range g.base ⊆ Set.range f.base) : lift f g H ≫ f = g := by
   simp [AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift,
     CategoryTheory.Limits.pullback.condition]
-
-/--
-theorem `lift_uniq` / 定理 `lift_uniq`
-
-English:
-theorem lift_uniq
-  given: (H : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
-  proof: by rw [← cancel_mono f, hl, lift_fac]
-
-中文:
-定理 lift_uniq
-  条件: (H : 集合.range g.base subseteq 集合.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
-  证明: by rw [← cancel_mono f, hl, lift_fac]
-
-Depends on / 依赖: cancel_mono, lift_fac
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift_uniq** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：lift_uniq (H : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl
+ : l ≫ f = g) : l = lift f g H
+参数：H : Set.range g.base subseteq Set.range f.base；l : Y ⟶ X；hl : l ≫ f = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.lift_fac`：lift_fac (H 
+: Set.range g.base subseteq Set.range f.base) : lift f g H ≫ f = g
 -/
-theorem lift_uniq (H : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g) :
+theorem lift_uniq (H : Set.range g.base ⊆ Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g) :
     l = lift f g H := by rw [← cancel_mono f, hl, lift_fac]
 
 /-- Two open immersions with equal range is isomorphic. -/
 @[simps]
-/--
-Definition of `isoOfRangeEq` / `isoOfRangeEq` 的定义
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoOfRangeEq** 是 Mathlib 中的一
+个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：isoOfRangeEq [IsOpenImmersion g] (e : Set.range f.base = Set.range g.base)
+ : X ≅ Y where hom
+参数：e : Set.range f.base = Set.range g.base。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfRangeEq
-  signature: [IsOpenImmersion g] (e : Set.range f.base = Set.range g.base)
-  body: lift g f (le_of_eq e)
-  inv := lift f g (le_of_eq e.symm)
-  hom_inv_id := by rw [← cancel_mono f]; simp
-  inv_hom_id := by rw [← cancel_mono g]; simp
-
-中文:
-定义 isoOfRangeEq
-  签名: [是开浸入 g] (e : 集合.range f.base = 集合.range g.base)
-  定义体: lift g f (le_of_eq e)
-  inv := lift f g (le_of_eq e.symm)
-  hom_inv_id := by rw [← cancel_mono f]; simp
-  inv_hom_id := by rw [← cancel_mono g]; simp
-
-Depends on / 依赖: le_of_eq
+--- 原说明 ---
+Two open immersions with equal range is isomorphic.
 -/
 def isoOfRangeEq [IsOpenImmersion g] (e : Set.range f.base = Set.range g.base) : X ≅ Y where
   hom := lift g f (le_of_eq e)
@@ -1603,28 +1577,18 @@ section ToSheafedSpace
 
 variable {X : PresheafedSpace C} (Y : SheafedSpace C)
 
-/--
-Definition of `toSheafedSpace` / `toSheafedSpace` 的定义
+/-- If `X ⟶ Y` is an open immersion, and `Y` is a SheafedSpace, then so is `X`. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpace** 是 Mathlib 中
+的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toSheafedSpace (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f] : She
+afedSpace C where IsSheaf
+参数：f : X ⟶ Y.toPresheafedSpace。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSheafedSpace
-  signature: (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f]
-  body: by
-    apply TopCat.Presheaf.isSheaf_of_iso (sheafIsoOfIso (isoRestrict f).symm).symm
-    apply TopCat.Sheaf.pushforward_sheaf_of_sheaf
-    exact (Y.restrict H.base_open).IsSheaf
-  toPresheafedSpace := X
-
-中文:
-定义 toSheafedSpace
-  签名: (f : X ⟶ Y.toPresheafedSpace) [H : 是开浸入 f]
-  定义体: by
-    apply TopCat.Presheaf.isSheaf_of_iso (sheafIsoOfIso (isoRestrict f).symm).symm
-    apply TopCat.Sheaf.pushforward_sheaf_of_sheaf
-    exact (Y.restrict H.base_open).IsSheaf
-  toPresheafedSpace := X
-
-Depends on / 依赖: H.base_open, IsSheaf, Presheaf, TopCat, TopCat.Presheaf.isSheaf_of_iso, TopCat.Sheaf.pushforward_sheaf_of_sheaf, Y.restrict, base_open, isSheaf_of_iso, isoRestrict, pushforward_sheaf_of_sheaf, restrict, sheafIsoOfIso, toPresheafedSpace
+--- 原说明 ---
+If `X ⟶ Y` is an open immersion, and `Y` is a SheafedSpace, then so is `X`.
 -/
 def toSheafedSpace (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f] : SheafedSpace C where
   IsSheaf := by
@@ -1636,115 +1600,79 @@ def toSheafedSpace (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f] : She
 variable (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f]
 
 @[simp]
-/--
-theorem `toSheafedSpace_toPresheafedSpace` / 定理 `toSheafedSpace_toPresheafedSpace`
-
-English:
-theorem toSheafedSpace_toPresheafedSpace
-  statement: (toSheafedSpace Y f).toPresheafedSpace = X
-  proof: rfl
-
-中文:
-定理 toSheafedSpace_toPresheafedSpace
-  结论: (toSheafedSpace Y f).toPresheafedSpace = X
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpace_toPresheafedS
+pace** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersio
+n`。
+形式化陈述：toSheafedSpace_toPresheafedSpace : (toSheafedSpace Y f).toPresheafedSpace 
+= X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSheafedSpace_toPresheafedSpace : (toSheafedSpace Y f).toPresheafedSpace = X :=
   rfl
 
-/--
-Definition of `toSheafedSpaceHom` / `toSheafedSpaceHom` 的定义
+/-- If `X ⟶ Y` is an open immersion of PresheafedSpaces, and `Y` is a SheafedSpace, we can
+upgrade it into a morphism of SheafedSpaces.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpaceHom** 是 Mathli
+b 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toSheafedSpaceHom : toSheafedSpace Y f ⟶ Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSheafedSpaceHom
-  signature: : toSheafedSpace Y f ⟶ Y
-  body: InducedCategory.homMk f
-
-@[simp]
-
-中文:
-定义 toSheafedSpaceHom
-  签名: : toSheafedSpace Y f ⟶ Y
-  定义体: InducedCategory.homMk f
-
-@[simp]
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk
+--- 原说明 ---
+If `X ⟶ Y` is an open immersion of PresheafedSpaces, and `Y` is a SheafedSpace, 
+we can
+upgrade it into a morphism of SheafedSpaces.
 -/
 def toSheafedSpaceHom : toSheafedSpace Y f ⟶ Y :=
   InducedCategory.homMk f
 
 @[simp]
-/--
-theorem `toSheafedSpaceHom_hom_base` / 定理 `toSheafedSpaceHom_hom_base`
-
-English:
-theorem toSheafedSpaceHom_hom_base
-  statement: (toSheafedSpaceHom Y f).hom.base = f.base
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toSheafedSpaceHom_hom_base
-  结论: (toSheafedSpaceHom Y f).hom.base = f.base
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpaceHom_hom_base**
+ 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toSheafedSpaceHom_hom_base : (toSheafedSpaceHom Y f).hom.base = f.base
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSheafedSpaceHom_hom_base : (toSheafedSpaceHom Y f).hom.base = f.base :=
   rfl
 
 @[simp]
-/--
-theorem `toSheafedSpaceHom_hom_c` / 定理 `toSheafedSpaceHom_hom_c`
-
-English:
-theorem toSheafedSpaceHom_hom_c
-  statement: (toSheafedSpaceHom Y f).hom.c = f.c
-  proof: rfl
-
-中文:
-定理 toSheafedSpaceHom_hom_c
-  结论: (toSheafedSpaceHom Y f).hom.c = f.c
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpaceHom_hom_c** 是 
+Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toSheafedSpaceHom_hom_c : (toSheafedSpaceHom Y f).hom.c = f.c
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSheafedSpaceHom_hom_c : (toSheafedSpaceHom Y f).hom.c = f.c :=
   rfl
-
-/--
-Instance `toSheafedSpace_isOpenImmersion` / 实例 `toSheafedSpace_isOpenImmersion`
-
-English:
-instance toSheafedSpace_isOpenImmersion
-  signature: : SheafedSpace.IsOpenImmersion (toSheafedSpaceHom Y f)
-  body: H
-
-@[simp]
-
-中文:
-实例 toSheafedSpace_isOpenImmersion
-  签名: : Sheafed空间.是开浸入 (toSheafedSpaceHom Y f)
-  定义体: H
-
-@[simp]
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toSheafedSpace_isOpenImmersi
+on** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`
+。
+形式化陈述：toSheafedSpace_isOpenImmersion : SheafedSpace.IsOpenImmersion (toSheafedSp
+aceHom Y f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance toSheafedSpace_isOpenImmersion : SheafedSpace.IsOpenImmersion (toSheafedSpaceHom Y f) :=
   H
 
 @[simp]
-/--
-theorem `sheafedSpace_toSheafedSpace` / 定理 `sheafedSpace_toSheafedSpace`
-
-English:
-theorem sheafedSpace_toSheafedSpace
-  statement: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  proof: by cases X; rfl
-
-中文:
-定理 sheafedSpace_toSheafedSpace
-  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  证明: by cases X; rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.sheafedSpace_toSheafedSpace*
+* 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：sheafedSpace_toSheafedSpace {X Y : SheafedSpace C} (f : X ⟶ Y) [SheafedSpa
+ce.IsOpenImmersion f] : toSheafedSpace Y f.hom = X
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sheafedSpace_toSheafedSpace {X Y : SheafedSpace C} (f : X ⟶ Y)
     [SheafedSpace.IsOpenImmersion f] :
@@ -1758,30 +1686,17 @@ variable {X : PresheafedSpace CommRingCat} (Y : LocallyRingedSpace)
 variable (f : X ⟶ Y.toPresheafedSpace) [H : IsOpenImmersion f]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `toLocallyRingedSpace` / `toLocallyRingedSpace` 的定义
+/-- If `X ⟶ Y` is an open immersion, and `Y` is a LocallyRingedSpace, then so is `X`. -/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toLocallyRingedSpace** 是 Mat
+hlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toLocallyRingedSpace : LocallyRingedSpace where toSheafedSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLocallyRingedSpace
-  signature: : LocallyRingedSpace where
-  body: toSheafedSpace Y.toSheafedSpace f
-  isLocalRing x :=
-    haveI : IsLocalRing (Y.presheaf.stalk (f.base x)) := Y.isLocalRing _
-    (asIso (f.stalkMap x)).commRingCatIsoToRingEquiv.isLocalRing
-
-@[simp]
-
-中文:
-定义 toLocallyRingedSpace
-  签名: : LocallyRinged空间 where
-  定义体: toSheafedSpace Y.toSheafedSpace f
-  isLocalRing x :=
-    haveI : IsLocalRing (Y.presheaf.stalk (f.base x)) := Y.isLocalRing _
-    (asIso (f.stalkMap x)).commRingCatIsoToRingEquiv.isLocalRing
-
-@[simp]
-
-Depends on / 依赖: Y.toSheafedSpace, toSheafedSpace
+--- 原说明 ---
+If `X ⟶ Y` is an open immersion, and `Y` is a LocallyRingedSpace, then so is `X`
+.
 -/
 def toLocallyRingedSpace : LocallyRingedSpace where
   toSheafedSpace := toSheafedSpace Y.toSheafedSpace f
@@ -1790,92 +1705,76 @@ def toLocallyRingedSpace : LocallyRingedSpace where
     (asIso (f.stalkMap x)).commRingCatIsoToRingEquiv.isLocalRing
 
 @[simp]
-/--
-theorem `toLocallyRingedSpace_toSheafedSpace` / 定理 `toLocallyRingedSpace_toSheafedSpace`
-
-English:
-theorem toLocallyRingedSpace_toSheafedSpace
-  proof: rfl
-
-中文:
-定理 toLocallyRingedSpace_toSheafedSpace
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toLocallyRingedSpace_toSheaf
+edSpace** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmer
+sion`。
+形式化陈述：toLocallyRingedSpace_toSheafedSpace : (toLocallyRingedSpace Y f).toSheafed
+Space = toSheafedSpace Y.1 f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLocallyRingedSpace_toSheafedSpace :
     (toLocallyRingedSpace Y f).toSheafedSpace = toSheafedSpace Y.1 f :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toLocallyRingedSpaceHom` / `toLocallyRingedSpaceHom` 的定义
+/-- If `X ⟶ Y` is an open immersion of PresheafedSpaces, and `Y` is a LocallyRingedSpace, we can
+upgrade it into a morphism of LocallyRingedSpace.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toLocallyRingedSpaceHom** 是 
+Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toLocallyRingedSpaceHom : toLocallyRingedSpace Y f ⟶ Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLocallyRingedSpaceHom
-  signature: : toLocallyRingedSpace Y f ⟶ Y
-  body: ⟨f, fun _ => inferInstance⟩
-
-@[simp]
-
-中文:
-定义 toLocallyRingedSpaceHom
-  签名: : toLocallyRingedSpace Y f ⟶ Y
-  定义体: ⟨f, fun _ => inferInstance⟩
-
-@[simp]
+--- 原说明 ---
+If `X ⟶ Y` is an open immersion of PresheafedSpaces, and `Y` is a LocallyRingedS
+pace, we can
+upgrade it into a morphism of LocallyRingedSpace.
 -/
 def toLocallyRingedSpaceHom : toLocallyRingedSpace Y f ⟶ Y :=
   ⟨f, fun _ => inferInstance⟩
 
 @[simp]
-/--
-theorem `toLocallyRingedSpaceHom_val` / 定理 `toLocallyRingedSpaceHom_val`
-
-English:
-theorem toLocallyRingedSpaceHom_val
-  proof: rfl
-
-中文:
-定理 toLocallyRingedSpaceHom_val
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toLocallyRingedSpaceHom_val*
+* 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：toLocallyRingedSpaceHom_val : (toLocallyRingedSpaceHom Y f).toShHom = Indu
+cedCategory.homMk f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLocallyRingedSpaceHom_val :
     (toLocallyRingedSpaceHom Y f).toShHom = InducedCategory.homMk f :=
   rfl
-
-/--
-Instance `toLocallyRingedSpace_isOpenImmersion` / 实例 `toLocallyRingedSpace_isOpenImmersion`
-
-English:
-instance toLocallyRingedSpace_isOpenImmersion
-  signature: :
-  body: H
-
-@[simp]
-
-中文:
-实例 toLocallyRingedSpace_isOpenImmersion
-  签名: :
-  定义体: H
-
-@[simp]
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.toLocallyRingedSpace_isOpenI
+mmersion** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImme
+rsion`。
+形式化陈述：toLocallyRingedSpace_isOpenImmersion : LocallyRingedSpace.IsOpenImmersion 
+(toLocallyRingedSpaceHom Y f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance toLocallyRingedSpace_isOpenImmersion :
     LocallyRingedSpace.IsOpenImmersion (toLocallyRingedSpaceHom Y f) :=
   H
 
 @[simp]
-/--
-theorem `locallyRingedSpace_toLocallyRingedSpace` / 定理 `locallyRingedSpace_toLocallyRingedSpace`
-
-English:
-theorem locallyRingedSpace_toLocallyRingedSpace
-  statement: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 locallyRingedSpace_toLocallyRingedSpace
-  结论: {X Y : LocallyRinged空间} (f : X ⟶ Y)
-  证明: rfl
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.locallyRingedSpace_toLocally
+RingedSpace** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenI
+mmersion`。
+形式化陈述：locallyRingedSpace_toLocallyRingedSpace {X Y : LocallyRingedSpace} (f : X 
+⟶ Y) [LocallyRingedSpace.IsOpenImmersion f] : toLocallyRingedSpace Y f.toHom = X
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 theorem locallyRingedSpace_toLocallyRingedSpace {X Y : LocallyRingedSpace} (f : X ⟶ Y)
     [LocallyRingedSpace.IsOpenImmersion f] : toLocallyRingedSpace Y f.toHom = X :=
@@ -1883,32 +1782,35 @@ theorem locallyRingedSpace_toLocallyRingedSpace {X Y : LocallyRingedSpace} (f : 
 
 end ToLocallyRingedSpace
 
-/--
-theorem `isIso_of_subset` / 定理 `isIso_of_subset`
-
-English:
-theorem isIso_of_subset
-  statement: {X Y : PresheafedSpace C} (f : X ⟶ Y)
-  proof: by
-  have : U = H.base_open.functor.obj ((Opens.map f.base).obj U) := by
-    ext1
-    exact (Set.inter_eq_left.mpr hU).symm.trans Set.image_preimage_eq_inter_range.symm
-  convert! H.c_iso ((Opens.map f.base).obj U)
-
-中文:
-定理 isIso_of_subset
-  结论: {X Y : Presheafed空间 C} (f : X ⟶ Y)
-  证明: by
-  have : U = H.base_open.functor.obj ((Opens.map f.base).obj U) := by
-    ext1
-    exact (Set.inter_eq_left.mpr hU).symm.trans Set.image_preimage_eq_inter_range.symm
-  convert! H.c_iso ((Opens.map f.base).obj U)
-
-Depends on / 依赖: H.base_open.functor.obj, H.c_iso, Opens.map, Set.image_preimage_eq_inter_range.symm, Set.inter_eq_left.mpr, base_open, c_iso, convert, f.base, functor, image_preimage_eq_inter_range, inter_eq_left, symm.trans
+/-
+**AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isIso_of_subset** 是 Mathlib 
+中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion`。
+形式化陈述：isIso_of_subset {X Y : PresheafedSpace C} (f : X ⟶ Y) [H : PresheafedSpace
+.IsOpenImmersion f] (U : Opens Y.carrier) (hU : (U : Set Y.carrier) subseteq Set
+.range f.base) : IsIso (f.c.app <| op U)
+参数：f : X ⟶ Y；U : Opens Y.carrier；hU : (U : Set Y.carrier) subseteq Set.range f.b
+ase。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 -/
 theorem isIso_of_subset {X Y : PresheafedSpace C} (f : X ⟶ Y)
     [H : PresheafedSpace.IsOpenImmersion f] (U : Opens Y.carrier)
-    (hU : (U : Set Y.carrier) subseteq Set.range f.base) : IsIso (f.c.app <| op U) := by
+    (hU : (U : Set Y.carrier) ⊆ Set.range f.base) : IsIso (f.c.app <| op U) := by
   have : U = H.base_open.functor.obj ((Opens.map f.base).obj U) := by
     ext1
     exact (Set.inter_eq_left.mpr hU).symm.trans Set.image_preimage_eq_inter_range.symm
@@ -1918,29 +1820,24 @@ end PresheafedSpace.IsOpenImmersion
 
 namespace SheafedSpace.IsOpenImmersion
 
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) of_isIso {X Y : SheafedSpace C} (f : X ⟶ Y) [IsIso f] :
     SheafedSpace.IsOpenImmersion f :=
   @PresheafedSpace.IsOpenImmersion.ofIsIso _ _ _ _ f.hom
     (SheafedSpace.forgetToPresheafedSpace.map_isIso _)
-
-/--
-Instance `comp` / 实例 `comp`
-
-English:
-instance comp
-  signature: {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) [SheafedSpace.IsOpenImmersion f]
-  body: PresheafedSpace.IsOpenImmersion.comp f.hom g.hom
-
-noncomputable section Pullback
-
-中文:
-实例 comp
-  签名: {X Y Z : Sheafed空间 C} (f : X ⟶ Y) (g : Y ⟶ Z) [Sheafed空间.是开浸入 f]
-  定义体: PresheafedSpace.IsOpenImmersion.comp f.hom g.hom
-
-noncomputable section Pullback
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.comp, f.hom, g.hom
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.comp** 是 Mathlib 中的一个实例，位于命名空间 
+`AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：comp {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) [SheafedSpace.IsOpen
+Immersion f] [SheafedSpace.IsOpenImmersion g] : SheafedSpace.IsOpenImmersion (f 
+≫ g)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance comp {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) [SheafedSpace.IsOpenImmersion f]
     [SheafedSpace.IsOpenImmersion g] : SheafedSpace.IsOpenImmersion (f ≫ g) :=
@@ -1956,66 +1853,37 @@ local notation "forget" => SheafedSpace.forgetToPresheafedSpace
 
 open CategoryTheory.Limits.WalkingCospan
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono f
-  body: (forget).mono_of_mono_map (show @Mono (PresheafedSpace C) _ _ _ f.hom by infer_instance)
-
-中文:
-实例 :
-  签名: 单态射 f
-  定义体: (forget).mono_of_mono_map (show @Mono (PresheafedSpace C) _ _ _ f.hom by infer_instance)
-
-Depends on / 依赖: PresheafedSpace, f.hom, forget, infer_instance, mono_of_mono_map
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono f :=
   (forget).mono_of_mono_map (show @Mono (PresheafedSpace C) _ _ _ f.hom by infer_instance)
-
-/--
-Instance `forgetMapIsOpenImmersion` / 实例 `forgetMapIsOpenImmersion`
-
-English:
-instance forgetMapIsOpenImmersion
-  signature: : PresheafedSpace.IsOpenImmersion ((forget).map f)
-  body: ⟨H.base_open, H.c_iso⟩
-
-中文:
-实例 forgetMapIsOpenImmersion
-  签名: : Presheafed空间.是开浸入 ((forget).map f)
-  定义体: ⟨H.base_open, H.c_iso⟩
-
-Depends on / 依赖: H.base_open, H.c_iso, base_open, c_iso
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.forgetMapIsOpenImmersion** 是 Ma
+thlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：forgetMapIsOpenImmersion : PresheafedSpace.IsOpenImmersion ((forget).map f
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.c_iso`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.PresheafedSpa
+ce C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
 -/
 instance forgetMapIsOpenImmersion : PresheafedSpace.IsOpenImmersion ((forget).map f) :=
   ⟨H.base_open, H.c_iso⟩
-
-/--
-Instance `hasLimit_cospan_forget_of_left` / 实例 `hasLimit_cospan_forget_of_left`
-
-English:
-instance hasLimit_cospan_forget_of_left
-  signature: : HasLimit (cospan f g ⋙ forget)
-  body: by
-  have : HasLimit (cospan ((cospan f g ⋙ forget).map Hom.inl)
-      ((cospan f g ⋙ forget).map Hom.inr)) := by
-    change HasLimit (cospan ((forget).map f) ((forget).map g))
-    infer_instance
-  apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-中文:
-实例 hasLimit_cospan_forget_of_left
-  签名: : 有极限 (cospan f g ⋙ forget)
-  定义体: by
-  have : HasLimit (cospan ((cospan f g ⋙ forget).map Hom.inl)
-      ((cospan f g ⋙ forget).map Hom.inr)) := by
-    change HasLimit (cospan ((forget).map f) ((forget).map g))
-    infer_instance
-  apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-Depends on / 依赖: HasLimit, Hom.inl, Hom.inr, cospan, diagramIsoCospan, forget, hasLimit_of_iso, infer_instance
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.hasLimit_cospan_forget_of_left*
+* 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：hasLimit_cospan_forget_of_left : HasLimit (cospan f g ⋙ forget)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 -/
 instance hasLimit_cospan_forget_of_left : HasLimit (cospan f g ⋙ forget) := by
   have : HasLimit (cospan ((cospan f g ⋙ forget).map Hom.inl)
@@ -2023,50 +1891,25 @@ instance hasLimit_cospan_forget_of_left : HasLimit (cospan f g ⋙ forget) := by
     change HasLimit (cospan ((forget).map f) ((forget).map g))
     infer_instance
   apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-/--
-Instance `hasLimit_cospan_forget_of_left'` / 实例 `hasLimit_cospan_forget_of_left'`
-
-English:
-instance hasLimit_cospan_forget_of_left'
-  signature: :
-  body: show HasLimit (cospan ((forget).map f) ((forget).map g)) from inferInstance
-
-中文:
-实例 hasLimit_cospan_forget_of_left'
-  签名: :
-  定义体: show HasLimit (cospan ((forget).map f) ((forget).map g)) from inferInstance
-
-Depends on / 依赖: HasLimit, cospan, forget
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.hasLimit_cospan_forget_of_left'
+** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：hasLimit_cospan_forget_of_left' : HasLimit (cospan ((cospan f g ⋙ forget).
+map Hom.inl) ((cospan f g ⋙ forget).map Hom.inr))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasLimit_cospan_forget_of_left' :
     HasLimit (cospan ((cospan f g ⋙ forget).map Hom.inl) ((cospan f g ⋙ forget).map Hom.inr)) :=
   show HasLimit (cospan ((forget).map f) ((forget).map g)) from inferInstance
-
-/--
-Instance `hasLimit_cospan_forget_of_right` / 实例 `hasLimit_cospan_forget_of_right`
-
-English:
-instance hasLimit_cospan_forget_of_right
-  signature: : HasLimit (cospan g f ⋙ forget)
-  body: by
-  have : HasLimit (cospan ((cospan g f ⋙ forget).map Hom.inl)
-      ((cospan g f ⋙ forget).map Hom.inr)) := by
-    change HasLimit (cospan ((forget).map g) ((forget).map f))
-    infer_instance
-  apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-中文:
-实例 hasLimit_cospan_forget_of_right
-  签名: : 有极限 (cospan g f ⋙ forget)
-  定义体: by
-  have : HasLimit (cospan ((cospan g f ⋙ forget).map Hom.inl)
-      ((cospan g f ⋙ forget).map Hom.inr)) := by
-    change HasLimit (cospan ((forget).map g) ((forget).map f))
-    infer_instance
-  apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-Depends on / 依赖: HasLimit, Hom.inl, Hom.inr, cospan, diagramIsoCospan, forget, hasLimit_of_iso, infer_instance
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.hasLimit_cospan_forget_of_right
+** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：hasLimit_cospan_forget_of_right : HasLimit (cospan g f ⋙ forget)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 -/
 instance hasLimit_cospan_forget_of_right : HasLimit (cospan g f ⋙ forget) := by
   have : HasLimit (cospan ((cospan g f ⋙ forget).map Hom.inl)
@@ -2074,48 +1917,23 @@ instance hasLimit_cospan_forget_of_right : HasLimit (cospan g f ⋙ forget) := b
     change HasLimit (cospan ((forget).map g) ((forget).map f))
     infer_instance
   apply hasLimit_of_iso (diagramIsoCospan _).symm
-
-/--
-Instance `hasLimit_cospan_forget_of_right'` / 实例 `hasLimit_cospan_forget_of_right'`
-
-English:
-instance hasLimit_cospan_forget_of_right'
-  signature: :
-  body: show HasLimit (cospan ((forget).map g) ((forget).map f)) from inferInstance
-
-中文:
-实例 hasLimit_cospan_forget_of_right'
-  签名: :
-  定义体: show HasLimit (cospan ((forget).map g) ((forget).map f)) from inferInstance
-
-Depends on / 依赖: HasLimit, cospan, forget
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.hasLimit_cospan_forget_of_right
+'** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：hasLimit_cospan_forget_of_right' : HasLimit (cospan ((cospan g f ⋙ forget)
+.map Hom.inl) ((cospan g f ⋙ forget).map Hom.inr))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasLimit_cospan_forget_of_right' :
     HasLimit (cospan ((cospan g f ⋙ forget).map Hom.inl) ((cospan g f ⋙ forget).map Hom.inr)) :=
   show HasLimit (cospan ((forget).map g) ((forget).map f)) from inferInstance
-
-/--
-Instance `forgetCreatesPullbackOfLeft` / 实例 `forgetCreatesPullbackOfLeft`
-
-English:
-instance forgetCreatesPullbackOfLeft
-  signature: : CreatesLimit (cospan f g) forget
-  body: createsLimitOfFullyFaithfulOfIso
-    (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
-      (@pullback.snd (PresheafedSpace C) _ _ _ _ f.hom g.hom _))
-    (eqToIso (show pullback _ _ = pullback _ _ by congr) ≪≫
-      HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
-
-中文:
-实例 forgetCreatesPullbackOfLeft
-  签名: : 创造极限 (cospan f g) forget
-  定义体: createsLimitOfFullyFaithfulOfIso
-    (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
-      (@pullback.snd (PresheafedSpace C) _ _ _ _ f.hom g.hom _))
-    (eqToIso (show pullback _ _ = pullback _ _ by congr) ≪≫
-      HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
-
-Depends on / 依赖: HasLimit, HasLimit.isoOfNatIso, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.toSheafedSpace, createsLimitOfFullyFaithfulOfIso, diagramIsoCospan, eqToIso, f.hom, g.hom, isoOfNatIso, pullback, pullback.snd, toSheafedSpace
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.forgetCreatesPullbackOfLeft** 是
+ Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：forgetCreatesPullbackOfLeft : CreatesLimit (cospan f g) forget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forgetCreatesPullbackOfLeft : CreatesLimit (cospan f g) forget :=
   createsLimitOfFullyFaithfulOfIso
@@ -2123,29 +1941,12 @@ instance forgetCreatesPullbackOfLeft : CreatesLimit (cospan f g) forget :=
       (@pullback.snd (PresheafedSpace C) _ _ _ _ f.hom g.hom _))
     (eqToIso (show pullback _ _ = pullback _ _ by congr) ≪≫
       HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
-
-/--
-Instance `forgetCreatesPullbackOfRight` / 实例 `forgetCreatesPullbackOfRight`
-
-English:
-instance forgetCreatesPullbackOfRight
-  signature: : CreatesLimit (cospan g f) forget
-  body: createsLimitOfFullyFaithfulOfIso
-    (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
-      (@pullback.fst (PresheafedSpace C) _ _ _ _ g.hom f.hom _))
-    (eqToIso (show pullback _ _ = pullback _ _ by congr) ≪≫
-      HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
-
-中文:
-实例 forgetCreatesPullbackOfRight
-  签名: : 创造极限 (cospan g f) forget
-  定义体: createsLimitOfFullyFaithfulOfIso
-    (PresheafedSpace.IsOpenImmersion.toSheafedSpace Y
-      (@pullback.fst (PresheafedSpace C) _ _ _ _ g.hom f.hom _))
-    (eqToIso (show pullback _ _ = pullback _ _ by congr) ≪≫
-      HasLimit.isoOfNatIso (diagramIsoCospan _).symm)
-
-Depends on / 依赖: HasLimit, HasLimit.isoOfNatIso, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.toSheafedSpace, createsLimitOfFullyFaithfulOfIso, diagramIsoCospan, eqToIso, f.hom, g.hom, isoOfNatIso, pullback, pullback.fst, toSheafedSpace
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.forgetCreatesPullbackOfRight** 
+是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：forgetCreatesPullbackOfRight : CreatesLimit (cospan g f) forget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forgetCreatesPullbackOfRight : CreatesLimit (cospan g f) forget :=
   createsLimitOfFullyFaithfulOfIso
@@ -2156,133 +1957,101 @@ instance forgetCreatesPullbackOfRight : CreatesLimit (cospan g f) forget :=
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `sheafedSpace_forgetPreserves_of_left` / 实例 `sheafedSpace_forgetPreserves_of_left`
-
-English:
-instance sheafedSpace_forgetPreserves_of_left
-  signature: :
-  body: @Limits.comp_preservesLimit _ _ _ _ _ _ (cospan f g) _ _ forget (PresheafedSpace.forget C)
-inferInstance by
-      have : PreservesLimit
-        (cospan ((cospan f g ⋙ forget).map Hom.inl)
-          ((cospan f g ⋙ forget).map Hom.inr)) (PresheafedSpace.forget C) := by
-        dsimp
-        infer_instance
-      apply preservesLimit_of_iso_diagram _ (diagramIsoCospan _).symm
-
-中文:
-实例 sheafedSpace_forgetPreserves_of_left
-  签名: :
-  定义体: @Limits.comp_preservesLimit _ _ _ _ _ _ (cospan f g) _ _ forget (PresheafedSpace.forget C)
-inferInstance by
-      have : PreservesLimit
-        (cospan ((cospan f g ⋙ forget).map Hom.inl)
-          ((cospan f g ⋙ forget).map Hom.inr)) (PresheafedSpace.forget C) := by
-        dsimp
-        infer_instance
-      apply preservesLimit_of_iso_diagram _ (diagramIsoCospan _).symm
-
-Depends on / 依赖: Hom.inl, Hom.inr, Limits, Limits.comp_preservesLimit, PreservesLimit, PresheafedSpace, PresheafedSpace.forget, comp_preservesLimit, cospan, diagramIsoCospan, forget, infer_instance, preservesLimit_of_iso_diagram
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_forgetPreserves_of
+_left** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`
+。
+形式化陈述：sheafedSpace_forgetPreserves_of_left : PreservesLimit (cospan f g) (Sheafe
+dSpace.forget C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
 -/
 instance sheafedSpace_forgetPreserves_of_left :
     PreservesLimit (cospan f g) (SheafedSpace.forget C) :=
   @Limits.comp_preservesLimit _ _ _ _ _ _ (cospan f g) _ _ forget (PresheafedSpace.forget C)
-inferInstance by
+    inferInstance <| by
       have : PreservesLimit
         (cospan ((cospan f g ⋙ forget).map Hom.inl)
           ((cospan f g ⋙ forget).map Hom.inr)) (PresheafedSpace.forget C) := by
         dsimp
         infer_instance
       apply preservesLimit_of_iso_diagram _ (diagramIsoCospan _).symm
-
-/--
-Instance `sheafedSpace_forgetPreserves_of_right` / 实例 `sheafedSpace_forgetPreserves_of_right`
-
-English:
-instance sheafedSpace_forgetPreserves_of_right
-  signature: :
-  body: preservesPullback_symmetry _ _ _
-
-中文:
-实例 sheafedSpace_forgetPreserves_of_right
-  签名: :
-  定义体: preservesPullback_symmetry _ _ _
-
-Depends on / 依赖: preservesPullback_symmetry
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_forgetPreserves_of
+_right** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion
+`。
+形式化陈述：sheafedSpace_forgetPreserves_of_right : PreservesLimit (cospan g f) (Sheaf
+edSpace.forget C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesPullback_symmetry`：preservesPullback_symm
+etry : PreservesLimit (cospan g f) G where preserves {c} hc
 -/
 instance sheafedSpace_forgetPreserves_of_right :
     PreservesLimit (cospan g f) (SheafedSpace.forget C) :=
   preservesPullback_symmetry _ _ _
-
-/--
-Instance `sheafedSpace_hasPullback_of_left` / 实例 `sheafedSpace_hasPullback_of_left`
-
-English:
-instance sheafedSpace_hasPullback_of_left
-  signature: : HasPullback f g
-  body: hasLimit_of_created (cospan f g) forget
-
-中文:
-实例 sheafedSpace_hasPullback_of_left
-  签名: : HasPullback f g
-  定义体: hasLimit_of_created (cospan f g) forget
-
-Depends on / 依赖: cospan, forget, hasLimit_of_created
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_hasPullback_of_lef
+t** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：sheafedSpace_hasPullback_of_left : HasPullback f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimit_of_created`：hasLimit_of_created (K : J ⥤ C) (F :
+ C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F] : HasLimit K
 -/
 instance sheafedSpace_hasPullback_of_left : HasPullback f g :=
   hasLimit_of_created (cospan f g) forget
-
-/--
-Instance `sheafedSpace_hasPullback_of_right` / 实例 `sheafedSpace_hasPullback_of_right`
-
-English:
-instance sheafedSpace_hasPullback_of_right
-  signature: : HasPullback g f
-  body: hasLimit_of_created (cospan g f) forget
-
-中文:
-实例 sheafedSpace_hasPullback_of_right
-  签名: : HasPullback g f
-  定义体: hasLimit_of_created (cospan g f) forget
-
-Depends on / 依赖: cospan, forget, hasLimit_of_created
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_hasPullback_of_rig
+ht** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：sheafedSpace_hasPullback_of_right : HasPullback g f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimit_of_created`：hasLimit_of_created (K : J ⥤ C) (F :
+ C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F] : HasLimit K
 -/
 instance sheafedSpace_hasPullback_of_right : HasPullback g f :=
   hasLimit_of_created (cospan g f) forget
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `sheafedSpace_pullback_snd_of_left` / 实例 `sheafedSpace_pullback_snd_of_left`
+/-- Open immersions are stable under base-change. -/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_pullback_snd_of_le
+ft** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：sheafedSpace_pullback_snd_of_left : SheafedSpace.IsOpenImmersion (pullback
+.snd f g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.SheafedSpace.isOpenImmersion_iff_hom`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.SheafedSpace C
+} (f : X ⟶ Y),   AlgebraicGeometry.SheafedSp…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesLimitIso_hom_π`：preservesLimitIso_hom_π (j) : (p
+reservesLimitIso G F).hom ≫ limit.π _ j = G.map (limit.π F j)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_hom_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 
-English:
-instance sheafedSpace_pullback_snd_of_left
-  signature: :
-  body: by
-  rw [SheafedSpace.isOpenImmersion_iff_hom]
-  have : _ = (pullback.snd f g).hom := preservesLimitIso_hom_π forget (cospan f g) right
-  rw [← this]
-  have := HasLimit.isoOfNatIso_hom_π (diagramIsoCospan (cospan f g ⋙ forget)) right
-  dsimp at this
-  rw [Category.comp_id] at this
-  rw [← this]
-  infer_instance
-
-中文:
-实例 sheafedSpace_pullback_snd_of_left
-  签名: :
-  定义体: by
-  rw [SheafedSpace.isOpenImmersion_iff_hom]
-  have : _ = (pullback.snd f g).hom := preservesLimitIso_hom_π forget (cospan f g) right
-  rw [← this]
-  have := HasLimit.isoOfNatIso_hom_π (diagramIsoCospan (cospan f g ⋙ forget)) right
-  dsimp at this
-  rw [Category.comp_id] at this
-  rw [← this]
-  infer_instance
-
-Depends on / 依赖: Category, Category.comp_id, HasLimit, HasLimit.isoOfNatIso_hom_, SheafedSpace, SheafedSpace.isOpenImmersion_iff_hom, comp_id, cospan, diagramIsoCospan, forget, infer_instance, isOpenImmersion_iff_hom, pullback, pullback.snd
+--- 原说明 ---
+Open immersions are stable under base-change.
 -/
 instance sheafedSpace_pullback_snd_of_left :
     SheafedSpace.IsOpenImmersion (pullback.snd f g) := by
@@ -2297,36 +2066,33 @@ instance sheafedSpace_pullback_snd_of_left :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `sheafedSpace_pullback_fst_of_right` / 实例 `sheafedSpace_pullback_fst_of_right`
-
-English:
-instance sheafedSpace_pullback_fst_of_right
-  signature: :
-  body: by
-  rw [SheafedSpace.isOpenImmersion_iff_hom]
-  have : _ = (pullback.fst g f).hom := preservesLimitIso_hom_π forget (cospan g f) left
-  rw [← this]
-  have := HasLimit.isoOfNatIso_hom_π (diagramIsoCospan (cospan g f ⋙ forget)) left
-  dsimp at this
-  rw [Category.comp_id] at this
-  rw [← this]
-  infer_instance
-
-中文:
-实例 sheafedSpace_pullback_fst_of_right
-  签名: :
-  定义体: by
-  rw [SheafedSpace.isOpenImmersion_iff_hom]
-  have : _ = (pullback.fst g f).hom := preservesLimitIso_hom_π forget (cospan g f) left
-  rw [← this]
-  have := HasLimit.isoOfNatIso_hom_π (diagramIsoCospan (cospan g f ⋙ forget)) left
-  dsimp at this
-  rw [Category.comp_id] at this
-  rw [← this]
-  infer_instance
-
-Depends on / 依赖: Category, Category.comp_id, HasLimit, HasLimit.isoOfNatIso_hom_, SheafedSpace, SheafedSpace.isOpenImmersion_iff_hom, comp_id, cospan, diagramIsoCospan, forget, infer_instance, isOpenImmersion_iff_hom, pullback, pullback.fst
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_pullback_fst_of_ri
+ght** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：sheafedSpace_pullback_fst_of_right : SheafedSpace.IsOpenImmersion (pullbac
+k.fst g f)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.SheafedSpace.isOpenImmersion_iff_hom`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {X Y : AlgebraicGeometry.SheafedSpace C
+} (f : X ⟶ Y),   AlgebraicGeometry.SheafedSp…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesLimitIso_hom_π`：preservesLimitIso_hom_π (j) : (p
+reservesLimitIso G F).hom ≫ limit.π _ j = G.map (limit.π F j)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_hom_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 instance sheafedSpace_pullback_fst_of_right :
     SheafedSpace.IsOpenImmersion (pullback.fst g f) := by
@@ -2340,36 +2106,35 @@ instance sheafedSpace_pullback_fst_of_right :
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `sheafedSpace_pullback_to_base_isOpenImmersion` / 实例 `sheafedSpace_pullback_to_base_isOpenImmersion`
-
-English:
-instance sheafedSpace_pullback_to_base_isOpenImmersion
-  signature: [SheafedSpace.IsOpenImmersion g]
-  body: by
-  rw [← limit.w (cospan f g) Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-中文:
-实例 sheafedSpace_pullback_to_base_isOpenImmersion
-  签名: [Sheafed空间.是开浸入 g]
-  定义体: by
-  rw [← limit.w (cospan f g) Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-Depends on / 依赖: Hom.inl, cospan, cospan_map_inl, infer_instance, limit.w
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sheafedSpace_pullback_to_base_i
+sOpenImmersion** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenI
+mmersion`。
+形式化陈述：sheafedSpace_pullback_to_base_isOpenImmersion [SheafedSpace.IsOpenImmersio
+n g] : SheafedSpace.IsOpenImmersion (limit.π (cospan f g) one : pullback f g ⟶ Z
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.w`：∀ {J : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   (F
+ : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.cospan_map_inl`：cospan_map_inl {X Y Z : C} (f : X 
+⟶ Z) (g : Y ⟶ Z) : (cospan f g).map WalkingCospan.Hom.inl = f
 -/
 instance sheafedSpace_pullback_to_base_isOpenImmersion [SheafedSpace.IsOpenImmersion g] :
     SheafedSpace.IsOpenImmersion (limit.π (cospan f g) one : pullback f g ⟶ Z) := by
-  rw [← limit.w (cospan f g) Hom.inl]; rw [cospan_map_inl]
+  rw [← limit.w (cospan f g) Hom.inl, cospan_map_inl]
   infer_instance
 
 end Pullback
 
 section OfStalkIso
 
-variable [HasLimits C] [HasColimits C] {FC : C -> C -> Type*} {CC : C -> Type v}
-variable [forall X Y, FunLike (FC X Y) (CC X) (CC Y)] [instCC : ConcreteCategory.{v} C FC]
+variable [HasLimits C] [HasColimits C] {FC : C → C → Type*} {CC : C → Type v}
+variable [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)] [instCC : ConcreteCategory.{v} C FC]
 variable [(CategoryTheory.forget C).ReflectsIsomorphisms]
   [PreservesLimits (CategoryTheory.forget C)]
 
@@ -2377,43 +2142,54 @@ variable [PreservesFilteredColimits (CategoryTheory.forget C)]
 
 set_option backward.isDefEq.respectTransparency false in
 include instCC in
-/--
-theorem `of_stalk_iso` / 定理 `of_stalk_iso`
+/-- Suppose `X Y : SheafedSpace C`, where `C` is a concrete category,
+whose forgetful functor reflects isomorphisms, preserves limits and filtered colimits.
+Then a morphism `X ⟶ Y` that is a topological open embedding
+is an open immersion iff every stalk map is an iso.
+-/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.of_stalk_iso** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：of_stalk_iso {X Y : SheafedSpace C} (f : X ⟶ Y) (hf : IsOpenEmbedding f.ho
+m.base) [H : forall x : X.1, IsIso (f.hom.stalkMap x)] : SheafedSpace.IsOpenImme
+rsion f
+参数：f : X ⟶ Y；hf : IsOpenEmbedding f.hom.base；f.hom.stalkMap x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso`：app_isIso_of_stalkFun
+ctor_map_iso {F G : Sheaf C X} (f : F ⟶ G) (U : Opens X) [forall x : U, IsIso ((
+stalkFunctor C x.val).map f.1)] : IsIso…
+· 使用定理 `TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing`：sta
+lkPushforward_iso_of_isInducing {f : X ⟶ Y} (hf : IsInducing f) (F : X.Presheaf 
+C) (x : X) : IsIso (F.stalkPushforward _ f x)
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用引理 `CategoryTheory.IsIso.comp_isIso'`：comp_isIso' (_ : IsIso f) (_ : IsIso h
+) : IsIso (f ≫ h)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem of_stalk_iso
-  statement: {X Y : SheafedSpace C} (f : X ⟶ Y) (hf : IsOpenEmbedding f.hom.base)
-  proof: { base_open := hf
-    c_iso := fun U => by
-      apply +allowSynthFailures TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso
-          (show Y.sheaf ⟶ (TopCat.Sheaf.pushforward _ f.hom.base).obj X.sheaf from ⟨f.hom.c⟩)
-      rintro ⟨_, y, hy, rfl⟩
-      specialize H y
-      delta PresheafedSpace.Hom.stalkMap at H
-      have H' := TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing C
-        hf.toIsInducing X.presheaf y
-      have := IsIso.comp_isIso' H (@IsIso.inv_isIso _ _ _ _ _ H')
-      rwa [Category.assoc, IsIso.hom_inv_id, Category.comp_id] at this }
-
-中文:
-定理 of_stalk_iso
-  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y) (hf : 是开嵌入 f.hom.base)
-  证明: { base_open := hf
-    c_iso := fun U => by
-      apply +allowSynthFailures TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso
-          (show Y.sheaf ⟶ (TopCat.Sheaf.pushforward _ f.hom.base).obj X.sheaf from ⟨f.hom.c⟩)
-      rintro ⟨_, y, hy, rfl⟩
-      specialize H y
-      delta PresheafedSpace.Hom.stalkMap at H
-      have H' := TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing C
-        hf.toIsInducing X.presheaf y
-      have := IsIso.comp_isIso' H (@IsIso.inv_isIso _ _ _ _ _ H')
-      rwa [Category.assoc, IsIso.hom_inv_id, Category.comp_id] at this }
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_, IsIso.comp_isIso, IsIso.hom_inv_id, IsIso.inv_isIso, Presheaf, PresheafedSpace, PresheafedSpace.Hom.stalkMap, TopCat, TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso, TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing, TopCat.Sheaf.pushforward, X.presheaf, X.sheaf, Y.sheaf, allowSynthFailures, app_isIso_of_stalkFunctor_map_iso, base_open, c_iso
+--- 原说明 ---
+Suppose `X Y : SheafedSpace C`, where `C` is a concrete category,
+whose forgetful functor reflects isomorphisms, preserves limits and filtered col
+imits.
+Then a morphism `X ⟶ Y` that is a topological open embedding
+is an open immersion iff every stalk map is an iso.
 -/
 theorem of_stalk_iso {X Y : SheafedSpace C} (f : X ⟶ Y) (hf : IsOpenEmbedding f.hom.base)
-    [H : forall x : X.1, IsIso (f.hom.stalkMap x)] : SheafedSpace.IsOpenImmersion f :=
+    [H : ∀ x : X.1, IsIso (f.hom.stalkMap x)] : SheafedSpace.IsOpenImmersion f :=
   { base_open := hf
     c_iso := fun U => by
       apply +allowSynthFailures TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso
@@ -2432,24 +2208,16 @@ section
 
 variable {X Y : SheafedSpace C} (f : X ⟶ Y) [H : IsOpenImmersion f]
 
-/--
-Definition of `opensFunctor` / `opensFunctor` 的定义
+/-- The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`. -/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.opensFunctor** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：opensFunctor : Opens X ⥤ Opens Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation opensFunctor
-  signature: : Opens X ⥤ Opens Y
-  body: H.base_open.functor
-
-#adaptation_note
-
-中文:
-缩写 opensFunctor
-  签名: : Opens X ⥤ Opens Y
-  定义体: H.base_open.functor
-
-#adaptation_note
-
-Depends on / 依赖: H.base_open.functor, base_open, functor
+--- 原说明 ---
+The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`.
 -/
 abbrev opensFunctor : Opens X ⥤ Opens Y :=
   H.base_open.functor
@@ -2459,94 +2227,70 @@ abbrev opensFunctor : Opens X ⥤ Opens Y :=
 set_option backward.isDefEq.respectTransparency.types false in
 /-- An open immersion `f : X ⟶ Y` induces an isomorphism `X ≅ Y|_{f(X)}`. -/
 @[simps! hom_hom_c_app]
-/--
-Definition of `isoRestrict` / `isoRestrict` 的定义
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.isoRestrict** 是 Mathlib 中的一个定义，
+位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict : X ≅ Y.restrict H.base_open
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoRestrict
-  signature: : X ≅ Y.restrict H.base_open
-  body: SheafedSpace.isoMk PresheafedSpace.IsOpenImmersion.isoRestrict f.hom
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 isoRestrict
-  签名: : X ≅ Y.restrict H.base_open
-  定义体: SheafedSpace.isoMk PresheafedSpace.IsOpenImmersion.isoRestrict f.hom
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.isoRestrict, SheafedSpace, SheafedSpace.isoMk, f.hom, isoRestrict
+--- 原说明 ---
+An open immersion `f : X ⟶ Y` induces an isomorphism `X ≅ Y|_{f(X)}`.
 -/
 noncomputable def isoRestrict : X ≅ Y.restrict H.base_open :=
-SheafedSpace.isoMk PresheafedSpace.IsOpenImmersion.isoRestrict f.hom
+  SheafedSpace.isoMk <| PresheafedSpace.IsOpenImmersion.isoRestrict f.hom
 
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_hom_ofRestrict` / 定理 `isoRestrict_hom_ofRestrict`
-
-English:
-theorem isoRestrict_hom_ofRestrict
-  statement: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  proof: InducedCategory.hom_ext
-    (PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.hom)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 isoRestrict_hom_ofRestrict
-  结论: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  证明: InducedCategory.hom_ext
-    (PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.hom)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict, f.hom, hom_ext, isoRestrict_hom_ofRestrict
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict** 是 
+Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRest
+rict`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
 -/
 theorem isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f :=
   InducedCategory.hom_ext
     (PresheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.hom)
 
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_inv_ofRestrict` / 定理 `isoRestrict_inv_ofRestrict`
-
-English:
-theorem isoRestrict_inv_ofRestrict
-  statement: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  proof: InducedCategory.hom_ext
-    (PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict f.hom)
-
-中文:
-定理 isoRestrict_inv_ofRestrict
-  结论: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  证明: InducedCategory.hom_ext
-    (PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict f.hom)
-
-Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict, f.hom, hom_ext, isoRestrict_inv_ofRestrict
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict** 是 
+Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRest
+rict`：isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _
 -/
 theorem isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _ :=
   InducedCategory.hom_ext
     (PresheafedSpace.IsOpenImmersion.isoRestrict_inv_ofRestrict f.hom)
 
-/--
-Definition of `invApp` / `invApp` 的定义
+/-- For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U) ⟶ Y(U)`. -/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.invApp** 是 Mathlib 中的一个定义，位于命名空
+间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：invApp (U : Opens X) : X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFu
+nctor f |>.obj U))
+参数：U : Opens X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invApp
-  signature: (U : Opens X)
-  body: PresheafedSpace.IsOpenImmersion.invApp f.hom U
-
-#adaptation_note
-
-中文:
-定义 invApp
-  签名: (U : Opens X)
-  定义体: PresheafedSpace.IsOpenImmersion.invApp f.hom U
-
-#adaptation_note
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.invApp, f.hom, invApp
+--- 原说明 ---
+For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U)
+ ⟶ Y(U)`.
 -/
 noncomputable def invApp (U : Opens X) :
     X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFunctor f |>.obj U)) :=
@@ -2556,46 +2300,44 @@ noncomputable def invApp (U : Opens X) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `inv_naturality` / 定理 `inv_naturality`
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.inv_naturality** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) : X.presheaf.map i ≫ H.invA
+pp _ (unop V) = H.invApp _ (unop U) ≫ Y.presheaf.map (opensFunctor f |>.op.map i
+)
+参数：Opens X；i : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_naturality`：inv_na
+turality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) : X.presheaf.map i ≫ H.invApp _ (unop V
+) = invApp f (unop U) ≫ Y.presheaf.map (opensFunctor f…
 
-English:
-theorem inv_naturality
-  given: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  proof: PresheafedSpace.IsOpenImmersion.inv_naturality f.hom i
-
-中文:
-定理 inv_naturality
-  条件: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  证明: PresheafedSpace.IsOpenImmersion.inv_naturality f.hom i
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.inv_naturality, f.hom, inv_naturality
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) :
     X.presheaf.map i ≫ H.invApp _ (unop V) =
       H.invApp _ (unop U) ≫ Y.presheaf.map (opensFunctor f |>.op.map i) :=
   PresheafedSpace.IsOpenImmersion.inv_naturality f.hom i
-
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : Opens X) : IsIso (H.invApp _ U) := by delta invApp; infer_instance
-
-/--
-theorem `inv_invApp` / 定理 `inv_invApp`
-
-English:
-theorem inv_invApp
-  given: (U : Opens X)
-  proof: PresheafedSpace.IsOpenImmersion.inv_invApp f.hom U
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inv_invApp
-  条件: (U : Opens X)
-  证明: PresheafedSpace.IsOpenImmersion.inv_invApp f.hom U
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.inv_invApp, f.hom, inv_invApp
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.inv_invApp** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：inv_invApp (U : Opens X) : inv (H.invApp _ U) = f.hom.c.app (op (opensFunc
+tor f |>.obj U)) ≫ X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage
+_image_eq _ H.base_open.injective]))
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_invApp`：inv_invApp
+ (U : Opens X) : inv (H.invApp _ U) = f.c.app (op (opensFunctor f |>.obj U)) ≫ X
+.presheaf.map (eqToHom (by simp [Opens.map_def, Se…
 -/
 theorem inv_invApp (U : Opens X) :
     inv (H.invApp _ U) =
@@ -2604,20 +2346,18 @@ theorem inv_invApp (U : Opens X) :
   PresheafedSpace.IsOpenImmersion.inv_invApp f.hom U
 
 @[reassoc (attr := simp)]
-/--
-theorem `invApp_app` / 定理 `invApp_app`
-
-English:
-theorem invApp_app
-  given: (U : Opens X)
-  proof: PresheafedSpace.IsOpenImmersion.invApp_app f.hom U
-
-中文:
-定理 invApp_app
-  条件: (U : Opens X)
-  证明: PresheafedSpace.IsOpenImmersion.invApp_app f.hom U
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.invApp_app, f.hom, invApp_app
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.invApp_app** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：invApp_app (U : Opens X) : H.invApp _ U ≫ f.hom.c.app (op (opensFunctor f 
+|>.obj U)) = X.presheaf.map (eqToHom (by simp [Opens.map_def, Set.preimage_image
+_eq _ H.base_open.injective]))
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp_app`：invApp_app
+ (U : Opens X) : invApp f U ≫ f.c.app (op (opensFunctor f |>.obj U)) = X.preshea
+f.map (eqToHom (by simp [Opens.map_def, Set.preima…
 -/
 theorem invApp_app (U : Opens X) :
     H.invApp _ U ≫ f.hom.c.app (op (opensFunctor f |>.obj U)) = X.presheaf.map
@@ -2627,20 +2367,18 @@ theorem invApp_app (U : Opens X) :
 attribute [elementwise] invApp_app
 
 @[reassoc (attr := simp)]
-/--
-theorem `app_invApp` / 定理 `app_invApp`
-
-English:
-theorem app_invApp
-  given: (U : Opens Y)
-  proof: PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
-
-中文:
-定理 app_invApp
-  条件: (U : Opens Y)
-  证明: PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.app_invApp, app_invApp, f.hom
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.app_invApp** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：app_invApp (U : Opens Y) : f.hom.c.app (op U) ≫ H.invApp _ ((Opens.map f.h
+om.base).obj U) = Y.presheaf.map ((homOfLE (Set.image_preimage_subset f.hom.base
+ U.1)).op : op U ⟶ op (opensFunctor f |>.obj ((Opens.map f.hom.base).obj U)))
+参数：U : Opens Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp`：app_invApp
+ (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.pres
+heaf.map ((homOfLE (Set.image_preimage_subset f.ba…
 -/
 theorem app_invApp (U : Opens Y) :
     f.hom.c.app (op U) ≫ H.invApp _ ((Opens.map f.hom.base).obj U) =
@@ -2651,113 +2389,92 @@ theorem app_invApp (U : Opens Y) :
 
 /-- A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`. -/
 @[reassoc]
-/--
-theorem `app_inv_app'` / 定理 `app_inv_app'`
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.app_inv_app'** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.hom.base
+) : f.hom.c.app (op U) ≫ invApp f ((Opens.map f.hom.base).obj U) = Y.presheaf.ma
+p (eqToHom <| le_antisymm (Set.image_preimage_subset f.hom.base U.1) (Set.image_
+preimage_eq_inter_range (f
+参数：U : Opens Y；hU : (U : Set Y) subseteq Set.range f.hom.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp`：app_invApp
+ (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.pres
+heaf.map ((homOfLE (Set.image_preimage_subset f.ba…
 
-English:
-theorem app_inv_app'
-  given: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.hom.base)
-  proof: PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
-
-中文:
-定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.hom.base)
-  证明: PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
-
-Depends on / 依赖: f.hom.base
+--- 原说明 ---
+A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`.
 -/
-theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.hom.base) :
+theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) ⊆ Set.range f.hom.base) :
     f.hom.c.app (op U) ≫ invApp f ((Opens.map f.hom.base).obj U) =
       Y.presheaf.map
         (eqToHom <|
-le_antisymm (Set.image_preimage_subset f.hom.base U.1)
+            le_antisymm (Set.image_preimage_subset f.hom.base U.1) <|
               (Set.image_preimage_eq_inter_range (f := f.hom.base) (t := U.1)).symm ▸
                 Set.subset_inter_iff.mpr ⟨fun _ h => h, hU⟩).op :=
   PresheafedSpace.IsOpenImmersion.app_invApp f.hom U
-
-/--
-Instance `ofRestrict` / 实例 `ofRestrict`
-
-English:
-instance ofRestrict
-  signature: {X : TopCat.{w}} (Y : SheafedSpace C) {f : X ⟶ Y.carrier}
-  body: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
-
-@[elementwise, simp]
-
-中文:
-实例 ofRestrict
-  签名: {X : 顶元素范畴.{w}} (Y : Sheafed空间 C) {f : X ⟶ Y.carrier}
-  定义体: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
-
-@[elementwise, simp]
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict, ofRestrict
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.ofRestrict** 是 Mathlib 中的一个实例，位
+于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict {X : TopCat.{w}} (Y : SheafedSpace C) {f : X ⟶ Y.carrier} (hf :
+ IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf)
+参数：Y : SheafedSpace C；hf : IsOpenEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ofRestrict {X : TopCat.{w}} (Y : SheafedSpace C) {f : X ⟶ Y.carrier}
     (hf : IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf) :=
   PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
 
 @[elementwise, simp]
-/--
-theorem `ofRestrict_invApp` / 定理 `ofRestrict_invApp`
-
-English:
-theorem ofRestrict_invApp
-  statement: {C : Type*} [Category* C] (X : SheafedSpace C) {Y : TopCat.{w}}
-  proof: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
-
-中文:
-定理 ofRestrict_invApp
-  结论: {C : 类型} [范畴* C] (X : Sheafed空间 C) {Y : 顶元素范畴.{w}}
-  证明: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, ofRestrict_invApp
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.ofRestrict_invApp** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict_invApp {C : Type*} [Category* C] (X : SheafedSpace C) {Y : TopC
+at.{w}} {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.rest
+rict h).carrier) : (SheafedSpace.IsOpenImmersion.ofRestrict X h).invApp _ U = 𝟙 
+_
+参数：X : SheafedSpace C；h : IsOpenEmbedding f；U : Opens (X.restrict h).carrier。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofRestrict_invApp`：ofR
+estrict_invApp {C : Type*} [Category* C] (X : PresheafedSpace C) {Y : TopCat.{w}
+} {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (…
 -/
 theorem ofRestrict_invApp {C : Type*} [Category* C] (X : SheafedSpace C) {Y : TopCat.{w}}
     {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.restrict h).carrier) :
     (SheafedSpace.IsOpenImmersion.ofRestrict X h).invApp _ U = 𝟙 _ :=
   PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
 
-/--
-theorem `to_iso` / 定理 `to_iso`
+/-- An open immersion is an iso if the underlying continuous map is epi. -/
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.to_iso** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：to_iso [h' : Epi f.hom.base] : IsIso f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.to_iso`：to_iso [h' : E
+pi f.base] : IsIso f
+· 使用定理 `CategoryTheory.isIso_of_reflects_iso`：isIso_of_reflects_iso {A B : C} (f
+ : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] [F.ReflectsIsomorphisms] : IsIso f
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
 
-English:
-theorem to_iso
-  given: [h' : Epi f.hom.base]
-  statement: IsIso f
-  proof: by
-  have : IsIso (forgetToPresheafedSpace.map f) := PresheafedSpace.IsOpenImmersion.to_iso f.hom
-  apply isIso_of_reflects_iso _ (SheafedSpace.forgetToPresheafedSpace)
-
-中文:
-定理 to_iso
-  条件: [h' : 满态射 f.hom.base]
-  结论: 是同构 f
-  证明: by
-  have : IsIso (forgetToPresheafedSpace.map f) := PresheafedSpace.IsOpenImmersion.to_iso f.hom
-  apply isIso_of_reflects_iso _ (SheafedSpace.forgetToPresheafedSpace)
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.to_iso, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, f.hom, forgetToPresheafedSpace, forgetToPresheafedSpace.map, isIso_of_reflects_iso, to_iso
+--- 原说明 ---
+An open immersion is an iso if the underlying continuous map is epi.
 -/
 theorem to_iso [h' : Epi f.hom.base] : IsIso f := by
   have : IsIso (forgetToPresheafedSpace.map f) := PresheafedSpace.IsOpenImmersion.to_iso f.hom
   apply isIso_of_reflects_iso _ (SheafedSpace.forgetToPresheafedSpace)
-
-/--
-Instance `stalk_iso` / 实例 `stalk_iso`
-
-English:
-instance stalk_iso
-  signature: [HasColimits C] (x : X)
-  body: PresheafedSpace.IsOpenImmersion.stalk_iso f.hom x
-
-中文:
-实例 stalk_iso
-  签名: [有余极限 C] (x : X)
-  定义体: PresheafedSpace.IsOpenImmersion.stalk_iso f.hom x
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.stalk_iso, f.hom, stalk_iso
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.stalk_iso** 是 Mathlib 中的一个实例，位于
+命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：stalk_iso [HasColimits C] (x : X) : IsIso (f.hom.stalkMap x)
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance stalk_iso [HasColimits C] (x : X) :
     IsIso (f.hom.stalkMap x) :=
@@ -2772,46 +2489,10 @@ variable [HasLimits C] {ι : Type v} (F : Discrete ι ⥤ SheafedSpace.{_, v, v}
   (i : Discrete ι)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `sigma_ι_isOpenEmbedding` / 定理 `sigma_ι_isOpenEmbedding`
-
-English:
-theorem sigma_ι_isOpenEmbedding
-  statement: IsOpenEmbedding (colimit.ι F i).hom.base
-  proof: by
-  rw [← show _ = (colimit.ι F i).hom.base from
-    ι_preservesColimitIso_inv (SheafedSpace.forget C) F i]
-  have : _ = _ ≫ colimit.ι (Discrete.functor ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk)) i :=
-    HasColimit.isoOfNatIso_ι_hom Discrete.natIsoFunctor i
-  rw [← Iso.eq_comp_inv] at this
-  rw [this]
-  have : colimit.ι _ _ ≫ _ = _ :=
-    TopCat.sigmaIsoSigma_hom_ι.{v, v} ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk) i.as
-  rw [← Iso.eq_comp_inv] at this
-  cases i
-  rw [this]; rw [← Category.assoc]
-  simp_rw [TopCat.isOpenEmbedding_iff_comp_isIso, (TopCat.isOpenEmbedding_iff_isIso_comp)]
-  exact .sigmaMk
-
-中文:
-定理 sigma_ι_isOpenEmbedding
-  结论: 是开嵌入 (colimit.ι F i).hom.base
-  证明: by
-  rw [← show _ = (colimit.ι F i).hom.base from
-    ι_preservesColimitIso_inv (SheafedSpace.forget C) F i]
-  have : _ = _ ≫ colimit.ι (Discrete.functor ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk)) i :=
-    HasColimit.isoOfNatIso_ι_hom Discrete.natIsoFunctor i
-  rw [← Iso.eq_comp_inv] at this
-  rw [this]
-  have : colimit.ι _ _ ≫ _ = _ :=
-    TopCat.sigmaIsoSigma_hom_ι.{v, v} ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk) i.as
-  rw [← Iso.eq_comp_inv] at this
-  cases i
-  rw [this]; rw [← Category.assoc]
-  simp_rw [TopCat.isOpenEmbedding_iff_comp_isIso, (TopCat.isOpenEmbedding_iff_isIso_comp)]
-  exact .sigmaMk
-
-Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.functor, Discrete.mk, Discrete.natIsoFunctor, HasColimit, HasColimit.isoOfNatIso_, Iso.eq_comp_inv, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.sigmaIsoSigma_hom_, colimit, eq_comp_inv, forget, functor, hom.base, i.as, natIsoFunctor
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sigma_** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sigma_ι_isOpenEmbedding : IsOpenEmbedding (colimit.ι F i).hom.base := by
   rw [← show _ = (colimit.ι F i).hom.base from
@@ -2824,61 +2505,77 @@ theorem sigma_ι_isOpenEmbedding : IsOpenEmbedding (colimit.ι F i).hom.base := 
     TopCat.sigmaIsoSigma_hom_ι.{v, v} ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk) i.as
   rw [← Iso.eq_comp_inv] at this
   cases i
-  rw [this]; rw [← Category.assoc]
+  rw [this, ← Category.assoc]
   simp_rw [TopCat.isOpenEmbedding_iff_comp_isIso, (TopCat.isOpenEmbedding_iff_isIso_comp)]
   exact .sigmaMk
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `image_preimage_is_empty` / 定理 `image_preimage_is_empty`
-
-English:
-theorem image_preimage_is_empty
-  given: (j : Discrete ι) (h : i != j) (U : Opens (F.obj i))
-  proof: by
-  ext x
-  apply iff_false_intro
-  rintro ⟨y, hy, eq⟩
-  replace eq := ConcreteCategory.congr_arg (preservesColimitIso (SheafedSpace.forget C) F ≪≫
-    HasColimit.isoOfNatIso Discrete.natIsoFunctor ≪≫ TopCat.sigmaIsoSigma.{v, v} _).hom eq
-  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, ← PresheafedSpace.comp_base] at eq
-  rw [ι_preservesColimitIso_inv] at eq
-  change
-    ((SheafedSpace.forget C).map (colimit.ι F i) ≫ (preservesColimitIso (forget C) F).hom ≫
-          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
-            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) y =
-      ((SheafedSpace.forget C).map (colimit.ι F j) ≫ (preservesColimitIso (forget C) F).hom ≫
-          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
-            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) x at eq
-  cases i; cases j
-  rw [ι_preservesColimitIso_hom_assoc]; rw [ι_preservesColimitIso_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [TopCat.sigmaIsoSigma_hom_ι]; rw [TopCat.sigmaIsoSigma_hom_ι] at eq
-  convert! h (congr_arg Discrete.mk (congr_arg Sigma.fst eq))
-
-中文:
-定理 image_preimage_is_empty
-  条件: (j : 离散 ι) (h : i != j) (U : Opens (F.obj i))
-  证明: by
-  ext x
-  apply iff_false_intro
-  rintro ⟨y, hy, eq⟩
-  replace eq := ConcreteCategory.congr_arg (preservesColimitIso (SheafedSpace.forget C) F ≪≫
-    HasColimit.isoOfNatIso Discrete.natIsoFunctor ≪≫ TopCat.sigmaIsoSigma.{v, v} _).hom eq
-  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, ← PresheafedSpace.comp_base] at eq
-  rw [ι_preservesColimitIso_inv] at eq
-  change
-    ((SheafedSpace.forget C).map (colimit.ι F i) ≫ (preservesColimitIso (forget C) F).hom ≫
-          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
-            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) y =
-      ((SheafedSpace.forget C).map (colimit.ι F j) ≫ (preservesColimitIso (forget C) F).hom ≫
-          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
-            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) x at eq
-  cases i; cases j
-  rw [ι_preservesColimitIso_hom_assoc]; rw [ι_preservesColimitIso_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [TopCat.sigmaIsoSigma_hom_ι]; rw [TopCat.sigmaIsoSigma_hom_ι] at eq
-  convert! h (congr_arg Discrete.mk (congr_arg Sigma.fst eq))
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Iso.trans_hom, ConcreteCategory, ConcreteCategory.congr_arg, Discrete, Discrete.natIsoFunctor, HasColimit, HasColimit.isoOfNatIso, PresheafedSpace, PresheafedSpace.comp_base, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.comp_app, TopCat.sigmaIsoSigma, colimit, comp_app, comp_base, congr_arg, forget
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.image_preimage_is_empty** 是 Mat
+hlib 中的一个定理，位于命名空间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+形式化陈述：image_preimage_is_empty (j : Discrete ι) (h : i != j) (U : Opens (F.obj i)
+) : (Opens.map (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) j).base).ob
+j ((Opens.map (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.b
+ase).obj ((sigma_ι_isOpenEmbedding F i).functor.obj U)) = ⊥
+参数：j : Discrete ι；h : i != j；U : Opens (F.obj i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.preservesColimitOfShape_of_createsColimitsOfShape_and_has
+ColimitsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D 
+: Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.instHasColimitsOfShape`：∀ {J : Type u'
+} [inst : CategoryTheory.Category.{v', u'} J] {C : Type u} [inst_1 : CategoryThe
+ory.Category.{v, u} C]   [CategoryTheory.Limit…
+· 使用定理 `TopCat.instHasLimitsOfShapePresheaf`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {J : Type w} [inst_1 : CategoryTheory.Category.{v_1, w} J]
+   [CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit`：∀ {C :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sigma_ι_isOpenEmbedding`：
+sigma_ι_isOpenEmbedding : IsOpenEmbedding (colimit.ι F i).hom.base
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_false_intro`：∀ {a : Prop}, ¬a → (a ↔ False)
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instPreservesColimitsOfShapeTopCatForgetO
+fSmallOfHasLimitsOfShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (J : Type w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v
+, w} J] [Categ…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_arg`：congr_arg {X Y : C} (f : X ⟶ 
+Y) {x x' : ToType X} (h : x = x') : f x = f x'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopCat.sigmaIsoSigma_hom_ι`：sigmaIsoSigma_hom_ι {ι : Type v} (α : ι -> T
+opCat.{max v u}) (i : ι) : Sigma.ι α i ≫ (sigmaIsoSigma α).hom = sigmaι α i
+· 使用定理 `CategoryTheory.Limits.HasColimit.isoOfNatIso_ι_hom_assoc`：∀ {J : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryThe
+ory.Category.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.ι_preservesColimitIso_hom_assoc`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ι_preservesColimitIso_inv`：ι_preservesColimitIso_inv (j :
+ J) : colimit.ι _ j ≫ (preservesColimitIso G F).inv = G.map (colimit.ι F j)
 -/
-theorem image_preimage_is_empty (j : Discrete ι) (h : i != j) (U : Opens (F.obj i)) :
+theorem image_preimage_is_empty (j : Discrete ι) (h : i ≠ j) (U : Opens (F.obj i)) :
     (Opens.map (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) j).base).obj
         ((Opens.map (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.base).obj
           ((sigma_ι_isOpenEmbedding F i).functor.obj U)) =
@@ -2898,81 +2595,17 @@ theorem image_preimage_is_empty (j : Discrete ι) (h : i != j) (U : Opens (F.obj
           (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
             (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) x at eq
   cases i; cases j
-  rw [ι_preservesColimitIso_hom_assoc]; rw [ι_preservesColimitIso_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [TopCat.sigmaIsoSigma_hom_ι]; rw [TopCat.sigmaIsoSigma_hom_ι] at eq
+  rw [ι_preservesColimitIso_hom_assoc, ι_preservesColimitIso_hom_assoc,
+    HasColimit.isoOfNatIso_ι_hom_assoc, HasColimit.isoOfNatIso_ι_hom_assoc,
+    TopCat.sigmaIsoSigma_hom_ι, TopCat.sigmaIsoSigma_hom_ι] at eq
   convert! h (congr_arg Discrete.mk (congr_arg Sigma.fst eq))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `sigma_ι_isOpenImmersion_aux` / 实例 `sigma_ι_isOpenImmersion_aux`
-
-English:
-instance sigma_ι_isOpenImmersion_aux
-  signature: [HasStrictTerminalObjects C]
-  body: sigma_ι_isOpenEmbedding F i
-  c_iso U := by
-    have h₁ := ι_preservesColimitIso_inv SheafedSpace.forgetToPresheafedSpace F i
-    have h₂ : colimit.ι F i =
-      { hom := (colimit.ι (F ⋙ forgetToPresheafedSpace) i ≫
-        (preservesColimitIso _ F).inv) } :=
-      InducedCategory.hom_ext h₁.symm
-    have H :
-      IsOpenEmbedding
-        (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
-            (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).base := by
-      have := h₁.symm
-      convert! sigma_ι_isOpenEmbedding F i
-suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
-        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).c.app <|
-      op (H.functor.obj U) by
-      convert! this
-    rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
-    -- Porting note: this instance created manually to make the `inferInstance` below work
-    have : IsIso (preservesColimitIso forgetToPresheafedSpace F).inv.c := inferInstance
-    suffices IsIso (limit.π (PresheafedSpace.componentwiseDiagram
-      (F ⋙ SheafedSpace.forgetToPresheafedSpace) ((Opens.map
-        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.base).obj
-          (H.functor.obj U))) (op i)) from inferInstance
-    apply limit_π_isIso_of_is_strict_terminal
-    rintro ⟨j⟩ hj
-    dsimp
-    convert! (F.obj j).sheaf.isTerminalOfEmpty using 3
-    convert! image_preimage_is_empty F i j (fun h => hj (congr_arg op h.symm)) U using 6
-    exact congr_arg PresheafedSpace.Hom.base h₁
-
-中文:
-实例 sigma_ι_isOpenImmersion_aux
-  签名: [有StrictTerminalObjects C]
-  定义体: sigma_ι_isOpenEmbedding F i
-  c_iso U := by
-    have h₁ := ι_preservesColimitIso_inv SheafedSpace.forgetToPresheafedSpace F i
-    have h₂ : colimit.ι F i =
-      { hom := (colimit.ι (F ⋙ forgetToPresheafedSpace) i ≫
-        (preservesColimitIso _ F).inv) } :=
-      InducedCategory.hom_ext h₁.symm
-    have H :
-      IsOpenEmbedding
-        (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
-            (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).base := by
-      have := h₁.symm
-      convert! sigma_ι_isOpenEmbedding F i
-suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
-        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).c.app <|
-      op (H.functor.obj U) by
-      convert! this
-    rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
-    -- Porting note: this instance created manually to make the `inferInstance` below work
-    have : IsIso (preservesColimitIso forgetToPresheafedSpace F).inv.c := inferInstance
-    suffices IsIso (limit.π (PresheafedSpace.componentwiseDiagram
-      (F ⋙ SheafedSpace.forgetToPresheafedSpace) ((Opens.map
-        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.base).obj
-          (H.functor.obj U))) (op i)) from inferInstance
-    apply limit_π_isIso_of_is_strict_terminal
-    rintro ⟨j⟩ hj
-    dsimp
-    convert! (F.obj j).sheaf.isTerminalOfEmpty using 3
-    convert! image_preimage_is_empty F i j (fun h => hj (congr_arg op h.symm)) U using 6
-    exact congr_arg PresheafedSpace.Hom.base h₁
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sigma_** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sigma_ι_isOpenImmersion_aux [HasStrictTerminalObjects C] :
     SheafedSpace.IsOpenImmersion (colimit.ι F i) where
@@ -2989,11 +2622,12 @@ instance sigma_ι_isOpenImmersion_aux [HasStrictTerminalObjects C] :
             (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).base := by
       have := h₁.symm
       convert! sigma_ι_isOpenEmbedding F i
-suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
+    suffices IsIso <| (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
         (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).c.app <|
       op (H.functor.obj U) by
       convert! this
-    rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
+    rw [PresheafedSpace.comp_c_app,
+      ← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
     -- Porting note: this instance created manually to make the `inferInstance` below work
     have : IsIso (preservesColimitIso forgetToPresheafedSpace F).inv.c := inferInstance
     suffices IsIso (limit.π (PresheafedSpace.componentwiseDiagram
@@ -3008,34 +2642,10 @@ suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
     exact congr_arg PresheafedSpace.Hom.base h₁
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `sigma_ι_isOpenImmersion` / 实例 `sigma_ι_isOpenImmersion`
-
-English:
-instance sigma_ι_isOpenImmersion
-  signature: {ι : Type w} [Small.{v} ι]
-  body: by
-  obtain ⟨ι', ⟨e⟩⟩ := Small.equiv_small (α := ι)
-  let f : Discrete ι' ≌ Discrete ι := Discrete.equivalence e.symm
-  have : colimit.ι F i = (colimit.ι F i ≫ (HasColimit.isoOfEquivalence f (Iso.refl _)).inv) ≫
-      (HasColimit.isoOfEquivalence f (Iso.refl _)).hom := by
-    simp
-  rw [this]; rw [HasColimit.ι_isoOfEquivalence_inv]
-  infer_instance
-
-中文:
-实例 sigma_ι_isOpenImmersion
-  签名: {ι : 类型 w} [Small.{v} ι]
-  定义体: by
-  obtain ⟨ι', ⟨e⟩⟩ := Small.equiv_small (α := ι)
-  let f : Discrete ι' ≌ Discrete ι := Discrete.equivalence e.symm
-  have : colimit.ι F i = (colimit.ι F i ≫ (HasColimit.isoOfEquivalence f (Iso.refl _)).inv) ≫
-      (HasColimit.isoOfEquivalence f (Iso.refl _)).hom := by
-    simp
-  rw [this]; rw [HasColimit.ι_isoOfEquivalence_inv]
-  infer_instance
-
-Depends on / 依赖: Discrete, Discrete.equivalence, HasColimit, HasColimit.isoOfEquivalence, Iso.refl, Small.equiv_small, colimit, e.symm, equiv_small, equivalence, infer_instance, isoOfEquivalence
+/-
+**AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sigma_** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sigma_ι_isOpenImmersion {ι : Type w} [Small.{v} ι]
     (F : Discrete ι ⥤ SheafedSpace.{_, v, v} C) [HasColimit F] (i : Discrete ι)
@@ -3046,7 +2656,7 @@ instance sigma_ι_isOpenImmersion {ι : Type w} [Small.{v} ι]
   have : colimit.ι F i = (colimit.ι F i ≫ (HasColimit.isoOfEquivalence f (Iso.refl _)).inv) ≫
       (HasColimit.isoOfEquivalence f (Iso.refl _)).hom := by
     simp
-  rw [this]; rw [HasColimit.ι_isoOfEquivalence_inv]
+  rw [this, HasColimit.ι_isoOfEquivalence_inv]
   infer_instance
 
 end Prod
@@ -3055,6 +2665,11 @@ end SheafedSpace.IsOpenImmersion
 
 namespace LocallyRingedSpace.IsOpenImmersion
 
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : LocallyRingedSpace) {U : TopCat.{w}} (f : U ⟶ X.toTopCat) (hf : IsOpenEmbedding f) :
     LocallyRingedSpace.IsOpenImmersion (X.ofRestrict hf) :=
   PresheafedSpace.IsOpenImmersion.ofRestrict X.toPresheafedSpace hf
@@ -3063,104 +2678,71 @@ noncomputable section Pullback
 
 variable {X Y Z : LocallyRingedSpace} (f : X ⟶ Z) (g : Y ⟶ Z)
 variable [H : LocallyRingedSpace.IsOpenImmersion f]
-
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) of_isIso [IsIso g] : LocallyRingedSpace.IsOpenImmersion g := by
   infer_instance
-
-/--
-Instance `comp` / 实例 `comp`
-
-English:
-instance comp
-  signature: (g : Z ⟶ Y) [LocallyRingedSpace.IsOpenImmersion g]
-  body: PresheafedSpace.IsOpenImmersion.comp f.1 g.1
-
-中文:
-实例 comp
-  签名: (g : Z ⟶ Y) [LocallyRinged空间.是开浸入 g]
-  定义体: PresheafedSpace.IsOpenImmersion.comp f.1 g.1
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.comp
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.comp** 是 Mathlib 中的一个实例，位
+于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：comp (g : Z ⟶ Y) [LocallyRingedSpace.IsOpenImmersion g] : LocallyRingedSpa
+ce.IsOpenImmersion (f ≫ g)
+参数：g : Z ⟶ Y。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 instance comp (g : Z ⟶ Y) [LocallyRingedSpace.IsOpenImmersion g] :
     LocallyRingedSpace.IsOpenImmersion (f ≫ g) :=
   PresheafedSpace.IsOpenImmersion.comp f.1 g.1
-
-/--
-Instance `mono` / 实例 `mono`
-
-English:
-instance mono
-  signature: : Mono f
-  body: LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map (show Mono f.toShHom by infer_instance)
-
-中文:
-实例 mono
-  签名: : 单态射 f
-  定义体: LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map (show Mono f.toShHom by infer_instance)
-
-Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map, f.toShHom, forgetToSheafedSpace, infer_instance, mono_of_mono_map, toShHom
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.mono** 是 Mathlib 中的一个实例，位
+于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：mono : Mono f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instFaithfulSheafedSpaceCommRingCat
+ForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace.
+Faithful
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion.instMono`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] {X Z : AlgebraicGeometry.SheafedSpace 
+C} (f : X ⟶ Z)   [H : AlgebraicGeometry.Sheaf…
 -/
 instance mono : Mono f :=
   LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map (show Mono f.toShHom by infer_instance)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SheafedSpace.IsOpenImmersion (LocallyRingedSpace.forgetToSheafedSpace.map f)
-  body: H
-
-中文:
-实例 :
-  签名: Sheafed空间.是开浸入 (LocallyRinged空间.forgetToSheafedSpace.map f)
-  定义体: H
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SheafedSpace.IsOpenImmersion (LocallyRingedSpace.forgetToSheafedSpace.map f) :=
   H
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `pullbackConeOfLeft` / `pullbackConeOfLeft` 的定义
+/-- An explicit pullback cone over `cospan f g` if `f` is an open immersion. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullbackConeOfLeft** 是 Ma
+thlib 中的一个定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：pullbackConeOfLeft : PullbackCone f g
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-definition pullbackConeOfLeft
-  signature: : PullbackCone f g
-  body: by
-  refine PullbackCone.mk ?_
-      (Y.ofRestrict (TopCat.snd_isOpenEmbedding_of_left H.base_open g.base)) ?_
-  · use PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst f.1 g.1
-    intro x
-    have := PresheafedSpace.stalkMap.congr_hom _ _
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition f.1 g.1) x
-    rw [PresheafedSpace.stalkMap.comp]; rw [PresheafedSpace.stalkMap.comp] at this
-    rw [← IsIso.eq_inv_comp] at this
-    rw [this]
-    dsimp
-    apply RingHom.isLocalHom_comp
-  · exact LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition _ _)
-
-中文:
-定义 pullbackConeOfLeft
-  签名: : PullbackCone f g
-  定义体: by
-  refine PullbackCone.mk ?_
-      (Y.ofRestrict (TopCat.snd_isOpenEmbedding_of_left H.base_open g.base)) ?_
-  · use PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst f.1 g.1
-    intro x
-    have := PresheafedSpace.stalkMap.congr_hom _ _
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition f.1 g.1) x
-    rw [PresheafedSpace.stalkMap.comp]; rw [PresheafedSpace.stalkMap.comp] at this
-    rw [← IsIso.eq_inv_comp] at this
-    rw [this]
-    dsimp
-    apply RingHom.isLocalHom_comp
-  · exact LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition _ _)
-
-Depends on / 依赖: H.base_open, IsIso.eq_inv_comp, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.Hom.ext, PresheafedSpace, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst, PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition, PresheafedSpace.stalkMap.comp, PresheafedSpace.stalkMap.congr_hom, PullbackCone, PullbackCone.mk, RingHom, RingHom.isLocalHom_comp, TopCat, TopCat.snd_isOpenEmbedding_of_left, Y.ofRestrict, base_open, congr_hom, eq_inv_comp
+--- 原说明 ---
+An explicit pullback cone over `cospan f g` if `f` is an open immersion.
 -/
 def pullbackConeOfLeft : PullbackCone f g := by
   refine PullbackCone.mk ?_
@@ -3169,93 +2751,36 @@ def pullbackConeOfLeft : PullbackCone f g := by
     intro x
     have := PresheafedSpace.stalkMap.congr_hom _ _
         (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition f.1 g.1) x
-    rw [PresheafedSpace.stalkMap.comp]; rw [PresheafedSpace.stalkMap.comp] at this
+    rw [PresheafedSpace.stalkMap.comp, PresheafedSpace.stalkMap.comp] at this
     rw [← IsIso.eq_inv_comp] at this
     rw [this]
     dsimp
     apply RingHom.isLocalHom_comp
   · exact LocallyRingedSpace.Hom.ext'
         (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallyRingedSpace.IsOpenImmersion (pullbackConeOfLeft f g).snd
-  body: show PresheafedSpace.IsOpenImmersion (Y.toPresheafedSpace.ofRestrict _) by infer_instance
-
-中文:
-实例 :
-  签名: LocallyRinged空间.是开浸入 (pullbackConeOfLeft f g).snd
-  定义体: show PresheafedSpace.IsOpenImmersion (Y.toPresheafedSpace.ofRestrict _) by infer_instance
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion, Y.toPresheafedSpace.ofRestrict, infer_instance, ofRestrict, toPresheafedSpace
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LocallyRingedSpace.IsOpenImmersion (pullbackConeOfLeft f g).snd :=
   show PresheafedSpace.IsOpenImmersion (Y.toPresheafedSpace.ofRestrict _) by infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `pullbackConeOfLeftIsLimit` / `pullbackConeOfLeftIsLimit` 的定义
+/-- The constructed `pullbackConeOfLeft` is indeed limiting. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit
+** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
+`。
+形式化陈述：pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-definition pullbackConeOfLeftIsLimit
-  signature: : IsLimit (pullbackConeOfLeft f g)
-  body: PullbackCone.isLimitAux' _ fun s => by
-    refine ⟨LocallyRingedSpace.Hom.mk (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift
-        f.1 g.1 (PullbackCone.mk _ _ (congr_arg LocallyRingedSpace.Hom.toHom s.condition))) ?_,
-      LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst f.1 g.1 _),
-      LocallyRingedSpace.Hom.ext'
-          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 _), ?_⟩
-    · intro x
-      have :=
-        PresheafedSpace.stalkMap.congr_hom _ _
-          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1
-            (PullbackCone.mk s.fst.1 s.snd.1
-              (congr_arg LocallyRingedSpace.Hom.toHom s.condition)))
-          x
-      change _ = _ ≫ s.snd.1.stalkMap x at this
-      rw [PresheafedSpace.stalkMap.comp]; rw [← IsIso.eq_inv_comp] at this
-      rw [this]
-      infer_instance
-    · intro m _ h₂
-      rw [← cancel_mono (pullbackConeOfLeft f g).snd]
-exact h₂.trans LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 <|
-PullbackCone.mk s.fst.1 s.snd.1 congr_arg
-            LocallyRingedSpace.Hom.toHom s.condition).symm
-
-中文:
-定义 pullbackConeOfLeftIsLimit
-  签名: : 是极限 (pullbackConeOfLeft f g)
-  定义体: PullbackCone.isLimitAux' _ fun s => by
-    refine ⟨LocallyRingedSpace.Hom.mk (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift
-        f.1 g.1 (PullbackCone.mk _ _ (congr_arg LocallyRingedSpace.Hom.toHom s.condition))) ?_,
-      LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst f.1 g.1 _),
-      LocallyRingedSpace.Hom.ext'
-          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 _), ?_⟩
-    · intro x
-      have :=
-        PresheafedSpace.stalkMap.congr_hom _ _
-          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1
-            (PullbackCone.mk s.fst.1 s.snd.1
-              (congr_arg LocallyRingedSpace.Hom.toHom s.condition)))
-          x
-      change _ = _ ≫ s.snd.1.stalkMap x at this
-      rw [PresheafedSpace.stalkMap.comp]; rw [← IsIso.eq_inv_comp] at this
-      rw [this]
-      infer_instance
-    · intro m _ h₂
-      rw [← cancel_mono (pullbackConeOfLeft f g).snd]
-exact h₂.trans LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 <|
-PullbackCone.mk s.fst.1 s.snd.1 congr_arg
-            LocallyRingedSpace.Hom.toHom s.condition).symm
-
-Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.Hom.ext, LocallyRingedSpace.Hom.mk, LocallyRingedSpace.Hom.toHom, PresheafedSpace, PresheafedSpace.IsOpe, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd, PresheafedSpace.stalkMap.congr_hom, PullbackCone, PullbackCone.isLimitAux, PullbackCone.mk, condition, congr_arg, congr_hom, isLimitAux, pullbackConeOfLeftLift, pullbackConeOfLeftLift_fst
+--- 原说明 ---
+The constructed `pullbackConeOfLeft` is indeed limiting.
 -/
 def pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g) :=
   PullbackCone.isLimitAux' _ fun s => by
@@ -3273,98 +2798,93 @@ def pullbackConeOfLeftIsLimit : IsLimit (pullbackConeOfLeft f g) :=
               (congr_arg LocallyRingedSpace.Hom.toHom s.condition)))
           x
       change _ = _ ≫ s.snd.1.stalkMap x at this
-      rw [PresheafedSpace.stalkMap.comp]; rw [← IsIso.eq_inv_comp] at this
+      rw [PresheafedSpace.stalkMap.comp, ← IsIso.eq_inv_comp] at this
       rw [this]
       infer_instance
     · intro m _ h₂
       rw [← cancel_mono (pullbackConeOfLeft f g).snd]
-exact h₂.trans LocallyRingedSpace.Hom.ext'
+      exact h₂.trans <| LocallyRingedSpace.Hom.ext'
         (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 <|
-PullbackCone.mk s.fst.1 s.snd.1 congr_arg
+          PullbackCone.mk s.fst.1 s.snd.1 <| congr_arg
             LocallyRingedSpace.Hom.toHom s.condition).symm
-
-/--
-Instance `hasPullback_of_left` / 实例 `hasPullback_of_left`
-
-English:
-instance hasPullback_of_left
-  signature: : HasPullback f g
-  body: ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-中文:
-实例 hasPullback_of_left
-  签名: : HasPullback f g
-  定义体: ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-Depends on / 依赖: pullbackConeOfLeftIsLimit
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.hasPullback_of_left** 是 M
+athlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：hasPullback_of_left : HasPullback f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasPullback_of_left : HasPullback f g :=
   ⟨⟨⟨_, pullbackConeOfLeftIsLimit f g⟩⟩⟩
-
-/--
-Instance `hasPullback_of_right` / 实例 `hasPullback_of_right`
-
-English:
-instance hasPullback_of_right
-  signature: : HasPullback g f
-  body: hasPullback_symmetry f g
-
-中文:
-实例 hasPullback_of_right
-  签名: : HasPullback g f
-  定义体: hasPullback_symmetry f g
-
-Depends on / 依赖: hasPullback_symmetry
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.hasPullback_of_right** 是 
+Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：hasPullback_of_right : HasPullback g f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
 -/
 instance hasPullback_of_right : HasPullback g f :=
   hasPullback_symmetry f g
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullback_snd_of_left` / 实例 `pullback_snd_of_left`
+/-- Open immersions are stable under base-change. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_snd_of_left** 是 
+Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：pullback_snd_of_left : LocallyRingedSpace.IsOpenImmersion (pullback.snd f 
+g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_hom_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_isIso`：∀ {Y Z : 
+AlgebraicGeometry.LocallyRingedSpace} (g : Y ⟶ Z) [CategoryTheory.IsIso g],   Al
+gebraicGeometry.LocallyRingedSpace.IsOpenImmersion …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.instSndPullbackCone
+OfLeft`：∀ {X Y Z : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Z) (g : Y ⟶ Z)
+   [H : AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion f],   A…
 
-English:
-instance pullback_snd_of_left
-  signature: :
-  body: by
-  delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-  infer_instance
-
-中文:
-实例 pullback_snd_of_left
-  签名: :
-  定义体: by
-  delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
-  infer_instance
-
-Depends on / 依赖: WalkingCospan, WalkingCospan.right, infer_instance, limit.isoLimitCone_hom_, pullback, pullback.snd, pullbackConeOfLeftIsLimit
+--- 原说明 ---
+Open immersions are stable under base-change.
 -/
 instance pullback_snd_of_left :
     LocallyRingedSpace.IsOpenImmersion (pullback.snd f g) := by
   delta pullback.snd
-  rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
+  rw [← limit.isoLimitCone_hom_π ⟨_, pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
   infer_instance
 
-/--
-Instance `pullback_fst_of_right` / 实例 `pullback_fst_of_right`
+/-- Open immersions are stable under base-change. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_fst_of_right** 是
+ Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：pullback_fst_of_right : LocallyRingedSpace.IsOpenImmersion (pullback.fst g
+ f)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd`：pullbackSymmetry_ho
+m_comp_snd [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.snd g f = p
+ullback.fst f g
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_isIso`：∀ {Y Z : 
+AlgebraicGeometry.LocallyRingedSpace} (g : Y ⟶ Z) [CategoryTheory.IsIso g],   Al
+gebraicGeometry.LocallyRingedSpace.IsOpenImmersion …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-instance pullback_fst_of_right
-  signature: :
-  body: by
-  rw [← pullbackSymmetry_hom_comp_snd]
-  infer_instance
-
-中文:
-实例 pullback_fst_of_right
-  签名: :
-  定义体: by
-  rw [← pullbackSymmetry_hom_comp_snd]
-  infer_instance
-
-Depends on / 依赖: infer_instance, pullbackSymmetry_hom_comp_snd
+--- 原说明 ---
+Open immersions are stable under base-change.
 -/
 instance pullback_fst_of_right :
     LocallyRingedSpace.IsOpenImmersion (pullback.fst g f) := by
@@ -3372,96 +2892,88 @@ instance pullback_fst_of_right :
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullback_to_base_isOpenImmersion` / 实例 `pullback_to_base_isOpenImmersion`
-
-English:
-instance pullback_to_base_isOpenImmersion
-  signature: [LocallyRingedSpace.IsOpenImmersion g]
-  body: by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-中文:
-实例 pullback_to_base_isOpenImmersion
-  签名: [LocallyRinged空间.是开浸入 g]
-  定义体: by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
-  infer_instance
-
-Depends on / 依赖: WalkingCospan, WalkingCospan.Hom.inl, cospan, cospan_map_inl, infer_instance, limit.w
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_to_base_isOpenIm
+mersion** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenIm
+mersion`。
+形式化陈述：pullback_to_base_isOpenImmersion [LocallyRingedSpace.IsOpenImmersion g] : 
+LocallyRingedSpace.IsOpenImmersion (limit.π (cospan f g) WalkingCospan.one)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.w`：∀ {J : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   (F
+ : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.cospan_map_inl`：cospan_map_inl {X Y Z : C} (f : X 
+⟶ Z) (g : Y ⟶ Z) : (cospan f g).map WalkingCospan.Hom.inl = f
 -/
 instance pullback_to_base_isOpenImmersion [LocallyRingedSpace.IsOpenImmersion g] :
     LocallyRingedSpace.IsOpenImmersion (limit.π (cospan f g) WalkingCospan.one) := by
-  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl]; rw [cospan_map_inl]
+  rw [← limit.w (cospan f g) WalkingCospan.Hom.inl, cospan_map_inl]
   infer_instance
-
-/--
-Instance `forget_preservesPullbackOfLeft` / 实例 `forget_preservesPullbackOfLeft`
-
-English:
-instance forget_preservesPullbackOfLeft
-  signature: :
-  body: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
-    apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
-    apply isLimitOfIsLimitPullbackConeMap SheafedSpace.forgetToPresheafedSpace
-    exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-中文:
-实例 forget_preservesPullbackOfLeft
-  签名: :
-  定义体: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
-    apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
-    apply isLimitOfIsLimitPullbackConeMap SheafedSpace.forgetToPresheafedSpace
-    exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, forgetToPresheafedSpace, isLimitMapConePullbackConeEquiv, isLimitOfIsLimitPullbackConeMap, preservesLimit_of_preserves_limit_cone, pullbackConeOfLeftIsLimit, symm.toFun
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forget_preservesPullbackO
+fLeft** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImme
+rsion`。
+形式化陈述：forget_preservesPullbackOfLeft : PreservesLimit (cospan f g) LocallyRinged
+Space.forgetToSheafedSpace
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.CreatesLimit.toReflectsLimit`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.instIsOpenImmersion
+CommRingCatMapSheafedSpaceForgetToSheafedSpace`：∀ {X Z : AlgebraicGeometry.Local
+lyRingedSpace} (f : X ⟶ Z) [H : AlgebraicGeometry.LocallyRingedSpace.IsOpenImmer
+sion f],   AlgebraicGeometry…
 -/
 instance forget_preservesPullbackOfLeft :
     PreservesLimit (cospan f g) LocallyRingedSpace.forgetToSheafedSpace :=
-preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
+  preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) <| by
     apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
     apply isLimitOfIsLimitPullbackConeMap SheafedSpace.forgetToPresheafedSpace
     exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-/--
-Instance `forgetToPresheafedSpace_preservesPullback_of_left` / 实例 `forgetToPresheafedSpace_preservesPullback_of_left`
-
-English:
-instance forgetToPresheafedSpace_preservesPullback_of_left
-  signature: :
-  body: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
-    apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
-    exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-中文:
-实例 forgetToPresheafedSpace_preservesPullback_of_left
-  签名: :
-  定义体: preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
-    apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
-    exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit, isLimitMapConePullbackConeEquiv, preservesLimit_of_preserves_limit_cone, pullbackConeOfLeftIsLimit, symm.toFun
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToPresheafedSpace_p
+reservesPullback_of_left** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRin
+gedSpace.IsOpenImmersion`。
+形式化陈述：forgetToPresheafedSpace_preservesPullback_of_left : PreservesLimit (cospan
+ f g) (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafed
+Space)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance forgetToPresheafedSpace_preservesPullback_of_left :
     PreservesLimit (cospan f g)
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) :=
-preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) by
+  preservesLimit_of_preserves_limit_cone (pullbackConeOfLeftIsLimit f g) <| by
     apply (isLimitMapConePullbackConeEquiv _ _).symm.toFun
     exact PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftIsLimit f.1 g.1
-
-/--
-Instance `forgetToPresheafedSpacePreservesOpenImmersion` / 实例 `forgetToPresheafedSpacePreservesOpenImmersion`
-
-English:
-instance forgetToPresheafedSpacePreservesOpenImmersion
-  signature: :
-  body: H
-
-中文:
-实例 forgetToPresheafedSpacePreservesOpenImmersion
-  签名: :
-  定义体: H
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToPresheafedSpacePr
+eservesOpenImmersion** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedS
+pace.IsOpenImmersion`。
+形式化陈述：forgetToPresheafedSpacePreservesOpenImmersion : PresheafedSpace.IsOpenImme
+rsion ((LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafe
+dSpace).map f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forgetToPresheafedSpacePreservesOpenImmersion :
     PresheafedSpace.IsOpenImmersion
@@ -3470,41 +2982,25 @@ instance forgetToPresheafedSpacePreservesOpenImmersion :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `forgetToTop_preservesPullback_of_left` / 实例 `forgetToTop_preservesPullback_of_left`
-
-English:
-instance forgetToTop_preservesPullback_of_left
-  signature: :
-  body: by
-change PreservesLimit _
-    (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) ⋙
-    PresheafedSpace.forget _
-  apply +allowSynthFailures Limits.comp_preservesLimit
-  apply +allowSynthFailures preservesLimit_of_iso_diagram
-  · exact (diagramIsoCospan _).symm
-  dsimp
-  infer_instance
-
-中文:
-实例 forgetToTop_preservesPullback_of_left
-  签名: :
-  定义体: by
-change PreservesLimit _
-    (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) ⋙
-    PresheafedSpace.forget _
-  apply +allowSynthFailures Limits.comp_preservesLimit
-  apply +allowSynthFailures preservesLimit_of_iso_diagram
-  · exact (diagramIsoCospan _).symm
-  dsimp
-  infer_instance
-
-Depends on / 依赖: Limits, Limits.comp_preservesLimit, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PreservesLimit, PresheafedSpace, PresheafedSpace.forget, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, allowSynthFailures, comp_preservesLimit, diagramIsoCospan, forget, forgetToPresheafedSpace, forgetToSheafedSpace, infer_instance, preservesLimit_of_iso_diagram
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToTop_preservesPull
+back_of_left** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsO
+penImmersion`。
+形式化陈述：forgetToTop_preservesPullback_of_left : PreservesLimit (cospan f g) (Local
+lyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 instance forgetToTop_preservesPullback_of_left :
     PreservesLimit (cospan f g)
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) := by
-change PreservesLimit _
+  change PreservesLimit _ <|
     (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) ⋙
     PresheafedSpace.forget _
   apply +allowSynthFailures Limits.comp_preservesLimit
@@ -3512,158 +3008,151 @@ change PreservesLimit _
   · exact (diagramIsoCospan _).symm
   dsimp
   infer_instance
-
-/--
-Instance `forget_reflectsPullback_of_left` / 实例 `forget_reflectsPullback_of_left`
-
-English:
-instance forget_reflectsPullback_of_left
-  signature: :
-  body: reflectsLimit_of_reflectsIsomorphisms _ _
-
-中文:
-实例 forget_reflectsPullback_of_left
-  签名: :
-  定义体: reflectsLimit_of_reflectsIsomorphisms _ _
-
-Depends on / 依赖: reflectsLimit_of_reflectsIsomorphisms
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forget_reflectsPullback_o
+f_left** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImm
+ersion`。
+形式化陈述：forget_reflectsPullback_of_left : ReflectsLimit (cospan f g) LocallyRinged
+Space.forgetToSheafedSpace
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsLimit_of_reflectsIsomorphisms`：reflectsLim
+it_of_reflectsIsomorphisms (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms] [Has
+Limit F] [PreservesLimit F G] : ReflectsLimit F G…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
 -/
 instance forget_reflectsPullback_of_left :
     ReflectsLimit (cospan f g) LocallyRingedSpace.forgetToSheafedSpace :=
   reflectsLimit_of_reflectsIsomorphisms _ _
-
-/--
-Instance `forget_preservesPullback_of_right` / 实例 `forget_preservesPullback_of_right`
-
-English:
-instance forget_preservesPullback_of_right
-  signature: :
-  body: preservesPullback_symmetry _ _ _
-
-中文:
-实例 forget_preservesPullback_of_right
-  签名: :
-  定义体: preservesPullback_symmetry _ _ _
-
-Depends on / 依赖: preservesPullback_symmetry
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forget_preservesPullback_
+of_right** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenI
+mmersion`。
+形式化陈述：forget_preservesPullback_of_right : PreservesLimit (cospan g f) LocallyRin
+gedSpace.forgetToSheafedSpace
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesPullback_symmetry`：preservesPullback_symm
+etry : PreservesLimit (cospan g f) G where preserves {c} hc
 -/
 instance forget_preservesPullback_of_right :
     PreservesLimit (cospan g f) LocallyRingedSpace.forgetToSheafedSpace :=
   preservesPullback_symmetry _ _ _
-
-/--
-Instance `forgetToPresheafedSpace_preservesPullback_of_right` / 实例 `forgetToPresheafedSpace_preservesPullback_of_right`
-
-English:
-instance forgetToPresheafedSpace_preservesPullback_of_right
-  signature: :
-  body: preservesPullback_symmetry _ _ _
-
-中文:
-实例 forgetToPresheafedSpace_preservesPullback_of_right
-  签名: :
-  定义体: preservesPullback_symmetry _ _ _
-
-Depends on / 依赖: preservesPullback_symmetry
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToPresheafedSpace_p
+reservesPullback_of_right** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRi
+ngedSpace.IsOpenImmersion`。
+形式化陈述：forgetToPresheafedSpace_preservesPullback_of_right : PreservesLimit (cospa
+n g f) (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafe
+dSpace)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesPullback_symmetry`：preservesPullback_symm
+etry : PreservesLimit (cospan g f) G where preserves {c} hc
 -/
 instance forgetToPresheafedSpace_preservesPullback_of_right :
     PreservesLimit (cospan g f)
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) :=
   preservesPullback_symmetry _ _ _
-
-/--
-Instance `forget_reflectsPullback_of_right` / 实例 `forget_reflectsPullback_of_right`
-
-English:
-instance forget_reflectsPullback_of_right
-  signature: :
-  body: reflectsLimit_of_reflectsIsomorphisms _ _
-
-中文:
-实例 forget_reflectsPullback_of_right
-  签名: :
-  定义体: reflectsLimit_of_reflectsIsomorphisms _ _
-
-Depends on / 依赖: reflectsLimit_of_reflectsIsomorphisms
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forget_reflectsPullback_o
+f_right** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenIm
+mersion`。
+形式化陈述：forget_reflectsPullback_of_right : ReflectsLimit (cospan g f) LocallyRinge
+dSpace.forgetToSheafedSpace
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsLimit_of_reflectsIsomorphisms`：reflectsLim
+it_of_reflectsIsomorphisms (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms] [Has
+Limit F] [PreservesLimit F G] : ReflectsLimit F G…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
 -/
 instance forget_reflectsPullback_of_right :
     ReflectsLimit (cospan g f) LocallyRingedSpace.forgetToSheafedSpace :=
   reflectsLimit_of_reflectsIsomorphisms _ _
-
-/--
-Instance `forgetToPresheafedSpace_reflectsPullback_of_left` / 实例 `forgetToPresheafedSpace_reflectsPullback_of_left`
-
-English:
-instance forgetToPresheafedSpace_reflectsPullback_of_left
-  signature: :
-  body: reflectsLimit_of_reflectsIsomorphisms _ _
-
-中文:
-实例 forgetToPresheafedSpace_reflectsPullback_of_left
-  签名: :
-  定义体: reflectsLimit_of_reflectsIsomorphisms _ _
-
-Depends on / 依赖: reflectsLimit_of_reflectsIsomorphisms
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToPresheafedSpace_r
+eflectsPullback_of_left** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRing
+edSpace.IsOpenImmersion`。
+形式化陈述：forgetToPresheafedSpace_reflectsPullback_of_left : ReflectsLimit (cospan f
+ g) (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSp
+ace)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsLimit_of_reflectsIsomorphisms`：reflectsLim
+it_of_reflectsIsomorphisms (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms] [Has
+Limit F] [PreservesLimit F G] : ReflectsLimit F G…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
 -/
 instance forgetToPresheafedSpace_reflectsPullback_of_left :
     ReflectsLimit (cospan f g)
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) :=
   reflectsLimit_of_reflectsIsomorphisms _ _
-
-/--
-Instance `forgetToPresheafedSpace_reflectsPullback_of_right` / 实例 `forgetToPresheafedSpace_reflectsPullback_of_right`
-
-English:
-instance forgetToPresheafedSpace_reflectsPullback_of_right
-  signature: :
-  body: reflectsLimit_of_reflectsIsomorphisms _ _
-
-中文:
-实例 forgetToPresheafedSpace_reflectsPullback_of_right
-  签名: :
-  定义体: reflectsLimit_of_reflectsIsomorphisms _ _
-
-Depends on / 依赖: reflectsLimit_of_reflectsIsomorphisms
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.forgetToPresheafedSpace_r
+eflectsPullback_of_right** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRin
+gedSpace.IsOpenImmersion`。
+形式化陈述：forgetToPresheafedSpace_reflectsPullback_of_right : ReflectsLimit (cospan 
+g f) (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedS
+pace)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsLimit_of_reflectsIsomorphisms`：reflectsLim
+it_of_reflectsIsomorphisms (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms] [Has
+Limit F] [PreservesLimit F G] : ReflectsLimit F G…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
 -/
 instance forgetToPresheafedSpace_reflectsPullback_of_right :
     ReflectsLimit (cospan g f)
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) :=
   reflectsLimit_of_reflectsIsomorphisms _ _
-
-/--
-theorem `pullback_snd_isIso_of_range_subset` / 定理 `pullback_snd_isIso_of_range_subset`
-
-English:
-theorem pullback_snd_isIso_of_range_subset
-  given: (H' : Set.range g.base subseteq Set.range f.base)
-  proof: by
-  apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
-    (F := LocallyRingedSpace.forgetToSheafedSpace)
-  apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
-    (F := SheafedSpace.forgetToPresheafedSpace)
-  erw [← PreservesPullback.iso_hom_snd
-      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) f g]
-  -- Porting note: was `inferInstance`
-exact IsIso.comp_isIso' inferInstance
-    PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_subset _ _ H'
-
-中文:
-定理 pullback_snd_isIso_of_range_subset
-  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
-  证明: by
-  apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
-    (F := LocallyRingedSpace.forgetToSheafedSpace)
-  apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
-    (F := SheafedSpace.forgetToPresheafedSpace)
-  erw [← PreservesPullback.iso_hom_snd
-      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) f g]
-  -- Porting note: was `inferInstance`
-exact IsIso.comp_isIso' inferInstance
-    PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_subset _ _ H'
-
-Depends on / 依赖: Functor, Functor.ReflectsIsomorphisms.reflects, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PreservesPullback, PreservesPullback.iso_hom_snd, ReflectsIsomorphisms, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, allowSynthFailures, forgetToPresheafedSpace, forgetToSheafedSpace, iso_hom_snd, reflects
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_snd_isIso_of_ran
+ge_subset** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpen
+Immersion`。
+形式化陈述：pullback_snd_isIso_of_range_subset (H' : Set.range g.base subseteq Set.ran
+ge f.base) : IsIso (pullback.snd f g)
+参数：H' : Set.range g.base subseteq Set.range f.base。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ReflectsIsomorphisms.reflects`：∀ {C : Type u_1} {
+inst : CategoryTheory.Category.{v_1, u_1} C} {D : Type u_2}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} (F : Categor…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.PreservesPullback.iso_hom_snd`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用引理 `CategoryTheory.IsIso.comp_isIso'`：comp_isIso' (_ : IsIso f) (_ : IsIso h
+) : IsIso (f ≫ h)
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_
+range_subset`：pullback_snd_isIso_of_range_subset (H : Set.range g.base subseteq 
+Set.range f.base) : IsIso (pullback.snd f g)
 -/
-theorem pullback_snd_isIso_of_range_subset (H' : Set.range g.base subseteq Set.range f.base) :
+theorem pullback_snd_isIso_of_range_subset (H' : Set.range g.base ⊆ Set.range f.base) :
     IsIso (pullback.snd f g) := by
   apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
     (F := LocallyRingedSpace.forgetToSheafedSpace)
@@ -3672,127 +3161,152 @@ theorem pullback_snd_isIso_of_range_subset (H' : Set.range g.base subseteq Set.r
   erw [← PreservesPullback.iso_hom_snd
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) f g]
   -- Porting note: was `inferInstance`
-exact IsIso.comp_isIso' inferInstance
+  exact IsIso.comp_isIso' inferInstance <|
     PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_subset _ _ H'
 
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: (H' : Set.range g.base subseteq Set.range f.base)
-  body: have := pullback_snd_isIso_of_range_subset f g H'
-  inv (pullback.snd f g) ≫ pullback.fst _ _
-
-@[simp, reassoc]
-
-中文:
-定义 lift
-  签名: (H' : 集合.range g.base subseteq 集合.range f.base)
-  定义体: have := pullback_snd_isIso_of_range_subset f g H'
-  inv (pullback.snd f g) ≫ pullback.fst _ _
-
-@[simp, reassoc]
-
-Depends on / 依赖: pullback, pullback.fst, pullback.snd, pullback_snd_isIso_of_range_subset
+/-- The universal property of open immersions:
+For an open immersion `f : X ⟶ Z`, given any morphism of schemes `g : Y ⟶ Z` whose topological
+image is contained in the image of `f`, we can lift this morphism to a unique `Y ⟶ X` that
+commutes with these maps.
 -/
-def lift (H' : Set.range g.base subseteq Set.range f.base) : Y ⟶ X :=
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift** 是 Mathlib 中的一个定义，位
+于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：lift (H' : Set.range g.base subseteq Set.range f.base) : Y ⟶ X
+参数：H' : Set.range g.base subseteq Set.range f.base。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_snd_isIso_
+of_range_subset`：pullback_snd_isIso_of_range_subset (H' : Set.range g.base subse
+teq Set.range f.base) : IsIso (pullback.snd f g)
+
+--- 原说明 ---
+The universal property of open immersions:
+For an open immersion `f : X ⟶ Z`, given any morphism of schemes `g : Y ⟶ Z` who
+se topological
+image is contained in the image of `f`, we can lift this morphism to a unique `Y
+ ⟶ X` that
+commutes with these maps.
+-/
+def lift (H' : Set.range g.base ⊆ Set.range f.base) : Y ⟶ X :=
   have := pullback_snd_isIso_of_range_subset f g H'
   inv (pullback.snd f g) ≫ pullback.fst _ _
 
 @[simp, reassoc]
-/--
-theorem `lift_fac` / 定理 `lift_fac`
-
-English:
-theorem lift_fac
-  given: (H' : Set.range g.base subseteq Set.range f.base)
-  statement: lift f g H' ≫ f = g
-  proof: by
-  simp [lift, pullback.condition]
-
-中文:
-定理 lift_fac
-  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
-  结论: lift f g H' ≫ f = g
-  证明: by
-  simp [lift, pullback.condition]
-
-Depends on / 依赖: condition, pullback, pullback.condition
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift_fac** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：lift_fac (H' : Set.range g.base subseteq Set.range f.base) : lift f g H' ≫
+ f = g
+参数：H' : Set.range g.base subseteq Set.range f.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_snd_isIso_
+of_range_subset`：pullback_snd_isIso_of_range_subset (H' : Set.range g.base subse
+teq Set.range f.base) : IsIso (pullback.snd f g)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_fac (H' : Set.range g.base subseteq Set.range f.base) : lift f g H' ≫ f = g := by
+theorem lift_fac (H' : Set.range g.base ⊆ Set.range f.base) : lift f g H' ≫ f = g := by
   simp [lift, pullback.condition]
-
-/--
-theorem `lift_uniq` / 定理 `lift_uniq`
-
-English:
-theorem lift_uniq
-  given: (H' : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
-  proof: by rw [← cancel_mono f, hl, lift_fac]
-
-中文:
-定理 lift_uniq
-  条件: (H' : 集合.range g.base subseteq 集合.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g)
-  证明: by rw [← cancel_mono f, hl, lift_fac]
-
-Depends on / 依赖: cancel_mono, lift_fac
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift_uniq** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：lift_uniq (H' : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (h
+l : l ≫ f = g) : l = lift f g H'
+参数：H' : Set.range g.base subseteq Set.range f.base；l : Y ⟶ X；hl : l ≫ f = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift_fac`：lift_fac 
+(H' : Set.range g.base subseteq Set.range f.base) : lift f g H' ≫ f = g
 -/
-theorem lift_uniq (H' : Set.range g.base subseteq Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g) :
+theorem lift_uniq (H' : Set.range g.base ⊆ Set.range f.base) (l : Y ⟶ X) (hl : l ≫ f = g) :
     l = lift f g H' := by rw [← cancel_mono f, hl, lift_fac]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lift_range` / 定理 `lift_range`
-
-English:
-theorem lift_range
-  given: (H' : Set.range g.base subseteq Set.range f.base)
-  proof: by
-  have := pullback_snd_isIso_of_range_subset f g H'
-  dsimp only [lift]
-  have : _ = (pullback.fst f g).base :=
-    PreservesPullback.iso_hom_fst
-      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) f g
-  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [Set.image_univ]
-  · rw [TopCat.pullback_fst_range]
-    ext
-    constructor
-    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
-    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
-  · rw [← TopCat.epi_iff_surjective, show (inv (pullback.snd f g)).base = _ from
-        (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _).map_inv _]
-    infer_instance
-
-中文:
-定理 lift_range
-  条件: (H' : 集合.range g.base subseteq 集合.range f.base)
-  证明: by
-  have := pullback_snd_isIso_of_range_subset f g H'
-  dsimp only [lift]
-  have : _ = (pullback.fst f g).base :=
-    PreservesPullback.iso_hom_fst
-      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) f g
-  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [Set.image_univ]
-  · rw [TopCat.pullback_fst_range]
-    ext
-    constructor
-    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
-    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
-  · rw [← TopCat.epi_iff_surjective, show (inv (pullback.snd f g)).base = _ from
-        (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _).map_inv _]
-    infer_instance
-
-Depends on / 依赖: Category, Category.assoc, LocallyRingedSpace, LocallyRingedSpace.comp_base, LocallyRingedSpace.forgetToSheafedSpace, PreservesPullback, PreservesPullback.iso_hom_fst, Set.image_univ, Set.range_comp, Set.range_eq_univ.mpr, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.coe_comp, TopCat.pullback_fst_range, coe_comp, comp_base, eq.symm, forget, forgetToSheafedSpace
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift_range** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：lift_range (H' : Set.range g.base subseteq Set.range f.base) : Set.range (
+lift f g H').base = f.base ⁻¹' Set.range g.base
+参数：H' : Set.range g.base subseteq Set.range f.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.pullback_snd_isIso_
+of_range_subset`：pullback_snd_isIso_of_range_subset (H' : Set.range g.base subse
+teq Set.range f.base) : IsIso (pullback.snd f g)
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `CategoryTheory.Limits.PreservesPullback.iso_hom_fst`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.comp_base`：comp_base {X Y Z : Local
+lyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).base = f.base ≫ g.base
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `TopCat.coe_comp`：∀ {X Y Z : TopCat} (f : X ⟶ Y) (g : Y ⟶ Z),   ⇑(Categor
+yTheory.ConcreteCategory.hom (CategoryTheory.CategoryStruct.comp f g)) =     ⇑(C
+atego…
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用定理 `TopCat.epi_iff_surjective`：epi_iff_surjective {X Y : TopCat.{u}} (f : X 
+⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `TopCat.pullback_fst_range`：pullback_fst_range {X Y S : TopCat.{u}} (f : 
+X ⟶ S) (g : Y ⟶ S) : Set.range (pullback.fst f g) = { x : X | exists y : Y, f x 
+= g y }
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem lift_range (H' : Set.range g.base subseteq Set.range f.base) :
+theorem lift_range (H' : Set.range g.base ⊆ Set.range f.base) :
     Set.range (lift f g H').base = f.base ⁻¹' Set.range g.base := by
   have := pullback_snd_isIso_of_range_subset f g H'
   dsimp only [lift]
   have : _ = (pullback.fst f g).base :=
     PreservesPullback.iso_hom_fst
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) f g
-  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [Set.image_univ]
+  rw [LocallyRingedSpace.comp_base, ← this, ← Category.assoc, TopCat.coe_comp, Set.range_comp,
+      Set.range_eq_univ.mpr, Set.image_univ]
   · rw [TopCat.pullback_fst_range]
     ext
     constructor
@@ -3804,46 +3318,41 @@ theorem lift_range (H' : Set.range g.base subseteq Set.range f.base) :
 
 end Pullback
 
-/--
-Definition of `isoRestrict` / `isoRestrict` 的定义
+/-- An open immersion is isomorphic to the induced open subscheme on its image. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoRestrict** 是 Mathlib 中
+的一个定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：isoRestrict {X Y : LocallyRingedSpace} (f : X ⟶ Y) [H : LocallyRingedSpace
+.IsOpenImmersion f] : X ≅ Y.restrict H.base_open
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-definition isoRestrict
-  signature: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
-  body: LocallyRingedSpace.isoOfSheafedSpaceIso
-    SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso
-      (PresheafedSpace.IsOpenImmersion.isoRestrict f.1)
-
-中文:
-定义 isoRestrict
-  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
-  定义体: LocallyRingedSpace.isoOfSheafedSpaceIso
-    SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso
-      (PresheafedSpace.IsOpenImmersion.isoRestrict f.1)
-
-Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.isoOfSheafedSpaceIso, PresheafedSpace, PresheafedSpace.IsOpenImmersion.isoRestrict, SheafedSpace, SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso, fullyFaithfulForgetToPresheafedSpace, isoOfSheafedSpaceIso, isoRestrict, preimageIso
+--- 原说明 ---
+An open immersion is isomorphic to the induced open subscheme on its image.
 -/
 noncomputable def isoRestrict {X Y : LocallyRingedSpace} (f : X ⟶ Y)
     [H : LocallyRingedSpace.IsOpenImmersion f] :
     X ≅ Y.restrict H.base_open :=
-LocallyRingedSpace.isoOfSheafedSpaceIso
+  LocallyRingedSpace.isoOfSheafedSpaceIso <|
     SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso
       (PresheafedSpace.IsOpenImmersion.isoRestrict f.1)
 
-/--
-Definition of `opensFunctor` / `opensFunctor` 的定义
+/-- The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.opensFunctor** 是 Mathlib 
+中的一个缩写定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：opensFunctor {X Y : LocallyRingedSpace} (f : X ⟶ Y) [H : LocallyRingedSpac
+e.IsOpenImmersion f] : Opens X ⥤ Opens Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation opensFunctor
-  signature: {X Y : LocallyRingedSpace} (f : X ⟶ Y)
-  body: H.base_open.functor
-
-中文:
-缩写 opensFunctor
-  签名: {X Y : LocallyRinged空间} (f : X ⟶ Y)
-  定义体: H.base_open.functor
-
-Depends on / 依赖: H.base_open.functor, base_open, functor
+--- 原说明 ---
+The functor `Opens X ⥤ Opens Y` associated with an open immersion `f : X ⟶ Y`.
 -/
 abbrev opensFunctor {X Y : LocallyRingedSpace} (f : X ⟶ Y)
     [H : LocallyRingedSpace.IsOpenImmersion f] : Opens X ⥤ Opens Y :=
@@ -3851,23 +3360,33 @@ abbrev opensFunctor {X Y : LocallyRingedSpace} (f : X ⟶ Y)
 
 section OfStalkIso
 
-/--
-theorem `of_stalk_iso` / 定理 `of_stalk_iso`
+/-- Suppose `X Y : SheafedSpace C`, where `C` is a concrete category,
+whose forgetful functor reflects isomorphisms, preserves limits and filtered colimits.
+Then a morphism `X ⟶ Y` that is a topological open embedding
+is an open immersion iff every stalk map is an iso.
+-/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso** 是 Mathlib 
+中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：of_stalk_iso {X Y : LocallyRingedSpace} (f : X ⟶ Y) (hf : IsOpenEmbedding 
+f.base) [stalk_iso : forall x : X.1, IsIso (f.stalkMap x)] : LocallyRingedSpace.
+IsOpenImmersion f
+参数：f : X ⟶ Y；hf : IsOpenEmbedding f.base；f.stalkMap x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion.of_stalk_iso`：of_stalk_is
+o {X Y : SheafedSpace C} (f : X ⟶ Y) (hf : IsOpenEmbedding f.hom.base) [H : fora
+ll x : X.1, IsIso (f.hom.stalkMap x)] : SheafedSp…
 
-English:
-theorem of_stalk_iso
-  statement: {X Y : LocallyRingedSpace} (f : X ⟶ Y) (hf : IsOpenEmbedding f.base)
-  proof: SheafedSpace.IsOpenImmersion.of_stalk_iso _ hf (H := stalk_iso)
-
-中文:
-定理 of_stalk_iso
-  结论: {X Y : LocallyRinged空间} (f : X ⟶ Y) (hf : 是开嵌入 f.base)
-  证明: SheafedSpace.IsOpenImmersion.of_stalk_iso _ hf (H := stalk_iso)
-
-Depends on / 依赖: IsOpenImmersion, SheafedSpace, SheafedSpace.IsOpenImmersion.of_stalk_iso, of_stalk_iso, stalk_iso
+--- 原说明 ---
+Suppose `X Y : SheafedSpace C`, where `C` is a concrete category,
+whose forgetful functor reflects isomorphisms, preserves limits and filtered col
+imits.
+Then a morphism `X ⟶ Y` that is a topological open embedding
+is an open immersion iff every stalk map is an iso.
 -/
 theorem of_stalk_iso {X Y : LocallyRingedSpace} (f : X ⟶ Y) (hf : IsOpenEmbedding f.base)
-    [stalk_iso : forall x : X.1, IsIso (f.stalkMap x)] :
+    [stalk_iso : ∀ x : X.1, IsIso (f.stalkMap x)] :
     LocallyRingedSpace.IsOpenImmersion f :=
   SheafedSpace.IsOpenImmersion.of_stalk_iso _ hf (H := stalk_iso)
 
@@ -3878,71 +3397,71 @@ section
 variable {X Y : LocallyRingedSpace} (f : X ⟶ Y) [H : IsOpenImmersion f]
 
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_hom_ofRestrict` / 定理 `isoRestrict_hom_ofRestrict`
-
-English:
-theorem isoRestrict_hom_ofRestrict
-  statement: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  proof: by
-  apply LocallyRingedSpace.forgetToSheafedSpace.map_injective
-  exact SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.toShHom
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 isoRestrict_hom_ofRestrict
-  结论: (isoRestrict f).hom ≫ Y.ofRestrict _ = f
-  证明: by
-  apply LocallyRingedSpace.forgetToSheafedSpace.map_injective
-  exact SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.toShHom
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.map_injective, SheafedSpace, SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict, f.toShHom, forgetToSheafedSpace, isoRestrict_hom_ofRestrict, map_injective, toShHom
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoRestrict_hom_ofRestric
+t** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersio
+n`。
+形式化陈述：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instFaithfulSheafedSpaceCommRingCat
+ForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace.
+Faithful
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestric
+t`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
 -/
 theorem isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f := by
   apply LocallyRingedSpace.forgetToSheafedSpace.map_injective
   exact SheafedSpace.IsOpenImmersion.isoRestrict_hom_ofRestrict f.toShHom
 
 @[reassoc (attr := simp)]
-/--
-theorem `isoRestrict_inv_ofRestrict` / 定理 `isoRestrict_inv_ofRestrict`
-
-English:
-theorem isoRestrict_inv_ofRestrict
-  statement: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  proof: by
-  simp only [← isoRestrict_hom_ofRestrict f, Iso.inv_hom_id_assoc]
-
-中文:
-定理 isoRestrict_inv_ofRestrict
-  结论: (isoRestrict f).inv ≫ f = Y.ofRestrict _
-  证明: by
-  simp only [← isoRestrict_hom_ofRestrict f, Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, inv_hom_id_assoc, isoRestrict_hom_ofRestrict
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoRestrict_inv_ofRestric
+t** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersio
+n`。
+形式化陈述：isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.base_open`：∀ {C : Type
+ u} {inst : CategoryTheory.Category.{v, u} C} {X Y : AlgebraicGeometry.Presheafe
+dSpace C} {f : X ⟶ Y}   [self : AlgebraicGeometry…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoRestrict_hom_ofR
+estrict`：isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoRestrict_inv_ofRestrict : (isoRestrict f).inv ≫ f = Y.ofRestrict _ := by
   simp only [← isoRestrict_hom_ofRestrict f, Iso.inv_hom_id_assoc]
-/--
-Definition of `invApp` / `invApp` 的定义
+/-- For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U) ⟶ Y(U)`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.invApp** 是 Mathlib 中的一个定义
+，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：invApp (U : Opens X) : X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFu
+nctor f |>.obj U))
+参数：U : Opens X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-definition invApp
-  signature: (U : Opens X)
-  body: PresheafedSpace.IsOpenImmersion.invApp f.1 U
-
-#adaptation_note
-
-中文:
-定义 invApp
-  签名: (U : Opens X)
-  定义体: PresheafedSpace.IsOpenImmersion.invApp f.1 U
-
-#adaptation_note
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.invApp, invApp
+--- 原说明 ---
+For an open immersion `f : X ⟶ Y` and an open set `U ⊆ X`, we have the map `X(U)
+ ⟶ Y(U)`.
 -/
 noncomputable def invApp (U : Opens X) :
     X.presheaf.obj (op U) ⟶ Y.presheaf.obj (op (opensFunctor f |>.obj U)) :=
@@ -3952,20 +3471,24 @@ noncomputable def invApp (U : Opens X) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `inv_naturality` / 定理 `inv_naturality`
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.inv_naturality** 是 Mathli
+b 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) : X.presheaf.map i ≫ H.invA
+pp _ (unop V) = H.invApp _ (unop U) ≫ Y.presheaf.map (opensFunctor f |>.op.map i
+)
+参数：Opens X；i : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_naturality`：inv_na
+turality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) : X.presheaf.map i ≫ H.invApp _ (unop V
+) = invApp f (unop U) ≫ Y.presheaf.map (opensFunctor f…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-theorem inv_naturality
-  given: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  proof: PresheafedSpace.IsOpenImmersion.inv_naturality f.1 i
-
-中文:
-定理 inv_naturality
-  条件: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V)
-  证明: PresheafedSpace.IsOpenImmersion.inv_naturality f.1 i
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.inv_naturality, inv_naturality
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) :
     X.presheaf.map i ≫ H.invApp _ (unop V) =
@@ -3973,24 +3496,29 @@ theorem inv_naturality {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) :
   PresheafedSpace.IsOpenImmersion.inv_naturality f.1 i
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : Opens X) : IsIso (H.invApp _ U) := by delta invApp; infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `inv_invApp` / 定理 `inv_invApp`
-
-English:
-theorem inv_invApp
-  given: (U : Opens X)
-  proof: PresheafedSpace.IsOpenImmersion.inv_invApp f.1 U
-
-中文:
-定理 inv_invApp
-  条件: (U : Opens X)
-  证明: PresheafedSpace.IsOpenImmersion.inv_invApp f.1 U
-
-Depends on / 依赖: H.base_open.injective, Set.preimage_image_eq, base_open, injective, preimage_image_eq
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.inv_invApp** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：inv_invApp (U : Opens X) : inv (H.invApp _ U) = f.c.app (op (opensFunctor 
+f |>.obj U)) ≫ X.presheaf.map (eqToHom (by have
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.inv_invApp`：inv_invApp
+ (U : Opens X) : inv (H.invApp _ U) = f.c.app (op (opensFunctor f |>.obj U)) ≫ X
+.presheaf.map (eqToHom (by simp [Opens.map_def, Se…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 theorem inv_invApp (U : Opens X) :
     inv (H.invApp _ U) =
@@ -4004,20 +3532,20 @@ theorem inv_invApp (U : Opens X) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `invApp_app` / 定理 `invApp_app`
-
-English:
-theorem invApp_app
-  given: (U : Opens X)
-  proof: PresheafedSpace.IsOpenImmersion.invApp_app f.1 U
-
-中文:
-定理 invApp_app
-  条件: (U : Opens X)
-  证明: PresheafedSpace.IsOpenImmersion.invApp_app f.1 U
-
-Depends on / 依赖: H.base_open.injective, Set.preimage_image_eq, base_open, injective, preimage_image_eq
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.invApp_app** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：invApp_app (U : Opens X) : H.invApp _ U ≫ f.c.app (op (opensFunctor f |>.o
+bj U)) = X.presheaf.map (eqToHom (by have
+参数：U : Opens X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.invApp_app`：invApp_app
+ (U : Opens X) : invApp f U ≫ f.c.app (op (opensFunctor f |>.obj U)) = X.preshea
+f.map (eqToHom (by simp [Opens.map_def, Set.preima…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 theorem invApp_app (U : Opens X) :
     H.invApp _ U ≫ f.c.app (op (opensFunctor f |>.obj U)) = X.presheaf.map
@@ -4030,20 +3558,21 @@ theorem invApp_app (U : Opens X) :
 attribute [elementwise nosimp] invApp_app
 
 @[reassoc (attr := simp)]
-/--
-theorem `app_invApp` / 定理 `app_invApp`
-
-English:
-theorem app_invApp
-  given: (U : Opens Y)
-  proof: PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
-
-中文:
-定理 app_invApp
-  条件: (U : Opens Y)
-  证明: PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.app_invApp, app_invApp
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.app_invApp** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：app_invApp (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base)
+.obj U) = Y.presheaf.map ((homOfLE (Set.image_preimage_subset f.base U.1)).op : 
+op U ⟶ op (opensFunctor f |>.obj ((Opens.map f.base).obj U)))
+参数：U : Opens Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp`：app_invApp
+ (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.pres
+heaf.map ((homOfLE (Set.image_preimage_subset f.ba…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 theorem app_invApp (U : Opens Y) :
     f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) =
@@ -4054,114 +3583,100 @@ theorem app_invApp (U : Opens Y) :
 
 /-- A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`. -/
 @[reassoc]
-/--
-theorem `app_inv_app'` / 定理 `app_inv_app'`
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.app_inv_app'** 是 Mathlib 
+中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base) : 
+f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.presheaf.map (eqToHom
+ <| le_antisymm (Set.image_preimage_subset f.base U.1) (Set.image_preimage_eq_in
+ter_range (f
+参数：U : Opens Y；hU : (U : Set Y) subseteq Set.range f.base。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.app_invApp`：app_invApp
+ (U : Opens Y) : f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) = Y.pres
+heaf.map ((homOfLE (Set.image_preimage_subset f.ba…
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 
-English:
-theorem app_inv_app'
-  given: (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base)
-  proof: PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
-
-中文:
-定理 app_inv_app'
-  条件: (U : Opens Y) (hU : (U : 集合 Y) subseteq 集合.range f.base)
-  证明: PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
-
-Depends on / 依赖: f.base
+--- 原说明 ---
+A variant of `app_inv_app` that gives an `eqToHom` instead of `homOfLe`.
 -/
-theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) subseteq Set.range f.base) :
+theorem app_inv_app' (U : Opens Y) (hU : (U : Set Y) ⊆ Set.range f.base) :
     f.c.app (op U) ≫ H.invApp _ ((Opens.map f.base).obj U) =
       Y.presheaf.map
         (eqToHom <|
-le_antisymm (Set.image_preimage_subset f.base U.1)
+            le_antisymm (Set.image_preimage_subset f.base U.1) <|
               (Set.image_preimage_eq_inter_range (f := f.base) (t := U.1)).symm ▸
                 Set.subset_inter_iff.mpr ⟨fun _ h => h, hU⟩).op :=
   PresheafedSpace.IsOpenImmersion.app_invApp f.1 U
-
-/--
-Instance `ofRestrict` / 实例 `ofRestrict`
-
-English:
-instance ofRestrict
-  signature: {X : TopCat.{w}} (Y : LocallyRingedSpace) {f : X ⟶ Y.carrier}
-  body: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
-
-@[elementwise, simp]
-
-中文:
-实例 ofRestrict
-  签名: {X : 顶元素范畴.{w}} (Y : LocallyRinged空间) {f : X ⟶ Y.carrier}
-  定义体: PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
-
-@[elementwise, simp]
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict, ofRestrict
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.ofRestrict** 是 Mathlib 中的
+一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict {X : TopCat.{w}} (Y : LocallyRingedSpace) {f : X ⟶ Y.carrier} (
+hf : IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf)
+参数：Y : LocallyRingedSpace；hf : IsOpenEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ofRestrict {X : TopCat.{w}} (Y : LocallyRingedSpace) {f : X ⟶ Y.carrier}
     (hf : IsOpenEmbedding f) : IsOpenImmersion (Y.ofRestrict hf) :=
   PresheafedSpace.IsOpenImmersion.ofRestrict _ hf
 
 @[elementwise, simp]
-/--
-theorem `ofRestrict_invApp` / 定理 `ofRestrict_invApp`
-
-English:
-theorem ofRestrict_invApp
-  statement: (X : LocallyRingedSpace) {Y : TopCat.{w}}
-  proof: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
-
-中文:
-定理 ofRestrict_invApp
-  结论: (X : LocallyRinged空间) {Y : 顶元素范畴.{w}}
-  证明: PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, ofRestrict_invApp
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.ofRestrict_invApp** 是 Mat
+hlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：ofRestrict_invApp (X : LocallyRingedSpace) {Y : TopCat.{w}} {f : Y ⟶ TopCa
+t.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.restrict h).carrier) : (Lo
+callyRingedSpace.IsOpenImmersion.ofRestrict X h).invApp _ U = 𝟙 _
+参数：X : LocallyRingedSpace；h : IsOpenEmbedding f；U : Opens (X.restrict h).carrier
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.IsOpenImmersion.ofRestrict_invApp`：ofR
+estrict_invApp {C : Type*} [Category* C] (X : PresheafedSpace C) {Y : TopCat.{w}
+} {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (…
 -/
 theorem ofRestrict_invApp (X : LocallyRingedSpace) {Y : TopCat.{w}}
     {f : Y ⟶ TopCat.of X.carrier} (h : IsOpenEmbedding f) (U : Opens (X.restrict h).carrier) :
     (LocallyRingedSpace.IsOpenImmersion.ofRestrict X h).invApp _ U = 𝟙 _ :=
   PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ h U
-
-/--
-Instance `stalk_iso` / 实例 `stalk_iso`
-
-English:
-instance stalk_iso
-  signature: (x : X)
-  body: PresheafedSpace.IsOpenImmersion.stalk_iso f.1 x
-
-中文:
-实例 stalk_iso
-  签名: (x : X)
-  定义体: PresheafedSpace.IsOpenImmersion.stalk_iso f.1 x
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.stalk_iso, stalk_iso
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.stalk_iso** 是 Mathlib 中的一
+个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：stalk_iso (x : X) : IsIso (f.stalkMap x)
+参数：x : X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionCommRingCatOfIsOpenImmersion`：∀ {X 
+Y : AlgebraicGeometry.LocallyRingedSpace} (f : X ⟶ Y) [AlgebraicGeometry.Locally
+RingedSpace.IsOpenImmersion f],   AlgebraicGeometry.Pre…
 -/
 instance stalk_iso (x : X) : IsIso (f.stalkMap x) :=
   PresheafedSpace.IsOpenImmersion.stalk_iso f.1 x
-
-/--
-theorem `to_iso` / 定理 `to_iso`
-
-English:
-theorem to_iso
-  given: [Epi f.base]
-  statement: IsIso f
-  proof: by
-  rw [← isIso_iff_of_reflects_iso _ LocallyRingedSpace.forgetToSheafedSpace]
-  have : Epi (forgetToSheafedSpace.map f).hom.base := by assumption
-  apply SheafedSpace.IsOpenImmersion.to_iso
-
-中文:
-定理 to_iso
-  条件: [满态射 f.base]
-  结论: 是同构 f
-  证明: by
-  rw [← isIso_iff_of_reflects_iso _ LocallyRingedSpace.forgetToSheafedSpace]
-  have : Epi (forgetToSheafedSpace.map f).hom.base := by assumption
-  apply SheafedSpace.IsOpenImmersion.to_iso
-
-Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, SheafedSpace, SheafedSpace.IsOpenImmersion.to_iso, forgetToSheafedSpace, forgetToSheafedSpace.map, hom.base, isIso_iff_of_reflects_iso, to_iso
+/-
+**AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.to_iso** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`。
+形式化陈述：to_iso [Epi f.base] : IsIso f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instReflectsIsomorphismsSheafedSpac
+eCommRingCatForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToS
+heafedSpace.ReflectsIsomorphisms
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsOpenImmersion.to_iso`：to_iso [h' : Epi 
+f.hom.base] : IsIso f
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.instIsOpenImmersion
+CommRingCatMapSheafedSpaceForgetToSheafedSpace`：∀ {X Z : AlgebraicGeometry.Local
+lyRingedSpace} (f : X ⟶ Z) [H : AlgebraicGeometry.LocallyRingedSpace.IsOpenImmer
+sion f],   AlgebraicGeometry…
 -/
 theorem to_iso [Epi f.base] : IsIso f := by
   rw [← isIso_iff_of_reflects_iso _ LocallyRingedSpace.forgetToSheafedSpace]
@@ -4173,3 +3688,4 @@ end
 end LocallyRingedSpace.IsOpenImmersion
 
 end AlgebraicGeometry
+

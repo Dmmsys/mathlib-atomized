@@ -50,190 +50,212 @@ open Nat IsLocalRing Padic
 
 namespace PadicInt
 
-variable {p : Nat} [hp_prime : Fact p.Prime]
+variable {p : ℕ} [hp_prime : Fact p.Prime]
 
 section RingHoms
 
 /-! ### Ring homomorphisms to `ZMod p` and `ZMod (p ^ n)` -/
 
 
-variable (p) (r : Rat)
+variable (p) (r : ℚ)
 
-/--
-Definition of `modPart` / `modPart` 的定义
+/-- `modPart p r` is an integer that satisfies
+`‖(r - modPart p r : ℚ_[p])‖ < 1` when `‖(r : ℚ_[p])‖ ≤ 1`,
+see `PadicInt.norm_sub_modPart`.
+It is the unique non-negative integer that is `< p` with this property.
 
-English:
-definition modPart
-  signature: : Int
-  body: r.num * gcdA r.den p % p
+(Note that this definition assumes `r : ℚ`.
+See `PadicInt.zmodRepr` for a version that takes values in `ℕ`
+and works for arbitrary `x : ℤ_[p]`.) -/
+/-
+**PadicInt.modPart** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：modPart : Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 modPart
-  签名: : 整数
-  定义体: r.num * gcdA r.den p % p
+--- 原说明 ---
+`modPart p r` is an integer that satisfies
+`‖(r - modPart p r : ℚ_[p])‖ < 1` when `‖(r : ℚ_[p])‖ ≤ 1`,
+see `PadicInt.norm_sub_modPart`.
+It is the unique non-negative integer that is `< p` with this property.
 
-Depends on / 依赖: r.den, r.num
+(Note that this definition assumes `r : ℚ`.
+See `PadicInt.zmodRepr` for a version that takes values in `ℕ`
+and works for arbitrary `x : ℤ_[p]`.)
 -/
-def modPart : Int :=
+def modPart : ℤ :=
   r.num * gcdA r.den p % p
 
 variable {p}
-
-/--
-theorem `modPart_lt_p` / 定理 `modPart_lt_p`
-
-English:
-theorem modPart_lt_p
-  statement: modPart p r < p
-  proof: by
-  convert! Int.emod_lt_abs _ _
-  · simp
-  · exact mod_cast hp_prime.1.ne_zero
-
-中文:
-定理 modPart_lt_p
-  结论: modPart p r < p
-  证明: by
-  convert! Int.emod_lt_abs _ _
-  · simp
-  · exact mod_cast hp_prime.1.ne_zero
-
-Depends on / 依赖: Int.emod_lt_abs, convert, emod_lt_abs, hp_prime, mod_cast, ne_zero
+/-
+**PadicInt.modPart_lt_p** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：modPart_lt_p : modPart p r < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.abs_cast`：abs_cast (n : Nat) : |(n : R)| = n
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Int.emod_lt_abs`：emod_lt_abs (a : Int) {b : Int} (H : b != 0) : a % b < 
+|b|
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
 theorem modPart_lt_p : modPart p r < p := by
   convert! Int.emod_lt_abs _ _
   · simp
   · exact mod_cast hp_prime.1.ne_zero
-
-/--
-theorem `modPart_nonneg` / 定理 `modPart_nonneg`
-
-English:
-theorem modPart_nonneg
-  statement: 0 <= modPart p r
-  proof: Int.emod_nonneg _ mod_cast hp_prime.1.ne_zero
-
-中文:
-定理 modPart_nonneg
-  结论: 0 <= modPart p r
-  证明: Int.emod_nonneg _ mod_cast hp_prime.1.ne_zero
-
-Depends on / 依赖: Int.emod_nonneg, emod_nonneg, hp_prime, mod_cast, ne_zero
+/-
+**PadicInt.modPart_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：modPart_nonneg : 0 <= modPart p r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
-theorem modPart_nonneg : 0 <= modPart p r :=
-Int.emod_nonneg _ mod_cast hp_prime.1.ne_zero
-
-/--
-theorem `norm_sub_modPart_aux` / 定理 `norm_sub_modPart_aux`
-
-English:
-theorem norm_sub_modPart_aux
-  given: (r : Rat) (h : ‖(r : Rat_[p])‖ <= 1)
-  proof: by
-  rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
-  simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
-  have := congr_arg (fun x => x % p : Int -> ZMod p) (gcd_eq_gcd_ab r.den p)
-  simp only [Int.cast_natCast, CharP.cast_eq_zero, EuclideanDomain.mod_zero, Int.cast_add,
-    Int.cast_mul, zero_mul, add_zero] at this
-  push_cast
-  rw [mul_right_comm]; rw [mul_assoc]; rw [← this]
-  suffices rdcp : r.den.Coprime p by
-    rw [rdcp.gcd_eq_one]
-    simp only [mul_one, cast_one, sub_self]
-  apply Coprime.symm
-  apply (coprime_or_dvd_of_prime hp_prime.1 _).resolve_right
-  rw [← Int.natCast_dvd_natCast]; rw [← norm_int_lt_one_iff_dvd]; rw [not_lt]
-  apply ge_of_eq
-  rw [← isUnit_iff]
-  exact isUnit_den r h
-
-中文:
-定理 norm_sub_modPart_aux
-  条件: (r : 有理数) (h : ‖(r : Rat_[p])‖ <= 1)
-  证明: by
-  rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
-  simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
-  have := congr_arg (fun x => x % p : Int -> ZMod p) (gcd_eq_gcd_ab r.den p)
-  simp only [Int.cast_natCast, CharP.cast_eq_zero, EuclideanDomain.mod_zero, Int.cast_add,
-    Int.cast_mul, zero_mul, add_zero] at this
-  push_cast
-  rw [mul_right_comm]; rw [mul_assoc]; rw [← this]
-  suffices rdcp : r.den.Coprime p by
-    rw [rdcp.gcd_eq_one]
-    simp only [mul_one, cast_one, sub_self]
-  apply Coprime.symm
-  apply (coprime_or_dvd_of_prime hp_prime.1 _).resolve_right
-  rw [← Int.natCast_dvd_natCast]; rw [← norm_int_lt_one_iff_dvd]; rw [not_lt]
-  apply ge_of_eq
-  rw [← isUnit_iff]
-  exact isUnit_den r h
-
-Depends on / 依赖: CharP.cast_eq_zero, Coprime, Coprime.symm, EuclideanDomain, EuclideanDomain.mod_zero, Int.cast_add, Int.cast_mul, Int.cast_natCast, Int.cast_sub, ZMod.intCast_zmod_eq_zero_iff_dvd, add_zero, cast_add, cast_eq_zero, cast_mul, cast_natCast, cast_one, cast_sub, congr_arg, coprime_or_d, gcd_eq_gcd_ab
+theorem modPart_nonneg : 0 ≤ modPart p r :=
+  Int.emod_nonneg _ <| mod_cast hp_prime.1.ne_zero
+/-
+**PadicInt.norm_sub_modPart_aux** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：norm_sub_modPart_aux (r : Rat) (h : ‖(r : Rat_[p])‖ <= 1) : ↑p ∣ r.num - r
+.num * r.den.gcdA p % p * ↑r.den
+参数：r : Rat；h : ‖(r : Rat_[p])‖ <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Nat.gcd_eq_gcd_ab`：gcd_eq_gcd_ab : (gcd x y : Int) = x * gcdA x y + y * 
+gcdB x y
+· 使用定理 `ZMod.intCast_mod`：intCast_mod (a : Int) (b : Nat) : ((a % b : Int) : ZMo
+d b) = (a : ZMod b)
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `EuclideanDomain.mod_zero`：mod_zero (a : R) : a % 0 = a
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `Nat.coprime_or_dvd_of_prime`：coprime_or_dvd_of_prime {p} (pp : Prime p) 
+(i : Nat) : Coprime p i ∨ p ∣ i
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `PadicInt.norm_int_lt_one_iff_dvd`：norm_int_lt_one_iff_dvd (k : Int) : ‖(
+k : Int_[p])‖ < 1 ↔ (p : Int) ∣ k
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `PadicInt.isUnit_iff`：isUnit_iff {z : Int_[p]} : IsUnit z ↔ ‖z‖ = 1
+· 使用定理 `PadicInt.isUnit_den`：isUnit_den {p : Nat} [hp_prime : Fact p.Prime] (r :
+ Rat) (h : ‖(r : Rat_[p])‖ <= 1) : IsUnit (r.den : Int_[p])
+· 使用定理 `Nat.Coprime.gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n → m.gcd n = 1
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem norm_sub_modPart_aux (r : Rat) (h : ‖(r : Rat_[p])‖ <= 1) :
+theorem norm_sub_modPart_aux (r : ℚ) (h : ‖(r : ℚ_[p])‖ ≤ 1) :
     ↑p ∣ r.num - r.num * r.den.gcdA p % p * ↑r.den := by
   rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
   simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
-  have := congr_arg (fun x => x % p : Int -> ZMod p) (gcd_eq_gcd_ab r.den p)
+  have := congr_arg (fun x => x % p : ℤ → ZMod p) (gcd_eq_gcd_ab r.den p)
   simp only [Int.cast_natCast, CharP.cast_eq_zero, EuclideanDomain.mod_zero, Int.cast_add,
     Int.cast_mul, zero_mul, add_zero] at this
   push_cast
-  rw [mul_right_comm]; rw [mul_assoc]; rw [← this]
+  rw [mul_right_comm, mul_assoc, ← this]
   suffices rdcp : r.den.Coprime p by
     rw [rdcp.gcd_eq_one]
     simp only [mul_one, cast_one, sub_self]
   apply Coprime.symm
   apply (coprime_or_dvd_of_prime hp_prime.1 _).resolve_right
-  rw [← Int.natCast_dvd_natCast]; rw [← norm_int_lt_one_iff_dvd]; rw [not_lt]
+  rw [← Int.natCast_dvd_natCast, ← norm_int_lt_one_iff_dvd, not_lt]
   apply ge_of_eq
   rw [← isUnit_iff]
   exact isUnit_den r h
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `norm_sub_modPart` / 定理 `norm_sub_modPart`
-
-English:
-theorem norm_sub_modPart
-  given: (h : ‖(r : Rat_[p])‖ <= 1)
-  statement: ‖(⟨r, h⟩ - modPart p r : Int_[p])‖ < 1
-  proof: by
-  let n := modPart p r
-  rw [norm_lt_one_iff_dvd]; rw [← (isUnit_den r h).dvd_mul_right]
-  suffices ↑p ∣ r.num - n * r.den by
-    convert! (map_dvd (Int.castRingHom Int_[p])) this
-    simp only [n, sub_mul, Int.cast_natCast, eq_intCast, Int.cast_mul, sub_left_inj,
-      Int.cast_sub]
-    apply Subtype.coe_injective
-    simp only [coe_mul, coe_natCast]
-    norm_cast
-    simp
-  exact norm_sub_modPart_aux r h
-
-中文:
-定理 norm_sub_modPart
-  条件: (h : ‖(r : Rat_[p])‖ <= 1)
-  结论: ‖(⟨r, h⟩ - modPart p r : 整数_[p])‖ < 1
-  证明: by
-  let n := modPart p r
-  rw [norm_lt_one_iff_dvd]; rw [← (isUnit_den r h).dvd_mul_right]
-  suffices ↑p ∣ r.num - n * r.den by
-    convert! (map_dvd (Int.castRingHom Int_[p])) this
-    simp only [n, sub_mul, Int.cast_natCast, eq_intCast, Int.cast_mul, sub_left_inj,
-      Int.cast_sub]
-    apply Subtype.coe_injective
-    simp only [coe_mul, coe_natCast]
-    norm_cast
-    simp
-  exact norm_sub_modPart_aux r h
-
-Depends on / 依赖: Int.castRingHom, Int.cast_mul, Int.cast_natCast, Int.cast_sub, Int_, Subtype, Subtype.coe_injective, castRingHom, cast_mul, cast_natCast, cast_sub, coe_injective, coe_mul, coe_natCast, convert, dvd_mul_right, eq_intCast, isUnit_den, map_dvd, modPart
+/-
+**PadicInt.norm_sub_modPart** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：norm_sub_modPart (h : ‖(r : Rat_[p])‖ <= 1) : ‖(⟨r, h⟩ - modPart p r : Int
+_[p])‖ < 1
+参数：h : ‖(r : Rat_[p])‖ <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicInt.norm_lt_one_iff_dvd`：norm_lt_one_iff_dvd (x : Int_[p]) : ‖x‖ < 
+1 ↔ ↑p ∣ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsUnit.dvd_mul_right`：dvd_mul_right (hu : IsUnit u) : a ∣ b * u ↔ a ∣ b
+· 使用定理 `PadicInt.isUnit_den`：isUnit_den {p : Nat} [hp_prime : Fact p.Prime] (r :
+ Rat) (h : ‖(r : Rat_[p])‖ <= 1) : IsUnit (r.den : Int_[p])
+· 使用定理 `PadicInt.norm_sub_modPart_aux`：norm_sub_modPart_aux (r : Rat) (h : ‖(r :
+ Rat_[p])‖ <= 1) : ↑p ∣ r.num - r.num * r.den.gcdA p % p * ↑r.den
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.cast_natCast`：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Rat.mul_den_eq_num`：∀ (q : ℚ), q * ↑q.den = ↑q.num
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
 -/
-theorem norm_sub_modPart (h : ‖(r : Rat_[p])‖ <= 1) : ‖(⟨r, h⟩ - modPart p r : Int_[p])‖ < 1 := by
+theorem norm_sub_modPart (h : ‖(r : ℚ_[p])‖ ≤ 1) : ‖(⟨r, h⟩ - modPart p r : ℤ_[p])‖ < 1 := by
   let n := modPart p r
-  rw [norm_lt_one_iff_dvd]; rw [← (isUnit_den r h).dvd_mul_right]
+  rw [norm_lt_one_iff_dvd, ← (isUnit_den r h).dvd_mul_right]
   suffices ↑p ∣ r.num - n * r.den by
-    convert! (map_dvd (Int.castRingHom Int_[p])) this
+    convert! (map_dvd (Int.castRingHom ℤ_[p])) this
     simp only [n, sub_mul, Int.cast_natCast, eq_intCast, Int.cast_mul, sub_left_inj,
       Int.cast_sub]
     apply Subtype.coe_injective
@@ -241,92 +263,122 @@ theorem norm_sub_modPart (h : ‖(r : Rat_[p])‖ <= 1) : ‖(⟨r, h⟩ - modPa
     norm_cast
     simp
   exact norm_sub_modPart_aux r h
-
-/--
-theorem `exists_mem_range_of_norm_rat_le_one` / 定理 `exists_mem_range_of_norm_rat_le_one`
-
-English:
-theorem exists_mem_range_of_norm_rat_le_one
-  given: (h : ‖(r : Rat_[p])‖ <= 1)
-  proof: ⟨modPart p r, modPart_nonneg _, modPart_lt_p _, norm_sub_modPart _ h⟩
-
-中文:
-定理 存在_mem_range_of_norm_rat_le_one
-  条件: (h : ‖(r : Rat_[p])‖ <= 1)
-  证明: ⟨modPart p r, modPart_nonneg _, modPart_lt_p _, norm_sub_modPart _ h⟩
-
-Depends on / 依赖: modPart, modPart_lt_p, modPart_nonneg, norm_sub_modPart
+/-
+**PadicInt.exists_mem_range_of_norm_rat_le_one** 是 Mathlib 中的一个定理，位于命名空间 `PadicI
+nt`。
+形式化陈述：exists_mem_range_of_norm_rat_le_one (h : ‖(r : Rat_[p])‖ <= 1) : exists n 
+: Int, 0 <= n ∧ n < p ∧ ‖(⟨r, h⟩ - n : Int_[p])‖ < 1
+参数：h : ‖(r : Rat_[p])‖ <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.modPart_nonneg`：modPart_nonneg : 0 <= modPart p r
+· 使用定理 `PadicInt.modPart_lt_p`：modPart_lt_p : modPart p r < p
+· 使用定理 `PadicInt.norm_sub_modPart`：norm_sub_modPart (h : ‖(r : Rat_[p])‖ <= 1) :
+ ‖(⟨r, h⟩ - modPart p r : Int_[p])‖ < 1
 -/
-theorem exists_mem_range_of_norm_rat_le_one (h : ‖(r : Rat_[p])‖ <= 1) :
-    exists n : Int, 0 <= n ∧ n < p ∧ ‖(⟨r, h⟩ - n : Int_[p])‖ < 1 :=
+theorem exists_mem_range_of_norm_rat_le_one (h : ‖(r : ℚ_[p])‖ ≤ 1) :
+    ∃ n : ℤ, 0 ≤ n ∧ n < p ∧ ‖(⟨r, h⟩ - n : ℤ_[p])‖ < 1 :=
   ⟨modPart p r, modPart_nonneg _, modPart_lt_p _, norm_sub_modPart _ h⟩
-
-/--
-theorem `zmod_congr_of_sub_mem_span_aux` / 定理 `zmod_congr_of_sub_mem_span_aux`
-
-English:
-theorem zmod_congr_of_sub_mem_span_aux
-  statement: (n : Nat) (x : Int_[p]) (a b : Int)
-  proof: by
-  rw [Ideal.mem_span_singleton] at ha hb
-  rw [← sub_eq_zero]; rw [← Int.cast_sub]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.natCast_pow]
-  rw [← dvd_neg]; rw [neg_sub] at ha
-  have := dvd_add ha hb
-  rwa [sub_eq_add_neg, sub_eq_add_neg, add_assoc, neg_add_cancel_left, ← sub_eq_add_neg, ←
-    Int.cast_sub, pow_p_dvd_int_iff] at this
-
-中文:
-定理 zmod_congr_of_sub_mem_span_aux
-  结论: (n : 自然数) (x : 整数_[p]) (a b : 整数)
-  证明: by
-  rw [Ideal.mem_span_singleton] at ha hb
-  rw [← sub_eq_zero]; rw [← Int.cast_sub]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.natCast_pow]
-  rw [← dvd_neg]; rw [neg_sub] at ha
-  have := dvd_add ha hb
-  rwa [sub_eq_add_neg, sub_eq_add_neg, add_assoc, neg_add_cancel_left, ← sub_eq_add_neg, ←
-    Int.cast_sub, pow_p_dvd_int_iff] at this
-
-Depends on / 依赖: Ideal.mem_span_singleton, Int.cast_sub, Int.natCast_pow, ZMod.intCast_zmod_eq_zero_iff_dvd, add_assoc, cast_sub, dvd_add, dvd_neg, intCast_zmod_eq_zero_iff_dvd, mem_span_singleton, natCast_pow, neg_add_cancel_left, neg_sub, pow_p_dvd_int_iff, sub_eq_add_neg, sub_eq_zero
+/-
+**PadicInt.zmod_congr_of_sub_mem_span_aux** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmod_congr_of_sub_mem_span_aux (n : Nat) (x : Int_[p]) (a b : Int) (ha : x
+ - a in (Ideal.span {(p : Int_[p]) ^ n})) (hb : x - b in (Ideal.span {(p : Int_[
+p]) ^ n})) : (a : ZMod (p ^ n)) = b
+参数：n : Nat；x : Int_[p]；a b : Int；ha : x - a in (Ideal.span {(p : Int_[p]) ^ n})；
+hb : x - b in (Ideal.span {(p : Int_[p]) ^ n})。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `Int.natCast_pow`：∀ (m n : ℕ), ↑(m ^ n) = ↑m ^ n
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PadicInt.pow_p_dvd_int_iff`：pow_p_dvd_int_iff (n : Nat) (a : Int) : (p :
+ Int_[p]) ^ n ∣ a ↔ (p ^ n : Int) ∣ a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `neg_add_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), -a 
++ (a + b) = b
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
-theorem zmod_congr_of_sub_mem_span_aux (n : Nat) (x : Int_[p]) (a b : Int)
-    (ha : x - a in (Ideal.span {(p : Int_[p]) ^ n}))
-    (hb : x - b in (Ideal.span {(p : Int_[p]) ^ n})) : (a : ZMod (p ^ n)) = b := by
+theorem zmod_congr_of_sub_mem_span_aux (n : ℕ) (x : ℤ_[p]) (a b : ℤ)
+    (ha : x - a ∈ (Ideal.span {(p : ℤ_[p]) ^ n}))
+    (hb : x - b ∈ (Ideal.span {(p : ℤ_[p]) ^ n})) : (a : ZMod (p ^ n)) = b := by
   rw [Ideal.mem_span_singleton] at ha hb
-  rw [← sub_eq_zero]; rw [← Int.cast_sub]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.natCast_pow]
-  rw [← dvd_neg]; rw [neg_sub] at ha
+  rw [← sub_eq_zero, ← Int.cast_sub, ZMod.intCast_zmod_eq_zero_iff_dvd, Int.natCast_pow]
+  rw [← dvd_neg, neg_sub] at ha
   have := dvd_add ha hb
   rwa [sub_eq_add_neg, sub_eq_add_neg, add_assoc, neg_add_cancel_left, ← sub_eq_add_neg, ←
     Int.cast_sub, pow_p_dvd_int_iff] at this
-
-/--
-theorem `zmod_congr_of_sub_mem_span` / 定理 `zmod_congr_of_sub_mem_span`
-
-English:
-theorem zmod_congr_of_sub_mem_span
-  statement: (n : Nat) (x : Int_[p]) (a b : Nat)
-  proof: by
-  simpa using zmod_congr_of_sub_mem_span_aux n x a b ha hb
-
-中文:
-定理 zmod_congr_of_sub_mem_span
-  结论: (n : 自然数) (x : 整数_[p]) (a b : 自然数)
-  证明: by
-  simpa using zmod_congr_of_sub_mem_span_aux n x a b ha hb
-
-Depends on / 依赖: zmod_congr_of_sub_mem_span_aux
+/-
+**PadicInt.zmod_congr_of_sub_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmod_congr_of_sub_mem_span (n : Nat) (x : Int_[p]) (a b : Nat) (ha : x - a
+ in (Ideal.span {(p : Int_[p]) ^ n})) (hb : x - b in (Ideal.span {(p : Int_[p]) 
+^ n})) : (a : ZMod (p ^ n)) = b
+参数：n : Nat；x : Int_[p]；a b : Nat；ha : x - a in (Ideal.span {(p : Int_[p]) ^ n})；
+hb : x - b in (Ideal.span {(p : Int_[p]) ^ n})。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_span_aux`：zmod_congr_of_sub_mem_span_aux 
+(n : Nat) (x : Int_[p]) (a b : Int) (ha : x - a in (Ideal.span {(p : Int_[p]) ^ 
+n})) (hb : x - b in (Ideal.sp…
 -/
-theorem zmod_congr_of_sub_mem_span (n : Nat) (x : Int_[p]) (a b : Nat)
-    (ha : x - a in (Ideal.span {(p : Int_[p]) ^ n}))
-    (hb : x - b in (Ideal.span {(p : Int_[p]) ^ n})) : (a : ZMod (p ^ n)) = b := by
+theorem zmod_congr_of_sub_mem_span (n : ℕ) (x : ℤ_[p]) (a b : ℕ)
+    (ha : x - a ∈ (Ideal.span {(p : ℤ_[p]) ^ n}))
+    (hb : x - b ∈ (Ideal.span {(p : ℤ_[p]) ^ n})) : (a : ZMod (p ^ n)) = b := by
   simpa using zmod_congr_of_sub_mem_span_aux n x a b ha hb
-
-/--
-theorem `zmod_congr_of_sub_mem_max_ideal` / 定理 `zmod_congr_of_sub_mem_max_ideal`
-
-English:
-theorem zmod_congr_of_sub_mem_max_ideal
-  statement: (x : Int_[p]) (m n : Nat) (hm : x - m in maximalIdeal Int_[p])
-  proof: by
+/-
+**PadicInt.zmod_congr_of_sub_mem_max_ideal** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmod_congr_of_sub_mem_max_ideal (x : Int_[p]) (m n : Nat) (hm : x - m in m
+aximalIdeal Int_[p]) (hn : x - n in maximalIdeal Int_[p]) : (m : ZMod p) = n
+参数：x : Int_[p]；m n : Nat；hm : x - m in maximalIdeal Int_[p]；hn : x - n in maxima
+lIdeal Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_span_aux`：zmod_congr_of_sub_mem_span_aux 
+(n : Nat) (x : Int_[p]) (a b : Int) (ha : x - a in (Ideal.span {(p : Int_[p]) ^ 
+n})) (hb : x - b in (Ideal.sp…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PadicInt.maximalIdeal_eq_span_p`：maximalIdeal_eq_span_p : maximalIdeal I
+nt_[p] = Ideal.span {(p : Int_[p])}
+-/
+theorem zmod_congr_of_sub_mem_max_ideal (x : ℤ_[p]) (m n : ℕ) (hm : x - m ∈ maximalIdeal ℤ_[p])
+    (hn : x - n ∈ maximalIdeal ℤ_[p]) : (m : ZMod p) = n := by
   rw [maximalIdeal_eq_span_p] at hm hn
   have := zmod_congr_of_sub_mem_span_aux 1 x m n
   simp only [pow_one] at this
@@ -335,690 +387,591 @@ theorem zmod_congr_of_sub_mem_max_ideal
   simp only [map_intCast] at this
   simpa only [Int.cast_natCast] using this
 
-中文:
-定理 zmod_congr_of_sub_mem_max_ideal
-  结论: (x : 整数_[p]) (m n : 自然数) (hm : x - m in maximalIdeal 整数_[p])
-  证明: by
-  rw [maximalIdeal_eq_span_p] at hm hn
-  have := zmod_congr_of_sub_mem_span_aux 1 x m n
-  simp only [pow_one] at this
-  specialize this hm hn
-  apply_fun ZMod.castHom (show p ∣ p ^ 1 by rw [pow_one]) (ZMod p) at this
-  simp only [map_intCast] at this
-  simpa only [Int.cast_natCast] using this
-
-Depends on / 依赖: Int.cast_natCast, ZMod.castHom, apply_fun, castHom, cast_natCast, map_intCast, maximalIdeal_eq_span_p, pow_one, specialize, zmod_congr_of_sub_mem_span_aux
--/
-theorem zmod_congr_of_sub_mem_max_ideal (x : Int_[p]) (m n : Nat) (hm : x - m in maximalIdeal Int_[p])
-    (hn : x - n in maximalIdeal Int_[p]) : (m : ZMod p) = n := by
-  rw [maximalIdeal_eq_span_p] at hm hn
-  have := zmod_congr_of_sub_mem_span_aux 1 x m n
-  simp only [pow_one] at this
-  specialize this hm hn
-  apply_fun ZMod.castHom (show p ∣ p ^ 1 by rw [pow_one]) (ZMod p) at this
-  simp only [map_intCast] at this
-  simpa only [Int.cast_natCast] using this
-
-variable (x : Int_[p])
+variable (x : ℤ_[p])
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `exists_mem_range` / 定理 `exists_mem_range`
-
-English:
-theorem exists_mem_range
-  statement: exists n : Nat, n < p ∧ x - n in maximalIdeal Int_[p]
-  proof: by
+/-
+**PadicInt.exists_mem_range** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：exists_mem_range : exists n : Nat, n < p ∧ x - n in maximalIdeal Int_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PadicInt.maximalIdeal_eq_span_p`：maximalIdeal_eq_span_p : maximalIdeal I
+nt_[p] = Ideal.span {(p : Int_[p])}
+· 使用定理 `Padic.rat_dense`：rat_dense (q : Rat_[p]) {ε : Real} (hε : 0 < ε) : exist
+s r : Rat, ‖q - r‖ < ε
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+（共 49 条，此处仅展示前 30 条）
+-/
+theorem exists_mem_range : ∃ n : ℕ, n < p ∧ x - n ∈ maximalIdeal ℤ_[p] := by
   simp only [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, ← norm_lt_one_iff_dvd]
-  obtain ⟨r, hr⟩ := rat_dense p (x : Rat_[p]) zero_lt_one
-  have H : ‖(r : Rat_[p])‖ <= 1 := by
+  obtain ⟨r, hr⟩ := rat_dense p (x : ℚ_[p]) zero_lt_one
+  have H : ‖(r : ℚ_[p])‖ ≤ 1 := by
     rw [norm_sub_rev] at hr
     calc
-      _ = ‖(r : Rat_[p]) - x + x‖ := by ring_nf
-      _ <= _ := Padic.nonarchimedean _ _
-      _ <= _ := max_le (le_of_lt hr) x.2
+      _ = ‖(r : ℚ_[p]) - x + x‖ := by ring_nf
+      _ ≤ _ := Padic.nonarchimedean _ _
+      _ ≤ _ := max_le (le_of_lt hr) x.2
   obtain ⟨n, hzn, hnp, hn⟩ := exists_mem_range_of_norm_rat_le_one r H
-  lift n to Nat using hzn
+  lift n to ℕ using hzn
   use n
   constructor
   · exact mod_cast hnp
   simp only [norm_def, coe_sub, coe_natCast] at hn ⊢
-  rw [show (x - n : Rat_[p]) = x - r + (r - n) by ring]
+  rw [show (x - n : ℚ_[p]) = x - r + (r - n) by ring]
   apply lt_of_le_of_lt (Padic.nonarchimedean _ _)
   apply max_lt hr
   simpa using hn
-
-中文:
-定理 存在_mem_range
-  结论: 存在 n : 自然数, n < p ∧ x - n in maximalIdeal 整数_[p]
-  证明: by
-  simp only [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, ← norm_lt_one_iff_dvd]
-  obtain ⟨r, hr⟩ := rat_dense p (x : Rat_[p]) zero_lt_one
-  have H : ‖(r : Rat_[p])‖ <= 1 := by
-    rw [norm_sub_rev] at hr
-    calc
-      _ = ‖(r : Rat_[p]) - x + x‖ := by ring_nf
-      _ <= _ := Padic.nonarchimedean _ _
-      _ <= _ := max_le (le_of_lt hr) x.2
-  obtain ⟨n, hzn, hnp, hn⟩ := exists_mem_range_of_norm_rat_le_one r H
-  lift n to Nat using hzn
-  use n
-  constructor
-  · exact mod_cast hnp
-  simp only [norm_def, coe_sub, coe_natCast] at hn ⊢
-  rw [show (x - n : Rat_[p]) = x - r + (r - n) by ring]
-  apply lt_of_le_of_lt (Padic.nonarchimedean _ _)
-  apply max_lt hr
-  simpa using hn
-
-Depends on / 依赖: Ideal.mem_span_singleton, Padic.nonarchimedean, Rat_, coe_natCast, coe_sub, exists_mem_range_of_norm_rat_le_one, le_of_lt, max_le, maximalIdeal_eq_span_p, mem_span_singleton, mod_cast, nonarchimedean, norm_def, norm_lt_one_iff_dvd, norm_sub_rev, rat_dense, ring_nf, zero_lt_one
+/-
+**PadicInt.existsUnique_mem_range** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：existsUnique_mem_range : exists! n : Nat, n < p ∧ x - n in maximalIdeal In
+t_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `PadicInt.exists_mem_range`：exists_mem_range : exists n : Nat, n < p ∧ x 
+- n in maximalIdeal Int_[p]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_max_ideal`：zmod_congr_of_sub_mem_max_idea
+l (x : Int_[p]) (m n : Nat) (hm : x - m in maximalIdeal Int_[p]) (hn : x - n in 
+maximalIdeal Int_[p]) : (m : Z…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Nat.ModEq.eq_1`：∀ (n a b : ℕ), (a ≡ b [MOD n]) = (a % n = b % n)
+· 使用定理 `ZMod.natCast_eq_natCast_iff`：natCast_eq_natCast_iff (a b c : Nat) : (a :
+ ZMod c) = (b : ZMod c) ↔ a ≡ b [MOD c]
 -/
-theorem exists_mem_range : exists n : Nat, n < p ∧ x - n in maximalIdeal Int_[p] := by
-  simp only [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, ← norm_lt_one_iff_dvd]
-  obtain ⟨r, hr⟩ := rat_dense p (x : Rat_[p]) zero_lt_one
-  have H : ‖(r : Rat_[p])‖ <= 1 := by
-    rw [norm_sub_rev] at hr
-    calc
-      _ = ‖(r : Rat_[p]) - x + x‖ := by ring_nf
-      _ <= _ := Padic.nonarchimedean _ _
-      _ <= _ := max_le (le_of_lt hr) x.2
-  obtain ⟨n, hzn, hnp, hn⟩ := exists_mem_range_of_norm_rat_le_one r H
-  lift n to Nat using hzn
-  use n
-  constructor
-  · exact mod_cast hnp
-  simp only [norm_def, coe_sub, coe_natCast] at hn ⊢
-  rw [show (x - n : Rat_[p]) = x - r + (r - n) by ring]
-  apply lt_of_le_of_lt (Padic.nonarchimedean _ _)
-  apply max_lt hr
-  simpa using hn
-
-/--
-theorem `existsUnique_mem_range` / 定理 `existsUnique_mem_range`
-
-English:
-theorem existsUnique_mem_range
-  statement: exists! n : Nat, n < p ∧ x - n in maximalIdeal Int_[p]
-  proof: by
+theorem existsUnique_mem_range : ∃! n : ℕ, n < p ∧ x - n ∈ maximalIdeal ℤ_[p] := by
   obtain ⟨n, hn₁, hn₂⟩ := exists_mem_range x
-  use n, ⟨hn₁, hn₂⟩, fun m ⟨hm₁, hm₂⟩ => ?_
+  use n, ⟨hn₁, hn₂⟩, fun m ⟨hm₁, hm₂⟩ ↦ ?_
   have := (zmod_congr_of_sub_mem_max_ideal x n m hn₂ hm₂).symm
   rwa [ZMod.natCast_eq_natCast_iff, ModEq, mod_eq_of_lt hn₁, mod_eq_of_lt hm₁] at this
 
-中文:
-定理 存在Unique_mem_range
-  结论: 存在! n : 自然数, n < p ∧ x - n in maximalIdeal 整数_[p]
-  证明: by
-  obtain ⟨n, hn₁, hn₂⟩ := exists_mem_range x
-  use n, ⟨hn₁, hn₂⟩, fun m ⟨hm₁, hm₂⟩ => ?_
-  have := (zmod_congr_of_sub_mem_max_ideal x n m hn₂ hm₂).symm
-  rwa [ZMod.natCast_eq_natCast_iff, ModEq, mod_eq_of_lt hn₁, mod_eq_of_lt hm₁] at this
-
-Depends on / 依赖: ZMod.natCast_eq_natCast_iff, exists_mem_range, mod_eq_of_lt, natCast_eq_natCast_iff, zmod_congr_of_sub_mem_max_ideal
+/-- `zmodRepr x` is the unique natural number smaller than `p`
+satisfying `‖(x - zmodRepr x : ℤ_[p])‖ < 1`.
 -/
-theorem existsUnique_mem_range : exists! n : Nat, n < p ∧ x - n in maximalIdeal Int_[p] := by
-  obtain ⟨n, hn₁, hn₂⟩ := exists_mem_range x
-  use n, ⟨hn₁, hn₂⟩, fun m ⟨hm₁, hm₂⟩ => ?_
-  have := (zmod_congr_of_sub_mem_max_ideal x n m hn₂ hm₂).symm
-  rwa [ZMod.natCast_eq_natCast_iff, ModEq, mod_eq_of_lt hn₁, mod_eq_of_lt hm₁] at this
+/-
+**PadicInt.zmodRepr** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr : Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
 
-/--
-Definition of `zmodRepr` / `zmodRepr` 的定义
-
-English:
-definition zmodRepr
-  signature: : Nat
-  body: Classical.choose (existsUnique_mem_range x).exists
-
-中文:
-定义 zmodRepr
-  签名: : 自然数
-  定义体: Classical.choose (existsUnique_mem_range x).exists
-
-Depends on / 依赖: Classical, Classical.choose, existsUnique_mem_range
+--- 原说明 ---
+`zmodRepr x` is the unique natural number smaller than `p`
+satisfying `‖(x - zmodRepr x : ℤ_[p])‖ < 1`.
 -/
-def zmodRepr : Nat :=
+def zmodRepr : ℕ :=
   Classical.choose (existsUnique_mem_range x).exists
-
-/--
-theorem `zmodRepr_spec` / 定理 `zmodRepr_spec`
-
-English:
-theorem zmodRepr_spec
-  statement: zmodRepr x < p ∧ x - zmodRepr x in maximalIdeal Int_[p]
-  proof: Classical.choose_spec (existsUnique_mem_range x).exists
-
-中文:
-定理 zmodRepr_spec
-  结论: zmodRepr x < p ∧ x - zmodRepr x in maximalIdeal 整数_[p]
-  证明: Classical.choose_spec (existsUnique_mem_range x).exists
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, existsUnique_mem_range
+/-
+**PadicInt.zmodRepr_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x in maximalIdeal Int_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `ExistsUnique.exists`：∀ {α : Sort u_1} {p : α → Prop}, (∃! x, p x) → ∃ x,
+ p x
+· 使用定理 `PadicInt.existsUnique_mem_range`：existsUnique_mem_range : exists! n : Na
+t, n < p ∧ x - n in maximalIdeal Int_[p]
 -/
-theorem zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x in maximalIdeal Int_[p] :=
+theorem zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x ∈ maximalIdeal ℤ_[p] :=
   Classical.choose_spec (existsUnique_mem_range x).exists
-
-/--
-theorem `zmodRepr_unique` / 定理 `zmodRepr_unique`
-
-English:
-theorem zmodRepr_unique
-  given: (y : Nat) (hy₁ : y < p) (hy₂ : x - y in maximalIdeal Int_[p])
-  statement: zmodRepr x = y
-  proof: have h := (Classical.choose_spec (existsUnique_mem_range x)).right
-  (h (zmodRepr x) (zmodRepr_spec x)).trans (h y ⟨hy₁, hy₂⟩).symm
-
-中文:
-定理 zmodRepr_unique
-  条件: (y : 自然数) (hy₁ : y < p) (hy₂ : x - y in maximalIdeal 整数_[p])
-  结论: zmodRepr x = y
-  证明: have h := (Classical.choose_spec (existsUnique_mem_range x)).right
-  (h (zmodRepr x) (zmodRepr_spec x)).trans (h y ⟨hy₁, hy₂⟩).symm
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, existsUnique_mem_range, zmodRepr, zmodRepr_spec
+/-
+**PadicInt.zmodRepr_unique** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ : x - y in maximalIdeal Int_[
+p]) : zmodRepr x = y
+参数：y : Nat；hy₁ : y < p；hy₂ : x - y in maximalIdeal Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `PadicInt.existsUnique_mem_range`：existsUnique_mem_range : exists! n : Na
+t, n < p ∧ x - n in maximalIdeal Int_[p]
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PadicInt.zmodRepr_spec`：zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x 
+in maximalIdeal Int_[p]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ : x - y in maximalIdeal Int_[p]) : zmodRepr x = y :=
+theorem zmodRepr_unique (y : ℕ) (hy₁ : y < p) (hy₂ : x - y ∈ maximalIdeal ℤ_[p]) : zmodRepr x = y :=
   have h := (Classical.choose_spec (existsUnique_mem_range x)).right
   (h (zmodRepr x) (zmodRepr_spec x)).trans (h y ⟨hy₁, hy₂⟩).symm
-
-/--
-theorem `zmodRepr_lt_p` / 定理 `zmodRepr_lt_p`
-
-English:
-theorem zmodRepr_lt_p
-  statement: zmodRepr x < p
-  proof: (zmodRepr_spec _).1
-
-中文:
-定理 zmodRepr_lt_p
-  结论: zmodRepr x < p
-  证明: (zmodRepr_spec _).1
-
-Depends on / 依赖: zmodRepr_spec
+/-
+**PadicInt.zmodRepr_lt_p** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_lt_p : zmodRepr x < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `PadicInt.zmodRepr_spec`：zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x 
+in maximalIdeal Int_[p]
 -/
 theorem zmodRepr_lt_p : zmodRepr x < p :=
   (zmodRepr_spec _).1
-
-/--
-theorem `sub_zmodRepr_mem` / 定理 `sub_zmodRepr_mem`
-
-English:
-theorem sub_zmodRepr_mem
-  statement: x - zmodRepr x in maximalIdeal Int_[p]
-  proof: (zmodRepr_spec _).2
-
-中文:
-定理 sub_zmodRepr_mem
-  结论: x - zmodRepr x in maximalIdeal 整数_[p]
-  证明: (zmodRepr_spec _).2
-
-Depends on / 依赖: zmodRepr_spec
+/-
+**PadicInt.sub_zmodRepr_mem** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：sub_zmodRepr_mem : x - zmodRepr x in maximalIdeal Int_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `PadicInt.zmodRepr_spec`：zmodRepr_spec : zmodRepr x < p ∧ x - zmodRepr x 
+in maximalIdeal Int_[p]
 -/
-theorem sub_zmodRepr_mem : x - zmodRepr x in maximalIdeal Int_[p] :=
+theorem sub_zmodRepr_mem : x - zmodRepr x ∈ maximalIdeal ℤ_[p] :=
   (zmodRepr_spec _).2
-
-/--
-lemma `zmodRepr_eq_zero_of_dvd` / 引理 `zmodRepr_eq_zero_of_dvd`
-
-English:
-lemma zmodRepr_eq_zero_of_dvd
-  given: {x : Int_[p]} (hx : (p : Int_[p]) ∣ x)
-  statement: x.zmodRepr = 0
-  proof: by
-  apply zmodRepr_unique _ _ (Nat.Prime.pos Fact.out)
-  simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, hx]
-
-@[simp]
-
-中文:
-引理 zmodRepr_eq_zero_of_dvd
-  条件: {x : 整数_[p]} (hx : (p : 整数_[p]) ∣ x)
-  结论: x.zmodRepr = 0
-  证明: by
-  apply zmodRepr_unique _ _ (Nat.Prime.pos Fact.out)
-  simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, hx]
-
-@[simp]
-
-Depends on / 依赖: Fact.out, Ideal.mem_span_singleton, Nat.Prime.pos, maximalIdeal_eq_span_p, mem_span_singleton, zmodRepr_unique
+/-
+**PadicInt.zmodRepr_eq_zero_of_dvd** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_eq_zero_of_dvd {x : Int_[p]} (hx : (p : Int_[p]) ∣ x) : x.zmodRep
+r = 0
+参数：hx : (p : Int_[p]) ∣ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.zmodRepr_unique`：zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ :
+ x - y in maximalIdeal Int_[p]) : zmodRepr x = y
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicInt.maximalIdeal_eq_span_p`：maximalIdeal_eq_span_p : maximalIdeal I
+nt_[p] = Ideal.span {(p : Int_[p])}
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `PadicInt.instCharZero`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CharZero ℤ_[
+p]
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-lemma zmodRepr_eq_zero_of_dvd {x : Int_[p]} (hx : (p : Int_[p]) ∣ x) : x.zmodRepr = 0 := by
+lemma zmodRepr_eq_zero_of_dvd {x : ℤ_[p]} (hx : (p : ℤ_[p]) ∣ x) : x.zmodRepr = 0 := by
   apply zmodRepr_unique _ _ (Nat.Prime.pos Fact.out)
   simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton, hx]
 
 @[simp]
-/--
-lemma `zmodRepr_zero` / 引理 `zmodRepr_zero`
-
-English:
-lemma zmodRepr_zero
-  statement: (0 : Int_[p]).zmodRepr = 0
-  proof: zmodRepr_eq_zero_of_dvd (dvd_zero _)
-
-中文:
-引理 zmodRepr_zero
-  结论: (0 : 整数_[p]).zmodRepr = 0
-  证明: zmodRepr_eq_zero_of_dvd (dvd_zero _)
-
-Depends on / 依赖: dvd_zero, zmodRepr_eq_zero_of_dvd
+/-
+**PadicInt.zmodRepr_zero** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_zero : (0 : Int_[p]).zmodRepr = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PadicInt.zmodRepr_eq_zero_of_dvd`：zmodRepr_eq_zero_of_dvd {x : Int_[p]} 
+(hx : (p : Int_[p]) ∣ x) : x.zmodRepr = 0
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
 -/
-lemma zmodRepr_zero : (0 : Int_[p]).zmodRepr = 0 :=
+lemma zmodRepr_zero : (0 : ℤ_[p]).zmodRepr = 0 :=
   zmodRepr_eq_zero_of_dvd (dvd_zero _)
-
-/--
-lemma `norm_sub_zmodRepr_lt_one` / 引理 `norm_sub_zmodRepr_lt_one`
-
-English:
-lemma norm_sub_zmodRepr_lt_one
-  given: (x : Int_[p])
-  proof: by
-  rw [← mem_nonunits]; rw [← IsLocalRing.mem_maximalIdeal]
-  exact sub_zmodRepr_mem _
-
-中文:
-引理 norm_sub_zmodRepr_lt_one
-  条件: (x : 整数_[p])
-  证明: by
-  rw [← mem_nonunits]; rw [← IsLocalRing.mem_maximalIdeal]
-  exact sub_zmodRepr_mem _
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.mem_maximalIdeal, mem_maximalIdeal, mem_nonunits, sub_zmodRepr_mem
+/-
+**PadicInt.norm_sub_zmodRepr_lt_one** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：norm_sub_zmodRepr_lt_one (x : Int_[p]) : ‖x - x.zmodRepr‖ < 1
+参数：x : Int_[p]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.mem_nonunits`：mem_nonunits {z : Int_[p]} : z in nonunits Int_[p
+] ↔ ‖z‖ < 1
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `IsLocalRing.mem_maximalIdeal`：mem_maximalIdeal (x) : x in maximalIdeal R
+ ↔ x in nonunits R
+· 使用定理 `PadicInt.sub_zmodRepr_mem`：sub_zmodRepr_mem : x - zmodRepr x in maximalI
+deal Int_[p]
 -/
-lemma norm_sub_zmodRepr_lt_one (x : Int_[p]) :
+lemma norm_sub_zmodRepr_lt_one (x : ℤ_[p]) :
     ‖x - x.zmodRepr‖ < 1 := by
-  rw [← mem_nonunits]; rw [← IsLocalRing.mem_maximalIdeal]
+  rw [← mem_nonunits, ← IsLocalRing.mem_maximalIdeal]
   exact sub_zmodRepr_mem _
-
-/--
-lemma `norm_natCast_zmodRepr_eq_one_iff` / 引理 `norm_natCast_zmodRepr_eq_one_iff`
-
-English:
-lemma norm_natCast_zmodRepr_eq_one_iff
-  given: {x : Int_[p]}
-  proof: by
-  rcases eq_or_ne ‖(x.zmodRepr : Int_[p])‖ ‖x‖ with H | H
+/-
+**PadicInt.norm_natCast_zmodRepr_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`
+。
+形式化陈述：norm_natCast_zmodRepr_eq_one_iff {x : Int_[p]} : ‖(x.zmodRepr : Int_[p])‖ 
+= 1 ↔ ‖x‖ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用引理 `PadicInt.norm_sub_zmodRepr_lt_one`：norm_sub_zmodRepr_lt_one (x : Int_[p]
+) : ‖x - x.zmodRepr‖ < 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Padic.norm_eq_of_norm_sub_lt_right`：norm_eq_of_norm_sub_lt_right {z1 z2 
+: Rat_[p]} (h : ‖z1 - z2‖ < ‖z2‖) : ‖z1‖ = ‖z2‖
+· 使用定理 `Padic.norm_eq_of_norm_sub_lt_left`：norm_eq_of_norm_sub_lt_left {z1 z2 : 
+Rat_[p]} (h : ‖z1 - z2‖ < ‖z1‖) : ‖z1‖ = ‖z2‖
+-/
+lemma norm_natCast_zmodRepr_eq_one_iff {x : ℤ_[p]} :
+    ‖(x.zmodRepr : ℤ_[p])‖ = 1 ↔ ‖x‖ = 1 := by
+  rcases eq_or_ne ‖(x.zmodRepr : ℤ_[p])‖ ‖x‖ with H | H
   · rw [H]
   · have := x.norm_sub_zmodRepr_lt_one
     constructor <;> intro h <;> rw [← h] at this ⊢
     · exact norm_eq_of_norm_sub_lt_right this
     · exact (norm_eq_of_norm_sub_lt_left this).symm
-
-中文:
-引理 norm_natCast_zmodRepr_eq_one_iff
-  条件: {x : 整数_[p]}
-  证明: by
-  rcases eq_or_ne ‖(x.zmodRepr : Int_[p])‖ ‖x‖ with H | H
-  · rw [H]
-  · have := x.norm_sub_zmodRepr_lt_one
-    constructor <;> intro h <;> rw [← h] at this ⊢
-    · exact norm_eq_of_norm_sub_lt_right this
-    · exact (norm_eq_of_norm_sub_lt_left this).symm
-
-Depends on / 依赖: Int_, eq_or_ne, norm_eq_of_norm_sub_lt_left, norm_eq_of_norm_sub_lt_right, norm_sub_zmodRepr_lt_one, x.norm_sub_zmodRepr_lt_one, x.zmodRepr, zmodRepr
+/-
+**PadicInt.zmodRepr_eq_zero_iff_dvd** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_eq_zero_iff_dvd {x : Int_[p]} : x.zmodRepr = 0 ↔ (p : Int_[p]) ∣ 
+x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.norm_lt_one_iff_dvd`：norm_lt_one_iff_dvd (x : Int_[p]) : ‖x‖ < 
+1 ↔ ↑p ∣ x
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用引理 `PadicInt.norm_sub_zmodRepr_lt_one`：norm_sub_zmodRepr_lt_one (x : Int_[p]
+) : ‖x - x.zmodRepr‖ < 1
+· 使用引理 `PadicInt.zmodRepr_eq_zero_of_dvd`：zmodRepr_eq_zero_of_dvd {x : Int_[p]} 
+(hx : (p : Int_[p]) ∣ x) : x.zmodRepr = 0
 -/
-lemma norm_natCast_zmodRepr_eq_one_iff {x : Int_[p]} :
-    ‖(x.zmodRepr : Int_[p])‖ = 1 ↔ ‖x‖ = 1 := by
-  rcases eq_or_ne ‖(x.zmodRepr : Int_[p])‖ ‖x‖ with H | H
-  · rw [H]
-  · have := x.norm_sub_zmodRepr_lt_one
-    constructor <;> intro h <;> rw [← h] at this ⊢
-    · exact norm_eq_of_norm_sub_lt_right this
-    · exact (norm_eq_of_norm_sub_lt_left this).symm
-
-/--
-lemma `zmodRepr_eq_zero_iff_dvd` / 引理 `zmodRepr_eq_zero_iff_dvd`
-
-English:
-lemma zmodRepr_eq_zero_iff_dvd
-  given: {x : Int_[p]}
-  proof: by
-  refine ⟨fun H => ?_, zmodRepr_eq_zero_of_dvd⟩
-  rw [← norm_lt_one_iff_dvd]; rw [← sub_zero x]; rw [← Nat.cast_zero]; rw [← H]
+lemma zmodRepr_eq_zero_iff_dvd {x : ℤ_[p]} :
+    x.zmodRepr = 0 ↔ (p : ℤ_[p]) ∣ x := by
+  refine ⟨fun H ↦ ?_, zmodRepr_eq_zero_of_dvd⟩
+  rw [← norm_lt_one_iff_dvd, ← sub_zero x, ← Nat.cast_zero, ← H]
   exact norm_sub_zmodRepr_lt_one _
-
-中文:
-引理 zmodRepr_eq_zero_iff_dvd
-  条件: {x : 整数_[p]}
-  证明: by
-  refine ⟨fun H => ?_, zmodRepr_eq_zero_of_dvd⟩
-  rw [← norm_lt_one_iff_dvd]; rw [← sub_zero x]; rw [← Nat.cast_zero]; rw [← H]
-  exact norm_sub_zmodRepr_lt_one _
-
-Depends on / 依赖: Nat.cast_zero, cast_zero, norm_lt_one_iff_dvd, norm_sub_zmodRepr_lt_one, sub_zero, zmodRepr_eq_zero_of_dvd
+/-
+**PadicInt.norm_natCast_zmodRepr_eq_one_iff_ne** 是 Mathlib 中的一个引理，位于命名空间 `PadicI
+nt`。
+形式化陈述：norm_natCast_zmodRepr_eq_one_iff_ne (x : Int_[p]) : ‖(x.zmodRepr : Int_[p]
+)‖ = 1 ↔ x.zmodRepr != 0
+参数：x : Int_[p]。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `PadicInt.norm_natCast_zmodRepr_eq_one_iff`：norm_natCast_zmodRepr_eq_one_
+iff {x : Int_[p]} : ‖(x.zmodRepr : Int_[p])‖ = 1 ↔ ‖x‖ = 1
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用引理 `PadicInt.zmodRepr_eq_zero_iff_dvd`：zmodRepr_eq_zero_iff_dvd {x : Int_[p]
+} : x.zmodRepr = 0 ↔ (p : Int_[p]) ∣ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.norm_lt_one_iff_dvd`：norm_lt_one_iff_dvd (x : Int_[p]) : ‖x‖ < 
+1 ↔ ↑p ∣ x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma zmodRepr_eq_zero_iff_dvd {x : Int_[p]} :
-    x.zmodRepr = 0 ↔ (p : Int_[p]) ∣ x := by
-  refine ⟨fun H => ?_, zmodRepr_eq_zero_of_dvd⟩
-  rw [← norm_lt_one_iff_dvd]; rw [← sub_zero x]; rw [← Nat.cast_zero]; rw [← H]
-  exact norm_sub_zmodRepr_lt_one _
-
-/--
-lemma `norm_natCast_zmodRepr_eq_one_iff_ne` / 引理 `norm_natCast_zmodRepr_eq_one_iff_ne`
-
-English:
-lemma norm_natCast_zmodRepr_eq_one_iff_ne
-  given: (x : Int_[p])
-  proof: by
-  rw [norm_natCast_zmodRepr_eq_one_iff]; rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]; rw [← norm_lt_one_iff_dvd]
+lemma norm_natCast_zmodRepr_eq_one_iff_ne (x : ℤ_[p]) :
+    ‖(x.zmodRepr : ℤ_[p])‖ = 1 ↔ x.zmodRepr ≠ 0 := by
+  rw [norm_natCast_zmodRepr_eq_one_iff, ne_eq, zmodRepr_eq_zero_iff_dvd, ← norm_lt_one_iff_dvd]
   simp
-
-中文:
-引理 norm_natCast_zmodRepr_eq_one_iff_ne
-  条件: (x : 整数_[p])
-  证明: by
-  rw [norm_natCast_zmodRepr_eq_one_iff]; rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]; rw [← norm_lt_one_iff_dvd]
-  simp
-
-Depends on / 依赖: ne_eq, norm_lt_one_iff_dvd, norm_natCast_zmodRepr_eq_one_iff, zmodRepr_eq_zero_iff_dvd
+/-
+**PadicInt.norm_natCast_zmodRepr_eq** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：norm_natCast_zmodRepr_eq (x : Int_[p]) : ‖(x.zmodRepr : Int_[p])‖ = 1 ∨ x.
+zmodRepr = 0
+参数：x : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma norm_natCast_zmodRepr_eq_one_iff_ne (x : Int_[p]) :
-    ‖(x.zmodRepr : Int_[p])‖ = 1 ↔ x.zmodRepr != 0 := by
-  rw [norm_natCast_zmodRepr_eq_one_iff]; rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]; rw [← norm_lt_one_iff_dvd]
-  simp
-
-/--
-lemma `norm_natCast_zmodRepr_eq` / 引理 `norm_natCast_zmodRepr_eq`
-
-English:
-lemma norm_natCast_zmodRepr_eq
-  given: (x : Int_[p])
-  proof: by
+lemma norm_natCast_zmodRepr_eq (x : ℤ_[p]) :
+    ‖(x.zmodRepr : ℤ_[p])‖ = 1 ∨ x.zmodRepr = 0 := by
   grind [norm_natCast_zmodRepr_eq_one_iff_ne]
 
 @[simp]
-
-中文:
-引理 norm_natCast_zmodRepr_eq
-  条件: (x : 整数_[p])
-  证明: by
-  grind [norm_natCast_zmodRepr_eq_one_iff_ne]
-
-@[simp]
-
-Depends on / 依赖: norm_natCast_zmodRepr_eq_one_iff_ne
+/-
+**PadicInt.zmodRepr_natCast_zmodRepr** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_natCast_zmodRepr (x : Int_[p]) : (x.zmodRepr : Int_[p]).zmodRepr 
+= x.zmodRepr
+参数：x : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.zmodRepr_unique`：zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ :
+ x - y in maximalIdeal Int_[p]) : zmodRepr x = y
+· 使用定理 `PadicInt.zmodRepr_lt_p`：zmodRepr_lt_p : zmodRepr x < p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
 -/
-lemma norm_natCast_zmodRepr_eq (x : Int_[p]) :
-    ‖(x.zmodRepr : Int_[p])‖ = 1 ∨ x.zmodRepr = 0 := by
-  grind [norm_natCast_zmodRepr_eq_one_iff_ne]
-
-@[simp]
-/--
-lemma `zmodRepr_natCast_zmodRepr` / 引理 `zmodRepr_natCast_zmodRepr`
-
-English:
-lemma zmodRepr_natCast_zmodRepr
-  given: (x : Int_[p])
-  proof: by
+lemma zmodRepr_natCast_zmodRepr (x : ℤ_[p]) :
+    (x.zmodRepr : ℤ_[p]).zmodRepr = x.zmodRepr := by
   apply zmodRepr_unique _ _ (zmodRepr_lt_p _)
   simp
 
 @[simp]
-
-中文:
-引理 zmodRepr_natCast_zmodRepr
-  条件: (x : 整数_[p])
-  证明: by
-  apply zmodRepr_unique _ _ (zmodRepr_lt_p _)
-  simp
-
-@[simp]
-
-Depends on / 依赖: zmodRepr_lt_p, zmodRepr_unique
+/-
+**PadicInt.norm_natCast_zmodRepr_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：norm_natCast_zmodRepr_eq_iff {x : Int_[p]} : ‖(x.zmodRepr : Int_[p])‖ = ‖x
+‖ ↔ ‖x‖ = 1 ∨ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PadicInt.norm_natCast_zmodRepr_eq`：norm_natCast_zmodRepr_eq (x : Int_[p]
+) : ‖(x.zmodRepr : Int_[p])‖ = 1 ∨ x.zmodRepr = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用引理 `PadicInt.zmodRepr_zero`：zmodRepr_zero : (0 : Int_[p]).zmodRepr = 0
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `PadicInt.instCharZero`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CharZero ℤ_[
+p]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma zmodRepr_natCast_zmodRepr (x : Int_[p]) :
-    (x.zmodRepr : Int_[p]).zmodRepr = x.zmodRepr := by
-  apply zmodRepr_unique _ _ (zmodRepr_lt_p _)
-  simp
-
-@[simp]
-/--
-lemma `norm_natCast_zmodRepr_eq_iff` / 引理 `norm_natCast_zmodRepr_eq_iff`
-
-English:
-lemma norm_natCast_zmodRepr_eq_iff
-  given: {x : Int_[p]}
-  proof: by
+lemma norm_natCast_zmodRepr_eq_iff {x : ℤ_[p]} :
+    ‖(x.zmodRepr : ℤ_[p])‖ = ‖x‖ ↔ ‖x‖ = 1 ∨ x = 0 := by
   rcases norm_natCast_zmodRepr_eq x with h | h
   · simp_all [eq_comm]
   · rw [eq_comm, h]
     simp [← norm_natCast_zmodRepr_eq_one_iff, h]
-
-中文:
-引理 norm_natCast_zmodRepr_eq_iff
-  条件: {x : 整数_[p]}
-  证明: by
-  rcases norm_natCast_zmodRepr_eq x with h | h
-  · simp_all [eq_comm]
-  · rw [eq_comm, h]
-    simp [← norm_natCast_zmodRepr_eq_one_iff, h]
-
-Depends on / 依赖: eq_comm, norm_natCast_zmodRepr_eq, norm_natCast_zmodRepr_eq_one_iff
+/-
+**PadicInt.zmodRepr_natCast** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_natCast (n : Nat) : zmodRepr (n : Int_[p]) = n % p
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.mod_add_div`：∀ (m k : ℕ), m % k + k * (m / k) = m
+· 使用定理 `PadicInt.zmodRepr_unique`：zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ :
+ x - y in maximalIdeal Int_[p]) : zmodRepr x = y
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PadicInt.maximalIdeal_eq_span_p`：maximalIdeal_eq_span_p : maximalIdeal I
+nt_[p] = Ideal.span {(p : Int_[p])}
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
 -/
-lemma norm_natCast_zmodRepr_eq_iff {x : Int_[p]} :
-    ‖(x.zmodRepr : Int_[p])‖ = ‖x‖ ↔ ‖x‖ = 1 ∨ x = 0 := by
-  rcases norm_natCast_zmodRepr_eq x with h | h
-  · simp_all [eq_comm]
-  · rw [eq_comm, h]
-    simp [← norm_natCast_zmodRepr_eq_one_iff, h]
-
-/--
-lemma `zmodRepr_natCast` / 引理 `zmodRepr_natCast`
-
-English:
-lemma zmodRepr_natCast
-  given: (n : Nat)
-  proof: by
+lemma zmodRepr_natCast (n : ℕ) :
+    zmodRepr (n : ℤ_[p]) = n % p := by
   nth_rw 1 [← Nat.mod_add_div n p]
   apply zmodRepr_unique
   · exact Nat.mod_lt _ (Nat.Prime.pos Fact.out)
   · simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton]
-
-中文:
-引理 zmodRepr_natCast
-  条件: (n : 自然数)
-  证明: by
-  nth_rw 1 [← Nat.mod_add_div n p]
-  apply zmodRepr_unique
-  · exact Nat.mod_lt _ (Nat.Prime.pos Fact.out)
-  · simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton]
-
-Depends on / 依赖: Fact.out, Ideal.mem_span_singleton, Nat.Prime.pos, Nat.mod_add_div, Nat.mod_lt, maximalIdeal_eq_span_p, mem_span_singleton, mod_add_div, mod_lt, nth_rw, zmodRepr_unique
+/-
+**PadicInt.zmodRepr_natCast_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_natCast_of_lt {n : Nat} (hn : n < p) : zmodRepr (n : Int_[p]) = n
+参数：hn : n < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `PadicInt.zmodRepr_natCast`：zmodRepr_natCast (n : Nat) : zmodRepr (n : In
+t_[p]) = n % p
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
 -/
-lemma zmodRepr_natCast (n : Nat) :
-    zmodRepr (n : Int_[p]) = n % p := by
-  nth_rw 1 [← Nat.mod_add_div n p]
-  apply zmodRepr_unique
-  · exact Nat.mod_lt _ (Nat.Prime.pos Fact.out)
-  · simp [maximalIdeal_eq_span_p, Ideal.mem_span_singleton]
-
-/--
-lemma `zmodRepr_natCast_of_lt` / 引理 `zmodRepr_natCast_of_lt`
-
-English:
-lemma zmodRepr_natCast_of_lt
-  given: {n : Nat} (hn : n < p)
-  proof: by
-  rw [zmodRepr_natCast (p := p) n]; rw [Nat.mod_eq_of_lt hn]
-
-中文:
-引理 zmodRepr_natCast_of_lt
-  条件: {n : 自然数} (hn : n < p)
-  证明: by
-  rw [zmodRepr_natCast (p := p) n]; rw [Nat.mod_eq_of_lt hn]
-
-Depends on / 依赖: Nat.mod_eq_of_lt, mod_eq_of_lt, zmodRepr_natCast
+lemma zmodRepr_natCast_of_lt {n : ℕ} (hn : n < p) :
+    zmodRepr (n : ℤ_[p]) = n := by
+  rw [zmodRepr_natCast (p := p) n, Nat.mod_eq_of_lt hn]
+/-
+**PadicInt.zmodRepr_natCast_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_natCast_ofNat {n : Nat} (hn : ofNat(n) < p) : zmodRepr (ofNat(n) 
+: Int_[p]) = ofNat(n)
+参数：hn : ofNat(n) < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `PadicInt.instCharZero`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CharZero ℤ_[
+p]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用引理 `PadicInt.zmodRepr_natCast_of_lt`：zmodRepr_natCast_of_lt {n : Nat} (hn : 
+n < p) : zmodRepr (n : Int_[p]) = n
 -/
-lemma zmodRepr_natCast_of_lt {n : Nat} (hn : n < p) :
-    zmodRepr (n : Int_[p]) = n := by
-  rw [zmodRepr_natCast (p := p) n]; rw [Nat.mod_eq_of_lt hn]
-
-/--
-lemma `zmodRepr_natCast_ofNat` / 引理 `zmodRepr_natCast_ofNat`
-
-English:
-lemma zmodRepr_natCast_ofNat
-  given: {n : Nat} (hn : ofNat(n) < p)
-  proof: by
+lemma zmodRepr_natCast_ofNat {n : ℕ} (hn : ofNat(n) < p) :
+    zmodRepr (ofNat(n) : ℤ_[p]) = ofNat(n) := by
   convert! zmodRepr_natCast_of_lt hn
   rcases n with _ | _ | n <;> simp
-
-中文:
-引理 zmodRepr_natCast_of自然数
-  条件: {n : 自然数} (hn : of自然数(n) < p)
-  证明: by
-  convert! zmodRepr_natCast_of_lt hn
-  rcases n with _ | _ | n <;> simp
-
-Depends on / 依赖: convert, zmodRepr_natCast_of_lt
+/-
+**PadicInt.zmodRepr_units_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_units_ne_zero (x : Int_[p]ˣ) : x.val.zmodRepr != 0
+参数：x : Int_[p]ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用引理 `PadicInt.zmodRepr_eq_zero_iff_dvd`：zmodRepr_eq_zero_iff_dvd {x : Int_[p]
+} : x.zmodRepr = 0 ↔ (p : Int_[p]) ∣ x
+· 使用定理 `Irreducible.not_dvd_isUnit`：Irreducible.not_dvd_isUnit [CommMonoid M] {p
+ u : M} (hp : Irreducible p) (hu : IsUnit u) : ¬p ∣ u
+· 使用定理 `PadicInt.irreducible_p`：irreducible_p : Irreducible (p : Int_[p])
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-lemma zmodRepr_natCast_ofNat {n : Nat} (hn : ofNat(n) < p) :
-    zmodRepr (ofNat(n) : Int_[p]) = ofNat(n) := by
-  convert! zmodRepr_natCast_of_lt hn
-  rcases n with _ | _ | n <;> simp
-
-/--
-lemma `zmodRepr_units_ne_zero` / 引理 `zmodRepr_units_ne_zero`
-
-English:
-lemma zmodRepr_units_ne_zero
-  given: (x : Int_[p]ˣ)
-  statement: x.val.zmodRepr != 0
-  proof: by
-  rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]
+lemma zmodRepr_units_ne_zero (x : ℤ_[p]ˣ) : x.val.zmodRepr ≠ 0 := by
+  rw [ne_eq, zmodRepr_eq_zero_iff_dvd]
   exact irreducible_p.not_dvd_isUnit x.isUnit
 
-中文:
-引理 zmodRepr_units_ne_zero
-  条件: (x : 整数_[p]ˣ)
-  结论: x.val.zmodRepr != 0
-  证明: by
-  rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]
-  exact irreducible_p.not_dvd_isUnit x.isUnit
-
-Depends on / 依赖: irreducible_p, irreducible_p.not_dvd_isUnit, isUnit, ne_eq, not_dvd_isUnit, x.isUnit, zmodRepr_eq_zero_iff_dvd
+/-- `toZModHom` is an auxiliary constructor for creating ring homs from `ℤ_[p]` to `ZMod v`.
 -/
-lemma zmodRepr_units_ne_zero (x : Int_[p]ˣ) : x.val.zmodRepr != 0 := by
-  rw [ne_eq]; rw [zmodRepr_eq_zero_iff_dvd]
-  exact irreducible_p.not_dvd_isUnit x.isUnit
+/-
+**PadicInt.toZModHom** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：toZModHom (v : Nat) (f : Int_[p] -> Nat) (f_spec : forall x, x - f x in (I
+deal.span {↑v} : Ideal Int_[p])) (f_congr : forall (x : Int_[p]) (a b : Nat), x 
+- a in (Ideal.span {↑v} : Ideal Int_[p]) -> x - b in (Ideal.span {↑v} : Ideal In
+t_[p]) -> (a : ZMod v) = b) : Int_[p] ->+* ZMod v where toFun x
+参数：v : Nat；f : Int_[p] -> Nat；f_spec : forall x, x - f x in (Ideal.span {↑v} : I
+deal Int_[p])；f_congr : forall (x : Int_[p]) (a b : Nat), x - a in (Ideal.span {
+↑v} : Ideal Int_[p]) -> x - b in (Ideal.span {↑v} : Ideal Int_[p]) -> (a : ZMod 
+v) = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `toZModHom` / `toZModHom` 的定义
-
-English:
-definition toZModHom
-  signature: (v : Nat) (f : Int_[p] -> Nat) (f_spec : forall x, x - f x in (Ideal.span {↑v} : Ideal Int_[p]))
-  body: f x
-  map_zero' := by
-    rw [f_congr (0 : Int_[p]) _ 0, cast_zero]
-    · exact f_spec _
-    · simp only [sub_zero, cast_zero, Submodule.zero_mem]
-  map_one' := by
-    rw [f_congr (1 : Int_[p]) _ 1, cast_one]
-    · exact f_spec _
-    · simp only [sub_self, cast_one, Submodule.zero_mem]
-  map_add' := by
-    intro x y
-    rw [f_congr (x + y) _ (f x + f y)]; rw [cast_add]
-    · exact f_spec _
-    · convert! Ideal.add_mem _ (f_spec x) (f_spec y) using 1
-      rw [cast_add]
-      ring
-  map_mul' := by
-    intro x y
-    rw [f_congr (x * y) _ (f x * f y)]; rw [cast_mul]
-    · exact f_spec _
-    · let I : Ideal Int_[p] := Ideal.span {↑v}
-      convert! I.add_mem (I.mul_mem_left x (f_spec y)) (I.mul_mem_right ↑(f y) (f_spec x)) using 1
-      rw [cast_mul]
-      ring
-
-中文:
-定义 toZModHom
-  签名: (v : 自然数) (f : 整数_[p] -> 自然数) (f_spec : 对任意 x, x - f x in (理想.span {↑v} : 理想 整数_[p]))
-  定义体: f x
-  map_zero' := by
-    rw [f_congr (0 : Int_[p]) _ 0, cast_zero]
-    · exact f_spec _
-    · simp only [sub_zero, cast_zero, Submodule.zero_mem]
-  map_one' := by
-    rw [f_congr (1 : Int_[p]) _ 1, cast_one]
-    · exact f_spec _
-    · simp only [sub_self, cast_one, Submodule.zero_mem]
-  map_add' := by
-    intro x y
-    rw [f_congr (x + y) _ (f x + f y)]; rw [cast_add]
-    · exact f_spec _
-    · convert! Ideal.add_mem _ (f_spec x) (f_spec y) using 1
-      rw [cast_add]
-      ring
-  map_mul' := by
-    intro x y
-    rw [f_congr (x * y) _ (f x * f y)]; rw [cast_mul]
-    · exact f_spec _
-    · let I : Ideal Int_[p] := Ideal.span {↑v}
-      convert! I.add_mem (I.mul_mem_left x (f_spec y)) (I.mul_mem_right ↑(f y) (f_spec x)) using 1
-      rw [cast_mul]
-      ring
+--- 原说明 ---
+`toZModHom` is an auxiliary constructor for creating ring homs from `ℤ_[p]` to `
+ZMod v`.
 -/
-def toZModHom (v : Nat) (f : Int_[p] -> Nat) (f_spec : forall x, x - f x in (Ideal.span {↑v} : Ideal Int_[p]))
+def toZModHom (v : ℕ) (f : ℤ_[p] → ℕ) (f_spec : ∀ x, x - f x ∈ (Ideal.span {↑v} : Ideal ℤ_[p]))
     (f_congr :
-      forall (x : Int_[p]) (a b : Nat),
-        x - a in (Ideal.span {↑v} : Ideal Int_[p]) ->
-          x - b in (Ideal.span {↑v} : Ideal Int_[p]) -> (a : ZMod v) = b) :
-    Int_[p] ->+* ZMod v where
+      ∀ (x : ℤ_[p]) (a b : ℕ),
+        x - a ∈ (Ideal.span {↑v} : Ideal ℤ_[p]) →
+          x - b ∈ (Ideal.span {↑v} : Ideal ℤ_[p]) → (a : ZMod v) = b) :
+    ℤ_[p] →+* ZMod v where
   toFun x := f x
   map_zero' := by
-    rw [f_congr (0 : Int_[p]) _ 0, cast_zero]
+    rw [f_congr (0 : ℤ_[p]) _ 0, cast_zero]
     · exact f_spec _
     · simp only [sub_zero, cast_zero, Submodule.zero_mem]
   map_one' := by
-    rw [f_congr (1 : Int_[p]) _ 1, cast_one]
+    rw [f_congr (1 : ℤ_[p]) _ 1, cast_one]
     · exact f_spec _
     · simp only [sub_self, cast_one, Submodule.zero_mem]
   map_add' := by
     intro x y
-    rw [f_congr (x + y) _ (f x + f y)]; rw [cast_add]
+    rw [f_congr (x + y) _ (f x + f y), cast_add]
     · exact f_spec _
     · convert! Ideal.add_mem _ (f_spec x) (f_spec y) using 1
       rw [cast_add]
       ring
   map_mul' := by
     intro x y
-    rw [f_congr (x * y) _ (f x * f y)]; rw [cast_mul]
+    rw [f_congr (x * y) _ (f x * f y), cast_mul]
     · exact f_spec _
-    · let I : Ideal Int_[p] := Ideal.span {↑v}
+    · let I : Ideal ℤ_[p] := Ideal.span {↑v}
       convert! I.add_mem (I.mul_mem_left x (f_spec y)) (I.mul_mem_right ↑(f y) (f_spec x)) using 1
       rw [cast_mul]
       ring
 
-/--
-Definition of `toZMod` / `toZMod` 的定义
-
-English:
-definition toZMod
-  signature: : Int_[p] ->+* ZMod p
-  body: toZModHom p zmodRepr
-    (by
-      rw [← maximalIdeal_eq_span_p]
-      exact sub_zmodRepr_mem)
-    (by
-      rw [← maximalIdeal_eq_span_p]
-      exact zmod_congr_of_sub_mem_max_ideal)
-
-中文:
-定义 toZMod
-  签名: : 整数_[p] ->+* ZMod p
-  定义体: toZModHom p zmodRepr
-    (by
-      rw [← maximalIdeal_eq_span_p]
-      exact sub_zmodRepr_mem)
-    (by
-      rw [← maximalIdeal_eq_span_p]
-      exact zmod_congr_of_sub_mem_max_ideal)
-
-Depends on / 依赖: maximalIdeal_eq_span_p, sub_zmodRepr_mem, toZModHom, zmodRepr, zmod_congr_of_sub_mem_max_ideal
+/-- `toZMod` is a ring hom from `ℤ_[p]` to `ZMod p`,
+with the equality `toZMod x = (zmodRepr x : ZMod p)`.
 -/
-def toZMod : Int_[p] ->+* ZMod p :=
+/-
+**PadicInt.toZMod** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：toZMod : Int_[p] ->+* ZMod p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`toZMod` is a ring hom from `ℤ_[p]` to `ZMod p`,
+with the equality `toZMod x = (zmodRepr x : ZMod p)`.
+-/
+def toZMod : ℤ_[p] →+* ZMod p :=
   toZModHom p zmodRepr
     (by
       rw [← maximalIdeal_eq_span_p]
@@ -1027,51 +980,95 @@ def toZMod : Int_[p] ->+* ZMod p :=
       rw [← maximalIdeal_eq_span_p]
       exact zmod_congr_of_sub_mem_max_ideal)
 
-/--
-theorem `toZMod_spec` / 定理 `toZMod_spec`
+/-- `z - (toZMod z : ℤ_[p])` is contained in the maximal ideal of `ℤ_[p]`, for every `z : ℤ_[p]`.
 
-English:
-theorem toZMod_spec
-  statement: x - (ZMod.cast (toZMod x) : Int_[p]) in maximalIdeal Int_[p]
-  proof: by
-  convert! sub_zmodRepr_mem x using 2
-  dsimp [toZMod, toZModHom]
-  rcases Nat.exists_eq_add_of_lt hp_prime.1.pos with ⟨p', rfl⟩
-  change ↑((_ : ZMod (0 + p' + 1)).val) = (_ : Int_[0 + p' + 1])
-  rw [Nat.cast_inj]
-  apply mod_eq_of_lt
-  simpa only [zero_add] using zmodRepr_lt_p x
-
-中文:
-定理 toZMod_spec
-  结论: x - (ZMod.cast (toZMod x) : 整数_[p]) in maximalIdeal 整数_[p]
-  证明: by
-  convert! sub_zmodRepr_mem x using 2
-  dsimp [toZMod, toZModHom]
-  rcases Nat.exists_eq_add_of_lt hp_prime.1.pos with ⟨p', rfl⟩
-  change ↑((_ : ZMod (0 + p' + 1)).val) = (_ : Int_[0 + p' + 1])
-  rw [Nat.cast_inj]
-  apply mod_eq_of_lt
-  simpa only [zero_add] using zmodRepr_lt_p x
-
-Depends on / 依赖: Int_, Nat.cast_inj, Nat.exists_eq_add_of_lt, cast_inj, convert, exists_eq_add_of_lt, hp_prime, mod_eq_of_lt, sub_zmodRepr_mem, toZMod, toZModHom, zero_add, zmodRepr_lt_p
+The coercion from `ZMod p` to `ℤ_[p]` is `ZMod.cast`,
+which coerces `ZMod p` into arbitrary rings.
+This is unfortunate, but a consequence of the fact that we allow `ZMod p`
+to coerce to rings of arbitrary characteristic, instead of only rings of characteristic `p`.
+This coercion is only a ring homomorphism if it coerces into a ring whose characteristic divides
+`p`. While this is not the case here we can still make use of the coercion.
 -/
-theorem toZMod_spec : x - (ZMod.cast (toZMod x) : Int_[p]) in maximalIdeal Int_[p] := by
+/-
+**PadicInt.toZMod_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：toZMod_spec : x - (ZMod.cast (toZMod x) : Int_[p]) in maximalIdeal Int_[p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.exists_eq_add_of_lt`：∀ {m n : ℕ}, m < n → ∃ k, n = m + k + 1
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+· 使用定理 `PadicInt.instCharZero`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], CharZero ℤ_[
+p]
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PadicInt.zmodRepr_lt_p`：zmodRepr_lt_p : zmodRepr x < p
+· 使用定理 `PadicInt.sub_zmodRepr_mem`：sub_zmodRepr_mem : x - zmodRepr x in maximalI
+deal Int_[p]
+
+--- 原说明 ---
+`z - (toZMod z : ℤ_[p])` is contained in the maximal ideal of `ℤ_[p]`, for every
+ `z : ℤ_[p]`.
+
+The coercion from `ZMod p` to `ℤ_[p]` is `ZMod.cast`,
+which coerces `ZMod p` into arbitrary rings.
+This is unfortunate, but a consequence of the fact that we allow `ZMod p`
+to coerce to rings of arbitrary characteristic, instead of only rings of charact
+eristic `p`.
+This coercion is only a ring homomorphism if it coerces into a ring whose charac
+teristic divides
+`p`. While this is not the case here we can still make use of the coercion.
+-/
+theorem toZMod_spec : x - (ZMod.cast (toZMod x) : ℤ_[p]) ∈ maximalIdeal ℤ_[p] := by
   convert! sub_zmodRepr_mem x using 2
   dsimp [toZMod, toZModHom]
   rcases Nat.exists_eq_add_of_lt hp_prime.1.pos with ⟨p', rfl⟩
-  change ↑((_ : ZMod (0 + p' + 1)).val) = (_ : Int_[0 + p' + 1])
+  change ↑((_ : ZMod (0 + p' + 1)).val) = (_ : ℤ_[0 + p' + 1])
   rw [Nat.cast_inj]
   apply mod_eq_of_lt
   simpa only [zero_add] using zmodRepr_lt_p x
-
-/--
-theorem `ker_toZMod` / 定理 `ker_toZMod`
-
-English:
-theorem ker_toZMod
-  statement: RingHom.ker (toZMod : Int_[p] ->+* ZMod p) = maximalIdeal Int_[p]
-  proof: by
+/-
+**PadicInt.ker_toZMod** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：ker_toZMod : RingHom.ker (toZMod : Int_[p] ->+* ZMod p) = maximalIdeal Int
+_[p]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ZMod.cast_zero`：cast_zero : (cast (0 : ZMod n) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `PadicInt.toZMod_spec`：toZMod_spec : x - (ZMod.cast (toZMod x) : Int_[p])
+ in maximalIdeal Int_[p]
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_max_ideal`：zmod_congr_of_sub_mem_max_idea
+l (x : Int_[p]) (m n : Nat) (hm : x - m in maximalIdeal Int_[p]) (hn : x - n in 
+maximalIdeal Int_[p]) : (m : Z…
+· 使用定理 `PadicInt.sub_zmodRepr_mem`：sub_zmodRepr_mem : x - zmodRepr x in maximalI
+deal Int_[p]
+-/
+theorem ker_toZMod : RingHom.ker (toZMod : ℤ_[p] →+* ZMod p) = maximalIdeal ℤ_[p] := by
   ext x
   rw [RingHom.mem_ker]
   constructor
@@ -1085,142 +1082,169 @@ theorem ker_toZMod
     · apply sub_zmodRepr_mem
 
 @[simp]
-
-中文:
-定理 ker_toZMod
-  结论: 环态射.ker (toZMod : 整数_[p] ->+* ZMod p) = maximalIdeal 整数_[p]
-  证明: by
-  ext x
-  rw [RingHom.mem_ker]
-  constructor
-  · intro h
-    simpa only [h, ZMod.cast_zero, sub_zero] using toZMod_spec x
-  · intro h
-    rw [← sub_zero x] at h
-    dsimp [toZMod, toZModHom]
-    convert! zmod_congr_of_sub_mem_max_ideal x _ 0 _ h
-    · norm_cast
-    · apply sub_zmodRepr_mem
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.mem_ker, ZMod.cast_zero, cast_zero, convert, mem_ker, sub_zero, sub_zmodRepr_mem, toZMod, toZModHom, toZMod_spec, zmod_congr_of_sub_mem_max_ideal
+/-
+**PadicInt.val_toZMod_eq_zmodRepr** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：val_toZMod_eq_zmodRepr (x : Int_[p]) : (toZMod x).val = x.zmodRepr
+参数：x : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.zmodRepr_unique`：zmodRepr_unique (y : Nat) (hy₁ : y < p) (hy₂ :
+ x - y in maximalIdeal Int_[p]) : zmodRepr x = y
+· 使用定理 `ZMod.val_lt`：val_lt {n : Nat} [NeZero n] (a : ZMod n) : a.val < n
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `PadicInt.toZMod_spec`：toZMod_spec : x - (ZMod.cast (toZMod x) : Int_[p])
+ in maximalIdeal Int_[p]
 -/
-theorem ker_toZMod : RingHom.ker (toZMod : Int_[p] ->+* ZMod p) = maximalIdeal Int_[p] := by
-  ext x
-  rw [RingHom.mem_ker]
-  constructor
-  · intro h
-    simpa only [h, ZMod.cast_zero, sub_zero] using toZMod_spec x
-  · intro h
-    rw [← sub_zero x] at h
-    dsimp [toZMod, toZModHom]
-    convert! zmod_congr_of_sub_mem_max_ideal x _ 0 _ h
-    · norm_cast
-    · apply sub_zmodRepr_mem
-
-@[simp]
-/--
-lemma `val_toZMod_eq_zmodRepr` / 引理 `val_toZMod_eq_zmodRepr`
-
-English:
-lemma val_toZMod_eq_zmodRepr
-  given: (x : Int_[p])
-  proof: (zmodRepr_unique _ _ (ZMod.val_lt _) <| by simpa using toZMod_spec _).symm
-
-中文:
-引理 val_toZMod_eq_zmodRepr
-  条件: (x : 整数_[p])
-  证明: (zmodRepr_unique _ _ (ZMod.val_lt _) <| by simpa using toZMod_spec _).symm
-
-Depends on / 依赖: ZMod.val_lt, toZMod_spec, val_lt, zmodRepr_unique
--/
-lemma val_toZMod_eq_zmodRepr (x : Int_[p]) :
+lemma val_toZMod_eq_zmodRepr (x : ℤ_[p]) :
     (toZMod x).val = x.zmodRepr :=
   (zmodRepr_unique _ _ (ZMod.val_lt _) <| by simpa using toZMod_spec _).symm
-
-/--
-lemma `zmodRepr_mul` / 引理 `zmodRepr_mul`
-
-English:
-lemma zmodRepr_mul
-  given: (x y : Int_[p])
-  statement: (x * y).zmodRepr = x.zmodRepr * y.zmodRepr % p
-  proof: by
-  simp [← val_toZMod_eq_zmodRepr, ZMod.val_mul]
-
-中文:
-引理 zmodRepr_mul
-  条件: (x y : 整数_[p])
-  结论: (x * y).zmodRepr = x.zmodRepr * y.zmodRepr % p
-  证明: by
-  simp [← val_toZMod_eq_zmodRepr, ZMod.val_mul]
-
-Depends on / 依赖: ZMod.val_mul, val_mul, val_toZMod_eq_zmodRepr
+/-
+**PadicInt.zmodRepr_mul** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt`。
+形式化陈述：zmodRepr_mul (x y : Int_[p]) : (x * y).zmodRepr = x.zmodRepr * y.zmodRepr 
+% p
+参数：x y : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `ZMod.val_mul`：val_mul {n : Nat} (a b : ZMod n) : (a * b).val = a.val * b
+.val % n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma zmodRepr_mul (x y : Int_[p]) : (x * y).zmodRepr = x.zmodRepr * y.zmodRepr % p := by
+lemma zmodRepr_mul (x y : ℤ_[p]) : (x * y).zmodRepr = x.zmodRepr * y.zmodRepr % p := by
   simp [← val_toZMod_eq_zmodRepr, ZMod.val_mul]
 
-/--
-Definition of `residueField` / `residueField` 的定义
+/-- The equivalence between the residue field of the `p`-adic integers and `ℤ/pℤ` -/
+/-
+**PadicInt.residueField** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：residueField : IsLocalRing.ResidueField Int_[p] ≃+* ZMod p
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.instIsLocalRing`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], IsLocalRi
+ng ℤ_[p]
 
-English:
-definition residueField
-  signature: : IsLocalRing.ResidueField Int_[p] ≃+* ZMod p
-  body: (Ideal.quotEquivOfEq PadicInt.ker_toZMod.symm).trans
-    RingHom.quotientKerEquivOfSurjective (ZMod.ringHom_surjective PadicInt.toZMod)
-
-中文:
-定义 residueField
-  签名: : 是局部环.ResidueField 整数_[p] ≃+* ZMod p
-  定义体: (Ideal.quotEquivOfEq PadicInt.ker_toZMod.symm).trans
-    RingHom.quotientKerEquivOfSurjective (ZMod.ringHom_surjective PadicInt.toZMod)
-
-Depends on / 依赖: Ideal.quotEquivOfEq, PadicInt, PadicInt.ker_toZMod.symm, PadicInt.toZMod, RingHom, RingHom.quotientKerEquivOfSurjective, ZMod.ringHom_surjective, ker_toZMod, quotEquivOfEq, quotientKerEquivOfSurjective, ringHom_surjective, toZMod
+--- 原说明 ---
+The equivalence between the residue field of the `p`-adic integers and `ℤ/pℤ`
 -/
-def residueField : IsLocalRing.ResidueField Int_[p] ≃+* ZMod p :=
-(Ideal.quotEquivOfEq PadicInt.ker_toZMod.symm).trans
+def residueField : IsLocalRing.ResidueField ℤ_[p] ≃+* ZMod p :=
+  (Ideal.quotEquivOfEq PadicInt.ker_toZMod.symm).trans <|
     RingHom.quotientKerEquivOfSurjective (ZMod.ringHom_surjective PadicInt.toZMod)
 
 open scoped Classical in
-/--
-Definition of `appr` / `appr` 的定义
+/-- `appr n x` gives a value `v : ℕ` such that `x` and `↑v : ℤ_p` are congruent mod `p^n`.
+See `appr_spec`. -/
+/-
+**PadicInt.appr** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：appr : Int_[p] -> Nat -> Nat | _x, 0 => 0 | x, n + 1 => let y
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition appr
-  signature: : Int_[p] -> Nat -> Nat
-  body: x - appr x n
-    if hy : y = 0 then appr x n
-    else
-      let u := (unitCoeff hy : Int_[p])
-      appr x n + p ^ n * (toZMod ((u * (p : Int_[p]) ^ (y.valuation - n : Int).natAbs) : Int_[p])).val
-
-中文:
-定义 appr
-  签名: : 整数_[p] -> 自然数 -> 自然数
-  定义体: x - appr x n
-    if hy : y = 0 then appr x n
-    else
-      let u := (unitCoeff hy : Int_[p])
-      appr x n + p ^ n * (toZMod ((u * (p : Int_[p]) ^ (y.valuation - n : Int).natAbs) : Int_[p])).val
+--- 原说明 ---
+`appr n x` gives a value `v : ℕ` such that `x` and `↑v : ℤ_p` are congruent mod 
+`p^n`.
+See `appr_spec`.
 -/
-noncomputable def appr : Int_[p] -> Nat -> Nat
+noncomputable def appr : ℤ_[p] → ℕ → ℕ
   | _x, 0 => 0
   | x, n + 1 =>
     let y := x - appr x n
     if hy : y = 0 then appr x n
     else
-      let u := (unitCoeff hy : Int_[p])
-      appr x n + p ^ n * (toZMod ((u * (p : Int_[p]) ^ (y.valuation - n : Int).natAbs) : Int_[p])).val
-
-/--
-theorem `appr_lt` / 定理 `appr_lt`
-
-English:
-theorem appr_lt
-  given: (x : Int_[p]) (n : Nat)
-  statement: x.appr n < p ^ n
-  proof: by
+      let u := (unitCoeff hy : ℤ_[p])
+      appr x n + p ^ n * (toZMod ((u * (p : ℤ_[p]) ^ (y.valuation - n : ℤ).natAbs) : ℤ_[p])).val
+/-
+**PadicInt.appr_lt** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：appr_lt (x : Int_[p]) (n : Nat) : x.appr n < p ^ n
+参数：x : Int_[p]；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite.congr_simp`：∀ {α : Sort u} (c : Prop) {h : Decidable c} [h_1 : Deci
+dable c] (t t_1 : c → α),   t = t_1 → ∀ (e e_1 : ¬c → α), e = e_1 → dite c t e =
+ dite…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `ZMod.natCast_self`：natCast_self (n : Nat) : (n : ZMod n) = 0
+· 使用定理 `Nat.pow_lt_pow_right`：∀ {a m n : ℕ}, 1 < a → m < n → a ^ m < a ^ n
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Nat.lt_add_one`：∀ (n : ℕ), n < n + 1
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `add_lt_add_of_lt_of_le`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddLeftMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c ≤ d → a 
++ c < b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+（共 44 条，此处仅展示前 30 条）
+-/
+theorem appr_lt (x : ℤ_[p]) (n : ℕ) : x.appr n < p ^ n := by
   induction n generalizing x with
   | zero => simp only [appr, _root_.pow_zero, zero_lt_one]
   | succ n ih =>
@@ -1237,91 +1261,77 @@ theorem appr_lt
         apply ZMod.val_lt
       · rw [mul_tsub, mul_one, ← _root_.pow_succ]
         apply add_tsub_cancel_of_le (le_of_lt hp)
-
-中文:
-定理 appr_lt
-  条件: (x : 整数_[p]) (n : 自然数)
-  结论: x.appr n < p ^ n
-  证明: by
-  induction n generalizing x with
-  | zero => simp only [appr, _root_.pow_zero, zero_lt_one]
-  | succ n ih =>
-    simp only [appr, map_natCast, ZMod.natCast_self, map_pow, Int.natAbs, map_mul]
-    have hp : p ^ n < p ^ (n + 1) := by apply Nat.pow_lt_pow_right hp_prime.1.one_lt n.lt_add_one
-    split_ifs with h
-    · apply lt_trans (ih _) hp
-    · calc
-        _ < p ^ n + p ^ n * (p - 1) := ?_
-        _ = p ^ (n + 1) := ?_
-      · apply add_lt_add_of_lt_of_le (ih _)
-        apply Nat.mul_le_mul_left
-        apply le_pred_of_lt
-        apply ZMod.val_lt
-      · rw [mul_tsub, mul_one, ← _root_.pow_succ]
-        apply add_tsub_cancel_of_le (le_of_lt hp)
-
-Depends on / 依赖: Int.natAbs, Nat.mul_le_mul_left, Nat.pow_lt_pow_right, ZMod.natCast_self, ZMod.val_lt, _root_, _root_.pow_zero, add_lt_add_of_lt_of_le, generalizing, hp_prime, le_pred_of_lt, lt_add_one, lt_trans, map_mul, map_natCast, map_pow, mul_le_mul_left, mul_t, n.lt_add_one, natAbs
+/-
+**PadicInt.appr_mono** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：appr_mono (x : Int_[p]) : Monotone x.appr
+参数：x : Int_[p]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `monotone_nat_of_le_succ`：monotone_nat_of_le_succ {f : Nat -> α} (hf : fo
+rall n, f n <= f (n + 1)) : Monotone f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
 -/
-theorem appr_lt (x : Int_[p]) (n : Nat) : x.appr n < p ^ n := by
-  induction n generalizing x with
-  | zero => simp only [appr, _root_.pow_zero, zero_lt_one]
-  | succ n ih =>
-    simp only [appr, map_natCast, ZMod.natCast_self, map_pow, Int.natAbs, map_mul]
-    have hp : p ^ n < p ^ (n + 1) := by apply Nat.pow_lt_pow_right hp_prime.1.one_lt n.lt_add_one
-    split_ifs with h
-    · apply lt_trans (ih _) hp
-    · calc
-        _ < p ^ n + p ^ n * (p - 1) := ?_
-        _ = p ^ (n + 1) := ?_
-      · apply add_lt_add_of_lt_of_le (ih _)
-        apply Nat.mul_le_mul_left
-        apply le_pred_of_lt
-        apply ZMod.val_lt
-      · rw [mul_tsub, mul_one, ← _root_.pow_succ]
-        apply add_tsub_cancel_of_le (le_of_lt hp)
-
-/--
-theorem `appr_mono` / 定理 `appr_mono`
-
-English:
-theorem appr_mono
-  given: (x : Int_[p])
-  statement: Monotone x.appr
-  proof: by
+theorem appr_mono (x : ℤ_[p]) : Monotone x.appr := by
   apply monotone_nat_of_le_succ
   intro n
   dsimp [appr]
   split_ifs; · rfl
   apply Nat.le_add_right
-
-中文:
-定理 appr_mono
-  条件: (x : 整数_[p])
-  结论: 递增 x.appr
-  证明: by
-  apply monotone_nat_of_le_succ
-  intro n
-  dsimp [appr]
-  split_ifs; · rfl
-  apply Nat.le_add_right
-
-Depends on / 依赖: Nat.le_add_right, le_add_right, monotone_nat_of_le_succ, split_ifs
+/-
+**PadicInt.dvd_appr_sub_appr** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：dvd_appr_sub_appr (x : Int_[p]) (m n : Nat) (h : m <= n) : p ^ m ∣ x.appr 
+n - x.appr m
+参数：x : Int_[p]；m n : Nat；h : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `tsub_eq_zero_of_le`：∀ {α : Type u_1} [inst : AddCommMonoid α] [inst_1 : 
+PartialOrder α] [CanonicallyOrderedAdd α] [inst_3 : Sub α]   [OrderedSub α] {a b
+ : α}, a…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_tsub_assoc_of_le`：add_tsub_assoc_of_le (h : c <= b) (a : α) : a + b 
+- c = a + (b - c)
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `PadicInt.appr_mono`：appr_mono (x : Int_[p]) : Monotone x.appr
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `dvd_mul_of_dvd_left`：dvd_mul_of_dvd_left (h : a ∣ b) (c : α) : a ∣ b * c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
 -/
-theorem appr_mono (x : Int_[p]) : Monotone x.appr := by
-  apply monotone_nat_of_le_succ
-  intro n
-  dsimp [appr]
-  split_ifs; · rfl
-  apply Nat.le_add_right
-
-/--
-theorem `dvd_appr_sub_appr` / 定理 `dvd_appr_sub_appr`
-
-English:
-theorem dvd_appr_sub_appr
-  given: (x : Int_[p]) (m n : Nat) (h : m <= n)
-  statement: p ^ m ∣ x.appr n - x.appr m
-  proof: by
+theorem dvd_appr_sub_appr (x : ℤ_[p]) (m n : ℕ) (h : m ≤ n) : p ^ m ∣ x.appr n - x.appr m := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h; clear h
   induction k with
   | zero =>
@@ -1331,55 +1341,75 @@ theorem dvd_appr_sub_appr
     dsimp [appr]
     split_ifs with h
     · exact ih
-    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
+    rw [add_comm, add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
     apply dvd_add _ ih
     apply dvd_mul_of_dvd_left
     apply pow_dvd_pow _ (Nat.le_add_right m k)
-
-中文:
-定理 dvd_appr_sub_appr
-  条件: (x : 整数_[p]) (m n : 自然数) (h : m <= n)
-  结论: p ^ m ∣ x.appr n - x.appr m
-  证明: by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h; clear h
-  induction k with
-  | zero =>
-    simp only [add_zero, le_refl, tsub_eq_zero_of_le, dvd_zero]
-  | succ k ih =>
-    rw [← add_assoc]
-    dsimp [appr]
-    split_ifs with h
-    · exact ih
-    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
-    apply dvd_add _ ih
-    apply dvd_mul_of_dvd_left
-    apply pow_dvd_pow _ (Nat.le_add_right m k)
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.le_add_right, add_assoc, add_comm, add_tsub_assoc_of_le, add_zero, appr_mono, dvd_add, dvd_mul_of_dvd_left, dvd_zero, exists_eq_add_of_le, le_add_right, le_refl, pow_dvd_pow, split_ifs, tsub_eq_zero_of_le
+/-
+**PadicInt.appr_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：appr_spec (n : Nat) : forall x : Int_[p], x - appr x n in Ideal.span {(p :
+ Int_[p]) ^ n}
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `sub_add_eq_sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - (b + c) = a - b - c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `ZMod.natCast_self`：natCast_self (n : Nat) : (n : ZMod n) = 0
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.valuation_p_pow_mul`：valuation_p_pow_mul (n : Nat) (c : Int_[p]
+) (hc : c != 0) : ((p : Int_[p]) ^ n * c).valuation = n + c.valuation
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+（共 58 条，此处仅展示前 30 条）
 -/
-theorem dvd_appr_sub_appr (x : Int_[p]) (m n : Nat) (h : m <= n) : p ^ m ∣ x.appr n - x.appr m := by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h; clear h
-  induction k with
-  | zero =>
-    simp only [add_zero, le_refl, tsub_eq_zero_of_le, dvd_zero]
-  | succ k ih =>
-    rw [← add_assoc]
-    dsimp [appr]
-    split_ifs with h
-    · exact ih
-    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
-    apply dvd_add _ ih
-    apply dvd_mul_of_dvd_left
-    apply pow_dvd_pow _ (Nat.le_add_right m k)
-
-/--
-theorem `appr_spec` / 定理 `appr_spec`
-
-English:
-theorem appr_spec
-  given: (n : Nat)
-  statement: forall x : Int_[p], x - appr x n in Ideal.span {(p : Int_[p]) ^ n}
-  proof: by
+theorem appr_spec (n : ℕ) : ∀ x : ℤ_[p], x - appr x n ∈ Ideal.span {(p : ℤ_[p]) ^ n} := by
   simp only [Ideal.mem_span_singleton]
   induction n with
   | zero => simp only [_root_.pow_zero, isUnit_one, IsUnit.dvd, forall_const]
@@ -1393,160 +1423,52 @@ theorem appr_spec
     rw [sub_add_eq_sub_sub]
     obtain ⟨c, hc⟩ := ih x
     simp only [map_natCast, ZMod.natCast_self, map_pow, map_mul, ZMod.natCast_val]
-    have hc' : c != 0 := by
+    have hc' : c ≠ 0 := by
       rintro rfl
       simp only [mul_zero] at hc
       contradiction
     conv_rhs =>
       congr
       simp only [hc]
-    rw [show (x - (appr x n : Int_[p])).valuation = ((p : Int_[p]) ^ n * c).valuation by rw [hc]]
-    rw [valuation_p_pow_mul _ _ hc']; rw [Nat.cast_add]; rw [add_sub_cancel_left]; rw [_root_.pow_succ]; rw [← mul_sub]
+    rw [show (x - (appr x n : ℤ_[p])).valuation = ((p : ℤ_[p]) ^ n * c).valuation by rw [hc]]
+    rw [valuation_p_pow_mul _ _ hc', Nat.cast_add, add_sub_cancel_left, _root_.pow_succ, ← mul_sub]
     apply mul_dvd_mul_left
     obtain hc0 | hc0 := eq_or_ne c.valuation 0
     · simp only [hc0, mul_one, _root_.pow_zero, Nat.cast_zero, Int.natAbs_zero]
-      rw [mul_comm]; rw [unitCoeff_spec h] at hc
+      rw [mul_comm, unitCoeff_spec h] at hc
       suffices c = unitCoeff h by
-        rw [← this]; rw [← Ideal.mem_span_singleton]; rw [← maximalIdeal_eq_span_p]
+        rw [← this, ← Ideal.mem_span_singleton, ← maximalIdeal_eq_span_p]
         apply toZMod_spec
-      lift c to Int_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
+      lift c to ℤ_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
       rw [IsDiscreteValuationRing.unit_mul_pow_congr_unit _ _ _ _ _ hc]
       exact irreducible_p
     · simp only [Int.natAbs_natCast, zero_pow hc0, sub_zero, ZMod.cast_zero, mul_zero]
       rw [unitCoeff_spec hc']
-      exact (dvd_pow_self (p : Int_[p]) hc0).mul_left _
-
-中文:
-定理 appr_spec
-  条件: (n : 自然数)
-  结论: 对任意 x : 整数_[p], x - appr x n in 理想.span {(p : 整数_[p]) ^ n}
-  证明: by
-  simp only [Ideal.mem_span_singleton]
-  induction n with
-  | zero => simp only [_root_.pow_zero, isUnit_one, IsUnit.dvd, forall_const]
-  | succ n ih =>
-    intro x
-    dsimp only [appr]
-    split_ifs with h
-    · rw [h]
-      apply dvd_zero
-    push_cast
-    rw [sub_add_eq_sub_sub]
-    obtain ⟨c, hc⟩ := ih x
-    simp only [map_natCast, ZMod.natCast_self, map_pow, map_mul, ZMod.natCast_val]
-    have hc' : c != 0 := by
-      rintro rfl
-      simp only [mul_zero] at hc
-      contradiction
-    conv_rhs =>
-      congr
-      simp only [hc]
-    rw [show (x - (appr x n : Int_[p])).valuation = ((p : Int_[p]) ^ n * c).valuation by rw [hc]]
-    rw [valuation_p_pow_mul _ _ hc']; rw [Nat.cast_add]; rw [add_sub_cancel_left]; rw [_root_.pow_succ]; rw [← mul_sub]
-    apply mul_dvd_mul_left
-    obtain hc0 | hc0 := eq_or_ne c.valuation 0
-    · simp only [hc0, mul_one, _root_.pow_zero, Nat.cast_zero, Int.natAbs_zero]
-      rw [mul_comm]; rw [unitCoeff_spec h] at hc
-      suffices c = unitCoeff h by
-        rw [← this]; rw [← Ideal.mem_span_singleton]; rw [← maximalIdeal_eq_span_p]
-        apply toZMod_spec
-      lift c to Int_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
-      rw [IsDiscreteValuationRing.unit_mul_pow_congr_unit _ _ _ _ _ hc]
-      exact irreducible_p
-    · simp only [Int.natAbs_natCast, zero_pow hc0, sub_zero, ZMod.cast_zero, mul_zero]
-      rw [unitCoeff_spec hc']
-      exact (dvd_pow_self (p : Int_[p]) hc0).mul_left _
-
-Depends on / 依赖: Ideal.mem_span_singleton, Int_, IsUnit, IsUnit.dvd, ZMod.natCast_self, ZMod.natCast_val, _root_, _root_.pow_zero, conv_rhs, dvd_zero, forall_const, isUnit_one, map_mul, map_natCast, map_pow, mem_span_singleton, mul_zero, natCast_self, natCast_val, pow_zero
--/
-theorem appr_spec (n : Nat) : forall x : Int_[p], x - appr x n in Ideal.span {(p : Int_[p]) ^ n} := by
-  simp only [Ideal.mem_span_singleton]
-  induction n with
-  | zero => simp only [_root_.pow_zero, isUnit_one, IsUnit.dvd, forall_const]
-  | succ n ih =>
-    intro x
-    dsimp only [appr]
-    split_ifs with h
-    · rw [h]
-      apply dvd_zero
-    push_cast
-    rw [sub_add_eq_sub_sub]
-    obtain ⟨c, hc⟩ := ih x
-    simp only [map_natCast, ZMod.natCast_self, map_pow, map_mul, ZMod.natCast_val]
-    have hc' : c != 0 := by
-      rintro rfl
-      simp only [mul_zero] at hc
-      contradiction
-    conv_rhs =>
-      congr
-      simp only [hc]
-    rw [show (x - (appr x n : Int_[p])).valuation = ((p : Int_[p]) ^ n * c).valuation by rw [hc]]
-    rw [valuation_p_pow_mul _ _ hc']; rw [Nat.cast_add]; rw [add_sub_cancel_left]; rw [_root_.pow_succ]; rw [← mul_sub]
-    apply mul_dvd_mul_left
-    obtain hc0 | hc0 := eq_or_ne c.valuation 0
-    · simp only [hc0, mul_one, _root_.pow_zero, Nat.cast_zero, Int.natAbs_zero]
-      rw [mul_comm]; rw [unitCoeff_spec h] at hc
-      suffices c = unitCoeff h by
-        rw [← this]; rw [← Ideal.mem_span_singleton]; rw [← maximalIdeal_eq_span_p]
-        apply toZMod_spec
-      lift c to Int_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
-      rw [IsDiscreteValuationRing.unit_mul_pow_congr_unit _ _ _ _ _ hc]
-      exact irreducible_p
-    · simp only [Int.natAbs_natCast, zero_pow hc0, sub_zero, ZMod.cast_zero, mul_zero]
-      rw [unitCoeff_spec hc']
-      exact (dvd_pow_self (p : Int_[p]) hc0).mul_left _
-
-/--
-lemma `toZMod_eq_residueField_comp_residue` / 引理 `toZMod_eq_residueField_comp_residue`
-
-English:
-lemma toZMod_eq_residueField_comp_residue
-  proof: rfl
-
-中文:
-引理 toZMod_eq_residueField_comp_residue
-  证明: rfl
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.residue, residue, residueField, residueField.toRingHom.comp, toRingHom
+      exact (dvd_pow_self (p : ℤ_[p]) hc0).mul_left _
+/-
+**PadicInt.toZMod_eq_residueField_comp_residue** 是 Mathlib 中的一个引理，位于命名空间 `PadicI
+nt`。
+形式化陈述：toZMod_eq_residueField_comp_residue : toZMod (p
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toZMod_eq_residueField_comp_residue :
     toZMod (p := p) = residueField.toRingHom.comp (IsLocalRing.residue _) :=
   rfl
 
-/--
-Definition of `toZModPow` / `toZModPow` 的定义
+/-- A ring hom from `ℤ_[p]` to `ZMod (p^n)`, with underlying function `PadicInt.appr n`. -/
+/-
+**PadicInt.toZModPow** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：toZModPow (n : Nat) : Int_[p] ->+* ZMod (p ^ n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toZModPow
-  signature: (n : Nat)
-  body: toZModHom (p ^ n) (fun x => appr x n)
-    (by
-      intros
-      rw [Nat.cast_pow]
-      exact appr_spec n _)
-    (by
-      intro x a b ha hb
-      apply zmod_congr_of_sub_mem_span n x a b
-      · simpa using ha
-      · simpa using hb)
-
-中文:
-定义 toZModPow
-  签名: (n : 自然数)
-  定义体: toZModHom (p ^ n) (fun x => appr x n)
-    (by
-      intros
-      rw [Nat.cast_pow]
-      exact appr_spec n _)
-    (by
-      intro x a b ha hb
-      apply zmod_congr_of_sub_mem_span n x a b
-      · simpa using ha
-      · simpa using hb)
-
-Depends on / 依赖: Nat.cast_pow, appr_spec, cast_pow, intros, toZModHom, zmod_congr_of_sub_mem_span
+--- 原说明 ---
+A ring hom from `ℤ_[p]` to `ZMod (p^n)`, with underlying function `PadicInt.appr
+ n`.
 -/
-def toZModPow (n : Nat) : Int_[p] ->+* ZMod (p ^ n) :=
+def toZModPow (n : ℕ) : ℤ_[p] →+* ZMod (p ^ n) :=
   toZModHom (p ^ n) (fun x => appr x n)
     (by
       intros
@@ -1557,54 +1479,39 @@ def toZModPow (n : Nat) : Int_[p] ->+* ZMod (p ^ n) :=
       apply zmod_congr_of_sub_mem_span n x a b
       · simpa using ha
       · simpa using hb)
-
-/--
-theorem `ker_toZModPow` / 定理 `ker_toZModPow`
-
-English:
-theorem ker_toZModPow
-  given: (n : Nat)
-  proof: by
-  ext x
-  rw [RingHom.mem_ker]
-  constructor
-  · intro h
-    suffices x.appr n = 0 by
-      convert! appr_spec n x
-      simp only [this, sub_zero, cast_zero]
-    dsimp [toZModPow, toZModHom] at h
-    rw [ZMod.natCast_eq_zero_iff] at h
-    apply eq_zero_of_dvd_of_lt h (appr_lt _ _)
-  · intro h
-    rw [← sub_zero x] at h
-    dsimp [toZModPow, toZModHom]
-    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h]; rw [cast_zero]
-    apply appr_spec
-
-中文:
-定理 ker_toZModPow
-  条件: (n : 自然数)
-  证明: by
-  ext x
-  rw [RingHom.mem_ker]
-  constructor
-  · intro h
-    suffices x.appr n = 0 by
-      convert! appr_spec n x
-      simp only [this, sub_zero, cast_zero]
-    dsimp [toZModPow, toZModHom] at h
-    rw [ZMod.natCast_eq_zero_iff] at h
-    apply eq_zero_of_dvd_of_lt h (appr_lt _ _)
-  · intro h
-    rw [← sub_zero x] at h
-    dsimp [toZModPow, toZModHom]
-    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h]; rw [cast_zero]
-    apply appr_spec
-
-Depends on / 依赖: RingHom, RingHom.mem_ker, ZMod.natCast_eq_zero_iff, appr_lt, appr_spec, cast_zero, convert, eq_zero_of_dvd_of_lt, mem_ker, natCast_eq_zero_iff, sub_zero, toZModHom, toZModPow, x.appr, zmod_congr_of_sub_mem_span
+/-
+**PadicInt.ker_toZModPow** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：ker_toZModPow (n : Nat) : RingHom.ker (toZModPow n : Int_[p] ->+* ZMod (p 
+^ n)) = Ideal.span {(p : Int_[p]) ^ n}
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `Nat.eq_zero_of_dvd_of_lt`：∀ {a b : ℕ}, a ∣ b → b < a → b = 0
+· 使用定理 `ZMod.natCast_eq_zero_iff`：natCast_eq_zero_iff (a b : Nat) : (a : ZMod b)
+ = 0 ↔ b ∣ a
+· 使用定理 `PadicInt.appr_lt`：appr_lt (x : Int_[p]) (n : Nat) : x.appr n < p ^ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PadicInt.appr_spec`：appr_spec (n : Nat) : forall x : Int_[p], x - appr x
+ n in Ideal.span {(p : Int_[p]) ^ n}
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_span`：zmod_congr_of_sub_mem_span (n : Nat
+) (x : Int_[p]) (a b : Nat) (ha : x - a in (Ideal.span {(p : Int_[p]) ^ n})) (hb
+ : x - b in (Ideal.span {…
 -/
-theorem ker_toZModPow (n : Nat) :
-    RingHom.ker (toZModPow n : Int_[p] ->+* ZMod (p ^ n)) = Ideal.span {(p : Int_[p]) ^ n} := by
+theorem ker_toZModPow (n : ℕ) :
+    RingHom.ker (toZModPow n : ℤ_[p] →+* ZMod (p ^ n)) = Ideal.span {(p : ℤ_[p]) ^ n} := by
   ext x
   rw [RingHom.mem_ker]
   constructor
@@ -1618,130 +1525,106 @@ theorem ker_toZModPow (n : Nat) :
   · intro h
     rw [← sub_zero x] at h
     dsimp [toZModPow, toZModHom]
-    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h]; rw [cast_zero]
+    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h, cast_zero]
     apply appr_spec
 
 -- This is not a simp lemma; simp can't match the LHS.
-/--
-theorem `zmod_cast_comp_toZModPow` / 定理 `zmod_cast_comp_toZModPow`
-
-English:
-theorem zmod_cast_comp_toZModPow
-  given: (m n : Nat) (h : m <= n)
-  proof: by
-  apply ZMod.ringHom_eq_of_ker_eq
-  ext x
-  rw [RingHom.mem_ker]; rw [RingHom.mem_ker]
-  simp only [Function.comp_apply, ZMod.castHom_apply, RingHom.coe_comp]
-  simp only [toZModPow, toZModHom, RingHom.coe_mk]
-  dsimp
-  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
-  · rw [sub_self]
-    apply Ideal.zero_mem _
-  · rw [Ideal.mem_span_singleton]
-    rcases dvd_appr_sub_appr x m n h with ⟨c, hc⟩
-    use c
-    rw [← Nat.cast_sub (appr_mono _ h)]; rw [hc]; rw [Nat.cast_mul]; rw [Nat.cast_pow]
-
-@[simp]
-
-中文:
-定理 zmod_cast_comp_toZModPow
-  条件: (m n : 自然数) (h : m <= n)
-  证明: by
-  apply ZMod.ringHom_eq_of_ker_eq
-  ext x
-  rw [RingHom.mem_ker]; rw [RingHom.mem_ker]
-  simp only [Function.comp_apply, ZMod.castHom_apply, RingHom.coe_comp]
-  simp only [toZModPow, toZModHom, RingHom.coe_mk]
-  dsimp
-  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
-  · rw [sub_self]
-    apply Ideal.zero_mem _
-  · rw [Ideal.mem_span_singleton]
-    rcases dvd_appr_sub_appr x m n h with ⟨c, hc⟩
-    use c
-    rw [← Nat.cast_sub (appr_mono _ h)]; rw [hc]; rw [Nat.cast_mul]; rw [Nat.cast_pow]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_apply, Ideal.mem_span_singleton, Ideal.zero_mem, Nat.cast_, Nat.cast_sub, RingHom, RingHom.coe_comp, RingHom.coe_mk, RingHom.mem_ker, ZMod.castHom_apply, ZMod.cast_natCast, ZMod.ringHom_eq_of_ker_eq, appr_mono, castHom_apply, cast_, cast_natCast, cast_sub, coe_comp, coe_mk
+/-
+**PadicInt.zmod_cast_comp_toZModPow** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：zmod_cast_comp_toZModPow (m n : Nat) (h : m <= n) : (ZMod.castHom (pow_dvd
+_pow p h) (ZMod (p ^ m))).comp (@toZModPow p _ n) = @toZModPow p _ m
+参数：m n : Nat；h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZMod.ringHom_eq_of_ker_eq`：ZMod.ringHom_eq_of_ker_eq {n : Nat} {R : Type
+*} [Ring R] (f g : R ->+* ZMod n) (h : RingHom.ker f = RingHom.ker g) : f = g
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `ZMod.cast_natCast`：cast_natCast (h : m ∣ n) (k : Nat) : (cast (k : ZMod 
+n) : R) = k
+· 使用定理 `PadicInt.zmod_congr_of_sub_mem_span`：zmod_congr_of_sub_mem_span (n : Nat
+) (x : Int_[p]) (a b : Nat) (ha : x - a in (Ideal.span {(p : Int_[p]) ^ n})) (hb
+ : x - b in (Ideal.span {…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PadicInt.dvd_appr_sub_appr`：dvd_appr_sub_appr (x : Int_[p]) (m n : Nat) 
+(h : m <= n) : p ^ m ∣ x.appr n - x.appr m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_sub`：cast_sub {m n} (h : m <= n) : ((n - m : Nat) : R) = n - m
+· 使用定理 `PadicInt.appr_mono`：appr_mono (x : Int_[p]) : Monotone x.appr
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem zmod_cast_comp_toZModPow (m n : Nat) (h : m <= n) :
+theorem zmod_cast_comp_toZModPow (m n : ℕ) (h : m ≤ n) :
     (ZMod.castHom (pow_dvd_pow p h) (ZMod (p ^ m))).comp (@toZModPow p _ n) = @toZModPow p _ m := by
   apply ZMod.ringHom_eq_of_ker_eq
   ext x
-  rw [RingHom.mem_ker]; rw [RingHom.mem_ker]
+  rw [RingHom.mem_ker, RingHom.mem_ker]
   simp only [Function.comp_apply, ZMod.castHom_apply, RingHom.coe_comp]
   simp only [toZModPow, toZModHom, RingHom.coe_mk]
   dsimp
-  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
+  rw [ZMod.cast_natCast (pow_dvd_pow p h),
+    zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
   · rw [sub_self]
     apply Ideal.zero_mem _
   · rw [Ideal.mem_span_singleton]
     rcases dvd_appr_sub_appr x m n h with ⟨c, hc⟩
     use c
-    rw [← Nat.cast_sub (appr_mono _ h)]; rw [hc]; rw [Nat.cast_mul]; rw [Nat.cast_pow]
+    rw [← Nat.cast_sub (appr_mono _ h), hc, Nat.cast_mul, Nat.cast_pow]
 
 @[simp]
-/--
-theorem `cast_toZModPow` / 定理 `cast_toZModPow`
-
-English:
-theorem cast_toZModPow
-  given: (m n : Nat) (h : m <= n) (x : Int_[p])
-  proof: by
-  rw [← zmod_cast_comp_toZModPow _ _ h]
-  simp
-
-中文:
-定理 cast_toZModPow
-  条件: (m n : 自然数) (h : m <= n) (x : 整数_[p])
-  证明: by
-  rw [← zmod_cast_comp_toZModPow _ _ h]
-  simp
-
-Depends on / 依赖: zmod_cast_comp_toZModPow
+/-
+**PadicInt.cast_toZModPow** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：cast_toZModPow (m n : Nat) (h : m <= n) (x : Int_[p]) : ZMod.cast (toZModP
+ow n x) = toZModPow m x
+参数：m n : Nat；h : m <= n；x : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.zmod_cast_comp_toZModPow`：zmod_cast_comp_toZModPow (m n : Nat) 
+(h : m <= n) : (ZMod.castHom (pow_dvd_pow p h) (ZMod (p ^ m))).comp (@toZModPow 
+p _ n) = @toZModPow p _…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cast_toZModPow (m n : Nat) (h : m <= n) (x : Int_[p]) :
+theorem cast_toZModPow (m n : ℕ) (h : m ≤ n) (x : ℤ_[p]) :
     ZMod.cast (toZModPow n x) = toZModPow m x := by
   rw [← zmod_cast_comp_toZModPow _ _ h]
   simp
-
-/--
-theorem `denseRange_natCast` / 定理 `denseRange_natCast`
-
-English:
-theorem denseRange_natCast
-  statement: DenseRange (Nat.cast : Nat -> Int_[p])
-  proof: by
-  intro x
-  rw [Metric.mem_closure_range_iff]
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
-  use x.appr n
-  rw [dist_eq_norm]
-  apply lt_of_le_of_lt _ hn
-  rw [norm_le_pow_iff_mem_span_pow]
-  apply appr_spec
-
-中文:
-定理 denseRange_natCast
-  结论: DenseRange (自然数.cast : 自然数 -> 整数_[p])
-  证明: by
-  intro x
-  rw [Metric.mem_closure_range_iff]
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
-  use x.appr n
-  rw [dist_eq_norm]
-  apply lt_of_le_of_lt _ hn
-  rw [norm_le_pow_iff_mem_span_pow]
-  apply appr_spec
-
-Depends on / 依赖: Metric, Metric.mem_closure_range_iff, appr_spec, dist_eq_norm, exists_pow_neg_lt, lt_of_le_of_lt, mem_closure_range_iff, norm_le_pow_iff_mem_span_pow, x.appr
+/-
+**PadicInt.denseRange_natCast** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：denseRange_natCast : DenseRange (Nat.cast : Nat -> Int_[p])
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closure_range_iff`：mem_closure_range_iff {e : β -> α} {a : α}
+ : a in closure (range e) ↔ forall ε > 0, exists k : β, dist a (e k) < ε
+· 使用定理 `PadicInt.exists_pow_neg_lt`：exists_pow_neg_lt {ε : Real} (hε : 0 < ε) : 
+exists k : Nat, (p : Real) ^ (-(k : Int)) < ε
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `PadicInt.norm_le_pow_iff_mem_span_pow`：norm_le_pow_iff_mem_span_pow (x :
+ Int_[p]) (n : Nat) : ‖x‖ <= (p : Real) ^ (-n : Int) ↔ x in (Ideal.span {(p : In
+t_[p]) ^ n} : Ideal Int_[p]…
+· 使用定理 `PadicInt.appr_spec`：appr_spec (n : Nat) : forall x : Int_[p], x - appr x
+ n in Ideal.span {(p : Int_[p]) ^ n}
 -/
-theorem denseRange_natCast : DenseRange (Nat.cast : Nat -> Int_[p]) := by
+theorem denseRange_natCast : DenseRange (Nat.cast : ℕ → ℤ_[p]) := by
   intro x
   rw [Metric.mem_closure_range_iff]
   intro ε hε
@@ -1751,35 +1634,22 @@ theorem denseRange_natCast : DenseRange (Nat.cast : Nat -> Int_[p]) := by
   apply lt_of_le_of_lt _ hn
   rw [norm_le_pow_iff_mem_span_pow]
   apply appr_spec
-
-/--
-theorem `denseRange_intCast` / 定理 `denseRange_intCast`
-
-English:
-theorem denseRange_intCast
-  statement: DenseRange (Int.cast : Int -> Int_[p])
-  proof: by
-  intro x
-  refine DenseRange.induction_on denseRange_natCast x ?_ ?_
-  · exact isClosed_closure
-  · intro a
-    apply subset_closure
-    exact Set.mem_range_self _
-
-中文:
-定理 denseRange_intCast
-  结论: DenseRange (整数.cast : 整数 -> 整数_[p])
-  证明: by
-  intro x
-  refine DenseRange.induction_on denseRange_natCast x ?_ ?_
-  · exact isClosed_closure
-  · intro a
-    apply subset_closure
-    exact Set.mem_range_self _
-
-Depends on / 依赖: DenseRange, DenseRange.induction_on, Set.mem_range_self, denseRange_natCast, induction_on, isClosed_closure, mem_range_self, subset_closure
+/-
+**PadicInt.denseRange_intCast** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：denseRange_intCast : DenseRange (Int.cast : Int -> Int_[p])
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DenseRange.induction_on`：DenseRange.induction_on [TopologicalSpace β] {e
+ : α -> β} (he : DenseRange e) {p : β -> Prop} (b₀ : β) (hp : IsClosed { b | p b
+ }) (ih : for…
+· 使用定理 `PadicInt.denseRange_natCast`：denseRange_natCast : DenseRange (Nat.cast :
+ Nat -> Int_[p])
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem denseRange_intCast : DenseRange (Int.cast : Int -> Int_[p]) := by
+theorem denseRange_intCast : DenseRange (Int.cast : ℤ → ℤ_[p]) := by
   intro x
   refine DenseRange.induction_on denseRange_natCast x ?_ ?_
   · exact isClosed_closure
@@ -1796,45 +1666,55 @@ section lift
 
 open CauSeq PadicSeq
 
-variable {R : Type*} [NonAssocSemiring R] {p : Nat} (f : forall k : Nat, R ->+* ZMod (p ^ k))
+variable {R : Type*} [NonAssocSemiring R] {p : Nat} (f : ∀ k : ℕ, R →+* ZMod (p ^ k))
 
 
-/--
-Definition of `nthHom` / `nthHom` 的定义
-
-English:
-definition nthHom
-  signature: (r : R)
-  body: fun n => (f n r : ZMod (p ^ n)).val
-
-@[simp]
-
-中文:
-定义 nthHom
-  签名: (r : R)
-  定义体: fun n => (f n r : ZMod (p ^ n)).val
-
-@[simp]
+/-- Given a family of ring homs `f : Π n : ℕ, R →+* ZMod (p ^ n)`,
+`nthHom f r` is an integer-valued sequence
+whose `n`th value is the unique integer `k` such that `0 ≤ k < p ^ n`
+and `f n r = (k : ZMod (p ^ n))`.
 -/
-def nthHom (r : R) : Nat -> Int := fun n => (f n r : ZMod (p ^ n)).val
+/-
+**PadicInt.nthHom** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：nthHom (r : R) : Nat -> Int
+参数：r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given a family of ring homs `f : Π n : ℕ, R →+* ZMod (p ^ n)`,
+`nthHom f r` is an integer-valued sequence
+whose `n`th value is the unique integer `k` such that `0 ≤ k < p ^ n`
+and `f n r = (k : ZMod (p ^ n))`.
+-/
+def nthHom (r : R) : ℕ → ℤ := fun n => (f n r : ZMod (p ^ n)).val
 
 @[simp]
-/--
-theorem `nthHom_zero` / 定理 `nthHom_zero`
-
-English:
-theorem nthHom_zero
-  statement: nthHom f 0 = 0
-  proof: by
-  simp +unfoldPartialApp [nthHom, Pi.zero_def]
-
-中文:
-定理 nthHom_zero
-  结论: nthHom f 0 = 0
-  证明: by
-  simp +unfoldPartialApp [nthHom, Pi.zero_def]
-
-Depends on / 依赖: Pi.zero_def, nthHom, unfoldPartialApp, zero_def
+/-
+**PadicInt.nthHom_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：nthHom_zero : nthHom f 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ZMod.val_zero`：∀ {n : ℕ}, ZMod.val 0 = 0
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nthHom_zero : nthHom f 0 = 0 := by
   simp +unfoldPartialApp [nthHom, Pi.zero_def]
@@ -1844,84 +1724,76 @@ variable [hp_prime : Fact p.Prime]
 
 section
 variable
-  (f_compat : forall (k1 k2) (hk : k1 <= k2), (ZMod.castHom (pow_dvd_pow p hk) _).comp (f k2) = f k1)
+  (f_compat : ∀ (k1 k2) (hk : k1 ≤ k2), (ZMod.castHom (pow_dvd_pow p hk) _).comp (f k2) = f k1)
 include f_compat
 
-/--
-theorem `pow_dvd_nthHom_sub` / 定理 `pow_dvd_nthHom_sub`
-
-English:
-theorem pow_dvd_nthHom_sub
-  given: (r : R) (i j : Nat) (h : i <= j)
-  proof: by
-  specialize f_compat i j h
-  rw [← Int.natCast_pow]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.cast_sub]
-  dsimp [nthHom]
-  rw [← f_compat]; rw [RingHom.comp_apply]
-  simp only [ZMod.cast_id, ZMod.castHom_apply, sub_self, ZMod.natCast_val, ZMod.intCast_cast]
-
-中文:
-定理 pow_dvd_nthHom_sub
-  条件: (r : R) (i j : 自然数) (h : i <= j)
-  证明: by
-  specialize f_compat i j h
-  rw [← Int.natCast_pow]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.cast_sub]
-  dsimp [nthHom]
-  rw [← f_compat]; rw [RingHom.comp_apply]
-  simp only [ZMod.cast_id, ZMod.castHom_apply, sub_self, ZMod.natCast_val, ZMod.intCast_cast]
-
-Depends on / 依赖: Int.cast_sub, Int.natCast_pow, RingHom, RingHom.comp_apply, ZMod.castHom_apply, ZMod.cast_id, ZMod.intCast_cast, ZMod.intCast_zmod_eq_zero_iff_dvd, ZMod.natCast_val, castHom_apply, cast_id, cast_sub, comp_apply, f_compat, intCast_cast, intCast_zmod_eq_zero_iff_dvd, natCast_pow, natCast_val, nthHom, specialize
+/-
+**PadicInt.pow_dvd_nthHom_sub** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：pow_dvd_nthHom_sub (r : R) (i j : Nat) (h : i <= j) : (p : Int) ^ i ∣ nthH
+om f r j - nthHom f r i
+参数：r : R；i j : Nat；h : i <= j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.natCast_pow`：∀ (m n : ℕ), ↑(m ^ n) = ↑m ^ n
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `ZMod.intCast_cast`：intCast_cast (i : ZMod n) : ((cast i : Int) : R) = ca
+st i
+· 使用定理 `ZMod.cast_id`：∀ (n : ℕ) (i : ZMod n), i.cast = i
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pow_dvd_nthHom_sub (r : R) (i j : Nat) (h : i <= j) :
-    (p : Int) ^ i ∣ nthHom f r j - nthHom f r i := by
+theorem pow_dvd_nthHom_sub (r : R) (i j : ℕ) (h : i ≤ j) :
+    (p : ℤ) ^ i ∣ nthHom f r j - nthHom f r i := by
   specialize f_compat i j h
-  rw [← Int.natCast_pow]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.cast_sub]
+  rw [← Int.natCast_pow, ← ZMod.intCast_zmod_eq_zero_iff_dvd, Int.cast_sub]
   dsimp [nthHom]
-  rw [← f_compat]; rw [RingHom.comp_apply]
+  rw [← f_compat, RingHom.comp_apply]
   simp only [ZMod.cast_id, ZMod.castHom_apply, sub_self, ZMod.natCast_val, ZMod.intCast_cast]
-
-/--
-theorem `isCauSeq_nthHom` / 定理 `isCauSeq_nthHom`
-
-English:
-theorem isCauSeq_nthHom
-  given: (r : R)
-  statement: IsCauSeq (padicNorm p) fun n => nthHom f r n
-  proof: by
-  intro ε hε
-  obtain ⟨k, hk⟩ : exists k : Nat, (p : Rat) ^ (-((k : Nat) : Int)) < ε := exists_pow_neg_lt_rat p hε
-  use k
-  intro j hj
-  refine lt_of_le_of_lt ?_ hk
-  -- Need to do beta reduction first, as `norm_cast` doesn't.
-  -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
-  beta_reduce
-  norm_cast
-  rw [← padicNorm.dvd_iff_norm_le]
-  exact mod_cast pow_dvd_nthHom_sub f_compat r k j hj
-
-中文:
-定理 isCauSeq_nthHom
-  条件: (r : R)
-  结论: IsCauSeq (padicNorm p) fun n => nthHom f r n
-  证明: by
-  intro ε hε
-  obtain ⟨k, hk⟩ : exists k : Nat, (p : Rat) ^ (-((k : Nat) : Int)) < ε := exists_pow_neg_lt_rat p hε
-  use k
-  intro j hj
-  refine lt_of_le_of_lt ?_ hk
-  -- Need to do beta reduction first, as `norm_cast` doesn't.
-  -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
-  beta_reduce
-  norm_cast
-  rw [← padicNorm.dvd_iff_norm_le]
-  exact mod_cast pow_dvd_nthHom_sub f_compat r k j hj
-
-Depends on / 依赖: exists_pow_neg_lt_rat, lt_of_le_of_lt
+/-
+**PadicInt.isCauSeq_nthHom** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm p) fun n => nthHom f r n
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.exists_pow_neg_lt_rat`：exists_pow_neg_lt_rat {ε : Rat} (hε : 0 
+< ε) : exists k : Nat, (p : Rat) ^ (-(k : Int)) < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `padicNorm.dvd_iff_norm_le`：dvd_iff_norm_le {n : Nat} {z : Int} : ↑(p ^ n
+) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : Int)
+· 使用定理 `PadicInt.pow_dvd_nthHom_sub`：pow_dvd_nthHom_sub (r : R) (i j : Nat) (h :
+ i <= j) : (p : Int) ^ i ∣ nthHom f r j - nthHom f r i
 -/
 theorem isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm p) fun n => nthHom f r n := by
   intro ε hε
-  obtain ⟨k, hk⟩ : exists k : Nat, (p : Rat) ^ (-((k : Nat) : Int)) < ε := exists_pow_neg_lt_rat p hε
+  obtain ⟨k, hk⟩ : ∃ k : ℕ, (p : ℚ) ^ (-((k : ℕ) : ℤ)) < ε := exists_pow_neg_lt_rat p hε
   use k
   intro j hj
   refine lt_of_le_of_lt ?_ hk
@@ -1932,54 +1804,80 @@ theorem isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm p) fun n => nthHom f r n :
   rw [← padicNorm.dvd_iff_norm_le]
   exact mod_cast pow_dvd_nthHom_sub f_compat r k j hj
 
-/--
-Definition of `nthHomSeq` / `nthHomSeq` 的定义
+/-- `nthHomSeq f_compat r` bundles `PadicInt.nthHom f r`
+as a Cauchy sequence of rationals with respect to the `p`-adic norm.
+The `n`th value of the sequence is `((f n r).val : ℚ)`.
+-/
+/-
+**PadicInt.nthHomSeq** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：nthHomSeq (r : R) : PadicSeq p
+参数：r : R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
 
-English:
-definition nthHomSeq
-  signature: (r : R)
-  body: ⟨fun n => nthHom f r n, isCauSeq_nthHom f_compat r⟩
-
-中文:
-定义 nthHomSeq
-  签名: (r : R)
-  定义体: ⟨fun n => nthHom f r n, isCauSeq_nthHom f_compat r⟩
-
-Depends on / 依赖: f_compat, isCauSeq_nthHom, nthHom
+--- 原说明 ---
+`nthHomSeq f_compat r` bundles `PadicInt.nthHom f r`
+as a Cauchy sequence of rationals with respect to the `p`-adic norm.
+The `n`th value of the sequence is `((f n r).val : ℚ)`.
 -/
 def nthHomSeq (r : R) : PadicSeq p :=
   ⟨fun n => nthHom f r n, isCauSeq_nthHom f_compat r⟩
 
 set_option backward.isDefEq.respectTransparency false in
 -- this lemma ran into issues after changing to `NeZero` and I'm not sure why.
-/--
-theorem `nthHomSeq_one` / 定理 `nthHomSeq_one`
-
-English:
-theorem nthHomSeq_one
-  statement: nthHomSeq f_compat 1 ≈ 1
-  proof: by
-  intro ε hε
-  change _ < _ at hε
-  use 1
-  intro j hj
-  have : Fact (1 < p ^ j) := ⟨Nat.one_lt_pow (by lia) hp_prime.1.one_lt⟩
-  suffices (ZMod.cast (1 : ZMod (p ^ j)) : Rat) = 1 by simp [nthHomSeq, nthHom, this, hε]
-  rw [ZMod.cast_eq_val]; rw [ZMod.val_one]; rw [Nat.cast_one]
-
-中文:
-定理 nthHomSeq_one
-  结论: nthHomSeq f_compat 1 ≈ 1
-  证明: by
-  intro ε hε
-  change _ < _ at hε
-  use 1
-  intro j hj
-  have : Fact (1 < p ^ j) := ⟨Nat.one_lt_pow (by lia) hp_prime.1.one_lt⟩
-  suffices (ZMod.cast (1 : ZMod (p ^ j)) : Rat) = 1 by simp [nthHomSeq, nthHom, this, hε]
-  rw [ZMod.cast_eq_val]; rw [ZMod.val_one]; rw [Nat.cast_one]
-
-Depends on / 依赖: Nat.cast_one, Nat.one_lt_pow, ZMod.cast, ZMod.cast_eq_val, ZMod.val_one, cast_eq_val, cast_one, hp_prime, nthHom, nthHomSeq, one_lt, one_lt_pow, val_one
+/-
+**PadicInt.nthHomSeq_one** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：nthHomSeq_one : nthHomSeq f_compat 1 ≈ 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `Nat.one_lt_pow`：∀ {n a : ℕ}, n ≠ 0 → 1 < a → 1 < a ^ n
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZMod.cast_eq_val`：cast_eq_val [NeZero n] (a : ZMod n) : (cast a : R) = a
+.val
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `ZMod.val_one`：val_one (n : Nat) [Fact (1 < n)] : (1 : ZMod n).val = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `ZMod.intCast_cast`：intCast_cast (i : ZMod n) : ((cast i : Int) : R) = ca
+st i
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `padicNorm.zero`：∀ {p : ℕ}, padicNorm p 0 = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem nthHomSeq_one : nthHomSeq f_compat 1 ≈ 1 := by
   intro ε hε
@@ -1987,48 +1885,61 @@ theorem nthHomSeq_one : nthHomSeq f_compat 1 ≈ 1 := by
   use 1
   intro j hj
   have : Fact (1 < p ^ j) := ⟨Nat.one_lt_pow (by lia) hp_prime.1.one_lt⟩
-  suffices (ZMod.cast (1 : ZMod (p ^ j)) : Rat) = 1 by simp [nthHomSeq, nthHom, this, hε]
-  rw [ZMod.cast_eq_val]; rw [ZMod.val_one]; rw [Nat.cast_one]
+  suffices (ZMod.cast (1 : ZMod (p ^ j)) : ℚ) = 1 by simp [nthHomSeq, nthHom, this, hε]
+  rw [ZMod.cast_eq_val, ZMod.val_one, Nat.cast_one]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `nthHomSeq_add` / 定理 `nthHomSeq_add`
-
-English:
-theorem nthHomSeq_add
-  given: (r s : R)
-  proof: by
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt_rat p hε
-  use n
-  intro j hj
-  dsimp [nthHomSeq]
-  apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_add]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
-    ZMod.intCast_zmod_eq_zero_iff_dvd]
-  dsimp [nthHom]
-  simp only [ZMod.natCast_val, map_add, Int.cast_sub, ZMod.intCast_cast, Int.cast_add]
-  rw [ZMod.cast_add (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]
-  simp only [sub_self]
-
-中文:
-定理 nthHomSeq_add
-  条件: (r s : R)
-  证明: by
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt_rat p hε
-  use n
-  intro j hj
-  dsimp [nthHomSeq]
-  apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_add]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
-    ZMod.intCast_zmod_eq_zero_iff_dvd]
-  dsimp [nthHom]
-  simp only [ZMod.natCast_val, map_add, Int.cast_sub, ZMod.intCast_cast, Int.cast_add]
-  rw [ZMod.cast_add (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]
-  simp only [sub_self]
-
-Depends on / 依赖: Int.cast_add, Int.cast_sub, ZMod.cast_add, ZMod.intCast_cast, ZMod.intCast_zmod_eq_zero_iff_dvd, ZMod.natCast_val, cast_add, cast_sub, dvd_iff_norm_le, exists_pow_neg_lt_rat, intCast_cast, intCast_zmod_eq_zero_iff_dvd, lt_of_le_of_lt, map_add, natCast_val, nthHom, nthHomSeq, padicNorm, padicNorm.dvd_iff_norm_le, pow_dvd_pow
+/-
+**PadicInt.nthHomSeq_add** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：nthHomSeq_add (r s : R) : nthHomSeq f_compat (r + s) ≈ nthHomSeq f_compat 
+r + nthHomSeq f_compat s
+参数：r s : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicInt.exists_pow_neg_lt_rat`：exists_pow_neg_lt_rat {ε : Rat} (hε : 0 
+< ε) : exists k : Nat, (p : Rat) ^ (-(k : Int)) < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用定理 `padicNorm.dvd_iff_norm_le`：dvd_iff_norm_le {n : Nat} {z : Int} : ↑(p ^ n
+) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : Int)
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `ZMod.intCast_cast`：intCast_cast (i : ZMod n) : ((cast i : Int) : R) = ca
+st i
+· 使用定理 `ZMod.cast_add`：cast_add (h : m ∣ n) (a b : ZMod n) : (cast (a + b : ZMod
+ n) : R) = cast a + cast b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nthHomSeq_add (r s : R) :
     nthHomSeq f_compat (r + s) ≈ nthHomSeq f_compat r + nthHomSeq f_compat s := by
@@ -2038,7 +1949,7 @@ theorem nthHomSeq_add (r s : R) :
   intro j hj
   dsimp [nthHomSeq]
   apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_add]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
+  rw [← Int.cast_add, ← Int.cast_sub, ← padicNorm.dvd_iff_norm_le, ←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
   simp only [ZMod.natCast_val, map_add, Int.cast_sub, ZMod.intCast_cast, Int.cast_add]
@@ -2046,42 +1957,55 @@ theorem nthHomSeq_add (r s : R) :
   simp only [sub_self]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `nthHomSeq_mul` / 定理 `nthHomSeq_mul`
-
-English:
-theorem nthHomSeq_mul
-  given: (r s : R)
-  proof: by
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt_rat p hε
-  use n
-  intro j hj
-  dsimp [nthHomSeq]
-  apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_mul]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
-    ZMod.intCast_zmod_eq_zero_iff_dvd]
-  dsimp [nthHom]
-  simp only [ZMod.natCast_val, map_mul, Int.cast_sub, ZMod.intCast_cast, Int.cast_mul]
-  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]; rw [sub_self]
-
-中文:
-定理 nthHomSeq_mul
-  条件: (r s : R)
-  证明: by
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt_rat p hε
-  use n
-  intro j hj
-  dsimp [nthHomSeq]
-  apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_mul]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
-    ZMod.intCast_zmod_eq_zero_iff_dvd]
-  dsimp [nthHom]
-  simp only [ZMod.natCast_val, map_mul, Int.cast_sub, ZMod.intCast_cast, Int.cast_mul]
-  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]; rw [sub_self]
-
-Depends on / 依赖: Int.cast_mul, Int.cast_sub, ZMod.cast_mul, ZMod.intCast_cast, ZMod.intCast_zmod_eq_zero_iff_dvd, ZMod.natCast_val, cast_mul, cast_sub, dvd_iff_norm_le, exists_pow_neg_lt_rat, intCast_cast, intCast_zmod_eq_zero_iff_dvd, lt_of_le_of_lt, map_mul, natCast_val, nthHom, nthHomSeq, padicNorm, padicNorm.dvd_iff_norm_le, pow_dvd_pow
+/-
+**PadicInt.nthHomSeq_mul** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：nthHomSeq_mul (r s : R) : nthHomSeq f_compat (r * s) ≈ nthHomSeq f_compat 
+r * nthHomSeq f_compat s
+参数：r s : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicInt.exists_pow_neg_lt_rat`：exists_pow_neg_lt_rat {ε : Rat} (hε : 0 
+< ε) : exists k : Nat, (p : Rat) ^ (-(k : Int)) < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用定理 `padicNorm.dvd_iff_norm_le`：dvd_iff_norm_le {n : Nat} {z : Int} : ↑(p ^ n
+) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : Int)
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `ZMod.intCast_cast`：intCast_cast (i : ZMod n) : ((cast i : Int) : R) = ca
+st i
+· 使用定理 `ZMod.cast_mul`：cast_mul (h : m ∣ n) (a b : ZMod n) : (cast (a * b : ZMod
+ n) : R) = cast a * cast b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
 theorem nthHomSeq_mul (r s : R) :
     nthHomSeq f_compat (r * s) ≈ nthHomSeq f_compat r * nthHomSeq f_compat s := by
@@ -2091,192 +2015,232 @@ theorem nthHomSeq_mul (r s : R) :
   intro j hj
   dsimp [nthHomSeq]
   apply lt_of_le_of_lt _ hn
-  rw [← Int.cast_mul]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
+  rw [← Int.cast_mul, ← Int.cast_sub, ← padicNorm.dvd_iff_norm_le, ←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
   simp only [ZMod.natCast_val, map_mul, Int.cast_sub, ZMod.intCast_cast, Int.cast_mul]
-  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]; rw [sub_self]
+  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj), sub_self]
 
 /--
-Definition of `limNthHom` / `limNthHom` 的定义
-
-English:
-definition limNthHom
-  signature: (r : R)
-  body: ofIntSeq (nthHom f r) (isCauSeq_nthHom f_compat r)
-
-中文:
-定义 limNthHom
-  签名: (r : R)
-  定义体: ofIntSeq (nthHom f r) (isCauSeq_nthHom f_compat r)
-
-Depends on / 依赖: f_compat, isCauSeq_nthHom, nthHom, ofIntSeq
+`limNthHom f_compat r` is the limit of a sequence `f` of compatible ring homs `R →+* ZMod (p^k)`.
+This is itself a ring hom: see `PadicInt.lift`.
 -/
-def limNthHom (r : R) : Int_[p] :=
+/-
+**PadicInt.limNthHom** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom (r : R) : Int_[p]
+参数：r : R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+
+--- 原说明 ---
+`limNthHom f_compat r` is the limit of a sequence `f` of compatible ring homs `R
+ →+* ZMod (p^k)`.
+This is itself a ring hom: see `PadicInt.lift`.
+-/
+def limNthHom (r : R) : ℤ_[p] :=
   ofIntSeq (nthHom f r) (isCauSeq_nthHom f_compat r)
-
-/--
-theorem `limNthHom_spec` / 定理 `limNthHom_spec`
-
-English:
-theorem limNthHom_spec
-  given: (r : R)
-  proof: by
-  intro ε hε
-  obtain ⟨ε', hε'0, hε'⟩ : exists v : Rat, (0 : Real) < v ∧ ↑v < ε := exists_rat_btwn hε
-  norm_cast at hε'0
-  obtain ⟨N, hN⟩ := padicNormE.defn (nthHomSeq f_compat r) hε'0
-  use N
-  intro n hn
-  apply _root_.lt_trans _ hε'
-  change (padicNormE _ : Real) < _
-  norm_cast
-  exact hN _ hn
-
-中文:
-定理 limNthHom_spec
-  条件: (r : R)
-  证明: by
-  intro ε hε
-  obtain ⟨ε', hε'0, hε'⟩ : exists v : Rat, (0 : Real) < v ∧ ↑v < ε := exists_rat_btwn hε
-  norm_cast at hε'0
-  obtain ⟨N, hN⟩ := padicNormE.defn (nthHomSeq f_compat r) hε'0
-  use N
-  intro n hn
-  apply _root_.lt_trans _ hε'
-  change (padicNormE _ : Real) < _
-  norm_cast
-  exact hN _ hn
-
-Depends on / 依赖: _root_, _root_.lt_trans, exists_rat_btwn, f_compat, lt_trans, nthHomSeq, padicNormE, padicNormE.defn
+/-
+**PadicInt.limNthHom_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom_spec (r : R) : forall ε : Real, 0 < ε -> exists N : Nat, forall 
+n >= N, ‖limNthHom f_compat r - nthHom f r n‖ < ε
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `exists_rat_btwn`：exists_rat_btwn {x y : K} (h : x < y) : exists q : Rat,
+ x < q ∧ q < y
+· 使用定理 `padicNormE.defn`：defn (f : PadicSeq p) {ε : Rat} (hε : 0 < ε) : exists N
+, forall i >= N, padicNormE (Padic.mk f - f i : Rat_[p]) < ε
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
 -/
 theorem limNthHom_spec (r : R) :
-    forall ε : Real, 0 < ε -> exists N : Nat, forall n >= N, ‖limNthHom f_compat r - nthHom f r n‖ < ε := by
+    ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ n ≥ N, ‖limNthHom f_compat r - nthHom f r n‖ < ε := by
   intro ε hε
-  obtain ⟨ε', hε'0, hε'⟩ : exists v : Rat, (0 : Real) < v ∧ ↑v < ε := exists_rat_btwn hε
+  obtain ⟨ε', hε'0, hε'⟩ : ∃ v : ℚ, (0 : ℝ) < v ∧ ↑v < ε := exists_rat_btwn hε
   norm_cast at hε'0
   obtain ⟨N, hN⟩ := padicNormE.defn (nthHomSeq f_compat r) hε'0
   use N
   intro n hn
   apply _root_.lt_trans _ hε'
-  change (padicNormE _ : Real) < _
+  change (padicNormE _ : ℝ) < _
   norm_cast
   exact hN _ hn
-
-/--
-theorem `limNthHom_zero` / 定理 `limNthHom_zero`
-
-English:
-theorem limNthHom_zero
-  statement: limNthHom f_compat 0 = 0
-  proof: by simp [limNthHom]; rfl
-
-中文:
-定理 limNthHom_zero
-  结论: limNthHom f_compat 0 = 0
-  证明: by simp [limNthHom]; rfl
-
-Depends on / 依赖: limNthHom
+/-
+**PadicInt.limNthHom_zero** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom_zero : limNthHom f_compat 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `PadicInt.nthHom_zero`：nthHom_zero : nthHom f 0 = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicInt.ofIntSeq.congr_simp`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (seq s
+eq_1 : ℕ → ℤ) (e_seq : seq = seq_1)   (h : IsCauSeq (padicNorm p) fun n => ↑(seq
+ n)), PadicInt.ofI…
 -/
 theorem limNthHom_zero : limNthHom f_compat 0 = 0 := by simp [limNthHom]; rfl
-
-/--
-theorem `limNthHom_one` / 定理 `limNthHom_one`
-
-English:
-theorem limNthHom_one
-  statement: limNthHom f_compat 1 = 1
-  proof: Subtype.ext Quot.sound nthHomSeq_one f_compat
-
-中文:
-定理 limNthHom_one
-  结论: limNthHom f_compat 1 = 1
-  证明: Subtype.ext Quot.sound nthHomSeq_one f_compat
-
-Depends on / 依赖: Quot.sound, Subtype, Subtype.ext, f_compat, nthHomSeq_one
+/-
+**PadicInt.limNthHom_one** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom_one : limNthHom f_compat 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `PadicInt.nthHomSeq_one`：nthHomSeq_one : nthHomSeq f_compat 1 ≈ 1
 -/
 theorem limNthHom_one : limNthHom f_compat 1 = 1 :=
-Subtype.ext Quot.sound nthHomSeq_one f_compat
-
-/--
-theorem `limNthHom_add` / 定理 `limNthHom_add`
-
-English:
-theorem limNthHom_add
-  given: (r s : R)
-  proof: Subtype.ext Quot.sound nthHomSeq_add f_compat _ _
-
-中文:
-定理 limNthHom_add
-  条件: (r s : R)
-  证明: Subtype.ext Quot.sound nthHomSeq_add f_compat _ _
-
-Depends on / 依赖: Quot.sound, Subtype, Subtype.ext, f_compat, nthHomSeq_add
+  Subtype.ext <| Quot.sound <| nthHomSeq_one f_compat
+/-
+**PadicInt.limNthHom_add** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom_add (r s : R) : limNthHom f_compat (r + s) = limNthHom f_compat 
+r + limNthHom f_compat s
+参数：r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `PadicInt.nthHomSeq_add`：nthHomSeq_add (r s : R) : nthHomSeq f_compat (r 
++ s) ≈ nthHomSeq f_compat r + nthHomSeq f_compat s
 -/
 theorem limNthHom_add (r s : R) :
     limNthHom f_compat (r + s) = limNthHom f_compat r + limNthHom f_compat s :=
-Subtype.ext Quot.sound nthHomSeq_add f_compat _ _
-
-/--
-theorem `limNthHom_mul` / 定理 `limNthHom_mul`
-
-English:
-theorem limNthHom_mul
-  given: (r s : R)
-  proof: Subtype.ext Quot.sound nthHomSeq_mul f_compat _ _
-
-中文:
-定理 limNthHom_mul
-  条件: (r s : R)
-  证明: Subtype.ext Quot.sound nthHomSeq_mul f_compat _ _
-
-Depends on / 依赖: Quot.sound, Subtype, Subtype.ext, f_compat, nthHomSeq_mul
+  Subtype.ext <| Quot.sound <| nthHomSeq_add f_compat _ _
+/-
+**PadicInt.limNthHom_mul** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：limNthHom_mul (r s : R) : limNthHom f_compat (r * s) = limNthHom f_compat 
+r * limNthHom f_compat s
+参数：r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `padicNorm.instIsAbsoluteValueRat`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)], I
+sAbsoluteValue (padicNorm p)
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `PadicInt.nthHomSeq_mul`：nthHomSeq_mul (r s : R) : nthHomSeq f_compat (r 
+* s) ≈ nthHomSeq f_compat r * nthHomSeq f_compat s
 -/
 theorem limNthHom_mul (r s : R) :
     limNthHom f_compat (r * s) = limNthHom f_compat r * limNthHom f_compat s :=
-Subtype.ext Quot.sound nthHomSeq_mul f_compat _ _
+  Subtype.ext <| Quot.sound <| nthHomSeq_mul f_compat _ _
 
 -- TODO: generalize this to arbitrary complete discrete valuation rings
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: : R ->+* Int_[p] where
-  body: limNthHom f_compat
-  map_one' := limNthHom_one f_compat
-  map_mul' := limNthHom_mul f_compat
-  map_zero' := limNthHom_zero f_compat
-  map_add' := limNthHom_add f_compat
-
-中文:
-定义 lift
-  签名: : R ->+* 整数_[p] where
-  定义体: limNthHom f_compat
-  map_one' := limNthHom_one f_compat
-  map_mul' := limNthHom_mul f_compat
-  map_zero' := limNthHom_zero f_compat
-  map_add' := limNthHom_add f_compat
-
-Depends on / 依赖: f_compat, limNthHom
+/-- `lift f_compat` is the limit of a sequence `f` of compatible ring homs `R →+* ZMod (p^k)`,
+with the equality `lift f_compat r = PadicInt.limNthHom f_compat r`.
 -/
-def lift : R ->+* Int_[p] where
+/-
+**PadicInt.lift** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：lift : R ->+* Int_[p] where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.limNthHom_one`：limNthHom_one : limNthHom f_compat 1 = 1
+· 使用定理 `PadicInt.limNthHom_mul`：limNthHom_mul (r s : R) : limNthHom f_compat (r 
+* s) = limNthHom f_compat r * limNthHom f_compat s
+· 使用定理 `PadicInt.limNthHom_zero`：limNthHom_zero : limNthHom f_compat 0 = 0
+· 使用定理 `PadicInt.limNthHom_add`：limNthHom_add (r s : R) : limNthHom f_compat (r 
++ s) = limNthHom f_compat r + limNthHom f_compat s
+
+--- 原说明 ---
+`lift f_compat` is the limit of a sequence `f` of compatible ring homs `R →+* ZM
+od (p^k)`,
+with the equality `lift f_compat r = PadicInt.limNthHom f_compat r`.
+-/
+def lift : R →+* ℤ_[p] where
   toFun := limNthHom f_compat
   map_one' := limNthHom_one f_compat
   map_mul' := limNthHom_mul f_compat
   map_zero' := limNthHom_zero f_compat
   map_add' := limNthHom_add f_compat
-
-/--
-theorem `lift_sub_val_mem_span` / 定理 `lift_sub_val_mem_span`
-
-English:
-theorem lift_sub_val_mem_span
-  given: (r : R) (n : Nat)
-  proof: by
+/-
+**PadicInt.lift_sub_val_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：lift_sub_val_mem_span (r : R) (n : Nat) : lift f_compat r - (f n r).val in
+ (Ideal.span {(p : Int_[p]) ^ n})
+参数：r : R；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `PadicInt.limNthHom_spec`：limNthHom_spec (r : R) : forall ε : Real, 0 < ε
+ -> exists N : Nat, forall n >= N, ‖limNthHom f_compat r - nthHom f r n‖ < ε
+· 使用定理 `zpow_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialO
+rder G₀] [PosMulReflectLT G₀] {a : G₀}   [ZeroLEOneClass G₀], 0 < a → ∀ (n : ℤ…
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `sub_eq_sub_add_sub`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b c : G)
+, a - b = c - b + (a - c)
+· 使用定理 `Ideal.add_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α) {a b : α
+}, a ∈ I → b ∈ I → a + b ∈ I
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Int.cast_pow`：∀ {R : Type u_1} [inst : Ring R] (n : ℤ) (m : ℕ), ↑(n ^ m)
+ = ↑n ^ m
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+（共 40 条，此处仅展示前 30 条）
+-/
+theorem lift_sub_val_mem_span (r : R) (n : ℕ) :
+    lift f_compat r - (f n r).val ∈ (Ideal.span {(p : ℤ_[p]) ^ n}) := by
   obtain ⟨k, hk⟩ :=
     limNthHom_spec f_compat r _
-      (show (0 : Real) < (p : Real) ^ (-n : Int) from zpow_pos (mod_cast hp_prime.1.pos) _)
+      (show (0 : ℝ) < (p : ℝ) ^ (-n : ℤ) from zpow_pos (mod_cast hp_prime.1.pos) _)
   have := le_of_lt (hk (max n k) (le_max_right _ _))
   rw [norm_le_pow_iff_mem_span_pow] at this
   dsimp [lift]
@@ -2284,218 +2248,216 @@ theorem lift_sub_val_mem_span
   apply Ideal.add_mem _ _ this
   rw [Ideal.mem_span_singleton]
   convert!
-    map_dvd (Int.castRingHom Int_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
+    map_dvd (Int.castRingHom ℤ_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
   · simp
   · simp [nthHom]
 
-中文:
-定理 lift_sub_val_mem_span
-  条件: (r : R) (n : 自然数)
-  证明: by
-  obtain ⟨k, hk⟩ :=
-    limNthHom_spec f_compat r _
-      (show (0 : Real) < (p : Real) ^ (-n : Int) from zpow_pos (mod_cast hp_prime.1.pos) _)
-  have := le_of_lt (hk (max n k) (le_max_right _ _))
-  rw [norm_le_pow_iff_mem_span_pow] at this
-  dsimp [lift]
-  rw [sub_eq_sub_add_sub (limNthHom f_compat r) _ ↑(nthHom f r (max n k))]
-  apply Ideal.add_mem _ _ this
-  rw [Ideal.mem_span_singleton]
-  convert!
-    map_dvd (Int.castRingHom Int_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
-  · simp
-  · simp [nthHom]
-
-Depends on / 依赖: Ideal.add_mem, Ideal.mem_span_singleton, Int.castRingHom, Int_, add_mem, castRingHom, convert, f_compat, hp_prime, le_max_left, le_max_right, le_of_lt, limNthHom, limNthHom_spec, map_dvd, mem_span_singleton, mod_cast, norm_le_pow_iff_mem_span_pow, nthHom, pow_dvd_nthHom_sub
+/-- One part of the universal property of `ℤ_[p]` as a projective limit.
+See also `PadicInt.lift_unique`.
 -/
-theorem lift_sub_val_mem_span (r : R) (n : Nat) :
-    lift f_compat r - (f n r).val in (Ideal.span {(p : Int_[p]) ^ n}) := by
-  obtain ⟨k, hk⟩ :=
-    limNthHom_spec f_compat r _
-      (show (0 : Real) < (p : Real) ^ (-n : Int) from zpow_pos (mod_cast hp_prime.1.pos) _)
-  have := le_of_lt (hk (max n k) (le_max_right _ _))
-  rw [norm_le_pow_iff_mem_span_pow] at this
-  dsimp [lift]
-  rw [sub_eq_sub_add_sub (limNthHom f_compat r) _ ↑(nthHom f r (max n k))]
-  apply Ideal.add_mem _ _ this
-  rw [Ideal.mem_span_singleton]
-  convert!
-    map_dvd (Int.castRingHom Int_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
-  · simp
-  · simp [nthHom]
+/-
+**PadicInt.lift_spec** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：lift_spec (n : Nat) : (toZModPow n).comp (lift f_compat) = f n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZMod.natCast_zmod_val`：natCast_zmod_val {n : Nat} [NeZero n] (a : ZMod n
+) : (a.val : ZMod n) = a
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `PadicInt.ker_toZModPow`：ker_toZModPow (n : Nat) : RingHom.ker (toZModPow
+ n : Int_[p] ->+* ZMod (p ^ n)) = Ideal.span {(p : Int_[p]) ^ n}
+· 使用定理 `PadicInt.lift_sub_val_mem_span`：lift_sub_val_mem_span (r : R) (n : Nat) 
+: lift f_compat r - (f n r).val in (Ideal.span {(p : Int_[p]) ^ n})
 
-/--
-theorem `lift_spec` / 定理 `lift_spec`
-
-English:
-theorem lift_spec
-  given: (n : Nat)
-  statement: (toZModPow n).comp (lift f_compat) = f n
-  proof: by
+--- 原说明 ---
+One part of the universal property of `ℤ_[p]` as a projective limit.
+See also `PadicInt.lift_unique`.
+-/
+theorem lift_spec (n : ℕ) : (toZModPow n).comp (lift f_compat) = f n := by
   ext r
-  rw [RingHom.comp_apply]; rw [← ZMod.natCast_zmod_val (f n r)]; rw [← map_natCast <| toZModPow n]; rw [←
-    sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [ker_toZModPow]
+  rw [RingHom.comp_apply, ← ZMod.natCast_zmod_val (f n r), ← map_natCast <| toZModPow n, ←
+    sub_eq_zero, ← map_sub, ← RingHom.mem_ker, ker_toZModPow]
   apply lift_sub_val_mem_span
 
-中文:
-定理 lift_spec
-  条件: (n : 自然数)
-  结论: (toZModPow n).comp (lift f_compat) = f n
-  证明: by
-  ext r
-  rw [RingHom.comp_apply]; rw [← ZMod.natCast_zmod_val (f n r)]; rw [← map_natCast <| toZModPow n]; rw [←
-    sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [ker_toZModPow]
-  apply lift_sub_val_mem_span
-
-Depends on / 依赖: RingHom, RingHom.comp_apply, RingHom.mem_ker, ZMod.natCast_zmod_val, comp_apply, ker_toZModPow, lift_sub_val_mem_span, map_natCast, map_sub, mem_ker, natCast_zmod_val, sub_eq_zero, toZModPow
+/-- One part of the universal property of `ℤ_[p]` as a projective limit.
+See also `PadicInt.lift_spec`.
 -/
-theorem lift_spec (n : Nat) : (toZModPow n).comp (lift f_compat) = f n := by
-  ext r
-  rw [RingHom.comp_apply]; rw [← ZMod.natCast_zmod_val (f n r)]; rw [← map_natCast <| toZModPow n]; rw [←
-    sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [ker_toZModPow]
-  apply lift_sub_val_mem_span
+/-
+**PadicInt.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：lift_unique (g : R ->+* Int_[p]) (hg : forall n, (toZModPow n).comp g = f 
+n) : lift f_compat = g
+参数：g : R ->+* Int_[p]；hg : forall n, (toZModPow n).comp g = f n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `eq_of_forall_dist_le`：eq_of_forall_dist_le {x y : γ} (h : forall ε > 0, 
+dist x y <= ε) : x = y
+· 使用定理 `PadicInt.exists_pow_neg_lt`：exists_pow_neg_lt {ε : Real} (hε : 0 < ε) : 
+exists k : Nat, (p : Real) ^ (-(k : Int)) < ε
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `PadicInt.norm_le_pow_iff_mem_span_pow`：norm_le_pow_iff_mem_span_pow (x :
+ Int_[p]) (n : Nat) : ‖x‖ <= (p : Real) ^ (-n : Int) ↔ x in (Ideal.span {(p : In
+t_[p]) ^ n} : Ideal Int_[p]…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.ker_toZModPow`：ker_toZModPow (n : Nat) : RingHom.ker (toZModPow
+ n : Int_[p] ->+* ZMod (p ^ n)) = Ideal.span {(p : Int_[p]) ^ n}
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `PadicInt.lift_spec`：lift_spec (n : Nat) : (toZModPow n).comp (lift f_com
+pat) = f n
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-/--
-theorem `lift_unique` / 定理 `lift_unique`
-
-English:
-theorem lift_unique
-  given: (g : R ->+* Int_[p]) (hg : forall n, (toZModPow n).comp g = f n)
-  proof: by
-  ext1 r
-  apply eq_of_forall_dist_le
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
-  apply le_trans _ (le_of_lt hn)
-  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw [lift_spec]; rw [hg]; rw [sub_self]
-
-中文:
-定理 lift_unique
-  条件: (g : R ->+* 整数_[p]) (hg : 对任意 n, (toZModPow n).comp g = f n)
-  证明: by
-  ext1 r
-  apply eq_of_forall_dist_le
-  intro ε hε
-  obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
-  apply le_trans _ (le_of_lt hn)
-  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw [lift_spec]; rw [hg]; rw [sub_self]
-
-Depends on / 依赖: RingHom, RingHom.comp_apply, RingHom.mem_ker, comp_apply, dist_eq_norm, eq_of_forall_dist_le, exists_pow_neg_lt, ker_toZModPow, le_of_lt, le_trans, lift_spec, map_sub, mem_ker, norm_le_pow_iff_mem_span_pow, sub_self
+--- 原说明 ---
+One part of the universal property of `ℤ_[p]` as a projective limit.
+See also `PadicInt.lift_spec`.
 -/
-theorem lift_unique (g : R ->+* Int_[p]) (hg : forall n, (toZModPow n).comp g = f n) :
+theorem lift_unique (g : R →+* ℤ_[p]) (hg : ∀ n, (toZModPow n).comp g = f n) :
     lift f_compat = g := by
   ext1 r
   apply eq_of_forall_dist_le
   intro ε hε
   obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
   apply le_trans _ (le_of_lt hn)
-  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw [lift_spec]; rw [hg]; rw [sub_self]
+  rw [dist_eq_norm, norm_le_pow_iff_mem_span_pow, ← ker_toZModPow, RingHom.mem_ker,
+    map_sub, ← RingHom.comp_apply, ← RingHom.comp_apply, lift_spec, hg, sub_self]
 
 end
 
 @[simp]
-/--
-theorem `lift_self` / 定理 `lift_self`
-
-English:
-theorem lift_self
-  given: (z : Int_[p])
-  statement: lift zmod_cast_comp_toZModPow z = z
-  proof: by
-  change _ = RingHom.id _ z
-  rw [lift_unique zmod_cast_comp_toZModPow (RingHom.id Int_[p])]
-  intro; rw [RingHom.comp_id]
-
-中文:
-定理 lift_self
-  条件: (z : 整数_[p])
-  结论: lift zmod_cast_comp_toZModPow z = z
-  证明: by
-  change _ = RingHom.id _ z
-  rw [lift_unique zmod_cast_comp_toZModPow (RingHom.id Int_[p])]
-  intro; rw [RingHom.comp_id]
-
-Depends on / 依赖: Int_, RingHom, RingHom.comp_id, RingHom.id, comp_id, lift_unique, zmod_cast_comp_toZModPow
+/-
+**PadicInt.lift_self** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：lift_self (z : Int_[p]) : lift zmod_cast_comp_toZModPow z = z
+参数：z : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.zmod_cast_comp_toZModPow`：zmod_cast_comp_toZModPow (m n : Nat) 
+(h : m <= n) : (ZMod.castHom (pow_dvd_pow p h) (ZMod (p ^ m))).comp (@toZModPow 
+p _ n) = @toZModPow p _…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PadicInt.lift_unique`：lift_unique (g : R ->+* Int_[p]) (hg : forall n, (
+toZModPow n).comp g = f n) : lift f_compat = g
+· 使用定理 `RingHom.comp_id`：comp_id (f : α ->+* β) : f.comp (id α) = f
 -/
-theorem lift_self (z : Int_[p]) : lift zmod_cast_comp_toZModPow z = z := by
+theorem lift_self (z : ℤ_[p]) : lift zmod_cast_comp_toZModPow z = z := by
   change _ = RingHom.id _ z
-  rw [lift_unique zmod_cast_comp_toZModPow (RingHom.id Int_[p])]
+  rw [lift_unique zmod_cast_comp_toZModPow (RingHom.id ℤ_[p])]
   intro; rw [RingHom.comp_id]
 
 end lift
 
-/--
-theorem `ext_of_toZModPow` / 定理 `ext_of_toZModPow`
-
-English:
-theorem ext_of_toZModPow
-  given: {x y : Int_[p]}
-  statement: (forall n, toZModPow n x = toZModPow n y) ↔ x = y
-  proof: by
-  constructor
-  · intro h
-    rw [← lift_self x]; rw [← lift_self y]
-    simp +unfoldPartialApp [lift, limNthHom, nthHom, h]
-  · rintro rfl _
-    rfl
-
-中文:
-定理 ext_of_toZModPow
-  条件: {x y : 整数_[p]}
-  结论: (对任意 n, toZModPow n x = toZModPow n y) ↔ x = y
-  证明: by
-  constructor
-  · intro h
-    rw [← lift_self x]; rw [← lift_self y]
-    simp +unfoldPartialApp [lift, limNthHom, nthHom, h]
-  · rintro rfl _
-    rfl
-
-Depends on / 依赖: lift_self, limNthHom, nthHom, unfoldPartialApp
+/-
+**PadicInt.ext_of_toZModPow** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：ext_of_toZModPow {x y : Int_[p]} : (forall n, toZModPow n x = toZModPow n 
+y) ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.zmod_cast_comp_toZModPow`：zmod_cast_comp_toZModPow (m n : Nat) 
+(h : m <= n) : (ZMod.castHom (pow_dvd_pow p h) (ZMod (p ^ m))).comp (@toZModPow 
+p _ n) = @toZModPow p _…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PadicInt.lift_self`：lift_self (z : Int_[p]) : lift zmod_cast_comp_toZMod
+Pow z = z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PadicInt.isCauSeq_nthHom`：isCauSeq_nthHom (r : R) : IsCauSeq (padicNorm 
+p) fun n => nthHom f r n
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ZMod.natCast_val`：natCast_val [NeZero n] (i : ZMod n) : (i.val : R) = ca
+st i
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PadicInt.limNthHom_one`：limNthHom_one : limNthHom f_compat 1 = 1
+· 使用定理 `PadicInt.ofIntSeq.congr_simp`：∀ {p : ℕ} [hp : Fact (Nat.Prime p)] (seq s
+eq_1 : ℕ → ℤ) (e_seq : seq = seq_1)   (h : IsCauSeq (padicNorm p) fun n => ↑(seq
+ n)), PadicInt.ofI…
+· 使用定理 `PadicInt.limNthHom_mul`：limNthHom_mul (r s : R) : limNthHom f_compat (r 
+* s) = limNthHom f_compat r * limNthHom f_compat s
+· 使用定理 `OneHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : One M] [
+inst_1 : One N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_one' 
+: toFun 1 …
+· 使用定理 `PadicInt.limNthHom_zero`：limNthHom_zero : limNthHom f_compat 0 = 0
+· 使用定理 `MonoidHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOn
+e M] [inst_1 : MulOne N] (toOneHom toOneHom_1 : OneHom M N)   (e_toOneHom : toOn
+eHom = toOneH…
+· 使用定理 `PadicInt.limNthHom_add`：limNthHom_add (r s : R) : limNthHom f_compat (r 
++ s) = limNthHom f_compat r + limNthHom f_compat s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RingHom.mk.congr_simp`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocS
+emiring α] [inst_1 : NonAssocSemiring β]   (toMonoidHom toMonoidHom_1 : α →* β) 
+(e_toMonoid…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ext_of_toZModPow {x y : Int_[p]} : (forall n, toZModPow n x = toZModPow n y) ↔ x = y := by
+theorem ext_of_toZModPow {x y : ℤ_[p]} : (∀ n, toZModPow n x = toZModPow n y) ↔ x = y := by
   constructor
   · intro h
-    rw [← lift_self x]; rw [← lift_self y]
+    rw [← lift_self x, ← lift_self y]
     simp +unfoldPartialApp [lift, limNthHom, nthHom, h]
   · rintro rfl _
     rfl
-
-/--
-theorem `toZModPow_eq_iff_ext` / 定理 `toZModPow_eq_iff_ext`
-
-English:
-theorem toZModPow_eq_iff_ext
-  given: {R : Type*} [NonAssocSemiring R] {g g' : R ->+* Int_[p]}
-  proof: by
-  constructor
-  · intro hg
-    ext x : 1
-    apply ext_of_toZModPow.mp
-    intro n
-    change (toZModPow n).comp g x = (toZModPow n).comp g' x
-    rw [hg n]
-  · rintro rfl _
-    rfl
-
-中文:
-定理 toZModPow_eq_iff_ext
-  条件: {R : 类型} [非结合半环 R] {g g' : R ->+* 整数_[p]}
-  证明: by
-  constructor
-  · intro hg
-    ext x : 1
-    apply ext_of_toZModPow.mp
-    intro n
-    change (toZModPow n).comp g x = (toZModPow n).comp g' x
-    rw [hg n]
-  · rintro rfl _
-    rfl
-
-Depends on / 依赖: ext_of_toZModPow, ext_of_toZModPow.mp, toZModPow
+/-
+**PadicInt.toZModPow_eq_iff_ext** 是 Mathlib 中的一个定理，位于命名空间 `PadicInt`。
+形式化陈述：toZModPow_eq_iff_ext {R : Type*} [NonAssocSemiring R] {g g' : R ->+* Int_[
+p]} : (forall n, (toZModPow n).comp g = (toZModPow n).comp g') ↔ g = g'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PadicInt.ext_of_toZModPow`：ext_of_toZModPow {x y : Int_[p]} : (forall n,
+ toZModPow n x = toZModPow n y) ↔ x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem toZModPow_eq_iff_ext {R : Type*} [NonAssocSemiring R] {g g' : R ->+* Int_[p]} :
-    (forall n, (toZModPow n).comp g = (toZModPow n).comp g') ↔ g = g' := by
+theorem toZModPow_eq_iff_ext {R : Type*} [NonAssocSemiring R] {g g' : R →+* ℤ_[p]} :
+    (∀ n, (toZModPow n).comp g = (toZModPow n).comp g') ↔ g = g' := by
   constructor
   · intro hg
     ext x : 1
@@ -2505,153 +2467,167 @@ theorem toZModPow_eq_iff_ext {R : Type*} [NonAssocSemiring R] {g g' : R ->+* Int
     rw [hg n]
   · rintro rfl _
     rfl
-
-/--
-lemma `isCauSeq_padicNorm_of_pow_dvd_sub` / 引理 `isCauSeq_padicNorm_of_pow_dvd_sub`
-
-English:
+/-
+**PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt
+`。
+形式化陈述：isCauSeq_padicNorm_of_pow_dvd_sub (f : Nat -> Int) (p : Nat) [Fact p.Prime
+] (hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i) : IsCauSeq (padicNorm p) (f ·
+)
+参数：f : Nat -> Int；p : Nat；hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PadicInt.exists_pow_neg_lt_rat`：exists_pow_neg_lt_rat {ε : Rat} (hε : 0 
+< ε) : exists k : Nat, (p : Rat) ^ (-(k : Int)) < ε
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `padicNorm.dvd_iff_norm_le`：dvd_iff_norm_le {n : Nat} {z : Int} : ↑(p ^ n
+) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : Int)
+· 使用定理 `ExistsAddOfLE.exists_add_of_le`：∀ {α : Type u} {inst : Add α} {inst_1 : 
+LE α} [self : ExistsAddOfLE α] {a b : α}, a ≤ b → ∃ c, b = a + c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sub_add_sub_cancel`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : G), a 
+- b + (b - c) = a - c
+· 使用定理 `Dvd.dvd.add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Semigroup α] [Lef
+tDistribClass α] {a b c : α}, a ∣ b → a ∣ c → a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
 lemma isCauSeq_padicNorm_of_pow_dvd_sub
-  proof: by
-  intro ε hε
-  obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt_rat p hε
-  simp only [← Int.cast_sub]
-  refine ⟨k, fun i hik => (padicNorm.dvd_iff_norm_le.mp ?_).trans_lt hk⟩
-  obtain ⟨i, rfl⟩ := exists_add_of_le hik
-  clear hik
-  induction i with
-  | zero => simp
-  | succ n IH =>
-    have : (↑(p ^ k) : Int) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
-    simpa using! (this.trans (hi _)).add IH
-
-中文:
-引理 isCauSeq_padicNorm_of_pow_dvd_sub
-  证明: by
-  intro ε hε
-  obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt_rat p hε
-  simp only [← Int.cast_sub]
-  refine ⟨k, fun i hik => (padicNorm.dvd_iff_norm_le.mp ?_).trans_lt hk⟩
-  obtain ⟨i, rfl⟩ := exists_add_of_le hik
-  clear hik
-  induction i with
-  | zero => simp
-  | succ n IH =>
-    have : (↑(p ^ k) : Int) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
-    simpa using! (this.trans (hi _)).add IH
-
-Depends on / 依赖: Int.cast_sub, PadicInt, PadicInt.exists_pow_neg_lt_rat, cast_sub, dvd_iff_norm_le, exists_add_of_le, exists_pow_neg_lt_rat, padicNorm, padicNorm.dvd_iff_norm_le.mp, pow_add, this.trans, trans_lt
--/
-lemma isCauSeq_padicNorm_of_pow_dvd_sub
-    (f : Nat -> Int) (p : Nat) [Fact p.Prime] (hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i) :
+    (f : ℕ → ℤ) (p : ℕ) [Fact p.Prime] (hi : ∀ i, (p : ℤ) ^ i ∣ f (i + 1) - f i) :
     IsCauSeq (padicNorm p) (f ·) := by
   intro ε hε
   obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt_rat p hε
   simp only [← Int.cast_sub]
-  refine ⟨k, fun i hik => (padicNorm.dvd_iff_norm_le.mp ?_).trans_lt hk⟩
+  refine ⟨k, fun i hik ↦ (padicNorm.dvd_iff_norm_le.mp ?_).trans_lt hk⟩
   obtain ⟨i, rfl⟩ := exists_add_of_le hik
   clear hik
   induction i with
   | zero => simp
   | succ n IH =>
-    have : (↑(p ^ k) : Int) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
+    have : (↑(p ^ k) : ℤ) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
     simpa using! (this.trans (hi _)).add IH
-
-/--
-lemma `toZModPow_ofIntSeq_of_pow_dvd_sub` / 引理 `toZModPow_ofIntSeq_of_pow_dvd_sub`
-
-English:
-lemma toZModPow_ofIntSeq_of_pow_dvd_sub
-  proof: by
-  set x := PadicInt.ofIntSeq _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)
-  let s : PadicSeq p := ⟨(f ·), isCauSeq_padicNorm_of_pow_dvd_sub f p hi⟩
-  have hs : x = Padic.mk s := rfl
-  obtain ⟨e, he⟩ := Ideal.mem_span_singleton.mp (PadicInt.appr_spec n x)
-  rw [sub_eq_iff_eq_add] at he
-  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : Int))
-    (by simp only [zpow_neg, zpow_natCast, inv_pos]; exact_mod_cast Nat.pos_of_neZero _)
-  replace hN := hN (N + n) (Nat.le_add_right N n)
-  rw [← hs]; rw [he]; rw [← Rat.cast_lt (K := Real)] at hN
-  push_cast at hN
-  simp only [← add_sub, s, Rat.cast_intCast, padicNormE.is_norm,
-    ← Int.cast_natCast (R := Rat_[p]) (x.appr n), ← Int.cast_sub] at hN
-  have : ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ <= ↑p ^ (-n : Int) := by
-    by_contra! H
-    have H' : ‖(p ^ n * e : Rat_[p])‖ < ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ := by
-      refine LE.le.trans_lt ?_ H
-      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 <= (↑p ^ n)⁻¹ by simp) zero_le_one
-    rw [Padic.add_eq_max_of_ne H'.ne]; rw [sup_eq_right.mpr H'.le] at hN
-    exact lt_asymm hN H
-  rw [Padic.norm_int_le_pow_iff_dvd]; rw [← Nat.cast_pow]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]; rw [Int.cast_natCast] at this
-  refine this.symm.trans ?_
-  clear * - hi
-  induction N with
-  | zero => simp
-  | succ N IH =>
-    rw [← IH]; rw [eq_comm]; rw [add_right_comm]; rw [ZMod.intCast_eq_intCast_iff_dvd_sub]
-    exact .trans ⟨p ^ N, by simp [pow_add, mul_comm]⟩ (hi _)
-
-中文:
-引理 toZModPow_of整数Seq_of_pow_dvd_sub
-  证明: by
-  set x := PadicInt.ofIntSeq _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)
-  let s : PadicSeq p := ⟨(f ·), isCauSeq_padicNorm_of_pow_dvd_sub f p hi⟩
-  have hs : x = Padic.mk s := rfl
-  obtain ⟨e, he⟩ := Ideal.mem_span_singleton.mp (PadicInt.appr_spec n x)
-  rw [sub_eq_iff_eq_add] at he
-  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : Int))
-    (by simp only [zpow_neg, zpow_natCast, inv_pos]; exact_mod_cast Nat.pos_of_neZero _)
-  replace hN := hN (N + n) (Nat.le_add_right N n)
-  rw [← hs]; rw [he]; rw [← Rat.cast_lt (K := Real)] at hN
-  push_cast at hN
-  simp only [← add_sub, s, Rat.cast_intCast, padicNormE.is_norm,
-    ← Int.cast_natCast (R := Rat_[p]) (x.appr n), ← Int.cast_sub] at hN
-  have : ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ <= ↑p ^ (-n : Int) := by
-    by_contra! H
-    have H' : ‖(p ^ n * e : Rat_[p])‖ < ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ := by
-      refine LE.le.trans_lt ?_ H
-      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 <= (↑p ^ n)⁻¹ by simp) zero_le_one
-    rw [Padic.add_eq_max_of_ne H'.ne]; rw [sup_eq_right.mpr H'.le] at hN
-    exact lt_asymm hN H
-  rw [Padic.norm_int_le_pow_iff_dvd]; rw [← Nat.cast_pow]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]; rw [Int.cast_natCast] at this
-  refine this.symm.trans ?_
-  clear * - hi
-  induction N with
-  | zero => simp
-  | succ N IH =>
-    rw [← IH]; rw [eq_comm]; rw [add_right_comm]; rw [ZMod.intCast_eq_intCast_iff_dvd_sub]
-    exact .trans ⟨p ^ N, by simp [pow_add, mul_comm]⟩ (hi _)
-
-Depends on / 依赖: Ideal.mem_span_singleton.mp, Nat.le_add_right, Nat.pos_of_neZero, Padic.mk, PadicInt, PadicInt.appr_spec, PadicInt.ofIntSeq, PadicSeq, appr_spec, inv_pos, isCauSeq_padicNorm_of_pow_dvd_sub, le_add_right, mem_span_singleton, ofIntSeq, padicNormE, padicNormE.defn, pos_of_neZero, replace, sub_eq_iff_eq_add, zpow_natCast
+/-
+**PadicInt.toZModPow_ofIntSeq_of_pow_dvd_sub** 是 Mathlib 中的一个引理，位于命名空间 `PadicInt
+`。
+形式化陈述：toZModPow_ofIntSeq_of_pow_dvd_sub (f : Nat -> Int) (p : Nat) [Fact p.Prime
+] (hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i) (n : Nat) : (PadicInt.ofIntSe
+q _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)).toZModPow n = f n
+参数：f : Nat -> Int；p : Nat；hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i；n : Nat
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub`：isCauSeq_padicNorm_of_pow_dv
+d_sub (f : Nat -> Int) (p : Nat) [Fact p.Prime] (hi : forall i, (p : Int) ^ i ∣ 
+f (i + 1) - f i) : IsCauSeq (pad…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PadicInt.appr_spec`：appr_spec (n : Nat) : forall x : Int_[p], x - appr x
+ n in Ideal.span {(p : Int_[p]) ^ n}
+· 使用定理 `padicNormE.defn`：defn (f : PadicSeq p) {ε : Rat} (hε : 0 < ε) : exists N
+, forall i >= N, padicNormE (Padic.mk f - f i : Rat_[p]) < ε
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Nat.pos_of_neZero`：∀ (n : ℕ) [NeZero n], 0 < n
+· 使用定理 `Nat.instNeZeroHPow`：∀ {n m : ℕ} [NeZero n], NeZero (n ^ m)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Padic.norm_p_pow`：norm_p_pow (n : Nat) : ‖(p : Rat_[p]) ^ n‖ = (p : Real
+) ^ (-n : Int)
+· 使用定理 `PadicInt.padic_norm_e_of_padicInt`：padic_norm_e_of_padicInt (z : Int_[p]
+) : ‖(z : Rat_[p])‖ = ‖z‖
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+（共 60 条，此处仅展示前 30 条）
 -/
 lemma toZModPow_ofIntSeq_of_pow_dvd_sub
-    (f : Nat -> Int) (p : Nat) [Fact p.Prime] (hi : forall i, (p : Int) ^ i ∣ f (i + 1) - f i) (n : Nat) :
+    (f : ℕ → ℤ) (p : ℕ) [Fact p.Prime] (hi : ∀ i, (p : ℤ) ^ i ∣ f (i + 1) - f i) (n : ℕ) :
     (PadicInt.ofIntSeq _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)).toZModPow n = f n := by
   set x := PadicInt.ofIntSeq _ (isCauSeq_padicNorm_of_pow_dvd_sub f p hi)
   let s : PadicSeq p := ⟨(f ·), isCauSeq_padicNorm_of_pow_dvd_sub f p hi⟩
   have hs : x = Padic.mk s := rfl
   obtain ⟨e, he⟩ := Ideal.mem_span_singleton.mp (PadicInt.appr_spec n x)
   rw [sub_eq_iff_eq_add] at he
-  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : Int))
+  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : ℤ))
     (by simp only [zpow_neg, zpow_natCast, inv_pos]; exact_mod_cast Nat.pos_of_neZero _)
   replace hN := hN (N + n) (Nat.le_add_right N n)
-  rw [← hs]; rw [he]; rw [← Rat.cast_lt (K := Real)] at hN
+  rw [← hs, he, ← Rat.cast_lt (K := ℝ)] at hN
   push_cast at hN
   simp only [← add_sub, s, Rat.cast_intCast, padicNormE.is_norm,
-    ← Int.cast_natCast (R := Rat_[p]) (x.appr n), ← Int.cast_sub] at hN
-  have : ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ <= ↑p ^ (-n : Int) := by
+    ← Int.cast_natCast (R := ℚ_[p]) (x.appr n), ← Int.cast_sub] at hN
+  have : ‖(((x.appr n) - f (N + n) : ℤ) : ℚ_[p])‖ ≤ ↑p ^ (-n : ℤ) := by
     by_contra! H
-    have H' : ‖(p ^ n * e : Rat_[p])‖ < ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ := by
+    have H' : ‖(p ^ n * e : ℚ_[p])‖ < ‖(((x.appr n) - f (N + n) : ℤ) : ℚ_[p])‖ := by
       refine LE.le.trans_lt ?_ H
-      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 <= (↑p ^ n)⁻¹ by simp) zero_le_one
-    rw [Padic.add_eq_max_of_ne H'.ne]; rw [sup_eq_right.mpr H'.le] at hN
+      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 ≤ (↑p ^ n)⁻¹ by simp) zero_le_one
+    rw [Padic.add_eq_max_of_ne H'.ne, sup_eq_right.mpr H'.le] at hN
     exact lt_asymm hN H
-  rw [Padic.norm_int_le_pow_iff_dvd]; rw [← Nat.cast_pow]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]; rw [Int.cast_natCast] at this
+  rw [Padic.norm_int_le_pow_iff_dvd, ← Nat.cast_pow,
+    ← ZMod.intCast_eq_intCast_iff_dvd_sub, Int.cast_natCast] at this
   refine this.symm.trans ?_
   clear * - hi
   induction N with
   | zero => simp
   | succ N IH =>
-    rw [← IH]; rw [eq_comm]; rw [add_right_comm]; rw [ZMod.intCast_eq_intCast_iff_dvd_sub]
+    rw [← IH, eq_comm, add_right_comm, ZMod.intCast_eq_intCast_iff_dvd_sub]
     exact .trans ⟨p ^ N, by simp [pow_add, mul_comm]⟩ (hi _)
 
 end PadicInt
+

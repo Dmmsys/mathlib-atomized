@@ -15,10 +15,10 @@ public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Basic
 `BicartesianSq f g h i` is the proposition that
 ```
   W ---f---> X
-  | |
-  g h
-  | |
-  v v
+  |          |
+  g          h
+  |          |
+  v          v
   Y ---i---> Z
 
 ```
@@ -41,20 +41,37 @@ namespace CategoryTheory
 
 variable {C : Type u₁} [Category.{v₁} C]
 
-/--
-Definition of `BicartesianSq` / `BicartesianSq` 的定义
+/-- A *bi-Cartesian* square is a commutative square
+```
+  W ---f---> X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---> Z
 
-English:
-structure BicartesianSq
-  parameters: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
-  extends: IsPullback f g h i, IsPushout f g h i
-  (no additional axioms)
+```
+that is both a pullback square and a pushout square.
+-/
+/-
+**CategoryTheory.BicartesianSq** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] → {W X Y Z :
+ C} → (W ⟶ X) → (W ⟶ Y) → (X ⟶ Z) → (Y ⟶ Z) → Prop
+参数：W ⟶ X；W ⟶ Y；X ⟶ Z；Y ⟶ Z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 BicartesianSq
-  参数: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
-  继承: 是拉回 f g h i, 是推出 f g h i
-  (无附加公理)
+--- 原说明 ---
+A *bi-Cartesian* square is a commutative square
+```
+  W ---f---> X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---> Z
+
+```
+that is both a pullback square and a pushout square.
 -/
 structure BicartesianSq {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z) : Prop
     extends IsPullback f g h i, IsPushout f g h i
@@ -67,24 +84,21 @@ namespace IsPullback
 
 variable {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
 
-/--
-theorem `of_hasBinaryProduct` / 定理 `of_hasBinaryProduct`
-
-English:
-theorem of_hasBinaryProduct
-  given: [HasBinaryProduct X Y]
-  proof: by
-  convert! @of_is_product _ _ X Y 0 _ (limit.isLimit _) HasZeroObject.zeroIsTerminal
-    <;> subsingleton
-
-中文:
-定理 of_hasBinaryProduct
-  条件: [HasBinaryProduct X Y]
-  证明: by
-  convert! @of_is_product _ _ X Y 0 _ (limit.isLimit _) HasZeroObject.zeroIsTerminal
-    <;> subsingleton
-
-Depends on / 依赖: HasZeroObject, HasZeroObject.zeroIsTerminal, convert, isLimit, limit.isLimit, of_is_product, subsingleton, zeroIsTerminal
+/-
+**CategoryTheory.IsPullback.of_hasBinaryProduct** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.IsPullback`。
+形式化陈述：of_hasBinaryProduct [HasBinaryProduct X Y] : IsPullback Limits.prod.fst Li
+mits.prod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.IsPullback.of_is_product`：of_is_product {c : BinaryFan X 
+Y} (h : Limits.IsLimit c) (t : IsTerminal Z) : IsPullback c.fst c.snd (t.from _)
+ (t.from _)
 -/
 theorem of_hasBinaryProduct [HasBinaryProduct X Y] :
     IsPullback Limits.prod.fst Limits.prod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) := by
@@ -95,39 +109,57 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The square with `0 : 0 ⟶ 0` on the left and `𝟙 X` on the right is a pullback square. -/
 @[simp]
-/--
-theorem `zero_left` / 定理 `zero_left`
+/-
+**CategoryTheory.IsPullback.zero_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+IsPullback`。
+形式化陈述：zero_left (X : C) : IsPullback (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 
+⟶ X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `CategoryTheory.Limits.PullbackCone.equalizer_ext`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   (t : Ca
+tegoryTheory.Limits.PullbackCone f g) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-theorem zero_left
-  given: (X : C)
-  statement: IsPullback (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
-  proof: { w := by simp
-    isLimit' :=
-      ⟨{ lift := fun _ => 0
-          fac := fun s => by
-            simpa [eq_iff_true_of_subsingleton] using
-              @PullbackCone.equalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
-                (by simpa using (PullbackCone.condition s).symm) }⟩ }
-
-中文:
-定理 zero_left
-  条件: (X : C)
-  结论: 是拉回 (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
-  证明: { w := by simp
-    isLimit' :=
-      ⟨{ lift := fun _ => 0
-          fac := fun s => by
-            simpa [eq_iff_true_of_subsingleton] using
-              @PullbackCone.equalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
-                (by simpa using (PullbackCone.condition s).symm) }⟩ }
-
-Depends on / 依赖: A.hom, A.prop, HasPushoutsAlong, HasPushoutsAlong.hasPushout, PullbackCone, PullbackCone.condition, PullbackCone.equalizer_ext, condition, eq_iff_true_of_subsingleton, equalizer_ext, hasPushout, isLimit
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the left and `𝟙 X` on the right is a pullback squ
+are.
 -/
 theorem zero_left (X : C) : IsPullback (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X) :=
   { w := by simp
     isLimit' :=
-      ⟨{ lift := fun _ => 0
+      ⟨{  lift := fun _ => 0
           fac := fun s => by
             simpa [eq_iff_true_of_subsingleton] using
               @PullbackCone.equalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
@@ -135,46 +167,66 @@ theorem zero_left (X : C) : IsPullback (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X
 
 /-- The square with `0 : 0 ⟶ 0` on the top and `𝟙 X` on the bottom is a pullback square. -/
 @[simp]
-/--
-theorem `zero_top` / 定理 `zero_top`
+/-
+**CategoryTheory.IsPullback.zero_top** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：zero_top (X : C) : IsPullback (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙
+ X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.zero_left`：zero_left (X : C) : IsPullback (0 :
+ 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
 
-English:
-theorem zero_top
-  given: (X : C)
-  statement: IsPullback (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
-  proof: (zero_left X).flip
-
-中文:
-定理 zero_top
-  条件: (X : C)
-  结论: 是拉回 (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
-  证明: (zero_left X).flip
-
-Depends on / 依赖: A.hom, A.prop, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsPushout, IsPushout.of_hasPushout, IsStableUnderCobaseChangeAlong, IsStableUnderCobaseChangeAlong.of_isPushout, hasPushout, of_hasPushout, of_isPushout, pushout, pushout.inr, zero_left
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the top and `𝟙 X` on the bottom is a pullback squ
+are.
 -/
 theorem zero_top (X : C) : IsPullback (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X) :=
   (zero_left X).flip
 
 /-- The square with `0 : 0 ⟶ 0` on the right and `𝟙 X` on the left is a pullback square. -/
 @[simp]
-/--
-theorem `zero_right` / 定理 `zero_right`
+/-
+**CategoryTheory.IsPullback.zero_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.IsPullback`。
+形式化陈述：zero_right (X : C) : IsPullback (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X
+ ⟶ 0)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_iso_pullback`：of_iso_pullback (h : CommSq f
+st snd f g) [HasPullback f g] (i : P ≅ pullback f g) (w₁ : i.hom ≫ pullback.fst 
+_ _ = fst) (w₂ : i.hom ≫ pullba…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullbackZeroZeroIso_inv_fst`：pullbackZeroZeroIso_i
+nv_fst (X Y : C) [HasBinaryProduct X Y] : (pullbackZeroZeroIso X Y).inv ≫ pullba
+ck.fst 0 0 = prod.fst
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.Limits.pullbackZeroZeroIso_inv_snd`：pullbackZeroZeroIso_i
+nv_snd (X Y : C) [HasBinaryProduct X Y] : (pullbackZeroZeroIso X Y).inv ≫ pullba
+ck.snd 0 0 = prod.snd
+· 使用定理 `CategoryTheory.Limits.zeroProdIso_inv_snd`：zeroProdIso_inv_snd (X : C) :
+ (zeroProdIso X).inv ≫ prod.snd = 𝟙 X
 
-English:
-theorem zero_right
-  given: (X : C)
-  statement: IsPullback (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
-  proof: of_iso_pullback (by simp) ((zeroProdIso X).symm ≪≫ (pullbackZeroZeroIso _ _).symm)
-    (by simp [eq_iff_true_of_subsingleton]) (by simp)
-
-中文:
-定理 zero_right
-  条件: (X : C)
-  结论: 是拉回 (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
-  证明: of_iso_pullback (by simp) ((zeroProdIso X).symm ≪≫ (pullbackZeroZeroIso _ _).symm)
-    (by simp [eq_iff_true_of_subsingleton]) (by simp)
-
-Depends on / 依赖: eq_iff_true_of_subsingleton, of_iso_pullback, pullbackZeroZeroIso, zeroProdIso
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the right and `𝟙 X` on the left is a pullback squ
+are.
 -/
 theorem zero_right (X : C) : IsPullback (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0) :=
   of_iso_pullback (by simp) ((zeroProdIso X).symm ≪≫ (pullbackZeroZeroIso _ _).symm)
@@ -182,48 +234,40 @@ theorem zero_right (X : C) : IsPullback (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 
 
 /-- The square with `0 : 0 ⟶ 0` on the bottom and `𝟙 X` on the top is a pullback square. -/
 @[simp]
-/--
-theorem `zero_bot` / 定理 `zero_bot`
+/-
+**CategoryTheory.IsPullback.zero_bot** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：zero_bot (X : C) : IsPullback (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶
+ 0)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.zero_right`：zero_right (X : C) : IsPullback (0
+ : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
 
-English:
-theorem zero_bot
-  given: (X : C)
-  statement: IsPullback (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
-  proof: (zero_right X).flip
-
-中文:
-定理 zero_bot
-  条件: (X : C)
-  结论: 是拉回 (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
-  证明: (zero_right X).flip
-
-Depends on / 依赖: zero_right
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the bottom and `𝟙 X` on the top is a pullback squ
+are.
 -/
 theorem zero_bot (X : C) : IsPullback (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0) :=
   (zero_right X).flip
-
-/--
-theorem `of_isBilimit` / 定理 `of_isBilimit`
-
-English:
-theorem of_isBilimit
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  convert! IsPullback.of_is_product' h.isLimit HasZeroObject.zeroIsTerminal
-    <;> subsingleton
-
-@[simp]
-
-中文:
-定理 of_isBilimit
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  convert! IsPullback.of_is_product' h.isLimit HasZeroObject.zeroIsTerminal
-    <;> subsingleton
-
-@[simp]
-
-Depends on / 依赖: HasZeroObject, HasZeroObject.zeroIsTerminal, IsPullback, IsPullback.of_is_product, convert, h.isLimit, isLimit, of_is_product, subsingleton, zeroIsTerminal
+/-
+**CategoryTheory.IsPullback.of_isBilimit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.IsPullback`。
+形式化陈述：of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPullback b.fst b
+.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.IsPullback.of_is_product'`：of_is_product' (h : Limits.IsL
+imit (BinaryFan.mk fst snd)) (t : IsTerminal Z) : IsPullback fst snd (t.from _) 
+(t.from _)
 -/
 theorem of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPullback b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) := by
@@ -231,43 +275,50 @@ theorem of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) :
     <;> subsingleton
 
 @[simp]
-/--
-theorem `of_has_biproduct` / 定理 `of_has_biproduct`
-
-English:
-theorem of_has_biproduct
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_has_biproduct
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_isBilimit
+/-
+**CategoryTheory.IsPullback.of_has_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.IsPullback`。
+形式化陈述：of_has_biproduct (X Y : C) [HasBinaryBiproduct X Y] : IsPullback biprod.fs
+t biprod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isBilimit`：of_isBilimit {b : BinaryBicone X
+ Y} (h : b.IsBilimit) : IsPullback b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
 -/
 theorem of_has_biproduct (X Y : C) [HasBinaryBiproduct X Y] :
     IsPullback biprod.fst biprod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) :=
   of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `inl_snd'` / 定理 `inl_snd'`
-
-English:
-theorem inl_snd'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  refine of_right ?_ (by simp) (of_isBilimit h)
-  simp
-
-中文:
-定理 inl_snd'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  refine of_right ?_ (by simp) (of_isBilimit h)
-  simp
-
-Depends on / 依赖: of_isBilimit, of_right
+/-
+**CategoryTheory.IsPullback.inl_snd'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPullback b.inl (0 : 
+X ⟶ 0) b.snd (0 : 0 ⟶ Y)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_right`：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : 
+C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ 
+: X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPullback.of_isBilimit`：of_isBilimit {b : BinaryBicone X
+ Y} (h : b.IsBilimit) : IsPullback b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
 -/
 theorem inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPullback b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y) := by
@@ -277,54 +328,73 @@ theorem inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) :
 /-- The square
 ```
   X --inl--> X ⊞ Y
-  | |
-  0 snd
-  | |
-  v v
+  |            |
+  0           snd
+  |            |
+  v            v
   0 ---0-----> Y
 ```
 is a pullback square.
 -/
 @[simp]
-/--
-theorem `inl_snd` / 定理 `inl_snd`
+/-
+**CategoryTheory.IsPullback.inl_snd** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：inl_snd (X Y : C) [HasBinaryBiproduct X Y] : IsPullback biprod.inl (0 : X 
+⟶ 0) biprod.snd (0 : 0 ⟶ Y)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.inl_snd'`：inl_snd' {b : BinaryBicone X Y} (h :
+ b.IsBilimit) : IsPullback b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y)
 
-English:
-theorem inl_snd
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 inl_snd
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inl_snd, isBilimit
+--- 原说明 ---
+The square
+```
+  X --inl--> X ⊞ Y
+  |            |
+  0           snd
+  |            |
+  v            v
+  0 ---0-----> Y
+```
+is a pullback square.
 -/
 theorem inl_snd (X Y : C) [HasBinaryBiproduct X Y] :
     IsPullback biprod.inl (0 : X ⟶ 0) biprod.snd (0 : 0 ⟶ Y) :=
   inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `inr_fst'` / 定理 `inr_fst'`
-
-English:
-theorem inr_fst'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  apply flip
-  refine of_bot ?_ (by simp) (of_isBilimit h)
-  simp
-
-中文:
-定理 inr_fst'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  apply flip
-  refine of_bot ?_ (by simp) (of_isBilimit h)
-  simp
-
-Depends on / 依赖: Under.mapPushoutAdj, isRightAdjoint, mapPushoutAdj, of_bot, of_isBilimit
+/-
+**CategoryTheory.IsPullback.inr_fst'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：inr_fst' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPullback b.inr (0 : 
+Y ⟶ 0) b.fst (0 : 0 ⟶ X)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.of_bot`：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {
+h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁
+₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inr_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inr_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPullback.of_isBilimit`：of_isBilimit {b : BinaryBicone X
+ Y} (h : b.IsBilimit) : IsPullback b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
 -/
 theorem inr_fst' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPullback b.inr (0 : Y ⟶ 0) b.fst (0 : 0 ⟶ X) := by
@@ -335,110 +405,123 @@ theorem inr_fst' {b : BinaryBicone X Y} (h : b.IsBilimit) :
 /-- The square
 ```
   Y --inr--> X ⊞ Y
-  | |
-  0 fst
-  | |
-  v v
+  |            |
+  0           fst
+  |            |
+  v            v
   0 ---0-----> X
 ```
 is a pullback square.
 -/
 @[simp]
-/--
-theorem `inr_fst` / 定理 `inr_fst`
+/-
+**CategoryTheory.IsPullback.inr_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：inr_fst (X Y : C) [HasBinaryBiproduct X Y] : IsPullback biprod.inr (0 : Y 
+⟶ 0) biprod.fst (0 : 0 ⟶ X)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.inr_fst'`：inr_fst' {b : BinaryBicone X Y} (h :
+ b.IsBilimit) : IsPullback b.inr (0 : Y ⟶ 0) b.fst (0 : 0 ⟶ X)
 
-English:
-theorem inr_fst
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 inr_fst
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inr_fst, isBilimit
+--- 原说明 ---
+The square
+```
+  Y --inr--> X ⊞ Y
+  |            |
+  0           fst
+  |            |
+  v            v
+  0 ---0-----> X
+```
+is a pullback square.
 -/
 theorem inr_fst (X Y : C) [HasBinaryBiproduct X Y] :
     IsPullback biprod.inr (0 : Y ⟶ 0) biprod.fst (0 : 0 ⟶ X) :=
   inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `of_is_bilimit'` / 定理 `of_is_bilimit'`
-
-English:
-theorem of_is_bilimit'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  refine IsPullback.of_right ?_ (by simp) (IsPullback.inl_snd' h).flip
-  simp
-
-中文:
-定理 of_is_bilimit'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  refine IsPullback.of_right ?_ (by simp) (IsPullback.inl_snd' h).flip
-  simp
-
-Depends on / 依赖: IsPullback, IsPullback.inl_snd, IsPullback.of_right, inl_snd, of_right
+/-
+**CategoryTheory.IsPullback.of_is_bilimit'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPullback`。
+形式化陈述：of_is_bilimit' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPullback (0 : 
+0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_right`：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : 
+C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ 
+: X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inr_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.inl_snd'`：inl_snd' {b : BinaryBicone X Y} (h :
+ b.IsBilimit) : IsPullback b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y)
 -/
 theorem of_is_bilimit' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPullback (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr := by
   refine IsPullback.of_right ?_ (by simp) (IsPullback.inl_snd' h).flip
   simp
-
-/--
-theorem `of_hasBinaryBiproduct` / 定理 `of_hasBinaryBiproduct`
-
-English:
-theorem of_hasBinaryBiproduct
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_hasBinaryBiproduct
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_is_bilimit
+/-
+**CategoryTheory.IsPullback.of_hasBinaryBiproduct** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.IsPullback`。
+形式化陈述：of_hasBinaryBiproduct (X Y : C) [HasBinaryBiproduct X Y] : IsPullback (0 :
+ 0 ⟶ X) (0 : 0 ⟶ Y) biprod.inl biprod.inr
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_is_bilimit'`：of_is_bilimit' {b : BinaryBico
+ne X Y} (h : b.IsBilimit) : IsPullback (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr
 -/
 theorem of_hasBinaryBiproduct (X Y : C) [HasBinaryBiproduct X Y] :
     IsPullback (0 : 0 ⟶ X) (0 : 0 ⟶ Y) biprod.inl biprod.inr :=
   of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-/--
-Instance `hasPullback_biprod_fst_biprod_snd` / 实例 `hasPullback_biprod_fst_biprod_snd`
-
-English:
-instance hasPullback_biprod_fst_biprod_snd
-  signature: [HasBinaryBiproduct X Y]
-  body: HasLimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
-
-中文:
-实例 hasPullback_biprod_fst_biprod_snd
-  签名: [有BinaryBiproduct X Y]
-  定义体: HasLimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
-
-Depends on / 依赖: HasLimit, HasLimit.mk, isLimit, of_hasBinaryBiproduct
+/-
+**CategoryTheory.IsPullback.hasPullback_biprod_fst_biprod_snd** 是 Mathlib 中的一个实例
+，位于命名空间 `CategoryTheory.IsPullback`。
+形式化陈述：hasPullback_biprod_fst_biprod_snd [HasBinaryBiproduct X Y] : HasPullback (
+biprod.inl : X ⟶ _) (biprod.inr : Y ⟶ _)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.IsPullback.of_hasBinaryBiproduct`：of_hasBinaryBiproduct (
+X Y : C) [HasBinaryBiproduct X Y] : IsPullback (0 : 0 ⟶ X) (0 : 0 ⟶ Y) biprod.in
+l biprod.inr
 -/
 instance hasPullback_biprod_fst_biprod_snd [HasBinaryBiproduct X Y] :
     HasPullback (biprod.inl : X ⟶ _) (biprod.inr : Y ⟶ _) :=
   HasLimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
 
-/--
-Definition of `pullbackBiprodInlBiprodInr` / `pullbackBiprodInlBiprodInr` 的定义
+/-- The pullback of `biprod.inl` and `biprod.inr` is the zero object. -/
+/-
+**CategoryTheory.IsPullback.pullbackBiprodInlBiprodInr** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.IsPullback`。
+形式化陈述：pullbackBiprodInlBiprodInr [HasBinaryBiproduct X Y] : pullback (biprod.inl
+ : X ⟶ _) (biprod.inr : Y ⟶ _) ≅ 0
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_hasBinaryBiproduct`：of_hasBinaryBiproduct (
+X Y : C) [HasBinaryBiproduct X Y] : IsPullback (0 : 0 ⟶ X) (0 : 0 ⟶ Y) biprod.in
+l biprod.inr
 
-English:
-definition pullbackBiprodInlBiprodInr
-  signature: [HasBinaryBiproduct X Y]
-  body: limit.isoLimitCone ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
-
-中文:
-定义 pullbackBiprodInlBiprodInr
-  签名: [有BinaryBiproduct X Y]
-  定义体: limit.isoLimitCone ⟨_, (of_hasBinaryBiproduct X Y).isLimit⟩
-
-Depends on / 依赖: isLimit, isoLimitCone, limit.isoLimitCone, of_hasBinaryBiproduct
+--- 原说明 ---
+The pullback of `biprod.inl` and `biprod.inr` is the zero object.
 -/
 def pullbackBiprodInlBiprodInr [HasBinaryBiproduct X Y] :
     pullback (biprod.inl : X ⟶ _) (biprod.inr : Y ⟶ _) ≅ 0 :=
@@ -450,24 +533,21 @@ namespace IsPushout
 
 variable {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
 
-/--
-theorem `of_hasBinaryCoproduct` / 定理 `of_hasBinaryCoproduct`
-
-English:
-theorem of_hasBinaryCoproduct
-  given: [HasBinaryCoproduct X Y]
-  proof: by
-  convert! @of_is_coproduct _ _ 0 X Y _ (colimit.isColimit _) HasZeroObject.zeroIsInitial
-    <;> subsingleton
-
-中文:
-定理 of_hasBinaryCoproduct
-  条件: [HasBinaryCoproduct X Y]
-  证明: by
-  convert! @of_is_coproduct _ _ 0 X Y _ (colimit.isColimit _) HasZeroObject.zeroIsInitial
-    <;> subsingleton
-
-Depends on / 依赖: HasZeroObject, HasZeroObject.zeroIsInitial, colimit, colimit.isColimit, convert, isColimit, of_is_coproduct, subsingleton, zeroIsInitial
+/-
+**CategoryTheory.IsPushout.of_hasBinaryCoproduct** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsPushout`。
+形式化陈述：of_hasBinaryCoproduct [HasBinaryCoproduct X Y] : IsPushout (0 : 0 ⟶ X) (0 
+: 0 ⟶ Y) coprod.inl coprod.inr
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.IsPushout.of_is_coproduct`：of_is_coproduct {c : BinaryCof
+an X Y} (h : Limits.IsColimit c) (t : IsInitial Z) : IsPushout (t.to _) (t.to _)
+ c.inl c.inr
 -/
 theorem of_hasBinaryCoproduct [HasBinaryCoproduct X Y] :
     IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) coprod.inl coprod.inr := by
@@ -478,43 +558,53 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The square with `0 : 0 ⟶ 0` on the right and `𝟙 X` on the left is a pushout square. -/
 @[simp]
-/--
-theorem `zero_right` / 定理 `zero_right`
+/-
+**CategoryTheory.IsPushout.zero_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+IsPushout`。
+形式化陈述：zero_right (X : C) : IsPushout (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X 
+⟶ 0)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.coequalizer_ext`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   (t :
+ CategoryTheory.Limits.PushoutCocone f g)…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.condition`：condition (t : PushoutCoc
+one f g) : f ≫ inl t = g ≫ inr t
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-theorem zero_right
-  given: (X : C)
-  statement: IsPushout (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
-  proof: { w := by simp
-    isColimit' :=
-      ⟨{ desc := fun _ => 0
-          fac := fun s => by
-            have c :=
-              @PushoutCocone.coequalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
-                (by simp [eq_iff_true_of_subsingleton]) (by simpa using PushoutCocone.condition s)
-            dsimp at c
-            simpa using c }⟩ }
-
-中文:
-定理 zero_right
-  条件: (X : C)
-  结论: 是推出 (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
-  证明: { w := by simp
-    isColimit' :=
-      ⟨{ desc := fun _ => 0
-          fac := fun s => by
-            have c :=
-              @PushoutCocone.coequalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
-                (by simp [eq_iff_true_of_subsingleton]) (by simpa using PushoutCocone.condition s)
-            dsimp at c
-            simpa using c }⟩ }
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.coequalizer_ext, PushoutCocone.condition, coequalizer_ext, condition, eq_iff_true_of_subsingleton, isColimit
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the right and `𝟙 X` on the left is a pushout squa
+re.
 -/
 theorem zero_right (X : C) : IsPushout (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0) :=
   { w := by simp
     isColimit' :=
-      ⟨{ desc := fun _ => 0
+      ⟨{  desc := fun _ => 0
           fac := fun s => by
             have c :=
               @PushoutCocone.coequalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
@@ -524,46 +614,66 @@ theorem zero_right (X : C) : IsPushout (0 : X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0
 
 /-- The square with `0 : 0 ⟶ 0` on the bottom and `𝟙 X` on the top is a pushout square. -/
 @[simp]
-/--
-theorem `zero_bot` / 定理 `zero_bot`
+/-
+**CategoryTheory.IsPushout.zero_bot** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：zero_bot (X : C) : IsPushout (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 
+0)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.zero_right`：zero_right (X : C) : IsPushout (0 :
+ X ⟶ 0) (𝟙 X) (0 : (0 : C) ⟶ 0) (0 : X ⟶ 0)
 
-English:
-theorem zero_bot
-  given: (X : C)
-  statement: IsPushout (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
-  proof: (zero_right X).flip
-
-中文:
-定理 zero_bot
-  条件: (X : C)
-  结论: 是推出 (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0)
-  证明: (zero_right X).flip
-
-Depends on / 依赖: zero_right
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the bottom and `𝟙 X` on the top is a pushout squa
+re.
 -/
 theorem zero_bot (X : C) : IsPushout (𝟙 X) (0 : X ⟶ 0) (0 : X ⟶ 0) (0 : (0 : C) ⟶ 0) :=
   (zero_right X).flip
 
 /-- The square with `0 : 0 ⟶ 0` on the right left `𝟙 X` on the right is a pushout square. -/
 @[simp]
-/--
-theorem `zero_left` / 定理 `zero_left`
+/-
+**CategoryTheory.IsPushout.zero_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPushout`。
+形式化陈述：zero_left (X : C) : IsPushout (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶
+ X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_iso_pushout`：of_iso_pushout (h : CommSq f g 
+inl inr) [HasPushout f g] (i : P ≅ pushout f g) (w₁ : inl ≫ i.hom = pushout.inl 
+_ _) (w₂ : inr ≫ i.hom = push…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.inl_pushoutZeroZeroIso_inv`：inl_pushoutZeroZeroIso
+_inv (X Y : C) [HasBinaryCoproduct X Y] : coprod.inl ≫ (pushoutZeroZeroIso X Y).
+inv = pushout.inl _ _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-theorem zero_left
-  given: (X : C)
-  statement: IsPushout (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
-  proof: of_iso_pushout (by simp) ((coprodZeroIso X).symm ≪≫ (pushoutZeroZeroIso _ _).symm) (by simp)
-    (by simp [eq_iff_true_of_subsingleton])
-
-中文:
-定理 zero_left
-  条件: (X : C)
-  结论: 是推出 (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
-  证明: of_iso_pushout (by simp) ((coprodZeroIso X).symm ≪≫ (pushoutZeroZeroIso _ _).symm) (by simp)
-    (by simp [eq_iff_true_of_subsingleton])
-
-Depends on / 依赖: coprodZeroIso, eq_iff_true_of_subsingleton, of_iso_pushout, pushoutZeroZeroIso
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the right left `𝟙 X` on the right is a pushout sq
+uare.
 -/
 theorem zero_left (X : C) : IsPushout (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X) :=
   of_iso_pushout (by simp) ((coprodZeroIso X).symm ≪≫ (pushoutZeroZeroIso _ _).symm) (by simp)
@@ -571,49 +681,40 @@ theorem zero_left (X : C) : IsPushout (0 : 0 ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X)
 
 /-- The square with `0 : 0 ⟶ 0` on the top and `𝟙 X` on the bottom is a pushout square. -/
 @[simp]
-/--
-theorem `zero_top` / 定理 `zero_top`
+/-
+**CategoryTheory.IsPushout.zero_top** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：zero_top (X : C) : IsPushout (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 
+X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.zero_left`：zero_left (X : C) : IsPushout (0 : 0
+ ⟶ X) (0 : (0 : C) ⟶ 0) (𝟙 X) (0 : 0 ⟶ X)
 
-English:
-theorem zero_top
-  given: (X : C)
-  statement: IsPushout (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
-  proof: (zero_left X).flip
-
-中文:
-定理 zero_top
-  条件: (X : C)
-  结论: 是推出 (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X)
-  证明: (zero_left X).flip
-
-Depends on / 依赖: zero_left
+--- 原说明 ---
+The square with `0 : 0 ⟶ 0` on the top and `𝟙 X` on the bottom is a pushout squa
+re.
 -/
 theorem zero_top (X : C) : IsPushout (0 : (0 : C) ⟶ 0) (0 : 0 ⟶ X) (0 : 0 ⟶ X) (𝟙 X) :=
   (zero_left X).flip
-
-
-/--
-theorem `of_isBilimit` / 定理 `of_isBilimit`
-
-English:
-theorem of_isBilimit
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  convert! IsPushout.of_is_coproduct' h.isColimit HasZeroObject.zeroIsInitial
-    <;> subsingleton
-
-@[simp]
-
-中文:
-定理 of_isBilimit
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  convert! IsPushout.of_is_coproduct' h.isColimit HasZeroObject.zeroIsInitial
-    <;> subsingleton
-
-@[simp]
-
-Depends on / 依赖: HasZeroObject, HasZeroObject.zeroIsInitial, IsPushout, IsPushout.of_is_coproduct, convert, h.isColimit, isColimit, of_is_coproduct, subsingleton, zeroIsInitial
+/-
+**CategoryTheory.IsPushout.of_isBilimit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.IsPushout`。
+形式化陈述：of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPushout (0 : 0 ⟶
+ X) (0 : 0 ⟶ Y) b.inl b.inr
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `CategoryTheory.IsPushout.of_is_coproduct'`：of_is_coproduct' (h : Limits.
+IsColimit (BinaryCofan.mk inl inr)) (t : IsInitial Z) : IsPushout (t.to _) (t.to
+ _) inl inr
 -/
 theorem of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr := by
@@ -621,45 +722,52 @@ theorem of_isBilimit {b : BinaryBicone X Y} (h : b.IsBilimit) :
     <;> subsingleton
 
 @[simp]
-/--
-theorem `of_has_biproduct` / 定理 `of_has_biproduct`
-
-English:
-theorem of_has_biproduct
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_has_biproduct
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_isBilimit
+/-
+**CategoryTheory.IsPushout.of_has_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsPushout`。
+形式化陈述：of_has_biproduct (X Y : C) [HasBinaryBiproduct X Y] : IsPushout (0 : 0 ⟶ X
+) (0 : 0 ⟶ Y) biprod.inl biprod.inr
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isBilimit`：of_isBilimit {b : BinaryBicone X 
+Y} (h : b.IsBilimit) : IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr
 -/
 theorem of_has_biproduct (X Y : C) [HasBinaryBiproduct X Y] :
     IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) biprod.inl biprod.inr :=
   of_isBilimit (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `inl_snd'` / 定理 `inl_snd'`
-
-English:
-theorem inl_snd'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  apply flip
-  refine of_left ?_ (by simp) (of_isBilimit h)
-  simp
-
-中文:
-定理 inl_snd'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  apply flip
-  refine of_left ?_ (by simp) (of_isBilimit h)
-  simp
-
-Depends on / 依赖: of_isBilimit, of_left
+/-
+**CategoryTheory.IsPushout.inl_snd'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPushout b.inl (0 : X
+ ⟶ 0) b.snd (0 : 0 ⟶ Y)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.of_left`：of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} 
+{h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X
+₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inr_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPushout.of_isBilimit`：of_isBilimit {b : BinaryBicone X 
+Y} (h : b.IsBilimit) : IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr
 -/
 theorem inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPushout b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y) := by
@@ -667,144 +775,194 @@ theorem inl_snd' {b : BinaryBicone X Y} (h : b.IsBilimit) :
   refine of_left ?_ (by simp) (of_isBilimit h)
   simp
 
-/--
-theorem `inl_snd` / 定理 `inl_snd`
+/-- The square
+```
+  X --inl--> X ⊞ Y
+  |            |
+  0           snd
+  |            |
+  v            v
+  0 ---0-----> Y
+```
+is a pushout square.
+-/
+/-
+**CategoryTheory.IsPushout.inl_snd** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：inl_snd (X Y : C) [HasBinaryBiproduct X Y] : IsPushout biprod.inl (0 : X ⟶
+ 0) biprod.snd (0 : 0 ⟶ Y)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.inl_snd'`：inl_snd' {b : BinaryBicone X Y} (h : 
+b.IsBilimit) : IsPushout b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y)
 
-English:
-theorem inl_snd
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 inl_snd
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inl_snd, isBilimit
+--- 原说明 ---
+The square
+```
+  X --inl--> X ⊞ Y
+  |            |
+  0           snd
+  |            |
+  v            v
+  0 ---0-----> Y
+```
+is a pushout square.
 -/
 theorem inl_snd (X Y : C) [HasBinaryBiproduct X Y] :
     IsPushout biprod.inl (0 : X ⟶ 0) biprod.snd (0 : 0 ⟶ Y) :=
   inl_snd' (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `inr_fst'` / 定理 `inr_fst'`
-
-English:
-theorem inr_fst'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  refine of_top ?_ (by simp) (of_isBilimit h)
-  simp
-
-中文:
-定理 inr_fst'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  refine of_top ?_ (by simp) (of_isBilimit h)
-  simp
-
-Depends on / 依赖: of_isBilimit, of_top
+/-
+**CategoryTheory.IsPushout.inr_fst'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：inr_fst' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPushout b.inr (0 : Y
+ ⟶ 0) b.fst (0 : 0 ⟶ X)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_top`：of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h
+₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂
+ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inr_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPushout.of_isBilimit`：of_isBilimit {b : BinaryBicone X 
+Y} (h : b.IsBilimit) : IsPushout (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr
 -/
 theorem inr_fst' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPushout b.inr (0 : Y ⟶ 0) b.fst (0 : 0 ⟶ X) := by
   refine of_top ?_ (by simp) (of_isBilimit h)
   simp
 
-/--
-theorem `inr_fst` / 定理 `inr_fst`
+/-- The square
+```
+  Y --inr--> X ⊞ Y
+  |            |
+  0           fst
+  |            |
+  v            v
+  0 ---0-----> X
+```
+is a pushout square.
+-/
+/-
+**CategoryTheory.IsPushout.inr_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：inr_fst (X Y : C) [HasBinaryBiproduct X Y] : IsPushout biprod.inr (0 : Y ⟶
+ 0) biprod.fst (0 : 0 ⟶ X)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.inr_fst'`：inr_fst' {b : BinaryBicone X Y} (h : 
+b.IsBilimit) : IsPushout b.inr (0 : Y ⟶ 0) b.fst (0 : 0 ⟶ X)
 
-English:
-theorem inr_fst
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 inr_fst
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, inr_fst, isBilimit
+--- 原说明 ---
+The square
+```
+  Y --inr--> X ⊞ Y
+  |            |
+  0           fst
+  |            |
+  v            v
+  0 ---0-----> X
+```
+is a pushout square.
 -/
 theorem inr_fst (X Y : C) [HasBinaryBiproduct X Y] :
     IsPushout biprod.inr (0 : Y ⟶ 0) biprod.fst (0 : 0 ⟶ X) :=
   inr_fst' (BinaryBiproduct.isBilimit X Y)
-
-/--
-theorem `of_is_bilimit'` / 定理 `of_is_bilimit'`
-
-English:
-theorem of_is_bilimit'
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: by
-  refine IsPushout.of_left ?_ (by simp) (IsPushout.inl_snd' h)
-  simp
-
-中文:
-定理 of_is_bilimit'
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: by
-  refine IsPushout.of_left ?_ (by simp) (IsPushout.inl_snd' h)
-  simp
-
-Depends on / 依赖: IsPushout, IsPushout.inl_snd, IsPushout.of_left, inl_snd, of_left
+/-
+**CategoryTheory.IsPushout.of_is_bilimit'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：of_is_bilimit' {b : BinaryBicone X Y} (h : b.IsBilimit) : IsPushout b.fst 
+b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
+参数：h : b.IsBilimit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_left`：of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} 
+{h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X
+₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPushout.inl_snd'`：inl_snd' {b : BinaryBicone X Y} (h : 
+b.IsBilimit) : IsPushout b.inl (0 : X ⟶ 0) b.snd (0 : 0 ⟶ Y)
 -/
 theorem of_is_bilimit' {b : BinaryBicone X Y} (h : b.IsBilimit) :
     IsPushout b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) := by
   refine IsPushout.of_left ?_ (by simp) (IsPushout.inl_snd' h)
   simp
-
-/--
-theorem `of_hasBinaryBiproduct` / 定理 `of_hasBinaryBiproduct`
-
-English:
-theorem of_hasBinaryBiproduct
-  given: (X Y : C) [HasBinaryBiproduct X Y]
-  proof: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_hasBinaryBiproduct
-  条件: (X Y : C) [有BinaryBiproduct X Y]
-  证明: of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, isBilimit, of_is_bilimit
+/-
+**CategoryTheory.IsPushout.of_hasBinaryBiproduct** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsPushout`。
+形式化陈述：of_hasBinaryBiproduct (X Y : C) [HasBinaryBiproduct X Y] : IsPushout bipro
+d.fst biprod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_is_bilimit'`：of_is_bilimit' {b : BinaryBicon
+e X Y} (h : b.IsBilimit) : IsPushout b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0)
 -/
 theorem of_hasBinaryBiproduct (X Y : C) [HasBinaryBiproduct X Y] :
     IsPushout biprod.fst biprod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) :=
   of_is_bilimit' (BinaryBiproduct.isBilimit X Y)
-
-/--
-Instance `hasPushout_biprod_fst_biprod_snd` / 实例 `hasPushout_biprod_fst_biprod_snd`
-
-English:
-instance hasPushout_biprod_fst_biprod_snd
-  signature: [HasBinaryBiproduct X Y]
-  body: HasColimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
-
-中文:
-实例 hasPushout_biprod_fst_biprod_snd
-  签名: [有BinaryBiproduct X Y]
-  定义体: HasColimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
-
-Depends on / 依赖: HasColimit, HasColimit.mk, isColimit, of_hasBinaryBiproduct
+/-
+**CategoryTheory.IsPushout.hasPushout_biprod_fst_biprod_snd** 是 Mathlib 中的一个实例，位
+于命名空间 `CategoryTheory.IsPushout`。
+形式化陈述：hasPushout_biprod_fst_biprod_snd [HasBinaryBiproduct X Y] : HasPushout (bi
+prod.fst : _ ⟶ X) (biprod.snd : _ ⟶ Y)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.IsPushout.of_hasBinaryBiproduct`：of_hasBinaryBiproduct (X
+ Y : C) [HasBinaryBiproduct X Y] : IsPushout biprod.fst biprod.snd (0 : X ⟶ 0) (
+0 : Y ⟶ 0)
 -/
 instance hasPushout_biprod_fst_biprod_snd [HasBinaryBiproduct X Y] :
     HasPushout (biprod.fst : _ ⟶ X) (biprod.snd : _ ⟶ Y) :=
   HasColimit.mk ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
 
-/--
-Definition of `pushoutBiprodFstBiprodSnd` / `pushoutBiprodFstBiprodSnd` 的定义
+/-- The pushout of `biprod.fst` and `biprod.snd` is the zero object. -/
+/-
+**CategoryTheory.IsPushout.pushoutBiprodFstBiprodSnd** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.IsPushout`。
+形式化陈述：pushoutBiprodFstBiprodSnd [HasBinaryBiproduct X Y] : pushout (biprod.fst :
+ _ ⟶ X) (biprod.snd : _ ⟶ Y) ≅ 0
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_hasBinaryBiproduct`：of_hasBinaryBiproduct (X
+ Y : C) [HasBinaryBiproduct X Y] : IsPushout biprod.fst biprod.snd (0 : X ⟶ 0) (
+0 : Y ⟶ 0)
 
-English:
-definition pushoutBiprodFstBiprodSnd
-  signature: [HasBinaryBiproduct X Y]
-  body: colimit.isoColimitCocone ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
-
-中文:
-定义 pushoutBiprodFstBiprodSnd
-  签名: [有BinaryBiproduct X Y]
-  定义体: colimit.isoColimitCocone ⟨_, (of_hasBinaryBiproduct X Y).isColimit⟩
-
-Depends on / 依赖: colimit, colimit.isoColimitCocone, isColimit, isoColimitCocone, of_hasBinaryBiproduct
+--- 原说明 ---
+The pushout of `biprod.fst` and `biprod.snd` is the zero object.
 -/
 def pushoutBiprodFstBiprodSnd [HasBinaryBiproduct X Y] :
     pushout (biprod.fst : _ ⟶ X) (biprod.snd : _ ⟶ Y) ≅ 0 :=
@@ -819,41 +977,40 @@ variable {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
 omit [HasZeroObject C] [HasZeroMorphisms C] in
 section
 
-/--
-theorem `of_isPullback_isPushout` / 定理 `of_isPullback_isPushout`
-
-English:
-theorem of_isPullback_isPushout
-  given: (p₁ : IsPullback f g h i) (p₂ : IsPushout f g h i)
-  proof: BicartesianSq.mk p₁ p₂.isColimit'
-
-中文:
-定理 of_isPullback_isPushout
-  条件: (p₁ : 是拉回 f g h i) (p₂ : 是推出 f g h i)
-  证明: BicartesianSq.mk p₁ p₂.isColimit'
-
-Depends on / 依赖: BicartesianSq, BicartesianSq.mk, isColimit
+/-
+**CategoryTheory.BicartesianSq.of_isPullback_isPushout** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.BicartesianSq`。
+形式化陈述：of_isPullback_isPushout (p₁ : IsPullback f g h i) (p₂ : IsPushout f g h i)
+ : BicartesianSq f g h i
+参数：p₁ : IsPullback f g h i；p₂ : IsPushout f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.isColimit'`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {
+inr : Y ⟶ P} (self : Cate…
 -/
 theorem of_isPullback_isPushout (p₁ : IsPullback f g h i) (p₂ : IsPushout f g h i) :
     BicartesianSq f g h i :=
   BicartesianSq.mk p₁ p₂.isColimit'
-
-/--
-theorem `flip` / 定理 `flip`
-
-English:
-theorem flip
-  given: (p : BicartesianSq f g h i)
-  statement: BicartesianSq g f i h
-  proof: of_isPullback_isPushout p.toIsPullback.flip p.toIsPushout.flip
-
-中文:
-定理 flip
-  条件: (p : BicartesianSq f g h i)
-  结论: BicartesianSq g f i h
-  证明: of_isPullback_isPushout p.toIsPullback.flip p.toIsPushout.flip
-
-Depends on / 依赖: of_isPullback_isPushout, p.toIsPullback.flip, p.toIsPushout.flip, toIsPullback, toIsPushout
+/-
+**CategoryTheory.BicartesianSq.flip** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bi
+cartesianSq`。
+形式化陈述：flip (p : BicartesianSq f g h i) : BicartesianSq g f i h
+参数：p : BicartesianSq f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.BicartesianSq.of_isPullback_isPushout`：of_isPullback_isPu
+shout (p₁ : IsPullback f g h i) (p₂ : IsPushout f g h i) : BicartesianSq f g h i
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.BicartesianSq.toIsPullback`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}
+   {i : Y ⟶ Z}, CategoryTheory.…
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.BicartesianSq.toIsPushout`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} 
+  {i : Y ⟶ Z}, CategoryTheory.…
 -/
 theorem flip (p : BicartesianSq f g h i) : BicartesianSq g f i h :=
   of_isPullback_isPushout p.toIsPullback.flip p.toIsPushout.flip
@@ -861,39 +1018,61 @@ theorem flip (p : BicartesianSq f g h i) : BicartesianSq g f i h :=
 end
 
 
-/--
-theorem `of_is_biproduct₁` / 定理 `of_is_biproduct₁`
+/-- ```
+ X ⊞ Y --fst--> X
+   |            |
+  snd           0
+   |            |
+   v            v
+   Y -----0---> 0
+```
+is a bi-Cartesian square.
+-/
+/-
+**CategoryTheory.BicartesianSq.of_is_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.BicartesianSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem of_is_biproduct₁
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: of_isPullback_isPushout (IsPullback.of_isBilimit h) (IsPushout.of_is_bilimit' h)
-
-中文:
-定理 of_is_biproduct₁
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: of_isPullback_isPushout (IsPullback.of_isBilimit h) (IsPushout.of_is_bilimit' h)
-
-Depends on / 依赖: F.map_injective, IsPullback, IsPullback.of_isBilimit, IsPushout, IsPushout.of_is_bilimit, map_injective, of_isBilimit, of_isPullback_isPushout, of_is_bilimit
+--- 原说明 ---
+```
+ X ⊞ Y --fst--> X
+   |            |
+  snd           0
+   |            |
+   v            v
+   Y -----0---> 0
+```
+is a bi-Cartesian square.
 -/
 theorem of_is_biproduct₁ {b : BinaryBicone X Y} (h : b.IsBilimit) :
     BicartesianSq b.fst b.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) :=
   of_isPullback_isPushout (IsPullback.of_isBilimit h) (IsPushout.of_is_bilimit' h)
 
-/--
-theorem `of_is_biproduct₂` / 定理 `of_is_biproduct₂`
+/-- ```
+   0 -----0---> X
+   |            |
+   0           inl
+   |            |
+   v            v
+   Y --inr--> X ⊞ Y
+```
+is a bi-Cartesian square.
+-/
+/-
+**CategoryTheory.BicartesianSq.of_is_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.BicartesianSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem of_is_biproduct₂
-  given: {b : BinaryBicone X Y} (h : b.IsBilimit)
-  proof: of_isPullback_isPushout (IsPullback.of_is_bilimit' h) (IsPushout.of_isBilimit h)
-
-中文:
-定理 of_is_biproduct₂
-  条件: {b : BinaryBicone X Y} (h : b.是Bilimit)
-  证明: of_isPullback_isPushout (IsPullback.of_is_bilimit' h) (IsPushout.of_isBilimit h)
-
-Depends on / 依赖: IsPullback, IsPullback.of_is_bilimit, IsPushout, IsPushout.of_isBilimit, of_isBilimit, of_isPullback_isPushout, of_is_bilimit
+--- 原说明 ---
+```
+   0 -----0---> X
+   |            |
+   0           inl
+   |            |
+   v            v
+   Y --inr--> X ⊞ Y
+```
+is a bi-Cartesian square.
 -/
 theorem of_is_biproduct₂ {b : BinaryBicone X Y} (h : b.IsBilimit) :
     BicartesianSq (0 : 0 ⟶ X) (0 : 0 ⟶ Y) b.inl b.inr :=
@@ -901,31 +1080,30 @@ theorem of_is_biproduct₂ {b : BinaryBicone X Y} (h : b.IsBilimit) :
 
 /-- ```
  X ⊞ Y --fst--> X
-   | |
-  snd 0
-   | |
-   v v
+   |            |
+  snd           0
+   |            |
+   v            v
    Y -----0---> 0
 ```
 is a bi-Cartesian square.
 -/
 @[simp]
-/--
-theorem `of_has_biproduct₁` / 定理 `of_has_biproduct₁`
+/-
+**CategoryTheory.BicartesianSq.of_has_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.BicartesianSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem of_has_biproduct₁
-  given: [HasBinaryBiproduct X Y]
-  proof: by
-  convert! of_is_biproduct₁ (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_has_biproduct₁
-  条件: [有BinaryBiproduct X Y]
-  证明: by
-  convert! of_is_biproduct₁ (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, convert, isBilimit
+--- 原说明 ---
+```
+ X ⊞ Y --fst--> X
+   |            |
+  snd           0
+   |            |
+   v            v
+   Y -----0---> 0
+```
+is a bi-Cartesian square.
 -/
 theorem of_has_biproduct₁ [HasBinaryBiproduct X Y] :
     BicartesianSq biprod.fst biprod.snd (0 : X ⟶ 0) (0 : Y ⟶ 0) := by
@@ -933,31 +1111,30 @@ theorem of_has_biproduct₁ [HasBinaryBiproduct X Y] :
 
 /-- ```
    0 -----0---> X
-   | |
-   0 inl
-   | |
-   v v
+   |            |
+   0           inl
+   |            |
+   v            v
    Y --inr--> X ⊞ Y
 ```
 is a bi-Cartesian square.
 -/
 @[simp]
-/--
-theorem `of_has_biproduct₂` / 定理 `of_has_biproduct₂`
+/-
+**CategoryTheory.BicartesianSq.of_has_biproduct** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.BicartesianSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem of_has_biproduct₂
-  given: [HasBinaryBiproduct X Y]
-  proof: by
-  convert! of_is_biproduct₂ (BinaryBiproduct.isBilimit X Y)
-
-中文:
-定理 of_has_biproduct₂
-  条件: [有BinaryBiproduct X Y]
-  证明: by
-  convert! of_is_biproduct₂ (BinaryBiproduct.isBilimit X Y)
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isBilimit, convert, isBilimit
+--- 原说明 ---
+```
+   0 -----0---> X
+   |            |
+   0           inl
+   |            |
+   v            v
+   Y --inr--> X ⊞ Y
+```
+is a bi-Cartesian square.
 -/
 theorem of_has_biproduct₂ [HasBinaryBiproduct X Y] :
     BicartesianSq (0 : 0 ⟶ X) (0 : 0 ⟶ Y) biprod.inl biprod.inr := by
@@ -965,3 +1142,4 @@ theorem of_has_biproduct₂ [HasBinaryBiproduct X Y] :
 
 end BicartesianSq
 end CategoryTheory
+

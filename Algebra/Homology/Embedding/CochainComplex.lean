@@ -32,227 +32,145 @@ open HomologicalComplex
 
 section HasZeroMorphisms
 
-variable [HasZeroMorphisms C] (K L : CochainComplex C Int) (φ : K ⟶ L) (e : K ≅ L)
+variable [HasZeroMorphisms C] (K L : CochainComplex C ℤ) (φ : K ⟶ L) (e : K ≅ L)
 
 section
 
-variable [HasZeroObject C] [forall i, K.HasHomology i] [forall i, L.HasHomology i]
+variable [HasZeroObject C] [∀ i, K.HasHomology i] [∀ i, L.HasHomology i]
 
-/--
-Definition of `truncLE` / `truncLE` 的定义
+/-- If `K : CochainComplex C ℤ`, this is the canonical truncation `≤ n` of `K`. -/
+/-
+**CochainComplex.truncLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncLE (n : Int) : CochainComplex C Int
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 
-English:
-abbreviation truncLE
-  signature: (n : Int)
-  body: HomologicalComplex.truncLE K (embeddingUpIntLE n)
-
-中文:
-缩写 truncLE
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncLE K (embeddingUpIntLE n)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncLE, embeddingUpIntLE, truncLE
+--- 原说明 ---
+If `K : CochainComplex C ℤ`, this is the canonical truncation `≤ n` of `K`.
 -/
-noncomputable abbrev truncLE (n : Int) : CochainComplex C Int :=
+noncomputable abbrev truncLE (n : ℤ) : CochainComplex C ℤ :=
   HomologicalComplex.truncLE K (embeddingUpIntLE n)
 
-/--
-Definition of `truncGE` / `truncGE` 的定义
+/-- If `K : CochainComplex C ℤ`, this is the canonical truncation `≥ n` of `K`. -/
+/-
+**CochainComplex.truncGE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncGE (n : Int) : CochainComplex C Int
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
 
-English:
-abbreviation truncGE
-  signature: (n : Int)
-  body: HomologicalComplex.truncGE K (embeddingUpIntGE n)
-
-中文:
-缩写 truncGE
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncGE K (embeddingUpIntGE n)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncGE, embeddingUpIntGE, truncGE
+--- 原说明 ---
+If `K : CochainComplex C ℤ`, this is the canonical truncation `≥ n` of `K`.
 -/
-noncomputable abbrev truncGE (n : Int) : CochainComplex C Int :=
+noncomputable abbrev truncGE (n : ℤ) : CochainComplex C ℤ :=
   HomologicalComplex.truncGE K (embeddingUpIntGE n)
 
-/--
-Definition of `ιTruncLE` / `ιTruncLE` 的定义
+/-- The canonical map `K.truncLE n ⟶ K` for `K : CochainComplex C ℤ`. -/
+/-
+**CochainComplex.** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιTruncLE
-  signature: (n : Int)
-  body: HomologicalComplex.ιTruncLE K (embeddingUpIntLE n)
-
-中文:
-定义 ιTruncLE
-  签名: (n : 整数)
-  定义体: HomologicalComplex.ιTruncLE K (embeddingUpIntLE n)
-
-Depends on / 依赖: HomologicalComplex, embeddingUpIntLE
+--- 原说明 ---
+The canonical map `K.truncLE n ⟶ K` for `K : CochainComplex C ℤ`.
 -/
-noncomputable def ιTruncLE (n : Int) : K.truncLE n ⟶ K :=
+noncomputable def ιTruncLE (n : ℤ) : K.truncLE n ⟶ K :=
   HomologicalComplex.ιTruncLE K (embeddingUpIntLE n)
 
-/--
-Definition of `πTruncGE` / `πTruncGE` 的定义
+/-- The canonical map `K ⟶ K.truncGE n` for `K : CochainComplex C ℤ`. -/
+/-
+**CochainComplex.** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition πTruncGE
-  signature: (n : Int)
-  body: HomologicalComplex.πTruncGE K (embeddingUpIntGE n)
-
-中文:
-定义 πTruncGE
-  签名: (n : 整数)
-  定义体: HomologicalComplex.πTruncGE K (embeddingUpIntGE n)
-
-Depends on / 依赖: BoundaryGE, HomologicalComplex, K.pOpcycles, K.truncGE, L.truncGE, XIsoOpcycles, _d_eq, _d_eq_fromOpcycles, cancel_epi, dif_neg, dif_pos, e.BoundaryGE, e.not_boundaryGE_next, embeddingUpIntGE, not_boundaryGE_next, opcyclesMap, pOpcycles, truncGE
+--- 原说明 ---
+The canonical map `K ⟶ K.truncGE n` for `K : CochainComplex C ℤ`.
 -/
-noncomputable def πTruncGE (n : Int) : K ⟶ K.truncGE n :=
+noncomputable def πTruncGE (n : ℤ) : K ⟶ K.truncGE n :=
   HomologicalComplex.πTruncGE K (embeddingUpIntGE n)
-
-/--
-lemma `quasiIsoAt_ιTruncLE` / 引理 `quasiIsoAt_ιTruncLE`
-
-English:
-lemma quasiIsoAt_ιTruncLE
-  given: (n q : Int) (hq : q <= n)
-  proof: by
-  obtain ⟨k, rfl⟩ := Int.le.dest hq
-  exact HomologicalComplex.quasiIsoAt_ιTruncLE (j := k) _ _ (by simp)
-
-中文:
-引理 quasiIsoAt_ιTruncLE
-  条件: (n q : 整数) (hq : q <= n)
-  证明: by
-  obtain ⟨k, rfl⟩ := Int.le.dest hq
-  exact HomologicalComplex.quasiIsoAt_ιTruncLE (j := k) _ _ (by simp)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.quasiIsoAt_, Int.le.dest, dif_pos
+/-
+**CochainComplex.quasiIsoAt_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_ιTruncLE (n q : Int) (hq : q <= n) :
+lemma quasiIsoAt_ιTruncLE (n q : ℤ) (hq : q ≤ n) :
     QuasiIsoAt (K.ιTruncLE n) q := by
   obtain ⟨k, rfl⟩ := Int.le.dest hq
   exact HomologicalComplex.quasiIsoAt_ιTruncLE (j := k) _ _ (by simp)
-
-/--
-lemma `quasiIsoAt_πTruncGE` / 引理 `quasiIsoAt_πTruncGE`
-
-English:
-lemma quasiIsoAt_πTruncGE
-  given: (n q : Int) (hq : n <= q)
-  proof: by
-  obtain ⟨k, rfl⟩ := Int.le.dest hq
-  exact HomologicalComplex.quasiIsoAt_πTruncGE (j := k) _ _ (by simp)
-
-中文:
-引理 quasiIsoAt_πTruncGE
-  条件: (n q : 整数) (hq : n <= q)
-  证明: by
-  obtain ⟨k, rfl⟩ := Int.le.dest hq
-  exact HomologicalComplex.quasiIsoAt_πTruncGE (j := k) _ _ (by simp)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.quasiIsoAt_, Int.le.dest, dif_neg
+/-
+**CochainComplex.quasiIsoAt_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_πTruncGE (n q : Int) (hq : n <= q) :
+lemma quasiIsoAt_πTruncGE (n q : ℤ) (hq : n ≤ q) :
     QuasiIsoAt (K.πTruncGE n) q := by
   obtain ⟨k, rfl⟩ := Int.le.dest hq
   exact HomologicalComplex.quasiIsoAt_πTruncGE (j := k) _ _ (by simp)
-
-instance (n : Int) : QuasiIsoAt (K.πTruncGE n) n :=
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : QuasiIsoAt (K.πTruncGE n) n :=
   quasiIsoAt_πTruncGE _ _ _ (by lia)
-
-instance (n : Int) : QuasiIsoAt (K.ιTruncLE n) n :=
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : QuasiIsoAt (K.ιTruncLE n) n :=
   quasiIsoAt_ιTruncLE _ _ _ (by lia)
 
 section
 
 variable {K L}
 
-/--
-Definition of `truncLEMap` / `truncLEMap` 的定义
+/-- The morphism `K.truncLE n ⟶ L.truncLE n` induced by a morphism `K ⟶ L`. -/
+/-
+**CochainComplex.truncLEMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncLEMap (n : Int) : K.truncLE n ⟶ L.truncLE n
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 
-English:
-abbreviation truncLEMap
-  signature: (n : Int)
-  body: HomologicalComplex.truncLEMap φ (embeddingUpIntLE n)
-
-中文:
-缩写 truncLEMap
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncLEMap φ (embeddingUpIntLE n)
-
-Depends on / 依赖: BoundaryGE, HomologicalComplex, HomologicalComplex.truncLEMap, Map_f_eq, Map_f_eq_opcyclesMap, e.BoundaryGE, embeddingUpIntLE, truncGE, truncLEMap
+--- 原说明 ---
+The morphism `K.truncLE n ⟶ L.truncLE n` induced by a morphism `K ⟶ L`.
 -/
-noncomputable abbrev truncLEMap (n : Int) : K.truncLE n ⟶ L.truncLE n :=
+noncomputable abbrev truncLEMap (n : ℤ) : K.truncLE n ⟶ L.truncLE n :=
   HomologicalComplex.truncLEMap φ (embeddingUpIntLE n)
 
-/--
-Definition of `truncGEMap` / `truncGEMap` 的定义
+/-- The morphism `K.truncGE n ⟶ L.truncGE n` induced by a morphism `K ⟶ L`. -/
+/-
+**CochainComplex.truncGEMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncGEMap (n : Int) : K.truncGE n ⟶ L.truncGE n
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
 
-English:
-abbreviation truncGEMap
-  signature: (n : Int)
-  body: HomologicalComplex.truncGEMap φ (embeddingUpIntGE n)
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 truncGEMap
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncGEMap φ (embeddingUpIntGE n)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BoundaryGE, HomologicalComplex, HomologicalComplex.truncGEMap, Map_f_eq, Map_f_eq_opcyclesMap, e.BoundaryGE, embeddingUpIntGE, opcyclesMap_comp, truncGE, truncGEMap
+--- 原说明 ---
+The morphism `K.truncGE n ⟶ L.truncGE n` induced by a morphism `K ⟶ L`.
 -/
-noncomputable abbrev truncGEMap (n : Int) : K.truncGE n ⟶ L.truncGE n :=
+noncomputable abbrev truncGEMap (n : ℤ) : K.truncGE n ⟶ L.truncGE n :=
   HomologicalComplex.truncGEMap φ (embeddingUpIntGE n)
 
 @[reassoc (attr := simp)]
-/--
-lemma `ιTruncLE_naturality` / 引理 `ιTruncLE_naturality`
-
-English:
-lemma ιTruncLE_naturality
-  given: (n : Int)
-  proof: by
-  apply HomologicalComplex.ιTruncLE_naturality
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 ιTruncLE_naturality
-  条件: (n : 整数)
-  证明: by
-  apply HomologicalComplex.ιTruncLE_naturality
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: HomologicalComplex
+/-
+**CochainComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ιTruncLE_naturality (n : Int) :
+lemma ιTruncLE_naturality (n : ℤ) :
     truncLEMap φ n ≫ L.ιTruncLE n = K.ιTruncLE n ≫ φ := by
   apply HomologicalComplex.ιTruncLE_naturality
 
 @[reassoc (attr := simp)]
-/--
-lemma `πTruncGE_naturality` / 引理 `πTruncGE_naturality`
-
-English:
-lemma πTruncGE_naturality
-  given: (n : Int)
-  proof: by
-  apply HomologicalComplex.πTruncGE_naturality
-
-中文:
-引理 πTruncGE_naturality
-  条件: (n : 整数)
-  证明: by
-  apply HomologicalComplex.πTruncGE_naturality
-
-Depends on / 依赖: HomologicalComplex
+/-
+**CochainComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma πTruncGE_naturality (n : Int) :
+lemma πTruncGE_naturality (n : ℤ) :
     K.πTruncGE n ≫ truncGEMap φ n = φ ≫ L.πTruncGE n := by
   apply HomologicalComplex.πTruncGE_naturality
 
@@ -260,459 +178,315 @@ end
 
 end
 
-/--
-Definition of `IsStrictlyGE` / `IsStrictlyGE` 的定义
+/-- The condition that a cochain complex `K` is strictly `≥ n`. -/
+/-
+**CochainComplex.IsStrictlyGE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：IsStrictlyGE (n : Int)
+参数：n : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsStrictlyGE
-  signature: (n : Int)
-  body: K.IsStrictlySupported (embeddingUpIntGE n)
-
-中文:
-缩写 IsStrictlyGE
-  签名: (n : 整数)
-  定义体: K.IsStrictlySupported (embeddingUpIntGE n)
-
-Depends on / 依赖: IsStrictlySupported, K.IsStrictlySupported, embeddingUpIntGE
+--- 原说明 ---
+The condition that a cochain complex `K` is strictly `≥ n`.
 -/
-abbrev IsStrictlyGE (n : Int) := K.IsStrictlySupported (embeddingUpIntGE n)
+abbrev IsStrictlyGE (n : ℤ) := K.IsStrictlySupported (embeddingUpIntGE n)
 
-/--
-Definition of `IsStrictlyLE` / `IsStrictlyLE` 的定义
+/-- The condition that a cochain complex `K` is strictly `≤ n`. -/
+/-
+**CochainComplex.IsStrictlyLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：IsStrictlyLE (n : Int)
+参数：n : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsStrictlyLE
-  signature: (n : Int)
-  body: K.IsStrictlySupported (embeddingUpIntLE n)
-
-中文:
-缩写 IsStrictlyLE
-  签名: (n : 整数)
-  定义体: K.IsStrictlySupported (embeddingUpIntLE n)
-
-Depends on / 依赖: IsStrictlySupported, K.IsStrictlySupported, embeddingUpIntLE
+--- 原说明 ---
+The condition that a cochain complex `K` is strictly `≤ n`.
 -/
-abbrev IsStrictlyLE (n : Int) := K.IsStrictlySupported (embeddingUpIntLE n)
+abbrev IsStrictlyLE (n : ℤ) := K.IsStrictlySupported (embeddingUpIntLE n)
 
-/--
-Definition of `IsGE` / `IsGE` 的定义
+/-- The condition that a cochain complex `K` is (cohomologically) `≥ n`. -/
+/-
+**CochainComplex.IsGE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：IsGE (n : Int)
+参数：n : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsGE
-  signature: (n : Int)
-  body: K.IsSupported (embeddingUpIntGE n)
-
-中文:
-缩写 是GE
-  签名: (n : 整数)
-  定义体: K.IsSupported (embeddingUpIntGE n)
-
-Depends on / 依赖: IsSupported, K.IsSupported, embeddingUpIntGE
+--- 原说明 ---
+The condition that a cochain complex `K` is (cohomologically) `≥ n`.
 -/
-abbrev IsGE (n : Int) := K.IsSupported (embeddingUpIntGE n)
+abbrev IsGE (n : ℤ) := K.IsSupported (embeddingUpIntGE n)
 
-/--
-Definition of `IsLE` / `IsLE` 的定义
+/-- The condition that a cochain complex `K` is (cohomologically) `≤ n`. -/
+/-
+**CochainComplex.IsLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：IsLE (n : Int)
+参数：n : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLE
-  signature: (n : Int)
-  body: K.IsSupported (embeddingUpIntLE n)
-
-中文:
-缩写 是LE
-  签名: (n : 整数)
-  定义体: K.IsSupported (embeddingUpIntLE n)
-
-Depends on / 依赖: IsSupported, K.IsSupported, embeddingUpIntLE
+--- 原说明 ---
+The condition that a cochain complex `K` is (cohomologically) `≤ n`.
 -/
-abbrev IsLE (n : Int) := K.IsSupported (embeddingUpIntLE n)
-
-/--
-lemma `isZero_of_isStrictlyGE` / 引理 `isZero_of_isStrictlyGE`
-
-English:
-lemma isZero_of_isStrictlyGE
-  given: (n i : Int) (hi : i < n := by lia) [K.IsStrictlyGE n]
-  proof: isZero_X_of_isStrictlySupported K (embeddingUpIntGE n) i
-    (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-中文:
-引理 isZero_of_isStrictlyGE
-  条件: (n i : 整数) (hi : i < n := by lia) [K.IsStrictlyGE n]
-  证明: isZero_X_of_isStrictlySupported K (embeddingUpIntGE n) i
-    (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-Depends on / 依赖: IsStrictlyGE, IsZero, K.IsStrictlyGE, embeddingUpIntGE, isZero_X_of_isStrictlySupported, notMem_range_embeddingUpIntGE_iff
+abbrev IsLE (n : ℤ) := K.IsSupported (embeddingUpIntLE n)
+/-
+**CochainComplex.isZero_of_isStrictlyGE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComple
+x`。
+形式化陈述：isZero_of_isStrictlyGE (n i : Int) (hi : i < n
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-lemma isZero_of_isStrictlyGE (n i : Int) (hi : i < n := by lia) [K.IsStrictlyGE n] :
+lemma isZero_of_isStrictlyGE (n i : ℤ) (hi : i < n := by lia) [K.IsStrictlyGE n] :
     IsZero (K.X i) :=
   isZero_X_of_isStrictlySupported K (embeddingUpIntGE n) i
     (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-/--
-lemma `isZero_of_isStrictlyLE` / 引理 `isZero_of_isStrictlyLE`
-
-English:
-lemma isZero_of_isStrictlyLE
-  given: (n i : Int) (hi : n < i := by lia) [K.IsStrictlyLE n]
-  proof: isZero_X_of_isStrictlySupported K (embeddingUpIntLE n) i
-    (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-中文:
-引理 isZero_of_isStrictlyLE
-  条件: (n i : 整数) (hi : n < i := by lia) [K.IsStrictlyLE n]
-  证明: isZero_X_of_isStrictlySupported K (embeddingUpIntLE n) i
-    (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-Depends on / 依赖: IsStrictlyLE, IsZero, K.IsStrictlyLE, embeddingUpIntLE, isZero_X_of_isStrictlySupported, notMem_range_embeddingUpIntLE_iff
+/-
+**CochainComplex.isZero_of_isStrictlyLE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComple
+x`。
+形式化陈述：isZero_of_isStrictlyLE (n i : Int) (hi : n < i
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-lemma isZero_of_isStrictlyLE (n i : Int) (hi : n < i := by lia) [K.IsStrictlyLE n] :
+lemma isZero_of_isStrictlyLE (n i : ℤ) (hi : n < i := by lia) [K.IsStrictlyLE n] :
     IsZero (K.X i) :=
   isZero_X_of_isStrictlySupported K (embeddingUpIntLE n) i
     (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-/--
-lemma `exactAt_of_isGE` / 引理 `exactAt_of_isGE`
-
-English:
-lemma exactAt_of_isGE
-  given: (n i : Int) (hi : i < n := by lia) [K.IsGE n]
-  proof: exactAt_of_isSupported K (embeddingUpIntGE n) i
-    (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-中文:
-引理 exactAt_of_isGE
-  条件: (n i : 整数) (hi : i < n := by lia) [K.是GE n]
-  证明: exactAt_of_isSupported K (embeddingUpIntGE n) i
-    (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-Depends on / 依赖: ExactAt, K.ExactAt, K.IsGE, embeddingUpIntGE, exactAt_of_isSupported, f_eq_iso_hom_pOpcycles_iso_inv, notMem_range_embeddingUpIntGE_iff, restrictionToTruncGE, restrictionXIso
+/-
+**CochainComplex.exactAt_of_isGE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：exactAt_of_isGE (n i : Int) (hi : i < n
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.exactAt_of_isSupported`：exactAt_of_isSupported [K.IsS
+upported e] (i' : ι') (hi' : forall i, e.f i != i') : K.ExactAt i'
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-lemma exactAt_of_isGE (n i : Int) (hi : i < n := by lia) [K.IsGE n] :
+lemma exactAt_of_isGE (n i : ℤ) (hi : i < n := by lia) [K.IsGE n] :
     K.ExactAt i :=
   exactAt_of_isSupported K (embeddingUpIntGE n) i
     (by simpa only [notMem_range_embeddingUpIntGE_iff] using hi)
-
-/--
-lemma `exactAt_of_isLE` / 引理 `exactAt_of_isLE`
-
-English:
-lemma exactAt_of_isLE
-  given: (n i : Int) (hi : n < i := by lia) [K.IsLE n]
-  proof: exactAt_of_isSupported K (embeddingUpIntLE n) i
-    (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-中文:
-引理 exactAt_of_isLE
-  条件: (n i : 整数) (hi : n < i := by lia) [K.是LE n]
-  证明: exactAt_of_isSupported K (embeddingUpIntLE n) i
-    (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-Depends on / 依赖: ExactAt, K.ExactAt, K.IsLE, embeddingUpIntLE, exactAt_of_isSupported, f_eq_iso_hom_pOpcycles_iso_inv, notMem_range_embeddingUpIntLE_iff, restrictionToTruncGE
+/-
+**CochainComplex.exactAt_of_isLE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：exactAt_of_isLE (n i : Int) (hi : n < i
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.exactAt_of_isSupported`：exactAt_of_isSupported [K.IsS
+upported e] (i' : ι') (hi' : forall i, e.f i != i') : K.ExactAt i'
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-lemma exactAt_of_isLE (n i : Int) (hi : n < i := by lia) [K.IsLE n] :
+lemma exactAt_of_isLE (n i : ℤ) (hi : n < i := by lia) [K.IsLE n] :
     K.ExactAt i :=
   exactAt_of_isSupported K (embeddingUpIntLE n) i
     (by simpa only [notMem_range_embeddingUpIntLE_iff] using hi)
-
-/--
-lemma `isZero_of_isGE` / 引理 `isZero_of_isGE`
-
-English:
-lemma isZero_of_isGE
-  given: (n i : Int) (hi : i < n := by lia) [K.IsGE n] [K.HasHomology i]
-  proof: (K.exactAt_of_isGE n i hi).isZero_homology
-
-中文:
-引理 isZero_of_isGE
-  条件: (n i : 整数) (hi : i < n := by lia) [K.是GE n] [K.有同调 i]
-  证明: (K.exactAt_of_isGE n i hi).isZero_homology
-
-Depends on / 依赖: HasHomology, IsZero, K.HasHomology, K.IsGE, K.exactAt_of_isGE, K.homology, exactAt_of_isGE, f_eq_iso_hom_iso_inv, homology, isZero_homology, restrictionToTruncGE
+/-
+**CochainComplex.isZero_of_isGE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isZero_of_isGE (n i : Int) (hi : i < n
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.ExactAt.isZero_homology`：∀ {C : Type u_1} [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphi
+sms C]   {ι : Type u_2} {c : Com…
+· 使用引理 `CochainComplex.exactAt_of_isGE`：exactAt_of_isGE (n i : Int) (hi : i < n
 -/
-lemma isZero_of_isGE (n i : Int) (hi : i < n := by lia) [K.IsGE n] [K.HasHomology i] :
+lemma isZero_of_isGE (n i : ℤ) (hi : i < n := by lia) [K.IsGE n] [K.HasHomology i] :
     IsZero (K.homology i) :=
   (K.exactAt_of_isGE n i hi).isZero_homology
-
-/--
-lemma `isZero_of_isLE` / 引理 `isZero_of_isLE`
-
-English:
-lemma isZero_of_isLE
-  given: (n i : Int) (hi : n < i := by lia) [K.IsLE n] [K.HasHomology i]
-  proof: (K.exactAt_of_isLE n i hi).isZero_homology
-
-中文:
-引理 isZero_of_isLE
-  条件: (n i : 整数) (hi : n < i := by lia) [K.是LE n] [K.有同调 i]
-  证明: (K.exactAt_of_isLE n i hi).isZero_homology
-
-Depends on / 依赖: HasHomology, IsZero, K.HasHomology, K.IsLE, K.exactAt_of_isLE, K.homology, exactAt_of_isLE, homology, isZero_homology
+/-
+**CochainComplex.isZero_of_isLE** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isZero_of_isLE (n i : Int) (hi : n < i
+参数：n i : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.ExactAt.isZero_homology`：∀ {C : Type u_1} [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphi
+sms C]   {ι : Type u_2} {c : Com…
+· 使用引理 `CochainComplex.exactAt_of_isLE`：exactAt_of_isLE (n i : Int) (hi : n < i
 -/
-lemma isZero_of_isLE (n i : Int) (hi : n < i := by lia) [K.IsLE n] [K.HasHomology i] :
+lemma isZero_of_isLE (n i : ℤ) (hi : n < i := by lia) [K.IsLE n] [K.HasHomology i] :
     IsZero (K.homology i) :=
   (K.exactAt_of_isLE n i hi).isZero_homology
-
-/--
-lemma `isStrictlyGE_iff` / 引理 `isStrictlyGE_iff`
-
-English:
-lemma isStrictlyGE_iff
-  given: (n : Int)
-  proof: by
+/-
+**CochainComplex.isStrictlyGE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyGE_iff (n : Int) : K.IsStrictlyGE n ↔ forall (i : Int) (_ : i < 
+n
+参数：n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.isZero_of_isStrictlyGE`：isZero_of_isStrictlyGE (n i : Int
+) (hi : i < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.notMem_range_embeddingUpIntGE_iff`：notMem_range_embeddingUp
+IntGE_iff (n : Int) : (forall (i : Nat), (embeddingUpIntGE p).f i != n) ↔ n < p
+-/
+lemma isStrictlyGE_iff (n : ℤ) :
+    K.IsStrictlyGE n ↔ ∀ (i : ℤ) (_ : i < n := by lia), IsZero (K.X i) := by
   constructor
   · intro _ i hi
     exact K.isZero_of_isStrictlyGE n i hi
   · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
+    refine IsStrictlySupported.mk (fun i hi ↦ ?_)
     rw [notMem_range_embeddingUpIntGE_iff] at hi
     exact h i hi
-
-中文:
-引理 isStrictlyGE_iff
-  条件: (n : 整数)
-  证明: by
-  constructor
-  · intro _ i hi
-    exact K.isZero_of_isStrictlyGE n i hi
-  · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntGE_iff] at hi
-    exact h i hi
-
-Depends on / 依赖: BoundaryGE, IsStrictlySupported, IsStrictlySupported.mk, IsZero, K.isZero_of_isStrictlyGE, Map_f_eq, Map_f_eq_opcyclesMap, _f_eq_iso_hom_iso_inv, _f_eq_iso_hom_pOpcycles_iso_inv, e.BoundaryGE, isZero_of_isStrictlyGE, notMem_range_embeddingUpIntGE_iff, restrictionToTruncGE, restrictionXIso, truncGE
+/-
+**CochainComplex.isStrictlyLE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyLE_iff (n : Int) : K.IsStrictlyLE n ↔ forall (i : Int) (_ : n < 
+i), IsZero (K.X i)
+参数：n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.isZero_of_isStrictlyLE`：isZero_of_isStrictlyLE (n i : Int
+) (hi : n < i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.notMem_range_embeddingUpIntLE_iff`：notMem_range_embeddingUp
+IntLE_iff (n : Int) : (forall (i : Nat), (embeddingUpIntLE p).f i != n) ↔ p < n
 -/
-lemma isStrictlyGE_iff (n : Int) :
-    K.IsStrictlyGE n ↔ forall (i : Int) (_ : i < n := by lia), IsZero (K.X i) := by
-  constructor
-  · intro _ i hi
-    exact K.isZero_of_isStrictlyGE n i hi
-  · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntGE_iff] at hi
-    exact h i hi
-
-/--
-lemma `isStrictlyLE_iff` / 引理 `isStrictlyLE_iff`
-
-English:
-lemma isStrictlyLE_iff
-  given: (n : Int)
-  proof: by
+lemma isStrictlyLE_iff (n : ℤ) :
+    K.IsStrictlyLE n ↔ ∀ (i : ℤ) (_ : n < i), IsZero (K.X i) := by
   constructor
   · intro _ i hi
     exact K.isZero_of_isStrictlyLE n i hi
   · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
+    refine IsStrictlySupported.mk (fun i hi ↦ ?_)
     rw [notMem_range_embeddingUpIntLE_iff] at hi
     exact h i hi
-
-中文:
-引理 isStrictlyLE_iff
-  条件: (n : 整数)
-  证明: by
-  constructor
-  · intro _ i hi
-    exact K.isZero_of_isStrictlyLE n i hi
-  · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntLE_iff] at hi
-    exact h i hi
-
-Depends on / 依赖: BoundaryGE, IsStrictlySupported, IsStrictlySupported.mk, K.isIso_restrictionToTruncGE, K.isZero_of_isStrictlyLE, K.restrictionToTruncGE, _f_eq_iso_hom_pOpcycles_iso_inv, e.BoundaryGE, infer_instance, isIso_restrictionToTruncGE, isZero_of_isStrictlyLE, notMem_range_embeddingUpIntLE_iff, restrictionToTruncGE
+/-
+**CochainComplex.isGE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isGE_iff (n : Int) : K.IsGE n ↔ forall (i : Int) (_ : i < n), K.ExactAt i
+参数：n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.exactAt_of_isGE`：exactAt_of_isGE (n i : Int) (hi : i < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.notMem_range_embeddingUpIntGE_iff`：notMem_range_embeddingUp
+IntGE_iff (n : Int) : (forall (i : Nat), (embeddingUpIntGE p).f i != n) ↔ n < p
 -/
-lemma isStrictlyLE_iff (n : Int) :
-    K.IsStrictlyLE n ↔ forall (i : Int) (_ : n < i), IsZero (K.X i) := by
-  constructor
-  · intro _ i hi
-    exact K.isZero_of_isStrictlyLE n i hi
-  · intro h
-    refine IsStrictlySupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntLE_iff] at hi
-    exact h i hi
-
-/--
-lemma `isGE_iff` / 引理 `isGE_iff`
-
-English:
-lemma isGE_iff
-  given: (n : Int)
-  proof: by
+lemma isGE_iff (n : ℤ) :
+    K.IsGE n ↔ ∀ (i : ℤ) (_ : i < n), K.ExactAt i := by
   constructor
   · intro _ i hi
     exact K.exactAt_of_isGE n i hi
   · intro h
-    refine IsSupported.mk (fun i hi => ?_)
+    refine IsSupported.mk (fun i hi ↦ ?_)
     rw [notMem_range_embeddingUpIntGE_iff] at hi
     exact h i hi
-
-中文:
-引理 isGE_iff
-  条件: (n : 整数)
-  证明: by
-  constructor
-  · intro _ i hi
-    exact K.exactAt_of_isGE n i hi
-  · intro h
-    refine IsSupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntGE_iff] at hi
-    exact h i hi
-
-Depends on / 依赖: IsSupported, IsSupported.mk, K.exactAt_of_isGE, exactAt_of_isGE, notMem_range_embeddingUpIntGE_iff
+/-
+**CochainComplex.isLE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isLE_iff (n : Int) : K.IsLE n ↔ forall (i : Int) (_ : n < i), K.ExactAt i
+参数：n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.exactAt_of_isLE`：exactAt_of_isLE (n i : Int) (hi : n < i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.notMem_range_embeddingUpIntLE_iff`：notMem_range_embeddingUp
+IntLE_iff (n : Int) : (forall (i : Nat), (embeddingUpIntLE p).f i != n) ↔ p < n
 -/
-lemma isGE_iff (n : Int) :
-    K.IsGE n ↔ forall (i : Int) (_ : i < n), K.ExactAt i := by
-  constructor
-  · intro _ i hi
-    exact K.exactAt_of_isGE n i hi
-  · intro h
-    refine IsSupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntGE_iff] at hi
-    exact h i hi
-
-/--
-lemma `isLE_iff` / 引理 `isLE_iff`
-
-English:
-lemma isLE_iff
-  given: (n : Int)
-  proof: by
+lemma isLE_iff (n : ℤ) :
+    K.IsLE n ↔ ∀ (i : ℤ) (_ : n < i), K.ExactAt i := by
   constructor
   · intro _ i hi
     exact K.exactAt_of_isLE n i hi
   · intro h
-    refine IsSupported.mk (fun i hi => ?_)
+    refine IsSupported.mk (fun i hi ↦ ?_)
     rw [notMem_range_embeddingUpIntLE_iff] at hi
     exact h i hi
-
-中文:
-引理 isLE_iff
-  条件: (n : 整数)
-  证明: by
-  constructor
-  · intro _ i hi
-    exact K.exactAt_of_isLE n i hi
-  · intro h
-    refine IsSupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntLE_iff] at hi
-    exact h i hi
-
-Depends on / 依赖: IsSupported, IsSupported.mk, K.exactAt_of_isLE, exactAt_of_isLE, notMem_range_embeddingUpIntLE_iff
+/-
+**CochainComplex.isStrictlyLE_of_le** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyLE_of_le (p q : Int) (hpq : p <= q) [K.IsStrictlyLE p] : K.IsStr
+ictlyLE q
+参数：p q : Int；hpq : p <= q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isStrictlyLE_iff`：isStrictlyLE_iff (n : Int) : K.IsStrict
+lyLE n ↔ forall (i : Int) (_ : n < i), IsZero (K.X i)
+· 使用引理 `CochainComplex.isZero_of_isStrictlyLE`：isZero_of_isStrictlyLE (n i : Int
+) (hi : n < i
 -/
-lemma isLE_iff (n : Int) :
-    K.IsLE n ↔ forall (i : Int) (_ : n < i), K.ExactAt i := by
-  constructor
-  · intro _ i hi
-    exact K.exactAt_of_isLE n i hi
-  · intro h
-    refine IsSupported.mk (fun i hi => ?_)
-    rw [notMem_range_embeddingUpIntLE_iff] at hi
-    exact h i hi
-
-/--
-lemma `isStrictlyLE_of_le` / 引理 `isStrictlyLE_of_le`
-
-English:
-lemma isStrictlyLE_of_le
-  given: (p q : Int) (hpq : p <= q) [K.IsStrictlyLE p]
-  proof: by
-  rw [isStrictlyLE_iff]
-  intro i hi
-  exact K.isZero_of_isStrictlyLE p _
-
-中文:
-引理 isStrictlyLE_of_le
-  条件: (p q : 整数) (hpq : p <= q) [K.IsStrictlyLE p]
-  证明: by
-  rw [isStrictlyLE_iff]
-  intro i hi
-  exact K.isZero_of_isStrictlyLE p _
-
-Depends on / 依赖: K.isZero_of_isStrictlyLE, e.epi_liftExtend_f_iff, epi_liftExtend_f_iff, infer_instance, isStrictlyLE_iff, isZero_extend_X, isZero_of_isStrictlyLE
--/
-lemma isStrictlyLE_of_le (p q : Int) (hpq : p <= q) [K.IsStrictlyLE p] :
+lemma isStrictlyLE_of_le (p q : ℤ) (hpq : p ≤ q) [K.IsStrictlyLE p] :
     K.IsStrictlyLE q := by
   rw [isStrictlyLE_iff]
   intro i hi
   exact K.isZero_of_isStrictlyLE p _
-
-/--
-lemma `isStrictlyGE_of_ge` / 引理 `isStrictlyGE_of_ge`
-
-English:
-lemma isStrictlyGE_of_ge
-  given: (p q : Int) (hpq : p <= q) [K.IsStrictlyGE q]
-  proof: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  exact K.isZero_of_isStrictlyGE q _
-
-中文:
-引理 isStrictlyGE_of_ge
-  条件: (p q : 整数) (hpq : p <= q) [K.IsStrictlyGE q]
-  证明: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  exact K.isZero_of_isStrictlyGE q _
-
-Depends on / 依赖: K.isZero_of_isStrictlyGE, isStrictlyGE_iff, isZero_of_isStrictlyGE
+/-
+**CochainComplex.isStrictlyGE_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyGE_of_ge (p q : Int) (hpq : p <= q) [K.IsStrictlyGE q] : K.IsStr
+ictlyGE p
+参数：p q : Int；hpq : p <= q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isStrictlyGE_iff`：isStrictlyGE_iff (n : Int) : K.IsStrict
+lyGE n ↔ forall (i : Int) (_ : i < n
+· 使用引理 `CochainComplex.isZero_of_isStrictlyGE`：isZero_of_isStrictlyGE (n i : Int
+) (hi : i < n
 -/
-lemma isStrictlyGE_of_ge (p q : Int) (hpq : p <= q) [K.IsStrictlyGE q] :
+lemma isStrictlyGE_of_ge (p q : ℤ) (hpq : p ≤ q) [K.IsStrictlyGE q] :
     K.IsStrictlyGE p := by
   rw [isStrictlyGE_iff]
   intro i hi
   exact K.isZero_of_isStrictlyGE q _
-
-/--
-lemma `isLE_of_le` / 引理 `isLE_of_le`
-
-English:
-lemma isLE_of_le
-  given: (p q : Int) (hpq : p <= q) [K.IsLE p]
-  proof: by
-  rw [isLE_iff]
-  intro i hi
-  exact K.exactAt_of_isLE p _
-
-中文:
-引理 isLE_of_le
-  条件: (p q : 整数) (hpq : p <= q) [K.是LE p]
-  证明: by
-  rw [isLE_iff]
-  intro i hi
-  exact K.exactAt_of_isLE p _
-
-Depends on / 依赖: K.exactAt_of_isLE, exactAt_of_isLE, isLE_iff
+/-
+**CochainComplex.isLE_of_le** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isLE_of_le (p q : Int) (hpq : p <= q) [K.IsLE p] : K.IsLE q
+参数：p q : Int；hpq : p <= q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isLE_iff`：isLE_iff (n : Int) : K.IsLE n ↔ forall (i : Int
+) (_ : n < i), K.ExactAt i
+· 使用引理 `CochainComplex.exactAt_of_isLE`：exactAt_of_isLE (n i : Int) (hi : n < i
 -/
-lemma isLE_of_le (p q : Int) (hpq : p <= q) [K.IsLE p] :
+lemma isLE_of_le (p q : ℤ) (hpq : p ≤ q) [K.IsLE p] :
     K.IsLE q := by
   rw [isLE_iff]
   intro i hi
   exact K.exactAt_of_isLE p _
-
-/--
-lemma `isGE_of_ge` / 引理 `isGE_of_ge`
-
-English:
-lemma isGE_of_ge
-  given: (p q : Int) (hpq : p <= q) [K.IsGE q]
-  proof: by
-  rw [isGE_iff]
-  intro i hi
-  exact K.exactAt_of_isGE q _
-
-中文:
-引理 isGE_of_ge
-  条件: (p q : 整数) (hpq : p <= q) [K.是GE q]
-  证明: by
-  rw [isGE_iff]
-  intro i hi
-  exact K.exactAt_of_isGE q _
-
-Depends on / 依赖: K.exactAt_of_isGE, exactAt_of_isGE, isGE_iff
+/-
+**CochainComplex.isGE_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isGE_of_ge (p q : Int) (hpq : p <= q) [K.IsGE q] : K.IsGE p
+参数：p q : Int；hpq : p <= q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isGE_iff`：isGE_iff (n : Int) : K.IsGE n ↔ forall (i : Int
+) (_ : i < n), K.ExactAt i
+· 使用引理 `CochainComplex.exactAt_of_isGE`：exactAt_of_isGE (n i : Int) (hi : i < n
 -/
-lemma isGE_of_ge (p q : Int) (hpq : p <= q) [K.IsGE q] :
+lemma isGE_of_ge (p q : ℤ) (hpq : p ≤ q) [K.IsGE q] :
     K.IsGE p := by
   rw [isGE_iff]
   intro i hi
@@ -724,92 +498,57 @@ variable {K L}
 
 include e
 
-/--
-lemma `isStrictlyLE_of_iso` / 引理 `isStrictlyLE_of_iso`
-
-English:
-lemma isStrictlyLE_of_iso
-  given: (n : Int) [K.IsStrictlyLE n]
-  statement: L.IsStrictlyLE n
-  proof: by
-  apply isStrictlySupported_of_iso e
-
-中文:
-引理 isStrictlyLE_of_iso
-  条件: (n : 整数) [K.IsStrictlyLE n]
-  结论: L.IsStrictlyLE n
-  证明: by
-  apply isStrictlySupported_of_iso e
-
-Depends on / 依赖: BoundaryGE, HomologicalComplex, HomologicalComplex.pOpcycles, IsZero, IsZero.iff_id_eq_zero, K.isZero_X_of_isStrictlySupported, K.truncGE, XIsoOpcycles, cancel_epi, e.BoundaryGE, eq_of_src, extendXIso, iff_id_eq_zero, isStrictlySupported_of_iso, isZero_X_of_isStr, isZero_X_of_isStrictlySupported, of_iso, pOpcycles, truncGE
+/-
+**CochainComplex.isStrictlyLE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyLE_of_iso (n : Int) [K.IsStrictlyLE n] : L.IsStrictlyLE n
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.isStrictlySupported_of_iso`：isStrictlySupported_of_is
+o [K.IsStrictlySupported e] : L.IsStrictlySupported e where isZero i' hi'
 -/
-lemma isStrictlyLE_of_iso (n : Int) [K.IsStrictlyLE n] : L.IsStrictlyLE n := by
+lemma isStrictlyLE_of_iso (n : ℤ) [K.IsStrictlyLE n] : L.IsStrictlyLE n := by
   apply isStrictlySupported_of_iso e
-
-/--
-lemma `isStrictlyGE_of_iso` / 引理 `isStrictlyGE_of_iso`
-
-English:
-lemma isStrictlyGE_of_iso
-  given: (n : Int) [K.IsStrictlyGE n]
-  statement: L.IsStrictlyGE n
-  proof: by
-  apply isStrictlySupported_of_iso e
-
-中文:
-引理 isStrictlyGE_of_iso
-  条件: (n : 整数) [K.IsStrictlyGE n]
-  结论: L.IsStrictlyGE n
-  证明: by
-  apply isStrictlySupported_of_iso e
-
-Depends on / 依赖: isStrictlySupported_of_iso
+/-
+**CochainComplex.isStrictlyGE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyGE_of_iso (n : Int) [K.IsStrictlyGE n] : L.IsStrictlyGE n
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.isStrictlySupported_of_iso`：isStrictlySupported_of_is
+o [K.IsStrictlySupported e] : L.IsStrictlySupported e where isZero i' hi'
 -/
-lemma isStrictlyGE_of_iso (n : Int) [K.IsStrictlyGE n] : L.IsStrictlyGE n := by
+lemma isStrictlyGE_of_iso (n : ℤ) [K.IsStrictlyGE n] : L.IsStrictlyGE n := by
   apply isStrictlySupported_of_iso e
-
-/--
-lemma `isLE_of_iso` / 引理 `isLE_of_iso`
-
-English:
-lemma isLE_of_iso
-  given: (n : Int) [K.IsLE n]
-  statement: L.IsLE n
-  proof: by
-  apply isSupported_of_iso e
-
-中文:
-引理 isLE_of_iso
-  条件: (n : 整数) [K.是LE n]
-  结论: L.是LE n
-  证明: by
-  apply isSupported_of_iso e
-
-Depends on / 依赖: isSupported_of_iso
+/-
+**CochainComplex.isLE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isLE_of_iso (n : Int) [K.IsLE n] : L.IsLE n
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.isSupported_of_iso`：isSupported_of_iso [K.IsSupported
+ e] : L.IsSupported e where exactAt i' hi'
 -/
-lemma isLE_of_iso (n : Int) [K.IsLE n] : L.IsLE n := by
+lemma isLE_of_iso (n : ℤ) [K.IsLE n] : L.IsLE n := by
   apply isSupported_of_iso e
-
-/--
-lemma `isGE_of_iso` / 引理 `isGE_of_iso`
-
-English:
-lemma isGE_of_iso
-  given: (n : Int) [K.IsGE n]
-  statement: L.IsGE n
-  proof: by
-  apply isSupported_of_iso e
-
-中文:
-引理 isGE_of_iso
-  条件: (n : 整数) [K.是GE n]
-  结论: L.是GE n
-  证明: by
-  apply isSupported_of_iso e
-
-Depends on / 依赖: isSupported_of_iso
+/-
+**CochainComplex.isGE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isGE_of_iso (n : Int) [K.IsGE n] : L.IsGE n
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.isSupported_of_iso`：isSupported_of_iso [K.IsSupported
+ e] : L.IsSupported e where exactAt i' hi'
 -/
-lemma isGE_of_iso (n : Int) [K.IsGE n] : L.IsGE n := by
+lemma isGE_of_iso (n : ℤ) [K.IsGE n] : L.IsGE n := by
   apply isSupported_of_iso e
 
 end
@@ -818,58 +557,85 @@ section
 
 variable [HasZeroObject C]
 
-instance (X : CochainComplex C Nat) :
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : CochainComplex C ℕ) :
     CochainComplex.IsStrictlyGE (X.extend embeddingUpNat) 0 where
   isZero _ _ := isZero_extend_X _ _ _ (by aesop)
-
-instance (X : ChainComplex C Nat) :
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : ChainComplex C ℕ) :
     CochainComplex.IsStrictlyLE (X.extend embeddingDownNat) 0 where
   isZero _ _ := isZero_extend_X _ _ _ (by aesop)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `exists_iso_single` / 引理 `exists_iso_single`
+/-- A cochain complex that is both strictly `≤ n` and `≥ n` is isomorphic to
+a complex `(single _ _ n).obj M` for some object `M`. -/
+/-
+**CochainComplex.exists_iso_single** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：exists_iso_single (n : Int) [K.IsStrictlyGE n] [K.IsStrictlyLE n] : exists
+ (M : C), Nonempty (K ≅ (single _ _ n).obj M)
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用引理 `CochainComplex.isZero_of_isStrictlyGE`：isZero_of_isStrictlyGE (n i : Int
+) (hi : i < n
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_tgt`：eq_of_tgt (hX : IsZero X) (f g :
+ Y ⟶ X) : f = g
+· 使用引理 `CochainComplex.isZero_of_isStrictlyLE`：isZero_of_isStrictlyLE (n i : Int
+) (hi : n < i
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `HomologicalComplex.mkHomToSingle_f`：mkHomToSingle_f {K : HomologicalComp
+lex V c} {j : ι} {A : V} (φ : K.X j ⟶ A) (hφ : forall (i : ι), c.Rel i j -> K.d 
+i j ≫ φ = 0) : (mkHomToS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `HomologicalComplex.mkHomFromSingle_f`：mkHomFromSingle_f {K : Homological
+Complex V c} {j : ι} {A : V} (φ : A ⟶ K.X j) (hφ : forall (k : ι), c.Rel j k -> 
+φ ≫ K.d j k = 0) : (mkHomF…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `HomologicalComplex.from_single_hom_ext`：from_single_hom_ext {K : Homolog
+icalComplex V c} {j : ι} {A : V} {f g : (single V c j).obj A ⟶ K} (hfg : f.f j =
+ g.f j) : f = g
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
 
-English:
-lemma exists_iso_single
-  given: (n : Int) [K.IsStrictlyGE n] [K.IsStrictlyLE n]
-  proof: ⟨K.X n, ⟨{
-      hom := mkHomToSingle (𝟙 _) (fun i (hi : i + 1 = n) =>
-        (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src _ _)
-      inv := mkHomFromSingle (𝟙 _) (fun i (hi : n + 1 = i) =>
-        (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt _ _)
-      hom_inv_id := by
-        ext i
-        obtain hi | rfl | hi := lt_trichotomy i n
-        · apply (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src
-        · simp
-        · apply (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt
-      inv_hom_id := by aesop }⟩⟩
-
-中文:
-引理 存在_iso_single
-  条件: (n : 整数) [K.IsStrictlyGE n] [K.IsStrictlyLE n]
-  证明: ⟨K.X n, ⟨{
-      hom := mkHomToSingle (𝟙 _) (fun i (hi : i + 1 = n) =>
-        (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src _ _)
-      inv := mkHomFromSingle (𝟙 _) (fun i (hi : n + 1 = i) =>
-        (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt _ _)
-      hom_inv_id := by
-        ext i
-        obtain hi | rfl | hi := lt_trichotomy i n
-        · apply (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src
-        · simp
-        · apply (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt
-      inv_hom_id := by aesop }⟩⟩
-
-Depends on / 依赖: K.isZero_of_isStrictlyGE, K.isZero_of_isStrictlyLE, eq_of_src, eq_of_tgt, hom_inv_id, inv_hom_id, isZero_of_isStrictlyGE, isZero_of_isStrictlyLE, lt_trichotomy, mkHomFromSingle, mkHomToSingle
+--- 原说明 ---
+A cochain complex that is both strictly `≤ n` and `≥ n` is isomorphic to
+a complex `(single _ _ n).obj M` for some object `M`.
 -/
-lemma exists_iso_single (n : Int) [K.IsStrictlyGE n] [K.IsStrictlyLE n] :
-    exists (M : C), Nonempty (K ≅ (single _ _ n).obj M) :=
+lemma exists_iso_single (n : ℤ) [K.IsStrictlyGE n] [K.IsStrictlyLE n] :
+    ∃ (M : C), Nonempty (K ≅ (single _ _ n).obj M) :=
   ⟨K.X n, ⟨{
-      hom := mkHomToSingle (𝟙 _) (fun i (hi : i + 1 = n) =>
+      hom := mkHomToSingle (𝟙 _) (fun i (hi : i + 1 = n) ↦
         (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src _ _)
-      inv := mkHomFromSingle (𝟙 _) (fun i (hi : n + 1 = i) =>
+      inv := mkHomFromSingle (𝟙 _) (fun i (hi : n + 1 = i) ↦
         (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt _ _)
       hom_inv_id := by
         ext i
@@ -878,172 +644,70 @@ lemma exists_iso_single (n : Int) [K.IsStrictlyGE n] [K.IsStrictlyLE n] :
         · simp
         · apply (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt
       inv_hom_id := by aesop }⟩⟩
-
-instance (A : C) (n : Int) :
-    IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n := by
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (A : C) (n : ℤ) :
+    IsStrictlyGE ((single C (ComplexShape.up ℤ) n).obj A) n := by
   rw [isStrictlyGE_iff]
   intro i hi
   exact isZero_single_obj_X _ _ _ _ (by lia)
-
-instance (A : C) (n : Int) :
-    IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n := by
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (A : C) (n : ℤ) :
+    IsStrictlyLE ((single C (ComplexShape.up ℤ) n).obj A) n := by
   rw [isStrictlyLE_iff]
   intro i hi
   exact isZero_single_obj_X _ _ _ _ (by lia)
 
-variable [forall i, K.HasHomology i] [forall i, L.HasHomology i] (n : Int)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsStrictlyGE
-  signature: n] : IsIso (K.πTruncGE n)
-  body: by dsimp [πTruncGE]; infer_instance
-
-中文:
-实例 [K.IsStrictlyGE
-  签名: n] : 是同构 (K.πTruncGE n)
-  定义体: by dsimp [πTruncGE]; infer_instance
-
-Depends on / 依赖: infer_instance
+variable [∀ i, K.HasHomology i] [∀ i, L.HasHomology i] (n : ℤ)
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsStrictlyGE n] : IsIso (K.πTruncGE n) := by dsimp [πTruncGE]; infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsStrictlyLE
-  signature: n] : IsIso (K.ιTruncLE n)
-  body: by dsimp [ιTruncLE]; infer_instance
-
-中文:
-实例 [K.IsStrictlyLE
-  签名: n] : 是同构 (K.ιTruncLE n)
-  定义体: by dsimp [ιTruncLE]; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsStrictlyLE n] : IsIso (K.ιTruncLE n) := by dsimp [ιTruncLE]; infer_instance
-
-/--
-lemma `isIso_πTruncGE_iff` / 引理 `isIso_πTruncGE_iff`
-
-English:
-lemma isIso_πTruncGE_iff
-  statement: IsIso (K.πTruncGE n) ↔ K.IsStrictlyGE n
-  proof: by
-  apply HomologicalComplex.isIso_πTruncGE_iff
-
-中文:
-引理 isIso_πTruncGE_iff
-  结论: 是同构 (K.πTruncGE n) ↔ K.IsStrictlyGE n
-  证明: by
-  apply HomologicalComplex.isIso_πTruncGE_iff
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.isIso_
+/-
+**CochainComplex.isIso_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_πTruncGE_iff : IsIso (K.πTruncGE n) ↔ K.IsStrictlyGE n := by
   apply HomologicalComplex.isIso_πTruncGE_iff
-
-/--
-lemma `isIso_ιTruncLE_iff` / 引理 `isIso_ιTruncLE_iff`
-
-English:
-lemma isIso_ιTruncLE_iff
-  statement: IsIso (K.ιTruncLE n) ↔ K.IsStrictlyLE n
-  proof: by
-  apply HomologicalComplex.isIso_ιTruncLE_iff
-
-中文:
-引理 isIso_ιTruncLE_iff
-  结论: 是同构 (K.ιTruncLE n) ↔ K.IsStrictlyLE n
-  证明: by
-  apply HomologicalComplex.isIso_ιTruncLE_iff
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.isIso_
+/-
+**CochainComplex.isIso_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_ιTruncLE_iff : IsIso (K.ιTruncLE n) ↔ K.IsStrictlyLE n := by
   apply HomologicalComplex.isIso_ιTruncLE_iff
-
-/--
-lemma `quasiIso_πTruncGE_iff` / 引理 `quasiIso_πTruncGE_iff`
-
-English:
-lemma quasiIso_πTruncGE_iff
-  statement: QuasiIso (K.πTruncGE n) ↔ K.IsGE n
-  proof: quasiIso_πTruncGE_iff_isSupported K (embeddingUpIntGE n)
-
-中文:
-引理 quasiIso_πTruncGE_iff
-  结论: 拟同构 (K.πTruncGE n) ↔ K.是GE n
-  证明: quasiIso_πTruncGE_iff_isSupported K (embeddingUpIntGE n)
-
-Depends on / 依赖: embeddingUpIntGE
+/-
+**CochainComplex.quasiIso_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma quasiIso_πTruncGE_iff : QuasiIso (K.πTruncGE n) ↔ K.IsGE n :=
   quasiIso_πTruncGE_iff_isSupported K (embeddingUpIntGE n)
-
-/--
-lemma `quasiIso_ιTruncLE_iff` / 引理 `quasiIso_ιTruncLE_iff`
-
-English:
-lemma quasiIso_ιTruncLE_iff
-  statement: QuasiIso (K.ιTruncLE n) ↔ K.IsLE n
-  proof: quasiIso_ιTruncLE_iff_isSupported K (embeddingUpIntLE n)
-
-中文:
-引理 quasiIso_ιTruncLE_iff
-  结论: 拟同构 (K.ιTruncLE n) ↔ K.是LE n
-  证明: quasiIso_ιTruncLE_iff_isSupported K (embeddingUpIntLE n)
-
-Depends on / 依赖: embeddingUpIntLE
+/-
+**CochainComplex.quasiIso_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma quasiIso_ιTruncLE_iff : QuasiIso (K.ιTruncLE n) ↔ K.IsLE n :=
   quasiIso_ιTruncLE_iff_isSupported K (embeddingUpIntLE n)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsGE
-  signature: n] : QuasiIso (K.πTruncGE n)
-  body: by
-  rw [quasiIso_πTruncGE_iff]
-  infer_instance
-
-中文:
-实例 [K.是GE
-  签名: n] : 拟同构 (K.πTruncGE n)
-  定义体: by
-  rw [quasiIso_πTruncGE_iff]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsGE n] : QuasiIso (K.πTruncGE n) := by
   rw [quasiIso_πTruncGE_iff]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsLE
-  signature: n] : QuasiIso (K.ιTruncLE n)
-  body: by
-  rw [quasiIso_ιTruncLE_iff]
-  infer_instance
-
-中文:
-实例 [K.是LE
-  签名: n] : 拟同构 (K.ιTruncLE n)
-  定义体: by
-  rw [quasiIso_ιTruncLE_iff]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsLE n] : QuasiIso (K.ιTruncLE n) := by
   rw [quasiIso_ιTruncLE_iff]
@@ -1052,35 +716,29 @@ instance [K.IsLE n] : QuasiIso (K.ιTruncLE n) := by
 variable {K L}
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `quasiIso_truncGEMap_iff` / 引理 `quasiIso_truncGEMap_iff`
-
-English:
-lemma quasiIso_truncGEMap_iff
-  proof: by
-  rw [HomologicalComplex.quasiIso_truncGEMap_iff]
-  constructor
-  · intro h i hi
-    obtain ⟨k, rfl⟩ := Int.le.dest hi
-    exact h k _ rfl
-  · rintro h i i' rfl
-    exact h _ (by dsimp; lia)
-
-中文:
-引理 quasiIso_truncGEMap_iff
-  证明: by
-  rw [HomologicalComplex.quasiIso_truncGEMap_iff]
-  constructor
-  · intro h i hi
-    obtain ⟨k, rfl⟩ := Int.le.dest hi
-    exact h k _ rfl
-  · rintro h i i' rfl
-    exact h _ (by dsimp; lia)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.quasiIso_truncGEMap_iff, Int.le.dest, quasiIso_truncGEMap_iff
+/-
+**CochainComplex.quasiIso_truncGEMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainCompl
+ex`。
+形式化陈述：quasiIso_truncGEMap_iff : QuasiIso (truncGEMap φ n) ↔ forall (i : Int) (_ 
+: n <= i), QuasiIsoAt φ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.truncGE.instHasHomology`：∀ {ι : Type u_1} {ι' : Type 
+u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [inst : Catego
+ryTheory.Category.{v_1, u_3} C] …
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.quasiIso_truncGEMap_iff`：quasiIso_truncGEMap_iff : Qu
+asiIso (truncGEMap φ e) ↔ forall (i : ι) (i' : ι') (_ : e.f i = i'), QuasiIsoAt 
+φ i'
+· 使用定理 `Int.le.dest`：∀ {a b : ℤ}, a ≤ b → ∃ n, a + ↑n = b
 -/
 lemma quasiIso_truncGEMap_iff :
-    QuasiIso (truncGEMap φ n) ↔ forall (i : Int) (_ : n <= i), QuasiIsoAt φ i := by
+    QuasiIso (truncGEMap φ n) ↔ ∀ (i : ℤ) (_ : n ≤ i), QuasiIsoAt φ i := by
   rw [HomologicalComplex.quasiIso_truncGEMap_iff]
   constructor
   · intro h i hi
@@ -1090,35 +748,29 @@ lemma quasiIso_truncGEMap_iff :
     exact h _ (by dsimp; lia)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `quasiIso_truncLEMap_iff` / 引理 `quasiIso_truncLEMap_iff`
-
-English:
-lemma quasiIso_truncLEMap_iff
-  proof: by
-  rw [HomologicalComplex.quasiIso_truncLEMap_iff]
-  constructor
-  · intro h i hi
-    obtain ⟨k, rfl⟩ := Int.le.dest hi
-    exact h k _ (by dsimp; lia)
-  · rintro h i i' rfl
-    exact h _ (by dsimp; lia)
-
-中文:
-引理 quasiIso_truncLEMap_iff
-  证明: by
-  rw [HomologicalComplex.quasiIso_truncLEMap_iff]
-  constructor
-  · intro h i hi
-    obtain ⟨k, rfl⟩ := Int.le.dest hi
-    exact h k _ (by dsimp; lia)
-  · rintro h i i' rfl
-    exact h _ (by dsimp; lia)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.quasiIso_truncLEMap_iff, Int.le.dest, quasiIso_truncLEMap_iff
+/-
+**CochainComplex.quasiIso_truncLEMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainCompl
+ex`。
+形式化陈述：quasiIso_truncLEMap_iff : QuasiIso (truncLEMap φ n) ↔ forall (i : Int) (_ 
+: i <= n), QuasiIsoAt φ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.instHasHomologyTruncLE`：∀ {ι : Type u_1} {ι' : Type u
+_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [inst : Categor
+yTheory.Category.{v_1, u_3} C] …
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.quasiIso_truncLEMap_iff`：quasiIso_truncLEMap_iff : Qu
+asiIso (truncLEMap φ e) ↔ forall (i : ι) (i' : ι') (_ : e.f i = i'), QuasiIsoAt 
+φ i'
+· 使用定理 `Int.le.dest`：∀ {a b : ℤ}, a ≤ b → ∃ n, a + ↑n = b
 -/
 lemma quasiIso_truncLEMap_iff :
-    QuasiIso (truncLEMap φ n) ↔ forall (i : Int) (_ : i <= n), QuasiIsoAt φ i := by
+    QuasiIso (truncLEMap φ n) ↔ ∀ (i : ℤ) (_ : i ≤ n), QuasiIsoAt φ i := by
   rw [HomologicalComplex.quasiIso_truncLEMap_iff]
   constructor
   · intro h i hi
@@ -1133,41 +785,40 @@ section
 
 variable {D : Type*} [Category* D] [HasZeroMorphisms D]
 
-/--
-lemma `isStrictlyGE_mapHomologicalComplex_obj_iff` / 引理 `isStrictlyGE_mapHomologicalComplex_obj_iff`
-
-English:
-lemma isStrictlyGE_mapHomologicalComplex_obj_iff
-  proof: isStrictlySupported_mapHomologicalComplex_obj_iff ..
-
-中文:
-引理 isStrictlyGE_mapHomologicalComplex_obj_iff
-  证明: isStrictlySupported_mapHomologicalComplex_obj_iff ..
-
-Depends on / 依赖: infer_instance, isStrictlySupported_mapHomologicalComplex_obj_iff, truncGE
+/-
+**CochainComplex.isStrictlyGE_mapHomologicalComplex_obj_iff** 是 Mathlib 中的一个引理，位
+于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyGE_mapHomologicalComplex_obj_iff (F : C ⥤ D) [F.Faithful] [F.Pre
+servesZeroMorphisms] (n : Int) : CochainComplex.IsStrictlyGE ((F.mapHomologicalC
+omplex (.up Int)).obj K) n ↔ K.IsStrictlyGE n
+参数：F : C ⥤ D；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.isStrictlySupported_mapHomologicalComplex_obj_iff`：is
+StrictlySupported_mapHomologicalComplex_obj_iff [F.Faithful] : ((F.mapHomologica
+lComplex c').obj K).IsStrictlySupported e ↔ K.IsStrictlySu…
 -/
 lemma isStrictlyGE_mapHomologicalComplex_obj_iff
-    (F : C ⥤ D) [F.Faithful] [F.PreservesZeroMorphisms] (n : Int) :
-    CochainComplex.IsStrictlyGE ((F.mapHomologicalComplex (.up Int)).obj K) n ↔
+    (F : C ⥤ D) [F.Faithful] [F.PreservesZeroMorphisms] (n : ℤ) :
+    CochainComplex.IsStrictlyGE ((F.mapHomologicalComplex (.up ℤ)).obj K) n ↔
       K.IsStrictlyGE n :=
   isStrictlySupported_mapHomologicalComplex_obj_iff ..
-
-/--
-lemma `isStrictlyLE_mapHomologicalComplex_obj_iff` / 引理 `isStrictlyLE_mapHomologicalComplex_obj_iff`
-
-English:
-lemma isStrictlyLE_mapHomologicalComplex_obj_iff
-  proof: isStrictlySupported_mapHomologicalComplex_obj_iff ..
-
-中文:
-引理 isStrictlyLE_mapHomologicalComplex_obj_iff
-  证明: isStrictlySupported_mapHomologicalComplex_obj_iff ..
-
-Depends on / 依赖: isStrictlySupported_mapHomologicalComplex_obj_iff
+/-
+**CochainComplex.isStrictlyLE_mapHomologicalComplex_obj_iff** 是 Mathlib 中的一个引理，位
+于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyLE_mapHomologicalComplex_obj_iff (F : C ⥤ D) [F.Faithful] [F.Pre
+servesZeroMorphisms] (n : Int) : CochainComplex.IsStrictlyLE ((F.mapHomologicalC
+omplex (.up Int)).obj K) n ↔ K.IsStrictlyLE n
+参数：F : C ⥤ D；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.isStrictlySupported_mapHomologicalComplex_obj_iff`：is
+StrictlySupported_mapHomologicalComplex_obj_iff [F.Faithful] : ((F.mapHomologica
+lComplex c').obj K).IsStrictlySupported e ↔ K.IsStrictlySu…
 -/
 lemma isStrictlyLE_mapHomologicalComplex_obj_iff
-    (F : C ⥤ D) [F.Faithful] [F.PreservesZeroMorphisms] (n : Int) :
-    CochainComplex.IsStrictlyLE ((F.mapHomologicalComplex (.up Int)).obj K) n ↔
+    (F : C ⥤ D) [F.Faithful] [F.PreservesZeroMorphisms] (n : ℤ) :
+    CochainComplex.IsStrictlyLE ((F.mapHomologicalComplex (.up ℤ)).obj K) n ↔
       K.IsStrictlyLE n :=
   isStrictlySupported_mapHomologicalComplex_obj_iff ..
 
@@ -1179,93 +830,62 @@ section Preadditive
 
 variable [Preadditive C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: C] (A
-  body: inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n)
-
-中文:
-实例 [有ZeroObject
-  签名: C] (A
-  定义体: inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, IsStrictlyGE, single
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [HasZeroObject C] (A : C) (n : Int) : ((singleFunctor C n).obj A).IsStrictlyGE n :=
-  inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up Int) n).obj A) n)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: C] (A
-  body: inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n)
-
-中文:
-实例 [有ZeroObject
-  签名: C] (A
-  定义体: inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, IsStrictlyLE, K.quasiIsoAt_, single
+instance [HasZeroObject C] (A : C) (n : ℤ) : ((singleFunctor C n).obj A).IsStrictlyGE n :=
+  inferInstanceAs (IsStrictlyGE ((single C (ComplexShape.up ℤ) n).obj A) n)
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [HasZeroObject C] (A : C) (n : Int) : ((singleFunctor C n).obj A).IsStrictlyLE n :=
-  inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up Int) n).obj A) n)
+instance [HasZeroObject C] (A : C) (n : ℤ) : ((singleFunctor C n).obj A).IsStrictlyLE n :=
+  inferInstanceAs (IsStrictlyLE ((single C (ComplexShape.up ℤ) n).obj A) n)
 
-variable (K : CochainComplex C Int)
-
-/--
-lemma `isStrictlyLE_shift` / 引理 `isStrictlyLE_shift`
-
-English:
-lemma isStrictlyLE_shift
-  given: (n : Int) [K.IsStrictlyLE n] (a n' : Int) (h : a + n' = n)
-  proof: by
-  rw [isStrictlyLE_iff]
-  intro i hi
-  exact IsZero.of_iso (K.isZero_of_isStrictlyLE n _ (by lia)) (K.shiftFunctorObjXIso a i _ rfl)
-
-中文:
-引理 isStrictlyLE_shift
-  条件: (n : 整数) [K.IsStrictlyLE n] (a n' : 整数) (h : a + n' = n)
-  证明: by
-  rw [isStrictlyLE_iff]
-  intro i hi
-  exact IsZero.of_iso (K.isZero_of_isStrictlyLE n _ (by lia)) (K.shiftFunctorObjXIso a i _ rfl)
-
-Depends on / 依赖: IsZero, IsZero.of_iso, K.isZero_of_isStrictlyLE, K.shiftFunctorObjXIso, isStrictlyLE_iff, isZero_of_isStrictlyLE, of_iso, shiftFunctorObjXIso
+variable (K : CochainComplex C ℤ)
+/-
+**CochainComplex.isStrictlyLE_shift** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyLE_shift (n : Int) [K.IsStrictlyLE n] (a n' : Int) (h : a + n' =
+ n) : (K⟦a⟧).IsStrictlyLE n'
+参数：n : Int；a n' : Int；h : a + n' = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isStrictlyLE_iff`：isStrictlyLE_iff (n : Int) : K.IsStrict
+lyLE n ↔ forall (i : Int) (_ : n < i), IsZero (K.X i)
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用引理 `CochainComplex.isZero_of_isStrictlyLE`：isZero_of_isStrictlyLE (n i : Int
+) (hi : n < i
 -/
-lemma isStrictlyLE_shift (n : Int) [K.IsStrictlyLE n] (a n' : Int) (h : a + n' = n) :
+lemma isStrictlyLE_shift (n : ℤ) [K.IsStrictlyLE n] (a n' : ℤ) (h : a + n' = n) :
     (K⟦a⟧).IsStrictlyLE n' := by
   rw [isStrictlyLE_iff]
   intro i hi
   exact IsZero.of_iso (K.isZero_of_isStrictlyLE n _ (by lia)) (K.shiftFunctorObjXIso a i _ rfl)
-
-/--
-lemma `isStrictlyGE_shift` / 引理 `isStrictlyGE_shift`
-
-English:
-lemma isStrictlyGE_shift
-  given: (n : Int) [K.IsStrictlyGE n] (a n' : Int) (h : a + n' = n)
-  proof: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  exact IsZero.of_iso (K.isZero_of_isStrictlyGE n _ (by lia)) (K.shiftFunctorObjXIso a i _ rfl)
-
-中文:
-引理 isStrictlyGE_shift
-  条件: (n : 整数) [K.IsStrictlyGE n] (a n' : 整数) (h : a + n' = n)
-  证明: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  exact IsZero.of_iso (K.isZero_of_isStrictlyGE n _ (by lia)) (K.shiftFunctorObjXIso a i _ rfl)
-
-Depends on / 依赖: IsZero, IsZero.of_iso, K.isZero_of_isStrictlyGE, K.shiftFunctorObjXIso, isStrictlyGE_iff, isZero_of_isStrictlyGE, of_iso, shiftFunctorObjXIso
+/-
+**CochainComplex.isStrictlyGE_shift** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isStrictlyGE_shift (n : Int) [K.IsStrictlyGE n] (a n' : Int) (h : a + n' =
+ n) : (K⟦a⟧).IsStrictlyGE n'
+参数：n : Int；a n' : Int；h : a + n' = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isStrictlyGE_iff`：isStrictlyGE_iff (n : Int) : K.IsStrict
+lyGE n ↔ forall (i : Int) (_ : i < n
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用引理 `CochainComplex.isZero_of_isStrictlyGE`：isZero_of_isStrictlyGE (n i : Int
+) (hi : i < n
 -/
-lemma isStrictlyGE_shift (n : Int) [K.IsStrictlyGE n] (a n' : Int) (h : a + n' = n) :
+lemma isStrictlyGE_shift (n : ℤ) [K.IsStrictlyGE n] (a n' : ℤ) (h : a + n' = n) :
     (K⟦a⟧).IsStrictlyGE n' := by
   rw [isStrictlyGE_iff]
   intro i hi
@@ -1275,73 +895,62 @@ section
 
 variable [CategoryWithHomology C]
 
-/--
-lemma `isLE_shift` / 引理 `isLE_shift`
-
-English:
-lemma isLE_shift
-  given: (n : Int) [K.IsLE n] (a n' : Int) (h : a + n' = n)
-  statement: (K⟦a⟧).IsLE n'
-  proof: by
-  rw [isLE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  exact IsZero.of_iso (K.isZero_of_isLE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
-
-中文:
-引理 isLE_shift
-  条件: (n : 整数) [K.是LE n] (a n' : 整数) (h : a + n' = n)
-  结论: (K⟦a⟧).是LE n'
-  证明: by
-  rw [isLE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  exact IsZero.of_iso (K.isZero_of_isLE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
-
-Depends on / 依赖: IsZero, IsZero.of_iso, K.isZero_of_isLE, exactAt_iff_isZero_homology, homologyFunctor, isLE_iff, isZero_of_isLE, of_iso, shiftIso
+/-
+**CochainComplex.isLE_shift** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isLE_shift (n : Int) [K.IsLE n] (a n' : Int) (h : a + n' = n) : (K⟦a⟧).IsL
+E n'
+参数：n : Int；a n' : Int；h : a + n' = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isLE_iff`：isLE_iff (n : Int) : K.IsLE n ↔ forall (i : Int
+) (_ : n < i), K.ExactAt i
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用引理 `HomologicalComplex.exactAt_iff_isZero_homology`：exactAt_iff_isZero_homol
+ogy [K.HasHomology i] : K.ExactAt i ↔ IsZero (K.homology i)
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用引理 `CochainComplex.isZero_of_isLE`：isZero_of_isLE (n i : Int) (hi : n < i
 -/
-lemma isLE_shift (n : Int) [K.IsLE n] (a n' : Int) (h : a + n' = n) : (K⟦a⟧).IsLE n' := by
+lemma isLE_shift (n : ℤ) [K.IsLE n] (a n' : ℤ) (h : a + n' = n) : (K⟦a⟧).IsLE n' := by
   rw [isLE_iff]
   intro i hi
   rw [exactAt_iff_isZero_homology]
   exact IsZero.of_iso (K.isZero_of_isLE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
-
-/--
-lemma `isGE_shift` / 引理 `isGE_shift`
-
-English:
-lemma isGE_shift
-  given: (n : Int) [K.IsGE n] (a n' : Int) (h : a + n' = n)
-  statement: (K⟦a⟧).IsGE n'
-  proof: by
-  rw [isGE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  exact IsZero.of_iso (K.isZero_of_isGE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
-
-中文:
-引理 isGE_shift
-  条件: (n : 整数) [K.是GE n] (a n' : 整数) (h : a + n' = n)
-  结论: (K⟦a⟧).是GE n'
-  证明: by
-  rw [isGE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  exact IsZero.of_iso (K.isZero_of_isGE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
-
-Depends on / 依赖: IsZero, IsZero.of_iso, K.isZero_of_isGE, exactAt_iff_isZero_homology, homologyFunctor, isGE_iff, isZero_of_isGE, of_iso, shiftIso
+    (((homologyFunctor C _ (0 : ℤ)).shiftIso a i _ rfl).app K)
+/-
+**CochainComplex.isGE_shift** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：isGE_shift (n : Int) [K.IsGE n] (a n' : Int) (h : a + n' = n) : (K⟦a⟧).IsG
+E n'
+参数：n : Int；a n' : Int；h : a + n' = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.isGE_iff`：isGE_iff (n : Int) : K.IsGE n ↔ forall (i : Int
+) (_ : i < n), K.ExactAt i
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用引理 `HomologicalComplex.exactAt_iff_isZero_homology`：exactAt_iff_isZero_homol
+ogy [K.HasHomology i] : K.ExactAt i ↔ IsZero (K.homology i)
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用引理 `CochainComplex.isZero_of_isGE`：isZero_of_isGE (n i : Int) (hi : i < n
 -/
-lemma isGE_shift (n : Int) [K.IsGE n] (a n' : Int) (h : a + n' = n) : (K⟦a⟧).IsGE n' := by
+lemma isGE_shift (n : ℤ) [K.IsGE n] (a n' : ℤ) (h : a + n' = n) : (K⟦a⟧).IsGE n' := by
   rw [isGE_iff]
   intro i hi
   rw [exactAt_iff_isZero_homology]
   exact IsZero.of_iso (K.isZero_of_isGE n (a + i) (by lia))
-    (((homologyFunctor C _ (0 : Int)).shiftIso a i _ rfl).app K)
+    (((homologyFunctor C _ (0 : ℤ)).shiftIso a i _ rfl).app K)
 
 end
 
@@ -1350,238 +959,196 @@ end Preadditive
 section HasZeroMorphisms
 
 variable {C : Type*} [Category C] [HasZeroMorphisms C] [HasZeroObject C]
-  (K L : CochainComplex C Int) (φ : K ⟶ L) (e : K ≅ L)
-  [forall (i : Int), K.HasHomology i] [forall (i : Int), L.HasHomology i] (n : Int)
+  (K L : CochainComplex C ℤ) (φ : K ⟶ L) (e : K ≅ L)
+  [∀ (i : ℤ), K.HasHomology i] [∀ (i : ℤ), L.HasHomology i] (n : ℤ)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `truncGEXIso` / `truncGEXIso` 的定义
+/-- When `K` is a cochain complex indexed by `ℤ` and `n < i`, this is
+the isomorphism `(K.truncGE n).X i ≅ K.X i`. -/
+/-
+**CochainComplex.truncGEXIso** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncGEXIso (n i : Int) (hi : n < i
+参数：n i : Int。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
 
-English:
-definition truncGEXIso
-  signature: (n i : Int) (hi : n < i := by lia)
-  body: HomologicalComplex.truncGEXIso K (embeddingUpIntGE n) (i := (i - n).natAbs) (by
-      dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [add_sub_cancel])
-    (fun h => by
-      rw [boundaryGE_embeddingUpIntGE_iff]; rw [Int.natAbs_eq_zero] at h
-      lia)
-
-中文:
-定义 truncGEXIso
-  签名: (n i : 整数) (hi : n < i := by lia)
-  定义体: HomologicalComplex.truncGEXIso K (embeddingUpIntGE n) (i := (i - n).natAbs) (by
-      dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [add_sub_cancel])
-    (fun h => by
-      rw [boundaryGE_embeddingUpIntGE_iff]; rw [Int.natAbs_eq_zero] at h
-      lia)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncGEXIso, Int.natAbs_eq_zero, Int.natAbs_of_nonneg, K.truncGE, add_sub_cancel, boundaryGE_embeddingUpIntGE_iff, embeddingUpIntGE, natAbs, natAbs_eq_zero, natAbs_of_nonneg, truncGE, truncGEXIso
+--- 原说明 ---
+When `K` is a cochain complex indexed by `ℤ` and `n < i`, this is
+the isomorphism `(K.truncGE n).X i ≅ K.X i`.
 -/
-noncomputable def truncGEXIso (n i : Int) (hi : n < i := by lia) :
+noncomputable def truncGEXIso (n i : ℤ) (hi : n < i := by lia) :
     (K.truncGE n).X i ≅ K.X i :=
   HomologicalComplex.truncGEXIso K (embeddingUpIntGE n) (i := (i - n).natAbs) (by
       dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [add_sub_cancel])
-    (fun h => by
-      rw [boundaryGE_embeddingUpIntGE_iff]; rw [Int.natAbs_eq_zero] at h
+      rw [Int.natAbs_of_nonneg (by lia), add_sub_cancel])
+    (fun h ↦ by
+      rw [boundaryGE_embeddingUpIntGE_iff, Int.natAbs_eq_zero] at h
       lia)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `truncLEXIso` / `truncLEXIso` 的定义
+/-- When `K` is a cochain complex indexed by `ℤ` and `i < n`, this is
+the isomorphism `(K.truncLE n).X i ≅ K.X i`. -/
+/-
+**CochainComplex.truncLEXIso** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncLEXIso (n i : Int) (hi : i < n
+参数：n i : Int。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 
-English:
-definition truncLEXIso
-  signature: (n i : Int) (hi : i < n := by lia)
-  body: HomologicalComplex.truncLEXIso K (embeddingUpIntLE n) (i := (n - i).natAbs) (by
-      dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [sub_sub_cancel])
-    (fun h => by
-      rw [boundaryLE_embeddingUpIntLE_iff]; rw [Int.natAbs_eq_zero] at h
-      lia)
-
-中文:
-定义 truncLEXIso
-  签名: (n i : 整数) (hi : i < n := by lia)
-  定义体: HomologicalComplex.truncLEXIso K (embeddingUpIntLE n) (i := (n - i).natAbs) (by
-      dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [sub_sub_cancel])
-    (fun h => by
-      rw [boundaryLE_embeddingUpIntLE_iff]; rw [Int.natAbs_eq_zero] at h
-      lia)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncLEXIso, Int.natAbs_eq_zero, Int.natAbs_of_nonneg, K.op.truncGE, K.truncLE, boundaryLE_embeddingUpIntLE_iff, e.op, embeddingUpIntLE, natAbs, natAbs_eq_zero, natAbs_of_nonneg, sub_sub_cancel, symm.unop, truncGE, truncLE, truncLEXIso
+--- 原说明 ---
+When `K` is a cochain complex indexed by `ℤ` and `i < n`, this is
+the isomorphism `(K.truncLE n).X i ≅ K.X i`.
 -/
-noncomputable def truncLEXIso (n i : Int) (hi : i < n := by lia) :
+noncomputable def truncLEXIso (n i : ℤ) (hi : i < n := by lia) :
     (K.truncLE n).X i ≅ K.X i :=
   HomologicalComplex.truncLEXIso K (embeddingUpIntLE n) (i := (n - i).natAbs) (by
       dsimp
-      rw [Int.natAbs_of_nonneg (by lia)]; rw [sub_sub_cancel])
-    (fun h => by
-      rw [boundaryLE_embeddingUpIntLE_iff]; rw [Int.natAbs_eq_zero] at h
+      rw [Int.natAbs_of_nonneg (by lia), sub_sub_cancel])
+    (fun h ↦ by
+      rw [boundaryLE_embeddingUpIntLE_iff, Int.natAbs_eq_zero] at h
       lia)
 
-/--
-Definition of `truncGEXIsoOpcycles` / `truncGEXIsoOpcycles` 的定义
+/-- When `K` is a cochain complex indexed by `ℤ`, this is the isomorphism
+`(K.truncGE n).X n ≅ K.opcycles n`. -/
+/-
+**CochainComplex.truncGEXIsoOpcycles** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncGEXIsoOpcycles (n : Int) : (K.truncGE n).X n ≅ K.opcycles n
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
 
-English:
-definition truncGEXIsoOpcycles
-  signature: (n : Int)
-  body: HomologicalComplex.truncGEXIsoOpcycles K (embeddingUpIntGE n) (i := 0) (by simp)
-    (by rw [boundaryGE_embeddingUpIntGE_iff])
-
-中文:
-定义 truncGEXIsoOpcycles
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncGEXIsoOpcycles K (embeddingUpIntGE n) (i := 0) (by simp)
-    (by rw [boundaryGE_embeddingUpIntGE_iff])
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncGEXIsoOpcycles, K.op.truncGE, K.opcyclesOpIso, XIsoOpcycles, boundaryGE_embeddingUpIntGE_iff, e.op, embeddingUpIntGE, opcyclesOpIso, truncGE, truncGEXIsoOpcycles, unop.symm
+--- 原说明 ---
+When `K` is a cochain complex indexed by `ℤ`, this is the isomorphism
+`(K.truncGE n).X n ≅ K.opcycles n`.
 -/
-noncomputable def truncGEXIsoOpcycles (n : Int) :
+noncomputable def truncGEXIsoOpcycles (n : ℤ) :
     (K.truncGE n).X n ≅ K.opcycles n :=
   HomologicalComplex.truncGEXIsoOpcycles K (embeddingUpIntGE n) (i := 0) (by simp)
     (by rw [boundaryGE_embeddingUpIntGE_iff])
 
-/--
-Definition of `truncLEXIsoCycles` / `truncLEXIsoCycles` 的定义
+/-- When `K` is a cochain complex indexed by `ℤ`, this is the isomorphism
+`(K.truncLE n).X n ≅ K.cycles n`. -/
+/-
+**CochainComplex.truncLEXIsoCycles** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：truncLEXIsoCycles (n : Int) : (K.truncLE n).X n ≅ K.cycles n
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 
-English:
-definition truncLEXIsoCycles
-  signature: (n : Int)
-  body: HomologicalComplex.truncLEXIsoCycles K (embeddingUpIntLE n) (i := 0) (by simp)
-    (by rw [boundaryLE_embeddingUpIntLE_iff])
-
-中文:
-定义 truncLEXIsoCycles
-  签名: (n : 整数)
-  定义体: HomologicalComplex.truncLEXIsoCycles K (embeddingUpIntLE n) (i := 0) (by simp)
-    (by rw [boundaryLE_embeddingUpIntLE_iff])
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.truncLEXIsoCycles, K.op.truncGE, Quiver, Quiver.Hom.op_inj, _d_eq, boundaryLE_embeddingUpIntLE_iff, e.op, embeddingUpIntLE, op_inj, truncGE, truncLEXIsoCycles
+--- 原说明 ---
+When `K` is a cochain complex indexed by `ℤ`, this is the isomorphism
+`(K.truncLE n).X n ≅ K.cycles n`.
 -/
-noncomputable def truncLEXIsoCycles (n : Int) :
+noncomputable def truncLEXIsoCycles (n : ℤ) :
     (K.truncLE n).X n ≅ K.cycles n :=
   HomologicalComplex.truncLEXIsoCycles K (embeddingUpIntLE n) (i := 0) (by simp)
     (by rw [boundaryLE_embeddingUpIntLE_iff])
-
-/--
-lemma `acyclic_truncGE_iff` / 引理 `acyclic_truncGE_iff`
-
-English:
-lemma acyclic_truncGE_iff
-  given: (n₀ n₁ : Int) (h : n₀ + 1 = n₁ := by lia)
-  proof: by
-  dsimp [truncGE]
-  rw [acyclic_truncGE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₂_iff]
-
-中文:
-引理 acyclic_truncGE_iff
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁ := by lia)
-  证明: by
-  dsimp [truncGE]
-  rw [acyclic_truncGE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₂_iff]
-
-Depends on / 依赖: Acyclic, Embedding, Embedding.embeddingUpInt_areComplementary, K.IsLE, K.op.truncGE, K.truncGE, Quiver, Quiver.Hom.op_inj, XIsoCycles, _d_eq_fromOpcycles, acyclic_truncGE_iff_isSupportedOutside, e.op, embeddingUpInt_areComplementary, op_inj, truncGE, truncLE
+/-
+**CochainComplex.acyclic_truncGE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：acyclic_truncGE_iff (n₀ n₁ : Int) (h : n₀ + 1 = n₁
+参数：n₀ n₁ : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `ComplexShape.instIsTruncGENatIntEmbeddingUpIntGE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntGE p).IsTruncGE
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.acyclic_truncGE_iff_isSupportedOutside`：acyclic_trunc
+GE_iff_isSupportedOutside : (K.truncGE e).Acyclic ↔ K.IsSupportedOutside e
+· 使用引理 `ComplexShape.Embedding.AreComplementary.isSupportedOutside₂_iff`：isSuppo
+rtedOutside₂_iff : K.IsSupportedOutside e₂ ↔ K.IsSupported e₁
+· 使用引理 `ComplexShape.Embedding.embeddingUpInt_areComplementary`：embeddingUpInt_a
+reComplementary (n₀ n₁ : Int) (h : n₀ + 1 = n₁) : AreComplementary (embeddingUpI
+ntLE n₀) (embeddingUpIntGE n₁) where disjoin…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma acyclic_truncGE_iff (n₀ n₁ : Int) (h : n₀ + 1 = n₁ := by lia) :
+lemma acyclic_truncGE_iff (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁ := by lia) :
     (K.truncGE n₁).Acyclic ↔ K.IsLE n₀ := by
   dsimp [truncGE]
-  rw [acyclic_truncGE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₂_iff]
-
-/--
-lemma `acyclic_truncLE_iff` / 引理 `acyclic_truncLE_iff`
-
-English:
-lemma acyclic_truncLE_iff
-  given: (n₀ n₁ : Int) (h : n₀ + 1 = n₁ := by lia)
-  proof: by
-  dsimp [truncLE]
-  rw [acyclic_truncLE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₁_iff]
-
-中文:
-引理 acyclic_truncLE_iff
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁ := by lia)
-  证明: by
-  dsimp [truncLE]
-  rw [acyclic_truncLE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₁_iff]
-
-Depends on / 依赖: Acyclic, Embedding, Embedding.embeddingUpInt_areComplementary, K.IsGE, K.truncLE, acyclic_truncLE_iff_isSupportedOutside, embeddingUpInt_areComplementary, truncLE
+  rw [acyclic_truncGE_iff_isSupportedOutside,
+    (Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₂_iff]
+/-
+**CochainComplex.acyclic_truncLE_iff** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：acyclic_truncLE_iff (n₀ n₁ : Int) (h : n₀ + 1 = n₁
+参数：n₀ n₁ : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.acyclic_truncLE_iff_isSupportedOutside`：acyclic_trunc
+LE_iff_isSupportedOutside : (K.truncLE e).Acyclic ↔ K.IsSupportedOutside e
+· 使用引理 `ComplexShape.Embedding.AreComplementary.isSupportedOutside₁_iff`：isSuppo
+rtedOutside₁_iff : K.IsSupportedOutside e₁ ↔ K.IsSupported e₂
+· 使用引理 `ComplexShape.Embedding.embeddingUpInt_areComplementary`：embeddingUpInt_a
+reComplementary (n₀ n₁ : Int) (h : n₀ + 1 = n₁) : AreComplementary (embeddingUpI
+ntLE n₀) (embeddingUpIntGE n₁) where disjoin…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma acyclic_truncLE_iff (n₀ n₁ : Int) (h : n₀ + 1 = n₁ := by lia) :
+lemma acyclic_truncLE_iff (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁ := by lia) :
     (K.truncLE n₀).Acyclic ↔ K.IsGE n₁ := by
   dsimp [truncLE]
-  rw [acyclic_truncLE_iff_isSupportedOutside]; rw [(Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₁_iff]
+  rw [acyclic_truncLE_iff_isSupportedOutside,
+    (Embedding.embeddingUpInt_areComplementary n₀ n₁ h).isSupportedOutside₁_iff]
 
 end HasZeroMorphisms
 
 section Abelian
 
-variable [Abelian C] (K L : CochainComplex C Int)
+variable [Abelian C] (K L : CochainComplex C ℤ)
 
-/--
-Definition of `shortComplexTruncLE` / `shortComplexTruncLE` 的定义
+/-- The cokernel sequence of the monomorphism `K.ιTruncLE n`. -/
+/-
+**CochainComplex.shortComplexTruncLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex
+`。
+形式化陈述：shortComplexTruncLE (n : Int) : ShortComplex (CochainComplex C Int)
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 
-English:
-abbreviation shortComplexTruncLE
-  signature: (n : Int)
-  body: HomologicalComplex.shortComplexTruncLE K (embeddingUpIntLE n)
-
-中文:
-缩写 shortComplexTruncLE
-  签名: (n : 整数)
-  定义体: HomologicalComplex.shortComplexTruncLE K (embeddingUpIntLE n)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortComplexTruncLE, embeddingUpIntLE, shortComplexTruncLE
+--- 原说明 ---
+The cokernel sequence of the monomorphism `K.ιTruncLE n`.
 -/
-noncomputable abbrev shortComplexTruncLE (n : Int) : ShortComplex (CochainComplex C Int) :=
+noncomputable abbrev shortComplexTruncLE (n : ℤ) : ShortComplex (CochainComplex C ℤ) :=
   HomologicalComplex.shortComplexTruncLE K (embeddingUpIntLE n)
-
-/--
-lemma `shortComplexTruncLE_shortExact` / 引理 `shortComplexTruncLE_shortExact`
-
-English:
-lemma shortComplexTruncLE_shortExact
-  given: (n : Int)
-  proof: by
-  apply HomologicalComplex.shortComplexTruncLE_shortExact
-
-中文:
-引理 shortComplexTruncLE_shortExact
-  条件: (n : 整数)
-  证明: by
-  apply HomologicalComplex.shortComplexTruncLE_shortExact
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortComplexTruncLE_shortExact, shortComplexTruncLE_shortExact
+/-
+**CochainComplex.shortComplexTruncLE_shortExact** 是 Mathlib 中的一个引理，位于命名空间 `Cocha
+inComplex`。
+形式化陈述：shortComplexTruncLE_shortExact (n : Int) : (K.shortComplexTruncLE n).Short
+Exact
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.shortComplexTruncLE_shortExact`：shortComplexTruncLE_s
+hortExact : (K.shortComplexTruncLE e).ShortExact where exact
+· 使用定理 `ComplexShape.instIsTruncLENatIntEmbeddingUpIntLE`：∀ (p : ℤ), (ComplexSha
+pe.embeddingUpIntLE p).IsTruncLE
 -/
-lemma shortComplexTruncLE_shortExact (n : Int) :
+lemma shortComplexTruncLE_shortExact (n : ℤ) :
     (K.shortComplexTruncLE n).ShortExact := by
   apply HomologicalComplex.shortComplexTruncLE_shortExact
 
-variable (n₀ n₁ : Int)
+variable (n₀ n₁ : ℤ)
 
-/--
-Definition of `shortComplexTruncLEX₃ToTruncGE` / `shortComplexTruncLEX₃ToTruncGE` 的定义
+/-- The canonical morphism `(K.shortComplexTruncLE n₀).X₃ ⟶ K.truncGE n₁`. -/
+/-
+**CochainComplex.shortComplexTruncLEX** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation shortComplexTruncLEX₃ToTruncGE
-  signature: (h : n₀ + 1 = n₁ := by lia)
-  body: HomologicalComplex.shortComplexTruncLEX₃ToTruncGE K
-    (Embedding.embeddingUpInt_areComplementary n₀ n₁ h)
-
-@[reassoc]
-
-中文:
-缩写 shortComplexTruncLEX₃ToTruncGE
-  签名: (h : n₀ + 1 = n₁ := by lia)
-  定义体: HomologicalComplex.shortComplexTruncLEX₃ToTruncGE K
-    (Embedding.embeddingUpInt_areComplementary n₀ n₁ h)
-
-@[reassoc]
-
-Depends on / 依赖: Embedding, Embedding.embeddingUpInt_areComplementary, HomologicalComplex, HomologicalComplex.shortComplexTruncLEX, K.shortComplexTruncLE, K.truncGE, embeddingUpInt_areComplementary, shortComplexTruncLE, truncGE
+--- 原说明 ---
+The canonical morphism `(K.shortComplexTruncLE n₀).X₃ ⟶ K.truncGE n₁`.
 -/
 noncomputable abbrev shortComplexTruncLEX₃ToTruncGE (h : n₀ + 1 = n₁ := by lia) :
     (K.shortComplexTruncLE n₀).X₃ ⟶ K.truncGE n₁ :=
@@ -1589,61 +1156,76 @@ noncomputable abbrev shortComplexTruncLEX₃ToTruncGE (h : n₀ + 1 = n₁ := by
     (Embedding.embeddingUpInt_areComplementary n₀ n₁ h)
 
 @[reassoc]
-/--
-lemma `g_shortComplexTruncLEX₃ToTruncGE` / 引理 `g_shortComplexTruncLEX₃ToTruncGE`
-
-English:
-lemma g_shortComplexTruncLEX₃ToTruncGE
-  given: (h : n₀ + 1 = n₁ := by lia)
-  proof: by
-  apply HomologicalComplex.g_shortComplexTruncLEX₃ToTruncGE
-
-中文:
-引理 g_shortComplexTruncLEX₃ToTruncGE
-  条件: (h : n₀ + 1 = n₁ := by lia)
-  证明: by
-  apply HomologicalComplex.g_shortComplexTruncLEX₃ToTruncGE
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.g_shortComplexTruncLEX, K.shortComplexTruncLE, K.shortComplexTruncLEX, c.symm, e.op, opFunctor, shortComplexTruncLE, truncGE, unopFunctor
+/-
+**CochainComplex.g_shortComplexTruncLEX** 是 Mathlib 中的一个引理，位于命名空间 `CochainComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma g_shortComplexTruncLEX₃ToTruncGE (h : n₀ + 1 = n₁ := by lia) :
     (K.shortComplexTruncLE n₀).g ≫ K.shortComplexTruncLEX₃ToTruncGE n₀ n₁ h = K.πTruncGE n₁ := by
   apply HomologicalComplex.g_shortComplexTruncLEX₃ToTruncGE
-
-/--
-lemma `injective_opcycles` / 引理 `injective_opcycles`
-
-English:
-lemma injective_opcycles
-  statement: [Injective (K.X n₀)] [Injective (K.X n₁)]
-  proof: by
-  let S : ShortComplex C := ShortComplex.mk (K.d n₀ n₁) (K.pOpcycles n₁) (by simp)
-  have : Mono S.f := by
-    let T := K.sc' (n₀ - 1) n₀ n₁
-    have hT : T.Exact := by
-      rwa [← K.exactAt_iff' (n₀ - 1) n₀ n₁ (by simp) (by simpa)]
-    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src ..)
-  have hS : S.ShortExact :=
-    { exact := S.exact_of_g_is_cokernel (K.opcyclesIsCokernel n₀ n₁ (by simp [← h])) }
-  exact Retract.injective
-    { i := _, r := _, retract := (hS.splittingOfInjective).s_g }
-
-中文:
-引理 injective_opcycles
-  结论: [单射 (K.X n₀)] [单射 (K.X n₁)]
-  证明: by
-  let S : ShortComplex C := ShortComplex.mk (K.d n₀ n₁) (K.pOpcycles n₁) (by simp)
-  have : Mono S.f := by
-    let T := K.sc' (n₀ - 1) n₀ n₁
-    have hT : T.Exact := by
-      rwa [← K.exactAt_iff' (n₀ - 1) n₀ n₁ (by simp) (by simpa)]
-    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src ..)
-  have hS : S.ShortExact :=
-    { exact := S.exact_of_g_is_cokernel (K.opcyclesIsCokernel n₀ n₁ (by simp [← h])) }
-  exact Retract.injective
-    { i := _, r := _, retract := (hS.splittingOfInjective).s_g }
-
-Depends on / 依赖: Injective, Iso.hom_inv_id_assoc, K.exactAt_iff, K.isZero_of_isStrictlyGE, K.opcycles, K.opcyclesIsCokernel, K.pOpcycles, K.sc, Map_f_eq_opcyclesMap, Quiver, Quiver.Hom.op_inj, Retract, Retract.injective, S.ShortExact, S.exact_of_g_is_cokernel, ShortComplex, ShortComplex.mk, ShortExact, T.Exact, XIsoCycles
+/-
+**CochainComplex.injective_opcycles** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex`。
+形式化陈述：injective_opcycles [Injective (K.X n₀)] [Injective (K.X n₁)] [K.IsStrictly
+GE n₀] (hK : K.ExactAt n₀) (h : n₀ + 1 = n₁
+参数：K.X n₀；K.X n₁；hK : K.ExactAt n₀。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.d_pOpcycles`：d_pOpcycles [K.HasHomology j] : K.d i j 
+≫ K.pOpcycles j = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `HomologicalComplex.exactAt_iff'`：exactAt_iff' (hi : c.prev j = i) (hk : 
+c.next j = k) : K.ExactAt j ↔ (K.sc' i j k).Exact
+· 使用定理 `CochainComplex.prev`：prev (α : Type*) [AddGroup α] [One α] (i : α) : (Co
+mplexShape.up α).prev i = i - 1
+· 使用定理 `CochainComplex.next`：next (α : Type*) [AddRightCancelSemigroup α] [One α
+] (i : α) : (ComplexShape.up α).next i = i + 1
+· 使用定理 `CategoryTheory.ShortComplex.Exact.mono_g`：∀ {C : Type u_1} [inst : Categ
+oryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   {S : 
+CategoryTheory.ShortComplex C}…
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用引理 `CochainComplex.isZero_of_isStrictlyGE`：isZero_of_isStrictlyGE (n i : Int
+) (hi : i < n
+· 使用引理 `CategoryTheory.ShortComplex.exact_of_g_is_cokernel`：exact_of_g_is_cokern
+el (hS : IsColimit (CokernelCofork.ofπ S.g S.zero)) [S.HasHomology] : S.Exact
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `HomologicalComplex.instEpiPOpcycles`：∀ {C : Type u_1} [inst : CategoryTh
+eory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] 
+  {ι : Type u_2} {c : Com…
+· 使用定理 `CategoryTheory.Retract.injective`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y : C} (h : CategoryTheory.Retract X Y)   [i : Category
+Theory.Injective Y], C…
+· 使用定理 `CategoryTheory.balanced_of_strongMonoCategory`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [CategoryTheory.StrongMonoCategory C],   Categor
+yTheory.Balanced C
+· 使用定理 `CategoryTheory.strongMonoCategory_of_regularMonoCategory`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] [CategoryTheory.IsRegularMonoCateg
+ory C],   CategoryTheory.StrongMonoCategory C
+· 使用定理 `CategoryTheory.regularMonoCategoryOfNormalMonoCategory`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasZ
+eroMorphisms C]   [CategoryTheory.IsNormalMo…
+· 使用定理 `CategoryTheory.Abelian.toIsNormalMonoCategory`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.Abelian C],   CategoryThe
+ory.IsNormalMonoCategory C
+· 使用定理 `CategoryTheory.ShortComplex.Splitting.s_g`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   {S :
+ CategoryTheory.ShortComplex C}…
 -/
 lemma injective_opcycles [Injective (K.X n₀)] [Injective (K.X n₁)]
     [K.IsStrictlyGE n₀] (hK : K.ExactAt n₀) (h : n₀ + 1 = n₁ := by lia) :
@@ -1662,3 +1244,4 @@ lemma injective_opcycles [Injective (K.X n₀)] [Injective (K.X n₁)]
 end Abelian
 
 end CochainComplex
+

@@ -17,73 +17,29 @@ namespace Mathlib.Tactic
 open Lean Meta Elab Tactic
 
 /--
-Definition of `simpIntroCore` / `simpIntroCore` 的定义
+Main loop of the `simp_intro` tactic.
+* `g`: the original goal
+* `ctx`: the simp context, which is extended with local variables as we enter the binders
+* `discharge?`: the discharger
+* `more`: if true, we will keep introducing binders as long as we can
+* `ids`: the list of binder identifiers
+-/
+/-
+**Mathlib.Tactic.simpIntroCore** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：MVarId →   Meta.Simp.Context →     optParam Meta.Simp.SimprocsArray #[] → 
+      Option Meta.Simp.Discharge → Bool → List (TSyntax `Lean.binderIdent) → Ela
+b.TermElabM (Option MVarId)
+参数：TSyntax `Lean.binderIdent；Option MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simpIntroCore
-  signature: (g : MVarId) (ctx : Simp.Context) (simprocs : Simp.SimprocsArray := #[])
-  body: do
-  let done := return (← simpTargetCore g ctx simprocs discharge?).1
-  let (transp, var, ids') ← match ids with
-    | [] => if more then pure (.reducible, mkHole (← getRef) |>.raw, []) else return ← done
-    | v::ids => pure (.default, v.raw[0], ids)
-  let t ← withTransparency transp g.getType'
-  let n := if var.isIdent then var.getId else `_
-  let withFVar := fun (fvar, g) => g.withContext do
-    Term.addLocalVarInfo var (mkFVar fvar)
-    let ctx : Simp.Context ←
-      if (← Meta.isProp <| ← fvar.getType) then
-        let simpTheorems ← ctx.simpTheorems.addTheorem (.fvar fvar) (.fvar fvar)
-pure ctx.setSimpTheorems simpTheorems
-      else
-        pure ctx
-    simpIntroCore g ctx simprocs discharge? more ids'
-  match t with
-  | .letE .. => withFVar (← g.intro n)
-  | .forallE (body := body) .. =>
-    let (fvar, g) ← g.intro n
-    if body.hasLooseBVars then withFVar (fvar, g) else
-    match (← simpLocalDecl g fvar ctx simprocs discharge?).1 with
-    | none =>
-g.withContext Term.addLocalVarInfo var (mkFVar fvar)
-      return none
-    | some g' => withFVar g'
-  | _ =>
-    if more && ids.isEmpty then done else
-    throwErrorAt var "simp_intro failed to introduce {var}\n{g}"
-
-中文:
-定义 simp整数roCore
-  签名: (g : MVarId) (ctx : Simp.余ntext) (simprocs : Simp.SimprocsArray := #[])
-  定义体: do
-  let done := return (← simpTargetCore g ctx simprocs discharge?).1
-  let (transp, var, ids') ← match ids with
-    | [] => if more then pure (.reducible, mkHole (← getRef) |>.raw, []) else return ← done
-    | v::ids => pure (.default, v.raw[0], ids)
-  let t ← withTransparency transp g.getType'
-  let n := if var.isIdent then var.getId else `_
-  let withFVar := fun (fvar, g) => g.withContext do
-    Term.addLocalVarInfo var (mkFVar fvar)
-    let ctx : Simp.Context ←
-      if (← Meta.isProp <| ← fvar.getType) then
-        let simpTheorems ← ctx.simpTheorems.addTheorem (.fvar fvar) (.fvar fvar)
-pure ctx.setSimpTheorems simpTheorems
-      else
-        pure ctx
-    simpIntroCore g ctx simprocs discharge? more ids'
-  match t with
-  | .letE .. => withFVar (← g.intro n)
-  | .forallE (body := body) .. =>
-    let (fvar, g) ← g.intro n
-    if body.hasLooseBVars then withFVar (fvar, g) else
-    match (← simpLocalDecl g fvar ctx simprocs discharge?).1 with
-    | none =>
-g.withContext Term.addLocalVarInfo var (mkFVar fvar)
-      return none
-    | some g' => withFVar g'
-  | _ =>
-    if more && ids.isEmpty then done else
-    throwErrorAt var "simp_intro failed to introduce {var}\n{g}"
+--- 原说明 ---
+Main loop of the `simp_intro` tactic.
+* `g`: the original goal
+* `ctx`: the simp context, which is extended with local variables as we enter th
+e binders
+* `discharge?`: the discharger
+* `more`: if true, we will keep introducing binders as long as we can
+* `ids`: the list of binder identifiers
 -/
 partial def simpIntroCore (g : MVarId) (ctx : Simp.Context) (simprocs : Simp.SimprocsArray := #[])
     (discharge? : Option Simp.Discharge) (more : Bool) (ids : List (TSyntax ``binderIdent)) :
@@ -94,12 +50,12 @@ partial def simpIntroCore (g : MVarId) (ctx : Simp.Context) (simprocs : Simp.Sim
     | v::ids => pure (.default, v.raw[0], ids)
   let t ← withTransparency transp g.getType'
   let n := if var.isIdent then var.getId else `_
-  let withFVar := fun (fvar, g) => g.withContext do
+  let withFVar := fun (fvar, g) ↦ g.withContext do
     Term.addLocalVarInfo var (mkFVar fvar)
     let ctx : Simp.Context ←
       if (← Meta.isProp <| ← fvar.getType) then
         let simpTheorems ← ctx.simpTheorems.addTheorem (.fvar fvar) (.fvar fvar)
-pure ctx.setSimpTheorems simpTheorems
+        pure <| ctx.setSimpTheorems simpTheorems
       else
         pure ctx
     simpIntroCore g ctx simprocs discharge? more ids'
@@ -110,7 +66,7 @@ pure ctx.setSimpTheorems simpTheorems
     if body.hasLooseBVars then withFVar (fvar, g) else
     match (← simpLocalDecl g fvar ctx simprocs discharge?).1 with
     | none =>
-g.withContext Term.addLocalVarInfo var (mkFVar fvar)
+      g.withContext <| Term.addLocalVarInfo var (mkFVar fvar)
       return none
     | some g' => withFVar g'
   | _ =>
@@ -135,15 +91,16 @@ and the goal.
 -/
 elab "simp_intro" cfg:optConfig disch:(discharger)?
     ids:(ppSpace colGt binderIdent)* more:" .."? only:(&" only")? args:(simpArgs)? : tactic => do
-  let args := args.map fun args => ⟨args.raw[1].getArgs⟩
+  let args := args.map fun args ↦ ⟨args.raw[1].getArgs⟩
   let stx ← `(tactic| simp $cfg:optConfig $(disch)? $[only%$only]? $[[$args,*]]?)
   let { ctx, simprocs, dischargeWrapper, .. } ←
-withMainContext mkSimpContext stx (eraseLocal := false)
-  dischargeWrapper.with fun discharge? => do
+    withMainContext <| mkSimpContext stx (eraseLocal := false)
+  dischargeWrapper.with fun discharge? ↦ do
     let g ← getMainGoal
     g.checkNotAssigned `simp_intro
     g.withContext do
       let g? ← simpIntroCore g ctx (simprocs := simprocs) discharge? more.isSome ids.toList
-replaceMainGoal if let some g := g? then [g] else []
+      replaceMainGoal <| if let some g := g? then [g] else []
 
 end Mathlib.Tactic
+

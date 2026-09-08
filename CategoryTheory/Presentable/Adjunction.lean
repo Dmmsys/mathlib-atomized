@@ -38,26 +38,29 @@ variable {F : C ⥤ D} {G : D ⥤ C} (adj : F ⊣ G) (κ : Cardinal.{w}) [Fact �
 
 include adj
 
-/--
-lemma `isCardinalPresentable_leftAdjoint_obj` / 引理 `isCardinalPresentable_leftAdjoint_obj`
-
-English:
-lemma isCardinalPresentable_leftAdjoint_obj
-  statement: (X : C) [IsCardinalPresentable X κ]
-  proof: by
-  rw [isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj.{v}]
-  exact Functor.isCardinalAccessible_of_natIso
-    (show G ⋙ _ ≅ _ from (Adjunction.compUliftCoyonedaIso.{0} adj).symm.app (op X)) κ
-
-中文:
-引理 isCardinalPresentable_leftAdjoint_obj
-  结论: (X : C) [IsCardinalPresentable X κ]
-  证明: by
-  rw [isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj.{v}]
-  exact Functor.isCardinalAccessible_of_natIso
-    (show G ⋙ _ ≅ _ from (Adjunction.compUliftCoyonedaIso.{0} adj).symm.app (op X)) κ
-
-Depends on / 依赖: Adjunction, Adjunction.compUliftCoyonedaIso, Functor, Functor.isCardinalAccessible_of_natIso, compUliftCoyonedaIso, isCardinalAccessible_of_natIso, isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj, symm.app
+/-
+**CategoryTheory.Adjunction.isCardinalPresentable_leftAdjoint_obj** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：isCardinalPresentable_leftAdjoint_obj (X : C) [IsCardinalPresentable X κ] 
+[G.IsCardinalAccessible κ] : IsCardinalPresentable (F.obj X) κ
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isCardinalPresentable_iff_isCardinalAccessible_uliftCoyon
+eda_obj`：isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj : IsCa
+rdinalPresentable X κ ↔ (uliftCoyoneda.{t}.obj (op X)).IsCardinalAcce…
+· 使用引理 `CategoryTheory.Functor.isCardinalAccessible_of_natIso`：isCardinalAccessi
+ble_of_natIso [F.IsCardinalAccessible κ] : G.IsCardinalAccessible κ where preser
+vesColimitOfShape J _ hκ
+· 使用定理 `CategoryTheory.Functor.instIsCardinalAccessibleComp`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   (κ : Cardinal.{w})…
+· 使用定理 `CategoryTheory.instIsCardinalAccessibleObjOppositeFunctorTypeUliftCoyone
+daOpOfIsCardinalPresentable`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] (X : C) (κ : Cardinal.{w}) [inst_1 : Fact κ.IsRegular]   [CategoryTheor
+y.IsCardi…
 -/
 lemma isCardinalPresentable_leftAdjoint_obj (X : C) [IsCardinalPresentable X κ]
     [G.IsCardinalAccessible κ] :
@@ -67,46 +70,51 @@ lemma isCardinalPresentable_leftAdjoint_obj (X : C) [IsCardinalPresentable X κ]
     (show G ⋙ _ ≅ _ from (Adjunction.compUliftCoyonedaIso.{0} adj).symm.app (op X)) κ
 
 variable {κ} in
-/--
-lemma `isCardinalFilteredGenerator` / 引理 `isCardinalFilteredGenerator`
-
-English:
-lemma isCardinalFilteredGenerator
-  proof: by
-    rintro Y ⟨X, hX, ⟨e⟩⟩
-    have hX' := hP.le_isCardinalPresentable X hX
-    rw [isCardinalPresentable_iff] at hX' ⊢
-    have := adj.isCardinalPresentable_leftAdjoint_obj κ X
-    exact isCardinalPresentable_of_iso e κ
-  exists_colimitsOfShape Y := by
-    have := adj.isLeftAdjoint
-    obtain ⟨J, _, _, ⟨hY⟩⟩ := hP.exists_colimitsOfShape (G.obj Y)
-    exact ⟨J, inferInstance, inferInstance,
-      ObjectProperty.prop_of_isIso _ (adj.counit.app Y) ⟨{
-        diag := _
-        ι := _
-        isColimit := isColimitOfPreserves F hY.isColimit
-        prop_diag_obj j := P.prop_map_obj _ (hY.prop_diag_obj j) }⟩⟩
-
-中文:
-引理 isCardinalFilteredGenerator
-  证明: by
-    rintro Y ⟨X, hX, ⟨e⟩⟩
-    have hX' := hP.le_isCardinalPresentable X hX
-    rw [isCardinalPresentable_iff] at hX' ⊢
-    have := adj.isCardinalPresentable_leftAdjoint_obj κ X
-    exact isCardinalPresentable_of_iso e κ
-  exists_colimitsOfShape Y := by
-    have := adj.isLeftAdjoint
-    obtain ⟨J, _, _, ⟨hY⟩⟩ := hP.exists_colimitsOfShape (G.obj Y)
-    exact ⟨J, inferInstance, inferInstance,
-      ObjectProperty.prop_of_isIso _ (adj.counit.app Y) ⟨{
-        diag := _
-        ι := _
-        isColimit := isColimitOfPreserves F hY.isColimit
-        prop_diag_obj j := P.prop_map_obj _ (hY.prop_diag_obj j) }⟩⟩
-
-Depends on / 依赖: G.obj, ObjectProperty, ObjectProperty.prop_of_isIso, adj.counit.app, adj.isCardinalPresentable_leftAdjoint_obj, adj.isLeftAdjoint, counit, exists_colimitsOfShape, hP.exists_colimitsOfShape, hP.le_isCardinalPresentable, hY.isColimit, isCardinalPresentable_iff, isCardinalPresentable_leftAdjoint_obj, isCardinalPresentable_of_iso, isColimit, isColimitOfPreserves, isLeftAdjoint, le_isCardinalPresentable, prop_diag_obj, prop_of_isIso
+/-
+**CategoryTheory.Adjunction.isCardinalFilteredGenerator** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：isCardinalFilteredGenerator {P : ObjectProperty C} (hP : P.IsCardinalFilte
+redGenerator κ) [G.IsCardinalAccessible κ] [G.Full] [G.Faithful] : (P.map F).IsC
+ardinalFilteredGenerator κ where le_isCardinalPresentable
+参数：hP : P.IsCardinalFilteredGenerator κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.le_isCardinalP
+resentable`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Catego
+ryTheory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isCardinalPresentable_iff`：isCardinalPresentable_iff (X :
+ C) : isCardinalPresentable C κ X ↔ IsCardinalPresentable X κ
+· 使用引理 `CategoryTheory.Adjunction.isCardinalPresentable_leftAdjoint_obj`：isCardi
+nalPresentable_leftAdjoint_obj (X : C) [IsCardinalPresentable X κ] [G.IsCardinal
+Accessible κ] : IsCardinalPresentable (F.obj X) κ
+· 使用引理 `CategoryTheory.isCardinalPresentable_of_iso`：isCardinalPresentable_of_is
+o [IsCardinalPresentable X κ] : IsCardinalPresentable Y κ
+· 使用引理 `CategoryTheory.Adjunction.isLeftAdjoint`：isLeftAdjoint (adj : F ⊣ G) : F
+.IsLeftAdjoint
+· 使用定理 `CategoryTheory.ObjectProperty.IsCardinalFilteredGenerator.exists_colimit
+sOfShape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : Category
+Theory.ObjectProperty C} {κ : Cardinal.{w}}   [inst_1 : Fact κ.IsRegul…
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isIso`：prop_of_isIso [IsClosedUnde
+rIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f] (hX : P X) : P Y
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsColimitsOfSha
+pe`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Category
+Theory.ObjectProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppCounitOfFullOfFaithful`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用引理 `CategoryTheory.ObjectProperty.prop_map_obj`：prop_map_obj (P : ObjectProp
+erty C) (F : C ⥤ D) {X : C} (hX : P X) : P.map F (F.obj X)
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma isCardinalFilteredGenerator
     {P : ObjectProperty C} (hP : P.IsCardinalFilteredGenerator κ)
@@ -127,27 +135,29 @@ lemma isCardinalFilteredGenerator
         ι := _
         isColimit := isColimitOfPreserves F hY.isColimit
         prop_diag_obj j := P.prop_map_obj _ (hY.prop_diag_obj j) }⟩⟩
-
-/--
-lemma `hasCardinalFilteredGenerator` / 引理 `hasCardinalFilteredGenerator`
-
-English:
-lemma hasCardinalFilteredGenerator
-  statement: [HasCardinalFilteredGenerator C κ]
-  proof: locallySmall_of_faithful G
-  exists_generator := by
-    obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
-    exact ⟨P.map F, inferInstance, adj.isCardinalFilteredGenerator hP⟩
-
-中文:
-引理 hasCardinalFilteredGenerator
-  结论: [有CardinalFilteredGenerator C κ]
-  证明: locallySmall_of_faithful G
-  exists_generator := by
-    obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
-    exact ⟨P.map F, inferInstance, adj.isCardinalFilteredGenerator hP⟩
-
-Depends on / 依赖: locallySmall_of_faithful
+/-
+**CategoryTheory.Adjunction.hasCardinalFilteredGenerator** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：hasCardinalFilteredGenerator [HasCardinalFilteredGenerator C κ] [G.IsCardi
+nalAccessible κ] [G.Full] [G.Faithful] : HasCardinalFilteredGenerator D κ where 
+toLocallySmall
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.locallySmall_of_faithful`：locallySmall_of_faithful {C : T
+ype u} [Category.{v} C] {D : Type u'} [Category.{v'} D] (F : C ⥤ D) [F.Faithful]
+ [LocallySmall.{w} D] : Local…
+· 使用定理 `CategoryTheory.HasCardinalFilteredGenerator.toLocallySmall`：∀ {C : Type 
+u} {hC : CategoryTheory.Category.{v, u} C} (κ : Cardinal.{w}) {hκ : Fact κ.IsReg
+ular}   [self : CategoryTheory.HasCardinalFilter…
+· 使用定理 `CategoryTheory.HasCardinalFilteredGenerator.exists_generator`：∀ (C : Typ
+e u) [hC : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w}) [hκ : Fact κ.IsR
+egular]   [self : CategoryTheory.HasCardinalFilter…
+· 使用定理 `CategoryTheory.ObjectProperty.instEssentiallySmallMap`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 : CategoryTheory.C
+ategory.{v', u'} D]   (P : CategoryTheory.O…
+· 使用引理 `CategoryTheory.Adjunction.isCardinalFilteredGenerator`：isCardinalFiltere
+dGenerator {P : ObjectProperty C} (hP : P.IsCardinalFilteredGenerator κ) [G.IsCa
+rdinalAccessible κ] [G.Full] [G.Faithful] :…
 -/
 lemma hasCardinalFilteredGenerator [HasCardinalFilteredGenerator C κ]
     [G.IsCardinalAccessible κ] [G.Full] [G.Faithful] :
@@ -156,25 +166,28 @@ lemma hasCardinalFilteredGenerator [HasCardinalFilteredGenerator C κ]
   exists_generator := by
     obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ
     exact ⟨P.map F, inferInstance, adj.isCardinalFilteredGenerator hP⟩
-
-/--
-lemma `isCardinalLocallyPresentable` / 引理 `isCardinalLocallyPresentable`
-
-English:
-lemma isCardinalLocallyPresentable
-  statement: [IsCardinalLocallyPresentable C κ]
-  proof: letI : Reflective G := ⟨_, adj⟩
-    hasColimits_of_reflective G
-  toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
-
-中文:
-引理 isCardinalLocallyPresentable
-  结论: [是CardinalLocallyPresentable C κ]
-  证明: letI : Reflective G := ⟨_, adj⟩
-    hasColimits_of_reflective G
-  toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
-
-Depends on / 依赖: Reflective, adj.hasCardinalFilteredGenerator, hasCardinalFilteredGenerator, hasColimits_of_reflective, toHasCardinalFilteredGenerator
+/-
+**CategoryTheory.Adjunction.isCardinalLocallyPresentable** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：isCardinalLocallyPresentable [IsCardinalLocallyPresentable C κ] [G.IsCardi
+nalAccessible κ] [G.Full] [G.Faithful] : IsCardinalLocallyPresentable D κ where 
+toHasColimitsOfSize
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasCardinalFilteredGenerator`：hasCardinalFilte
+redGenerator [HasCardinalFilteredGenerator C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : HasCardinalFilteredGenera…
+· 使用定理 `CategoryTheory.IsCardinalAccessibleCategory.toHasCardinalFilteredGenerat
+or`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {κ : Cardinal.{w}} 
+{inst_1 : Fact κ.IsRegular}   [self : CategoryTheory.IsCardinalA…
+· 使用定理 `CategoryTheory.instIsCardinalAccessibleCategoryOfIsCardinalLocallyPresen
+table`：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w
+}) [inst_1 : Fact κ.IsRegular]   [CategoryTheory.IsCardinalLocallyP…
+· 使用定理 `CategoryTheory.hasColimits_of_reflective`：hasColimits_of_reflective (R :
+ D ⥤ C) [Reflective R] [HasColimitsOfSize.{v, u} C] : HasColimitsOfSize.{v, u} D
+· 使用定理 `CategoryTheory.IsCardinalLocallyPresentable.toHasColimitsOfSize`：∀ {C : 
+Type u} {inst : CategoryTheory.Category.{v, u} C} (κ : Cardinal.{w}) {inst_1 : F
+act κ.IsRegular}   [self : CategoryTheory.IsCardinalL…
 -/
 lemma isCardinalLocallyPresentable [IsCardinalLocallyPresentable C κ]
     [G.IsCardinalAccessible κ] [G.Full] [G.Faithful] :
@@ -183,32 +196,34 @@ lemma isCardinalLocallyPresentable [IsCardinalLocallyPresentable C κ]
     letI : Reflective G := ⟨_, adj⟩
     hasColimits_of_reflective G
   toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
-
-/--
-lemma `isCardinalAccessibleCategory` / 引理 `isCardinalAccessibleCategory`
-
-English:
-lemma isCardinalAccessibleCategory
-  statement: [IsCardinalAccessibleCategory C κ]
-  proof: ⟨fun J _ _ =>
-    let : Reflective G := ⟨_, adj⟩
-    have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
-    hasColimitsOfShape_of_reflective G⟩
-  toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
-
-中文:
-引理 isCardinalAccessibleCategory
-  结论: [是CardinalAccessible范畴 C κ]
-  证明: ⟨fun J _ _ =>
-    let : Reflective G := ⟨_, adj⟩
-    have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
-    hasColimitsOfShape_of_reflective G⟩
-  toHasCardinalFilteredGenerator := adj.hasCardinalFilteredGenerator κ
+/-
+**CategoryTheory.Adjunction.isCardinalAccessibleCategory** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：isCardinalAccessibleCategory [IsCardinalAccessibleCategory C κ] [G.IsCardi
+nalAccessible κ] [G.Full] [G.Faithful] : IsCardinalAccessibleCategory D κ where 
+toHasCardinalFilteredColimits
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasCardinalFilteredGenerator`：hasCardinalFilte
+redGenerator [HasCardinalFilteredGenerator C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : HasCardinalFilteredGenera…
+· 使用定理 `CategoryTheory.IsCardinalAccessibleCategory.toHasCardinalFilteredGenerat
+or`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {κ : Cardinal.{w}} 
+{inst_1 : Fact κ.IsRegular}   [self : CategoryTheory.IsCardinalA…
+· 使用定理 `CategoryTheory.HasCardinalFilteredColimits.hasColimitsOfShape`：∀ (C : Ty
+pe u₁) {inst : CategoryTheory.Category.{v₁, u₁} C} (κ : Cardinal.{w}) {inst_1 : 
+Fact κ.IsRegular}   [self : CategoryTheory.HasCardi…
+· 使用定理 `CategoryTheory.IsCardinalAccessibleCategory.toHasCardinalFilteredColimit
+s`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {κ : Cardinal.{w}} {
+inst_1 : Fact κ.IsRegular}   [self : CategoryTheory.IsCardinalA…
+· 使用定理 `CategoryTheory.hasColimitsOfShape_of_reflective`：hasColimitsOfShape_of_r
+eflective (R : D ⥤ C) [Reflective R] [HasColimitsOfShape J C] : HasColimitsOfSha
+pe J D where has_colimit
 -/
 lemma isCardinalAccessibleCategory [IsCardinalAccessibleCategory C κ]
     [G.IsCardinalAccessible κ] [G.Full] [G.Faithful] :
     IsCardinalAccessibleCategory D κ where
-  toHasCardinalFilteredColimits := ⟨fun J _ _ =>
+  toHasCardinalFilteredColimits := ⟨fun J _ _ ↦
     let : Reflective G := ⟨_, adj⟩
     have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
     hasColimitsOfShape_of_reflective G⟩
@@ -226,58 +241,80 @@ section
 
 variable (κ : Cardinal.{w}) [Fact κ.IsRegular]
 
-/--
-lemma `hasCardinalFilteredGenerator` / 引理 `hasCardinalFilteredGenerator`
-
-English:
-lemma hasCardinalFilteredGenerator
-  given: [HasCardinalFilteredGenerator C κ]
-  proof: e.toAdjunction.hasCardinalFilteredGenerator κ
-
-中文:
-引理 hasCardinalFilteredGenerator
-  条件: [有CardinalFilteredGenerator C κ]
-  证明: e.toAdjunction.hasCardinalFilteredGenerator κ
-
-Depends on / 依赖: e.toAdjunction.hasCardinalFilteredGenerator, hasCardinalFilteredGenerator, toAdjunction
+/-
+**CategoryTheory.Equivalence.hasCardinalFilteredGenerator** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Equivalence`。
+形式化陈述：hasCardinalFilteredGenerator [HasCardinalFilteredGenerator C κ] : HasCardi
+nalFilteredGenerator D κ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasCardinalFilteredGenerator`：hasCardinalFilte
+redGenerator [HasCardinalFilteredGenerator C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : HasCardinalFilteredGenera…
+· 使用定理 `CategoryTheory.Functor.instIsCardinalAccessibleOfPreservesColimitsOfSize
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [ins
+t_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 lemma hasCardinalFilteredGenerator [HasCardinalFilteredGenerator C κ] :
     HasCardinalFilteredGenerator D κ :=
   e.toAdjunction.hasCardinalFilteredGenerator κ
-
-/--
-lemma `isCardinalLocallyPresentable` / 引理 `isCardinalLocallyPresentable`
-
-English:
-lemma isCardinalLocallyPresentable
-  given: [IsCardinalLocallyPresentable C κ]
-  proof: e.toAdjunction.isCardinalLocallyPresentable κ
-
-中文:
-引理 isCardinalLocallyPresentable
-  条件: [是CardinalLocallyPresentable C κ]
-  证明: e.toAdjunction.isCardinalLocallyPresentable κ
-
-Depends on / 依赖: e.toAdjunction.isCardinalLocallyPresentable, isCardinalLocallyPresentable, toAdjunction
+/-
+**CategoryTheory.Equivalence.isCardinalLocallyPresentable** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Equivalence`。
+形式化陈述：isCardinalLocallyPresentable [IsCardinalLocallyPresentable C κ] : IsCardin
+alLocallyPresentable D κ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isCardinalLocallyPresentable`：isCardinalLocall
+yPresentable [IsCardinalLocallyPresentable C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : IsCardinalLocallyPresenta…
+· 使用定理 `CategoryTheory.Functor.instIsCardinalAccessibleOfPreservesColimitsOfSize
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [ins
+t_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 lemma isCardinalLocallyPresentable [IsCardinalLocallyPresentable C κ] :
     IsCardinalLocallyPresentable D κ :=
   e.toAdjunction.isCardinalLocallyPresentable κ
-
-/--
-lemma `isCardinalAccessibleCategory` / 引理 `isCardinalAccessibleCategory`
-
-English:
-lemma isCardinalAccessibleCategory
-  given: [IsCardinalAccessibleCategory C κ]
-  proof: e.toAdjunction.isCardinalAccessibleCategory κ
-
-中文:
-引理 isCardinalAccessibleCategory
-  条件: [是CardinalAccessible范畴 C κ]
-  证明: e.toAdjunction.isCardinalAccessibleCategory κ
-
-Depends on / 依赖: e.toAdjunction.isCardinalAccessibleCategory, isCardinalAccessibleCategory, toAdjunction
+/-
+**CategoryTheory.Equivalence.isCardinalAccessibleCategory** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Equivalence`。
+形式化陈述：isCardinalAccessibleCategory [IsCardinalAccessibleCategory C κ] : IsCardin
+alAccessibleCategory D κ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isCardinalAccessibleCategory`：isCardinalAccess
+ibleCategory [IsCardinalAccessibleCategory C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : IsCardinalAccessibleCateg…
+· 使用定理 `CategoryTheory.Functor.instIsCardinalAccessibleOfPreservesColimitsOfSize
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [ins
+t_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 lemma isCardinalAccessibleCategory [IsCardinalAccessibleCategory C κ] :
     IsCardinalAccessibleCategory D κ :=
@@ -285,48 +322,37 @@ lemma isCardinalAccessibleCategory [IsCardinalAccessibleCategory C κ] :
 
 end
 
-/--
-lemma `isLocallyPresentable` / 引理 `isLocallyPresentable`
-
-English:
-lemma isLocallyPresentable
-  given: [IsLocallyPresentable.{w} C]
-  proof: by
-  obtain ⟨κ, _, _⟩ := IsLocallyPresentable.exists_cardinal.{w} C
-  exact ⟨κ, inferInstance, e.isCardinalLocallyPresentable κ⟩
-
-中文:
-引理 isLocallyPresentable
-  条件: [是LocallyPresentable.{w} C]
-  证明: by
-  obtain ⟨κ, _, _⟩ := IsLocallyPresentable.exists_cardinal.{w} C
-  exact ⟨κ, inferInstance, e.isCardinalLocallyPresentable κ⟩
-
-Depends on / 依赖: IsLocallyPresentable, IsLocallyPresentable.exists_cardinal, e.isCardinalLocallyPresentable, exists_cardinal, isCardinalLocallyPresentable
+/-
+**CategoryTheory.Equivalence.isLocallyPresentable** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：isLocallyPresentable [IsLocallyPresentable.{w} C] : IsLocallyPresentable.{
+w} D
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsLocallyPresentable.exists_cardinal`：∀ (C : Type u) [hC 
+: CategoryTheory.Category.{v, u} C] [self : CategoryTheory.IsLocallyPresentable.
+{w, v, u} C],   ∃ κ, ∃ (x : Fact κ.IsRegu…
+· 使用引理 `CategoryTheory.Equivalence.isCardinalLocallyPresentable`：isCardinalLocal
+lyPresentable [IsCardinalLocallyPresentable C κ] : IsCardinalLocallyPresentable 
+D κ
 -/
 lemma isLocallyPresentable [IsLocallyPresentable.{w} C] :
     IsLocallyPresentable.{w} D := by
   obtain ⟨κ, _, _⟩ := IsLocallyPresentable.exists_cardinal.{w} C
   exact ⟨κ, inferInstance, e.isCardinalLocallyPresentable κ⟩
-
-/--
-lemma `isAccessibleCategory` / 引理 `isAccessibleCategory`
-
-English:
-lemma isAccessibleCategory
-  given: [IsAccessibleCategory.{w} C]
-  proof: by
-  obtain ⟨κ, _, _⟩ := IsAccessibleCategory.exists_cardinal.{w} C
-  exact ⟨κ, inferInstance, e.isCardinalAccessibleCategory κ⟩
-
-中文:
-引理 isAccessibleCategory
-  条件: [是Accessible范畴.{w} C]
-  证明: by
-  obtain ⟨κ, _, _⟩ := IsAccessibleCategory.exists_cardinal.{w} C
-  exact ⟨κ, inferInstance, e.isCardinalAccessibleCategory κ⟩
-
-Depends on / 依赖: IsAccessibleCategory, IsAccessibleCategory.exists_cardinal, e.isCardinalAccessibleCategory, exists_cardinal, isCardinalAccessibleCategory
+/-
+**CategoryTheory.Equivalence.isAccessibleCategory** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：isAccessibleCategory [IsAccessibleCategory.{w} C] : IsAccessibleCategory.{
+w} D
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsAccessibleCategory.exists_cardinal`：∀ (C : Type u) [hC 
+: CategoryTheory.Category.{v, u} C] [self : CategoryTheory.IsAccessibleCategory.
+{w, v, u} C],   ∃ κ, ∃ (x : Fact κ.IsRegu…
+· 使用引理 `CategoryTheory.Equivalence.isCardinalAccessibleCategory`：isCardinalAcces
+sibleCategory [IsCardinalAccessibleCategory C κ] : IsCardinalAccessibleCategory 
+D κ
 -/
 lemma isAccessibleCategory [IsAccessibleCategory.{w} C] :
     IsAccessibleCategory.{w} D := by
@@ -336,3 +362,4 @@ lemma isAccessibleCategory [IsAccessibleCategory.{w} C] :
 end Equivalence
 
 end CategoryTheory
+

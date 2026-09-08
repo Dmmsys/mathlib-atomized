@@ -27,60 +27,55 @@ namespace SSet
 
 variable (X : SSet.{u})
 
-/--
-Definition of `PtSimplex` / `PtSimplex` 的定义
+/-- Given a simplicial set `X`, `n : ℕ` and `x : X _⦋0⦌`, this is the type
+of morphisms `Δ[n] ⟶ X` which are constant with value `x` on the boundary. -/
+/-
+**SSet.PtSimplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：PtSimplex (n : Nat) (x : X _⦋0⦌) : Type u
+参数：n : Nat；x : X _⦋0⦌。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PtSimplex
-  signature: (n : Nat) (x : X _⦋0⦌)
-  body: RelativeMorphism (boundary n) (Subcomplex.ofSimplex x)
-    (const ⟨x, Subcomplex.mem_ofSimplex_obj x⟩)
-
-中文:
-缩写 PtSimplex
-  签名: (n : 自然数) (x : X _⦋0⦌)
-  定义体: RelativeMorphism (boundary n) (Subcomplex.ofSimplex x)
-    (const ⟨x, Subcomplex.mem_ofSimplex_obj x⟩)
-
-Depends on / 依赖: RelativeMorphism, Subcomplex, Subcomplex.mem_ofSimplex_obj, Subcomplex.ofSimplex, boundary, mem_ofSimplex_obj, ofSimplex
+--- 原说明 ---
+Given a simplicial set `X`, `n : ℕ` and `x : X _⦋0⦌`, this is the type
+of morphisms `Δ[n] ⟶ X` which are constant with value `x` on the boundary.
 -/
-abbrev PtSimplex (n : Nat) (x : X _⦋0⦌) : Type u :=
+abbrev PtSimplex (n : ℕ) (x : X _⦋0⦌) : Type u :=
   RelativeMorphism (boundary n) (Subcomplex.ofSimplex x)
     (const ⟨x, Subcomplex.mem_ofSimplex_obj x⟩)
 
 namespace PtSimplex
 
-variable {X} {n : Nat} {x : X _⦋0⦌}
+variable {X} {n : ℕ} {x : X _⦋0⦌}
 
 @[reassoc]
-/--
-lemma `comp_map_eq_const` / 引理 `comp_map_eq_const`
-
-English:
-lemma comp_map_eq_const
-  proof: by
-  refine (Subcomplex.lift φ ?_) ≫= s.comm
-  rw [stdSimplex.le_boundary_iff]
-  intro h
-  have : IsIso (Subcomplex.range φ).ι := by rw [h]; infer_instance
-  exact stdSimplex.not_hasDimensionLT n
-    ((hasDimensionLT_iff_of_iso (asIso (Subcomplex.range φ).ι) n).mp inferInstance)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 comp_map_eq_const
-  证明: by
-  refine (Subcomplex.lift φ ?_) ≫= s.comm
-  rw [stdSimplex.le_boundary_iff]
-  intro h
-  have : IsIso (Subcomplex.range φ).ι := by rw [h]; infer_instance
-  exact stdSimplex.not_hasDimensionLT n
-    ((hasDimensionLT_iff_of_iso (asIso (Subcomplex.range φ).ι) n).mp inferInstance)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Subcomplex, Subcomplex.lift, Subcomplex.range, hasDimensionLT_iff_of_iso, infer_instance, le_boundary_iff, not_hasDimensionLT, s.comm, stdSimplex, stdSimplex.le_boundary_iff, stdSimplex.not_hasDimensionLT
+/-
+**SSet.PtSimplex.comp_map_eq_const** 是 Mathlib 中的一个引理，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：comp_map_eq_const (s : X.PtSimplex n x) {Y : SSet.{u}} (φ : Y ⟶ Δ[n]) [Y.H
+asDimensionLT n] : φ ≫ s.map = const x
+参数：s : X.PtSimplex n x；φ : Y ⟶ Δ[n]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.stdSimplex.le_boundary_iff`：le_boundary_iff : A <= boundary.{u} n ↔
+ A != ⊤
+· 使用定理 `CategoryTheory.Subfunctor.instIsIsoFunctorTypeιTop`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] {F : CategoryTheory.Functor C (Type w)},   
+CategoryTheory.IsIso ⊤.ι
+· 使用引理 `SSet.stdSimplex.not_hasDimensionLT`：not_hasDimensionLT (n : Nat) (_ : Ha
+sDimensionLT.{u} Δ[n] n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `SSet.hasDimensionLT_iff_of_iso`：hasDimensionLT_iff_of_iso {X Y : SSet.{u
+}} (e : X ≅ Y) (d : Nat) : X.HasDimensionLT d ↔ Y.HasDimensionLT d
+· 使用定理 `SSet.instHasDimensionLTToSSetRange`：∀ {X Y : _root_.SSet} (f : X ⟶ Y) (d
+ : ℕ) [X.HasDimensionLT d], (SSet.Subcomplex.range f).toSSet.HasDimensionLT d
+· 使用定理 `SSet.RelativeMorphism.comm`：∀ {X Y : _root_.SSet} {A : X.Subcomplex} {B 
+: Y.Subcomplex} {φ : A.toSSet ⟶ B.toSSet}   (self : SSet.RelativeMorphism A B φ)
+,   CategoryTheo…
 -/
 lemma comp_map_eq_const
     (s : X.PtSimplex n x) {Y : SSet.{u}} (φ : Y ⟶ Δ[n]) [Y.HasDimensionLT n] :
@@ -93,20 +88,9 @@ lemma comp_map_eq_const
     ((hasDimensionLT_iff_of_iso (asIso (Subcomplex.range φ).ι) n).mp inferInstance)
 
 @[reassoc (attr := simp)]
-/--
-lemma `δ_map` / 引理 `δ_map`
-
-English:
-lemma δ_map
-  given: (f : X.PtSimplex (n + 1) x) (i : Fin (n + 2))
-  proof: comp_map_eq_const _ _
-
-中文:
-引理 δ_map
-  条件: (f : X.PtSimplex (n + 1) x) (i : 有限集 (n + 2))
-  证明: comp_map_eq_const _ _
-
-Depends on / 依赖: comp_map_eq_const
+/-
+**SSet.PtSimplex.** 是 Mathlib 中的一个引理，位于命名空间 `SSet.PtSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_map (f : X.PtSimplex (n + 1) x) (i : Fin (n + 2)) :
     stdSimplex.δ i ≫ f.map = const x :=
@@ -115,56 +99,17 @@ lemma δ_map (f : X.PtSimplex (n + 1) x) (i : Fin (n + 2)) :
 /-- The bijection between `n`-simplices of `X.op` and of `X`
 that are constant on the boundary. -/
 @[simps]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**SSet.PtSimplex.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：opEquiv : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where toF
+un f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition opEquiv
-  signature: : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where
-  body: { map := yonedaEquiv.symm (opObjEquiv (yonedaEquiv f.map))
-      comm := by
-        obtain _ | n := n
-        · ext
-        · refine boundary.hom_ext (fun i => ?_)
-          simp [stdSimplex.δ_comp_yonedaEquiv_symm,
-            δ_opObjEquiv, ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_yonedaEquiv_const] }
-  invFun g :=
-    { map := yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv g.map))
-      comm := by
-        obtain _ | n := n
-        · ext
-        · refine boundary.hom_ext (fun i => ?_)
-          simp [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ,
-            ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_symm_yonedaEquiv_const] }
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 opEquiv
-  签名: : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where
-  定义体: { map := yonedaEquiv.symm (opObjEquiv (yonedaEquiv f.map))
-      comm := by
-        obtain _ | n := n
-        · ext
-        · refine boundary.hom_ext (fun i => ?_)
-          simp [stdSimplex.δ_comp_yonedaEquiv_symm,
-            δ_opObjEquiv, ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_yonedaEquiv_const] }
-  invFun g :=
-    { map := yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv g.map))
-      comm := by
-        obtain _ | n := n
-        · ext
-        · refine boundary.hom_ext (fun i => ?_)
-          simp [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ,
-            ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_symm_yonedaEquiv_const] }
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-Depends on / 依赖: boundary, boundary.hom_ext, f.map, g.map, hom_ext, invFun, opObjEquiv, opObjEquiv.symm, opObjEquiv_sy, opObjEquiv_yonedaEquiv_const, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
+--- 原说明 ---
+The bijection between `n`-simplices of `X.op` and of `X`
+that are constant on the boundary.
 -/
 def opEquiv : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where
   toFun f :=
@@ -172,7 +117,7 @@ def opEquiv : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where
       comm := by
         obtain _ | n := n
         · ext
-        · refine boundary.hom_ext (fun i => ?_)
+        · refine boundary.hom_ext (fun i ↦ ?_)
           simp [stdSimplex.δ_comp_yonedaEquiv_symm,
             δ_opObjEquiv, ← stdSimplex.yonedaEquiv_δ_comp,
             opObjEquiv_yonedaEquiv_const] }
@@ -181,73 +126,65 @@ def opEquiv : X.op.PtSimplex n (opObjEquiv.symm x) ≃ X.PtSimplex n x where
       comm := by
         obtain _ | n := n
         · ext
-        · refine boundary.hom_ext (fun i => ?_)
+        · refine boundary.hom_ext (fun i ↦ ?_)
           simp [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ,
             ← stdSimplex.yonedaEquiv_δ_comp,
             opObjEquiv_symm_yonedaEquiv_const] }
   left_inv _ := by simp
   right_inv _ := by simp
 
-/--
-Definition of `op` / `op` 的定义
+/-- Given a `n`-simplex of `X` that is constant on the boundary, this
+is the corresponding `n`-simplex of `X.op`. -/
+/-
+**SSet.PtSimplex.op** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：op (f : X.PtSimplex n x) : X.op.PtSimplex n (opObjEquiv.symm x)
+参数：f : X.PtSimplex n x。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation op
-  signature: (f : X.PtSimplex n x)
-  body: opEquiv.symm f
-
-中文:
-缩写 op
-  签名: (f : X.PtSimplex n x)
-  定义体: opEquiv.symm f
-
-Depends on / 依赖: opEquiv, opEquiv.symm
+--- 原说明 ---
+Given a `n`-simplex of `X` that is constant on the boundary, this
+is the corresponding `n`-simplex of `X.op`.
 -/
 abbrev op (f : X.PtSimplex n x) : X.op.PtSimplex n (opObjEquiv.symm x) :=
   opEquiv.symm f
 
-/--
-Definition of `unop` / `unop` 的定义
+/-- Given a `n`-simplex of `X.op` that is constant on the boundary, this
+is the corresponding `n`-simplex of `X`. -/
+/-
+**SSet.PtSimplex.unop** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：unop (f : X.op.PtSimplex n (opObjEquiv.symm x)) : X.PtSimplex n x
+参数：f : X.op.PtSimplex n (opObjEquiv.symm x)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation unop
-  signature: (f : X.op.PtSimplex n (opObjEquiv.symm x))
-  body: opEquiv f
-
-中文:
-缩写 unop
-  签名: (f : X.op.PtSimplex n (opObjEquiv.symm x))
-  定义体: opEquiv f
-
-Depends on / 依赖: opEquiv
+--- 原说明 ---
+Given a `n`-simplex of `X.op` that is constant on the boundary, this
+is the corresponding `n`-simplex of `X`.
 -/
 abbrev unop (f : X.op.PtSimplex n (opObjEquiv.symm x)) : X.PtSimplex n x :=
   opEquiv f
 
-/--
-Definition of `RelStruct` / `RelStruct` 的定义
+/-- For each `i : Fin (n + 1)`, this is a variant of the homotopy relation on
+`n`-simplices that are constant on the boundary. Simplices `f` and `g` are related
+if they appear respectively as the `i.castSucc` and `i.succ` faces of a
+`n + 1`-simplex such that all the other faces are constant. -/
+/-
+**SSet.PtSimplex.RelStruct** 是 Mathlib 中的一个结构，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：RelStruct (f g : X.PtSimplex n x) (i : Fin (n + 1)) where /-- A `n + 1`-si
+mplex -/ map : Δ[n + 1] ⟶ X δ_castSucc_map : stdSimplex.δ i.castSucc ≫ map = f.m
+ap
+参数：f g : X.PtSimplex n x；i : Fin (n + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RelStruct
-  parameters: (f g : X.PtSimplex n x) (i : Fin (n + 1))
-  axioms and operations (5):
-    - map : Δ[n + 1] ⟶ X
-    - δ_castSucc_map : stdSimplex.δ i.castSucc ≫ map = f.map  [default: by cat_disch]
-    - δ_succ_map : stdSimplex.δ i.succ ≫ map = g.map  [default: by cat_disch]
-    - δ_map_of_lt((j : Fin (n + 2)) (hj : j < i.castSucc)) : stdSimplex.δ j ≫ map = const x  [default: by cat_disch]
-    - δ_map_of_gt((j : Fin (n + 2)) (hj : i.succ < j)) : stdSimplex.δ j ≫ map = const x  [default: by cat_disch]
-
-中文:
-结构 RelStruct
-  参数: (f g : X.PtSimplex n x) (i : 有限集 (n + 1))
-  公理与运算 (5 个):
-    - map : Δ[n + 1] ⟶ X
-    - δ_castSucc_map : stdSimplex.δ i.castSucc ≫ map = f.map  [默认: by cat_disch]
-    - δ_succ_map : stdSimplex.δ i.succ ≫ map = g.map  [默认: by cat_disch]
-    - δ_map_of_lt((j : 有限集 (n + 2)) (hj : j < i.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-    - δ_map_of_gt((j : 有限集 (n + 2)) (hj : i.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-
-Depends on / 依赖: castSucc, cat_disch, g.map, i.castSucc, i.succ, stdSimplex
+--- 原说明 ---
+For each `i : Fin (n + 1)`, this is a variant of the homotopy relation on
+`n`-simplices that are constant on the boundary. Simplices `f` and `g` are relat
+ed
+if they appear respectively as the `i.castSucc` and `i.succ` faces of a
+`n + 1`-simplex such that all the other faces are constant.
 -/
 structure RelStruct (f g : X.PtSimplex n x) (i : Fin (n + 1)) where
   /-- A `n + 1`-simplex -/
@@ -266,48 +203,16 @@ attribute [reassoc (attr := simp)] δ_castSucc_map δ_succ_map
 
 /-- `RelStruct` is reflexive. -/
 @[simps]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**SSet.PtSimplex.RelStruct.refl** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.RelStr
+uct`。
+形式化陈述：refl (f : X.PtSimplex n x) (i : Fin (n + 1)) : RelStruct f f i where map
+参数：f : X.PtSimplex n x；i : Fin (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (f : X.PtSimplex n x) (i : Fin (n + 1))
-  body: stdSimplex.σ i ≫ f.map
-  δ_castSucc_map := by rw [CosimplicialObject.δ_comp_σ_self_assoc]
-  δ_succ_map := by rw [CosimplicialObject.δ_comp_σ_succ_assoc]
-  δ_map_of_lt j hj := by
-    obtain ⟨i, rfl⟩ := i.eq_succ_of_ne_zero (by aesop)
-    obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (by grind)
-    obtain _ | n := n
-    · fin_cases i
-    · rw [stdSimplex.δ_comp_σ_of_le_assoc (by grind), δ_map, comp_const]
-  δ_map_of_gt j hj := by
-    obtain ⟨i, rfl⟩ := i.eq_castSucc_of_ne_last (by grind)
-    obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (by aesop)
-    obtain _ | n := n
-    · fin_cases i
-    · rw [stdSimplex.δ_comp_σ_of_gt_assoc (by grind), δ_map, comp_const]
-
-中文:
-定义 refl
-  签名: (f : X.PtSimplex n x) (i : 有限集 (n + 1))
-  定义体: stdSimplex.σ i ≫ f.map
-  δ_castSucc_map := by rw [CosimplicialObject.δ_comp_σ_self_assoc]
-  δ_succ_map := by rw [CosimplicialObject.δ_comp_σ_succ_assoc]
-  δ_map_of_lt j hj := by
-    obtain ⟨i, rfl⟩ := i.eq_succ_of_ne_zero (by aesop)
-    obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (by grind)
-    obtain _ | n := n
-    · fin_cases i
-    · rw [stdSimplex.δ_comp_σ_of_le_assoc (by grind), δ_map, comp_const]
-  δ_map_of_gt j hj := by
-    obtain ⟨i, rfl⟩ := i.eq_castSucc_of_ne_last (by grind)
-    obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (by aesop)
-    obtain _ | n := n
-    · fin_cases i
-    · rw [stdSimplex.δ_comp_σ_of_gt_assoc (by grind), δ_map, comp_const]
-
-Depends on / 依赖: f.map, stdSimplex
+--- 原说明 ---
+`RelStruct` is reflexive.
 -/
 def refl (f : X.PtSimplex n x) (i : Fin (n + 1)) : RelStruct f f i where
   map := stdSimplex.σ i ≫ f.map
@@ -329,28 +234,18 @@ def refl (f : X.PtSimplex n x) (i : Fin (n + 1)) : RelStruct f f i where
 /-- The `RelStruct f' g' i` deduced from `r : RelStruct f g i` when
 `f = f'` and `g = g'`. -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**SSet.PtSimplex.RelStruct.copy** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.RelStr
+uct`。
+形式化陈述：copy {f g : X.PtSimplex n x} {i : Fin (n + 1)} (r : RelStruct f g i) {f' g
+' : X.PtSimplex n x} (hf : f = f') (hg : g = g') : RelStruct f' g' i where map
+参数：n + 1；r : RelStruct f g i；hf : f = f'；hg : g = g'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: {f g : X.PtSimplex n x} {i : Fin (n + 1)} (r : RelStruct f g i)
-  body: r.map
-  δ_castSucc_map := by rw [δ_castSucc_map, hf]
-  δ_succ_map := by rw [δ_succ_map, hg]
-  δ_map_of_lt j hj := by rw [δ_map_of_lt _ j hj]
-  δ_map_of_gt j hj := by rw [δ_map_of_gt _ j hj]
-
-中文:
-定义 copy
-  签名: {f g : X.PtSimplex n x} {i : 有限集 (n + 1)} (r : RelStruct f g i)
-  定义体: r.map
-  δ_castSucc_map := by rw [δ_castSucc_map, hf]
-  δ_succ_map := by rw [δ_succ_map, hg]
-  δ_map_of_lt j hj := by rw [δ_map_of_lt _ j hj]
-  δ_map_of_gt j hj := by rw [δ_map_of_gt _ j hj]
-
-Depends on / 依赖: r.map
+--- 原说明 ---
+The `RelStruct f' g' i` deduced from `r : RelStruct f g i` when
+`f = f'` and `g = g'`.
 -/
 def copy {f g : X.PtSimplex n x} {i : Fin (n + 1)} (r : RelStruct f g i)
     {f' g' : X.PtSimplex n x} (hf : f = f') (hg : g = g') :
@@ -363,18 +258,17 @@ def copy {f g : X.PtSimplex n x} {i : Fin (n + 1)} (r : RelStruct f g i)
 
 /-- The `RelStruct f g i` deduced from an equality `f = g`. -/
 @[simps! map]
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-
+**SSet.PtSimplex.RelStruct.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.RelStr
+uct`。
+形式化陈述：ofEq {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1)) : RelStruct f g
+ i
+参数：h : f = g；i : Fin (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1))
-  body: (refl f i).copy rfl h
-
-中文:
-定义 ofEq
-  签名: {f g : X.PtSimplex n x} (h : f = g) (i : 有限集 (n + 1))
-  定义体: (refl f i).copy rfl h
+--- 原说明 ---
+The `RelStruct f g i` deduced from an equality `f = g`.
 -/
 def ofEq {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1)) :
     RelStruct f g i :=
@@ -382,32 +276,30 @@ def ofEq {f g : X.PtSimplex n x} (h : f = g) (i : Fin (n + 1)) :
 
 end RelStruct
 
-/--
-Definition of `MulStruct` / `MulStruct` 的定义
+/-- For each `i : Fin n`, this structure is a candidate for the relation saying
+that `fg` is the product of `f` and `g` in the homotopy group (of a Kan complex).
+It is so if `g`, `fg` and `f` are respectively the `i.castSucc.castSucc`,
+`i.castSucc.succ` and `i.succ.succ` faces of a `n + 1`-simplex such that
+all the other faces are constant. (The multiplication on homotopy groups will be
+defined using `i := Fin.last _`, but in general, this structure is useful in
+order to obtain properties of `RelStruct`.) -/
+/-
+**SSet.PtSimplex.MulStruct** 是 Mathlib 中的一个结构，位于命名空间 `SSet.PtSimplex`。
+形式化陈述：MulStruct (f g fg : X.PtSimplex n x) (i : Fin n) where /-- A `n + 1`-simpl
+ex -/ map : Δ[n + 1] ⟶ X δ_castSucc_castSucc_map : stdSimplex.δ (i.castSucc.cast
+Succ) ≫ map = g.map
+参数：f g fg : X.PtSimplex n x；i : Fin n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulStruct
-  parameters: (f g fg : X.PtSimplex n x) (i : Fin n)
-  axioms and operations (6):
-    - map : Δ[n + 1] ⟶ X
-    - δ_castSucc_castSucc_map : stdSimplex.δ (i.castSucc.castSucc) ≫ map = g.map  [default: by cat_disch]
-    - δ_succ_castSucc_map : stdSimplex.δ (i.castSucc.succ) ≫ map = fg.map  [default: by cat_disch]
-    - δ_succ_succ_map : stdSimplex.δ (i.succ.succ) ≫ map = f.map  [default: by cat_disch]
-    - δ_map_of_lt((j : Fin (n + 2)) (hj : j < i.castSucc.castSucc)) : stdSimplex.δ j ≫ map = const x  [default: by cat_disch]
-    - δ_map_of_gt((j : Fin (n + 2)) (hj : i.succ.succ < j)) : stdSimplex.δ j ≫ map = const x  [default: by cat_disch]
-
-中文:
-结构 MulStruct
-  参数: (f g fg : X.PtSimplex n x) (i : 有限集 n)
-  公理与运算 (6 个):
-    - map : Δ[n + 1] ⟶ X
-    - δ_castSucc_castSucc_map : stdSimplex.δ (i.castSucc.castSucc) ≫ map = g.map  [默认: by cat_disch]
-    - δ_succ_castSucc_map : stdSimplex.δ (i.castSucc.succ) ≫ map = fg.map  [默认: by cat_disch]
-    - δ_succ_succ_map : stdSimplex.δ (i.succ.succ) ≫ map = f.map  [默认: by cat_disch]
-    - δ_map_of_lt((j : 有限集 (n + 2)) (hj : j < i.castSucc.castSucc)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-    - δ_map_of_gt((j : 有限集 (n + 2)) (hj : i.succ.succ < j)) : stdSimplex.δ j ≫ map = const x  [默认: by cat_disch]
-
-Depends on / 依赖: castSucc, cat_disch, f.map, fg.map, i.castSucc.castSucc, i.castSucc.succ, i.succ.succ, stdSimplex
+--- 原说明 ---
+For each `i : Fin n`, this structure is a candidate for the relation saying
+that `fg` is the product of `f` and `g` in the homotopy group (of a Kan complex)
+.
+It is so if `g`, `fg` and `f` are respectively the `i.castSucc.castSucc`,
+`i.castSucc.succ` and `i.succ.succ` faces of a `n + 1`-simplex such that
+all the other faces are constant. (The multiplication on homotopy groups will be
+defined using `i := Fin.last _`, but in general, this structure is useful in
+order to obtain properties of `RelStruct`.)
 -/
 structure MulStruct (f g fg : X.PtSimplex n x) (i : Fin n) where
   /-- A `n + 1`-simplex -/
@@ -428,55 +320,35 @@ attribute [reassoc (attr := simp)] δ_castSucc_castSucc_map δ_succ_castSucc_map
 /-- The `MulStruct` for `X.op` that is deduced from a `MulStruct` for the simplicial
 set `X`. -/
 @[simps]
-/--
-Definition of `op` / `op` 的定义
+/-
+**SSet.PtSimplex.MulStruct.op** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.MulStruc
+t`。
+形式化陈述：op {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fi
+n n} (hij : i.rev = j
+参数：h : MulStruct f g fg i。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition op
-  signature: {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fin n}
-  body: yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
-  δ_castSucc_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_castSucc]; rw [← hij]; rw [Fin.rev_rev]
-  δ_succ_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_castSucc]; rw [Fin.castSucc_succ]; rw [← hij]; rw [Fin.rev_rev]
-  δ_succ_succ_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_castSucc_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_succ]; rw [← hij]; rw [Fin.rev_rev]
-  δ_map_of_lt k hk := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
-      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_gt k.rev (by grind)]
-  δ_map_of_gt k hk := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
-      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_lt k.rev (by grind)]
-
-中文:
-定义 op
-  签名: {f g fg : X.PtSimplex n x} {i : 有限集 n} (h : MulStruct f g fg i) {j : 有限集 n}
-  定义体: yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
-  δ_castSucc_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_castSucc]; rw [← hij]; rw [Fin.rev_rev]
-  δ_succ_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_castSucc]; rw [Fin.castSucc_succ]; rw [← hij]; rw [Fin.rev_rev]
-  δ_succ_succ_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_castSucc_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_succ]; rw [← hij]; rw [Fin.rev_rev]
-  δ_map_of_lt k hk := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
-      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_gt k.rev (by grind)]
-  δ_map_of_gt k hk := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
-      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_lt k.rev (by grind)]
-
-Depends on / 依赖: Equiv.apply_symm_apply, Fin.rev_castSucc, Fin.rev_rev, MulStruct, apply_symm_apply, f.op, fg.op, g.op, h.map, opEquiv_symm_apply_map, opObjEquiv, opObjEquiv.symm, rev_castSucc, rev_rev, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
+--- 原说明 ---
+The `MulStruct` for `X.op` that is deduced from a `MulStruct` for the simplicial
+set `X`.
 -/
 def op {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fin n}
     (hij : i.rev = j := by grind) :
     MulStruct g.op f.op fg.op j where
   map := yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
   δ_castSucc_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_castSucc]; rw [← hij]; rw [Fin.rev_rev]
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ, Equiv.apply_symm_apply,
+      ← stdSimplex.yonedaEquiv_δ_comp, opEquiv_symm_apply_map, ← h.δ_succ_succ_map,
+      Fin.rev_castSucc, Fin.rev_castSucc, ← hij, Fin.rev_rev]
   δ_succ_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_castSucc]; rw [Fin.castSucc_succ]; rw [← hij]; rw [Fin.rev_rev]
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ, Equiv.apply_symm_apply,
+      ← stdSimplex.yonedaEquiv_δ_comp, opEquiv_symm_apply_map, ← h.δ_succ_castSucc_map,
+      Fin.rev_succ, Fin.rev_castSucc, Fin.castSucc_succ, ← hij, Fin.rev_rev]
   δ_succ_succ_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_castSucc_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_succ]; rw [← hij]; rw [Fin.rev_rev]
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ, Equiv.apply_symm_apply,
+      ← stdSimplex.yonedaEquiv_δ_comp, opEquiv_symm_apply_map, ← h.δ_castSucc_castSucc_map,
+      Fin.rev_succ, Fin.rev_succ, ← hij, Fin.rev_rev]
   δ_map_of_lt k hk := by
     simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
       opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_gt k.rev (by grind)]
@@ -486,50 +358,18 @@ def op {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fin 
 
 /-- The `Mulstruct` for a simplicial set `X` that is deduced from a `Mulstruct` for `X.op`. -/
 @[simps]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**SSet.PtSimplex.MulStruct.unop** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.MulStr
+uct`。
+形式化陈述：unop {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct g.op f.op fg.op
+ i) {j : Fin n} (hij : i.rev = j
+参数：h : MulStruct g.op f.op fg.op i。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition unop
-  signature: {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct g.op f.op fg.op i) {j : Fin n}
-  body: yonedaEquiv.symm (opObjEquiv (yonedaEquiv h.map))
-  δ_castSucc_castSucc_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc]
-  δ_succ_castSucc_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc, Fin.rev_succ]
-  δ_succ_succ_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_succ]
-  δ_map_of_lt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_gt _ (by grind)]
-    simp [opObjEquiv_yonedaEquiv_const]
-  δ_map_of_gt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_lt _ (by grind)]
-    simp [opObjEquiv_yonedaEquiv_const]
-
-中文:
-定义 unop
-  签名: {f g fg : X.PtSimplex n x} {i : 有限集 n} (h : MulStruct g.op f.op fg.op i) {j : 有限集 n}
-  定义体: yonedaEquiv.symm (opObjEquiv (yonedaEquiv h.map))
-  δ_castSucc_castSucc_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc]
-  δ_succ_castSucc_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc, Fin.rev_succ]
-  δ_succ_succ_map := by
-    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_succ]
-  δ_map_of_lt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_gt _ (by grind)]
-    simp [opObjEquiv_yonedaEquiv_const]
-  δ_map_of_gt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_lt _ (by grind)]
-    simp [opObjEquiv_yonedaEquiv_const]
-
-Depends on / 依赖: Fin.rev_castSucc, Fin.rev_succ, MulStruct, h.map, opObjEquiv, rev_castSucc, rev_succ, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
+--- 原说明 ---
+The `Mulstruct` for a simplicial set `X` that is deduced from a `Mulstruct` for 
+`X.op`.
 -/
 def unop {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct g.op f.op fg.op i) {j : Fin n}
     (hij : i.rev = j := by grind) :
@@ -545,10 +385,12 @@ def unop {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct g.op f.op fg.op i
     simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
       ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_succ]
   δ_map_of_lt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_gt _ (by grind)]
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
+      ← stdSimplex.yonedaEquiv_δ_comp, h.δ_map_of_gt _ (by grind)]
     simp [opObjEquiv_yonedaEquiv_const]
   δ_map_of_gt k hk := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_lt _ (by grind)]
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
+      ← stdSimplex.yonedaEquiv_δ_comp, h.δ_map_of_lt _ (by grind)]
     simp [opObjEquiv_yonedaEquiv_const]
 
 end MulStruct
@@ -556,34 +398,17 @@ end MulStruct
 /-- If `f` and `g` are in `X.PtSimplex n x`, then `RelStruct f g i.castSucc`
 identifies to `MulStruct .const f g i`. -/
 @[simps apply_map symm_apply_map]
-/--
-Definition of `relStructCastSuccEquivMulStruct` / `relStructCastSuccEquivMulStruct` 的定义
+/-
+**SSet.PtSimplex.relStructCastSuccEquivMulStruct** 是 Mathlib 中的一个定义，位于命名空间 `SSet
+.PtSimplex`。
+形式化陈述：relStructCastSuccEquivMulStruct {f g : X.PtSimplex n x} {i : Fin n} : RelS
+truct f g i.castSucc ≃ MulStruct .const f g i where toFun h
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relStructCastSuccEquivMulStruct
-  signature: {f g : X.PtSimplex n x} {i : Fin n}
-  body: { map := h.map
-      δ_map_of_gt j hj := h.δ_map_of_gt j (lt_trans (by simp) hj) }
-  invFun h :=
-    { map := h.map
-      δ_map_of_gt j hj := by
-        rw [Fin.succ_castSucc]; rw [Fin.castSucc_lt_iff_succ_le] at hj
-        obtain rfl | hj := hj.eq_or_lt
-        exacts [h.δ_succ_succ_map, h.δ_map_of_gt j hj] }
-
-中文:
-定义 relStructCastSuccEquivMulStruct
-  签名: {f g : X.PtSimplex n x} {i : 有限集 n}
-  定义体: { map := h.map
-      δ_map_of_gt j hj := h.δ_map_of_gt j (lt_trans (by simp) hj) }
-  invFun h :=
-    { map := h.map
-      δ_map_of_gt j hj := by
-        rw [Fin.succ_castSucc]; rw [Fin.castSucc_lt_iff_succ_le] at hj
-        obtain rfl | hj := hj.eq_or_lt
-        exacts [h.δ_succ_succ_map, h.δ_map_of_gt j hj] }
-
-Depends on / 依赖: Fin.castSucc_lt_iff_succ_le, Fin.succ_castSucc, castSucc_lt_iff_succ_le, eq_or_lt, exacts, h.map, hj.eq_or_lt, invFun, lt_trans, succ_castSucc
+--- 原说明 ---
+If `f` and `g` are in `X.PtSimplex n x`, then `RelStruct f g i.castSucc`
+identifies to `MulStruct .const f g i`.
 -/
 def relStructCastSuccEquivMulStruct {f g : X.PtSimplex n x} {i : Fin n} :
     RelStruct f g i.castSucc ≃ MulStruct .const f g i where
@@ -593,43 +418,24 @@ def relStructCastSuccEquivMulStruct {f g : X.PtSimplex n x} {i : Fin n} :
   invFun h :=
     { map := h.map
       δ_map_of_gt j hj := by
-        rw [Fin.succ_castSucc]; rw [Fin.castSucc_lt_iff_succ_le] at hj
+        rw [Fin.succ_castSucc, Fin.castSucc_lt_iff_succ_le] at hj
         obtain rfl | hj := hj.eq_or_lt
         exacts [h.δ_succ_succ_map, h.δ_map_of_gt j hj] }
 
 /-- If `f` and `g` are in `X.PtSimplex n x`, then `RelStruct f g i.succ`
 identifies to `MulStruct g .const f i`. -/
 @[simps apply_map symm_apply_map]
-/--
-Definition of `relStructSuccEquivMulStruct` / `relStructSuccEquivMulStruct` 的定义
+/-
+**SSet.PtSimplex.relStructSuccEquivMulStruct** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtS
+implex`。
+形式化陈述：relStructSuccEquivMulStruct {f g : X.PtSimplex n x} {i : Fin n} : RelStruc
+t f g i.succ ≃ MulStruct g .const f i where toFun h
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relStructSuccEquivMulStruct
-  signature: {f g : X.PtSimplex n x} {i : Fin n}
-  body: { map := h.map
-      δ_map_of_lt j hj := h.δ_map_of_lt j (lt_trans hj (by simp))
-      δ_succ_castSucc_map := by rw [← Fin.castSucc_succ, h.δ_castSucc_map] }
-  invFun h :=
-    { map := h.map
-      δ_map_of_lt j hj := by
-        rw [← Fin.succ_castSucc] at hj
-        obtain rfl | hj := (Fin.le_castSucc_iff.mpr hj).eq_or_lt
-        exacts [h.δ_castSucc_castSucc_map, h.δ_map_of_lt j hj] }
-
-中文:
-定义 relStructSuccEquivMulStruct
-  签名: {f g : X.PtSimplex n x} {i : 有限集 n}
-  定义体: { map := h.map
-      δ_map_of_lt j hj := h.δ_map_of_lt j (lt_trans hj (by simp))
-      δ_succ_castSucc_map := by rw [← Fin.castSucc_succ, h.δ_castSucc_map] }
-  invFun h :=
-    { map := h.map
-      δ_map_of_lt j hj := by
-        rw [← Fin.succ_castSucc] at hj
-        obtain rfl | hj := (Fin.le_castSucc_iff.mpr hj).eq_or_lt
-        exacts [h.δ_castSucc_castSucc_map, h.δ_map_of_lt j hj] }
-
-Depends on / 依赖: Fin.castSucc_succ, Fin.le_castSucc_iff.mpr, Fin.succ_castSucc, castSucc_succ, eq_or_lt, exacts, h.map, invFun, le_castSucc_iff, lt_trans, succ_castSucc
+--- 原说明 ---
+If `f` and `g` are in `X.PtSimplex n x`, then `RelStruct f g i.succ`
+identifies to `MulStruct g .const f i`.
 -/
 def relStructSuccEquivMulStruct {f g : X.PtSimplex n x} {i : Fin n} :
     RelStruct f g i.succ ≃ MulStruct g .const f i where
@@ -650,20 +456,18 @@ namespace MulStruct
 this is the term in `MulStruct .const f f i` corresponding to
 `stdSimplex.σ i.castSucc ≫ f.map`. -/
 @[simps! map]
-/--
-Definition of `oneMul` / `oneMul` 的定义
+/-
+**SSet.PtSimplex.MulStruct.oneMul** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.MulS
+truct`。
+形式化陈述：oneMul (f : X.PtSimplex n x) (i : Fin n) : MulStruct .const f f i
+参数：f : X.PtSimplex n x；i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oneMul
-  signature: (f : X.PtSimplex n x) (i : Fin n)
-  body: relStructCastSuccEquivMulStruct (.refl f i.castSucc)
-
-中文:
-定义 oneMul
-  签名: (f : X.PtSimplex n x) (i : 有限集 n)
-  定义体: relStructCastSuccEquivMulStruct (.refl f i.castSucc)
-
-Depends on / 依赖: castSucc, i.castSucc, relStructCastSuccEquivMulStruct
+--- 原说明 ---
+Given `f : X.PtSimplex n x` and `i : Fin n` (note that this implies `n ≠ 0`),
+this is the term in `MulStruct .const f f i` corresponding to
+`stdSimplex.σ i.castSucc ≫ f.map`.
 -/
 def oneMul (f : X.PtSimplex n x) (i : Fin n) :
     MulStruct .const f f i :=
@@ -673,20 +477,18 @@ def oneMul (f : X.PtSimplex n x) (i : Fin n) :
 this is the term in `MulStruct f .const f i` corresponding to
 `stdSimplex.σ i.succ ≫ f.map`. -/
 @[simps! map]
-/--
-Definition of `mulOne` / `mulOne` 的定义
+/-
+**SSet.PtSimplex.MulStruct.mulOne** 是 Mathlib 中的一个定义，位于命名空间 `SSet.PtSimplex.MulS
+truct`。
+形式化陈述：mulOne (f : X.PtSimplex n x) (i : Fin n) : MulStruct f .const f i
+参数：f : X.PtSimplex n x；i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulOne
-  signature: (f : X.PtSimplex n x) (i : Fin n)
-  body: relStructSuccEquivMulStruct (.refl f i.succ)
-
-中文:
-定义 mulOne
-  签名: (f : X.PtSimplex n x) (i : 有限集 n)
-  定义体: relStructSuccEquivMulStruct (.refl f i.succ)
-
-Depends on / 依赖: i.succ, relStructSuccEquivMulStruct
+--- 原说明 ---
+Given `f : X.PtSimplex n x` and `i : Fin n` (note that this implies `n ≠ 0`),
+this is the term in `MulStruct f .const f i` corresponding to
+`stdSimplex.σ i.succ ≫ f.map`.
 -/
 def mulOne (f : X.PtSimplex n x) (i : Fin n) :
     MulStruct f .const f i :=
@@ -697,3 +499,4 @@ end MulStruct
 end PtSimplex
 
 end SSet
+

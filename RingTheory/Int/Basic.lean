@@ -34,58 +34,80 @@ public section
 namespace Int
 
 
-/--
-theorem `isCoprime_iff_nat_coprime` / 定理 `isCoprime_iff_nat_coprime`
-
-English:
-theorem isCoprime_iff_nat_coprime
-  given: {a b : Int}
-  statement: IsCoprime a b ↔ Nat.Coprime a.natAbs b.natAbs
-  proof: by
-  rw [isCoprime_iff_gcd_eq_one]; rw [Nat.coprime_iff_gcd_eq_one]; rw [gcd_eq_natAbs]
-
-中文:
-定理 isCoprime_iff_nat_coprime
-  条件: {a b : 整数}
-  结论: IsCoprime a b ↔ 自然数.Coprime a.natAbs b.natAbs
-  证明: by
-  rw [isCoprime_iff_gcd_eq_one]; rw [Nat.coprime_iff_gcd_eq_one]; rw [gcd_eq_natAbs]
-
-Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, coprime_iff_gcd_eq_one, gcd_eq_natAbs, isCoprime_iff_gcd_eq_one
+/-
+**Int.isCoprime_iff_nat_coprime** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isCoprime_iff_nat_coprime {a b : Int} : IsCoprime a b ↔ Nat.Coprime a.natA
+bs b.natAbs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.isCoprime_iff_gcd_eq_one`：Int.isCoprime_iff_gcd_eq_one {m n : Int} :
+ IsCoprime m n ↔ Int.gcd m n = 1
+· 使用定理 `Nat.coprime_iff_gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n ↔ m.gcd n = 1
+· 使用定理 `Int.gcd_eq_natAbs`：gcd_eq_natAbs {a b : Int} : Int.gcd a b = Nat.gcd a.n
+atAbs b.natAbs
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isCoprime_iff_nat_coprime {a b : Int} : IsCoprime a b ↔ Nat.Coprime a.natAbs b.natAbs := by
-  rw [isCoprime_iff_gcd_eq_one]; rw [Nat.coprime_iff_gcd_eq_one]; rw [gcd_eq_natAbs]
+theorem isCoprime_iff_nat_coprime {a b : ℤ} : IsCoprime a b ↔ Nat.Coprime a.natAbs b.natAbs := by
+  rw [isCoprime_iff_gcd_eq_one, Nat.coprime_iff_gcd_eq_one, gcd_eq_natAbs]
 
-/--
-theorem `gcd_ne_one_iff_gcd_mul_right_ne_one` / 定理 `gcd_ne_one_iff_gcd_mul_right_ne_one`
+/-- If `gcd a (m * n) ≠ 1`, then `gcd a m ≠ 1` or `gcd a n ≠ 1`. -/
+/-
+**Int.gcd_ne_one_iff_gcd_mul_right_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gcd_ne_one_iff_gcd_mul_right_ne_one {a : Int} {m n : Nat} : a.gcd (m * n) 
+!= 1 ↔ a.gcd m != 1 ∨ a.gcd n != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem gcd_ne_one_iff_gcd_mul_right_ne_one
-  given: {a : Int} {m n : Nat}
-  proof: by
-  simp only [← isCoprime_iff_gcd_eq_one, ← not_and_or, not_iff_not, IsCoprime.mul_right_iff]
-
-中文:
-定理 gcd_ne_one_iff_gcd_mul_right_ne_one
-  条件: {a : 整数} {m n : 自然数}
-  证明: by
-  simp only [← isCoprime_iff_gcd_eq_one, ← not_and_or, not_iff_not, IsCoprime.mul_right_iff]
-
-Depends on / 依赖: IsCoprime, IsCoprime.mul_right_iff, isCoprime_iff_gcd_eq_one, mul_right_iff, not_and_or, not_iff_not
+--- 原说明 ---
+If `gcd a (m * n) ≠ 1`, then `gcd a m ≠ 1` or `gcd a n ≠ 1`.
 -/
-theorem gcd_ne_one_iff_gcd_mul_right_ne_one {a : Int} {m n : Nat} :
-    a.gcd (m * n) != 1 ↔ a.gcd m != 1 ∨ a.gcd n != 1 := by
+theorem gcd_ne_one_iff_gcd_mul_right_ne_one {a : ℤ} {m n : ℕ} :
+    a.gcd (m * n) ≠ 1 ↔ a.gcd m ≠ 1 ∨ a.gcd n ≠ 1 := by
   simp only [← isCoprime_iff_gcd_eq_one, ← not_and_or, not_iff_not, IsCoprime.mul_right_iff]
-
-/--
-theorem `sq_of_gcd_eq_one` / 定理 `sq_of_gcd_eq_one`
-
-English:
-theorem sq_of_gcd_eq_one
-  given: {a b c : Int} (h : Int.gcd a b = 1) (heq : a * b = c ^ 2)
-  proof: by
+/-
+**Int.sq_of_gcd_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sq_of_gcd_eq_one {a b c : Int} (h : Int.gcd a b = 1) (heq : a * b = c ^ 2)
+ : exists a0 : Int, a = a0 ^ 2 ∨ a = -a0 ^ 2
+参数：h : Int.gcd a b = 1；heq : a * b = c ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.coe_gcd`：coe_gcd (i j : Int) : ↑(Int.gcd i j) = GCDMonoid.gcd i j
+· 使用定理 `Int.ofNat_one`：↑1 = 1
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
+· 使用定理 `exists_associated_pow_of_mul_eq_pow`：exists_associated_pow_of_mul_eq_pow
+ [GCDMonoid α] {a b c : α} (hab : IsUnit (gcd a b)) {k : Nat} (h : a * b = c ^ k
+) : exists d : α, Associa…
+· 使用引理 `Int.units_eq_one_or`：units_eq_one_or (u : Intˣ) : u = 1 ∨ u = -1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+-/
+theorem sq_of_gcd_eq_one {a b c : ℤ} (h : Int.gcd a b = 1) (heq : a * b = c ^ 2) :
+    ∃ a0 : ℤ, a = a0 ^ 2 ∨ a = -a0 ^ 2 := by
   have h' : IsUnit (GCDMonoid.gcd a b) := by
-    rw [← coe_gcd]; rw [h]; rw [Int.ofNat_one]
+    rw [← coe_gcd, h, Int.ofNat_one]
     exact isUnit_one
   obtain ⟨d, ⟨u, hu⟩⟩ := exists_associated_pow_of_mul_eq_pow h' heq
   use d
@@ -93,80 +115,45 @@ theorem sq_of_gcd_eq_one
   rcases Int.units_eq_one_or u with hu' | hu' <;>
     · rw [hu']
       simp
-
-中文:
-定理 sq_of_gcd_eq_one
-  条件: {a b c : 整数} (h : 整数.最大公约数 a b = 1) (heq : a * b = c ^ 2)
-  证明: by
-  have h' : IsUnit (GCDMonoid.gcd a b) := by
-    rw [← coe_gcd]; rw [h]; rw [Int.ofNat_one]
-    exact isUnit_one
-  obtain ⟨d, ⟨u, hu⟩⟩ := exists_associated_pow_of_mul_eq_pow h' heq
-  use d
-  rw [← hu]
-  rcases Int.units_eq_one_or u with hu' | hu' <;>
-    · rw [hu']
-      simp
-
-Depends on / 依赖: GCDMonoid, GCDMonoid.gcd, Int.ofNat_one, Int.units_eq_one_or, IsUnit, coe_gcd, exists_associated_pow_of_mul_eq_pow, isUnit_one, ofNat_one, units_eq_one_or
+/-
+**Int.sq_of_isCoprime** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sq_of_isCoprime {a b c : Int} (h : IsCoprime a b) (heq : a * b = c ^ 2) : 
+exists a0 : Int, a = a0 ^ 2 ∨ a = -a0 ^ 2
+参数：h : IsCoprime a b；heq : a * b = c ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.sq_of_gcd_eq_one`：sq_of_gcd_eq_one {a b c : Int} (h : Int.gcd a b = 
+1) (heq : a * b = c ^ 2) : exists a0 : Int, a = a0 ^ 2 ∨ a = -a0 ^ 2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.isCoprime_iff_gcd_eq_one`：Int.isCoprime_iff_gcd_eq_one {m n : Int} :
+ IsCoprime m n ↔ Int.gcd m n = 1
 -/
-theorem sq_of_gcd_eq_one {a b c : Int} (h : Int.gcd a b = 1) (heq : a * b = c ^ 2) :
-    exists a0 : Int, a = a0 ^ 2 ∨ a = -a0 ^ 2 := by
-  have h' : IsUnit (GCDMonoid.gcd a b) := by
-    rw [← coe_gcd]; rw [h]; rw [Int.ofNat_one]
-    exact isUnit_one
-  obtain ⟨d, ⟨u, hu⟩⟩ := exists_associated_pow_of_mul_eq_pow h' heq
-  use d
-  rw [← hu]
-  rcases Int.units_eq_one_or u with hu' | hu' <;>
-    · rw [hu']
-      simp
-
-/--
-theorem `sq_of_isCoprime` / 定理 `sq_of_isCoprime`
-
-English:
-theorem sq_of_isCoprime
-  given: {a b c : Int} (h : IsCoprime a b) (heq : a * b = c ^ 2)
-  proof: sq_of_gcd_eq_one (isCoprime_iff_gcd_eq_one.mp h) heq
-
-中文:
-定理 sq_of_isCoprime
-  条件: {a b c : 整数} (h : IsCoprime a b) (heq : a * b = c ^ 2)
-  证明: sq_of_gcd_eq_one (isCoprime_iff_gcd_eq_one.mp h) heq
-
-Depends on / 依赖: isCoprime_iff_gcd_eq_one, isCoprime_iff_gcd_eq_one.mp, sq_of_gcd_eq_one
--/
-theorem sq_of_isCoprime {a b c : Int} (h : IsCoprime a b) (heq : a * b = c ^ 2) :
-    exists a0 : Int, a = a0 ^ 2 ∨ a = -a0 ^ 2 :=
+theorem sq_of_isCoprime {a b c : ℤ} (h : IsCoprime a b) (heq : a * b = c ^ 2) :
+    ∃ a0 : ℤ, a = a0 ^ 2 ∨ a = -a0 ^ 2 :=
   sq_of_gcd_eq_one (isCoprime_iff_gcd_eq_one.mp h) heq
-
-/--
-theorem `natAbs_euclideanDomain_gcd` / 定理 `natAbs_euclideanDomain_gcd`
-
-English:
-theorem natAbs_euclideanDomain_gcd
-  given: (a b : Int)
-  proof: by
-  apply Nat.dvd_antisymm <;> rw [← Int.natCast_dvd_natCast]
-  · rw [Int.natAbs_dvd]
-    exact Int.dvd_coe_gcd (EuclideanDomain.gcd_dvd_left _ _) (EuclideanDomain.gcd_dvd_right _ _)
-  · rw [Int.dvd_natAbs]
-    exact EuclideanDomain.dvd_gcd (Int.gcd_dvd_left ..) (Int.gcd_dvd_right ..)
-
-中文:
-定理 natAbs_euclideanDomain_gcd
-  条件: (a b : 整数)
-  证明: by
-  apply Nat.dvd_antisymm <;> rw [← Int.natCast_dvd_natCast]
-  · rw [Int.natAbs_dvd]
-    exact Int.dvd_coe_gcd (EuclideanDomain.gcd_dvd_left _ _) (EuclideanDomain.gcd_dvd_right _ _)
-  · rw [Int.dvd_natAbs]
-    exact EuclideanDomain.dvd_gcd (Int.gcd_dvd_left ..) (Int.gcd_dvd_right ..)
-
-Depends on / 依赖: EuclideanDomain, EuclideanDomain.dvd_gcd, EuclideanDomain.gcd_dvd_left, EuclideanDomain.gcd_dvd_right, Int.dvd_coe_gcd, Int.dvd_natAbs, Int.gcd_dvd_left, Int.gcd_dvd_right, Int.natAbs_dvd, Int.natCast_dvd_natCast, Nat.dvd_antisymm, dvd_antisymm, dvd_coe_gcd, dvd_gcd, dvd_natAbs, gcd_dvd_left, gcd_dvd_right, natAbs_dvd, natCast_dvd_natCast
+/-
+**Int.natAbs_euclideanDomain_gcd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：natAbs_euclideanDomain_gcd (a b : Int) : Int.natAbs (EuclideanDomain.gcd a
+ b) = Int.gcd a b
+参数：a b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.dvd_antisymm`：∀ {m n : ℕ}, m ∣ n → n ∣ m → m = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `Int.natAbs_dvd`：∀ {a b : ℤ}, ↑a.natAbs ∣ b ↔ a ∣ b
+· 使用定理 `Int.dvd_coe_gcd`：∀ {a b c : ℤ}, c ∣ a → c ∣ b → c ∣ ↑(a.gcd b)
+· 使用定理 `EuclideanDomain.gcd_dvd_left`：gcd_dvd_left (a b : R) : gcd a b ∣ a
+· 使用定理 `EuclideanDomain.gcd_dvd_right`：gcd_dvd_right (a b : R) : gcd a b ∣ b
+· 使用定理 `Int.dvd_natAbs`：∀ {a b : ℤ}, a ∣ ↑b.natAbs ↔ a ∣ b
+· 使用定理 `EuclideanDomain.dvd_gcd`：dvd_gcd {a b c : R} : c ∣ a -> c ∣ b -> c ∣ gcd
+ a b
+· 使用定理 `Int.gcd_dvd_left`：∀ (a b : ℤ), ↑(a.gcd b) ∣ a
+· 使用定理 `Int.gcd_dvd_right`：∀ (a b : ℤ), ↑(a.gcd b) ∣ b
 -/
-theorem natAbs_euclideanDomain_gcd (a b : Int) :
+theorem natAbs_euclideanDomain_gcd (a b : ℤ) :
     Int.natAbs (EuclideanDomain.gcd a b) = Int.gcd a b := by
   apply Nat.dvd_antisymm <;> rw [← Int.natCast_dvd_natCast]
   · rw [Int.natAbs_dvd]
@@ -176,348 +163,284 @@ theorem natAbs_euclideanDomain_gcd (a b : Int) :
 
 end Int
 
-/--
-theorem `Int.Prime.dvd_mul` / 定理 `Int.Prime.dvd_mul`
-
-English:
-theorem Int.Prime.dvd_mul
-  given: {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ m * n)
-  proof: by
-  rwa [← hp.dvd_mul, ← Int.natAbs_mul, ← Int.natCast_dvd]
-
-中文:
-定理 整数.素.dvd_mul
-  条件: {m n : 整数} {p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ m * n)
-  证明: by
-  rwa [← hp.dvd_mul, ← Int.natAbs_mul, ← Int.natCast_dvd]
-
-Depends on / 依赖: Int.natAbs_mul, Int.natCast_dvd, dvd_mul, hp.dvd_mul, natAbs_mul, natCast_dvd
+/-
+**Int.Prime.dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.Prime.dvd_mul {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int) 
+∣ m * n) : p ∣ m.natAbs ∨ p ∣ n.natAbs
+参数：hp : Nat.Prime p；h : (p : Int) ∣ m * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.Prime.dvd_mul`：∀ {p m n : ℕ}, Nat.Prime p → (p ∣ m * n ↔ p ∣ m ∨ p ∣
+ n)
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
+· 使用引理 `Int.natCast_dvd`：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
 -/
-theorem Int.Prime.dvd_mul {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ m * n) :
+theorem Int.Prime.dvd_mul {m n : ℤ} {p : ℕ} (hp : Nat.Prime p) (h : (p : ℤ) ∣ m * n) :
     p ∣ m.natAbs ∨ p ∣ n.natAbs := by
   rwa [← hp.dvd_mul, ← Int.natAbs_mul, ← Int.natCast_dvd]
-
-/--
-theorem `Int.Prime.dvd_mul'` / 定理 `Int.Prime.dvd_mul'`
-
-English:
-theorem Int.Prime.dvd_mul'
-  given: {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ m * n)
-  proof: by
-  rw [Int.natCast_dvd]; rw [Int.natCast_dvd]
-  exact Int.Prime.dvd_mul hp h
-
-中文:
-定理 整数.素.dvd_mul'
-  条件: {m n : 整数} {p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ m * n)
-  证明: by
-  rw [Int.natCast_dvd]; rw [Int.natCast_dvd]
-  exact Int.Prime.dvd_mul hp h
-
-Depends on / 依赖: Int.Prime.dvd_mul, Int.natCast_dvd, dvd_mul, natCast_dvd
+/-
+**Int.Prime.dvd_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.Prime.dvd_mul' {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int)
+ ∣ m * n) : (p : Int) ∣ m ∨ (p : Int) ∣ n
+参数：hp : Nat.Prime p；h : (p : Int) ∣ m * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.natCast_dvd`：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
+· 使用定理 `Int.Prime.dvd_mul`：Int.Prime.dvd_mul {m n : Int} {p : Nat} (hp : Nat.Pri
+me p) (h : (p : Int) ∣ m * n) : p ∣ m.natAbs ∨ p ∣ n.natAbs
 -/
-theorem Int.Prime.dvd_mul' {m n : Int} {p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ m * n) :
-    (p : Int) ∣ m ∨ (p : Int) ∣ n := by
-  rw [Int.natCast_dvd]; rw [Int.natCast_dvd]
+theorem Int.Prime.dvd_mul' {m n : ℤ} {p : ℕ} (hp : Nat.Prime p) (h : (p : ℤ) ∣ m * n) :
+    (p : ℤ) ∣ m ∨ (p : ℤ) ∣ n := by
+  rw [Int.natCast_dvd, Int.natCast_dvd]
   exact Int.Prime.dvd_mul hp h
-
-/--
-theorem `Int.Prime.dvd_pow` / 定理 `Int.Prime.dvd_pow`
-
-English:
-theorem Int.Prime.dvd_pow
-  given: {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ n ^ k)
-  proof: by
-  rw [Int.natCast_dvd]; rw [Int.natAbs_pow] at h
-  exact hp.dvd_of_dvd_pow h
-
-中文:
-定理 整数.素.dvd_pow
-  条件: {n : 整数} {k p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ n ^ k)
-  证明: by
-  rw [Int.natCast_dvd]; rw [Int.natAbs_pow] at h
-  exact hp.dvd_of_dvd_pow h
-
-Depends on / 依赖: Int.natAbs_pow, Int.natCast_dvd, dvd_of_dvd_pow, hp.dvd_of_dvd_pow, natAbs_pow, natCast_dvd
+/-
+**Int.Prime.dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.Prime.dvd_pow {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int) 
+∣ n ^ k) : p ∣ n.natAbs
+参数：hp : Nat.Prime p；h : (p : Int) ∣ n ^ k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.dvd_of_dvd_pow`：∀ {p m n : ℕ}, Nat.Prime p → p ∣ m ^ n → p ∣ m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natAbs_pow`：∀ (n : ℤ) (k : ℕ), (n ^ k).natAbs = n.natAbs ^ k
+· 使用引理 `Int.natCast_dvd`：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
 -/
-theorem Int.Prime.dvd_pow {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ n ^ k) :
+theorem Int.Prime.dvd_pow {n : ℤ} {k p : ℕ} (hp : Nat.Prime p) (h : (p : ℤ) ∣ n ^ k) :
     p ∣ n.natAbs := by
-  rw [Int.natCast_dvd]; rw [Int.natAbs_pow] at h
+  rw [Int.natCast_dvd, Int.natAbs_pow] at h
   exact hp.dvd_of_dvd_pow h
-
-/--
-theorem `Int.Prime.dvd_pow'` / 定理 `Int.Prime.dvd_pow'`
-
-English:
-theorem Int.Prime.dvd_pow'
-  given: {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ n ^ k)
-  proof: by
-  rw [Int.natCast_dvd]
-  exact Int.Prime.dvd_pow hp h
-
-中文:
-定理 整数.素.dvd_pow'
-  条件: {n : 整数} {k p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ n ^ k)
-  证明: by
-  rw [Int.natCast_dvd]
-  exact Int.Prime.dvd_pow hp h
-
-Depends on / 依赖: Int.Prime.dvd_pow, Int.natCast_dvd, dvd_pow, natCast_dvd
+/-
+**Int.Prime.dvd_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.Prime.dvd_pow' {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int)
+ ∣ n ^ k) : (p : Int) ∣ n
+参数：hp : Nat.Prime p；h : (p : Int) ∣ n ^ k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.natCast_dvd`：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
+· 使用定理 `Int.Prime.dvd_pow`：Int.Prime.dvd_pow {n : Int} {k p : Nat} (hp : Nat.Pri
+me p) (h : (p : Int) ∣ n ^ k) : p ∣ n.natAbs
 -/
-theorem Int.Prime.dvd_pow' {n : Int} {k p : Nat} (hp : Nat.Prime p) (h : (p : Int) ∣ n ^ k) :
-    (p : Int) ∣ n := by
+theorem Int.Prime.dvd_pow' {n : ℤ} {k p : ℕ} (hp : Nat.Prime p) (h : (p : ℤ) ∣ n ^ k) :
+    (p : ℤ) ∣ n := by
   rw [Int.natCast_dvd]
   exact Int.Prime.dvd_pow hp h
-
-/--
-theorem `prime_two_or_dvd_of_dvd_two_mul_pow_self_two` / 定理 `prime_two_or_dvd_of_dvd_two_mul_pow_self_two`
-
-English:
-theorem prime_two_or_dvd_of_dvd_two_mul_pow_self_two
-  statement: {m : Int} {p : Nat} (hp : Nat.Prime p)
-  proof: by
-  rcases Int.Prime.dvd_mul hp h with hp2 | hpp
-  · apply Or.intro_left
-    exact le_antisymm (Nat.le_of_dvd zero_lt_two hp2) (Nat.Prime.two_le hp)
-  · apply Or.intro_right
-    rw [sq]; rw [Int.natAbs_mul] at hpp
-    exact or_self_iff.mp ((Nat.Prime.dvd_mul hp).mp hpp)
-
-中文:
-定理 prime_two_or_dvd_of_dvd_two_mul_pow_self_two
-  结论: {m : 整数} {p : 自然数} (hp : 自然数.素 p)
-  证明: by
-  rcases Int.Prime.dvd_mul hp h with hp2 | hpp
-  · apply Or.intro_left
-    exact le_antisymm (Nat.le_of_dvd zero_lt_two hp2) (Nat.Prime.two_le hp)
-  · apply Or.intro_right
-    rw [sq]; rw [Int.natAbs_mul] at hpp
-    exact or_self_iff.mp ((Nat.Prime.dvd_mul hp).mp hpp)
-
-Depends on / 依赖: Int.Prime.dvd_mul, Int.natAbs_mul, Nat.Prime.dvd_mul, Nat.Prime.two_le, Nat.le_of_dvd, Or.intro_left, Or.intro_right, dvd_mul, intro_left, intro_right, le_antisymm, le_of_dvd, natAbs_mul, or_self_iff, or_self_iff.mp, two_le, zero_lt_two
+/-
+**prime_two_or_dvd_of_dvd_two_mul_pow_self_two** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：prime_two_or_dvd_of_dvd_two_mul_pow_self_two {m : Int} {p : Nat} (hp : Nat
+.Prime p) (h : (p : Int) ∣ 2 * m ^ 2) : p = 2 ∨ p ∣ Int.natAbs m
+参数：hp : Nat.Prime p；h : (p : Int) ∣ 2 * m ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.Prime.dvd_mul`：Int.Prime.dvd_mul {m n : Int} {p : Nat} (hp : Nat.Pri
+me p) (h : (p : Int) ∣ m * n) : p ∣ m.natAbs ∨ p ∣ n.natAbs
+· 使用定理 `Or.intro_left`：∀ {a : Prop} (b : Prop), a → a ∨ b
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.Prime.two_le`：∀ {p : ℕ}, Nat.Prime p → 2 ≤ p
+· 使用定理 `Or.intro_right`：∀ {b : Prop} (a : Prop), b → a ∨ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_self_iff`：∀ {a : Prop}, a ∨ a ↔ a
+· 使用定理 `Nat.Prime.dvd_mul`：∀ {p m n : ℕ}, Nat.Prime p → (p ∣ m * n ↔ p ∣ m ∨ p ∣
+ n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
 -/
-theorem prime_two_or_dvd_of_dvd_two_mul_pow_self_two {m : Int} {p : Nat} (hp : Nat.Prime p)
-    (h : (p : Int) ∣ 2 * m ^ 2) : p = 2 ∨ p ∣ Int.natAbs m := by
+theorem prime_two_or_dvd_of_dvd_two_mul_pow_self_two {m : ℤ} {p : ℕ} (hp : Nat.Prime p)
+    (h : (p : ℤ) ∣ 2 * m ^ 2) : p = 2 ∨ p ∣ Int.natAbs m := by
   rcases Int.Prime.dvd_mul hp h with hp2 | hpp
   · apply Or.intro_left
     exact le_antisymm (Nat.le_of_dvd zero_lt_two hp2) (Nat.Prime.two_le hp)
   · apply Or.intro_right
-    rw [sq]; rw [Int.natAbs_mul] at hpp
+    rw [sq, Int.natAbs_mul] at hpp
     exact or_self_iff.mp ((Nat.Prime.dvd_mul hp).mp hpp)
 
 namespace Int
 
-/--
-theorem `exists_prime_and_dvd` / 定理 `exists_prime_and_dvd`
-
-English:
-theorem exists_prime_and_dvd
-  given: {n : Int} (hn : n.natAbs != 1)
-  statement: exists p, Prime p ∧ p ∣ n
-  proof: by
-  obtain ⟨p, pp, pd⟩ := Nat.exists_prime_and_dvd hn
-  exact ⟨p, Nat.prime_iff_prime_int.mp pp, Int.natCast_dvd.mpr pd⟩
-
-中文:
-定理 存在_prime_and_dvd
-  条件: {n : 整数} (hn : n.natAbs != 1)
-  结论: 存在 p, 素 p ∧ p ∣ n
-  证明: by
-  obtain ⟨p, pp, pd⟩ := Nat.exists_prime_and_dvd hn
-  exact ⟨p, Nat.prime_iff_prime_int.mp pp, Int.natCast_dvd.mpr pd⟩
-
-Depends on / 依赖: Int.natCast_dvd.mpr, Nat.exists_prime_and_dvd, Nat.prime_iff_prime_int.mp, exists_prime_and_dvd, natCast_dvd, prime_iff_prime_int
+/-
+**Int.exists_prime_and_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：exists_prime_and_dvd {n : Int} (hn : n.natAbs != 1) : exists p, Prime p ∧ 
+p ∣ n
+参数：hn : n.natAbs != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_prime_and_dvd`：exists_prime_and_dvd {n : Nat} (hn : n != 1) :
+ exists p, Prime p ∧ p ∣ n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Int.natCast_dvd`：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
 -/
-theorem exists_prime_and_dvd {n : Int} (hn : n.natAbs != 1) : exists p, Prime p ∧ p ∣ n := by
+theorem exists_prime_and_dvd {n : ℤ} (hn : n.natAbs ≠ 1) : ∃ p, Prime p ∧ p ∣ n := by
   obtain ⟨p, pp, pd⟩ := Nat.exists_prime_and_dvd hn
   exact ⟨p, Nat.prime_iff_prime_int.mp pp, Int.natCast_dvd.mpr pd⟩
-
-/--
-theorem `prime_iff_natAbs_prime` / 定理 `prime_iff_natAbs_prime`
-
-English:
-theorem prime_iff_natAbs_prime
-  given: {k : Int}
-  statement: Prime k ↔ Nat.Prime k.natAbs
-  proof: (Int.associated_natAbs k).prime_iff.trans Nat.prime_iff_prime_int.symm
-
-中文:
-定理 prime_iff_natAbs_prime
-  条件: {k : 整数}
-  结论: 素 k ↔ 自然数.素 k.natAbs
-  证明: (Int.associated_natAbs k).prime_iff.trans Nat.prime_iff_prime_int.symm
-
-Depends on / 依赖: Int.associated_natAbs, Nat.prime_iff_prime_int.symm, associated_natAbs, prime_iff, prime_iff.trans, prime_iff_prime_int
+/-
+**Int.prime_iff_natAbs_prime** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：prime_iff_natAbs_prime {k : Int} : Prime k ↔ Nat.Prime k.natAbs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Associated.prime_iff`：Associated.prime_iff [CommMonoidWithZero M] {p q :
+ M} (h : p ~ᵤ q) : Prime p ↔ Prime q
+· 使用定理 `Int.associated_natAbs`：Int.associated_natAbs (k : Int) : Associated k k.
+natAbs
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
 -/
-theorem prime_iff_natAbs_prime {k : Int} : Prime k ↔ Nat.Prime k.natAbs :=
+theorem prime_iff_natAbs_prime {k : ℤ} : Prime k ↔ Nat.Prime k.natAbs :=
   (Int.associated_natAbs k).prime_iff.trans Nat.prime_iff_prime_int.symm
-
-/--
-Instance `instDecidablePredPrime` / 实例 `instDecidablePredPrime`
-
-English:
-instance instDecidablePredPrime
-  signature: : DecidablePred (Prime : Int -> Prop)
-  body: fun m =>
-  decidable_of_iff (Nat.Prime m.natAbs) prime_iff_natAbs_prime.symm
-
-中文:
-实例 instDecidablePredPrime
-  签名: : DecidablePred (素 : 整数 -> 命题)
-  定义体: fun m =>
-  decidable_of_iff (Nat.Prime m.natAbs) prime_iff_natAbs_prime.symm
+/-
+**Int.instDecidablePredPrime** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instDecidablePredPrime : DecidablePred (Prime : Int -> Prop)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instDecidablePredPrime : DecidablePred (Prime : Int -> Prop) := fun m =>
+instance instDecidablePredPrime : DecidablePred (Prime : ℤ → Prop) := fun m ↦
   decidable_of_iff (Nat.Prime m.natAbs) prime_iff_natAbs_prime.symm
-
-instance (priority := 100) : DecidablePred (Irreducible : Int -> Prop) := fun m =>
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) : DecidablePred (Irreducible : ℤ → Prop) := fun m ↦
   decidable_of_iff (Prime m) irreducible_iff_prime.symm
-
-/--
-theorem `span_natAbs` / 定理 `span_natAbs`
-
-English:
-theorem span_natAbs
-  given: (a : Int)
-  statement: Ideal.span ({(a.natAbs : Int)} : Set Int) = Ideal.span {a}
-  proof: by
+/-
+**Int.span_natAbs** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：span_natAbs (a : Int) : Ideal.span ({(a.natAbs : Int)} : Set Int) = Ideal.
+span {a}
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.span_singleton_eq_span_singleton`：span_singleton_eq_span_singleton
+ {α : Type u} [CommSemiring α] [IsDomain α] {x y : α} : span ({x} : Set α) = spa
+n ({y} : Set α) ↔ Associated…
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Int.associated_natAbs`：Int.associated_natAbs (k : Int) : Associated k k.
+natAbs
+-/
+theorem span_natAbs (a : ℤ) : Ideal.span ({(a.natAbs : ℤ)} : Set ℤ) = Ideal.span {a} := by
   rw [Ideal.span_singleton_eq_span_singleton]
   exact (associated_natAbs _).symm
 
 @[simp]
-
-中文:
-定理 span_natAbs
-  条件: (a : 整数)
-  结论: 理想.span ({(a.natAbs : 整数)} : 集合 整数) = 理想.span {a}
-  证明: by
-  rw [Ideal.span_singleton_eq_span_singleton]
-  exact (associated_natAbs _).symm
-
-@[simp]
-
-Depends on / 依赖: Ideal.span_singleton_eq_span_singleton, associated_natAbs, span_singleton_eq_span_singleton
+/-
+**Int.isCoprime_two_left** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isCoprime_two_left {m : Int} : IsCoprime 2 m ↔ Odd m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem span_natAbs (a : Int) : Ideal.span ({(a.natAbs : Int)} : Set Int) = Ideal.span {a} := by
-  rw [Ideal.span_singleton_eq_span_singleton]
-  exact (associated_natAbs _).symm
-
-@[simp]
-/--
-theorem `isCoprime_two_left` / 定理 `isCoprime_two_left`
-
-English:
-theorem isCoprime_two_left
-  given: {m : Int}
-  statement: IsCoprime 2 m ↔ Odd m
-  proof: by
+theorem isCoprime_two_left {m : ℤ} : IsCoprime 2 m ↔ Odd m := by
   simp [isCoprime_iff_nat_coprime]
 
 @[simp]
-
-中文:
-定理 isCoprime_two_left
-  条件: {m : 整数}
-  结论: IsCoprime 2 m ↔ Odd m
-  证明: by
-  simp [isCoprime_iff_nat_coprime]
-
-@[simp]
-
-Depends on / 依赖: isCoprime_iff_nat_coprime
+/-
+**Int.isCoprime_two_right** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isCoprime_two_right {m : Int} : IsCoprime m 2 ↔ Odd m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isCoprime_two_left {m : Int} : IsCoprime 2 m ↔ Odd m := by
+theorem isCoprime_two_right {m : ℤ} : IsCoprime m 2 ↔ Odd m := by
   simp [isCoprime_iff_nat_coprime]
-
-@[simp]
-/--
-theorem `isCoprime_two_right` / 定理 `isCoprime_two_right`
-
-English:
-theorem isCoprime_two_right
-  given: {m : Int}
-  statement: IsCoprime m 2 ↔ Odd m
-  proof: by
-  simp [isCoprime_iff_nat_coprime]
-
-中文:
-定理 isCoprime_two_right
-  条件: {m : 整数}
-  结论: IsCoprime m 2 ↔ Odd m
-  证明: by
-  simp [isCoprime_iff_nat_coprime]
-
-Depends on / 依赖: isCoprime_iff_nat_coprime
+/-
+**Int.eq_pow_of_mul_eq_pow_odd_left** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：eq_pow_of_mul_eq_pow_odd_left {a b c : Int} (hab : IsCoprime a b) {k : Nat
+} (hk : Odd k) (h : a * b = c ^ k) : exists d, a = d ^ k
+参数：hab : IsCoprime a b；hk : Odd k；h : a * b = c ^ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_associated_pow_of_mul_eq_pow'`：exists_associated_pow_of_mul_eq_po
+w' {a b c : R} (hab : IsCoprime a b) {k : Nat} (h : a * b = c ^ k) : exists d : 
+R, Associated (d ^ k) a
+· 使用定理 `IsBezout.of_isPrincipalIdealRing`：∀ (R : Type u) [inst : Semiring R] [Is
+PrincipalIdealRing R], IsBezout R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Odd.neg_pow`：Odd.neg_pow : Odd n -> forall a : α, (-a) ^ n = -a ^ n
+· 使用定理 `Int.natAbs_eq_natAbs_iff`：∀ {a b : ℤ}, a.natAbs = b.natAbs ↔ a = b ∨ a =
+ -b
+· 使用定理 `Int.associated_iff_natAbs`：Int.associated_iff_natAbs {a b : Int} : Assoc
+iated a b ↔ a.natAbs = b.natAbs
 -/
-theorem isCoprime_two_right {m : Int} : IsCoprime m 2 ↔ Odd m := by
-  simp [isCoprime_iff_nat_coprime]
-
-/--
-theorem `eq_pow_of_mul_eq_pow_odd_left` / 定理 `eq_pow_of_mul_eq_pow_odd_left`
-
-English:
-theorem eq_pow_of_mul_eq_pow_odd_left
-  statement: {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-  proof: by
+theorem eq_pow_of_mul_eq_pow_odd_left {a b c : ℤ} (hab : IsCoprime a b) {k : ℕ} (hk : Odd k)
+    (h : a * b = c ^ k) : ∃ d, a = d ^ k := by
   obtain ⟨d, hd⟩ := exists_associated_pow_of_mul_eq_pow' hab h
   replace hd := hd.symm
-  rw [associated_iff_natAbs]; rw [natAbs_eq_natAbs_iff]; rw [← hk.neg_pow] at hd
+  rw [associated_iff_natAbs, natAbs_eq_natAbs_iff, ← hk.neg_pow] at hd
   obtain rfl | rfl := hd <;> exact ⟨_, rfl⟩
-
-中文:
-定理 eq_pow_of_mul_eq_pow_odd_left
-  结论: {a b c : 整数} (hab : IsCoprime a b) {k : 自然数} (hk : Odd k)
-  证明: by
-  obtain ⟨d, hd⟩ := exists_associated_pow_of_mul_eq_pow' hab h
-  replace hd := hd.symm
-  rw [associated_iff_natAbs]; rw [natAbs_eq_natAbs_iff]; rw [← hk.neg_pow] at hd
-  obtain rfl | rfl := hd <;> exact ⟨_, rfl⟩
-
-Depends on / 依赖: associated_iff_natAbs, exists_associated_pow_of_mul_eq_pow, hd.symm, hk.neg_pow, natAbs_eq_natAbs_iff, neg_pow, replace
+/-
+**Int.eq_pow_of_mul_eq_pow_odd_right** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：eq_pow_of_mul_eq_pow_odd_right {a b c : Int} (hab : IsCoprime a b) {k : Na
+t} (hk : Odd k) (h : a * b = c ^ k) : exists d, b = d ^ k
+参数：hab : IsCoprime a b；hk : Odd k；h : a * b = c ^ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_pow_of_mul_eq_pow_odd_left`：eq_pow_of_mul_eq_pow_odd_left {a b c 
+: Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k) (h : a * b = c ^ k) : exists
+ d, a = d ^ k
+· 使用定理 `IsCoprime.symm`：IsCoprime.symm (H : IsCoprime x y) : IsCoprime y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem eq_pow_of_mul_eq_pow_odd_left {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-    (h : a * b = c ^ k) : exists d, a = d ^ k := by
-  obtain ⟨d, hd⟩ := exists_associated_pow_of_mul_eq_pow' hab h
-  replace hd := hd.symm
-  rw [associated_iff_natAbs]; rw [natAbs_eq_natAbs_iff]; rw [← hk.neg_pow] at hd
-  obtain rfl | rfl := hd <;> exact ⟨_, rfl⟩
-
-/--
-theorem `eq_pow_of_mul_eq_pow_odd_right` / 定理 `eq_pow_of_mul_eq_pow_odd_right`
-
-English:
-theorem eq_pow_of_mul_eq_pow_odd_right
-  statement: {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-  proof: eq_pow_of_mul_eq_pow_odd_left (c := c) hab.symm hk (by rwa [mul_comm] at h)
-
-中文:
-定理 eq_pow_of_mul_eq_pow_odd_right
-  结论: {a b c : 整数} (hab : IsCoprime a b) {k : 自然数} (hk : Odd k)
-  证明: eq_pow_of_mul_eq_pow_odd_left (c := c) hab.symm hk (by rwa [mul_comm] at h)
-
-Depends on / 依赖: eq_pow_of_mul_eq_pow_odd_left, hab.symm, mul_comm
--/
-theorem eq_pow_of_mul_eq_pow_odd_right {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-    (h : a * b = c ^ k) : exists d, b = d ^ k :=
+theorem eq_pow_of_mul_eq_pow_odd_right {a b c : ℤ} (hab : IsCoprime a b) {k : ℕ} (hk : Odd k)
+    (h : a * b = c ^ k) : ∃ d, b = d ^ k :=
   eq_pow_of_mul_eq_pow_odd_left (c := c) hab.symm hk (by rwa [mul_comm] at h)
-
-/--
-theorem `eq_pow_of_mul_eq_pow_odd` / 定理 `eq_pow_of_mul_eq_pow_odd`
-
-English:
-theorem eq_pow_of_mul_eq_pow_odd
-  statement: {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-  proof: ⟨eq_pow_of_mul_eq_pow_odd_left hab hk h, eq_pow_of_mul_eq_pow_odd_right hab hk h⟩
-
-中文:
-定理 eq_pow_of_mul_eq_pow_odd
-  结论: {a b c : 整数} (hab : IsCoprime a b) {k : 自然数} (hk : Odd k)
-  证明: ⟨eq_pow_of_mul_eq_pow_odd_left hab hk h, eq_pow_of_mul_eq_pow_odd_right hab hk h⟩
-
-Depends on / 依赖: Subtype, TopologicalSpace, eq_pow_of_mul_eq_pow_odd_left, eq_pow_of_mul_eq_pow_odd_right
+/-
+**Int.eq_pow_of_mul_eq_pow_odd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：eq_pow_of_mul_eq_pow_odd {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk
+ : Odd k) (h : a * b = c ^ k) : (exists d, a = d ^ k) ∧ exists e, b = e ^ k
+参数：hab : IsCoprime a b；hk : Odd k；h : a * b = c ^ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_pow_of_mul_eq_pow_odd_left`：eq_pow_of_mul_eq_pow_odd_left {a b c 
+: Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k) (h : a * b = c ^ k) : exists
+ d, a = d ^ k
+· 使用定理 `Int.eq_pow_of_mul_eq_pow_odd_right`：eq_pow_of_mul_eq_pow_odd_right {a b 
+c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k) (h : a * b = c ^ k) : exis
+ts d, b = d ^ k
 -/
-theorem eq_pow_of_mul_eq_pow_odd {a b c : Int} (hab : IsCoprime a b) {k : Nat} (hk : Odd k)
-    (h : a * b = c ^ k) : (exists d, a = d ^ k) ∧ exists e, b = e ^ k :=
+theorem eq_pow_of_mul_eq_pow_odd {a b c : ℤ} (hab : IsCoprime a b) {k : ℕ} (hk : Odd k)
+    (h : a * b = c ^ k) : (∃ d, a = d ^ k) ∧ ∃ e, b = e ^ k :=
   ⟨eq_pow_of_mul_eq_pow_odd_left hab hk h, eq_pow_of_mul_eq_pow_odd_right hab hk h⟩
 
 end Int
+

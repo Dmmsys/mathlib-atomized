@@ -49,40 +49,28 @@ Gödel, beta function
 
 namespace Nat
 
-/--
-lemma `coprime_mul_succ` / 引理 `coprime_mul_succ`
-
-English:
-lemma coprime_mul_succ
-  given: {n m a} (ha : m - n ∣ a)
-  statement: Coprime (n * a + 1) (m * a + 1)
-  proof: Nat.coprime_of_dvd fun p pp hn hm => by
-    have : p ∣ (m - n) * a := by
-      simpa [Nat.succ_sub_succ, ← Nat.mul_sub_right_distrib] using
-        Nat.dvd_sub hm hn
-    have : p ∣ a := by
-      rcases (Nat.Prime.dvd_mul pp).mp this with (hp | hp)
-      · exact Nat.dvd_trans hp ha
-      · exact hp
-    apply pp.ne_one
-    simpa [Nat.add_sub_cancel_left] using Nat.dvd_sub hn (this.mul_left n)
-
-中文:
-引理 coprime_mul_succ
-  条件: {n m a} (ha : m - n ∣ a)
-  结论: Coprime (n * a + 1) (m * a + 1)
-  证明: Nat.coprime_of_dvd fun p pp hn hm => by
-    have : p ∣ (m - n) * a := by
-      simpa [Nat.succ_sub_succ, ← Nat.mul_sub_right_distrib] using
-        Nat.dvd_sub hm hn
-    have : p ∣ a := by
-      rcases (Nat.Prime.dvd_mul pp).mp this with (hp | hp)
-      · exact Nat.dvd_trans hp ha
-      · exact hp
-    apply pp.ne_one
-    simpa [Nat.add_sub_cancel_left] using Nat.dvd_sub hn (this.mul_left n)
-
-Depends on / 依赖: Nat.Prime.dvd_mul, Nat.add_sub_cancel_left, Nat.coprime_of_dvd, Nat.dvd_sub, Nat.dvd_trans, Nat.mul_sub_right_distrib, Nat.succ_sub_succ, add_sub_cancel_left, coprime_of_dvd, dvd_mul, dvd_sub, dvd_trans, mul_left, mul_sub_right_distrib, ne_one, pp.ne_one, succ_sub_succ, this.mul_left
+/-
+**Nat.coprime_mul_succ** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：coprime_mul_succ {n m a} (ha : m - n ∣ a) : Coprime (n * a + 1) (m * a + 1
+)
+参数：ha : m - n ∣ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.coprime_of_dvd`：coprime_of_dvd {m n : Nat} (H : forall k, Prime k ->
+ k ∣ m -> ¬k ∣ n) : Coprime m n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.succ_sub_succ`：∀ (n m : ℕ), n.succ - m.succ = n - m
+· 使用定理 `Nat.dvd_sub`：∀ {k m n : ℕ}, k ∣ m → k ∣ n → k ∣ m - n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.Prime.dvd_mul`：∀ {p m n : ℕ}, Nat.Prime p → (p ∣ m * n ↔ p ∣ m ∨ p ∣
+ n)
+· 使用定理 `Nat.dvd_trans`：∀ {a b c : ℕ}, a ∣ b → b ∣ c → a ∣ c
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `Nat.add_sub_cancel_left`：∀ (n m : ℕ), n + m - n = m
+· 使用定理 `Dvd.dvd.mul_left`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b : α}, a
+ ∣ b → ∀ (c : α), a ∣ c * b
 -/
 lemma coprime_mul_succ {n m a} (ha : m - n ∣ a) : Coprime (n * a + 1) (m * a + 1) :=
   Nat.coprime_of_dvd fun p pp hn hm => by
@@ -96,112 +84,56 @@ lemma coprime_mul_succ {n m a} (ha : m - n ∣ a) : Coprime (n * a + 1) (m * a +
     apply pp.ne_one
     simpa [Nat.add_sub_cancel_left] using Nat.dvd_sub hn (this.mul_left n)
 
-variable {m : Nat}
+variable {m : ℕ}
 
 set_option backward.privateInPublic true in
-/--
-Definition of `supOfSeq` / `supOfSeq` 的定义
-
-English:
-definition supOfSeq
-  signature: (a : Fin m -> Nat)
-  body: max m (Finset.sup .univ a) + 1
-
-中文:
-定义 supOfSeq
-  签名: (a : 有限集 m -> 自然数)
-  定义体: max m (Finset.sup .univ a) + 1
+/-
+**Nat.supOfSeq** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def supOfSeq (a : Fin m -> Nat) : Nat := max m (Finset.sup .univ a) + 1
+private def supOfSeq (a : Fin m → ℕ) : ℕ := max m (Finset.sup .univ a) + 1
 
 set_option backward.privateInPublic true in
-/--
-Definition of `coprimes` / `coprimes` 的定义
-
-English:
-definition coprimes
-  signature: (a : Fin m -> Nat)
-  body: fun i => (i + 1) * (supOfSeq a)! + 1
-
-中文:
-定义 coprimes
-  签名: (a : 有限集 m -> 自然数)
-  定义体: fun i => (i + 1) * (supOfSeq a)! + 1
+/-
+**Nat.coprimes** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def coprimes (a : Fin m -> Nat) : Fin m -> Nat := fun i => (i + 1) * (supOfSeq a)! + 1
+private def coprimes (a : Fin m → ℕ) : Fin m → ℕ := fun i => (i + 1) * (supOfSeq a)! + 1
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-lemma `coprimes_lt` / 引理 `coprimes_lt`
-
-English:
-lemma coprimes_lt
-  given: (a : Fin m -> Nat) (i)
-  statement: a i < coprimes a i
-  proof: by
-  have h₁ : a i < supOfSeq a :=
-    Nat.lt_add_one_iff.mpr (le_max_of_le_right <| Finset.le_sup (by simp))
-  have h₂ : supOfSeq a <= (i + 1) * (supOfSeq a)! + 1 :=
-    le_trans (self_le_factorial _) (le_trans (Nat.le_mul_of_pos_left (supOfSeq a)! (succ_pos i))
-      (le_add_right _ _))
-  simpa only [coprimes] using lt_of_lt_of_le h₁ h₂
-
-中文:
-引理 coprimes_lt
-  条件: (a : 有限集 m -> 自然数) (i)
-  结论: a i < coprimes a i
-  证明: by
-  have h₁ : a i < supOfSeq a :=
-    Nat.lt_add_one_iff.mpr (le_max_of_le_right <| Finset.le_sup (by simp))
-  have h₂ : supOfSeq a <= (i + 1) * (supOfSeq a)! + 1 :=
-    le_trans (self_le_factorial _) (le_trans (Nat.le_mul_of_pos_left (supOfSeq a)! (succ_pos i))
-      (le_add_right _ _))
-  simpa only [coprimes] using lt_of_lt_of_le h₁ h₂
-
-Depends on / 依赖: Finset, Finset.le_sup, Nat.le_mul_of_pos_left, Nat.lt_add_one_iff.mpr, coprimes, le_add_right, le_max_of_le_right, le_mul_of_pos_left, le_sup, le_trans, lt_add_one_iff, lt_of_lt_of_le, self_le_factorial, succ_pos, supOfSeq
+/-
+**Nat.coprimes_lt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：coprimes_lt (a : Fin m -> Nat) (i) : a i < coprimes a i
+参数：a : Fin m -> Nat；i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.lt_add_one_iff`：∀ {m n : ℕ}, m < n + 1 ↔ m ≤ n
+· 使用定理 `le_max_of_le_right`：le_max_of_le_right : a <= c -> a <= max b c
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.self_le_factorial`：∀ (n : ℕ), n ≤ n.factorial
+· 使用定理 `Nat.le_mul_of_pos_left`：∀ {n : ℕ} (m : ℕ), 0 < n → m ≤ n * m
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
 -/
-lemma coprimes_lt (a : Fin m -> Nat) (i) : a i < coprimes a i := by
+lemma coprimes_lt (a : Fin m → ℕ) (i) : a i < coprimes a i := by
   have h₁ : a i < supOfSeq a :=
     Nat.lt_add_one_iff.mpr (le_max_of_le_right <| Finset.le_sup (by simp))
-  have h₂ : supOfSeq a <= (i + 1) * (supOfSeq a)! + 1 :=
+  have h₂ : supOfSeq a ≤ (i + 1) * (supOfSeq a)! + 1 :=
     le_trans (self_le_factorial _) (le_trans (Nat.le_mul_of_pos_left (supOfSeq a)! (succ_pos i))
       (le_add_right _ _))
   simpa only [coprimes] using lt_of_lt_of_le h₁ h₂
 
 open scoped Function in -- required for scoped `on` notation
-/--
-lemma `pairwise_coprime_coprimes` / 引理 `pairwise_coprime_coprimes`
-
-English:
-lemma pairwise_coprime_coprimes
-  given: (a : Fin m -> Nat)
-  statement: Pairwise (Coprime on coprimes a)
-  proof: by
-  intro i j hij
-  wlog! ltij : i < j
-  · exact (this a hij.symm (lt_of_le_of_ne ltij hij.symm)).symm
-  unfold Function.onFun coprimes
-  have hja : j < supOfSeq a := lt_of_lt_of_le j.prop (le_succ_of_le (le_max_left _ _))
-  exact coprime_mul_succ
-    (Nat.dvd_factorial (by lia)
-      (by simpa only [Nat.succ_sub_succ] using le_of_lt (lt_of_le_of_lt (sub_le j i) hja)))
-
-中文:
-引理 pairwise_coprime_coprimes
-  条件: (a : 有限集 m -> 自然数)
-  结论: 两两 (Coprime on coprimes a)
-  证明: by
-  intro i j hij
-  wlog! ltij : i < j
-  · exact (this a hij.symm (lt_of_le_of_ne ltij hij.symm)).symm
-  unfold Function.onFun coprimes
-  have hja : j < supOfSeq a := lt_of_lt_of_le j.prop (le_succ_of_le (le_max_left _ _))
-  exact coprime_mul_succ
-    (Nat.dvd_factorial (by lia)
-      (by simpa only [Nat.succ_sub_succ] using le_of_lt (lt_of_le_of_lt (sub_le j i) hja)))
+/-
+**Nat.pairwise_coprime_coprimes** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma pairwise_coprime_coprimes (a : Fin m -> Nat) : Pairwise (Coprime on coprimes a) := by
+private lemma pairwise_coprime_coprimes (a : Fin m → ℕ) : Pairwise (Coprime on coprimes a) := by
   intro i j hij
   wlog! ltij : i < j
   · exact (this a hij.symm (lt_of_le_of_ne ltij hij.symm)).symm
@@ -211,80 +143,91 @@ private lemma pairwise_coprime_coprimes (a : Fin m -> Nat) : Pairwise (Coprime o
     (Nat.dvd_factorial (by lia)
       (by simpa only [Nat.succ_sub_succ] using le_of_lt (lt_of_le_of_lt (sub_le j i) hja)))
 
-/--
-Definition of `beta` / `beta` 的定义
+/-- Gödel's Beta Function. This is similar to `(Encodable.decodeList)[i]`, but it is easier to
+prove that it is arithmetically definable. -/
+/-
+**Nat.beta** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：beta (n i : Nat) : Nat
+参数：n i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition beta
-  signature: (n i : Nat)
-  body: n.unpair.1 % ((i + 1) * n.unpair.2 + 1)
-
-中文:
-定义 beta
-  签名: (n i : 自然数)
-  定义体: n.unpair.1 % ((i + 1) * n.unpair.2 + 1)
-
-Depends on / 依赖: n.unpair, unpair
+--- 原说明 ---
+Gödel's Beta Function. This is similar to `(Encodable.decodeList)[i]`, but it is
+ easier to
+prove that it is arithmetically definable.
 -/
-def beta (n i : Nat) : Nat := n.unpair.1 % ((i + 1) * n.unpair.2 + 1)
+def beta (n i : ℕ) : ℕ := n.unpair.1 % ((i + 1) * n.unpair.2 + 1)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `unbeta` / `unbeta` 的定义
+/-- Inverse of Gödel's Beta Function. This is similar to `Encodable.encodeList`, but it is easier
+to prove that it is arithmetically definable. -/
+/-
+**Nat.unbeta** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：unbeta (l : List Nat) : Nat
+参数：l : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unbeta
-  signature: (l : List Nat)
-  body: (chineseRemainderOfFinset (ι := Fin l.length) (l[·]) (coprimes (l[·])) Finset.univ
-    (by simp [coprimes])
-    (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _)) : Nat).pair
-  (supOfSeq (m := l.length) (l[·]))!
-
-中文:
-定义 unbeta
-  签名: (l : 列表 自然数)
-  定义体: (chineseRemainderOfFinset (ι := Fin l.length) (l[·]) (coprimes (l[·])) Finset.univ
-    (by simp [coprimes])
-    (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _)) : Nat).pair
-  (supOfSeq (m := l.length) (l[·]))!
-
-Depends on / 依赖: Finset, Finset.univ, Set.pairwise_univ.mpr, chineseRemainderOfFinset, coprimes, l.length, length, pairwise_coprime_coprimes, pairwise_univ, supOfSeq
+--- 原说明 ---
+Inverse of Gödel's Beta Function. This is similar to `Encodable.encodeList`, but
+ it is easier
+to prove that it is arithmetically definable.
 -/
-def unbeta (l : List Nat) : Nat :=
+def unbeta (l : List ℕ) : ℕ :=
   (chineseRemainderOfFinset (ι := Fin l.length) (l[·]) (coprimes (l[·])) Finset.univ
     (by simp [coprimes])
-    (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _)) : Nat).pair
+    (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _)) : ℕ).pair
   (supOfSeq (m := l.length) (l[·]))!
 
-/--
-lemma `beta_unbeta_coe` / 引理 `beta_unbeta_coe`
+/-- **Gödel's Beta Function Lemma** -/
+/-
+**Nat.beta_unbeta_coe** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：beta_unbeta_coe (l : List Nat) (i : Fin l.length) : beta (unbeta l) i = l[
+i]
+参数：l : List Nat；i : Fin l.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.unpair_pair`：unpair_pair (a b : Nat) : unpair (pair a b) = (a, b)
+· 使用引理 `Nat.mod_eq_of_modEq`：mod_eq_of_modEq {a b n} (h : a ≡ b [MOD n]) (hb : b
+ < n) : a % n = b
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Nat.instIsDomain`：IsDomain ℕ
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.pairwise_univ`：pairwise_univ : (univ : Set α).Pairwise r ↔ Pairwise 
+r
+· 使用定理 `_private.Mathlib.Logic.Godel.GodelBetaFunction.0.Nat.pairwise_coprime_co
+primes`：∀ {m : ℕ} (a : Fin m → ℕ), Pairwise (Function.onFun Nat.Coprime (Nat.cop
+rimes✝ a))
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用引理 `Nat.coprimes_lt`：coprimes_lt (a : Fin m -> Nat) (i) : a i < coprimes a i
 
-English:
-lemma beta_unbeta_coe
-  given: (l : List Nat) (i : Fin l.length)
-  statement: beta (unbeta l) i = l[i]
-  proof: by
-  simpa [beta, unbeta, coprimes] using mod_eq_of_modEq
-    ((chineseRemainderOfFinset (l[·]) (coprimes (l[·])) Finset.univ
-      (by simp [coprimes])
-      (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _))).prop i (by simp))
-    (coprimes_lt _ _)
-
-中文:
-引理 beta_unbeta_coe
-  条件: (l : 列表 自然数) (i : 有限集 l.length)
-  结论: beta (unbeta l) i = l[i]
-  证明: by
-  simpa [beta, unbeta, coprimes] using mod_eq_of_modEq
-    ((chineseRemainderOfFinset (l[·]) (coprimes (l[·])) Finset.univ
-      (by simp [coprimes])
-      (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _))).prop i (by simp))
-    (coprimes_lt _ _)
-
-Depends on / 依赖: Finset, Finset.univ, Set.pairwise_univ.mpr, chineseRemainderOfFinset, coprimes, coprimes_lt, mod_eq_of_modEq, pairwise_coprime_coprimes, pairwise_univ, unbeta
+--- 原说明 ---
+**Gödel's Beta Function Lemma**
 -/
-lemma beta_unbeta_coe (l : List Nat) (i : Fin l.length) : beta (unbeta l) i = l[i] := by
+lemma beta_unbeta_coe (l : List ℕ) (i : Fin l.length) : beta (unbeta l) i = l[i] := by
   simpa [beta, unbeta, coprimes] using mod_eq_of_modEq
     ((chineseRemainderOfFinset (l[·]) (coprimes (l[·])) Finset.univ
       (by simp [coprimes])
@@ -292,3 +235,4 @@ lemma beta_unbeta_coe (l : List Nat) (i : Fin l.length) : beta (unbeta l) i = l[
     (coprimes_lt _ _)
 
 end Nat
+

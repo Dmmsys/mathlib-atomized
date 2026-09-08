@@ -52,31 +52,13 @@ namespace SSet
 
 namespace prodStdSimplex
 
-/--
-lemma `innerAnodyneExtensions_unionProd_ι` / 引理 `innerAnodyneExtensions_unionProd_ι`
-
-English:
-lemma innerAnodyneExtensions_unionProd_ι
-  statement: {m : Nat} (k : Fin (m + 2)) (h0 : 0 < k)
-  proof: by
-  obtain ⟨k, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hn)
-  obtain ⟨k, rfl⟩ := Fin.eq_succ_of_ne_zero
-    (Fin.ne_zero_of_lt (show 0 < k from Fin.val_pos_iff.mp h0))
-  exact (pairing k.castSucc.succ n).innerAnodyneExtensions
-
-中文:
-引理 innerAnodyneExtensions_unionProd_ι
-  结论: {m : 自然数} (k : 有限集 (m + 2)) (h0 : 0 < k)
-  证明: by
-  obtain ⟨k, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hn)
-  obtain ⟨k, rfl⟩ := Fin.eq_succ_of_ne_zero
-    (Fin.ne_zero_of_lt (show 0 < k from Fin.val_pos_iff.mp h0))
-  exact (pairing k.castSucc.succ n).innerAnodyneExtensions
-
-Depends on / 依赖: Fin.eq_castSucc_of_ne_last, Fin.eq_succ_of_ne_zero, Fin.ne_last_of_lt, Fin.ne_zero_of_lt, Fin.val_pos_iff.mp, castSucc, eq_castSucc_of_ne_last, eq_succ_of_ne_zero, innerAnodyneExtensions, k.castSucc.succ, ne_last_of_lt, ne_zero_of_lt, pairing, val_pos_iff
+/-
+**SSet.prodStdSimplex.innerAnodyneExtensions_unionProd_** 是 Mathlib 中的一个引理，位于命名空
+间 `SSet.prodStdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma innerAnodyneExtensions_unionProd_ι {m : Nat} (k : Fin (m + 2)) (h0 : 0 < k)
-    (hn : k < Fin.last (m + 1)) (n : Nat) :
+lemma innerAnodyneExtensions_unionProd_ι {m : ℕ} (k : Fin (m + 2)) (h0 : 0 < k)
+    (hn : k < Fin.last (m + 1)) (n : ℕ) :
     innerAnodyneExtensions (Subcomplex.unionProd.{u} Λ[m + 1, k] ∂Δ[n]).ι := by
   obtain ⟨k, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hn)
   obtain ⟨k, rfl⟩ := Fin.eq_succ_of_ne_zero
@@ -90,56 +72,9 @@ section
 variable {X₁ X₂ Y₁ Y₂ E B : SSet.{u}}
   {i : X₁ ⟶ Y₁} {j : X₂ ⟶ Y₂} {p : E ⟶ B}
 
-/--
-lemma `innerFibration_pullbackObjObjπ` / 引理 `innerFibration_pullbackObjObjπ`
-
-English:
-lemma innerFibration_pullbackObjObjπ
-  statement: [Mono i] [InnerFibration p]
-  proof: by
-  rw [innerFibration_iff]
-  intro _ _ _ ⟨k, h0, hn⟩
-  let sq₁₂ := Functor.PushoutObjObj.ofHasPushout (curriedTensor SSet) i Λ[_, k].ι
-  rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
-  suffices innerAnodyneExtensions sq₁₂.ι from
-    this _ (by rwa [← innerFibration_iff])
-  intro E B p hp
-  rw [HasLiftingProperty.iff_of_arrow_iso_left
-    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
-      Arrow.isoMk (Iso.refl _) (β_ _ _))]
-  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[_, k].ι p
-  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
-  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
-  rw [rlp_monomorphisms]
-  rintro _ _ _ ⟨n⟩
-  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
-    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
-  exact prodStdSimplex.innerAnodyneExtensions_unionProd_ι k h0 hn n _ hp
-
-中文:
-引理 innerFibration_pullbackObjObjπ
-  结论: [单态射 i] [内纤维化 p]
-  证明: by
-  rw [innerFibration_iff]
-  intro _ _ _ ⟨k, h0, hn⟩
-  let sq₁₂ := Functor.PushoutObjObj.ofHasPushout (curriedTensor SSet) i Λ[_, k].ι
-  rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
-  suffices innerAnodyneExtensions sq₁₂.ι from
-    this _ (by rwa [← innerFibration_iff])
-  intro E B p hp
-  rw [HasLiftingProperty.iff_of_arrow_iso_left
-    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
-      Arrow.isoMk (Iso.refl _) (β_ _ _))]
-  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[_, k].ι p
-  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
-  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
-  rw [rlp_monomorphisms]
-  rintro _ _ _ ⟨n⟩
-  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
-    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
-  exact prodStdSimplex.innerAnodyneExtensions_unionProd_ι k h0 hn n _ hp
-
-Depends on / 依赖: Arrow.isoMk, Arrow.mk, Functor, Functor.PullbackObjObj.ofHasPullback, Functor.PushoutObjObj.ofHasPushout, HasLiftingProperty, HasLiftingProperty.iff_of_arrow_iso_left, Iso.refl, MonoidalClosed, MonoidalClosed.internalHom, PullbackObjObj, PushoutObjObj, curriedTensor, flipTensor, hasLiftingProperty_iff, iff_of_arrow_iso_left, innerAnodyneExtensions, innerFibration_iff, internalHom, ofHasPullback
+/-
+**SSet.innerFibration_pullbackObjObj** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma innerFibration_pullbackObjObjπ [Mono i] [InnerFibration p]
     (sq₁₃ : MonoidalClosed.internalHom.PullbackObjObj i p) :
@@ -160,33 +95,12 @@ lemma innerFibration_pullbackObjObjπ [Mono i] [InnerFibration p]
   rw [rlp_monomorphisms]
   rintro _ _ _ ⟨n⟩
   rw [← internalHomAdjunction₂.hasLiftingProperty_iff
-    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
+    (Subcomplex.unionProd.pushoutObjObj.{u} _ _),
+    Subcomplex.unionProd.pushoutObjObj_ι]
   exact prodStdSimplex.innerAnodyneExtensions_unionProd_ι k h0 hn n _ hp
-
-/--
-lemma `innerAnodyneExtensions_pushoutObjObjι` / 引理 `innerAnodyneExtensions_pushoutObjObjι`
-
-English:
-lemma innerAnodyneExtensions_pushoutObjObjι
-  proof: by
-  intro E B p hp
-  let sq₁₃ := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom i p
-  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃]
-  apply hj
-  rw [← innerFibration_iff] at hp ⊢
-  exact innerFibration_pullbackObjObjπ sq₁₃
-
-中文:
-引理 innerAnodyneExtensions_pushoutObjObjι
-  证明: by
-  intro E B p hp
-  let sq₁₃ := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom i p
-  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃]
-  apply hj
-  rw [← innerFibration_iff] at hp ⊢
-  exact innerFibration_pullbackObjObjπ sq₁₃
-
-Depends on / 依赖: Functor, Functor.PullbackObjObj.ofHasPullback, MonoidalClosed, MonoidalClosed.internalHom, PullbackObjObj, hasLiftingProperty_iff, innerFibration_iff, internalHom, ofHasPullback
+/-
+**SSet.innerAnodyneExtensions_pushoutObjObj** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma innerAnodyneExtensions_pushoutObjObjι
     (sq₁₂ : (curriedTensor _).PushoutObjObj i j) [Mono i] (hj : innerAnodyneExtensions j) :
@@ -197,25 +111,9 @@ lemma innerAnodyneExtensions_pushoutObjObjι
   apply hj
   rw [← innerFibration_iff] at hp ⊢
   exact innerFibration_pullbackObjObjπ sq₁₃
-
-/--
-lemma `innerAnodyneExtensions_pushoutObjObjι'` / 引理 `innerAnodyneExtensions_pushoutObjObjι'`
-
-English:
-lemma innerAnodyneExtensions_pushoutObjObjι'
-  proof: by
-  refine (innerAnodyneExtensions.arrow_mk_iso_iff ?_).1
-    (innerAnodyneExtensions_pushoutObjObjι sq₁₂.flipTensor hi)
-  exact Arrow.isoMk (Iso.refl _) (β_ _ _)
-
-中文:
-引理 innerAnodyneExtensions_pushoutObjObjι'
-  证明: by
-  refine (innerAnodyneExtensions.arrow_mk_iso_iff ?_).1
-    (innerAnodyneExtensions_pushoutObjObjι sq₁₂.flipTensor hi)
-  exact Arrow.isoMk (Iso.refl _) (β_ _ _)
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, arrow_mk_iso_iff, flipTensor, innerAnodyneExtensions, innerAnodyneExtensions.arrow_mk_iso_iff
+/-
+**SSet.innerAnodyneExtensions_pushoutObjObj** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma innerAnodyneExtensions_pushoutObjObjι'
     (sq₁₂ : (curriedTensor _).PushoutObjObj i j)
@@ -227,103 +125,144 @@ lemma innerAnodyneExtensions_pushoutObjObjι'
 
 end
 
-/--
-lemma `innerAnodyneExtensions_unionProd_ι` / 引理 `innerAnodyneExtensions_unionProd_ι`
-
-English:
-lemma innerAnodyneExtensions_unionProd_ι
-  proof: innerAnodyneExtensions_pushoutObjObjι (Subcomplex.unionProd.pushoutObjObj A B) hB
-
-中文:
-引理 innerAnodyneExtensions_unionProd_ι
-  证明: innerAnodyneExtensions_pushoutObjObjι (Subcomplex.unionProd.pushoutObjObj A B) hB
-
-Depends on / 依赖: Subcomplex, Subcomplex.unionProd.pushoutObjObj, pushoutObjObj, unionProd
+/-
+**SSet.innerAnodyneExtensions_unionProd_** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma innerAnodyneExtensions_unionProd_ι
     {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
     (hB : innerAnodyneExtensions B.ι) :
     innerAnodyneExtensions (A.unionProd B).ι :=
   innerAnodyneExtensions_pushoutObjObjι (Subcomplex.unionProd.pushoutObjObj A B) hB
-
-/--
-lemma `innerAnodyneExtensions_unionProd_ι'` / 引理 `innerAnodyneExtensions_unionProd_ι'`
-
-English:
-lemma innerAnodyneExtensions_unionProd_ι'
-  proof: innerAnodyneExtensions_pushoutObjObjι' (Subcomplex.unionProd.pushoutObjObj A B) hA
-
-中文:
-引理 innerAnodyneExtensions_unionProd_ι'
-  证明: innerAnodyneExtensions_pushoutObjObjι' (Subcomplex.unionProd.pushoutObjObj A B) hA
-
-Depends on / 依赖: Subcomplex, Subcomplex.unionProd.pushoutObjObj, pushoutObjObj, unionProd
+/-
+**SSet.innerAnodyneExtensions_unionProd_** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma innerAnodyneExtensions_unionProd_ι'
     {X Y : SSet.{u}} (A : X.Subcomplex) (B : Y.Subcomplex)
     (hA : innerAnodyneExtensions A.ι) :
     innerAnodyneExtensions (A.unionProd B).ι :=
   innerAnodyneExtensions_pushoutObjObjι' (Subcomplex.unionProd.pushoutObjObj A B) hA
-
-/--
-lemma `innerAnodyneExtensions.whiskerRight` / 引理 `innerAnodyneExtensions.whiskerRight`
-
-English:
-lemma innerAnodyneExtensions.whiskerRight
-  proof: innerAnodyneExtensions_pushoutObjObjι'
-    (.ofIsInitialRight (curriedTensor _) f (initial.to Z) initialIsInitial) hf
-
-中文:
-引理 innerAnodyneExtensions.whiskerRight
-  证明: innerAnodyneExtensions_pushoutObjObjι'
-    (.ofIsInitialRight (curriedTensor _) f (initial.to Z) initialIsInitial) hf
-
-Depends on / 依赖: curriedTensor, initial, initial.to, initialIsInitial, ofIsInitialRight
+/-
+**SSet.innerAnodyneExtensions.whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `SSet.inner
+AnodyneExtensions`。
+形式化陈述：∀ {X Y : _root_.SSet} {f : X ⟶ Y},   SSet.innerAnodyneExtensions f →     ∀
+ (Z : _root_.SSet), SSet.innerAnodyneExtensions (CategoryTheory.MonoidalCategory
+Struct.whiskerRight f Z)
+参数：Z : _root_.SSet；CategoryTheory.MonoidalCategoryStruct.whiskerRight f Z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.innerAnodyneExtensions_pushoutObjObjι'`：innerAnodyneExtensions_push
+outObjObjι' (sq₁₂ : (curriedTensor _).PushoutObjObj i j) [Mono j] (hi : innerAno
+dyneExtensions i) : innerAnodyneE…
+· 使用定理 `CategoryTheory.Limits.hasFiniteCoproducts_of_hasFiniteColimits`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinit
+eColimits C],   CategoryTheory.Limits.HasFiniteCopro…
+· 使用定理 `CategoryTheory.Limits.hasFiniteColimits_of_hasColimits`：∀ (C : Type u) [
+inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C], 
+  CategoryTheory.Limits.HasFiniteColimits C
+· 使用定理 `CategoryTheory.SimplicialObject.instHasColimits`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C],   Categ
+oryTheory.Limits.HasColimits (Categor…
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Functor.Monoidal.instPreservesColimitsOfShapeTensorLeftOf
+HasColimitsOfShape`：∀ {J : Type u_1} {C : Type u_2} [inst : CategoryTheory.Categ
+ory.{v_1, u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C] [inst_2 : Ca
+…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instPreservesColimitsTensorLeft`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C] (A
+ : C)   [CategoryTheory.Closed A], C…
+· 使用定理 `CategoryTheory.Initial.mono_to`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory.Li…
 -/
 lemma innerAnodyneExtensions.whiskerRight
     {X Y : SSet.{u}} {f : X ⟶ Y} (hf : innerAnodyneExtensions f) (Z : SSet.{u}) :
     innerAnodyneExtensions (f ▷ Z) :=
   innerAnodyneExtensions_pushoutObjObjι'
     (.ofIsInitialRight (curriedTensor _) f (initial.to Z) initialIsInitial) hf
-
-/--
-lemma `innerAnodyneExtensions.whiskerLeft` / 引理 `innerAnodyneExtensions.whiskerLeft`
-
-English:
-lemma innerAnodyneExtensions.whiskerLeft
-  proof: innerAnodyneExtensions_pushoutObjObjι
-    (.ofIsInitialLeft (curriedTensor _) (initial.to Z) f initialIsInitial) hf
-
-中文:
-引理 innerAnodyneExtensions.whiskerLeft
-  证明: innerAnodyneExtensions_pushoutObjObjι
-    (.ofIsInitialLeft (curriedTensor _) (initial.to Z) f initialIsInitial) hf
-
-Depends on / 依赖: curriedTensor, initial, initial.to, initialIsInitial, ofIsInitialLeft
+/-
+**SSet.innerAnodyneExtensions.whiskerLeft** 是 Mathlib 中的一个定理，位于命名空间 `SSet.innerA
+nodyneExtensions`。
+形式化陈述：∀ {X Y : _root_.SSet} {f : X ⟶ Y},   SSet.innerAnodyneExtensions f →     ∀
+ (Z : _root_.SSet), SSet.innerAnodyneExtensions (CategoryTheory.MonoidalCategory
+Struct.whiskerLeft Z f)
+参数：Z : _root_.SSet；CategoryTheory.MonoidalCategoryStruct.whiskerLeft Z f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.innerAnodyneExtensions_pushoutObjObjι`：innerAnodyneExtensions_pusho
+utObjObjι (sq₁₂ : (curriedTensor _).PushoutObjObj i j) [Mono i] (hj : innerAnody
+neExtensions j) : innerAnodyneEx…
+· 使用定理 `CategoryTheory.Limits.hasFiniteCoproducts_of_hasFiniteColimits`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinit
+eColimits C],   CategoryTheory.Limits.HasFiniteCopro…
+· 使用定理 `CategoryTheory.Limits.hasFiniteColimits_of_hasColimits`：∀ (C : Type u) [
+inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C], 
+  CategoryTheory.Limits.HasFiniteColimits C
+· 使用定理 `CategoryTheory.SimplicialObject.instHasColimits`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasColimits C],   Categ
+oryTheory.Limits.HasColimits (Categor…
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.ihom.instIsLeftAdjointTensorRightOfClosed`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Monoid
+alCategory C]   [CategoryTheory.BraidedCategor…
+· 使用定理 `CategoryTheory.Initial.mono_to`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory.Li…
 -/
 lemma innerAnodyneExtensions.whiskerLeft
     {X Y : SSet.{u}} {f : X ⟶ Y} (hf : innerAnodyneExtensions f) (Z : SSet.{u}) :
     innerAnodyneExtensions (Z ◁ f) :=
   innerAnodyneExtensions_pushoutObjObjι
     (.ofIsInitialLeft (curriedTensor _) (initial.to Z) f initialIsInitial) hf
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {E B X : SSet.{u}} (p : E ⟶ B) [InnerFibration p] :
     InnerFibration ((ihom X).map p) :=
   innerFibration_pullbackObjObjπ (Functor.PullbackObjObj.ofIsInitial
     MonoidalClosed.internalHom (initial.to X) p initialIsInitial)
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A B : SSet.{u}} (i : A ⟶ B) [Mono i] (X : SSet.{u}) [Quasicategory X] :
     InnerFibration ((MonoidalClosed.pre i).app X) :=
   innerFibration_pullbackObjObjπ (Functor.PullbackObjObj.ofIsTerminal
     MonoidalClosed.internalHom i (terminal.from X) terminalIsTerminal)
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : SSet.{u}) : Quasicategory ((ihom A).obj (⊤_ _)) := by
   have : IsIso (terminal.from ((ihom A).obj (⊤_ _))) :=
     isIso_of_isTerminal (IsTerminal.isTerminalObj _ _ terminalIsTerminal)
       terminalIsTerminal _
   infer_instance
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A X : SSet.{u}} [Quasicategory X] : Quasicategory ((ihom A).obj X) :=
   quasicategory_of_innerFibration ((ihom A).map (terminal.from X))
 
 end SSet
+

@@ -25,103 +25,77 @@ Note: Currently Category does not extend ReflQuiver, although it could. (TODO: d
 namespace CategoryTheory
 universe v v₁ v₂ u u₁ u₂
 
-/--
-Definition of `ReflQuiver` / `ReflQuiver` 的定义
+/-- A reflexive quiver extends a quiver with a specified arrow `id X : X ⟶ X` for each `X` in its
+type of objects. We denote these arrows by `id` since categories can be understood as an extension
+of refl quivers.
+-/
+/-
+**CategoryTheory.ReflQuiver** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：Type u → Type (max u (v + 1))
+参数：max u (v + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ReflQuiver
-  parameters: (obj : Type u)
-  extends: Quiver.{v} obj
-  axioms and operations (1):
-    - id : forall X : obj, Hom X X
-
-中文:
-类 ReflQuiver
-  参数: (obj : 类型u)
-  继承: 箭图.{v} obj
-  公理与运算 (1 个):
-    - id : 对任意 X : obj, 态射 X X
+--- 原说明 ---
+A reflexive quiver extends a quiver with a specified arrow `id X : X ⟶ X` for ea
+ch `X` in its
+type of objects. We denote these arrows by `id` since categories can be understo
+od as an extension
+of refl quivers.
 -/
 class ReflQuiver (obj : Type u) : Type max u (v + 1) extends Quiver.{v} obj where
   /-- The identity morphism on an object. -/
-  id : forall X : obj, Hom X X
+  id : ∀ X : obj, Hom X X
 
 /-- Notation for the identity morphism in a category. -/
-scoped notation "𝟙rq" => ReflQuiver.id -- type as \b1
+scoped notation "𝟙rq" => ReflQuiver.id  -- type as \b1
 
 @[simp]
-/--
-theorem `ReflQuiver.homOfEq_id` / 定理 `ReflQuiver.homOfEq_id`
-
-English:
-theorem ReflQuiver.homOfEq_id
-  given: {V : Type*} [ReflQuiver V] {X X' : V} (hX : X = X')
-  proof: by subst hX; rfl
-
-中文:
-定理 ReflQuiver.homOfEq_id
-  条件: {V : 类型} [ReflQuiver V] {X X' : V} (hX : X = X')
-  证明: by subst hX; rfl
+/-
+**CategoryTheory.ReflQuiver.homOfEq_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.ReflQuiver`。
+形式化陈述：∀ {V : Type u_1} [inst : CategoryTheory.ReflQuiver V] {X X' : V} (hX : X =
+ X'),   Quiver.homOfEq (CategoryTheory.ReflQuiver.id X) hX hX = CategoryTheory.R
+eflQuiver.id X'
+参数：hX : X = X'；CategoryTheory.ReflQuiver.id X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ReflQuiver.homOfEq_id {V : Type*} [ReflQuiver V] {X X' : V} (hX : X = X') :
     Quiver.homOfEq (𝟙rq X) hX hX = 𝟙rq X' := by subst hX; rfl
-
-/--
-Instance `catToReflQuiver` / 实例 `catToReflQuiver`
-
-English:
-instance catToReflQuiver
-  signature: {C : Type u} [inst : Category.{v} C]
-  body: { inst with }
-
-中文:
-实例 catToReflQuiver
-  签名: {C : 类型u} [inst : 范畴.{v} C]
-  定义体: { inst with }
+/-
+**CategoryTheory.catToReflQuiver** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：catToReflQuiver {C : Type u} [inst : Category.{v} C] : ReflQuiver.{v, u} C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance catToReflQuiver {C : Type u} [inst : Category.{v} C] : ReflQuiver.{v, u} C :=
   { inst with }
-
-/--
-theorem `ReflQuiver.id_eq_id` / 定理 `ReflQuiver.id_eq_id`
-
-English:
-theorem ReflQuiver.id_eq_id
-  given: {C : Type*} [Category* C] (X : C)
-  statement: 𝟙rq X = 𝟙 X
-  proof: rfl
-
-中文:
-定理 ReflQuiver.id_eq_id
-  条件: {C : 类型} [范畴* C] (X : C)
-  结论: 𝟙rq X = 𝟙 X
-  证明: rfl
+/-
+**CategoryTheory.ReflQuiver.id_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.R
+eflQuiver`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (X : C),   
+CategoryTheory.ReflQuiver.id X = CategoryTheory.CategoryStruct.id X
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ReflQuiver.id_eq_id {C : Type*} [Category* C] (X : C) : 𝟙rq X = 𝟙 X := rfl
 
-/--
-Definition of `ReflPrefunctor` / `ReflPrefunctor` 的定义
+/-- A morphism of reflexive quivers called a `ReflPrefunctor`. -/
+/-
+**CategoryTheory.ReflPrefunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：ReflPrefunctor (V : Type u₁) [ReflQuiver.{v₁} V] (W : Type u₂) [ReflQuiver
+.{v₂} W] extends Prefunctor V W where /-- A functor preserves identity morphisms
+. -/ map_id : forall X : V, map (𝟙rq X) = 𝟙rq (obj X)
+参数：V : Type u₁；W : Type u₂。
+继承自：Prefunctor V W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ReflPrefunctor
-  parameters: (V : Type u₁) [ReflQuiver.{v₁} V] (W : Type u₂) [ReflQuiver.{v₂} W]
-  extends: Prefunctor V W
-  axioms and operations (1):
-    - map_id : forall X : V, map (𝟙rq X) = 𝟙rq (obj X)  [default: by cat_disch]
-
-中文:
-结构 ReflPrefunctor
-  参数: (V : 类型u₁) [ReflQuiver.{v₁} V] (W : 类型u₂) [ReflQuiver.{v₂} W]
-  继承: 预函子 V W
-  公理与运算 (1 个):
-    - map_id : 对任意 X : V, map (𝟙rq X) = 𝟙rq (obj X)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of reflexive quivers called a `ReflPrefunctor`.
 -/
 structure ReflPrefunctor (V : Type u₁) [ReflQuiver.{v₁} V] (W : Type u₂) [ReflQuiver.{v₂} W]
     extends Prefunctor V W where
   /-- A functor preserves identity morphisms. -/
-  map_id : forall X : V, map (𝟙rq X) = 𝟙rq (obj X) := by cat_disch
+  map_id : ∀ X : V, map (𝟙rq X) = 𝟙rq (obj X) := by cat_disch
 
 namespace ReflPrefunctor
 
@@ -129,104 +103,87 @@ attribute [simp] map_id
 
 -- These lemmas cannot be `@[simp]` because after `whnfR` they have a variable on the LHS.
 -- Nevertheless they are sometimes useful when building functors.
-/--
-lemma `mk_obj` / 引理 `mk_obj`
-
-English:
-lemma mk_obj
-  given: {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X : V}
-  proof: rfl
-
-中文:
-引理 mk_obj
-  条件: {V W : 类型} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X : V}
-  证明: rfl
+/-
+**CategoryTheory.ReflPrefunctor.mk_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ReflPrefunctor`。
+形式化陈述：mk_obj {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X
+ : V} : (Prefunctor.mk obj map).obj X = obj X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_obj {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X : V} :
+lemma mk_obj {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V → W} {map} {X : V} :
     (Prefunctor.mk obj map).obj X = obj X := rfl
-
-/--
-lemma `mk_map` / 引理 `mk_map`
-
-English:
-lemma mk_map
-  given: {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X Y : V} {f : X ⟶ Y}
-  proof: rfl
-
-中文:
-引理 mk_map
-  条件: {V W : 类型} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X Y : V} {f : X ⟶ Y}
-  证明: rfl
+/-
+**CategoryTheory.ReflPrefunctor.mk_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ReflPrefunctor`。
+形式化陈述：mk_map {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X
+ Y : V} {f : X ⟶ Y} : (Prefunctor.mk obj map).map f = map f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_map {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V -> W} {map} {X Y : V} {f : X ⟶ Y} :
+lemma mk_map {V W : Type*} [ReflQuiver V] [ReflQuiver W] {obj : V → W} {map} {X Y : V} {f : X ⟶ Y} :
     (Prefunctor.mk obj map).map f = map f := rfl
 
-/--
-theorem `ext` / 定理 `ext`
+/-- Proving equality between reflexive prefunctors. This isn't an extensionality lemma,
+  because usually you don't really want to do this. -/
+/-
+**CategoryTheory.ReflPrefunctor.ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Re
+flPrefunctor`。
+形式化陈述：ext {V : Type u} [ReflQuiver.{v₁} V] {W : Type u₂} [ReflQuiver.{v₂} W] {F 
+G : ReflPrefunctor V W} (h_obj : forall X, F.obj X = G.obj X) (h_map : forall (X
+ Y : V) (f : X ⟶ Y), F.map f = Eq.recOn (h_obj Y).symm (Eq.recOn (h_obj X).symm 
+(G.map f))) : F = G
+参数：h_obj : forall X, F.obj X = G.obj X；h_map : forall (X Y : V) (f : X ⟶ Y), F.m
+ap f = Eq.recOn (h_obj Y).symm (Eq.recOn (h_obj X).symm (G.map f))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.eqOn_univ`：eqOn_univ (f₁ f₂ : α -> β) : EqOn f₁ f₂ univ ↔ f₁ = f₂
 
-English:
-theorem ext
-  statement: {V : Type u} [ReflQuiver.{v₁} V] {W : Type u₂} [ReflQuiver.{v₂} W]
-  proof: by
-  obtain ⟨⟨F_obj⟩⟩ := F
-  obtain ⟨⟨G_obj⟩⟩ := G
-  obtain rfl : F_obj = G_obj := (Set.eqOn_univ F_obj G_obj).mp fun _ _ => h_obj _
-  congr
-  funext X Y f
-  simpa using h_map X Y f
-
-中文:
-定理 ext
-  结论: {V : 类型u} [ReflQuiver.{v₁} V] {W : 类型u₂} [ReflQuiver.{v₂} W]
-  证明: by
-  obtain ⟨⟨F_obj⟩⟩ := F
-  obtain ⟨⟨G_obj⟩⟩ := G
-  obtain rfl : F_obj = G_obj := (Set.eqOn_univ F_obj G_obj).mp fun _ _ => h_obj _
-  congr
-  funext X Y f
-  simpa using h_map X Y f
-
-Depends on / 依赖: F_obj, G_obj, Set.eqOn_univ, eqOn_univ, h_map, h_obj
+--- 原说明 ---
+Proving equality between reflexive prefunctors. This isn't an extensionality lem
+ma,
+  because usually you don't really want to do this.
 -/
 theorem ext {V : Type u} [ReflQuiver.{v₁} V] {W : Type u₂} [ReflQuiver.{v₂} W]
     {F G : ReflPrefunctor V W}
-    (h_obj : forall X, F.obj X = G.obj X)
-    (h_map : forall (X Y : V) (f : X ⟶ Y),
+    (h_obj : ∀ X, F.obj X = G.obj X)
+    (h_map : ∀ (X Y : V) (f : X ⟶ Y),
       F.map f = Eq.recOn (h_obj Y).symm (Eq.recOn (h_obj X).symm (G.map f))) : F = G := by
   obtain ⟨⟨F_obj⟩⟩ := F
   obtain ⟨⟨G_obj⟩⟩ := G
-  obtain rfl : F_obj = G_obj := (Set.eqOn_univ F_obj G_obj).mp fun _ _ => h_obj _
+  obtain rfl : F_obj = G_obj := (Set.eqOn_univ F_obj G_obj).mp fun _ _ ↦ h_obj _
   congr
   funext X Y f
   simpa using h_map X Y f
 
-/--
-theorem `ext'` / 定理 `ext'`
+/-- This may be a more useful form of `ReflPrefunctor.ext`. -/
+/-
+**CategoryTheory.ReflPrefunctor.ext'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.R
+eflPrefunctor`。
+形式化陈述：ext' {V W : Type u} [ReflQuiver.{v} V] [ReflQuiver.{v} W] {F G : ReflPrefu
+nctor V W} (h_obj : forall X, F.obj X = G.obj X) (h_map : forall (X Y : V) (f : 
+X ⟶ Y), F.map f = Quiver.homOfEq (G.map f) (h_obj _).symm (h_obj _).symm) : F = 
+G
+参数：h_obj : forall X, F.obj X = G.obj X；h_map : forall (X Y : V) (f : X ⟶ Y), F.m
+ap f = Quiver.homOfEq (G.map f) (h_obj _).symm (h_obj _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Prefunctor.ext'`：ext' {V W : Type u} [Quiver V] [Quiver W] {F G : Prefun
+ctor V W} (h_obj : forall X, F.obj X = G.obj X) (h_map : forall (X Y : V) (f : X
+ ⟶ Y)…
 
-English:
-theorem ext'
-  statement: {V W : Type u} [ReflQuiver.{v} V] [ReflQuiver.{v} W]
-  proof: by
-  obtain ⟨Fpre, Fid⟩ := F
-  obtain ⟨Gpre, Gid⟩ := G
-  obtain rfl : Fpre = Gpre := Prefunctor.ext' (V := V) (W := W) h_obj h_map
-  rfl
-
-中文:
-定理 ext'
-  结论: {V W : 类型u} [ReflQuiver.{v} V] [ReflQuiver.{v} W]
-  证明: by
-  obtain ⟨Fpre, Fid⟩ := F
-  obtain ⟨Gpre, Gid⟩ := G
-  obtain rfl : Fpre = Gpre := Prefunctor.ext' (V := V) (W := W) h_obj h_map
-  rfl
-
-Depends on / 依赖: Prefunctor, Prefunctor.ext, h_map, h_obj
+--- 原说明 ---
+This may be a more useful form of `ReflPrefunctor.ext`.
 -/
 theorem ext' {V W : Type u} [ReflQuiver.{v} V] [ReflQuiver.{v} W]
     {F G : ReflPrefunctor V W}
-    (h_obj : forall X, F.obj X = G.obj X)
-    (h_map : forall (X Y : V) (f : X ⟶ Y),
+    (h_obj : ∀ X, F.obj X = G.obj X)
+    (h_map : ∀ (X Y : V) (f : X ⟶ Y),
       F.map f = Quiver.homOfEq (G.map f) (h_obj _).symm (h_obj _).symm) : F = G := by
   obtain ⟨Fpre, Fid⟩ := F
   obtain ⟨Gpre, Gid⟩ := G
@@ -235,53 +192,43 @@ theorem ext' {V W : Type u} [ReflQuiver.{v} V] [ReflQuiver.{v} W]
 
 /-- The identity morphism between reflexive quivers. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.ReflPrefunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ref
+lPrefunctor`。
+形式化陈述：id (V : Type*) [ReflQuiver V] : ReflPrefunctor V V where __
+参数：V : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (V : Type*) [ReflQuiver V]
-  body: Prefunctor.id _
-  map_id _ := rfl
-
-中文:
-定义 id
-  签名: (V : 类型) [ReflQuiver V]
-  定义体: Prefunctor.id _
-  map_id _ := rfl
-
-Depends on / 依赖: Prefunctor, Prefunctor.id
+--- 原说明 ---
+The identity morphism between reflexive quivers.
 -/
 def id (V : Type*) [ReflQuiver V] : ReflPrefunctor V V where
   __ := Prefunctor.id _
   map_id _ := rfl
-
+/-
+**CategoryTheory.ReflPrefunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ReflP
+refunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (V : Type*) [ReflQuiver V] : Inhabited (ReflPrefunctor V V) :=
   ⟨id V⟩
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Composition of morphisms between reflexive quivers. -/
 @[simps!]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.ReflPrefunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.R
+eflPrefunctor`。
+形式化陈述：comp {U : Type*} [ReflQuiver U] {V : Type*} [ReflQuiver V] {W : Type*} [Re
+flQuiver W] (F : ReflPrefunctor U V) (G : ReflPrefunctor V W) : ReflPrefunctor U
+ W where __
+参数：F : ReflPrefunctor U V；G : ReflPrefunctor V W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {U : Type*} [ReflQuiver U] {V : Type*} [ReflQuiver V] {W : Type*} [ReflQuiver W]
-  body: F.toPrefunctor.comp G.toPrefunctor
-  map_id _ := by simp [F.map_id, G.map_id]
-
-@[simp]
-
-中文:
-定义 comp
-  签名: {U : 类型} [ReflQuiver U] {V : 类型} [ReflQuiver V] {W : 类型} [ReflQuiver W]
-  定义体: F.toPrefunctor.comp G.toPrefunctor
-  map_id _ := by simp [F.map_id, G.map_id]
-
-@[simp]
-
-Depends on / 依赖: F.toPrefunctor.comp, G.toPrefunctor, toPrefunctor
+--- 原说明 ---
+Composition of morphisms between reflexive quivers.
 -/
 def comp {U : Type*} [ReflQuiver U] {V : Type*} [ReflQuiver V] {W : Type*} [ReflQuiver W]
     (F : ReflPrefunctor U V) (G : ReflPrefunctor V W) : ReflPrefunctor U W where
@@ -289,60 +236,41 @@ def comp {U : Type*} [ReflQuiver U] {V : Type*} [ReflQuiver V] {W : Type*} [Refl
   map_id _ := by simp [F.map_id, G.map_id]
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: {U V : 类型} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ReflPrefunctor.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.ReflPrefunctor`。
+形式化陈述：comp_id {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U 
+V) : F.comp (id _) = F
+参数：F : ReflPrefunctor U V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_id {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V) :
     F.comp (id _) = F := rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: {U V : 类型} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ReflPrefunctor.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.ReflPrefunctor`。
+形式化陈述：id_comp {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U 
+V) : (id _).comp F = F
+参数：F : ReflPrefunctor U V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_comp {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : ReflPrefunctor U V) :
     (id _).comp F = F := rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {U V W Z : Type*} [ReflQuiver U] [ReflQuiver V] [ReflQuiver W] [ReflQuiver Z]
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  结论: {U V W Z : 类型} [ReflQuiver U] [ReflQuiver V] [ReflQuiver W] [ReflQuiver Z]
-  证明: rfl
+/-
+**CategoryTheory.ReflPrefunctor.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.ReflPrefunctor`。
+形式化陈述：comp_assoc {U V W Z : Type*} [ReflQuiver U] [ReflQuiver V] [ReflQuiver W] 
+[ReflQuiver Z] (F : ReflPrefunctor U V) (G : ReflPrefunctor V W) (H : ReflPrefun
+ctor W Z) : (F.comp G).comp H = F.comp (G.comp H)
+参数：F : ReflPrefunctor U V；G : ReflPrefunctor V W；H : ReflPrefunctor W Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc {U V W Z : Type*} [ReflQuiver U] [ReflQuiver V] [ReflQuiver W] [ReflQuiver Z]
     (F : ReflPrefunctor U V) (G : ReflPrefunctor V W) (H : ReflPrefunctor W Z) :
@@ -357,56 +285,54 @@ infixl:60 " ⋙rq " => ReflPrefunctor.comp
 /-- Notation for the identity prefunctor on a reflexive quiver. -/
 notation "𝟭rq" => id
 
-/--
-theorem `congr_map` / 定理 `congr_map`
-
-English:
-theorem congr_map
-  statement: {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : U ⥤rq V) {X Y : U}
-  proof: congrArg F.map h
-
-中文:
-定理 congr_map
-  结论: {U V : 类型} [ReflQuiver U] [ReflQuiver V] (F : U ⥤rq V) {X Y : U}
-  证明: congrArg F.map h
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.ReflPrefunctor.congr_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.ReflPrefunctor`。
+形式化陈述：congr_map {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : U ⥤rq V) {X Y :
+ U} {f g : X ⟶ Y} (h : f = g) : F.map f = F.map g
+参数：F : U ⥤rq V；h : f = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem congr_map {U V : Type*} [ReflQuiver U] [ReflQuiver V] (F : U ⥤rq V) {X Y : U}
     {f g : X ⟶ Y} (h : f = g) : F.map f = F.map g := congrArg F.map h
 
-/--
-theorem `congr_obj` / 定理 `congr_obj`
+/-- An equality of refl prefunctors gives an equality on objects. -/
+/-
+**CategoryTheory.ReflPrefunctor.congr_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.ReflPrefunctor`。
+形式化陈述：congr_obj {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V} (e :
+ F = G) (X : U) : F.obj X = G.obj X
+参数：e : F = G；X : U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem congr_obj
-  statement: {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
-  proof: by cases e; rfl
-
-中文:
-定理 congr_obj
-  结论: {U V : 类型} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
-  证明: by cases e; rfl
+--- 原说明 ---
+An equality of refl prefunctors gives an equality on objects.
 -/
 theorem congr_obj {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
     (e : F = G) (X : U) : F.obj X = G.obj X := by cases e; rfl
 
-/--
-theorem `congr_hom` / 定理 `congr_hom`
+/-- An equality of refl prefunctors gives an equality on homs. -/
+/-
+**CategoryTheory.ReflPrefunctor.congr_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.ReflPrefunctor`。
+形式化陈述：congr_hom {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V} (e :
+ F = G) {X Y : U} (f : X ⟶ Y) : Quiver.homOfEq (F.map f) (congr_obj e X) (congr_
+obj e Y) = G.map f
+参数：e : F = G；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ReflPrefunctor.congr_obj`：congr_obj {U V : Type*} [ReflQu
+iver U] [ReflQuiver V] {F G : U ⥤rq V} (e : F = G) (X : U) : F.obj X = G.obj X
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem congr_hom
-  statement: {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
-  proof: by
-  subst e
-  simp
-
-中文:
-定理 congr_hom
-  结论: {U V : 类型} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
-  证明: by
-  subst e
-  simp
+--- 原说明 ---
+An equality of refl prefunctors gives an equality on homs.
 -/
 theorem congr_hom {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
     (e : F = G) {X Y : U} (f : X ⟶ Y) :
@@ -416,55 +342,45 @@ theorem congr_hom {U V : Type*} [ReflQuiver U] [ReflQuiver V] {F G : U ⥤rq V}
 
 end ReflPrefunctor
 
-/--
-Definition of `Functor.toReflPrefunctor` / `Functor.toReflPrefunctor` 的定义
+/-- A functor has an underlying refl prefunctor. -/
+/-
+**CategoryTheory.Functor.toReflPrefunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.Functor C D → C ⥤rq D
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 
-English:
-definition Functor.toReflPrefunctor
-  signature: {C D} [Category* C] [Category* D] (F : C ⥤ D)
-  body: { F with }
-
-中文:
-定义 函子.toReflPrefunctor
-  签名: {C D} [范畴* C] [范畴* D] (F : C ⥤ D)
-  定义体: { F with }
+--- 原说明 ---
+A functor has an underlying refl prefunctor.
 -/
 def Functor.toReflPrefunctor {C D} [Category* C] [Category* D] (F : C ⥤ D) : C ⥤rq D := { F with }
-
-/--
-theorem `Functor.toReflPrefunctor.map_comp` / 定理 `Functor.toReflPrefunctor.map_comp`
-
-English:
-theorem Functor.toReflPrefunctor.map_comp
-  statement: {C D E} [Category* C] [Category* D] [Category* E]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 函子.toReflPrefunctor.map_comp
-  结论: {C D E} [范畴* C] [范畴* D] [范畴* E]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.toReflPrefunctor.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Functor.toReflPrefunctor`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} {E : Type u_3} [inst : CategoryTheory.Cate
+gory.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} E]   (F : CategoryTheory.Functor C D) (G : Cat
+egoryTheory.Functor D E),   (F.comp G).toReflPrefunctor = F.toReflPrefunctor ⋙rq
+ G.toReflPrefunctor
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Functor.toReflPrefunctor.map_comp {C D E} [Category* C] [Category* D] [Category* E]
     (F : C ⥤ D) (G : D ⥤ E) :
     toReflPrefunctor (F ⋙ G) = toReflPrefunctor F ⋙rq toReflPrefunctor G := rfl
 
 @[simp]
-/--
-theorem `Functor.toReflPrefunctor_toPrefunctor` / 定理 `Functor.toReflPrefunctor_toPrefunctor`
-
-English:
-theorem Functor.toReflPrefunctor_toPrefunctor
-  given: {C D : Cat} (F : C ⥤ D)
-  proof: rfl
-
-中文:
-定理 函子.toReflPrefunctor_toPrefunctor
-  条件: {C D : Cat} (F : C ⥤ D)
-  证明: rfl
+/-
+**CategoryTheory.Functor.toReflPrefunctor_toPrefunctor** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor`。
+形式化陈述：∀ {C : CategoryTheory.Cat} {D : CategoryTheory.Cat} (F : CategoryTheory.Fu
+nctor ↑C ↑D),   F.toReflPrefunctor.toPrefunctor = F.toPrefunctor
+参数：F : CategoryTheory.Functor ↑C ↑D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Functor.toReflPrefunctor_toPrefunctor {C D : Cat} (F : C ⥤ D) :
     (Functor.toReflPrefunctor F).toPrefunctor = F.toPrefunctor := rfl
@@ -472,38 +388,26 @@ theorem Functor.toReflPrefunctor_toPrefunctor {C D : Cat} (F : C ⥤ D) :
 namespace ReflQuiver
 open Opposite
 
-/--
-Instance `opposite` / 实例 `opposite`
+/-- `Vᵒᵖ` reverses the direction of all arrows of `V`. -/
+/-
+**CategoryTheory.ReflQuiver.opposite** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.R
+eflQuiver`。
+形式化陈述：opposite {V} [ReflQuiver V] : ReflQuiver Vᵒᵖ where id X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance opposite
-  signature: {V} [ReflQuiver V]
-  body: op (𝟙rq X.unop)
-
-中文:
-实例 opposite
-  签名: {V} [ReflQuiver V]
-  定义体: op (𝟙rq X.unop)
-
-Depends on / 依赖: X.unop
+--- 原说明 ---
+`Vᵒᵖ` reverses the direction of all arrows of `V`.
 -/
 instance opposite {V} [ReflQuiver V] : ReflQuiver Vᵒᵖ where
   id X := op (𝟙rq X.unop)
-
-/--
-Instance `discreteReflQuiver` / 实例 `discreteReflQuiver`
-
-English:
-instance discreteReflQuiver
-  signature: (V : Type u)
-  body: { discreteCategory V with }
-
-中文:
-实例 discreteReflQuiver
-  签名: (V : 类型u)
-  定义体: { discreteCategory V with }
-
-Depends on / 依赖: discreteCategory
+/-
+**CategoryTheory.ReflQuiver.discreteReflQuiver** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.ReflQuiver`。
+形式化陈述：discreteReflQuiver (V : Type u) : ReflQuiver.{u} (Discrete V)
+参数：V : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance discreteReflQuiver (V : Type u) : ReflQuiver.{u} (Discrete V) :=
   { discreteCategory V with }
@@ -511,3 +415,4 @@ instance discreteReflQuiver (V : Type u) : ReflQuiver.{u} (Discrete V) :=
 end ReflQuiver
 
 end CategoryTheory
+

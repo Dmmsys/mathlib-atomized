@@ -32,50 +32,23 @@ variable (X : SSet.{u})
 /-- The canonical splitting of a simplicial set that is given
 by the nondegenerate simplices. -/
 @[simps]
-/--
-Definition of `splitting` / `splitting` 的定义
+/-
+**SSet.splitting** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：splitting : X.Splitting where N n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitting
-  signature: : X.Splitting where
-  body: X.nonDegenerate n
-  ι n := ↾Subtype.val
-  isColimit' := fun ⟨⟨n⟩⟩ => Nonempty.some (by
-    rw [← Limits.Cofan.isColimit_cofanTypes_iff]
-    refine CofanTypes.isColimit_mk _ (fun x => ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h => ?_)
-      (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h => ?_)
-    · obtain ⟨m, f, _, y, rfl⟩ := X.exists_nonDegenerate x
-      exact ⟨.mk f, y, rfl⟩
-    · exact unique_nonDegenerate_simplex _ _ _ _ rfl _ _ h
-    · obtain rfl : m = p := unique_nonDegenerate_dim _ _ _ _ rfl _ _ h
-      obtain rfl : f = g := unique_nonDegenerate_map _ _ _ _ rfl _ _ h
-      dsimp)
-
-中文:
-定义 splitting
-  签名: : X.Splitting where
-  定义体: X.nonDegenerate n
-  ι n := ↾Subtype.val
-  isColimit' := fun ⟨⟨n⟩⟩ => Nonempty.some (by
-    rw [← Limits.Cofan.isColimit_cofanTypes_iff]
-    refine CofanTypes.isColimit_mk _ (fun x => ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h => ?_)
-      (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h => ?_)
-    · obtain ⟨m, f, _, y, rfl⟩ := X.exists_nonDegenerate x
-      exact ⟨.mk f, y, rfl⟩
-    · exact unique_nonDegenerate_simplex _ _ _ _ rfl _ _ h
-    · obtain rfl : m = p := unique_nonDegenerate_dim _ _ _ _ rfl _ _ h
-      obtain rfl : f = g := unique_nonDegenerate_map _ _ _ _ rfl _ _ h
-      dsimp)
-
-Depends on / 依赖: X.nonDegenerate, nonDegenerate
+--- 原说明 ---
+The canonical splitting of a simplicial set that is given
+by the nondegenerate simplices.
 -/
 noncomputable def splitting : X.Splitting where
   N n := X.nonDegenerate n
   ι n := ↾Subtype.val
-  isColimit' := fun ⟨⟨n⟩⟩ => Nonempty.some (by
+  isColimit' := fun ⟨⟨n⟩⟩ ↦ Nonempty.some (by
     rw [← Limits.Cofan.isColimit_cofanTypes_iff]
-    refine CofanTypes.isColimit_mk _ (fun x => ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h => ?_)
-      (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h => ?_)
+    refine CofanTypes.isColimit_mk _ (fun x ↦ ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h ↦ ?_)
+      (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h ↦ ?_)
     · obtain ⟨m, f, _, y, rfl⟩ := X.exists_nonDegenerate x
       exact ⟨.mk f, y, rfl⟩
     · exact unique_nonDegenerate_simplex _ _ _ _ rfl _ _ h
@@ -84,3 +57,4 @@ noncomputable def splitting : X.Splitting where
       dsimp)
 
 end SSet
+

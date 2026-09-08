@@ -31,26 +31,20 @@ universe u
 
 open CategoryTheory MonoidalCategory Functor.LaxMonoidal
 
-/--
-Definition of `TopCat.Homotopy.toSSet` / `TopCat.Homotopy.toSSet` 的定义
+/-- If two morphisms `f : X ⟶ Y` and `g : X ⟶ Y` in `TopCat` are homotopic, then so
+are their images by the functor `TopCat.toSSet : TopCat ⥤ SSet`. -/
+/-
+**TopCat.Homotopy.toSSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：TopCat.Homotopy.toSSet {X Y : TopCat.{u}} {f g : X ⟶ Y} (h : Homotopy f g)
+ : SSet.Homotopy (toSSet.map f) (toSSet.map g) where h
+参数：h : Homotopy f g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition TopCat.Homotopy.toSSet
-  signature: {X Y : TopCat.{u}} {f g : X ⟶ Y} (h : Homotopy f g)
-  body: _ ◁ SSet.stdSimplex.toSSetObjI ≫ μ TopCat.toSSet _ _ ≫ TopCat.toSSet.map h.h
-  h₀ := by simp [← Functor.map_comp]
-  h₁ := by simp [← Functor.map_comp]
-  rel := by ext _ ⟨⟨_, ⟨⟩⟩, _⟩
-
-中文:
-定义 顶元素范畴.同伦.toSSet
-  签名: {X Y : 顶元素范畴.{u}} {f g : X ⟶ Y} (h : 同伦 f g)
-  定义体: _ ◁ SSet.stdSimplex.toSSetObjI ≫ μ TopCat.toSSet _ _ ≫ TopCat.toSSet.map h.h
-  h₀ := by simp [← Functor.map_comp]
-  h₁ := by simp [← Functor.map_comp]
-  rel := by ext _ ⟨⟨_, ⟨⟩⟩, _⟩
-
-Depends on / 依赖: SSet.stdSimplex.toSSetObjI, TopCat, TopCat.toSSet, TopCat.toSSet.map, stdSimplex, toSSet, toSSetObjI
+--- 原说明 ---
+If two morphisms `f : X ⟶ Y` and `g : X ⟶ Y` in `TopCat` are homotopic, then so
+are their images by the functor `TopCat.toSSet : TopCat ⥤ SSet`.
 -/
 noncomputable def TopCat.Homotopy.toSSet {X Y : TopCat.{u}} {f g : X ⟶ Y} (h : Homotopy f g) :
     SSet.Homotopy (toSSet.map f) (toSSet.map g) where

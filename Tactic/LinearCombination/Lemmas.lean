@@ -26,710 +26,836 @@ namespace Mathlib.Tactic.LinearCombination
 variable {α : Type*} {a a' a₁ a₂ b b' b₁ b₂ c : α}
 variable {K : Type*} {t s : K}
 
+/-! ### Addition -/
 
-/--
-theorem `add_eq_eq` / 定理 `add_eq_eq`
+/-
+**Mathlib.Tactic.LinearCombination.add_eq_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.LinearCombination`。
+形式化陈述：add_eq_eq [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ + a₂ = b₁ + b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem add_eq_eq
-  given: [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  statement: a₁ + a₂ = b₁ + b₂
-  proof: p₁ ▸ p₂ ▸ rfl
-
-中文:
-定理 add_eq_eq
-  条件: [加法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  结论: a₁ + a₂ = b₁ + b₂
-  证明: p₁ ▸ p₂ ▸ rfl
+--- 原说明 ---
+### Addition
 -/
 theorem add_eq_eq [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ + a₂ = b₁ + b₂ := p₁ ▸ p₂ ▸ rfl
-
-/--
-theorem `add_le_eq` / 定理 `add_le_eq`
-
-English:
-theorem add_le_eq
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
-  proof: p₂ ▸ add_le_add_left p₁ b₂
-
-中文:
-定理 add_le_eq
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
-  证明: p₂ ▸ add_le_add_left p₁ b₂
-
-Depends on / 依赖: add_le_add_left
+/-
+**Mathlib.Tactic.LinearCombination.add_le_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.LinearCombination`。
+形式化陈述：add_le_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α] (p₁ : 
+(a₁ : α) <= b₁) (p₂ : a₂ = b₂) : a₁ + a₂ <= b₁ + b₂
+参数：p₁ : (a₁ : α) <= b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_le_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
-    (p₁ : (a₁ : α) <= b₁) (p₂ : a₂ = b₂) : a₁ + a₂ <= b₁ + b₂ :=
+    (p₁ : (a₁ : α) ≤ b₁) (p₂ : a₂ = b₂) : a₁ + a₂ ≤ b₁ + b₂ :=
   p₂ ▸ add_le_add_left p₁ b₂
-
-/--
-theorem `add_eq_le` / 定理 `add_eq_le`
-
-English:
-theorem add_eq_le
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
-  proof: p₁ ▸ add_le_add_right p₂ b₁
-
-中文:
-定理 add_eq_le
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
-  证明: p₁ ▸ add_le_add_right p₂ b₁
-
-Depends on / 依赖: add_le_add_right
+/-
+**Mathlib.Tactic.LinearCombination.add_eq_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.LinearCombination`。
+形式化陈述：add_eq_le [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α] (p₁ : 
+(a₁ : α) = b₁) (p₂ : a₂ <= b₂) : a₁ + a₂ <= b₁ + b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ <= b₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [AddLe
+ftMono α] {b c : α}, b ≤ c → ∀ (a : α), a + b ≤ a + c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_le [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
-    (p₁ : (a₁ : α) = b₁) (p₂ : a₂ <= b₂) : a₁ + a₂ <= b₁ + b₂ :=
+    (p₁ : (a₁ : α) = b₁) (p₂ : a₂ ≤ b₂) : a₁ + a₂ ≤ b₁ + b₂ :=
   p₁ ▸ add_le_add_right p₂ b₁
-
-/--
-theorem `add_lt_eq` / 定理 `add_lt_eq`
-
-English:
-theorem add_lt_eq
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: p₂ ▸ add_lt_add_left p₁ b₂
-
-中文:
-定理 add_lt_eq
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: p₂ ▸ add_lt_add_left p₁ b₂
-
-Depends on / 依赖: add_lt_add_left
+/-
+**Mathlib.Tactic.LinearCombination.add_lt_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.LinearCombination`。
+形式化陈述：add_lt_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] 
+(p₁ : (a₁ : α) < b₁) (p₂ : a₂ = b₂) : a₁ + a₂ < b₁ + b₂
+参数：p₁ : (a₁ : α) < b₁；p₂ : a₂ = b₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_lt_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [i : Ad
+dRightStrictMono α] {b c : α}, b < c → ∀ (a : α), b + a < c + a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_lt_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
     (p₁ : (a₁ : α) < b₁) (p₂ : a₂ = b₂) : a₁ + a₂ < b₁ + b₂ :=
   p₂ ▸ add_lt_add_left p₁ b₂
-
-/--
-theorem `add_eq_lt` / 定理 `add_eq_lt`
-
-English:
-theorem add_eq_lt
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] {a₁ b₁ a₂ b₂ : α}
-  proof: p₁ ▸ add_lt_add_right p₂ b₁
-
-中文:
-定理 add_eq_lt
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α] {a₁ b₁ a₂ b₂ : α}
-  证明: p₁ ▸ add_lt_add_right p₂ b₁
-
-Depends on / 依赖: add_lt_add_right
+/-
+**Mathlib.Tactic.LinearCombination.add_eq_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.LinearCombination`。
+形式化陈述：add_eq_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] 
+{a₁ b₁ a₂ b₂ : α} (p₁ : a₁ = b₁) (p₂ : a₂ < b₂) : a₁ + a₂ < b₁ + b₂
+参数：p₁ : a₁ = b₁；p₂ : a₂ < b₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] {a₁ b₁ a₂ b₂ : α}
     (p₁ : a₁ = b₁) (p₂ : a₂ < b₂) : a₁ + a₂ < b₁ + b₂ :=
   p₁ ▸ add_lt_add_right p₂ b₁
 
+/-! ### Multiplication -/
 
-/--
-theorem `mul_eq_const` / 定理 `mul_eq_const`
+/-
+**Mathlib.Tactic.LinearCombination.mul_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_eq_const [Mul α] (p : a = b) (c : α) : a * c = b * c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mul_eq_const
-  given: [Mul α] (p : a = b) (c : α)
-  statement: a * c = b * c
-  proof: p ▸ rfl
-
-中文:
-定理 mul_eq_const
-  条件: [乘法 α] (p : a = b) (c : α)
-  结论: a * c = b * c
-  证明: p ▸ rfl
+--- 原说明 ---
+### Multiplication
 -/
 theorem mul_eq_const [Mul α] (p : a = b) (c : α) : a * c = b * c := p ▸ rfl
-
-/--
-theorem `mul_le_const` / 定理 `mul_le_const`
-
-English:
-theorem mul_le_const
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α]
-  proof: mul_le_mul_of_nonneg_right p ha
-
-中文:
-定理 mul_le_const
-  结论: [半环 α] [偏序 α] [是Ordered环 α]
-  证明: mul_le_mul_of_nonneg_right p ha
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right
+/-
+**Mathlib.Tactic.LinearCombination.mul_le_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_le_const [Semiring α] [PartialOrder α] [IsOrderedRing α] (p : b <= c) 
+{a : α} (ha : 0 <= a) : b * a <= c * a
+参数：p : b <= c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
 -/
 theorem mul_le_const [Semiring α] [PartialOrder α] [IsOrderedRing α]
-    (p : b <= c) {a : α} (ha : 0 <= a) :
-    b * a <= c * a :=
+    (p : b ≤ c) {a : α} (ha : 0 ≤ a) :
+    b * a ≤ c * a :=
   mul_le_mul_of_nonneg_right p ha
-
-/--
-theorem `mul_lt_const` / 定理 `mul_lt_const`
-
-English:
-theorem mul_lt_const
-  statement: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
-  proof: mul_lt_mul_of_pos_right p ha
-
-中文:
-定理 mul_lt_const
-  结论: [半环 α] [偏序 α] [是StrictOrdered环 α]
-  证明: mul_lt_mul_of_pos_right p ha
-
-Depends on / 依赖: mul_lt_mul_of_pos_right
+/-
+**Mathlib.Tactic.LinearCombination.mul_lt_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_lt_const [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] (p : b 
+< c) {a : α} (ha : 0 < a) : b * a < c * a
+参数：p : b < c；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
 -/
 theorem mul_lt_const [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
     (p : b < c) {a : α} (ha : 0 < a) :
     b * a < c * a :=
   mul_lt_mul_of_pos_right p ha
-
-/--
-theorem `mul_lt_const_weak` / 定理 `mul_lt_const_weak`
-
-English:
-theorem mul_lt_const_weak
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α]
-  proof: mul_le_mul_of_nonneg_right p.le ha
-
-中文:
-定理 mul_lt_const_weak
-  结论: [半环 α] [偏序 α] [是Ordered环 α]
-  证明: mul_le_mul_of_nonneg_right p.le ha
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right, p.le
+/-
+**Mathlib.Tactic.LinearCombination.mul_lt_const_weak** 是 Mathlib 中的一个定理，位于命名空间 `
+Mathlib.Tactic.LinearCombination`。
+形式化陈述：mul_lt_const_weak [Semiring α] [PartialOrder α] [IsOrderedRing α] (p : b <
+ c) {a : α} (ha : 0 <= a) : b * a <= c * a
+参数：p : b < c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem mul_lt_const_weak [Semiring α] [PartialOrder α] [IsOrderedRing α]
-    (p : b < c) {a : α} (ha : 0 <= a) :
-    b * a <= c * a :=
+    (p : b < c) {a : α} (ha : 0 ≤ a) :
+    b * a ≤ c * a :=
   mul_le_mul_of_nonneg_right p.le ha
-
-/--
-theorem `mul_const_eq` / 定理 `mul_const_eq`
-
-English:
-theorem mul_const_eq
-  given: [Mul α] (p : b = c) (a : α)
-  statement: a * b = a * c
-  proof: p ▸ rfl
-
-中文:
-定理 mul_const_eq
-  条件: [乘法 α] (p : b = c) (a : α)
-  结论: a * b = a * c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombination.mul_const_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_const_eq [Mul α] (p : b = c) (a : α) : a * b = a * c
+参数：p : b = c；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_const_eq [Mul α] (p : b = c) (a : α) : a * b = a * c := p ▸ rfl
-
-/--
-theorem `mul_const_le` / 定理 `mul_const_le`
-
-English:
-theorem mul_const_le
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α]
-  proof: mul_le_mul_of_nonneg_left p ha
-
-中文:
-定理 mul_const_le
-  结论: [半环 α] [偏序 α] [是Ordered环 α]
-  证明: mul_le_mul_of_nonneg_left p ha
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left
+/-
+**Mathlib.Tactic.LinearCombination.mul_const_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_const_le [Semiring α] [PartialOrder α] [IsOrderedRing α] (p : b <= c) 
+{a : α} (ha : 0 <= a) : a * b <= a * c
+参数：p : b <= c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
 theorem mul_const_le [Semiring α] [PartialOrder α] [IsOrderedRing α]
-    (p : b <= c) {a : α} (ha : 0 <= a) :
-    a * b <= a * c :=
+    (p : b ≤ c) {a : α} (ha : 0 ≤ a) :
+    a * b ≤ a * c :=
   mul_le_mul_of_nonneg_left p ha
-
-/--
-theorem `mul_const_lt` / 定理 `mul_const_lt`
-
-English:
-theorem mul_const_lt
-  statement: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
-  proof: mul_lt_mul_of_pos_left p ha
-
-中文:
-定理 mul_const_lt
-  结论: [半环 α] [偏序 α] [是StrictOrdered环 α]
-  证明: mul_lt_mul_of_pos_left p ha
-
-Depends on / 依赖: mul_lt_mul_of_pos_left
+/-
+**Mathlib.Tactic.LinearCombination.mul_const_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：mul_const_lt [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] (p : b 
+< c) {a : α} (ha : 0 < a) : a * b < a * c
+参数：p : b < c；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem mul_const_lt [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
     (p : b < c) {a : α} (ha : 0 < a) :
     a * b < a * c :=
   mul_lt_mul_of_pos_left p ha
-
-/--
-theorem `mul_const_lt_weak` / 定理 `mul_const_lt_weak`
-
-English:
-theorem mul_const_lt_weak
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α]
-  proof: mul_le_mul_of_nonneg_left p.le ha
-
-中文:
-定理 mul_const_lt_weak
-  结论: [半环 α] [偏序 α] [是Ordered环 α]
-  证明: mul_le_mul_of_nonneg_left p.le ha
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, p.le
+/-
+**Mathlib.Tactic.LinearCombination.mul_const_lt_weak** 是 Mathlib 中的一个定理，位于命名空间 `
+Mathlib.Tactic.LinearCombination`。
+形式化陈述：mul_const_lt_weak [Semiring α] [PartialOrder α] [IsOrderedRing α] (p : b <
+ c) {a : α} (ha : 0 <= a) : a * b <= a * c
+参数：p : b < c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem mul_const_lt_weak [Semiring α] [PartialOrder α] [IsOrderedRing α]
-    (p : b < c) {a : α} (ha : 0 <= a) :
-    a * b <= a * c :=
+    (p : b < c) {a : α} (ha : 0 ≤ a) :
+    a * b ≤ a * c :=
   mul_le_mul_of_nonneg_left p.le ha
 
+/-! ### Scalar multiplication -/
 
-/--
-theorem `smul_eq_const` / 定理 `smul_eq_const`
+/-
+**Mathlib.Tactic.LinearCombination.smul_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_eq_const [SMul K α] (p : t = s) (c : α) : t • c = s • c
+参数：p : t = s；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem smul_eq_const
-  given: [SMul K α] (p : t = s) (c : α)
-  statement: t • c = s • c
-  proof: p ▸ rfl
-
-中文:
-定理 smul_eq_const
-  条件: [标量乘法 K α] (p : t = s) (c : α)
-  结论: t • c = s • c
-  证明: p ▸ rfl
+--- 原说明 ---
+### Scalar multiplication
 -/
 theorem smul_eq_const [SMul K α] (p : t = s) (c : α) : t • c = s • c := p ▸ rfl
-
-/--
-theorem `smul_le_const` / 定理 `smul_le_const`
-
-English:
-theorem smul_le_const
-  statement: [Ring K] [PartialOrder K] [IsOrderedRing K]
-  proof: smul_le_smul_of_nonneg_right p ha
-
-中文:
-定理 smul_le_const
-  结论: [环 K] [偏序 K] [是Ordered环 K]
-  证明: smul_le_smul_of_nonneg_right p ha
-
-Depends on / 依赖: smul_le_smul_of_nonneg_right
+/-
+**Mathlib.Tactic.LinearCombination.smul_le_const** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_le_const [Ring K] [PartialOrder K] [IsOrderedRing K] [AddCommGroup α]
+ [PartialOrder α] [IsOrderedAddMonoid α] [Module K α] [IsOrderedModule K α] (p :
+ t <= s) {a : α} (ha : 0 <= a) : t • a <= s • a
+参数：p : t <= s；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_le_smul_of_nonneg_right`：∀ {α : Type u_1} {β : Type u_2} {a₁ a₂ : α
+} {b : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_
+3 : Zero β] [SMulP…
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
 -/
 theorem smul_le_const [Ring K] [PartialOrder K] [IsOrderedRing K]
     [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α] [Module K α]
-    [IsOrderedModule K α] (p : t <= s) {a : α} (ha : 0 <= a) :
-    t • a <= s • a :=
+    [IsOrderedModule K α] (p : t ≤ s) {a : α} (ha : 0 ≤ a) :
+    t • a ≤ s • a :=
   smul_le_smul_of_nonneg_right p ha
-
-/--
-theorem `smul_lt_const` / 定理 `smul_lt_const`
-
-English:
-theorem smul_lt_const
-  statement: [Ring K] [PartialOrder K] [IsOrderedRing K]
-  proof: smul_lt_smul_of_pos_right p ha
-
-中文:
-定理 smul_lt_const
-  结论: [环 K] [偏序 K] [是Ordered环 K]
-  证明: smul_lt_smul_of_pos_right p ha
-
-Depends on / 依赖: smul_lt_smul_of_pos_right
+/-
+**Mathlib.Tactic.LinearCombination.smul_lt_const** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_lt_const [Ring K] [PartialOrder K] [IsOrderedRing K] [AddCommGroup α]
+ [PartialOrder α] [IsOrderedAddMonoid α] [Module K α] [IsStrictOrderedModule K α
+] (p : t < s) {a : α} (ha : 0 < a) : t • a < s • a
+参数：p : t < s；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_lt_smul_of_pos_right`：∀ {α : Type u_1} {β : Type u_2} {a₁ a₂ : α} {
+b : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_3 :
+ Zero β] [SMulP…
+· 使用定理 `IsStrictOrderedModule.toPosSMulStrictMono`：∀ {α : Type u_1} {β : Type u_
+2} {inst : SMul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero 
+α}   {inst_4 : Zero β} [self : …
 -/
 theorem smul_lt_const [Ring K] [PartialOrder K] [IsOrderedRing K]
     [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α] [Module K α]
     [IsStrictOrderedModule K α] (p : t < s) {a : α} (ha : 0 < a) :
     t • a < s • a :=
   smul_lt_smul_of_pos_right p ha
-
-/--
-theorem `smul_lt_const_weak` / 定理 `smul_lt_const_weak`
-
-English:
-theorem smul_lt_const_weak
-  statement: [Ring K] [PartialOrder K] [IsOrderedRing K]
-  proof: smul_le_smul_of_nonneg_right p.le ha
-
-中文:
-定理 smul_lt_const_weak
-  结论: [环 K] [偏序 K] [是Ordered环 K]
-  证明: smul_le_smul_of_nonneg_right p.le ha
-
-Depends on / 依赖: p.le, smul_le_smul_of_nonneg_right
+/-
+**Mathlib.Tactic.LinearCombination.smul_lt_const_weak** 是 Mathlib 中的一个定理，位于命名空间 
+`Mathlib.Tactic.LinearCombination`。
+形式化陈述：smul_lt_const_weak [Ring K] [PartialOrder K] [IsOrderedRing K] [AddCommGro
+up α] [PartialOrder α] [IsOrderedAddMonoid α] [Module K α] [IsStrictOrderedModul
+e K α] (p : t < s) {a : α} (ha : 0 <= a) : t • a <= s • a
+参数：p : t < s；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_le_smul_of_nonneg_right`：∀ {α : Type u_1} {β : Type u_2} {a₁ a₂ : α
+} {b : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_
+3 : Zero β] [SMulP…
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem smul_lt_const_weak [Ring K] [PartialOrder K] [IsOrderedRing K]
     [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α] [Module K α]
-    [IsStrictOrderedModule K α] (p : t < s) {a : α} (ha : 0 <= a) :
-    t • a <= s • a :=
+    [IsStrictOrderedModule K α] (p : t < s) {a : α} (ha : 0 ≤ a) :
+    t • a ≤ s • a :=
   smul_le_smul_of_nonneg_right p.le ha
-
-/--
-theorem `smul_const_eq` / 定理 `smul_const_eq`
-
-English:
-theorem smul_const_eq
-  given: [SMul K α] (p : b = c) (s : K)
-  statement: s • b = s • c
-  proof: p ▸ rfl
-
-中文:
-定理 smul_const_eq
-  条件: [标量乘法 K α] (p : b = c) (s : K)
-  结论: s • b = s • c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombination.smul_const_eq** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_const_eq [SMul K α] (p : b = c) (s : K) : s • b = s • c
+参数：p : b = c；s : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_const_eq [SMul K α] (p : b = c) (s : K) : s • b = s • c := p ▸ rfl
-
-/--
-theorem `smul_const_le` / 定理 `smul_const_le`
-
-English:
-theorem smul_const_le
-  statement: [Semiring K] [PartialOrder K]
-  proof: smul_le_smul_of_nonneg_left p hs
-
-中文:
-定理 smul_const_le
-  结论: [半环 K] [偏序 K]
-  证明: smul_le_smul_of_nonneg_left p hs
-
-Depends on / 依赖: smul_le_smul_of_nonneg_left
+/-
+**Mathlib.Tactic.LinearCombination.smul_const_le** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_const_le [Semiring K] [PartialOrder K] [AddCommMonoid α] [PartialOrde
+r α] [Module K α] [PosSMulMono K α] (p : b <= c) {s : K} (hs : 0 <= s) : s • b <
+= s • c
+参数：p : b <= c；hs : 0 <= s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_le_smul_of_nonneg_left`：∀ {α : Type u_1} {β : Type u_2} {a : α} {b₁
+ b₂ : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_3
+ : Zero α] [PosSM…
 -/
 theorem smul_const_le [Semiring K] [PartialOrder K]
     [AddCommMonoid α] [PartialOrder α] [Module K α]
-    [PosSMulMono K α] (p : b <= c) {s : K} (hs : 0 <= s) :
-    s • b <= s • c :=
+    [PosSMulMono K α] (p : b ≤ c) {s : K} (hs : 0 ≤ s) :
+    s • b ≤ s • c :=
   smul_le_smul_of_nonneg_left p hs
-
-/--
-theorem `smul_const_lt` / 定理 `smul_const_lt`
-
-English:
-theorem smul_const_lt
-  statement: [Semiring K] [PartialOrder K]
-  proof: smul_lt_smul_of_pos_left p hs
-
-中文:
-定理 smul_const_lt
-  结论: [半环 K] [偏序 K]
-  证明: smul_lt_smul_of_pos_left p hs
-
-Depends on / 依赖: smul_lt_smul_of_pos_left
+/-
+**Mathlib.Tactic.LinearCombination.smul_const_lt** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：smul_const_lt [Semiring K] [PartialOrder K] [AddCommMonoid α] [PartialOrde
+r α] [Module K α] [PosSMulStrictMono K α] (p : b < c) {s : K} (hs : 0 < s) : s •
+ b < s • c
+参数：p : b < c；hs : 0 < s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_lt_smul_of_pos_left`：∀ {α : Type u_1} {β : Type u_2} {a : α} {b₁ b₂
+ : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_3 : 
+Zero α] [PosSM…
 -/
 theorem smul_const_lt [Semiring K] [PartialOrder K]
     [AddCommMonoid α] [PartialOrder α] [Module K α]
     [PosSMulStrictMono K α] (p : b < c) {s : K} (hs : 0 < s) :
     s • b < s • c :=
   smul_lt_smul_of_pos_left p hs
-
-/--
-theorem `smul_const_lt_weak` / 定理 `smul_const_lt_weak`
-
-English:
-theorem smul_const_lt_weak
-  statement: [Semiring K] [PartialOrder K]
-  proof: smul_le_smul_of_nonneg_left p.le hs
-
-中文:
-定理 smul_const_lt_weak
-  结论: [半环 K] [偏序 K]
-  证明: smul_le_smul_of_nonneg_left p.le hs
-
-Depends on / 依赖: p.le, smul_le_smul_of_nonneg_left
+/-
+**Mathlib.Tactic.LinearCombination.smul_const_lt_weak** 是 Mathlib 中的一个定理，位于命名空间 
+`Mathlib.Tactic.LinearCombination`。
+形式化陈述：smul_const_lt_weak [Semiring K] [PartialOrder K] [AddCommMonoid α] [Partia
+lOrder α] [Module K α] [PosSMulMono K α] (p : b < c) {s : K} (hs : 0 <= s) : s •
+ b <= s • c
+参数：p : b < c；hs : 0 <= s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_le_smul_of_nonneg_left`：∀ {α : Type u_1} {β : Type u_2} {a : α} {b₁
+ b₂ : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_3
+ : Zero α] [PosSM…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem smul_const_lt_weak [Semiring K] [PartialOrder K]
     [AddCommMonoid α] [PartialOrder α] [Module K α]
-    [PosSMulMono K α] (p : b < c) {s : K} (hs : 0 <= s) :
-    s • b <= s • c :=
+    [PosSMulMono K α] (p : b < c) {s : K} (hs : 0 ≤ s) :
+    s • b ≤ s • c :=
   smul_le_smul_of_nonneg_left p.le hs
 
+/-! ### Division -/
 
-/--
-theorem `div_eq_const` / 定理 `div_eq_const`
+/-
+**Mathlib.Tactic.LinearCombination.div_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：div_eq_const [Div α] (p : a = b) (c : α) : a / c = b / c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem div_eq_const
-  given: [Div α] (p : a = b) (c : α)
-  statement: a / c = b / c
-  proof: p ▸ rfl
-
-中文:
-定理 div_eq_const
-  条件: [除法 α] (p : a = b) (c : α)
-  结论: a / c = b / c
-  证明: p ▸ rfl
+--- 原说明 ---
+### Division
 -/
 theorem div_eq_const [Div α] (p : a = b) (c : α) : a / c = b / c := p ▸ rfl
-
-/--
-theorem `div_le_const` / 定理 `div_le_const`
-
-English:
-theorem div_le_const
-  statement: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
-  proof: div_le_div_of_nonneg_right p ha
-
-中文:
-定理 div_le_const
-  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
-  证明: div_le_div_of_nonneg_right p ha
-
-Depends on / 依赖: div_le_div_of_nonneg_right
+/-
+**Mathlib.Tactic.LinearCombination.div_le_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：div_le_const [Semifield α] [LinearOrder α] [IsStrictOrderedRing α] (p : b 
+<= c) {a : α} (ha : 0 <= a) : b / a <= c / a
+参数：p : b <= c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_le_div_of_nonneg_right`：div_le_div_of_nonneg_right (hab : a <= b) (h
+c : 0 <= c) : a / c <= b / c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
 -/
 theorem div_le_const [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
-    (p : b <= c) {a : α} (ha : 0 <= a) : b / a <= c / a :=
+    (p : b ≤ c) {a : α} (ha : 0 ≤ a) : b / a ≤ c / a :=
   div_le_div_of_nonneg_right p ha
-
-/--
-theorem `div_lt_const` / 定理 `div_lt_const`
-
-English:
-theorem div_lt_const
-  statement: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
-  proof: div_lt_div_of_pos_right p ha
-
-中文:
-定理 div_lt_const
-  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
-  证明: div_lt_div_of_pos_right p ha
-
-Depends on / 依赖: div_lt_div_of_pos_right
+/-
+**Mathlib.Tactic.LinearCombination.div_lt_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：div_lt_const [Semifield α] [LinearOrder α] [IsStrictOrderedRing α] (p : b 
+< c) {a : α} (ha : 0 < a) : b / a < c / a
+参数：p : b < c；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_lt_div_of_pos_right`：div_lt_div_of_pos_right (h : a < b) (hc : 0 < c
+) : a / c < b / c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
 -/
 theorem div_lt_const [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
     (p : b < c) {a : α} (ha : 0 < a) : b / a < c / a :=
   div_lt_div_of_pos_right p ha
-
-/--
-theorem `div_lt_const_weak` / 定理 `div_lt_const_weak`
-
-English:
-theorem div_lt_const_weak
-  statement: [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
-  proof: div_le_div_of_nonneg_right p.le ha
-
-中文:
-定理 div_lt_const_weak
-  结论: [半域 α] [线性序 α] [是StrictOrdered环 α]
-  证明: div_le_div_of_nonneg_right p.le ha
-
-Depends on / 依赖: div_le_div_of_nonneg_right, p.le
+/-
+**Mathlib.Tactic.LinearCombination.div_lt_const_weak** 是 Mathlib 中的一个定理，位于命名空间 `
+Mathlib.Tactic.LinearCombination`。
+形式化陈述：div_lt_const_weak [Semifield α] [LinearOrder α] [IsStrictOrderedRing α] (p
+ : b < c) {a : α} (ha : 0 <= a) : b / a <= c / a
+参数：p : b < c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_le_div_of_nonneg_right`：div_le_div_of_nonneg_right (hab : a <= b) (h
+c : 0 <= c) : a / c <= b / c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem div_lt_const_weak [Semifield α] [LinearOrder α] [IsStrictOrderedRing α]
-    (p : b < c) {a : α} (ha : 0 <= a) :
-    b / a <= c / a :=
+    (p : b < c) {a : α} (ha : 0 ≤ a) :
+    b / a ≤ c / a :=
   div_le_div_of_nonneg_right p.le ha
 
+/-! ### Lemmas constructing the reduction of a goal to a specified built-up hypothesis -/
 
-/--
-theorem `eq_of_eq` / 定理 `eq_of_eq`
+/-
+**Mathlib.Tactic.LinearCombination.eq_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：eq_of_eq [Add α] [IsRightCancelAdd α] (p : (a : α) = b) (H : a' + b = b' +
+ a) : a' = b'
+参数：p : (a : α) = b；H : a' + b = b' + a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_right_cancel`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] {
+a b c : G}, a + b = c + b → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem eq_of_eq
-  given: [Add α] [IsRightCancelAdd α] (p : (a : α) = b) (H : a' + b = b' + a)
-  proof: by
-  rw [p] at H
-  exact add_right_cancel H
-
-中文:
-定理 eq_of_eq
-  条件: [加法 α] [是右消去加法 α] (p : (a : α) = b) (H : a' + b = b' + a)
-  证明: by
-  rw [p] at H
-  exact add_right_cancel H
-
-Depends on / 依赖: add_right_cancel
+--- 原说明 ---
+### Lemmas constructing the reduction of a goal to a specified built-up hypothes
+is
 -/
 theorem eq_of_eq [Add α] [IsRightCancelAdd α] (p : (a : α) = b) (H : a' + b = b' + a) :
     a' = b' := by
   rw [p] at H
   exact add_right_cancel H
-
-/--
-theorem `le_of_le` / 定理 `le_of_le`
-
-English:
-theorem le_of_le
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  grw [← add_le_add_iff_right b, H, p]
-
-中文:
-定理 le_of_le
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  grw [← add_le_add_iff_right b, H, p]
-
-Depends on / 依赖: add_le_add_iff_right
+/-
+**Mathlib.Tactic.LinearCombination.le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：le_of_le [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) <= b) (H : a' + b <= b' + a) : a' <= b'
+参数：p : (a : α) <= b；H : a' + b <= b' + a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_le_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [A
+ddRightMono α] [AddRightReflectLE α] (a : α) {b c : α},   b + a ≤ c + a ↔ b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
 -/
 theorem le_of_le [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-    (p : (a : α) <= b) (H : a' + b <= b' + a) :
-    a' <= b' := by
+    (p : (a : α) ≤ b) (H : a' + b ≤ b' + a) :
+    a' ≤ b' := by
   grw [← add_le_add_iff_right b, H, p]
-
-/--
-theorem `le_of_eq` / 定理 `le_of_eq`
-
-English:
-theorem le_of_eq
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  rwa [p, add_le_add_iff_right] at H
-
-中文:
-定理 le_of_eq
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  rwa [p, add_le_add_iff_right] at H
-
-Depends on / 依赖: add_le_add_iff_right
+/-
+**Mathlib.Tactic.LinearCombination.le_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：le_of_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) = b) (H : a' + b <= b' + a) : a' <= b'
+参数：p : (a : α) = b；H : a' + b <= b' + a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_le_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [A
+ddRightMono α] [AddRightReflectLE α] (a : α) {b c : α},   b + a ≤ c + a ↔ b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
 -/
 theorem le_of_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-    (p : (a : α) = b) (H : a' + b <= b' + a) :
-    a' <= b' := by
+    (p : (a : α) = b) (H : a' + b ≤ b' + a) :
+    a' ≤ b' := by
   rwa [p, add_le_add_iff_right] at H
-
-/--
-theorem `le_of_lt` / 定理 `le_of_lt`
-
-English:
-theorem le_of_lt
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: le_of_le p.le H
-
-中文:
-定理 le_of_lt
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: le_of_le p.le H
-
-Depends on / 依赖: le_of_le, p.le
+/-
+**Mathlib.Tactic.LinearCombination.le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：le_of_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) < b) (H : a' + b <= b' + a) : a' <= b'
+参数：p : (a : α) < b；H : a' + b <= b' + a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.LinearCombination.le_of_le`：le_of_le [AddCommMonoid α] [P
+artialOrder α] [IsOrderedCancelAddMonoid α] (p : (a : α) <= b) (H : a' + b <= b'
+ + a) : a' <= b'
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem le_of_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-    (p : (a : α) < b) (H : a' + b <= b' + a) :
-    a' <= b' :=
+    (p : (a : α) < b) (H : a' + b ≤ b' + a) :
+    a' ≤ b' :=
   le_of_le p.le H
-
-/--
-theorem `lt_of_le` / 定理 `lt_of_le`
-
-English:
-theorem lt_of_le
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  grw [p] at H; simpa using H
-
-中文:
-定理 lt_of_le
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  grw [p] at H; simpa using H
+/-
+**Mathlib.Tactic.LinearCombination.lt_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：lt_of_le [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) <= b) (H : a' + b < b' + a) : a' < b'
+参数：p : (a : α) <= b；H : a' + b < b' + a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
 -/
 theorem lt_of_le [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-    (p : (a : α) <= b) (H : a' + b < b' + a) :
+    (p : (a : α) ≤ b) (H : a' + b < b' + a) :
     a' < b' := by
   grw [p] at H; simpa using H
-
-/--
-theorem `lt_of_eq` / 定理 `lt_of_eq`
-
-English:
-theorem lt_of_eq
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  rwa [p, add_lt_add_iff_right] at H
-
-中文:
-定理 lt_of_eq
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  rwa [p, add_lt_add_iff_right] at H
-
-Depends on / 依赖: add_lt_add_iff_right
+/-
+**Mathlib.Tactic.LinearCombination.lt_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：lt_of_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) = b) (H : a' + b < b' + a) : a' < b'
+参数：p : (a : α) = b；H : a' + b < b' + a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_lt_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [A
+ddRightStrictMono α] [AddRightReflectLT α] (a : α) {b c : α},   b + a < c + a ↔ 
+b < c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
 -/
 theorem lt_of_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
     (p : (a : α) = b) (H : a' + b < b' + a) :
     a' < b' := by
   rwa [p, add_lt_add_iff_right] at H
-
-/--
-theorem `lt_of_lt` / 定理 `lt_of_lt`
-
-English:
-theorem lt_of_lt
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  grw [← add_lt_add_iff_right b, H]
-  gcongr
-
-alias ⟨eq_rearrange, _⟩ := sub_eq_zero
-
-中文:
-定理 lt_of_lt
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  grw [← add_lt_add_iff_right b, H]
-  gcongr
-
-alias ⟨eq_rearrange, _⟩ := sub_eq_zero
-
-Depends on / 依赖: add_lt_add_iff_right
+/-
+**Mathlib.Tactic.LinearCombination.lt_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.LinearCombination`。
+形式化陈述：lt_of_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α] (
+p : (a : α) < b) (H : a' + b <= b' + a) : a' < b'
+参数：p : (a : α) < b；H : a' + b <= b' + a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_lt_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [A
+ddRightStrictMono α] [AddRightReflectLT α] (a : α) {b c : α},   b + a < c + a ↔ 
+b < c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
 -/
 theorem lt_of_lt [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-    (p : (a : α) < b) (H : a' + b <= b' + a) :
+    (p : (a : α) < b) (H : a' + b ≤ b' + a) :
     a' < b' := by
   grw [← add_lt_add_iff_right b, H]
   gcongr
 
 alias ⟨eq_rearrange, _⟩ := sub_eq_zero
-
-/--
-theorem `le_rearrange` / 定理 `le_rearrange`
-
-English:
-theorem le_rearrange
-  statement: {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
-  proof: sub_nonpos.mp h
-
-中文:
-定理 le_rearrange
-  结论: {α : 类型} [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
-  证明: sub_nonpos.mp h
-
-Depends on / 依赖: sub_nonpos, sub_nonpos.mp
+/-
+**Mathlib.Tactic.LinearCombination.le_rearrange** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：le_rearrange {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMo
+noid α] {a b : α} (h : a - b <= 0) : a <= b
+参数：h : a - b <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_nonpos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, a - b ≤ 0 ↔ a ≤ b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem le_rearrange {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
-    {a b : α} (h : a - b <= 0) : a <= b :=
+    {a b : α} (h : a - b ≤ 0) : a ≤ b :=
   sub_nonpos.mp h
-
-/--
-theorem `lt_rearrange` / 定理 `lt_rearrange`
-
-English:
-theorem lt_rearrange
-  statement: {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
-  proof: sub_neg.mp h
-
-中文:
-定理 lt_rearrange
-  结论: {α : 类型} [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
-  证明: sub_neg.mp h
-
-Depends on / 依赖: sub_neg, sub_neg.mp
+/-
+**Mathlib.Tactic.LinearCombination.lt_rearrange** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Tactic.LinearCombination`。
+形式化陈述：lt_rearrange {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMo
+noid α] {a b : α} (h : a - b < 0) : a < b
+参数：h : a - b < 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_neg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, a - b < 0 ↔ a < b
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem lt_rearrange {α : Type*} [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
     {a b : α} (h : a - b < 0) : a < b :=
   sub_neg.mp h
-
-/--
-theorem `eq_of_add_pow` / 定理 `eq_of_add_pow`
-
-English:
-theorem eq_of_add_pow
-  statement: [Ring α] [NoZeroDivisors α] (n : Nat) (p : (a : α) = b)
-  proof: by
-  rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
-
-中文:
-定理 eq_of_add_pow
-  结论: [环 α] [无零因子 α] (n : 自然数) (p : (a : α) = b)
-  证明: by
-  rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
-
-Depends on / 依赖: eq_zero_of_pow_eq_zero, sub_eq_zero
+/-
+**Mathlib.Tactic.LinearCombination.eq_of_add_pow** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombination`。
+形式化陈述：eq_of_add_pow [Ring α] [NoZeroDivisors α] (n : Nat) (p : (a : α) = b) (H :
+ (a' - b') ^ n - (a - b) = 0) : a' = b'
+参数：n : Nat；p : (a : α) = b；H : (a' - b') ^ n - (a - b) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `eq_zero_of_pow_eq_zero`：eq_zero_of_pow_eq_zero [Zero R] [Pow R Nat] [IsR
+educed R] {n : Nat} (h : x ^ n = 0) : x = 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
 -/
-theorem eq_of_add_pow [Ring α] [NoZeroDivisors α] (n : Nat) (p : (a : α) = b)
+theorem eq_of_add_pow [Ring α] [NoZeroDivisors α] (n : ℕ) (p : (a : α) = b)
     (H : (a' - b') ^ n - (a - b) = 0) : a' = b' := by
   rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
 
@@ -741,18 +867,16 @@ open Tactic.LinearCombination
 
 namespace Ineq
 
-/--
-Definition of `addRelRelData` / `addRelRelData` 的定义
+/-- Given two (in)equalities, look up the lemma to add them. -/
+/-
+**Mathlib.Ineq.addRelRelData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → Mathlib.Ineq → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addRelRelData
-  signature: : Ineq -> Ineq -> Name
-
-中文:
-定义 addRelRelData
-  签名: : Ineq -> Ineq -> Name
+--- 原说明 ---
+Given two (in)equalities, look up the lemma to add them.
 -/
-def addRelRelData : Ineq -> Ineq -> Name
+def addRelRelData : Ineq → Ineq → Name
   | eq, eq => ``add_eq_eq
   | eq, le => ``add_eq_le
   | eq, lt => ``add_eq_lt
@@ -763,127 +887,143 @@ def addRelRelData : Ineq -> Ineq -> Name
   | lt, le => ``add_lt_add_of_lt_of_le
   | lt, lt => ``add_lt_add
 
-/--
-Inductive type `WithStrictness` / 归纳类型 `WithStrictness`
+/-- Finite inductive type extending `Mathlib.Ineq`: a type of inequality (`eq`, `le` or `lt`),
+together with, in the case of `lt`, a Boolean, typically representing the strictness (< or ≤) of
+some other inequality. -/
+/-
+**Mathlib.Ineq.WithStrictness** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WithStrictness
-  parameters: : Type
-  constructors (3):
-    - eq: Ineq.WithStrictness
-    - le: Ineq.WithStrictness
-    - lt: (strict : Bool) : Ineq.WithStrictness
-
-中文:
-归纳类型 WithStrictness
-  参数: : 类型
-  构造子 (3 个):
-    - eq: Ineq.WithStrictness
-    - le: Ineq.WithStrictness
-    - lt: (strict : 布尔值) : Ineq.WithStrictness
+--- 原说明 ---
+Finite inductive type extending `Mathlib.Ineq`: a type of inequality (`eq`, `le`
+ or `lt`),
+together with, in the case of `lt`, a Boolean, typically representing the strict
+ness (< or ≤) of
+some other inequality.
 -/
 protected inductive WithStrictness : Type
   | eq : Ineq.WithStrictness
   | le : Ineq.WithStrictness
   | lt (strict : Bool) : Ineq.WithStrictness
 
-/--
-Definition of `mulRelConstData` / `mulRelConstData` 的定义
+/-- Given an (in)equality, look up the lemma to left-multiply it by a constant.  If relevant, also
+take into account the degree of positivity which can be proved of the constant: strict or
+non-strict. -/
+/-
+**Mathlib.Ineq.mulRelConstData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq.WithStrictness → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRelConstData
-  signature: : Ineq.WithStrictness -> Name
-
-中文:
-定义 mulRelConstData
-  签名: : Ineq.WithStrictness -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to left-multiply it by a constant.  If 
+relevant, also
+take into account the degree of positivity which can be proved of the constant: 
+strict or
+non-strict.
 -/
-def mulRelConstData : Ineq.WithStrictness -> Name
+def mulRelConstData : Ineq.WithStrictness → Name
   | .eq => ``mul_eq_const
   | .le => ``mul_le_const
   | .lt true => ``mul_lt_const
   | .lt false => ``mul_lt_const_weak
 
-/--
-Definition of `mulConstRelData` / `mulConstRelData` 的定义
+/-- Given an (in)equality, look up the lemma to right-multiply it by a constant.  If relevant, also
+take into account the degree of positivity which can be proved of the constant: strict or
+non-strict. -/
+/-
+**Mathlib.Ineq.mulConstRelData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq.WithStrictness → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulConstRelData
-  signature: : Ineq.WithStrictness -> Name
-
-中文:
-定义 mulConstRelData
-  签名: : Ineq.WithStrictness -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to right-multiply it by a constant.  If
+ relevant, also
+take into account the degree of positivity which can be proved of the constant: 
+strict or
+non-strict.
 -/
-def mulConstRelData : Ineq.WithStrictness -> Name
+def mulConstRelData : Ineq.WithStrictness → Name
   | .eq => ``mul_const_eq
   | .le => ``mul_const_le
   | .lt true => ``mul_const_lt
   | .lt false => ``mul_const_lt_weak
 
-/--
-Definition of `smulRelConstData` / `smulRelConstData` 的定义
+/-- Given an (in)equality, look up the lemma to left-scalar-multiply it by a constant (scalar).
+If relevant, also take into account the degree of positivity which can be proved of the constant:
+strict or non-strict. -/
+/-
+**Mathlib.Ineq.smulRelConstData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq.WithStrictness → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulRelConstData
-  signature: : Ineq.WithStrictness -> Name
-
-中文:
-定义 smulRelConstData
-  签名: : Ineq.WithStrictness -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to left-scalar-multiply it by a constan
+t (scalar).
+If relevant, also take into account the degree of positivity which can be proved
+ of the constant:
+strict or non-strict.
 -/
-def smulRelConstData : Ineq.WithStrictness -> Name
+def smulRelConstData : Ineq.WithStrictness → Name
   | .eq => ``smul_eq_const
   | .le => ``smul_le_const
   | .lt true => ``smul_lt_const
   | .lt false => ``smul_lt_const_weak
 
-/--
-Definition of `smulConstRelData` / `smulConstRelData` 的定义
+/-- Given an (in)equality, look up the lemma to right-scalar-multiply it by a constant (vector).
+If relevant, also take into account the degree of positivity which can be proved of the constant:
+strict or non-strict. -/
+/-
+**Mathlib.Ineq.smulConstRelData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq.WithStrictness → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulConstRelData
-  signature: : Ineq.WithStrictness -> Name
-
-中文:
-定义 smulConstRelData
-  签名: : Ineq.WithStrictness -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to right-scalar-multiply it by a consta
+nt (vector).
+If relevant, also take into account the degree of positivity which can be proved
+ of the constant:
+strict or non-strict.
 -/
-def smulConstRelData : Ineq.WithStrictness -> Name
+def smulConstRelData : Ineq.WithStrictness → Name
   | .eq => ``smul_const_eq
   | .le => ``smul_const_le
   | .lt true => ``smul_const_lt
   | .lt false => ``smul_const_lt_weak
 
-/--
-Definition of `divRelConstData` / `divRelConstData` 的定义
+/-- Given an (in)equality, look up the lemma to divide it by a constant.  If relevant, also take
+into account the degree of positivity which can be proved of the constant: strict or non-strict. -/
+/-
+**Mathlib.Ineq.divRelConstData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq.WithStrictness → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divRelConstData
-  signature: : Ineq.WithStrictness -> Name
-
-中文:
-定义 divRelConstData
-  签名: : Ineq.WithStrictness -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to divide it by a constant.  If relevan
+t, also take
+into account the degree of positivity which can be proved of the constant: stric
+t or non-strict.
 -/
-def divRelConstData : Ineq.WithStrictness -> Name
+def divRelConstData : Ineq.WithStrictness → Name
   | .eq => ``div_eq_const
   | .le => ``div_le_const
   | .lt true => ``div_lt_const
   | .lt false => ``div_lt_const_weak
 
-/--
-Definition of `relImpRelData` / `relImpRelData` 的定义
+/-- Given two (in)equalities `P` and `Q`, look up the lemma to deduce `Q` from `P`, and the relation
+appearing in the side condition produced by this lemma. -/
+/-
+**Mathlib.Ineq.relImpRelData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → Mathlib.Ineq → Option (Name × Mathlib.Ineq)
+参数：Name × Mathlib.Ineq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relImpRelData
-  signature: : Ineq -> Ineq -> Option (Name × Ineq)
-
-中文:
-定义 relImpRelData
-  签名: : Ineq -> Ineq -> 选项类型 (Name × Ineq)
+--- 原说明 ---
+Given two (in)equalities `P` and `Q`, look up the lemma to deduce `Q` from `P`, 
+and the relation
+appearing in the side condition produced by this lemma.
 -/
-def relImpRelData : Ineq -> Ineq -> Option (Name × Ineq)
+def relImpRelData : Ineq → Ineq → Option (Name × Ineq)
   | eq, eq => some (``eq_of_eq, eq)
   | eq, le => some (``Tactic.LinearCombination.le_of_eq, le)
   | eq, lt => some (``lt_of_eq, lt)
@@ -894,20 +1034,19 @@ def relImpRelData : Ineq -> Ineq -> Option (Name × Ineq)
   | lt, le => some (``Tactic.LinearCombination.le_of_lt, le)
   | lt, lt => some (``lt_of_lt, le)
 
-/--
-Definition of `rearrangeData` / `rearrangeData` 的定义
+/-- Given an (in)equality, look up the lemma to move everything to the LHS. -/
+/-
+**Mathlib.Ineq.rearrangeData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ineq`。
+形式化陈述：Mathlib.Ineq → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rearrangeData
-  signature: : Ineq -> Name
-
-中文:
-定义 rearrangeData
-  签名: : Ineq -> Name
+--- 原说明 ---
+Given an (in)equality, look up the lemma to move everything to the LHS.
 -/
-def rearrangeData : Ineq -> Name
+def rearrangeData : Ineq → Name
   | eq => ``eq_rearrange
   | le => ``le_rearrange
   | lt => ``lt_rearrange
 
 end Mathlib.Ineq
+

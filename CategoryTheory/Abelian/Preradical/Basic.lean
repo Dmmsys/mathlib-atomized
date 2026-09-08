@@ -40,18 +40,16 @@ namespace CategoryTheory.Abelian
 variable {C : Type u} [Category.{v} C] [Abelian C]
 
 variable (C) in
-/--
-Definition of `Preradical` / `Preradical` 的定义
+/-- A preradical on an abelian category `C` is a monomorphism in `C ⥤ C` with codomain `𝟭 C`. -/
+/-
+**CategoryTheory.Abelian.Preradical** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+Abelian`。
+形式化陈述：Preradical
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Preradical
-  body: MonoOver (𝟭 C)
-
-中文:
-缩写 Preradical
-  定义体: MonoOver (𝟭 C)
-
-Depends on / 依赖: MonoOver
+--- 原说明 ---
+A preradical on an abelian category `C` is a monomorphism in `C ⥤ C` with codoma
+in `𝟭 C`.
 -/
 abbrev Preradical := MonoOver (𝟭 C)
 
@@ -59,127 +57,67 @@ namespace Preradical
 
 variable (Φ : Preradical C)
 
-/--
-Definition of `r` / `r` 的定义
+/-- The underlying endofunctor `r : C ⥤ C` of a preradical `Φ`. -/
+/-
+**CategoryTheory.Abelian.Preradical.r** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Abelian.Preradical`。
+形式化陈述：r : C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation r
-  signature: : C ⥤ C
-  body: Φ.obj.left
-
-中文:
-缩写 r
-  签名: : C ⥤ C
-  定义体: Φ.obj.left
-
-Depends on / 依赖: obj.left
+--- 原说明 ---
+The underlying endofunctor `r : C ⥤ C` of a preradical `Φ`.
 -/
 abbrev r : C ⥤ C := Φ.obj.left
 
-/--
-Definition of `ι` / `ι` 的定义
+/-- The structure morphism `Φ.r ⟶ 𝟭 C` of a preradical `Φ`. -/
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ι
-  signature: : Φ.r ⟶ 𝟭 C
-  body: Φ.obj.hom
-
-@[simp]
-
-中文:
-缩写 ι
-  签名: : Φ.r ⟶ 𝟭 C
-  定义体: Φ.obj.hom
-
-@[simp]
-
-Depends on / 依赖: obj.hom
+--- 原说明 ---
+The structure morphism `Φ.r ⟶ 𝟭 C` of a preradical `Φ`.
 -/
 abbrev ι : Φ.r ⟶ 𝟭 C := Φ.obj.hom
 
 @[simp]
-/--
-lemma `r_map_ι_app` / 引理 `r_map_ι_app`
-
-English:
-lemma r_map_ι_app
-  given: (X : C)
-  statement: Φ.r.map (Φ.ι.app X) = Φ.ι.app (Φ.r.obj X)
-  proof: by
-  rw [← cancel_mono (Φ.ι.app X)]
-  exact Φ.ι.naturality (Φ.ι.app X)
-
-中文:
-引理 r_map_ι_app
-  条件: (X : C)
-  结论: Φ.r.map (Φ.ι.app X) = Φ.ι.app (Φ.r.obj X)
-  证明: by
-  rw [← cancel_mono (Φ.ι.app X)]
-  exact Φ.ι.naturality (Φ.ι.app X)
-
-Depends on / 依赖: cancel_mono, naturality
+/-
+**CategoryTheory.Abelian.Preradical.r_map_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma r_map_ι_app (X : C) : Φ.r.map (Φ.ι.app X) = Φ.ι.app (Φ.r.obj X) := by
   rw [← cancel_mono (Φ.ι.app X)]
   exact Φ.ι.naturality (Φ.ι.app X)
 
-/--
-Definition of `IsIdempotent` / `IsIdempotent` 的定义
+/-- A preradical `Φ` is idempotent if `Φ.r ⋙ Φ.r ≅ Φ.r`. -/
+/-
+**CategoryTheory.Abelian.Preradical.IsIdempotent** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ca
+tegoryTheory.Abelian.Preradical`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Abelian.Preradical C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsIdempotent
-  parameters: : Prop where
-  axioms and operations (1):
-    - isIso_whiskerLeft_r_ι : IsIso (Functor.whiskerLeft Φ.r Φ.ι)
-
-中文:
-类 是幂等
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isIso_whiskerLeft_r_ι : 是同构 (函子.whiskerLeft Φ.r Φ.ι)
+--- 原说明 ---
+A preradical `Φ` is idempotent if `Φ.r ⋙ Φ.r ≅ Φ.r`.
 -/
 class IsIdempotent : Prop where
   isIso_whiskerLeft_r_ι : IsIso (Functor.whiskerLeft Φ.r Φ.ι)
 
 attribute [instance] IsIdempotent.isIso_whiskerLeft_r_ι
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsIdempotent]
-  signature: (X : C)
-  body: inferInstanceAs (IsIso ((Functor.whiskerLeft Φ.r Φ.ι).app X))
-
-中文:
-实例 [Φ.是幂等]
-  签名: (X : C)
-  定义体: inferInstanceAs (IsIso ((Functor.whiskerLeft Φ.r Φ.ι).app X))
-
-Depends on / 依赖: Functor, Functor.whiskerLeft, whiskerLeft
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsIdempotent] (X : C) :
     IsIso (Φ.ι.app (Φ.r.obj X)) :=
   inferInstanceAs (IsIso ((Functor.whiskerLeft Φ.r Φ.ι).app X))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsIdempotent]
-  signature: (X : C)
-  body: by
-  rw [r_map_ι_app]
-  infer_instance
-
-中文:
-实例 [Φ.是幂等]
-  签名: (X : C)
-  定义体: by
-  rw [r_map_ι_app]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsIdempotent] (X : C) :
     IsIso (Φ.r.map (Φ.ι.app X)) := by
@@ -187,6 +125,11 @@ instance [Φ.IsIdempotent] (X : C) :
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {D : Type*} [Category* D] (F : D ⥤ C) :
     Mono (Functor.whiskerLeft F Φ.ι) := by
   rw [NatTrans.mono_iff_mono_app]
@@ -197,3 +140,4 @@ instance {D : Type*} [Category* D] (F : D ⥤ C) :
 end Preradical
 
 end CategoryTheory.Abelian
+

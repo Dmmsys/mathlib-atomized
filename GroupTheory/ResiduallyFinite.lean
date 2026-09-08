@@ -21,40 +21,34 @@ In this file we define residually finite groups and prove some basic properties.
 
 @[expose] public section
 
-/--
-Definition of `AddGroup.ResiduallyFinite` / `AddGroup.ResiduallyFinite` 的定义
+/-- An additive group `G` is residually finite if the intersection of all finite index normal
+additive subgroups is trivial. -/
+/-
+**AddGroup.ResiduallyFinite** 是 Mathlib 中的一个归纳类型，位于命名空间 `AddGroup`。
+形式化陈述：(G : Type u_1) → [AddGroup G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddGroup.ResiduallyFinite
-  parameters: (G : Type*) [AddGroup G]
-  axioms and operations (1):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormalAddSubgroup G, H.toAddSubgroup = ⊥
-
-中文:
-类 加法群.ResiduallyFinite
-  参数: (G : 类型) [加法群 G]
-  公理与运算 (1 个):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormalAdd子群 G, H.toAddSubgroup = ⊥
+--- 原说明 ---
+An additive group `G` is residually finite if the intersection of all finite ind
+ex normal
+additive subgroups is trivial.
 -/
 class AddGroup.ResiduallyFinite (G : Type*) [AddGroup G] : Prop where
   iInf_eq_bot : ⨅ H : FiniteIndexNormalAddSubgroup G, H.toAddSubgroup = ⊥
 
 namespace Group
 
-/--
-Definition of `ResiduallyFinite` / `ResiduallyFinite` 的定义
+/-- A group `G` is residually finite if the intersection of all finite index normal subgroups is
+trivial. -/
+/-
+**Group.ResiduallyFinite** 是 Mathlib 中的一个归纳类型，位于命名空间 `Group`。
+形式化陈述：(G : Type u_1) → [Group G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ResiduallyFinite
-  parameters: (G : Type*) [Group G]
-  axioms and operations (1):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormalSubgroup G, H.toSubgroup = ⊥
-
-中文:
-类 ResiduallyFinite
-  参数: (G : 类型) [群 G]
-  公理与运算 (1 个):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormal子群 G, H.toSubgroup = ⊥
+--- 原说明 ---
+A group `G` is residually finite if the intersection of all finite index normal 
+subgroups is
+trivial.
 -/
 class ResiduallyFinite (G : Type*) [Group G] : Prop where
   iInf_eq_bot : ⨅ H : FiniteIndexNormalSubgroup G, H.toSubgroup = ⊥
@@ -64,239 +58,202 @@ attribute [to_additive existing] ResiduallyFinite
 variable {G G' : Type*} [Group G] [Group G']
 
 @[to_additive]
-/--
-theorem `residuallyFinite_def` / 定理 `residuallyFinite_def`
-
-English:
-theorem residuallyFinite_def
-  proof: ⟨fun h => h.iInf_eq_bot, fun h => ⟨h⟩⟩
-
-@[to_additive]
-
-中文:
-定理 residuallyFinite_def
-  证明: ⟨fun h => h.iInf_eq_bot, fun h => ⟨h⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: h.iInf_eq_bot, iInf_eq_bot
+/-
+**Group.residuallyFinite_def** 是 Mathlib 中的一个定理，位于命名空间 `Group`。
+形式化陈述：residuallyFinite_def : ResiduallyFinite G ↔ ⨅ H : FiniteIndexNormalSubgrou
+p G, H.toSubgroup = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Group.ResiduallyFinite.iInf_eq_bot`：∀ {G : Type u_1} {inst : Group G} [s
+elf : Group.ResiduallyFinite G], ⨅ H, H.toSubgroup = ⊥
 -/
 theorem residuallyFinite_def :
     ResiduallyFinite G ↔ ⨅ H : FiniteIndexNormalSubgroup G, H.toSubgroup = ⊥ :=
-  ⟨fun h => h.iInf_eq_bot, fun h => ⟨h⟩⟩
+  ⟨fun h ↦ h.iInf_eq_bot, fun h ↦ ⟨h⟩⟩
 
 @[to_additive]
-/--
-theorem `residuallyFinite_iff_forall_finiteIndexNormalSubgroup` / 定理 `residuallyFinite_iff_forall_finiteIndexNormalSubgroup`
-
-English:
-theorem residuallyFinite_iff_forall_finiteIndexNormalSubgroup
-  proof: by
-  simp_rw [residuallyFinite_def, Subgroup.eq_bot_iff_forall, Subgroup.mem_iInf,
-    FiniteIndexNormalSubgroup.mem_toSubgroup_iff]
-
-@[to_additive]
-
-中文:
-定理 residuallyFinite_iff_对任意_finiteIndexNormalSubgroup
-  证明: by
-  simp_rw [residuallyFinite_def, Subgroup.eq_bot_iff_forall, Subgroup.mem_iInf,
-    FiniteIndexNormalSubgroup.mem_toSubgroup_iff]
-
-@[to_additive]
-
-Depends on / 依赖: FiniteIndexNormalSubgroup, FiniteIndexNormalSubgroup.mem_toSubgroup_iff, Subgroup, Subgroup.eq_bot_iff_forall, Subgroup.mem_iInf, eq_bot_iff_forall, mem_iInf, mem_toSubgroup_iff, residuallyFinite_def, simp_rw
+/-
+**Group.residuallyFinite_iff_forall_finiteIndexNormalSubgroup** 是 Mathlib 中的一个定理
+，位于命名空间 `Group`。
+形式化陈述：residuallyFinite_iff_forall_finiteIndexNormalSubgroup : ResiduallyFinite G
+ ↔ forall g : G, (forall H : FiniteIndexNormalSubgroup G, g in H) -> g = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem residuallyFinite_iff_forall_finiteIndexNormalSubgroup :
-    ResiduallyFinite G ↔ forall g : G, (forall H : FiniteIndexNormalSubgroup G, g in H) -> g = 1 := by
+    ResiduallyFinite G ↔ ∀ g : G, (∀ H : FiniteIndexNormalSubgroup G, g ∈ H) → g = 1 := by
   simp_rw [residuallyFinite_def, Subgroup.eq_bot_iff_forall, Subgroup.mem_iInf,
     FiniteIndexNormalSubgroup.mem_toSubgroup_iff]
 
 @[to_additive]
-/--
-theorem `eq_one_iff_forall_finiteIndexNormalSubroup` / 定理 `eq_one_iff_forall_finiteIndexNormalSubroup`
-
-English:
-theorem eq_one_iff_forall_finiteIndexNormalSubroup
-  statement: [ResiduallyFinite G]
-  proof: residuallyFinite_iff_forall_finiteIndexNormalSubgroup.mp ‹_› g hg
-
-@[to_additive]
-
-中文:
-定理 eq_one_iff_对任意_finiteIndexNormalSubroup
-  结论: [ResiduallyFinite G]
-  证明: residuallyFinite_iff_forall_finiteIndexNormalSubgroup.mp ‹_› g hg
-
-@[to_additive]
-
-Depends on / 依赖: residuallyFinite_iff_forall_finiteIndexNormalSubgroup, residuallyFinite_iff_forall_finiteIndexNormalSubgroup.mp
+/-
+**Group.eq_one_iff_forall_finiteIndexNormalSubroup** 是 Mathlib 中的一个定理，位于命名空间 `Gr
+oup`。
+形式化陈述：eq_one_iff_forall_finiteIndexNormalSubroup [ResiduallyFinite G] (g : G) (h
+g : forall H : FiniteIndexNormalSubgroup G, g in H) : g = 1
+参数：g : G；hg : forall H : FiniteIndexNormalSubgroup G, g in H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Group.residuallyFinite_iff_forall_finiteIndexNormalSubgroup`：residuallyF
+inite_iff_forall_finiteIndexNormalSubgroup : ResiduallyFinite G ↔ forall g : G, 
+(forall H : FiniteIndexNormalSubgroup G, g in H) …
 -/
 theorem eq_one_iff_forall_finiteIndexNormalSubroup [ResiduallyFinite G]
-    (g : G) (hg : forall H : FiniteIndexNormalSubgroup G, g in H) : g = 1 :=
+    (g : G) (hg : ∀ H : FiniteIndexNormalSubgroup G, g ∈ H) : g = 1 :=
   residuallyFinite_iff_forall_finiteIndexNormalSubgroup.mp ‹_› g hg
 
 @[to_additive]
-/--
-theorem `residuallyFinite_iff_exists_finiteIndexNormalSubgroup` / 定理 `residuallyFinite_iff_exists_finiteIndexNormalSubgroup`
-
-English:
-theorem residuallyFinite_iff_exists_finiteIndexNormalSubgroup
-  proof: by
-  simp_rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup, ← not_forall, not_imp_not]
-
-@[to_additive]
-
-中文:
-定理 residuallyFinite_iff_存在_finiteIndexNormalSubgroup
-  证明: by
-  simp_rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup, ← not_forall, not_imp_not]
-
-@[to_additive]
-
-Depends on / 依赖: not_forall, not_imp_not, residuallyFinite_iff_forall_finiteIndexNormalSubgroup, simp_rw
+/-
+**Group.residuallyFinite_iff_exists_finiteIndexNormalSubgroup** 是 Mathlib 中的一个定理
+，位于命名空间 `Group`。
+形式化陈述：residuallyFinite_iff_exists_finiteIndexNormalSubgroup : ResiduallyFinite G
+ ↔ forall g : G, g != 1 -> exists H : FiniteIndexNormalSubgroup G, g ∉ H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem residuallyFinite_iff_exists_finiteIndexNormalSubgroup :
-    ResiduallyFinite G ↔ forall g : G, g != 1 -> exists H : FiniteIndexNormalSubgroup G, g ∉ H := by
+    ResiduallyFinite G ↔ ∀ g : G, g ≠ 1 → ∃ H : FiniteIndexNormalSubgroup G, g ∉ H := by
   simp_rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup, ← not_forall, not_imp_not]
 
 @[to_additive]
-/--
-theorem `exists_finiteIndexNormalSubgroup_notMem` / 定理 `exists_finiteIndexNormalSubgroup_notMem`
-
-English:
-theorem exists_finiteIndexNormalSubgroup_notMem
-  given: [ResiduallyFinite G] (g : G) (hg : g != 1)
-  proof: residuallyFinite_iff_exists_finiteIndexNormalSubgroup.mp ‹_› g hg
-
-@[to_additive]
-
-中文:
-定理 存在_finiteIndexNormalSubgroup_notMem
-  条件: [ResiduallyFinite G] (g : G) (hg : g != 1)
-  证明: residuallyFinite_iff_exists_finiteIndexNormalSubgroup.mp ‹_› g hg
-
-@[to_additive]
-
-Depends on / 依赖: residuallyFinite_iff_exists_finiteIndexNormalSubgroup, residuallyFinite_iff_exists_finiteIndexNormalSubgroup.mp
+/-
+**Group.exists_finiteIndexNormalSubgroup_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Group
+`。
+形式化陈述：exists_finiteIndexNormalSubgroup_notMem [ResiduallyFinite G] (g : G) (hg :
+ g != 1) : exists H : FiniteIndexNormalSubgroup G, g ∉ H
+参数：g : G；hg : g != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Group.residuallyFinite_iff_exists_finiteIndexNormalSubgroup`：residuallyF
+inite_iff_exists_finiteIndexNormalSubgroup : ResiduallyFinite G ↔ forall g : G, 
+g != 1 -> exists H : FiniteIndexNormalSubgroup G,…
 -/
-theorem exists_finiteIndexNormalSubgroup_notMem [ResiduallyFinite G] (g : G) (hg : g != 1) :
-    exists H : FiniteIndexNormalSubgroup G, g ∉ H :=
+theorem exists_finiteIndexNormalSubgroup_notMem [ResiduallyFinite G] (g : G) (hg : g ≠ 1) :
+    ∃ H : FiniteIndexNormalSubgroup G, g ∉ H :=
   residuallyFinite_iff_exists_finiteIndexNormalSubgroup.mp ‹_› g hg
 
 @[to_additive]
-/--
-theorem `residuallyFinite_iff_forall_finiteIndex` / 定理 `residuallyFinite_iff_forall_finiteIndex`
-
-English:
-theorem residuallyFinite_iff_forall_finiteIndex
-  proof: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  exact forall_congr' fun g => ⟨fun h hg => h fun H => hg H,
-    fun h hg => h fun H hH => H.normalCore_le (hg (.ofSubgroup H.normalCore))⟩
-
-@[to_additive]
-
-中文:
-定理 residuallyFinite_iff_对任意_finiteIndex
-  证明: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  exact forall_congr' fun g => ⟨fun h hg => h fun H => hg H,
-    fun h hg => h fun H hH => H.normalCore_le (hg (.ofSubgroup H.normalCore))⟩
-
-@[to_additive]
-
-Depends on / 依赖: H.normalCore, H.normalCore_le, forall_congr, normalCore, normalCore_le, ofSubgroup, residuallyFinite_iff_forall_finiteIndexNormalSubgroup
+/-
+**Group.residuallyFinite_iff_forall_finiteIndex** 是 Mathlib 中的一个定理，位于命名空间 `Group
+`。
+形式化陈述：residuallyFinite_iff_forall_finiteIndex : ResiduallyFinite G ↔ forall g : 
+G, (forall (H : Subgroup G) [H.FiniteIndex], g in H) -> g = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Group.residuallyFinite_iff_forall_finiteIndexNormalSubgroup`：residuallyF
+inite_iff_forall_finiteIndexNormalSubgroup : ResiduallyFinite G ↔ forall g : G, 
+(forall H : FiniteIndexNormalSubgroup G, g in H) …
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `FiniteIndexNormalSubgroup.instFiniteIndex`：∀ {G : Type u_1} [inst : Grou
+p G] (H : FiniteIndexNormalSubgroup G), H.FiniteIndex
+· 使用定理 `Subgroup.normalCore_le`：normalCore_le (H : Subgroup G) : H.normalCore <=
+ H
 -/
 theorem residuallyFinite_iff_forall_finiteIndex :
-    ResiduallyFinite G ↔ forall g : G, (forall (H : Subgroup G) [H.FiniteIndex], g in H) -> g = 1 := by
+    ResiduallyFinite G ↔ ∀ g : G, (∀ (H : Subgroup G) [H.FiniteIndex], g ∈ H) → g = 1 := by
   rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  exact forall_congr' fun g => ⟨fun h hg => h fun H => hg H,
-    fun h hg => h fun H hH => H.normalCore_le (hg (.ofSubgroup H.normalCore))⟩
+  exact forall_congr' fun g ↦ ⟨fun h hg ↦ h fun H ↦ hg H,
+    fun h hg ↦ h fun H hH ↦ H.normalCore_le (hg (.ofSubgroup H.normalCore))⟩
 
 @[to_additive]
-/--
-theorem `residuallyFinite_iff_exists_finiteIndex` / 定理 `residuallyFinite_iff_exists_finiteIndex`
-
-English:
-theorem residuallyFinite_iff_exists_finiteIndex
-  proof: by
-  simp_rw [residuallyFinite_iff_forall_finiteIndex, ← Classical.not_imp, ← not_forall,
-    not_imp_not]
-
-中文:
-定理 residuallyFinite_iff_存在_finiteIndex
-  证明: by
-  simp_rw [residuallyFinite_iff_forall_finiteIndex, ← Classical.not_imp, ← not_forall,
-    not_imp_not]
-
-Depends on / 依赖: Classical, Classical.not_imp, not_forall, not_imp, not_imp_not, residuallyFinite_iff_forall_finiteIndex, simp_rw
+/-
+**Group.residuallyFinite_iff_exists_finiteIndex** 是 Mathlib 中的一个定理，位于命名空间 `Group
+`。
+形式化陈述：residuallyFinite_iff_exists_finiteIndex : ResiduallyFinite G ↔ forall g : 
+G, g != 1 -> exists (H : Subgroup G), H.FiniteIndex ∧ g ∉ H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem residuallyFinite_iff_exists_finiteIndex :
-    ResiduallyFinite G ↔ forall g : G, g != 1 -> exists (H : Subgroup G), H.FiniteIndex ∧ g ∉ H := by
+    ResiduallyFinite G ↔ ∀ g : G, g ≠ 1 → ∃ (H : Subgroup G), H.FiniteIndex ∧ g ∉ H := by
   simp_rw [residuallyFinite_iff_forall_finiteIndex, ← Classical.not_imp, ← not_forall,
     not_imp_not]
 
 /-- If `G` is residually finite, for every pair of distinct elements `g`, `h` there exists a finite
 index normal subgroup `H` such that `g` and `h` differ in the quotient `G ⧸ H`. -/
 @[to_additive]
-/--
-theorem `exists_finiteIndexNormalSubgroup_of_residuallyFinite` / 定理 `exists_finiteIndexNormalSubgroup_of_residuallyFinite`
+/-
+**Group.exists_finiteIndexNormalSubgroup_of_residuallyFinite** 是 Mathlib 中的一个定理，
+位于命名空间 `Group`。
+形式化陈述：exists_finiteIndexNormalSubgroup_of_residuallyFinite [ResiduallyFinite G] 
+(g h : G) (hgh : g != h) : exists H : FiniteIndexNormalSubgroup G, (g : G ⧸ H.to
+Subgroup) != ↑h
+参数：g h : G；hgh : g != h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Group.exists_finiteIndexNormalSubgroup_notMem`：exists_finiteIndexNormalS
+ubgroup_notMem [ResiduallyFinite G] (g : G) (hg : g != 1) : exists H : FiniteInd
+exNormalSubgroup G, g ∉ H
+· 使用引理 `eq_of_inv_mul_eq_one`：eq_of_inv_mul_eq_one (h : a⁻¹ * b = 1) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem exists_finiteIndexNormalSubgroup_of_residuallyFinite
-  statement: [ResiduallyFinite G] (g h : G)
-  proof: by
-  obtain ⟨H, hH⟩ :=
-exists_finiteIndexNormalSubgroup_notMem (g⁻¹ * h) fun h => hgh eq_of_inv_mul_eq_one h
-  exact ⟨H, by simpa [QuotientGroup.eq]⟩
-
-中文:
-定理 存在_finiteIndexNormalSubgroup_of_residuallyFinite
-  结论: [ResiduallyFinite G] (g h : G)
-  证明: by
-  obtain ⟨H, hH⟩ :=
-exists_finiteIndexNormalSubgroup_notMem (g⁻¹ * h) fun h => hgh eq_of_inv_mul_eq_one h
-  exact ⟨H, by simpa [QuotientGroup.eq]⟩
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq, eq_of_inv_mul_eq_one, exists_finiteIndexNormalSubgroup_notMem
+--- 原说明 ---
+If `G` is residually finite, for every pair of distinct elements `g`, `h` there 
+exists a finite
+index normal subgroup `H` such that `g` and `h` differ in the quotient `G ⧸ H`.
 -/
 theorem exists_finiteIndexNormalSubgroup_of_residuallyFinite [ResiduallyFinite G] (g h : G)
-    (hgh : g != h) : exists H : FiniteIndexNormalSubgroup G, (g : G ⧸ H.toSubgroup) != ↑h := by
+    (hgh : g ≠ h) : ∃ H : FiniteIndexNormalSubgroup G, (g : G ⧸ H.toSubgroup) ≠ ↑h := by
   obtain ⟨H, hH⟩ :=
-exists_finiteIndexNormalSubgroup_notMem (g⁻¹ * h) fun h => hgh eq_of_inv_mul_eq_one h
+    exists_finiteIndexNormalSubgroup_notMem (g⁻¹ * h) fun h ↦ hgh <| eq_of_inv_mul_eq_one h
   exact ⟨H, by simpa [QuotientGroup.eq]⟩
 
 /-- `G` is residually finite if for every element `g` not equal to `1` there exists a group
 homomorphism `f` to a finite group `H` such that `f g ≠ 1`. -/
 @[to_additive]
-/--
-theorem `residuallyFinite_of_forall_exists_finite_monoidHom.` / 定理 `residuallyFinite_of_forall_exists_finite_monoidHom.`
+/-
+**Group.residuallyFinite_of_forall_exists_finite_monoidHom.** 是 Mathlib 中的一个定理，位
+于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem residuallyFinite_of_forall_exists_finite_monoidHom.{u}
-  proof: by
-  rw [residuallyFinite_iff_exists_finiteIndex]
-  intro g hg
-  obtain ⟨_, _, _, f, hf⟩ := h g hg
-  exact ⟨f.ker, Subgroup.finiteIndex_ker f, by simpa using hf⟩
-
-@[to_additive]
-
-中文:
-定理 residuallyFinite_of_对任意_存在_finite_monoidHom.{u}
-  证明: by
-  rw [residuallyFinite_iff_exists_finiteIndex]
-  intro g hg
-  obtain ⟨_, _, _, f, hf⟩ := h g hg
-  exact ⟨f.ker, Subgroup.finiteIndex_ker f, by simpa using hf⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.finiteIndex_ker, f.ker, finiteIndex_ker, residuallyFinite_iff_exists_finiteIndex
+--- 原说明 ---
+`G` is residually finite if for every element `g` not equal to `1` there exists 
+a group
+homomorphism `f` to a finite group `H` such that `f g ≠ 1`.
 -/
 theorem residuallyFinite_of_forall_exists_finite_monoidHom.{u}
-    (h : forall g : G, g != 1 -> exists (H : Type u) (_ : Group H) (_ : Finite H) (f : G ->* H), f g != 1) :
+    (h : ∀ g : G, g ≠ 1 → ∃ (H : Type u) (_ : Group H) (_ : Finite H) (f : G →* H), f g ≠ 1) :
     ResiduallyFinite G := by
   rw [residuallyFinite_iff_exists_finiteIndex]
   intro g hg
@@ -304,93 +261,35 @@ theorem residuallyFinite_of_forall_exists_finite_monoidHom.{u}
   exact ⟨f.ker, Subgroup.finiteIndex_ker f, by simpa using hf⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: G] : ResiduallyFinite G
-  body: residuallyFinite_iff_forall_finiteIndex.mpr fun _ hg => hg ⊥
-
-@[to_additive]
-
-中文:
-实例 [有限
-  签名: G] : ResiduallyFinite G
-  定义体: residuallyFinite_iff_forall_finiteIndex.mpr fun _ hg => hg ⊥
-
-@[to_additive]
-
-Depends on / 依赖: residuallyFinite_iff_forall_finiteIndex, residuallyFinite_iff_forall_finiteIndex.mpr
+/-
+**Group.** 是 Mathlib 中的一个实例，位于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite G] : ResiduallyFinite G :=
-  residuallyFinite_iff_forall_finiteIndex.mpr fun _ hg => hg ⊥
+  residuallyFinite_iff_forall_finiteIndex.mpr fun _ hg ↦ hg ⊥
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ResiduallyFinite
-  signature: G] {H
-  body: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  intro g hg
-  ext
-  exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap H.subtype)
-
-@[to_additive]
-
-中文:
-实例 [ResiduallyFinite
-  签名: G] {H
-  定义体: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  intro g hg
-  ext
-  exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap H.subtype)
-
-@[to_additive]
-
-Depends on / 依赖: H.subtype, K.comap, eq_one_iff_forall_finiteIndexNormalSubroup, residuallyFinite_iff_forall_finiteIndexNormalSubgroup, subtype
+/-
+**Group.** 是 Mathlib 中的一个实例，位于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ResiduallyFinite G] {H : Subgroup G} : ResiduallyFinite H := by
   rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
   intro g hg
   ext
-  exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap H.subtype)
+  exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K ↦ hg (K.comap H.subtype)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ResiduallyFinite
-  signature: G] [ResiduallyFinite G'] : ResiduallyFinite (G × G')
-  body: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  intro g hg
-  ext
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap (MonoidHom.fst G G'))
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.2 fun K => hg (K.comap (MonoidHom.snd G G'))
-
-中文:
-实例 [ResiduallyFinite
-  签名: G] [ResiduallyFinite G'] : ResiduallyFinite (G × G')
-  定义体: by
-  rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
-  intro g hg
-  ext
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap (MonoidHom.fst G G'))
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.2 fun K => hg (K.comap (MonoidHom.snd G G'))
-
-Depends on / 依赖: K.comap, MonoidHom, MonoidHom.fst, MonoidHom.snd, eq_one_iff_forall_finiteIndexNormalSubroup, residuallyFinite_iff_forall_finiteIndexNormalSubgroup
+/-
+**Group.** 是 Mathlib 中的一个实例，位于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ResiduallyFinite G] [ResiduallyFinite G'] : ResiduallyFinite (G × G') := by
   rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
   intro g hg
   ext
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K => hg (K.comap (MonoidHom.fst G G'))
-  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.2 fun K => hg (K.comap (MonoidHom.snd G G'))
+  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.1 fun K ↦ hg (K.comap (MonoidHom.fst G G'))
+  · exact eq_one_iff_forall_finiteIndexNormalSubroup g.2 fun K ↦ hg (K.comap (MonoidHom.snd G G'))
 
 end Group
+

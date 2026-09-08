@@ -29,184 +29,176 @@ section Ring
 variable {R : Type*} [Ring R]
 variable {M : Type*} [AddCommGroup M] [Module R M]
 
-/--
-Definition of `CoFG` / `CoFG` 的定义
+/-- A submodule `S` of a module `M` is co-finitely generated (CoFG) if the quotient
+  space `M ⧸ S` is finitely generated. -/
+/-
+**Submodule.CoFG** 是 Mathlib 中的一个缩写定义，位于命名空间 `Submodule`。
+形式化陈述：CoFG (S : Submodule R M) : Prop
+参数：S : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CoFG
-  signature: (S : Submodule R M)
-  body: Module.Finite R (M ⧸ S)
-
-中文:
-缩写 CoFG
-  签名: (S : 子模 R M)
-  定义体: Module.Finite R (M ⧸ S)
-
-Depends on / 依赖: Finite, Module, Module.Finite
+--- 原说明 ---
+A submodule `S` of a module `M` is co-finitely generated (CoFG) if the quotient
+  space `M ⧸ S` is finitely generated.
 -/
 abbrev CoFG (S : Submodule R M) : Prop := Module.Finite R (M ⧸ S)
 
-/--
-theorem `CoFG.of_finite` / 定理 `CoFG.of_finite`
+/-- A submodule of a finite module is CoFG. -/
+/-
+**Submodule.CoFG.of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [Module.Finite R M] {S : Submodule R M}, S.CoFG
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem CoFG.of_finite
-  given: [Module.Finite R M] {S : Submodule R M}
-  statement: S.CoFG
-  proof: Module.Finite.quotient R S
-
-中文:
-定理 CoFG.of_finite
-  条件: [模.有限 R M] {S : 子模 R M}
-  结论: S.CoFG
-  证明: Module.Finite.quotient R S
+--- 原说明 ---
+A submodule of a finite module is CoFG.
 -/
 @[simp] theorem CoFG.of_finite [Module.Finite R M] {S : Submodule R M} : S.CoFG :=
   Module.Finite.quotient R S
 
-/--
-theorem `CoFG.top` / 定理 `CoFG.top`
+/-- The top submodule is CoFG. -/
+/-
+**Submodule.CoFG.top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M], ⊤.CoFG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
+· 使用定理 `isNoetherian_of_finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semiring
+ R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] [Finite M],   IsNoet
+herian R M
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem CoFG.top
-  statement: (⊤ : Submodule R M).CoFG
-  proof: inferInstance
-
-中文:
-定理 CoFG.top
-  结论: (⊤ : 子模 R M).CoFG
-  证明: inferInstance
+--- 原说明 ---
+The top submodule is CoFG.
 -/
 @[simp] theorem CoFG.top : (⊤ : Submodule R M).CoFG := inferInstance
 
 variable (R M) in
-/--
-theorem `_root_.Module.Finite.iff_cofg_bot` / 定理 `_root_.Module.Finite.iff_cofg_bot`
+/-- A module is finite if and only if the bottom submodule is CoFG. -/
+/-
+**Submodule._root_.Module.Finite.iff_cofg_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Module.Finite.iff_cofg_bot
-  statement: (⊥ : Submodule R M).CoFG ↔ Module.Finite R M
-  proof: ⟨fun _ => Module.Finite.equiv (quotEquivOfEqBot ⊥ rfl), fun _ => CoFG.of_finite⟩
-
-中文:
-定理 _root_.模.有限.iff_cofg_bot
-  结论: (⊥ : 子模 R M).CoFG ↔ 模.有限 R M
-  证明: ⟨fun _ => Module.Finite.equiv (quotEquivOfEqBot ⊥ rfl), fun _ => CoFG.of_finite⟩
-
-Depends on / 依赖: CoFG.of_finite, Finite, Module, Module.Finite.equiv, of_finite, quotEquivOfEqBot
+--- 原说明 ---
+A module is finite if and only if the bottom submodule is CoFG.
 -/
 theorem _root_.Module.Finite.iff_cofg_bot : (⊥ : Submodule R M).CoFG ↔ Module.Finite R M :=
   ⟨fun _ => Module.Finite.equiv (quotEquivOfEqBot ⊥ rfl), fun _ => CoFG.of_finite⟩
 
-/--
-theorem `CoFG.fg_of_isCompl` / 定理 `CoFG.fg_of_isCompl`
+/-- A complement of a CoFG submodule is FG. -/
+/-
+**Submodule.CoFG.fg_of_isCompl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {S T : Submodule R M}, IsCompl S T → S.CoFG → T.F
+G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.Finite.iff_fg`：iff_fg {N : Submodule R M} : Module.Finite R N ↔ N
+.FG
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
 
-English:
-theorem CoFG.fg_of_isCompl
-  given: {S T : Submodule R M} (hST : IsCompl S T) (hS : S.CoFG)
-  statement: T.FG
-  proof: Module.Finite.iff_fg.mp Module.Finite.equiv quotientEquivOfIsCompl S T hST
-
-中文:
-定理 CoFG.fg_of_isCompl
-  条件: {S T : 子模 R M} (hST : 是补集 S T) (hS : S.CoFG)
-  结论: T.FG
-  证明: Module.Finite.iff_fg.mp Module.Finite.equiv quotientEquivOfIsCompl S T hST
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv, Module.Finite.iff_fg.mp, iff_fg, quotientEquivOfIsCompl
+--- 原说明 ---
+A complement of a CoFG submodule is FG.
 -/
 theorem CoFG.fg_of_isCompl {S T : Submodule R M} (hST : IsCompl S T) (hS : S.CoFG) : T.FG :=
-Module.Finite.iff_fg.mp Module.Finite.equiv quotientEquivOfIsCompl S T hST
+  Module.Finite.iff_fg.mp <| Module.Finite.equiv <| quotientEquivOfIsCompl S T hST
 
-/--
-theorem `CoFG.fg_of_disjoint` / 定理 `CoFG.fg_of_disjoint`
+/-- Over a noetherian ring, if `S` and `T` are disjoint and `T` is CoFG, then `S` is FG. -/
+/-
+**Submodule.CoFG.fg_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [IsNoetherianRing R] {S T : Submodule R M}, Disjo
+int S T → T.CoFG → S.FG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.FG.of_disjoint_of_isNoetherian_quotient`：∀ {R : Type u_1} {M :
+ Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M
+]   {S T : Submodule R M} [IsNoetherian…
 
-English:
-theorem CoFG.fg_of_disjoint
-  statement: [IsNoetherianRing R] {S T : Submodule R M} (hST : Disjoint S T)
-  proof: .of_disjoint_of_isNoetherian_quotient hST
-
-中文:
-定理 CoFG.fg_of_disjoint
-  结论: [是Noether环 R] {S T : 子模 R M} (hST : Disjoint S T)
-  证明: .of_disjoint_of_isNoetherian_quotient hST
-
-Depends on / 依赖: of_disjoint_of_isNoetherian_quotient
+--- 原说明 ---
+Over a noetherian ring, if `S` and `T` are disjoint and `T` is CoFG, then `S` is
+ FG.
 -/
 theorem CoFG.fg_of_disjoint [IsNoetherianRing R] {S T : Submodule R M} (hST : Disjoint S T)
     (hT : T.CoFG) : S.FG :=
   .of_disjoint_of_isNoetherian_quotient hST
 
-/--
-theorem `FG.cofg_of_codisjoint` / 定理 `FG.cofg_of_codisjoint`
+/-- If `S` and `T` are co-disjoint and `S` is FG, then `T` is CoFG. -/
+/-
+**Submodule.FG.cofg_of_codisjoint** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {S T : Submodule R M}, Codisjoint S T → S.FG → T.
+CoFG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Finite.iff_fg`：iff_fg {N : Submodule R M} : Module.Finite R N ↔ N
+.FG
+· 使用定理 `Module.Finite.of_surjective`：of_surjective [hM : Module.Finite R M] (f :
+ M ->ₛₗ[σ] P) (hf : Surjective f) : Module.Finite S P
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range_domRestrict`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type 
+u_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddC
+ommMonoid M] [ins…
+· 使用定理 `Codisjoint.eq_top`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : 
+OrderTop α] {a b : α}, Codisjoint a b → a ⊔ b = ⊤
+· 使用定理 `Codisjoint.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Orde
+rTop α] ⦃a b : α⦄, Codisjoint a b → Codisjoint b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem FG.cofg_of_codisjoint
-  given: {S T : Submodule R M} (hST : Codisjoint S T) (hS : S.FG)
-  proof: have := Module.Finite.iff_fg.mpr hS
-  .of_surjective (T.mkQ.domRestrict S) (by simp [← LinearMap.range_eq_top, hST.symm.eq_top])
-
-中文:
-定理 FG.cofg_of_codisjoint
-  条件: {S T : 子模 R M} (hST : Codisjoint S T) (hS : S.FG)
-  证明: have := Module.Finite.iff_fg.mpr hS
-  .of_surjective (T.mkQ.domRestrict S) (by simp [← LinearMap.range_eq_top, hST.symm.eq_top])
-
-Depends on / 依赖: Finite, LinearMap, LinearMap.range_eq_top, Module, Module.Finite.iff_fg.mpr, T.mkQ.domRestrict, domRestrict, eq_top, hST.symm.eq_top, iff_fg, of_surjective, range_eq_top
+--- 原说明 ---
+If `S` and `T` are co-disjoint and `S` is FG, then `T` is CoFG.
 -/
 theorem FG.cofg_of_codisjoint {S T : Submodule R M} (hST : Codisjoint S T) (hS : S.FG) :
     T.CoFG :=
   have := Module.Finite.iff_fg.mpr hS
   .of_surjective (T.mkQ.domRestrict S) (by simp [← LinearMap.range_eq_top, hST.symm.eq_top])
 
-/--
-theorem `FG.cofg_of_isCompl` / 定理 `FG.cofg_of_isCompl`
+/-- A complement of an FG submodule is CoFG. -/
+/-
+**Submodule.FG.cofg_of_isCompl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {S T : Submodule R M}, IsCompl S T → S.FG → T.CoF
+G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.FG.cofg_of_codisjoint`：∀ {R : Type u_1} [inst : Ring R] {M : T
+ype u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {S T : Submodu
+le R M}, Codisjoint S…
+· 使用定理 `IsCompl.codisjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : B
+oundedOrder α] {x y : α}, IsCompl x y → Codisjoint x y
 
-English:
-theorem FG.cofg_of_isCompl
-  given: {S T : Submodule R M} (hST : IsCompl S T) (hS : S.FG)
-  statement: T.CoFG
-  proof: hS.cofg_of_codisjoint hST.codisjoint
-
-中文:
-定理 FG.cofg_of_isCompl
-  条件: {S T : 子模 R M} (hST : 是补集 S T) (hS : S.FG)
-  结论: T.CoFG
-  证明: hS.cofg_of_codisjoint hST.codisjoint
-
-Depends on / 依赖: codisjoint, cofg_of_codisjoint, hS.cofg_of_codisjoint, hST.codisjoint
+--- 原说明 ---
+A complement of an FG submodule is CoFG.
 -/
 theorem FG.cofg_of_isCompl {S T : Submodule R M} (hST : IsCompl S T) (hS : S.FG) : T.CoFG :=
   hS.cofg_of_codisjoint hST.codisjoint
 
-/--
-theorem `CoFG.of_le` / 定理 `CoFG.of_le`
+/-- A submodule that contains a CoFG submodule is CoFG. -/
+/-
+**Submodule.CoFG.of_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {S T : Submodule R M}, S ≤ T → S.CoFG → T.CoFG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
 
-English:
-theorem CoFG.of_le
-  given: {S T : Submodule R M} (hT : S <= T) (hS : S.CoFG)
-  statement: T.CoFG
-  proof: by
-  rw [← sup_eq_right.mpr hT]
-  exact Module.Finite.equiv (quotientQuotientEquivQuotientSup S T)
-
-@[deprecated (since := "2026-05-13")]
-alias CoFG.cofg_of_le := CoFG.of_le
-
-中文:
-定理 CoFG.of_le
-  条件: {S T : 子模 R M} (hT : S <= T) (hS : S.CoFG)
-  结论: T.CoFG
-  证明: by
-  rw [← sup_eq_right.mpr hT]
-  exact Module.Finite.equiv (quotientQuotientEquivQuotientSup S T)
-
-@[deprecated (since := "2026-05-13")]
-alias CoFG.cofg_of_le := CoFG.of_le
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv, quotientQuotientEquivQuotientSup, sup_eq_right, sup_eq_right.mpr
+--- 原说明 ---
+A submodule that contains a CoFG submodule is CoFG.
 -/
-theorem CoFG.of_le {S T : Submodule R M} (hT : S <= T) (hS : S.CoFG) : T.CoFG := by
+theorem CoFG.of_le {S T : Submodule R M} (hT : S ≤ T) (hS : S.CoFG) : T.CoFG := by
   rw [← sup_eq_right.mpr hT]
   exact Module.Finite.equiv (quotientQuotientEquivQuotientSup S T)
 
@@ -219,48 +211,47 @@ open LinearMap
 
 variable {N : Type*} [AddCommGroup N] [Module R N]
 
-/--
-theorem `range_fg_iff_ker_cofg` / 定理 `range_fg_iff_ker_cofg`
+/-- The range of a linear map is FG if and only if the kernel is CoFG. -/
+/-
+**Submodule.range_fg_iff_ker_cofg** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_fg_iff_ker_cofg {f : M ->ₗ[R] N} : (range f).FG ↔ (ker f).CoFG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Finite.iff_fg`：iff_fg {N : Submodule R M} : Module.Finite R N ↔ N
+.FG
+· 使用定理 `Module.Finite.equiv_iff`：equiv_iff (e : M ≃ₗ[R] N) : Module.Finite R M ↔
+ Module.Finite R N
 
-English:
-theorem range_fg_iff_ker_cofg
-  given: {f : M ->ₗ[R] N}
-  statement: (range f).FG ↔ (ker f).CoFG
-  proof: by
-  rw [← Module.Finite.iff_fg]
-exact Module.Finite.equiv_iff f.quotKerEquivRange.symm
-
-中文:
-定理 range_fg_iff_ker_cofg
-  条件: {f : M ->ₗ[R] N}
-  结论: (range f).FG ↔ (ker f).CoFG
-  证明: by
-  rw [← Module.Finite.iff_fg]
-exact Module.Finite.equiv_iff f.quotKerEquivRange.symm
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv_iff, Module.Finite.iff_fg, equiv_iff, f.quotKerEquivRange.symm, iff_fg, quotKerEquivRange
+--- 原说明 ---
+The range of a linear map is FG if and only if the kernel is CoFG.
 -/
-theorem range_fg_iff_ker_cofg {f : M ->ₗ[R] N} : (range f).FG ↔ (ker f).CoFG := by
+theorem range_fg_iff_ker_cofg {f : M →ₗ[R] N} : (range f).FG ↔ (ker f).CoFG := by
   rw [← Module.Finite.iff_fg]
-exact Module.Finite.equiv_iff f.quotKerEquivRange.symm
+  exact Module.Finite.equiv_iff <| f.quotKerEquivRange.symm
 
-/--
-theorem `CoFG.ker` / 定理 `CoFG.ker`
+/-- The kernel of a linear map into a noetherian module is CoFG. -/
+/-
+**Submodule.CoFG.ker** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {N : Type u_3}   [inst_3 : AddCommGroup N] [inst_4 
+: _root_.Module R N] [IsNoetherian R N] (f : M →ₗ[R] N), f.ker.CoFG
+参数：f : M →ₗ[R] N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.range_fg_iff_ker_cofg`：range_fg_iff_ker_cofg {f : M ->ₗ[R] N} 
+: (range f).FG ↔ (ker f).CoFG
+· 使用定理 `IsNoetherian.noetherian`：∀ {R : Type u_1} {M : Type u_2} {inst : Semirin
+g R} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : IsNoether
+ian R M] (s :…
 
-English:
-theorem CoFG.ker
-  given: [IsNoetherian R N] (f : M ->ₗ[R] N)
-  statement: (ker f).CoFG
-  proof: range_fg_iff_ker_cofg.mp IsNoetherian.noetherian _
-
-中文:
-定理 CoFG.ker
-  条件: [是Noether R N] (f : M ->ₗ[R] N)
-  结论: (ker f).CoFG
-  证明: range_fg_iff_ker_cofg.mp IsNoetherian.noetherian _
+--- 原说明 ---
+The kernel of a linear map into a noetherian module is CoFG.
 -/
-protected theorem CoFG.ker [IsNoetherian R N] (f : M ->ₗ[R] N) : (ker f).CoFG :=
-range_fg_iff_ker_cofg.mp IsNoetherian.noetherian _
+protected theorem CoFG.ker [IsNoetherian R N] (f : M →ₗ[R] N) : (ker f).CoFG :=
+  range_fg_iff_ker_cofg.mp <| IsNoetherian.noetherian _
 
 end LinearMap
 
@@ -268,54 +259,68 @@ section IsNoetherianRing
 
 variable [IsNoetherianRing R]
 
-/--
-theorem `CoFG.inf` / 定理 `CoFG.inf`
+/-- Over a noetherian ring the intersection of two CoFG submodules is CoFG. -/
+/-
+**Submodule.CoFG.inf** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [IsNoetherianRing R] {S T : Submodule R M}, S.CoF
+G → T.CoFG → (S ⊓ T).CoFG
+参数：S ⊓ T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `LinearMap.ker_prod`：ker_prod (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) : ker (
+prod f g) = ker f ⊓ ker g
+· 使用定理 `Submodule.CoFG.ker`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type u_3}   [inst_3 : Ad
+dCommGro…
 
-English:
-theorem CoFG.inf
-  given: {S T : Submodule R M} (hS : S.CoFG) (hT : T.CoFG)
-  proof: by
-  rw [← Submodule.ker_mkQ S]; rw [← Submodule.ker_mkQ T]; rw [← LinearMap.ker_prod]
-  exact CoFG.ker _
-
-中文:
-定理 CoFG.下确界
-  条件: {S T : 子模 R M} (hS : S.CoFG) (hT : T.CoFG)
-  证明: by
-  rw [← Submodule.ker_mkQ S]; rw [← Submodule.ker_mkQ T]; rw [← LinearMap.ker_prod]
-  exact CoFG.ker _
-
-Depends on / 依赖: CoFG.ker, LinearMap, LinearMap.ker_prod, Submodule, Submodule.ker_mkQ, ker_mkQ, ker_prod
+--- 原说明 ---
+Over a noetherian ring the intersection of two CoFG submodules is CoFG.
 -/
 theorem CoFG.inf {S T : Submodule R M} (hS : S.CoFG) (hT : T.CoFG) :
       (S ⊓ T).CoFG := by
-  rw [← Submodule.ker_mkQ S]; rw [← Submodule.ker_mkQ T]; rw [← LinearMap.ker_prod]
+  rw [← Submodule.ker_mkQ S, ← Submodule.ker_mkQ T, ← LinearMap.ker_prod]
   exact CoFG.ker _
 
-/--
-theorem `CoFG.sInf` / 定理 `CoFG.sInf`
+/-- Over a noetherian ring the infimum of a finite family of CoFG submodules is CoFG. -/
+/-
+**Submodule.CoFG.sInf** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [IsNoetherianRing R] {s : Finset (Submodule R M)}
+, (∀ S ∈ s, S.CoFG) → (sInf ↑s).CoFG
+参数：Submodule R M；∀ S ∈ s, S.CoFG；sInf ↑s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `sInf_empty`：∀ {α : Type u_1} [inst : CompleteLattice α], sInf ∅ = ⊤
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `sInf_insert`：∀ {α : Type u_1} [inst : CompleteLattice α] {a : α} {s : Se
+t α}, sInf (insert a s) = a ⊓ sInf s
+· 使用定理 `Submodule.CoFG.inf`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsNoetherianRing R] {S T :
+ Submodu…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem CoFG.sInf
-  given: {s : Finset (Submodule R M)} (hs : forall S in s, S.CoFG)
-  proof: by
-  induction s using Finset.induction with
-  | empty => simp
-  | insert w s hws hs' =>
-    simp only [Finset.mem_insert, forall_eq_or_imp, Finset.coe_insert, sInf_insert] at *
-    exact hs.1.inf (hs' hs.2)
-
-中文:
-定理 CoFG.sInf
-  条件: {s : 有限集 (子模 R M)} (hs : 对任意 S in s, S.CoFG)
-  证明: by
-  induction s using Finset.induction with
-  | empty => simp
-  | insert w s hws hs' =>
-    simp only [Finset.mem_insert, forall_eq_or_imp, Finset.coe_insert, sInf_insert] at *
-    exact hs.1.inf (hs' hs.2)
+--- 原说明 ---
+Over a noetherian ring the infimum of a finite family of CoFG submodules is CoFG
+.
 -/
-protected theorem CoFG.sInf {s : Finset (Submodule R M)} (hs : forall S in s, S.CoFG) :
+protected theorem CoFG.sInf {s : Finset (Submodule R M)} (hs : ∀ S ∈ s, S.CoFG) :
     (sInf (s : Set (Submodule R M))).CoFG := by
   induction s using Finset.induction with
   | empty => simp
@@ -323,25 +328,29 @@ protected theorem CoFG.sInf {s : Finset (Submodule R M)} (hs : forall S in s, S.
     simp only [Finset.mem_insert, forall_eq_or_imp, Finset.coe_insert, sInf_insert] at *
     exact hs.1.inf (hs' hs.2)
 
-/--
-theorem `CoFG.sInf_of_finite` / 定理 `CoFG.sInf_of_finite`
+/-- Over a noetherian ring the infimum of a finite family of CoFG submodules is CoFG. -/
+/-
+**Submodule.CoFG.sInf_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.CoFG`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [IsNoetherianRing R] {s : Set (Submodule R M)}, s
+.Finite → (∀ S ∈ s, S.CoFG) → (sInf s).CoFG
+参数：Submodule R M；∀ S ∈ s, S.CoFG；sInf s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Submodule.CoFG.sInf`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [in
+st_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsNoetherianRing R] {s : 
+Finset (S…
 
-English:
-theorem CoFG.sInf_of_finite
-  statement: {s : Set (Submodule R M)} (hs : s.Finite)
-  proof: by
-  rw [← hs.coe_toFinset] at hcofg ⊢; exact CoFG.sInf hcofg
-
-中文:
-定理 CoFG.sInf_of_finite
-  结论: {s : 集合 (子模 R M)} (hs : s.有限)
-  证明: by
-  rw [← hs.coe_toFinset] at hcofg ⊢; exact CoFG.sInf hcofg
-
-Depends on / 依赖: CoFG.sInf, coe_toFinset, hs.coe_toFinset
+--- 原说明 ---
+Over a noetherian ring the infimum of a finite family of CoFG submodules is CoFG
+.
 -/
 theorem CoFG.sInf_of_finite {s : Set (Submodule R M)} (hs : s.Finite)
-    (hcofg : forall S in s, S.CoFG) : (sInf s).CoFG := by
+    (hcofg : ∀ S ∈ s, S.CoFG) : (sInf s).CoFG := by
   rw [← hs.coe_toFinset] at hcofg ⊢; exact CoFG.sInf hcofg
 
 end IsNoetherianRing
@@ -349,3 +358,4 @@ end IsNoetherianRing
 end Ring
 
 end Submodule
+

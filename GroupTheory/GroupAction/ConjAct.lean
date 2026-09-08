@@ -39,18 +39,15 @@ assert_not_exists MonoidWithZero
 
 variable (α M G : Type*)
 
-/--
-Definition of `ConjAct` / `ConjAct` 的定义
+/-- A type alias for a group `G`. `ConjAct G` acts on `G` by conjugation -/
+/-
+**ConjAct** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ConjAct : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ConjAct
-  signature: : Type _
-  body: G
-
-中文:
-定义 ConjAct
-  签名: : 类型 _
-  定义体: G
+--- 原说明 ---
+A type alias for a group `G`. `ConjAct G` acts on `G` by conjugation
 -/
 def ConjAct : Type _ :=
   G
@@ -61,74 +58,28 @@ open MulAction Subgroup
 
 variable {M G}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DivInvMonoid
-  signature: G] : DivInvMonoid (ConjAct G)
-  body: inferInstanceAs DivInvMonoid G
-
-中文:
-实例 [除逆幺半群
-  签名: G] : 除逆幺半群 (ConjAct G)
-  定义体: inferInstanceAs DivInvMonoid G
-
-Depends on / 依赖: DivInvMonoid
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DivInvMonoid G] : DivInvMonoid (ConjAct G) := inferInstanceAs DivInvMonoid G
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] : Group (ConjAct G)
-  body: inferInstanceAs Group G
-
-中文:
-实例 [群
-  签名: G] : 群 (ConjAct G)
-  定义体: inferInstanceAs Group G
+instance [DivInvMonoid G] : DivInvMonoid (ConjAct G) := inferInstanceAs <| DivInvMonoid G
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Group G] : Group (ConjAct G) := inferInstanceAs Group G
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: G] : Fintype (ConjAct G)
-  body: inferInstanceAs Fintype G
+instance [Group G] : Group (ConjAct G) := inferInstanceAs <| Group G
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [Fintype G] : Fintype (ConjAct G) := inferInstanceAs <| Fintype G
 
 @[simp]
-
-中文:
-实例 [有限类型
-  签名: G] : 有限类型 (ConjAct G)
-  定义体: inferInstanceAs Fintype G
-
-@[simp]
-
-Depends on / 依赖: Fintype
--/
-instance [Fintype G] : Fintype (ConjAct G) := inferInstanceAs Fintype G
-
-@[simp]
-/--
-theorem `card` / 定理 `card`
-
-English:
-theorem card
-  given: [Fintype G]
-  statement: Fintype.card (ConjAct G) = Fintype.card G
-  proof: rfl
-
-中文:
-定理 card
-  条件: [有限类型 G]
-  结论: 有限类型.card (ConjAct G) = 有限类型.card G
-  证明: rfl
+/-
+**ConjAct.card** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：card [Fintype G] : Fintype.card (ConjAct G) = Fintype.card G
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card [Fintype G] : Fintype.card (ConjAct G) = Fintype.card G :=
   rfl
@@ -137,374 +88,191 @@ section DivInvMonoid
 
 variable [DivInvMonoid G]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (ConjAct G)
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 (ConjAct G)
-  定义体: ⟨1⟩
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (ConjAct G) :=
   ⟨1⟩
 
-/--
-Definition of `ofConjAct` / `ofConjAct` 的定义
+/-- Reinterpret `g : ConjAct G` as an element of `G`. -/
+/-
+**ConjAct.ofConjAct** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct`。
+形式化陈述：ofConjAct : ConjAct G ≃* G where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofConjAct
-  signature: : ConjAct G ≃* G where
-  body: id
-  invFun := id
-  map_mul' := fun _ _ => rfl
-
-中文:
-定义 ofConjAct
-  签名: : ConjAct G ≃* G where
-  定义体: id
-  invFun := id
-  map_mul' := fun _ _ => rfl
+--- 原说明 ---
+Reinterpret `g : ConjAct G` as an element of `G`.
 -/
 def ofConjAct : ConjAct G ≃* G where
   toFun := id
   invFun := id
   map_mul' := fun _ _ => rfl
 
-/--
-Definition of `toConjAct` / `toConjAct` 的定义
+/-- Reinterpret `g : G` as an element of `ConjAct G`. -/
+/-
+**ConjAct.toConjAct** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct : G ≃* ConjAct G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toConjAct
-  signature: : G ≃* ConjAct G
-  body: ofConjAct.symm
-
-中文:
-定义 toConjAct
-  签名: : G ≃* ConjAct G
-  定义体: ofConjAct.symm
-
-Depends on / 依赖: ofConjAct, ofConjAct.symm
+--- 原说明 ---
+Reinterpret `g : G` as an element of `ConjAct G`.
 -/
 def toConjAct : G ≃* ConjAct G :=
   ofConjAct.symm
 
 /-- A recursor for `ConjAct`, for use as `induction x` when `x : ConjAct G`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**ConjAct.rec** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct`。
+形式化陈述：{G : Type u_3} →   [inst : DivInvMonoid G] → {C : ConjAct G → Sort u_4} → 
+((g : G) → C (ConjAct.toConjAct g)) → (g : ConjAct G) → C g
+参数：(g : G) → C (ConjAct.toConjAct g)；g : ConjAct G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {C : ConjAct G -> Sort*} (h : forall g, C (toConjAct g))
-  body: h
-
-@[simp]
-
-中文:
-定义 rec
-  签名: {C : ConjAct G -> 类型层*} (h : 对任意 g, C (toConjAct g))
-  定义体: h
-
-@[simp]
+--- 原说明 ---
+A recursor for `ConjAct`, for use as `induction x` when `x : ConjAct G`.
 -/
-protected def rec {C : ConjAct G -> Sort*} (h : forall g, C (toConjAct g)) : forall g, C g :=
+protected def rec {C : ConjAct G → Sort*} (h : ∀ g, C (toConjAct g)) : ∀ g, C g :=
   h
 
 @[simp]
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: (p : ConjAct G -> Prop)
-  statement: (forall x : ConjAct G, p x) ↔ forall x : G, p (toConjAct x)
-  proof: id Iff.rfl
-
-@[simp]
-
-中文:
-定理 «对任意»
-  条件: (p : ConjAct G -> 命题)
-  结论: (对任意 x : ConjAct G, p x) ↔ 对任意 x : G, p (toConjAct x)
-  证明: id Iff.rfl
-
-@[simp]
+/-
+**ConjAct.** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «forall» (p : ConjAct G -> Prop) : (forall x : ConjAct G, p x) ↔ forall x : G, p (toConjAct x) :=
+theorem «forall» (p : ConjAct G → Prop) : (∀ x : ConjAct G, p x) ↔ ∀ x : G, p (toConjAct x) :=
   id Iff.rfl
 
 @[simp]
-/--
-theorem `of_mul_symm_eq` / 定理 `of_mul_symm_eq`
-
-English:
-theorem of_mul_symm_eq
-  statement: (@ofConjAct G _).symm = toConjAct
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_mul_symm_eq
-  结论: (@ofConjAct G _).symm = toConjAct
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.of_mul_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：of_mul_symm_eq : (@ofConjAct G _).symm = toConjAct
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem of_mul_symm_eq : (@ofConjAct G _).symm = toConjAct :=
   rfl
 
 @[simp]
-/--
-theorem `to_mul_symm_eq` / 定理 `to_mul_symm_eq`
-
-English:
-theorem to_mul_symm_eq
-  statement: (@toConjAct G _).symm = ofConjAct
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 to_mul_symm_eq
-  结论: (@toConjAct G _).symm = ofConjAct
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.to_mul_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：to_mul_symm_eq : (@toConjAct G _).symm = ofConjAct
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem to_mul_symm_eq : (@toConjAct G _).symm = ofConjAct :=
   rfl
 
 @[simp]
-/--
-theorem `toConjAct_ofConjAct` / 定理 `toConjAct_ofConjAct`
-
-English:
-theorem toConjAct_ofConjAct
-  given: (x : ConjAct G)
-  statement: toConjAct (ofConjAct x) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toConjAct_ofConjAct
-  条件: (x : ConjAct G)
-  结论: toConjAct (ofConjAct x) = x
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.toConjAct_ofConjAct** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_ofConjAct (x : ConjAct G) : toConjAct (ofConjAct x) = x
+参数：x : ConjAct G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_ofConjAct (x : ConjAct G) : toConjAct (ofConjAct x) = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofConjAct_toConjAct` / 定理 `ofConjAct_toConjAct`
-
-English:
-theorem ofConjAct_toConjAct
-  given: (x : G)
-  statement: ofConjAct (toConjAct x) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofConjAct_toConjAct
-  条件: (x : G)
-  结论: ofConjAct (toConjAct x) = x
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.ofConjAct_toConjAct** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：ofConjAct_toConjAct (x : G) : ofConjAct (toConjAct x) = x
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofConjAct_toConjAct (x : G) : ofConjAct (toConjAct x) = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofConjAct_one` / 定理 `ofConjAct_one`
-
-English:
-theorem ofConjAct_one
-  statement: ofConjAct (1 : ConjAct G) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofConjAct_one
-  结论: ofConjAct (1 : ConjAct G) = 1
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.ofConjAct_one** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：ofConjAct_one : ofConjAct (1 : ConjAct G) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofConjAct_one : ofConjAct (1 : ConjAct G) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `toConjAct_one` / 定理 `toConjAct_one`
-
-English:
-theorem toConjAct_one
-  statement: toConjAct (1 : G) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toConjAct_one
-  结论: toConjAct (1 : G) = 1
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.toConjAct_one** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_one : toConjAct (1 : G) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_one : toConjAct (1 : G) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `ofConjAct_inv` / 定理 `ofConjAct_inv`
-
-English:
-theorem ofConjAct_inv
-  given: (x : ConjAct G)
-  statement: ofConjAct x⁻¹ = (ofConjAct x)⁻¹
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofConjAct_inv
-  条件: (x : ConjAct G)
-  结论: ofConjAct x⁻¹ = (ofConjAct x)⁻¹
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.ofConjAct_inv** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：ofConjAct_inv (x : ConjAct G) : ofConjAct x⁻¹ = (ofConjAct x)⁻¹
+参数：x : ConjAct G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofConjAct_inv (x : ConjAct G) : ofConjAct x⁻¹ = (ofConjAct x)⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `toConjAct_inv` / 定理 `toConjAct_inv`
-
-English:
-theorem toConjAct_inv
-  given: (x : G)
-  statement: toConjAct x⁻¹ = (toConjAct x)⁻¹
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toConjAct_inv
-  条件: (x : G)
-  结论: toConjAct x⁻¹ = (toConjAct x)⁻¹
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.toConjAct_inv** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_inv (x : G) : toConjAct x⁻¹ = (toConjAct x)⁻¹
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_inv (x : G) : toConjAct x⁻¹ = (toConjAct x)⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `ofConjAct_mul` / 定理 `ofConjAct_mul`
-
-English:
-theorem ofConjAct_mul
-  given: (x y : ConjAct G)
-  statement: ofConjAct (x * y) = ofConjAct x * ofConjAct y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofConjAct_mul
-  条件: (x y : ConjAct G)
-  结论: ofConjAct (x * y) = ofConjAct x * ofConjAct y
-  证明: rfl
-
-@[simp]
+/-
+**ConjAct.ofConjAct_mul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：ofConjAct_mul (x y : ConjAct G) : ofConjAct (x * y) = ofConjAct x * ofConj
+Act y
+参数：x y : ConjAct G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofConjAct_mul (x y : ConjAct G) : ofConjAct (x * y) = ofConjAct x * ofConjAct y :=
   rfl
 
 @[simp]
-/--
-theorem `toConjAct_mul` / 定理 `toConjAct_mul`
-
-English:
-theorem toConjAct_mul
-  given: (x y : G)
-  statement: toConjAct (x * y) = toConjAct x * toConjAct y
-  proof: rfl
-
-中文:
-定理 toConjAct_mul
-  条件: (x y : G)
-  结论: toConjAct (x * y) = toConjAct x * toConjAct y
-  证明: rfl
+/-
+**ConjAct.toConjAct_mul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_mul (x y : G) : toConjAct (x * y) = toConjAct x * toConjAct y
+参数：x y : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_mul (x y : G) : toConjAct (x * y) = toConjAct x * toConjAct y :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul (ConjAct G) G
-  body: ofConjAct g * h * (ofConjAct g)⁻¹
-
-中文:
-实例 :
-  签名: 标量乘法 (ConjAct G) G
-  定义体: ofConjAct g * h * (ofConjAct g)⁻¹
-
-Depends on / 依赖: ofConjAct
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul (ConjAct G) G where smul g h := ofConjAct g * h * (ofConjAct g)⁻¹
-
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (g : ConjAct G) (h : G)
-  statement: g • h = ofConjAct g * h * (ofConjAct g)⁻¹
-  proof: rfl
-
-中文:
-定理 smul_def
-  条件: (g : ConjAct G) (h : G)
-  结论: g • h = ofConjAct g * h * (ofConjAct g)⁻¹
-  证明: rfl
+/-
+**ConjAct.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：smul_def (g : ConjAct G) (h : G) : g • h = ofConjAct g * h * (ofConjAct g)
+⁻¹
+参数：g : ConjAct G；h : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def (g : ConjAct G) (h : G) : g • h = ofConjAct g * h * (ofConjAct g)⁻¹ :=
   rfl
-
-/--
-theorem `toConjAct_smul` / 定理 `toConjAct_smul`
-
-English:
-theorem toConjAct_smul
-  given: (g h : G)
-  statement: toConjAct g • h = g * h * g⁻¹
-  proof: rfl
-
-中文:
-定理 toConjAct_smul
-  条件: (g h : G)
-  结论: toConjAct g • h = g * h * g⁻¹
-  证明: rfl
+/-
+**ConjAct.toConjAct_smul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_smul (g h : G) : toConjAct g • h = g * h * g⁻¹
+参数：g h : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_smul (g h : G) : toConjAct g • h = g * h * g⁻¹ :=
   rfl
@@ -517,104 +285,61 @@ section Monoid
 
 variable [Monoid M]
 
-/--
-Instance `unitsScalar` / 实例 `unitsScalar`
-
-English:
-instance unitsScalar
-  signature: : SMul (ConjAct Mˣ) M where smul g h
-  body: ofConjAct g * h * ↑(ofConjAct g)⁻¹
-
-中文:
-实例 unitsScalar
-  签名: : 标量乘法 (ConjAct Mˣ) M where smul g h
-  定义体: ofConjAct g * h * ↑(ofConjAct g)⁻¹
-
-Depends on / 依赖: ofConjAct
+/-
+**ConjAct.unitsScalar** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：unitsScalar : SMul (ConjAct Mˣ) M where smul g h
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance unitsScalar : SMul (ConjAct Mˣ) M where smul g h := ofConjAct g * h * ↑(ofConjAct g)⁻¹
-
-/--
-theorem `units_smul_def` / 定理 `units_smul_def`
-
-English:
-theorem units_smul_def
-  given: (g : ConjAct Mˣ) (h : M)
-  statement: g • h = ofConjAct g * h * ↑(ofConjAct g)⁻¹
-  proof: rfl
-
-中文:
-定理 units_smul_def
-  条件: (g : ConjAct Mˣ) (h : M)
-  结论: g • h = ofConjAct g * h * ↑(ofConjAct g)⁻¹
-  证明: rfl
+/-
+**ConjAct.units_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：units_smul_def (g : ConjAct Mˣ) (h : M) : g • h = ofConjAct g * h * ↑(ofCo
+njAct g)⁻¹
+参数：g : ConjAct Mˣ；h : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem units_smul_def (g : ConjAct Mˣ) (h : M) : g • h = ofConjAct g * h * ↑(ofConjAct g)⁻¹ :=
   rfl
-
-/--
-Instance `unitsMulDistribMulAction` / 实例 `unitsMulDistribMulAction`
-
-English:
-instance unitsMulDistribMulAction
-  signature: : MulDistribMulAction (ConjAct Mˣ) M where
-  body: by simp [units_smul_def]
-  mul_smul := by simp [units_smul_def, mul_assoc]
-  smul_mul := by simp [units_smul_def, mul_assoc]
-  smul_one := by simp [units_smul_def]
-
-中文:
-实例 unitsMulDistribMulAction
-  签名: : MulDistribMul作用 (ConjAct Mˣ) M where
-  定义体: by simp [units_smul_def]
-  mul_smul := by simp [units_smul_def, mul_assoc]
-  smul_mul := by simp [units_smul_def, mul_assoc]
-  smul_one := by simp [units_smul_def]
-
-Depends on / 依赖: mul_assoc, mul_smul, smul_mul, smul_one, units_smul_def
+/-
+**ConjAct.unitsMulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：unitsMulDistribMulAction : MulDistribMulAction (ConjAct Mˣ) M where one_sm
+ul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance unitsMulDistribMulAction : MulDistribMulAction (ConjAct Mˣ) M where
   one_smul := by simp [units_smul_def]
   mul_smul := by simp [units_smul_def, mul_assoc]
   smul_mul := by simp [units_smul_def, mul_assoc]
   smul_one := by simp [units_smul_def]
-
-
-/--
-Instance `unitsSMulCommClass` / 实例 `unitsSMulCommClass`
-
-English:
-instance unitsSMulCommClass
-  signature: [SMul α M] [SMulCommClass α M M] [IsScalarTower α M M]
-  body: by rw [units_smul_def, units_smul_def, mul_smul_comm, smul_mul_assoc]
-
-中文:
-实例 unitsSMulCommClass
-  签名: [标量乘法 α M] [标量交换类 α M M] [标量塔 α M M]
-  定义体: by rw [units_smul_def, units_smul_def, mul_smul_comm, smul_mul_assoc]
-
-Depends on / 依赖: mul_smul_comm, smul_mul_assoc, units_smul_def
+/-
+**ConjAct.unitsSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：unitsSMulCommClass [SMul α M] [SMulCommClass α M M] [IsScalarTower α M M] 
+: SMulCommClass α (ConjAct Mˣ) M where smul_comm a um m
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.units_smul_def`：units_smul_def (g : ConjAct Mˣ) (h : M) : g • h 
+= ofConjAct g * h * ↑(ofConjAct g)⁻¹
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
 instance unitsSMulCommClass [SMul α M] [SMulCommClass α M M] [IsScalarTower α M M] :
     SMulCommClass α (ConjAct Mˣ) M where
   smul_comm a um m := by rw [units_smul_def, units_smul_def, mul_smul_comm, smul_mul_assoc]
-
-/--
-Instance `unitsSMulCommClass'` / 实例 `unitsSMulCommClass'`
-
-English:
-instance unitsSMulCommClass'
-  signature: [SMul α M] [SMulCommClass M α M] [IsScalarTower α M M]
-  body: haveI : SMulCommClass α M M := SMulCommClass.symm _ _ _
-  SMulCommClass.symm _ _ _
-
-中文:
-实例 unitsSMulCommClass'
-  签名: [标量乘法 α M] [标量交换类 M α M] [标量塔 α M M]
-  定义体: haveI : SMulCommClass α M M := SMulCommClass.symm _ _ _
-  SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**ConjAct.unitsSMulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：unitsSMulCommClass' [SMul α M] [SMulCommClass M α M] [IsScalarTower α M M]
+ : SMulCommClass (ConjAct Mˣ) α M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance unitsSMulCommClass' [SMul α M] [SMulCommClass M α M] [IsScalarTower α M M] :
     SMulCommClass (ConjAct Mˣ) α M :=
@@ -627,281 +352,195 @@ end Units
 
 variable [Group G]
 
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: {G : Type*} [Group G] {H : Subgroup G} (g h : H)
-  proof: by
-  rfl
-
-中文:
-定理 coe_smul
-  条件: {G : 类型} [群 G] {H : 子群 G} (g h : H)
-  证明: by
-  rfl
+/-
+**ConjAct.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：coe_smul {G : Type*} [Group G] {H : Subgroup G} (g h : H) : (ConjAct.toCon
+jAct g • h).1 = ConjAct.toConjAct g.1 • h.1
+参数：g h : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul {G : Type*} [Group G] {H : Subgroup G} (g h : H) :
     (ConjAct.toConjAct g • h).1 = ConjAct.toConjAct g.1 • h.1 := by
   rfl
-
-/--
-theorem `toConjAct_inv_smul` / 定理 `toConjAct_inv_smul`
-
-English:
-theorem toConjAct_inv_smul
-  given: (g h : G)
-  statement: toConjAct g⁻¹ • h = g⁻¹ * h * g
-  proof: by
-  rw [toConjAct_smul]; rw [inv_inv]
-
-中文:
-定理 toConjAct_inv_smul
-  条件: (g h : G)
-  结论: toConjAct g⁻¹ • h = g⁻¹ * h * g
-  证明: by
-  rw [toConjAct_smul]; rw [inv_inv]
-
-Depends on / 依赖: inv_inv, toConjAct_smul
+/-
+**ConjAct.toConjAct_inv_smul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_inv_smul (g h : G) : toConjAct g⁻¹ • h = g⁻¹ * h * g
+参数：g h : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.toConjAct_smul`：toConjAct_smul (g h : G) : toConjAct g • h = g *
+ h * g⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 theorem toConjAct_inv_smul (g h : G) : toConjAct g⁻¹ • h = g⁻¹ * h * g := by
-  rw [toConjAct_smul]; rw [inv_inv]
+  rw [toConjAct_smul, inv_inv]
 
 -- todo: this file is not in good order; I will refactor this after the PR
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulDistribMulAction (ConjAct G) G
-  body: by simp [smul_def]
-  smul_one := by simp [smul_def]
-  one_smul := by simp [smul_def]
-  mul_smul := by simp [smul_def, mul_assoc]
-
-中文:
-实例 :
-  签名: MulDistribMul作用 (ConjAct G) G
-  定义体: by simp [smul_def]
-  smul_one := by simp [smul_def]
-  one_smul := by simp [smul_def]
-  mul_smul := by simp [smul_def, mul_assoc]
-
-Depends on / 依赖: mul_assoc, mul_smul, one_smul, smul_def, smul_one
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulDistribMulAction (ConjAct G) G where
   smul_mul := by simp [smul_def]
   smul_one := by simp [smul_def]
   one_smul := by simp [smul_def]
   mul_smul := by simp [smul_def, mul_assoc]
-
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
-
-English:
-instance smulCommClass
-  signature: [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G]
-  body: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-中文:
-实例 smulCommClass
-  签名: [标量乘法 α G] [标量交换类 α G G] [标量塔 α G G]
-  定义体: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-Depends on / 依赖: mul_smul_comm, smul_def, smul_mul_assoc
+/-
+**ConjAct.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：smulCommClass [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G] : SMu
+lCommClass α (ConjAct G) G where smul_comm a ug g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.smul_def`：smul_def (g : ConjAct G) (h : G) : g • h = ofConjAct g
+ * h * (ofConjAct g)⁻¹
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
 instance smulCommClass [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G] :
     SMulCommClass α (ConjAct G) G where
   smul_comm a ug g := by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-/--
-Instance `smulCommClass'` / 实例 `smulCommClass'`
-
-English:
-instance smulCommClass'
-  signature: [SMul α G] [SMulCommClass G α G] [IsScalarTower α G G]
-  body: haveI := SMulCommClass.symm G α G
-  SMulCommClass.symm _ _ _
-
-中文:
-实例 smulCommClass'
-  签名: [标量乘法 α G] [标量交换类 G α G] [标量塔 α G G]
-  定义体: haveI := SMulCommClass.symm G α G
-  SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**ConjAct.smulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：smulCommClass' [SMul α G] [SMulCommClass G α G] [IsScalarTower α G G] : SM
+ulCommClass (ConjAct G) α G
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance smulCommClass' [SMul α G] [SMulCommClass G α G] [IsScalarTower α G G] :
     SMulCommClass (ConjAct G) α G :=
   haveI := SMulCommClass.symm G α G
   SMulCommClass.symm _ _ _
-
-/--
-theorem `smul_eq_mulAut_conj` / 定理 `smul_eq_mulAut_conj`
-
-English:
-theorem smul_eq_mulAut_conj
-  given: (g : ConjAct G) (h : G)
-  statement: g • h = MulAut.conj (ofConjAct g) h
-  proof: rfl
-
-中文:
-定理 smul_eq_mulAut_conj
-  条件: (g : ConjAct G) (h : G)
-  结论: g • h = MulAut.conj (ofConjAct g) h
-  证明: rfl
+/-
+**ConjAct.smul_eq_mulAut_conj** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：smul_eq_mulAut_conj (g : ConjAct G) (h : G) : g • h = MulAut.conj (ofConjA
+ct g) h
+参数：g : ConjAct G；h : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_eq_mulAut_conj (g : ConjAct G) (h : G) : g • h = MulAut.conj (ofConjAct g) h :=
   rfl
-
-/--
-theorem `toConjAct_smul_eq_mulAut_conj` / 定理 `toConjAct_smul_eq_mulAut_conj`
-
-English:
-theorem toConjAct_smul_eq_mulAut_conj
-  given: (g h : G)
-  statement: ConjAct.toConjAct g • h = MulAut.conj g h
-  proof: rfl
-
-中文:
-定理 toConjAct_smul_eq_mulAut_conj
-  条件: (g h : G)
-  结论: ConjAct.toConjAct g • h = MulAut.conj g h
-  证明: rfl
+/-
+**ConjAct.toConjAct_smul_eq_mulAut_conj** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：toConjAct_smul_eq_mulAut_conj (g h : G) : ConjAct.toConjAct g • h = MulAut
+.conj g h
+参数：g h : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toConjAct_smul_eq_mulAut_conj (g h : G) : ConjAct.toConjAct g • h = MulAut.conj g h :=
   rfl
 
-/--
-theorem `fixedPoints_eq_center` / 定理 `fixedPoints_eq_center`
+/-- The set of fixed points of the conjugation action of `G` on itself is the center of `G`. -/
+/-
+**ConjAct.fixedPoints_eq_center** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：fixedPoints_eq_center : fixedPoints (ConjAct G) G = center G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem fixedPoints_eq_center
-  statement: fixedPoints (ConjAct G) G = center G
-  proof: by
-  ext x
-  simp [mem_center_iff, smul_def, mul_inv_eq_iff_eq_mul]
-
-@[simp]
-
-中文:
-定理 fixedPoints_eq_center
-  结论: fixedPoints (ConjAct G) G = center G
-  证明: by
-  ext x
-  simp [mem_center_iff, smul_def, mul_inv_eq_iff_eq_mul]
-
-@[simp]
-
-Depends on / 依赖: mem_center_iff, mul_inv_eq_iff_eq_mul, smul_def
+--- 原说明 ---
+The set of fixed points of the conjugation action of `G` on itself is the center
+ of `G`.
 -/
 theorem fixedPoints_eq_center : fixedPoints (ConjAct G) G = center G := by
   ext x
   simp [mem_center_iff, smul_def, mul_inv_eq_iff_eq_mul]
 
 @[simp]
-/--
-theorem `mem_orbit_conjAct` / 定理 `mem_orbit_conjAct`
-
-English:
-theorem mem_orbit_conjAct
-  given: {g h : G}
-  statement: g in orbit (ConjAct G) h ↔ IsConj g h
-  proof: by
-  rw [isConj_comm]; rw [isConj_iff]; rw [mem_orbit_iff]; rfl
-
-中文:
-定理 mem_orbit_conjAct
-  条件: {g h : G}
-  结论: g in orbit (ConjAct G) h ↔ IsConj g h
-  证明: by
-  rw [isConj_comm]; rw [isConj_iff]; rw [mem_orbit_iff]; rfl
-
-Depends on / 依赖: isConj_comm, isConj_iff, mem_orbit_iff
+/-
+**ConjAct.mem_orbit_conjAct** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：mem_orbit_conjAct {g h : G} : g in orbit (ConjAct G) h ↔ IsConj g h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isConj_comm`：isConj_comm {g h : α} : IsConj g h ↔ IsConj h g
+· 使用定理 `isConj_iff`：isConj_iff {a b : α} : IsConj a b ↔ exists c : α, c * a * c⁻
+¹ = b
+· 使用定理 `MulAction.mem_orbit_iff`：mem_orbit_iff {a₁ a₂ : α} : a₂ in orbit γ a₁ ↔ 
+exists x : γ, x • a₁ = a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_orbit_conjAct {g h : G} : g in orbit (ConjAct G) h ↔ IsConj g h := by
-  rw [isConj_comm]; rw [isConj_iff]; rw [mem_orbit_iff]; rfl
-
-/--
-theorem `orbitRel_conjAct` / 定理 `orbitRel_conjAct`
-
-English:
-theorem orbitRel_conjAct
-  statement: ⇑(orbitRel (ConjAct G) G) = IsConj
-  proof: funext₂ fun g h => by rw [orbitRel_apply, mem_orbit_conjAct]
-
-中文:
-定理 orbitRel_conjAct
-  结论: ⇑(orbitRel (ConjAct G) G) = IsConj
-  证明: funext₂ fun g h => by rw [orbitRel_apply, mem_orbit_conjAct]
-
-Depends on / 依赖: mem_orbit_conjAct, orbitRel_apply
+theorem mem_orbit_conjAct {g h : G} : g ∈ orbit (ConjAct G) h ↔ IsConj g h := by
+  rw [isConj_comm, isConj_iff, mem_orbit_iff]; rfl
+/-
+**ConjAct.orbitRel_conjAct** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：orbitRel_conjAct : ⇑(orbitRel (ConjAct G) G) = IsConj
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.orbitRel_apply`：orbitRel_apply {a b : α} : orbitRel G α a b ↔ 
+a in orbit G b
+· 使用定理 `ConjAct.mem_orbit_conjAct`：mem_orbit_conjAct {g h : G} : g in orbit (Con
+jAct G) h ↔ IsConj g h
 -/
 theorem orbitRel_conjAct : ⇑(orbitRel (ConjAct G) G) = IsConj :=
   funext₂ fun g h => by rw [orbitRel_apply, mem_orbit_conjAct]
-
-/--
-theorem `orbit_eq_carrier_conjClasses` / 定理 `orbit_eq_carrier_conjClasses`
-
-English:
-theorem orbit_eq_carrier_conjClasses
-  given: (g : G)
-  proof: by
-  ext h
-  rw [ConjClasses.mem_carrier_iff_mk_eq]; rw [ConjClasses.mk_eq_mk_iff_isConj]; rw [mem_orbit_conjAct]
-
-中文:
-定理 orbit_eq_carrier_conjClasses
-  条件: (g : G)
-  证明: by
-  ext h
-  rw [ConjClasses.mem_carrier_iff_mk_eq]; rw [ConjClasses.mk_eq_mk_iff_isConj]; rw [mem_orbit_conjAct]
-
-Depends on / 依赖: ConjClasses, ConjClasses.mem_carrier_iff_mk_eq, ConjClasses.mk_eq_mk_iff_isConj, mem_carrier_iff_mk_eq, mem_orbit_conjAct, mk_eq_mk_iff_isConj
+/-
+**ConjAct.orbit_eq_carrier_conjClasses** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：orbit_eq_carrier_conjClasses (g : G) : orbit (ConjAct G) g = (ConjClasses.
+mk g).carrier
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjClasses.mem_carrier_iff_mk_eq`：mem_carrier_iff_mk_eq {a : α} {b : Co
+njClasses α} : a in carrier b ↔ ConjClasses.mk a = b
+· 使用定理 `ConjClasses.mk_eq_mk_iff_isConj`：mk_eq_mk_iff_isConj {a b : α} : ConjCla
+sses.mk a = ConjClasses.mk b ↔ IsConj a b
+· 使用定理 `ConjAct.mem_orbit_conjAct`：mem_orbit_conjAct {g h : G} : g in orbit (Con
+jAct G) h ↔ IsConj g h
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem orbit_eq_carrier_conjClasses (g : G) :
     orbit (ConjAct G) g = (ConjClasses.mk g).carrier := by
   ext h
-  rw [ConjClasses.mem_carrier_iff_mk_eq]; rw [ConjClasses.mk_eq_mk_iff_isConj]; rw [mem_orbit_conjAct]
-
-/--
-theorem `stabilizer_eq_centralizer` / 定理 `stabilizer_eq_centralizer`
-
-English:
-theorem stabilizer_eq_centralizer
-  given: (g : G)
-  proof: le_antisymm (fun _ hg _ h => h ▸ eq_mul_inv_iff_mul_eq.mp hg.symm) fun _ h =>
-    mul_inv_eq_of_eq_mul (h g rfl).symm
-
-中文:
-定理 stabilizer_eq_centralizer
-  条件: (g : G)
-  证明: le_antisymm (fun _ hg _ h => h ▸ eq_mul_inv_iff_mul_eq.mp hg.symm) fun _ h =>
-    mul_inv_eq_of_eq_mul (h g rfl).symm
-
-Depends on / 依赖: eq_mul_inv_iff_mul_eq, eq_mul_inv_iff_mul_eq.mp, hg.symm, le_antisymm, mul_inv_eq_of_eq_mul
+  rw [ConjClasses.mem_carrier_iff_mk_eq, ConjClasses.mk_eq_mk_iff_isConj, mem_orbit_conjAct]
+/-
+**ConjAct.stabilizer_eq_centralizer** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：stabilizer_eq_centralizer (g : G) : stabilizer (ConjAct G) g = centralizer
+ {toConjAct g}
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq : a = b * c⁻¹ ↔ a * c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv_eq_of_eq_mul`：mul_inv_eq_of_eq_mul (h : a = c * b) : a * b⁻¹ = c
 -/
 theorem stabilizer_eq_centralizer (g : G) :
     stabilizer (ConjAct G) g = centralizer {toConjAct g} :=
-  le_antisymm (fun _ hg _ h => h ▸ eq_mul_inv_iff_mul_eq.mp hg.symm) fun _ h =>
+  le_antisymm (fun _ hg _ h ↦ h ▸ eq_mul_inv_iff_mul_eq.mp hg.symm) fun _ h =>
     mul_inv_eq_of_eq_mul (h g rfl).symm
-
-/--
-theorem `_root_.Subgroup.centralizer_eq_comap_stabilizer` / 定理 `_root_.Subgroup.centralizer_eq_comap_stabilizer`
-
-English:
-theorem _root_.Subgroup.centralizer_eq_comap_stabilizer
-  given: (g : G)
-  proof: by
-  ext k
-
-中文:
-定理 _root_.子群.centralizer_eq_comap_stabilizer
-  条件: (g : G)
-  证明: by
-  ext k
+/-
+**ConjAct._root_.Subgroup.centralizer_eq_comap_stabilizer** 是 Mathlib 中的一个定理，位于命
+名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Subgroup.centralizer_eq_comap_stabilizer (g : G) :
     Subgroup.centralizer {g} = Subgroup.comap ConjAct.toConjAct.toMonoidHom
@@ -913,95 +552,61 @@ theorem _root_.Subgroup.centralizer_eq_comap_stabilizer (g : G) :
   rw [eq_comm]
   exact Iff.symm mul_inv_eq_iff_eq_mul
 
-/--
-Instance `Subgroup.conjAction` / 实例 `Subgroup.conjAction`
+/-- As normal subgroups are closed under conjugation, they inherit the conjugation action
+  of the underlying group. -/
+/-
+**ConjAct.Subgroup.conjAction** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct.Subgroup`。
+形式化陈述：{G : Type u_3} → [inst : Group G] → {H : Subgroup G} → [hH : H.Normal] → S
+Mul (ConjAct G) ↥H
+参数：ConjAct G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Subgroup.conjAction
-  signature: {H : Subgroup G} [hH : H.Normal]
-  body: ⟨fun g h => ⟨g • (h : G), hH.conj_mem h.1 h.2 (ofConjAct g)⟩⟩
-
-中文:
-实例 子群.conjAction
-  签名: {H : 子群 G} [hH : H.正规]
-  定义体: ⟨fun g h => ⟨g • (h : G), hH.conj_mem h.1 h.2 (ofConjAct g)⟩⟩
-
-Depends on / 依赖: conj_mem, hH.conj_mem, ofConjAct
+--- 原说明 ---
+As normal subgroups are closed under conjugation, they inherit the conjugation a
+ction
+  of the underlying group.
 -/
 instance Subgroup.conjAction {H : Subgroup G} [hH : H.Normal] : SMul (ConjAct G) H :=
   ⟨fun g h => ⟨g • (h : G), hH.conj_mem h.1 h.2 (ofConjAct g)⟩⟩
-
-/--
-theorem `Subgroup.val_conj_smul` / 定理 `Subgroup.val_conj_smul`
-
-English:
-theorem Subgroup.val_conj_smul
-  given: {H : Subgroup G} [H.Normal] (g : ConjAct G) (h : H)
-  proof: rfl
-
-中文:
-定理 子群.val_conj_smul
-  条件: {H : 子群 G} [H.正规] (g : ConjAct G) (h : H)
-  证明: rfl
+/-
+**ConjAct.Subgroup.val_conj_smul** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct.Subgroup`。
+形式化陈述：∀ {G : Type u_3} [inst : Group G] {H : Subgroup G} [inst_1 : H.Normal] (g 
+: ConjAct G) (h : ↥H), ↑(g • h) = g • ↑h
+参数：g : ConjAct G；h : ↥H；g • h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Subgroup.val_conj_smul {H : Subgroup G} [H.Normal] (g : ConjAct G) (h : H) :
     ↑(g • h) = g • (h : G) :=
   rfl
-
-/--
-Instance `Subgroup.conjMulDistribMulAction` / 实例 `Subgroup.conjMulDistribMulAction`
-
-English:
-instance Subgroup.conjMulDistribMulAction
-  signature: {H : Subgroup G} [H.Normal]
-  body: Subtype.coe_injective.mulDistribMulAction H.subtype Subgroup.val_conj_smul
-
-中文:
-实例 子群.conjMulDistribMulAction
-  签名: {H : 子群 G} [H.正规]
-  定义体: Subtype.coe_injective.mulDistribMulAction H.subtype Subgroup.val_conj_smul
-
-Depends on / 依赖: H.subtype, Subgroup, Subgroup.val_conj_smul, Subtype, Subtype.coe_injective.mulDistribMulAction, coe_injective, mulDistribMulAction, subtype, val_conj_smul
+/-
+**ConjAct.Subgroup.conjMulDistribMulAction** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct.Su
+bgroup`。
+形式化陈述：{G : Type u_3} → [inst : Group G] → {H : Subgroup G} → [H.Normal] → MulDis
+tribMulAction (ConjAct G) ↥H
+参数：ConjAct G。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ConjAct.Subgroup.val_conj_smul`：∀ {G : Type u_3} [inst : Group G] {H : S
+ubgroup G} [inst_1 : H.Normal] (g : ConjAct G) (h : ↥H), ↑(g • h) = g • ↑h
 -/
 instance Subgroup.conjMulDistribMulAction {H : Subgroup G} [H.Normal] :
     MulDistribMulAction (ConjAct G) H :=
   Subtype.coe_injective.mulDistribMulAction H.subtype Subgroup.val_conj_smul
 
-/--
-Definition of `_root_.MulAut.conjNormal` / `_root_.MulAut.conjNormal` 的定义
+/-- Group conjugation on a normal subgroup. Analogous to `MulAut.conj`. -/
+/-
+**ConjAct._root_.MulAut.conjNormal** 是 Mathlib 中的一个定义，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.MulAut.conjNormal
-  signature: {H : Subgroup G} [H.Normal]
-  body: (MulDistribMulAction.toMulAut (ConjAct G) H).comp toConjAct.toMonoidHom
-
-@[simp]
-
-中文:
-定义 _root_.MulAut.conjNormal
-  签名: {H : 子群 G} [H.正规]
-  定义体: (MulDistribMulAction.toMulAut (ConjAct G) H).comp toConjAct.toMonoidHom
-
-@[simp]
-
-Depends on / 依赖: ConjAct, MulDistribMulAction, MulDistribMulAction.toMulAut, toConjAct, toConjAct.toMonoidHom, toMonoidHom, toMulAut
+--- 原说明 ---
+Group conjugation on a normal subgroup. Analogous to `MulAut.conj`.
 -/
-def _root_.MulAut.conjNormal {H : Subgroup G} [H.Normal] : G ->* MulAut H :=
+def _root_.MulAut.conjNormal {H : Subgroup G} [H.Normal] : G →* MulAut H :=
   (MulDistribMulAction.toMulAut (ConjAct G) H).comp toConjAct.toMonoidHom
 
 @[simp]
-/--
-theorem `_root_.MulAut.conjNormal_apply` / 定理 `_root_.MulAut.conjNormal_apply`
-
-English:
-theorem _root_.MulAut.conjNormal_apply
-  given: {H : Subgroup G} [H.Normal] (g : G) (h : H)
-  proof: rfl
-
-中文:
-定理 _root_.MulAut.conjNormal_apply
-  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
-  证明: rfl
+/-
+**ConjAct._root_.MulAut.conjNormal_apply** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MulAut.conjNormal_apply {H : Subgroup G} [H.Normal] (g : G) (h : H) :
     ↑(MulAut.conjNormal g h) = g * h * g⁻¹ :=
@@ -1009,91 +614,46 @@ theorem _root_.MulAut.conjNormal_apply {H : Subgroup G} [H.Normal] (g : G) (h : 
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `_root_.MulAut.conjNormal_symm_apply` / 定理 `_root_.MulAut.conjNormal_symm_apply`
-
-English:
-theorem _root_.MulAut.conjNormal_symm_apply
-  given: {H : Subgroup G} [H.Normal] (g : G) (h : H)
-  proof: by
-  change _ * g⁻¹⁻¹ = _
-  rw [inv_inv]
-  rfl
-
-中文:
-定理 _root_.MulAut.conjNormal_symm_apply
-  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
-  证明: by
-  change _ * g⁻¹⁻¹ = _
-  rw [inv_inv]
-  rfl
-
-Depends on / 依赖: inv_inv
+/-
+**ConjAct._root_.MulAut.conjNormal_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MulAut.conjNormal_symm_apply {H : Subgroup G} [H.Normal] (g : G) (h : H) :
     ↑((MulAut.conjNormal g).symm h) = g⁻¹ * h * g := by
   change _ * g⁻¹⁻¹ = _
   rw [inv_inv]
   rfl
-
-/--
-theorem `_root_.MulAut.conjNormal_inv_apply` / 定理 `_root_.MulAut.conjNormal_inv_apply`
-
-English:
-theorem _root_.MulAut.conjNormal_inv_apply
-  given: {H : Subgroup G} [H.Normal] (g : G) (h : H)
-  proof: MulAut.conjNormal_symm_apply g h
-
-中文:
-定理 _root_.MulAut.conjNormal_inv_apply
-  条件: {H : 子群 G} [H.正规] (g : G) (h : H)
-  证明: MulAut.conjNormal_symm_apply g h
-
-Depends on / 依赖: MulAut, MulAut.conjNormal_symm_apply, conjNormal_symm_apply
+/-
+**ConjAct._root_.MulAut.conjNormal_inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MulAut.conjNormal_inv_apply {H : Subgroup G} [H.Normal] (g : G) (h : H) :
     ↑((MulAut.conjNormal g)⁻¹ h) = g⁻¹ * h * g :=
   MulAut.conjNormal_symm_apply g h
-
-/--
-theorem `_root_.MulAut.conjNormal_val` / 定理 `_root_.MulAut.conjNormal_val`
-
-English:
-theorem _root_.MulAut.conjNormal_val
-  given: {H : Subgroup G} [H.Normal] {h : H}
-  proof: MulEquiv.ext fun _ => rfl
-
-中文:
-定理 _root_.MulAut.conjNormal_val
-  条件: {H : 子群 G} [H.正规] {h : H}
-  证明: MulEquiv.ext fun _ => rfl
-
-Depends on / 依赖: MulEquiv, MulEquiv.ext
+/-
+**ConjAct._root_.MulAut.conjNormal_val** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MulAut.conjNormal_val {H : Subgroup G} [H.Normal] {h : H} :
     MulAut.conjNormal ↑h = MulAut.conj h :=
   MulEquiv.ext fun _ => rfl
-
-/--
-Instance `normal_of_characteristic_of_normal` / 实例 `normal_of_characteristic_of_normal`
-
-English:
-instance normal_of_characteristic_of_normal
-  signature: {H : Subgroup G} [hH : H.Normal] {K : Subgroup H}
-  body: ⟨fun a ha b => by
-    obtain ⟨a, ha, rfl⟩ := ha
-    exact K.apply_coe_mem_map H.subtype
-      ⟨_, (SetLike.ext_iff.mp (h.fixed (MulAut.conjNormal b)) a).mpr ha⟩⟩
-
-中文:
-实例 normal_of_characteristic_of_normal
-  签名: {H : 子群 G} [hH : H.正规] {K : 子群 H}
-  定义体: ⟨fun a ha b => by
-    obtain ⟨a, ha, rfl⟩ := ha
-    exact K.apply_coe_mem_map H.subtype
-      ⟨_, (SetLike.ext_iff.mp (h.fixed (MulAut.conjNormal b)) a).mpr ha⟩⟩
-
-Depends on / 依赖: H.subtype, K.apply_coe_mem_map, MulAut, MulAut.conjNormal, SetLike, SetLike.ext_iff.mp, apply_coe_mem_map, conjNormal, ext_iff, h.fixed, subtype
+/-
+**ConjAct.normal_of_characteristic_of_normal** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`
+。
+形式化陈述：normal_of_characteristic_of_normal {H : Subgroup G} [hH : H.Normal] {K : S
+ubgroup H} [h : K.Characteristic] : (K.map H.subtype).Normal
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.apply_coe_mem_map`：apply_coe_mem_map (f : G ->* N) (K : Subgrou
+p G) (x : K) : f x in K.map f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Subgroup.Characteristic.fixed`：∀ {G : Type u_1} [inst : Group G] {H : Su
+bgroup G},   H.Characteristic → ∀ (ϕ : G ≃* G), Subgroup.comap ϕ.toMonoidHom H =
+ H
 -/
 instance normal_of_characteristic_of_normal {H : Subgroup G} [hH : H.Normal] {K : Subgroup H}
     [h : K.Characteristic] : (K.map H.subtype).Normal :=
@@ -1111,62 +671,35 @@ variable [Monoid M]
 /-- The stabilizer of `Mˣ` acting on itself by conjugation at `x : Mˣ` is exactly the
 units of the centralizer of `x : M`. -/
 @[simps! apply_coe_val symm_apply_val_coe]
-/--
-Definition of `unitsCentralizerEquiv` / `unitsCentralizerEquiv` 的定义
+/-
+**unitsCentralizerEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：unitsCentralizerEquiv (x : Mˣ) : (Submonoid.centralizer ({↑x} : Set M))ˣ ≃
+* MulAction.stabilizer (ConjAct Mˣ) x
+参数：x : Mˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitsCentralizerEquiv
-  signature: (x : Mˣ)
-  body: MulEquiv.symm
-  { toFun := MonoidHom.toHomUnits <|
-      { toFun := fun u => ⟨↑(ConjAct.ofConjAct u.1 : Mˣ), by
-          rintro x ⟨rfl⟩
-          have : (u : ConjAct Mˣ) • x = x := u.2
-          rwa [ConjAct.smul_def, mul_inv_eq_iff_eq_mul, Units.ext_iff, eq_comm] at this⟩,
-        map_one' := rfl,
-        map_mul' := fun _ _ => rfl }
-    invFun := fun u =>
-      ⟨ConjAct.toConjAct (Units.map (Submonoid.centralizer ({↑x} : Set M)).subtype u), by
-      change _ • _ = _
-      simp only [ConjAct.smul_def, ConjAct.ofConjAct_toConjAct, mul_inv_eq_iff_eq_mul]
-exact Units.ext (u.1.2 x <| Set.mem_singleton _).symm⟩
-    map_mul' := map_mul _ }
-
-中文:
-定义 unitsCentralizerEquiv
-  签名: (x : Mˣ)
-  定义体: MulEquiv.symm
-  { toFun := MonoidHom.toHomUnits <|
-      { toFun := fun u => ⟨↑(ConjAct.ofConjAct u.1 : Mˣ), by
-          rintro x ⟨rfl⟩
-          have : (u : ConjAct Mˣ) • x = x := u.2
-          rwa [ConjAct.smul_def, mul_inv_eq_iff_eq_mul, Units.ext_iff, eq_comm] at this⟩,
-        map_one' := rfl,
-        map_mul' := fun _ _ => rfl }
-    invFun := fun u =>
-      ⟨ConjAct.toConjAct (Units.map (Submonoid.centralizer ({↑x} : Set M)).subtype u), by
-      change _ • _ = _
-      simp only [ConjAct.smul_def, ConjAct.ofConjAct_toConjAct, mul_inv_eq_iff_eq_mul]
-exact Units.ext (u.1.2 x <| Set.mem_singleton _).symm⟩
-    map_mul' := map_mul _ }
-
-Depends on / 依赖: ConjAct, ConjAct.ofConjAct, ConjAct.ofConjAct_toConjAct, ConjAct.smul_def, ConjAct.toConjAct, MonoidHom, MonoidHom.toHomUnits, MulEquiv, MulEquiv.symm, Submonoid, Submonoid.centralizer, Units.ext, Units.ext_iff, Units.map, centralizer, eq_comm, ext_iff, invFun, map_mul, map_one
+--- 原说明 ---
+The stabilizer of `Mˣ` acting on itself by conjugation at `x : Mˣ` is exactly th
+e
+units of the centralizer of `x : M`.
 -/
 def unitsCentralizerEquiv (x : Mˣ) :
     (Submonoid.centralizer ({↑x} : Set M))ˣ ≃* MulAction.stabilizer (ConjAct Mˣ) x :=
   MulEquiv.symm
   { toFun := MonoidHom.toHomUnits <|
-      { toFun := fun u => ⟨↑(ConjAct.ofConjAct u.1 : Mˣ), by
+      { toFun := fun u ↦ ⟨↑(ConjAct.ofConjAct u.1 : Mˣ), by
           rintro x ⟨rfl⟩
           have : (u : ConjAct Mˣ) • x = x := u.2
           rwa [ConjAct.smul_def, mul_inv_eq_iff_eq_mul, Units.ext_iff, eq_comm] at this⟩,
         map_one' := rfl,
-        map_mul' := fun _ _ => rfl }
-    invFun := fun u =>
+        map_mul' := fun _ _ ↦ rfl }
+    invFun := fun u ↦
       ⟨ConjAct.toConjAct (Units.map (Submonoid.centralizer ({↑x} : Set M)).subtype u), by
       change _ • _ = _
       simp only [ConjAct.smul_def, ConjAct.ofConjAct_toConjAct, mul_inv_eq_iff_eq_mul]
-exact Units.ext (u.1.2 x <| Set.mem_singleton _).symm⟩
+      exact Units.ext <| (u.1.2 x <| Set.mem_singleton _).symm⟩
     map_mul' := map_mul _ }
 
 end Units
+

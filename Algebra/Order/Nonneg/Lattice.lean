@@ -23,180 +23,115 @@ variable {α : Type*}
 
 namespace Nonneg
 
-/--
-Instance `orderBot` / 实例 `orderBot`
-
-English:
-instance orderBot
-  signature: [Preorder α] {a : α}
-  body: inferInstanceAs OrderBot (Ici a)
-
-中文:
-实例 orderBot
-  签名: [预序 α] {a : α}
-  定义体: inferInstanceAs OrderBot (Ici a)
-
-Depends on / 依赖: OrderBot
+/-
+**Nonneg.orderBot** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：orderBot [Preorder α] {a : α} : OrderBot { x : α // a <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance orderBot [Preorder α] {a : α} : OrderBot { x : α // a <= x } :=
-inferInstanceAs OrderBot (Ici a)
-
-/--
-theorem `bot_eq` / 定理 `bot_eq`
-
-English:
-theorem bot_eq
-  given: [Preorder α] {a : α}
-  statement: (⊥ : { x : α // a <= x }) = ⟨a, le_rfl⟩
-  proof: rfl
-
-中文:
-定理 bot_eq
-  条件: [预序 α] {a : α}
-  结论: (⊥ : { x : α // a <= x }) = ⟨a, le_rfl⟩
-  证明: rfl
+instance orderBot [Preorder α] {a : α} : OrderBot { x : α // a ≤ x } :=
+  inferInstanceAs <| OrderBot (Ici a)
+/-
+**Nonneg.bot_eq** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：bot_eq [Preorder α] {a : α} : (⊥ : { x : α // a <= x }) = ⟨a, le_rfl⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bot_eq [Preorder α] {a : α} : (⊥ : { x : α // a <= x }) = ⟨a, le_rfl⟩ :=
+theorem bot_eq [Preorder α] {a : α} : (⊥ : { x : α // a ≤ x }) = ⟨a, le_rfl⟩ :=
   rfl
-
-/--
-Instance `noMaxOrder` / 实例 `noMaxOrder`
-
-English:
-instance noMaxOrder
-  signature: [PartialOrder α] [NoMaxOrder α] {a : α}
-  body: inferInstanceAs NoMaxOrder (Ici a)
-
-中文:
-实例 noMaxOrder
-  签名: [偏序 α] [NoMax序 α] {a : α}
-  定义体: inferInstanceAs NoMaxOrder (Ici a)
-
-Depends on / 依赖: NoMaxOrder
+/-
+**Nonneg.noMaxOrder** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：noMaxOrder [PartialOrder α] [NoMaxOrder α] {a : α} : NoMaxOrder { x : α //
+ a <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance noMaxOrder [PartialOrder α] [NoMaxOrder α] {a : α} : NoMaxOrder { x : α // a <= x } :=
-inferInstanceAs NoMaxOrder (Ici a)
-
-/--
-Instance `semilatticeSup` / 实例 `semilatticeSup`
-
-English:
-instance semilatticeSup
-  signature: [SemilatticeSup α] {a : α}
-  body: inferInstanceAs SemilatticeSup (Ici a)
-
-中文:
-实例 semilatticeSup
-  签名: [SemilatticeSup α] {a : α}
-  定义体: inferInstanceAs SemilatticeSup (Ici a)
-
-Depends on / 依赖: SemilatticeSup
+instance noMaxOrder [PartialOrder α] [NoMaxOrder α] {a : α} : NoMaxOrder { x : α // a ≤ x } :=
+  inferInstanceAs <| NoMaxOrder (Ici a)
+/-
+**Nonneg.semilatticeSup** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：semilatticeSup [SemilatticeSup α] {a : α} : SemilatticeSup { x : α // a <=
+ x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semilatticeSup [SemilatticeSup α] {a : α} : SemilatticeSup { x : α // a <= x } :=
-inferInstanceAs SemilatticeSup (Ici a)
-
-/--
-Instance `semilatticeInf` / 实例 `semilatticeInf`
-
-English:
-instance semilatticeInf
-  signature: [SemilatticeInf α] {a : α}
-  body: inferInstanceAs SemilatticeInf (Ici a)
-
-中文:
-实例 semilatticeInf
-  签名: [SemilatticeInf α] {a : α}
-  定义体: inferInstanceAs SemilatticeInf (Ici a)
-
-Depends on / 依赖: SemilatticeInf
+instance semilatticeSup [SemilatticeSup α] {a : α} : SemilatticeSup { x : α // a ≤ x } :=
+  inferInstanceAs <| SemilatticeSup (Ici a)
+/-
+**Nonneg.semilatticeInf** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：semilatticeInf [SemilatticeInf α] {a : α} : SemilatticeInf { x : α // a <=
+ x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semilatticeInf [SemilatticeInf α] {a : α} : SemilatticeInf { x : α // a <= x } :=
-inferInstanceAs SemilatticeInf (Ici a)
-
-/--
-Instance `distribLattice` / 实例 `distribLattice`
-
-English:
-instance distribLattice
-  signature: [DistribLattice α] {a : α}
-  body: inferInstanceAs DistribLattice (Ici a)
-
-中文:
-实例 distribLattice
-  签名: [Distrib格 α] {a : α}
-  定义体: inferInstanceAs DistribLattice (Ici a)
-
-Depends on / 依赖: DistribLattice
+instance semilatticeInf [SemilatticeInf α] {a : α} : SemilatticeInf { x : α // a ≤ x } :=
+  inferInstanceAs <| SemilatticeInf (Ici a)
+/-
+**Nonneg.distribLattice** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：distribLattice [DistribLattice α] {a : α} : DistribLattice { x : α // a <=
+ x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance distribLattice [DistribLattice α] {a : α} : DistribLattice { x : α // a <= x } :=
-inferInstanceAs DistribLattice (Ici a)
-
-/--
-Instance `instDenselyOrdered` / 实例 `instDenselyOrdered`
-
-English:
-instance instDenselyOrdered
-  signature: [Preorder α] [DenselyOrdered α] {a : α}
-  body: inferInstanceAs DenselyOrdered (Ici a)
-
-中文:
-实例 instDenselyOrdered
-  签名: [预序 α] [稠密序 α] {a : α}
-  定义体: inferInstanceAs DenselyOrdered (Ici a)
-
-Depends on / 依赖: DenselyOrdered
+instance distribLattice [DistribLattice α] {a : α} : DistribLattice { x : α // a ≤ x } :=
+  inferInstanceAs <| DistribLattice (Ici a)
+/-
+**Nonneg.instDenselyOrdered** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：instDenselyOrdered [Preorder α] [DenselyOrdered α] {a : α} : DenselyOrdere
+d { x : α // a <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDenselyOrdered [Preorder α] [DenselyOrdered α] {a : α} :
-    DenselyOrdered { x : α // a <= x } :=
-inferInstanceAs DenselyOrdered (Ici a)
+    DenselyOrdered { x : α // a ≤ x } :=
+  inferInstanceAs <| DenselyOrdered (Ici a)
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- If `sSup ∅ ≤ a` then `{x : α // a ≤ x}` is a `ConditionallyCompleteLinearOrder`. -/
+/-
+**Nonneg.conditionallyCompleteLinearOrder** 是 Mathlib 中的一个定义，位于命名空间 `Nonneg`。
+形式化陈述：{α : Type u_1} → [inst : ConditionallyCompleteLinearOrder α] → {a : α} → C
+onditionallyCompleteLinearOrder { x // a ≤ x }
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev conditionallyCompleteLinearOrder [ConditionallyCompleteLinearOrder α]
-  body: -- TODO: missing `Inhabited (Ici a)` instance
-  haveI : Inhabited (Ici a) := ⟨a, le_rfl⟩
-inferInstanceAs ConditionallyCompleteLinearOrder (Ici a)
-
-中文:
-缩写 noncomputable
-  签名: abbrev conditionallyCompleteLinearOrder [条件完备线性序 α]
-  定义体: -- TODO: missing `Inhabited (Ici a)` instance
-  haveI : Inhabited (Ici a) := ⟨a, le_rfl⟩
-inferInstanceAs ConditionallyCompleteLinearOrder (Ici a)
+--- 原说明 ---
+If `sSup ∅ ≤ a` then `{x : α // a ≤ x}` is a `ConditionallyCompleteLinearOrder`.
 -/
 protected noncomputable abbrev conditionallyCompleteLinearOrder [ConditionallyCompleteLinearOrder α]
-    {a : α} : ConditionallyCompleteLinearOrder { x : α // a <= x } :=
+    {a : α} : ConditionallyCompleteLinearOrder { x : α // a ≤ x } :=
   -- TODO: missing `Inhabited (Ici a)` instance
   haveI : Inhabited (Ici a) := ⟨a, le_rfl⟩
-inferInstanceAs ConditionallyCompleteLinearOrder (Ici a)
+  inferInstanceAs <| ConditionallyCompleteLinearOrder (Ici a)
 
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- If `sSup ∅ ≤ a` then `{x : α // a ≤ x}` is a `ConditionallyCompleteLinearOrderBot`.
 
-English:
-abbreviation noncomputable
-  signature: abbrev conditionallyCompleteLinearOrderBot
-  body: { Nonneg.orderBot, Nonneg.conditionallyCompleteLinearOrder with
-    csSup_empty := by
-      rw [@subset_sSup_def α (Set.Ici a) _ _ ⟨⟨a]; rw [le_rfl⟩⟩]; simp [bot_eq] }
+This instance uses data fields from `Subtype.linearOrder` to help type-class inference.
+The `Set.Ici` data fields are definitionally equal, but that requires unfolding semireducible
+definitions, so type-class inference won't see this. -/
+/-
+**Nonneg.conditionallyCompleteLinearOrderBot** 是 Mathlib 中的一个定义，位于命名空间 `Nonneg`。
+形式化陈述：{α : Type u_1} →   [inst : ConditionallyCompleteLinearOrder α] → (a : α) →
+ ConditionallyCompleteLinearOrderBot { x // a ≤ x }
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 noncomputable
-  签名: abbrev conditionallyCompleteLinearOrderBot
-  定义体: { Nonneg.orderBot, Nonneg.conditionallyCompleteLinearOrder with
-    csSup_empty := by
-      rw [@subset_sSup_def α (Set.Ici a) _ _ ⟨⟨a]; rw [le_rfl⟩⟩]; simp [bot_eq] }
+--- 原说明 ---
+If `sSup ∅ ≤ a` then `{x : α // a ≤ x}` is a `ConditionallyCompleteLinearOrderBo
+t`.
+
+This instance uses data fields from `Subtype.linearOrder` to help type-class inf
+erence.
+The `Set.Ici` data fields are definitionally equal, but that requires unfolding 
+semireducible
+definitions, so type-class inference won't see this.
 -/
 protected noncomputable abbrev conditionallyCompleteLinearOrderBot
     [ConditionallyCompleteLinearOrder α] (a : α) :
-    ConditionallyCompleteLinearOrderBot { x : α // a <= x } :=
+    ConditionallyCompleteLinearOrderBot { x : α // a ≤ x } :=
   { Nonneg.orderBot, Nonneg.conditionallyCompleteLinearOrder with
     csSup_empty := by
-      rw [@subset_sSup_def α (Set.Ici a) _ _ ⟨⟨a]; rw [le_rfl⟩⟩]; simp [bot_eq] }
+      rw [@subset_sSup_def α (Set.Ici a) _ _ ⟨⟨a, le_rfl⟩⟩]; simp [bot_eq] }
 
 end Nonneg
+

@@ -65,41 +65,19 @@ section Finsupp
 variable [DecidableEq α]
 
 /--
-theorem `apply_eq_dlookup` / 定理 `apply_eq_dlookup`
+This theorem exists because plausible does not have access to dlookup but
+mathlib has all the theory for it and wants to use it. We probably want to
+bring these two together at some point.
+-/
+/-
+**Plausible.TotalFunction.apply_eq_dlookup** 是 Mathlib 中的一个定理，位于命名空间 `Plausible.
+TotalFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem apply_eq_dlookup
-  given: (m : List (Σ _ : α, β)) (y : β) (x : α)
-  proof: by
-  dsimp only [apply]
-  congr 1
-  induction m with
-  | nil => simp
-  | cons p m ih =>
-    rcases p with ⟨fst, snd⟩
-    by_cases heq : fst = x
-    · simp [heq]
-    · rw [List.dlookup_cons_ne]
-      · simp [heq, ih]
-      · symm
-        simp [heq]
-
-中文:
-定理 apply_eq_dlookup
-  条件: (m : 列表 (Σ _ : α, β)) (y : β) (x : α)
-  证明: by
-  dsimp only [apply]
-  congr 1
-  induction m with
-  | nil => simp
-  | cons p m ih =>
-    rcases p with ⟨fst, snd⟩
-    by_cases heq : fst = x
-    · simp [heq]
-    · rw [List.dlookup_cons_ne]
-      · simp [heq, ih]
-      · symm
-        simp [heq]
+--- 原说明 ---
+This theorem exists because plausible does not have access to dlookup but
+mathlib has all the theory for it and wants to use it. We probably want to
+bring these two together at some point.
 -/
 private theorem apply_eq_dlookup (m : List (Σ _ : α, β)) (y : β) (x : α) :
      (withDefault m y).apply x = (m.dlookup x).getD y := by
@@ -120,91 +98,51 @@ variable [Zero β] [DecidableEq β]
 
 /-- Map a `TotalFunction` to one whose default value is zero so that it represents a `Finsupp`. -/
 @[simp]
-/--
-Definition of `zeroDefault` / `zeroDefault` 的定义
+/-
+**Plausible.TotalFunction.zeroDefault** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Total
+Function`。
+形式化陈述：{α : Type u} → {β : Type v} → [Zero β] → Plausible.TotalFunction α β → Pla
+usible.TotalFunction α β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroDefault
-  signature: : TotalFunction α β -> TotalFunction α β
-
-中文:
-定义 zeroDefault
-  签名: : TotalFunction α β -> TotalFunction α β
+--- 原说明 ---
+Map a `TotalFunction` to one whose default value is zero so that it represents a
+ `Finsupp`.
 -/
-def zeroDefault : TotalFunction α β -> TotalFunction α β
+def zeroDefault : TotalFunction α β → TotalFunction α β
   | .withDefault A _ => .withDefault A 0
 
-/--
-Definition of `zeroDefaultSupp` / `zeroDefaultSupp` 的定义
+/-- The support of a zero default `TotalFunction`. -/
+/-
+**Plausible.TotalFunction.zeroDefaultSupp** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.T
+otalFunction`。
+形式化陈述：{α : Type u} → {β : Type v} → [DecidableEq α] → [Zero β] → [DecidableEq β]
+ → Plausible.TotalFunction α β → Finset α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroDefaultSupp
-  signature: : TotalFunction α β -> Finset α
-
-中文:
-定义 zeroDefaultSupp
-  签名: : TotalFunction α β -> 有限集 α
+--- 原说明 ---
+The support of a zero default `TotalFunction`.
 -/
-def zeroDefaultSupp : TotalFunction α β -> Finset α
+def zeroDefaultSupp : TotalFunction α β → Finset α
   | .withDefault A _ =>
-List.toFinset (A.dedupKeys.filter fun ab => Sigma.snd ab != 0).map Sigma.fst
+    List.toFinset <| (A.dedupKeys.filter fun ab => Sigma.snd ab ≠ 0).map Sigma.fst
 
-/--
-Definition of `applyFinsupp` / `applyFinsupp` 的定义
+/-- Create a finitely supported function from a total function by taking the default value to
+zero. -/
+/-
+**Plausible.TotalFunction.applyFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Tota
+lFunction`。
+形式化陈述：applyFinsupp (tf : TotalFunction α β) : α ->₀ β where support
+参数：tf : TotalFunction α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyFinsupp
-  signature: (tf : TotalFunction α β)
-  body: zeroDefaultSupp tf
-  toFun := tf.zeroDefault.apply
-  mem_support_toFun := by
-    intro a
-    rcases tf with ⟨A, y⟩
-    simp only [zeroDefaultSupp, List.mem_map, List.mem_filter, exists_and_right,
-      List.mem_toFinset, exists_eq_right, Sigma.exists, Ne, zeroDefault]
-    rw [apply_eq_dlookup]
-    constructor
-    · rintro ⟨od, hval, hod⟩
-      have := List.mem_dlookup (List.nodupKeys_dedupKeys A) hval
-      rw [(_ : List.dlookup a A = od)]
-      · simpa using hod
-      · simpa [List.dlookup_dedupKeys]
-    · intro h
-      use (A.dlookup a).getD (0 : β)
-      rw [← List.dlookup_dedupKeys] at h ⊢
-      simp only [h, ← List.mem_dlookup_iff A.nodupKeys_dedupKeys, not_false_iff, Option.mem_def]
-      cases haA : List.dlookup a A.dedupKeys
-      · simp [haA] at h
-      · simp
-
-中文:
-定义 applyFinsupp
-  签名: (tf : TotalFunction α β)
-  定义体: zeroDefaultSupp tf
-  toFun := tf.zeroDefault.apply
-  mem_support_toFun := by
-    intro a
-    rcases tf with ⟨A, y⟩
-    simp only [zeroDefaultSupp, List.mem_map, List.mem_filter, exists_and_right,
-      List.mem_toFinset, exists_eq_right, Sigma.exists, Ne, zeroDefault]
-    rw [apply_eq_dlookup]
-    constructor
-    · rintro ⟨od, hval, hod⟩
-      have := List.mem_dlookup (List.nodupKeys_dedupKeys A) hval
-      rw [(_ : List.dlookup a A = od)]
-      · simpa using hod
-      · simpa [List.dlookup_dedupKeys]
-    · intro h
-      use (A.dlookup a).getD (0 : β)
-      rw [← List.dlookup_dedupKeys] at h ⊢
-      simp only [h, ← List.mem_dlookup_iff A.nodupKeys_dedupKeys, not_false_iff, Option.mem_def]
-      cases haA : List.dlookup a A.dedupKeys
-      · simp [haA] at h
-      · simp
-
-Depends on / 依赖: zeroDefaultSupp
+--- 原说明 ---
+Create a finitely supported function from a total function by taking the default
+ value to
+zero.
 -/
-def applyFinsupp (tf : TotalFunction α β) : α ->₀ β where
+def applyFinsupp (tf : TotalFunction α β) : α →₀ β where
   support := zeroDefaultSupp tf
   toFun := tf.zeroDefault.apply
   mem_support_toFun := by
@@ -228,65 +166,36 @@ def applyFinsupp (tf : TotalFunction α β) : α ->₀ β where
       · simp
 
 variable [SampleableExt α] [SampleableExt β] [Repr α]
-
-/--
-Instance `Finsupp.sampleableExt` / 实例 `Finsupp.sampleableExt`
-
-English:
-instance Finsupp.sampleableExt
-  signature: : SampleableExt (α ->₀ β) where
-  body: TotalFunction α (SampleableExt.proxy β)
-  interp := fun f => (f.comp SampleableExt.interp).applyFinsupp
-  sample := SampleableExt.sample (α := α -> β)
-  -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
-
-中文:
-实例 有限支撑.sampleableExt
-  签名: : SampleableExt (α ->₀ β) where
-  定义体: TotalFunction α (SampleableExt.proxy β)
-  interp := fun f => (f.comp SampleableExt.interp).applyFinsupp
-  sample := SampleableExt.sample (α := α -> β)
-  -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
-
-Depends on / 依赖: SampleableExt, SampleableExt.proxy, TotalFunction
+/-
+**Plausible.TotalFunction.Finsupp.sampleableExt** 是 Mathlib 中的一个定义，位于命名空间 `Plaus
+ible.TotalFunction.Finsupp`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [DecidableEq α] →       [inst : Zero β
+] →         [DecidableEq β] →           [Plausible.SampleableExt α] → [Plausible
+.SampleableExt β] → [Repr α] → Plausible.SampleableExt (α →₀ β)
+参数：α →₀ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Finsupp.sampleableExt : SampleableExt (α ->₀ β) where
+instance Finsupp.sampleableExt : SampleableExt (α →₀ β) where
   proxy := TotalFunction α (SampleableExt.proxy β)
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp
-  sample := SampleableExt.sample (α := α -> β)
+  sample := SampleableExt.sample (α := α → β)
   -- note: no way of shrinking the domain without an inverse to `interp`
   shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
 
 -- TODO: support a non-constant codomain type
-/--
-Instance `DFinsupp.sampleableExt` / 实例 `DFinsupp.sampleableExt`
-
-English:
-instance DFinsupp.sampleableExt
-  signature: : SampleableExt (Π₀ _ : α, β) where
-  body: TotalFunction α (SampleableExt.proxy β)
-  interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
-  sample := SampleableExt.sample (α := α -> β)
-  -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
-
-中文:
-实例 直和有限支撑.sampleableExt
-  签名: : SampleableExt (Π₀ _ : α, β) where
-  定义体: TotalFunction α (SampleableExt.proxy β)
-  interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
-  sample := SampleableExt.sample (α := α -> β)
-  -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
-
-Depends on / 依赖: SampleableExt, SampleableExt.proxy, TotalFunction
+/-
+**Plausible.TotalFunction.DFinsupp.sampleableExt** 是 Mathlib 中的一个定义，位于命名空间 `Plau
+sible.TotalFunction.DFinsupp`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [DecidableEq α] →       [inst : Zero β
+] →         [DecidableEq β] →           [Plausible.SampleableExt α] → [Plausible
+.SampleableExt β] → [Repr α] → Plausible.SampleableExt (Π₀ (x : α), β)
+参数：Π₀ (x : α), β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance DFinsupp.sampleableExt : SampleableExt (Π₀ _ : α, β) where
   proxy := TotalFunction α (SampleableExt.proxy β)
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
-  sample := SampleableExt.sample (α := α -> β)
+  sample := SampleableExt.sample (α := α → β)
   -- note: no way of shrinking the domain without an inverse to `interp`
   shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
 
@@ -295,117 +204,133 @@ end TotalFunction
 
 open _root_.List
 
-/--
-Inductive type `InjectiveFunction` / 归纳类型 `InjectiveFunction`
+/-- Data structure specifying a total function using a list of pairs
+and a default value returned when the input is not in the domain of
+the partial function.
 
-English:
-inductive InjectiveFunction
-  parameters: (α : Type u)
-  constructors (1):
-    - mapToSelf: (xs : List (Σ _ : α, α)) : xs.map Sigma.fst ~ xs.map Sigma.snd -> List.Nodup (xs.map Sigma.snd) -> InjectiveFunction α
+`mapToSelf f` encodes `x ↦ f x` when `x ∈ f` and `x ↦ x`,
+i.e. `x` to itself, otherwise.
 
-中文:
-归纳类型 InjectiveFunction
-  参数: (α : 类型u)
-  构造子 (1 个):
-    - mapToSelf: (xs : 列表 (Σ _ : α, α)) : xs.map 依赖和类型.fst ~ xs.map 依赖和类型.snd -> 列表.Nodup (xs.map 依赖和类型.snd) -> InjectiveFunction α
+We use `Σ` to encode mappings instead of `×` because we
+rely on the association list API defined in `Mathlib/Data/List/Sigma.lean`.
+-/
+/-
+**Plausible.InjectiveFunction** 是 Mathlib 中的一个归纳类型，位于命名空间 `Plausible`。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Data structure specifying a total function using a list of pairs
+and a default value returned when the input is not in the domain of
+the partial function.
+
+`mapToSelf f` encodes `x ↦ f x` when `x ∈ f` and `x ↦ x`,
+i.e. `x` to itself, otherwise.
+
+We use `Σ` to encode mappings instead of `×` because we
+rely on the association list API defined in `Mathlib/Data/List/Sigma.lean`.
 -/
 inductive InjectiveFunction (α : Type u) : Type u
   | mapToSelf (xs : List (Σ _ : α, α)) :
-      xs.map Sigma.fst ~ xs.map Sigma.snd -> List.Nodup (xs.map Sigma.snd) -> InjectiveFunction α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (InjectiveFunction α)
-  body: ⟨⟨[], List.Perm.nil, List.nodup_nil⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (InjectiveFunction α)
-  定义体: ⟨⟨[], List.Perm.nil, List.nodup_nil⟩⟩
-
-Depends on / 依赖: List.Perm.nil, List.nodup_nil, nodup_nil
+      xs.map Sigma.fst ~ xs.map Sigma.snd → List.Nodup (xs.map Sigma.snd) → InjectiveFunction α
+/-
+**Plausible.** 是 Mathlib 中的一个实例，位于命名空间 `Plausible`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (InjectiveFunction α) :=
   ⟨⟨[], List.Perm.nil, List.nodup_nil⟩⟩
 
 namespace InjectiveFunction
 
-/--
-Definition of `apply` / `apply` 的定义
+/-- Apply a total function to an argument. -/
+/-
+**Plausible.InjectiveFunction.apply** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Injecti
+veFunction`。
+形式化陈述：{α : Type u} → [DecidableEq α] → Plausible.InjectiveFunction α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition apply
-  signature: [DecidableEq α]
-
-中文:
-定义 apply
-  签名: [DecidableEq α]
+--- 原说明 ---
+Apply a total function to an argument.
 -/
-def apply [DecidableEq α] : InjectiveFunction α -> α -> α
+def apply [DecidableEq α] : InjectiveFunction α → α → α
   | InjectiveFunction.mapToSelf m _ _, x => (m.dlookup x).getD x
 
-/--
-Definition of `repr` / `repr` 的定义
-
-English:
-definition repr
-  signature: [Repr α]
-
-中文:
-定义 repr
-  签名: [Repr α]
+/-- Produce a string for a given `InjectiveFunction`.
+The output is of the form `[x₀ ↦ f x₀, .. xₙ ↦ f xₙ, x ↦ x]`.
+Unlike for `TotalFunction`, the default value is not a constant
+but the identity function.
 -/
-protected def repr [Repr α] : InjectiveFunction α -> String
-  | InjectiveFunction.mapToSelf m _ _ => s! "[{TotalFunction.reprAux m}x => x]"
+/-
+**Plausible.InjectiveFunction.repr** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Injectiv
+eFunction`。
+形式化陈述：{α : Type u} → [Repr α] → Plausible.InjectiveFunction α → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+Produce a string for a given `InjectiveFunction`.
+The output is of the form `[x₀ ↦ f x₀, .. xₙ ↦ f xₙ, x ↦ x]`.
+Unlike for `TotalFunction`, the default value is not a constant
+but the identity function.
+-/
+protected def repr [Repr α] : InjectiveFunction α → String
+  | InjectiveFunction.mapToSelf m _ _ => s! "[{TotalFunction.reprAux m}x ↦ x]"
+/-
+**Plausible.InjectiveFunction.** 是 Mathlib 中的一个实例，位于命名空间 `Plausible.InjectiveFun
+ction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type u) [Repr α] : Repr (InjectiveFunction α) where
   reprPrec f _p := InjectiveFunction.repr f
 
-/--
-Definition of `List.applyId` / `List.applyId` 的定义
+/-- Interpret a list of pairs as a total function, defaulting to
+the identity function when no entries are found for a given function -/
+/-
+**Plausible.InjectiveFunction.List.applyId** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.
+InjectiveFunction.List`。
+形式化陈述：{α : Type u} → [DecidableEq α] → List (α × α) → α → α
+参数：α × α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition List.applyId
-  signature: [DecidableEq α] (xs : List (α × α)) (x : α)
-  body: ((xs.map Prod.toSigma).dlookup x).getD x
-
-@[simp]
-
-中文:
-定义 列表.applyId
-  签名: [DecidableEq α] (xs : 列表 (α × α)) (x : α)
-  定义体: ((xs.map Prod.toSigma).dlookup x).getD x
-
-@[simp]
-
-Depends on / 依赖: Prod.toSigma, dlookup, toSigma, xs.map
+--- 原说明 ---
+Interpret a list of pairs as a total function, defaulting to
+the identity function when no entries are found for a given function
 -/
 def List.applyId [DecidableEq α] (xs : List (α × α)) (x : α) : α :=
   ((xs.map Prod.toSigma).dlookup x).getD x
 
 @[simp]
-/--
-theorem `List.applyId_cons` / 定理 `List.applyId_cons`
-
-English:
-theorem List.applyId_cons
-  given: [DecidableEq α] (xs : List (α × α)) (x y z : α)
-  proof: by
-  simp only [List.applyId, List.dlookup, eq_rec_constant, Prod.toSigma, List.map]
-  split_ifs <;> rfl
-
-中文:
-定理 列表.applyId_cons
-  条件: [DecidableEq α] (xs : 列表 (α × α)) (x y z : α)
-  证明: by
-  simp only [List.applyId, List.dlookup, eq_rec_constant, Prod.toSigma, List.map]
-  split_ifs <;> rfl
-
-Depends on / 依赖: List.applyId, List.dlookup, List.map, Prod.toSigma, applyId, dlookup, eq_rec_constant, split_ifs, toSigma
+/-
+**Plausible.InjectiveFunction.List.applyId_cons** 是 Mathlib 中的一个定理，位于命名空间 `Plaus
+ible.InjectiveFunction.List`。
+形式化陈述：∀ {α : Type u} [inst : DecidableEq α] (xs : List (α × α)) (x y z : α),   P
+lausible.InjectiveFunction.List.applyId ((y, z) :: xs) x =     if y = x then z e
+lse Plausible.InjectiveFunction.List.applyId xs x
+参数：xs : List (α × α)；x y z : α；(y, z) :: xs。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.dlookup.eq_2`：∀ {α : Type u} {β : α → Type v} [inst : DecidableEq α
+] (a a' : α) (b : β a') (l : List (Sigma β)),   List.dlookup a (⟨a', b⟩ :: l) = 
+if h : …
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 theorem List.applyId_cons [DecidableEq α] (xs : List (α × α)) (x y z : α) :
     List.applyId ((y, z)::xs) x = if y = x then z else List.applyId xs x := by
@@ -413,58 +338,73 @@ theorem List.applyId_cons [DecidableEq α] (xs : List (α × α)) (x y z : α) :
   split_ifs <;> rfl
 
 open Function
-
-/--
-theorem `List.applyId_zip_eq` / 定理 `List.applyId_zip_eq`
-
-English:
-theorem List.applyId_zip_eq
-  statement: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs)
-  proof: by
-  induction xs generalizing ys i with
-  | nil => cases h₂
-  | cons x' xs xs_ih =>
-    cases i
-    · simp only [length_cons, lt_add_iff_pos_left, add_pos_iff, Nat.lt_add_one, or_true,
-        getElem?_eq_getElem, getElem_cons_zero, Option.some.injEq] at h₂
-      subst h₂
-      cases ys
-      · cases h₁
-      · simp
-    · cases ys
-      · cases h₁
-      · obtain - | ⟨h₀, h₁⟩ := h₀
-        simp only [getElem?_cons_succ, zip_cons_cons, applyId_cons] at h₂ ⊢
-        rw [if_neg]
-        · apply xs_ih <;> solve_by_elim [Nat.succ.inj]
-        · apply h₀; apply List.mem_of_getElem? h₂
-
-中文:
-定理 列表.applyId_zip_eq
-  结论: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs)
-  证明: by
-  induction xs generalizing ys i with
-  | nil => cases h₂
-  | cons x' xs xs_ih =>
-    cases i
-    · simp only [length_cons, lt_add_iff_pos_left, add_pos_iff, Nat.lt_add_one, or_true,
-        getElem?_eq_getElem, getElem_cons_zero, Option.some.injEq] at h₂
-      subst h₂
-      cases ys
-      · cases h₁
-      · simp
-    · cases ys
-      · cases h₁
-      · obtain - | ⟨h₀, h₁⟩ := h₀
-        simp only [getElem?_cons_succ, zip_cons_cons, applyId_cons] at h₂ ⊢
-        rw [if_neg]
-        · apply xs_ih <;> solve_by_elim [Nat.succ.inj]
-        · apply h₀; apply List.mem_of_getElem? h₂
-
-Depends on / 依赖: List.mem_of_getElem, Nat.lt_add_one, Nat.succ.inj, Option.some.injEq, _cons_succ, _eq_getElem, add_pos_iff, applyId_cons, generalizing, getElem, getElem_cons_zero, if_neg, length_cons, lt_add_iff_pos_left, lt_add_one, mem_of_getElem, or_true, solve_by_elim, xs_ih, zip_cons_cons
+/-
+**Plausible.InjectiveFunction.List.applyId_zip_eq** 是 Mathlib 中的一个定理，位于命名空间 `Pla
+usible.InjectiveFunction.List`。
+形式化陈述：∀ {α : Type u} [inst : DecidableEq α] {xs ys : List α},   xs.Nodup →     x
+s.length = ys.length →       ∀ (x y : α) (i : ℕ),         xs[i]? = some x → (Pla
+usible.InjectiveFunction.List.applyId (xs.zip ys) x = y ↔ ys[i]? = some y)
+参数：x y : α；i : ℕ；Plausible.InjectiveFunction.List.applyId (xs.zip ys) x = y ↔ ys
+[i]? = some y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Plausible.InjectiveFunction.List.applyId_cons`：∀ {α : Type u} [inst : De
+cidableEq α] (xs : List (α × α)) (x y z : α),   Plausible.InjectiveFunction.List
+.applyId ((y, z) :: xs) x =     if …
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `getElem?_pos`：∀ {cont : Type u_1} {idx : Type u_2} {elem : Type u_3} {do
+m : cont → idx → Prop} [inst : GetElem? cont idx elem dom]   [LawfulGetElem cont
+ i…
+· 使用定理 `List.instLawfulGetElemNatLtLength`：∀ {α : Type u_1}, LawfulGetElem (List
+ α) ℕ α fun as i => i < as.length
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `List.getElem?_eq_getElem`：∀ {α : Type u_1} {l : List α} {i : ℕ} (h : i <
+ l.length), l[i]? = some l[i]
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `List.mem_of_getElem?`：∀ {α : Type u_1} {l : List α} {i : ℕ} {a : α}, l[i
+]? = some a → a ∈ l
+· 使用定理 `Nat.succ.inj`：∀ {m n : ℕ}, m.succ = n.succ → m = n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem List.applyId_zip_eq [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs)
-    (h₁ : xs.length = ys.length) (x y : α) (i : Nat) (h₂ : xs[i]? = some x) :
+    (h₁ : xs.length = ys.length) (x y : α) (i : ℕ) (h₂ : xs[i]? = some x) :
     List.applyId.{u} (xs.zip ys) x = y ↔ ys[i]? = some y := by
   induction xs generalizing ys i with
   | nil => cases h₂
@@ -483,88 +423,68 @@ theorem List.applyId_zip_eq [DecidableEq α] {xs ys : List α} (h₀ : List.Nodu
         rw [if_neg]
         · apply xs_ih <;> solve_by_elim [Nat.succ.inj]
         · apply h₀; apply List.mem_of_getElem? h₂
-
-/--
-theorem `applyId_mem_iff` / 定理 `applyId_mem_iff`
-
-English:
-theorem applyId_mem_iff
-  statement: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys)
-  proof: by
-  simp only [List.applyId]
-  cases h₃ : List.dlookup x (List.map Prod.toSigma (xs.zip ys)) with
-  | none =>
-    dsimp [Option.getD]
-    rw [h₁.mem_iff]
-  | some val =>
-    have h₂ : ys.Nodup := h₁.nodup_iff.1 h₀
-    replace h₁ : xs.length = ys.length := h₁.length_eq
-    dsimp
-    induction xs generalizing ys with
-    | nil => contradiction
-    | cons x' xs xs_ih =>
-      rcases ys with - | ⟨y, ys⟩
-      · cases h₃
-      simp only [zip_cons_cons, map_cons, Prod.toSigma_mk, dlookup, eq_rec_constant,
-        dite_eq_ite] at h₃
-      split_ifs at h₃ with h
-      · rw [Option.some_inj] at h₃
-        subst x'; subst val
-        simp only [List.mem_cons, true_or]
-      · obtain - | ⟨h₀, h₅⟩ := h₀
-        obtain - | ⟨h₂, h₄⟩ := h₂
-        have h₆ := Nat.succ.inj h₁
-        specialize xs_ih h₅ h₃ h₄ h₆
-        simp only [Ne.symm h, xs_ih, List.mem_cons]
-        suffices val in ys by tauto
-        rw [← Option.mem_def]; rw [List.mem_dlookup_iff] at h₃
-        · simp only [Prod.toSigma, List.mem_map, Prod.exists] at h₃
-          rcases h₃ with ⟨a, b, h₃, h₄, h₅⟩
-          apply (List.of_mem_zip h₃).2
-        simp only [List.NodupKeys, List.keys, comp_def, Prod.fst_toSigma, List.map_map]
-        rwa [List.map_fst_zip (le_of_eq h₆)]
-
-中文:
-定理 applyId_mem_iff
-  结论: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs) (h₁ : xs ~ ys)
-  证明: by
-  simp only [List.applyId]
-  cases h₃ : List.dlookup x (List.map Prod.toSigma (xs.zip ys)) with
-  | none =>
-    dsimp [Option.getD]
-    rw [h₁.mem_iff]
-  | some val =>
-    have h₂ : ys.Nodup := h₁.nodup_iff.1 h₀
-    replace h₁ : xs.length = ys.length := h₁.length_eq
-    dsimp
-    induction xs generalizing ys with
-    | nil => contradiction
-    | cons x' xs xs_ih =>
-      rcases ys with - | ⟨y, ys⟩
-      · cases h₃
-      simp only [zip_cons_cons, map_cons, Prod.toSigma_mk, dlookup, eq_rec_constant,
-        dite_eq_ite] at h₃
-      split_ifs at h₃ with h
-      · rw [Option.some_inj] at h₃
-        subst x'; subst val
-        simp only [List.mem_cons, true_or]
-      · obtain - | ⟨h₀, h₅⟩ := h₀
-        obtain - | ⟨h₂, h₄⟩ := h₂
-        have h₆ := Nat.succ.inj h₁
-        specialize xs_ih h₅ h₃ h₄ h₆
-        simp only [Ne.symm h, xs_ih, List.mem_cons]
-        suffices val in ys by tauto
-        rw [← Option.mem_def]; rw [List.mem_dlookup_iff] at h₃
-        · simp only [Prod.toSigma, List.mem_map, Prod.exists] at h₃
-          rcases h₃ with ⟨a, b, h₃, h₄, h₅⟩
-          apply (List.of_mem_zip h₃).2
-        simp only [List.NodupKeys, List.keys, comp_def, Prod.fst_toSigma, List.map_map]
-        rwa [List.map_fst_zip (le_of_eq h₆)]
-
-Depends on / 依赖: List.applyId, List.dlookup, List.map, Option.getD, Prod.toSigma, Prod.toSigma_mk, applyId, dite_eq_ite, dlookup, eq_rec_constant, generalizing, length, length_eq, map_cons, mem_iff, nodup_iff, replace, split_ifs, toSigma, toSigma_mk
+/-
+**Plausible.InjectiveFunction.applyId_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Plausib
+le.InjectiveFunction`。
+形式化陈述：applyId_mem_iff [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ 
+: xs ~ ys) (x : α) : List.applyId.{u} (xs.zip ys) x in ys ↔ x in xs
+参数：h₀ : List.Nodup xs；h₁ : xs ~ ys；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Perm.mem_iff`：∀ {α : Type u_1} {a : α} {l₁ l₂ : List α}, l₁.Perm l₂
+ → (a ∈ l₁ ↔ a ∈ l₂)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Perm.nodup_iff`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → (l₁
+.Nodup ↔ l₂.Nodup)
+· 使用定理 `List.Perm.length_eq`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₁.
+length = l₂.length
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `List.dlookup.congr_simp`：∀ {α : Type u} {β : α → Type v} {inst : Decidab
+leEq α} [inst_1 : DecidableEq α] (a : α) (a_1 a_2 : List (Sigma β)),   a_1 = a_2
+ → List.dlook…
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `List.dlookup.eq_2`：∀ {α : Type u} {β : α → Type v} [inst : DecidableEq α
+] (a a' : α) (b : β a') (l : List (Sigma β)),   List.dlookup a (⟨a', b⟩ :: l) = 
+if h : …
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
+· 使用定理 `Nat.succ.inj`：∀ {m n : ℕ}, m.succ = n.succ → m = n
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `List.mem_dlookup_iff`：mem_dlookup_iff {a : α} {b : β a} {l : List (Sigma
+ β)} (nd : l.NodupKeys) : b in dlookup a l ↔ Sigma.mk a b in l
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `List.map_fst_zip`：∀ {α : Type u_1} {β : Type u_2} {l₁ : List α} {l₂ : Li
+st β}, l₁.length ≤ l₂.length → List.map Prod.fst (l₁.zip l₂) = l₁
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem applyId_mem_iff [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys)
-    (x : α) : List.applyId.{u} (xs.zip ys) x in ys ↔ x in xs := by
+    (x : α) : List.applyId.{u} (xs.zip ys) x ∈ ys ↔ x ∈ xs := by
   simp only [List.applyId]
   cases h₃ : List.dlookup x (List.map Prod.toSigma (xs.zip ys)) with
   | none =>
@@ -590,47 +510,38 @@ theorem applyId_mem_iff [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs
         have h₆ := Nat.succ.inj h₁
         specialize xs_ih h₅ h₃ h₄ h₆
         simp only [Ne.symm h, xs_ih, List.mem_cons]
-        suffices val in ys by tauto
-        rw [← Option.mem_def]; rw [List.mem_dlookup_iff] at h₃
+        suffices val ∈ ys by tauto
+        rw [← Option.mem_def, List.mem_dlookup_iff] at h₃
         · simp only [Prod.toSigma, List.mem_map, Prod.exists] at h₃
           rcases h₃ with ⟨a, b, h₃, h₄, h₅⟩
           apply (List.of_mem_zip h₃).2
         simp only [List.NodupKeys, List.keys, comp_def, Prod.fst_toSigma, List.map_map]
         rwa [List.map_fst_zip (le_of_eq h₆)]
-
-/--
-theorem `List.applyId_eq_self` / 定理 `List.applyId_eq_self`
-
-English:
-theorem List.applyId_eq_self
-  given: [DecidableEq α] {xs ys : List α} (x : α)
-  proof: by
-  intro h
-  dsimp [List.applyId]
-  rw [List.dlookup_eq_none.2]
-  · rfl
-  simp only [List.keys, not_exists, Prod.toSigma, exists_and_right, exists_eq_right, List.mem_map,
-    Function.comp_apply, List.map_map, Prod.exists]
-  intro y hy
-  exact h (List.of_mem_zip hy).1
-
-中文:
-定理 列表.applyId_eq_self
-  条件: [DecidableEq α] {xs ys : 列表 α} (x : α)
-  证明: by
-  intro h
-  dsimp [List.applyId]
-  rw [List.dlookup_eq_none.2]
-  · rfl
-  simp only [List.keys, not_exists, Prod.toSigma, exists_and_right, exists_eq_right, List.mem_map,
-    Function.comp_apply, List.map_map, Prod.exists]
-  intro y hy
-  exact h (List.of_mem_zip hy).1
-
-Depends on / 依赖: Function, Function.comp_apply, List.applyId, List.dlookup_eq_none, List.keys, List.map_map, List.mem_map, List.of_mem_zip, Prod.exists, Prod.toSigma, applyId, comp_apply, dlookup_eq_none, exists_and_right, exists_eq_right, map_map, mem_map, not_exists, of_mem_zip, toSigma
+/-
+**Plausible.InjectiveFunction.List.applyId_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Pl
+ausible.InjectiveFunction.List`。
+形式化陈述：∀ {α : Type u} [inst : DecidableEq α] {xs ys : List α},   ∀ x ∉ xs, Plausi
+ble.InjectiveFunction.List.applyId (xs.zip ys) x = x
+参数：xs.zip ys。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.dlookup_eq_none`：dlookup_eq_none {a : α} {l : List (Sigma β)} : dlo
+okup a l = none ↔ a ∉ l.keys
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `List.of_mem_zip`：∀ {α : Type u_1} {β : Type u_2} {a : α} {b : β} {l₁ : L
+ist α} {l₂ : List β}, (a, b) ∈ l₁.zip l₂ → a ∈ l₁ ∧ b ∈ l₂
 -/
 theorem List.applyId_eq_self [DecidableEq α] {xs ys : List α} (x : α) :
-    x ∉ xs -> List.applyId.{u} (xs.zip ys) x = x := by
+    x ∉ xs → List.applyId.{u} (xs.zip ys) x = x := by
   intro h
   dsimp [List.applyId]
   rw [List.dlookup_eq_none.2]
@@ -639,79 +550,51 @@ theorem List.applyId_eq_self [DecidableEq α] {xs ys : List α} (x : α) :
     Function.comp_apply, List.map_map, Prod.exists]
   intro y hy
   exact h (List.of_mem_zip hy).1
-
-/--
-theorem `applyId_injective` / 定理 `applyId_injective`
-
-English:
-theorem applyId_injective
-  given: [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys)
-  proof: by
-  intro x y h
-  by_cases hx : x in xs <;> by_cases hy : y in xs
-  · rw [List.mem_iff_getElem?] at hx hy
-    obtain ⟨i, hx⟩ := hx
-    obtain ⟨j, hy⟩ := hy
-    suffices some x = some y by injection this
-    have h₂ := h₁.length_eq
-    rw [List.applyId_zip_eq h₀ h₂ _ _ _ hx] at h
-    rw [← hx]; rw [← hy]; congr
-    apply (List.getElem?_inj _ (h₁.nodup_iff.1 h₀)).mp
-    · symm; rw [h]
-      rw [← List.applyId_zip_eq] <;> assumption
-    · rw [← h₁.length_eq]
-      rw [List.getElem?_eq_some_iff] at hx
-      obtain ⟨hx, hx'⟩ := hx
-      exact hx
-  · rw [← applyId_mem_iff h₀ h₁] at hx hy
-    rw [h] at hx
-    contradiction
-  · rw [← applyId_mem_iff h₀ h₁] at hx hy
-    rw [h] at hx
-    contradiction
-  · rwa [List.applyId_eq_self, List.applyId_eq_self] at h <;> assumption
-
-中文:
-定理 applyId_injective
-  条件: [DecidableEq α] {xs ys : 列表 α} (h₀ : 列表.Nodup xs) (h₁ : xs ~ ys)
-  证明: by
-  intro x y h
-  by_cases hx : x in xs <;> by_cases hy : y in xs
-  · rw [List.mem_iff_getElem?] at hx hy
-    obtain ⟨i, hx⟩ := hx
-    obtain ⟨j, hy⟩ := hy
-    suffices some x = some y by injection this
-    have h₂ := h₁.length_eq
-    rw [List.applyId_zip_eq h₀ h₂ _ _ _ hx] at h
-    rw [← hx]; rw [← hy]; congr
-    apply (List.getElem?_inj _ (h₁.nodup_iff.1 h₀)).mp
-    · symm; rw [h]
-      rw [← List.applyId_zip_eq] <;> assumption
-    · rw [← h₁.length_eq]
-      rw [List.getElem?_eq_some_iff] at hx
-      obtain ⟨hx, hx'⟩ := hx
-      exact hx
-  · rw [← applyId_mem_iff h₀ h₁] at hx hy
-    rw [h] at hx
-    contradiction
-  · rw [← applyId_mem_iff h₀ h₁] at hx hy
-    rw [h] at hx
-    contradiction
-  · rwa [List.applyId_eq_self, List.applyId_eq_self] at h <;> assumption
-
-Depends on / 依赖: List.applyId_zip_eq, List.getElem, List.mem_iff_getElem, _eq_some_iff, _inj, applyId_me, applyId_zip_eq, getElem, injection, length_eq, mem_iff_getElem, nodup_iff
+/-
+**Plausible.InjectiveFunction.applyId_injective** 是 Mathlib 中的一个定理，位于命名空间 `Plaus
+ible.InjectiveFunction`。
+形式化陈述：applyId_injective [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h
+₁ : xs ~ ys) : Injective.{u + 1, u + 1} (List.applyId (xs.zip ys))
+参数：h₀ : List.Nodup xs；h₁ : xs ~ ys。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.mem_iff_getElem?`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l ↔ ∃ 
+i, l[i]? = some a
+· 使用定理 `List.Perm.length_eq`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₁.
+length = l₂.length
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.getElem?_inj`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, i < l.length
+ → l.Nodup → (l[i]? = l[j]? ↔ i = j)
+· 使用定理 `List.getElem?_eq_some_iff`：∀ {α : Type u_1} {i : ℕ} {a : α} {l : List α}
+, l[i]? = some a ↔ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `List.Perm.nodup_iff`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → (l₁
+.Nodup ↔ l₂.Nodup)
+· 使用定理 `Plausible.InjectiveFunction.List.applyId_zip_eq`：∀ {α : Type u} [inst : 
+DecidableEq α] {xs ys : List α},   xs.Nodup →     xs.length = ys.length →       
+∀ (x y : α) (i : ℕ),         xs[i]? =…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Plausible.InjectiveFunction.applyId_mem_iff`：applyId_mem_iff [DecidableE
+q α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys) (x : α) : List.applyId
+.{u} (xs.zip ys) x in ys ↔ x in x…
+· 使用定理 `Plausible.InjectiveFunction.List.applyId_eq_self`：∀ {α : Type u} [inst :
+ DecidableEq α] {xs ys : List α},   ∀ x ∉ xs, Plausible.InjectiveFunction.List.a
+pplyId (xs.zip ys) x = x
 -/
 theorem applyId_injective [DecidableEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys) :
     Injective.{u + 1, u + 1} (List.applyId (xs.zip ys)) := by
   intro x y h
-  by_cases hx : x in xs <;> by_cases hy : y in xs
+  by_cases hx : x ∈ xs <;> by_cases hy : y ∈ xs
   · rw [List.mem_iff_getElem?] at hx hy
     obtain ⟨i, hx⟩ := hx
     obtain ⟨j, hy⟩ := hy
     suffices some x = some y by injection this
     have h₂ := h₁.length_eq
     rw [List.applyId_zip_eq h₀ h₂ _ _ _ hx] at h
-    rw [← hx]; rw [← hy]; congr
+    rw [← hx, ← hy]; congr
     apply (List.getElem?_inj _ (h₁.nodup_iff.1 h₀)).mp
     · symm; rw [h]
       rw [← List.applyId_zip_eq] <;> assumption
@@ -731,213 +614,176 @@ open TotalFunction (List.toFinmap')
 
 open SampleableExt
 
-/--
-Definition of `Perm.slice` / `Perm.slice` 的定义
-
-English:
-definition Perm.slice
-  signature: [DecidableEq α] (n m : Nat)
-  body: List.dropSlice n m xs
-    have h₀ : xs' ~ ys.inter xs' := List.Perm.dropSlice_inter _ _ h h'
-    ⟨xs', ys.inter xs', h₀, h'.inter _⟩
-
-中文:
-定义 置换.slice
-  签名: [DecidableEq α] (n m : 自然数)
-  定义体: List.dropSlice n m xs
-    have h₀ : xs' ~ ys.inter xs' := List.Perm.dropSlice_inter _ _ h h'
-    ⟨xs', ys.inter xs', h₀, h'.inter _⟩
-
-Depends on / 依赖: List.dropSlice, dropSlice
+/-- Remove a slice of length `m` at index `n` in a list and a permutation, maintaining the property
+that it is a permutation.
 -/
-def Perm.slice [DecidableEq α] (n m : Nat) :
-    (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup) -> Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup
+/-
+**Plausible.InjectiveFunction.Perm.slice** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.In
+jectiveFunction.Perm`。
+形式化陈述：{α : Type u} →   [DecidableEq α] →     ℕ →       ℕ →         (xs : List α)
+ ×' (ys : List α) ×' xs.Perm ys ∧ ys.Nodup →           (xs : List α) ×' (ys : Li
+st α) ×' xs.Perm ys ∧ ys.Nodup
+参数：xs : List α；ys : List α；xs : List α；ys : List α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.dropSlice_inter`：∀ {α : Type u_1} [inst : DecidableEq α] {xs y
+s : List α} (n m : ℕ),   xs.Perm ys → ys.Nodup → (List.dropSlice n m xs).Perm (y
+s ∩ List.dropSl…
+
+--- 原说明 ---
+Remove a slice of length `m` at index `n` in a list and a permutation, maintaini
+ng the property
+that it is a permutation.
+-/
+def Perm.slice [DecidableEq α] (n m : ℕ) :
+    (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup) → Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup
   | ⟨xs, ys, h, h'⟩ =>
     let xs' := List.dropSlice n m xs
     have h₀ : xs' ~ ys.inter xs' := List.Perm.dropSlice_inter _ _ h h'
     ⟨xs', ys.inter xs', h₀, h'.inter _⟩
 
-/--
-Definition of `sliceSizes` / `sliceSizes` 的定义
-
-English:
-definition sliceSizes
-  signature: : Nat -> MLList Id Nat+
-  body: Nat.div_lt_self h (by decide : 1 < 2)
-      .cons ⟨_, h⟩ (sliceSizes <| n / 2)
-    else .nil
-
-中文:
-定义 sliceSizes
-  签名: : 自然数 -> MLList Id 自然数+
-  定义体: Nat.div_lt_self h (by decide : 1 < 2)
-      .cons ⟨_, h⟩ (sliceSizes <| n / 2)
-    else .nil
-
-Depends on / 依赖: Nat.div_lt_self, div_lt_self
+/-- A list, in decreasing order, of sizes that should be
+sliced off a list of length `n`
 -/
-def sliceSizes : Nat -> MLList Id Nat+
+/-
+**Plausible.InjectiveFunction.sliceSizes** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.In
+jectiveFunction`。
+形式化陈述：sliceSizes : Nat -> MLList Id Nat+ | n => if h : 0 < n then have : n / 2 <
+ n
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A list, in decreasing order, of sizes that should be
+sliced off a list of length `n`
+-/
+def sliceSizes : ℕ → MLList Id ℕ+
   | n =>
     if h : 0 < n then
       have : n / 2 < n := Nat.div_lt_self h (by decide : 1 < 2)
       .cons ⟨_, h⟩ (sliceSizes <| n / 2)
     else .nil
 
-/--
-Definition of `shrinkPerm` / `shrinkPerm` 的定义
+/-- Shrink a permutation of a list, slicing a segment in the middle.
 
-English:
-definition shrinkPerm
-  signature: {α : Type} [DecidableEq α]
-  body: xs.1.length
-    let n ← (sliceSizes k).force
-let i ← List.finRange k / n
-pure Perm.slice (i * n) n xs
+The sizes of the slice being removed start at `n` (with `n` the length
+of the list) and then `n / 2`, then `n / 4`, etc. down to 1. The slices
+will be taken at index `0`, `n / k`, `2n / k`, `3n / k`, etc.
+-/
+/-
+**Plausible.InjectiveFunction.shrinkPerm** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.In
+jectiveFunction`。
+形式化陈述：{α : Type} →   [DecidableEq α] →     (xs : List α) ×' (ys : List α) ×' xs.
+Perm ys ∧ ys.Nodup →       List ((xs : List α) ×' (ys : List α) ×' xs.Perm ys ∧ 
+ys.Nodup)
+参数：xs : List α；ys : List α；(xs : List α) ×' (ys : List α) ×' xs.Perm ys ∧ ys.Nod
+up。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 shrinkPerm
-  签名: {α : 类型} [DecidableEq α]
-  定义体: xs.1.length
-    let n ← (sliceSizes k).force
-let i ← List.finRange k / n
-pure Perm.slice (i * n) n xs
+--- 原说明 ---
+Shrink a permutation of a list, slicing a segment in the middle.
+
+The sizes of the slice being removed start at `n` (with `n` the length
+of the list) and then `n / 2`, then `n / 4`, etc. down to 1. The slices
+will be taken at index `0`, `n / k`, `2n / k`, `3n / k`, etc.
 -/
 protected def shrinkPerm {α : Type} [DecidableEq α] :
-    (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup) -> List (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup)
+    (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup) → List (Σ' xs ys : List α, xs ~ ys ∧ ys.Nodup)
   | xs => do
     let k := xs.1.length
     let n ← (sliceSizes k).force
-let i ← List.finRange k / n
-pure Perm.slice (i * n) n xs
+    let i ← List.finRange <| k / n
+    pure <| Perm.slice (i * n) n xs
 
 
-/--
-Definition of `shrink` / `shrink` 的定义
+/-- Shrink an injective function slicing a segment in the middle of the domain and removing
+the corresponding elements in the codomain, hence maintaining the property that
+one is a permutation of the other.
+-/
+/-
+**Plausible.InjectiveFunction.shrink** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Inject
+iveFunction`。
+形式化陈述：{α : Type} → [DecidableEq α] → Plausible.InjectiveFunction α → List (Plaus
+ible.InjectiveFunction α)
+参数：Plausible.InjectiveFunction α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shrink
-  signature: {α : Type} [DecidableEq α]
-  body: le_of_eq (List.Perm.length_eq h₀)
-    have h₄ : ys'.length <= xs'.length := le_of_eq (List.Perm.length_eq h₀.symm)
-    pure
-      ⟨(List.zip xs' ys').map Prod.toSigma,
-        by simp only [comp_def, List.map_fst_zip, List.map_snd_zip, *, Prod.fst_toSigma,
-          Prod.snd_toSigma, List.map_map],
-        by simp only [comp_def, List.map_snd_zip, *, Prod.snd_toSigma, List.map_map]⟩
-
-中文:
-定义 shrink
-  签名: {α : 类型} [DecidableEq α]
-  定义体: le_of_eq (List.Perm.length_eq h₀)
-    have h₄ : ys'.length <= xs'.length := le_of_eq (List.Perm.length_eq h₀.symm)
-    pure
-      ⟨(List.zip xs' ys').map Prod.toSigma,
-        by simp only [comp_def, List.map_fst_zip, List.map_snd_zip, *, Prod.fst_toSigma,
-          Prod.snd_toSigma, List.map_map],
-        by simp only [comp_def, List.map_snd_zip, *, Prod.snd_toSigma, List.map_map]⟩
+--- 原说明 ---
+Shrink an injective function slicing a segment in the middle of the domain and r
+emoving
+the corresponding elements in the codomain, hence maintaining the property that
+one is a permutation of the other.
 -/
 protected def shrink {α : Type} [DecidableEq α] :
-    InjectiveFunction α -> List (InjectiveFunction α)
+    InjectiveFunction α → List (InjectiveFunction α)
   | ⟨_, h₀, h₁⟩ => do
     let ⟨xs', ys', h₀, h₁⟩ ← InjectiveFunction.shrinkPerm ⟨_, _, h₀, h₁⟩
-    have h₃ : xs'.length <= ys'.length := le_of_eq (List.Perm.length_eq h₀)
-    have h₄ : ys'.length <= xs'.length := le_of_eq (List.Perm.length_eq h₀.symm)
+    have h₃ : xs'.length ≤ ys'.length := le_of_eq (List.Perm.length_eq h₀)
+    have h₄ : ys'.length ≤ xs'.length := le_of_eq (List.Perm.length_eq h₀.symm)
     pure
       ⟨(List.zip xs' ys').map Prod.toSigma,
         by simp only [comp_def, List.map_fst_zip, List.map_snd_zip, *, Prod.fst_toSigma,
           Prod.snd_toSigma, List.map_map],
         by simp only [comp_def, List.map_snd_zip, *, Prod.snd_toSigma, List.map_map]⟩
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Create an injective function from one list and a permutation of that list. -/
+/-
+**Plausible.InjectiveFunction.mk** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.InjectiveF
+unction`。
+形式化陈述：{α : Type u} → (xs ys : List α) → xs.Perm ys → ys.Nodup → Plausible.Inject
+iveFunction α
+参数：xs ys : List α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (xs ys : List α) (h : xs ~ ys) (h' : ys.Nodup)
-  body: have h₀ : xs.length <= ys.length := le_of_eq h.length_eq
-  have h₁ : ys.length <= xs.length := le_of_eq h.length_eq.symm
-  InjectiveFunction.mapToSelf (List.toFinmap' (xs.zip ys))
-    (by
-      simp only [List.toFinmap', comp_def, List.map_fst_zip, List.map_snd_zip, *,
-        List.map_map])
-    (by simp only [List.toFinmap', comp_def, List.map_snd_zip, *, List.map_map])
-
-中文:
-定义 mk
-  签名: (xs ys : 列表 α) (h : xs ~ ys) (h' : ys.Nodup)
-  定义体: have h₀ : xs.length <= ys.length := le_of_eq h.length_eq
-  have h₁ : ys.length <= xs.length := le_of_eq h.length_eq.symm
-  InjectiveFunction.mapToSelf (List.toFinmap' (xs.zip ys))
-    (by
-      simp only [List.toFinmap', comp_def, List.map_fst_zip, List.map_snd_zip, *,
-        List.map_map])
-    (by simp only [List.toFinmap', comp_def, List.map_snd_zip, *, List.map_map])
+--- 原说明 ---
+Create an injective function from one list and a permutation of that list.
 -/
 protected def mk (xs ys : List α) (h : xs ~ ys) (h' : ys.Nodup) : InjectiveFunction α :=
-  have h₀ : xs.length <= ys.length := le_of_eq h.length_eq
-  have h₁ : ys.length <= xs.length := le_of_eq h.length_eq.symm
+  have h₀ : xs.length ≤ ys.length := le_of_eq h.length_eq
+  have h₁ : ys.length ≤ xs.length := le_of_eq h.length_eq.symm
   InjectiveFunction.mapToSelf (List.toFinmap' (xs.zip ys))
     (by
       simp only [List.toFinmap', comp_def, List.map_fst_zip, List.map_snd_zip, *,
         List.map_map])
     (by simp only [List.toFinmap', comp_def, List.map_snd_zip, *, List.map_map])
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  given: [DecidableEq α] (f : InjectiveFunction α)
-  statement: Injective (apply f)
-  proof: by
-  obtain ⟨xs, hperm, hnodup⟩ := f
-  generalize h₀ : List.map Sigma.fst xs = xs₀
-  generalize h₁ : xs.map (@id ((Σ _ : α, α) -> α) <| @Sigma.snd α fun _ : α => α) = xs₁
-  dsimp [id] at h₁
-  have hxs : xs = TotalFunction.List.toFinmap' (xs₀.zip xs₁) := by
-    rw [← h₀]; rw [← h₁]; rw [List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
-    induction xs with
-    | nil => simp only [List.zip_nil_right, List.map_nil]
-    | cons xs_hd xs_tl xs_ih =>
-      simp only [Sigma.eta, List.zip_cons_cons,
-        List.map, List.cons_inj_right]
-      exact xs_ih
-  revert hperm hnodup
-  rw [hxs]; intro hperm hnodup
-  apply InjectiveFunction.applyId_injective
-  · rwa [← h₀, hxs, hperm.nodup_iff]
-  · rwa [← hxs, h₀, h₁] at hperm
-
-中文:
-定理 injective
-  条件: [DecidableEq α] (f : InjectiveFunction α)
-  结论: 单射 (apply f)
-  证明: by
-  obtain ⟨xs, hperm, hnodup⟩ := f
-  generalize h₀ : List.map Sigma.fst xs = xs₀
-  generalize h₁ : xs.map (@id ((Σ _ : α, α) -> α) <| @Sigma.snd α fun _ : α => α) = xs₁
-  dsimp [id] at h₁
-  have hxs : xs = TotalFunction.List.toFinmap' (xs₀.zip xs₁) := by
-    rw [← h₀]; rw [← h₁]; rw [List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
-    induction xs with
-    | nil => simp only [List.zip_nil_right, List.map_nil]
-    | cons xs_hd xs_tl xs_ih =>
-      simp only [Sigma.eta, List.zip_cons_cons,
-        List.map, List.cons_inj_right]
-      exact xs_ih
-  revert hperm hnodup
-  rw [hxs]; intro hperm hnodup
-  apply InjectiveFunction.applyId_injective
-  · rwa [← h₀, hxs, hperm.nodup_iff]
-  · rwa [← hxs, h₀, h₁] at hperm
+/-
+**Plausible.InjectiveFunction.injective** 是 Mathlib 中的一个定理，位于命名空间 `Plausible.Inj
+ectiveFunction`。
+形式化陈述：∀ {α : Type u} [inst : DecidableEq α] (f : Plausible.InjectiveFunction α),
+ Function.Injective f.apply
+参数：f : Plausible.InjectiveFunction α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Plausible.TotalFunction.List.toFinmap'.eq_1`：∀ {α : Type u} {β : Type v}
+ (xs : List (α × β)),   Plausible.TotalFunction.List.toFinmap' xs =     List.map
+       (fun x =>         match x …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `List.zip_nil_right`：∀ {α : Type u} {β : Type v} {l : List α}, l.zip [] =
+ []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sigma.eta`：∀ {α : Type u_1} {β : α → Type u_4} (x : (a : α) × β a), ⟨x.f
+st, x.snd⟩ = x
+· 使用定理 `Plausible.InjectiveFunction.applyId_injective`：applyId_injective [Decida
+bleEq α] {xs ys : List α} (h₀ : List.Nodup xs) (h₁ : xs ~ ys) : Injective.{u + 1
+, u + 1} (List.applyId (xs.zip ys))
+· 使用定理 `List.Perm.nodup_iff`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → (l₁
+.Nodup ↔ l₂.Nodup)
 -/
 protected theorem injective [DecidableEq α] (f : InjectiveFunction α) : Injective (apply f) := by
   obtain ⟨xs, hperm, hnodup⟩ := f
   generalize h₀ : List.map Sigma.fst xs = xs₀
-  generalize h₁ : xs.map (@id ((Σ _ : α, α) -> α) <| @Sigma.snd α fun _ : α => α) = xs₁
+  generalize h₁ : xs.map (@id ((Σ _ : α, α) → α) <| @Sigma.snd α fun _ : α => α) = xs₁
   dsimp [id] at h₁
   have hxs : xs = TotalFunction.List.toFinmap' (xs₀.zip xs₁) := by
-    rw [← h₀]; rw [← h₁]; rw [List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
+    rw [← h₀, ← h₁, List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
     induction xs with
     | nil => simp only [List.zip_nil_right, List.map_nil]
     | cons xs_hd xs_tl xs_ih =>
@@ -949,130 +795,88 @@ protected theorem injective [DecidableEq α] (f : InjectiveFunction α) : Inject
   apply InjectiveFunction.applyId_injective
   · rwa [← h₀, hxs, hperm.nodup_iff]
   · rwa [← hxs, h₀, h₁] at hperm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Arbitrary (InjectiveFunction Int)
-  body: do
-    let ⟨sz⟩ ← Gen.up Gen.getSize
-    let xs' := Int.range (-(2 * sz + 2)) (2 * sz + 2)
-    let ys ← Gen.permutationOf xs'
-    have Hinj : Injective fun r : Nat => -(2 * sz + 2 : Int) + ↑r := fun _x _y h =>
-        Int.ofNat.inj (add_right_injective _ h)
-    let r : InjectiveFunction Int :=
-      InjectiveFunction.mk.{0} xs' ys.1 ys.2 (ys.2.nodup_iff.1 <| List.nodup_range.map Hinj)
-    pure r
-
-中文:
-实例 :
-  签名: Arbitrary (InjectiveFunction 整数)
-  定义体: do
-    let ⟨sz⟩ ← Gen.up Gen.getSize
-    let xs' := Int.range (-(2 * sz + 2)) (2 * sz + 2)
-    let ys ← Gen.permutationOf xs'
-    have Hinj : Injective fun r : Nat => -(2 * sz + 2 : Int) + ↑r := fun _x _y h =>
-        Int.ofNat.inj (add_right_injective _ h)
-    let r : InjectiveFunction Int :=
-      InjectiveFunction.mk.{0} xs' ys.1 ys.2 (ys.2.nodup_iff.1 <| List.nodup_range.map Hinj)
-    pure r
+/-
+**Plausible.InjectiveFunction.** 是 Mathlib 中的一个实例，位于命名空间 `Plausible.InjectiveFun
+ction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Arbitrary (InjectiveFunction Int) where
+instance : Arbitrary (InjectiveFunction ℤ) where
   arbitrary := do
     let ⟨sz⟩ ← Gen.up Gen.getSize
     let xs' := Int.range (-(2 * sz + 2)) (2 * sz + 2)
     let ys ← Gen.permutationOf xs'
-    have Hinj : Injective fun r : Nat => -(2 * sz + 2 : Int) + ↑r := fun _x _y h =>
+    have Hinj : Injective fun r : ℕ => -(2 * sz + 2 : ℤ) + ↑r := fun _x _y h =>
         Int.ofNat.inj (add_right_injective _ h)
-    let r : InjectiveFunction Int :=
+    let r : InjectiveFunction ℤ :=
       InjectiveFunction.mk.{0} xs' ys.1 ys.2 (ys.2.nodup_iff.1 <| List.nodup_range.map Hinj)
     pure r
-
-/--
-Instance `PiInjective.sampleableExt` / 实例 `PiInjective.sampleableExt`
-
-English:
-instance PiInjective.sampleableExt
-  signature: : SampleableExt { f : Int -> Int // Function.Injective f } where
-  body: InjectiveFunction Int
-  interp f := ⟨apply f, f.injective⟩
-  shrink := { shrink := @InjectiveFunction.shrink Int _ }
-
-中文:
-实例 PiInjective.sampleableExt
-  签名: : SampleableExt { f : 整数 -> 整数 // 函数.单射 f } where
-  定义体: InjectiveFunction Int
-  interp f := ⟨apply f, f.injective⟩
-  shrink := { shrink := @InjectiveFunction.shrink Int _ }
-
-Depends on / 依赖: InjectiveFunction
+/-
+**Plausible.InjectiveFunction.PiInjective.sampleableExt** 是 Mathlib 中的一个定义，位于命名空
+间 `Plausible.InjectiveFunction.PiInjective`。
+形式化陈述：Plausible.SampleableExt { f // Function.Injective f }
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Plausible.InjectiveFunction.injective`：∀ {α : Type u} [inst : DecidableE
+q α] (f : Plausible.InjectiveFunction α), Function.Injective f.apply
 -/
-instance PiInjective.sampleableExt : SampleableExt { f : Int -> Int // Function.Injective f } where
-  proxy := InjectiveFunction Int
+instance PiInjective.sampleableExt : SampleableExt { f : ℤ → ℤ // Function.Injective f } where
+  proxy := InjectiveFunction ℤ
   interp f := ⟨apply f, f.injective⟩
-  shrink := { shrink := @InjectiveFunction.shrink Int _ }
+  shrink := { shrink := @InjectiveFunction.shrink ℤ _ }
 
 end InjectiveFunction
 
 open Function
 
-/--
-Instance `Injective.testable` / 实例 `Injective.testable`
-
-English:
-instance Injective.testable
-  signature: (f : α -> β)
-  body: I
-
-中文:
-实例 单射.testable
-  签名: (f : α -> β)
-  定义体: I
+/-
+**Plausible.Injective.testable** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Injective`。
+形式化陈述：{α : Type u} →   {β : Type v} →     (f : α → β) →       [I :           Pla
+usible.Testable             (Plausible.NamedBinder "x"               (∀ (x : α),
+ Plausible.NamedBinder "y" (∀ (y : α), Plausible.NamedBinder "H" (f x = f y → x 
+= y))))] →         Plausible.Testable (Function.Injective f)
+参数：f : α → β；Plausible.NamedBinder "x"               (∀ (x : α), Plausible.Named
+Binder "y" (∀ (y : α), Plausible.NamedBinder "H" (f x = f y → x = y)))；Function.
+Injective f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Injective.testable (f : α -> β)
+instance Injective.testable (f : α → β)
     [I : Testable (NamedBinder "x" <|
-forall x : α, NamedBinder "y" forall y : α, NamedBinder "H" f x = f y -> x = y)] :
+      ∀ x : α, NamedBinder "y" <| ∀ y : α, NamedBinder "H" <| f x = f y → x = y)] :
     Testable (Injective f) :=
   I
-
-/--
-Instance `Monotone.testable` / 实例 `Monotone.testable`
-
-English:
-instance Monotone.testable
-  signature: [Preorder α] [Preorder β] (f : α -> β)
-  body: I
-
-中文:
-实例 递增.testable
-  签名: [预序 α] [预序 β] (f : α -> β)
-  定义体: I
+/-
+**Plausible.Monotone.testable** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Monotone`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [inst : Preorder α] →       [inst_1 : 
+Preorder β] →         (f : α → β) →           [I :               Plausible.Testa
+ble                 (Plausible.NamedBinder "x"                   (∀ (x : α), Pla
+usible.NamedBinder "y" (∀ (y : α), Plausible.NamedBinder "H" (x ≤ y → f x ≤ f y)
+)))] →             Plausible.Testable (Monotone f)
+参数：f : α → β；Plausible.NamedBinder "x"                   (∀ (x : α), Plausible.N
+amedBinder "y" (∀ (y : α), Plausible.NamedBinder "H" (x ≤ y → f x ≤ f y)))；Monot
+one f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Monotone.testable [Preorder α] [Preorder β] (f : α -> β)
+instance Monotone.testable [Preorder α] [Preorder β] (f : α → β)
     [I : Testable (NamedBinder "x" <|
-forall x : α, NamedBinder "y" forall y : α, NamedBinder "H" x <= y -> f x <= f y)] :
+      ∀ x : α, NamedBinder "y" <| ∀ y : α, NamedBinder "H" <| x ≤ y → f x ≤ f y)] :
     Testable (Monotone f) :=
   I
-
-/--
-Instance `Antitone.testable` / 实例 `Antitone.testable`
-
-English:
-instance Antitone.testable
-  signature: [Preorder α] [Preorder β] (f : α -> β)
-  body: I
-
-中文:
-实例 递减.testable
-  签名: [预序 α] [预序 β] (f : α -> β)
-  定义体: I
+/-
+**Plausible.Antitone.testable** 是 Mathlib 中的一个定义，位于命名空间 `Plausible.Antitone`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [inst : Preorder α] →       [inst_1 : 
+Preorder β] →         (f : α → β) →           [I :               Plausible.Testa
+ble                 (Plausible.NamedBinder "x"                   (∀ (x : α), Pla
+usible.NamedBinder "y" (∀ (y : α), Plausible.NamedBinder "H" (x ≤ y → f y ≤ f x)
+)))] →             Plausible.Testable (Antitone f)
+参数：f : α → β；Plausible.NamedBinder "x"                   (∀ (x : α), Plausible.N
+amedBinder "y" (∀ (y : α), Plausible.NamedBinder "H" (x ≤ y → f y ≤ f x)))；Antit
+one f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Antitone.testable [Preorder α] [Preorder β] (f : α -> β)
+instance Antitone.testable [Preorder α] [Preorder β] (f : α → β)
     [I : Testable (NamedBinder "x" <|
-forall x : α, NamedBinder "y" forall y : α, NamedBinder "H" x <= y -> f y <= f x)] :
+      ∀ x : α, NamedBinder "y" <| ∀ y : α, NamedBinder "H" <| x ≤ y → f y ≤ f x)] :
     Testable (Antitone f) :=
   I
 
 end Plausible
+

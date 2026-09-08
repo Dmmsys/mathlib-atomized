@@ -71,802 +71,520 @@ variable {ι : Type*}
 -/
 
 
-/--
-Definition of `Box` / `Box` 的定义
+/-- A nontrivial rectangular box in `ι → ℝ` with corners `lower` and `upper`. Represents the product
+of half-open intervals `(lower i, upper i]`. -/
+/-
+**BoxIntegral.Box** 是 Mathlib 中的一个归纳类型，位于命名空间 `BoxIntegral`。
+形式化陈述：Type u_2 → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Box
-  parameters: (ι : Type*)
-  axioms and operations (2):
-    - (lower(upper) : ι -> Real)
-    - lower_lt_upper : forall i, lower i < upper i
-
-中文:
-结构 Box
-  参数: (ι : 类型)
-  公理与运算 (2 个):
-    - (lower(upper) : ι -> 实数)
-    - lower_lt_upper : 对任意 i, lower i < upper i
+--- 原说明 ---
+A nontrivial rectangular box in `ι → ℝ` with corners `lower` and `upper`. Repres
+ents the product
+of half-open intervals `(lower i, upper i]`.
 -/
 structure Box (ι : Type*) where
   /-- coordinates of the lower and upper corners of the box -/
-  (lower upper : ι -> Real)
+  (lower upper : ι → ℝ)
   /-- Each lower coordinate is less than its upper coordinate: i.e., the box is non-empty -/
-  lower_lt_upper : forall i, lower i < upper i
+  lower_lt_upper : ∀ i, lower i < upper i
 
 attribute [simp] Box.lower_lt_upper
 
 namespace Box
 
-variable (I J : Box ι) {x y : ι -> Real}
+variable (I J : Box ι) {x y : ι → ℝ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Box ι)
-  body: ⟨⟨0, 1, fun _ => zero_lt_one⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (Box ι)
-  定义体: ⟨⟨0, 1, fun _ => zero_lt_one⟩⟩
-
-Depends on / 依赖: zero_lt_one
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Box ι) :=
-  ⟨⟨0, 1, fun _ => zero_lt_one⟩⟩
-
-/--
-theorem `lower_le_upper` / 定理 `lower_le_upper`
-
-English:
-theorem lower_le_upper
-  statement: I.lower <= I.upper
-  proof: fun i => (I.lower_lt_upper i).le
-
-中文:
-定理 lower_le_upper
-  结论: I.lower <= I.upper
-  证明: fun i => (I.lower_lt_upper i).le
-
-Depends on / 依赖: I.lower_lt_upper, lower_lt_upper
+  ⟨⟨0, 1, fun _ ↦ zero_lt_one⟩⟩
+/-
+**BoxIntegral.Box.lower_le_upper** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：lower_le_upper : I.lower <= I.upper
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
 -/
-theorem lower_le_upper : I.lower <= I.upper :=
-  fun i => (I.lower_lt_upper i).le
-
-/--
-theorem `lower_ne_upper` / 定理 `lower_ne_upper`
-
-English:
-theorem lower_ne_upper
-  given: (i)
-  statement: I.lower i != I.upper i
-  proof: (I.lower_lt_upper i).ne
-
-中文:
-定理 lower_ne_upper
-  条件: (i)
-  结论: I.lower i != I.upper i
-  证明: (I.lower_lt_upper i).ne
-
-Depends on / 依赖: I.lower_lt_upper, lower_lt_upper
+theorem lower_le_upper : I.lower ≤ I.upper :=
+  fun i ↦ (I.lower_lt_upper i).le
+/-
+**BoxIntegral.Box.lower_ne_upper** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：lower_ne_upper (i) : I.lower i != I.upper i
+参数：i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
 -/
-theorem lower_ne_upper (i) : I.lower i != I.upper i :=
+theorem lower_ne_upper (i) : I.lower i ≠ I.upper i :=
   (I.lower_lt_upper i).ne
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership (ι -> Real) (Box ι)
-  body: ⟨fun I x => forall i, x i in Ioc (I.lower i) (I.upper i)⟩
-
-中文:
-实例 :
-  签名: Membership (ι -> 实数) (Box ι)
-  定义体: ⟨fun I x => forall i, x i in Ioc (I.lower i) (I.upper i)⟩
-
-Depends on / 依赖: I.lower, I.upper
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Membership (ι -> Real) (Box ι) :=
-  ⟨fun I x => forall i, x i in Ioc (I.lower i) (I.upper i)⟩
+instance : Membership (ι → ℝ) (Box ι) :=
+  ⟨fun I x ↦ ∀ i, x i ∈ Ioc (I.lower i) (I.upper i)⟩
 
 /-- The set of points in this box: this is the product of half-open intervals `(lower i, upper i]`,
 where `lower` and `upper` are this box' corners. -/
 @[coe]
-/--
-Definition of `toSet` / `toSet` 的定义
+/-
+**BoxIntegral.Box.toSet** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：toSet (I : Box ι) : Set (ι -> Real)
+参数：I : Box ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSet
-  signature: (I : Box ι)
-  body: { x | x in I }
-
-中文:
-定义 toSet
-  签名: (I : Box ι)
-  定义体: { x | x in I }
+--- 原说明 ---
+The set of points in this box: this is the product of half-open intervals `(lowe
+r i, upper i]`,
+where `lower` and `upper` are this box' corners.
 -/
-def toSet (I : Box ι) : Set (ι -> Real) := { x | x in I }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeTC (Box ι) (Set <| ι -> Real)
-  body: ⟨toSet⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: CoeTC (Box ι) (集合 <| ι -> 实数)
-  定义体: ⟨toSet⟩
-
-@[simp]
+def toSet (I : Box ι) : Set (ι → ℝ) := { x | x ∈ I }
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeTC (Box ι) (Set <| ι -> Real) :=
+instance : CoeTC (Box ι) (Set <| ι → ℝ) :=
   ⟨toSet⟩
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {l u x : ι -> Real} {H}
-  statement: x in mk l u H ↔ forall i, x i in Ioc (l i) (u i)
-  proof: Iff.rfl
+/-
+**BoxIntegral.Box.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：mem_mk {l u x : ι -> Real} {H} : x in mk l u H ↔ forall i, x i in Ioc (l i
+) (u i)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem mem_mk {l u x : ι → ℝ} {H} : x ∈ mk l u H ↔ ∀ i, x i ∈ Ioc (l i) (u i) := Iff.rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 mem_mk
-  条件: {l u x : ι -> 实数} {H}
-  结论: x in mk l u H ↔ 对任意 i, x i in 左开右闭区间 (l i) (u i)
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**BoxIntegral.Box.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：mem_coe : x in (I : Set (ι -> Real)) ↔ x in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk {l u x : ι -> Real} {H} : x in mk l u H ↔ forall i, x i in Ioc (l i) (u i) := Iff.rfl
-
-@[simp, norm_cast]
-/--
-theorem `mem_coe` / 定理 `mem_coe`
-
-English:
-theorem mem_coe
-  statement: x in (I : Set (ι -> Real)) ↔ x in I
-  proof: Iff.rfl
-
-中文:
-定理 mem_coe
-  结论: x in (I : 集合 (ι -> 实数)) ↔ x in I
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem mem_coe : x ∈ (I : Set (ι → ℝ)) ↔ x ∈ I := Iff.rfl
+/-
+**BoxIntegral.Box.mem_def** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：mem_def : x in I ↔ forall i, x i in Ioc (I.lower i) (I.upper i)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe : x in (I : Set (ι -> Real)) ↔ x in I := Iff.rfl
-
-/--
-theorem `mem_def` / 定理 `mem_def`
-
-English:
-theorem mem_def
-  statement: x in I ↔ forall i, x i in Ioc (I.lower i) (I.upper i)
-  proof: Iff.rfl
-
-中文:
-定理 mem_def
-  结论: x in I ↔ 对任意 i, x i in 左开右闭区间 (I.lower i) (I.upper i)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem mem_def : x ∈ I ↔ ∀ i, x i ∈ Ioc (I.lower i) (I.upper i) := Iff.rfl
+/-
+**BoxIntegral.Box.mem_univ_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：mem_univ_Ioc {I : Box ι} : (x in pi univ fun i => Ioc (I.lower i) (I.upper
+ i)) ↔ x in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ_pi`：mem_univ_pi : f in pi univ t ↔ forall i, f i in t i
 -/
-theorem mem_def : x in I ↔ forall i, x i in Ioc (I.lower i) (I.upper i) := Iff.rfl
-
-/--
-theorem `mem_univ_Ioc` / 定理 `mem_univ_Ioc`
-
-English:
-theorem mem_univ_Ioc
-  given: {I : Box ι}
-  statement: (x in pi univ fun i => Ioc (I.lower i) (I.upper i)) ↔ x in I
-  proof: mem_univ_pi
-
-中文:
-定理 mem_univ_Ioc
-  条件: {I : Box ι}
-  结论: (x in pi univ fun i => 左开右闭区间 (I.lower i) (I.upper i)) ↔ x in I
-  证明: mem_univ_pi
-
-Depends on / 依赖: mem_univ_pi
--/
-theorem mem_univ_Ioc {I : Box ι} : (x in pi univ fun i => Ioc (I.lower i) (I.upper i)) ↔ x in I :=
+theorem mem_univ_Ioc {I : Box ι} : (x ∈ pi univ fun i ↦ Ioc (I.lower i) (I.upper i)) ↔ x ∈ I :=
   mem_univ_pi
-
-/--
-theorem `coe_eq_pi` / 定理 `coe_eq_pi`
-
-English:
-theorem coe_eq_pi
-  statement: (I : Set (ι -> Real)) = pi univ fun i => Ioc (I.lower i) (I.upper i)
-  proof: Set.ext fun _ => mem_univ_Ioc.symm
+/-
+**BoxIntegral.Box.coe_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_eq_pi : (I : Set (ι -> Real)) = pi univ fun i => Ioc (I.lower i) (I.up
+per i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `BoxIntegral.Box.mem_univ_Ioc`：mem_univ_Ioc {I : Box ι} : (x in pi univ f
+un i => Ioc (I.lower i) (I.upper i)) ↔ x in I
+-/
+theorem coe_eq_pi : (I : Set (ι → ℝ)) = pi univ fun i ↦ Ioc (I.lower i) (I.upper i) :=
+  Set.ext fun _ ↦ mem_univ_Ioc.symm
 
 @[simp]
-
-中文:
-定理 coe_eq_pi
-  结论: (I : 集合 (ι -> 实数)) = pi univ fun i => 左开右闭区间 (I.lower i) (I.upper i)
-  证明: Set.ext fun _ => mem_univ_Ioc.symm
-
-@[simp]
-
-Depends on / 依赖: Set.ext, mem_univ_Ioc, mem_univ_Ioc.symm
+/-
+**BoxIntegral.Box.upper_mem** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：upper_mem : I.upper in I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Ioc b a ↔ b < a
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
 -/
-theorem coe_eq_pi : (I : Set (ι -> Real)) = pi univ fun i => Ioc (I.lower i) (I.upper i) :=
-  Set.ext fun _ => mem_univ_Ioc.symm
-
-@[simp]
-/--
-theorem `upper_mem` / 定理 `upper_mem`
-
-English:
-theorem upper_mem
-  statement: I.upper in I
-  proof: fun i => right_mem_Ioc.2 I.lower_lt_upper i
-
-中文:
-定理 upper_mem
-  结论: I.upper in I
-  证明: fun i => right_mem_Ioc.2 I.lower_lt_upper i
-
-Depends on / 依赖: I.lower_lt_upper, lower_lt_upper, right_mem_Ioc
+theorem upper_mem : I.upper ∈ I :=
+  fun i ↦ right_mem_Ioc.2 <| I.lower_lt_upper i
+/-
+**BoxIntegral.Box.exists_mem** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：exists_mem : exists x, x in I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoxIntegral.Box.upper_mem`：upper_mem : I.upper in I
 -/
-theorem upper_mem : I.upper in I :=
-fun i => right_mem_Ioc.2 I.lower_lt_upper i
-
-/--
-theorem `exists_mem` / 定理 `exists_mem`
-
-English:
-theorem exists_mem
-  statement: exists x, x in I
-  proof: ⟨_, I.upper_mem⟩
-
-中文:
-定理 存在_mem
-  结论: 存在 x, x in I
-  证明: ⟨_, I.upper_mem⟩
-
-Depends on / 依赖: I.upper_mem, upper_mem
--/
-theorem exists_mem : exists x, x in I :=
+theorem exists_mem : ∃ x, x ∈ I :=
   ⟨_, I.upper_mem⟩
-
-/--
-theorem `nonempty_coe` / 定理 `nonempty_coe`
-
-English:
-theorem nonempty_coe
-  statement: Set.Nonempty (I : Set (ι -> Real))
-  proof: I.exists_mem
-
-@[simp]
-
-中文:
-定理 nonempty_coe
-  结论: 集合.非空 (I : 集合 (ι -> 实数))
-  证明: I.exists_mem
-
-@[simp]
-
-Depends on / 依赖: I.exists_mem, exists_mem
+/-
+**BoxIntegral.Box.nonempty_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：nonempty_coe : Set.Nonempty (I : Set (ι -> Real))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoxIntegral.Box.exists_mem`：exists_mem : exists x, x in I
 -/
-theorem nonempty_coe : Set.Nonempty (I : Set (ι -> Real)) :=
+theorem nonempty_coe : Set.Nonempty (I : Set (ι → ℝ)) :=
   I.exists_mem
 
 @[simp]
-/--
-theorem `coe_ne_empty` / 定理 `coe_ne_empty`
-
-English:
-theorem coe_ne_empty
-  statement: (I : Set (ι -> Real)) != ∅
-  proof: I.nonempty_coe.ne_empty
-
-@[simp]
-
-中文:
-定理 coe_ne_empty
-  结论: (I : 集合 (ι -> 实数)) != ∅
-  证明: I.nonempty_coe.ne_empty
-
-@[simp]
-
-Depends on / 依赖: I.nonempty_coe.ne_empty, ne_empty, nonempty_coe
+/-
+**BoxIntegral.Box.coe_ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_ne_empty : (I : Set (ι -> Real)) != ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `BoxIntegral.Box.nonempty_coe`：nonempty_coe : Set.Nonempty (I : Set (ι ->
+ Real))
 -/
-theorem coe_ne_empty : (I : Set (ι -> Real)) != ∅ :=
+theorem coe_ne_empty : (I : Set (ι → ℝ)) ≠ ∅ :=
   I.nonempty_coe.ne_empty
 
 @[simp]
-/--
-theorem `empty_ne_coe` / 定理 `empty_ne_coe`
-
-English:
-theorem empty_ne_coe
-  statement: ∅ != (I : Set (ι -> Real))
-  proof: I.coe_ne_empty.symm
-
-中文:
-定理 empty_ne_coe
-  结论: ∅ != (I : 集合 (ι -> 实数))
-  证明: I.coe_ne_empty.symm
-
-Depends on / 依赖: I.coe_ne_empty.symm, coe_ne_empty
+/-
+**BoxIntegral.Box.empty_ne_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：empty_ne_coe : ∅ != (I : Set (ι -> Real))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `BoxIntegral.Box.coe_ne_empty`：coe_ne_empty : (I : Set (ι -> Real)) != ∅
 -/
-theorem empty_ne_coe : ∅ != (I : Set (ι -> Real)) :=
+theorem empty_ne_coe : ∅ ≠ (I : Set (ι → ℝ)) :=
   I.coe_ne_empty.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Box ι)
-  body: ⟨fun I J => forall ⦃x⦄, x in I -> x in J⟩
-
-中文:
-实例 :
-  签名: LE (Box ι)
-  定义体: ⟨fun I J => forall ⦃x⦄, x in I -> x in J⟩
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (Box ι) :=
-  ⟨fun I J => forall ⦃x⦄, x in I -> x in J⟩
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  statement: I <= J ↔ forall x in I, x in J
-  proof: Iff.rfl
-
-中文:
-定理 le_def
-  结论: I <= J ↔ 对任意 x in I, x in J
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  ⟨fun I J ↦ ∀ ⦃x⦄, x ∈ I → x ∈ J⟩
+/-
+**BoxIntegral.Box.le_def** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：le_def : I <= J ↔ forall x in I, x in J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def : I <= J ↔ forall x in I, x in J := Iff.rfl
-
-/--
-theorem `le_TFAE` / 定理 `le_TFAE`
-
-English:
-theorem le_TFAE
-  statement: List.TFAE [I <= J, (I : Set (ι -> Real)) subseteq J,
-  proof: by
-  tfae_have 1 ↔ 2 := Iff.rfl
-  tfae_have 2 -> 3
-  | h => by simpa [coe_eq_pi, closure_pi_set, lower_ne_upper] using closure_mono h
-  tfae_have 3 ↔ 4 := Icc_subset_Icc_iff I.lower_le_upper
-  tfae_have 4 -> 2
-  | h, x, hx, i => Ioc_subset_Ioc (h.1 i) (h.2 i) (hx i)
-  tfae_finish
-
-中文:
-定理 le_TFAE
-  结论: 列表.TFAE [I <= J, (I : 集合 (ι -> 实数)) subseteq J,
-  证明: by
-  tfae_have 1 ↔ 2 := Iff.rfl
-  tfae_have 2 -> 3
-  | h => by simpa [coe_eq_pi, closure_pi_set, lower_ne_upper] using closure_mono h
-  tfae_have 3 ↔ 4 := Icc_subset_Icc_iff I.lower_le_upper
-  tfae_have 4 -> 2
-  | h, x, hx, i => Ioc_subset_Ioc (h.1 i) (h.2 i) (hx i)
-  tfae_finish
-
-Depends on / 依赖: I.lower_le_upper, Icc_subset_Icc_iff, Iff.rfl, Ioc_subset_Ioc, closure_mono, closure_pi_set, coe_eq_pi, lower_le_upper, lower_ne_upper, tfae_finish, tfae_have
+theorem le_def : I ≤ J ↔ ∀ x ∈ I, x ∈ J := Iff.rfl
+/-
+**BoxIntegral.Box.le_TFAE** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：le_TFAE : List.TFAE [I <= J, (I : Set (ι -> Real)) subseteq J, Icc I.lower
+ I.upper subseteq Icc J.lower J.upper, J.lower <= I.lower ∧ I.upper <= J.upper]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `closure_pi_set`：closure_pi_set {ι : Type*} {α : ι -> Type*} [forall i, T
+opologicalSpace (α i)] (I : Set ι) (s : forall i, Set (α i)) : closure (pi I s) 
+= pi…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `closure_Ioc`：closure_Ioc {a b : α} (hab : a != b) : closure (Ioc a b) = 
+Icc a b
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.pi_univ_Icc`：pi_univ_Icc : (pi univ fun i => Icc (x i) (y i)) = Icc 
+x y
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.Icc_subset_Icc_iff`：Icc_subset_Icc_iff (h₁ : a₁ <= b₁) : Icc a₁ b₁ s
+ubseteq Icc a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
+· 使用定理 `Set.Ioc_subset_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a₁ a₂ b₁ b₂ : 
+α}, b₂ ≤ b₁ → a₁ ≤ a₂ → Set.Ioc b₁ a₁ ⊆ Set.Ioc b₂ a₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem le_TFAE : List.TFAE [I <= J, (I : Set (ι -> Real)) subseteq J,
-    Icc I.lower I.upper subseteq Icc J.lower J.upper, J.lower <= I.lower ∧ I.upper <= J.upper] := by
+theorem le_TFAE : List.TFAE [I ≤ J, (I : Set (ι → ℝ)) ⊆ J,
+    Icc I.lower I.upper ⊆ Icc J.lower J.upper, J.lower ≤ I.lower ∧ I.upper ≤ J.upper] := by
   tfae_have 1 ↔ 2 := Iff.rfl
-  tfae_have 2 -> 3
+  tfae_have 2 → 3
   | h => by simpa [coe_eq_pi, closure_pi_set, lower_ne_upper] using closure_mono h
   tfae_have 3 ↔ 4 := Icc_subset_Icc_iff I.lower_le_upper
-  tfae_have 4 -> 2
+  tfae_have 4 → 2
   | h, x, hx, i => Ioc_subset_Ioc (h.1 i) (h.2 i) (hx i)
   tfae_finish
 
 variable {I J}
 
 @[simp, norm_cast]
-/--
-theorem `coe_subset_coe` / 定理 `coe_subset_coe`
-
-English:
-theorem coe_subset_coe
-  statement: (I : Set (ι -> Real)) subseteq J ↔ I <= J
-  proof: Iff.rfl
-
-中文:
-定理 coe_subset_coe
-  结论: (I : 集合 (ι -> 实数)) subseteq J ↔ I <= J
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**BoxIntegral.Box.coe_subset_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_subset_coe : (I : Set (ι -> Real)) subseteq J ↔ I <= J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_subset_coe : (I : Set (ι -> Real)) subseteq J ↔ I <= J := Iff.rfl
-
-/--
-theorem `le_iff_bounds` / 定理 `le_iff_bounds`
-
-English:
-theorem le_iff_bounds
-  statement: I <= J ↔ J.lower <= I.lower ∧ I.upper <= J.upper
-  proof: (le_TFAE I J).out 0 3
-
-中文:
-定理 le_iff_bounds
-  结论: I <= J ↔ J.lower <= I.lower ∧ I.upper <= J.upper
-  证明: (le_TFAE I J).out 0 3
-
-Depends on / 依赖: le_TFAE
+theorem coe_subset_coe : (I : Set (ι → ℝ)) ⊆ J ↔ I ≤ J := Iff.rfl
+/-
+**BoxIntegral.Box.le_iff_bounds** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：le_iff_bounds : I <= J ↔ J.lower <= I.lower ∧ I.upper <= J.upper
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `BoxIntegral.Box.le_TFAE`：le_TFAE : List.TFAE [I <= J, (I : Set (ι -> Rea
+l)) subseteq J, Icc I.lower I.upper subseteq Icc J.lower J.upper, J.lower <= I.l
+ower ∧ I.uppe…
 -/
-theorem le_iff_bounds : I <= J ↔ J.lower <= I.lower ∧ I.upper <= J.upper :=
+theorem le_iff_bounds : I ≤ J ↔ J.lower ≤ I.lower ∧ I.upper ≤ J.upper :=
   (le_TFAE I J).out 0 3
-
-/--
-theorem `injective_coe` / 定理 `injective_coe`
-
-English:
-theorem injective_coe
-  statement: Injective ((↑) : Box ι -> Set (ι -> Real))
-  proof: by
-  rintro ⟨l₁, u₁, h₁⟩ ⟨l₂, u₂, h₂⟩ h
-  simp only [Subset.antisymm_iff, coe_subset_coe, le_iff_bounds] at h
-  congr
-  exacts [le_antisymm h.2.1 h.1.1, le_antisymm h.1.2 h.2.2]
-
-@[simp, norm_cast]
-
-中文:
-定理 injective_coe
-  结论: 单射 ((↑) : Box ι -> 集合 (ι -> 实数))
-  证明: by
-  rintro ⟨l₁, u₁, h₁⟩ ⟨l₂, u₂, h₂⟩ h
-  simp only [Subset.antisymm_iff, coe_subset_coe, le_iff_bounds] at h
-  congr
-  exacts [le_antisymm h.2.1 h.1.1, le_antisymm h.1.2 h.2.2]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subset, Subset.antisymm_iff, antisymm_iff, coe_subset_coe, exacts, le_antisymm, le_iff_bounds
+/-
+**BoxIntegral.Box.injective_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：injective_coe : Injective ((↑) : Box ι -> Set (ι -> Real))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem injective_coe : Injective ((↑) : Box ι -> Set (ι -> Real)) := by
+theorem injective_coe : Injective ((↑) : Box ι → Set (ι → ℝ)) := by
   rintro ⟨l₁, u₁, h₁⟩ ⟨l₂, u₂, h₂⟩ h
   simp only [Subset.antisymm_iff, coe_subset_coe, le_iff_bounds] at h
   congr
   exacts [le_antisymm h.2.1 h.1.1, le_antisymm h.1.2 h.2.2]
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  statement: (I : Set (ι -> Real)) = J ↔ I = J
-  proof: injective_coe.eq_iff
-
-@[ext]
-
-中文:
-定理 coe_inj
-  结论: (I : 集合 (ι -> 实数)) = J ↔ I = J
-  证明: injective_coe.eq_iff
-
-@[ext]
-
-Depends on / 依赖: eq_iff, injective_coe, injective_coe.eq_iff
+/-
+**BoxIntegral.Box.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_inj : (I : Set (ι -> Real)) = J ↔ I = J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `BoxIntegral.Box.injective_coe`：injective_coe : Injective ((↑) : Box ι ->
+ Set (ι -> Real))
 -/
-theorem coe_inj : (I : Set (ι -> Real)) = J ↔ I = J :=
+theorem coe_inj : (I : Set (ι → ℝ)) = J ↔ I = J :=
   injective_coe.eq_iff
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (H : forall x, x in I ↔ x in J)
-  statement: I = J
-  proof: injective_coe Set.ext H
-
-中文:
-定理 ext
-  条件: (H : 对任意 x, x in I ↔ x in J)
-  结论: I = J
-  证明: injective_coe Set.ext H
-
-Depends on / 依赖: Set.ext, injective_coe
+/-
+**BoxIntegral.Box.ext** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：ext (H : forall x, x in I ↔ x in J) : I = J
+参数：H : forall x, x in I ↔ x in J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoxIntegral.Box.injective_coe`：injective_coe : Injective ((↑) : Box ι ->
+ Set (ι -> Real))
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem ext (H : forall x, x in I ↔ x in J) : I = J :=
-injective_coe Set.ext H
-
-/--
-theorem `ne_of_disjoint_coe` / 定理 `ne_of_disjoint_coe`
-
-English:
-theorem ne_of_disjoint_coe
-  given: (h : Disjoint (I : Set (ι -> Real)) J)
-  statement: I != J
-  proof: mt coe_inj.2 h.ne I.coe_ne_empty
-
-中文:
-定理 ne_of_disjoint_coe
-  条件: (h : Disjoint (I : 集合 (ι -> 实数)) J)
-  结论: I != J
-  证明: mt coe_inj.2 h.ne I.coe_ne_empty
-
-Depends on / 依赖: I.coe_ne_empty, coe_inj, coe_ne_empty, h.ne
+theorem ext (H : ∀ x, x ∈ I ↔ x ∈ J) : I = J :=
+  injective_coe <| Set.ext H
+/-
+**BoxIntegral.Box.ne_of_disjoint_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`
+。
+形式化陈述：ne_of_disjoint_coe (h : Disjoint (I : Set (ι -> Real)) J) : I != J
+参数：h : Disjoint (I : Set (ι -> Real)) J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BoxIntegral.Box.coe_inj`：coe_inj : (I : Set (ι -> Real)) = J ↔ I = J
+· 使用定理 `Disjoint.ne`：Disjoint.ne (ha : a != ⊥) (hab : Disjoint a b) : a != b
+· 使用定理 `BoxIntegral.Box.coe_ne_empty`：coe_ne_empty : (I : Set (ι -> Real)) != ∅
 -/
-theorem ne_of_disjoint_coe (h : Disjoint (I : Set (ι -> Real)) J) : I != J :=
-mt coe_inj.2 h.ne I.coe_ne_empty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Box ι)
-  body: { PartialOrder.lift ((↑) : Box ι -> Set (ι -> Real)) injective_coe with le := (· <= ·) }
-
-中文:
-实例 :
-  签名: 偏序 (Box ι)
-  定义体: { PartialOrder.lift ((↑) : Box ι -> Set (ι -> Real)) injective_coe with le := (· <= ·) }
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, injective_coe
+theorem ne_of_disjoint_coe (h : Disjoint (I : Set (ι → ℝ)) J) : I ≠ J :=
+  mt coe_inj.2 <| h.ne I.coe_ne_empty
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Box ι) :=
-  { PartialOrder.lift ((↑) : Box ι -> Set (ι -> Real)) injective_coe with le := (· <= ·) }
+  { PartialOrder.lift ((↑) : Box ι → Set (ι → ℝ)) injective_coe with le := (· ≤ ·) }
 
-/--
-Definition of `Icc` / `Icc` 的定义
+/-- Closed box corresponding to `I : BoxIntegral.Box ι`. -/
+/-
+**BoxIntegral.Box.Icc** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：{ι : Type u_1} → BoxIntegral.Box ι ↪o Set (ι → ℝ)
+参数：ι → ℝ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Icc
-  signature: : Box ι ↪o Set (ι -> Real)
-  body: OrderEmbedding.ofMapLEIff (fun I : Box ι => Icc I.lower I.upper) fun I J => (le_TFAE I J).out 2 0
-
-中文:
-定义 闭区间
-  签名: : Box ι ↪o 集合 (ι -> 实数)
-  定义体: OrderEmbedding.ofMapLEIff (fun I : Box ι => Icc I.lower I.upper) fun I J => (le_TFAE I J).out 2 0
+--- 原说明 ---
+Closed box corresponding to `I : BoxIntegral.Box ι`.
 -/
-protected def Icc : Box ι ↪o Set (ι -> Real) :=
-  OrderEmbedding.ofMapLEIff (fun I : Box ι => Icc I.lower I.upper) fun I J => (le_TFAE I J).out 2 0
-
-/--
-theorem `Icc_def` / 定理 `Icc_def`
-
-English:
-theorem Icc_def
-  statement: Box.Icc I = Icc I.lower I.upper
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Icc_def
-  结论: Box.闭区间 I = 闭区间 I.lower I.upper
-  证明: rfl
-
-@[simp]
+protected def Icc : Box ι ↪o Set (ι → ℝ) :=
+  OrderEmbedding.ofMapLEIff (fun I : Box ι ↦ Icc I.lower I.upper) fun I J ↦ (le_TFAE I J).out 2 0
+/-
+**BoxIntegral.Box.Icc_def** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：Icc_def : Box.Icc I = Icc I.lower I.upper
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Icc_def : Box.Icc I = Icc I.lower I.upper := rfl
 
 @[simp]
-/--
-theorem `upper_mem_Icc` / 定理 `upper_mem_Icc`
-
-English:
-theorem upper_mem_Icc
-  given: (I : Box ι)
-  statement: I.upper in Box.Icc I
-  proof: right_mem_Icc.2 I.lower_le_upper
-
-@[simp]
-
-中文:
-定理 upper_mem_Icc
-  条件: (I : Box ι)
-  结论: I.upper in Box.闭区间 I
-  证明: right_mem_Icc.2 I.lower_le_upper
-
-@[simp]
-
-Depends on / 依赖: I.lower_le_upper, lower_le_upper, right_mem_Icc
+/-
+**BoxIntegral.Box.upper_mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：upper_mem_Icc (I : Box ι) : I.upper in Box.Icc I
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
 -/
-theorem upper_mem_Icc (I : Box ι) : I.upper in Box.Icc I :=
+theorem upper_mem_Icc (I : Box ι) : I.upper ∈ Box.Icc I :=
   right_mem_Icc.2 I.lower_le_upper
 
 @[simp]
-/--
-theorem `lower_mem_Icc` / 定理 `lower_mem_Icc`
-
-English:
-theorem lower_mem_Icc
-  given: (I : Box ι)
-  statement: I.lower in Box.Icc I
-  proof: left_mem_Icc.2 I.lower_le_upper
-
-中文:
-定理 lower_mem_Icc
-  条件: (I : Box ι)
-  结论: I.lower in Box.闭区间 I
-  证明: left_mem_Icc.2 I.lower_le_upper
-
-Depends on / 依赖: I.lower_le_upper, left_mem_Icc, lower_le_upper
+/-
+**BoxIntegral.Box.lower_mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：lower_mem_Icc (I : Box ι) : I.lower in Box.Icc I
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
 -/
-theorem lower_mem_Icc (I : Box ι) : I.lower in Box.Icc I :=
+theorem lower_mem_Icc (I : Box ι) : I.lower ∈ Box.Icc I :=
   left_mem_Icc.2 I.lower_le_upper
-
-/--
-theorem `isCompact_Icc` / 定理 `isCompact_Icc`
-
-English:
-theorem isCompact_Icc
-  given: (I : Box ι)
-  statement: IsCompact (Box.Icc I)
-  proof: isCompact_Icc
-
-中文:
-定理 isCompact_Icc
-  条件: (I : Box ι)
-  结论: 是紧集 (Box.闭区间 I)
-  证明: isCompact_Icc
+/-
+**BoxIntegral.Box.isCompact_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：∀ {ι : Type u_1} (I : BoxIntegral.Box ι), IsCompact (BoxIntegral.Box.Icc I
+)
+参数：I : BoxIntegral.Box ι；BoxIntegral.Box.Icc I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactIccSpace.isCompact_Icc`：∀ {α : Type u_1} {inst : TopologicalSpace
+ α} {inst_1 : Preorder α} [self : CompactIccSpace α] {a b : α},   IsCompact (Set
+.Icc a b)
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 -/
 protected theorem isCompact_Icc (I : Box ι) : IsCompact (Box.Icc I) :=
   isCompact_Icc
-
-/--
-theorem `Icc_eq_pi` / 定理 `Icc_eq_pi`
-
-English:
-theorem Icc_eq_pi
-  statement: Box.Icc I = pi univ fun i => Icc (I.lower i) (I.upper i)
-  proof: (pi_univ_Icc _ _).symm
-
-中文:
-定理 Icc_eq_pi
-  结论: Box.闭区间 I = pi univ fun i => 闭区间 (I.lower i) (I.upper i)
-  证明: (pi_univ_Icc _ _).symm
-
-Depends on / 依赖: pi_univ_Icc
+/-
+**BoxIntegral.Box.Icc_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：Icc_eq_pi : Box.Icc I = pi univ fun i => Icc (I.lower i) (I.upper i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.pi_univ_Icc`：pi_univ_Icc : (pi univ fun i => Icc (x i) (y i)) = Icc 
+x y
 -/
-theorem Icc_eq_pi : Box.Icc I = pi univ fun i => Icc (I.lower i) (I.upper i) :=
+theorem Icc_eq_pi : Box.Icc I = pi univ fun i ↦ Icc (I.lower i) (I.upper i) :=
   (pi_univ_Icc _ _).symm
-
-/--
-theorem `le_iff_Icc` / 定理 `le_iff_Icc`
-
-English:
-theorem le_iff_Icc
-  statement: I <= J ↔ Box.Icc I subseteq Box.Icc J
-  proof: (le_TFAE I J).out 0 2
-
-中文:
-定理 le_iff_Icc
-  结论: I <= J ↔ Box.闭区间 I subseteq Box.闭区间 J
-  证明: (le_TFAE I J).out 0 2
-
-Depends on / 依赖: le_TFAE
+/-
+**BoxIntegral.Box.le_iff_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：le_iff_Icc : I <= J ↔ Box.Icc I subseteq Box.Icc J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `BoxIntegral.Box.le_TFAE`：le_TFAE : List.TFAE [I <= J, (I : Set (ι -> Rea
+l)) subseteq J, Icc I.lower I.upper subseteq Icc J.lower J.upper, J.lower <= I.l
+ower ∧ I.uppe…
 -/
-theorem le_iff_Icc : I <= J ↔ Box.Icc I subseteq Box.Icc J :=
+theorem le_iff_Icc : I ≤ J ↔ Box.Icc I ⊆ Box.Icc J :=
   (le_TFAE I J).out 0 2
-
-/--
-theorem `antitone_lower` / 定理 `antitone_lower`
-
-English:
-theorem antitone_lower
-  statement: Antitone fun I : Box ι => I.lower
-  proof: fun _ _ H => (le_iff_bounds.1 H).1
-
-中文:
-定理 antitone_lower
-  结论: 递减 fun I : Box ι => I.lower
-  证明: fun _ _ H => (le_iff_bounds.1 H).1
-
-Depends on / 依赖: le_iff_bounds
+/-
+**BoxIntegral.Box.antitone_lower** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：antitone_lower : Antitone fun I : Box ι => I.lower
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `BoxIntegral.Box.le_iff_bounds`：le_iff_bounds : I <= J ↔ J.lower <= I.low
+er ∧ I.upper <= J.upper
 -/
-theorem antitone_lower : Antitone fun I : Box ι => I.lower :=
-  fun _ _ H => (le_iff_bounds.1 H).1
-
-/--
-theorem `monotone_upper` / 定理 `monotone_upper`
-
-English:
-theorem monotone_upper
-  statement: Monotone fun I : Box ι => I.upper
-  proof: fun _ _ H => (le_iff_bounds.1 H).2
-
-中文:
-定理 monotone_upper
-  结论: 递增 fun I : Box ι => I.upper
-  证明: fun _ _ H => (le_iff_bounds.1 H).2
-
-Depends on / 依赖: le_iff_bounds
+theorem antitone_lower : Antitone fun I : Box ι ↦ I.lower :=
+  fun _ _ H ↦ (le_iff_bounds.1 H).1
+/-
+**BoxIntegral.Box.monotone_upper** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：monotone_upper : Monotone fun I : Box ι => I.upper
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `BoxIntegral.Box.le_iff_bounds`：le_iff_bounds : I <= J ↔ J.lower <= I.low
+er ∧ I.upper <= J.upper
 -/
-theorem monotone_upper : Monotone fun I : Box ι => I.upper :=
-  fun _ _ H => (le_iff_bounds.1 H).2
-
-/--
-theorem `coe_subset_Icc` / 定理 `coe_subset_Icc`
-
-English:
-theorem coe_subset_Icc
-  statement: ↑I subseteq Box.Icc I
-  proof: fun _ hx => ⟨fun i => (hx i).1.le, fun i => (hx i).2⟩
-
-中文:
-定理 coe_subset_Icc
-  结论: ↑I subseteq Box.闭区间 I
-  证明: fun _ hx => ⟨fun i => (hx i).1.le, fun i => (hx i).2⟩
+theorem monotone_upper : Monotone fun I : Box ι ↦ I.upper :=
+  fun _ _ H ↦ (le_iff_bounds.1 H).2
+/-
+**BoxIntegral.Box.coe_subset_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_subset_Icc : ↑I subseteq Box.Icc I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem coe_subset_Icc : ↑I subseteq Box.Icc I :=
-  fun _ hx => ⟨fun i => (hx i).1.le, fun i => (hx i).2⟩
-
-/--
-theorem `isBounded_Icc` / 定理 `isBounded_Icc`
-
-English:
-theorem isBounded_Icc
-  given: [Finite ι] (I : Box ι)
-  statement: Bornology.IsBounded (Box.Icc I)
-  proof: by
-  cases nonempty_fintype ι
-  exact Metric.isBounded_Icc _ _
-
-中文:
-定理 isBounded_Icc
-  条件: [有限 ι] (I : Box ι)
-  结论: 有界结构.IsBounded (Box.闭区间 I)
-  证明: by
-  cases nonempty_fintype ι
-  exact Metric.isBounded_Icc _ _
-
-Depends on / 依赖: Metric, Metric.isBounded_Icc, isBounded_Icc, nonempty_fintype
+theorem coe_subset_Icc : ↑I ⊆ Box.Icc I :=
+  fun _ hx ↦ ⟨fun i ↦ (hx i).1.le, fun i ↦ (hx i).2⟩
+/-
+**BoxIntegral.Box.isBounded_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：isBounded_Icc [Finite ι] (I : Box ι) : Bornology.IsBounded (Box.Icc I)
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Metric.isBounded_Icc`：isBounded_Icc (a b : α) : IsBounded (Icc a b)
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 -/
 theorem isBounded_Icc [Finite ι] (I : Box ι) : Bornology.IsBounded (Box.Icc I) := by
   cases nonempty_fintype ι
   exact Metric.isBounded_Icc _ _
-
-/--
-theorem `isBounded` / 定理 `isBounded`
-
-English:
-theorem isBounded
-  given: [Finite ι] (I : Box ι)
-  statement: Bornology.IsBounded I.toSet
-  proof: Bornology.IsBounded.subset I.isBounded_Icc coe_subset_Icc
-
-中文:
-定理 isBounded
-  条件: [有限 ι] (I : Box ι)
-  结论: 有界结构.IsBounded I.toSet
-  证明: Bornology.IsBounded.subset I.isBounded_Icc coe_subset_Icc
-
-Depends on / 依赖: Bornology, Bornology.IsBounded.subset, I.isBounded_Icc, IsBounded, coe_subset_Icc, isBounded_Icc, subset
+/-
+**BoxIntegral.Box.isBounded** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：isBounded [Finite ι] (I : Box ι) : Bornology.IsBounded I.toSet
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `BoxIntegral.Box.isBounded_Icc`：isBounded_Icc [Finite ι] (I : Box ι) : Bo
+rnology.IsBounded (Box.Icc I)
+· 使用定理 `BoxIntegral.Box.coe_subset_Icc`：coe_subset_Icc : ↑I subseteq Box.Icc I
 -/
 theorem isBounded [Finite ι] (I : Box ι) : Bornology.IsBounded I.toSet :=
   Bornology.IsBounded.subset I.isBounded_Icc coe_subset_Icc
@@ -876,39 +594,23 @@ theorem isBounded [Finite ι] (I : Box ι) : Bornology.IsBounded I.toSet :=
 -/
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `I ⊔ J` is the least box that includes both `I` and `J`. Since `↑I ∪ ↑J` is usually not a box,
+`↑(I ⊔ J)` is larger than `↑I ∪ ↑J`. -/
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: SemilatticeSup (Box ι)
-  body: { sup := fun I J => ⟨I.lower ⊓ J.lower, I.upper ⊔ J.upper,
-fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
-    le_sup_left := fun _ _ => le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
-    le_sup_right := fun _ _ => le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
-    sup_le := fun _ _ _ h₁ h₂ => le_iff_bounds.2
-      ⟨le_inf (antitone_lower h₁) (antitone_lower h₂),
-        sup_le (monotone_upper h₁) (monotone_upper h₂)⟩ }
-
-中文:
-实例 :
-  签名: SemilatticeSup (Box ι)
-  定义体: { sup := fun I J => ⟨I.lower ⊓ J.lower, I.upper ⊔ J.upper,
-fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
-    le_sup_left := fun _ _ => le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
-    le_sup_right := fun _ _ => le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
-    sup_le := fun _ _ _ h₁ h₂ => le_iff_bounds.2
-      ⟨le_inf (antitone_lower h₁) (antitone_lower h₂),
-        sup_le (monotone_upper h₁) (monotone_upper h₂)⟩ }
-
-Depends on / 依赖: I.lower, I.lower_lt_upper, I.upper, J.lower, J.upper, antitone_lower, inf_le_left, inf_le_right, le_iff_bounds, le_inf, le_max_left, le_sup_left, le_sup_right, lower_lt_upper, min_le_left, monotone_upper, sup_le, trans_le, trans_lt
+--- 原说明 ---
+`I ⊔ J` is the least box that includes both `I` and `J`. Since `↑I ∪ ↑J` is usua
+lly not a box,
+`↑(I ⊔ J)` is larger than `↑I ∪ ↑J`.
 -/
 instance : SemilatticeSup (Box ι) :=
-  { sup := fun I J => ⟨I.lower ⊓ J.lower, I.upper ⊔ J.upper,
-fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
-    le_sup_left := fun _ _ => le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
-    le_sup_right := fun _ _ => le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
-    sup_le := fun _ _ _ h₁ h₂ => le_iff_bounds.2
+  { sup := fun I J ↦ ⟨I.lower ⊓ J.lower, I.upper ⊔ J.upper,
+    fun i ↦ (min_le_left _ _).trans_lt <| (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
+    le_sup_left := fun _ _ ↦ le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
+    le_sup_right := fun _ _ ↦ le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
+    sup_le := fun _ _ _ h₁ h₂ ↦ le_iff_bounds.2
       ⟨le_inf (antitone_lower h₁) (antitone_lower h₂),
         sup_le (monotone_upper h₁) (monotone_upper h₂)⟩ }
 
@@ -920,485 +622,380 @@ In this section we define coercion from `WithBot (Box ι)` to `Set (ι → ℝ)`
 
 /-- The set underlying this box: `⊥` is mapped to `∅`. -/
 @[coe]
-/--
-Definition of `withBotToSet` / `withBotToSet` 的定义
+/-
+**BoxIntegral.Box.withBotToSet** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：withBotToSet (o : WithBot (Box ι)) : Set (ι -> Real)
+参数：o : WithBot (Box ι)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withBotToSet
-  signature: (o : WithBot (Box ι))
-  body: o.elim ∅ (↑)
-
-中文:
-定义 withBotToSet
-  签名: (o : WithBot (Box ι))
-  定义体: o.elim ∅ (↑)
-
-Depends on / 依赖: o.elim
+--- 原说明 ---
+The set underlying this box: `⊥` is mapped to `∅`.
 -/
-def withBotToSet (o : WithBot (Box ι)) : Set (ι -> Real) := o.elim ∅ (↑)
-
-/--
-Instance `withBotCoe` / 实例 `withBotCoe`
-
-English:
-instance withBotCoe
-  signature: : CoeTC (WithBot (Box ι)) (Set (ι -> Real))
-  body: ⟨withBotToSet⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 withBotCoe
-  签名: : CoeTC (WithBot (Box ι)) (集合 (ι -> 实数))
-  定义体: ⟨withBotToSet⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: withBotToSet
+def withBotToSet (o : WithBot (Box ι)) : Set (ι → ℝ) := o.elim ∅ (↑)
+/-
+**BoxIntegral.Box.withBotCoe** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：withBotCoe : CoeTC (WithBot (Box ι)) (Set (ι -> Real))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance withBotCoe : CoeTC (WithBot (Box ι)) (Set (ι -> Real)) :=
+instance withBotCoe : CoeTC (WithBot (Box ι)) (Set (ι → ℝ)) :=
   ⟨withBotToSet⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ((⊥ : WithBot (Box ι)) : Set (ι -> Real)) = ∅
-  proof: rfl
+/-
+**BoxIntegral.Box.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_bot : ((⊥ : WithBot (Box ι)) : Set (ι -> Real)) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem coe_bot : ((⊥ : WithBot (Box ι)) : Set (ι → ℝ)) = ∅ := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 coe_bot
-  结论: ((⊥ : WithBot (Box ι)) : 集合 (ι -> 实数)) = ∅
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**BoxIntegral.Box.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_coe : ((I : WithBot (Box ι)) : Set (ι -> Real)) = I
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_bot : ((⊥ : WithBot (Box ι)) : Set (ι -> Real)) = ∅ := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: ((I : WithBot (Box ι)) : Set (ι -> Real)) = I
-  proof: rfl
-
-中文:
-定理 coe_coe
-  结论: ((I : WithBot (Box ι)) : 集合 (ι -> 实数)) = I
-  证明: rfl
+theorem coe_coe : ((I : WithBot (Box ι)) : Set (ι → ℝ)) = I := rfl
+/-
+**BoxIntegral.Box.isSome_iff** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：∀ {ι : Type u_1} {I : WithBot (BoxIntegral.Box ι)}, Option.isSome I = true
+ ↔ (↑I).Nonempty
+参数：BoxIntegral.Box ι；↑I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Bool.false_eq_true`：(false = true) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `BoxIntegral.Box.nonempty_coe`：nonempty_coe : Set.Nonempty (I : Set (ι ->
+ Real))
 -/
-theorem coe_coe : ((I : WithBot (Box ι)) : Set (ι -> Real)) = I := rfl
-
-/--
-theorem `isSome_iff` / 定理 `isSome_iff`
-
-English:
-theorem isSome_iff
-  statement: forall {I : WithBot (Box ι)}, I.isSome ↔ (I : Set (ι -> Real)).Nonempty
-
-中文:
-定理 isSome_iff
-  结论: 对任意 {I : WithBot (Box ι)}, I.isSome ↔ (I : 集合 (ι -> 实数)).非空
--/
-theorem isSome_iff : forall {I : WithBot (Box ι)}, I.isSome ↔ (I : Set (ι -> Real)).Nonempty
+theorem isSome_iff : ∀ {I : WithBot (Box ι)}, I.isSome ↔ (I : Set (ι → ℝ)).Nonempty
   | ⊥ => by
     unfold Option.isSome
     simp
   | (I : Box ι) => by
     unfold Option.isSome
     simp [I.nonempty_coe]
-
-/--
-theorem `biUnion_coe_eq_coe` / 定理 `biUnion_coe_eq_coe`
-
-English:
-theorem biUnion_coe_eq_coe
-  given: (I : WithBot (Box ι))
-  proof: by
-  induction I <;> simp
-
-@[simp, norm_cast]
-
-中文:
-定理 biUnion_coe_eq_coe
-  条件: (I : WithBot (Box ι))
-  证明: by
-  induction I <;> simp
-
-@[simp, norm_cast]
+/-
+**BoxIntegral.Box.biUnion_coe_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`
+。
+形式化陈述：biUnion_coe_eq_coe (I : WithBot (Box ι)) : ⋃ (J : Box ι) (_ : ↑J = I), (J 
+: Set (ι -> Real)) = I
+参数：I : WithBot (Box ι)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.iUnion_iUnion_eq_left`：iUnion_iUnion_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋃ (x) (h : x = b), s x h = s b rfl
 -/
 theorem biUnion_coe_eq_coe (I : WithBot (Box ι)) :
-    ⋃ (J : Box ι) (_ : ↑J = I), (J : Set (ι -> Real)) = I := by
+    ⋃ (J : Box ι) (_ : ↑J = I), (J : Set (ι → ℝ)) = I := by
   induction I <;> simp
 
 @[simp, norm_cast]
-/--
-theorem `withBotCoe_subset_iff` / 定理 `withBotCoe_subset_iff`
-
-English:
-theorem withBotCoe_subset_iff
-  given: {I J : WithBot (Box ι)}
-  statement: (I : Set (ι -> Real)) subseteq J ↔ I <= J
-  proof: by
-  induction I; · simp
-  induction J; · simp [subset_empty_iff]
-  simp [le_def]
-
-@[simp, norm_cast]
-
-中文:
-定理 withBotCoe_subset_iff
-  条件: {I J : WithBot (Box ι)}
-  结论: (I : 集合 (ι -> 实数)) subseteq J ↔ I <= J
-  证明: by
-  induction I; · simp
-  induction J; · simp [subset_empty_iff]
-  simp [le_def]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_def, subset_empty_iff
+/-
+**BoxIntegral.Box.withBotCoe_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.B
+ox`。
+形式化陈述：withBotCoe_subset_iff {I J : WithBot (Box ι)} : (I : Set (ι -> Real)) subs
+eteq J ↔ I <= J
+参数：Box ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem withBotCoe_subset_iff {I J : WithBot (Box ι)} : (I : Set (ι -> Real)) subseteq J ↔ I <= J := by
+theorem withBotCoe_subset_iff {I J : WithBot (Box ι)} : (I : Set (ι → ℝ)) ⊆ J ↔ I ≤ J := by
   induction I; · simp
   induction J; · simp [subset_empty_iff]
   simp [le_def]
 
 @[simp, norm_cast]
-/--
-theorem `withBotCoe_inj` / 定理 `withBotCoe_inj`
-
-English:
-theorem withBotCoe_inj
-  given: {I J : WithBot (Box ι)}
-  statement: (I : Set (ι -> Real)) = J ↔ I = J
-  proof: by
-  simp only [Subset.antisymm_iff, ← le_antisymm_iff, withBotCoe_subset_iff]
-
-中文:
-定理 withBotCoe_inj
-  条件: {I J : WithBot (Box ι)}
-  结论: (I : 集合 (ι -> 实数)) = J ↔ I = J
-  证明: by
-  simp only [Subset.antisymm_iff, ← le_antisymm_iff, withBotCoe_subset_iff]
-
-Depends on / 依赖: Subset, Subset.antisymm_iff, antisymm_iff, le_antisymm_iff, withBotCoe_subset_iff
+/-
+**BoxIntegral.Box.withBotCoe_inj** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：withBotCoe_inj {I J : WithBot (Box ι)} : (I : Set (ι -> Real)) = J ↔ I = J
+参数：Box ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem withBotCoe_inj {I J : WithBot (Box ι)} : (I : Set (ι -> Real)) = J ↔ I = J := by
+theorem withBotCoe_inj {I J : WithBot (Box ι)} : (I : Set (ι → ℝ)) = J ↔ I = J := by
   simp only [Subset.antisymm_iff, ← le_antisymm_iff, withBotCoe_subset_iff]
 
 open scoped Classical in
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Make a `WithBot (Box ι)` from a pair of corners `l u : ι → ℝ`. If `l i < u i` for all `i`,
+then the result is `⟨l, u, _⟩ : Box ι`, otherwise it is `⊥`. In any case, the result interpreted
+as a set in `ι → ℝ` is the set `{x : ι → ℝ | ∀ i, x i ∈ Ioc (l i) (u i)}`. -/
+/-
+**BoxIntegral.Box.mk'** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：mk' (l u : ι -> Real) : WithBot (Box ι)
+参数：l u : ι -> Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (l u : ι -> Real)
-  body: if h : forall i, l i < u i then ↑(⟨l, u, h⟩ : Box ι) else ⊥
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: (l u : ι -> 实数)
-  定义体: if h : forall i, l i < u i then ↑(⟨l, u, h⟩ : Box ι) else ⊥
-
-@[simp]
+--- 原说明 ---
+Make a `WithBot (Box ι)` from a pair of corners `l u : ι → ℝ`. If `l i < u i` fo
+r all `i`,
+then the result is `⟨l, u, _⟩ : Box ι`, otherwise it is `⊥`. In any case, the re
+sult interpreted
+as a set in `ι → ℝ` is the set `{x : ι → ℝ | ∀ i, x i ∈ Ioc (l i) (u i)}`.
 -/
-def mk' (l u : ι -> Real) : WithBot (Box ι) :=
-  if h : forall i, l i < u i then ↑(⟨l, u, h⟩ : Box ι) else ⊥
+def mk' (l u : ι → ℝ) : WithBot (Box ι) :=
+  if h : ∀ i, l i < u i then ↑(⟨l, u, h⟩ : Box ι) else ⊥
 
 @[simp]
-/--
-theorem `mk'_eq_bot` / 定理 `mk'_eq_bot`
-
-English:
-theorem mk'_eq_bot
-  given: {l u : ι -> Real}
-  statement: mk' l u = ⊥ ↔ exists i, u i <= l i
-  proof: by
+/-
+**BoxIntegral.Box.mk'_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：∀ {ι : Type u_1} {l u : ι → ℝ}, BoxIntegral.Box.mk' l u = ⊥ ↔ ∃ i, u i ≤ l
+ i
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.mk'.eq_1`：∀ {ι : Type u_1} (l u : ι → ℝ),   BoxIntegral.
+Box.mk' l u = if h : ∀ (i : ι), l i < u i then ↑{ lower := l, upper := u, lower_
+lt_upper := h …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+-/
+theorem mk'_eq_bot {l u : ι → ℝ} : mk' l u = ⊥ ↔ ∃ i, u i ≤ l i := by
   rw [mk']
   split_ifs with h <;> simpa using h
 
 @[simp]
-
-中文:
-定理 mk'_eq_bot
-  条件: {l u : ι -> 实数}
-  结论: mk' l u = ⊥ ↔ 存在 i, u i <= l i
-  证明: by
-  rw [mk']
-  split_ifs with h <;> simpa using h
-
-@[simp]
+/-
+**BoxIntegral.Box.mk'_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：∀ {ι : Type u_1} {I : BoxIntegral.Box ι} {l u : ι → ℝ}, BoxIntegral.Box.mk
+' l u = ↑I ↔ l = I.lower ∧ u = I.upper
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.mk'.eq_1`：∀ {ι : Type u_1} (l u : ι → ℝ),   BoxIntegral.
+Box.mk' l u = if h : ∀ (i : ι), l i < u i then ↑{ lower := l, upper := u, lower_
+lt_upper := h …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BoxIntegral.Box.mk.injEq`：∀ {ι : Type u_2} (lower upper : ι → ℝ) (lower_
+lt_upper : ∀ (i : ι), lower i < upper i) (lower_1 upper_1 : ι → ℝ)   (lower_lt_u
+pper_1 : ∀ (i …
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
 -/
-theorem mk'_eq_bot {l u : ι -> Real} : mk' l u = ⊥ ↔ exists i, u i <= l i := by
-  rw [mk']
-  split_ifs with h <;> simpa using h
-
-@[simp]
-/--
-theorem `mk'_eq_coe` / 定理 `mk'_eq_coe`
-
-English:
-theorem mk'_eq_coe
-  given: {l u : ι -> Real}
-  statement: mk' l u = I ↔ l = I.lower ∧ u = I.upper
-  proof: by
+theorem mk'_eq_coe {l u : ι → ℝ} : mk' l u = I ↔ l = I.lower ∧ u = I.upper := by
   obtain ⟨lI, uI, hI⟩ := I; rw [mk']; split_ifs with h
   · simp
-  · suffices l = lI -> u != uI by simpa
+  · suffices l = lI → u ≠ uI by simpa
     rintro rfl rfl
     exact h hI
 
 @[simp]
-
-中文:
-定理 mk'_eq_coe
-  条件: {l u : ι -> 实数}
-  结论: mk' l u = I ↔ l = I.lower ∧ u = I.upper
-  证明: by
-  obtain ⟨lI, uI, hI⟩ := I; rw [mk']; split_ifs with h
-  · simp
-  · suffices l = lI -> u != uI by simpa
-    rintro rfl rfl
-    exact h hI
-
-@[simp]
+/-
+**BoxIntegral.Box.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_mk' (l u : ι -> Real) : (mk' l u : Set (ι -> Real)) = pi univ fun i =>
+ Ioc (l i) (u i)
+参数：l u : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.mk'.eq_1`：∀ {ι : Type u_1} (l u : ι → ℝ),   BoxIntegral.
+Box.mk' l u = if h : ∀ (i : ι), l i < u i then ↑{ lower := l, upper := u, lower_
+lt_upper := h …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `BoxIntegral.Box.coe_bot`：coe_bot : ((⊥ : WithBot (Box ι)) : Set (ι -> Re
+al)) = ∅
+· 使用定理 `Set.univ_pi_eq_empty`：univ_pi_eq_empty (ht : t i = ∅) : pi univ t = ∅
+· 使用定理 `Set.Ioc_eq_empty`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, ¬b < a
+ → Set.Ioc b a = ∅
 -/
-theorem mk'_eq_coe {l u : ι -> Real} : mk' l u = I ↔ l = I.lower ∧ u = I.upper := by
-  obtain ⟨lI, uI, hI⟩ := I; rw [mk']; split_ifs with h
-  · simp
-  · suffices l = lI -> u != uI by simpa
-    rintro rfl rfl
-    exact h hI
-
-@[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  given: (l u : ι -> Real)
-  statement: (mk' l u : Set (ι -> Real)) = pi univ fun i => Ioc (l i) (u i)
-  proof: by
+theorem coe_mk' (l u : ι → ℝ) : (mk' l u : Set (ι → ℝ)) = pi univ fun i ↦ Ioc (l i) (u i) := by
   rw [mk']; split_ifs with h
   · exact coe_eq_pi _
   · rcases not_forall.mp h with ⟨i, hi⟩
-    rw [coe_bot]; rw [univ_pi_eq_empty]
+    rw [coe_bot, univ_pi_eq_empty]
     exact Ioc_eq_empty hi
-
-中文:
-定理 coe_mk'
-  条件: (l u : ι -> 实数)
-  结论: (mk' l u : 集合 (ι -> 实数)) = pi univ fun i => 左开右闭区间 (l i) (u i)
-  证明: by
-  rw [mk']; split_ifs with h
-  · exact coe_eq_pi _
-  · rcases not_forall.mp h with ⟨i, hi⟩
-    rw [coe_bot]; rw [univ_pi_eq_empty]
-    exact Ioc_eq_empty hi
-
-Depends on / 依赖: Ioc_eq_empty, coe_bot, coe_eq_pi, not_forall, not_forall.mp, split_ifs, univ_pi_eq_empty
--/
-theorem coe_mk' (l u : ι -> Real) : (mk' l u : Set (ι -> Real)) = pi univ fun i => Ioc (l i) (u i) := by
-  rw [mk']; split_ifs with h
-  · exact coe_eq_pi _
-  · rcases not_forall.mp h with ⟨i, hi⟩
-    rw [coe_bot]; rw [univ_pi_eq_empty]
-    exact Ioc_eq_empty hi
-
-/--
-Instance `WithBot.inf` / 实例 `WithBot.inf`
-
-English:
-instance WithBot.inf
-  signature: : Min (WithBot (Box ι))
-  body: ⟨fun I =>
-    WithBot.recBotCoe (fun _ => ⊥)
-      (fun I J => WithBot.recBotCoe ⊥ (fun J => mk' (I.lower ⊔ J.lower) (I.upper ⊓ J.upper)) J) I⟩
-
-@[simp]
-
-中文:
-实例 WithBot.下确界
-  签名: : 最小值 (WithBot (Box ι))
-  定义体: ⟨fun I =>
-    WithBot.recBotCoe (fun _ => ⊥)
-      (fun I J => WithBot.recBotCoe ⊥ (fun J => mk' (I.lower ⊔ J.lower) (I.upper ⊓ J.upper)) J) I⟩
-
-@[simp]
-
-Depends on / 依赖: I.lower, I.upper, J.lower, J.upper, WithBot, WithBot.recBotCoe, recBotCoe
+/-
+**BoxIntegral.Box.WithBot.inf** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box.WithBot
+`。
+形式化陈述：{ι : Type u_1} → Min (WithBot (BoxIntegral.Box ι))
+参数：WithBot (BoxIntegral.Box ι)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance WithBot.inf : Min (WithBot (Box ι)) :=
-  ⟨fun I =>
-    WithBot.recBotCoe (fun _ => ⊥)
-      (fun I J => WithBot.recBotCoe ⊥ (fun J => mk' (I.lower ⊔ J.lower) (I.upper ⊓ J.upper)) J) I⟩
+  ⟨fun I ↦
+    WithBot.recBotCoe (fun _ ↦ ⊥)
+      (fun I J ↦ WithBot.recBotCoe ⊥ (fun J ↦ mk' (I.lower ⊔ J.lower) (I.upper ⊓ J.upper)) J) I⟩
 
 @[simp]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (I J : WithBot (Box ι))
-  statement: (↑(I ⊓ J) : Set (ι -> Real)) = (I : Set _) inter J
-  proof: by
-  induction I
-  · change ∅ = _
-    simp
-  induction J
-  · change ∅ = _
-    simp
-  change ((mk' _ _ : WithBot (Box ι)) : Set (ι -> Real)) = _
-  simp only [coe_eq_pi, ← pi_inter_distrib, Ioc_inter_Ioc, Pi.sup_apply, Pi.inf_apply, coe_mk',
-    coe_coe]
-
-中文:
-定理 coe_inf
-  条件: (I J : WithBot (Box ι))
-  结论: (↑(I ⊓ J) : 集合 (ι -> 实数)) = (I : 集合 _) inter J
-  证明: by
-  induction I
-  · change ∅ = _
-    simp
-  induction J
-  · change ∅ = _
-    simp
-  change ((mk' _ _ : WithBot (Box ι)) : Set (ι -> Real)) = _
-  simp only [coe_eq_pi, ← pi_inter_distrib, Ioc_inter_Ioc, Pi.sup_apply, Pi.inf_apply, coe_mk',
-    coe_coe]
-
-Depends on / 依赖: Ioc_inter_Ioc, Pi.inf_apply, Pi.sup_apply, WithBot, coe_coe, coe_eq_pi, coe_mk, inf_apply, pi_inter_distrib, sup_apply
+/-
+**BoxIntegral.Box.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_inf (I J : WithBot (Box ι)) : (↑(I ⊓ J) : Set (ι -> Real)) = (I : Set 
+_) inter J
+参数：I J : WithBot (Box ι)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.empty_inter`：empty_inter (a : Set α) : ∅ inter a = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `BoxIntegral.Box.coe_mk'`：coe_mk' (l u : ι -> Real) : (mk' l u : Set (ι -
+> Real)) = pi univ fun i => Ioc (l i) (u i)
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.Ioc_inter_Ioc`：∀ {α : Type u_1} [inst : LinearOrder α] {a₁ a₂ b₁ b₂ 
+: α},   Set.Ioc b₁ a₁ ∩ Set.Ioc b₂ a₂ = Set.Ioc (max b₁ b₂) (min a₁ a₂)
 -/
-theorem coe_inf (I J : WithBot (Box ι)) : (↑(I ⊓ J) : Set (ι -> Real)) = (I : Set _) inter J := by
+theorem coe_inf (I J : WithBot (Box ι)) : (↑(I ⊓ J) : Set (ι → ℝ)) = (I : Set _) ∩ J := by
   induction I
   · change ∅ = _
     simp
   induction J
   · change ∅ = _
     simp
-  change ((mk' _ _ : WithBot (Box ι)) : Set (ι -> Real)) = _
+  change ((mk' _ _ : WithBot (Box ι)) : Set (ι → ℝ)) = _
   simp only [coe_eq_pi, ← pi_inter_distrib, Ioc_inter_Ioc, Pi.sup_apply, Pi.inf_apply, coe_mk',
     coe_coe]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (WithBot (Box ι))
-  body: { inf := min
-    inf_le_left := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
-      exact inter_subset_left
-    inf_le_right := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
-      exact inter_subset_right
-    le_inf := fun I J₁ J₂ h₁ h₂ => by
-      simp only [← withBotCoe_subset_iff, coe_inf] at *
-      exact subset_inter h₁ h₂ }
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 格 (WithBot (Box ι))
-  定义体: { inf := min
-    inf_le_left := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
-      exact inter_subset_left
-    inf_le_right := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
-      exact inter_subset_right
-    le_inf := fun I J₁ J₂ h₁ h₂ => by
-      simp only [← withBotCoe_subset_iff, coe_inf] at *
-      exact subset_inter h₁ h₂ }
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_inf, inf_le_left, inf_le_right, inter_subset_left, inter_subset_right, le_inf, subset_inter, withBotCoe_subset_iff
+/-
+**BoxIntegral.Box.** 是 Mathlib 中的一个实例，位于命名空间 `BoxIntegral.Box`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (WithBot (Box ι)) :=
   { inf := min
-    inf_le_left := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
+    inf_le_left := fun I J ↦ by
+      rw [← withBotCoe_subset_iff, coe_inf]
       exact inter_subset_left
-    inf_le_right := fun I J => by
-      rw [← withBotCoe_subset_iff]; rw [coe_inf]
+    inf_le_right := fun I J ↦ by
+      rw [← withBotCoe_subset_iff, coe_inf]
       exact inter_subset_right
-    le_inf := fun I J₁ J₂ h₁ h₂ => by
+    le_inf := fun I J₁ J₂ h₁ h₂ ↦ by
       simp only [← withBotCoe_subset_iff, coe_inf] at *
       exact subset_inter h₁ h₂ }
 
 @[simp, norm_cast]
-/--
-theorem `disjoint_withBotCoe` / 定理 `disjoint_withBotCoe`
-
-English:
-theorem disjoint_withBotCoe
-  given: {I J : WithBot (Box ι)}
-  proof: by
-  simp only [disjoint_iff_inf_le, ← withBotCoe_subset_iff, coe_inf]
-  rfl
-
-中文:
-定理 disjoint_withBotCoe
-  条件: {I J : WithBot (Box ι)}
-  证明: by
-  simp only [disjoint_iff_inf_le, ← withBotCoe_subset_iff, coe_inf]
-  rfl
-
-Depends on / 依赖: coe_inf, disjoint_iff_inf_le, withBotCoe_subset_iff
+/-
+**BoxIntegral.Box.disjoint_withBotCoe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box
+`。
+形式化陈述：disjoint_withBotCoe {I J : WithBot (Box ι)} : Disjoint (I : Set (ι -> Real
+)) J ↔ Disjoint I J
+参数：Box ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoxIntegral.Box.coe_inf`：coe_inf (I J : WithBot (Box ι)) : (↑(I ⊓ J) : S
+et (ι -> Real)) = (I : Set _) inter J
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem disjoint_withBotCoe {I J : WithBot (Box ι)} :
-    Disjoint (I : Set (ι -> Real)) J ↔ Disjoint I J := by
+    Disjoint (I : Set (ι → ℝ)) J ↔ Disjoint I J := by
   simp only [disjoint_iff_inf_le, ← withBotCoe_subset_iff, coe_inf]
   rfl
-
-/--
-theorem `disjoint_coe` / 定理 `disjoint_coe`
-
-English:
-theorem disjoint_coe
-  statement: Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : Set (ι -> Real)) J
-  proof: disjoint_withBotCoe.symm
-
-中文:
-定理 disjoint_coe
-  结论: Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : 集合 (ι -> 实数)) J
-  证明: disjoint_withBotCoe.symm
-
-Depends on / 依赖: disjoint_withBotCoe, disjoint_withBotCoe.symm
+/-
+**BoxIntegral.Box.disjoint_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：disjoint_coe : Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : Set (ι -> 
+Real)) J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `BoxIntegral.Box.disjoint_withBotCoe`：disjoint_withBotCoe {I J : WithBot 
+(Box ι)} : Disjoint (I : Set (ι -> Real)) J ↔ Disjoint I J
 -/
-theorem disjoint_coe : Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : Set (ι -> Real)) J :=
+theorem disjoint_coe : Disjoint (I : WithBot (Box ι)) J ↔ Disjoint (I : Set (ι → ℝ)) J :=
   disjoint_withBotCoe.symm
-
-/--
-theorem `not_disjoint_coe_iff_nonempty_inter` / 定理 `not_disjoint_coe_iff_nonempty_inter`
-
-English:
-theorem not_disjoint_coe_iff_nonempty_inter
-  proof: by
-  rw [disjoint_coe]; rw [Set.not_disjoint_iff_nonempty_inter]
-
-中文:
-定理 not_disjoint_coe_iff_nonempty_inter
-  证明: by
-  rw [disjoint_coe]; rw [Set.not_disjoint_iff_nonempty_inter]
-
-Depends on / 依赖: Set.not_disjoint_iff_nonempty_inter, disjoint_coe, not_disjoint_iff_nonempty_inter
+/-
+**BoxIntegral.Box.not_disjoint_coe_iff_nonempty_inter** 是 Mathlib 中的一个定理，位于命名空间 
+`BoxIntegral.Box`。
+形式化陈述：not_disjoint_coe_iff_nonempty_inter : ¬Disjoint (I : WithBot (Box ι)) J ↔ 
+(I inter J : Set (ι -> Real)).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.disjoint_coe`：disjoint_coe : Disjoint (I : WithBot (Box 
+ι)) J ↔ Disjoint (I : Set (ι -> Real)) J
+· 使用引理 `Set.not_disjoint_iff_nonempty_inter`：not_disjoint_iff_nonempty_inter : ¬
+ Disjoint s t ↔ (s inter t).Nonempty
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem not_disjoint_coe_iff_nonempty_inter :
-    ¬Disjoint (I : WithBot (Box ι)) J ↔ (I inter J : Set (ι -> Real)).Nonempty := by
-  rw [disjoint_coe]; rw [Set.not_disjoint_iff_nonempty_inter]
+    ¬Disjoint (I : WithBot (Box ι)) J ↔ (I ∩ J : Set (ι → ℝ)).Nonempty := by
+  rw [disjoint_coe, Set.not_disjoint_iff_nonempty_inter]
 
 /-!
 ### Hyperface of a box in `ℝⁿ⁺¹ = Fin (n + 1) → ℝ`
@@ -1408,158 +1005,139 @@ theorem not_disjoint_coe_iff_nonempty_inter :
 /-- Face of a box in `ℝⁿ⁺¹ = Fin (n + 1) → ℝ`: the box in `ℝⁿ = Fin n → ℝ` with corners at
 `I.lower ∘ Fin.succAbove i` and `I.upper ∘ Fin.succAbove i`. -/
 @[simps +simpRhs]
-/--
-Definition of `face` / `face` 的定义
+/-
+**BoxIntegral.Box.face** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：face {n} (I : Box (Fin (n + 1))) (i : Fin (n + 1)) : Box (Fin n)
+参数：I : Box (Fin (n + 1))；i : Fin (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition face
-  signature: {n} (I : Box (Fin (n + 1))) (i : Fin (n + 1))
-  body: ⟨I.lower ∘ Fin.succAbove i, I.upper ∘ Fin.succAbove i, fun _ => I.lower_lt_upper _⟩
-
-@[simp]
-
-中文:
-定义 face
-  签名: {n} (I : Box (有限集 (n + 1))) (i : 有限集 (n + 1))
-  定义体: ⟨I.lower ∘ Fin.succAbove i, I.upper ∘ Fin.succAbove i, fun _ => I.lower_lt_upper _⟩
-
-@[simp]
-
-Depends on / 依赖: Fin.succAbove, I.lower, I.lower_lt_upper, I.upper, lower_lt_upper, succAbove
+--- 原说明 ---
+Face of a box in `ℝⁿ⁺¹ = Fin (n + 1) → ℝ`: the box in `ℝⁿ = Fin n → ℝ` with corn
+ers at
+`I.lower ∘ Fin.succAbove i` and `I.upper ∘ Fin.succAbove i`.
 -/
 def face {n} (I : Box (Fin (n + 1))) (i : Fin (n + 1)) : Box (Fin n) :=
-  ⟨I.lower ∘ Fin.succAbove i, I.upper ∘ Fin.succAbove i, fun _ => I.lower_lt_upper _⟩
+  ⟨I.lower ∘ Fin.succAbove i, I.upper ∘ Fin.succAbove i, fun _ ↦ I.lower_lt_upper _⟩
 
 @[simp]
-/--
-theorem `face_mk` / 定理 `face_mk`
-
-English:
-theorem face_mk
-  given: {n} (l u : Fin (n + 1) -> Real) (h : forall i, l i < u i) (i : Fin (n + 1))
-  proof: rfl
+/-
+**BoxIntegral.Box.face_mk** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：face_mk {n} (l u : Fin (n + 1) -> Real) (h : forall i, l i < u i) (i : Fin
+ (n + 1)) : face ⟨l, u, h⟩ i = ⟨l ∘ Fin.succAbove i, u ∘ Fin.succAbove i, fun _ 
+=> h _⟩
+参数：l u : Fin (n + 1) -> Real；h : forall i, l i < u i；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem face_mk {n} (l u : Fin (n + 1) → ℝ) (h : ∀ i, l i < u i) (i : Fin (n + 1)) :
+    face ⟨l, u, h⟩ i = ⟨l ∘ Fin.succAbove i, u ∘ Fin.succAbove i, fun _ ↦ h _⟩ := rfl
 
 @[gcongr, mono]
-
-中文:
-定理 face_mk
-  条件: {n} (l u : 有限集 (n + 1) -> 实数) (h : 对任意 i, l i < u i) (i : 有限集 (n + 1))
-  证明: rfl
-
-@[gcongr, mono]
+/-
+**BoxIntegral.Box.face_mono** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：face_mono {n} {I J : Box (Fin (n + 1))} (h : I <= J) (i : Fin (n + 1)) : f
+ace I i <= face J i
+参数：Fin (n + 1)；h : I <= J；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioc_subset_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a₁ a₂ b₁ b₂ : 
+α}, b₂ ≤ b₁ → a₁ ≤ a₂ → Set.Ioc b₁ a₁ ⊆ Set.Ioc b₂ a₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `BoxIntegral.Box.le_iff_bounds`：le_iff_bounds : I <= J ↔ J.lower <= I.low
+er ∧ I.upper <= J.upper
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem face_mk {n} (l u : Fin (n + 1) -> Real) (h : forall i, l i < u i) (i : Fin (n + 1)) :
-    face ⟨l, u, h⟩ i = ⟨l ∘ Fin.succAbove i, u ∘ Fin.succAbove i, fun _ => h _⟩ := rfl
-
-@[gcongr, mono]
-/--
-theorem `face_mono` / 定理 `face_mono`
-
-English:
-theorem face_mono
-  given: {n} {I J : Box (Fin (n + 1))} (h : I <= J) (i : Fin (n + 1))
-  proof: fun _ hx _ => Ioc_subset_Ioc ((le_iff_bounds.1 h).1 _) ((le_iff_bounds.1 h).2 _) (hx _)
-
-中文:
-定理 face_mono
-  条件: {n} {I J : Box (有限集 (n + 1))} (h : I <= J) (i : 有限集 (n + 1))
-  证明: fun _ hx _ => Ioc_subset_Ioc ((le_iff_bounds.1 h).1 _) ((le_iff_bounds.1 h).2 _) (hx _)
-
-Depends on / 依赖: Ioc_subset_Ioc, le_iff_bounds
+theorem face_mono {n} {I J : Box (Fin (n + 1))} (h : I ≤ J) (i : Fin (n + 1)) :
+    face I i ≤ face J i :=
+  fun _ hx _ ↦ Ioc_subset_Ioc ((le_iff_bounds.1 h).1 _) ((le_iff_bounds.1 h).2 _) (hx _)
+/-
+**BoxIntegral.Box.monotone_face** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：monotone_face {n} (i : Fin (n + 1)) : Monotone fun I => face I i
+参数：i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoxIntegral.Box.face_mono`：face_mono {n} {I J : Box (Fin (n + 1))} (h : 
+I <= J) (i : Fin (n + 1)) : face I i <= face J i
 -/
-theorem face_mono {n} {I J : Box (Fin (n + 1))} (h : I <= J) (i : Fin (n + 1)) :
-    face I i <= face J i :=
-  fun _ hx _ => Ioc_subset_Ioc ((le_iff_bounds.1 h).1 _) ((le_iff_bounds.1 h).2 _) (hx _)
-
-/--
-theorem `monotone_face` / 定理 `monotone_face`
-
-English:
-theorem monotone_face
-  given: {n} (i : Fin (n + 1))
-  statement: Monotone fun I => face I i
-  proof: fun _ _ h => face_mono h i
-
-中文:
-定理 monotone_face
-  条件: {n} (i : 有限集 (n + 1))
-  结论: 递增 fun I => face I i
-  证明: fun _ _ h => face_mono h i
-
-Depends on / 依赖: face_mono
+theorem monotone_face {n} (i : Fin (n + 1)) : Monotone fun I ↦ face I i :=
+  fun _ _ h ↦ face_mono h i
+/-
+**BoxIntegral.Box.mapsTo_insertNth_face_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegr
+al.Box`。
+形式化陈述：mapsTo_insertNth_face_Icc {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x
+ : Real} (hx : x in Icc (I.lower i) (I.upper i)) : MapsTo (i.insertNth x) (Box.I
+cc (I.face i)) (Box.Icc I)
+参数：I : Box (Fin (n + 1))；n + 1；hx : x in Icc (I.lower i) (I.upper i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Fin.insertNth_mem_Icc`：insertNth_mem_Icc {i : Fin (n + 1)} {x : α i} {p 
+: forall j, α (i.succAbove j)} {q₁ q₂ : forall j, α j} : i.insertNth x p in Icc 
+q₁ q₂ ↔ x i…
 -/
-theorem monotone_face {n} (i : Fin (n + 1)) : Monotone fun I => face I i :=
-  fun _ _ h => face_mono h i
-
-/--
-theorem `mapsTo_insertNth_face_Icc` / 定理 `mapsTo_insertNth_face_Icc`
-
-English:
-theorem mapsTo_insertNth_face_Icc
-  statement: {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : Real}
-  proof: fun _ hy => Fin.insertNth_mem_Icc.2 ⟨hx, hy⟩
-
-中文:
-定理 mapsTo_insertNth_face_Icc
-  结论: {n} (I : Box (有限集 (n + 1))) {i : 有限集 (n + 1)} {x : 实数}
-  证明: fun _ hy => Fin.insertNth_mem_Icc.2 ⟨hx, hy⟩
-
-Depends on / 依赖: Fin.insertNth_mem_Icc, insertNth_mem_Icc
--/
-theorem mapsTo_insertNth_face_Icc {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : Real}
-    (hx : x in Icc (I.lower i) (I.upper i)) :
+theorem mapsTo_insertNth_face_Icc {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : ℝ}
+    (hx : x ∈ Icc (I.lower i) (I.upper i)) :
     MapsTo (i.insertNth x) (Box.Icc (I.face i)) (Box.Icc I) :=
-  fun _ hy => Fin.insertNth_mem_Icc.2 ⟨hx, hy⟩
-
-/--
-theorem `mapsTo_insertNth_face` / 定理 `mapsTo_insertNth_face`
-
-English:
-theorem mapsTo_insertNth_face
-  statement: {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : Real}
-  proof: by
-  intro y hy
-  simp_rw [mem_coe, mem_def, i.forall_iff_succAbove, Fin.insertNth_apply_same,
-    Fin.insertNth_apply_succAbove]
-  exact ⟨hx, hy⟩
-
-中文:
-定理 mapsTo_insertNth_face
-  结论: {n} (I : Box (有限集 (n + 1))) {i : 有限集 (n + 1)} {x : 实数}
-  证明: by
-  intro y hy
-  simp_rw [mem_coe, mem_def, i.forall_iff_succAbove, Fin.insertNth_apply_same,
-    Fin.insertNth_apply_succAbove]
-  exact ⟨hx, hy⟩
-
-Depends on / 依赖: Fin.insertNth_apply_same, Fin.insertNth_apply_succAbove, forall_iff_succAbove, i.forall_iff_succAbove, insertNth_apply_same, insertNth_apply_succAbove, mem_coe, mem_def, simp_rw
+  fun _ hy ↦ Fin.insertNth_mem_Icc.2 ⟨hx, hy⟩
+/-
+**BoxIntegral.Box.mapsTo_insertNth_face** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.B
+ox`。
+形式化陈述：mapsTo_insertNth_face {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : R
+eal} (hx : x in Ioc (I.lower i) (I.upper i)) : MapsTo (i.insertNth x) (I.face i 
+: Set (_ -> _)) (I : Set (_ -> _))
+参数：I : Box (Fin (n + 1))；n + 1；hx : x in Ioc (I.lower i) (I.upper i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.forall_iff_succAbove`：forall_iff_succAbove {P : Fin (n + 1) -> Prop}
+ (p : Fin (n + 1)) : (forall i, P i) ↔ P p ∧ forall i, P (p.succAbove i)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.insertNth_apply_same`：insertNth_apply_same (i : Fin (n + 1)) (x : α 
+i) (p : forall j, α (i.succAbove j)) : insertNth i x p i = x
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Fin.insertNth_apply_succAbove`：insertNth_apply_succAbove (i : Fin (n + 1
+)) (x : α i) (p : forall j, α (i.succAbove j)) (j : Fin n) : insertNth i x p (i.
+succAbove j) = p j
 -/
-theorem mapsTo_insertNth_face {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : Real}
-    (hx : x in Ioc (I.lower i) (I.upper i)) :
-    MapsTo (i.insertNth x) (I.face i : Set (_ -> _)) (I : Set (_ -> _)) := by
+theorem mapsTo_insertNth_face {n} (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : ℝ}
+    (hx : x ∈ Ioc (I.lower i) (I.upper i)) :
+    MapsTo (i.insertNth x) (I.face i : Set (_ → _)) (I : Set (_ → _)) := by
   intro y hy
   simp_rw [mem_coe, mem_def, i.forall_iff_succAbove, Fin.insertNth_apply_same,
     Fin.insertNth_apply_succAbove]
   exact ⟨hx, hy⟩
-
-/--
-theorem `continuousOn_face_Icc` / 定理 `continuousOn_face_Icc`
-
-English:
-theorem continuousOn_face_Icc
-  statement: {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) -> Real) -> X}
-  proof: h.comp (continuousOn_const.finInsertNth i continuousOn_id) (I.mapsTo_insertNth_face_Icc hx)
-
-中文:
-定理 continuousOn_face_Icc
-  结论: {X} [拓扑空间 X] {n} {f : (有限集 (n + 1) -> 实数) -> X}
-  证明: h.comp (continuousOn_const.finInsertNth i continuousOn_id) (I.mapsTo_insertNth_face_Icc hx)
-
-Depends on / 依赖: I.mapsTo_insertNth_face_Icc, continuousOn_const, continuousOn_const.finInsertNth, continuousOn_id, finInsertNth, h.comp, mapsTo_insertNth_face_Icc
+/-
+**BoxIntegral.Box.continuousOn_face_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.B
+ox`。
+形式化陈述：continuousOn_face_Icc {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) -> Re
+al) -> X} {I : Box (Fin (n + 1))} (h : ContinuousOn f (Box.Icc I)) {i : Fin (n +
+ 1)} {x : Real} (hx : x in Icc (I.lower i) (I.upper i)) : ContinuousOn (f ∘ i.in
+sertNth x) (Box.Icc (I.face i))
+参数：Fin (n + 1) -> Real；Fin (n + 1)；h : ContinuousOn f (Box.Icc I)；n + 1；hx : x i
+n Icc (I.lower i) (I.upper i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+· 使用定理 `ContinuousOn.finInsertNth`：ContinuousOn.finInsertNth (i : Fin (n + 1)) {
+f : α -> X i} {g : α -> forall j : Fin n, X (i.succAbove j)} {s : Set α} (hf : C
+ontinuousOn f s…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `continuousOn_id`：continuousOn_id {s : Set α} : ContinuousOn id s
+· 使用定理 `BoxIntegral.Box.mapsTo_insertNth_face_Icc`：mapsTo_insertNth_face_Icc {n}
+ (I : Box (Fin (n + 1))) {i : Fin (n + 1)} {x : Real} (hx : x in Icc (I.lower i)
+ (I.upper i)) : MapsTo (i.inser…
 -/
-theorem continuousOn_face_Icc {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) -> Real) -> X}
-    {I : Box (Fin (n + 1))} (h : ContinuousOn f (Box.Icc I)) {i : Fin (n + 1)} {x : Real}
-    (hx : x in Icc (I.lower i) (I.upper i)) :
+theorem continuousOn_face_Icc {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) → ℝ) → X}
+    {I : Box (Fin (n + 1))} (h : ContinuousOn f (Box.Icc I)) {i : Fin (n + 1)} {x : ℝ}
+    (hx : x ∈ Icc (I.lower i) (I.upper i)) :
     ContinuousOn (f ∘ i.insertNth x) (Box.Icc (I.face i)) :=
   h.comp (continuousOn_const.finInsertNth i continuousOn_id) (I.mapsTo_insertNth_face_Icc hx)
 
@@ -1568,217 +1146,267 @@ theorem continuousOn_face_Icc {X} [TopologicalSpace X] {n} {f : (Fin (n + 1) -> 
 -/
 
 
-/--
-Definition of `Ioo` / `Ioo` 的定义
+/-- The interior of a box. -/
+/-
+**BoxIntegral.Box.Ioo** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：{ι : Type u_1} → BoxIntegral.Box ι →o Set (ι → ℝ)
+参数：ι → ℝ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioo
-  signature: : Box ι ->o Set (ι -> Real) where
-  body: pi univ fun i => Ioo (I.lower i) (I.upper i)
-  monotone' _ _ h :=
-    pi_mono fun i _ => Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
-
-中文:
-定义 开区间
-  签名: : Box ι ->o 集合 (ι -> 实数) where
-  定义体: pi univ fun i => Ioo (I.lower i) (I.upper i)
-  monotone' _ _ h :=
-    pi_mono fun i _ => Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
+--- 原说明 ---
+The interior of a box.
 -/
-protected def Ioo : Box ι ->o Set (ι -> Real) where
-  toFun I := pi univ fun i => Ioo (I.lower i) (I.upper i)
+protected def Ioo : Box ι →o Set (ι → ℝ) where
+  toFun I := pi univ fun i ↦ Ioo (I.lower i) (I.upper i)
   monotone' _ _ h :=
-    pi_mono fun i _ => Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
-
-/--
-theorem `Ioo_subset_coe` / 定理 `Ioo_subset_coe`
-
-English:
-theorem Ioo_subset_coe
-  given: (I : Box ι)
-  statement: Box.Ioo I subseteq I
-  proof: fun _ hx i => Ioo_subset_Ioc_self (hx i trivial)
-
-中文:
-定理 Ioo_subset_coe
-  条件: (I : Box ι)
-  结论: Box.开区间 I subseteq I
-  证明: fun _ hx i => Ioo_subset_Ioc_self (hx i trivial)
-
-Depends on / 依赖: Ioo_subset_Ioc_self
+    pi_mono fun i _ ↦ Ioo_subset_Ioo ((le_iff_bounds.1 h).1 i) ((le_iff_bounds.1 h).2 i)
+/-
+**BoxIntegral.Box.Ioo_subset_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：Ioo_subset_coe (I : Box ι) : Box.Ioo I subseteq I
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioo_subset_Ioc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioc b a
+· 使用定理 `trivial`：True
 -/
-theorem Ioo_subset_coe (I : Box ι) : Box.Ioo I subseteq I :=
-  fun _ hx i => Ioo_subset_Ioc_self (hx i trivial)
-
-/--
-theorem `Ioo_subset_Icc` / 定理 `Ioo_subset_Icc`
-
-English:
-theorem Ioo_subset_Icc
-  given: (I : Box ι)
-  statement: Box.Ioo I subseteq Box.Icc I
-  proof: I.Ioo_subset_coe.trans coe_subset_Icc
-
-中文:
-定理 Ioo_subset_Icc
-  条件: (I : Box ι)
-  结论: Box.开区间 I subseteq Box.闭区间 I
-  证明: I.Ioo_subset_coe.trans coe_subset_Icc
+theorem Ioo_subset_coe (I : Box ι) : Box.Ioo I ⊆ I :=
+  fun _ hx i ↦ Ioo_subset_Ioc_self (hx i trivial)
+/-
+**BoxIntegral.Box.Ioo_subset_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：∀ {ι : Type u_1} (I : BoxIntegral.Box ι), BoxIntegral.Box.Ioo I ⊆ BoxInteg
+ral.Box.Icc I
+参数：I : BoxIntegral.Box ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `BoxIntegral.Box.Ioo_subset_coe`：Ioo_subset_coe (I : Box ι) : Box.Ioo I s
+ubseteq I
+· 使用定理 `BoxIntegral.Box.coe_subset_Icc`：coe_subset_Icc : ↑I subseteq Box.Icc I
 -/
-protected theorem Ioo_subset_Icc (I : Box ι) : Box.Ioo I subseteq Box.Icc I :=
+protected theorem Ioo_subset_Icc (I : Box ι) : Box.Ioo I ⊆ Box.Icc I :=
   I.Ioo_subset_coe.trans coe_subset_Icc
-
-/--
-theorem `iUnion_Ioo_of_tendsto` / 定理 `iUnion_Ioo_of_tendsto`
-
-English:
-theorem iUnion_Ioo_of_tendsto
-  statement: [Finite ι] {I : Box ι} {J : Nat -> Box ι} (hJ : Monotone J)
-  proof: have hl' : forall i, Antitone fun n => (J n).lower i :=
-    fun i => (monotone_eval i).comp_antitone (antitone_lower.comp_monotone hJ)
-  have hu' : forall i, Monotone fun n => (J n).upper i :=
-    fun i => (monotone_eval i).comp (monotone_upper.comp hJ)
-  calc
-    ⋃ n, Box.Ioo (J n) = pi univ fun i => ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
-      iUnion_univ_pi_of_monotone fun i => (hl' i).Ioo (hu' i)
-    _ = Box.Ioo I :=
-      pi_congr rfl fun i _ =>
-        iUnion_Ioo_of_mono_of_isGLB_of_isLUB (hl' i) (hu' i)
-          (isGLB_of_tendsto_atTop (hl' i) (tendsto_pi_nhds.1 hl _))
-          (isLUB_of_tendsto_atTop (hu' i) (tendsto_pi_nhds.1 hu _))
-
-中文:
-定理 iUnion_Ioo_of_tendsto
-  结论: [有限 ι] {I : Box ι} {J : 自然数 -> Box ι} (hJ : 递增 J)
-  证明: have hl' : forall i, Antitone fun n => (J n).lower i :=
-    fun i => (monotone_eval i).comp_antitone (antitone_lower.comp_monotone hJ)
-  have hu' : forall i, Monotone fun n => (J n).upper i :=
-    fun i => (monotone_eval i).comp (monotone_upper.comp hJ)
-  calc
-    ⋃ n, Box.Ioo (J n) = pi univ fun i => ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
-      iUnion_univ_pi_of_monotone fun i => (hl' i).Ioo (hu' i)
-    _ = Box.Ioo I :=
-      pi_congr rfl fun i _ =>
-        iUnion_Ioo_of_mono_of_isGLB_of_isLUB (hl' i) (hu' i)
-          (isGLB_of_tendsto_atTop (hl' i) (tendsto_pi_nhds.1 hl _))
-          (isLUB_of_tendsto_atTop (hu' i) (tendsto_pi_nhds.1 hu _))
-
-Depends on / 依赖: Antitone, Box.Ioo, Monotone, antitone_lower, antitone_lower.comp_monotone, comp_antitone, comp_monotone, iUnion_Ioo_of_mono_of_isGLB_of_isLUB, iUnion_univ_pi_of_monotone, isGLB_of_tendsto_a, monotone_eval, monotone_upper, monotone_upper.comp, pi_congr
+/-
+**BoxIntegral.Box.iUnion_Ioo_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.B
+ox`。
+形式化陈述：iUnion_Ioo_of_tendsto [Finite ι] {I : Box ι} {J : Nat -> Box ι} (hJ : Mono
+tone J) (hl : Tendsto (lower ∘ J) atTop (𝓝 I.lower)) (hu : Tendsto (upper ∘ J) a
+tTop (𝓝 I.upper)) : ⋃ n, Box.Ioo (J n) = Box.Ioo I
+参数：hJ : Monotone J；hl : Tendsto (lower ∘ J) atTop (𝓝 I.lower)；hu : Tendsto (uppe
+r ∘ J) atTop (𝓝 I.upper)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.comp_antitone`：Monotone.comp_antitone (hg : Monotone g) (hf : A
+ntitone f) : Antitone (g ∘ f)
+· 使用定理 `Function.monotone_eval`：Function.monotone_eval {ι : Type u} {α : ι -> Ty
+pe v} [forall i, Preorder (α i)] (i : ι) : Monotone (Function.eval i : (forall i
+, α i) -> α …
+· 使用定理 `Antitone.comp_monotone`：Antitone.comp_monotone (hg : Antitone g) (hf : M
+onotone f) : Antitone (g ∘ f)
+· 使用定理 `BoxIntegral.Box.antitone_lower`：antitone_lower : Antitone fun I : Box ι 
+=> I.lower
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `BoxIntegral.Box.monotone_upper`：monotone_upper : Monotone fun I : Box ι 
+=> I.upper
+· 使用定理 `Set.iUnion_univ_pi_of_monotone`：iUnion_univ_pi_of_monotone {ι ι' : Type*
+} [LinearOrder ι'] [Nonempty ι'] [Finite ι] {α : ι -> Type*} {s : forall i, ι' -
+> Set (α i)} (hs : f…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Antitone.Ioo`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_
+1 : Preorder β] {f g : α → β},   Antitone f → Monotone g → Monotone fun x => Set
+.I…
+· 使用定理 `Set.pi_congr`：pi_congr (h : s₁ = s₂) (h' : forall i in s₁, t₁ i = t₂ i) 
+: s₁.pi t₁ = s₂.pi t₂
+· 使用定理 `iUnion_Ioo_of_mono_of_isGLB_of_isLUB`：iUnion_Ioo_of_mono_of_isGLB_of_isL
+UB (hf : Antitone f) (hg : Monotone g) (ha : IsGLB (range f) a) (hb : IsLUB (ran
+ge g) b) : ⋃ x, Ioo (f x) …
+· 使用定理 `isGLB_of_tendsto_atTop`：isGLB_of_tendsto_atTop [TopologicalSpace α] [Pre
+order α] [OrderClosedTopology α] [Preorder β] [IsDirectedOrder β] [Nonempty β] {
+f : β -> α} …
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `tendsto_pi_nhds`：tendsto_pi_nhds {f : Y -> forall i, A i} {g : forall i,
+ A i} {u : Filter Y} : Tendsto f u (𝓝 g) ↔ forall x, Tendsto (fun i => f i x) u 
+(𝓝 (g…
+· 使用定理 `isLUB_of_tendsto_atTop`：isLUB_of_tendsto_atTop [TopologicalSpace α] [Pre
+order α] [OrderClosedTopology α] [Preorder β] [IsDirectedOrder β] [Nonempty β] {
+f : β -> α} …
 -/
-theorem iUnion_Ioo_of_tendsto [Finite ι] {I : Box ι} {J : Nat -> Box ι} (hJ : Monotone J)
+theorem iUnion_Ioo_of_tendsto [Finite ι] {I : Box ι} {J : ℕ → Box ι} (hJ : Monotone J)
     (hl : Tendsto (lower ∘ J) atTop (𝓝 I.lower)) (hu : Tendsto (upper ∘ J) atTop (𝓝 I.upper)) :
     ⋃ n, Box.Ioo (J n) = Box.Ioo I :=
-  have hl' : forall i, Antitone fun n => (J n).lower i :=
-    fun i => (monotone_eval i).comp_antitone (antitone_lower.comp_monotone hJ)
-  have hu' : forall i, Monotone fun n => (J n).upper i :=
-    fun i => (monotone_eval i).comp (monotone_upper.comp hJ)
+  have hl' : ∀ i, Antitone fun n ↦ (J n).lower i :=
+    fun i ↦ (monotone_eval i).comp_antitone (antitone_lower.comp_monotone hJ)
+  have hu' : ∀ i, Monotone fun n ↦ (J n).upper i :=
+    fun i ↦ (monotone_eval i).comp (monotone_upper.comp hJ)
   calc
-    ⋃ n, Box.Ioo (J n) = pi univ fun i => ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
-      iUnion_univ_pi_of_monotone fun i => (hl' i).Ioo (hu' i)
+    ⋃ n, Box.Ioo (J n) = pi univ fun i ↦ ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
+      iUnion_univ_pi_of_monotone fun i ↦ (hl' i).Ioo (hu' i)
     _ = Box.Ioo I :=
-      pi_congr rfl fun i _ =>
+      pi_congr rfl fun i _ ↦
         iUnion_Ioo_of_mono_of_isGLB_of_isLUB (hl' i) (hu' i)
           (isGLB_of_tendsto_atTop (hl' i) (tendsto_pi_nhds.1 hl _))
           (isLUB_of_tendsto_atTop (hu' i) (tendsto_pi_nhds.1 hu _))
-
-/--
-theorem `exists_seq_mono_tendsto` / 定理 `exists_seq_mono_tendsto`
-
-English:
-theorem exists_seq_mono_tendsto
-  given: (I : Box ι)
-  proof: by
-  choose a b ha_anti hb_mono ha_mem hb_mem hab ha_tendsto hb_tendsto using
-    fun i => exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
-  exact
-    ⟨⟨fun k => ⟨flip a k, flip b k, fun i => hab _ _ _⟩, fun k l hkl =>
-        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i => (hb_mono i).monotone hkl⟩⟩,
-      fun n x hx i _ => ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
-      tendsto_pi_nhds.2 ha_tendsto, tendsto_pi_nhds.2 hb_tendsto⟩
-
-中文:
-定理 存在_seq_mono_tendsto
-  条件: (I : Box ι)
-  证明: by
-  choose a b ha_anti hb_mono ha_mem hb_mem hab ha_tendsto hb_tendsto using
-    fun i => exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
-  exact
-    ⟨⟨fun k => ⟨flip a k, flip b k, fun i => hab _ _ _⟩, fun k l hkl =>
-        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i => (hb_mono i).monotone hkl⟩⟩,
-      fun n x hx i _ => ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
-      tendsto_pi_nhds.2 ha_tendsto, tendsto_pi_nhds.2 hb_tendsto⟩
-
-Depends on / 依赖: I.lower_lt_upper, antitone, exists_seq_strictAnti_strictMono_tendsto, ha_anti, ha_mem, ha_tendsto, hb_mem, hb_mono, hb_tendsto, le_iff_bounds, lower_lt_upper, monotone, tendsto_pi_nhds, trans_le, trans_lt
+/-
+**BoxIntegral.Box.exists_seq_mono_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral
+.Box`。
+形式化陈述：exists_seq_mono_tendsto (I : Box ι) : exists J : Nat ->o Box ι, (forall n,
+ Box.Icc (J n) subseteq Box.Ioo I) ∧ Tendsto (lower ∘ J) atTop (𝓝 I.lower) ∧ Ten
+dsto (upper ∘ J) atTop (𝓝 I.upper)
+参数：I : Box ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BoxIntegral.Box.le_iff_bounds`：le_iff_bounds : I <= J ↔ J.lower <= I.low
+er ∧ I.upper <= J.upper
+· 使用定理 `StrictAnti.antitone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictAnti f → Antitone f
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `tendsto_pi_nhds`：tendsto_pi_nhds {f : Y -> forall i, A i} {g : forall i,
+ A i} {u : Filter Y} : Tendsto f u (𝓝 g) ↔ forall x, Tendsto (fun i => f i x) u 
+(𝓝 (g…
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `exists_seq_strictAnti_strictMono_tendsto`：exists_seq_strictAnti_strictMo
+no_tendsto [DenselyOrdered α] [FirstCountableTopology α] {x y : α} (h : x < y) :
+ exists u v : Nat -> α, Strict…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology`：∀ {X : Ty
+pe u_2} [inst : TopologicalSpace X] [h : TopologicalSpace.PseudoMetrizableSpace 
+X], FirstCountableTopology X
+· 使用定理 `UniformSpace.pseudoMetrizableSpace`：∀ {X : Type u_5} [u : UniformSpace X
+] [hu : (uniformity X).IsCountablyGenerated],   TopologicalSpace.PseudoMetrizabl
+eSpace X
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
 -/
 theorem exists_seq_mono_tendsto (I : Box ι) :
-    exists J : Nat ->o Box ι,
-      (forall n, Box.Icc (J n) subseteq Box.Ioo I) ∧
+    ∃ J : ℕ →o Box ι,
+      (∀ n, Box.Icc (J n) ⊆ Box.Ioo I) ∧
         Tendsto (lower ∘ J) atTop (𝓝 I.lower) ∧ Tendsto (upper ∘ J) atTop (𝓝 I.upper) := by
   choose a b ha_anti hb_mono ha_mem hb_mem hab ha_tendsto hb_tendsto using
-    fun i => exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
+    fun i ↦ exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
   exact
-    ⟨⟨fun k => ⟨flip a k, flip b k, fun i => hab _ _ _⟩, fun k l hkl =>
-        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i => (hb_mono i).monotone hkl⟩⟩,
-      fun n x hx i _ => ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
+    ⟨⟨fun k ↦ ⟨flip a k, flip b k, fun i ↦ hab _ _ _⟩, fun k l hkl ↦
+        le_iff_bounds.2 ⟨fun i ↦ (ha_anti i).antitone hkl, fun i ↦ (hb_mono i).monotone hkl⟩⟩,
+      fun n x hx i _ ↦ ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
       tendsto_pi_nhds.2 ha_tendsto, tendsto_pi_nhds.2 hb_tendsto⟩
 
 section Distortion
 
 variable [Fintype ι]
 
-/--
-Definition of `distortion` / `distortion` 的定义
+/-- The distortion of a box `I` is the maximum of the ratios of the lengths of its edges.
+It is defined as the maximum of the ratios
+`nndist I.lower I.upper / nndist (I.lower i) (I.upper i)`. -/
+/-
+**BoxIntegral.Box.distortion** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：distortion (I : Box ι) : Real>=0
+参数：I : Box ι。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition distortion
-  signature: (I : Box ι)
-  body: Finset.univ.sup fun i : ι => nndist I.lower I.upper / nndist (I.lower i) (I.upper i)
-
-中文:
-定义 distortion
-  签名: (I : Box ι)
-  定义体: Finset.univ.sup fun i : ι => nndist I.lower I.upper / nndist (I.lower i) (I.upper i)
-
-Depends on / 依赖: Finset, Finset.univ.sup, I.lower, I.upper, nndist
+--- 原说明 ---
+The distortion of a box `I` is the maximum of the ratios of the lengths of its e
+dges.
+It is defined as the maximum of the ratios
+`nndist I.lower I.upper / nndist (I.lower i) (I.upper i)`.
 -/
-def distortion (I : Box ι) : Real>=0 :=
-  Finset.univ.sup fun i : ι => nndist I.lower I.upper / nndist (I.lower i) (I.upper i)
-
-/--
-theorem `distortion_eq_of_sub_eq_div` / 定理 `distortion_eq_of_sub_eq_div`
-
-English:
-theorem distortion_eq_of_sub_eq_div
-  statement: {I J : Box ι} {r : Real}
-  proof: by
-  simp only [distortion, nndist_pi_def, Real.nndist_eq', h, map_div₀]
-  congr 1 with i
-  have : 0 < r := by
-    by_contra hr
-    have := div_nonpos_of_nonneg_of_nonpos (sub_nonneg.2 <| J.lower_le_upper i) (not_lt.1 hr)
-    rw [← h] at this
-    exact this.not_gt (sub_pos.2 <| I.lower_lt_upper i)
-  have hn0 := (map_ne_zero Real.nnabs).2 this.ne'
-  simp_rw [NNReal.finset_sup_div, div_div_div_cancel_right₀ hn0]
-
-中文:
-定理 distortion_eq_of_sub_eq_div
-  结论: {I J : Box ι} {r : 实数}
-  证明: by
-  simp only [distortion, nndist_pi_def, Real.nndist_eq', h, map_div₀]
-  congr 1 with i
-  have : 0 < r := by
-    by_contra hr
-    have := div_nonpos_of_nonneg_of_nonpos (sub_nonneg.2 <| J.lower_le_upper i) (not_lt.1 hr)
-    rw [← h] at this
-    exact this.not_gt (sub_pos.2 <| I.lower_lt_upper i)
-  have hn0 := (map_ne_zero Real.nnabs).2 this.ne'
-  simp_rw [NNReal.finset_sup_div, div_div_div_cancel_right₀ hn0]
-
-Depends on / 依赖: I.lower_lt_upper, J.lower_le_upper, NNReal, NNReal.finset_sup_div, Real.nnabs, Real.nndist_eq, distortion, div_nonpos_of_nonneg_of_nonpos, finset_sup_div, lower_le_upper, lower_lt_upper, map_ne_zero, nndist_eq, nndist_pi_def, not_gt, not_lt, simp_rw, sub_nonneg, sub_pos, this.ne
+def distortion (I : Box ι) : ℝ≥0 :=
+  Finset.univ.sup fun i : ι ↦ nndist I.lower I.upper / nndist (I.lower i) (I.upper i)
+/-
+**BoxIntegral.Box.distortion_eq_of_sub_eq_div** 是 Mathlib 中的一个定理，位于命名空间 `BoxInte
+gral.Box`。
+形式化陈述：distortion_eq_of_sub_eq_div {I J : Box ι} {r : Real} (h : forall i, I.uppe
+r i - I.lower i = (J.upper i - J.lower i) / r) : distortion I = distortion J
+参数：h : forall i, I.upper i - I.lower i = (J.upper i - J.lower i) / r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.nndist_eq'`：Real.nndist_eq' (x y : Real) : nndist x y = Real.nnabs 
+(y - x)
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `div_nonpos_of_nonneg_of_nonpos`：div_nonpos_of_nonneg_of_nonpos (ha : 0 <
+= a) (hb : b <= 0) : a / b <= 0
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, 0 < a - b ↔ b < a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
+· 使用定理 `map_ne_zero`：map_ne_zero : f a != 0 ↔ a != 0
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.finset_sup_div`：finset_sup_div {α} {f : α -> Real>=0} {s : Finset
+ α} (r : Real>=0) : s.sup f / r = s.sup fun a => f a / r
+（共 34 条，此处仅展示前 30 条）
 -/
-theorem distortion_eq_of_sub_eq_div {I J : Box ι} {r : Real}
-    (h : forall i, I.upper i - I.lower i = (J.upper i - J.lower i) / r) :
+theorem distortion_eq_of_sub_eq_div {I J : Box ι} {r : ℝ}
+    (h : ∀ i, I.upper i - I.lower i = (J.upper i - J.lower i) / r) :
     distortion I = distortion J := by
   simp only [distortion, nndist_pi_def, Real.nndist_eq', h, map_div₀]
   congr 1 with i
@@ -1789,107 +1417,136 @@ theorem distortion_eq_of_sub_eq_div {I J : Box ι} {r : Real}
     exact this.not_gt (sub_pos.2 <| I.lower_lt_upper i)
   have hn0 := (map_ne_zero Real.nnabs).2 this.ne'
   simp_rw [NNReal.finset_sup_div, div_div_div_cancel_right₀ hn0]
-
-/--
-theorem `nndist_le_distortion_mul` / 定理 `nndist_le_distortion_mul`
-
-English:
-theorem nndist_le_distortion_mul
-  given: (I : Box ι) (i : ι)
-  proof: calc
-    nndist I.lower I.upper =
-        nndist I.lower I.upper / nndist (I.lower i) (I.upper i) * nndist (I.lower i) (I.upper i) :=
-      (div_mul_cancel₀ _ <| mt nndist_eq_zero.1 (I.lower_lt_upper i).ne).symm
-    _ <= I.distortion * nndist (I.lower i) (I.upper i) := by
-      grw [distortion, ← Finset.le_sup (Finset.mem_univ i)]
-
-中文:
-定理 nndist_le_distortion_mul
-  条件: (I : Box ι) (i : ι)
-  证明: calc
-    nndist I.lower I.upper =
-        nndist I.lower I.upper / nndist (I.lower i) (I.upper i) * nndist (I.lower i) (I.upper i) :=
-      (div_mul_cancel₀ _ <| mt nndist_eq_zero.1 (I.lower_lt_upper i).ne).symm
-    _ <= I.distortion * nndist (I.lower i) (I.upper i) := by
-      grw [distortion, ← Finset.le_sup (Finset.mem_univ i)]
-
-Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_univ, I.distortion, I.lower, I.lower_lt_upper, I.upper, distortion, le_sup, lower_lt_upper, mem_univ, nndist, nndist_eq_zero
+/-
+**BoxIntegral.Box.nndist_le_distortion_mul** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegra
+l.Box`。
+形式化陈述：nndist_le_distortion_mul (I : Box ι) (i : ι) : nndist I.lower I.upper <= I
+.distortion * nndist (I.lower i) (I.upper i)
+参数：I : Box ι；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `div_mul_cancel₀`：div_mul_cancel₀ (a : G₀) (h : b != 0) : a / b * b = a
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nndist_eq_zero`：nndist_eq_zero {x y : γ} : nndist x y = 0 ↔ x = y
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.distortion.eq_1`：∀ {ι : Type u_1} [inst : Fintype ι] (I 
+: BoxIntegral.Box ι),   I.distortion = Finset.univ.sup fun i => nndist I.lower I
+.upper / nndist (I.lo…
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
 theorem nndist_le_distortion_mul (I : Box ι) (i : ι) :
-    nndist I.lower I.upper <= I.distortion * nndist (I.lower i) (I.upper i) :=
+    nndist I.lower I.upper ≤ I.distortion * nndist (I.lower i) (I.upper i) :=
   calc
     nndist I.lower I.upper =
         nndist I.lower I.upper / nndist (I.lower i) (I.upper i) * nndist (I.lower i) (I.upper i) :=
       (div_mul_cancel₀ _ <| mt nndist_eq_zero.1 (I.lower_lt_upper i).ne).symm
-    _ <= I.distortion * nndist (I.lower i) (I.upper i) := by
+    _ ≤ I.distortion * nndist (I.lower i) (I.upper i) := by
       grw [distortion, ← Finset.le_sup (Finset.mem_univ i)]
-
-/--
-theorem `dist_le_distortion_mul` / 定理 `dist_le_distortion_mul`
-
-English:
-theorem dist_le_distortion_mul
-  given: (I : Box ι) (i : ι)
-  proof: by
-  have A : I.lower i - I.upper i < 0 := sub_neg.2 (I.lower_lt_upper i)
-  simpa only [← NNReal.coe_le_coe, ← dist_nndist, NNReal.coe_mul, Real.dist_eq, abs_of_neg A,
-    neg_sub] using I.nndist_le_distortion_mul i
-
-中文:
-定理 dist_le_distortion_mul
-  条件: (I : Box ι) (i : ι)
-  证明: by
-  have A : I.lower i - I.upper i < 0 := sub_neg.2 (I.lower_lt_upper i)
-  simpa only [← NNReal.coe_le_coe, ← dist_nndist, NNReal.coe_mul, Real.dist_eq, abs_of_neg A,
-    neg_sub] using I.nndist_le_distortion_mul i
-
-Depends on / 依赖: I.lower, I.lower_lt_upper, I.nndist_le_distortion_mul, I.upper, NNReal, NNReal.coe_le_coe, NNReal.coe_mul, Real.dist_eq, abs_of_neg, coe_le_coe, coe_mul, dist_eq, dist_nndist, lower_lt_upper, neg_sub, nndist_le_distortion_mul, sub_neg
+/-
+**BoxIntegral.Box.dist_le_distortion_mul** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.
+Box`。
+形式化陈述：dist_le_distortion_mul (I : Box ι) (i : ι) : dist I.lower I.upper <= I.dis
+tortion * (I.upper i - I.lower i)
+参数：I : Box ι；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_neg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, a - b < 0 ↔ a < b
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `BoxIntegral.Box.lower_lt_upper`：∀ {ι : Type u_2} (self : BoxIntegral.Box
+ ι) (i : ι), self.lower i < self.upper i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], a < 0 → |a| = -a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `BoxIntegral.Box.nndist_le_distortion_mul`：nndist_le_distortion_mul (I : 
+Box ι) (i : ι) : nndist I.lower I.upper <= I.distortion * nndist (I.lower i) (I.
+upper i)
 -/
 theorem dist_le_distortion_mul (I : Box ι) (i : ι) :
-    dist I.lower I.upper <= I.distortion * (I.upper i - I.lower i) := by
+    dist I.lower I.upper ≤ I.distortion * (I.upper i - I.lower i) := by
   have A : I.lower i - I.upper i < 0 := sub_neg.2 (I.lower_lt_upper i)
   simpa only [← NNReal.coe_le_coe, ← dist_nndist, NNReal.coe_mul, Real.dist_eq, abs_of_neg A,
     neg_sub] using I.nndist_le_distortion_mul i
-
-/--
-theorem `diam_Icc_le_of_distortion_le` / 定理 `diam_Icc_le_of_distortion_le`
-
-English:
-theorem diam_Icc_le_of_distortion_le
-  given: (I : Box ι) (i : ι) {c : Real>=0} (h : I.distortion <= c)
-  proof: have : (0 : Real) <= c * (I.upper i - I.lower i) :=
-    mul_nonneg c.coe_nonneg (sub_nonneg.2 <| I.lower_le_upper _)
-  diam_le_of_forall_dist_le this fun x hx y hy =>
-    calc
-      dist x y <= dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
-      _ <= I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
-      _ <= c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
-
-中文:
-定理 diam_Icc_le_of_distortion_le
-  条件: (I : Box ι) (i : ι) {c : 实数>=0} (h : I.distortion <= c)
-  证明: have : (0 : Real) <= c * (I.upper i - I.lower i) :=
-    mul_nonneg c.coe_nonneg (sub_nonneg.2 <| I.lower_le_upper _)
-  diam_le_of_forall_dist_le this fun x hx y hy =>
-    calc
-      dist x y <= dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
-      _ <= I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
-      _ <= c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
-
-Depends on / 依赖: I.dist_le_distortion_mul, I.distortion, I.lower, I.lower_le_upper, I.upper, Real.dist_le_of_mem_pi_Icc, c.coe_nonneg, coe_nonneg, diam_le_of_forall_dist_le, dist_le_distortion_mul, dist_le_of_mem_pi_Icc, distortion, lower_le_upper, mul_nonneg, sub_nonneg
+/-
+**BoxIntegral.Box.diam_Icc_le_of_distortion_le** 是 Mathlib 中的一个定理，位于命名空间 `BoxInt
+egral.Box`。
+形式化陈述：diam_Icc_le_of_distortion_le (I : Box ι) (i : ι) {c : Real>=0} (h : I.dist
+ortion <= c) : diam (Box.Icc I) <= c * (I.upper i - I.lower i)
+参数：I : Box ι；i : ι；h : I.distortion <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
+· 使用定理 `Metric.diam_le_of_forall_dist_le`：diam_le_of_forall_dist_le {C : Real} (
+h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C) : diam s <= C
+· 使用引理 `Real.dist_le_of_mem_pi_Icc`：dist_le_of_mem_pi_Icc (hx : x in Icc x' y') 
+(hy : y in Icc x' y') : dist x y <= dist x' y'
+· 使用定理 `BoxIntegral.Box.dist_le_distortion_mul`：dist_le_distortion_mul (I : Box 
+ι) (i : ι) : dist I.lower I.upper <= I.distortion * (I.upper i - I.lower i)
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `NNReal.coe_mono`：Monotone NNReal.toReal
 -/
-theorem diam_Icc_le_of_distortion_le (I : Box ι) (i : ι) {c : Real>=0} (h : I.distortion <= c) :
-    diam (Box.Icc I) <= c * (I.upper i - I.lower i) :=
-  have : (0 : Real) <= c * (I.upper i - I.lower i) :=
+theorem diam_Icc_le_of_distortion_le (I : Box ι) (i : ι) {c : ℝ≥0} (h : I.distortion ≤ c) :
+    diam (Box.Icc I) ≤ c * (I.upper i - I.lower i) :=
+  have : (0 : ℝ) ≤ c * (I.upper i - I.lower i) :=
     mul_nonneg c.coe_nonneg (sub_nonneg.2 <| I.lower_le_upper _)
-  diam_le_of_forall_dist_le this fun x hx y hy =>
+  diam_le_of_forall_dist_le this fun x hx y hy ↦
     calc
-      dist x y <= dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
-      _ <= I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
-      _ <= c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
+      dist x y ≤ dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
+      _ ≤ I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
+      _ ≤ c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
 
 end Distortion
 
 end Box
 
 end BoxIntegral
+

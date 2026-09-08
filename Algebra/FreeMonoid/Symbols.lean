@@ -22,113 +22,59 @@ namespace FreeMonoid
 
 /-- the set of unique symbols in a free monoid element -/
 @[to_additive /-- The set of unique symbols in an additive free monoid element -/]
-/--
-Definition of `symbols` / `symbols` 的定义
+/-
+**FreeMonoid.symbols** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：symbols (a : FreeMonoid α) : Finset α
+参数：a : FreeMonoid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symbols
-  signature: (a : FreeMonoid α)
-  body: List.toFinset a
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 symbols
-  签名: (a : 自由幺半群 α)
-  定义体: List.toFinset a
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.toFinset, toFinset
+--- 原说明 ---
+the set of unique symbols in a free monoid element
 -/
 def symbols (a : FreeMonoid α) : Finset α := List.toFinset a
 
 @[to_additive (attr := simp)]
-/--
-theorem `symbols_one` / 定理 `symbols_one`
-
-English:
-theorem symbols_one
-  statement: symbols (1 : FreeMonoid α) = ∅
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 symbols_one
-  结论: symbols (1 : 自由幺半群 α) = ∅
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.symbols_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：symbols_one : symbols (1 : FreeMonoid α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symbols_one : symbols (1 : FreeMonoid α) = ∅ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `symbols_of` / 定理 `symbols_of`
-
-English:
-theorem symbols_of
-  given: {m : α}
-  statement: symbols (of m) = {m}
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 symbols_of
-  条件: {m : α}
-  结论: symbols (of m) = {m}
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.symbols_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：symbols_of {m : α} : symbols (of m) = {m}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symbols_of {m : α} : symbols (of m) = {m} := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `symbols_mul` / 定理 `symbols_mul`
-
-English:
-theorem symbols_mul
-  given: {a b : FreeMonoid α}
-  statement: symbols (a * b) = symbols a union symbols b
-  proof: List.toFinset_append
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 symbols_mul
-  条件: {a b : 自由幺半群 α}
-  结论: symbols (a * b) = symbols a union symbols b
-  证明: List.toFinset_append
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.toFinset_append, toFinset_append
+/-
+**FreeMonoid.symbols_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：symbols_mul {a b : FreeMonoid α} : symbols (a * b) = symbols a union symbo
+ls b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.toFinset_append`：toFinset_append : toFinset (l ++ l') = l.toFinset 
+union l'.toFinset
 -/
-theorem symbols_mul {a b : FreeMonoid α} : symbols (a * b) = symbols a union symbols b :=
+theorem symbols_mul {a b : FreeMonoid α} : symbols (a * b) = symbols a ∪ symbols b :=
   List.toFinset_append
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_symbols` / 定理 `mem_symbols`
-
-English:
-theorem mem_symbols
-  given: {m : α} {a : FreeMonoid α}
-  statement: m in symbols a ↔ m in a
-  proof: List.mem_toFinset
-
-中文:
-定理 mem_symbols
-  条件: {m : α} {a : 自由幺半群 α}
-  结论: m in symbols a ↔ m in a
-  证明: List.mem_toFinset
-
-Depends on / 依赖: List.mem_toFinset, mem_toFinset
+/-
+**FreeMonoid.mem_symbols** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：mem_symbols {m : α} {a : FreeMonoid α} : m in symbols a ↔ m in a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_toFinset`：mem_toFinset : a in l.toFinset ↔ a in l
 -/
-theorem mem_symbols {m : α} {a : FreeMonoid α} : m in symbols a ↔ m in a :=
+theorem mem_symbols {m : α} {a : FreeMonoid α} : m ∈ symbols a ↔ m ∈ a :=
   List.mem_toFinset
 
 end FreeMonoid
+

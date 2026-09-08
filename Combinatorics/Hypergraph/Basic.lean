@@ -70,24 +70,19 @@ The requirement `subset_vertexSet_of_mem_edgeSet` ensures that all vertices in e
 `vertexSet`, i.e., all edges are subsets of the `vertexSet`.
 -/
 @[ext]
-/--
-Definition of `Hypergraph` / `Hypergraph` 的定义
+/-
+**Hypergraph** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_4 → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hypergraph
-  parameters: (α : Type*)
-  axioms and operations (3):
-    - vertexSet : Set α
-    - edgeSet : Set (Set α)
-    - subset_vertexSet_of_mem_edgeSet' : forall ⦃e⦄, e in edgeSet -> e subseteq vertexSet
+--- 原说明 ---
+An undirected hypergraph with vertices of type `α` and edges of type `Set α`, as
+ described by vertex
+and edge sets `vertexSet : Set α` and `edgeSet : Set (Set α)`.
 
-中文:
-结构 超图
-  参数: (α : 类型)
-  公理与运算 (3 个):
-    - vertexSet : 集合 α
-    - edgeSet : 集合 (集合 α)
-    - subset_vertexSet_of_mem_edgeSet' : 对任意 ⦃e⦄, e in edgeSet -> e subseteq vertexSet
+The requirement `subset_vertexSet_of_mem_edgeSet` ensures that all vertices in e
+dges are part of
+`vertexSet`, i.e., all edges are subsets of the `vertexSet`.
 -/
 structure Hypergraph (α : Type*) where
   /-- The vertex set -/
@@ -95,7 +90,7 @@ structure Hypergraph (α : Type*) where
   /-- The edge set -/
   edgeSet : Set (Set α)
   /-- All edges must be subsets of the vertex set -/
-  subset_vertexSet_of_mem_edgeSet' : forall ⦃e⦄, e in edgeSet -> e subseteq vertexSet
+  subset_vertexSet_of_mem_edgeSet' : ∀ ⦃e⦄, e ∈ edgeSet → e ⊆ vertexSet
 
 namespace Hypergraph
 
@@ -113,110 +108,69 @@ scoped notation "E(" H ")" => Hypergraph.edgeSet H
 /-! ## Vertex-Hyperedge Incidence -/
 
 @[simp]
-/--
-lemma `subset_vertexSet_of_mem_edgeSet` / 引理 `subset_vertexSet_of_mem_edgeSet`
+/-
+**Hypergraph.subset_vertexSet_of_mem_edgeSet** 是 Mathlib 中的一个引理，位于命名空间 `Hypergra
+ph`。
+形式化陈述：subset_vertexSet_of_mem_edgeSet (he : e in E(H)) : e subseteq V(H)
+参数：he : e in E(H)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.subset_vertexSet_of_mem_edgeSet'`：∀ {α : Type u_4} (self : Hy
+pergraph α) ⦃e : Set α⦄, e ∈ self.edgeSet → e ⊆ self.vertexSet
 
-English:
-lemma subset_vertexSet_of_mem_edgeSet
-  given: (he : e in E(H))
-  statement: e subseteq V(H)
-  proof: H.subset_vertexSet_of_mem_edgeSet' he
-
-alias _root_.Membership.mem.subset_vertexSet := subset_vertexSet_of_mem_edgeSet
-
-中文:
-引理 subset_vertexSet_of_mem_edgeSet
-  条件: (he : e in E(H))
-  结论: e subseteq V(H)
-  证明: H.subset_vertexSet_of_mem_edgeSet' he
-
-alias _root_.Membership.mem.subset_vertexSet := subset_vertexSet_of_mem_edgeSet
-
-Depends on / 依赖: H.subset_vertexSet_of_mem_edgeSet, subset_vertexSet_of_mem_edgeSet
+--- 原说明 ---
+## Vertex-Hyperedge Incidence
 -/
-lemma subset_vertexSet_of_mem_edgeSet (he : e in E(H)) : e subseteq V(H) :=
+lemma subset_vertexSet_of_mem_edgeSet (he : e ∈ E(H)) : e ⊆ V(H) :=
   H.subset_vertexSet_of_mem_edgeSet' he
 
 alias _root_.Membership.mem.subset_vertexSet := subset_vertexSet_of_mem_edgeSet
-
-/--
-lemma `edgeSet_subset_powerset_vertexSet` / 引理 `edgeSet_subset_powerset_vertexSet`
-
-English:
-lemma edgeSet_subset_powerset_vertexSet
-  given: {H : Hypergraph α}
-  statement: E(H) subseteq V(H).powerset
-  proof: fun _ => subset_vertexSet_of_mem_edgeSet
-
-中文:
-引理 edgeSet_subset_powerset_vertexSet
-  条件: {H : 超图 α}
-  结论: E(H) subseteq V(H).powerset
-  证明: fun _ => subset_vertexSet_of_mem_edgeSet
-
-Depends on / 依赖: Nonempty, subset_vertexSet_of_mem_edgeSet
+/-
+**Hypergraph.edgeSet_subset_powerset_vertexSet** 是 Mathlib 中的一个引理，位于命名空间 `Hyperg
+raph`。
+形式化陈述：edgeSet_subset_powerset_vertexSet {H : Hypergraph α} : E(H) subseteq V(H).
+powerset
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Hypergraph.subset_vertexSet_of_mem_edgeSet`：subset_vertexSet_of_mem_edge
+Set (he : e in E(H)) : e subseteq V(H)
 -/
-lemma edgeSet_subset_powerset_vertexSet {H : Hypergraph α} : E(H) subseteq V(H).powerset :=
-  fun _ => subset_vertexSet_of_mem_edgeSet
-
-/--
-lemma `mem_vertexSet_of_mem_edgeSet` / 引理 `mem_vertexSet_of_mem_edgeSet`
-
-English:
-lemma mem_vertexSet_of_mem_edgeSet
-  given: (he : e in E(H)) (hx : x in e)
-  statement: x in V(H)
-  proof: H.subset_vertexSet_of_mem_edgeSet he hx
-
-中文:
-引理 mem_vertexSet_of_mem_edgeSet
-  条件: (he : e in E(H)) (hx : x in e)
-  结论: x in V(H)
-  证明: H.subset_vertexSet_of_mem_edgeSet he hx
-
-Depends on / 依赖: H.subset_vertexSet_of_mem_edgeSet, subset_vertexSet_of_mem_edgeSet
+lemma edgeSet_subset_powerset_vertexSet {H : Hypergraph α} : E(H) ⊆ V(H).powerset :=
+  fun _ ↦ subset_vertexSet_of_mem_edgeSet
+/-
+**Hypergraph.mem_vertexSet_of_mem_edgeSet** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`
+。
+形式化陈述：mem_vertexSet_of_mem_edgeSet (he : e in E(H)) (hx : x in e) : x in V(H)
+参数：he : e in E(H)；hx : x in e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Hypergraph.subset_vertexSet_of_mem_edgeSet`：subset_vertexSet_of_mem_edge
+Set (he : e in E(H)) : e subseteq V(H)
 -/
-lemma mem_vertexSet_of_mem_edgeSet (he : e in E(H)) (hx : x in e) : x in V(H) :=
+lemma mem_vertexSet_of_mem_edgeSet (he : e ∈ E(H)) (hx : x ∈ e) : x ∈ V(H) :=
   H.subset_vertexSet_of_mem_edgeSet he hx
-
-/--
-lemma `edgeSet.ext_iff` / 引理 `edgeSet.ext_iff`
-
-English:
-lemma edgeSet.ext_iff
-  given: (he : e in E(H)) (he' : e' in E(H))
-  statement: e = e' ↔ forall x in V(H), x in e ↔ x in e'
-  proof: by
-  grind [he.subset_vertexSet, he'.subset_vertexSet]
-
-中文:
-引理 edgeSet.ext_iff
-  条件: (he : e in E(H)) (he' : e' in E(H))
-  结论: e = e' ↔ 对任意 x in V(H), x in e ↔ x in e'
-  证明: by
-  grind [he.subset_vertexSet, he'.subset_vertexSet]
-
-Depends on / 依赖: he.subset_vertexSet, subset_vertexSet
+/-
+**Hypergraph.edgeSet.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.edgeSet`。
+形式化陈述：∀ {α : Type u_1} {e e' : Set α} {H : Hypergraph α},   e ∈ H.edgeSet → e' ∈
+ H.edgeSet → (e = e' ↔ ∀ x ∈ H.vertexSet, x ∈ e ↔ x ∈ e')
+参数：e = e' ↔ ∀ x ∈ H.vertexSet, x ∈ e ↔ x ∈ e'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma edgeSet.ext_iff (he : e in E(H)) (he' : e' in E(H)) : e = e' ↔ forall x in V(H), x in e ↔ x in e' := by
+lemma edgeSet.ext_iff (he : e ∈ E(H)) (he' : e' ∈ E(H)) : e = e' ↔ ∀ x ∈ V(H), x ∈ e ↔ x ∈ e' := by
   grind [he.subset_vertexSet, he'.subset_vertexSet]
-
-/--
-lemma `sUnion_edgeSet_subset_vertexSet` / 引理 `sUnion_edgeSet_subset_vertexSet`
-
-English:
-lemma sUnion_edgeSet_subset_vertexSet
-  statement: ⋃₀ E(H) subseteq V(H)
-  proof: subset_powerset_iff.mp edgeSet_subset_powerset_vertexSet
-
-中文:
-引理 sUnion_edgeSet_subset_vertexSet
-  结论: ⋃₀ E(H) subseteq V(H)
-  证明: subset_powerset_iff.mp edgeSet_subset_powerset_vertexSet
-
-Depends on / 依赖: edgeSet_subset_powerset_vertexSet, subset_powerset_iff, subset_powerset_iff.mp
+/-
+**Hypergraph.sUnion_edgeSet_subset_vertexSet** 是 Mathlib 中的一个引理，位于命名空间 `Hypergra
+ph`。
+形式化陈述：sUnion_edgeSet_subset_vertexSet : ⋃₀ E(H) subseteq V(H)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_powerset_iff`：subset_powerset_iff {s : Set (Set α)} {t : Set 
+α} : s subseteq 𝒫 t ↔ ⋃₀ s subseteq t
+· 使用引理 `Hypergraph.edgeSet_subset_powerset_vertexSet`：edgeSet_subset_powerset_ve
+rtexSet {H : Hypergraph α} : E(H) subseteq V(H).powerset
 -/
-lemma sUnion_edgeSet_subset_vertexSet : ⋃₀ E(H) subseteq V(H) :=
+lemma sUnion_edgeSet_subset_vertexSet : ⋃₀ E(H) ⊆ V(H) :=
   subset_powerset_iff.mp edgeSet_subset_powerset_vertexSet
 
 /-! ## Vertex and Hyperedge Adjacency -/
@@ -229,53 +183,38 @@ Note that we do not need to explicitly check that `x, y ∈ V(H)` here because a
 the vertex set cannot be incident to any edge.
 -/
 @[expose]
-/--
-Definition of `Adj` / `Adj` 的定义
+/-
+**Hypergraph.Adj** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：Adj (H : Hypergraph α) (x : α) (y : α) : Prop
+参数：H : Hypergraph α；x : α；y : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Adj
-  signature: (H : Hypergraph α) (x : α) (y : α)
-  body: exists e in E(H), x in e ∧ y in e
+--- 原说明 ---
+Predicate for adjacency. Two vertices `x` and `y` are adjacent if there is some 
+edge `e ∈ E(H)`
+where `x` and `y` are both incident to `e`.
 
-中文:
-定义 伴随
-  签名: (H : 超图 α) (x : α) (y : α)
-  定义体: exists e in E(H), x in e ∧ y in e
+Note that we do not need to explicitly check that `x, y ∈ V(H)` here because a v
+ertex that is not in
+the vertex set cannot be incident to any edge.
 -/
 def Adj (H : Hypergraph α) (x : α) (y : α) : Prop :=
-  exists e in E(H), x in e ∧ y in e
-
-/--
-lemma `Adj.symm` / 引理 `Adj.symm`
-
-English:
-lemma Adj.symm
-  given: (h : H.Adj x y)
-  statement: H.Adj y x
-  proof: by grind [Adj]
-
-中文:
-引理 伴随.symm
-  条件: (h : H.伴随 x y)
-  结论: H.伴随 y x
-  证明: by grind [Adj]
+  ∃ e ∈ E(H), x ∈ e ∧ y ∈ e
+/-
+**Hypergraph.Adj.symm** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.Adj`。
+形式化陈述：∀ {α : Type u_1} {x y : α} {H : Hypergraph α}, H.Adj x y → H.Adj y x
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Adj.symm (h : H.Adj x y) : H.Adj y x := by grind [Adj]
-
-/--
-lemma `adj_comm` / 引理 `adj_comm`
-
-English:
-lemma adj_comm
-  given: (x y : α)
-  statement: H.Adj x y ↔ H.Adj y x
-  proof: ⟨.symm, .symm⟩
-
-中文:
-引理 adj_comm
-  条件: (x y : α)
-  结论: H.伴随 x y ↔ H.伴随 y x
-  证明: ⟨.symm, .symm⟩
+/-
+**Hypergraph.adj_comm** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：adj_comm (x y : α) : H.Adj x y ↔ H.Adj y x
+参数：x y : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.Adj.symm`：∀ {α : Type u_1} {x y : α} {H : Hypergraph α}, H.Ad
+j x y → H.Adj y x
 -/
 lemma adj_comm (x y : α) : H.Adj x y ↔ H.Adj y x := ⟨.symm, .symm⟩
 
@@ -284,98 +223,61 @@ Predicate for edge adjacency. Analogous to `Hypergraph.Adj`, edges `e` and `f` a
 adjacent if there is some vertex `x ∈ V(H)` where `x` is incident to both `e` and `f`.
 -/
 @[expose]
-/--
-Definition of `EAdj` / `EAdj` 的定义
+/-
+**Hypergraph.EAdj** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：EAdj (H : Hypergraph α) (e : Set α) (f : Set α) : Prop
+参数：H : Hypergraph α；e : Set α；f : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EAdj
-  signature: (H : Hypergraph α) (e : Set α) (f : Set α)
-  body: e in E(H) ∧ f in E(H) ∧ exists x, x in e ∧ x in f
-
-中文:
-定义 EAdj
-  签名: (H : 超图 α) (e : 集合 α) (f : 集合 α)
-  定义体: e in E(H) ∧ f in E(H) ∧ exists x, x in e ∧ x in f
+--- 原说明 ---
+Predicate for edge adjacency. Analogous to `Hypergraph.Adj`, edges `e` and `f` a
+re
+adjacent if there is some vertex `x ∈ V(H)` where `x` is incident to both `e` an
+d `f`.
 -/
 def EAdj (H : Hypergraph α) (e : Set α) (f : Set α) : Prop :=
-  e in E(H) ∧ f in E(H) ∧ exists x, x in e ∧ x in f
-
-/--
-lemma `EAdj.exists_vertex` / 引理 `EAdj.exists_vertex`
-
-English:
-lemma EAdj.exists_vertex
-  given: (h : H.EAdj e f)
-  statement: exists x in V(H), x in e ∧ x in f
-  proof: by
-  obtain ⟨x, hx⟩ := h.2.2
-  exact ⟨x, mem_vertexSet_of_mem_edgeSet h.1 hx.1, hx⟩
-
-中文:
-引理 EAdj.存在_vertex
-  条件: (h : H.EAdj e f)
-  结论: 存在 x in V(H), x in e ∧ x in f
-  证明: by
-  obtain ⟨x, hx⟩ := h.2.2
-  exact ⟨x, mem_vertexSet_of_mem_edgeSet h.1 hx.1, hx⟩
-
-Depends on / 依赖: mem_vertexSet_of_mem_edgeSet
+  e ∈ E(H) ∧ f ∈ E(H) ∧ ∃ x, x ∈ e ∧ x ∈ f
+/-
+**Hypergraph.EAdj.exists_vertex** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.EAdj`。
+形式化陈述：∀ {α : Type u_1} {e f : Set α} {H : Hypergraph α}, H.EAdj e f → ∃ x ∈ H.ve
+rtexSet, x ∈ e ∧ x ∈ f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Hypergraph.mem_vertexSet_of_mem_edgeSet`：mem_vertexSet_of_mem_edgeSet (h
+e : e in E(H)) (hx : x in e) : x in V(H)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma EAdj.exists_vertex (h : H.EAdj e f) : exists x in V(H), x in e ∧ x in f := by
+lemma EAdj.exists_vertex (h : H.EAdj e f) : ∃ x ∈ V(H), x ∈ e ∧ x ∈ f := by
   obtain ⟨x, hx⟩ := h.2.2
   exact ⟨x, mem_vertexSet_of_mem_edgeSet h.1 hx.1, hx⟩
-
-/--
-lemma `EAdj.symm` / 引理 `EAdj.symm`
-
-English:
-lemma EAdj.symm
-  given: (h : H.EAdj e f)
-  statement: H.EAdj f e
-  proof: by grind [EAdj]
-
-中文:
-引理 EAdj.symm
-  条件: (h : H.EAdj e f)
-  结论: H.EAdj f e
-  证明: by grind [EAdj]
+/-
+**Hypergraph.EAdj.symm** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.EAdj`。
+形式化陈述：∀ {α : Type u_1} {e f : Set α} {H : Hypergraph α}, H.EAdj e f → H.EAdj f e
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma EAdj.symm (h : H.EAdj e f) : H.EAdj f e := by grind [EAdj]
-
-/--
-lemma `EAdj.inter_nonempty` / 引理 `EAdj.inter_nonempty`
-
-English:
-lemma EAdj.inter_nonempty
-  given: (hef : H.EAdj e f)
-  statement: (e inter f).Nonempty
-  proof: Set.inter_nonempty.mpr hef.2.2
-
-中文:
-引理 EAdj.inter_nonempty
-  条件: (hef : H.EAdj e f)
-  结论: (e inter f).非空
-  证明: Set.inter_nonempty.mpr hef.2.2
-
-Depends on / 依赖: Set.inter_nonempty.mpr, inter_nonempty
+/-
+**Hypergraph.EAdj.inter_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.EAdj`。
+形式化陈述：∀ {α : Type u_1} {e f : Set α} {H : Hypergraph α}, H.EAdj e f → (e ∩ f).No
+nempty
+参数：e ∩ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_nonempty`：inter_nonempty : (s inter t).Nonempty ↔ exists x, x 
+in s ∧ x in t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma EAdj.inter_nonempty (hef : H.EAdj e f) : (e inter f).Nonempty :=
+lemma EAdj.inter_nonempty (hef : H.EAdj e f) : (e ∩ f).Nonempty :=
   Set.inter_nonempty.mpr hef.2.2
-
-/--
-lemma `eAdj_comm` / 引理 `eAdj_comm`
-
-English:
-lemma eAdj_comm
-  given: (e f)
-  statement: H.EAdj e f ↔ H.EAdj f e
-  proof: ⟨.symm, .symm⟩
-
-中文:
-引理 eAdj_comm
-  条件: (e f)
-  结论: H.EAdj e f ↔ H.EAdj f e
-  证明: ⟨.symm, .symm⟩
+/-
+**Hypergraph.eAdj_comm** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：eAdj_comm (e f) : H.EAdj e f ↔ H.EAdj f e
+参数：e f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.EAdj.symm`：∀ {α : Type u_1} {e f : Set α} {H : Hypergraph α},
+ H.EAdj e f → H.EAdj f e
 -/
 lemma eAdj_comm (e f) : H.EAdj e f ↔ H.EAdj f e := ⟨.symm, .symm⟩
 
@@ -385,366 +287,236 @@ lemma eAdj_comm (e f) : H.EAdj e f ↔ H.EAdj f e := ⟨.symm, .symm⟩
 `Hᶠ : Hypergraph β` where the vertex set of `Hᶠ` is the image of `V(H)` under `f` and the edge set
 of `Hᶠ` is the set of images of the edges (subsets of vertices) in `E(H)`. -/
 @[simps, expose]
-/--
-Definition of `image` / `image` 的定义
+/-
+**Hypergraph.image** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Hypergraph α → (α → β) → Hypergraph β
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: (H : Hypergraph α) (f : α -> β)
-  body: V(H).image f
-  edgeSet := E(H).image (Set.image f)
-  subset_vertexSet_of_mem_edgeSet' := by
-    rintro - ⟨e, he, rfl⟩
-    exact image_mono he.subset_vertexSet
-
-中文:
-定义 像
-  签名: (H : 超图 α) (f : α -> β)
-  定义体: V(H).image f
-  edgeSet := E(H).image (Set.image f)
-  subset_vertexSet_of_mem_edgeSet' := by
-    rintro - ⟨e, he, rfl⟩
-    exact image_mono he.subset_vertexSet
-
-Depends on / 依赖: Erased
+--- 原说明 ---
+The *image* of a hypergraph `H : Hypergraph α` under a function `f : α → β` is t
+he hypergraph
+`Hᶠ : Hypergraph β` where the vertex set of `Hᶠ` is the image of `V(H)` under `f
+` and the edge set
+of `Hᶠ` is the set of images of the edges (subsets of vertices) in `E(H)`.
 -/
-protected def image (H : Hypergraph α) (f : α -> β) : Hypergraph β where
+protected def image (H : Hypergraph α) (f : α → β) : Hypergraph β where
   vertexSet := V(H).image f
   edgeSet := E(H).image (Set.image f)
   subset_vertexSet_of_mem_edgeSet' := by
     rintro - ⟨e, he, rfl⟩
     exact image_mono he.subset_vertexSet
-
-/--
-lemma `mem_edgeSet_image` / 引理 `mem_edgeSet_image`
-
-English:
-lemma mem_edgeSet_image
-  given: {f : α -> β} {e : Set β}
-  statement: e in E(H.image f) ↔ exists e' in E(H), f '' e' = e
-  proof: .rfl
-
-中文:
-引理 mem_edgeSet_image
-  条件: {f : α -> β} {e : 集合 β}
-  结论: e in E(H.像 f) ↔ 存在 e' in E(H), f '' e' = e
-  证明: .rfl
-
-Depends on / 依赖: Erased
+/-
+**Hypergraph.mem_edgeSet_image** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：mem_edgeSet_image {f : α -> β} {e : Set β} : e in E(H.image f) ↔ exists e'
+ in E(H), f '' e' = e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_edgeSet_image {f : α -> β} {e : Set β} : e in E(H.image f) ↔ exists e' in E(H), f '' e' = e :=
+lemma mem_edgeSet_image {f : α → β} {e : Set β} : e ∈ E(H.image f) ↔ ∃ e' ∈ E(H), f '' e' = e :=
   .rfl
-
-/--
-lemma `image_mem_edgeSet_image` / 引理 `image_mem_edgeSet_image`
-
-English:
-lemma image_mem_edgeSet_image
-  given: {f : α -> β} (he : e in E(H))
-  statement: e.image f in E(H.image f)
-  proof: mem_image_of_mem _ he
-
-中文:
-引理 image_mem_edgeSet_image
-  条件: {f : α -> β} (he : e in E(H))
-  结论: e.像 f in E(H.像 f)
-  证明: mem_image_of_mem _ he
-
-Depends on / 依赖: mem_image_of_mem
+/-
+**Hypergraph.image_mem_edgeSet_image** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：image_mem_edgeSet_image {f : α -> β} (he : e in E(H)) : e.image f in E(H.i
+mage f)
+参数：he : e in E(H)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-lemma image_mem_edgeSet_image {f : α -> β} (he : e in E(H)) : e.image f in E(H.image f) :=
+lemma image_mem_edgeSet_image {f : α → β} (he : e ∈ E(H)) : e.image f ∈ E(H.image f) :=
   mem_image_of_mem _ he
-
-/--
-lemma `image_image` / 引理 `image_image`
-
-English:
-lemma image_image
-  given: {f : α -> β} {g : β -> γ} (H : Hypergraph α)
-  proof: by
-  ext <;> simp [Set.image_image]
-
-中文:
-引理 image_image
-  条件: {f : α -> β} {g : β -> γ} (H : 超图 α)
-  证明: by
-  ext <;> simp [Set.image_image]
-
-Depends on / 依赖: Set.image_image, image_image
+/-
+**Hypergraph.image_image** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：image_image {f : α -> β} {g : β -> γ} (H : Hypergraph α) : (H.image f).ima
+ge g = H.image (g ∘ f)
+参数：H : Hypergraph α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.ext`：∀ {α : Type u_4} {x y : Hypergraph α}, x.vertexSet = y.v
+ertexSet → x.edgeSet = y.edgeSet → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Hypergraph.image_vertexSet`：∀ {α : Type u_1} {β : Type u_2} (H : Hypergr
+aph α) (f : α → β), (H.image f).vertexSet = f '' H.vertexSet
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Hypergraph.image_edgeSet`：∀ {α : Type u_1} {β : Type u_2} (H : Hypergrap
+h α) (f : α → β), (H.image f).edgeSet = Set.image f '' H.edgeSet
 -/
-lemma image_image {f : α -> β} {g : β -> γ} (H : Hypergraph α) :
+lemma image_image {f : α → β} {g : β → γ} (H : Hypergraph α) :
     (H.image f).image g = H.image (g ∘ f) := by
   ext <;> simp [Set.image_image]
 
 /-- A vertex is isolated if it is not incident to any edges (including loops). -/
 @[expose]
-/--
-Definition of `IsIsolated` / `IsIsolated` 的定义
+/-
+**Hypergraph.IsIsolated** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：IsIsolated (H : Hypergraph α) (x : α) : Prop
+参数：H : Hypergraph α；x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsIsolated
-  signature: (H : Hypergraph α) (x : α)
-  body: forall e in E(H), x ∉ e
-
-中文:
-定义 IsIsolated
-  签名: (H : 超图 α) (x : α)
-  定义体: forall e in E(H), x ∉ e
-
-Depends on / 依赖: choice
+--- 原说明 ---
+A vertex is isolated if it is not incident to any edges (including loops).
 -/
-def IsIsolated (H : Hypergraph α) (x : α) : Prop := forall e in E(H), x ∉ e
-
-/--
-lemma `sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated` / 引理 `sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated`
-
-English:
-lemma sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated
-  proof: by
-  grind [IsIsolated, mem_vertexSet_of_mem_edgeSet]
-
-中文:
-引理 sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated
-  证明: by
-  grind [IsIsolated, mem_vertexSet_of_mem_edgeSet]
-
-Depends on / 依赖: IsIsolated, mem_vertexSet_of_mem_edgeSet
+def IsIsolated (H : Hypergraph α) (x : α) : Prop := ∀ e ∈ E(H), x ∉ e
+/-
+**Hypergraph.sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated** 是 Mathlib
+ 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated : ⋃₀ E(H) = V(H) ↔
+ forall x in V(H), ¬IsIsolated H x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sUnion_edgeSet_eq_vertexSet_iff_all_vertex_not_isolated :
-    ⋃₀ E(H) = V(H) ↔ forall x in V(H), ¬IsIsolated H x := by
+    ⋃₀ E(H) = V(H) ↔ ∀ x ∈ V(H), ¬IsIsolated H x := by
   grind [IsIsolated, mem_vertexSet_of_mem_edgeSet]
 
 /-- A loop is an edge whose associated vertex subset consists of a single vertex. -/
 @[expose]
-/--
-Definition of `IsLoop` / `IsLoop` 的定义
+/-
+**Hypergraph.IsLoop** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：IsLoop (H : Hypergraph α) (e : Set α) : Prop
+参数：H : Hypergraph α；e : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLoop
-  signature: (H : Hypergraph α) (e : Set α)
-  body: e in E(H) ∧ exists x, e = {x}
-
-中文:
-定义 IsLoop
-  签名: (H : 超图 α) (e : 集合 α)
-  定义体: e in E(H) ∧ exists x, e = {x}
+--- 原说明 ---
+A loop is an edge whose associated vertex subset consists of a single vertex.
 -/
-def IsLoop (H : Hypergraph α) (e : Set α) : Prop := e in E(H) ∧ exists x, e = {x}
-
-/--
-lemma `isLoop_iff_mem_edgeSet_and_singleton` / 引理 `isLoop_iff_mem_edgeSet_and_singleton`
-
-English:
-lemma isLoop_iff_mem_edgeSet_and_singleton
-  statement: H.IsLoop e ↔ (e in E(H) ∧ exists x, e = {x})
-  proof: .rfl
-
-中文:
-引理 isLoop_iff_mem_edgeSet_and_singleton
-  结论: H.IsLoop e ↔ (e in E(H) ∧ 存在 x, e = {x})
-  证明: .rfl
+def IsLoop (H : Hypergraph α) (e : Set α) : Prop := e ∈ E(H) ∧ ∃ x, e = {x}
+/-
+**Hypergraph.isLoop_iff_mem_edgeSet_and_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Hyp
+ergraph`。
+形式化陈述：isLoop_iff_mem_edgeSet_and_singleton : H.IsLoop e ↔ (e in E(H) ∧ exists x,
+ e = {x})
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma isLoop_iff_mem_edgeSet_and_singleton : H.IsLoop e ↔ (e in E(H) ∧ exists x, e = {x}) := .rfl
-
-/--
-lemma `isLoop_iff_mem_and_ncard_one` / 引理 `isLoop_iff_mem_and_ncard_one`
-
-English:
-lemma isLoop_iff_mem_and_ncard_one
-  statement: H.IsLoop e ↔ (e in E(H) ∧ Set.ncard e = 1)
-  proof: by
-  grind [IsLoop, ncard_eq_one, mem_vertexSet_of_mem_edgeSet]
-
-中文:
-引理 isLoop_iff_mem_and_ncard_one
-  结论: H.IsLoop e ↔ (e in E(H) ∧ 集合.ncard e = 1)
-  证明: by
-  grind [IsLoop, ncard_eq_one, mem_vertexSet_of_mem_edgeSet]
-
-Depends on / 依赖: IsLoop, mem_vertexSet_of_mem_edgeSet, ncard_eq_one
+lemma isLoop_iff_mem_edgeSet_and_singleton : H.IsLoop e ↔ (e ∈ E(H) ∧ ∃ x, e = {x}) := .rfl
+/-
+**Hypergraph.isLoop_iff_mem_and_ncard_one** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`
+。
+形式化陈述：isLoop_iff_mem_and_ncard_one : H.IsLoop e ↔ (e in E(H) ∧ Set.ncard e = 1)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isLoop_iff_mem_and_ncard_one : H.IsLoop e ↔ (e in E(H) ∧ Set.ncard e = 1) := by
+lemma isLoop_iff_mem_and_ncard_one : H.IsLoop e ↔ (e ∈ E(H) ∧ Set.ncard e = 1) := by
   grind [IsLoop, ncard_eq_one, mem_vertexSet_of_mem_edgeSet]
-
-/--
-lemma `IsLoop.ncard_one` / 引理 `IsLoop.ncard_one`
-
-English:
-lemma IsLoop.ncard_one
-  given: (h : H.IsLoop e)
-  statement: Set.ncard e = 1
-  proof: (isLoop_iff_mem_and_ncard_one.mp h).2
-
-中文:
-引理 IsLoop.ncard_one
-  条件: (h : H.IsLoop e)
-  结论: 集合.ncard e = 1
-  证明: (isLoop_iff_mem_and_ncard_one.mp h).2
-
-Depends on / 依赖: isLoop_iff_mem_and_ncard_one, isLoop_iff_mem_and_ncard_one.mp
+/-
+**Hypergraph.IsLoop.ncard_one** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsLoop`。
+形式化陈述：∀ {α : Type u_1} {e : Set α} {H : Hypergraph α}, H.IsLoop e → e.ncard = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Hypergraph.isLoop_iff_mem_and_ncard_one`：isLoop_iff_mem_and_ncard_one : 
+H.IsLoop e ↔ (e in E(H) ∧ Set.ncard e = 1)
 -/
 lemma IsLoop.ncard_one (h : H.IsLoop e) : Set.ncard e = 1 := (isLoop_iff_mem_and_ncard_one.mp h).2
 
 /-- A hypergraph is nonempty if it has at least one vertex or at least one edge. -/
 @[expose]
-/--
-Definition of `IsNonempty` / `IsNonempty` 的定义
+/-
+**Hypergraph.IsNonempty** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：IsNonempty (H : Hypergraph α) : Prop
+参数：H : Hypergraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsNonempty
-  signature: (H : Hypergraph α)
-  body: V(H).Nonempty ∨ E(H).Nonempty
-
-中文:
-定义 IsNonempty
-  签名: (H : 超图 α)
-  定义体: V(H).Nonempty ∨ E(H).Nonempty
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+A hypergraph is nonempty if it has at least one vertex or at least one edge.
 -/
 def IsNonempty (H : Hypergraph α) : Prop := V(H).Nonempty ∨ E(H).Nonempty
 
 /-- The empty hypergraph (bottom) on a type. -/
 @[simps]
+/-
+**Hypergraph.** 是 Mathlib 中的一个实例，位于命名空间 `Hypergraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The empty hypergraph (bottom) on a type.
+-/
 instance (α : Type*) : Bot (Hypergraph α) where
   bot.vertexSet := ∅
   bot.edgeSet := ∅
   bot.subset_vertexSet_of_mem_edgeSet' := by simp
 
 @[simp]
-/--
-lemma `IsNonempty.of_nonempty_vertexSet` / 引理 `IsNonempty.of_nonempty_vertexSet`
-
-English:
-lemma IsNonempty.of_nonempty_vertexSet
-  given: (hV : V(H).Nonempty)
-  statement: H.IsNonempty
-  proof: .inl hV
-
-@[simp]
-
-中文:
-引理 IsNonempty.of_nonempty_vertexSet
-  条件: (hV : V(H).非空)
-  结论: H.IsNonempty
-  证明: .inl hV
-
-@[simp]
+/-
+**Hypergraph.IsNonempty.of_nonempty_vertexSet** 是 Mathlib 中的一个定理，位于命名空间 `Hypergr
+aph.IsNonempty`。
+形式化陈述：∀ {α : Type u_1} {H : Hypergraph α}, H.vertexSet.Nonempty → H.IsNonempty
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsNonempty.of_nonempty_vertexSet (hV : V(H).Nonempty) : H.IsNonempty :=
   .inl hV
 
 @[simp]
-/--
-lemma `IsNonempty.of_nonempty_edgeSet` / 引理 `IsNonempty.of_nonempty_edgeSet`
-
-English:
-lemma IsNonempty.of_nonempty_edgeSet
-  given: (hE : E(H).Nonempty)
-  statement: H.IsNonempty
-  proof: .inr hE
-
-@[simp]
-
-中文:
-引理 IsNonempty.of_nonempty_edgeSet
-  条件: (hE : E(H).非空)
-  结论: H.IsNonempty
-  证明: .inr hE
-
-@[simp]
+/-
+**Hypergraph.IsNonempty.of_nonempty_edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `Hypergrap
+h.IsNonempty`。
+形式化陈述：∀ {α : Type u_1} {H : Hypergraph α}, H.edgeSet.Nonempty → H.IsNonempty
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsNonempty.of_nonempty_edgeSet (hE : E(H).Nonempty) : H.IsNonempty :=
   .inr hE
 
 @[simp]
-/--
-theorem `ne_bot_iff` / 定理 `ne_bot_iff`
-
-English:
-theorem ne_bot_iff
-  statement: H != ⊥ ↔ H.IsNonempty
-  proof: by
-  simp [IsNonempty, Set.nonempty_iff_ne_empty, Hypergraph.ext_iff]
-  grind [bot_vertexSet, bot_edgeSet]
-
-alias ⟨_, IsNonempty.ne_bot⟩ := ne_bot_iff
-
-@[simp]
-
-中文:
-定理 ne_bot_iff
-  结论: H != ⊥ ↔ H.IsNonempty
-  证明: by
-  simp [IsNonempty, Set.nonempty_iff_ne_empty, Hypergraph.ext_iff]
-  grind [bot_vertexSet, bot_edgeSet]
-
-alias ⟨_, IsNonempty.ne_bot⟩ := ne_bot_iff
-
-@[simp]
-
-Depends on / 依赖: Hypergraph, Hypergraph.ext_iff, IsNonempty, Set.nonempty_iff_ne_empty, bot_edgeSet, bot_vertexSet, ext_iff, nonempty_iff_ne_empty
+/-
+**Hypergraph.ne_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph`。
+形式化陈述：ne_bot_iff : H != ⊥ ↔ H.IsNonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem ne_bot_iff : H != ⊥ ↔ H.IsNonempty := by
+theorem ne_bot_iff : H ≠ ⊥ ↔ H.IsNonempty := by
   simp [IsNonempty, Set.nonempty_iff_ne_empty, Hypergraph.ext_iff]
   grind [bot_vertexSet, bot_edgeSet]
 
 alias ⟨_, IsNonempty.ne_bot⟩ := ne_bot_iff
 
 @[simp]
-/--
-theorem `not_isNonempty_iff` / 定理 `not_isNonempty_iff`
-
-English:
-theorem not_isNonempty_iff
-  statement: ¬H.IsNonempty ↔ H = ⊥
-  proof: not_iff_comm.mp ne_bot_iff
-
-中文:
-定理 not_isNonempty_iff
-  结论: ¬H.IsNonempty ↔ H = ⊥
-  证明: not_iff_comm.mp ne_bot_iff
-
-Depends on / 依赖: ne_bot_iff, not_iff_comm, not_iff_comm.mp
+/-
+**Hypergraph.not_isNonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph`。
+形式化陈述：not_isNonempty_iff : ¬H.IsNonempty ↔ H = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_comm`：not_iff_comm : (¬a ↔ b) ↔ (¬b ↔ a)
+· 使用定理 `Hypergraph.ne_bot_iff`：ne_bot_iff : H != ⊥ ↔ H.IsNonempty
 -/
 theorem not_isNonempty_iff : ¬H.IsNonempty ↔ H = ⊥ :=
   not_iff_comm.mp ne_bot_iff
 
 variable (H) in
-/--
-lemma `eq_bot_or_isNonempty` / 引理 `eq_bot_or_isNonempty`
-
-English:
-lemma eq_bot_or_isNonempty
-  statement: H = ⊥ ∨ H.IsNonempty
-  proof: by
-  have h : (V(H) = ∅ ∧ E(H) = ∅) ∨ (V(H).Nonempty ∨ E(H).Nonempty) := by grind [Set.Nonempty]
-  cases h with
-  | inl empty => (
-    left
-    apply Hypergraph.ext empty.1 empty.2
-  )
-  | inr nonempty => (
-    right
-    grind [IsNonempty]
-  )
-
-中文:
-引理 eq_bot_or_isNonempty
-  结论: H = ⊥ ∨ H.IsNonempty
-  证明: by
-  have h : (V(H) = ∅ ∧ E(H) = ∅) ∨ (V(H).Nonempty ∨ E(H).Nonempty) := by grind [Set.Nonempty]
-  cases h with
-  | inl empty => (
-    left
-    apply Hypergraph.ext empty.1 empty.2
-  )
-  | inr nonempty => (
-    right
-    grind [IsNonempty]
-  )
-
-Depends on / 依赖: Hypergraph, Hypergraph.ext, IsNonempty, Nonempty, Set.Nonempty, nonempty
+/-
+**Hypergraph.eq_bot_or_isNonempty** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：eq_bot_or_isNonempty : H = ⊥ ∨ H.IsNonempty
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.ext`：∀ {α : Type u_4} {x y : Hypergraph α}, x.vertexSet = y.v
+ertexSet → x.edgeSet = y.edgeSet → x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma eq_bot_or_isNonempty : H = ⊥ ∨ H.IsNonempty := by
   have h : (V(H) = ∅ ∧ E(H) = ∅) ∨ (V(H).Nonempty ∨ E(H).Nonempty) := by grind [Set.Nonempty]
@@ -760,271 +532,166 @@ lemma eq_bot_or_isNonempty : H = ⊥ ∨ H.IsNonempty := by
 
 /-- A hypergraph is trivial if it has at least one vertex but no edges. -/
 @[expose]
-/--
-Definition of `IsTrivial` / `IsTrivial` 的定义
+/-
+**Hypergraph.IsTrivial** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：IsTrivial (H : Hypergraph α) : Prop
+参数：H : Hypergraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTrivial
-  signature: (H : Hypergraph α)
-  body: Set.Nonempty V(H) ∧ E(H) = ∅
-
-中文:
-定义 是平凡
-  签名: (H : 超图 α)
-  定义体: Set.Nonempty V(H) ∧ E(H) = ∅
-
-Depends on / 依赖: Nonempty, Set.Nonempty
+--- 原说明 ---
+A hypergraph is trivial if it has at least one vertex but no edges.
 -/
 def IsTrivial (H : Hypergraph α) : Prop := Set.Nonempty V(H) ∧ E(H) = ∅
 
 /-- The trivial hypergraph with a given vertex set is defined by having no edges on that vertex
 set. -/
 @[simps, expose]
-/--
-Definition of `trivialOn` / `trivialOn` 的定义
+/-
+**Hypergraph.trivialOn** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：trivialOn (f : Set α) : Hypergraph α where vertexSet
+参数：f : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivialOn
-  signature: (f : Set α)
-  body: f
-  edgeSet := ∅
-  subset_vertexSet_of_mem_edgeSet' := by simp
-
-中文:
-定义 trivialOn
-  签名: (f : 集合 α)
-  定义体: f
-  edgeSet := ∅
-  subset_vertexSet_of_mem_edgeSet' := by simp
+--- 原说明 ---
+The trivial hypergraph with a given vertex set is defined by having no edges on 
+that vertex
+set.
 -/
 def trivialOn (f : Set α) : Hypergraph α where
   vertexSet := f
   edgeSet := ∅
   subset_vertexSet_of_mem_edgeSet' := by simp
-
-/--
-lemma `IsTrivial.trivialOn` / 引理 `IsTrivial.trivialOn`
-
-English:
-lemma IsTrivial.trivialOn
-  given: (hf : Set.Nonempty f)
-  proof: by
-  grind [trivialOn, IsTrivial]
-
-中文:
-引理 是平凡.trivialOn
-  条件: (hf : 集合.非空 f)
-  证明: by
-  grind [trivialOn, IsTrivial]
-
-Depends on / 依赖: IsTrivial, trivialOn
+/-
+**Hypergraph.IsTrivial.trivialOn** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsTrivial
+`。
+形式化陈述：∀ {α : Type u_1} {f : Set α}, f.Nonempty → (Hypergraph.trivialOn f).IsTriv
+ial
+参数：Hypergraph.trivialOn f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsTrivial.trivialOn (hf : Set.Nonempty f) :
     IsTrivial (trivialOn f) := by
   grind [trivialOn, IsTrivial]
-
-/--
-lemma `IsTrivial.isNonempty` / 引理 `IsTrivial.isNonempty`
-
-English:
-lemma IsTrivial.isNonempty
-  given: (h : IsTrivial H)
-  statement: IsNonempty H
-  proof: by
-  grind [IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty]
-
-中文:
-引理 是平凡.isNonempty
-  条件: (h : 是平凡 H)
-  结论: IsNonempty H
-  证明: by
-  grind [IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty]
-
-Depends on / 依赖: IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty, nonempty_iff_ne_empty
+/-
+**Hypergraph.IsTrivial.isNonempty** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsTrivia
+l`。
+形式化陈述：∀ {α : Type u_1} {H : Hypergraph α}, H.IsTrivial → H.IsNonempty
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsTrivial.isNonempty (h : IsTrivial H) : IsNonempty H := by
   grind [IsNonempty, IsTrivial, Set.nonempty_iff_ne_empty]
-
-/--
-lemma `IsTrivial.not_mem_edgeSet` / 引理 `IsTrivial.not_mem_edgeSet`
-
-English:
-lemma IsTrivial.not_mem_edgeSet
-  given: (h : H.IsTrivial)
-  statement: e ∉ E(H)
-  proof: by grind [IsTrivial]
-
-中文:
-引理 是平凡.not_mem_edgeSet
-  条件: (h : H.是平凡)
-  结论: e ∉ E(H)
-  证明: by grind [IsTrivial]
-
-Depends on / 依赖: IsTrivial
+/-
+**Hypergraph.IsTrivial.not_mem_edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsT
+rivial`。
+形式化陈述：∀ {α : Type u_1} {e : Set α} {H : Hypergraph α}, H.IsTrivial → e ∉ H.edgeS
+et
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsTrivial.not_mem_edgeSet (h : H.IsTrivial) : e ∉ E(H) := by grind [IsTrivial]
 
 /-- A hypergraph is complete if every subset of the vertex set is in the edge set. -/
 @[expose]
-/--
-Definition of `IsComplete` / `IsComplete` 的定义
+/-
+**Hypergraph.IsComplete** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：IsComplete (H : Hypergraph α) : Prop
+参数：H : Hypergraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsComplete
-  signature: (H : Hypergraph α)
-  body: forall e subseteq V(H), e in E(H)
-
-中文:
-定义 是完备
-  签名: (H : 超图 α)
-  定义体: forall e subseteq V(H), e in E(H)
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+A hypergraph is complete if every subset of the vertex set is in the edge set.
 -/
-def IsComplete (H : Hypergraph α) : Prop := forall e subseteq V(H), e in E(H)
+def IsComplete (H : Hypergraph α) : Prop := ∀ e ⊆ V(H), e ∈ E(H)
 
 /-- The complete hypergraph with a given vertex set, which has each subset of the vertex set as an
 edge. -/
 @[simps, expose]
-/--
-Definition of `completeOn` / `completeOn` 的定义
+/-
+**Hypergraph.completeOn** 是 Mathlib 中的一个定义，位于命名空间 `Hypergraph`。
+形式化陈述：completeOn (f : Set α) : Hypergraph α where vertexSet
+参数：f : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition completeOn
-  signature: (f : Set α)
-  body: f
-  edgeSet := 𝒫 f
-  subset_vertexSet_of_mem_edgeSet' := by simp
-
-中文:
-定义 completeOn
-  签名: (f : 集合 α)
-  定义体: f
-  edgeSet := 𝒫 f
-  subset_vertexSet_of_mem_edgeSet' := by simp
+--- 原说明 ---
+The complete hypergraph with a given vertex set, which has each subset of the ve
+rtex set as an
+edge.
 -/
 def completeOn (f : Set α) : Hypergraph α where
   vertexSet := f
   edgeSet := 𝒫 f
   subset_vertexSet_of_mem_edgeSet' := by simp
-
-/--
-lemma `mem_completeOn` / 引理 `mem_completeOn`
-
-English:
-lemma mem_completeOn
-  statement: e in E(completeOn f) ↔ e subseteq f
-  proof: by simp
-
-中文:
-引理 mem_completeOn
-  结论: e in E(completeOn f) ↔ e subseteq f
-  证明: by simp
+/-
+**Hypergraph.mem_completeOn** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：mem_completeOn : e in E(completeOn f) ↔ e subseteq f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Hypergraph.completeOn_edgeSet`：∀ {α : Type u_1} (f : Set α), (Hypergraph
+.completeOn f).edgeSet = 𝒫 f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_completeOn : e in E(completeOn f) ↔ e subseteq f := by simp
-
-/--
-lemma `IsComplete.mem_iff` / 引理 `IsComplete.mem_iff`
-
-English:
-lemma IsComplete.mem_iff
-  given: (h : H.IsComplete)
-  statement: e in E(H) ↔ e subseteq V(H)
-  proof: by
-  grind [IsComplete, subset_vertexSet_of_mem_edgeSet]
-
-中文:
-引理 是完备.mem_iff
-  条件: (h : H.是完备)
-  结论: e in E(H) ↔ e subseteq V(H)
-  证明: by
-  grind [IsComplete, subset_vertexSet_of_mem_edgeSet]
-
-Depends on / 依赖: IsComplete, subset_vertexSet_of_mem_edgeSet
+lemma mem_completeOn : e ∈ E(completeOn f) ↔ e ⊆ f := by simp
+/-
+**Hypergraph.IsComplete.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsComplete
+`。
+形式化陈述：∀ {α : Type u_1} {e : Set α} {H : Hypergraph α}, H.IsComplete → (e ∈ H.edg
+eSet ↔ e ⊆ H.vertexSet)
+参数：e ∈ H.edgeSet ↔ e ⊆ H.vertexSet。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsComplete.mem_iff (h : H.IsComplete) : e in E(H) ↔ e subseteq V(H) := by
+lemma IsComplete.mem_iff (h : H.IsComplete) : e ∈ E(H) ↔ e ⊆ V(H) := by
   grind [IsComplete, subset_vertexSet_of_mem_edgeSet]
-
-/--
-lemma `IsComplete.completeOn` / 引理 `IsComplete.completeOn`
-
-English:
-lemma IsComplete.completeOn
-  given: (f : Set α)
-  statement: (completeOn f).IsComplete
-  proof: fun _ a => a
-
-中文:
-引理 是完备.completeOn
-  条件: (f : 集合 α)
-  结论: (completeOn f).是完备
-  证明: fun _ a => a
+/-
+**Hypergraph.IsComplete.completeOn** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsCompl
+ete`。
+形式化陈述：∀ {α : Type u_1} (f : Set α), (Hypergraph.completeOn f).IsComplete
+参数：f : Set α；Hypergraph.completeOn f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsComplete.completeOn (f : Set α) : (completeOn f).IsComplete := fun _ a => a
-
-/--
-lemma `IsComplete.isNonempty` / 引理 `IsComplete.isNonempty`
-
-English:
-lemma IsComplete.isNonempty
-  given: (h : H.IsComplete)
-  statement: H.IsNonempty
-  proof: Or.inr ⟨∅, h ∅ (Set.empty_subset _)⟩
-
-中文:
-引理 是完备.isNonempty
-  条件: (h : H.是完备)
-  结论: H.IsNonempty
-  证明: Or.inr ⟨∅, h ∅ (Set.empty_subset _)⟩
-
-Depends on / 依赖: Or.inr, Set.empty_subset, empty_subset
+lemma IsComplete.completeOn (f : Set α) : (completeOn f).IsComplete := fun _ a ↦ a
+/-
+**Hypergraph.IsComplete.isNonempty** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsCompl
+ete`。
+形式化陈述：∀ {α : Type u_1} {H : Hypergraph α}, H.IsComplete → H.IsNonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
 -/
 lemma IsComplete.isNonempty (h : H.IsComplete) : H.IsNonempty :=
   Or.inr ⟨∅, h ∅ (Set.empty_subset _)⟩
-
-/--
-lemma `IsComplete.not_isTrivial` / 引理 `IsComplete.not_isTrivial`
-
-English:
-lemma IsComplete.not_isTrivial
-  given: (h : H.IsComplete)
-  statement: ¬ H.IsTrivial
-  proof: by
-  intro hH
-  exact hH.not_mem_edgeSet (h ∅ (Set.empty_subset _))
-
-中文:
-引理 是完备.not_isTrivial
-  条件: (h : H.是完备)
-  结论: ¬ H.是平凡
-  证明: by
-  intro hH
-  exact hH.not_mem_edgeSet (h ∅ (Set.empty_subset _))
-
-Depends on / 依赖: Set.empty_subset, empty_subset, hH.not_mem_edgeSet, not_mem_edgeSet
+/-
+**Hypergraph.IsComplete.not_isTrivial** 是 Mathlib 中的一个定理，位于命名空间 `Hypergraph.IsCo
+mplete`。
+形式化陈述：∀ {α : Type u_1} {H : Hypergraph α}, H.IsComplete → ¬H.IsTrivial
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.IsTrivial.not_mem_edgeSet`：∀ {α : Type u_1} {e : Set α} {H : 
+Hypergraph α}, H.IsTrivial → e ∉ H.edgeSet
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
 -/
 lemma IsComplete.not_isTrivial (h : H.IsComplete) : ¬ H.IsTrivial := by
   intro hH
   exact hH.not_mem_edgeSet (h ∅ (Set.empty_subset _))
-
-/--
-lemma `not_isTrivial_completeOn` / 引理 `not_isTrivial_completeOn`
-
-English:
-lemma not_isTrivial_completeOn
-  given: (f : Set α)
-  statement: ¬ (completeOn f).IsTrivial
-  proof: (IsComplete.completeOn f).not_isTrivial
-
-中文:
-引理 not_isTrivial_completeOn
-  条件: (f : 集合 α)
-  结论: ¬ (completeOn f).是平凡
-  证明: (IsComplete.completeOn f).not_isTrivial
-
-Depends on / 依赖: IsComplete, IsComplete.completeOn, completeOn, not_isTrivial
+/-
+**Hypergraph.not_isTrivial_completeOn** 是 Mathlib 中的一个引理，位于命名空间 `Hypergraph`。
+形式化陈述：not_isTrivial_completeOn (f : Set α) : ¬ (completeOn f).IsTrivial
+参数：f : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Hypergraph.IsComplete.not_isTrivial`：∀ {α : Type u_1} {H : Hypergraph α}
+, H.IsComplete → ¬H.IsTrivial
+· 使用定理 `Hypergraph.IsComplete.completeOn`：∀ {α : Type u_1} (f : Set α), (Hypergr
+aph.completeOn f).IsComplete
 -/
 lemma not_isTrivial_completeOn (f : Set α) : ¬ (completeOn f).IsTrivial :=
   (IsComplete.completeOn f).not_isTrivial
 
 end Hypergraph
+

@@ -65,28 +65,24 @@ variable {α β γ δ : Type*} [MeasurableSpace α] [MeasurableSpace β] [Measur
 
 namespace ProbabilityTheory
 
-/--
-Definition of `IdentDistrib` / `IdentDistrib` 的定义
+/-- Two functions defined on two (possibly different) measure spaces are identically distributed if
+their image measures coincide. This only makes sense when the functions are ae measurable
+(as otherwise the image measures are not defined), so we require this as well in the definition. -/
+/-
+**ProbabilityTheory.IdentDistrib** 是 Mathlib 中的一个结构，位于命名空间 `ProbabilityTheory`。
+形式化陈述：IdentDistrib (f : α -> γ) (g : β -> γ) (μ : Measure α
+参数：f : α -> γ；g : β -> γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IdentDistrib
-  parameters: (f : α -> γ) (g : β -> γ)
-  axioms and operations (3):
-    - aemeasurable_fst : AEMeasurable f μ
-    - aemeasurable_snd : AEMeasurable g ν
-    - map_eq : Measure.map f μ = Measure.map g ν
-
-中文:
-结构 同分布
-  参数: (f : α -> γ) (g : β -> γ)
-  公理与运算 (3 个):
-    - aemeasurable_fst : 几乎处处可测 f μ
-    - aemeasurable_snd : 几乎处处可测 g ν
-    - map_eq : 测度.map f μ = 测度.map g ν
-
-Depends on / 依赖: AEMeasurable, Measure, Measure.map, aemeasurable_fst, aemeasurable_snd, map_eq, volume_tac
+--- 原说明 ---
+Two functions defined on two (possibly different) measure spaces are identically
+ distributed if
+their image measures coincide. This only makes sense when the functions are ae m
+easurable
+(as otherwise the image measures are not defined), so we require this as well in
+ the definition.
 -/
-structure IdentDistrib (f : α -> γ) (g : β -> γ)
+structure IdentDistrib (f : α → γ) (g : β → γ)
     (μ : Measure α := by volume_tac)
     (ν : Measure β := by volume_tac) : Prop where
   aemeasurable_fst : AEMeasurable f μ
@@ -97,345 +93,349 @@ namespace IdentDistrib
 
 open TopologicalSpace
 
-variable {μ : Measure α} {ν : Measure β} {f : α -> γ} {g : β -> γ}
+variable {μ : Measure α} {ν : Measure β} {f : α → γ} {g : β → γ}
 
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (hf : AEMeasurable f μ)
-  statement: IdentDistrib f f μ μ
-  proof: { aemeasurable_fst := hf
-    aemeasurable_snd := hf
-    map_eq := rfl }
-
-中文:
-定理 refl
-  条件: (hf : 几乎处处可测 f μ)
-  结论: 同分布 f f μ μ
-  证明: { aemeasurable_fst := hf
-    aemeasurable_snd := hf
-    map_eq := rfl }
+/-
+**ProbabilityTheory.IdentDistrib.refl** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : Measu
+rableSpace γ] {μ : MeasureTheory.Measure α}   {f : α → γ}, AEMeasurable f μ → Pr
+obabilityTheory.IdentDistrib f f μ μ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem refl (hf : AEMeasurable f μ) : IdentDistrib f f μ μ :=
   { aemeasurable_fst := hf
     aemeasurable_snd := hf
     map_eq := rfl }
-
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: (h : IdentDistrib f g μ ν)
-  statement: IdentDistrib g f ν μ
-  proof: { aemeasurable_fst := h.aemeasurable_snd
-    aemeasurable_snd := h.aemeasurable_fst
-    map_eq := h.map_eq.symm }
-
-中文:
-定理 symm
-  条件: (h : 同分布 f g μ ν)
-  结论: 同分布 g f ν μ
-  证明: { aemeasurable_fst := h.aemeasurable_snd
-    aemeasurable_snd := h.aemeasurable_fst
-    map_eq := h.map_eq.symm }
+/-
+**ProbabilityTheory.IdentDistrib.symm** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] 
+[inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] {μ : MeasureTheory.M
+easure α} {ν : MeasureTheory.Measure β} {f : α → γ} {g : β → γ},   ProbabilityTh
+eory.IdentDistrib f g μ ν → ProbabilityTheory.IdentDistrib g f ν μ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
 -/
 protected theorem symm (h : IdentDistrib f g μ ν) : IdentDistrib g f ν μ :=
   { aemeasurable_fst := h.aemeasurable_snd
     aemeasurable_snd := h.aemeasurable_fst
     map_eq := h.map_eq.symm }
-
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  statement: {ρ : Measure δ} {h : δ -> γ} (h₁ : IdentDistrib f g μ ν)
-  proof: { aemeasurable_fst := h₁.aemeasurable_fst
-    aemeasurable_snd := h₂.aemeasurable_snd
-    map_eq := h₁.map_eq.trans h₂.map_eq }
-
-中文:
-定理 trans
-  结论: {ρ : 测度 δ} {h : δ -> γ} (h₁ : 同分布 f g μ ν)
-  证明: { aemeasurable_fst := h₁.aemeasurable_fst
-    aemeasurable_snd := h₂.aemeasurable_snd
-    map_eq := h₁.map_eq.trans h₂.map_eq }
+/-
+**ProbabilityTheory.IdentDistrib.trans** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] [inst
+_3 : MeasurableSpace δ] {μ : MeasureTheory.Measure α} {ν : MeasureTheory.Measure
+ β}   {f : α → γ} {g : β → γ} {ρ : MeasureTheory.Measure δ} {h : δ → γ},   Proba
+bilityTheory.IdentDistrib f g μ ν →     ProbabilityTheory.IdentDistrib g h ν ρ →
+ ProbabilityTheory.IdentDistrib f h μ ρ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
 -/
-protected theorem trans {ρ : Measure δ} {h : δ -> γ} (h₁ : IdentDistrib f g μ ν)
+protected theorem trans {ρ : Measure δ} {h : δ → γ} (h₁ : IdentDistrib f g μ ν)
     (h₂ : IdentDistrib g h ν ρ) : IdentDistrib f h μ ρ :=
   { aemeasurable_fst := h₁.aemeasurable_fst
     aemeasurable_snd := h₂.aemeasurable_snd
     map_eq := h₁.map_eq.trans h₂.map_eq }
-
-/--
-theorem `comp_of_aemeasurable` / 定理 `comp_of_aemeasurable`
-
-English:
-theorem comp_of_aemeasurable
-  statement: {u : γ -> δ} (h : IdentDistrib f g μ ν)
-  proof: { aemeasurable_fst := hu.comp_aemeasurable h.aemeasurable_fst
-    aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
-    map_eq := by
-      rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst]; rw [←
-        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd]; rw [h.map_eq]
-      rwa [← h.map_eq] }
-
-中文:
-定理 comp_of_aemeasurable
-  结论: {u : γ -> δ} (h : 同分布 f g μ ν)
-  证明: { aemeasurable_fst := hu.comp_aemeasurable h.aemeasurable_fst
-    aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
-    map_eq := by
-      rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst]; rw [←
-        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd]; rw [h.map_eq]
-      rwa [← h.map_eq] }
+/-
+**ProbabilityTheory.IdentDistrib.comp_of_aemeasurable** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] [inst
+_3 : MeasurableSpace δ] {μ : MeasureTheory.Measure α} {ν : MeasureTheory.Measure
+ β}   {f : α → γ} {g : β → γ} {u : γ → δ},   ProbabilityTheory.IdentDistrib f g 
+μ ν →     AEMeasurable u (MeasureTheory.Measure.map f μ) → ProbabilityTheory.Ide
+ntDistrib (u ∘ f) (u ∘ g) μ ν
+参数：MeasureTheory.Measure.map f μ；u ∘ f；u ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.comp_aemeasurable`：comp_aemeasurable {f : α -> δ} {g : δ ->
+ β} (hg : AEMeasurable g (μ.map f)) (hf : AEMeasurable f μ) : AEMeasurable (g ∘ 
+f) μ
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
 -/
-protected theorem comp_of_aemeasurable {u : γ -> δ} (h : IdentDistrib f g μ ν)
+protected theorem comp_of_aemeasurable {u : γ → δ} (h : IdentDistrib f g μ ν)
     (hu : AEMeasurable u (Measure.map f μ)) : IdentDistrib (u ∘ f) (u ∘ g) μ ν :=
   { aemeasurable_fst := hu.comp_aemeasurable h.aemeasurable_fst
     aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
     map_eq := by
-      rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst]; rw [←
-        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd]; rw [h.map_eq]
+      rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst, ←
+        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd, h.map_eq]
       rwa [← h.map_eq] }
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: {u : γ -> δ} (h : IdentDistrib f g μ ν) (hu : Measurable u)
-  proof: h.comp_of_aemeasurable hu.aemeasurable
-
-中文:
-定理 comp
-  条件: {u : γ -> δ} (h : 同分布 f g μ ν) (hu : 可测 u)
-  证明: h.comp_of_aemeasurable hu.aemeasurable
+/-
+**ProbabilityTheory.IdentDistrib.comp** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] [inst
+_3 : MeasurableSpace δ] {μ : MeasureTheory.Measure α} {ν : MeasureTheory.Measure
+ β}   {f : α → γ} {g : β → γ} {u : γ → δ},   ProbabilityTheory.IdentDistrib f g 
+μ ν → Measurable u → ProbabilityTheory.IdentDistrib (u ∘ f) (u ∘ g) μ ν
+参数：u ∘ f；u ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp_of_aemeasurable`：∀ {α : Type u_1} {β
+ : Type u_2} {γ : Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : 
+MeasurableSpace β]   [inst_2 : Measurable…
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
 -/
-protected theorem comp {u : γ -> δ} (h : IdentDistrib f g μ ν) (hu : Measurable u) :
+protected theorem comp {u : γ → δ} (h : IdentDistrib f g μ ν) (hu : Measurable u) :
     IdentDistrib (u ∘ f) (u ∘ g) μ ν :=
   h.comp_of_aemeasurable hu.aemeasurable
-
-/--
-theorem `of_ae_eq` / 定理 `of_ae_eq`
-
-English:
-theorem of_ae_eq
-  given: {g : α -> γ} (hf : AEMeasurable f μ) (heq : f =ᵐ[μ] g)
-  proof: { aemeasurable_fst := hf
-    aemeasurable_snd := hf.congr heq
-    map_eq := Measure.map_congr heq }
-
-中文:
-定理 of_ae_eq
-  条件: {g : α -> γ} (hf : 几乎处处可测 f μ) (heq : f =ᵐ[μ] g)
-  证明: { aemeasurable_fst := hf
-    aemeasurable_snd := hf.congr heq
-    map_eq := Measure.map_congr heq }
+/-
+**ProbabilityTheory.IdentDistrib.of_ae_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probability
+Theory.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : Measu
+rableSpace γ] {μ : MeasureTheory.Measure α}   {f g : α → γ}, AEMeasurable f μ → 
+f =ᵐ[μ] g → ProbabilityTheory.IdentDistrib f g μ μ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `AEMeasurable.congr`：congr (hf : AEMeasurable f μ) (h : f =ᵐ[μ] g) : AEMe
+asurable g μ
+· 使用定理 `MeasureTheory.Measure.map_congr`：map_congr {f g : α -> β} (h : f =ᵐ[μ] g
+) : Measure.map f μ = Measure.map g μ
 -/
-protected theorem of_ae_eq {g : α -> γ} (hf : AEMeasurable f μ) (heq : f =ᵐ[μ] g) :
+protected theorem of_ae_eq {g : α → γ} (hf : AEMeasurable f μ) (heq : f =ᵐ[μ] g) :
     IdentDistrib f g μ μ :=
   { aemeasurable_fst := hf
     aemeasurable_snd := hf.congr heq
     map_eq := Measure.map_congr heq }
-
-/--
-lemma `_root_.MeasureTheory.AEMeasurable.identDistrib_mk` / 引理 `_root_.MeasureTheory.AEMeasurable.identDistrib_mk`
-
-English:
-lemma _root_.MeasureTheory.AEMeasurable.identDistrib_mk
-  proof: IdentDistrib.of_ae_eq hf hf.ae_eq_mk
-
-中文:
-引理 _root_.测度论.几乎处处可测.identDistrib_mk
-  证明: IdentDistrib.of_ae_eq hf hf.ae_eq_mk
-
-Depends on / 依赖: IdentDistrib, IdentDistrib.of_ae_eq, ae_eq_mk, hf.ae_eq_mk, of_ae_eq
+/-
+**ProbabilityTheory.IdentDistrib._root_.MeasureTheory.AEMeasurable.identDistrib_
+mk** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.IdentDistrib`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.MeasureTheory.AEMeasurable.identDistrib_mk
     (hf : AEMeasurable f μ) : IdentDistrib f (hf.mk f) μ μ :=
   IdentDistrib.of_ae_eq hf hf.ae_eq_mk
-
-/--
-lemma `_root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk` / 引理 `_root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk`
-
-English:
-lemma _root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk
-  proof: IdentDistrib.of_ae_eq hf.aemeasurable hf.ae_eq_mk
-
-中文:
-引理 _root_.测度论.AEStronglyMeasurable.identDistrib_mk
-  证明: IdentDistrib.of_ae_eq hf.aemeasurable hf.ae_eq_mk
-
-Depends on / 依赖: IdentDistrib, IdentDistrib.of_ae_eq, ae_eq_mk, aemeasurable, hf.ae_eq_mk, hf.aemeasurable, of_ae_eq
+/-
+**ProbabilityTheory.IdentDistrib._root_.MeasureTheory.AEStronglyMeasurable.ident
+Distrib_mk** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.IdentDistrib`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk
     [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
     (hf : AEStronglyMeasurable f μ) : IdentDistrib f (hf.mk f) μ μ :=
   IdentDistrib.of_ae_eq hf.aemeasurable hf.ae_eq_mk
-
-/--
-theorem `measure_mem_eq` / 定理 `measure_mem_eq`
-
-English:
-theorem measure_mem_eq
-  given: (h : IdentDistrib f g μ ν) {s : Set γ} (hs : MeasurableSet s)
-  proof: by
-  rw [← Measure.map_apply_of_aemeasurable h.aemeasurable_fst hs]; rw [←
-    Measure.map_apply_of_aemeasurable h.aemeasurable_snd hs]; rw [h.map_eq]
-
-alias measure_preimage_eq := measure_mem_eq
-
-中文:
-定理 measure_mem_eq
-  条件: (h : 同分布 f g μ ν) {s : 集合 γ} (hs : 可测集 s)
-  证明: by
-  rw [← Measure.map_apply_of_aemeasurable h.aemeasurable_fst hs]; rw [←
-    Measure.map_apply_of_aemeasurable h.aemeasurable_snd hs]; rw [h.map_eq]
-
-alias measure_preimage_eq := measure_mem_eq
-
-Depends on / 依赖: Measure, Measure.map_apply_of_aemeasurable, aemeasurable_fst, aemeasurable_snd, h.aemeasurable_fst, h.aemeasurable_snd, h.map_eq, map_apply_of_aemeasurable, map_eq
+/-
+**ProbabilityTheory.IdentDistrib.measure_mem_eq** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.IdentDistrib`。
+形式化陈述：measure_mem_eq (h : IdentDistrib f g μ ν) {s : Set γ} (hs : MeasurableSet 
+s) : μ (f ⁻¹' s) = ν (g ⁻¹' s)
+参数：h : IdentDistrib f g μ ν；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.map_apply_of_aemeasurable`：map_apply_of_aemeasurab
+le (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s) : μ.map f s = μ (f
+ ⁻¹' s)
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
 -/
 theorem measure_mem_eq (h : IdentDistrib f g μ ν) {s : Set γ} (hs : MeasurableSet s) :
     μ (f ⁻¹' s) = ν (g ⁻¹' s) := by
-  rw [← Measure.map_apply_of_aemeasurable h.aemeasurable_fst hs]; rw [←
-    Measure.map_apply_of_aemeasurable h.aemeasurable_snd hs]; rw [h.map_eq]
+  rw [← Measure.map_apply_of_aemeasurable h.aemeasurable_fst hs, ←
+    Measure.map_apply_of_aemeasurable h.aemeasurable_snd hs, h.map_eq]
 
 alias measure_preimage_eq := measure_mem_eq
-
-/--
-theorem `ae_snd` / 定理 `ae_snd`
-
-English:
-theorem ae_snd
-  statement: (h : IdentDistrib f g μ ν) {p : γ -> Prop} (pmeas : MeasurableSet {x | p x})
-  proof: by
-  apply (ae_map_iff h.aemeasurable_snd pmeas).1
-  rw [← h.map_eq]
-  exact (ae_map_iff h.aemeasurable_fst pmeas).2 hp
-
-中文:
-定理 ae_snd
-  结论: (h : 同分布 f g μ ν) {p : γ -> 命题} (pmeas : 可测集 {x | p x})
-  证明: by
-  apply (ae_map_iff h.aemeasurable_snd pmeas).1
-  rw [← h.map_eq]
-  exact (ae_map_iff h.aemeasurable_fst pmeas).2 hp
-
-Depends on / 依赖: ae_map_iff, aemeasurable_fst, aemeasurable_snd, h.aemeasurable_fst, h.aemeasurable_snd, h.map_eq, map_eq
+/-
+**ProbabilityTheory.IdentDistrib.ae_snd** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.IdentDistrib`。
+形式化陈述：ae_snd (h : IdentDistrib f g μ ν) {p : γ -> Prop} (pmeas : MeasurableSet {
+x | p x}) (hp : forallᵐ x ∂μ, p (f x)) : forallᵐ x ∂ν, p (g x)
+参数：h : IdentDistrib f g μ ν；pmeas : MeasurableSet {x | p x}；hp : forallᵐ x ∂μ, p
+ (f x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.ae_map_iff`：ae_map_iff {f : α -> β} (hf : AEMeasurable f μ
+) {p : β -> Prop} (hp : MeasurableSet { x | p x }) : (forallᵐ y ∂μ.map f, p y) ↔
+ forallᵐ x ∂μ,…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
 -/
-theorem ae_snd (h : IdentDistrib f g μ ν) {p : γ -> Prop} (pmeas : MeasurableSet {x | p x})
-    (hp : forallᵐ x ∂μ, p (f x)) : forallᵐ x ∂ν, p (g x) := by
+theorem ae_snd (h : IdentDistrib f g μ ν) {p : γ → Prop} (pmeas : MeasurableSet {x | p x})
+    (hp : ∀ᵐ x ∂μ, p (f x)) : ∀ᵐ x ∂ν, p (g x) := by
   apply (ae_map_iff h.aemeasurable_snd pmeas).1
   rw [← h.map_eq]
   exact (ae_map_iff h.aemeasurable_fst pmeas).2 hp
-
-/--
-theorem `ae_mem_snd` / 定理 `ae_mem_snd`
-
-English:
-theorem ae_mem_snd
-  statement: (h : IdentDistrib f g μ ν) {t : Set γ} (tmeas : MeasurableSet t)
-  proof: h.ae_snd tmeas ht
-
-中文:
-定理 ae_mem_snd
-  结论: (h : 同分布 f g μ ν) {t : 集合 γ} (tmeas : 可测集 t)
-  证明: h.ae_snd tmeas ht
-
-Depends on / 依赖: ae_snd, h.ae_snd
+/-
+**ProbabilityTheory.IdentDistrib.ae_mem_snd** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.IdentDistrib`。
+形式化陈述：ae_mem_snd (h : IdentDistrib f g μ ν) {t : Set γ} (tmeas : MeasurableSet t
+) (ht : forallᵐ x ∂μ, f x in t) : forallᵐ x ∂ν, g x in t
+参数：h : IdentDistrib f g μ ν；tmeas : MeasurableSet t；ht : forallᵐ x ∂μ, f x in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ProbabilityTheory.IdentDistrib.ae_snd`：ae_snd (h : IdentDistrib f g μ ν)
+ {p : γ -> Prop} (pmeas : MeasurableSet {x | p x}) (hp : forallᵐ x ∂μ, p (f x)) 
+: forallᵐ x ∂ν, p (g x)
 -/
 theorem ae_mem_snd (h : IdentDistrib f g μ ν) {t : Set γ} (tmeas : MeasurableSet t)
-    (ht : forallᵐ x ∂μ, f x in t) : forallᵐ x ∂ν, g x in t :=
+    (ht : ∀ᵐ x ∂μ, f x ∈ t) : ∀ᵐ x ∂ν, g x ∈ t :=
   h.ae_snd tmeas ht
-
-/--
-theorem `_root_.ProbabilityTheory.HasLaw.identDistrib` / 定理 `_root_.ProbabilityTheory.HasLaw.identDistrib`
-
-English:
-theorem _root_.ProbabilityTheory.HasLaw.identDistrib
-  statement: {κ : Measure γ} (h₀ : HasLaw f κ μ)
-  proof: ⟨h₀.aemeasurable, h₁.aemeasurable, by simp [h₀.map_eq, h₁.map_eq]⟩
-
-中文:
-定理 _root_.ProbabilityTheory.有Law.identDistrib
-  结论: {κ : 测度 γ} (h₀ : 有Law f κ μ)
-  证明: ⟨h₀.aemeasurable, h₁.aemeasurable, by simp [h₀.map_eq, h₁.map_eq]⟩
-
-Depends on / 依赖: aemeasurable, map_eq
+/-
+**ProbabilityTheory.IdentDistrib._root_.ProbabilityTheory.HasLaw.identDistrib** 
+是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.IdentDistrib`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.ProbabilityTheory.HasLaw.identDistrib {κ : Measure γ} (h₀ : HasLaw f κ μ)
     (h₁ : HasLaw g κ ν) : IdentDistrib f g μ ν :=
   ⟨h₀.aemeasurable, h₁.aemeasurable, by simp [h₀.map_eq, h₁.map_eq]⟩
-
-/--
-theorem `hasLaw` / 定理 `hasLaw`
-
-English:
-theorem hasLaw
-  given: {κ : Measure γ} (h₀ : IdentDistrib f g μ ν) (h₁ : HasLaw f κ μ)
-  statement: HasLaw g κ ν
-  proof: ⟨h₀.aemeasurable_snd, by simp [h₀.map_eq, ← h₁.map_eq]⟩
-
-中文:
-定理 hasLaw
-  条件: {κ : 测度 γ} (h₀ : 同分布 f g μ ν) (h₁ : 有Law f κ μ)
-  结论: 有Law g κ ν
-  证明: ⟨h₀.aemeasurable_snd, by simp [h₀.map_eq, ← h₁.map_eq]⟩
-
-Depends on / 依赖: aemeasurable_snd, map_eq
+/-
+**ProbabilityTheory.IdentDistrib.hasLaw** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.IdentDistrib`。
+形式化陈述：hasLaw {κ : Measure γ} (h₀ : IdentDistrib f g μ ν) (h₁ : HasLaw f κ μ) : H
+asLaw g κ ν
+参数：h₀ : IdentDistrib f g μ ν；h₁ : HasLaw f κ μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.HasLaw.map_eq`：∀ {Ω : Type u_1} {𝓧 : Type u_2} {mΩ : M
+easurableSpace Ω} {m𝓧 : MeasurableSpace 𝓧} {X : Ω → 𝓧}   {μ : MeasureTheory.Meas
+ure 𝓧} {P : autoParam…
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hasLaw {κ : Measure γ} (h₀ : IdentDistrib f g μ ν) (h₁ : HasLaw f κ μ) : HasLaw g κ ν :=
   ⟨h₀.aemeasurable_snd, by simp [h₀.map_eq, ← h₁.map_eq]⟩
 
-/--
-theorem `aestronglyMeasurable_fst` / 定理 `aestronglyMeasurable_fst`
+/-- In a second countable topology, the first function in an identically distributed pair is a.e.
+strongly measurable. So is the second function, but use `h.symm.aestronglyMeasurable_fst` as
+`h.aestronglyMeasurable_snd` has a different meaning. -/
+/-
+**ProbabilityTheory.IdentDistrib.aestronglyMeasurable_fst** 是 Mathlib 中的一个定理，位于命
+名空间 `ProbabilityTheory.IdentDistrib`。
+形式化陈述：aestronglyMeasurable_fst [TopologicalSpace γ] [PseudoMetrizableSpace γ] [O
+pensMeasurableSpace γ] [SecondCountableTopology γ] (h : IdentDistrib f g μ ν) : 
+AEStronglyMeasurable f μ
+参数：h : IdentDistrib f g μ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst
+ : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 : M…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
 
-English:
-theorem aestronglyMeasurable_fst
-  statement: [TopologicalSpace γ] [PseudoMetrizableSpace γ]
-  proof: h.aemeasurable_fst.aestronglyMeasurable
-
-中文:
-定理 aestronglyMeasurable_fst
-  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ]
-  证明: h.aemeasurable_fst.aestronglyMeasurable
-
-Depends on / 依赖: aemeasurable_fst, aestronglyMeasurable, h.aemeasurable_fst.aestronglyMeasurable
+--- 原说明 ---
+In a second countable topology, the first function in an identically distributed
+ pair is a.e.
+strongly measurable. So is the second function, but use `h.symm.aestronglyMeasur
+able_fst` as
+`h.aestronglyMeasurable_snd` has a different meaning.
 -/
 theorem aestronglyMeasurable_fst [TopologicalSpace γ] [PseudoMetrizableSpace γ]
     [OpensMeasurableSpace γ] [SecondCountableTopology γ] (h : IdentDistrib f g μ ν) :
     AEStronglyMeasurable f μ :=
   h.aemeasurable_fst.aestronglyMeasurable
 
-/--
-theorem `aestronglyMeasurable_snd` / 定理 `aestronglyMeasurable_snd`
+/-- If `f` and `g` are identically distributed and `f` is a.e. strongly measurable, so is `g`. -/
+/-
+**ProbabilityTheory.IdentDistrib.aestronglyMeasurable_snd** 是 Mathlib 中的一个定理，位于命
+名空间 `ProbabilityTheory.IdentDistrib`。
+形式化陈述：aestronglyMeasurable_snd [TopologicalSpace γ] [PseudoMetrizableSpace γ] [B
+orelSpace γ] (h : IdentDistrib f g μ ν) (hf : AEStronglyMeasurable f μ) : AEStro
+nglyMeasurable g ν
+参数：h : IdentDistrib f g μ ν；hf : AEStronglyMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `aestronglyMeasurable_iff_aemeasurable_separable`：∀ {α : Type u_1} {β : T
+ype u_2} [inst : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory
+.Measure α}   {f : α → β} [Topologica…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.IsSeparable.closure`：∀ {α : Type u} [t : TopologicalSpa
+ce α] {s : Set α},   TopologicalSpace.IsSeparable s → TopologicalSpace.IsSeparab
+le (closure s)
+· 使用定理 `ProbabilityTheory.IdentDistrib.ae_mem_snd`：ae_mem_snd (h : IdentDistrib 
+f g μ ν) {t : Set γ} (tmeas : MeasurableSet t) (ht : forallᵐ x ∂μ, f x in t) : f
+orallᵐ x ∂ν, g x in t
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-theorem aestronglyMeasurable_snd
-  statement: [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
-  proof: by
-  refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨h.aemeasurable_snd, ?_⟩
-  rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-  refine ⟨closure t, t_sep.closure, ?_⟩
-  apply h.ae_mem_snd isClosed_closure.measurableSet
-  filter_upwards [ht] with x hx using subset_closure hx
-
-中文:
-定理 aestronglyMeasurable_snd
-  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ] [Borel空间 γ]
-  证明: by
-  refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨h.aemeasurable_snd, ?_⟩
-  rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-  refine ⟨closure t, t_sep.closure, ?_⟩
-  apply h.ae_mem_snd isClosed_closure.measurableSet
-  filter_upwards [ht] with x hx using subset_closure hx
-
-Depends on / 依赖: ae_mem_snd, aemeasurable_snd, aestronglyMeasurable_iff_aemeasurable_separable, closure, filter_upwards, h.ae_mem_snd, h.aemeasurable_snd, isClosed_closure, isClosed_closure.measurableSet, measurableSet, subset_closure, t_sep, t_sep.closure
+--- 原说明 ---
+If `f` and `g` are identically distributed and `f` is a.e. strongly measurable, 
+so is `g`.
 -/
 theorem aestronglyMeasurable_snd [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
     (h : IdentDistrib f g μ ν) (hf : AEStronglyMeasurable f μ) : AEStronglyMeasurable g ν := by
@@ -444,126 +444,144 @@ theorem aestronglyMeasurable_snd [TopologicalSpace γ] [PseudoMetrizableSpace γ
   refine ⟨closure t, t_sep.closure, ?_⟩
   apply h.ae_mem_snd isClosed_closure.measurableSet
   filter_upwards [ht] with x hx using subset_closure hx
-
-/--
-theorem `aestronglyMeasurable_iff` / 定理 `aestronglyMeasurable_iff`
-
-English:
-theorem aestronglyMeasurable_iff
-  statement: [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
-  proof: ⟨fun hf => h.aestronglyMeasurable_snd hf, fun hg => h.symm.aestronglyMeasurable_snd hg⟩
-
-中文:
-定理 aestronglyMeasurable_iff
-  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ] [Borel空间 γ]
-  证明: ⟨fun hf => h.aestronglyMeasurable_snd hf, fun hg => h.symm.aestronglyMeasurable_snd hg⟩
-
-Depends on / 依赖: aestronglyMeasurable_snd, h.aestronglyMeasurable_snd, h.symm.aestronglyMeasurable_snd
+/-
+**ProbabilityTheory.IdentDistrib.aestronglyMeasurable_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `ProbabilityTheory.IdentDistrib`。
+形式化陈述：aestronglyMeasurable_iff [TopologicalSpace γ] [PseudoMetrizableSpace γ] [B
+orelSpace γ] (h : IdentDistrib f g μ ν) : AEStronglyMeasurable f μ ↔ AEStronglyM
+easurable g ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.aestronglyMeasurable_snd`：aestronglyMeasu
+rable_snd [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ] (h : Ide
+ntDistrib f g μ ν) (hf : AEStronglyMeasurable…
+· 使用定理 `ProbabilityTheory.IdentDistrib.symm`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {μ : M…
 -/
 theorem aestronglyMeasurable_iff [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
     (h : IdentDistrib f g μ ν) : AEStronglyMeasurable f μ ↔ AEStronglyMeasurable g ν :=
   ⟨fun hf => h.aestronglyMeasurable_snd hf, fun hg => h.symm.aestronglyMeasurable_snd hg⟩
-
-/--
-theorem `essSup_eq` / 定理 `essSup_eq`
-
-English:
-theorem essSup_eq
-  statement: [ConditionallyCompleteLinearOrder γ] [TopologicalSpace γ] [OpensMeasurableSpace γ]
-  proof: by
-  have I : forall a, μ {x : α | a < f x} = ν {x : β | a < g x} := fun a =>
-    h.measure_mem_eq measurableSet_Ioi
-  simp_rw [essSup_eq_sInf, I]
-
-中文:
-定理 essSup_eq
-  结论: [条件完备线性序 γ] [拓扑空间 γ] [OpensMeasurable空间 γ]
-  证明: by
-  have I : forall a, μ {x : α | a < f x} = ν {x : β | a < g x} := fun a =>
-    h.measure_mem_eq measurableSet_Ioi
-  simp_rw [essSup_eq_sInf, I]
-
-Depends on / 依赖: essSup_eq_sInf, h.measure_mem_eq, measurableSet_Ioi, measure_mem_eq, simp_rw
+/-
+**ProbabilityTheory.IdentDistrib.essSup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：essSup_eq [ConditionallyCompleteLinearOrder γ] [TopologicalSpace γ] [Opens
+MeasurableSpace γ] [OrderClosedTopology γ] (h : IdentDistrib f g μ ν) : essSup f
+ μ = essSup g ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.measure_mem_eq`：measure_mem_eq (h : Ident
+Distrib f g μ ν) {s : Set γ} (hs : MeasurableSet s) : μ (f ⁻¹' s) = ν (g ⁻¹' s)
+· 使用定理 `measurableSet_Ioi`：measurableSet_Ioi [ClosedIicTopology α] : MeasurableS
+et (Ioi a)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `essSup_eq_sInf`：essSup_eq_sInf {m : MeasurableSpace α} (μ : Measure α) (
+f : α -> β) : essSup f μ = sInf { a | μ { x | a < f x } = 0 }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem essSup_eq [ConditionallyCompleteLinearOrder γ] [TopologicalSpace γ] [OpensMeasurableSpace γ]
     [OrderClosedTopology γ] (h : IdentDistrib f g μ ν) : essSup f μ = essSup g ν := by
-  have I : forall a, μ {x : α | a < f x} = ν {x : β | a < g x} := fun a =>
+  have I : ∀ a, μ {x : α | a < f x} = ν {x : β | a < g x} := fun a =>
     h.measure_mem_eq measurableSet_Ioi
   simp_rw [essSup_eq_sInf, I]
-
-/--
-theorem `lintegral_eq` / 定理 `lintegral_eq`
-
-English:
-theorem lintegral_eq
-  given: {f : α -> Real>=0∞} {g : β -> Real>=0∞} (h : IdentDistrib f g μ ν)
-  proof: by
-  change ∫⁻ x, id (f x) ∂μ = ∫⁻ x, id (g x) ∂ν
-  rw [← lintegral_map' aemeasurable_id h.aemeasurable_fst]; rw [←
-    lintegral_map' aemeasurable_id h.aemeasurable_snd]; rw [h.map_eq]
-
-中文:
-定理 lintegral_eq
-  条件: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (h : 同分布 f g μ ν)
-  证明: by
-  change ∫⁻ x, id (f x) ∂μ = ∫⁻ x, id (g x) ∂ν
-  rw [← lintegral_map' aemeasurable_id h.aemeasurable_fst]; rw [←
-    lintegral_map' aemeasurable_id h.aemeasurable_snd]; rw [h.map_eq]
-
-Depends on / 依赖: aemeasurable_fst, aemeasurable_id, aemeasurable_snd, h.aemeasurable_fst, h.aemeasurable_snd, h.map_eq, lintegral_map, map_eq
+/-
+**ProbabilityTheory.IdentDistrib.lintegral_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.IdentDistrib`。
+形式化陈述：lintegral_eq {f : α -> Real>=0∞} {g : β -> Real>=0∞} (h : IdentDistrib f g
+ μ ν) : ∫⁻ x, f x ∂μ = ∫⁻ x, g x ∂ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.lintegral_map'`：lintegral_map' {f : β -> Real>=0∞} {g : α 
+-> β} (hf : AEMeasurable f (Measure.map g μ)) (hg : AEMeasurable g μ) : ∫⁻ a, f 
+a ∂Measure.map g μ…
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
 -/
-theorem lintegral_eq {f : α -> Real>=0∞} {g : β -> Real>=0∞} (h : IdentDistrib f g μ ν) :
+theorem lintegral_eq {f : α → ℝ≥0∞} {g : β → ℝ≥0∞} (h : IdentDistrib f g μ ν) :
     ∫⁻ x, f x ∂μ = ∫⁻ x, g x ∂ν := by
   change ∫⁻ x, id (f x) ∂μ = ∫⁻ x, id (g x) ∂ν
-  rw [← lintegral_map' aemeasurable_id h.aemeasurable_fst]; rw [←
-    lintegral_map' aemeasurable_id h.aemeasurable_snd]; rw [h.map_eq]
-
-/--
-theorem `integral_eq` / 定理 `integral_eq`
-
-English:
-theorem integral_eq
-  statement: [NormedAddCommGroup γ] [NormedSpace Real γ] [BorelSpace γ]
-  proof: by
-  by_cases hf : AEStronglyMeasurable f μ
-  · have A : AEStronglyMeasurable id (Measure.map f μ) := by
-      rw [aestronglyMeasurable_iff_aemeasurable_separable]
-      rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-      refine ⟨aemeasurable_id, ⟨closure t, t_sep.closure, ?_⟩⟩
-      rw [ae_map_iff h.aemeasurable_fst]
-      · filter_upwards [ht] with x hx using subset_closure hx
-      · exact isClosed_closure.measurableSet
-    change ∫ x, id (f x) ∂μ = ∫ x, id (g x) ∂ν
-    rw [← integral_map h.aemeasurable_fst A]
-    rw [h.map_eq] at A
-    rw [← integral_map h.aemeasurable_snd A]; rw [h.map_eq]
-  · rw [integral_non_aestronglyMeasurable hf]
-    rw [h.aestronglyMeasurable_iff] at hf
-    rw [integral_non_aestronglyMeasurable hf]
-
-中文:
-定理 integral_eq
-  结论: [赋范交换加群 γ] [赋范空间 实数 γ] [Borel空间 γ]
-  证明: by
-  by_cases hf : AEStronglyMeasurable f μ
-  · have A : AEStronglyMeasurable id (Measure.map f μ) := by
-      rw [aestronglyMeasurable_iff_aemeasurable_separable]
-      rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-      refine ⟨aemeasurable_id, ⟨closure t, t_sep.closure, ?_⟩⟩
-      rw [ae_map_iff h.aemeasurable_fst]
-      · filter_upwards [ht] with x hx using subset_closure hx
-      · exact isClosed_closure.measurableSet
-    change ∫ x, id (f x) ∂μ = ∫ x, id (g x) ∂ν
-    rw [← integral_map h.aemeasurable_fst A]
-    rw [h.map_eq] at A
-    rw [← integral_map h.aemeasurable_snd A]; rw [h.map_eq]
-  · rw [integral_non_aestronglyMeasurable hf]
-    rw [h.aestronglyMeasurable_iff] at hf
-    rw [integral_non_aestronglyMeasurable hf]
-
-Depends on / 依赖: AEStronglyMeasurable, Measure, Measure.map, ae_map_iff, aemeasurabl, aemeasurable_fst, aemeasurable_id, aestronglyMeasurable_iff_aemeasurable_separable, closure, filter_upwards, h.aemeasurabl, h.aemeasurable_fst, integral_map, isClosed_closure, isClosed_closure.measurableSet, measurableSet, subset_closure, t_sep, t_sep.closure
+  rw [← lintegral_map' aemeasurable_id h.aemeasurable_fst, ←
+    lintegral_map' aemeasurable_id h.aemeasurable_snd, h.map_eq]
+/-
+**ProbabilityTheory.IdentDistrib.integral_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabil
+ityTheory.IdentDistrib`。
+形式化陈述：integral_eq [NormedAddCommGroup γ] [NormedSpace Real γ] [BorelSpace γ] (h 
+: IdentDistrib f g μ ν) : ∫ x, f x ∂μ = ∫ x, g x ∂ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `aestronglyMeasurable_iff_aemeasurable_separable`：∀ {α : Type u_1} {β : T
+ype u_2} [inst : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory
+.Measure α}   {f : α → β} [Topologica…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `TopologicalSpace.IsSeparable.closure`：∀ {α : Type u} [t : TopologicalSpa
+ce α] {s : Set α},   TopologicalSpace.IsSeparable s → TopologicalSpace.IsSeparab
+le (closure s)
+· 使用定理 `MeasureTheory.ae_map_iff`：ae_map_iff {f : α -> β} (hf : AEMeasurable f μ
+) {p : β -> Prop} (hp : MeasurableSet { x | p x }) : (forallᵐ y ∂μ.map f, p y) ↔
+ forallᵐ x ∂μ,…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_map`：integral_map {β} [MeasurableSpace β] {φ : α 
+-> β} (hφ : AEMeasurable φ μ) {f : β -> G} (hfm : AEStronglyMeasurable f (Measur
+e.map φ μ)) : ∫ …
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `MeasureTheory.integral_non_aestronglyMeasurable`：integral_non_aestrongly
+Measurable {f : α -> G} (h : ¬AEStronglyMeasurable f μ) : ∫ a, f a ∂μ = 0
+· 使用定理 `ProbabilityTheory.IdentDistrib.aestronglyMeasurable_iff`：aestronglyMeasu
+rable_iff [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ] (h : Ide
+ntDistrib f g μ ν) : AEStronglyMeasurable f μ…
 -/
-theorem integral_eq [NormedAddCommGroup γ] [NormedSpace Real γ] [BorelSpace γ]
+theorem integral_eq [NormedAddCommGroup γ] [NormedSpace ℝ γ] [BorelSpace γ]
     (h : IdentDistrib f g μ ν) : ∫ x, f x ∂μ = ∫ x, g x ∂ν := by
   by_cases hf : AEStronglyMeasurable f μ
   · have A : AEStronglyMeasurable id (Measure.map f μ) := by
@@ -576,52 +594,70 @@ theorem integral_eq [NormedAddCommGroup γ] [NormedSpace Real γ] [BorelSpace γ
     change ∫ x, id (f x) ∂μ = ∫ x, id (g x) ∂ν
     rw [← integral_map h.aemeasurable_fst A]
     rw [h.map_eq] at A
-    rw [← integral_map h.aemeasurable_snd A]; rw [h.map_eq]
+    rw [← integral_map h.aemeasurable_snd A, h.map_eq]
   · rw [integral_non_aestronglyMeasurable hf]
     rw [h.aestronglyMeasurable_iff] at hf
     rw [integral_non_aestronglyMeasurable hf]
-
-/--
-theorem `eLpNorm_eq` / 定理 `eLpNorm_eq`
-
-English:
-theorem eLpNorm_eq
-  statement: [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν)
-  proof: by
-  by_cases h0 : p = 0
-  · simp [h0]
-  by_cases h_top : p = ∞
-  · simp only [h_top, eLpNorm, eLpNormEssSup, ENNReal.top_ne_zero, if_true,
-      if_false]
-    apply essSup_eq
-    exact h.comp (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm', one_div]
-  congr 1
-  apply lintegral_eq
-  exact h.comp (Measurable.pow_const (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-    p.toReal)
-
-中文:
-定理 eLpNorm_eq
-  结论: [赋范交换加群 γ] [OpensMeasurable空间 γ] (h : 同分布 f g μ ν)
-  证明: by
-  by_cases h0 : p = 0
-  · simp [h0]
-  by_cases h_top : p = ∞
-  · simp only [h_top, eLpNorm, eLpNormEssSup, ENNReal.top_ne_zero, if_true,
-      if_false]
-    apply essSup_eq
-    exact h.comp (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm', one_div]
-  congr 1
-  apply lintegral_eq
-  exact h.comp (Measurable.pow_const (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-    p.toReal)
-
-Depends on / 依赖: ENNReal, ENNReal.top_ne_zero, Measurable, Measurable.pow_const, eLpNorm, eLpNormEssSup, eLpNorm_eq_eLpNorm, essSup_eq, h.comp, h_top, if_false, if_true, lintegral_eq, measurable_coe_nnreal_ennreal, measurable_coe_nnreal_ennreal.comp, measurable_nnnorm, one_div, p.toReal, pow_const, toReal
+/-
+**ProbabilityTheory.IdentDistrib.eLpNorm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.IdentDistrib`。
+形式化陈述：eLpNorm_eq [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistr
+ib f g μ ν) (p : Real>=0∞) : eLpNorm f p μ = eLpNorm g p ν
+参数：h : IdentDistrib f g μ ν；p : Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.eLpNorm_exponent_zero`：eLpNorm_exponent_zero {f : α -> ε} 
+: eLpNorm f 0 μ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.eLpNorm'`：eLpNorm'_exponent_zero {f : α -> ε} : eLpNorm' f
+ 0 μ = 1
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `if_true`：∀ {α : Sort u_1} {x : Decidable True} (t e : α), (if True then 
+t else e) = t
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `ProbabilityTheory.IdentDistrib.essSup_eq`：essSup_eq [ConditionallyComple
+teLinearOrder γ] [TopologicalSpace γ] [OpensMeasurableSpace γ] [OrderClosedTopol
+ogy γ] (h : IdentDistrib f g μ…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_coe_nnreal_ennreal`：measurable_coe_nnreal_ennreal : Measurabl
+e ((↑) : Real>=0 -> Real>=0∞)
+· 使用定理 `measurable_nnnorm`：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0
+)
+· 使用定理 `MeasureTheory.eLpNorm_eq_eLpNorm'`：eLpNorm_eq_eLpNorm' (hp_ne_zero : p !
+= 0) (hp_ne_top : p != ∞) {f : α -> ε} : eLpNorm f p μ = eLpNorm' f (ENNReal.toR
+eal p) μ
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `ProbabilityTheory.IdentDistrib.lintegral_eq`：lintegral_eq {f : α -> Real
+>=0∞} {g : β -> Real>=0∞} (h : IdentDistrib f g μ ν) : ∫⁻ x, f x ∂μ = ∫⁻ x, g x 
+∂ν
+· 使用定理 `Measurable.pow_const`：Measurable.pow_const (hf : Measurable f) (c : γ) :
+ Measurable fun x => f x ^ c
 -/
 theorem eLpNorm_eq [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν)
-    (p : Real>=0∞) : eLpNorm f p μ = eLpNorm g p ν := by
+    (p : ℝ≥0∞) : eLpNorm f p μ = eLpNorm g p ν := by
   by_cases h0 : p = 0
   · simp [h0]
   by_cases h_top : p = ∞
@@ -634,344 +670,351 @@ theorem eLpNorm_eq [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentD
   apply lintegral_eq
   exact h.comp (Measurable.pow_const (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
     p.toReal)
-
-/--
-theorem `memLp_snd` / 定理 `memLp_snd`
-
-English:
-theorem memLp_snd
-  statement: [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν)
-  proof: by
-  refine ⟨h.aestronglyMeasurable_snd hf.aestronglyMeasurable, ?_⟩
-  rw [← h.eLpNorm_eq]
-  exact hf.2
-
-中文:
-定理 memLp_snd
-  结论: [赋范交换加群 γ] [Borel空间 γ] {p : 实数>=0∞} (h : 同分布 f g μ ν)
-  证明: by
-  refine ⟨h.aestronglyMeasurable_snd hf.aestronglyMeasurable, ?_⟩
-  rw [← h.eLpNorm_eq]
-  exact hf.2
-
-Depends on / 依赖: aestronglyMeasurable, aestronglyMeasurable_snd, eLpNorm_eq, h.aestronglyMeasurable_snd, h.eLpNorm_eq, hf.aestronglyMeasurable
+/-
+**ProbabilityTheory.IdentDistrib.memLp_snd** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：memLp_snd [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentD
+istrib f g μ ν) (hf : MemLp f p μ) : MemLp g p ν
+参数：h : IdentDistrib f g μ ν；hf : MemLp f p μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.aestronglyMeasurable_snd`：aestronglyMeasu
+rable_snd [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ] (h : Ide
+ntDistrib f g μ ν) (hf : AEStronglyMeasurable…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.MemLp.aestronglyMeasurable`：∀ {α : Type u_1} {ε : Type u_2
+} {m0 : MeasurableSpace α} [inst : ENorm ε] {μ : MeasureTheory.Measure α}   [ins
+t_1 : TopologicalSpace ε] {f :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.IdentDistrib.eLpNorm_eq`：eLpNorm_eq [NormedAddCommGrou
+p γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν) (p : Real>=0∞) : eLpNor
+m f p μ = eLpNorm g p ν
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem memLp_snd [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν)
+theorem memLp_snd [NormedAddCommGroup γ] [BorelSpace γ] {p : ℝ≥0∞} (h : IdentDistrib f g μ ν)
     (hf : MemLp f p μ) : MemLp g p ν := by
   refine ⟨h.aestronglyMeasurable_snd hf.aestronglyMeasurable, ?_⟩
   rw [← h.eLpNorm_eq]
   exact hf.2
-
-/--
-theorem `memLp_iff` / 定理 `memLp_iff`
-
-English:
-theorem memLp_iff
-  given: [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν)
-  proof: ⟨fun hf => h.memLp_snd hf, fun hg => h.symm.memLp_snd hg⟩
-
-中文:
-定理 memLp_iff
-  条件: [赋范交换加群 γ] [Borel空间 γ] {p : 实数>=0∞} (h : 同分布 f g μ ν)
-  证明: ⟨fun hf => h.memLp_snd hf, fun hg => h.symm.memLp_snd hg⟩
-
-Depends on / 依赖: h.memLp_snd, h.symm.memLp_snd, memLp_snd
+/-
+**ProbabilityTheory.IdentDistrib.memLp_iff** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：memLp_iff [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentD
+istrib f g μ ν) : MemLp f p μ ↔ MemLp g p ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.memLp_snd`：memLp_snd [NormedAddCommGroup 
+γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν) (hf : MemLp f p μ) :
+ MemLp g p ν
+· 使用定理 `ProbabilityTheory.IdentDistrib.symm`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {μ : M…
 -/
-theorem memLp_iff [NormedAddCommGroup γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν) :
+theorem memLp_iff [NormedAddCommGroup γ] [BorelSpace γ] {p : ℝ≥0∞} (h : IdentDistrib f g μ ν) :
     MemLp f p μ ↔ MemLp g p ν :=
   ⟨fun hf => h.memLp_snd hf, fun hg => h.symm.memLp_snd hg⟩
-
-/--
-theorem `integrable_snd` / 定理 `integrable_snd`
-
-English:
-theorem integrable_snd
-  statement: [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν)
-  proof: by
-  rw [← memLp_one_iff_integrable] at hf ⊢
-  exact h.memLp_snd hf
-
-中文:
-定理 integrable_snd
-  结论: [赋范交换加群 γ] [Borel空间 γ] (h : 同分布 f g μ ν)
-  证明: by
-  rw [← memLp_one_iff_integrable] at hf ⊢
-  exact h.memLp_snd hf
-
-Depends on / 依赖: h.memLp_snd, memLp_one_iff_integrable, memLp_snd
+/-
+**ProbabilityTheory.IdentDistrib.integrable_snd** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.IdentDistrib`。
+形式化陈述：integrable_snd [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g
+ μ ν) (hf : Integrable f μ) : Integrable g ν
+参数：h : IdentDistrib f g μ ν；hf : Integrable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.memLp_one_iff_integrable`：memLp_one_iff_integrable {f : α 
+-> ε} : MemLp f 1 μ ↔ Integrable f μ
+· 使用定理 `ProbabilityTheory.IdentDistrib.memLp_snd`：memLp_snd [NormedAddCommGroup 
+γ] [BorelSpace γ] {p : Real>=0∞} (h : IdentDistrib f g μ ν) (hf : MemLp f p μ) :
+ MemLp g p ν
 -/
 theorem integrable_snd [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν)
     (hf : Integrable f μ) : Integrable g ν := by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact h.memLp_snd hf
-
-/--
-theorem `integrable_iff` / 定理 `integrable_iff`
-
-English:
-theorem integrable_iff
-  given: [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν)
-  proof: ⟨fun hf => h.integrable_snd hf, fun hg => h.symm.integrable_snd hg⟩
-
-中文:
-定理 integrable_iff
-  条件: [赋范交换加群 γ] [Borel空间 γ] (h : 同分布 f g μ ν)
-  证明: ⟨fun hf => h.integrable_snd hf, fun hg => h.symm.integrable_snd hg⟩
-
-Depends on / 依赖: h.integrable_snd, h.symm.integrable_snd, integrable_snd
+/-
+**ProbabilityTheory.IdentDistrib.integrable_iff** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.IdentDistrib`。
+形式化陈述：integrable_iff [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g
+ μ ν) : Integrable f μ ↔ Integrable g ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.integrable_snd`：integrable_snd [NormedAdd
+CommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν) (hf : Integrable f μ) : I
+ntegrable g ν
+· 使用定理 `ProbabilityTheory.IdentDistrib.symm`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {μ : M…
 -/
 theorem integrable_iff [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν) :
     Integrable f μ ↔ Integrable g ν :=
   ⟨fun hf => h.integrable_snd hf, fun hg => h.symm.integrable_snd hg⟩
-
-/--
-theorem `norm` / 定理 `norm`
-
-English:
-theorem norm
-  given: [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν)
-  proof: h.comp measurable_norm
-
-中文:
-定理 norm
-  条件: [赋范交换加群 γ] [OpensMeasurable空间 γ] (h : 同分布 f g μ ν)
-  证明: h.comp measurable_norm
+/-
+**ProbabilityTheory.IdentDistrib.norm** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] 
+[inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] {μ : MeasureTheory.M
+easure α} {ν : MeasureTheory.Measure β} {f : α → γ} {g : β → γ}   [inst_3 : Norm
+edAddCommGroup γ] [OpensMeasurableSpace γ],   ProbabilityTheory.IdentDistrib f g
+ μ ν → ProbabilityTheory.IdentDistrib (fun x => ‖f x‖) (fun x => ‖g x‖) μ ν
+参数：fun x => ‖f x‖；fun x => ‖g x‖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `measurable_norm`：measurable_norm : Measurable (norm : α -> Real)
 -/
 protected theorem norm [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν) :
     IdentDistrib (fun x => ‖f x‖) (fun x => ‖g x‖) μ ν :=
   h.comp measurable_norm
-
-/--
-theorem `nnnorm` / 定理 `nnnorm`
-
-English:
-theorem nnnorm
-  statement: [NormedAddCommGroup γ] [OpensMeasurableSpace γ]
-  proof: h.comp measurable_nnnorm
-
-中文:
-定理 nnnorm
-  结论: [赋范交换加群 γ] [OpensMeasurable空间 γ]
-  证明: h.comp measurable_nnnorm
+/-
+**ProbabilityTheory.IdentDistrib.nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] 
+[inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] {μ : MeasureTheory.M
+easure α} {ν : MeasureTheory.Measure β} {f : α → γ} {g : β → γ}   [inst_3 : Norm
+edAddCommGroup γ] [OpensMeasurableSpace γ],   ProbabilityTheory.IdentDistrib f g
+ μ ν → ProbabilityTheory.IdentDistrib (fun x => ‖f x‖₊) (fun x => ‖g x‖₊) μ ν
+参数：fun x => ‖f x‖₊；fun x => ‖g x‖₊。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `measurable_nnnorm`：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0
+)
 -/
 protected theorem nnnorm [NormedAddCommGroup γ] [OpensMeasurableSpace γ]
     (h : IdentDistrib f g μ ν) :
     IdentDistrib (fun x => ‖f x‖₊) (fun x => ‖g x‖₊) μ ν :=
   h.comp measurable_nnnorm
-
-/--
-theorem `pow` / 定理 `pow`
-
-English:
-theorem pow
-  given: [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν) {n : Nat}
-  proof: h.comp (measurable_id.pow_const n)
-
-中文:
-定理 pow
-  条件: [幂 γ 自然数] [MeasurablePow γ 自然数] (h : 同分布 f g μ ν) {n : 自然数}
-  证明: h.comp (measurable_id.pow_const n)
+/-
+**ProbabilityTheory.IdentDistrib.pow** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheor
+y.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] 
+[inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] {μ : MeasureTheory.M
+easure α} {ν : MeasureTheory.Measure β} {f : α → γ} {g : β → γ}   [inst_3 : Pow 
+γ ℕ] [MeasurablePow γ ℕ],   ProbabilityTheory.IdentDistrib f g μ ν →     ∀ {n : 
+ℕ}, ProbabilityTheory.IdentDistrib (fun x => f x ^ n) (fun x => g x ^ n) μ ν
+参数：fun x => f x ^ n；fun x => g x ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `Measurable.pow_const`：Measurable.pow_const (hf : Measurable f) (c : γ) :
+ Measurable fun x => f x ^ c
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
-protected theorem pow [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν) {n : Nat} :
+protected theorem pow [Pow γ ℕ] [MeasurablePow γ ℕ] (h : IdentDistrib f g μ ν) {n : ℕ} :
     IdentDistrib (fun x => f x ^ n) (fun x => g x ^ n) μ ν :=
   h.comp (measurable_id.pow_const n)
-
-/--
-theorem `sq` / 定理 `sq`
-
-English:
-theorem sq
-  given: [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν)
-  proof: h.comp (measurable_id.pow_const 2)
-
-中文:
-定理 sq
-  条件: [幂 γ 自然数] [MeasurablePow γ 自然数] (h : 同分布 f g μ ν)
-  证明: h.comp (measurable_id.pow_const 2)
+/-
+**ProbabilityTheory.IdentDistrib.sq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] 
+[inst_1 : MeasurableSpace β]   [inst_2 : MeasurableSpace γ] {μ : MeasureTheory.M
+easure α} {ν : MeasureTheory.Measure β} {f : α → γ} {g : β → γ}   [inst_3 : Pow 
+γ ℕ] [MeasurablePow γ ℕ],   ProbabilityTheory.IdentDistrib f g μ ν → Probability
+Theory.IdentDistrib (fun x => f x ^ 2) (fun x => g x ^ 2) μ ν
+参数：fun x => f x ^ 2；fun x => g x ^ 2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `Measurable.pow_const`：Measurable.pow_const (hf : Measurable f) (c : γ) :
+ Measurable fun x => f x ^ c
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
-protected theorem sq [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν) :
+protected theorem sq [Pow γ ℕ] [MeasurablePow γ ℕ] (h : IdentDistrib f g μ ν) :
     IdentDistrib (fun x => f x ^ 2) (fun x => g x ^ 2) μ ν :=
   h.comp (measurable_id.pow_const 2)
-
-/--
-theorem `coe_nnreal_ennreal` / 定理 `coe_nnreal_ennreal`
-
-English:
-theorem coe_nnreal_ennreal
-  given: {f : α -> Real>=0} {g : β -> Real>=0} (h : IdentDistrib f g μ ν)
-  proof: h.comp measurable_coe_nnreal_ennreal
-
-@[to_additive]
-
-中文:
-定理 coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} {g : β -> 实数>=0} (h : 同分布 f g μ ν)
-  证明: h.comp measurable_coe_nnreal_ennreal
-
-@[to_additive]
+/-
+**ProbabilityTheory.IdentDistrib.coe_nnreal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.IdentDistrib`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : Measu
+rableSpace β] {μ : MeasureTheory.Measure α}   {ν : MeasureTheory.Measure β} {f :
+ α → NNReal} {g : β → NNReal},   ProbabilityTheory.IdentDistrib f g μ ν → Probab
+ilityTheory.IdentDistrib (fun x => ↑(f x)) (fun x => ↑(g x)) μ ν
+参数：fun x => ↑(f x)；fun x => ↑(g x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `measurable_coe_nnreal_ennreal`：measurable_coe_nnreal_ennreal : Measurabl
+e ((↑) : Real>=0 -> Real>=0∞)
 -/
-protected theorem coe_nnreal_ennreal {f : α -> Real>=0} {g : β -> Real>=0} (h : IdentDistrib f g μ ν) :
-    IdentDistrib (fun x => (f x : Real>=0∞)) (fun x => (g x : Real>=0∞)) μ ν :=
+protected theorem coe_nnreal_ennreal {f : α → ℝ≥0} {g : β → ℝ≥0} (h : IdentDistrib f g μ ν) :
+    IdentDistrib (fun x => (f x : ℝ≥0∞)) (fun x => (g x : ℝ≥0∞)) μ ν :=
   h.comp measurable_coe_nnreal_ennreal
 
 @[to_additive]
-/--
-theorem `mul_const` / 定理 `mul_const`
-
-English:
-theorem mul_const
-  given: [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ)
-  proof: h.comp (measurable_mul_const c)
-
-@[to_additive]
-
-中文:
-定理 mul_const
-  条件: [乘法 γ] [MeasurableMul γ] (h : 同分布 f g μ ν) (c : γ)
-  证明: h.comp (measurable_mul_const c)
-
-@[to_additive]
-
-Depends on / 依赖: h.comp, measurable_mul_const
+/-
+**ProbabilityTheory.IdentDistrib.mul_const** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：mul_const [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ) : I
+dentDistrib (fun x => f x * c) (fun x => g x * c) μ ν
+参数：h : IdentDistrib f g μ ν；c : γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `MeasurableMul.measurable_mul_const`：∀ {M : Type u_2} {inst : MeasurableS
+pace M} {inst_1 : Mul M} [self : MeasurableMul M] (c : M), Measurable fun x => x
+ * c
 -/
 theorem mul_const [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ) :
     IdentDistrib (fun x => f x * c) (fun x => g x * c) μ ν :=
   h.comp (measurable_mul_const c)
 
 @[to_additive]
-/--
-theorem `const_mul` / 定理 `const_mul`
-
-English:
-theorem const_mul
-  given: [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ)
-  proof: h.comp (measurable_const_mul c)
-
-@[to_additive]
-
-中文:
-定理 const_mul
-  条件: [乘法 γ] [MeasurableMul γ] (h : 同分布 f g μ ν) (c : γ)
-  证明: h.comp (measurable_const_mul c)
-
-@[to_additive]
-
-Depends on / 依赖: h.comp, measurable_const_mul
+/-
+**ProbabilityTheory.IdentDistrib.const_mul** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：const_mul [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ) : I
+dentDistrib (fun x => c * f x) (fun x => c * g x) μ ν
+参数：h : IdentDistrib f g μ ν；c : γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `MeasurableMul.measurable_const_mul`：∀ {M : Type u_2} {inst : MeasurableS
+pace M} {inst_1 : Mul M} [self : MeasurableMul M] (c : M), Measurable fun x => c
+ * x
 -/
 theorem const_mul [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ) :
     IdentDistrib (fun x => c * f x) (fun x => c * g x) μ ν :=
   h.comp (measurable_const_mul c)
 
 @[to_additive]
-/--
-theorem `div_const` / 定理 `div_const`
-
-English:
-theorem div_const
-  given: [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ)
-  proof: h.comp (MeasurableDiv.measurable_div_const c)
-
-@[to_additive]
-
-中文:
-定理 div_const
-  条件: [除法 γ] [MeasurableDiv γ] (h : 同分布 f g μ ν) (c : γ)
-  证明: h.comp (MeasurableDiv.measurable_div_const c)
-
-@[to_additive]
-
-Depends on / 依赖: MeasurableDiv, MeasurableDiv.measurable_div_const, h.comp, measurable_div_const
+/-
+**ProbabilityTheory.IdentDistrib.div_const** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：div_const [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ) : I
+dentDistrib (fun x => f x / c) (fun x => g x / c) μ ν
+参数：h : IdentDistrib f g μ ν；c : γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `MeasurableDiv.measurable_div_const`：∀ {G₀ : Type u_2} {inst : Measurable
+Space G₀} {inst_1 : Div G₀} [self : MeasurableDiv G₀] (c : G₀),   Measurable fun
+ x => x / c
 -/
 theorem div_const [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ) :
     IdentDistrib (fun x => f x / c) (fun x => g x / c) μ ν :=
   h.comp (MeasurableDiv.measurable_div_const c)
 
 @[to_additive]
-/--
-theorem `const_div` / 定理 `const_div`
-
-English:
-theorem const_div
-  given: [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ)
-  proof: h.comp (MeasurableDiv.measurable_const_div c)
-
-@[to_additive]
-
-中文:
-定理 const_div
-  条件: [除法 γ] [MeasurableDiv γ] (h : 同分布 f g μ ν) (c : γ)
-  证明: h.comp (MeasurableDiv.measurable_const_div c)
-
-@[to_additive]
-
-Depends on / 依赖: MeasurableDiv, MeasurableDiv.measurable_const_div, h.comp, measurable_const_div
+/-
+**ProbabilityTheory.IdentDistrib.const_div** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.IdentDistrib`。
+形式化陈述：const_div [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ) : I
+dentDistrib (fun x => c / f x) (fun x => c / g x) μ ν
+参数：h : IdentDistrib f g μ ν；c : γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `MeasurableDiv.measurable_const_div`：∀ {G₀ : Type u_2} {inst : Measurable
+Space G₀} {inst_1 : Div G₀} [self : MeasurableDiv G₀] (c : G₀),   Measurable fun
+ x => c / x
 -/
 theorem const_div [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ) :
     IdentDistrib (fun x => c / f x) (fun x => c / g x) μ ν :=
   h.comp (MeasurableDiv.measurable_const_div c)
 
 @[to_additive]
-/--
-lemma `inv` / 引理 `inv`
-
-English:
-lemma inv
-  given: [Inv γ] [MeasurableInv γ] (h : IdentDistrib f g μ ν)
-  proof: h.comp measurable_inv
-
-中文:
-引理 inv
-  条件: [取逆 γ] [MeasurableInv γ] (h : 同分布 f g μ ν)
-  证明: h.comp measurable_inv
-
-Depends on / 依赖: h.comp, measurable_inv
+/-
+**ProbabilityTheory.IdentDistrib.inv** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y.IdentDistrib`。
+形式化陈述：inv [Inv γ] [MeasurableInv γ] (h : IdentDistrib f g μ ν) : IdentDistrib f⁻
+¹ g⁻¹ μ ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
+· 使用定理 `MeasurableInv.measurable_inv`：∀ {G : Type u_2} {inst : Inv G} {inst_1 : 
+MeasurableSpace G} [self : MeasurableInv G], Measurable Inv.inv
 -/
 lemma inv [Inv γ] [MeasurableInv γ] (h : IdentDistrib f g μ ν) :
     IdentDistrib f⁻¹ g⁻¹ μ ν := h.comp measurable_inv
-
-/--
-theorem `evariance_eq` / 定理 `evariance_eq`
-
-English:
-theorem evariance_eq
-  given: {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν)
-  proof: by
-  convert! (h.sub_const (∫ x, f x ∂μ)).nnnorm.coe_nnreal_ennreal.sq.lintegral_eq
-  rw [h.integral_eq]
-  rfl
-
-中文:
-定理 evariance_eq
-  条件: {f : α -> 实数} {g : β -> 实数} (h : 同分布 f g μ ν)
-  证明: by
-  convert! (h.sub_const (∫ x, f x ∂μ)).nnnorm.coe_nnreal_ennreal.sq.lintegral_eq
-  rw [h.integral_eq]
-  rfl
-
-Depends on / 依赖: coe_nnreal_ennreal, convert, h.integral_eq, h.sub_const, integral_eq, lintegral_eq, nnnorm, nnnorm.coe_nnreal_ennreal.sq.lintegral_eq, sub_const
+/-
+**ProbabilityTheory.IdentDistrib.evariance_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.IdentDistrib`。
+形式化陈述：evariance_eq {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν) : 
+evariance f μ = evariance g ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.IdentDistrib.integral_eq`：integral_eq [NormedAddCommGr
+oup γ] [NormedSpace Real γ] [BorelSpace γ] (h : IdentDistrib f g μ ν) : ∫ x, f x
+ ∂μ = ∫ x, g x ∂ν
+· 使用定理 `ProbabilityTheory.IdentDistrib.lintegral_eq`：lintegral_eq {f : α -> Real
+>=0∞} {g : β -> Real>=0∞} (h : IdentDistrib f g μ ν) : ∫⁻ x, f x ∂μ = ∫⁻ x, g x 
+∂ν
+· 使用定理 `ProbabilityTheory.IdentDistrib.sq`：∀ {α : Type u_1} {β : Type u_2} {γ : 
+Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : Me
+asurableSpace γ] {μ : M…
+· 使用定理 `ProbabilityTheory.IdentDistrib.coe_nnreal_ennreal`：∀ {α : Type u_1} {β :
+ Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μ : MeasureT
+heory.Measure α}   {ν : MeasureTheory.M…
+· 使用定理 `ProbabilityTheory.IdentDistrib.nnnorm`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {μ : M…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ProbabilityTheory.IdentDistrib.sub_const`：∀ {α : Type u_1} {β : Type u_2
+} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst
+_2 : MeasurableSpace γ] {μ : M…
+· 使用定理 `ContinuousSub.measurableSub`：∀ {γ : Type u_3} [inst : TopologicalSpace γ
+] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [inst_3 : Sub γ]   [ContinuousSub 
+γ], MeasurableSub…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
 -/
-theorem evariance_eq {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν) :
+theorem evariance_eq {f : α → ℝ} {g : β → ℝ} (h : IdentDistrib f g μ ν) :
     evariance f μ = evariance g ν := by
   convert! (h.sub_const (∫ x, f x ∂μ)).nnnorm.coe_nnreal_ennreal.sq.lintegral_eq
   rw [h.integral_eq]
   rfl
-
-/--
-theorem `variance_eq` / 定理 `variance_eq`
-
-English:
-theorem variance_eq
-  given: {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν)
-  proof: by rw [variance, h.evariance_eq]; rfl
-
-中文:
-定理 variance_eq
-  条件: {f : α -> 实数} {g : β -> 实数} (h : 同分布 f g μ ν)
-  证明: by rw [variance, h.evariance_eq]; rfl
-
-Depends on / 依赖: evariance_eq, h.evariance_eq, variance
+/-
+**ProbabilityTheory.IdentDistrib.variance_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabil
+ityTheory.IdentDistrib`。
+形式化陈述：variance_eq {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν) : v
+ariance f μ = variance g ν
+参数：h : IdentDistrib f g μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.variance.eq_1`：∀ {Ω : Type u_1} {mΩ : MeasurableSpace 
+Ω} (X : Ω → ℝ) (μ : MeasureTheory.Measure Ω),   ProbabilityTheory.variance X μ =
+ (ProbabilityTheory.e…
+· 使用定理 `ProbabilityTheory.IdentDistrib.evariance_eq`：evariance_eq {f : α -> Real
+} {g : β -> Real} (h : IdentDistrib f g μ ν) : evariance f μ = evariance g ν
 -/
-theorem variance_eq {f : α -> Real} {g : β -> Real} (h : IdentDistrib f g μ ν) :
+theorem variance_eq {f : α → ℝ} {g : β → ℝ} (h : IdentDistrib f g μ ν) :
     variance f μ = variance g ν := by rw [variance, h.evariance_eq]; rfl
 
 end IdentDistrib
@@ -984,125 +1027,165 @@ variable {E : Type*} [MeasurableSpace E] [NormedAddCommGroup E] [BorelSpace E]
   {μ : Measure α} [IsFiniteMeasure μ]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `MemLp.uniformIntegrable_of_identDistrib_aux` / 定理 `MemLp.uniformIntegrable_of_identDistrib_aux`
+/-- This lemma is superseded by `MemLp.uniformIntegrable_of_identDistrib` which only requires
+`AEStronglyMeasurable`. -/
+/-
+**ProbabilityTheory.MemLp.uniformIntegrable_of_identDistrib_aux** 是 Mathlib 中的一个
+定理，位于命名空间 `ProbabilityTheory.MemLp`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {E : Type u_5} [inst_1 : Measu
+rableSpace E] [inst_2 : NormedAddCommGroup E]   [BorelSpace E] {μ : MeasureTheor
+y.Measure α} [MeasureTheory.IsFiniteMeasure μ] {ι : Type u_6} {f : ι → α → E} {j
+ : ι}   {p : ENNReal},   1 ≤ p →     p ≠ ⊤ →       MeasureTheory.MemLp (f j) p μ
+ →         (∀ (i : ι), MeasureTheory.StronglyMeasurable (f i)) →           (∀ (i
+ : ι), ProbabilityTheory.IdentDistrib (f i) (f j) μ μ) → MeasureTheory.UniformIn
+tegrable f p μ
+参数：f j；∀ (i : ι), MeasureTheory.StronglyMeasurable (f i)；∀ (i : ι), ProbabilityT
+heory.IdentDistrib (f i) (f j) μ μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.uniformIntegrable_of'`：uniformIntegrable_of' [IsFiniteMeas
+ure μ] (hp : 1 <= p) (hp' : p != ∞) (hf : forall i, StronglyMeasurable (f i)) (h
+ : forall ε : Real, 0 < ε…
+· 使用定理 `MeasureTheory.MemLp.eLpNorm_indicator_norm_ge_pos_le`：∀ {α : Type u_1} {
+β : Type u_2} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : Norm
+edAddCommGroup β]   {p : ENNReal} {f : α →…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Real.le_toNNReal_iff_coe_le`：le_toNNReal_iff_coe_le {r : Real>=0} {p : R
+eal} (hp : 0 <= p) : r <= Real.toNNReal p ↔ ↑r <= p
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.eLpNorm_norm`：eLpNorm_norm (f : α -> F) : eLpNorm (fun x =
+> ‖f x‖) p μ = eLpNorm f p μ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_indicator_eq_indicator_norm`：norm_indicator_eq_indicator_norm : ‖in
+dicator s f a‖ = indicator s (fun a => ‖f a‖) a
+· 使用定理 `Measurable.indicator`：Measurable.indicator [Zero β] (hf : Measurable f) 
+(hs : MeasurableSet s) : Measurable (s.indicator f)
+· 使用定理 `measurable_norm`：measurable_norm : Measurable (norm : α -> Real)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `measurableSet_le`：measurableSet_le {f g : δ -> α} (hf : Measurable f) (h
+g : Measurable g) : MeasurableSet { a | f a <= g a }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `NNReal.instOrderTopology`：OrderTopology NNReal
+· 使用定理 `NNReal.instSecondCountableTopology`：SecondCountableTopology NNReal
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `measurable_nnnorm`：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0
+)
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MeasureTheory.eLpNorm_map_measure`：eLpNorm_map_measure (hg : AEStronglyM
+easurable g (Measure.map f μ)) (hf : AEMeasurable f μ) : eLpNorm g p (Measure.ma
+p f μ) = eLpNorm (g ∘ f…
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+（共 33 条，此处仅展示前 30 条）
 
-English:
-theorem MemLp.uniformIntegrable_of_identDistrib_aux
-  statement: {ι : Type*} {f : ι -> α -> E} {j : ι} {p : Real>=0∞}
-  proof: by
-  refine uniformIntegrable_of' hp hp' hfmeas fun ε hε => ?_
-  by_cases hι : Nonempty ι
-  swap; · exact ⟨0, fun i => False.elim (hι <| Nonempty.intro i)⟩
-  obtain ⟨C, hC₁, hC₂⟩ := hℒp.eLpNorm_indicator_norm_ge_pos_le (hfmeas _) hε
-  refine ⟨⟨C, hC₁.le⟩, fun i => le_trans (le_of_eq ?_) hC₂⟩
-  have : {x | (⟨C, hC₁.le⟩ : Real>=0) <= ‖f i x‖₊} = {x | C <= ‖f i x‖} := by
-    ext x
-    simp_rw [← norm_toNNReal]
-    exact Real.le_toNNReal_iff_coe_le (norm_nonneg _)
-  rw [this]; rw [← eLpNorm_norm]; rw [← eLpNorm_norm (Set.indicator _ _)]
-  simp_rw [norm_indicator_eq_indicator_norm, coe_nnnorm]
-  let F : E -> Real := (fun x : E => if (⟨C, hC₁.le⟩ : Real>=0) <= ‖x‖₊ then ‖x‖ else 0)
-  have F_meas : Measurable F := by
-    apply measurable_norm.indicator (measurableSet_le measurable_const measurable_nnnorm)
-  have : forall k, (fun x => Set.indicator {x | C <= ‖f k x‖} (fun a => ‖f k a‖) x) = F ∘ f k := by
-    intro k
-    ext x
-    simp only [Set.indicator, Set.mem_ofPred_eq]; norm_cast
-  rw [this]; rw [this]; rw [← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst]; rw [(hf i).map_eq]; rw [eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
-
-中文:
-定理 MemLp.uniform整数egrable_of_identDistrib_aux
-  结论: {ι : 类型} {f : ι -> α -> E} {j : ι} {p : 实数>=0∞}
-  证明: by
-  refine uniformIntegrable_of' hp hp' hfmeas fun ε hε => ?_
-  by_cases hι : Nonempty ι
-  swap; · exact ⟨0, fun i => False.elim (hι <| Nonempty.intro i)⟩
-  obtain ⟨C, hC₁, hC₂⟩ := hℒp.eLpNorm_indicator_norm_ge_pos_le (hfmeas _) hε
-  refine ⟨⟨C, hC₁.le⟩, fun i => le_trans (le_of_eq ?_) hC₂⟩
-  have : {x | (⟨C, hC₁.le⟩ : Real>=0) <= ‖f i x‖₊} = {x | C <= ‖f i x‖} := by
-    ext x
-    simp_rw [← norm_toNNReal]
-    exact Real.le_toNNReal_iff_coe_le (norm_nonneg _)
-  rw [this]; rw [← eLpNorm_norm]; rw [← eLpNorm_norm (Set.indicator _ _)]
-  simp_rw [norm_indicator_eq_indicator_norm, coe_nnnorm]
-  let F : E -> Real := (fun x : E => if (⟨C, hC₁.le⟩ : Real>=0) <= ‖x‖₊ then ‖x‖ else 0)
-  have F_meas : Measurable F := by
-    apply measurable_norm.indicator (measurableSet_le measurable_const measurable_nnnorm)
-  have : forall k, (fun x => Set.indicator {x | C <= ‖f k x‖} (fun a => ‖f k a‖) x) = F ∘ f k := by
-    intro k
-    ext x
-    simp only [Set.indicator, Set.mem_ofPred_eq]; norm_cast
-  rw [this]; rw [this]; rw [← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst]; rw [(hf i).map_eq]; rw [eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
-
-Depends on / 依赖: False.elim, Nonempty, Nonempty.intro, Real.le_toNNReal_iff_coe_le, Set.ind, eLpNorm_indicator_norm_ge_pos_le, eLpNorm_norm, hfmeas, le_of_eq, le_toNNReal_iff_coe_le, le_trans, norm_nonneg, norm_toNNReal, p.eLpNorm_indicator_norm_ge_pos_le, simp_rw, uniformIntegrable_of
+--- 原说明 ---
+This lemma is superseded by `MemLp.uniformIntegrable_of_identDistrib` which only
+ requires
+`AEStronglyMeasurable`.
 -/
-theorem MemLp.uniformIntegrable_of_identDistrib_aux {ι : Type*} {f : ι -> α -> E} {j : ι} {p : Real>=0∞}
-    (hp : 1 <= p) (hp' : p != ∞) (hℒp : MemLp (f j) p μ) (hfmeas : forall i, StronglyMeasurable (f i))
-    (hf : forall i, IdentDistrib (f i) (f j) μ μ) : UniformIntegrable f p μ := by
+theorem MemLp.uniformIntegrable_of_identDistrib_aux {ι : Type*} {f : ι → α → E} {j : ι} {p : ℝ≥0∞}
+    (hp : 1 ≤ p) (hp' : p ≠ ∞) (hℒp : MemLp (f j) p μ) (hfmeas : ∀ i, StronglyMeasurable (f i))
+    (hf : ∀ i, IdentDistrib (f i) (f j) μ μ) : UniformIntegrable f p μ := by
   refine uniformIntegrable_of' hp hp' hfmeas fun ε hε => ?_
   by_cases hι : Nonempty ι
   swap; · exact ⟨0, fun i => False.elim (hι <| Nonempty.intro i)⟩
   obtain ⟨C, hC₁, hC₂⟩ := hℒp.eLpNorm_indicator_norm_ge_pos_le (hfmeas _) hε
   refine ⟨⟨C, hC₁.le⟩, fun i => le_trans (le_of_eq ?_) hC₂⟩
-  have : {x | (⟨C, hC₁.le⟩ : Real>=0) <= ‖f i x‖₊} = {x | C <= ‖f i x‖} := by
+  have : {x | (⟨C, hC₁.le⟩ : ℝ≥0) ≤ ‖f i x‖₊} = {x | C ≤ ‖f i x‖} := by
     ext x
     simp_rw [← norm_toNNReal]
     exact Real.le_toNNReal_iff_coe_le (norm_nonneg _)
-  rw [this]; rw [← eLpNorm_norm]; rw [← eLpNorm_norm (Set.indicator _ _)]
+  rw [this, ← eLpNorm_norm, ← eLpNorm_norm (Set.indicator _ _)]
   simp_rw [norm_indicator_eq_indicator_norm, coe_nnnorm]
-  let F : E -> Real := (fun x : E => if (⟨C, hC₁.le⟩ : Real>=0) <= ‖x‖₊ then ‖x‖ else 0)
+  let F : E → ℝ := (fun x : E => if (⟨C, hC₁.le⟩ : ℝ≥0) ≤ ‖x‖₊ then ‖x‖ else 0)
   have F_meas : Measurable F := by
     apply measurable_norm.indicator (measurableSet_le measurable_const measurable_nnnorm)
-  have : forall k, (fun x => Set.indicator {x | C <= ‖f k x‖} (fun a => ‖f k a‖) x) = F ∘ f k := by
+  have : ∀ k, (fun x ↦ Set.indicator {x | C ≤ ‖f k x‖} (fun a ↦ ‖f k a‖) x) = F ∘ f k := by
     intro k
     ext x
     simp only [Set.indicator, Set.mem_ofPred_eq]; norm_cast
-  rw [this]; rw [this]; rw [← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst]; rw [(hf i).map_eq]; rw [eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
+  rw [this, this, ← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst,
+    (hf i).map_eq, eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
 
-/--
-theorem `MemLp.uniformIntegrable_of_identDistrib` / 定理 `MemLp.uniformIntegrable_of_identDistrib`
+/-- A sequence of identically distributed Lᵖ functions is p-uniformly integrable. -/
+/-
+**ProbabilityTheory.MemLp.uniformIntegrable_of_identDistrib** 是 Mathlib 中的一个定理，位
+于命名空间 `ProbabilityTheory.MemLp`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {E : Type u_5} [inst_1 : Measu
+rableSpace E] [inst_2 : NormedAddCommGroup E]   [BorelSpace E] {μ : MeasureTheor
+y.Measure α} [MeasureTheory.IsFiniteMeasure μ] {ι : Type u_6} {f : ι → α → E} {j
+ : ι}   {p : ENNReal},   1 ≤ p →     p ≠ ⊤ →       MeasureTheory.MemLp (f j) p μ
+ →         (∀ (i : ι), ProbabilityTheory.IdentDistrib (f i) (f j) μ μ) → Measure
+Theory.UniformIntegrable f p μ
+参数：f j；∀ (i : ι), ProbabilityTheory.IdentDistrib (f i) (f j) μ μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ProbabilityTheory.IdentDistrib.aestronglyMeasurable_iff`：aestronglyMeasu
+rable_iff [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ] (h : Ide
+ntDistrib f g μ ν) : AEStronglyMeasurable f μ…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.MemLp.ae_eq`：∀ {α : Type u_1} {ε : Type u_2} {m0 : Measura
+bleSpace α} {p : ENNReal} {μ : MeasureTheory.Measure α} [inst : ENorm ε]   [inst
+_1 : Topologica…
+· 使用定理 `MeasureTheory.UniformIntegrable.ae_eq`：∀ {α : Type u_1} {β : Type u_2} {
+ι : Type u_3} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α}   [inst : No
+rmedAddCommGroup β] {p : EN…
+· 使用定理 `ProbabilityTheory.MemLp.uniformIntegrable_of_identDistrib_aux`：∀ {α : Ty
+pe u_1} [inst : MeasurableSpace α] {E : Type u_5} [inst_1 : MeasurableSpace E] [
+inst_2 : NormedAddCommGroup E]   [BorelSpace E] {μ …
+· 使用定理 `ProbabilityTheory.IdentDistrib.trans`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace
+ β]   [inst_2 : Measurable…
+· 使用定理 `ProbabilityTheory.IdentDistrib.of_ae_eq`：∀ {α : Type u_1} {γ : Type u_3}
+ [inst : MeasurableSpace α] [inst_1 : MeasurableSpace γ] {μ : MeasureTheory.Meas
+ure α}   {f g : α → γ}, AEMea…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {β : Typ
+e u_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β]   [Topolo
+gicalSpace.PseudoMetrizableSpace β]…
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {m₀ : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : Measurab
+leSpace β]   [inst_1 : TopologicalSpa…
 
-English:
-theorem MemLp.uniformIntegrable_of_identDistrib
-  statement: {ι : Type*} {f : ι -> α -> E} {j : ι} {p : Real>=0∞}
-  proof: by
-  have hfmeas : forall i, AEStronglyMeasurable (f i) μ := fun i =>
-    (hf i).aestronglyMeasurable_iff.2 hℒp.1
-  set g : ι -> α -> E := fun i => (hfmeas i).choose
-  have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
-  have hgeq : forall i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
-  have hgℒp : MemLp (g j) p μ := hℒp.ae_eq (hgeq j).symm
-  exact UniformIntegrable.ae_eq
-    (MemLp.uniformIntegrable_of_identDistrib_aux hp hp' hgℒp hgmeas fun i =>
-      (IdentDistrib.of_ae_eq (hgmeas i).aemeasurable (hgeq i)).trans
-        ((hf i).trans <| IdentDistrib.of_ae_eq (hfmeas j).aemeasurable (hgeq j).symm)) hgeq
-
-中文:
-定理 MemLp.uniform整数egrable_of_identDistrib
-  结论: {ι : 类型} {f : ι -> α -> E} {j : ι} {p : 实数>=0∞}
-  证明: by
-  have hfmeas : forall i, AEStronglyMeasurable (f i) μ := fun i =>
-    (hf i).aestronglyMeasurable_iff.2 hℒp.1
-  set g : ι -> α -> E := fun i => (hfmeas i).choose
-  have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
-  have hgeq : forall i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
-  have hgℒp : MemLp (g j) p μ := hℒp.ae_eq (hgeq j).symm
-  exact UniformIntegrable.ae_eq
-    (MemLp.uniformIntegrable_of_identDistrib_aux hp hp' hgℒp hgmeas fun i =>
-      (IdentDistrib.of_ae_eq (hgmeas i).aemeasurable (hgeq i)).trans
-        ((hf i).trans <| IdentDistrib.of_ae_eq (hfmeas j).aemeasurable (hgeq j).symm)) hgeq
-
-Depends on / 依赖: AEStronglyMeasurable, Exists, Exists.choose_spec, MemLp.uniformIntegrable_of_identDistrib_aux, StronglyMeasurable, UniformIntegrable, UniformIntegrable.ae_eq, ae_eq, aestronglyMeasurable_iff, choose_spec, hfmeas, hgmeas, p.ae_eq, uniformIntegrable_of_identDistrib_aux
+--- 原说明 ---
+A sequence of identically distributed Lᵖ functions is p-uniformly integrable.
 -/
-theorem MemLp.uniformIntegrable_of_identDistrib {ι : Type*} {f : ι -> α -> E} {j : ι} {p : Real>=0∞}
-    (hp : 1 <= p) (hp' : p != ∞) (hℒp : MemLp (f j) p μ) (hf : forall i, IdentDistrib (f i) (f j) μ μ) :
+theorem MemLp.uniformIntegrable_of_identDistrib {ι : Type*} {f : ι → α → E} {j : ι} {p : ℝ≥0∞}
+    (hp : 1 ≤ p) (hp' : p ≠ ∞) (hℒp : MemLp (f j) p μ) (hf : ∀ i, IdentDistrib (f i) (f j) μ μ) :
     UniformIntegrable f p μ := by
-  have hfmeas : forall i, AEStronglyMeasurable (f i) μ := fun i =>
+  have hfmeas : ∀ i, AEStronglyMeasurable (f i) μ := fun i =>
     (hf i).aestronglyMeasurable_iff.2 hℒp.1
-  set g : ι -> α -> E := fun i => (hfmeas i).choose
-  have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
-  have hgeq : forall i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
+  set g : ι → α → E := fun i => (hfmeas i).choose
+  have hgmeas : ∀ i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
+  have hgeq : ∀ i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
   have hgℒp : MemLp (g j) p μ := hℒp.ae_eq (hgeq j).symm
   exact UniformIntegrable.ae_eq
     (MemLp.uniformIntegrable_of_identDistrib_aux hp hp' hgℒp hgmeas fun i =>
@@ -1111,39 +1194,63 @@ theorem MemLp.uniformIntegrable_of_identDistrib {ι : Type*} {f : ι -> α -> E}
 
 end UniformIntegrable
 
-/--
-lemma `indepFun_of_identDistrib_pair` / 引理 `indepFun_of_identDistrib_pair`
+/-- If `X` and `Y` are independent and `(X, Y)` and `(X', Y')` are identically distributed,
+then `X'` and `Y'` are independent. -/
+/-
+**ProbabilityTheory.indepFun_of_identDistrib_pair** 是 Mathlib 中的一个引理，位于命名空间 `Pro
+babilityTheory`。
+形式化陈述：indepFun_of_identDistrib_pair {μ : Measure γ} {μ' : Measure δ} [IsFiniteMe
+asure μ] [IsFiniteMeasure μ'] {X : γ -> α} {X' : δ -> α} {Y : γ -> β} {Y' : δ ->
+ β} (h_indep : X ⟂ᵢ[μ] Y) (h_ident : IdentDistrib (fun ω => (X ω, Y ω)) (fun ω =
+> (X' ω, Y' ω)) μ μ') : X' ⟂ᵢ[μ'] Y'
+参数：h_indep : X ⟂ᵢ[μ] Y；h_ident : IdentDistrib (fun ω => (X ω, Y ω)) (fun ω => (X
+' ω, Y' ω)) μ μ'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.indepFun_iff_map_prod_eq_prod_map_map`：indepFun_iff_ma
+p_prod_eq_prod_map_map {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'} [IsFi
+niteMeasure μ] (hf : AEMeasurable f μ) (hg : …
+· 使用定理 `AEMeasurable.comp_aemeasurable`：comp_aemeasurable {f : α -> δ} {g : δ ->
+ β} (hg : AEMeasurable g (μ.map f)) (hf : AEMeasurable f μ) : AEMeasurable (g ∘ 
+f) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_snd`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `ProbabilityTheory.IndepFun.map_prod_eq_prod_map_map`：∀ {Ω : Type u_1} {β
+ : Type u_6} {β' : Type u_7} {_mΩ : MeasurableSpace Ω} {μ : MeasureTheory.Measur
+e Ω} {f : Ω → β}   {g : Ω → β'} {mβ : Mea…
+· 使用定理 `ProbabilityTheory.IdentDistrib.aemeasurable_fst`：∀ {α : Type u_1} {β : T
+ype u_2} {γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] 
+  [inst_2 : MeasurableSpace γ] {f : α…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ProbabilityTheory.IdentDistrib.comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {δ : Type u_4} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace 
+β]   [inst_2 : Measurable…
 
-English:
-lemma indepFun_of_identDistrib_pair
-  proof: by
-  rw [indepFun_iff_map_prod_eq_prod_map_map]; rw [← h_ident.map_eq]; rw [h_indep.map_prod_eq_prod_map_map]
-  · exact congr (congrArg Measure.prod <| (h_ident.comp measurable_fst).map_eq)
-      (h_ident.comp measurable_snd).map_eq
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
-  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
-  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
-
-中文:
-引理 indepFun_of_identDistrib_pair
-  证明: by
-  rw [indepFun_iff_map_prod_eq_prod_map_map]; rw [← h_ident.map_eq]; rw [h_indep.map_prod_eq_prod_map_map]
-  · exact congr (congrArg Measure.prod <| (h_ident.comp measurable_fst).map_eq)
-      (h_ident.comp measurable_snd).map_eq
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
-  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
-  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
-
-Depends on / 依赖: Measure, Measure.prod, aemeasurable, aemeasurable_fst, aemeasurable_snd, comp_aemeasurable, h_ident, h_ident.aemeasurable_fst, h_ident.aemeasurable_snd, h_ident.comp, h_ident.map_eq, h_indep, h_indep.map_prod_eq_prod_map_map, indepFun_iff_map_prod_eq_prod_map_map, map_eq, map_prod_eq_prod_map_map, measurable_fst, measurable_fst.aemeasurable.comp_aemeasurable, measurable_snd, measurable_snd.aemeasurable.comp
+--- 原说明 ---
+If `X` and `Y` are independent and `(X, Y)` and `(X', Y')` are identically distr
+ibuted,
+then `X'` and `Y'` are independent.
 -/
 lemma indepFun_of_identDistrib_pair
     {μ : Measure γ} {μ' : Measure δ} [IsFiniteMeasure μ] [IsFiniteMeasure μ']
-    {X : γ -> α} {X' : δ -> α} {Y : γ -> β} {Y' : δ -> β} (h_indep : X ⟂ᵢ[μ] Y)
-    (h_ident : IdentDistrib (fun ω => (X ω, Y ω)) (fun ω => (X' ω, Y' ω)) μ μ') :
+    {X : γ → α} {X' : δ → α} {Y : γ → β} {Y' : δ → β} (h_indep : X ⟂ᵢ[μ] Y)
+    (h_ident : IdentDistrib (fun ω ↦ (X ω, Y ω)) (fun ω ↦ (X' ω, Y' ω)) μ μ') :
     X' ⟂ᵢ[μ'] Y' := by
-  rw [indepFun_iff_map_prod_eq_prod_map_map]; rw [← h_ident.map_eq]; rw [h_indep.map_prod_eq_prod_map_map]
+  rw [indepFun_iff_map_prod_eq_prod_map_map, ← h_ident.map_eq, h_indep.map_prod_eq_prod_map_map]
   · exact congr (congrArg Measure.prod <| (h_ident.comp measurable_fst).map_eq)
       (h_ident.comp measurable_snd).map_eq
   · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
@@ -1152,3 +1259,4 @@ lemma indepFun_of_identDistrib_pair
   · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
 
 end ProbabilityTheory
+

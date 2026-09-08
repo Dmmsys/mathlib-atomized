@@ -20,7 +20,7 @@ This file defines affine maps.
 
 ## Main definitions
 
-* `AffineMap` is the type of affine maps between two affine spaces with the same ring `k`. Various
+* `AffineMap` is the type of affine maps between two affine spaces with the same ring `k`.  Various
   basic examples of affine maps are defined, including `const`, `id`, `lineMap` and `homothety`.
 
 ## Notation
@@ -49,139 +49,93 @@ topology are defined elsewhere; see `Analysis.Normed.Affine.AddTorsor` and
 
 open Affine Module
 
-/--
-Definition of `AffineMap` / `AffineMap` 的定义
+/-- An `AffineMap k P1 P2` (notation: `P1 →ᵃ[k] P2`) is a map from `P1` to `P2` that
+induces a corresponding linear map from `V1` to `V2`. -/
+/-
+**AffineMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(k : Type u_1) →   {V1 : Type u_2} →     (P1 : Type u_3) →       {V2 : Typ
+e u_4} →         (P2 : Type u_5) →           [inst : Ring k] →             [inst
+_1 : AddCommGroup V1] →               [_root_.Module k V1] →                 [Ad
+dTorsor V1 P1] →                   [inst_4 : AddCommGroup V2] →                 
+    [_root_.Module k V2] → [AddTorsor V2 P2] → Type (max (max (max u_2 u_3) u_4)
+ u_5)
+参数：max (max u_2 u_3) u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AffineMap
-  parameters: (k : Type*) {V1 : Type*} (P1 : Type*) {V2 : Type*} (P2 : Type*) [Ring k]
-  axioms and operations (3):
-    - toFun : P1 -> P2
-    - linear : V1 ->ₗ[k] V2
-    - map_vadd' : forall (p : P1) (v : V1), toFun (v +ᵥ p) = linear v +ᵥ toFun p
-
-中文:
-结构 仿射映射
-  参数: (k : 类型) {V1 : 类型} (P1 : 类型) {V2 : 类型} (P2 : 类型) [环 k]
-  公理与运算 (3 个):
-    - toFun : P1 -> P2
-    - linear : V1 ->ₗ[k] V2
-    - map_vadd' : 对任意 (p : P1) (v : V1), toFun (v +ᵥ p) = linear v +ᵥ toFun p
+--- 原说明 ---
+An `AffineMap k P1 P2` (notation: `P1 →ᵃ[k] P2`) is a map from `P1` to `P2` that
+induces a corresponding linear map from `V1` to `V2`.
 -/
 structure AffineMap (k : Type*) {V1 : Type*} (P1 : Type*) {V2 : Type*} (P2 : Type*) [Ring k]
   [AddCommGroup V1] [Module k V1] [AffineSpace V1 P1] [AddCommGroup V2] [Module k V2]
   [AffineSpace V2 P2] where
   /-- The underlying function between the affine spaces `P1` and `P2`. -/
-  toFun : P1 -> P2
+  toFun : P1 → P2
   /-- The linear map between the corresponding vector spaces `V1` and `V2`.
   This represents how the affine map acts on differences of points. -/
-  linear : V1 ->ₗ[k] V2
-  map_vadd' : forall (p : P1) (v : V1), toFun (v +ᵥ p) = linear v +ᵥ toFun p
+  linear : V1 →ₗ[k] V2
+  map_vadd' : ∀ (p : P1) (v : V1), toFun (v +ᵥ p) = linear v +ᵥ toFun p
 
 /-- An `AffineMap k P1 P2` (notation: `P1 →ᵃ[k] P2`) is a map from `P1` to `P2` that
 induces a corresponding linear map from `V1` to `V2`. -/
-notation:25 P1 " ->ᵃ[" k:25 "] " P2:0 => AffineMap k P1 P2
+notation:25 P1 " →ᵃ[" k:25 "] " P2:0 => AffineMap k P1 P2
 
-/--
-Instance `AffineMap.instFunLike` / 实例 `AffineMap.instFunLike`
-
-English:
-instance AffineMap.instFunLike
-  signature: (k : Type*) {V1 : Type*} (P1 : Type*) {V2 : Type*} (P2 : Type*)
-  body: AffineMap.toFun
-  coe_injective := fun ⟨f, f_linear, f_add⟩ ⟨g, g_linear, g_add⟩ => fun (h : f = g) => by
-    obtain ⟨p⟩ := (AddTorsor.nonempty : Nonempty P1)
-    congr with v
-    apply vadd_right_cancel (f p)
-    rw [← f_add]; rw [h]; rw [← g_add]
-
-中文:
-实例 仿射映射.instFunLike
-  签名: (k : 类型) {V1 : 类型} (P1 : 类型) {V2 : 类型} (P2 : 类型)
-  定义体: AffineMap.toFun
-  coe_injective := fun ⟨f, f_linear, f_add⟩ ⟨g, g_linear, g_add⟩ => fun (h : f = g) => by
-    obtain ⟨p⟩ := (AddTorsor.nonempty : Nonempty P1)
-    congr with v
-    apply vadd_right_cancel (f p)
-    rw [← f_add]; rw [h]; rw [← g_add]
-
-Depends on / 依赖: AffineMap, AffineMap.toFun
+/-
+**AffineMap.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AffineMap.instFunLike (k : Type*) {V1 : Type*} (P1 : Type*) {V2 : Type*} (
+P2 : Type*) [Ring k] [AddCommGroup V1] [Module k V1] [AffineSpace V1 P1] [AddCom
+mGroup V2] [Module k V2] [AffineSpace V2 P2] : FunLike (P1 ->ᵃ[k] P2) P1 P2 wher
+e coe
+参数：k : Type*；P1 : Type*；P2 : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance AffineMap.instFunLike (k : Type*) {V1 : Type*} (P1 : Type*) {V2 : Type*} (P2 : Type*)
     [Ring k] [AddCommGroup V1] [Module k V1] [AffineSpace V1 P1] [AddCommGroup V2] [Module k V2]
-    [AffineSpace V2 P2] : FunLike (P1 ->ᵃ[k] P2) P1 P2 where
+    [AffineSpace V2 P2] : FunLike (P1 →ᵃ[k] P2) P1 P2 where
   coe := AffineMap.toFun
   coe_injective := fun ⟨f, f_linear, f_add⟩ ⟨g, g_linear, g_add⟩ => fun (h : f = g) => by
     obtain ⟨p⟩ := (AddTorsor.nonempty : Nonempty P1)
     congr with v
     apply vadd_right_cancel (f p)
-    rw [← f_add]; rw [h]; rw [← g_add]
+    rw [← f_add, h, ← g_add]
 
 namespace LinearMap
 
 variable {k : Type*} {V₁ : Type*} {V₂ : Type*} [Ring k] [AddCommGroup V₁] [Module k V₁]
-  [AddCommGroup V₂] [Module k V₂] (f : V₁ ->ₗ[k] V₂)
+  [AddCommGroup V₂] [Module k V₂] (f : V₁ →ₗ[k] V₂)
 
-/--
-Definition of `toAffineMap` / `toAffineMap` 的定义
+/-- Reinterpret a linear map as an affine map. -/
+/-
+**LinearMap.toAffineMap** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：toAffineMap : V₁ ->ᵃ[k] V₂ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAffineMap
-  signature: : V₁ ->ᵃ[k] V₂ where
-  body: f
-  linear := f
-  map_vadd' p v := f.map_add v p
-
-@[simp]
-
-中文:
-定义 toAffineMap
-  签名: : V₁ ->ᵃ[k] V₂ where
-  定义体: f
-  linear := f
-  map_vadd' p v := f.map_add v p
-
-@[simp]
+--- 原说明 ---
+Reinterpret a linear map as an affine map.
 -/
-def toAffineMap : V₁ ->ᵃ[k] V₂ where
+def toAffineMap : V₁ →ᵃ[k] V₂ where
   toFun := f
   linear := f
   map_vadd' p v := f.map_add v p
 
 @[simp]
-/--
-theorem `coe_toAffineMap` / 定理 `coe_toAffineMap`
-
-English:
-theorem coe_toAffineMap
-  statement: ⇑f.toAffineMap = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toAffineMap
-  结论: ⇑f.toAffineMap = f
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.coe_toAffineMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：coe_toAffineMap : ⇑f.toAffineMap = f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toAffineMap : ⇑f.toAffineMap = f :=
   rfl
 
 @[simp]
-/--
-theorem `toAffineMap_linear` / 定理 `toAffineMap_linear`
-
-English:
-theorem toAffineMap_linear
-  statement: f.toAffineMap.linear = f
-  proof: rfl
-
-中文:
-定理 toAffineMap_linear
-  结论: f.toAffineMap.linear = f
-  证明: rfl
+/-
+**LinearMap.toAffineMap_linear** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：toAffineMap_linear : f.toAffineMap.linear = f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAffineMap_linear : f.toAffineMap.linear = f :=
   rfl
@@ -198,256 +152,222 @@ variable {k : Type*} {V1 : Type*} {P1 : Type*} {V2 : Type*} {P2 : Type*} {V3 : T
 /-- Constructing an affine map and coercing back to a function
 produces the same map. -/
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
+/-
+**AffineMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_mk (f : P1 -> P2) (linear add) : ((mk f linear add : P1 ->ᵃ[k] P2) : P
+1 -> P2) = f
+参数：f : P1 -> P2；linear add。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_mk
-  given: (f : P1 -> P2) (linear add)
-  statement: ((mk f linear add : P1 ->ᵃ[k] P2) : P1 -> P2) = f
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : P1 -> P2) (linear add)
-  结论: ((mk f linear add : P1 ->ᵃ[k] P2) : P1 -> P2) = f
-  证明: rfl
+--- 原说明 ---
+Constructing an affine map and coercing back to a function
+produces the same map.
 -/
-theorem coe_mk (f : P1 -> P2) (linear add) : ((mk f linear add : P1 ->ᵃ[k] P2) : P1 -> P2) = f :=
+theorem coe_mk (f : P1 → P2) (linear add) : ((mk f linear add : P1 →ᵃ[k] P2) : P1 → P2) = f :=
   rfl
 
 /-- `toFun` is the same as the result of coercing to a function. -/
 @[simp]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
+/-
+**AffineMap.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：toFun_eq_coe (f : P1 ->ᵃ[k] P2) : f.toFun = ⇑f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toFun_eq_coe
-  given: (f : P1 ->ᵃ[k] P2)
-  statement: f.toFun = ⇑f
-  proof: rfl
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : P1 ->ᵃ[k] P2)
-  结论: f.toFun = ⇑f
-  证明: rfl
+--- 原说明 ---
+`toFun` is the same as the result of coercing to a function.
 -/
-theorem toFun_eq_coe (f : P1 ->ᵃ[k] P2) : f.toFun = ⇑f :=
+theorem toFun_eq_coe (f : P1 →ᵃ[k] P2) : f.toFun = ⇑f :=
   rfl
 
 /-- An affine map on the result of adding a vector to a point produces
 the same result as the linear map applied to that vector, added to the
 affine map applied to that point. -/
 @[simp]
-/--
-theorem `map_vadd` / 定理 `map_vadd`
+/-
+**AffineMap.map_vadd** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v +ᵥ p) = f.linear v +ᵥ
+ f p
+参数：f : P1 ->ᵃ[k] P2；p : P1；v : V1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.map_vadd'`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V
+2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst
+_2 : _roo…
 
-English:
-theorem map_vadd
-  given: (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1)
-  statement: f (v +ᵥ p) = f.linear v +ᵥ f p
-  proof: f.map_vadd' p v
-
-中文:
-定理 map_vadd
-  条件: (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1)
-  结论: f (v +ᵥ p) = f.linear v +ᵥ f p
-  证明: f.map_vadd' p v
-
-Depends on / 依赖: f.map_vadd, map_vadd
+--- 原说明 ---
+An affine map on the result of adding a vector to a point produces
+the same result as the linear map applied to that vector, added to the
+affine map applied to that point.
 -/
-theorem map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v +ᵥ p) = f.linear v +ᵥ f p :=
+theorem map_vadd (f : P1 →ᵃ[k] P2) (p : P1) (v : V1) : f (v +ᵥ p) = f.linear v +ᵥ f p :=
   f.map_vadd' p v
 
 /-- The linear map on the result of subtracting two points is the
 result of subtracting the result of the affine map on those two
 points. -/
 @[simp]
-/--
-theorem `linearMap_vsub` / 定理 `linearMap_vsub`
+/-
+**AffineMap.linearMap_vsub** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1) : f.linear (p1 -ᵥ p2) = f p
+1 -ᵥ f p2
+参数：f : P1 ->ᵃ[k] P2；p1 p2 : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `vsub_vadd`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (p₁ p₂ : P), (p₁ -ᵥ p₂) +ᵥ p₂ = p₁
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
 
-English:
-theorem linearMap_vsub
-  given: (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
-  statement: f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
-  proof: by
-  conv_rhs => rw [← vsub_vadd p1 p2, map_vadd, vadd_vsub]
-
-中文:
-定理 linearMap_vsub
-  条件: (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
-  结论: f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
-  证明: by
-  conv_rhs => rw [← vsub_vadd p1 p2, map_vadd, vadd_vsub]
-
-Depends on / 依赖: conv_rhs, map_vadd, vadd_vsub, vsub_vadd
+--- 原说明 ---
+The linear map on the result of subtracting two points is the
+result of subtracting the result of the affine map on those two
+points.
 -/
-theorem linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1) : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2 := by
+theorem linearMap_vsub (f : P1 →ᵃ[k] P2) (p1 p2 : P1) : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2 := by
   conv_rhs => rw [← vsub_vadd p1 p2, map_vadd, vadd_vsub]
 
 /-- Two affine maps are equal if they coerce to the same function. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**AffineMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = g
+参数：h : forall p, f p = g p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 
-English:
-theorem ext
-  given: {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: {f g : P1 ->ᵃ[k] P2} (h : 对任意 p, f p = g p)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+--- 原说明 ---
+Two affine maps are equal if they coerce to the same function.
 -/
-theorem ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = g :=
+theorem ext {f g : P1 →ᵃ[k] P2} (h : ∀ p, f p = g p) : f = g :=
   DFunLike.ext _ _ h
-
-/--
-theorem `coeFn_injective` / 定理 `coeFn_injective`
-
-English:
-theorem coeFn_injective
-  statement: @Function.Injective (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑)
-  proof: DFunLike.coe_injective
-
-中文:
-定理 coeFn_injective
-  结论: @函数.单射 (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑)
-  证明: DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**AffineMap.coeFn_injective** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coeFn_injective : @Function.Injective (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coeFn_injective : @Function.Injective (P1 ->ᵃ[k] P2) (P1 -> P2) (⇑) :=
+theorem coeFn_injective : @Function.Injective (P1 →ᵃ[k] P2) (P1 → P2) (⇑) :=
   DFunLike.coe_injective
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: (f : P1 ->ᵃ[k] P2) {x y : P1} (h : x = y)
-  statement: f x = f y
-  proof: congr_arg _ h
-
-中文:
-定理 congr_arg
-  条件: (f : P1 ->ᵃ[k] P2) {x y : P1} (h : x = y)
-  结论: f x = f y
-  证明: congr_arg _ h
+/-
+**AffineMap.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V2 : Type u_4} {P2 : Typ
+e u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst_2 : _root_.Module k V1
+] [inst_3 : AddTorsor V1 P1] [inst_4 : AddCommGroup V2]   [inst_5 : _root_.Modul
+e k V2] [inst_6 : AddTorsor V2 P2] (f : P1 →ᵃ[k] P2) {x y : P1}, x = y → f x = f
+ y
+参数：f : P1 →ᵃ[k] P2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-protected theorem congr_arg (f : P1 ->ᵃ[k] P2) {x y : P1} (h : x = y) : f x = f y :=
+protected theorem congr_arg (f : P1 →ᵃ[k] P2) {x y : P1} (h : x = y) : f x = f y :=
   congr_arg _ h
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : P1 ->ᵃ[k] P2} (h : f = g) (x : P1)
-  statement: f x = g x
-  proof: h ▸ rfl
-
-中文:
-定理 congr_fun
-  条件: {f g : P1 ->ᵃ[k] P2} (h : f = g) (x : P1)
-  结论: f x = g x
-  证明: h ▸ rfl
+/-
+**AffineMap.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V2 : Type u_4} {P2 : Typ
+e u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst_2 : _root_.Module k V1
+] [inst_3 : AddTorsor V1 P1] [inst_4 : AddCommGroup V2]   [inst_5 : _root_.Modul
+e k V2] [inst_6 : AddTorsor V2 P2] {f g : P1 →ᵃ[k] P2}, f = g → ∀ (x : P1), f x 
+= g x
+参数：x : P1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem congr_fun {f g : P1 ->ᵃ[k] P2} (h : f = g) (x : P1) : f x = g x :=
+protected theorem congr_fun {f g : P1 →ᵃ[k] P2} (h : f = g) (x : P1) : f x = g x :=
   h ▸ rfl
 
-/--
-theorem `ext_linear` / 定理 `ext_linear`
+/-- Two affine maps are equal if they have equal linear maps and are equal at some point. -/
+/-
+**AffineMap.ext_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：ext_linear {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g.linear) {p : P1} (h₂ : 
+f p = g p) : f = g
+参数：h₁ : f.linear = g.linear；h₂ : f p = g p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.linearMap_vsub`：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
+ : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AffineMap.map_vadd'`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V
+2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst
+_2 : _roo…
+· 使用定理 `AffineMap.toFun_eq_coe`：toFun_eq_coe (f : P1 ->ᵃ[k] P2) : f.toFun = ⇑f
 
-English:
-theorem ext_linear
-  given: {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g.linear) {p : P1} (h₂ : f p = g p)
-  proof: by
-  ext q
-  have hgl : g.linear (q -ᵥ p) = toFun g ((q -ᵥ p) +ᵥ q) -ᵥ toFun g q := by simp
-  have := f.map_vadd' q (q -ᵥ p)
-  rw [h₁]; rw [hgl]; rw [toFun_eq_coe]; rw [map_vadd]; rw [linearMap_vsub]; rw [h₂] at this
-  simpa
-
-中文:
-定理 ext_linear
-  条件: {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g.linear) {p : P1} (h₂ : f p = g p)
-  证明: by
-  ext q
-  have hgl : g.linear (q -ᵥ p) = toFun g ((q -ᵥ p) +ᵥ q) -ᵥ toFun g q := by simp
-  have := f.map_vadd' q (q -ᵥ p)
-  rw [h₁]; rw [hgl]; rw [toFun_eq_coe]; rw [map_vadd]; rw [linearMap_vsub]; rw [h₂] at this
-  simpa
-
-Depends on / 依赖: f.map_vadd, g.linear, linear, linearMap_vsub, map_vadd, toFun_eq_coe
+--- 原说明 ---
+Two affine maps are equal if they have equal linear maps and are equal at some p
+oint.
 -/
-theorem ext_linear {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g.linear) {p : P1} (h₂ : f p = g p) :
+theorem ext_linear {f g : P1 →ᵃ[k] P2} (h₁ : f.linear = g.linear) {p : P1} (h₂ : f p = g p) :
     f = g := by
   ext q
   have hgl : g.linear (q -ᵥ p) = toFun g ((q -ᵥ p) +ᵥ q) -ᵥ toFun g q := by simp
   have := f.map_vadd' q (q -ᵥ p)
-  rw [h₁]; rw [hgl]; rw [toFun_eq_coe]; rw [map_vadd]; rw [linearMap_vsub]; rw [h₂] at this
+  rw [h₁, hgl, toFun_eq_coe, map_vadd, linearMap_vsub, h₂] at this
   simpa
 
-/--
-theorem `ext_linear_iff` / 定理 `ext_linear_iff`
+/-- Two affine maps are equal if they have equal linear maps and are equal at some point. -/
+/-
+**AffineMap.ext_linear_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：ext_linear_iff {f g : P1 ->ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (exi
+sts p, f p = g p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `AffineMap.ext_linear`：ext_linear {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g
+.linear) {p : P1} (h₂ : f p = g p) : f = g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 
-English:
-theorem ext_linear_iff
-  given: {f g : P1 ->ᵃ[k] P2}
-  statement: f = g ↔ (f.linear = g.linear) ∧ (exists p, f p = g p)
-  proof: ⟨fun h => ⟨congrArg _ h, by inhabit P1; exact default, by rw [h]⟩,
-  fun h => Exists.casesOn h.2 fun _ hp => ext_linear h.1 hp⟩
-
-中文:
-定理 ext_linear_iff
-  条件: {f g : P1 ->ᵃ[k] P2}
-  结论: f = g ↔ (f.linear = g.linear) ∧ (存在 p, f p = g p)
-  证明: ⟨fun h => ⟨congrArg _ h, by inhabit P1; exact default, by rw [h]⟩,
-  fun h => Exists.casesOn h.2 fun _ hp => ext_linear h.1 hp⟩
-
-Depends on / 依赖: Exists, Exists.casesOn, casesOn, ext_linear, inhabit
+--- 原说明 ---
+Two affine maps are equal if they have equal linear maps and are equal at some p
+oint.
 -/
-theorem ext_linear_iff {f g : P1 ->ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (exists p, f p = g p) :=
-  ⟨fun h => ⟨congrArg _ h, by inhabit P1; exact default, by rw [h]⟩,
-  fun h => Exists.casesOn h.2 fun _ hp => ext_linear h.1 hp⟩
+theorem ext_linear_iff {f g : P1 →ᵃ[k] P2} : f = g ↔ (f.linear = g.linear) ∧ (∃ p, f p = g p) :=
+  ⟨fun h ↦ ⟨congrArg _ h, by inhabit P1; exact default, by rw [h]⟩,
+  fun h ↦ Exists.casesOn h.2 fun _ hp ↦ ext_linear h.1 hp⟩
 
 variable (k P1)
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant function as an `AffineMap`. -/
+/-
+**AffineMap.const** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：const (p : P2) : P1 ->ᵃ[k] P2 where toFun
+参数：p : P2。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (p : P2)
-  body: Function.const P1 p
-  linear := 0
-  map_vadd' _ _ :=
-    letI : AddAction V2 P2 := inferInstance
-    by simp
-
-@[simp]
-
-中文:
-定义 const
-  签名: (p : P2)
-  定义体: Function.const P1 p
-  linear := 0
-  map_vadd' _ _ :=
-    letI : AddAction V2 P2 := inferInstance
-    by simp
-
-@[simp]
-
-Depends on / 依赖: Function, Function.const
+--- 原说明 ---
+The constant function as an `AffineMap`.
 -/
-def const (p : P2) : P1 ->ᵃ[k] P2 where
+def const (p : P2) : P1 →ᵃ[k] P2 where
   toFun := Function.const P1 p
   linear := 0
   map_vadd' _ _ :=
@@ -455,596 +375,336 @@ def const (p : P2) : P1 ->ᵃ[k] P2 where
     by simp
 
 @[simp]
-/--
-theorem `coe_const` / 定理 `coe_const`
-
-English:
-theorem coe_const
-  given: (p : P2)
-  statement: ⇑(const k P1 p) = Function.const P1 p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_const
-  条件: (p : P2)
-  结论: ⇑(const k P1 p) = 函数.const P1 p
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_const** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_const (p : P2) : ⇑(const k P1 p) = Function.const P1 p
+参数：p : P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_const (p : P2) : ⇑(const k P1 p) = Function.const P1 p :=
   rfl
 
 @[simp]
-/--
-theorem `const_apply` / 定理 `const_apply`
-
-English:
-theorem const_apply
-  given: (p : P2) (q : P1)
-  statement: (const k P1 p) q = p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 const_apply
-  条件: (p : P2) (q : P1)
-  结论: (const k P1 p) q = p
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.const_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：const_apply (p : P2) (q : P1) : (const k P1 p) q = p
+参数：p : P2；q : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_apply (p : P2) (q : P1) : (const k P1 p) q = p := rfl
 
 @[simp]
-/--
-theorem `const_linear` / 定理 `const_linear`
-
-English:
-theorem const_linear
-  given: (p : P2)
-  statement: (const k P1 p).linear = 0
-  proof: rfl
-
-中文:
-定理 const_linear
-  条件: (p : P2)
-  结论: (const k P1 p).linear = 0
-  证明: rfl
+/-
+**AffineMap.const_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：const_linear (p : P2) : (const k P1 p).linear = 0
+参数：p : P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_linear (p : P2) : (const k P1 p).linear = 0 :=
   rfl
 
 variable {k P1}
-
-/--
-theorem `linear_eq_zero_iff_exists_const` / 定理 `linear_eq_zero_iff_exists_const`
-
-English:
-theorem linear_eq_zero_iff_exists_const
-  given: (f : P1 ->ᵃ[k] P2)
-  proof: by
+/-
+**AffineMap.linear_eq_zero_iff_exists_const** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap
+`。
+形式化陈述：linear_eq_zero_iff_exists_const (f : P1 ->ᵃ[k] P2) : f.linear = 0 ↔ exists
+ q, f = const k P1 q
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.coe_const`：coe_const (p : P2) : ⇑(const k P1 p) = Function.con
+st P1 p
+· 使用定理 `Function.const_apply`：∀ {β : Sort u_1} {α : Sort u_2} {y : β} {x : α}, F
+unction.const α y x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `vsub_eq_zero_iff_eq`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G]
+ [T : AddTorsor G P] {p₁ p₂ : P}, p₁ -ᵥ p₂ = 0 ↔ p₁ = p₂
+· 使用定理 `AffineMap.linearMap_vsub`：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
+ : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
+· 使用定理 `LinearMap.zero_apply`：zero_apply (x : M) : (0 : M ->ₛₗ[σ₁₂] M₂) x = 0
+· 使用定理 `AffineMap.const_linear`：const_linear (p : P2) : (const k P1 p).linear = 
+0
+-/
+theorem linear_eq_zero_iff_exists_const (f : P1 →ᵃ[k] P2) :
+    f.linear = 0 ↔ ∃ q, f = const k P1 q := by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · use f (Classical.arbitrary P1)
     ext
-    rw [coe_const]; rw [Function.const_apply]; rw [← @vsub_eq_zero_iff_eq V2]; rw [← f.linearMap_vsub]; rw [h]; rw [LinearMap.zero_apply]
+    rw [coe_const, Function.const_apply, ← @vsub_eq_zero_iff_eq V2, ← f.linearMap_vsub, h,
+      LinearMap.zero_apply]
   · rcases h with ⟨q, rfl⟩
     exact const_linear k P1 q
-
-中文:
-定理 linear_eq_zero_iff_存在_const
-  条件: (f : P1 ->ᵃ[k] P2)
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use f (Classical.arbitrary P1)
-    ext
-    rw [coe_const]; rw [Function.const_apply]; rw [← @vsub_eq_zero_iff_eq V2]; rw [← f.linearMap_vsub]; rw [h]; rw [LinearMap.zero_apply]
-  · rcases h with ⟨q, rfl⟩
-    exact const_linear k P1 q
-
-Depends on / 依赖: Classical, Classical.arbitrary, Function, Function.const_apply, LinearMap, LinearMap.zero_apply, arbitrary, coe_const, const_apply, const_linear, f.linearMap_vsub, linearMap_vsub, vsub_eq_zero_iff_eq, zero_apply
+/-
+**AffineMap.nonempty** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+形式化陈述：nonempty : Nonempty (P1 ->ᵃ[k] P2)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
 -/
-theorem linear_eq_zero_iff_exists_const (f : P1 ->ᵃ[k] P2) :
-    f.linear = 0 ↔ exists q, f = const k P1 q := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use f (Classical.arbitrary P1)
-    ext
-    rw [coe_const]; rw [Function.const_apply]; rw [← @vsub_eq_zero_iff_eq V2]; rw [← f.linearMap_vsub]; rw [h]; rw [LinearMap.zero_apply]
-  · rcases h with ⟨q, rfl⟩
-    exact const_linear k P1 q
+instance nonempty : Nonempty (P1 →ᵃ[k] P2) :=
+  (AddTorsor.nonempty : Nonempty P2).map <| const k P1
 
-/--
-Instance `nonempty` / 实例 `nonempty`
+/-- Construct an affine map by verifying the relation between the map and its linear part at one
+base point. Namely, this function takes a map `f : P₁ → P₂`, a linear map `f' : V₁ →ₗ[k] V₂`, and
+a point `p` such that for any other point `p'` we have `f p' = f' (p' -ᵥ p) +ᵥ f p`. -/
+/-
+**AffineMap.mk'** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：mk' (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p : P1) (h : forall p' : P1, f p' 
+= f' (p' -ᵥ p) +ᵥ f p) : P1 ->ᵃ[k] P2 where toFun
+参数：f : P1 -> P2；f' : V1 ->ₗ[k] V2；p : P1；h : forall p' : P1, f p' = f' (p' -ᵥ p)
+ +ᵥ f p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance nonempty
-  signature: : Nonempty (P1 ->ᵃ[k] P2)
-  body: (AddTorsor.nonempty : Nonempty P2).map const k P1
-
-中文:
-实例 nonempty
-  签名: : 非空 (P1 ->ᵃ[k] P2)
-  定义体: (AddTorsor.nonempty : Nonempty P2).map const k P1
-
-Depends on / 依赖: AddTorsor, AddTorsor.nonempty, Nonempty, nonempty
+--- 原说明 ---
+Construct an affine map by verifying the relation between the map and its linear
+ part at one
+base point. Namely, this function takes a map `f : P₁ → P₂`, a linear map `f' : 
+V₁ →ₗ[k] V₂`, and
+a point `p` such that for any other point `p'` we have `f p' = f' (p' -ᵥ p) +ᵥ f
+ p`.
 -/
-instance nonempty : Nonempty (P1 ->ᵃ[k] P2) :=
-(AddTorsor.nonempty : Nonempty P2).map const k P1
-
-/--
-Definition of `mk'` / `mk'` 的定义
-
-English:
-definition mk'
-  signature: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p : P1) (h : forall p' : P1, f p' = f' (p' -ᵥ p) +ᵥ f p)
-  body: f
-  linear := f'
-  map_vadd' p' v := by rw [h, h p', vadd_vsub_assoc, f'.map_add, vadd_vadd]
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p : P1) (h : 对任意 p' : P1, f p' = f' (p' -ᵥ p) +ᵥ f p)
-  定义体: f
-  linear := f'
-  map_vadd' p' v := by rw [h, h p', vadd_vsub_assoc, f'.map_add, vadd_vadd]
-
-@[simp]
--/
-def mk' (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p : P1) (h : forall p' : P1, f p' = f' (p' -ᵥ p) +ᵥ f p) :
-    P1 ->ᵃ[k] P2 where
+def mk' (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p : P1) (h : ∀ p' : P1, f p' = f' (p' -ᵥ p) +ᵥ f p) :
+    P1 →ᵃ[k] P2 where
   toFun := f
   linear := f'
   map_vadd' p' v := by rw [h, h p', vadd_vsub_assoc, f'.map_add, vadd_vadd]
 
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  given: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h)
-  statement: ⇑(mk' f f' p h) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk'
-  条件: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h)
-  结论: ⇑(mk' f f' p h) = f
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_mk' (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h) : ⇑(mk' f f' p h) = f
+参数：f : P1 -> P2；f' : V1 ->ₗ[k] V2；p h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h) : ⇑(mk' f f' p h) = f :=
+theorem coe_mk' (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p h) : ⇑(mk' f f' p h) = f :=
   rfl
 
 @[simp]
-/--
-theorem `mk'_linear` / 定理 `mk'_linear`
-
-English:
-theorem mk'_linear
-  given: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h)
-  statement: (mk' f f' p h).linear = f'
-  proof: rfl
-
-中文:
-定理 mk'_linear
-  条件: (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h)
-  结论: (mk' f f' p h).linear = f'
-  证明: rfl
+/-
+**AffineMap.mk'_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V2 : Type u_4} {P2 : Typ
+e u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst_2 : _root_.Module k V1
+] [inst_3 : AddTorsor V1 P1] [inst_4 : AddCommGroup V2]   [inst_5 : _root_.Modul
+e k V2] [inst_6 : AddTorsor V2 P2] (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p : P1)   (
+h : ∀ (p' : P1), f p' = f' (p' -ᵥ p) +ᵥ f p), (AffineMap.mk' f f' p h).linear = 
+f'
+参数：f : P1 → P2；f' : V1 →ₗ[k] V2；p : P1；h : ∀ (p' : P1), f p' = f' (p' -ᵥ p) +ᵥ f
+ p；AffineMap.mk' f f' p h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk'_linear (f : P1 -> P2) (f' : V1 ->ₗ[k] V2) (p h) : (mk' f f' p h).linear = f' :=
+theorem mk'_linear (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p h) : (mk' f f' p h).linear = f' :=
   rfl
 
 section SMul
 
 variable {R : Type*} [Monoid R] [DistribMulAction R V2] [SMulCommClass k R V2]
-/--
-Instance `mulAction` / 实例 `mulAction`
+/-- The space of affine maps to a module inherits an `R`-action from the action on its codomain. -/
+/-
+**AffineMap.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+形式化陈述：mulAction : MulAction R (P1 ->ᵃ[k] V2) where smul c f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mulAction
-  signature: : MulAction R (P1 ->ᵃ[k] V2) where
-  body: ⟨c • ⇑f, c • f.linear, fun p v => by simp [smul_add]⟩
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-@[simp, norm_cast]
-
-中文:
-实例 mulAction
-  签名: : 乘法作用 R (P1 ->ᵃ[k] V2) where
-  定义体: ⟨c • ⇑f, c • f.linear, fun p v => by simp [smul_add]⟩
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: f.linear, linear, smul_add
+--- 原说明 ---
+The space of affine maps to a module inherits an `R`-action from the action on i
+ts codomain.
 -/
-instance mulAction : MulAction R (P1 ->ᵃ[k] V2) where
+instance mulAction : MulAction R (P1 →ᵃ[k] V2) where
   smul c f := ⟨c • ⇑f, c • f.linear, fun p v => by simp [smul_add]⟩
   one_smul _ := ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: (c : R) (f : P1 ->ᵃ[k] V2)
-  statement: ⇑(c • f) = c • ⇑f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_smul
-  条件: (c : R) (f : P1 ->ᵃ[k] V2)
-  结论: ⇑(c • f) = c • ⇑f
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_smul (c : R) (f : P1 ->ᵃ[k] V2) : ⇑(c • f) = c • ⇑f
+参数：c : R；f : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul (c : R) (f : P1 ->ᵃ[k] V2) : ⇑(c • f) = c • ⇑f :=
+theorem coe_smul (c : R) (f : P1 →ᵃ[k] V2) : ⇑(c • f) = c • ⇑f :=
   rfl
 
 @[simp]
-/--
-theorem `smul_linear` / 定理 `smul_linear`
-
-English:
-theorem smul_linear
-  given: (t : R) (f : P1 ->ᵃ[k] V2)
-  statement: (t • f).linear = t • f.linear
-  proof: rfl
-
-中文:
-定理 smul_linear
-  条件: (t : R) (f : P1 ->ᵃ[k] V2)
-  结论: (t • f).linear = t • f.linear
-  证明: rfl
+/-
+**AffineMap.smul_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：smul_linear (t : R) (f : P1 ->ᵃ[k] V2) : (t • f).linear = t • f.linear
+参数：t : R；f : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_linear (t : R) (f : P1 ->ᵃ[k] V2) : (t • f).linear = t • f.linear :=
+theorem smul_linear (t : R) (f : P1 →ᵃ[k] V2) : (t • f).linear = t • f.linear :=
   rfl
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [DistribMulAction Rᵐᵒᵖ V2] [IsCentralScalar R V2]
-  body: ext fun _ => op_smul_eq_smul _ _
-
-中文:
-实例 isCentralScalar
-  签名: [分配乘法作用 Rᵐᵒᵖ V2] [中心标量 R V2]
-  定义体: ext fun _ => op_smul_eq_smul _ _
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**AffineMap.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+形式化陈述：isCentralScalar [DistribMulAction Rᵐᵒᵖ V2] [IsCentralScalar R V2] : IsCent
+ralScalar R (P1 ->ᵃ[k] V2) where op_smul_eq_smul _r _x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.op_right`：∀ {M : Type u_1} {N : Type u_2} {α : Type u_5} [
+inst : SMul M α] [inst_1 : SMul N α] [inst_2 : SMul Nᵐᵒᵖ α]   [IsCentralScalar N
+ α] [SMulCom…
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance isCentralScalar [DistribMulAction Rᵐᵒᵖ V2] [IsCentralScalar R V2] :
-    IsCentralScalar R (P1 ->ᵃ[k] V2) where
+    IsCentralScalar R (P1 →ᵃ[k] V2) where
   op_smul_eq_smul _r _x := ext fun _ => op_smul_eq_smul _ _
 
 end SMul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (P1 ->ᵃ[k] V2)
-  body: ⟨0, 0, fun _ _ => (zero_vadd _ _).symm⟩
-
-中文:
-实例 :
-  签名: 零 (P1 ->ᵃ[k] V2)
-  定义体: ⟨0, 0, fun _ _ => (zero_vadd _ _).symm⟩
-
-Depends on / 依赖: zero_vadd
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Zero (P1 ->ᵃ[k] V2) where zero := ⟨0, 0, fun _ _ => (zero_vadd _ _).symm⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (P1 ->ᵃ[k] V2)
-  body: ⟨f + g, f.linear + g.linear, fun p v => by simp [add_add_add_comm]⟩
-
-中文:
-实例 :
-  签名: 加法 (P1 ->ᵃ[k] V2)
-  定义体: ⟨f + g, f.linear + g.linear, fun p v => by simp [add_add_add_comm]⟩
-
-Depends on / 依赖: add_add_add_comm, f.linear, g.linear, linear
+instance : Zero (P1 →ᵃ[k] V2) where zero := ⟨0, 0, fun _ _ => (zero_vadd _ _).symm⟩
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Add (P1 ->ᵃ[k] V2) where
+instance : Add (P1 →ᵃ[k] V2) where
   add f g := ⟨f + g, f.linear + g.linear, fun p v => by simp [add_add_add_comm]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (P1 ->ᵃ[k] V2)
-  body: ⟨f - g, f.linear - g.linear, fun p v => by simp [sub_add_sub_comm]⟩
-
-中文:
-实例 :
-  签名: 减法 (P1 ->ᵃ[k] V2)
-  定义体: ⟨f - g, f.linear - g.linear, fun p v => by simp [sub_add_sub_comm]⟩
-
-Depends on / 依赖: f.linear, g.linear, linear, sub_add_sub_comm
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Sub (P1 ->ᵃ[k] V2) where
+instance : Sub (P1 →ᵃ[k] V2) where
   sub f g := ⟨f - g, f.linear - g.linear, fun p v => by simp [sub_add_sub_comm]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (P1 ->ᵃ[k] V2)
-  body: ⟨-f, -f.linear, fun p v => by simp [add_comm, map_vadd f]⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 取负 (P1 ->ᵃ[k] V2)
-  定义体: ⟨-f, -f.linear, fun p v => by simp [add_comm, map_vadd f]⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: add_comm, f.linear, linear, map_vadd
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Neg (P1 ->ᵃ[k] V2) where
+instance : Neg (P1 →ᵃ[k] V2) where
   neg f := ⟨-f, -f.linear, fun p v => by simp [add_comm, map_vadd f]⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ⇑(0 : P1 ->ᵃ[k] V2) = 0
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_zero
-  结论: ⇑(0 : P1 ->ᵃ[k] V2) = 0
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AffineMap.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_zero : ⇑(0 : P1 ->ᵃ[k] V2) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ⇑(0 : P1 ->ᵃ[k] V2) = 0 :=
+theorem coe_zero : ⇑(0 : P1 →ᵃ[k] V2) = 0 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (f g : P1 ->ᵃ[k] V2)
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_add
-  条件: (f g : P1 ->ᵃ[k] V2)
-  结论: ⇑(f + g) = f + g
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AffineMap.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_add (f g : P1 ->ᵃ[k] V2) : ⇑(f + g) = f + g
+参数：f g : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_add (f g : P1 ->ᵃ[k] V2) : ⇑(f + g) = f + g :=
+theorem coe_add (f g : P1 →ᵃ[k] V2) : ⇑(f + g) = f + g :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (f : P1 ->ᵃ[k] V2)
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_neg
-  条件: (f : P1 ->ᵃ[k] V2)
-  结论: ⇑(-f) = -f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AffineMap.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_neg (f : P1 ->ᵃ[k] V2) : ⇑(-f) = -f
+参数：f : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg (f : P1 ->ᵃ[k] V2) : ⇑(-f) = -f :=
+theorem coe_neg (f : P1 →ᵃ[k] V2) : ⇑(-f) = -f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (f g : P1 ->ᵃ[k] V2)
-  statement: ⇑(f - g) = f - g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sub
-  条件: (f g : P1 ->ᵃ[k] V2)
-  结论: ⇑(f - g) = f - g
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_sub (f g : P1 ->ᵃ[k] V2) : ⇑(f - g) = f - g
+参数：f g : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sub (f g : P1 ->ᵃ[k] V2) : ⇑(f - g) = f - g :=
+theorem coe_sub (f g : P1 →ᵃ[k] V2) : ⇑(f - g) = f - g :=
   rfl
 
 @[simp]
-/--
-theorem `zero_linear` / 定理 `zero_linear`
-
-English:
-theorem zero_linear
-  statement: (0 : P1 ->ᵃ[k] V2).linear = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_linear
-  结论: (0 : P1 ->ᵃ[k] V2).linear = 0
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.zero_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：zero_linear : (0 : P1 ->ᵃ[k] V2).linear = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_linear : (0 : P1 ->ᵃ[k] V2).linear = 0 :=
+theorem zero_linear : (0 : P1 →ᵃ[k] V2).linear = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `add_linear` / 定理 `add_linear`
-
-English:
-theorem add_linear
-  given: (f g : P1 ->ᵃ[k] V2)
-  statement: (f + g).linear = f.linear + g.linear
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_linear
-  条件: (f g : P1 ->ᵃ[k] V2)
-  结论: (f + g).linear = f.linear + g.linear
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.add_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：add_linear (f g : P1 ->ᵃ[k] V2) : (f + g).linear = f.linear + g.linear
+参数：f g : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem add_linear (f g : P1 ->ᵃ[k] V2) : (f + g).linear = f.linear + g.linear :=
+theorem add_linear (f g : P1 →ᵃ[k] V2) : (f + g).linear = f.linear + g.linear :=
   rfl
 
 @[simp]
-/--
-theorem `sub_linear` / 定理 `sub_linear`
-
-English:
-theorem sub_linear
-  given: (f g : P1 ->ᵃ[k] V2)
-  statement: (f - g).linear = f.linear - g.linear
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_linear
-  条件: (f g : P1 ->ᵃ[k] V2)
-  结论: (f - g).linear = f.linear - g.linear
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.sub_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：sub_linear (f g : P1 ->ᵃ[k] V2) : (f - g).linear = f.linear - g.linear
+参数：f g : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sub_linear (f g : P1 ->ᵃ[k] V2) : (f - g).linear = f.linear - g.linear :=
+theorem sub_linear (f g : P1 →ᵃ[k] V2) : (f - g).linear = f.linear - g.linear :=
   rfl
 
 @[simp]
-/--
-theorem `neg_linear` / 定理 `neg_linear`
-
-English:
-theorem neg_linear
-  given: (f : P1 ->ᵃ[k] V2)
-  statement: (-f).linear = -f.linear
-  proof: rfl
-
-中文:
-定理 neg_linear
-  条件: (f : P1 ->ᵃ[k] V2)
-  结论: (-f).linear = -f.linear
-  证明: rfl
+/-
+**AffineMap.neg_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：neg_linear (f : P1 ->ᵃ[k] V2) : (-f).linear = -f.linear
+参数：f : P1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem neg_linear (f : P1 ->ᵃ[k] V2) : (-f).linear = -f.linear :=
+theorem neg_linear (f : P1 →ᵃ[k] V2) : (-f).linear = -f.linear :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The set of affine maps to a vector space is an additive commutative group. -/
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: AddCommGroup (P1 ->ᵃ[k] V2)
-  body: coeFn_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _)
-    fun _ _ => coe_smul _ _
-
-中文:
-实例 :
-  签名: 加法交换群 (P1 ->ᵃ[k] V2)
-  定义体: coeFn_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _)
-    fun _ _ => coe_smul _ _
-
-Depends on / 依赖: addCommGroup, coeFn_injective, coeFn_injective.addCommGroup, coe_add, coe_neg, coe_smul, coe_sub, coe_zero
+--- 原说明 ---
+The set of affine maps to a vector space is an additive commutative group.
 -/
-instance : AddCommGroup (P1 ->ᵃ[k] V2) :=
+instance : AddCommGroup (P1 →ᵃ[k] V2) :=
   coeFn_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_smul _ _)
     fun _ _ => coe_smul _ _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The space of affine maps from `P1` to `P2` is an affine space over the space of affine maps
+from `P1` to the vector space `V2` corresponding to `P2`. -/
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: AffineSpace (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2)
-  body: ⟨fun p => f p +ᵥ g p, f.linear + g.linear,
-      fun p v => by simp [vadd_vadd, add_right_comm]⟩
-  zero_vadd f := ext fun p => zero_vadd _ (f p)
-  add_vadd f₁ f₂ f₃ := ext fun p => add_vadd (f₁ p) (f₂ p) (f₃ p)
-  vsub f g :=
-    ⟨fun p => f p -ᵥ g p, f.linear - g.linear, fun p v => by
-      simp [vsub_vadd_eq_vsub_sub, vadd_vsub_assoc, sub_add_eq_add_sub]⟩
-  vsub_vadd' f g := ext fun p => vsub_vadd (f p) (g p)
-  vadd_vsub' f g := ext fun p => vadd_vsub (f p) (g p)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 仿射空间 (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2)
-  定义体: ⟨fun p => f p +ᵥ g p, f.linear + g.linear,
-      fun p v => by simp [vadd_vadd, add_right_comm]⟩
-  zero_vadd f := ext fun p => zero_vadd _ (f p)
-  add_vadd f₁ f₂ f₃ := ext fun p => add_vadd (f₁ p) (f₂ p) (f₃ p)
-  vsub f g :=
-    ⟨fun p => f p -ᵥ g p, f.linear - g.linear, fun p v => by
-      simp [vsub_vadd_eq_vsub_sub, vadd_vsub_assoc, sub_add_eq_add_sub]⟩
-  vsub_vadd' f g := ext fun p => vsub_vadd (f p) (g p)
-  vadd_vsub' f g := ext fun p => vadd_vsub (f p) (g p)
-
-@[simp]
-
-Depends on / 依赖: add_right_comm, add_vadd, f.linear, g.linear, linear, sub_add_eq_add_sub, vadd_vadd, vadd_vsub, vadd_vsub_assoc, vsub_vadd, vsub_vadd_eq_vsub_sub, zero_vadd
+--- 原说明 ---
+The space of affine maps from `P1` to `P2` is an affine space over the space of 
+affine maps
+from `P1` to the vector space `V2` corresponding to `P2`.
 -/
-instance : AffineSpace (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2) where
+instance : AffineSpace (P1 →ᵃ[k] V2) (P1 →ᵃ[k] P2) where
   vadd f g :=
     ⟨fun p => f p +ᵥ g p, f.linear + g.linear,
       fun p v => by simp [vadd_vadd, add_right_comm]⟩
@@ -1057,469 +717,268 @@ instance : AffineSpace (P1 ->ᵃ[k] V2) (P1 ->ᵃ[k] P2) where
   vadd_vsub' f g := ext fun p => vadd_vsub (f p) (g p)
 
 @[simp]
-/--
-theorem `vadd_apply` / 定理 `vadd_apply`
-
-English:
-theorem vadd_apply
-  given: (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) (p : P1)
-  statement: (f +ᵥ g) p = f p +ᵥ g p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vadd_apply
-  条件: (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) (p : P1)
-  结论: (f +ᵥ g) p = f p +ᵥ g p
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.vadd_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：vadd_apply (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) (p : P1) : (f +ᵥ g) p = f
+ p +ᵥ g p
+参数：f : P1 ->ᵃ[k] V2；g : P1 ->ᵃ[k] P2；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vadd_apply (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) (p : P1) : (f +ᵥ g) p = f p +ᵥ g p :=
+theorem vadd_apply (f : P1 →ᵃ[k] V2) (g : P1 →ᵃ[k] P2) (p : P1) : (f +ᵥ g) p = f p +ᵥ g p :=
   rfl
 
 @[simp]
-/--
-theorem `vadd_linear` / 定理 `vadd_linear`
-
-English:
-theorem vadd_linear
-  given: (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2)
-  statement: (f +ᵥ g).linear = f.linear + g.linear
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vadd_linear
-  条件: (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2)
-  结论: (f +ᵥ g).linear = f.linear + g.linear
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.vadd_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：vadd_linear (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) : (f +ᵥ g).linear = f.li
+near + g.linear
+参数：f : P1 ->ᵃ[k] V2；g : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vadd_linear (f : P1 ->ᵃ[k] V2) (g : P1 ->ᵃ[k] P2) : (f +ᵥ g).linear = f.linear + g.linear :=
+theorem vadd_linear (f : P1 →ᵃ[k] V2) (g : P1 →ᵃ[k] P2) : (f +ᵥ g).linear = f.linear + g.linear :=
   rfl
 
 @[simp]
-/--
-theorem `vsub_apply` / 定理 `vsub_apply`
-
-English:
-theorem vsub_apply
-  given: (f g : P1 ->ᵃ[k] P2) (p : P1)
-  statement: (f -ᵥ g : P1 ->ᵃ[k] V2) p = f p -ᵥ g p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vsub_apply
-  条件: (f g : P1 ->ᵃ[k] P2) (p : P1)
-  结论: (f -ᵥ g : P1 ->ᵃ[k] V2) p = f p -ᵥ g p
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.vsub_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：vsub_apply (f g : P1 ->ᵃ[k] P2) (p : P1) : (f -ᵥ g : P1 ->ᵃ[k] V2) p = f p
+ -ᵥ g p
+参数：f g : P1 ->ᵃ[k] P2；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vsub_apply (f g : P1 ->ᵃ[k] P2) (p : P1) : (f -ᵥ g : P1 ->ᵃ[k] V2) p = f p -ᵥ g p :=
+theorem vsub_apply (f g : P1 →ᵃ[k] P2) (p : P1) : (f -ᵥ g : P1 →ᵃ[k] V2) p = f p -ᵥ g p :=
   rfl
 
 @[simp]
-/--
-theorem `vsub_linear` / 定理 `vsub_linear`
-
-English:
-theorem vsub_linear
-  given: (f g : P1 ->ᵃ[k] P2)
-  statement: (f -ᵥ g).linear = f.linear - g.linear
-  proof: rfl
-
-中文:
-定理 vsub_linear
-  条件: (f g : P1 ->ᵃ[k] P2)
-  结论: (f -ᵥ g).linear = f.linear - g.linear
-  证明: rfl
+/-
+**AffineMap.vsub_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：vsub_linear (f g : P1 ->ᵃ[k] P2) : (f -ᵥ g).linear = f.linear - g.linear
+参数：f g : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vsub_linear (f g : P1 ->ᵃ[k] P2) : (f -ᵥ g).linear = f.linear - g.linear :=
+theorem vsub_linear (f g : P1 →ᵃ[k] P2) : (f -ᵥ g).linear = f.linear - g.linear :=
   rfl
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- `Prod.fst` as an `AffineMap`. -/
+/-
+**AffineMap.fst** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：fst : P1 × P2 ->ᵃ[k] P1 where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : P1 × P2 ->ᵃ[k] P1 where
-  body: Prod.fst
-  linear := LinearMap.fst k V1 V2
-  map_vadd' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 fst
-  签名: : P1 × P2 ->ᵃ[k] P1 where
-  定义体: Prod.fst
-  linear := LinearMap.fst k V1 V2
-  map_vadd' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: Prod.fst
+--- 原说明 ---
+`Prod.fst` as an `AffineMap`.
 -/
-def fst : P1 × P2 ->ᵃ[k] P1 where
+def fst : P1 × P2 →ᵃ[k] P1 where
   toFun := Prod.fst
   linear := LinearMap.fst k V1 V2
   map_vadd' _ _ := rfl
 
 @[simp]
-/--
-theorem `coe_fst` / 定理 `coe_fst`
-
-English:
-theorem coe_fst
-  statement: ⇑(fst : P1 × P2 ->ᵃ[k] P1) = Prod.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_fst
-  结论: ⇑(fst : P1 × P2 ->ᵃ[k] P1) = 积类型.fst
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_fst** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_fst : ⇑(fst : P1 × P2 ->ᵃ[k] P1) = Prod.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_fst : ⇑(fst : P1 × P2 ->ᵃ[k] P1) = Prod.fst :=
+theorem coe_fst : ⇑(fst : P1 × P2 →ᵃ[k] P1) = Prod.fst :=
   rfl
 
 @[simp]
-/--
-theorem `fst_linear` / 定理 `fst_linear`
-
-English:
-theorem fst_linear
-  statement: (fst : P1 × P2 ->ᵃ[k] P1).linear = LinearMap.fst k V1 V2
-  proof: rfl
-
-中文:
-定理 fst_linear
-  结论: (fst : P1 × P2 ->ᵃ[k] P1).linear = 线性映射.fst k V1 V2
-  证明: rfl
+/-
+**AffineMap.fst_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：fst_linear : (fst : P1 × P2 ->ᵃ[k] P1).linear = LinearMap.fst k V1 V2
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fst_linear : (fst : P1 × P2 ->ᵃ[k] P1).linear = LinearMap.fst k V1 V2 :=
+theorem fst_linear : (fst : P1 × P2 →ᵃ[k] P1).linear = LinearMap.fst k V1 V2 :=
   rfl
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- `Prod.snd` as an `AffineMap`. -/
+/-
+**AffineMap.snd** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：snd : P1 × P2 ->ᵃ[k] P2 where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : P1 × P2 ->ᵃ[k] P2 where
-  body: Prod.snd
-  linear := LinearMap.snd k V1 V2
-  map_vadd' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 snd
-  签名: : P1 × P2 ->ᵃ[k] P2 where
-  定义体: Prod.snd
-  linear := LinearMap.snd k V1 V2
-  map_vadd' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: Prod.snd
+--- 原说明 ---
+`Prod.snd` as an `AffineMap`.
 -/
-def snd : P1 × P2 ->ᵃ[k] P2 where
+def snd : P1 × P2 →ᵃ[k] P2 where
   toFun := Prod.snd
   linear := LinearMap.snd k V1 V2
   map_vadd' _ _ := rfl
 
 @[simp]
-/--
-theorem `coe_snd` / 定理 `coe_snd`
-
-English:
-theorem coe_snd
-  statement: ⇑(snd : P1 × P2 ->ᵃ[k] P2) = Prod.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_snd
-  结论: ⇑(snd : P1 × P2 ->ᵃ[k] P2) = 积类型.snd
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_snd** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_snd : ⇑(snd : P1 × P2 ->ᵃ[k] P2) = Prod.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_snd : ⇑(snd : P1 × P2 ->ᵃ[k] P2) = Prod.snd :=
+theorem coe_snd : ⇑(snd : P1 × P2 →ᵃ[k] P2) = Prod.snd :=
   rfl
 
 @[simp]
-/--
-theorem `snd_linear` / 定理 `snd_linear`
-
-English:
-theorem snd_linear
-  statement: (snd : P1 × P2 ->ᵃ[k] P2).linear = LinearMap.snd k V1 V2
-  proof: rfl
-
-中文:
-定理 snd_linear
-  结论: (snd : P1 × P2 ->ᵃ[k] P2).linear = 线性映射.snd k V1 V2
-  证明: rfl
+/-
+**AffineMap.snd_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：snd_linear : (snd : P1 × P2 ->ᵃ[k] P2).linear = LinearMap.snd k V1 V2
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem snd_linear : (snd : P1 × P2 ->ᵃ[k] P2).linear = LinearMap.snd k V1 V2 :=
+theorem snd_linear : (snd : P1 × P2 →ᵃ[k] P2).linear = LinearMap.snd k V1 V2 :=
   rfl
 
 variable (k P1)
 /-- Identity map as an affine map. -/
-nonrec def id : P1 ->ᵃ[k] P1 where
+nonrec def id : P1 →ᵃ[k] P1 where
   toFun := id
   linear := LinearMap.id
   map_vadd' _ _ := rfl
 
 /-- The identity affine map acts as the identity. -/
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
+/-
+**AffineMap.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_id : ⇑(id k P1) = _root_.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_id
-  statement: ⇑(id k P1) = _root_.id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_id
-  结论: ⇑(id k P1) = _root_.id
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The identity affine map acts as the identity.
 -/
 theorem coe_id : ⇑(id k P1) = _root_.id :=
   rfl
 
 @[simp]
-/--
-theorem `id_linear` / 定理 `id_linear`
-
-English:
-theorem id_linear
-  statement: (id k P1).linear = LinearMap.id
-  proof: rfl
-
-中文:
-定理 id_linear
-  结论: (id k P1).linear = 线性映射.id
-  证明: rfl
+/-
+**AffineMap.id_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：id_linear : (id k P1).linear = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_linear : (id k P1).linear = LinearMap.id :=
   rfl
 
 variable {P1}
 
-/--
-theorem `id_apply` / 定理 `id_apply`
+/-- The identity affine map acts as the identity. -/
+/-
+**AffineMap.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：id_apply (p : P1) : id k P1 p = p
+参数：p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem id_apply
-  given: (p : P1)
-  statement: id k P1 p = p
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (p : P1)
-  结论: id k P1 p = p
-  证明: rfl
+--- 原说明 ---
+The identity affine map acts as the identity.
 -/
 theorem id_apply (p : P1) : id k P1 p = p :=
   rfl
 
 variable {k}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (P1 ->ᵃ[k] P1)
-  body: ⟨id k P1⟩
-
-中文:
-实例 :
-  签名: 可居 (P1 ->ᵃ[k] P1)
-  定义体: ⟨id k P1⟩
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (P1 ->ᵃ[k] P1) :=
+instance : Inhabited (P1 →ᵃ[k] P1) :=
   ⟨id k P1⟩
 
 /-- Composition of affine maps. -/
 @[simps linear]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**AffineMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：comp (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) : P1 ->ᵃ[k] P3 where toFun
+参数：f : P2 ->ᵃ[k] P3；g : P1 ->ᵃ[k] P2。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2)
-  body: f ∘ g
-  linear := f.linear.comp g.linear
-  map_vadd' := by
-    intro p v
-    rw [Function.comp_apply]; rw [g.map_vadd]; rw [f.map_vadd]
-    rfl
-
-中文:
-定义 comp
-  签名: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2)
-  定义体: f ∘ g
-  linear := f.linear.comp g.linear
-  map_vadd' := by
-    intro p v
-    rw [Function.comp_apply]; rw [g.map_vadd]; rw [f.map_vadd]
-    rfl
+--- 原说明 ---
+Composition of affine maps.
 -/
-def comp (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) : P1 ->ᵃ[k] P3 where
+def comp (f : P2 →ᵃ[k] P3) (g : P1 →ᵃ[k] P2) : P1 →ᵃ[k] P3 where
   toFun := f ∘ g
   linear := f.linear.comp g.linear
   map_vadd' := by
     intro p v
-    rw [Function.comp_apply]; rw [g.map_vadd]; rw [f.map_vadd]
+    rw [Function.comp_apply, g.map_vadd, f.map_vadd]
     rfl
 
 /-- Composition of affine maps acts as applying the two functions. -/
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
+/-
+**AffineMap.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_comp (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) : ⇑(f.comp g) = f ∘ g
+参数：f : P2 ->ᵃ[k] P3；g : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_comp
-  given: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2)
-  statement: ⇑(f.comp g) = f ∘ g
-  proof: rfl
-
-中文:
-定理 coe_comp
-  条件: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2)
-  结论: ⇑(f.comp g) = f ∘ g
-  证明: rfl
+--- 原说明 ---
+Composition of affine maps acts as applying the two functions.
 -/
-theorem coe_comp (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) : ⇑(f.comp g) = f ∘ g :=
+theorem coe_comp (f : P2 →ᵃ[k] P3) (g : P1 →ᵃ[k] P2) : ⇑(f.comp g) = f ∘ g :=
   rfl
 
-/--
-theorem `comp_apply` / 定理 `comp_apply`
+/-- Composition of affine maps acts as applying the two functions. -/
+/-
+**AffineMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：comp_apply (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) (p : P1) : f.comp g p = f
+ (g p)
+参数：f : P2 ->ᵃ[k] P3；g : P1 ->ᵃ[k] P2；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comp_apply
-  given: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) (p : P1)
-  statement: f.comp g p = f (g p)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) (p : P1)
-  结论: f.comp g p = f (g p)
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Composition of affine maps acts as applying the two functions.
 -/
-theorem comp_apply (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) (p : P1) : f.comp g p = f (g p) :=
+theorem comp_apply (f : P2 →ᵃ[k] P3) (g : P1 →ᵃ[k] P2) (p : P1) : f.comp g p = f (g p) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : P1 ->ᵃ[k] P2)
-  statement: f.comp (id k P1) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : P1 ->ᵃ[k] P2)
-  结论: f.comp (id k P1) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**AffineMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：comp_id (f : P1 ->ᵃ[k] P2) : f.comp (id k P1) = f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
 -/
-theorem comp_id (f : P1 ->ᵃ[k] P2) : f.comp (id k P1) = f :=
+theorem comp_id (f : P1 →ᵃ[k] P2) : f.comp (id k P1) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : P1 ->ᵃ[k] P2)
-  statement: (id k P2).comp f = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 id_comp
-  条件: (f : P1 ->ᵃ[k] P2)
-  结论: (id k P2).comp f = f
-  证明: ext fun _ => rfl
+/-
+**AffineMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：id_comp (f : P1 ->ᵃ[k] P2) : (id k P2).comp f = f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
 -/
-theorem id_comp (f : P1 ->ᵃ[k] P2) : (id k P2).comp f = f :=
+theorem id_comp (f : P1 →ᵃ[k] P2) : (id k P2).comp f = f :=
   ext fun _ => rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f₃₄ : P3 ->ᵃ[k] P4) (f₂₃ : P2 ->ᵃ[k] P3) (f₁₂ : P1 ->ᵃ[k] P2)
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  条件: (f₃₄ : P3 ->ᵃ[k] P4) (f₂₃ : P2 ->ᵃ[k] P3) (f₁₂ : P1 ->ᵃ[k] P2)
-  证明: rfl
+/-
+**AffineMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：comp_assoc (f₃₄ : P3 ->ᵃ[k] P4) (f₂₃ : P2 ->ᵃ[k] P3) (f₁₂ : P1 ->ᵃ[k] P2) 
+: (f₃₄.comp f₂₃).comp f₁₂ = f₃₄.comp (f₂₃.comp f₁₂)
+参数：f₃₄ : P3 ->ᵃ[k] P4；f₂₃ : P2 ->ᵃ[k] P3；f₁₂ : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc (f₃₄ : P3 ->ᵃ[k] P4) (f₂₃ : P2 ->ᵃ[k] P3) (f₁₂ : P1 ->ᵃ[k] P2) :
+theorem comp_assoc (f₃₄ : P3 →ᵃ[k] P4) (f₂₃ : P2 →ᵃ[k] P3) (f₁₂ : P1 →ᵃ[k] P2) :
     (f₃₄.comp f₂₃).comp f₁₂ = f₃₄.comp (f₂₃.comp f₁₂) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (P1 ->ᵃ[k] P1)
-  body: id k P1
-  mul := comp
-  one_mul := id_comp
-  mul_one := comp_id
-  mul_assoc := comp_assoc
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺半群 (P1 ->ᵃ[k] P1)
-  定义体: id k P1
-  mul := comp
-  one_mul := id_comp
-  mul_one := comp_id
-  mul_assoc := comp_assoc
-
-@[simp]
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Monoid (P1 ->ᵃ[k] P1) where
+instance : Monoid (P1 →ᵃ[k] P1) where
   one := id k P1
   mul := comp
   one_mul := id_comp
@@ -1527,195 +986,157 @@ instance : Monoid (P1 ->ᵃ[k] P1) where
   mul_assoc := comp_assoc
 
 @[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (f g : P1 ->ᵃ[k] P1)
-  statement: ⇑(f * g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mul
-  条件: (f g : P1 ->ᵃ[k] P1)
-  结论: ⇑(f * g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_mul (f g : P1 ->ᵃ[k] P1) : ⇑(f * g) = f ∘ g
+参数：f g : P1 ->ᵃ[k] P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mul (f g : P1 ->ᵃ[k] P1) : ⇑(f * g) = f ∘ g :=
+theorem coe_mul (f g : P1 →ᵃ[k] P1) : ⇑(f * g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ⇑(1 : P1 ->ᵃ[k] P1) = _root_.id
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ⇑(1 : P1 ->ᵃ[k] P1) = _root_.id
-  证明: rfl
+/-
+**AffineMap.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_one : ⇑(1 : P1 ->ᵃ[k] P1) = _root_.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : ⇑(1 : P1 ->ᵃ[k] P1) = _root_.id :=
+theorem coe_one : ⇑(1 : P1 →ᵃ[k] P1) = _root_.id :=
   rfl
 
 /-- `AffineMap.linear` on endomorphisms is a `MonoidHom`. -/
 @[simps]
-/--
-Definition of `linearHom` / `linearHom` 的定义
+/-
+**AffineMap.linearHom** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：linearHom : (P1 ->ᵃ[k] P1) ->* V1 ->ₗ[k] V1 where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearHom
-  signature: : (P1 ->ᵃ[k] P1) ->* V1 ->ₗ[k] V1 where
-  body: linear
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 linearHom
-  签名: : (P1 ->ᵃ[k] P1) ->* V1 ->ₗ[k] V1 where
-  定义体: linear
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: linear
+--- 原说明 ---
+`AffineMap.linear` on endomorphisms is a `MonoidHom`.
 -/
-def linearHom : (P1 ->ᵃ[k] P1) ->* V1 ->ₗ[k] V1 where
+def linearHom : (P1 →ᵃ[k] P1) →* V1 →ₗ[k] V1 where
   toFun := linear
   map_one' := rfl
   map_mul' _ _ := rfl
 
 @[simp]
-/--
-theorem `linear_injective_iff` / 定理 `linear_injective_iff`
-
-English:
-theorem linear_injective_iff
-  given: (f : P1 ->ᵃ[k] P2)
-  proof: by
-  obtain ⟨p⟩ := (inferInstance : Nonempty P1)
-  have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
-    ext v
-    simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_injective]; rw [Equiv.injective_comp]
-
-@[simp]
-
-中文:
-定理 linear_injective_iff
-  条件: (f : P1 ->ᵃ[k] P2)
-  证明: by
-  obtain ⟨p⟩ := (inferInstance : Nonempty P1)
-  have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
-    ext v
-    simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_injective]; rw [Equiv.injective_comp]
-
-@[simp]
-
-Depends on / 依赖: Equiv.comp_injective, Equiv.injective_comp, Equiv.vaddConst, Nonempty, comp_injective, f.linear, f.map_vadd, injective_comp, linear, map_vadd, vaddConst
+/-
+**AffineMap.linear_injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：linear_injective_iff (f : P1 ->ᵃ[k] P2) : Function.Injective f.linear ↔ Fu
+nction.Injective f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem linear_injective_iff (f : P1 ->ᵃ[k] P2) :
+theorem linear_injective_iff (f : P1 →ᵃ[k] P2) :
     Function.Injective f.linear ↔ Function.Injective f := by
   obtain ⟨p⟩ := (inferInstance : Nonempty P1)
   have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
     ext v
     simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_injective]; rw [Equiv.injective_comp]
+  rw [h, Equiv.comp_injective, Equiv.injective_comp]
 
 @[simp]
-/--
-theorem `linear_surjective_iff` / 定理 `linear_surjective_iff`
-
-English:
-theorem linear_surjective_iff
-  given: (f : P1 ->ᵃ[k] P2)
-  proof: by
-  obtain ⟨p⟩ := (inferInstance : Nonempty P1)
-  have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
-    ext v
-    simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_surjective]; rw [Equiv.surjective_comp]
-
-@[simp]
-
-中文:
-定理 linear_surjective_iff
-  条件: (f : P1 ->ᵃ[k] P2)
-  证明: by
-  obtain ⟨p⟩ := (inferInstance : Nonempty P1)
-  have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
-    ext v
-    simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_surjective]; rw [Equiv.surjective_comp]
-
-@[simp]
-
-Depends on / 依赖: Equiv.comp_surjective, Equiv.surjective_comp, Equiv.vaddConst, Nonempty, comp_surjective, f.linear, f.map_vadd, linear, map_vadd, surjective_comp, vaddConst
+/-
+**AffineMap.linear_surjective_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：linear_surjective_iff (f : P1 ->ᵃ[k] P2) : Function.Surjective f.linear ↔ 
+Function.Surjective f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.comp_surjective`：comp_surjective (f : α -> β) (e : β ≃ γ) : Surjec
+tive (e ∘ f) ↔ Surjective f
+· 使用定理 `Equiv.surjective_comp`：surjective_comp (e : α ≃ β) (f : β -> γ) : Surjec
+tive (f ∘ e) ↔ Surjective f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem linear_surjective_iff (f : P1 ->ᵃ[k] P2) :
+theorem linear_surjective_iff (f : P1 →ᵃ[k] P2) :
     Function.Surjective f.linear ↔ Function.Surjective f := by
   obtain ⟨p⟩ := (inferInstance : Nonempty P1)
   have h : ⇑f.linear = (Equiv.vaddConst (f p)).symm ∘ f ∘ Equiv.vaddConst p := by
     ext v
     simp [f.map_vadd]
-  rw [h]; rw [Equiv.comp_surjective]; rw [Equiv.surjective_comp]
+  rw [h, Equiv.comp_surjective, Equiv.surjective_comp]
 
 @[simp]
-/--
-theorem `linear_bijective_iff` / 定理 `linear_bijective_iff`
-
-English:
-theorem linear_bijective_iff
-  given: (f : P1 ->ᵃ[k] P2)
-  proof: and_congr f.linear_injective_iff f.linear_surjective_iff
-
-中文:
-定理 linear_bijective_iff
-  条件: (f : P1 ->ᵃ[k] P2)
-  证明: and_congr f.linear_injective_iff f.linear_surjective_iff
-
-Depends on / 依赖: and_congr, f.linear_injective_iff, f.linear_surjective_iff, linear_injective_iff, linear_surjective_iff
+/-
+**AffineMap.linear_bijective_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：linear_bijective_iff (f : P1 ->ᵃ[k] P2) : Function.Bijective f.linear ↔ Fu
+nction.Bijective f
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `AffineMap.linear_injective_iff`：linear_injective_iff (f : P1 ->ᵃ[k] P2) 
+: Function.Injective f.linear ↔ Function.Injective f
+· 使用定理 `AffineMap.linear_surjective_iff`：linear_surjective_iff (f : P1 ->ᵃ[k] P2
+) : Function.Surjective f.linear ↔ Function.Surjective f
 -/
-theorem linear_bijective_iff (f : P1 ->ᵃ[k] P2) :
+theorem linear_bijective_iff (f : P1 →ᵃ[k] P2) :
     Function.Bijective f.linear ↔ Function.Bijective f :=
   and_congr f.linear_injective_iff f.linear_surjective_iff
-
-/--
-theorem `image_vsub_image` / 定理 `image_vsub_image`
-
-English:
-theorem image_vsub_image
-  given: {s t : Set P1} (f : P1 ->ᵃ[k] P2)
-  proof: by
-  ext v
-  simp only [Set.mem_vsub, Set.mem_image,
-    exists_exists_and_eq_and, ← f.linearMap_vsub]
-  grind
-
-中文:
-定理 image_vsub_image
-  条件: {s t : 集合 P1} (f : P1 ->ᵃ[k] P2)
-  证明: by
-  ext v
-  simp only [Set.mem_vsub, Set.mem_image,
-    exists_exists_and_eq_and, ← f.linearMap_vsub]
-  grind
-
-Depends on / 依赖: Set.mem_image, Set.mem_vsub, exists_exists_and_eq_and, f.linearMap_vsub, linearMap_vsub, mem_image, mem_vsub
+/-
+**AffineMap.image_vsub_image** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：image_vsub_image {s t : Set P1} (f : P1 ->ᵃ[k] P2) : f '' s -ᵥ f '' t = f.
+linear '' (s -ᵥ t)
+参数：f : P1 ->ᵃ[k] P2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.linearMap_vsub`：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
+ : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
 -/
-theorem image_vsub_image {s t : Set P1} (f : P1 ->ᵃ[k] P2) :
+theorem image_vsub_image {s t : Set P1} (f : P1 →ᵃ[k] P2) :
     f '' s -ᵥ f '' t = f.linear '' (s -ᵥ t) := by
   ext v
   simp only [Set.mem_vsub, Set.mem_image,
@@ -1724,619 +1145,493 @@ theorem image_vsub_image {s t : Set P1} (f : P1 ->ᵃ[k] P2) :
 
 /-- The product of two affine maps is an affine map. -/
 @[simps linear]
-/--
-Definition of `prod` / `prod` 的定义
+/-
+**AffineMap.prod** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：prod (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) : P1 ->ᵃ[k] P2 × P3 where toFun
+参数：f : P1 ->ᵃ[k] P2；g : P1 ->ᵃ[k] P3。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
-  body: Function.prod f g
-  linear := f.linear.prod g.linear
-  map_vadd' := by simp
-
-中文:
-定义 乘积
-  签名: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
-  定义体: Function.prod f g
-  linear := f.linear.prod g.linear
-  map_vadd' := by simp
-
-Depends on / 依赖: Function, Function.prod
+--- 原说明 ---
+The product of two affine maps is an affine map.
 -/
-def prod (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) : P1 ->ᵃ[k] P2 × P3 where
+def prod (f : P1 →ᵃ[k] P2) (g : P1 →ᵃ[k] P3) : P1 →ᵃ[k] P2 × P3 where
   toFun := Function.prod f g
   linear := f.linear.prod g.linear
   map_vadd' := by simp
-
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
-  statement: prod f g = Function.prod f g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prod
-  条件: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3)
-  结论: 乘积 f g = 函数.乘积 f g
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_prod (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) : prod f g = Function.prod 
+f g
+参数：f : P1 ->ᵃ[k] P2；g : P1 ->ᵃ[k] P3。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prod (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) : prod f g = Function.prod f g :=
+theorem coe_prod (f : P1 →ᵃ[k] P2) (g : P1 →ᵃ[k] P3) : prod f g = Function.prod f g :=
   rfl
 
 @[simp]
-/--
-theorem `prod_apply` / 定理 `prod_apply`
-
-English:
-theorem prod_apply
-  given: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1)
-  statement: prod f g p = (f p, g p)
-  proof: rfl
-
-中文:
-定理 prod_apply
-  条件: (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1)
-  结论: 乘积 f g p = (f p, g p)
-  证明: rfl
+/-
+**AffineMap.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：prod_apply (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1) : prod f g p = (
+f p, g p)
+参数：f : P1 ->ᵃ[k] P2；g : P1 ->ᵃ[k] P3；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_apply (f : P1 ->ᵃ[k] P2) (g : P1 ->ᵃ[k] P3) (p : P1) : prod f g p = (f p, g p) :=
+theorem prod_apply (f : P1 →ᵃ[k] P2) (g : P1 →ᵃ[k] P3) (p : P1) : prod f g p = (f p, g p) :=
   rfl
 
 /-- `Prod.map` of two affine maps. -/
 @[simps linear]
-/--
-Definition of `prodMap` / `prodMap` 的定义
+/-
+**AffineMap.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：prodMap (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) : P1 × P3 ->ᵃ[k] P2 × P4 whe
+re toFun
+参数：f : P1 ->ᵃ[k] P2；g : P3 ->ᵃ[k] P4。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMap
-  signature: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4)
-  body: Prod.map f g
-  linear := f.linear.prodMap g.linear
-  map_vadd' := by simp
-
-中文:
-定义 prodMap
-  签名: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4)
-  定义体: Prod.map f g
-  linear := f.linear.prodMap g.linear
-  map_vadd' := by simp
-
-Depends on / 依赖: Prod.map
+--- 原说明 ---
+`Prod.map` of two affine maps.
 -/
-def prodMap (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) : P1 × P3 ->ᵃ[k] P2 × P4 where
+def prodMap (f : P1 →ᵃ[k] P2) (g : P3 →ᵃ[k] P4) : P1 × P3 →ᵃ[k] P2 × P4 where
   toFun := Prod.map f g
   linear := f.linear.prodMap g.linear
   map_vadd' := by simp
-
-/--
-theorem `coe_prodMap` / 定理 `coe_prodMap`
-
-English:
-theorem coe_prodMap
-  given: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4)
-  statement: ⇑(f.prodMap g) = Prod.map f g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prodMap
-  条件: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4)
-  结论: ⇑(f.prodMap g) = 积类型.map f g
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.coe_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_prodMap (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) : ⇑(f.prodMap g) = Prod.
+map f g
+参数：f : P1 ->ᵃ[k] P2；g : P3 ->ᵃ[k] P4。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prodMap (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) : ⇑(f.prodMap g) = Prod.map f g :=
+theorem coe_prodMap (f : P1 →ᵃ[k] P2) (g : P3 →ᵃ[k] P4) : ⇑(f.prodMap g) = Prod.map f g :=
   rfl
 
 @[simp]
-/--
-theorem `prodMap_apply` / 定理 `prodMap_apply`
-
-English:
-theorem prodMap_apply
-  given: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) (x)
-  statement: f.prodMap g x = (f x.1, g x.2)
-  proof: rfl
-
-中文:
-定理 prodMap_apply
-  条件: (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) (x)
-  结论: f.prodMap g x = (f x.1, g x.2)
-  证明: rfl
+/-
+**AffineMap.prodMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：prodMap_apply (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) (x) : f.prodMap g x = 
+(f x.1, g x.2)
+参数：f : P1 ->ᵃ[k] P2；g : P3 ->ᵃ[k] P4；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prodMap_apply (f : P1 ->ᵃ[k] P2) (g : P3 ->ᵃ[k] P4) (x) : f.prodMap g x = (f x.1, g x.2) :=
+theorem prodMap_apply (f : P1 →ᵃ[k] P2) (g : P3 →ᵃ[k] P4) (x) : f.prodMap g x = (f x.1, g x.2) :=
   rfl
 
 /-! ### Definition of `AffineMap.lineMap` and lemmas about it -/
 
-/--
-Definition of `lineMap` / `lineMap` 的定义
+/-- The affine map from `k` to `P1` sending `0` to `p₀` and `1` to `p₁`. -/
+/-
+**AffineMap.lineMap** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：lineMap (p₀ p₁ : P1) : k ->ᵃ[k] P1
+参数：p₀ p₁ : P1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lineMap
-  signature: (p₀ p₁ : P1)
-  body: ((LinearMap.id : k ->ₗ[k] k).smulRight (p₁ -ᵥ p₀)).toAffineMap +ᵥ const k k p₀
-
-中文:
-定义 lineMap
-  签名: (p₀ p₁ : P1)
-  定义体: ((LinearMap.id : k ->ₗ[k] k).smulRight (p₁ -ᵥ p₀)).toAffineMap +ᵥ const k k p₀
-
-Depends on / 依赖: LinearMap, LinearMap.id, smulRight, toAffineMap
+--- 原说明 ---
+The affine map from `k` to `P1` sending `0` to `p₀` and `1` to `p₁`.
 -/
-def lineMap (p₀ p₁ : P1) : k ->ᵃ[k] P1 :=
-  ((LinearMap.id : k ->ₗ[k] k).smulRight (p₁ -ᵥ p₀)).toAffineMap +ᵥ const k k p₀
+def lineMap (p₀ p₁ : P1) : k →ᵃ[k] P1 :=
+  ((LinearMap.id : k →ₗ[k] k).smulRight (p₁ -ᵥ p₀)).toAffineMap +ᵥ const k k p₀
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_lineMap` / 定理 `coe_lineMap`
-
-English:
-theorem coe_lineMap
-  given: (p₀ p₁ : P1)
-  statement: (lineMap p₀ p₁ : k -> P1) = fun c => c • (p₁ -ᵥ p₀) +ᵥ p₀
-  proof: rfl
-
-中文:
-定理 coe_lineMap
-  条件: (p₀ p₁ : P1)
-  结论: (lineMap p₀ p₁ : k -> P1) = fun c => c • (p₁ -ᵥ p₀) +ᵥ p₀
-  证明: rfl
+/-
+**AffineMap.coe_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_lineMap (p₀ p₁ : P1) : (lineMap p₀ p₁ : k -> P1) = fun c => c • (p₁ -ᵥ
+ p₀) +ᵥ p₀
+参数：p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_lineMap (p₀ p₁ : P1) : (lineMap p₀ p₁ : k -> P1) = fun c => c • (p₁ -ᵥ p₀) +ᵥ p₀ :=
+theorem coe_lineMap (p₀ p₁ : P1) : (lineMap p₀ p₁ : k → P1) = fun c => c • (p₁ -ᵥ p₀) +ᵥ p₀ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_apply` / 定理 `lineMap_apply`
-
-English:
-theorem lineMap_apply
-  given: (p₀ p₁ : P1) (c : k)
-  statement: lineMap p₀ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p₀
-  proof: rfl
-
-中文:
-定理 lineMap_apply
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: lineMap p₀ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p₀
-  证明: rfl
+/-
+**AffineMap.lineMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p
+₀
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lineMap_apply (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p₀ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_apply_module'` / 定理 `lineMap_apply_module'`
-
-English:
-theorem lineMap_apply_module'
-  given: (p₀ p₁ : V1) (c : k)
-  statement: lineMap p₀ p₁ c = c • (p₁ - p₀) + p₀
-  proof: rfl
-
-中文:
-定理 lineMap_apply_module'
-  条件: (p₀ p₁ : V1) (c : k)
-  结论: lineMap p₀ p₁ c = c • (p₁ - p₀) + p₀
-  证明: rfl
+/-
+**AffineMap.lineMap_apply_module'** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_module' (p₀ p₁ : V1) (c : k) : lineMap p₀ p₁ c = c • (p₁ - p
+₀) + p₀
+参数：p₀ p₁ : V1；c : k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lineMap_apply_module' (p₀ p₁ : V1) (c : k) : lineMap p₀ p₁ c = c • (p₁ - p₀) + p₀ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_apply_module` / 定理 `lineMap_apply_module`
-
-English:
-theorem lineMap_apply_module
-  given: (p₀ p₁ : V1) (c : k)
-  statement: lineMap p₀ p₁ c = (1 - c) • p₀ + c • p₁
-  proof: by
-  simp [lineMap_apply_module', smul_sub, sub_smul]; abel
-
-中文:
-定理 lineMap_apply_module
-  条件: (p₀ p₁ : V1) (c : k)
-  结论: lineMap p₀ p₁ c = (1 - c) • p₀ + c • p₁
-  证明: by
-  simp [lineMap_apply_module', smul_sub, sub_smul]; abel
-
-Depends on / 依赖: lineMap_apply_module, smul_sub, sub_smul
+/-
+**AffineMap.lineMap_apply_module** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_module (p₀ p₁ : V1) (c : k) : lineMap p₀ p₁ c = (1 - c) • p₀
+ + c • p₁
+参数：p₀ p₁ : V1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `_private.Mathlib.LinearAlgebra.AffineSpace.AffineMap.0.AffineMap.lineMap
+_apply_module._abel_1_1`：∀ {k : Type u_2} {V1 : Type u_1} [inst : Ring k] [inst_
+1 : AddCommGroup V1] [inst_2 : _root_.Module k V1] (p₀ p₁ : V1)   (c : k), c • p
+₁ - c…
 -/
 theorem lineMap_apply_module (p₀ p₁ : V1) (c : k) : lineMap p₀ p₁ c = (1 - c) • p₀ + c • p₁ := by
   simp [lineMap_apply_module', smul_sub, sub_smul]; abel
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_apply_ring'` / 定理 `lineMap_apply_ring'`
-
-English:
-theorem lineMap_apply_ring'
-  given: (a b c : k)
-  statement: lineMap a b c = c * (b - a) + a
-  proof: rfl
-
-中文:
-定理 lineMap_apply_ring'
-  条件: (a b c : k)
-  结论: lineMap a b c = c * (b - a) + a
-  证明: rfl
+/-
+**AffineMap.lineMap_apply_ring'** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_ring' (a b c : k) : lineMap a b c = c * (b - a) + a
+参数：a b c : k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lineMap_apply_ring' (a b c : k) : lineMap a b c = c * (b - a) + a :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_apply_ring` / 定理 `lineMap_apply_ring`
-
-English:
-theorem lineMap_apply_ring
-  given: (a b c : k)
-  statement: lineMap a b c = (1 - c) * a + c * b
-  proof: lineMap_apply_module a b c
-
-中文:
-定理 lineMap_apply_ring
-  条件: (a b c : k)
-  结论: lineMap a b c = (1 - c) * a + c * b
-  证明: lineMap_apply_module a b c
-
-Depends on / 依赖: lineMap_apply_module
+/-
+**AffineMap.lineMap_apply_ring** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_ring (a b c : k) : lineMap a b c = (1 - c) * a + c * b
+参数：a b c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.lineMap_apply_module`：lineMap_apply_module (p₀ p₁ : V1) (c : k
+) : lineMap p₀ p₁ c = (1 - c) • p₀ + c • p₁
 -/
 theorem lineMap_apply_ring (a b c : k) : lineMap a b c = (1 - c) * a + c * b :=
   lineMap_apply_module a b c
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_vadd_apply` / 定理 `lineMap_vadd_apply`
-
-English:
-theorem lineMap_vadd_apply
-  given: (p : P1) (v : V1) (c : k)
-  statement: lineMap p (v +ᵥ p) c = c • v +ᵥ p
-  proof: by
-  rw [lineMap_apply]; rw [vadd_vsub]
-
-@[simp]
-
-中文:
-定理 lineMap_vadd_apply
-  条件: (p : P1) (v : V1) (c : k)
-  结论: lineMap p (v +ᵥ p) c = c • v +ᵥ p
-  证明: by
-  rw [lineMap_apply]; rw [vadd_vsub]
-
-@[simp]
-
-Depends on / 依赖: lineMap_apply, vadd_vsub
+/-
+**AffineMap.lineMap_vadd_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_vadd_apply (p : P1) (v : V1) (c : k) : lineMap p (v +ᵥ p) c = c • 
+v +ᵥ p
+参数：p : P1；v : V1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.lineMap_apply`：lineMap_apply (p₀ p₁ : P1) (c : k) : lineMap p₀
+ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p₀
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
 -/
 theorem lineMap_vadd_apply (p : P1) (v : V1) (c : k) : lineMap p (v +ᵥ p) c = c • v +ᵥ p := by
-  rw [lineMap_apply]; rw [vadd_vsub]
+  rw [lineMap_apply, vadd_vsub]
 
 @[simp]
-/--
-theorem `lineMap_linear` / 定理 `lineMap_linear`
-
-English:
-theorem lineMap_linear
-  given: (p₀ p₁ : P1)
-  proof: add_zero _
-
-中文:
-定理 lineMap_linear
-  条件: (p₀ p₁ : P1)
-  证明: add_zero _
-
-Depends on / 依赖: add_zero
+/-
+**AffineMap.lineMap_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_linear (p₀ p₁ : P1) : (lineMap p₀ p₁ : k ->ᵃ[k] P1).linear = Linea
+rMap.id.smulRight (p₁ -ᵥ p₀)
+参数：p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem lineMap_linear (p₀ p₁ : P1) :
-    (lineMap p₀ p₁ : k ->ᵃ[k] P1).linear = LinearMap.id.smulRight (p₁ -ᵥ p₀) :=
+    (lineMap p₀ p₁ : k →ᵃ[k] P1).linear = LinearMap.id.smulRight (p₁ -ᵥ p₀) :=
   add_zero _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_same_apply` / 定理 `lineMap_same_apply`
-
-English:
-theorem lineMap_same_apply
-  given: (p : P1) (c : k)
-  statement: lineMap p p c = p
-  proof: by
-  simp [lineMap_apply]
-
-@[simp]
-
-中文:
-定理 lineMap_same_apply
-  条件: (p : P1) (c : k)
-  结论: lineMap p p c = p
-  证明: by
-  simp [lineMap_apply]
-
-@[simp]
-
-Depends on / 依赖: lineMap_apply
+/-
+**AffineMap.lineMap_same_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_same_apply (p : P1) (c : k) : lineMap p p c = p
+参数：p : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `vsub_self`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (p : P), p -ᵥ p = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_vadd`：∀ (M : Type u_1) {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (b : α), 0 +ᵥ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lineMap_same_apply (p : P1) (c : k) : lineMap p p c = p := by
   simp [lineMap_apply]
 
 @[simp]
-/--
-theorem `lineMap_same` / 定理 `lineMap_same`
-
-English:
-theorem lineMap_same
-  given: (p : P1)
-  statement: lineMap p p = const k k p
-  proof: ext lineMap_same_apply p
-
-中文:
-定理 lineMap_same
-  条件: (p : P1)
-  结论: lineMap p p = const k k p
-  证明: ext lineMap_same_apply p
-
-Depends on / 依赖: lineMap_same_apply
+/-
+**AffineMap.lineMap_same** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_same (p : P1) : lineMap p p = const k k p
+参数：p : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `AffineMap.lineMap_same_apply`：lineMap_same_apply (p : P1) (c : k) : line
+Map p p c = p
 -/
 theorem lineMap_same (p : P1) : lineMap p p = const k k p :=
-ext lineMap_same_apply p
+  ext <| lineMap_same_apply p
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_apply_zero` / 定理 `lineMap_apply_zero`
-
-English:
-theorem lineMap_apply_zero
-  given: (p₀ p₁ : P1)
-  statement: lineMap p₀ p₁ (0 : k) = p₀
-  proof: by
-  simp [lineMap_apply]
-
-中文:
-定理 lineMap_apply_zero
-  条件: (p₀ p₁ : P1)
-  结论: lineMap p₀ p₁ (0 : k) = p₀
-  证明: by
-  simp [lineMap_apply]
-
-Depends on / 依赖: lineMap_apply
+/-
+**AffineMap.lineMap_apply_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_zero (p₀ p₁ : P1) : lineMap p₀ p₁ (0 : k) = p₀
+参数：p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `zero_vadd`：∀ (M : Type u_1) {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (b : α), 0 +ᵥ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lineMap_apply_zero (p₀ p₁ : P1) : lineMap p₀ p₁ (0 : k) = p₀ := by
   simp [lineMap_apply]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_apply_one` / 定理 `lineMap_apply_one`
-
-English:
-theorem lineMap_apply_one
-  given: (p₀ p₁ : P1)
-  statement: lineMap p₀ p₁ (1 : k) = p₁
-  proof: by
-  simp [lineMap_apply]
-
-中文:
-定理 lineMap_apply_one
-  条件: (p₀ p₁ : P1)
-  结论: lineMap p₀ p₁ (1 : k) = p₁
-  证明: by
-  simp [lineMap_apply]
-
-Depends on / 依赖: lineMap_apply
+/-
+**AffineMap.lineMap_apply_one** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_one (p₀ p₁ : P1) : lineMap p₀ p₁ (1 : k) = p₁
+参数：p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `vsub_vadd`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (p₁ p₂ : P), (p₁ -ᵥ p₂) +ᵥ p₂ = p₁
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lineMap_apply_one (p₀ p₁ : P1) : lineMap p₀ p₁ (1 : k) = p₁ := by
   simp [lineMap_apply]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_eq_lineMap_iff` / 定理 `lineMap_eq_lineMap_iff`
-
-English:
-theorem lineMap_eq_lineMap_iff
-  given: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k}
-  proof: by
-  rw [lineMap_apply]; rw [lineMap_apply]; rw [← @vsub_eq_zero_iff_eq V1]; rw [vadd_vsub_vadd_cancel_right]; rw [←
-    sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [vsub_eq_zero_iff_eq]; rw [or_comm]; rw [eq_comm]
-
-中文:
-定理 lineMap_eq_lineMap_iff
-  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c₁ c₂ : k}
-  证明: by
-  rw [lineMap_apply]; rw [lineMap_apply]; rw [← @vsub_eq_zero_iff_eq V1]; rw [vadd_vsub_vadd_cancel_right]; rw [←
-    sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [vsub_eq_zero_iff_eq]; rw [or_comm]; rw [eq_comm]
-
-Depends on / 依赖: eq_comm, lineMap_apply, or_comm, smul_eq_zero, sub_eq_zero, sub_smul, vadd_vsub_vadd_cancel_right, vsub_eq_zero_iff_eq
+/-
+**AffineMap.lineMap_eq_lineMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_eq_lineMap_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c₁ 
+c₂ : k} : lineMap p₀ p₁ c₁ = lineMap p₀ p₁ c₂ ↔ p₀ = p₁ ∨ c₁ = c₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.lineMap_apply`：lineMap_apply (p₀ p₁ : P1) (c : k) : lineMap p₀
+ p₁ c = c • (p₁ -ᵥ p₀) +ᵥ p₀
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `vsub_eq_zero_iff_eq`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G]
+ [T : AddTorsor G P] {p₁ p₂ : P}, p₁ -ᵥ p₂ = 0 ↔ p₁ = p₂
+· 使用定理 `vadd_vsub_vadd_cancel_right`：∀ {G : Type u_1} {P : Type u_2} [inst : Add
+Group G] [T : AddTorsor G P] (v₁ v₂ : G) (p : P),   (v₁ +ᵥ p) -ᵥ (v₂ +ᵥ p) = v₁ 
+- v₂
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `smul_eq_zero`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [inst_
+1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {r : R}   {m : M} [Module.IsTo
+rs…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lineMap_eq_lineMap_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k} :
     lineMap p₀ p₁ c₁ = lineMap p₀ p₁ c₂ ↔ p₀ = p₁ ∨ c₁ = c₂ := by
-  rw [lineMap_apply]; rw [lineMap_apply]; rw [← @vsub_eq_zero_iff_eq V1]; rw [vadd_vsub_vadd_cancel_right]; rw [←
-    sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [vsub_eq_zero_iff_eq]; rw [or_comm]; rw [eq_comm]
+  rw [lineMap_apply, lineMap_apply, ← @vsub_eq_zero_iff_eq V1, vadd_vsub_vadd_cancel_right, ←
+    sub_smul, smul_eq_zero, sub_eq_zero, vsub_eq_zero_iff_eq, or_comm, eq_comm]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_eq_left_iff` / 定理 `lineMap_eq_left_iff`
-
-English:
-theorem lineMap_eq_left_iff
-  given: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k}
-  proof: by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_zero]
-
-中文:
-定理 lineMap_eq_left_iff
-  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c : k}
-  证明: by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_zero]
-
-Depends on / 依赖: lineMap_apply_zero, lineMap_eq_lineMap_iff
+/-
+**AffineMap.lineMap_eq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_eq_left_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k}
+ : lineMap p₀ p₁ c = p₀ ↔ p₀ = p₁ ∨ c = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.lineMap_eq_lineMap_iff`：lineMap_eq_lineMap_iff [IsDomain k] [I
+sTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k} : lineMap p₀ p₁ c₁ = lineMap p₀ p₁ c
+₂ ↔ p₀ = p₁ ∨ c₁ = c₂
+· 使用定理 `AffineMap.lineMap_apply_zero`：lineMap_apply_zero (p₀ p₁ : P1) : lineMap 
+p₀ p₁ (0 : k) = p₀
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lineMap_eq_left_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k} :
     lineMap p₀ p₁ c = p₀ ↔ p₀ = p₁ ∨ c = 0 := by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_zero]
+  rw [← @lineMap_eq_lineMap_iff k V1, lineMap_apply_zero]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_eq_right_iff` / 定理 `lineMap_eq_right_iff`
-
-English:
-theorem lineMap_eq_right_iff
-  given: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k}
-  proof: by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_one]
-
-中文:
-定理 lineMap_eq_right_iff
-  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} {c : k}
-  证明: by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_one]
-
-Depends on / 依赖: lineMap_apply_one, lineMap_eq_lineMap_iff
+/-
+**AffineMap.lineMap_eq_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_eq_right_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k
+} : lineMap p₀ p₁ c = p₁ ↔ p₀ = p₁ ∨ c = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.lineMap_eq_lineMap_iff`：lineMap_eq_lineMap_iff [IsDomain k] [I
+sTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k} : lineMap p₀ p₁ c₁ = lineMap p₀ p₁ c
+₂ ↔ p₀ = p₁ ∨ c₁ = c₂
+· 使用定理 `AffineMap.lineMap_apply_one`：lineMap_apply_one (p₀ p₁ : P1) : lineMap p₀
+ p₁ (1 : k) = p₁
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lineMap_eq_right_iff [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} {c : k} :
     lineMap p₀ p₁ c = p₁ ↔ p₀ = p₁ ∨ c = 1 := by
-  rw [← @lineMap_eq_lineMap_iff k V1]; rw [lineMap_apply_one]
+  rw [← @lineMap_eq_lineMap_iff k V1, lineMap_apply_one]
 
 set_option backward.isDefEq.respectTransparency false in
 variable (k) in
-/--
-theorem `lineMap_injective` / 定理 `lineMap_injective`
-
-English:
-theorem lineMap_injective
-  given: [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} (h : p₀ != p₁)
-  proof: fun _c₁ _c₂ hc =>
-  (lineMap_eq_lineMap_iff.mp hc).resolve_left h
-
-中文:
-定理 lineMap_injective
-  条件: [是整环 k] [是无挠 k V1] {p₀ p₁ : P1} (h : p₀ != p₁)
-  证明: fun _c₁ _c₂ hc =>
-  (lineMap_eq_lineMap_iff.mp hc).resolve_left h
+/-
+**AffineMap.lineMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_injective [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} (h : p₀ !
+= p₁) : Function.Injective (lineMap p₀ p₁ : k -> P1)
+参数：h : p₀ != p₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AffineMap.lineMap_eq_lineMap_iff`：lineMap_eq_lineMap_iff [IsDomain k] [I
+sTorsionFree k V1] {p₀ p₁ : P1} {c₁ c₂ : k} : lineMap p₀ p₁ c₁ = lineMap p₀ p₁ c
+₂ ↔ p₀ = p₁ ∨ c₁ = c₂
 -/
-theorem lineMap_injective [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} (h : p₀ != p₁) :
-    Function.Injective (lineMap p₀ p₁ : k -> P1) := fun _c₁ _c₂ hc =>
+theorem lineMap_injective [IsDomain k] [IsTorsionFree k V1] {p₀ p₁ : P1} (h : p₀ ≠ p₁) :
+    Function.Injective (lineMap p₀ p₁ : k → P1) := fun _c₁ _c₂ hc =>
   (lineMap_eq_lineMap_iff.mp hc).resolve_left h
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `apply_lineMap` / 定理 `apply_lineMap`
-
-English:
-theorem apply_lineMap
-  given: (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (c : k)
-  proof: by
-  simp [lineMap_apply]
-
-@[simp]
-
-中文:
-定理 apply_lineMap
-  条件: (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (c : k)
-  证明: by
-  simp [lineMap_apply]
-
-@[simp]
-
-Depends on / 依赖: lineMap_apply
+/-
+**AffineMap.apply_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (c : k) : f (lineMap p₀ p₁ c
+) = lineMap (f p₀) (f p₁) c
+参数：f : P1 ->ᵃ[k] P2；p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `AffineMap.linearMap_vsub`：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
+ : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (c : k) :
+theorem apply_lineMap (f : P1 →ᵃ[k] P2) (p₀ p₁ : P1) (c : k) :
     f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c := by
   simp [lineMap_apply]
 
 @[simp]
-/--
-theorem `comp_lineMap` / 定理 `comp_lineMap`
-
-English:
-theorem comp_lineMap
-  given: (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1)
-  proof: ext f.apply_lineMap p₀ p₁
-
-中文:
-定理 comp_lineMap
-  条件: (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1)
-  证明: ext f.apply_lineMap p₀ p₁
-
-Depends on / 依赖: apply_lineMap, f.apply_lineMap
+/-
+**AffineMap.comp_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：comp_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) : f.comp (lineMap p₀ p₁) = li
+neMap (f p₀) (f p₁)
+参数：f : P1 ->ᵃ[k] P2；p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
-theorem comp_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) :
+theorem comp_lineMap (f : P1 →ᵃ[k] P2) (p₀ p₁ : P1) :
     f.comp (lineMap p₀ p₁) = lineMap (f p₀) (f p₁) :=
-ext f.apply_lineMap p₀ p₁
+  ext <| f.apply_lineMap p₀ p₁
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `fst_lineMap` / 定理 `fst_lineMap`
-
-English:
-theorem fst_lineMap
-  given: (p₀ p₁ : P1 × P2) (c : k)
-  statement: (lineMap p₀ p₁ c).1 = lineMap p₀.1 p₁.1 c
-  proof: fst.apply_lineMap p₀ p₁ c
-
-中文:
-定理 fst_lineMap
-  条件: (p₀ p₁ : P1 × P2) (c : k)
-  结论: (lineMap p₀ p₁ c).1 = lineMap p₀.1 p₁.1 c
-  证明: fst.apply_lineMap p₀ p₁ c
-
-Depends on / 依赖: apply_lineMap, fst.apply_lineMap
+/-
+**AffineMap.fst_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：fst_lineMap (p₀ p₁ : P1 × P2) (c : k) : (lineMap p₀ p₁ c).1 = lineMap p₀.1
+ p₁.1 c
+参数：p₀ p₁ : P1 × P2；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
 theorem fst_lineMap (p₀ p₁ : P1 × P2) (c : k) : (lineMap p₀ p₁ c).1 = lineMap p₀.1 p₁.1 c :=
   fst.apply_lineMap p₀ p₁ c
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `snd_lineMap` / 定理 `snd_lineMap`
-
-English:
-theorem snd_lineMap
-  given: (p₀ p₁ : P1 × P2) (c : k)
-  statement: (lineMap p₀ p₁ c).2 = lineMap p₀.2 p₁.2 c
-  proof: snd.apply_lineMap p₀ p₁ c
-
-中文:
-定理 snd_lineMap
-  条件: (p₀ p₁ : P1 × P2) (c : k)
-  结论: (lineMap p₀ p₁ c).2 = lineMap p₀.2 p₁.2 c
-  证明: snd.apply_lineMap p₀ p₁ c
-
-Depends on / 依赖: apply_lineMap, snd.apply_lineMap
+/-
+**AffineMap.snd_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：snd_lineMap (p₀ p₁ : P1 × P2) (c : k) : (lineMap p₀ p₁ c).2 = lineMap p₀.2
+ p₁.2 c
+参数：p₀ p₁ : P1 × P2；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
 theorem snd_lineMap (p₀ p₁ : P1 × P2) (c : k) : (lineMap p₀ p₁ c).2 = lineMap p₀.2 p₁.2 c :=
   snd.apply_lineMap p₀ p₁ c
-
-/--
-theorem `lineMap_symm` / 定理 `lineMap_symm`
-
-English:
-theorem lineMap_symm
-  given: (p₀ p₁ : P1)
-  proof: by
-  simp
-
-中文:
-定理 lineMap_symm
-  条件: (p₀ p₁ : P1)
-  证明: by
-  simp
+/-
+**AffineMap.lineMap_symm** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_symm (p₀ p₁ : P1) : lineMap p₀ p₁ = (lineMap p₁ p₀).comp (lineMap 
+(1 : k) (0 : k))
+参数：p₀ p₁ : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.comp_lineMap`：comp_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) : f
+.comp (lineMap p₀ p₁) = lineMap (f p₀) (f p₁)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AffineMap.lineMap_apply_one`：lineMap_apply_one (p₀ p₁ : P1) : lineMap p₀
+ p₁ (1 : k) = p₁
+· 使用定理 `AffineMap.lineMap_apply_zero`：lineMap_apply_zero (p₀ p₁ : P1) : lineMap 
+p₀ p₁ (0 : k) = p₀
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lineMap_symm (p₀ p₁ : P1) :
     lineMap p₀ p₁ = (lineMap p₁ p₀).comp (lineMap (1 : k) (0 : k)) := by
@@ -2344,458 +1639,436 @@ theorem lineMap_symm (p₀ p₁ : P1) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_apply_one_sub` / 定理 `lineMap_apply_one_sub`
-
-English:
-theorem lineMap_apply_one_sub
-  given: (p₀ p₁ : P1) (c : k)
-  statement: lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c
-  proof: by
-  rw [lineMap_symm p₀]; rw [comp_apply]
-  congr
-  simp [lineMap_apply]
-
-中文:
-定理 lineMap_apply_one_sub
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c
-  证明: by
-  rw [lineMap_symm p₀]; rw [comp_apply]
-  congr
-  simp [lineMap_apply]
-
-Depends on / 依赖: comp_apply, lineMap_apply, lineMap_symm
+/-
+**AffineMap.lineMap_apply_one_sub** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply_one_sub (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ (1 - c) = lineM
+ap p₁ p₀ c
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.lineMap_symm`：lineMap_symm (p₀ p₁ : P1) : lineMap p₀ p₁ = (lin
+eMap p₁ p₀).comp (lineMap (1 : k) (0 : k))
+· 使用定理 `AffineMap.comp_apply`：comp_apply (f : P2 ->ᵃ[k] P3) (g : P1 ->ᵃ[k] P2) (
+p : P1) : f.comp g p = f (g p)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lineMap_apply_one_sub (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c := by
-  rw [lineMap_symm p₀]; rw [comp_apply]
+  rw [lineMap_symm p₀, comp_apply]
   congr
   simp [lineMap_apply]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_vsub_left` / 定理 `lineMap_vsub_left`
-
-English:
-theorem lineMap_vsub_left
-  given: (p₀ p₁ : P1) (c : k)
-  statement: lineMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -ᵥ p₀)
-  proof: vadd_vsub _ _
-
-中文:
-定理 lineMap_vsub_left
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: lineMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -ᵥ p₀)
-  证明: vadd_vsub _ _
-
-Depends on / 依赖: vadd_vsub
+/-
+**AffineMap.lineMap_vsub_left** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_vsub_left (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -
+ᵥ p₀)
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
 -/
 theorem lineMap_vsub_left (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -ᵥ p₀) :=
   vadd_vsub _ _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `left_vsub_lineMap` / 定理 `left_vsub_lineMap`
-
-English:
-theorem left_vsub_lineMap
-  given: (p₀ p₁ : P1) (c : k)
-  statement: p₀ -ᵥ lineMap p₀ p₁ c = c • (p₀ -ᵥ p₁)
-  proof: by
-  rw [← neg_vsub_eq_vsub_rev]; rw [lineMap_vsub_left]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
-
-中文:
-定理 left_vsub_lineMap
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: p₀ -ᵥ lineMap p₀ p₁ c = c • (p₀ -ᵥ p₁)
-  证明: by
-  rw [← neg_vsub_eq_vsub_rev]; rw [lineMap_vsub_left]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
-
-Depends on / 依赖: lineMap_vsub_left, neg_vsub_eq_vsub_rev, smul_neg
+/-
+**AffineMap.left_vsub_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：left_vsub_lineMap (p₀ p₁ : P1) (c : k) : p₀ -ᵥ lineMap p₀ p₁ c = c • (p₀ -
+ᵥ p₁)
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_vsub_eq_vsub_rev`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G
+] [T : AddTorsor G P] (p₁ p₂ : P), -(p₁ -ᵥ p₂) = p₂ -ᵥ p₁
+· 使用定理 `AffineMap.lineMap_vsub_left`：lineMap_vsub_left (p₀ p₁ : P1) (c : k) : li
+neMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -ᵥ p₀)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
 -/
 theorem left_vsub_lineMap (p₀ p₁ : P1) (c : k) : p₀ -ᵥ lineMap p₀ p₁ c = c • (p₀ -ᵥ p₁) := by
-  rw [← neg_vsub_eq_vsub_rev]; rw [lineMap_vsub_left]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
+  rw [← neg_vsub_eq_vsub_rev, lineMap_vsub_left, ← smul_neg, neg_vsub_eq_vsub_rev]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lineMap_vsub_right` / 定理 `lineMap_vsub_right`
-
-English:
-theorem lineMap_vsub_right
-  given: (p₀ p₁ : P1) (c : k)
-  statement: lineMap p₀ p₁ c -ᵥ p₁ = (1 - c) • (p₀ -ᵥ p₁)
-  proof: by
-  rw [← lineMap_apply_one_sub]; rw [lineMap_vsub_left]
-
-中文:
-定理 lineMap_vsub_right
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: lineMap p₀ p₁ c -ᵥ p₁ = (1 - c) • (p₀ -ᵥ p₁)
-  证明: by
-  rw [← lineMap_apply_one_sub]; rw [lineMap_vsub_left]
-
-Depends on / 依赖: lineMap_apply_one_sub, lineMap_vsub_left
+/-
+**AffineMap.lineMap_vsub_right** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_vsub_right (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c -ᵥ p₁ = (1 - c) 
+• (p₀ -ᵥ p₁)
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.lineMap_apply_one_sub`：lineMap_apply_one_sub (p₀ p₁ : P1) (c :
+ k) : lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c
+· 使用定理 `AffineMap.lineMap_vsub_left`：lineMap_vsub_left (p₀ p₁ : P1) (c : k) : li
+neMap p₀ p₁ c -ᵥ p₀ = c • (p₁ -ᵥ p₀)
 -/
 theorem lineMap_vsub_right (p₀ p₁ : P1) (c : k) : lineMap p₀ p₁ c -ᵥ p₁ = (1 - c) • (p₀ -ᵥ p₁) := by
-  rw [← lineMap_apply_one_sub]; rw [lineMap_vsub_left]
+  rw [← lineMap_apply_one_sub, lineMap_vsub_left]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `right_vsub_lineMap` / 定理 `right_vsub_lineMap`
-
-English:
-theorem right_vsub_lineMap
-  given: (p₀ p₁ : P1) (c : k)
-  statement: p₁ -ᵥ lineMap p₀ p₁ c = (1 - c) • (p₁ -ᵥ p₀)
-  proof: by
-  rw [← lineMap_apply_one_sub]; rw [left_vsub_lineMap]
-
-中文:
-定理 right_vsub_lineMap
-  条件: (p₀ p₁ : P1) (c : k)
-  结论: p₁ -ᵥ lineMap p₀ p₁ c = (1 - c) • (p₁ -ᵥ p₀)
-  证明: by
-  rw [← lineMap_apply_one_sub]; rw [left_vsub_lineMap]
-
-Depends on / 依赖: left_vsub_lineMap, lineMap_apply_one_sub
+/-
+**AffineMap.right_vsub_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：right_vsub_lineMap (p₀ p₁ : P1) (c : k) : p₁ -ᵥ lineMap p₀ p₁ c = (1 - c) 
+• (p₁ -ᵥ p₀)
+参数：p₀ p₁ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.lineMap_apply_one_sub`：lineMap_apply_one_sub (p₀ p₁ : P1) (c :
+ k) : lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c
+· 使用定理 `AffineMap.left_vsub_lineMap`：left_vsub_lineMap (p₀ p₁ : P1) (c : k) : p₀
+ -ᵥ lineMap p₀ p₁ c = c • (p₀ -ᵥ p₁)
 -/
 theorem right_vsub_lineMap (p₀ p₁ : P1) (c : k) : p₁ -ᵥ lineMap p₀ p₁ c = (1 - c) • (p₁ -ᵥ p₀) := by
-  rw [← lineMap_apply_one_sub]; rw [left_vsub_lineMap]
+  rw [← lineMap_apply_one_sub, left_vsub_lineMap]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_vadd_lineMap` / 定理 `lineMap_vadd_lineMap`
-
-English:
-theorem lineMap_vadd_lineMap
-  given: (v₁ v₂ : V1) (p₁ p₂ : P1) (c : k)
-  proof: ((fst : V1 × P1 ->ᵃ[k] V1) +ᵥ (snd : V1 × P1 ->ᵃ[k] P1)).apply_lineMap (v₁, p₁) (v₂, p₂) c
-
-中文:
-定理 lineMap_vadd_lineMap
-  条件: (v₁ v₂ : V1) (p₁ p₂ : P1) (c : k)
-  证明: ((fst : V1 × P1 ->ᵃ[k] V1) +ᵥ (snd : V1 × P1 ->ᵃ[k] P1)).apply_lineMap (v₁, p₁) (v₂, p₂) c
-
-Depends on / 依赖: apply_lineMap
+/-
+**AffineMap.lineMap_vadd_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_vadd_lineMap (v₁ v₂ : V1) (p₁ p₂ : P1) (c : k) : lineMap v₁ v₂ c +
+ᵥ lineMap p₁ p₂ c = lineMap (v₁ +ᵥ p₁) (v₂ +ᵥ p₂) c
+参数：v₁ v₂ : V1；p₁ p₂ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
 theorem lineMap_vadd_lineMap (v₁ v₂ : V1) (p₁ p₂ : P1) (c : k) :
     lineMap v₁ v₂ c +ᵥ lineMap p₁ p₂ c = lineMap (v₁ +ᵥ p₁) (v₂ +ᵥ p₂) c :=
-  ((fst : V1 × P1 ->ᵃ[k] V1) +ᵥ (snd : V1 × P1 ->ᵃ[k] P1)).apply_lineMap (v₁, p₁) (v₂, p₂) c
+  ((fst : V1 × P1 →ᵃ[k] V1) +ᵥ (snd : V1 × P1 →ᵃ[k] P1)).apply_lineMap (v₁, p₁) (v₂, p₂) c
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lineMap_vsub_lineMap` / 定理 `lineMap_vsub_lineMap`
-
-English:
-theorem lineMap_vsub_lineMap
-  given: (p₁ p₂ p₃ p₄ : P1) (c : k)
-  proof: ((fst : P1 × P1 ->ᵃ[k] P1) -ᵥ (snd : P1 × P1 ->ᵃ[k] P1)).apply_lineMap (_, _) (_, _) c
-
-中文:
-定理 lineMap_vsub_lineMap
-  条件: (p₁ p₂ p₃ p₄ : P1) (c : k)
-  证明: ((fst : P1 × P1 ->ᵃ[k] P1) -ᵥ (snd : P1 × P1 ->ᵃ[k] P1)).apply_lineMap (_, _) (_, _) c
-
-Depends on / 依赖: apply_lineMap
+/-
+**AffineMap.lineMap_vsub_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_vsub_lineMap (p₁ p₂ p₃ p₄ : P1) (c : k) : lineMap p₁ p₂ c -ᵥ lineM
+ap p₃ p₄ c = lineMap (p₁ -ᵥ p₃) (p₂ -ᵥ p₄) c
+参数：p₁ p₂ p₃ p₄ : P1；c : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
 theorem lineMap_vsub_lineMap (p₁ p₂ p₃ p₄ : P1) (c : k) :
     lineMap p₁ p₂ c -ᵥ lineMap p₃ p₄ c = lineMap (p₁ -ᵥ p₃) (p₂ -ᵥ p₄) c :=
-  ((fst : P1 × P1 ->ᵃ[k] P1) -ᵥ (snd : P1 × P1 ->ᵃ[k] P1)).apply_lineMap (_, _) (_, _) c
+  ((fst : P1 × P1 →ᵃ[k] P1) -ᵥ (snd : P1 × P1 →ᵃ[k] P1)).apply_lineMap (_, _) (_, _) c
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `lineMap_lineMap_right` / 引理 `lineMap_lineMap_right`
-
-English:
-lemma lineMap_lineMap_right
-  given: (p₀ p₁ : P1) (c d : k)
-  proof: by simp [lineMap_apply, mul_smul]
-
-中文:
-引理 lineMap_lineMap_right
-  条件: (p₀ p₁ : P1) (c d : k)
-  证明: by simp [lineMap_apply, mul_smul]
+/-
+**AffineMap.lineMap_lineMap_right** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} [inst : Ring k] [inst_1 :
+ AddCommGroup V1]   [inst_2 : _root_.Module k V1] [inst_3 : AddTorsor V1 P1] (p₀
+ p₁ : P1) (c d : k),   (AffineMap.lineMap p₀ ((AffineMap.lineMap p₀ p₁) c)) d = 
+(AffineMap.lineMap p₀ p₁) (d * c)
+参数：p₀ p₁ : P1；c d : k；AffineMap.lineMap p₀ ((AffineMap.lineMap p₀ p₁) c)；AffineM
+ap.lineMap p₀ p₁；d * c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma lineMap_lineMap_right (p₀ p₁ : P1) (c d : k) :
     lineMap p₀ (lineMap p₀ p₁ c) d = lineMap p₀ p₁ (d * c) := by simp [lineMap_apply, mul_smul]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `lineMap_lineMap_left` / 引理 `lineMap_lineMap_left`
-
-English:
-lemma lineMap_lineMap_left
-  given: (p₀ p₁ : P1) (c d : k)
-  proof: by
-  simp_rw [lineMap_apply_one_sub, ← lineMap_apply_one_sub p₁, lineMap_lineMap_right]
-
-中文:
-引理 lineMap_lineMap_left
-  条件: (p₀ p₁ : P1) (c d : k)
-  证明: by
-  simp_rw [lineMap_apply_one_sub, ← lineMap_apply_one_sub p₁, lineMap_lineMap_right]
+/-
+**AffineMap.lineMap_lineMap_left** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} [inst : Ring k] [inst_1 :
+ AddCommGroup V1]   [inst_2 : _root_.Module k V1] [inst_3 : AddTorsor V1 P1] (p₀
+ p₁ : P1) (c d : k),   (AffineMap.lineMap ((AffineMap.lineMap p₀ p₁) c) p₁) d = 
+(AffineMap.lineMap p₀ p₁) (1 - (1 - d) * (1 - c))
+参数：p₀ p₁ : P1；c d : k；AffineMap.lineMap ((AffineMap.lineMap p₀ p₁) c) p₁；AffineM
+ap.lineMap p₀ p₁；1 - (1 - d) * (1 - c)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.lineMap_apply_one_sub`：lineMap_apply_one_sub (p₀ p₁ : P1) (c :
+ k) : lineMap p₀ p₁ (1 - c) = lineMap p₁ p₀ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AffineMap.lineMap_lineMap_right`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : 
+Type u_3} [inst : Ring k] [inst_1 : AddCommGroup V1]   [inst_2 : _root_.Module k
+ V1] [inst_3 : AddTor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma lineMap_lineMap_left (p₀ p₁ : P1) (c d : k) :
     lineMap (lineMap p₀ p₁ c) p₁ d = lineMap p₀ p₁ (1 - (1 - d) * (1 - c)) := by
   simp_rw [lineMap_apply_one_sub, ← lineMap_apply_one_sub p₁, lineMap_lineMap_right]
-
-/--
-lemma `lineMap_mono` / 引理 `lineMap_mono`
-
-English:
-lemma lineMap_mono
-  statement: [LinearOrder k] [Preorder V1] [AddRightMono V1] [SMulPosMono k V1]
-  proof: by
-  intro x y hxy
-  suffices x • (p₁ - p₀) <= y • (p₁ - p₀) by simpa [lineMap]
-  gcongr
-  simpa
-
-中文:
-引理 lineMap_mono
-  结论: [线性序 k] [预序 V1] [AddRightMono V1] [标量乘正递增 k V1]
-  证明: by
-  intro x y hxy
-  suffices x • (p₁ - p₀) <= y • (p₁ - p₀) by simpa [lineMap]
-  gcongr
-  simpa
-
-Depends on / 依赖: lineMap
+/-
+**AffineMap.lineMap_mono** 是 Mathlib 中的一个引理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_mono [LinearOrder k] [Preorder V1] [AddRightMono V1] [SMulPosMono 
+k V1] {p₀ p₁ : V1} (h : p₀ <= p₁) : Monotone (lineMap (k
+参数：h : p₀ <= p₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_le_smul_of_nonneg_right`：∀ {α : Type u_1} {β : Type u_2} {a₁ a₂ : α
+} {b : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_
+3 : Zero β] [SMulP…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AddGroup.addRightReflectLE_of_addRightMono`：∀ {N : Type u_2} [inst : Add
+Group N] [inst_1 : LE N] [AddRightMono N], AddRightReflectLE N
 -/
 lemma lineMap_mono [LinearOrder k] [Preorder V1] [AddRightMono V1] [SMulPosMono k V1]
-    {p₀ p₁ : V1} (h : p₀ <= p₁) :
+    {p₀ p₁ : V1} (h : p₀ ≤ p₁) :
     Monotone (lineMap (k := k) p₀ p₁) := by
   intro x y hxy
-  suffices x • (p₁ - p₀) <= y • (p₁ - p₀) by simpa [lineMap]
+  suffices x • (p₁ - p₀) ≤ y • (p₁ - p₀) by simpa [lineMap]
   gcongr
   simpa
-
-/--
-lemma `lineMap_anti` / 引理 `lineMap_anti`
-
-English:
-lemma lineMap_anti
-  statement: [LinearOrder k] [Preorder V1] [AddLeftMono V1] [SMulPosMono k V1]
-  proof: by
-  intro x y hxy
-  suffices y • (p₁ - p₀) <= x • (p₁ - p₀) by simpa [lineMap]
-  rw [← neg_le_neg_iff]; rw [← smul_neg]; rw [← smul_neg]
-  gcongr
-  simpa
-
-中文:
-引理 lineMap_anti
-  结论: [线性序 k] [预序 V1] [AddLeftMono V1] [标量乘正递增 k V1]
-  证明: by
-  intro x y hxy
-  suffices y • (p₁ - p₀) <= x • (p₁ - p₀) by simpa [lineMap]
-  rw [← neg_le_neg_iff]; rw [← smul_neg]; rw [← smul_neg]
-  gcongr
-  simpa
-
-Depends on / 依赖: lineMap, neg_le_neg_iff, smul_neg
+/-
+**AffineMap.lineMap_anti** 是 Mathlib 中的一个引理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_anti [LinearOrder k] [Preorder V1] [AddLeftMono V1] [SMulPosMono k
+ V1] {p₀ p₁ : V1} (h : p₁ <= p₀) : Antitone (lineMap (k
+参数：h : p₁ <= p₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_le_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddL
+eftMono α] {a b : α} [AddRightMono α], -a ≤ -b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `smul_le_smul_of_nonneg_right`：∀ {α : Type u_1} {β : Type u_2} {a₁ a₂ : α
+} {b : β} [inst : SMul α β] [inst_1 : Preorder α] [inst_2 : Preorder β]   [inst_
+3 : Zero β] [SMulP…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
 -/
 lemma lineMap_anti [LinearOrder k] [Preorder V1] [AddLeftMono V1] [SMulPosMono k V1]
-    {p₀ p₁ : V1} (h : p₁ <= p₀) :
+    {p₀ p₁ : V1} (h : p₁ ≤ p₀) :
     Antitone (lineMap (k := k) p₀ p₁) := by
   intro x y hxy
-  suffices y • (p₁ - p₀) <= x • (p₁ - p₀) by simpa [lineMap]
-  rw [← neg_le_neg_iff]; rw [← smul_neg]; rw [← smul_neg]
+  suffices y • (p₁ - p₀) ≤ x • (p₁ - p₀) by simpa [lineMap]
+  rw [← neg_le_neg_iff, ← smul_neg, ← smul_neg]
   gcongr
   simpa
 
-/--
-theorem `decomp` / 定理 `decomp`
+/-- Decomposition of an affine map in the special case when the point space and vector space
+are the same. -/
+/-
+**AffineMap.decomp** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：decomp (f : V1 ->ᵃ[k] V2) : (f : V1 -> V2) = ⇑f.linear + fun _ => f 0
+参数：f : V1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `vadd_eq_add`：∀ {α : Type u_9} [inst : Add α] (a b : α), a +ᵥ b = a + b
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 
-English:
-theorem decomp
-  given: (f : V1 ->ᵃ[k] V2)
-  statement: (f : V1 -> V2) = ⇑f.linear + fun _ => f 0
-  proof: by
-  ext x
-  calc
-    f x = f.linear x +ᵥ f 0 := by rw [← f.map_vadd, vadd_eq_add, add_zero]
-    _ = (f.linear + fun _ : V1 => f 0) x := rfl
-
-中文:
-定理 decomp
-  条件: (f : V1 ->ᵃ[k] V2)
-  结论: (f : V1 -> V2) = ⇑f.linear + fun _ => f 0
-  证明: by
-  ext x
-  calc
-    f x = f.linear x +ᵥ f 0 := by rw [← f.map_vadd, vadd_eq_add, add_zero]
-    _ = (f.linear + fun _ : V1 => f 0) x := rfl
-
-Depends on / 依赖: add_zero, f.linear, f.map_vadd, linear, map_vadd, vadd_eq_add
+--- 原说明 ---
+Decomposition of an affine map in the special case when the point space and vect
+or space
+are the same.
 -/
-theorem decomp (f : V1 ->ᵃ[k] V2) : (f : V1 -> V2) = ⇑f.linear + fun _ => f 0 := by
+theorem decomp (f : V1 →ᵃ[k] V2) : (f : V1 → V2) = ⇑f.linear + fun _ => f 0 := by
   ext x
   calc
     f x = f.linear x +ᵥ f 0 := by rw [← f.map_vadd, vadd_eq_add, add_zero]
     _ = (f.linear + fun _ : V1 => f 0) x := rfl
 
-/--
-theorem `decomp'` / 定理 `decomp'`
+/-- Decomposition of an affine map in the special case when the point space and vector space
+are the same. -/
+/-
+**AffineMap.decomp'** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：decomp' (f : V1 ->ᵃ[k] V2) : (f.linear : V1 -> V2) = ⇑f - fun _ => f 0
+参数：f : V1 ->ᵃ[k] V2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineMap.decomp`：decomp (f : V1 ->ᵃ[k] V2) : (f : V1 -> V2) = ⇑f.linear
+ + fun _ => f 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem decomp'
-  given: (f : V1 ->ᵃ[k] V2)
-  statement: (f.linear : V1 -> V2) = ⇑f - fun _ => f 0
-  proof: by
-  rw [decomp]
-  simp only [map_zero, Pi.add_apply, add_sub_cancel_right, zero_add]
-
-中文:
-定理 decomp'
-  条件: (f : V1 ->ᵃ[k] V2)
-  结论: (f.linear : V1 -> V2) = ⇑f - fun _ => f 0
-  证明: by
-  rw [decomp]
-  simp only [map_zero, Pi.add_apply, add_sub_cancel_right, zero_add]
-
-Depends on / 依赖: Pi.add_apply, add_apply, add_sub_cancel_right, decomp, map_zero, zero_add
+--- 原说明 ---
+Decomposition of an affine map in the special case when the point space and vect
+or space
+are the same.
 -/
-theorem decomp' (f : V1 ->ᵃ[k] V2) : (f.linear : V1 -> V2) = ⇑f - fun _ => f 0 := by
+theorem decomp' (f : V1 →ᵃ[k] V2) : (f.linear : V1 → V2) = ⇑f - fun _ => f 0 := by
   rw [decomp]
   simp only [map_zero, Pi.add_apply, add_sub_cancel_right, zero_add]
-
-/--
-theorem `image_uIcc` / 定理 `image_uIcc`
-
-English:
-theorem image_uIcc
-  statement: {k : Type*} [Field k] [LinearOrder k] [IsStrictOrderedRing k]
-  proof: by
-  have : ⇑f = (fun x => x + f 0) ∘ fun x => x * (f 1 - f 0) := by
-    ext x
-    change f x = x • (f 1 -ᵥ f 0) +ᵥ f 0
-    rw [← f.linearMap_vsub]; rw [← f.linear.map_smul]; rw [← f.map_vadd]
-    simp only [vsub_eq_sub, add_zero, mul_one, vadd_eq_add, sub_zero, smul_eq_mul]
-  rw [this]; rw [Set.image_comp]
-  simp only [Set.image_add_const_uIcc, Set.image_mul_const_uIcc, Function.comp_apply]
-
-中文:
-定理 image_uIcc
-  结论: {k : 类型} [域 k] [线性序 k] [是StrictOrdered环 k]
-  证明: by
-  have : ⇑f = (fun x => x + f 0) ∘ fun x => x * (f 1 - f 0) := by
-    ext x
-    change f x = x • (f 1 -ᵥ f 0) +ᵥ f 0
-    rw [← f.linearMap_vsub]; rw [← f.linear.map_smul]; rw [← f.map_vadd]
-    simp only [vsub_eq_sub, add_zero, mul_one, vadd_eq_add, sub_zero, smul_eq_mul]
-  rw [this]; rw [Set.image_comp]
-  simp only [Set.image_add_const_uIcc, Set.image_mul_const_uIcc, Function.comp_apply]
-
-Depends on / 依赖: Function, Function.comp_apply, Set.image_add_const_uIcc, Set.image_comp, Set.image_mul_const_uIcc, add_zero, comp_apply, f.linear.map_smul, f.linearMap_vsub, f.map_vadd, image_add_const_uIcc, image_comp, image_mul_const_uIcc, linear, linearMap_vsub, map_smul, map_vadd, mul_one, smul_eq_mul, sub_zero
+/-
+**AffineMap.image_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：image_uIcc {k : Type*} [Field k] [LinearOrder k] [IsStrictOrderedRing k] (
+f : k ->ᵃ[k] k) (a b : k) : f '' Set.uIcc a b = Set.uIcc (f a) (f b)
+参数：f : k ->ᵃ[k] k；a b : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.linearMap_vsub`：linearMap_vsub (f : P1 ->ᵃ[k] P2) (p1 p2 : P1)
+ : f.linear (p1 -ᵥ p2) = f p1 -ᵥ f p2
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `Set.image_mul_const_uIcc`：image_mul_const_uIcc (a b c : α) : (· * a) '' 
+[[b, c]] = [[b * a, c * a]]
+· 使用定理 `Set.image_add_const_uIcc`：image_add_const_uIcc : (fun x => x + a) '' [[b
+, c]] = [[b + a, c + a]]
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
 -/
 theorem image_uIcc {k : Type*} [Field k] [LinearOrder k] [IsStrictOrderedRing k]
-    (f : k ->ᵃ[k] k) (a b : k) :
+    (f : k →ᵃ[k] k) (a b : k) :
     f '' Set.uIcc a b = Set.uIcc (f a) (f b) := by
   have : ⇑f = (fun x => x + f 0) ∘ fun x => x * (f 1 - f 0) := by
     ext x
     change f x = x • (f 1 -ᵥ f 0) +ᵥ f 0
-    rw [← f.linearMap_vsub]; rw [← f.linear.map_smul]; rw [← f.map_vadd]
+    rw [← f.linearMap_vsub, ← f.linear.map_smul, ← f.map_vadd]
     simp only [vsub_eq_sub, add_zero, mul_one, vadd_eq_add, sub_zero, smul_eq_mul]
-  rw [this]; rw [Set.image_comp]
+  rw [this, Set.image_comp]
   simp only [Set.image_add_const_uIcc, Set.image_mul_const_uIcc, Function.comp_apply]
 
 section
 
-variable {ι : Type*} {V : ι -> Type*} {P : ι -> Type*} [forall i, AddCommGroup (V i)]
-  [forall i, Module k (V i)] [forall i, AddTorsor (V i) (P i)]
+variable {ι : Type*} {V : ι → Type*} {P : ι → Type*} [∀ i, AddCommGroup (V i)]
+  [∀ i, Module k (V i)] [∀ i, AddTorsor (V i) (P i)]
 
-/--
-Definition of `proj` / `proj` 的定义
+/-- Evaluation at a point as an affine map. -/
+/-
+**AffineMap.proj** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：proj (i : ι) : (forall i : ι, P i) ->ᵃ[k] P i where toFun f
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proj
-  signature: (i : ι)
-  body: f i
-  linear := @LinearMap.proj k ι _ V _ _ i
-  map_vadd' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 proj
-  签名: (i : ι)
-  定义体: f i
-  linear := @LinearMap.proj k ι _ V _ _ i
-  map_vadd' _ _ := rfl
-
-@[simp]
+--- 原说明 ---
+Evaluation at a point as an affine map.
 -/
-def proj (i : ι) : (forall i : ι, P i) ->ᵃ[k] P i where
+def proj (i : ι) : (∀ i : ι, P i) →ᵃ[k] P i where
   toFun f := f i
   linear := @LinearMap.proj k ι _ V _ _ i
   map_vadd' _ _ := rfl
 
 @[simp]
-/--
-theorem `proj_apply` / 定理 `proj_apply`
-
-English:
-theorem proj_apply
-  given: (i : ι) (f : forall i, P i)
-  statement: @proj k _ ι V P _ _ _ i f = f i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 proj_apply
-  条件: (i : ι) (f : 对任意 i, P i)
-  结论: @proj k _ ι V P _ _ _ i f = f i
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.proj_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：proj_apply (i : ι) (f : forall i, P i) : @proj k _ ι V P _ _ _ i f = f i
+参数：i : ι；f : forall i, P i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem proj_apply (i : ι) (f : forall i, P i) : @proj k _ ι V P _ _ _ i f = f i :=
+theorem proj_apply (i : ι) (f : ∀ i, P i) : @proj k _ ι V P _ _ _ i f = f i :=
   rfl
 
 @[simp]
-/--
-theorem `proj_linear` / 定理 `proj_linear`
-
-English:
-theorem proj_linear
-  given: (i : ι)
-  statement: (@proj k _ ι V P _ _ _ i).linear = @LinearMap.proj k ι _ V _ _ i
-  proof: rfl
-
-中文:
-定理 proj_linear
-  条件: (i : ι)
-  结论: (@proj k _ ι V P _ _ _ i).linear = @线性映射.proj k ι _ V _ _ i
-  证明: rfl
+/-
+**AffineMap.proj_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：proj_linear (i : ι) : (@proj k _ ι V P _ _ _ i).linear = @LinearMap.proj k
+ ι _ V _ _ i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem proj_linear (i : ι) : (@proj k _ ι V P _ _ _ i).linear = @LinearMap.proj k ι _ V _ _ i :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pi_lineMap_apply` / 定理 `pi_lineMap_apply`
-
-English:
-theorem pi_lineMap_apply
-  given: (f g : forall i, P i) (c : k) (i : ι)
-  proof: (proj i : (forall i, P i) ->ᵃ[k] P i).apply_lineMap f g c
-
-中文:
-定理 pi_lineMap_apply
-  条件: (f g : 对任意 i, P i) (c : k) (i : ι)
-  证明: (proj i : (forall i, P i) ->ᵃ[k] P i).apply_lineMap f g c
-
-Depends on / 依赖: apply_lineMap
+/-
+**AffineMap.pi_lineMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_lineMap_apply (f g : forall i, P i) (c : k) (i : ι) : lineMap f g c i =
+ lineMap (f i) (g i) c
+参数：f g : forall i, P i；c : k；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 -/
-theorem pi_lineMap_apply (f g : forall i, P i) (c : k) (i : ι) :
+theorem pi_lineMap_apply (f g : ∀ i, P i) (c : k) (i : ι) :
     lineMap f g c i = lineMap (f i) (g i) c :=
-  (proj i : (forall i, P i) ->ᵃ[k] P i).apply_lineMap f g c
+  (proj i : (∀ i, P i) →ᵃ[k] P i).apply_lineMap f g c
 
 end
 
@@ -2814,24 +2087,18 @@ section DistribMulAction
 
 variable [Monoid R] [DistribMulAction R V2] [SMulCommClass k R V2]
 
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
+/-- The space of affine maps to a module inherits an `R`-action from the action on its codomain. -/
+/-
+**AffineMap.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+形式化陈述：distribMulAction : DistribMulAction R (P1 ->ᵃ[k] V2) where smul_add _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance distribMulAction
-  signature: : DistribMulAction R (P1 ->ᵃ[k] V2) where
-  body: ext fun _ => smul_add _ _ _
-  smul_zero _ := ext fun _ => smul_zero _
-
-中文:
-实例 distribMulAction
-  签名: : 分配乘法作用 R (P1 ->ᵃ[k] V2) where
-  定义体: ext fun _ => smul_add _ _ _
-  smul_zero _ := ext fun _ => smul_zero _
-
-Depends on / 依赖: smul_add
+--- 原说明 ---
+The space of affine maps to a module inherits an `R`-action from the action on i
+ts codomain.
 -/
-instance distribMulAction : DistribMulAction R (P1 ->ᵃ[k] V2) where
+instance distribMulAction : DistribMulAction R (P1 →ᵃ[k] V2) where
   smul_add _ _ _ := ext fun _ => smul_add _ _ _
   smul_zero _ := ext fun _ => smul_zero _
 
@@ -2841,26 +2108,15 @@ section Module
 
 variable [Semiring R] [Module R V2] [SMulCommClass k R V2]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The space of affine maps taking values in an `R`-module is an `R`-module. -/
+/-
+**AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Module R (P1 ->ᵃ[k] V2)
-  body: { AffineMap.distribMulAction with
-    add_smul := fun _ _ _ => ext fun _ => add_smul _ _ _
-    zero_smul := fun _ => ext fun _ => zero_smul _ _ }
-
-中文:
-实例 :
-  签名: 模 R (P1 ->ᵃ[k] V2)
-  定义体: { AffineMap.distribMulAction with
-    add_smul := fun _ _ _ => ext fun _ => add_smul _ _ _
-    zero_smul := fun _ => ext fun _ => zero_smul _ _ }
-
-Depends on / 依赖: AffineMap, AffineMap.distribMulAction, add_smul, distribMulAction, zero_smul
+--- 原说明 ---
+The space of affine maps taking values in an `R`-module is an `R`-module.
 -/
-instance : Module R (P1 ->ᵃ[k] V2) :=
+instance : Module R (P1 →ᵃ[k] V2) :=
   { AffineMap.distribMulAction with
     add_smul := fun _ _ _ => ext fun _ => add_smul _ _ _
     zero_smul := fun _ => ext fun _ => zero_smul _ _ }
@@ -2873,42 +2129,23 @@ linear part.
 
 See note [bundled maps over different rings] -/
 @[simps]
-/--
-Definition of `toConstProdLinearMap` / `toConstProdLinearMap` 的定义
+/-
+**AffineMap.toConstProdLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：toConstProdLinearMap : (V1 ->ᵃ[k] V2) ≃ₗ[R] V2 × (V1 ->ₗ[k] V2) where toFu
+n f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toConstProdLinearMap
-  signature: : (V1 ->ᵃ[k] V2) ≃ₗ[R] V2 × (V1 ->ₗ[k] V2) where
-  body: ⟨f 0, f.linear⟩
-  invFun p := p.2.toAffineMap + const k V1 p.1
-  left_inv f := by
-    ext
-    rw [f.decomp]
-    simp
-  right_inv := by
-    rintro ⟨v, f⟩
-    ext <;> simp [const_linear]
-  map_add' := by simp
-  map_smul' := by simp
+--- 原说明 ---
+The space of affine maps between two modules is linearly equivalent to the produ
+ct of the
+domain with the space of linear maps, by taking the value of the affine map at `
+(0 : V1)` and the
+linear part.
 
-中文:
-定义 toConstProdLinearMap
-  签名: : (V1 ->ᵃ[k] V2) ≃ₗ[R] V2 × (V1 ->ₗ[k] V2) where
-  定义体: ⟨f 0, f.linear⟩
-  invFun p := p.2.toAffineMap + const k V1 p.1
-  left_inv f := by
-    ext
-    rw [f.decomp]
-    simp
-  right_inv := by
-    rintro ⟨v, f⟩
-    ext <;> simp [const_linear]
-  map_add' := by simp
-  map_smul' := by simp
-
-Depends on / 依赖: f.linear, linear
+See note [bundled maps over different rings]
 -/
-def toConstProdLinearMap : (V1 ->ᵃ[k] V2) ≃ₗ[R] V2 × (V1 ->ₗ[k] V2) where
+def toConstProdLinearMap : (V1 →ᵃ[k] V2) ≃ₗ[R] V2 × (V1 →ₗ[k] V2) where
   toFun f := ⟨f 0, f.linear⟩
   invFun p := p.2.toAffineMap + const k V1 p.1
   left_inv f := by
@@ -2926,201 +2163,157 @@ end Module
 set_option backward.isDefEq.respectTransparency false in
 /-- Interpolating between affine maps with `lineMap` commutes with evaluation. -/
 @[simp]
-/--
-lemma `lineMap_apply'` / 引理 `lineMap_apply'`
+/-
+**AffineMap.lineMap_apply'** 是 Mathlib 中的一个引理，位于命名空间 `AffineMap`。
+形式化陈述：lineMap_apply' [SMulCommClass k k V2] (f g : P1 ->ᵃ[k] P2) (c : k) (p : P1
+) : lineMap f g c p = lineMap (f p) (g p) c
+参数：f g : P1 ->ᵃ[k] P2；c : k；p : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma lineMap_apply'
-  statement: [SMulCommClass k k V2] (f g : P1 ->ᵃ[k] P2) (c : k)
-  proof: by
-  simp [AffineMap.lineMap_apply]
-
-中文:
-引理 lineMap_apply'
-  结论: [标量交换类 k k V2] (f g : P1 ->ᵃ[k] P2) (c : k)
-  证明: by
-  simp [AffineMap.lineMap_apply]
-
-Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, lineMap_apply
+--- 原说明 ---
+Interpolating between affine maps with `lineMap` commutes with evaluation.
 -/
-lemma lineMap_apply' [SMulCommClass k k V2] (f g : P1 ->ᵃ[k] P2) (c : k)
+lemma lineMap_apply' [SMulCommClass k k V2] (f g : P1 →ᵃ[k] P2) (c : k)
     (p : P1) : lineMap f g c p = lineMap (f p) (g p) c := by
   simp [AffineMap.lineMap_apply]
 
 section Pi
 
-variable {ι : Type*} {φv φp : ι -> Type*} [(i : ι) -> AddCommGroup (φv i)]
-  [(i : ι) -> Module k (φv i)] [(i : ι) -> AffineSpace (φv i) (φp i)]
+variable {ι : Type*} {φv φp : ι → Type*} [(i : ι) → AddCommGroup (φv i)]
+  [(i : ι) → Module k (φv i)] [(i : ι) → AffineSpace (φv i) (φp i)]
 /-- `pi` construction for affine maps. From a family of affine maps it produces an affine
 map into a family of affine spaces.
 
 This is the affine version of `LinearMap.pi`.
 -/
 @[simps linear]
-/--
-Definition of `pi` / `pi` 的定义
+/-
+**AffineMap.pi** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：pi (f : (i : ι) -> (P1 ->ᵃ[k] φp i)) : P1 ->ᵃ[k] ((i : ι) -> φp i) where t
+oFun m a
+参数：f : (i : ι) -> (P1 ->ᵃ[k] φp i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (f : (i : ι) -> (P1 ->ᵃ[k] φp i))
-  body: f a m
-  linear := LinearMap.pi (fun a => (f a).linear)
-  map_vadd' _ _ := funext fun _ => map_vadd _ _ _
+--- 原说明 ---
+`pi` construction for affine maps. From a family of affine maps it produces an a
+ffine
+map into a family of affine spaces.
 
-中文:
-定义 pi
-  签名: (f : (i : ι) -> (P1 ->ᵃ[k] φp i))
-  定义体: f a m
-  linear := LinearMap.pi (fun a => (f a).linear)
-  map_vadd' _ _ := funext fun _ => map_vadd _ _ _
+This is the affine version of `LinearMap.pi`.
 -/
-def pi (f : (i : ι) -> (P1 ->ᵃ[k] φp i)) : P1 ->ᵃ[k] ((i : ι) -> φp i) where
+def pi (f : (i : ι) → (P1 →ᵃ[k] φp i)) : P1 →ᵃ[k] ((i : ι) → φp i) where
   toFun m a := f a m
-  linear := LinearMap.pi (fun a => (f a).linear)
-  map_vadd' _ _ := funext fun _ => map_vadd _ _ _
+  linear := LinearMap.pi (fun a ↦ (f a).linear)
+  map_vadd' _ _ := funext fun _ ↦ map_vadd _ _ _
 
 --fp for when the image is a dependent AffineSpace φp i, fv for when the
 --image is a Module φv i, f' for when the image isn't dependent.
-variable (fp : (i : ι) -> (P1 ->ᵃ[k] φp i)) (fv : (i : ι) -> (P1 ->ᵃ[k] φv i))
-  (f' : ι -> P1 ->ᵃ[k] P2)
+variable (fp : (i : ι) → (P1 →ᵃ[k] φp i)) (fv : (i : ι) → (P1 →ᵃ[k] φv i))
+  (f' : ι → P1 →ᵃ[k] P2)
 
 @[simp]
-/--
-theorem `pi_apply` / 定理 `pi_apply`
-
-English:
-theorem pi_apply
-  given: (c : P1) (i : ι)
-  statement: pi fp c i = fp i c
-  proof: rfl
-
-中文:
-定理 pi_apply
-  条件: (c : P1) (i : ι)
-  结论: pi fp c i = fp i c
-  证明: rfl
+/-
+**AffineMap.pi_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_apply (c : P1) (i : ι) : pi fp c i = fp i c
+参数：c : P1；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pi_apply (c : P1) (i : ι) : pi fp c i = fp i c :=
   rfl
-
-/--
-theorem `pi_comp` / 定理 `pi_comp`
-
-English:
-theorem pi_comp
-  given: (g : P3 ->ᵃ[k] P1)
-  statement: (pi fp).comp g = pi (fun i => (fp i).comp g)
-  proof: rfl
-
-中文:
-定理 pi_comp
-  条件: (g : P3 ->ᵃ[k] P1)
-  结论: (pi fp).comp g = pi (fun i => (fp i).comp g)
-  证明: rfl
+/-
+**AffineMap.pi_comp** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_comp (g : P3 ->ᵃ[k] P1) : (pi fp).comp g = pi (fun i => (fp i).comp g)
+参数：g : P3 ->ᵃ[k] P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pi_comp (g : P3 ->ᵃ[k] P1) : (pi fp).comp g = pi (fun i => (fp i).comp g) :=
+theorem pi_comp (g : P3 →ᵃ[k] P1) : (pi fp).comp g = pi (fun i => (fp i).comp g) :=
   rfl
-
-/--
-theorem `pi_eq_zero` / 定理 `pi_eq_zero`
-
-English:
-theorem pi_eq_zero
-  statement: pi fv = 0 ↔ forall i, fv i = 0
-  proof: by
-  simp only [AffineMap.ext_iff, funext_iff, pi_apply]
-  exact forall_comm
-
-中文:
-定理 pi_eq_zero
-  结论: pi fv = 0 ↔ 对任意 i, fv i = 0
-  证明: by
-  simp only [AffineMap.ext_iff, funext_iff, pi_apply]
-  exact forall_comm
-
-Depends on / 依赖: AffineMap, AffineMap.ext_iff, ext_iff, forall_comm, funext_iff, pi_apply
+/-
+**AffineMap.pi_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_eq_zero : pi fv = 0 ↔ forall i, fv i = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
-theorem pi_eq_zero : pi fv = 0 ↔ forall i, fv i = 0 := by
+theorem pi_eq_zero : pi fv = 0 ↔ ∀ i, fv i = 0 := by
   simp only [AffineMap.ext_iff, funext_iff, pi_apply]
   exact forall_comm
-
-/--
-theorem `pi_zero` / 定理 `pi_zero`
-
-English:
-theorem pi_zero
-  statement: pi (fun _ => 0 : (i : ι) -> P1 ->ᵃ[k] φv i) = 0
-  proof: by
-  ext; rfl
-
-中文:
-定理 pi_zero
-  结论: pi (fun _ => 0 : (i : ι) -> P1 ->ᵃ[k] φv i) = 0
-  证明: by
-  ext; rfl
+/-
+**AffineMap.pi_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_zero : pi (fun _ => 0 : (i : ι) -> P1 ->ᵃ[k] φv i) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem pi_zero : pi (fun _ => 0 : (i : ι) -> P1 ->ᵃ[k] φv i) = 0 := by
+theorem pi_zero : pi (fun _ ↦ 0 : (i : ι) → P1 →ᵃ[k] φv i) = 0 := by
   ext; rfl
-
-/--
-theorem `proj_pi` / 定理 `proj_pi`
-
-English:
-theorem proj_pi
-  given: (i : ι)
-  statement: (proj i).comp (pi fp) = fp i
-  proof: ext fun _ => rfl
-
-中文:
-定理 proj_pi
-  条件: (i : ι)
-  结论: (proj i).comp (pi fp) = fp i
-  证明: ext fun _ => rfl
+/-
+**AffineMap.proj_pi** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：proj_pi (i : ι) : (proj i).comp (pi fp) = fp i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
 -/
 theorem proj_pi (i : ι) : (proj i).comp (pi fp) = fp i :=
   ext fun _ => rfl
 section Ext
 
-variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) -> φv i) ->ᵃ[k] P2}
+variable [Finite ι] [DecidableEq ι] {f g : ((i : ι) → φv i) →ᵃ[k] P2}
 
-/--
-theorem `pi_ext_zero` / 定理 `pi_ext_zero`
+/-- Two affine maps from a Pi-type of modules `(i : ι) → φv i` are equal if they are equal in their
+  operation on `Pi.single` and at zero. Analogous to `LinearMap.pi_ext`. See also `pi_ext_nonempty`,
+  which instead of agreement at zero requires `Nonempty ι`. -/
+/-
+**AffineMap.pi_ext_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_ext_zero (h : forall i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : 
+f 0 = g 0) : f = g
+参数：h : forall i x, f (Pi.single i x) = g (Pi.single i x)；h₂ : f 0 = g 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext_linear`：ext_linear {f g : P1 ->ᵃ[k] P2} (h₁ : f.linear = g
+.linear) {p : P1} (h₂ : f p = g p) : f = g
+· 使用定理 `LinearMap.pi_ext`：pi_ext (h : forall i x, f (Pi.single i x) = g (Pi.sing
+le i x)) : f = g
+· 使用定理 `AffineMap.map_vadd`：map_vadd (f : P1 ->ᵃ[k] P2) (p : P1) (v : V1) : f (v
+ +ᵥ p) = f.linear v +ᵥ f p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `vadd_right_cancel_iff`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup 
+G] [T : AddTorsor G P] {g₁ g₂ : G} (p : P), g₁ +ᵥ p = g₂ +ᵥ p ↔ g₁ = g₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Pi.single_zero`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) → Ze
+ro (M i)] [inst_1 : DecidableEq ι] (i : ι), Pi.single i 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `vadd_eq_add`：∀ {α : Type u_9} [inst : Add α] (a b : α), a +ᵥ b = a + b
 
-English:
-theorem pi_ext_zero
-  given: (h : forall i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0)
-  proof: by
-  apply ext_linear
-  · apply LinearMap.pi_ext
-    intro i x
-    have s₁ := h i x
-    have s₂ := f.map_vadd 0 (Pi.single i x)
-    have s₃ := g.map_vadd 0 (Pi.single i x)
-    rw [vadd_eq_add]; rw [add_zero] at s₂ s₃
-    replace h₂ := h i 0
-    simp only [Pi.single_zero] at h₂
-    rwa [s₂, s₃, h₂, vadd_right_cancel_iff] at s₁
-  · exact h₂
-
-中文:
-定理 pi_ext_zero
-  条件: (h : 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x)) (h₂ : f 0 = g 0)
-  证明: by
-  apply ext_linear
-  · apply LinearMap.pi_ext
-    intro i x
-    have s₁ := h i x
-    have s₂ := f.map_vadd 0 (Pi.single i x)
-    have s₃ := g.map_vadd 0 (Pi.single i x)
-    rw [vadd_eq_add]; rw [add_zero] at s₂ s₃
-    replace h₂ := h i 0
-    simp only [Pi.single_zero] at h₂
-    rwa [s₂, s₃, h₂, vadd_right_cancel_iff] at s₁
-  · exact h₂
-
-Depends on / 依赖: LinearMap, LinearMap.pi_ext, Pi.single, Pi.single_zero, add_zero, ext_linear, f.map_vadd, g.map_vadd, map_vadd, pi_ext, replace, single, single_zero, vadd_eq_add, vadd_right_cancel_iff
+--- 原说明 ---
+Two affine maps from a Pi-type of modules `(i : ι) → φv i` are equal if they are
+ equal in their
+  operation on `Pi.single` and at zero. Analogous to `LinearMap.pi_ext`. See als
+o `pi_ext_nonempty`,
+  which instead of agreement at zero requires `Nonempty ι`.
 -/
-theorem pi_ext_zero (h : forall i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
+theorem pi_ext_zero (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) (h₂ : f 0 = g 0) :
     f = g := by
   apply ext_linear
   · apply LinearMap.pi_ext
@@ -3128,36 +2321,38 @@ theorem pi_ext_zero (h : forall i x, f (Pi.single i x) = g (Pi.single i x)) (h�
     have s₁ := h i x
     have s₂ := f.map_vadd 0 (Pi.single i x)
     have s₃ := g.map_vadd 0 (Pi.single i x)
-    rw [vadd_eq_add]; rw [add_zero] at s₂ s₃
+    rw [vadd_eq_add, add_zero] at s₂ s₃
     replace h₂ := h i 0
     simp only [Pi.single_zero] at h₂
     rwa [s₂, s₃, h₂, vadd_right_cancel_iff] at s₁
   · exact h₂
 
-/--
-theorem `pi_ext_nonempty` / 定理 `pi_ext_nonempty`
+/-- Two affine maps from a Pi-type of modules `(i : ι) → φv i` are equal if they are equal in their
+  operation on `Pi.single` and `ι` is nonempty.  Analogous to `LinearMap.pi_ext`. See also
+  `pi_ext_zero`, which instead of `Nonempty ι` requires agreement at 0. -/
+/-
+**AffineMap.pi_ext_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_ext_nonempty [Nonempty ι] (h : forall i x, f (Pi.single i x) = g (Pi.si
+ngle i x)) : f = g
+参数：h : forall i x, f (Pi.single i x) = g (Pi.single i x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.pi_ext_zero`：pi_ext_zero (h : forall i x, f (Pi.single i x) = 
+g (Pi.single i x)) (h₂ : f 0 = g 0) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.single_zero`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) → Ze
+ro (M i)] [inst_1 : DecidableEq ι] (i : ι), Pi.single i 0 = 0
 
-English:
-theorem pi_ext_nonempty
-  given: [Nonempty ι] (h : forall i x, f (Pi.single i x) = g (Pi.single i x))
-  proof: by
-  apply pi_ext_zero h
-  inhabit ι
-  rw [← Pi.single_zero default]
-  apply h
-
-中文:
-定理 pi_ext_nonempty
-  条件: [非空 ι] (h : 对任意 i x, f (依赖函数类型.single i x) = g (依赖函数类型.single i x))
-  证明: by
-  apply pi_ext_zero h
-  inhabit ι
-  rw [← Pi.single_zero default]
-  apply h
-
-Depends on / 依赖: Pi.single_zero, inhabit, pi_ext_zero, single_zero
+--- 原说明 ---
+Two affine maps from a Pi-type of modules `(i : ι) → φv i` are equal if they are
+ equal in their
+  operation on `Pi.single` and `ι` is nonempty.  Analogous to `LinearMap.pi_ext`
+. See also
+  `pi_ext_zero`, which instead of `Nonempty ι` requires agreement at 0.
 -/
-theorem pi_ext_nonempty [Nonempty ι] (h : forall i x, f (Pi.single i x) = g (Pi.single i x)) :
+theorem pi_ext_nonempty [Nonempty ι] (h : ∀ i x, f (Pi.single i x) = g (Pi.single i x)) :
     f = g := by
   apply pi_ext_zero h
   inhabit ι
@@ -3167,26 +2362,28 @@ theorem pi_ext_nonempty [Nonempty ι] (h : forall i x, f (Pi.single i x) = g (Pi
 /-- This is used as the ext lemma instead of `AffineMap.pi_ext_nonempty` for reasons explained in
 note [partially-applied ext lemmas]. Analogous to `LinearMap.pi_ext'` -/
 @[ext (iff := false)]
-/--
-theorem `pi_ext_nonempty'` / 定理 `pi_ext_nonempty'`
+/-
+**AffineMap.pi_ext_nonempty'** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：pi_ext_nonempty' [Nonempty ι] (h : forall i, f.comp (LinearMap.single _ _ 
+i).toAffineMap = g.comp (LinearMap.single _ _ i).toAffineMap) : f = g
+参数：h : forall i, f.comp (LinearMap.single _ _ i).toAffineMap = g.comp (LinearMap
+.single _ _ i).toAffineMap。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.pi_ext_nonempty`：pi_ext_nonempty [Nonempty ι] (h : forall i x,
+ f (Pi.single i x) = g (Pi.single i x)) : f = g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.congr_fun`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3} {V
+2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [inst
+_2 : _roo…
 
-English:
-theorem pi_ext_nonempty'
-  statement: [Nonempty ι] (h : forall i, f.comp (LinearMap.single _ _ i).toAffineMap =
-  proof: by
-  refine pi_ext_nonempty fun i x => ?_
-  convert! AffineMap.congr_fun (h i) x
-
-中文:
-定理 pi_ext_nonempty'
-  结论: [非空 ι] (h : 对任意 i, f.comp (线性映射.single _ _ i).toAffineMap =
-  证明: by
-  refine pi_ext_nonempty fun i x => ?_
-  convert! AffineMap.congr_fun (h i) x
-
-Depends on / 依赖: AffineMap, AffineMap.congr_fun, congr_fun, convert, pi_ext_nonempty
+--- 原说明 ---
+This is used as the ext lemma instead of `AffineMap.pi_ext_nonempty` for reasons
+ explained in
+note [partially-applied ext lemmas]. Analogous to `LinearMap.pi_ext'`
 -/
-theorem pi_ext_nonempty' [Nonempty ι] (h : forall i, f.comp (LinearMap.single _ _ i).toAffineMap =
+theorem pi_ext_nonempty' [Nonempty ι] (h : ∀ i, f.comp (LinearMap.single _ _ i).toAffineMap =
     g.comp (LinearMap.single _ _ i).toAffineMap) : f = g := by
   refine pi_ext_nonempty fun i x => ?_
   convert! AffineMap.congr_fun (h i) x
@@ -3202,439 +2399,338 @@ section CommRing
 variable [CommRing k] [AddCommGroup V1] [AffineSpace V1 P1] [AddCommGroup V2]
 variable [Module k V1] [Module k V2]
 
-/--
-Definition of `homothety` / `homothety` 的定义
+/-- `homothety c r` is the homothety (also known as dilation) about `c` with scale factor `r`. -/
+/-
+**AffineMap.homothety** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：homothety (c : P1) (r : k) : P1 ->ᵃ[k] P1
+参数：c : P1；r : k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homothety
-  signature: (c : P1) (r : k)
-  body: r • (id k P1 -ᵥ const k P1 c) +ᵥ const k P1 c
-
-中文:
-定义 homothety
-  签名: (c : P1) (r : k)
-  定义体: r • (id k P1 -ᵥ const k P1 c) +ᵥ const k P1 c
+--- 原说明 ---
+`homothety c r` is the homothety (also known as dilation) about `c` with scale f
+actor `r`.
 -/
-def homothety (c : P1) (r : k) : P1 ->ᵃ[k] P1 :=
+def homothety (c : P1) (r : k) : P1 →ᵃ[k] P1 :=
   r • (id k P1 -ᵥ const k P1 c) +ᵥ const k P1 c
-
-/--
-theorem `homothety_def` / 定理 `homothety_def`
-
-English:
-theorem homothety_def
-  given: (c : P1) (r : k)
-  proof: rfl
-
-中文:
-定理 homothety_def
-  条件: (c : P1) (r : k)
-  证明: rfl
+/-
+**AffineMap.homothety_def** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_def (c : P1) (r : k) : homothety c r = r • (id k P1 -ᵥ const k P
+1 c) +ᵥ const k P1 c
+参数：c : P1；r : k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem homothety_def (c : P1) (r : k) :
     homothety c r = r • (id k P1 -ᵥ const k P1 c) +ᵥ const k P1 c :=
   rfl
-
-/--
-theorem `coe_homothety` / 定理 `coe_homothety`
-
-English:
-theorem coe_homothety
-  given: (c : P1) (r : k)
-  statement: homothety c r = fun p => r • (p -ᵥ c) +ᵥ c
-  proof: rfl
-
-中文:
-定理 coe_homothety
-  条件: (c : P1) (r : k)
-  结论: homothety c r = fun p => r • (p -ᵥ c) +ᵥ c
-  证明: rfl
+/-
+**AffineMap.coe_homothety** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_homothety (c : P1) (r : k) : homothety c r = fun p => r • (p -ᵥ c) +ᵥ 
+c
+参数：c : P1；r : k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_homothety (c : P1) (r : k) : homothety c r = fun p => r • (p -ᵥ c) +ᵥ c :=
   rfl
-
-/--
-theorem `homothety_apply` / 定理 `homothety_apply`
-
-English:
-theorem homothety_apply
-  given: (c : P1) (r : k) (p : P1)
-  statement: homothety c r p = r • (p -ᵥ c : V1) +ᵥ c
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 homothety_apply
-  条件: (c : P1) (r : k) (p : P1)
-  结论: homothety c r p = r • (p -ᵥ c : V1) +ᵥ c
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.homothety_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_apply (c : P1) (r : k) (p : P1) : homothety c r p = r • (p -ᵥ c 
+: V1) +ᵥ c
+参数：c : P1；r : k；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem homothety_apply (c : P1) (r : k) (p : P1) : homothety c r p = r • (p -ᵥ c : V1) +ᵥ c :=
   rfl
 
 @[simp]
-/--
-theorem `homothety_linear` / 定理 `homothety_linear`
-
-English:
-theorem homothety_linear
-  given: (c : P1) (r : k)
-  statement: (homothety c r).linear = r • LinearMap.id
-  proof: by
-  simp [homothety]
-
-中文:
-定理 homothety_linear
-  条件: (c : P1) (r : k)
-  结论: (homothety c r).linear = r • 线性映射.id
-  证明: by
-  simp [homothety]
-
-Depends on / 依赖: homothety
+/-
+**AffineMap.homothety_linear** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_linear (c : P1) (r : k) : (homothety c r).linear = r • LinearMap
+.id
+参数：c : P1；r : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_linear (c : P1) (r : k) : (homothety c r).linear = r • LinearMap.id := by
   simp [homothety]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `homothety_eq_lineMap` / 定理 `homothety_eq_lineMap`
-
-English:
-theorem homothety_eq_lineMap
-  given: (c : P1) (r : k) (p : P1)
-  statement: homothety c r p = lineMap c p r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 homothety_eq_lineMap
-  条件: (c : P1) (r : k) (p : P1)
-  结论: homothety c r p = lineMap c p r
-  证明: rfl
-
-@[simp]
+/-
+**AffineMap.homothety_eq_lineMap** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_eq_lineMap (c : P1) (r : k) (p : P1) : homothety c r p = lineMap
+ c p r
+参数：c : P1；r : k；p : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem homothety_eq_lineMap (c : P1) (r : k) (p : P1) : homothety c r p = lineMap c p r :=
   rfl
 
 @[simp]
-/--
-theorem `homothety_one` / 定理 `homothety_one`
-
-English:
-theorem homothety_one
-  given: (c : P1)
-  statement: homothety c (1 : k) = id k P1
-  proof: by
-  ext p
-  simp [homothety_apply]
-
-@[simp]
-
-中文:
-定理 homothety_one
-  条件: (c : P1)
-  结论: homothety c (1 : k) = id k P1
-  证明: by
-  ext p
-  simp [homothety_apply]
-
-@[simp]
-
-Depends on / 依赖: homothety_apply
+/-
+**AffineMap.homothety_one** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_one (c : P1) : homothety c (1 : k) = id k P1
+参数：c : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `vsub_vadd`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (p₁ p₂ : P), (p₁ -ᵥ p₂) +ᵥ p₂ = p₁
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_one (c : P1) : homothety c (1 : k) = id k P1 := by
   ext p
   simp [homothety_apply]
 
 @[simp]
-/--
-theorem `homothety_apply_same` / 定理 `homothety_apply_same`
-
-English:
-theorem homothety_apply_same
-  given: (c : P1) (r : k)
-  statement: homothety c r c = c
-  proof: lineMap_same_apply c r
-
-中文:
-定理 homothety_apply_same
-  条件: (c : P1) (r : k)
-  结论: homothety c r c = c
-  证明: lineMap_same_apply c r
-
-Depends on / 依赖: lineMap_same_apply
+/-
+**AffineMap.homothety_apply_same** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_apply_same (c : P1) (r : k) : homothety c r c = c
+参数：c : P1；r : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.lineMap_same_apply`：lineMap_same_apply (p : P1) (c : k) : line
+Map p p c = p
 -/
 theorem homothety_apply_same (c : P1) (r : k) : homothety c r c = c :=
   lineMap_same_apply c r
-
-/--
-theorem `homothety_mul_apply` / 定理 `homothety_mul_apply`
-
-English:
-theorem homothety_mul_apply
-  given: (c : P1) (r₁ r₂ : k) (p : P1)
-  proof: by
-  simp only [homothety_apply, mul_smul, vadd_vsub]
-
-中文:
-定理 homothety_mul_apply
-  条件: (c : P1) (r₁ r₂ : k) (p : P1)
-  证明: by
-  simp only [homothety_apply, mul_smul, vadd_vsub]
-
-Depends on / 依赖: homothety_apply, mul_smul, vadd_vsub
+/-
+**AffineMap.homothety_mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_mul_apply (c : P1) (r₁ r₂ : k) (p : P1) : homothety c (r₁ * r₂) 
+p = homothety c r₁ (homothety c r₂ p)
+参数：c : P1；r₁ r₂ : k；p : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `vadd_vsub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (g : G) (p : P), (g +ᵥ p) -ᵥ p = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_mul_apply (c : P1) (r₁ r₂ : k) (p : P1) :
     homothety c (r₁ * r₂) p = homothety c r₁ (homothety c r₂ p) := by
   simp only [homothety_apply, mul_smul, vadd_vsub]
-
-/--
-theorem `homothety_mul` / 定理 `homothety_mul`
-
-English:
-theorem homothety_mul
-  given: (c : P1) (r₁ r₂ : k)
-  proof: ext homothety_mul_apply c r₁ r₂
-
-@[simp]
-
-中文:
-定理 homothety_mul
-  条件: (c : P1) (r₁ r₂ : k)
-  证明: ext homothety_mul_apply c r₁ r₂
-
-@[simp]
-
-Depends on / 依赖: homothety_mul_apply
+/-
+**AffineMap.homothety_mul** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_mul (c : P1) (r₁ r₂ : k) : homothety c (r₁ * r₂) = (homothety c 
+r₁).comp (homothety c r₂)
+参数：c : P1；r₁ r₂ : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `AffineMap.homothety_mul_apply`：homothety_mul_apply (c : P1) (r₁ r₂ : k) 
+(p : P1) : homothety c (r₁ * r₂) p = homothety c r₁ (homothety c r₂ p)
 -/
 theorem homothety_mul (c : P1) (r₁ r₂ : k) :
     homothety c (r₁ * r₂) = (homothety c r₁).comp (homothety c r₂) :=
-ext homothety_mul_apply c r₁ r₂
+  ext <| homothety_mul_apply c r₁ r₂
 
 @[simp]
-/--
-theorem `homothety_zero` / 定理 `homothety_zero`
-
-English:
-theorem homothety_zero
-  given: (c : P1)
-  statement: homothety c (0 : k) = const k P1 c
-  proof: by
-  ext p
-  simp [homothety_apply]
-
-@[simp]
-
-中文:
-定理 homothety_zero
-  条件: (c : P1)
-  结论: homothety c (0 : k) = const k P1 c
-  证明: by
-  ext p
-  simp [homothety_apply]
-
-@[simp]
-
-Depends on / 依赖: homothety_apply
+/-
+**AffineMap.homothety_zero** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_zero (c : P1) : homothety c (0 : k) = const k P1 c
+参数：c : P1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `zero_vadd`：∀ (M : Type u_1) {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (b : α), 0 +ᵥ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_zero (c : P1) : homothety c (0 : k) = const k P1 c := by
   ext p
   simp [homothety_apply]
 
 @[simp]
-/--
-theorem `homothety_add` / 定理 `homothety_add`
-
-English:
-theorem homothety_add
-  given: (c : P1) (r₁ r₂ : k)
-  proof: by
-  simp only [homothety_def, add_smul, vadd_vadd]
-
-中文:
-定理 homothety_add
-  条件: (c : P1) (r₁ r₂ : k)
-  证明: by
-  simp only [homothety_def, add_smul, vadd_vadd]
-
-Depends on / 依赖: add_smul, homothety_def, vadd_vadd
+/-
+**AffineMap.homothety_add** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_add (c : P1) (r₁ r₂ : k) : homothety c (r₁ + r₂) = r₁ • (id k P1
+ -ᵥ const k P1 c) +ᵥ homothety c r₂
+参数：c : P1；r₁ r₂ : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `vadd_vadd`：∀ {M : Type u_1} {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (a₁ a₂ : M) (b : α),   a₁ +ᵥ a₂ +ᵥ b = (a₁ + a₂) +ᵥ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_add (c : P1) (r₁ r₂ : k) :
     homothety c (r₁ + r₂) = r₁ • (id k P1 -ᵥ const k P1 c) +ᵥ homothety c r₂ := by
   simp only [homothety_def, add_smul, vadd_vadd]
-
-/--
-theorem `homothety_eq_iff_of_mul_eq_one` / 定理 `homothety_eq_iff_of_mul_eq_one`
-
-English:
-theorem homothety_eq_iff_of_mul_eq_one
-  given: {c p q : P1} {r₁ r₂ : k} (h : r₁ * r₂ = 1)
-  proof: by
-  obtain h' : r₂ * r₁ = 1 := mul_eq_one_comm.mp h
-  refine ⟨fun h1 => ?_, fun h1 => ?_⟩
-  all_goals
-    rw [← h1]; rw [← homothety_mul_apply]
-    simp [h, h']
-
-中文:
-定理 homothety_eq_iff_of_mul_eq_one
-  条件: {c p q : P1} {r₁ r₂ : k} (h : r₁ * r₂ = 1)
-  证明: by
-  obtain h' : r₂ * r₁ = 1 := mul_eq_one_comm.mp h
-  refine ⟨fun h1 => ?_, fun h1 => ?_⟩
-  all_goals
-    rw [← h1]; rw [← homothety_mul_apply]
-    simp [h, h']
-
-Depends on / 依赖: all_goals, homothety_mul_apply, mul_eq_one_comm, mul_eq_one_comm.mp
+/-
+**AffineMap.homothety_eq_iff_of_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`
+。
+形式化陈述：homothety_eq_iff_of_mul_eq_one {c p q : P1} {r₁ r₂ : k} (h : r₁ * r₂ = 1) 
+: homothety c r₁ p = q ↔ homothety c r₂ q = p
+参数：h : r₁ * r₂ = 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineMap.homothety_mul_apply`：homothety_mul_apply (c : P1) (r₁ r₂ : k) 
+(p : P1) : homothety c (r₁ * r₂) p = homothety c r₁ (homothety c r₂ p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_eq_one_comm`：∀ {M : Type u_2} [inst : MulOne M] [IsDedekindFiniteMon
+oid M] {a b : M}, a * b = 1 ↔ b * a = 1
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `AffineMap.homothety_one`：homothety_one (c : P1) : homothety c (1 : k) = 
+id k P1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homothety_eq_iff_of_mul_eq_one {c p q : P1} {r₁ r₂ : k} (h : r₁ * r₂ = 1) :
     homothety c r₁ p = q ↔ homothety c r₂ q = p := by
   obtain h' : r₂ * r₁ = 1 := mul_eq_one_comm.mp h
-  refine ⟨fun h1 => ?_, fun h1 => ?_⟩
+  refine ⟨fun h1 ↦ ?_, fun h1 ↦ ?_⟩
   all_goals
-    rw [← h1]; rw [← homothety_mul_apply]
+    rw [← h1, ← homothety_mul_apply]
     simp [h, h']
-
-/--
-theorem `homothety_injective` / 定理 `homothety_injective`
-
-English:
-theorem homothety_injective
-  statement: [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
-  proof: fun _ _ h => by simpa [homothety_def, hr] using h
-
-@[simp]
-
-中文:
-定理 homothety_injective
-  结论: [模.是无挠 k V1] [是乘零消去 k] (c : P1) {r : k}
-  证明: fun _ _ h => by simpa [homothety_def, hr] using h
-
-@[simp]
-
-Depends on / 依赖: homothety_def
+/-
+**AffineMap.homothety_injective** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P
+1) {r : k} (hr : r != 0) : Function.Injective (homothety c r)
+参数：c : P1；hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem homothety_injective [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k}
-    (hr : r != 0) :
+    (hr : r ≠ 0) :
     Function.Injective (homothety c r) :=
-  fun _ _ h => by simpa [homothety_def, hr] using h
+  fun _ _ h ↦ by simpa [homothety_def, hr] using h
 
 @[simp]
-/--
-theorem `homothety_inj` / 定理 `homothety_inj`
-
-English:
-theorem homothety_inj
-  statement: [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k} (hr : r != 0)
-  proof: (homothety_injective c hr).eq_iff
-
-中文:
-定理 homothety_inj
-  结论: [模.是无挠 k V1] [是乘零消去 k] (c : P1) {r : k} (hr : r != 0)
-  证明: (homothety_injective c hr).eq_iff
-
-Depends on / 依赖: eq_iff, homothety_injective
+/-
+**AffineMap.homothety_inj** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：homothety_inj [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r 
+: k} (hr : r != 0) {p q : P1} : homothety c r p = homothety c r q ↔ p = q
+参数：c : P1；hr : r != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `AffineMap.homothety_injective`：homothety_injective [Module.IsTorsionFree
+ k V1] [IsCancelMulZero k] (c : P1) {r : k} (hr : r != 0) : Function.Injective (
+homothety c r)
 -/
-theorem homothety_inj [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k} (hr : r != 0)
+theorem homothety_inj [Module.IsTorsionFree k V1] [IsCancelMulZero k] (c : P1) {r : k} (hr : r ≠ 0)
     {p q : P1} :
     homothety c r p = homothety c r q ↔ p = q :=
   (homothety_injective c hr).eq_iff
 
-/--
-Definition of `homothetyHom` / `homothetyHom` 的定义
+/-- `homothety` as a multiplicative monoid homomorphism. -/
+/-
+**AffineMap.homothetyHom** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：homothetyHom (c : P1) : k ->* P1 ->ᵃ[k] P1 where toFun
+参数：c : P1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.homothety_one`：homothety_one (c : P1) : homothety c (1 : k) = 
+id k P1
+· 使用定理 `AffineMap.homothety_mul`：homothety_mul (c : P1) (r₁ r₂ : k) : homothety 
+c (r₁ * r₂) = (homothety c r₁).comp (homothety c r₂)
 
-English:
-definition homothetyHom
-  signature: (c : P1)
-  body: homothety c
-  map_one' := homothety_one c
-  map_mul' := homothety_mul c
-
-@[simp]
-
-中文:
-定义 homothetyHom
-  签名: (c : P1)
-  定义体: homothety c
-  map_one' := homothety_one c
-  map_mul' := homothety_mul c
-
-@[simp]
-
-Depends on / 依赖: homothety
+--- 原说明 ---
+`homothety` as a multiplicative monoid homomorphism.
 -/
-def homothetyHom (c : P1) : k ->* P1 ->ᵃ[k] P1 where
+def homothetyHom (c : P1) : k →* P1 →ᵃ[k] P1 where
   toFun := homothety c
   map_one' := homothety_one c
   map_mul' := homothety_mul c
 
 @[simp]
-/--
-theorem `coe_homothetyHom` / 定理 `coe_homothetyHom`
-
-English:
-theorem coe_homothetyHom
-  given: (c : P1)
-  statement: ⇑(homothetyHom c : k ->* _) = homothety c
-  proof: rfl
-
-中文:
-定理 coe_homothetyHom
-  条件: (c : P1)
-  结论: ⇑(homothetyHom c : k ->* _) = homothety c
-  证明: rfl
+/-
+**AffineMap.coe_homothetyHom** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_homothetyHom (c : P1) : ⇑(homothetyHom c : k ->* _) = homothety c
+参数：c : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_homothetyHom (c : P1) : ⇑(homothetyHom c : k ->* _) = homothety c :=
+theorem coe_homothetyHom (c : P1) : ⇑(homothetyHom c : k →* _) = homothety c :=
   rfl
 
-/--
-Definition of `homothetyAffine` / `homothetyAffine` 的定义
+/-- `homothety` as an affine map. -/
+/-
+**AffineMap.homothetyAffine** 是 Mathlib 中的一个定义，位于命名空间 `AffineMap`。
+形式化陈述：homothetyAffine (c : P1) : k ->ᵃ[k] P1 ->ᵃ[k] P1
+参数：c : P1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homothetyAffine
-  signature: (c : P1)
-  body: ⟨homothety c, (LinearMap.lsmul k _).flip (id k P1 -ᵥ const k P1 c),
-    Function.swap (homothety_add c)⟩
-
-@[simp]
-
-中文:
-定义 homothetyAffine
-  签名: (c : P1)
-  定义体: ⟨homothety c, (LinearMap.lsmul k _).flip (id k P1 -ᵥ const k P1 c),
-    Function.swap (homothety_add c)⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.swap, LinearMap, LinearMap.lsmul, homothety, homothety_add
+--- 原说明 ---
+`homothety` as an affine map.
 -/
-def homothetyAffine (c : P1) : k ->ᵃ[k] P1 ->ᵃ[k] P1 :=
+def homothetyAffine (c : P1) : k →ᵃ[k] P1 →ᵃ[k] P1 :=
   ⟨homothety c, (LinearMap.lsmul k _).flip (id k P1 -ᵥ const k P1 c),
     Function.swap (homothety_add c)⟩
 
 @[simp]
-/--
-theorem `coe_homothetyAffine` / 定理 `coe_homothetyAffine`
-
-English:
-theorem coe_homothetyAffine
-  given: (c : P1)
-  statement: ⇑(homothetyAffine c : k ->ᵃ[k] _) = homothety c
-  proof: rfl
-
-中文:
-定理 coe_homothetyAffine
-  条件: (c : P1)
-  结论: ⇑(homothetyAffine c : k ->ᵃ[k] _) = homothety c
-  证明: rfl
+/-
+**AffineMap.coe_homothetyAffine** 是 Mathlib 中的一个定理，位于命名空间 `AffineMap`。
+形式化陈述：coe_homothetyAffine (c : P1) : ⇑(homothetyAffine c : k ->ᵃ[k] _) = homothe
+ty c
+参数：c : P1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_homothetyAffine (c : P1) : ⇑(homothetyAffine c : k ->ᵃ[k] _) = homothety c :=
+theorem coe_homothetyAffine (c : P1) : ⇑(homothetyAffine c : k →ᵃ[k] _) = homothety c :=
   rfl
 
 end CommRing
@@ -3645,28 +2741,33 @@ section
 
 variable {𝕜 E F : Type*} [Ring 𝕜] [AddCommGroup E] [AddCommGroup F] [Module 𝕜 E] [Module 𝕜 F]
 
-/--
-theorem `Convex.combo_affine_apply` / 定理 `Convex.combo_affine_apply`
+/-- Applying an affine map to an affine combination of two points yields an affine combination of
+the images. -/
+/-
+**Convex.combo_affine_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Convex.combo_affine_apply {x y : E} {a b : 𝕜} {f : E ->ᵃ[𝕜] F} (h : a + b 
+= 1) : f (a • x + b • y) = a • f x + b • f y
+参数：h : a + b = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Convex.combo_eq_smul_sub_add`：Convex.combo_eq_smul_sub_add [Module R M] 
+{x y : M} {a b : R} (h : a + b = 1) : a • x + b • y = b • (y - x) + x
+· 使用定理 `AffineMap.apply_lineMap`：apply_lineMap (f : P1 ->ᵃ[k] P2) (p₀ p₁ : P1) (
+c : k) : f (lineMap p₀ p₁ c) = lineMap (f p₀) (f p₁) c
 
-English:
-theorem Convex.combo_affine_apply
-  given: {x y : E} {a b : 𝕜} {f : E ->ᵃ[𝕜] F} (h : a + b = 1)
-  proof: by
-  simp only [Convex.combo_eq_smul_sub_add h, ← vsub_eq_sub]
-  exact f.apply_lineMap _ _ _
-
-中文:
-定理 凸.combo_affine_apply
-  条件: {x y : E} {a b : 𝕜} {f : E ->ᵃ[𝕜] F} (h : a + b = 1)
-  证明: by
-  simp only [Convex.combo_eq_smul_sub_add h, ← vsub_eq_sub]
-  exact f.apply_lineMap _ _ _
-
-Depends on / 依赖: Convex, Convex.combo_eq_smul_sub_add, apply_lineMap, combo_eq_smul_sub_add, f.apply_lineMap, vsub_eq_sub
+--- 原说明 ---
+Applying an affine map to an affine combination of two points yields an affine c
+ombination of
+the images.
 -/
-theorem Convex.combo_affine_apply {x y : E} {a b : 𝕜} {f : E ->ᵃ[𝕜] F} (h : a + b = 1) :
+theorem Convex.combo_affine_apply {x y : E} {a b : 𝕜} {f : E →ᵃ[𝕜] F} (h : a + b = 1) :
     f (a • x + b • y) = a • f x + b • f y := by
   simp only [Convex.combo_eq_smul_sub_add h, ← vsub_eq_sub]
   exact f.apply_lineMap _ _ _
 
 end
+

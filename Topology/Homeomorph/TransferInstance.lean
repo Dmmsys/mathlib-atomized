@@ -22,55 +22,34 @@ variable {R α β : Type*}
 namespace Equiv
 
 -- See note [instance transfer via equivalence]
-/--
-Definition of `topologicalSpace` / `topologicalSpace` 的定义
+/-- Transfer a `TopologicalSpace` across an `Equiv` -/
+/-
+**Equiv.topologicalSpace** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [TopologicalSpace β] → α ≃ β → Topologic
+alSpace α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation topologicalSpace
-  signature: [TopologicalSpace β] (e : α ≃ β)
-  body: .induced e.toFun ‹_›
-
-中文:
-缩写 topologicalSpace
-  签名: [拓扑空间 β] (e : α ≃ β)
-  定义体: .induced e.toFun ‹_›
+--- 原说明 ---
+Transfer a `TopologicalSpace` across an `Equiv`
 -/
 protected abbrev topologicalSpace [TopologicalSpace β] (e : α ≃ β) :
     TopologicalSpace α :=
   .induced e.toFun ‹_›
 
-/--
-Definition of `homeomorph` / `homeomorph` 的定义
+/-- An equivalence `e : α ≃ β` gives a homeomorphism `α ≃ₜ β` where the topological space structure
+on `α` is the one obtained by transporting the topological space structure on `β` back along `e`. -/
+/-
+**Equiv.homeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：homeomorph [TopologicalSpace β] (e : α ≃ β) : letI
+参数：e : α ≃ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeomorph
-  signature: [TopologicalSpace β] (e : α ≃ β)
-  body: e.topologicalSpace
-    α ≃ₜ β :=
-  letI := e.topologicalSpace
-  { e with
-    continuous_toFun := continuous_induced_dom
-    continuous_invFun := by
-      simp only [Equiv.invFun_as_coe]
-      convert! continuous_coinduced_rng
-      rw [e.coinduced_symm]
-      rfl }
-
-中文:
-定义 homeomorph
-  签名: [拓扑空间 β] (e : α ≃ β)
-  定义体: e.topologicalSpace
-    α ≃ₜ β :=
-  letI := e.topologicalSpace
-  { e with
-    continuous_toFun := continuous_induced_dom
-    continuous_invFun := by
-      simp only [Equiv.invFun_as_coe]
-      convert! continuous_coinduced_rng
-      rw [e.coinduced_symm]
-      rfl }
-
-Depends on / 依赖: e.topologicalSpace, topologicalSpace
+--- 原说明 ---
+An equivalence `e : α ≃ β` gives a homeomorphism `α ≃ₜ β` where the topological 
+space structure
+on `α` is the one obtained by transporting the topological space structure on `β
+` back along `e`.
 -/
 def homeomorph [TopologicalSpace β] (e : α ≃ β) :
     letI := e.topologicalSpace
@@ -85,3 +64,4 @@ def homeomorph [TopologicalSpace β] (e : α ≃ β) :
       rfl }
 
 end Equiv
+

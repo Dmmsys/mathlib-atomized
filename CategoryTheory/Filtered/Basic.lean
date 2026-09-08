@@ -74,29 +74,29 @@ attribute [local instance] uliftCategory
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `IsFilteredOrEmpty` / `IsFilteredOrEmpty` 的定义
+/-- A category `IsFilteredOrEmpty` if
+1. for every pair of objects there exists another object "to the right", and
+2. for every pair of parallel morphisms there exists a morphism to the right so the compositions
+   are equal.
+-/
+/-
+**CategoryTheory.IsFilteredOrEmpty** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsFilteredOrEmpty
-  parameters: : Prop where
-  axioms and operations (2):
-    - cocone_objs : forall X Y : C, exists (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), True
-    - cocone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
-
-中文:
-类 是FilteredOrEmpty
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - cocone_objs : 对任意 X Y : C, 存在 (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), 真
-    - cocone_maps : 对任意 ⦃X Y : C⦄ (f g : X ⟶ Y), 存在 (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
+--- 原说明 ---
+A category `IsFilteredOrEmpty` if
+1. for every pair of objects there exists another object "to the right", and
+2. for every pair of parallel morphisms there exists a morphism to the right so 
+the compositions
+   are equal.
 -/
 class IsFilteredOrEmpty : Prop where
   /-- for every pair of objects there exists another object "to the right" -/
-  cocone_objs : forall X Y : C, exists (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), True
+  cocone_objs : ∀ X Y : C, ∃ (Z : _) (_ : X ⟶ Z) (_ : Y ⟶ Z), True
   /-- for every pair of parallel morphisms there exists a morphism to the right
   so the compositions are equal -/
-  cocone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
+  cocone_maps : ∀ ⦃X Y : C⦄ (f g : X ⟶ Y), ∃ (Z : _) (h : Y ⟶ Z), f ≫ h = g ≫ h
 
 /-- A category `IsFiltered` if
 1. for every pair of objects there exists another object "to the right",
@@ -104,65 +104,68 @@ class IsFilteredOrEmpty : Prop where
    are equal, and
 3. there exists some object. -/
 @[stacks 002V "They also define a diagram being filtered."]
-/--
-Definition of `IsFiltered` / `IsFiltered` 的定义
+/-
+**CategoryTheory.IsFiltered** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsFiltered
-  parameters: : Prop extends IsFilteredOrEmpty C where
-  extends: IsFilteredOrEmpty C
-  axioms and operations (1):
-    - [nonempty : Nonempty C]
-
-中文:
-类 是Filtered
-  参数: : 命题 extends 是FilteredOrEmpty C where
-  继承: 是FilteredOrEmpty C
-  公理与运算 (1 个):
-    - [nonempty : 非空 C]
+--- 原说明 ---
+A category `IsFiltered` if
+1. for every pair of objects there exists another object "to the right",
+2. for every pair of parallel morphisms there exists a morphism to the right so 
+the compositions
+   are equal, and
+3. there exists some object.
 -/
 class IsFiltered : Prop extends IsFilteredOrEmpty C where
   /-- a filtered category must be non-empty -/
   -- This should be an instance but it causes significant slowdown
   [nonempty : Nonempty C]
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFilteredOrEmpty_of_semilatticeSup (α : Type u) [SemilatticeSup α] :
     IsFilteredOrEmpty α where
   cocone_objs X Y := ⟨X ⊔ Y, homOfLE le_sup_left, homOfLE le_sup_right, trivial⟩
   cocone_maps X Y f g := ⟨Y, 𝟙 _, by subsingleton⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFiltered_of_semilatticeSup_nonempty (α : Type u) [SemilatticeSup α]
     [Nonempty α] : IsFiltered α where
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFilteredOrEmpty_of_directed_le (α : Type u) [Preorder α]
     [IsDirectedOrder α] : IsFilteredOrEmpty α where
   cocone_objs X Y :=
     let ⟨Z, h1, h2⟩ := exists_ge_ge X Y
     ⟨Z, homOfLE h1, homOfLE h2, trivial⟩
   cocone_maps X Y f g := ⟨Y, 𝟙 _, by subsingleton⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFiltered_of_directed_le_nonempty (α : Type u) [Preorder α]
     [IsDirectedOrder α] [Nonempty α] : IsFiltered α where
 
 -- Sanity checks
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (α : Type u) [SemilatticeSup α] [OrderBot α] : IsFiltered α := by infer_instance
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (α : Type u) [SemilatticeSup α] [OrderTop α] : IsFiltered α := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFiltered (Discrete PUnit)
-  body: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
-  cocone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by subsingleton⟩
-
-中文:
-实例 :
-  签名: 是Filtered (离散 命题单元)
-  定义体: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
-  cocone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by subsingleton⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFiltered (Discrete PUnit) where
   cocone_objs X Y := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
@@ -175,92 +178,116 @@ section AllowEmpty
 variable {C}
 variable [IsFilteredOrEmpty C]
 
-/--
-Definition of `max` / `max` 的定义
+/-- `max j j'` is an arbitrary choice of object to the right of both `j` and `j'`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.max** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFilt
+ered`。
+形式化陈述：max (j j' : C) : C
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] (X Y 
+: C),   ∃ Z x x, True
 
-English:
-definition max
-  signature: (j j' : C)
-  body: (IsFilteredOrEmpty.cocone_objs j j').choose
-
-中文:
-定义 最大值
-  签名: (j j' : C)
-  定义体: (IsFilteredOrEmpty.cocone_objs j j').choose
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_objs, cocone_objs
+--- 原说明 ---
+`max j j'` is an arbitrary choice of object to the right of both `j` and `j'`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def max (j j' : C) : C :=
   (IsFilteredOrEmpty.cocone_objs j j').choose
 
-/--
-Definition of `leftToMax` / `leftToMax` 的定义
+/-- `leftToMax j j'` is an arbitrary choice of morphism from `j` to `max j j'`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.leftToMax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+IsFiltered`。
+形式化陈述：leftToMax (j j' : C) : j ⟶ max j j'
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] (X Y 
+: C),   ∃ Z x x, True
 
-English:
-definition leftToMax
-  signature: (j j' : C)
-  body: (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose
-
-中文:
-定义 leftToMax
-  签名: (j j' : C)
-  定义体: (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_objs, choose_spec, choose_spec.choose, cocone_objs
+--- 原说明 ---
+`leftToMax j j'` is an arbitrary choice of morphism from `j` to `max j j'`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def leftToMax (j j' : C) : j ⟶ max j j' :=
   (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose
 
-/--
-Definition of `rightToMax` / `rightToMax` 的定义
+/-- `rightToMax j j'` is an arbitrary choice of morphism from `j'` to `max j j'`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.rightToMax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.IsFiltered`。
+形式化陈述：rightToMax (j j' : C) : j' ⟶ max j j'
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] (X Y 
+: C),   ∃ Z x x, True
 
-English:
-definition rightToMax
-  signature: (j j' : C)
-  body: (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose_spec.choose
-
-中文:
-定义 rightToMax
-  签名: (j j' : C)
-  定义体: (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose_spec.choose
-
-Depends on / 依赖: HasFiniteBiproducts, IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_objs, choose_spec, choose_spec.choose_spec.choose, cocone_objs, hasZeroObject_of_hasFiniteBiproducts
+--- 原说明 ---
+`rightToMax j j'` is an arbitrary choice of morphism from `j'` to `max j j'`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def rightToMax (j j' : C) : j' ⟶ max j j' :=
   (IsFilteredOrEmpty.cocone_objs j j').choose_spec.choose_spec.choose
 
-/--
-Definition of `coeq` / `coeq` 的定义
+/-- `coeq f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of object
+which admits a morphism `coeqHom f f' : j' ⟶ coeq f f'` such that
+`coeq_condition : f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
+Its existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 
-English:
-definition coeq
-  signature: {j j' : C} (f f' : j ⟶ j')
-  body: (IsFilteredOrEmpty.cocone_maps f f').choose
-
-中文:
-定义 coeq
-  签名: {j j' : C} (f f' : j ⟶ j')
-  定义体: (IsFilteredOrEmpty.cocone_maps f f').choose
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_maps, cocone_maps
+--- 原说明 ---
+`coeq f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of object
+which admits a morphism `coeqHom f f' : j' ⟶ coeq f f'` such that
+`coeq_condition : f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
+Its existence is ensured by `IsFiltered`.
 -/
 noncomputable def coeq {j j' : C} (f f' : j ⟶ j') : C :=
   (IsFilteredOrEmpty.cocone_maps f f').choose
 
-/--
-Definition of `coeqHom` / `coeqHom` 的定义
+/-- `coeqHom f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of morphism
+`coeqHom f f' : j' ⟶ coeq f f'` such that
+`coeq_condition : f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
+Its existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.coeqHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+Filtered`。
+形式化陈述：coeqHom {j j' : C} (f f' : j ⟶ j') : j' ⟶ coeq f f'
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 
-English:
-definition coeqHom
-  signature: {j j' : C} (f f' : j ⟶ j')
-  body: (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose
-
-中文:
-定义 coeqHom
-  签名: {j j' : C} (f f' : j ⟶ j')
-  定义体: (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_maps, Nonempty, Subsingleton, choose_spec, choose_spec.choose, cocone_maps, hasBiproduct_unique
+--- 原说明 ---
+`coeqHom f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of morphis
+m
+`coeqHom f f' : j' ⟶ coeq f f'` such that
+`coeq_condition : f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
+Its existence is ensured by `IsFiltered`.
 -/
 noncomputable def coeqHom {j j' : C} (f f' : j ⟶ j') : j' ⟶ coeq f f' :=
   (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose
@@ -269,42 +296,41 @@ noncomputable def coeqHom {j j' : C} (f f' : j ⟶ j') : j' ⟶ coeq f f' :=
 `f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
 -/
 @[reassoc] -- Not `@[simp]` as it does not fire.
-/--
-theorem `coeq_condition` / 定理 `coeq_condition`
+/-
+**CategoryTheory.IsFiltered.coeq_condition** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsFiltered`。
+形式化陈述：coeq_condition {j j' : C} (f f' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHo
+m f f'
+参数：f f' : j ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 
-English:
-theorem coeq_condition
-  given: {j j' : C} (f f' : j ⟶ j')
-  statement: f ≫ coeqHom f f' = f' ≫ coeqHom f f'
-  proof: (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose_spec
-
-中文:
-定理 coeq_condition
-  条件: {j j' : C} (f f' : j ⟶ j')
-  结论: f ≫ coeqHom f f' = f' ≫ coeqHom f f'
-  证明: (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose_spec
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_maps, choose_spec, choose_spec.choose_spec, cocone_maps
+--- 原说明 ---
+`coeq_condition f f'`, for morphisms `f f' : j ⟶ j'`, is the proof that
+`f ≫ coeqHom f f' = f' ≫ coeqHom f f'`.
 -/
 theorem coeq_condition {j j' : C} (f f' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHom f f' :=
   (IsFilteredOrEmpty.cocone_maps f f').choose_spec.choose_spec
 
 end AllowEmpty
 
-/--
-lemma `isDirectedOrder` / 引理 `isDirectedOrder`
-
-English:
-lemma isDirectedOrder
-  given: (α : Type u) [Preorder α] [IsFiltered α]
-  proof: ⟨max i j, leOfHom (leftToMax i j), leOfHom (rightToMax i j)⟩
-
-中文:
-引理 isDirectedOrder
-  条件: (α : 类型u) [预序 α] [是Filtered α]
-  证明: ⟨max i j, leOfHom (leftToMax i j), leOfHom (rightToMax i j)⟩
-
-Depends on / 依赖: leOfHom, leftToMax, rightToMax
+/-
+**CategoryTheory.IsFiltered.isDirectedOrder** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.IsFiltered`。
+形式化陈述：isDirectedOrder (α : Type u) [Preorder α] [IsFiltered α] : IsDirectedOrder
+ α where directed i j
+参数：α : Type u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `CategoryTheory.leOfHom`：leOfHom {x y : X} (h : x ⟶ y) : x <= y
 -/
 lemma isDirectedOrder (α : Type u) [Preorder α] [IsFiltered α] :
     IsDirectedOrder α where
@@ -319,32 +345,29 @@ variable {C}
 variable [IsFilteredOrEmpty C]
 variable {D : Type u₁} [Category.{v₁} D]
 
-/--
-theorem `of_right_adjoint` / 定理 `of_right_adjoint`
+/-- If `C` is filtered or empty, and we have a functor `R : C ⥤ D` with a left adjoint, then `D` is
+filtered or empty.
+-/
+/-
+**CategoryTheory.IsFilteredOrEmpty.of_right_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.IsFilteredOrEmpty`。
+形式化陈述：of_right_adjoint {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredOrEmpty D
+参数：h : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_left`：homEquiv_naturality_
+left (f : X' ⟶ X) (g : F.obj X ⟶ Y) : (adj.homEquiv X' Y) (F.map f ≫ g) = f ≫ (a
+dj.homEquiv X Y) g
+· 使用定理 `CategoryTheory.IsFiltered.coeq_condition`：coeq_condition {j j' : C} (f f
+' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHom f f'
 
-English:
-theorem of_right_adjoint
-  given: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  statement: IsFilteredOrEmpty D
-  proof: { cocone_objs := fun X Y =>
-      ⟨R.obj (max (L.obj X) (L.obj Y)),
-        h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
-    cocone_maps := fun X Y f g =>
-      ⟨R.obj (coeq (L.map f) (L.map g)), h.homEquiv _ _ (coeqHom _ _), by
-        rw [← h.homEquiv_naturality_left]; rw [← h.homEquiv_naturality_left]; rw [coeq_condition]⟩ }
-
-中文:
-定理 of_right_adjoint
-  条件: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  结论: 是FilteredOrEmpty D
-  证明: { cocone_objs := fun X Y =>
-      ⟨R.obj (max (L.obj X) (L.obj Y)),
-        h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
-    cocone_maps := fun X Y f g =>
-      ⟨R.obj (coeq (L.map f) (L.map g)), h.homEquiv _ _ (coeqHom _ _), by
-        rw [← h.homEquiv_naturality_left]; rw [← h.homEquiv_naturality_left]; rw [coeq_condition]⟩ }
-
-Depends on / 依赖: L.map, L.obj, R.obj, cocone_maps, cocone_objs, coeqHom, coeq_condition, h.homEquiv, h.homEquiv_naturality_left, homEquiv, homEquiv_naturality_left, leftToMax, rightToMax
+--- 原说明 ---
+If `C` is filtered or empty, and we have a functor `R : C ⥤ D` with a left adjoi
+nt, then `D` is
+filtered or empty.
 -/
 theorem of_right_adjoint {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredOrEmpty D :=
   { cocone_objs := fun X Y =>
@@ -352,44 +375,41 @@ theorem of_right_adjoint {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredO
         h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
     cocone_maps := fun X Y f g =>
       ⟨R.obj (coeq (L.map f) (L.map g)), h.homEquiv _ _ (coeqHom _ _), by
-        rw [← h.homEquiv_naturality_left]; rw [← h.homEquiv_naturality_left]; rw [coeq_condition]⟩ }
+        rw [← h.homEquiv_naturality_left, ← h.homEquiv_naturality_left, coeq_condition]⟩ }
 
-/--
-theorem `of_isRightAdjoint` / 定理 `of_isRightAdjoint`
+/-- If `C` is filtered or empty, and we have a right adjoint functor `R : C ⥤ D`, then `D` is
+filtered or empty. -/
+/-
+**CategoryTheory.IsFilteredOrEmpty.of_isRightAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.IsFilteredOrEmpty`。
+形式化陈述：of_isRightAdjoint (R : C ⥤ D) [R.IsRightAdjoint] : IsFilteredOrEmpty D
+参数：R : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_right_adjoint`：of_right_adjoint {L :
+ D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredOrEmpty D
 
-English:
-theorem of_isRightAdjoint
-  given: (R : C ⥤ D) [R.IsRightAdjoint]
-  statement: IsFilteredOrEmpty D
-  proof: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
-
-中文:
-定理 of_isRightAdjoint
-  条件: (R : C ⥤ D) [R.是右伴随]
-  结论: 是FilteredOrEmpty D
-  证明: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, of_right_adjoint
+--- 原说明 ---
+If `C` is filtered or empty, and we have a right adjoint functor `R : C ⥤ D`, th
+en `D` is
+filtered or empty.
 -/
 theorem of_isRightAdjoint (R : C ⥤ D) [R.IsRightAdjoint] : IsFilteredOrEmpty D :=
   of_right_adjoint (Adjunction.ofIsRightAdjoint R)
 
-/--
-theorem `of_equivalence` / 定理 `of_equivalence`
+/-- Being filtered or empty is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.IsFilteredOrEmpty.of_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.IsFilteredOrEmpty`。
+形式化陈述：of_equivalence (h : C ≌ D) : IsFilteredOrEmpty D
+参数：h : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_right_adjoint`：of_right_adjoint {L :
+ D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredOrEmpty D
 
-English:
-theorem of_equivalence
-  given: (h : C ≌ D)
-  statement: IsFilteredOrEmpty D
-  proof: of_right_adjoint h.symm.toAdjunction
-
-中文:
-定理 of_equivalence
-  条件: (h : C ≌ D)
-  结论: 是FilteredOrEmpty D
-  证明: of_right_adjoint h.symm.toAdjunction
-
-Depends on / 依赖: h.symm.toAdjunction, of_right_adjoint, toAdjunction
+--- 原说明 ---
+Being filtered or empty is preserved by equivalence of categories.
 -/
 theorem of_equivalence (h : C ≌ D) : IsFilteredOrEmpty D :=
   of_right_adjoint h.symm.toAdjunction
@@ -405,44 +425,41 @@ open CategoryTheory.Limits
 variable {C}
 variable [IsFiltered C]
 
-/--
-theorem `sup_objs_exists` / 定理 `sup_objs_exists`
-
-English:
-theorem sup_objs_exists
-  given: (O : Finset C)
-  statement: exists S : C, forall {X}, X in O -> Nonempty (X ⟶ S)
-  proof: by
-  classical
-  induction O using Finset.induction with
-  | empty => exact ⟨Classical.choice IsFiltered.nonempty, by simp⟩
-  | insert X O' nm h =>
-    obtain ⟨S', w'⟩ := h
-    use max X S'
-    rintro Y mY
-    obtain rfl | h := eq_or_ne Y X
-    · exact ⟨leftToMax _ _⟩
-    · exact ⟨(w' (Finset.mem_of_mem_insert_of_ne mY h)).some ≫ rightToMax _ _⟩
-
-中文:
-定理 sup_objs_存在
-  条件: (O : 有限集 C)
-  结论: 存在 S : C, 对任意 {X}, X in O -> 非空 (X ⟶ S)
-  证明: by
-  classical
-  induction O using Finset.induction with
-  | empty => exact ⟨Classical.choice IsFiltered.nonempty, by simp⟩
-  | insert X O' nm h =>
-    obtain ⟨S', w'⟩ := h
-    use max X S'
-    rintro Y mY
-    obtain rfl | h := eq_or_ne Y X
-    · exact ⟨leftToMax _ _⟩
-    · exact ⟨(w' (Finset.mem_of_mem_insert_of_ne mY h)).some ≫ rightToMax _ _⟩
-
-Depends on / 依赖: Classical, Classical.choice, Finset, Finset.induction, Finset.mem_of_mem_insert_of_ne, IsFiltered, IsFiltered.nonempty, choice, classical, eq_or_ne, insert, leftToMax, mem_of_mem_insert_of_ne, nonempty, rightToMax
+/-- Any finite collection of objects in a filtered category has an object "to the right".
 -/
-theorem sup_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Nonempty (X ⟶ S) := by
+/-
+**CategoryTheory.IsFiltered.sup_objs_exists** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsFiltered`。
+形式化陈述：sup_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Nonem
+pty (X ⟶ S)
+参数：O : Finset C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `CategoryTheory.IsFiltered.nonempty`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.IsFiltered C], Nonempty C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Finset.mem_of_mem_insert_of_ne`：mem_of_mem_insert_of_ne (h : b in insert
+ a s) : b != a -> b in s
+
+--- 原说明 ---
+Any finite collection of objects in a filtered category has an object "to the ri
+ght".
+-/
+theorem sup_objs_exists (O : Finset C) : ∃ S : C, ∀ {X}, X ∈ O → Nonempty (X ⟶ S) := by
   classical
   induction O using Finset.induction with
   | empty => exact ⟨Classical.choice IsFiltered.nonempty, by simp⟩
@@ -454,63 +471,55 @@ theorem sup_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Non
     · exact ⟨leftToMax _ _⟩
     · exact ⟨(w' (Finset.mem_of_mem_insert_of_ne mY h)).some ≫ rightToMax _ _⟩
 
-variable (O : Finset C) (H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y))
+variable (O : Finset C) (H : Finset (Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y))
 
-/--
-theorem `sup_exists` / 定理 `sup_exists`
+/-- Given any `Finset` of objects `{X, ...}` and
+indexed collection of `Finset`s of morphisms `{f, ...}` in `C`,
+there exists an object `S`, with a morphism `T X : X ⟶ S` from each `X`,
+such that the triangles commute: `f ≫ T Y = T X`, for `f : X ⟶ Y` in the `Finset`.
+-/
+/-
+**CategoryTheory.IsFiltered.sup_exists** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.IsFiltered`。
+形式化陈述：sup_exists : exists (S : C) (T : forall {X : C}, X in O -> (X ⟶ S)), foral
+l {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}, (⟨X, Y, mX, mY, f⟩ : Σ' (X 
+Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H -> f ≫ T mY = T mX
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `CategoryTheory.IsFiltered.sup_objs_exists`：sup_objs_exists (O : Finset C
+) : exists S : C, forall {X}, X in O -> Nonempty (X ⟶ S)
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Finset.mem_of_mem_insert_of_ne`：mem_of_mem_insert_of_ne (h : b in insert
+ a s) : b != a -> b in s
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 
-English:
-theorem sup_exists
-  proof: by
-  classical
-  induction H using Finset.induction with
-  | empty =>
-    obtain ⟨S, f⟩ := sup_objs_exists O
-    exact ⟨S, fun mX => (f mX).some, by rintro - - - - - ⟨⟩⟩
-  | insert h' H' nmf h'' =>
-    obtain ⟨X, Y, mX, mY, f⟩ := h'
-    obtain ⟨S', T', w'⟩ := h''
-    refine ⟨coeq (f ≫ T' mY) (T' mX), fun mZ => T' mZ ≫ coeqHom (f ≫ T' mY) (T' mX), ?_⟩
-    intro X' Y' mX' mY' f' mf'
-    rw [← Category.assoc]
-    by_cases h : X = X' ∧ Y = Y'
-    · rcases h with ⟨rfl, rfl⟩
-      grind [coeq_condition]
-    · rw [@w' _ _ mX' mY' f' _]
-      apply Finset.mem_of_mem_insert_of_ne mf'
-      contrapose h
-      obtain ⟨rfl, h⟩ := h
-      trivial
-
-中文:
-定理 sup_存在
-  证明: by
-  classical
-  induction H using Finset.induction with
-  | empty =>
-    obtain ⟨S, f⟩ := sup_objs_exists O
-    exact ⟨S, fun mX => (f mX).some, by rintro - - - - - ⟨⟩⟩
-  | insert h' H' nmf h'' =>
-    obtain ⟨X, Y, mX, mY, f⟩ := h'
-    obtain ⟨S', T', w'⟩ := h''
-    refine ⟨coeq (f ≫ T' mY) (T' mX), fun mZ => T' mZ ≫ coeqHom (f ≫ T' mY) (T' mX), ?_⟩
-    intro X' Y' mX' mY' f' mf'
-    rw [← Category.assoc]
-    by_cases h : X = X' ∧ Y = Y'
-    · rcases h with ⟨rfl, rfl⟩
-      grind [coeq_condition]
-    · rw [@w' _ _ mX' mY' f' _]
-      apply Finset.mem_of_mem_insert_of_ne mf'
-      contrapose h
-      obtain ⟨rfl, h⟩ := h
-      trivial
-
-Depends on / 依赖: Category, Category.assoc, Finset, Finset.induction, Finset.mem_of, classical, coeqHom, coeq_condition, insert, mem_of, sup_objs_exists
+--- 原说明 ---
+Given any `Finset` of objects `{X, ...}` and
+indexed collection of `Finset`s of morphisms `{f, ...}` in `C`,
+there exists an object `S`, with a morphism `T X : X ⟶ S` from each `X`,
+such that the triangles commute: `f ≫ T Y = T X`, for `f : X ⟶ Y` in the `Finset
+`.
 -/
 theorem sup_exists :
-    exists (S : C) (T : forall {X : C}, X in O -> (X ⟶ S)),
-      forall {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y},
-        (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H ->
+    ∃ (S : C) (T : ∀ {X : C}, X ∈ O → (X ⟶ S)),
+      ∀ {X Y : C} (mX : X ∈ O) (mY : Y ∈ O) {f : X ⟶ Y},
+        (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) ∈ H →
           f ≫ T mY = T mX := by
   classical
   induction H using Finset.induction with
@@ -532,114 +541,120 @@ theorem sup_exists :
       obtain ⟨rfl, h⟩ := h
       trivial
 
-/--
-Definition of `sup` / `sup` 的定义
+/-- An arbitrary choice of object "to the right"
+of a finite collection of objects `O` and morphisms `H`,
+making all the triangles commute.
+-/
+/-
+**CategoryTheory.IsFiltered.sup** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFilt
+ered`。
+形式化陈述：sup : C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.sup_exists`：sup_exists : exists (S : C) (T : f
+orall {X : C}, X in O -> (X ⟶ S)), forall {X Y : C} (mX : X in O) (mY : Y in O) 
+{f : X ⟶ Y}, (⟨X, Y, mX, m…
 
-English:
-definition sup
-  signature: : C
-  body: (sup_exists O H).choose
-
-中文:
-定义 上确界
-  签名: : C
-  定义体: (sup_exists O H).choose
-
-Depends on / 依赖: sup_exists
+--- 原说明 ---
+An arbitrary choice of object "to the right"
+of a finite collection of objects `O` and morphisms `H`,
+making all the triangles commute.
 -/
 noncomputable def sup : C :=
   (sup_exists O H).choose
 
-/--
-Definition of `toSup` / `toSup` 的定义
-
-English:
-definition toSup
-  signature: {X : C} (m : X in O)
-  body: (sup_exists O H).choose_spec.choose m
-
-中文:
-定义 toSup
-  签名: {X : C} (m : X in O)
-  定义体: (sup_exists O H).choose_spec.choose m
-
-Depends on / 依赖: choose_spec, choose_spec.choose, sup_exists
+/-- The morphisms to `sup O H`.
 -/
-noncomputable def toSup {X : C} (m : X in O) : X ⟶ sup O H :=
+/-
+**CategoryTheory.IsFiltered.toSup** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFi
+ltered`。
+形式化陈述：toSup {X : C} (m : X in O) : X ⟶ sup O H
+参数：m : X in O。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.sup_exists`：sup_exists : exists (S : C) (T : f
+orall {X : C}, X in O -> (X ⟶ S)), forall {X Y : C} (mX : X in O) (mY : Y in O) 
+{f : X ⟶ Y}, (⟨X, Y, mX, m…
+
+--- 原说明 ---
+The morphisms to `sup O H`.
+-/
+noncomputable def toSup {X : C} (m : X ∈ O) : X ⟶ sup O H :=
   (sup_exists O H).choose_spec.choose m
 
-/--
-theorem `toSup_commutes` / 定理 `toSup_commutes`
-
-English:
-theorem toSup_commutes
-  statement: {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-  proof: (sup_exists O H).choose_spec.choose_spec mX mY mf
-
-中文:
-定理 toSup_commutes
-  结论: {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-  证明: (sup_exists O H).choose_spec.choose_spec mX mY mf
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec, sup_exists
+/-- The triangles of consisting of a morphism in `H` and the maps to `sup O H` commute.
 -/
-theorem toSup_commutes {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-    (mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H) :
+/-
+**CategoryTheory.IsFiltered.toSup_commutes** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsFiltered`。
+形式化陈述：toSup_commutes {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y} (mf : (⟨X
+, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H) : f ≫ toS
+up O H mY = toSup O H mX
+参数：mX : X in O；mY : Y in O；mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (
+_ : Y in O), X ⟶ Y) in H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.IsFiltered.sup_exists`：sup_exists : exists (S : C) (T : f
+orall {X : C}, X in O -> (X ⟶ S)), forall {X Y : C} (mX : X in O) (mY : Y in O) 
+{f : X ⟶ Y}, (⟨X, Y, mX, m…
+
+--- 原说明 ---
+The triangles of consisting of a morphism in `H` and the maps to `sup O H` commu
+te.
+-/
+theorem toSup_commutes {X Y : C} (mX : X ∈ O) (mY : Y ∈ O) {f : X ⟶ Y}
+    (mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) ∈ H) :
     f ≫ toSup O H mY = toSup O H mX :=
   (sup_exists O H).choose_spec.choose_spec mX mY mf
 
 variable {J : Type w} [SmallCategory J] [FinCategory J]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `cocone_nonempty` / 定理 `cocone_nonempty`
+/-- If we have `IsFiltered C`, then for any functor `F : J ⥤ C` with `FinCategory J`,
+there exists a cocone over `F`.
+-/
+/-
+**CategoryTheory.IsFiltered.cocone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsFiltered`。
+形式化陈述：cocone_nonempty (F : J ⥤ C) : Nonempty (Cocone F)
+参数：F : J ⥤ C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `CategoryTheory.IsFiltered.sup_exists`：sup_exists : exists (S : C) (T : f
+orall {X : C}, X in O -> (X ⟶ S)), forall {X Y : C} (mX : X in O) (mY : Y in O) 
+{f : X ⟶ Y}, (⟨X, Y, mX, m…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PSigma.mk.injEq`：∀ {α : Sort u} {β : α → Sort v} (fst : α) (snd : β fst)
+ (fst_1 : α) (snd_1 : β fst_1),   (⟨fst, snd⟩ = ⟨fst_1, snd_1⟩) = (fst = fst_1 ∧
+ snd …
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem cocone_nonempty
-  given: (F : J ⥤ C)
-  statement: Nonempty (Cocone F)
-  proof: by
-  classical
-  let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
-    Finset.univ.biUnion fun X : J => Finset.univ.biUnion fun Y : J =>
-      Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w⟩ := sup_exists O H
-  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
-  intro j j' g
-  dsimp
-  simp only [Category.comp_id]
-  apply w
-  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image, PSigma.mk.injEq,
-    true_and, exists_and_left]
-  exact ⟨j, rfl, j', g, by simp⟩
-
-中文:
-定理 cocone_nonempty
-  条件: (F : J ⥤ C)
-  结论: 非空 (余锥 F)
-  证明: by
-  classical
-  let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
-    Finset.univ.biUnion fun X : J => Finset.univ.biUnion fun Y : J =>
-      Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w⟩ := sup_exists O H
-  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
-  intro j j' g
-  dsimp
-  simp only [Category.comp_id]
-  apply w
-  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image, PSigma.mk.injEq,
-    true_and, exists_and_left]
-  exact ⟨j, rfl, j', g, by simp⟩
-
-Depends on / 依赖: Category, Category.comp_id, F.map, F.obj, Finset, Finset.mem_biUnion, Finset.mem_image, Finset.mem_univ, Finset.univ.biUnion, Finset.univ.image, PSigma, PSigma.mk.injEq, biUnion, classical, comp_id, mem_biUnion, mem_image, mem_univ, sup_exists, true_and
+--- 原说明 ---
+If we have `IsFiltered C`, then for any functor `F : J ⥤ C` with `FinCategory J`
+,
+there exists a cocone over `F`.
 -/
 theorem cocone_nonempty (F : J ⥤ C) : Nonempty (Cocone F) := by
   classical
   let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
+  let H : Finset (Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) :=
     Finset.univ.biUnion fun X : J => Finset.univ.biUnion fun Y : J =>
       Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
   obtain ⟨Z, f, w⟩ := sup_exists O H
@@ -652,113 +667,103 @@ theorem cocone_nonempty (F : J ⥤ C) : Nonempty (Cocone F) := by
     true_and, exists_and_left]
   exact ⟨j, rfl, j', g, by simp⟩
 
-/--
-Definition of `cocone` / `cocone` 的定义
+/-- An arbitrary choice of cocone over `F : J ⥤ C`, for `FinCategory J` and `IsFiltered C`.
+-/
+/-
+**CategoryTheory.IsFiltered.cocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsF
+iltered`。
+形式化陈述：cocone (F : J ⥤ C) : Cocone F
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.cocone_nonempty`：cocone_nonempty (F : J ⥤ C) :
+ Nonempty (Cocone F)
 
-English:
-definition cocone
-  signature: (F : J ⥤ C)
-  body: (cocone_nonempty F).some
-
-中文:
-定义 cocone
-  签名: (F : J ⥤ C)
-  定义体: (cocone_nonempty F).some
-
-Depends on / 依赖: cocone_nonempty
+--- 原说明 ---
+An arbitrary choice of cocone over `F : J ⥤ C`, for `FinCategory J` and `IsFilte
+red C`.
 -/
 noncomputable def cocone (F : J ⥤ C) : Cocone F :=
   (cocone_nonempty F).some
 
 variable {D : Type u₁} [Category.{v₁} D]
 
-/--
-theorem `of_right_adjoint` / 定理 `of_right_adjoint`
+/-- If `C` is filtered, and we have a functor `R : C ⥤ D` with a left adjoint, then `D` is filtered.
+-/
+/-
+**CategoryTheory.IsFiltered.of_right_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.IsFiltered`。
+形式化陈述：of_right_adjoint {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFiltered D
+参数：h : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_right_adjoint`：of_right_adjoint {L :
+ D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFilteredOrEmpty D
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `CategoryTheory.IsFiltered.nonempty`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.IsFiltered C], Nonempty C
 
-English:
-theorem of_right_adjoint
-  given: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  statement: IsFiltered D
-  proof: { IsFilteredOrEmpty.of_right_adjoint h with
-    nonempty := IsFiltered.nonempty.map R.obj }
-
-中文:
-定理 of_right_adjoint
-  条件: {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R)
-  结论: 是Filtered D
-  证明: { IsFilteredOrEmpty.of_right_adjoint h with
-    nonempty := IsFiltered.nonempty.map R.obj }
-
-Depends on / 依赖: IsFiltered, IsFiltered.nonempty.map, IsFilteredOrEmpty, IsFilteredOrEmpty.of_right_adjoint, R.obj, nonempty, of_right_adjoint
+--- 原说明 ---
+If `C` is filtered, and we have a functor `R : C ⥤ D` with a left adjoint, then 
+`D` is filtered.
 -/
 theorem of_right_adjoint {L : D ⥤ C} {R : C ⥤ D} (h : L ⊣ R) : IsFiltered D :=
   { IsFilteredOrEmpty.of_right_adjoint h with
     nonempty := IsFiltered.nonempty.map R.obj }
 
-/--
-theorem `of_isRightAdjoint` / 定理 `of_isRightAdjoint`
+/-- If `C` is filtered, and we have a right adjoint functor `R : C ⥤ D`, then `D` is filtered. -/
+/-
+**CategoryTheory.IsFiltered.of_isRightAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsFiltered`。
+形式化陈述：of_isRightAdjoint (R : C ⥤ D) [R.IsRightAdjoint] : IsFiltered D
+参数：R : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_right_adjoint`：of_right_adjoint {L : D ⥤ C}
+ {R : C ⥤ D} (h : L ⊣ R) : IsFiltered D
 
-English:
-theorem of_isRightAdjoint
-  given: (R : C ⥤ D) [R.IsRightAdjoint]
-  statement: IsFiltered D
-  proof: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
-
-中文:
-定理 of_isRightAdjoint
-  条件: (R : C ⥤ D) [R.是右伴随]
-  结论: 是Filtered D
-  证明: of_right_adjoint (Adjunction.ofIsRightAdjoint R)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, of_right_adjoint
+--- 原说明 ---
+If `C` is filtered, and we have a right adjoint functor `R : C ⥤ D`, then `D` is
+ filtered.
 -/
 theorem of_isRightAdjoint (R : C ⥤ D) [R.IsRightAdjoint] : IsFiltered D :=
   of_right_adjoint (Adjunction.ofIsRightAdjoint R)
 
-/--
-theorem `of_equivalence` / 定理 `of_equivalence`
+/-- Being filtered is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.IsFiltered.of_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsFiltered`。
+形式化陈述：of_equivalence (h : C ≌ D) : IsFiltered D
+参数：h : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_right_adjoint`：of_right_adjoint {L : D ⥤ C}
+ {R : C ⥤ D} (h : L ⊣ R) : IsFiltered D
 
-English:
-theorem of_equivalence
-  given: (h : C ≌ D)
-  statement: IsFiltered D
-  proof: of_right_adjoint h.symm.toAdjunction
-
-omit [IsFiltered C] in
-
-中文:
-定理 of_equivalence
-  条件: (h : C ≌ D)
-  结论: 是Filtered D
-  证明: of_right_adjoint h.symm.toAdjunction
-
-omit [IsFiltered C] in
-
-Depends on / 依赖: h.symm.toAdjunction, of_right_adjoint, toAdjunction
+--- 原说明 ---
+Being filtered is preserved by equivalence of categories.
 -/
 theorem of_equivalence (h : C ≌ D) : IsFiltered D :=
   of_right_adjoint h.symm.toAdjunction
 
 omit [IsFiltered C] in
-/--
-lemma `iff_of_equivalence` / 引理 `iff_of_equivalence`
-
-English:
-lemma iff_of_equivalence
-  given: (e : C ≌ D)
-  statement: IsFiltered C ↔ IsFiltered D
-  proof: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
-
-中文:
-引理 iff_of_equivalence
-  条件: (e : C ≌ D)
-  结论: 是Filtered C ↔ 是Filtered D
-  证明: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
-
-Depends on / 依赖: e.symm, of_equivalence
+/-
+**CategoryTheory.IsFiltered.iff_of_equivalence** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.IsFiltered`。
+形式化陈述：iff_of_equivalence (e : C ≌ D) : IsFiltered C ↔ IsFiltered D
+参数：e : C ≌ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
 -/
 lemma iff_of_equivalence (e : C ≌ D) : IsFiltered C ↔ IsFiltered D :=
-  ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
+  ⟨fun _ ↦ .of_equivalence e, fun _ ↦ .of_equivalence e.symm⟩
 
 end Nonempty
 
@@ -767,52 +772,46 @@ section OfCocone
 open CategoryTheory.Limits
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `of_cocone_nonempty` / 定理 `of_cocone_nonempty`
+/-- If every finite diagram in `C` admits a cocone, then `C` is filtered. It is sufficient to verify
+this for diagrams whose shape lives in any one fixed universe. -/
+/-
+**CategoryTheory.IsFiltered.of_cocone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsFiltered`。
+形式化陈述：of_cocone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCategory
+ J] (F : J ⥤ C), Nonempty (Cocone F)) : IsFiltered C
+参数：h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonemp
+ty (Cocone F)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ULiftHom.down_map`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y : CategoryTheory.ULiftHom C} (f : X ⟶ Y),   CategoryT
+heory.ULiftHom.down.ma…
+· 使用定理 `CategoryTheory.ULift.downFunctor_map`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X Y : ULift.{u₂, u₁} C} (f : X ⟶ Y),   CategoryTheory
+.ULift.downFunctor.map f =…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem of_cocone_nonempty
-  statement: (h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
-  proof: by
-  have : Nonempty C := by
-    obtain ⟨c⟩ := h (Functor.empty _)
-    exact ⟨c.pt⟩
-  have : IsFilteredOrEmpty C := by
-    refine ⟨?_, ?_⟩
-    · intro X Y
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
-    · intro X Y f g
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
-      refine ⟨c.pt, c.ι.app ⟨WalkingParallelPair.one⟩, ?_⟩
-      have h₁ := c.ι.naturality ⟨WalkingParallelPairHom.left⟩
-      have h₂ := c.ι.naturality ⟨WalkingParallelPairHom.right⟩
-      simp_all
-  apply IsFiltered.mk
-
-中文:
-定理 of_cocone_nonempty
-  结论: (h : 对任意 {J : 类型 w} [小范畴 J] [有限范畴 J] (F : J ⥤ C),
-  证明: by
-  have : Nonempty C := by
-    obtain ⟨c⟩ := h (Functor.empty _)
-    exact ⟨c.pt⟩
-  have : IsFilteredOrEmpty C := by
-    refine ⟨?_, ?_⟩
-    · intro X Y
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
-    · intro X Y f g
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
-      refine ⟨c.pt, c.ι.app ⟨WalkingParallelPair.one⟩, ?_⟩
-      have h₁ := c.ι.naturality ⟨WalkingParallelPairHom.left⟩
-      have h₂ := c.ι.naturality ⟨WalkingParallelPairHom.right⟩
-      simp_all
-  apply IsFiltered.mk
-
-Depends on / 依赖: Functor, Functor.empty, IsFilteredOrEmpty, Nonempty, ULift.downFunctor, ULiftHom, ULiftHom.down, WalkingPair, WalkingPair.left, WalkingPair.right, WalkingParallelPair, WalkingParallelPair.one, WalkingParallelPairHom, WalkingParallelPairHom.left, c.pt, downFunctor, naturali, naturality, parallelPair
+--- 原说明 ---
+If every finite diagram in `C` admits a cocone, then `C` is filtered. It is suff
+icient to verify
+this for diagrams whose shape lives in any one fixed universe.
 -/
-theorem of_cocone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+theorem of_cocone_nonempty (h : ∀ {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
     Nonempty (Cocone F)) : IsFiltered C := by
   have : Nonempty C := by
     obtain ⟨c⟩ := h (Functor.empty _)
@@ -829,67 +828,70 @@ theorem of_cocone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCatego
       have h₂ := c.ι.naturality ⟨WalkingParallelPairHom.right⟩
       simp_all
   apply IsFiltered.mk
-
-/--
-theorem `of_hasFiniteColimits` / 定理 `of_hasFiniteColimits`
-
-English:
-theorem of_hasFiniteColimits
-  given: [HasFiniteColimits C]
-  statement: IsFiltered C
-  proof: of_cocone_nonempty.{v} C fun F => ⟨colimit.cocone F⟩
-
-中文:
-定理 of_hasFiniteColimits
-  条件: [有有限余极限 C]
-  结论: 是Filtered C
-  证明: of_cocone_nonempty.{v} C fun F => ⟨colimit.cocone F⟩
-
-Depends on / 依赖: cocone, colimit, colimit.cocone, of_cocone_nonempty
+/-
+**CategoryTheory.IsFiltered.of_hasFiniteColimits** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsFiltered`。
+形式化陈述：of_hasFiniteColimits [HasFiniteColimits C] : IsFiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_cocone_nonempty`：of_cocone_nonempty (h : fo
+rall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cocon
+e F)) : IsFiltered C
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_hasFiniteColimits`：∀ (C : Ty
+pe u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinite
+Colimits C] (J : Type w)   [inst_2 : CategoryTheory…
 -/
 theorem of_hasFiniteColimits [HasFiniteColimits C] : IsFiltered C :=
   of_cocone_nonempty.{v} C fun F => ⟨colimit.cocone F⟩
-
-/--
-theorem `of_isTerminal` / 定理 `of_isTerminal`
-
-English:
-theorem of_isTerminal
-  given: {X : C} (h : IsTerminal X)
-  statement: IsFiltered C
-  proof: of_cocone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.from _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
-中文:
-定理 of_isTerminal
-  条件: {X : C} (h : 是终止 X)
-  结论: 是Filtered C
-  证明: of_cocone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.from _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
-Depends on / 依赖: h.from, h.hom_ext, hom_ext, of_cocone_nonempty
+/-
+**CategoryTheory.IsFiltered.of_isTerminal** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsFiltered`。
+形式化陈述：of_isTerminal {X : C} (h : IsTerminal X) : IsFiltered C
+参数：h : IsTerminal X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_cocone_nonempty`：of_cocone_nonempty (h : fo
+rall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cocon
+e F)) : IsFiltered C
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
 -/
 theorem of_isTerminal {X : C} (h : IsTerminal X) : IsFiltered C :=
   of_cocone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.from _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
+/-
+**CategoryTheory.IsFiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsFiltere
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) of_hasTerminal [HasTerminal C] : IsFiltered C :=
   of_isTerminal _ terminalIsTerminal
 
-/--
-theorem `iff_cocone_nonempty` / 定理 `iff_cocone_nonempty`
+/-- For every universe `w`, `C` is filtered if and only if every finite diagram in `C` with shape
+in `w` admits a cocone. -/
+/-
+**CategoryTheory.IsFiltered.iff_cocone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.IsFiltered`。
+形式化陈述：iff_cocone_nonempty : IsFiltered C ↔ forall {J : Type w} [SmallCategory J]
+ [FinCategory J] (F : J ⥤ C), Nonempty (Cocone F)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.cocone_nonempty`：cocone_nonempty (F : J ⥤ C) :
+ Nonempty (Cocone F)
+· 使用定理 `CategoryTheory.IsFiltered.of_cocone_nonempty`：of_cocone_nonempty (h : fo
+rall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cocon
+e F)) : IsFiltered C
 
-English:
-theorem iff_cocone_nonempty
-  statement: IsFiltered C ↔
-  proof: ⟨fun _ _ _ _ F => cocone_nonempty F, of_cocone_nonempty C⟩
-
-中文:
-定理 iff_cocone_nonempty
-  结论: 是Filtered C ↔
-  证明: ⟨fun _ _ _ _ F => cocone_nonempty F, of_cocone_nonempty C⟩
-
-Depends on / 依赖: cocone_nonempty, of_cocone_nonempty
+--- 原说明 ---
+For every universe `w`, `C` is filtered if and only if every finite diagram in `
+C` with shape
+in `w` admits a cocone.
 -/
 theorem iff_cocone_nonempty : IsFiltered C ↔
-    forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cocone F) :=
+    ∀ {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cocone F) :=
   ⟨fun _ _ _ _ F => cocone_nonempty F, of_cocone_nonempty C⟩
 
 end OfCocone
@@ -899,170 +901,155 @@ section SpecialShapes
 variable {C}
 variable [IsFilteredOrEmpty C]
 
-/--
-Definition of `max₃` / `max₃` 的定义
+/-- `max₃ j₁ j₂ j₃` is an arbitrary choice of object to the right of `j₁`, `j₂` and `j₃`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.max** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFilt
+ered`。
+形式化陈述：max (j j' : C) : C
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] (X Y 
+: C),   ∃ Z x x, True
 
-English:
-definition max₃
-  signature: (j₁ j₂ j₃ : C)
-  body: max (max j₁ j₂) j₃
-
-中文:
-定义 max₃
-  签名: (j₁ j₂ j₃ : C)
-  定义体: max (max j₁ j₂) j₃
+--- 原说明 ---
+`max₃ j₁ j₂ j₃` is an arbitrary choice of object to the right of `j₁`, `j₂` and 
+`j₃`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def max₃ (j₁ j₂ j₃ : C) : C :=
   max (max j₁ j₂) j₃
 
-/--
-Definition of `firstToMax₃` / `firstToMax₃` 的定义
+/-- `firstToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₁` to `max₃ j₁ j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.firstToMax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.IsFiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstToMax₃
-  signature: (j₁ j₂ j₃ : C)
-  body: leftToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
-
-中文:
-定义 firstToMax₃
-  签名: (j₁ j₂ j₃ : C)
-  定义体: leftToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
-
-Depends on / 依赖: leftToMax
+--- 原说明 ---
+`firstToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₁` to `max₃ j₁ 
+j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def firstToMax₃ (j₁ j₂ j₃ : C) : j₁ ⟶ max₃ j₁ j₂ j₃ :=
   leftToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
 
-/--
-Definition of `secondToMax₃` / `secondToMax₃` 的定义
+/-- `secondToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₂` to `max₃ j₁ j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.secondToMax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.IsFiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondToMax₃
-  signature: (j₁ j₂ j₃ : C)
-  body: rightToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
-
-中文:
-定义 secondToMax₃
-  签名: (j₁ j₂ j₃ : C)
-  定义体: rightToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
-
-Depends on / 依赖: leftToMax, rightToMax
+--- 原说明 ---
+`secondToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₂` to `max₃ j₁
+ j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def secondToMax₃ (j₁ j₂ j₃ : C) : j₂ ⟶ max₃ j₁ j₂ j₃ :=
   rightToMax j₁ j₂ ≫ leftToMax (max j₁ j₂) j₃
 
-/--
-Definition of `thirdToMax₃` / `thirdToMax₃` 的定义
+/-- `thirdToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₃` to `max₃ j₁ j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.thirdToMax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.IsFiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition thirdToMax₃
-  signature: (j₁ j₂ j₃ : C)
-  body: rightToMax (max j₁ j₂) j₃
-
-中文:
-定义 thirdToMax₃
-  签名: (j₁ j₂ j₃ : C)
-  定义体: rightToMax (max j₁ j₂) j₃
-
-Depends on / 依赖: rightToMax
+--- 原说明 ---
+`thirdToMax₃ j₁ j₂ j₃` is an arbitrary choice of morphism from `j₃` to `max₃ j₁ 
+j₂ j₃`,
+whose existence is ensured by `IsFiltered`.
 -/
 noncomputable def thirdToMax₃ (j₁ j₂ j₃ : C) : j₃ ⟶ max₃ j₁ j₂ j₃ :=
   rightToMax (max j₁ j₂) j₃
 
-/--
-Definition of `coeq₃` / `coeq₃` 的定义
+/-- `coeq₃ f g h`, for morphisms `f g h : j₁ ⟶ j₂`, is an arbitrary choice of object
+which admits a morphism `coeq₃Hom f g h : j₂ ⟶ coeq₃ f g h` such that
+`coeq₃_condition₁`, `coeq₃_condition₂` and `coeq₃_condition₃` are satisfied.
+Its existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 
-English:
-definition coeq₃
-  signature: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  body: coeq (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
-    (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
-
-中文:
-定义 coeq₃
-  签名: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  定义体: coeq (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
-    (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
-
-Depends on / 依赖: coeqHom, leftToMax, rightToMax
+--- 原说明 ---
+`coeq₃ f g h`, for morphisms `f g h : j₁ ⟶ j₂`, is an arbitrary choice of object
+which admits a morphism `coeq₃Hom f g h : j₂ ⟶ coeq₃ f g h` such that
+`coeq₃_condition₁`, `coeq₃_condition₂` and `coeq₃_condition₃` are satisfied.
+Its existence is ensured by `IsFiltered`.
 -/
 noncomputable def coeq₃ {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) : C :=
   coeq (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
     (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
 
-/--
-Definition of `coeq₃Hom` / `coeq₃Hom` 的定义
+/-- `coeq₃Hom f g h`, for morphisms `f g h : j₁ ⟶ j₂`, is an arbitrary choice of morphism
+`j₂ ⟶ coeq₃ f g h` such that `coeq₃_condition₁`, `coeq₃_condition₂` and `coeq₃_condition₃`
+are satisfied. Its existence is ensured by `IsFiltered`.
+-/
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 
-English:
-definition coeq₃Hom
-  signature: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  body: coeqHom f g ≫
-    leftToMax (coeq f g) (coeq g h) ≫
-      coeqHom (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
-        (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
-
-中文:
-定义 coeq₃Hom
-  签名: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  定义体: coeqHom f g ≫
-    leftToMax (coeq f g) (coeq g h) ≫
-      coeqHom (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
-        (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
-
-Depends on / 依赖: coeqHom, leftToMax, rightToMax
+--- 原说明 ---
+`coeq₃Hom f g h`, for morphisms `f g h : j₁ ⟶ j₂`, is an arbitrary choice of mor
+phism
+`j₂ ⟶ coeq₃ f g h` such that `coeq₃_condition₁`, `coeq₃_condition₂` and `coeq₃_c
+ondition₃`
+are satisfied. Its existence is ensured by `IsFiltered`.
 -/
 noncomputable def coeq₃Hom {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) : j₂ ⟶ coeq₃ f g h :=
   coeqHom f g ≫
     leftToMax (coeq f g) (coeq g h) ≫
       coeqHom (coeqHom f g ≫ leftToMax (coeq f g) (coeq g h))
         (coeqHom g h ≫ rightToMax (coeq f g) (coeq g h))
-
-/--
-theorem `coeq₃_condition₁` / 定理 `coeq₃_condition₁`
-
-English:
-theorem coeq₃_condition₁
-  given: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  proof: by
-  simp only [coeq₃Hom, ← Category.assoc, coeq_condition f g]
-
-中文:
-定理 coeq₃_condition₁
-  条件: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  证明: by
-  simp only [coeq₃Hom, ← Category.assoc, coeq_condition f g]
-
-Depends on / 依赖: Category, Category.assoc, coeq_condition
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 -/
 theorem coeq₃_condition₁ {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) :
     f ≫ coeq₃Hom f g h = g ≫ coeq₃Hom f g h := by
   simp only [coeq₃Hom, ← Category.assoc, coeq_condition f g]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coeq₃_condition₂` / 定理 `coeq₃_condition₂`
-
-English:
-theorem coeq₃_condition₂
-  given: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  proof: by
-  dsimp [coeq₃Hom]
-  slice_lhs 2 4 => rw [← Category.assoc, coeq_condition _ _]
-  slice_rhs 2 4 => rw [← Category.assoc, coeq_condition _ _]
-  slice_lhs 1 3 => rw [← Category.assoc, coeq_condition _ _]
-  simp only [Category.assoc]
-
-中文:
-定理 coeq₃_condition₂
-  条件: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  证明: by
-  dsimp [coeq₃Hom]
-  slice_lhs 2 4 => rw [← Category.assoc, coeq_condition _ _]
-  slice_rhs 2 4 => rw [← Category.assoc, coeq_condition _ _]
-  slice_lhs 1 3 => rw [← Category.assoc, coeq_condition _ _]
-  simp only [Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, coeq_condition, slice_lhs, slice_rhs
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 -/
 theorem coeq₃_condition₂ {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) :
     g ≫ coeq₃Hom f g h = h ≫ coeq₃Hom f g h := by
@@ -1071,118 +1058,171 @@ theorem coeq₃_condition₂ {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) :
   slice_rhs 2 4 => rw [← Category.assoc, coeq_condition _ _]
   slice_lhs 1 3 => rw [← Category.assoc, coeq_condition _ _]
   simp only [Category.assoc]
-
-/--
-theorem `coeq₃_condition₃` / 定理 `coeq₃_condition₃`
-
-English:
-theorem coeq₃_condition₃
-  given: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  statement: f ≫ coeq₃Hom f g h = h ≫ coeq₃Hom f g h
-  proof: Eq.trans (coeq₃_condition₁ f g h) (coeq₃_condition₂ f g h)
-
-中文:
-定理 coeq₃_condition₃
-  条件: {j₁ j₂ : C} (f g h : j₁ ⟶ j₂)
-  结论: f ≫ coeq₃Hom f g h = h ≫ coeq₃Hom f g h
-  证明: Eq.trans (coeq₃_condition₁ f g h) (coeq₃_condition₂ f g h)
-
-Depends on / 依赖: Eq.trans
+/-
+**CategoryTheory.IsFiltered.coeq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：coeq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
 -/
 theorem coeq₃_condition₃ {j₁ j₂ : C} (f g h : j₁ ⟶ j₂) : f ≫ coeq₃Hom f g h = h ≫ coeq₃Hom f g h :=
   Eq.trans (coeq₃_condition₁ f g h) (coeq₃_condition₂ f g h)
 
-/--
-theorem `span` / 定理 `span`
+/-- For every span `j ⟵ i ⟶ j'`, there exists a cocone `j ⟶ k ⟵ j'` such that the square
+commutes. -/
+/-
+**CategoryTheory.IsFiltered.span** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsFil
+tered`。
+形式化陈述：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ j') : exists (k : C) (g : j ⟶ k) (
+g' : j' ⟶ k), f ≫ g = f' ≫ g'
+参数：f : i ⟶ j；f' : i ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] (X Y 
+: C),   ∃ Z x x, True
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem span
-  given: {i j j' : C} (f : i ⟶ j) (f' : i ⟶ j')
-  proof: let ⟨K, G, G', _⟩ := IsFilteredOrEmpty.cocone_objs j j'
-  let ⟨k, e, he⟩ := IsFilteredOrEmpty.cocone_maps (f ≫ G) (f' ≫ G')
-  ⟨k, G ≫ e, G' ≫ e, by simpa only [← Category.assoc] ⟩
-
-中文:
-定理 span
-  条件: {i j j' : C} (f : i ⟶ j) (f' : i ⟶ j')
-  证明: let ⟨K, G, G', _⟩ := IsFilteredOrEmpty.cocone_objs j j'
-  let ⟨k, e, he⟩ := IsFilteredOrEmpty.cocone_maps (f ≫ G) (f' ≫ G')
-  ⟨k, G ≫ e, G' ≫ e, by simpa only [← Category.assoc] ⟩
-
-Depends on / 依赖: Category, Category.assoc, IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_maps, IsFilteredOrEmpty.cocone_objs, cocone_maps, cocone_objs
+--- 原说明 ---
+For every span `j ⟵ i ⟶ j'`, there exists a cocone `j ⟶ k ⟵ j'` such that the sq
+uare
+commutes.
 -/
 theorem span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ j') :
-    exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g' :=
+    ∃ (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g' :=
   let ⟨K, G, G', _⟩ := IsFilteredOrEmpty.cocone_objs j j'
   let ⟨k, e, he⟩ := IsFilteredOrEmpty.cocone_maps (f ≫ G) (f' ≫ G')
   ⟨k, G ≫ e, G' ≫ e, by simpa only [← Category.assoc] ⟩
 
-/--
-theorem `bowtie` / 定理 `bowtie`
+/-- Given a "bowtie" of morphisms
+```
+ j₁   j₂
+ |\  /|
+ | \/ |
+ | /\ |
+ |/  \∣
+ vv  vv
+ k₁  k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k₁` and `k₂` to `s`,
+making the resulting squares commute.
+-/
+/-
+**CategoryTheory.IsFiltered.bowtie** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsF
+iltered`。
+形式化陈述：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ 
+: j₂ ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α 
+= g₂ ≫ β
+参数：f₁ : j₁ ⟶ k₁；g₁ : j₁ ⟶ k₂；f₂ : j₂ ⟶ k₁；g₂ : j₂ ⟶ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.cocone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFilteredOrEmpty C] ⦃X Y 
+: C⦄   (f g : X ⟶ Y), ∃ Z h, Categ…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem bowtie
-  given: {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂)
-  proof: by
-  obtain ⟨t, k₁t, k₂t, ht⟩ := span f₁ g₁
-  obtain ⟨s, ts, hs⟩ := IsFilteredOrEmpty.cocone_maps (f₂ ≫ k₁t) (g₂ ≫ k₂t)
-  simp_rw [Category.assoc] at hs
-  exact ⟨s, k₁t ≫ ts, k₂t ≫ ts, by simp only [← Category.assoc, ht], hs⟩
-
-中文:
-定理 bowtie
-  条件: {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂)
-  证明: by
-  obtain ⟨t, k₁t, k₂t, ht⟩ := span f₁ g₁
-  obtain ⟨s, ts, hs⟩ := IsFilteredOrEmpty.cocone_maps (f₂ ≫ k₁t) (g₂ ≫ k₂t)
-  simp_rw [Category.assoc] at hs
-  exact ⟨s, k₁t ≫ ts, k₂t ≫ ts, by simp only [← Category.assoc, ht], hs⟩
-
-Depends on / 依赖: Category, Category.assoc, IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_maps, cocone_maps, simp_rw
+--- 原说明 ---
+Given a "bowtie" of morphisms
+```
+ j₁   j₂
+ |\  /|
+ | \/ |
+ | /\ |
+ |/  \∣
+ vv  vv
+ k₁  k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k
+₁` and `k₂` to `s`,
+making the resulting squares commute.
 -/
 theorem bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂) :
-    exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = g₂ ≫ β := by
+    ∃ (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = g₂ ≫ β := by
   obtain ⟨t, k₁t, k₂t, ht⟩ := span f₁ g₁
   obtain ⟨s, ts, hs⟩ := IsFilteredOrEmpty.cocone_maps (f₂ ≫ k₁t) (g₂ ≫ k₂t)
   simp_rw [Category.assoc] at hs
   exact ⟨s, k₁t ≫ ts, k₂t ≫ ts, by simp only [← Category.assoc, ht], hs⟩
 
-/--
-theorem `crown` / 定理 `crown`
+/-- Given a "crown" of morphisms
+```
+  j₁   j₂   j₃  ... jₙ
+ /  \  /\  /  \
+|    \/  \/    |
+|    /\  /\    |
+|   |  \/  |   |
+ \  |  /\  |  /
+  \ | /  \ | /
+   vvv    vvv
+    k₁    k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k₁` and `k₂` to `s`,
+making the resulting squares commute.
+-/
+/-
+**CategoryTheory.IsFiltered.crown** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsFi
+ltered`。
+形式化陈述：crown {ι : Type*} [Finite ι] (j : ι -> C) {k₁ k₂ : C} (f : forall i, j i ⟶
+ k₁) (g : forall i, j i ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), forall
+ i, f i ≫ α = g i ≫ β
+参数：j : ι -> C；f : forall i, j i ⟶ k₁；g : forall i, j i ⟶ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.induction_empty_option`：Finite.induction_empty_option {P : Type u
+ -> Prop} (of_equiv : forall {α β}, α ≃ β -> P α -> P β) (h_empty : P PEmpty) (h
+_option : forall {α…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFiltered.bowtie`：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁
+) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β 
+: k₂ ⟶ s), f₁ ≫ α = g₁…
 
-English:
-theorem crown
-  proof: by
-  induction ι using Finite.induction_empty_option with
-  | @of_equiv ι₁ ι₂ e IH =>
-    obtain ⟨s, α, β, H⟩ := IH (j ∘ e) (f <| e ·) (g <| e ·)
-    exact ⟨s, α, β, e.forall_congr_right.mp H⟩
-  | h_empty => exact ⟨max k₁ k₂, leftToMax k₁ k₂, rightToMax k₁ k₂, by simp⟩
-  | @h_option ι _ IH =>
-    obtain ⟨s₁, α₁, β₁, H₁⟩ := IH (j ·) (f ·) (g ·)
-    obtain ⟨s₂, α₂, β₂, H₂⟩ := span (f .none) (g .none)
-    obtain ⟨t, α, β, h₁, h₂⟩ := bowtie α₁ α₂ β₁ β₂
-    exact ⟨t, α₁ ≫ α, β₁ ≫ α, Option.rec (by grind) (by grind)⟩
-
-中文:
-定理 crown
-  证明: by
-  induction ι using Finite.induction_empty_option with
-  | @of_equiv ι₁ ι₂ e IH =>
-    obtain ⟨s, α, β, H⟩ := IH (j ∘ e) (f <| e ·) (g <| e ·)
-    exact ⟨s, α, β, e.forall_congr_right.mp H⟩
-  | h_empty => exact ⟨max k₁ k₂, leftToMax k₁ k₂, rightToMax k₁ k₂, by simp⟩
-  | @h_option ι _ IH =>
-    obtain ⟨s₁, α₁, β₁, H₁⟩ := IH (j ·) (f ·) (g ·)
-    obtain ⟨s₂, α₂, β₂, H₂⟩ := span (f .none) (g .none)
-    obtain ⟨t, α, β, h₁, h₂⟩ := bowtie α₁ α₂ β₁ β₂
-    exact ⟨t, α₁ ≫ α, β₁ ≫ α, Option.rec (by grind) (by grind)⟩
-
-Depends on / 依赖: Finite, Finite.induction_empty_option, Option.rec, bowtie, e.forall_congr_right.mp, forall_congr_right, h_empty, h_option, induction_empty_option, leftToMax, of_equiv, rightToMax
+--- 原说明 ---
+Given a "crown" of morphisms
+```
+  j₁   j₂   j₃  ... jₙ
+ /  \  /\  /  \
+|    \/  \/    |
+|    /\  /\    |
+|   |  \/  |   |
+ \  |  /\  |  /
+  \ | /  \ | /
+   vvv    vvv
+    k₁    k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k
+₁` and `k₂` to `s`,
+making the resulting squares commute.
 -/
 theorem crown
-    {ι : Type*} [Finite ι] (j : ι -> C) {k₁ k₂ : C} (f : forall i, j i ⟶ k₁) (g : forall i, j i ⟶ k₂) :
-    exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), forall i, f i ≫ α = g i ≫ β := by
+    {ι : Type*} [Finite ι] (j : ι → C) {k₁ k₂ : C} (f : ∀ i, j i ⟶ k₁) (g : ∀ i, j i ⟶ k₂) :
+    ∃ (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), ∀ i, f i ≫ α = g i ≫ β := by
   induction ι using Finite.induction_empty_option with
   | @of_equiv ι₁ ι₂ e IH =>
     obtain ⟨s, α, β, H⟩ := IH (j ∘ e) (f <| e ·) (g <| e ·)
@@ -1194,160 +1234,241 @@ theorem crown
     obtain ⟨t, α, β, h₁, h₂⟩ := bowtie α₁ α₂ β₁ β₂
     exact ⟨t, α₁ ≫ α, β₁ ≫ α, Option.rec (by grind) (by grind)⟩
 
-/--
-theorem `crown₃` / 定理 `crown₃`
+/-- Given a "crown" of morphisms
+```
+  j₁   j₂   j₃
+ /  \  /\  /  \
+|    \/  \/    |
+|    /\  /\    |
+|   |  \/  |   |
+ \  |  /\  |  /
+  \ | /  \ | /
+   vvv    vvv
+    k₁    k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k₁` and `k₂` to `s`,
+making the resulting squares commute.
+-/
+/-
+**CategoryTheory.IsFiltered.crown** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsFi
+ltered`。
+形式化陈述：crown {ι : Type*} [Finite ι] (j : ι -> C) {k₁ k₂ : C} (f : forall i, j i ⟶
+ k₁) (g : forall i, j i ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), forall
+ i, f i ≫ α = g i ≫ β
+参数：j : ι -> C；f : forall i, j i ⟶ k₁；g : forall i, j i ⟶ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.induction_empty_option`：Finite.induction_empty_option {P : Type u
+ -> Prop} (of_equiv : forall {α β}, α ≃ β -> P α -> P β) (h_empty : P PEmpty) (h
+_option : forall {α…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFiltered.bowtie`：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁
+) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β 
+: k₂ ⟶ s), f₁ ≫ α = g₁…
 
-English:
-theorem crown₃
-  proof: by
-  obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃] (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ nofun)))
-     (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ nofun)))
-  exact ⟨s, α, β, H 0, H 1, H 2⟩
-
-中文:
-定理 crown₃
-  证明: by
-  obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃] (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ nofun)))
-     (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ nofun)))
-  exact ⟨s, α, β, H 0, H 1, H 2⟩
-
-Depends on / 依赖: Fin.cons
+--- 原说明 ---
+Given a "crown" of morphisms
+```
+  j₁   j₂   j₃
+ /  \  /\  /  \
+|    \/  \/    |
+|    /\  /\    |
+|   |  \/  |   |
+ \  |  /\  |  /
+  \ | /  \ | /
+   vvv    vvv
+    k₁    k₂
+```
+in a filtered category, we can construct an object `s` and two morphisms from `k
+₁` and `k₂` to `s`,
+making the resulting squares commute.
 -/
 theorem crown₃
     {j₁ j₂ j₃ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁)
     (g₂ : j₂ ⟶ k₂) (f₃ : j₃ ⟶ k₁) (g₃ : j₃ ⟶ k₂) :
-    exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s),
+    ∃ (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s),
       f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = g₂ ≫ β ∧ f₃ ≫ α = g₃ ≫ β := by
   obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃] (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ nofun)))
      (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ nofun)))
   exact ⟨s, α, β, H 0, H 1, H 2⟩
-
-/--
-theorem `crown₄` / 定理 `crown₄`
-
-English:
-theorem crown₄
-  proof: by
-  obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃, j₄]
-      (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ (Fin.cons f₄ nofun))))
-     (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ (Fin.cons g₄ nofun))))
-  exact ⟨s, α, β, H 0, H 1, H 2, H 3⟩
-
-中文:
-定理 crown₄
-  证明: by
-  obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃, j₄]
-      (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ (Fin.cons f₄ nofun))))
-     (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ (Fin.cons g₄ nofun))))
-  exact ⟨s, α, β, H 0, H 1, H 2, H 3⟩
-
-Depends on / 依赖: Fin.cons
+/-
+**CategoryTheory.IsFiltered.crown** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsFi
+ltered`。
+形式化陈述：crown {ι : Type*} [Finite ι] (j : ι -> C) {k₁ k₂ : C} (f : forall i, j i ⟶
+ k₁) (g : forall i, j i ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s), forall
+ i, f i ≫ α = g i ≫ β
+参数：j : ι -> C；f : forall i, j i ⟶ k₁；g : forall i, j i ⟶ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.induction_empty_option`：Finite.induction_empty_option {P : Type u
+ -> Prop} (of_equiv : forall {α β}, α ≃ β -> P α -> P β) (h_empty : P PEmpty) (h
+_option : forall {α…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFiltered.bowtie`：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁
+) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β 
+: k₂ ⟶ s), f₁ ≫ α = g₁…
 -/
 theorem crown₄
     {j₁ j₂ j₃ j₄ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁)
     (g₂ : j₂ ⟶ k₂) (f₃ : j₃ ⟶ k₁) (g₃ : j₃ ⟶ k₂) (f₄ : j₄ ⟶ k₁) (g₄ : j₄ ⟶ k₂) :
-    exists (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s),
+    ∃ (s : C) (α : k₁ ⟶ s) (β : k₂ ⟶ s),
       f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = g₂ ≫ β ∧ f₃ ≫ α = g₃ ≫ β ∧ f₄ ≫ α = g₄ ≫ β := by
   obtain ⟨s, α, β, H⟩ := crown ![j₁, j₂, j₃, j₄]
       (Fin.cons f₁ (Fin.cons f₂ (Fin.cons f₃ (Fin.cons f₄ nofun))))
      (Fin.cons g₁ (Fin.cons g₂ (Fin.cons g₃ (Fin.cons g₄ nofun))))
   exact ⟨s, α, β, H 0, H 1, H 2, H 3⟩
 
-/--
-theorem `tulip` / 定理 `tulip`
+/-- Given a "tulip" of morphisms
+```
+ j₁    j₂    j₃
+ |\   / \   / |
+ | \ /   \ /  |
+ |  vv    vv  |
+ \  k₁    k₂ /
+  \         /
+   \       /
+    \     /
+     \   /
+      v v
+       l
+```
+in a filtered category, we can construct an object `s` and three morphisms from `k₁`, `k₂` and `l`
+to `s`, making the resulting squares commute.
+-/
+/-
+**CategoryTheory.IsFiltered.tulip** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsFi
+ltered`。
+形式化陈述：tulip {j₁ j₂ j₃ k₁ k₂ l : C} (f₁ : j₁ ⟶ k₁) (f₂ : j₂ ⟶ k₁) (f₃ : j₂ ⟶ k₂) 
+(f₄ : j₃ ⟶ k₂) (g₁ : j₁ ⟶ l) (g₂ : j₃ ⟶ l) : exists (s : C) (α : k₁ ⟶ s) (β : l 
+⟶ s) (γ : k₂ ⟶ s), f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = f₃ ≫ γ ∧ f₄ ≫ γ = g₂ ≫ β
+参数：f₁ : j₁ ⟶ k₁；f₂ : j₂ ⟶ k₁；f₃ : j₂ ⟶ k₂；f₄ : j₃ ⟶ k₂；g₁ : j₁ ⟶ l；g₂ : j₃ ⟶ l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFiltered.bowtie`：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : j₁ ⟶ k₁
+) (g₁ : j₁ ⟶ k₂) (f₂ : j₂ ⟶ k₁) (g₂ : j₂ ⟶ k₂) : exists (s : C) (α : k₁ ⟶ s) (β 
+: k₂ ⟶ s), f₁ ≫ α = g₁…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 
-English:
-theorem tulip
-  statement: {j₁ j₂ j₃ k₁ k₂ l : C} (f₁ : j₁ ⟶ k₁) (f₂ : j₂ ⟶ k₁) (f₃ : j₂ ⟶ k₂) (f₄ : j₃ ⟶ k₂)
-  proof: by
-  obtain ⟨l', k₁l, k₂l, hl⟩ := span f₂ f₃
-  obtain ⟨s, ls, l's, hs₁, hs₂⟩ := bowtie g₁ (f₁ ≫ k₁l) g₂ (f₄ ≫ k₂l)
-  refine ⟨s, k₁l ≫ l's, ls, k₂l ≫ l's, ?_, by simp only [← Category.assoc, hl], ?_⟩ <;>
-    simp only [hs₁, hs₂, Category.assoc]
-
-中文:
-定理 tulip
-  结论: {j₁ j₂ j₃ k₁ k₂ l : C} (f₁ : j₁ ⟶ k₁) (f₂ : j₂ ⟶ k₁) (f₃ : j₂ ⟶ k₂) (f₄ : j₃ ⟶ k₂)
-  证明: by
-  obtain ⟨l', k₁l, k₂l, hl⟩ := span f₂ f₃
-  obtain ⟨s, ls, l's, hs₁, hs₂⟩ := bowtie g₁ (f₁ ≫ k₁l) g₂ (f₄ ≫ k₂l)
-  refine ⟨s, k₁l ≫ l's, ls, k₂l ≫ l's, ?_, by simp only [← Category.assoc, hl], ?_⟩ <;>
-    simp only [hs₁, hs₂, Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, IsConnected, IsConnected.of_constant_of_preserves_morphisms, bowtie, exacts, of_constant_of_preserves_morphisms
+--- 原说明 ---
+Given a "tulip" of morphisms
+```
+ j₁    j₂    j₃
+ |\   / \   / |
+ | \ /   \ /  |
+ |  vv    vv  |
+ \  k₁    k₂ /
+  \         /
+   \       /
+    \     /
+     \   /
+      v v
+       l
+```
+in a filtered category, we can construct an object `s` and three morphisms from 
+`k₁`, `k₂` and `l`
+to `s`, making the resulting squares commute.
 -/
 theorem tulip {j₁ j₂ j₃ k₁ k₂ l : C} (f₁ : j₁ ⟶ k₁) (f₂ : j₂ ⟶ k₁) (f₃ : j₂ ⟶ k₂) (f₄ : j₃ ⟶ k₂)
     (g₁ : j₁ ⟶ l) (g₂ : j₃ ⟶ l) :
-    exists (s : C) (α : k₁ ⟶ s) (β : l ⟶ s) (γ : k₂ ⟶ s),
+    ∃ (s : C) (α : k₁ ⟶ s) (β : l ⟶ s) (γ : k₂ ⟶ s),
       f₁ ≫ α = g₁ ≫ β ∧ f₂ ≫ α = f₃ ≫ γ ∧ f₄ ≫ γ = g₂ ≫ β := by
   obtain ⟨l', k₁l, k₂l, hl⟩ := span f₂ f₃
   obtain ⟨s, ls, l's, hs₁, hs₂⟩ := bowtie g₁ (f₁ ≫ k₁l) g₂ (f₄ ≫ k₂l)
   refine ⟨s, k₁l ≫ l's, ls, k₂l ≫ l's, ?_, by simp only [← Category.assoc, hl], ?_⟩ <;>
     simp only [hs₁, hs₂, Category.assoc]
-
-/--
-lemma `wideSpan` / 引理 `wideSpan`
-
-English:
-lemma wideSpan
-  given: {I : Type*} [Finite I] {i : C} {j : I -> C} (f : forall x, i ⟶ j x)
-  proof: by
-  have : IsFiltered C := { nonempty := ⟨i⟩ }
-  classical
-  cases nonempty_fintype I
-  obtain ⟨k, fk, hk⟩ := sup_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨i, j x, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
-
-中文:
-引理 wideSpan
-  条件: {I : 类型} [有限 I] {i : C} {j : I -> C} (f : 对任意 x, i ⟶ j x)
-  证明: by
-  have : IsFiltered C := { nonempty := ⟨i⟩ }
-  classical
-  cases nonempty_fintype I
-  obtain ⟨k, fk, hk⟩ := sup_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨i, j x, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
-
-Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.mem_univ, Finset.univ.image, IsConnected, IsConnected.of_constant_of_preserves_morphisms, IsFiltered, classical, exacts, insert, mem_image_of_mem, mem_univ, nonempty, nonempty_fintype, of_constant_of_preserves_morphisms, sup_exists
+/-
+**CategoryTheory.IsFiltered.wideSpan** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+sFiltered`。
+形式化陈述：wideSpan {I : Type*} [Finite I] {i : C} {j : I -> C} (f : forall x, i ⟶ j 
+x) : exists k fik, exists g : forall x, j x ⟶ k, forall x, f x ≫ g x = fik
+参数：f : forall x, i ⟶ j x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `CategoryTheory.IsFiltered.sup_exists`：sup_exists : exists (S : C) (T : f
+orall {X : C}, X in O -> (X ⟶ S)), forall {X Y : C} (mX : X in O) (mY : Y in O) 
+{f : X ⟶ Y}, (⟨X, Y, mX, m…
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
-lemma wideSpan {I : Type*} [Finite I] {i : C} {j : I -> C} (f : forall x, i ⟶ j x) :
-    exists k fik, exists g : forall x, j x ⟶ k, forall x, f x ≫ g x = fik := by
+lemma wideSpan {I : Type*} [Finite I] {i : C} {j : I → C} (f : ∀ x, i ⟶ j x) :
+    ∃ k fik, ∃ g : ∀ x, j x ⟶ k, ∀ x, f x ≫ g x = fik := by
   have : IsFiltered C := { nonempty := ⟨i⟩ }
   classical
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := sup_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨i, j x, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
+    (Finset.univ.image fun x ↦ ⟨i, j x, by simp, by simp, f x⟩)
+  exact ⟨k, _, _, fun x ↦ hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 end SpecialShapes
 
 end IsFiltered
 
 /--
-Definition of `IsCofilteredOrEmpty` / `IsCofilteredOrEmpty` 的定义
+A category `IsCofilteredOrEmpty` if
+1. for every pair of objects there exists another object "to the left", and
+2. for every pair of parallel morphisms there exists a morphism to the left so the compositions
+   are equal.
+-/
+/-
+**CategoryTheory.IsCofilteredOrEmpty** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCofilteredOrEmpty
-  parameters: : Prop where
-  axioms and operations (2):
-    - cone_objs : forall X Y : C, exists (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), True
-    - cone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
-
-中文:
-类 是余filteredOrEmpty
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - cone_objs : 对任意 X Y : C, 存在 (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), 真
-    - cone_maps : 对任意 ⦃X Y : C⦄ (f g : X ⟶ Y), 存在 (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
+--- 原说明 ---
+A category `IsCofilteredOrEmpty` if
+1. for every pair of objects there exists another object "to the left", and
+2. for every pair of parallel morphisms there exists a morphism to the left so t
+he compositions
+   are equal.
 -/
 class IsCofilteredOrEmpty : Prop where
   /-- for every pair of objects there exists another object "to the left" -/
-  cone_objs : forall X Y : C, exists (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), True
+  cone_objs : ∀ X Y : C, ∃ (W : _) (_ : W ⟶ X) (_ : W ⟶ Y), True
   /-- for every pair of parallel morphisms there exists a morphism to the left
   so the compositions are equal -/
-  cone_maps : forall ⦃X Y : C⦄ (f g : X ⟶ Y), exists (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
+  cone_maps : ∀ ⦃X Y : C⦄ (f g : X ⟶ Y), ∃ (W : _) (h : W ⟶ X), h ≫ f = h ≫ g
 
 /-- A category `IsCofiltered` if
 1. for every pair of objects there exists another object "to the left",
@@ -1355,40 +1476,43 @@ class IsCofilteredOrEmpty : Prop where
    are equal, and
 3. there exists some object. -/
 @[stacks 04AZ]
-/--
-Definition of `IsCofiltered` / `IsCofiltered` 的定义
+/-
+**CategoryTheory.IsCofiltered** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCofiltered
-  parameters: : Prop extends IsCofilteredOrEmpty C where
-  extends: IsCofilteredOrEmpty C
-  axioms and operations (1):
-    - [nonempty : Nonempty C]
-
-中文:
-类 是余filtered
-  参数: : 命题 extends 是余filteredOrEmpty C where
-  继承: 是余filteredOrEmpty C
-  公理与运算 (1 个):
-    - [nonempty : 非空 C]
-
-Depends on / 依赖: HasCountableLimits, hasFiniteLimits_of_hasCountableLimits
+--- 原说明 ---
+A category `IsCofiltered` if
+1. for every pair of objects there exists another object "to the left",
+2. for every pair of parallel morphisms there exists a morphism to the left so t
+he compositions
+   are equal, and
+3. there exists some object.
 -/
 class IsCofiltered : Prop extends IsCofilteredOrEmpty C where
   /-- a cofiltered category must be non-empty -/
   -- This should be an instance but it causes significant slowdown
   [nonempty : Nonempty C]
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isCofilteredOrEmpty_of_semilatticeInf (α : Type u) [SemilatticeInf α] :
     IsCofilteredOrEmpty α where
   cone_objs X Y := ⟨X ⊓ Y, homOfLE inf_le_left, homOfLE inf_le_right, trivial⟩
   cone_maps X Y f g := ⟨X, 𝟙 _, by
     apply ULift.ext
     subsingleton⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isCofiltered_of_semilatticeInf_nonempty (α : Type u) [SemilatticeInf α]
     [Nonempty α] : IsCofiltered α where
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isCofilteredOrEmpty_of_directed_ge (α : Type u) [Preorder α]
     [IsCodirectedOrder α] : IsCofilteredOrEmpty α where
   cone_objs X Y :=
@@ -1397,35 +1521,27 @@ instance (priority := 100) isCofilteredOrEmpty_of_directed_ge (α : Type u) [Pre
   cone_maps X Y f g := ⟨X, 𝟙 _, by
     apply ULift.ext
     subsingleton⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isCofiltered_of_directed_ge_nonempty (α : Type u) [Preorder α]
     [IsCodirectedOrder α] [Nonempty α] : IsCofiltered α where
 
 -- Sanity checks
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (α : Type u) [SemilatticeInf α] [OrderBot α] : IsCofiltered α := by infer_instance
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (α : Type u) [SemilatticeInf α] [OrderTop α] : IsCofiltered α := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCofiltered (Discrete PUnit)
-  body: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
-  cone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by
-    apply ULift.ext
-    subsingleton⟩
-
-中文:
-实例 :
-  签名: 是余filtered (离散 命题单元)
-  定义体: ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
-  cone_maps X Y f g := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, by
-    apply ULift.ext
-    subsingleton⟩
-
-Depends on / 依赖: HasLimits, PUnit.unit, hasCountableLimits_of_hasLimits, subsingleton
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCofiltered (Discrete PUnit) where
   cone_objs _ Y := ⟨⟨PUnit.unit⟩, ⟨⟨by trivial⟩⟩, ⟨⟨by subsingleton⟩⟩, trivial⟩
@@ -1440,92 +1556,115 @@ section AllowEmpty
 variable {C}
 variable [IsCofilteredOrEmpty C]
 
-/--
-Definition of `min` / `min` 的定义
+/-- `min j j'` is an arbitrary choice of object to the left of both `j` and `j'`,
+whose existence is ensured by `IsCofiltered`.
+-/
+/-
+**CategoryTheory.IsCofiltered.min** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCo
+filtered`。
+形式化陈述：min (j j' : C) : C
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] (X 
+Y : C),   ∃ W x x, True
 
-English:
-definition min
-  signature: (j j' : C)
-  body: (IsCofilteredOrEmpty.cone_objs j j').choose
-
-中文:
-定义 最小值
-  签名: (j j' : C)
-  定义体: (IsCofilteredOrEmpty.cone_objs j j').choose
-
-Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_objs, cone_objs
+--- 原说明 ---
+`min j j'` is an arbitrary choice of object to the left of both `j` and `j'`,
+whose existence is ensured by `IsCofiltered`.
 -/
 noncomputable def min (j j' : C) : C :=
   (IsCofilteredOrEmpty.cone_objs j j').choose
 
-/--
-Definition of `minToLeft` / `minToLeft` 的定义
+/-- `minToLeft j j'` is an arbitrary choice of morphism from `min j j'` to `j`,
+whose existence is ensured by `IsCofiltered`.
+-/
+/-
+**CategoryTheory.IsCofiltered.minToLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.IsCofiltered`。
+形式化陈述：minToLeft (j j' : C) : min j j' ⟶ j
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] (X 
+Y : C),   ∃ W x x, True
 
-English:
-definition minToLeft
-  signature: (j j' : C)
-  body: (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose
-
-中文:
-定义 minToLeft
-  签名: (j j' : C)
-  定义体: (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose
-
-Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_objs, choose_spec, choose_spec.choose, cone_objs
+--- 原说明 ---
+`minToLeft j j'` is an arbitrary choice of morphism from `min j j'` to `j`,
+whose existence is ensured by `IsCofiltered`.
 -/
 noncomputable def minToLeft (j j' : C) : min j j' ⟶ j :=
   (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose
 
-/--
-Definition of `minToRight` / `minToRight` 的定义
+/-- `minToRight j j'` is an arbitrary choice of morphism from `min j j'` to `j'`,
+whose existence is ensured by `IsCofiltered`.
+-/
+/-
+**CategoryTheory.IsCofiltered.minToRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.IsCofiltered`。
+形式化陈述：minToRight (j j' : C) : min j j' ⟶ j'
+参数：j j' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] (X 
+Y : C),   ∃ W x x, True
 
-English:
-definition minToRight
-  signature: (j j' : C)
-  body: (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose_spec.choose
-
-中文:
-定义 minToRight
-  签名: (j j' : C)
-  定义体: (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose_spec.choose
-
-Depends on / 依赖: HasProducts, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_objs, choose_spec, choose_spec.choose_spec.choose, cone_objs, hasCountableProducts_of_hasProducts
+--- 原说明 ---
+`minToRight j j'` is an arbitrary choice of morphism from `min j j'` to `j'`,
+whose existence is ensured by `IsCofiltered`.
 -/
 noncomputable def minToRight (j j' : C) : min j j' ⟶ j' :=
   (IsCofilteredOrEmpty.cone_objs j j').choose_spec.choose_spec.choose
 
-/--
-Definition of `eq` / `eq` 的定义
+/-- `eq f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of object
+which admits a morphism `eqHom f f' : eq f f' ⟶ j` such that
+`eq_condition : eqHom f f' ≫ f = eqHom f f' ≫ f'`.
+Its existence is ensured by `IsCofiltered`.
+-/
+/-
+**CategoryTheory.IsCofiltered.eq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCof
+iltered`。
+形式化陈述：eq {j j' : C} (f f' : j ⟶ j') : C
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] ⦃X 
+Y : C⦄   (f g : X ⟶ Y), ∃ W h, Cat…
 
-English:
-definition eq
-  signature: {j j' : C} (f f' : j ⟶ j')
-  body: (IsCofilteredOrEmpty.cone_maps f f').choose
-
-中文:
-定义 eq
-  签名: {j j' : C} (f f' : j ⟶ j')
-  定义体: (IsCofilteredOrEmpty.cone_maps f f').choose
-
-Depends on / 依赖: HasCountableLimits, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, cone_maps, hasCountableProducts_of_hasCountableLimits
+--- 原说明 ---
+`eq f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of object
+which admits a morphism `eqHom f f' : eq f f' ⟶ j` such that
+`eq_condition : eqHom f f' ≫ f = eqHom f f' ≫ f'`.
+Its existence is ensured by `IsCofiltered`.
 -/
 noncomputable def eq {j j' : C} (f f' : j ⟶ j') : C :=
   (IsCofilteredOrEmpty.cone_maps f f').choose
 
-/--
-Definition of `eqHom` / `eqHom` 的定义
+/-- `eqHom f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of morphism
+`eqHom f f' : eq f f' ⟶ j` such that
+`eq_condition : eqHom f f' ≫ f = eqHom f f' ≫ f'`.
+Its existence is ensured by `IsCofiltered`.
+-/
+/-
+**CategoryTheory.IsCofiltered.eqHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+Cofiltered`。
+形式化陈述：eqHom {j j' : C} (f f' : j ⟶ j') : eq f f' ⟶ j
+参数：f f' : j ⟶ j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] ⦃X 
+Y : C⦄   (f g : X ⟶ Y), ∃ W h, Cat…
 
-English:
-definition eqHom
-  signature: {j j' : C} (f f' : j ⟶ j')
-  body: (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose
-
-中文:
-定义 eqHom
-  签名: {j j' : C} (f f' : j ⟶ j')
-  定义体: (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose
-
-Depends on / 依赖: HasCountableProducts, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, choose_spec, choose_spec.choose, cone_maps, hasFiniteProducts_of_hasCountableProducts
+--- 原说明 ---
+`eqHom f f'`, for morphisms `f f' : j ⟶ j'`, is an arbitrary choice of morphism
+`eqHom f f' : eq f f' ⟶ j` such that
+`eq_condition : eqHom f f' ≫ f = eqHom f f' ≫ f'`.
+Its existence is ensured by `IsCofiltered`.
 -/
 noncomputable def eqHom {j j' : C} (f f' : j ⟶ j') : eq f f' ⟶ j :=
   (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose
@@ -1534,73 +1673,63 @@ noncomputable def eqHom {j j' : C} (f f' : j ⟶ j') : eq f f' ⟶ j :=
 `eqHom f f' ≫ f = eqHom f f' ≫ f'`.
 -/
 @[reassoc] -- Not `@[simp]` as it does not fire.
-/--
-theorem `eq_condition` / 定理 `eq_condition`
+/-
+**CategoryTheory.IsCofiltered.eq_condition** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsCofiltered`。
+形式化陈述：eq_condition {j j' : C} (f f' : j ⟶ j') : eqHom f f' ≫ f = eqHom f f' ≫ f'
+参数：f f' : j ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] ⦃X 
+Y : C⦄   (f g : X ⟶ Y), ∃ W h, Cat…
 
-English:
-theorem eq_condition
-  given: {j j' : C} (f f' : j ⟶ j')
-  statement: eqHom f f' ≫ f = eqHom f f' ≫ f'
-  proof: (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose_spec
-
-中文:
-定理 eq_condition
-  条件: {j j' : C} (f f' : j ⟶ j')
-  结论: eqHom f f' ≫ f = eqHom f f' ≫ f'
-  证明: (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose_spec
-
-Depends on / 依赖: HasCountableColimits, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, choose_spec, choose_spec.choose_spec, cone_maps, hasFiniteColimits_of_hasCountableColimits
+--- 原说明 ---
+`eq_condition f f'`, for morphisms `f f' : j ⟶ j'`, is the proof that
+`eqHom f f' ≫ f = eqHom f f' ≫ f'`.
 -/
 theorem eq_condition {j j' : C} (f f' : j ⟶ j') : eqHom f f' ≫ f = eqHom f f' ≫ f' :=
   (IsCofilteredOrEmpty.cone_maps f f').choose_spec.choose_spec
 
-/--
-theorem `cospan` / 定理 `cospan`
+/-- For every cospan `j ⟶ i ⟵ j'`,
+there exists a cone `j ⟵ k ⟶ j'` such that the square commutes. -/
+/-
+**CategoryTheory.IsCofiltered.cospan** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sCofiltered`。
+形式化陈述：cospan {i j j' : C} (f : j ⟶ i) (f' : j' ⟶ i) : exists (k : C) (g : k ⟶ j)
+ (g' : k ⟶ j'), g ≫ f = g' ≫ f'
+参数：f : j ⟶ i；f' : j' ⟶ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_objs`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] (X 
+Y : C),   ∃ W x x, True
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] ⦃X 
+Y : C⦄   (f g : X ⟶ Y), ∃ W h, Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem cospan
-  given: {i j j' : C} (f : j ⟶ i) (f' : j' ⟶ i)
-  proof: let ⟨K, G, G', _⟩ := IsCofilteredOrEmpty.cone_objs j j'
-  let ⟨k, e, he⟩ := IsCofilteredOrEmpty.cone_maps (G ≫ f) (G' ≫ f')
-  ⟨k, e ≫ G, e ≫ G', by simpa only [Category.assoc] using he⟩
-
-中文:
-定理 cospan
-  条件: {i j j' : C} (f : j ⟶ i) (f' : j' ⟶ i)
-  证明: let ⟨K, G, G', _⟩ := IsCofilteredOrEmpty.cone_objs j j'
-  let ⟨k, e, he⟩ := IsCofilteredOrEmpty.cone_maps (G ≫ f) (G' ≫ f')
-  ⟨k, e ≫ G, e ≫ G', by simpa only [Category.assoc] using he⟩
-
-Depends on / 依赖: Category, Category.assoc, HasColimits, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, IsCofilteredOrEmpty.cone_objs, cone_maps, cone_objs, hasCountableColimits_of_hasColimits
+--- 原说明 ---
+For every cospan `j ⟶ i ⟵ j'`,
+there exists a cone `j ⟵ k ⟶ j'` such that the square commutes.
 -/
 theorem cospan {i j j' : C} (f : j ⟶ i) (f' : j' ⟶ i) :
-    exists (k : C) (g : k ⟶ j) (g' : k ⟶ j'), g ≫ f = g' ≫ f' :=
+    ∃ (k : C) (g : k ⟶ j) (g' : k ⟶ j'), g ≫ f = g' ≫ f' :=
   let ⟨K, G, G', _⟩ := IsCofilteredOrEmpty.cone_objs j j'
   let ⟨k, e, he⟩ := IsCofilteredOrEmpty.cone_maps (G ≫ f) (G' ≫ f')
   ⟨k, e ≫ G, e ≫ G', by simpa only [Category.assoc] using he⟩
-
-/--
-theorem `_root_.CategoryTheory.Functor.ranges_directed` / 定理 `_root_.CategoryTheory.Functor.ranges_directed`
-
-English:
-theorem _root_.CategoryTheory.Functor.ranges_directed
-  given: (F : C ⥤ Type*) (j : C)
-  proof: fun ⟨i, ij⟩ ⟨k, kj⟩ => by
-  let ⟨l, li, lk, e⟩ := cospan ij kj
-  refine ⟨⟨l, lk ≫ kj⟩, e ▸ ?_, ?_⟩ <;>
-    simp_rw [F.map_comp] <;>
-    convert! Set.range_comp_subset_range _ _
-
-中文:
-定理 _root_.范畴论.函子.ranges_directed
-  条件: (F : C ⥤ 类型) (j : C)
-  证明: fun ⟨i, ij⟩ ⟨k, kj⟩ => by
-  let ⟨l, li, lk, e⟩ := cospan ij kj
-  refine ⟨⟨l, lk ≫ kj⟩, e ▸ ?_, ?_⟩ <;>
-    simp_rw [F.map_comp] <;>
-    convert! Set.range_comp_subset_range _ _
-
-Depends on / 依赖: F.map_comp, Set.range_comp_subset_range, convert, cospan, map_comp, range_comp_subset_range, simp_rw
+/-
+**CategoryTheory.IsCofiltered._root_.CategoryTheory.Functor.ranges_directed** 是 
+Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsCofiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.CategoryTheory.Functor.ranges_directed (F : C ⥤ Type*) (j : C) :
     Directed (· ⊇ ·) fun f : Σ' i, i ⟶ j => Set.range (F.map f.2) := fun ⟨i, ij⟩ ⟨k, kj⟩ => by
@@ -1609,31 +1738,60 @@ theorem _root_.CategoryTheory.Functor.ranges_directed (F : C ⥤ Type*) (j : C) 
     simp_rw [F.map_comp] <;>
     convert! Set.range_comp_subset_range _ _
 
-/--
-theorem `bowtie` / 定理 `bowtie`
+/-- Given a "bowtie" of morphisms
+```
+ k₁   k₂
+ |\  /|
+ | \/ |
+ | /\ |
+ |/  \∣
+ vv  vv
+ j₁  j₂
+```
+in a cofiltered category, we can construct an object `s` and two morphisms
+from `s` to `k₁` and `k₂`, making the resulting squares commute.
+-/
+/-
+**CategoryTheory.IsCofiltered.bowtie** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sCofiltered`。
+形式化陈述：bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : k₁ ⟶ j₁) (g₁ : k₂ ⟶ j₁) (f₂ : k₁ ⟶ j₂) (g₂ 
+: k₂ ⟶ j₂) : exists (s : C) (α : s ⟶ k₁) (β : s ⟶ k₂), α ≫ f₁ = β ≫ g₁ ∧ α ≫ f₂ 
+= β ≫ g₂
+参数：f₁ : k₁ ⟶ j₁；g₁ : k₂ ⟶ j₁；f₂ : k₁ ⟶ j₂；g₂ : k₂ ⟶ j₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.cospan`：cospan {i j j' : C} (f : j ⟶ i) (f' 
+: j' ⟶ i) : exists (k : C) (g : k ⟶ j) (g' : k ⟶ j'), g ≫ f = g' ≫ f'
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.cone_maps`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofilteredOrEmpty C] ⦃X 
+Y : C⦄   (f g : X ⟶ Y), ∃ W h, Cat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem bowtie
-  given: {j₁ j₂ k₁ k₂ : C} (f₁ : k₁ ⟶ j₁) (g₁ : k₂ ⟶ j₁) (f₂ : k₁ ⟶ j₂) (g₂ : k₂ ⟶ j₂)
-  proof: by
-  obtain ⟨t, k₁t, k₂t, ht⟩ := cospan f₁ g₁
-  obtain ⟨s, ts, hs⟩ := IsCofilteredOrEmpty.cone_maps (k₁t ≫ f₂) (k₂t ≫ g₂)
-  exact ⟨s, ts ≫ k₁t, ts ≫ k₂t, by simp only [Category.assoc, ht],
-    by simp only [Category.assoc, hs]⟩
-
-中文:
-定理 bowtie
-  条件: {j₁ j₂ k₁ k₂ : C} (f₁ : k₁ ⟶ j₁) (g₁ : k₂ ⟶ j₁) (f₂ : k₁ ⟶ j₂) (g₂ : k₂ ⟶ j₂)
-  证明: by
-  obtain ⟨t, k₁t, k₂t, ht⟩ := cospan f₁ g₁
-  obtain ⟨s, ts, hs⟩ := IsCofilteredOrEmpty.cone_maps (k₁t ≫ f₂) (k₂t ≫ g₂)
-  exact ⟨s, ts ≫ k₁t, ts ≫ k₂t, by simp only [Category.assoc, ht],
-    by simp only [Category.assoc, hs]⟩
-
-Depends on / 依赖: Category, Category.assoc, HasCoproducts, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, cone_maps, cospan, hasCountableCoproducts_of_hasCoproducts
+--- 原说明 ---
+Given a "bowtie" of morphisms
+```
+ k₁   k₂
+ |\  /|
+ | \/ |
+ | /\ |
+ |/  \∣
+ vv  vv
+ j₁  j₂
+```
+in a cofiltered category, we can construct an object `s` and two morphisms
+from `s` to `k₁` and `k₂`, making the resulting squares commute.
 -/
 theorem bowtie {j₁ j₂ k₁ k₂ : C} (f₁ : k₁ ⟶ j₁) (g₁ : k₂ ⟶ j₁) (f₂ : k₁ ⟶ j₂) (g₂ : k₂ ⟶ j₂) :
-    exists (s : C) (α : s ⟶ k₁) (β : s ⟶ k₂), α ≫ f₁ = β ≫ g₁ ∧ α ≫ f₂ = β ≫ g₂ := by
+    ∃ (s : C) (α : s ⟶ k₁) (β : s ⟶ k₂), α ≫ f₁ = β ≫ g₁ ∧ α ≫ f₂ = β ≫ g₂ := by
   obtain ⟨t, k₁t, k₂t, ht⟩ := cospan f₁ g₁
   obtain ⟨s, ts, hs⟩ := IsCofilteredOrEmpty.cone_maps (k₁t ≫ f₂) (k₂t ≫ g₂)
   exact ⟨s, ts ≫ k₁t, ts ≫ k₂t, by simp only [Category.assoc, ht],
@@ -1650,32 +1808,31 @@ variable {C}
 variable [IsCofilteredOrEmpty C]
 variable {D : Type u₁} [Category.{v₁} D]
 
-/--
-theorem `of_left_adjoint` / 定理 `of_left_adjoint`
+/-- If `C` is cofiltered or empty, and we have a functor `L : C ⥤ D` with a right adjoint,
+then `D` is cofiltered or empty.
+-/
+/-
+**CategoryTheory.IsCofilteredOrEmpty.of_left_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.IsCofilteredOrEmpty`。
+形式化陈述：of_left_adjoint {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofilteredOrEmpty 
+D
+参数：h : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_right_symm`：homEquiv_natur
+ality_right_symm (f : X ⟶ G.obj Y) (g : Y ⟶ Y') : (adj.homEquiv X Y').symm (f ≫ 
+G.map g) = (adj.homEquiv X Y).symm f ≫ g
+· 使用定理 `CategoryTheory.IsCofiltered.eq_condition`：eq_condition {j j' : C} (f f' 
+: j ⟶ j') : eqHom f f' ≫ f = eqHom f f' ≫ f'
 
-English:
-theorem of_left_adjoint
-  given: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  statement: IsCofilteredOrEmpty D
-  proof: { cone_objs := fun X Y =>
-      ⟨L.obj (min (R.obj X) (R.obj Y)), (h.homEquiv _ X).symm (minToLeft _ _),
-        (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
-    cone_maps := fun X Y f g =>
-      ⟨L.obj (eq (R.map f) (R.map g)), (h.homEquiv _ _).symm (eqHom _ _), by
-        rw [← h.homEquiv_naturality_right_symm]; rw [← h.homEquiv_naturality_right_symm]; rw [eq_condition]⟩ }
-
-中文:
-定理 of_left_adjoint
-  条件: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  结论: 是余filteredOrEmpty D
-  证明: { cone_objs := fun X Y =>
-      ⟨L.obj (min (R.obj X) (R.obj Y)), (h.homEquiv _ X).symm (minToLeft _ _),
-        (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
-    cone_maps := fun X Y f g =>
-      ⟨L.obj (eq (R.map f) (R.map g)), (h.homEquiv _ _).symm (eqHom _ _), by
-        rw [← h.homEquiv_naturality_right_symm]; rw [← h.homEquiv_naturality_right_symm]; rw [eq_condition]⟩ }
-
-Depends on / 依赖: L.obj, R.map, R.obj, cone_maps, cone_objs, eq_condition, h.homEquiv, h.homEquiv_naturality_right_symm, homEquiv, homEquiv_naturality_right_symm, minToLeft, minToRight
+--- 原说明 ---
+If `C` is cofiltered or empty, and we have a functor `L : C ⥤ D` with a right ad
+joint,
+then `D` is cofiltered or empty.
 -/
 theorem of_left_adjoint {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofilteredOrEmpty D :=
   { cone_objs := fun X Y =>
@@ -1683,44 +1840,41 @@ theorem of_left_adjoint {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofiltered
         (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
     cone_maps := fun X Y f g =>
       ⟨L.obj (eq (R.map f) (R.map g)), (h.homEquiv _ _).symm (eqHom _ _), by
-        rw [← h.homEquiv_naturality_right_symm]; rw [← h.homEquiv_naturality_right_symm]; rw [eq_condition]⟩ }
+        rw [← h.homEquiv_naturality_right_symm, ← h.homEquiv_naturality_right_symm, eq_condition]⟩ }
 
-/--
-theorem `of_isLeftAdjoint` / 定理 `of_isLeftAdjoint`
+/-- If `C` is cofiltered or empty, and we have a left adjoint functor `L : C ⥤ D`, then `D` is
+cofiltered or empty. -/
+/-
+**CategoryTheory.IsCofilteredOrEmpty.of_isLeftAdjoint** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.IsCofilteredOrEmpty`。
+形式化陈述：of_isLeftAdjoint (L : C ⥤ D) [L.IsLeftAdjoint] : IsCofilteredOrEmpty D
+参数：L : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.of_left_adjoint`：of_left_adjoint {L :
+ C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofilteredOrEmpty D
 
-English:
-theorem of_isLeftAdjoint
-  given: (L : C ⥤ D) [L.IsLeftAdjoint]
-  statement: IsCofilteredOrEmpty D
-  proof: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
-
-中文:
-定理 of_isLeftAdjoint
-  条件: (L : C ⥤ D) [L.是左伴随]
-  结论: 是余filteredOrEmpty D
-  证明: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, HasCountableColimits, hasCountableCoproducts_of_hasCountableColimits, ofIsLeftAdjoint, of_left_adjoint
+--- 原说明 ---
+If `C` is cofiltered or empty, and we have a left adjoint functor `L : C ⥤ D`, t
+hen `D` is
+cofiltered or empty.
 -/
 theorem of_isLeftAdjoint (L : C ⥤ D) [L.IsLeftAdjoint] : IsCofilteredOrEmpty D :=
   of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
 
-/--
-theorem `of_equivalence` / 定理 `of_equivalence`
+/-- Being cofiltered or empty is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.IsCofilteredOrEmpty.of_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.IsCofilteredOrEmpty`。
+形式化陈述：of_equivalence (h : C ≌ D) : IsCofilteredOrEmpty D
+参数：h : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.of_left_adjoint`：of_left_adjoint {L :
+ C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofilteredOrEmpty D
 
-English:
-theorem of_equivalence
-  given: (h : C ≌ D)
-  statement: IsCofilteredOrEmpty D
-  proof: of_left_adjoint h.toAdjunction
-
-中文:
-定理 of_equivalence
-  条件: (h : C ≌ D)
-  结论: 是余filteredOrEmpty D
-  证明: of_left_adjoint h.toAdjunction
-
-Depends on / 依赖: h.toAdjunction, hasFiniteCoproducts_of_hasCountableCoproducts, of_left_adjoint, toAdjunction
+--- 原说明 ---
+Being cofiltered or empty is preserved by equivalence of categories.
 -/
 theorem of_equivalence (h : C ≌ D) : IsCofilteredOrEmpty D :=
   of_left_adjoint h.toAdjunction
@@ -1736,44 +1890,41 @@ open CategoryTheory.Limits
 variable {C}
 variable [IsCofiltered C]
 
-/--
-theorem `inf_objs_exists` / 定理 `inf_objs_exists`
-
-English:
-theorem inf_objs_exists
-  given: (O : Finset C)
-  statement: exists S : C, forall {X}, X in O -> Nonempty (S ⟶ X)
-  proof: by
-  classical
-  induction O using Finset.induction with
-  | empty => exact ⟨Classical.choice IsCofiltered.nonempty, by simp⟩
-  | insert X O' nm h =>
-    obtain ⟨S', w'⟩ := h
-    use min X S'
-    rintro Y mY
-    obtain rfl | h := eq_or_ne Y X
-    · exact ⟨minToLeft _ _⟩
-    · exact ⟨minToRight _ _ ≫ (w' (Finset.mem_of_mem_insert_of_ne mY h)).some⟩
-
-中文:
-定理 inf_objs_存在
-  条件: (O : 有限集 C)
-  结论: 存在 S : C, 对任意 {X}, X in O -> 非空 (S ⟶ X)
-  证明: by
-  classical
-  induction O using Finset.induction with
-  | empty => exact ⟨Classical.choice IsCofiltered.nonempty, by simp⟩
-  | insert X O' nm h =>
-    obtain ⟨S', w'⟩ := h
-    use min X S'
-    rintro Y mY
-    obtain rfl | h := eq_or_ne Y X
-    · exact ⟨minToLeft _ _⟩
-    · exact ⟨minToRight _ _ ≫ (w' (Finset.mem_of_mem_insert_of_ne mY h)).some⟩
-
-Depends on / 依赖: Classical, Classical.choice, Finset, Finset.induction, Finset.mem_of_mem_insert_of_ne, IsCofiltered, IsCofiltered.nonempty, choice, classical, eq_or_ne, insert, mem_of_mem_insert_of_ne, minToLeft, minToRight, nonempty
+/-- Any finite collection of objects in a cofiltered category has an object "to the left".
 -/
-theorem inf_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Nonempty (S ⟶ X) := by
+/-
+**CategoryTheory.IsCofiltered.inf_objs_exists** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsCofiltered`。
+形式化陈述：inf_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Nonem
+pty (S ⟶ X)
+参数：O : Finset C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `CategoryTheory.IsCofiltered.nonempty`：∀ {C : Type u} {inst : CategoryThe
+ory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C], Nonempty C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Finset.mem_of_mem_insert_of_ne`：mem_of_mem_insert_of_ne (h : b in insert
+ a s) : b != a -> b in s
+
+--- 原说明 ---
+Any finite collection of objects in a cofiltered category has an object "to the 
+left".
+-/
+theorem inf_objs_exists (O : Finset C) : ∃ S : C, ∀ {X}, X ∈ O → Nonempty (S ⟶ X) := by
   classical
   induction O using Finset.induction with
   | empty => exact ⟨Classical.choice IsCofiltered.nonempty, by simp⟩
@@ -1785,63 +1936,54 @@ theorem inf_objs_exists (O : Finset C) : exists S : C, forall {X}, X in O -> Non
     · exact ⟨minToLeft _ _⟩
     · exact ⟨minToRight _ _ ≫ (w' (Finset.mem_of_mem_insert_of_ne mY h)).some⟩
 
-variable (O : Finset C) (H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y))
+variable (O : Finset C) (H : Finset (Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y))
 
-/--
-theorem `inf_exists` / 定理 `inf_exists`
+/-- Given any `Finset` of objects `{X, ...}` and
+indexed collection of `Finset`s of morphisms `{f, ...}` in `C`,
+there exists an object `S`, with a morphism `T X : S ⟶ X` from each `X`,
+such that the triangles commute: `T X ≫ f = T Y`, for `f : X ⟶ Y` in the `Finset`.
+-/
+/-
+**CategoryTheory.IsCofiltered.inf_exists** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.IsCofiltered`。
+形式化陈述：inf_exists : exists (S : C) (T : forall {X : C}, X in O -> (S ⟶ X)), foral
+l {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}, (⟨X, Y, mX, mY, f⟩ : Σ' (X 
+Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H -> T mX ≫ f = T mY
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `CategoryTheory.IsCofiltered.inf_objs_exists`：inf_objs_exists (O : Finset
+ C) : exists S : C, forall {X}, X in O -> Nonempty (S ⟶ X)
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Finset.mem_of_mem_insert_of_ne`：mem_of_mem_insert_of_ne (h : b in insert
+ a s) : b != a -> b in s
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 
-English:
-theorem inf_exists
-  proof: by
-  classical
-  induction H using Finset.induction with
-  | empty =>
-    obtain ⟨S, f⟩ := inf_objs_exists O
-    exact ⟨S, fun mX => (f mX).some, by rintro - - - - - ⟨⟩⟩
-  | insert h' H' nmf h'' =>
-    obtain ⟨X, Y, mX, mY, f⟩ := h'
-    obtain ⟨S', T', w'⟩ := h''
-    refine ⟨eq (T' mX ≫ f) (T' mY), fun mZ => eqHom (T' mX ≫ f) (T' mY) ≫ T' mZ, ?_⟩
-    intro X' Y' mX' mY' f' mf'
-    rw [Category.assoc]
-    by_cases h : X = X' ∧ Y = Y'
-    · rcases h with ⟨rfl, rfl⟩
-      grind [eq_condition]
-    · rw [@w' _ _ mX' mY' f' _]
-      apply Finset.mem_of_mem_insert_of_ne mf'
-      contrapose h
-      obtain ⟨rfl, h⟩ := h
-      trivial
-
-中文:
-定理 inf_存在
-  证明: by
-  classical
-  induction H using Finset.induction with
-  | empty =>
-    obtain ⟨S, f⟩ := inf_objs_exists O
-    exact ⟨S, fun mX => (f mX).some, by rintro - - - - - ⟨⟩⟩
-  | insert h' H' nmf h'' =>
-    obtain ⟨X, Y, mX, mY, f⟩ := h'
-    obtain ⟨S', T', w'⟩ := h''
-    refine ⟨eq (T' mX ≫ f) (T' mY), fun mZ => eqHom (T' mX ≫ f) (T' mY) ≫ T' mZ, ?_⟩
-    intro X' Y' mX' mY' f' mf'
-    rw [Category.assoc]
-    by_cases h : X = X' ∧ Y = Y'
-    · rcases h with ⟨rfl, rfl⟩
-      grind [eq_condition]
-    · rw [@w' _ _ mX' mY' f' _]
-      apply Finset.mem_of_mem_insert_of_ne mf'
-      contrapose h
-      obtain ⟨rfl, h⟩ := h
-      trivial
-
-Depends on / 依赖: Category, Category.assoc, Finset, Finset.induction, Finset.mem_of_mem_ins, classical, eq_condition, inf_objs_exists, insert, mem_of_mem_ins
+--- 原说明 ---
+Given any `Finset` of objects `{X, ...}` and
+indexed collection of `Finset`s of morphisms `{f, ...}` in `C`,
+there exists an object `S`, with a morphism `T X : S ⟶ X` from each `X`,
+such that the triangles commute: `T X ≫ f = T Y`, for `f : X ⟶ Y` in the `Finset
+`.
 -/
 theorem inf_exists :
-    exists (S : C) (T : forall {X : C}, X in O -> (S ⟶ X)),
-      forall {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y},
-        (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H ->
+    ∃ (S : C) (T : ∀ {X : C}, X ∈ O → (S ⟶ X)),
+      ∀ {X Y : C} (mX : X ∈ O) (mY : Y ∈ O) {f : X ⟶ Y},
+        (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) ∈ H →
           T mX ≫ f = T mY := by
   classical
   induction H using Finset.induction with
@@ -1863,118 +2005,121 @@ theorem inf_exists :
       obtain ⟨rfl, h⟩ := h
       trivial
 
-/--
-Definition of `inf` / `inf` 的定义
+/-- An arbitrary choice of object "to the left"
+of a finite collection of objects `O` and morphisms `H`,
+making all the triangles commute.
+-/
+/-
+**CategoryTheory.IsCofiltered.inf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCo
+filtered`。
+形式化陈述：inf : C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.inf_exists`：inf_exists : exists (S : C) (T :
+ forall {X : C}, X in O -> (S ⟶ X)), forall {X Y : C} (mX : X in O) (mY : Y in O
+) {f : X ⟶ Y}, (⟨X, Y, mX, m…
 
-English:
-definition inf
-  signature: : C
-  body: (inf_exists O H).choose
-
-中文:
-定义 下确界
-  签名: : C
-  定义体: (inf_exists O H).choose
-
-Depends on / 依赖: inf_exists
+--- 原说明 ---
+An arbitrary choice of object "to the left"
+of a finite collection of objects `O` and morphisms `H`,
+making all the triangles commute.
 -/
 noncomputable def inf : C :=
   (inf_exists O H).choose
 
-/--
-Definition of `infTo` / `infTo` 的定义
-
-English:
-definition infTo
-  signature: {X : C} (m : X in O)
-  body: (inf_exists O H).choose_spec.choose m
-
-中文:
-定义 infTo
-  签名: {X : C} (m : X in O)
-  定义体: (inf_exists O H).choose_spec.choose m
-
-Depends on / 依赖: choose_spec, choose_spec.choose, inf_exists
+/-- The morphisms from `inf O H`.
 -/
-noncomputable def infTo {X : C} (m : X in O) : inf O H ⟶ X :=
+/-
+**CategoryTheory.IsCofiltered.infTo** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+Cofiltered`。
+形式化陈述：infTo {X : C} (m : X in O) : inf O H ⟶ X
+参数：m : X in O。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.inf_exists`：inf_exists : exists (S : C) (T :
+ forall {X : C}, X in O -> (S ⟶ X)), forall {X Y : C} (mX : X in O) (mY : Y in O
+) {f : X ⟶ Y}, (⟨X, Y, mX, m…
+
+--- 原说明 ---
+The morphisms from `inf O H`.
+-/
+noncomputable def infTo {X : C} (m : X ∈ O) : inf O H ⟶ X :=
   (inf_exists O H).choose_spec.choose m
 
-/--
-theorem `infTo_commutes` / 定理 `infTo_commutes`
-
-English:
-theorem infTo_commutes
-  statement: {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-  proof: (inf_exists O H).choose_spec.choose_spec mX mY mf
-
-中文:
-定理 infTo_commutes
-  结论: {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-  证明: (inf_exists O H).choose_spec.choose_spec mX mY mf
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec, inf_exists
+/-- The triangles consisting of a morphism in `H` and the maps from `inf O H` commute.
 -/
-theorem infTo_commutes {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y}
-    (mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H) :
+/-
+**CategoryTheory.IsCofiltered.infTo_commutes** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.IsCofiltered`。
+形式化陈述：infTo_commutes {X Y : C} (mX : X in O) (mY : Y in O) {f : X ⟶ Y} (mf : (⟨X
+, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) in H) : infTo O
+ H mX ≫ f = infTo O H mY
+参数：mX : X in O；mY : Y in O；mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X in O) (
+_ : Y in O), X ⟶ Y) in H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.IsCofiltered.inf_exists`：inf_exists : exists (S : C) (T :
+ forall {X : C}, X in O -> (S ⟶ X)), forall {X Y : C} (mX : X in O) (mY : Y in O
+) {f : X ⟶ Y}, (⟨X, Y, mX, m…
+
+--- 原说明 ---
+The triangles consisting of a morphism in `H` and the maps from `inf O H` commut
+e.
+-/
+theorem infTo_commutes {X Y : C} (mX : X ∈ O) (mY : Y ∈ O) {f : X ⟶ Y}
+    (mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) ∈ H) :
     infTo O H mX ≫ f = infTo O H mY :=
   (inf_exists O H).choose_spec.choose_spec mX mY mf
 
 variable {J : Type w} [SmallCategory J] [FinCategory J]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `cone_nonempty` / 定理 `cone_nonempty`
+/-- If we have `IsCofiltered C`, then for any functor `F : J ⥤ C` with `FinCategory J`,
+there exists a cone over `F`.
+-/
+/-
+**CategoryTheory.IsCofiltered.cone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsCofiltered`。
+形式化陈述：cone_nonempty (F : J ⥤ C) : Nonempty (Cone F)
+参数：F : J ⥤ C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `CategoryTheory.IsCofiltered.inf_exists`：inf_exists : exists (S : C) (T :
+ forall {X : C}, X in O -> (S ⟶ X)), forall {X Y : C} (mX : X in O) (mY : Y in O
+) {f : X ⟶ Y}, (⟨X, Y, mX, m…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PSigma.mk.injEq`：∀ {α : Sort u} {β : α → Sort v} (fst : α) (snd : β fst)
+ (fst_1 : α) (snd_1 : β fst_1),   (⟨fst, snd⟩ = ⟨fst_1, snd_1⟩) = (fst = fst_1 ∧
+ snd …
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem cone_nonempty
-  given: (F : J ⥤ C)
-  statement: Nonempty (Cone F)
-  proof: by
-  classical
-  let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
-    Finset.univ.biUnion fun X : J =>
-      Finset.univ.biUnion fun Y : J =>
-        Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w⟩ := inf_exists O H
-  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
-  intro j j' g
-  dsimp
-  simp only [Category.id_comp]
-  symm
-  apply w
-  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image,
-    PSigma.mk.injEq, true_and, exists_and_left]
-  exact ⟨j, rfl, j', g, by simp⟩
-
-中文:
-定理 cone_nonempty
-  条件: (F : J ⥤ C)
-  结论: 非空 (锥 F)
-  证明: by
-  classical
-  let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
-    Finset.univ.biUnion fun X : J =>
-      Finset.univ.biUnion fun Y : J =>
-        Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w⟩ := inf_exists O H
-  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
-  intro j j' g
-  dsimp
-  simp only [Category.id_comp]
-  symm
-  apply w
-  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image,
-    PSigma.mk.injEq, true_and, exists_and_left]
-  exact ⟨j, rfl, j', g, by simp⟩
-
-Depends on / 依赖: Category, Category.id_comp, F.map, F.obj, Finset, Finset.mem_biUnion, Finset.mem_image, Finset.mem_univ, Finset.univ.biUnion, Finset.univ.image, PSigma, PSigma.mk.injEq, biUnion, classical, id_comp, inf_exists, mem_biUnion, mem_image, mem_univ
+--- 原说明 ---
+If we have `IsCofiltered C`, then for any functor `F : J ⥤ C` with `FinCategory 
+J`,
+there exists a cone over `F`.
 -/
 theorem cone_nonempty (F : J ⥤ C) : Nonempty (Cone F) := by
   classical
   let O := Finset.univ.image F.obj
-  let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
+  let H : Finset (Σ' (X Y : C) (_ : X ∈ O) (_ : Y ∈ O), X ⟶ Y) :=
     Finset.univ.biUnion fun X : J =>
       Finset.univ.biUnion fun Y : J =>
         Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
@@ -1989,155 +2134,148 @@ theorem cone_nonempty (F : J ⥤ C) : Nonempty (Cone F) := by
     PSigma.mk.injEq, true_and, exists_and_left]
   exact ⟨j, rfl, j', g, by simp⟩
 
-/--
-Definition of `cone` / `cone` 的定义
+/-- An arbitrary choice of cone over `F : J ⥤ C`, for `FinCategory J` and `IsCofiltered C`.
+-/
+/-
+**CategoryTheory.IsCofiltered.cone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsC
+ofiltered`。
+形式化陈述：cone (F : J ⥤ C) : Cone F
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.cone_nonempty`：cone_nonempty (F : J ⥤ C) : N
+onempty (Cone F)
 
-English:
-definition cone
-  signature: (F : J ⥤ C)
-  body: (cone_nonempty F).some
-
-中文:
-定义 cone
-  签名: (F : J ⥤ C)
-  定义体: (cone_nonempty F).some
-
-Depends on / 依赖: cone_nonempty
+--- 原说明 ---
+An arbitrary choice of cone over `F : J ⥤ C`, for `FinCategory J` and `IsCofilte
+red C`.
 -/
 noncomputable def cone (F : J ⥤ C) : Cone F :=
   (cone_nonempty F).some
 
 variable {D : Type u₁} [Category.{v₁} D]
 
-/--
-theorem `of_left_adjoint` / 定理 `of_left_adjoint`
+/-- If `C` is cofiltered, and we have a functor `L : C ⥤ D` with a right adjoint,
+then `D` is cofiltered.
+-/
+/-
+**CategoryTheory.IsCofiltered.of_left_adjoint** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsCofiltered`。
+形式化陈述：of_left_adjoint {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofiltered D
+参数：h : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.of_left_adjoint`：of_left_adjoint {L :
+ C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofilteredOrEmpty D
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `CategoryTheory.IsCofiltered.nonempty`：∀ {C : Type u} {inst : CategoryThe
+ory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C], Nonempty C
 
-English:
-theorem of_left_adjoint
-  given: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  statement: IsCofiltered D
-  proof: { IsCofilteredOrEmpty.of_left_adjoint h with
-    nonempty := IsCofiltered.nonempty.map L.obj }
-
-中文:
-定理 of_left_adjoint
-  条件: {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R)
-  结论: 是余filtered D
-  证明: { IsCofilteredOrEmpty.of_left_adjoint h with
-    nonempty := IsCofiltered.nonempty.map L.obj }
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.nonempty.map, IsCofilteredOrEmpty, IsCofilteredOrEmpty.of_left_adjoint, L.obj, nonempty, of_left_adjoint
+--- 原说明 ---
+If `C` is cofiltered, and we have a functor `L : C ⥤ D` with a right adjoint,
+then `D` is cofiltered.
 -/
 theorem of_left_adjoint {L : C ⥤ D} {R : D ⥤ C} (h : L ⊣ R) : IsCofiltered D :=
   { IsCofilteredOrEmpty.of_left_adjoint h with
     nonempty := IsCofiltered.nonempty.map L.obj }
 
-/--
-theorem `of_isLeftAdjoint` / 定理 `of_isLeftAdjoint`
+/-- If `C` is cofiltered, and we have a left adjoint functor `L : C ⥤ D`, then `D` is cofiltered. -/
+/-
+**CategoryTheory.IsCofiltered.of_isLeftAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsCofiltered`。
+形式化陈述：of_isLeftAdjoint (L : C ⥤ D) [L.IsLeftAdjoint] : IsCofiltered D
+参数：L : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_left_adjoint`：of_left_adjoint {L : C ⥤ D}
+ {R : D ⥤ C} (h : L ⊣ R) : IsCofiltered D
 
-English:
-theorem of_isLeftAdjoint
-  given: (L : C ⥤ D) [L.IsLeftAdjoint]
-  statement: IsCofiltered D
-  proof: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
-
-中文:
-定理 of_isLeftAdjoint
-  条件: (L : C ⥤ D) [L.是左伴随]
-  结论: 是余filtered D
-  证明: of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, ofIsLeftAdjoint, of_left_adjoint
+--- 原说明 ---
+If `C` is cofiltered, and we have a left adjoint functor `L : C ⥤ D`, then `D` i
+s cofiltered.
 -/
 theorem of_isLeftAdjoint (L : C ⥤ D) [L.IsLeftAdjoint] : IsCofiltered D :=
   of_left_adjoint (Adjunction.ofIsLeftAdjoint L)
 
-/--
-theorem `of_equivalence` / 定理 `of_equivalence`
+/-- Being cofiltered is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.IsCofiltered.of_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.IsCofiltered`。
+形式化陈述：of_equivalence (h : C ≌ D) : IsCofiltered D
+参数：h : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_left_adjoint`：of_left_adjoint {L : C ⥤ D}
+ {R : D ⥤ C} (h : L ⊣ R) : IsCofiltered D
 
-English:
-theorem of_equivalence
-  given: (h : C ≌ D)
-  statement: IsCofiltered D
-  proof: of_left_adjoint h.toAdjunction
-
-omit [IsCofiltered C] in
-
-中文:
-定理 of_equivalence
-  条件: (h : C ≌ D)
-  结论: 是余filtered D
-  证明: of_left_adjoint h.toAdjunction
-
-omit [IsCofiltered C] in
-
-Depends on / 依赖: h.toAdjunction, of_left_adjoint, toAdjunction
+--- 原说明 ---
+Being cofiltered is preserved by equivalence of categories.
 -/
 theorem of_equivalence (h : C ≌ D) : IsCofiltered D :=
   of_left_adjoint h.toAdjunction
 
 omit [IsCofiltered C] in
-/--
-lemma `iff_of_equivalence` / 引理 `iff_of_equivalence`
-
-English:
-lemma iff_of_equivalence
-  given: (e : C ≌ D)
-  statement: IsCofiltered C ↔ IsCofiltered D
-  proof: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
-
-omit [IsCofiltered C] in
-
-中文:
-引理 iff_of_equivalence
-  条件: (e : C ≌ D)
-  结论: 是余filtered C ↔ 是余filtered D
-  证明: ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
-
-omit [IsCofiltered C] in
-
-Depends on / 依赖: e.symm, of_equivalence
+/-
+**CategoryTheory.IsCofiltered.iff_of_equivalence** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.IsCofiltered`。
+形式化陈述：iff_of_equivalence (e : C ≌ D) : IsCofiltered C ↔ IsCofiltered D
+参数：e : C ≌ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
 -/
 lemma iff_of_equivalence (e : C ≌ D) : IsCofiltered C ↔ IsCofiltered D :=
-  ⟨fun _ => .of_equivalence e, fun _ => .of_equivalence e.symm⟩
+  ⟨fun _ ↦ .of_equivalence e, fun _ ↦ .of_equivalence e.symm⟩
 
 omit [IsCofiltered C] in
-/--
-lemma `wideCospan` / 引理 `wideCospan`
-
-English:
-lemma wideCospan
-  statement: [IsCofilteredOrEmpty C]
-  proof: by
-  have : IsCofiltered C := { nonempty := ⟨i⟩ }
-  classical
-  cases nonempty_fintype I
-  obtain ⟨k, fk, hk⟩ := IsCofiltered.inf_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨j x, i, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
-
-中文:
-引理 wideCospan
-  结论: [是余filteredOrEmpty C]
-  证明: by
-  have : IsCofiltered C := { nonempty := ⟨i⟩ }
-  classical
-  cases nonempty_fintype I
-  obtain ⟨k, fk, hk⟩ := IsCofiltered.inf_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨j x, i, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
-
-Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.mem_univ, Finset.univ.image, IsCofiltered, IsCofiltered.inf_exists, classical, inf_exists, insert, mem_image_of_mem, mem_univ, nonempty, nonempty_fintype
+/-
+**CategoryTheory.IsCofiltered.wideCospan** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.IsCofiltered`。
+形式化陈述：wideCospan [IsCofilteredOrEmpty C] {I : Type*} [Finite I] {i : C} {j : I -
+> C} (f : forall x, j x ⟶ i) : exists k fki, exists g : forall x, k ⟶ j x, foral
+l x, g x ≫ f x = fki
+参数：f : forall x, j x ⟶ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `CategoryTheory.IsCofiltered.inf_exists`：inf_exists : exists (S : C) (T :
+ forall {X : C}, X in O -> (S ⟶ X)), forall {X Y : C} (mX : X in O) (mY : Y in O
+) {f : X ⟶ Y}, (⟨X, Y, mX, m…
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
 lemma wideCospan [IsCofilteredOrEmpty C]
-    {I : Type*} [Finite I] {i : C} {j : I -> C} (f : forall x, j x ⟶ i) :
-    exists k fki, exists g : forall x, k ⟶ j x, forall x, g x ≫ f x = fki := by
+    {I : Type*} [Finite I] {i : C} {j : I → C} (f : ∀ x, j x ⟶ i) :
+    ∃ k fki, ∃ g : ∀ x, k ⟶ j x, ∀ x, g x ≫ f x = fki := by
   have : IsCofiltered C := { nonempty := ⟨i⟩ }
   classical
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := IsCofiltered.inf_exists (insert i (Finset.univ.image j))
-    (Finset.univ.image fun x => ⟨j x, i, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
+    (Finset.univ.image fun x ↦ ⟨j x, i, by simp, by simp, f x⟩)
+  exact ⟨k, _, _, fun x ↦ hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 end Nonempty
 
@@ -2147,52 +2285,46 @@ section OfCone
 open CategoryTheory.Limits
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `of_cone_nonempty` / 定理 `of_cone_nonempty`
+/-- If every finite diagram in `C` admits a cone, then `C` is cofiltered. It is sufficient to
+verify this for diagrams whose shape lives in any one fixed universe. -/
+/-
+**CategoryTheory.IsCofiltered.of_cone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsCofiltered`。
+形式化陈述：of_cone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCategory J
+] (F : J ⥤ C), Nonempty (Cone F)) : IsCofiltered C
+参数：h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonemp
+ty (Cone F)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ULiftHom.down_map`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y : CategoryTheory.ULiftHom C} (f : X ⟶ Y),   CategoryT
+heory.ULiftHom.down.ma…
+· 使用定理 `CategoryTheory.ULift.downFunctor_map`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X Y : ULift.{u₂, u₁} C} (f : X ⟶ Y),   CategoryTheory
+.ULift.downFunctor.map f =…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem of_cone_nonempty
-  statement: (h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
-  proof: by
-  have : Nonempty C := by
-    obtain ⟨c⟩ := h (Functor.empty _)
-    exact ⟨c.pt⟩
-  have : IsCofilteredOrEmpty C := by
-    refine ⟨?_, ?_⟩
-    · intro X Y
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
-    · intro X Y f g
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
-      refine ⟨c.pt, c.π.app ⟨WalkingParallelPair.zero⟩, ?_⟩
-      have h₁ := c.π.naturality ⟨WalkingParallelPairHom.left⟩
-      have h₂ := c.π.naturality ⟨WalkingParallelPairHom.right⟩
-      simp_all
-  apply IsCofiltered.mk
-
-中文:
-定理 of_cone_nonempty
-  结论: (h : 对任意 {J : 类型 w} [小范畴 J] [有限范畴 J] (F : J ⥤ C),
-  证明: by
-  have : Nonempty C := by
-    obtain ⟨c⟩ := h (Functor.empty _)
-    exact ⟨c.pt⟩
-  have : IsCofilteredOrEmpty C := by
-    refine ⟨?_, ?_⟩
-    · intro X Y
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
-    · intro X Y f g
-      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
-      refine ⟨c.pt, c.π.app ⟨WalkingParallelPair.zero⟩, ?_⟩
-      have h₁ := c.π.naturality ⟨WalkingParallelPairHom.left⟩
-      have h₂ := c.π.naturality ⟨WalkingParallelPairHom.right⟩
-      simp_all
-  apply IsCofiltered.mk
-
-Depends on / 依赖: Functor, Functor.empty, IsCofilteredOrEmpty, Nonempty, ULift.downFunctor, ULiftHom, ULiftHom.down, WalkingPair, WalkingPair.left, WalkingPair.right, WalkingParallelPair, WalkingParallelPair.zero, WalkingParallelPairHom, WalkingParallelPairHom.left, c.pt, downFunctor, naturality, parallelPair
+--- 原说明 ---
+If every finite diagram in `C` admits a cone, then `C` is cofiltered. It is suff
+icient to
+verify this for diagrams whose shape lives in any one fixed universe.
 -/
-theorem of_cone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+theorem of_cone_nonempty (h : ∀ {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
     Nonempty (Cone F)) : IsCofiltered C := by
   have : Nonempty C := by
     obtain ⟨c⟩ := h (Functor.empty _)
@@ -2209,67 +2341,70 @@ theorem of_cone_nonempty (h : forall {J : Type w} [SmallCategory J] [FinCategory
       have h₂ := c.π.naturality ⟨WalkingParallelPairHom.right⟩
       simp_all
   apply IsCofiltered.mk
-
-/--
-theorem `of_hasFiniteLimits` / 定理 `of_hasFiniteLimits`
-
-English:
-theorem of_hasFiniteLimits
-  given: [HasFiniteLimits C]
-  statement: IsCofiltered C
-  proof: of_cone_nonempty.{v} C fun F => ⟨limit.cone F⟩
-
-中文:
-定理 of_hasFiniteLimits
-  条件: [有有限极限 C]
-  结论: 是余filtered C
-  证明: of_cone_nonempty.{v} C fun F => ⟨limit.cone F⟩
-
-Depends on / 依赖: limit.cone, of_cone_nonempty
+/-
+**CategoryTheory.IsCofiltered.of_hasFiniteLimits** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsCofiltered`。
+形式化陈述：of_hasFiniteLimits [HasFiniteLimits C] : IsCofiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_cone_nonempty`：of_cone_nonempty (h : fora
+ll {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F)
+) : IsCofiltered C
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
 -/
 theorem of_hasFiniteLimits [HasFiniteLimits C] : IsCofiltered C :=
   of_cone_nonempty.{v} C fun F => ⟨limit.cone F⟩
-
-/--
-theorem `of_isInitial` / 定理 `of_isInitial`
-
-English:
-theorem of_isInitial
-  given: {X : C} (h : IsInitial X)
-  statement: IsCofiltered C
-  proof: of_cone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.to _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
-中文:
-定理 of_isInitial
-  条件: {X : C} (h : IsInitial X)
-  结论: 是余filtered C
-  证明: of_cone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.to _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
-Depends on / 依赖: h.hom_ext, h.to, hom_ext, of_cone_nonempty
+/-
+**CategoryTheory.IsCofiltered.of_isInitial** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsCofiltered`。
+形式化陈述：of_isInitial {X : C} (h : IsInitial X) : IsCofiltered C
+参数：h : IsInitial X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_cone_nonempty`：of_cone_nonempty (h : fora
+ll {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F)
+) : IsCofiltered C
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
 -/
 theorem of_isInitial {X : C} (h : IsInitial X) : IsCofiltered C :=
   of_cone_nonempty.{v} _ fun {_} _ _ _ => ⟨⟨X, ⟨fun _ => h.to _, fun _ _ _ => h.hom_ext _ _⟩⟩⟩
-
+/-
+**CategoryTheory.IsCofiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsCofil
+tered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) of_hasInitial [HasInitial C] : IsCofiltered C :=
   of_isInitial _ initialIsInitial
 
-/--
-theorem `iff_cone_nonempty` / 定理 `iff_cone_nonempty`
+/-- For every universe `w`, `C` is filtered if and only if every finite diagram in `C` with shape
+in `w` admits a cocone. -/
+/-
+**CategoryTheory.IsCofiltered.iff_cone_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.IsCofiltered`。
+形式化陈述：iff_cone_nonempty : IsCofiltered C ↔ forall {J : Type w} [SmallCategory J]
+ [FinCategory J] (F : J ⥤ C), Nonempty (Cone F)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.cone_nonempty`：cone_nonempty (F : J ⥤ C) : N
+onempty (Cone F)
+· 使用定理 `CategoryTheory.IsCofiltered.of_cone_nonempty`：of_cone_nonempty (h : fora
+ll {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F)
+) : IsCofiltered C
 
-English:
-theorem iff_cone_nonempty
-  statement: IsCofiltered C ↔
-  proof: ⟨fun _ _ _ _ F => cone_nonempty F, of_cone_nonempty C⟩
-
-中文:
-定理 iff_cone_nonempty
-  结论: 是余filtered C ↔
-  证明: ⟨fun _ _ _ _ F => cone_nonempty F, of_cone_nonempty C⟩
-
-Depends on / 依赖: cone_nonempty, of_cone_nonempty
+--- 原说明 ---
+For every universe `w`, `C` is filtered if and only if every finite diagram in `
+C` with shape
+in `w` admits a cocone.
 -/
 theorem iff_cone_nonempty : IsCofiltered C ↔
-    forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F) :=
+    ∀ {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F) :=
   ⟨fun _ _ _ _ F => cone_nonempty F, of_cone_nonempty C⟩
 
 end OfCone
@@ -2280,32 +2415,23 @@ section Opposite
 
 open Opposite
 
-/--
-Instance `isCofilteredOrEmpty_op_of_isFilteredOrEmpty` / 实例 `isCofilteredOrEmpty_op_of_isFilteredOrEmpty`
-
-English:
-instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty
-  signature: [IsFilteredOrEmpty C]
-  body: ⟨op (IsFiltered.max X.unop Y.unop), (IsFiltered.leftToMax _ _).op,
-      (IsFiltered.rightToMax _ _).op, trivial⟩
-  cone_maps X Y f g :=
-    ⟨op (IsFiltered.coeq f.unop g.unop), (IsFiltered.coeqHom _ _).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
-      congr 1
-      exact IsFiltered.coeq_condition f.unop g.unop⟩
-
-中文:
-实例 isCofilteredOrEmpty_op_of_isFilteredOrEmpty
-  签名: [是FilteredOrEmpty C]
-  定义体: ⟨op (IsFiltered.max X.unop Y.unop), (IsFiltered.leftToMax _ _).op,
-      (IsFiltered.rightToMax _ _).op, trivial⟩
-  cone_maps X Y f g :=
-    ⟨op (IsFiltered.coeq f.unop g.unop), (IsFiltered.coeqHom _ _).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
-      congr 1
-      exact IsFiltered.coeq_condition f.unop g.unop⟩
-
-Depends on / 依赖: IsFiltered, IsFiltered.coeq, IsFiltered.coeqHom, IsFiltered.coeq_condition, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, X.unop, Y.unop, coeqHom, coeq_condition, cone_maps, f.unop, f.unop.op, g.unop, g.unop.op, leftToMax, op_comp, rightToMax
+/-
+**CategoryTheory.isCofilteredOrEmpty_op_of_isFilteredOrEmpty** 是 Mathlib 中的一个实例，
+位于命名空间 `CategoryTheory`。
+形式化陈述：isCofilteredOrEmpty_op_of_isFilteredOrEmpty [IsFilteredOrEmpty C] : IsCofi
+lteredOrEmpty Cᵒᵖ where cone_objs X Y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.IsFiltered.coeq_condition`：coeq_condition {j j' : C} (f f
+' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHom f f'
 -/
 instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty [IsFilteredOrEmpty C] :
     IsCofilteredOrEmpty Cᵒᵖ where
@@ -2314,54 +2440,42 @@ instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty [IsFilteredOrEmpty C] :
       (IsFiltered.rightToMax _ _).op, trivial⟩
   cone_maps X Y f g :=
     ⟨op (IsFiltered.coeq f.unop g.unop), (IsFiltered.coeqHom _ _).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      rw [show f = f.unop.op by simp, show g = g.unop.op by simp, ← op_comp, ← op_comp]
       congr 1
       exact IsFiltered.coeq_condition f.unop g.unop⟩
-
-/--
-Instance `isCofiltered_op_of_isFiltered` / 实例 `isCofiltered_op_of_isFiltered`
-
-English:
-instance isCofiltered_op_of_isFiltered
-  signature: [IsFiltered C]
-  body: letI : Nonempty C := IsFiltered.nonempty; inferInstance
-
-中文:
-实例 isCofiltered_op_of_isFiltered
-  签名: [是Filtered C]
-  定义体: letI : Nonempty C := IsFiltered.nonempty; inferInstance
-
-Depends on / 依赖: IsFiltered, IsFiltered.nonempty, Nonempty, nonempty
+/-
+**CategoryTheory.isCofiltered_op_of_isFiltered** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isCofiltered_op_of_isFiltered [IsFiltered C] : IsCofiltered Cᵒᵖ where none
+mpty
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `Opposite.instNonempty`：∀ {α : Sort u} [Nonempty α], Nonempty αᵒᵖ
+· 使用定理 `CategoryTheory.IsFiltered.nonempty`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.IsFiltered C], Nonempty C
 -/
 instance isCofiltered_op_of_isFiltered [IsFiltered C] : IsCofiltered Cᵒᵖ where
   nonempty := letI : Nonempty C := IsFiltered.nonempty; inferInstance
-
-/--
-Instance `isFilteredOrEmpty_op_of_isCofilteredOrEmpty` / 实例 `isFilteredOrEmpty_op_of_isCofilteredOrEmpty`
-
-English:
-instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty
-  signature: [IsCofilteredOrEmpty C]
-  body: ⟨op (IsCofiltered.min X.unop Y.unop), (IsCofiltered.minToLeft X.unop Y.unop).op,
-      (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
-  cocone_maps X Y f g :=
-    ⟨op (IsCofiltered.eq f.unop g.unop), (IsCofiltered.eqHom f.unop g.unop).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
-      congr 1
-      exact IsCofiltered.eq_condition f.unop g.unop⟩
-
-中文:
-实例 isFilteredOrEmpty_op_of_isCofilteredOrEmpty
-  签名: [是余filteredOrEmpty C]
-  定义体: ⟨op (IsCofiltered.min X.unop Y.unop), (IsCofiltered.minToLeft X.unop Y.unop).op,
-      (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
-  cocone_maps X Y f g :=
-    ⟨op (IsCofiltered.eq f.unop g.unop), (IsCofiltered.eqHom f.unop g.unop).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
-      congr 1
-      exact IsCofiltered.eq_condition f.unop g.unop⟩
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.eq, IsCofiltered.eqHom, IsCofiltered.eq_condition, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.minToRight, X.unop, Y.unop, cocone_maps, eq_condition, f.unop, f.unop.op, g.unop, g.unop.op, minToLeft, minToRight, op_comp
+/-
+**CategoryTheory.isFilteredOrEmpty_op_of_isCofilteredOrEmpty** 是 Mathlib 中的一个实例，
+位于命名空间 `CategoryTheory`。
+形式化陈述：isFilteredOrEmpty_op_of_isCofilteredOrEmpty [IsCofilteredOrEmpty C] : IsFi
+lteredOrEmpty Cᵒᵖ where cocone_objs X Y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.IsCofiltered.eq_condition`：eq_condition {j j' : C} (f f' 
+: j ⟶ j') : eqHom f f' ≫ f = eqHom f f' ≫ f'
 -/
 instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty [IsCofilteredOrEmpty C] :
     IsFilteredOrEmpty Cᵒᵖ where
@@ -2370,252 +2484,151 @@ instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty [IsCofilteredOrEmpty C] :
       (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
   cocone_maps X Y f g :=
     ⟨op (IsCofiltered.eq f.unop g.unop), (IsCofiltered.eqHom f.unop g.unop).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      rw [show f = f.unop.op by simp, show g = g.unop.op by simp, ← op_comp, ← op_comp]
       congr 1
       exact IsCofiltered.eq_condition f.unop g.unop⟩
-
-/--
-Instance `isFiltered_op_of_isCofiltered` / 实例 `isFiltered_op_of_isCofiltered`
-
-English:
-instance isFiltered_op_of_isCofiltered
-  signature: [IsCofiltered C]
-  body: letI : Nonempty C := IsCofiltered.nonempty; inferInstance
-
-中文:
-实例 isFiltered_op_of_isCofiltered
-  签名: [是余filtered C]
-  定义体: letI : Nonempty C := IsCofiltered.nonempty; inferInstance
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.nonempty, Nonempty, nonempty
+/-
+**CategoryTheory.isFiltered_op_of_isCofiltered** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isFiltered_op_of_isCofiltered [IsCofiltered C] : IsFiltered Cᵒᵖ where none
+mpty
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `Opposite.instNonempty`：∀ {α : Sort u} [Nonempty α], Nonempty αᵒᵖ
+· 使用定理 `CategoryTheory.IsCofiltered.nonempty`：∀ {C : Type u} {inst : CategoryThe
+ory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C], Nonempty C
 -/
 instance isFiltered_op_of_isCofiltered [IsCofiltered C] : IsFiltered Cᵒᵖ where
   nonempty := letI : Nonempty C := IsCofiltered.nonempty; inferInstance
 
-/--
-lemma `isCofilteredOrEmpty_of_isFilteredOrEmpty_op` / 引理 `isCofilteredOrEmpty_of_isFilteredOrEmpty_op`
+/-- If Cᵒᵖ is filtered or empty, then C is cofiltered or empty. -/
+/-
+**CategoryTheory.isCofilteredOrEmpty_of_isFilteredOrEmpty_op** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory`。
+形式化陈述：isCofilteredOrEmpty_of_isFilteredOrEmpty_op [IsFilteredOrEmpty Cᵒᵖ] : IsCo
+filteredOrEmpty C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofilteredOrEmpty.of_equivalence`：of_equivalence (h : C
+ ≌ D) : IsCofilteredOrEmpty D
 
-English:
-lemma isCofilteredOrEmpty_of_isFilteredOrEmpty_op
-  given: [IsFilteredOrEmpty Cᵒᵖ]
-  statement: IsCofilteredOrEmpty C
-  proof: IsCofilteredOrEmpty.of_equivalence (opOpEquivalence _)
-
-中文:
-引理 isCofilteredOrEmpty_of_isFilteredOrEmpty_op
-  条件: [是FilteredOrEmpty Cᵒᵖ]
-  结论: 是余filteredOrEmpty C
-  证明: IsCofilteredOrEmpty.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.of_equivalence, of_equivalence, opOpEquivalence
+--- 原说明 ---
+If Cᵒᵖ is filtered or empty, then C is cofiltered or empty.
 -/
 lemma isCofilteredOrEmpty_of_isFilteredOrEmpty_op [IsFilteredOrEmpty Cᵒᵖ] : IsCofilteredOrEmpty C :=
   IsCofilteredOrEmpty.of_equivalence (opOpEquivalence _)
 
-/--
-lemma `isFilteredOrEmpty_of_isCofilteredOrEmpty_op` / 引理 `isFilteredOrEmpty_of_isCofilteredOrEmpty_op`
+/-- If Cᵒᵖ is cofiltered or empty, then C is filtered or empty. -/
+/-
+**CategoryTheory.isFilteredOrEmpty_of_isCofilteredOrEmpty_op** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory`。
+形式化陈述：isFilteredOrEmpty_of_isCofilteredOrEmpty_op [IsCofilteredOrEmpty Cᵒᵖ] : Is
+FilteredOrEmpty C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_equivalence`：of_equivalence (h : C ≌
+ D) : IsFilteredOrEmpty D
 
-English:
-lemma isFilteredOrEmpty_of_isCofilteredOrEmpty_op
-  given: [IsCofilteredOrEmpty Cᵒᵖ]
-  statement: IsFilteredOrEmpty C
-  proof: IsFilteredOrEmpty.of_equivalence (opOpEquivalence _)
-
-中文:
-引理 isFilteredOrEmpty_of_isCofilteredOrEmpty_op
-  条件: [是余filteredOrEmpty Cᵒᵖ]
-  结论: 是FilteredOrEmpty C
-  证明: IsFilteredOrEmpty.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.of_equivalence, of_equivalence, opOpEquivalence
+--- 原说明 ---
+If Cᵒᵖ is cofiltered or empty, then C is filtered or empty.
 -/
 lemma isFilteredOrEmpty_of_isCofilteredOrEmpty_op [IsCofilteredOrEmpty Cᵒᵖ] : IsFilteredOrEmpty C :=
   IsFilteredOrEmpty.of_equivalence (opOpEquivalence _)
 
-/--
-lemma `isCofiltered_of_isFiltered_op` / 引理 `isCofiltered_of_isFiltered_op`
+/-- If Cᵒᵖ is filtered, then C is cofiltered. -/
+/-
+**CategoryTheory.isCofiltered_of_isFiltered_op** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isCofiltered_of_isFiltered_op [IsFiltered Cᵒᵖ] : IsCofiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
 
-English:
-lemma isCofiltered_of_isFiltered_op
-  given: [IsFiltered Cᵒᵖ]
-  statement: IsCofiltered C
-  proof: IsCofiltered.of_equivalence (opOpEquivalence _)
-
-中文:
-引理 isCofiltered_of_isFiltered_op
-  条件: [是Filtered Cᵒᵖ]
-  结论: 是余filtered C
-  证明: IsCofiltered.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, of_equivalence, opOpEquivalence
+--- 原说明 ---
+If Cᵒᵖ is filtered, then C is cofiltered.
 -/
 lemma isCofiltered_of_isFiltered_op [IsFiltered Cᵒᵖ] : IsCofiltered C :=
   IsCofiltered.of_equivalence (opOpEquivalence _)
 
-/--
-lemma `isFiltered_of_isCofiltered_op` / 引理 `isFiltered_of_isCofiltered_op`
+/-- If Cᵒᵖ is cofiltered, then C is filtered. -/
+/-
+**CategoryTheory.isFiltered_of_isCofiltered_op** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isFiltered_of_isCofiltered_op [IsCofiltered Cᵒᵖ] : IsFiltered C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
 
-English:
-lemma isFiltered_of_isCofiltered_op
-  given: [IsCofiltered Cᵒᵖ]
-  statement: IsFiltered C
-  proof: IsFiltered.of_equivalence (opOpEquivalence _)
-
-中文:
-引理 isFiltered_of_isCofiltered_op
-  条件: [是余filtered Cᵒᵖ]
-  结论: 是Filtered C
-  证明: IsFiltered.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, of_equivalence, opOpEquivalence
+--- 原说明 ---
+If Cᵒᵖ is cofiltered, then C is filtered.
 -/
 lemma isFiltered_of_isCofiltered_op [IsCofiltered Cᵒᵖ] : IsFiltered C :=
   IsFiltered.of_equivalence (opOpEquivalence _)
-
-/--
-lemma `isCofiltered_op_iff_isFiltered` / 引理 `isCofiltered_op_iff_isFiltered`
-
-English:
-lemma isCofiltered_op_iff_isFiltered
-  statement: IsCofiltered Cᵒᵖ ↔ IsFiltered C
-  proof: ⟨fun _ => isFiltered_of_isCofiltered_op _, fun _ => inferInstance⟩
-
-中文:
-引理 isCofiltered_op_iff_isFiltered
-  结论: 是余filtered Cᵒᵖ ↔ 是Filtered C
-  证明: ⟨fun _ => isFiltered_of_isCofiltered_op _, fun _ => inferInstance⟩
-
-Depends on / 依赖: isFiltered_of_isCofiltered_op
+/-
+**CategoryTheory.isCofiltered_op_iff_isFiltered** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：isCofiltered_op_iff_isFiltered : IsCofiltered Cᵒᵖ ↔ IsFiltered C
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isFiltered_of_isCofiltered_op`：isFiltered_of_isCofiltered
+_op [IsCofiltered Cᵒᵖ] : IsFiltered C
 -/
 lemma isCofiltered_op_iff_isFiltered : IsCofiltered Cᵒᵖ ↔ IsFiltered C :=
-  ⟨fun _ => isFiltered_of_isCofiltered_op _, fun _ => inferInstance⟩
-
-/--
-lemma `isFiltered_op_iff_isCofiltered` / 引理 `isFiltered_op_iff_isCofiltered`
-
-English:
-lemma isFiltered_op_iff_isCofiltered
-  statement: IsFiltered Cᵒᵖ ↔ IsCofiltered C
-  proof: ⟨fun _ => isCofiltered_of_isFiltered_op _, fun _ => inferInstance⟩
-
-中文:
-引理 isFiltered_op_iff_isCofiltered
-  结论: 是Filtered Cᵒᵖ ↔ 是余filtered C
-  证明: ⟨fun _ => isCofiltered_of_isFiltered_op _, fun _ => inferInstance⟩
-
-Depends on / 依赖: isCofiltered_of_isFiltered_op
+  ⟨fun _ ↦ isFiltered_of_isCofiltered_op _, fun _ ↦ inferInstance⟩
+/-
+**CategoryTheory.isFiltered_op_iff_isCofiltered** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：isFiltered_op_iff_isCofiltered : IsFiltered Cᵒᵖ ↔ IsCofiltered C
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isCofiltered_of_isFiltered_op`：isCofiltered_of_isFiltered
+_op [IsFiltered Cᵒᵖ] : IsCofiltered C
 -/
 lemma isFiltered_op_iff_isCofiltered : IsFiltered Cᵒᵖ ↔ IsCofiltered C :=
-  ⟨fun _ => isCofiltered_of_isFiltered_op _, fun _ => inferInstance⟩
+  ⟨fun _ ↦ isCofiltered_of_isFiltered_op _, fun _ ↦ inferInstance⟩
 
 end Opposite
 
 section ULift
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFiltered
-  signature: C] : IsFiltered (ULift.{u₂} C)
-  body: IsFiltered.of_equivalence ULift.equivalence
-
-中文:
-实例 [是Filtered
-  签名: C] : 是Filtered (类型层提升.{u₂} C)
-  定义体: IsFiltered.of_equivalence ULift.equivalence
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, ULift.equivalence, equivalence, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFiltered C] : IsFiltered (ULift.{u₂} C) :=
   IsFiltered.of_equivalence ULift.equivalence
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: C] : IsCofiltered (ULift.{u₂} C)
-  body: IsCofiltered.of_equivalence ULift.equivalence
-
-中文:
-实例 [是余filtered
-  签名: C] : 是余filtered (类型层提升.{u₂} C)
-  定义体: IsCofiltered.of_equivalence ULift.equivalence
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, ULift.equivalence, equivalence, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered C] : IsCofiltered (ULift.{u₂} C) :=
   IsCofiltered.of_equivalence ULift.equivalence
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFiltered
-  signature: C] : IsFiltered (ULiftHom C)
-  body: IsFiltered.of_equivalence ULiftHom.equiv
-
-中文:
-实例 [是Filtered
-  签名: C] : 是Filtered (ULiftHom C)
-  定义体: IsFiltered.of_equivalence ULiftHom.equiv
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, ULiftHom, ULiftHom.equiv, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFiltered C] : IsFiltered (ULiftHom C) :=
   IsFiltered.of_equivalence ULiftHom.equiv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: C] : IsCofiltered (ULiftHom C)
-  body: IsCofiltered.of_equivalence ULiftHom.equiv
-
-中文:
-实例 [是余filtered
-  签名: C] : 是余filtered (ULiftHom C)
-  定义体: IsCofiltered.of_equivalence ULiftHom.equiv
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, ULiftHom, ULiftHom.equiv, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered C] : IsCofiltered (ULiftHom C) :=
   IsCofiltered.of_equivalence ULiftHom.equiv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFiltered
-  signature: C] : IsFiltered (AsSmall C)
-  body: IsFiltered.of_equivalence AsSmall.equiv
-
-中文:
-实例 [是Filtered
-  签名: C] : 是Filtered (AsSmall C)
-  定义体: IsFiltered.of_equivalence AsSmall.equiv
-
-Depends on / 依赖: AsSmall, AsSmall.equiv, IsFiltered, IsFiltered.of_equivalence, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFiltered C] : IsFiltered (AsSmall C) :=
   IsFiltered.of_equivalence AsSmall.equiv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: C] : IsCofiltered (AsSmall C)
-  body: IsCofiltered.of_equivalence AsSmall.equiv
-
-中文:
-实例 [是余filtered
-  签名: C] : 是余filtered (AsSmall C)
-  定义体: IsCofiltered.of_equivalence AsSmall.equiv
-
-Depends on / 依赖: AsSmall, AsSmall.equiv, IsCofiltered, IsCofiltered.of_equivalence, of_equivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered C] : IsCofiltered (AsSmall C) :=
   IsCofiltered.of_equivalence AsSmall.equiv
@@ -2624,91 +2637,43 @@ end ULift
 
 section Pi
 
-variable {α : Type w} {I : α -> Type u₁} [forall i, Category.{v₁} (I i)]
+variable {α : Type w} {I : α → Type u₁} [∀ i, Category.{v₁} (I i)]
 
 open IsFiltered in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, IsFilteredOrEmpty (I i)] : IsFilteredOrEmpty (forall i, I i) where
-  body: ⟨fun s => max (k s) (l s), fun s => leftToMax (k s) (l s),
-    fun s => rightToMax (k s) (l s), trivial⟩
-  cocone_maps k l f g := ⟨fun s => coeq (f s) (g s), fun s => coeqHom (f s) (g s),
-    funext fun s => by simp [coeq_condition (f s) (g s)]⟩
-
-中文:
-实例 [对任意
-  签名: i, 是FilteredOrEmpty (I i)] : 是FilteredOrEmpty (对任意 i, I i) where
-  定义体: ⟨fun s => max (k s) (l s), fun s => leftToMax (k s) (l s),
-    fun s => rightToMax (k s) (l s), trivial⟩
-  cocone_maps k l f g := ⟨fun s => coeq (f s) (g s), fun s => coeqHom (f s) (g s),
-    funext fun s => by simp [coeq_condition (f s) (g s)]⟩
-
-Depends on / 依赖: leftToMax
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, IsFilteredOrEmpty (I i)] : IsFilteredOrEmpty (forall i, I i) where
+instance [∀ i, IsFilteredOrEmpty (I i)] : IsFilteredOrEmpty (∀ i, I i) where
   cocone_objs k l := ⟨fun s => max (k s) (l s), fun s => leftToMax (k s) (l s),
     fun s => rightToMax (k s) (l s), trivial⟩
   cocone_maps k l f g := ⟨fun s => coeq (f s) (g s), fun s => coeqHom (f s) (g s),
     funext fun s => by simp [coeq_condition (f s) (g s)]⟩
 
 attribute [local instance] IsFiltered.nonempty in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, IsFiltered (I i)] : IsFiltered (forall i, I i) where
-
-中文:
-实例 [对任意
-  签名: i, 是Filtered (I i)] : 是Filtered (对任意 i, I i) where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, IsFiltered (I i)] : IsFiltered (forall i, I i) where
+instance [∀ i, IsFiltered (I i)] : IsFiltered (∀ i, I i) where
 
 open IsCofiltered in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, IsCofilteredOrEmpty (I i)] : IsCofilteredOrEmpty (forall i, I i) where
-  body: ⟨fun s => min (k s) (l s), fun s => minToLeft (k s) (l s),
-    fun s => minToRight (k s) (l s), trivial⟩
-  cone_maps k l f g := ⟨fun s => eq (f s) (g s), fun s => eqHom (f s) (g s),
-    funext fun s => by simp [eq_condition (f s) (g s)]⟩
-
-中文:
-实例 [对任意
-  签名: i, 是余filteredOrEmpty (I i)] : 是余filteredOrEmpty (对任意 i, I i) where
-  定义体: ⟨fun s => min (k s) (l s), fun s => minToLeft (k s) (l s),
-    fun s => minToRight (k s) (l s), trivial⟩
-  cone_maps k l f g := ⟨fun s => eq (f s) (g s), fun s => eqHom (f s) (g s),
-    funext fun s => by simp [eq_condition (f s) (g s)]⟩
-
-Depends on / 依赖: minToLeft
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, IsCofilteredOrEmpty (I i)] : IsCofilteredOrEmpty (forall i, I i) where
+instance [∀ i, IsCofilteredOrEmpty (I i)] : IsCofilteredOrEmpty (∀ i, I i) where
   cone_objs k l := ⟨fun s => min (k s) (l s), fun s => minToLeft (k s) (l s),
     fun s => minToRight (k s) (l s), trivial⟩
   cone_maps k l f g := ⟨fun s => eq (f s) (g s), fun s => eqHom (f s) (g s),
     funext fun s => by simp [eq_condition (f s) (g s)]⟩
 
 attribute [local instance] IsCofiltered.nonempty in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, IsCofiltered (I i)] : IsCofiltered (forall i, I i) where
-
-中文:
-实例 [对任意
-  签名: i, 是余filtered (I i)] : 是余filtered (对任意 i, I i) where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, IsCofiltered (I i)] : IsCofiltered (forall i, I i) where
+instance [∀ i, IsCofiltered (I i)] : IsCofiltered (∀ i, I i) where
 
 end Pi
 
@@ -2718,26 +2683,9 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 
 set_option backward.isDefEq.respectTransparency false in
 open IsFiltered in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFilteredOrEmpty
-  signature: C] [IsFilteredOrEmpty D] : IsFilteredOrEmpty (C × D) where
-  body: ⟨(max k.1 l.1, max k.2 l.2), (leftToMax k.1 l.1, leftToMax k.2 l.2),
-    (rightToMax k.1 l.1, rightToMax k.2 l.2), trivial⟩
-  cocone_maps k l f g := ⟨(coeq f.1 g.1, coeq f.2 g.2), (coeqHom f.1 g.1, coeqHom f.2 g.2),
-    by simp [coeq_condition]⟩
-
-中文:
-实例 [是FilteredOrEmpty
-  签名: C] [是FilteredOrEmpty D] : 是FilteredOrEmpty (C × D) where
-  定义体: ⟨(max k.1 l.1, max k.2 l.2), (leftToMax k.1 l.1, leftToMax k.2 l.2),
-    (rightToMax k.1 l.1, rightToMax k.2 l.2), trivial⟩
-  cocone_maps k l f g := ⟨(coeq f.1 g.1, coeq f.2 g.2), (coeqHom f.1 g.1, coeqHom f.2 g.2),
-    by simp [coeq_condition]⟩
-
-Depends on / 依赖: leftToMax
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFilteredOrEmpty C] [IsFilteredOrEmpty D] : IsFilteredOrEmpty (C × D) where
   cocone_objs k l := ⟨(max k.1 l.1, max k.2 l.2), (leftToMax k.1 l.1, leftToMax k.2 l.2),
@@ -2746,41 +2694,17 @@ instance [IsFilteredOrEmpty C] [IsFilteredOrEmpty D] : IsFilteredOrEmpty (C × D
     by simp [coeq_condition]⟩
 
 attribute [local instance] IsFiltered.nonempty in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFiltered
-  signature: C] [IsFiltered D] : IsFiltered (C × D) where
-
-中文:
-实例 [是Filtered
-  签名: C] [是Filtered D] : 是Filtered (C × D) where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFiltered C] [IsFiltered D] : IsFiltered (C × D) where
 
 set_option backward.isDefEq.respectTransparency false in
 open IsCofiltered in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofilteredOrEmpty
-  signature: C] [IsCofilteredOrEmpty D] : IsCofilteredOrEmpty (C × D) where
-  body: ⟨(min k.1 l.1, min k.2 l.2), (minToLeft k.1 l.1, minToLeft k.2 l.2),
-    (minToRight k.1 l.1, minToRight k.2 l.2), trivial⟩
-  cone_maps k l f g := ⟨(eq f.1 g.1, eq f.2 g.2), (eqHom f.1 g.1, eqHom f.2 g.2),
-    by simp [eq_condition]⟩
-
-中文:
-实例 [是余filteredOrEmpty
-  签名: C] [是余filteredOrEmpty D] : 是余filteredOrEmpty (C × D) where
-  定义体: ⟨(min k.1 l.1, min k.2 l.2), (minToLeft k.1 l.1, minToLeft k.2 l.2),
-    (minToRight k.1 l.1, minToRight k.2 l.2), trivial⟩
-  cone_maps k l f g := ⟨(eq f.1 g.1, eq f.2 g.2), (eqHom f.1 g.1, eqHom f.2 g.2),
-    by simp [eq_condition]⟩
-
-Depends on / 依赖: minToLeft
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofilteredOrEmpty C] [IsCofilteredOrEmpty D] : IsCofilteredOrEmpty (C × D) where
   cone_objs k l := ⟨(min k.1 l.1, min k.2 l.2), (minToLeft k.1 l.1, minToLeft k.2 l.2),
@@ -2789,19 +2713,13 @@ instance [IsCofilteredOrEmpty C] [IsCofilteredOrEmpty D] : IsCofilteredOrEmpty (
     by simp [eq_condition]⟩
 
 attribute [local instance] IsCofiltered.nonempty in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: C] [IsCofiltered D] : IsCofiltered (C × D) where
-
-中文:
-实例 [是余filtered
-  签名: C] [是余filtered D] : 是余filtered (C × D) where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered C] [IsCofiltered D] : IsCofiltered (C × D) where
 
 end Prod
 
 end CategoryTheory
+

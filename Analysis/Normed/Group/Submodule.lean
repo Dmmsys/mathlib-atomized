@@ -16,20 +16,19 @@ variable {𝕜 E : Type*}
 
 namespace Submodule
 
-/--
-Instance `seminormedAddCommGroup` / 实例 `seminormedAddCommGroup`
+/-- A submodule of a seminormed group is also a seminormed group, with the restriction of the norm.
+-/
+/-
+**Submodule.seminormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：seminormedAddCommGroup [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] (s
+ : Submodule 𝕜 E) : SeminormedAddCommGroup s
+参数：s : Submodule 𝕜 E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance seminormedAddCommGroup
-  signature: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E]
-  body: fast_instance% SeminormedAddCommGroup.induced _ _ s.subtype.toAddMonoidHom
-
-中文:
-实例 seminormedAddCommGroup
-  签名: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E]
-  定义体: fast_instance% SeminormedAddCommGroup.induced _ _ s.subtype.toAddMonoidHom
-
-Depends on / 依赖: SeminormedAddCommGroup, SeminormedAddCommGroup.induced, fast_instance, induced, s.subtype.toAddMonoidHom, subtype, toAddMonoidHom
+--- 原说明 ---
+A submodule of a seminormed group is also a seminormed group, with the restricti
+on of the norm.
 -/
 instance seminormedAddCommGroup [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E]
     (s : Submodule 𝕜 E) : SeminormedAddCommGroup s :=
@@ -38,18 +37,18 @@ instance seminormedAddCommGroup [Ring 𝕜] [SeminormedAddCommGroup E] [Module �
 /-- If `x` is an element of a submodule `s` of a normed group `E`, its norm in `s` is equal to its
 norm in `E`. -/
 @[simp]
-/--
-theorem `coe_norm` / 定理 `coe_norm`
+/-
+**Submodule.coe_norm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_norm [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜
+ E} (x : s) : ‖x‖ = ‖(x : E)‖
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_norm
-  statement: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
-  proof: rfl
-
-中文:
-定理 coe_norm
-  结论: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E] {s : 子模 𝕜 E}
-  证明: rfl
+--- 原说明 ---
+If `x` is an element of a submodule `s` of a normed group `E`, its norm in `s` i
+s equal to its
+norm in `E`.
 -/
 theorem coe_norm [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
     (x : s) : ‖x‖ = ‖(x : E)‖ :=
@@ -60,39 +59,38 @@ norm in `s`.
 
 This is a reversed version of the `simp` lemma `Submodule.coe_norm` for use by `norm_cast`. -/
 @[norm_cast]
-/--
-theorem `norm_coe` / 定理 `norm_coe`
+/-
+**Submodule.norm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：norm_coe [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜
+ E} (x : s) : ‖(x : E)‖ = ‖x‖
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem norm_coe
-  statement: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
-  proof: rfl
+--- 原说明 ---
+If `x` is an element of a submodule `s` of a normed group `E`, its norm in `E` i
+s equal to its
+norm in `s`.
 
-中文:
-定理 norm_coe
-  结论: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E] {s : 子模 𝕜 E}
-  证明: rfl
+This is a reversed version of the `simp` lemma `Submodule.coe_norm` for use by `
+norm_cast`.
 -/
 theorem norm_coe [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
     (x : s) : ‖(x : E)‖ = ‖x‖ :=
   rfl
 
-/--
-Instance `normedAddCommGroup` / 实例 `normedAddCommGroup`
+/-- A submodule of a normed group is also a normed group, with the restriction of the norm. -/
+/-
+**Submodule.normedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：normedAddCommGroup [Ring 𝕜] [NormedAddCommGroup E] [Module 𝕜 E] (s : Submo
+dule 𝕜 E) : NormedAddCommGroup s
+参数：s : Submodule 𝕜 E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance normedAddCommGroup
-  signature: [Ring 𝕜] [NormedAddCommGroup E] [Module 𝕜 E]
-  body: { Submodule.seminormedAddCommGroup s with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 normedAddCommGroup
-  签名: [环 𝕜] [赋范交换加群 E] [模 𝕜 E]
-  定义体: { Submodule.seminormedAddCommGroup s with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Submodule, Submodule.seminormedAddCommGroup, eq_of_dist_eq_zero, seminormedAddCommGroup
+--- 原说明 ---
+A submodule of a normed group is also a normed group, with the restriction of th
+e norm.
 -/
 instance normedAddCommGroup [Ring 𝕜] [NormedAddCommGroup E] [Module 𝕜 E]
     (s : Submodule 𝕜 E) : NormedAddCommGroup s :=
@@ -102,28 +100,25 @@ instance normedAddCommGroup [Ring 𝕜] [NormedAddCommGroup E] [Module 𝕜 E]
 end Submodule
 
 @[continuity, fun_prop]
-/--
-theorem `LinearMap.continuous_domRestrict` / 定理 `LinearMap.continuous_domRestrict`
-
-English:
-theorem LinearMap.continuous_domRestrict
-  statement: {R R' M M' : Type*} [Semiring R] [Semiring R']
-  proof: by
-  rw [coe_domRestrict]
-  fun_prop
-
-中文:
-定理 线性映射.continuous_domRestrict
-  结论: {R R' M M' : 类型} [半环 R] [半环 R']
-  证明: by
-  rw [coe_domRestrict]
-  fun_prop
-
-Depends on / 依赖: coe_domRestrict, fun_prop
+/-
+**LinearMap.continuous_domRestrict** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearMap.continuous_domRestrict {R R' M M' : Type*} [Semiring R] [Semirin
+g R'] [AddCommMonoid M] [AddCommMonoid M'] [Module R M] [Module R' M'] {σ₁₂ : R 
+->+* R'} (f : M ->ₛₗ[σ₁₂] M') [TopologicalSpace M] [TopologicalSpace M'] (hf : C
+ontinuous f) (p : Submodule R M) : Continuous (f.domRestrict p)
+参数：f : M ->ₛₗ[σ₁₂] M'；hf : Continuous f；p : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.coe_domRestrict`：coe_domRestrict (f : M ->ₛₗ[σ₁₂] M₂) (p : Sub
+module R M) : ⇑(f.domRestrict p) = Set.domRestrict p f
+· 使用定理 `Pi.continuous_domRestrict_apply`：Pi.continuous_domRestrict_apply (s : Se
+t X) {f : X -> Z} (hf : Continuous f) : Continuous (s.domRestrict f)
 -/
 theorem LinearMap.continuous_domRestrict {R R' M M' : Type*} [Semiring R] [Semiring R']
-    [AddCommMonoid M] [AddCommMonoid M'] [Module R M] [Module R' M'] {σ₁₂ : R ->+* R'}
-    (f : M ->ₛₗ[σ₁₂] M') [TopologicalSpace M] [TopologicalSpace M'] (hf : Continuous f)
+    [AddCommMonoid M] [AddCommMonoid M'] [Module R M] [Module R' M'] {σ₁₂ : R →+* R'}
+    (f : M →ₛₗ[σ₁₂] M') [TopologicalSpace M] [TopologicalSpace M'] (hf : Continuous f)
     (p : Submodule R M) : Continuous (f.domRestrict p) := by
   rw [coe_domRestrict]
   fun_prop

@@ -49,97 +49,115 @@ namespace MeasureTheory.AddContent
 
 variable {α : Type*} {C : Set (Set α)} {s : Set α}
 
-/--
-theorem `ofFunction_eq` / 定理 `ofFunction_eq`
+/-- For `m : AddContent C` sigma-sub-additive, finite on `C`, the `OuterMeasure` given by `m`
+coincides with `m` on `C`. -/
+/-
+**MeasureTheory.AddContent.ofFunction_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.AddContent`。
+形式化陈述：ofFunction_eq (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C) (m_sigma_
+subadd : m.IsSigmaSubadditive) (m_top : forall s ∉ C, m s = ∞) (hs : s in C) : O
+uterMeasure.ofFunction m addContent_empty s = m s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；m_sigma_subadd : m.IsSigmaSuba
+dditive；m_top : forall s ∉ C, m s = ∞；hs : s in C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_eq_iInf_mem`：ofFunction_eq_iInf_me
+m {P : Set α -> Prop} (m_top : forall s, ¬ P s -> m s = ∞) (s : Set α) : OuterMe
+asure.ofFunction m m_empty s = ⨅ (t : N…
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Set.inter_eq_self_of_subset_left`：inter_eq_self_of_subset_left {s t : Se
+t α} : s subseteq t -> s inter t = s
+· 使用定理 `Set.inter_iUnion`：inter_iUnion (s : Set β) (t : ι -> Set β) : (s inter ⋃
+ i, t i) = ⋃ i, s inter t i
+· 使用定理 `MeasureTheory.IsSetSemiring.inter_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∀ s ∈ C, ∀ t ∈ C, s ∩ t ∈ C
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Summable.tsum_le_tsum`：∀ {ι : Type u_1} {α : Type u_3} {L : SummationFil
+ter ι} [inst : AddCommMonoid α] [inst_1 : Preorder α]   [IsOrderedAddMonoid α] [
+inst_3 : To…
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用引理 `MeasureTheory.addContent_mono`：addContent_mono (hC : IsSetSemiring C) (h
+s : s in C) (ht : t in C) (hst : s subseteq t) : m s <= m t
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `ENNReal.summable`：∀ {α : Type u_1} {f : α → ENNReal}, Summable f
 
-English:
-theorem ofFunction_eq
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: by
-  refine le_antisymm (OuterMeasure.ofFunction_le s) ?_
-  rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hs_subset => ?_
-  calc m s = m (s inter ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
-    _ = m (⋃ i, s inter f i) := by rw [inter_iUnion]
-    _ <= ∑' i, m (s inter f i) := by
-      refine m_sigma_subadd (fun i => hC.inter_mem _ hs _ (hf i)) ?_
-      rwa [← inter_iUnion, inter_eq_self_of_subset_left hs_subset]
-    _ <= ∑' i, m (f i) := by
-      refine ENNReal.summable.tsum_le_tsum (fun i => ?_) ENNReal.summable
-      exact addContent_mono hC (hC.inter_mem _ hs _ (hf i)) (hf i) Set.inter_subset_right
-
-中文:
-定理 ofFunction_eq
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: by
-  refine le_antisymm (OuterMeasure.ofFunction_le s) ?_
-  rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hs_subset => ?_
-  calc m s = m (s inter ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
-    _ = m (⋃ i, s inter f i) := by rw [inter_iUnion]
-    _ <= ∑' i, m (s inter f i) := by
-      refine m_sigma_subadd (fun i => hC.inter_mem _ hs _ (hf i)) ?_
-      rwa [← inter_iUnion, inter_eq_self_of_subset_left hs_subset]
-    _ <= ∑' i, m (f i) := by
-      refine ENNReal.summable.tsum_le_tsum (fun i => ?_) ENNReal.summable
-      exact addContent_mono hC (hC.inter_mem _ hs _ (hf i)) (hf i) Set.inter_subset_right
-
-Depends on / 依赖: H.to_set.image, OuterMeasure, OuterMeasure.ofFunction_eq_iInf_mem, OuterMeasure.ofFunction_le, bddAbove, csSup_le_iff, eq_of_forall_ge_iff, finite_toSet, hC.inter_mem, hs_subset, inter_eq_self_of_subset_left, inter_iUnion, inter_mem, le_antisymm, le_iInf, m_sigma_subadd, m_top, ofFunction_eq_iInf_mem, ofFunction_le, s.finite_toSet.image
+--- 原说明 ---
+For `m : AddContent C` sigma-sub-additive, finite on `C`, the `OuterMeasure` giv
+en by `m`
+coincides with `m` on `C`.
 -/
-theorem ofFunction_eq (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-    (m_sigma_subadd : m.IsSigmaSubadditive) (m_top : forall s ∉ C, m s = ∞) (hs : s in C) :
+theorem ofFunction_eq (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
+    (m_sigma_subadd : m.IsSigmaSubadditive) (m_top : ∀ s ∉ C, m s = ∞) (hs : s ∈ C) :
     OuterMeasure.ofFunction m addContent_empty s = m s := by
   refine le_antisymm (OuterMeasure.ofFunction_le s) ?_
   rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hs_subset => ?_
-  calc m s = m (s inter ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
-    _ = m (⋃ i, s inter f i) := by rw [inter_iUnion]
-    _ <= ∑' i, m (s inter f i) := by
-      refine m_sigma_subadd (fun i => hC.inter_mem _ hs _ (hf i)) ?_
+  refine le_iInf fun f ↦ le_iInf fun hf ↦ le_iInf fun hs_subset ↦ ?_
+  calc m s = m (s ∩ ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
+    _ = m (⋃ i, s ∩ f i) := by rw [inter_iUnion]
+    _ ≤ ∑' i, m (s ∩ f i) := by
+      refine m_sigma_subadd (fun i ↦ hC.inter_mem _ hs _ (hf i)) ?_
       rwa [← inter_iUnion, inter_eq_self_of_subset_left hs_subset]
-    _ <= ∑' i, m (f i) := by
-      refine ENNReal.summable.tsum_le_tsum (fun i => ?_) ENNReal.summable
+    _ ≤ ∑' i, m (f i) := by
+      refine ENNReal.summable.tsum_le_tsum (fun i ↦ ?_) ENNReal.summable
       exact addContent_mono hC (hC.inter_mem _ hs _ (hf i)) (hf i) Set.inter_subset_right
 
-/--
-theorem `inducedOuterMeasure_eq` / 定理 `inducedOuterMeasure_eq`
+/-- For `m : AddContent C` sigma-sub-additive, finite on `C`, the `inducedOuterMeasure` given by `m`
+coincides with `m` on `C`. -/
+/-
+**MeasureTheory.AddContent.inducedOuterMeasure_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.AddContent`。
+形式化陈述：inducedOuterMeasure_eq (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C) 
+(m_sigma_subadd : m.IsSigmaSubadditive) (hs : s in C) : inducedOuterMeasure (fun
+ x _ => m x) hC.empty_mem addContent_empty s = m s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；m_sigma_subadd : m.IsSigmaSuba
+dditive；hs : s in C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.AddContent.ofFunction_eq`：ofFunction_eq (hC : IsSetSemirin
+g C) (m : AddContent Real>=0∞ C) (m_sigma_subadd : m.IsSigmaSubadditive) (m_top 
+: forall s ∉ C, m s = ∞) (hs…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AddContent.extend_eq`：∀ {α : Type u_1} {C : Set (Set α)} {
+s : Set α} (hC : MeasureTheory.IsSetSemiring C)   (m : MeasureTheory.AddContent 
+ENNReal C), s ∈ C → (Mea…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.AddContent.extend_eq_top`：∀ {α : Type u_1} {C : Set (Set α
+)} {s : Set α} (hC : MeasureTheory.IsSetSemiring C)   (m : MeasureTheory.AddCont
+ent ENNReal C), s ∉ C → (Mea…
 
-English:
-theorem inducedOuterMeasure_eq
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: by
-  suffices inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s = m.extend hC s by
-    rwa [m.extend_eq hC hs] at this
-  refine Eq.trans ?_ ((m.extend hC).ofFunction_eq hC ?_ ?_ hs)
-  · congr
-  · intro f hf hf_mem
-    rw [m.extend_eq hC hf_mem]
-    refine (m_sigma_subadd hf hf_mem).trans_eq ?_
-    congr with i
-    rw [m.extend_eq hC (hf i)]
-  · exact fun _ => m.extend_eq_top _
-
-中文:
-定理 inducedOuterMeasure_eq
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: by
-  suffices inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s = m.extend hC s by
-    rwa [m.extend_eq hC hs] at this
-  refine Eq.trans ?_ ((m.extend hC).ofFunction_eq hC ?_ ?_ hs)
-  · congr
-  · intro f hf hf_mem
-    rw [m.extend_eq hC hf_mem]
-    refine (m_sigma_subadd hf hf_mem).trans_eq ?_
-    congr with i
-    rw [m.extend_eq hC (hf i)]
-  · exact fun _ => m.extend_eq_top _
-
-Depends on / 依赖: Eq.trans, _eq_csSup_image, addContent_empty, empty_mem, extend, extend_eq, extend_eq_top, hC.empty_mem, hf_mem, inducedOuterMeasure, m.extend, m.extend_eq, m.extend_eq_top, m_sigma_subadd, ofFunction_eq, trans_eq
+--- 原说明 ---
+For `m : AddContent C` sigma-sub-additive, finite on `C`, the `inducedOuterMeasu
+re` given by `m`
+coincides with `m` on `C`.
 -/
-theorem inducedOuterMeasure_eq (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-    (m_sigma_subadd : m.IsSigmaSubadditive) (hs : s in C) :
-    inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s = m s := by
-  suffices inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s = m.extend hC s by
+theorem inducedOuterMeasure_eq (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
+    (m_sigma_subadd : m.IsSigmaSubadditive) (hs : s ∈ C) :
+    inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty s = m s := by
+  suffices inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty s = m.extend hC s by
     rwa [m.extend_eq hC hs] at this
   refine Eq.trans ?_ ((m.extend hC).ofFunction_eq hC ?_ ?_ hs)
   · congr
@@ -148,99 +166,98 @@ theorem inducedOuterMeasure_eq (hC : IsSetSemiring C) (m : AddContent Real>=0∞
     refine (m_sigma_subadd hf hf_mem).trans_eq ?_
     congr with i
     rw [m.extend_eq hC (hf i)]
-  · exact fun _ => m.extend_eq_top _
-
-/--
-theorem `isCaratheodory_ofFunction_of_mem` / 定理 `isCaratheodory_ofFunction_of_mem`
-
-English:
-theorem isCaratheodory_ofFunction_of_mem
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: by
-  rw [OuterMeasure.isCaratheodory_iff_le']
-  intro t
-  conv_rhs => rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hf_subset => ?_
-  let A : Nat -> Finset (Set α) := fun i => hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
-  have h_diff_eq_sUnion i : f i \ s = ⋃₀ A i := by simp [A, IsSetSemiring.sUnion_disjointOfDiff]
-  have h_m_eq i : m (f i) = m (f i inter s) + ∑ u in A i, m u :=
-    eq_add_disjointOfDiff_of_subset hC (hC.inter_mem (f i) (hf i) s hs) (hf i) inter_subset_left
-  simp_rw [h_m_eq]
-  rw [ENNReal.tsum_add]
-  refine add_le_add ?_ ?_
-· refine iInf_le_of_le (fun i => f i inter s) iInf_le_of_le ?_ le_rfl
-    rw [← iUnion_inter]
-    exact Set.inter_subset_inter_left _ hf_subset
-· apply le_trans (OuterMeasure.ofFunction m addContent_empty).mono
- (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
-    simp only [OuterMeasure.measureOf_eq_coe, A]
-apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
-      (fun i => f i \ s)
-    apply ENNReal.tsum_le_tsum
-    intro i
-    simp_rw [sUnion_eq_biUnion] at h_diff_eq_sUnion
-    rw [h_diff_eq_sUnion]
-    obtain h6 := MeasureTheory.measure_biUnion_finset_le
-      (μ := OuterMeasure.ofFunction m addContent_empty) (A i) id
-    simp only [id_eq] at h6
-exact le_trans h6 Finset.sum_le_sum fun b _ => OuterMeasure.ofFunction_le b
-
-中文:
-定理 isCaratheodory_ofFunction_of_mem
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: by
-  rw [OuterMeasure.isCaratheodory_iff_le']
-  intro t
-  conv_rhs => rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hf_subset => ?_
-  let A : Nat -> Finset (Set α) := fun i => hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
-  have h_diff_eq_sUnion i : f i \ s = ⋃₀ A i := by simp [A, IsSetSemiring.sUnion_disjointOfDiff]
-  have h_m_eq i : m (f i) = m (f i inter s) + ∑ u in A i, m u :=
-    eq_add_disjointOfDiff_of_subset hC (hC.inter_mem (f i) (hf i) s hs) (hf i) inter_subset_left
-  simp_rw [h_m_eq]
-  rw [ENNReal.tsum_add]
-  refine add_le_add ?_ ?_
-· refine iInf_le_of_le (fun i => f i inter s) iInf_le_of_le ?_ le_rfl
-    rw [← iUnion_inter]
-    exact Set.inter_subset_inter_left _ hf_subset
-· apply le_trans (OuterMeasure.ofFunction m addContent_empty).mono
- (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
-    simp only [OuterMeasure.measureOf_eq_coe, A]
-apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
-      (fun i => f i \ s)
-    apply ENNReal.tsum_le_tsum
-    intro i
-    simp_rw [sUnion_eq_biUnion] at h_diff_eq_sUnion
-    rw [h_diff_eq_sUnion]
-    obtain h6 := MeasureTheory.measure_biUnion_finset_le
-      (μ := OuterMeasure.ofFunction m addContent_empty) (A i) id
-    simp only [id_eq] at h6
-exact le_trans h6 Finset.sum_le_sum fun b _ => OuterMeasure.ofFunction_le b
-
-Depends on / 依赖: Finset, IsSetSemiring, IsSetSemiring.sUnion_disjointOfDiff, OuterMeasure, OuterMeasure.isCaratheodory_iff_le, OuterMeasure.ofFunction_eq_iInf_mem, Set.image_id, _eq_csSup_image, conv_rhs, disjointOfDiff, eq_add_disjointOfDiff_of_subset, hC.disjointOfDiff, hC.inter_mem, h_diff_eq_sUnion, h_m_eq, hf_subset, image_id, inter_mem, isCaratheodory_iff_le, le_iInf
+  · exact fun _ ↦ m.extend_eq_top _
+/-
+**MeasureTheory.AddContent.isCaratheodory_ofFunction_of_mem** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.AddContent`。
+形式化陈述：isCaratheodory_ofFunction_of_mem (hC : IsSetSemiring C) (m : AddContent Re
+al>=0∞ C) (m_top : forall s ∉ C, m s = ∞) (hs : s in C) : (OuterMeasure.ofFuncti
+on m addContent_empty).IsCaratheodory s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；m_top : forall s ∉ C, m s = ∞；
+hs : s in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.isCaratheodory_iff_le'`：isCaratheodory_iff_le
+' {s : Set α} : IsCaratheodory m s ↔ forall t, m (t inter s) + m (t \ s) <= m t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_eq_iInf_mem`：ofFunction_eq_iInf_me
+m {P : Set α -> Prop} (m_top : forall s, ¬ P s -> m s = ∞) (s : Set α) : OuterMe
+asure.ofFunction m m_empty s = ⨅ (t : N…
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `MeasureTheory.IsSetSemiring.inter_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∀ s ∈ C, ∀ t ∈ C, s ∩ t ∈ C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `MeasureTheory.IsSetSemiring.sUnion_disjointOfDiff`：sUnion_disjointOfDiff
+ (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : ⋃₀ hC.disjointOfDiff hs ht
+ = s \ t
+· 使用定理 `Set.sdiff_self_inter`：sdiff_self_inter {s t : Set α} : s \ (s inter t) =
+ s \ t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.eq_add_disjointOfDiff_of_subset`：eq_add_disjointOfDiff_of_
+subset (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) (hst : s subseteq t) :
+ m t = m s + ∑ i in hC.disjointOfDi…
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.tsum_add`：∀ {α : Type u_1} {f g : α → ENNReal}, ∑' (a : α), (f a
+ + g a) = ∑' (a : α), f a + ∑' (a : α), g a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.iUnion_inter`：iUnion_inter (s : Set β) (t : ι -> Set β) : (⋃ i, t i)
+ inter s = ⋃ i, t i inter s
+· 使用定理 `Set.inter_subset_inter_left`：inter_subset_inter_left {s t : Set α} (u : 
+Set α) (H : s subseteq t) : s inter u subseteq t inter u
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MeasureTheory.OuterMeasure.mono`：∀ {α : Type u_2} (self : MeasureTheory.
+OuterMeasure α) {s₁ s₂ : Set α}, s₁ ⊆ s₂ → self.measureOf s₁ ≤ self.measureOf s₂
+· 使用定理 `Set.sdiff_subset_sdiff_left`：sdiff_subset_sdiff_left {s₁ s₂ t : Set α} (
+h : s₁ subseteq s₂) : s₁ \ t subseteq s₂ \ t
+· 使用定理 `Set.iUnion_sdiff`：iUnion_sdiff (s : Set β) (t : ι -> Set β) : (⋃ i, t i)
+ \ s = ⋃ i, t i \ s
+· 使用定理 `MeasureTheory.measure_iUnion_le`：measure_iUnion_le [Countable ι] (s : ι 
+-> Set α) : μ (⋃ i, s i) <= ∑' i, μ (s i)
+（共 42 条，此处仅展示前 30 条）
 -/
-theorem isCaratheodory_ofFunction_of_mem (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-    (m_top : forall s ∉ C, m s = ∞) (hs : s in C) :
+theorem isCaratheodory_ofFunction_of_mem (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
+    (m_top : ∀ s ∉ C, m s = ∞) (hs : s ∈ C) :
     (OuterMeasure.ofFunction m addContent_empty).IsCaratheodory s := by
   rw [OuterMeasure.isCaratheodory_iff_le']
   intro t
   conv_rhs => rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
-  refine le_iInf fun f => le_iInf fun hf => le_iInf fun hf_subset => ?_
-  let A : Nat -> Finset (Set α) := fun i => hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
+  refine le_iInf fun f ↦ le_iInf fun hf ↦ le_iInf fun hf_subset ↦ ?_
+  let A : ℕ → Finset (Set α) := fun i ↦ hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
   have h_diff_eq_sUnion i : f i \ s = ⋃₀ A i := by simp [A, IsSetSemiring.sUnion_disjointOfDiff]
-  have h_m_eq i : m (f i) = m (f i inter s) + ∑ u in A i, m u :=
+  have h_m_eq i : m (f i) = m (f i ∩ s) + ∑ u ∈ A i, m u :=
     eq_add_disjointOfDiff_of_subset hC (hC.inter_mem (f i) (hf i) s hs) (hf i) inter_subset_left
   simp_rw [h_m_eq]
   rw [ENNReal.tsum_add]
   refine add_le_add ?_ ?_
-· refine iInf_le_of_le (fun i => f i inter s) iInf_le_of_le ?_ le_rfl
+  · refine iInf_le_of_le (fun i ↦ f i ∩ s) <| iInf_le_of_le ?_ le_rfl
     rw [← iUnion_inter]
     exact Set.inter_subset_inter_left _ hf_subset
-· apply le_trans (OuterMeasure.ofFunction m addContent_empty).mono
- (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
+  · apply le_trans <| (OuterMeasure.ofFunction m addContent_empty).mono
+      <| (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
     simp only [OuterMeasure.measureOf_eq_coe, A]
-apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
-      (fun i => f i \ s)
+    apply le_trans <| measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
+      (fun i ↦ f i \ s)
     apply ENNReal.tsum_le_tsum
     intro i
     simp_rw [sUnion_eq_biUnion] at h_diff_eq_sUnion
@@ -248,204 +265,225 @@ apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_emp
     obtain h6 := MeasureTheory.measure_biUnion_finset_le
       (μ := OuterMeasure.ofFunction m addContent_empty) (A i) id
     simp only [id_eq] at h6
-exact le_trans h6 Finset.sum_le_sum fun b _ => OuterMeasure.ofFunction_le b
+    exact le_trans h6 <| Finset.sum_le_sum <| fun b _ ↦ OuterMeasure.ofFunction_le b
 
-/--
-theorem `isCaratheodory_inducedOuterMeasure_of_mem` / 定理 `isCaratheodory_inducedOuterMeasure_of_mem`
+/-- Every `s ∈ C` for an `m : AddContent C` with `IsSetSemiring C` is Carathéodory measurable
+with respect to the `inducedOuterMeasure` from `m`. -/
+/-
+**MeasureTheory.AddContent.isCaratheodory_inducedOuterMeasure_of_mem** 是 Mathlib
+ 中的一个定理，位于命名空间 `MeasureTheory.AddContent`。
+形式化陈述：isCaratheodory_inducedOuterMeasure_of_mem (hC : IsSetSemiring C) (m : AddC
+ontent Real>=0∞ C) {s : Set α} (hs : s in C) : (inducedOuterMeasure (fun x _ => 
+m x) hC.empty_mem addContent_empty).IsCaratheodory s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；hs : s in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AddContent.isCaratheodory_ofFunction_of_mem`：isCaratheodor
+y_ofFunction_of_mem (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C) (m_top : 
+forall s ∉ C, m s = ∞) (hs : s in C) : (OuterMe…
+· 使用定理 `MeasureTheory.AddContent.extend_eq_top`：∀ {α : Type u_1} {C : Set (Set α
+)} {s : Set α} (hC : MeasureTheory.IsSetSemiring C)   (m : MeasureTheory.AddCont
+ent ENNReal C), s ∉ C → (Mea…
 
-English:
-theorem isCaratheodory_inducedOuterMeasure_of_mem
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: isCaratheodory_ofFunction_of_mem hC (m.extend hC) (fun _ => m.extend_eq_top hC) hs
-
-中文:
-定理 isCaratheodory_inducedOuterMeasure_of_mem
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: isCaratheodory_ofFunction_of_mem hC (m.extend hC) (fun _ => m.extend_eq_top hC) hs
-
-Depends on / 依赖: _id_eq_csSup, extend, extend_eq_top, isCaratheodory_ofFunction_of_mem, m.extend, m.extend_eq_top
+--- 原说明 ---
+Every `s ∈ C` for an `m : AddContent C` with `IsSetSemiring C` is Carathéodory m
+easurable
+with respect to the `inducedOuterMeasure` from `m`.
 -/
-theorem isCaratheodory_inducedOuterMeasure_of_mem (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-    {s : Set α} (hs : s in C) :
-    (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s :=
-  isCaratheodory_ofFunction_of_mem hC (m.extend hC) (fun _ => m.extend_eq_top hC) hs
-
-/--
-theorem `isCaratheodory_inducedOuterMeasure` / 定理 `isCaratheodory_inducedOuterMeasure`
-
-English:
-theorem isCaratheodory_inducedOuterMeasure
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: by
-  induction hs with
-  | basic u hu => exact isCaratheodory_inducedOuterMeasure_of_mem hC m hu
-  | empty => exact OuterMeasure.isCaratheodory_empty _
-  | compl t _ h => exact OuterMeasure.isCaratheodory_compl _ h
-  | iUnion f _ h => exact OuterMeasure.isCaratheodory_iUnion _ h
-
-中文:
-定理 isCaratheodory_inducedOuterMeasure
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: by
-  induction hs with
-  | basic u hu => exact isCaratheodory_inducedOuterMeasure_of_mem hC m hu
-  | empty => exact OuterMeasure.isCaratheodory_empty _
-  | compl t _ h => exact OuterMeasure.isCaratheodory_compl _ h
-  | iUnion f _ h => exact OuterMeasure.isCaratheodory_iUnion _ h
-
-Depends on / 依赖: OuterMeasure, OuterMeasure.isCaratheodory_compl, OuterMeasure.isCaratheodory_empty, OuterMeasure.isCaratheodory_iUnion, _eq_csSup_image, iUnion, isCaratheodory_compl, isCaratheodory_empty, isCaratheodory_iUnion, isCaratheodory_inducedOuterMeasure_of_mem
+theorem isCaratheodory_inducedOuterMeasure_of_mem (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
+    {s : Set α} (hs : s ∈ C) :
+    (inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty).IsCaratheodory s :=
+  isCaratheodory_ofFunction_of_mem hC (m.extend hC) (fun _ ↦ m.extend_eq_top hC) hs
+/-
+**MeasureTheory.AddContent.isCaratheodory_inducedOuterMeasure** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory.AddContent`。
+形式化陈述：isCaratheodory_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent 
+Real>=0∞ C) (s : Set α) (hs : MeasurableSet[MeasurableSpace.generateFrom C] s) :
+ (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheo
+dory s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；s : Set α；hs : MeasurableSet[M
+easurableSpace.generateFrom C] s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
+· 使用定理 `MeasureTheory.AddContent.isCaratheodory_inducedOuterMeasure_of_mem`：isCa
+ratheodory_inducedOuterMeasure_of_mem (hC : IsSetSemiring C) (m : AddContent Rea
+l>=0∞ C) {s : Set α} (hs : s in C) : (inducedOuterMeasur…
+· 使用定理 `MeasureTheory.OuterMeasure.isCaratheodory_empty`：isCaratheodory_empty : 
+IsCaratheodory m ∅
+· 使用定理 `MeasureTheory.OuterMeasure.isCaratheodory_compl`：isCaratheodory_compl : 
+IsCaratheodory m s₁ -> IsCaratheodory m s₁ᶜ
+· 使用引理 `MeasureTheory.OuterMeasure.isCaratheodory_iUnion`：isCaratheodory_iUnion 
+{s : Nat -> Set α} (h : forall i, m.IsCaratheodory (s i)) : m.IsCaratheodory (⋃ 
+i, s i)
 -/
-theorem isCaratheodory_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
+theorem isCaratheodory_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
     (s : Set α) (hs : MeasurableSet[MeasurableSpace.generateFrom C] s) :
-    (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s := by
+    (inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty).IsCaratheodory s := by
   induction hs with
   | basic u hu => exact isCaratheodory_inducedOuterMeasure_of_mem hC m hu
   | empty => exact OuterMeasure.isCaratheodory_empty _
   | compl t _ h => exact OuterMeasure.isCaratheodory_compl _ h
   | iUnion f _ h => exact OuterMeasure.isCaratheodory_iUnion _ h
 
-/--
-Definition of `measureCaratheodory` / `measureCaratheodory` 的定义
+/-- Construct a measure from a sigma-subadditive content on a semiring. This
+measure is defined on the associated Carathéodory sigma-algebra. -/
+/-
+**MeasureTheory.AddContent.measureCaratheodory** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.AddContent`。
+形式化陈述：measureCaratheodory (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C) (m_
+sigma_subadd : m.IsSigmaSubadditive) : @Measure α (inducedOuterMeasure (fun x _ 
+=> m x) hC.empty_mem addContent_empty).caratheodory
+参数：m : AddContent Real>=0∞ C；hC : IsSetSemiring C；m_sigma_subadd : m.IsSigmaSuba
+dditive。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
 
-English:
-definition measureCaratheodory
-  signature: (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-  body: letI : MeasurableSpace α :=
-    (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).caratheodory
-  { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
-    m_iUnion := fun f hf hd => OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
-    trim_le := by
-      apply le_inducedOuterMeasure.mpr fun s hs => ?_
-      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ => m x) hC.empty_mem
-          addContent_empty).caratheodory] s := by
-        change (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s
-        exact isCaratheodory_inducedOuterMeasure_of_mem hC m hs
-      rw [OuterMeasure.trim_eq _ hs_meas]; rw [m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
-
-中文:
-定义 measureCaratheodory
-  签名: (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
-  定义体: letI : MeasurableSpace α :=
-    (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).caratheodory
-  { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
-    m_iUnion := fun f hf hd => OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
-    trim_le := by
-      apply le_inducedOuterMeasure.mpr fun s hs => ?_
-      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ => m x) hC.empty_mem
-          addContent_empty).caratheodory] s := by
-        change (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s
-        exact isCaratheodory_inducedOuterMeasure_of_mem hC m hs
-      rw [OuterMeasure.trim_eq _ hs_meas]; rw [m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
-
-Depends on / 依赖: MeasurableSet, MeasurableSpace, OuterMeasure, OuterMeasure.iUnion_eq_of_caratheodory, _eq_csInf_image, addContent_empty, caratheodory, empty_mem, hC.empty_mem, hs_meas, iUnion_eq_of_caratheodory, inducedOuterMeasure, le_inducedOuterMeasure, le_inducedOuterMeasure.mpr, m_iUnion, trim_le
+--- 原说明 ---
+Construct a measure from a sigma-subadditive content on a semiring. This
+measure is defined on the associated Carathéodory sigma-algebra.
 -/
-noncomputable def measureCaratheodory (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
+noncomputable def measureCaratheodory (m : AddContent ℝ≥0∞ C) (hC : IsSetSemiring C)
     (m_sigma_subadd : m.IsSigmaSubadditive) :
-    @Measure α (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).caratheodory :=
+    @Measure α (inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty).caratheodory :=
   letI : MeasurableSpace α :=
-    (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).caratheodory
-  { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
-    m_iUnion := fun f hf hd => OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
+    (inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty).caratheodory
+  { inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty with
+    m_iUnion := fun f hf hd ↦ OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
     trim_le := by
-      apply le_inducedOuterMeasure.mpr fun s hs => ?_
-      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ => m x) hC.empty_mem
+      apply le_inducedOuterMeasure.mpr fun s hs ↦ ?_
+      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem
           addContent_empty).caratheodory] s := by
-        change (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s
+        change (inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty).IsCaratheodory s
         exact isCaratheodory_inducedOuterMeasure_of_mem hC m hs
-      rw [OuterMeasure.trim_eq _ hs_meas]; rw [m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
+      rw [OuterMeasure.trim_eq _ hs_meas, m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
 
-/--
-theorem `measureCaratheodory_eq_inducedOuterMeasure` / 定理 `measureCaratheodory_eq_inducedOuterMeasure`
+/-- The measure `MeasureTheory.AddContent.measureCaratheodory` generated from an
+`m : AddContent C` on a `IsSetSemiring C` coincides with the `MeasureTheory.inducedOuterMeasure`. -/
+/-
+**MeasureTheory.AddContent.measureCaratheodory_eq_inducedOuterMeasure** 是 Mathli
+b 中的一个定理，位于命名空间 `MeasureTheory.AddContent`。
+形式化陈述：measureCaratheodory_eq_inducedOuterMeasure (hC : IsSetSemiring C) (m : Add
+Content Real>=0∞ C) (m_sigma_subadd : m.IsSigmaSubadditive) : m.measureCaratheod
+ory hC m_sigma_subadd s = inducedOuterMeasure (fun x _ => m x) hC.empty_mem addC
+ontent_empty s
+参数：hC : IsSetSemiring C；m : AddContent Real>=0∞ C；m_sigma_subadd : m.IsSigmaSuba
+dditive。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
 
-English:
-theorem measureCaratheodory_eq_inducedOuterMeasure
-  statement: (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
-  proof: rfl
-
-中文:
-定理 measureCaratheodory_eq_inducedOuterMeasure
-  结论: (hC : 是SetSemiring C) (m : 加法内容 实数>=0∞ C)
-  证明: rfl
+--- 原说明 ---
+The measure `MeasureTheory.AddContent.measureCaratheodory` generated from an
+`m : AddContent C` on a `IsSetSemiring C` coincides with the `MeasureTheory.indu
+cedOuterMeasure`.
 -/
-theorem measureCaratheodory_eq_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent Real>=0∞ C)
+theorem measureCaratheodory_eq_inducedOuterMeasure (hC : IsSetSemiring C) (m : AddContent ℝ≥0∞ C)
     (m_sigma_subadd : m.IsSigmaSubadditive) :
     m.measureCaratheodory hC m_sigma_subadd s
-      = inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty s := rfl
-
-/--
-theorem `measureCaratheodory_eq` / 定理 `measureCaratheodory_eq`
-
-English:
-theorem measureCaratheodory_eq
-  statement: (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-  proof: m.inducedOuterMeasure_eq hC m_sigma_subadd hs
-
-中文:
-定理 measureCaratheodory_eq
-  结论: (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
-  证明: m.inducedOuterMeasure_eq hC m_sigma_subadd hs
-
-Depends on / 依赖: inducedOuterMeasure_eq, m.inducedOuterMeasure_eq, m_sigma_subadd
+      = inducedOuterMeasure (fun x _ ↦ m x) hC.empty_mem addContent_empty s := rfl
+/-
+**MeasureTheory.AddContent.measureCaratheodory_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.AddContent`。
+形式化陈述：measureCaratheodory_eq (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C) 
+(m_sigma_subadd : m.IsSigmaSubadditive) (hs : s in C) : m.measureCaratheodory hC
+ m_sigma_subadd s = m s
+参数：m : AddContent Real>=0∞ C；hC : IsSetSemiring C；m_sigma_subadd : m.IsSigmaSuba
+dditive；hs : s in C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AddContent.inducedOuterMeasure_eq`：inducedOuterMeasure_eq 
+(hC : IsSetSemiring C) (m : AddContent Real>=0∞ C) (m_sigma_subadd : m.IsSigmaSu
+badditive) (hs : s in C) : inducedOut…
 -/
-theorem measureCaratheodory_eq (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-    (m_sigma_subadd : m.IsSigmaSubadditive) (hs : s in C) :
+theorem measureCaratheodory_eq (m : AddContent ℝ≥0∞ C) (hC : IsSetSemiring C)
+    (m_sigma_subadd : m.IsSigmaSubadditive) (hs : s ∈ C) :
     m.measureCaratheodory hC m_sigma_subadd s = m s :=
   m.inducedOuterMeasure_eq hC m_sigma_subadd hs
 
-/--
-Definition of `measure` / `measure` 的定义
+/-- Construct a measure from a sigma-subadditive content on a semiring, assuming the semiring
+generates a given measurable structure. The measure is defined on this measurable structure. -/
+/-
+**MeasureTheory.AddContent.measure** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AddC
+ontent`。
+形式化陈述：measure [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSetSe
+miring C) (hC_gen : mα <= MeasurableSpace.generateFrom C) (m_sigma_subadd : m.Is
+SigmaSubadditive) : Measure α
+参数：m : AddContent Real>=0∞ C；hC : IsSetSemiring C；hC_gen : mα <= MeasurableSpace
+.generateFrom C；m_sigma_subadd : m.IsSigmaSubadditive。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
 
-English:
-definition measure
-  signature: [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-  body: (m.measureCaratheodory hC m_sigma_subadd).trim
-    fun s a => isCaratheodory_inducedOuterMeasure hC m s (hC_gen s a)
-
-中文:
-定义 measure
-  签名: [mα : 可测空间 α] (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
-  定义体: (m.measureCaratheodory hC m_sigma_subadd).trim
-    fun s a => isCaratheodory_inducedOuterMeasure hC m s (hC_gen s a)
-
-Depends on / 依赖: hC_gen, isCaratheodory_inducedOuterMeasure, m.measureCaratheodory, m_sigma_subadd, measureCaratheodory
+--- 原说明 ---
+Construct a measure from a sigma-subadditive content on a semiring, assuming the
+ semiring
+generates a given measurable structure. The measure is defined on this measurabl
+e structure.
 -/
-noncomputable def measure [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-    (hC_gen : mα <= MeasurableSpace.generateFrom C) (m_sigma_subadd : m.IsSigmaSubadditive) :
+noncomputable def measure [mα : MeasurableSpace α] (m : AddContent ℝ≥0∞ C) (hC : IsSetSemiring C)
+    (hC_gen : mα ≤ MeasurableSpace.generateFrom C) (m_sigma_subadd : m.IsSigmaSubadditive) :
     Measure α :=
-(m.measureCaratheodory hC m_sigma_subadd).trim
-    fun s a => isCaratheodory_inducedOuterMeasure hC m s (hC_gen s a)
+  (m.measureCaratheodory hC m_sigma_subadd).trim <|
+    fun s a ↦ isCaratheodory_inducedOuterMeasure hC m s (hC_gen s a)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `measure_eq` / 定理 `measure_eq`
+/-- The measure defined through a sigma-subadditive
+  content on a semiring coincides with the content on the semiring. -/
+/-
+**MeasureTheory.AddContent.measure_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.A
+ddContent`。
+形式化陈述：measure_eq [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSe
+tSemiring C) (hC_gen : mα = MeasurableSpace.generateFrom C) (m_sigma_subadd : m.
+IsSigmaSubadditive) (hs : s in C) : m.measure hC hC_gen.le m_sigma_subadd s = m 
+s
+参数：m : AddContent Real>=0∞ C；hC : IsSetSemiring C；hC_gen : mα = MeasurableSpace.
+generateFrom C；m_sigma_subadd : m.IsSigmaSubadditive；hs : s in C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用定理 `MeasureTheory.addContent_empty`：∀ {α : Type u_1} {C : Set (Set α)} {G : 
+Type u_2} [inst : AddCommMonoid G] {m : MeasureTheory.AddContent G C}, m ∅ = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AddContent.measure.eq_1`：∀ {α : Type u_1} {C : Set (Set α)
+} [mα : MeasurableSpace α] (m : MeasureTheory.AddContent ENNReal C)   (hC : Meas
+ureTheory.IsSetSemiring C) …
+· 使用定理 `MeasureTheory.trim_measurableSet_eq`：trim_measurableSet_eq (hm : m <= m0
+) (hs : @MeasurableSet α m s) : μ.trim hm s = μ s
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `MeasureTheory.AddContent.measureCaratheodory_eq`：measureCaratheodory_eq 
+(m : AddContent Real>=0∞ C) (hC : IsSetSemiring C) (m_sigma_subadd : m.IsSigmaSu
+badditive) (hs : s in C) : m.measureC…
 
-English:
-theorem measure_eq
-  statement: [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
-  proof: by
-  rw [measure]; rw [trim_measurableSet_eq]
-  · exact m.measureCaratheodory_eq hC m_sigma_subadd hs
-  · rw [hC_gen]
-    apply MeasurableSpace.measurableSet_generateFrom hs
-
-中文:
-定理 measure_eq
-  结论: [mα : 可测空间 α] (m : 加法内容 实数>=0∞ C) (hC : 是SetSemiring C)
-  证明: by
-  rw [measure]; rw [trim_measurableSet_eq]
-  · exact m.measureCaratheodory_eq hC m_sigma_subadd hs
-  · rw [hC_gen]
-    apply MeasurableSpace.measurableSet_generateFrom hs
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_generateFrom, hC_gen, m.measureCaratheodory_eq, m_sigma_subadd, measurableSet_generateFrom, measure, measureCaratheodory_eq, trim_measurableSet_eq
+--- 原说明 ---
+The measure defined through a sigma-subadditive
+  content on a semiring coincides with the content on the semiring.
 -/
-theorem measure_eq [mα : MeasurableSpace α] (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C)
+theorem measure_eq [mα : MeasurableSpace α] (m : AddContent ℝ≥0∞ C) (hC : IsSetSemiring C)
     (hC_gen : mα = MeasurableSpace.generateFrom C) (m_sigma_subadd : m.IsSigmaSubadditive)
-    (hs : s in C) :
+    (hs : s ∈ C) :
     m.measure hC hC_gen.le m_sigma_subadd s = m s := by
-  rw [measure]; rw [trim_measurableSet_eq]
+  rw [measure, trim_measurableSet_eq]
   · exact m.measureCaratheodory_eq hC m_sigma_subadd hs
   · rw [hC_gen]
     apply MeasurableSpace.measurableSet_generateFrom hs
 
 end MeasureTheory.AddContent
+

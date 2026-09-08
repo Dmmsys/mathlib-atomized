@@ -23,20 +23,14 @@ namespace ComplexShape
 
 variable {ι : Type*}
 
-/--
-Definition of `HasNoLoop` / `HasNoLoop` 的定义
+/-- The condition that `c.Rel i i` does not hold for any `i`. -/
+/-
+**ComplexShape.HasNoLoop** 是 Mathlib 中的一个归纳类型，位于命名空间 `ComplexShape`。
+形式化陈述：{ι : Type u_1} → ComplexShape ι → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasNoLoop
-  parameters: (c : ComplexShape ι)
-  axioms and operations (1):
-    - not_rel_self((i : ι)) : ¬ c.Rel i i
-
-中文:
-类 有NoLoop
-  参数: (c : 余mplexShape ι)
-  公理与运算 (1 个):
-    - not_rel_self((i : ι)) : ¬ c.关系 i i
+--- 原说明 ---
+The condition that `c.Rel i i` does not hold for any `i`.
 -/
 class HasNoLoop (c : ComplexShape ι) : Prop where
   not_rel_self (i : ι) : ¬ c.Rel i i
@@ -45,257 +39,143 @@ section
 
 variable (c : ComplexShape ι) [c.HasNoLoop] (j : ι)
 
-/--
-lemma `not_rel_self` / 引理 `not_rel_self`
-
-English:
-lemma not_rel_self
-  statement: ¬ c.Rel j j
-  proof: HasNoLoop.not_rel_self j
-
-中文:
-引理 not_rel_self
-  结论: ¬ c.关系 j j
-  证明: HasNoLoop.not_rel_self j
-
-Depends on / 依赖: HasNoLoop, HasNoLoop.not_rel_self, not_rel_self
+/-
+**ComplexShape.not_rel_self** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：not_rel_self : ¬ c.Rel j j
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.HasNoLoop.not_rel_self`：∀ {ι : Type u_1} {c : ComplexShape 
+ι} [self : c.HasNoLoop] (i : ι), ¬c.Rel i i
 -/
 lemma not_rel_self : ¬ c.Rel j j :=
   HasNoLoop.not_rel_self j
 
 variable {j} in
-/--
-lemma `not_rel_of_eq` / 引理 `not_rel_of_eq`
-
-English:
-lemma not_rel_of_eq
-  given: {j' : ι} (h : j = j')
-  statement: ¬ c.Rel j j'
-  proof: by
-  subst h
-  exact c.not_rel_self j
-
-中文:
-引理 not_rel_of_eq
-  条件: {j' : ι} (h : j = j')
-  结论: ¬ c.关系 j j'
-  证明: by
-  subst h
-  exact c.not_rel_self j
-
-Depends on / 依赖: c.not_rel_self, not_rel_self
+/-
+**ComplexShape.not_rel_of_eq** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：not_rel_of_eq {j' : ι} (h : j = j') : ¬ c.Rel j j'
+参数：h : j = j'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.not_rel_self`：not_rel_self : ¬ c.Rel j j
 -/
 lemma not_rel_of_eq {j' : ι} (h : j = j') : ¬ c.Rel j j' := by
   subst h
   exact c.not_rel_self j
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: c.symm.HasNoLoop
-  body: c.not_rel_self j
-
-中文:
-实例 :
-  签名: c.symm.有NoLoop
-  定义体: c.not_rel_self j
-
-Depends on / 依赖: c.not_rel_self, not_rel_self
+/-
+**ComplexShape.** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : c.symm.HasNoLoop where
   not_rel_self j := c.not_rel_self j
-
-/--
-lemma `exists_distinct_prev_or` / 引理 `exists_distinct_prev_or`
-
-English:
-lemma exists_distinct_prev_or
-  proof: by
-  grind +splitIndPred
-
-中文:
-引理 存在_distinct_prev_or
-  证明: by
-  grind +splitIndPred
-
-Depends on / 依赖: splitIndPred
+/-
+**ComplexShape.exists_distinct_prev_or** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：exists_distinct_prev_or : (exists (k : ι), c.Rel j k ∧ j != k) ∨ forall (k
+ : ι), ¬ c.Rel j k
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exists_distinct_prev_or :
-    (exists (k : ι), c.Rel j k ∧ j != k) ∨ forall (k : ι), ¬ c.Rel j k := by
+    (∃ (k : ι), c.Rel j k ∧ j ≠ k) ∨ ∀ (k : ι), ¬ c.Rel j k := by
   grind +splitIndPred
-
-/--
-lemma `exists_distinct_next_or` / 引理 `exists_distinct_next_or`
-
-English:
-lemma exists_distinct_next_or
-  proof: by
-  grind +splitIndPred
-
-中文:
-引理 存在_distinct_next_or
-  证明: by
-  grind +splitIndPred
-
-Depends on / 依赖: splitIndPred
+/-
+**ComplexShape.exists_distinct_next_or** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：exists_distinct_next_or : (exists (i : ι), c.Rel i j ∧ i != j) ∨ forall (i
+ : ι), ¬ c.Rel i j
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exists_distinct_next_or :
-    (exists (i : ι), c.Rel i j ∧ i != j) ∨ forall (i : ι), ¬ c.Rel i j := by
+    (∃ (i : ι), c.Rel i j ∧ i ≠ j) ∨ ∀ (i : ι), ¬ c.Rel i j := by
   grind +splitIndPred
-
-/--
-lemma `hasNoLoop_up'` / 引理 `hasNoLoop_up'`
-
-English:
-lemma hasNoLoop_up'
-  statement: {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-  proof: ha (add_left_cancel (by rw [add_zero, hi]))
-
-中文:
-引理 hasNoLoop_up'
-  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
-  证明: ha (add_left_cancel (by rw [add_zero, hi]))
-
-Depends on / 依赖: add_left_cancel, add_zero
+/-
+**ComplexShape.hasNoLoop_up'** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：hasNoLoop_up' {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCan
+celAdd α] (a : α) (ha : a != 0) : (up' a).HasNoLoop where not_rel_self i (hi : _
+ = _)
+参数：a : α；ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_left_cancel`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] {a 
+b c : G}, a + b = a + c → b = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 lemma hasNoLoop_up' {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-    (a : α) (ha : a != 0) :
+    (a : α) (ha : a ≠ 0) :
     (up' a).HasNoLoop where
   not_rel_self i (hi : _ = _) :=
     ha (add_left_cancel (by rw [add_zero, hi]))
-
-/--
-lemma `hasNoLoop_down'` / 引理 `hasNoLoop_down'`
-
-English:
-lemma hasNoLoop_down'
-  statement: {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-  proof: by
-  have := hasNoLoop_up' a ha
-  exact inferInstanceAs (up' a).symm.HasNoLoop
-
-中文:
-引理 hasNoLoop_down'
-  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
-  证明: by
-  have := hasNoLoop_up' a ha
-  exact inferInstanceAs (up' a).symm.HasNoLoop
-
-Depends on / 依赖: HasNoLoop, hasNoLoop_up, symm.HasNoLoop
+/-
+**ComplexShape.hasNoLoop_down'** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：hasNoLoop_down' {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftC
+ancelAdd α] (a : α) (ha : a != 0) : (down' a).HasNoLoop
+参数：a : α；ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.hasNoLoop_up'`：hasNoLoop_up' {α : Type*} [AddZeroClass α] [
+IsRightCancelAdd α] [IsLeftCancelAdd α] (a : α) (ha : a != 0) : (up' a).HasNoLoo
+p where not_rel_…
 -/
 lemma hasNoLoop_down' {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-    (a : α) (ha : a != 0) :
+    (a : α) (ha : a ≠ 0) :
     (down' a).HasNoLoop := by
   have := hasNoLoop_up' a ha
   exact inferInstanceAs (up' a).symm.HasNoLoop
-
-/--
-lemma `hasNoLoop_up` / 引理 `hasNoLoop_up`
-
-English:
-lemma hasNoLoop_up
-  statement: {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-  proof: hasNoLoop_up' _ ha
-
-中文:
-引理 hasNoLoop_up
-  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
-  证明: hasNoLoop_up' _ ha
-
-Depends on / 依赖: hasNoLoop_up
+/-
+**ComplexShape.hasNoLoop_up** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：hasNoLoop_up {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCanc
+elAdd α] [One α] (ha : (1 : α) != 0) : (up α).HasNoLoop
+参数：ha : (1 : α) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.hasNoLoop_up'`：hasNoLoop_up' {α : Type*} [AddZeroClass α] [
+IsRightCancelAdd α] [IsLeftCancelAdd α] (a : α) (ha : a != 0) : (up' a).HasNoLoo
+p where not_rel_…
 -/
 lemma hasNoLoop_up {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-    [One α] (ha : (1 : α) != 0) :
+    [One α] (ha : (1 : α) ≠ 0) :
     (up α).HasNoLoop :=
   hasNoLoop_up' _ ha
-
-/--
-lemma `hasNoLoop_down` / 引理 `hasNoLoop_down`
-
-English:
-lemma hasNoLoop_down
-  statement: {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-  proof: hasNoLoop_down' _ ha
-
-中文:
-引理 hasNoLoop_down
-  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
-  证明: hasNoLoop_down' _ ha
-
-Depends on / 依赖: hasNoLoop_down
+/-
+**ComplexShape.hasNoLoop_down** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+形式化陈述：hasNoLoop_down {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCa
+ncelAdd α] [One α] (ha : (1 : α) != 0) : (down α).HasNoLoop
+参数：ha : (1 : α) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.hasNoLoop_down'`：hasNoLoop_down' {α : Type*} [AddZeroClass 
+α] [IsRightCancelAdd α] [IsLeftCancelAdd α] (a : α) (ha : a != 0) : (down' a).Ha
+sNoLoop
 -/
 lemma hasNoLoop_down {α : Type*} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
-    [One α] (ha : (1 : α) != 0) :
+    [One α] (ha : (1 : α) ≠ 0) :
     (down α).HasNoLoop :=
   hasNoLoop_down' _ ha
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (up Int).HasNoLoop
-  body: hasNoLoop_up (by simp)
-
-中文:
-实例 :
-  签名: (up 整数).有NoLoop
-  定义体: hasNoLoop_up (by simp)
-
-Depends on / 依赖: hasNoLoop_up
+/-
+**ComplexShape.** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (up Int).HasNoLoop := hasNoLoop_up (by simp)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (up Nat).HasNoLoop
-  body: hasNoLoop_up (by simp)
-
-中文:
-实例 :
-  签名: (up 自然数).有NoLoop
-  定义体: hasNoLoop_up (by simp)
-
-Depends on / 依赖: hasNoLoop_up
+instance : (up ℤ).HasNoLoop := hasNoLoop_up (by simp)
+/-
+**ComplexShape.** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (up Nat).HasNoLoop := hasNoLoop_up (by simp)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (down Int).HasNoLoop
-  body: hasNoLoop_down (by simp)
-
-中文:
-实例 :
-  签名: (down 整数).有NoLoop
-  定义体: hasNoLoop_down (by simp)
-
-Depends on / 依赖: hasNoLoop_down
+instance : (up ℕ).HasNoLoop := hasNoLoop_up (by simp)
+/-
+**ComplexShape.** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (down Int).HasNoLoop := hasNoLoop_down (by simp)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (down Nat).HasNoLoop
-  body: hasNoLoop_down (by simp)
-
-中文:
-实例 :
-  签名: (down 自然数).有NoLoop
-  定义体: hasNoLoop_down (by simp)
-
-Depends on / 依赖: hasNoLoop_down
+instance : (down ℤ).HasNoLoop := hasNoLoop_down (by simp)
+/-
+**ComplexShape.** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (down Nat).HasNoLoop := hasNoLoop_down (by simp)
+instance : (down ℕ).HasNoLoop := hasNoLoop_down (by simp)
 
 end ComplexShape
+

@@ -30,233 +30,245 @@ noncomputable section
 
 variable {X : Type*}
 
-/--
-Definition of `FreeAbelianGroup.toFinsupp` / `FreeAbelianGroup.toFinsupp` 的定义
+/-- The group homomorphism `FreeAbelianGroup X →+ (X →₀ ℤ)`. -/
+/-
+**FreeAbelianGroup.toFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeAbelianGroup.toFinsupp : FreeAbelianGroup X ->+ X ->₀ Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeAbelianGroup.toFinsupp
-  signature: : FreeAbelianGroup X ->+ X ->₀ Int
-  body: FreeAbelianGroup.lift fun x => Finsupp.single x (1 : Int)
-
-中文:
-定义 自由交换群.toFinsupp
-  签名: : 自由交换群 X ->+ X ->₀ 整数
-  定义体: FreeAbelianGroup.lift fun x => Finsupp.single x (1 : Int)
-
-Depends on / 依赖: Finsupp, Finsupp.single, FreeAbelianGroup, FreeAbelianGroup.lift, single
+--- 原说明 ---
+The group homomorphism `FreeAbelianGroup X →+ (X →₀ ℤ)`.
 -/
-def FreeAbelianGroup.toFinsupp : FreeAbelianGroup X ->+ X ->₀ Int :=
-  FreeAbelianGroup.lift fun x => Finsupp.single x (1 : Int)
+def FreeAbelianGroup.toFinsupp : FreeAbelianGroup X →+ X →₀ ℤ :=
+  FreeAbelianGroup.lift fun x => Finsupp.single x (1 : ℤ)
 
-/--
-Definition of `Finsupp.toFreeAbelianGroup` / `Finsupp.toFreeAbelianGroup` 的定义
+/-- The group homomorphism `(X →₀ ℤ) →+ FreeAbelianGroup X`. -/
+/-
+**Finsupp.toFreeAbelianGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finsupp.toFreeAbelianGroup : (X ->₀ Int) ->+ FreeAbelianGroup X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finsupp.toFreeAbelianGroup
-  signature: : (X ->₀ Int) ->+ FreeAbelianGroup X
-  body: Finsupp.liftAddHom fun x => (smulAddHom Int (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
-
-中文:
-定义 有限支撑.toFreeAbelianGroup
-  签名: : (X ->₀ 整数) ->+ 自由交换群 X
-  定义体: Finsupp.liftAddHom fun x => (smulAddHom Int (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
-
-Depends on / 依赖: Finsupp, Finsupp.liftAddHom, FreeAbelianGroup, FreeAbelianGroup.of, liftAddHom, smulAddHom
+--- 原说明 ---
+The group homomorphism `(X →₀ ℤ) →+ FreeAbelianGroup X`.
 -/
-def Finsupp.toFreeAbelianGroup : (X ->₀ Int) ->+ FreeAbelianGroup X :=
-  Finsupp.liftAddHom fun x => (smulAddHom Int (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
-
-/--
-lemma `FreeAbelianGroup.toFinsupp_of` / 引理 `FreeAbelianGroup.toFinsupp_of`
-
-English:
-lemma FreeAbelianGroup.toFinsupp_of
-  given: (x : X)
-  statement: toFinsupp (of x) = .single x 1
-  proof: by
-  simp [toFinsupp]
-
-中文:
-引理 自由交换群.toFinsupp_of
-  条件: (x : X)
-  结论: toFinsupp (of x) = .single x 1
-  证明: by
-  simp [toFinsupp]
+def Finsupp.toFreeAbelianGroup : (X →₀ ℤ) →+ FreeAbelianGroup X :=
+  Finsupp.liftAddHom fun x => (smulAddHom ℤ (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
+/-
+**FreeAbelianGroup.toFinsupp_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：∀ {X : Type u_1} (x : X), FreeAbelianGroup.toFinsupp (FreeAbelianGroup.of 
+x) = fun₀ | x => 1
+参数：x : X；FreeAbelianGroup.of x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeAbelianGroup.lift_apply_of`：lift_apply_of (x : α) : lift f (of x) = 
+f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma FreeAbelianGroup.toFinsupp_of (x : X) : toFinsupp (of x) = .single x 1 := by
   simp [toFinsupp]
-
-/--
-lemma `Finsupp.toFreeAbelianGroup_single` / 引理 `Finsupp.toFreeAbelianGroup_single`
-
-English:
-lemma Finsupp.toFreeAbelianGroup_single
-  given: (x : X) (n : Int)
-  proof: by simp [toFreeAbelianGroup]
-
-中文:
-引理 有限支撑.toFreeAbelianGroup_single
-  条件: (x : X) (n : 整数)
-  证明: by simp [toFreeAbelianGroup]
+/-
+**Finsupp.toFreeAbelianGroup_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {X : Type u_1} (x : X) (n : ℤ), (Finsupp.toFreeAbelianGroup fun₀ | x => 
+n) = n • FreeAbelianGroup.of x
+参数：x : X；n : ℤ；Finsupp.toFreeAbelianGroup fun₀ | x => n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma Finsupp.toFreeAbelianGroup_single (x : X) (n : Int) :
+@[simp] lemma Finsupp.toFreeAbelianGroup_single (x : X) (n : ℤ) :
     toFreeAbelianGroup (single x n) = n • .of x := by simp [toFreeAbelianGroup]
 
 open Finsupp FreeAbelianGroup
 
 @[simp]
-/--
-theorem `Finsupp.toFreeAbelianGroup_comp_singleAddHom` / 定理 `Finsupp.toFreeAbelianGroup_comp_singleAddHom`
-
-English:
-theorem Finsupp.toFreeAbelianGroup_comp_singleAddHom
-  given: (x : X)
-  proof: AddMonoidHom.ext toFreeAbelianGroup_single _
-
-@[simp]
-
-中文:
-定理 有限支撑.toFreeAbelianGroup_comp_singleAddHom
-  条件: (x : X)
-  证明: AddMonoidHom.ext toFreeAbelianGroup_single _
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, toFreeAbelianGroup_single
+/-
+**Finsupp.toFreeAbelianGroup_comp_singleAddHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toFreeAbelianGroup_comp_singleAddHom (x : X) : Finsupp.toFreeAbeli
+anGroup.comp (Finsupp.singleAddHom x) = (smulAddHom Int (FreeAbelianGroup X)).fl
+ip (of x)
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.toFreeAbelianGroup_single`：∀ {X : Type u_1} (x : X) (n : ℤ), (Fi
+nsupp.toFreeAbelianGroup fun₀ | x => n) = n • FreeAbelianGroup.of x
 -/
 theorem Finsupp.toFreeAbelianGroup_comp_singleAddHom (x : X) :
     Finsupp.toFreeAbelianGroup.comp (Finsupp.singleAddHom x) =
-      (smulAddHom Int (FreeAbelianGroup X)).flip (of x) :=
-AddMonoidHom.ext toFreeAbelianGroup_single _
+      (smulAddHom ℤ (FreeAbelianGroup X)).flip (of x) :=
+  AddMonoidHom.ext <| toFreeAbelianGroup_single _
 
 @[simp]
-/--
-theorem `FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup` / 定理 `FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup`
-
-English:
-theorem FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 自由交换群.toFinsupp_comp_toFreeAbelianGroup
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup : toFinsupp.comp toFree
+AbelianGroup = AddMonoidHom.id (X ->₀ Int)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.addHom_ext'`：addHom_ext' [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N
+⦄ (H : forall x, f.comp (singleAddHom x) = g.comp (singleAddHom x)) : f = g
+· 使用定理 `AddMonoidHom.ext_int`：ext_int [AddMonoid A] {f g : Int ->+ A} (h1 : f 1 
+= g 1) : f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.singleAddHom_apply`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZ
+eroClass M] (a : ι) (b : M), (Finsupp.singleAddHom a) b = fun₀ | a => b
+· 使用定理 `Finsupp.toFreeAbelianGroup_single`：∀ {X : Type u_1} (x : X) (n : ℤ), (Fi
+nsupp.toFreeAbelianGroup fun₀ | x => n) = n • FreeAbelianGroup.of x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `FreeAbelianGroup.toFinsupp_of`：∀ {X : Type u_1} (x : X), FreeAbelianGrou
+p.toFinsupp (FreeAbelianGroup.of x) = fun₀ | x => 1
+· 使用定理 `AddMonoidHom.id_comp`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M]
+ [inst_1 : AddZero N] (f : M →+ N), (AddMonoidHom.id N).comp f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup :
-    toFinsupp.comp toFreeAbelianGroup = AddMonoidHom.id (X ->₀ Int) := by
+    toFinsupp.comp toFreeAbelianGroup = AddMonoidHom.id (X →₀ ℤ) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `Finsupp.toFreeAbelianGroup_comp_toFinsupp` / 定理 `Finsupp.toFreeAbelianGroup_comp_toFinsupp`
-
-English:
-theorem Finsupp.toFreeAbelianGroup_comp_toFinsupp
-  proof: by
-  ext
-  rw [toFreeAbelianGroup]; rw [toFinsupp]; rw [AddMonoidHom.comp_apply]; rw [lift_apply_of]; rw [liftAddHom_apply_single]; rw [AddMonoidHom.flip_apply]; rw [smulAddHom_apply]; rw [one_smul]; rw [AddMonoidHom.id_apply]
-
-@[simp]
-
-中文:
-定理 有限支撑.toFreeAbelianGroup_comp_toFinsupp
-  证明: by
-  ext
-  rw [toFreeAbelianGroup]; rw [toFinsupp]; rw [AddMonoidHom.comp_apply]; rw [lift_apply_of]; rw [liftAddHom_apply_single]; rw [AddMonoidHom.flip_apply]; rw [smulAddHom_apply]; rw [one_smul]; rw [AddMonoidHom.id_apply]
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddMonoidHom.flip_apply, AddMonoidHom.id_apply, comp_apply, flip_apply, id_apply, liftAddHom_apply_single, lift_apply_of, one_smul, smulAddHom_apply, toFinsupp, toFreeAbelianGroup
+/-
+**Finsupp.toFreeAbelianGroup_comp_toFinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toFreeAbelianGroup_comp_toFinsupp : toFreeAbelianGroup.comp toFins
+upp = AddMonoidHom.id (FreeAbelianGroup X)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeAbelianGroup.lift_ext`：lift_ext (g h : FreeAbelianGroup α ->+ β) (H 
+: forall x, g (of x) = h (of x)) : g = h
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toFreeAbelianGroup.eq_1`：∀ {X : Type u_1},   Finsupp.toFreeAbeli
+anGroup =     Finsupp.liftAddHom fun x => (smulAddHom ℤ (FreeAbelianGroup X)).fl
+ip (FreeAbelianGroup.…
+· 使用定理 `FreeAbelianGroup.toFinsupp.eq_1`：∀ {X : Type u_1}, FreeAbelianGroup.toFi
+nsupp = FreeAbelianGroup.lift fun x => fun₀ | x => 1
+· 使用定理 `AddMonoidHom.comp_apply`：∀ {M : Type u_4} {N : Type u_5} {P : Type u_6} 
+[inst : AddZero M] [inst_1 : AddZero N] [inst_2 : AddZero P] (g : N →+ P)   (f :
+ M →+ N) (x :…
+· 使用定理 `FreeAbelianGroup.lift_apply_of`：lift_apply_of (x : α) : lift f (of x) = 
+f x
+· 使用定理 `Finsupp.liftAddHom_apply_single`：liftAddHom_apply_single [AddZeroClass M
+] [AddCommMonoid N] (f : α -> M ->+ N) (a : α) (b : M) : (liftAddHom (α
+· 使用定理 `AddMonoidHom.flip_apply`：∀ {M : Type uM} {N : Type uN} {P : Type uP} {x 
+: AddZeroClass M} {x_1 : AddZeroClass N} {x_2 : AddCommMonoid P}   (f : M →+ N →
++ P) (x_3 : M…
+· 使用定理 `smulAddHom_apply`：smulAddHom_apply : smulAddHom R M r x = r • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `AddMonoidHom.id_apply`：∀ (M : Type u_10) [inst : AddZero M] (x : M), (Ad
+dMonoidHom.id M) x = x
 -/
 theorem Finsupp.toFreeAbelianGroup_comp_toFinsupp :
     toFreeAbelianGroup.comp toFinsupp = AddMonoidHom.id (FreeAbelianGroup X) := by
   ext
-  rw [toFreeAbelianGroup]; rw [toFinsupp]; rw [AddMonoidHom.comp_apply]; rw [lift_apply_of]; rw [liftAddHom_apply_single]; rw [AddMonoidHom.flip_apply]; rw [smulAddHom_apply]; rw [one_smul]; rw [AddMonoidHom.id_apply]
+  rw [toFreeAbelianGroup, toFinsupp, AddMonoidHom.comp_apply, lift_apply_of,
+    liftAddHom_apply_single, AddMonoidHom.flip_apply, smulAddHom_apply, one_smul,
+    AddMonoidHom.id_apply]
 
 @[simp]
-/--
-theorem `Finsupp.toFreeAbelianGroup_toFinsupp` / 定理 `Finsupp.toFreeAbelianGroup_toFinsupp`
-
-English:
-theorem Finsupp.toFreeAbelianGroup_toFinsupp
-  given: {X} (x : FreeAbelianGroup X)
-  proof: by
-  rw [← AddMonoidHom.comp_apply]; rw [Finsupp.toFreeAbelianGroup_comp_toFinsupp]; rw [AddMonoidHom.id_apply]
-
-中文:
-定理 有限支撑.toFreeAbelianGroup_toFinsupp
-  条件: {X} (x : 自由交换群 X)
-  证明: by
-  rw [← AddMonoidHom.comp_apply]; rw [Finsupp.toFreeAbelianGroup_comp_toFinsupp]; rw [AddMonoidHom.id_apply]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddMonoidHom.id_apply, Finsupp, Finsupp.toFreeAbelianGroup_comp_toFinsupp, comp_apply, id_apply, toFreeAbelianGroup_comp_toFinsupp
+/-
+**Finsupp.toFreeAbelianGroup_toFinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toFreeAbelianGroup_toFinsupp {X} (x : FreeAbelianGroup X) : Finsup
+p.toFreeAbelianGroup (FreeAbelianGroup.toFinsupp x) = x
+参数：x : FreeAbelianGroup X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddMonoidHom.comp_apply`：∀ {M : Type u_4} {N : Type u_5} {P : Type u_6} 
+[inst : AddZero M] [inst_1 : AddZero N] [inst_2 : AddZero P] (g : N →+ P)   (f :
+ M →+ N) (x :…
+· 使用定理 `Finsupp.toFreeAbelianGroup_comp_toFinsupp`：Finsupp.toFreeAbelianGroup_co
+mp_toFinsupp : toFreeAbelianGroup.comp toFinsupp = AddMonoidHom.id (FreeAbelianG
+roup X)
+· 使用定理 `AddMonoidHom.id_apply`：∀ (M : Type u_10) [inst : AddZero M] (x : M), (Ad
+dMonoidHom.id M) x = x
 -/
 theorem Finsupp.toFreeAbelianGroup_toFinsupp {X} (x : FreeAbelianGroup X) :
     Finsupp.toFreeAbelianGroup (FreeAbelianGroup.toFinsupp x) = x := by
-  rw [← AddMonoidHom.comp_apply]; rw [Finsupp.toFreeAbelianGroup_comp_toFinsupp]; rw [AddMonoidHom.id_apply]
+  rw [← AddMonoidHom.comp_apply, Finsupp.toFreeAbelianGroup_comp_toFinsupp, AddMonoidHom.id_apply]
 
 namespace FreeAbelianGroup
 
 open Finsupp
 
 @[simp]
-/--
-theorem `toFinsupp_toFreeAbelianGroup` / 定理 `toFinsupp_toFreeAbelianGroup`
-
-English:
-theorem toFinsupp_toFreeAbelianGroup
-  given: (f : X ->₀ Int)
-  proof: by
-  rw [← AddMonoidHom.comp_apply]; rw [toFinsupp_comp_toFreeAbelianGroup]; rw [AddMonoidHom.id_apply]
-
-中文:
-定理 toFinsupp_toFreeAbelianGroup
-  条件: (f : X ->₀ 整数)
-  证明: by
-  rw [← AddMonoidHom.comp_apply]; rw [toFinsupp_comp_toFreeAbelianGroup]; rw [AddMonoidHom.id_apply]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddMonoidHom.id_apply, comp_apply, id_apply, toFinsupp_comp_toFreeAbelianGroup
+/-
+**FreeAbelianGroup.toFinsupp_toFreeAbelianGroup** 是 Mathlib 中的一个定理，位于命名空间 `FreeA
+belianGroup`。
+形式化陈述：toFinsupp_toFreeAbelianGroup (f : X ->₀ Int) : FreeAbelianGroup.toFinsupp 
+(Finsupp.toFreeAbelianGroup f) = f
+参数：f : X ->₀ Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddMonoidHom.comp_apply`：∀ {M : Type u_4} {N : Type u_5} {P : Type u_6} 
+[inst : AddZero M] [inst_1 : AddZero N] [inst_2 : AddZero P] (g : N →+ P)   (f :
+ M →+ N) (x :…
+· 使用定理 `FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup`：FreeAbelianGroup.toF
+insupp_comp_toFreeAbelianGroup : toFinsupp.comp toFreeAbelianGroup = AddMonoidHo
+m.id (X ->₀ Int)
+· 使用定理 `AddMonoidHom.id_apply`：∀ (M : Type u_10) [inst : AddZero M] (x : M), (Ad
+dMonoidHom.id M) x = x
 -/
-theorem toFinsupp_toFreeAbelianGroup (f : X ->₀ Int) :
+theorem toFinsupp_toFreeAbelianGroup (f : X →₀ ℤ) :
     FreeAbelianGroup.toFinsupp (Finsupp.toFreeAbelianGroup f) = f := by
-  rw [← AddMonoidHom.comp_apply]; rw [toFinsupp_comp_toFreeAbelianGroup]; rw [AddMonoidHom.id_apply]
+  rw [← AddMonoidHom.comp_apply, toFinsupp_comp_toFreeAbelianGroup, AddMonoidHom.id_apply]
 
 variable (X)
 
 /-- The additive equivalence between `FreeAbelianGroup X` and `(X →₀ ℤ)`. -/
 @[simps!]
-/--
-Definition of `equivFinsupp` / `equivFinsupp` 的定义
+/-
+**FreeAbelianGroup.equivFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：equivFinsupp : FreeAbelianGroup X ≃+ (X ->₀ Int) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.toFreeAbelianGroup_toFinsupp`：Finsupp.toFreeAbelianGroup_toFinsu
+pp {X} (x : FreeAbelianGroup X) : Finsupp.toFreeAbelianGroup (FreeAbelianGroup.t
+oFinsupp x) = x
+· 使用定理 `FreeAbelianGroup.toFinsupp_toFreeAbelianGroup`：toFinsupp_toFreeAbelianGr
+oup (f : X ->₀ Int) : FreeAbelianGroup.toFinsupp (Finsupp.toFreeAbelianGroup f) 
+= f
 
-English:
-definition equivFinsupp
-  signature: : FreeAbelianGroup X ≃+ (X ->₀ Int) where
-  body: toFinsupp
-  invFun := toFreeAbelianGroup
-  left_inv := toFreeAbelianGroup_toFinsupp
-  right_inv := toFinsupp_toFreeAbelianGroup
-  map_add' := toFinsupp.map_add
-
-中文:
-定义 equivFinsupp
-  签名: : 自由交换群 X ≃+ (X ->₀ 整数) where
-  定义体: toFinsupp
-  invFun := toFreeAbelianGroup
-  left_inv := toFreeAbelianGroup_toFinsupp
-  right_inv := toFinsupp_toFreeAbelianGroup
-  map_add' := toFinsupp.map_add
-
-Depends on / 依赖: toFinsupp
+--- 原说明 ---
+The additive equivalence between `FreeAbelianGroup X` and `(X →₀ ℤ)`.
 -/
-def equivFinsupp : FreeAbelianGroup X ≃+ (X ->₀ Int) where
+def equivFinsupp : FreeAbelianGroup X ≃+ (X →₀ ℤ) where
   toFun := toFinsupp
   invFun := toFreeAbelianGroup
   left_inv := toFreeAbelianGroup_toFinsupp
@@ -265,337 +277,315 @@ def equivFinsupp : FreeAbelianGroup X ≃+ (X ->₀ Int) where
 
 variable {X}
 
-/--
-Definition of `coeff` / `coeff` 的定义
+/-- `coeff x` is the additive group homomorphism `FreeAbelianGroup X →+ ℤ`
+that sends `a` to the multiplicity of `x : X` in `a`. -/
+/-
+**FreeAbelianGroup.coeff** 是 Mathlib 中的一个定义，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：coeff (x : X) : FreeAbelianGroup X ->+ Int
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeff
-  signature: (x : X)
-  body: (Finsupp.applyAddHom x).comp toFinsupp
-
-中文:
-定义 coeff
-  签名: (x : X)
-  定义体: (Finsupp.applyAddHom x).comp toFinsupp
-
-Depends on / 依赖: Finsupp, Finsupp.applyAddHom, applyAddHom, toFinsupp
+--- 原说明 ---
+`coeff x` is the additive group homomorphism `FreeAbelianGroup X →+ ℤ`
+that sends `a` to the multiplicity of `x : X` in `a`.
 -/
-def coeff (x : X) : FreeAbelianGroup X ->+ Int :=
+def coeff (x : X) : FreeAbelianGroup X →+ ℤ :=
   (Finsupp.applyAddHom x).comp toFinsupp
 
-/--
-Definition of `support` / `support` 的定义
+/-- `support a` for `a : FreeAbelianGroup X` is the finite set of `x : X`
+that occur in the formal sum `a`. -/
+/-
+**FreeAbelianGroup.support** 是 Mathlib 中的一个定义，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support (a : FreeAbelianGroup X) : Finset X
+参数：a : FreeAbelianGroup X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition support
-  signature: (a : FreeAbelianGroup X)
-  body: a.toFinsupp.support
-
-@[simp]
-
-中文:
-定义 support
-  签名: (a : 自由交换群 X)
-  定义体: a.toFinsupp.support
-
-@[simp]
-
-Depends on / 依赖: a.toFinsupp.support, support, toFinsupp
+--- 原说明 ---
+`support a` for `a : FreeAbelianGroup X` is the finite set of `x : X`
+that occur in the formal sum `a`.
 -/
 def support (a : FreeAbelianGroup X) : Finset X :=
   a.toFinsupp.support
 
 @[simp]
-/--
-theorem `mem_support_iff` / 定理 `mem_support_iff`
-
-English:
-theorem mem_support_iff
-  given: (x : X) (a : FreeAbelianGroup X)
-  statement: x in a.support ↔ coeff x a != 0
-  proof: by
-  rw [support]; rw [Finsupp.mem_support_iff]
-  exact Iff.rfl
-
-中文:
-定理 mem_support_iff
-  条件: (x : X) (a : 自由交换群 X)
-  结论: x in a.support ↔ coeff x a != 0
-  证明: by
-  rw [support]; rw [Finsupp.mem_support_iff]
-  exact Iff.rfl
-
-Depends on / 依赖: Finsupp, Finsupp.mem_support_iff, Iff.rfl, mem_support_iff, support
+/-
+**FreeAbelianGroup.mem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：mem_support_iff (x : X) (a : FreeAbelianGroup X) : x in a.support ↔ coeff 
+x a != 0
+参数：x : X；a : FreeAbelianGroup X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeAbelianGroup.support.eq_1`：∀ {X : Type u_1} (a : FreeAbelianGroup X)
+, a.support = (FreeAbelianGroup.toFinsupp a).support
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_support_iff (x : X) (a : FreeAbelianGroup X) : x in a.support ↔ coeff x a != 0 := by
-  rw [support]; rw [Finsupp.mem_support_iff]
+theorem mem_support_iff (x : X) (a : FreeAbelianGroup X) : x ∈ a.support ↔ coeff x a ≠ 0 := by
+  rw [support, Finsupp.mem_support_iff]
   exact Iff.rfl
-
-/--
-theorem `notMem_support_iff` / 定理 `notMem_support_iff`
-
-English:
-theorem notMem_support_iff
-  given: (x : X) (a : FreeAbelianGroup X)
-  statement: x ∉ a.support ↔ coeff x a = 0
-  proof: by
-  rw [support]; rw [Finsupp.notMem_support_iff]
-  exact Iff.rfl
-
-@[simp]
-
-中文:
-定理 notMem_support_iff
-  条件: (x : X) (a : 自由交换群 X)
-  结论: x ∉ a.support ↔ coeff x a = 0
-  证明: by
-  rw [support]; rw [Finsupp.notMem_support_iff]
-  exact Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.notMem_support_iff, Iff.rfl, notMem_support_iff, support
+/-
+**FreeAbelianGroup.notMem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGrou
+p`。
+形式化陈述：notMem_support_iff (x : X) (a : FreeAbelianGroup X) : x ∉ a.support ↔ coef
+f x a = 0
+参数：x : X；a : FreeAbelianGroup X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeAbelianGroup.support.eq_1`：∀ {X : Type u_1} (a : FreeAbelianGroup X)
+, a.support = (FreeAbelianGroup.toFinsupp a).support
+· 使用定理 `Finsupp.notMem_support_iff`：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f
+.support ↔ f a = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem notMem_support_iff (x : X) (a : FreeAbelianGroup X) : x ∉ a.support ↔ coeff x a = 0 := by
-  rw [support]; rw [Finsupp.notMem_support_iff]
+  rw [support, Finsupp.notMem_support_iff]
   exact Iff.rfl
 
 @[simp]
-/--
-theorem `support_zero` / 定理 `support_zero`
-
-English:
-theorem support_zero
-  statement: support (0 : FreeAbelianGroup X) = ∅
-  proof: by
-  simp only [support, Finsupp.support_zero, map_zero]
-
-@[simp]
-
-中文:
-定理 support_zero
-  结论: support (0 : 自由交换群 X) = ∅
-  证明: by
-  simp only [support, Finsupp.support_zero, map_zero]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.support_zero, FreeAbelianGroup, FreeAbelianGroup.equivFinsupp, equivFinsupp, map_zero, support, support_zero, twoUniqueSums_iff, twoUniqueSums_iff.mpr
+/-
+**FreeAbelianGroup.support_zero** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_zero : support (0 : FreeAbelianGroup X) = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem support_zero : support (0 : FreeAbelianGroup X) = ∅ := by
   simp only [support, Finsupp.support_zero, map_zero]
 
 @[simp]
-/--
-theorem `support_of` / 定理 `support_of`
-
-English:
-theorem support_of
-  given: (x : X)
-  statement: support (of x) = {x}
-  proof: by
-  rw [support]; rw [toFinsupp_of]; rw [Finsupp.support_single _ one_ne_zero]
-
-@[simp]
-
-中文:
-定理 support_of
-  条件: (x : X)
-  结论: support (of x) = {x}
-  证明: by
-  rw [support]; rw [toFinsupp_of]; rw [Finsupp.support_single _ one_ne_zero]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.support_single, one_ne_zero, support, support_single, toFinsupp_of
+/-
+**FreeAbelianGroup.support_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_of (x : X) : support (of x) = {x}
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeAbelianGroup.support.eq_1`：∀ {X : Type u_1} (a : FreeAbelianGroup X)
+, a.support = (FreeAbelianGroup.toFinsupp a).support
+· 使用定理 `FreeAbelianGroup.toFinsupp_of`：∀ {X : Type u_1} (x : X), FreeAbelianGrou
+p.toFinsupp (FreeAbelianGroup.of x) = fun₀ | x => 1
+· 使用定理 `Finsupp.support_single`：∀ {α : Type u_1} {M : Type u_5} [inst : Zero M] 
+{b : M} (a : α), b ≠ 0 → (fun₀ | a => b).support = {a}
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem support_of (x : X) : support (of x) = {x} := by
-  rw [support]; rw [toFinsupp_of]; rw [Finsupp.support_single _ one_ne_zero]
+  rw [support, toFinsupp_of, Finsupp.support_single _ one_ne_zero]
 
 @[simp]
-/--
-theorem `support_neg` / 定理 `support_neg`
-
-English:
-theorem support_neg
-  given: (a : FreeAbelianGroup X)
-  statement: support (-a) = support a
-  proof: by
-  simp only [support, map_neg, Finsupp.support_neg]
-
-@[simp]
-
-中文:
-定理 support_neg
-  条件: (a : 自由交换群 X)
-  结论: support (-a) = support a
-  证明: by
-  simp only [support, map_neg, Finsupp.support_neg]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.support_neg, map_neg, support, support_neg
+/-
+**FreeAbelianGroup.support_neg** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_neg (a : FreeAbelianGroup X) : support (-a) = support a
+参数：a : FreeAbelianGroup X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用引理 `Finsupp.support_neg`：support_neg (f : ι ->₀ G) : support (-f) = support 
+f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem support_neg (a : FreeAbelianGroup X) : support (-a) = support a := by
   simp only [support, map_neg, Finsupp.support_neg]
 
 @[simp]
-/--
-theorem `support_zsmul` / 定理 `support_zsmul`
-
-English:
-theorem support_zsmul
-  given: (k : Int) (h : k != 0) (a : FreeAbelianGroup X)
-  proof: by
-  ext x
-  simp [h]
-
-@[simp]
-
-中文:
-定理 support_zsmul
-  条件: (k : 整数) (h : k != 0) (a : 自由交换群 X)
-  证明: by
-  ext x
-  simp [h]
-
-@[simp]
+/-
+**FreeAbelianGroup.support_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_zsmul (k : Int) (h : k != 0) (a : FreeAbelianGroup X) : support (k
+ • a) = support a
+参数：k : Int；h : k != 0；a : FreeAbelianGroup X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem support_zsmul (k : Int) (h : k != 0) (a : FreeAbelianGroup X) :
+theorem support_zsmul (k : ℤ) (h : k ≠ 0) (a : FreeAbelianGroup X) :
     support (k • a) = support a := by
   ext x
   simp [h]
 
 @[simp]
-/--
-theorem `support_nsmul` / 定理 `support_nsmul`
-
-English:
-theorem support_nsmul
-  given: (k : Nat) (h : k != 0) (a : FreeAbelianGroup X)
-  proof: by
-  apply support_zsmul k _ a
-  exact mod_cast h
-
-中文:
-定理 support_nsmul
-  条件: (k : 自然数) (h : k != 0) (a : 自由交换群 X)
-  证明: by
-  apply support_zsmul k _ a
-  exact mod_cast h
-
-Depends on / 依赖: mod_cast, support_zsmul
+/-
+**FreeAbelianGroup.support_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_nsmul (k : Nat) (h : k != 0) (a : FreeAbelianGroup X) : support (k
+ • a) = support a
+参数：k : Nat；h : k != 0；a : FreeAbelianGroup X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeAbelianGroup.support_zsmul`：support_zsmul (k : Int) (h : k != 0) (a 
+: FreeAbelianGroup X) : support (k • a) = support a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-theorem support_nsmul (k : Nat) (h : k != 0) (a : FreeAbelianGroup X) :
+theorem support_nsmul (k : ℕ) (h : k ≠ 0) (a : FreeAbelianGroup X) :
     support (k • a) = support a := by
   apply support_zsmul k _ a
   exact mod_cast h
 
 open scoped Classical in
-/--
-theorem `support_add` / 定理 `support_add`
-
-English:
-theorem support_add
-  given: (a b : FreeAbelianGroup X)
-  statement: support (a + b) subseteq a.support union b.support
-  proof: by
-  simp only [support, map_add]
-  apply Finsupp.support_add
-
-中文:
-定理 support_add
-  条件: (a b : 自由交换群 X)
-  结论: support (a + b) subseteq a.support union b.support
-  证明: by
-  simp only [support, map_add]
-  apply Finsupp.support_add
-
-Depends on / 依赖: Finsupp, Finsupp.support_add, map_add, support, support_add
+/-
+**FreeAbelianGroup.support_add** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`。
+形式化陈述：support_add (a b : FreeAbelianGroup X) : support (a + b) subseteq a.suppor
+t union b.support
+参数：a b : FreeAbelianGroup X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用引理 `Finsupp.support_add`：support_add [DecidableEq ι] : (g₁ + g₂).support sub
+seteq g₁.support union g₂.support
 -/
-theorem support_add (a b : FreeAbelianGroup X) : support (a + b) subseteq a.support union b.support := by
+theorem support_add (a b : FreeAbelianGroup X) : support (a + b) ⊆ a.support ∪ b.support := by
   simp only [support, map_add]
   apply Finsupp.support_add
-
-/--
-theorem `support_eq_empty` / 定理 `support_eq_empty`
-
-English:
-theorem support_eq_empty
-  given: {a : FreeAbelianGroup X}
-  statement: a.support = ∅ ↔ a = 0
-  proof: Finsupp.support_eq_empty.trans (equivFinsupp X).map_eq_zero_iff
-
-中文:
-定理 support_eq_empty
-  条件: {a : 自由交换群 X}
-  结论: a.support = ∅ ↔ a = 0
-  证明: Finsupp.support_eq_empty.trans (equivFinsupp X).map_eq_zero_iff
+/-
+**FreeAbelianGroup.support_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGroup`
+。
+形式化陈述：∀ {X : Type u_1} {a : FreeAbelianGroup X}, a.support = ∅ ↔ a = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
+· 使用定理 `AddEquiv.map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZer
+oClass M] [inst_1 : AddZeroClass N] (h : M ≃+ N) {x : M}, h x = 0 ↔ x = 0
 -/
 @[simp] theorem support_eq_empty {a : FreeAbelianGroup X} : a.support = ∅ ↔ a = 0 :=
   Finsupp.support_eq_empty.trans (equivFinsupp X).map_eq_zero_iff
-
-/--
-theorem `nonempty_support_iff` / 定理 `nonempty_support_iff`
-
-English:
-theorem nonempty_support_iff
-  given: {a : FreeAbelianGroup X}
-  proof: by
-  contrapose!; exact support_eq_empty
-
-中文:
-定理 nonempty_support_iff
-  条件: {a : 自由交换群 X}
-  证明: by
-  contrapose!; exact support_eq_empty
+/-
+**FreeAbelianGroup.nonempty_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGr
+oup`。
+形式化陈述：∀ {X : Type u_1} {a : FreeAbelianGroup X}, a.support.Nonempty ↔ a ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₃`：contrapose_iff₃ {p q : Prop} 
+: (¬ p ↔ q) -> (p ↔ ¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeAbelianGroup.support_eq_empty`：∀ {X : Type u_1} {a : FreeAbelianGrou
+p X}, a.support = ∅ ↔ a = 0
 -/
 @[simp] theorem nonempty_support_iff {a : FreeAbelianGroup X} :
-    a.support.Nonempty ↔ a != 0 := by
+    a.support.Nonempty ↔ a ≠ 0 := by
   contrapose!; exact support_eq_empty
-
-/--
-theorem `card_support_eq_zero` / 定理 `card_support_eq_zero`
-
-English:
-theorem card_support_eq_zero
-  given: {a : FreeAbelianGroup X}
-  statement: a.support.card = 0 ↔ a = 0
-  proof: by
-  simp
-
-中文:
-定理 card_support_eq_zero
-  条件: {a : 自由交换群 X}
-  结论: a.support.card = 0 ↔ a = 0
-  证明: by
-  simp
+/-
+**FreeAbelianGroup.card_support_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `FreeAbelianGr
+oup`。
+形式化陈述：card_support_eq_zero {a : FreeAbelianGroup X} : a.support.card = 0 ↔ a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem card_support_eq_zero {a : FreeAbelianGroup X} : a.support.card = 0 ↔ a = 0 := by
   simp
-
-/--
-theorem `eq_sum_support_coeff_smul_of` / 定理 `eq_sum_support_coeff_smul_of`
-
-English:
-theorem eq_sum_support_coeff_smul_of
-  given: (a : FreeAbelianGroup X)
-  proof: by
-  conv_lhs => rw [← toFreeAbelianGroup_toFinsupp a, ← sum_single a.toFinsupp]
-  simp [sum, support, coeff]
-
-中文:
-定理 eq_sum_support_coeff_smul_of
-  条件: (a : 自由交换群 X)
-  证明: by
-  conv_lhs => rw [← toFreeAbelianGroup_toFinsupp a, ← sum_single a.toFinsupp]
-  simp [sum, support, coeff]
-
-Depends on / 依赖: a.toFinsupp, conv_lhs, sum_single, support, toFinsupp, toFreeAbelianGroup_toFinsupp
+/-
+**FreeAbelianGroup.eq_sum_support_coeff_smul_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeA
+belianGroup`。
+形式化陈述：eq_sum_support_coeff_smul_of (a : FreeAbelianGroup X) : a = ∑ x in a.suppo
+rt, coeff x a • of x
+参数：a : FreeAbelianGroup X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.toFreeAbelianGroup_toFinsupp`：Finsupp.toFreeAbelianGroup_toFinsu
+pp {X} (x : FreeAbelianGroup X) : Finsupp.toFreeAbelianGroup (FreeAbelianGroup.t
+oFinsupp x) = x
+· 使用定理 `Finsupp.sum_single`：sum_single [AddCommMonoid M] (f : α ->₀ M) : f.sum s
+ingle = f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finsupp.toFreeAbelianGroup_single`：∀ {X : Type u_1} (x : X) (n : ℤ), (Fi
+nsupp.toFreeAbelianGroup fun₀ | x => n) = n • FreeAbelianGroup.of x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.applyAddHom_apply`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZe
+roClass M] (a : ι) (g : ι →₀ M), (Finsupp.applyAddHom a) g = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_sum_support_coeff_smul_of (a : FreeAbelianGroup X) :
-    a = ∑ x in a.support, coeff x a • of x := by
+    a = ∑ x ∈ a.support, coeff x a • of x := by
   conv_lhs => rw [← toFreeAbelianGroup_toFinsupp a, ← sum_single a.toFinsupp]
   simp [sum, support, coeff]
 
 end FreeAbelianGroup
+

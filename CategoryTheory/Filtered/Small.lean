@@ -30,57 +30,40 @@ namespace IsFiltered
 
 section filteredClosure
 
-variable [IsFilteredOrEmpty C] {α : Type w} (f : α -> C)
+variable [IsFilteredOrEmpty C] {α : Type w} (f : α → C)
 
-/--
-Inductive type `filteredClosure` / 归纳类型 `filteredClosure`
+/-- The "filtered closure" of an `α`-indexed family of objects in `C` is the set of objects in `C`
+obtained by starting with the family and successively adding maxima and coequalizers. -/
+/-
+**CategoryTheory.IsFiltered.filteredClosure** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.IsFiltered`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.IsFilteredOrEmpty C] → {α : Type w} → (α → C) → CategoryTheory.ObjectProp
+erty C
+参数：α → C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive filteredClosure
-  parameters: : ObjectProperty C
-  constructors (3):
-    - base: (x : α) -> filteredClosure (f x)
-    - max: {j j' : C} -> filteredClosure j -> filteredClosure j' -> filteredClosure (max j j')
-    - coeq: {j j' : C} -> filteredClosure j -> filteredClosure j' -> (f f' : j ⟶ j') -> filteredClosure (coeq f f')
-
-中文:
-归纳类型 filteredClosure
-  参数: : ObjectProperty C
-  构造子 (3 个):
-    - base: (x : α) -> filteredClosure (f x)
-    - max: {j j' : C} -> filteredClosure j -> filteredClosure j' -> filteredClosure (最大值 j j')
-    - coeq: {j j' : C} -> filteredClosure j -> filteredClosure j' -> (f f' : j ⟶ j') -> filteredClosure (coeq f f')
+--- 原说明 ---
+The "filtered closure" of an `α`-indexed family of objects in `C` is the set of 
+objects in `C`
+obtained by starting with the family and successively adding maxima and coequali
+zers.
 -/
 inductive filteredClosure : ObjectProperty C
-  | base : (x : α) -> filteredClosure (f x)
-  | max : {j j' : C} -> filteredClosure j -> filteredClosure j' -> filteredClosure (max j j')
-  | coeq : {j j' : C} -> filteredClosure j -> filteredClosure j' -> (f f' : j ⟶ j') ->
+  | base : (x : α) → filteredClosure (f x)
+  | max : {j j' : C} → filteredClosure j → filteredClosure j' → filteredClosure (max j j')
+  | coeq : {j j' : C} → filteredClosure j → filteredClosure j' → (f f' : j ⟶ j') →
       filteredClosure (coeq f f')
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The full subcategory induced by the filtered closure of a family of objects is filtered. -/
+/-
+**CategoryTheory.IsFiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsFiltere
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsFilteredOrEmpty (filteredClosure f).FullSubcategory
-  body: ⟨⟨max j.1 j'.1, filteredClosure.max j.2 j'.2⟩, ObjectProperty.homMk (leftToMax _ _),
-      ObjectProperty.homMk (rightToMax _ _), trivial⟩
-  cocone_maps {j j'} f f' :=
-    ⟨⟨coeq f.hom f'.hom, filteredClosure.coeq j.2 j'.2 f.hom f'.hom⟩,
-      ObjectProperty.homMk (coeqHom f.hom f'.hom),
-      ObjectProperty.hom_ext _ (coeq_condition _ _)⟩
-
-中文:
-实例 :
-  签名: 是FilteredOrEmpty (filteredClosure f).满子范畴
-  定义体: ⟨⟨max j.1 j'.1, filteredClosure.max j.2 j'.2⟩, ObjectProperty.homMk (leftToMax _ _),
-      ObjectProperty.homMk (rightToMax _ _), trivial⟩
-  cocone_maps {j j'} f f' :=
-    ⟨⟨coeq f.hom f'.hom, filteredClosure.coeq j.2 j'.2 f.hom f'.hom⟩,
-      ObjectProperty.homMk (coeqHom f.hom f'.hom),
-      ObjectProperty.hom_ext _ (coeq_condition _ _)⟩
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, ObjectProperty.hom_ext, cocone_maps, coeqHom, coeq_condition, f.hom, filteredClosure, filteredClosure.coeq, filteredClosure.max, hom_ext, leftToMax, rightToMax
+--- 原说明 ---
+The full subcategory induced by the filtered closure of a family of objects is f
+iltered.
 -/
 instance : IsFilteredOrEmpty (filteredClosure f).FullSubcategory where
   cocone_objs j j' :=
@@ -107,168 +90,118 @@ namespace FilteredClosureSmall
     induction and then take the union over all natural numbers, mimicking what one would do in a
     set-theoretic setting. -/
 
-/--
-Inductive type `InductiveStep` / 归纳类型 `InductiveStep`
+/-- One step of the inductive procedure consists of adjoining all maxima and coequalizers of all
+objects and morphisms obtained so far. This is quite redundant, picking up many objects which we
+already hit in earlier iterations, but this is easier to work with later. -/
+/-
+**CategoryTheory.IsFiltered.FilteredClosureSmall.InductiveStep** 是 Mathlib 中的一个归
+纳类型，位于命名空间 `CategoryTheory.IsFiltered.FilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive InductiveStep
-  parameters: (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C)
-
-中文:
-归纳类型 InductiveStep
-  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : 类型 (最大值 v w), t -> C)
+--- 原说明 ---
+One step of the inductive procedure consists of adjoining all maxima and coequal
+izers of all
+objects and morphisms obtained so far. This is quite redundant, picking up many 
+objects which we
+already hit in earlier iterations, but this is easier to work with later.
 -/
-private inductive InductiveStep (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) :
+private inductive InductiveStep (n : ℕ) (X : ∀ (k : ℕ), k < n → Σ t : Type (max v w), t → C) :
     Type (max v w)
-  | max : {k k' : Nat} -> (hk : k < n) -> (hk' : k' < n) -> (X _ hk).1 -> (X _ hk').1 -> InductiveStep n X
-  | coeq : {k k' : Nat} -> (hk : k < n) -> (hk' : k' < n) -> (j : (X _ hk).1) -> (j' : (X _ hk').1) ->
-      ((X _ hk).2 j ⟶ (X _ hk').2 j') -> ((X _ hk).2 j ⟶ (X _ hk').2 j') -> InductiveStep n X
+  | max : {k k' : ℕ} → (hk : k < n) → (hk' : k' < n) → (X _ hk).1 → (X _ hk').1 → InductiveStep n X
+  | coeq : {k k' : ℕ} → (hk : k < n) → (hk' : k' < n) → (j : (X _ hk).1) → (j' : (X _ hk').1) →
+      ((X _ hk).2 j ⟶ (X _ hk').2 j') → ((X _ hk).2 j ⟶ (X _ hk').2 j') → InductiveStep n X
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The realization function sends the abstract maxima and weak coequalizers to the corresponding
+objects in `C`. -/
+/-
+**CategoryTheory.IsFiltered.FilteredClosureSmall.inductiveStepRealization** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.IsFiltered.FilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def inductiveStepRealization (n : Nat)
-
-中文:
-定义 noncomputable
-  签名: def inductiveStep实数ization (n : 自然数)
+--- 原说明 ---
+The realization function sends the abstract maxima and weak coequalizers to the 
+corresponding
+objects in `C`.
 -/
-private noncomputable def inductiveStepRealization (n : Nat)
-    (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) : InductiveStep.{w} n X -> C
+private noncomputable def inductiveStepRealization (n : ℕ)
+    (X : ∀ (k : ℕ), k < n → Σ t : Type (max v w), t → C) : InductiveStep.{w} n X → C
   | (InductiveStep.max hk hk' x y) => max ((X _ hk).2 x) ((X _ hk').2 y)
   | (InductiveStep.coeq _ _ _ _ f g) => coeq f g
 
 /--
-Definition of `noncomputable` / `noncomputable` 的定义
+All steps of building the abstract filtered closure together with the realization function,
+as a function of `ℕ`. -/
+/-
+**CategoryTheory.IsFiltered.FilteredClosureSmall.bundledAbstractFilteredClosure*
+* 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFiltered.FilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def bundledAbstractFilteredClosure
-
-中文:
-定义 noncomputable
-  签名: def bundledAbstractFilteredClosure
+--- 原说明 ---
+All steps of building the abstract filtered closure together with the realizatio
+n function,
+as a function of `ℕ`.
 -/
 private noncomputable def bundledAbstractFilteredClosure :
-    Nat -> Σ t : Type (max v w), t -> C
+    ℕ → Σ t : Type (max v w), t → C
   | 0 => ⟨ULift.{v} α, f ∘ ULift.down⟩
   | (n + 1) => ⟨_, inductiveStepRealization (n + 1) (fun m _ => bundledAbstractFilteredClosure m)⟩
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The small type modelling the filtered closure. -/
+/-
+**CategoryTheory.IsFiltered.FilteredClosureSmall.AbstractFilteredClosure** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.IsFiltered.FilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def AbstractFilteredClosure
-  body: Σ n, (bundledAbstractFilteredClosure f n).1
-
-中文:
-定义 noncomputable
-  签名: def AbstractFilteredClosure
-  定义体: Σ n, (bundledAbstractFilteredClosure f n).1
+--- 原说明 ---
+The small type modelling the filtered closure.
 -/
 private noncomputable def AbstractFilteredClosure : Type (max v w) :=
   Σ n, (bundledAbstractFilteredClosure f n).1
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The surjection from the abstract filtered closure to the actual filtered closure in `C`. -/
+/-
+**CategoryTheory.IsFiltered.FilteredClosureSmall.abstractFilteredClosureRealizat
+ion** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFiltered.FilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def abstractFilteredClosureRealization
-  body: fun x => (bundledAbstractFilteredClosure f x.1).2 x.2
-
-中文:
-定义 noncomputable
-  签名: def abstractFilteredClosure实数ization
-  定义体: fun x => (bundledAbstractFilteredClosure f x.1).2 x.2
+--- 原说明 ---
+The surjection from the abstract filtered closure to the actual filtered closure
+ in `C`.
 -/
-private noncomputable def abstractFilteredClosureRealization : AbstractFilteredClosure f -> C :=
+private noncomputable def abstractFilteredClosureRealization : AbstractFilteredClosure f → C :=
   fun x => (bundledAbstractFilteredClosure f x.1).2 x.2
 
 end FilteredClosureSmall
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `small_fullSubcategory_filteredClosure` / 定理 `small_fullSubcategory_filteredClosure`
-
-English:
-theorem small_fullSubcategory_filteredClosure
-  proof: by
-  refine small_of_injective_of_exists (FilteredClosureSmall.abstractFilteredClosureRealization f)
-    (fun _ _ => ObjectProperty.FullSubcategory.ext) ?_
-  rintro ⟨j, h⟩
-  induction h with
-  | base x =>
-      refine ⟨⟨0, ?_⟩, ?_⟩
-      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-        exact ULift.up x
-      · simp only [FilteredClosureSmall.abstractFilteredClosureRealization,
-          FilteredClosureSmall.bundledAbstractFilteredClosure]
-        rfl
-  | max hj₁ hj₂ ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      refine FilteredClosureSmall.InductiveStep.max ?_ ?_ x y
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
-      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      rfl
-  | coeq hj₁ hj₂ g g' ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      refine FilteredClosureSmall.InductiveStep.coeq ?_ ?_ x y g g'
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
-      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      rfl
-
-中文:
-定理 small_fullSubcategory_filteredClosure
-  证明: by
-  refine small_of_injective_of_exists (FilteredClosureSmall.abstractFilteredClosureRealization f)
-    (fun _ _ => ObjectProperty.FullSubcategory.ext) ?_
-  rintro ⟨j, h⟩
-  induction h with
-  | base x =>
-      refine ⟨⟨0, ?_⟩, ?_⟩
-      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-        exact ULift.up x
-      · simp only [FilteredClosureSmall.abstractFilteredClosureRealization,
-          FilteredClosureSmall.bundledAbstractFilteredClosure]
-        rfl
-  | max hj₁ hj₂ ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      refine FilteredClosureSmall.InductiveStep.max ?_ ?_ x y
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
-      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      rfl
-  | coeq hj₁ hj₂ g g' ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      refine FilteredClosureSmall.InductiveStep.coeq ?_ ?_ x y g g'
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
-      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
-      rfl
-
-Depends on / 依赖: FilteredClosureSmall, FilteredClosureSmall.abstractFilteredClosureRealization, FilteredClosureSmall.bundledAbstractFilteredClosure, FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.ext, ULift.up, abstractFilteredClosureRealization, bundledAbstractFilteredClosure, small_of_injective_of_exists
+/-
+**CategoryTheory.IsFiltered.small_fullSubcategory_filteredClosure** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.IsFiltered`。
+形式化陈述：small_fullSubcategory_filteredClosure : Small.{max v w} (filteredClosure f
+).FullSubcategory
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective_of_exists`：small_of_injective_of_exists {α : Type v} 
+{β : Type w} {γ : Type v'} [Small.{u} α] (f : α -> γ) {g : β -> γ} (hg : Functio
+n.Injective g) (h …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.ext`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectProperty C}   {x y
+ : P.FullSubcategory}, x.obj = y.obj → …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.CategoryTheory.Filtered.Small.0.CategoryTheory.IsFilter
+ed.FilteredClosureSmall.bundledAbstractFilteredClosure.eq_2`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.IsFilteredOrEmpty
+ C] {α : Type w}   (f : α → C) (n : ℕ),  …
+· 使用定理 `Nat.lt_succ_of_le`：∀ {n m : ℕ}, n ≤ m → n < m.succ
+· 使用定理 `Nat.le_max_left`：∀ (a b : ℕ), a ≤ max a b
+· 使用定理 `Nat.le_max_right`：∀ (a b : ℕ), b ≤ max a b
+· 使用定理 `Mathlib.Tactic.DepRewrite.eq_of_heq`：eq_of_heq.{u} {α : Sort u} {a a' : 
+α} (h : a ≍ a') : a = a'
+· 使用定理 `Mathlib.Tactic.DepRewrite.hdcongrArg`：hdcongrArg.{u, v} {α : Sort u} {a 
+a' : α} {β : (a' : α) -> a = a' -> Sort v} (h : a = a') (f : (a' : α) -> (h : a 
+= a') -> β a' h) : f a rfl…
 -/
 theorem small_fullSubcategory_filteredClosure :
     Small.{max v w} (filteredClosure f).FullSubcategory := by
@@ -305,25 +238,10 @@ theorem small_fullSubcategory_filteredClosure :
     · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
       rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
       rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EssentiallySmall.{max v w} (filteredClosure f).FullSubcategory
-  body: have : LocallySmall.{max v w} (filteredClosure f).FullSubcategory := locallySmall_max.{w, v, u}
-  have := small_fullSubcategory_filteredClosure f
-  essentiallySmall_of_small_of_locallySmall _
-
-中文:
-实例 :
-  签名: EssentiallySmall.{最大值 v w} (filteredClosure f).满子范畴
-  定义体: have : LocallySmall.{max v w} (filteredClosure f).FullSubcategory := locallySmall_max.{w, v, u}
-  have := small_fullSubcategory_filteredClosure f
-  essentiallySmall_of_small_of_locallySmall _
-
-Depends on / 依赖: FullSubcategory, LocallySmall, essentiallySmall_of_small_of_locallySmall, filteredClosure, locallySmall_max, small_fullSubcategory_filteredClosure
+/-
+**CategoryTheory.IsFiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsFiltere
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EssentiallySmall.{max v w} (filteredClosure f).FullSubcategory :=
   have : LocallySmall.{max v w} (filteredClosure f).FullSubcategory := locallySmall_max.{w, v, u}
@@ -336,168 +254,107 @@ section
 
 variable [IsFilteredOrEmpty C] {D : Type u₁} [Category.{v₁} D] (F : D ⥤ C)
 
-/--
-Definition of `SmallFilteredIntermediate` / `SmallFilteredIntermediate` 的定义
+/-- Every functor from a small category to a filtered category factors fully faithfully through a
+small filtered category. This is that category. -/
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.IsFiltered`。
+形式化陈述：SmallFilteredIntermediate : Type (max u₁ v)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SmallFilteredIntermediate
-  signature: : Type (max u₁ v)
-  body: SmallModel.{max u₁ v} (filteredClosure F.obj).FullSubcategory
-
-中文:
-定义 SmallFiltered整数ermediate
-  签名: : 类型 (最大值 u₁ v)
-  定义体: SmallModel.{max u₁ v} (filteredClosure F.obj).FullSubcategory
-
-Depends on / 依赖: F.obj, FullSubcategory, SmallModel, filteredClosure
+--- 原说明 ---
+Every functor from a small category to a filtered category factors fully faithfu
+lly through a
+small filtered category. This is that category.
 -/
 def SmallFilteredIntermediate : Type (max u₁ v) :=
   SmallModel.{max u₁ v} (filteredClosure F.obj).FullSubcategory
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SmallCategory (SmallFilteredIntermediate F)
-  body: inferInstanceAs (SmallCategory (SmallModel (filteredClosure F.obj).FullSubcategory))
-
-中文:
-实例 :
-  签名: 小范畴 (SmallFiltered整数ermediate F)
-  定义体: inferInstanceAs (SmallCategory (SmallModel (filteredClosure F.obj).FullSubcategory))
-
-Depends on / 依赖: F.obj, FullSubcategory, SmallCategory, SmallModel, filteredClosure
+/-
+**CategoryTheory.IsFiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsFiltere
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : SmallCategory (SmallFilteredIntermediate F) :=
   inferInstanceAs (SmallCategory (SmallModel (filteredClosure F.obj).FullSubcategory))
 
 namespace SmallFilteredIntermediate
 
-/--
-Definition of `factoring` / `factoring` 的定义
+/-- The first part of a factoring of a functor from a small category to a filtered category through
+a small filtered category. -/
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.factoring** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+形式化陈述：factoring : D ⥤ SmallFilteredIntermediate F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factoring
-  signature: : D ⥤ SmallFilteredIntermediate F
-  body: ObjectProperty.lift _ F filteredClosure.base ⋙ (equivSmallModel _).functor
-
-中文:
-定义 factoring
-  签名: : D ⥤ SmallFiltered整数ermediate F
-  定义体: ObjectProperty.lift _ F filteredClosure.base ⋙ (equivSmallModel _).functor
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, equivSmallModel, filteredClosure, filteredClosure.base, functor
+--- 原说明 ---
+The first part of a factoring of a functor from a small category to a filtered c
+ategory through
+a small filtered category.
 -/
 noncomputable def factoring : D ⥤ SmallFilteredIntermediate F :=
   ObjectProperty.lift _ F filteredClosure.base ⋙ (equivSmallModel _).functor
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- The second, fully faithful part of a factoring of a functor from a small category to a filtered
+category through a small filtered category. -/
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.inclusion** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+形式化陈述：inclusion : SmallFilteredIntermediate F ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: : SmallFilteredIntermediate F ⥤ C
-  body: (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-中文:
-定义 inclusion
-  签名: : SmallFiltered整数ermediate F ⥤ C
-  定义体: (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
+--- 原说明 ---
+The second, fully faithful part of a factoring of a functor from a small categor
+y to a filtered
+category through a small filtered category.
 -/
 noncomputable def inclusion : SmallFilteredIntermediate F ⥤ C :=
   (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inclusion F).Faithful
-  body: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-中文:
-实例 :
-  签名: (inclusion F).忠实
-  定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-Depends on / 依赖: Faithful, ObjectProperty, equivSmallModel, inverse
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (inclusion F).Faithful :=
   inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inclusion F).Full
-  body: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
-
-中文:
-实例 :
-  签名: (inclusion F).满
-  定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
-
-Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (inclusion F).Full :=
   inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
 
-/--
-Definition of `factoringCompInclusion` / `factoringCompInclusion` 的定义
+/-- The factorization through a small filtered category is in fact a factorization, up to natural
+isomorphism. -/
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.factoringCompInclusion** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+形式化陈述：factoringCompInclusion : factoring F ⋙ inclusion F ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factoringCompInclusion
-  signature: : factoring F ⋙ inclusion F ≅ F
-  body: Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-中文:
-定义 factoringCompInclusion
-  签名: : factoring F ⋙ inclusion F ≅ F
-  定义体: Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-Depends on / 依赖: Equivalence, Equivalence.unitIso, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, isoWhiskerLeft, isoWhiskerRight, unitIso
+--- 原说明 ---
+The factorization through a small filtered category is in fact a factorization, 
+up to natural
+isomorphism.
 -/
 noncomputable def factoringCompInclusion : factoring F ⋙ inclusion F ≅ F :=
   Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFilteredOrEmpty (SmallFilteredIntermediate F)
-  body: IsFilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-中文:
-实例 :
-  签名: 是FilteredOrEmpty (SmallFiltered整数ermediate F)
-  定义体: IsFilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-Depends on / 依赖: IsFilteredOrEmpty, IsFilteredOrEmpty.of_equivalence, equivSmallModel, of_equivalence
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFilteredOrEmpty (SmallFilteredIntermediate F) :=
   IsFilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: D] : IsFiltered (SmallFilteredIntermediate F)
-  body: { (inferInstance : IsFilteredOrEmpty _) with
-    nonempty := Nonempty.map (factoring F).obj inferInstance }
-
-中文:
-实例 [非空
-  签名: D] : 是Filtered (SmallFiltered整数ermediate F)
-  定义体: { (inferInstance : IsFilteredOrEmpty _) with
-    nonempty := Nonempty.map (factoring F).obj inferInstance }
-
-Depends on / 依赖: IsFilteredOrEmpty, Nonempty, Nonempty.map, factoring, nonempty
+/-
+**CategoryTheory.IsFiltered.SmallFilteredIntermediate.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.IsFiltered.SmallFilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty D] : IsFiltered (SmallFilteredIntermediate F) :=
   { (inferInstance : IsFilteredOrEmpty _) with
@@ -513,55 +370,40 @@ namespace IsCofiltered
 
 section cofilteredClosure
 
-variable [IsCofilteredOrEmpty C] {α : Type w} (f : α -> C)
+variable [IsCofilteredOrEmpty C] {α : Type w} (f : α → C)
 
-/--
-Inductive type `cofilteredClosure` / 归纳类型 `cofilteredClosure`
+/-- The "cofiltered closure" of an `α`-indexed family of objects in `C` is the set of objects in `C`
+obtained by starting with the family and successively adding minima and equalizers. -/
+/-
+**CategoryTheory.IsCofiltered.cofilteredClosure** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.IsCofiltered`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.IsCofilteredOrEmpty C] → {α : Type w} → (α → C) → CategoryTheory.ObjectPr
+operty C
+参数：α → C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive cofilteredClosure
-  parameters: : ObjectProperty C
-  constructors (3):
-    - base: (x : α) -> cofilteredClosure (f x)
-    - min: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> cofilteredClosure (min j j')
-    - eq: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> (f f' : j ⟶ j') -> cofilteredClosure (eq f f')
-
-中文:
-归纳类型 cofilteredClosure
-  参数: : ObjectProperty C
-  构造子 (3 个):
-    - base: (x : α) -> cofilteredClosure (f x)
-    - min: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> cofilteredClosure (最小值 j j')
-    - eq: {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> (f f' : j ⟶ j') -> cofilteredClosure (eq f f')
+--- 原说明 ---
+The "cofiltered closure" of an `α`-indexed family of objects in `C` is the set o
+f objects in `C`
+obtained by starting with the family and successively adding minima and equalize
+rs.
 -/
 inductive cofilteredClosure : ObjectProperty C
-  | base : (x : α) -> cofilteredClosure (f x)
-  | min : {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> cofilteredClosure (min j j')
-  | eq : {j j' : C} -> cofilteredClosure j -> cofilteredClosure j' -> (f f' : j ⟶ j') ->
+  | base : (x : α) → cofilteredClosure (f x)
+  | min : {j j' : C} → cofilteredClosure j → cofilteredClosure j' → cofilteredClosure (min j j')
+  | eq : {j j' : C} → cofilteredClosure j → cofilteredClosure j' → (f f' : j ⟶ j') →
       cofilteredClosure (eq f f')
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The full subcategory induced by the cofiltered closure of a family is cofiltered. -/
+/-
+**CategoryTheory.IsCofiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsCofil
+tered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsCofilteredOrEmpty (cofilteredClosure f).FullSubcategory
-  body: ⟨⟨min j.1 j'.1, cofilteredClosure.min j.2 j'.2⟩,
-    ObjectProperty.homMk (minToLeft _ _), ObjectProperty.homMk (minToRight _ _), trivial⟩
-  cone_maps {j j'} f f' :=
-    ⟨⟨eq f.hom f'.hom, cofilteredClosure.eq j.2 j'.2 f.hom f'.hom⟩,
-    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_ext _ (eq_condition _ _)⟩
-
-中文:
-实例 :
-  签名: 是余filteredOrEmpty (cofilteredClosure f).满子范畴
-  定义体: ⟨⟨min j.1 j'.1, cofilteredClosure.min j.2 j'.2⟩,
-    ObjectProperty.homMk (minToLeft _ _), ObjectProperty.homMk (minToRight _ _), trivial⟩
-  cone_maps {j j'} f f' :=
-    ⟨⟨eq f.hom f'.hom, cofilteredClosure.eq j.2 j'.2 f.hom f'.hom⟩,
-    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_ext _ (eq_condition _ _)⟩
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, ObjectProperty.hom_ext, cofilteredClosure, cofilteredClosure.eq, cofilteredClosure.min, cone_maps, eq_condition, f.hom, hom_ext, minToLeft, minToRight
+--- 原说明 ---
+The full subcategory induced by the cofiltered closure of a family is cofiltered
+.
 -/
 instance : IsCofilteredOrEmpty (cofilteredClosure f).FullSubcategory where
   cone_objs j j' :=
@@ -573,170 +415,116 @@ instance : IsCofilteredOrEmpty (cofilteredClosure f).FullSubcategory where
 
 namespace CofilteredClosureSmall
 
-/--
-Inductive type `InductiveStep` / 归纳类型 `InductiveStep`
+/-- Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`. -/
+/-
+**CategoryTheory.IsCofiltered.CofilteredClosureSmall.InductiveStep** 是 Mathlib 中
+的一个归纳类型，位于命名空间 `CategoryTheory.IsCofiltered.CofilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive InductiveStep
-  parameters: (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C)
-
-中文:
-归纳类型 InductiveStep
-  参数: (n : 自然数) (X : 对任意 (k : 自然数), k < n -> Σ t : 类型 (最大值 v w), t -> C)
+--- 原说明 ---
+Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`.
 -/
-private inductive InductiveStep (n : Nat) (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) :
+private inductive InductiveStep (n : ℕ) (X : ∀ (k : ℕ), k < n → Σ t : Type (max v w), t → C) :
     Type (max v w)
-  | min : {k k' : Nat} -> (hk : k < n) -> (hk' : k' < n) -> (X _ hk).1 -> (X _ hk').1 -> InductiveStep n X
-  | eq : {k k' : Nat} -> (hk : k < n) -> (hk' : k' < n) -> (j : (X _ hk).1) -> (j' : (X _ hk').1) ->
-      ((X _ hk).2 j ⟶ (X _ hk').2 j') -> ((X _ hk).2 j ⟶ (X _ hk').2 j') -> InductiveStep n X
+  | min : {k k' : ℕ} → (hk : k < n) → (hk' : k' < n) → (X _ hk).1 → (X _ hk').1 → InductiveStep n X
+  | eq : {k k' : ℕ} → (hk : k < n) → (hk' : k' < n) → (j : (X _ hk).1) → (j' : (X _ hk').1) →
+      ((X _ hk).2 j ⟶ (X _ hk').2 j') → ((X _ hk).2 j ⟶ (X _ hk').2 j') → InductiveStep n X
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`. -/
+/-
+**CategoryTheory.IsCofiltered.CofilteredClosureSmall.inductiveStepRealization** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.CofilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def inductiveStepRealization (n : Nat)
-
-中文:
-定义 noncomputable
-  签名: def inductiveStep实数ization (n : 自然数)
+--- 原说明 ---
+Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`.
 -/
-private noncomputable def inductiveStepRealization (n : Nat)
-    (X : forall (k : Nat), k < n -> Σ t : Type (max v w), t -> C) : InductiveStep.{w} n X -> C
+private noncomputable def inductiveStepRealization (n : ℕ)
+    (X : ∀ (k : ℕ), k < n → Σ t : Type (max v w), t → C) : InductiveStep.{w} n X → C
   | (InductiveStep.min hk hk' x y) => min ((X _ hk).2 x) ((X _ hk').2 y)
   | (InductiveStep.eq _ _ _ _ f g) => eq f g
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`. -/
+/-
+**CategoryTheory.IsCofiltered.CofilteredClosureSmall.bundledAbstractCofilteredCl
+osure** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.CofilteredClosureSm
+all`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def bundledAbstractCofilteredClosure
-
-中文:
-定义 noncomputable
-  签名: def bundledAbstractCofilteredClosure
+--- 原说明 ---
+Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`.
 -/
 private noncomputable def bundledAbstractCofilteredClosure :
-    Nat -> Σ t : Type (max v w), t -> C
+    ℕ → Σ t : Type (max v w), t → C
   | 0 => ⟨ULift.{v} α, f ∘ ULift.down⟩
   | (n + 1) => ⟨_, inductiveStepRealization (n + 1) (fun m _ => bundledAbstractCofilteredClosure m)⟩
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`. -/
+/-
+**CategoryTheory.IsCofiltered.CofilteredClosureSmall.AbstractCofilteredClosure**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.CofilteredClosureSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def AbstractCofilteredClosure
-  body: Σ n, (bundledAbstractCofilteredClosure f n).1
-
-中文:
-定义 noncomputable
-  签名: def AbstractCofilteredClosure
-  定义体: Σ n, (bundledAbstractCofilteredClosure f n).1
+--- 原说明 ---
+Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`.
 -/
 private noncomputable def AbstractCofilteredClosure : Type (max v w) :=
   Σ n, (bundledAbstractCofilteredClosure f n).1
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`. -/
+/-
+**CategoryTheory.IsCofiltered.CofilteredClosureSmall.abstractCofilteredClosureRe
+alization** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.CofilteredClosu
+reSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def abstractCofilteredClosureRealization
-  body: fun x => (bundledAbstractCofilteredClosure f x.1).2 x.2
-
-中文:
-定义 noncomputable
-  签名: def abstractCofilteredClosure实数ization
-  定义体: fun x => (bundledAbstractCofilteredClosure f x.1).2 x.2
+--- 原说明 ---
+Implementation detail for the instance
+`EssentiallySmall.{max v w} (FullSubcategory (cofilteredClosure f))`.
 -/
-private noncomputable def abstractCofilteredClosureRealization : AbstractCofilteredClosure f -> C :=
+private noncomputable def abstractCofilteredClosureRealization : AbstractCofilteredClosure f → C :=
   fun x => (bundledAbstractCofilteredClosure f x.1).2 x.2
 
 end CofilteredClosureSmall
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `small_fullSubcategory_cofilteredClosure` / 定理 `small_fullSubcategory_cofilteredClosure`
-
-English:
-theorem small_fullSubcategory_cofilteredClosure
-  proof: by
-  refine small_of_injective_of_exists
-    (CofilteredClosureSmall.abstractCofilteredClosureRealization f)
-    (fun _ _ => ObjectProperty.FullSubcategory.ext) ?_
-  rintro ⟨j, h⟩
-  induction h with
-  | base x =>
-    refine ⟨⟨0, ?_⟩,?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      exact ULift.up x
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization,
-        CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-  | min hj₁ hj₂ ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      refine CofilteredClosureSmall.InductiveStep.min ?_ ?_ x y
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
-      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-  | eq hj₁ hj₂ g g' ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      refine CofilteredClosureSmall.InductiveStep.eq ?_ ?_ x y g g'
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
-      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-
-中文:
-定理 small_fullSubcategory_cofilteredClosure
-  证明: by
-  refine small_of_injective_of_exists
-    (CofilteredClosureSmall.abstractCofilteredClosureRealization f)
-    (fun _ _ => ObjectProperty.FullSubcategory.ext) ?_
-  rintro ⟨j, h⟩
-  induction h with
-  | base x =>
-    refine ⟨⟨0, ?_⟩,?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      exact ULift.up x
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization,
-        CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-  | min hj₁ hj₂ ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      refine CofilteredClosureSmall.InductiveStep.min ?_ ?_ x y
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
-      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-  | eq hj₁ hj₂ g g' ih ih' =>
-    rcases ih with ⟨⟨n, x⟩, rfl⟩
-    rcases ih' with ⟨⟨m, y⟩, rfl⟩
-    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      refine CofilteredClosureSmall.InductiveStep.eq ?_ ?_ x y g g'
-      all_goals apply Nat.lt_succ_of_le
-      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
-    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
-      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
-      rfl
-
-Depends on / 依赖: CofilteredClosureSmall, CofilteredClosureSmall.abstractCofilteredClosureRealization, CofilteredClosureSmall.bundledAbstractCofilteredClosure, FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.ext, ULift.up, abstractCofilteredClosureRealization, bundledAbstractCofilteredClosure, small_of_injective_of_exists
+/-
+**CategoryTheory.IsCofiltered.small_fullSubcategory_cofilteredClosure** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.IsCofiltered`。
+形式化陈述：small_fullSubcategory_cofilteredClosure : Small.{max v w} (cofilteredClosu
+re f).FullSubcategory
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective_of_exists`：small_of_injective_of_exists {α : Type v} 
+{β : Type w} {γ : Type v'} [Small.{u} α] (f : α -> γ) {g : β -> γ} (hg : Functio
+n.Injective g) (h …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.ext`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectProperty C}   {x y
+ : P.FullSubcategory}, x.obj = y.obj → …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.CategoryTheory.Filtered.Small.0.CategoryTheory.IsCofilt
+ered.CofilteredClosureSmall.bundledAbstractCofilteredClosure.eq_2`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.IsCofiltere
+dOrEmpty C] {α : Type w}   (f : α → C) (n : ℕ),…
+· 使用定理 `Nat.lt_succ_of_le`：∀ {n m : ℕ}, n ≤ m → n < m.succ
+· 使用定理 `Nat.le_max_left`：∀ (a b : ℕ), a ≤ max a b
+· 使用定理 `Nat.le_max_right`：∀ (a b : ℕ), b ≤ max a b
+· 使用定理 `Mathlib.Tactic.DepRewrite.eq_of_heq`：eq_of_heq.{u} {α : Sort u} {a a' : 
+α} (h : a ≍ a') : a = a'
+· 使用定理 `Mathlib.Tactic.DepRewrite.hdcongrArg`：hdcongrArg.{u, v} {α : Sort u} {a 
+a' : α} {β : (a' : α) -> a = a' -> Sort v} (h : a = a') (f : (a' : α) -> (h : a 
+= a') -> β a' h) : f a rfl…
 -/
 theorem small_fullSubcategory_cofilteredClosure :
     Small.{max v w} (cofilteredClosure f).FullSubcategory := by
@@ -774,26 +562,10 @@ theorem small_fullSubcategory_cofilteredClosure :
     · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
       rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
       rfl
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EssentiallySmall.{max v w} (cofilteredClosure f).FullSubcategory
-  body: have : LocallySmall.{max v w} (cofilteredClosure f).FullSubcategory :=
-    locallySmall_max.{w, v, u}
-  have := small_fullSubcategory_cofilteredClosure f
-  essentiallySmall_of_small_of_locallySmall _
-
-中文:
-实例 :
-  签名: EssentiallySmall.{最大值 v w} (cofilteredClosure f).满子范畴
-  定义体: have : LocallySmall.{max v w} (cofilteredClosure f).FullSubcategory :=
-    locallySmall_max.{w, v, u}
-  have := small_fullSubcategory_cofilteredClosure f
-  essentiallySmall_of_small_of_locallySmall _
-
-Depends on / 依赖: FullSubcategory, LocallySmall, cofilteredClosure, essentiallySmall_of_small_of_locallySmall, locallySmall_max, small_fullSubcategory_cofilteredClosure
+/-
+**CategoryTheory.IsCofiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsCofil
+tered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EssentiallySmall.{max v w} (cofilteredClosure f).FullSubcategory :=
   have : LocallySmall.{max v w} (cofilteredClosure f).FullSubcategory :=
@@ -807,168 +579,108 @@ section
 
 variable [IsCofilteredOrEmpty C] {D : Type u₁} [Category.{v₁} D] (F : D ⥤ C)
 
-/--
-Definition of `SmallCofilteredIntermediate` / `SmallCofilteredIntermediate` 的定义
+/-- Every functor from a small category to a cofiltered category factors fully faithfully through a
+small cofiltered category. This is that category. -/
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.IsCofiltered`。
+形式化陈述：SmallCofilteredIntermediate : Type (max u₁ v)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SmallCofilteredIntermediate
-  signature: : Type (max u₁ v)
-  body: SmallModel.{max u₁ v} (cofilteredClosure F.obj).FullSubcategory
-
-中文:
-定义 SmallCofiltered整数ermediate
-  签名: : 类型 (最大值 u₁ v)
-  定义体: SmallModel.{max u₁ v} (cofilteredClosure F.obj).FullSubcategory
-
-Depends on / 依赖: F.obj, FullSubcategory, SmallModel, cofilteredClosure
+--- 原说明 ---
+Every functor from a small category to a cofiltered category factors fully faith
+fully through a
+small cofiltered category. This is that category.
 -/
 def SmallCofilteredIntermediate : Type (max u₁ v) :=
   SmallModel.{max u₁ v} (cofilteredClosure F.obj).FullSubcategory
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SmallCategory (SmallCofilteredIntermediate F)
-  body: inferInstanceAs (SmallCategory (SmallModel (cofilteredClosure F.obj).FullSubcategory))
-
-中文:
-实例 :
-  签名: 小范畴 (SmallCofiltered整数ermediate F)
-  定义体: inferInstanceAs (SmallCategory (SmallModel (cofilteredClosure F.obj).FullSubcategory))
-
-Depends on / 依赖: F.obj, FullSubcategory, SmallCategory, SmallModel, cofilteredClosure
+/-
+**CategoryTheory.IsCofiltered.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsCofil
+tered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : SmallCategory (SmallCofilteredIntermediate F) :=
   inferInstanceAs (SmallCategory (SmallModel (cofilteredClosure F.obj).FullSubcategory))
 
 namespace SmallCofilteredIntermediate
 
-/--
-Definition of `factoring` / `factoring` 的定义
+/-- The first part of a factoring of a functor from a small category to a cofiltered category
+through a small filtered category. -/
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.factoring** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+形式化陈述：factoring : D ⥤ SmallCofilteredIntermediate F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factoring
-  signature: : D ⥤ SmallCofilteredIntermediate F
-  body: ObjectProperty.lift _ F cofilteredClosure.base ⋙ (equivSmallModel _).functor
-
-中文:
-定义 factoring
-  签名: : D ⥤ SmallCofiltered整数ermediate F
-  定义体: ObjectProperty.lift _ F cofilteredClosure.base ⋙ (equivSmallModel _).functor
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, cofilteredClosure, cofilteredClosure.base, equivSmallModel, functor
+--- 原说明 ---
+The first part of a factoring of a functor from a small category to a cofiltered
+ category
+through a small filtered category.
 -/
 noncomputable def factoring : D ⥤ SmallCofilteredIntermediate F :=
   ObjectProperty.lift _ F cofilteredClosure.base ⋙ (equivSmallModel _).functor
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- The second, fully faithful part of a factoring of a functor from a small category to a filtered
+category through a small filtered category. -/
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.inclusion** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+形式化陈述：inclusion : SmallCofilteredIntermediate F ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: : SmallCofilteredIntermediate F ⥤ C
-  body: (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-中文:
-定义 inclusion
-  签名: : SmallCofiltered整数ermediate F ⥤ C
-  定义体: (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
+--- 原说明 ---
+The second, fully faithful part of a factoring of a functor from a small categor
+y to a filtered
+category through a small filtered category.
 -/
 noncomputable def inclusion : SmallCofilteredIntermediate F ⥤ C :=
   (equivSmallModel _).inverse ⋙ ObjectProperty.ι _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inclusion F).Faithful
-  body: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-中文:
-实例 :
-  签名: (inclusion F).忠实
-  定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-Depends on / 依赖: Faithful, ObjectProperty, equivSmallModel, inverse
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (inclusion F).Faithful :=
   inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inclusion F).Full
-  body: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
-
-中文:
-实例 :
-  签名: (inclusion F).满
-  定义体: inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
-
-Depends on / 依赖: ObjectProperty, equivSmallModel, inverse
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (inclusion F).Full :=
   inferInstanceAs ((equivSmallModel _).inverse ⋙ ObjectProperty.ι _).Full
 
-/--
-Definition of `factoringCompInclusion` / `factoringCompInclusion` 的定义
+/-- The factorization through a small filtered category is in fact a factorization, up to natural
+isomorphism. -/
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.factoringCompInclusion
+** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermedi
+ate`。
+形式化陈述：factoringCompInclusion : factoring F ⋙ inclusion F ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factoringCompInclusion
-  signature: : factoring F ⋙ inclusion F ≅ F
-  body: Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-中文:
-定义 factoringCompInclusion
-  签名: : factoring F ⋙ inclusion F ≅ F
-  定义体: Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-Depends on / 依赖: Equivalence, Equivalence.unitIso, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, isoWhiskerLeft, isoWhiskerRight, unitIso
+--- 原说明 ---
+The factorization through a small filtered category is in fact a factorization, 
+up to natural
+isomorphism.
 -/
 noncomputable def factoringCompInclusion : factoring F ⋙ inclusion F ≅ F :=
   Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (Equivalence.unitIso _).symm _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCofilteredOrEmpty (SmallCofilteredIntermediate F)
-  body: IsCofilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-中文:
-实例 :
-  签名: 是余filteredOrEmpty (SmallCofiltered整数ermediate F)
-  定义体: IsCofilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-Depends on / 依赖: IsCofilteredOrEmpty, IsCofilteredOrEmpty.of_equivalence, equivSmallModel, of_equivalence
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCofilteredOrEmpty (SmallCofilteredIntermediate F) :=
   IsCofilteredOrEmpty.of_equivalence (equivSmallModel _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: D] : IsCofiltered (SmallCofilteredIntermediate F)
-  body: { (inferInstance : IsCofilteredOrEmpty _) with
-    nonempty := Nonempty.map (factoring F).obj inferInstance }
-
-中文:
-实例 [非空
-  签名: D] : 是余filtered (SmallCofiltered整数ermediate F)
-  定义体: { (inferInstance : IsCofilteredOrEmpty _) with
-    nonempty := Nonempty.map (factoring F).obj inferInstance }
-
-Depends on / 依赖: IsCofilteredOrEmpty, Nonempty, Nonempty.map, factoring, nonempty
+/-
+**CategoryTheory.IsCofiltered.SmallCofilteredIntermediate.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.IsCofiltered.SmallCofilteredIntermediate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty D] : IsCofiltered (SmallCofilteredIntermediate F) :=
   { (inferInstance : IsCofilteredOrEmpty _) with
@@ -981,3 +693,4 @@ end
 end IsCofiltered
 
 end CategoryTheory
+

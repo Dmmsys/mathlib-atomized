@@ -26,30 +26,22 @@ public meta section
 
 namespace Lean.Elab
 
-variable {m : Type -> Type} [Monad m] [MonadOptions m] [MonadRef m] [MonadInfoTree m]
+variable {m : Type → Type} [Monad m] [MonadOptions m] [MonadRef m] [MonadInfoTree m]
 
-/--
-Definition of `elabUnsetOption` / `elabUnsetOption` 的定义
+/-- unset the option specified by id -/
+/-
+**Lean.Elab.elabUnsetOption** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab`。
+形式化陈述：elabUnsetOption (id : Syntax) : m Options
+参数：id : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabUnsetOption
-  signature: (id : Syntax)
-  body: do
-  -- We include the first argument (the keyword) for position information in case `id` is `missing`.
-addCompletionInfo CompletionInfo.option (← getRef)
-  unsetOption id.getId.eraseMacroScopes
-
-中文:
-定义 elabUnsetOption
-  签名: (id : Syntax)
-  定义体: do
-  -- We include the first argument (the keyword) for position information in case `id` is `missing`.
-addCompletionInfo CompletionInfo.option (← getRef)
-  unsetOption id.getId.eraseMacroScopes
+--- 原说明 ---
+unset the option specified by id
 -/
 def elabUnsetOption (id : Syntax) : m Options := do
   -- We include the first argument (the keyword) for position information in case `id` is `missing`.
-addCompletionInfo CompletionInfo.option (← getRef)
+  addCompletionInfo <| CompletionInfo.option (← getRef)
   unsetOption id.getId.eraseMacroScopes
 where
   /-- unset the given option name -/
@@ -60,8 +52,9 @@ namespace Command
 /-- Unset a user option -/
 elab (name := unsetOption) "unset_option " opt:ident : command => do
   let options ← Elab.elabUnsetOption opt
-  modify fun s => { s with maxRecDepth := maxRecDepth.get options }
-  modifyScope fun scope => { scope with opts := options }
+  modify fun s ↦ { s with maxRecDepth := maxRecDepth.get options }
+  modifyScope fun scope ↦ { scope with opts := options }
 
 end Command
 end Lean.Elab
+

@@ -38,76 +38,48 @@ open CategoryTheory
 variable (R : Type u) [Ring R]
 
 /--
-Definition of `LightCondMod` / `LightCondMod` 的定义
+The category of light condensed `R`-modules, defined as sheaves of `R`-modules over
+`LightProfinite.{u}` with respect to the coherent Grothendieck topology.
+-/
+/-
+**LightCondMod** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondMod
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightCondMod
-  body: LightCondensed.{u} (ModuleCat.{u} R)
-
-中文:
-缩写 LightCondMod
-  定义体: LightCondensed.{u} (ModuleCat.{u} R)
-
-Depends on / 依赖: LightCondensed, ModuleCat
+--- 原说明 ---
+The category of light condensed `R`-modules, defined as sheaves of `R`-modules o
+ver
+`LightProfinite.{u}` with respect to the coherent Grothendieck topology.
 -/
 abbrev LightCondMod := LightCondensed.{u} (ModuleCat.{u} R)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian (LightCondMod.{u} R)
-  body: sheafIsAbelian
-
-中文:
-实例 :
-  签名: 交换 (LightCondMod.{u} R)
-  定义体: sheafIsAbelian
-
-Depends on / 依赖: sheafIsAbelian
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian (LightCondMod.{u} R) := sheafIsAbelian
 
-/--
-Definition of `LightCondensed.forget` / `LightCondensed.forget` 的定义
+/-- The forgetful functor from light condensed `R`-modules to light condensed sets. -/
+/-
+**LightCondensed.forget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LightCondensed.forget : LightCondMod R ⥤ LightCondSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LightCondensed.forget
-  signature: : LightCondMod R ⥤ LightCondSet
-  body: sheafCompose _ (CategoryTheory.forget _)
-
-@[simp]
-
-中文:
-定义 LightCondensed.forget
-  签名: : LightCondMod R ⥤ LightCondSet
-  定义体: sheafCompose _ (CategoryTheory.forget _)
-
-@[simp]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.forget, forget, sheafCompose
+--- 原说明 ---
+The forgetful functor from light condensed `R`-modules to light condensed sets.
 -/
 def LightCondensed.forget : LightCondMod R ⥤ LightCondSet :=
   sheafCompose _ (CategoryTheory.forget _)
 
 @[simp]
-/--
-lemma `LightCondensed.forget_obj_obj_map_hom_apply` / 引理 `LightCondensed.forget_obj_obj_map_hom_apply`
-
-English:
-lemma LightCondensed.forget_obj_obj_map_hom_apply
-  statement: (X : LightCondMod R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 LightCondensed.forget_obj_obj_map_hom_apply
-  结论: (X : LightCondMod R)
-  证明: rfl
-
-@[simp]
+/-
+**LightCondensed.forget_obj_obj_map_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LightCondensed.forget_obj_obj_map_hom_apply (X : LightCondMod R) {S T : Li
+ghtProfiniteᵒᵖ} (f : S ⟶ T) (a : ((sheafToPresheaf _ _).obj X).obj S) : ((forget
+ R).obj X).obj.map f a = X.obj.map f a
+参数：X : LightCondMod R；f : S ⟶ T；a : ((sheafToPresheaf _ _).obj X).obj S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LightCondensed.forget_obj_obj_map_hom_apply (X : LightCondMod R)
     {S T : LightProfiniteᵒᵖ} (f : S ⟶ T) (a : ((sheafToPresheaf _ _).obj X).obj S) :
@@ -115,16 +87,14 @@ lemma LightCondensed.forget_obj_obj_map_hom_apply (X : LightCondMod R)
   rfl
 
 @[simp]
-/--
-lemma `LightCondensed.forget_map_hom_app_hom_apply` / 引理 `LightCondensed.forget_map_hom_app_hom_apply`
-
-English:
-lemma LightCondensed.forget_map_hom_app_hom_apply
-  proof: rfl
-
-中文:
-引理 LightCondensed.forget_map_hom_app_hom_apply
-  证明: rfl
+/-
+**LightCondensed.forget_map_hom_app_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LightCondensed.forget_map_hom_app_hom_apply {X Y : LightCondMod R} (f : X 
+⟶ Y) (S : LightProfiniteᵒᵖ) (a : ((sheafToPresheaf _ _).obj X).obj S) : ((forget
+ R).map f).hom.app S a = f.hom.app S a
+参数：f : X ⟶ Y；S : LightProfiniteᵒᵖ；a : ((sheafToPresheaf _ _).obj X).obj S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LightCondensed.forget_map_hom_app_hom_apply
     {X Y : LightCondMod R} (f : X ⟶ Y) (S : LightProfiniteᵒᵖ)
@@ -137,89 +107,75 @@ The left adjoint to the forgetful functor. The *free light condensed `R`-module*
 condensed set.
 -/
 noncomputable
-/--
-Definition of `LightCondensed.free` / `LightCondensed.free` 的定义
-
-English:
-definition LightCondensed.free
-  signature: : LightCondSet ⥤ LightCondMod R
-  body: Sheaf.composeAndSheafify _ (ModuleCat.free R)
-
-中文:
-定义 LightCondensed.free
-  签名: : LightCondSet ⥤ LightCondMod R
-  定义体: Sheaf.composeAndSheafify _ (ModuleCat.free R)
-
-Depends on / 依赖: ModuleCat, ModuleCat.free, Sheaf.composeAndSheafify, composeAndSheafify
+/-
+**LightCondensed.free** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LightCondensed.free : LightCondSet ⥤ LightCondMod R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def LightCondensed.free : LightCondSet ⥤ LightCondMod R :=
   Sheaf.composeAndSheafify _ (ModuleCat.free R)
 
 /-- The condensed version of the free-forgetful adjunction. -/
 noncomputable
-/--
-Definition of `LightCondensed.freeForgetAdjunction` / `LightCondensed.freeForgetAdjunction` 的定义
-
-English:
-definition LightCondensed.freeForgetAdjunction
-  signature: : free R ⊣ forget R
-  body: Sheaf.adjunction _ (ModuleCat.adj R)
-
-中文:
-定义 LightCondensed.freeForgetAdjunction
-  签名: : free R ⊣ forget R
-  定义体: Sheaf.adjunction _ (ModuleCat.adj R)
-
-Depends on / 依赖: ModuleCat, ModuleCat.adj, Sheaf.adjunction, adjunction
+/-
+**LightCondensed.freeForgetAdjunction** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LightCondensed.freeForgetAdjunction : free R ⊣ forget R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def LightCondensed.freeForgetAdjunction : free R ⊣ forget R := Sheaf.adjunction _ (ModuleCat.adj R)
 
 open LightCondensed
-
-.isLeftAdjoint instance : (LightCondensed.free R).IsLeftAdjoint := freeForgetAdjunction R
-
-.isRightAdjoint instance : (LightCondensed.forget R).IsRightAdjoint := freeForgetAdjunction R
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : (LightCondensed.free R).IsLeftAdjoint := freeForgetAdjunction R |>.isLeftAdjoint
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : (LightCondensed.forget R).IsRightAdjoint := freeForgetAdjunction R |>.isRightAdjoint
 
 /--
-Definition of `LightCondAb` / `LightCondAb` 的定义
-
-English:
-abbreviation LightCondAb
-  body: LightCondMod Int
-
-noncomputable example : Abelian LightCondAb := inferInstance
-
-中文:
-缩写 LightCondAb
-  定义体: LightCondMod Int
-
-noncomputable example : Abelian LightCondAb := inferInstance
-
-Depends on / 依赖: LightCondMod
+The category of light condensed abelian groups, defined as sheaves of `ℤ`-modules over
+`LightProfinite.{0}` with respect to the coherent Grothendieck topology.
 -/
-abbrev LightCondAb := LightCondMod Int
+/-
+**LightCondAb** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondAb
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+The category of light condensed abelian groups, defined as sheaves of `ℤ`-module
+s over
+`LightProfinite.{0}` with respect to the coherent Grothendieck topology.
+-/
+abbrev LightCondAb := LightCondMod ℤ
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example : Abelian LightCondAb := inferInstance
 
 namespace LightCondMod
 
-/--
-lemma `hom_naturality_apply` / 引理 `hom_naturality_apply`
-
-English:
-lemma hom_naturality_apply
-  statement: {X Y : LightCondMod.{u} R} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
-  proof: NatTrans.naturality_apply f.hom g x
-
-中文:
-引理 hom_naturality_apply
-  结论: {X Y : LightCondMod.{u} R} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
-  证明: NatTrans.naturality_apply f.hom g x
-
-Depends on / 依赖: NatTrans, NatTrans.naturality_apply, f.hom, naturality_apply
+/-
+**LightCondMod.hom_naturality_apply** 是 Mathlib 中的一个引理，位于命名空间 `LightCondMod`。
+形式化陈述：hom_naturality_apply {X Y : LightCondMod.{u} R} (f : X ⟶ Y) {S T : LightPr
+ofiniteᵒᵖ} (g : S ⟶ T) (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.m
+ap g (f.hom.app S x)
+参数：f : X ⟶ Y；g : S ⟶ T；x : X.obj.obj S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
 -/
 lemma hom_naturality_apply {X Y : LightCondMod.{u} R} (f : X ⟶ Y) {S T : LightProfiniteᵒᵖ}
     (g : S ⟶ T) (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.map g (f.hom.app S x) :=
   NatTrans.naturality_apply f.hom g x
 
 end LightCondMod
+

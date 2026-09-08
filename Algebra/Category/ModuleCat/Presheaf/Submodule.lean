@@ -36,127 +36,94 @@ namespace PresheafOfModules
 
 variable {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
 
-/--
-Definition of `Submodule` / `Submodule` 的定义
+/-- A family of submodules `N X` of `M.obj X`, for a presheaf of modules `M`, stable
+under the restriction maps of `M`. This defines a subobject of `M` in `PresheafOfModules R`. -/
+/-
+**PresheafOfModules.Submodule** 是 Mathlib 中的一个归纳类型，位于命名空间 `PresheafOfModules`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {R : C
+ategoryTheory.Functor Cᵒᵖ RingCat} → PresheafOfModules R → Type (max u₁ v)
+参数：max u₁ v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Submodule
-  parameters: (M : PresheafOfModules.{v} R)
-  axioms and operations (2):
-    - obj((X : Cᵒᵖ)) : _root_.Submodule (R.obj X) (M.obj X)
-    - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X <= (obj Y).comap (M.restrictₛₗ f)
-
-中文:
-结构 子模
-  参数: (M : 预模层.{v} R)
-  公理与运算 (2 个):
-    - obj((X : Cᵒᵖ)) : _root_.子模 (R.obj X) (M.obj X)
-    - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X <= (obj Y).comap (M.restrictₛₗ f)
+--- 原说明 ---
+A family of submodules `N X` of `M.obj X`, for a presheaf of modules `M`, stable
+under the restriction maps of `M`. This defines a subobject of `M` in `PresheafO
+fModules R`.
 -/
 structure Submodule (M : PresheafOfModules.{v} R) where
   /-- the submodule of `M.obj X` -/
   obj (X : Cᵒᵖ) : _root_.Submodule (R.obj X) (M.obj X)
   /-- the family is stable under restriction -/
-  map {X Y : Cᵒᵖ} (f : X ⟶ Y) : obj X <= (obj Y).comap (M.restrictₛₗ f)
+  map {X Y : Cᵒᵖ} (f : X ⟶ Y) : obj X ≤ (obj Y).comap (M.restrictₛₗ f)
 
 namespace Submodule
 
 variable {M : PresheafOfModules.{v} R} (N : M.Submodule)
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {N₁ N₂ : M.Submodule} (h : forall X, N₁.obj X = N₂.obj X)
-  proof: by
-  cases N₁; cases N₂; congr 1; ext X : 1; exact h X
-
-@[grind .]
-
-中文:
-引理 ext
-  条件: {N₁ N₂ : M.子模} (h : 对任意 X, N₁.obj X = N₂.obj X)
-  证明: by
-  cases N₁; cases N₂; congr 1; ext X : 1; exact h X
-
-@[grind .]
+/-
+**PresheafOfModules.Submodule.ext** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules.S
+ubmodule`。
+形式化陈述：ext {N₁ N₂ : M.Submodule} (h : forall X, N₁.obj X = N₂.obj X) : N₁ = N₂
+参数：h : forall X, N₁.obj X = N₂.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma ext {N₁ N₂ : M.Submodule} (h : forall X, N₁.obj X = N₂.obj X) :
+lemma ext {N₁ N₂ : M.Submodule} (h : ∀ X, N₁.obj X = N₂.obj X) :
     N₁ = N₂ := by
   cases N₁; cases N₂; congr 1; ext X : 1; exact h X
 
 @[grind .]
-/--
-lemma `map_mem` / 引理 `map_mem`
-
-English:
-lemma map_mem
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) {x : M.obj X} (hx : x in N.obj X)
-  proof: N.map f hx
-
-中文:
-引理 map_mem
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {x : M.obj X} (hx : x in N.obj X)
-  证明: N.map f hx
-
-Depends on / 依赖: N.map
+/-
+**PresheafOfModules.Submodule.map_mem** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModul
+es.Submodule`。
+形式化陈述：map_mem {X Y : Cᵒᵖ} (f : X ⟶ Y) {x : M.obj X} (hx : x in N.obj X) : M.map 
+f x in N.obj Y
+参数：f : X ⟶ Y；hx : x in N.obj X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PresheafOfModules.Submodule.map`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {R : CategoryTheory.Functor Cᵒᵖ RingCat}   {M : PresheafOfM
+odules R} (self : M.S…
 -/
-lemma map_mem {X Y : Cᵒᵖ} (f : X ⟶ Y) {x : M.obj X} (hx : x in N.obj X) :
-    M.map f x in N.obj Y :=
+lemma map_mem {X Y : Cᵒᵖ} (f : X ⟶ Y) {x : M.obj X} (hx : x ∈ N.obj X) :
+    M.map f x ∈ N.obj Y :=
   N.map f hx
 
 attribute [local simp] LinearMap.restrict_apply ModuleCat.semilinearMapAddEquiv in
 set_option backward.isDefEq.respectTransparency false in
 /-- The presheaf of modules associated to a submodule. -/
 @[simps! obj]
-/--
-Definition of `toPresheafOfModules` / `toPresheafOfModules` 的定义
+/-
+**PresheafOfModules.Submodule.toPresheafOfModules** 是 Mathlib 中的一个定义，位于命名空间 `Pre
+sheafOfModules.Submodule`。
+形式化陈述：toPresheafOfModules : PresheafOfModules.{v} R where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.Submodule.map_mem`：map_mem {X Y : Cᵒᵖ} (f : X ⟶ Y) {x 
+: M.obj X} (hx : x in N.obj X) : M.map f x in N.obj Y
 
-English:
-definition toPresheafOfModules
-  signature: : PresheafOfModules.{v} R where
-  body: ModuleCat.of (R.obj X) (N.obj X)
-  map {X Y} f :=
-ModuleCat.semilinearMapAddEquiv _ _ _
-      (M.restrictₛₗ f).restrict (p := N.obj X) (q := N.obj Y) (fun _ hc => N.map_mem _ hc)
-
-@[simp]
-
-中文:
-定义 toPresheafOfModules
-  签名: : 预模层.{v} R where
-  定义体: ModuleCat.of (R.obj X) (N.obj X)
-  map {X Y} f :=
-ModuleCat.semilinearMapAddEquiv _ _ _
-      (M.restrictₛₗ f).restrict (p := N.obj X) (q := N.obj Y) (fun _ hc => N.map_mem _ hc)
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, N.obj, R.obj
+--- 原说明 ---
+The presheaf of modules associated to a submodule.
 -/
 noncomputable def toPresheafOfModules : PresheafOfModules.{v} R where
   obj X := ModuleCat.of (R.obj X) (N.obj X)
   map {X Y} f :=
-ModuleCat.semilinearMapAddEquiv _ _ _
-      (M.restrictₛₗ f).restrict (p := N.obj X) (q := N.obj Y) (fun _ hc => N.map_mem _ hc)
+    ModuleCat.semilinearMapAddEquiv _ _ _ <|
+      (M.restrictₛₗ f).restrict (p := N.obj X) (q := N.obj Y) (fun _ hc ↦ N.map_mem _ hc)
 
 @[simp]
-/--
-lemma `toPresheafOfModules_map_apply` / 引理 `toPresheafOfModules_map_apply`
-
-English:
-lemma toPresheafOfModules_map_apply
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : N.obj X)
-  proof: by
-  rfl
-
-中文:
-引理 toPresheafOfModules_map_apply
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : N.obj X)
-  证明: by
-  rfl
+/-
+**PresheafOfModules.Submodule.toPresheafOfModules_map_apply** 是 Mathlib 中的一个引理，位
+于命名空间 `PresheafOfModules.Submodule`。
+形式化陈述：toPresheafOfModules_map_apply {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : N.obj X) : dsim
+p% ((N.toPresheafOfModules).map f m).val = M.map f m.val
+参数：f : X ⟶ Y；m : N.obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toPresheafOfModules_map_apply {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : N.obj X) :
     dsimp% ((N.toPresheafOfModules).map f m).val = M.map f m.val := by
@@ -164,201 +131,80 @@ lemma toPresheafOfModules_map_apply {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : N.obj X) 
 
 /-- The inclusion of a submodule into the ambient presheaf of modules. -/
 @[simps!]
-/--
-Definition of `ι` / `ι` 的定义
+/-
+**PresheafOfModules.Submodule.** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModules.Subm
+odule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : N.toPresheafOfModules ⟶ M
-  body: homMk { app X := AddCommGrpCat.ofHom (N.obj X).subtype.toAddMonoidHom } (by cat_disch)
-
-中文:
-定义 ι
-  签名: : N.toPresheafOfModules ⟶ M
-  定义体: homMk { app X := AddCommGrpCat.ofHom (N.obj X).subtype.toAddMonoidHom } (by cat_disch)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, N.obj, cat_disch, subtype, subtype.toAddMonoidHom, toAddMonoidHom
+--- 原说明 ---
+The inclusion of a submodule into the ambient presheaf of modules.
 -/
 noncomputable def ι : N.toPresheafOfModules ⟶ M :=
   homMk { app X := AddCommGrpCat.ofHom (N.obj X).subtype.toAddMonoidHom } (by cat_disch)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono N.ι
-  body: mono_of_injective fun _ => Subtype.val_injective
-
-中文:
-实例 :
-  签名: 单态射 N.ι
-  定义体: mono_of_injective fun _ => Subtype.val_injective
-
-Depends on / 依赖: Subtype, Subtype.val_injective, mono_of_injective, val_injective
+/-
+**PresheafOfModules.Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules.Subm
+odule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Mono N.ι := mono_of_injective fun _ => Subtype.val_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder M.Submodule
-  body: PartialOrder.lift _ fun _ _ h => ext (congrFun h)
-
-中文:
-实例 :
-  签名: 偏序 M.子模
-  定义体: PartialOrder.lift _ fun _ _ h => ext (congrFun h)
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift
+instance : Mono N.ι := mono_of_injective fun _ ↦ Subtype.val_injective
+/-
+**PresheafOfModules.Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules.Subm
+odule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder M.Submodule :=
-  PartialOrder.lift _ fun _ _ h => ext (congrFun h)
-
-/--
-lemma `le_iff` / 引理 `le_iff`
-
-English:
-lemma le_iff
-  given: {N₁ N₂ : M.Submodule}
-  statement: N₁ <= N₂ ↔ forall X, N₁.obj X <= N₂.obj X
-  proof: .rfl
-
-中文:
-引理 le_iff
-  条件: {N₁ N₂ : M.子模}
-  结论: N₁ <= N₂ ↔ 对任意 X, N₁.obj X <= N₂.obj X
-  证明: .rfl
+  PartialOrder.lift _ fun _ _ h ↦ ext (congrFun h)
+/-
+**PresheafOfModules.Submodule.le_iff** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModule
+s.Submodule`。
+形式化陈述：le_iff {N₁ N₂ : M.Submodule} : N₁ <= N₂ ↔ forall X, N₁.obj X <= N₂.obj X
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_iff {N₁ N₂ : M.Submodule} : N₁ <= N₂ ↔ forall X, N₁.obj X <= N₂.obj X :=
+lemma le_iff {N₁ N₂ : M.Submodule} : N₁ ≤ N₂ ↔ ∀ X, N₁.obj X ≤ N₂.obj X :=
   .rfl
 
 /-- If `N₁` and `N₂` are submodule with `N₁ ≤ N₂`, this is the associated inclusion
 of presheaves of modules. -/
 @[simps!]
-/--
-Definition of `homOfLE` / `homOfLE` 的定义
+/-
+**PresheafOfModules.Submodule.homOfLE** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModul
+es.Submodule`。
+形式化陈述：homOfLE {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂) : N₁.toPresheafOfModules ⟶ 
+N₂.toPresheafOfModules
+参数：hle : N₁ <= N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homOfLE
-  signature: {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂)
-  body: homMk { app X := AddCommGrpCat.ofHom (Submodule.inclusion (hle X)).toAddMonoidHom } (by cat_disch)
-
-中文:
-定义 homOfLE
-  签名: {N₁ N₂ : M.子模} (hle : N₁ <= N₂)
-  定义体: homMk { app X := AddCommGrpCat.ofHom (Submodule.inclusion (hle X)).toAddMonoidHom } (by cat_disch)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, Submodule, Submodule.inclusion, cat_disch, inclusion, toAddMonoidHom
+--- 原说明 ---
+If `N₁` and `N₂` are submodule with `N₁ ≤ N₂`, this is the associated inclusion
+of presheaves of modules.
 -/
-noncomputable def homOfLE {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂) :
+noncomputable def homOfLE {N₁ N₂ : M.Submodule} (hle : N₁ ≤ N₂) :
     N₁.toPresheafOfModules ⟶ N₂.toPresheafOfModules :=
   homMk { app X := AddCommGrpCat.ofHom (Submodule.inclusion (hle X)).toAddMonoidHom } (by cat_disch)
-
-instance (N₁ N₂ : M.Submodule) (hle : N₁ <= N₂) : Mono (homOfLE hle) :=
-  mono_of_injective fun _ => Submodule.inclusion_injective (hle _)
+/-
+**PresheafOfModules.Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules.Subm
+odule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (N₁ N₂ : M.Submodule) (hle : N₁ ≤ N₂) : Mono (homOfLE hle) :=
+  mono_of_injective fun _ ↦ Submodule.inclusion_injective (hle _)
 
 @[reassoc (attr := simp)]
-/--
-lemma `homOfLE_ι` / 引理 `homOfLE_ι`
-
-English:
-lemma homOfLE_ι
-  given: {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂)
-  statement: homOfLE hle ≫ N₂.ι = N₁.ι
-  proof: rfl
-
-@[simps sup_obj inf_obj sSup_obj sInf_obj top_obj bot_obj]
-
-中文:
-引理 homOfLE_ι
-  条件: {N₁ N₂ : M.子模} (hle : N₁ <= N₂)
-  结论: homOfLE hle ≫ N₂.ι = N₁.ι
-  证明: rfl
-
-@[simps sup_obj inf_obj sSup_obj sInf_obj top_obj bot_obj]
+/-
+**PresheafOfModules.Submodule.homOfLE_** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les.Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homOfLE_ι {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂) : homOfLE hle ≫ N₂.ι = N₁.ι := rfl
+lemma homOfLE_ι {N₁ N₂ : M.Submodule} (hle : N₁ ≤ N₂) : homOfLE hle ≫ N₂.ι = N₁.ι := rfl
 
 @[simps sup_obj inf_obj sSup_obj sInf_obj top_obj bot_obj]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice M.Submodule
-  body: { obj X := F.obj X ⊔ G.obj X
-      map f := sup_le ((F.map f).trans (Submodule.comap_mono le_sup_left))
-        ((G.map f).trans (Submodule.comap_mono le_sup_right)) }
-  le_sup_left _ _ _ := le_sup_left
-  le_sup_right _ _ _ := le_sup_right
-  sup_le _ _ _ h₁ h₂ X := sup_le (h₁ X) (h₂ X)
-  inf F G :=
-    { obj X := F.obj X ⊓ G.obj X
-      map f := le_inf (inf_le_left.trans (F.map f)) (inf_le_right.trans (G.map f)) }
-  inf_le_left _ _ _ := inf_le_left
-  inf_le_right _ _ _ := inf_le_right
-  le_inf _ _ _ h₁ h₂ X := le_inf (h₁ X) (h₂ X)
-  sSup s :=
-    { obj X := ⨆ N in s, N.obj X
-      map f := iSup₂_le fun N hN => (N.map f).trans
-        (Submodule.comap_mono (le_iSup₂_of_le N hN le_rfl)) }
-  isLUB_sSup _ :=
-    ⟨fun N hN _ => le_iSup₂_of_le N hN le_rfl, fun _ hb X => iSup₂_le fun _ hN => hb hN X⟩
-  sInf s :=
-    { obj X := ⨅ N in s, N.obj X
-      map f := by
-        simp_rw [Submodule.comap_iInf, le_iInf₂_iff]
-        intro N hN
-        refine iInf₂_le_of_le _ hN (N.map _) }
-  isGLB_sInf _ :=
-    ⟨fun N hN _ => iInf₂_le N hN, fun _ hb X => le_iInf₂ fun _ hN => hb hN X⟩
-  bot.obj := ⊥
-  bot.map _ := bot_le
-  bot_le _ _ := bot_le
-  top.obj := ⊤
-  top.map _ := le_top
-  le_top _ _ := le_top
-
-中文:
-实例 :
-  签名: 完备格 M.子模
-  定义体: { obj X := F.obj X ⊔ G.obj X
-      map f := sup_le ((F.map f).trans (Submodule.comap_mono le_sup_left))
-        ((G.map f).trans (Submodule.comap_mono le_sup_right)) }
-  le_sup_left _ _ _ := le_sup_left
-  le_sup_right _ _ _ := le_sup_right
-  sup_le _ _ _ h₁ h₂ X := sup_le (h₁ X) (h₂ X)
-  inf F G :=
-    { obj X := F.obj X ⊓ G.obj X
-      map f := le_inf (inf_le_left.trans (F.map f)) (inf_le_right.trans (G.map f)) }
-  inf_le_left _ _ _ := inf_le_left
-  inf_le_right _ _ _ := inf_le_right
-  le_inf _ _ _ h₁ h₂ X := le_inf (h₁ X) (h₂ X)
-  sSup s :=
-    { obj X := ⨆ N in s, N.obj X
-      map f := iSup₂_le fun N hN => (N.map f).trans
-        (Submodule.comap_mono (le_iSup₂_of_le N hN le_rfl)) }
-  isLUB_sSup _ :=
-    ⟨fun N hN _ => le_iSup₂_of_le N hN le_rfl, fun _ hb X => iSup₂_le fun _ hN => hb hN X⟩
-  sInf s :=
-    { obj X := ⨅ N in s, N.obj X
-      map f := by
-        simp_rw [Submodule.comap_iInf, le_iInf₂_iff]
-        intro N hN
-        refine iInf₂_le_of_le _ hN (N.map _) }
-  isGLB_sInf _ :=
-    ⟨fun N hN _ => iInf₂_le N hN, fun _ hb X => le_iInf₂ fun _ hN => hb hN X⟩
-  bot.obj := ⊥
-  bot.map _ := bot_le
-  bot_le _ _ := bot_le
-  top.obj := ⊤
-  top.map _ := le_top
-  le_top _ _ := le_top
-
-Depends on / 依赖: F.map, F.obj, G.map, G.obj, Submodule, Submodule.comap_mono, comap_mono, inf_le_left, inf_le_left.trans, inf_le_right, inf_le_right.trans, le_inf, le_sup_left, le_sup_right, sup_le
+/-
+**PresheafOfModules.Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules.Subm
+odule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice M.Submodule where
   sup F G :=
@@ -375,19 +221,19 @@ instance : CompleteLattice M.Submodule where
   inf_le_right _ _ _ := inf_le_right
   le_inf _ _ _ h₁ h₂ X := le_inf (h₁ X) (h₂ X)
   sSup s :=
-    { obj X := ⨆ N in s, N.obj X
-      map f := iSup₂_le fun N hN => (N.map f).trans
+    { obj X := ⨆ N ∈ s, N.obj X
+      map f := iSup₂_le fun N hN ↦ (N.map f).trans
         (Submodule.comap_mono (le_iSup₂_of_le N hN le_rfl)) }
   isLUB_sSup _ :=
-    ⟨fun N hN _ => le_iSup₂_of_le N hN le_rfl, fun _ hb X => iSup₂_le fun _ hN => hb hN X⟩
+    ⟨fun N hN _ ↦ le_iSup₂_of_le N hN le_rfl, fun _ hb X ↦ iSup₂_le fun _ hN ↦ hb hN X⟩
   sInf s :=
-    { obj X := ⨅ N in s, N.obj X
+    { obj X := ⨅ N ∈ s, N.obj X
       map f := by
         simp_rw [Submodule.comap_iInf, le_iInf₂_iff]
         intro N hN
         refine iInf₂_le_of_le _ hN (N.map _) }
   isGLB_sInf _ :=
-    ⟨fun N hN _ => iInf₂_le N hN, fun _ hb X => le_iInf₂ fun _ hN => hb hN X⟩
+    ⟨fun N hN _ ↦ iInf₂_le N hN, fun _ hb X ↦ le_iInf₂ fun _ hN ↦ hb hN X⟩
   bot.obj := ⊥
   bot.map _ := bot_le
   bot_le _ _ := bot_le
@@ -398,3 +244,4 @@ instance : CompleteLattice M.Submodule where
 end Submodule
 
 end PresheafOfModules
+

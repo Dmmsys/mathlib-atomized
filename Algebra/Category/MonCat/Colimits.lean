@@ -68,290 +68,178 @@ and the identifications given by the morphisms in the diagram.
 
 variable {J : Type v} [Category.{u} J] (F : J ⥤ MonCat.{v})
 
-/--
-Inductive type `Prequotient` / 归纳类型 `Prequotient`
+/-- An inductive type representing all monoid expressions (without relations)
+on a collection of types indexed by the objects of `J`.
+-/
+/-
+**MonCat.Colimits.Prequotient** 是 Mathlib 中的一个归纳类型，位于命名空间 `MonCat.Colimits`。
+形式化陈述：{J : Type v} → [inst : CategoryTheory.Category.{u, v} J] → CategoryTheory.
+Functor J MonCat → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Prequotient
-  constructors (3):
-    - of: forall (j : J) (_ : F.obj j), Prequotient
-    - one: Prequotient
-    - mul: Prequotient -> Prequotient -> Prequotient
-
-中文:
-归纳类型 Prequotient
-  构造子 (3 个):
-    - of: 对任意 (j : J) (_ : F.obj j), Prequotient
-    - one: Prequotient
-    - mul: Prequotient -> Prequotient -> Prequotient
+--- 原说明 ---
+An inductive type representing all monoid expressions (without relations)
+on a collection of types indexed by the objects of `J`.
 -/
 inductive Prequotient
   -- There's always `of`
-  | of : forall (j : J) (_ : F.obj j), Prequotient
+  | of : ∀ (j : J) (_ : F.obj j), Prequotient
   -- Then one generator for each operation
   | one : Prequotient
-  | mul : Prequotient -> Prequotient -> Prequotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Prequotient F)
-  body: ⟨Prequotient.one⟩
-
-中文:
-实例 :
-  签名: 可居 (Prequotient F)
-  定义体: ⟨Prequotient.one⟩
-
-Depends on / 依赖: Prequotient, Prequotient.one
+  | mul : Prequotient → Prequotient → Prequotient
+/-
+**MonCat.Colimits.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat.Colimits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Prequotient F) :=
   ⟨Prequotient.one⟩
 
 open Prequotient
 
-/--
-Inductive type `Relation` / 归纳类型 `Relation`
-
-English:
-inductive Relation
-  parameters: : Prequotient F -> Prequotient F -> Prop -- Make it an equivalence relation:
-  constructors (11):
-    - refl: forall x, Relation x x
-    - symm: forall (x y) (_ : Relation x y), Relation y x
-    - trans: forall (x y z) (_ : Relation x y) (_ : Relation y z), Relation x z -- There's always a `map` relation
-    - map: forall (j j' : J) (f : j ⟶ j') (x : F.obj j), Relation (Prequotient.of j' ((F.map f) x)) (Prequotient.of j x)
-    - mul: forall (j) (x y : F.obj j), Relation (Prequotient.of j (x * y)) (mul (Prequotient.of j x) (Prequotient.of j y))
-    - one: forall j, Relation (Prequotient.of j 1) one -- Then one relation per argument of each operation
-    - mul_1: forall (x x' y) (_ : Relation x x'), Relation (mul x y) (mul x' y)
-    - mul_2: forall (x y y') (_ : Relation y y'), Relation (mul x y) (mul x y')
-    - mul_assoc: forall x y z, Relation (mul (mul x y) z) (mul x (mul y z))
-    - one_mul: forall x, Relation (mul one x) x
-    - mul_one: forall x, Relation (mul x one) x
-
-中文:
-归纳类型 关系
-  参数: : Prequotient F -> Prequotient F -> 命题 -- Make it an equivalence relation:
-  构造子 (11 个):
-    - refl: 对任意 x, 关系 x x
-    - symm: 对任意 (x y) (_ : 关系 x y), 关系 y x
-    - trans: 对任意 (x y z) (_ : 关系 x y) (_ : 关系 y z), 关系 x z -- There's always a `map` relation
-    - map: 对任意 (j j' : J) (f : j ⟶ j') (x : F.obj j), 关系 (Prequotient.of j' ((F.map f) x)) (Prequotient.of j x)
-    - mul: 对任意 (j) (x y : F.obj j), 关系 (Prequotient.of j (x * y)) (mul (Prequotient.of j x) (Prequotient.of j y))
-    - one: 对任意 j, 关系 (Prequotient.of j 1) one -- Then one relation per argument of each operation
-    - mul_1: 对任意 (x x' y) (_ : 关系 x x'), 关系 (mul x y) (mul x' y)
-    - mul_2: 对任意 (x y y') (_ : 关系 y y'), 关系 (mul x y) (mul x y')
-    - mul_assoc: 对任意 x y z, 关系 (mul (mul x y) z) (mul x (mul y z))
-    - one_mul: 对任意 x, 关系 (mul one x) x
-    - mul_one: 对任意 x, 关系 (mul x one) x
+/-- The relation on `Prequotient` saying when two expressions are equal
+because of the monoid laws, or
+because one element is mapped to another by a morphism in the diagram.
 -/
-inductive Relation : Prequotient F -> Prequotient F -> Prop -- Make it an equivalence relation:
-  | refl : forall x, Relation x x
-  | symm : forall (x y) (_ : Relation x y), Relation y x
-  | trans : forall (x y z) (_ : Relation x y) (_ : Relation y z),
+/-
+**MonCat.Colimits.Relation** 是 Mathlib 中的一个归纳类型，位于命名空间 `MonCat.Colimits`。
+形式化陈述：{J : Type v} →   [inst : CategoryTheory.Category.{u, v} J] →     (F : Cate
+goryTheory.Functor J MonCat) → MonCat.Colimits.Prequotient F → MonCat.Colimits.P
+requotient F → Prop
+参数：F : CategoryTheory.Functor J MonCat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The relation on `Prequotient` saying when two expressions are equal
+because of the monoid laws, or
+because one element is mapped to another by a morphism in the diagram.
+-/
+inductive Relation : Prequotient F → Prequotient F → Prop -- Make it an equivalence relation:
+  | refl : ∀ x, Relation x x
+  | symm : ∀ (x y) (_ : Relation x y), Relation y x
+  | trans : ∀ (x y z) (_ : Relation x y) (_ : Relation y z),
       Relation x z -- There's always a `map` relation
   | map :
-    forall (j j' : J) (f : j ⟶ j') (x : F.obj j),
+    ∀ (j j' : J) (f : j ⟶ j') (x : F.obj j),
       -- Then one relation per operation, describing the interaction with `of`
       Relation (Prequotient.of j' ((F.map f) x)) (Prequotient.of j x)
-  | mul : forall (j) (x y : F.obj j), Relation (Prequotient.of j (x * y))
+  | mul : ∀ (j) (x y : F.obj j), Relation (Prequotient.of j (x * y))
       (mul (Prequotient.of j x) (Prequotient.of j y))
-  | one : forall j, Relation (Prequotient.of j 1) one -- Then one relation per argument of each operation
-  | mul_1 : forall (x x' y) (_ : Relation x x'), Relation (mul x y) (mul x' y)
-  | mul_2 : forall (x y y') (_ : Relation y y'), Relation (mul x y) (mul x y')
+  | one : ∀ j, Relation (Prequotient.of j 1) one -- Then one relation per argument of each operation
+  | mul_1 : ∀ (x x' y) (_ : Relation x x'), Relation (mul x y) (mul x' y)
+  | mul_2 : ∀ (x y y') (_ : Relation y y'), Relation (mul x y) (mul x y')
     -- And one relation per axiom
-  | mul_assoc : forall x y z, Relation (mul (mul x y) z) (mul x (mul y z))
-  | one_mul : forall x, Relation (mul one x) x
-  | mul_one : forall x, Relation (mul x one) x
+  | mul_assoc : ∀ x y z, Relation (mul (mul x y) z) (mul x (mul y z))
+  | one_mul : ∀ x, Relation (mul one x) x
+  | mul_one : ∀ x, Relation (mul x one) x
 
-/--
-Instance `colimitSetoid` / 实例 `colimitSetoid`
+/-- The setoid corresponding to monoid expressions modulo monoid relations and identifications.
+-/
+/-
+**MonCat.Colimits.colimitSetoid** 是 Mathlib 中的一个实例，位于命名空间 `MonCat.Colimits`。
+形式化陈述：colimitSetoid : Setoid (Prequotient F) where r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance colimitSetoid
-  signature: : Setoid (Prequotient F) where
-  body: Relation F
-  iseqv := ⟨Relation.refl, Relation.symm _ _, Relation.trans _ _ _⟩
-
-中文:
-实例 colimitSetoid
-  签名: : 集合等价关系 (Prequotient F) where
-  定义体: Relation F
-  iseqv := ⟨Relation.refl, Relation.symm _ _, Relation.trans _ _ _⟩
-
-Depends on / 依赖: Relation
+--- 原说明 ---
+The setoid corresponding to monoid expressions modulo monoid relations and ident
+ifications.
 -/
 instance colimitSetoid : Setoid (Prequotient F) where
   r := Relation F
   iseqv := ⟨Relation.refl, Relation.symm _ _, Relation.trans _ _ _⟩
 
-/--
-Definition of `ColimitType` / `ColimitType` 的定义
+/-- The underlying type of the colimit of a diagram in `MonCat`.
+-/
+/-
+**MonCat.Colimits.ColimitType** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：ColimitType : Type v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ColimitType
-  signature: : Type v
-  body: Quotient (colimitSetoid F)
-deriving Inhabited
-
-中文:
-定义 ColimitType
-  签名: : 类型v
-  定义体: Quotient (colimitSetoid F)
-deriving Inhabited
-
-Depends on / 依赖: Quotient, colimitSetoid
+--- 原说明 ---
+The underlying type of the colimit of a diagram in `MonCat`.
 -/
 def ColimitType : Type v :=
   Quotient (colimitSetoid F)
 deriving Inhabited
-
-/--
-Instance `monoidColimitType` / 实例 `monoidColimitType`
-
-English:
-instance monoidColimitType
-  signature: : Monoid (ColimitType F) where
-  body: Quotient.mk _ one
-  mul := Quotient.map₂ mul fun _ x' rx y _ ry =>
-    Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
-one_mul := Quotient.ind fun _ => Quotient.sound Relation.one_mul _
-mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
-  mul_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
-Quotient.sound Relation.mul_assoc _ _ _
-
-@[simp]
-
-中文:
-实例 monoidColimitType
-  签名: : 幺半群 (ColimitType F) where
-  定义体: Quotient.mk _ one
-  mul := Quotient.map₂ mul fun _ x' rx y _ ry =>
-    Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
-one_mul := Quotient.ind fun _ => Quotient.sound Relation.one_mul _
-mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
-  mul_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
-Quotient.sound Relation.mul_assoc _ _ _
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.mk
+/-
+**MonCat.Colimits.monoidColimitType** 是 Mathlib 中的一个实例，位于命名空间 `MonCat.Colimits`。
+形式化陈述：monoidColimitType : Monoid (ColimitType F) where one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance monoidColimitType : Monoid (ColimitType F) where
   one := Quotient.mk _ one
   mul := Quotient.map₂ mul fun _ x' rx y _ ry =>
     Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
-one_mul := Quotient.ind fun _ => Quotient.sound Relation.one_mul _
-mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
+  one_mul := Quotient.ind fun _ => Quotient.sound <| Relation.one_mul _
+  mul_one := Quotient.ind fun _ => Quotient.sound <| Relation.mul_one _
   mul_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
-Quotient.sound Relation.mul_assoc _ _ _
+    Quotient.sound <| Relation.mul_assoc _ _ _
 
 @[simp]
-/--
-theorem `quot_one` / 定理 `quot_one`
-
-English:
-theorem quot_one
-  statement: Quot.mk Setoid.r one = (1 : ColimitType F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quot_one
-  结论: 商.mk 集合等价关系.r one = (1 : ColimitType F)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, ModuleCat.restrictScalars, R.map, colimit, colimit.isColimit, evaluation, isColimit, isColimitOfPreserves, restrictScalars
+/-
+**MonCat.Colimits.quot_one** 是 Mathlib 中的一个定理，位于命名空间 `MonCat.Colimits`。
+形式化陈述：quot_one : Quot.mk Setoid.r one = (1 : ColimitType F)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quot_one : Quot.mk Setoid.r one = (1 : ColimitType F) :=
   rfl
 
 @[simp]
-/--
-theorem `quot_mul` / 定理 `quot_mul`
-
-English:
-theorem quot_mul
-  given: (x y : Prequotient F)
-  statement: Quot.mk Setoid.r (mul x y) =
-  proof: rfl
-
-中文:
-定理 quot_mul
-  条件: (x y : Prequotient F)
-  结论: 商.mk 集合等价关系.r (mul x y) =
-  证明: rfl
+/-
+**MonCat.Colimits.quot_mul** 是 Mathlib 中的一个定理，位于命名空间 `MonCat.Colimits`。
+形式化陈述：quot_mul (x y : Prequotient F) : Quot.mk Setoid.r (mul x y) = @HMul.hMul (
+ColimitType F) (ColimitType F) (ColimitType F) _ (Quot.mk Setoid.r x) (Quot.mk S
+etoid.r y)
+参数：x y : Prequotient F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quot_mul (x y : Prequotient F) : Quot.mk Setoid.r (mul x y) =
     @HMul.hMul (ColimitType F) (ColimitType F) (ColimitType F) _
       (Quot.mk Setoid.r x) (Quot.mk Setoid.r y) :=
   rfl
 
-/--
-Definition of `colimit` / `colimit` 的定义
+/-- The bundled monoid giving the colimit of a diagram. -/
+/-
+**MonCat.Colimits.colimit** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：colimit : MonCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit
-  signature: : MonCat
-  body: of (ColimitType F)
-
-中文:
-定义 colimit
-  签名: : 幺半群范畴
-  定义体: of (ColimitType F)
-
-Depends on / 依赖: ColimitType
+--- 原说明 ---
+The bundled monoid giving the colimit of a diagram.
 -/
 def colimit : MonCat :=
   of (ColimitType F)
 
-/--
-Definition of `coconeFun` / `coconeFun` 的定义
+/-- The function from a given monoid in the diagram to the colimit monoid. -/
+/-
+**MonCat.Colimits.coconeFun** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：coconeFun (j : J) (x : F.obj j) : ColimitType F
+参数：j : J；x : F.obj j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeFun
-  signature: (j : J) (x : F.obj j)
-  body: Quot.mk _ (Prequotient.of j x)
-
-中文:
-定义 coconeFun
-  签名: (j : J) (x : F.obj j)
-  定义体: Quot.mk _ (Prequotient.of j x)
-
-Depends on / 依赖: Prequotient, Prequotient.of, Quot.mk
+--- 原说明 ---
+The function from a given monoid in the diagram to the colimit monoid.
 -/
 def coconeFun (j : J) (x : F.obj j) : ColimitType F :=
   Quot.mk _ (Prequotient.of j x)
 
-/--
-Definition of `coconeMorphism` / `coconeMorphism` 的定义
+/-- The monoid homomorphism from a given monoid in the diagram to the colimit monoid. -/
+/-
+**MonCat.Colimits.coconeMorphism** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：coconeMorphism (j : J) : F.obj j ⟶ colimit F
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeMorphism
-  signature: (j : J)
-  body: ofHom
-  { toFun := coconeFun F j
-    map_one' := Quot.sound (Relation.one _)
-    map_mul' _ _ := Quot.sound (Relation.mul _ _ _) }
-
-@[simp]
-
-中文:
-定义 coconeMorphism
-  签名: (j : J)
-  定义体: ofHom
-  { toFun := coconeFun F j
-    map_one' := Quot.sound (Relation.one _)
-    map_mul' _ _ := Quot.sound (Relation.mul _ _ _) }
-
-@[simp]
-
-Depends on / 依赖: Quot.sound, Relation, Relation.mul, Relation.one, coconeFun, map_mul, map_one
+--- 原说明 ---
+The monoid homomorphism from a given monoid in the diagram to the colimit monoid
+.
 -/
 def coconeMorphism (j : J) : F.obj j ⟶ colimit F :=
   ofHom
@@ -360,30 +248,17 @@ def coconeMorphism (j : J) : F.obj j ⟶ colimit F :=
     map_mul' _ _ := Quot.sound (Relation.mul _ _ _) }
 
 @[simp]
-/--
-theorem `cocone_naturality` / 定理 `cocone_naturality`
-
-English:
-theorem cocone_naturality
-  given: {j j' : J} (f : j ⟶ j')
-  proof: by
-  ext
-  apply Quot.sound
-  apply Relation.map
-
-@[simp]
-
-中文:
-定理 cocone_naturality
-  条件: {j j' : J} (f : j ⟶ j')
-  证明: by
-  ext
-  apply Quot.sound
-  apply Relation.map
-
-@[simp]
-
-Depends on / 依赖: Quot.sound, Relation, Relation.map
+/-
+**MonCat.Colimits.cocone_naturality** 是 Mathlib 中的一个定理，位于命名空间 `MonCat.Colimits`。
+形式化陈述：cocone_naturality {j j' : J} (f : j ⟶ j') : F.map f ≫ coconeMorphism F j' 
+= coconeMorphism F j
+参数：f : j ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonCat.hom_ext`：hom_ext {M N : MonCat} {f g : M ⟶ N} (hf : f.hom = g.hom
+) : f = g
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
 -/
 theorem cocone_naturality {j j' : J} (f : j ⟶ j') :
     F.map f ≫ coconeMorphism F j' = coconeMorphism F j := by
@@ -392,24 +267,19 @@ theorem cocone_naturality {j j' : J} (f : j ⟶ j') :
   apply Relation.map
 
 @[simp]
-/--
-theorem `cocone_naturality_components` / 定理 `cocone_naturality_components`
-
-English:
-theorem cocone_naturality_components
-  given: (j j' : J) (f : j ⟶ j') (x : F.obj j)
-  proof: by
-  rw [← cocone_naturality F f]
-  rfl
-
-中文:
-定理 cocone_naturality_components
-  条件: (j j' : J) (f : j ⟶ j') (x : F.obj j)
-  证明: by
-  rw [← cocone_naturality F f]
-  rfl
-
-Depends on / 依赖: cocone_naturality
+/-
+**MonCat.Colimits.cocone_naturality_components** 是 Mathlib 中的一个定理，位于命名空间 `MonCat
+.Colimits`。
+形式化陈述：cocone_naturality_components (j j' : J) (f : j ⟶ j') (x : F.obj j) : (coco
+neMorphism F j') (F.map f x) = (coconeMorphism F j) x
+参数：j j' : J；f : j ⟶ j'；x : F.obj j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonCat.Colimits.cocone_naturality`：cocone_naturality {j j' : J} (f : j ⟶
+ j') : F.map f ≫ coconeMorphism F j' = coconeMorphism F j
 -/
 theorem cocone_naturality_components (j j' : J) (f : j ⟶ j') (x : F.obj j) :
     (coconeMorphism F j') (F.map f x) = (coconeMorphism F j) x := by
@@ -417,22 +287,15 @@ theorem cocone_naturality_components (j j' : J) (f : j ⟶ j') (x : F.obj j) :
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `colimitCocone` / `colimitCocone` 的定义
+/-- The cocone over the proposed colimit monoid. -/
+/-
+**MonCat.Colimits.colimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：colimitCocone : Cocone F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitCocone
-  signature: : Cocone F where
-  body: colimit F
-  ι := { app := coconeMorphism F }
-
-中文:
-定义 colimitCocone
-  签名: : 余锥 F where
-  定义体: colimit F
-  ι := { app := coconeMorphism F }
-
-Depends on / 依赖: colimit
+--- 原说明 ---
+The cocone over the proposed colimit monoid.
 -/
 def colimitCocone : Cocone F where
   pt := colimit F
@@ -440,68 +303,35 @@ def colimitCocone : Cocone F where
 
 /-- The function from the free monoid on the diagram to the cone point of any other cocone. -/
 @[simp]
-/--
-Definition of `descFunLift` / `descFunLift` 的定义
+/-
+**MonCat.Colimits.descFunLift** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：{J : Type v} →   [inst : CategoryTheory.Category.{u, v} J] →     (F : Cate
+goryTheory.Functor J MonCat) → (s : CategoryTheory.Limits.Cocone F) → MonCat.Col
+imits.Prequotient F → ↑s.pt
+参数：F : CategoryTheory.Functor J MonCat；s : CategoryTheory.Limits.Cocone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition descFunLift
-  signature: (s : Cocone F)
-
-中文:
-定义 descFunLift
-  签名: (s : 余锥 F)
+--- 原说明 ---
+The function from the free monoid on the diagram to the cone point of any other 
+cocone.
 -/
-def descFunLift (s : Cocone F) : Prequotient F -> s.pt
+def descFunLift (s : Cocone F) : Prequotient F → s.pt
   | Prequotient.of j x => (s.ι.app j) x
   | one => 1
   | mul x y => descFunLift _ x * descFunLift _ y
 
-/--
-Definition of `descFun` / `descFun` 的定义
+/-- The function from the colimit monoid to the cone point of any other cocone. -/
+/-
+**MonCat.Colimits.descFun** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：descFun (s : Cocone F) : ColimitType F -> s.pt
+参数：s : Cocone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition descFun
-  signature: (s : Cocone F)
-  body: by
-  fapply Quot.lift
-  · exact descFunLift F s
-  · intro x y r
-    induction r with
-    | refl x => rfl
-    | symm x y _ h => exact h.symm
-    | trans x y z _ _ h₁ h₂ => exact h₁.trans h₂
-    | map j j' f x => exact s.w_apply f x
-    | mul j x y => exact map_mul (s.ι.app j).hom x y
-    | one j => exact map_one (s.ι.app j).hom
-    | mul_1 x x' y _ h => exact congr_arg (· * _) h
-    | mul_2 x y y' _ h => exact congr_arg (_ * ·) h
-    | mul_assoc x y z => exact mul_assoc _ _ _
-    | one_mul x => exact one_mul _
-    | mul_one x => exact mul_one _
-
-中文:
-定义 descFun
-  签名: (s : 余锥 F)
-  定义体: by
-  fapply Quot.lift
-  · exact descFunLift F s
-  · intro x y r
-    induction r with
-    | refl x => rfl
-    | symm x y _ h => exact h.symm
-    | trans x y z _ _ h₁ h₂ => exact h₁.trans h₂
-    | map j j' f x => exact s.w_apply f x
-    | mul j x y => exact map_mul (s.ι.app j).hom x y
-    | one j => exact map_one (s.ι.app j).hom
-    | mul_1 x x' y _ h => exact congr_arg (· * _) h
-    | mul_2 x y y' _ h => exact congr_arg (_ * ·) h
-    | mul_assoc x y z => exact mul_assoc _ _ _
-    | one_mul x => exact one_mul _
-    | mul_one x => exact mul_one _
-
-Depends on / 依赖: Quot.lift, congr_arg, descFunLift, fapply, h.symm, map_mul, map_one, mul_1, mul_2, mul_assoc, mul_one, one_mul, s.w_apply, w_apply
+--- 原说明 ---
+The function from the colimit monoid to the cone point of any other cocone.
 -/
-def descFun (s : Cocone F) : ColimitType F -> s.pt := by
+def descFun (s : Cocone F) : ColimitType F → s.pt := by
   fapply Quot.lift
   · exact descFunLift F s
   · intro x y r
@@ -518,32 +348,17 @@ def descFun (s : Cocone F) : ColimitType F -> s.pt := by
     | one_mul x => exact one_mul _
     | mul_one x => exact mul_one _
 
-/--
-Definition of `descMorphism` / `descMorphism` 的定义
+/-- The monoid homomorphism from the colimit monoid to the cone point of any other cocone. -/
+/-
+**MonCat.Colimits.descMorphism** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：descMorphism (s : Cocone F) : colimit F ⟶ s.pt
+参数：s : Cocone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition descMorphism
-  signature: (s : Cocone F)
-  body: ofHom
-  { toFun := descFun F s
-    map_one' := rfl
-    map_mul' x y := by
-      induction x using Quot.inductionOn
-      induction y using Quot.inductionOn
-      solve_by_elim }
-
-中文:
-定义 descMorphism
-  签名: (s : 余锥 F)
-  定义体: ofHom
-  { toFun := descFun F s
-    map_one' := rfl
-    map_mul' x y := by
-      induction x using Quot.inductionOn
-      induction y using Quot.inductionOn
-      solve_by_elim }
-
-Depends on / 依赖: Quot.inductionOn, descFun, inductionOn, map_mul, map_one, solve_by_elim
+--- 原说明 ---
+The monoid homomorphism from the colimit monoid to the cone point of any other c
+ocone.
 -/
 def descMorphism (s : Cocone F) : colimit F ⟶ s.pt :=
   ofHom
@@ -555,48 +370,15 @@ def descMorphism (s : Cocone F) : colimit F ⟶ s.pt :=
       solve_by_elim }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `colimitIsColimit` / `colimitIsColimit` 的定义
+/-- Evidence that the proposed colimit is the colimit. -/
+/-
+**MonCat.Colimits.colimitIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Colimits`。
+形式化陈述：colimitIsColimit : IsColimit (colimitCocone F) where desc s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitIsColimit
-  signature: : IsColimit (colimitCocone F) where
-  body: descMorphism F s
-  uniq s m w := by
-    ext x
-    induction x using Quot.inductionOn with | h x => ?_
-    induction x with
-    | of j =>
-      change _ = s.ι.app j _
-      rw [← w j]
-      rfl
-    | one =>
-      rw [quot_one]; rw [map_one]
-      rfl
-    | mul x y hx hy =>
-      rw [quot_mul]; rw [map_mul]; rw [hx]; rw [hy]
-      solve_by_elim
-
-中文:
-定义 colimitIsColimit
-  签名: : 是余极限 (colimitCocone F) where
-  定义体: descMorphism F s
-  uniq s m w := by
-    ext x
-    induction x using Quot.inductionOn with | h x => ?_
-    induction x with
-    | of j =>
-      change _ = s.ι.app j _
-      rw [← w j]
-      rfl
-    | one =>
-      rw [quot_one]; rw [map_one]
-      rfl
-    | mul x y hx hy =>
-      rw [quot_mul]; rw [map_mul]; rw [hx]; rw [hy]
-      solve_by_elim
-
-Depends on / 依赖: descMorphism
+--- 原说明 ---
+Evidence that the proposed colimit is the colimit.
 -/
 def colimitIsColimit : IsColimit (colimitCocone F) where
   desc s := descMorphism F s
@@ -609,32 +391,20 @@ def colimitIsColimit : IsColimit (colimitCocone F) where
       rw [← w j]
       rfl
     | one =>
-      rw [quot_one]; rw [map_one]
+      rw [quot_one, map_one]
       rfl
     | mul x y hx hy =>
-      rw [quot_mul]; rw [map_mul]; rw [hx]; rw [hy]
+      rw [quot_mul, map_mul, hx, hy]
       solve_by_elim
-
-/--
-Instance `hasColimits_monCat` / 实例 `hasColimits_monCat`
-
-English:
-instance hasColimits_monCat
-  signature: : HasColimits MonCat where
-  body: { has_colimit := fun F =>
-        HasColimit.mk
-          { cocone := colimitCocone F
-            isColimit := colimitIsColimit F } }
-
-中文:
-实例 hasColimits_monCat
-  签名: : 有余极限 幺半群范畴 where
-  定义体: { has_colimit := fun F =>
-        HasColimit.mk
-          { cocone := colimitCocone F
-            isColimit := colimitIsColimit F } }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, colimitCocone, colimitIsColimit, has_colimit, isColimit
+/-
+**MonCat.Colimits.hasColimits_monCat** 是 Mathlib 中的一个实例，位于命名空间 `MonCat.Colimits`
+。
+形式化陈述：hasColimits_monCat : HasColimits MonCat where has_colimits_of_shape _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 -/
 instance hasColimits_monCat : HasColimits MonCat where
   has_colimits_of_shape _ _ :=
@@ -644,3 +414,4 @@ instance hasColimits_monCat : HasColimits MonCat where
             isColimit := colimitIsColimit F } }
 
 end MonCat.Colimits
+

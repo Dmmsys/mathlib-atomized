@@ -27,39 +27,41 @@ assert_not_exists RelIso
 variable {M G R : Type*}
 variable [Monoid M] [Group G] [Semiring R]
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [MulSemiringAction M R] {S : Type*} [SetLike S M] (s : S)
     [SubmonoidClass S M] : MulSemiringAction s R :=
   { (inferInstance : DistribMulAction s R), (inferInstance : MulDistribMulAction s R) with }
 
-/--
-Instance `Submonoid.mulSemiringAction` / 实例 `Submonoid.mulSemiringAction`
+/-- A stronger version of `Submonoid.distribMulAction`. -/
+/-
+**Submonoid.mulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Submonoid.mulSemiringAction [MulSemiringAction M R] (H : Submonoid M) : Mu
+lSemiringAction H R
+参数：H : Submonoid M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Submonoid.mulSemiringAction
-  signature: [MulSemiringAction M R] (H : Submonoid M)
-  body: inferInstance
-
-中文:
-实例 子幺半群.mulSemiringAction
-  签名: [MulSemiring作用 M R] (H : 子幺半群 M)
-  定义体: inferInstance
+--- 原说明 ---
+A stronger version of `Submonoid.distribMulAction`.
 -/
 instance Submonoid.mulSemiringAction [MulSemiringAction M R] (H : Submonoid M) :
     MulSemiringAction H R :=
   inferInstance
 
-/--
-Instance `Subgroup.mulSemiringAction` / 实例 `Subgroup.mulSemiringAction`
+/-- A stronger version of `Subgroup.distribMulAction`. -/
+/-
+**Subgroup.mulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subgroup.mulSemiringAction [MulSemiringAction G R] (H : Subgroup G) : MulS
+emiringAction H R
+参数：H : Subgroup G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Subgroup.mulSemiringAction
-  signature: [MulSemiringAction G R] (H : Subgroup G)
-  body: inferInstance
-
-中文:
-实例 子群.mulSemiringAction
-  签名: [MulSemiring作用 G R] (H : 子群 G)
-  定义体: inferInstance
+--- 原说明 ---
+A stronger version of `Subgroup.distribMulAction`.
 -/
 instance Subgroup.mulSemiringAction [MulSemiringAction G R] (H : Subgroup G) :
     MulSemiringAction H R :=

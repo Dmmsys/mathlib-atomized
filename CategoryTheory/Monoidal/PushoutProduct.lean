@@ -19,8 +19,8 @@ to the canonical map from the pushout of `f ◁ X` and `A ▷ g` to `B ⊗ Y`, i
 diagram:
 ```
   A ⊗ X --> B ⊗ X
-     | |
-     v v
+     |          |
+     v          v
   A ⊗ Y --> B ⊗ Y
 ```
 
@@ -31,8 +31,8 @@ to the internal hom. This is the bifunctor of arrow categories that sends `f : A
 following diagram:
 ```
   B ⟹ X --> A ⟹ X
-     | |
-     v v
+     |          |
+     v          v
   B ⟹ Y --> A ⟹ Y
 ```
 
@@ -63,26 +63,19 @@ bifunctor of arrow categories that sends `f : A ⟶ B` and `g : X ⟶ Y` to the 
 pushout of `f ◁ X` and `A ▷ g` to `B ⊗ Y`, induced by the following diagram:
 ```
   A ⊗ X --> B ⊗ X
-     | |
-     v v
+     |          |
+     v          v
   A ⊗ Y --> B ⊗ Y
 ```
 -/
 noncomputable
-/--
-Definition of `pushoutProduct` / `pushoutProduct` 的定义
-
-English:
-abbreviation pushoutProduct
-  signature: [HasPushouts C] [MonoidalCategory C]
-  body: (curriedTensor C).leibnizPushout
-
-中文:
-缩写 pushoutProduct
-  签名: [有Pushouts C] [幺半群范畴 C]
-  定义体: (curriedTensor C).leibnizPushout
-
-Depends on / 依赖: curriedTensor, infer_instance, leibnizPushout, ofMkLEMk
+/-
+**CategoryTheory.MonoidalCategory.Arrow.pushoutProduct** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.MonoidalCategory.Arrow`。
+形式化陈述：pushoutProduct [HasPushouts C] [MonoidalCategory C] : Arrow C ⥤ Arrow C ⥤ 
+Arrow C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev pushoutProduct [HasPushouts C] [MonoidalCategory C] :
     Arrow C ⥤ Arrow C ⥤ Arrow C := (curriedTensor C).leibnizPushout
@@ -96,26 +89,19 @@ bifunctor of arrow categories that sends `f : A ⟶ B` and `g : X ⟶ Y` to the 
 `(pre f).app Y : B ⟹ Y ⟶ A ⟹ Y`, induced by the following diagram:
 ```
   B ⟹ X --> A ⟹ X
-     | |
-     v v
+     |          |
+     v          v
   B ⟹ Y --> A ⟹ Y
 ```
 -/
 noncomputable
-/--
-Definition of `pullbackHom` / `pullbackHom` 的定义
-
-English:
-abbreviation pullbackHom
-  signature: [HasPullbacks C] [MonoidalCategory C] [MonoidalClosed C]
-  body: MonoidalClosed.internalHom.leibnizPullback
-
-中文:
-缩写 pullbackHom
-  签名: [有Pullbacks C] [幺半群范畴 C] [幺半群闭 C]
-  定义体: MonoidalClosed.internalHom.leibnizPullback
-
-Depends on / 依赖: MonoidalClosed, MonoidalClosed.internalHom.leibnizPullback, internalHom, leibnizPullback
+/-
+**CategoryTheory.MonoidalCategory.Arrow.pullbackHom** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MonoidalCategory.Arrow`。
+形式化陈述：pullbackHom [HasPullbacks C] [MonoidalCategory C] [MonoidalClosed C] : (Ar
+row C)ᵒᵖ ⥤ Arrow C ⥤ Arrow C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev pullbackHom [HasPullbacks C] [MonoidalCategory C] [MonoidalClosed C] :
     (Arrow C)ᵒᵖ ⥤ Arrow C ⥤ Arrow C := MonoidalClosed.internalHom.leibnizPullback
@@ -139,34 +125,14 @@ set_option backward.defeqAttrib.useBackward true in
   pushout-product of `W ◁ X₁` and `X₂`. -/
 @[simps!]
 noncomputable
-/--
-Definition of `whiskerLeftIso` / `whiskerLeftIso` 的定义
-
-English:
-definition whiskerLeftIso
-  body: Arrow.isoMk
-    (((tensorLeft W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
-      HasColimit.isoOfNatIso (spanExt (α_ W _ _).symm (α_ W _ _).symm (α_ W _ _).symm
-      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_right W _ _).symm))
-    (α_ W _ _).symm
-    (((tensorLeft W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
-        (by simp [← whiskerLeft_comp_assoc]) (by simp [← whiskerLeft_comp_assoc]))
-
-中文:
-定义 whiskerLeftIso
-  定义体: Arrow.isoMk
-    (((tensorLeft W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
-      HasColimit.isoOfNatIso (spanExt (α_ W _ _).symm (α_ W _ _).symm (α_ W _ _).symm
-      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_right W _ _).symm))
-    (α_ W _ _).symm
-    (((tensorLeft W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
-        (by simp [← whiskerLeft_comp_assoc]) (by simp [← whiskerLeft_comp_assoc]))
-
-Depends on / 依赖: Arrow.isoMk, HasColimit, HasColimit.isoOfNatIso, IsPushout, IsPushout.of_hasPushout, associator_inv_naturality_middle, associator_inv_naturality_right, hom_ext, isoOfNatIso, isoPushout, map_isPushout, of_hasPushout, spanExt, tensorLeft, whiskerLeft_comp_assoc
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.whiskerLeftIso** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：whiskerLeftIso [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.ho
+m)) (tensorLeft W)] : Arrow.mk (W ◁ (X₁ □ X₂).hom) ≅ (W ◁ X₁.hom) □ X₂
+参数：span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)；tensorLeft W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def whiskerLeftIso
     [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)) (tensorLeft W)] :
@@ -187,34 +153,14 @@ set_option backward.isDefEq.respectTransparency false in
   pushout-product of `X₁` and `X₂ ▷ W`. -/
 @[simps!]
 noncomputable
-/--
-Definition of `whiskerRightIso` / `whiskerRightIso` 的定义
-
-English:
-definition whiskerRightIso
-  body: Arrow.isoMk
-    (((tensorRight W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
-      HasColimit.isoOfNatIso (spanExt (α_ _ _ W) (α_ _ _ W) (α_ _ _ W)
-      (associator_naturality_left _ _ W).symm (associator_naturality_middle _ _ W).symm))
-    (α_ _ _ W)
-    (((tensorRight W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
-      (by simp [← comp_whiskerRight_assoc]) (by simp [← comp_whiskerRight_assoc]))
-
-中文:
-定义 whiskerRightIso
-  定义体: Arrow.isoMk
-    (((tensorRight W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
-      HasColimit.isoOfNatIso (spanExt (α_ _ _ W) (α_ _ _ W) (α_ _ _ W)
-      (associator_naturality_left _ _ W).symm (associator_naturality_middle _ _ W).symm))
-    (α_ _ _ W)
-    (((tensorRight W).map_isPushout
-      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
-      (by simp [← comp_whiskerRight_assoc]) (by simp [← comp_whiskerRight_assoc]))
-
-Depends on / 依赖: Arrow.isoMk, HasColimit, HasColimit.isoOfNatIso, IsPushout, IsPushout.of_hasPushout, associator_naturality_left, associator_naturality_middle, comp_whiskerRight_assoc, hom_ext, isoOfNatIso, isoPushout, map_isPushout, of_hasPushout, spanExt, tensorRight
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.whiskerRightIso** 是 Mathl
+ib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：whiskerRightIso [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.h
+om)) (tensorRight W)] : Arrow.mk ((X₁ □ X₂).hom ▷ W) ≅ X₁ □ (X₂.hom ▷ W)
+参数：span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)；tensorRight W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def whiskerRightIso
     [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)) (tensorRight W)] :
@@ -241,74 +187,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The pushout-product is associative: `(X₁ □ X₂) □ X₃ ≅ X₁ □ X₂ □ X₃`. -/
 @[simps!]
 noncomputable
-/--
-Definition of `associator` / `associator` 的定义
-
-English:
-definition associator
-  body: by
-  refine Arrow.isoMk ?_ (α_ _ _ _) ?_
-  · refine Iso.mk ?_ ?_ ?_ ?_
-    · exact pushout.desc ((α_ _ _ _).hom ≫ _ ◁ pushout.inl _ _ ≫ pushout.inl _ _)
-        ((whiskerRightIso _ _).hom.left ≫
-          pushout.desc (_ ◁ pushout.inr _ _ ≫ pushout.inl _ _) (pushout.inr _ _)
-          (by simp [Limits.pushout.associator_naturality_left_condition]))
-        (((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-          (by simp [Limits.pushout.whiskerLeft_condition_assoc, ← whisker_exchange_assoc,
-            ← comp_whiskerRight_assoc])
-          (by simp [← whisker_exchange_assoc, Limits.pushout.associator_naturality_left_condition,
-            ← comp_whiskerRight_assoc]))
-    · exact pushout.desc ((whiskerLeftIso _ _).hom.left ≫
-          pushout.desc (pushout.inl _ _) ((pushout.inl _ _ ▷ _) ≫ pushout.inr _ _)
-          (by simp [Limits.pushout.associator_inv_naturality_right_condition]))
-        ((α_ _ _ _).inv ≫ (pushout.inr _ _) ▷ _ ≫ pushout.inr _ _)
-        (((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-          (by simp [whisker_exchange_assoc,
-            Limits.pushout.associator_inv_naturality_right_condition, ← whiskerLeft_comp_assoc])
-          (by simp [whisker_exchange_assoc, Limits.pushout.condition_whiskerRight_assoc,
-            ← whiskerLeft_comp_assoc]))
-    · apply pushout.hom_ext (by simp)
-      apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
-    · refine pushout.hom_ext ?_ (by simp)
-      apply ((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
-  · apply pushout.hom_ext (by simp [← MonoidalCategory.whiskerLeft_comp])
-    · apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-      · simp [← MonoidalCategory.whiskerLeft_comp, ← MonoidalCategory.comp_whiskerRight_assoc]
-      · simp [← MonoidalCategory.comp_whiskerRight_assoc]
-
-中文:
-定义 associator
-  定义体: by
-  refine Arrow.isoMk ?_ (α_ _ _ _) ?_
-  · refine Iso.mk ?_ ?_ ?_ ?_
-    · exact pushout.desc ((α_ _ _ _).hom ≫ _ ◁ pushout.inl _ _ ≫ pushout.inl _ _)
-        ((whiskerRightIso _ _).hom.left ≫
-          pushout.desc (_ ◁ pushout.inr _ _ ≫ pushout.inl _ _) (pushout.inr _ _)
-          (by simp [Limits.pushout.associator_naturality_left_condition]))
-        (((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-          (by simp [Limits.pushout.whiskerLeft_condition_assoc, ← whisker_exchange_assoc,
-            ← comp_whiskerRight_assoc])
-          (by simp [← whisker_exchange_assoc, Limits.pushout.associator_naturality_left_condition,
-            ← comp_whiskerRight_assoc]))
-    · exact pushout.desc ((whiskerLeftIso _ _).hom.left ≫
-          pushout.desc (pushout.inl _ _) ((pushout.inl _ _ ▷ _) ≫ pushout.inr _ _)
-          (by simp [Limits.pushout.associator_inv_naturality_right_condition]))
-        ((α_ _ _ _).inv ≫ (pushout.inr _ _) ▷ _ ≫ pushout.inr _ _)
-        (((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-          (by simp [whisker_exchange_assoc,
-            Limits.pushout.associator_inv_naturality_right_condition, ← whiskerLeft_comp_assoc])
-          (by simp [whisker_exchange_assoc, Limits.pushout.condition_whiskerRight_assoc,
-            ← whiskerLeft_comp_assoc]))
-    · apply pushout.hom_ext (by simp)
-      apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
-    · refine pushout.hom_ext ?_ (by simp)
-      apply ((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
-  · apply pushout.hom_ext (by simp [← MonoidalCategory.whiskerLeft_comp])
-    · apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
-      · simp [← MonoidalCategory.whiskerLeft_comp, ← MonoidalCategory.comp_whiskerRight_assoc]
-      · simp [← MonoidalCategory.comp_whiskerRight_assoc]
-
-Depends on / 依赖: Arrow.isoMk, IsPushout, IsPushout.of_hasPushout, Iso.mk, Limits, Limits.pushout.associator_naturality_left_condition, Limits.pushout.whiskerLeft_condition_assoc, associator_naturality_left_condition, comp_whiskerRight_assoc, hom.left, hom_ext, map_isPushout, of_hasPushout, pushout, pushout.desc, pushout.inl, pushout.inr, tensorRight, whiskerLeft_condition_assoc, whiskerRightIso
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.associator** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：associator [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)) 
+(tensorRight X₃.left)] [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.
+hom)) (tensorRight X₃.right)] [PreservesColimit (span (X₂.hom ▷ X₃.left) (X₂.lef
+t ◁ X₃.hom)) (tensorLeft X₁.left)] [PreservesColimit (span (X₂.hom ▷ X₃.left) (X
+₂.left ◁ X₃.hom)) (tensorLeft X₁.right)] : ((X₁ □ X₂) □ X₃) ≅ X₁ □ X₂ □ X₃
+参数：span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)；tensorRight X₃.left；span (X₁.hom ▷
+ X₂.left) (X₁.left ◁ X₂.hom)；tensorRight X₃.right；span (X₂.hom ▷ X₃.left) (X₂.le
+ft ◁ X₃.hom)；tensorLeft X₁.left；span (X₂.hom ▷ X₃.left) (X₂.left ◁ X₃.hom)；tenso
+rLeft X₁.right。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def associator
     [PreservesColimit (span (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom)) (tensorRight X₃.left)]
@@ -350,26 +242,13 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The pushout-product is commutative: `X₁ □ X₂ ≅ X₂ □ X₁`. -/
 @[simps!]
 noncomputable
-/--
-Definition of `braiding` / `braiding` 的定义
-
-English:
-definition braiding
-  signature: [BraidedCategory C] (X₁ X₂ : Arrow C)
-  body: Arrow.isoMk (pushoutSymmetry _ _ ≪≫
-    HasColimit.isoOfNatIso (spanExt (β_ _ _) (β_ _ _) (β_ _ _)
-    (BraidedCategory.braiding_naturality_right _ _).symm
-    (BraidedCategory.braiding_naturality_left _ _).symm)) (β_ _ _) (by cat_disch)
-
-中文:
-定义 braiding
-  签名: [辫范畴 C] (X₁ X₂ : 箭头 C)
-  定义体: Arrow.isoMk (pushoutSymmetry _ _ ≪≫
-    HasColimit.isoOfNatIso (spanExt (β_ _ _) (β_ _ _) (β_ _ _)
-    (BraidedCategory.braiding_naturality_right _ _).symm
-    (BraidedCategory.braiding_naturality_left _ _).symm)) (β_ _ _) (by cat_disch)
-
-Depends on / 依赖: Arrow.isoMk, BraidedCategory, BraidedCategory.braiding_naturality_left, BraidedCategory.braiding_naturality_right, HasColimit, HasColimit.isoOfNatIso, braiding_naturality_left, braiding_naturality_right, cat_disch, isoOfNatIso, pushoutSymmetry, spanExt
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.braiding** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：braiding [BraidedCategory C] (X₁ X₂ : Arrow C) : (X₁ □ X₂) ≅ X₂ □ X₁
+参数：X₁ X₂ : Arrow C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def braiding [BraidedCategory C] (X₁ X₂ : Arrow C) : (X₁ □ X₂) ≅ X₂ □ X₁ :=
   Arrow.isoMk (pushoutSymmetry _ _ ≪≫
@@ -389,30 +268,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The arrow isomorphism `X □ (∅ ⟶ W) ≅ X ▷ W` in a CCC with pushouts and an
 initial object. -/
 @[simps!]
-/--
-Definition of `isInitialIso` / `isInitialIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.isInitialIso** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：isInitialIso (X : Arrow C) {I : C} (i : IsInitial I) {W : C} : (X □ i.to W
+) ≅ X.hom ▷ W
+参数：X : Arrow C；i : IsInitial I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialIso
-  signature: (X : Arrow C) {I : C} (i : IsInitial I) {W : C}
-  body: haveI : IsIso (X.hom ▷ I) :=
-    isIso_of_isInitial (i.ofIso (zeroMul i).symm) (i.ofIso (zeroMul i).symm) _
-  haveI : IsPushout (X.hom ▷ I) (_ ◁ i.to W) ((i.ofIso (zeroMul i).symm).to _) (𝟙 _) :=
-    .of_horiz_isIso (sq := ⟨(i.ofIso (zeroMul i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
-    (pushout.hom_ext ((i.ofIso (zeroMul i).symm).hom_ext ..) (by simp [pushout.inr_desc]))
-
-中文:
-定义 isInitialIso
-  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {W : C}
-  定义体: haveI : IsIso (X.hom ▷ I) :=
-    isIso_of_isInitial (i.ofIso (zeroMul i).symm) (i.ofIso (zeroMul i).symm) _
-  haveI : IsPushout (X.hom ▷ I) (_ ◁ i.to W) ((i.ofIso (zeroMul i).symm).to _) (𝟙 _) :=
-    .of_horiz_isIso (sq := ⟨(i.ofIso (zeroMul i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
-    (pushout.hom_ext ((i.ofIso (zeroMul i).symm).hom_ext ..) (by simp [pushout.inr_desc]))
-
-Depends on / 依赖: Arrow.isoMk, IsPushout, Iso.refl, X.hom, hom_ext, i.ofIso, i.to, inr_desc, isIso_of_isInitial, isoPushout, of_horiz_isIso, pushout, pushout.hom_ext, pushout.inr_desc, this.isoPushout.symm, zeroMul
+--- 原说明 ---
+The arrow isomorphism `X □ (∅ ⟶ W) ≅ X ▷ W` in a CCC with pushouts and an
+initial object.
 -/
 def isInitialIso (X : Arrow C) {I : C} (i : IsInitial I) {W : C} :
     (X □ i.to W) ≅ X.hom ▷ W :=
@@ -427,30 +294,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The arrow isomorphism `(∅ ⟶ W) □ X ≅ W ◁ X` in a braided CCC with pushouts and
 an initial object. -/
 @[simps!]
-/--
-Definition of `isInitialIso'` / `isInitialIso'` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.isInitialIso'** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：isInitialIso' [BraidedCategory C] (X : Arrow C) {I : C} (i : IsInitial I) 
+{W : C} : (i.to W □ X) ≅ Arrow.mk (W ◁ X.hom)
+参数：X : Arrow C；i : IsInitial I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialIso'
-  signature: [BraidedCategory C] (X : Arrow C) {I : C} (i : IsInitial I) {W : C}
-  body: haveI : IsIso (I ◁ X.hom) :=
-    isIso_of_isInitial (i.ofIso (mulZero i).symm) (i.ofIso (mulZero i).symm) _
-  haveI : IsPushout (i.to W ▷ _) (I ◁ X.hom) (𝟙 _) ((i.ofIso (mulZero i).symm).to _) :=
-    .of_vert_isIso (sq := ⟨(i.ofIso (mulZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
-    (pushout.hom_ext (by simp [pushout.inl_desc]) ((i.ofIso (mulZero i).symm).hom_ext _ _))
-
-中文:
-定义 isInitialIso'
-  签名: [辫范畴 C] (X : 箭头 C) {I : C} (i : IsInitial I) {W : C}
-  定义体: haveI : IsIso (I ◁ X.hom) :=
-    isIso_of_isInitial (i.ofIso (mulZero i).symm) (i.ofIso (mulZero i).symm) _
-  haveI : IsPushout (i.to W ▷ _) (I ◁ X.hom) (𝟙 _) ((i.ofIso (mulZero i).symm).to _) :=
-    .of_vert_isIso (sq := ⟨(i.ofIso (mulZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
-    (pushout.hom_ext (by simp [pushout.inl_desc]) ((i.ofIso (mulZero i).symm).hom_ext _ _))
-
-Depends on / 依赖: Arrow.isoMk, IsPushout, Iso.refl, X.hom, hom_ext, i.ofIso, i.to, inl_desc, isIso_of_isInitial, isoPushout, mulZero, of_vert_isIso, pushout, pushout.hom_ext, pushout.inl_desc, this.isoPushout.symm
+--- 原说明 ---
+The arrow isomorphism `(∅ ⟶ W) □ X ≅ W ◁ X` in a braided CCC with pushouts and
+an initial object.
 -/
 def isInitialIso' [BraidedCategory C] (X : Arrow C) {I : C} (i : IsInitial I) {W : C} :
     (i.to W □ X) ≅ Arrow.mk (W ◁ X.hom) :=
@@ -464,30 +319,19 @@ def isInitialIso' [BraidedCategory C] (X : Arrow C) {I : C} (i : IsInitial I) {W
 /-- The arrow isomorphism `X □ (∅ ⟶ ⋆) ≅ X` in a CCC with pushouts, an initial object, and a
 terminal object. -/
 @[simps!]
-/--
-Definition of `isInitialIsTerminalIso` / `isInitialIsTerminalIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.isInitialIsTerminalIso** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：isInitialIsTerminalIso (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t 
+: IsTerminal T) : (X □ i.to T) ≅ X
+参数：X : Arrow C；i : IsInitial I；t : IsTerminal T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialIsTerminalIso
-  signature: (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T)
-  body: (isInitialIso X i) ≪≫ Arrow.isoMk' _ _
-    (MonoidalCategory.whiskerLeftIso X.left
-      (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.left)
-    (MonoidalCategory.whiskerLeftIso X.right
-      (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.right)
-    (by simp [← whisker_exchange_assoc])
-
-中文:
-定义 isInitialIsTerminalIso
-  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {T : C} (t : 是终止 T)
-  定义体: (isInitialIso X i) ≪≫ Arrow.isoMk' _ _
-    (MonoidalCategory.whiskerLeftIso X.left
-      (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.left)
-    (MonoidalCategory.whiskerLeftIso X.right
-      (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.right)
-    (by simp [← whisker_exchange_assoc])
-
-Depends on / 依赖: Arrow.isoMk, CartesianMonoidalCategory, CartesianMonoidalCategory.isTerminalTensorUnit, MonoidalCategory, MonoidalCategory.whiskerLeftIso, X.left, X.right, isInitialIso, isTerminalTensorUnit, t.uniqueUpToIso, uniqueUpToIso, whiskerLeftIso, whisker_exchange_assoc
+--- 原说明 ---
+The arrow isomorphism `X □ (∅ ⟶ ⋆) ≅ X` in a CCC with pushouts, an initial objec
+t, and a
+terminal object.
 -/
 def isInitialIsTerminalIso (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T) :
     (X □ i.to T) ≅ X :=
@@ -501,22 +345,19 @@ def isInitialIsTerminalIso (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : 
 /-- The arrow isomorphism `X □ (∅ ⟶ ⋆) ≅ X` in a CCC with pushouts, an initial object, and a
 terminal object. -/
 @[simps!]
-/--
-Definition of `isInitialIsTerminalIso'` / `isInitialIsTerminalIso'` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.isInitialIsTerminalIso'**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：isInitialIsTerminalIso' (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t
+ : IsTerminal T) : (X □ t.from I) ≅ X
+参数：X : Arrow C；i : IsInitial I；t : IsTerminal T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialIsTerminalIso'
-  signature: (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T)
-  body: (mapIso _ (Arrow.isoMk' _ _ (Iso.refl _) (Iso.refl _) (i.hom_ext _ _))) ≪≫
-    (isInitialIsTerminalIso X i t)
-
-中文:
-定义 isInitialIsTerminalIso'
-  签名: (X : 箭头 C) {I : C} (i : IsInitial I) {T : C} (t : 是终止 T)
-  定义体: (mapIso _ (Arrow.isoMk' _ _ (Iso.refl _) (Iso.refl _) (i.hom_ext _ _))) ≪≫
-    (isInitialIsTerminalIso X i t)
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, hom_ext, i.hom_ext, isInitialIsTerminalIso, mapIso
+--- 原说明 ---
+The arrow isomorphism `X □ (∅ ⟶ ⋆) ≅ X` in a CCC with pushouts, an initial objec
+t, and a
+terminal object.
 -/
 def isInitialIsTerminalIso' (X : Arrow C) {I : C} (i : IsInitial I) {T : C} (t : IsTerminal T) :
     (X □ t.from I) ≅ X :=
@@ -532,40 +373,13 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `C` is a CCC with pushouts and an initial object, then `X □ (⊥_ C ⟶ 𝟙_ C) ≅ X`. -/
 @[simp]
 noncomputable
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
-
-English:
-definition rightUnitor
-  signature: (X : Arrow C)
-  body: by
-  refine Arrow.isoMk ?_ (ρ_ X.right) ?_
-  · refine Iso.mk ?_ ((ρ_ X.left).inv ≫ pushout.inr _ _) ?_ ?_
-    · refine pushout.desc ?_ (ρ_ X.left).hom ?_
-      · exact (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).to _
-      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-    · refine pushout.hom_ext ?_ (by simp)
-      apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-    · simp
-  · refine pushout.hom_ext ?_ (by simp)
-    apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-
-中文:
-定义 rightUnitor
-  签名: (X : 箭头 C)
-  定义体: by
-  refine Arrow.isoMk ?_ (ρ_ X.right) ?_
-  · refine Iso.mk ?_ ((ρ_ X.left).inv ≫ pushout.inr _ _) ?_ ?_
-    · refine pushout.desc ?_ (ρ_ X.left).hom ?_
-      · exact (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).to _
-      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-    · refine pushout.hom_ext ?_ (by simp)
-      apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-    · simp
-  · refine pushout.hom_ext ?_ (by simp)
-    apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
-
-Depends on / 依赖: Arrow.isoMk, Iso.mk, X.left, X.right, hom_ext, initialIsInitial, initialIsInitial.ofIso, pushout, pushout.desc, pushout.hom_ext, pushout.inr, zeroMul
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.rightUnitor** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：rightUnitor (X : Arrow C) : (X □ initial.to (𝟙_ C)) ≅ X
+参数：X : Arrow C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def rightUnitor (X : Arrow C) :
     (X □ initial.to (𝟙_ C)) ≅ X := by
@@ -583,20 +397,13 @@ def rightUnitor (X : Arrow C) :
 /-- If `C` is a braided CCC with pushouts and an initial object, then `(⊥_ C ⟶ 𝟙_ C) □ X ≅ X`. -/
 @[simp]
 noncomputable
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
-
-English:
-definition leftUnitor
-  signature: [BraidedCategory C]
-  body: braiding _ _ ≪≫ rightUnitor _
-
-中文:
-定义 leftUnitor
-  签名: [辫范畴 C]
-  定义体: braiding _ _ ≪≫ rightUnitor _
-
-Depends on / 依赖: braiding, rightUnitor
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PushoutProduct.leftUnitor** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PushoutProduct`。
+形式化陈述：leftUnitor [BraidedCategory C] (X : Arrow C) : (initial.to (𝟙_ C) □ X) ≅ X
+参数：X : Arrow C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def leftUnitor [BraidedCategory C]
     (X : Arrow C) : (initial.to (𝟙_ C) □ X) ≅ X :=
@@ -619,34 +426,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The arrow isomorphism `(f : A ⟶ B) ⋔ (W ⟶ ⋆) ≅ (B ⟹ W ⟶ A ⟹ W)` in a monoidal closed
 category with pullbacks and a terminal object. -/
 @[simps!]
-/--
-Definition of `isTerminalIso` / `isTerminalIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PullbackHom.isTerminalIso** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PullbackHom`。
+形式化陈述：isTerminalIso [MonoidalCategory C] [MonoidalClosed C] (X : Arrow C) {T : C
+} (t : IsTerminal T) {W : C} : ((Opposite.op X) ⋔ Arrow.mk (t.from W)) ≅ Arrow.m
+k ((MonoidalClosed.pre X.hom).app W)
+参数：X : Arrow C；t : IsTerminal T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isTerminalIso
-  signature: [MonoidalCategory C] [MonoidalClosed C]
-  body: haveI : IsIso ((MonoidalClosed.pre X.hom).app T) :=
-    isIso_of_isTerminal (IsTerminal.isTerminalObj (ihom _) _ t)
-      (IsTerminal.isTerminalObj (ihom _) _ t) _
-  haveI : IsPullback (𝟙 _) ((IsTerminal.isTerminalObj (ihom _) _ t).from _)
-      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.hom).app T) :=
-    .of_horiz_isIso (sq := ⟨(IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..⟩)
-  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
-    (pullback.hom_ext (by simp) ((IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..)))
-
-中文:
-定义 isTerminalIso
-  签名: [幺半群范畴 C] [幺半群闭 C]
-  定义体: haveI : IsIso ((MonoidalClosed.pre X.hom).app T) :=
-    isIso_of_isTerminal (IsTerminal.isTerminalObj (ihom _) _ t)
-      (IsTerminal.isTerminalObj (ihom _) _ t) _
-  haveI : IsPullback (𝟙 _) ((IsTerminal.isTerminalObj (ihom _) _ t).from _)
-      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.hom).app T) :=
-    .of_horiz_isIso (sq := ⟨(IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..⟩)
-  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
-    (pullback.hom_ext (by simp) ((IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..)))
-
-Depends on / 依赖: Arrow.isoMk, IsPullback, IsTerminal, IsTerminal.isTerminalObj, Iso.refl, MonoidalClosed, MonoidalClosed.pre, X.hom, X.left, eq_comp_inv, hom_ext, isIso_of_isTerminal, isTerminalObj, isoPullback, of_horiz_isIso, pullback, pullback.hom_ext, t.from, this.isoPullback, this.isoPullback.symm
+--- 原说明 ---
+The arrow isomorphism `(f : A ⟶ B) ⋔ (W ⟶ ⋆) ≅ (B ⟹ W ⟶ A ⟹ W)` in a monoidal cl
+osed
+category with pullbacks and a terminal object.
 -/
 def isTerminalIso [MonoidalCategory C] [MonoidalClosed C]
     (X : Arrow C) {T : C} (t : IsTerminal T) {W : C} :
@@ -666,34 +459,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The arrow isomorphism `(∅ ⟶ W) ⋔ (f : A ⟶ B) ≅ (W ⟹ A ⟶ W ⟹ B)` in a braided CCC with
 pullbacks and an initial object. -/
 @[simps!]
-/--
-Definition of `isInitialIso` / `isInitialIso` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Arrow.PullbackHom.isInitialIso** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Arrow.PullbackHom`。
+形式化陈述：isInitialIso [CartesianMonoidalCategory C] [MonoidalClosed C] [BraidedCate
+gory C] (X : Arrow C) {I : C} (i : IsInitial I) {W : C} : (Opposite.op (Arrow.mk
+ (i.to W)) ⋔ X) ≅ Arrow.mk ((ihom W).map X.hom)
+参数：X : Arrow C；i : IsInitial I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInitialIso
-  signature: [CartesianMonoidalCategory C] [MonoidalClosed C] [BraidedCategory C]
-  body: haveI : IsIso ((ihom I).map X.hom) :=
-    isIso_of_isTerminal (isTerminalTensorUnit.ofIso (powZero i).symm)
-      (isTerminalTensorUnit.ofIso (powZero i).symm) _
-  haveI : IsPullback ((isTerminalTensorUnit.ofIso (powZero i).symm).from _) (𝟙 _)
-      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)).app X.right) :=
-    .of_vert_isIso (sq := ⟨(isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
-    (pullback.hom_ext ((isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..) (by simp)))
-
-中文:
-定义 isInitialIso
-  签名: [CartesianMonoidal范畴 C] [幺半群闭 C] [辫范畴 C]
-  定义体: haveI : IsIso ((ihom I).map X.hom) :=
-    isIso_of_isTerminal (isTerminalTensorUnit.ofIso (powZero i).symm)
-      (isTerminalTensorUnit.ofIso (powZero i).symm) _
-  haveI : IsPullback ((isTerminalTensorUnit.ofIso (powZero i).symm).from _) (𝟙 _)
-      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)).app X.right) :=
-    .of_vert_isIso (sq := ⟨(isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
-    (pullback.hom_ext ((isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..) (by simp)))
-
-Depends on / 依赖: Arrow.isoMk, IsPullback, Iso.refl, MonoidalClosed, MonoidalClosed.pre, X.hom, X.right, eq_comp_inv, hom_ext, i.to, isIso_of_isTerminal, isTerminalTe, isTerminalTensorUnit, isTerminalTensorUnit.ofIso, isoPullback, of_vert_isIso, powZero, pullback, pullback.hom_ext, this.isoPullback
+--- 原说明 ---
+The arrow isomorphism `(∅ ⟶ W) ⋔ (f : A ⟶ B) ≅ (W ⟹ A ⟶ W ⟹ B)` in a braided CCC
+ with
+pullbacks and an initial object.
 -/
 def isInitialIso [CartesianMonoidalCategory C] [MonoidalClosed C] [BraidedCategory C]
     (X : Arrow C) {I : C} (i : IsInitial I) {W : C} :
@@ -712,3 +491,4 @@ end
 end PullbackHom
 
 end CategoryTheory.MonoidalCategory.Arrow
+

@@ -28,293 +28,242 @@ namespace RingHom
 /-- A ring homomorphism `f : R →+* S` is formally smooth
 if `S` is formally smooth as an `R` algebra. -/
 @[algebraize RingHom.FormallySmooth.toAlgebra]
-/--
-Definition of `FormallySmooth` / `FormallySmooth` 的定义
+/-
+**RingHom.FormallySmooth** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：FormallySmooth (f : R ->+* S) : Prop
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FormallySmooth
-  signature: (f : R ->+* S)
-  body: letI := f.toAlgebra
-  Algebra.FormallySmooth R S
-
-中文:
-定义 形式光滑
-  签名: (f : R ->+* S)
-  定义体: letI := f.toAlgebra
-  Algebra.FormallySmooth R S
-
-Depends on / 依赖: Algebra, Algebra.FormallySmooth, FormallySmooth, f.toAlgebra, toAlgebra
+--- 原说明 ---
+A ring homomorphism `f : R →+* S` is formally smooth
+if `S` is formally smooth as an `R` algebra.
 -/
-def FormallySmooth (f : R ->+* S) : Prop :=
+def FormallySmooth (f : R →+* S) : Prop :=
   letI := f.toAlgebra
   Algebra.FormallySmooth R S
 
-/--
-lemma `FormallySmooth.toAlgebra` / 引理 `FormallySmooth.toAlgebra`
+/-- Helper lemma for the `algebraize` tactic -/
+/-
+**RingHom.FormallySmooth.toAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.FormallySm
+ooth`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S},   f.FormallySmooth → Algebra.FormallySmooth R S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma FormallySmooth.toAlgebra
-  given: {f : R ->+* S} (hf : FormallySmooth f)
-  proof: hf
-
-中文:
-引理 形式光滑.toAlgebra
-  条件: {f : R ->+* S} (hf : 形式光滑 f)
-  证明: hf
+--- 原说明 ---
+Helper lemma for the `algebraize` tactic
 -/
-lemma FormallySmooth.toAlgebra {f : R ->+* S} (hf : FormallySmooth f) :
+lemma FormallySmooth.toAlgebra {f : R →+* S} (hf : FormallySmooth f) :
     @Algebra.FormallySmooth R S _ _ f.toAlgebra := hf
-
-/--
-lemma `formallySmooth_algebraMap` / 引理 `formallySmooth_algebraMap`
-
-English:
-lemma formallySmooth_algebraMap
-  given: [Algebra R S]
-  proof: by
-  rw [FormallySmooth]; rw [toAlgebra_algebraMap]
-
-中文:
-引理 formallySmooth_algebraMap
-  条件: [代数 R S]
-  证明: by
-  rw [FormallySmooth]; rw [toAlgebra_algebraMap]
-
-Depends on / 依赖: FormallySmooth, toAlgebra_algebraMap
+/-
+**RingHom.formallySmooth_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：formallySmooth_algebraMap [Algebra R S] : (algebraMap R S).FormallySmooth 
+↔ Algebra.FormallySmooth R S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.FormallySmooth.eq_1`：∀ {R : Type u_1} {S : Type u_2} [inst : Com
+mRing R] [inst_1 : CommRing S] (f : R →+* S),   f.FormallySmooth = Algebra.Forma
+llySmooth R S
+· 使用定理 `toAlgebra_algebraMap`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : CommSemiring S] [inst_2 : Algebra R S],   (algebraMap R S).toAlgebra
+ = inst_2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma formallySmooth_algebraMap [Algebra R S] :
     (algebraMap R S).FormallySmooth ↔ Algebra.FormallySmooth R S := by
-  rw [FormallySmooth]; rw [toAlgebra_algebraMap]
+  rw [FormallySmooth, toAlgebra_algebraMap]
 
-/--
-lemma `FormallySmooth.comp` / 引理 `FormallySmooth.comp`
+/-- Composition of formally smooth ring homomorphisms is formally smooth. -/
+/-
+**RingHom.FormallySmooth.comp** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.FormallySmooth`
+。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{T : Type u_3} [inst_2 : CommRing T]   {f : R →+* S} {g : S →+* T}, f.FormallySm
+ooth → g.FormallySmooth → (g.comp f).FormallySmooth
+参数：g.comp f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `Algebra.FormallySmooth.comp`：∀ (R : Type u_4) [inst : CommRing R] (A : T
+ype u_5) [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6)   [inst_3 :
+ CommRing B] [ins…
+· 使用定理 `RingHom.FormallySmooth.toAlgebra`：∀ {R : Type u_1} {S : Type u_2} [inst 
+: CommRing R] [inst_1 : CommRing S] {f : R →+* S},   f.FormallySmooth → Algebra.
+FormallySmooth R S
 
-English:
-lemma FormallySmooth.comp
-  statement: {T : Type*} [CommRing T] {f : R ->+* S} {g : S ->+* T}
-  proof: by
-  algebraize [f, g, g.comp f]
-  exact Algebra.FormallySmooth.comp R S T
-
-中文:
-引理 形式光滑.comp
-  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T}
-  证明: by
-  algebraize [f, g, g.comp f]
-  exact Algebra.FormallySmooth.comp R S T
-
-Depends on / 依赖: Algebra, Algebra.FormallySmooth.comp, FormallySmooth, algebraize, g.comp
+--- 原说明 ---
+Composition of formally smooth ring homomorphisms is formally smooth.
 -/
-lemma FormallySmooth.comp {T : Type*} [CommRing T] {f : R ->+* S} {g : S ->+* T}
+lemma FormallySmooth.comp {T : Type*} [CommRing T] {f : R →+* S} {g : S →+* T}
     (hf : f.FormallySmooth) (hg : g.FormallySmooth) : (g.comp f).FormallySmooth := by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallySmooth.comp R S T
-
-/--
-lemma `FormallySmooth.of_bijective` / 引理 `FormallySmooth.of_bijective`
-
-English:
-lemma FormallySmooth.of_bijective
-  given: {f : R ->+* S} (hf : Function.Bijective f)
-  proof: by
-  algebraize [f]
-  exact Algebra.FormallySmooth.of_equiv (AlgEquiv.ofBijective (Algebra.ofId R S) hf)
-
-中文:
-引理 形式光滑.of_bijective
-  条件: {f : R ->+* S} (hf : 函数.双射 f)
-  证明: by
-  algebraize [f]
-  exact Algebra.FormallySmooth.of_equiv (AlgEquiv.ofBijective (Algebra.ofId R S) hf)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, Algebra, Algebra.FormallySmooth.of_equiv, Algebra.ofId, FormallySmooth, algebraize, ofBijective, of_equiv
+/-
+**RingHom.FormallySmooth.of_bijective** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Formall
+ySmooth`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S},   Function.Bijective ⇑f → f.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_equiv`：∀ {R : Type u_4} [inst : CommRing R] {A
+ : Type u_5} {B : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst
+_3 : CommRing B] [ins…
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
+· 使用定理 `Algebra.Etale.instSmooth`：∀ {R : Type u} {A : Type v} [inst : CommRing R
+] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebra.Sm
+ooth R A
+· 使用定理 `Algebra.Etale.inst`：∀ {R : Type u} [inst : CommRing R], Algebra.Etale R 
+R
 -/
-lemma FormallySmooth.of_bijective {f : R ->+* S} (hf : Function.Bijective f) :
+lemma FormallySmooth.of_bijective {f : R →+* S} (hf : Function.Bijective f) :
     f.FormallySmooth := by
   algebraize [f]
   exact Algebra.FormallySmooth.of_equiv (AlgEquiv.ofBijective (Algebra.ofId R S) hf)
-
-/--
-lemma `FormallySmooth.holdsForLocalizationAway` / 引理 `FormallySmooth.holdsForLocalizationAway`
-
-English:
-lemma FormallySmooth.holdsForLocalizationAway
-  statement: HoldsForLocalizationAway @FormallySmooth
-  proof: fun _ _ _ _ _ r _ => formallySmooth_algebraMap.mpr .of_isLocalization (.powers r)
-
-中文:
-引理 形式光滑.holdsForLocalizationAway
-  结论: HoldsForLocalizationAway @形式光滑
-  证明: fun _ _ _ _ _ r _ => formallySmooth_algebraMap.mpr .of_isLocalization (.powers r)
-
-Depends on / 依赖: formallySmooth_algebraMap, formallySmooth_algebraMap.mpr, of_isLocalization, powers
+/-
+**RingHom.FormallySmooth.holdsForLocalizationAway** 是 Mathlib 中的一个定理，位于命名空间 `Rin
+gHom.FormallySmooth`。
+形式化陈述：RingHom.HoldsForLocalizationAway @RingHom.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `RingHom.formallySmooth_algebraMap`：formallySmooth_algebraMap [Algebra R 
+S] : (algebraMap R S).FormallySmooth ↔ Algebra.FormallySmooth R S
+· 使用定理 `Algebra.FormallySmooth.of_isLocalization`：∀ {R : Type u_4} {Rₘ : Type u_
+6} [inst : CommRing R] [inst_1 : CommRing Rₘ] (M : Submonoid R) [inst_2 : Algebr
+a R Rₘ]   [IsLocalization M Rₘ…
 -/
 lemma FormallySmooth.holdsForLocalizationAway : HoldsForLocalizationAway @FormallySmooth :=
-fun _ _ _ _ _ r _ => formallySmooth_algebraMap.mpr .of_isLocalization (.powers r)
-
-/--
-lemma `FormallySmooth.stableUnderComposition` / 引理 `FormallySmooth.stableUnderComposition`
-
-English:
-lemma FormallySmooth.stableUnderComposition
-  statement: StableUnderComposition @FormallySmooth
-  proof: fun _ _ _ _ _ _ _ _ hf hg => hf.comp hg
-
-中文:
-引理 形式光滑.stableUnderComposition
-  结论: StableUnderComposition @形式光滑
-  证明: fun _ _ _ _ _ _ _ _ hf hg => hf.comp hg
-
-Depends on / 依赖: hf.comp
+  fun _ _ _ _ _ r _ ↦ formallySmooth_algebraMap.mpr <| .of_isLocalization (.powers r)
+/-
+**RingHom.FormallySmooth.stableUnderComposition** 是 Mathlib 中的一个定理，位于命名空间 `RingH
+om.FormallySmooth`。
+形式化陈述：RingHom.StableUnderComposition @RingHom.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.FormallySmooth.comp`：∀ {R : Type u_1} {S : Type u_2} [inst : Com
+mRing R] [inst_1 : CommRing S] {T : Type u_3} [inst_2 : CommRing T]   {f : R →+*
+ S} {g : S →+* T}…
 -/
 lemma FormallySmooth.stableUnderComposition : StableUnderComposition @FormallySmooth :=
-  fun _ _ _ _ _ _ _ _ hf hg => hf.comp hg
-
-/--
-lemma `FormallySmooth.respectsIso` / 引理 `FormallySmooth.respectsIso`
-
-English:
-lemma FormallySmooth.respectsIso
-  statement: RespectsIso @FormallySmooth
-  proof: stableUnderComposition.respectsIso fun e => holdsForLocalizationAway.of_bijective _ _ e.bijective
-
-中文:
-引理 形式光滑.respectsIso
-  结论: RespectsIso @形式光滑
-  证明: stableUnderComposition.respectsIso fun e => holdsForLocalizationAway.of_bijective _ _ e.bijective
-
-Depends on / 依赖: bijective, e.bijective, holdsForLocalizationAway, holdsForLocalizationAway.of_bijective, of_bijective, respectsIso, stableUnderComposition, stableUnderComposition.respectsIso
+  fun _ _ _ _ _ _ _ _ hf hg ↦ hf.comp hg
+/-
+**RingHom.FormallySmooth.respectsIso** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Formally
+Smooth`。
+形式化陈述：RingHom.RespectsIso @RingHom.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.StableUnderComposition.respectsIso`：∀ {P : {R S : Type u} → [ins
+t : CommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   RingHom.StableUnd
+erComposition P →     (∀ {R S : …
+· 使用定理 `RingHom.FormallySmooth.stableUnderComposition`：RingHom.StableUnderCompos
+ition @RingHom.FormallySmooth
+· 使用定理 `RingHom.HoldsForLocalizationAway.of_bijective`：RingHom.HoldsForLocalizat
+ionAway.of_bijective (H : RingHom.HoldsForLocalizationAway P) (hf : Function.Bij
+ective f) : P f
+· 使用定理 `RingHom.FormallySmooth.holdsForLocalizationAway`：RingHom.HoldsForLocaliz
+ationAway @RingHom.FormallySmooth
+· 使用定理 `RingEquiv.bijective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Bijecti
+ve ⇑e
 -/
 lemma FormallySmooth.respectsIso : RespectsIso @FormallySmooth :=
-  stableUnderComposition.respectsIso fun e => holdsForLocalizationAway.of_bijective _ _ e.bijective
-
-/--
-lemma `FormallySmooth.isStableUnderBaseChange` / 引理 `FormallySmooth.isStableUnderBaseChange`
-
-English:
-lemma FormallySmooth.isStableUnderBaseChange
-  statement: IsStableUnderBaseChange @FormallySmooth
-  proof: by
-  refine .mk respectsIso ?_
-  introv H
-  rw [formallySmooth_algebraMap] at H ⊢
-  infer_instance
-
-中文:
-引理 形式光滑.isStableUnderBaseChange
-  结论: 是StableUnderBaseChange @形式光滑
-  证明: by
-  refine .mk respectsIso ?_
-  introv H
-  rw [formallySmooth_algebraMap] at H ⊢
-  infer_instance
-
-Depends on / 依赖: formallySmooth_algebraMap, infer_instance, introv, respectsIso
+  stableUnderComposition.respectsIso fun e ↦ holdsForLocalizationAway.of_bijective _ _ e.bijective
+/-
+**RingHom.FormallySmooth.isStableUnderBaseChange** 是 Mathlib 中的一个定理，位于命名空间 `Ring
+Hom.FormallySmooth`。
+形式化陈述：RingHom.IsStableUnderBaseChange @RingHom.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.IsStableUnderBaseChange.mk`：∀ {P : {R S : Type u} → [inst : Comm
+Ring R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   RingHom.RespectsIso P →  
+   (∀ ⦃R S T : Type u⦄ […
+· 使用定理 `RingHom.FormallySmooth.respectsIso`：RingHom.RespectsIso @RingHom.Formall
+ySmooth
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.formallySmooth_algebraMap`：formallySmooth_algebraMap [Algebra R 
+S] : (algebraMap R S).FormallySmooth ↔ Algebra.FormallySmooth R S
+· 使用定理 `Algebra.FormallySmooth.instTensorProduct`：∀ {R : Type u_4} [inst : CommR
+ing R] {A : Type u_5} [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6
+)   [inst_3 : CommRing B] [ins…
 -/
 lemma FormallySmooth.isStableUnderBaseChange : IsStableUnderBaseChange @FormallySmooth := by
   refine .mk respectsIso ?_
   introv H
   rw [formallySmooth_algebraMap] at H ⊢
   infer_instance
-
-/--
-lemma `FormallySmooth.localizationPreserves` / 引理 `FormallySmooth.localizationPreserves`
-
-English:
-lemma FormallySmooth.localizationPreserves
-  statement: LocalizationPreserves @FormallySmooth
-  proof: isStableUnderBaseChange.localizationPreserves
-
-中文:
-引理 形式光滑.localizationPreserves
-  结论: LocalizationPreserves @形式光滑
-  证明: isStableUnderBaseChange.localizationPreserves
-
-Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves, localizationPreserves
+/-
+**RingHom.FormallySmooth.localizationPreserves** 是 Mathlib 中的一个定理，位于命名空间 `RingHo
+m.FormallySmooth`。
+形式化陈述：RingHom.LocalizationPreserves @RingHom.FormallySmooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RingHom.IsStableUnderBaseChange.localizationPreserves`：RingHom.IsStableU
+nderBaseChange.localizationPreserves : LocalizationPreserves P
+· 使用定理 `RingHom.FormallySmooth.isStableUnderBaseChange`：RingHom.IsStableUnderBas
+eChange @RingHom.FormallySmooth
 -/
 lemma FormallySmooth.localizationPreserves : LocalizationPreserves @FormallySmooth :=
   isStableUnderBaseChange.localizationPreserves
 
 /-- A ring homomorphism `f : R →+* S` is smooth if `S` is smooth as an `R` algebra. -/
 @[algebraize RingHom.Smooth.toAlgebra]
-/--
-Definition of `Smooth` / `Smooth` 的定义
+/-
+**RingHom.Smooth** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：Smooth (f : R ->+* S) : Prop
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Smooth
-  signature: (f : R ->+* S)
-  body: letI : Algebra R S := f.toAlgebra
-  Algebra.Smooth R S
-
-中文:
-定义 光滑
-  签名: (f : R ->+* S)
-  定义体: letI : Algebra R S := f.toAlgebra
-  Algebra.Smooth R S
-
-Depends on / 依赖: Algebra, Algebra.Smooth, Smooth, f.toAlgebra, toAlgebra
+--- 原说明 ---
+A ring homomorphism `f : R →+* S` is smooth if `S` is smooth as an `R` algebra.
 -/
-def Smooth (f : R ->+* S) : Prop :=
+def Smooth (f : R →+* S) : Prop :=
   letI : Algebra R S := f.toAlgebra
   Algebra.Smooth R S
 
-/--
-lemma `Smooth.toAlgebra` / 引理 `Smooth.toAlgebra`
+/-- Helper lemma for the `algebraize` tactic -/
+/-
+**RingHom.Smooth.toAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S}, f.Smooth → Algebra.Smooth R S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Smooth.toAlgebra
-  given: {f : R ->+* S} (hf : Smooth f)
-  proof: hf
-
-中文:
-引理 光滑.toAlgebra
-  条件: {f : R ->+* S} (hf : 光滑 f)
-  证明: hf
+--- 原说明 ---
+Helper lemma for the `algebraize` tactic
 -/
-lemma Smooth.toAlgebra {f : R ->+* S} (hf : Smooth f) :
+lemma Smooth.toAlgebra {f : R →+* S} (hf : Smooth f) :
     @Algebra.Smooth R _ S _ f.toAlgebra := hf
-
-/--
-lemma `smooth_algebraMap` / 引理 `smooth_algebraMap`
-
-English:
-lemma smooth_algebraMap
-  given: [Algebra R S]
-  proof: by
-  rw [RingHom.Smooth]; rw [toAlgebra_algebraMap]
-
-中文:
-引理 smooth_algebraMap
-  条件: [代数 R S]
-  证明: by
-  rw [RingHom.Smooth]; rw [toAlgebra_algebraMap]
-
-Depends on / 依赖: RingHom, RingHom.Smooth, Smooth, toAlgebra_algebraMap
+/-
+**RingHom.smooth_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：smooth_algebraMap [Algebra R S] : (algebraMap R S).Smooth ↔ Algebra.Smooth
+ R S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Smooth.eq_1`：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R]
+ [inst_1 : CommRing S] (f : R →+* S), f.Smooth = Algebra.Smooth R S
+· 使用定理 `toAlgebra_algebraMap`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : CommSemiring S] [inst_2 : Algebra R S],   (algebraMap R S).toAlgebra
+ = inst_2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma smooth_algebraMap [Algebra R S] :
     (algebraMap R S).Smooth ↔ Algebra.Smooth R S := by
-  rw [RingHom.Smooth]; rw [toAlgebra_algebraMap]
-
-/--
-lemma `smooth_def` / 引理 `smooth_def`
-
-English:
-lemma smooth_def
-  given: {f : R ->+* S}
-  statement: f.Smooth ↔ f.FormallySmooth ∧ f.FinitePresentation
-  proof: letI := f.toAlgebra
-  Algebra.smooth_iff _ _
-
-中文:
-引理 smooth_def
-  条件: {f : R ->+* S}
-  结论: f.光滑 ↔ f.形式光滑 ∧ f.有限呈现
-  证明: letI := f.toAlgebra
-  Algebra.smooth_iff _ _
-
-Depends on / 依赖: Algebra, Algebra.smooth_iff, f.toAlgebra, smooth_iff, toAlgebra
+  rw [RingHom.Smooth, toAlgebra_algebraMap]
+/-
+**RingHom.smooth_def** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmooth ∧ f.FinitePresenta
+tion
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.smooth_iff`：∀ (R : Type u_4) [inst : CommRing R] (A : Type u) [i
+nst_1 : CommRing A] [inst_2 : Algebra R A],   Algebra.Smooth R A ↔     autoParam
+ (Algebr…
 -/
-lemma smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmooth ∧ f.FinitePresentation :=
+lemma smooth_def {f : R →+* S} : f.Smooth ↔ f.FormallySmooth ∧ f.FinitePresentation :=
   letI := f.toAlgebra
   Algebra.smooth_iff _ _
 
@@ -322,273 +271,236 @@ namespace Smooth
 
 variable {R S T : Type*} [CommRing R] [CommRing S] [CommRing T]
 
-/--
-lemma `formallySmooth` / 引理 `formallySmooth`
-
-English:
-lemma formallySmooth
-  given: {f : R ->+* S} (hf : f.Smooth)
-  statement: f.FormallySmooth
-  proof: by
-  rw [smooth_def] at hf
-  exact hf.1
-
-中文:
-引理 formallySmooth
-  条件: {f : R ->+* S} (hf : f.光滑)
-  结论: f.形式光滑
-  证明: by
-  rw [smooth_def] at hf
-  exact hf.1
-
-Depends on / 依赖: smooth_def
+/-
+**RingHom.Smooth.formallySmooth** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：formallySmooth {f : R ->+* S} (hf : f.Smooth) : f.FormallySmooth
+参数：hf : f.Smooth。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.smooth_def`：smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmo
+oth ∧ f.FinitePresentation
 -/
-lemma formallySmooth {f : R ->+* S} (hf : f.Smooth) : f.FormallySmooth := by
+lemma formallySmooth {f : R →+* S} (hf : f.Smooth) : f.FormallySmooth := by
   rw [smooth_def] at hf
   exact hf.1
-
-/--
-lemma `finitePresentation` / 引理 `finitePresentation`
-
-English:
-lemma finitePresentation
-  given: {f : R ->+* S} (hf : f.Smooth)
-  statement: f.FinitePresentation
-  proof: by
+/-
+**RingHom.Smooth.finitePresentation** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：finitePresentation {f : R ->+* S} (hf : f.Smooth) : f.FinitePresentation
+参数：hf : f.Smooth。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.smooth_def`：smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmo
+oth ∧ f.FinitePresentation
+-/
+lemma finitePresentation {f : R →+* S} (hf : f.Smooth) : f.FinitePresentation := by
   rw [smooth_def] at hf
   exact hf.2
 
-中文:
-引理 finitePresentation
-  条件: {f : R ->+* S} (hf : f.光滑)
-  结论: f.有限呈现
-  证明: by
-  rw [smooth_def] at hf
-  exact hf.2
+/-- Composition of smooth ring homomorphisms is smooth. -/
+/-
+**RingHom.Smooth.comp** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：comp {f : R ->+* S} {g : S ->+* T} (hf : f.Smooth) (hg : g.Smooth) : (g.co
+mp f).Smooth
+参数：hf : f.Smooth；hg : g.Smooth。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `Algebra.Smooth.comp`：∀ (R : Type u_4) [inst : CommRing R] (A : Type u_5)
+ (B : Type u_6) [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRin
+g B] [ins…
+· 使用定理 `RingHom.Smooth.toAlgebra`：∀ {R : Type u_1} {S : Type u_2} [inst : CommRi
+ng R] [inst_1 : CommRing S] {f : R →+* S}, f.Smooth → Algebra.Smooth R S
 
-Depends on / 依赖: smooth_def
+--- 原说明 ---
+Composition of smooth ring homomorphisms is smooth.
 -/
-lemma finitePresentation {f : R ->+* S} (hf : f.Smooth) : f.FinitePresentation := by
-  rw [smooth_def] at hf
-  exact hf.2
-
-/--
-lemma `comp` / 引理 `comp`
-
-English:
-lemma comp
-  given: {f : R ->+* S} {g : S ->+* T} (hf : f.Smooth) (hg : g.Smooth)
-  statement: (g.comp f).Smooth
-  proof: by
+lemma comp {f : R →+* S} {g : S →+* T} (hf : f.Smooth) (hg : g.Smooth) : (g.comp f).Smooth := by
   algebraize [f, g, g.comp f]
   exact Algebra.Smooth.comp R S T
-
-中文:
-引理 comp
-  条件: {f : R ->+* S} {g : S ->+* T} (hf : f.光滑) (hg : g.光滑)
-  结论: (g.comp f).光滑
-  证明: by
-  algebraize [f, g, g.comp f]
-  exact Algebra.Smooth.comp R S T
-
-Depends on / 依赖: Algebra, Algebra.Smooth.comp, Smooth, algebraize, g.comp
--/
-lemma comp {f : R ->+* S} {g : S ->+* T} (hf : f.Smooth) (hg : g.Smooth) : (g.comp f).Smooth := by
-  algebraize [f, g, g.comp f]
-  exact Algebra.Smooth.comp R S T
-
-/--
-lemma `stableUnderComposition` / 引理 `stableUnderComposition`
-
-English:
-lemma stableUnderComposition
-  statement: StableUnderComposition Smooth
-  proof: fun _ _ _ _ _ _ _ _ => RingHom.Smooth.comp
-
-中文:
-引理 stableUnderComposition
-  结论: StableUnderComposition 光滑
-  证明: fun _ _ _ _ _ _ _ _ => RingHom.Smooth.comp
-
-Depends on / 依赖: RingHom, RingHom.Smooth.comp, Smooth
+/-
+**RingHom.Smooth.stableUnderComposition** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smoot
+h`。
+形式化陈述：stableUnderComposition : StableUnderComposition Smooth
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RingHom.Smooth.comp`：comp {f : R ->+* S} {g : S ->+* T} (hf : f.Smooth) 
+(hg : g.Smooth) : (g.comp f).Smooth
 -/
 lemma stableUnderComposition : StableUnderComposition Smooth :=
-  fun _ _ _ _ _ _ _ _ => RingHom.Smooth.comp
-
-/--
-lemma `isStableUnderBaseChange` / 引理 `isStableUnderBaseChange`
-
-English:
-lemma isStableUnderBaseChange
-  statement: IsStableUnderBaseChange Smooth
-  proof: by
-  convert!
-    RingHom.FormallySmooth.isStableUnderBaseChange.and
-      RingHom.finitePresentation_isStableUnderBaseChange
-  rw [smooth_def]
-
-中文:
-引理 isStableUnderBaseChange
-  结论: 是StableUnderBaseChange 光滑
-  证明: by
-  convert!
-    RingHom.FormallySmooth.isStableUnderBaseChange.and
-      RingHom.finitePresentation_isStableUnderBaseChange
-  rw [smooth_def]
-
-Depends on / 依赖: FormallySmooth, RingHom, RingHom.FormallySmooth.isStableUnderBaseChange.and, RingHom.finitePresentation_isStableUnderBaseChange, convert, finitePresentation_isStableUnderBaseChange, isStableUnderBaseChange, smooth_def
+  fun _ _ _ _ _ _ _ _ ↦ RingHom.Smooth.comp
+/-
+**RingHom.Smooth.isStableUnderBaseChange** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smoo
+th`。
+形式化陈述：isStableUnderBaseChange : IsStableUnderBaseChange Smooth
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.smooth_def`：smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmo
+oth ∧ f.FinitePresentation
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `RingHom.IsStableUnderBaseChange.and`：∀ {P Q : {R S : Type u} → [inst : C
+ommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   (RingHom.IsStableUnder
+BaseChange fun {R S} [Com…
+· 使用定理 `RingHom.FormallySmooth.isStableUnderBaseChange`：RingHom.IsStableUnderBas
+eChange @RingHom.FormallySmooth
+· 使用定理 `RingHom.finitePresentation_isStableUnderBaseChange`：finitePresentation_i
+sStableUnderBaseChange : IsStableUnderBaseChange @FinitePresentation
 -/
 lemma isStableUnderBaseChange : IsStableUnderBaseChange Smooth := by
   convert!
     RingHom.FormallySmooth.isStableUnderBaseChange.and
       RingHom.finitePresentation_isStableUnderBaseChange
   rw [smooth_def]
-
-/--
-lemma `holdsForLocalizationAway` / 引理 `holdsForLocalizationAway`
-
-English:
-lemma holdsForLocalizationAway
-  statement: HoldsForLocalizationAway Smooth
-  proof: by
-  introv R h
-  rw [smooth_algebraMap]
-  exact ⟨Algebra.FormallySmooth.of_isLocalization (.powers r),
-    IsLocalization.Away.finitePresentation r⟩
-
-中文:
-引理 holdsForLocalizationAway
-  结论: HoldsForLocalizationAway 光滑
-  证明: by
-  introv R h
-  rw [smooth_algebraMap]
-  exact ⟨Algebra.FormallySmooth.of_isLocalization (.powers r),
-    IsLocalization.Away.finitePresentation r⟩
-
-Depends on / 依赖: Algebra, Algebra.FormallySmooth.of_isLocalization, FormallySmooth, IsLocalization, IsLocalization.Away.finitePresentation, finitePresentation, introv, of_isLocalization, powers, smooth_algebraMap
+/-
+**RingHom.Smooth.holdsForLocalizationAway** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smo
+oth`。
+形式化陈述：holdsForLocalizationAway : HoldsForLocalizationAway Smooth
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.smooth_algebraMap`：smooth_algebraMap [Algebra R S] : (algebraMap
+ R S).Smooth ↔ Algebra.Smooth R S
+· 使用定理 `Algebra.FormallySmooth.of_isLocalization`：∀ {R : Type u_4} {Rₘ : Type u_
+6} [inst : CommRing R] [inst_1 : CommRing Rₘ] (M : Submonoid R) [inst_2 : Algebr
+a R Rₘ]   [IsLocalization M Rₘ…
+· 使用定理 `IsLocalization.Away.finitePresentation`：IsLocalization.Away.finitePresen
+tation (r : R) {S} [CommRing S] [Algebra R S] [IsLocalization.Away r S] : Algebr
+a.FinitePresentation R S
 -/
 lemma holdsForLocalizationAway : HoldsForLocalizationAway Smooth := by
   introv R h
   rw [smooth_algebraMap]
   exact ⟨Algebra.FormallySmooth.of_isLocalization (.powers r),
     IsLocalization.Away.finitePresentation r⟩
-
-/--
-lemma `of_bijective` / 引理 `of_bijective`
-
-English:
-lemma of_bijective
-  given: {f : R ->+* S} (hf : Function.Bijective f)
-  statement: f.Smooth
-  proof: by
-  rw [RingHom.smooth_def]
-  exact ⟨.of_bijective hf, .of_bijective hf⟩
-
-中文:
-引理 of_bijective
-  条件: {f : R ->+* S} (hf : 函数.双射 f)
-  结论: f.光滑
-  证明: by
-  rw [RingHom.smooth_def]
-  exact ⟨.of_bijective hf, .of_bijective hf⟩
-
-Depends on / 依赖: RingHom, RingHom.smooth_def, of_bijective, smooth_def
+/-
+**RingHom.Smooth.of_bijective** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：of_bijective {f : R ->+* S} (hf : Function.Bijective f) : f.Smooth
+参数：hf : Function.Bijective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.smooth_def`：smooth_def {f : R ->+* S} : f.Smooth ↔ f.FormallySmo
+oth ∧ f.FinitePresentation
+· 使用定理 `RingHom.FormallySmooth.of_bijective`：∀ {R : Type u_1} {S : Type u_2} [in
+st : CommRing R] [inst_1 : CommRing S] {f : R →+* S},   Function.Bijective ⇑f → 
+f.FormallySmooth
+· 使用引理 `RingHom.FinitePresentation.of_bijective`：of_bijective {f : A ->+* B} (hf
+ : Function.Bijective f) : f.FinitePresentation
 -/
-lemma of_bijective {f : R ->+* S} (hf : Function.Bijective f) : f.Smooth := by
+lemma of_bijective {f : R →+* S} (hf : Function.Bijective f) : f.Smooth := by
   rw [RingHom.smooth_def]
   exact ⟨.of_bijective hf, .of_bijective hf⟩
 
 variable (R) in
-/--
-lemma `id` / 引理 `id`
+/-- The identity of a ring is smooth. -/
+/-
+**RingHom.Smooth.id** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：id : RingHom.Smooth (RingHom.id R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RingHom.HoldsForLocalizationAway.containsIdentities`：RingHom.HoldsForLoc
+alizationAway.containsIdentities (hPl : HoldsForLocalizationAway P) : ContainsId
+entities P
+· 使用引理 `RingHom.Smooth.holdsForLocalizationAway`：holdsForLocalizationAway : Hold
+sForLocalizationAway Smooth
 
-English:
-lemma id
-  statement: RingHom.Smooth (RingHom.id R)
-  proof: holdsForLocalizationAway.containsIdentities R
-
-中文:
-引理 id
-  结论: 环态射.光滑 (环态射.id R)
-  证明: holdsForLocalizationAway.containsIdentities R
-
-Depends on / 依赖: containsIdentities, holdsForLocalizationAway, holdsForLocalizationAway.containsIdentities
+--- 原说明 ---
+The identity of a ring is smooth.
 -/
 lemma id : RingHom.Smooth (RingHom.id R) :=
   holdsForLocalizationAway.containsIdentities R
-
-/--
-lemma `ofLocalizationSpanTarget` / 引理 `ofLocalizationSpanTarget`
-
-English:
-lemma ofLocalizationSpanTarget
-  statement: OfLocalizationSpanTarget Smooth
-  proof: by
-  introv R hs hf
-  have : f.FinitePresentation :=
-    finitePresentation_ofLocalizationSpanTarget _ s hs fun r => (hf r).finitePresentation
-  algebraize [f]
-  refine ⟨?_, ‹_›⟩
-  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
-  simp only [TopologicalSpace.Opens.coe_iSup, Set.iUnion_subset_iff,
-    Algebra.basicOpen_subset_smoothLocus_iff, ← formallySmooth_algebraMap]
-  exact fun r hr => (hf ⟨r, hr⟩).1
-
-中文:
-引理 ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget 光滑
-  证明: by
-  introv R hs hf
-  have : f.FinitePresentation :=
-    finitePresentation_ofLocalizationSpanTarget _ s hs fun r => (hf r).finitePresentation
-  algebraize [f]
-  refine ⟨?_, ‹_›⟩
-  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
-  simp only [TopologicalSpace.Opens.coe_iSup, Set.iUnion_subset_iff,
-    Algebra.basicOpen_subset_smoothLocus_iff, ← formallySmooth_algebraMap]
-  exact fun r hr => (hf ⟨r, hr⟩).1
-
-Depends on / 依赖: Algebra, Algebra.basicOpen_subset_smoothLocus_iff, Algebra.smoothLocus_eq_univ_iff, FinitePresentation, PrimeSpectrum, PrimeSpectrum.iSup_basicOpen_eq_top_iff, Set.iUnion_subset_iff, Set.univ_subset_iff, TopologicalSpace, TopologicalSpace.Opens.coe_iSup, TopologicalSpace.Opens.coe_top, algebraize, basicOpen_subset_smoothLocus_iff, coe_iSup, coe_top, f.FinitePresentation, finitePresentation, finitePresentation_ofLocalizationSpanTarget, formallySmooth_algebraMap, iSup_basicOpen_eq_top_iff
+/-
+**RingHom.Smooth.ofLocalizationSpanTarget** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smo
+oth`。
+形式化陈述：ofLocalizationSpanTarget : OfLocalizationSpanTarget Smooth
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.finitePresentation_ofLocalizationSpanTarget`：finitePresentation_
+ofLocalizationSpanTarget : OfLocalizationSpanTarget @FinitePresentation
+· 使用引理 `RingHom.Smooth.finitePresentation`：finitePresentation {f : R ->+* S} (hf
+ : f.Smooth) : f.FinitePresentation
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Algebra.smoothLocus_eq_univ_iff`：smoothLocus_eq_univ_iff [FinitePresenta
+tion R A] : smoothLocus R A = Set.univ ↔ Algebra.FormallySmooth R A
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `TopologicalSpace.Opens.coe_top`：coe_top : ((⊤ : Opens α) : Set α) = Set.
+univ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `PrimeSpectrum.iSup_basicOpen_eq_top_iff'`：iSup_basicOpen_eq_top_iff' {s 
+: Set R} : (⨆ i in s, PrimeSpectrum.basicOpen i) = ⊤ ↔ Ideal.span s = ⊤
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopologicalSpace.Opens.coe_iSup`：coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i
+, s i : Opens α) : Set α) = ⋃ i, s i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
 -/
 lemma ofLocalizationSpanTarget : OfLocalizationSpanTarget Smooth := by
   introv R hs hf
   have : f.FinitePresentation :=
-    finitePresentation_ofLocalizationSpanTarget _ s hs fun r => (hf r).finitePresentation
+    finitePresentation_ofLocalizationSpanTarget _ s hs fun r ↦ (hf r).finitePresentation
   algebraize [f]
   refine ⟨?_, ‹_›⟩
-  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
+  rw [← Algebra.smoothLocus_eq_univ_iff, ← Set.univ_subset_iff, ← TopologicalSpace.Opens.coe_top,
+    ← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
   simp only [TopologicalSpace.Opens.coe_iSup, Set.iUnion_subset_iff,
     Algebra.basicOpen_subset_smoothLocus_iff, ← formallySmooth_algebraMap]
-  exact fun r hr => (hf ⟨r, hr⟩).1
+  exact fun r hr ↦ (hf ⟨r, hr⟩).1
 
-/--
-lemma `propertyIsLocal` / 引理 `propertyIsLocal`
+/-- Smoothness is a local property of ring homomorphisms. -/
+/-
+**RingHom.Smooth.propertyIsLocal** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：propertyIsLocal : PropertyIsLocal Smooth where localizationAwayPreserves
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.LocalizationPreserves.away`：RingHom.LocalizationPreserves.away (
+H : RingHom.LocalizationPreserves @P) : RingHom.LocalizationAwayPreserves P
+· 使用引理 `RingHom.IsStableUnderBaseChange.localizationPreserves`：RingHom.IsStableU
+nderBaseChange.localizationPreserves : LocalizationPreserves P
+· 使用引理 `RingHom.Smooth.isStableUnderBaseChange`：isStableUnderBaseChange : IsStab
+leUnderBaseChange Smooth
+· 使用引理 `RingHom.Smooth.ofLocalizationSpanTarget`：ofLocalizationSpanTarget : OfLo
+calizationSpanTarget Smooth
+· 使用定理 `RingHom.OfLocalizationSpanTarget.ofLocalizationSpan`：RingHom.OfLocalizat
+ionSpanTarget.ofLocalizationSpan (hP : RingHom.OfLocalizationSpanTarget @P) (hP'
+ : RingHom.StableUnderCompositionWithLoca…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `RingHom.StableUnderComposition.stableUnderCompositionWithLocalizationAwa
+y`：RingHom.StableUnderComposition.stableUnderCompositionWithLocalizationAway (hP
+c : RingHom.StableUnderComposition P) (hPl : HoldsForLocalizati…
+· 使用引理 `RingHom.Smooth.stableUnderComposition`：stableUnderComposition : StableUn
+derComposition Smooth
+· 使用引理 `RingHom.Smooth.holdsForLocalizationAway`：holdsForLocalizationAway : Hold
+sForLocalizationAway Smooth
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma propertyIsLocal
-  statement: PropertyIsLocal Smooth where
-  proof: isStableUnderBaseChange.localizationPreserves.away
-  ofLocalizationSpanTarget := ofLocalizationSpanTarget
-  ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
-    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
-      holdsForLocalizationAway).left
-  StableUnderCompositionWithLocalizationAwayTarget :=
-    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
-      holdsForLocalizationAway).right
-
-中文:
-引理 propertyIsLocal
-  结论: PropertyIsLocal 光滑 where
-  证明: isStableUnderBaseChange.localizationPreserves.away
-  ofLocalizationSpanTarget := ofLocalizationSpanTarget
-  ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
-    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
-      holdsForLocalizationAway).left
-  StableUnderCompositionWithLocalizationAwayTarget :=
-    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
-      holdsForLocalizationAway).right
-
-Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves.away, localizationPreserves
+--- 原说明 ---
+Smoothness is a local property of ring homomorphisms.
 -/
 lemma propertyIsLocal : PropertyIsLocal Smooth where
   localizationAwayPreserves := isStableUnderBaseChange.localizationPreserves.away
@@ -599,23 +511,18 @@ lemma propertyIsLocal : PropertyIsLocal Smooth where
   StableUnderCompositionWithLocalizationAwayTarget :=
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).right
-
-/--
-lemma `respectsIso` / 引理 `respectsIso`
-
-English:
-lemma respectsIso
-  statement: RespectsIso Smooth
-  proof: propertyIsLocal.respectsIso
-
-中文:
-引理 respectsIso
-  结论: RespectsIso 光滑
-  证明: propertyIsLocal.respectsIso
-
-Depends on / 依赖: propertyIsLocal, propertyIsLocal.respectsIso, respectsIso
+/-
+**RingHom.Smooth.respectsIso** 是 Mathlib 中的一个引理，位于命名空间 `RingHom.Smooth`。
+形式化陈述：respectsIso : RespectsIso Smooth
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.PropertyIsLocal.respectsIso`：RingHom.PropertyIsLocal.respectsIso
+ (hP : RingHom.PropertyIsLocal @P) : RingHom.RespectsIso @P
+· 使用引理 `RingHom.Smooth.propertyIsLocal`：propertyIsLocal : PropertyIsLocal Smooth
+ where localizationAwayPreserves
 -/
 lemma respectsIso : RespectsIso Smooth :=
   propertyIsLocal.respectsIso
 
 end RingHom.Smooth
+

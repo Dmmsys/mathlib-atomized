@@ -31,56 +31,24 @@ variable {D : Type u} [Category.{v} D]
 
 namespace SimplicialObject
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EnrichedCategory SSet.{v} (SimplicialObject D)
-  body: inferInstanceAs (EnrichedCategory (_ ⥤ Type v) (_ ⥤ D))
-
-中文:
-实例 :
-  签名: Enriched范畴 SSet.{v} (SimplicialObject D)
-  定义体: inferInstanceAs (EnrichedCategory (_ ⥤ Type v) (_ ⥤ D))
-
-Depends on / 依赖: EnrichedCategory
+/-
+**CategoryTheory.SimplicialObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sim
+plicialObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EnrichedCategory SSet.{v} (SimplicialObject D) :=
   inferInstanceAs (EnrichedCategory (_ ⥤ Type v) (_ ⥤ D))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SimplicialCategory (SimplicialObject D)
-  body: Functor.natTransEquiv.symm
-
-中文:
-实例 :
-  签名: SimplicialCategory (SimplicialObject D)
-  定义体: Functor.natTransEquiv.symm
-
-Depends on / 依赖: Functor, Functor.natTransEquiv.symm, natTransEquiv
+/-
+**CategoryTheory.SimplicialObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sim
+plicialObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SimplicialCategory (SimplicialObject D) where
   homEquiv := Functor.natTransEquiv.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SimplicialCategory SSet.{v}
-  body: inferInstanceAs (SimplicialCategory (SimplicialObject (Type v)))
-
-中文:
-实例 :
-  签名: SimplicialCategory SSet.{v}
-  定义体: inferInstanceAs (SimplicialCategory (SimplicialObject (Type v)))
-
-Depends on / 依赖: SimplicialCategory, SimplicialObject
+/-
+**CategoryTheory.SimplicialObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sim
+plicialObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SimplicialCategory SSet.{v} :=
   inferInstanceAs (SimplicialCategory (SimplicialObject (Type v)))
@@ -88,3 +56,4 @@ instance : SimplicialCategory SSet.{v} :=
 end SimplicialObject
 
 end CategoryTheory
+

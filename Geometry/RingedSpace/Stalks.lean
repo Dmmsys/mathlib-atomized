@@ -35,18 +35,20 @@ open TopCat.Presheaf
 
 namespace AlgebraicGeometry.PresheafedSpace
 
-/--
-Definition of `Hom.stalkMap` / `Hom.stalkMap` 的定义
+/-- A morphism of presheafed spaces induces a morphism of stalks.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.Hom.stalkMap** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.PresheafedSpace.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasColimits C] →       {X Y : AlgebraicGeometry.Presheafe
+dSpace C} →         (α : X.Hom Y) →           (x : ↑↑X) → Y.presheaf.stalk ((Cat
+egoryTheory.ConcreteCategory.hom α.base) x) ⟶ X.presheaf.stalk x
+参数：α : X.Hom Y；x : ↑↑X；(CategoryTheory.ConcreteCategory.hom α.base) x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.stalkMap
-  signature: {X Y : PresheafedSpace.{_, _, v} C} (α : Hom X Y) (x : X)
-  body: (stalkFunctor C (α.base x)).map α.c ≫ X.presheaf.stalkPushforward C α.base x
-
-中文:
-定义 态射.stalkMap
-  签名: {X Y : Presheafed空间.{_, _, v} C} (α : 态射 X Y) (x : X)
-  定义体: (stalkFunctor C (α.base x)).map α.c ≫ X.presheaf.stalkPushforward C α.base x
+--- 原说明 ---
+A morphism of presheafed spaces induces a morphism of stalks.
 -/
 def Hom.stalkMap {X Y : PresheafedSpace.{_, _, v} C} (α : Hom X Y) (x : X) :
     Y.presheaf.stalk (α.base x) ⟶ X.presheaf.stalk x :=
@@ -54,53 +56,52 @@ def Hom.stalkMap {X Y : PresheafedSpace.{_, _, v} C} (α : Hom X Y) (x : X) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[elementwise, reassoc]
-/--
-theorem `stalkMap_germ` / 定理 `stalkMap_germ`
-
-English:
-theorem stalkMap_germ
-  statement: {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y)
-  proof: by
-  rw [Hom.stalkMap]; rw [stalkFunctor_map_germ_assoc]; rw [stalkPushforward_germ]
-
-中文:
-定理 stalkMap_germ
-  结论: {X Y : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y)
-  证明: by
-  rw [Hom.stalkMap]; rw [stalkFunctor_map_germ_assoc]; rw [stalkPushforward_germ]
-
-Depends on / 依赖: Hom.stalkMap, stalkFunctor_map_germ_assoc, stalkMap, stalkPushforward_germ
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap_germ** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.PresheafedSpace`。
+形式化陈述：stalkMap_germ {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y
+) (x : X) (hx : α x in U) : Y.presheaf.germ U (α x) hx ≫ α.stalkMap x = α.c.app 
+(op U) ≫ X.presheaf.germ ((Opens.map α.base).obj U) x hx
+参数：α : X ⟶ Y；U : Opens Y；x : X；hx : α x in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.Hom.stalkMap.eq_1`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimit
+s C]   {X Y : AlgebraicGeometry.Presheafe…
+· 使用定理 `TopCat.Presheaf.stalkFunctor_map_germ_assoc`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X 
+: TopCat}   {F G : TopCat.Preshea…
+· 使用定理 `TopCat.Presheaf.stalkPushforward_germ`：stalkPushforward_germ (f : X ⟶ Y)
+ (F : X.Presheaf C) (U : Opens Y) (x : X) (hx : f x in U) : (f _* F).germ U (f x
+) hx ≫ F.stalkPushforward C…
 -/
 theorem stalkMap_germ {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (U : Opens Y)
-    (x : X) (hx : α x in U) :
+    (x : X) (hx : α x ∈ U) :
     Y.presheaf.germ U (α x) hx ≫ α.stalkMap x = α.c.app (op U) ≫
       X.presheaf.germ ((Opens.map α.base).obj U) x hx := by
-  rw [Hom.stalkMap]; rw [stalkFunctor_map_germ_assoc]; rw [stalkPushforward_germ]
+  rw [Hom.stalkMap, stalkFunctor_map_germ_assoc, stalkPushforward_germ]
 
 section Restrict
 
-/--
-Definition of `restrictStalkIso` / `restrictStalkIso` 的定义
+/-- For an open embedding `f : U ⟶ X` and a point `x : U`, we get an isomorphism between the stalk
+of `X` at `f x` and the stalk of the restriction of `X` along `f` at `x`.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.restrictStalkIso** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：restrictStalkIso {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U
+ ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) : (X.restrict h).presheaf.s
+talk x ≅ X.presheaf.stalk (f x)
+参数：X : PresheafedSpace.{_, _, v} C；X : TopCat.{v}；h : IsOpenEmbedding f；x : U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictStalkIso
-  signature: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶ (X : TopCat.{v})}
-  body: haveI := initial_of_adjunction (h.adjunctionNhds x)
-  Final.colimitIso (h.functorNhds x).op ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
-  -- As a left adjoint, the functor `h.functorNhds x` is initial.
-  -- Typeclass resolution knows that the opposite of an initial functor is final. The result
-  -- follows from the general fact that postcomposing with a final functor doesn't change colimits.
-
-中文:
-定义 restrictStalkIso
-  签名: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C) {f : U ⟶ (X : 顶元素范畴.{v})}
-  定义体: haveI := initial_of_adjunction (h.adjunctionNhds x)
-  Final.colimitIso (h.functorNhds x).op ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
-  -- As a left adjoint, the functor `h.functorNhds x` is initial.
-  -- Typeclass resolution knows that the opposite of an initial functor is final. The result
-  -- follows from the general fact that postcomposing with a final functor doesn't change colimits.
-
-Depends on / 依赖: Final.colimitIso, OpenNhds, OpenNhds.inclusion, X.presheaf, adjunctionNhds, colimitIso, functorNhds, h.adjunctionNhds, h.functorNhds, inclusion, initial_of_adjunction, presheaf
+--- 原说明 ---
+For an open embedding `f : U ⟶ X` and a point `x : U`, we get an isomorphism bet
+ween the stalk
+of `X` at `f x` and the stalk of the restriction of `X` along `f` at `x`.
 -/
 def restrictStalkIso {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶ (X : TopCat.{v})}
     (h : IsOpenEmbedding f) (x : U) : (X.restrict h).presheaf.stalk x ≅ X.presheaf.stalk (f x) :=
@@ -113,25 +114,29 @@ def restrictStalkIso {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U �
 -- We intentionally leave `simp` off this lemma and those generated by `elementwise` and `reassoc`,
 -- as the simpNF linter claims they never apply.
 @[elementwise, reassoc]
-/--
-theorem `restrictStalkIso_hom_eq_germ` / 定理 `restrictStalkIso_hom_eq_germ`
-
-English:
-theorem restrictStalkIso_hom_eq_germ
-  statement: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-  proof: colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) (h.functorNhds x).op
-    (op ⟨V, hx⟩)
-
-中文:
-定理 restrictStalkIso_hom_eq_germ
-  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
-  证明: colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) (h.functorNhds x).op
-    (op ⟨V, hx⟩)
-
-Depends on / 依赖: OpenNhds, OpenNhds.inclusion, X.presheaf, colimit, functorNhds, h.functorNhds, inclusion, presheaf
+/-
+**AlgebraicGeometry.PresheafedSpace.restrictStalkIso_hom_eq_germ** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：restrictStalkIso_hom_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, 
+v} C) {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (
+hx : x in V) : (X.restrict h).presheaf.germ _ x hx ≫ (restrictStalkIso X h x).ho
+m = X.presheaf.germ (h.functor.obj V) (f x) ⟨x, hx, rfl⟩
+参数：X : PresheafedSpace.{_, _, v} C；X : TopCat.{v}；h : IsOpenEmbedding f；V : Open
+s U；x : U；hx : x in V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem restrictStalkIso_hom_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-    {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (hx : x in V) :
+    {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (hx : x ∈ V) :
     (X.restrict h).presheaf.germ _ x hx ≫ (restrictStalkIso X h x).hom =
     X.presheaf.germ (h.functor.obj V) (f x) ⟨x, hx, rfl⟩ :=
   colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) (h.functorNhds x).op
@@ -141,65 +146,82 @@ set_option backward.isDefEq.respectTransparency false in
 -- We intentionally leave `simp` off the lemmas generated by `elementwise` and `reassoc`,
 -- as the simpNF linter claims they never apply.
 @[simp, elementwise, reassoc]
-/--
-theorem `restrictStalkIso_inv_eq_germ` / 定理 `restrictStalkIso_inv_eq_germ`
-
-English:
-theorem restrictStalkIso_inv_eq_germ
-  statement: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-  proof: by
-  rw [← restrictStalkIso_hom_eq_germ]; rw [Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
-
-中文:
-定理 restrictStalkIso_inv_eq_germ
-  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
-  证明: by
-  rw [← restrictStalkIso_hom_eq_germ]; rw [Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.hom_inv_id, comp_id, hom_inv_id, restrictStalkIso_hom_eq_germ
+/-
+**AlgebraicGeometry.PresheafedSpace.restrictStalkIso_inv_eq_germ** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：restrictStalkIso_inv_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, 
+v} C) {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (
+hx : x in V) : X.presheaf.germ (h.functor.obj V) (f x) ⟨x, hx, rfl⟩ ≫ (restrictS
+talkIso X h x).inv = (X.restrict h).presheaf.germ _ x hx
+参数：X : PresheafedSpace.{_, _, v} C；X : TopCat.{v}；h : IsOpenEmbedding f；V : Open
+s U；x : U；hx : x in V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.restrictStalkIso_hom_eq_germ`：restrict
+StalkIso_hom_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶
+ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Open…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem restrictStalkIso_inv_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-    {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (hx : x in V) :
+    {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Opens U) (x : U) (hx : x ∈ V) :
     X.presheaf.germ (h.functor.obj V) (f x) ⟨x, hx, rfl⟩ ≫
         (restrictStalkIso X h x).inv =
       (X.restrict h).presheaf.germ _ x hx := by
-  rw [← restrictStalkIso_hom_eq_germ]; rw [Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
+  rw [← restrictStalkIso_hom_eq_germ, Category.assoc, Iso.hom_inv_id, Category.comp_id]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `restrictStalkIso_inv_eq_ofRestrict` / 定理 `restrictStalkIso_inv_eq_ofRestrict`
-
-English:
-theorem restrictStalkIso_inv_eq_ofRestrict
-  statement: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-  proof: by
-  -- We can't use `ext` here because it would call `stalk_hom_ext` instead.
-  refine colimit.hom_ext fun V => ?_
-  induction V with | op V => ?_
-  let i : (h.functorNhds x).obj ((OpenNhds.map f x).obj V) ⟶ V :=
-    homOfLE (Set.image_preimage_subset f _)
-  erw [Iso.comp_inv_eq, colimit.ι_map_assoc, colimit.ι_map_assoc, colimit.ι_pre]
-  simp_rw [Category.assoc]
-  erw [colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
-      (h.functorNhds x).op]
-  erw [← X.presheaf.map_comp_assoc]
-  exact (colimit.w ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) i.op).symm
-
-中文:
-定理 restrictStalkIso_inv_eq_ofRestrict
-  结论: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
-  证明: by
-  -- We can't use `ext` here because it would call `stalk_hom_ext` instead.
-  refine colimit.hom_ext fun V => ?_
-  induction V with | op V => ?_
-  let i : (h.functorNhds x).obj ((OpenNhds.map f x).obj V) ⟶ V :=
-    homOfLE (Set.image_preimage_subset f _)
-  erw [Iso.comp_inv_eq, colimit.ι_map_assoc, colimit.ι_map_assoc, colimit.ι_pre]
-  simp_rw [Category.assoc]
-  erw [colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
-      (h.functorNhds x).op]
-  erw [← X.presheaf.map_comp_assoc]
-  exact (colimit.w ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) i.op).symm
+/-
+**AlgebraicGeometry.PresheafedSpace.restrictStalkIso_inv_eq_ofRestrict** 是 Mathl
+ib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：restrictStalkIso_inv_eq_ofRestrict {U : TopCat.{v}} (X : PresheafedSpace.{
+_, _, v} C) {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) : (X.rest
+rictStalkIso h x).inv = (X.ofRestrict h).stalkMap x
+参数：X : PresheafedSpace.{_, _, v} C；X : TopCat.{v}；h : IsOpenEmbedding f；x : U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.comp_inv_eq`：comp_inv_eq (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : f ≫ α.inv = g ↔ f = g ≫ α.hom
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_map_assoc`：∀ {J : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v
+, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.colimit.w`：∀ {J : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   
+(F : CategoryTheory.F…
 -/
 theorem restrictStalkIso_inv_eq_ofRestrict {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
     {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) :
@@ -217,22 +239,23 @@ theorem restrictStalkIso_inv_eq_ofRestrict {U : TopCat.{v}} (X : PresheafedSpace
   exact (colimit.w ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) i.op).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `ofRestrict_stalkMap_isIso` / 实例 `ofRestrict_stalkMap_isIso`
-
-English:
-instance ofRestrict_stalkMap_isIso
-  signature: {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
-  body: by
-  rw [← restrictStalkIso_inv_eq_ofRestrict]; infer_instance
-
-中文:
-实例 ofRestrict_stalkMap_isIso
-  签名: {U : 顶元素范畴.{v}} (X : Presheafed空间.{_, _, v} C)
-  定义体: by
-  rw [← restrictStalkIso_inv_eq_ofRestrict]; infer_instance
-
-Depends on / 依赖: infer_instance, restrictStalkIso_inv_eq_ofRestrict
+/-
+**AlgebraicGeometry.PresheafedSpace.ofRestrict_stalkMap_isIso** 是 Mathlib 中的一个实例
+，位于命名空间 `AlgebraicGeometry.PresheafedSpace`。
+形式化陈述：ofRestrict_stalkMap_isIso {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} 
+C) {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) : IsIso ((X.ofRest
+rict h).stalkMap x)
+参数：X : PresheafedSpace.{_, _, v} C；X : TopCat.{v}；h : IsOpenEmbedding f；x : U。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.restrictStalkIso_inv_eq_ofRestrict`：re
+strictStalkIso_inv_eq_ofRestrict {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v}
+ C) {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x …
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 instance ofRestrict_stalkMap_isIso {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
     {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) :
@@ -245,26 +268,43 @@ namespace stalkMap
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `id` / 定理 `id`
-
-English:
-theorem id
-  given: (X : PresheafedSpace.{_, _, v} C) (x : X)
-  proof: by
-  dsimp [Hom.stalkMap]
-  ext
-  simp
-
-中文:
-定理 id
-  条件: (X : Presheafed空间.{_, _, v} C) (x : X)
-  证明: by
-  dsimp [Hom.stalkMap]
-  ext
-  simp
-
-Depends on / 依赖: Hom.stalkMap, stalkMap
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.id** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：id (X : PresheafedSpace.{_, _, v} C) (x : X) : (𝟙 X : X ⟶ X).stalkMap x = 
+𝟙 (X.presheaf.stalk x)
+参数：X : PresheafedSpace.{_, _, v} C；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.stalk_hom_ext`：stalk_hom_ext (F : X.Presheaf C) {x} {Y :
+ C} {f₁ f₂ : F.stalk x ⟶ Y} (ih : forall (U : Opens X) (hxU : x in U), F.germ U 
+x hxU ≫ f₁ = F.germ…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopCat.Presheaf.stalkPushforward.id`：id (ℱ : X.Presheaf C) (x : X) : ℱ.s
+talkPushforward C (𝟙 X) x = (stalkFunctor C x).map (Pushforward.id ℱ).hom
+· 使用定理 `TopCat.Presheaf.stalkFunctor_map_germ_assoc`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X 
+: TopCat}   {F G : TopCat.Preshea…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.id_c_app`：id_c_app (X : PresheafedSpac
+e C) (U) : (𝟙 X : X ⟶ X).c.app U = X.presheaf.map (𝟙 U)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `TopCat.Presheaf.stalkFunctor_map_germ`：stalkFunctor_map_germ {F G : X.Pr
+esheaf C} (U : Opens X) (x : X) (hx : x in U) (f : F ⟶ G) : F.germ U x hx ≫ (sta
+lkFunctor C x).map f = f.ap…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id (X : PresheafedSpace.{_, _, v} C) (x : X) :
     (𝟙 X : X ⟶ X).stalkMap x = 𝟙 (X.presheaf.stalk x) := by
@@ -275,30 +315,47 @@ theorem id (X : PresheafedSpace.{_, _, v} C) (x : X) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: {X Y Z : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X)
-  proof: by
-  dsimp [Hom.stalkMap, stalkFunctor, stalkPushforward]
-  -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  apply colimit.hom_ext
-  rintro ⟨U, hU⟩
-  simp
-
-中文:
-定理 comp
-  条件: {X Y Z : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X)
-  证明: by
-  dsimp [Hom.stalkMap, stalkFunctor, stalkPushforward]
-  -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  apply colimit.hom_ext
-  rintro ⟨U, hU⟩
-  simp
-
-Depends on / 依赖: Hom.stalkMap, stalkFunctor, stalkMap, stalkPushforward
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.comp** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：comp {X Y Z : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X)
+ : (α ≫ β).stalkMap x = (β.stalkMap (α.base x) : Z.presheaf.stalk (β.base (α.bas
+e x)) ⟶ Y.presheaf.stalk (α.base x)) ≫ (α.stalkMap x : Y.presheaf.stalk (α.base 
+x) ⟶ X.presheaf.stalk x)
+参数：α : X ⟶ Y；β : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre_assoc`：∀ {J : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} K]   {C : Type u} [inst…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp {X Y Z : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X) :
     (α ≫ β).stalkMap x =
@@ -310,24 +367,46 @@ theorem comp {X Y Z : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z)
   rintro ⟨U, hU⟩
   simp
 
-/--
-theorem `congr` / 定理 `congr`
+/-- If `α = β` and `x = x'`, we would like to say that `stalk_map α x = stalk_map β x'`.
+Unfortunately, this equality is not well-formed, as their types are not _definitionally_ the same.
+To get a proper congruence lemma, we therefore have to introduce these `eqToHom` arrows on
+either side of the equality.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.congr** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：congr {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h₁ : α = β) (x x'
+ : X) (h₂ : x = x') : α.stalkMap x ≫ eqToHom (show X.presheaf.stalk x = X.preshe
+af.stalk x' by rw [h₂]) = eqToHom (show Y.presheaf.stalk (α.base x) = Y.presheaf
+.stalk (β.base x') by rw [h₁, h₂]) ≫ β.stalkMap x'
+参数：α β : X ⟶ Y；h₁ : α = β；x x' : X；h₂ : x = x'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.stalk_hom_ext`：stalk_hom_ext (F : X.Presheaf C) {x} {Y :
+ C} {f₁ f₂ : F.stalk x ⟶ Y} (ih : forall (U : Opens X) (hxU : x in U), F.germ U 
+x hxU ≫ f₁ = F.germ…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem congr
-  statement: {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y)
-  proof: by
-  ext
-  subst h₁ h₂
-  simp
-
-中文:
-定理 congr
-  结论: {X Y : Presheafed空间.{_, _, v} C} (α β : X ⟶ Y)
-  证明: by
-  ext
-  subst h₁ h₂
-  simp
+--- 原说明 ---
+If `α = β` and `x = x'`, we would like to say that `stalk_map α x = stalk_map β 
+x'`.
+Unfortunately, this equality is not well-formed, as their types are not _definit
+ionally_ the same.
+To get a proper congruence lemma, we therefore have to introduce these `eqToHom`
+ arrows on
+either side of the equality.
 -/
 theorem congr {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y)
     (h₁ : α = β) (x x' : X) (h₂ : x = x') :
@@ -337,46 +416,47 @@ theorem congr {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y)
   ext
   subst h₁ h₂
   simp
-
-/--
-theorem `congr_hom` / 定理 `congr_hom`
-
-English:
-theorem congr_hom
-  given: {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X)
-  proof: by
-  rw [← stalkMap.congr α β h x x rfl]; rw [eqToHom_refl]; rw [Category.comp_id]
-
-中文:
-定理 congr_hom
-  条件: {X Y : Presheafed空间.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X)
-  证明: by
-  rw [← stalkMap.congr α β h x x rfl]; rw [eqToHom_refl]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, eqToHom_refl, stalkMap, stalkMap.congr
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.congr_hom** 是 Mathlib 中的一个定理，位于命名空间
+ `AlgebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：congr_hom {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x
+ : X) : α.stalkMap x = eqToHom (show Y.presheaf.stalk (α.base x) = Y.presheaf.st
+alk (β.base x) by rw [h]) ≫ β.stalkMap x
+参数：α β : X ⟶ Y；h : α = β；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.congr`：congr {X Y : Presheafe
+dSpace.{_, _, v} C} (α β : X ⟶ Y) (h₁ : α = β) (x x' : X) (h₂ : x = x') : α.stal
+kMap x ≫ eqToHom (show X.presheaf.stal…
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem congr_hom {X Y : PresheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X) :
     α.stalkMap x =
       eqToHom (show Y.presheaf.stalk (α.base x) =
         Y.presheaf.stalk (β.base x) by rw [h]) ≫ β.stalkMap x := by
-  rw [← stalkMap.congr α β h x x rfl]; rw [eqToHom_refl]; rw [Category.comp_id]
-
-/--
-theorem `congr_point` / 定理 `congr_point`
-
-English:
-theorem congr_point
-  statement: {X Y : PresheafedSpace.{_, _, v} C}
-  proof: by
-  rw [stalkMap.congr α α rfl x x' h]
-
-中文:
-定理 congr_point
-  结论: {X Y : Presheafed空间.{_, _, v} C}
-  证明: by
-  rw [stalkMap.congr α α rfl x x' h]
-
-Depends on / 依赖: stalkMap, stalkMap.congr
+  rw [← stalkMap.congr α β h x x rfl, eqToHom_refl, Category.comp_id]
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.congr_point** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：congr_point {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (x x' : X) (h 
+: x = x') : α.stalkMap x ≫ eqToHom (show X.presheaf.stalk x = X.presheaf.stalk x
+' by rw [h]) = eqToHom (show Y.presheaf.stalk (α.base x) = Y.presheaf.stalk (α.b
+ase x') by rw [h]) ≫ α.stalkMap x'
+参数：α : X ⟶ Y；x x' : X；h : x = x'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.congr`：congr {X Y : Presheafe
+dSpace.{_, _, v} C} (α β : X ⟶ Y) (h₁ : α = β) (x x' : X) (h₂ : x = x') : α.stal
+kMap x ≫ eqToHom (show X.presheaf.stal…
 -/
 theorem congr_point {X Y : PresheafedSpace.{_, _, v} C}
     (α : X ⟶ Y) (x x' : X) (h : x = x') :
@@ -386,54 +466,47 @@ theorem congr_point {X Y : PresheafedSpace.{_, _, v} C}
   rw [stalkMap.congr α α rfl x x' h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isIso` / 实例 `isIso`
-
-English:
-instance isIso
-  signature: {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) [IsIso α] (x : X)
-  body: by
-    let β : Y ⟶ X := CategoryTheory.inv α
-    have h_eq : (α ≫ β).base x = x := by rw [IsIso.hom_inv_id α, id_base, TopCat.id_app]
-    -- Intuitively, the inverse of the stalk map of `α` at `x` should just be the stalk map of `β`
-    -- at `α x`. Unfortunately, we have a problem with dependent type theory here: Because `x`
-    -- is not *definitionally* equal to `β (α x)`, the map `stalk_map β (α x)` has not the correct
-    -- type for an inverse.
-    -- To get a proper inverse, we need to compose with the `eqToHom` arrow
-    -- `X.stalk x ⟶ X.stalk ((α ≫ β).base x)`.
-    refine
-      ⟨eqToHom (show X.presheaf.stalk x = X.presheaf.stalk ((α ≫ β).base x) by rw [h_eq]) ≫
-          (β.stalkMap (α.base x) :),
-        ?_, ?_⟩
-    · rw [← Category.assoc, congr_point α x ((α ≫ β).base x) h_eq.symm, Category.assoc]
-      erw [← stalkMap.comp β α (α.base x)]
-      rw [congr_hom _ _ (IsIso.inv_hom_id α)]; rw [stalkMap.id]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
-    · rw [Category.assoc, ← stalkMap.comp, congr_hom _ _ (IsIso.hom_inv_id α), stalkMap.id,
-        eqToHom_trans_assoc, eqToHom_refl, Category.id_comp]
-
-中文:
-实例 isIso
-  签名: {X Y : Presheafed空间.{_, _, v} C} (α : X ⟶ Y) [是同构 α] (x : X)
-  定义体: by
-    let β : Y ⟶ X := CategoryTheory.inv α
-    have h_eq : (α ≫ β).base x = x := by rw [IsIso.hom_inv_id α, id_base, TopCat.id_app]
-    -- Intuitively, the inverse of the stalk map of `α` at `x` should just be the stalk map of `β`
-    -- at `α x`. Unfortunately, we have a problem with dependent type theory here: Because `x`
-    -- is not *definitionally* equal to `β (α x)`, the map `stalk_map β (α x)` has not the correct
-    -- type for an inverse.
-    -- To get a proper inverse, we need to compose with the `eqToHom` arrow
-    -- `X.stalk x ⟶ X.stalk ((α ≫ β).base x)`.
-    refine
-      ⟨eqToHom (show X.presheaf.stalk x = X.presheaf.stalk ((α ≫ β).base x) by rw [h_eq]) ≫
-          (β.stalkMap (α.base x) :),
-        ?_, ?_⟩
-    · rw [← Category.assoc, congr_point α x ((α ≫ β).base x) h_eq.symm, Category.assoc]
-      erw [← stalkMap.comp β α (α.base x)]
-      rw [congr_hom _ _ (IsIso.inv_hom_id α)]; rw [stalkMap.id]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
-    · rw [Category.assoc, ← stalkMap.comp, congr_hom _ _ (IsIso.hom_inv_id α), stalkMap.id,
-        eqToHom_trans_assoc, eqToHom_refl, Category.id_comp]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.inv, IsIso.hom_inv_id, TopCat, TopCat.id_app, h_eq, hom_inv_id, id_app, id_base
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.isIso** 是 Mathlib 中的一个实例，位于命名空间 `Al
+gebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：isIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) [IsIso α] (x : X) : 
+IsIso (α.stalkMap x) where out
+参数：α : X ⟶ Y；x : X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.id_base`：id_base (X : PresheafedSpace 
+C) : (𝟙 X : X ⟶ X).base = 𝟙 (X : TopCat)
+· 使用定理 `TopCat.id_app`：id_app (X : TopCat.{u}) (x : ↑X) : (𝟙 X : X ⟶ X) x = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.congr_point`：congr_point {X Y
+ : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) (x x' : X) (h : x = x') : α.stalkMap
+ x ≫ eqToHom (show X.presheaf.stalk x = X.pr…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.comp`：comp {X Y Z : Presheafe
+dSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X) : (α ≫ β).stalkMap x = (β.st
+alkMap (α.base x) : Z.presheaf.stalk …
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.congr_hom`：congr_hom {X Y : P
+resheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X) : α.stalkMap x = e
+qToHom (show Y.presheaf.stalk (α.base x) =…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.id`：id (X : PresheafedSpace.{
+_, _, v} C) (x : X) : (𝟙 X : X ⟶ X).stalkMap x = 𝟙 (X.presheaf.stalk x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 instance isIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) [IsIso α] (x : X) :
     IsIso (α.stalkMap x) where
@@ -452,24 +525,24 @@ instance isIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ⟶ Y) [IsIso α] (x 
         ?_, ?_⟩
     · rw [← Category.assoc, congr_point α x ((α ≫ β).base x) h_eq.symm, Category.assoc]
       erw [← stalkMap.comp β α (α.base x)]
-      rw [congr_hom _ _ (IsIso.inv_hom_id α)]; rw [stalkMap.id]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
+      rw [congr_hom _ _ (IsIso.inv_hom_id α), stalkMap.id, eqToHom_trans_assoc, eqToHom_refl,
+        Category.id_comp]
     · rw [Category.assoc, ← stalkMap.comp, congr_hom _ _ (IsIso.hom_inv_id α), stalkMap.id,
         eqToHom_trans_assoc, eqToHom_refl, Category.id_comp]
 
-/--
-Definition of `stalkIso` / `stalkIso` 的定义
+/-- An isomorphism between presheafed spaces induces an isomorphism of stalks.
+-/
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.stalkIso** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：stalkIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ≅ Y) (x : X) : Y.presh
+eaf.stalk (α.hom.base x) ≅ X.presheaf.stalk x
+参数：α : X ≅ Y；x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stalkIso
-  signature: {X Y : PresheafedSpace.{_, _, v} C} (α : X ≅ Y) (x : X)
-  body: asIso (α.hom.stalkMap x)
-
-中文:
-定义 stalkIso
-  签名: {X Y : Presheafed空间.{_, _, v} C} (α : X ≅ Y) (x : X)
-  定义体: asIso (α.hom.stalkMap x)
-
-Depends on / 依赖: hom.stalkMap, stalkMap
+--- 原说明 ---
+An isomorphism between presheafed spaces induces an isomorphism of stalks.
 -/
 def stalkIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ≅ Y) (x : X) :
     Y.presheaf.stalk (α.hom.base x) ≅ X.presheaf.stalk x :=
@@ -478,42 +551,49 @@ def stalkIso {X Y : PresheafedSpace.{_, _, v} C} (α : X ≅ Y) (x : X) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp), elementwise (attr := simp)]
-/--
-theorem `stalkSpecializes_stalkMap` / 定理 `stalkSpecializes_stalkMap`
-
-English:
-theorem stalkSpecializes_stalkMap
-  statement: {X Y : PresheafedSpace.{_, _, v} C}
-  proof: by
-  -- Porting note: the original one liner `dsimp [stalkMap]; simp [stalkMap]` doesn't work,
-  -- I had to uglify this
-  dsimp [stalkSpecializes, Hom.stalkMap, stalkFunctor, stalkPushforward]
-  -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  refine colimit.hom_ext fun j => ?_
-  induction j with | op j => ?_
-  dsimp
-  simp only [colimit.ι_desc_assoc, ι_colimMap_assoc, whiskerLeft_app,
-    whiskerRight_app, NatTrans.id_app, colimit.ι_pre, assoc,
-    colimit.pre_desc, colimit.map_desc, colimit.ι_desc, Cocone.precompose_obj_ι,
-    Cocone.whisker_ι, NatTrans.comp_app]
-  tauto
-
-中文:
-定理 stalkSpecializes_stalkMap
-  结论: {X Y : Presheafed空间.{_, _, v} C}
-  证明: by
-  -- Porting note: the original one liner `dsimp [stalkMap]; simp [stalkMap]` doesn't work,
-  -- I had to uglify this
-  dsimp [stalkSpecializes, Hom.stalkMap, stalkFunctor, stalkPushforward]
-  -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  refine colimit.hom_ext fun j => ?_
-  induction j with | op j => ?_
-  dsimp
-  simp only [colimit.ι_desc_assoc, ι_colimMap_assoc, whiskerLeft_app,
-    whiskerRight_app, NatTrans.id_app, colimit.ι_pre, assoc,
-    colimit.pre_desc, colimit.map_desc, colimit.ι_desc, Cocone.precompose_obj_ι,
-    Cocone.whisker_ι, NatTrans.comp_app]
-  tauto
+/-
+**AlgebraicGeometry.PresheafedSpace.stalkMap.stalkSpecializes_stalkMap** 是 Mathl
+ib 中的一个定理，位于命名空间 `AlgebraicGeometry.PresheafedSpace.stalkMap`。
+形式化陈述：stalkSpecializes_stalkMap {X Y : PresheafedSpace.{_, _, v} C} (f : X ⟶ Y) 
+{x y : X} (h : x ⤳ y) : Y.presheaf.stalkSpecializes (f.base.hom.map_specializes 
+h) ≫ f.stalkMap x = f.stalkMap y ≫ X.presheaf.stalkSpecializes h
+参数：f : X ⟶ Y；h : x ⤳ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.map_specializes`：map_specializes (f : C(α, β)) {x y : α} (
+h : x ⤳ y) : f x ⤳ f y
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_pre`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.colimit.pre_desc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} K]   {C : Type u} [inst…
+· 使用定理 `CategoryTheory.Limits.colimit.map_desc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
 -/
 theorem stalkSpecializes_stalkMap {X Y : PresheafedSpace.{_, _, v} C}
     (f : X ⟶ Y) {x y : X} (h : x ⤳ y) :
@@ -535,3 +615,4 @@ theorem stalkSpecializes_stalkMap {X Y : PresheafedSpace.{_, _, v} C}
 end stalkMap
 
 end AlgebraicGeometry.PresheafedSpace
+

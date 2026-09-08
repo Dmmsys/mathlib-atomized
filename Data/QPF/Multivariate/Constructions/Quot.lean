@@ -24,43 +24,37 @@ open MvFunctor
 
 namespace MvQPF
 
-variable {n : Nat}
-variable {F : TypeVec.{u} n -> Type u}
+variable {n : ℕ}
+variable {F : TypeVec.{u} n → Type u}
 
 section repr
 
 variable [q : MvQPF F]
-variable {G : TypeVec.{u} n -> Type u} [MvFunctor G]
-variable {FG_abs : forall {α}, F α -> G α}
-variable {FG_repr : forall {α}, G α -> F α}
+variable {G : TypeVec.{u} n → Type u} [MvFunctor G]
+variable {FG_abs : ∀ {α}, F α → G α}
+variable {FG_repr : ∀ {α}, G α → F α}
 
 /-- If `F` is a QPF then `G` is a QPF as well. Can be used to
 construct `MvQPF` instances by transporting them across
 surjective functions -/
 @[instance_reducible]
-/--
-Definition of `quotientQPF` / `quotientQPF` 的定义
+/-
+**MvQPF.quotientQPF** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：quotientQPF (FG_abs_repr : forall {α} (x : G α), FG_abs (FG_repr x) = x) (
+FG_abs_map : forall {α β} (f : α ⟹ β) (x : F α), FG_abs (f <$$> x) = f <$$> FG_a
+bs x) : MvQPF G where P
+参数：FG_abs_repr : forall {α} (x : G α), FG_abs (FG_repr x) = x；FG_abs_map : foral
+l {α β} (f : α ⟹ β) (x : F α), FG_abs (f <$$> x) = f <$$> FG_abs x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotientQPF
-  signature: (FG_abs_repr : forall {α} (x : G α), FG_abs (FG_repr x) = x)
-  body: q.P
-  abs p := FG_abs (abs p)
-  repr x := repr (FG_repr x)
-  abs_repr x := by rw [abs_repr, FG_abs_repr]
-  abs_map f p := by rw [abs_map, FG_abs_map]
-
-中文:
-定义 quotientQPF
-  签名: (FG_abs_repr : 对任意 {α} (x : G α), FG_abs (FG_repr x) = x)
-  定义体: q.P
-  abs p := FG_abs (abs p)
-  repr x := repr (FG_repr x)
-  abs_repr x := by rw [abs_repr, FG_abs_repr]
-  abs_map f p := by rw [abs_map, FG_abs_map]
+--- 原说明 ---
+If `F` is a QPF then `G` is a QPF as well. Can be used to
+construct `MvQPF` instances by transporting them across
+surjective functions
 -/
-def quotientQPF (FG_abs_repr : forall {α} (x : G α), FG_abs (FG_repr x) = x)
-    (FG_abs_map : forall {α β} (f : α ⟹ β) (x : F α), FG_abs (f <$$> x) = f <$$> FG_abs x) :
+def quotientQPF (FG_abs_repr : ∀ {α} (x : G α), FG_abs (FG_repr x) = x)
+    (FG_abs_map : ∀ {α β} (f : α ⟹ β) (x : F α), FG_abs (f <$$> x) = f <$$> FG_abs x) :
     MvQPF G where
   P := q.P
   abs p := FG_abs (abs p)
@@ -72,80 +66,69 @@ end repr
 
 section Rel
 
-variable (R : forall ⦃α⦄, F α -> F α -> Prop)
+variable (R : ∀ ⦃α⦄, F α → F α → Prop)
 
-/--
-Definition of `Quot1` / `Quot1` 的定义
+/-- Functorial quotient type -/
+/-
+**MvQPF.Quot1** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：Quot1 (α : TypeVec n)
+参数：α : TypeVec n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quot1
-  signature: (α : TypeVec n)
-  body: Quot (@R α)
-
-中文:
-定义 Quot1
-  签名: (α : TypeVec n)
-  定义体: Quot (@R α)
+--- 原说明 ---
+Functorial quotient type
 -/
 def Quot1 (α : TypeVec n) :=
   Quot (@R α)
-
-/--
-Instance `Quot1.inhabited` / 实例 `Quot1.inhabited`
-
-English:
-instance Quot1.inhabited
-  signature: {α : TypeVec n} [Inhabited <| F α]
-  body: ⟨Quot.mk _ default⟩
-
-中文:
-实例 Quot1.inhabited
-  签名: {α : TypeVec n} [可居 <| F α]
-  定义体: ⟨Quot.mk _ default⟩
-
-Depends on / 依赖: Quot.mk
+/-
+**MvQPF.Quot1.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Quot1`。
+形式化陈述：{n : ℕ} →   {F : TypeVec.{u} n → Type u} →     (R : ⦃α : TypeVec.{u} n⦄ → 
+F α → F α → Prop) → {α : TypeVec.{u} n} → [Inhabited (F α)] → Inhabited (MvQPF.Q
+uot1 R α)
+参数：R : ⦃α : TypeVec.{u} n⦄ → F α → F α → Prop；F α；MvQPF.Quot1 R α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Quot1.inhabited {α : TypeVec n} [Inhabited <| F α] : Inhabited (Quot1 R α) :=
   ⟨Quot.mk _ default⟩
 
 section
 
-variable [MvFunctor F] (Hfunc : forall ⦃α β⦄ (a b : F α) (f : α ⟹ β), R a b -> R (f <$$> a) (f <$$> b))
+variable [MvFunctor F] (Hfunc : ∀ ⦃α β⦄ (a b : F α) (f : α ⟹ β), R a b → R (f <$$> a) (f <$$> b))
 
-/--
-Definition of `Quot1.map` / `Quot1.map` 的定义
+/-- `map` of the `Quot1` functor -/
+/-
+**MvQPF.Quot1.map** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Quot1`。
+形式化陈述：{n : ℕ} →   {F : TypeVec.{u} n → Type u} →     (R : ⦃α : TypeVec.{u} n⦄ → 
+F α → F α → Prop) →       [inst : MvFunctor F] →         (∀ ⦃α β : TypeVec.{u} n
+⦄ (a b : F α) (f : α.Arrow β), R a b → R (MvFunctor.map f a) (MvFunctor.map f b)
+) →           ⦃α β : TypeVec.{u} n⦄ → α.Arrow β → MvQPF.Quot1 R α → MvQPF.Quot1 
+R β
+参数：R : ⦃α : TypeVec.{u} n⦄ → F α → F α → Prop；∀ ⦃α β : TypeVec.{u} n⦄ (a b : F α
+) (f : α.Arrow β), R a b → R (MvFunctor.map f a) (MvFunctor.map f b)。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quot1.map
-  signature: ⦃α β⦄ (f : α ⟹ β)
-  body: Quot.lift (fun x : F α => Quot.mk _ (f <$$> x : F β)) fun a b h => Quot.sound Hfunc a b _ h
-
-中文:
-定义 Quot1.map
-  签名: ⦃α β⦄ (f : α ⟹ β)
-  定义体: Quot.lift (fun x : F α => Quot.mk _ (f <$$> x : F β)) fun a b h => Quot.sound Hfunc a b _ h
-
-Depends on / 依赖: Quot.lift, Quot.mk, Quot.sound
+--- 原说明 ---
+`map` of the `Quot1` functor
 -/
-def Quot1.map ⦃α β⦄ (f : α ⟹ β) : Quot1.{u} R α -> Quot1.{u} R β :=
-Quot.lift (fun x : F α => Quot.mk _ (f <$$> x : F β)) fun a b h => Quot.sound Hfunc a b _ h
+def Quot1.map ⦃α β⦄ (f : α ⟹ β) : Quot1.{u} R α → Quot1.{u} R β :=
+  Quot.lift (fun x : F α => Quot.mk _ (f <$$> x : F β)) fun a b h => Quot.sound <| Hfunc a b _ h
 
 /-- `mvFunctor` instance for `Quot1` with well-behaved `R` -/
 @[instance_reducible]
-/--
-Definition of `Quot1.mvFunctor` / `Quot1.mvFunctor` 的定义
+/-
+**MvQPF.Quot1.mvFunctor** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Quot1`。
+形式化陈述：{n : ℕ} →   {F : TypeVec.{u} n → Type u} →     (R : ⦃α : TypeVec.{u} n⦄ → 
+F α → F α → Prop) →       [inst : MvFunctor F] →         (∀ ⦃α β : TypeVec.{u} n
+⦄ (a b : F α) (f : α.Arrow β), R a b → R (MvFunctor.map f a) (MvFunctor.map f b)
+) →           MvFunctor (MvQPF.Quot1 R)
+参数：R : ⦃α : TypeVec.{u} n⦄ → F α → F α → Prop；∀ ⦃α β : TypeVec.{u} n⦄ (a b : F α
+) (f : α.Arrow β), R a b → R (MvFunctor.map f a) (MvFunctor.map f b)；MvQPF.Quot1
+ R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quot1.mvFunctor
-  signature: : MvFunctor (Quot1 R) where map
-  body: @Quot1.map _ _ R _ Hfunc
-
-中文:
-定义 Quot1.mvFunctor
-  签名: : Mv函子 (Quot1 R) where map
-  定义体: @Quot1.map _ _ R _ Hfunc
-
-Depends on / 依赖: Quot1.map
+--- 原说明 ---
+`mvFunctor` instance for `Quot1` with well-behaved `R`
 -/
 def Quot1.mvFunctor : MvFunctor (Quot1 R) where map := @Quot1.map _ _ R _ Hfunc
 
@@ -153,26 +136,18 @@ end
 
 section
 
-variable [q : MvQPF F] (Hfunc : forall ⦃α β⦄ (a b : F α) (f : α ⟹ β), R a b -> R (f <$$> a) (f <$$> b))
+variable [q : MvQPF F] (Hfunc : ∀ ⦃α β⦄ (a b : F α) (f : α ⟹ β), R a b → R (f <$$> a) (f <$$> b))
 
 /-- `Quot1` is a QPF -/
 @[instance_reducible]
-/--
-Definition of `relQuot` / `relQuot` 的定义
+/-
+**MvQPF.relQuot** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：relQuot : @MvQPF _ (Quot1 R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relQuot
-  signature: : @MvQPF _ (Quot1 R)
-  body: @quotientQPF n F q _ (MvQPF.Quot1.mvFunctor R Hfunc) (fun x => Quot.mk _ x)
-    Quot.out (fun _x => Quot.out_eq _) fun _f _x => rfl
-
-中文:
-定义 relQuot
-  签名: : @MvQPF _ (Quot1 R)
-  定义体: @quotientQPF n F q _ (MvQPF.Quot1.mvFunctor R Hfunc) (fun x => Quot.mk _ x)
-    Quot.out (fun _x => Quot.out_eq _) fun _f _x => rfl
-
-Depends on / 依赖: MvQPF.Quot1.mvFunctor, Quot.mk, Quot.out, Quot.out_eq, mvFunctor, out_eq, quotientQPF
+--- 原说明 ---
+`Quot1` is a QPF
 -/
 noncomputable def relQuot : @MvQPF _ (Quot1 R) :=
   @quotientQPF n F q _ (MvQPF.Quot1.mvFunctor R Hfunc) (fun x => Quot.mk _ x)
@@ -183,3 +158,4 @@ end
 end Rel
 
 end MvQPF
+

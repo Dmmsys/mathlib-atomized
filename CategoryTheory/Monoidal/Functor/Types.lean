@@ -24,7 +24,7 @@ namespace CategoryTheory
 
 section
 
-variable (F : Type* -> Type*) [Applicative F] [LawfulApplicative F]
+variable (F : Type* → Type*) [Applicative F] [LawfulApplicative F]
 
 set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] map_seq seq_map_assoc types_tensorObj_def types_tensorUnit_def
@@ -32,27 +32,19 @@ attribute [local simp] map_seq seq_map_assoc types_tensorObj_def types_tensorUni
 /-- A lawful `Applicative` gives a category theory `LaxMonoidal` functor
 between categories of types. -/
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (ofTypeFunctor F).LaxMonoidal
-  body: ↾fun _ => (pure PUnit.unit : F _)
-  μ _ _ := ↾fun p => (Prod.mk <$> p.1 <*> p.2 : F _)
-
-中文:
-实例 :
-  签名: (ofTypeFunctor F).松弛幺半群
-  定义体: ↾fun _ => (pure PUnit.unit : F _)
-  μ _ _ := ↾fun p => (Prod.mk <$> p.1 <*> p.2 : F _)
-
-Depends on / 依赖: PUnit.unit
+--- 原说明 ---
+A lawful `Applicative` gives a category theory `LaxMonoidal` functor
+between categories of types.
 -/
 instance : (ofTypeFunctor F).LaxMonoidal where
-  ε := ↾fun _ => (pure PUnit.unit : F _)
-  μ _ _ := ↾fun p => (Prod.mk <$> p.1 <*> p.2 : F _)
+  ε := ↾fun _ ↦ (pure PUnit.unit : F _)
+  μ _ _ := ↾fun p ↦ (Prod.mk <$> p.1 <*> p.2 : F _)
 
 end
 
 end CategoryTheory
+

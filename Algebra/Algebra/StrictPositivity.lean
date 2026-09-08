@@ -31,23 +31,28 @@ Thus, it is best to avoid unfolding the definition and only use the API provided
 
 @[expose] public section
 
-/--
-Definition of `IsStrictlyPositive` / `IsStrictlyPositive` 的定义
+/-- An element of an ordered algebra is *strictly positive* if it is nonnegative and invertible.
 
-English:
-definition IsStrictlyPositive
-  signature: {A : Type*} [LE A] [Monoid A] [Zero A] (a : A)
-  body: 0 <= a ∧ IsUnit a
+NOTE: This definition will be generalized to the non-unital case in the future; do not unfold
+the definition and use the API provided instead to avoid breakage when the refactor happens. -/
+/-
+**IsStrictlyPositive** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsStrictlyPositive {A : Type*} [LE A] [Monoid A] [Zero A] (a : A) : Prop
+参数：a : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 IsStrictlyPositive
-  签名: {A : 类型} [LE A] [幺半群 A] [零 A] (a : A)
-  定义体: 0 <= a ∧ IsUnit a
+--- 原说明 ---
+An element of an ordered algebra is *strictly positive* if it is nonnegative and
+ invertible.
 
-Depends on / 依赖: IsUnit
+NOTE: This definition will be generalized to the non-unital case in the future; 
+do not unfold
+the definition and use the API provided instead to avoid breakage when the refac
+tor happens.
 -/
 def IsStrictlyPositive {A : Type*} [LE A] [Monoid A] [Zero A] (a : A) : Prop :=
-  0 <= a ∧ IsUnit a
+  0 ≤ a ∧ IsUnit a
 
 variable {A : Type*}
 
@@ -56,194 +61,106 @@ namespace IsStrictlyPositive
 section basic
 
 @[grind _=_]
-/--
-lemma `iff_of_unital` / 引理 `iff_of_unital`
-
-English:
-lemma iff_of_unital
-  given: [LE A] [Monoid A] [Zero A] {a : A}
-  proof: Iff.rfl
-
-@[aesop 20% apply (rule_sets := [CStarAlgebra])]
-
-中文:
-引理 iff_of_unital
-  条件: [LE A] [幺半群 A] [零 A] {a : A}
-  证明: Iff.rfl
-
-@[aesop 20% apply (rule_sets := [CStarAlgebra])]
-
-Depends on / 依赖: Iff.rfl
+/-
+**IsStrictlyPositive.iff_of_unital** 是 Mathlib 中的一个引理，位于命名空间 `IsStrictlyPositive
+`。
+形式化陈述：iff_of_unital [LE A] [Monoid A] [Zero A] {a : A} : IsStrictlyPositive a ↔ 
+0 <= a ∧ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma iff_of_unital [LE A] [Monoid A] [Zero A] {a : A} :
-    IsStrictlyPositive a ↔ 0 <= a ∧ IsUnit a := Iff.rfl
+    IsStrictlyPositive a ↔ 0 ≤ a ∧ IsUnit a := Iff.rfl
 
 @[aesop 20% apply (rule_sets := [CStarAlgebra])]
-/--
-lemma `nonneg` / 引理 `nonneg`
-
-English:
-lemma nonneg
-  given: [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a)
-  proof: ha.1
-
-@[aesop 20% apply (rule_sets := [CStarAlgebra])]
-
-中文:
-引理 nonneg
-  条件: [LE A] [幺半群 A] [零 A] {a : A} (ha : IsStrictlyPositive a)
-  证明: ha.1
-
-@[aesop 20% apply (rule_sets := [CStarAlgebra])]
+/-
+**IsStrictlyPositive.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `IsStrictlyPositive`。
+形式化陈述：∀ {A : Type u_1} [inst : LE A] [inst_1 : Monoid A] [inst_2 : Zero A] {a : 
+A}, IsStrictlyPositive a → 0 ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 protected lemma nonneg [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a) :
-    0 <= a := ha.1
+    0 ≤ a := ha.1
 
 @[aesop 20% apply (rule_sets := [CStarAlgebra])]
-/--
-lemma `isUnit` / 引理 `isUnit`
-
-English:
-lemma isUnit
-  given: [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a)
-  proof: ha.2
-
-中文:
-引理 isUnit
-  条件: [LE A] [幺半群 A] [零 A] {a : A} (ha : IsStrictlyPositive a)
-  证明: ha.2
+/-
+**IsStrictlyPositive.isUnit** 是 Mathlib 中的一个定理，位于命名空间 `IsStrictlyPositive`。
+形式化陈述：∀ {A : Type u_1} [inst : LE A] [inst_1 : Monoid A] [inst_2 : Zero A] {a : 
+A}, IsStrictlyPositive a → IsUnit a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected lemma isUnit [LE A] [Monoid A] [Zero A] {a : A} (ha : IsStrictlyPositive a) :
     IsUnit a := ha.2
-
-/--
-lemma `_root_.IsUnit.isStrictlyPositive` / 引理 `_root_.IsUnit.isStrictlyPositive`
-
-English:
-lemma _root_.IsUnit.isStrictlyPositive
-  statement: [LE A] [Monoid A] [Zero A]
-  proof: iff_of_unital.mpr ⟨ha₀, ha⟩
-
-@[grind ->]
-
-中文:
-引理 _root_.是单位.isStrictlyPositive
-  结论: [LE A] [幺半群 A] [零 A]
-  证明: iff_of_unital.mpr ⟨ha₀, ha⟩
-
-@[grind ->]
-
-Depends on / 依赖: iff_of_unital, iff_of_unital.mpr
+/-
+**IsStrictlyPositive._root_.IsUnit.isStrictlyPositive** 是 Mathlib 中的一个引理，位于命名空间 
+`IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsUnit.isStrictlyPositive [LE A] [Monoid A] [Zero A]
-    {a : A} (ha : IsUnit a) (ha₀ : 0 <= a) : IsStrictlyPositive a := iff_of_unital.mpr ⟨ha₀, ha⟩
+    {a : A} (ha : IsUnit a) (ha₀ : 0 ≤ a) : IsStrictlyPositive a := iff_of_unital.mpr ⟨ha₀, ha⟩
 
-@[grind ->]
-/--
-lemma `isSelfAdjoint` / 引理 `isSelfAdjoint`
-
-English:
-lemma isSelfAdjoint
-  statement: [Semiring A] [PartialOrder A] [StarRing A] [StarOrderedRing A] {a : A}
-  proof: ha.nonneg.isSelfAdjoint
-
-@[simp, grind .]
-
-中文:
-引理 isSelfAdjoint
-  结论: [半环 A] [偏序 A] [对合环 A] [StarOrdered环 A] {a : A}
-  证明: ha.nonneg.isSelfAdjoint
-
-@[simp, grind .]
-
-Depends on / 依赖: ha.nonneg.isSelfAdjoint, isSelfAdjoint, nonneg
+@[grind →]
+/-
+**IsStrictlyPositive.isSelfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `IsStrictlyPositive
+`。
+形式化陈述：isSelfAdjoint [Semiring A] [PartialOrder A] [StarRing A] [StarOrderedRing 
+A] {a : A} (ha : IsStrictlyPositive a) : IsSelfAdjoint a
+参数：ha : IsStrictlyPositive a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.isSelfAdjoint`：∀ {R : Type u_1} [inst : NonUnitalSemiring R] [inst
+_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R]   {x : R}, 0 ≤ x 
+→ IsSelfA…
+· 使用定理 `IsStrictlyPositive.nonneg`：∀ {A : Type u_1} [inst : LE A] [inst_1 : Mono
+id A] [inst_2 : Zero A] {a : A}, IsStrictlyPositive a → 0 ≤ a
 -/
 lemma isSelfAdjoint [Semiring A] [PartialOrder A] [StarRing A] [StarOrderedRing A] {a : A}
     (ha : IsStrictlyPositive a) : IsSelfAdjoint a := ha.nonneg.isSelfAdjoint
 
 @[simp, grind .]
-/--
-lemma `_root_.isStrictlyPositive_one` / 引理 `_root_.isStrictlyPositive_one`
-
-English:
-lemma _root_.isStrictlyPositive_one
-  given: [LE A] [Monoid A] [Zero A] [ZeroLEOneClass A]
-  proof: iff_of_unital.mpr ⟨zero_le_one, isUnit_one⟩
-
-@[grind =]
-
-中文:
-引理 _root_.isStrictlyPositive_one
-  条件: [LE A] [幺半群 A] [零 A] [ZeroLEOne类 A]
-  证明: iff_of_unital.mpr ⟨zero_le_one, isUnit_one⟩
-
-@[grind =]
-
-Depends on / 依赖: iff_of_unital, iff_of_unital.mpr, isUnit_one, zero_le_one
+/-
+**IsStrictlyPositive._root_.isStrictlyPositive_one** 是 Mathlib 中的一个引理，位于命名空间 `Is
+StrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.isStrictlyPositive_one [LE A] [Monoid A] [Zero A] [ZeroLEOneClass A] :
     IsStrictlyPositive (1 : A) := iff_of_unital.mpr ⟨zero_le_one, isUnit_one⟩
 
 @[grind =]
-/--
-lemma `_root_.Units.isStrictlyPositive_iff` / 引理 `_root_.Units.isStrictlyPositive_iff`
-
-English:
-lemma _root_.Units.isStrictlyPositive_iff
-  given: [LE A] [Monoid A] [Zero A] {a : Aˣ}
-  proof: ⟨fun h => h.nonneg, fun h => iff_of_unital.mp ⟨h, a.isUnit⟩⟩
-
-@[aesop safe apply]
-
-中文:
-引理 _root_.单位群.isStrictlyPositive_iff
-  条件: [LE A] [幺半群 A] [零 A] {a : Aˣ}
-  证明: ⟨fun h => h.nonneg, fun h => iff_of_unital.mp ⟨h, a.isUnit⟩⟩
-
-@[aesop safe apply]
-
-Depends on / 依赖: a.isUnit, h.nonneg, iff_of_unital, iff_of_unital.mp, isUnit, nonneg
+/-
+**IsStrictlyPositive._root_.Units.isStrictlyPositive_iff** 是 Mathlib 中的一个引理，位于命名
+空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Units.isStrictlyPositive_iff [LE A] [Monoid A] [Zero A] {a : Aˣ} :
-    IsStrictlyPositive (a : A) ↔ (0 : A) <= a :=
+    IsStrictlyPositive (a : A) ↔ (0 : A) ≤ a :=
   ⟨fun h => h.nonneg, fun h => iff_of_unital.mp ⟨h, a.isUnit⟩⟩
 
 @[aesop safe apply]
-/--
-lemma `_root_.Units.isStrictlyPositive_of_le` / 引理 `_root_.Units.isStrictlyPositive_of_le`
-
-English:
-lemma _root_.Units.isStrictlyPositive_of_le
-  statement: [LE A] [Monoid A] [Zero A] {a : Aˣ}
-  proof: a.isStrictlyPositive_iff.mpr h
-
-@[nontriviality]
-
-中文:
-引理 _root_.单位群.isStrictlyPositive_of_le
-  结论: [LE A] [幺半群 A] [零 A] {a : Aˣ}
-  证明: a.isStrictlyPositive_iff.mpr h
-
-@[nontriviality]
-
-Depends on / 依赖: a.isStrictlyPositive_iff.mpr, isStrictlyPositive_iff
+/-
+**IsStrictlyPositive._root_.Units.isStrictlyPositive_of_le** 是 Mathlib 中的一个引理，位于
+命名空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Units.isStrictlyPositive_of_le [LE A] [Monoid A] [Zero A] {a : Aˣ}
-    (h : (0 : A) <= a) : IsStrictlyPositive (a : A) := a.isStrictlyPositive_iff.mpr h
+    (h : (0 : A) ≤ a) : IsStrictlyPositive (a : A) := a.isStrictlyPositive_iff.mpr h
 
 @[nontriviality]
-/--
-lemma `of_subsingleton` / 引理 `of_subsingleton`
-
-English:
-lemma of_subsingleton
-  statement: [PartialOrder A] [Monoid A] [Zero A] [Subsingleton A]
-  proof: iff_of_unital.mpr ⟨by simp, isUnit_of_subsingleton _⟩
-
-中文:
-引理 of_subsingleton
-  结论: [偏序 A] [幺半群 A] [零 A] [子单例 A]
-  证明: iff_of_unital.mpr ⟨by simp, isUnit_of_subsingleton _⟩
+/-
+**IsStrictlyPositive.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `IsStrictlyPositi
+ve`。
+形式化陈述：∀ {A : Type u_1} [inst : PartialOrder A] [inst_1 : Monoid A] [inst_2 : Zer
+o A] [Subsingleton A] {a : A},   IsStrictlyPositive a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `IsStrictlyPositive.iff_of_unital`：iff_of_unital [LE A] [Monoid A] [Zero 
+A] {a : A} : IsStrictlyPositive a ↔ 0 <= a ∧ IsUnit a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `isUnit_of_subsingleton`：isUnit_of_subsingleton [Monoid M] [Subsingleton 
+M] (a : M) : IsUnit a
 -/
 protected lemma of_subsingleton [PartialOrder A] [Monoid A] [Zero A] [Subsingleton A]
     {a : A} : IsStrictlyPositive a :=
@@ -254,79 +171,30 @@ end basic
 section StarOrderedRing
 variable [Semiring A] [StarRing A] [PartialOrder A] [StarOrderedRing A]
 
-/--
-lemma `_root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff` / 引理 `_root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff`
-
-English:
-lemma _root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff
-  given: {u a : A} (hu : IsUnit u)
-  proof: by
-  simp_rw [IsStrictlyPositive.iff_of_unital, hu.star_right_conjugate_nonneg_iff]
-  lift u to Aˣ using hu
-  rw [← Units.coe_star]; rw [Units.isUnit_mul_units]; rw [Units.isUnit_units_mul]
-
-中文:
-引理 _root_.是单位.isStrictlyPositive_star_right_conjugate_iff
-  条件: {u a : A} (hu : 是单位 u)
-  证明: by
-  simp_rw [IsStrictlyPositive.iff_of_unital, hu.star_right_conjugate_nonneg_iff]
-  lift u to Aˣ using hu
-  rw [← Units.coe_star]; rw [Units.isUnit_mul_units]; rw [Units.isUnit_units_mul]
-
-Depends on / 依赖: IsStrictlyPositive, IsStrictlyPositive.iff_of_unital, Units.coe_star, Units.isUnit_mul_units, Units.isUnit_units_mul, coe_star, hu.star_right_conjugate_nonneg_iff, iff_of_unital, isUnit_mul_units, isUnit_units_mul, simp_rw, star_right_conjugate_nonneg_iff
+/-
+**IsStrictlyPositive._root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff**
+ 是 Mathlib 中的一个引理，位于命名空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsUnit.isStrictlyPositive_star_right_conjugate_iff {u a : A} (hu : IsUnit u) :
     IsStrictlyPositive (u * a * star u) ↔ IsStrictlyPositive a := by
   simp_rw [IsStrictlyPositive.iff_of_unital, hu.star_right_conjugate_nonneg_iff]
   lift u to Aˣ using hu
-  rw [← Units.coe_star]; rw [Units.isUnit_mul_units]; rw [Units.isUnit_units_mul]
-
-/--
-lemma `_root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff` / 引理 `_root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff`
-
-English:
-lemma _root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff
-  given: {u a : A} (hu : IsUnit u)
-  proof: by
-  simpa using hu.star.isStrictlyPositive_star_right_conjugate_iff
-
-@[grind =]
-
-中文:
-引理 _root_.是单位.isStrictlyPositive_star_left_conjugate_iff
-  条件: {u a : A} (hu : 是单位 u)
-  证明: by
-  simpa using hu.star.isStrictlyPositive_star_right_conjugate_iff
-
-@[grind =]
-
-Depends on / 依赖: hu.star.isStrictlyPositive_star_right_conjugate_iff, isStrictlyPositive_star_right_conjugate_iff
+  rw [← Units.coe_star, Units.isUnit_mul_units, Units.isUnit_units_mul]
+/-
+**IsStrictlyPositive._root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff** 
+是 Mathlib 中的一个引理，位于命名空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsUnit.isStrictlyPositive_star_left_conjugate_iff {u a : A} (hu : IsUnit u) :
     IsStrictlyPositive (star u * a * u) ↔ IsStrictlyPositive a := by
   simpa using hu.star.isStrictlyPositive_star_right_conjugate_iff
 
 @[grind =]
-/--
-theorem `_root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint` / 定理 `_root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint`
-
-English:
-theorem _root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
-  statement: (a b : A) (hb : IsUnit b)
-  proof: by
-  grind [hb.isStrictlyPositive_star_left_conjugate_iff]
-
-@[aesop safe apply]
-
-中文:
-定理 _root_.是单位.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
-  结论: (a b : A) (hb : 是单位 b)
-  证明: by
-  grind [hb.isStrictlyPositive_star_left_conjugate_iff]
-
-@[aesop safe apply]
-
-Depends on / 依赖: IsStrictlyPositive, cfc_tac, hb.isStrictlyPositive_star_left_conjugate_iff, isStrictlyPositive_star_left_conjugate_iff
+/-
+**IsStrictlyPositive._root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdj
+oint** 是 Mathlib 中的一个定理，位于命名空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint (a b : A) (hb : IsUnit b)
     (hb₂ : IsSelfAdjoint b := by cfc_tac) :
@@ -334,20 +202,17 @@ theorem _root_.IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint (a b : A
   grind [hb.isStrictlyPositive_star_left_conjugate_iff]
 
 @[aesop safe apply]
-/--
-theorem `conjugate_of_isUnit_of_isSelfAdjoint` / 定理 `conjugate_of_isUnit_of_isSelfAdjoint`
-
-English:
-theorem conjugate_of_isUnit_of_isSelfAdjoint
-  statement: (a b : A) (hb : IsUnit b)
-  proof: (hb.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint _ _ hb₂).mpr ha
-
-中文:
-定理 conjugate_of_isUnit_of_isSelfAdjoint
-  结论: (a b : A) (hb : 是单位 b)
-  证明: (hb.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint _ _ hb₂).mpr ha
-
-Depends on / 依赖: IsStrictlyPositive, cfc_tac, hb.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint, isStrictlyPositive_iff_conjugate_of_isSelfAdjoint
+/-
+**IsStrictlyPositive.conjugate_of_isUnit_of_isSelfAdjoint** 是 Mathlib 中的一个定理，位于命
+名空间 `IsStrictlyPositive`。
+形式化陈述：conjugate_of_isUnit_of_isSelfAdjoint (a b : A) (hb : IsUnit b) (hb₂ : IsSe
+lfAdjoint b
+参数：a b : A；hb : IsUnit b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsUnit.isStrictlyPositive_iff_conjugate_of_isSelfAdjoint`：∀ {A : Type u_
+1} [inst : Semiring A] [inst_1 : StarRing A] [inst_2 : PartialOrder A] [StarOrde
+redRing A] (a b : A),   IsUnit b →     autoPar…
 -/
 theorem conjugate_of_isUnit_of_isSelfAdjoint (a b : A) (hb : IsUnit b)
     (hb₂ : IsSelfAdjoint b := by cfc_tac) (ha : IsStrictlyPositive a := by cfc_tac) :
@@ -361,28 +226,51 @@ section Algebra
 variable {𝕜 : Type*} [Ring A] [PartialOrder A]
 
 @[grind ←, aesop safe apply]
-/--
-lemma `smul` / 引理 `smul`
-
-English:
-lemma smul
-  statement: [Semifield 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A] [PosSMulMono 𝕜 A] {c : 𝕜}
-  proof: by
-  have hunit : IsUnit (c • a) :=
-    isUnit_iff_exists.mpr ⟨c⁻¹ • ha.isUnit.unit⁻¹, by simp [(ne_of_lt hc).symm]⟩
-  exact hunit.isStrictlyPositive (smul_nonneg hc.le ha.nonneg)
-
-@[grind ←, aesop safe apply]
-
-中文:
-引理 smul
-  结论: [半域 𝕜] [偏序 𝕜] [代数 𝕜 A] [正标量乘递增 𝕜 A] {c : 𝕜}
-  证明: by
-  have hunit : IsUnit (c • a) :=
-    isUnit_iff_exists.mpr ⟨c⁻¹ • ha.isUnit.unit⁻¹, by simp [(ne_of_lt hc).symm]⟩
-  exact hunit.isStrictlyPositive (smul_nonneg hc.le ha.nonneg)
-
-@[grind ←, aesop safe apply]
+/-
+**IsStrictlyPositive.smul** 是 Mathlib 中的一个定理，位于命名空间 `IsStrictlyPositive`。
+形式化陈述：∀ {A : Type u_1} {𝕜 : Type u_2} [inst : Ring A] [inst_1 : PartialOrder A] 
+[inst_2 : Semifield 𝕜]   [inst_3 : PartialOrder 𝕜] [inst_4 : Algebra 𝕜 A] [PosSM
+ulMono 𝕜 A] {c : 𝕜},   0 < c → ∀ {a : A}, IsStrictlyPositive a → IsStrictlyPosit
+ive (c • a)
+参数：c • a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `isUnit_iff_exists`：isUnit_iff_exists [Monoid M] {x : M} : IsUnit x ↔ exi
+sts b, x * b = 1 ∧ b * x = 1
+· 使用定理 `IsStrictlyPositive.isUnit`：∀ {A : Type u_1} [inst : LE A] [inst_1 : Mono
+id A] [inst_2 : Zero A] {a : A}, IsStrictlyPositive a → IsUnit a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Algebra.mul_smul_comm`：∀ {R : Type u} {A : Type w} [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (s : R) (x y : A),   x * s • y =
+ s • (x * y…
+· 使用定理 `Algebra.smul_mul_assoc`：∀ {R : Type u} {A : Type w} [inst : CommSemiring
+ R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (r : R) (x y : A),   r • x * y 
+= r • (x * y…
+· 使用定理 `IsUnit.mul_val_inv`：mul_val_inv (h : IsUnit a) : a * ↑h.unit⁻¹ = 1
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsUnit.val_inv_mul`：val_inv_mul (h : IsUnit a) : ↑h.unit⁻¹ * a = 1
+· 使用引理 `smul_inv_smul₀`：smul_inv_smul₀ (ha : a != 0) (x : β) : a • a⁻¹ • x = x
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `IsUnit.isStrictlyPositive`：∀ {A : Type u_1} [inst : LE A] [inst_1 : Mono
+id A] [inst_2 : Zero A] {a : A}, IsUnit a → 0 ≤ a → IsStrictlyPositive a
+· 使用引理 `smul_nonneg`：smul_nonneg [PosSMulMono α β] (ha : 0 <= a) (hb : 0 <= b₁) 
+: 0 <= a • b₁
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `IsStrictlyPositive.nonneg`：∀ {A : Type u_1} [inst : LE A] [inst_1 : Mono
+id A] [inst_2 : Zero A] {a : A}, IsStrictlyPositive a → 0 ≤ a
 -/
 protected lemma smul [Semifield 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A] [PosSMulMono 𝕜 A] {c : 𝕜}
     (hc : 0 < c) {a : A} (ha : IsStrictlyPositive a) :
@@ -392,65 +280,38 @@ protected lemma smul [Semifield 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A] [PosS
   exact hunit.isStrictlyPositive (smul_nonneg hc.le ha.nonneg)
 
 @[grind ←, aesop safe apply]
-/--
-lemma `_root_.isStrictlyPositive_algebraMap` / 引理 `_root_.isStrictlyPositive_algebraMap`
-
-English:
-lemma _root_.isStrictlyPositive_algebraMap
-  statement: [ZeroLEOneClass A] [Semifield 𝕜] [PartialOrder 𝕜]
-  proof: by
-  rw [Algebra.algebraMap_eq_smul_one]
-  exact IsStrictlyPositive.smul hc isStrictlyPositive_one
-
-中文:
-引理 _root_.isStrictlyPositive_algebraMap
-  结论: [ZeroLEOne类 A] [半域 𝕜] [偏序 𝕜]
-  证明: by
-  rw [Algebra.algebraMap_eq_smul_one]
-  exact IsStrictlyPositive.smul hc isStrictlyPositive_one
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsStrictlyPositive, IsStrictlyPositive.smul, algebraMap_eq_smul_one, isStrictlyPositive_one
+/-
+**IsStrictlyPositive._root_.isStrictlyPositive_algebraMap** 是 Mathlib 中的一个引理，位于命
+名空间 `IsStrictlyPositive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.isStrictlyPositive_algebraMap [ZeroLEOneClass A] [Semifield 𝕜] [PartialOrder 𝕜]
     [Algebra 𝕜 A] [PosSMulMono 𝕜 A] {c : 𝕜} (hc : 0 < c) :
     IsStrictlyPositive (algebraMap 𝕜 A c) := by
   rw [Algebra.algebraMap_eq_smul_one]
   exact IsStrictlyPositive.smul hc isStrictlyPositive_one
-
-/--
-lemma `spectrum_pos` / 引理 `spectrum_pos`
-
-English:
-lemma spectrum_pos
-  statement: [CommSemiring 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A]
-  proof: by
-  have h₁ : 0 <= x := by grind
-  have h₂ : x != 0 := by grind [= spectrum.zero_notMem_iff]
-  exact lt_of_le_of_ne h₁ h₂.symm
-
-grind_pattern IsStrictlyPositive.spectrum_pos => x in spectrum 𝕜 a, IsStrictlyPositive a
-
-中文:
-引理 spectrum_pos
-  结论: [交换半环 𝕜] [偏序 𝕜] [代数 𝕜 A]
-  证明: by
-  have h₁ : 0 <= x := by grind
-  have h₂ : x != 0 := by grind [= spectrum.zero_notMem_iff]
-  exact lt_of_le_of_ne h₁ h₂.symm
-
-grind_pattern IsStrictlyPositive.spectrum_pos => x in spectrum 𝕜 a, IsStrictlyPositive a
-
-Depends on / 依赖: lt_of_le_of_ne, spectrum, spectrum.zero_notMem_iff, zero_notMem_iff
+/-
+**IsStrictlyPositive.spectrum_pos** 是 Mathlib 中的一个引理，位于命名空间 `IsStrictlyPositive`
+。
+形式化陈述：spectrum_pos [CommSemiring 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A] [NonnegSpectr
+umClass 𝕜 A] {a : A} (ha : IsStrictlyPositive a) {x : 𝕜} (hx : x in spectrum 𝕜 a
+) : 0 < x
+参数：ha : IsStrictlyPositive a；hx : x in spectrum 𝕜 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
 lemma spectrum_pos [CommSemiring 𝕜] [PartialOrder 𝕜] [Algebra 𝕜 A]
     [NonnegSpectrumClass 𝕜 A] {a : A} (ha : IsStrictlyPositive a) {x : 𝕜}
-    (hx : x in spectrum 𝕜 a) : 0 < x := by
-  have h₁ : 0 <= x := by grind
-  have h₂ : x != 0 := by grind [= spectrum.zero_notMem_iff]
+    (hx : x ∈ spectrum 𝕜 a) : 0 < x := by
+  have h₁ : 0 ≤ x := by grind
+  have h₂ : x ≠ 0 := by grind [= spectrum.zero_notMem_iff]
   exact lt_of_le_of_ne h₁ h₂.symm
 
-grind_pattern IsStrictlyPositive.spectrum_pos => x in spectrum 𝕜 a, IsStrictlyPositive a
+grind_pattern IsStrictlyPositive.spectrum_pos => x ∈ spectrum 𝕜 a, IsStrictlyPositive a
 
 end Algebra
 
 end IsStrictlyPositive
+

@@ -10,7 +10,7 @@ public import Mathlib.Tactic.Ring
 /-!
 # `linear_combination'` Tactic
 
-In this file, the `linear_combination'` tactic is created. This tactic, which
+In this file, the `linear_combination'` tactic is created.  This tactic, which
 works over `CommRing`s, attempts to simplify the target by creating a linear combination
 of a list of equalities and subtracting it from the target. A `Syntax.Tactic`
 object can also be passed into the tactic, allowing the user to specify a
@@ -19,16 +19,16 @@ normalization tactic.
 ## Implementation Notes
 
 This tactic works by creating a weighted sum of the given equations with the
-given coefficients. Then, it subtracts the right side of the weighted sum
+given coefficients.  Then, it subtracts the right side of the weighted sum
 from the left side so that the right side equals 0, and it does the same with
-the target. Afterwards, it sets the goal to be the equality between the
+the target.  Afterwards, it sets the goal to be the equality between the
 left-hand side of the new goal and the left-hand side of the new weighted sum.
 Lastly, calls a normalization tactic on this target.
 
 This file contains the `linear_combination'` tactic (note the '): the original
 Lean 4 implementation of the "linear combination" idea, written at the time of
-the port from Lean 3. Notably, its scope includes certain *nonlinear*
-operations. The `linear_combination` tactic (in a separate file) is a variant
+the port from Lean 3.  Notably, its scope includes certain *nonlinear*
+operations.  The `linear_combination` tactic (in a separate file) is a variant
 implementation, but this version is provided for backward-compatibility.
 
 ## References
@@ -45,247 +45,149 @@ open Elab Meta Term
 
 variable {α : Type*} {a a' a₁ a₂ b b' b₁ b₂ c : α}
 
-/--
-theorem `pf_add_c` / 定理 `pf_add_c`
-
-English:
-theorem pf_add_c
-  given: [Add α] (p : a = b) (c : α)
-  statement: a + c = b + c
-  proof: p ▸ rfl
-
-中文:
-定理 pf_add_c
-  条件: [加法 α] (p : a = b) (c : α)
-  结论: a + c = b + c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.pf_add_c** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：pf_add_c [Add α] (p : a = b) (c : α) : a + c = b + c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pf_add_c [Add α] (p : a = b) (c : α) : a + c = b + c := p ▸ rfl
-/--
-theorem `c_add_pf` / 定理 `c_add_pf`
-
-English:
-theorem c_add_pf
-  given: [Add α] (p : b = c) (a : α)
-  statement: a + b = a + c
-  proof: p ▸ rfl
-
-中文:
-定理 c_add_pf
-  条件: [加法 α] (p : b = c) (a : α)
-  结论: a + b = a + c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.c_add_pf** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：c_add_pf [Add α] (p : b = c) (a : α) : a + b = a + c
+参数：p : b = c；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem c_add_pf [Add α] (p : b = c) (a : α) : a + b = a + c := p ▸ rfl
-/--
-theorem `add_pf` / 定理 `add_pf`
-
-English:
-theorem add_pf
-  given: [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  statement: a₁ + a₂ = b₁ + b₂
-  proof: p₁ ▸ p₂ ▸ rfl
-
-中文:
-定理 add_pf
-  条件: [加法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  结论: a₁ + a₂ = b₁ + b₂
-  证明: p₁ ▸ p₂ ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.add_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：add_pf [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ + a₂ = b₁ + b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_pf [Add α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ + a₂ = b₁ + b₂ := p₁ ▸ p₂ ▸ rfl
-/--
-theorem `pf_sub_c` / 定理 `pf_sub_c`
-
-English:
-theorem pf_sub_c
-  given: [Sub α] (p : a = b) (c : α)
-  statement: a - c = b - c
-  proof: p ▸ rfl
-
-中文:
-定理 pf_sub_c
-  条件: [减法 α] (p : a = b) (c : α)
-  结论: a - c = b - c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.pf_sub_c** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：pf_sub_c [Sub α] (p : a = b) (c : α) : a - c = b - c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pf_sub_c [Sub α] (p : a = b) (c : α) : a - c = b - c := p ▸ rfl
-/--
-theorem `c_sub_pf` / 定理 `c_sub_pf`
-
-English:
-theorem c_sub_pf
-  given: [Sub α] (p : b = c) (a : α)
-  statement: a - b = a - c
-  proof: p ▸ rfl
-
-中文:
-定理 c_sub_pf
-  条件: [减法 α] (p : b = c) (a : α)
-  结论: a - b = a - c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.c_sub_pf** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：c_sub_pf [Sub α] (p : b = c) (a : α) : a - b = a - c
+参数：p : b = c；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem c_sub_pf [Sub α] (p : b = c) (a : α) : a - b = a - c := p ▸ rfl
-/--
-theorem `sub_pf` / 定理 `sub_pf`
-
-English:
-theorem sub_pf
-  given: [Sub α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  statement: a₁ - a₂ = b₁ - b₂
-  proof: p₁ ▸ p₂ ▸ rfl
-
-中文:
-定理 sub_pf
-  条件: [减法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  结论: a₁ - a₂ = b₁ - b₂
-  证明: p₁ ▸ p₂ ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.sub_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：sub_pf [Sub α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ - a₂ = b₁ - b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_pf [Sub α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ - a₂ = b₁ - b₂ := p₁ ▸ p₂ ▸ rfl
-/--
-theorem `neg_pf` / 定理 `neg_pf`
-
-English:
-theorem neg_pf
-  given: [Neg α] (p : (a : α) = b)
-  statement: -a = -b
-  proof: p ▸ rfl
-
-中文:
-定理 neg_pf
-  条件: [取负 α] (p : (a : α) = b)
-  结论: -a = -b
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.neg_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：neg_pf [Neg α] (p : (a : α) = b) : -a = -b
+参数：p : (a : α) = b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_pf [Neg α] (p : (a : α) = b) : -a = -b := p ▸ rfl
-/--
-theorem `pf_mul_c` / 定理 `pf_mul_c`
-
-English:
-theorem pf_mul_c
-  given: [Mul α] (p : a = b) (c : α)
-  statement: a * c = b * c
-  proof: p ▸ rfl
-
-中文:
-定理 pf_mul_c
-  条件: [乘法 α] (p : a = b) (c : α)
-  结论: a * c = b * c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.pf_mul_c** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：pf_mul_c [Mul α] (p : a = b) (c : α) : a * c = b * c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pf_mul_c [Mul α] (p : a = b) (c : α) : a * c = b * c := p ▸ rfl
-/--
-theorem `c_mul_pf` / 定理 `c_mul_pf`
-
-English:
-theorem c_mul_pf
-  given: [Mul α] (p : b = c) (a : α)
-  statement: a * b = a * c
-  proof: p ▸ rfl
-
-中文:
-定理 c_mul_pf
-  条件: [乘法 α] (p : b = c) (a : α)
-  结论: a * b = a * c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.c_mul_pf** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：c_mul_pf [Mul α] (p : b = c) (a : α) : a * b = a * c
+参数：p : b = c；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem c_mul_pf [Mul α] (p : b = c) (a : α) : a * b = a * c := p ▸ rfl
-/--
-theorem `mul_pf` / 定理 `mul_pf`
-
-English:
-theorem mul_pf
-  given: [Mul α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  statement: a₁ * a₂ = b₁ * b₂
-  proof: p₁ ▸ p₂ ▸ rfl
-
-中文:
-定理 mul_pf
-  条件: [乘法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  结论: a₁ * a₂ = b₁ * b₂
-  证明: p₁ ▸ p₂ ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.mul_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：mul_pf [Mul α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ * a₂ = b₁ * b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_pf [Mul α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ * a₂ = b₁ * b₂ := p₁ ▸ p₂ ▸ rfl
-/--
-theorem `inv_pf` / 定理 `inv_pf`
-
-English:
-theorem inv_pf
-  given: [Inv α] (p : (a : α) = b)
-  statement: a⁻¹ = b⁻¹
-  proof: p ▸ rfl
-
-中文:
-定理 inv_pf
-  条件: [取逆 α] (p : (a : α) = b)
-  结论: a⁻¹ = b⁻¹
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.inv_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：inv_pf [Inv α] (p : (a : α) = b) : a⁻¹ = b⁻¹
+参数：p : (a : α) = b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_pf [Inv α] (p : (a : α) = b) : a⁻¹ = b⁻¹ := p ▸ rfl
-/--
-theorem `pf_div_c` / 定理 `pf_div_c`
-
-English:
-theorem pf_div_c
-  given: [Div α] (p : a = b) (c : α)
-  statement: a / c = b / c
-  proof: p ▸ rfl
-
-中文:
-定理 pf_div_c
-  条件: [除法 α] (p : a = b) (c : α)
-  结论: a / c = b / c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.pf_div_c** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：pf_div_c [Div α] (p : a = b) (c : α) : a / c = b / c
+参数：p : a = b；c : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pf_div_c [Div α] (p : a = b) (c : α) : a / c = b / c := p ▸ rfl
-/--
-theorem `c_div_pf` / 定理 `c_div_pf`
-
-English:
-theorem c_div_pf
-  given: [Div α] (p : b = c) (a : α)
-  statement: a / b = a / c
-  proof: p ▸ rfl
-
-中文:
-定理 c_div_pf
-  条件: [除法 α] (p : b = c) (a : α)
-  结论: a / b = a / c
-  证明: p ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.c_div_pf** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+形式化陈述：c_div_pf [Div α] (p : b = c) (a : α) : a / b = a / c
+参数：p : b = c；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem c_div_pf [Div α] (p : b = c) (a : α) : a / b = a / c := p ▸ rfl
-/--
-theorem `div_pf` / 定理 `div_pf`
-
-English:
-theorem div_pf
-  given: [Div α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  statement: a₁ / a₂ = b₁ / b₂
-  proof: p₁ ▸ p₂ ▸ rfl
-
-中文:
-定理 div_pf
-  条件: [除法 α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂)
-  结论: a₁ / a₂ = b₁ / b₂
-  证明: p₁ ▸ p₂ ▸ rfl
+/-
+**Mathlib.Tactic.LinearCombinationPrime.div_pf** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Tactic.LinearCombinationPrime`。
+形式化陈述：div_pf [Div α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ / a₂ = b₁ / b₂
+参数：p₁ : (a₁ : α) = b₁；p₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem div_pf [Div α] (p₁ : (a₁ : α) = b₁) (p₂ : a₂ = b₂) : a₁ / a₂ = b₁ / b₂ := p₁ ▸ p₂ ▸ rfl
 
-/--
-Inductive type `Expanded` / 归纳类型 `Expanded`
+/-- Result of `expandLinearCombo`, either an equality proof or a value. -/
+/-
+**Mathlib.Tactic.LinearCombinationPrime.Expanded** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.LinearCombinationPrime`。
+形式化陈述：Expanded /-- A proof of `a = b`. -/ | proof (pf : Syntax.Term) /-- A value
+, equivalently a proof of `c = c`. -/ | const (c : Syntax.Term)  /-- Performs ma
+cro expansion of a linear combination expression, using `+`/`-`/`*`/`/` on equat
+ions and values. * `.proof p` means that `p` is a syntax corresponding to a proo
+f of an equation. For example, if `h : a = b` then `expandLinearCombo (2 * h)` r
+eturns `.proof (c_add_pf 2 h)` which is a proof of `2 * a = 2 * b`. * `.const c`
+ means that the input expr
+参数：pf : Syntax.Term；c : Syntax.Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Expanded
-  constructors (2):
-    - proof: (pf : Syntax.Term)
-    - const: (c : Syntax.Term)
-
-中文:
-归纳类型 Expanded
-  构造子 (2 个):
-    - proof: (pf : Syntax.项)
-    - const: (c : Syntax.项)
-
-Depends on / 依赖: withRef
+--- 原说明 ---
+Result of `expandLinearCombo`, either an equality proof or a value. -/
 -/
 inductive Expanded
   /-- A proof of `a = b`. -/
@@ -294,280 +196,132 @@ inductive Expanded
   | const (c : Syntax.Term)
 
 /--
-Definition of `expandLinearCombo` / `expandLinearCombo` 的定义
+Performs macro expansion of a linear combination expression,
+using `+`/`-`/`*`/`/` on equations and values.
+* `.proof p` means that `p` is a syntax corresponding to a proof of an equation.
+  For example, if `h : a = b` then `expandLinearCombo (2 * h)` returns `.proof (c_add_pf 2 h)`
+  which is a proof of `2 * a = 2 * b`.
+* `.const c` means that the input expression is not an equation but a value.
+-/
+/-
+**Mathlib.Tactic.LinearCombinationPrime.expandLinearCombo** 是 Mathlib 中的一个不透明定义，
+位于命名空间 `Mathlib.Tactic.LinearCombinationPrime`。
+形式化陈述：Expr → Term → Elab.TermElabM Mathlib.Tactic.LinearCombinationPrime.Expande
+d
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expandLinearCombo
-  signature: (ty : Expr) (stx : Syntax.Term)
-  body: withRef stx do
-  match stx with
-  | `(($e)) => expandLinearCombo ty e
-  | `($e₁ + $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ + $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_add_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_add_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(add_pf $p₁ $p₂)
-  | `($e₁ - $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ - $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_sub_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_sub_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(sub_pf $p₁ $p₂)
-  | `(-$e) => do
-    match ← expandLinearCombo ty e with
-| .const c => .const < > `(-$c)
-| .proof p => .proof < > ``(neg_pf $p)
-  | `(← $e:term) => do
-    match ← expandLinearCombo ty e with
-    | .const c => return .const c
-| .proof p => .proof < > ``(Eq.symm $p)
-  | `($e₁ * $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ * $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_mul_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_mul_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(mul_pf $p₁ $p₂)
-  | `($e⁻¹) => do
-    match ← expandLinearCombo ty e with
-| .const c => .const < > `($c⁻¹)
-| .proof p => .proof < > ``(inv_pf $p)
-  | `($e₁ / $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ / $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_div_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_div_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(div_pf $p₁ $p₂)
-  | e =>
-    -- We have the expected type from the goal, so we can fully synthesize this leaf node.
-    withSynthesize do
-      -- It is OK to use `ty` as the expected type even if `e` is a proof.
-      -- The expected type is just a hint.
-let c ← withSynthesizeLight Term.elabTerm e ty
-      if (← whnfR (← inferType c)).isEq then
-.proof < > c.toSyntax
-      else
-.const < > c.toSyntax
-
-中文:
-定义 expandLinearCombo
-  签名: (ty : Expr) (stx : Syntax.项)
-  定义体: withRef stx do
-  match stx with
-  | `(($e)) => expandLinearCombo ty e
-  | `($e₁ + $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ + $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_add_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_add_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(add_pf $p₁ $p₂)
-  | `($e₁ - $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ - $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_sub_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_sub_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(sub_pf $p₁ $p₂)
-  | `(-$e) => do
-    match ← expandLinearCombo ty e with
-| .const c => .const < > `(-$c)
-| .proof p => .proof < > ``(neg_pf $p)
-  | `(← $e:term) => do
-    match ← expandLinearCombo ty e with
-    | .const c => return .const c
-| .proof p => .proof < > ``(Eq.symm $p)
-  | `($e₁ * $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ * $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_mul_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_mul_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(mul_pf $p₁ $p₂)
-  | `($e⁻¹) => do
-    match ← expandLinearCombo ty e with
-| .const c => .const < > `($c⁻¹)
-| .proof p => .proof < > ``(inv_pf $p)
-  | `($e₁ / $e₂) => do
-    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ / $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_div_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_div_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(div_pf $p₁ $p₂)
-  | e =>
-    -- We have the expected type from the goal, so we can fully synthesize this leaf node.
-    withSynthesize do
-      -- It is OK to use `ty` as the expected type even if `e` is a proof.
-      -- The expected type is just a hint.
-let c ← withSynthesizeLight Term.elabTerm e ty
-      if (← whnfR (← inferType c)).isEq then
-.proof < > c.toSyntax
-      else
-.const < > c.toSyntax
+--- 原说明 ---
+Performs macro expansion of a linear combination expression,
+using `+`/`-`/`*`/`/` on equations and values.
+* `.proof p` means that `p` is a syntax corresponding to a proof of an equation.
+  For example, if `h : a = b` then `expandLinearCombo (2 * h)` returns `.proof (
+c_add_pf 2 h)`
+  which is a proof of `2 * a = 2 * b`.
+* `.const c` means that the input expression is not an equation but a value.
 -/
 partial def expandLinearCombo (ty : Expr) (stx : Syntax.Term) : TermElabM Expanded := withRef stx do
   match stx with
   | `(($e)) => expandLinearCombo ty e
   | `($e₁ + $e₂) => do
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ + $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_add_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_add_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(add_pf $p₁ $p₂)
+    | .const c₁, .const c₂ => .const <$> ``($c₁ + $c₂)
+    | .proof p₁, .const c₂ => .proof <$> ``(pf_add_c $p₁ $c₂)
+    | .const c₁, .proof p₂ => .proof <$> ``(c_add_pf $p₂ $c₁)
+    | .proof p₁, .proof p₂ => .proof <$> ``(add_pf $p₁ $p₂)
   | `($e₁ - $e₂) => do
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ - $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_sub_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_sub_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(sub_pf $p₁ $p₂)
+    | .const c₁, .const c₂ => .const <$> ``($c₁ - $c₂)
+    | .proof p₁, .const c₂ => .proof <$> ``(pf_sub_c $p₁ $c₂)
+    | .const c₁, .proof p₂ => .proof <$> ``(c_sub_pf $p₂ $c₁)
+    | .proof p₁, .proof p₂ => .proof <$> ``(sub_pf $p₁ $p₂)
   | `(-$e) => do
     match ← expandLinearCombo ty e with
-| .const c => .const < > `(-$c)
-| .proof p => .proof < > ``(neg_pf $p)
+    | .const c => .const <$> `(-$c)
+    | .proof p => .proof <$> ``(neg_pf $p)
   | `(← $e:term) => do
     match ← expandLinearCombo ty e with
     | .const c => return .const c
-| .proof p => .proof < > ``(Eq.symm $p)
+    | .proof p => .proof <$> ``(Eq.symm $p)
   | `($e₁ * $e₂) => do
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ * $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_mul_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_mul_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(mul_pf $p₁ $p₂)
+    | .const c₁, .const c₂ => .const <$> ``($c₁ * $c₂)
+    | .proof p₁, .const c₂ => .proof <$> ``(pf_mul_c $p₁ $c₂)
+    | .const c₁, .proof p₂ => .proof <$> ``(c_mul_pf $p₂ $c₁)
+    | .proof p₁, .proof p₂ => .proof <$> ``(mul_pf $p₁ $p₂)
   | `($e⁻¹) => do
     match ← expandLinearCombo ty e with
-| .const c => .const < > `($c⁻¹)
-| .proof p => .proof < > ``(inv_pf $p)
+    | .const c => .const <$> `($c⁻¹)
+    | .proof p => .proof <$> ``(inv_pf $p)
   | `($e₁ / $e₂) => do
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
-| .const c₁, .const c₂ => .const < > ``($c₁ / $c₂)
-| .proof p₁, .const c₂ => .proof < > ``(pf_div_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .proof < > ``(c_div_pf $p₂ $c₁)
-| .proof p₁, .proof p₂ => .proof < > ``(div_pf $p₁ $p₂)
+    | .const c₁, .const c₂ => .const <$> ``($c₁ / $c₂)
+    | .proof p₁, .const c₂ => .proof <$> ``(pf_div_c $p₁ $c₂)
+    | .const c₁, .proof p₂ => .proof <$> ``(c_div_pf $p₂ $c₁)
+    | .proof p₁, .proof p₂ => .proof <$> ``(div_pf $p₁ $p₂)
   | e =>
     -- We have the expected type from the goal, so we can fully synthesize this leaf node.
     withSynthesize do
       -- It is OK to use `ty` as the expected type even if `e` is a proof.
       -- The expected type is just a hint.
-let c ← withSynthesizeLight Term.elabTerm e ty
+      let c ← withSynthesizeLight <| Term.elabTerm e ty
       if (← whnfR (← inferType c)).isEq then
-.proof < > c.toSyntax
+        .proof <$> c.toSyntax
       else
-.const < > c.toSyntax
-
-/--
-theorem `eq_trans₃` / 定理 `eq_trans₃`
-
-English:
-theorem eq_trans₃
-  given: (p : (a : α) = b) (p₁ : a = a') (p₂ : b = b')
-  statement: a' = b'
-  proof: p₁ ▸ p₂ ▸ p
-
-中文:
-定理 eq_trans₃
-  条件: (p : (a : α) = b) (p₁ : a = a') (p₂ : b = b')
-  结论: a' = b'
-  证明: p₁ ▸ p₂ ▸ p
+        .const <$> c.toSyntax
+/-
+**Mathlib.Tactic.LinearCombinationPrime.eq_trans** 是 Mathlib 中的一个定理，位于命名空间 `Math
+lib.Tactic.LinearCombinationPrime`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eq_trans₃ (p : (a : α) = b) (p₁ : a = a') (p₂ : b = b') : a' = b' := p₁ ▸ p₂ ▸ p
-
-/--
-theorem `eq_of_add` / 定理 `eq_of_add`
-
-English:
-theorem eq_of_add
-  given: [AddGroup α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0)
-  statement: a' = b'
-  proof: by
-  rw [← sub_eq_zero] at p ⊢; rwa [sub_eq_zero, p] at H
-
-中文:
-定理 eq_of_add
-  条件: [加法群 α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0)
-  结论: a' = b'
-  证明: by
-  rw [← sub_eq_zero] at p ⊢; rwa [sub_eq_zero, p] at H
-
-Depends on / 依赖: sub_eq_zero
+/-
+**Mathlib.Tactic.LinearCombinationPrime.eq_of_add** 是 Mathlib 中的一个定理，位于命名空间 `Mat
+hlib.Tactic.LinearCombinationPrime`。
+形式化陈述：eq_of_add [AddGroup α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0) : a
+' = b'
+参数：p : (a : α) = b；H : (a' - b') - (a - b) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
 -/
 theorem eq_of_add [AddGroup α] (p : (a : α) = b) (H : (a' - b') - (a - b) = 0) : a' = b' := by
   rw [← sub_eq_zero] at p ⊢; rwa [sub_eq_zero, p] at H
-
-/--
-theorem `eq_of_add_pow` / 定理 `eq_of_add_pow`
-
-English:
-theorem eq_of_add_pow
-  statement: [Ring α] [IsReduced α] (n : Nat) (p : (a : α) = b)
-  proof: by
-  rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
-
-中文:
-定理 eq_of_add_pow
-  结论: [环 α] [是既约 α] (n : 自然数) (p : (a : α) = b)
-  证明: by
-  rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
-
-Depends on / 依赖: eq_zero_of_pow_eq_zero, sub_eq_zero
+/-
+**Mathlib.Tactic.LinearCombinationPrime.eq_of_add_pow** 是 Mathlib 中的一个定理，位于命名空间 
+`Mathlib.Tactic.LinearCombinationPrime`。
+形式化陈述：eq_of_add_pow [Ring α] [IsReduced α] (n : Nat) (p : (a : α) = b) (H : (a' 
+- b') ^ n - (a - b) = 0) : a' = b'
+参数：n : Nat；p : (a : α) = b；H : (a' - b') ^ n - (a - b) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `eq_zero_of_pow_eq_zero`：eq_zero_of_pow_eq_zero [Zero R] [Pow R Nat] [IsR
+educed R] {n : Nat} (h : x ^ n = 0) : x = 0
 -/
-theorem eq_of_add_pow [Ring α] [IsReduced α] (n : Nat) (p : (a : α) = b)
+theorem eq_of_add_pow [Ring α] [IsReduced α] (n : ℕ) (p : (a : α) = b)
     (H : (a' - b') ^ n - (a - b) = 0) : a' = b' := by
   rw [← sub_eq_zero] at p ⊢; apply eq_zero_of_pow_eq_zero (n := n); rwa [sub_eq_zero, p] at H
 
-/--
-Definition of `elabLinearCombination'` / `elabLinearCombination'` 的定义
+/-- Implementation of `linear_combination'` and `linear_combination2`. -/
+/-
+**Mathlib.Tactic.LinearCombinationPrime.elabLinearCombination'** 是 Mathlib 中的一个定
+义，位于命名空间 `Mathlib.Tactic.LinearCombinationPrime`。
+形式化陈述：elabLinearCombination' (tk : Syntax) (norm? : Option Syntax.Tactic) (exp? 
+: Option Syntax.NumLit) (input : Option Syntax.Term) (twoGoals
+参数：tk : Syntax；norm? : Option Syntax.Tactic；exp? : Option Syntax.NumLit；input : 
+Option Syntax.Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabLinearCombination'
-  signature: (tk : Syntax)
-  body: Tactic.withMainContext do
-  let some (ty, _) := (← (← Tactic.getMainGoal).getType').eq? |
-    throwError "'linear_combination'' only proves equalities"
-  let p ← match input with
-  | none => `(Eq.refl 0)
-  | some e =>
-    match ← expandLinearCombo ty e with
-    | .const c => `(Eq.refl $c)
-    | .proof p => pure p
-  let norm := norm?.getD (Unhygienic.run <| withRef tk `(tactic| ring1))
-Term.withoutErrToSorry Tactic.evalTactic ← withFreshMacroScope
-  if twoGoals then
-    `(tactic| (
-refine eq_trans₃ p ?a ?b
-case' a => norm:tactic
-case' b => norm:tactic))
-  else
-    match exp? with
-    | some n =>
-      if n.getNat = 1 then `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
-      else `(tactic| (refine eq_of_add_pow $n $p ?a; case' a => $norm:tactic))
-    | _ => `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
-
-中文:
-定义 elabLinearCombination'
-  签名: (tk : Syntax)
-  定义体: Tactic.withMainContext do
-  let some (ty, _) := (← (← Tactic.getMainGoal).getType').eq? |
-    throwError "'linear_combination'' only proves equalities"
-  let p ← match input with
-  | none => `(Eq.refl 0)
-  | some e =>
-    match ← expandLinearCombo ty e with
-    | .const c => `(Eq.refl $c)
-    | .proof p => pure p
-  let norm := norm?.getD (Unhygienic.run <| withRef tk `(tactic| ring1))
-Term.withoutErrToSorry Tactic.evalTactic ← withFreshMacroScope
-  if twoGoals then
-    `(tactic| (
-refine eq_trans₃ p ?a ?b
-case' a => norm:tactic
-case' b => norm:tactic))
-  else
-    match exp? with
-    | some n =>
-      if n.getNat = 1 then `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
-      else `(tactic| (refine eq_of_add_pow $n $p ?a; case' a => $norm:tactic))
-    | _ => `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
-
-Depends on / 依赖: Tactic, Tactic.TacticM, Tactic.withMainContext, TacticM, withMainContext
+--- 原说明 ---
+Implementation of `linear_combination'` and `linear_combination2`.
 -/
 def elabLinearCombination' (tk : Syntax)
     (norm? : Option Syntax.Tactic) (exp? : Option Syntax.NumLit) (input : Option Syntax.Term)
@@ -581,12 +335,12 @@ def elabLinearCombination' (tk : Syntax)
     | .const c => `(Eq.refl $c)
     | .proof p => pure p
   let norm := norm?.getD (Unhygienic.run <| withRef tk `(tactic| ring1))
-Term.withoutErrToSorry Tactic.evalTactic ← withFreshMacroScope
+  Term.withoutErrToSorry <| Tactic.evalTactic <| ← withFreshMacroScope <|
   if twoGoals then
     `(tactic| (
-refine eq_trans₃ p ?a ?b
-case' a => norm:tactic
-case' b => norm:tactic))
+      refine eq_trans₃ $p ?a ?b
+      case' a => $norm:tactic
+      case' b => $norm:tactic))
   else
     match exp? with
     | some n =>
@@ -612,12 +366,12 @@ syntax expStx := atomic(" (" &"exp" " := ") withoutPosition(num) ")"
   of a list of equalities and subtracting it from the target.
   The tactic will create a linear
   combination by adding the equalities together from left to right, so the order
-  of the input hypotheses does matter. If the `norm` field of the
+  of the input hypotheses does matter.  If the `norm` field of the
   tactic is set to `skip`, then the tactic will simply set the user up to
   prove their target using the linear combination instead of normalizing the subtraction.
 
 Note: There is also a similar tactic `linear_combination` (no prime); this version is
-provided for backward compatibility. Compared to this tactic, `linear_combination`:
+provided for backward compatibility.  Compared to this tactic, `linear_combination`:
 * drops the `←` syntax for reversing an equation, instead offering this operation using the `-`
   syntax
 * does not support multiplication of two hypotheses (`h1 * h2`), division by a hypothesis (`3 / h`),
@@ -625,7 +379,7 @@ provided for backward compatibility. Compared to this tactic, `linear_combinatio
 * produces noisy output when the user adds or subtracts a constant to a hypothesis (`h + 3`)
 
 Note: The left and right sides of all the equalities should have the same
-  type, and the coefficients should also have this type. There must be
+  type, and the coefficients should also have this type.  There must be
   instances of `Mul` and `AddGroup` for this type.
 
 * The input `e` in `linear_combination' e` is a linear combination of proofs of equalities,
@@ -666,23 +420,23 @@ example (x y : ℤ) (h1 : x*y + 2*x = 1) (h2 : x = y) : x*y = -2*y + 1 := by
   linear_combination' (norm := ring_nf) -2*h2
   /- Goal: x * y + x * 2 - 1 = 0 -/
 
-example (x y z : Real) (ha : x + 2*y - z = 4) (hb : 2*x + y + z = -2)
+example (x y z : ℝ) (ha : x + 2*y - z = 4) (hb : 2*x + y + z = -2)
     (hc : x + 2*y + z = 2) :
     -3*x - 3*y - 4*z = 2 := by
   linear_combination' ha - hb - 2*hc
 
-example (x y : Rat) (h1 : x + y = 3) (h2 : 3*x = 7) :
+example (x y : ℚ) (h1 : x + y = 3) (h2 : 3*x = 7) :
     x*x*y + y*x*y + 6*x = 3*x*y + 14 := by
   linear_combination' x*y*h1 + 2*h2
 
-example (x y : Int) (h1 : x = -3) (h2 : y = 10) : 2*x = -6 := by
+example (x y : ℤ) (h1 : x = -3) (h2 : y = 10) : 2*x = -6 := by
   linear_combination' (norm := skip) 2*h1
   simp
 
-axiom qc : Rat
+axiom qc : ℚ
 axiom hqc : qc = 2*qc
 
-example (a b : Rat) (h : forall p q : Rat, p = q) : 3*a + qc = 3*b + 2*qc := by
+example (a b : ℚ) (h : ∀ p q : ℚ, p = q) : 3*a + qc = 3*b + 2*qc := by
   linear_combination' 3 * h a b + hqc
 ```
 -/
@@ -699,3 +453,4 @@ elab_rules : tactic
     elabLinearCombination' tk tac none e true
 
 end Mathlib.Tactic.LinearCombinationPrime
+

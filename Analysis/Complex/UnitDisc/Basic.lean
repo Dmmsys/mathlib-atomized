@@ -26,47 +26,31 @@ noncomputable section
 
 namespace Complex
 
-/--
-Definition of `UnitDisc` / `UnitDisc` 的定义
+/-- The complex unit disc, denoted as `𝔻` within the Complex namespace -/
+/-
+**Complex.UnitDisc** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：UnitDisc : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UnitDisc
-  signature: : Type
-  body: Subsemigroup.unitBall Complex deriving TopologicalSpace
-
-中文:
-定义 UnitDisc
-  签名: : 类型
-  定义体: Subsemigroup.unitBall Complex deriving TopologicalSpace
-
-Depends on / 依赖: Subsemigroup, Subsemigroup.unitBall, TopologicalSpace, deriving, unitBall
+--- 原说明 ---
+The complex unit disc, denoted as `𝔻` within the Complex namespace
 -/
 def UnitDisc : Type :=
-  Subsemigroup.unitBall Complex deriving TopologicalSpace
+  Subsemigroup.unitBall ℂ deriving TopologicalSpace
 
-/--
-Definition of `UnitClosedDisc` / `UnitClosedDisc` 的定义
+/-- The complex closed unit disc, denoted as `𝕔𝔻` within the Complex namespace -/
+/-
+**Complex.UnitClosedDisc** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：UnitClosedDisc : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UnitClosedDisc
-  signature: : Type
-  body: Submonoid.unitClosedBall Complex deriving TopologicalSpace
-
-@[inherit_doc] scoped[Complex.UnitDisc] notation "𝔻" => Complex.UnitDisc
-@[inherit_doc] scoped[Complex.UnitDisc] notation "𝕔𝔻" => Complex.UnitClosedDisc
-
-中文:
-定义 UnitClosedDisc
-  签名: : 类型
-  定义体: Submonoid.unitClosedBall Complex deriving TopologicalSpace
-
-@[inherit_doc] scoped[Complex.UnitDisc] notation "𝔻" => Complex.UnitDisc
-@[inherit_doc] scoped[Complex.UnitDisc] notation "𝕔𝔻" => Complex.UnitClosedDisc
-
-Depends on / 依赖: Submonoid, Submonoid.unitClosedBall, TopologicalSpace, deriving, unitClosedBall
+--- 原说明 ---
+The complex closed unit disc, denoted as `𝕔𝔻` within the Complex namespace
 -/
 def UnitClosedDisc : Type :=
-  Submonoid.unitClosedBall Complex deriving TopologicalSpace
+  Submonoid.unitClosedBall ℂ deriving TopologicalSpace
 
 @[inherit_doc] scoped[Complex.UnitDisc] notation "𝔻" => Complex.UnitDisc
 @[inherit_doc] scoped[Complex.UnitDisc] notation "𝕔𝔻" => Complex.UnitClosedDisc
@@ -75,1383 +59,803 @@ open UnitDisc
 
 namespace UnitDisc
 
-/--
-Definition of `coe` / `coe` 的定义
+/-- Coercion to `ℂ`. -/
+/-
+**Complex.UnitDisc.coe** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：Complex.UnitDisc → ℂ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coe
-  signature: : 𝔻 -> Complex
-  body: Subtype.val
-
-中文:
-定义 coe
-  签名: : 𝔻 -> 复形
-  定义体: Subtype.val
+--- 原说明 ---
+Coercion to `ℂ`.
 -/
-@[coe] protected def coe : 𝔻 -> Complex := Subtype.val
+@[coe] protected def coe : 𝔻 → ℂ := Subtype.val
+/-
+**Complex.UnitDisc.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc
+`。
+形式化陈述：instCommSemigroup : CommSemigroup UnitDisc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: : CommSemigroup UnitDisc
-  body: inferInstanceAs CommSemigroup (ball _ _)
-
-中文:
-实例 instCommSemigroup
-  签名: : 交换半群 UnitDisc
-  定义体: inferInstanceAs CommSemigroup (ball _ _)
-
-Depends on / 依赖: CommSemigroup
+--- 原说明 ---
+Coercion to `ℂ`.
 -/
-instance instCommSemigroup : CommSemigroup UnitDisc := inferInstanceAs CommSemigroup (ball _ _)
-
-/--
-Instance `instSemigroupWithZero` / 实例 `instSemigroupWithZero`
-
-English:
-instance instSemigroupWithZero
-  signature: : SemigroupWithZero UnitDisc
-  body: inferInstanceAs SemigroupWithZero (ball _ _)
-
-中文:
-实例 instSemigroupWithZero
-  签名: : 带零半群 UnitDisc
-  定义体: inferInstanceAs SemigroupWithZero (ball _ _)
-
-Depends on / 依赖: SemigroupWithZero
+instance instCommSemigroup : CommSemigroup UnitDisc := inferInstanceAs <| CommSemigroup (ball _ _)
+/-
+**Complex.UnitDisc.instSemigroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Complex.Unit
+Disc`。
+形式化陈述：instSemigroupWithZero : SemigroupWithZero UnitDisc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroupWithZero : SemigroupWithZero UnitDisc :=
-inferInstanceAs SemigroupWithZero (ball _ _)
-
-/--
-Instance `instIsCancelMulZero` / 实例 `instIsCancelMulZero`
-
-English:
-instance instIsCancelMulZero
-  signature: : IsCancelMulZero UnitDisc
-  body: inferInstanceAs IsCancelMulZero (ball _ _)
-
-中文:
-实例 instIsCancelMulZero
-  签名: : 是乘零消去 UnitDisc
-  定义体: inferInstanceAs IsCancelMulZero (ball _ _)
-
-Depends on / 依赖: IsCancelMulZero
+  inferInstanceAs <| SemigroupWithZero (ball _ _)
+/-
+**Complex.UnitDisc.instIsCancelMulZero** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDi
+sc`。
+形式化陈述：instIsCancelMulZero : IsCancelMulZero UnitDisc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsCancelMulZero : IsCancelMulZero UnitDisc :=
-inferInstanceAs IsCancelMulZero (ball _ _)
-
-/--
-Instance `instHasDistribNeg` / 实例 `instHasDistribNeg`
-
-English:
-instance instHasDistribNeg
-  signature: : HasDistribNeg UnitDisc
-  body: inferInstanceAs HasDistribNeg (ball _ _)
-
-中文:
-实例 instHasDistribNeg
-  签名: : 有DistribNeg UnitDisc
-  定义体: inferInstanceAs HasDistribNeg (ball _ _)
-
-Depends on / 依赖: HasDistribNeg
+  inferInstanceAs <| IsCancelMulZero (ball _ _)
+/-
+**Complex.UnitDisc.instHasDistribNeg** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc
+`。
+形式化陈述：instHasDistribNeg : HasDistribNeg UnitDisc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instHasDistribNeg : HasDistribNeg UnitDisc :=
-inferInstanceAs HasDistribNeg (ball _ _)
-
-/--
-Instance `instCoe` / 实例 `instCoe`
-
-English:
-instance instCoe
-  signature: : Coe UnitDisc Complex
-  body: ⟨UnitDisc.coe⟩
-
-@[ext]
-
-中文:
-实例 instCoe
-  签名: : Coe UnitDisc 复形
-  定义体: ⟨UnitDisc.coe⟩
-
-@[ext]
-
-Depends on / 依赖: UnitDisc, UnitDisc.coe
+  inferInstanceAs <| HasDistribNeg (ball _ _)
+/-
+**Complex.UnitDisc.instCoe** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：instCoe : Coe UnitDisc Complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCoe : Coe UnitDisc Complex := ⟨UnitDisc.coe⟩
+instance instCoe : Coe UnitDisc ℂ := ⟨UnitDisc.coe⟩
 
 @[ext]
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Injective ((↑) : 𝔻 -> Complex)
-  proof: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_injective
-  结论: 单射 ((↑) : 𝔻 -> 复形)
-  证明: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**Complex.UnitDisc.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_injective : Injective ((↑) : 𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-theorem coe_injective : Injective ((↑) : 𝔻 -> Complex) :=
+theorem coe_injective : Injective ((↑) : 𝔻 → ℂ) :=
   Subtype.coe_injective
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {z w : 𝔻}
-  statement: (z : Complex) = w ↔ z = w
-  proof: Subtype.val_inj
-
-@[fun_prop]
-
-中文:
-定理 coe_inj
-  条件: {z w : 𝔻}
-  结论: (z : 复形) = w ↔ z = w
-  证明: Subtype.val_inj
-
-@[fun_prop]
-
-Depends on / 依赖: Subtype, Subtype.val_inj, val_inj
+/-
+**Complex.UnitDisc.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_inj {z w : 𝔻} : (z : Complex) = w ↔ z = w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_inj`：val_inj {a b : Subtype p} : a.val = b.val ↔ a = b
 -/
-theorem coe_inj {z w : 𝔻} : (z : Complex) = w ↔ z = w := Subtype.val_inj
+theorem coe_inj {z w : 𝔻} : (z : ℂ) = w ↔ z = w := Subtype.val_inj
 
 @[fun_prop]
-/--
-theorem `isEmbedding_coe` / 定理 `isEmbedding_coe`
-
-English:
-theorem isEmbedding_coe
-  statement: Topology.IsEmbedding ((↑) : 𝔻 -> Complex)
-  proof: .subtypeVal
-
-@[fun_prop]
-
-中文:
-定理 isEmbedding_coe
-  结论: 拓扑.是嵌入 ((↑) : 𝔻 -> 复形)
-  证明: .subtypeVal
-
-@[fun_prop]
-
-Depends on / 依赖: subtypeVal
+/-
+**Complex.UnitDisc.isEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsEmbedding.subtypeVal`：Topology.IsEmbedding.subtypeVal : IsEmb
+edding ((↑) : Subtype p -> X)
 -/
-theorem isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝔻 -> Complex) := .subtypeVal
+theorem isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝔻 → ℂ) := .subtypeVal
 
 @[fun_prop]
-/--
-theorem `continuous_coe` / 定理 `continuous_coe`
-
-English:
-theorem continuous_coe
-  statement: Continuous ((↑) : 𝔻 -> Complex)
-  proof: isEmbedding_coe.continuous
-
-中文:
-定理 continuous_coe
-  结论: 连续 ((↑) : 𝔻 -> 复形)
-  证明: isEmbedding_coe.continuous
-
-Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
+/-
+**Complex.UnitDisc.continuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：continuous_coe : Continuous ((↑) : 𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用定理 `Complex.UnitDisc.isEmbedding_coe`：isEmbedding_coe : Topology.IsEmbedding
+ ((↑) : 𝔻 -> Complex)
 -/
-theorem continuous_coe : Continuous ((↑) : 𝔻 -> Complex) := isEmbedding_coe.continuous
-
-/--
-theorem `norm_lt_one` / 定理 `norm_lt_one`
-
-English:
-theorem norm_lt_one
-  given: (z : 𝔻)
-  statement: ‖(z : Complex)‖ < 1
-  proof: mem_ball_zero_iff.1 z.2
-
-中文:
-定理 norm_lt_one
-  条件: (z : 𝔻)
-  结论: ‖(z : 复形)‖ < 1
-  证明: mem_ball_zero_iff.1 z.2
-
-Depends on / 依赖: mem_ball_zero_iff
+theorem continuous_coe : Continuous ((↑) : 𝔻 → ℂ) := isEmbedding_coe.continuous
+/-
+**Complex.UnitDisc.norm_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1
+参数：z : 𝔻。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_ball_zero_iff`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] {a : E
+} {r : ℝ}, a ∈ Metric.ball 0 r ↔ ‖a‖ < r
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1 :=
+theorem norm_lt_one (z : 𝔻) : ‖(z : ℂ)‖ < 1 :=
   mem_ball_zero_iff.1 z.2
-
-/--
-theorem `norm_ne_one` / 定理 `norm_ne_one`
-
-English:
-theorem norm_ne_one
-  given: (z : 𝔻)
-  statement: ‖(z : Complex)‖ != 1
-  proof: z.norm_lt_one.ne
-
-中文:
-定理 norm_ne_one
-  条件: (z : 𝔻)
-  结论: ‖(z : 复形)‖ != 1
-  证明: z.norm_lt_one.ne
-
-Depends on / 依赖: norm_lt_one, z.norm_lt_one.ne
+/-
+**Complex.UnitDisc.norm_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：norm_ne_one (z : 𝔻) : ‖(z : Complex)‖ != 1
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Complex.UnitDisc.norm_lt_one`：norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1
 -/
-theorem norm_ne_one (z : 𝔻) : ‖(z : Complex)‖ != 1 :=
+theorem norm_ne_one (z : 𝔻) : ‖(z : ℂ)‖ ≠ 1 :=
   z.norm_lt_one.ne
-
-/--
-theorem `sq_norm_lt_one` / 定理 `sq_norm_lt_one`
-
-English:
-theorem sq_norm_lt_one
-  given: (z : 𝔻)
-  statement: ‖(z : Complex)‖ ^ 2 < 1
-  proof: by
-  rw [sq_lt_one_iff_abs_lt_one]; rw [abs_norm]
-  exact z.norm_lt_one
-
-中文:
-定理 sq_norm_lt_one
-  条件: (z : 𝔻)
-  结论: ‖(z : 复形)‖ ^ 2 < 1
-  证明: by
-  rw [sq_lt_one_iff_abs_lt_one]; rw [abs_norm]
-  exact z.norm_lt_one
-
-Depends on / 依赖: abs_norm, norm_lt_one, sq_lt_one_iff_abs_lt_one, z.norm_lt_one
+/-
+**Complex.UnitDisc.sq_norm_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：sq_norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ ^ 2 < 1
+参数：z : 𝔻。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq_lt_one_iff_abs_lt_one`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : Lin
+earOrder α] [IsStrictOrderedRing α] (a : α), a ^ 2 < 1 ↔ |a| < 1
+· 使用定理 `abs_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (z : E), |‖z‖| 
+= ‖z‖
+· 使用定理 `Complex.UnitDisc.norm_lt_one`：norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1
 -/
-theorem sq_norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ ^ 2 < 1 := by
-  rw [sq_lt_one_iff_abs_lt_one]; rw [abs_norm]
+theorem sq_norm_lt_one (z : 𝔻) : ‖(z : ℂ)‖ ^ 2 < 1 := by
+  rw [sq_lt_one_iff_abs_lt_one, abs_norm]
   exact z.norm_lt_one
-
-/--
-theorem `normSq_lt_one` / 定理 `normSq_lt_one`
-
-English:
-theorem normSq_lt_one
-  given: (z : 𝔻)
-  statement: normSq z < 1
-  proof: by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
-  exact z.sq_norm_lt_one
-
-中文:
-定理 normSq_lt_one
-  条件: (z : 𝔻)
-  结论: normSq z < 1
-  证明: by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
-  exact z.sq_norm_lt_one
-
-Depends on / 依赖: Complex.norm_mul_self_eq_normSq, norm_mul_self_eq_normSq, sq_norm_lt_one, z.sq_norm_lt_one
+/-
+**Complex.UnitDisc.normSq_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：normSq_lt_one (z : 𝔻) : normSq z < 1
+参数：z : 𝔻。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.norm_mul_self_eq_normSq`：norm_mul_self_eq_normSq (z : Complex) :
+ ‖z‖ * ‖z‖ = normSq z
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Complex.UnitDisc.sq_norm_lt_one`：sq_norm_lt_one (z : 𝔻) : ‖(z : Complex)
+‖ ^ 2 < 1
 -/
 theorem normSq_lt_one (z : 𝔻) : normSq z < 1 := by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
+  rw [← Complex.norm_mul_self_eq_normSq, ← sq]
   exact z.sq_norm_lt_one
-
-/--
-theorem `coe_ne_one` / 定理 `coe_ne_one`
-
-English:
-theorem coe_ne_one
-  given: (z : 𝔻)
-  statement: (z : Complex) != 1
-  proof: ne_of_apply_ne (‖·‖) by simp [z.norm_ne_one]
-
-中文:
-定理 coe_ne_one
-  条件: (z : 𝔻)
-  结论: (z : 复形) != 1
-  证明: ne_of_apply_ne (‖·‖) by simp [z.norm_ne_one]
-
-Depends on / 依赖: ne_of_apply_ne, norm_ne_one, z.norm_ne_one
+/-
+**Complex.UnitDisc.coe_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_ne_one (z : 𝔻) : (z : Complex) != 1
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Complex.UnitDisc.norm_ne_one`：norm_ne_one (z : 𝔻) : ‖(z : Complex)‖ != 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem coe_ne_one (z : 𝔻) : (z : Complex) != 1 :=
-ne_of_apply_ne (‖·‖) by simp [z.norm_ne_one]
-
-/--
-theorem `coe_ne_neg_one` / 定理 `coe_ne_neg_one`
-
-English:
-theorem coe_ne_neg_one
-  given: (z : 𝔻)
-  statement: (z : Complex) != -1
-  proof: ne_of_apply_ne (‖·‖) by simpa [norm_neg] using z.norm_ne_one
-
-中文:
-定理 coe_ne_neg_one
-  条件: (z : 𝔻)
-  结论: (z : 复形) != -1
-  证明: ne_of_apply_ne (‖·‖) by simpa [norm_neg] using z.norm_ne_one
-
-Depends on / 依赖: ne_of_apply_ne, norm_ne_one, norm_neg, z.norm_ne_one
+theorem coe_ne_one (z : 𝔻) : (z : ℂ) ≠ 1 :=
+  ne_of_apply_ne (‖·‖) <| by simp [z.norm_ne_one]
+/-
+**Complex.UnitDisc.coe_ne_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_ne_neg_one (z : 𝔻) : (z : Complex) != -1
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Complex.UnitDisc.norm_ne_one`：norm_ne_one (z : 𝔻) : ‖(z : Complex)‖ != 1
 -/
-theorem coe_ne_neg_one (z : 𝔻) : (z : Complex) != -1 :=
-ne_of_apply_ne (‖·‖) by simpa [norm_neg] using z.norm_ne_one
-
-/--
-theorem `one_add_coe_ne_zero` / 定理 `one_add_coe_ne_zero`
-
-English:
-theorem one_add_coe_ne_zero
-  given: (z : 𝔻)
-  statement: (1 + z : Complex) != 0
-  proof: mt neg_eq_iff_add_eq_zero.2 z.coe_ne_neg_one.symm
-
-@[simp, norm_cast]
-
-中文:
-定理 one_add_coe_ne_zero
-  条件: (z : 𝔻)
-  结论: (1 + z : 复形) != 0
-  证明: mt neg_eq_iff_add_eq_zero.2 z.coe_ne_neg_one.symm
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_ne_neg_one, neg_eq_iff_add_eq_zero, z.coe_ne_neg_one.symm
+theorem coe_ne_neg_one (z : 𝔻) : (z : ℂ) ≠ -1 :=
+  ne_of_apply_ne (‖·‖) <| by simpa [norm_neg] using z.norm_ne_one
+/-
+**Complex.UnitDisc.one_add_coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDi
+sc`。
+形式化陈述：one_add_coe_ne_zero (z : 𝔻) : (1 + z : Complex) != 0
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_eq_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+-a = b ↔ a + b = 0
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Complex.UnitDisc.coe_ne_neg_one`：coe_ne_neg_one (z : 𝔻) : (z : Complex) 
+!= -1
 -/
-theorem one_add_coe_ne_zero (z : 𝔻) : (1 + z : Complex) != 0 :=
+theorem one_add_coe_ne_zero (z : 𝔻) : (1 + z : ℂ) ≠ 0 :=
   mt neg_eq_iff_add_eq_zero.2 z.coe_ne_neg_one.symm
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (z w : 𝔻)
-  statement: ↑(z * w) = (z * w : Complex)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mul
-  条件: (z w : 𝔻)
-  结论: ↑(z * w) = (z * w : 复形)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Complex.UnitDisc.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_mul (z w : 𝔻) : ↑(z * w) = (z * w : Complex)
+参数：z w : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mul (z w : 𝔻) : ↑(z * w) = (z * w : Complex) :=
+theorem coe_mul (z w : 𝔻) : ↑(z * w) = (z * w : ℂ) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (z : 𝔻)
-  statement: ↑(-z) = (-z : Complex)
-  proof: rfl
-
-中文:
-定理 coe_neg
-  条件: (z : 𝔻)
-  结论: ↑(-z) = (-z : 复形)
-  证明: rfl
+/-
+**Complex.UnitDisc.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_neg (z : 𝔻) : ↑(-z) = (-z : Complex)
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg (z : 𝔻) : ↑(-z) = (-z : Complex) := rfl
+theorem coe_neg (z : 𝔻) : ↑(-z) = (-z : ℂ) := rfl
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- A constructor that assumes `‖z‖ < 1` instead of `dist z 0 < 1` and returns an element
+of `𝔻` instead of `↥Metric.ball (0 : ℂ) 1`. -/
+/-
+**Complex.UnitDisc.mk** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：mk (z : Complex) (hz : ‖z‖ < 1) : 𝔻
+参数：z : Complex；hz : ‖z‖ < 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (z : Complex) (hz : ‖z‖ < 1)
-  body: ⟨z, mem_ball_zero_iff.2 hz⟩
-
-中文:
-定义 mk
-  签名: (z : 复形) (hz : ‖z‖ < 1)
-  定义体: ⟨z, mem_ball_zero_iff.2 hz⟩
-
-Depends on / 依赖: mem_ball_zero_iff
+--- 原说明 ---
+A constructor that assumes `‖z‖ < 1` instead of `dist z 0 < 1` and returns an el
+ement
+of `𝔻` instead of `↥Metric.ball (0 : ℂ) 1`.
 -/
-def mk (z : Complex) (hz : ‖z‖ < 1) : 𝔻 :=
+def mk (z : ℂ) (hz : ‖z‖ < 1) : 𝔻 :=
   ⟨z, mem_ball_zero_iff.2 hz⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift Complex 𝔻 (↑) (‖·‖ < 1)
-  body: ⟨mk z hz, rfl⟩
-
-中文:
-实例 :
-  签名: CanLift 复形 𝔻 (↑) (‖·‖ < 1)
-  定义体: ⟨mk z hz, rfl⟩
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CanLift Complex 𝔻 (↑) (‖·‖ < 1) where
+instance : CanLift ℂ 𝔻 (↑) (‖·‖ < 1) where
   prf z hz := ⟨mk z hz, rfl⟩
 
 /-- A cases eliminator that makes `cases z` use `UnitDisc.mk` instead of `Subtype.mk`. -/
 @[elab_as_elim, cases_eliminator]
-/--
-Definition of `casesOn` / `casesOn` 的定义
+/-
+**Complex.UnitDisc.casesOn** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：{motive : Complex.UnitDisc → Sort u_1} →   ((z : ℂ) → (hz : ‖z‖ < 1) → mot
+ive (Complex.UnitDisc.mk z hz)) → (z : Complex.UnitDisc) → motive z
+参数：(z : ℂ) → (hz : ‖z‖ < 1) → motive (Complex.UnitDisc.mk z hz)；z : Complex.Unit
+Disc。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.UnitDisc.norm_lt_one`：norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1
 
-English:
-definition casesOn
-  signature: {motive : 𝔻 -> Sort*} (mk : forall z hz, motive (.mk z hz)) (z : 𝔻)
-  body: mk z z.norm_lt_one
-
-@[simp]
-
-中文:
-定义 casesOn
-  签名: {motive : 𝔻 -> 类型层*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝔻)
-  定义体: mk z z.norm_lt_one
-
-@[simp]
+--- 原说明 ---
+A cases eliminator that makes `cases z` use `UnitDisc.mk` instead of `Subtype.mk
+`.
 -/
-protected def casesOn {motive : 𝔻 -> Sort*} (mk : forall z hz, motive (.mk z hz)) (z : 𝔻) :
+protected def casesOn {motive : 𝔻 → Sort*} (mk : ∀ z hz, motive (.mk z hz)) (z : 𝔻) :
     motive z :=
   mk z z.norm_lt_one
 
 @[simp]
-/--
-theorem `casesOn_mk` / 定理 `casesOn_mk`
-
-English:
-theorem casesOn_mk
-  given: {motive : 𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ < 1)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 casesOn_mk
-  条件: {motive : 𝔻 -> 类型层*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : 复形} (hz : ‖z‖ < 1)
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.casesOn_mk** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：casesOn_mk {motive : 𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {z
+ : Complex} (hz : ‖z‖ < 1) : (mk z hz).casesOn mk' = mk' z hz
+参数：mk' : forall z hz, motive (.mk z hz)；hz : ‖z‖ < 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem casesOn_mk {motive : 𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ < 1) :
+theorem casesOn_mk {motive : 𝔻 → Sort*} (mk' : ∀ z hz, motive (.mk z hz)) {z : ℂ} (hz : ‖z‖ < 1) :
     (mk z hz).casesOn mk' = mk' z hz :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (z : Complex) (hz : ‖z‖ < 1)
-  statement: (mk z hz : Complex) = z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (z : 复形) (hz : ‖z‖ < 1)
-  结论: (mk z hz : 复形) = z
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_mk (z : Complex) (hz : ‖z‖ < 1) : (mk z hz : Complex) = z
+参数：z : Complex；hz : ‖z‖ < 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (z : Complex) (hz : ‖z‖ < 1) : (mk z hz : Complex) = z :=
+theorem coe_mk (z : ℂ) (hz : ‖z‖ < 1) : (mk z hz : ℂ) = z :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (z : 𝔻) (hz : ‖(z : Complex)‖ < 1 := z.norm_lt_one)
-  statement: mk z hz = z
-  proof: Subtype.eta _ _
-
-@[simp]
-
-中文:
-定理 mk_coe
-  条件: (z : 𝔻) (hz : ‖(z : 复形)‖ < 1 := z.norm_lt_one)
-  结论: mk z hz = z
-  证明: Subtype.eta _ _
-
-@[simp]
-
-Depends on / 依赖: norm_lt_one, z.norm_lt_one
+/-
+**Complex.UnitDisc.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：mk_coe (z : 𝔻) (hz : ‖(z : Complex)‖ < 1
+参数：z : 𝔻。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.eta`：∀ {α : Sort u} {p : α → Prop} (a : { x // p x }) (h : p ↑a)
+, ⟨↑a, h⟩ = a
 -/
-theorem mk_coe (z : 𝔻) (hz : ‖(z : Complex)‖ < 1 := z.norm_lt_one) : mk z hz = z :=
+theorem mk_coe (z : 𝔻) (hz : ‖(z : ℂ)‖ < 1 := z.norm_lt_one) : mk z hz = z :=
   Subtype.eta _ _
 
 @[simp]
-/--
-theorem `mk_inj` / 定理 `mk_inj`
-
-English:
-theorem mk_inj
-  given: {z w : Complex} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1)
-  statement: mk z hz = mk w hw ↔ z = w
-  proof: Subtype.mk_eq_mk
-
-中文:
-定理 mk_inj
-  条件: {z w : 复形} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1)
-  结论: mk z hz = mk w hw ↔ z = w
-  证明: Subtype.mk_eq_mk
-
-Depends on / 依赖: Subtype, Subtype.mk_eq_mk, mk_eq_mk
+/-
+**Complex.UnitDisc.mk_inj** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：mk_inj {z w : Complex} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1) : mk z hz = mk w hw ↔
+ z = w
+参数：hz : ‖z‖ < 1；hw : ‖w‖ < 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.mk_eq_mk`：mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a
+ = a'
 -/
-theorem mk_inj {z w : Complex} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1) : mk z hz = mk w hw ↔ z = w :=
+theorem mk_inj {z w : ℂ} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1) : mk z hz = mk w hw ↔ z = w :=
   Subtype.mk_eq_mk
-
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : 𝔻 -> Prop}
-  statement: (forall z, p z) ↔ forall z hz, p (mk z hz)
-  proof: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_lt_one⟩
-
-中文:
-定理 «对任意»
-  条件: {p : 𝔻 -> 命题}
-  结论: (对任意 z, p z) ↔ 对任意 z hz, p (mk z hz)
-  证明: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_lt_one⟩
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem «forall» {p : 𝔻 -> Prop} : (forall z, p z) ↔ forall z hz, p (mk z hz) :=
-  ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_lt_one⟩
-
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : 𝔻 -> Prop}
-  statement: (exists z, p z) ↔ exists z hz, p (mk z hz)
-  proof: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_lt_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
-
-@[simp]
-
-中文:
-定理 «存在»
-  条件: {p : 𝔻 -> 命题}
-  结论: (存在 z, p z) ↔ 存在 z hz, p (mk z hz)
-  证明: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_lt_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
-
-@[simp]
+protected theorem «forall» {p : 𝔻 → Prop} : (∀ z, p z) ↔ ∀ z hz, p (mk z hz) :=
+  ⟨fun h z hz ↦ h (mk z hz), fun h z ↦ h z z.norm_lt_one⟩
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem «exists» {p : 𝔻 -> Prop} : (exists z, p z) ↔ exists z hz, p (mk z hz) :=
-  ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_lt_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
+protected theorem «exists» {p : 𝔻 → Prop} : (∃ z, p z) ↔ ∃ z hz, p (mk z hz) :=
+  ⟨fun ⟨z, hz⟩ ↦ ⟨z, z.norm_lt_one, hz⟩, fun ⟨z, hz, h⟩ ↦ ⟨mk z hz, h⟩⟩
 
 @[simp]
-/--
-theorem `mk_neg` / 定理 `mk_neg`
-
-English:
-theorem mk_neg
-  given: (z : Complex) (hz : ‖-z‖ < 1)
-  statement: mk (-z) hz = -mk z (norm_neg z ▸ hz)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_neg
-  条件: (z : 复形) (hz : ‖-z‖ < 1)
-  结论: mk (-z) hz = -mk z (norm_neg z ▸ hz)
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.mk_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：mk_neg (z : Complex) (hz : ‖-z‖ < 1) : mk (-z) hz = -mk z (norm_neg z ▸ hz
+)
+参数：z : Complex；hz : ‖-z‖ < 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_neg (z : Complex) (hz : ‖-z‖ < 1) : mk (-z) hz = -mk z (norm_neg z ▸ hz) :=
+theorem mk_neg (z : ℂ) (hz : ‖-z‖ < 1) : mk (-z) hz = -mk z (norm_neg z ▸ hz) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ((0 : 𝔻) : Complex) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ((0 : 𝔻) : 复形) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_zero : ((0 : 𝔻) : Complex) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ((0 : 𝔻) : Complex) = 0 :=
+theorem coe_zero : ((0 : 𝔻) : ℂ) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  given: {z : 𝔻}
-  statement: (z : Complex) = 0 ↔ z = 0
-  proof: coe_injective.eq_iff' coe_zero
-
-中文:
-定理 coe_eq_zero
-  条件: {z : 𝔻}
-  结论: (z : 复形) = 0 ↔ z = 0
-  证明: coe_injective.eq_iff' coe_zero
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_zero, eq_iff
+/-
+**Complex.UnitDisc.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_eq_zero {z : 𝔻} : (z : Complex) = 0 ↔ z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Complex.UnitDisc.coe_injective`：coe_injective : Injective ((↑) : 𝔻 -> Co
+mplex)
+· 使用定理 `Complex.UnitDisc.coe_zero`：coe_zero : ((0 : 𝔻) : Complex) = 0
 -/
-theorem coe_eq_zero {z : 𝔻} : (z : Complex) = 0 ↔ z = 0 :=
+theorem coe_eq_zero {z : 𝔻} : (z : ℂ) = 0 ↔ z = 0 :=
   coe_injective.eq_iff' coe_zero
-
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: mk 0 (by simp) = 0
-  proof: rfl
-
-中文:
-定理 mk_zero
-  结论: mk 0 (by simp) = 0
-  证明: rfl
+/-
+**Complex.UnitDisc.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：Complex.UnitDisc.mk 0 Complex.UnitDisc.mk_zero._proof_1 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mk_zero : mk 0 (by simp) = 0 := rfl
-
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: {z : Complex} (hz : ‖z‖ < 1)
-  statement: mk z hz = 0 ↔ z = 0
-  proof: by simp [← coe_inj]
-
-中文:
-定理 mk_eq_zero
-  条件: {z : 复形} (hz : ‖z‖ < 1)
-  结论: mk z hz = 0 ↔ z = 0
-  证明: by simp [← coe_inj]
+/-
+**Complex.UnitDisc.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ {z : ℂ} (hz : ‖z‖ < 1), Complex.UnitDisc.mk z hz = 0 ↔ z = 0
+参数：hz : ‖z‖ < 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem mk_eq_zero {z : Complex} (hz : ‖z‖ < 1) : mk z hz = 0 ↔ z = 0 := by simp [← coe_inj]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited 𝔻
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 𝔻
-  定义体: ⟨0⟩
+@[simp] theorem mk_eq_zero {z : ℂ} (hz : ‖z‖ < 1) : mk z hz = 0 ↔ z = 0 := by simp [← coe_inj]
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited 𝔻 :=
   ⟨0⟩
-
-/--
-Instance `instMulActionCircle` / 实例 `instMulActionCircle`
-
-English:
-instance instMulActionCircle
-  signature: : MulAction Circle 𝔻
-  body: inferInstanceAs MulAction (sphere _ _) (ball _ _)
-
-中文:
-实例 instMulActionCircle
-  签名: : 乘法作用 Circle 𝔻
-  定义体: inferInstanceAs MulAction (sphere _ _) (ball _ _)
-
-Depends on / 依赖: MulAction, sphere
+/-
+**Complex.UnitDisc.instMulActionCircle** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDi
+sc`。
+形式化陈述：instMulActionCircle : MulAction Circle 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionCircle : MulAction Circle 𝔻 :=
-inferInstanceAs MulAction (sphere _ _) (ball _ _)
-
-/--
-Instance `instIsScalarTower_circle_circle` / 实例 `instIsScalarTower_circle_circle`
-
-English:
-instance instIsScalarTower_circle_circle
-  signature: : IsScalarTower Circle Circle 𝔻
-  body: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (ball _ _)
-
-中文:
-实例 instIsScalarTower_circle_circle
-  签名: : 标量塔 Circle Circle 𝔻
-  定义体: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (ball _ _)
-
-Depends on / 依赖: IsScalarTower, sphere
+  inferInstanceAs <| MulAction (sphere _ _) (ball _ _)
+/-
+**Complex.UnitDisc.instIsScalarTower_circle_circle** 是 Mathlib 中的一个实例，位于命名空间 `Co
+mplex.UnitDisc`。
+形式化陈述：instIsScalarTower_circle_circle : IsScalarTower Circle Circle 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTower_circle_circle : IsScalarTower Circle Circle 𝔻 :=
-inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (ball _ _)
-
-/--
-Instance `instIsScalarTower_circle` / 实例 `instIsScalarTower_circle`
-
-English:
-instance instIsScalarTower_circle
-  signature: : IsScalarTower Circle 𝔻 𝔻
-  body: inferInstanceAs IsScalarTower (sphere _ _) (ball _ _) (ball _ _)
-
-中文:
-实例 instIsScalarTower_circle
-  签名: : 标量塔 Circle 𝔻 𝔻
-  定义体: inferInstanceAs IsScalarTower (sphere _ _) (ball _ _) (ball _ _)
-
-Depends on / 依赖: IsScalarTower, sphere
+  inferInstanceAs <| IsScalarTower (sphere _ _) (sphere _ _) (ball _ _)
+/-
+**Complex.UnitDisc.instIsScalarTower_circle** 是 Mathlib 中的一个实例，位于命名空间 `Complex.U
+nitDisc`。
+形式化陈述：instIsScalarTower_circle : IsScalarTower Circle 𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTower_circle : IsScalarTower Circle 𝔻 𝔻 :=
-inferInstanceAs IsScalarTower (sphere _ _) (ball _ _) (ball _ _)
-
-/--
-Instance `instSMulCommClass_circle_left` / 实例 `instSMulCommClass_circle_left`
-
-English:
-instance instSMulCommClass_circle_left
-  signature: : SMulCommClass Circle 𝔻 𝔻
-  body: inferInstanceAs SMulCommClass (sphere _ _) (ball _ _) (ball _ _)
-
-中文:
-实例 instSMulCommClass_circle_left
-  签名: : 标量交换类 Circle 𝔻 𝔻
-  定义体: inferInstanceAs SMulCommClass (sphere _ _) (ball _ _) (ball _ _)
-
-Depends on / 依赖: SMulCommClass, sphere
+  inferInstanceAs <| IsScalarTower (sphere _ _) (ball _ _) (ball _ _)
+/-
+**Complex.UnitDisc.instSMulCommClass_circle_left** 是 Mathlib 中的一个实例，位于命名空间 `Comp
+lex.UnitDisc`。
+形式化陈述：instSMulCommClass_circle_left : SMulCommClass Circle 𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulCommClass_circle_left : SMulCommClass Circle 𝔻 𝔻 :=
-inferInstanceAs SMulCommClass (sphere _ _) (ball _ _) (ball _ _)
-
-/--
-Instance `instSMulCommClass_circle_right` / 实例 `instSMulCommClass_circle_right`
-
-English:
-instance instSMulCommClass_circle_right
-  signature: : SMulCommClass 𝔻 Circle 𝔻
-  body: SMulCommClass.symm _ _ _
-
-@[simp, norm_cast]
-
-中文:
-实例 instSMulCommClass_circle_right
-  签名: : 标量交换类 𝔻 Circle 𝔻
-  定义体: SMulCommClass.symm _ _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+  inferInstanceAs <| SMulCommClass (sphere _ _) (ball _ _) (ball _ _)
+/-
+**Complex.UnitDisc.instSMulCommClass_circle_right** 是 Mathlib 中的一个实例，位于命名空间 `Com
+plex.UnitDisc`。
+形式化陈述：instSMulCommClass_circle_right : SMulCommClass 𝔻 Circle 𝔻
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance instSMulCommClass_circle_right : SMulCommClass 𝔻 Circle 𝔻 :=
   SMulCommClass.symm _ _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_circle_smul` / 定理 `coe_circle_smul`
-
-English:
-theorem coe_circle_smul
-  given: (z : Circle) (w : 𝔻)
-  statement: ↑(z • w) = (z * w : Complex)
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_smul_circle := coe_circle_smul
-
-中文:
-定理 coe_circle_smul
-  条件: (z : Circle) (w : 𝔻)
-  结论: ↑(z • w) = (z * w : 复形)
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_smul_circle := coe_circle_smul
+/-
+**Complex.UnitDisc.coe_circle_smul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_circle_smul (z : Circle) (w : 𝔻) : ↑(z • w) = (z * w : Complex)
+参数：z : Circle；w : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_circle_smul (z : Circle) (w : 𝔻) : ↑(z • w) = (z * w : Complex) :=
+theorem coe_circle_smul (z : Circle) (w : 𝔻) : ↑(z • w) = (z * w : ℂ) :=
   rfl
 
 @[deprecated (since := "2026-01-06")]
 alias coe_smul_circle := coe_circle_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow UnitDisc Nat+
-  body: ⟨z ^ (n : Nat), by simp [pow_lt_one_iff_of_nonneg, z.norm_lt_one]⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 幂 UnitDisc 自然数+
-  定义体: ⟨z ^ (n : Nat), by simp [pow_lt_one_iff_of_nonneg, z.norm_lt_one]⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: norm_lt_one, pow_lt_one_iff_of_nonneg, z.norm_lt_one
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow UnitDisc Nat+ where
-  pow z n := ⟨z ^ (n : Nat), by simp [pow_lt_one_iff_of_nonneg, z.norm_lt_one]⟩
+instance : Pow UnitDisc ℕ+ where
+  pow z n := ⟨z ^ (n : ℕ), by simp [pow_lt_one_iff_of_nonneg, z.norm_lt_one]⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (z : 𝔻) (n : Nat+)
-  statement: ((z ^ n : 𝔻) : Complex) = z ^ (n : Nat)
-  proof: rfl
-
-@[fun_prop]
-
-中文:
-定理 coe_pow
-  条件: (z : 𝔻) (n : 自然数+)
-  结论: ((z ^ n : 𝔻) : 复形) = z ^ (n : 自然数)
-  证明: rfl
-
-@[fun_prop]
+/-
+**Complex.UnitDisc.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：coe_pow (z : 𝔻) (n : Nat+) : ((z ^ n : 𝔻) : Complex) = z ^ (n : Nat)
+参数：z : 𝔻；n : Nat+。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow (z : 𝔻) (n : Nat+) : ((z ^ n : 𝔻) : Complex) = z ^ (n : Nat) := rfl
+theorem coe_pow (z : 𝔻) (n : ℕ+) : ((z ^ n : 𝔻) : ℂ) = z ^ (n : ℕ) := rfl
 
 @[fun_prop]
-/--
-theorem `continuous_pow` / 定理 `continuous_pow`
-
-English:
-theorem continuous_pow
-  given: (n : Nat+)
-  statement: Continuous (· ^ n : 𝔻 -> 𝔻)
-  proof: by
+/-
+**Complex.UnitDisc.continuous_pow** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：continuous_pow (n : Nat+) : Continuous (· ^ n : 𝔻 -> 𝔻)
+参数：n : Nat+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.continuous_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z 
+: Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topo
+logicalSpace Y] [inst_2 :…
+· 使用定理 `Complex.UnitDisc.isEmbedding_coe`：isEmbedding_coe : Topology.IsEmbedding
+ ((↑) : 𝔻 -> Complex)
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `Continuous.fun_pow`：∀ {M : Type u_3} {X : Type u_5} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace M] [inst_2 : Monoid M]   [ContinuousMul M] {f
+ : X → M…
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Complex.UnitDisc.continuous_coe`：continuous_coe : Continuous ((↑) : 𝔻 ->
+ Complex)
+-/
+theorem continuous_pow (n : ℕ+) : Continuous (· ^ n : 𝔻 → 𝔻) := by
   simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
   fun_prop
 
 @[simp]
-
-中文:
-定理 continuous_pow
-  条件: (n : 自然数+)
-  结论: 连续 (· ^ n : 𝔻 -> 𝔻)
-  证明: by
-  simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
-  fun_prop
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, coe_pow, comp_def, continuous_iff, fun_prop, isEmbedding_coe, isEmbedding_coe.continuous_iff
+/-
+**Complex.UnitDisc.pow_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：pow_eq_zero {z : 𝔻} {n : Nat+} : z ^ n = 0 ↔ z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.UnitDisc.coe_inj`：coe_inj {z w : 𝔻} : (z : Complex) = w ↔ z = w
+· 使用定理 `Complex.UnitDisc.coe_pow`：coe_pow (z : 𝔻) (n : Nat+) : ((z ^ n : 𝔻) : Co
+mplex) = z ^ (n : Nat)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem continuous_pow (n : Nat+) : Continuous (· ^ n : 𝔻 -> 𝔻) := by
-  simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
-  fun_prop
-
-@[simp]
-/--
-theorem `pow_eq_zero` / 定理 `pow_eq_zero`
-
-English:
-theorem pow_eq_zero
-  given: {z : 𝔻} {n : Nat+}
-  statement: z ^ n = 0 ↔ z = 0
-  proof: by
-  rw [← coe_inj]; rw [coe_pow]
+theorem pow_eq_zero {z : 𝔻} {n : ℕ+} : z ^ n = 0 ↔ z = 0 := by
+  rw [← coe_inj, coe_pow]
   simp
-
-中文:
-定理 pow_eq_zero
-  条件: {z : 𝔻} {n : 自然数+}
-  结论: z ^ n = 0 ↔ z = 0
-  证明: by
-  rw [← coe_inj]; rw [coe_pow]
-  simp
-
-Depends on / 依赖: coe_inj, coe_pow
--/
-theorem pow_eq_zero {z : 𝔻} {n : Nat+} : z ^ n = 0 ↔ z = 0 := by
-  rw [← coe_inj]; rw [coe_pow]
-  simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PNatPowAssoc 𝔻
-  body: mod_cast pow_add (z : Complex) m n
-  ppow_one z := by simp [← coe_inj]
-
-中文:
-实例 :
-  签名: P自然数PowAssoc 𝔻
-  定义体: mod_cast pow_add (z : Complex) m n
-  ppow_one z := by simp [← coe_inj]
-
-Depends on / 依赖: mod_cast, pow_add
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PNatPowAssoc 𝔻 where
-  ppow_add m n z := mod_cast pow_add (z : Complex) m n
+  ppow_add m n z := mod_cast pow_add (z : ℂ) m n
   ppow_one z := by simp [← coe_inj]
-
-/--
-theorem `tendsto_pow_atTop_nhds_zero` / 定理 `tendsto_pow_atTop_nhds_zero`
-
-English:
-theorem tendsto_pow_atTop_nhds_zero
-  given: (z : 𝔻)
-  proof: by
-  simp only [isEmbedding_coe.tendsto_nhds_iff, comp_def, coe_pow]
-  exact tendsto_pow_atTop_nhds_zero_iff_norm_lt_one.mpr z.norm_lt_one
-.comp tendsto_PNat_val_atTop_atTop
-
-中文:
-定理 tendsto_pow_atTop_nhds_zero
-  条件: (z : 𝔻)
-  证明: by
-  simp only [isEmbedding_coe.tendsto_nhds_iff, comp_def, coe_pow]
-  exact tendsto_pow_atTop_nhds_zero_iff_norm_lt_one.mpr z.norm_lt_one
-.comp tendsto_PNat_val_atTop_atTop
-
-Depends on / 依赖: coe_pow, comp_def, isEmbedding_coe, isEmbedding_coe.tendsto_nhds_iff, norm_lt_one, tendsto_PNat_val_atTop_atTop, tendsto_nhds_iff, tendsto_pow_atTop_nhds_zero_iff_norm_lt_one, tendsto_pow_atTop_nhds_zero_iff_norm_lt_one.mpr, z.norm_lt_one
+/-
+**Complex.UnitDisc.tendsto_pow_atTop_nhds_zero** 是 Mathlib 中的一个定理，位于命名空间 `Comple
+x.UnitDisc`。
+形式化陈述：tendsto_pow_atTop_nhds_zero (z : 𝔻) : Tendsto (fun n : Nat+ => z ^ n) atTo
+p (𝓝 0)
+参数：z : 𝔻。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.tendsto_nhds_iff`：∀ {Y : Type u_2} {Z : Type u_3} {
+ι : Type u_4} {g : Y → Z} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace
+ Z]   {f : ι → Y} {l : Filt…
+· 使用定理 `Complex.UnitDisc.isEmbedding_coe`：isEmbedding_coe : Topology.IsEmbedding
+ ((↑) : 𝔻 -> Complex)
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `tendsto_pow_atTop_nhds_zero_iff_norm_lt_one`：tendsto_pow_atTop_nhds_zero
+_iff_norm_lt_one {R : Type*} [SeminormedRing R] [NormMulClass R] {x : R} : Tends
+to (fun n : Nat => x ^ n) atTop (…
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Complex.UnitDisc.norm_lt_one`：norm_lt_one (z : 𝔻) : ‖(z : Complex)‖ < 1
+· 使用引理 `tendsto_PNat_val_atTop_atTop`：tendsto_PNat_val_atTop_atTop : Tendsto PNa
+t.val atTop atTop
 -/
 theorem tendsto_pow_atTop_nhds_zero (z : 𝔻) :
-    Tendsto (fun n : Nat+ => z ^ n) atTop (𝓝 0) := by
+    Tendsto (fun n : ℕ+ ↦ z ^ n) atTop (𝓝 0) := by
   simp only [isEmbedding_coe.tendsto_nhds_iff, comp_def, coe_pow]
   exact tendsto_pow_atTop_nhds_zero_iff_norm_lt_one.mpr z.norm_lt_one
-.comp tendsto_PNat_val_atTop_atTop
+    |>.comp tendsto_PNat_val_atTop_atTop
 
-/--
-Definition of `re` / `re` 的定义
+/-- Real part of a point of the unit disc. -/
+/-
+**Complex.UnitDisc.re** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：re (z : 𝔻) : Real
+参数：z : 𝔻。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition re
-  signature: (z : 𝔻)
-  body: Complex.re z
-
-中文:
-定义 re
-  签名: (z : 𝔻)
-  定义体: Complex.re z
-
-Depends on / 依赖: Complex.re
+--- 原说明 ---
+Real part of a point of the unit disc.
 -/
-def re (z : 𝔻) : Real :=
+def re (z : 𝔻) : ℝ :=
   Complex.re z
 
-/--
-Definition of `im` / `im` 的定义
+/-- Imaginary part of a point of the unit disc. -/
+/-
+**Complex.UnitDisc.im** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：im (z : 𝔻) : Real
+参数：z : 𝔻。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition im
-  signature: (z : 𝔻)
-  body: Complex.im z
-
-@[simp, norm_cast]
-
-中文:
-定义 im
-  签名: (z : 𝔻)
-  定义体: Complex.im z
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Complex.im
+--- 原说明 ---
+Imaginary part of a point of the unit disc.
 -/
-def im (z : 𝔻) : Real :=
+def im (z : 𝔻) : ℝ :=
   Complex.im z
 
 @[simp, norm_cast]
-/--
-theorem `re_coe` / 定理 `re_coe`
-
-English:
-theorem re_coe
-  given: (z : 𝔻)
-  statement: (z : Complex).re = z.re
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 re_coe
-  条件: (z : 𝔻)
-  结论: (z : 复形).re = z.re
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Complex.UnitDisc.re_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：re_coe (z : 𝔻) : (z : Complex).re = z.re
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_coe (z : 𝔻) : (z : Complex).re = z.re :=
+theorem re_coe (z : 𝔻) : (z : ℂ).re = z.re :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `im_coe` / 定理 `im_coe`
-
-English:
-theorem im_coe
-  given: (z : 𝔻)
-  statement: (z : Complex).im = z.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_coe
-  条件: (z : 𝔻)
-  结论: (z : 复形).im = z.im
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.im_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：im_coe (z : 𝔻) : (z : Complex).im = z.im
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_coe (z : 𝔻) : (z : Complex).im = z.im :=
+theorem im_coe (z : 𝔻) : (z : ℂ).im = z.im :=
   rfl
 
 @[simp]
-/--
-theorem `re_neg` / 定理 `re_neg`
-
-English:
-theorem re_neg
-  given: (z : 𝔻)
-  statement: (-z).re = -z.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_neg
-  条件: (z : 𝔻)
-  结论: (-z).re = -z.re
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitDisc.re_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：re_neg (z : 𝔻) : (-z).re = -z.re
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem re_neg (z : 𝔻) : (-z).re = -z.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_neg` / 定理 `im_neg`
-
-English:
-theorem im_neg
-  given: (z : 𝔻)
-  statement: (-z).im = -z.im
-  proof: rfl
-
-中文:
-定理 im_neg
-  条件: (z : 𝔻)
-  结论: (-z).im = -z.im
-  证明: rfl
+/-
+**Complex.UnitDisc.im_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：im_neg (z : 𝔻) : (-z).im = -z.im
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem im_neg (z : 𝔻) : (-z).im = -z.im :=
   rfl
-
-/--
-theorem `re_zero` / 定理 `re_zero`
-
-English:
-theorem re_zero
-  statement: re 0 = 0
-  proof: rfl
-
-中文:
-定理 re_zero
-  结论: re 0 = 0
-  证明: rfl
+/-
+**Complex.UnitDisc.re_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：Complex.UnitDisc.re 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_zero : re 0 = 0 := rfl
-/--
-theorem `im_zero` / 定理 `im_zero`
-
-English:
-theorem im_zero
-  statement: im 0 = 0
-  proof: rfl
-
-中文:
-定理 im_zero
-  结论: im 0 = 0
-  证明: rfl
+/-
+**Complex.UnitDisc.im_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：Complex.UnitDisc.im 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_zero : im 0 = 0 := rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Conjugate point of the unit disc. -/
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Star 𝔻
-  body: mk (conj z) (norm_conj z).symm ▸ z.norm_lt_one
-
-中文:
-实例 :
-  签名: 对合 𝔻
-  定义体: mk (conj z) (norm_conj z).symm ▸ z.norm_lt_one
-
-Depends on / 依赖: norm_conj, norm_lt_one, z.norm_lt_one
+--- 原说明 ---
+Conjugate point of the unit disc.
 -/
 instance : Star 𝔻 where
-star z := mk (conj z) (norm_conj z).symm ▸ z.norm_lt_one
+  star z := mk (conj z) <| (norm_conj z).symm ▸ z.norm_lt_one
 
 /-- Conjugate point of the unit disc. Deprecated, use `star` instead. -/
 @[deprecated star (since := "2026-01-06")]
-/--
-Definition of `«conj»` / `«conj»` 的定义
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition «conj»
-  signature: (z : 𝔻)
-  body: star z
-
-中文:
-定义 «conj»
-  签名: (z : 𝔻)
-  定义体: star z
+--- 原说明 ---
+Conjugate point of the unit disc. Deprecated, use `star` instead.
 -/
 protected def «conj» (z : 𝔻) := star z
-
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: (z : 𝔻)
-  statement: (↑(star z) : Complex) = conj ↑z
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_conj := coe_star
-
-@[simp]
-
-中文:
-定理 coe_star
-  条件: (z : 𝔻)
-  结论: (↑(star z) : 复形) = conj ↑z
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_conj := coe_star
-
-@[simp]
+/-
+**Complex.UnitDisc.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ (z : Complex.UnitDisc), ↑(star z) = (starRingEnd ℂ) ↑z
+参数：z : Complex.UnitDisc；star z；starRingEnd ℂ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_star (z : 𝔻) : (↑(star z) : Complex) = conj ↑z := rfl
+@[simp] theorem coe_star (z : 𝔻) : (↑(star z) : ℂ) = conj ↑z := rfl
 
 @[deprecated (since := "2026-01-06")]
 alias coe_conj := coe_star
 
 @[simp]
-/--
-theorem `star_eq_zero` / 定理 `star_eq_zero`
-
-English:
-theorem star_eq_zero
-  given: {z : 𝔻}
-  statement: star z = 0 ↔ z = 0
-  proof: by
-  simp [← coe_eq_zero]
-
-@[simp]
-
-中文:
-定理 star_eq_zero
-  条件: {z : 𝔻}
-  结论: star z = 0 ↔ z = 0
-  证明: by
-  simp [← coe_eq_zero]
-
-@[simp]
+/-
+**Complex.UnitDisc.star_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ {z : Complex.UnitDisc}, star z = 0 ↔ z = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem star_eq_zero {z : 𝔻} : star z = 0 ↔ z = 0 := by
   simp [← coe_eq_zero]
 
 @[simp]
-/--
-theorem `star_zero` / 定理 `star_zero`
-
-English:
-theorem star_zero
-  statement: star (0 : 𝔻) = 0
-  proof: by simp
-
-中文:
-定理 star_zero
-  结论: star (0 : 𝔻) = 0
-  证明: by simp
+/-
+**Complex.UnitDisc.star_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：star 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem star_zero : star (0 : 𝔻) = 0 := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar 𝔻
-  body: by ext; simp
-
-@[deprecated star_star (since := "2026-01-06")]
-
-中文:
-实例 :
-  签名: InvolutiveStar 𝔻
-  定义体: by ext; simp
-
-@[deprecated star_star (since := "2026-01-06")]
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InvolutiveStar 𝔻 where
   star_involutive z := by ext; simp
 
 @[deprecated star_star (since := "2026-01-06")]
-/--
-theorem `conj_conj` / 定理 `conj_conj`
-
-English:
-theorem conj_conj
-  given: (z : 𝔻)
-  statement: star (star z) = z
-  proof: star_star z
-
-中文:
-定理 conj_conj
-  条件: (z : 𝔻)
-  结论: star (star z) = z
-  证明: star_star z
-
-Depends on / 依赖: star_star
+/-
+**Complex.UnitDisc.conj_conj** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：conj_conj (z : 𝔻) : star (star z) = z
+参数：z : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 theorem conj_conj (z : 𝔻) : star (star z) = z := star_star z
-
-/--
-theorem `star_neg` / 定理 `star_neg`
-
-English:
-theorem star_neg
-  given: (z : 𝔻)
-  statement: star (-z) = -(star z)
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias conj_neg := UnitDisc.star_neg
-
-中文:
-定理 star_neg
-  条件: (z : 𝔻)
-  结论: star (-z) = -(star z)
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias conj_neg := UnitDisc.star_neg
+/-
+**Complex.UnitDisc.star_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ (z : Complex.UnitDisc), star (-z) = -star z
+参数：z : Complex.UnitDisc；-z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem star_neg (z : 𝔻) : star (-z) = -(star z) := rfl
 
 @[deprecated (since := "2026-01-06")]
 alias conj_neg := UnitDisc.star_neg
-
-/--
-theorem `re_star` / 定理 `re_star`
-
-English:
-theorem re_star
-  given: (z : 𝔻)
-  statement: (star z).re = z.re
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias re_conj := UnitDisc.re_star
-
-中文:
-定理 re_star
-  条件: (z : 𝔻)
-  结论: (star z).re = z.re
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias re_conj := UnitDisc.re_star
+/-
+**Complex.UnitDisc.re_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ (z : Complex.UnitDisc), (star z).re = z.re
+参数：z : Complex.UnitDisc；star z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem re_star (z : 𝔻) : (star z).re = z.re := rfl
 
 @[deprecated (since := "2026-01-06")]
 alias re_conj := UnitDisc.re_star
-
-/--
-theorem `im_star` / 定理 `im_star`
-
-English:
-theorem im_star
-  given: (z : 𝔻)
-  statement: (star z).im = -z.im
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")] alias im_conj := UnitDisc.im_star
-
-中文:
-定理 im_star
-  条件: (z : 𝔻)
-  结论: (star z).im = -z.im
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")] alias im_conj := UnitDisc.im_star
+/-
+**Complex.UnitDisc.im_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：∀ (z : Complex.UnitDisc), (star z).im = -z.im
+参数：z : Complex.UnitDisc；star z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem im_star (z : 𝔻) : (star z).im = -z.im := rfl
 
 @[deprecated (since := "2026-01-06")] alias im_conj := UnitDisc.im_star
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul 𝔻
-  body: coe_injective by simp [mul_comm]
-
-@[deprecated star_mul' (since := "2026-01-06")]
-
-中文:
-实例 :
-  签名: StarMul 𝔻
-  定义体: coe_injective by simp [mul_comm]
-
-@[deprecated star_mul' (since := "2026-01-06")]
-
-Depends on / 依赖: coe_injective, mul_comm
+/-
+**Complex.UnitDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul 𝔻 where
-star_mul z w := coe_injective by simp [mul_comm]
+  star_mul z w := coe_injective <| by simp [mul_comm]
 
 @[deprecated star_mul' (since := "2026-01-06")]
-/--
-theorem `conj_mul` / 定理 `conj_mul`
-
-English:
-theorem conj_mul
-  given: (z w : 𝔻)
-  statement: star (z * w) = star z * star w
-  proof: star_mul' z w
-
-中文:
-定理 conj_mul
-  条件: (z w : 𝔻)
-  结论: star (z * w) = star z * star w
-  证明: star_mul' z w
-
-Depends on / 依赖: star_mul
+/-
+**Complex.UnitDisc.conj_mul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitDisc`。
+形式化陈述：conj_mul (z w : 𝔻) : star (z * w) = star z * star w
+参数：z w : 𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_mul'`：star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) 
+= star x * star y
 -/
 theorem conj_mul (z w : 𝔻) : star (z * w) = star z * star w :=
   star_mul' z w
@@ -1460,1382 +864,772 @@ end UnitDisc
 
 namespace UnitClosedDisc
 
-/--
-Definition of `coe` / `coe` 的定义
+/-- Coercion to `ℂ`. -/
+/-
+**Complex.UnitClosedDisc.coe** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：Complex.UnitClosedDisc → ℂ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coe
-  signature: : 𝕔𝔻 -> Complex
-  body: Subtype.val
-
-中文:
-定义 coe
-  签名: : 𝕔𝔻 -> 复形
-  定义体: Subtype.val
+--- 原说明 ---
+Coercion to `ℂ`.
 -/
-@[coe] protected def coe : 𝕔𝔻 -> Complex := Subtype.val
+@[coe] protected def coe : 𝕔𝔻 → ℂ := Subtype.val
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidWithZero 𝕔𝔻
-  body: inferInstanceAs MonoidWithZero (closedBall _ _)
-
-中文:
-实例 :
-  签名: 带零幺半群 𝕔𝔻
-  定义体: inferInstanceAs MonoidWithZero (closedBall _ _)
-
-Depends on / 依赖: MonoidWithZero, closedBall
+--- 原说明 ---
+Coercion to `ℂ`.
 -/
-instance : MonoidWithZero 𝕔𝔻 := inferInstanceAs MonoidWithZero (closedBall _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCancelMulZero 𝕔𝔻
-  body: inferInstanceAs IsCancelMulZero (closedBall _ _)
-
-中文:
-实例 :
-  签名: 是乘零消去 𝕔𝔻
-  定义体: inferInstanceAs IsCancelMulZero (closedBall _ _)
-
-Depends on / 依赖: IsCancelMulZero, closedBall
+instance : MonoidWithZero 𝕔𝔻 := inferInstanceAs <| MonoidWithZero (closedBall _ _)
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCancelMulZero 𝕔𝔻 :=
-inferInstanceAs IsCancelMulZero (closedBall _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasDistribNeg 𝕔𝔻
-  body: inferInstanceAs HasDistribNeg (closedBall _ _)
-
-中文:
-实例 :
-  签名: 有DistribNeg 𝕔𝔻
-  定义体: inferInstanceAs HasDistribNeg (closedBall _ _)
-
-Depends on / 依赖: HasDistribNeg, closedBall
+  inferInstanceAs <| IsCancelMulZero (closedBall _ _)
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasDistribNeg 𝕔𝔻 :=
-inferInstanceAs HasDistribNeg (closedBall _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe 𝕔𝔻 Complex
-  body: ⟨UnitClosedDisc.coe⟩
-
-@[ext]
-
-中文:
-实例 :
-  签名: Coe 𝕔𝔻 复形
-  定义体: ⟨UnitClosedDisc.coe⟩
-
-@[ext]
-
-Depends on / 依赖: UnitClosedDisc, UnitClosedDisc.coe
+  inferInstanceAs <| HasDistribNeg (closedBall _ _)
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe 𝕔𝔻 Complex := ⟨UnitClosedDisc.coe⟩
+instance : Coe 𝕔𝔻 ℂ := ⟨UnitClosedDisc.coe⟩
 
 @[ext]
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Injective ((↑) : 𝕔𝔻 -> Complex)
-  proof: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_injective
-  结论: 单射 ((↑) : 𝕔𝔻 -> 复形)
-  证明: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**Complex.UnitClosedDisc.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitCl
+osedDisc`。
+形式化陈述：coe_injective : Injective ((↑) : 𝕔𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-theorem coe_injective : Injective ((↑) : 𝕔𝔻 -> Complex) :=
+theorem coe_injective : Injective ((↑) : 𝕔𝔻 → ℂ) :=
   Subtype.coe_injective
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {z w : 𝕔𝔻}
-  statement: (z : Complex) = w ↔ z = w
-  proof: Subtype.val_inj
-
-@[fun_prop]
-
-中文:
-定理 coe_inj
-  条件: {z w : 𝕔𝔻}
-  结论: (z : 复形) = w ↔ z = w
-  证明: Subtype.val_inj
-
-@[fun_prop]
-
-Depends on / 依赖: Subtype, Subtype.val_inj, val_inj
+/-
+**Complex.UnitClosedDisc.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：coe_inj {z w : 𝕔𝔻} : (z : Complex) = w ↔ z = w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_inj`：val_inj {a b : Subtype p} : a.val = b.val ↔ a = b
 -/
-theorem coe_inj {z w : 𝕔𝔻} : (z : Complex) = w ↔ z = w := Subtype.val_inj
+theorem coe_inj {z w : 𝕔𝔻} : (z : ℂ) = w ↔ z = w := Subtype.val_inj
 
 @[fun_prop]
-/--
-theorem `isEmbedding_coe` / 定理 `isEmbedding_coe`
-
-English:
-theorem isEmbedding_coe
-  statement: Topology.IsEmbedding ((↑) : 𝕔𝔻 -> Complex)
-  proof: .subtypeVal
-
-@[fun_prop]
-
-中文:
-定理 isEmbedding_coe
-  结论: 拓扑.是嵌入 ((↑) : 𝕔𝔻 -> 复形)
-  证明: .subtypeVal
-
-@[fun_prop]
-
-Depends on / 依赖: subtypeVal
+/-
+**Complex.UnitClosedDisc.isEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.Unit
+ClosedDisc`。
+形式化陈述：isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝕔𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsEmbedding.subtypeVal`：Topology.IsEmbedding.subtypeVal : IsEmb
+edding ((↑) : Subtype p -> X)
 -/
-theorem isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝕔𝔻 -> Complex) := .subtypeVal
+theorem isEmbedding_coe : Topology.IsEmbedding ((↑) : 𝕔𝔻 → ℂ) := .subtypeVal
 
 @[fun_prop]
-/--
-theorem `continuous_coe` / 定理 `continuous_coe`
-
-English:
-theorem continuous_coe
-  statement: Continuous ((↑) : 𝕔𝔻 -> Complex)
-  proof: isEmbedding_coe.continuous
-
-中文:
-定理 continuous_coe
-  结论: 连续 ((↑) : 𝕔𝔻 -> 复形)
-  证明: isEmbedding_coe.continuous
-
-Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
+/-
+**Complex.UnitClosedDisc.continuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitC
+losedDisc`。
+形式化陈述：continuous_coe : Continuous ((↑) : 𝕔𝔻 -> Complex)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用定理 `Complex.UnitClosedDisc.isEmbedding_coe`：isEmbedding_coe : Topology.IsEmb
+edding ((↑) : 𝕔𝔻 -> Complex)
 -/
-theorem continuous_coe : Continuous ((↑) : 𝕔𝔻 -> Complex) := isEmbedding_coe.continuous
-
-/--
-theorem `norm_le_one` / 定理 `norm_le_one`
-
-English:
-theorem norm_le_one
-  given: (z : 𝕔𝔻)
-  statement: ‖(z : Complex)‖ <= 1
-  proof: mem_closedBall_zero_iff.1 z.2
-
-中文:
-定理 norm_le_one
-  条件: (z : 𝕔𝔻)
-  结论: ‖(z : 复形)‖ <= 1
-  证明: mem_closedBall_zero_iff.1 z.2
-
-Depends on / 依赖: mem_closedBall_zero_iff
+theorem continuous_coe : Continuous ((↑) : 𝕔𝔻 → ℂ) := isEmbedding_coe.continuous
+/-
+**Complex.UnitClosedDisc.norm_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClos
+edDisc`。
+形式化陈述：norm_le_one (z : 𝕔𝔻) : ‖(z : Complex)‖ <= 1
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_closedBall_zero_iff`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] 
+{a : E} {r : ℝ}, a ∈ Metric.closedBall 0 r ↔ ‖a‖ ≤ r
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem norm_le_one (z : 𝕔𝔻) : ‖(z : Complex)‖ <= 1 :=
+theorem norm_le_one (z : 𝕔𝔻) : ‖(z : ℂ)‖ ≤ 1 :=
   mem_closedBall_zero_iff.1 z.2
-
-/--
-theorem `sq_norm_lt_one` / 定理 `sq_norm_lt_one`
-
-English:
-theorem sq_norm_lt_one
-  given: (z : 𝕔𝔻)
-  statement: ‖(z : Complex)‖ ^ 2 <= 1
-  proof: by
-  rw [sq_le_one_iff_abs_le_one]; rw [abs_norm]
-  exact z.norm_le_one
-
-中文:
-定理 sq_norm_lt_one
-  条件: (z : 𝕔𝔻)
-  结论: ‖(z : 复形)‖ ^ 2 <= 1
-  证明: by
-  rw [sq_le_one_iff_abs_le_one]; rw [abs_norm]
-  exact z.norm_le_one
-
-Depends on / 依赖: abs_norm, norm_le_one, sq_le_one_iff_abs_le_one, z.norm_le_one
+/-
+**Complex.UnitClosedDisc.sq_norm_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitC
+losedDisc`。
+形式化陈述：sq_norm_lt_one (z : 𝕔𝔻) : ‖(z : Complex)‖ ^ 2 <= 1
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq_le_one_iff_abs_le_one`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : Lin
+earOrder α] [IsStrictOrderedRing α] (a : α), a ^ 2 ≤ 1 ↔ |a| ≤ 1
+· 使用定理 `abs_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (z : E), |‖z‖| 
+= ‖z‖
+· 使用定理 `Complex.UnitClosedDisc.norm_le_one`：norm_le_one (z : 𝕔𝔻) : ‖(z : Complex
+)‖ <= 1
 -/
-theorem sq_norm_lt_one (z : 𝕔𝔻) : ‖(z : Complex)‖ ^ 2 <= 1 := by
-  rw [sq_le_one_iff_abs_le_one]; rw [abs_norm]
+theorem sq_norm_lt_one (z : 𝕔𝔻) : ‖(z : ℂ)‖ ^ 2 ≤ 1 := by
+  rw [sq_le_one_iff_abs_le_one, abs_norm]
   exact z.norm_le_one
-
-/--
-theorem `normSq_lt_one` / 定理 `normSq_lt_one`
-
-English:
-theorem normSq_lt_one
-  given: (z : 𝕔𝔻)
-  statement: normSq z <= 1
-  proof: by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
+/-
+**Complex.UnitClosedDisc.normSq_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitCl
+osedDisc`。
+形式化陈述：normSq_lt_one (z : 𝕔𝔻) : normSq z <= 1
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.norm_mul_self_eq_normSq`：norm_mul_self_eq_normSq (z : Complex) :
+ ‖z‖ * ‖z‖ = normSq z
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Complex.UnitClosedDisc.sq_norm_lt_one`：sq_norm_lt_one (z : 𝕔𝔻) : ‖(z : C
+omplex)‖ ^ 2 <= 1
+-/
+theorem normSq_lt_one (z : 𝕔𝔻) : normSq z ≤ 1 := by
+  rw [← Complex.norm_mul_self_eq_normSq, ← sq]
   exact z.sq_norm_lt_one
 
 @[simp, norm_cast]
-
-中文:
-定理 normSq_lt_one
-  条件: (z : 𝕔𝔻)
-  结论: normSq z <= 1
-  证明: by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
-  exact z.sq_norm_lt_one
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Complex.norm_mul_self_eq_normSq, norm_mul_self_eq_normSq, sq_norm_lt_one, z.sq_norm_lt_one
+/-
+**Complex.UnitClosedDisc.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：coe_mul (z w : 𝕔𝔻) : ↑(z * w) = (z * w : Complex)
+参数：z w : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem normSq_lt_one (z : 𝕔𝔻) : normSq z <= 1 := by
-  rw [← Complex.norm_mul_self_eq_normSq]; rw [← sq]
-  exact z.sq_norm_lt_one
-
-@[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (z w : 𝕔𝔻)
-  statement: ↑(z * w) = (z * w : Complex)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mul
-  条件: (z w : 𝕔𝔻)
-  结论: ↑(z * w) = (z * w : 复形)
-  证明: rfl
-
-@[simp, norm_cast]
--/
-theorem coe_mul (z w : 𝕔𝔻) : ↑(z * w) = (z * w : Complex) :=
+theorem coe_mul (z w : 𝕔𝔻) : ↑(z * w) = (z * w : ℂ) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (z : 𝕔𝔻)
-  statement: ↑(-z) = (-z : Complex)
-  proof: rfl
-
-中文:
-定理 coe_neg
-  条件: (z : 𝕔𝔻)
-  结论: ↑(-z) = (-z : 复形)
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：coe_neg (z : 𝕔𝔻) : ↑(-z) = (-z : Complex)
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg (z : 𝕔𝔻) : ↑(-z) = (-z : Complex) := rfl
+theorem coe_neg (z : 𝕔𝔻) : ↑(-z) = (-z : ℂ) := rfl
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- A constructor that assumes `‖z‖ < 1` instead of `dist z 0 < 1` and returns an element
+of `𝕔𝔻` instead of `↥Metric.ball (0 : ℂ) 1`. -/
+/-
+**Complex.UnitClosedDisc.mk** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：mk (z : Complex) (hz : ‖z‖ <= 1) : 𝕔𝔻
+参数：z : Complex；hz : ‖z‖ <= 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (z : Complex) (hz : ‖z‖ <= 1)
-  body: ⟨z, mem_closedBall_zero_iff.2 hz⟩
-
-中文:
-定义 mk
-  签名: (z : 复形) (hz : ‖z‖ <= 1)
-  定义体: ⟨z, mem_closedBall_zero_iff.2 hz⟩
-
-Depends on / 依赖: mem_closedBall_zero_iff
+--- 原说明 ---
+A constructor that assumes `‖z‖ < 1` instead of `dist z 0 < 1` and returns an el
+ement
+of `𝕔𝔻` instead of `↥Metric.ball (0 : ℂ) 1`.
 -/
-def mk (z : Complex) (hz : ‖z‖ <= 1) : 𝕔𝔻 :=
+def mk (z : ℂ) (hz : ‖z‖ ≤ 1) : 𝕔𝔻 :=
   ⟨z, mem_closedBall_zero_iff.2 hz⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift Complex 𝕔𝔻 (↑) (‖·‖ <= 1)
-  body: ⟨mk z hz, rfl⟩
-
-中文:
-实例 :
-  签名: CanLift 复形 𝕔𝔻 (↑) (‖·‖ <= 1)
-  定义体: ⟨mk z hz, rfl⟩
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CanLift Complex 𝕔𝔻 (↑) (‖·‖ <= 1) where
+instance : CanLift ℂ 𝕔𝔻 (↑) (‖·‖ ≤ 1) where
   prf z hz := ⟨mk z hz, rfl⟩
 
 /-- A cases eliminator that makes `cases z` use `UnitClosedDisc.mk` instead of `Subtype.mk`. -/
 @[elab_as_elim, cases_eliminator]
-/--
-Definition of `casesOn` / `casesOn` 的定义
+/-
+**Complex.UnitClosedDisc.casesOn** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：{motive : Complex.UnitClosedDisc → Sort u_1} →   ((z : ℂ) → (hz : ‖z‖ ≤ 1)
+ → motive (Complex.UnitClosedDisc.mk z hz)) → (z : Complex.UnitClosedDisc) → mot
+ive z
+参数：(z : ℂ) → (hz : ‖z‖ ≤ 1) → motive (Complex.UnitClosedDisc.mk z hz)；z : Comple
+x.UnitClosedDisc。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.UnitClosedDisc.norm_le_one`：norm_le_one (z : 𝕔𝔻) : ‖(z : Complex
+)‖ <= 1
 
-English:
-definition casesOn
-  signature: {motive : 𝕔𝔻 -> Sort*} (mk : forall z hz, motive (.mk z hz)) (z : 𝕔𝔻)
-  body: mk z z.norm_le_one
-
-@[simp]
-
-中文:
-定义 casesOn
-  签名: {motive : 𝕔𝔻 -> 类型层*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝕔𝔻)
-  定义体: mk z z.norm_le_one
-
-@[simp]
+--- 原说明 ---
+A cases eliminator that makes `cases z` use `UnitClosedDisc.mk` instead of `Subt
+ype.mk`.
 -/
-protected def casesOn {motive : 𝕔𝔻 -> Sort*} (mk : forall z hz, motive (.mk z hz)) (z : 𝕔𝔻) :
+protected def casesOn {motive : 𝕔𝔻 → Sort*} (mk : ∀ z hz, motive (.mk z hz)) (z : 𝕔𝔻) :
     motive z :=
   mk z z.norm_le_one
 
 @[simp]
-/--
-theorem `casesOn_mk` / 定理 `casesOn_mk`
-
-English:
-theorem casesOn_mk
-  given: {motive : 𝕔𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ <= 1)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 casesOn_mk
-  条件: {motive : 𝕔𝔻 -> 类型层*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : 复形} (hz : ‖z‖ <= 1)
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.casesOn_mk** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClose
+dDisc`。
+形式化陈述：casesOn_mk {motive : 𝕔𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {
+z : Complex} (hz : ‖z‖ <= 1) : (mk z hz).casesOn mk' = mk' z hz
+参数：mk' : forall z hz, motive (.mk z hz)；hz : ‖z‖ <= 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem casesOn_mk {motive : 𝕔𝔻 -> Sort*} (mk' : forall z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ <= 1) :
+theorem casesOn_mk {motive : 𝕔𝔻 → Sort*} (mk' : ∀ z hz, motive (.mk z hz)) {z : ℂ} (hz : ‖z‖ ≤ 1) :
     (mk z hz).casesOn mk' = mk' z hz :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (z : Complex) (hz : ‖z‖ <= 1)
-  statement: (mk z hz : Complex) = z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (z : 复形) (hz : ‖z‖ <= 1)
-  结论: (mk z hz : 复形) = z
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：coe_mk (z : Complex) (hz : ‖z‖ <= 1) : (mk z hz : Complex) = z
+参数：z : Complex；hz : ‖z‖ <= 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (z : Complex) (hz : ‖z‖ <= 1) : (mk z hz : Complex) = z :=
+theorem coe_mk (z : ℂ) (hz : ‖z‖ ≤ 1) : (mk z hz : ℂ) = z :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (z : 𝕔𝔻) (hz : ‖(z : Complex)‖ <= 1 := z.norm_le_one)
-  statement: mk z hz = z
-  proof: Subtype.eta _ _
-
-@[simp]
-
-中文:
-定理 mk_coe
-  条件: (z : 𝕔𝔻) (hz : ‖(z : 复形)‖ <= 1 := z.norm_le_one)
-  结论: mk z hz = z
-  证明: Subtype.eta _ _
-
-@[simp]
-
-Depends on / 依赖: norm_le_one, z.norm_le_one
+/-
+**Complex.UnitClosedDisc.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：mk_coe (z : 𝕔𝔻) (hz : ‖(z : Complex)‖ <= 1
+参数：z : 𝕔𝔻。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.eta`：∀ {α : Sort u} {p : α → Prop} (a : { x // p x }) (h : p ↑a)
+, ⟨↑a, h⟩ = a
 -/
-theorem mk_coe (z : 𝕔𝔻) (hz : ‖(z : Complex)‖ <= 1 := z.norm_le_one) : mk z hz = z :=
+theorem mk_coe (z : 𝕔𝔻) (hz : ‖(z : ℂ)‖ ≤ 1 := z.norm_le_one) : mk z hz = z :=
   Subtype.eta _ _
 
 @[simp]
-/--
-theorem `mk_inj` / 定理 `mk_inj`
-
-English:
-theorem mk_inj
-  given: {z w : Complex} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1)
-  statement: mk z hz = mk w hw ↔ z = w
-  proof: Subtype.mk_eq_mk
-
-中文:
-定理 mk_inj
-  条件: {z w : 复形} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1)
-  结论: mk z hz = mk w hw ↔ z = w
-  证明: Subtype.mk_eq_mk
-
-Depends on / 依赖: Subtype, Subtype.mk_eq_mk, mk_eq_mk
+/-
+**Complex.UnitClosedDisc.mk_inj** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：mk_inj {z w : Complex} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1) : mk z hz = mk w hw
+ ↔ z = w
+参数：hz : ‖z‖ <= 1；hw : ‖w‖ <= 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.mk_eq_mk`：mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a
+ = a'
 -/
-theorem mk_inj {z w : Complex} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1) : mk z hz = mk w hw ↔ z = w :=
+theorem mk_inj {z w : ℂ} (hz : ‖z‖ ≤ 1) (hw : ‖w‖ ≤ 1) : mk z hz = mk w hw ↔ z = w :=
   Subtype.mk_eq_mk
-
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : 𝕔𝔻 -> Prop}
-  statement: (forall z, p z) ↔ forall z hz, p (mk z hz)
-  proof: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_le_one⟩
-
-中文:
-定理 «对任意»
-  条件: {p : 𝕔𝔻 -> 命题}
-  结论: (对任意 z, p z) ↔ 对任意 z hz, p (mk z hz)
-  证明: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_le_one⟩
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem «forall» {p : 𝕔𝔻 -> Prop} : (forall z, p z) ↔ forall z hz, p (mk z hz) :=
-  ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_le_one⟩
-
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : 𝕔𝔻 -> Prop}
-  statement: (exists z, p z) ↔ exists z hz, p (mk z hz)
-  proof: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_le_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
-
-@[simp]
-
-中文:
-定理 «存在»
-  条件: {p : 𝕔𝔻 -> 命题}
-  结论: (存在 z, p z) ↔ 存在 z hz, p (mk z hz)
-  证明: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_le_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
-
-@[simp]
+protected theorem «forall» {p : 𝕔𝔻 → Prop} : (∀ z, p z) ↔ ∀ z hz, p (mk z hz) :=
+  ⟨fun h z hz ↦ h (mk z hz), fun h z ↦ h z z.norm_le_one⟩
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem «exists» {p : 𝕔𝔻 -> Prop} : (exists z, p z) ↔ exists z hz, p (mk z hz) :=
-  ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_le_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
+protected theorem «exists» {p : 𝕔𝔻 → Prop} : (∃ z, p z) ↔ ∃ z hz, p (mk z hz) :=
+  ⟨fun ⟨z, hz⟩ ↦ ⟨z, z.norm_le_one, hz⟩, fun ⟨z, hz, h⟩ ↦ ⟨mk z hz, h⟩⟩
 
 @[simp]
-/--
-theorem `mk_neg` / 定理 `mk_neg`
-
-English:
-theorem mk_neg
-  given: (z : Complex) (hz : ‖-z‖ <= 1)
-  statement: mk (-z) hz = -mk z (norm_neg z ▸ hz)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_neg
-  条件: (z : 复形) (hz : ‖-z‖ <= 1)
-  结论: mk (-z) hz = -mk z (norm_neg z ▸ hz)
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.mk_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：mk_neg (z : Complex) (hz : ‖-z‖ <= 1) : mk (-z) hz = -mk z (norm_neg z ▸ h
+z)
+参数：z : Complex；hz : ‖-z‖ <= 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_neg (z : Complex) (hz : ‖-z‖ <= 1) : mk (-z) hz = -mk z (norm_neg z ▸ hz) :=
+theorem mk_neg (z : ℂ) (hz : ‖-z‖ ≤ 1) : mk (-z) hz = -mk z (norm_neg z ▸ hz) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ((0 : 𝕔𝔻) : Complex) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ((0 : 𝕔𝔻) : 复形) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedD
+isc`。
+形式化陈述：coe_zero : ((0 : 𝕔𝔻) : Complex) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ((0 : 𝕔𝔻) : Complex) = 0 :=
+theorem coe_zero : ((0 : 𝕔𝔻) : ℂ) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  given: {z : 𝕔𝔻}
-  statement: (z : Complex) = 0 ↔ z = 0
-  proof: coe_injective.eq_iff' coe_zero
-
-中文:
-定理 coe_eq_zero
-  条件: {z : 𝕔𝔻}
-  结论: (z : 复形) = 0 ↔ z = 0
-  证明: coe_injective.eq_iff' coe_zero
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_zero, eq_iff
+/-
+**Complex.UnitClosedDisc.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClos
+edDisc`。
+形式化陈述：coe_eq_zero {z : 𝕔𝔻} : (z : Complex) = 0 ↔ z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Complex.UnitClosedDisc.coe_injective`：coe_injective : Injective ((↑) : 𝕔
+𝔻 -> Complex)
+· 使用定理 `Complex.UnitClosedDisc.coe_zero`：coe_zero : ((0 : 𝕔𝔻) : Complex) = 0
 -/
-theorem coe_eq_zero {z : 𝕔𝔻} : (z : Complex) = 0 ↔ z = 0 :=
+theorem coe_eq_zero {z : 𝕔𝔻} : (z : ℂ) = 0 ↔ z = 0 :=
   coe_injective.eq_iff' coe_zero
-
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: mk 0 (by simp) = 0
-  proof: rfl
-
-中文:
-定理 mk_zero
-  结论: mk 0 (by simp) = 0
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：Complex.UnitClosedDisc.mk 0 Complex.UnitClosedDisc.mk_zero._proof_1 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mk_zero : mk 0 (by simp) = 0 := rfl
-
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: {z : Complex} (hz : ‖z‖ <= 1)
-  statement: mk z hz = 0 ↔ z = 0
-  proof: by simp [← coe_inj]
-
-@[simp]
-
-中文:
-定理 mk_eq_zero
-  条件: {z : 复形} (hz : ‖z‖ <= 1)
-  结论: mk z hz = 0 ↔ z = 0
-  证明: by simp [← coe_inj]
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClose
+dDisc`。
+形式化陈述：∀ {z : ℂ} (hz : ‖z‖ ≤ 1), Complex.UnitClosedDisc.mk z hz = 0 ↔ z = 0
+参数：hz : ‖z‖ ≤ 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem mk_eq_zero {z : Complex} (hz : ‖z‖ <= 1) : mk z hz = 0 ↔ z = 0 := by simp [← coe_inj]
+@[simp] theorem mk_eq_zero {z : ℂ} (hz : ‖z‖ ≤ 1) : mk z hz = 0 ↔ z = 0 := by simp [← coe_inj]
 
 @[simp]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : 𝕔𝔻) : Complex) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_one
-  结论: ((1 : 𝕔𝔻) : 复形) = 1
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：coe_one : ((1 : 𝕔𝔻) : Complex) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : ((1 : 𝕔𝔻) : Complex) = 1 :=
+theorem coe_one : ((1 : 𝕔𝔻) : ℂ) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_eq_one` / 定理 `coe_eq_one`
-
-English:
-theorem coe_eq_one
-  given: {z : 𝕔𝔻}
-  statement: (z : Complex) = 1 ↔ z = 1
-  proof: coe_injective.eq_iff' coe_one
-
-中文:
-定理 coe_eq_one
-  条件: {z : 𝕔𝔻}
-  结论: (z : 复形) = 1 ↔ z = 1
-  证明: coe_injective.eq_iff' coe_one
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_one, eq_iff
+/-
+**Complex.UnitClosedDisc.coe_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClose
+dDisc`。
+形式化陈述：coe_eq_one {z : 𝕔𝔻} : (z : Complex) = 1 ↔ z = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Complex.UnitClosedDisc.coe_injective`：coe_injective : Injective ((↑) : 𝕔
+𝔻 -> Complex)
+· 使用定理 `Complex.UnitClosedDisc.coe_one`：coe_one : ((1 : 𝕔𝔻) : Complex) = 1
 -/
-theorem coe_eq_one {z : 𝕔𝔻} : (z : Complex) = 1 ↔ z = 1 :=
+theorem coe_eq_one {z : 𝕔𝔻} : (z : ℂ) = 1 ↔ z = 1 :=
   coe_injective.eq_iff' coe_one
-
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  statement: mk 1 (by simp) = 1
-  proof: rfl
-
-中文:
-定理 mk_one
-  结论: mk 1 (by simp) = 1
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：Complex.UnitClosedDisc.mk 1 Complex.UnitClosedDisc.mk_one._proof_1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mk_one : mk 1 (by simp) = 1 := rfl
-
-/--
-theorem `mk_eq_one` / 定理 `mk_eq_one`
-
-English:
-theorem mk_eq_one
-  given: {z : Complex} (hz : ‖z‖ <= 1)
-  statement: mk z hz = 1 ↔ z = 1
-  proof: by simp [← coe_inj]
-
-中文:
-定理 mk_eq_one
-  条件: {z : 复形} (hz : ‖z‖ <= 1)
-  结论: mk z hz = 1 ↔ z = 1
-  证明: by simp [← coe_inj]
+/-
+**Complex.UnitClosedDisc.mk_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosed
+Disc`。
+形式化陈述：∀ {z : ℂ} (hz : ‖z‖ ≤ 1), Complex.UnitClosedDisc.mk z hz = 1 ↔ z = 1
+参数：hz : ‖z‖ ≤ 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem mk_eq_one {z : Complex} (hz : ‖z‖ <= 1) : mk z hz = 1 ↔ z = 1 := by simp [← coe_inj]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited 𝕔𝔻
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 𝕔𝔻
-  定义体: ⟨0⟩
+@[simp] theorem mk_eq_one {z : ℂ} (hz : ‖z‖ ≤ 1) : mk z hz = 1 ↔ z = 1 := by simp [← coe_inj]
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited 𝕔𝔻 :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction Circle 𝕔𝔻
-  body: inferInstanceAs MulAction (sphere _ _) (closedBall _ _)
-
-中文:
-实例 :
-  签名: 乘法作用 Circle 𝕔𝔻
-  定义体: inferInstanceAs MulAction (sphere _ _) (closedBall _ _)
-
-Depends on / 依赖: MulAction, closedBall, sphere
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction Circle 𝕔𝔻 :=
-inferInstanceAs MulAction (sphere _ _) (closedBall _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Circle Circle 𝕔𝔻
-  body: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (closedBall _ _)
-
-中文:
-实例 :
-  签名: 标量塔 Circle Circle 𝕔𝔻
-  定义体: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (closedBall _ _)
-
-Depends on / 依赖: IsScalarTower, closedBall, sphere
+  inferInstanceAs <| MulAction (sphere _ _) (closedBall _ _)
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower Circle Circle 𝕔𝔻 :=
-inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (closedBall _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Circle 𝕔𝔻 𝕔𝔻
-  body: isScalarTower_sphere_closedBall_closedBall
-
-中文:
-实例 :
-  签名: 标量塔 Circle 𝕔𝔻 𝕔𝔻
-  定义体: isScalarTower_sphere_closedBall_closedBall
-
-Depends on / 依赖: isScalarTower_sphere_closedBall_closedBall
+  inferInstanceAs <| IsScalarTower (sphere _ _) (sphere _ _) (closedBall _ _)
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower Circle 𝕔𝔻 𝕔𝔻 :=
   isScalarTower_sphere_closedBall_closedBall
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass Circle 𝕔𝔻 𝕔𝔻
-  body: instSMulCommClass_sphere_closedBall_closedBall
-
-中文:
-实例 :
-  签名: 标量交换类 Circle 𝕔𝔻 𝕔𝔻
-  定义体: instSMulCommClass_sphere_closedBall_closedBall
-
-Depends on / 依赖: instSMulCommClass_sphere_closedBall_closedBall
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass Circle 𝕔𝔻 𝕔𝔻 :=
   instSMulCommClass_sphere_closedBall_closedBall
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass 𝕔𝔻 Circle 𝕔𝔻
-  body: SMulCommClass.symm _ _ _
-
-中文:
-实例 :
-  签名: 标量交换类 𝕔𝔻 Circle 𝕔𝔻
-  定义体: SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass 𝕔𝔻 Circle 𝕔𝔻 :=
   SMulCommClass.symm _ _ _
-
-/--
-Instance `instMulActionClosedBall` / 实例 `instMulActionClosedBall`
-
-English:
-instance instMulActionClosedBall
-  signature: : MulAction 𝕔𝔻 𝔻
-  body: inferInstanceAs MulAction (closedBall _ _) (ball _ _)
-
-中文:
-实例 instMulActionClosedBall
-  签名: : 乘法作用 𝕔𝔻 𝔻
-  定义体: inferInstanceAs MulAction (closedBall _ _) (ball _ _)
-
-Depends on / 依赖: MulAction, closedBall
+/-
+**Complex.UnitClosedDisc.instMulActionClosedBall** 是 Mathlib 中的一个实例，位于命名空间 `Comp
+lex.UnitClosedDisc`。
+形式化陈述：instMulActionClosedBall : MulAction 𝕔𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionClosedBall : MulAction 𝕔𝔻 𝔻 :=
-inferInstanceAs MulAction (closedBall _ _) (ball _ _)
-
-/--
-Instance `instIsScalarTower_closedBall_closedBall` / 实例 `instIsScalarTower_closedBall_closedBall`
-
-English:
-instance instIsScalarTower_closedBall_closedBall
-  signature: :
-  body: inferInstanceAs IsScalarTower (closedBall _ _) (closedBall _ _) (ball _ _)
-
-中文:
-实例 instIsScalarTower_closedBall_closedBall
-  签名: :
-  定义体: inferInstanceAs IsScalarTower (closedBall _ _) (closedBall _ _) (ball _ _)
-
-Depends on / 依赖: IsScalarTower, closedBall
+  inferInstanceAs <| MulAction (closedBall _ _) (ball _ _)
+/-
+**Complex.UnitClosedDisc.instIsScalarTower_closedBall_closedBall** 是 Mathlib 中的一
+个实例，位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：instIsScalarTower_closedBall_closedBall : IsScalarTower 𝕔𝔻 𝕔𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTower_closedBall_closedBall :
     IsScalarTower 𝕔𝔻 𝕔𝔻 𝔻 :=
-inferInstanceAs IsScalarTower (closedBall _ _) (closedBall _ _) (ball _ _)
-
-/--
-Instance `instIsScalarTower_closedBall` / 实例 `instIsScalarTower_closedBall`
-
-English:
-instance instIsScalarTower_closedBall
-  signature: : IsScalarTower 𝕔𝔻 𝔻 𝔻
-  body: inferInstanceAs IsScalarTower (closedBall _ _) (ball _ _) (ball _ _)
-
-中文:
-实例 instIsScalarTower_closedBall
-  签名: : 标量塔 𝕔𝔻 𝔻 𝔻
-  定义体: inferInstanceAs IsScalarTower (closedBall _ _) (ball _ _) (ball _ _)
-
-Depends on / 依赖: IsScalarTower, closedBall
+  inferInstanceAs <| IsScalarTower (closedBall _ _) (closedBall _ _) (ball _ _)
+/-
+**Complex.UnitClosedDisc.instIsScalarTower_closedBall** 是 Mathlib 中的一个实例，位于命名空间 
+`Complex.UnitClosedDisc`。
+形式化陈述：instIsScalarTower_closedBall : IsScalarTower 𝕔𝔻 𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTower_closedBall : IsScalarTower 𝕔𝔻 𝔻 𝔻 :=
-inferInstanceAs IsScalarTower (closedBall _ _) (ball _ _) (ball _ _)
-
-/--
-Instance `instSMulCommClass_closedBall_left` / 实例 `instSMulCommClass_closedBall_left`
-
-English:
-instance instSMulCommClass_closedBall_left
-  signature: : SMulCommClass 𝕔𝔻 𝔻 𝔻
-  body: ⟨fun _ _ _ => Subtype.ext mul_left_comm _ _ _⟩
-
-中文:
-实例 instSMulCommClass_closedBall_left
-  签名: : 标量交换类 𝕔𝔻 𝔻 𝔻
-  定义体: ⟨fun _ _ _ => Subtype.ext mul_left_comm _ _ _⟩
-
-Depends on / 依赖: Subtype, Subtype.ext, mul_left_comm
+  inferInstanceAs <| IsScalarTower (closedBall _ _) (ball _ _) (ball _ _)
+/-
+**Complex.UnitClosedDisc.instSMulCommClass_closedBall_left** 是 Mathlib 中的一个实例，位于
+命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：instSMulCommClass_closedBall_left : SMulCommClass 𝕔𝔻 𝔻 𝔻
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
 -/
 instance instSMulCommClass_closedBall_left : SMulCommClass 𝕔𝔻 𝔻 𝔻 :=
-⟨fun _ _ _ => Subtype.ext mul_left_comm _ _ _⟩
-
-/--
-Instance `instSMulCommClass_closedBall_right` / 实例 `instSMulCommClass_closedBall_right`
-
-English:
-instance instSMulCommClass_closedBall_right
-  signature: : SMulCommClass 𝔻 𝕔𝔻 𝔻
-  body: SMulCommClass.symm _ _ _
-
-中文:
-实例 instSMulCommClass_closedBall_right
-  签名: : 标量交换类 𝔻 𝕔𝔻 𝔻
-  定义体: SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+  ⟨fun _ _ _ => Subtype.ext <| mul_left_comm _ _ _⟩
+/-
+**Complex.UnitClosedDisc.instSMulCommClass_closedBall_right** 是 Mathlib 中的一个实例，位
+于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：instSMulCommClass_closedBall_right : SMulCommClass 𝔻 𝕔𝔻 𝔻
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance instSMulCommClass_closedBall_right : SMulCommClass 𝔻 𝕔𝔻 𝔻 :=
   SMulCommClass.symm _ _ _
-
-/--
-Instance `instSMulCommClass_circle_closedBall` / 实例 `instSMulCommClass_circle_closedBall`
-
-English:
-instance instSMulCommClass_circle_closedBall
-  signature: : SMulCommClass Circle 𝕔𝔻 𝔻
-  body: inferInstanceAs SMulCommClass (sphere _ _) (closedBall _ _) (ball _ _)
-
-中文:
-实例 instSMulCommClass_circle_closedBall
-  签名: : 标量交换类 Circle 𝕔𝔻 𝔻
-  定义体: inferInstanceAs SMulCommClass (sphere _ _) (closedBall _ _) (ball _ _)
-
-Depends on / 依赖: SMulCommClass, closedBall, sphere
+/-
+**Complex.UnitClosedDisc.instSMulCommClass_circle_closedBall** 是 Mathlib 中的一个实例，
+位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：instSMulCommClass_circle_closedBall : SMulCommClass Circle 𝕔𝔻 𝔻
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulCommClass_circle_closedBall : SMulCommClass Circle 𝕔𝔻 𝔻 :=
-inferInstanceAs SMulCommClass (sphere _ _) (closedBall _ _) (ball _ _)
-
-/--
-Instance `instSMulCommClass_closedBall_circle` / 实例 `instSMulCommClass_closedBall_circle`
-
-English:
-instance instSMulCommClass_closedBall_circle
-  signature: : SMulCommClass 𝕔𝔻 Circle 𝔻
-  body: SMulCommClass.symm _ _ _
-
-@[simp, norm_cast]
-
-中文:
-实例 instSMulCommClass_closedBall_circle
-  签名: : 标量交换类 𝕔𝔻 Circle 𝔻
-  定义体: SMulCommClass.symm _ _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+  inferInstanceAs <| SMulCommClass (sphere _ _) (closedBall _ _) (ball _ _)
+/-
+**Complex.UnitClosedDisc.instSMulCommClass_closedBall_circle** 是 Mathlib 中的一个实例，
+位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：instSMulCommClass_closedBall_circle : SMulCommClass 𝕔𝔻 Circle 𝔻
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance instSMulCommClass_closedBall_circle : SMulCommClass 𝕔𝔻 Circle 𝔻 :=
   SMulCommClass.symm _ _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_closedBall_smul` / 定理 `coe_closedBall_smul`
-
-English:
-theorem coe_closedBall_smul
-  given: (z : 𝕔𝔻) (w : 𝔻)
-  statement: ↑(z • w) = (z * w : Complex)
-  proof: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_smul_closedBall := coe_closedBall_smul
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_closedBall_smul
-  条件: (z : 𝕔𝔻) (w : 𝔻)
-  结论: ↑(z • w) = (z * w : 复形)
-  证明: rfl
-
-@[deprecated (since := "2026-01-06")]
-alias coe_smul_closedBall := coe_closedBall_smul
-
-@[simp, norm_cast]
+/-
+**Complex.UnitClosedDisc.coe_closedBall_smul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.
+UnitClosedDisc`。
+形式化陈述：coe_closedBall_smul (z : 𝕔𝔻) (w : 𝔻) : ↑(z • w) = (z * w : Complex)
+参数：z : 𝕔𝔻；w : 𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_closedBall_smul (z : 𝕔𝔻) (w : 𝔻) : ↑(z • w) = (z * w : Complex) :=
+theorem coe_closedBall_smul (z : 𝕔𝔻) (w : 𝔻) : ↑(z • w) = (z * w : ℂ) :=
   rfl
 
 @[deprecated (since := "2026-01-06")]
 alias coe_smul_closedBall := coe_closedBall_smul
 
 @[simp, norm_cast]
-/--
-theorem `coe_circle_smul` / 定理 `coe_circle_smul`
-
-English:
-theorem coe_circle_smul
-  given: (z : Circle) (w : 𝕔𝔻)
-  statement: ↑(z • w) = (z * w : Complex)
-  proof: rfl
-
-中文:
-定理 coe_circle_smul
-  条件: (z : Circle) (w : 𝕔𝔻)
-  结论: ↑(z • w) = (z * w : 复形)
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.coe_circle_smul** 是 Mathlib 中的一个定理，位于命名空间 `Complex.Unit
+ClosedDisc`。
+形式化陈述：coe_circle_smul (z : Circle) (w : 𝕔𝔻) : ↑(z • w) = (z * w : Complex)
+参数：z : Circle；w : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_circle_smul (z : Circle) (w : 𝕔𝔻) : ↑(z • w) = (z * w : Complex) :=
+theorem coe_circle_smul (z : Circle) (w : 𝕔𝔻) : ↑(z • w) = (z * w : ℂ) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass 𝕔𝔻 Circle 𝕔𝔻
-  body: SMulCommClass.symm _ _ _
-
-中文:
-实例 :
-  签名: 标量交换类 𝕔𝔻 Circle 𝕔𝔻
-  定义体: SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass 𝕔𝔻 Circle 𝕔𝔻 :=
   SMulCommClass.symm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow 𝕔𝔻 Nat
-  body: ⟨z ^ n, by simp [pow_le_one₀ (norm_nonneg _) z.norm_le_one]⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 幂 𝕔𝔻 自然数
-  定义体: ⟨z ^ n, by simp [pow_le_one₀ (norm_nonneg _) z.norm_le_one]⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: norm_le_one, norm_nonneg, z.norm_le_one
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow 𝕔𝔻 Nat where
+instance : Pow 𝕔𝔻 ℕ where
   pow z n := ⟨z ^ n, by simp [pow_le_one₀ (norm_nonneg _) z.norm_le_one]⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (z : 𝕔𝔻) (n : Nat)
-  statement: ((z ^ n : 𝕔𝔻) : Complex) = z ^ (n : Nat)
-  proof: rfl
-
-@[fun_prop]
-
-中文:
-定理 coe_pow
-  条件: (z : 𝕔𝔻) (n : 自然数)
-  结论: ((z ^ n : 𝕔𝔻) : 复形) = z ^ (n : 自然数)
-  证明: rfl
-
-@[fun_prop]
+/-
+**Complex.UnitClosedDisc.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：coe_pow (z : 𝕔𝔻) (n : Nat) : ((z ^ n : 𝕔𝔻) : Complex) = z ^ (n : Nat)
+参数：z : 𝕔𝔻；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow (z : 𝕔𝔻) (n : Nat) : ((z ^ n : 𝕔𝔻) : Complex) = z ^ (n : Nat) := rfl
+theorem coe_pow (z : 𝕔𝔻) (n : ℕ) : ((z ^ n : 𝕔𝔻) : ℂ) = z ^ (n : ℕ) := rfl
 
 @[fun_prop]
-/--
-theorem `continuous_pow` / 定理 `continuous_pow`
-
-English:
-theorem continuous_pow
-  given: (n : Nat)
-  statement: Continuous (· ^ n : 𝕔𝔻 -> 𝕔𝔻)
-  proof: by
-  simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
-  fun_prop
-
-中文:
-定理 continuous_pow
-  条件: (n : 自然数)
-  结论: 连续 (· ^ n : 𝕔𝔻 -> 𝕔𝔻)
-  证明: by
-  simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
-  fun_prop
-
-Depends on / 依赖: Function, Function.comp_def, coe_pow, comp_def, continuous_iff, fun_prop, isEmbedding_coe, isEmbedding_coe.continuous_iff
+/-
+**Complex.UnitClosedDisc.continuous_pow** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitC
+losedDisc`。
+形式化陈述：continuous_pow (n : Nat) : Continuous (· ^ n : 𝕔𝔻 -> 𝕔𝔻)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.continuous_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z 
+: Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topo
+logicalSpace Y] [inst_2 :…
+· 使用定理 `Complex.UnitClosedDisc.isEmbedding_coe`：isEmbedding_coe : Topology.IsEmb
+edding ((↑) : 𝕔𝔻 -> Complex)
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `Continuous.fun_pow`：∀ {M : Type u_3} {X : Type u_5} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace M] [inst_2 : Monoid M]   [ContinuousMul M] {f
+ : X → M…
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Complex.UnitClosedDisc.continuous_coe`：continuous_coe : Continuous ((↑) 
+: 𝕔𝔻 -> Complex)
 -/
-theorem continuous_pow (n : Nat) : Continuous (· ^ n : 𝕔𝔻 -> 𝕔𝔻) := by
+theorem continuous_pow (n : ℕ) : Continuous (· ^ n : 𝕔𝔻 → 𝕔𝔻) := by
   simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
   fun_prop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatPowAssoc 𝕔𝔻
-  body: mod_cast pow_add (z : Complex) m n
-  npow_one z := by simp [← coe_inj]
-  npow_zero z := by simp [← coe_inj]
-
-中文:
-实例 :
-  签名: 自然数PowAssoc 𝕔𝔻
-  定义体: mod_cast pow_add (z : Complex) m n
-  npow_one z := by simp [← coe_inj]
-  npow_zero z := by simp [← coe_inj]
-
-Depends on / 依赖: mod_cast, pow_add
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatPowAssoc 𝕔𝔻 where
-  npow_add m n z := mod_cast pow_add (z : Complex) m n
+  npow_add m n z := mod_cast pow_add (z : ℂ) m n
   npow_one z := by simp [← coe_inj]
   npow_zero z := by simp [← coe_inj]
 
-/--
-Definition of `re` / `re` 的定义
+/-- Real part of a point of the unit disc. -/
+/-
+**Complex.UnitClosedDisc.re** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：re (z : 𝕔𝔻) : Real
+参数：z : 𝕔𝔻。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition re
-  signature: (z : 𝕔𝔻)
-  body: Complex.re z
-
-中文:
-定义 re
-  签名: (z : 𝕔𝔻)
-  定义体: Complex.re z
-
-Depends on / 依赖: Complex.re
+--- 原说明 ---
+Real part of a point of the unit disc.
 -/
-def re (z : 𝕔𝔻) : Real :=
+def re (z : 𝕔𝔻) : ℝ :=
   Complex.re z
 
-/--
-Definition of `im` / `im` 的定义
+/-- Imaginary part of a point of the unit disc. -/
+/-
+**Complex.UnitClosedDisc.im** 是 Mathlib 中的一个定义，位于命名空间 `Complex.UnitClosedDisc`。
+形式化陈述：im (z : 𝕔𝔻) : Real
+参数：z : 𝕔𝔻。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition im
-  signature: (z : 𝕔𝔻)
-  body: Complex.im z
-
-@[simp, norm_cast]
-
-中文:
-定义 im
-  签名: (z : 𝕔𝔻)
-  定义体: Complex.im z
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Complex.im
+--- 原说明 ---
+Imaginary part of a point of the unit disc.
 -/
-def im (z : 𝕔𝔻) : Real :=
+def im (z : 𝕔𝔻) : ℝ :=
   Complex.im z
 
 @[simp, norm_cast]
-/--
-theorem `re_coe` / 定理 `re_coe`
-
-English:
-theorem re_coe
-  given: (z : 𝕔𝔻)
-  statement: (z : Complex).re = z.re
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 re_coe
-  条件: (z : 𝕔𝔻)
-  结论: (z : 复形).re = z.re
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Complex.UnitClosedDisc.re_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：re_coe (z : 𝕔𝔻) : (z : Complex).re = z.re
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_coe (z : 𝕔𝔻) : (z : Complex).re = z.re :=
+theorem re_coe (z : 𝕔𝔻) : (z : ℂ).re = z.re :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `im_coe` / 定理 `im_coe`
-
-English:
-theorem im_coe
-  given: (z : 𝕔𝔻)
-  statement: (z : Complex).im = z.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_coe
-  条件: (z : 𝕔𝔻)
-  结论: (z : 复形).im = z.im
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.im_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：im_coe (z : 𝕔𝔻) : (z : Complex).im = z.im
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_coe (z : 𝕔𝔻) : (z : Complex).im = z.im :=
+theorem im_coe (z : 𝕔𝔻) : (z : ℂ).im = z.im :=
   rfl
 
 @[simp]
-/--
-theorem `re_neg` / 定理 `re_neg`
-
-English:
-theorem re_neg
-  given: (z : 𝕔𝔻)
-  statement: (-z).re = -z.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_neg
-  条件: (z : 𝕔𝔻)
-  结论: (-z).re = -z.re
-  证明: rfl
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.re_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：re_neg (z : 𝕔𝔻) : (-z).re = -z.re
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem re_neg (z : 𝕔𝔻) : (-z).re = -z.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_neg` / 定理 `im_neg`
-
-English:
-theorem im_neg
-  given: (z : 𝕔𝔻)
-  statement: (-z).im = -z.im
-  proof: rfl
-
-中文:
-定理 im_neg
-  条件: (z : 𝕔𝔻)
-  结论: (-z).im = -z.im
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.im_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDis
+c`。
+形式化陈述：im_neg (z : 𝕔𝔻) : (-z).im = -z.im
+参数：z : 𝕔𝔻。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem im_neg (z : 𝕔𝔻) : (-z).im = -z.im :=
   rfl
-
-/--
-theorem `re_zero` / 定理 `re_zero`
-
-English:
-theorem re_zero
-  statement: re 0 = 0
-  proof: rfl
-
-中文:
-定理 re_zero
-  结论: re 0 = 0
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.re_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：Complex.UnitClosedDisc.re 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_zero : re 0 = 0 := rfl
-/--
-theorem `im_zero` / 定理 `im_zero`
-
-English:
-theorem im_zero
-  statement: im 0 = 0
-  proof: rfl
-
-中文:
-定理 im_zero
-  结论: im 0 = 0
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.im_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：Complex.UnitClosedDisc.im 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_zero : im 0 = 0 := rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Conjugate point of the unit disc. -/
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Star 𝕔𝔻
-  body: mk (conj z) (norm_conj z).symm ▸ z.norm_le_one
-
-中文:
-实例 :
-  签名: 对合 𝕔𝔻
-  定义体: mk (conj z) (norm_conj z).symm ▸ z.norm_le_one
-
-Depends on / 依赖: norm_conj, norm_le_one, z.norm_le_one
+--- 原说明 ---
+Conjugate point of the unit disc.
 -/
 instance : Star 𝕔𝔻 where
-star z := mk (conj z) (norm_conj z).symm ▸ z.norm_le_one
-
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: (z : 𝕔𝔻)
-  statement: (↑(star z) : Complex) = conj ↑z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_star
-  条件: (z : 𝕔𝔻)
-  结论: (↑(star z) : 复形) = conj ↑z
-  证明: rfl
-
-@[simp]
+  star z := mk (conj z) <| (norm_conj z).symm ▸ z.norm_le_one
+/-
+**Complex.UnitClosedDisc.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedD
+isc`。
+形式化陈述：∀ (z : Complex.UnitClosedDisc), ↑(star z) = (starRingEnd ℂ) ↑z
+参数：z : Complex.UnitClosedDisc；star z；starRingEnd ℂ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_star (z : 𝕔𝔻) : (↑(star z) : Complex) = conj ↑z := rfl
+@[simp] theorem coe_star (z : 𝕔𝔻) : (↑(star z) : ℂ) = conj ↑z := rfl
 
 @[simp]
-/--
-theorem `star_eq_zero` / 定理 `star_eq_zero`
-
-English:
-theorem star_eq_zero
-  given: {z : 𝕔𝔻}
-  statement: star z = 0 ↔ z = 0
-  proof: by
-  simp [← coe_eq_zero]
-
-@[simp]
-
-中文:
-定理 star_eq_zero
-  条件: {z : 𝕔𝔻}
-  结论: star z = 0 ↔ z = 0
-  证明: by
-  simp [← coe_eq_zero]
-
-@[simp]
+/-
+**Complex.UnitClosedDisc.star_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClo
+sedDisc`。
+形式化陈述：∀ {z : Complex.UnitClosedDisc}, star z = 0 ↔ z = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem star_eq_zero {z : 𝕔𝔻} : star z = 0 ↔ z = 0 := by
   simp [← coe_eq_zero]
 
 @[simp]
-/--
-theorem `star_zero` / 定理 `star_zero`
-
-English:
-theorem star_zero
-  statement: star (0 : 𝕔𝔻) = 0
-  proof: by simp
-
-中文:
-定理 star_zero
-  结论: star (0 : 𝕔𝔻) = 0
-  证明: by simp
+/-
+**Complex.UnitClosedDisc.star_zero** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosed
+Disc`。
+形式化陈述：star 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem star_zero : star (0 : 𝕔𝔻) = 0 := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar 𝕔𝔻
-  body: by ext; simp
-
-中文:
-实例 :
-  签名: InvolutiveStar 𝕔𝔻
-  定义体: by ext; simp
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InvolutiveStar 𝕔𝔻 where
   star_involutive z := by ext; simp
-
-/--
-theorem `star_neg` / 定理 `star_neg`
-
-English:
-theorem star_neg
-  given: (z : 𝕔𝔻)
-  statement: star (-z) = -(star z)
-  proof: rfl
-
-中文:
-定理 star_neg
-  条件: (z : 𝕔𝔻)
-  结论: star (-z) = -(star z)
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.star_neg** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedD
+isc`。
+形式化陈述：∀ (z : Complex.UnitClosedDisc), star (-z) = -star z
+参数：z : Complex.UnitClosedDisc；-z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem star_neg (z : 𝕔𝔻) : star (-z) = -(star z) := rfl
-
-/--
-theorem `re_star` / 定理 `re_star`
-
-English:
-theorem re_star
-  given: (z : 𝕔𝔻)
-  statement: (star z).re = z.re
-  proof: rfl
-
-中文:
-定理 re_star
-  条件: (z : 𝕔𝔻)
-  结论: (star z).re = z.re
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.re_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：∀ (z : Complex.UnitClosedDisc), (star z).re = z.re
+参数：z : Complex.UnitClosedDisc；star z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem re_star (z : 𝕔𝔻) : (star z).re = z.re := rfl
-
-/--
-theorem `im_star` / 定理 `im_star`
-
-English:
-theorem im_star
-  given: (z : 𝕔𝔻)
-  statement: (star z).im = -z.im
-  proof: rfl
-
-中文:
-定理 im_star
-  条件: (z : 𝕔𝔻)
-  结论: (star z).im = -z.im
-  证明: rfl
+/-
+**Complex.UnitClosedDisc.im_star** 是 Mathlib 中的一个定理，位于命名空间 `Complex.UnitClosedDi
+sc`。
+形式化陈述：∀ (z : Complex.UnitClosedDisc), (star z).im = -z.im
+参数：z : Complex.UnitClosedDisc；star z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] protected theorem im_star (z : 𝕔𝔻) : (star z).im = -z.im := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul 𝕔𝔻
-  body: coe_injective by simp [mul_comm]
-
-中文:
-实例 :
-  签名: StarMul 𝕔𝔻
-  定义体: coe_injective by simp [mul_comm]
-
-Depends on / 依赖: coe_injective, mul_comm
+/-
+**Complex.UnitClosedDisc.** 是 Mathlib 中的一个实例，位于命名空间 `Complex.UnitClosedDisc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul 𝕔𝔻 where
-star_mul z w := coe_injective by simp [mul_comm]
+  star_mul z w := coe_injective <| by simp [mul_comm]
 
 end UnitClosedDisc
 
 end Complex
+

@@ -50,68 +50,31 @@ register_option says.no_verify_in_CI : Bool :=
 open Parser Tactic
 
 /--
-Definition of `evalTacticCapturingTryThis` / `evalTacticCapturingTryThis` 的定义
+Run `evalTactic`, capturing a "Try this:" message and converting it back to syntax.
+-/
+/-
+**Mathlib.Tactic.Says.evalTacticCapturingTryThis** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Says`。
+形式化陈述：evalTacticCapturingTryThis (tac : TSyntax `tactic) : TacticM (TSyntax ``ta
+cticSeq)
+参数：tac : TSyntax `tactic。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalTacticCapturingTryThis
-  signature: (tac : TSyntax `tactic)
-  body: do
-let { trees, ..} ← withResetServerInfo evalTactic tac
-  let suggestions := collectTryThisSuggestions trees
-  let some s := suggestions[0]?
-    | throwError m!"Tactic `{tac}` did not produce a 'Try this:' suggestion."
-  let suggestion ← do
-    if let some msg := s.messageData? then
-pure SuggestionText.string ← msg.toString
-    else
-pure s.suggestion
-  match suggestion with
-  | .tsyntax (kind := ``tacticSeq) stx =>
-    return stx
-  | .tsyntax (kind := `tactic) stx =>
-    return ← `(tacticSeq| $stx:tactic)
-  | .tsyntax stx =>
-    throwError m!"Tactic `{tac}` produced a 'Try this:' suggestion with a non-tactic syntax: {stx}"
-  | .string s =>
-    match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) s with
-    | .ok stx => return stx
-    | .error err => throwError m!"Failed to parse 'Try this:' suggestion: {s}\n{err}"
-
-中文:
-定义 evalTacticCapturingTryThis
-  签名: (tac : TSyntax `tactic)
-  定义体: do
-let { trees, ..} ← withResetServerInfo evalTactic tac
-  let suggestions := collectTryThisSuggestions trees
-  let some s := suggestions[0]?
-    | throwError m!"Tactic `{tac}` did not produce a 'Try this:' suggestion."
-  let suggestion ← do
-    if let some msg := s.messageData? then
-pure SuggestionText.string ← msg.toString
-    else
-pure s.suggestion
-  match suggestion with
-  | .tsyntax (kind := ``tacticSeq) stx =>
-    return stx
-  | .tsyntax (kind := `tactic) stx =>
-    return ← `(tacticSeq| $stx:tactic)
-  | .tsyntax stx =>
-    throwError m!"Tactic `{tac}` produced a 'Try this:' suggestion with a non-tactic syntax: {stx}"
-  | .string s =>
-    match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) s with
-    | .ok stx => return stx
-    | .error err => throwError m!"Failed to parse 'Try this:' suggestion: {s}\n{err}"
+--- 原说明 ---
+Run `evalTactic`, capturing a "Try this:" message and converting it back to synt
+ax.
 -/
 def evalTacticCapturingTryThis (tac : TSyntax `tactic) : TacticM (TSyntax ``tacticSeq) := do
-let { trees, ..} ← withResetServerInfo evalTactic tac
+  let { trees, ..} ← withResetServerInfo <| evalTactic tac
   let suggestions := collectTryThisSuggestions trees
   let some s := suggestions[0]?
     | throwError m!"Tactic `{tac}` did not produce a 'Try this:' suggestion."
   let suggestion ← do
     if let some msg := s.messageData? then
-pure SuggestionText.string ← msg.toString
+      pure <| SuggestionText.string <| ← msg.toString
     else
-pure s.suggestion
+      pure <| s.suggestion
   match suggestion with
   | .tsyntax (kind := ``tacticSeq) stx =>
     return stx
@@ -162,3 +125,4 @@ initialize Batteries.Linter.UnreachableTactic.addIgnoreTacticKind `Mathlib.Tacti
 end Says
 
 end Mathlib.Tactic
+

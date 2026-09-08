@@ -17,113 +17,72 @@ variable {α β : Type*}
 
 namespace Finite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] [Finite β] : Finite (α oplus β)
-  body: by
+/-
+**Finite.** 是 Mathlib 中的一个实例，位于命名空间 `Finite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [Finite α] [Finite β] : Finite (α ⊕ β) := by
   have := Fintype.ofFinite α
   have := Fintype.ofFinite β
   infer_instance
-
-中文:
-实例 [有限
-  签名: α] [有限 β] : 有限 (α oplus β)
-  定义体: by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite β
-  infer_instance
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, infer_instance, ofFinite
+/-
+**Finite.sum_left** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：sum_left (β) [Finite (α oplus β)] : Finite α
+参数：β；α oplus β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `Sum.inl_injective`：inl_injective : Function.Injective (inl : α -> α oplu
+s β)
 -/
-instance [Finite α] [Finite β] : Finite (α oplus β) := by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite β
-  infer_instance
-
-/--
-theorem `sum_left` / 定理 `sum_left`
-
-English:
-theorem sum_left
-  given: (β) [Finite (α oplus β)]
-  statement: Finite α
-  proof: of_injective (Sum.inl : α -> α oplus β) Sum.inl_injective
-
-中文:
-定理 sum_left
-  条件: (β) [有限 (α oplus β)]
-  结论: 有限 α
-  证明: of_injective (Sum.inl : α -> α oplus β) Sum.inl_injective
-
-Depends on / 依赖: Sum.inl, Sum.inl_injective, inl_injective, of_injective
+theorem sum_left (β) [Finite (α ⊕ β)] : Finite α :=
+  of_injective (Sum.inl : α → α ⊕ β) Sum.inl_injective
+/-
+**Finite.sum_right** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：sum_right (α) [Finite (α oplus β)] : Finite β
+参数：α；α oplus β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `Sum.inr_injective`：inr_injective : Function.Injective (inr : β -> α oplu
+s β)
 -/
-theorem sum_left (β) [Finite (α oplus β)] : Finite α :=
-  of_injective (Sum.inl : α -> α oplus β) Sum.inl_injective
-
-/--
-theorem `sum_right` / 定理 `sum_right`
-
-English:
-theorem sum_right
-  given: (α) [Finite (α oplus β)]
-  statement: Finite β
-  proof: of_injective (Sum.inr : β -> α oplus β) Sum.inr_injective
-
-中文:
-定理 sum_right
-  条件: (α) [有限 (α oplus β)]
-  结论: 有限 β
-  证明: of_injective (Sum.inr : β -> α oplus β) Sum.inr_injective
-
-Depends on / 依赖: Sum.inr, Sum.inr_injective, inr_injective, of_injective
+theorem sum_right (α) [Finite (α ⊕ β)] : Finite β :=
+  of_injective (Sum.inr : β → α ⊕ β) Sum.inr_injective
+/-
+**Finite.** 是 Mathlib 中的一个实例，位于命名空间 `Finite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sum_right (α) [Finite (α oplus β)] : Finite β :=
-  of_injective (Sum.inr : β -> α oplus β) Sum.inr_injective
-
-instance {α β : Sort*} [Finite α] [Finite β] : Finite (α oplus' β) :=
+instance {α β : Sort*} [Finite α] [Finite β] : Finite (α ⊕' β) :=
   of_equiv _ ((Equiv.psumEquivSum _ _).symm.trans (Equiv.plift.psumCongr Equiv.plift))
-
-/--
-theorem `psum_left` / 定理 `psum_left`
-
-English:
-theorem psum_left
-  given: {α β : Sort*} [Finite (α oplus' β)]
-  statement: Finite α
-  proof: of_injective (PSum.inl : α -> α oplus' β) PSum.inl_injective
-
-中文:
-定理 psum_left
-  条件: {α β : 类型层*} [有限 (α oplus' β)]
-  结论: 有限 α
-  证明: of_injective (PSum.inl : α -> α oplus' β) PSum.inl_injective
-
-Depends on / 依赖: PSum.inl, PSum.inl_injective, inl_injective, of_injective
+/-
+**Finite.psum_left** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：psum_left {α β : Sort*} [Finite (α oplus' β)] : Finite α
+参数：α oplus' β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `PSum.inl_injective`：inl_injective : Function.Injective (PSum.inl : α -> 
+α oplus' β)
 -/
-theorem psum_left {α β : Sort*} [Finite (α oplus' β)] : Finite α :=
-  of_injective (PSum.inl : α -> α oplus' β) PSum.inl_injective
-
-/--
-theorem `psum_right` / 定理 `psum_right`
-
-English:
-theorem psum_right
-  given: {α β : Sort*} [Finite (α oplus' β)]
-  statement: Finite β
-  proof: of_injective (PSum.inr : β -> α oplus' β) PSum.inr_injective
-
-中文:
-定理 psum_right
-  条件: {α β : 类型层*} [有限 (α oplus' β)]
-  结论: 有限 β
-  证明: of_injective (PSum.inr : β -> α oplus' β) PSum.inr_injective
-
-Depends on / 依赖: PSum.inr, PSum.inr_injective, inr_injective, of_injective
+theorem psum_left {α β : Sort*} [Finite (α ⊕' β)] : Finite α :=
+  of_injective (PSum.inl : α → α ⊕' β) PSum.inl_injective
+/-
+**Finite.psum_right** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：psum_right {α β : Sort*} [Finite (α oplus' β)] : Finite β
+参数：α oplus' β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `PSum.inr_injective`：inr_injective : Function.Injective (PSum.inr : β -> 
+α oplus' β)
 -/
-theorem psum_right {α β : Sort*} [Finite (α oplus' β)] : Finite β :=
-  of_injective (PSum.inr : β -> α oplus' β) PSum.inr_injective
+theorem psum_right {α β : Sort*} [Finite (α ⊕' β)] : Finite β :=
+  of_injective (PSum.inr : β → α ⊕' β) PSum.inr_injective
 
 end Finite
+

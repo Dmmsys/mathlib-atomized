@@ -69,26 +69,26 @@ public meta section
 
 open Lean Meta Elab Tactic
 
-/--
-Definition of `Convert.CheapConfig` / `Convert.CheapConfig` 的定义
+/-- Configuration for the `convert` family of tactics.
+This is `Congr!.Config` with different, less aggressive, defaults.
 
-English:
-structure Convert.CheapConfig
-  parameters: extends Congr!.Config
-  extends: Congr!.Config
-  axioms and operations (2):
-    - postTransparency : = .reducible
-    - sameFun : = true
+To elaborate config options for `convert`, use `Convert.elabConfig` which chooses
+between `Convert.CheapConfig` and `Convert.ExpensiveConfig` based on other flags.
+-/
+/-
+**Convert.CheapConfig** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Convert.CheapConfig extends Congr!.Config where postTransparency
+继承自：Congr!.Config。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 Convert.CheapConfig
-  参数: extends 余ngr!.余nfig
-  继承: 余ngr!.余nfig
-  公理与运算 (2 个):
-    - postTransparency : = .reducible
-    - sameFun : = true
+--- 原说明 ---
+Configuration for the `convert` family of tactics.
+This is `Congr!.Config` with different, less aggressive, defaults.
 
-Depends on / 依赖: reducible
+To elaborate config options for `convert`, use `Convert.elabConfig` which choose
+s
+between `Convert.CheapConfig` and `Convert.ExpensiveConfig` based on other flags
+.
 -/
 structure Convert.CheapConfig extends Congr!.Config where
   postTransparency := .reducible
@@ -97,20 +97,43 @@ structure Convert.CheapConfig extends Congr!.Config where
 /-- Internal elaborator for `Convert.CheapConfig`: use `Convert.elabConfig` instead. -/
 declare_config_elab Convert.elabCheapConfig Convert.CheapConfig
 
-/--
-Definition of `Convert.ExpensiveConfig` / `Convert.ExpensiveConfig` 的定义
+/-- Configuration for the `convert!` family of tactics.
+This is `Convert.CheapConfig` (used by `convert` without exclamation mark) with different,
+more aggressive, defaults.
 
-English:
-structure Convert.ExpensiveConfig
-  parameters: extends Congr!.Config
-  extends: Congr!.Config
-  (no additional axioms)
+To elaborate config options for `convert`, use `Convert.elabConfig` which chooses
+between `Convert.CheapConfig` and `Convert.ExpensiveConfig` based on other flags.
 
-中文:
-结构 Convert.ExpensiveConfig
-  参数: extends 余ngr!.余nfig
-  继承: 余ngr!.余nfig
-  (无附加公理)
+We separate out the two structures to allow the user to explicitly set options in the call, so for
+example the following call runs at `.instances` transparency.
+```
+convert! (postTransparency := .instances)
+```
+-/
+/-
+**Convert.ExpensiveConfig** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Convert.ExpensiveConfig extends Congr!.Config where -- TODO: also enable t
+his in the future? -- preTransparency
+继承自：Congr!.Config。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Configuration for the `convert!` family of tactics.
+This is `Convert.CheapConfig` (used by `convert` without exclamation mark) with 
+different,
+more aggressive, defaults.
+
+To elaborate config options for `convert`, use `Convert.elabConfig` which choose
+s
+between `Convert.CheapConfig` and `Convert.ExpensiveConfig` based on other flags
+.
+
+We separate out the two structures to allow the user to explicitly set options i
+n the call, so for
+example the following call runs at `.instances` transparency.
+```
+convert! (postTransparency := .instances)
+```
 -/
 structure Convert.ExpensiveConfig extends Congr!.Config where
   -- TODO: also enable this in the future?
@@ -120,30 +143,26 @@ structure Convert.ExpensiveConfig extends Congr!.Config where
 /-- Internal elaborator for `Convert.ExpensiveConfig`: use `Convert.elabConfig` instead. -/
 declare_config_elab Convert.elabExpensiveConfig Convert.ExpensiveConfig
 
-/--
-Definition of `Convert.elabConfig` / `Convert.elabConfig` 的定义
+/-- Configuration elaborator for the `convert`/`convert!` family of tactics.
 
-English:
-definition Convert.elabConfig
-  signature: (expensive : Bool) (stx : Syntax)
-  body: do
-  -- Implement overridable fields by choosing to elaborate one of two structures,
-  -- which have different defaults (that can later be overridden by the user).
-  if expensive then
-    pure { ← Convert.elabExpensiveConfig stx with }
-  else
-    pure { ← Convert.elabCheapConfig stx with }
+If `expensive` is true, we're elaborating for `convert!`, and will configure to run at default
+transparency (unless explicitly overridden by the user saying e.g. `(transparency := .instances)`.)
+-/
+/-
+**Convert.elabConfig** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Convert.elabConfig (expensive : Bool) (stx : Syntax) : TacticM Congr!.Conf
+ig
+参数：expensive : Bool；stx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Convert.elabConfig
-  签名: (expensive : 布尔值) (stx : Syntax)
-  定义体: do
-  -- Implement overridable fields by choosing to elaborate one of two structures,
-  -- which have different defaults (that can later be overridden by the user).
-  if expensive then
-    pure { ← Convert.elabExpensiveConfig stx with }
-  else
-    pure { ← Convert.elabCheapConfig stx with }
+--- 原说明 ---
+Configuration elaborator for the `convert`/`convert!` family of tactics.
+
+If `expensive` is true, we're elaborating for `convert!`, and will configure to 
+run at default
+transparency (unless explicitly overridden by the user saying e.g. `(transparenc
+y := .instances)`.)
 -/
 def Convert.elabConfig (expensive : Bool) (stx : Syntax) : TacticM Congr!.Config := do
   -- Implement overridable fields by choosing to elaborate one of two structures,
@@ -154,31 +173,29 @@ def Convert.elabConfig (expensive : Bool) (stx : Syntax) : TacticM Congr!.Config
     pure { ← Convert.elabCheapConfig stx with }
 
 /--
-Definition of `Lean.MVarId.convert` / `Lean.MVarId.convert` 的定义
+Close the goal `g` using `Eq.mp v e`,
+where `v` is a metavariable asserting that the type of `g` and `e` are equal.
+Then call `MVarId.congrN!` (also using local hypotheses and reflexivity) on `v`,
+and return the resulting goals.
 
-English:
-definition Lean.MVarId.convert
-  signature: (e : Expr) (symm : Bool)
-  body: g.withContext do
-  let src ← inferType e
-  let tgt ← g.getType
-  let v ← mkFreshExprMVar (← mkAppM ``Eq (if symm then #[src, tgt] else #[tgt, src]))
-  g.assign (← mkAppM (if symm then ``Eq.mp else ``Eq.mpr) #[v, e])
-  let m := v.mvarId!
-  m.congrN! depth config patterns
+With `symm = true`, reverses the equality in `v`, and uses `Eq.mpr v e` instead.
+With `depth = some n`, calls `MVarId.congrN! n` instead, with `n` as the max recursion depth.
+-/
+/-
+**Lean.MVarId.convert** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.MVarId.convert (e : Expr) (symm : Bool) (depth : Option Nat
+参数：e : Expr；symm : Bool。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Lean.MVarId.convert
-  签名: (e : Expr) (symm : 布尔值)
-  定义体: g.withContext do
-  let src ← inferType e
-  let tgt ← g.getType
-  let v ← mkFreshExprMVar (← mkAppM ``Eq (if symm then #[src, tgt] else #[tgt, src]))
-  g.assign (← mkAppM (if symm then ``Eq.mp else ``Eq.mpr) #[v, e])
-  let m := v.mvarId!
-  m.congrN! depth config patterns
+--- 原说明 ---
+Close the goal `g` using `Eq.mp v e`,
+where `v` is a metavariable asserting that the type of `g` and `e` are equal.
+Then call `MVarId.congrN!` (also using local hypotheses and reflexivity) on `v`,
+and return the resulting goals.
 
-Depends on / 依赖: Config, config
+With `symm = true`, reverses the equality in `v`, and uses `Eq.mpr v e` instead.
+With `depth = some n`, calls `MVarId.congrN! n` instead, with `n` as the max rec
+ursion depth.
 -/
 def Lean.MVarId.convert (e : Expr) (symm : Bool)
     (depth : Option Nat := none) (config : Congr!.Config := {})
@@ -192,33 +209,33 @@ def Lean.MVarId.convert (e : Expr) (symm : Bool)
   m.congrN! depth config patterns
 
 /--
-Definition of `Lean.MVarId.convertLocalDecl` / `Lean.MVarId.convertLocalDecl` 的定义
+Replaces the type of the local declaration `fvarId` with `typeNew`,
+using `Lean.MVarId.congrN!` to prove that the old type of `fvarId` is equal to `typeNew`.
+Uses `Lean.MVarId.replaceLocalDecl` to replace the type.
+Returns the new goal along with the side goals generated by `congrN!`.
 
-English:
-definition Lean.MVarId.convertLocalDecl
-  signature: (g : MVarId) (fvarId : FVarId) (typeNew : Expr) (symm : Bool)
-  body: g.withContext do
-  let typeOld ← fvarId.getType
-  let v ← mkFreshExprMVar (← mkAppM ``Eq
-    (if symm then #[typeNew, typeOld] else #[typeOld, typeNew]))
-  let pf ← if symm then mkEqSymm v else pure v
-  let res ← g.replaceLocalDecl fvarId typeNew pf
-  let gs ← v.mvarId!.congrN! depth config patterns
-  return (res.mvarId, gs)
+With `symm = true`, reverses the equality,
+changing the goal to prove `typeNew` is equal to `typeOld`.
+With `depth = some n`, calls `MVarId.congrN! n` instead, with `n` as the max recursion depth.
+-/
+/-
+**Lean.MVarId.convertLocalDecl** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.MVarId.convertLocalDecl (g : MVarId) (fvarId : FVarId) (typeNew : Exp
+r) (symm : Bool) (depth : Option Nat
+参数：g : MVarId；fvarId : FVarId；typeNew : Expr；symm : Bool。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Lean.MVarId.convertLocalDecl
-  签名: (g : MVarId) (fvarId : FVarId) (typeNew : Expr) (symm : 布尔值)
-  定义体: g.withContext do
-  let typeOld ← fvarId.getType
-  let v ← mkFreshExprMVar (← mkAppM ``Eq
-    (if symm then #[typeNew, typeOld] else #[typeOld, typeNew]))
-  let pf ← if symm then mkEqSymm v else pure v
-  let res ← g.replaceLocalDecl fvarId typeNew pf
-  let gs ← v.mvarId!.congrN! depth config patterns
-  return (res.mvarId, gs)
+--- 原说明 ---
+Replaces the type of the local declaration `fvarId` with `typeNew`,
+using `Lean.MVarId.congrN!` to prove that the old type of `fvarId` is equal to `
+typeNew`.
+Uses `Lean.MVarId.replaceLocalDecl` to replace the type.
+Returns the new goal along with the side goals generated by `congrN!`.
 
-Depends on / 依赖: Config, config
+With `symm = true`, reverses the equality,
+changing the goal to prove `typeNew` is equal to `typeOld`.
+With `depth = some n`, calls `MVarId.congrN! n` instead, with `n` as the max rec
+ursion depth.
 -/
 def Lean.MVarId.convertLocalDecl (g : MVarId) (fvarId : FVarId) (typeNew : Expr) (symm : Bool)
     (depth : Option Nat := none) (config : Congr!.Config := {})
@@ -297,55 +314,20 @@ macro_rules
     `(tactic| convert ! $cfg $[←%$l]? $t:term $[using $n]? $[with $[$w]*]?)
 
 /--
-Definition of `elabTermForConvert` / `elabTermForConvert` 的定义
+Elaborates `term` ensuring the expected type, allowing stuck metavariables.
+Returns stuck metavariables as additional goals.
+-/
+/-
+**Mathlib.Tactic.elabTermForConvert** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：elabTermForConvert (term : Syntax) (expectedType? : Option Expr) : TacticM
+ (Expr × List MVarId)
+参数：term : Syntax；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabTermForConvert
-  signature: (term : Syntax) (expectedType? : Option Expr)
-  body: do
-  withCollectingNewGoalsFrom (parentTag := ← getMainTag) (tagSuffix := `convert)
-      (allowNaturalHoles := true) do
-    -- Allow typeclass inference failures since these will be inferred by unification
-    -- or else become new goals
-    withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true }) do
-      let t ← elabTermEnsuringType (mayPostpone := true) term expectedType?
-      -- Process everything so that tactics get run, but again allow TC failures
-      Term.synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
-      return t
-
-elab_rules : tactic
-| `(tactic| convert $[!%$expensive]? $cfg $[←%$sym]? $term $[using $n]? $[with $ps?*]?) =>
-  withMainContext do
-    let config ← Convert.elabConfig expensive.isSome cfg
-    let patterns := (ps?.getD #[]).toList
-    let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
-    let (e, gs) ← elabTermForConvert term expectedType
-    liftMetaTactic fun g =>
-      return (← g.convert e sym.isSome (n.map (·.getNat)) config patterns) ++ gs
-
-中文:
-定义 elabTermForConvert
-  签名: (term : Syntax) (expectedType? : 选项类型 Expr)
-  定义体: do
-  withCollectingNewGoalsFrom (parentTag := ← getMainTag) (tagSuffix := `convert)
-      (allowNaturalHoles := true) do
-    -- Allow typeclass inference failures since these will be inferred by unification
-    -- or else become new goals
-    withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true }) do
-      let t ← elabTermEnsuringType (mayPostpone := true) term expectedType?
-      -- Process everything so that tactics get run, but again allow TC failures
-      Term.synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
-      return t
-
-elab_rules : tactic
-| `(tactic| convert $[!%$expensive]? $cfg $[←%$sym]? $term $[using $n]? $[with $ps?*]?) =>
-  withMainContext do
-    let config ← Convert.elabConfig expensive.isSome cfg
-    let patterns := (ps?.getD #[]).toList
-    let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
-    let (e, gs) ← elabTermForConvert term expectedType
-    liftMetaTactic fun g =>
-      return (← g.convert e sym.isSome (n.map (·.getNat)) config patterns) ++ gs
+--- 原说明 ---
+Elaborates `term` ensuring the expected type, allowing stuck metavariables.
+Returns stuck metavariables as additional goals.
 -/
 def elabTermForConvert (term : Syntax) (expectedType? : Option Expr) :
     TacticM (Expr × List MVarId) := do
@@ -366,7 +348,7 @@ elab_rules : tactic
     let patterns := (ps?.getD #[]).toList
     let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
     let (e, gs) ← elabTermForConvert term expectedType
-    liftMetaTactic fun g =>
+    liftMetaTactic fun g ↦
       return (← g.convert e sym.isSome (n.map (·.getNat)) config patterns) ++ gs
 
 /--
@@ -410,22 +392,22 @@ macro_rules
 
 elab_rules : tactic
 | `(tactic| convert_to $[!%$expensive]? $cfg $[←%$sym]? $newType $[using $n]?
- [with $ps?*]? [$loc?:location]?) => do
-.getD 1 .map (·.getNat) let n : Nat := n
+    $[with $ps?*]? $[$loc?:location]?) => do
+  let n : ℕ := n |>.map (·.getNat) |>.getD 1
   let config ← Convert.elabConfig expensive.isSome cfg
   let patterns := (ps?.getD #[]).toList
   withLocation (expandOptLocation (mkOptionalNode loc?))
-    (atLocal := fun fvarId => do
+    (atLocal := fun fvarId ↦ do
       let (e, gs) ← elabTermForConvert newType (← inferType (← fvarId.getType))
-      liftMetaTactic fun g => do
+      liftMetaTactic fun g ↦ do
         let (g', gs') ← g.convertLocalDecl fvarId e sym.isSome n config patterns
         return (gs' ++ (g' :: gs)))
     (atTarget := do
       let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
       let (e, gs) ← elabTermForConvert (← `((id ?_ : $newType))) expectedType
-      liftMetaTactic fun g =>
+      liftMetaTactic fun g ↦
         return (← g.convert e sym.isSome n config patterns) ++ gs)
-    (failed := fun _ => throwError "convert_to failed")
+    (failed := fun _ ↦ throwError "convert_to failed")
 
 /--
 `ac_change t` on a goal `⊢ t'` changes the goal to `⊢ t` and adds new goals for proving the equality
@@ -464,3 +446,4 @@ macro_rules
     `(tactic| convert_to! $t:term $[using $n]? <;> try ac_rfl)
 
 end Mathlib.Tactic
+

@@ -55,132 +55,114 @@ namespace CategoryTheory
 variable {C : Type u} [Category.{v} C] (J : GrothendieckTopology C)
   (A : Type u₂) [Category.{v₂} A] [HasWeakSheafify J A]
 
-/--
-Definition of `HasGlobalSectionsFunctor` / `HasGlobalSectionsFunctor` 的定义
+/-- Typeclass stating that the constant sheaf functor has a right adjoint. This right adjoint will
+then be called the global sections functor and written `Sheaf.Γ`. -/
+/-
+**CategoryTheory.HasGlobalSectionsFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory`。
+形式化陈述：HasGlobalSectionsFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasGlobalSectionsFunctor
-  body: (constantSheaf J A).IsLeftAdjoint
-
-中文:
-缩写 HasGlobalSectionsFunctor
-  定义体: (constantSheaf J A).IsLeftAdjoint
-
-Depends on / 依赖: IsLeftAdjoint, constantSheaf
+--- 原说明 ---
+Typeclass stating that the constant sheaf functor has a right adjoint. This righ
+t adjoint will
+then be called the global sections functor and written `Sheaf.Γ`.
 -/
 abbrev HasGlobalSectionsFunctor := (constantSheaf J A).IsLeftAdjoint
 
-/--
-Definition of `Sheaf.Γ` / `Sheaf.Γ` 的定义
+/-- We define the global sections functor as the right-adjoint of the constant sheaf functor
+whenever it exists. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.Γ
-  signature: [HasGlobalSectionsFunctor J A]
-  body: (constantSheaf J A).rightAdjoint
-deriving Functor.IsRightAdjoint
-
-中文:
-定义 层.Γ
-  签名: [HasGlobalSectionsFunctor J A]
-  定义体: (constantSheaf J A).rightAdjoint
-deriving Functor.IsRightAdjoint
-
-Depends on / 依赖: constantSheaf, rightAdjoint
+--- 原说明 ---
+We define the global sections functor as the right-adjoint of the constant sheaf
+ functor
+whenever it exists.
 -/
 noncomputable def Sheaf.Γ [HasGlobalSectionsFunctor J A] : Sheaf J A ⥤ A :=
   (constantSheaf J A).rightAdjoint
 deriving Functor.IsRightAdjoint
 
-/--
-Definition of `constantSheafΓAdj` / `constantSheafΓAdj` 的定义
+/-- The constant sheaf functor is by definition left-adjoint to the global sections functor. -/
+/-
+**CategoryTheory.constantSheaf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：constantSheaf : D ⥤ Sheaf J D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constantSheafΓAdj
-  signature: [HasGlobalSectionsFunctor J A]
-  body: Adjunction.ofIsLeftAdjoint (constantSheaf J A)
-
-中文:
-定义 constantSheafΓAdj
-  签名: [HasGlobalSectionsFunctor J A]
-  定义体: Adjunction.ofIsLeftAdjoint (constantSheaf J A)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, constantSheaf, ofIsLeftAdjoint
+--- 原说明 ---
+The constant sheaf functor is by definition left-adjoint to the global sections 
+functor.
 -/
 noncomputable def constantSheafΓAdj [HasGlobalSectionsFunctor J A] :
     constantSheaf J A ⊣ Γ J A :=
   Adjunction.ofIsLeftAdjoint (constantSheaf J A)
 
-/--
-Instance `hasGlobalSectionsFunctor_of_hasTerminal` / 实例 `hasGlobalSectionsFunctor_of_hasTerminal`
+/-- Sites with a terminal object admit a global sections functor. -/
+/-
+**CategoryTheory.hasGlobalSectionsFunctor_of_hasTerminal** 是 Mathlib 中的一个实例，位于命名
+空间 `CategoryTheory`。
+形式化陈述：hasGlobalSectionsFunctor_of_hasTerminal [HasTerminal C] : HasGlobalSection
+sFunctor J A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasGlobalSectionsFunctor_of_hasTerminal
-  signature: [HasTerminal C]
-  body: ⟨_, ⟨constantSheafAdj J A terminalIsTerminal⟩⟩
-
-中文:
-实例 hasGlobalSectionsFunctor_of_hasTerminal
-  签名: [有终止 C]
-  定义体: ⟨_, ⟨constantSheafAdj J A terminalIsTerminal⟩⟩
-
-Depends on / 依赖: constantSheafAdj, terminalIsTerminal
+--- 原说明 ---
+Sites with a terminal object admit a global sections functor.
 -/
 instance hasGlobalSectionsFunctor_of_hasTerminal [HasTerminal C] :
     HasGlobalSectionsFunctor J A :=
   ⟨_, ⟨constantSheafAdj J A terminalIsTerminal⟩⟩
 
-/--
-Definition of `Sheaf.ΓNatIsoSheafSections` / `Sheaf.ΓNatIsoSheafSections` 的定义
+/-- On sites with a terminal object, the global sections functor is isomorphic to the functor
+of sections on that object. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓNatIsoSheafSections
-  signature: [HasTerminal C] {T : C} (hT : IsTerminal T)
-  body: (constantSheafΓAdj J A).rightAdjointUniq (constantSheafAdj J A hT)
-
-中文:
-定义 层.Γ自然数IsoSheafSections
-  签名: [有终止 C] {T : C} (hT : 是终止 T)
-  定义体: (constantSheafΓAdj J A).rightAdjointUniq (constantSheafAdj J A hT)
-
-Depends on / 依赖: constantSheafAdj, rightAdjointUniq
+--- 原说明 ---
+On sites with a terminal object, the global sections functor is isomorphic to th
+e functor
+of sections on that object.
 -/
 noncomputable def Sheaf.ΓNatIsoSheafSections [HasTerminal C] {T : C} (hT : IsTerminal T) :
     Γ J A ≅ (sheafSections J A).obj (op T) :=
   (constantSheafΓAdj J A).rightAdjointUniq (constantSheafAdj J A hT)
 
-/--
-Instance `hasGlobalSectionsFunctor_of_hasLimitsOfShape` / 实例 `hasGlobalSectionsFunctor_of_hasLimitsOfShape`
+/-- Every site `C` admits a global sections functor for `A`-valued sheaves when `A` has limits of
+shape `Cᵒᵖ`. -/
+/-
+**CategoryTheory.hasGlobalSectionsFunctor_of_hasLimitsOfShape** 是 Mathlib 中的一个实例
+，位于命名空间 `CategoryTheory`。
+形式化陈述：hasGlobalSectionsFunctor_of_hasLimitsOfShape [HasLimitsOfShape Cᵒᵖ A] : Ha
+sGlobalSectionsFunctor J A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasGlobalSectionsFunctor_of_hasLimitsOfShape
-  signature: [HasLimitsOfShape Cᵒᵖ A]
-  body: ⟨sheafToPresheaf J A ⋙ lim, ⟨constLimAdj.comp (sheafificationAdjunction J A)⟩⟩
-
-中文:
-实例 hasGlobalSectionsFunctor_of_hasLimitsOfShape
-  签名: [有形状极限 Cᵒᵖ A]
-  定义体: ⟨sheafToPresheaf J A ⋙ lim, ⟨constLimAdj.comp (sheafificationAdjunction J A)⟩⟩
-
-Depends on / 依赖: constLimAdj, constLimAdj.comp, sheafToPresheaf, sheafificationAdjunction
+--- 原说明 ---
+Every site `C` admits a global sections functor for `A`-valued sheaves when `A` 
+has limits of
+shape `Cᵒᵖ`.
 -/
 instance hasGlobalSectionsFunctor_of_hasLimitsOfShape [HasLimitsOfShape Cᵒᵖ A] :
     HasGlobalSectionsFunctor J A :=
   ⟨sheafToPresheaf J A ⋙ lim, ⟨constLimAdj.comp (sheafificationAdjunction J A)⟩⟩
 
-/--
-Definition of `Sheaf.ΓNatIsoLim` / `Sheaf.ΓNatIsoLim` 的定义
+/-- Global sections of sheaves are naturally isomorphic to the limits of the underlying presheaves.
+Note that while `HasLimitsOfShape Cᵒᵖ A` is needed here to talk about `lim` as a functor, global
+sections are still limits without it - see `Sheaf.isLimitConeΓ`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓNatIsoLim
-  signature: [HasLimitsOfShape Cᵒᵖ A]
-  body: (constantSheafΓAdj J A).rightAdjointUniq (constLimAdj.comp (sheafificationAdjunction J A))
-
-中文:
-定义 层.Γ自然数IsoLim
-  签名: [有形状极限 Cᵒᵖ A]
-  定义体: (constantSheafΓAdj J A).rightAdjointUniq (constLimAdj.comp (sheafificationAdjunction J A))
-
-Depends on / 依赖: constLimAdj, constLimAdj.comp, rightAdjointUniq, sheafificationAdjunction
+--- 原说明 ---
+Global sections of sheaves are naturally isomorphic to the limits of the underly
+ing presheaves.
+Note that while `HasLimitsOfShape Cᵒᵖ A` is needed here to talk about `lim` as a
+ functor, global
+sections are still limits without it - see `Sheaf.isLimitConeΓ`.
 -/
 noncomputable def Sheaf.ΓNatIsoLim [HasLimitsOfShape Cᵒᵖ A] :
     Γ J A ≅ sheafToPresheaf J A ⋙ lim :=
@@ -188,44 +170,30 @@ noncomputable def Sheaf.ΓNatIsoLim [HasLimitsOfShape Cᵒᵖ A] :
 
 variable {J A}
 
-/--
-Definition of `Sheaf.ΓHomEquiv` / `Sheaf.ΓHomEquiv` 的定义
+/-- Natural transformations from a constant presheaf into a sheaf correspond to morphisms to its
+global sections. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓHomEquiv
-  signature: [HasGlobalSectionsFunctor J A] {X : A} {F : Sheaf J A}
-  body: ((sheafificationAdjunction J A).homEquiv _ _).symm.trans
-    ((constantSheafΓAdj J A).homEquiv _ _)
-
-中文:
-定义 层.ΓHomEquiv
-  签名: [HasGlobalSectionsFunctor J A] {X : A} {F : 层 J A}
-  定义体: ((sheafificationAdjunction J A).homEquiv _ _).symm.trans
-    ((constantSheafΓAdj J A).homEquiv _ _)
-
-Depends on / 依赖: homEquiv, sheafificationAdjunction, symm.trans
+--- 原说明 ---
+Natural transformations from a constant presheaf into a sheaf correspond to morp
+hisms to its
+global sections.
 -/
 noncomputable def Sheaf.ΓHomEquiv [HasGlobalSectionsFunctor J A] {X : A} {F : Sheaf J A} :
     ((Functor.const _).obj X ⟶ F.obj) ≃ (X ⟶ (Γ J A).obj F) :=
   ((sheafificationAdjunction J A).homEquiv _ _).symm.trans
     ((constantSheafΓAdj J A).homEquiv _ _)
 
-/--
-lemma `Sheaf.ΓHomEquiv_naturality_left` / 引理 `Sheaf.ΓHomEquiv_naturality_left`
+/-- Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_left`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Sheaf.ΓHomEquiv_naturality_left
-  statement: [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
-  proof: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_left_symm _ _)).trans
-    ((constantSheafΓAdj J A).homEquiv_naturality_left _ _)
-
-中文:
-引理 层.ΓHomEquiv_naturality_left
-  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : 层 J A}
-  证明: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_left_symm _ _)).trans
-    ((constantSheafΓAdj J A).homEquiv_naturality_left _ _)
-
-Depends on / 依赖: homEquiv_naturality_left, homEquiv_naturality_left_symm, sheafificationAdjunction
+--- 原说明 ---
+Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_le
+ft`.
 -/
 lemma Sheaf.ΓHomEquiv_naturality_left [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
     (f : X' ⟶ X) (g : (Functor.const _).obj X ⟶ F.obj) :
@@ -233,22 +201,14 @@ lemma Sheaf.ΓHomEquiv_naturality_left [HasGlobalSectionsFunctor J A] {X' X : A}
   (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_left_symm _ _)).trans
     ((constantSheafΓAdj J A).homEquiv_naturality_left _ _)
 
-/--
-lemma `Sheaf.ΓHomEquiv_naturality_left_symm` / 引理 `Sheaf.ΓHomEquiv_naturality_left_symm`
+/-- Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_left_symm`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Sheaf.ΓHomEquiv_naturality_left_symm
-  statement: [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
-  proof: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_left_symm _ _)).trans
-    ((sheafificationAdjunction J A).homEquiv_naturality_left _ _)
-
-中文:
-引理 层.ΓHomEquiv_naturality_left_symm
-  结论: [HasGlobalSectionsFunctor J A] {X' X : A} {F : 层 J A}
-  证明: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_left_symm _ _)).trans
-    ((sheafificationAdjunction J A).homEquiv_naturality_left _ _)
-
-Depends on / 依赖: homEquiv_naturality_left, homEquiv_naturality_left_symm, sheafificationAdjunction
+--- 原说明 ---
+Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_le
+ft_symm`.
 -/
 lemma Sheaf.ΓHomEquiv_naturality_left_symm [HasGlobalSectionsFunctor J A] {X' X : A} {F : Sheaf J A}
     (f : X' ⟶ X) (g : X ⟶ (Γ J A).obj F) :
@@ -256,22 +216,14 @@ lemma Sheaf.ΓHomEquiv_naturality_left_symm [HasGlobalSectionsFunctor J A] {X' X
   (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_left_symm _ _)).trans
     ((sheafificationAdjunction J A).homEquiv_naturality_left _ _)
 
-/--
-lemma `Sheaf.ΓHomEquiv_naturality_right` / 引理 `Sheaf.ΓHomEquiv_naturality_right`
+/-- Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_right`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Sheaf.ΓHomEquiv_naturality_right
-  statement: [HasGlobalSectionsFunctor J A] {X : A} {F F' : Sheaf J A}
-  proof: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_right_symm _ _)).trans
-    ((constantSheafΓAdj J A).homEquiv_naturality_right _ _)
-
-中文:
-引理 层.ΓHomEquiv_naturality_right
-  结论: [HasGlobalSectionsFunctor J A] {X : A} {F F' : 层 J A}
-  证明: (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_right_symm _ _)).trans
-    ((constantSheafΓAdj J A).homEquiv_naturality_right _ _)
-
-Depends on / 依赖: homEquiv_naturality_right, homEquiv_naturality_right_symm, sheafificationAdjunction
+--- 原说明 ---
+Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_ri
+ght`.
 -/
 lemma Sheaf.ΓHomEquiv_naturality_right [HasGlobalSectionsFunctor J A] {X : A} {F F' : Sheaf J A}
     (f : (Functor.const _).obj X ⟶ F.obj) (g : F ⟶ F') :
@@ -279,22 +231,14 @@ lemma Sheaf.ΓHomEquiv_naturality_right [HasGlobalSectionsFunctor J A] {X : A} {
   (congrArg _ ((sheafificationAdjunction J A).homEquiv_naturality_right_symm _ _)).trans
     ((constantSheafΓAdj J A).homEquiv_naturality_right _ _)
 
-/--
-lemma `Sheaf.ΓHomEquiv_naturality_right_symm` / 引理 `Sheaf.ΓHomEquiv_naturality_right_symm`
+/-- Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_right_symm`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Sheaf.ΓHomEquiv_naturality_right_symm
-  statement: [HasGlobalSectionsFunctor J A] {X : A}
-  proof: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_right_symm _ _)).trans
-    ((sheafificationAdjunction J A).homEquiv_naturality_right _ _)
-
-中文:
-引理 层.ΓHomEquiv_naturality_right_symm
-  结论: [HasGlobalSectionsFunctor J A] {X : A}
-  证明: (congrArg _ ((constantSheafΓAdj J A).homEquiv_naturality_right_symm _ _)).trans
-    ((sheafificationAdjunction J A).homEquiv_naturality_right _ _)
-
-Depends on / 依赖: homEquiv_naturality_right, homEquiv_naturality_right_symm, sheafificationAdjunction
+--- 原说明 ---
+Naturality lemma for `ΓHomEquiv` analogous to `Adjunction.homEquiv_naturality_ri
+ght_symm`.
 -/
 lemma Sheaf.ΓHomEquiv_naturality_right_symm [HasGlobalSectionsFunctor J A] {X : A}
     {F F' : Sheaf J A} (f : X ⟶ (Γ J A).obj F) (g : F ⟶ F') :
@@ -305,50 +249,30 @@ lemma Sheaf.ΓHomEquiv_naturality_right_symm [HasGlobalSectionsFunctor J A] {X :
 /-- The cone over a given sheaf whose cone point is the global sections and whose components are
 the restriction maps. -/
 @[simps pt]
-/--
-Definition of `Sheaf.coneΓ` / `Sheaf.coneΓ` 的定义
+/-
+**CategoryTheory.Sheaf.cone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.coneΓ
-  signature: [HasGlobalSectionsFunctor J A] (F : Sheaf J A)
-  body: (Γ J A).obj F
-  π := ΓHomEquiv.symm (𝟙 _)
-
-中文:
-定义 层.coneΓ
-  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A)
-  定义体: (Γ J A).obj F
-  π := ΓHomEquiv.symm (𝟙 _)
+--- 原说明 ---
+The cone over a given sheaf whose cone point is the global sections and whose co
+mponents are
+the restriction maps.
 -/
 noncomputable def Sheaf.coneΓ [HasGlobalSectionsFunctor J A] (F : Sheaf J A) : Cone F.obj where
   pt := (Γ J A).obj F
   π := ΓHomEquiv.symm (𝟙 _)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `Sheaf.isLimitConeΓ` / `Sheaf.isLimitConeΓ` 的定义
+/-- The global sections cone `Sheaf.coneΓ` is limiting - that is, global sections are limits even
+when not all limits of shape `Cᵒᵖ` exist in `A`. -/
+/-
+**CategoryTheory.Sheaf.isLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.isLimitConeΓ
-  signature: [HasGlobalSectionsFunctor J A] (F : Sheaf J A)
-  body: F.ΓHomEquiv c.π
-  fac c j := by
-    suffices h : ((Functor.const Cᵒᵖ).map (ΓHomEquiv c.π)) ≫ F.coneΓ.π = c.π from congr_app h j
-    simp [coneΓ, ← ΓHomEquiv_naturality_left_symm]
-  uniq c f hf := by
-    replace hf : ((Functor.const Cᵒᵖ).map f) ≫ F.coneΓ.π = c.π := by ext j; exact hf j
-    simpa [coneΓ, ← ΓHomEquiv_naturality_left_symm, Equiv.symm_apply_eq] using hf
-
-中文:
-定义 层.isLimitConeΓ
-  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A)
-  定义体: F.ΓHomEquiv c.π
-  fac c j := by
-    suffices h : ((Functor.const Cᵒᵖ).map (ΓHomEquiv c.π)) ≫ F.coneΓ.π = c.π from congr_app h j
-    simp [coneΓ, ← ΓHomEquiv_naturality_left_symm]
-  uniq c f hf := by
-    replace hf : ((Functor.const Cᵒᵖ).map f) ≫ F.coneΓ.π = c.π := by ext j; exact hf j
-    simpa [coneΓ, ← ΓHomEquiv_naturality_left_symm, Equiv.symm_apply_eq] using hf
+--- 原说明 ---
+The global sections cone `Sheaf.coneΓ` is limiting - that is, global sections ar
+e limits even
+when not all limits of shape `Cᵒᵖ` exist in `A`.
 -/
 noncomputable def Sheaf.isLimitConeΓ [HasGlobalSectionsFunctor J A] (F : Sheaf J A) :
     IsLimit F.coneΓ where
@@ -360,92 +284,41 @@ noncomputable def Sheaf.isLimitConeΓ [HasGlobalSectionsFunctor J A] (F : Sheaf 
     replace hf : ((Functor.const Cᵒᵖ).map f) ≫ F.coneΓ.π = c.π := by ext j; exact hf j
     simpa [coneΓ, ← ΓHomEquiv_naturality_left_symm, Equiv.symm_apply_eq] using hf
 
-/--
-Definition of `Sheaf.ΓRes` / `Sheaf.ΓRes` 的定义
+/-- The restriction map from global sections of `F` to sections on `U`. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓRes
-  signature: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ)
-  body: F.coneΓ.π.app U
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 层.ΓRes
-  签名: [HasGlobalSectionsFunctor J A] (F : 层 J A) (U : Cᵒᵖ)
-  定义体: F.coneΓ.π.app U
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.cone
+--- 原说明 ---
+The restriction map from global sections of `F` to sections on `U`.
 -/
 noncomputable def Sheaf.ΓRes [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ) :
     (Γ J A).obj F ⟶ F.obj.obj U :=
   F.coneΓ.π.app U
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sheaf.ΓRes_map` / 引理 `Sheaf.ΓRes_map`
-
-English:
-lemma Sheaf.ΓRes_map
-  given: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) {V U : Cᵒᵖ} (f : U ⟶ V)
-  proof: F.coneΓ.w f
-
-@[simp]
-
-中文:
-引理 层.ΓRes_map
-  条件: [HasGlobalSectionsFunctor J A] (F : 层 J A) {V U : Cᵒᵖ} (f : U ⟶ V)
-  证明: F.coneΓ.w f
-
-@[simp]
-
-Depends on / 依赖: F.cone
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓRes_map [HasGlobalSectionsFunctor J A] (F : Sheaf J A) {V U : Cᵒᵖ} (f : U ⟶ V) :
     F.ΓRes U ≫ F.obj.map f = F.ΓRes V :=
   F.coneΓ.w f
 
 @[simp]
-/--
-lemma `Sheaf.coneΓ_π_app` / 引理 `Sheaf.coneΓ_π_app`
-
-English:
-lemma Sheaf.coneΓ_π_app
-  given: [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 层.coneΓ_π_app
-  条件: [HasGlobalSectionsFunctor J A] (F : 层 J A) (U : Cᵒᵖ)
-  证明: rfl
+/-
+**CategoryTheory.Sheaf.cone** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.coneΓ_π_app [HasGlobalSectionsFunctor J A] (F : Sheaf J A) (U : Cᵒᵖ) :
     F.coneΓ.π.app U = F.ΓRes U := rfl
-
-/--
-lemma `Sheaf.ΓRes_naturality` / 引理 `Sheaf.ΓRes_naturality`
-
-English:
-lemma Sheaf.ΓRes_naturality
-  given: [HasGlobalSectionsFunctor J A] {F G : Sheaf J A} (f : F ⟶ G) (U : Cᵒᵖ)
-  proof: by
-refine .trans ?_ congr_app (ΓHomEquiv_naturality_right_symm _ _) U
-  exact (congr_app (ΓHomEquiv_naturality_left_symm ((Γ J A).map f) (𝟙 _)) U).symm.trans (by simp)
-
-中文:
-引理 层.ΓRes_naturality
-  条件: [HasGlobalSectionsFunctor J A] {F G : 层 J A} (f : F ⟶ G) (U : Cᵒᵖ)
-  证明: by
-refine .trans ?_ congr_app (ΓHomEquiv_naturality_right_symm _ _) U
-  exact (congr_app (ΓHomEquiv_naturality_left_symm ((Γ J A).map f) (𝟙 _)) U).symm.trans (by simp)
-
-Depends on / 依赖: congr_app, symm.trans
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓRes_naturality [HasGlobalSectionsFunctor J A] {F G : Sheaf J A} (f : F ⟶ G) (U : Cᵒᵖ) :
     (Γ J A).map f ≫ ΓRes G U = ΓRes F U ≫ f.hom.app U := by
-refine .trans ?_ congr_app (ΓHomEquiv_naturality_right_symm _ _) U
+  refine .trans ?_ <| congr_app (ΓHomEquiv_naturality_right_symm _ _) U
   exact (congr_app (ΓHomEquiv_naturality_left_symm ((Γ J A).map f) (𝟙 _)) U).symm.trans (by simp)
 
 variable (J A)
@@ -453,69 +326,37 @@ variable (J A)
 /-- The natural transformation from the global sections functor to the sections functor on any
 object `U`. -/
 @[simps!]
-/--
-Definition of `Sheaf.natTransΓRes` / `Sheaf.natTransΓRes` 的定义
+/-
+**CategoryTheory.Sheaf.natTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.natTransΓRes
-  signature: [HasGlobalSectionsFunctor J A] (U : Cᵒᵖ)
-  body: ΓRes F U
-  naturality _ _ f := ΓRes_naturality f U
-
-中文:
-定义 层.natTransΓRes
-  签名: [HasGlobalSectionsFunctor J A] (U : Cᵒᵖ)
-  定义体: ΓRes F U
-  naturality _ _ f := ΓRes_naturality f U
+--- 原说明 ---
+The natural transformation from the global sections functor to the sections func
+tor on any
+object `U`.
 -/
 noncomputable def Sheaf.natTransΓRes [HasGlobalSectionsFunctor J A] (U : Cᵒᵖ) :
     Γ J A ⟶ (sheafSections J A).obj U where
   app F := ΓRes F U
   naturality _ _ f := ΓRes_naturality f U
 
-/--
-Definition of `Sheaf.ΓObjEquivSections` / `Sheaf.ΓObjEquivSections` 的定义
+/-- Global sections of a sheaf of types correspond to sections of the underlying presheaf. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓObjEquivSections
-  signature: [HasWeakSheafify J (Type w)]
-  body: (Equiv.trans (by exact (Equiv.funUnique (PUnit) _).symm.trans TypeCat.homEquiv.symm)
-    ΓHomEquiv.symm).trans (F.obj.sectionsEquivHom PUnit).symm
-
-中文:
-定义 层.ΓObjEquivSections
-  签名: [HasWeakSheafify J (类型 w)]
-  定义体: (Equiv.trans (by exact (Equiv.funUnique (PUnit) _).symm.trans TypeCat.homEquiv.symm)
-    ΓHomEquiv.symm).trans (F.obj.sectionsEquivHom PUnit).symm
-
-Depends on / 依赖: Equiv.funUnique, Equiv.trans, F.obj.sectionsEquivHom, HomEquiv.symm, TypeCat, TypeCat.homEquiv.symm, funUnique, homEquiv, sectionsEquivHom, symm.trans
+--- 原说明 ---
+Global sections of a sheaf of types correspond to sections of the underlying pre
+sheaf.
 -/
 noncomputable def Sheaf.ΓObjEquivSections [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] (F : Sheaf J (Type w)) :
       (Γ J (Type w)).obj F ≃ F.obj.sections :=
   (Equiv.trans (by exact (Equiv.funUnique (PUnit) _).symm.trans TypeCat.homEquiv.symm)
     ΓHomEquiv.symm).trans (F.obj.sectionsEquivHom PUnit).symm
-
-/--
-lemma `Sheaf.ΓObjEquivSections_naturality` / 引理 `Sheaf.ΓObjEquivSections_naturality`
-
-English:
-lemma Sheaf.ΓObjEquivSections_naturality
-  statement: [HasWeakSheafify J (Type w)]
-  proof: by
-  dsimp [ΓObjEquivSections]
-  exact (congr_arg _ (ΓHomEquiv_naturality_right_symm (↾(uniqueElim x)) f)).trans
-    (Functor.sectionsEquivHom_naturality_symm _ _ _)
-
-中文:
-引理 层.ΓObjEquivSections_naturality
-  结论: [HasWeakSheafify J (类型 w)]
-  证明: by
-  dsimp [ΓObjEquivSections]
-  exact (congr_arg _ (ΓHomEquiv_naturality_right_symm (↾(uniqueElim x)) f)).trans
-    (Functor.sectionsEquivHom_naturality_symm _ _ _)
-
-Depends on / 依赖: Functor, Functor.sectionsEquivHom_naturality_symm, congr_arg, sectionsEquivHom_naturality_symm, uniqueElim
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓObjEquivSections_naturality [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] {F G : Sheaf J (Type w)} (f : F ⟶ G)
@@ -525,21 +366,9 @@ lemma Sheaf.ΓObjEquivSections_naturality [HasWeakSheafify J (Type w)]
   dsimp [ΓObjEquivSections]
   exact (congr_arg _ (ΓHomEquiv_naturality_right_symm (↾(uniqueElim x)) f)).trans
     (Functor.sectionsEquivHom_naturality_symm _ _ _)
-
-/--
-lemma `Sheaf.ΓObjEquivSections_naturality_symm` / 引理 `Sheaf.ΓObjEquivSections_naturality_symm`
-
-English:
-lemma Sheaf.ΓObjEquivSections_naturality_symm
-  statement: [HasWeakSheafify J (Type w)]
-  proof: ConcreteCategory.congr_hom (ΓHomEquiv_naturality_right (F.obj.sectionsEquivHom _ x) f) _
-
-中文:
-引理 层.ΓObjEquivSections_naturality_symm
-  结论: [HasWeakSheafify J (类型 w)]
-  证明: ConcreteCategory.congr_hom (ΓHomEquiv_naturality_right (F.obj.sectionsEquivHom _ x) f) _
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.obj.sectionsEquivHom, congr_hom, sectionsEquivHom
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓObjEquivSections_naturality_symm [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] {F G : Sheaf J (Type w)} (f : F ⟶ G)
@@ -547,70 +376,43 @@ lemma Sheaf.ΓObjEquivSections_naturality_symm [HasWeakSheafify J (Type w)]
       (Γ J _).map f ((ΓObjEquivSections J F).symm x) :=
   ConcreteCategory.congr_hom (ΓHomEquiv_naturality_right (F.obj.sectionsEquivHom _ x) f) _
 
-/--
-Definition of `Sheaf.ΓNatIsoSectionsFunctor` / `Sheaf.ΓNatIsoSectionsFunctor` 的定义
+/-- For sheaves of types, the global sections functor is isomorphic to the sections functor
+on presheaves. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓNatIsoSectionsFunctor
-  signature: :
-  body: NatIso.ofComponents (fun F => (ΓObjEquivSections J F).toIso) fun f => by
-    ext x
-    exact ΓObjEquivSections_naturality J f x
-
-中文:
-定义 层.Γ自然数IsoSectionsFunctor
-  签名: :
-  定义体: NatIso.ofComponents (fun F => (ΓObjEquivSections J F).toIso) fun f => by
-    ext x
-    exact ΓObjEquivSections_naturality J f x
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+For sheaves of types, the global sections functor is isomorphic to the sections 
+functor
+on presheaves.
 -/
 noncomputable def Sheaf.ΓNatIsoSectionsFunctor :
     Γ J (Type (max u v)) ≅ sheafToPresheaf J _ ⋙ Functor.sectionsFunctor _ :=
-  NatIso.ofComponents (fun F => (ΓObjEquivSections J F).toIso) fun f => by
+  NatIso.ofComponents (fun F ↦ (ΓObjEquivSections J F).toIso) fun f ↦ by
     ext x
     exact ΓObjEquivSections_naturality J f x
 
-/--
-Definition of `Sheaf.ΓObjEquivHom` / `Sheaf.ΓObjEquivHom` 的定义
+/-- Global sections of a sheaf of types `F` correspond to morphisms from a terminal sheaf to `F`.
+We use the constant sheaf on a singleton type as a specific choice of terminal sheaf here. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓObjEquivHom
-  signature: [HasWeakSheafify J (Type w)]
-  body: ((Equiv.funUnique X _).symm.trans TypeCat.homEquiv.symm).trans
-    ((constantSheafΓAdj J (Type w)).homEquiv _ _).symm
-
-中文:
-定义 层.ΓObjEquivHom
-  签名: [HasWeakSheafify J (类型 w)]
-  定义体: ((Equiv.funUnique X _).symm.trans TypeCat.homEquiv.symm).trans
-    ((constantSheafΓAdj J (Type w)).homEquiv _ _).symm
-
-Depends on / 依赖: Equiv.funUnique, TypeCat, TypeCat.homEquiv.symm, funUnique, homEquiv, symm.trans
+--- 原说明 ---
+Global sections of a sheaf of types `F` correspond to morphisms from a terminal 
+sheaf to `F`.
+We use the constant sheaf on a singleton type as a specific choice of terminal s
+heaf here.
 -/
 noncomputable def Sheaf.ΓObjEquivHom [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] (F : Sheaf J (Type w)) (X : Type w)
     [Unique X] : (Γ J (Type w)).obj F ≃ ((constantSheaf J (Type w)).obj X ⟶ F) :=
   ((Equiv.funUnique X _).symm.trans TypeCat.homEquiv.symm).trans
     ((constantSheafΓAdj J (Type w)).homEquiv _ _).symm
-
-/--
-lemma `Sheaf.ΓObjEquivHom_naturality` / 引理 `Sheaf.ΓObjEquivHom_naturality`
-
-English:
-lemma Sheaf.ΓObjEquivHom_naturality
-  statement: [HasWeakSheafify J (Type w)]
-  proof: (constantSheafΓAdj J (Type w)).homEquiv_naturality_right_symm
-    (↾(uniqueElim x)) f
-
-中文:
-引理 层.ΓObjEquivHom_naturality
-  结论: [HasWeakSheafify J (类型 w)]
-  证明: (constantSheafΓAdj J (Type w)).homEquiv_naturality_right_symm
-    (↾(uniqueElim x)) f
-
-Depends on / 依赖: homEquiv_naturality_right_symm, uniqueElim
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓObjEquivHom_naturality [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] (X : Type w) [Unique X]
@@ -618,21 +420,9 @@ lemma Sheaf.ΓObjEquivHom_naturality [HasWeakSheafify J (Type w)]
     (ΓObjEquivHom J G X) ((Γ J (Type w)).map f x) = (ΓObjEquivHom J F X) x ≫ f :=
   (constantSheafΓAdj J (Type w)).homEquiv_naturality_right_symm
     (↾(uniqueElim x)) f
-
-/--
-lemma `Sheaf.ΓObjEquivHom_naturality_symm` / 引理 `Sheaf.ΓObjEquivHom_naturality_symm`
-
-English:
-lemma Sheaf.ΓObjEquivHom_naturality_symm
-  statement: [HasWeakSheafify J (Type w)]
-  proof: ConcreteCategory.congr_hom ((constantSheafΓAdj J _).homEquiv_naturality_right x f) default
-
-中文:
-引理 层.ΓObjEquivHom_naturality_symm
-  结论: [HasWeakSheafify J (类型 w)]
-  证明: ConcreteCategory.congr_hom ((constantSheafΓAdj J _).homEquiv_naturality_right x f) default
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, homEquiv_naturality_right
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sheaf.ΓObjEquivHom_naturality_symm [HasWeakSheafify J (Type w)]
     [HasGlobalSectionsFunctor J (Type w)] {X : Type w} [Unique X]
@@ -640,29 +430,22 @@ lemma Sheaf.ΓObjEquivHom_naturality_symm [HasWeakSheafify J (Type w)]
     (ΓObjEquivHom J G X).symm (x ≫ f) = (Γ J _).map f ((ΓObjEquivHom J F X).symm x) :=
   ConcreteCategory.congr_hom ((constantSheafΓAdj J _).homEquiv_naturality_right x f) default
 
-/--
-Definition of `Sheaf.ΓNatIsoCoyoneda` / `Sheaf.ΓNatIsoCoyoneda` 的定义
+/-- For sheaves of types, the global sections functor is isomorphic to the covariant hom
+functor of the terminal sheaf. -/
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sheaf.ΓNatIsoCoyoneda
-  signature: (X : Type (max u v)) [Unique X]
-  body: NatIso.ofComponents (fun F => (F.ΓObjEquivHom J X).toIso) fun f => by
-    ext x
-    exact ΓObjEquivHom_naturality J X f x
-
-中文:
-定义 层.Γ自然数IsoCoyoneda
-  签名: (X : 类型 (最大值 u v)) [唯一 X]
-  定义体: NatIso.ofComponents (fun F => (F.ΓObjEquivHom J X).toIso) fun f => by
-    ext x
-    exact ΓObjEquivHom_naturality J X f x
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+For sheaves of types, the global sections functor is isomorphic to the covariant
+ hom
+functor of the terminal sheaf.
 -/
 noncomputable def Sheaf.ΓNatIsoCoyoneda (X : Type (max u v)) [Unique X] :
     Γ J (Type (max u v)) ≅ coyoneda.obj (op ((constantSheaf J (Type (max u v))).obj X)) :=
-  NatIso.ofComponents (fun F => (F.ΓObjEquivHom J X).toIso) fun f => by
+  NatIso.ofComponents (fun F ↦ (F.ΓObjEquivHom J X).toIso) fun f ↦ by
     ext x
     exact ΓObjEquivHom_naturality J X f x
 
 end CategoryTheory
+

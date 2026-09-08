@@ -55,62 +55,35 @@ section
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `multiforkEvaluationCone` / `multiforkEvaluationCone` 的定义
+/-- An auxiliary definition to be used below.
 
-English:
-definition multiforkEvaluationCone
-  signature: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D)) (X : C)
-  body: S.pt
-  π :=
-    { app := fun k => (Presheaf.isLimitOfIsSheaf J (F.obj k).1 W (F.obj k).2).lift <|
-        Multifork.ofι _ S.pt (fun i => S.ι i ≫ (E.π.app k).app (op i.Y))
-          (by
-            intro i
-            simp only [Category.assoc]
-            erw [← (E.π.app k).naturality, ← (E.π.app k).naturality]
-            dsimp
-            simp only [← Category.assoc]
-            congr 1
-            apply S.condition)
-      naturality := by
-        intro i j f
-        dsimp [Presheaf.isLimitOfIsSheaf]
-        rw [Category.id_comp]
-        apply Presheaf.IsSheaf.hom_ext (F.obj j).2 W
-        intro ii
-        rw [Presheaf.IsSheaf.amalgamate_map]; rw [Category.assoc]; rw [← (F.map f).hom.naturality]; rw [←
-          Category.assoc]; rw [Presheaf.IsSheaf.amalgamate_map]
-        erw [Category.assoc, ← E.w f]
-        cat_disch }
+Whenever `E` is a cone of shape `K` of sheaves, and `S` is the multifork associated to a
+covering `W` of an object `X`, with respect to the cone point `E.X`, this provides a cone of
+shape `K` of objects in `D`, with cone point `S.X`.
 
-中文:
-定义 multiforkEvaluationCone
-  签名: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D)) (X : C)
-  定义体: S.pt
-  π :=
-    { app := fun k => (Presheaf.isLimitOfIsSheaf J (F.obj k).1 W (F.obj k).2).lift <|
-        Multifork.ofι _ S.pt (fun i => S.ι i ≫ (E.π.app k).app (op i.Y))
-          (by
-            intro i
-            simp only [Category.assoc]
-            erw [← (E.π.app k).naturality, ← (E.π.app k).naturality]
-            dsimp
-            simp only [← Category.assoc]
-            congr 1
-            apply S.condition)
-      naturality := by
-        intro i j f
-        dsimp [Presheaf.isLimitOfIsSheaf]
-        rw [Category.id_comp]
-        apply Presheaf.IsSheaf.hom_ext (F.obj j).2 W
-        intro ii
-        rw [Presheaf.IsSheaf.amalgamate_map]; rw [Category.assoc]; rw [← (F.map f).hom.naturality]; rw [←
-          Category.assoc]; rw [Presheaf.IsSheaf.amalgamate_map]
-        erw [Category.assoc, ← E.w f]
-        cat_disch }
+See `isLimitMultiforkOfIsLimit` for more on how this definition is used.
+-/
+/-
+**CategoryTheory.Sheaf.multiforkEvaluationCone** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Sheaf`。
+形式化陈述：multiforkEvaluationCone (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf
+ J D)) (X : C) (W : J.Cover X) (S : Multifork (W.index E.pt)) : Cone (F ⋙ sheafT
+oPresheaf J D ⋙ (evaluation Cᵒᵖ D).obj (op X)) where pt
+参数：F : K ⥤ Sheaf J D；E : Cone (F ⋙ sheafToPresheaf J D)；X : C；W : J.Cover X；S : 
+Multifork (W.index E.pt)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: S.pt
+--- 原说明 ---
+An auxiliary definition to be used below.
+
+Whenever `E` is a cone of shape `K` of sheaves, and `S` is the multifork associa
+ted to a
+covering `W` of an object `X`, with respect to the cone point `E.X`, this provid
+es a cone of
+shape `K` of objects in `D`, with cone point `S.X`.
+
+See `isLimitMultiforkOfIsLimit` for more on how this definition is used.
 -/
 def multiforkEvaluationCone (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D)) (X : C)
     (W : J.Cover X) (S : Multifork (W.index E.pt)) :
@@ -133,8 +106,8 @@ def multiforkEvaluationCone (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPreshe
         rw [Category.id_comp]
         apply Presheaf.IsSheaf.hom_ext (F.obj j).2 W
         intro ii
-        rw [Presheaf.IsSheaf.amalgamate_map]; rw [Category.assoc]; rw [← (F.map f).hom.naturality]; rw [←
-          Category.assoc]; rw [Presheaf.IsSheaf.amalgamate_map]
+        rw [Presheaf.IsSheaf.amalgamate_map, Category.assoc, ← (F.map f).hom.naturality, ←
+          Category.assoc, Presheaf.IsSheaf.amalgamate_map]
         erw [Category.assoc, ← E.w f]
         cat_disch }
 
@@ -142,76 +115,31 @@ variable [HasLimitsOfShape K D]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitMultiforkOfIsLimit` / `isLimitMultiforkOfIsLimit` 的定义
+/-- If `E` is a cone of shape `K` of sheaves, which is a limit on the level of presheaves,
+this definition shows that the limit presheaf satisfies the multifork variant of the sheaf
+condition, at a given covering `W`.
 
-English:
-definition isLimitMultiforkOfIsLimit
-  signature: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
-  body: Multifork.IsLimit.mk _
-    (fun S => (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).lift <|
-      multiforkEvaluationCone F E X W S)
-    (by
-      intro S i
-      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op i.Y)) hE).hom_ext
-      intro k
-      dsimp [Multifork.ofι]
-      erw [Category.assoc, (E.π.app k).naturality]
-      dsimp
-      rw [← Category.assoc]
-      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac
-        (multiforkEvaluationCone F E X W S)]
-      dsimp [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
-      rw [Presheaf.IsSheaf.amalgamate_map])
-    (by
-      intro S m hm
-      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).hom_ext
-      intro k
-      dsimp
-      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac]
-      apply Presheaf.IsSheaf.hom_ext (F.obj k).2 W
-      intro i
-      dsimp only [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
-      rw [(F.obj k).property.amalgamate_map]
-      dsimp [Multifork.ofι]
-      change _ = S.ι i ≫ _
-      erw [← hm, Category.assoc, ← (E.π.app k).naturality, Category.assoc]
-      rfl)
+This is used below in `isSheaf_of_isLimit` to show that the limit presheaf is indeed a sheaf.
+-/
+/-
+**CategoryTheory.Sheaf.isLimitMultiforkOfIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Sheaf`。
+形式化陈述：isLimitMultiforkOfIsLimit (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPreshe
+af J D)) (hE : IsLimit E) (X : C) (W : J.Cover X) : IsLimit (W.multifork E.pt)
+参数：F : K ⥤ Sheaf J D；E : Cone (F ⋙ sheafToPresheaf J D)；hE : IsLimit E；X : C；W :
+ J.Cover X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isLimitMultiforkOfIsLimit
-  签名: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D))
-  定义体: Multifork.IsLimit.mk _
-    (fun S => (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).lift <|
-      multiforkEvaluationCone F E X W S)
-    (by
-      intro S i
-      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op i.Y)) hE).hom_ext
-      intro k
-      dsimp [Multifork.ofι]
-      erw [Category.assoc, (E.π.app k).naturality]
-      dsimp
-      rw [← Category.assoc]
-      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac
-        (multiforkEvaluationCone F E X W S)]
-      dsimp [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
-      rw [Presheaf.IsSheaf.amalgamate_map])
-    (by
-      intro S m hm
-      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).hom_ext
-      intro k
-      dsimp
-      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac]
-      apply Presheaf.IsSheaf.hom_ext (F.obj k).2 W
-      intro i
-      dsimp only [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
-      rw [(F.obj k).property.amalgamate_map]
-      dsimp [Multifork.ofι]
-      change _ = S.ι i ≫ _
-      erw [← hm, Category.assoc, ← (E.π.app k).naturality, Category.assoc]
-      rfl)
+--- 原说明 ---
+If `E` is a cone of shape `K` of sheaves, which is a limit on the level of presh
+eaves,
+this definition shows that the limit presheaf satisfies the multifork variant of
+ the sheaf
+condition, at a given covering `W`.
 
-Depends on / 依赖: Category, Category.assoc, IsLimit, Multifork, Multifork.IsLimit.mk, Multifork.of, Presheaf, Presheaf.IsShe, Presheaf.isLimitOfIsSheaf, evaluation, hom_ext, isLimitOfIsSheaf, isLimitOfPreserves, multiforkEvaluationCone, naturality
+This is used below in `isSheaf_of_isLimit` to show that the limit presheaf is in
+deed a sheaf.
 -/
 def isLimitMultiforkOfIsLimit (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
     (hE : IsLimit E) (X : C) (W : J.Cover X) : IsLimit (W.multifork E.pt) :=
@@ -245,183 +173,120 @@ def isLimitMultiforkOfIsLimit (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPres
       erw [← hm, Category.assoc, ← (E.π.app k).naturality, Category.assoc]
       rfl)
 
-/--
-theorem `isSheaf_of_isLimit` / 定理 `isSheaf_of_isLimit`
+/-- If `E` is a cone which is a limit on the level of presheaves,
+then the limit presheaf is again a sheaf.
 
-English:
-theorem isSheaf_of_isLimit
-  statement: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
-  proof: by
-  rw [Presheaf.isSheaf_iff_multifork]
-  intro X S
-  exact ⟨isLimitMultiforkOfIsLimit _ _ hE _ _⟩
+This is used to show that the forgetful functor from sheaves to presheaves creates limits.
+-/
+/-
+**CategoryTheory.Sheaf.isSheaf_of_isLimit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Sheaf`。
+形式化陈述：isSheaf_of_isLimit (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D)
+) (hE : IsLimit E) : Presheaf.IsSheaf J E.pt
+参数：F : K ⥤ Sheaf J D；E : Cone (F ⋙ sheafToPresheaf J D)；hE : IsLimit E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_iff_multifork`：isSheaf_iff_multifork : I
+sSheaf J P ↔ forall (X : C) (S : J.Cover X), Nonempty (IsLimit (S.multifork P))
 
-中文:
-定理 isSheaf_of_isLimit
-  结论: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D))
-  证明: by
-  rw [Presheaf.isSheaf_iff_multifork]
-  intro X S
-  exact ⟨isLimitMultiforkOfIsLimit _ _ hE _ _⟩
+--- 原说明 ---
+If `E` is a cone which is a limit on the level of presheaves,
+then the limit presheaf is again a sheaf.
 
-Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_multifork, isLimitMultiforkOfIsLimit, isSheaf_iff_multifork
+This is used to show that the forgetful functor from sheaves to presheaves creat
+es limits.
 -/
 theorem isSheaf_of_isLimit (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
     (hE : IsLimit E) : Presheaf.IsSheaf J E.pt := by
   rw [Presheaf.isSheaf_iff_multifork]
   intro X S
   exact ⟨isLimitMultiforkOfIsLimit _ _ hE _ _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ObjectProperty.IsClosedUnderLimitsOfShape (Presheaf.IsSheaf J (A := D)) K
-  body: by
-    rintro P ⟨h⟩
-    let F : K ⥤ Sheaf J D := ObjectProperty.lift _ h.diag h.prop_diag_obj
-    exact isSheaf_of_isLimit F _ h.isLimit
-
-中文:
-实例 :
-  签名: ObjectProperty.是ClosedUnderLimitsOfShape (预层.是层 J (A := D)) K
-  定义体: by
-    rintro P ⟨h⟩
-    let F : K ⥤ Sheaf J D := ObjectProperty.lift _ h.diag h.prop_diag_obj
-    exact isSheaf_of_isLimit F _ h.isLimit
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ObjectProperty.IsClosedUnderLimitsOfShape (Presheaf.IsSheaf J (A := D)) K where
   limitsOfShape_le := by
     rintro P ⟨h⟩
     let F : K ⥤ Sheaf J D := ObjectProperty.lift _ h.diag h.prop_diag_obj
     exact isSheaf_of_isLimit F _ h.isLimit
-
-/--
-Instance `createsLimitsOfShape` / 实例 `createsLimitsOfShape`
-
-English:
-instance createsLimitsOfShape
-  signature: : CreatesLimitsOfShape K (sheafToPresheaf J D) where
-
-中文:
-实例 createsLimitsOfShape
-  签名: : 创造形状极限 K (sheafToPresheaf J D) where
+/-
+**CategoryTheory.Sheaf.createsLimitsOfShape** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Sheaf`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {J : Cate
+goryTheory.GrothendieckTopology C} →       {D : Type w} →         [inst_1 : Cate
+goryTheory.Category.{w', w} D] →           {K : Type z} →             [inst_2 : 
+CategoryTheory.Category.{z', z} K] →               [CategoryTheory.Limits.HasLim
+itsOfShape K D] →                 CategoryTheory.CreatesLimitsOfShape K (Categor
+yTheory.sheafToPresheaf J D)
+参数：CategoryTheory.sheafToPresheaf J D。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sheaf.instIsClosedUnderLimitsOfShapeFunctorOppositeIsShea
+f`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.
+GrothendieckTopology C} {D : Type w}   [inst_1 : CategoryTheory…
 -/
 instance createsLimitsOfShape : CreatesLimitsOfShape K (sheafToPresheaf J D) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimitsOfShape K (Sheaf J D)
-  body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (sheafToPresheaf J D)
-
-中文:
-实例 :
-  签名: 有形状极限 K (层 J D)
-  定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (sheafToPresheaf J D)
-
-Depends on / 依赖: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape, sheafToPresheaf
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimitsOfShape K (Sheaf J D) :=
   hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (sheafToPresheaf J D)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteProducts
-  signature: D] : HasFiniteProducts (Sheaf J D)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有FiniteProducts
-  签名: D] : 有FiniteProducts (层 J D)
-  定义体: ⟨inferInstance⟩
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteProducts D] : HasFiniteProducts (Sheaf J D) :=
   ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: D] : HasFiniteLimits (Sheaf J D)
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 [有有限极限
-  签名: D] : 有有限极限 (层 J D)
-  定义体: ⟨fun _ => inferInstance⟩
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteLimits D] : HasFiniteLimits (Sheaf J D) :=
-  ⟨fun _ => inferInstance⟩
+  ⟨fun _ ↦ inferInstance⟩
 
 end
 
-/--
-Instance `createsLimits` / 实例 `createsLimits`
-
-English:
-instance createsLimits
-  signature: [HasLimitsOfSize.{u₁, u₂} D]
-  body: ⟨createsLimitsOfShape⟩
-
-中文:
-实例 createsLimits
-  签名: [有LimitsOfSize.{u₁, u₂} D]
-  定义体: ⟨createsLimitsOfShape⟩
-
-Depends on / 依赖: createsLimitsOfShape
+/-
+**CategoryTheory.Sheaf.createsLimits** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.S
+heaf`。
+形式化陈述：createsLimits [HasLimitsOfSize.{u₁, u₂} D] : CreatesLimitsOfSize.{u₁, u₂} 
+(sheafToPresheaf J D)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance createsLimits [HasLimitsOfSize.{u₁, u₂} D] :
     CreatesLimitsOfSize.{u₁, u₂} (sheafToPresheaf J D) :=
   ⟨createsLimitsOfShape⟩
-
-/--
-Instance `hasLimitsOfSize` / 实例 `hasLimitsOfSize`
-
-English:
-instance hasLimitsOfSize
-  signature: [HasLimitsOfSize.{u₁, u₂} D]
-  body: hasLimits_of_hasLimits_createsLimits (sheafToPresheaf J D)
-
-中文:
-实例 hasLimitsOfSize
-  签名: [有LimitsOfSize.{u₁, u₂} D]
-  定义体: hasLimits_of_hasLimits_createsLimits (sheafToPresheaf J D)
-
-Depends on / 依赖: hasLimits_of_hasLimits_createsLimits, sheafToPresheaf
+/-
+**CategoryTheory.Sheaf.hasLimitsOfSize** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.Sheaf`。
+形式化陈述：hasLimitsOfSize [HasLimitsOfSize.{u₁, u₂} D] : HasLimitsOfSize.{u₁, u₂} (S
+heaf J D)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimits_of_hasLimits_createsLimits`：hasLimits_of_hasLim
+its_createsLimits (F : C ⥤ D) [HasLimitsOfSize.{w, w'} D] [CreatesLimitsOfSize.{
+w, w'} F] : HasLimitsOfSize.{w, w'} C
 -/
 instance hasLimitsOfSize [HasLimitsOfSize.{u₁, u₂} D] : HasLimitsOfSize.{u₁, u₂} (Sheaf J D) :=
   hasLimits_of_hasLimits_createsLimits (sheafToPresheaf J D)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: D] :
-  body: inferInstance
-
-example {D : Type w} [Category.{max v u} D] [HasLimits D] :
-    HasLimits (Sheaf J D) := inferInstance
-
-中文:
-实例 [有有限极限
-  签名: D] :
-  定义体: inferInstance
-
-example {D : Type w} [Category.{max v u} D] [HasLimits D] :
-    HasLimits (Sheaf J D) := inferInstance
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteLimits D] :
     PreservesFiniteLimits (sheafToPresheaf J D) where
   preservesFiniteLimits _ _ _ := inferInstance
-
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example {D : Type w} [Category.{max v u} D] [HasLimits D] :
     HasLimits (Sheaf J D) := inferInstance
 
@@ -433,24 +298,23 @@ section Colimits
 
 variable [HasWeakSheafify J D]
 
-/--
-Definition of `sheafifyCocone` / `sheafifyCocone` 的定义
+/-- Construct a cocone by sheafifying a cocone point of a cocone `E` of presheaves
+over a functor which factors through sheaves.
+In `isColimitSheafifyCocone`, we show that this is a colimit cocone when `E` is a colimit. -/
+/-
+**CategoryTheory.Sheaf.sheafifyCocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Sheaf`。
+形式化陈述：sheafifyCocone {F : K ⥤ Sheaf J D} (E : Cocone (F ⋙ sheafToPresheaf J D)) 
+: Cocone F
+参数：E : Cocone (F ⋙ sheafToPresheaf J D)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafifyCocone
-  signature: {F : K ⥤ Sheaf J D}
-  body: (Cocone.precompose
-    (Functor.isoWhiskerLeft F (asIso (sheafificationAdjunction J D).counit).symm).hom).obj
-    ((presheafToSheaf J D).mapCocone E)
-
-中文:
-定义 sheafifyCocone
-  签名: {F : K ⥤ 层 J D}
-  定义体: (Cocone.precompose
-    (Functor.isoWhiskerLeft F (asIso (sheafificationAdjunction J D).counit).symm).hom).obj
-    ((presheafToSheaf J D).mapCocone E)
-
-Depends on / 依赖: Cocone, Cocone.precompose, Functor, Functor.isoWhiskerLeft, counit, isoWhiskerLeft, mapCocone, precompose, presheafToSheaf, sheafificationAdjunction
+--- 原说明 ---
+Construct a cocone by sheafifying a cocone point of a cocone `E` of presheaves
+over a functor which factors through sheaves.
+In `isColimitSheafifyCocone`, we show that this is a colimit cocone when `E` is 
+a colimit.
 -/
 noncomputable def sheafifyCocone {F : K ⥤ Sheaf J D}
     (E : Cocone (F ⋙ sheafToPresheaf J D)) : Cocone F :=
@@ -461,30 +325,10 @@ noncomputable def sheafifyCocone {F : K ⥤ Sheaf J D}
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `sheafifyCocone_ι_app_val` / 引理 `sheafifyCocone_ι_app_val`
-
-English:
-lemma sheafifyCocone_ι_app_val
-  proof: by
-  rw [← cancel_epi ((sheafToPresheaf _ _).map
-    ((sheafificationAdjunction J D).counit.app (F.obj k)))]
-  dsimp [sheafifyCocone]
-  rw [← ObjectProperty.FullSubcategory.comp_hom_assoc]; rw [← NatTrans.comp_app]; rw [IsIso.hom_inv_id]; rw [NatTrans.id_app]
-  dsimp
-  rw [Category.id_comp]; rw [toSheafify_naturality]; rw [sheafificationAdjunction_counit_app_val]; rw [sheafifyLift_id_toSheafify_assoc]
-
-中文:
-引理 sheafifyCocone_ι_app_val
-  证明: by
-  rw [← cancel_epi ((sheafToPresheaf _ _).map
-    ((sheafificationAdjunction J D).counit.app (F.obj k)))]
-  dsimp [sheafifyCocone]
-  rw [← ObjectProperty.FullSubcategory.comp_hom_assoc]; rw [← NatTrans.comp_app]; rw [IsIso.hom_inv_id]; rw [NatTrans.id_app]
-  dsimp
-  rw [Category.id_comp]; rw [toSheafify_naturality]; rw [sheafificationAdjunction_counit_app_val]; rw [sheafifyLift_id_toSheafify_assoc]
-
-Depends on / 依赖: Category, Category.id_comp, F.obj, FullSubcategory, IsIso.hom_inv_id, NatTrans, NatTrans.comp_app, NatTrans.id_app, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom_assoc, cancel_epi, comp_app, comp_hom_assoc, counit, counit.app, hom_inv_id, id_app, id_comp, sheafToPresheaf, sheafificationAdjunction
+/-
+**CategoryTheory.Sheaf.sheafifyCocone_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sheafifyCocone_ι_app_val
     {F : K ⥤ Sheaf J D} (E : Cocone (F ⋙ sheafToPresheaf J D)) (k : K) :
@@ -493,97 +337,55 @@ lemma sheafifyCocone_ι_app_val
   rw [← cancel_epi ((sheafToPresheaf _ _).map
     ((sheafificationAdjunction J D).counit.app (F.obj k)))]
   dsimp [sheafifyCocone]
-  rw [← ObjectProperty.FullSubcategory.comp_hom_assoc]; rw [← NatTrans.comp_app]; rw [IsIso.hom_inv_id]; rw [NatTrans.id_app]
+  rw [← ObjectProperty.FullSubcategory.comp_hom_assoc,
+    ← NatTrans.comp_app, IsIso.hom_inv_id, NatTrans.id_app]
   dsimp
-  rw [Category.id_comp]; rw [toSheafify_naturality]; rw [sheafificationAdjunction_counit_app_val]; rw [sheafifyLift_id_toSheafify_assoc]
+  rw [Category.id_comp, toSheafify_naturality, sheafificationAdjunction_counit_app_val,
+    sheafifyLift_id_toSheafify_assoc]
 
-/--
-Definition of `isColimitSheafifyCocone` / `isColimitSheafifyCocone` 的定义
+/-- If `E` is a colimit cocone of presheaves, over a diagram factoring through sheaves,
+then `sheafifyCocone E` is a colimit cocone. -/
+/-
+**CategoryTheory.Sheaf.isColimitSheafifyCocone** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Sheaf`。
+形式化陈述：isColimitSheafifyCocone {F : K ⥤ Sheaf J D} (E : Cocone (F ⋙ sheafToPreshe
+af J D)) (hE : IsColimit E) : IsColimit (sheafifyCocone E)
+参数：E : Cocone (F ⋙ sheafToPresheaf J D)；hE : IsColimit E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isColimitSheafifyCocone
-  signature: {F : K ⥤ Sheaf J D}
-  body: (IsColimit.precomposeHomEquiv _ ((presheafToSheaf J D).mapCocone E)).symm
-    (isColimitOfPreserves _ hE)
-
-中文:
-定义 isColimitSheafifyCocone
-  签名: {F : K ⥤ 层 J D}
-  定义体: (IsColimit.precomposeHomEquiv _ ((presheafToSheaf J D).mapCocone E)).symm
-    (isColimitOfPreserves _ hE)
-
-Depends on / 依赖: IsColimit, IsColimit.precomposeHomEquiv, isColimitOfPreserves, mapCocone, precomposeHomEquiv, presheafToSheaf
+--- 原说明 ---
+If `E` is a colimit cocone of presheaves, over a diagram factoring through sheav
+es,
+then `sheafifyCocone E` is a colimit cocone.
 -/
 noncomputable def isColimitSheafifyCocone {F : K ⥤ Sheaf J D}
     (E : Cocone (F ⋙ sheafToPresheaf J D)) (hE : IsColimit E) : IsColimit (sheafifyCocone E) :=
   (IsColimit.precomposeHomEquiv _ ((presheafToSheaf J D).mapCocone E)).symm
     (isColimitOfPreserves _ hE)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfShape
-  signature: K D] : HasColimitsOfShape K (Sheaf J D)
-  body: ⟨fun _ => HasColimit.mk
-    ⟨sheafifyCocone (colimit.cocone _), isColimitSheafifyCocone _ (colimit.isColimit _)⟩⟩
-
-中文:
-实例 [有形状余极限
-  签名: K D] : 有形状余极限 K (层 J D)
-  定义体: ⟨fun _ => HasColimit.mk
-    ⟨sheafifyCocone (colimit.cocone _), isColimitSheafifyCocone _ (colimit.isColimit _)⟩⟩
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, colimit, colimit.cocone, colimit.isColimit, isColimit, isColimitSheafifyCocone, sheafifyCocone
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfShape K D] : HasColimitsOfShape K (Sheaf J D) :=
   ⟨fun _ => HasColimit.mk
     ⟨sheafifyCocone (colimit.cocone _), isColimitSheafifyCocone _ (colimit.isColimit _)⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteCoproducts
-  signature: D] : HasFiniteCoproducts (Sheaf J D)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有FiniteCoproducts
-  签名: D] : 有FiniteCoproducts (层 J D)
-  定义体: ⟨inferInstance⟩
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteCoproducts D] : HasFiniteCoproducts (Sheaf J D) :=
   ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteColimits
-  signature: D] : HasFiniteColimits (Sheaf J D)
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 [有有限余极限
-  签名: D] : 有有限余极限 (层 J D)
-  定义体: ⟨fun _ => inferInstance⟩
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteColimits D] : HasFiniteColimits (Sheaf J D) :=
-  ⟨fun _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfSize.{u₁,
-  signature: u₂} D] : HasColimitsOfSize.{u₁, u₂} (Sheaf J D)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有余limitsOfSize.{u₁,
-  签名: u₂} D] : 有余limitsOfSize.{u₁, u₂} (层 J D)
-  定义体: ⟨inferInstance⟩
+  ⟨fun _ ↦ inferInstance⟩
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfSize.{u₁, u₂} D] : HasColimitsOfSize.{u₁, u₂} (Sheaf J D) :=
   ⟨inferInstance⟩
@@ -597,47 +399,33 @@ Note: this almost never holds in sheaf categories in general, but it does for th
 topology (see `Mathlib/CategoryTheory/Sites/Coherent/ExtensiveColimits.lean`).
 -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfIsSheaf` / `createsColimitOfIsSheaf` 的定义
+/-
+**CategoryTheory.Sheaf.createsColimitOfIsSheaf** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Sheaf`。
+形式化陈述：createsColimitOfIsSheaf (F : K ⥤ Sheaf J D) (h : forall (c : Cocone (F ⋙ s
+heafToPresheaf J D)) (_ : IsColimit c), Presheaf.IsSheaf J c.pt) : CreatesColimi
+t F (sheafToPresheaf J D)
+参数：F : K ⥤ Sheaf J D；h : forall (c : Cocone (F ⋙ sheafToPresheaf J D)) (_ : IsCo
+limit c), Presheaf.IsSheaf J c.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOfIsSheaf
-  signature: (F : K ⥤ Sheaf J D)
-  body: createsColimitOfReflectsIso fun E hE =>
-    { liftedCocone := ⟨⟨E.pt, h _ hE⟩,
-⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩
-      validLift := Cocone.ext (eqToIso rfl) fun j => by simp
-      makesColimit :=
-        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone S)⟩
-          fac := fun S j => by ext1; dsimp; rw [hE.fac]; rfl
-          uniq := fun S m hm => by
-            ext1
-            exact hE.uniq ((sheafToPresheaf J D).mapCocone S) m.hom fun j =>
-              (ObjectProperty.ι _).congr_map (hm j) } }
-
-中文:
-定义 createsColimitOfIsSheaf
-  签名: (F : K ⥤ 层 J D)
-  定义体: createsColimitOfReflectsIso fun E hE =>
-    { liftedCocone := ⟨⟨E.pt, h _ hE⟩,
-⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩
-      validLift := Cocone.ext (eqToIso rfl) fun j => by simp
-      makesColimit :=
-        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone S)⟩
-          fac := fun S j => by ext1; dsimp; rw [hE.fac]; rfl
-          uniq := fun S m hm => by
-            ext1
-            exact hE.uniq ((sheafToPresheaf J D).mapCocone S) m.hom fun j =>
-              (ObjectProperty.ι _).congr_map (hm j) } }
-
-Depends on / 依赖: Cocone, Cocone.ext, E.pt, ObjectProperty, Sheaf.hom_ext, congr_map, createsColimitOfReflectsIso, eqToIso, hE.desc, hE.fac, hE.uniq, hom_ext, liftedCocone, m.hom, makesColimit, mapCocone, naturality, sheafToPresheaf, validLift
+--- 原说明 ---
+If every cocone on a diagram of sheaves which is a colimit on the level of presh
+eaves satisfies
+the condition that the cocone point is a sheaf, then the functor from sheaves to
+ presheaves
+creates colimits of the diagram.
+Note: this almost never holds in sheaf categories in general, but it does for th
+e extensive
+topology (see `Mathlib/CategoryTheory/Sites/Coherent/ExtensiveColimits.lean`).
 -/
 def createsColimitOfIsSheaf (F : K ⥤ Sheaf J D)
-    (h : forall (c : Cocone (F ⋙ sheafToPresheaf J D)) (_ : IsColimit c), Presheaf.IsSheaf J c.pt) :
+    (h : ∀ (c : Cocone (F ⋙ sheafToPresheaf J D)) (_ : IsColimit c), Presheaf.IsSheaf J c.pt) :
     CreatesColimit F (sheafToPresheaf J D) :=
   createsColimitOfReflectsIso fun E hE =>
     { liftedCocone := ⟨⟨E.pt, h _ hE⟩,
-⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩
+        ⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext <| E.ι.naturality _⟩⟩
       validLift := Cocone.ext (eqToIso rfl) fun j => by simp
       makesColimit :=
         { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone S)⟩
@@ -648,7 +436,10 @@ def createsColimitOfIsSheaf (F : K ⥤ Sheaf J D)
               (ObjectProperty.ι _).congr_map (hm j) } }
 
 variable {D : Type w} [Category.{max v u} D]
-
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [HasLimits D] : HasLimits (Sheaf J D) := inferInstance
 
 end Colimits
@@ -656,3 +447,4 @@ end Colimits
 end Sheaf
 
 end CategoryTheory
+

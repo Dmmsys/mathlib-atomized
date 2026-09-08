@@ -26,182 +26,158 @@ namespace Filter
 
 variable {α β γ ι : Type*} {ι' : Sort*}
 
-/--
-Definition of `IsCountablyGenerated` / `IsCountablyGenerated` 的定义
+/-- `IsCountablyGenerated f` means `f = generate s` for some countable `s`. -/
+/-
+**Filter.IsCountablyGenerated** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → Filter α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCountablyGenerated
-  parameters: (f : Filter α)
-  axioms and operations (1):
-    - out : exists s : Set (Set α), s.Countable ∧ f = generate s
-
-中文:
-类 是余untablyGenerated
-  参数: (f : 滤子 α)
-  公理与运算 (1 个):
-    - out : 存在 s : 集合 (集合 α), s.可数 ∧ f = generate s
+--- 原说明 ---
+`IsCountablyGenerated f` means `f = generate s` for some countable `s`.
 -/
 class IsCountablyGenerated (f : Filter α) : Prop where
   /-- There exists a countable set that generates the filter. -/
-  out : exists s : Set (Set α), s.Countable ∧ f = generate s
+  out : ∃ s : Set (Set α), s.Countable ∧ f = generate s
 
-/--
-Definition of `IsCountableBasis` / `IsCountableBasis` 的定义
+/-- `IsCountableBasis p s` means the image of `s` bounded by `p` is a countable filter basis. -/
+/-
+**Filter.IsCountableBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → {ι : Type u_4} → (ι → Prop) → (ι → Set α) → Prop
+参数：ι → Prop；ι → Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsCountableBasis
-  parameters: (p : ι -> Prop) (s : ι -> Set α)
-  extends: IsBasis p s
-  axioms and operations (1):
-    - countable : (Set.ofPred p).Countable
-
-中文:
-结构 是余untableBasis
-  参数: (p : ι -> 命题) (s : ι -> 集合 α)
-  继承: 是基 p s
-  公理与运算 (1 个):
-    - countable : (集合.ofPred p).可数
+--- 原说明 ---
+`IsCountableBasis p s` means the image of `s` bounded by `p` is a countable filt
+er basis.
 -/
-structure IsCountableBasis (p : ι -> Prop) (s : ι -> Set α) : Prop extends IsBasis p s where
+structure IsCountableBasis (p : ι → Prop) (s : ι → Set α) : Prop extends IsBasis p s where
   /-- The set of `i` that satisfy the predicate `p` is countable. -/
   countable : (Set.ofPred p).Countable
 
-/--
-Definition of `HasCountableBasis` / `HasCountableBasis` 的定义
+/-- We say that a filter `l` has a countable basis `s : ι → Set α` bounded by `p : ι → Prop`,
+if `t ∈ l` if and only if `t` includes `s i` for some `i` such that `p i`, and the set
+defined by `p` is countable. -/
+/-
+**Filter.HasCountableBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → {ι : Type u_4} → Filter α → (ι → Prop) → (ι → Set α) → Pr
+op
+参数：ι → Prop；ι → Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HasCountableBasis
-  parameters: (l : Filter α) (p : ι -> Prop) (s : ι -> Set α)
-  extends: HasBasis l p s
-  axioms and operations (1):
-    - countable : (Set.ofPred p).Countable
-
-中文:
-结构 有余untableBasis
-  参数: (l : 滤子 α) (p : ι -> 命题) (s : ι -> 集合 α)
-  继承: 有基 l p s
-  公理与运算 (1 个):
-    - countable : (集合.ofPred p).可数
+--- 原说明 ---
+We say that a filter `l` has a countable basis `s : ι → Set α` bounded by `p : ι
+ → Prop`,
+if `t ∈ l` if and only if `t` includes `s i` for some `i` such that `p i`, and t
+he set
+defined by `p` is countable.
 -/
-structure HasCountableBasis (l : Filter α) (p : ι -> Prop) (s : ι -> Set α) : Prop
+structure HasCountableBasis (l : Filter α) (p : ι → Prop) (s : ι → Set α) : Prop
     extends HasBasis l p s where
   /-- The set of `i` that satisfy the predicate `p` is countable. -/
   countable : (Set.ofPred p).Countable
 
-/--
-Definition of `CountableFilterBasis` / `CountableFilterBasis` 的定义
+/-- A countable filter basis `B` on a type `α` is a nonempty countable collection of sets of `α`
+such that the intersection of two elements of this collection contains some element
+of the collection. -/
+/-
+**Filter.CountableFilterBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：Type u_6 → Type u_6
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CountableFilterBasis
-  parameters: (α : Type*)
-  extends: FilterBasis α
-  axioms and operations (1):
-    - countable : sets.Countable
-
-中文:
-结构 余untableFilterBasis
-  参数: (α : 类型)
-  继承: 滤子基 α
-  公理与运算 (1 个):
-    - countable : sets.可数
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrRight, AlgEquiv.refl, Algebra, Algebra.IsFiniteSplit.nonempty_algEquiv_fun, IsFiniteSplit, TensorProduct, TensorProduct.congr, TensorProduct.piRight, TensorProduct.rid, nonempty_algEquiv_fun, piCongrRight, piRight
+--- 原说明 ---
+A countable filter basis `B` on a type `α` is a nonempty countable collection of
+ sets of `α`
+such that the intersection of two elements of this collection contains some elem
+ent
+of the collection.
 -/
 structure CountableFilterBasis (α : Type*) extends FilterBasis α where
   /-- The set of sets of the filter basis is countable. -/
   countable : sets.Countable
 
 -- For illustration purposes, the countable filter basis defining `(atTop : Filter ℕ)`
-/--
-Instance `Nat.inhabitedCountableFilterBasis` / 实例 `Nat.inhabitedCountableFilterBasis`
-
-English:
-instance Nat.inhabitedCountableFilterBasis
-  signature: : Inhabited (CountableFilterBasis Nat)
-  body: ⟨⟨default, countable_range fun n => Ici n⟩⟩
-
-中文:
-实例 自然数.inhabitedCountableFilterBasis
-  签名: : 可居 (余untableFilterBasis 自然数)
-  定义体: ⟨⟨default, countable_range fun n => Ici n⟩⟩
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrLeft, Fintype, Fintype.equivFin, countable_range, equivFin, nonempty_fintype, piCongrLeft
+/-
+**Filter.Nat.inhabitedCountableFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Nat
+`。
+形式化陈述：Inhabited (Filter.CountableFilterBasis ℕ)
+参数：Filter.CountableFilterBasis ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Nat.inhabitedCountableFilterBasis : Inhabited (CountableFilterBasis Nat) :=
+instance Nat.inhabitedCountableFilterBasis : Inhabited (CountableFilterBasis ℕ) :=
   ⟨⟨default, countable_range fun n => Ici n⟩⟩
-
-/--
-theorem `HasCountableBasis.isCountablyGenerated` / 定理 `HasCountableBasis.isCountablyGenerated`
-
-English:
-theorem HasCountableBasis.isCountablyGenerated
-  statement: {f : Filter α} {p : ι -> Prop} {s : ι -> Set α}
-  proof: ⟨⟨{ t | exists i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
-
-中文:
-定理 有余untableBasis.isCountablyGenerated
-  结论: {f : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α}
-  证明: ⟨⟨{ t | exists i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
-
-Depends on / 依赖: countable, eq_generate, h.countable.image, h.toHasBasis.eq_generate, toHasBasis
+/-
+**Filter.HasCountableBasis.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filte
+r.HasCountableBasis`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} {f : Filter α} {p : ι → Prop} {s : ι → Set
+ α},   f.HasCountableBasis p s → f.IsCountablyGenerated
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Filter.HasCountableBasis.countable`：∀ {α : Type u_1} {ι : Type u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasCountableBasis p s → (Set.ofPr
+ed p).Countable
+· 使用定理 `Filter.HasBasis.eq_generate`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter
+ α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l = Filter.generate {U | 
+∃ i, p i ∧ s i = …
+· 使用定理 `Filter.HasCountableBasis.toHasBasis`：∀ {α : Type u_1} {ι : Type u_4} {l 
+: Filter α} {p : ι → Prop} {s : ι → Set α}, l.HasCountableBasis p s → l.HasBasis
+ p s
 -/
-theorem HasCountableBasis.isCountablyGenerated {f : Filter α} {p : ι -> Prop} {s : ι -> Set α}
+theorem HasCountableBasis.isCountablyGenerated {f : Filter α} {p : ι → Prop} {s : ι → Set α}
     (h : f.HasCountableBasis p s) : f.IsCountablyGenerated :=
-  ⟨⟨{ t | exists i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
-
-/--
-theorem `HasBasis.isCountablyGenerated` / 定理 `HasBasis.isCountablyGenerated`
-
-English:
-theorem HasBasis.isCountablyGenerated
-  statement: [Countable ι] {f : Filter α} {p : ι -> Prop} {s : ι -> Set α}
-  proof: HasCountableBasis.isCountablyGenerated ⟨h, to_countable _⟩
-
-中文:
-定理 有基.isCountablyGenerated
-  结论: [可数 ι] {f : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α}
-  证明: HasCountableBasis.isCountablyGenerated ⟨h, to_countable _⟩
-
-Depends on / 依赖: HasCountableBasis, HasCountableBasis.isCountablyGenerated, isCountablyGenerated, to_countable
+  ⟨⟨{ t | ∃ i, p i ∧ s i = t }, h.countable.image s, h.toHasBasis.eq_generate⟩⟩
+/-
+**Filter.HasBasis.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasi
+s`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [Countable ι] {f : Filter α} {p : ι → Prop
+} {s : ι → Set α},   f.HasBasis p s → f.IsCountablyGenerated
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasCountableBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Typ
+e u_4} {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasCountableBasis p s 
+→ f.IsCountablyGenerated
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 -/
-theorem HasBasis.isCountablyGenerated [Countable ι] {f : Filter α} {p : ι -> Prop} {s : ι -> Set α}
+theorem HasBasis.isCountablyGenerated [Countable ι] {f : Filter α} {p : ι → Prop} {s : ι → Set α}
     (h : f.HasBasis p s) : f.IsCountablyGenerated :=
   HasCountableBasis.isCountablyGenerated ⟨h, to_countable _⟩
-
-/--
-theorem `antitone_seq_of_seq` / 定理 `antitone_seq_of_seq`
-
-English:
-theorem antitone_seq_of_seq
-  given: (s : Nat -> Set α)
-  proof: by
-  use fun n => ⋂ m <= n, s m; constructor
-  · exact fun i j hij => biInter_mono (Iic_subset_Iic.2 hij) fun n _ => Subset.rfl
-  apply le_antisymm <;> rw [le_iInf_iff] <;> intro i
-  · rw [le_principal_iff]
-    refine (biInter_mem (finite_le_nat _)).2 fun j _ => ?_
-    exact mem_iInf_of_mem j (mem_principal_self _)
-  · refine iInf_le_of_le i (principal_mono.2 <| iInter₂_subset i ?_)
-    rfl
-
-中文:
-定理 antitone_seq_of_seq
-  条件: (s : 自然数 -> 集合 α)
-  证明: by
-  use fun n => ⋂ m <= n, s m; constructor
-  · exact fun i j hij => biInter_mono (Iic_subset_Iic.2 hij) fun n _ => Subset.rfl
-  apply le_antisymm <;> rw [le_iInf_iff] <;> intro i
-  · rw [le_principal_iff]
-    refine (biInter_mem (finite_le_nat _)).2 fun j _ => ?_
-    exact mem_iInf_of_mem j (mem_principal_self _)
-  · refine iInf_le_of_le i (principal_mono.2 <| iInter₂_subset i ?_)
-    rfl
-
-Depends on / 依赖: Iic_subset_Iic, Subset, Subset.rfl, biInter_mem, biInter_mono, finite_le_nat, iInf_le_of_le, le_antisymm, le_iInf_iff, le_principal_iff, mem_iInf_of_mem, mem_principal_self, principal_mono
+/-
+**Filter.antitone_seq_of_seq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：antitone_seq_of_seq (s : Nat -> Set α) : exists t : Nat -> Set α, Antitone
+ t ∧ ⨅ i, 𝓟 (s i) = ⨅ i, 𝓟 (t i)
+参数：s : Nat -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.biInter_mono`：biInter_mono {s s' : Set α} {t t' : α -> Set β} (hs : 
+s subseteq s') (h : forall x in s, t x subseteq t' x) : ⋂ x in s', t x subseteq 
+⋂ x in…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_iInf_iff`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] 
+{f : ι → α} {a : α}, a ≤ iInf f ↔ ∀ (i : ι), a ≤ f i
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.biInter_mem`：biInter_mem {β : Type v} {s : β -> Set α} {is : Set 
+β} (hf : is.Finite) : (⋂ i in is, s i) in f ↔ forall i in is, s i in f
+· 使用定理 `Set.finite_le_nat`：finite_le_nat (n : Nat) : Set.Finite { i | i <= n }
+· 使用定理 `Filter.mem_iInf_of_mem`：mem_iInf_of_mem {f : ι -> Filter α} (i : ι) {s} 
+(hs : s in f i) : s in ⨅ i, f i
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `Filter.principal_mono`：principal_mono {s t : Set α} : 𝓟 s <= 𝓟 t ↔ s sub
+seteq t
+· 使用定理 `Set.iInter₂_subset`：iInter₂_subset {s : forall i, κ i -> Set α} (i : ι) 
+(j : κ i) : ⋂ (i) (j), s i j subseteq s i j
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem antitone_seq_of_seq (s : Nat -> Set α) :
-    exists t : Nat -> Set α, Antitone t ∧ ⨅ i, 𝓟 (s i) = ⨅ i, 𝓟 (t i) := by
-  use fun n => ⋂ m <= n, s m; constructor
+theorem antitone_seq_of_seq (s : ℕ → Set α) :
+    ∃ t : ℕ → Set α, Antitone t ∧ ⨅ i, 𝓟 (s i) = ⨅ i, 𝓟 (t i) := by
+  use fun n => ⋂ m ≤ n, s m; constructor
   · exact fun i j hij => biInter_mono (Iic_subset_Iic.2 hij) fun n _ => Subset.rfl
   apply le_antisymm <;> rw [le_iInf_iff] <;> intro i
   · rw [le_principal_iff]
@@ -209,208 +185,236 @@ theorem antitone_seq_of_seq (s : Nat -> Set α) :
     exact mem_iInf_of_mem j (mem_principal_self _)
   · refine iInf_le_of_le i (principal_mono.2 <| iInter₂_subset i ?_)
     rfl
-
-/--
-theorem `countable_biInf_eq_iInf_seq` / 定理 `countable_biInf_eq_iInf_seq`
-
-English:
-theorem countable_biInf_eq_iInf_seq
-  statement: [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
-  proof: let ⟨g, hg⟩ := Bcbl.exists_eq_range Bne
-  ⟨g, hg.symm ▸ iInf_range⟩
-
-中文:
-定理 countable_biInf_eq_iInf_seq
-  结论: [完备格 α] {B : 集合 ι} (Bcbl : B.可数)
-  证明: let ⟨g, hg⟩ := Bcbl.exists_eq_range Bne
-  ⟨g, hg.symm ▸ iInf_range⟩
-
-Depends on / 依赖: Bcbl.exists_eq_range, exists_eq_range, hg.symm, iInf_range
+/-
+**Filter.countable_biInf_eq_iInf_seq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：countable_biInf_eq_iInf_seq [CompleteLattice α] {B : Set ι} (Bcbl : B.Coun
+table) (Bne : B.Nonempty) (f : ι -> α) : exists x : Nat -> ι, ⨅ t in B, f t = ⨅ 
+i, f (x i)
+参数：Bcbl : B.Countable；Bne : B.Nonempty；f : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.exists_eq_range`：∀ {α : Type u} {s : Set α}, s.Countable →
+ s.Nonempty → ∃ f, s = Set.range f
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem countable_biInf_eq_iInf_seq [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
-    (Bne : B.Nonempty) (f : ι -> α) : exists x : Nat -> ι, ⨅ t in B, f t = ⨅ i, f (x i) :=
+    (Bne : B.Nonempty) (f : ι → α) : ∃ x : ℕ → ι, ⨅ t ∈ B, f t = ⨅ i, f (x i) :=
   let ⟨g, hg⟩ := Bcbl.exists_eq_range Bne
   ⟨g, hg.symm ▸ iInf_range⟩
-
-/--
-theorem `countable_biInf_eq_iInf_seq'` / 定理 `countable_biInf_eq_iInf_seq'`
-
-English:
-theorem countable_biInf_eq_iInf_seq'
-  statement: [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
-  proof: by
-  rcases B.eq_empty_or_nonempty with hB | Bnonempty
-  · rw [hB, iInf_emptyset]
-    use fun _ => i₀
-    simp [h]
-  · exact countable_biInf_eq_iInf_seq Bcbl Bnonempty f
-
-中文:
-定理 countable_biInf_eq_iInf_seq'
-  结论: [完备格 α] {B : 集合 ι} (Bcbl : B.可数)
-  证明: by
-  rcases B.eq_empty_or_nonempty with hB | Bnonempty
-  · rw [hB, iInf_emptyset]
-    use fun _ => i₀
-    simp [h]
-  · exact countable_biInf_eq_iInf_seq Bcbl Bnonempty f
-
-Depends on / 依赖: B.eq_empty_or_nonempty, Bnonempty, countable_biInf_eq_iInf_seq, eq_empty_or_nonempty, iInf_emptyset
+/-
+**Filter.countable_biInf_eq_iInf_seq'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：countable_biInf_eq_iInf_seq' [CompleteLattice α] {B : Set ι} (Bcbl : B.Cou
+ntable) (f : ι -> α) {i₀ : ι} (h : f i₀ = ⊤) : exists x : Nat -> ι, ⨅ t in B, f 
+t = ⨅ i, f (x i)
+参数：Bcbl : B.Countable；f : ι -> α；h : f i₀ = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_emptyset`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α
+] {f : β → α}, ⨅ x ∈ ∅, f x = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_top`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α], ⨅ 
+x, ⊤ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.countable_biInf_eq_iInf_seq`：countable_biInf_eq_iInf_seq [Complet
+eLattice α] {B : Set ι} (Bcbl : B.Countable) (Bne : B.Nonempty) (f : ι -> α) : e
+xists x : Nat -> ι, ⨅ t …
 -/
 theorem countable_biInf_eq_iInf_seq' [CompleteLattice α] {B : Set ι} (Bcbl : B.Countable)
-    (f : ι -> α) {i₀ : ι} (h : f i₀ = ⊤) : exists x : Nat -> ι, ⨅ t in B, f t = ⨅ i, f (x i) := by
+    (f : ι → α) {i₀ : ι} (h : f i₀ = ⊤) : ∃ x : ℕ → ι, ⨅ t ∈ B, f t = ⨅ i, f (x i) := by
   rcases B.eq_empty_or_nonempty with hB | Bnonempty
   · rw [hB, iInf_emptyset]
     use fun _ => i₀
     simp [h]
   · exact countable_biInf_eq_iInf_seq Bcbl Bnonempty f
-
-/--
-theorem `countable_biInf_principal_eq_seq_iInf` / 定理 `countable_biInf_principal_eq_seq_iInf`
-
-English:
-theorem countable_biInf_principal_eq_seq_iInf
-  given: {B : Set (Set α)} (Bcbl : B.Countable)
-  proof: countable_biInf_eq_iInf_seq' Bcbl 𝓟 principal_univ
-
-中文:
-定理 countable_biInf_principal_eq_seq_iInf
-  条件: {B : 集合 (集合 α)} (Bcbl : B.可数)
-  证明: countable_biInf_eq_iInf_seq' Bcbl 𝓟 principal_univ
-
-Depends on / 依赖: countable_biInf_eq_iInf_seq, principal_univ
+/-
+**Filter.countable_biInf_principal_eq_seq_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Filter
+`。
+形式化陈述：countable_biInf_principal_eq_seq_iInf {B : Set (Set α)} (Bcbl : B.Countabl
+e) : exists x : Nat -> Set α, ⨅ t in B, 𝓟 t = ⨅ i, 𝓟 (x i)
+参数：Set α；Bcbl : B.Countable。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.countable_biInf_eq_iInf_seq'`：countable_biInf_eq_iInf_seq' [Compl
+eteLattice α] {B : Set ι} (Bcbl : B.Countable) (f : ι -> α) {i₀ : ι} (h : f i₀ =
+ ⊤) : exists x : Nat -> ι…
+· 使用定理 `Filter.principal_univ`：∀ {α : Type u}, Filter.principal Set.univ = ⊤
 -/
 theorem countable_biInf_principal_eq_seq_iInf {B : Set (Set α)} (Bcbl : B.Countable) :
-    exists x : Nat -> Set α, ⨅ t in B, 𝓟 t = ⨅ i, 𝓟 (x i) :=
+    ∃ x : ℕ → Set α, ⨅ t ∈ B, 𝓟 t = ⨅ i, 𝓟 (x i) :=
   countable_biInf_eq_iInf_seq' Bcbl 𝓟 principal_univ
 
 section IsCountablyGenerated
 
-/--
-theorem `HasAntitoneBasis.mem_iff` / 定理 `HasAntitoneBasis.mem_iff`
-
-English:
-theorem HasAntitoneBasis.mem_iff
-  statement: [Preorder ι] {l : Filter α} {s : ι -> Set α}
-  proof: hs.toHasBasis.mem_iff.trans by simp only [true_and]
-
-中文:
-定理 有AntitoneBasis.mem_iff
-  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
-  证明: hs.toHasBasis.mem_iff.trans by simp only [true_and]
+/-
+**Filter.HasAntitoneBasis.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasAntitoneB
+asis`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [inst : Preorder ι] {l : Filter α} {s : ι 
+→ Set α},   l.HasAntitoneBasis s → ∀ {t : Set α}, t ∈ l ↔ ∃ i, s i ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected theorem HasAntitoneBasis.mem_iff [Preorder ι] {l : Filter α} {s : ι -> Set α}
-    (hs : l.HasAntitoneBasis s) {t : Set α} : t in l ↔ exists i, s i subseteq t :=
-hs.toHasBasis.mem_iff.trans by simp only [true_and]
-
-/--
-theorem `HasAntitoneBasis.mem` / 定理 `HasAntitoneBasis.mem`
-
-English:
-theorem HasAntitoneBasis.mem
-  statement: [Preorder ι] {l : Filter α} {s : ι -> Set α}
-  proof: hs.toHasBasis.mem_of_mem trivial
-
-中文:
-定理 有AntitoneBasis.mem
-  结论: [预序 ι] {l : 滤子 α} {s : ι -> 集合 α}
-  证明: hs.toHasBasis.mem_of_mem trivial
+protected theorem HasAntitoneBasis.mem_iff [Preorder ι] {l : Filter α} {s : ι → Set α}
+    (hs : l.HasAntitoneBasis s) {t : Set α} : t ∈ l ↔ ∃ i, s i ⊆ t :=
+  hs.toHasBasis.mem_iff.trans <| by simp only [true_and]
+/-
+**Filter.HasAntitoneBasis.mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasAntitoneBasis
+`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [inst : Preorder ι] {l : Filter α} {s : ι 
+→ Set α},   l.HasAntitoneBasis s → ∀ (i : ι), s i ∈ l
+参数：i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `trivial`：True
 -/
-protected theorem HasAntitoneBasis.mem [Preorder ι] {l : Filter α} {s : ι -> Set α}
-    (hs : l.HasAntitoneBasis s) (i : ι) : s i in l :=
+protected theorem HasAntitoneBasis.mem [Preorder ι] {l : Filter α} {s : ι → Set α}
+    (hs : l.HasAntitoneBasis s) (i : ι) : s i ∈ l :=
   hs.toHasBasis.mem_of_mem trivial
-
-/--
-theorem `HasAntitoneBasis.hasBasis_ge` / 定理 `HasAntitoneBasis.hasBasis_ge`
-
-English:
-theorem HasAntitoneBasis.hasBasis_ge
-  statement: [Preorder ι] [IsDirectedOrder ι] {l : Filter α}
-  proof: hs.1.to_hasBasis (fun j _ => (exists_ge_ge i j).imp fun _k hk => ⟨hk.1, hs.2 hk.2⟩) fun j _ =>
-    ⟨j, trivial, Subset.rfl⟩
-
-中文:
-定理 有AntitoneBasis.hasBasis_ge
-  结论: [预序 ι] [IsDirectedOrder ι] {l : 滤子 α}
-  证明: hs.1.to_hasBasis (fun j _ => (exists_ge_ge i j).imp fun _k hk => ⟨hk.1, hs.2 hk.2⟩) fun j _ =>
-    ⟨j, trivial, Subset.rfl⟩
-
-Depends on / 依赖: Subset, Subset.rfl, exists_ge_ge, to_hasBasis
+/-
+**Filter.HasAntitoneBasis.hasBasis_ge** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasAntit
+oneBasis`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [inst : Preorder ι] [IsDirectedOrder ι] {l
+ : Filter α} {s : ι → Set α},   l.HasAntitoneBasis s → ∀ (i : ι), l.HasBasis (fu
+n j => i ≤ j) s
+参数：i : ι；fun j => i ≤ j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.HasAntitoneBasis.antitone`：∀ {α : Type u_1} {ι'' : Type u_6} [ins
+t : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → Ant
+itone s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `exists_ge_ge`：exists_ge_ge [LE α] [IsDirectedOrder α] (a b : α) : exists
+ c, a <= c ∧ b <= c
+· 使用定理 `trivial`：True
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 theorem HasAntitoneBasis.hasBasis_ge [Preorder ι] [IsDirectedOrder ι] {l : Filter α}
-    {s : ι -> Set α} (hs : l.HasAntitoneBasis s) (i : ι) : l.HasBasis (fun j => i <= j) s :=
+    {s : ι → Set α} (hs : l.HasAntitoneBasis s) (i : ι) : l.HasBasis (fun j => i ≤ j) s :=
   hs.1.to_hasBasis (fun j _ => (exists_ge_ge i j).imp fun _k hk => ⟨hk.1, hs.2 hk.2⟩) fun j _ =>
     ⟨j, trivial, Subset.rfl⟩
 
-/--
-theorem `HasBasis.exists_antitone_subbasis` / 定理 `HasBasis.exists_antitone_subbasis`
+/-- If `f` is countably generated and `f.HasBasis p s`, then `f` admits a decreasing basis
+enumerated by natural numbers such that all sets have the form `s i`. More precisely, there is a
+sequence `i n` such that `p (i n)` for all `n` and `s (i n)` is a decreasing sequence of sets which
+forms a basis of `f`. -/
+/-
+**Filter.HasBasis.exists_antitone_subbasis** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Has
+Basis`。
+形式化陈述：∀ {α : Type u_1} {ι' : Sort u_5} {f : Filter α} [h : f.IsCountablyGenerate
+d] {p : ι' → Prop} {s : ι' → Set α},   f.HasBasis p s → ∃ x, (∀ (i : ℕ), p (x i)
+) ∧ f.HasAntitoneBasis fun i => s (x i)
+参数：∀ (i : ℕ), p (x i)；x i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.generate_eq_biInf`：generate_eq_biInf (S : Set (Set α)) : generate
+ S = ⨅ s in S, 𝓟 s
+· 使用定理 `Filter.countable_biInf_principal_eq_seq_iInf`：countable_biInf_principal_
+eq_seq_iInf {B : Set (Set α)} (Bcbl : B.Countable) : exists x : Nat -> Set α, ⨅ 
+t in B, 𝓟 t = ⨅ i, 𝓟 (x i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] (f :
+ ι → α) (i : ι), iInf f ≤ f i
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `antitone_nat_of_succ_le`：antitone_nat_of_succ_le {f : Nat -> α} (hf : fo
+rall n, f (n + 1) <= f n) : Antitone f
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Filter.HasBasis.set_index_subset`：∀ {α : Type u_1} {ι : Sort u_4} {l : F
+ilter α} {p : ι → Prop} {s : ι → Set α} {t : Set α} (h : l.HasBasis p s)   (ht :
+ t ∈ l), s ↑(h.index t…
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Filter.HasAntitoneBasis.iInf_principal`：∀ {α : Type u_1} {ι : Type u_7} 
+[inst : Preorder ι] [Nonempty ι] [IsDirectedOrder ι] {s : ι → Set α},   Antitone
+ s → (⨅ i, Filter.principal …
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.HasBasis.set_index_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filt
+er α} {p : ι → Prop} {s : ι → Set α} {t : Set α} (h : l.HasBasis p s)   (ht : t 
+∈ l), s ↑(h.index t…
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `trivial`：True
 
-English:
-theorem HasBasis.exists_antitone_subbasis
-  statement: {f : Filter α} [h : f.IsCountablyGenerated]
-  proof: by
-  obtain ⟨x', hx'⟩ : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i) := by
-    rcases h with ⟨s, hsc, rfl⟩
-    rw [generate_eq_biInf]
-    exact countable_biInf_principal_eq_seq_iInf hsc
-  have : forall i, x' i in f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
-  let x : Nat -> { i : ι' // p i } := fun n =>
-    Nat.recOn n (hs.index _ <| this 0) fun n xn =>
-hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
-  have x_anti : Antitone fun i => s (x i).1 :=
-    antitone_nat_of_succ_le fun i => (hs.set_index_subset _).trans inter_subset_right
-  have x_subset : forall i, s (x i).1 subseteq x' i := by
-    rintro (_ | i)
-    exacts [hs.set_index_subset _, (hs.set_index_subset _).trans inter_subset_left]
-  refine ⟨fun i => (x i).1, fun i => (x i).2, ?_⟩
-  have : (⨅ i, 𝓟 (s (x i).1)).HasAntitoneBasis fun i => s (x i).1 := .iInf_principal x_anti
-  convert! this
-  exact
-    le_antisymm (le_iInf fun i => le_principal_iff.2 <| by cases i <;> apply hs.set_index_mem)
-      (hx'.symm ▸
-le_iInf fun i => le_principal_iff.2 this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
-
-中文:
-定理 有基.存在_antitone_subbasis
-  结论: {f : 滤子 α} [h : f.是余untablyGenerated]
-  证明: by
-  obtain ⟨x', hx'⟩ : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i) := by
-    rcases h with ⟨s, hsc, rfl⟩
-    rw [generate_eq_biInf]
-    exact countable_biInf_principal_eq_seq_iInf hsc
-  have : forall i, x' i in f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
-  let x : Nat -> { i : ι' // p i } := fun n =>
-    Nat.recOn n (hs.index _ <| this 0) fun n xn =>
-hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
-  have x_anti : Antitone fun i => s (x i).1 :=
-    antitone_nat_of_succ_le fun i => (hs.set_index_subset _).trans inter_subset_right
-  have x_subset : forall i, s (x i).1 subseteq x' i := by
-    rintro (_ | i)
-    exacts [hs.set_index_subset _, (hs.set_index_subset _).trans inter_subset_left]
-  refine ⟨fun i => (x i).1, fun i => (x i).2, ?_⟩
-  have : (⨅ i, 𝓟 (s (x i).1)).HasAntitoneBasis fun i => s (x i).1 := .iInf_principal x_anti
-  convert! this
-  exact
-    le_antisymm (le_iInf fun i => le_principal_iff.2 <| by cases i <;> apply hs.set_index_mem)
-      (hx'.symm ▸
-le_iInf fun i => le_principal_iff.2 this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
-
-Depends on / 依赖: Antitone, Nat.recOn, antitone_nat_of_succ_le, countable_biInf_principal_eq_seq_iInf, generate_eq_biInf, hs.index, hs.mem_of_mem, iInf_le, inter_mem, mem_of_mem, mem_principal_self, x_anti
+--- 原说明 ---
+If `f` is countably generated and `f.HasBasis p s`, then `f` admits a decreasing
+ basis
+enumerated by natural numbers such that all sets have the form `s i`. More preci
+sely, there is a
+sequence `i n` such that `p (i n)` for all `n` and `s (i n)` is a decreasing seq
+uence of sets which
+forms a basis of `f`.
 -/
 theorem HasBasis.exists_antitone_subbasis {f : Filter α} [h : f.IsCountablyGenerated]
-    {p : ι' -> Prop} {s : ι' -> Set α} (hs : f.HasBasis p s) :
-    exists x : Nat -> ι', (forall i, p (x i)) ∧ f.HasAntitoneBasis fun i => s (x i) := by
-  obtain ⟨x', hx'⟩ : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i) := by
+    {p : ι' → Prop} {s : ι' → Set α} (hs : f.HasBasis p s) :
+    ∃ x : ℕ → ι', (∀ i, p (x i)) ∧ f.HasAntitoneBasis fun i => s (x i) := by
+  obtain ⟨x', hx'⟩ : ∃ x : ℕ → Set α, f = ⨅ i, 𝓟 (x i) := by
     rcases h with ⟨s, hsc, rfl⟩
     rw [generate_eq_biInf]
     exact countable_biInf_principal_eq_seq_iInf hsc
-  have : forall i, x' i in f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
-  let x : Nat -> { i : ι' // p i } := fun n =>
+  have : ∀ i, x' i ∈ f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
+  let x : ℕ → { i : ι' // p i } := fun n =>
     Nat.recOn n (hs.index _ <| this 0) fun n xn =>
-hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
+      hs.index _ <| inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
   have x_anti : Antitone fun i => s (x i).1 :=
     antitone_nat_of_succ_le fun i => (hs.set_index_subset _).trans inter_subset_right
-  have x_subset : forall i, s (x i).1 subseteq x' i := by
+  have x_subset : ∀ i, s (x i).1 ⊆ x' i := by
     rintro (_ | i)
     exacts [hs.set_index_subset _, (hs.set_index_subset _).trans inter_subset_left]
   refine ⟨fun i => (x i).1, fun i => (x i).2, ?_⟩
@@ -419,183 +423,194 @@ hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
   exact
     le_antisymm (le_iInf fun i => le_principal_iff.2 <| by cases i <;> apply hs.set_index_mem)
       (hx'.symm ▸
-le_iInf fun i => le_principal_iff.2 this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
+        le_iInf fun i => le_principal_iff.2 <| this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
 
-/--
-theorem `exists_antitone_basis` / 定理 `exists_antitone_basis`
+/-- A countably generated filter admits a basis formed by an antitone sequence of sets. -/
+/-
+**Filter.exists_antitone_basis** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：exists_antitone_basis (f : Filter α) [f.IsCountablyGenerated] : exists x :
+ Nat -> Set α, f.HasAntitoneBasis x
+参数：f : Filter α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.exists_antitone_subbasis`：∀ {α : Type u_1} {ι' : Sort u_
+5} {f : Filter α} [h : f.IsCountablyGenerated] {p : ι' → Prop} {s : ι' → Set α},
+   f.HasBasis p s → ∃ x, (∀ (i…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 
-English:
-theorem exists_antitone_basis
-  given: (f : Filter α) [f.IsCountablyGenerated]
-  proof: let ⟨x, _, hx⟩ := f.basis_sets.exists_antitone_subbasis
-  ⟨x, hx⟩
-
-中文:
-定理 存在_antitone_basis
-  条件: (f : 滤子 α) [f.是余untablyGenerated]
-  证明: let ⟨x, _, hx⟩ := f.basis_sets.exists_antitone_subbasis
-  ⟨x, hx⟩
-
-Depends on / 依赖: basis_sets, exists_antitone_subbasis, f.basis_sets.exists_antitone_subbasis
+--- 原说明 ---
+A countably generated filter admits a basis formed by an antitone sequence of se
+ts.
 -/
 theorem exists_antitone_basis (f : Filter α) [f.IsCountablyGenerated] :
-    exists x : Nat -> Set α, f.HasAntitoneBasis x :=
+    ∃ x : ℕ → Set α, f.HasAntitoneBasis x :=
   let ⟨x, _, hx⟩ := f.basis_sets.exists_antitone_subbasis
   ⟨x, hx⟩
-
-/--
-theorem `exists_antitone_seq` / 定理 `exists_antitone_seq`
-
-English:
-theorem exists_antitone_seq
-  given: (f : Filter α) [f.IsCountablyGenerated]
-  proof: let ⟨x, hx⟩ := f.exists_antitone_basis
-  ⟨x, hx.antitone, by simp [hx.1.mem_iff]⟩
-
-中文:
-定理 存在_antitone_seq
-  条件: (f : 滤子 α) [f.是余untablyGenerated]
-  证明: let ⟨x, hx⟩ := f.exists_antitone_basis
-  ⟨x, hx.antitone, by simp [hx.1.mem_iff]⟩
-
-Depends on / 依赖: antitone, exists_antitone_basis, f.exists_antitone_basis, hx.antitone, mem_iff
+/-
+**Filter.exists_antitone_seq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：exists_antitone_seq (f : Filter α) [f.IsCountablyGenerated] : exists x : N
+at -> Set α, Antitone x ∧ forall {s}, s in f ↔ exists i, x i subseteq s
+参数：f : Filter α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasAntitoneBasis.antitone`：∀ {α : Type u_1} {ι'' : Type u_6} [ins
+t : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → Ant
+itone s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem exists_antitone_seq (f : Filter α) [f.IsCountablyGenerated] :
-    exists x : Nat -> Set α, Antitone x ∧ forall {s}, s in f ↔ exists i, x i subseteq s :=
+    ∃ x : ℕ → Set α, Antitone x ∧ ∀ {s}, s ∈ f ↔ ∃ i, x i ⊆ s :=
   let ⟨x, hx⟩ := f.exists_antitone_basis
   ⟨x, hx.antitone, by simp [hx.1.mem_iff]⟩
-
-/--
-Instance `Inf.isCountablyGenerated` / 实例 `Inf.isCountablyGenerated`
-
-English:
-instance Inf.isCountablyGenerated
-  signature: (f g : Filter α) [IsCountablyGenerated f]
-  body: by
-  rcases f.exists_antitone_basis with ⟨s, hs⟩
-  rcases g.exists_antitone_basis with ⟨t, ht⟩
-  exact HasCountableBasis.isCountablyGenerated ⟨hs.1.inf ht.1, Set.to_countable _⟩
-
-中文:
-实例 下确界.isCountablyGenerated
-  签名: (f g : 滤子 α) [是余untablyGenerated f]
-  定义体: by
-  rcases f.exists_antitone_basis with ⟨s, hs⟩
-  rcases g.exists_antitone_basis with ⟨t, ht⟩
-  exact HasCountableBasis.isCountablyGenerated ⟨hs.1.inf ht.1, Set.to_countable _⟩
-
-Depends on / 依赖: HasCountableBasis, HasCountableBasis.isCountablyGenerated, Set.to_countable, exists_antitone_basis, f.exists_antitone_basis, g.exists_antitone_basis, isCountablyGenerated, to_countable
+/-
+**Filter.Inf.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Inf`。
+形式化陈述：∀ {α : Type u_1} (f g : Filter α) [f.IsCountablyGenerated] [g.IsCountablyG
+enerated], (f ⊓ g).IsCountablyGenerated
+参数：f g : Filter α；f ⊓ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasCountableBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Typ
+e u_4} {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasCountableBasis p s 
+→ f.IsCountablyGenerated
+· 使用定理 `Filter.HasBasis.inf`：∀ {α : Type u_1} {l l' : Filter α} {ι : Type u_6} {
+ι' : Type u_7} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' → Set 
+α},   l.H…
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `instCountableProd`：∀ {α : Type u} {β : Type v} [Countable α] [Countable 
+β], Countable (α × β)
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 instance Inf.isCountablyGenerated (f g : Filter α) [IsCountablyGenerated f]
     [IsCountablyGenerated g] : IsCountablyGenerated (f ⊓ g) := by
   rcases f.exists_antitone_basis with ⟨s, hs⟩
   rcases g.exists_antitone_basis with ⟨t, ht⟩
   exact HasCountableBasis.isCountablyGenerated ⟨hs.1.inf ht.1, Set.to_countable _⟩
-
-/--
-Instance `map.isCountablyGenerated` / 实例 `map.isCountablyGenerated`
-
-English:
-instance map.isCountablyGenerated
-  signature: (l : Filter α) [l.IsCountablyGenerated] (f : α -> β)
-  body: let ⟨_x, hxl⟩ := l.exists_antitone_basis
-  (hxl.map _).isCountablyGenerated
-
-中文:
-实例 map.isCountablyGenerated
-  签名: (l : 滤子 α) [l.是余untablyGenerated] (f : α -> β)
-  定义体: let ⟨_x, hxl⟩ := l.exists_antitone_basis
-  (hxl.map _).isCountablyGenerated
-
-Depends on / 依赖: exists_antitone_basis, hxl.map, isCountablyGenerated, l.exists_antitone_basis
+/-
+**Filter.map.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.map`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (l : Filter α) [l.IsCountablyGenerated] (f
+ : α → β),   (Filter.map f l).IsCountablyGenerated
+参数：l : Filter α；f : α → β；Filter.map f l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Type u_4} [C
+ountable ι] {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasBasis p s → f.
+IsCountablyGenerated
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Filter.HasAntitoneBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι'' : Type
+ u_6} [inst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBas
+is s → ∀ (m : α →…
 -/
-instance map.isCountablyGenerated (l : Filter α) [l.IsCountablyGenerated] (f : α -> β) :
+instance map.isCountablyGenerated (l : Filter α) [l.IsCountablyGenerated] (f : α → β) :
     (map f l).IsCountablyGenerated :=
   let ⟨_x, hxl⟩ := l.exists_antitone_basis
   (hxl.map _).isCountablyGenerated
-
-/--
-Instance `comap.isCountablyGenerated` / 实例 `comap.isCountablyGenerated`
-
-English:
-instance comap.isCountablyGenerated
-  signature: (l : Filter β) [l.IsCountablyGenerated] (f : α -> β)
-  body: let ⟨_x, hxl⟩ := l.exists_antitone_basis
-  (hxl.comap _).isCountablyGenerated
-
-中文:
-实例 comap.isCountablyGenerated
-  签名: (l : 滤子 β) [l.是余untablyGenerated] (f : α -> β)
-  定义体: let ⟨_x, hxl⟩ := l.exists_antitone_basis
-  (hxl.comap _).isCountablyGenerated
-
-Depends on / 依赖: exists_antitone_basis, hxl.comap, isCountablyGenerated, l.exists_antitone_basis
+/-
+**Filter.comap.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.comap`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (l : Filter β) [l.IsCountablyGenerated] (f
+ : α → β),   (Filter.comap f l).IsCountablyGenerated
+参数：l : Filter β；f : α → β；Filter.comap f l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Type u_4} [C
+ountable ι] {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasBasis p s → f.
+IsCountablyGenerated
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Filter.HasAntitoneBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι'' : Ty
+pe u_6} [inst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneB
+asis s → ∀ (m : β →…
 -/
-instance comap.isCountablyGenerated (l : Filter β) [l.IsCountablyGenerated] (f : α -> β) :
+instance comap.isCountablyGenerated (l : Filter β) [l.IsCountablyGenerated] (f : α → β) :
     (comap f l).IsCountablyGenerated :=
   let ⟨_x, hxl⟩ := l.exists_antitone_basis
   (hxl.comap _).isCountablyGenerated
-
-/--
-Instance `Sup.isCountablyGenerated` / 实例 `Sup.isCountablyGenerated`
-
-English:
-instance Sup.isCountablyGenerated
-  signature: (f g : Filter α) [IsCountablyGenerated f]
-  body: by
-  rcases f.exists_antitone_basis with ⟨s, hs⟩
-  rcases g.exists_antitone_basis with ⟨t, ht⟩
-  exact HasCountableBasis.isCountablyGenerated ⟨hs.1.sup ht.1, Set.to_countable _⟩
-
-中文:
-实例 上确界.isCountablyGenerated
-  签名: (f g : 滤子 α) [是余untablyGenerated f]
-  定义体: by
-  rcases f.exists_antitone_basis with ⟨s, hs⟩
-  rcases g.exists_antitone_basis with ⟨t, ht⟩
-  exact HasCountableBasis.isCountablyGenerated ⟨hs.1.sup ht.1, Set.to_countable _⟩
-
-Depends on / 依赖: Fact.out, HasCountableBasis, HasCountableBasis.isCountablyGenerated, Or.inl, Set.to_countable, exists_antitone_basis, f.exists_antitone_basis, g.exists_antitone_basis, isCountablyGenerated, isReduced_zmod, to_countable
+/-
+**Filter.Sup.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Sup`。
+形式化陈述：∀ {α : Type u_1} (f g : Filter α) [f.IsCountablyGenerated] [g.IsCountablyG
+enerated], (f ⊔ g).IsCountablyGenerated
+参数：f g : Filter α；f ⊔ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Filter.HasCountableBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Typ
+e u_4} {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasCountableBasis p s 
+→ f.IsCountablyGenerated
+· 使用定理 `Filter.HasBasis.sup`：∀ {α : Type u_1} {l l' : Filter α} {ι : Type u_6} {
+ι' : Type u_7} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' → Set 
+α},   l.H…
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `instCountableProd`：∀ {α : Type u} {β : Type v} [Countable α] [Countable 
+β], Countable (α × β)
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 instance Sup.isCountablyGenerated (f g : Filter α) [IsCountablyGenerated f]
     [IsCountablyGenerated g] : IsCountablyGenerated (f ⊔ g) := by
   rcases f.exists_antitone_basis with ⟨s, hs⟩
   rcases g.exists_antitone_basis with ⟨t, ht⟩
   exact HasCountableBasis.isCountablyGenerated ⟨hs.1.sup ht.1, Set.to_countable _⟩
-
-/--
-Instance `prod.isCountablyGenerated` / 实例 `prod.isCountablyGenerated`
-
-English:
-instance prod.isCountablyGenerated
-  signature: (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
-  body: Filter.Inf.isCountablyGenerated _ _
-
-中文:
-实例 乘积.isCountablyGenerated
-  签名: (la : 滤子 α) (lb : 滤子 β) [是余untablyGenerated la]
-  定义体: Filter.Inf.isCountablyGenerated _ _
-
-Depends on / 依赖: Filter, Filter.Inf.isCountablyGenerated, isCountablyGenerated
+/-
+**Filter.prod.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.prod`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (la : Filter α) (lb : Filter β) [la.IsCoun
+tablyGenerated] [lb.IsCountablyGenerated],   (la ×ˢ lb).IsCountablyGenerated
+参数：la : Filter α；lb : Filter β；la ×ˢ lb。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Inf.isCountablyGenerated`：∀ {α : Type u_1} (f g : Filter α) [f.Is
+CountablyGenerated] [g.IsCountablyGenerated], (f ⊓ g).IsCountablyGenerated
+· 使用定理 `Filter.comap.isCountablyGenerated`：∀ {α : Type u_1} {β : Type u_2} (l : 
+Filter β) [l.IsCountablyGenerated] (f : α → β),   (Filter.comap f l).IsCountably
+Generated
 -/
 instance prod.isCountablyGenerated (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
     [IsCountablyGenerated lb] : IsCountablyGenerated (la ×ˢ lb) :=
   Filter.Inf.isCountablyGenerated _ _
-
-/--
-Instance `coprod.isCountablyGenerated` / 实例 `coprod.isCountablyGenerated`
-
-English:
-instance coprod.isCountablyGenerated
-  signature: (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
-  body: Filter.Sup.isCountablyGenerated _ _
-
-中文:
-实例 coprod.isCountablyGenerated
-  签名: (la : 滤子 α) (lb : 滤子 β) [是余untablyGenerated la]
-  定义体: Filter.Sup.isCountablyGenerated _ _
-
-Depends on / 依赖: Filter, Filter.Sup.isCountablyGenerated, isCountablyGenerated
+/-
+**Filter.coprod.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.coprod`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (la : Filter α) (lb : Filter β) [la.IsCoun
+tablyGenerated] [lb.IsCountablyGenerated],   (la.coprod lb).IsCountablyGenerated
+参数：la : Filter α；lb : Filter β；la.coprod lb。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Sup.isCountablyGenerated`：∀ {α : Type u_1} (f g : Filter α) [f.Is
+CountablyGenerated] [g.IsCountablyGenerated], (f ⊔ g).IsCountablyGenerated
+· 使用定理 `Filter.comap.isCountablyGenerated`：∀ {α : Type u_1} {β : Type u_2} (l : 
+Filter β) [l.IsCountablyGenerated] (f : α → β),   (Filter.comap f l).IsCountably
+Generated
 -/
 instance coprod.isCountablyGenerated (la : Filter α) (lb : Filter β) [IsCountablyGenerated la]
     [IsCountablyGenerated lb] : IsCountablyGenerated (la.coprod lb) :=
@@ -603,106 +618,82 @@ instance coprod.isCountablyGenerated (la : Filter α) (lb : Filter β) [IsCounta
 
 end IsCountablyGenerated
 
-/--
-theorem `isCountablyGenerated_seq` / 定理 `isCountablyGenerated_seq`
-
-English:
-theorem isCountablyGenerated_seq
-  given: [Countable ι'] (x : ι' -> Set α)
-  proof: by
-  use range x, countable_range x
-  rw [generate_eq_biInf]; rw [iInf_range]
-
-中文:
-定理 isCountablyGenerated_seq
-  条件: [可数 ι'] (x : ι' -> 集合 α)
-  证明: by
-  use range x, countable_range x
-  rw [generate_eq_biInf]; rw [iInf_range]
-
-Depends on / 依赖: countable_range, generate_eq_biInf, iInf_range
+/-
+**Filter.isCountablyGenerated_seq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_seq [Countable ι'] (x : ι' -> Set α) : IsCountablyGen
+erated (⨅ i, 𝓟 (x i))
+参数：x : ι' -> Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.generate_eq_biInf`：generate_eq_biInf (S : Set (Set α)) : generate
+ S = ⨅ s in S, 𝓟 s
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
 -/
-theorem isCountablyGenerated_seq [Countable ι'] (x : ι' -> Set α) :
+theorem isCountablyGenerated_seq [Countable ι'] (x : ι' → Set α) :
     IsCountablyGenerated (⨅ i, 𝓟 (x i)) := by
   use range x, countable_range x
-  rw [generate_eq_biInf]; rw [iInf_range]
-
-/--
-theorem `isCountablyGenerated_of_seq` / 定理 `isCountablyGenerated_of_seq`
-
-English:
-theorem isCountablyGenerated_of_seq
-  given: {f : Filter α} (h : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i))
-  proof: by
-  rcases h with ⟨x, rfl⟩
-  apply isCountablyGenerated_seq
-
-中文:
-定理 isCountablyGenerated_of_seq
-  条件: {f : 滤子 α} (h : 存在 x : 自然数 -> 集合 α, f = ⨅ i, 𝓟 (x i))
-  证明: by
-  rcases h with ⟨x, rfl⟩
-  apply isCountablyGenerated_seq
-
-Depends on / 依赖: isCountablyGenerated_seq
+  rw [generate_eq_biInf, iInf_range]
+/-
+**Filter.isCountablyGenerated_of_seq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_of_seq {f : Filter α} (h : exists x : Nat -> Set α, f
+ = ⨅ i, 𝓟 (x i)) : f.IsCountablyGenerated
+参数：h : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.isCountablyGenerated_seq`：isCountablyGenerated_seq [Countable ι']
+ (x : ι' -> Set α) : IsCountablyGenerated (⨅ i, 𝓟 (x i))
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem isCountablyGenerated_of_seq {f : Filter α} (h : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i)) :
+theorem isCountablyGenerated_of_seq {f : Filter α} (h : ∃ x : ℕ → Set α, f = ⨅ i, 𝓟 (x i)) :
     f.IsCountablyGenerated := by
   rcases h with ⟨x, rfl⟩
   apply isCountablyGenerated_seq
-
-/--
-theorem `isCountablyGenerated_biInf_principal` / 定理 `isCountablyGenerated_biInf_principal`
-
-English:
-theorem isCountablyGenerated_biInf_principal
-  given: {B : Set (Set α)} (h : B.Countable)
-  proof: isCountablyGenerated_of_seq (countable_biInf_principal_eq_seq_iInf h)
-
-中文:
-定理 isCountablyGenerated_biInf_principal
-  条件: {B : 集合 (集合 α)} (h : B.可数)
-  证明: isCountablyGenerated_of_seq (countable_biInf_principal_eq_seq_iInf h)
-
-Depends on / 依赖: countable_biInf_principal_eq_seq_iInf, isCountablyGenerated_of_seq
+/-
+**Filter.isCountablyGenerated_biInf_principal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`
+。
+形式化陈述：isCountablyGenerated_biInf_principal {B : Set (Set α)} (h : B.Countable) :
+ IsCountablyGenerated (⨅ s in B, 𝓟 s)
+参数：Set α；h : B.Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.isCountablyGenerated_of_seq`：isCountablyGenerated_of_seq {f : Fil
+ter α} (h : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i)) : f.IsCountablyGenerated
+· 使用定理 `Filter.countable_biInf_principal_eq_seq_iInf`：countable_biInf_principal_
+eq_seq_iInf {B : Set (Set α)} (Bcbl : B.Countable) : exists x : Nat -> Set α, ⨅ 
+t in B, 𝓟 t = ⨅ i, 𝓟 (x i)
 -/
 theorem isCountablyGenerated_biInf_principal {B : Set (Set α)} (h : B.Countable) :
-    IsCountablyGenerated (⨅ s in B, 𝓟 s) :=
+    IsCountablyGenerated (⨅ s ∈ B, 𝓟 s) :=
   isCountablyGenerated_of_seq (countable_biInf_principal_eq_seq_iInf h)
-
-/--
-theorem `isCountablyGenerated_iff_exists_antitone_basis` / 定理 `isCountablyGenerated_iff_exists_antitone_basis`
-
-English:
-theorem isCountablyGenerated_iff_exists_antitone_basis
-  given: {f : Filter α}
-  proof: by
-  constructor
-  · intro h
-    exact f.exists_antitone_basis
-  · rintro ⟨x, h⟩
-    rw [h.1.eq_iInf]
-    exact isCountablyGenerated_seq x
-
-@[instance]
-
-中文:
-定理 isCountablyGenerated_iff_存在_antitone_basis
-  条件: {f : 滤子 α}
-  证明: by
-  constructor
-  · intro h
-    exact f.exists_antitone_basis
-  · rintro ⟨x, h⟩
-    rw [h.1.eq_iInf]
-    exact isCountablyGenerated_seq x
-
-@[instance]
-
-Depends on / 依赖: eq_iInf, exists_antitone_basis, f.exists_antitone_basis, isCountablyGenerated_seq
+/-
+**Filter.isCountablyGenerated_iff_exists_antitone_basis** 是 Mathlib 中的一个定理，位于命名空
+间 `Filter`。
+形式化陈述：isCountablyGenerated_iff_exists_antitone_basis {f : Filter α} : IsCountabl
+yGenerated f ↔ exists x : Nat -> Set α, f.HasAntitoneBasis x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.eq_iInf`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{s : ι → Set α},   l.HasBasis (fun x => True) s → l = ⨅ i, Filter.principal (s i
+)
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Filter.isCountablyGenerated_seq`：isCountablyGenerated_seq [Countable ι']
+ (x : ι' -> Set α) : IsCountablyGenerated (⨅ i, 𝓟 (x i))
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 theorem isCountablyGenerated_iff_exists_antitone_basis {f : Filter α} :
-    IsCountablyGenerated f ↔ exists x : Nat -> Set α, f.HasAntitoneBasis x := by
+    IsCountablyGenerated f ↔ ∃ x : ℕ → Set α, f.HasAntitoneBasis x := by
   constructor
   · intro h
     exact f.exists_antitone_basis
@@ -711,158 +702,135 @@ theorem isCountablyGenerated_iff_exists_antitone_basis {f : Filter α} :
     exact isCountablyGenerated_seq x
 
 @[instance]
-/--
-theorem `isCountablyGenerated_principal` / 定理 `isCountablyGenerated_principal`
-
-English:
-theorem isCountablyGenerated_principal
-  given: (s : Set α)
-  statement: IsCountablyGenerated (𝓟 s)
-  proof: isCountablyGenerated_of_seq ⟨fun _ => s, iInf_const.symm⟩
-
-@[instance]
-
-中文:
-定理 isCountablyGenerated_principal
-  条件: (s : 集合 α)
-  结论: 是余untablyGenerated (𝓟 s)
-  证明: isCountablyGenerated_of_seq ⟨fun _ => s, iInf_const.symm⟩
-
-@[instance]
-
-Depends on / 依赖: iInf_const, iInf_const.symm, isCountablyGenerated_of_seq
+/-
+**Filter.isCountablyGenerated_principal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_principal (s : Set α) : IsCountablyGenerated (𝓟 s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.isCountablyGenerated_of_seq`：isCountablyGenerated_of_seq {f : Fil
+ter α} (h : exists x : Nat -> Set α, f = ⨅ i, 𝓟 (x i)) : f.IsCountablyGenerated
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {
+a : α} [Nonempty ι], ⨅ x, a = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 theorem isCountablyGenerated_principal (s : Set α) : IsCountablyGenerated (𝓟 s) :=
   isCountablyGenerated_of_seq ⟨fun _ => s, iInf_const.symm⟩
 
 @[instance]
-/--
-theorem `isCountablyGenerated_pure` / 定理 `isCountablyGenerated_pure`
-
-English:
-theorem isCountablyGenerated_pure
-  given: (a : α)
-  statement: IsCountablyGenerated (pure a)
-  proof: by
-  rw [← principal_singleton]
-  exact isCountablyGenerated_principal _
-
-@[instance]
-
-中文:
-定理 isCountablyGenerated_pure
-  条件: (a : α)
-  结论: 是余untablyGenerated (pure a)
-  证明: by
-  rw [← principal_singleton]
-  exact isCountablyGenerated_principal _
-
-@[instance]
-
-Depends on / 依赖: isCountablyGenerated_principal, principal_singleton
+/-
+**Filter.isCountablyGenerated_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_pure (a : α) : IsCountablyGenerated (pure a)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.principal_singleton`：principal_singleton (a : α) : 𝓟 {a} = pure a
+· 使用定理 `Filter.isCountablyGenerated_principal`：isCountablyGenerated_principal (s
+ : Set α) : IsCountablyGenerated (𝓟 s)
 -/
 theorem isCountablyGenerated_pure (a : α) : IsCountablyGenerated (pure a) := by
   rw [← principal_singleton]
   exact isCountablyGenerated_principal _
 
 @[instance]
-/--
-theorem `isCountablyGenerated_bot` / 定理 `isCountablyGenerated_bot`
-
-English:
-theorem isCountablyGenerated_bot
-  statement: IsCountablyGenerated (⊥ : Filter α)
-  proof: @principal_empty α ▸ isCountablyGenerated_principal _
-
-@[instance]
-
-中文:
-定理 isCountablyGenerated_bot
-  结论: 是余untablyGenerated (⊥ : 滤子 α)
-  证明: @principal_empty α ▸ isCountablyGenerated_principal _
-
-@[instance]
-
-Depends on / 依赖: isCountablyGenerated_principal, principal_empty
+/-
+**Filter.isCountablyGenerated_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_bot : IsCountablyGenerated (⊥ : Filter α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.isCountablyGenerated_principal`：isCountablyGenerated_principal (s
+ : Set α) : IsCountablyGenerated (𝓟 s)
+· 使用定理 `Filter.principal_empty`：principal_empty : 𝓟 (∅ : Set α) = ⊥
 -/
 theorem isCountablyGenerated_bot : IsCountablyGenerated (⊥ : Filter α) :=
   @principal_empty α ▸ isCountablyGenerated_principal _
 
 @[instance]
-/--
-theorem `isCountablyGenerated_top` / 定理 `isCountablyGenerated_top`
-
-English:
-theorem isCountablyGenerated_top
-  statement: IsCountablyGenerated (⊤ : Filter α)
-  proof: @principal_univ α ▸ isCountablyGenerated_principal _
-
-中文:
-定理 isCountablyGenerated_top
-  结论: 是余untablyGenerated (⊤ : 滤子 α)
-  证明: @principal_univ α ▸ isCountablyGenerated_principal _
-
-Depends on / 依赖: isCountablyGenerated_principal, principal_univ
+/-
+**Filter.isCountablyGenerated_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCountablyGenerated_top : IsCountablyGenerated (⊤ : Filter α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.isCountablyGenerated_principal`：isCountablyGenerated_principal (s
+ : Set α) : IsCountablyGenerated (𝓟 s)
+· 使用定理 `Filter.principal_univ`：∀ {α : Type u}, Filter.principal Set.univ = ⊤
 -/
 theorem isCountablyGenerated_top : IsCountablyGenerated (⊤ : Filter α) :=
   @principal_univ α ▸ isCountablyGenerated_principal _
-
-/--
-Instance `iInf.isCountablyGenerated` / 实例 `iInf.isCountablyGenerated`
-
-English:
-instance iInf.isCountablyGenerated
-  signature: {ι : Sort*} {α : Type*} [Countable ι] (f : ι -> Filter α)
-  body: by
-  choose s hs using fun i => exists_antitone_basis (f i)
-  rw [← PLift.down_surjective.iInf_comp]
-  refine HasCountableBasis.isCountablyGenerated ⟨.iInf fun n => (hs _).1, ?_⟩
-  refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) -> Set (PLift ι)) fun _ => id).mono ?_
-  rintro ⟨I, f⟩ ⟨hI, -⟩
-  lift I to Finset (PLift ι) using hI
-  exact ⟨⟨I, f⟩, rfl⟩
-
-中文:
-实例 iInf.isCountablyGenerated
-  签名: {ι : 类型层*} {α : 类型} [可数 ι] (f : ι -> 滤子 α)
-  定义体: by
-  choose s hs using fun i => exists_antitone_basis (f i)
-  rw [← PLift.down_surjective.iInf_comp]
-  refine HasCountableBasis.isCountablyGenerated ⟨.iInf fun n => (hs _).1, ?_⟩
-  refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) -> Set (PLift ι)) fun _ => id).mono ?_
-  rintro ⟨I, f⟩ ⟨hI, -⟩
-  lift I to Finset (PLift ι) using hI
-  exact ⟨⟨I, f⟩, rfl⟩
-
-Depends on / 依赖: Finset, HasCountableBasis, HasCountableBasis.isCountablyGenerated, PLift.down_surjective.iInf_comp, Sigma.map, countable_range, down_surjective, exists_antitone_basis, iInf_comp, isCountablyGenerated
+/-
+**Filter.iInf.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.iInf`。
+形式化陈述：∀ {ι : Sort u_6} {α : Type u_7} [Countable ι] (f : ι → Filter α) [∀ (i : ι
+), (f i).IsCountablyGenerated],   (⨅ i, f i).IsCountablyGenerated
+参数：f : ι → Filter α；i : ι；f i；⨅ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Surjective.iInf_comp`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sor
+t u_5} [inst : InfSet α] {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α),
+ ⨅ x, g (f x) = ⨅ y…
+· 使用定理 `PLift.down_surjective`：down_surjective : Surjective (@down α)
+· 使用定理 `Filter.HasCountableBasis.isCountablyGenerated`：∀ {α : Type u_1} {ι : Typ
+e u_4} {f : Filter α} {p : ι → Prop} {s : ι → Set α},   f.HasCountableBasis p s 
+→ f.IsCountablyGenerated
+· 使用定理 `Filter.HasBasis.iInf`：∀ {α : Type u_1} {ι : Type u_6} {ι' : ι → Type u_7
+} {l : ι → Filter α} {p : (i : ι) → ι' i → Prop}   {s : (i : ι) → ι' i → Set α},
+   (∀ (i :…
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.instCanLiftFinsetCoeFinite`：∀ {α : Type u}, CanLift (Set α) (Finset 
+α) SetLike.coe Set.Finite
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableSigma`：∀ {α : Type u} {π : α → Type w} [Countable α] [∀ (a 
+: α), Countable (π a)], Countable (Sigma π)
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
+· 使用定理 `instCountablePLift`：∀ {α : Sort u} [Countable α], Countable (PLift α)
+· 使用定理 `instCountableForallOfFinite`：∀ {α : Sort u} {π : α → Sort w} [Finite α] 
+[∀ (a : α), Countable (π a)], Countable ((a : α) → π a)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-instance iInf.isCountablyGenerated {ι : Sort*} {α : Type*} [Countable ι] (f : ι -> Filter α)
-    [forall i, IsCountablyGenerated (f i)] : IsCountablyGenerated (⨅ i, f i) := by
+instance iInf.isCountablyGenerated {ι : Sort*} {α : Type*} [Countable ι] (f : ι → Filter α)
+    [∀ i, IsCountablyGenerated (f i)] : IsCountablyGenerated (⨅ i, f i) := by
   choose s hs using fun i => exists_antitone_basis (f i)
   rw [← PLift.down_surjective.iInf_comp]
   refine HasCountableBasis.isCountablyGenerated ⟨.iInf fun n => (hs _).1, ?_⟩
-  refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) -> Set (PLift ι)) fun _ => id).mono ?_
+  refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) → Set (PLift ι)) fun _ => id).mono ?_
   rintro ⟨I, f⟩ ⟨hI, -⟩
   lift I to Finset (PLift ι) using hI
   exact ⟨⟨I, f⟩, rfl⟩
-
-/--
-Instance `pi.isCountablyGenerated` / 实例 `pi.isCountablyGenerated`
-
-English:
-instance pi.isCountablyGenerated
-  signature: {ι : Type*} {α : ι -> Type*} [Countable ι]
-  body: iInf.isCountablyGenerated _
-
-中文:
-实例 pi.isCountablyGenerated
-  签名: {ι : 类型} {α : ι -> 类型} [可数 ι]
-  定义体: iInf.isCountablyGenerated _
-
-Depends on / 依赖: iInf.isCountablyGenerated, isCountablyGenerated
+/-
+**Filter.pi.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.pi`。
+形式化陈述：∀ {ι : Type u_6} {α : ι → Type u_7} [Countable ι] (f : (i : ι) → Filter (α
+ i)) [∀ (i : ι), (f i).IsCountablyGenerated],   (Filter.pi f).IsCountablyGenerat
+ed
+参数：f : (i : ι) → Filter (α i)；i : ι；f i；Filter.pi f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.iInf.isCountablyGenerated`：∀ {ι : Sort u_6} {α : Type u_7} [Count
+able ι] (f : ι → Filter α) [∀ (i : ι), (f i).IsCountablyGenerated],   (⨅ i, f i)
+.IsCountablyGenerated
+· 使用定理 `Filter.comap.isCountablyGenerated`：∀ {α : Type u_1} {β : Type u_2} (l : 
+Filter β) [l.IsCountablyGenerated] (f : α → β),   (Filter.comap f l).IsCountably
+Generated
 -/
-instance pi.isCountablyGenerated {ι : Type*} {α : ι -> Type*} [Countable ι]
-    (f : forall i, Filter (α i)) [forall i, IsCountablyGenerated (f i)] : IsCountablyGenerated (pi f) :=
+instance pi.isCountablyGenerated {ι : Type*} {α : ι → Type*} [Countable ι]
+    (f : ∀ i, Filter (α i)) [∀ i, IsCountablyGenerated (f i)] : IsCountablyGenerated (pi f) :=
   iInf.isCountablyGenerated _
 
 end Filter
+

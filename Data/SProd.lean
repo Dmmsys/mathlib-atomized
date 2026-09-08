@@ -27,25 +27,20 @@ public section
 
 universe u v w
 
-/--
-Definition of `SProd` / `SProd` 的定义
+/-- Notation type class for the set product `×ˢ`. -/
+/-
+**SProd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type v → outParam (Type w) → Type (max (max u v) w)
+参数：Type w；max (max u v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SProd
-  parameters: (α : Type u) (β : Type v) (γ : outParam (Type w))
-  axioms and operations (1):
-    - sprod : α -> β -> γ
-
-中文:
-类 SProd
-  参数: (α : 类型u) (β : 类型v) (γ : outParam (类型 w))
-  公理与运算 (1 个):
-    - sprod : α -> β -> γ
+--- 原说明 ---
+Notation type class for the set product `×ˢ`.
 -/
 class SProd (α : Type u) (β : Type v) (γ : outParam (Type w)) where
   /-- The Cartesian product `s ×ˢ t` is the set of `(a, b)` such that `a ∈ s` and `b ∈ t`. -/
-  sprod : α -> β -> γ
+  sprod : α → β → γ
 
 -- This notation binds more strongly than (pre)images, unions and intersections.
 @[inherit_doc SProd.sprod] infixr:82 " ×ˢ " => SProd.sprod
-macro_rules | `($x ×ˢ $y) => `(fbinop% SProd.sprod $x $y)
+macro_rules | `($x ×ˢ $y)   => `(fbinop% SProd.sprod $x $y)

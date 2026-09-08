@@ -27,26 +27,16 @@ modeq, congruence, mod, MOD, modulo, integers
 
 /-- `a ≡ b [ZMOD n]` when `a % n = b % n`. -/
 @[wikidata Q3773677]
-/--
-Definition of `Int.ModEq` / `Int.ModEq` 的定义
+/-
+**Int.ModEq** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Int.ModEq (n a b : Int)
+参数：n a b : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Int.ModEq
-  signature: (n a b : Int)
-  body: a % n = b % n
-
-@[inherit_doc]
-notation:50 a " ≡ " b " [ZMOD " n "]" => Int.ModEq n a b
-
-中文:
-定义 整数.ModEq
-  签名: (n a b : 整数)
-  定义体: a % n = b % n
-
-@[inherit_doc]
-notation:50 a " ≡ " b " [ZMOD " n "]" => Int.ModEq n a b
+--- 原说明 ---
+`a ≡ b [ZMOD n]` when `a % n = b % n`.
 -/
-def Int.ModEq (n a b : Int) :=
+def Int.ModEq (n a b : ℤ) :=
   a % n = b % n
 
 @[inherit_doc]
@@ -55,36 +45,21 @@ notation:50 a " ≡ " b " [ZMOD " n "]" => Int.ModEq n a b
 namespace AddCommGroup
 
 @[simp]
-/--
-theorem `modEq_iff_intModEq` / 定理 `modEq_iff_intModEq`
-
-English:
-theorem modEq_iff_intModEq
-  given: {a b z : Int}
-  statement: a ≡ b [PMOD z] ↔ a ≡ b [ZMOD z]
-  proof: by
-  rw [modEq_comm]
-  simp [modEq_iff_zsmul', dvd_iff_exists_eq_mul_left, Int.ModEq,
-    Int.emod_eq_emod_iff_emod_sub_eq_zero, ← Int.dvd_iff_emod_eq_zero]
-
-@[deprecated (since := "2026-01-13")]
-alias modEq_iff_int_modEq := modEq_iff_intModEq
-
-中文:
-定理 modEq_iff_intModEq
-  条件: {a b z : 整数}
-  结论: a ≡ b [PMOD z] ↔ a ≡ b [ZMOD z]
-  证明: by
-  rw [modEq_comm]
-  simp [modEq_iff_zsmul', dvd_iff_exists_eq_mul_left, Int.ModEq,
-    Int.emod_eq_emod_iff_emod_sub_eq_zero, ← Int.dvd_iff_emod_eq_zero]
-
-@[deprecated (since := "2026-01-13")]
-alias modEq_iff_int_modEq := modEq_iff_intModEq
-
-Depends on / 依赖: Int.ModEq, Int.dvd_iff_emod_eq_zero, Int.emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero, dvd_iff_exists_eq_mul_left, emod_eq_emod_iff_emod_sub_eq_zero, modEq_comm, modEq_iff_zsmul
+/-
+**AddCommGroup.modEq_iff_intModEq** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGroup`。
+形式化陈述：modEq_iff_intModEq {a b z : Int} : a ≡ b [PMOD z] ↔ a ≡ b [ZMOD z]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddCommGroup.modEq_comm`：modEq_comm : a ≡ b [PMOD p] ↔ b ≡ a [PMOD p]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem modEq_iff_intModEq {a b z : Int} : a ≡ b [PMOD z] ↔ a ≡ b [ZMOD z] := by
+theorem modEq_iff_intModEq {a b z : ℤ} : a ≡ b [PMOD z] ↔ a ≡ b [ZMOD z] := by
   rw [modEq_comm]
   simp [modEq_iff_zsmul', dvd_iff_exists_eq_mul_left, Int.ModEq,
     Int.emod_eq_emod_iff_emod_sub_eq_zero, ← Int.dvd_iff_emod_eq_zero]
@@ -95,55 +70,40 @@ alias modEq_iff_int_modEq := modEq_iff_intModEq
 variable {G : Type*} [AddCommGroupWithOne G] [CharZero G]
 
 @[simp, norm_cast]
-/--
-theorem `intCast_modEq_intCast` / 定理 `intCast_modEq_intCast`
-
-English:
-theorem intCast_modEq_intCast
-  given: {a b z : Int}
-  statement: a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z]
-  proof: map_modEq_iff (Int.castAddHom G) Int.cast_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 intCast_modEq_intCast
-  条件: {a b z : 整数}
-  结论: a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z]
-  证明: map_modEq_iff (Int.castAddHom G) Int.cast_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Int.castAddHom, Int.cast_injective, castAddHom, cast_injective, map_modEq_iff
+/-
+**AddCommGroup.intCast_modEq_intCast** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGroup`。
+形式化陈述：intCast_modEq_intCast {a b z : Int} : a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z
+]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGroup.map_modEq_iff`：map_modEq_iff {N F : Type*} [AddCommMonoid N
+] [FunLike F M N] [AddMonoidHomClass F M N] (f : F) (hf : Function.Injective f) 
+: f a ≡ f b [PMO…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
 -/
-theorem intCast_modEq_intCast {a b z : Int} : a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z] :=
+theorem intCast_modEq_intCast {a b z : ℤ} : a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z] :=
   map_modEq_iff (Int.castAddHom G) Int.cast_injective
 
 @[simp, norm_cast]
-/--
-lemma `intCast_modEq_intCast'` / 引理 `intCast_modEq_intCast'`
-
-English:
-lemma intCast_modEq_intCast'
-  given: {a b : Int} {n : Nat}
-  statement: a ≡ b [PMOD (n : G)] ↔ a ≡ b [PMOD (n : Int)]
-  proof: by
-  simpa using intCast_modEq_intCast (G := G) (z := n)
-
-alias ⟨ModEq.of_intCast, ModEq.intCast⟩ := intCast_modEq_intCast
-
-中文:
-引理 intCast_modEq_intCast'
-  条件: {a b : 整数} {n : 自然数}
-  结论: a ≡ b [PMOD (n : G)] ↔ a ≡ b [PMOD (n : 整数)]
-  证明: by
-  simpa using intCast_modEq_intCast (G := G) (z := n)
-
-alias ⟨ModEq.of_intCast, ModEq.intCast⟩ := intCast_modEq_intCast
-
-Depends on / 依赖: intCast_modEq_intCast
+/-
+**AddCommGroup.intCast_modEq_intCast'** 是 Mathlib 中的一个引理，位于命名空间 `AddCommGroup`。
+形式化陈述：intCast_modEq_intCast' {a b : Int} {n : Nat} : a ≡ b [PMOD (n : G)] ↔ a ≡ 
+b [PMOD (n : Int)]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `AddCommGroup.intCast_modEq_intCast`：intCast_modEq_intCast {a b z : Int} 
+: a ≡ b [PMOD (z : G)] ↔ a ≡ b [PMOD z]
 -/
-lemma intCast_modEq_intCast' {a b : Int} {n : Nat} : a ≡ b [PMOD (n : G)] ↔ a ≡ b [PMOD (n : Int)] := by
+lemma intCast_modEq_intCast' {a b : ℤ} {n : ℕ} : a ≡ b [PMOD (n : G)] ↔ a ≡ b [PMOD (n : ℤ)] := by
   simpa using intCast_modEq_intCast (G := G) (z := n)
 
 alias ⟨ModEq.of_intCast, ModEq.intCast⟩ := intCast_modEq_intCast
@@ -152,424 +112,248 @@ end AddCommGroup
 
 namespace Int
 
-variable {m n a b c d : Int}
+variable {m n a b c d : ℤ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Decidable (ModEq n a b)
-  body: decEq (a % n) (b % n)
-
-中文:
-实例 :
-  签名: 可判定 (ModEq n a b)
-  定义体: decEq (a % n) (b % n)
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Decidable (ModEq n a b) := decEq (a % n) (b % n)
 
 namespace ModEq
 
 @[refl, simp]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (a : Int)
-  statement: a ≡ a [ZMOD n]
-  proof: @rfl _ _
-
-中文:
-定理 refl
-  条件: (a : 整数)
-  结论: a ≡ a [ZMOD n]
-  证明: @rfl _ _
+/-
+**Int.ModEq.refl** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n : ℤ} (a : ℤ), a ≡ a [ZMOD n]
+参数：a : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem refl (a : Int) : a ≡ a [ZMOD n] :=
+protected theorem refl (a : ℤ) : a ≡ a [ZMOD n] :=
   @rfl _ _
-
-/--
-theorem `rfl` / 定理 `rfl`
-
-English:
-theorem rfl
-  statement: a ≡ a [ZMOD n]
-  proof: ModEq.refl _
-
-中文:
-定理 rfl
-  结论: a ≡ a [ZMOD n]
-  证明: ModEq.refl _
+/-
+**Int.ModEq.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a : ℤ}, a ≡ a [ZMOD n]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.refl`：∀ {n : ℤ} (a : ℤ), a ≡ a [ZMOD n]
 -/
 protected theorem rfl : a ≡ a [ZMOD n] :=
   ModEq.refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.Refl (ModEq n)
-  body: ⟨ModEq.refl⟩
-
-@[symm]
-
-中文:
-实例 :
-  签名: Std.Refl (ModEq n)
-  定义体: ⟨ModEq.refl⟩
-
-@[symm]
-
-Depends on / 依赖: ModEq.refl
+/-
+**Int.ModEq.** 是 Mathlib 中的一个实例，位于命名空间 `Int.ModEq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.Refl (ModEq n) :=
   ⟨ModEq.refl⟩
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  statement: a ≡ b [ZMOD n] -> b ≡ a [ZMOD n]
-  proof: Eq.symm
-
-@[trans]
-
-中文:
-定理 symm
-  结论: a ≡ b [ZMOD n] -> b ≡ a [ZMOD n]
-  证明: Eq.symm
-
-@[trans]
+/-
+**Int.ModEq.symm** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → b ≡ a [ZMOD n]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem symm : a ≡ b [ZMOD n] -> b ≡ a [ZMOD n] :=
+protected theorem symm : a ≡ b [ZMOD n] → b ≡ a [ZMOD n] :=
   Eq.symm
 
 @[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  statement: a ≡ b [ZMOD n] -> b ≡ c [ZMOD n] -> a ≡ c [ZMOD n]
-  proof: Eq.trans
-
-中文:
-定理 trans
-  结论: a ≡ b [ZMOD n] -> b ≡ c [ZMOD n] -> a ≡ c [ZMOD n]
-  证明: Eq.trans
+/-
+**Int.ModEq.trans** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → b ≡ c [ZMOD n] → a ≡ c [ZMOD n]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-protected theorem trans : a ≡ b [ZMOD n] -> b ≡ c [ZMOD n] -> a ≡ c [ZMOD n] :=
+protected theorem trans : a ≡ b [ZMOD n] → b ≡ c [ZMOD n] → a ≡ c [ZMOD n] :=
   Eq.trans
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTrans Int (ModEq n)
-  body: @Int.ModEq.trans n
-
-中文:
-实例 :
-  签名: 是Trans 整数 (ModEq n)
-  定义体: @Int.ModEq.trans n
-
-Depends on / 依赖: Int.ModEq.trans
+/-
+**Int.ModEq.** 是 Mathlib 中的一个实例，位于命名空间 `Int.ModEq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsTrans Int (ModEq n) where
+instance : IsTrans ℤ (ModEq n) where
   trans := @Int.ModEq.trans n
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  statement: a ≡ b [ZMOD n] -> a % n = b % n
-  proof: id
-
-中文:
-定理 eq
-  结论: a ≡ b [ZMOD n] -> a % n = b % n
-  证明: id
+/-
+**Int.ModEq.eq** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → a % n = b % n
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem eq : a ≡ b [ZMOD n] -> a % n = b % n := id
+protected theorem eq : a ≡ b [ZMOD n] → a % n = b % n := id
 
 end ModEq
 
-/--
-theorem `modEq_comm` / 定理 `modEq_comm`
-
-English:
-theorem modEq_comm
-  statement: a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n]
-  proof: ⟨ModEq.symm, ModEq.symm⟩
-
-@[simp, norm_cast]
-
-中文:
-定理 modEq_comm
-  结论: a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n]
-  证明: ⟨ModEq.symm, ModEq.symm⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ModEq.symm
+/-
+**Int.modEq_comm** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_comm : a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.symm`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → b ≡ a [ZMOD n]
 -/
 theorem modEq_comm : a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n] := ⟨ModEq.symm, ModEq.symm⟩
 
 @[simp, norm_cast]
-/--
-theorem `natCast_modEq_iff` / 定理 `natCast_modEq_iff`
-
-English:
-theorem natCast_modEq_iff
-  given: {a b n : Nat}
-  statement: a ≡ b [ZMOD n] ↔ a ≡ b [MOD n]
-  proof: by
-  unfold ModEq Nat.ModEq; rw [← Int.ofNat_inj]; simp
-
-中文:
-定理 natCast_modEq_iff
-  条件: {a b n : 自然数}
-  结论: a ≡ b [ZMOD n] ↔ a ≡ b [MOD n]
-  证明: by
-  unfold ModEq Nat.ModEq; rw [← Int.ofNat_inj]; simp
-
-Depends on / 依赖: Int.ofNat_inj, Nat.ModEq, ofNat_inj
+/-
+**Int.natCast_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：natCast_modEq_iff {a b n : Nat} : a ≡ b [ZMOD n] ↔ a ≡ b [MOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.ofNat_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem natCast_modEq_iff {a b n : Nat} : a ≡ b [ZMOD n] ↔ a ≡ b [MOD n] := by
+theorem natCast_modEq_iff {a b n : ℕ} : a ≡ b [ZMOD n] ↔ a ≡ b [MOD n] := by
   unfold ModEq Nat.ModEq; rw [← Int.ofNat_inj]; simp
-
-/--
-theorem `modEq_zero_iff_dvd` / 定理 `modEq_zero_iff_dvd`
-
-English:
-theorem modEq_zero_iff_dvd
-  statement: a ≡ 0 [ZMOD n] ↔ n ∣ a
-  proof: by
-  rw [ModEq]; rw [zero_emod]; rw [dvd_iff_emod_eq_zero]
-
-中文:
-定理 modEq_zero_iff_dvd
-  结论: a ≡ 0 [ZMOD n] ↔ n ∣ a
-  证明: by
-  rw [ModEq]; rw [zero_emod]; rw [dvd_iff_emod_eq_zero]
-
-Depends on / 依赖: dvd_iff_emod_eq_zero, zero_emod
+/-
+**Int.modEq_zero_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_zero_iff_dvd : a ≡ 0 [ZMOD n] ↔ n ∣ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ModEq.eq_1`：∀ (n a b : ℤ), (a ≡ b [ZMOD n]) = (a % n = b % n)
+· 使用定理 `Int.zero_emod`：∀ (b : ℤ), 0 % b = 0
+· 使用定理 `Int.dvd_iff_emod_eq_zero`：∀ {a b : ℤ}, a ∣ b ↔ b % a = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_zero_iff_dvd : a ≡ 0 [ZMOD n] ↔ n ∣ a := by
-  rw [ModEq]; rw [zero_emod]; rw [dvd_iff_emod_eq_zero]
-
-/--
-theorem `_root_.Dvd.dvd.modEq_zero_int` / 定理 `_root_.Dvd.dvd.modEq_zero_int`
-
-English:
-theorem _root_.Dvd.dvd.modEq_zero_int
-  given: (h : n ∣ a)
-  statement: a ≡ 0 [ZMOD n]
-  proof: modEq_zero_iff_dvd.2 h
-
-中文:
-定理 _root_.Dvd.dvd.modEq_zero_int
-  条件: (h : n ∣ a)
-  结论: a ≡ 0 [ZMOD n]
-  证明: modEq_zero_iff_dvd.2 h
-
-Depends on / 依赖: modEq_zero_iff_dvd
+  rw [ModEq, zero_emod, dvd_iff_emod_eq_zero]
+/-
+**Int._root_.Dvd.dvd.modEq_zero_int** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Dvd.dvd.modEq_zero_int (h : n ∣ a) : a ≡ 0 [ZMOD n] :=
   modEq_zero_iff_dvd.2 h
-
-/--
-theorem `_root_.Dvd.dvd.zero_modEq_int` / 定理 `_root_.Dvd.dvd.zero_modEq_int`
-
-English:
-theorem _root_.Dvd.dvd.zero_modEq_int
-  given: (h : n ∣ a)
-  statement: 0 ≡ a [ZMOD n]
-  proof: h.modEq_zero_int.symm
-
-中文:
-定理 _root_.Dvd.dvd.zero_modEq_int
-  条件: (h : n ∣ a)
-  结论: 0 ≡ a [ZMOD n]
-  证明: h.modEq_zero_int.symm
-
-Depends on / 依赖: h.modEq_zero_int.symm, modEq_zero_int
+/-
+**Int._root_.Dvd.dvd.zero_modEq_int** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Dvd.dvd.zero_modEq_int (h : n ∣ a) : 0 ≡ a [ZMOD n] :=
   h.modEq_zero_int.symm
-
-/--
-theorem `modEq_iff_dvd` / 定理 `modEq_iff_dvd`
-
-English:
-theorem modEq_iff_dvd
-  statement: a ≡ b [ZMOD n] ↔ n ∣ b - a
-  proof: by
-  rw [ModEq]; rw [eq_comm]
-  simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]
-
-中文:
-定理 modEq_iff_dvd
-  结论: a ≡ b [ZMOD n] ↔ n ∣ b - a
-  证明: by
-  rw [ModEq]; rw [eq_comm]
-  simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]
-
-Depends on / 依赖: dvd_iff_emod_eq_zero, emod_eq_emod_iff_emod_sub_eq_zero, eq_comm
+/-
+**Int.modEq_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ModEq.eq_1`：∀ (n a b : ℤ), (a ≡ b [ZMOD n]) = (a % n = b % n)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a := by
-  rw [ModEq]; rw [eq_comm]
+  rw [ModEq, eq_comm]
   simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]
-
-/--
-theorem `modEq_iff_add_fac` / 定理 `modEq_iff_add_fac`
-
-English:
-theorem modEq_iff_add_fac
-  given: {a b n : Int}
-  statement: a ≡ b [ZMOD n] ↔ exists t, b = a + n * t
-  proof: by
-  rw [modEq_iff_dvd]
-  exact exists_congr fun t => sub_eq_iff_eq_add'
-
-alias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd
-
-中文:
-定理 modEq_iff_add_fac
-  条件: {a b n : 整数}
-  结论: a ≡ b [ZMOD n] ↔ 存在 t, b = a + n * t
-  证明: by
-  rw [modEq_iff_dvd]
-  exact exists_congr fun t => sub_eq_iff_eq_add'
-
-alias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd
-
-Depends on / 依赖: exists_congr, modEq_iff_dvd, sub_eq_iff_eq_add
+/-
+**Int.modEq_iff_add_fac** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_iff_add_fac {a b n : Int} : a ≡ b [ZMOD n] ↔ exists t, b = a + n * t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `sub_eq_iff_eq_add'`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}
+, a - b = c ↔ a = b + c
 -/
-theorem modEq_iff_add_fac {a b n : Int} : a ≡ b [ZMOD n] ↔ exists t, b = a + n * t := by
+theorem modEq_iff_add_fac {a b n : ℤ} : a ≡ b [ZMOD n] ↔ ∃ t, b = a + n * t := by
   rw [modEq_iff_dvd]
   exact exists_congr fun t => sub_eq_iff_eq_add'
 
 alias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd
-
-/--
-theorem `mod_modEq` / 定理 `mod_modEq`
-
-English:
-theorem mod_modEq
-  given: (a n)
-  statement: a % n ≡ a [ZMOD n]
-  proof: emod_emod _ _
-
-@[simp]
-
-中文:
-定理 mod_modEq
-  条件: (a n)
-  结论: a % n ≡ a [ZMOD n]
-  证明: emod_emod _ _
-
-@[simp]
-
-Depends on / 依赖: emod_emod
+/-
+**Int.mod_modEq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：mod_modEq (a n) : a % n ≡ a [ZMOD n]
+参数：a n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.emod_emod`：∀ (a b : ℤ), a % b % b = a % b
 -/
 theorem mod_modEq (a n) : a % n ≡ a [ZMOD n] :=
   emod_emod _ _
 
 @[simp]
-/--
-theorem `neg_modEq_neg` / 定理 `neg_modEq_neg`
-
-English:
-theorem neg_modEq_neg
-  statement: -a ≡ -b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp only [modEq_iff_dvd, (by lia : -b - -a = -(b - a)), Int.dvd_neg]
-
-@[simp]
-
-中文:
-定理 neg_modEq_neg
-  结论: -a ≡ -b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp only [modEq_iff_dvd, (by lia : -b - -a = -(b - a)), Int.dvd_neg]
-
-@[simp]
-
-Depends on / 依赖: Int.dvd_neg, dvd_neg, modEq_iff_dvd
+/-
+**Int.neg_modEq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：neg_modEq_neg : -a ≡ -b [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem neg_modEq_neg : -a ≡ -b [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp only [modEq_iff_dvd, (by lia : -b - -a = -(b - a)), Int.dvd_neg]
 
 @[simp]
-/--
-theorem `modEq_neg` / 定理 `modEq_neg`
-
-English:
-theorem modEq_neg
-  statement: a ≡ b [ZMOD -n] ↔ a ≡ b [ZMOD n]
-  proof: by simp [modEq_iff_dvd]
-
-中文:
-定理 modEq_neg
-  结论: a ≡ b [ZMOD -n] ↔ a ≡ b [ZMOD n]
-  证明: by simp [modEq_iff_dvd]
-
-Depends on / 依赖: modEq_iff_dvd
+/-
+**Int.modEq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_neg : a ≡ b [ZMOD -n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_neg : a ≡ b [ZMOD -n] ↔ a ≡ b [ZMOD n] := by simp [modEq_iff_dvd]
 
 namespace ModEq
 
-/--
-theorem `of_dvd` / 定理 `of_dvd`
-
-English:
-theorem of_dvd
-  given: (d : m ∣ n) (h : a ≡ b [ZMOD n])
-  statement: a ≡ b [ZMOD m]
-  proof: modEq_iff_dvd.2 d.trans h.dvd
-
-中文:
-定理 of_dvd
-  条件: (d : m ∣ n) (h : a ≡ b [ZMOD n])
-  结论: a ≡ b [ZMOD m]
-  证明: modEq_iff_dvd.2 d.trans h.dvd
+/-
+**Int.ModEq.of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {m n a b : ℤ}, m ∣ n → a ≡ b [ZMOD n] → a ≡ b [ZMOD m]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Int.ModEq.dvd`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → n ∣ b - a
 -/
 protected theorem of_dvd (d : m ∣ n) (h : a ≡ b [ZMOD n]) : a ≡ b [ZMOD m] :=
-modEq_iff_dvd.2 d.trans h.dvd
-
-/--
-theorem `mul_left'` / 定理 `mul_left'`
-
-English:
-theorem mul_left'
-  given: (h : a ≡ b [ZMOD n])
-  statement: c * a ≡ c * b [ZMOD c * n]
-  proof: by
-  obtain hc | rfl | hc := lt_trichotomy c 0
-  · rw [← neg_modEq_neg, ← modEq_neg, ← Int.neg_mul, ← Int.neg_mul, ← Int.neg_mul]
-    simp only [ModEq, mul_emod_mul_of_pos _ _ (neg_pos.2 hc), h.eq]
-  · simp only [Int.zero_mul, ModEq.rfl]
-  · simp only [ModEq, mul_emod_mul_of_pos _ _ hc, h.eq]
-
-中文:
-定理 mul_left'
-  条件: (h : a ≡ b [ZMOD n])
-  结论: c * a ≡ c * b [ZMOD c * n]
-  证明: by
-  obtain hc | rfl | hc := lt_trichotomy c 0
-  · rw [← neg_modEq_neg, ← modEq_neg, ← Int.neg_mul, ← Int.neg_mul, ← Int.neg_mul]
-    simp only [ModEq, mul_emod_mul_of_pos _ _ (neg_pos.2 hc), h.eq]
-  · simp only [Int.zero_mul, ModEq.rfl]
-  · simp only [ModEq, mul_emod_mul_of_pos _ _ hc, h.eq]
+  modEq_iff_dvd.2 <| d.trans h.dvd
+/-
+**Int.ModEq.mul_left'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → c * a ≡ c * b [ZMOD c * n]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.neg_modEq_neg`：neg_modEq_neg : -a ≡ -b [ZMOD n] ↔ a ≡ b [ZMOD n]
+· 使用定理 `Int.modEq_neg`：modEq_neg : a ≡ b [ZMOD -n] ↔ a ≡ b [ZMOD n]
+· 使用定理 `Int.neg_mul`：∀ (a b : ℤ), -a * b = -(a * b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.mul_emod_mul_of_pos`：∀ {a : ℤ} (b c : ℤ), 0 < a → a * b % (a * c) = 
+a * (b % c)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddLeftStri
+ctMono α] {a : α}, 0 < -a ↔ a < 0
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `Int.ModEq.eq`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → a % n = b % n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Int.zero_mul`：∀ (a : ℤ), 0 * a = 0
 -/
 protected theorem mul_left' (h : a ≡ b [ZMOD n]) : c * a ≡ c * b [ZMOD c * n] := by
   obtain hc | rfl | hc := lt_trichotomy c 0
@@ -577,407 +361,286 @@ protected theorem mul_left' (h : a ≡ b [ZMOD n]) : c * a ≡ c * b [ZMOD c * n
     simp only [ModEq, mul_emod_mul_of_pos _ _ (neg_pos.2 hc), h.eq]
   · simp only [Int.zero_mul, ModEq.rfl]
   · simp only [ModEq, mul_emod_mul_of_pos _ _ hc, h.eq]
-
-/--
-theorem `mul_right'` / 定理 `mul_right'`
-
-English:
-theorem mul_right'
-  given: (h : a ≡ b [ZMOD n])
-  statement: a * c ≡ b * c [ZMOD n * c]
-  proof: by
-  rw [mul_comm a]; rw [mul_comm b]; rw [mul_comm n]; exact h.mul_left'
-
-@[gcongr]
-
-中文:
-定理 mul_right'
-  条件: (h : a ≡ b [ZMOD n])
-  结论: a * c ≡ b * c [ZMOD n * c]
-  证明: by
-  rw [mul_comm a]; rw [mul_comm b]; rw [mul_comm n]; exact h.mul_left'
-
-@[gcongr]
+/-
+**Int.ModEq.mul_right'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → a * c ≡ b * c [ZMOD n * c]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Int.ModEq.mul_left'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → c * a ≡ c * b [ZM
+OD c * n]
 -/
 protected theorem mul_right' (h : a ≡ b [ZMOD n]) : a * c ≡ b * c [ZMOD n * c] := by
-  rw [mul_comm a]; rw [mul_comm b]; rw [mul_comm n]; exact h.mul_left'
+  rw [mul_comm a, mul_comm b, mul_comm n]; exact h.mul_left'
 
 @[gcongr]
-/--
-theorem `add` / 定理 `add`
-
-English:
-theorem add
-  given: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  statement: a + c ≡ b + d [ZMOD n]
-  proof: modEq_iff_dvd.2 by convert! Int.dvd_add h₁.dvd h₂.dvd using 1; lia
-
-中文:
-定理 add
-  条件: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  结论: a + c ≡ b + d [ZMOD n]
-  证明: modEq_iff_dvd.2 by convert! Int.dvd_add h₁.dvd h₂.dvd using 1; lia
+/-
+**Int.ModEq.add** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a + c ≡ b + d [ZMOD n
+]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.dvd_add`：∀ {a b c : ℤ}, a ∣ b → a ∣ c → a ∣ b + c
+· 使用定理 `Int.ModEq.dvd`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → n ∣ b - a
 -/
 protected theorem add (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n]) : a + c ≡ b + d [ZMOD n] :=
-modEq_iff_dvd.2 by convert! Int.dvd_add h₁.dvd h₂.dvd using 1; lia
-
-/--
-theorem `add_left` / 定理 `add_left`
-
-English:
-theorem add_left
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: c + a ≡ c + b [ZMOD n]
-  proof: ModEq.rfl.add h
-
-中文:
-定理 add_left
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: c + a ≡ c + b [ZMOD n]
-  证明: ModEq.rfl.add h
+  modEq_iff_dvd.2 <| by convert! Int.dvd_add h₁.dvd h₂.dvd using 1; lia
+/-
+**Int.ModEq.add_left** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → c + a ≡ c + b [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a + 
+c ≡ b + d [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem add_left (c : Int) (h : a ≡ b [ZMOD n]) : c + a ≡ c + b [ZMOD n] :=
+protected theorem add_left (c : ℤ) (h : a ≡ b [ZMOD n]) : c + a ≡ c + b [ZMOD n] :=
   ModEq.rfl.add h
-
-/--
-theorem `add_right` / 定理 `add_right`
-
-English:
-theorem add_right
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: a + c ≡ b + c [ZMOD n]
-  proof: h.add ModEq.rfl
-
-中文:
-定理 add_right
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: a + c ≡ b + c [ZMOD n]
-  证明: h.add ModEq.rfl
+/-
+**Int.ModEq.add_right** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → a + c ≡ b + c [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a + 
+c ≡ b + d [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem add_right (c : Int) (h : a ≡ b [ZMOD n]) : a + c ≡ b + c [ZMOD n] :=
+protected theorem add_right (c : ℤ) (h : a ≡ b [ZMOD n]) : a + c ≡ b + c [ZMOD n] :=
   h.add ModEq.rfl
-
-/--
-theorem `add_left_cancel` / 定理 `add_left_cancel`
-
-English:
-theorem add_left_cancel
-  given: (h₁ : a ≡ b [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n])
-  proof: have : d - c = b + d - (a + c) - (b - a) := by lia
-modEq_iff_dvd.2 by
-    rw [this]
-    exact Int.dvd_sub h₂.dvd h₁.dvd
-
-中文:
-定理 add_left_cancel
-  条件: (h₁ : a ≡ b [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n])
-  证明: have : d - c = b + d - (a + c) - (b - a) := by lia
-modEq_iff_dvd.2 by
-    rw [this]
-    exact Int.dvd_sub h₂.dvd h₁.dvd
+/-
+**Int.ModEq.add_left_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → a + c ≡ b + d [ZMOD n] → c ≡ d [ZMOD n
+]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.dvd_sub`：∀ {a b c : ℤ}, a ∣ b → a ∣ c → a ∣ b - c
+· 使用定理 `Int.ModEq.dvd`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → n ∣ b - a
 -/
 protected theorem add_left_cancel (h₁ : a ≡ b [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n]) :
     c ≡ d [ZMOD n] :=
   have : d - c = b + d - (a + c) - (b - a) := by lia
-modEq_iff_dvd.2 by
+  modEq_iff_dvd.2 <| by
     rw [this]
     exact Int.dvd_sub h₂.dvd h₁.dvd
-
-/--
-theorem `add_left_cancel'` / 定理 `add_left_cancel'`
-
-English:
-theorem add_left_cancel'
-  given: (c : Int) (h : c + a ≡ c + b [ZMOD n])
-  statement: a ≡ b [ZMOD n]
-  proof: ModEq.rfl.add_left_cancel h
-
-中文:
-定理 add_left_cancel'
-  条件: (c : 整数) (h : c + a ≡ c + b [ZMOD n])
-  结论: a ≡ b [ZMOD n]
-  证明: ModEq.rfl.add_left_cancel h
+/-
+**Int.ModEq.add_left_cancel'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), c + a ≡ c + b [ZMOD n] → a ≡ b [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add_left_cancel`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → a + c ≡ b
+ + d [ZMOD n] → c ≡ d [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem add_left_cancel' (c : Int) (h : c + a ≡ c + b [ZMOD n]) : a ≡ b [ZMOD n] :=
+protected theorem add_left_cancel' (c : ℤ) (h : c + a ≡ c + b [ZMOD n]) : a ≡ b [ZMOD n] :=
   ModEq.rfl.add_left_cancel h
-
-/--
-theorem `add_right_cancel` / 定理 `add_right_cancel`
-
-English:
-theorem add_right_cancel
-  given: (h₁ : c ≡ d [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n])
-  proof: by
-  rw [add_comm a]; rw [add_comm b] at h₂
-  exact h₁.add_left_cancel h₂
-
-中文:
-定理 add_right_cancel
-  条件: (h₁ : c ≡ d [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n])
-  证明: by
-  rw [add_comm a]; rw [add_comm b] at h₂
-  exact h₁.add_left_cancel h₂
+/-
+**Int.ModEq.add_right_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c d : ℤ}, c ≡ d [ZMOD n] → a + c ≡ b + d [ZMOD n] → a ≡ b [ZMOD n
+]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add_left_cancel`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → a + c ≡ b
+ + d [ZMOD n] → c ≡ d [ZMOD n]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 protected theorem add_right_cancel (h₁ : c ≡ d [ZMOD n]) (h₂ : a + c ≡ b + d [ZMOD n]) :
     a ≡ b [ZMOD n] := by
-  rw [add_comm a]; rw [add_comm b] at h₂
+  rw [add_comm a, add_comm b] at h₂
   exact h₁.add_left_cancel h₂
-
-/--
-theorem `add_right_cancel'` / 定理 `add_right_cancel'`
-
-English:
-theorem add_right_cancel'
-  given: (c : Int) (h : a + c ≡ b + c [ZMOD n])
-  statement: a ≡ b [ZMOD n]
-  proof: ModEq.rfl.add_right_cancel h
-
-中文:
-定理 add_right_cancel'
-  条件: (c : 整数) (h : a + c ≡ b + c [ZMOD n])
-  结论: a ≡ b [ZMOD n]
-  证明: ModEq.rfl.add_right_cancel h
+/-
+**Int.ModEq.add_right_cancel'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a + c ≡ b + c [ZMOD n] → a ≡ b [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add_right_cancel`：∀ {n a b c d : ℤ}, c ≡ d [ZMOD n] → a + c ≡ 
+b + d [ZMOD n] → a ≡ b [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem add_right_cancel' (c : Int) (h : a + c ≡ b + c [ZMOD n]) : a ≡ b [ZMOD n] :=
+protected theorem add_right_cancel' (c : ℤ) (h : a + c ≡ b + c [ZMOD n]) : a ≡ b [ZMOD n] :=
   ModEq.rfl.add_right_cancel h
-
-/--
-theorem `neg` / 定理 `neg`
-
-English:
-theorem neg
-  given: (h : a ≡ b [ZMOD n])
-  statement: -a ≡ -b [ZMOD n]
-  proof: h.add_left_cancel (by simp_rw [← sub_eq_add_neg, sub_self]; rfl)
-
-@[gcongr]
-
-中文:
-定理 neg
-  条件: (h : a ≡ b [ZMOD n])
-  结论: -a ≡ -b [ZMOD n]
-  证明: h.add_left_cancel (by simp_rw [← sub_eq_add_neg, sub_self]; rfl)
-
-@[gcongr]
+/-
+**Int.ModEq.neg** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → -a ≡ -b [ZMOD n]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.add_left_cancel`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → a + c ≡ b
+ + d [ZMOD n] → c ≡ d [ZMOD n]
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
 @[gcongr] protected theorem neg (h : a ≡ b [ZMOD n]) : -a ≡ -b [ZMOD n] :=
   h.add_left_cancel (by simp_rw [← sub_eq_add_neg, sub_self]; rfl)
 
 @[gcongr]
-/--
-theorem `sub` / 定理 `sub`
-
-English:
-theorem sub
-  given: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  statement: a - c ≡ b - d [ZMOD n]
-  proof: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]
-  exact h₁.add h₂.neg
-
-中文:
-定理 sub
-  条件: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  结论: a - c ≡ b - d [ZMOD n]
-  证明: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]
-  exact h₁.add h₂.neg
+/-
+**Int.ModEq.sub** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a - c ≡ b - d [ZMOD n
+]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Int.ModEq.add`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a + 
+c ≡ b + d [ZMOD n]
+· 使用定理 `Int.ModEq.neg`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → -a ≡ -b [ZMOD n]
 -/
 protected theorem sub (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n]) : a - c ≡ b - d [ZMOD n] := by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]
+  rw [sub_eq_add_neg, sub_eq_add_neg]
   exact h₁.add h₂.neg
-
-/--
-theorem `sub_left` / 定理 `sub_left`
-
-English:
-theorem sub_left
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: c - a ≡ c - b [ZMOD n]
-  proof: ModEq.rfl.sub h
-
-中文:
-定理 sub_left
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: c - a ≡ c - b [ZMOD n]
-  证明: ModEq.rfl.sub h
+/-
+**Int.ModEq.sub_left** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → c - a ≡ c - b [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.sub`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a - 
+c ≡ b - d [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem sub_left (c : Int) (h : a ≡ b [ZMOD n]) : c - a ≡ c - b [ZMOD n] :=
+protected theorem sub_left (c : ℤ) (h : a ≡ b [ZMOD n]) : c - a ≡ c - b [ZMOD n] :=
   ModEq.rfl.sub h
-
-/--
-theorem `sub_right` / 定理 `sub_right`
-
-English:
-theorem sub_right
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: a - c ≡ b - c [ZMOD n]
-  proof: h.sub ModEq.rfl
-
-中文:
-定理 sub_right
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: a - c ≡ b - c [ZMOD n]
-  证明: h.sub ModEq.rfl
+/-
+**Int.ModEq.sub_right** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → a - c ≡ b - c [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.sub`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a - 
+c ≡ b - d [ZMOD n]
+· 使用定理 `Int.ModEq.rfl`：∀ {n a : ℤ}, a ≡ a [ZMOD n]
 -/
-protected theorem sub_right (c : Int) (h : a ≡ b [ZMOD n]) : a - c ≡ b - c [ZMOD n] :=
+protected theorem sub_right (c : ℤ) (h : a ≡ b [ZMOD n]) : a - c ≡ b - c [ZMOD n] :=
   h.sub ModEq.rfl
-
-/--
-theorem `mul_left` / 定理 `mul_left`
-
-English:
-theorem mul_left
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: c * a ≡ c * b [ZMOD n]
-  proof: h.mul_left'.of_dvd dvd_mul_left _ _
-
-中文:
-定理 mul_left
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: c * a ≡ c * b [ZMOD n]
-  证明: h.mul_left'.of_dvd dvd_mul_left _ _
+/-
+**Int.ModEq.mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → c * a ≡ c * b [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.of_dvd`：∀ {m n a b : ℤ}, m ∣ n → a ≡ b [ZMOD n] → a ≡ b [ZMOD 
+m]
+· 使用定理 `dvd_mul_left`：dvd_mul_left (a b : α) : a ∣ b * a
+· 使用定理 `Int.ModEq.mul_left'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → c * a ≡ c * b [ZM
+OD c * n]
 -/
-protected theorem mul_left (c : Int) (h : a ≡ b [ZMOD n]) : c * a ≡ c * b [ZMOD n] :=
-h.mul_left'.of_dvd dvd_mul_left _ _
-
-/--
-theorem `mul_right` / 定理 `mul_right`
-
-English:
-theorem mul_right
-  given: (c : Int) (h : a ≡ b [ZMOD n])
-  statement: a * c ≡ b * c [ZMOD n]
-  proof: h.mul_right'.of_dvd dvd_mul_right _ _
-
-@[gcongr]
-
-中文:
-定理 mul_right
-  条件: (c : 整数) (h : a ≡ b [ZMOD n])
-  结论: a * c ≡ b * c [ZMOD n]
-  证明: h.mul_right'.of_dvd dvd_mul_right _ _
-
-@[gcongr]
+protected theorem mul_left (c : ℤ) (h : a ≡ b [ZMOD n]) : c * a ≡ c * b [ZMOD n] :=
+  h.mul_left'.of_dvd <| dvd_mul_left _ _
+/-
+**Int.ModEq.mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → a * c ≡ b * c [ZMOD n]
+参数：c : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.of_dvd`：∀ {m n a b : ℤ}, m ∣ n → a ≡ b [ZMOD n] → a ≡ b [ZMOD 
+m]
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
+· 使用定理 `Int.ModEq.mul_right'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → a * c ≡ b * c [Z
+MOD n * c]
 -/
-protected theorem mul_right (c : Int) (h : a ≡ b [ZMOD n]) : a * c ≡ b * c [ZMOD n] :=
-h.mul_right'.of_dvd dvd_mul_right _ _
+protected theorem mul_right (c : ℤ) (h : a ≡ b [ZMOD n]) : a * c ≡ b * c [ZMOD n] :=
+  h.mul_right'.of_dvd <| dvd_mul_right _ _
 
 @[gcongr]
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  statement: a * c ≡ b * d [ZMOD n]
-  proof: (h₂.mul_left _).trans (h₁.mul_right _)
-
-中文:
-定理 mul
-  条件: (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n])
-  结论: a * c ≡ b * d [ZMOD n]
-  证明: (h₂.mul_left _).trans (h₁.mul_right _)
+/-
+**Int.ModEq.mul** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a * c ≡ b * d [ZMOD n
+]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.trans`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → b ≡ c [ZMOD n] → a ≡ 
+c [ZMOD n]
+· 使用定理 `Int.ModEq.mul_left`：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → c * a ≡ c * 
+b [ZMOD n]
+· 使用定理 `Int.ModEq.mul_right`：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → a * c ≡ b *
+ c [ZMOD n]
 -/
 protected theorem mul (h₁ : a ≡ b [ZMOD n]) (h₂ : c ≡ d [ZMOD n]) : a * c ≡ b * d [ZMOD n] :=
   (h₂.mul_left _).trans (h₁.mul_right _)
-
-/--
-theorem `pow` / 定理 `pow`
-
-English:
-theorem pow
-  given: (m : Nat) (h : a ≡ b [ZMOD n])
-  statement: a ^ m ≡ b ^ m [ZMOD n]
-  proof: by
+/-
+**Int.ModEq.pow** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {n a b : ℤ} (m : ℕ), a ≡ b [ZMOD n] → a ^ m ≡ b ^ m [ZMOD n]
+参数：m : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Int.ModEq.mul`：∀ {n a b c d : ℤ}, a ≡ b [ZMOD n] → c ≡ d [ZMOD n] → a * 
+c ≡ b * d [ZMOD n]
+-/
+@[gcongr] protected theorem pow (m : ℕ) (h : a ≡ b [ZMOD n]) : a ^ m ≡ b ^ m [ZMOD n] := by
   induction m with
   | zero => simp
   | succ d hd => rw [pow_succ, pow_succ]; exact hd.mul h
-
-中文:
-定理 pow
-  条件: (m : 自然数) (h : a ≡ b [ZMOD n])
-  结论: a ^ m ≡ b ^ m [ZMOD n]
-  证明: by
-  induction m with
-  | zero => simp
-  | succ d hd => rw [pow_succ, pow_succ]; exact hd.mul h
+/-
+**Int.ModEq.of_mul_left** 是 Mathlib 中的一个引理，位于命名空间 `Int.ModEq`。
+形式化陈述：of_mul_left (m : Int) (h : a ≡ b [ZMOD m * n]) : a ≡ b [ZMOD n]
+参数：m : Int；h : a ≡ b [ZMOD m * n]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `dvd_mul_left`：dvd_mul_left (a b : α) : a ∣ b * a
 -/
-@[gcongr] protected theorem pow (m : Nat) (h : a ≡ b [ZMOD n]) : a ^ m ≡ b ^ m [ZMOD n] := by
-  induction m with
-  | zero => simp
-  | succ d hd => rw [pow_succ, pow_succ]; exact hd.mul h
-
-/--
-lemma `of_mul_left` / 引理 `of_mul_left`
-
-English:
-lemma of_mul_left
-  given: (m : Int) (h : a ≡ b [ZMOD m * n])
-  statement: a ≡ b [ZMOD n]
-  proof: by
+lemma of_mul_left (m : ℤ) (h : a ≡ b [ZMOD m * n]) : a ≡ b [ZMOD n] := by
   rw [modEq_iff_dvd] at *; exact (dvd_mul_left n m).trans h
-
-中文:
-引理 of_mul_left
-  条件: (m : 整数) (h : a ≡ b [ZMOD m * n])
-  结论: a ≡ b [ZMOD n]
-  证明: by
-  rw [modEq_iff_dvd] at *; exact (dvd_mul_left n m).trans h
-
-Depends on / 依赖: dvd_mul_left, modEq_iff_dvd
+/-
+**Int.ModEq.of_mul_right** 是 Mathlib 中的一个引理，位于命名空间 `Int.ModEq`。
+形式化陈述：of_mul_right (m : Int) : a ≡ b [ZMOD n * m] -> a ≡ b [ZMOD n]
+参数：m : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.ModEq.of_mul_left`：of_mul_left (m : Int) (h : a ≡ b [ZMOD m * n]) : 
+a ≡ b [ZMOD n]
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma of_mul_left (m : Int) (h : a ≡ b [ZMOD m * n]) : a ≡ b [ZMOD n] := by
-  rw [modEq_iff_dvd] at *; exact (dvd_mul_left n m).trans h
-
-/--
-lemma `of_mul_right` / 引理 `of_mul_right`
-
-English:
-lemma of_mul_right
-  given: (m : Int)
-  statement: a ≡ b [ZMOD n * m] -> a ≡ b [ZMOD n]
-  proof: mul_comm m n ▸ of_mul_left _
-
-中文:
-引理 of_mul_right
-  条件: (m : 整数)
-  结论: a ≡ b [ZMOD n * m] -> a ≡ b [ZMOD n]
-  证明: mul_comm m n ▸ of_mul_left _
-
-Depends on / 依赖: mul_comm, of_mul_left
--/
-lemma of_mul_right (m : Int) : a ≡ b [ZMOD n * m] -> a ≡ b [ZMOD n] :=
+lemma of_mul_right (m : ℤ) : a ≡ b [ZMOD n * m] → a ≡ b [ZMOD n] :=
   mul_comm m n ▸ of_mul_left _
 
-/--
-theorem `cancel_right_div_gcd` / 定理 `cancel_right_div_gcd`
+/-- To cancel a common factor `c` from a `ModEq` we must divide the modulus `m` by `gcd m c`. -/
+/-
+**Int.ModEq.cancel_right_div_gcd** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：cancel_right_div_gcd (hm : 0 < m) (h : a * c ≡ b * c [ZMOD m]) : a ≡ b [ZM
+OD m / gcd m c]
+参数：hm : 0 < m；h : a * c ≡ b * c [ZMOD m]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `Int.dvd_of_dvd_mul_right_of_gcd_one`：dvd_of_dvd_mul_right_of_gcd_one {a 
+b c : Int} (habc : a ∣ b * c) (hab : gcd a b = 1) : a ∣ c
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.mul_ediv_assoc`：∀ (a : ℤ) {b c : ℤ}, c ∣ b → a * b / c = a * (b / c)
+· 使用定理 `Int.gcd_dvd_right`：∀ (a b : ℤ), ↑(a.gcd b) ∣ b
+· 使用定理 `Int.sub_mul`：∀ (a b c : ℤ), (a - b) * c = a * c - b * c
+· 使用定理 `Int.ediv_dvd_ediv`：∀ {a b c : ℤ}, a ∣ b → b ∣ c → b / a ∣ c / a
+· 使用定理 `Int.gcd_dvd_left`：∀ (a b : ℤ), ↑(a.gcd b) ∣ a
+· 使用定理 `Int.gcd_div`：∀ {a b c : ℤ}, c ∣ a → c ∣ b → (a / c).gcd (b / c) = a.gcd 
+b / c.natAbs
+· 使用定理 `Int.natAbs_natCast`：∀ (n : ℕ), (↑n).natAbs = n
+· 使用定理 `Nat.div_self`：∀ {n : ℕ}, 0 < n → n / n = 1
+· 使用定理 `Int.gcd_pos_of_ne_zero_left`：∀ {a : ℤ} (b : ℤ), a ≠ 0 → 0 < a.gcd b
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 
-English:
-theorem cancel_right_div_gcd
-  given: (hm : 0 < m) (h : a * c ≡ b * c [ZMOD m])
-  proof: by
-  let d := gcd m c
-  rw [modEq_iff_dvd] at h ⊢
-  refine Int.dvd_of_dvd_mul_right_of_gcd_one (?_ : m / d ∣ c / d * (b - a)) ?_
-  · rw [mul_comm, ← Int.mul_ediv_assoc (b - a) (gcd_dvd_right ..), Int.sub_mul]
-    exact Int.ediv_dvd_ediv (gcd_dvd_left ..) h
-  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_right ..), natAbs_natCast,
-      Nat.div_self (gcd_pos_of_ne_zero_left c hm.ne')]
-
-中文:
-定理 cancel_right_div_gcd
-  条件: (hm : 0 < m) (h : a * c ≡ b * c [ZMOD m])
-  证明: by
-  let d := gcd m c
-  rw [modEq_iff_dvd] at h ⊢
-  refine Int.dvd_of_dvd_mul_right_of_gcd_one (?_ : m / d ∣ c / d * (b - a)) ?_
-  · rw [mul_comm, ← Int.mul_ediv_assoc (b - a) (gcd_dvd_right ..), Int.sub_mul]
-    exact Int.ediv_dvd_ediv (gcd_dvd_left ..) h
-  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_right ..), natAbs_natCast,
-      Nat.div_self (gcd_pos_of_ne_zero_left c hm.ne')]
-
-Depends on / 依赖: Int.dvd_of_dvd_mul_right_of_gcd_one, Int.ediv_dvd_ediv, Int.mul_ediv_assoc, Int.sub_mul, Nat.div_self, div_self, dvd_of_dvd_mul_right_of_gcd_one, ediv_dvd_ediv, gcd_div, gcd_dvd_left, gcd_dvd_right, gcd_pos_of_ne_zero_left, hm.ne, modEq_iff_dvd, mul_comm, mul_ediv_assoc, natAbs_natCast, sub_mul
+--- 原说明 ---
+To cancel a common factor `c` from a `ModEq` we must divide the modulus `m` by `
+gcd m c`.
 -/
 theorem cancel_right_div_gcd (hm : 0 < m) (h : a * c ≡ b * c [ZMOD m]) :
     a ≡ b [ZMOD m / gcd m c] := by
@@ -989,1079 +652,800 @@ theorem cancel_right_div_gcd (hm : 0 < m) (h : a * c ≡ b * c [ZMOD m]) :
   · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_right ..), natAbs_natCast,
       Nat.div_self (gcd_pos_of_ne_zero_left c hm.ne')]
 
-/--
-theorem `cancel_left_div_gcd` / 定理 `cancel_left_div_gcd`
+/-- To cancel a common factor `c` from a `ModEq` we must divide the modulus `m` by `gcd m c`. -/
+/-
+**Int.ModEq.cancel_left_div_gcd** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：cancel_left_div_gcd (hm : 0 < m) (h : c * a ≡ c * b [ZMOD m]) : a ≡ b [ZMO
+D m / gcd m c]
+参数：hm : 0 < m；h : c * a ≡ c * b [ZMOD m]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.cancel_right_div_gcd`：cancel_right_div_gcd (hm : 0 < m) (h : a
+ * c ≡ b * c [ZMOD m]) : a ≡ b [ZMOD m / gcd m c]
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 
-English:
-theorem cancel_left_div_gcd
-  given: (hm : 0 < m) (h : c * a ≡ c * b [ZMOD m])
-  statement: a ≡ b [ZMOD m / gcd m c]
-  proof: cancel_right_div_gcd hm by simpa [mul_comm] using h
-
-中文:
-定理 cancel_left_div_gcd
-  条件: (hm : 0 < m) (h : c * a ≡ c * b [ZMOD m])
-  结论: a ≡ b [ZMOD m / 最大公约数 m c]
-  证明: cancel_right_div_gcd hm by simpa [mul_comm] using h
-
-Depends on / 依赖: cancel_right_div_gcd, mul_comm
+--- 原说明 ---
+To cancel a common factor `c` from a `ModEq` we must divide the modulus `m` by `
+gcd m c`.
 -/
 theorem cancel_left_div_gcd (hm : 0 < m) (h : c * a ≡ c * b [ZMOD m]) : a ≡ b [ZMOD m / gcd m c] :=
-cancel_right_div_gcd hm by simpa [mul_comm] using h
-
-/--
-theorem `of_div` / 定理 `of_div`
-
-English:
-theorem of_div
-  given: (h : a / c ≡ b / c [ZMOD m / c]) (ha : c ∣ a) (ha : c ∣ b) (ha : c ∣ m)
-  proof: by convert! h.mul_left' <;> rwa [Int.mul_ediv_cancel']
-
-中文:
-定理 of_div
-  条件: (h : a / c ≡ b / c [ZMOD m / c]) (ha : c ∣ a) (ha : c ∣ b) (ha : c ∣ m)
-  证明: by convert! h.mul_left' <;> rwa [Int.mul_ediv_cancel']
-
-Depends on / 依赖: Int.mul_ediv_cancel, convert, h.mul_left, mul_ediv_cancel, mul_left
+  cancel_right_div_gcd hm <| by simpa [mul_comm] using h
+/-
+**Int.ModEq.of_div** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：of_div (h : a / c ≡ b / c [ZMOD m / c]) (ha : c ∣ a) (ha : c ∣ b) (ha : c 
+∣ m) : a ≡ b [ZMOD m]
+参数：h : a / c ≡ b / c [ZMOD m / c]；ha : c ∣ a；ha : c ∣ b；ha : c ∣ m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.mul_ediv_cancel'`：∀ {a b : ℤ}, a ∣ b → a * (b / a) = b
+· 使用定理 `Int.ModEq.mul_left'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → c * a ≡ c * b [ZM
+OD c * n]
 -/
 theorem of_div (h : a / c ≡ b / c [ZMOD m / c]) (ha : c ∣ a) (ha : c ∣ b) (ha : c ∣ m) :
     a ≡ b [ZMOD m] := by convert! h.mul_left' <;> rwa [Int.mul_ediv_cancel']
 
-/--
-theorem `mul_left_cancel'` / 定理 `mul_left_cancel'`
+/-- Cancel left multiplication on both sides of the `≡` and in the modulus.
 
-English:
-theorem mul_left_cancel'
-  given: (hc : c != 0)
-  proof: by
-  simp only [modEq_iff_dvd, ← Int.mul_sub]
-  exact Int.dvd_of_mul_dvd_mul_left hc
+For cancelling left multiplication in the modulus, see `Int.ModEq.of_mul_left`. -/
+/-
+**Int.ModEq.mul_left_cancel'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {m a b c : ℤ}, c ≠ 0 → c * a ≡ c * b [ZMOD c * m] → a ≡ b [ZMOD m]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.dvd_of_mul_dvd_mul_left`：∀ {a m n : ℤ}, a ≠ 0 → a * m ∣ a * n → m ∣ 
+n
 
-中文:
-定理 mul_left_cancel'
-  条件: (hc : c != 0)
-  证明: by
-  simp only [modEq_iff_dvd, ← Int.mul_sub]
-  exact Int.dvd_of_mul_dvd_mul_left hc
+--- 原说明 ---
+Cancel left multiplication on both sides of the `≡` and in the modulus.
+
+For cancelling left multiplication in the modulus, see `Int.ModEq.of_mul_left`.
 -/
-protected theorem mul_left_cancel' (hc : c != 0) :
-    c * a ≡ c * b [ZMOD c * m] -> a ≡ b [ZMOD m] := by
+protected theorem mul_left_cancel' (hc : c ≠ 0) :
+    c * a ≡ c * b [ZMOD c * m] → a ≡ b [ZMOD m] := by
   simp only [modEq_iff_dvd, ← Int.mul_sub]
   exact Int.dvd_of_mul_dvd_mul_left hc
-
-/--
-theorem `mul_left_cancel_iff'` / 定理 `mul_left_cancel_iff'`
-
-English:
-theorem mul_left_cancel_iff'
-  given: (hc : c != 0)
-  proof: ⟨ModEq.mul_left_cancel' hc, Int.ModEq.mul_left'⟩
-
-中文:
-定理 mul_left_cancel_iff'
-  条件: (hc : c != 0)
-  证明: ⟨ModEq.mul_left_cancel' hc, Int.ModEq.mul_left'⟩
+/-
+**Int.ModEq.mul_left_cancel_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {m a b c : ℤ}, c ≠ 0 → (c * a ≡ c * b [ZMOD c * m] ↔ a ≡ b [ZMOD m])
+参数：c * a ≡ c * b [ZMOD c * m] ↔ a ≡ b [ZMOD m]。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.mul_left_cancel'`：∀ {m a b c : ℤ}, c ≠ 0 → c * a ≡ c * b [ZMOD
+ c * m] → a ≡ b [ZMOD m]
+· 使用定理 `Int.ModEq.mul_left'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → c * a ≡ c * b [ZM
+OD c * n]
 -/
-protected theorem mul_left_cancel_iff' (hc : c != 0) :
+protected theorem mul_left_cancel_iff' (hc : c ≠ 0) :
     c * a ≡ c * b [ZMOD c * m] ↔ a ≡ b [ZMOD m] :=
   ⟨ModEq.mul_left_cancel' hc, Int.ModEq.mul_left'⟩
 
-/--
-theorem `mul_right_cancel'` / 定理 `mul_right_cancel'`
+/-- Cancel right multiplication on both sides of the `≡` and in the modulus.
 
-English:
-theorem mul_right_cancel'
-  given: (hc : c != 0)
-  proof: by
-  simp only [modEq_iff_dvd, ← Int.sub_mul]
-  exact Int.dvd_of_mul_dvd_mul_right hc
+For cancelling right multiplication in the modulus, see `Int.ModEq.of_mul_right`. -/
+/-
+**Int.ModEq.mul_right_cancel'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {m a b c : ℤ}, c ≠ 0 → a * c ≡ b * c [ZMOD m * c] → a ≡ b [ZMOD m]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.dvd_of_mul_dvd_mul_right`：∀ {a m n : ℤ}, a ≠ 0 → m * a ∣ n * a → m ∣
+ n
 
-中文:
-定理 mul_right_cancel'
-  条件: (hc : c != 0)
-  证明: by
-  simp only [modEq_iff_dvd, ← Int.sub_mul]
-  exact Int.dvd_of_mul_dvd_mul_right hc
+--- 原说明 ---
+Cancel right multiplication on both sides of the `≡` and in the modulus.
 
-Depends on / 依赖: K.subset_succ, monotone_nat_of_le_succ, subset_succ
+For cancelling right multiplication in the modulus, see `Int.ModEq.of_mul_right`
+.
 -/
-protected theorem mul_right_cancel' (hc : c != 0) :
-    a * c ≡ b * c [ZMOD m * c] -> a ≡ b [ZMOD m] := by
+protected theorem mul_right_cancel' (hc : c ≠ 0) :
+    a * c ≡ b * c [ZMOD m * c] → a ≡ b [ZMOD m] := by
   simp only [modEq_iff_dvd, ← Int.sub_mul]
   exact Int.dvd_of_mul_dvd_mul_right hc
-
-/--
-theorem `mul_right_cancel_iff'` / 定理 `mul_right_cancel_iff'`
-
-English:
-theorem mul_right_cancel_iff'
-  given: (hc : c != 0)
-  proof: ⟨ModEq.mul_right_cancel' hc, ModEq.mul_right'⟩
-
-中文:
-定理 mul_right_cancel_iff'
-  条件: (hc : c != 0)
-  证明: ⟨ModEq.mul_right_cancel' hc, ModEq.mul_right'⟩
-
-Depends on / 依赖: K.finite, finite
+/-
+**Int.ModEq.mul_right_cancel_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：∀ {m a b c : ℤ}, c ≠ 0 → (a * c ≡ b * c [ZMOD m * c] ↔ a ≡ b [ZMOD m])
+参数：a * c ≡ b * c [ZMOD m * c] ↔ a ≡ b [ZMOD m]。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.mul_right_cancel'`：∀ {m a b c : ℤ}, c ≠ 0 → a * c ≡ b * c [ZMO
+D m * c] → a ≡ b [ZMOD m]
+· 使用定理 `Int.ModEq.mul_right'`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → a * c ≡ b * c [Z
+MOD n * c]
 -/
-protected theorem mul_right_cancel_iff' (hc : c != 0) :
+protected theorem mul_right_cancel_iff' (hc : c ≠ 0) :
     a * c ≡ b * c [ZMOD m * c] ↔ a ≡ b [ZMOD m] :=
   ⟨ModEq.mul_right_cancel' hc, ModEq.mul_right'⟩
-
-/--
-theorem `dvd_iff` / 定理 `dvd_iff`
-
-English:
-theorem dvd_iff
-  given: (h : a ≡ b [ZMOD n])
-  statement: n ∣ a ↔ n ∣ b
-  proof: by
-  simp only [← modEq_zero_iff_dvd]
-  exact ⟨fun ha => h.symm.trans ha, h.trans⟩
-
-中文:
-定理 dvd_iff
-  条件: (h : a ≡ b [ZMOD n])
-  结论: n ∣ a ↔ n ∣ b
-  证明: by
-  simp only [← modEq_zero_iff_dvd]
-  exact ⟨fun ha => h.symm.trans ha, h.trans⟩
-
-Depends on / 依赖: h.symm.trans, h.trans, modEq_zero_iff_dvd
+/-
+**Int.ModEq.dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int.ModEq`。
+形式化陈述：dvd_iff (h : a ≡ b [ZMOD n]) : n ∣ a ↔ n ∣ b
+参数：h : a ≡ b [ZMOD n]。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ModEq.trans`：∀ {n a b c : ℤ}, a ≡ b [ZMOD n] → b ≡ c [ZMOD n] → a ≡ 
+c [ZMOD n]
+· 使用定理 `Int.ModEq.symm`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → b ≡ a [ZMOD n]
 -/
 theorem dvd_iff (h : a ≡ b [ZMOD n]) : n ∣ a ↔ n ∣ b := by
   simp only [← modEq_zero_iff_dvd]
-  exact ⟨fun ha => h.symm.trans ha, h.trans⟩
+  exact ⟨fun ha ↦ h.symm.trans ha, h.trans⟩
 
 end ModEq
 
 @[simp]
-/--
-theorem `abs_modEq_two` / 定理 `abs_modEq_two`
-
-English:
-theorem abs_modEq_two
-  statement: |a| ≡ a [ZMOD 2]
-  proof: by
-  grind [Int.ModEq]
-
-@[simp]
-
-中文:
-定理 abs_modEq_two
-  结论: |a| ≡ a [ZMOD 2]
-  证明: by
-  grind [Int.ModEq]
-
-@[simp]
-
-Depends on / 依赖: Int.ModEq
+/-
+**Int.abs_modEq_two** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：abs_modEq_two : |a| ≡ a [ZMOD 2]
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem abs_modEq_two : |a| ≡ a [ZMOD 2] := by
   grind [Int.ModEq]
 
 @[simp]
-/--
-theorem `modulus_modEq_zero` / 定理 `modulus_modEq_zero`
-
-English:
-theorem modulus_modEq_zero
-  statement: n ≡ 0 [ZMOD n]
-  proof: by simp [ModEq]
-
-@[simp]
-
-中文:
-定理 modulus_modEq_zero
-  结论: n ≡ 0 [ZMOD n]
-  证明: by simp [ModEq]
-
-@[simp]
+/-
+**Int.modulus_modEq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modulus_modEq_zero : n ≡ 0 [ZMOD n]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.emod_self`：∀ {a : ℤ}, a % a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem modulus_modEq_zero : n ≡ 0 [ZMOD n] := by simp [ModEq]
 
 @[simp]
-/--
-theorem `modEq_abs` / 定理 `modEq_abs`
-
-English:
-theorem modEq_abs
-  statement: a ≡ b [ZMOD |n|] ↔ a ≡ b [ZMOD n]
-  proof: by simp [ModEq]
-
-中文:
-定理 modEq_abs
-  结论: a ≡ b [ZMOD |n|] ↔ a ≡ b [ZMOD n]
-  证明: by simp [ModEq]
+/-
+**Int.modEq_abs** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_abs : a ≡ b [ZMOD |n|] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.emod_abs`：emod_abs (a b : Int) : a % |b| = a % b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_abs : a ≡ b [ZMOD |n|] ↔ a ≡ b [ZMOD n] := by simp [ModEq]
-
-/--
-theorem `modEq_natAbs` / 定理 `modEq_natAbs`
-
-English:
-theorem modEq_natAbs
-  statement: a ≡ b [ZMOD n.natAbs] ↔ a ≡ b [ZMOD n]
-  proof: by simp [natCast_natAbs]
-
-@[simp]
-
-中文:
-定理 modEq_natAbs
-  结论: a ≡ b [ZMOD n.natAbs] ↔ a ≡ b [ZMOD n]
-  证明: by simp [natCast_natAbs]
-
-@[simp]
-
-Depends on / 依赖: natCast_natAbs
+/-
+**Int.modEq_natAbs** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_natAbs : a ≡ b [ZMOD n.natAbs] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natCast_natAbs`：∀ (n : ℤ), ↑n.natAbs = |n|
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_natAbs : a ≡ b [ZMOD n.natAbs] ↔ a ≡ b [ZMOD n] := by simp [natCast_natAbs]
 
 @[simp]
-/--
-theorem `add_modEq_left_iff` / 定理 `add_modEq_left_iff`
-
-English:
-theorem add_modEq_left_iff
-  statement: a + b ≡ a [ZMOD n] ↔ n ∣ b
-  proof: by
-  simp [modEq_iff_dvd]
-
-@[simp]
-
-中文:
-定理 add_modEq_left_iff
-  结论: a + b ≡ a [ZMOD n] ↔ n ∣ b
-  证明: by
-  simp [modEq_iff_dvd]
-
-@[simp]
-
-Depends on / 依赖: modEq_iff_dvd
+/-
+**Int.add_modEq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modEq_left_iff : a + b ≡ a [ZMOD n] ↔ n ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a - (a + b) = -b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem add_modEq_left_iff : a + b ≡ a [ZMOD n] ↔ n ∣ b := by
   simp [modEq_iff_dvd]
 
 @[simp]
-/--
-theorem `add_modEq_right_iff` / 定理 `add_modEq_right_iff`
-
-English:
-theorem add_modEq_right_iff
-  statement: a + b ≡ b [ZMOD n] ↔ n ∣ a
-  proof: by
-  rw [add_comm]; rw [add_modEq_left_iff]
-
-@[simp]
-
-中文:
-定理 add_modEq_right_iff
-  结论: a + b ≡ b [ZMOD n] ↔ n ∣ a
-  证明: by
-  rw [add_comm]; rw [add_modEq_left_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, add_modEq_left_iff
+/-
+**Int.add_modEq_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modEq_right_iff : a + b ≡ b [ZMOD n] ↔ n ∣ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.add_modEq_left_iff`：add_modEq_left_iff : a + b ≡ a [ZMOD n] ↔ n ∣ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem add_modEq_right_iff : a + b ≡ b [ZMOD n] ↔ n ∣ a := by
-  rw [add_comm]; rw [add_modEq_left_iff]
+  rw [add_comm, add_modEq_left_iff]
 
 @[simp]
-/--
-theorem `left_modEq_add_iff` / 定理 `left_modEq_add_iff`
-
-English:
-theorem left_modEq_add_iff
-  statement: a ≡ a + b [ZMOD n] ↔ n ∣ b
-  proof: by
-  rw [modEq_comm]; rw [add_modEq_left_iff]
-
-@[simp]
-
-中文:
-定理 left_modEq_add_iff
-  结论: a ≡ a + b [ZMOD n] ↔ n ∣ b
-  证明: by
-  rw [modEq_comm]; rw [add_modEq_left_iff]
-
-@[simp]
-
-Depends on / 依赖: add_modEq_left_iff, modEq_comm
+/-
+**Int.left_modEq_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：left_modEq_add_iff : a ≡ a + b [ZMOD n] ↔ n ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_comm`：modEq_comm : a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n]
+· 使用定理 `Int.add_modEq_left_iff`：add_modEq_left_iff : a + b ≡ a [ZMOD n] ↔ n ∣ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem left_modEq_add_iff : a ≡ a + b [ZMOD n] ↔ n ∣ b := by
-  rw [modEq_comm]; rw [add_modEq_left_iff]
+  rw [modEq_comm, add_modEq_left_iff]
 
 @[simp]
-/--
-theorem `right_modEq_add_iff` / 定理 `right_modEq_add_iff`
-
-English:
-theorem right_modEq_add_iff
-  statement: b ≡ a + b [ZMOD n] ↔ n ∣ a
-  proof: by
-  rw [modEq_comm]; rw [add_modEq_right_iff]
-
-@[simp]
-
-中文:
-定理 right_modEq_add_iff
-  结论: b ≡ a + b [ZMOD n] ↔ n ∣ a
-  证明: by
-  rw [modEq_comm]; rw [add_modEq_right_iff]
-
-@[simp]
-
-Depends on / 依赖: add_modEq_right_iff, modEq_comm
+/-
+**Int.right_modEq_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：right_modEq_add_iff : b ≡ a + b [ZMOD n] ↔ n ∣ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_comm`：modEq_comm : a ≡ b [ZMOD n] ↔ b ≡ a [ZMOD n]
+· 使用定理 `Int.add_modEq_right_iff`：add_modEq_right_iff : a + b ≡ b [ZMOD n] ↔ n ∣ 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem right_modEq_add_iff : b ≡ a + b [ZMOD n] ↔ n ∣ a := by
-  rw [modEq_comm]; rw [add_modEq_right_iff]
+  rw [modEq_comm, add_modEq_right_iff]
 
 @[simp]
-/--
-theorem `add_modulus_modEq_iff` / 定理 `add_modulus_modEq_iff`
-
-English:
-theorem add_modulus_modEq_iff
-  statement: a + n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 add_modulus_modEq_iff
-  结论: a + n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.add_modulus_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modulus_modEq_iff : a + n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_emod_right`：∀ (a b : ℤ), (a + b) % b = a % b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem add_modulus_modEq_iff : a + n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `modulus_add_modEq_iff` / 定理 `modulus_add_modEq_iff`
-
-English:
-theorem modulus_add_modEq_iff
-  statement: n + a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  rw [add_comm]; rw [add_modulus_modEq_iff]
-
-@[simp]
-
-中文:
-定理 modulus_add_modEq_iff
-  结论: n + a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  rw [add_comm]; rw [add_modulus_modEq_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, add_modulus_modEq_iff
+/-
+**Int.modulus_add_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modulus_add_modEq_iff : n + a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.add_modulus_modEq_iff`：add_modulus_modEq_iff : a + n ≡ b [ZMOD n] ↔ 
+a ≡ b [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modulus_add_modEq_iff : n + a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n] := by
-  rw [add_comm]; rw [add_modulus_modEq_iff]
+  rw [add_comm, add_modulus_modEq_iff]
 
 @[simp]
-/--
-theorem `modEq_add_modulus_iff` / 定理 `modEq_add_modulus_iff`
-
-English:
-theorem modEq_add_modulus_iff
-  statement: a ≡ b + n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 modEq_add_modulus_iff
-  结论: a ≡ b + n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.modEq_add_modulus_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_add_modulus_iff : a ≡ b + n [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_emod_right`：∀ (a b : ℤ), (a + b) % b = a % b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_add_modulus_iff : a ≡ b + n [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `modEq_modulus_add_iff` / 定理 `modEq_modulus_add_iff`
-
-English:
-theorem modEq_modulus_add_iff
-  statement: a ≡ n + b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 modEq_modulus_add_iff
-  结论: a ≡ n + b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.modEq_modulus_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_modulus_add_iff : a ≡ n + b [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_emod_left`：∀ (a b : ℤ), (a + b) % a = b % a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_modulus_add_iff : a ≡ n + b [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `add_mul_modulus_modEq_iff` / 定理 `add_mul_modulus_modEq_iff`
-
-English:
-theorem add_mul_modulus_modEq_iff
-  statement: a + b * n ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 add_mul_modulus_modEq_iff
-  结论: a + b * n ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.add_mul_modulus_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_mul_modulus_modEq_iff : a + b * n ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_mul_emod_self_right`：∀ (a b c : ℤ), (a + b * c) % c = a % c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem add_mul_modulus_modEq_iff : a + b * n ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `mul_modulus_add_modEq_iff` / 定理 `mul_modulus_add_modEq_iff`
-
-English:
-theorem mul_modulus_add_modEq_iff
-  statement: b * n + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  rw [add_comm]; rw [add_mul_modulus_modEq_iff]
-
-@[simp]
-
-中文:
-定理 mul_modulus_add_modEq_iff
-  结论: b * n + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  rw [add_comm]; rw [add_mul_modulus_modEq_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, add_mul_modulus_modEq_iff
+/-
+**Int.mul_modulus_add_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：mul_modulus_add_modEq_iff : b * n + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.add_mul_modulus_modEq_iff`：add_mul_modulus_modEq_iff : a + b * n ≡ c
+ [ZMOD n] ↔ a ≡ c [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mul_modulus_add_modEq_iff : b * n + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
-  rw [add_comm]; rw [add_mul_modulus_modEq_iff]
+  rw [add_comm, add_mul_modulus_modEq_iff]
 
 @[simp]
-/--
-theorem `modEq_add_mul_modulus_iff` / 定理 `modEq_add_mul_modulus_iff`
-
-English:
-theorem modEq_add_mul_modulus_iff
-  statement: a ≡ b + c * n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 modEq_add_mul_modulus_iff
-  结论: a ≡ b + c * n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.modEq_add_mul_modulus_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_add_mul_modulus_iff : a ≡ b + c * n [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_mul_emod_self_right`：∀ (a b c : ℤ), (a + b * c) % c = a % c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_add_mul_modulus_iff : a ≡ b + c * n [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `modEq_mul_modulus_add_iff` / 定理 `modEq_mul_modulus_add_iff`
-
-English:
-theorem modEq_mul_modulus_add_iff
-  statement: a ≡ b * n + c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  rw [add_comm]; rw [modEq_add_mul_modulus_iff]
-
-@[simp]
-
-中文:
-定理 modEq_mul_modulus_add_iff
-  结论: a ≡ b * n + c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  rw [add_comm]; rw [modEq_add_mul_modulus_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, modEq_add_mul_modulus_iff
+/-
+**Int.modEq_mul_modulus_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_mul_modulus_add_iff : a ≡ b * n + c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.modEq_add_mul_modulus_iff`：modEq_add_mul_modulus_iff : a ≡ b + c * n
+ [ZMOD n] ↔ a ≡ b [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_mul_modulus_add_iff : a ≡ b * n + c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
-  rw [add_comm]; rw [modEq_add_mul_modulus_iff]
+  rw [add_comm, modEq_add_mul_modulus_iff]
 
 @[simp]
-/--
-theorem `add_modulus_mul_modEq_iff` / 定理 `add_modulus_mul_modEq_iff`
-
-English:
-theorem add_modulus_mul_modEq_iff
-  statement: a + n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 add_modulus_mul_modEq_iff
-  结论: a + n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.add_modulus_mul_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modulus_mul_modEq_iff : a + n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_mul_emod_self_left`：∀ (a b c : ℤ), (a + b * c) % b = a % b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem add_modulus_mul_modEq_iff : a + n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `modulus_mul_add_modEq_iff` / 定理 `modulus_mul_add_modEq_iff`
-
-English:
-theorem modulus_mul_add_modEq_iff
-  statement: n * b + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  rw [add_comm]; rw [add_modulus_mul_modEq_iff]
-
-@[simp]
-
-中文:
-定理 modulus_mul_add_modEq_iff
-  结论: n * b + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  rw [add_comm]; rw [add_modulus_mul_modEq_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, add_modulus_mul_modEq_iff
+/-
+**Int.modulus_mul_add_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modulus_mul_add_modEq_iff : n * b + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.add_modulus_mul_modEq_iff`：add_modulus_mul_modEq_iff : a + n * b ≡ c
+ [ZMOD n] ↔ a ≡ c [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modulus_mul_add_modEq_iff : n * b + a ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
-  rw [add_comm]; rw [add_modulus_mul_modEq_iff]
+  rw [add_comm, add_modulus_mul_modEq_iff]
 
 @[simp]
-/--
-theorem `modEq_add_modulus_mul_iff` / 定理 `modEq_add_modulus_mul_iff`
-
-English:
-theorem modEq_add_modulus_mul_iff
-  statement: a ≡ b + n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  simp [ModEq]
-
-@[simp]
-
-中文:
-定理 modEq_add_modulus_mul_iff
-  结论: a ≡ b + n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  simp [ModEq]
-
-@[simp]
+/-
+**Int.modEq_add_modulus_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_add_modulus_mul_iff : a ≡ b + n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_mul_emod_self_left`：∀ (a b c : ℤ), (a + b * c) % b = a % b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem modEq_add_modulus_mul_iff : a ≡ b + n * c [ZMOD n] ↔ a ≡ b [ZMOD n] := by
   simp [ModEq]
 
 @[simp]
-/--
-theorem `modEq_modulus_mul_add_iff` / 定理 `modEq_modulus_mul_add_iff`
-
-English:
-theorem modEq_modulus_mul_add_iff
-  statement: a ≡ n * b + c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  rw [add_comm]; rw [modEq_add_modulus_mul_iff]
-
-@[simp]
-
-中文:
-定理 modEq_modulus_mul_add_iff
-  结论: a ≡ n * b + c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  rw [add_comm]; rw [modEq_add_modulus_mul_iff]
-
-@[simp]
-
-Depends on / 依赖: add_comm, modEq_add_modulus_mul_iff
+/-
+**Int.modEq_modulus_mul_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_modulus_mul_add_iff : a ≡ n * b + c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.modEq_add_modulus_mul_iff`：modEq_add_modulus_mul_iff : a ≡ b + n * c
+ [ZMOD n] ↔ a ≡ b [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_modulus_mul_add_iff : a ≡ n * b + c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
-  rw [add_comm]; rw [modEq_add_modulus_mul_iff]
+  rw [add_comm, modEq_add_modulus_mul_iff]
 
 @[simp]
-/--
-theorem `sub_modulus_modEq_iff` / 定理 `sub_modulus_modEq_iff`
-
-English:
-theorem sub_modulus_modEq_iff
-  statement: a - n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  rw [← add_modulus_modEq_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 sub_modulus_modEq_iff
-  结论: a - n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  rw [← add_modulus_modEq_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: add_modulus_modEq_iff, sub_add_cancel
+/-
+**Int.sub_modulus_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sub_modulus_modEq_iff : a - n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.add_modulus_modEq_iff`：add_modulus_modEq_iff : a + n ≡ b [ZMOD n] ↔ 
+a ≡ b [ZMOD n]
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sub_modulus_modEq_iff : a - n ≡ b [ZMOD n] ↔ a ≡ b [ZMOD n] := by
-  rw [← add_modulus_modEq_iff]; rw [sub_add_cancel]
+  rw [← add_modulus_modEq_iff, sub_add_cancel]
 
 @[simp]
-/--
-theorem `sub_modulus_mul_modEq_iff` / 定理 `sub_modulus_mul_modEq_iff`
-
-English:
-theorem sub_modulus_mul_modEq_iff
-  statement: a - n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  proof: by
-  rw [← add_modulus_mul_modEq_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 sub_modulus_mul_modEq_iff
-  结论: a - n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
-  证明: by
-  rw [← add_modulus_mul_modEq_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: add_modulus_mul_modEq_iff, sub_add_cancel
+/-
+**Int.sub_modulus_mul_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sub_modulus_mul_modEq_iff : a - n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.add_modulus_mul_modEq_iff`：add_modulus_mul_modEq_iff : a + n * b ≡ c
+ [ZMOD n] ↔ a ≡ c [ZMOD n]
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sub_modulus_mul_modEq_iff : a - n * b ≡ c [ZMOD n] ↔ a ≡ c [ZMOD n] := by
-  rw [← add_modulus_mul_modEq_iff]; rw [sub_add_cancel]
+  rw [← add_modulus_mul_modEq_iff, sub_add_cancel]
 
 @[simp]
-/--
-theorem `modEq_sub_modulus_iff` / 定理 `modEq_sub_modulus_iff`
-
-English:
-theorem modEq_sub_modulus_iff
-  statement: a ≡ b - n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  rw [← modEq_add_modulus_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 modEq_sub_modulus_iff
-  结论: a ≡ b - n [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  rw [← modEq_add_modulus_iff]; rw [sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: modEq_add_modulus_iff, sub_add_cancel
+/-
+**Int.modEq_sub_modulus_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_sub_modulus_iff : a ≡ b - n [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.modEq_add_modulus_iff`：modEq_add_modulus_iff : a ≡ b + n [ZMOD n] ↔ 
+a ≡ b [ZMOD n]
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_sub_modulus_iff : a ≡ b - n [ZMOD n] ↔ a ≡ b [ZMOD n] := by
-  rw [← modEq_add_modulus_iff]; rw [sub_add_cancel]
+  rw [← modEq_add_modulus_iff, sub_add_cancel]
 
 @[simp]
-/--
-theorem `modEq_sub_modulus_mul_iff` / 定理 `modEq_sub_modulus_mul_iff`
-
-English:
-theorem modEq_sub_modulus_mul_iff
-  statement: a ≡ b - n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
-  proof: by
-  rw [← modEq_add_modulus_mul_iff]; rw [sub_add_cancel]
-
-中文:
-定理 modEq_sub_modulus_mul_iff
-  结论: a ≡ b - n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
-  证明: by
-  rw [← modEq_add_modulus_mul_iff]; rw [sub_add_cancel]
-
-Depends on / 依赖: modEq_add_modulus_mul_iff, sub_add_cancel
+/-
+**Int.modEq_sub_modulus_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_sub_modulus_mul_iff : a ≡ b - n * c [ZMOD n] ↔ a ≡ b [ZMOD n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.modEq_add_modulus_mul_iff`：modEq_add_modulus_mul_iff : a ≡ b + n * c
+ [ZMOD n] ↔ a ≡ b [ZMOD n]
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_sub_modulus_mul_iff : a ≡ b - n * c [ZMOD n] ↔ a ≡ b [ZMOD n] := by
-  rw [← modEq_add_modulus_mul_iff]; rw [sub_add_cancel]
-
-/--
-theorem `modEq_one` / 定理 `modEq_one`
-
-English:
-theorem modEq_one
-  statement: a ≡ b [ZMOD 1]
-  proof: modEq_of_dvd (one_dvd _)
-
-中文:
-定理 modEq_one
-  结论: a ≡ b [ZMOD 1]
-  证明: modEq_of_dvd (one_dvd _)
-
-Depends on / 依赖: modEq_of_dvd, one_dvd
+  rw [← modEq_add_modulus_mul_iff, sub_add_cancel]
+/-
+**Int.modEq_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_one : a ≡ b [ZMOD 1]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.modEq_of_dvd`：∀ {n a b : ℤ}, n ∣ b - a → a ≡ b [ZMOD n]
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
 -/
 theorem modEq_one : a ≡ b [ZMOD 1] :=
   modEq_of_dvd (one_dvd _)
-
-/--
-theorem `modEq_sub` / 定理 `modEq_sub`
-
-English:
-theorem modEq_sub
-  given: (a b : Int)
-  statement: a ≡ b [ZMOD a - b]
-  proof: (modEq_of_dvd dvd_rfl).symm
-
-@[simp]
-
-中文:
-定理 modEq_sub
-  条件: (a b : 整数)
-  结论: a ≡ b [ZMOD a - b]
-  证明: (modEq_of_dvd dvd_rfl).symm
-
-@[simp]
-
-Depends on / 依赖: dvd_rfl, modEq_of_dvd
+/-
+**Int.modEq_sub** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_sub (a b : Int) : a ≡ b [ZMOD a - b]
+参数：a b : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ModEq.symm`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → b ≡ a [ZMOD n]
+· 使用定理 `Int.modEq_of_dvd`：∀ {n a b : ℤ}, n ∣ b - a → a ≡ b [ZMOD n]
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 -/
-theorem modEq_sub (a b : Int) : a ≡ b [ZMOD a - b] :=
+theorem modEq_sub (a b : ℤ) : a ≡ b [ZMOD a - b] :=
   (modEq_of_dvd dvd_rfl).symm
 
 @[simp]
-/--
-theorem `modEq_zero_iff` / 定理 `modEq_zero_iff`
-
-English:
-theorem modEq_zero_iff
-  statement: a ≡ b [ZMOD 0] ↔ a = b
-  proof: by rw [ModEq, emod_zero, emod_zero]
-
-中文:
-定理 modEq_zero_iff
-  结论: a ≡ b [ZMOD 0] ↔ a = b
-  证明: by rw [ModEq, emod_zero, emod_zero]
-
-Depends on / 依赖: emod_zero
+/-
+**Int.modEq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_zero_iff : a ≡ b [ZMOD 0] ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ModEq.eq_1`：∀ (n a b : ℤ), (a ≡ b [ZMOD n]) = (a % n = b % n)
+· 使用定理 `Int.emod_zero`：∀ (a : ℤ), a % 0 = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_zero_iff : a ≡ b [ZMOD 0] ↔ a = b := by rw [ModEq, emod_zero, emod_zero]
-
-/--
-theorem `add_modEq_left` / 定理 `add_modEq_left`
-
-English:
-theorem add_modEq_left
-  statement: n + a ≡ a [ZMOD n]
-  proof: by simp
-
-中文:
-定理 add_modEq_left
-  结论: n + a ≡ a [ZMOD n]
-  证明: by simp
+/-
+**Int.add_modEq_left** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modEq_left : n + a ≡ a [ZMOD n]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem add_modEq_left : n + a ≡ a [ZMOD n] := by simp
-
-/--
-theorem `add_modEq_right` / 定理 `add_modEq_right`
-
-English:
-theorem add_modEq_right
-  statement: a + n ≡ a [ZMOD n]
-  proof: by simp
-
-中文:
-定理 add_modEq_right
-  结论: a + n ≡ a [ZMOD n]
-  证明: by simp
+/-
+**Int.add_modEq_right** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：add_modEq_right : a + n ≡ a [ZMOD n]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem add_modEq_right : a + n ≡ a [ZMOD n] := by simp
-
-/--
-theorem `modEq_and_modEq_iff_modEq_lcm` / 定理 `modEq_and_modEq_iff_modEq_lcm`
-
-English:
-theorem modEq_and_modEq_iff_modEq_lcm
-  given: {a b m n : Int}
-  proof: by
-  simp only [modEq_iff_dvd, coe_lcm_dvd_iff]
-
-中文:
-定理 modEq_and_modEq_iff_modEq_lcm
-  条件: {a b m n : 整数}
-  证明: by
-  simp only [modEq_iff_dvd, coe_lcm_dvd_iff]
-
-Depends on / 依赖: coe_lcm_dvd_iff, modEq_iff_dvd
+/-
+**Int.modEq_and_modEq_iff_modEq_lcm** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_and_modEq_iff_modEq_lcm {a b m n : Int} : a ≡ b [ZMOD m] ∧ a ≡ b [ZM
+OD n] ↔ a ≡ b [ZMOD m.lcm n]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem modEq_and_modEq_iff_modEq_lcm {a b m n : Int} :
+theorem modEq_and_modEq_iff_modEq_lcm {a b m n : ℤ} :
     a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m.lcm n] := by
   simp only [modEq_iff_dvd, coe_lcm_dvd_iff]
-
-/--
-theorem `modEq_and_modEq_iff_modEq_mul` / 定理 `modEq_and_modEq_iff_modEq_mul`
-
-English:
-theorem modEq_and_modEq_iff_modEq_mul
-  given: {a b m n : Int} (hmn : m.natAbs.Coprime n.natAbs)
-  proof: by
-  convert! ← modEq_and_modEq_iff_modEq_lcm using 1
-  rw [lcm_eq_mul_iff.mpr (.inr <| .inr hmn)]; rw [← natAbs_mul]; rw [modEq_natAbs]
-
-中文:
-定理 modEq_and_modEq_iff_modEq_mul
-  条件: {a b m n : 整数} (hmn : m.natAbs.Coprime n.natAbs)
-  证明: by
-  convert! ← modEq_and_modEq_iff_modEq_lcm using 1
-  rw [lcm_eq_mul_iff.mpr (.inr <| .inr hmn)]; rw [← natAbs_mul]; rw [modEq_natAbs]
-
-Depends on / 依赖: convert, lcm_eq_mul_iff, lcm_eq_mul_iff.mpr, modEq_and_modEq_iff_modEq_lcm, modEq_natAbs, natAbs_mul
+/-
+**Int.modEq_and_modEq_iff_modEq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_and_modEq_iff_modEq_mul {a b m n : Int} (hmn : m.natAbs.Coprime n.na
+tAbs) : a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m * n]
+参数：hmn : m.natAbs.Coprime n.natAbs。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.lcm_eq_mul_iff`：∀ {m n : ℤ}, m.lcm n = m.natAbs * n.natAbs ↔ m = 0 ∨
+ n = 0 ∨ m.gcd n = 1
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
+· 使用定理 `Int.modEq_natAbs`：modEq_natAbs : a ≡ b [ZMOD n.natAbs] ↔ a ≡ b [ZMOD n]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Int.modEq_and_modEq_iff_modEq_lcm`：modEq_and_modEq_iff_modEq_lcm {a b m 
+n : Int} : a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m.lcm n]
 -/
-theorem modEq_and_modEq_iff_modEq_mul {a b m n : Int} (hmn : m.natAbs.Coprime n.natAbs) :
+theorem modEq_and_modEq_iff_modEq_mul {a b m n : ℤ} (hmn : m.natAbs.Coprime n.natAbs) :
     a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m * n] := by
   convert! ← modEq_and_modEq_iff_modEq_lcm using 1
-  rw [lcm_eq_mul_iff.mpr (.inr <| .inr hmn)]; rw [← natAbs_mul]; rw [modEq_natAbs]
-
-/--
-theorem `gcd_a_modEq` / 定理 `gcd_a_modEq`
-
-English:
-theorem gcd_a_modEq
-  given: (a b : Nat)
-  statement: (a : Int) * Nat.gcdA a b ≡ Nat.gcd a b [ZMOD b]
-  proof: by
-  rw [← add_zero ((a : Int) * _)]; rw [Nat.gcd_eq_gcd_ab]
-  exact (dvd_mul_right _ _).zero_modEq_int.add_left _
-
-中文:
-定理 gcd_a_modEq
-  条件: (a b : 自然数)
-  结论: (a : 整数) * 自然数.gcdA a b ≡ 自然数.最大公约数 a b [ZMOD b]
-  证明: by
-  rw [← add_zero ((a : Int) * _)]; rw [Nat.gcd_eq_gcd_ab]
-  exact (dvd_mul_right _ _).zero_modEq_int.add_left _
-
-Depends on / 依赖: Nat.gcd_eq_gcd_ab, add_left, add_zero, dvd_mul_right, gcd_eq_gcd_ab, zero_modEq_int, zero_modEq_int.add_left
+  rw [lcm_eq_mul_iff.mpr (.inr <| .inr hmn), ← natAbs_mul, modEq_natAbs]
+/-
+**Int.gcd_a_modEq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gcd_a_modEq (a b : Nat) : (a : Int) * Nat.gcdA a b ≡ Nat.gcd a b [ZMOD b]
+参数：a b : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Nat.gcd_eq_gcd_ab`：gcd_eq_gcd_ab : (gcd x y : Int) = x * gcdA x y + y * 
+gcdB x y
+· 使用定理 `Int.ModEq.add_left`：∀ {n a b : ℤ} (c : ℤ), a ≡ b [ZMOD n] → c + a ≡ c + 
+b [ZMOD n]
+· 使用定理 `Dvd.dvd.zero_modEq_int`：∀ {n a : ℤ}, n ∣ a → 0 ≡ a [ZMOD n]
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
 -/
-theorem gcd_a_modEq (a b : Nat) : (a : Int) * Nat.gcdA a b ≡ Nat.gcd a b [ZMOD b] := by
-  rw [← add_zero ((a : Int) * _)]; rw [Nat.gcd_eq_gcd_ab]
+theorem gcd_a_modEq (a b : ℕ) : (a : ℤ) * Nat.gcdA a b ≡ Nat.gcd a b [ZMOD b] := by
+  rw [← add_zero ((a : ℤ) * _), Nat.gcd_eq_gcd_ab]
   exact (dvd_mul_right _ _).zero_modEq_int.add_left _
-
-/--
-theorem `modEq_add_fac_self` / 定理 `modEq_add_fac_self`
-
-English:
-theorem modEq_add_fac_self
-  given: {a t n : Int}
-  statement: a + n * t ≡ a [ZMOD n]
-  proof: by simp
-
-中文:
-定理 modEq_add_fac_self
-  条件: {a t n : 整数}
-  结论: a + n * t ≡ a [ZMOD n]
-  证明: by simp
+/-
+**Int.modEq_add_fac_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_add_fac_self {a t n : Int} : a + n * t ≡ a [ZMOD n]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem modEq_add_fac_self {a t n : Int} : a + n * t ≡ a [ZMOD n] := by simp
-
-/--
-theorem `mod_coprime` / 定理 `mod_coprime`
-
-English:
-theorem mod_coprime
-  given: {a b : Nat} (hab : Nat.Coprime a b)
-  statement: exists y : Int, a * y ≡ 1 [ZMOD b]
-  proof: ⟨Nat.gcdA a b,
-    have hgcd : Nat.gcd a b = 1 := Nat.Coprime.gcd_eq_one hab
-    calc
-      ↑a * Nat.gcdA a b ≡ ↑a * Nat.gcdA a b + ↑b * Nat.gcdB a b [ZMOD ↑b] := by simp
-      _ ≡ 1 [ZMOD ↑b] := by rw [← Nat.gcd_eq_gcd_ab, hgcd]; rfl
-      ⟩
-
-中文:
-定理 mod_coprime
-  条件: {a b : 自然数} (hab : 自然数.Coprime a b)
-  结论: 存在 y : 整数, a * y ≡ 1 [ZMOD b]
-  证明: ⟨Nat.gcdA a b,
-    have hgcd : Nat.gcd a b = 1 := Nat.Coprime.gcd_eq_one hab
-    calc
-      ↑a * Nat.gcdA a b ≡ ↑a * Nat.gcdA a b + ↑b * Nat.gcdB a b [ZMOD ↑b] := by simp
-      _ ≡ 1 [ZMOD ↑b] := by rw [← Nat.gcd_eq_gcd_ab, hgcd]; rfl
-      ⟩
-
-Depends on / 依赖: Coprime, Nat.Coprime.gcd_eq_one, Nat.gcd, Nat.gcdA, Nat.gcdB, Nat.gcd_eq_gcd_ab, gcd_eq_gcd_ab, gcd_eq_one
+theorem modEq_add_fac_self {a t n : ℤ} : a + n * t ≡ a [ZMOD n] := by simp
+/-
+**Int.mod_coprime** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：mod_coprime {a b : Nat} (hab : Nat.Coprime a b) : exists y : Int, a * y ≡ 
+1 [ZMOD b]
+参数：hab : Nat.Coprime a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Coprime.gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n → m.gcd n = 1
+· 使用定理 `Int.ModEq.instIsTrans`：∀ {n : ℤ}, IsTrans ℤ n.ModEq
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.gcd_eq_gcd_ab`：gcd_eq_gcd_ab : (gcd x y : Int) = x * gcdA x y + y * 
+gcdB x y
 -/
-theorem mod_coprime {a b : Nat} (hab : Nat.Coprime a b) : exists y : Int, a * y ≡ 1 [ZMOD b] :=
+theorem mod_coprime {a b : ℕ} (hab : Nat.Coprime a b) : ∃ y : ℤ, a * y ≡ 1 [ZMOD b] :=
   ⟨Nat.gcdA a b,
     have hgcd : Nat.gcd a b = 1 := Nat.Coprime.gcd_eq_one hab
     calc
       ↑a * Nat.gcdA a b ≡ ↑a * Nat.gcdA a b + ↑b * Nat.gcdB a b [ZMOD ↑b] := by simp
       _ ≡ 1 [ZMOD ↑b] := by rw [← Nat.gcd_eq_gcd_ab, hgcd]; rfl
       ⟩
-
-/--
-theorem `existsUnique_equiv` / 定理 `existsUnique_equiv`
-
-English:
-theorem existsUnique_equiv
-  given: (a : Int) {b : Int} (hb : 0 < b)
-  proof: ⟨a % b, emod_nonneg _ (ne_of_gt hb),
-    by
-      have : a % b < |b| := emod_lt_abs _ (ne_of_gt hb)
-      rwa [abs_of_pos hb] at this, by simp [ModEq]⟩
-
-中文:
-定理 存在Unique_equiv
-  条件: (a : 整数) {b : 整数} (hb : 0 < b)
-  证明: ⟨a % b, emod_nonneg _ (ne_of_gt hb),
-    by
-      have : a % b < |b| := emod_lt_abs _ (ne_of_gt hb)
-      rwa [abs_of_pos hb] at this, by simp [ModEq]⟩
-
-Depends on / 依赖: abs_of_pos, emod_lt_abs, emod_nonneg, ne_of_gt
+/-
+**Int.existsUnique_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：existsUnique_equiv (a : Int) {b : Int} (hb : 0 < b) : exists z : Int, 0 <=
+ z ∧ z < b ∧ z ≡ a [ZMOD b]
+参数：a : Int；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Int.emod_lt_abs`：emod_lt_abs (a : Int) {b : Int} (H : b != 0) : a % b < 
+|b|
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.emod_emod_of_dvd`：∀ (n : ℤ) {m k : ℤ}, m ∣ k → n % k % m = n % m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem existsUnique_equiv (a : Int) {b : Int} (hb : 0 < b) :
-    exists z : Int, 0 <= z ∧ z < b ∧ z ≡ a [ZMOD b] :=
+theorem existsUnique_equiv (a : ℤ) {b : ℤ} (hb : 0 < b) :
+    ∃ z : ℤ, 0 ≤ z ∧ z < b ∧ z ≡ a [ZMOD b] :=
   ⟨a % b, emod_nonneg _ (ne_of_gt hb),
     by
       have : a % b < |b| := emod_lt_abs _ (ne_of_gt hb)
       rwa [abs_of_pos hb] at this, by simp [ModEq]⟩
-
-/--
-theorem `existsUnique_equiv_nat` / 定理 `existsUnique_equiv_nat`
-
-English:
-theorem existsUnique_equiv_nat
-  given: (a : Int) {b : Int} (hb : 0 < b)
-  statement: exists z : Nat, ↑z < b ∧ ↑z ≡ a [ZMOD b]
-  proof: let ⟨z, hz1, hz2, hz3⟩ := existsUnique_equiv a hb
-  ⟨z.natAbs, by
-    constructor <;> rw [natAbs_of_nonneg hz1] <;> assumption⟩
-
-中文:
-定理 存在Unique_equiv_nat
-  条件: (a : 整数) {b : 整数} (hb : 0 < b)
-  结论: 存在 z : 自然数, ↑z < b ∧ ↑z ≡ a [ZMOD b]
-  证明: let ⟨z, hz1, hz2, hz3⟩ := existsUnique_equiv a hb
-  ⟨z.natAbs, by
-    constructor <;> rw [natAbs_of_nonneg hz1] <;> assumption⟩
-
-Depends on / 依赖: existsUnique_equiv, natAbs, natAbs_of_nonneg, z.natAbs
+/-
+**Int.existsUnique_equiv_nat** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：existsUnique_equiv_nat (a : Int) {b : Int} (hb : 0 < b) : exists z : Nat, 
+↑z < b ∧ ↑z ≡ a [ZMOD b]
+参数：a : Int；hb : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.existsUnique_equiv`：existsUnique_equiv (a : Int) {b : Int} (hb : 0 <
+ b) : exists z : Int, 0 <= z ∧ z < b ∧ z ≡ a [ZMOD b]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
 -/
-theorem existsUnique_equiv_nat (a : Int) {b : Int} (hb : 0 < b) : exists z : Nat, ↑z < b ∧ ↑z ≡ a [ZMOD b] :=
+theorem existsUnique_equiv_nat (a : ℤ) {b : ℤ} (hb : 0 < b) : ∃ z : ℕ, ↑z < b ∧ ↑z ≡ a [ZMOD b] :=
   let ⟨z, hz1, hz2, hz3⟩ := existsUnique_equiv a hb
   ⟨z.natAbs, by
     constructor <;> rw [natAbs_of_nonneg hz1] <;> assumption⟩
-
-/--
-theorem `mod_mul_right_mod` / 定理 `mod_mul_right_mod`
-
-English:
-theorem mod_mul_right_mod
-  given: (a b c : Int)
-  statement: a % (b * c) % b = a % b
-  proof: (mod_modEq _ _).of_mul_right _
-
-中文:
-定理 mod_mul_right_mod
-  条件: (a b c : 整数)
-  结论: a % (b * c) % b = a % b
-  证明: (mod_modEq _ _).of_mul_right _
-
-Depends on / 依赖: mod_modEq, of_mul_right
+/-
+**Int.mod_mul_right_mod** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：mod_mul_right_mod (a b c : Int) : a % (b * c) % b = a % b
+参数：a b c : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.ModEq.of_mul_right`：of_mul_right (m : Int) : a ≡ b [ZMOD n * m] -> a
+ ≡ b [ZMOD n]
+· 使用定理 `Int.mod_modEq`：mod_modEq (a n) : a % n ≡ a [ZMOD n]
 -/
-theorem mod_mul_right_mod (a b c : Int) : a % (b * c) % b = a % b :=
+theorem mod_mul_right_mod (a b c : ℤ) : a % (b * c) % b = a % b :=
   (mod_modEq _ _).of_mul_right _
-
-/--
-theorem `mod_mul_left_mod` / 定理 `mod_mul_left_mod`
-
-English:
-theorem mod_mul_left_mod
-  given: (a b c : Int)
-  statement: a % (b * c) % c = a % c
-  proof: (mod_modEq _ _).of_mul_left _
-
-中文:
-定理 mod_mul_left_mod
-  条件: (a b c : 整数)
-  结论: a % (b * c) % c = a % c
-  证明: (mod_modEq _ _).of_mul_left _
-
-Depends on / 依赖: mod_modEq, of_mul_left
+/-
+**Int.mod_mul_left_mod** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：mod_mul_left_mod (a b c : Int) : a % (b * c) % c = a % c
+参数：a b c : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.ModEq.of_mul_left`：of_mul_left (m : Int) (h : a ≡ b [ZMOD m * n]) : 
+a ≡ b [ZMOD n]
+· 使用定理 `Int.mod_modEq`：mod_modEq (a n) : a % n ≡ a [ZMOD n]
 -/
-theorem mod_mul_left_mod (a b c : Int) : a % (b * c) % c = a % c :=
+theorem mod_mul_left_mod (a b c : ℤ) : a % (b * c) % c = a % c :=
   (mod_modEq _ _).of_mul_left _
-
-/--
-theorem `ext_ediv_modEq` / 定理 `ext_ediv_modEq`
-
-English:
-theorem ext_ediv_modEq
-  given: {n a b : Int} (h0 : a / n = b / n) (h1 : a ≡ b [ZMOD n])
-  statement: a = b
-  proof: ext_ediv_emod h0 h1
-
-中文:
-定理 ext_ediv_modEq
-  条件: {n a b : 整数} (h0 : a / n = b / n) (h1 : a ≡ b [ZMOD n])
-  结论: a = b
-  证明: ext_ediv_emod h0 h1
-
-Depends on / 依赖: ext_ediv_emod
+/-
+**Int.ext_ediv_modEq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ext_ediv_modEq {n a b : Int} (h0 : a / n = b / n) (h1 : a ≡ b [ZMOD n]) : 
+a = b
+参数：h0 : a / n = b / n；h1 : a ≡ b [ZMOD n]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ext_ediv_emod`：∀ {n a b : ℤ}, a / n = b / n → a % n = b % n → a = b
 -/
-theorem ext_ediv_modEq {n a b : Int} (h0 : a / n = b / n) (h1 : a ≡ b [ZMOD n]) : a = b :=
+theorem ext_ediv_modEq {n a b : ℤ} (h0 : a / n = b / n) (h1 : a ≡ b [ZMOD n]) : a = b :=
   ext_ediv_emod h0 h1
-
-/--
-theorem `ext_ediv_modEq_iff` / 定理 `ext_ediv_modEq_iff`
-
-English:
-theorem ext_ediv_modEq_iff
-  given: (n a b : Int)
-  statement: a = b ↔ a / n = b / n ∧ a ≡ b [ZMOD n]
-  proof: ext_ediv_emod_iff _ _ _
-
-中文:
-定理 ext_ediv_modEq_iff
-  条件: (n a b : 整数)
-  结论: a = b ↔ a / n = b / n ∧ a ≡ b [ZMOD n]
-  证明: ext_ediv_emod_iff _ _ _
-
-Depends on / 依赖: ext_ediv_emod_iff
+/-
+**Int.ext_ediv_modEq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ext_ediv_modEq_iff (n a b : Int) : a = b ↔ a / n = b / n ∧ a ≡ b [ZMOD n]
+参数：n a b : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ext_ediv_emod_iff`：∀ (n a b : ℤ), a = b ↔ a / n = b / n ∧ a % n = b 
+% n
 -/
-theorem ext_ediv_modEq_iff (n a b : Int) : a = b ↔ a / n = b / n ∧ a ≡ b [ZMOD n] :=
+theorem ext_ediv_modEq_iff (n a b : ℤ) : a = b ↔ a / n = b / n ∧ a ≡ b [ZMOD n] :=
   ext_ediv_emod_iff _ _ _
-
-/--
-theorem `modEq_iff_eq_of_div_eq` / 定理 `modEq_iff_eq_of_div_eq`
-
-English:
-theorem modEq_iff_eq_of_div_eq
-  given: {n a b : Int} (h : a / n = b / n)
-  proof: by grind [ext_ediv_modEq_iff]
-
-中文:
-定理 modEq_iff_eq_of_div_eq
-  条件: {n a b : 整数} (h : a / n = b / n)
-  证明: by grind [ext_ediv_modEq_iff]
-
-Depends on / 依赖: ext_ediv_modEq_iff
+/-
+**Int.modEq_iff_eq_of_div_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：modEq_iff_eq_of_div_eq {n a b : Int} (h : a / n = b / n) : a ≡ b [ZMOD n] 
+↔ a = b
+参数：h : a / n = b / n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem modEq_iff_eq_of_div_eq {n a b : Int} (h : a / n = b / n) :
+theorem modEq_iff_eq_of_div_eq {n a b : ℤ} (h : a / n = b / n) :
     a ≡ b [ZMOD n] ↔ a = b := by grind [ext_ediv_modEq_iff]
 
 end Int
+

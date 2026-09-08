@@ -33,24 +33,13 @@ open CategoryTheory
 universe u v
 
 
-/--
-Definition of `ωCPO` / `ωCPO` 的定义
+/-- The category of types with an omega complete partial order. -/
+/-
+**** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ωCPO
-  parameters: : Type (u + 1) where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [str : OmegaCompletePartialOrder carrier]
-
-中文:
-结构 ωCPO
-  参数: : 类型 (u + 1) where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [str : OmegaCompletePartial序 carrier]
+--- 原说明 ---
+The category of types with an omega complete partial order.
 -/
 structure ωCPO : Type (u + 1) where
   /-- Construct a bundled ωCPO from the underlying type and typeclass. -/
@@ -65,97 +54,39 @@ namespace ωCPO
 
 open OmegaCompletePartialOrder
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort ωCPO Type*
-  body: ⟨carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort ωCPO 类型
-  定义体: ⟨carrier⟩
-
-Depends on / 依赖: carrier
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort ωCPO Type* :=
   ⟨carrier⟩
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (α : Type*) [OmegaCompletePartialOrder α]
-  statement: ↥(of α) = α
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (α : 类型) [OmegaCompletePartial序 α]
-  结论: ↥(of α) = α
-  证明: rfl
+/-
+**ωCPO.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `ωCPO`。
+形式化陈述：coe_of (α : Type*) [OmegaCompletePartialOrder α] : ↥(of α) = α
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (α : Type*) [OmegaCompletePartialOrder α] : ↥(of α) = α :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LargeCategory.{u} ωCPO
-  body: ContinuousHom X Y
-  id X := ContinuousHom.id
-  comp f g := g.comp f
-
-中文:
-实例 :
-  签名: 大范畴.{u} ωCPO
-  定义体: ContinuousHom X Y
-  id X := ContinuousHom.id
-  comp f g := g.comp f
-
-Depends on / 依赖: ContinuousHom
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LargeCategory.{u} ωCPO where
   Hom X Y := ContinuousHom X Y
   id X := ContinuousHom.id
   comp f g := g.comp f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory ωCPO (ContinuousHom · ·)
-  body: f
-  ofHom f := f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 ωCPO (连续态射 · ·)
-  定义体: f
-  ofHom f := f
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory ωCPO (ContinuousHom · ·) where
   hom f := f
   ofHom f := f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited ωCPO
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 ωCPO
-  定义体: ⟨of PUnit⟩
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited ωCPO :=
   ⟨of PUnit⟩
@@ -166,54 +97,32 @@ open CategoryTheory.Limits
 
 namespace HasProducts
 
-/--
-Definition of `product` / `product` 的定义
+/-- The pi-type gives a cone for a product. -/
+/-
+**ωCPO.HasProducts.product** 是 Mathlib 中的一个定义，位于命名空间 `ωCPO.HasProducts`。
+形式化陈述：product {J : Type v} (f : J -> ωCPO.{v}) : Fan f
+参数：f : J -> ωCPO.{v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition product
-  signature: {J : Type v} (f : J -> ωCPO.{v})
-  body: Fan.mk (of (forall j, f j)) fun j => .mk (Pi.evalOrderHom j) fun _ => rfl
-
-中文:
-定义 product
-  签名: {J : 类型v} (f : J -> ωCPO.{v})
-  定义体: Fan.mk (of (forall j, f j)) fun j => .mk (Pi.evalOrderHom j) fun _ => rfl
-
-Depends on / 依赖: Fan.mk, Pi.evalOrderHom, evalOrderHom
+--- 原说明 ---
+The pi-type gives a cone for a product.
 -/
-def product {J : Type v} (f : J -> ωCPO.{v}) : Fan f :=
-  Fan.mk (of (forall j, f j)) fun j => .mk (Pi.evalOrderHom j) fun _ => rfl
+def product {J : Type v} (f : J → ωCPO.{v}) : Fan f :=
+  Fan.mk (of (∀ j, f j)) fun j => .mk (Pi.evalOrderHom j) fun _ => rfl
 
-/--
-Definition of `isProduct` / `isProduct` 的定义
+/-- The pi-type is a limit cone for the product. -/
+/-
+**ωCPO.HasProducts.isProduct** 是 Mathlib 中的一个定义，位于命名空间 `ωCPO.HasProducts`。
+形式化陈述：isProduct (J : Type v) (f : J -> ωCPO) : IsLimit (product f) where lift s
+参数：J : Type v；f : J -> ωCPO。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isProduct
-  signature: (J : Type v) (f : J -> ωCPO)
-  body: ⟨⟨fun t j => (s.π.app ⟨j⟩) t, fun _ _ h j => (s.π.app ⟨j⟩).monotone h⟩,
-      fun x => funext fun j => (s.π.app ⟨j⟩).continuous x⟩
-  uniq s m w := by
-    ext t; funext j -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext t j`
-    change m t j = (s.π.app ⟨j⟩) t
-    rw [← w ⟨j⟩]
-    rfl
-  fac _ _ := rfl
-
-中文:
-定义 isProduct
-  签名: (J : 类型v) (f : J -> ωCPO)
-  定义体: ⟨⟨fun t j => (s.π.app ⟨j⟩) t, fun _ _ h j => (s.π.app ⟨j⟩).monotone h⟩,
-      fun x => funext fun j => (s.π.app ⟨j⟩).continuous x⟩
-  uniq s m w := by
-    ext t; funext j -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext t j`
-    change m t j = (s.π.app ⟨j⟩) t
-    rw [← w ⟨j⟩]
-    rfl
-  fac _ _ := rfl
-
-Depends on / 依赖: Originally, Porting, community, continuous, github, github.com, issues, leanprover, mathlib4, monotone
+--- 原说明 ---
+The pi-type is a limit cone for the product.
 -/
-def isProduct (J : Type v) (f : J -> ωCPO) : IsLimit (product f) where
+def isProduct (J : Type v) (f : J → ωCPO) : IsLimit (product f) where
   lift s :=
     ⟨⟨fun t j => (s.π.app ⟨j⟩) t, fun _ _ h j => (s.π.app ⟨j⟩).monotone h⟩,
       fun x => funext fun j => (s.π.app ⟨j⟩).continuous x⟩
@@ -223,116 +132,79 @@ def isProduct (J : Type v) (f : J -> ωCPO) : IsLimit (product f) where
     rw [← w ⟨j⟩]
     rfl
   fac _ _ := rfl
-
-instance (J : Type v) (f : J -> ωCPO.{v}) : HasProduct f :=
+/-
+**ωCPO.HasProducts.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO.HasProducts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (J : Type v) (f : J → ωCPO.{v}) : HasProduct f :=
   HasLimit.mk ⟨_, isProduct _ f⟩
 
 end HasProducts
 
-/--
-Instance `omegaCompletePartialOrderEqualizer` / 实例 `omegaCompletePartialOrderEqualizer`
-
-English:
-instance omegaCompletePartialOrderEqualizer
-  signature: {α β : Type*} [OmegaCompletePartialOrder α]
-  body: OmegaCompletePartialOrder.subtype _ fun c hc => by
-    rw [f.continuous]; rw [g.continuous]
-    congr 1
-    ext x
-    apply hc _ ⟨_, rfl⟩
-
-中文:
-实例 omegaCompletePartialOrderEqualizer
-  签名: {α β : 类型} [OmegaCompletePartial序 α]
-  定义体: OmegaCompletePartialOrder.subtype _ fun c hc => by
-    rw [f.continuous]; rw [g.continuous]
-    congr 1
-    ext x
-    apply hc _ ⟨_, rfl⟩
-
-Depends on / 依赖: OmegaCompletePartialOrder, OmegaCompletePartialOrder.subtype, continuous, f.continuous, g.continuous, subtype
+/-
+**ωCPO.omegaCompletePartialOrderEqualizer** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+形式化陈述：omegaCompletePartialOrderEqualizer {α β : Type*} [OmegaCompletePartialOrde
+r α] [OmegaCompletePartialOrder β] (f g : α ->𝒄 β) : OmegaCompletePartialOrder {
+ a : α // f a = g a }
+参数：f g : α ->𝒄 β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance omegaCompletePartialOrderEqualizer {α β : Type*} [OmegaCompletePartialOrder α]
-    [OmegaCompletePartialOrder β] (f g : α ->𝒄 β) :
+    [OmegaCompletePartialOrder β] (f g : α →𝒄 β) :
     OmegaCompletePartialOrder { a : α // f a = g a } :=
   OmegaCompletePartialOrder.subtype _ fun c hc => by
-    rw [f.continuous]; rw [g.continuous]
+    rw [f.continuous, g.continuous]
     congr 1
     ext x
     apply hc _ ⟨_, rfl⟩
 
 namespace HasEqualizers
 
-/--
-Definition of `equalizerι` / `equalizerι` 的定义
+/-- The equalizer inclusion function as a `ContinuousHom`. -/
+/-
+**ωCPO.HasEqualizers.equalizer** 是 Mathlib 中的一个定义，位于命名空间 `ωCPO.HasEqualizers`。
+形式化陈述：equalizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : Fork f g
+参数：f g : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizerι
-  signature: {α β : Type*} [OmegaCompletePartialOrder α] [OmegaCompletePartialOrder β]
-  body: .mk (OrderHom.Subtype.val _) fun _ => rfl
-
-中文:
-定义 equalizerι
-  签名: {α β : 类型} [OmegaCompletePartial序 α] [OmegaCompletePartial序 β]
-  定义体: .mk (OrderHom.Subtype.val _) fun _ => rfl
-
-Depends on / 依赖: OrderHom, OrderHom.Subtype.val, Subtype
+--- 原说明 ---
+The equalizer inclusion function as a `ContinuousHom`.
 -/
 def equalizerι {α β : Type*} [OmegaCompletePartialOrder α] [OmegaCompletePartialOrder β]
-    (f g : α ->𝒄 β) : { a : α // f a = g a } ->𝒄 α :=
+    (f g : α →𝒄 β) : { a : α // f a = g a } →𝒄 α :=
   .mk (OrderHom.Subtype.val _) fun _ => rfl
 
-/--
-Definition of `equalizer` / `equalizer` 的定义
+/-- A construction of the equalizer fork. -/
+/-
+**ωCPO.HasEqualizers.equalizer** 是 Mathlib 中的一个定义，位于命名空间 `ωCPO.HasEqualizers`。
+形式化陈述：equalizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : Fork f g
+参数：f g : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizer
-  signature: {X Y : ωCPO.{v}} (f g : X ⟶ Y)
-  body: Fork.ofι (P := ωCPO.of { a // f a = g a }) (equalizerι f g)
-    (ContinuousHom.ext _ _ fun x => x.2)
-
-中文:
-定义 equalizer
-  签名: {X Y : ωCPO.{v}} (f g : X ⟶ Y)
-  定义体: Fork.ofι (P := ωCPO.of { a // f a = g a }) (equalizerι f g)
-    (ContinuousHom.ext _ _ fun x => x.2)
-
-Depends on / 依赖: CPO.of, ContinuousHom, ContinuousHom.ext, Fork.of
+--- 原说明 ---
+A construction of the equalizer fork.
 -/
 def equalizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : Fork f g :=
   Fork.ofι (P := ωCPO.of { a // f a = g a }) (equalizerι f g)
     (ContinuousHom.ext _ _ fun x => x.2)
 
-/--
-Definition of `isEqualizer` / `isEqualizer` 的定义
+/-- The equalizer fork is a limit. -/
+/-
+**ωCPO.HasEqualizers.isEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `ωCPO.HasEqualizers`。
+形式化陈述：isEqualizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : IsLimit (equalizer f g)
+参数：f g : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isEqualizer
-  signature: {X Y : ωCPO.{v}} (f g : X ⟶ Y)
-  body: Fork.IsLimit.mk' _ fun s =>
-    ⟨{ toFun := fun x => ⟨s.ι x, by apply ContinuousHom.congr_fun s.condition⟩
-        monotone' := fun _ _ h => s.ι.monotone h
-        map_ωSup' := fun x => Subtype.ext (s.ι.continuous x)
-      }, by ext; rfl, fun hm => by
-      ext x : 2; apply Subtype.ext ?_ -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
-      apply ContinuousHom.congr_fun hm⟩
-
-中文:
-定义 isEqualizer
-  签名: {X Y : ωCPO.{v}} (f g : X ⟶ Y)
-  定义体: Fork.IsLimit.mk' _ fun s =>
-    ⟨{ toFun := fun x => ⟨s.ι x, by apply ContinuousHom.congr_fun s.condition⟩
-        monotone' := fun _ _ h => s.ι.monotone h
-        map_ωSup' := fun x => Subtype.ext (s.ι.continuous x)
-      }, by ext; rfl, fun hm => by
-      ext x : 2; apply Subtype.ext ?_ -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
-      apply ContinuousHom.congr_fun hm⟩
-
-Depends on / 依赖: ContinuousHom, ContinuousHom.congr_fun, Fork.IsLimit.mk, IsLimit, Originally, Porting, Subtype, Subtype.ext, community, condition, congr_fun, continuous, github, github.com, issues, leanprover, mathlib4, monotone, s.condition
+--- 原说明 ---
+The equalizer fork is a limit.
 -/
 def isEqualizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : IsLimit (equalizer f g) :=
   Fork.IsLimit.mk' _ fun s =>
-    ⟨{ toFun := fun x => ⟨s.ι x, by apply ContinuousHom.congr_fun s.condition⟩
+    ⟨{  toFun := fun x => ⟨s.ι x, by apply ContinuousHom.congr_fun s.condition⟩
         monotone' := fun _ _ h => s.ι.monotone h
         map_ωSup' := fun x => Subtype.ext (s.ι.continuous x)
       }, by ext; rfl, fun hm => by
@@ -341,59 +213,27 @@ def isEqualizer {X Y : ωCPO.{v}} (f g : X ⟶ Y) : IsLimit (equalizer f g) :=
 
 end HasEqualizers
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasProducts.{v} ωCPO.{v}
-  body: fun _ => { has_limit := fun _ => hasLimit_of_iso Discrete.natIsoFunctor.symm }
-
-中文:
-实例 :
-  签名: HasProducts.{v} ωCPO.{v}
-  定义体: fun _ => { has_limit := fun _ => hasLimit_of_iso Discrete.natIsoFunctor.symm }
-
-Depends on / 依赖: Discrete, Discrete.natIsoFunctor.symm, hasLimit_of_iso, has_limit, natIsoFunctor
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasProducts.{v} ωCPO.{v} :=
   fun _ => { has_limit := fun _ => hasLimit_of_iso Discrete.natIsoFunctor.symm }
-
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : ωCPO.{v}} (f g : X ⟶ Y) : HasLimit (parallelPair f g) :=
   HasLimit.mk ⟨_, HasEqualizers.isEqualizer f g⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasEqualizers ωCPO.{v}
-  body: hasEqualizers_of_hasLimit_parallelPair _
-
-中文:
-实例 :
-  签名: HasEqualizers ωCPO.{v}
-  定义体: hasEqualizers_of_hasLimit_parallelPair _
-
-Depends on / 依赖: hasEqualizers_of_hasLimit_parallelPair
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasEqualizers ωCPO.{v} :=
   hasEqualizers_of_hasLimit_parallelPair _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimits ωCPO.{v}
-  body: has_limits_of_hasEqualizers_and_products
-
-中文:
-实例 :
-  签名: 有极限 ωCPO.{v}
-  定义体: has_limits_of_hasEqualizers_and_products
-
-Depends on / 依赖: has_limits_of_hasEqualizers_and_products
+/-
+**ωCPO.** 是 Mathlib 中的一个实例，位于命名空间 `ωCPO`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimits ωCPO.{v} :=
   has_limits_of_hasEqualizers_and_products
@@ -401,3 +241,4 @@ instance : HasLimits ωCPO.{v} :=
 end
 
 end ωCPO
+

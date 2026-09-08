@@ -28,28 +28,18 @@ variable {α : Type*}
 /-- An equivalence between `Bool × ℕ` and `ℕ`, by mapping `(true, x)` to `2 * x + 1` and
 `(false, x)` to `2 * x`. -/
 @[simps]
-/--
-Definition of `boolProdNatEquivNat` / `boolProdNatEquivNat` 的定义
+/-
+**Equiv.boolProdNatEquivNat** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：boolProdNatEquivNat : Bool × Nat ≃ Nat where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boolProdNatEquivNat
-  signature: : Bool × Nat ≃ Nat where
-  body: uncurry bit
-  invFun n := ⟨n.bodd, n.div2⟩
-  left_inv := fun ⟨b, n⟩ => by simp
-  right_inv n := by simp
-
-中文:
-定义 boolProd自然数Equiv自然数
-  签名: : 布尔值 × 自然数 ≃ 自然数 where
-  定义体: uncurry bit
-  invFun n := ⟨n.bodd, n.div2⟩
-  left_inv := fun ⟨b, n⟩ => by simp
-  right_inv n := by simp
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+An equivalence between `Bool × ℕ` and `ℕ`, by mapping `(true, x)` to `2 * x + 1`
+ and
+`(false, x)` to `2 * x`.
 -/
-def boolProdNatEquivNat : Bool × Nat ≃ Nat where
+def boolProdNatEquivNat : Bool × ℕ ≃ ℕ where
   toFun := uncurry bit
   invFun n := ⟨n.bodd, n.div2⟩
   left_inv := fun ⟨b, n⟩ => by simp
@@ -59,90 +49,71 @@ def boolProdNatEquivNat : Bool × Nat ≃ Nat where
 `2 * x + 1`.
 -/
 @[simps! symm_apply]
-/--
-Definition of `natSumNatEquivNat` / `natSumNatEquivNat` 的定义
+/-
+**Equiv.natSumNatEquivNat** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：natSumNatEquivNat : Nat oplus Nat ≃ Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition natSumNatEquivNat
-  signature: : Nat oplus Nat ≃ Nat
-  body: (boolProdEquivSum Nat).symm.trans boolProdNatEquivNat
-
-@[simp]
-
-中文:
-定义 natSum自然数Equiv自然数
-  签名: : 自然数 oplus 自然数 ≃ 自然数
-  定义体: (boolProdEquivSum Nat).symm.trans boolProdNatEquivNat
-
-@[simp]
-
-Depends on / 依赖: boolProdEquivSum, boolProdNatEquivNat, symm.trans
+--- 原说明 ---
+An equivalence between `ℕ ⊕ ℕ` and `ℕ`, by mapping `(Sum.inl x)` to `2 * x` and 
+`(Sum.inr x)` to
+`2 * x + 1`.
 -/
-def natSumNatEquivNat : Nat oplus Nat ≃ Nat :=
-  (boolProdEquivSum Nat).symm.trans boolProdNatEquivNat
+def natSumNatEquivNat : ℕ ⊕ ℕ ≃ ℕ :=
+  (boolProdEquivSum ℕ).symm.trans boolProdNatEquivNat
 
 @[simp]
-/--
-theorem `natSumNatEquivNat_apply` / 定理 `natSumNatEquivNat_apply`
-
-English:
-theorem natSumNatEquivNat_apply
-  statement: ⇑natSumNatEquivNat = Sum.elim (2 * ·) (2 * · + 1)
-  proof: by
-  ext (x | x) <;> rfl
-
-中文:
-定理 natSum自然数Equiv自然数_apply
-  结论: ⇑natSum自然数Equiv自然数 = 和.elim (2 * ·) (2 * · + 1)
-  证明: by
-  ext (x | x) <;> rfl
+/-
+**Equiv.natSumNatEquivNat_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：natSumNatEquivNat_apply : ⇑natSumNatEquivNat = Sum.elim (2 * ·) (2 * · + 1
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem natSumNatEquivNat_apply : ⇑natSumNatEquivNat = Sum.elim (2 * ·) (2 * · + 1) := by
   ext (x | x) <;> rfl
 
-/--
-Definition of `intEquivNat` / `intEquivNat` 的定义
-
-English:
-definition intEquivNat
-  signature: : Int ≃ Nat
-  body: intEquivNatSumNat.trans natSumNatEquivNat
-
-中文:
-定义 intEquiv自然数
-  签名: : 整数 ≃ 自然数
-  定义体: intEquivNatSumNat.trans natSumNatEquivNat
-
-Depends on / 依赖: intEquivNatSumNat, intEquivNatSumNat.trans, natSumNatEquivNat
+/-- An equivalence between `ℤ` and `ℕ`, through `ℤ ≃ ℕ ⊕ ℕ` and `ℕ ⊕ ℕ ≃ ℕ`.
 -/
-def intEquivNat : Int ≃ Nat :=
+/-
+**Equiv.intEquivNat** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：intEquivNat : Int ≃ Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+
+--- 原说明 ---
+An equivalence between `ℤ` and `ℕ`, through `ℤ ≃ ℕ ⊕ ℕ` and `ℕ ⊕ ℕ ≃ ℕ`.
+-/
+def intEquivNat : ℤ ≃ ℕ :=
   intEquivNatSumNat.trans natSumNatEquivNat
 
-/--
-Definition of `prodEquivOfEquivNat` / `prodEquivOfEquivNat` 的定义
-
-English:
-definition prodEquivOfEquivNat
-  signature: (e : α ≃ Nat)
-  body: calc
-    α × α ≃ Nat × Nat := prodCongr e e
-    _ ≃ Nat := pairEquiv
-    _ ≃ α := e.symm
-
-中文:
-定义 prodEquivOfEquiv自然数
-  签名: (e : α ≃ 自然数)
-  定义体: calc
-    α × α ≃ Nat × Nat := prodCongr e e
-    _ ≃ Nat := pairEquiv
-    _ ≃ α := e.symm
-
-Depends on / 依赖: e.symm, pairEquiv, prodCongr
+/-- An equivalence between `α × α` and `α`, given that there is an equivalence between `α` and `ℕ`.
 -/
-def prodEquivOfEquivNat (e : α ≃ Nat) : α × α ≃ α :=
+/-
+**Equiv.prodEquivOfEquivNat** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：prodEquivOfEquivNat (e : α ≃ Nat) : α × α ≃ α
+参数：e : α ≃ Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+
+--- 原说明 ---
+An equivalence between `α × α` and `α`, given that there is an equivalence betwe
+en `α` and `ℕ`.
+-/
+def prodEquivOfEquivNat (e : α ≃ ℕ) : α × α ≃ α :=
   calc
-    α × α ≃ Nat × Nat := prodCongr e e
-    _ ≃ Nat := pairEquiv
+    α × α ≃ ℕ × ℕ := prodCongr e e
+    _ ≃ ℕ := pairEquiv
     _ ≃ α := e.symm
 
 end Equiv
+

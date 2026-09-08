@@ -28,320 +28,143 @@ variable {G₀ M₀ : Type*}
 
 namespace OrderDual
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ᵒᵈ M₀
-  body: inferInstanceAs SMulZeroClass G₀ M₀
-
-中文:
-实例 [零
-  签名: M₀] [SMulZero类 G₀ M₀] : SMulZero类 G₀ᵒᵈ M₀
-  定义体: inferInstanceAs SMulZeroClass G₀ M₀
-
-Depends on / 依赖: SMulZeroClass
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ᵒᵈ M₀ :=
-inferInstanceAs SMulZeroClass G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ M₀ᵒᵈ
-  body: inferInstanceAs SMulZeroClass G₀ M₀
-
-中文:
-实例 [零
-  签名: M₀] [SMulZero类 G₀ M₀] : SMulZero类 G₀ M₀ᵒᵈ
-  定义体: inferInstanceAs SMulZeroClass G₀ M₀
+  inferInstanceAs <| SMulZeroClass G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ M₀ᵒᵈ :=
-inferInstanceAs SMulZeroClass G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ᵒᵈ M₀
-  body: inferInstanceAs SMulWithZero G₀ M₀
-
-中文:
-实例 [零
-  签名: G₀] [零 M₀] [带零标量乘法 G₀ M₀] : 带零标量乘法 G₀ᵒᵈ M₀
-  定义体: inferInstanceAs SMulWithZero G₀ M₀
+  inferInstanceAs <| SMulZeroClass G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ᵒᵈ M₀ :=
-inferInstanceAs SMulWithZero G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ M₀ᵒᵈ
-  body: inferInstanceAs SMulWithZero G₀ M₀
-
-中文:
-实例 [零
-  签名: G₀] [零 M₀] [带零标量乘法 G₀ M₀] : 带零标量乘法 G₀ M₀ᵒᵈ
-  定义体: inferInstanceAs SMulWithZero G₀ M₀
-
-Depends on / 依赖: SMulWithZero
+  inferInstanceAs <| SMulWithZero G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ M₀ᵒᵈ :=
-inferInstanceAs SMulWithZero G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ᵒᵈ M₀
-  body: inferInstanceAs DistribSMul G₀ M₀
-
-中文:
-实例 [加法零类
-  签名: M₀] [分配标量乘法 G₀ M₀] : 分配标量乘法 G₀ᵒᵈ M₀
-  定义体: inferInstanceAs DistribSMul G₀ M₀
+  inferInstanceAs <| SMulWithZero G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ᵒᵈ M₀ :=
-inferInstanceAs DistribSMul G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ M₀ᵒᵈ
-  body: inferInstanceAs DistribSMul G₀ M₀
-
-中文:
-实例 [加法零类
-  签名: M₀] [分配标量乘法 G₀ M₀] : 分配标量乘法 G₀ M₀ᵒᵈ
-  定义体: inferInstanceAs DistribSMul G₀ M₀
-
-Depends on / 依赖: DistribSMul
+  inferInstanceAs <| DistribSMul G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ M₀ᵒᵈ :=
-inferInstanceAs DistribSMul G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ᵒᵈ M₀
-  body: inferInstanceAs DistribMulAction G₀ M₀
-
-中文:
-实例 [幺半群
-  签名: G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀] : 分配乘法作用 G₀ᵒᵈ M₀
-  定义体: inferInstanceAs DistribMulAction G₀ M₀
+  inferInstanceAs <| DistribSMul G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ᵒᵈ M₀ :=
-inferInstanceAs DistribMulAction G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ M₀ᵒᵈ
-  body: inferInstanceAs DistribMulAction G₀ M₀
-
-中文:
-实例 [幺半群
-  签名: G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀] : 分配乘法作用 G₀ M₀ᵒᵈ
-  定义体: inferInstanceAs DistribMulAction G₀ M₀
-
-Depends on / 依赖: DistribMulAction
+  inferInstanceAs <| DistribMulAction G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ M₀ᵒᵈ :=
-inferInstanceAs DistribMulAction G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonoidWithZero
-  signature: G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-  body: inferInstanceAs MulActionWithZero G₀ M₀
-
-中文:
-实例 [带零幺半群
-  签名: G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀] :
-  定义体: inferInstanceAs MulActionWithZero G₀ M₀
+  inferInstanceAs <| DistribMulAction G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-MulActionWithZero G₀ᵒᵈ M₀ := inferInstanceAs MulActionWithZero G₀ M₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonoidWithZero
-  signature: G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-  body: inferInstanceAs MulActionWithZero G₀ M₀
-
-中文:
-实例 [带零幺半群
-  签名: G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀] :
-  定义体: inferInstanceAs MulActionWithZero G₀ M₀
+    MulActionWithZero G₀ᵒᵈ M₀ := inferInstanceAs <| MulActionWithZero G₀ M₀
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-MulActionWithZero G₀ M₀ᵒᵈ := inferInstanceAs MulActionWithZero G₀ M₀
+    MulActionWithZero G₀ M₀ᵒᵈ := inferInstanceAs <| MulActionWithZero G₀ M₀
 
 end OrderDual
 
 namespace Lex
 
-/--
-Instance `instSMulWithZero` / 实例 `instSMulWithZero`
-
-English:
-instance instSMulWithZero
-  signature: [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀]
-  body: inferInstanceAs SMulWithZero G₀ M₀
-
-中文:
-实例 instSMulWithZero
-  签名: [零 G₀] [零 M₀] [带零标量乘法 G₀ M₀]
-  定义体: inferInstanceAs SMulWithZero G₀ M₀
-
-Depends on / 依赖: SMulWithZero
+/-
+**Lex.instSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instSMulWithZero [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero (
+Lex G₀) M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulWithZero [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero (Lex G₀) M₀ :=
-inferInstanceAs SMulWithZero G₀ M₀
-
-/--
-Instance `instSMulWithZero'` / 实例 `instSMulWithZero'`
-
-English:
-instance instSMulWithZero'
-  signature: [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀]
-  body: inferInstanceAs SMulWithZero G₀ M₀
-
-中文:
-实例 instSMulWithZero'
-  签名: [零 G₀] [零 M₀] [带零标量乘法 G₀ M₀]
-  定义体: inferInstanceAs SMulWithZero G₀ M₀
-
-Depends on / 依赖: SMulWithZero
+  inferInstanceAs <| SMulWithZero G₀ M₀
+/-
+**Lex.instSMulWithZero'** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instSMulWithZero' [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero 
+G₀ (Lex M₀)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulWithZero' [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ (Lex M₀) :=
-inferInstanceAs SMulWithZero G₀ M₀
-
-/--
-Instance `instDistribSMul` / 实例 `instDistribSMul`
-
-English:
-instance instDistribSMul
-  signature: [AddZeroClass M₀] [DistribSMul G₀ M₀]
-  body: inferInstanceAs DistribSMul G₀ M₀
-
-中文:
-实例 instDistribSMul
-  签名: [加法零类 M₀] [分配标量乘法 G₀ M₀]
-  定义体: inferInstanceAs DistribSMul G₀ M₀
-
-Depends on / 依赖: DistribSMul
+  inferInstanceAs <| SMulWithZero G₀ M₀
+/-
+**Lex.instDistribSMul** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instDistribSMul [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul (Lex G
+₀) M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribSMul [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul (Lex G₀) M₀ :=
-inferInstanceAs DistribSMul G₀ M₀
-
-/--
-Instance `instDistribSMul'` / 实例 `instDistribSMul'`
-
-English:
-instance instDistribSMul'
-  signature: [AddZeroClass M₀] [DistribSMul G₀ M₀]
-  body: inferInstanceAs DistribSMul G₀ M₀
-
-中文:
-实例 instDistribSMul'
-  签名: [加法零类 M₀] [分配标量乘法 G₀ M₀]
-  定义体: inferInstanceAs DistribSMul G₀ M₀
-
-Depends on / 依赖: DistribSMul
+  inferInstanceAs <| DistribSMul G₀ M₀
+/-
+**Lex.instDistribSMul'** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instDistribSMul' [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ (L
+ex M₀)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribSMul' [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ (Lex M₀) :=
-inferInstanceAs DistribSMul G₀ M₀
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀]
-  body: inferInstanceAs DistribMulAction G₀ M₀
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀]
-  定义体: inferInstanceAs DistribMulAction G₀ M₀
-
-Depends on / 依赖: DistribMulAction
+  inferInstanceAs <| DistribSMul G₀ M₀
+/-
+**Lex.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instDistribMulAction [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] :
+ DistribMulAction (Lex G₀) M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] :
-DistribMulAction (Lex G₀) M₀ := inferInstanceAs DistribMulAction G₀ M₀
-
-/--
-Instance `instDistribMulAction'` / 实例 `instDistribMulAction'`
-
-English:
-instance instDistribMulAction'
-  signature: [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀]
-  body: inferInstanceAs DistribMulAction G₀ M₀
-
-中文:
-实例 instDistribMulAction'
-  签名: [幺半群 G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀]
-  定义体: inferInstanceAs DistribMulAction G₀ M₀
-
-Depends on / 依赖: DistribMulAction
+    DistribMulAction (Lex G₀) M₀ := inferInstanceAs <| DistribMulAction G₀ M₀
+/-
+**Lex.instDistribMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instDistribMulAction' [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] 
+: DistribMulAction G₀ (Lex M₀)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction' [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] :
-DistribMulAction G₀ (Lex M₀) := inferInstanceAs DistribMulAction G₀ M₀
-
-/--
-Instance `instMulActionWithZero` / 实例 `instMulActionWithZero`
-
-English:
-instance instMulActionWithZero
-  signature: [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀]
-  body: inferInstanceAs MulActionWithZero G₀ M₀
-
-中文:
-实例 instMulActionWithZero
-  签名: [带零幺半群 G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀]
-  定义体: inferInstanceAs MulActionWithZero G₀ M₀
-
-Depends on / 依赖: CovariantClass, Group.covconv, MulActionWithZero, covconv
+    DistribMulAction G₀ (Lex M₀) := inferInstanceAs <| DistribMulAction G₀ M₀
+/-
+**Lex.instMulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instMulActionWithZero [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZer
+o G₀ M₀] : MulActionWithZero (Lex G₀) M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionWithZero [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-MulActionWithZero (Lex G₀) M₀ := inferInstanceAs MulActionWithZero G₀ M₀
-
-/--
-Instance `instMulActionWithZero'` / 实例 `instMulActionWithZero'`
-
-English:
-instance instMulActionWithZero'
-  signature: [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀]
-  body: inferInstanceAs MulActionWithZero G₀ M₀
-
-中文:
-实例 instMulActionWithZero'
-  签名: [带零幺半群 G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀]
-  定义体: inferInstanceAs MulActionWithZero G₀ M₀
-
-Depends on / 依赖: MulActionWithZero
+    MulActionWithZero (Lex G₀) M₀ := inferInstanceAs <| MulActionWithZero G₀ M₀
+/-
+**Lex.instMulActionWithZero'** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instMulActionWithZero' [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZe
+ro G₀ M₀] : MulActionWithZero G₀ (Lex M₀)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionWithZero' [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
-MulActionWithZero G₀ (Lex M₀) := inferInstanceAs MulActionWithZero G₀ M₀
+    MulActionWithZero G₀ (Lex M₀) := inferInstanceAs <| MulActionWithZero G₀ M₀
 
 end Lex
+

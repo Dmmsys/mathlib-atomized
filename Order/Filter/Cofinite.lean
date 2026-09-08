@@ -39,847 +39,758 @@ variable {ι α β : Type*} {l : Filter α}
 
 namespace Filter
 
-/--
-Definition of `cofinite` / `cofinite` 的定义
+/-- The cofinite filter is the filter of subsets whose complements are finite. -/
+/-
+**Filter.cofinite** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：cofinite : Filter α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_empty`：finite_empty : (∅ : Set α).Finite
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
 
-English:
-definition cofinite
-  signature: : Filter α
-  body: comk Set.Finite finite_empty (fun _t ht _s hsub => ht.subset hsub) fun _ h _ => h.union
-
-@[simp]
-
-中文:
-定义 cofinite
-  签名: : 滤子 α
-  定义体: comk Set.Finite finite_empty (fun _t ht _s hsub => ht.subset hsub) fun _ h _ => h.union
-
-@[simp]
-
-Depends on / 依赖: Finite, Set.Finite, finite_empty, h.union, ht.subset, subset
+--- 原说明 ---
+The cofinite filter is the filter of subsets whose complements are finite.
 -/
 def cofinite : Filter α :=
-  comk Set.Finite finite_empty (fun _t ht _s hsub => ht.subset hsub) fun _ h _ => h.union
+  comk Set.Finite finite_empty (fun _t ht _s hsub ↦ ht.subset hsub) fun _ h _ ↦ h.union
 
 @[simp]
-/--
-theorem `mem_cofinite` / 定理 `mem_cofinite`
-
-English:
-theorem mem_cofinite
-  given: {s : Set α}
-  statement: s in @cofinite α ↔ sᶜ.Finite
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_cofinite
-  条件: {s : 集合 α}
-  结论: s in @cofinite α ↔ sᶜ.有限
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_cofinite {s : Set α} : s in @cofinite α ↔ sᶜ.Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_cofinite {s : Set α} : s in @cofinite α ↔ sᶜ.Finite :=
+theorem mem_cofinite {s : Set α} : s ∈ @cofinite α ↔ sᶜ.Finite :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `eventually_cofinite` / 定理 `eventually_cofinite`
-
-English:
-theorem eventually_cofinite
-  given: {p : α -> Prop}
-  statement: (forallᶠ x in cofinite, p x) ↔ { x | ¬p x }.Finite
-  proof: Iff.rfl
-
-中文:
-定理 eventually_cofinite
-  条件: {p : α -> 命题}
-  结论: (对任意ᶠ x in cofinite, p x) ↔ { x | ¬p x }.有限
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.eventually_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：eventually_cofinite {p : α -> Prop} : (forallᶠ x in cofinite, p x) ↔ { x |
+ ¬p x }.Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eventually_cofinite {p : α -> Prop} : (forallᶠ x in cofinite, p x) ↔ { x | ¬p x }.Finite :=
+theorem eventually_cofinite {p : α → Prop} : (∀ᶠ x in cofinite, p x) ↔ { x | ¬p x }.Finite :=
   Iff.rfl
-
-/--
-theorem `hasBasis_cofinite` / 定理 `hasBasis_cofinite`
-
-English:
-theorem hasBasis_cofinite
-  statement: HasBasis cofinite (fun s : Set α => s.Finite) compl
-  proof: ⟨fun s =>
-    ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ =>
-htf.subset compl_subset_comm.2 hts⟩⟩
-
-中文:
-定理 hasBasis_cofinite
-  结论: 有基 cofinite (fun s : 集合 α => s.有限) compl
-  证明: ⟨fun s =>
-    ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ =>
-htf.subset compl_subset_comm.2 hts⟩⟩
-
-Depends on / 依赖: compl_compl, compl_subset_comm, htf.subset, subset
+/-
+**Filter.hasBasis_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：hasBasis_cofinite : HasBasis cofinite (fun s : Set α => s.Finite) compl
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.compl_subset_comm`：compl_subset_comm : sᶜ subseteq t ↔ tᶜ subseteq s
 -/
 theorem hasBasis_cofinite : HasBasis cofinite (fun s : Set α => s.Finite) compl :=
   ⟨fun s =>
     ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ =>
-htf.subset compl_subset_comm.2 hts⟩⟩
-
-/--
-Instance `cofinite_neBot` / 实例 `cofinite_neBot`
-
-English:
-instance cofinite_neBot
-  signature: [Infinite α]
-  body: hasBasis_cofinite.neBot_iff.2 fun hs => hs.infinite_compl.nonempty
-
-@[simp]
-
-中文:
-实例 cofinite_neBot
-  签名: [无限 α]
-  定义体: hasBasis_cofinite.neBot_iff.2 fun hs => hs.infinite_compl.nonempty
-
-@[simp]
-
-Depends on / 依赖: hasBasis_cofinite, hasBasis_cofinite.neBot_iff, hs.infinite_compl.nonempty, infinite_compl, neBot_iff, nonempty
+      htf.subset <| compl_subset_comm.2 hts⟩⟩
+/-
+**Filter.cofinite_neBot** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：cofinite_neBot [Infinite α] : NeBot (@cofinite α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.neBot_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α
+} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → (l.NeBot ↔ ∀ {i : ι}, p i →
+ (s i).Nonempty…
+· 使用定理 `Filter.hasBasis_cofinite`：hasBasis_cofinite : HasBasis cofinite (fun s :
+ Set α => s.Finite) compl
+· 使用定理 `Set.Infinite.nonempty`：∀ {α : Type u} {s : Set α}, s.Infinite → s.Nonemp
+ty
+· 使用定理 `Set.Finite.infinite_compl`：∀ {α : Type u} [Infinite α] {s : Set α}, s.Fi
+nite → sᶜ.Infinite
 -/
 instance cofinite_neBot [Infinite α] : NeBot (@cofinite α) :=
   hasBasis_cofinite.neBot_iff.2 fun hs => hs.infinite_compl.nonempty
 
 @[simp]
-/--
-theorem `cofinite_eq_bot_iff` / 定理 `cofinite_eq_bot_iff`
-
-English:
-theorem cofinite_eq_bot_iff
-  statement: @cofinite α = ⊥ ↔ Finite α
-  proof: by
-  simp [← empty_mem_iff_bot, finite_univ_iff]
-
-@[simp]
-
-中文:
-定理 cofinite_eq_bot_iff
-  结论: @cofinite α = ⊥ ↔ 有限 α
-  证明: by
-  simp [← empty_mem_iff_bot, finite_univ_iff]
-
-@[simp]
-
-Depends on / 依赖: empty_mem_iff_bot, finite_univ_iff
+/-
+**Filter.cofinite_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：cofinite_eq_bot_iff : @cofinite α = ⊥ ↔ Finite α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cofinite_eq_bot_iff : @cofinite α = ⊥ ↔ Finite α := by
   simp [← empty_mem_iff_bot, finite_univ_iff]
 
 @[simp]
-/--
-theorem `cofinite_eq_bot` / 定理 `cofinite_eq_bot`
-
-English:
-theorem cofinite_eq_bot
-  given: [Finite α]
-  statement: @cofinite α = ⊥
-  proof: cofinite_eq_bot_iff.2 ‹_›
-
-中文:
-定理 cofinite_eq_bot
-  条件: [有限 α]
-  结论: @cofinite α = ⊥
-  证明: cofinite_eq_bot_iff.2 ‹_›
-
-Depends on / 依赖: cofinite_eq_bot_iff
+/-
+**Filter.cofinite_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：cofinite_eq_bot [Finite α] : @cofinite α = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.cofinite_eq_bot_iff`：cofinite_eq_bot_iff : @cofinite α = ⊥ ↔ Fini
+te α
 -/
 theorem cofinite_eq_bot [Finite α] : @cofinite α = ⊥ := cofinite_eq_bot_iff.2 ‹_›
-
-/--
-theorem `frequently_cofinite_iff_infinite` / 定理 `frequently_cofinite_iff_infinite`
-
-English:
-theorem frequently_cofinite_iff_infinite
-  given: {p : α -> Prop}
-  proof: by
-  simp only [Filter.Frequently, eventually_cofinite, not_not, Set.Infinite]
-
-中文:
-定理 frequently_cofinite_iff_infinite
-  条件: {p : α -> 命题}
-  证明: by
-  simp only [Filter.Frequently, eventually_cofinite, not_not, Set.Infinite]
-
-Depends on / 依赖: Filter, Filter.Frequently, Frequently, Infinite, Set.Infinite, eventually_cofinite, not_not
+/-
+**Filter.frequently_cofinite_iff_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：frequently_cofinite_iff_infinite {p : α -> Prop} : (existsᶠ x in cofinite,
+ p x) ↔ Set.Infinite { x | p x }
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem frequently_cofinite_iff_infinite {p : α -> Prop} :
-    (existsᶠ x in cofinite, p x) ↔ Set.Infinite { x | p x } := by
+theorem frequently_cofinite_iff_infinite {p : α → Prop} :
+    (∃ᶠ x in cofinite, p x) ↔ Set.Infinite { x | p x } := by
   simp only [Filter.Frequently, eventually_cofinite, not_not, Set.Infinite]
-
-/--
-lemma `frequently_cofinite_mem_iff_infinite` / 引理 `frequently_cofinite_mem_iff_infinite`
-
-English:
-lemma frequently_cofinite_mem_iff_infinite
-  given: {s : Set α}
-  statement: (existsᶠ x in cofinite, x in s) ↔ s.Infinite
-  proof: frequently_cofinite_iff_infinite
-
-alias ⟨_, _root_.Set.Infinite.frequently_cofinite⟩ := frequently_cofinite_mem_iff_infinite
-
-@[simp]
-
-中文:
-引理 frequently_cofinite_mem_iff_infinite
-  条件: {s : 集合 α}
-  结论: (存在ᶠ x in cofinite, x in s) ↔ s.无限
-  证明: frequently_cofinite_iff_infinite
-
-alias ⟨_, _root_.Set.Infinite.frequently_cofinite⟩ := frequently_cofinite_mem_iff_infinite
-
-@[simp]
-
-Depends on / 依赖: frequently_cofinite_iff_infinite
+/-
+**Filter.frequently_cofinite_mem_iff_infinite** 是 Mathlib 中的一个引理，位于命名空间 `Filter`
+。
+形式化陈述：frequently_cofinite_mem_iff_infinite {s : Set α} : (existsᶠ x in cofinite,
+ x in s) ↔ s.Infinite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.frequently_cofinite_iff_infinite`：frequently_cofinite_iff_infinit
+e {p : α -> Prop} : (existsᶠ x in cofinite, p x) ↔ Set.Infinite { x | p x }
 -/
-lemma frequently_cofinite_mem_iff_infinite {s : Set α} : (existsᶠ x in cofinite, x in s) ↔ s.Infinite :=
+lemma frequently_cofinite_mem_iff_infinite {s : Set α} : (∃ᶠ x in cofinite, x ∈ s) ↔ s.Infinite :=
   frequently_cofinite_iff_infinite
 
 alias ⟨_, _root_.Set.Infinite.frequently_cofinite⟩ := frequently_cofinite_mem_iff_infinite
 
 @[simp]
-/--
-lemma `cofinite_inf_principal_neBot_iff` / 引理 `cofinite_inf_principal_neBot_iff`
-
-English:
-lemma cofinite_inf_principal_neBot_iff
-  given: {s : Set α}
-  statement: (cofinite ⊓ 𝓟 s).NeBot ↔ s.Infinite
-  proof: frequently_mem_iff_neBot.symm.trans frequently_cofinite_mem_iff_infinite
-
-alias ⟨_, _root_.Set.Infinite.cofinite_inf_principal_neBot⟩ := cofinite_inf_principal_neBot_iff
-
-中文:
-引理 cofinite_inf_principal_neBot_iff
-  条件: {s : 集合 α}
-  结论: (cofinite ⊓ 𝓟 s).NeBot ↔ s.无限
-  证明: frequently_mem_iff_neBot.symm.trans frequently_cofinite_mem_iff_infinite
-
-alias ⟨_, _root_.Set.Infinite.cofinite_inf_principal_neBot⟩ := cofinite_inf_principal_neBot_iff
-
-Depends on / 依赖: frequently_cofinite_mem_iff_infinite, frequently_mem_iff_neBot, frequently_mem_iff_neBot.symm.trans
+/-
+**Filter.cofinite_inf_principal_neBot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：cofinite_inf_principal_neBot_iff {s : Set α} : (cofinite ⊓ 𝓟 s).NeBot ↔ s.
+Infinite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Filter.frequently_mem_iff_neBot`：frequently_mem_iff_neBot {l : Filter α}
+ {s : Set α} : (existsᶠ x in l, x in s) ↔ NeBot (l ⊓ 𝓟 s)
+· 使用引理 `Filter.frequently_cofinite_mem_iff_infinite`：frequently_cofinite_mem_iff
+_infinite {s : Set α} : (existsᶠ x in cofinite, x in s) ↔ s.Infinite
 -/
 lemma cofinite_inf_principal_neBot_iff {s : Set α} : (cofinite ⊓ 𝓟 s).NeBot ↔ s.Infinite :=
   frequently_mem_iff_neBot.symm.trans frequently_cofinite_mem_iff_infinite
 
 alias ⟨_, _root_.Set.Infinite.cofinite_inf_principal_neBot⟩ := cofinite_inf_principal_neBot_iff
-
-/--
-theorem `_root_.Set.Finite.compl_mem_cofinite` / 定理 `_root_.Set.Finite.compl_mem_cofinite`
-
-English:
-theorem _root_.Set.Finite.compl_mem_cofinite
-  given: {s : Set α} (hs : s.Finite)
-  statement: sᶜ in @cofinite α
-  proof: mem_cofinite.2 (compl_compl s).symm ▸ hs
-
-中文:
-定理 _root_.集合.有限.compl_mem_cofinite
-  条件: {s : 集合 α} (hs : s.有限)
-  结论: sᶜ in @cofinite α
-  证明: mem_cofinite.2 (compl_compl s).symm ▸ hs
-
-Depends on / 依赖: compl_compl, mem_cofinite
+/-
+**Filter._root_.Set.Finite.compl_mem_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Set.Finite.compl_mem_cofinite {s : Set α} (hs : s.Finite) : sᶜ in @cofinite α :=
-mem_cofinite.2 (compl_compl s).symm ▸ hs
-
-/--
-theorem `_root_.Set.Finite.eventually_cofinite_notMem` / 定理 `_root_.Set.Finite.eventually_cofinite_notMem`
-
-English:
-theorem _root_.Set.Finite.eventually_cofinite_notMem
-  given: {s : Set α} (hs : s.Finite)
-  proof: hs.compl_mem_cofinite
-
-中文:
-定理 _root_.集合.有限.eventually_cofinite_notMem
-  条件: {s : 集合 α} (hs : s.有限)
-  证明: hs.compl_mem_cofinite
-
-Depends on / 依赖: compl_mem_cofinite, hs.compl_mem_cofinite
+theorem _root_.Set.Finite.compl_mem_cofinite {s : Set α} (hs : s.Finite) : sᶜ ∈ @cofinite α :=
+  mem_cofinite.2 <| (compl_compl s).symm ▸ hs
+/-
+**Filter._root_.Set.Finite.eventually_cofinite_notMem** 是 Mathlib 中的一个定理，位于命名空间 
+`Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Set.Finite.eventually_cofinite_notMem {s : Set α} (hs : s.Finite) :
-    forallᶠ x in cofinite, x ∉ s :=
+    ∀ᶠ x in cofinite, x ∉ s :=
   hs.compl_mem_cofinite
-
-/--
-theorem `_root_.Finset.eventually_cofinite_notMem` / 定理 `_root_.Finset.eventually_cofinite_notMem`
-
-English:
-theorem _root_.Finset.eventually_cofinite_notMem
-  given: (s : Finset α)
-  statement: forallᶠ x in cofinite, x ∉ s
-  proof: s.finite_toSet.eventually_cofinite_notMem
-
-中文:
-定理 _root_.有限集.eventually_cofinite_notMem
-  条件: (s : 有限集 α)
-  结论: 对任意ᶠ x in cofinite, x ∉ s
-  证明: s.finite_toSet.eventually_cofinite_notMem
-
-Depends on / 依赖: eventually_cofinite_notMem, finite_toSet, s.finite_toSet.eventually_cofinite_notMem
+/-
+**Filter._root_.Finset.eventually_cofinite_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Fil
+ter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Finset.eventually_cofinite_notMem (s : Finset α) : forallᶠ x in cofinite, x ∉ s :=
+theorem _root_.Finset.eventually_cofinite_notMem (s : Finset α) : ∀ᶠ x in cofinite, x ∉ s :=
   s.finite_toSet.eventually_cofinite_notMem
-
-/--
-theorem `_root_.Set.infinite_iff_frequently_cofinite` / 定理 `_root_.Set.infinite_iff_frequently_cofinite`
-
-English:
-theorem _root_.Set.infinite_iff_frequently_cofinite
-  given: {s : Set α}
-  proof: frequently_cofinite_iff_infinite.symm
-
-中文:
-定理 _root_.集合.infinite_iff_frequently_cofinite
-  条件: {s : 集合 α}
-  证明: frequently_cofinite_iff_infinite.symm
-
-Depends on / 依赖: frequently_cofinite_iff_infinite, frequently_cofinite_iff_infinite.symm
+/-
+**Filter._root_.Set.infinite_iff_frequently_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `
+Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Set.infinite_iff_frequently_cofinite {s : Set α} :
-    Set.Infinite s ↔ existsᶠ x in cofinite, x in s :=
+    Set.Infinite s ↔ ∃ᶠ x in cofinite, x ∈ s :=
   frequently_cofinite_iff_infinite.symm
-
-/--
-theorem `eventually_cofinite_ne` / 定理 `eventually_cofinite_ne`
-
-English:
-theorem eventually_cofinite_ne
-  given: (x : α)
-  statement: forallᶠ a in cofinite, a != x
-  proof: (Set.finite_singleton x).eventually_cofinite_notMem
-
-中文:
-定理 eventually_cofinite_ne
-  条件: (x : α)
-  结论: 对任意ᶠ a in cofinite, a != x
-  证明: (Set.finite_singleton x).eventually_cofinite_notMem
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.productMap, Algebra.smul_def, IsBaseChange, IsBaseChange.equiv_tmul, IsScalarTower, IsScalarTower.toAlgHom, Set.finite_singleton, TensorProduct, convert, e.toLinearMap.restrictScalars, equiv_t, equiv_tmul, eventually_cofinite_notMem, finite_singleton, h.symm, introv, map_mul, productMap, restrictScalars
+/-
+**Filter.eventually_cofinite_ne** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：eventually_cofinite_ne (x : α) : forallᶠ a in cofinite, a != x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.eventually_cofinite_notMem`：∀ {α : Type u_2} {s : Set α}, s.F
+inite → ∀ᶠ (x : α) in Filter.cofinite, x ∉ s
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
 -/
-theorem eventually_cofinite_ne (x : α) : forallᶠ a in cofinite, a != x :=
+theorem eventually_cofinite_ne (x : α) : ∀ᶠ a in cofinite, a ≠ x :=
   (Set.finite_singleton x).eventually_cofinite_notMem
-
-/--
-theorem `le_cofinite_iff_compl_singleton_mem` / 定理 `le_cofinite_iff_compl_singleton_mem`
-
-English:
-theorem le_cofinite_iff_compl_singleton_mem
-  statement: l <= cofinite ↔ forall x, {x}ᶜ in l
-  proof: by
-  refine ⟨fun h x => h (finite_singleton x).compl_mem_cofinite, fun h s (hs : sᶜ.Finite) => ?_⟩
-  rw [← compl_compl s]; rw [← biUnion_of_singleton sᶜ]; rw [compl_iUnion₂]; rw [Filter.biInter_mem hs]
-  exact fun x _ => h x
-
-中文:
-定理 le_cofinite_iff_compl_singleton_mem
-  结论: l <= cofinite ↔ 对任意 x, {x}ᶜ in l
-  证明: by
-  refine ⟨fun h x => h (finite_singleton x).compl_mem_cofinite, fun h s (hs : sᶜ.Finite) => ?_⟩
-  rw [← compl_compl s]; rw [← biUnion_of_singleton sᶜ]; rw [compl_iUnion₂]; rw [Filter.biInter_mem hs]
-  exact fun x _ => h x
-
-Depends on / 依赖: Filter, Filter.biInter_mem, Finite, biInter_mem, biUnion_of_singleton, compl_compl, compl_mem_cofinite, finite_singleton
+/-
+**Filter.le_cofinite_iff_compl_singleton_mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_cofinite_iff_compl_singleton_mem : l <= cofinite ↔ forall x, {x}ᶜ in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.compl_mem_cofinite`：∀ {α : Type u_2} {s : Set α}, s.Finite → 
+sᶜ ∈ Filter.cofinite
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `Set.compl_iUnion₂`：compl_iUnion₂ (s : forall i, κ i -> Set α) : (⋃ (i) (
+j), s i j)ᶜ = ⋂ (i) (j), (s i j)ᶜ
+· 使用定理 `Filter.biInter_mem`：biInter_mem {β : Type v} {s : β -> Set α} {is : Set 
+β} (hf : is.Finite) : (⋂ i in is, s i) in f ↔ forall i in is, s i in f
 -/
-theorem le_cofinite_iff_compl_singleton_mem : l <= cofinite ↔ forall x, {x}ᶜ in l := by
+theorem le_cofinite_iff_compl_singleton_mem : l ≤ cofinite ↔ ∀ x, {x}ᶜ ∈ l := by
   refine ⟨fun h x => h (finite_singleton x).compl_mem_cofinite, fun h s (hs : sᶜ.Finite) => ?_⟩
-  rw [← compl_compl s]; rw [← biUnion_of_singleton sᶜ]; rw [compl_iUnion₂]; rw [Filter.biInter_mem hs]
+  rw [← compl_compl s, ← biUnion_of_singleton sᶜ, compl_iUnion₂, Filter.biInter_mem hs]
   exact fun x _ => h x
-
-/--
-theorem `le_cofinite_iff_eventually_ne` / 定理 `le_cofinite_iff_eventually_ne`
-
-English:
-theorem le_cofinite_iff_eventually_ne
-  statement: l <= cofinite ↔ forall x, forallᶠ y in l, y != x
-  proof: le_cofinite_iff_compl_singleton_mem
-
-中文:
-定理 le_cofinite_iff_eventually_ne
-  结论: l <= cofinite ↔ 对任意 x, 对任意ᶠ y in l, y != x
-  证明: le_cofinite_iff_compl_singleton_mem
-
-Depends on / 依赖: le_cofinite_iff_compl_singleton_mem
+/-
+**Filter.le_cofinite_iff_eventually_ne** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_cofinite_iff_eventually_ne : l <= cofinite ↔ forall x, forallᶠ y in l, 
+y != x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_cofinite_iff_compl_singleton_mem`：le_cofinite_iff_compl_single
+ton_mem : l <= cofinite ↔ forall x, {x}ᶜ in l
 -/
-theorem le_cofinite_iff_eventually_ne : l <= cofinite ↔ forall x, forallᶠ y in l, y != x :=
+theorem le_cofinite_iff_eventually_ne : l ≤ cofinite ↔ ∀ x, ∀ᶠ y in l, y ≠ x :=
   le_cofinite_iff_compl_singleton_mem
 
-/--
-theorem `atTop_le_cofinite` / 定理 `atTop_le_cofinite`
+/-- If `α` is a preorder with no top element, then `atTop ≤ cofinite`. -/
+/-
+**Filter.atTop_le_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：atTop_le_cofinite [Preorder α] [NoTopOrder α] : (atTop : Filter α) <= cofi
+nite
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_cofinite_iff_eventually_ne`：le_cofinite_iff_eventually_ne : l 
+<= cofinite ↔ forall x, forallᶠ y in l, y != x
+· 使用定理 `Filter.eventually_ne_atTop`：eventually_ne_atTop [Preorder α] [NoTopOrder
+ α] (a : α) : forallᶠ x in atTop, x != a
 
-English:
-theorem atTop_le_cofinite
-  given: [Preorder α] [NoTopOrder α]
-  statement: (atTop : Filter α) <= cofinite
-  proof: le_cofinite_iff_eventually_ne.mpr eventually_ne_atTop
-
-中文:
-定理 atTop_le_cofinite
-  条件: [预序 α] [无顶序 α]
-  结论: (atTop : 滤子 α) <= cofinite
-  证明: le_cofinite_iff_eventually_ne.mpr eventually_ne_atTop
-
-Depends on / 依赖: eventually_ne_atTop, le_cofinite_iff_eventually_ne, le_cofinite_iff_eventually_ne.mpr
+--- 原说明 ---
+If `α` is a preorder with no top element, then `atTop ≤ cofinite`.
 -/
-theorem atTop_le_cofinite [Preorder α] [NoTopOrder α] : (atTop : Filter α) <= cofinite :=
+theorem atTop_le_cofinite [Preorder α] [NoTopOrder α] : (atTop : Filter α) ≤ cofinite :=
   le_cofinite_iff_eventually_ne.mpr eventually_ne_atTop
 
-/--
-theorem `atBot_le_cofinite` / 定理 `atBot_le_cofinite`
+/-- If `α` is a preorder with no bottom element, then `atBot ≤ cofinite`. -/
+/-
+**Filter.atBot_le_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：atBot_le_cofinite [Preorder α] [NoBotOrder α] : (atBot : Filter α) <= cofi
+nite
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_cofinite_iff_eventually_ne`：le_cofinite_iff_eventually_ne : l 
+<= cofinite ↔ forall x, forallᶠ y in l, y != x
+· 使用定理 `Filter.eventually_ne_atBot`：∀ {α : Type u_3} [inst : Preorder α] [NoBotO
+rder α] (a : α), ∀ᶠ (x : α) in Filter.atBot, x ≠ a
 
-English:
-theorem atBot_le_cofinite
-  given: [Preorder α] [NoBotOrder α]
-  statement: (atBot : Filter α) <= cofinite
-  proof: le_cofinite_iff_eventually_ne.mpr eventually_ne_atBot
-
-中文:
-定理 atBot_le_cofinite
-  条件: [预序 α] [无底序 α]
-  结论: (atBot : 滤子 α) <= cofinite
-  证明: le_cofinite_iff_eventually_ne.mpr eventually_ne_atBot
-
-Depends on / 依赖: eventually_ne_atBot, le_cofinite_iff_eventually_ne, le_cofinite_iff_eventually_ne.mpr
+--- 原说明 ---
+If `α` is a preorder with no bottom element, then `atBot ≤ cofinite`.
 -/
-theorem atBot_le_cofinite [Preorder α] [NoBotOrder α] : (atBot : Filter α) <= cofinite :=
+theorem atBot_le_cofinite [Preorder α] [NoBotOrder α] : (atBot : Filter α) ≤ cofinite :=
   le_cofinite_iff_eventually_ne.mpr eventually_ne_atBot
-
-/--
-theorem `comap_cofinite_le` / 定理 `comap_cofinite_le`
-
-English:
-theorem comap_cofinite_le
-  given: (f : α -> β)
-  statement: comap f cofinite <= cofinite
-  proof: le_cofinite_iff_eventually_ne.mpr fun x =>
-    mem_comap.2 ⟨{f x}ᶜ, (finite_singleton _).compl_mem_cofinite, fun _ => ne_of_apply_ne f⟩
-
-中文:
-定理 comap_cofinite_le
-  条件: (f : α -> β)
-  结论: comap f cofinite <= cofinite
-  证明: le_cofinite_iff_eventually_ne.mpr fun x =>
-    mem_comap.2 ⟨{f x}ᶜ, (finite_singleton _).compl_mem_cofinite, fun _ => ne_of_apply_ne f⟩
-
-Depends on / 依赖: compl_mem_cofinite, finite_singleton, le_cofinite_iff_eventually_ne, le_cofinite_iff_eventually_ne.mpr, mem_comap, ne_of_apply_ne
+/-
+**Filter.comap_cofinite_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：comap_cofinite_le (f : α -> β) : comap f cofinite <= cofinite
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_cofinite_iff_eventually_ne`：le_cofinite_iff_eventually_ne : l 
+<= cofinite ↔ forall x, forallᶠ y in l, y != x
+· 使用定理 `Filter.mem_comap`：∀ {α : Type u_1} {β : Type u_2} {g : Filter β} {m : α 
+→ β} {s : Set α}, s ∈ Filter.comap m g ↔ ∃ t ∈ g, m ⁻¹' t ⊆ s
+· 使用定理 `Set.Finite.compl_mem_cofinite`：∀ {α : Type u_2} {s : Set α}, s.Finite → 
+sᶜ ∈ Filter.cofinite
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
 -/
-theorem comap_cofinite_le (f : α -> β) : comap f cofinite <= cofinite :=
+theorem comap_cofinite_le (f : α → β) : comap f cofinite ≤ cofinite :=
   le_cofinite_iff_eventually_ne.mpr fun x =>
     mem_comap.2 ⟨{f x}ᶜ, (finite_singleton _).compl_mem_cofinite, fun _ => ne_of_apply_ne f⟩
 
-/--
-theorem `coprod_cofinite` / 定理 `coprod_cofinite`
+/-- The coproduct of the cofinite filters on two types is the cofinite filter on their product. -/
+/-
+**Filter.coprod_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：coprod_cofinite : (cofinite : Filter α).coprod (cofinite : Filter β) = cof
+inite
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.coext`：∀ {α : Type u} {f g : Filter α}, (∀ (s : Set α), sᶜ ∈ f ↔ 
+sᶜ ∈ g) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem coprod_cofinite
-  statement: (cofinite : Filter α).coprod (cofinite : Filter β) = cofinite
-  proof: Filter.coext fun s => by
-    simp only [compl_mem_coprod, mem_cofinite, compl_compl, finite_image_fst_and_snd_iff]
-
-中文:
-定理 coprod_cofinite
-  结论: (cofinite : 滤子 α).coprod (cofinite : 滤子 β) = cofinite
-  证明: Filter.coext fun s => by
-    simp only [compl_mem_coprod, mem_cofinite, compl_compl, finite_image_fst_and_snd_iff]
-
-Depends on / 依赖: Filter, Filter.coext, compl_compl, compl_mem_coprod, finite_image_fst_and_snd_iff, mem_cofinite
+--- 原说明 ---
+The coproduct of the cofinite filters on two types is the cofinite filter on the
+ir product.
 -/
 theorem coprod_cofinite : (cofinite : Filter α).coprod (cofinite : Filter β) = cofinite :=
   Filter.coext fun s => by
     simp only [compl_mem_coprod, mem_cofinite, compl_compl, finite_image_fst_and_snd_iff]
-
-/--
-theorem `coprodᵢ_cofinite` / 定理 `coprodᵢ_cofinite`
-
-English:
-theorem coprodᵢ_cofinite
-  given: {α : ι -> Type*} [Finite ι]
-  proof: Filter.coext fun s => by
-    simp only [compl_mem_coprodᵢ, mem_cofinite, compl_compl, forall_finite_image_eval_iff]
-
-中文:
-定理 coprodᵢ_cofinite
-  条件: {α : ι -> 类型} [有限 ι]
-  证明: Filter.coext fun s => by
-    simp only [compl_mem_coprodᵢ, mem_cofinite, compl_compl, forall_finite_image_eval_iff]
-
-Depends on / 依赖: Filter, Filter.coext, compl_compl, forall_finite_image_eval_iff, mem_cofinite
+/-
+**Filter.coprod** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Filter α → Filter β → Filter (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coprodᵢ_cofinite {α : ι -> Type*} [Finite ι] :
+theorem coprodᵢ_cofinite {α : ι → Type*} [Finite ι] :
     (Filter.coprodᵢ fun i => (cofinite : Filter (α i))) = cofinite :=
   Filter.coext fun s => by
     simp only [compl_mem_coprodᵢ, mem_cofinite, compl_compl, forall_finite_image_eval_iff]
-
-/--
-theorem `disjoint_cofinite_left` / 定理 `disjoint_cofinite_left`
-
-English:
-theorem disjoint_cofinite_left
-  statement: Disjoint cofinite l ↔ exists s in l, Set.Finite s
-  proof: by
-  simp [l.basis_sets.disjoint_iff_right]
-
-中文:
-定理 disjoint_cofinite_left
-  结论: Disjoint cofinite l ↔ 存在 s in l, 集合.有限 s
-  证明: by
-  simp [l.basis_sets.disjoint_iff_right]
-
-Depends on / 依赖: basis_sets, disjoint_iff_right, l.basis_sets.disjoint_iff_right
+/-
+**Filter.disjoint_cofinite_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_cofinite_left : Disjoint cofinite l ↔ exists s in l, Set.Finite s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.disjoint_iff_right`：∀ {α : Type u_1} {ι : Sort u_4} {l l
+' : Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → (Disjoint l' l 
+↔ ∃ i, p i ∧ (s i)ᶜ ∈ l'…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem disjoint_cofinite_left : Disjoint cofinite l ↔ exists s in l, Set.Finite s := by
+theorem disjoint_cofinite_left : Disjoint cofinite l ↔ ∃ s ∈ l, Set.Finite s := by
   simp [l.basis_sets.disjoint_iff_right]
-
-/--
-theorem `disjoint_cofinite_right` / 定理 `disjoint_cofinite_right`
-
-English:
-theorem disjoint_cofinite_right
-  statement: Disjoint l cofinite ↔ exists s in l, Set.Finite s
-  proof: disjoint_comm.trans disjoint_cofinite_left
-
-中文:
-定理 disjoint_cofinite_right
-  结论: Disjoint l cofinite ↔ 存在 s in l, 集合.有限 s
-  证明: disjoint_comm.trans disjoint_cofinite_left
-
-Depends on / 依赖: disjoint_cofinite_left, disjoint_comm, disjoint_comm.trans
+/-
+**Filter.disjoint_cofinite_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_cofinite_right : Disjoint l cofinite ↔ exists s in l, Set.Finite 
+s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `Filter.disjoint_cofinite_left`：disjoint_cofinite_left : Disjoint cofinit
+e l ↔ exists s in l, Set.Finite s
 -/
-theorem disjoint_cofinite_right : Disjoint l cofinite ↔ exists s in l, Set.Finite s :=
+theorem disjoint_cofinite_right : Disjoint l cofinite ↔ ∃ s ∈ l, Set.Finite s :=
   disjoint_comm.trans disjoint_cofinite_left
 
-/--
-theorem `countable_compl_ker` / 定理 `countable_compl_ker`
+/-- If `l ≥ Filter.cofinite` is a countably generated filter, then `l.ker` is cocountable. -/
+/-
+**Filter.countable_compl_ker** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：countable_compl_ker [l.IsCountablyGenerated] (h : cofinite <= l) : Set.Cou
+ntable l.kerᶜ
+参数：h : cofinite <= l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_antitone_basis`：exists_antitone_basis (f : Filter α) [f.Is
+CountablyGenerated] : exists x : Nat -> Set α, f.HasAntitoneBasis x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Filter.HasBasis.ker`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} {p :
+ ι → Prop} {s : ι → Set α},   l.HasBasis p s → l.ker = ⋂ i, ⋂ (_ : p i), s i
+· 使用定理 `Filter.HasAntitoneBasis.toHasBasis`：∀ {α : Type u_1} {ι'' : Type u_6} [i
+nst : Preorder ι''] {l : Filter α} {s : ι'' → Set α},   l.HasAntitoneBasis s → l
+.HasBasis (fun x => True…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_true`：iInter_true {s : True -> Set α} : iInter s = s trivial
+· 使用定理 `Set.compl_iInter`：compl_iInter (s : ι -> Set β) : (⋂ i, s i)ᶜ = ⋃ i, (s 
+i)ᶜ
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用定理 `Filter.HasAntitoneBasis.mem`：∀ {α : Type u_1} {ι : Type u_4} [inst : Pre
+order ι] {l : Filter α} {s : ι → Set α},   l.HasAntitoneBasis s → ∀ (i : ι), s i
+ ∈ l
 
-English:
-theorem countable_compl_ker
-  given: [l.IsCountablyGenerated] (h : cofinite <= l)
-  statement: Set.Countable l.kerᶜ
-  proof: by
-  rcases exists_antitone_basis l with ⟨s, hs⟩
-  simp only [hs.ker, iInter_true, compl_iInter]
-exact countable_iUnion fun n => Set.Finite.countable h hs.mem _
-
-中文:
-定理 countable_compl_ker
-  条件: [l.是余untablyGenerated] (h : cofinite <= l)
-  结论: 集合.可数 l.kerᶜ
-  证明: by
-  rcases exists_antitone_basis l with ⟨s, hs⟩
-  simp only [hs.ker, iInter_true, compl_iInter]
-exact countable_iUnion fun n => Set.Finite.countable h hs.mem _
-
-Depends on / 依赖: Finite, Set.Finite.countable, compl_iInter, countable, countable_iUnion, exists_antitone_basis, hs.ker, hs.mem, iInter_true
+--- 原说明 ---
+If `l ≥ Filter.cofinite` is a countably generated filter, then `l.ker` is cocoun
+table.
 -/
-theorem countable_compl_ker [l.IsCountablyGenerated] (h : cofinite <= l) : Set.Countable l.kerᶜ := by
+theorem countable_compl_ker [l.IsCountablyGenerated] (h : cofinite ≤ l) : Set.Countable l.kerᶜ := by
   rcases exists_antitone_basis l with ⟨s, hs⟩
   simp only [hs.ker, iInter_true, compl_iInter]
-exact countable_iUnion fun n => Set.Finite.countable h hs.mem _
+  exact countable_iUnion fun n ↦ Set.Finite.countable <| h <| hs.mem _
 
-/--
-theorem `Tendsto.countable_compl_preimage_ker` / 定理 `Tendsto.countable_compl_preimage_ker`
+/-- If `f` tends to a countably generated filter `l` along `Filter.cofinite`,
+then for all but countably many elements, `f x ∈ l.ker`. -/
+/-
+**Filter.Tendsto.countable_compl_preimage_ker** 是 Mathlib 中的一个定理，位于命名空间 `Filter.
+Tendsto`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {f : α → β} {l : Filter β} [l.IsCountablyG
+enerated],   Filter.Tendsto f Filter.cofinite l → (f ⁻¹' l.ker)ᶜ.Countable
+参数：f ⁻¹' l.ker。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.ker_comap`：∀ {α : Type u_2} {β : Type u_3} (m : α → β) (f : Filte
+r β), (Filter.comap m f).ker = m ⁻¹' f.ker
+· 使用定理 `Filter.countable_compl_ker`：countable_compl_ker [l.IsCountablyGenerated]
+ (h : cofinite <= l) : Set.Countable l.kerᶜ
+· 使用定理 `Filter.comap.isCountablyGenerated`：∀ {α : Type u_1} {β : Type u_2} (l : 
+Filter β) [l.IsCountablyGenerated] (f : α → β),   (Filter.comap f l).IsCountably
+Generated
+· 使用定理 `Filter.Tendsto.le_comap`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁
+ : Filter α} {l₂ : Filter β},   Filter.Tendsto f l₁ l₂ → l₁ ≤ Filter.comap f l₂
 
-English:
-theorem Tendsto.countable_compl_preimage_ker
-  statement: {f : α -> β}
-  proof: by rw [← ker_comap]; exact countable_compl_ker h.le_comap
-
-中文:
-定理 收敛.countable_compl_preimage_ker
-  结论: {f : α -> β}
-  证明: by rw [← ker_comap]; exact countable_compl_ker h.le_comap
-
-Depends on / 依赖: countable_compl_ker, h.le_comap, ker_comap, le_comap
+--- 原说明 ---
+If `f` tends to a countably generated filter `l` along `Filter.cofinite`,
+then for all but countably many elements, `f x ∈ l.ker`.
 -/
-theorem Tendsto.countable_compl_preimage_ker {f : α -> β}
+theorem Tendsto.countable_compl_preimage_ker {f : α → β}
     {l : Filter β} [l.IsCountablyGenerated] (h : Tendsto f cofinite l) :
     Set.Countable (f ⁻¹' l.ker)ᶜ := by rw [← ker_comap]; exact countable_compl_ker h.le_comap
 
-/--
-theorem `univ_pi_mem_pi` / 定理 `univ_pi_mem_pi`
+/-- Given a collection of filters `l i : Filter (α i)` and sets `s i ∈ l i`,
+if all but finitely many of `s i` are the whole space,
+then their indexed product `Set.pi Set.univ s` belongs to the filter `Filter.pi l`. -/
+/-
+**Filter.univ_pi_mem_pi** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：univ_pi_mem_pi {α : ι -> Type*} {s : forall i, Set (α i)} {l : forall i, F
+ilter (α i)} (h : forall i, s i in l i) (hfin : forallᶠ i in cofinite, s i = uni
+v) : univ.pi s in pi l
+参数：α i；α i；h : forall i, s i in l i；hfin : forallᶠ i in cofinite, s i = univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.pi_mem_pi`：pi_mem_pi {I : Set ι} (hI : I.Finite) (h : forall i in
+ I, s i in f i) : I.pi s in pi f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem univ_pi_mem_pi
-  statement: {α : ι -> Type*} {s : forall i, Set (α i)} {l : forall i, Filter (α i)}
-  proof: by
-  filter_upwards [pi_mem_pi hfin fun i _ => h i] with a ha i _
+--- 原说明 ---
+Given a collection of filters `l i : Filter (α i)` and sets `s i ∈ l i`,
+if all but finitely many of `s i` are the whole space,
+then their indexed product `Set.pi Set.univ s` belongs to the filter `Filter.pi 
+l`.
+-/
+theorem univ_pi_mem_pi {α : ι → Type*} {s : ∀ i, Set (α i)} {l : ∀ i, Filter (α i)}
+    (h : ∀ i, s i ∈ l i) (hfin : ∀ᶠ i in cofinite, s i = univ) : univ.pi s ∈ pi l := by
+  filter_upwards [pi_mem_pi hfin fun i _ ↦ h i] with a ha i _
   if hi : s i = univ then
     simp [hi]
   else
     exact ha i hi
 
-中文:
-定理 univ_pi_mem_pi
-  结论: {α : ι -> 类型} {s : 对任意 i, 集合 (α i)} {l : 对任意 i, 滤子 (α i)}
-  证明: by
-  filter_upwards [pi_mem_pi hfin fun i _ => h i] with a ha i _
-  if hi : s i = univ then
-    simp [hi]
-  else
-    exact ha i hi
+/-- Given a family of maps `f i : α i → β i` and a family of filters `l i : Filter (α i)`,
+if all but finitely many of `f i` are surjective,
+then the indexed product of `f i`s maps the indexed product of the filters `l i`
+to the indexed products of their pushforwards under individual `f i`s.
 
-Depends on / 依赖: filter_upwards, pi_mem_pi
+See also `map_piMap_pi_finite` for the case of a finite index type.
 -/
-theorem univ_pi_mem_pi {α : ι -> Type*} {s : forall i, Set (α i)} {l : forall i, Filter (α i)}
-    (h : forall i, s i in l i) (hfin : forallᶠ i in cofinite, s i = univ) : univ.pi s in pi l := by
-  filter_upwards [pi_mem_pi hfin fun i _ => h i] with a ha i _
-  if hi : s i = univ then
-    simp [hi]
-  else
-    exact ha i hi
+/-
+**Filter.map_piMap_pi** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：map_piMap_pi {α β : ι -> Type*} {f : forall i, α i -> β i} (hf : forallᶠ i
+ in cofinite, Surjective (f i)) (l : forall i, Filter (α i)) : map (Pi.map f) (p
+i l) = pi fun i => map (f i) (l i)
+参数：hf : forallᶠ i in cofinite, Surjective (f i)；l : forall i, Filter (α i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Filter.tendsto_piMap_pi`：tendsto_piMap_pi {β : ι -> Type*} {f : forall i
+, α i -> β i} {l : forall i, Filter (α i)} {l' : forall i, Filter (β i)} (h : fo
+rall i, Tends…
+· 使用定理 `Filter.tendsto_map`：tendsto_map {f : α -> β} {x : Filter α} : Tendsto f 
+x (map f x)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `Filter.hasBasis_pi`：hasBasis_pi {ι' : ι -> Type*} {s : forall i, ι' i ->
+ Set (α i)} {p : forall i, ι' i -> Prop} (h : forall i, (f i).HasBasis (p i) (s 
+i)) : (p…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.univ_pi_piecewise_univ`：univ_pi_piecewise_univ {ι : Type*} {α : ι ->
+ Type*} (s : Set ι) (t : forall i, Set (α i)) [forall x, Decidable (x in s)] : p
+i univ (s.piecew…
+· 使用定理 `Set.piMap_image_univ_pi`：piMap_image_univ_pi (f : forall i, α i -> β i) 
+(t : forall i, Set (α i)) : Pi.map f '' univ.pi t = univ.pi fun i => f i '' t i
+· 使用定理 `Filter.univ_pi_mem_pi`：univ_pi_mem_pi {α : ι -> Type*} {s : forall i, Se
+t (α i)} {l : forall i, Filter (α i)} (h : forall i, s i in l i) (hfin : forallᶠ
+ i in cofin…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.piecewise_eq_of_mem`：piecewise_eq_of_mem {i : α} (hi : i in s) : s.p
+iecewise f g i = f i
+· 使用定理 `Filter.image_mem_map`：image_mem_map (hs : s in f) : m '' s in map m f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.piecewise_eq_of_notMem`：piecewise_eq_of_notMem {i : α} (hi : i ∉ s) 
+: s.piecewise f g i = g i
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.preimage_range`：preimage_range (f : α -> β) : f ⁻¹' range f = univ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Set.Finite.compl_mem_cofinite`：∀ {α : Type u_2} {s : Set α}, s.Finite → 
+sᶜ ∈ Filter.cofinite
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-/--
-theorem `map_piMap_pi` / 定理 `map_piMap_pi`
+--- 原说明 ---
+Given a family of maps `f i : α i → β i` and a family of filters `l i : Filter (
+α i)`,
+if all but finitely many of `f i` are surjective,
+then the indexed product of `f i`s maps the indexed product of the filters `l i`
+to the indexed products of their pushforwards under individual `f i`s.
 
-English:
-theorem map_piMap_pi
-  statement: {α β : ι -> Type*} {f : forall i, α i -> β i}
-  proof: by
-  refine le_antisymm (tendsto_piMap_pi fun _ => tendsto_map) ?_
-  refine ((hasBasis_pi fun i => (l i).basis_sets).map _).ge_iff.2 ?_
-  rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : forall i in I, s i in l i⟩
+See also `map_piMap_pi_finite` for the case of a finite index type.
+-/
+theorem map_piMap_pi {α β : ι → Type*} {f : ∀ i, α i → β i}
+    (hf : ∀ᶠ i in cofinite, Surjective (f i)) (l : ∀ i, Filter (α i)) :
+    map (Pi.map f) (pi l) = pi fun i ↦ map (f i) (l i) := by
+  refine le_antisymm (tendsto_piMap_pi fun _ ↦ tendsto_map) ?_
+  refine ((hasBasis_pi fun i ↦ (l i).basis_sets).map _).ge_iff.2 ?_
+  rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : ∀ i ∈ I, s i ∈ l i⟩
   classical
-  rw [← univ_pi_piecewise_univ]; rw [piMap_image_univ_pi]
-  refine univ_pi_mem_pi (fun i => ?_) ?_
-  · by_cases hi : i in I
+  rw [← univ_pi_piecewise_univ, piMap_image_univ_pi]
+  refine univ_pi_mem_pi (fun i ↦ ?_) ?_
+  · by_cases hi : i ∈ I
     · simpa [hi] using image_mem_map (hs i hi)
     · simp [hi]
   · filter_upwards [hf, hI.compl_mem_cofinite] with i hsurj (hiI : i ∉ I)
     simp [hiI, hsurj.range_eq]
 
-中文:
-定理 map_piMap_pi
-  结论: {α β : ι -> 类型} {f : 对任意 i, α i -> β i}
-  证明: by
-  refine le_antisymm (tendsto_piMap_pi fun _ => tendsto_map) ?_
-  refine ((hasBasis_pi fun i => (l i).basis_sets).map _).ge_iff.2 ?_
-  rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : forall i in I, s i in l i⟩
-  classical
-  rw [← univ_pi_piecewise_univ]; rw [piMap_image_univ_pi]
-  refine univ_pi_mem_pi (fun i => ?_) ?_
-  · by_cases hi : i in I
-    · simpa [hi] using image_mem_map (hs i hi)
-    · simp [hi]
-  · filter_upwards [hf, hI.compl_mem_cofinite] with i hsurj (hiI : i ∉ I)
-    simp [hiI, hsurj.range_eq]
+/-- Given finite families of maps `f i : α i → β i` and of filters `l i : Filter (α i)`,
+the indexed product of `f i`s maps the indexed product of the filters `l i`
+to the indexed products of their pushforwards under individual `f i`s.
 
-Depends on / 依赖: Finite, I.Finite, basis_sets, classical, compl_mem_cofinite, filter_upwards, ge_iff, hI.compl_mem_cofinite, hasBasis_pi, hsurj.range_eq, image_mem_map, le_antisymm, piMap_image_univ_pi, range_eq, tendsto_map, tendsto_piMap_pi, univ_pi_mem_pi, univ_pi_piecewise_univ
+See also `map_piMap_pi` for a more general case.
 -/
-theorem map_piMap_pi {α β : ι -> Type*} {f : forall i, α i -> β i}
-    (hf : forallᶠ i in cofinite, Surjective (f i)) (l : forall i, Filter (α i)) :
-    map (Pi.map f) (pi l) = pi fun i => map (f i) (l i) := by
-  refine le_antisymm (tendsto_piMap_pi fun _ => tendsto_map) ?_
-  refine ((hasBasis_pi fun i => (l i).basis_sets).map _).ge_iff.2 ?_
-  rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : forall i in I, s i in l i⟩
-  classical
-  rw [← univ_pi_piecewise_univ]; rw [piMap_image_univ_pi]
-  refine univ_pi_mem_pi (fun i => ?_) ?_
-  · by_cases hi : i in I
-    · simpa [hi] using image_mem_map (hs i hi)
-    · simp [hi]
-  · filter_upwards [hf, hI.compl_mem_cofinite] with i hsurj (hiI : i ∉ I)
-    simp [hiI, hsurj.range_eq]
+/-
+**Filter.map_piMap_pi_finite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：map_piMap_pi_finite {α β : ι -> Type*} [Finite ι] (f : forall i, α i -> β 
+i) (l : forall i, Filter (α i)) : map (Pi.map f) (pi l) = pi fun i => map (f i) 
+(l i)
+参数：f : forall i, α i -> β i；l : forall i, Filter (α i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_piMap_pi`：map_piMap_pi {α β : ι -> Type*} {f : forall i, α i 
+-> β i} (hf : forallᶠ i in cofinite, Surjective (f i)) (l : forall i, Filter (α 
+i)) : map…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.cofinite_eq_bot`：cofinite_eq_bot [Finite α] : @cofinite α = ⊥
 
-/--
-theorem `map_piMap_pi_finite` / 定理 `map_piMap_pi_finite`
+--- 原说明 ---
+Given finite families of maps `f i : α i → β i` and of filters `l i : Filter (α 
+i)`,
+the indexed product of `f i`s maps the indexed product of the filters `l i`
+to the indexed products of their pushforwards under individual `f i`s.
 
-English:
-theorem map_piMap_pi_finite
-  statement: {α β : ι -> Type*} [Finite ι]
-  proof: map_piMap_pi (by simp) l
-
-中文:
-定理 map_piMap_pi_finite
-  结论: {α β : ι -> 类型} [有限 ι]
-  证明: map_piMap_pi (by simp) l
-
-Depends on / 依赖: map_piMap_pi
+See also `map_piMap_pi` for a more general case.
 -/
-theorem map_piMap_pi_finite {α β : ι -> Type*} [Finite ι]
-    (f : forall i, α i -> β i) (l : forall i, Filter (α i)) :
-    map (Pi.map f) (pi l) = pi fun i => map (f i) (l i) :=
+theorem map_piMap_pi_finite {α β : ι → Type*} [Finite ι]
+    (f : ∀ i, α i → β i) (l : ∀ i, Filter (α i)) :
+    map (Pi.map f) (pi l) = pi fun i ↦ map (f i) (l i) :=
   map_piMap_pi (by simp) l
 
 end Filter
 
 open Filter
 
-/--
-lemma `Set.Finite.cofinite_inf_principal_compl` / 引理 `Set.Finite.cofinite_inf_principal_compl`
-
-English:
-lemma Set.Finite.cofinite_inf_principal_compl
-  given: {s : Set α} (hs : s.Finite)
-  proof: by
-  simpa using hs.compl_mem_cofinite
-
-中文:
-引理 集合.有限.cofinite_inf_principal_compl
-  条件: {s : 集合 α} (hs : s.有限)
-  证明: by
-  simpa using hs.compl_mem_cofinite
-
-Depends on / 依赖: compl_mem_cofinite, hs.compl_mem_cofinite
+/-
+**Set.Finite.cofinite_inf_principal_compl** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Set.Finite.cofinite_inf_principal_compl {s : Set α} (hs : s.Finite) : cofi
+nite ⊓ 𝓟 sᶜ = cofinite
+参数：hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Set.Finite.compl_mem_cofinite`：∀ {α : Type u_2} {s : Set α}, s.Finite → 
+sᶜ ∈ Filter.cofinite
 -/
 lemma Set.Finite.cofinite_inf_principal_compl {s : Set α} (hs : s.Finite) :
     cofinite ⊓ 𝓟 sᶜ = cofinite := by
   simpa using hs.compl_mem_cofinite
-
-/--
-lemma `Set.Finite.cofinite_inf_principal_sdiff` / 引理 `Set.Finite.cofinite_inf_principal_sdiff`
-
-English:
-lemma Set.Finite.cofinite_inf_principal_sdiff
-  given: {s t : Set α} (ht : t.Finite)
-  proof: by
-  rw [sdiff_eq]; rw [← inf_principal]; rw [← inf_assoc]; rw [inf_right_comm]; rw [ht.cofinite_inf_principal_compl]
-
-@[deprecated (since := "2026-06-03")]
-alias Set.Finite.cofinite_inf_principal_diff := Set.Finite.cofinite_inf_principal_sdiff
-
-中文:
-引理 集合.有限.cofinite_inf_principal_sdiff
-  条件: {s t : 集合 α} (ht : t.有限)
-  证明: by
-  rw [sdiff_eq]; rw [← inf_principal]; rw [← inf_assoc]; rw [inf_right_comm]; rw [ht.cofinite_inf_principal_compl]
-
-@[deprecated (since := "2026-06-03")]
-alias Set.Finite.cofinite_inf_principal_diff := Set.Finite.cofinite_inf_principal_sdiff
-
-Depends on / 依赖: cofinite_inf_principal_compl, ht.cofinite_inf_principal_compl, inf_assoc, inf_principal, inf_right_comm, sdiff_eq
+/-
+**Set.Finite.cofinite_inf_principal_sdiff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Set.Finite.cofinite_inf_principal_sdiff {s t : Set α} (ht : t.Finite) : co
+finite ⊓ 𝓟 (s \ t) = cofinite ⊓ 𝓟 s
+参数：ht : t.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.inf_principal`：inf_principal {s t : Set α} : 𝓟 s ⊓ 𝓟 t = 𝓟 (s int
+er t)
+· 使用定理 `inf_assoc`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : α), a ⊓ b ⊓
+ c = a ⊓ (b ⊓ c)
+· 使用定理 `inf_right_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : α), a 
+⊓ b ⊓ c = a ⊓ c ⊓ b
+· 使用引理 `Set.Finite.cofinite_inf_principal_compl`：Set.Finite.cofinite_inf_princip
+al_compl {s : Set α} (hs : s.Finite) : cofinite ⊓ 𝓟 sᶜ = cofinite
 -/
 lemma Set.Finite.cofinite_inf_principal_sdiff {s t : Set α} (ht : t.Finite) :
     cofinite ⊓ 𝓟 (s \ t) = cofinite ⊓ 𝓟 s := by
-  rw [sdiff_eq]; rw [← inf_principal]; rw [← inf_assoc]; rw [inf_right_comm]; rw [ht.cofinite_inf_principal_compl]
+  rw [sdiff_eq, ← inf_principal, ← inf_assoc, inf_right_comm, ht.cofinite_inf_principal_compl]
 
 @[deprecated (since := "2026-06-03")]
 alias Set.Finite.cofinite_inf_principal_diff := Set.Finite.cofinite_inf_principal_sdiff
 
-/--
-theorem `Nat.cofinite_eq_atTop` / 定理 `Nat.cofinite_eq_atTop`
+/-- For natural numbers the filters `Filter.cofinite` and `Filter.atTop` coincide. -/
+/-
+**Nat.cofinite_eq_atTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.cofinite_eq_atTop : @cofinite Nat = atTop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `Filter.atTop_basis`：atTop_basis [Nonempty α] : (@atTop α _).HasBasis (fu
+n _ => True) Ici
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.compl_Ici`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ici
+ a)ᶜ = Set.Iio a
+· 使用定理 `Set.finite_lt_nat`：finite_lt_nat (n : Nat) : Set.Finite { i | i < n }
+· 使用定理 `Filter.atTop_le_cofinite`：atTop_le_cofinite [Preorder α] [NoTopOrder α] 
+: (atTop : Filter α) <= cofinite
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
 
-English:
-theorem Nat.cofinite_eq_atTop
-  statement: @cofinite Nat = atTop
-  proof: by
+--- 原说明 ---
+For natural numbers the filters `Filter.cofinite` and `Filter.atTop` coincide.
+-/
+theorem Nat.cofinite_eq_atTop : @cofinite ℕ = atTop := by
   refine le_antisymm ?_ atTop_le_cofinite
   refine atTop_basis.ge_iff.2 fun N _ => ?_
   simpa only [mem_cofinite, compl_Ici] using! finite_lt_nat N
-
-中文:
-定理 自然数.cofinite_eq_atTop
-  结论: @cofinite 自然数 = atTop
-  证明: by
-  refine le_antisymm ?_ atTop_le_cofinite
-  refine atTop_basis.ge_iff.2 fun N _ => ?_
-  simpa only [mem_cofinite, compl_Ici] using! finite_lt_nat N
-
-Depends on / 依赖: atTop_basis, atTop_basis.ge_iff, atTop_le_cofinite, compl_Ici, finite_lt_nat, ge_iff, le_antisymm, mem_cofinite
+/-
+**Nat.frequently_atTop_iff_infinite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.frequently_atTop_iff_infinite {p : Nat -> Prop} : (existsᶠ n in atTop,
+ p n) ↔ Set.Infinite { n | p n }
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cofinite_eq_atTop`：Nat.cofinite_eq_atTop : @cofinite Nat = atTop
+· 使用定理 `Filter.frequently_cofinite_iff_infinite`：frequently_cofinite_iff_infinit
+e {p : α -> Prop} : (existsᶠ x in cofinite, p x) ↔ Set.Infinite { x | p x }
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Nat.cofinite_eq_atTop : @cofinite Nat = atTop := by
-  refine le_antisymm ?_ atTop_le_cofinite
-  refine atTop_basis.ge_iff.2 fun N _ => ?_
-  simpa only [mem_cofinite, compl_Ici] using! finite_lt_nat N
-
-/--
-theorem `Nat.frequently_atTop_iff_infinite` / 定理 `Nat.frequently_atTop_iff_infinite`
-
-English:
-theorem Nat.frequently_atTop_iff_infinite
-  given: {p : Nat -> Prop}
-  proof: by
-  rw [← Nat.cofinite_eq_atTop]; rw [frequently_cofinite_iff_infinite]
-
-中文:
-定理 自然数.frequently_atTop_iff_infinite
-  条件: {p : 自然数 -> 命题}
-  证明: by
-  rw [← Nat.cofinite_eq_atTop]; rw [frequently_cofinite_iff_infinite]
-
-Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, frequently_cofinite_iff_infinite
+theorem Nat.frequently_atTop_iff_infinite {p : ℕ → Prop} :
+    (∃ᶠ n in atTop, p n) ↔ Set.Infinite { n | p n } := by
+  rw [← Nat.cofinite_eq_atTop, frequently_cofinite_iff_infinite]
+/-
+**Nat.eventually_pos** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Nat.eventually_pos : forallᶠ (k : Nat) in Filter.atTop, 0 < k
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_of_mem`：eventually_of_mem {f : Filter α} {P : α -> Pro
+p} {U : Set α} (hU : U in f) (h : forall x in U, P x) : forallᶠ x in f, P x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.mem_atTop_sets`：mem_atTop_sets {s : Set α} : s in (atTop : Filter
+ α) ↔ exists a : α, forall b, a <= b -> b in s
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-theorem Nat.frequently_atTop_iff_infinite {p : Nat -> Prop} :
-    (existsᶠ n in atTop, p n) ↔ Set.Infinite { n | p n } := by
-  rw [← Nat.cofinite_eq_atTop]; rw [frequently_cofinite_iff_infinite]
-
-/--
-lemma `Nat.eventually_pos` / 引理 `Nat.eventually_pos`
-
-English:
-lemma Nat.eventually_pos
-  statement: forallᶠ (k : Nat) in Filter.atTop, 0 < k
-  proof: Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx => hx⟩) (fun _ hx => hx)
-
-中文:
-引理 自然数.eventually_pos
-  结论: 对任意ᶠ (k : 自然数) in 滤子.atTop, 0 < k
-  证明: Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx => hx⟩) (fun _ hx => hx)
-
-Depends on / 依赖: Filter, Filter.eventually_of_mem, Filter.mem_atTop_sets.mpr, eventually_of_mem, mem_atTop_sets
--/
-lemma Nat.eventually_pos : forallᶠ (k : Nat) in Filter.atTop, 0 < k :=
-  Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx => hx⟩) (fun _ hx => hx)
-
-/--
-theorem `Filter.Tendsto.exists_within_forall_le` / 定理 `Filter.Tendsto.exists_within_forall_le`
-
-English:
-theorem Filter.Tendsto.exists_within_forall_le
-  statement: {α β : Type*} [LinearOrder β] {s : Set α}
-  proof: by
-  by_cases! all_top : exists y in s, exists x, f y < x
-  · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
-    rcases all_top with ⟨y, hys, x, hx⟩
-    have : { y | ¬x <= f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
-    simp only [not_le] at this
-    obtain ⟨a₀, ⟨ha₀ : f a₀ < x, ha₀s⟩, others_bigger⟩ :=
-      exists_min_image _ f (this.inter_of_left s) ⟨y, hx, hys⟩
-    refine ⟨a₀, ha₀s, fun a has => (lt_or_ge (f a) x).elim ?_ (le_trans ha₀.le)⟩
-    exact fun h => others_bigger a ⟨h, has⟩
-  · -- in this case, f is constant because all values are at top
-    obtain ⟨a₀, ha₀s⟩ := hs
-    exact ⟨a₀, ha₀s, fun a ha => all_top a ha (f a₀)⟩
-
-中文:
-定理 滤子.收敛.存在_within_对任意_le
-  结论: {α β : 类型} [线性序 β] {s : 集合 α}
-  证明: by
-  by_cases! all_top : exists y in s, exists x, f y < x
-  · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
-    rcases all_top with ⟨y, hys, x, hx⟩
-    have : { y | ¬x <= f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
-    simp only [not_le] at this
-    obtain ⟨a₀, ⟨ha₀ : f a₀ < x, ha₀s⟩, others_bigger⟩ :=
-      exists_min_image _ f (this.inter_of_left s) ⟨y, hx, hys⟩
-    refine ⟨a₀, ha₀s, fun a has => (lt_or_ge (f a) x).elim ?_ (le_trans ha₀.le)⟩
-    exact fun h => others_bigger a ⟨h, has⟩
-  · -- in this case, f is constant because all values are at top
-    obtain ⟨a₀, ha₀s⟩ := hs
-    exact ⟨a₀, ha₀s, fun a ha => all_top a ha (f a₀)⟩
-
-Depends on / 依赖: Filter, Filter.eventually_cofinite.mp, Finite, all_top, eventually_cofinite, exists_min_image, finite, inter_of_left, le_trans, lt_or_ge, nonempty, not_le, others_bigger, points, tendsto_atTop, this.inter_of_left
+lemma Nat.eventually_pos : ∀ᶠ (k : ℕ) in Filter.atTop, 0 < k :=
+  Filter.eventually_of_mem (Filter.mem_atTop_sets.mpr ⟨1, fun _ hx ↦ hx⟩) (fun _ hx ↦ hx)
+/-
+**Filter.Tendsto.exists_within_forall_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.exists_within_forall_le {α β : Type*} [LinearOrder β] {s : 
+Set α} (hs : s.Nonempty) {f : α -> β} (hf : Filter.Tendsto f Filter.cofinite Fil
+ter.atTop) : exists a₀ in s, forall a in s, f a₀ <= f a
+参数：hs : s.Nonempty；hf : Filter.Tendsto f Filter.cofinite Filter.atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.eventually_cofinite`：eventually_cofinite {p : α -> Prop} : (foral
+lᶠ x in cofinite, p x) ↔ { x | ¬p x }.Finite
+· 使用定理 `Filter.tendsto_atTop`：tendsto_atTop [Preorder β] {m : α -> β} {f : Filte
+r α} : Tendsto m f atTop ↔ forall b, forallᶠ a in f, b <= m a
+· 使用定理 `Set.exists_min_image`：∀ {α : Type u} {β : Type v} [inst : LinearOrder β]
+ (s : Set α) (f : α → β),   s.Finite → s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f a ≤ f b
+· 使用定理 `Set.Finite.inter_of_left`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ (t : 
+Set α), (s ∩ t).Finite
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 theorem Filter.Tendsto.exists_within_forall_le {α β : Type*} [LinearOrder β] {s : Set α}
-    (hs : s.Nonempty) {f : α -> β} (hf : Filter.Tendsto f Filter.cofinite Filter.atTop) :
-    exists a₀ in s, forall a in s, f a₀ <= f a := by
-  by_cases! all_top : exists y in s, exists x, f y < x
+    (hs : s.Nonempty) {f : α → β} (hf : Filter.Tendsto f Filter.cofinite Filter.atTop) :
+    ∃ a₀ ∈ s, ∀ a ∈ s, f a₀ ≤ f a := by
+  by_cases! all_top : ∃ y ∈ s, ∃ x, f y < x
   · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
     rcases all_top with ⟨y, hys, x, hx⟩
-    have : { y | ¬x <= f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
+    have : { y | ¬x ≤ f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
     simp only [not_le] at this
     obtain ⟨a₀, ⟨ha₀ : f a₀ < x, ha₀s⟩, others_bigger⟩ :=
       exists_min_image _ f (this.inter_of_left s) ⟨y, hx, hys⟩
@@ -888,283 +799,269 @@ theorem Filter.Tendsto.exists_within_forall_le {α β : Type*} [LinearOrder β] 
   · -- in this case, f is constant because all values are at top
     obtain ⟨a₀, ha₀s⟩ := hs
     exact ⟨a₀, ha₀s, fun a ha => all_top a ha (f a₀)⟩
-
-/--
-theorem `Filter.Tendsto.exists_forall_le` / 定理 `Filter.Tendsto.exists_forall_le`
-
-English:
-theorem Filter.Tendsto.exists_forall_le
-  statement: [Nonempty α] [LinearOrder β] {f : α -> β}
-  proof: let ⟨a₀, _, ha₀⟩ := hf.exists_within_forall_le univ_nonempty
-  ⟨a₀, fun a => ha₀ a (mem_univ _)⟩
-
-中文:
-定理 滤子.收敛.存在_对任意_le
-  结论: [非空 α] [线性序 β] {f : α -> β}
-  证明: let ⟨a₀, _, ha₀⟩ := hf.exists_within_forall_le univ_nonempty
-  ⟨a₀, fun a => ha₀ a (mem_univ _)⟩
-
-Depends on / 依赖: exists_within_forall_le, hf.exists_within_forall_le, mem_univ, univ_nonempty
+/-
+**Filter.Tendsto.exists_forall_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.exists_forall_le [Nonempty α] [LinearOrder β] {f : α -> β} 
+(hf : Tendsto f cofinite atTop) : exists a₀, forall a, f a₀ <= f a
+参数：hf : Tendsto f cofinite atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.exists_within_forall_le`：Filter.Tendsto.exists_within_for
+all_le {α β : Type*} [LinearOrder β] {s : Set α} (hs : s.Nonempty) {f : α -> β} 
+(hf : Filter.Tendsto f Filte…
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem Filter.Tendsto.exists_forall_le [Nonempty α] [LinearOrder β] {f : α -> β}
-    (hf : Tendsto f cofinite atTop) : exists a₀, forall a, f a₀ <= f a :=
+theorem Filter.Tendsto.exists_forall_le [Nonempty α] [LinearOrder β] {f : α → β}
+    (hf : Tendsto f cofinite atTop) : ∃ a₀, ∀ a, f a₀ ≤ f a :=
   let ⟨a₀, _, ha₀⟩ := hf.exists_within_forall_le univ_nonempty
   ⟨a₀, fun a => ha₀ a (mem_univ _)⟩
-
-/--
-theorem `Filter.Tendsto.exists_within_forall_ge` / 定理 `Filter.Tendsto.exists_within_forall_ge`
-
-English:
-theorem Filter.Tendsto.exists_within_forall_ge
-  statement: [LinearOrder β] {s : Set α} (hs : s.Nonempty)
-  proof: @Filter.Tendsto.exists_within_forall_le _ βᵒᵈ _ _ hs _ hf
-
-中文:
-定理 滤子.收敛.存在_within_对任意_ge
-  结论: [线性序 β] {s : 集合 α} (hs : s.非空)
-  证明: @Filter.Tendsto.exists_within_forall_le _ βᵒᵈ _ _ hs _ hf
-
-Depends on / 依赖: Filter, Filter.Tendsto.exists_within_forall_le, Tendsto, exists_within_forall_le
+/-
+**Filter.Tendsto.exists_within_forall_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.exists_within_forall_ge [LinearOrder β] {s : Set α} (hs : s
+.Nonempty) {f : α -> β} (hf : Filter.Tendsto f Filter.cofinite Filter.atBot) : e
+xists a₀ in s, forall a in s, f a <= f a₀
+参数：hs : s.Nonempty；hf : Filter.Tendsto f Filter.cofinite Filter.atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.exists_within_forall_le`：Filter.Tendsto.exists_within_for
+all_le {α β : Type*} [LinearOrder β] {s : Set α} (hs : s.Nonempty) {f : α -> β} 
+(hf : Filter.Tendsto f Filte…
 -/
 theorem Filter.Tendsto.exists_within_forall_ge [LinearOrder β] {s : Set α} (hs : s.Nonempty)
-    {f : α -> β} (hf : Filter.Tendsto f Filter.cofinite Filter.atBot) :
-    exists a₀ in s, forall a in s, f a <= f a₀ :=
+    {f : α → β} (hf : Filter.Tendsto f Filter.cofinite Filter.atBot) :
+    ∃ a₀ ∈ s, ∀ a ∈ s, f a ≤ f a₀ :=
   @Filter.Tendsto.exists_within_forall_le _ βᵒᵈ _ _ hs _ hf
-
-/--
-theorem `Filter.Tendsto.exists_forall_ge` / 定理 `Filter.Tendsto.exists_forall_ge`
-
-English:
-theorem Filter.Tendsto.exists_forall_ge
-  statement: [Nonempty α] [LinearOrder β] {f : α -> β}
-  proof: @Filter.Tendsto.exists_forall_le _ βᵒᵈ _ _ _ hf
-
-中文:
-定理 滤子.收敛.存在_对任意_ge
-  结论: [非空 α] [线性序 β] {f : α -> β}
-  证明: @Filter.Tendsto.exists_forall_le _ βᵒᵈ _ _ _ hf
-
-Depends on / 依赖: Filter, Filter.Tendsto.exists_forall_le, Tendsto, exists_forall_le
+/-
+**Filter.Tendsto.exists_forall_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.exists_forall_ge [Nonempty α] [LinearOrder β] {f : α -> β} 
+(hf : Tendsto f cofinite atBot) : exists a₀, forall a, f a <= f a₀
+参数：hf : Tendsto f cofinite atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.exists_forall_le`：Filter.Tendsto.exists_forall_le [Nonemp
+ty α] [LinearOrder β] {f : α -> β} (hf : Tendsto f cofinite atTop) : exists a₀, 
+forall a, f a₀ <= f a
 -/
-theorem Filter.Tendsto.exists_forall_ge [Nonempty α] [LinearOrder β] {f : α -> β}
-    (hf : Tendsto f cofinite atBot) : exists a₀, forall a, f a <= f a₀ :=
+theorem Filter.Tendsto.exists_forall_ge [Nonempty α] [LinearOrder β] {f : α → β}
+    (hf : Tendsto f cofinite atBot) : ∃ a₀, ∀ a, f a ≤ f a₀ :=
   @Filter.Tendsto.exists_forall_le _ βᵒᵈ _ _ _ hf
-
-/--
-theorem `Function.Surjective.le_map_cofinite` / 定理 `Function.Surjective.le_map_cofinite`
-
-English:
-theorem Function.Surjective.le_map_cofinite
-  given: {f : α -> β} (hf : Surjective f)
-  proof: fun _ h => .of_preimage h hf
-
-中文:
-定理 函数.满射.le_map_cofinite
-  条件: {f : α -> β} (hf : 满射 f)
-  证明: fun _ h => .of_preimage h hf
-
-Depends on / 依赖: of_preimage
+/-
+**Function.Surjective.le_map_cofinite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Surjective.le_map_cofinite {f : α -> β} (hf : Surjective f) : cof
+inite <= map f cofinite
+参数：hf : Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.of_preimage`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set
+ β}, (f ⁻¹' s).Finite → Function.Surjective f → s.Finite
 -/
-theorem Function.Surjective.le_map_cofinite {f : α -> β} (hf : Surjective f) :
-    cofinite <= map f cofinite := fun _ h => .of_preimage h hf
+theorem Function.Surjective.le_map_cofinite {f : α → β} (hf : Surjective f) :
+    cofinite ≤ map f cofinite := fun _ h => .of_preimage h hf
 
-/--
-theorem `Function.Injective.tendsto_cofinite` / 定理 `Function.Injective.tendsto_cofinite`
+/-- For an injective function `f`, inverse images of finite sets are finite. See also
+`Filter.comap_cofinite_le` and `Function.Injective.comap_cofinite_eq`. -/
+/-
+**Function.Injective.tendsto_cofinite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.tendsto_cofinite {f : α -> β} (hf : Injective f) : Tend
+sto f cofinite cofinite
+参数：hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.preimage`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set β}
+, Set.InjOn f (f ⁻¹' s) → s.Finite → (f ⁻¹' s).Finite
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
 
-English:
-theorem Function.Injective.tendsto_cofinite
-  given: {f : α -> β} (hf : Injective f)
-  proof: fun _ h => h.preimage hf.injOn
-
-中文:
-定理 函数.单射.tendsto_cofinite
-  条件: {f : α -> β} (hf : 单射 f)
-  证明: fun _ h => h.preimage hf.injOn
-
-Depends on / 依赖: h.preimage, hf.injOn, preimage
+--- 原说明 ---
+For an injective function `f`, inverse images of finite sets are finite. See als
+o
+`Filter.comap_cofinite_le` and `Function.Injective.comap_cofinite_eq`.
 -/
-theorem Function.Injective.tendsto_cofinite {f : α -> β} (hf : Injective f) :
+theorem Function.Injective.tendsto_cofinite {f : α → β} (hf : Injective f) :
     Tendsto f cofinite cofinite := fun _ h => h.preimage hf.injOn
 
-/--
-theorem `Filter.Tendsto.cofinite_of_finite_preimage_singleton` / 定理 `Filter.Tendsto.cofinite_of_finite_preimage_singleton`
+/-- For a function with finite fibres, inverse images of finite sets are finite. -/
+/-
+**Filter.Tendsto.cofinite_of_finite_preimage_singleton** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：Filter.Tendsto.cofinite_of_finite_preimage_singleton {f : α -> β} (hf : fo
+rall b, Finite (f ⁻¹' {b})) : Tendsto f cofinite cofinite
+参数：hf : forall b, Finite (f ⁻¹' {b})。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.preimage'`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set β
+}, s.Finite → (∀ b ∈ s, (f ⁻¹' {b}).Finite) → (f ⁻¹' s).Finite
 
-English:
-theorem Filter.Tendsto.cofinite_of_finite_preimage_singleton
-  statement: {f : α -> β}
-  proof: fun _ h => h.preimage' fun b _ => hf b
-
-中文:
-定理 滤子.收敛.cofinite_of_finite_preimage_singleton
-  结论: {f : α -> β}
-  证明: fun _ h => h.preimage' fun b _ => hf b
-
-Depends on / 依赖: h.preimage, preimage
+--- 原说明 ---
+For a function with finite fibres, inverse images of finite sets are finite.
 -/
-theorem Filter.Tendsto.cofinite_of_finite_preimage_singleton {f : α -> β}
-    (hf : forall b, Finite (f ⁻¹' {b})) : Tendsto f cofinite cofinite :=
-  fun _ h => h.preimage' fun b _ => hf b
+theorem Filter.Tendsto.cofinite_of_finite_preimage_singleton {f : α → β}
+    (hf : ∀ b, Finite (f ⁻¹' {b})) : Tendsto f cofinite cofinite :=
+  fun _ h => h.preimage' fun b _ ↦ hf b
 
-/--
-theorem `Function.Injective.comap_cofinite_eq` / 定理 `Function.Injective.comap_cofinite_eq`
+/-- The pullback of the `Filter.cofinite` under an injective function is equal to `Filter.cofinite`.
+See also `Filter.comap_cofinite_le` and `Function.Injective.tendsto_cofinite`. -/
+/-
+**Function.Injective.comap_cofinite_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.comap_cofinite_eq {f : α -> β} (hf : Injective f) : com
+ap f cofinite = cofinite
+参数：hf : Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Filter.comap_cofinite_le`：comap_cofinite_le (f : α -> β) : comap f cofin
+ite <= cofinite
+· 使用定理 `Filter.Tendsto.le_comap`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁
+ : Filter α} {l₂ : Filter β},   Filter.Tendsto f l₁ l₂ → l₁ ≤ Filter.comap f l₂
+· 使用定理 `Function.Injective.tendsto_cofinite`：Function.Injective.tendsto_cofinite
+ {f : α -> β} (hf : Injective f) : Tendsto f cofinite cofinite
 
-English:
-theorem Function.Injective.comap_cofinite_eq
-  given: {f : α -> β} (hf : Injective f)
-  proof: (comap_cofinite_le f).antisymm hf.tendsto_cofinite.le_comap
-
-中文:
-定理 函数.单射.comap_cofinite_eq
-  条件: {f : α -> β} (hf : 单射 f)
-  证明: (comap_cofinite_le f).antisymm hf.tendsto_cofinite.le_comap
-
-Depends on / 依赖: antisymm, comap_cofinite_le, hf.tendsto_cofinite.le_comap, le_comap, tendsto_cofinite
+--- 原说明 ---
+The pullback of the `Filter.cofinite` under an injective function is equal to `F
+ilter.cofinite`.
+See also `Filter.comap_cofinite_le` and `Function.Injective.tendsto_cofinite`.
 -/
-theorem Function.Injective.comap_cofinite_eq {f : α -> β} (hf : Injective f) :
+theorem Function.Injective.comap_cofinite_eq {f : α → β} (hf : Injective f) :
     comap f cofinite = cofinite :=
   (comap_cofinite_le f).antisymm hf.tendsto_cofinite.le_comap
 
-/--
-theorem `Function.Injective.nat_tendsto_atTop` / 定理 `Function.Injective.nat_tendsto_atTop`
+/-- An injective sequence `f : ℕ → ℕ` tends to infinity at infinity. -/
+/-
+**Function.Injective.nat_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.nat_tendsto_atTop {f : Nat -> Nat} (hf : Injective f) :
+ Tendsto f atTop atTop
+参数：hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.tendsto_cofinite`：Function.Injective.tendsto_cofinite
+ {f : α -> β} (hf : Injective f) : Tendsto f cofinite cofinite
+· 使用定理 `Nat.cofinite_eq_atTop`：Nat.cofinite_eq_atTop : @cofinite Nat = atTop
 
-English:
-theorem Function.Injective.nat_tendsto_atTop
-  given: {f : Nat -> Nat} (hf : Injective f)
-  proof: Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite
-
-中文:
-定理 函数.单射.nat_tendsto_atTop
-  条件: {f : 自然数 -> 自然数} (hf : 单射 f)
-  证明: Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite
-
-Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, hf.tendsto_cofinite, tendsto_cofinite
+--- 原说明 ---
+An injective sequence `f : ℕ → ℕ` tends to infinity at infinity.
 -/
-theorem Function.Injective.nat_tendsto_atTop {f : Nat -> Nat} (hf : Injective f) :
+theorem Function.Injective.nat_tendsto_atTop {f : ℕ → ℕ} (hf : Injective f) :
     Tendsto f atTop atTop :=
   Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite
-
-/--
-lemma `Function.update_eventuallyEq` / 引理 `Function.update_eventuallyEq`
-
-English:
-lemma Function.update_eventuallyEq
-  given: [DecidableEq α] (f : α -> β) (a : α) (b : β)
-  proof: by
-  filter_upwards [mem_principal_self _] with u hu using Function.update_of_ne hu _ _
-
-中文:
-引理 函数.update_eventuallyEq
-  条件: [DecidableEq α] (f : α -> β) (a : α) (b : β)
-  证明: by
-  filter_upwards [mem_principal_self _] with u hu using Function.update_of_ne hu _ _
-
-Depends on / 依赖: Function, Function.update_of_ne, filter_upwards, mem_principal_self, update_of_ne
+/-
+**Function.update_eventuallyEq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.update_eventuallyEq [DecidableEq α] (f : α -> β) (a : α) (b : β) 
+: Function.update f a b =ᶠ[𝓟 {a}ᶜ] f
+参数：f : α -> β；a : α；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
 -/
-lemma Function.update_eventuallyEq [DecidableEq α] (f : α -> β) (a : α) (b : β) :
+lemma Function.update_eventuallyEq [DecidableEq α] (f : α → β) (a : α) (b : β) :
     Function.update f a b =ᶠ[𝓟 {a}ᶜ] f := by
   filter_upwards [mem_principal_self _] with u hu using Function.update_of_ne hu _ _
-
-/--
-lemma `Function.update_eventuallyEq_cofinite` / 引理 `Function.update_eventuallyEq_cofinite`
-
-English:
-lemma Function.update_eventuallyEq_cofinite
-  given: [DecidableEq α] (f : α -> β) (a : α) (b : β)
-  proof: (Function.update_eventuallyEq f a b).filter_mono (by simp)
-
-中文:
-引理 函数.update_eventuallyEq_cofinite
-  条件: [DecidableEq α] (f : α -> β) (a : α) (b : β)
-  证明: (Function.update_eventuallyEq f a b).filter_mono (by simp)
-
-Depends on / 依赖: Function, Function.update_eventuallyEq, filter_mono, update_eventuallyEq
+/-
+**Function.update_eventuallyEq_cofinite** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.update_eventuallyEq_cofinite [DecidableEq α] (f : α -> β) (a : α)
+ (b : β) : Function.update f a b =ᶠ[cofinite] f
+参数：f : α -> β；a : α；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.filter_mono`：∀ {α : Type u} {β : Type v} {l l' : Fil
+ter α} {f g : α → β}, f =ᶠ[l] g → l' ≤ l → f =ᶠ[l'] g
+· 使用引理 `Function.update_eventuallyEq`：Function.update_eventuallyEq [DecidableEq 
+α] (f : α -> β) (a : α) (b : β) : Function.update f a b =ᶠ[𝓟 {a}ᶜ] f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 -/
-lemma Function.update_eventuallyEq_cofinite [DecidableEq α] (f : α -> β) (a : α) (b : β) :
+lemma Function.update_eventuallyEq_cofinite [DecidableEq α] (f : α → β) (a : α) (b : β) :
     Function.update f a b =ᶠ[cofinite] f :=
   (Function.update_eventuallyEq f a b).filter_mono (by simp)
 
-/--
-lemma `tendsto_cofinite_pure_iff` / 引理 `tendsto_cofinite_pure_iff`
+/-- A function tendsto 0 along the cofinite filter iff it has finite support. -/
+/-
+**tendsto_cofinite_pure_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tendsto_cofinite_pure_iff {f : α -> β} [Zero β] : Tendsto f cofinite (pure
+ 0) ↔ f.HasFiniteSupport
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma tendsto_cofinite_pure_iff
-  given: {f : α -> β} [Zero β]
-  proof: by
-  simp [Function.HasFiniteSupport, Function.support]
-
-中文:
-引理 tendsto_cofinite_pure_iff
-  条件: {f : α -> β} [零 β]
-  证明: by
-  simp [Function.HasFiniteSupport, Function.support]
-
-Depends on / 依赖: Function, Function.HasFiniteSupport, Function.support, HasFiniteSupport, support
+--- 原说明 ---
+A function tendsto 0 along the cofinite filter iff it has finite support.
 -/
-lemma tendsto_cofinite_pure_iff {f : α -> β} [Zero β] :
+lemma tendsto_cofinite_pure_iff {f : α → β} [Zero β] :
     Tendsto f cofinite (pure 0) ↔ f.HasFiniteSupport := by
   simp [Function.HasFiniteSupport, Function.support]
 
 variable {f : Filter α}
 
-/--
-theorem `le_cofinite_iff_ker` / 定理 `le_cofinite_iff_ker`
+/-- A filter is free iff it is smaller than the cofinite filter. -/
+/-
+**le_cofinite_iff_ker** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_cofinite_iff_ker : f <= cofinite ↔ f.ker = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.le_cofinite_iff_compl_singleton_mem`：le_cofinite_iff_compl_single
+ton_mem : l <= cofinite ↔ forall x, {x}ᶜ in l
+· 使用引理 `Filter.ker_def`：ker_def (f : Filter α) : f.ker = ⋂ s in f, s
+· 使用定理 `Set.iInter₂_eq_empty_iff`：iInter₂_eq_empty_iff {s : forall i, κ i -> Set
+ α} : ⋂ (i) (j), s i j = ∅ ↔ forall a, exists i j, a ∉ s i j
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
 
-English:
-theorem le_cofinite_iff_ker
-  statement: f <= cofinite ↔ f.ker = ∅
-  proof: by
-  rw [le_cofinite_iff_compl_singleton_mem]; rw [ker_def]; rw [iInter₂_eq_empty_iff]
-  exact forall_congr' fun x => ⟨fun h => ⟨{x}ᶜ, h, by simp⟩,
-    fun ⟨s, hs, hx⟩ => mem_of_superset hs (by simpa using hx)⟩
-
-中文:
-定理 le_cofinite_iff_ker
-  结论: f <= cofinite ↔ f.ker = ∅
-  证明: by
-  rw [le_cofinite_iff_compl_singleton_mem]; rw [ker_def]; rw [iInter₂_eq_empty_iff]
-  exact forall_congr' fun x => ⟨fun h => ⟨{x}ᶜ, h, by simp⟩,
-    fun ⟨s, hs, hx⟩ => mem_of_superset hs (by simpa using hx)⟩
-
-Depends on / 依赖: forall_congr, ker_def, le_cofinite_iff_compl_singleton_mem, mem_of_superset
+--- 原说明 ---
+A filter is free iff it is smaller than the cofinite filter.
 -/
-theorem le_cofinite_iff_ker : f <= cofinite ↔ f.ker = ∅ := by
-  rw [le_cofinite_iff_compl_singleton_mem]; rw [ker_def]; rw [iInter₂_eq_empty_iff]
+theorem le_cofinite_iff_ker : f ≤ cofinite ↔ f.ker = ∅ := by
+  rw [le_cofinite_iff_compl_singleton_mem, ker_def, iInter₂_eq_empty_iff]
   exact forall_congr' fun x => ⟨fun h => ⟨{x}ᶜ, h, by simp⟩,
     fun ⟨s, hs, hx⟩ => mem_of_superset hs (by simpa using hx)⟩
-
-/--
-theorem `le_cofinite_iff_boundary` / 定理 `le_cofinite_iff_boundary`
-
-English:
-theorem le_cofinite_iff_boundary
-  statement: f <= cofinite ↔ Coheyting.boundary f = f
-  proof: by
-  rw [← Coheyting.inf_hnot_self]; rw [inf_eq_left]; rw [le_cofinite_iff_ker]; rw [Filter.hnot_def]; rw [le_principal_iff]
-  constructor
-  · intro h
-    simp [h]
-  · intro h
-    rw [eq_empty_iff_forall_notMem]
-    intro x hx
-    exact hx f.kerᶜ h hx
-
-中文:
-定理 le_cofinite_iff_boundary
-  结论: f <= cofinite ↔ Coheyting.boundary f = f
-  证明: by
-  rw [← Coheyting.inf_hnot_self]; rw [inf_eq_left]; rw [le_cofinite_iff_ker]; rw [Filter.hnot_def]; rw [le_principal_iff]
-  constructor
-  · intro h
-    simp [h]
-  · intro h
-    rw [eq_empty_iff_forall_notMem]
-    intro x hx
-    exact hx f.kerᶜ h hx
-
-Depends on / 依赖: Coheyting, Coheyting.inf_hnot_self, Filter, Filter.hnot_def, eq_empty_iff_forall_notMem, f.ker, hnot_def, inf_eq_left, inf_hnot_self, le_cofinite_iff_ker, le_principal_iff
+/-
+**le_cofinite_iff_boundary** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_cofinite_iff_boundary : f <= cofinite ↔ Coheyting.boundary f = f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Coheyting.inf_hnot_self`：inf_hnot_self (a : α) : a ⊓ ￢a = ∂ a
+· 使用定理 `inf_eq_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b =
+ a ↔ a ≤ b
+· 使用定理 `le_cofinite_iff_ker`：le_cofinite_iff_ker : f <= cofinite ↔ f.ker = ∅
+· 使用定理 `Filter.hnot_def`：∀ {α : Type u_1} {f : Filter α}, ￢f = Filter.principal 
+f.kerᶜ
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
 -/
-theorem le_cofinite_iff_boundary : f <= cofinite ↔ Coheyting.boundary f = f := by
-  rw [← Coheyting.inf_hnot_self]; rw [inf_eq_left]; rw [le_cofinite_iff_ker]; rw [Filter.hnot_def]; rw [le_principal_iff]
+theorem le_cofinite_iff_boundary : f ≤ cofinite ↔ Coheyting.boundary f = f := by
+  rw [← Coheyting.inf_hnot_self, inf_eq_left, le_cofinite_iff_ker,
+    Filter.hnot_def, le_principal_iff]
   constructor
   · intro h
     simp [h]
@@ -1174,97 +1071,99 @@ theorem le_cofinite_iff_boundary : f <= cofinite ↔ Coheyting.boundary f = f :=
     exact hx f.kerᶜ h hx
 
 variable (f)
-
-/--
-theorem `boundary_le_cofinite` / 定理 `boundary_le_cofinite`
-
-English:
-theorem boundary_le_cofinite
-  statement: Coheyting.boundary f <= cofinite
-  proof: le_cofinite_iff_boundary.2 (Coheyting.boundary_boundary f)
-
-@[simp]
-
-中文:
-定理 boundary_le_cofinite
-  结论: Coheyting.boundary f <= cofinite
-  证明: le_cofinite_iff_boundary.2 (Coheyting.boundary_boundary f)
-
-@[simp]
-
-Depends on / 依赖: Coheyting, Coheyting.boundary_boundary, boundary_boundary, le_cofinite_iff_boundary
+/-
+**boundary_le_cofinite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：boundary_le_cofinite : Coheyting.boundary f <= cofinite
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_cofinite_iff_boundary`：le_cofinite_iff_boundary : f <= cofinite ↔ Coh
+eyting.boundary f = f
+· 使用定理 `Coheyting.boundary_boundary`：boundary_boundary (a : α) : ∂ ∂ a = ∂ a
 -/
-theorem boundary_le_cofinite : Coheyting.boundary f <= cofinite :=
+theorem boundary_le_cofinite : Coheyting.boundary f ≤ cofinite :=
   le_cofinite_iff_boundary.2 (Coheyting.boundary_boundary f)
 
 @[simp]
-/--
-theorem `boundary_principal` / 定理 `boundary_principal`
-
-English:
-theorem boundary_principal
-  given: (s : Set α)
-  statement: Coheyting.boundary (𝓟 s) = ⊥
-  proof: by
-  simp [← Coheyting.inf_hnot_self]
-
-中文:
-定理 boundary_principal
-  条件: (s : 集合 α)
-  结论: Coheyting.boundary (𝓟 s) = ⊥
-  证明: by
-  simp [← Coheyting.inf_hnot_self]
-
-Depends on / 依赖: Coheyting, Coheyting.inf_hnot_self, inf_hnot_self
+/-
+**boundary_principal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：boundary_principal (s : Set α) : Coheyting.boundary (𝓟 s) = ⊥
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.hnot_principal`：hnot_principal {s : Set α} : ￢𝓟 s = 𝓟 sᶜ
+· 使用定理 `Filter.inf_principal`：inf_principal {s t : Set α} : 𝓟 s ⊓ 𝓟 t = 𝓟 (s int
+er t)
+· 使用定理 `Set.inter_compl_self`：inter_compl_self (s : Set α) : s inter sᶜ = ∅
+· 使用定理 `Filter.principal_empty`：principal_empty : 𝓟 (∅ : Set α) = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem boundary_principal (s : Set α) : Coheyting.boundary (𝓟 s) = ⊥ := by
   simp [← Coheyting.inf_hnot_self]
 
-/--
-theorem `existsUnique_eq_principal_sup_free` / 定理 `existsUnique_eq_principal_sup_free`
+/-- Every filter is the disjoint supremum of
+a principal filter and a free filter in a unique way. -/
+/-
+**existsUnique_eq_principal_sup_free** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：existsUnique_eq_principal_sup_free : exists! p : Set α × Filter α, p.2 <= 
+cofinite ∧ Disjoint (𝓟 p.1) p.2 ∧ f = 𝓟 p.1 ⊔ p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `boundary_le_cofinite`：boundary_le_cofinite : Coheyting.boundary f <= cof
+inite
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.disjoint_principal_left`：disjoint_principal_left {f : Filter α} {
+s : Set α} : Disjoint (𝓟 s) f ↔ sᶜ in f
+· 使用定理 `Filter.mem_inf_of_right`：mem_inf_of_right {f g : Filter α} {s : Set α} (
+h : s in g) : s in f ⊓ g
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Filter.hnot_principal`：hnot_principal {s : Set α} : ￢𝓟 s = 𝓟 sᶜ
+· 使用定理 `Filter.hnot_def`：∀ {α : Type u_1} {f : Filter α}, ￢f = Filter.principal 
+f.kerᶜ
+· 使用定理 `Coheyting.hnot_hnot_sup_boundary`：hnot_hnot_sup_boundary (a : α) : ￢￢a ⊔
+ ∂ a = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → γ
+) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_cofinite_iff_ker`：le_cofinite_iff_ker : f <= cofinite ↔ f.ker = ∅
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.ker_principal`：∀ {α : Type u_2} (s : Set α), (Filter.principal s)
+.ker = s
+· 使用定理 `Filter.ker_sup`：ker_sup (f g : Filter α) : ker (f ⊔ g) = ker f union ker
+ g
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Coheyting.boundary_sup_le`：boundary_sup_le : ∂ (a ⊔ b) <= ∂ a ⊔ ∂ b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `boundary_principal`：boundary_principal (s : Set α) : Coheyting.boundary 
+(𝓟 s) = ⊥
+· 使用定理 `bot_sup_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBo
+t α] (a : α), ⊥ ⊔ a = a
+· 使用定理 `Coheyting.boundary_le`：boundary_le : ∂ a <= a
 
-English:
-theorem existsUnique_eq_principal_sup_free
-  proof: by
-  refine ⟨(f.ker, Coheyting.boundary f), ⟨?_, ?_, ?_⟩, fun q hq => ?_⟩
-  · exact boundary_le_cofinite f
-  · rw [disjoint_principal_left]
-    exact mem_inf_of_right (mem_principal_self f.kerᶜ)
-  · rw [← compl_compl f.ker, ← hnot_principal, ← Filter.hnot_def,
-      Coheyting.hnot_hnot_sup_boundary]
-  · have hqk := congrArg Filter.ker hq.2.2
-    rw [ker_sup]; rw [ker_principal]; rw [le_cofinite_iff_ker.mp hq.1]; rw [union_empty] at hqk
-    refine congrArg₂ Prod.mk hqk.symm (le_antisymm (le_inf ?_ ?_) ?_)
-    · rw [hq.2.2]
-      exact le_sup_right
-    · rw [Filter.hnot_def, le_principal_iff, ← disjoint_principal_left, hqk]
-      exact hq.2.1
-    · grw [hq.2.2, Coheyting.boundary_sup_le, boundary_principal, bot_sup_eq]
-      exact Coheyting.boundary_le
-
-中文:
-定理 存在Unique_eq_principal_sup_free
-  证明: by
-  refine ⟨(f.ker, Coheyting.boundary f), ⟨?_, ?_, ?_⟩, fun q hq => ?_⟩
-  · exact boundary_le_cofinite f
-  · rw [disjoint_principal_left]
-    exact mem_inf_of_right (mem_principal_self f.kerᶜ)
-  · rw [← compl_compl f.ker, ← hnot_principal, ← Filter.hnot_def,
-      Coheyting.hnot_hnot_sup_boundary]
-  · have hqk := congrArg Filter.ker hq.2.2
-    rw [ker_sup]; rw [ker_principal]; rw [le_cofinite_iff_ker.mp hq.1]; rw [union_empty] at hqk
-    refine congrArg₂ Prod.mk hqk.symm (le_antisymm (le_inf ?_ ?_) ?_)
-    · rw [hq.2.2]
-      exact le_sup_right
-    · rw [Filter.hnot_def, le_principal_iff, ← disjoint_principal_left, hqk]
-      exact hq.2.1
-    · grw [hq.2.2, Coheyting.boundary_sup_le, boundary_principal, bot_sup_eq]
-      exact Coheyting.boundary_le
-
-Depends on / 依赖: Coheyting, Coheyting.boundary, Coheyting.hnot_hnot_sup_boundary, Filter, Filter.hnot_def, Filter.ker, Prod.mk, boundary, boundary_le_cofinite, compl_compl, disjoint_principal_left, f.ker, hnot_def, hnot_hnot_sup_boundary, hnot_principal, hqk.symm, ker_principal, ker_sup, le_antisymm, le_cofinite_iff_ker
+--- 原说明 ---
+Every filter is the disjoint supremum of
+a principal filter and a free filter in a unique way.
 -/
 theorem existsUnique_eq_principal_sup_free :
-    exists! p : Set α × Filter α, p.2 <= cofinite ∧ Disjoint (𝓟 p.1) p.2 ∧ f = 𝓟 p.1 ⊔ p.2 := by
+    ∃! p : Set α × Filter α, p.2 ≤ cofinite ∧ Disjoint (𝓟 p.1) p.2 ∧ f = 𝓟 p.1 ⊔ p.2 := by
   refine ⟨(f.ker, Coheyting.boundary f), ⟨?_, ?_, ?_⟩, fun q hq => ?_⟩
   · exact boundary_le_cofinite f
   · rw [disjoint_principal_left]
@@ -1272,7 +1171,7 @@ theorem existsUnique_eq_principal_sup_free :
   · rw [← compl_compl f.ker, ← hnot_principal, ← Filter.hnot_def,
       Coheyting.hnot_hnot_sup_boundary]
   · have hqk := congrArg Filter.ker hq.2.2
-    rw [ker_sup]; rw [ker_principal]; rw [le_cofinite_iff_ker.mp hq.1]; rw [union_empty] at hqk
+    rw [ker_sup, ker_principal, le_cofinite_iff_ker.mp hq.1, union_empty] at hqk
     refine congrArg₂ Prod.mk hqk.symm (le_antisymm (le_inf ?_ ?_) ?_)
     · rw [hq.2.2]
       exact le_sup_right
@@ -1281,19 +1180,25 @@ theorem existsUnique_eq_principal_sup_free :
     · grw [hq.2.2, Coheyting.boundary_sup_le, boundary_principal, bot_sup_eq]
       exact Coheyting.boundary_le
 
-/--
-theorem `exists_eq_principal_sup_free` / 定理 `exists_eq_principal_sup_free`
+/-- Every filter is the disjoint supremum of a principal filter and a free filter. -/
+/-
+**exists_eq_principal_sup_free** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_eq_principal_sup_free : exists s g, g <= cofinite ∧ Disjoint (𝓟 s) 
+g ∧ f = 𝓟 s ⊔ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.exists`：∀ {α : Type u_1} {β : Type u_2} {p : α × β → Prop}, (∃ x, p
+ x) ↔ ∃ a b, p (a, b)
+· 使用定理 `ExistsUnique.exists`：∀ {α : Sort u_1} {p : α → Prop}, (∃! x, p x) → ∃ x,
+ p x
+· 使用定理 `existsUnique_eq_principal_sup_free`：existsUnique_eq_principal_sup_free :
+ exists! p : Set α × Filter α, p.2 <= cofinite ∧ Disjoint (𝓟 p.1) p.2 ∧ f = 𝓟 p.
+1 ⊔ p.2
 
-English:
-theorem exists_eq_principal_sup_free
-  proof: Prod.exists.mp (existsUnique_eq_principal_sup_free f).exists
-
-中文:
-定理 存在_eq_principal_sup_free
-  证明: Prod.exists.mp (existsUnique_eq_principal_sup_free f).exists
-
-Depends on / 依赖: Prod.exists.mp, existsUnique_eq_principal_sup_free
+--- 原说明 ---
+Every filter is the disjoint supremum of a principal filter and a free filter.
 -/
 theorem exists_eq_principal_sup_free :
-    exists s g, g <= cofinite ∧ Disjoint (𝓟 s) g ∧ f = 𝓟 s ⊔ g :=
+    ∃ s g, g ≤ cofinite ∧ Disjoint (𝓟 s) g ∧ f = 𝓟 s ⊔ g :=
   Prod.exists.mp (existsUnique_eq_principal_sup_free f).exists

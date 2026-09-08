@@ -31,78 +31,23 @@ namespace Mathlib.Tactic
 `msg` can be any term that evaluates to an explicit `String`. -/
 syntax (name := successIfFailWithMsg) "success_if_fail_with_msg " term:max tacticSeq : tactic
 
-/--
-Definition of `successIfFailWithMessage` / `successIfFailWithMessage` 的定义
+/-- Evaluates `tacs` and succeeds only if `tacs` both fails and throws an error equal (as a string)
+to `msg`. -/
+/-
+**Mathlib.Tactic.successIfFailWithMessage** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic`。
+形式化陈述：successIfFailWithMessage {s α : Type} {m : Type -> Type} [Monad m] [MonadL
+iftT BaseIO m] [MonadLiftT CoreM m] [MonadBacktrack s m] [MonadError m] (msg : S
+tring) (tacs : m α) (msgref : Option Syntax
+参数：msg : String；tacs : m α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition successIfFailWithMessage
-  signature: {s α : Type} {m : Type -> Type} [Monad m] [MonadLiftT BaseIO m]
-  body: do
-  let s ← saveState
-  let err ←
-    try _ ← tacs; pure none
-    catch err => pure (some (← err.toMessageData.toString))
-  restoreState s
-  if let some err := err then
-    unless msg.trimAscii == err.trimAscii do
-      if let some msgref := msgref then
-        let suggestion : TryThis.Suggestion :=
-          { suggestion := s!"\"{err.trimAscii}\""
-            toCodeActionTitle? := some (fun _ => "Update with tactic error message")}
-        TryThis.addSuggestion msgref suggestion (header := "Update with tactic error message: ")
-
-      if let some ref := ref then
-        throwErrorAt ref "tactic '{ref}' failed, but got different error message:\n\n{err}"
-      else
-        throwError "tactic failed, but got different error message:\n\n{err}"
-  else
-    if let some ref := ref then
-      throwErrorAt ref "tactic '{ref}' succeeded, but was expected to fail"
-    else
-      throwError "tactic succeeded, but was expected to fail"
-
-elab_rules : tactic
-| `(tactic| success_if_fail_with_msg $msg:term $tacs:tacticSeq) =>
-Term.withoutErrToSorry withoutRecover do
-    let msg' ← unsafe Term.evalTerm String (.const ``String []) msg
-    successIfFailWithMessage msg' (evalTacticSeq tacs) msg tacs
-
-中文:
-定义 successIfFailWithMessage
-  签名: {s α : 类型} {m : 类型 -> 类型} [单子 m] [MonadLiftT BaseIO m]
-  定义体: do
-  let s ← saveState
-  let err ←
-    try _ ← tacs; pure none
-    catch err => pure (some (← err.toMessageData.toString))
-  restoreState s
-  if let some err := err then
-    unless msg.trimAscii == err.trimAscii do
-      if let some msgref := msgref then
-        let suggestion : TryThis.Suggestion :=
-          { suggestion := s!"\"{err.trimAscii}\""
-            toCodeActionTitle? := some (fun _ => "Update with tactic error message")}
-        TryThis.addSuggestion msgref suggestion (header := "Update with tactic error message: ")
-
-      if let some ref := ref then
-        throwErrorAt ref "tactic '{ref}' failed, but got different error message:\n\n{err}"
-      else
-        throwError "tactic failed, but got different error message:\n\n{err}"
-  else
-    if let some ref := ref then
-      throwErrorAt ref "tactic '{ref}' succeeded, but was expected to fail"
-    else
-      throwError "tactic succeeded, but was expected to fail"
-
-elab_rules : tactic
-| `(tactic| success_if_fail_with_msg $msg:term $tacs:tacticSeq) =>
-Term.withoutErrToSorry withoutRecover do
-    let msg' ← unsafe Term.evalTerm String (.const ``String []) msg
-    successIfFailWithMessage msg' (evalTacticSeq tacs) msg tacs
-
-Depends on / 依赖: Syntax
+--- 原说明 ---
+Evaluates `tacs` and succeeds only if `tacs` both fails and throws an error equa
+l (as a string)
+to `msg`.
 -/
-def successIfFailWithMessage {s α : Type} {m : Type -> Type} [Monad m] [MonadLiftT BaseIO m]
+def successIfFailWithMessage {s α : Type} {m : Type → Type} [Monad m] [MonadLiftT BaseIO m]
     [MonadLiftT CoreM m] [MonadBacktrack s m] [MonadError m] (msg : String) (tacs : m α)
     (msgref : Option Syntax := none) (ref : Option Syntax := none) : m Unit := do
   let s ← saveState
@@ -130,8 +75,9 @@ def successIfFailWithMessage {s α : Type} {m : Type -> Type} [Monad m] [MonadLi
 
 elab_rules : tactic
 | `(tactic| success_if_fail_with_msg $msg:term $tacs:tacticSeq) =>
-Term.withoutErrToSorry withoutRecover do
+  Term.withoutErrToSorry <| withoutRecover do
     let msg' ← unsafe Term.evalTerm String (.const ``String []) msg
     successIfFailWithMessage msg' (evalTacticSeq tacs) msg tacs
 
 end Mathlib.Tactic
+

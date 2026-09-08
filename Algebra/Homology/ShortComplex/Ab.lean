@@ -41,49 +41,42 @@ namespace ShortComplex
 variable (S : ShortComplex Ab.{u})
 
 @[simp]
-/--
-lemma `ab_zero_apply` / 引理 `ab_zero_apply`
-
-English:
-lemma ab_zero_apply
-  given: (x : S.X₁)
-  statement: S.g (S.f x) = 0
-  proof: by
-  rw [← ConcreteCategory.comp_apply]; rw [S.zero]
-  rfl
-
-中文:
-引理 ab_zero_apply
-  条件: (x : S.X₁)
-  结论: S.g (S.f x) = 0
-  证明: by
-  rw [← ConcreteCategory.comp_apply]; rw [S.zero]
-  rfl
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, S.zero, comp_apply
+/-
+**CategoryTheory.ShortComplex.ab_zero_apply** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ShortComplex`。
+形式化陈述：ab_zero_apply (x : S.X₁) : S.g (S.f x) = 0
+参数：x : S.X₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.ShortComplex.zero`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   (
+self : CategoryTheory.…
 -/
 lemma ab_zero_apply (x : S.X₁) : S.g (S.f x) = 0 := by
-  rw [← ConcreteCategory.comp_apply]; rw [S.zero]
+  rw [← ConcreteCategory.comp_apply, S.zero]
   rfl
 
 /-- The canonical additive morphism `S.X₁ →+ AddMonoidHom.ker S.g` induced by `S.f`. -/
 @[simps!]
-/--
-Definition of `abToCycles` / `abToCycles` 的定义
+/-
+**CategoryTheory.ShortComplex.abToCycles** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.ShortComplex`。
+形式化陈述：abToCycles : S.X₁ ->+ AddMonoidHom.ker S.g.hom
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.ab_zero_apply`：ab_zero_apply (x : S.X₁) : S.
+g (S.f x) = 0
 
-English:
-definition abToCycles
-  signature: : S.X₁ ->+ AddMonoidHom.ker S.g.hom
-  body: AddMonoidHom.mk' (fun x => ⟨S.f x, S.ab_zero_apply x⟩) (by aesop)
-
-中文:
-定义 abToCycles
-  签名: : S.X₁ ->+ 加法幺半群态射.ker S.g.hom
-  定义体: AddMonoidHom.mk' (fun x => ⟨S.f x, S.ab_zero_apply x⟩) (by aesop)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, S.ab_zero_apply, ab_zero_apply
+--- 原说明 ---
+The canonical additive morphism `S.X₁ →+ AddMonoidHom.ker S.g` induced by `S.f`.
 -/
-def abToCycles : S.X₁ ->+ AddMonoidHom.ker S.g.hom :=
+def abToCycles : S.X₁ →+ AddMonoidHom.ker S.g.hom :=
     AddMonoidHom.mk' (fun x => ⟨S.f x, S.ab_zero_apply x⟩) (by aesop)
 
 set_option backward.defeqAttrib.useBackward true in
@@ -91,56 +84,22 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The explicit left homology data of a short complex of abelian group that is
 given by a kernel and a quotient given by the `AddMonoidHom` API. -/
 @[simps]
-/--
-Definition of `abLeftHomologyData` / `abLeftHomologyData` 的定义
+/-
+**CategoryTheory.ShortComplex.abLeftHomologyData** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex`。
+形式化陈述：abLeftHomologyData : S.LeftHomologyData where K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abLeftHomologyData
-  signature: : S.LeftHomologyData where
-  body: AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
-  H := AddCommGrpCat.of ((AddMonoidHom.ker S.g.hom) ⧸ AddMonoidHom.range S.abToCycles)
-i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
-π := AddCommGrpCat.ofHom QuotientAddGroup.mk' _
-  wi := by
-    ext ⟨_, hx⟩
-    exact hx
-  hi := AddCommGrpCat.kernelIsLimit _
-  wπ := by
-    ext (x : S.X₁)
-    dsimp
-    rw [QuotientAddGroup.eq_zero_iff]; rw [AddMonoidHom.mem_range]
-    apply exists_apply_eq_apply
-  hπ := AddCommGrpCat.cokernelIsColimit (AddCommGrpCat.ofHom S.abToCycles)
-
-@[simp]
-
-中文:
-定义 abLeftHomologyData
-  签名: : S.LeftHomologyData where
-  定义体: AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
-  H := AddCommGrpCat.of ((AddMonoidHom.ker S.g.hom) ⧸ AddMonoidHom.range S.abToCycles)
-i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
-π := AddCommGrpCat.ofHom QuotientAddGroup.mk' _
-  wi := by
-    ext ⟨_, hx⟩
-    exact hx
-  hi := AddCommGrpCat.kernelIsLimit _
-  wπ := by
-    ext (x : S.X₁)
-    dsimp
-    rw [QuotientAddGroup.eq_zero_iff]; rw [AddMonoidHom.mem_range]
-    apply exists_apply_eq_apply
-  hπ := AddCommGrpCat.cokernelIsColimit (AddCommGrpCat.ofHom S.abToCycles)
-
-@[simp]
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, AddMonoidHom, AddMonoidHom.ker, S.g.hom
+--- 原说明 ---
+The explicit left homology data of a short complex of abelian group that is
+given by a kernel and a quotient given by the `AddMonoidHom` API.
 -/
 def abLeftHomologyData : S.LeftHomologyData where
   K := AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
   H := AddCommGrpCat.of ((AddMonoidHom.ker S.g.hom) ⧸ AddMonoidHom.range S.abToCycles)
-i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
-π := AddCommGrpCat.ofHom QuotientAddGroup.mk' _
+  i := AddCommGrpCat.ofHom <| (AddMonoidHom.ker S.g.hom).subtype
+  π := AddCommGrpCat.ofHom <| QuotientAddGroup.mk' _
   wi := by
     ext ⟨_, hx⟩
     exact hx
@@ -148,40 +107,35 @@ i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
   wπ := by
     ext (x : S.X₁)
     dsimp
-    rw [QuotientAddGroup.eq_zero_iff]; rw [AddMonoidHom.mem_range]
+    rw [QuotientAddGroup.eq_zero_iff, AddMonoidHom.mem_range]
     apply exists_apply_eq_apply
   hπ := AddCommGrpCat.cokernelIsColimit (AddCommGrpCat.ofHom S.abToCycles)
 
 @[simp]
-/--
-lemma `abLeftHomologyData_f'` / 引理 `abLeftHomologyData_f'`
-
-English:
-lemma abLeftHomologyData_f'
-  statement: S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.abToCycles
-  proof: rfl
-
-中文:
-引理 abLeftHomologyData_f'
-  结论: S.abLeftHomologyData.f' = 加法交换群范畴.ofHom S.abToCycles
-  证明: rfl
+/-
+**CategoryTheory.ShortComplex.abLeftHomologyData_f'** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ShortComplex`。
+形式化陈述：abLeftHomologyData_f' : S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.ab
+ToCycles
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma abLeftHomologyData_f' : S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.abToCycles := rfl
 
-/--
-Definition of `abCyclesIso` / `abCyclesIso` 的定义
+/-- Given a short complex `S` of abelian groups, this is the isomorphism between
+the abstract `S.cycles` of the homology API and the more concrete description as
+`AddMonoidHom.ker S.g`. -/
+/-
+**CategoryTheory.ShortComplex.abCyclesIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ShortComplex`。
+形式化陈述：abCyclesIso : S.cycles ≅ AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abCyclesIso
-  signature: : S.cycles ≅ AddCommGrpCat.of (AddMonoidHom.ker S.g.hom)
-  body: S.abLeftHomologyData.cyclesIso
-
-中文:
-定义 abCyclesIso
-  签名: : S.cycles ≅ 加法交换群范畴.of (加法幺半群态射.ker S.g.hom)
-  定义体: S.abLeftHomologyData.cyclesIso
-
-Depends on / 依赖: S.abLeftHomologyData.cyclesIso, abLeftHomologyData, cyclesIso
+--- 原说明 ---
+Given a short complex `S` of abelian groups, this is the isomorphism between
+the abstract `S.cycles` of the homology API and the more concrete description as
+`AddMonoidHom.ker S.g`.
 -/
 noncomputable def abCyclesIso : S.cycles ≅ AddCommGrpCat.of (AddMonoidHom.ker S.g.hom) :=
   S.abLeftHomologyData.cyclesIso
@@ -192,106 +146,108 @@ set_option backward.isDefEq.respectTransparency false in
 -- It was not used a simp lemma in Mathlib.
 -- Possible solution: higher priority function coercions that remove the `of`?
 -- @[simp]
-/--
-lemma `abCyclesIso_inv_apply_iCycles` / 引理 `abCyclesIso_inv_apply_iCycles`
-
-English:
-lemma abCyclesIso_inv_apply_iCycles
-  given: (x : AddMonoidHom.ker S.g.hom)
-  proof: by
-  dsimp only [abCyclesIso]
-  rw [← ConcreteCategory.comp_apply]; rw [S.abLeftHomologyData.cyclesIso_inv_comp_iCycles]
-  rfl
-
-中文:
-引理 abCyclesIso_inv_apply_iCycles
-  条件: (x : 加法幺半群态射.ker S.g.hom)
-  证明: by
-  dsimp only [abCyclesIso]
-  rw [← ConcreteCategory.comp_apply]; rw [S.abLeftHomologyData.cyclesIso_inv_comp_iCycles]
-  rfl
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, RightHomologyData, RightHomologyData.ofEpiOfIsIsoOfMono, RightHomologyMapData, RightHomologyMapData.ofEpiOfIsIsoOfMono, S.abLeftHomologyData.cyclesIso_inv_comp_iCycles, _comp, abCyclesIso, abLeftHomologyData, comp_apply, comp_id, cyclesIso_inv_comp_iCycles, infer_instance, ofEpiOfIsIsoOfMono, rightHomologyMap
+/-
+**CategoryTheory.ShortComplex.abCyclesIso_inv_apply_iCycles** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：abCyclesIso_inv_apply_iCycles (x : AddMonoidHom.ker S.g.hom) : S.iCycles (
+S.abCyclesIso.inv x) = x
+参数：x : AddMonoidHom.ker S.g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用引理 `CategoryTheory.ShortComplex.LeftHomologyData.cyclesIso_inv_comp_iCycles`
+：cyclesIso_inv_comp_iCycles : h.cyclesIso.inv ≫ S.iCycles = h.i
 -/
 lemma abCyclesIso_inv_apply_iCycles (x : AddMonoidHom.ker S.g.hom) :
     S.iCycles (S.abCyclesIso.inv x) = x := by
   dsimp only [abCyclesIso]
-  rw [← ConcreteCategory.comp_apply]; rw [S.abLeftHomologyData.cyclesIso_inv_comp_iCycles]
+  rw [← ConcreteCategory.comp_apply, S.abLeftHomologyData.cyclesIso_inv_comp_iCycles]
   rfl
 
-/--
-Definition of `abHomologyIso` / `abHomologyIso` 的定义
+/-- Given a short complex `S` of abelian groups, this is the isomorphism between
+the abstract `S.homology` of the homology API and the more explicit
+quotient of `AddMonoidHom.ker S.g` by the image of
+`S.abToCycles : S.X₁ →+ AddMonoidHom.ker S.g`. -/
+/-
+**CategoryTheory.ShortComplex.abHomologyIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ShortComplex`。
+形式化陈述：abHomologyIso : S.homology ≅ AddCommGrpCat.of ((AddMonoidHom.ker S.g.hom) 
+⧸ AddMonoidHom.range S.abToCycles)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abHomologyIso
-  signature: : S.homology ≅
-  body: S.abLeftHomologyData.homologyIso
-
-中文:
-定义 abHomologyIso
-  签名: : S.homology ≅
-  定义体: S.abLeftHomologyData.homologyIso
-
-Depends on / 依赖: S.abLeftHomologyData.homologyIso, abLeftHomologyData, homologyIso, infer_instance, rightHomologyMap
+--- 原说明 ---
+Given a short complex `S` of abelian groups, this is the isomorphism between
+the abstract `S.homology` of the homology API and the more explicit
+quotient of `AddMonoidHom.ker S.g` by the image of
+`S.abToCycles : S.X₁ →+ AddMonoidHom.ker S.g`.
 -/
 noncomputable def abHomologyIso : S.homology ≅
     AddCommGrpCat.of ((AddMonoidHom.ker S.g.hom) ⧸ AddMonoidHom.range S.abToCycles) :=
   S.abLeftHomologyData.homologyIso
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `exact_iff_surjective_abToCycles` / 引理 `exact_iff_surjective_abToCycles`
-
-English:
-lemma exact_iff_surjective_abToCycles
-  proof: by
-  rw [S.abLeftHomologyData.exact_iff_epi_f']; rw [abLeftHomologyData_f']; rw [AddCommGrpCat.epi_iff_surjective]
-  rfl
-
-中文:
-引理 exact_iff_surjective_abToCycles
-  证明: by
-  rw [S.abLeftHomologyData.exact_iff_epi_f']; rw [abLeftHomologyData_f']; rw [AddCommGrpCat.epi_iff_surjective]
-  rfl
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.epi_iff_surjective, S.abLeftHomologyData.exact_iff_epi_f, abLeftHomologyData, abLeftHomologyData_f, epi_iff_surjective, exact_iff_epi_f
+/-
+**CategoryTheory.ShortComplex.exact_iff_surjective_abToCycles** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：exact_iff_surjective_abToCycles : S.Exact ↔ Function.Surjective S.abToCycl
+es
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.exact_iff_epi_f'`：∀ {C : Ty
+pe u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.P
+readditive C]   {S : CategoryTheory.ShortComplex C}…
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用引理 `CategoryTheory.ShortComplex.abLeftHomologyData_f'`：abLeftHomologyData_f'
+ : S.abLeftHomologyData.f' = AddCommGrpCat.ofHom S.abToCycles
+· 使用定理 `AddCommGrpCat.epi_iff_surjective`：∀ {A B : AddCommGrpCat} (f : A ⟶ B), C
+ategoryTheory.Epi f ↔ Function.Surjective ⇑(CategoryTheory.ConcreteCategory.hom 
+f)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma exact_iff_surjective_abToCycles :
     S.Exact ↔ Function.Surjective S.abToCycles := by
-  rw [S.abLeftHomologyData.exact_iff_epi_f']; rw [abLeftHomologyData_f']; rw [AddCommGrpCat.epi_iff_surjective]
+  rw [S.abLeftHomologyData.exact_iff_epi_f', abLeftHomologyData_f',
+    AddCommGrpCat.epi_iff_surjective]
   rfl
-
-/--
-lemma `ab_exact_iff` / 引理 `ab_exact_iff`
-
-English:
-lemma ab_exact_iff
-  proof: by
-  rw [exact_iff_surjective_abToCycles]
-  constructor
-  · intro h x₂ hx₂
-    obtain ⟨x₁, hx₁⟩ := h ⟨x₂, hx₂⟩
-    exact ⟨x₁, by simpa only [Subtype.ext_iff, abToCycles_apply_coe] using hx₁⟩
-  · rintro h ⟨x₂, hx₂⟩
-    obtain ⟨x₁, rfl⟩ := h x₂ hx₂
-    exact ⟨x₁, rfl⟩
-
-中文:
-引理 ab_exact_iff
-  证明: by
-  rw [exact_iff_surjective_abToCycles]
-  constructor
-  · intro h x₂ hx₂
-    obtain ⟨x₁, hx₁⟩ := h ⟨x₂, hx₂⟩
-    exact ⟨x₁, by simpa only [Subtype.ext_iff, abToCycles_apply_coe] using hx₁⟩
-  · rintro h ⟨x₂, hx₂⟩
-    obtain ⟨x₁, rfl⟩ := h x₂ hx₂
-    exact ⟨x₁, rfl⟩
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, abToCycles_apply_coe, exact_iff_surjective_abToCycles, ext_iff
+/-
+**CategoryTheory.ShortComplex.ab_exact_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：ab_exact_iff : S.Exact ↔ forall (x₂ : S.X₂) (_ : S.g x₂ = 0), exists (x₁ :
+ S.X₁), S.f x₁ = x₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.exact_iff_surjective_abToCycles`：exact_iff_s
+urjective_abToCycles : S.Exact ↔ Function.Surjective S.abToCycles
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.abToCycles_apply_coe`：∀ (S : CategoryTheory.
+ShortComplex Ab) (x : ↑S.X₁), ↑(S.abToCycles x) = (CategoryTheory.ConcreteCatego
+ry.hom S.f) x
 -/
 lemma ab_exact_iff :
-    S.Exact ↔ forall (x₂ : S.X₂) (_ : S.g x₂ = 0), exists (x₁ : S.X₁), S.f x₁ = x₂ := by
+    S.Exact ↔ ∀ (x₂ : S.X₂) (_ : S.g x₂ = 0), ∃ (x₁ : S.X₁), S.f x₁ = x₂ := by
   rw [exact_iff_surjective_abToCycles]
   constructor
   · intro h x₂ hx₂
@@ -300,37 +256,28 @@ lemma ab_exact_iff :
   · rintro h ⟨x₂, hx₂⟩
     obtain ⟨x₁, rfl⟩ := h x₂ hx₂
     exact ⟨x₁, rfl⟩
-
-/--
-lemma `ab_exact_iff_function_exact` / 引理 `ab_exact_iff_function_exact`
-
-English:
-lemma ab_exact_iff_function_exact
-  proof: by
-  rw [S.ab_exact_iff]
-  apply forall_congr'
-  intro x₂
-  constructor
-  · intro h
-    refine ⟨h, ?_⟩
-    rintro ⟨x₁, rfl⟩
-    simp only [ab_zero_apply]
-  · tauto
-
-中文:
-引理 ab_exact_iff_function_exact
-  证明: by
-  rw [S.ab_exact_iff]
-  apply forall_congr'
-  intro x₂
-  constructor
-  · intro h
-    refine ⟨h, ?_⟩
-    rintro ⟨x₁, rfl⟩
-    simp only [ab_zero_apply]
-  · tauto
-
-Depends on / 依赖: S.ab_exact_iff, ab_exact_iff, ab_zero_apply, forall_congr
+/-
+**CategoryTheory.ShortComplex.ab_exact_iff_function_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：ab_exact_iff_function_exact : S.Exact ↔ Function.Exact S.f S.g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.ab_exact_iff`：ab_exact_iff : S.Exact ↔ foral
+l (x₂ : S.X₂) (_ : S.g x₂ = 0), exists (x₁ : S.X₁), S.f x₁ = x₂
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.ShortComplex.ab_zero_apply`：ab_zero_apply (x : S.X₁) : S.
+g (S.f x) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.iff_iff_and_or_not_and_not`：∀ {a b : Prop} [Decidable b], (a ↔
+ b) ↔ a ∧ b ∨ ¬a ∧ ¬b
 -/
 lemma ab_exact_iff_function_exact :
     S.Exact ↔ Function.Exact S.f S.g := by
@@ -345,60 +292,37 @@ lemma ab_exact_iff_function_exact :
   · tauto
 
 variable {S}
-
-/--
-lemma `ab_exact_iff_ker_le_range` / 引理 `ab_exact_iff_ker_le_range`
-
-English:
-lemma ab_exact_iff_ker_le_range
-  statement: S.Exact ↔ S.g.hom.ker <= S.f.hom.range
-  proof: S.ab_exact_iff
-
-中文:
-引理 ab_exact_iff_ker_le_range
-  结论: S.正合 ↔ S.g.hom.ker <= S.f.hom.range
-  证明: S.ab_exact_iff
-
-Depends on / 依赖: S.ab_exact_iff, ab_exact_iff
+/-
+**CategoryTheory.ShortComplex.ab_exact_iff_ker_le_range** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ShortComplex`。
+形式化陈述：ab_exact_iff_ker_le_range : S.Exact ↔ S.g.hom.ker <= S.f.hom.range
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.ab_exact_iff`：ab_exact_iff : S.Exact ↔ foral
+l (x₂ : S.X₂) (_ : S.g x₂ = 0), exists (x₁ : S.X₁), S.f x₁ = x₂
 -/
-lemma ab_exact_iff_ker_le_range : S.Exact ↔ S.g.hom.ker <= S.f.hom.range := S.ab_exact_iff
-
-/--
-lemma `ab_exact_iff_range_eq_ker` / 引理 `ab_exact_iff_range_eq_ker`
-
-English:
-lemma ab_exact_iff_range_eq_ker
-  statement: S.Exact ↔ S.f.hom.range = S.g.hom.ker
-  proof: by
-  rw [ab_exact_iff_ker_le_range]
-  constructor
-  · intro h
-    refine le_antisymm ?_ h
-    rintro _ ⟨x₁, rfl⟩
-    rw [AddMonoidHom.mem_ker]; rw [← ConcreteCategory.comp_apply]; rw [S.zero]
-    rfl
-  · intro h
-    rw [h]
-
-alias ⟨Exact.ab_range_eq_ker, _⟩ := ab_exact_iff_range_eq_ker
-
-中文:
-引理 ab_exact_iff_range_eq_ker
-  结论: S.正合 ↔ S.f.hom.range = S.g.hom.ker
-  证明: by
-  rw [ab_exact_iff_ker_le_range]
-  constructor
-  · intro h
-    refine le_antisymm ?_ h
-    rintro _ ⟨x₁, rfl⟩
-    rw [AddMonoidHom.mem_ker]; rw [← ConcreteCategory.comp_apply]; rw [S.zero]
-    rfl
-  · intro h
-    rw [h]
-
-alias ⟨Exact.ab_range_eq_ker, _⟩ := ab_exact_iff_range_eq_ker
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mem_ker, ConcreteCategory, ConcreteCategory.comp_apply, S.zero, ab_exact_iff_ker_le_range, comp_apply, le_antisymm, mem_ker
+lemma ab_exact_iff_ker_le_range : S.Exact ↔ S.g.hom.ker ≤ S.f.hom.range := S.ab_exact_iff
+/-
+**CategoryTheory.ShortComplex.ab_exact_iff_range_eq_ker** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ShortComplex`。
+形式化陈述：ab_exact_iff_range_eq_ker : S.Exact ↔ S.f.hom.range = S.g.hom.ker
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.ab_exact_iff_ker_le_range`：ab_exact_iff_ker_
+le_range : S.Exact ↔ S.g.hom.ker <= S.f.hom.range
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `AddMonoidHom.mem_ker`：∀ {G : Type u_1} [inst : AddGroup G] {M : Type u_7
+} [inst_1 : AddZeroClass M] {f : G →+ M} {x : G}, x ∈ f.ker ↔ f x = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.ShortComplex.zero`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   (
+self : CategoryTheory.…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 lemma ab_exact_iff_range_eq_ker : S.Exact ↔ S.f.hom.range = S.g.hom.ker := by
   rw [ab_exact_iff_ker_le_range]
@@ -406,37 +330,42 @@ lemma ab_exact_iff_range_eq_ker : S.Exact ↔ S.f.hom.range = S.g.hom.ker := by
   · intro h
     refine le_antisymm ?_ h
     rintro _ ⟨x₁, rfl⟩
-    rw [AddMonoidHom.mem_ker]; rw [← ConcreteCategory.comp_apply]; rw [S.zero]
+    rw [AddMonoidHom.mem_ker, ← ConcreteCategory.comp_apply, S.zero]
     rfl
   · intro h
     rw [h]
 
 alias ⟨Exact.ab_range_eq_ker, _⟩ := ab_exact_iff_range_eq_ker
 
-/--
-lemma `Exact.ab_finite` / 引理 `Exact.ab_finite`
+/-- In an exact sequence of abelian groups, if the first and last groups are finite, then so is the
+middle one. -/
+/-
+**CategoryTheory.ShortComplex.Exact.ab_finite** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ShortComplex.Exact`。
+形式化陈述：∀ {S : CategoryTheory.ShortComplex Ab}, S.Exact → ∀ [Finite ↑S.X₁] [Finite
+ ↑S.X₃], Finite ↑S.X₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_range`：finite_range (f : ι -> α) [Finite ι] : (range f).Finit
+e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.Exact.ab_range_eq_ker`：∀ {S : CategoryTheory
+.ShortComplex Ab}, S.Exact → (AddCommGrpCat.Hom.hom S.f).range = (AddCommGrpCat.
+Hom.hom S.g).ker
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `AddSubgroup.instFiniteSubtypeMem`：∀ {G : Type u_1} [inst : AddGroup G] (
+K : AddSubgroup G) [Finite G], Finite ↥K
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `AddMonoidHom.normal_ker`：∀ {G : Type u_1} [inst : AddGroup G] {M : Type 
+u_7} [inst_1 : AddZeroClass M] (f : G →+ M), f.ker.Normal
+· 使用定理 `Finite.of_addSubgroup_quotient`：∀ {G : Type u_2} [inst : AddGroup G] (H 
+: AddSubgroup G) [Finite ↥H] [Finite (G ⧸ H)], Finite G
 
-English:
-lemma Exact.ab_finite
-  given: {S : ShortComplex Ab.{u}} (hS : S.Exact) [Finite S.X₁] [Finite S.X₃]
-  proof: by
-  have : Finite S.f.hom.range := Set.finite_range _
-  have : Finite (S.X₂ ⧸ S.f.hom.range) := by
-    rw [hS.ab_range_eq_ker]
-    exact .of_equiv _ (QuotientAddGroup.quotientKerEquivRange _).toEquiv.symm
-  exact .of_addSubgroup_quotient (H := S.f.hom.range)
-
-中文:
-引理 正合.ab_finite
-  条件: {S : 短复形 Ab.{u}} (hS : S.正合) [有限 S.X₁] [有限 S.X₃]
-  证明: by
-  have : Finite S.f.hom.range := Set.finite_range _
-  have : Finite (S.X₂ ⧸ S.f.hom.range) := by
-    rw [hS.ab_range_eq_ker]
-    exact .of_equiv _ (QuotientAddGroup.quotientKerEquivRange _).toEquiv.symm
-  exact .of_addSubgroup_quotient (H := S.f.hom.range)
-
-Depends on / 依赖: Finite, QuotientAddGroup, QuotientAddGroup.quotientKerEquivRange, S.f.hom.range, Set.finite_range, ab_range_eq_ker, finite_range, hS.ab_range_eq_ker, of_addSubgroup_quotient, of_equiv, quotientKerEquivRange, toEquiv, toEquiv.symm
+--- 原说明 ---
+In an exact sequence of abelian groups, if the first and last groups are finite,
+ then so is the
+middle one.
 -/
 lemma Exact.ab_finite {S : ShortComplex Ab.{u}} (hS : S.Exact) [Finite S.X₁] [Finite S.X₃] :
     Finite S.X₂ := by
@@ -445,61 +374,72 @@ lemma Exact.ab_finite {S : ShortComplex Ab.{u}} (hS : S.Exact) [Finite S.X₁] [
     rw [hS.ab_range_eq_ker]
     exact .of_equiv _ (QuotientAddGroup.quotientKerEquivRange _).toEquiv.symm
   exact .of_addSubgroup_quotient (H := S.f.hom.range)
-
-/--
-lemma `ShortExact.ab_injective_f` / 引理 `ShortExact.ab_injective_f`
-
-English:
-lemma ShortExact.ab_injective_f
-  given: (hS : S.ShortExact)
-  proof: (AddCommGrpCat.mono_iff_injective _).1 hS.mono_f
-
-中文:
-引理 短正合.ab_injective_f
-  条件: (hS : S.短正合)
-  证明: (AddCommGrpCat.mono_iff_injective _).1 hS.mono_f
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, hS.mono_f, mono_f, mono_iff_injective
+/-
+**CategoryTheory.ShortComplex.ShortExact.ab_injective_f** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：∀ {S : CategoryTheory.ShortComplex Ab}, S.ShortExact → Function.Injective 
+⇑(CategoryTheory.ConcreteCategory.hom S.f)
+参数：CategoryTheory.ConcreteCategory.hom S.f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddCommGrpCat.mono_iff_injective`：∀ {A B : AddCommGrpCat} (f : A ⟶ B), C
+ategoryTheory.Mono f ↔ Function.Injective ⇑(CategoryTheory.ConcreteCategory.hom 
+f)
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.mono_f`：∀ {C : Type u_1} [inst : 
+CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMor
+phisms C]   {S : CategoryTheory.Sho…
 -/
 lemma ShortExact.ab_injective_f (hS : S.ShortExact) :
     Function.Injective S.f :=
   (AddCommGrpCat.mono_iff_injective _).1 hS.mono_f
-
-/--
-lemma `ShortExact.ab_surjective_g` / 引理 `ShortExact.ab_surjective_g`
-
-English:
-lemma ShortExact.ab_surjective_g
-  given: (hS : S.ShortExact)
-  proof: (AddCommGrpCat.epi_iff_surjective _).1 hS.epi_g
-
-中文:
-引理 短正合.ab_surjective_g
-  条件: (hS : S.短正合)
-  证明: (AddCommGrpCat.epi_iff_surjective _).1 hS.epi_g
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.epi_iff_surjective, epi_g, epi_iff_surjective, hS.epi_g
+/-
+**CategoryTheory.ShortComplex.ShortExact.ab_surjective_g** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：∀ {S : CategoryTheory.ShortComplex Ab}, S.ShortExact → Function.Surjective
+ ⇑(CategoryTheory.ConcreteCategory.hom S.g)
+参数：CategoryTheory.ConcreteCategory.hom S.g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddCommGrpCat.epi_iff_surjective`：∀ {A B : AddCommGrpCat} (f : A ⟶ B), C
+ategoryTheory.Epi f ↔ Function.Surjective ⇑(CategoryTheory.ConcreteCategory.hom 
+f)
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.epi_g`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms C]   {S : CategoryTheory.Sho…
 -/
 lemma ShortExact.ab_surjective_g (hS : S.ShortExact) :
     Function.Surjective S.g :=
   (AddCommGrpCat.epi_iff_surjective _).1 hS.epi_g
 
-/--
-lemma `ShortExact.ab_finite_iff` / 引理 `ShortExact.ab_finite_iff`
+/-- In a short exact sequence of abelian groups, the middle group is finite iff the first and last
+are. -/
+/-
+**CategoryTheory.ShortComplex.ShortExact.ab_finite_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：∀ {S : CategoryTheory.ShortComplex Ab}, S.ShortExact → (Finite ↑S.X₂ ↔ Fin
+ite ↑S.X₁ ∧ Finite ↑S.X₃)
+参数：Finite ↑S.X₂ ↔ Finite ↑S.X₁ ∧ Finite ↑S.X₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.ab_injective_f`：∀ {S : CategoryTh
+eory.ShortComplex Ab}, S.ShortExact → Function.Injective ⇑(CategoryTheory.Concre
+teCategory.hom S.f)
+· 使用定理 `Finite.of_surjective`：Finite.of_surjective {α β : Sort*} [Finite α] (f :
+ α -> β) (H : Surjective f) : Finite β
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.ab_surjective_g`：∀ {S : CategoryT
+heory.ShortComplex Ab}, S.ShortExact → Function.Surjective ⇑(CategoryTheory.Conc
+reteCategory.hom S.g)
+· 使用定理 `CategoryTheory.ShortComplex.Exact.ab_finite`：∀ {S : CategoryTheory.Short
+Complex Ab}, S.Exact → ∀ [Finite ↑S.X₁] [Finite ↑S.X₃], Finite ↑S.X₂
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.exact`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms C]   {S : CategoryTheory.Sho…
 
-English:
-lemma ShortExact.ab_finite_iff
-  given: {S : ShortComplex Ab.{u}} (hS : S.ShortExact)
-  proof: ⟨.of_injective _ hS.ab_injective_f, .of_surjective _ hS.ab_surjective_g⟩
-  mpr | ⟨_, _⟩ => hS.exact.ab_finite
-
-中文:
-引理 短正合.ab_finite_iff
-  条件: {S : 短复形 Ab.{u}} (hS : S.短正合)
-  证明: ⟨.of_injective _ hS.ab_injective_f, .of_surjective _ hS.ab_surjective_g⟩
-  mpr | ⟨_, _⟩ => hS.exact.ab_finite
-
-Depends on / 依赖: ab_injective_f, ab_surjective_g, hS.ab_injective_f, hS.ab_surjective_g, of_injective, of_surjective
+--- 原说明 ---
+In a short exact sequence of abelian groups, the middle group is finite iff the 
+first and last
+are.
 -/
 lemma ShortExact.ab_finite_iff {S : ShortComplex Ab.{u}} (hS : S.ShortExact) :
     Finite S.X₂ ↔ Finite S.X₁ ∧ Finite S.X₃ where
@@ -509,3 +449,4 @@ lemma ShortExact.ab_finite_iff {S : ShortComplex Ab.{u}} (hS : S.ShortExact) :
 end ShortComplex
 
 end CategoryTheory
+

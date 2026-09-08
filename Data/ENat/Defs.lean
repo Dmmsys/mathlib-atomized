@@ -13,109 +13,72 @@ public import Mathlib.Order.TypeTags
 
 @[expose] public section
 
-/--
-Definition of `ENat` / `ENat` 的定义
+/-- Extended natural numbers `ℕ∞ = WithTop ℕ`. -/
+/-
+**ENat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ENat : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ENat
-  signature: : Type
-  body: WithTop Nat deriving Top, Inhabited
-
-@[inherit_doc] notation "Nat∞" => ENat
-
-中文:
-定义 E自然数
-  签名: : 类型
-  定义体: WithTop Nat deriving Top, Inhabited
-
-@[inherit_doc] notation "Nat∞" => ENat
-
-Depends on / 依赖: Inhabited, WithTop, deriving
+--- 原说明 ---
+Extended natural numbers `ℕ∞ = WithTop ℕ`.
 -/
-def ENat : Type := WithTop Nat deriving Top, Inhabited
+def ENat : Type := WithTop ℕ deriving Top, Inhabited
 
-@[inherit_doc] notation "Nat∞" => ENat
+@[inherit_doc] notation "ℕ∞" => ENat
 
 namespace ENat
 
-/--
-Instance `instNatCast` / 实例 `instNatCast`
-
-English:
-instance instNatCast
-  signature: : NatCast Nat∞
-  body: ⟨WithTop.some⟩
-
-中文:
-实例 inst自然数Cast
-  签名: : 自然数嵌入 自然数∞
-  定义体: ⟨WithTop.some⟩
-
-Depends on / 依赖: WithTop, WithTop.some
+/-
+**ENat.instNatCast** 是 Mathlib 中的一个实例，位于命名空间 `ENat`。
+形式化陈述：instNatCast : NatCast Nat∞
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNatCast : NatCast Nat∞ := ⟨WithTop.some⟩
+instance instNatCast : NatCast ℕ∞ := ⟨WithTop.some⟩
 
 /-- Recursor for `ENat` using the preferred forms `⊤` and `↑a`. -/
 @[elab_as_elim, induction_eliminator, cases_eliminator]
-/--
-Definition of `recTopCoe` / `recTopCoe` 的定义
+/-
+**ENat.recTopCoe** 是 Mathlib 中的一个定义，位于命名空间 `ENat`。
+形式化陈述：{C : ℕ∞ → Sort u_1} → C ⊤ → ((a : ℕ) → C ↑a) → (n : ℕ∞) → C n
+参数：(a : ℕ) → C ↑a；n : ℕ∞。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recTopCoe
-  signature: {C : Nat∞ -> Sort*} (top : C ⊤) (coe : forall a : Nat, C a)
-
-中文:
-定义 recTopCoe
-  签名: {C : 自然数∞ -> 类型层*} (top : C ⊤) (coe : 对任意 a : 自然数, C a)
+--- 原说明 ---
+Recursor for `ENat` using the preferred forms `⊤` and `↑a`.
 -/
-def recTopCoe {C : Nat∞ -> Sort*} (top : C ⊤) (coe : forall a : Nat, C a) : forall n : Nat∞, C n
+def recTopCoe {C : ℕ∞ → Sort*} (top : C ⊤) (coe : ∀ a : ℕ, C a) : ∀ n : ℕ∞, C n
   | none => top
   | Option.some a => coe a
 
 @[simp]
-/--
-theorem `recTopCoe_top` / 定理 `recTopCoe_top`
-
-English:
-theorem recTopCoe_top
-  given: {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 recTopCoe_top
-  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
-  证明: rfl
-
-@[simp]
+/-
+**ENat.recTopCoe_top** 是 Mathlib 中的一个定理，位于命名空间 `ENat`。
+形式化陈述：recTopCoe_top {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a) : @r
+ecTopCoe C d f ⊤ = d
+参数：d : C ⊤；f : forall a : Nat, C a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recTopCoe_top {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a) :
+theorem recTopCoe_top {C : ℕ∞ → Sort*} (d : C ⊤) (f : ∀ a : ℕ, C a) :
     @recTopCoe C d f ⊤ = d :=
   rfl
 
 @[simp]
-/--
-theorem `recTopCoe_natCast` / 定理 `recTopCoe_natCast`
-
-English:
-theorem recTopCoe_natCast
-  given: {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a) (x : Nat)
-  proof: rfl
-
-@[deprecated (since := "2026-07-17")] alias recTopCoe_coe := recTopCoe_natCast
-
-中文:
-定理 recTopCoe_natCast
-  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a) (x : 自然数)
-  证明: rfl
-
-@[deprecated (since := "2026-07-17")] alias recTopCoe_coe := recTopCoe_natCast
+/-
+**ENat.recTopCoe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `ENat`。
+形式化陈述：recTopCoe_natCast {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a) 
+(x : Nat) : @recTopCoe C d f ↑x = f x
+参数：d : C ⊤；f : forall a : Nat, C a；x : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recTopCoe_natCast {C : Nat∞ -> Sort*} (d : C ⊤) (f : forall a : Nat, C a) (x : Nat) :
+theorem recTopCoe_natCast {C : ℕ∞ → Sort*} (d : C ⊤) (f : ∀ a : ℕ, C a) (x : ℕ) :
     @recTopCoe C d f ↑x = f x :=
   rfl
 
 @[deprecated (since := "2026-07-17")] alias recTopCoe_coe := recTopCoe_natCast
 
 end ENat
+

@@ -45,28 +45,22 @@ variable {C : Type u} [Category.{v} C] [HasZeroMorphisms C] (S : ShortComplex C)
 
 namespace ShortComplex
 
-/--
-Definition of `HomologyData` / `HomologyData` 的定义
+/-- A homology data for a short complex consists of two compatible left and
+right homology data -/
+/-
+**CategoryTheory.ShortComplex.HomologyData** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：HomologyData where /-- a left homology data -/ left : S.LeftHomologyData /
+-- a right homology data -/ right : S.RightHomologyData /-- the compatibility is
+omorphism relating the two dual notions of `LeftHomologyData` and `RightHomology
+Data` -/ iso : left.H ≅ right.H /-- the pentagon relation expressing the compati
+bility of the left and right homology data -/ comm : left.π ≫ iso.hom ≫ right.ι 
+= left.i ≫ right.p
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HomologyData
-  parameters: where
-  axioms and operations (4):
-    - left : S.LeftHomologyData
-    - right : S.RightHomologyData
-    - iso : left.H ≅ right.H
-    - comm : left.π ≫ iso.hom ≫ right.ι = left.i ≫ right.p  [default: by cat_disch]
-
-中文:
-结构 同调数据
-  参数: where
-  公理与运算 (4 个):
-    - left : S.LeftHomologyData
-    - right : S.RightHomologyData
-    - iso : left.H ≅ right.H
-    - comm : left.π ≫ iso.hom ≫ right.ι = left.i ≫ right.p  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A homology data for a short complex consists of two compatible left and
+right homology data
 -/
 structure HomologyData where
   /-- a left homology data -/
@@ -84,24 +78,20 @@ attribute [reassoc (attr := simp)] HomologyData.comm
 
 variable (φ : S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
 
-/--
-Definition of `HomologyMapData` / `HomologyMapData` 的定义
+/-- A homology map data for a morphism `φ : S₁ ⟶ S₂` where both `S₁` and `S₂` are
+equipped with homology data consists of left and right homology map data. -/
+/-
+**CategoryTheory.ShortComplex.HomologyMapData** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.ShortComplex`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       {S₁ S₂ : CategoryTheory.Short
+Complex C} → (S₁ ⟶ S₂) → S₁.HomologyData → S₂.HomologyData → Type v
+参数：S₁ ⟶ S₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HomologyMapData
-  parameters: where
-  axioms and operations (2):
-    - left : LeftHomologyMapData φ h₁.left h₂.left
-    - right : RightHomologyMapData φ h₁.right h₂.right
-
-中文:
-结构 同调映射数据
-  参数: where
-  公理与运算 (2 个):
-    - left : LeftHomologyMapData φ h₁.left h₂.left
-    - right : RightHomologyMapData φ h₁.right h₂.right
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A homology map data for a morphism `φ : S₁ ⟶ S₂` where both `S₁` and `S₂` are
+equipped with homology data consists of left and right homology map data.
 -/
 structure HomologyMapData where
   /-- a left homology map data -/
@@ -114,120 +104,108 @@ namespace HomologyMapData
 variable {φ h₁ h₂}
 
 @[reassoc]
-/--
-lemma `comm` / 引理 `comm`
-
-English:
-lemma comm
-  given: (h : HomologyMapData φ h₁ h₂)
-  proof: by
-  simp only [← cancel_epi h₁.left.π, ← cancel_mono h₂.right.ι, assoc,
-    LeftHomologyMapData.commπ_assoc, HomologyData.comm, LeftHomologyMapData.commi_assoc,
-    RightHomologyMapData.commι, HomologyData.comm_assoc, RightHomologyMapData.commp]
-
-中文:
-引理 comm
-  条件: (h : 同调映射数据 φ h₁ h₂)
-  证明: by
-  simp only [← cancel_epi h₁.left.π, ← cancel_mono h₂.right.ι, assoc,
-    LeftHomologyMapData.commπ_assoc, HomologyData.comm, LeftHomologyMapData.commi_assoc,
-    RightHomologyMapData.commι, HomologyData.comm_assoc, RightHomologyMapData.commp]
-
-Depends on / 依赖: HomologyData, HomologyData.comm, HomologyData.comm_assoc, LeftHomologyMapData, LeftHomologyMapData.comm, LeftHomologyMapData.commi_assoc, RightHomologyMapData, RightHomologyMapData.comm, RightHomologyMapData.commp, cancel_epi, cancel_mono, comm_assoc, commi_assoc
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.comm** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：comm (h : HomologyMapData φ h₁ h₂) : h.left.φH ≫ h₂.iso.hom = h₁.iso.hom ≫
+ h.right.φH
+参数：h : HomologyMapData φ h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.instEpiπ`：∀ {C : Type u_1} 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.commπ_assoc`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Lim
+its.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.instMonoι`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.
+HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.comm`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.commi_assoc`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Lim
+its.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyMapData.commι`：∀ {C : Type u_1}
+ [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.comm_assoc`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMor
+phisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyMapData.commp`：∀ {C : Type u_1}
+ [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comm (h : HomologyMapData φ h₁ h₂) :
     h.left.φH ≫ h₂.iso.hom = h₁.iso.hom ≫ h.right.φH := by
   simp only [← cancel_epi h₁.left.π, ← cancel_mono h₂.right.ι, assoc,
     LeftHomologyMapData.commπ_assoc, HomologyData.comm, LeftHomologyMapData.commi_assoc,
     RightHomologyMapData.commι, HomologyData.comm_assoc, RightHomologyMapData.commp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (HomologyMapData φ h₁ h₂)
-  body: ⟨by
-  rintro ⟨left₁, right₁⟩ ⟨left₂, right₂⟩
-  simp only [mk.injEq, eq_iff_true_of_subsingleton, and_self]⟩
-
-中文:
-实例 :
-  签名: 子单例 (同调映射数据 φ h₁ h₂)
-  定义体: ⟨by
-  rintro ⟨left₁, right₁⟩ ⟨left₂, right₂⟩
-  simp only [mk.injEq, eq_iff_true_of_subsingleton, and_self]⟩
-
-Depends on / 依赖: and_self, eq_iff_true_of_subsingleton, mk.injEq
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.ShortComplex.HomologyMapData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (HomologyMapData φ h₁ h₂) := ⟨by
   rintro ⟨left₁, right₁⟩ ⟨left₂, right₂⟩
   simp only [mk.injEq, eq_iff_true_of_subsingleton, and_self]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (HomologyMapData φ h₁ h₂)
-  body: ⟨⟨default, default⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (同调映射数据 φ h₁ h₂)
-  定义体: ⟨⟨default, default⟩⟩
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.ShortComplex.HomologyMapData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (HomologyMapData φ h₁ h₂) :=
   ⟨⟨default, default⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique (HomologyMapData φ h₁ h₂)
-  body: Unique.mk' _
-
-中文:
-实例 :
-  签名: 唯一 (同调映射数据 φ h₁ h₂)
-  定义体: Unique.mk' _
-
-Depends on / 依赖: Unique, Unique.mk
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.ShortComplex.HomologyMapData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique (HomologyMapData φ h₁ h₂) := Unique.mk' _
 
 variable (φ h₁ h₂)
 
-/--
-Definition of `homologyMapData` / `homologyMapData` 的定义
+/-- A choice of the (unique) homology map data associated with a morphism
+`φ : S₁ ⟶ S₂` where both short complexes `S₁` and `S₂` are equipped with
+homology data. -/
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.homologyMapData** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：homologyMapData : HomologyMapData φ h₁ h₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyMapData
-  signature: : HomologyMapData φ h₁ h₂
-  body: default
-
-中文:
-定义 homologyMapData
-  签名: : 同调映射数据 φ h₁ h₂
-  定义体: default
+--- 原说明 ---
+A choice of the (unique) homology map data associated with a morphism
+`φ : S₁ ⟶ S₂` where both short complexes `S₁` and `S₂` are equipped with
+homology data.
 -/
 def homologyMapData : HomologyMapData φ h₁ h₂ := default
 
 variable {φ h₁ h₂}
-
-/--
-lemma `congr_left_φH` / 引理 `congr_left_φH`
-
-English:
-lemma congr_left_φH
-  given: {γ₁ γ₂ : HomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂)
-  proof: by rw [eq]
-
-中文:
-引理 congr_left_φH
-  条件: {γ₁ γ₂ : 同调映射数据 φ h₁ h₂} (eq : γ₁ = γ₂)
-  证明: by rw [eq]
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.congr_left_** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma congr_left_φH {γ₁ γ₂ : HomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂) :
     γ₁.left.φH = γ₂.left.φH := by rw [eq]
@@ -240,24 +218,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- When the first map `S.f` is zero, this is the homology data on `S` given
 by any limit kernel fork of `S.g` -/
 @[simps]
-/--
-Definition of `ofIsLimitKernelFork` / `ofIsLimitKernelFork` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofIsLimitKernelFork** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofIsLimitKernelFork (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c) :
+ S.HomologyData where left
+参数：hf : S.f = 0；c : KernelFork S.g；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsLimitKernelFork
-  signature: (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c)
-  body: LeftHomologyData.ofIsLimitKernelFork S hf c hc
-  right := RightHomologyData.ofIsLimitKernelFork S hf c hc
-  iso := Iso.refl _
-
-中文:
-定义 ofIsLimitKernelFork
-  签名: (hf : S.f = 0) (c : 核叉 S.g) (hc : 是极限 c)
-  定义体: LeftHomologyData.ofIsLimitKernelFork S hf c hc
-  right := RightHomologyData.ofIsLimitKernelFork S hf c hc
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofIsLimitKernelFork, infer_instance, ofIsLimitKernelFork
+--- 原说明 ---
+When the first map `S.f` is zero, this is the homology data on `S` given
+by any limit kernel fork of `S.g`
 -/
 def ofIsLimitKernelFork (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c) :
     S.HomologyData where
@@ -269,24 +241,17 @@ set_option backward.defeqAttrib.useBackward true in
 /-- When the first map `S.f` is zero, this is the homology data on `S` given
 by the chosen `kernel S.g` -/
 @[simps]
-/--
-Definition of `ofHasKernel` / `ofHasKernel` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofHasKernel** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofHasKernel (hf : S.f = 0) [HasKernel S.g] : S.HomologyData where left
+参数：hf : S.f = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHasKernel
-  signature: (hf : S.f = 0) [HasKernel S.g]
-  body: LeftHomologyData.ofHasKernel S hf
-  right := RightHomologyData.ofHasKernel S hf
-  iso := Iso.refl _
-
-中文:
-定义 ofHasKernel
-  签名: (hf : S.f = 0) [HasKernel S.g]
-  定义体: LeftHomologyData.ofHasKernel S hf
-  right := RightHomologyData.ofHasKernel S hf
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofHasKernel, ofHasKernel
+--- 原说明 ---
+When the first map `S.f` is zero, this is the homology data on `S` given
+by the chosen `kernel S.g`
 -/
 noncomputable def ofHasKernel (hf : S.f = 0) [HasKernel S.g] :
     S.HomologyData where
@@ -298,24 +263,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- When the second map `S.g` is zero, this is the homology data on `S` given
 by any colimit cokernel cofork of `S.f` -/
 @[simps]
-/--
-Definition of `ofIsColimitCokernelCofork` / `ofIsColimitCokernelCofork` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofIsColimitCokernelCofork** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofIsColimitCokernelCofork (hg : S.g = 0) (c : CokernelCofork S.f) (hc : Is
+Colimit c) : S.HomologyData where left
+参数：hg : S.g = 0；c : CokernelCofork S.f；hc : IsColimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsColimitCokernelCofork
-  signature: (hg : S.g = 0) (c : CokernelCofork S.f) (hc : IsColimit c)
-  body: LeftHomologyData.ofIsColimitCokernelCofork S hg c hc
-  right := RightHomologyData.ofIsColimitCokernelCofork S hg c hc
-  iso := Iso.refl _
-
-中文:
-定义 ofIsColimitCokernelCofork
-  签名: (hg : S.g = 0) (c : 余核余叉 S.f) (hc : 是余极限 c)
-  定义体: LeftHomologyData.ofIsColimitCokernelCofork S hg c hc
-  right := RightHomologyData.ofIsColimitCokernelCofork S hg c hc
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofIsColimitCokernelCofork, ofIsColimitCokernelCofork
+--- 原说明 ---
+When the second map `S.g` is zero, this is the homology data on `S` given
+by any colimit cokernel cofork of `S.f`
 -/
 def ofIsColimitCokernelCofork (hg : S.g = 0) (c : CokernelCofork S.f) (hc : IsColimit c) :
     S.HomologyData where
@@ -327,24 +286,17 @@ set_option backward.defeqAttrib.useBackward true in
 /-- When the second map `S.g` is zero, this is the homology data on `S` given by
 the chosen `cokernel S.f` -/
 @[simps]
-/--
-Definition of `ofHasCokernel` / `ofHasCokernel` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofHasCokernel** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofHasCokernel (hg : S.g = 0) [HasCokernel S.f] : S.HomologyData where left
+参数：hg : S.g = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHasCokernel
-  signature: (hg : S.g = 0) [HasCokernel S.f]
-  body: LeftHomologyData.ofHasCokernel S hg
-  right := RightHomologyData.ofHasCokernel S hg
-  iso := Iso.refl _
-
-中文:
-定义 ofHasCokernel
-  签名: (hg : S.g = 0) [HasCokernel S.f]
-  定义体: LeftHomologyData.ofHasCokernel S hg
-  right := RightHomologyData.ofHasCokernel S hg
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofHasCokernel, ofHasCokernel
+--- 原说明 ---
+When the second map `S.g` is zero, this is the homology data on `S` given by
+the chosen `cokernel S.f`
 -/
 noncomputable def ofHasCokernel (hg : S.g = 0) [HasCokernel S.f] :
     S.HomologyData where
@@ -355,24 +307,17 @@ noncomputable def ofHasCokernel (hg : S.g = 0) [HasCokernel S.f] :
 set_option backward.defeqAttrib.useBackward true in
 /-- When both `S.f` and `S.g` are zero, the middle object `S.X₂` gives a homology data on S -/
 @[simps]
-/--
-Definition of `ofZeros` / `ofZeros` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofZeros** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofZeros (hf : S.f = 0) (hg : S.g = 0) : S.HomologyData where left
+参数：hf : S.f = 0；hg : S.g = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZeros
-  signature: (hf : S.f = 0) (hg : S.g = 0)
-  body: LeftHomologyData.ofZeros S hf hg
-  right := RightHomologyData.ofZeros S hf hg
-  iso := Iso.refl _
-
-中文:
-定义 ofZeros
-  签名: (hf : S.f = 0) (hg : S.g = 0)
-  定义体: LeftHomologyData.ofZeros S hf hg
-  right := RightHomologyData.ofZeros S hf hg
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofZeros, ofZeros
+--- 原说明 ---
+When both `S.f` and `S.g` are zero, the middle object `S.X₂` gives a homology da
+ta on S
 -/
 noncomputable def ofZeros (hf : S.f = 0) (hg : S.g = 0) :
     S.HomologyData where
@@ -385,24 +330,21 @@ set_option backward.defeqAttrib.useBackward true in
 and `φ.τ₃` is mono, then a homology data for `S₁` induces a homology data for `S₂`.
 The inverse construction is `ofEpiOfIsIsoOfMono'`. -/
 @[simps]
-/--
-Definition of `ofEpiOfIsIsoOfMono` / `ofEpiOfIsIsoOfMono` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofEpiOfIsIsoOfMono** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofEpiOfIsIsoOfMono (φ : S₁ ⟶ S₂) (h : HomologyData S₁) [Epi φ.τ₁] [IsIso φ
+.τ₂] [Mono φ.τ₃] : HomologyData S₂ where left
+参数：φ : S₁ ⟶ S₂；h : HomologyData S₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEpiOfIsIsoOfMono
-  signature: (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
-  body: LeftHomologyData.ofEpiOfIsIsoOfMono φ h.left
-  right := RightHomologyData.ofEpiOfIsIsoOfMono φ h.right
-  iso := h.iso
-
-中文:
-定义 ofEpiOfIsIsoOfMono
-  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₁)
-  定义体: LeftHomologyData.ofEpiOfIsIsoOfMono φ h.left
-  right := RightHomologyData.ofEpiOfIsIsoOfMono φ h.right
-  iso := h.iso
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofEpiOfIsIsoOfMono, h.left, ofEpiOfIsIsoOfMono
+--- 原说明 ---
+If `φ : S₁ ⟶ S₂` is a morphism of short complexes such that `φ.τ₁` is epi, `φ.τ₂
+` is an iso
+and `φ.τ₃` is mono, then a homology data for `S₁` induces a homology data for `S
+₂`.
+The inverse construction is `ofEpiOfIsIsoOfMono'`.
 -/
 noncomputable def ofEpiOfIsIsoOfMono (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HomologyData S₂ where
@@ -415,28 +357,21 @@ set_option backward.defeqAttrib.useBackward true in
 and `φ.τ₃` is mono, then a homology data for `S₂` induces a homology data for `S₁`.
 The inverse construction is `ofEpiOfIsIsoOfMono`. -/
 @[simps]
-/--
-Definition of `ofEpiOfIsIsoOfMono'` / `ofEpiOfIsIsoOfMono'` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofEpiOfIsIsoOfMono'** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofEpiOfIsIsoOfMono' (φ : S₁ ⟶ S₂) (h : HomologyData S₂) [Epi φ.τ₁] [IsIso 
+φ.τ₂] [Mono φ.τ₃] : HomologyData S₁ where left
+参数：φ : S₁ ⟶ S₂；h : HomologyData S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEpiOfIsIsoOfMono'
-  signature: (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
-  body: LeftHomologyData.ofEpiOfIsIsoOfMono' φ h.left
-  right := RightHomologyData.ofEpiOfIsIsoOfMono' φ h.right
-  iso := h.iso
-
-#adaptation_note
-
-中文:
-定义 ofEpiOfIsIsoOfMono'
-  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₂)
-  定义体: LeftHomologyData.ofEpiOfIsIsoOfMono' φ h.left
-  right := RightHomologyData.ofEpiOfIsIsoOfMono' φ h.right
-  iso := h.iso
-
-#adaptation_note
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofEpiOfIsIsoOfMono, h.left, ofEpiOfIsIsoOfMono
+--- 原说明 ---
+If `φ : S₁ ⟶ S₂` is a morphism of short complexes such that `φ.τ₁` is epi, `φ.τ₂
+` is an iso
+and `φ.τ₃` is mono, then a homology data for `S₂` induces a homology data for `S
+₁`.
+The inverse construction is `ofEpiOfIsIsoOfMono`.
 -/
 noncomputable def ofEpiOfIsIsoOfMono' (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HomologyData S₁ where
@@ -450,20 +385,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- If `e : S₁ ≅ S₂` is an isomorphism of short complexes and `h₁ : HomologyData S₁`,
 this is the homology data for `S₂` deduced from the isomorphism. -/
 @[simps!]
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofIso (e : S₁ ≅ S₂) (h : HomologyData S₁)
+参数：e : S₁ ≅ S₂；h : HomologyData S₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIso
-  signature: (e : S₁ ≅ S₂) (h : HomologyData S₁)
-  body: h.ofEpiOfIsIsoOfMono e.hom
-
-中文:
-定义 ofIso
-  签名: (e : S₁ ≅ S₂) (h : 同调数据 S₁)
-  定义体: h.ofEpiOfIsIsoOfMono e.hom
-
-Depends on / 依赖: e.hom, h.ofEpiOfIsIsoOfMono, ofEpiOfIsIsoOfMono
+--- 原说明 ---
+If `e : S₁ ≅ S₂` is an isomorphism of short complexes and `h₁ : HomologyData S₁`
+,
+this is the homology data for `S₂` deduced from the isomorphism.
 -/
 noncomputable def ofIso (e : S₁ ≅ S₂) (h : HomologyData S₁) :=
   h.ofEpiOfIsIsoOfMono e.hom
@@ -473,26 +405,16 @@ variable {S}
 set_option backward.defeqAttrib.useBackward true in
 /-- A homology data for a short complex `S` induces a homology data for `S.op`. -/
 @[simps]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.op** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ShortComplex.HomologyData`。
+形式化陈述：op (h : S.HomologyData) : S.op.HomologyData where left
+参数：h : S.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (h : S.HomologyData)
-  body: h.right.op
-  right := h.left.op
-  iso := h.iso.op
-  comm := Quiver.Hom.unop_inj (by simp)
-
-中文:
-定义 op
-  签名: (h : S.同调数据)
-  定义体: h.right.op
-  right := h.left.op
-  iso := h.iso.op
-  comm := Quiver.Hom.unop_inj (by simp)
-
-Depends on / 依赖: h.right.op
+--- 原说明 ---
+A homology data for a short complex `S` induces a homology data for `S.op`.
 -/
 def op (h : S.HomologyData) : S.op.HomologyData where
   left := h.right.op
@@ -504,26 +426,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A homology data for a short complex `S` in the opposite category
 induces a homology data for `S.unop`. -/
 @[simps]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.unop** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.ShortComplex.HomologyData`。
+形式化陈述：unop {S : ShortComplex Cᵒᵖ} (h : S.HomologyData) : S.unop.HomologyData whe
+re left
+参数：h : S.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: {S : ShortComplex Cᵒᵖ} (h : S.HomologyData)
-  body: h.right.unop
-  right := h.left.unop
-  iso := h.iso.unop
-  comm := Quiver.Hom.op_inj (by simp)
-
-中文:
-定义 unop
-  签名: {S : 短复形 Cᵒᵖ} (h : S.同调数据)
-  定义体: h.right.unop
-  right := h.left.unop
-  iso := h.iso.unop
-  comm := Quiver.Hom.op_inj (by simp)
-
-Depends on / 依赖: h.right.unop
+--- 原说明 ---
+A homology data for a short complex `S` in the opposite category
+induces a homology data for `S.unop`.
 -/
 def unop {S : ShortComplex Cᵒᵖ} (h : S.HomologyData) : S.unop.HomologyData where
   left := h.right.unop
@@ -533,232 +447,177 @@ def unop {S : ShortComplex Cᵒᵖ} (h : S.HomologyData) : S.unop.HomologyData w
 
 end HomologyData
 
-/--
-Definition of `HasHomology` / `HasHomology` 的定义
+/-- A short complex `S` has homology when there exists a `S.HomologyData` -/
+/-
+**CategoryTheory.ShortComplex.HasHomology** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.ShortComplex`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] → CategoryTheory.ShortComplex C → Pro
+p
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasHomology
-  parameters: : Prop where
-  axioms and operations (1):
-    - condition : Nonempty S.HomologyData
-
-中文:
-类 有同调
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - condition : 非空 S.同调数据
+--- 原说明 ---
+A short complex `S` has homology when there exists a `S.HomologyData`
 -/
 class HasHomology : Prop where
   /-- the condition that there exists a homology data -/
   condition : Nonempty S.HomologyData
 
-/--
-Definition of `homologyData` / `homologyData` 的定义
+/-- A chosen `S.HomologyData` for a short complex `S` that has homology -/
+/-
+**CategoryTheory.ShortComplex.homologyData** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：homologyData [HasHomology S] : S.HomologyData
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.condition`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C}   {S : CategoryTheory.ShortComp…
 
-English:
-definition homologyData
-  signature: [HasHomology S]
-  body: HasHomology.condition.some
-
-中文:
-定义 homologyData
-  签名: [有同调 S]
-  定义体: HasHomology.condition.some
-
-Depends on / 依赖: HasHomology, HasHomology.condition.some, condition
+--- 原说明 ---
+A chosen `S.HomologyData` for a short complex `S` that has homology
 -/
 noncomputable def homologyData [HasHomology S] : S.HomologyData := HasHomology.condition.some
 
 variable {S}
-
-/--
-lemma `HasHomology.mk'` / 引理 `HasHomology.mk'`
-
-English:
-lemma HasHomology.mk'
-  given: (h : S.HomologyData)
-  statement: HasHomology S
-  proof: ⟨Nonempty.intro h⟩
-
-中文:
-引理 有同调.mk'
-  条件: (h : S.同调数据)
-  结论: 有同调 S
-  证明: ⟨Nonempty.intro h⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.ShortComplex.HasHomology.mk'** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ShortComplex.HasHomology`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData), S.HasHomology
+参数：h : S.HomologyData。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma HasHomology.mk' (h : S.HomologyData) : HasHomology S :=
   ⟨Nonempty.intro h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasHomology
-  signature: S] : HasHomology S.op
-  body: HasHomology.mk' S.homologyData.op
-
-中文:
-实例 [有同调
-  签名: S] : 有同调 S.op
-  定义体: HasHomology.mk' S.homologyData.op
-
-Depends on / 依赖: HasHomology, HasHomology.mk, S.homologyData.op, homologyData
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasHomology S] : HasHomology S.op :=
   HasHomology.mk' S.homologyData.op
-
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : ShortComplex Cᵒᵖ) [HasHomology S] : HasHomology S.unop :=
   HasHomology.mk' S.homologyData.unop
-
-/--
-Instance `hasLeftHomology_of_hasHomology` / 实例 `hasLeftHomology_of_hasHomology`
-
-English:
-instance hasLeftHomology_of_hasHomology
-  signature: [S.HasHomology]
-  body: HasLeftHomology.mk' S.homologyData.left
-
-中文:
-实例 hasLeftHomology_of_hasHomology
-  签名: [S.有同调]
-  定义体: HasLeftHomology.mk' S.homologyData.left
-
-Depends on / 依赖: HasLeftHomology, HasLeftHomology.mk, S.homologyData.left, homologyData
+/-
+**CategoryTheory.ShortComplex.hasLeftHomology_of_hasHomology** 是 Mathlib 中的一个实例，
+位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasLeftHomology_of_hasHomology [S.HasHomology] : S.HasLeftHomology
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.HasLeftHomology.mk'`：mk' (h : S.LeftHomology
+Data) : HasLeftHomology S
 -/
 instance hasLeftHomology_of_hasHomology [S.HasHomology] : S.HasLeftHomology :=
   HasLeftHomology.mk' S.homologyData.left
-
-/--
-Instance `hasRightHomology_of_hasHomology` / 实例 `hasRightHomology_of_hasHomology`
-
-English:
-instance hasRightHomology_of_hasHomology
-  signature: [S.HasHomology]
-  body: HasRightHomology.mk' S.homologyData.right
-
-中文:
-实例 hasRightHomology_of_hasHomology
-  签名: [S.有同调]
-  定义体: HasRightHomology.mk' S.homologyData.right
-
-Depends on / 依赖: HasRightHomology, HasRightHomology.mk, S.homologyData.right, homologyData
+/-
+**CategoryTheory.ShortComplex.hasRightHomology_of_hasHomology** 是 Mathlib 中的一个实例
+，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasRightHomology_of_hasHomology [S.HasHomology] : S.HasRightHomology
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.HasRightHomology.mk'`：mk' (h : S.RightHomolo
+gyData) : HasRightHomology S
 -/
 instance hasRightHomology_of_hasHomology [S.HasHomology] : S.HasRightHomology :=
   HasRightHomology.mk' S.homologyData.right
-
-/--
-Instance `hasHomology_of_hasCokernel` / 实例 `hasHomology_of_hasCokernel`
-
-English:
-instance hasHomology_of_hasCokernel
-  signature: {X Y : C} (f : X ⟶ Y) (Z : C) [HasCokernel f]
-  body: HasHomology.mk' (HomologyData.ofHasCokernel _ rfl)
-
-中文:
-实例 hasHomology_of_hasCokernel
-  签名: {X Y : C} (f : X ⟶ Y) (Z : C) [HasCokernel f]
-  定义体: HasHomology.mk' (HomologyData.ofHasCokernel _ rfl)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofHasCokernel, ofHasCokernel
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_hasCokernel** 是 Mathlib 中的一个实例，位于命名
+空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_hasCokernel {X Y : C} (f : X ⟶ Y) (Z : C) [HasCokernel f] :
+ (ShortComplex.mk f (0 : Y ⟶ Z) comp_zero).HasHomology
+参数：f : X ⟶ Y；Z : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 instance hasHomology_of_hasCokernel {X Y : C} (f : X ⟶ Y) (Z : C) [HasCokernel f] :
     (ShortComplex.mk f (0 : Y ⟶ Z) comp_zero).HasHomology :=
   HasHomology.mk' (HomologyData.ofHasCokernel _ rfl)
-
-/--
-Instance `hasHomology_of_hasKernel` / 实例 `hasHomology_of_hasKernel`
-
-English:
-instance hasHomology_of_hasKernel
-  signature: {Y Z : C} (g : Y ⟶ Z) (X : C) [HasKernel g]
-  body: HasHomology.mk' (HomologyData.ofHasKernel _ rfl)
-
-中文:
-实例 hasHomology_of_hasKernel
-  签名: {Y Z : C} (g : Y ⟶ Z) (X : C) [HasKernel g]
-  定义体: HasHomology.mk' (HomologyData.ofHasKernel _ rfl)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofHasKernel, ofHasKernel
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_hasKernel** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_hasKernel {Y Z : C} (g : Y ⟶ Z) (X : C) [HasKernel g] : (Sh
+ortComplex.mk (0 : X ⟶ Y) g zero_comp).HasHomology
+参数：g : Y ⟶ Z；X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 instance hasHomology_of_hasKernel {Y Z : C} (g : Y ⟶ Z) (X : C) [HasKernel g] :
     (ShortComplex.mk (0 : X ⟶ Y) g zero_comp).HasHomology :=
   HasHomology.mk' (HomologyData.ofHasKernel _ rfl)
-
-/--
-Instance `hasHomology_of_zeros` / 实例 `hasHomology_of_zeros`
-
-English:
-instance hasHomology_of_zeros
-  signature: (X Y Z : C)
-  body: HasHomology.mk' (HomologyData.ofZeros _ rfl rfl)
-
-中文:
-实例 hasHomology_of_zeros
-  签名: (X Y Z : C)
-  定义体: HasHomology.mk' (HomologyData.ofZeros _ rfl rfl)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofZeros, ofZeros
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_zeros** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_zeros (X Y Z : C) : (ShortComplex.mk (0 : X ⟶ Y) (0 : Y ⟶ Z
+) zero_comp).HasHomology
+参数：X Y Z : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 instance hasHomology_of_zeros (X Y Z : C) :
     (ShortComplex.mk (0 : X ⟶ Y) (0 : Y ⟶ Z) zero_comp).HasHomology :=
   HasHomology.mk' (HomologyData.ofZeros _ rfl rfl)
-
-/--
-lemma `hasHomology_of_epi_of_isIso_of_mono` / 引理 `hasHomology_of_epi_of_isIso_of_mono`
-
-English:
-lemma hasHomology_of_epi_of_isIso_of_mono
-  statement: (φ : S₁ ⟶ S₂) [HasHomology S₁]
-  proof: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono φ S₁.homologyData)
-
-中文:
-引理 hasHomology_of_epi_of_isIso_of_mono
-  结论: (φ : S₁ ⟶ S₂) [有同调 S₁]
-  证明: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono φ S₁.homologyData)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofEpiOfIsIsoOfMono, homologyData, ofEpiOfIsIsoOfMono
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_epi_of_isIso_of_mono** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [HasHomology S₁] [Epi φ.
+τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HasHomology S₂
+参数：φ : S₁ ⟶ S₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
 -/
 lemma hasHomology_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [HasHomology S₁]
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HasHomology S₂ :=
   HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono φ S₁.homologyData)
-
-/--
-lemma `hasHomology_of_epi_of_isIso_of_mono'` / 引理 `hasHomology_of_epi_of_isIso_of_mono'`
-
-English:
-lemma hasHomology_of_epi_of_isIso_of_mono'
-  statement: (φ : S₁ ⟶ S₂) [HasHomology S₂]
-  proof: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono' φ S₂.homologyData)
-
-中文:
-引理 hasHomology_of_epi_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) [有同调 S₂]
-  证明: HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono' φ S₂.homologyData)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofEpiOfIsIsoOfMono, homologyData, ofEpiOfIsIsoOfMono
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_epi_of_isIso_of_mono'** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_epi_of_isIso_of_mono' (φ : S₁ ⟶ S₂) [HasHomology S₂] [Epi φ
+.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HasHomology S₁
+参数：φ : S₁ ⟶ S₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
 -/
 lemma hasHomology_of_epi_of_isIso_of_mono' (φ : S₁ ⟶ S₂) [HasHomology S₂]
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : HasHomology S₁ :=
   HasHomology.mk' (HomologyData.ofEpiOfIsIsoOfMono' φ S₂.homologyData)
-
-/--
-lemma `hasHomology_of_iso` / 引理 `hasHomology_of_iso`
-
-English:
-lemma hasHomology_of_iso
-  given: (e : S₁ ≅ S₂) [HasHomology S₁]
-  statement: HasHomology S₂
-  proof: HasHomology.mk' (HomologyData.ofIso e S₁.homologyData)
-
-中文:
-引理 hasHomology_of_iso
-  条件: (e : S₁ ≅ S₂) [有同调 S₁]
-  结论: 有同调 S₂
-  证明: HasHomology.mk' (HomologyData.ofIso e S₁.homologyData)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofIso, homologyData
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_iso (e : S₁ ≅ S₂) [HasHomology S₁] : HasHomology S₂
+参数：e : S₁ ≅ S₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
 -/
 lemma hasHomology_of_iso (e : S₁ ≅ S₂) [HasHomology S₁] : HasHomology S₂ :=
   HasHomology.mk' (HomologyData.ofIso e S₁.homologyData)
@@ -767,22 +626,16 @@ namespace HomologyMapData
 
 /-- The homology map data associated to the identity morphism of a short complex. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.id** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：id (h : S.HomologyData) : HomologyMapData (𝟙 S) h h where left
+参数：h : S.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (h : S.HomologyData)
-  body: LeftHomologyMapData.id h.left
-  right := RightHomologyMapData.id h.right
-
-中文:
-定义 id
-  签名: (h : S.同调数据)
-  定义体: LeftHomologyMapData.id h.left
-  right := RightHomologyMapData.id h.right
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.id, h.left
+--- 原说明 ---
+The homology map data associated to the identity morphism of a short complex.
 -/
 def id (h : S.HomologyData) : HomologyMapData (𝟙 S) h h where
   left := LeftHomologyMapData.id h.left
@@ -790,22 +643,18 @@ def id (h : S.HomologyData) : HomologyMapData (𝟙 S) h h where
 
 /-- The homology map data associated to the zero morphism between two short complexes. -/
 @[simps]
-/--
-Definition of `zero` / `zero` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.zero** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) : HomologyMapData 0 h₁ 
+h₂ where left
+参数：h₁ : S₁.HomologyData；h₂ : S₂.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zero
-  signature: (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
-  body: LeftHomologyMapData.zero h₁.left h₂.left
-  right := RightHomologyMapData.zero h₁.right h₂.right
-
-中文:
-定义 zero
-  签名: (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
-  定义体: LeftHomologyMapData.zero h₁.left h₂.left
-  right := RightHomologyMapData.zero h₁.right h₂.right
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.zero
+--- 原说明 ---
+The homology map data associated to the zero morphism between two short complexe
+s.
 -/
 def zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
     HomologyMapData 0 h₁ h₂ where
@@ -814,22 +663,18 @@ def zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
 
 /-- The composition of homology map data. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.comp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：comp {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.HomologyData} {h₂ : S₂.Homology
+Data} {h₃ : S₃.HomologyData} (ψ : HomologyMapData φ h₁ h₂) (ψ' : HomologyMapData
+ φ' h₂ h₃) : HomologyMapData (φ ≫ φ') h₁ h₃ where left
+参数：ψ : HomologyMapData φ h₁ h₂；ψ' : HomologyMapData φ' h₂ h₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.HomologyData}
-  body: ψ.left.comp ψ'.left
-  right := ψ.right.comp ψ'.right
-
-中文:
-定义 comp
-  签名: {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.同调数据}
-  定义体: ψ.left.comp ψ'.left
-  right := ψ.right.comp ψ'.right
-
-Depends on / 依赖: left.comp
+--- 原说明 ---
+The composition of homology map data.
 -/
 def comp {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.HomologyData}
     {h₂ : S₂.HomologyData} {h₃ : S₃.HomologyData}
@@ -841,22 +686,18 @@ def comp {φ : S₁ ⟶ S₂} {φ' : S₂ ⟶ S₃} {h₁ : S₁.HomologyData}
 /-- A homology map data for a morphism of short complexes induces
 a homology map data in the opposite category. -/
 @[simps]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.op** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：op {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData} (ψ : Homolo
+gyMapData φ h₁ h₂) : HomologyMapData (opMap φ) h₂.op h₁.op where left
+参数：ψ : HomologyMapData φ h₁ h₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
-  body: ψ.right.op
-  right := ψ.left.op
-
-中文:
-定义 op
-  签名: {φ : S₁ ⟶ S₂} {h₁ : S₁.同调数据} {h₂ : S₂.同调数据}
-  定义体: ψ.right.op
-  right := ψ.left.op
-
-Depends on / 依赖: right.op
+--- 原说明 ---
+A homology map data for a morphism of short complexes induces
+a homology map data in the opposite category.
 -/
 def op {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
     (ψ : HomologyMapData φ h₁ h₂) :
@@ -867,22 +708,19 @@ def op {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData
 /-- A homology map data for a morphism of short complexes in the opposite category
 induces a homology map data in the original category. -/
 @[simps]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.unop** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：unop {S₁ S₂ : ShortComplex Cᵒᵖ} {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ :
+ S₂.HomologyData} (ψ : HomologyMapData φ h₁ h₂) : HomologyMapData (unopMap φ) h₂
+.unop h₁.unop where left
+参数：ψ : HomologyMapData φ h₁ h₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: {S₁ S₂ : ShortComplex Cᵒᵖ} {φ : S₁ ⟶ S₂}
-  body: ψ.right.unop
-  right := ψ.left.unop
-
-中文:
-定义 unop
-  签名: {S₁ S₂ : 短复形 Cᵒᵖ} {φ : S₁ ⟶ S₂}
-  定义体: ψ.right.unop
-  right := ψ.left.unop
-
-Depends on / 依赖: right.unop
+--- 原说明 ---
+A homology map data for a morphism of short complexes in the opposite category
+induces a homology map data in the original category.
 -/
 def unop {S₁ S₂ : ShortComplex Cᵒᵖ} {φ : S₁ ⟶ S₂}
     {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
@@ -894,22 +732,19 @@ def unop {S₁ S₂ : ShortComplex Cᵒᵖ} {φ : S₁ ⟶ S₂}
 /-- When `S₁.f`, `S₁.g`, `S₂.f` and `S₂.g` are all zero, the action on homology of a
 morphism `φ : S₁ ⟶ S₂` is given by the action `φ.τ₂` on the middle objects. -/
 @[simps]
-/--
-Definition of `ofZeros` / `ofZeros` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.ofZeros** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：ofZeros (φ : S₁ ⟶ S₂) (hf₁ : S₁.f = 0) (hg₁ : S₁.g = 0) (hf₂ : S₂.f = 0) (
+hg₂ : S₂.g = 0) : HomologyMapData φ (HomologyData.ofZeros S₁ hf₁ hg₁) (HomologyD
+ata.ofZeros S₂ hf₂ hg₂) where left
+参数：φ : S₁ ⟶ S₂；hf₁ : S₁.f = 0；hg₁ : S₁.g = 0；hf₂ : S₂.f = 0；hg₂ : S₂.g = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZeros
-  signature: (φ : S₁ ⟶ S₂)
-  body: LeftHomologyMapData.ofZeros φ hf₁ hg₁ hf₂ hg₂
-  right := RightHomologyMapData.ofZeros φ hf₁ hg₁ hf₂ hg₂
-
-中文:
-定义 ofZeros
-  签名: (φ : S₁ ⟶ S₂)
-  定义体: LeftHomologyMapData.ofZeros φ hf₁ hg₁ hf₂ hg₂
-  right := RightHomologyMapData.ofZeros φ hf₁ hg₁ hf₂ hg₂
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.ofZeros, ofZeros
+--- 原说明 ---
+When `S₁.f`, `S₁.g`, `S₂.f` and `S₂.g` are all zero, the action on homology of a
+morphism `φ : S₁ ⟶ S₂` is given by the action `φ.τ₂` on the middle objects.
 -/
 noncomputable def ofZeros (φ : S₁ ⟶ S₂)
     (hf₁ : S₁.f = 0) (hg₁ : S₁.g = 0) (hf₂ : S₂.f = 0) (hg₂ : S₂.g = 0) :
@@ -922,22 +757,27 @@ for `S₁.f` and `S₂.f` respectively, the action on homology of a morphism `φ
 short complexes is given by the unique morphism `f : c₁.pt ⟶ c₂.pt` such that
 `φ.τ₂ ≫ c₂.π = c₁.π ≫ f`. -/
 @[simps]
-/--
-Definition of `ofIsColimitCokernelCofork` / `ofIsColimitCokernelCofork` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.ofIsColimitCokernelCofork** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：ofIsColimitCokernelCofork (φ : S₁ ⟶ S₂) (hg₁ : S₁.g = 0) (c₁ : CokernelCof
+ork S₁.f) (hc₁ : IsColimit c₁) (hg₂ : S₂.g = 0) (c₂ : CokernelCofork S₂.f) (hc₂ 
+: IsColimit c₂) (f : c₁.pt ⟶ c₂.pt) (comm : φ.τ₂ ≫ c₂.π = c₁.π ≫ f) : HomologyMa
+pData φ (HomologyData.ofIsColimitCokernelCofork S₁ hg₁ c₁ hc₁) (HomologyData.ofI
+sColimitCokernelCofork S₂ hg₂ c₂ hc₂) where left
+参数：φ : S₁ ⟶ S₂；hg₁ : S₁.g = 0；c₁ : CokernelCofork S₁.f；hc₁ : IsColimit c₁；hg₂ : 
+S₂.g = 0；c₂ : CokernelCofork S₂.f；hc₂ : IsColimit c₂；f : c₁.pt ⟶ c₂.pt；comm : φ.
+τ₂ ≫ c₂.π = c₁.π ≫ f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsColimitCokernelCofork
-  signature: (φ : S₁ ⟶ S₂)
-  body: LeftHomologyMapData.ofIsColimitCokernelCofork φ hg₁ c₁ hc₁ hg₂ c₂ hc₂ f comm
-  right := RightHomologyMapData.ofIsColimitCokernelCofork φ hg₁ c₁ hc₁ hg₂ c₂ hc₂ f comm
-
-中文:
-定义 ofIsColimitCokernelCofork
-  签名: (φ : S₁ ⟶ S₂)
-  定义体: LeftHomologyMapData.ofIsColimitCokernelCofork φ hg₁ c₁ hc₁ hg₂ c₂ hc₂ f comm
-  right := RightHomologyMapData.ofIsColimitCokernelCofork φ hg₁ c₁ hc₁ hg₂ c₂ hc₂ f comm
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.ofIsColimitCokernelCofork, ofIsColimitCokernelCofork
+--- 原说明 ---
+When `S₁.g` and `S₂.g` are zero and we have chosen colimit cokernel coforks `c₁`
+ and `c₂`
+for `S₁.f` and `S₂.f` respectively, the action on homology of a morphism `φ : S₁
+ ⟶ S₂` of
+short complexes is given by the unique morphism `f : c₁.pt ⟶ c₂.pt` such that
+`φ.τ₂ ≫ c₂.π = c₁.π ≫ f`.
 -/
 def ofIsColimitCokernelCofork (φ : S₁ ⟶ S₂)
     (hg₁ : S₁.g = 0) (c₁ : CokernelCofork S₁.f) (hc₁ : IsColimit c₁)
@@ -953,22 +793,27 @@ for `S₁.g` and `S₂.g` respectively, the action on homology of a morphism `φ
 short complexes is given by the unique morphism `f : c₁.pt ⟶ c₂.pt` such that
 `c₁.ι ≫ φ.τ₂ = f ≫ c₂.ι`. -/
 @[simps]
-/--
-Definition of `ofIsLimitKernelFork` / `ofIsLimitKernelFork` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.ofIsLimitKernelFork** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：ofIsLimitKernelFork (φ : S₁ ⟶ S₂) (hf₁ : S₁.f = 0) (c₁ : KernelFork S₁.g) 
+(hc₁ : IsLimit c₁) (hf₂ : S₂.f = 0) (c₂ : KernelFork S₂.g) (hc₂ : IsLimit c₂) (f
+ : c₁.pt ⟶ c₂.pt) (comm : c₁.ι ≫ φ.τ₂ = f ≫ c₂.ι) : HomologyMapData φ (HomologyD
+ata.ofIsLimitKernelFork S₁ hf₁ c₁ hc₁) (HomologyData.ofIsLimitKernelFork S₂ hf₂ 
+c₂ hc₂) where left
+参数：φ : S₁ ⟶ S₂；hf₁ : S₁.f = 0；c₁ : KernelFork S₁.g；hc₁ : IsLimit c₁；hf₂ : S₂.f =
+ 0；c₂ : KernelFork S₂.g；hc₂ : IsLimit c₂；f : c₁.pt ⟶ c₂.pt；comm : c₁.ι ≫ φ.τ₂ = 
+f ≫ c₂.ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsLimitKernelFork
-  signature: (φ : S₁ ⟶ S₂)
-  body: LeftHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
-  right := RightHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
-
-中文:
-定义 ofIsLimitKernelFork
-  签名: (φ : S₁ ⟶ S₂)
-  定义体: LeftHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
-  right := RightHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.ofIsLimitKernelFork, ofIsLimitKernelFork
+--- 原说明 ---
+When `S₁.f` and `S₂.f` are zero and we have chosen limit kernel forks `c₁` and `
+c₂`
+for `S₁.g` and `S₂.g` respectively, the action on homology of a morphism `φ : S₁
+ ⟶ S₂` of
+short complexes is given by the unique morphism `f : c₁.pt ⟶ c₂.pt` such that
+`c₁.ι ≫ φ.τ₂ = f ≫ c₂.ι`.
 -/
 def ofIsLimitKernelFork (φ : S₁ ⟶ S₂)
     (hf₁ : S₁.f = 0) (c₁ : KernelFork S₁.g) (hc₁ : IsLimit c₁)
@@ -979,22 +824,26 @@ def ofIsLimitKernelFork (φ : S₁ ⟶ S₂)
   left := LeftHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
   right := RightHomologyMapData.ofIsLimitKernelFork φ hf₁ c₁ hc₁ hf₂ c₂ hc₂ f comm
 
-/--
-Definition of `compatibilityOfZerosOfIsColimitCokernelCofork` / `compatibilityOfZerosOfIsColimitCokernelCofork` 的定义
+/-- When both maps `S.f` and `S.g` of a short complex `S` are zero, this is the homology map
+data (for the identity of `S`) which relates the homology data `ofZeros` and
+`ofIsColimitCokernelCofork`. -/
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.compatibilityOfZerosOfIsColimitCok
+ernelCofork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapDa
+ta`。
+形式化陈述：compatibilityOfZerosOfIsColimitCokernelCofork (hf : S.f = 0) (hg : S.g = 0
+) (c : CokernelCofork S.f) (hc : IsColimit c) : HomologyMapData (𝟙 S) (HomologyD
+ata.ofZeros S hf hg) (HomologyData.ofIsColimitCokernelCofork S hg c hc) where le
+ft
+参数：hf : S.f = 0；hg : S.g = 0；c : CokernelCofork S.f；hc : IsColimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compatibilityOfZerosOfIsColimitCokernelCofork
-  signature: (hf : S.f = 0) (hg : S.g = 0)
-  body: LeftHomologyMapData.compatibilityOfZerosOfIsColimitCokernelCofork S hf hg c hc
-  right := RightHomologyMapData.compatibilityOfZerosOfIsColimitCokernelCofork S hf hg c hc
-
-中文:
-定义 compatibilityOfZerosOfIsColimitCokernelCofork
-  签名: (hf : S.f = 0) (hg : S.g = 0)
-  定义体: LeftHomologyMapData.compatibilityOfZerosOfIsColimitCokernelCofork S hf hg c hc
-  right := RightHomologyMapData.compatibilityOfZerosOfIsColimitCokernelCofork S hf hg c hc
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.compatibilityOfZerosOfIsColimitCokernelCofork, compatibilityOfZerosOfIsColimitCokernelCofork
+--- 原说明 ---
+When both maps `S.f` and `S.g` of a short complex `S` are zero, this is the homo
+logy map
+data (for the identity of `S`) which relates the homology data `ofZeros` and
+`ofIsColimitCokernelCofork`.
 -/
 noncomputable def compatibilityOfZerosOfIsColimitCokernelCofork (hf : S.f = 0) (hg : S.g = 0)
     (c : CokernelCofork S.f) (hc : IsColimit c) :
@@ -1007,22 +856,21 @@ noncomputable def compatibilityOfZerosOfIsColimitCokernelCofork (hf : S.f = 0) (
 data (for the identity of `S`) which relates the homology data
 `HomologyData.ofIsLimitKernelFork` and `ofZeros` . -/
 @[simps]
-/--
-Definition of `compatibilityOfZerosOfIsLimitKernelFork` / `compatibilityOfZerosOfIsLimitKernelFork` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.compatibilityOfZerosOfIsLimitKerne
+lFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：compatibilityOfZerosOfIsLimitKernelFork (hf : S.f = 0) (hg : S.g = 0) (c :
+ KernelFork S.g) (hc : IsLimit c) : HomologyMapData (𝟙 S) (HomologyData.ofIsLimi
+tKernelFork S hf c hc) (HomologyData.ofZeros S hf hg) where left
+参数：hf : S.f = 0；hg : S.g = 0；c : KernelFork S.g；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compatibilityOfZerosOfIsLimitKernelFork
-  signature: (hf : S.f = 0) (hg : S.g = 0)
-  body: LeftHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
-  right := RightHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
-
-中文:
-定义 compatibilityOfZerosOfIsLimitKernelFork
-  签名: (hf : S.f = 0) (hg : S.g = 0)
-  定义体: LeftHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
-  right := RightHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork, compatibilityOfZerosOfIsLimitKernelFork
+--- 原说明 ---
+When both maps `S.f` and `S.g` of a short complex `S` are zero, this is the homo
+logy map
+data (for the identity of `S`) which relates the homology data
+`HomologyData.ofIsLimitKernelFork` and `ofZeros` .
 -/
 noncomputable def compatibilityOfZerosOfIsLimitKernelFork (hf : S.f = 0) (hg : S.g = 0)
     (c : KernelFork S.g) (hc : IsLimit c) :
@@ -1032,22 +880,21 @@ noncomputable def compatibilityOfZerosOfIsLimitKernelFork (hf : S.f = 0) (hg : S
   left := LeftHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
   right := RightHomologyMapData.compatibilityOfZerosOfIsLimitKernelFork S hf hg c hc
 
-/--
-Definition of `ofEpiOfIsIsoOfMono` / `ofEpiOfIsIsoOfMono` 的定义
+/-- This homology map data expresses compatibilities of the homology data
+constructed by `HomologyData.ofEpiOfIsIsoOfMono` -/
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.ofEpiOfIsIsoOfMono** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：ofEpiOfIsIsoOfMono (φ : S₁ ⟶ S₂) (h : HomologyData S₁) [Epi φ.τ₁] [IsIso φ
+.τ₂] [Mono φ.τ₃] : HomologyMapData φ h (HomologyData.ofEpiOfIsIsoOfMono φ h) whe
+re left
+参数：φ : S₁ ⟶ S₂；h : HomologyData S₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEpiOfIsIsoOfMono
-  signature: (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
-  body: LeftHomologyMapData.ofEpiOfIsIsoOfMono φ h.left
-  right := RightHomologyMapData.ofEpiOfIsIsoOfMono φ h.right
-
-中文:
-定义 ofEpiOfIsIsoOfMono
-  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₁)
-  定义体: LeftHomologyMapData.ofEpiOfIsIsoOfMono φ h.left
-  right := RightHomologyMapData.ofEpiOfIsIsoOfMono φ h.right
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.ofEpiOfIsIsoOfMono, h.left, ofEpiOfIsIsoOfMono
+--- 原说明 ---
+This homology map data expresses compatibilities of the homology data
+constructed by `HomologyData.ofEpiOfIsIsoOfMono`
 -/
 noncomputable def ofEpiOfIsIsoOfMono (φ : S₁ ⟶ S₂) (h : HomologyData S₁)
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] :
@@ -1055,22 +902,21 @@ noncomputable def ofEpiOfIsIsoOfMono (φ : S₁ ⟶ S₂) (h : HomologyData S₁
   left := LeftHomologyMapData.ofEpiOfIsIsoOfMono φ h.left
   right := RightHomologyMapData.ofEpiOfIsIsoOfMono φ h.right
 
-/--
-Definition of `ofEpiOfIsIsoOfMono'` / `ofEpiOfIsIsoOfMono'` 的定义
+/-- This homology map data expresses compatibilities of the homology data
+constructed by `HomologyData.ofEpiOfIsIsoOfMono'` -/
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.ofEpiOfIsIsoOfMono'** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：ofEpiOfIsIsoOfMono' (φ : S₁ ⟶ S₂) (h : HomologyData S₂) [Epi φ.τ₁] [IsIso 
+φ.τ₂] [Mono φ.τ₃] : HomologyMapData φ (HomologyData.ofEpiOfIsIsoOfMono' φ h) h w
+here left
+参数：φ : S₁ ⟶ S₂；h : HomologyData S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEpiOfIsIsoOfMono'
-  signature: (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
-  body: LeftHomologyMapData.ofEpiOfIsIsoOfMono' φ h.left
-  right := RightHomologyMapData.ofEpiOfIsIsoOfMono' φ h.right
-
-中文:
-定义 ofEpiOfIsIsoOfMono'
-  签名: (φ : S₁ ⟶ S₂) (h : 同调数据 S₂)
-  定义体: LeftHomologyMapData.ofEpiOfIsIsoOfMono' φ h.left
-  right := RightHomologyMapData.ofEpiOfIsIsoOfMono' φ h.right
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.ofEpiOfIsIsoOfMono, h.left, ofEpiOfIsIsoOfMono
+--- 原说明 ---
+This homology map data expresses compatibilities of the homology data
+constructed by `HomologyData.ofEpiOfIsIsoOfMono'`
 -/
 noncomputable def ofEpiOfIsIsoOfMono' (φ : S₁ ⟶ S₂) (h : HomologyData S₂)
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] :
@@ -1082,93 +928,85 @@ end HomologyMapData
 
 variable (S)
 
-/--
-Definition of `homology` / `homology` 的定义
+/-- The homology of a short complex is the `left.H` field of a chosen homology data. -/
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homology
-  signature: [HasHomology S]
-  body: S.homologyData.left.H
-
-中文:
-定义 homology
-  签名: [有同调 S]
-  定义体: S.homologyData.left.H
-
-Depends on / 依赖: S.homologyData.left.H, homologyData
+--- 原说明 ---
+The homology of a short complex is the `left.H` field of a chosen homology data.
 -/
 noncomputable def homology [HasHomology S] : C := S.homologyData.left.H
 
-/--
-Definition of `leftHomologyIso` / `leftHomologyIso` 的定义
+/-- When a short complex has homology, this is the canonical isomorphism
+`S.leftHomology ≅ S.homology`. -/
+/-
+**CategoryTheory.ShortComplex.leftHomologyIso** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ShortComplex`。
+形式化陈述：leftHomologyIso [S.HasHomology] : S.leftHomology ≅ S.homology
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftHomologyIso
-  signature: [S.HasHomology]
-  body: leftHomologyMapIso' (Iso.refl _) _ _
-
-中文:
-定义 leftHomologyIso
-  签名: [S.有同调]
-  定义体: leftHomologyMapIso' (Iso.refl _) _ _
-
-Depends on / 依赖: Iso.refl, leftHomologyMapIso
+--- 原说明 ---
+When a short complex has homology, this is the canonical isomorphism
+`S.leftHomology ≅ S.homology`.
 -/
 noncomputable def leftHomologyIso [S.HasHomology] : S.leftHomology ≅ S.homology :=
   leftHomologyMapIso' (Iso.refl _) _ _
 
-/--
-Definition of `rightHomologyIso` / `rightHomologyIso` 的定义
+/-- When a short complex has homology, this is the canonical isomorphism
+`S.rightHomology ≅ S.homology`. -/
+/-
+**CategoryTheory.ShortComplex.rightHomologyIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ShortComplex`。
+形式化陈述：rightHomologyIso [S.HasHomology] : S.rightHomology ≅ S.homology
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightHomologyIso
-  signature: [S.HasHomology]
-  body: rightHomologyMapIso' (Iso.refl _) _ _ ≪≫ S.homologyData.iso.symm
-
-中文:
-定义 rightHomologyIso
-  签名: [S.有同调]
-  定义体: rightHomologyMapIso' (Iso.refl _) _ _ ≪≫ S.homologyData.iso.symm
-
-Depends on / 依赖: Iso.refl, S.homologyData.iso.symm, homologyData, rightHomologyMapIso
+--- 原说明 ---
+When a short complex has homology, this is the canonical isomorphism
+`S.rightHomology ≅ S.homology`.
 -/
 noncomputable def rightHomologyIso [S.HasHomology] : S.rightHomology ≅ S.homology :=
   rightHomologyMapIso' (Iso.refl _) _ _ ≪≫ S.homologyData.iso.symm
 
 variable {S}
 
-/--
-Definition of `LeftHomologyData.homologyIso` / `LeftHomologyData.homologyIso` 的定义
+/-- When a short complex has homology, its homology can be computed using
+any left homology data. -/
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.homologyIso** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       {S : CategoryTheory.ShortComp
+lex C} → (h : S.LeftHomologyData) → [inst_2 : S.HasHomology] → S.homology ≅ h.H
+参数：h : S.LeftHomologyData。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftHomologyData.homologyIso
-  signature: (h : S.LeftHomologyData) [S.HasHomology]
-  body: S.leftHomologyIso.symm ≪≫ h.leftHomologyIso
-
-中文:
-定义 LeftHomologyData.homologyIso
-  签名: (h : S.LeftHomologyData) [S.有同调]
-  定义体: S.leftHomologyIso.symm ≪≫ h.leftHomologyIso
-
-Depends on / 依赖: S.leftHomologyIso.symm, h.leftHomologyIso, leftHomologyIso
+--- 原说明 ---
+When a short complex has homology, its homology can be computed using
+any left homology data.
 -/
 noncomputable def LeftHomologyData.homologyIso (h : S.LeftHomologyData) [S.HasHomology] :
     S.homology ≅ h.H := S.leftHomologyIso.symm ≪≫ h.leftHomologyIso
 
-/--
-Definition of `RightHomologyData.homologyIso` / `RightHomologyData.homologyIso` 的定义
+/-- When a short complex has homology, its homology can be computed using
+any right homology data. -/
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.homologyIso** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       {S : CategoryTheory.ShortComp
+lex C} → (h : S.RightHomologyData) → [inst_2 : S.HasHomology] → S.homology ≅ h.H
+参数：h : S.RightHomologyData。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightHomologyData.homologyIso
-  signature: (h : S.RightHomologyData) [S.HasHomology]
-  body: S.rightHomologyIso.symm ≪≫ h.rightHomologyIso
-
-中文:
-定义 RightHomologyData.homologyIso
-  签名: (h : S.RightHomologyData) [S.有同调]
-  定义体: S.rightHomologyIso.symm ≪≫ h.rightHomologyIso
-
-Depends on / 依赖: S.rightHomologyIso.symm, h.rightHomologyIso, rightHomologyIso
+--- 原说明 ---
+When a short complex has homology, its homology can be computed using
+any right homology data.
 -/
 noncomputable def RightHomologyData.homologyIso (h : S.RightHomologyData) [S.HasHomology] :
     S.homology ≅ h.H := S.rightHomologyIso.symm ≪≫ h.rightHomologyIso
@@ -1178,53 +1016,60 @@ variable (S)
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `LeftHomologyData.homologyIso_leftHomologyData` / 引理 `LeftHomologyData.homologyIso_leftHomologyData`
-
-English:
-lemma LeftHomologyData.homologyIso_leftHomologyData
-  given: [S.HasHomology]
-  proof: by
-  ext
-  dsimp [homologyIso, leftHomologyIso, ShortComplex.leftHomologyIso]
-  rw [← leftHomologyMap'_comp]; rw [comp_id]
-
-中文:
-引理 LeftHomologyData.homologyIso_leftHomologyData
-  条件: [S.有同调]
-  证明: by
-  ext
-  dsimp [homologyIso, leftHomologyIso, ShortComplex.leftHomologyIso]
-  rw [← leftHomologyMap'_comp]; rw [comp_id]
-
-Depends on / 依赖: ShortComplex, ShortComplex.leftHomologyIso, _comp, comp_id, homologyIso, leftHomologyIso, leftHomologyMap
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.homologyIso_leftHomologyData** 是 
+Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology], S.leftHomologyData.homologyIso = S.leftHomologyIso.symm
+参数：S : CategoryTheory.ShortComplex C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.leftHomologyMap'_comp`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C]   {S₁ S₂ S₃ : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma LeftHomologyData.homologyIso_leftHomologyData [S.HasHomology] :
     S.leftHomologyData.homologyIso = S.leftHomologyIso.symm := by
   ext
   dsimp [homologyIso, leftHomologyIso, ShortComplex.leftHomologyIso]
-  rw [← leftHomologyMap'_comp]; rw [comp_id]
+  rw [← leftHomologyMap'_comp, comp_id]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `RightHomologyData.homologyIso_rightHomologyData` / 引理 `RightHomologyData.homologyIso_rightHomologyData`
-
-English:
-lemma RightHomologyData.homologyIso_rightHomologyData
-  given: [S.HasHomology]
-  proof: by
-  ext
-  simp [homologyIso, rightHomologyIso]
-
-中文:
-引理 RightHomologyData.homologyIso_rightHomologyData
-  条件: [S.有同调]
-  证明: by
-  ext
-  simp [homologyIso, rightHomologyIso]
-
-Depends on / 依赖: CommMagma, IsCommJordan, IsCommJordan.toIsJordan, IsJordan, homologyIso, rightHomologyIso, toIsJordan
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.homologyIso_rightHomologyData** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology],   S.rightHomologyData.homologyIso = S.rightHomologyIso.symm
+参数：S : CategoryTheory.ShortComplex C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyMapIso'_hom`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.Has
+ZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyMap'_id`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma RightHomologyData.homologyIso_rightHomologyData [S.HasHomology] :
     S.rightHomologyData.homologyIso = S.rightHomologyIso.symm := by
@@ -1233,38 +1078,40 @@ lemma RightHomologyData.homologyIso_rightHomologyData [S.HasHomology] :
 
 variable {S}
 
-/--
-Definition of `homologyMap'` / `homologyMap'` 的定义
+/-- Given a morphism `φ : S₁ ⟶ S₂` of short complexes and homology data `h₁` and `h₂`
+for `S₁` and `S₂` respectively, this is the induced homology map `h₁.left.H ⟶ h₁.left.H`. -/
+/-
+**CategoryTheory.ShortComplex.homologyMap'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：homologyMap' (φ : S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
+ h₁.left.H ⟶ h₂.left.H
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyMap'
-  signature: (φ : S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
-  body: leftHomologyMap' φ _ _
-
-中文:
-定义 homologyMap'
-  签名: (φ : S₁ ⟶ S₂) (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
-  定义体: leftHomologyMap' φ _ _
-
-Depends on / 依赖: IsJordan, Semigroup, Semigroup.isJordan, isJordan, leftHomologyMap
+--- 原说明 ---
+Given a morphism `φ : S₁ ⟶ S₂` of short complexes and homology data `h₁` and `h₂
+`
+for `S₁` and `S₂` respectively, this is the induced homology map `h₁.left.H ⟶ h₁
+.left.H`.
 -/
 def homologyMap' (φ : S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
     h₁.left.H ⟶ h₂.left.H := leftHomologyMap' φ _ _
 
-/--
-Definition of `homologyMap` / `homologyMap` 的定义
+/-- The homology map `S₁.homology ⟶ S₂.homology` induced by a morphism
+`S₁ ⟶ S₂` of short complexes. -/
+/-
+**CategoryTheory.ShortComplex.homologyMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ShortComplex`。
+形式化陈述：homologyMap (φ : S₁ ⟶ S₂) [HasHomology S₁] [HasHomology S₂] : S₁.homology 
+⟶ S₂.homology
+参数：φ : S₁ ⟶ S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyMap
-  signature: (φ : S₁ ⟶ S₂) [HasHomology S₁] [HasHomology S₂]
-  body: homologyMap' φ _ _
-
-中文:
-定义 homologyMap
-  签名: (φ : S₁ ⟶ S₂) [有同调 S₁] [有同调 S₂]
-  定义体: homologyMap' φ _ _
-
-Depends on / 依赖: CommSemigroup, CommSemigroup.isCommJordan, IsCommJordan, homologyMap, isCommJordan
+--- 原说明 ---
+The homology map `S₁.homology ⟶ S₂.homology` induced by a morphism
+`S₁ ⟶ S₂` of short complexes.
 -/
 noncomputable def homologyMap (φ : S₁ ⟶ S₂) [HasHomology S₁] [HasHomology S₂] :
     S₁.homology ⟶ S₂.homology :=
@@ -1275,56 +1122,60 @@ namespace HomologyMapData
 variable {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
   (γ : HomologyMapData φ h₁ h₂)
 
-/--
-lemma `homologyMap'_eq` / 引理 `homologyMap'_eq`
-
-English:
-lemma homologyMap'_eq
-  statement: homologyMap' φ h₁ h₂ = γ.left.φH
-  proof: LeftHomologyMapData.congr_φH (Subsingleton.elim _ _)
-
-中文:
-引理 homologyMap'_eq
-  结论: homologyMap' φ h₁ h₂ = γ.left.φH
-  证明: LeftHomologyMapData.congr_φH (Subsingleton.elim _ _)
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.congr_, Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.homologyMap'_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} {φ 
+: S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}   (γ : CategoryTheory.S
+hortComplex.HomologyMapData φ h₁ h₂),   CategoryTheory.ShortComplex.homologyMap'
+ φ h₁ h₂ = γ.left.φH
+参数：γ : CategoryTheory.ShortComplex.HomologyMapData φ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.LeftHomologyMapData.congr_φH`：congr_φH {γ₁ γ
+₂ : LeftHomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂) : γ₁.φH = γ₂.φH
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.instSubsingleton`：∀ {C :
+ Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
 -/
 lemma homologyMap'_eq : homologyMap' φ h₁ h₂ = γ.left.φH :=
   LeftHomologyMapData.congr_φH (Subsingleton.elim _ _)
-
-/--
-lemma `cyclesMap'_eq` / 引理 `cyclesMap'_eq`
-
-English:
-lemma cyclesMap'_eq
-  statement: cyclesMap' φ h₁.left h₂.left = γ.left.φK
-  proof: LeftHomologyMapData.congr_φK (Subsingleton.elim _ _)
-
-中文:
-引理 cyclesMap'_eq
-  结论: cyclesMap' φ h₁.left h₂.left = γ.left.φK
-  证明: LeftHomologyMapData.congr_φK (Subsingleton.elim _ _)
-
-Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.congr_, Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.cyclesMap'_eq** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} {φ 
+: S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}   (γ : CategoryTheory.S
+hortComplex.HomologyMapData φ h₁ h₂),   CategoryTheory.ShortComplex.cyclesMap' φ
+ h₁.left h₂.left = γ.left.φK
+参数：γ : CategoryTheory.ShortComplex.HomologyMapData φ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.LeftHomologyMapData.congr_φK`：congr_φK {γ₁ γ
+₂ : LeftHomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂) : γ₁.φK = γ₂.φK
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.instSubsingleton`：∀ {C :
+ Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
 -/
 lemma cyclesMap'_eq : cyclesMap' φ h₁.left h₂.left = γ.left.φK :=
   LeftHomologyMapData.congr_φK (Subsingleton.elim _ _)
-
-/--
-lemma `opcyclesMap'_eq` / 引理 `opcyclesMap'_eq`
-
-English:
-lemma opcyclesMap'_eq
-  statement: opcyclesMap' φ h₁.right h₂.right = γ.right.φQ
-  proof: RightHomologyMapData.congr_φQ (Subsingleton.elim _ _)
-
-中文:
-引理 opcyclesMap'_eq
-  结论: opcyclesMap' φ h₁.right h₂.right = γ.right.φQ
-  证明: RightHomologyMapData.congr_φQ (Subsingleton.elim _ _)
-
-Depends on / 依赖: RightHomologyMapData, RightHomologyMapData.congr_, Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.ShortComplex.HomologyMapData.opcyclesMap'_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.ShortComplex.HomologyMapData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} {φ 
+: S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}   (γ : CategoryTheory.S
+hortComplex.HomologyMapData φ h₁ h₂),   CategoryTheory.ShortComplex.opcyclesMap'
+ φ h₁.right h₂.right = γ.right.φQ
+参数：γ : CategoryTheory.ShortComplex.HomologyMapData φ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.RightHomologyMapData.congr_φQ`：congr_φQ {γ₁ 
+γ₂ : RightHomologyMapData φ h₁ h₂} (eq : γ₁ = γ₂) : γ₁.φQ = γ₂.φQ
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyMapData.instSubsingleton`：∀ {C 
+: Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheo
+ry.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
 -/
 lemma opcyclesMap'_eq : opcyclesMap' φ h₁.right h₂.right = γ.right.φQ :=
   RightHomologyMapData.congr_φQ (Subsingleton.elim _ _)
@@ -1338,45 +1189,63 @@ variable {h₁ : S₁.LeftHomologyData} {h₂ : S₂.LeftHomologyData}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `homologyMap_eq` / 引理 `homologyMap_eq`
-
-English:
-lemma homologyMap_eq
-  proof: by
-  dsimp [homologyMap, LeftHomologyData.homologyIso, leftHomologyIso,
-    LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [← γ.leftHomologyMap'_eq, ← leftHomologyMap'_comp, id_comp, comp_id]
-
-中文:
-引理 homologyMap_eq
-  证明: by
-  dsimp [homologyMap, LeftHomologyData.homologyIso, leftHomologyIso,
-    LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [← γ.leftHomologyMap'_eq, ← leftHomologyMap'_comp, id_comp, comp_id]
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso, _comp, comp_id, homologyIso, homologyMap, id_comp, leftHomologyIso, leftHomologyMap
+/-
+**CategoryTheory.ShortComplex.LeftHomologyMapData.homologyMap_eq** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyMapData`。
+形式化陈述：homologyMap_eq : homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIs
+o.inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.leftHomologyMap'_eq`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap_eq :
     homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIso.inv := by
   dsimp [homologyMap, LeftHomologyData.homologyIso, leftHomologyIso,
     LeftHomologyData.leftHomologyIso, homologyMap']
   simp only [← γ.leftHomologyMap'_eq, ← leftHomologyMap'_comp, id_comp, comp_id]
-
-/--
-lemma `homologyMap_comm` / 引理 `homologyMap_comm`
-
-English:
-lemma homologyMap_comm
-  proof: by
-  simp only [γ.homologyMap_eq, assoc, Iso.inv_hom_id, comp_id]
-
-中文:
-引理 homologyMap_comm
-  证明: by
-  simp only [γ.homologyMap_eq, assoc, Iso.inv_hom_id, comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_id, homologyMap_eq, inv_hom_id
+/-
+**CategoryTheory.ShortComplex.LeftHomologyMapData.homologyMap_comm** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyMapData`。
+形式化陈述：homologyMap_comm : homologyMap φ ≫ h₂.homologyIso.hom = h₁.homologyIso.hom
+ ≫ γ.φH
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.LeftHomologyMapData.homologyMap_eq`：homology
+Map_eq : homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIso.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap_comm :
     homologyMap φ ≫ h₂.homologyIso.hom = h₁.homologyIso.hom ≫ γ.φH := by
@@ -1391,30 +1260,48 @@ variable {h₁ : S₁.RightHomologyData} {h₂ : S₂.RightHomologyData}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `homologyMap_eq` / 引理 `homologyMap_eq`
-
-English:
-lemma homologyMap_eq
-  proof: by
-  dsimp [homologyMap, homologyMap', RightHomologyData.homologyIso,
-    rightHomologyIso, RightHomologyData.rightHomologyIso]
-  have γ' : HomologyMapData φ S₁.homologyData S₂.homologyData := default
-  simp only [← γ.rightHomologyMap'_eq, assoc, ← rightHomologyMap'_comp_assoc,
-    id_comp, comp_id, γ'.left.leftHomologyMap'_eq, γ'.right.rightHomologyMap'_eq, ← γ'.comm_assoc,
-    Iso.hom_inv_id]
-
-中文:
-引理 homologyMap_eq
-  证明: by
-  dsimp [homologyMap, homologyMap', RightHomologyData.homologyIso,
-    rightHomologyIso, RightHomologyData.rightHomologyIso]
-  have γ' : HomologyMapData φ S₁.homologyData S₂.homologyData := default
-  simp only [← γ.rightHomologyMap'_eq, assoc, ← rightHomologyMap'_comp_assoc,
-    id_comp, comp_id, γ'.left.leftHomologyMap'_eq, γ'.right.rightHomologyMap'_eq, ← γ'.comm_assoc,
-    Iso.hom_inv_id]
-
-Depends on / 依赖: HomologyMapData, Iso.hom_inv_id, RightHomologyData, RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso, _comp_assoc, comm_assoc, comp_id, hom_inv_id, homologyData, homologyIso, homologyMap, id_comp, left.leftHomologyMap, leftHomologyMap, right.rightHomologyMap, rightHomologyIso, rightHomologyMap
+/-
+**CategoryTheory.ShortComplex.RightHomologyMapData.homologyMap_eq** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyMapData`。
+形式化陈述：homologyMap_eq : homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIs
+o.inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyMapData.leftHomologyMap'_eq`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyMapData.rightHomologyMap'_eq`：∀
+ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyMapData.comm_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap_eq :
     homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIso.inv := by
@@ -1424,21 +1311,31 @@ lemma homologyMap_eq :
   simp only [← γ.rightHomologyMap'_eq, assoc, ← rightHomologyMap'_comp_assoc,
     id_comp, comp_id, γ'.left.leftHomologyMap'_eq, γ'.right.rightHomologyMap'_eq, ← γ'.comm_assoc,
     Iso.hom_inv_id]
-
-/--
-lemma `homologyMap_comm` / 引理 `homologyMap_comm`
-
-English:
-lemma homologyMap_comm
-  proof: by
-  simp only [γ.homologyMap_eq, assoc, Iso.inv_hom_id, comp_id]
-
-中文:
-引理 homologyMap_comm
-  证明: by
-  simp only [γ.homologyMap_eq, assoc, Iso.inv_hom_id, comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_id, homologyMap_eq, inv_hom_id
+/-
+**CategoryTheory.ShortComplex.RightHomologyMapData.homologyMap_comm** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyMapData`。
+形式化陈述：homologyMap_comm : homologyMap φ ≫ h₂.homologyIso.hom = h₁.homologyIso.hom
+ ≫ γ.φH
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.RightHomologyMapData.homologyMap_eq`：homolog
+yMap_eq : homologyMap φ = h₁.homologyIso.hom ≫ γ.φH ≫ h₂.homologyIso.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap_comm :
     homologyMap φ ≫ h₂.homologyIso.hom = h₁.homologyIso.hom ≫ γ.φH := by
@@ -1447,18 +1344,18 @@ lemma homologyMap_comm :
 end RightHomologyMapData
 
 @[simp]
-/--
-lemma `homologyMap'_id` / 引理 `homologyMap'_id`
-
-English:
-lemma homologyMap'_id
-  given: (h : S.HomologyData)
-  proof: (HomologyMapData.id h).homologyMap'_eq
-
-中文:
-引理 homologyMap'_id
-  条件: (h : S.同调数据)
-  证明: (HomologyMapData.id h).homologyMap'_eq
+/-
+**CategoryTheory.ShortComplex.homologyMap'_id** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData),   CategoryTheory.ShortComplex.homologyMap' (CategoryTheory.Catego
+ryStruct.id S) h h =     CategoryTheory.CategoryStruct.id h.left.H
+参数：h : S.HomologyData；CategoryTheory.CategoryStruct.id S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HomologyMapData.homologyMap'_eq`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma homologyMap'_id (h : S.HomologyData) :
     homologyMap' (𝟙 S) h h = 𝟙 _ :=
@@ -1467,42 +1364,33 @@ lemma homologyMap'_id (h : S.HomologyData) :
 variable (S)
 
 @[simp]
-/--
-lemma `homologyMap_id` / 引理 `homologyMap_id`
-
-English:
-lemma homologyMap_id
-  given: [HasHomology S]
-  proof: homologyMap'_id _
-
-@[simp]
-
-中文:
-引理 homologyMap_id
-  条件: [有同调 S]
-  证明: homologyMap'_id _
-
-@[simp]
-
-Depends on / 依赖: homologyMap
+/-
+**CategoryTheory.ShortComplex.homologyMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ShortComplex`。
+形式化陈述：homologyMap_id [HasHomology S] : homologyMap (𝟙 S) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.homologyMap'_id`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
 -/
 lemma homologyMap_id [HasHomology S] :
     homologyMap (𝟙 S) = 𝟙 _ :=
   homologyMap'_id _
 
 @[simp]
-/--
-lemma `homologyMap'_zero` / 引理 `homologyMap'_zero`
-
-English:
-lemma homologyMap'_zero
-  given: (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)
-  proof: (HomologyMapData.zero h₁ h₂).homologyMap'_eq
-
-中文:
-引理 homologyMap'_zero
-  条件: (h₁ : S₁.同调数据) (h₂ : S₂.同调数据)
-  证明: (HomologyMapData.zero h₁ h₂).homologyMap'_eq
+/-
+**CategoryTheory.ShortComplex.homologyMap'_zero** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} (h₁
+ : S₁.HomologyData) (h₂ : S₂.HomologyData),   CategoryTheory.ShortComplex.homolo
+gyMap' 0 h₁ h₂ = 0
+参数：h₁ : S₁.HomologyData；h₂ : S₂.HomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HomologyMapData.homologyMap'_eq`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma homologyMap'_zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
     homologyMap' 0 h₁ h₂ = 0 :=
@@ -1511,43 +1399,39 @@ lemma homologyMap'_zero (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
 variable (S₁ S₂)
 
 @[simp]
-/--
-lemma `homologyMap_zero` / 引理 `homologyMap_zero`
-
-English:
-lemma homologyMap_zero
-  given: [S₁.HasHomology] [S₂.HasHomology]
-  proof: homologyMap'_zero _ _
-
-中文:
-引理 homologyMap_zero
-  条件: [S₁.有同调] [S₂.有同调]
-  证明: homologyMap'_zero _ _
-
-Depends on / 依赖: _zero, homologyMap
+/-
+**CategoryTheory.ShortComplex.homologyMap_zero** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ShortComplex`。
+形式化陈述：homologyMap_zero [S₁.HasHomology] [S₂.HasHomology] : homologyMap (0 : S₁ ⟶
+ S₂) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.homologyMap'_zero`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma homologyMap_zero [S₁.HasHomology] [S₂.HasHomology] :
     homologyMap (0 : S₁ ⟶ S₂) = 0 :=
   homologyMap'_zero _ _
 
 variable {S₁ S₂}
-
-/--
-lemma `homologyMap'_comp` / 引理 `homologyMap'_comp`
-
-English:
-lemma homologyMap'_comp
-  statement: (φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃)
-  proof: leftHomologyMap'_comp _ _ _ _ _
-
-@[simp]
-
-中文:
-引理 homologyMap'_comp
-  结论: (φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃)
-  证明: leftHomologyMap'_comp _ _ _ _ _
-
-@[simp]
+/-
+**CategoryTheory.ShortComplex.homologyMap'_comp** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ S₃ : CategoryTheory.ShortComplex C} 
+(φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)   (h
+₃ : S₃.HomologyData),   CategoryTheory.ShortComplex.homologyMap' (CategoryTheory
+.CategoryStruct.comp φ₁ φ₂) h₁ h₃ =     CategoryTheory.CategoryStruct.comp (Cate
+goryTheory.ShortComplex.homologyMap' φ₁ h₁ h₂)       (CategoryTheory.ShortComple
+x.homologyMap' φ₂ h₂ h₃)
+参数：φ₁ : S₁ ⟶ S₂；φ₂ : S₂ ⟶ S₃；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData；h₃ : S₃.H
+omologyData；CategoryTheory.CategoryStruct.comp φ₁ φ₂；CategoryTheory.ShortComplex
+.homologyMap' φ₁ h₁ h₂；CategoryTheory.ShortComplex.homologyMap' φ₂ h₂ h₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.leftHomologyMap'_comp`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C]   {S₁ S₂ S₃ : CategoryThe…
 -/
 lemma homologyMap'_comp (φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃)
     (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) (h₃ : S₃.HomologyData) :
@@ -1556,20 +1440,18 @@ lemma homologyMap'_comp (φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃)
   leftHomologyMap'_comp _ _ _ _ _
 
 @[simp]
-/--
-lemma `homologyMap_comp` / 引理 `homologyMap_comp`
-
-English:
-lemma homologyMap_comp
-  statement: [HasHomology S₁] [HasHomology S₂] [HasHomology S₃]
-  proof: homologyMap'_comp _ _ _ _ _
-
-中文:
-引理 homologyMap_comp
-  结论: [有同调 S₁] [有同调 S₂] [有同调 S₃]
-  证明: homologyMap'_comp _ _ _ _ _
-
-Depends on / 依赖: _comp, homologyMap
+/-
+**CategoryTheory.ShortComplex.homologyMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ShortComplex`。
+形式化陈述：homologyMap_comp [HasHomology S₁] [HasHomology S₂] [HasHomology S₃] (φ₁ : 
+S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃) : homologyMap (φ₁ ≫ φ₂) = homologyMap φ₁ ≫ homologyMap φ
+₂
+参数：φ₁ : S₁ ⟶ S₂；φ₂ : S₂ ⟶ S₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.homologyMap'_comp`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ S₃ : CategoryTheory.Sh…
 -/
 lemma homologyMap_comp [HasHomology S₁] [HasHomology S₂] [HasHomology S₃]
     (φ₁ : S₁ ⟶ S₂) (φ₂ : S₂ ⟶ S₃) :
@@ -1579,26 +1461,20 @@ lemma homologyMap_comp [HasHomology S₁] [HasHomology S₂] [HasHomology S₃]
 /-- Given an isomorphism `S₁ ≅ S₂` of short complexes and homology data `h₁` and `h₂`
 for `S₁` and `S₂` respectively, this is the induced homology isomorphism `h₁.left.H ≅ h₁.left.H`. -/
 @[simps]
-/--
-Definition of `homologyMapIso'` / `homologyMapIso'` 的定义
+/-
+**CategoryTheory.ShortComplex.homologyMapIso'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ShortComplex`。
+形式化陈述：homologyMapIso' (e : S₁ ≅ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData
+) : h₁.left.H ≅ h₂.left.H where hom
+参数：e : S₁ ≅ S₂；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyMapIso'
-  signature: (e : S₁ ≅ S₂) (h₁ : S₁.HomologyData)
-  body: homologyMap' e.hom h₁ h₂
-  inv := homologyMap' e.inv h₂ h₁
-  hom_inv_id := by rw [← homologyMap'_comp, e.hom_inv_id, homologyMap'_id]
-  inv_hom_id := by rw [← homologyMap'_comp, e.inv_hom_id, homologyMap'_id]
-
-中文:
-定义 homologyMapIso'
-  签名: (e : S₁ ≅ S₂) (h₁ : S₁.同调数据)
-  定义体: homologyMap' e.hom h₁ h₂
-  inv := homologyMap' e.inv h₂ h₁
-  hom_inv_id := by rw [← homologyMap'_comp, e.hom_inv_id, homologyMap'_id]
-  inv_hom_id := by rw [← homologyMap'_comp, e.inv_hom_id, homologyMap'_id]
-
-Depends on / 依赖: e.hom, homologyMap
+--- 原说明 ---
+Given an isomorphism `S₁ ≅ S₂` of short complexes and homology data `h₁` and `h₂
+`
+for `S₁` and `S₂` respectively, this is the induced homology isomorphism `h₁.lef
+t.H ≅ h₁.left.H`.
 -/
 def homologyMapIso' (e : S₁ ≅ S₂) (h₁ : S₁.HomologyData)
     (h₂ : S₂.HomologyData) : h₁.left.H ≅ h₂.left.H where
@@ -1606,50 +1482,37 @@ def homologyMapIso' (e : S₁ ≅ S₂) (h₁ : S₁.HomologyData)
   inv := homologyMap' e.inv h₂ h₁
   hom_inv_id := by rw [← homologyMap'_comp, e.hom_inv_id, homologyMap'_id]
   inv_hom_id := by rw [← homologyMap'_comp, e.inv_hom_id, homologyMap'_id]
-
-/--
-Instance `isIso_homologyMap'_of_isIso` / 实例 `isIso_homologyMap'_of_isIso`
-
-English:
-instance isIso_homologyMap'_of_isIso
-  signature: (φ : S₁ ⟶ S₂) [IsIso φ]
-  body: inferInstanceAs IsIso (homologyMapIso' (asIso φ) h₁ h₂).hom
-
-中文:
-实例 isIso_homologyMap'_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [是同构 φ]
-  定义体: inferInstanceAs IsIso (homologyMapIso' (asIso φ) h₁ h₂).hom
-
-Depends on / 依赖: homologyMapIso
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap'_of_isIso** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} (φ 
+: S₁ ⟶ S₂) [CategoryTheory.IsIso φ] (h₁ : S₁.HomologyData)   (h₂ : S₂.HomologyDa
+ta), CategoryTheory.IsIso (CategoryTheory.ShortComplex.homologyMap' φ h₁ h₂)
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData；CategoryTheory.ShortCom
+plex.homologyMap' φ h₁ h₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_homologyMap'_of_isIso (φ : S₁ ⟶ S₂) [IsIso φ]
     (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) :
     IsIso (homologyMap' φ h₁ h₂) :=
-inferInstanceAs IsIso (homologyMapIso' (asIso φ) h₁ h₂).hom
+  inferInstanceAs <| IsIso (homologyMapIso' (asIso φ) h₁ h₂).hom
 
 /-- The homology isomorphism `S₁.homology ⟶ S₂.homology` induced by an isomorphism
 `S₁ ≅ S₂` of short complexes. -/
 @[simps]
-/--
-Definition of `homologyMapIso` / `homologyMapIso` 的定义
+/-
+**CategoryTheory.ShortComplex.homologyMapIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.ShortComplex`。
+形式化陈述：homologyMapIso (e : S₁ ≅ S₂) [S₁.HasHomology] [S₂.HasHomology] : S₁.homolo
+gy ≅ S₂.homology where hom
+参数：e : S₁ ≅ S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyMapIso
-  signature: (e : S₁ ≅ S₂) [S₁.HasHomology]
-  body: homologyMap e.hom
-  inv := homologyMap e.inv
-  hom_inv_id := by rw [← homologyMap_comp, e.hom_inv_id, homologyMap_id]
-  inv_hom_id := by rw [← homologyMap_comp, e.inv_hom_id, homologyMap_id]
-
-中文:
-定义 homologyMapIso
-  签名: (e : S₁ ≅ S₂) [S₁.有同调]
-  定义体: homologyMap e.hom
-  inv := homologyMap e.inv
-  hom_inv_id := by rw [← homologyMap_comp, e.hom_inv_id, homologyMap_id]
-  inv_hom_id := by rw [← homologyMap_comp, e.inv_hom_id, homologyMap_id]
-
-Depends on / 依赖: e.hom, homologyMap
+--- 原说明 ---
+The homology isomorphism `S₁.homology ⟶ S₂.homology` induced by an isomorphism
+`S₁ ≅ S₂` of short complexes.
 -/
 noncomputable def homologyMapIso (e : S₁ ≅ S₂) [S₁.HasHomology]
     [S₂.HasHomology] : S₁.homology ≅ S₂.homology where
@@ -1657,26 +1520,19 @@ noncomputable def homologyMapIso (e : S₁ ≅ S₂) [S₁.HasHomology]
   inv := homologyMap e.inv
   hom_inv_id := by rw [← homologyMap_comp, e.hom_inv_id, homologyMap_id]
   inv_hom_id := by rw [← homologyMap_comp, e.inv_hom_id, homologyMap_id]
-
-/--
-Instance `isIso_homologyMap_of_iso` / 实例 `isIso_homologyMap_of_iso`
-
-English:
-instance isIso_homologyMap_of_iso
-  signature: (φ : S₁ ⟶ S₂) [IsIso φ] [S₁.HasHomology]
-  body: inferInstanceAs IsIso (homologyMapIso (asIso φ)).hom
-
-中文:
-实例 isIso_homologyMap_of_iso
-  签名: (φ : S₁ ⟶ S₂) [是同构 φ] [S₁.有同调]
-  定义体: inferInstanceAs IsIso (homologyMapIso (asIso φ)).hom
-
-Depends on / 依赖: homologyMapIso
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_iso** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_iso (φ : S₁ ⟶ S₂) [IsIso φ] [S₁.HasHomology] [S₂.HasH
+omology] : IsIso (homologyMap φ)
+参数：φ : S₁ ⟶ S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_homologyMap_of_iso (φ : S₁ ⟶ S₂) [IsIso φ] [S₁.HasHomology]
     [S₂.HasHomology] :
     IsIso (homologyMap φ) :=
-inferInstanceAs IsIso (homologyMapIso (asIso φ)).hom
+  inferInstanceAs <| IsIso (homologyMapIso (asIso φ)).hom
 
 variable {S}
 
@@ -1684,44 +1540,35 @@ section
 
 variable (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
 
-/--
-Definition of `leftRightHomologyComparison'` / `leftRightHomologyComparison'` 的定义
+/-- If a short complex `S` has both a left homology data `h₁` and a right homology data `h₂`,
+this is the canonical morphism `h₁.H ⟶ h₂.H`. -/
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftRightHomologyComparison' : h₁.H ⟶ h₂.H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftRightHomologyComparison'
-  signature: : h₁.H ⟶ h₂.H
-  body: h₂.liftH (h₁.descH (h₁.i ≫ h₂.p) (by simp))
-    (by rw [← cancel_epi h₁.π, LeftHomologyData.π_descH_assoc, assoc,
-      RightHomologyData.p_g', LeftHomologyData.wi, comp_zero])
-
-中文:
-定义 leftRightHomologyComparison'
-  签名: : h₁.H ⟶ h₂.H
-  定义体: h₂.liftH (h₁.descH (h₁.i ≫ h₂.p) (by simp))
-    (by rw [← cancel_epi h₁.π, LeftHomologyData.π_descH_assoc, assoc,
-      RightHomologyData.p_g', LeftHomologyData.wi, comp_zero])
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.wi, RightHomologyData, RightHomologyData.p_g, cancel_epi, comp_zero
+--- 原说明 ---
+If a short complex `S` has both a left homology data `h₁` and a right homology d
+ata `h₂`,
+this is the canonical morphism `h₁.H ⟶ h₂.H`.
 -/
 def leftRightHomologyComparison' : h₁.H ⟶ h₂.H :=
   h₂.liftH (h₁.descH (h₁.i ≫ h₂.p) (by simp))
     (by rw [← cancel_epi h₁.π, LeftHomologyData.π_descH_assoc, assoc,
       RightHomologyData.p_g', LeftHomologyData.wi, comp_zero])
-
-/--
-lemma `leftRightHomologyComparison'_eq_liftH` / 引理 `leftRightHomologyComparison'_eq_liftH`
-
-English:
-lemma leftRightHomologyComparison'_eq_liftH
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 leftRightHomologyComparison'_eq_liftH
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_eq_liftH** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h₁ : S
+.LeftHomologyData) (h₂ : S.RightHomologyData),   CategoryTheory.ShortComplex.lef
+tRightHomologyComparison' h₁ h₂ =     h₂.liftH (h₁.descH (CategoryTheory.Categor
+yStruct.comp h₁.i h₂.p) ⋯) ⋯
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData；h₁.descH (CategoryTheory.Cat
+egoryStruct.comp h₁.i h₂.p) ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma leftRightHomologyComparison'_eq_liftH :
     leftRightHomologyComparison' h₁ h₂ =
@@ -1730,42 +1577,53 @@ lemma leftRightHomologyComparison'_eq_liftH :
           RightHomologyData.p_g', LeftHomologyData.wi, comp_zero]) := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_leftRightHomologyComparison'_ι` / 引理 `π_leftRightHomologyComparison'_ι`
-
-English:
-lemma π_leftRightHomologyComparison'_ι
-  proof: by
-  simp only [leftRightHomologyComparison'_eq_liftH,
-    RightHomologyData.liftH_ι, LeftHomologyData.π_descH]
-
-中文:
-引理 π_leftRightHomologyComparison'_ι
-  证明: by
-  simp only [leftRightHomologyComparison'_eq_liftH,
-    RightHomologyData.liftH_ι, LeftHomologyData.π_descH]
-
-Depends on / 依赖: LeftHomologyData, RightHomologyData, RightHomologyData.liftH_, _eq_liftH, leftRightHomologyComparison
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π_leftRightHomologyComparison'_ι :
     h₁.π ≫ leftRightHomologyComparison' h₁ h₂ ≫ h₂.ι = h₁.i ≫ h₂.p := by
   simp only [leftRightHomologyComparison'_eq_liftH,
     RightHomologyData.liftH_ι, LeftHomologyData.π_descH]
-
-/--
-lemma `leftRightHomologyComparison'_eq_descH` / 引理 `leftRightHomologyComparison'_eq_descH`
-
-English:
-lemma leftRightHomologyComparison'_eq_descH
-  proof: by
-  simp only [← cancel_mono h₂.ι, ← cancel_epi h₁.π, π_leftRightHomologyComparison'_ι,
-    LeftHomologyData.π_descH_assoc, RightHomologyData.liftH_ι]
-
-中文:
-引理 leftRightHomologyComparison'_eq_descH
-  证明: by
-  simp only [← cancel_mono h₂.ι, ← cancel_epi h₁.π, π_leftRightHomologyComparison'_ι,
-    LeftHomologyData.π_descH_assoc, RightHomologyData.liftH_ι]
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_eq_descH** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h₁ : S
+.LeftHomologyData) (h₂ : S.RightHomologyData),   CategoryTheory.ShortComplex.lef
+tRightHomologyComparison' h₁ h₂ =     h₁.descH (h₂.liftH (CategoryTheory.Categor
+yStruct.comp h₁.i h₂.p) ⋯) ⋯
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData；h₂.liftH (CategoryTheory.Cat
+egoryStruct.comp h₁.i h₂.p) ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.instMonoι`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.
+HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.instEpiπ`：∀ {C : Type u_1} 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.π_leftRightHomologyComparison'_ι`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.π_descH_assoc`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limi
+ts.HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用引理 `CategoryTheory.ShortComplex.RightHomologyData.liftH_ι`：liftH_ι (k : A ⟶ 
+h.Q) (hk : k ≫ h.g' = 0) : h.liftH k hk ≫ h.ι = k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leftRightHomologyComparison'_eq_descH :
     leftRightHomologyComparison' h₁ h₂ =
@@ -1779,46 +1637,29 @@ end
 
 variable (S)
 
-/--
-Definition of `leftRightHomologyComparison` / `leftRightHomologyComparison` 的定义
+/-- If a short complex `S` has both a left and right homology,
+this is the canonical morphism `S.leftHomology ⟶ S.rightHomology`. -/
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftRightHomologyComparison [S.HasLeftHomology] [S.HasRightHomology] : S.l
+eftHomology ⟶ S.rightHomology
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftRightHomologyComparison
-  signature: [S.HasLeftHomology] [S.HasRightHomology]
-  body: leftRightHomologyComparison' _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 leftRightHomologyComparison
-  签名: [S.有LeftHomology] [S.有RightHomology]
-  定义体: leftRightHomologyComparison' _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: leftRightHomologyComparison
+--- 原说明 ---
+If a short complex `S` has both a left and right homology,
+this is the canonical morphism `S.leftHomology ⟶ S.rightHomology`.
 -/
 noncomputable def leftRightHomologyComparison [S.HasLeftHomology] [S.HasRightHomology] :
     S.leftHomology ⟶ S.rightHomology :=
   leftRightHomologyComparison' _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_leftRightHomologyComparison_ι` / 引理 `π_leftRightHomologyComparison_ι`
-
-English:
-lemma π_leftRightHomologyComparison_ι
-  given: [S.HasLeftHomology] [S.HasRightHomology]
-  proof: π_leftRightHomologyComparison'_ι _ _
-
-@[reassoc]
-
-中文:
-引理 π_leftRightHomologyComparison_ι
-  条件: [S.有LeftHomology] [S.有RightHomology]
-  证明: π_leftRightHomologyComparison'_ι _ _
-
-@[reassoc]
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π_leftRightHomologyComparison_ι [S.HasLeftHomology] [S.HasRightHomology] :
     S.leftHomologyπ ≫ S.leftRightHomologyComparison ≫ S.rightHomologyι =
@@ -1826,26 +1667,67 @@ lemma π_leftRightHomologyComparison_ι [S.HasLeftHomology] [S.HasRightHomology]
   π_leftRightHomologyComparison'_ι _ _
 
 @[reassoc]
-/--
-lemma `leftRightHomologyComparison'_naturality` / 引理 `leftRightHomologyComparison'_naturality`
-
-English:
-lemma leftRightHomologyComparison'_naturality
-  statement: (φ : S₁ ⟶ S₂) (h₁ : S₁.LeftHomologyData)
-  proof: by
-  simp only [← cancel_epi h₁.π, ← cancel_mono h₂'.ι, assoc,
-    leftHomologyπ_naturality'_assoc, rightHomologyι_naturality',
-    π_leftRightHomologyComparison'_ι, π_leftRightHomologyComparison'_ι_assoc,
-    cyclesMap'_i_assoc, p_opcyclesMap']
-
-中文:
-引理 leftRightHomologyComparison'_naturality
-  结论: (φ : S₁ ⟶ S₂) (h₁ : S₁.LeftHomologyData)
-  证明: by
-  simp only [← cancel_epi h₁.π, ← cancel_mono h₂'.ι, assoc,
-    leftHomologyπ_naturality'_assoc, rightHomologyι_naturality',
-    π_leftRightHomologyComparison'_ι, π_leftRightHomologyComparison'_ι_assoc,
-    cyclesMap'_i_assoc, p_opcyclesMap']
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_naturality** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} (φ 
+: S₁ ⟶ S₂) (h₁ : S₁.LeftHomologyData) (h₂ : S₁.RightHomologyData)   (h₁' : S₂.Le
+ftHomologyData) (h₂' : S₂.RightHomologyData),   CategoryTheory.CategoryStruct.co
+mp (CategoryTheory.ShortComplex.leftHomologyMap' φ h₁ h₁')       (CategoryTheory
+.ShortComplex.leftRightHomologyComparison' h₁' h₂') =     CategoryTheory.Categor
+yStruct.comp (CategoryTheory.ShortComplex.leftRightHomologyComparison' h₁ h₂)   
+    (CategoryTheory.ShortComplex.rightHomologyMap' φ h₂ h₂')
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.LeftHomologyData；h₂ : S₁.RightHomologyData；h₁' : S₂.LeftH
+omologyData；h₂' : S₂.RightHomologyData；CategoryTheory.ShortComplex.leftHomologyM
+ap' φ h₁ h₁'；CategoryTheory.ShortComplex.leftRightHomologyComparison' h₁' h₂'；Ca
+tegoryTheory.ShortComplex.leftRightHomologyComparison' h₁ h₂；CategoryTheory.Shor
+tComplex.rightHomologyMap' φ h₂ h₂'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.instEpiπ`：∀ {C : Type u_1} 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.leftHomologyπ_naturality'_assoc`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Lim
+its.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.instMonoι`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.
+HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.ShortComplex.π_leftRightHomologyComparison'_ι`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.cyclesMap'_i_assoc`：∀ {C : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMo
+rphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用引理 `CategoryTheory.ShortComplex.opcyclesMap'`：opcyclesMap'_smul : opcyclesMa
+p' (a • φ) h₁ h₂ = a • opcyclesMap' φ h₁ h₂
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyι_naturality'`：rightHomologyι_n
+aturality' : rightHomologyMap' φ h₁ h₂ ≫ h₂.ι = h₁.ι ≫ opcyclesMap' φ h₁ h₂
+· 使用定理 `CategoryTheory.ShortComplex.π_leftRightHomologyComparison'_ι_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用引理 `CategoryTheory.ShortComplex.p_opcyclesMap'`：p_opcyclesMap' : h₁.p ≫ opcy
+clesMap' φ h₁ h₂ = φ.τ₂ ≫ h₂.p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leftRightHomologyComparison'_naturality (φ : S₁ ⟶ S₂) (h₁ : S₁.LeftHomologyData)
     (h₂ : S₁.RightHomologyData) (h₁' : S₂.LeftHomologyData) (h₂' : S₂.RightHomologyData) :
@@ -1857,46 +1739,60 @@ lemma leftRightHomologyComparison'_naturality (φ : S₁ ⟶ S₂) (h₁ : S₁.
     cyclesMap'_i_assoc, p_opcyclesMap']
 
 variable {S}
-
-/--
-lemma `leftRightHomologyComparison'_compatibility` / 引理 `leftRightHomologyComparison'_compatibility`
-
-English:
-lemma leftRightHomologyComparison'_compatibility
-  statement: (h₁ h₁' : S.LeftHomologyData)
-  proof: by
-  rw [leftRightHomologyComparison'_naturality_assoc (𝟙 S) h₁ h₂ h₁' h₂']; rw [← rightHomologyMap'_comp]; rw [comp_id]; rw [rightHomologyMap'_id]; rw [comp_id]
-
-中文:
-引理 leftRightHomologyComparison'_compatibility
-  结论: (h₁ h₁' : S.LeftHomologyData)
-  证明: by
-  rw [leftRightHomologyComparison'_naturality_assoc (𝟙 S) h₁ h₂ h₁' h₂']; rw [← rightHomologyMap'_comp]; rw [comp_id]; rw [rightHomologyMap'_id]; rw [comp_id]
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_compatibility** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h₁ h₁'
+ : S.LeftHomologyData) (h₂ h₂' : S.RightHomologyData),   CategoryTheory.ShortCom
+plex.leftRightHomologyComparison' h₁ h₂ =     CategoryTheory.CategoryStruct.comp
+       (CategoryTheory.ShortComplex.leftHomologyMap' (CategoryTheory.CategoryStr
+uct.id S) h₁ h₁')       (CategoryTheory.CategoryStruct.comp (CategoryTheory.Shor
+tComplex.leftRightHomologyComparison' h₁' h₂')         (CategoryTheory.ShortComp
+lex.rightHomologyMap' (CategoryTheory.CategoryStruct.id S) h₂' h₂))
+参数：h₁ h₁' : S.LeftHomologyData；h₂ h₂' : S.RightHomologyData；CategoryTheory.Short
+Complex.leftHomologyMap' (CategoryTheory.CategoryStruct.id S) h₁ h₁'；CategoryThe
+ory.CategoryStruct.comp (CategoryTheory.ShortComplex.leftRightHomologyComparison
+' h₁' h₂')         (CategoryTheory.ShortComplex.rightHomologyMap' (CategoryTheor
+y.CategoryStruct.id S) h₂' h₂)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_naturality_asso
+c`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyMap'_comp`：∀ {C : Type u_1} [in
+st : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZe
+roMorphisms C]   {S₁ S₂ S₃ : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyMap'_id`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S : CategoryTheory.Sho…
 -/
 lemma leftRightHomologyComparison'_compatibility (h₁ h₁' : S.LeftHomologyData)
     (h₂ h₂' : S.RightHomologyData) :
     leftRightHomologyComparison' h₁ h₂ = leftHomologyMap' (𝟙 S) h₁ h₁' ≫
       leftRightHomologyComparison' h₁' h₂' ≫ rightHomologyMap' (𝟙 S) _ _ := by
-  rw [leftRightHomologyComparison'_naturality_assoc (𝟙 S) h₁ h₂ h₁' h₂']; rw [← rightHomologyMap'_comp]; rw [comp_id]; rw [rightHomologyMap'_id]; rw [comp_id]
-
-/--
-lemma `leftRightHomologyComparison_eq` / 引理 `leftRightHomologyComparison_eq`
-
-English:
-lemma leftRightHomologyComparison_eq
-  statement: [S.HasLeftHomology] [S.HasRightHomology]
-  proof: leftRightHomologyComparison'_compatibility _ _ _ _
-
-@[simp]
-
-中文:
-引理 leftRightHomologyComparison_eq
-  结论: [S.有LeftHomology] [S.有RightHomology]
-  证明: leftRightHomologyComparison'_compatibility _ _ _ _
-
-@[simp]
-
-Depends on / 依赖: _compatibility, leftRightHomologyComparison
+  rw [leftRightHomologyComparison'_naturality_assoc (𝟙 S) h₁ h₂ h₁' h₂',
+    ← rightHomologyMap'_comp, comp_id, rightHomologyMap'_id, comp_id]
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison_eq** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftRightHomologyComparison_eq [S.HasLeftHomology] [S.HasRightHomology] (h
+₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData) : S.leftRightHomologyComparis
+on = h₁.leftHomologyIso.hom ≫ leftRightHomologyComparison' h₁ h₂ ≫ h₂.rightHomol
+ogyIso.inv
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_compatibility`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
 -/
 lemma leftRightHomologyComparison_eq [S.HasLeftHomology] [S.HasRightHomology]
     (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData) :
@@ -1905,72 +1801,115 @@ lemma leftRightHomologyComparison_eq [S.HasLeftHomology] [S.HasRightHomology]
   leftRightHomologyComparison'_compatibility _ _ _ _
 
 @[simp]
-/--
-lemma `HomologyData.leftRightHomologyComparison'_eq` / 引理 `HomologyData.leftRightHomologyComparison'_eq`
-
-English:
-lemma HomologyData.leftRightHomologyComparison'_eq
-  given: (h : S.HomologyData)
-  proof: by
-  simp only [← cancel_epi h.left.π, ← cancel_mono h.right.ι, assoc,
-    π_leftRightHomologyComparison'_ι, comm]
-
-中文:
-引理 同调数据.leftRightHomologyComparison'_eq
-  条件: (h : S.同调数据)
-  证明: by
-  simp only [← cancel_epi h.left.π, ← cancel_mono h.right.ι, assoc,
-    π_leftRightHomologyComparison'_ι, comm]
-
-Depends on / 依赖: cancel_epi, cancel_mono, h.left, h.right
+/-
+**CategoryTheory.ShortComplex.HomologyData.leftRightHomologyComparison'_eq** 是 M
+athlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData),   CategoryTheory.ShortComplex.leftRightHomologyComparison' h.left
+ h.right = h.iso.hom
+参数：h : S.HomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.instEpiπ`：∀ {C : Type u_1} 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.instMonoι`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.
+HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.ShortComplex.π_leftRightHomologyComparison'_ι`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.comm`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma HomologyData.leftRightHomologyComparison'_eq (h : S.HomologyData) :
     leftRightHomologyComparison' h.left h.right = h.iso.hom := by
   simp only [← cancel_epi h.left.π, ← cancel_mono h.right.ι, assoc,
     π_leftRightHomologyComparison'_ι, comm]
-
-/--
-Instance `isIso_leftRightHomologyComparison'_of_homologyData` / 实例 `isIso_leftRightHomologyComparison'_of_homologyData`
-
-English:
-instance isIso_leftRightHomologyComparison'_of_homologyData
-  signature: (h : S.HomologyData)
-  body: by
-    rw [h.leftRightHomologyComparison'_eq]
-    infer_instance
-
-中文:
-实例 isIso_leftRightHomologyComparison'_of_homologyData
-  签名: (h : S.同调数据)
-  定义体: by
-    rw [h.leftRightHomologyComparison'_eq]
-    infer_instance
-
-Depends on / 依赖: h.leftRightHomologyComparison, infer_instance, leftRightHomologyComparison
+/-
+**CategoryTheory.ShortComplex.isIso_leftRightHomologyComparison'_of_homologyData
+** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData),   CategoryTheory.IsIso (CategoryTheory.ShortComplex.leftRightHomo
+logyComparison' h.left h.right)
+参数：h : S.HomologyData；CategoryTheory.ShortComplex.leftRightHomologyComparison' h
+.left h.right。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.leftRightHomologyComparison'_eq
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryThe
+ory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance isIso_leftRightHomologyComparison'_of_homologyData (h : S.HomologyData) :
     IsIso (leftRightHomologyComparison' h.left h.right) := by
     rw [h.leftRightHomologyComparison'_eq]
     infer_instance
-
-/--
-Instance `isIso_leftRightHomologyComparison'` / 实例 `isIso_leftRightHomologyComparison'`
-
-English:
-instance isIso_leftRightHomologyComparison'
-  signature: [S.HasHomology]
-  body: by
-  rw [leftRightHomologyComparison'_compatibility h₁ S.homologyData.left h₂
-    S.homologyData.right]
-  infer_instance
-
-中文:
-实例 isIso_leftRightHomologyComparison'
-  签名: [S.有同调]
-  定义体: by
-  rw [leftRightHomologyComparison'_compatibility h₁ S.homologyData.left h₂
-    S.homologyData.right]
-  infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_leftRightHomologyComparison'** 是 Mathlib 中的一
+个实例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_leftRightHomologyComparison'_of_homologyData (h : S.HomologyData) : 
+IsIso (leftRightHomologyComparison' h.left h.right)
+参数：h : S.HomologyData。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_compatibility`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoLeftHomologyMap'OfEpiτ₁Ofτ₂OfMonoτ₃
+`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Categ
+oryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₁`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₂`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₃`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.isIso_leftRightHomologyComparison'_of_homolo
+gyData`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categ
+oryTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoRightHomologyMap'OfEpiτ₁Ofτ₂OfMonoτ
+₃`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Cate
+goryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
 -/
 instance isIso_leftRightHomologyComparison' [S.HasHomology]
     (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData) :
@@ -1980,24 +1919,13 @@ instance isIso_leftRightHomologyComparison' [S.HasHomology]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isIso_leftRightHomologyComparison` / 实例 `isIso_leftRightHomologyComparison`
-
-English:
-instance isIso_leftRightHomologyComparison
-  signature: [S.HasHomology]
-  body: by
-  dsimp only [leftRightHomologyComparison]
-  infer_instance
-
-中文:
-实例 isIso_leftRightHomologyComparison
-  签名: [S.有同调]
-  定义体: by
-  dsimp only [leftRightHomologyComparison]
-  infer_instance
-
-Depends on / 依赖: infer_instance, leftRightHomologyComparison
+/-
+**CategoryTheory.ShortComplex.isIso_leftRightHomologyComparison** 是 Mathlib 中的一个
+实例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_leftRightHomologyComparison [S.HasHomology] : IsIso S.leftRightHomol
+ogyComparison
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_leftRightHomologyComparison [S.HasHomology] :
     IsIso S.leftRightHomologyComparison := by
@@ -2010,20 +1938,22 @@ namespace HomologyData
 from a left homology data `h₁` and a right homology data `h₂` when the comparison
 morphism `leftRightHomologyComparison' h₁ h₂ : h₁.H ⟶ h₂.H` is an isomorphism. -/
 @[simps]
-/--
-Definition of `ofIsIsoLeftRightHomologyComparison'` / `ofIsIsoLeftRightHomologyComparison'` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.ofIsIsoLeftRightHomologyComparison'**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：ofIsIsoLeftRightHomologyComparison' (h₁ : S.LeftHomologyData) (h₂ : S.Righ
+tHomologyData) [IsIso (leftRightHomologyComparison' h₁ h₂)] : S.HomologyData whe
+re left
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData；leftRightHomologyComparison'
+ h₁ h₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsIsoLeftRightHomologyComparison'
-  body: h₁
-  right := h₂
-  iso := asIso (leftRightHomologyComparison' h₁ h₂)
-
-中文:
-定义 ofIsIsoLeftRightHomologyComparison'
-  定义体: h₁
-  right := h₂
-  iso := asIso (leftRightHomologyComparison' h₁ h₂)
+--- 原说明 ---
+This is the homology data for a short complex `S` that is obtained
+from a left homology data `h₁` and a right homology data `h₂` when the compariso
+n
+morphism `leftRightHomologyComparison' h₁ h₂ : h₁.H ⟶ h₂.H` is an isomorphism.
 -/
 noncomputable def ofIsIsoLeftRightHomologyComparison'
     (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
@@ -2035,20 +1965,35 @@ noncomputable def ofIsIsoLeftRightHomologyComparison'
 
 end HomologyData
 
-/--
-lemma `leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'` / 引理 `leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'`
-
-English:
-lemma leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'
-  proof: by
-  simpa only [h.leftRightHomologyComparison'_eq] using
-    leftRightHomologyComparison'_compatibility h₁ h.left h₂ h.right
-
-中文:
-引理 leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'
-  证明: by
-  simpa only [h.leftRightHomologyComparison'_eq] using
-    leftRightHomologyComparison'_compatibility h₁ h.left h₂ h.right
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_eq_leftHomologpMap'_c
+omp_iso_hom_comp_rightHomologyMap'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Sho
+rtComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData) (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData),   CategoryTh
+eory.ShortComplex.leftRightHomologyComparison' h₁ h₂ =     CategoryTheory.Catego
+ryStruct.comp       (CategoryTheory.ShortComplex.leftHomologyMap' (CategoryTheor
+y.CategoryStruct.id S) h₁ h.left)       (CategoryTheory.CategoryStruct.comp h.is
+o.hom         (CategoryTheory.ShortComplex.rightHomologyMap' (CategoryTheory.Cat
+egoryStruct.id S) h.right h₂))
+参数：h : S.HomologyData；h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData；CategoryT
+heory.ShortComplex.leftHomologyMap' (CategoryTheory.CategoryStruct.id S) h₁ h.le
+ft；CategoryTheory.CategoryStruct.comp h.iso.hom         (CategoryTheory.ShortCom
+plex.rightHomologyMap' (CategoryTheory.CategoryStruct.id S) h.right h₂)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.leftRightHomologyComparison'_eq
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryThe
+ory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_compatibility`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
 -/
 lemma leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'
     (h : S.HomologyData) (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData) :
@@ -2059,32 +2004,37 @@ lemma leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHo
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `leftRightHomologyComparison'_fac` / 引理 `leftRightHomologyComparison'_fac`
-
-English:
-lemma leftRightHomologyComparison'_fac
-  statement: (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
-  proof: by
-  rw [leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'
-    S.homologyData h₁ h₂]
-  dsimp only [LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso,
-    Iso.symm, Iso.trans, Iso.refl, leftHomologyMapIso', leftHomologyIso,
-    RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso,
-    rightHomologyMapIso', rightHomologyIso]
-  simp only [assoc, ← leftHomologyMap'_comp_assoc, id_comp, ← rightHomologyMap'_comp]
-
-中文:
-引理 leftRightHomologyComparison'_fac
-  结论: (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
-  证明: by
-  rw [leftRightHomologyComparison'_eq_leftHomologpMap'_comp_iso_hom_comp_rightHomologyMap'
-    S.homologyData h₁ h₂]
-  dsimp only [LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso,
-    Iso.symm, Iso.trans, Iso.refl, leftHomologyMapIso', leftHomologyIso,
-    RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso,
-    rightHomologyMapIso', rightHomologyIso]
-  simp only [assoc, ← leftHomologyMap'_comp_assoc, id_comp, ← rightHomologyMap'_comp]
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison'_fac** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h₁ : S
+.LeftHomologyData) (h₂ : S.RightHomologyData) [inst_2 : S.HasHomology],   Catego
+ryTheory.ShortComplex.leftRightHomologyComparison' h₁ h₂ =     CategoryTheory.Ca
+tegoryStruct.comp h₁.homologyIso.inv h₂.homologyIso.hom
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_eq_leftHomologp
+Map'_comp_iso_hom_comp_rightHomologyMap'`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   {S : Ca
+tegoryTheory.ShortComp…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leftRightHomologyComparison'_fac (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
     [S.HasHomology] :
@@ -2100,26 +2050,26 @@ lemma leftRightHomologyComparison'_fac (h₁ : S.LeftHomologyData) (h₂ : S.Rig
 variable (S)
 
 @[reassoc]
-/--
-lemma `leftRightHomologyComparison_fac` / 引理 `leftRightHomologyComparison_fac`
-
-English:
-lemma leftRightHomologyComparison_fac
-  given: [S.HasHomology]
-  proof: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv,
-    RightHomologyData.homologyIso_rightHomologyData, Iso.symm_hom] using!
-      leftRightHomologyComparison'_fac S.leftHomologyData S.rightHomologyData
-
-中文:
-引理 leftRightHomologyComparison_fac
-  条件: [S.有同调]
-  证明: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv,
-    RightHomologyData.homologyIso_rightHomologyData, Iso.symm_hom] using!
-      leftRightHomologyComparison'_fac S.leftHomologyData S.rightHomologyData
-
-Depends on / 依赖: Iso.symm_hom, Iso.symm_inv, LeftHomologyData, LeftHomologyData.homologyIso_leftHomologyData, RightHomologyData, RightHomologyData.homologyIso_rightHomologyData, S.leftHomologyData, S.rightHomologyData, _fac, homologyIso_leftHomologyData, homologyIso_rightHomologyData, leftHomologyData, leftRightHomologyComparison, rightHomologyData, symm_hom, symm_inv
+/-
+**CategoryTheory.ShortComplex.leftRightHomologyComparison_fac** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftRightHomologyComparison_fac [S.HasHomology] : S.leftRightHomologyCompa
+rison = S.leftHomologyIso.hom ≫ S.rightHomologyIso.inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.homologyIso_leftHomologyDat
+a`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.homologyIso_rightHomologyD
+ata`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_fac`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
 -/
 lemma leftRightHomologyComparison_fac [S.HasHomology] :
     S.leftRightHomologyComparison = S.leftHomologyIso.hom ≫ S.rightHomologyIso.inv := by
@@ -2130,98 +2080,95 @@ lemma leftRightHomologyComparison_fac [S.HasHomology] :
 variable {S}
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso` / 引理 `HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso`
-
-English:
-lemma HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso
-  proof: by
-  suffices h.iso = h.left.homologyIso.symm ≪≫ h.right.homologyIso by
-    rw [this]; rw [Iso.self_symm_id_assoc]
-  ext
-  dsimp
-  rw [← leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_eq]
-
-中文:
-引理 同调数据.right_homologyIso_eq_left_homologyIso_trans_iso
-  证明: by
-  suffices h.iso = h.left.homologyIso.symm ≪≫ h.right.homologyIso by
-    rw [this]; rw [Iso.self_symm_id_assoc]
-  ext
-  dsimp
-  rw [← leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_eq]
-
-Depends on / 依赖: Iso.self_symm_id_assoc, _fac, h.iso, h.left.homologyIso.symm, h.right.homologyIso, homologyIso, leftRightHomologyComparison, self_symm_id_assoc
+/-
+**CategoryTheory.ShortComplex.HomologyData.right_homologyIso_eq_left_homologyIso
+_trans_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData) [inst_2 : S.HasHomology],   h.right.homologyIso = h.left.homologyI
+so ≪≫ h.iso
+参数：h : S.HomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_fac`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.leftRightHomologyComparison'_eq
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryThe
+ory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Iso.self_symm_id_assoc`：self_symm_id_assoc (α : X ≅ Y) (β
+ : X ≅ Z) : α ≪≫ α.symm ≪≫ β = β
 -/
 lemma HomologyData.right_homologyIso_eq_left_homologyIso_trans_iso
     (h : S.HomologyData) [S.HasHomology] :
     h.right.homologyIso = h.left.homologyIso ≪≫ h.iso := by
   suffices h.iso = h.left.homologyIso.symm ≪≫ h.right.homologyIso by
-    rw [this]; rw [Iso.self_symm_id_assoc]
+    rw [this, Iso.self_symm_id_assoc]
   ext
   dsimp
-  rw [← leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_eq]
-
-/--
-lemma `HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm` / 引理 `HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm`
-
-English:
-lemma HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm
-  proof: by
-  rw [right_homologyIso_eq_left_homologyIso_trans_iso]
-  cat_disch
-
-中文:
-引理 同调数据.left_homologyIso_eq_right_homologyIso_trans_iso_symm
-  证明: by
-  rw [right_homologyIso_eq_left_homologyIso_trans_iso]
-  cat_disch
-
-Depends on / 依赖: cat_disch, right_homologyIso_eq_left_homologyIso_trans_iso
+  rw [← leftRightHomologyComparison'_fac, leftRightHomologyComparison'_eq]
+/-
+**CategoryTheory.ShortComplex.HomologyData.left_homologyIso_eq_right_homologyIso
+_trans_iso_symm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.HomologyD
+ata`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComplex C} (h : S.
+HomologyData) [inst_2 : S.HasHomology],   h.left.homologyIso = h.right.homologyI
+so ≪≫ h.iso.symm
+参数：h : S.HomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.right_homologyIso_eq_left_homol
+ogyIso_trans_iso`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst
+_1 : CategoryTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Iso.trans_assoc`：trans_assoc {Z' : C} (α : X ≅ Y) (β : Y 
+≅ Z) (γ : Z ≅ Z') : (α ≪≫ β) ≪≫ γ = α ≪≫ β ≪≫ γ
+· 使用定理 `CategoryTheory.Iso.self_symm_id`：self_symm_id (α : X ≅ Y) : α ≪≫ α.symm 
+= Iso.refl X
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma HomologyData.left_homologyIso_eq_right_homologyIso_trans_iso_symm
     (h : S.HomologyData) [S.HasHomology] :
     h.left.homologyIso = h.right.homologyIso ≪≫ h.iso.symm := by
   rw [right_homologyIso_eq_left_homologyIso_trans_iso]
   cat_disch
-
-/--
-lemma `hasHomology_of_isIso_leftRightHomologyComparison'` / 引理 `hasHomology_of_isIso_leftRightHomologyComparison'`
-
-English:
-lemma hasHomology_of_isIso_leftRightHomologyComparison'
-  proof: HasHomology.mk' (HomologyData.ofIsIsoLeftRightHomologyComparison' h₁ h₂)
-
-中文:
-引理 hasHomology_of_isIso_leftRightHomologyComparison'
-  证明: HasHomology.mk' (HomologyData.ofIsIsoLeftRightHomologyComparison' h₁ h₂)
-
-Depends on / 依赖: HasHomology, HasHomology.mk, HomologyData, HomologyData.ofIsIsoLeftRightHomologyComparison, ofIsIsoLeftRightHomologyComparison
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_isIso_leftRightHomologyComparison'*
+* 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_isIso_leftRightHomologyComparison' (h₁ : S.LeftHomologyData
+) (h₂ : S.RightHomologyData) [IsIso (leftRightHomologyComparison' h₁ h₂)] : S.Ha
+sHomology
+参数：h₁ : S.LeftHomologyData；h₂ : S.RightHomologyData；leftRightHomologyComparison'
+ h₁ h₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.HasHomology.mk'`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S : CategoryTheory.ShortComp…
 -/
 lemma hasHomology_of_isIso_leftRightHomologyComparison'
     (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
     [IsIso (leftRightHomologyComparison' h₁ h₂)] :
     S.HasHomology :=
   HasHomology.mk' (HomologyData.ofIsIsoLeftRightHomologyComparison' h₁ h₂)
-
-/--
-lemma `hasHomology_of_isIsoLeftRightHomologyComparison` / 引理 `hasHomology_of_isIsoLeftRightHomologyComparison`
-
-English:
-lemma hasHomology_of_isIsoLeftRightHomologyComparison
-  statement: [S.HasLeftHomology]
-  proof: by
-  have : IsIso (leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData) := h
-  exact hasHomology_of_isIso_leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData
-
-中文:
-引理 hasHomology_of_isIsoLeftRightHomologyComparison
-  结论: [S.有LeftHomology]
-  证明: by
-  have : IsIso (leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData) := h
-  exact hasHomology_of_isIso_leftRightHomologyComparison' S.leftHomologyData S.rightHomologyData
-
-Depends on / 依赖: S.leftHomologyData, S.rightHomologyData, hasHomology_of_isIso_leftRightHomologyComparison, leftHomologyData, leftRightHomologyComparison, rightHomologyData
+/-
+**CategoryTheory.ShortComplex.hasHomology_of_isIsoLeftRightHomologyComparison** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：hasHomology_of_isIsoLeftRightHomologyComparison [S.HasLeftHomology] [S.Has
+RightHomology] [h : IsIso S.leftRightHomologyComparison] : S.HasHomology
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.hasHomology_of_isIso_leftRightHomologyCompar
+ison'`：hasHomology_of_isIso_leftRightHomologyComparison' (h₁ : S.LeftHomologyDat
+a) (h₂ : S.RightHomologyData) [IsIso (leftRightHomologyComparison' …
 -/
 lemma hasHomology_of_isIsoLeftRightHomologyComparison [S.HasLeftHomology]
     [S.HasRightHomology] [h : IsIso S.leftRightHomologyComparison] :
@@ -2236,22 +2183,36 @@ variable [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `LeftHomologyData.leftHomologyIso_hom_naturality` / 引理 `LeftHomologyData.leftHomologyIso_hom_naturality`
-
-English:
-lemma LeftHomologyData.leftHomologyIso_hom_naturality
-  proof: by
-  dsimp [homologyIso, ShortComplex.leftHomologyIso, homologyMap, homologyMap', leftHomologyIso]
-  simp only [← leftHomologyMap'_comp, id_comp, comp_id]
-
-中文:
-引理 LeftHomologyData.leftHomologyIso_hom_naturality
-  证明: by
-  dsimp [homologyIso, ShortComplex.leftHomologyIso, homologyMap, homologyMap', leftHomologyIso]
-  simp only [← leftHomologyMap'_comp, id_comp, comp_id]
-
-Depends on / 依赖: ShortComplex, ShortComplex.leftHomologyIso, _comp, comp_id, homologyIso, homologyMap, id_comp, leftHomologyIso, leftHomologyMap
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_hom_naturality** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} [in
+st_2 : S₁.HasHomology] [inst_3 : S₂.HasHomology] (φ : S₁ ⟶ S₂)   (h₁ : S₁.LeftHo
+mologyData) (h₂ : S₂.LeftHomologyData),   CategoryTheory.CategoryStruct.comp h₁.
+homologyIso.hom (CategoryTheory.ShortComplex.leftHomologyMap' φ h₁ h₂) =     Cat
+egoryTheory.CategoryStruct.comp (CategoryTheory.ShortComplex.homologyMap φ) h₂.h
+omologyIso.hom
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.LeftHomologyData；h₂ : S₂.LeftHomologyData；CategoryTheory.
+ShortComplex.leftHomologyMap' φ h₁ h₂；CategoryTheory.ShortComplex.homologyMap φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma LeftHomologyData.leftHomologyIso_hom_naturality
     (h₁ : S₁.LeftHomologyData) (h₂ : S₂.LeftHomologyData) :
@@ -2263,26 +2224,36 @@ lemma LeftHomologyData.leftHomologyIso_hom_naturality
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `LeftHomologyData.leftHomologyIso_inv_naturality` / 引理 `LeftHomologyData.leftHomologyIso_inv_naturality`
-
-English:
-lemma LeftHomologyData.leftHomologyIso_inv_naturality
-  proof: by
-  dsimp [homologyIso, ShortComplex.leftHomologyIso, homologyMap, homologyMap', leftHomologyIso]
-  simp only [← leftHomologyMap'_comp, id_comp, comp_id]
-
-@[reassoc]
-
-中文:
-引理 LeftHomologyData.leftHomologyIso_inv_naturality
-  证明: by
-  dsimp [homologyIso, ShortComplex.leftHomologyIso, homologyMap, homologyMap', leftHomologyIso]
-  simp only [← leftHomologyMap'_comp, id_comp, comp_id]
-
-@[reassoc]
-
-Depends on / 依赖: ShortComplex, ShortComplex.leftHomologyIso, _comp, comp_id, homologyIso, homologyMap, id_comp, leftHomologyIso, leftHomologyMap
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_inv_naturality** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} [in
+st_2 : S₁.HasHomology] [inst_3 : S₂.HasHomology] (φ : S₁ ⟶ S₂)   (h₁ : S₁.LeftHo
+mologyData) (h₂ : S₂.LeftHomologyData),   CategoryTheory.CategoryStruct.comp h₁.
+homologyIso.inv (CategoryTheory.ShortComplex.homologyMap φ) =     CategoryTheory
+.CategoryStruct.comp (CategoryTheory.ShortComplex.leftHomologyMap' φ h₁ h₂) h₂.h
+omologyIso.inv
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.LeftHomologyData；h₂ : S₂.LeftHomologyData；CategoryTheory.
+ShortComplex.homologyMap φ；CategoryTheory.ShortComplex.leftHomologyMap' φ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma LeftHomologyData.leftHomologyIso_inv_naturality
     (h₁ : S₁.LeftHomologyData) (h₂ : S₂.LeftHomologyData) :
@@ -2292,26 +2263,25 @@ lemma LeftHomologyData.leftHomologyIso_inv_naturality
   simp only [← leftHomologyMap'_comp, id_comp, comp_id]
 
 @[reassoc]
-/--
-lemma `leftHomologyIso_hom_naturality` / 引理 `leftHomologyIso_hom_naturality`
-
-English:
-lemma leftHomologyIso_hom_naturality
-  proof: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv] using!
-    LeftHomologyData.leftHomologyIso_inv_naturality φ S₁.leftHomologyData S₂.leftHomologyData
-
-@[reassoc]
-
-中文:
-引理 leftHomologyIso_hom_naturality
-  证明: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv] using!
-    LeftHomologyData.leftHomologyIso_inv_naturality φ S₁.leftHomologyData S₂.leftHomologyData
-
-@[reassoc]
-
-Depends on / 依赖: Iso.symm_inv, LeftHomologyData, LeftHomologyData.homologyIso_leftHomologyData, LeftHomologyData.leftHomologyIso_inv_naturality, homologyIso_leftHomologyData, leftHomologyData, leftHomologyIso_inv_naturality, symm_inv
+/-
+**CategoryTheory.ShortComplex.leftHomologyIso_hom_naturality** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftHomologyIso_hom_naturality : S₁.leftHomologyIso.hom ≫ homologyMap φ = 
+leftHomologyMap φ ≫ S₂.leftHomologyIso.hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.homologyIso_leftHomologyDat
+a`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_inv_natural
+ity`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma leftHomologyIso_hom_naturality :
     S₁.leftHomologyIso.hom ≫ homologyMap φ =
@@ -2320,26 +2290,25 @@ lemma leftHomologyIso_hom_naturality :
     LeftHomologyData.leftHomologyIso_inv_naturality φ S₁.leftHomologyData S₂.leftHomologyData
 
 @[reassoc]
-/--
-lemma `leftHomologyIso_inv_naturality` / 引理 `leftHomologyIso_inv_naturality`
-
-English:
-lemma leftHomologyIso_inv_naturality
-  proof: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv] using!
-    LeftHomologyData.leftHomologyIso_hom_naturality φ S₁.leftHomologyData S₂.leftHomologyData
-
-@[reassoc]
-
-中文:
-引理 leftHomologyIso_inv_naturality
-  证明: by
-  simpa only [LeftHomologyData.homologyIso_leftHomologyData, Iso.symm_inv] using!
-    LeftHomologyData.leftHomologyIso_hom_naturality φ S₁.leftHomologyData S₂.leftHomologyData
-
-@[reassoc]
-
-Depends on / 依赖: Iso.symm_inv, LeftHomologyData, LeftHomologyData.homologyIso_leftHomologyData, LeftHomologyData.leftHomologyIso_hom_naturality, homologyIso_leftHomologyData, leftHomologyData, leftHomologyIso_hom_naturality, symm_inv
+/-
+**CategoryTheory.ShortComplex.leftHomologyIso_inv_naturality** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：leftHomologyIso_inv_naturality : S₁.leftHomologyIso.inv ≫ leftHomologyMap 
+φ = homologyMap φ ≫ S₂.leftHomologyIso.inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.homologyIso_leftHomologyDat
+a`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTh
+eory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_hom_natural
+ity`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma leftHomologyIso_inv_naturality :
     S₁.leftHomologyIso.inv ≫ leftHomologyMap φ =
@@ -2348,52 +2317,119 @@ lemma leftHomologyIso_inv_naturality :
     LeftHomologyData.leftHomologyIso_hom_naturality φ S₁.leftHomologyData S₂.leftHomologyData
 
 @[reassoc]
-/--
-lemma `RightHomologyData.rightHomologyIso_hom_naturality` / 引理 `RightHomologyData.rightHomologyIso_hom_naturality`
-
-English:
-lemma RightHomologyData.rightHomologyIso_hom_naturality
-  proof: by
-  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [LeftHomologyData.leftHomologyIso_hom_naturality_assoc]; rw [leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_fac]; rw [assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]
-
-@[reassoc]
-
-中文:
-引理 RightHomologyData.rightHomologyIso_hom_naturality
-  证明: by
-  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [LeftHomologyData.leftHomologyIso_hom_naturality_assoc]; rw [leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_fac]; rw [assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]
-
-@[reassoc]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, LeftHomologyData, LeftHomologyData.leftHomologyIso_hom_naturality_assoc, _fac, _naturality, cancel_epi, hom_inv_id_assoc, homologyIso, homologyIso.inv, inv_hom_id_assoc, leftHomologyData, leftHomologyData.homologyIso.hom, leftHomologyIso_hom_naturality_assoc, leftRightHomologyComparison
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_hom_naturality*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} [in
+st_2 : S₁.HasHomology] [inst_3 : S₂.HasHomology] (φ : S₁ ⟶ S₂)   (h₁ : S₁.RightH
+omologyData) (h₂ : S₂.RightHomologyData),   CategoryTheory.CategoryStruct.comp h
+₁.homologyIso.hom (CategoryTheory.ShortComplex.rightHomologyMap' φ h₁ h₂) =     
+CategoryTheory.CategoryStruct.comp (CategoryTheory.ShortComplex.homologyMap φ) h
+₂.homologyIso.hom
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.RightHomologyData；h₂ : S₂.RightHomologyData；CategoryTheor
+y.ShortComplex.rightHomologyMap' φ h₁ h₂；CategoryTheory.ShortComplex.homologyMap
+ φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_naturality`：∀ {
+C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.L
+imits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_hom_natural
+ity_assoc`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Ca
+tegoryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.ShortComplex.leftRightHomologyComparison'_fac`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma RightHomologyData.rightHomologyIso_hom_naturality
     (h₁ : S₁.RightHomologyData) (h₂ : S₂.RightHomologyData) :
     h₁.homologyIso.hom ≫ rightHomologyMap' φ h₁ h₂ =
       homologyMap φ ≫ h₂.homologyIso.hom := by
-  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [LeftHomologyData.leftHomologyIso_hom_naturality_assoc]; rw [leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_fac]; rw [assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]
+  rw [← cancel_epi h₁.homologyIso.inv, Iso.inv_hom_id_assoc,
+    ← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁),
+    ← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂,
+    ← cancel_epi (S₁.leftHomologyData.homologyIso.hom),
+    LeftHomologyData.leftHomologyIso_hom_naturality_assoc,
+    leftRightHomologyComparison'_fac, leftRightHomologyComparison'_fac, assoc,
+    Iso.hom_inv_id_assoc, Iso.hom_inv_id_assoc, Iso.hom_inv_id_assoc]
 
 @[reassoc]
-/--
-lemma `RightHomologyData.rightHomologyIso_inv_naturality` / 引理 `RightHomologyData.rightHomologyIso_inv_naturality`
-
-English:
-lemma RightHomologyData.rightHomologyIso_inv_naturality
-  proof: by
-  simp only [← cancel_mono h₂.homologyIso.hom, assoc, Iso.inv_hom_id_assoc, comp_id,
-    ← RightHomologyData.rightHomologyIso_hom_naturality φ h₁ h₂, Iso.inv_hom_id]
-
-@[reassoc]
-
-中文:
-引理 RightHomologyData.rightHomologyIso_inv_naturality
-  证明: by
-  simp only [← cancel_mono h₂.homologyIso.hom, assoc, Iso.inv_hom_id_assoc, comp_id,
-    ← RightHomologyData.rightHomologyIso_hom_naturality φ h₁ h₂, Iso.inv_hom_id]
-
-@[reassoc]
-
-Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, RightHomologyData, RightHomologyData.rightHomologyIso_hom_naturality, cancel_mono, comp_id, homologyIso, homologyIso.hom, inv_hom_id, inv_hom_id_assoc, rightHomologyIso_hom_naturality
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_inv_naturality*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} [in
+st_2 : S₁.HasHomology] [inst_3 : S₂.HasHomology] (φ : S₁ ⟶ S₂)   (h₁ : S₁.RightH
+omologyData) (h₂ : S₂.RightHomologyData),   CategoryTheory.CategoryStruct.comp h
+₁.homologyIso.inv (CategoryTheory.ShortComplex.homologyMap φ) =     CategoryTheo
+ry.CategoryStruct.comp (CategoryTheory.ShortComplex.rightHomologyMap' φ h₁ h₂) h
+₂.homologyIso.inv
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.RightHomologyData；h₂ : S₂.RightHomologyData；CategoryTheor
+y.ShortComplex.homologyMap φ；CategoryTheory.ShortComplex.rightHomologyMap' φ h₁ 
+h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_hom_natur
+ality`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Catego
+ryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma RightHomologyData.rightHomologyIso_inv_naturality
     (h₁ : S₁.RightHomologyData) (h₂ : S₂.RightHomologyData) :
@@ -2403,26 +2439,27 @@ lemma RightHomologyData.rightHomologyIso_inv_naturality
     ← RightHomologyData.rightHomologyIso_hom_naturality φ h₁ h₂, Iso.inv_hom_id]
 
 @[reassoc]
-/--
-lemma `rightHomologyIso_hom_naturality` / 引理 `rightHomologyIso_hom_naturality`
-
-English:
-lemma rightHomologyIso_hom_naturality
-  proof: by
-  simpa only [RightHomologyData.homologyIso_rightHomologyData, Iso.symm_inv] using!
-    RightHomologyData.rightHomologyIso_inv_naturality φ S₁.rightHomologyData S₂.rightHomologyData
-
-@[reassoc]
-
-中文:
-引理 rightHomologyIso_hom_naturality
-  证明: by
-  simpa only [RightHomologyData.homologyIso_rightHomologyData, Iso.symm_inv] using!
-    RightHomologyData.rightHomologyIso_inv_naturality φ S₁.rightHomologyData S₂.rightHomologyData
-
-@[reassoc]
-
-Depends on / 依赖: Iso.symm_inv, RightHomologyData, RightHomologyData.homologyIso_rightHomologyData, RightHomologyData.rightHomologyIso_inv_naturality, homologyIso_rightHomologyData, rightHomologyData, rightHomologyIso_inv_naturality, symm_inv
+/-
+**CategoryTheory.ShortComplex.rightHomologyIso_hom_naturality** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：rightHomologyIso_hom_naturality : S₁.rightHomologyIso.hom ≫ homologyMap φ 
+= rightHomologyMap φ ≫ S₂.rightHomologyIso.hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.homologyIso_rightHomologyD
+ata`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_inv_natur
+ality`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Catego
+ryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma rightHomologyIso_hom_naturality :
     S₁.rightHomologyIso.hom ≫ homologyMap φ =
@@ -2431,22 +2468,27 @@ lemma rightHomologyIso_hom_naturality :
     RightHomologyData.rightHomologyIso_inv_naturality φ S₁.rightHomologyData S₂.rightHomologyData
 
 @[reassoc]
-/--
-lemma `rightHomologyIso_inv_naturality` / 引理 `rightHomologyIso_inv_naturality`
-
-English:
-lemma rightHomologyIso_inv_naturality
-  proof: by
-  simpa only [RightHomologyData.homologyIso_rightHomologyData, Iso.symm_inv] using!
-    RightHomologyData.rightHomologyIso_hom_naturality φ S₁.rightHomologyData S₂.rightHomologyData
-
-中文:
-引理 rightHomologyIso_inv_naturality
-  证明: by
-  simpa only [RightHomologyData.homologyIso_rightHomologyData, Iso.symm_inv] using!
-    RightHomologyData.rightHomologyIso_hom_naturality φ S₁.rightHomologyData S₂.rightHomologyData
-
-Depends on / 依赖: Iso.symm_inv, RightHomologyData, RightHomologyData.homologyIso_rightHomologyData, RightHomologyData.rightHomologyIso_hom_naturality, homologyIso_rightHomologyData, rightHomologyData, rightHomologyIso_hom_naturality, symm_inv
+/-
+**CategoryTheory.ShortComplex.rightHomologyIso_inv_naturality** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：rightHomologyIso_inv_naturality : S₁.rightHomologyIso.inv ≫ rightHomologyM
+ap φ = homologyMap φ ≫ S₂.rightHomologyIso.inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.homologyIso_rightHomologyD
+ata`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Category
+Theory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_hom_natur
+ality`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Catego
+ryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma rightHomologyIso_inv_naturality :
     S₁.rightHomologyIso.inv ≫ rightHomologyMap φ =
@@ -2458,62 +2500,44 @@ end
 
 variable (C)
 
-/--
-Definition of `_root_.CategoryTheory.CategoryWithHomology` / `_root_.CategoryTheory.CategoryWithHomology` 的定义
+/-- We shall say that a category `C` is a category with homology when all short complexes
+have homology. -/
+/-
+**CategoryTheory.ShortComplex._root_.CategoryTheory.CategoryWithHomology** 是 Mat
+hlib 中的一个类，位于命名空间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class _root_.CategoryTheory.CategoryWithHomology
-  parameters: : Prop where
-  axioms and operations (1):
-    - hasHomology : forall (S : ShortComplex C), S.HasHomology
-
-中文:
-类 _root_.范畴论.带同调范畴
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - hasHomology : 对任意 (S : 短复形 C), S.有同调
+--- 原说明 ---
+We shall say that a category `C` is a category with homology when all short comp
+lexes
+have homology.
 -/
 class _root_.CategoryTheory.CategoryWithHomology : Prop where
-  hasHomology : forall (S : ShortComplex C), S.HasHomology
+  hasHomology : ∀ (S : ShortComplex C), S.HasHomology
 
 attribute [instance] CategoryWithHomology.hasHomology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CategoryWithHomology
-  signature: C] : CategoryWithHomology Cᵒᵖ
-  body: ⟨fun S => HasHomology.mk' S.unop.homologyData.op⟩
-
-中文:
-实例 [带同调范畴
-  签名: C] : 带同调范畴 Cᵒᵖ
-  定义体: ⟨fun S => HasHomology.mk' S.unop.homologyData.op⟩
-
-Depends on / 依赖: HasHomology, HasHomology.mk, S.unop.homologyData.op, homologyData
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CategoryWithHomology C] : CategoryWithHomology Cᵒᵖ :=
   ⟨fun S => HasHomology.mk' S.unop.homologyData.op⟩
 
 /-- The homology functor `ShortComplex C ⥤ C` for a category `C` with homology. -/
 @[simps]
-/--
-Definition of `homologyFunctor` / `homologyFunctor` 的定义
+/-
+**CategoryTheory.ShortComplex.homologyFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ShortComplex`。
+形式化陈述：homologyFunctor [CategoryWithHomology C] : ShortComplex C ⥤ C where obj S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
 
-English:
-definition homologyFunctor
-  signature: [CategoryWithHomology C]
-  body: S.homology
-  map f := homologyMap f
-
-中文:
-定义 homologyFunctor
-  签名: [带同调范畴 C]
-  定义体: S.homology
-  map f := homologyMap f
-
-Depends on / 依赖: S.homology, homology
+--- 原说明 ---
+The homology functor `ShortComplex C ⥤ C` for a category `C` with homology.
 -/
 noncomputable def homologyFunctor [CategoryWithHomology C] :
     ShortComplex C ⥤ C where
@@ -2521,23 +2545,20 @@ noncomputable def homologyFunctor [CategoryWithHomology C] :
   map f := homologyMap f
 
 variable {C}
-
-/--
-Instance `isIso_homologyMap'_of_epi_of_isIso_of_mono` / 实例 `isIso_homologyMap'_of_epi_of_isIso_of_mono`
-
-English:
-instance isIso_homologyMap'_of_epi_of_isIso_of_mono
-  signature: (φ : S₁ ⟶ S₂)
-  body: by
-  dsimp only [homologyMap']
-  infer_instance
-
-中文:
-实例 isIso_homologyMap'_of_epi_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂)
-  定义体: by
-  dsimp only [homologyMap']
-  infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap'_of_epi_of_isIso_of_mono** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} (φ 
+: S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData)   [CategoryTheory.Epi φ
+.τ₁] [CategoryTheory.IsIso φ.τ₂] [CategoryTheory.Mono φ.τ₃],   CategoryTheory.Is
+Iso (CategoryTheory.ShortComplex.homologyMap' φ h₁ h₂)
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData；CategoryTheory.ShortCom
+plex.homologyMap' φ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoLeftHomologyMap'OfEpiτ₁Ofτ₂OfMonoτ₃
+`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Categ
+oryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
 -/
 instance isIso_homologyMap'_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂)
     (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData) [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] :
@@ -2546,90 +2567,88 @@ instance isIso_homologyMap'_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂)
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isIso_homologyMap_of_epi_of_isIso_of_mono'` / 引理 `isIso_homologyMap_of_epi_of_isIso_of_mono'`
-
-English:
-lemma isIso_homologyMap_of_epi_of_isIso_of_mono'
-  statement: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
-  proof: by
-  dsimp only [homologyMap]
-  infer_instance
-
-中文:
-引理 isIso_homologyMap_of_epi_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
-  证明: by
-  dsimp only [homologyMap]
-  infer_instance
-
-Depends on / 依赖: homologyMap, infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_epi_of_isIso_of_mono'** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_epi_of_isIso_of_mono' (φ : S₁ ⟶ S₂) [S₁.HasHomology] 
+[S₂.HasHomology] (h₁ : Epi φ.τ₁) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃) : IsIso (hom
+ologyMap φ)
+参数：φ : S₁ ⟶ S₂；h₁ : Epi φ.τ₁；h₂ : IsIso φ.τ₂；h₃ : Mono φ.τ₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.isIso_homologyMap'_of_epi_of_isIso_of_mono`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
 -/
 lemma isIso_homologyMap_of_epi_of_isIso_of_mono' (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
     (h₁ : Epi φ.τ₁) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃) :
     IsIso (homologyMap φ) := by
   dsimp only [homologyMap]
   infer_instance
-
-/--
-Instance `isIso_homologyMap_of_epi_of_isIso_of_mono` / 实例 `isIso_homologyMap_of_epi_of_isIso_of_mono`
-
-English:
-instance isIso_homologyMap_of_epi_of_isIso_of_mono
-  signature: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
-  body: isIso_homologyMap_of_epi_of_isIso_of_mono' φ inferInstance inferInstance inferInstance
-
-中文:
-实例 isIso_homologyMap_of_epi_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
-  定义体: isIso_homologyMap_of_epi_of_isIso_of_mono' φ inferInstance inferInstance inferInstance
-
-Depends on / 依赖: isIso_homologyMap_of_epi_of_isIso_of_mono
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_epi_of_isIso_of_mono** 是 Math
+lib 中的一个实例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [S₁.HasHomology] [
+S₂.HasHomology] [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : IsIso (homologyMap φ)
+参数：φ : S₁ ⟶ S₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.isIso_homologyMap_of_epi_of_isIso_of_mono'`：
+isIso_homologyMap_of_epi_of_isIso_of_mono' (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.Ha
+sHomology] (h₁ : Epi φ.τ₁) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃…
 -/
 instance isIso_homologyMap_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] :
     IsIso (homologyMap φ) :=
   isIso_homologyMap_of_epi_of_isIso_of_mono' φ inferInstance inferInstance inferInstance
-
-/--
-Instance `isIso_homologyFunctor_map_of_epi_of_isIso_of_mono` / 实例 `isIso_homologyFunctor_map_of_epi_of_isIso_of_mono`
-
-English:
-instance isIso_homologyFunctor_map_of_epi_of_isIso_of_mono
-  signature: (φ : S₁ ⟶ S₂) [CategoryWithHomology C]
-  body: inferInstanceAs IsIso (homologyMap φ)
-
-中文:
-实例 isIso_homologyFunctor_map_of_epi_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂) [带同调范畴 C]
-  定义体: inferInstanceAs IsIso (homologyMap φ)
-
-Depends on / 依赖: homologyMap
+/-
+**CategoryTheory.ShortComplex.isIso_homologyFunctor_map_of_epi_of_isIso_of_mono*
+* 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyFunctor_map_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [CategoryW
+ithHomology C] [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] : IsIso ((homologyFunctor C).
+map φ)
+参数：φ : S₁ ⟶ S₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_homologyFunctor_map_of_epi_of_isIso_of_mono (φ : S₁ ⟶ S₂) [CategoryWithHomology C]
     [Epi φ.τ₁] [IsIso φ.τ₂] [Mono φ.τ₃] :
     IsIso ((homologyFunctor C).map φ) :=
-inferInstanceAs IsIso (homologyMap φ)
+  inferInstanceAs <| IsIso (homologyMap φ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isIso_homologyMap_of_isIso` / 实例 `isIso_homologyMap_of_isIso`
-
-English:
-instance isIso_homologyMap_of_isIso
-  signature: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] [IsIso φ]
-  body: by
-  dsimp only [homologyMap, homologyMap']
-  infer_instance
-
-中文:
-实例 isIso_homologyMap_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调] [是同构 φ]
-  定义体: by
-  dsimp only [homologyMap, homologyMap']
-  infer_instance
-
-Depends on / 依赖: homologyMap, infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_isIso** 是 Mathlib 中的一个实例，位于命名
+空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_isIso (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
+ [IsIso φ] : IsIso (homologyMap φ)
+参数：φ : S₁ ⟶ S₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoLeftHomologyMap'OfEpiτ₁Ofτ₂OfMonoτ₃
+`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Categ
+oryTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₁`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₂`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.ShortComplex.instIsIsoτ₃`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   {S₁ S₂ : CategoryTheory…
 -/
 instance isIso_homologyMap_of_isIso (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] [IsIso φ] :
     IsIso (homologyMap φ) := by
@@ -2641,67 +2660,43 @@ section
 variable (S) {A : C}
 variable [HasHomology S]
 
-/--
-Definition of `homologyπ` / `homologyπ` 的定义
+/-- The canonical morphism `S.cycles ⟶ S.homology` for a short complex `S` that has homology. -/
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyπ
-  signature: : S.cycles ⟶ S.homology
-  body: S.leftHomologyπ ≫ S.leftHomologyIso.hom
-
-中文:
-定义 homologyπ
-  签名: : S.cycles ⟶ S.homology
-  定义体: S.leftHomologyπ ≫ S.leftHomologyIso.hom
-
-Depends on / 依赖: S.leftHomology, S.leftHomologyIso.hom, leftHomologyIso
+--- 原说明 ---
+The canonical morphism `S.cycles ⟶ S.homology` for a short complex `S` that has 
+homology.
 -/
 noncomputable def homologyπ : S.cycles ⟶ S.homology :=
   S.leftHomologyπ ≫ S.leftHomologyIso.hom
 
-/--
-Definition of `homologyι` / `homologyι` 的定义
+/-- The canonical morphism `S.homology ⟶ S.opcycles` for a short complex `S` that has homology. -/
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyι
-  signature: : S.homology ⟶ S.opcycles
-  body: S.rightHomologyIso.inv ≫ S.rightHomologyι
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 homologyι
-  签名: : S.homology ⟶ S.opcycles
-  定义体: S.rightHomologyIso.inv ≫ S.rightHomologyι
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.rightHomology, S.rightHomologyIso.inv, rightHomologyIso
+--- 原说明 ---
+The canonical morphism `S.homology ⟶ S.opcycles` for a short complex `S` that ha
+s homology.
 -/
 noncomputable def homologyι : S.homology ⟶ S.opcycles :=
   S.rightHomologyIso.inv ≫ S.rightHomologyι
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyπ_comp_leftHomologyIso_inv` / 引理 `homologyπ_comp_leftHomologyIso_inv`
-
-English:
-lemma homologyπ_comp_leftHomologyIso_inv
-  proof: by
-  dsimp only [homologyπ]
-  simp only [assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 homologyπ_comp_leftHomologyIso_inv
-  证明: by
-  dsimp only [homologyπ]
-  simp only [assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id, comp_id, hom_inv_id
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyπ_comp_leftHomologyIso_inv :
     S.homologyπ ≫ S.leftHomologyIso.inv = S.leftHomologyπ := by
@@ -2709,26 +2704,10 @@ lemma homologyπ_comp_leftHomologyIso_inv :
   simp only [assoc, Iso.hom_inv_id, comp_id]
 
 @[reassoc (attr := simp)]
-/--
-lemma `rightHomologyIso_hom_comp_homologyι` / 引理 `rightHomologyIso_hom_comp_homologyι`
-
-English:
-lemma rightHomologyIso_hom_comp_homologyι
-  proof: by
-  dsimp only [homologyι]
-  simp only [Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 rightHomologyIso_hom_comp_homologyι
-  证明: by
-  dsimp only [homologyι]
-  simp only [Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, hom_inv_id_assoc
+/-
+**CategoryTheory.ShortComplex.rightHomologyIso_hom_comp_homology** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightHomologyIso_hom_comp_homologyι :
     S.rightHomologyIso.hom ≫ S.homologyι = S.rightHomologyι := by
@@ -2736,26 +2715,10 @@ lemma rightHomologyIso_hom_comp_homologyι :
   simp only [Iso.hom_inv_id_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `toCycles_comp_homologyπ` / 引理 `toCycles_comp_homologyπ`
-
-English:
-lemma toCycles_comp_homologyπ
-  proof: by
-  dsimp only [homologyπ]
-  simp only [toCycles_comp_leftHomologyπ_assoc, zero_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toCycles_comp_homologyπ
-  证明: by
-  dsimp only [homologyπ]
-  simp only [toCycles_comp_leftHomologyπ_assoc, zero_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: zero_comp
+/-
+**CategoryTheory.ShortComplex.toCycles_comp_homology** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toCycles_comp_homologyπ :
     S.toCycles ≫ S.homologyπ = 0 := by
@@ -2763,44 +2726,33 @@ lemma toCycles_comp_homologyπ :
   simp only [toCycles_comp_leftHomologyπ_assoc, zero_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyι_comp_fromOpcycles` / 引理 `homologyι_comp_fromOpcycles`
-
-English:
-lemma homologyι_comp_fromOpcycles
-  proof: by
-  dsimp only [homologyι]
-  simp only [assoc, rightHomologyι_comp_fromOpcycles, comp_zero]
-
-中文:
-引理 homologyι_comp_fromOpcycles
-  证明: by
-  dsimp only [homologyι]
-  simp only [assoc, rightHomologyι_comp_fromOpcycles, comp_zero]
-
-Depends on / 依赖: comp_zero
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyι_comp_fromOpcycles :
     S.homologyι ≫ S.fromOpcycles = 0 := by
   dsimp only [homologyι]
   simp only [assoc, rightHomologyι_comp_fromOpcycles, comp_zero]
 
-/--
-Definition of `homologyIsCokernel` / `homologyIsCokernel` 的定义
+/-- The homology `S.homology` of a short complex is
+the cokernel of the morphism `S.toCycles : S.X₁ ⟶ S.cycles`. -/
+/-
+**CategoryTheory.ShortComplex.homologyIsCokernel** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex`。
+形式化陈述：homologyIsCokernel : IsColimit (CokernelCofork.ofπ S.homologyπ S.toCycles_
+comp_homologyπ)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.toCycles_comp_homologyπ`：toCycles_comp_homol
+ogyπ : S.toCycles ≫ S.homologyπ = 0
 
-English:
-definition homologyIsCokernel
-  signature: :
-  body: IsColimit.ofIsoColimit S.leftHomologyIsCokernel
-    (Cofork.ext S.leftHomologyIso rfl)
-
-中文:
-定义 homologyIsCokernel
-  签名: :
-  定义体: IsColimit.ofIsoColimit S.leftHomologyIsCokernel
-    (Cofork.ext S.leftHomologyIso rfl)
-
-Depends on / 依赖: Cofork, Cofork.ext, IsColimit, IsColimit.ofIsoColimit, S.leftHomologyIsCokernel, S.leftHomologyIso, leftHomologyIsCokernel, leftHomologyIso, ofIsoColimit
+--- 原说明 ---
+The homology `S.homology` of a short complex is
+the cokernel of the morphism `S.toCycles : S.X₁ ⟶ S.cycles`.
 -/
 noncomputable def homologyIsCokernel :
     IsColimit (CokernelCofork.ofπ S.homologyπ S.toCycles_comp_homologyπ) :=
@@ -2808,179 +2760,110 @@ noncomputable def homologyIsCokernel :
     (Cofork.ext S.leftHomologyIso rfl)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `homologyIsKernel` / `homologyIsKernel` 的定义
+/-- The homology `S.homology` of a short complex is
+the kernel of the morphism `S.fromOpcycles : S.opcycles ⟶ S.X₃`. -/
+/-
+**CategoryTheory.ShortComplex.homologyIsKernel** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ShortComplex`。
+形式化陈述：homologyIsKernel : IsLimit (KernelFork.ofι S.homologyι S.homologyι_comp_fr
+omOpcycles)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_comp_fromOpcycles`：homologyι_comp_
+fromOpcycles : S.homologyι ≫ S.fromOpcycles = 0
 
-English:
-definition homologyIsKernel
-  signature: :
-  body: IsLimit.ofIsoLimit S.rightHomologyIsKernel
-    (Fork.ext S.rightHomologyIso (by simp))
-
-中文:
-定义 homologyIsKernel
-  签名: :
-  定义体: IsLimit.ofIsoLimit S.rightHomologyIsKernel
-    (Fork.ext S.rightHomologyIso (by simp))
-
-Depends on / 依赖: Fork.ext, IsLimit, IsLimit.ofIsoLimit, S.rightHomologyIsKernel, S.rightHomologyIso, ofIsoLimit, rightHomologyIsKernel, rightHomologyIso
+--- 原说明 ---
+The homology `S.homology` of a short complex is
+the kernel of the morphism `S.fromOpcycles : S.opcycles ⟶ S.X₃`.
 -/
 noncomputable def homologyIsKernel :
     IsLimit (KernelFork.ofι S.homologyι S.homologyι_comp_fromOpcycles) :=
   IsLimit.ofIsoLimit S.rightHomologyIsKernel
     (Fork.ext S.rightHomologyIso (by simp))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi S.homologyπ
-  body: Limits.epi_of_isColimit_cofork (S.homologyIsCokernel)
-
-中文:
-实例 :
-  签名: 满态射 S.homologyπ
-  定义体: Limits.epi_of_isColimit_cofork (S.homologyIsCokernel)
-
-Depends on / 依赖: Limits, Limits.epi_of_isColimit_cofork, S.homologyIsCokernel, epi_of_isColimit_cofork, homologyIsCokernel
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi S.homologyπ :=
   Limits.epi_of_isColimit_cofork (S.homologyIsCokernel)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono S.homologyι
-  body: Limits.mono_of_isLimit_fork (S.homologyIsKernel)
-
-中文:
-实例 :
-  签名: 单态射 S.homologyι
-  定义体: Limits.mono_of_isLimit_fork (S.homologyIsKernel)
-
-Depends on / 依赖: Limits, Limits.mono_of_isLimit_fork, S.homologyIsKernel, homologyIsKernel, mono_of_isLimit_fork
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono S.homologyι :=
   Limits.mono_of_isLimit_fork (S.homologyIsKernel)
 
-/--
-Definition of `descHomology` / `descHomology` 的定义
+/-- Given a morphism `k : S.cycles ⟶ A` such that `S.toCycles ≫ k = 0`, this is the
+induced morphism `S.homology ⟶ A`. -/
+/-
+**CategoryTheory.ShortComplex.descHomology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：descHomology (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0) : S.homology ⟶ A
+参数：k : S.cycles ⟶ A；hk : S.toCycles ≫ k = 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.toCycles_comp_homologyπ`：toCycles_comp_homol
+ogyπ : S.toCycles ≫ S.homologyπ = 0
 
-English:
-definition descHomology
-  signature: (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0)
-  body: S.homologyIsCokernel.desc (CokernelCofork.ofπ k hk)
-
-中文:
-定义 descHomology
-  签名: (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0)
-  定义体: S.homologyIsCokernel.desc (CokernelCofork.ofπ k hk)
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.of, S.homologyIsCokernel.desc, homologyIsCokernel
+--- 原说明 ---
+Given a morphism `k : S.cycles ⟶ A` such that `S.toCycles ≫ k = 0`, this is the
+induced morphism `S.homology ⟶ A`.
 -/
 noncomputable def descHomology (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0) :
     S.homology ⟶ A :=
   S.homologyIsCokernel.desc (CokernelCofork.ofπ k hk)
 
-/--
-Definition of `liftHomology` / `liftHomology` 的定义
+/-- Given a morphism `k : A ⟶ S.opcycles` such that `k ≫ S.fromOpcycles = 0`, this is the
+induced morphism `A ⟶ S.homology`. -/
+/-
+**CategoryTheory.ShortComplex.liftHomology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ShortComplex`。
+形式化陈述：liftHomology (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0) : A ⟶ S.ho
+mology
+参数：k : A ⟶ S.opcycles；hk : k ≫ S.fromOpcycles = 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_comp_fromOpcycles`：homologyι_comp_
+fromOpcycles : S.homologyι ≫ S.fromOpcycles = 0
 
-English:
-definition liftHomology
-  signature: (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0)
-  body: S.homologyIsKernel.lift (KernelFork.ofι k hk)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 liftHomology
-  签名: (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0)
-  定义体: S.homologyIsKernel.lift (KernelFork.ofι k hk)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: KernelFork, KernelFork.of, S.homologyIsKernel.lift, homologyIsKernel
+--- 原说明 ---
+Given a morphism `k : A ⟶ S.opcycles` such that `k ≫ S.fromOpcycles = 0`, this i
+s the
+induced morphism `A ⟶ S.homology`.
 -/
 noncomputable def liftHomology (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0) :
     A ⟶ S.homology :=
   S.homologyIsKernel.lift (KernelFork.ofι k hk)
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_descHomology` / 引理 `π_descHomology`
-
-English:
-lemma π_descHomology
-  given: (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0)
-  proof: Cofork.IsColimit.π_desc S.homologyIsCokernel
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 π_descHomology
-  条件: (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0)
-  证明: Cofork.IsColimit.π_desc S.homologyIsCokernel
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Cofork, Cofork.IsColimit, IsColimit, S.homologyIsCokernel, homologyIsCokernel
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π_descHomology (k : S.cycles ⟶ A) (hk : S.toCycles ≫ k = 0) :
     S.homologyπ ≫ S.descHomology k hk = k :=
   Cofork.IsColimit.π_desc S.homologyIsCokernel
 
 @[reassoc (attr := simp)]
-/--
-lemma `liftHomology_ι` / 引理 `liftHomology_ι`
-
-English:
-lemma liftHomology_ι
-  given: (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0)
-  proof: Fork.IsLimit.lift_ι S.homologyIsKernel
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 liftHomology_ι
-  条件: (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0)
-  证明: Fork.IsLimit.lift_ι S.homologyIsKernel
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Fork.IsLimit.lift_, IsLimit, S.homologyIsKernel, homologyIsKernel
+/-
+**CategoryTheory.ShortComplex.liftHomology_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma liftHomology_ι (k : A ⟶ S.opcycles) (hk : k ≫ S.fromOpcycles = 0) :
     S.liftHomology k hk ≫ S.homologyι = k :=
   Fork.IsLimit.lift_ι S.homologyIsKernel
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyπ_naturality` / 引理 `homologyπ_naturality`
-
-English:
-lemma homologyπ_naturality
-  given: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
-  proof: by
-  simp only [← cancel_mono S₂.leftHomologyIso.inv, assoc, ← leftHomologyIso_inv_naturality φ,
-    homologyπ_comp_leftHomologyIso_inv]
-  simp only [homologyπ, assoc, Iso.hom_inv_id_assoc, leftHomologyπ_naturality]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 homologyπ_naturality
-  条件: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
-  证明: by
-  simp only [← cancel_mono S₂.leftHomologyIso.inv, assoc, ← leftHomologyIso_inv_naturality φ,
-    homologyπ_comp_leftHomologyIso_inv]
-  simp only [homologyπ, assoc, Iso.hom_inv_id_assoc, leftHomologyπ_naturality]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, cancel_mono, hom_inv_id_assoc, leftHomologyIso, leftHomologyIso.inv, leftHomologyIso_inv_naturality
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyπ_naturality (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] :
     S₁.homologyπ ≫ homologyMap φ = cyclesMap φ ≫ S₂.homologyπ := by
@@ -2989,30 +2872,12 @@ lemma homologyπ_naturality (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHom
   simp only [homologyπ, assoc, Iso.hom_inv_id_assoc, leftHomologyπ_naturality]
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyι_naturality` / 引理 `homologyι_naturality`
-
-English:
-lemma homologyι_naturality
-  given: (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology]
-  proof: by
-  simp only [← cancel_epi S₁.rightHomologyIso.hom, rightHomologyIso_hom_naturality_assoc φ,
-    rightHomologyIso_hom_comp_homologyι, rightHomologyι_naturality]
-  simp only [homologyι, assoc, Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 homologyι_naturality
-  条件: (φ : S₁ ⟶ S₂) [S₁.有同调] [S₂.有同调]
-  证明: by
-  simp only [← cancel_epi S₁.rightHomologyIso.hom, rightHomologyIso_hom_naturality_assoc φ,
-    rightHomologyIso_hom_comp_homologyι, rightHomologyι_naturality]
-  simp only [homologyι, assoc, Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, cancel_epi, hom_inv_id_assoc, rightHomologyIso, rightHomologyIso.hom, rightHomologyIso_hom_naturality_assoc
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyι_naturality (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] :
     homologyMap φ ≫ S₂.homologyι = S₁.homologyι ≫ S₁.opcyclesMap φ := by
@@ -3021,66 +2886,58 @@ lemma homologyι_naturality (φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHom
   simp only [homologyι, assoc, Iso.hom_inv_id_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `homology_π_ι` / 引理 `homology_π_ι`
-
-English:
-lemma homology_π_ι
-  proof: by
-  dsimp only [homologyπ, homologyι]
-  simpa only [assoc, S.leftRightHomologyComparison_fac] using S.π_leftRightHomologyComparison_ι
-
-中文:
-引理 homology_π_ι
-  证明: by
-  dsimp only [homologyπ, homologyι]
-  simpa only [assoc, S.leftRightHomologyComparison_fac] using S.π_leftRightHomologyComparison_ι
-
-Depends on / 依赖: S.leftRightHomologyComparison_fac, leftRightHomologyComparison_fac
+/-
+**CategoryTheory.ShortComplex.homology_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homology_π_ι :
     S.homologyπ ≫ S.homologyι = S.iCycles ≫ S.pOpcycles := by
   dsimp only [homologyπ, homologyι]
   simpa only [assoc, S.leftRightHomologyComparison_fac] using S.π_leftRightHomologyComparison_ι
 
-/--
-Definition of `homologyIsoKernelDesc` / `homologyIsoKernelDesc` 的定义
+/-- The homology of a short complex `S` identifies to the kernel of the induced morphism
+`cokernel S.f ⟶ S.X₃`. -/
+/-
+**CategoryTheory.ShortComplex.homologyIsoKernelDesc** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.ShortComplex`。
+形式化陈述：homologyIsoKernelDesc [HasCokernel S.f] [HasKernel (cokernel.desc S.f S.g 
+S.zero)] : S.homology ≅ kernel (cokernel.desc S.f S.g S.zero)
+参数：cokernel.desc S.f S.g S.zero。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.zero`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   (
+self : CategoryTheory.…
 
-English:
-definition homologyIsoKernelDesc
-  signature: [HasCokernel S.f]
-  body: S.rightHomologyIso.symm ≪≫ S.rightHomologyIsoKernelDesc
-
-中文:
-定义 homologyIsoKernelDesc
-  签名: [HasCokernel S.f]
-  定义体: S.rightHomologyIso.symm ≪≫ S.rightHomologyIsoKernelDesc
-
-Depends on / 依赖: S.rightHomologyIso.symm, S.rightHomologyIsoKernelDesc, rightHomologyIso, rightHomologyIsoKernelDesc
+--- 原说明 ---
+The homology of a short complex `S` identifies to the kernel of the induced morp
+hism
+`cokernel S.f ⟶ S.X₃`.
 -/
 noncomputable def homologyIsoKernelDesc [HasCokernel S.f]
     [HasKernel (cokernel.desc S.f S.g S.zero)] :
     S.homology ≅ kernel (cokernel.desc S.f S.g S.zero) :=
   S.rightHomologyIso.symm ≪≫ S.rightHomologyIsoKernelDesc
 
-/--
-Definition of `homologyIsoCokernelLift` / `homologyIsoCokernelLift` 的定义
+/-- The homology of a short complex `S` identifies to the cokernel of the induced morphism
+`S.X₁ ⟶ kernel S.g`. -/
+/-
+**CategoryTheory.ShortComplex.homologyIsoCokernelLift** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.ShortComplex`。
+形式化陈述：homologyIsoCokernelLift [HasKernel S.g] [HasCokernel (kernel.lift S.g S.f 
+S.zero)] : S.homology ≅ cokernel (kernel.lift S.g S.f S.zero)
+参数：kernel.lift S.g S.f S.zero。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.zero`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   (
+self : CategoryTheory.…
 
-English:
-definition homologyIsoCokernelLift
-  signature: [HasKernel S.g]
-  body: S.leftHomologyIso.symm ≪≫ S.leftHomologyIsoCokernelLift
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 homologyIsoCokernelLift
-  签名: [HasKernel S.g]
-  定义体: S.leftHomologyIso.symm ≪≫ S.leftHomologyIsoCokernelLift
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.leftHomologyIso.symm, S.leftHomologyIsoCokernelLift, leftHomologyIso, leftHomologyIsoCokernelLift
+--- 原说明 ---
+The homology of a short complex `S` identifies to the cokernel of the induced mo
+rphism
+`S.X₁ ⟶ kernel S.g`.
 -/
 noncomputable def homologyIsoCokernelLift [HasKernel S.g]
     [HasCokernel (kernel.lift S.g S.f S.zero)] :
@@ -3088,30 +2945,10 @@ noncomputable def homologyIsoCokernelLift [HasKernel S.g]
   S.leftHomologyIso.symm ≪≫ S.leftHomologyIsoCokernelLift
 
 @[reassoc (attr := simp)]
-/--
-lemma `LeftHomologyData.homologyπ_comp_homologyIso_hom` / 引理 `LeftHomologyData.homologyπ_comp_homologyIso_hom`
-
-English:
-lemma LeftHomologyData.homologyπ_comp_homologyIso_hom
-  given: (h : S.LeftHomologyData)
-  proof: by
-  dsimp only [homologyπ, homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id_assoc,
-    leftHomologyπ_comp_leftHomologyIso_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 LeftHomologyData.homologyπ_comp_homologyIso_hom
-  条件: (h : S.LeftHomologyData)
-  证明: by
-  dsimp only [homologyπ, homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id_assoc,
-    leftHomologyπ_comp_leftHomologyIso_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.symm_hom, Iso.trans_hom, hom_inv_id_assoc, homologyIso, symm_hom, trans_hom
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.homology** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LeftHomologyData.homologyπ_comp_homologyIso_hom (h : S.LeftHomologyData) :
     S.homologyπ ≫ h.homologyIso.hom = h.cyclesIso.hom ≫ h.π := by
@@ -3120,28 +2957,10 @@ lemma LeftHomologyData.homologyπ_comp_homologyIso_hom (h : S.LeftHomologyData) 
     leftHomologyπ_comp_leftHomologyIso_hom]
 
 @[reassoc (attr := simp)]
-/--
-lemma `LeftHomologyData.π_comp_homologyIso_inv` / 引理 `LeftHomologyData.π_comp_homologyIso_inv`
-
-English:
-lemma LeftHomologyData.π_comp_homologyIso_inv
-  given: (h : S.LeftHomologyData)
-  proof: by
-  dsimp only [homologyπ, homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, π_comp_leftHomologyIso_inv_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 LeftHomologyData.π_comp_homologyIso_inv
-  条件: (h : S.LeftHomologyData)
-  证明: by
-  dsimp only [homologyπ, homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, π_comp_leftHomologyIso_inv_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.symm_inv, Iso.trans_inv, homologyIso, symm_inv, trans_inv
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LeftHomologyData.π_comp_homologyIso_inv (h : S.LeftHomologyData) :
     h.π ≫ h.homologyIso.inv = h.cyclesIso.inv ≫ S.homologyπ := by
@@ -3149,30 +2968,10 @@ lemma LeftHomologyData.π_comp_homologyIso_inv (h : S.LeftHomologyData) :
   simp only [Iso.trans_inv, Iso.symm_inv, π_comp_leftHomologyIso_inv_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `RightHomologyData.homologyIso_inv_comp_homologyι` / 引理 `RightHomologyData.homologyIso_inv_comp_homologyι`
-
-English:
-lemma RightHomologyData.homologyIso_inv_comp_homologyι
-  given: (h : S.RightHomologyData)
-  proof: by
-  dsimp only [homologyι, homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, assoc, Iso.hom_inv_id_assoc,
-    rightHomologyIso_inv_comp_rightHomologyι]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 RightHomologyData.homologyIso_inv_comp_homologyι
-  条件: (h : S.RightHomologyData)
-  证明: by
-  dsimp only [homologyι, homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, assoc, Iso.hom_inv_id_assoc,
-    rightHomologyIso_inv_comp_rightHomologyι]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.symm_inv, Iso.trans_inv, hom_inv_id_assoc, homologyIso, symm_inv, trans_inv
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.homologyIso_inv_comp_homology** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RightHomologyData.homologyIso_inv_comp_homologyι (h : S.RightHomologyData) :
     h.homologyIso.inv ≫ S.homologyι = h.ι ≫ h.opcyclesIso.inv := by
@@ -3181,28 +2980,10 @@ lemma RightHomologyData.homologyIso_inv_comp_homologyι (h : S.RightHomologyData
     rightHomologyIso_inv_comp_rightHomologyι]
 
 @[reassoc (attr := simp)]
-/--
-lemma `RightHomologyData.homologyIso_hom_comp_ι` / 引理 `RightHomologyData.homologyIso_hom_comp_ι`
-
-English:
-lemma RightHomologyData.homologyIso_hom_comp_ι
-  given: (h : S.RightHomologyData)
-  proof: by
-  dsimp only [homologyι, homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, rightHomologyIso_hom_comp_ι]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 RightHomologyData.homologyIso_hom_comp_ι
-  条件: (h : S.RightHomologyData)
-  证明: by
-  dsimp only [homologyι, homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, rightHomologyIso_hom_comp_ι]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.symm_hom, Iso.trans_hom, homologyIso, symm_hom, trans_hom
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.homologyIso_hom_comp_** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RightHomologyData.homologyIso_hom_comp_ι (h : S.RightHomologyData) :
     h.homologyIso.hom ≫ h.ι = S.homologyι ≫ h.opcyclesIso.hom := by
@@ -3210,28 +2991,32 @@ lemma RightHomologyData.homologyIso_hom_comp_ι (h : S.RightHomologyData) :
   simp only [Iso.trans_hom, Iso.symm_hom, assoc, rightHomologyIso_hom_comp_ι]
 
 @[reassoc (attr := simp)]
-/--
-lemma `LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv` / 引理 `LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv`
-
-English:
-lemma LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv
-  given: (h : S.LeftHomologyData)
-  proof: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv
-  条件: (h : S.LeftHomologyData)
-  证明: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.symm_hom, Iso.trans_hom, comp_id, hom_inv_id, homologyIso, symm_hom, trans_hom
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.homologyIso_hom_comp_leftHomology
+Iso_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`
+。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology] (h : S.LeftHomologyData),   CategoryTheory.CategoryStruct.comp
+ h.homologyIso.hom h.leftHomologyIso.inv = S.leftHomologyIso.inv
+参数：S : CategoryTheory.ShortComplex C；h : S.LeftHomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv (h : S.LeftHomologyData) :
     h.homologyIso.hom ≫ h.leftHomologyIso.inv = S.leftHomologyIso.inv := by
@@ -3239,28 +3024,26 @@ lemma LeftHomologyData.homologyIso_hom_comp_leftHomologyIso_inv (h : S.LeftHomol
   simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
 
 @[reassoc (attr := simp)]
-/--
-lemma `LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv` / 引理 `LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv`
-
-English:
-lemma LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv
-  given: (h : S.LeftHomologyData)
-  proof: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv
-  条件: (h : S.LeftHomologyData)
-  证明: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, Iso.hom_inv_id_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.symm_inv, Iso.trans_inv, hom_inv_id_assoc, homologyIso, symm_inv, trans_inv
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.leftHomologyIso_hom_comp_homology
+Iso_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`
+。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology] (h : S.LeftHomologyData),   CategoryTheory.CategoryStruct.comp
+ h.leftHomologyIso.hom h.homologyIso.inv = S.leftHomologyIso.hom
+参数：S : CategoryTheory.ShortComplex C；h : S.LeftHomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv (h : S.LeftHomologyData) :
     h.leftHomologyIso.hom ≫ h.homologyIso.inv = S.leftHomologyIso.hom := by
@@ -3268,28 +3051,32 @@ lemma LeftHomologyData.leftHomologyIso_hom_comp_homologyIso_inv (h : S.LeftHomol
   simp only [Iso.trans_inv, Iso.symm_inv, Iso.hom_inv_id_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv` / 引理 `RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv`
-
-English:
-lemma RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv
-  given: (h : S.RightHomologyData)
-  proof: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv
-  条件: (h : S.RightHomologyData)
-  证明: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.symm_hom, Iso.trans_hom, LieAlgebra, LieAlgebra.toModule_injective, comp_id, hom_inv_id, homologyIso, subsingleton, symm_hom, toModule_injective, trans_hom
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.homologyIso_hom_comp_rightHomolo
+gyIso_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyDa
+ta`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology] (h : S.RightHomologyData),   CategoryTheory.CategoryStruct.com
+p h.homologyIso.hom h.rightHomologyIso.inv = S.rightHomologyIso.inv
+参数：S : CategoryTheory.ShortComplex C；h : S.RightHomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv (h : S.RightHomologyData) :
     h.homologyIso.hom ≫ h.rightHomologyIso.inv = S.rightHomologyIso.inv := by
@@ -3297,24 +3084,26 @@ lemma RightHomologyData.homologyIso_hom_comp_rightHomologyIso_inv (h : S.RightHo
   simp only [Iso.trans_hom, Iso.symm_hom, assoc, Iso.hom_inv_id, comp_id]
 
 @[reassoc (attr := simp)]
-/--
-lemma `RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv` / 引理 `RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv`
-
-English:
-lemma RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv
-  given: (h : S.RightHomologyData)
-  proof: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, Iso.hom_inv_id_assoc]
-
-中文:
-引理 RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv
-  条件: (h : S.RightHomologyData)
-  证明: by
-  dsimp only [homologyIso]
-  simp only [Iso.trans_inv, Iso.symm_inv, Iso.hom_inv_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.symm_inv, Iso.trans_inv, hom_inv_id_assoc, homologyIso, symm_inv, trans_inv
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.rightHomologyIso_hom_comp_homolo
+gyIso_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ShortComplex.RightHomologyDa
+ta`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology] (h : S.RightHomologyData),   CategoryTheory.CategoryStruct.com
+p h.rightHomologyIso.hom h.homologyIso.inv = S.rightHomologyIso.hom
+参数：S : CategoryTheory.ShortComplex C；h : S.RightHomologyData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv (h : S.RightHomologyData) :
     h.rightHomologyIso.hom ≫ h.homologyIso.inv = S.rightHomologyIso.hom := by
@@ -3323,42 +3112,51 @@ lemma RightHomologyData.rightHomologyIso_hom_comp_homologyIso_inv (h : S.RightHo
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `comp_homologyMap_comp` / 引理 `comp_homologyMap_comp`
-
-English:
-lemma comp_homologyMap_comp
-  statement: [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
-  proof: by
-  dsimp only [LeftHomologyData.homologyIso, RightHomologyData.homologyIso,
-    Iso.symm, Iso.trans, Iso.refl, leftHomologyIso, rightHomologyIso,
-    leftHomologyMapIso', rightHomologyMapIso',
-    LeftHomologyData.cyclesIso, RightHomologyData.opcyclesIso,
-    LeftHomologyData.leftHomologyIso, RightHomologyData.rightHomologyIso,
-    homologyMap, homologyMap']
-  simp only [assoc, rightHomologyι_naturality', rightHomologyι_naturality'_assoc,
-    leftHomologyπ_naturality'_assoc, HomologyData.comm_assoc, p_opcyclesMap'_assoc,
-    id_τ₂, p_opcyclesMap', id_comp, cyclesMap'_i_assoc]
-
-@[reassoc]
-
-中文:
-引理 comp_homologyMap_comp
-  结论: [S₁.有同调] [S₂.有同调] (φ : S₁ ⟶ S₂)
-  证明: by
-  dsimp only [LeftHomologyData.homologyIso, RightHomologyData.homologyIso,
-    Iso.symm, Iso.trans, Iso.refl, leftHomologyIso, rightHomologyIso,
-    leftHomologyMapIso', rightHomologyMapIso',
-    LeftHomologyData.cyclesIso, RightHomologyData.opcyclesIso,
-    LeftHomologyData.leftHomologyIso, RightHomologyData.rightHomologyIso,
-    homologyMap, homologyMap']
-  simp only [assoc, rightHomologyι_naturality', rightHomologyι_naturality'_assoc,
-    leftHomologyπ_naturality'_assoc, HomologyData.comm_assoc, p_opcyclesMap'_assoc,
-    id_τ₂, p_opcyclesMap', id_comp, cyclesMap'_i_assoc]
-
-@[reassoc]
-
-Depends on / 依赖: HomologyData, HomologyData.comm_assoc, Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.cyclesIso, LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso, RightHomologyData, RightHomologyData.homologyIso, RightHomologyData.opcyclesIso, RightHomologyData.rightHomologyIso, _assoc, comm_assoc, cyclesIso, homologyIso, homologyMap, leftHomologyIso, leftHomologyMapIso
+/-
+**CategoryTheory.ShortComplex.comp_homologyMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ShortComplex`。
+形式化陈述：comp_homologyMap_comp [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂) (h₁ 
+: S₁.LeftHomologyData) (h₂ : S₂.RightHomologyData) : h₁.π ≫ h₁.homologyIso.inv ≫
+ homologyMap φ ≫ h₂.homologyIso.hom ≫ h₂.ι = h₁.i ≫ φ.τ₂ ≫ h₂.p
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.LeftHomologyData；h₂ : S₂.RightHomologyData。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.opcyclesMap'`：opcyclesMap'_smul : opcyclesMa
+p' (a • φ) h₁ h₂ = a • opcyclesMap' φ h₁ h₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyι_naturality'`：rightHomologyι_n
+aturality' : rightHomologyMap' φ h₁ h₂ ≫ h₂.ι = h₁.ι ≫ opcyclesMap' φ h₁ h₂
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyι_naturality'_assoc`：∀ {C : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.leftHomologyπ_naturality'_assoc`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Lim
+its.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.ShortComplex.HomologyData.comm_assoc`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMor
+phisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.p_opcyclesMap'_assoc`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用引理 `CategoryTheory.ShortComplex.p_opcyclesMap'`：p_opcyclesMap' : h₁.p ≫ opcy
+clesMap' φ h₁ h₂ = φ.τ₂ ≫ h₂.p
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ShortComplex.cyclesMap'_i_assoc`：∀ {C : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMo
+rphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_homologyMap_comp [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
     (h₁ : S₁.LeftHomologyData) (h₂ : S₂.RightHomologyData) :
@@ -3375,22 +3173,10 @@ lemma comp_homologyMap_comp [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶
     id_τ₂, p_opcyclesMap', id_comp, cyclesMap'_i_assoc]
 
 @[reassoc]
-/--
-lemma `π_homologyMap_ι` / 引理 `π_homologyMap_ι`
-
-English:
-lemma π_homologyMap_ι
-  given: [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂)
-  proof: by
-  simp only [homologyι_naturality, homology_π_ι_assoc, p_opcyclesMap]
-
-中文:
-引理 π_homologyMap_ι
-  条件: [S₁.有同调] [S₂.有同调] (φ : S₁ ⟶ S₂)
-  证明: by
-  simp only [homologyι_naturality, homology_π_ι_assoc, p_opcyclesMap]
-
-Depends on / 依赖: p_opcyclesMap
+/-
+**CategoryTheory.ShortComplex.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortCo
+mplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π_homologyMap_ι [S₁.HasHomology] [S₂.HasHomology] (φ : S₁ ⟶ S₂) :
     S₁.homologyπ ≫ homologyMap φ ≫ S₂.homologyι = S₁.iCycles ≫ φ.τ₂ ≫ S₂.pOpcycles := by
@@ -3400,20 +3186,21 @@ end
 
 variable (S)
 
-/--
-Definition of `homologyOpIso` / `homologyOpIso` 的定义
+/-- The canonical isomorphism `S.op.homology ≅ Opposite.op S.homology` when a short
+complex `S` has homology. -/
+/-
+**CategoryTheory.ShortComplex.homologyOpIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ShortComplex`。
+形式化陈述：homologyOpIso [S.HasHomology] : S.op.homology ≅ Opposite.op S.homology
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.instHasHomologyOppositeOp`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C]   {S : CategoryTheory.ShortComp…
 
-English:
-definition homologyOpIso
-  signature: [S.HasHomology]
-  body: S.op.leftHomologyIso.symm ≪≫ S.leftHomologyOpIso ≪≫ S.rightHomologyIso.symm.op
-
-中文:
-定义 homologyOpIso
-  签名: [S.有同调]
-  定义体: S.op.leftHomologyIso.symm ≪≫ S.leftHomologyOpIso ≪≫ S.rightHomologyIso.symm.op
-
-Depends on / 依赖: S.leftHomologyOpIso, S.op.leftHomologyIso.symm, S.rightHomologyIso.symm.op, leftHomologyIso, leftHomologyOpIso, rightHomologyIso
+--- 原说明 ---
+The canonical isomorphism `S.op.homology ≅ Opposite.op S.homology` when a short
+complex `S` has homology.
 -/
 noncomputable def homologyOpIso [S.HasHomology] :
     S.op.homology ≅ Opposite.op S.homology :=
@@ -3421,28 +3208,48 @@ noncomputable def homologyOpIso [S.HasHomology] :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `homologyMap'_op` / 引理 `homologyMap'_op`
-
-English:
-lemma homologyMap'_op
-  statement: (homologyMap' φ h₁ h₂).op =
-  proof: Quiver.Hom.unop_inj (by
-    dsimp
-    have γ : HomologyMapData φ h₁ h₂ := default
-    simp only [γ.homologyMap'_eq, γ.op.homologyMap'_eq, HomologyData.op_left,
-      HomologyMapData.op_left, RightHomologyMapData.op_φH, Quiver.Hom.unop_op, assoc,
-      ← γ.comm_assoc, Iso.hom_inv_id, comp_id])
-
-中文:
-引理 homologyMap'_op
-  结论: (homologyMap' φ h₁ h₂).op =
-  证明: Quiver.Hom.unop_inj (by
-    dsimp
-    have γ : HomologyMapData φ h₁ h₂ := default
-    simp only [γ.homologyMap'_eq, γ.op.homologyMap'_eq, HomologyData.op_left,
-      HomologyMapData.op_left, RightHomologyMapData.op_φH, Quiver.Hom.unop_op, assoc,
-      ← γ.comm_assoc, Iso.hom_inv_id, comp_id])
+/-
+**CategoryTheory.ShortComplex.homologyMap'_op** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ShortComplex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   {S₁ S₂ : CategoryTheory.ShortComplex C} (φ 
+: S₁ ⟶ S₂) (h₁ : S₁.HomologyData) (h₂ : S₂.HomologyData),   (CategoryTheory.Shor
+tComplex.homologyMap' φ h₁ h₂).op =     CategoryTheory.CategoryStruct.comp h₂.is
+o.inv.op       (CategoryTheory.CategoryStruct.comp         (CategoryTheory.Short
+Complex.homologyMap' (CategoryTheory.ShortComplex.opMap φ) h₂.op h₁.op) h₁.iso.h
+om.op)
+参数：φ : S₁ ⟶ S₂；h₁ : S₁.HomologyData；h₂ : S₂.HomologyData；CategoryTheory.ShortCom
+plex.homologyMap' φ h₁ h₂；CategoryTheory.CategoryStruct.comp         (CategoryTh
+eory.ShortComplex.homologyMap' (CategoryTheory.ShortComplex.opMap φ) h₂.op h₁.op
+) h₁.iso.hom.op。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.unop_inj`：Quiver.Hom.unop_inj {X Y : Cᵒᵖ} : Function.Injectiv
+e (Quiver.Hom.unop : (X ⟶ Y) -> (Opposite.unop Y ⟶ Opposite.unop X))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.HomologyMapData.homologyMap'_eq`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.Ha
+sZeroMorphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ShortComplex.HomologyMapData.comm_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap'_op : (homologyMap' φ h₁ h₂).op =
     h₂.iso.inv.op ≫ homologyMap' (opMap φ) h₂.op h₁.op ≫ h₁.iso.hom.op :=
@@ -3455,38 +3262,47 @@ lemma homologyMap'_op : (homologyMap' φ h₁ h₂).op =
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `homologyMap_op` / 引理 `homologyMap_op`
-
-English:
-lemma homologyMap_op
-  given: [HasHomology S₁] [HasHomology S₂]
-  proof: by
-  dsimp only [homologyMap, homologyOpIso]
-  rw [homologyMap'_op]
-  dsimp only [Iso.symm, Iso.trans, Iso.op, Iso.refl, rightHomologyIso, leftHomologyIso,
-    leftHomologyOpIso, leftHomologyMapIso', rightHomologyMapIso',
-    LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [assoc, rightHomologyMap'_op, op_comp, ← leftHomologyMap'_comp_assoc, id_comp,
-    opMap_id, comp_id, HomologyData.op_left]
-
-@[reassoc]
-
-中文:
-引理 homologyMap_op
-  条件: [有同调 S₁] [有同调 S₂]
-  证明: by
-  dsimp only [homologyMap, homologyOpIso]
-  rw [homologyMap'_op]
-  dsimp only [Iso.symm, Iso.trans, Iso.op, Iso.refl, rightHomologyIso, leftHomologyIso,
-    leftHomologyOpIso, leftHomologyMapIso', rightHomologyMapIso',
-    LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [assoc, rightHomologyMap'_op, op_comp, ← leftHomologyMap'_comp_assoc, id_comp,
-    opMap_id, comp_id, HomologyData.op_left]
-
-@[reassoc]
-
-Depends on / 依赖: HomologyData, HomologyData.op_left, Iso.op, Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.leftHomologyIso, _comp_assoc, comp_id, homologyMap, homologyOpIso, id_comp, leftHomologyIso, leftHomologyMap, leftHomologyMapIso, leftHomologyOpIso, opMap_id, op_comp, op_left
+/-
+**CategoryTheory.ShortComplex.homologyMap_op** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ShortComplex`。
+形式化陈述：homologyMap_op [HasHomology S₁] [HasHomology S₂] : (homologyMap φ).op = (S
+₂.homologyOpIso).inv ≫ homologyMap (opMap φ) ≫ (S₁.homologyOpIso).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.instHasHomologyOppositeOp`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.homologyMap'_op`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.ShortComplex.rightHomologyMap'`：rightHomologyMap'_smul : 
+rightHomologyMap' (a • φ) h₁ h₂ = a • rightHomologyMap' φ h₁ h₂
+· 使用定理 `CategoryTheory.ShortComplex.instHasLeftHomologyOppositeOpOfHasRightHomol
+ogy`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Ca
+tegoryTheory.Limits.HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ShortComplex.rightHomologyMap'_op`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyMap_op [HasHomology S₁] [HasHomology S₂] :
     (homologyMap φ).op =
@@ -3500,26 +3316,28 @@ lemma homologyMap_op [HasHomology S₁] [HasHomology S₂] :
     opMap_id, comp_id, HomologyData.op_left]
 
 @[reassoc]
-/--
-lemma `homologyOpIso_hom_naturality` / 引理 `homologyOpIso_hom_naturality`
-
-English:
-lemma homologyOpIso_hom_naturality
-  given: [S₁.HasHomology] [S₂.HasHomology]
-  proof: by
-  simp [homologyMap_op]
-
-@[reassoc]
-
-中文:
-引理 homologyOpIso_hom_naturality
-  条件: [S₁.有同调] [S₂.有同调]
-  证明: by
-  simp [homologyMap_op]
-
-@[reassoc]
-
-Depends on / 依赖: homologyMap_op
+/-
+**CategoryTheory.ShortComplex.homologyOpIso_hom_naturality** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：homologyOpIso_hom_naturality [S₁.HasHomology] [S₂.HasHomology] : homologyM
+ap (opMap φ) ≫ (S₁.homologyOpIso).hom = S₂.homologyOpIso.hom ≫ (homologyMap φ).o
+p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.ShortComplex.instHasHomologyOppositeOp`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.homologyMap_op`：homologyMap_op [HasHomology 
+S₁] [HasHomology S₂] : (homologyMap φ).op = (S₂.homologyOpIso).inv ≫ homologyMap
+ (opMap φ) ≫ (S₁.homologyOpIso).…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyOpIso_hom_naturality [S₁.HasHomology] [S₂.HasHomology] :
     homologyMap (opMap φ) ≫ (S₁.homologyOpIso).hom =
@@ -3527,22 +3345,36 @@ lemma homologyOpIso_hom_naturality [S₁.HasHomology] [S₂.HasHomology] :
   simp [homologyMap_op]
 
 @[reassoc]
-/--
-lemma `homologyOpIso_inv_naturality` / 引理 `homologyOpIso_inv_naturality`
-
-English:
-lemma homologyOpIso_inv_naturality
-  given: [S₁.HasHomology] [S₂.HasHomology]
-  proof: by
-  simp [homologyMap_op]
-
-中文:
-引理 homologyOpIso_inv_naturality
-  条件: [S₁.有同调] [S₂.有同调]
-  证明: by
-  simp [homologyMap_op]
-
-Depends on / 依赖: homologyMap_op
+/-
+**CategoryTheory.ShortComplex.homologyOpIso_inv_naturality** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：homologyOpIso_inv_naturality [S₁.HasHomology] [S₂.HasHomology] : (homology
+Map φ).op ≫ (S₁.homologyOpIso).inv = S₂.homologyOpIso.inv ≫ homologyMap (opMap φ
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.ShortComplex.instHasHomologyOppositeOp`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroM
+orphisms C]   {S : CategoryTheory.ShortComp…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.homologyMap_op`：homologyMap_op [HasHomology 
+S₁] [HasHomology S₂] : (homologyMap φ).op = (S₂.homologyOpIso).inv ≫ homologyMap
+ (opMap φ) ≫ (S₁.homologyOpIso).…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homologyOpIso_inv_naturality [S₁.HasHomology] [S₂.HasHomology] :
     (homologyMap φ).op ≫ (S₁.homologyOpIso).inv =
@@ -3551,120 +3383,104 @@ lemma homologyOpIso_inv_naturality [S₁.HasHomology] [S₂.HasHomology] :
 
 variable (C)
 
-/--
-Definition of `homologyFunctorOpNatIso` / `homologyFunctorOpNatIso` 的定义
+/-- The natural isomorphism `(homologyFunctor C).op ≅ opFunctor C ⋙ homologyFunctor Cᵒᵖ`
+which relates the homology in `C` and in `Cᵒᵖ`. -/
+/-
+**CategoryTheory.ShortComplex.homologyFunctorOpNatIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.ShortComplex`。
+形式化陈述：homologyFunctorOpNatIso [CategoryWithHomology C] : (homologyFunctor C).op 
+≅ opFunctor C ⋙ homologyFunctor Cᵒᵖ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.instCategoryWithHomologyOpposite`：∀ (C : Typ
+e u) [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C]   [CategoryTheory.CategoryWithH…
 
-English:
-definition homologyFunctorOpNatIso
-  signature: [CategoryWithHomology C]
-  body: NatIso.ofComponents (fun S => S.unop.homologyOpIso.symm)
-    (fun _ => homologyOpIso_inv_naturality _)
-
-中文:
-定义 homologyFunctorOp自然数Iso
-  签名: [带同调范畴 C]
-  定义体: NatIso.ofComponents (fun S => S.unop.homologyOpIso.symm)
-    (fun _ => homologyOpIso_inv_naturality _)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, S.unop.homologyOpIso.symm, homologyOpIso, homologyOpIso_inv_naturality, ofComponents
+--- 原说明 ---
+The natural isomorphism `(homologyFunctor C).op ≅ opFunctor C ⋙ homologyFunctor 
+Cᵒᵖ`
+which relates the homology in `C` and in `Cᵒᵖ`.
 -/
 noncomputable def homologyFunctorOpNatIso [CategoryWithHomology C] :
     (homologyFunctor C).op ≅ opFunctor C ⋙ homologyFunctor Cᵒᵖ :=
   NatIso.ofComponents (fun S => S.unop.homologyOpIso.symm)
-    (fun _ => homologyOpIso_inv_naturality _)
+    (fun _ ↦ homologyOpIso_inv_naturality _)
 
 variable {C} {A : C}
-
-/--
-lemma `liftCycles_homologyπ_eq_zero_of_boundary` / 引理 `liftCycles_homologyπ_eq_zero_of_boundary`
-
-English:
-lemma liftCycles_homologyπ_eq_zero_of_boundary
-  statement: [S.HasHomology]
-  proof: by
-  dsimp only [homologyπ]
-  rw [S.liftCycles_leftHomologyπ_eq_zero_of_boundary_assoc k x hx]; rw [zero_comp]
-
-@[reassoc]
-
-中文:
-引理 liftCycles_homologyπ_eq_zero_of_boundary
-  结论: [S.有同调]
-  证明: by
-  dsimp only [homologyπ]
-  rw [S.liftCycles_leftHomologyπ_eq_zero_of_boundary_assoc k x hx]; rw [zero_comp]
-
-@[reassoc]
-
-Depends on / 依赖: S.liftCycles_leftHomology, zero_comp
+/-
+**CategoryTheory.ShortComplex.liftCycles_homology** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma liftCycles_homologyπ_eq_zero_of_boundary [S.HasHomology]
     (k : A ⟶ S.X₂) (x : A ⟶ S.X₁) (hx : k = x ≫ S.f) :
     S.liftCycles k (by rw [hx, assoc, S.zero, comp_zero]) ≫ S.homologyπ = 0 := by
   dsimp only [homologyπ]
-  rw [S.liftCycles_leftHomologyπ_eq_zero_of_boundary_assoc k x hx]; rw [zero_comp]
+  rw [S.liftCycles_leftHomologyπ_eq_zero_of_boundary_assoc k x hx, zero_comp]
 
 @[reassoc]
-/--
-lemma `homologyι_descOpcycles_eq_zero_of_boundary` / 引理 `homologyι_descOpcycles_eq_zero_of_boundary`
-
-English:
-lemma homologyι_descOpcycles_eq_zero_of_boundary
-  statement: [S.HasHomology]
-  proof: by
-  dsimp only [homologyι]
-  rw [assoc]; rw [S.rightHomologyι_descOpcycles_π_eq_zero_of_boundary k x hx]; rw [comp_zero]
-
-中文:
-引理 homologyι_descOpcycles_eq_zero_of_boundary
-  结论: [S.有同调]
-  证明: by
-  dsimp only [homologyι]
-  rw [assoc]; rw [S.rightHomologyι_descOpcycles_π_eq_zero_of_boundary k x hx]; rw [comp_zero]
-
-Depends on / 依赖: S.rightHomology, comp_zero
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyι_descOpcycles_eq_zero_of_boundary [S.HasHomology]
     (k : S.X₂ ⟶ A) (x : S.X₃ ⟶ A) (hx : k = S.g ≫ x) :
     S.homologyι ≫ S.descOpcycles k (by rw [hx, S.zero_assoc, zero_comp]) = 0 := by
   dsimp only [homologyι]
-  rw [assoc]; rw [S.rightHomologyι_descOpcycles_π_eq_zero_of_boundary k x hx]; rw [comp_zero]
+  rw [assoc, S.rightHomologyι_descOpcycles_π_eq_zero_of_boundary k x hx, comp_zero]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isIso_homologyMap_of_isIso_cyclesMap_of_epi` / 引理 `isIso_homologyMap_of_isIso_cyclesMap_of_epi`
-
-English:
-lemma isIso_homologyMap_of_isIso_cyclesMap_of_epi
-  statement: {φ : S₁ ⟶ S₂}
-  proof: by
-  have h : S₂.toCycles ≫ inv (cyclesMap φ) ≫ S₁.homologyπ = 0 := by
-    simp only [← cancel_epi φ.τ₁, ← toCycles_naturality_assoc,
-      IsIso.hom_inv_id_assoc, toCycles_comp_homologyπ, comp_zero]
-  have ⟨z, hz⟩ := CokernelCofork.IsColimit.desc' S₂.homologyIsCokernel _ h
-  dsimp at hz
-  refine ⟨⟨z, ?_, ?_⟩⟩
-  · rw [← cancel_epi S₁.homologyπ, homologyπ_naturality_assoc, hz,
-      IsIso.hom_inv_id_assoc, comp_id]
-  · rw [← cancel_epi S₂.homologyπ, reassoc_of% hz, homologyπ_naturality,
-      IsIso.inv_hom_id_assoc, comp_id]
-
-中文:
-引理 isIso_homologyMap_of_isIso_cyclesMap_of_epi
-  结论: {φ : S₁ ⟶ S₂}
-  证明: by
-  have h : S₂.toCycles ≫ inv (cyclesMap φ) ≫ S₁.homologyπ = 0 := by
-    simp only [← cancel_epi φ.τ₁, ← toCycles_naturality_assoc,
-      IsIso.hom_inv_id_assoc, toCycles_comp_homologyπ, comp_zero]
-  have ⟨z, hz⟩ := CokernelCofork.IsColimit.desc' S₂.homologyIsCokernel _ h
-  dsimp at hz
-  refine ⟨⟨z, ?_, ?_⟩⟩
-  · rw [← cancel_epi S₁.homologyπ, homologyπ_naturality_assoc, hz,
-      IsIso.hom_inv_id_assoc, comp_id]
-  · rw [← cancel_epi S₂.homologyπ, reassoc_of% hz, homologyπ_naturality,
-      IsIso.inv_hom_id_assoc, comp_id]
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id_assoc, cancel_epi, comp_id, comp_zero, cyclesMap, hom_inv_id_assoc, homologyIsCokernel, inv_hom_id_assoc, reassoc_of, toCycles, toCycles_naturality_assoc
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_isIso_cyclesMap_of_epi** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_isIso_cyclesMap_of_epi {φ : S₁ ⟶ S₂} [S₁.HasHomology]
+ [S₂.HasHomology] (h₁ : IsIso (cyclesMap φ)) (h₂ : Epi φ.τ₁) : IsIso (homologyMa
+p φ)
+参数：h₁ : IsIso (cyclesMap φ)；h₂ : Epi φ.τ₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用引理 `CategoryTheory.ShortComplex.toCycles_comp_homologyπ`：toCycles_comp_homol
+ogyπ : S.toCycles ≫ S.homologyπ = 0
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.ShortComplex.instEpiHomologyπ`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.ShortComplex.homologyπ_naturality_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.ShortComplex.homologyπ_naturality`：homologyπ_naturality (
+φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] : S₁.homologyπ ≫ homologyMap φ = 
+cyclesMap φ ≫ S₂.homologyπ
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
 -/
 lemma isIso_homologyMap_of_isIso_cyclesMap_of_epi {φ : S₁ ⟶ S₂}
     [S₁.HasHomology] [S₂.HasHomology] (h₁ : IsIso (cyclesMap φ)) (h₂ : Epi φ.τ₁) :
@@ -3681,40 +3497,61 @@ lemma isIso_homologyMap_of_isIso_cyclesMap_of_epi {φ : S₁ ⟶ S₂}
       IsIso.inv_hom_id_assoc, comp_id]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isIso_homologyMap_of_isIso_opcyclesMap_of_mono` / 引理 `isIso_homologyMap_of_isIso_opcyclesMap_of_mono`
-
-English:
-lemma isIso_homologyMap_of_isIso_opcyclesMap_of_mono
-  statement: {φ : S₁ ⟶ S₂}
-  proof: by
-  have h : (S₂.homologyι ≫ inv (opcyclesMap φ)) ≫ S₁.fromOpcycles = 0 := by
-    simp only [← cancel_mono φ.τ₃, zero_comp, assoc, ← fromOpcycles_naturality,
-      IsIso.inv_hom_id_assoc, homologyι_comp_fromOpcycles]
-  have ⟨z, hz⟩ := KernelFork.IsLimit.lift' S₁.homologyIsKernel _ h
-  dsimp at hz
-  refine ⟨⟨z, ?_, ?_⟩⟩
-  · rw [← cancel_mono S₁.homologyι, id_comp, assoc, hz, homologyι_naturality_assoc,
-      IsIso.hom_inv_id, comp_id]
-  · rw [← cancel_mono S₂.homologyι, assoc, homologyι_naturality, reassoc_of% hz,
-      IsIso.inv_hom_id, comp_id, id_comp]
-
-中文:
-引理 isIso_homologyMap_of_isIso_opcyclesMap_of_mono
-  结论: {φ : S₁ ⟶ S₂}
-  证明: by
-  have h : (S₂.homologyι ≫ inv (opcyclesMap φ)) ≫ S₁.fromOpcycles = 0 := by
-    simp only [← cancel_mono φ.τ₃, zero_comp, assoc, ← fromOpcycles_naturality,
-      IsIso.inv_hom_id_assoc, homologyι_comp_fromOpcycles]
-  have ⟨z, hz⟩ := KernelFork.IsLimit.lift' S₁.homologyIsKernel _ h
-  dsimp at hz
-  refine ⟨⟨z, ?_, ?_⟩⟩
-  · rw [← cancel_mono S₁.homologyι, id_comp, assoc, hz, homologyι_naturality_assoc,
-      IsIso.hom_inv_id, comp_id]
-  · rw [← cancel_mono S₂.homologyι, assoc, homologyι_naturality, reassoc_of% hz,
-      IsIso.inv_hom_id, comp_id, id_comp]
-
-Depends on / 依赖: IsIso.hom_inv_id, IsIso.in, IsIso.inv_hom_id_assoc, IsLimit, KernelFork, KernelFork.IsLimit.lift, cancel_mono, comp_id, fromOpcycles, fromOpcycles_naturality, hom_inv_id, homologyIsKernel, id_comp, inv_hom_id_assoc, opcyclesMap, reassoc_of, zero_comp
+/-
+**CategoryTheory.ShortComplex.isIso_homologyMap_of_isIso_opcyclesMap_of_mono** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：isIso_homologyMap_of_isIso_opcyclesMap_of_mono {φ : S₁ ⟶ S₂} [S₁.HasHomolo
+gy] [S₂.HasHomology] (h₁ : IsIso (opcyclesMap φ)) (h₂ : Mono φ.τ₃) : IsIso (homo
+logyMap φ)
+参数：h₁ : IsIso (opcyclesMap φ)；h₂ : Mono φ.τ₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_comp_fromOpcycles`：homologyι_comp_
+fromOpcycles : S.homologyι ≫ S.fromOpcycles = 0
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.ShortComplex.instMonoHomologyι`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ShortComplex.homologyι_naturality_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Morphisms C]   {S₁ S₂ : CategoryTheory.Short…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_naturality`：homologyι_naturality (
+φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] : homologyMap φ ≫ S₂.homologyι = 
+S₁.homologyι ≫ S₁.opcyclesMap φ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 -/
 lemma isIso_homologyMap_of_isIso_opcyclesMap_of_mono {φ : S₁ ⟶ S₂}
     [S₁.HasHomology] [S₂.HasHomology] (h₁ : IsIso (opcyclesMap φ)) (h₂ : Mono φ.τ₃) :
@@ -3729,76 +3566,29 @@ lemma isIso_homologyMap_of_isIso_opcyclesMap_of_mono {φ : S₁ ⟶ S₂}
       IsIso.hom_inv_id, comp_id]
   · rw [← cancel_mono S₂.homologyι, assoc, homologyι_naturality, reassoc_of% hz,
       IsIso.inv_hom_id, comp_id, id_comp]
-
-/--
-lemma `isZero_homology_of_isZero_X₂` / 引理 `isZero_homology_of_isZero_X₂`
-
-English:
-lemma isZero_homology_of_isZero_X₂
-  given: (hS : IsZero S.X₂) [S.HasHomology]
-  proof: IsZero.of_iso hS (HomologyData.ofZeros S (hS.eq_of_tgt _ _)
-    (hS.eq_of_src _ _)).left.homologyIso
-
-中文:
-引理 isZero_homology_of_isZero_X₂
-  条件: (hS : 是零 S.X₂) [S.有同调]
-  证明: IsZero.of_iso hS (HomologyData.ofZeros S (hS.eq_of_tgt _ _)
-    (hS.eq_of_src _ _)).left.homologyIso
-
-Depends on / 依赖: HomologyData, HomologyData.ofZeros, IsZero, IsZero.of_iso, eq_of_src, eq_of_tgt, hS.eq_of_src, hS.eq_of_tgt, homologyIso, left.homologyIso, ofZeros, of_iso
+/-
+**CategoryTheory.ShortComplex.isZero_homology_of_isZero_X** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero_homology_of_isZero_X₂ (hS : IsZero S.X₂) [S.HasHomology] :
     IsZero S.homology :=
   IsZero.of_iso hS (HomologyData.ofZeros S (hS.eq_of_tgt _ _)
     (hS.eq_of_src _ _)).left.homologyIso
-
-/--
-lemma `isIso_homologyπ` / 引理 `isIso_homologyπ`
-
-English:
-lemma isIso_homologyπ
-  given: (hf : S.f = 0) [S.HasHomology]
-  proof: by
-  have := S.isIso_leftHomologyπ hf
-  dsimp only [homologyπ]
-  infer_instance
-
-中文:
-引理 isIso_homologyπ
-  条件: (hf : S.f = 0) [S.有同调]
-  证明: by
-  have := S.isIso_leftHomologyπ hf
-  dsimp only [homologyπ]
-  infer_instance
-
-Depends on / 依赖: S.isIso_leftHomology, infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_homology** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_homologyπ (hf : S.f = 0) [S.HasHomology] :
     IsIso S.homologyπ := by
   have := S.isIso_leftHomologyπ hf
   dsimp only [homologyπ]
   infer_instance
-
-/--
-lemma `isIso_homologyι` / 引理 `isIso_homologyι`
-
-English:
-lemma isIso_homologyι
-  given: (hg : S.g = 0) [S.HasHomology]
-  proof: by
-  have := S.isIso_rightHomologyι hg
-  dsimp only [homologyι]
-  infer_instance
-
-中文:
-引理 isIso_homologyι
-  条件: (hg : S.g = 0) [S.有同调]
-  证明: by
-  have := S.isIso_rightHomologyι hg
-  dsimp only [homologyι]
-  infer_instance
-
-Depends on / 依赖: S.isIso_rightHomology, infer_instance
+/-
+**CategoryTheory.ShortComplex.isIso_homology** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_homologyι (hg : S.g = 0) [S.HasHomology] :
     IsIso S.homologyι := by
@@ -3808,28 +3598,13 @@ lemma isIso_homologyι (hg : S.g = 0) [S.HasHomology] :
 
 /-- The canonical isomorphism `S.cycles ≅ S.homology` when `S.f = 0`. -/
 @[simps! hom]
-/--
-Definition of `asIsoHomologyπ` / `asIsoHomologyπ` 的定义
+/-
+**CategoryTheory.ShortComplex.asIsoHomology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asIsoHomologyπ
-  signature: (hf : S.f = 0) [S.HasHomology]
-  body: by
-  have := S.isIso_homologyπ hf
-  exact asIso S.homologyπ
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 asIsoHomologyπ
-  签名: (hf : S.f = 0) [S.有同调]
-  定义体: by
-  have := S.isIso_homologyπ hf
-  exact asIso S.homologyπ
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.homology, S.isIso_homology
+--- 原说明 ---
+The canonical isomorphism `S.cycles ≅ S.homology` when `S.f = 0`.
 -/
 noncomputable def asIsoHomologyπ (hf : S.f = 0) [S.HasHomology] :
     S.cycles ≅ S.homology := by
@@ -3837,71 +3612,34 @@ noncomputable def asIsoHomologyπ (hf : S.f = 0) [S.HasHomology] :
   exact asIso S.homologyπ
 
 @[reassoc (attr := simp)]
-/--
-lemma `asIsoHomologyπ_inv_comp_homologyπ` / 引理 `asIsoHomologyπ_inv_comp_homologyπ`
-
-English:
-lemma asIsoHomologyπ_inv_comp_homologyπ
-  given: (hf : S.f = 0) [S.HasHomology]
-  proof: Iso.inv_hom_id _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 asIsoHomologyπ_inv_comp_homologyπ
-  条件: (hf : S.f = 0) [S.有同调]
-  证明: Iso.inv_hom_id _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.ShortComplex.asIsoHomology** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma asIsoHomologyπ_inv_comp_homologyπ (hf : S.f = 0) [S.HasHomology] :
     (S.asIsoHomologyπ hf).inv ≫ S.homologyπ = 𝟙 _ := Iso.inv_hom_id _
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyπ_comp_asIsoHomologyπ_inv` / 引理 `homologyπ_comp_asIsoHomologyπ_inv`
-
-English:
-lemma homologyπ_comp_asIsoHomologyπ_inv
-  given: (hf : S.f = 0) [S.HasHomology]
-  proof: (S.asIsoHomologyπ hf).hom_inv_id
-
-中文:
-引理 homologyπ_comp_asIsoHomologyπ_inv
-  条件: (hf : S.f = 0) [S.有同调]
-  证明: (S.asIsoHomologyπ hf).hom_inv_id
-
-Depends on / 依赖: S.asIsoHomology, hom_inv_id
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyπ_comp_asIsoHomologyπ_inv (hf : S.f = 0) [S.HasHomology] :
     S.homologyπ ≫ (S.asIsoHomologyπ hf).inv = 𝟙 _ := (S.asIsoHomologyπ hf).hom_inv_id
 
 /-- The canonical isomorphism `S.homology ≅ S.opcycles` when `S.g = 0`. -/
 @[simps! hom]
-/--
-Definition of `asIsoHomologyι` / `asIsoHomologyι` 的定义
+/-
+**CategoryTheory.ShortComplex.asIsoHomology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asIsoHomologyι
-  signature: (hg : S.g = 0) [S.HasHomology]
-  body: by
-  have := S.isIso_homologyι hg
-  exact asIso S.homologyι
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 asIsoHomologyι
-  签名: (hg : S.g = 0) [S.有同调]
-  定义体: by
-  have := S.isIso_homologyι hg
-  exact asIso S.homologyι
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.homology, S.isIso_homology
+--- 原说明 ---
+The canonical isomorphism `S.homology ≅ S.opcycles` when `S.g = 0`.
 -/
 noncomputable def asIsoHomologyι (hg : S.g = 0) [S.HasHomology] :
     S.homology ≅ S.opcycles := by
@@ -3909,67 +3647,46 @@ noncomputable def asIsoHomologyι (hg : S.g = 0) [S.HasHomology] :
   exact asIso S.homologyι
 
 @[reassoc (attr := simp)]
-/--
-lemma `asIsoHomologyι_inv_comp_homologyι` / 引理 `asIsoHomologyι_inv_comp_homologyι`
-
-English:
-lemma asIsoHomologyι_inv_comp_homologyι
-  given: (hg : S.g = 0) [S.HasHomology]
-  proof: Iso.inv_hom_id _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 asIsoHomologyι_inv_comp_homologyι
-  条件: (hg : S.g = 0) [S.有同调]
-  证明: Iso.inv_hom_id _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.ShortComplex.asIsoHomology** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ShortComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma asIsoHomologyι_inv_comp_homologyι (hg : S.g = 0) [S.HasHomology] :
     (S.asIsoHomologyι hg).inv ≫ S.homologyι = 𝟙 _ := Iso.inv_hom_id _
 
 @[reassoc (attr := simp)]
-/--
-lemma `homologyι_comp_asIsoHomologyι_inv` / 引理 `homologyι_comp_asIsoHomologyι_inv`
-
-English:
-lemma homologyι_comp_asIsoHomologyι_inv
-  given: (hg : S.g = 0) [S.HasHomology]
-  proof: (S.asIsoHomologyι hg).hom_inv_id
-
-中文:
-引理 homologyι_comp_asIsoHomologyι_inv
-  条件: (hg : S.g = 0) [S.有同调]
-  证明: (S.asIsoHomologyι hg).hom_inv_id
-
-Depends on / 依赖: S.asIsoHomology, hom_inv_id
+/-
+**CategoryTheory.ShortComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ShortComplex`。
+形式化陈述：homology [HasHomology S] : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyι_comp_asIsoHomologyι_inv (hg : S.g = 0) [S.HasHomology] :
     S.homologyι ≫ (S.asIsoHomologyι hg).inv = 𝟙 _ := (S.asIsoHomologyι hg).hom_inv_id
-
-/--
-lemma `mono_homologyMap_of_mono_opcyclesMap'` / 引理 `mono_homologyMap_of_mono_opcyclesMap'`
-
-English:
-lemma mono_homologyMap_of_mono_opcyclesMap'
-  proof: by
-  have : Mono (homologyMap φ ≫ S₂.homologyι) := by
-    rw [homologyι_naturality φ]
-    apply mono_comp
-  exact mono_of_mono (homologyMap φ) S₂.homologyι
-
-中文:
-引理 mono_homologyMap_of_mono_opcyclesMap'
-  证明: by
-  have : Mono (homologyMap φ ≫ S₂.homologyι) := by
-    rw [homologyι_naturality φ]
-    apply mono_comp
-  exact mono_of_mono (homologyMap φ) S₂.homologyι
-
-Depends on / 依赖: homologyMap, mono_comp, mono_of_mono, zsmul_lie
+/-
+**CategoryTheory.ShortComplex.mono_homologyMap_of_mono_opcyclesMap'** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：mono_homologyMap_of_mono_opcyclesMap' [S₁.HasHomology] [S₂.HasHomology] (h
+ : Mono (opcyclesMap φ)) : Mono (homologyMap φ)
+参数：h : Mono (opcyclesMap φ)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_naturality`：homologyι_naturality (
+φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] : homologyMap φ ≫ S₂.homologyι = 
+S₁.homologyι ≫ S₁.opcyclesMap φ
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.ShortComplex.instMonoHomologyι`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.mono_of_mono`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X)   [CategoryTheory.Mono (Catego
+ryTheory.Category…
 -/
 lemma mono_homologyMap_of_mono_opcyclesMap'
     [S₁.HasHomology] [S₂.HasHomology] (h : Mono (opcyclesMap φ)) :
@@ -3978,45 +3695,40 @@ lemma mono_homologyMap_of_mono_opcyclesMap'
     rw [homologyι_naturality φ]
     apply mono_comp
   exact mono_of_mono (homologyMap φ) S₂.homologyι
-
-/--
-Instance `mono_homologyMap_of_mono_opcyclesMap` / 实例 `mono_homologyMap_of_mono_opcyclesMap`
-
-English:
-instance mono_homologyMap_of_mono_opcyclesMap
-  body: mono_homologyMap_of_mono_opcyclesMap' φ inferInstance
-
-中文:
-实例 mono_homologyMap_of_mono_opcyclesMap
-  定义体: mono_homologyMap_of_mono_opcyclesMap' φ inferInstance
-
-Depends on / 依赖: mono_homologyMap_of_mono_opcyclesMap
+/-
+**CategoryTheory.ShortComplex.mono_homologyMap_of_mono_opcyclesMap** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：mono_homologyMap_of_mono_opcyclesMap [S₁.HasHomology] [S₂.HasHomology] [Mo
+no (opcyclesMap φ)] : Mono (homologyMap φ)
+参数：opcyclesMap φ。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.mono_homologyMap_of_mono_opcyclesMap'`：mono_
+homologyMap_of_mono_opcyclesMap' [S₁.HasHomology] [S₂.HasHomology] (h : Mono (op
+cyclesMap φ)) : Mono (homologyMap φ)
 -/
 instance mono_homologyMap_of_mono_opcyclesMap
     [S₁.HasHomology] [S₂.HasHomology] [Mono (opcyclesMap φ)] :
     Mono (homologyMap φ) :=
   mono_homologyMap_of_mono_opcyclesMap' φ inferInstance
-
-/--
-lemma `epi_homologyMap_of_epi_cyclesMap'` / 引理 `epi_homologyMap_of_epi_cyclesMap'`
-
-English:
-lemma epi_homologyMap_of_epi_cyclesMap'
-  proof: by
-  have : Epi (S₁.homologyπ ≫ homologyMap φ) := by
-    rw [homologyπ_naturality φ]
-    apply epi_comp
-  exact epi_of_epi S₁.homologyπ (homologyMap φ)
-
-中文:
-引理 epi_homologyMap_of_epi_cyclesMap'
-  证明: by
-  have : Epi (S₁.homologyπ ≫ homologyMap φ) := by
-    rw [homologyπ_naturality φ]
-    apply epi_comp
-  exact epi_of_epi S₁.homologyπ (homologyMap φ)
-
-Depends on / 依赖: epi_comp, epi_of_epi, homologyMap
+/-
+**CategoryTheory.ShortComplex.epi_homologyMap_of_epi_cyclesMap'** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：epi_homologyMap_of_epi_cyclesMap' [S₁.HasHomology] [S₂.HasHomology] (h : E
+pi (cyclesMap φ)) : Epi (homologyMap φ)
+参数：h : Epi (cyclesMap φ)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ShortComplex.homologyπ_naturality`：homologyπ_naturality (
+φ : S₁ ⟶ S₂) [S₁.HasHomology] [S₂.HasHomology] : S₁.homologyπ ≫ homologyMap φ = 
+cyclesMap φ ≫ S₂.homologyπ
+· 使用定理 `CategoryTheory.ShortComplex.instEpiHomologyπ`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+C]   (S : CategoryTheory.ShortComp…
+· 使用定理 `CategoryTheory.epi_of_epi`：epi_of_epi (f : X ⟶ Y) (g : Y ⟶ Z) [Epi (f ≫ 
+g)] : Epi g
 -/
 lemma epi_homologyMap_of_epi_cyclesMap'
     [S₁.HasHomology] [S₂.HasHomology] (h : Epi (cyclesMap φ)) :
@@ -4025,19 +3737,17 @@ lemma epi_homologyMap_of_epi_cyclesMap'
     rw [homologyπ_naturality φ]
     apply epi_comp
   exact epi_of_epi S₁.homologyπ (homologyMap φ)
-
-/--
-Instance `epi_homologyMap_of_epi_cyclesMap` / 实例 `epi_homologyMap_of_epi_cyclesMap`
-
-English:
-instance epi_homologyMap_of_epi_cyclesMap
-  body: epi_homologyMap_of_epi_cyclesMap' φ inferInstance
-
-中文:
-实例 epi_homologyMap_of_epi_cyclesMap
-  定义体: epi_homologyMap_of_epi_cyclesMap' φ inferInstance
-
-Depends on / 依赖: epi_homologyMap_of_epi_cyclesMap
+/-
+**CategoryTheory.ShortComplex.epi_homologyMap_of_epi_cyclesMap** 是 Mathlib 中的一个实
+例，位于命名空间 `CategoryTheory.ShortComplex`。
+形式化陈述：epi_homologyMap_of_epi_cyclesMap [S₁.HasHomology] [S₂.HasHomology] [Epi (c
+yclesMap φ)] : Epi (homologyMap φ)
+参数：cyclesMap φ。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.epi_homologyMap_of_epi_cyclesMap'`：epi_homol
+ogyMap_of_epi_cyclesMap' [S₁.HasHomology] [S₂.HasHomology] (h : Epi (cyclesMap φ
+)) : Epi (homologyMap φ)
 -/
 instance epi_homologyMap_of_epi_cyclesMap
     [S₁.HasHomology] [S₂.HasHomology] [Epi (cyclesMap φ)] :
@@ -4048,34 +3758,21 @@ instance epi_homologyMap_of_epi_cyclesMap
 left homology data for `S` whose `K` and `H` fields are
 respectively `S.cycles` and `S.homology`. -/
 @[simps!]
-/--
-Definition of `LeftHomologyData.canonical` / `LeftHomologyData.canonical` 的定义
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.canonical** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       (S : CategoryTheory.ShortComp
+lex C) → [S.HasHomology] → S.LeftHomologyData
+参数：S : CategoryTheory.ShortComplex C。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.toCycles_comp_homologyπ`：toCycles_comp_homol
+ogyπ : S.toCycles ≫ S.homologyπ = 0
 
-English:
-definition LeftHomologyData.canonical
-  signature: [S.HasHomology]
-  body: S.cycles
-  H := S.homology
-  i := S.iCycles
-  π := S.homologyπ
-  wi := by simp
-  hi := S.cyclesIsKernel
-  wπ := S.toCycles_comp_homologyπ
-  hπ := S.homologyIsCokernel
-
-中文:
-定义 LeftHomologyData.canonical
-  签名: [S.有同调]
-  定义体: S.cycles
-  H := S.homology
-  i := S.iCycles
-  π := S.homologyπ
-  wi := by simp
-  hi := S.cyclesIsKernel
-  wπ := S.toCycles_comp_homologyπ
-  hπ := S.homologyIsCokernel
-
-Depends on / 依赖: S.cycles, cycles
+--- 原说明 ---
+Given a short complex `S` such that `S.HasHomology`, this is the canonical
+left homology data for `S` whose `K` and `H` fields are
+respectively `S.cycles` and `S.homology`.
 -/
 noncomputable def LeftHomologyData.canonical [S.HasHomology] : S.LeftHomologyData where
   K := S.cycles
@@ -4089,18 +3786,19 @@ noncomputable def LeftHomologyData.canonical [S.HasHomology] : S.LeftHomologyDat
 
 /-- Computation of the `f'` field of `LeftHomologyData.canonical`. -/
 @[simp]
-/--
-lemma `LeftHomologyData.canonical_f'` / 引理 `LeftHomologyData.canonical_f'`
+/-
+**CategoryTheory.ShortComplex.LeftHomologyData.canonical_f'** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.ShortComplex.LeftHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology],   (CategoryTheory.ShortComplex.LeftHomologyData.canonical S).
+f' = S.toCycles
+参数：S : CategoryTheory.ShortComplex C；CategoryTheory.ShortComplex.LeftHomologyDat
+a.canonical S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma LeftHomologyData.canonical_f'
-  given: [S.HasHomology]
-  proof: rfl
-
-中文:
-引理 LeftHomologyData.canonical_f'
-  条件: [S.有同调]
-  证明: rfl
+--- 原说明 ---
+Computation of the `f'` field of `LeftHomologyData.canonical`.
 -/
 lemma LeftHomologyData.canonical_f' [S.HasHomology] :
     (LeftHomologyData.canonical S).f' = S.toCycles := rfl
@@ -4109,34 +3807,21 @@ lemma LeftHomologyData.canonical_f' [S.HasHomology] :
 right homology data for `S` whose `Q` and `H` fields are
 respectively `S.opcycles` and `S.homology`. -/
 @[simps!]
-/--
-Definition of `RightHomologyData.canonical` / `RightHomologyData.canonical` 的定义
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.canonical** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       (S : CategoryTheory.ShortComp
+lex C) → [S.HasHomology] → S.RightHomologyData
+参数：S : CategoryTheory.ShortComplex C。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.homologyι_comp_fromOpcycles`：homologyι_comp_
+fromOpcycles : S.homologyι ≫ S.fromOpcycles = 0
 
-English:
-definition RightHomologyData.canonical
-  signature: [S.HasHomology]
-  body: S.opcycles
-  H := S.homology
-  p := S.pOpcycles
-  ι := S.homologyι
-  wp := by simp
-  hp := S.opcyclesIsCokernel
-  wι := S.homologyι_comp_fromOpcycles
-  hι := S.homologyIsKernel
-
-中文:
-定义 RightHomologyData.canonical
-  签名: [S.有同调]
-  定义体: S.opcycles
-  H := S.homology
-  p := S.pOpcycles
-  ι := S.homologyι
-  wp := by simp
-  hp := S.opcyclesIsCokernel
-  wι := S.homologyι_comp_fromOpcycles
-  hι := S.homologyIsKernel
-
-Depends on / 依赖: S.opcycles, opcycles
+--- 原说明 ---
+Given a short complex `S` such that `S.HasHomology`, this is the canonical
+right homology data for `S` whose `Q` and `H` fields are
+respectively `S.opcycles` and `S.homology`.
 -/
 noncomputable def RightHomologyData.canonical [S.HasHomology] : S.RightHomologyData where
   Q := S.opcycles
@@ -4150,18 +3835,19 @@ noncomputable def RightHomologyData.canonical [S.HasHomology] : S.RightHomologyD
 
 /-- Computation of the `g'` field of `RightHomologyData.canonical`. -/
 @[simp]
-/--
-lemma `RightHomologyData.canonical_g'` / 引理 `RightHomologyData.canonical_g'`
+/-
+**CategoryTheory.ShortComplex.RightHomologyData.canonical_g'** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.ShortComplex.RightHomologyData`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms C]   (S : CategoryTheory.ShortComplex C) [inst_2
+ : S.HasHomology],   (CategoryTheory.ShortComplex.RightHomologyData.canonical S)
+.g' = S.fromOpcycles
+参数：S : CategoryTheory.ShortComplex C；CategoryTheory.ShortComplex.RightHomologyDa
+ta.canonical S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma RightHomologyData.canonical_g'
-  given: [S.HasHomology]
-  proof: rfl
-
-中文:
-引理 RightHomologyData.canonical_g'
-  条件: [S.有同调]
-  证明: rfl
+--- 原说明 ---
+Computation of the `g'` field of `RightHomologyData.canonical`.
 -/
 lemma RightHomologyData.canonical_g' [S.HasHomology] :
     (RightHomologyData.canonical S).g' = S.fromOpcycles := rfl
@@ -4171,24 +3857,19 @@ set_option backward.defeqAttrib.useBackward true in
 homology data for `S` whose `left.K`, `left/right.H` and `right.Q` fields are
 respectively `S.cycles`, `S.homology` and `S.opcycles`. -/
 @[simps!]
-/--
-Definition of `HomologyData.canonical` / `HomologyData.canonical` 的定义
+/-
+**CategoryTheory.ShortComplex.HomologyData.canonical** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.ShortComplex.HomologyData`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms C] →       (S : CategoryTheory.ShortComp
+lex C) → [S.HasHomology] → S.HomologyData
+参数：S : CategoryTheory.ShortComplex C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HomologyData.canonical
-  signature: [S.HasHomology]
-  body: LeftHomologyData.canonical S
-  right := RightHomologyData.canonical S
-  iso := Iso.refl _
-
-中文:
-定义 同调数据.canonical
-  签名: [S.有同调]
-  定义体: LeftHomologyData.canonical S
-  right := RightHomologyData.canonical S
-  iso := Iso.refl _
-
-Depends on / 依赖: LeftHomologyData, LeftHomologyData.canonical, canonical
+--- 原说明 ---
+Given a short complex `S` such that `S.HasHomology`, this is the canonical
+homology data for `S` whose `left.K`, `left/right.H` and `right.Q` fields are
+respectively `S.cycles`, `S.homology` and `S.opcycles`.
 -/
 noncomputable def HomologyData.canonical [S.HasHomology] : S.HomologyData where
   left := LeftHomologyData.canonical S
@@ -4198,3 +3879,4 @@ noncomputable def HomologyData.canonical [S.HasHomology] : S.HomologyData where
 end ShortComplex
 
 end CategoryTheory
+

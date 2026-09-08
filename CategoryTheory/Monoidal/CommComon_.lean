@@ -34,24 +34,16 @@ open MonoidalCategory ComonObj
 variable {C : Type u₁} [Category.{v₁} C] [MonoidalCategory.{v₁} C] [BraidedCategory.{v₁} C]
 
 variable (C) in
-/--
-Definition of `CommComon` / `CommComon` 的定义
+/-- A commutative comonoid object internal to a monoidal category. -/
+/-
+**CategoryTheory.CommComon** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] → [CategoryTheory.BraidedCategory C] → Ty
+pe (max u₁ v₁)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommComon
-  parameters: where
-  axioms and operations (3):
-    - X : C
-    - [comon : ComonObj X]
-    - [comm : IsCommComonObj X]
-
-中文:
-结构 交换余mon
-  参数: where
-  公理与运算 (3 个):
-    - X : C
-    - [comon : 余monObj X]
-    - [comm : 是交换余monObj X]
+--- 原说明 ---
+A commutative comonoid object internal to a monoidal category.
 -/
 structure CommComon where
   /-- The underlying object in the ambient monoidal category -/
@@ -65,38 +57,47 @@ namespace CommComon
 
 /-- A commutative comonoid object is a comonoid object. -/
 @[simps X]
-/--
-Definition of `toComon` / `toComon` 的定义
+/-
+**CategoryTheory.CommComon.toComon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+mComon`。
+形式化陈述：toComon (A : CommComon C) : Comon C
+参数：A : CommComon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toComon
-  signature: (A : CommComon C)
-  body: ⟨A.X⟩
-
-中文:
-定义 toComon
-  签名: (A : 交换余mon C)
-  定义体: ⟨A.X⟩
+--- 原说明 ---
+A commutative comonoid object is a comonoid object.
 -/
 def toComon (A : CommComon C) : Comon C := ⟨A.X⟩
 
 section
 
 attribute [local instance] ComonObj.instTensorUnit in
-/--
-Instance `instCommComonObjUnit` / 实例 `instCommComonObjUnit`
+/-- The trivial comonoid on the unit object is commutative. -/
+/-
+**CategoryTheory.CommComon.instCommComonObjUnit** 是 Mathlib 中的一个实例，位于命名空间 `Categ
+oryTheory.CommComon`。
+形式化陈述：instCommComonObjUnit : IsCommComonObj (𝟙_ C) where comul_comm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.braiding_tensorUnit_right`：braiding_tensorUnit_right (X :
+ C) : (β_ X (𝟙_ C)).hom = (ρ_ X).hom ≫ (fun_ X).inv
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance instCommComonObjUnit
-  signature: : IsCommComonObj (𝟙_ C) where
-  body: by simp [← unitors_equal]
-
-中文:
-实例 instCommComonObjUnit
-  签名: : 是交换余monObj (𝟙_ C) where
-  定义体: by simp [← unitors_equal]
-
-Depends on / 依赖: unitors_equal
+--- 原说明 ---
+The trivial comonoid on the unit object is commutative.
 -/
 instance instCommComonObjUnit : IsCommComonObj (𝟙_ C) where
   comul_comm := by simp [← unitors_equal]
@@ -107,123 +108,76 @@ attribute [local instance] ComonObj.instTensorUnit in
 variable (C) in
 /-- The trivial commutative comonoid object. We later show this is initial in `CommComon C`. -/
 @[simps!]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.CommComon.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+mComon`。
+形式化陈述：trivial : CommComon C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: : CommComon C
-  body: mk (𝟙_ C)
-
-中文:
-定义 trivial
-  签名: : 交换余mon C
-  定义体: mk (𝟙_ C)
+--- 原说明 ---
+The trivial commutative comonoid object. We later show this is initial in `CommC
+omon C`.
 -/
 def trivial : CommComon C := mk (𝟙_ C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (CommComon C)
-  body: ⟨trivial C⟩
-
-中文:
-实例 :
-  签名: 可居 (交换余mon C)
-  定义体: ⟨trivial C⟩
+/-
+**CategoryTheory.CommComon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommComon`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (CommComon C) :=
   ⟨trivial C⟩
 
 variable {M : CommComon C}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CommComon C)
-  body: inferInstanceAs (Category (InducedCategory _ CommComon.toComon))
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (交换余mon C)
-  定义体: inferInstanceAs (Category (InducedCategory _ CommComon.toComon))
-
-@[simp]
-
-Depends on / 依赖: Category, CommComon, CommComon.toComon, InducedCategory, toComon
+/-
+**CategoryTheory.CommComon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommComon`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CommComon C) :=
   inferInstanceAs (Category (InducedCategory _ CommComon.toComon))
 
 @[simp]
-/--
-theorem `id_hom` / 定理 `id_hom`
-
-English:
-theorem id_hom
-  given: (A : CommComon C)
-  statement: Comon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom
-  条件: (A : 交换余mon C)
-  结论: 余mon.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommComon.id_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+Comon`。
+形式化陈述：id_hom (A : CommComon C) : Comon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) =
+ 𝟙 A.X
+参数：A : CommComon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom (A : CommComon C) : Comon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X :=
   rfl
 
 @[simp]
-/--
-theorem `comp_hom` / 定理 `comp_hom`
-
-English:
-theorem comp_hom
-  given: {R S T : CommComon C} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 comp_hom
-  条件: {R S T : 交换余mon C} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.CommComon.comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Co
+mmComon`。
+形式化陈述：comp_hom {R S T : CommComon C} (f : R ⟶ S) (g : S ⟶ T) : Comon.Hom.hom (f 
+≫ g).hom = f.hom.hom ≫ g.hom.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom {R S T : CommComon C} (f : R ⟶ S) (g : S ⟶ T) :
     Comon.Hom.hom (f ≫ g).hom = f.hom.hom ≫ g.hom.hom :=
   rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {A B : CommComon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  statement: f = g
-  proof: InducedCategory.hom_ext (Comon.Hom.ext h)
-
-中文:
-引理 hom_ext
-  条件: {A B : 交换余mon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  结论: f = g
-  证明: InducedCategory.hom_ext (Comon.Hom.ext h)
-
-Depends on / 依赖: Comon.Hom.ext, InducedCategory, InducedCategory.hom_ext, hom_ext
+/-
+**CategoryTheory.CommComon.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Com
+mComon`。
+形式化陈述：hom_ext {A B : CommComon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f 
+= g
+参数：f g : A ⟶ B；h : f.hom.hom = g.hom.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `CategoryTheory.Comon.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cat
+egory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {M N : Category
+Theory.Comon C} {x…
 -/
 lemma hom_ext {A B : CommComon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f = g :=
   InducedCategory.hom_ext (Comon.Hom.ext h)
@@ -234,20 +188,13 @@ variable (C)
 
 /-- The forgetful functor from commutative comonoid objects to comonoid objects. -/
 @[simps!]
-/--
-Definition of `forget₂Comon` / `forget₂Comon` 的定义
+/-
+**CategoryTheory.CommComon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comm
+Comon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂Comon
-  signature: : CommComon C ⥤ Comon C
-  body: inducedFunctor _
-
-中文:
-定义 forget₂Comon
-  签名: : 交换余mon C ⥤ 余mon C
-  定义体: inducedFunctor _
-
-Depends on / 依赖: inducedFunctor
+--- 原说明 ---
+The forgetful functor from commutative comonoid objects to comonoid objects.
 -/
 def forget₂Comon : CommComon C ⥤ Comon C :=
   inducedFunctor _
@@ -256,11 +203,16 @@ end
 
 end CommComon
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {C : Type*} [Category* C] [MonoidalCategory C] [SymmetricCategory C]
     (A B : C) [ComonObj A] [ComonObj B]
-    [IsCommComonObj A] [IsCommComonObj B] : IsCommComonObj (A otimes B) where
+    [IsCommComonObj A] [IsCommComonObj B] : IsCommComonObj (A ⊗ B) where
   comul_comm := by
-    rw [Comon.tensorObj_comul]; rw [Category.assoc]; rw [SymmetricCategory.tensorμ_braid_swap]
+    rw [Comon.tensorObj_comul, Category.assoc, SymmetricCategory.tensorμ_braid_swap]
     simp
 
 end CategoryTheory
+

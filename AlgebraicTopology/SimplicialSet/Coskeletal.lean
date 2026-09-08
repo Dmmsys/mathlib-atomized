@@ -39,20 +39,21 @@ namespace Truncated
 /-- The identity natural transformation exhibits a simplicial set as a right extension of its
 restriction along `(Truncated.inclusion (n := n)).op`. -/
 @[simps! left right_as hom_app]
-/--
-Definition of `rightExtensionInclusion` / `rightExtensionInclusion` 的定义
+/-
+**SSet.Truncated.rightExtensionInclusion** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncat
+ed`。
+形式化陈述：rightExtensionInclusion (X : SSet.{u}) (n : Nat) : RightExtension (Truncat
+ed.inclusion (n
+参数：X : SSet.{u}；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightExtensionInclusion
-  signature: (X : SSet.{u}) (n : Nat)
-  body: RightExtension.mk _ (𝟙 _)
-
-中文:
-定义 rightExtensionInclusion
-  签名: (X : SSet.{u}) (n : 自然数)
-  定义体: RightExtension.mk _ (𝟙 _)
+--- 原说明 ---
+The identity natural transformation exhibits a simplicial set as a right extensi
+on of its
+restriction along `(Truncated.inclusion (n := n)).op`.
 -/
-def rightExtensionInclusion (X : SSet.{u}) (n : Nat) :
+def rightExtensionInclusion (X : SSet.{u}) (n : ℕ) :
     RightExtension (Truncated.inclusion (n := n)).op
       ((Truncated.inclusion n).op ⋙ X) := RightExtension.mk _ (𝟙 _)
 
@@ -67,22 +68,19 @@ variable {X : SSet.{u}} (sx : StrictSegal X)
 
 namespace isPointwiseRightKanExtensionAt
 
-/--
-Definition of `strArrowMk₂` / `strArrowMk₂` 的定义
+/-- A morphism in `SimplexCategory` with domain `⦋0⦌`, `⦋1⦌`, or `⦋2⦌` defines an object in the
+comma category `StructuredArrow (op ⦋n⦌) (Truncated.inclusion (n := 2)).op`. -/
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt.strArrowMk** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `SSet.StrictSegal.isPointwiseRightKanExtensionAt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation strArrowMk₂
-  signature: {i : Nat} {n : Nat} (φ : ⦋i⦌ ⟶ ⦋n⦌) (hi : i <= 2 := by lia)
-  body: StructuredArrow.mk (Y := op ⦋i⦌₂) φ.op
-
-中文:
-缩写 strArrowMk₂
-  签名: {i : 自然数} {n : 自然数} (φ : ⦋i⦌ ⟶ ⦋n⦌) (hi : i <= 2 := by lia)
-  定义体: StructuredArrow.mk (Y := op ⦋i⦌₂) φ.op
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.mk, Truncated, Truncated.inclusion, inclusion
+--- 原说明 ---
+A morphism in `SimplexCategory` with domain `⦋0⦌`, `⦋1⦌`, or `⦋2⦌` defines an ob
+ject in the
+comma category `StructuredArrow (op ⦋n⦌) (Truncated.inclusion (n := 2)).op`.
 -/
-abbrev strArrowMk₂ {i : Nat} {n : Nat} (φ : ⦋i⦌ ⟶ ⦋n⦌) (hi : i <= 2 := by lia) :
+abbrev strArrowMk₂ {i : ℕ} {n : ℕ} (φ : ⦋i⦌ ⟶ ⦋n⦌) (hi : i ≤ 2 := by lia) :
     StructuredArrow (op ⦋n⦌) (Truncated.inclusion 2).op :=
   StructuredArrow.mk (Y := op ⦋i⦌₂) φ.op
 
@@ -90,64 +88,37 @@ abbrev strArrowMk₂ {i : Nat} {n : Nat} (φ : ⦋i⦌ ⟶ ⦋n⦌) (hi : i <= 2
 `(proj (op ⦋n⦌) ((Truncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X)` where `X` is
 Strict Segal, one can produce an `n`-simplex in `X`. -/
 @[simp]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt.lift** 是 Mathlib 中的一个定义，位于命名空间
+ `SSet.StrictSegal.isPointwiseRightKanExtensionAt`。
+形式化陈述：lift {X : SSet.{u}} (sx : StrictSegal X) {n} (s : Cone (proj (op ⦋n⦌) (Tru
+ncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X)) (x : s.pt) : X _⦋n⦌
+参数：sx : StrictSegal X；s : Cone (proj (op ⦋n⦌) (Truncated.inclusion 2).op ⋙ (Trun
+cated.inclusion 2).op ⋙ X)；x : s.pt。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.castSucc_le_succ`：castSucc_le_succ {n} (i : Fin n) : i.castSucc <= i
+.succ
 
-English:
-definition lift
-  signature: {X : SSet.{u}} (sx : StrictSegal X) {n}
-  body: sx.spineToSimplex {
-    vertex := fun i => s.π.app (.mk (Y := op ⦋0⦌₂) (.op (SimplexCategory.const _ _ i))) x
-    arrow := fun i => s.π.app (.mk (Y := op ⦋1⦌₂) (.op (mkOfLe _ _ (Fin.castSucc_le_succ i)))) x
-    arrow_src := fun i => by
-      let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
-        strArrowMk₂ (⦋0⦌.const _ i.castSucc) :=
-          StructuredArrow.homMk (Hom.tr (δ 1)).op
-          (Quiver.Hom.unop_inj (by ext x; fin_cases x; rfl))
-      exact ConcreteCategory.congr_hom (s.w φ) x
-    arrow_tgt := fun i => by
-      dsimp
-      let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
-          strArrowMk₂ (⦋0⦌.const _ i.succ) :=
-        StructuredArrow.homMk (Hom.tr (δ 0)).op
-          (Quiver.Hom.unop_inj (by ext x; fin_cases x; rfl))
-      exact ConcreteCategory.congr_hom (s.w φ) x }
-
-中文:
-定义 lift
-  签名: {X : SSet.{u}} (sx : StrictSegal X) {n}
-  定义体: sx.spineToSimplex {
-    vertex := fun i => s.π.app (.mk (Y := op ⦋0⦌₂) (.op (SimplexCategory.const _ _ i))) x
-    arrow := fun i => s.π.app (.mk (Y := op ⦋1⦌₂) (.op (mkOfLe _ _ (Fin.castSucc_le_succ i)))) x
-    arrow_src := fun i => by
-      let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
-        strArrowMk₂ (⦋0⦌.const _ i.castSucc) :=
-          StructuredArrow.homMk (Hom.tr (δ 1)).op
-          (Quiver.Hom.unop_inj (by ext x; fin_cases x; rfl))
-      exact ConcreteCategory.congr_hom (s.w φ) x
-    arrow_tgt := fun i => by
-      dsimp
-      let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
-          strArrowMk₂ (⦋0⦌.const _ i.succ) :=
-        StructuredArrow.homMk (Hom.tr (δ 0)).op
-          (Quiver.Hom.unop_inj (by ext x; fin_cases x; rfl))
-      exact ConcreteCategory.congr_hom (s.w φ) x }
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Fin.castSucc_le_succ, Hom.tr, Quiver, Quiver.Hom.unop_inj, SimplexCategory, SimplexCategory.const, StructuredArrow, StructuredArrow.homMk, arrow_src, arrow_tgt, castSucc, castSucc_le_succ, congr_hom, fin_cases, i.castSucc, mkOfLe, spineToSimplex, sx.spineToSimplex
+--- 原说明 ---
+Given a term in the cone over the diagram
+`(proj (op ⦋n⦌) ((Truncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X)` w
+here `X` is
+Strict Segal, one can produce an `n`-simplex in `X`.
 -/
 noncomputable def lift {X : SSet.{u}} (sx : StrictSegal X) {n}
     (s : Cone (proj (op ⦋n⦌) (Truncated.inclusion 2).op ⋙
       (Truncated.inclusion 2).op ⋙ X)) (x : s.pt) : X _⦋n⦌ :=
   sx.spineToSimplex {
-    vertex := fun i => s.π.app (.mk (Y := op ⦋0⦌₂) (.op (SimplexCategory.const _ _ i))) x
-    arrow := fun i => s.π.app (.mk (Y := op ⦋1⦌₂) (.op (mkOfLe _ _ (Fin.castSucc_le_succ i)))) x
-    arrow_src := fun i => by
+    vertex := fun i ↦ s.π.app (.mk (Y := op ⦋0⦌₂) (.op (SimplexCategory.const _ _ i))) x
+    arrow := fun i ↦ s.π.app (.mk (Y := op ⦋1⦌₂) (.op (mkOfLe _ _ (Fin.castSucc_le_succ i)))) x
+    arrow_src := fun i ↦ by
       let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
         strArrowMk₂ (⦋0⦌.const _ i.castSucc) :=
           StructuredArrow.homMk (Hom.tr (δ 1)).op
           (Quiver.Hom.unop_inj (by ext x; fin_cases x; rfl))
       exact ConcreteCategory.congr_hom (s.w φ) x
-    arrow_tgt := fun i => by
+    arrow_tgt := fun i ↦ by
       dsimp
       let φ : strArrowMk₂ (mkOfLe _ _ (Fin.castSucc_le_succ i)) ⟶
           strArrowMk₂ (⦋0⦌.const _ i.succ) :=
@@ -156,30 +127,14 @@ noncomputable def lift {X : SSet.{u}} (sx : StrictSegal X) {n}
       exact ConcreteCategory.congr_hom (s.w φ) x }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `fac_aux₁` / 引理 `fac_aux₁`
-
-English:
-lemma fac_aux₁
-  statement: {n : Nat}
-  proof: by
-  dsimp [lift]
-  rw [spineToSimplex_arrow]
-  rfl
-
-中文:
-引理 fac_aux₁
-  结论: {n : 自然数}
-  证明: by
-  dsimp [lift]
-  rw [spineToSimplex_arrow]
-  rfl
-
-Depends on / 依赖: spineToSimplex_arrow
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt.fac_aux** 是 Mathlib 中的一个引理，位于命
+名空间 `SSet.StrictSegal.isPointwiseRightKanExtensionAt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma fac_aux₁ {n : Nat}
+lemma fac_aux₁ {n : ℕ}
     (s : Cone (proj (op ⦋n⦌) (Truncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X))
-    (x : s.pt) (i : Nat) (hi : i < n) :
+    (x : s.pt) (i : ℕ) (hi : i < n) :
     X.map (mkOfSucc ⟨i, hi⟩).op (lift sx s x) =
       s.π.app (strArrowMk₂ (mkOfSucc ⟨i, hi⟩)) x := by
   dsimp [lift]
@@ -188,152 +143,14 @@ lemma fac_aux₁ {n : Nat}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `fac_aux₂` / 引理 `fac_aux₂`
-
-English:
-lemma fac_aux₂
-  statement: {n : Nat}
-  proof: by
-  obtain ⟨k, hk⟩ := Nat.le.dest hij
-  revert i j
-  induction k with
-  | zero =>
-      rintro i j hij hj hik
-      obtain rfl : i = j := hik
-      have : mkOfLe ⟨i, Nat.lt_add_one_of_le hj⟩ ⟨i, Nat.lt_add_one_of_le hj⟩ (by rfl) =
-        ⦋1⦌.const ⦋0⦌ 0 ≫ ⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩ := Hom.ext_one_left _ _
-      rw [this]
-      let α : (strArrowMk₂ (⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩)) ⟶
-        (strArrowMk₂ (⦋1⦌.const ⦋0⦌ 0 ≫ ⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩)) :=
-            StructuredArrow.homMk ((Hom.tr (⦋1⦌.const ⦋0⦌ 0)).op) (by simp; rfl)
-      conv_rhs => dsimp; rw [dsimp% s.π.naturality_apply α x]
-      rw [op_comp]; rw [Functor.map_comp]
-      simp only [types_comp_apply]
-      refine congrArg (X.map (⦋1⦌.const ⦋0⦌ 0).op) ?_
-      unfold strArrowMk₂
-      rw [lift]; rw [StrictSegal.spineToSimplex_vertex]
-      congr
-  | succ k hk =>
-      intro i j hij hj hik
-      let α := strArrowMk₂ (mkOfLeComp (n := n) ⟨i, by omega⟩ ⟨i + k, by omega⟩
-          ⟨j, by omega⟩ (by simp) (by simp only [Fin.mk_le_mk]; omega))
-      let α₀ := strArrowMk₂ (mkOfLe (n := n) ⟨i + k, by omega⟩ ⟨j, by omega⟩
-        (by simp only [Fin.mk_le_mk]; omega))
-      let α₁ := strArrowMk₂ (mkOfLe (n := n) ⟨i, by omega⟩ ⟨j, by omega⟩ hij)
-      let α₂ := strArrowMk₂ (mkOfLe (n := n) ⟨i, by omega⟩ ⟨i + k, by omega⟩ (by simp))
-      let β₀ : α ⟶ α₀ := StructuredArrow.homMk ((Hom.tr (mkOfSucc 1)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      let β₁ : α ⟶ α₁ := StructuredArrow.homMk ((Hom.tr (δ 1)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      let β₂ : α ⟶ α₂ := StructuredArrow.homMk ((Hom.tr (mkOfSucc 0)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      have h₀ : X.map α₀.hom (lift sx s x) = s.π.app α₀ x := by
-        subst hik
-        exact fac_aux₁ _ _ _ _ hj
-      have h₂ : X.map α₂.hom (lift sx s x) = s.π.app α₂ x :=
-        hk i (i + k) (by simp) (by lia) rfl
-      change X.map α₁.hom (lift sx s x) = s.π.app α₁ x
-      have : X.map α.hom (lift sx s x) = s.π.app α x := by
-        apply sx.spineInjective
-        apply Path.ext'
-        intro t
-        dsimp [spineEquiv, α]
-        rw [← Functor.map_comp_apply]
-        match t with
-        | 0 =>
-            have : α.hom ≫ (mkOfSucc 0).op = α₂.hom :=
-              Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
-            rw [dsimp% [α] this]
-            dsimp [α₂] at h₂ ⊢
-            rw [h₂]; rw [← dsimp% [α₂] ConcreteCategory.congr_hom (s.w β₂) x]
-            rfl
-        | 1 =>
-            have : α.hom ≫ (mkOfSucc 1).op = α₀.hom :=
-              Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
-            rw [dsimp% [α] this]
-            dsimp [α₀] at h₀ ⊢
-            rw [h₀]; rw [← dsimp% [α₀] ConcreteCategory.congr_hom (s.w β₀) x]
-            rfl
-      rw [← StructuredArrow.w β₁]; rw [Functor.map_comp_apply]
-      dsimp [fromPUnit] at this ⊢
-      rw [this]; rw [← s.w β₁]
-      dsimp
-
-中文:
-引理 fac_aux₂
-  结论: {n : 自然数}
-  证明: by
-  obtain ⟨k, hk⟩ := Nat.le.dest hij
-  revert i j
-  induction k with
-  | zero =>
-      rintro i j hij hj hik
-      obtain rfl : i = j := hik
-      have : mkOfLe ⟨i, Nat.lt_add_one_of_le hj⟩ ⟨i, Nat.lt_add_one_of_le hj⟩ (by rfl) =
-        ⦋1⦌.const ⦋0⦌ 0 ≫ ⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩ := Hom.ext_one_left _ _
-      rw [this]
-      let α : (strArrowMk₂ (⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩)) ⟶
-        (strArrowMk₂ (⦋1⦌.const ⦋0⦌ 0 ≫ ⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩)) :=
-            StructuredArrow.homMk ((Hom.tr (⦋1⦌.const ⦋0⦌ 0)).op) (by simp; rfl)
-      conv_rhs => dsimp; rw [dsimp% s.π.naturality_apply α x]
-      rw [op_comp]; rw [Functor.map_comp]
-      simp only [types_comp_apply]
-      refine congrArg (X.map (⦋1⦌.const ⦋0⦌ 0).op) ?_
-      unfold strArrowMk₂
-      rw [lift]; rw [StrictSegal.spineToSimplex_vertex]
-      congr
-  | succ k hk =>
-      intro i j hij hj hik
-      let α := strArrowMk₂ (mkOfLeComp (n := n) ⟨i, by omega⟩ ⟨i + k, by omega⟩
-          ⟨j, by omega⟩ (by simp) (by simp only [Fin.mk_le_mk]; omega))
-      let α₀ := strArrowMk₂ (mkOfLe (n := n) ⟨i + k, by omega⟩ ⟨j, by omega⟩
-        (by simp only [Fin.mk_le_mk]; omega))
-      let α₁ := strArrowMk₂ (mkOfLe (n := n) ⟨i, by omega⟩ ⟨j, by omega⟩ hij)
-      let α₂ := strArrowMk₂ (mkOfLe (n := n) ⟨i, by omega⟩ ⟨i + k, by omega⟩ (by simp))
-      let β₀ : α ⟶ α₀ := StructuredArrow.homMk ((Hom.tr (mkOfSucc 1)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      let β₁ : α ⟶ α₁ := StructuredArrow.homMk ((Hom.tr (δ 1)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      let β₂ : α ⟶ α₂ := StructuredArrow.homMk ((Hom.tr (mkOfSucc 0)).op) (Quiver.Hom.unop_inj
-        (by ext x; fin_cases x <;> rfl))
-      have h₀ : X.map α₀.hom (lift sx s x) = s.π.app α₀ x := by
-        subst hik
-        exact fac_aux₁ _ _ _ _ hj
-      have h₂ : X.map α₂.hom (lift sx s x) = s.π.app α₂ x :=
-        hk i (i + k) (by simp) (by lia) rfl
-      change X.map α₁.hom (lift sx s x) = s.π.app α₁ x
-      have : X.map α.hom (lift sx s x) = s.π.app α x := by
-        apply sx.spineInjective
-        apply Path.ext'
-        intro t
-        dsimp [spineEquiv, α]
-        rw [← Functor.map_comp_apply]
-        match t with
-        | 0 =>
-            have : α.hom ≫ (mkOfSucc 0).op = α₂.hom :=
-              Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
-            rw [dsimp% [α] this]
-            dsimp [α₂] at h₂ ⊢
-            rw [h₂]; rw [← dsimp% [α₂] ConcreteCategory.congr_hom (s.w β₂) x]
-            rfl
-        | 1 =>
-            have : α.hom ≫ (mkOfSucc 1).op = α₀.hom :=
-              Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
-            rw [dsimp% [α] this]
-            dsimp [α₀] at h₀ ⊢
-            rw [h₀]; rw [← dsimp% [α₀] ConcreteCategory.congr_hom (s.w β₀) x]
-            rfl
-      rw [← StructuredArrow.w β₁]; rw [Functor.map_comp_apply]
-      dsimp [fromPUnit] at this ⊢
-      rw [this]; rw [← s.w β₁]
-      dsimp
-
-Depends on / 依赖: Hom.ext_one_left, Hom.tr, Nat.le.dest, Nat.lt_add_one_of_le, StructuredArrow, StructuredArrow.homMk, ext_one_left, lt_add_one_of_le, mkOfLe, revert
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt.fac_aux** 是 Mathlib 中的一个引理，位于命
+名空间 `SSet.StrictSegal.isPointwiseRightKanExtensionAt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma fac_aux₂ {n : Nat}
+lemma fac_aux₂ {n : ℕ}
     (s : Cone (proj (op ⦋n⦌) (Truncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X))
-    (x : s.pt) (i j : Nat) (hij : i <= j) (hj : j <= n) :
+    (x : s.pt) (i j : ℕ) (hij : i ≤ j) (hj : j ≤ n) :
     X.map (mkOfLe ⟨i, by lia⟩ ⟨j, by lia⟩ hij).op (lift sx s x) =
       s.π.app (strArrowMk₂ (mkOfLe ⟨i, by lia⟩ ⟨j, by lia⟩ hij)) x := by
   obtain ⟨k, hk⟩ := Nat.le.dest hij
@@ -349,11 +166,11 @@ lemma fac_aux₂ {n : Nat}
         (strArrowMk₂ (⦋1⦌.const ⦋0⦌ 0 ≫ ⦋0⦌.const ⦋n⦌ ⟨i, Nat.lt_add_one_of_le hj⟩)) :=
             StructuredArrow.homMk ((Hom.tr (⦋1⦌.const ⦋0⦌ 0)).op) (by simp; rfl)
       conv_rhs => dsimp; rw [dsimp% s.π.naturality_apply α x]
-      rw [op_comp]; rw [Functor.map_comp]
+      rw [op_comp, Functor.map_comp]
       simp only [types_comp_apply]
       refine congrArg (X.map (⦋1⦌.const ⦋0⦌ 0).op) ?_
       unfold strArrowMk₂
-      rw [lift]; rw [StrictSegal.spineToSimplex_vertex]
+      rw [lift, StrictSegal.spineToSimplex_vertex]
       congr
   | succ k hk =>
       intro i j hij hj hik
@@ -387,48 +204,29 @@ lemma fac_aux₂ {n : Nat}
               Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
             rw [dsimp% [α] this]
             dsimp [α₂] at h₂ ⊢
-            rw [h₂]; rw [← dsimp% [α₂] ConcreteCategory.congr_hom (s.w β₂) x]
+            rw [h₂, ← dsimp% [α₂] ConcreteCategory.congr_hom (s.w β₂) x]
             rfl
         | 1 =>
             have : α.hom ≫ (mkOfSucc 1).op = α₀.hom :=
               Quiver.Hom.unop_inj (by ext x; fin_cases x <;> rfl)
             rw [dsimp% [α] this]
             dsimp [α₀] at h₀ ⊢
-            rw [h₀]; rw [← dsimp% [α₀] ConcreteCategory.congr_hom (s.w β₀) x]
+            rw [h₀, ← dsimp% [α₀] ConcreteCategory.congr_hom (s.w β₀) x]
             rfl
-      rw [← StructuredArrow.w β₁]; rw [Functor.map_comp_apply]
+      rw [← StructuredArrow.w β₁, Functor.map_comp_apply]
       dsimp [fromPUnit] at this ⊢
-      rw [this]; rw [← s.w β₁]
+      rw [this, ← s.w β₁]
       dsimp
-
-/--
-lemma `fac_aux₃` / 引理 `fac_aux₃`
-
-English:
-lemma fac_aux₃
-  statement: {n : Nat}
-  proof: by
-  obtain ⟨i, j, hij, rfl⟩ : exists i j hij, φ = mkOfLe i j hij :=
-    ⟨φ.toOrderHom 0, φ.toOrderHom 1, φ.toOrderHom.monotone (by decide),
-      Hom.ext_one_left _ _ rfl rfl⟩
-  exact fac_aux₂ _ _ _ _ _ _ (by lia)
-
-中文:
-引理 fac_aux₃
-  结论: {n : 自然数}
-  证明: by
-  obtain ⟨i, j, hij, rfl⟩ : exists i j hij, φ = mkOfLe i j hij :=
-    ⟨φ.toOrderHom 0, φ.toOrderHom 1, φ.toOrderHom.monotone (by decide),
-      Hom.ext_one_left _ _ rfl rfl⟩
-  exact fac_aux₂ _ _ _ _ _ _ (by lia)
-
-Depends on / 依赖: Hom.ext_one_left, ext_one_left, mkOfLe, monotone, toOrderHom, toOrderHom.monotone
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt.fac_aux** 是 Mathlib 中的一个引理，位于命
+名空间 `SSet.StrictSegal.isPointwiseRightKanExtensionAt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma fac_aux₃ {n : Nat}
+lemma fac_aux₃ {n : ℕ}
     (s : Cone (proj (op ⦋n⦌) (Truncated.inclusion 2).op ⋙ (Truncated.inclusion 2).op ⋙ X))
     (x : s.pt) (φ : ⦋1⦌ ⟶ ⦋n⦌) :
     X.map φ.op (lift sx s x) = s.π.app (strArrowMk₂ φ) x := by
-  obtain ⟨i, j, hij, rfl⟩ : exists i j hij, φ = mkOfLe i j hij :=
+  obtain ⟨i, j, hij, rfl⟩ : ∃ i j hij, φ = mkOfLe i j hij :=
     ⟨φ.toOrderHom 0, φ.toOrderHom 1, φ.toOrderHom.monotone (by decide),
       Hom.ext_one_left _ _ rfl rfl⟩
   exact fac_aux₂ _ _ _ _ _ _ (by lia)
@@ -440,96 +238,32 @@ open Truncated
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 open isPointwiseRightKanExtensionAt in
-/--
-Definition of `isPointwiseRightKanExtensionAt` / `isPointwiseRightKanExtensionAt` 的定义
+/-- A strict Segal simplicial set is 2-coskeletal. -/
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtensionAt** 是 Mathlib 中的一个定义，位于命名空间 `SSe
+t.StrictSegal`。
+形式化陈述：isPointwiseRightKanExtensionAt (n : Nat) : (rightExtensionInclusion X 2).I
+sPointwiseRightKanExtensionAt ⟨⦋n⦌⟩ where lift s
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isPointwiseRightKanExtensionAt
-  signature: (n : Nat)
-  body: ↾fun x => lift sx s x
-  fac s j := by
-    ext x
-    obtain ⟨⟨i, hi⟩, ⟨f : _ ⟶ _⟩, rfl⟩ := j.mk_surjective
-    obtain ⟨i, rfl⟩ : exists j, ⦋j⦌ = i := ⟨_, i.mk_len⟩
-    dsimp at hi ⊢
-    apply sx.spineInjective
-    ext k
-    · dsimp only [spineEquiv, Equiv.coe_fn_mk]
-      rw [dsimp% show op f = f.op from rfl]
-      rw [spine_map_vertex]; rw [spine_spineToSimplex_apply]; rw [spine_vertex]
-      let α : strArrowMk₂ f hi ⟶ strArrowMk₂ (⦋0⦌.const ⦋n⦌ (f.toOrderHom k)) :=
-        StructuredArrow.homMk ((Hom.tr (⦋0⦌.const _ (by exact k))).op) (by simp; rfl)
-      exact ConcreteCategory.congr_hom (s.w α).symm x
-    · dsimp only [spineEquiv, Equiv.coe_fn_mk, spine_arrow]
-      rw [← Functor.map_comp_apply]
-      let α : strArrowMk₂ f ⟶ strArrowMk₂ (mkOfSucc k ≫ f) :=
-        StructuredArrow.homMk (Hom.tr (mkOfSucc k)).op (by simp)
-      exact (isPointwiseRightKanExtensionAt.fac_aux₃ _ _ _ _).trans
-        (ConcreteCategory.congr_hom (s.w α).symm x)
-  uniq s m hm := by
-    ext x
-    apply sx.spineInjective (X := X)
-    -- simp? [spineEquiv] says:
-    simp only [spineEquiv, RightExtension.coneAt_pt, rightExtensionInclusion_left,
-      TypeCat.Fun.toFun_apply, Equiv.coe_fn_mk, lift, Nat.reduceAdd, ObjectProperty.ι_obj,
-      const_obj_obj, comp_obj, proj_obj, mk_right, op_obj, TypeCat.hom_ofHom, TypeCat.Fun.coe_mk,
-      spine_spineToSimplex_apply]
-    ext i
-    · exact ConcreteCategory.congr_hom (hm (StructuredArrow.mk
-        (Y := op ⦋0⦌₂) (⦋0⦌.const ⦋n⦌ i).op)) x
-    · exact ConcreteCategory.congr_hom (hm (.mk (Y := op ⦋1⦌₂)
-        (.op (mkOfLe _ _ (Fin.castSucc_le_succ i))))) x
-
-中文:
-定义 isPointwiseRightKanExtensionAt
-  签名: (n : 自然数)
-  定义体: ↾fun x => lift sx s x
-  fac s j := by
-    ext x
-    obtain ⟨⟨i, hi⟩, ⟨f : _ ⟶ _⟩, rfl⟩ := j.mk_surjective
-    obtain ⟨i, rfl⟩ : exists j, ⦋j⦌ = i := ⟨_, i.mk_len⟩
-    dsimp at hi ⊢
-    apply sx.spineInjective
-    ext k
-    · dsimp only [spineEquiv, Equiv.coe_fn_mk]
-      rw [dsimp% show op f = f.op from rfl]
-      rw [spine_map_vertex]; rw [spine_spineToSimplex_apply]; rw [spine_vertex]
-      let α : strArrowMk₂ f hi ⟶ strArrowMk₂ (⦋0⦌.const ⦋n⦌ (f.toOrderHom k)) :=
-        StructuredArrow.homMk ((Hom.tr (⦋0⦌.const _ (by exact k))).op) (by simp; rfl)
-      exact ConcreteCategory.congr_hom (s.w α).symm x
-    · dsimp only [spineEquiv, Equiv.coe_fn_mk, spine_arrow]
-      rw [← Functor.map_comp_apply]
-      let α : strArrowMk₂ f ⟶ strArrowMk₂ (mkOfSucc k ≫ f) :=
-        StructuredArrow.homMk (Hom.tr (mkOfSucc k)).op (by simp)
-      exact (isPointwiseRightKanExtensionAt.fac_aux₃ _ _ _ _).trans
-        (ConcreteCategory.congr_hom (s.w α).symm x)
-  uniq s m hm := by
-    ext x
-    apply sx.spineInjective (X := X)
-    -- simp? [spineEquiv] says:
-    simp only [spineEquiv, RightExtension.coneAt_pt, rightExtensionInclusion_left,
-      TypeCat.Fun.toFun_apply, Equiv.coe_fn_mk, lift, Nat.reduceAdd, ObjectProperty.ι_obj,
-      const_obj_obj, comp_obj, proj_obj, mk_right, op_obj, TypeCat.hom_ofHom, TypeCat.Fun.coe_mk,
-      spine_spineToSimplex_apply]
-    ext i
-    · exact ConcreteCategory.congr_hom (hm (StructuredArrow.mk
-        (Y := op ⦋0⦌₂) (⦋0⦌.const ⦋n⦌ i).op)) x
-    · exact ConcreteCategory.congr_hom (hm (.mk (Y := op ⦋1⦌₂)
-        (.op (mkOfLe _ _ (Fin.castSucc_le_succ i))))) x
+--- 原说明 ---
+A strict Segal simplicial set is 2-coskeletal.
 -/
-noncomputable def isPointwiseRightKanExtensionAt (n : Nat) :
+noncomputable def isPointwiseRightKanExtensionAt (n : ℕ) :
     (rightExtensionInclusion X 2).IsPointwiseRightKanExtensionAt ⟨⦋n⦌⟩ where
-  lift s := ↾fun x => lift sx s x
+  lift s := ↾fun x ↦ lift sx s x
   fac s j := by
     ext x
     obtain ⟨⟨i, hi⟩, ⟨f : _ ⟶ _⟩, rfl⟩ := j.mk_surjective
-    obtain ⟨i, rfl⟩ : exists j, ⦋j⦌ = i := ⟨_, i.mk_len⟩
+    obtain ⟨i, rfl⟩ : ∃ j, ⦋j⦌ = i := ⟨_, i.mk_len⟩
     dsimp at hi ⊢
     apply sx.spineInjective
     ext k
     · dsimp only [spineEquiv, Equiv.coe_fn_mk]
       rw [dsimp% show op f = f.op from rfl]
-      rw [spine_map_vertex]; rw [spine_spineToSimplex_apply]; rw [spine_vertex]
+      rw [spine_map_vertex, spine_spineToSimplex_apply, spine_vertex]
       let α : strArrowMk₂ f hi ⟶ strArrowMk₂ (⦋0⦌.const ⦋n⦌ (f.toOrderHom k)) :=
         StructuredArrow.homMk ((Hom.tr (⦋0⦌.const _ (by exact k))).op) (by simp; rfl)
       exact ConcreteCategory.congr_hom (s.w α).symm x
@@ -553,83 +287,73 @@ noncomputable def isPointwiseRightKanExtensionAt (n : Nat) :
     · exact ConcreteCategory.congr_hom (hm (.mk (Y := op ⦋1⦌₂)
         (.op (mkOfLe _ _ (Fin.castSucc_le_succ i))))) x
 
-/--
-Definition of `isPointwiseRightKanExtension` / `isPointwiseRightKanExtension` 的定义
+/-- Since `StrictSegal.isPointwiseRightKanExtensionAt` proves that the appropriate
+cones are limit cones, `rightExtensionInclusion X 2` is a pointwise right Kan extension. -/
+/-
+**SSet.StrictSegal.isPointwiseRightKanExtension** 是 Mathlib 中的一个定义，位于命名空间 `SSet.
+StrictSegal`。
+形式化陈述：isPointwiseRightKanExtension : (rightExtensionInclusion X 2).IsPointwiseRi
+ghtKanExtension
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isPointwiseRightKanExtension
-  signature: :
-  body: fun Δ => sx.isPointwiseRightKanExtensionAt Δ.unop.len
-
-中文:
-定义 isPointwiseRightKanExtension
-  签名: :
-  定义体: fun Δ => sx.isPointwiseRightKanExtensionAt Δ.unop.len
-
-Depends on / 依赖: isPointwiseRightKanExtensionAt, sx.isPointwiseRightKanExtensionAt, unop.len
+--- 原说明 ---
+Since `StrictSegal.isPointwiseRightKanExtensionAt` proves that the appropriate
+cones are limit cones, `rightExtensionInclusion X 2` is a pointwise right Kan ex
+tension.
 -/
 noncomputable def isPointwiseRightKanExtension :
     (rightExtensionInclusion X 2).IsPointwiseRightKanExtension :=
   fun Δ => sx.isPointwiseRightKanExtensionAt Δ.unop.len
-
-/--
-theorem `isRightKanExtension` / 定理 `isRightKanExtension`
-
-English:
-theorem isRightKanExtension
-  given: (sx : StrictSegal X)
-  proof: RightExtension.IsPointwiseRightKanExtension.isRightKanExtension
-    sx.isPointwiseRightKanExtension
-
-中文:
-定理 isRightKanExtension
-  条件: (sx : StrictSegal X)
-  证明: RightExtension.IsPointwiseRightKanExtension.isRightKanExtension
-    sx.isPointwiseRightKanExtension
-
-Depends on / 依赖: IsPointwiseRightKanExtension, RightExtension, RightExtension.IsPointwiseRightKanExtension.isRightKanExtension, isPointwiseRightKanExtension, isRightKanExtension, sx.isPointwiseRightKanExtension
+/-
+**SSet.StrictSegal.isRightKanExtension** 是 Mathlib 中的一个定理，位于命名空间 `SSet.StrictSeg
+al`。
+形式化陈述：isRightKanExtension (sx : StrictSegal X) : X.IsRightKanExtension (𝟙 ((incl
+usion 2).op ⋙ X))
+参数：sx : StrictSegal X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RightExtension.IsPointwiseRightKanExtension.isRig
+htKanExtension`：∀ {C : Type u_1} {D : Type u_2} {H : Type u_4} [inst : CategoryT
+heory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
 -/
 theorem isRightKanExtension (sx : StrictSegal X) :
     X.IsRightKanExtension (𝟙 ((inclusion 2).op ⋙ X)) :=
   RightExtension.IsPointwiseRightKanExtension.isRightKanExtension
     sx.isPointwiseRightKanExtension
 
-/--
-theorem `isCoskeletal` / 定理 `isCoskeletal`
+/-- When `X` is `StrictSegal`, `X` is 2-coskeletal. -/
+/-
+**SSet.StrictSegal.isCoskeletal** 是 Mathlib 中的一个定理，位于命名空间 `SSet.StrictSegal`。
+形式化陈述：isCoskeletal (sx : StrictSegal X) : SimplicialObject.IsCoskeletal X 2 wher
+e isRightKanExtension
+参数：sx : StrictSegal X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.StrictSegal.isRightKanExtension`：isRightKanExtension (sx : StrictSe
+gal X) : X.IsRightKanExtension (𝟙 ((inclusion 2).op ⋙ X))
 
-English:
-theorem isCoskeletal
-  given: (sx : StrictSegal X)
-  proof: sx.isRightKanExtension
-
-中文:
-定理 isCoskeletal
-  条件: (sx : StrictSegal X)
-  证明: sx.isRightKanExtension
-
-Depends on / 依赖: isRightKanExtension, sx.isRightKanExtension
+--- 原说明 ---
+When `X` is `StrictSegal`, `X` is 2-coskeletal.
 -/
 theorem isCoskeletal (sx : StrictSegal X) :
     SimplicialObject.IsCoskeletal X 2 where
   isRightKanExtension := sx.isRightKanExtension
 
-/--
-Instance `isCoskeletal'` / 实例 `isCoskeletal'`
+/-- When `X` satisfies `IsStrictSegal`, `X` is 2-coskeletal. -/
+/-
+**SSet.StrictSegal.isCoskeletal'** 是 Mathlib 中的一个实例，位于命名空间 `SSet.StrictSegal`。
+形式化陈述：isCoskeletal' [IsStrictSegal X] : SimplicialObject.IsCoskeletal X 2
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.StrictSegal.isCoskeletal`：isCoskeletal (sx : StrictSegal X) : Simpl
+icialObject.IsCoskeletal X 2 where isRightKanExtension
 
-English:
-instance isCoskeletal'
-  signature: [IsStrictSegal X]
-  body: isCoskeletal ofIsStrictSegal X
-
-中文:
-实例 isCoskeletal'
-  签名: [是StrictSegal X]
-  定义体: isCoskeletal ofIsStrictSegal X
-
-Depends on / 依赖: isCoskeletal, ofIsStrictSegal
+--- 原说明 ---
+When `X` satisfies `IsStrictSegal`, `X` is 2-coskeletal.
 -/
 instance isCoskeletal' [IsStrictSegal X] : SimplicialObject.IsCoskeletal X 2 :=
-isCoskeletal ofIsStrictSegal X
+  isCoskeletal <| ofIsStrictSegal X
 
 end StrictSegal
 
@@ -643,52 +367,55 @@ namespace Nerve
 
 open SSet
 
+/-
+**CategoryTheory.Nerve.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Nerve`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (C : Type u) [Category.{v} C] :
     SimplicialObject.IsCoskeletal (nerve C) 2 := inferInstance
 
-/--
-Definition of `nerveFunctor₂` / `nerveFunctor₂` 的定义
+/-- The essential data of the nerve functor is contained in the 2-truncation, which is
+recorded by the composite functor `nerveFunctor₂`. -/
+/-
+**CategoryTheory.Nerve.nerveFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ne
+rve`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nerveFunctor₂
-  signature: : Cat.{v, u} ⥤ SSet.Truncated 2
-  body: nerveFunctor ⋙ truncation 2
-
-中文:
-定义 nerveFunctor₂
-  签名: : Cat.{v, u} ⥤ SSet.Truncated 2
-  定义体: nerveFunctor ⋙ truncation 2
-
-Depends on / 依赖: nerveFunctor, truncation
+--- 原说明 ---
+The essential data of the nerve functor is contained in the 2-truncation, which 
+is
+recorded by the composite functor `nerveFunctor₂`.
 -/
 def nerveFunctor₂ : Cat.{v, u} ⥤ SSet.Truncated 2 := nerveFunctor ⋙ truncation 2
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Nerve.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Nerve`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Cat.{v, u}) : (nerveFunctor₂.obj X).IsStrictSegal := by
   dsimp [nerveFunctor₂]
   infer_instance
 
-/--
-Definition of `cosk₂Iso` / `cosk₂Iso` 的定义
+/-- The natural isomorphism between `nerveFunctor` and `nerveFunctor₂ ⋙ Truncated.cosk 2` whose
+components `nerve C ≅ (Truncated.cosk 2).obj (nerveFunctor₂.obj C)` shows that nerves of categories
+are 2-coskeletal. -/
+/-
+**CategoryTheory.Nerve.cosk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Nerve`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cosk₂Iso
-  signature: : nerveFunctor.{v, u} ≅ nerveFunctor₂.{v, u} ⋙ Truncated.cosk 2
-  body: NatIso.ofComponents (fun C => (nerve C).isoCoskOfIsCoskeletal 2)
-    (fun _ => (coskAdj 2).unit.naturality _)
-
-中文:
-定义 cosk₂Iso
-  签名: : nerveFunctor.{v, u} ≅ nerveFunctor₂.{v, u} ⋙ Truncated.cosk 2
-  定义体: NatIso.ofComponents (fun C => (nerve C).isoCoskOfIsCoskeletal 2)
-    (fun _ => (coskAdj 2).unit.naturality _)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, coskAdj, isoCoskOfIsCoskeletal, naturality, ofComponents, unit.naturality
+--- 原说明 ---
+The natural isomorphism between `nerveFunctor` and `nerveFunctor₂ ⋙ Truncated.co
+sk 2` whose
+components `nerve C ≅ (Truncated.cosk 2).obj (nerveFunctor₂.obj C)` shows that n
+erves of categories
+are 2-coskeletal.
 -/
 noncomputable def cosk₂Iso : nerveFunctor.{v, u} ≅ nerveFunctor₂.{v, u} ⋙ Truncated.cosk 2 :=
-  NatIso.ofComponents (fun C => (nerve C).isoCoskOfIsCoskeletal 2)
-    (fun _ => (coskAdj 2).unit.naturality _)
+  NatIso.ofComponents (fun C ↦ (nerve C).isoCoskOfIsCoskeletal 2)
+    (fun _ ↦ (coskAdj 2).unit.naturality _)
 
 end Nerve
 
 end CategoryTheory
+

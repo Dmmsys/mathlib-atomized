@@ -43,98 +43,62 @@ open Module
 variable (K : Type*) [Field K]
 variable (A : Type*) [Field A] [CharZero A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: K] [Algebra.IsAlgebraic Rat K] [IsAlgClosed A] : Nonempty (K ->+* A)
-  body: by
-  obtain ⟨f⟩ : Nonempty (K ->ₐ[Rat] A) := by
-    apply IntermediateField.nonempty_algHom_of_splits
-    exact fun x => ⟨Algebra.IsIntegral.isIntegral x, IsAlgClosed.splits _⟩
-  exact ⟨f.toRingHom⟩
-
-中文:
-实例 [特征零
-  签名: K] [代数.是代数 有理数 K] [是代数闭 A] : 非空 (K ->+* A)
-  定义体: by
-  obtain ⟨f⟩ : Nonempty (K ->ₐ[Rat] A) := by
-    apply IntermediateField.nonempty_algHom_of_splits
-    exact fun x => ⟨Algebra.IsIntegral.isIntegral x, IsAlgClosed.splits _⟩
-  exact ⟨f.toRingHom⟩
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IntermediateField, IntermediateField.nonempty_algHom_of_splits, IsAlgClosed, IsAlgClosed.splits, IsIntegral, Nonempty, f.toRingHom, isIntegral, nonempty_algHom_of_splits, splits, toRingHom
+/-
+**NumberField.Embeddings.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.Embeddings`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CharZero K] [Algebra.IsAlgebraic Rat K] [IsAlgClosed A] : Nonempty (K ->+* A) := by
-  obtain ⟨f⟩ : Nonempty (K ->ₐ[Rat] A) := by
+instance [CharZero K] [Algebra.IsAlgebraic ℚ K] [IsAlgClosed A] : Nonempty (K →+* A) := by
+  obtain ⟨f⟩ : Nonempty (K →ₐ[ℚ] A) := by
     apply IntermediateField.nonempty_algHom_of_splits
-    exact fun x => ⟨Algebra.IsIntegral.isIntegral x, IsAlgClosed.splits _⟩
+    exact fun x ↦ ⟨Algebra.IsIntegral.isIntegral x, IsAlgClosed.splits _⟩
   exact ⟨f.toRingHom⟩
 
 variable [NumberField K]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- There are finitely many embeddings of a number field. -/
+/-
+**NumberField.Embeddings.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.Embeddings`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Fintype (K ->+* A)
-  body: Fintype.ofEquiv (K ->ₐ[Rat] A) (RingHom.equivRatAlgHom K A).symm
-
-中文:
-实例 :
-  签名: 有限类型 (K ->+* A)
-  定义体: Fintype.ofEquiv (K ->ₐ[Rat] A) (RingHom.equivRatAlgHom K A).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, RingHom, RingHom.equivRatAlgHom, equivRatAlgHom, ofEquiv
+--- 原说明 ---
+There are finitely many embeddings of a number field.
 -/
-noncomputable instance : Fintype (K ->+* A) :=
-  Fintype.ofEquiv (K ->ₐ[Rat] A) (RingHom.equivRatAlgHom K A).symm
+noncomputable instance : Fintype (K →+* A) :=
+  Fintype.ofEquiv (K →ₐ[ℚ] A) (RingHom.equivRatAlgHom K A).symm
 
 variable [IsAlgClosed A]
 
-/--
-theorem `card` / 定理 `card`
+/-- The number of embeddings of a number field is equal to its finrank. -/
+/-
+**NumberField.Embeddings.card** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Embeddings`
+。
+形式化陈述：card : Fintype.card (K ->+* A) = finrank Rat K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fintype.ofEquiv_card`：ofEquiv_card [Fintype α] (f : α ≃ β) : @card β (of
+Equiv α f) = card α
+· 使用定理 `AlgHom.card`：AlgHom.card (K : Type*) [Field K] [IsAlgClosed K] [Algebra 
+F K] : Fintype.card (E ->ₐ[F] K) = finrank F E
 
-English:
-theorem card
-  statement: Fintype.card (K ->+* A) = finrank Rat K
-  proof: by
-  rw [Fintype.ofEquiv_card (RingHom.equivRatAlgHom K A).symm]; rw [AlgHom.card]
-
-中文:
-定理 card
-  结论: 有限类型.card (K ->+* A) = finrank 有理数 K
-  证明: by
-  rw [Fintype.ofEquiv_card (RingHom.equivRatAlgHom K A).symm]; rw [AlgHom.card]
-
-Depends on / 依赖: AlgHom, AlgHom.card, Fintype, Fintype.ofEquiv_card, RingHom, RingHom.equivRatAlgHom, equivRatAlgHom, ofEquiv_card
+--- 原说明 ---
+The number of embeddings of a number field is equal to its finrank.
 -/
-theorem card : Fintype.card (K ->+* A) = finrank Rat K := by
-  rw [Fintype.ofEquiv_card (RingHom.equivRatAlgHom K A).symm]; rw [AlgHom.card]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (K ->+* A)
-  body: by
-  rw [← Fintype.card_pos_iff]; rw [NumberField.Embeddings.card K A]
-  exact Module.finrank_pos
-
-中文:
-实例 :
-  签名: 非空 (K ->+* A)
-  定义体: by
-  rw [← Fintype.card_pos_iff]; rw [NumberField.Embeddings.card K A]
-  exact Module.finrank_pos
-
-Depends on / 依赖: Embeddings, Fintype, Fintype.card_pos_iff, Module, Module.finrank_pos, NumberField, NumberField.Embeddings.card, card_pos_iff, finrank_pos
+theorem card : Fintype.card (K →+* A) = finrank ℚ K := by
+  rw [Fintype.ofEquiv_card (RingHom.equivRatAlgHom K A).symm, AlgHom.card]
+/-
+**NumberField.Embeddings.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.Embeddings`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Nonempty (K ->+* A) := by
-  rw [← Fintype.card_pos_iff]; rw [NumberField.Embeddings.card K A]
+instance : Nonempty (K →+* A) := by
+  rw [← Fintype.card_pos_iff, NumberField.Embeddings.card K A]
   exact Module.finrank_pos
 
 end Fintype
@@ -143,29 +107,39 @@ section Roots
 
 open Set Polynomial
 
-variable (K A : Type*) [Field K] [NumberField K] [Field A] [Algebra Rat A] [IsAlgClosed A] (x : K)
+variable (K A : Type*) [Field K] [NumberField K] [Field A] [Algebra ℚ A] [IsAlgClosed A] (x : K)
 
-/--
-theorem `range_eval_eq_rootSet_minpoly` / 定理 `range_eval_eq_rootSet_minpoly`
+/-- Let `A` be an algebraically closed field and let `x ∈ K`, with `K` a number field.
+The images of `x` by the embeddings of `K` in `A` are exactly the roots in `A` of
+the minimal polynomial of `x` over `ℚ`. -/
+/-
+**NumberField.Embeddings.range_eval_eq_rootSet_minpoly** 是 Mathlib 中的一个定理，位于命名空间
+ `NumberField.Embeddings`。
+形式化陈述：range_eval_eq_rootSet_minpoly : (range fun φ : K ->+* A => φ x) = (minpoly
+ Rat x).rootSet A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly`：Algebra.IsAlgebraic.r
+ange_eval_eq_rootSet_minpoly [IsAlgClosed A] (x : K) : (Set.range fun ψ : K ->ₐ[
+F] A => ψ x) = (minpoly F x).rootSet A
+· 使用定理 `NumberField.isAlgebraic`：∀ (K : Type u_1) [inst : Field K] [inst_1 : Num
+berField K], Algebra.IsAlgebraic ℚ K
 
-English:
-theorem range_eval_eq_rootSet_minpoly
-  proof: by
-  convert! (NumberField.isAlgebraic K).range_eval_eq_rootSet_minpoly A x using 1
-  ext a
-  exact ⟨fun ⟨φ, hφ⟩ => ⟨φ.toRatAlgHom, hφ⟩, fun ⟨φ, hφ⟩ => ⟨φ.toRingHom, hφ⟩⟩
-
-中文:
-定理 range_eval_eq_rootSet_minpoly
-  证明: by
-  convert! (NumberField.isAlgebraic K).range_eval_eq_rootSet_minpoly A x using 1
-  ext a
-  exact ⟨fun ⟨φ, hφ⟩ => ⟨φ.toRatAlgHom, hφ⟩, fun ⟨φ, hφ⟩ => ⟨φ.toRingHom, hφ⟩⟩
-
-Depends on / 依赖: NumberField, NumberField.isAlgebraic, convert, isAlgebraic, range_eval_eq_rootSet_minpoly, toRatAlgHom, toRingHom
+--- 原说明 ---
+Let `A` be an algebraically closed field and let `x ∈ K`, with `K` a number fiel
+d.
+The images of `x` by the embeddings of `K` in `A` are exactly the roots in `A` o
+f
+the minimal polynomial of `x` over `ℚ`.
 -/
 theorem range_eval_eq_rootSet_minpoly :
-    (range fun φ : K ->+* A => φ x) = (minpoly Rat x).rootSet A := by
+    (range fun φ : K →+* A => φ x) = (minpoly ℚ x).rootSet A := by
   convert! (NumberField.isAlgebraic K).range_eval_eq_rootSet_minpoly A x using 1
   ext a
   exact ⟨fun ⟨φ, hφ⟩ => ⟨φ.toRatAlgHom, hφ⟩, fun ⟨φ, hφ⟩ => ⟨φ.toRingHom, hφ⟩⟩
@@ -177,43 +151,68 @@ section Bounded
 open Module Polynomial Set
 
 variable {K : Type*} [Field K] [NumberField K]
-variable {A : Type*} [NormedField A] [IsAlgClosed A] [NormedAlgebra Rat A]
+variable {A : Type*} [NormedField A] [IsAlgClosed A] [NormedAlgebra ℚ A]
 
-/--
-theorem `coeff_bdd_of_norm_le` / 定理 `coeff_bdd_of_norm_le`
-
-English:
-theorem coeff_bdd_of_norm_le
-  given: {B : Real} {x : K} (h : forall φ : K ->+* A, ‖φ x‖ <= B) (i : Nat)
-  proof: by
-  have hx := Algebra.IsSeparable.isIntegral Rat x
-  rw [← norm_algebraMap' A]; rw [← coeff_map (algebraMap Rat A)]
-  refine coeff_bdd_of_roots_le _ (minpoly.monic hx)
-      (IsAlgClosed.splits _) (minpoly.natDegree_le x) (fun z hz => ?_) i
-  classical
-  rw [← Multiset.mem_toFinset] at hz
-  obtain ⟨φ, rfl⟩ := (range_eval_eq_rootSet_minpoly K A x).symm.subset hz
-  exact h φ
-
-中文:
-定理 coeff_bdd_of_norm_le
-  条件: {B : 实数} {x : K} (h : 对任意 φ : K ->+* A, ‖φ x‖ <= B) (i : 自然数)
-  证明: by
-  have hx := Algebra.IsSeparable.isIntegral Rat x
-  rw [← norm_algebraMap' A]; rw [← coeff_map (algebraMap Rat A)]
-  refine coeff_bdd_of_roots_le _ (minpoly.monic hx)
-      (IsAlgClosed.splits _) (minpoly.natDegree_le x) (fun z hz => ?_) i
-  classical
-  rw [← Multiset.mem_toFinset] at hz
-  obtain ⟨φ, rfl⟩ := (range_eval_eq_rootSet_minpoly K A x).symm.subset hz
-  exact h φ
-
-Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, IsAlgClosed, IsAlgClosed.splits, IsSeparable, Multiset, Multiset.mem_toFinset, algebraMap, classical, coeff_bdd_of_roots_le, coeff_map, isIntegral, mem_toFinset, minpoly, minpoly.monic, minpoly.natDegree_le, natDegree_le, norm_algebraMap, range_eval_eq_rootSet_minpoly, splits
+/-
+**NumberField.Embeddings.coeff_bdd_of_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.Embeddings`。
+形式化陈述：coeff_bdd_of_norm_le {B : Real} {x : K} (h : forall φ : K ->+* A, ‖φ x‖ <=
+ B) (i : Nat) : ‖(minpoly Rat x).coeff i‖ <= max B 1 ^ finrank Rat K * (finrank 
+Rat K).choose (finrank Rat K / 2)
+参数：h : forall φ : K ->+* A, ‖φ x‖ <= B；i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Algebra.IsSeparable.isIntegral`：Algebra.IsSeparable.isIntegral [Algebra.
+IsSeparable F K] : forall x : K, IsIntegral F x
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Polynomial.coeff_map`：coeff_map (n : Nat) : coeff (p.map f) n = f (coeff
+ p n)
+· 使用定理 `Polynomial.coeff_bdd_of_roots_le`：coeff_bdd_of_roots_le {B : Real} {d : 
+Nat} (f : F ->+* K) {p : F[X]} (h1 : p.Monic) (h2 : Splits (p.map f)) (h3 : p.na
+tDegree <= d) (h4 : fo…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `IsAlgClosed.splits`：∀ {k : Type u} {inst : Field k} [self : IsAlgClosed 
+k] (p : Polynomial k), p.Splits
+· 使用定理 `minpoly.natDegree_le`：natDegree_le [Module.Free A B] : (minpoly A x).nat
+Degree <= Module.finrank A B
+· 使用定理 `instIsPrincipalIdealRingOfIsSemisimpleRing`：∀ {R : Type u_2} [inst : Rin
+g R] [IsSemisimpleRing R], IsPrincipalIdealRing R
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `NumberField.Embeddings.range_eval_eq_rootSet_minpoly`：range_eval_eq_root
+Set_minpoly : (range fun φ : K ->+* A => φ x) = (minpoly Rat x).rootSet A
+· 使用定理 `Multiset.mem_toFinset`：mem_toFinset {a : α} {s : Multiset α} : a in s.to
+Finset ↔ a in s
 -/
-theorem coeff_bdd_of_norm_le {B : Real} {x : K} (h : forall φ : K ->+* A, ‖φ x‖ <= B) (i : Nat) :
-    ‖(minpoly Rat x).coeff i‖ <= max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2) := by
-  have hx := Algebra.IsSeparable.isIntegral Rat x
-  rw [← norm_algebraMap' A]; rw [← coeff_map (algebraMap Rat A)]
+theorem coeff_bdd_of_norm_le {B : ℝ} {x : K} (h : ∀ φ : K →+* A, ‖φ x‖ ≤ B) (i : ℕ) :
+    ‖(minpoly ℚ x).coeff i‖ ≤ max B 1 ^ finrank ℚ K * (finrank ℚ K).choose (finrank ℚ K / 2) := by
+  have hx := Algebra.IsSeparable.isIntegral ℚ x
+  rw [← norm_algebraMap' A, ← coeff_map (algebraMap ℚ A)]
   refine coeff_bdd_of_roots_le _ (minpoly.monic hx)
       (IsAlgClosed.splits _) (minpoly.natDegree_le x) (fun z hz => ?_) i
   classical
@@ -223,135 +222,234 @@ theorem coeff_bdd_of_norm_le {B : Real} {x : K} (h : forall φ : K ->+* A, ‖φ
 
 variable (K A)
 
-/--
-theorem `finite_of_norm_le` / 定理 `finite_of_norm_le`
+/-- Let `B` be a real number. The set of algebraic integers in `K` whose conjugates are all
+smaller in norm than `B` is finite. -/
+/-
+**NumberField.Embeddings.finite_of_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.Embeddings`。
+形式化陈述：finite_of_norm_le (B : Real) : {x : K | IsIntegral Int x ∧ forall φ : K ->
++* A, ‖φ x‖ <= B}.Finite
+参数：B : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.bUnion_roots_finite`：bUnion_roots_finite {R S : Type*} [Semir
+ing R] [CommRing S] [IsDomain S] [DecidableEq S] (m : R ->+* S) (d : Nat) {U : S
+et R} (h : U.Finite)…
+· 使用引理 `Set.finite_Icc`：finite_Icc : (Icc a b).Finite
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `minpoly.isIntegrallyClosed_eq_field_fractions'`：isIntegrallyClosed_eq_fi
+eld_fractions' [IsDomain S] [Algebra K S] [IsScalarTower R K S] {s : S} (hs : Is
+Integral R s) : minpoly K s = (minpo…
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `IsDedekindRing.toIsIntegralClosure`：∀ {A : Type u_2} {inst : CommRing A}
+ [self : IsDedekindRing A], IsIntegralClosure A A (FractionRing A)
+· 使用定理 `IsDedekindDomain.toIsDedekindRing`：∀ {A : Type u_2} {inst : CommRing A} 
+[self : IsDedekindDomain A], IsDedekindRing A
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.Monic.natDegree_map`：∀ {R : Type u} {S : Type v} [inst : Semi
+ring R] [inst_1 : Semiring S] [Nontrivial S] {P : Polynomial R},   P.Monic → ∀ (
+f : R →+* S), (Polyn…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `minpoly.natDegree_le`：natDegree_le [Module.Free A B] : (minpoly A x).nat
+Degree <= Module.finrank A B
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `instIsPrincipalIdealRingOfIsSemisimpleRing`：∀ {R : Type u_2} [inst : Rin
+g R] [IsSemisimpleRing R], IsPrincipalIdealRing R
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Set.mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+cc a b ↔ a ≤ x ∧ x ≤ b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `Int.cast_le`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : P
+artialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {m n : ℤ}, ↑m ≤ ↑
+n…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+（共 47 条，此处仅展示前 30 条）
 
-English:
-theorem finite_of_norm_le
-  given: (B : Real)
-  statement: {x : K | IsIntegral Int x ∧ forall φ : K ->+* A, ‖φ x‖ <= B}.Finite
-  proof: by
-  classical
-  let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
-  have := bUnion_roots_finite (algebraMap Int K) (finrank Rat K) (finite_Icc (-C : Int) C)
-  refine this.subset fun x hx => ?_; simp_rw [mem_iUnion]
-  have h_map_Rat_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx.1
-  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval Int x⟩⟩
-  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap Int Rat), ← h_map_Rat_minpoly]
-    exact minpoly.natDegree_le x
-  rw [mem_Icc]; rw [← abs_le]; rw [← @Int.cast_le Real]
-  refine (Eq.trans_le ?_ <| coeff_bdd_of_norm_le hx.2 i).trans (Nat.le_ceil _)
-  rw [h_map_Rat_minpoly]; rw [coeff_map]; rw [eq_intCast]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
-
-中文:
-定理 finite_of_norm_le
-  条件: (B : 实数)
-  结论: {x : K | 是整 整数 x ∧ 对任意 φ : K ->+* A, ‖φ x‖ <= B}.有限
-  证明: by
-  classical
-  let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
-  have := bUnion_roots_finite (algebraMap Int K) (finrank Rat K) (finite_Icc (-C : Int) C)
-  refine this.subset fun x hx => ?_; simp_rw [mem_iUnion]
-  have h_map_Rat_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx.1
-  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval Int x⟩⟩
-  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap Int Rat), ← h_map_Rat_minpoly]
-    exact minpoly.natDegree_le x
-  rw [mem_Icc]; rw [← abs_le]; rw [← @Int.cast_le Real]
-  refine (Eq.trans_le ?_ <| coeff_bdd_of_norm_le hx.2 i).trans (Nat.le_ceil _)
-  rw [h_map_Rat_minpoly]; rw [coeff_map]; rw [eq_intCast]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
-
-Depends on / 依赖: Nat.ceil, algebraMap, bUnion_roots_finite, classical, finite_Icc, finrank, h_map_Rat_minpo, h_map_Rat_minpoly, isIntegrallyClosed_eq_field_fractions, mem_iUnion, mem_rootSet, minpoly, minpoly.aeval, minpoly.isIntegrallyClosed_eq_field_fractions, minpoly.monic, minpoly.ne_zero, natDegree_map, ne_zero, simp_rw, subset
+--- 原说明 ---
+Let `B` be a real number. The set of algebraic integers in `K` whose conjugates 
+are all
+smaller in norm than `B` is finite.
 -/
-theorem finite_of_norm_le (B : Real) : {x : K | IsIntegral Int x ∧ forall φ : K ->+* A, ‖φ x‖ <= B}.Finite := by
+theorem finite_of_norm_le (B : ℝ) : {x : K | IsIntegral ℤ x ∧ ∀ φ : K →+* A, ‖φ x‖ ≤ B}.Finite := by
   classical
-  let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
-  have := bUnion_roots_finite (algebraMap Int K) (finrank Rat K) (finite_Icc (-C : Int) C)
+  let C := Nat.ceil (max B 1 ^ finrank ℚ K * (finrank ℚ K).choose (finrank ℚ K / 2))
+  have := bUnion_roots_finite (algebraMap ℤ K) (finrank ℚ K) (finite_Icc (-C : ℤ) C)
   refine this.subset fun x hx => ?_; simp_rw [mem_iUnion]
-  have h_map_Rat_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx.1
-  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval Int x⟩⟩
-  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap Int Rat), ← h_map_Rat_minpoly]
+  have h_map_ℚ_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' ℚ hx.1
+  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval ℤ x⟩⟩
+  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap ℤ ℚ), ← h_map_ℚ_minpoly]
     exact minpoly.natDegree_le x
-  rw [mem_Icc]; rw [← abs_le]; rw [← @Int.cast_le Real]
+  rw [mem_Icc, ← abs_le, ← @Int.cast_le ℝ]
   refine (Eq.trans_le ?_ <| coeff_bdd_of_norm_le hx.2 i).trans (Nat.le_ceil _)
-  rw [h_map_Rat_minpoly]; rw [coeff_map]; rw [eq_intCast]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
+  rw [h_map_ℚ_minpoly, coeff_map, eq_intCast, Int.norm_cast_rat, Int.norm_eq_abs, Int.cast_abs]
 
-/--
-theorem `pow_eq_one_of_norm_le_one` / 定理 `pow_eq_one_of_norm_le_one`
+/-- **Kronecker's Theorem:** A non-zero algebraic integer whose conjugates are all inside the closed
+unit disk is a root of unity. -/
+/-
+**NumberField.Embeddings.pow_eq_one_of_norm_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.Embeddings`。
+形式化陈述：pow_eq_one_of_norm_le_one {x : K} (hx₀ : x != 0) (hxi : IsIntegral Int x) 
+(hx : forall φ : K ->+* A, ‖φ x‖ <= 1) : exists (n : Nat) (_ : 0 < n), x ^ n = 1
+参数：hx₀ : x != 0；hxi : IsIntegral Int x；hx : forall φ : K ->+* A, ‖φ x‖ <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.exists_ne_map_eq_of_mapsTo`：∀ {α : Type u} {β : Type v} {s 
+: Set α} {t : Set β} {f : α → β},   s.Infinite → Set.MapsTo f s t → t.Finite → ∃
+ x ∈ s, ∃ y ∈ s, x ≠ y ∧ f x …
+· 使用定理 `Set.infinite_univ`：infinite_univ [h : Infinite α] : (@univ α).Infinite
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `IsIntegral.pow`：IsIntegral.pow {x : B} (h : IsIntegral R x) (n : Nat) : 
+IsIntegral R (x ^ n)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `norm_pow`：norm_pow (a : α) : forall n : Nat, ‖a ^ n‖ = ‖a‖ ^ n
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `pow_le_one₀`：pow_le_one₀ [PosMulMono M₀] {n : Nat} (ha₀ : 0 <= a) (ha₁ :
+ a <= 1) : a ^ n <= 1
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `NumberField.Embeddings.finite_of_norm_le`：finite_of_norm_le (B : Real) :
+ {x : K | IsIntegral Int x ∧ forall φ : K ->+* A, ‖φ x‖ <= B}.Finite
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `tsub_pos_of_lt`：tsub_pos_of_lt (h : a < b) : 0 < b - a
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `mul_left_eq_self₀`：mul_left_eq_self₀ [IsRightCancelMulZero M₀] : a * b =
+ b ↔ a = 1 ∨ b = 0
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 37 条，此处仅展示前 30 条）
 
-English:
-theorem pow_eq_one_of_norm_le_one
-  statement: {x : K} (hx₀ : x != 0) (hxi : IsIntegral Int x)
-  proof: by
+--- 原说明 ---
+**Kronecker's Theorem:** A non-zero algebraic integer whose conjugates are all i
+nside the closed
+unit disk is a root of unity.
+-/
+theorem pow_eq_one_of_norm_le_one {x : K} (hx₀ : x ≠ 0) (hxi : IsIntegral ℤ x)
+    (hx : ∀ φ : K →+* A, ‖φ x‖ ≤ 1) : ∃ (n : ℕ) (_ : 0 < n), x ^ n = 1 := by
   obtain ⟨a, -, b, -, habne, h⟩ :=
-    Set.Infinite.exists_ne_map_eq_of_mapsTo (f := (x ^ · : Nat -> K)) Set.infinite_univ
+    Set.Infinite.exists_ne_map_eq_of_mapsTo (f := (x ^ · : ℕ → K)) Set.infinite_univ
       (fun a _ => mem_ofPred.mpr <|
         ⟨hxi.pow a, fun φ => by simp [pow_le_one₀ (norm_nonneg (φ x)) <| hx φ]⟩)
-      (finite_of_norm_le K A (1 : Real))
+      (finite_of_norm_le K A (1 : ℝ))
   wlog hlt : b < a
   · exact this K A hx₀ hxi hx b a habne.symm h.symm (habne.lt_or_gt.resolve_right hlt)
   refine ⟨a - b, tsub_pos_of_lt hlt, ?_⟩
-  rw [← Nat.sub_add_cancel hlt.le]; rw [pow_add]; rw [mul_left_eq_self₀] at h
-  refine h.resolve_right fun hp => hx₀ (eq_zero_of_pow_eq_zero hp)
+  rw [← Nat.sub_add_cancel hlt.le, pow_add, mul_left_eq_self₀] at h
+  refine h.resolve_right fun hp ↦ hx₀ (eq_zero_of_pow_eq_zero hp)
 
-中文:
-定理 pow_eq_one_of_norm_le_one
-  结论: {x : K} (hx₀ : x != 0) (hxi : 是整 整数 x)
-  证明: by
-  obtain ⟨a, -, b, -, habne, h⟩ :=
-    Set.Infinite.exists_ne_map_eq_of_mapsTo (f := (x ^ · : Nat -> K)) Set.infinite_univ
-      (fun a _ => mem_ofPred.mpr <|
-        ⟨hxi.pow a, fun φ => by simp [pow_le_one₀ (norm_nonneg (φ x)) <| hx φ]⟩)
-      (finite_of_norm_le K A (1 : Real))
-  wlog hlt : b < a
-  · exact this K A hx₀ hxi hx b a habne.symm h.symm (habne.lt_or_gt.resolve_right hlt)
-  refine ⟨a - b, tsub_pos_of_lt hlt, ?_⟩
-  rw [← Nat.sub_add_cancel hlt.le]; rw [pow_add]; rw [mul_left_eq_self₀] at h
-  refine h.resolve_right fun hp => hx₀ (eq_zero_of_pow_eq_zero hp)
+/-- An algebraic integer whose conjugates are all of norm one is a root of unity. -/
+/-
+**NumberField.Embeddings.pow_eq_one_of_norm_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.Embeddings`。
+形式化陈述：pow_eq_one_of_norm_eq_one {x : K} (hxi : IsIntegral Int x) (hx : forall φ 
+: K ->+* A, ‖φ x‖ = 1) : exists (n : Nat) (_ : 0 < n), x ^ n = 1
+参数：hxi : IsIntegral Int x；hx : forall φ : K ->+* A, ‖φ x‖ = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Embeddings.pow_eq_one_of_norm_le_one`：pow_eq_one_of_norm_le_
+one {x : K} (hx₀ : x != 0) (hxi : IsIntegral Int x) (hx : forall φ : K ->+* A, ‖
+φ x‖ <= 1) : exists (n : Nat) (_ : 0 <…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 
-Depends on / 依赖: Infinite, Nat.sub_add_cancel, Set.Infinite.exists_ne_map_eq_of_mapsTo, Set.infinite_univ, exists_ne_map_eq_of_mapsTo, finite_of_norm_le, h.resolve_right, h.symm, habne.lt_or_gt.resolve_right, habne.symm, hlt.le, hxi.pow, infinite_univ, lt_or_gt, mem_ofPred, mem_ofPred.mpr, norm_nonneg, pow_add, resolve_right, sub_add_cancel
+--- 原说明 ---
+An algebraic integer whose conjugates are all of norm one is a root of unity.
 -/
-theorem pow_eq_one_of_norm_le_one {x : K} (hx₀ : x != 0) (hxi : IsIntegral Int x)
-    (hx : forall φ : K ->+* A, ‖φ x‖ <= 1) : exists (n : Nat) (_ : 0 < n), x ^ n = 1 := by
-  obtain ⟨a, -, b, -, habne, h⟩ :=
-    Set.Infinite.exists_ne_map_eq_of_mapsTo (f := (x ^ · : Nat -> K)) Set.infinite_univ
-      (fun a _ => mem_ofPred.mpr <|
-        ⟨hxi.pow a, fun φ => by simp [pow_le_one₀ (norm_nonneg (φ x)) <| hx φ]⟩)
-      (finite_of_norm_le K A (1 : Real))
-  wlog hlt : b < a
-  · exact this K A hx₀ hxi hx b a habne.symm h.symm (habne.lt_or_gt.resolve_right hlt)
-  refine ⟨a - b, tsub_pos_of_lt hlt, ?_⟩
-  rw [← Nat.sub_add_cancel hlt.le]; rw [pow_add]; rw [mul_left_eq_self₀] at h
-  refine h.resolve_right fun hp => hx₀ (eq_zero_of_pow_eq_zero hp)
-
-/--
-theorem `pow_eq_one_of_norm_eq_one` / 定理 `pow_eq_one_of_norm_eq_one`
-
-English:
-theorem pow_eq_one_of_norm_eq_one
-  given: {x : K} (hxi : IsIntegral Int x) (hx : forall φ : K ->+* A, ‖φ x‖ = 1)
-  proof: by
-apply pow_eq_one_of_norm_le_one K A _ hxi fun φ => le_of_eq hx φ
+theorem pow_eq_one_of_norm_eq_one {x : K} (hxi : IsIntegral ℤ x) (hx : ∀ φ : K →+* A, ‖φ x‖ = 1) :
+    ∃ (n : ℕ) (_ : 0 < n), x ^ n = 1 := by
+  apply pow_eq_one_of_norm_le_one K A _ hxi fun φ ↦ le_of_eq <| hx φ
   intro rfl
   simp_rw [map_zero, norm_zero, zero_ne_one] at hx
-  exact hx (IsAlgClosed.lift (R := Rat)).toRingHom
-
-中文:
-定理 pow_eq_one_of_norm_eq_one
-  条件: {x : K} (hxi : 是整 整数 x) (hx : 对任意 φ : K ->+* A, ‖φ x‖ = 1)
-  证明: by
-apply pow_eq_one_of_norm_le_one K A _ hxi fun φ => le_of_eq hx φ
-  intro rfl
-  simp_rw [map_zero, norm_zero, zero_ne_one] at hx
-  exact hx (IsAlgClosed.lift (R := Rat)).toRingHom
-
-Depends on / 依赖: IsAlgClosed, IsAlgClosed.lift, le_of_eq, map_zero, norm_zero, pow_eq_one_of_norm_le_one, simp_rw, toRingHom, zero_ne_one
--/
-theorem pow_eq_one_of_norm_eq_one {x : K} (hxi : IsIntegral Int x) (hx : forall φ : K ->+* A, ‖φ x‖ = 1) :
-    exists (n : Nat) (_ : 0 < n), x ^ n = 1 := by
-apply pow_eq_one_of_norm_le_one K A _ hxi fun φ => le_of_eq hx φ
-  intro rfl
-  simp_rw [map_zero, norm_zero, zero_ne_one] at hx
-  exact hx (IsAlgClosed.lift (R := Rat)).toRingHom
+  exact hx (IsAlgClosed.lift (R := ℚ)).toRingHom
 
 end Bounded
 
@@ -359,45 +457,28 @@ end NumberField.Embeddings
 
 section Place
 
-variable {K : Type*} [Field K] {A : Type*} [NormedDivisionRing A] (φ : K ->+* A)
+variable {K : Type*} [Field K] {A : Type*} [NormedDivisionRing A] (φ : K →+* A)
 
-/--
-Definition of `NumberField.place` / `NumberField.place` 的定义
+/-- An embedding into a normed division ring defines a place of `K` -/
+/-
+**NumberField.place** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：NumberField.place : AbsoluteValue K Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NumberField.place
-  signature: : AbsoluteValue K Real
-  body: (IsAbsoluteValue.toAbsoluteValue (norm : A -> Real)).comp φ.injective
-
-@[simp]
-
-中文:
-定义 数域.place
-  签名: : 绝对值 K 实数
-  定义体: (IsAbsoluteValue.toAbsoluteValue (norm : A -> Real)).comp φ.injective
-
-@[simp]
-
-Depends on / 依赖: IsAbsoluteValue, IsAbsoluteValue.toAbsoluteValue, injective, toAbsoluteValue
+--- 原说明 ---
+An embedding into a normed division ring defines a place of `K`
 -/
-def NumberField.place : AbsoluteValue K Real :=
-  (IsAbsoluteValue.toAbsoluteValue (norm : A -> Real)).comp φ.injective
+def NumberField.place : AbsoluteValue K ℝ :=
+  (IsAbsoluteValue.toAbsoluteValue (norm : A → ℝ)).comp φ.injective
 
 @[simp]
-/--
-theorem `NumberField.place_apply` / 定理 `NumberField.place_apply`
-
-English:
-theorem NumberField.place_apply
-  given: (x : K)
-  statement: (NumberField.place φ) x = norm (φ x)
-  proof: rfl
-
-中文:
-定理 数域.place_apply
-  条件: (x : K)
-  结论: (数域.place φ) x = norm (φ x)
-  证明: rfl
+/-
+**NumberField.place_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NumberField.place_apply (x : K) : (NumberField.place φ) x = norm (φ x)
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem NumberField.place_apply (x : K) : (NumberField.place φ) x = norm (φ x) := rfl
 
@@ -412,271 +493,205 @@ open scoped ComplexConjugate
 variable (K : Type*) [Field K] {k : Type*} [Field k]
 
 /--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex)
-  body: by
-  letI := φ.toAlgebra
-  exact (IsAlgClosed.lift (R := k)).toRingHom
-
-@[simp]
-
-中文:
-定义 lift
-  签名: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形)
-  定义体: by
-  letI := φ.toAlgebra
-  exact (IsAlgClosed.lift (R := k)).toRingHom
-
-@[simp]
-
-Depends on / 依赖: IsAlgClosed, IsAlgClosed.lift, toAlgebra, toRingHom
+A (random) lift of the complex embedding `φ : k →+* ℂ` to an extension `K` of `k`.
 -/
-noncomputable def lift [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) : K ->+* Complex := by
+/-
+**NumberField.ComplexEmbedding.lift** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Compl
+exEmbedding`。
+形式化陈述：lift [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) : K ->+*
+ Complex
+参数：φ : k ->+* Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A (random) lift of the complex embedding `φ : k →+* ℂ` to an extension `K` of `k
+`.
+-/
+noncomputable def lift [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k →+* ℂ) : K →+* ℂ := by
   letI := φ.toAlgebra
   exact (IsAlgClosed.lift (R := k)).toRingHom
 
 @[simp]
-/--
-theorem `lift_comp_algebraMap` / 定理 `lift_comp_algebraMap`
-
-English:
-theorem lift_comp_algebraMap
-  given: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex)
-  proof: by
-  unfold lift
-  let := φ.toAlgebra
-  rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_algebraMap_of_tower]; rw [RingHom.algebraMap_toAlgebra']
-
-@[simp]
-
-中文:
-定理 lift_comp_algebraMap
-  条件: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形)
-  证明: by
-  unfold lift
-  let := φ.toAlgebra
-  rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_algebraMap_of_tower]; rw [RingHom.algebraMap_toAlgebra']
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.comp_algebraMap_of_tower, AlgHom.toRingHom_eq_coe, RingHom, RingHom.algebraMap_toAlgebra, algebraMap_toAlgebra, comp_algebraMap_of_tower, toAlgebra, toRingHom_eq_coe
+/-
+**NumberField.ComplexEmbedding.lift_comp_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `N
+umberField.ComplexEmbedding`。
+形式化陈述：lift_comp_algebraMap [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* C
+omplex) : (lift K φ).comp (algebraMap k K) = φ
+参数：φ : k ->+* Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.toRingHom_eq_coe`：toRingHom_eq_coe (f : A ->ₐ[R] B) : f.toRingHom
+ = f
+· 使用定理 `AlgHom.comp_algebraMap_of_tower`：∀ (R : Type u) {S : Type v} {A : Type w
+} {B : Type u₁} [inst : CommSemiring R] [inst_1 : CommSemiring S]   [inst_2 : Se
+miring A] [inst_3 : S…
+· 使用定理 `RingHom.algebraMap_toAlgebra'`：RingHom.algebraMap_toAlgebra' {R S} [Comm
+Semiring R] [Semiring S] (i : R ->+* S) (h : forall c x, i c * x = x * i c) : @a
+lgebraMap R S _ _ (…
 -/
-theorem lift_comp_algebraMap [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) :
+theorem lift_comp_algebraMap [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k →+* ℂ) :
     (lift K φ).comp (algebraMap k K) = φ := by
   unfold lift
   let := φ.toAlgebra
-  rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_algebraMap_of_tower]; rw [RingHom.algebraMap_toAlgebra']
+  rw [AlgHom.toRingHom_eq_coe, AlgHom.comp_algebraMap_of_tower, RingHom.algebraMap_toAlgebra']
 
 @[simp]
-/--
-theorem `lift_algebraMap_apply` / 定理 `lift_algebraMap_apply`
-
-English:
-theorem lift_algebraMap_apply
-  given: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) (x : k)
-  proof: RingHom.congr_fun (lift_comp_algebraMap K φ) x
-
-中文:
-定理 lift_algebraMap_apply
-  条件: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形) (x : k)
-  证明: RingHom.congr_fun (lift_comp_algebraMap K φ) x
-
-Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun, lift_comp_algebraMap
+/-
+**NumberField.ComplexEmbedding.lift_algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.ComplexEmbedding`。
+形式化陈述：lift_algebraMap_apply [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* 
+Complex) (x : k) : lift K φ (algebraMap k K x) = φ x
+参数：φ : k ->+* Complex；x : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
+· 使用定理 `NumberField.ComplexEmbedding.lift_comp_algebraMap`：lift_comp_algebraMap 
+[Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) : (lift K φ).comp (
+algebraMap k K) = φ
 -/
-theorem lift_algebraMap_apply [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) (x : k) :
+theorem lift_algebraMap_apply [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k →+* ℂ) (x : k) :
     lift K φ (algebraMap k K x) = φ x :=
   RingHom.congr_fun (lift_comp_algebraMap K φ) x
 
 variable {K}
 
-/--
-Definition of `conjugate` / `conjugate` 的定义
+/-- The conjugate of a complex embedding as a complex embedding. -/
+/-
+**NumberField.ComplexEmbedding.conjugate** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberFiel
+d.ComplexEmbedding`。
+形式化陈述：conjugate (φ : K ->+* Complex) : K ->+* Complex
+参数：φ : K ->+* Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation conjugate
-  signature: (φ : K ->+* Complex)
-  body: star φ
-
-@[simp]
-
-中文:
-缩写 conjugate
-  签名: (φ : K ->+* 复形)
-  定义体: star φ
-
-@[simp]
+--- 原说明 ---
+The conjugate of a complex embedding as a complex embedding.
 -/
-abbrev conjugate (φ : K ->+* Complex) : K ->+* Complex := star φ
+abbrev conjugate (φ : K →+* ℂ) : K →+* ℂ := star φ
 
 @[simp]
-/--
-theorem `conjugate_comp` / 定理 `conjugate_comp`
-
-English:
-theorem conjugate_comp
-  given: (φ : K ->+* Complex) (σ : k ->+* K)
-  proof: rfl
-
-中文:
-定理 conjugate_comp
-  条件: (φ : K ->+* 复形) (σ : k ->+* K)
-  证明: rfl
+/-
+**NumberField.ComplexEmbedding.conjugate_comp** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.ComplexEmbedding`。
+形式化陈述：conjugate_comp (φ : K ->+* Complex) (σ : k ->+* K) : (conjugate φ).comp σ 
+= conjugate (φ.comp σ)
+参数：φ : K ->+* Complex；σ : k ->+* K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conjugate_comp (φ : K ->+* Complex) (σ : k ->+* K) :
+theorem conjugate_comp (φ : K →+* ℂ) (σ : k →+* K) :
     (conjugate φ).comp σ = conjugate (φ.comp σ) :=
   rfl
 
 variable (K) in
-/--
-theorem `involutive_conjugate` / 定理 `involutive_conjugate`
-
-English:
-theorem involutive_conjugate
-  proof: by
-  intro; simp
-
-@[simp]
-
-中文:
-定理 involutive_conjugate
-  证明: by
-  intro; simp
-
-@[simp]
+/-
+**NumberField.ComplexEmbedding.involutive_conjugate** 是 Mathlib 中的一个定理，位于命名空间 `N
+umberField.ComplexEmbedding`。
+形式化陈述：involutive_conjugate : Function.Involutive (conjugate : (K ->+* Complex) -
+> (K ->+* Complex))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem involutive_conjugate :
-    Function.Involutive (conjugate : (K ->+* Complex) -> (K ->+* Complex)) := by
+    Function.Involutive (conjugate : (K →+* ℂ) → (K →+* ℂ)) := by
   intro; simp
 
 @[simp]
-/--
-theorem `conjugate_coe_eq` / 定理 `conjugate_coe_eq`
-
-English:
-theorem conjugate_coe_eq
-  given: (φ : K ->+* Complex) (x : K)
-  statement: (conjugate φ) x = conj (φ x)
-  proof: rfl
-
-中文:
-定理 conjugate_coe_eq
-  条件: (φ : K ->+* 复形) (x : K)
-  结论: (conjugate φ) x = conj (φ x)
-  证明: rfl
+/-
+**NumberField.ComplexEmbedding.conjugate_coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.ComplexEmbedding`。
+形式化陈述：conjugate_coe_eq (φ : K ->+* Complex) (x : K) : (conjugate φ) x = conj (φ 
+x)
+参数：φ : K ->+* Complex；x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conjugate_coe_eq (φ : K ->+* Complex) (x : K) : (conjugate φ) x = conj (φ x) := rfl
-
-/--
-theorem `place_conjugate` / 定理 `place_conjugate`
-
-English:
-theorem place_conjugate
-  given: (φ : K ->+* Complex)
-  statement: place (conjugate φ) = place φ
-  proof: by
+theorem conjugate_coe_eq (φ : K →+* ℂ) (x : K) : (conjugate φ) x = conj (φ x) := rfl
+/-
+**NumberField.ComplexEmbedding.place_conjugate** 是 Mathlib 中的一个定理，位于命名空间 `Number
+Field.ComplexEmbedding`。
+形式化陈述：place_conjugate (φ : K ->+* Complex) : place (conjugate φ) = place φ
+参数：φ : K ->+* Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbsoluteValue.ext`：ext ⦃f g : AbsoluteValue R S⦄ : (forall x, f x = g x)
+ -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.norm_conj`：norm_conj (z : Complex) : ‖conj z‖ = ‖z‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem place_conjugate (φ : K →+* ℂ) : place (conjugate φ) = place φ := by
   ext; simp only [place_apply, norm_conj, conjugate_coe_eq]
 
-中文:
-定理 place_conjugate
-  条件: (φ : K ->+* 复形)
-  结论: place (conjugate φ) = place φ
-  证明: by
-  ext; simp only [place_apply, norm_conj, conjugate_coe_eq]
+/-- An embedding into `ℂ` is real if it is fixed by complex conjugation. -/
+/-
+**NumberField.ComplexEmbedding.IsReal** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberField.C
+omplexEmbedding`。
+形式化陈述：IsReal (φ : K ->+* Complex) : Prop
+参数：φ : K ->+* Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: conjugate_coe_eq, norm_conj, place_apply
+--- 原说明 ---
+An embedding into `ℂ` is real if it is fixed by complex conjugation.
 -/
-theorem place_conjugate (φ : K ->+* Complex) : place (conjugate φ) = place φ := by
-  ext; simp only [place_apply, norm_conj, conjugate_coe_eq]
-
-/--
-Definition of `IsReal` / `IsReal` 的定义
-
-English:
-abbreviation IsReal
-  signature: (φ : K ->+* Complex)
-  body: IsSelfAdjoint φ
-
-中文:
-缩写 Is实数
-  签名: (φ : K ->+* 复形)
-  定义体: IsSelfAdjoint φ
-
-Depends on / 依赖: IsSelfAdjoint
+abbrev IsReal (φ : K →+* ℂ) : Prop := IsSelfAdjoint φ
+/-
+**NumberField.ComplexEmbedding.isReal_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.ComplexEmbedding`。
+形式化陈述：isReal_iff {φ : K ->+* Complex} : IsReal φ ↔ conjugate φ = φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isSelfAdjoint_iff`：∀ {R : Type u_1} [inst : Star R] {x : R}, IsSelfAdjoi
+nt x ↔ star x = x
 -/
-abbrev IsReal (φ : K ->+* Complex) : Prop := IsSelfAdjoint φ
-
-/--
-theorem `isReal_iff` / 定理 `isReal_iff`
-
-English:
-theorem isReal_iff
-  given: {φ : K ->+* Complex}
-  statement: IsReal φ ↔ conjugate φ = φ
-  proof: isSelfAdjoint_iff
-
-中文:
-定理 is实数_iff
-  条件: {φ : K ->+* 复形}
-  结论: Is实数 φ ↔ conjugate φ = φ
-  证明: isSelfAdjoint_iff
-
-Depends on / 依赖: isSelfAdjoint_iff
+theorem isReal_iff {φ : K →+* ℂ} : IsReal φ ↔ conjugate φ = φ := isSelfAdjoint_iff
+/-
+**NumberField.ComplexEmbedding.isReal_conjugate_iff** 是 Mathlib 中的一个定理，位于命名空间 `N
+umberField.ComplexEmbedding`。
+形式化陈述：isReal_conjugate_iff {φ : K ->+* Complex} : IsReal (conjugate φ) ↔ IsReal 
+φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.star_iff`：star_iff [InvolutiveStar R] {x : R} : IsSelfAdjo
+int (star x) ↔ IsSelfAdjoint x
 -/
-theorem isReal_iff {φ : K ->+* Complex} : IsReal φ ↔ conjugate φ = φ := isSelfAdjoint_iff
-
-/--
-theorem `isReal_conjugate_iff` / 定理 `isReal_conjugate_iff`
-
-English:
-theorem isReal_conjugate_iff
-  given: {φ : K ->+* Complex}
-  statement: IsReal (conjugate φ) ↔ IsReal φ
-  proof: IsSelfAdjoint.star_iff
-
-中文:
-定理 is实数_conjugate_iff
-  条件: {φ : K ->+* 复形}
-  结论: Is实数 (conjugate φ) ↔ Is实数 φ
-  证明: IsSelfAdjoint.star_iff
-
-Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.star_iff, star_iff
--/
-theorem isReal_conjugate_iff {φ : K ->+* Complex} : IsReal (conjugate φ) ↔ IsReal φ :=
+theorem isReal_conjugate_iff {φ : K →+* ℂ} : IsReal (conjugate φ) ↔ IsReal φ :=
   IsSelfAdjoint.star_iff
 
-/--
-Definition of `IsReal.embedding` / `IsReal.embedding` 的定义
+/-- A real embedding as a ring homomorphism from `K` to `ℝ` . -/
+/-
+**NumberField.ComplexEmbedding.IsReal.embedding** 是 Mathlib 中的一个定义，位于命名空间 `Numbe
+rField.ComplexEmbedding.IsReal`。
+形式化陈述：{K : Type u_1} → [inst : Field K] → {φ : K →+* ℂ} → NumberField.ComplexEmb
+edding.IsReal φ → K →+* ℝ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsReal.embedding
-  signature: {φ : K ->+* Complex} (hφ : IsReal φ)
-  body: (φ x).re
-  map_one' := by simp only [map_one, one_re]
-  map_mul' := by
-    simp only [Complex.conj_eq_iff_im.mp (RingHom.congr_fun hφ _), map_mul, mul_re,
-      mul_zero, tsub_zero, forall_const]
-  map_zero' := by simp only [map_zero, zero_re]
-  map_add' := by simp only [map_add, add_re, forall_const]
-
-@[simp]
-
-中文:
-定义 Is实数.embedding
-  签名: {φ : K ->+* 复形} (hφ : Is实数 φ)
-  定义体: (φ x).re
-  map_one' := by simp only [map_one, one_re]
-  map_mul' := by
-    simp only [Complex.conj_eq_iff_im.mp (RingHom.congr_fun hφ _), map_mul, mul_re,
-      mul_zero, tsub_zero, forall_const]
-  map_zero' := by simp only [map_zero, zero_re]
-  map_add' := by simp only [map_add, add_re, forall_const]
-
-@[simp]
+--- 原说明 ---
+A real embedding as a ring homomorphism from `K` to `ℝ` .
 -/
-def IsReal.embedding {φ : K ->+* Complex} (hφ : IsReal φ) : K ->+* Real where
+def IsReal.embedding {φ : K →+* ℂ} (hφ : IsReal φ) : K →+* ℝ where
   toFun x := (φ x).re
   map_one' := by simp only [map_one, one_re]
   map_mul' := by
@@ -686,495 +701,513 @@ def IsReal.embedding {φ : K ->+* Complex} (hφ : IsReal φ) : K ->+* Real where
   map_add' := by simp only [map_add, add_re, forall_const]
 
 @[simp]
-/--
-theorem `IsReal.coe_embedding_apply` / 定理 `IsReal.coe_embedding_apply`
-
-English:
-theorem IsReal.coe_embedding_apply
-  given: {φ : K ->+* Complex} (hφ : IsReal φ) (x : K)
-  proof: by
-  apply Complex.ext
-  · rfl
-  · rw [ofReal_im, eq_comm, ← Complex.conj_eq_iff_im]
-    exact RingHom.congr_fun hφ x
-
-中文:
-定理 Is实数.coe_embedding_apply
-  条件: {φ : K ->+* 复形} (hφ : Is实数 φ) (x : K)
-  证明: by
-  apply Complex.ext
-  · rfl
-  · rw [ofReal_im, eq_comm, ← Complex.conj_eq_iff_im]
-    exact RingHom.congr_fun hφ x
-
-Depends on / 依赖: Complex.conj_eq_iff_im, Complex.ext, RingHom, RingHom.congr_fun, congr_fun, conj_eq_iff_im, eq_comm, ofReal_im
+/-
+**NumberField.ComplexEmbedding.IsReal.coe_embedding_apply** 是 Mathlib 中的一个定理，位于命
+名空间 `NumberField.ComplexEmbedding.IsReal`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {φ : K →+* ℂ} (hφ : NumberField.ComplexE
+mbedding.IsReal φ) (x : K),   ↑(hφ.embedding x) = φ x
+参数：hφ : NumberField.ComplexEmbedding.IsReal φ；x : K；hφ.embedding x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.ext`：∀ {z w : ℂ}, z.re = w.re → z.im = w.im → z = w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.ofReal_im`：ofReal_im (r : Real) : (r : Complex).im = 0
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.conj_eq_iff_im`：conj_eq_iff_im {z : Complex} : conj z = z ↔ z.im
+ = 0
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
 -/
-theorem IsReal.coe_embedding_apply {φ : K ->+* Complex} (hφ : IsReal φ) (x : K) :
-    (hφ.embedding x : Complex) = φ x := by
+theorem IsReal.coe_embedding_apply {φ : K →+* ℂ} (hφ : IsReal φ) (x : K) :
+    (hφ.embedding x : ℂ) = φ x := by
   apply Complex.ext
   · rfl
   · rw [ofReal_im, eq_comm, ← Complex.conj_eq_iff_im]
     exact RingHom.congr_fun hφ x
-
-/--
-lemma `IsReal.comp` / 引理 `IsReal.comp`
-
-English:
-lemma IsReal.comp
-  given: (f : k ->+* K) {φ : K ->+* Complex} (hφ : IsReal φ)
-  proof: by ext1 x; simpa using RingHom.congr_fun hφ (f x)
-
-中文:
-引理 Is实数.comp
-  条件: (f : k ->+* K) {φ : K ->+* 复形} (hφ : Is实数 φ)
-  证明: by ext1 x; simpa using RingHom.congr_fun hφ (f x)
-
-Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun
+/-
+**NumberField.ComplexEmbedding.IsReal.comp** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.ComplexEmbedding.IsReal`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] (f : k
+ →+* K) {φ : K →+* ℂ},   NumberField.ComplexEmbedding.IsReal φ → NumberField.Com
+plexEmbedding.IsReal (φ.comp f)
+参数：f : k →+* K；φ.comp f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
 -/
-lemma IsReal.comp (f : k ->+* K) {φ : K ->+* Complex} (hφ : IsReal φ) :
+lemma IsReal.comp (f : k →+* K) {φ : K →+* ℂ} (hφ : IsReal φ) :
     IsReal (φ.comp f) := by ext1 x; simpa using RingHom.congr_fun hφ (f x)
-
-/--
-lemma `isReal_comp_iff` / 引理 `isReal_comp_iff`
-
-English:
-lemma isReal_comp_iff
-  given: {f : k ≃+* K} {φ : K ->+* Complex}
-  proof: ⟨fun H => by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
-
-中文:
-引理 is实数_comp_iff
-  条件: {f : k ≃+* K} {φ : K ->+* 复形}
-  证明: ⟨fun H => by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
-
-Depends on / 依赖: H.comp, IsReal, IsReal.comp, convert, f.symm.toRingHom, toRingHom
+/-
+**NumberField.ComplexEmbedding.isReal_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `Number
+Field.ComplexEmbedding`。
+形式化陈述：isReal_comp_iff {f : k ≃+* K} {φ : K ->+* Complex} : IsReal (φ.comp (f : k
+ ->+* K)) ↔ IsReal φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingEquiv.apply_symm_apply`：apply_symm_apply (e : R ≃+* S) : forall x, e
+ (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NumberField.ComplexEmbedding.IsReal.comp`：∀ {K : Type u_1} [inst : Field
+ K] {k : Type u_2} [inst_1 : Field k] (f : k →+* K) {φ : K →+* ℂ},   NumberField
+.ComplexEmbedding.IsReal φ → N…
 -/
-lemma isReal_comp_iff {f : k ≃+* K} {φ : K ->+* Complex} :
-    IsReal (φ.comp (f : k ->+* K)) ↔ IsReal φ :=
-  ⟨fun H => by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
-
-/--
-lemma `exists_comp_symm_eq_of_comp_eq` / 引理 `exists_comp_symm_eq_of_comp_eq`
-
-English:
-lemma exists_comp_symm_eq_of_comp_eq
-  statement: [Algebra k K] [IsGalois k K] (φ ψ : K ->+* Complex)
-  proof: by
-  let := (φ.comp (algebraMap k K)).toAlgebra
-  let := φ.toAlgebra
-  have : IsScalarTower k K Complex := IsScalarTower.of_algebraMap_eq' rfl
-  let ψ' : K ->ₐ[k] Complex := { ψ with commutes' := fun r => (RingHom.congr_fun h r).symm }
-  use (AlgHom.restrictNormal' ψ' K).symm
-  ext1 x
-  exact AlgHom.restrictNormal_commutes ψ' K x
-
-中文:
-引理 存在_comp_symm_eq_of_comp_eq
-  结论: [代数 k K] [是Galois k K] (φ ψ : K ->+* 复形)
-  证明: by
-  let := (φ.comp (algebraMap k K)).toAlgebra
-  let := φ.toAlgebra
-  have : IsScalarTower k K Complex := IsScalarTower.of_algebraMap_eq' rfl
-  let ψ' : K ->ₐ[k] Complex := { ψ with commutes' := fun r => (RingHom.congr_fun h r).symm }
-  use (AlgHom.restrictNormal' ψ' K).symm
-  ext1 x
-  exact AlgHom.restrictNormal_commutes ψ' K x
-
-Depends on / 依赖: AlgHom, AlgHom.restrictNormal, AlgHom.restrictNormal_commutes, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.congr_fun, algebraMap, commutes, congr_fun, of_algebraMap_eq, restrictNormal, restrictNormal_commutes, toAlgebra
+lemma isReal_comp_iff {f : k ≃+* K} {φ : K →+* ℂ} :
+    IsReal (φ.comp (f : k →+* K)) ↔ IsReal φ :=
+  ⟨fun H ↦ by convert! H.comp f.symm.toRingHom; ext1; simp, IsReal.comp _⟩
+/-
+**NumberField.ComplexEmbedding.exists_comp_symm_eq_of_comp_eq** 是 Mathlib 中的一个引理
+，位于命名空间 `NumberField.ComplexEmbedding`。
+形式化陈述：exists_comp_symm_eq_of_comp_eq [Algebra k K] [IsGalois k K] (φ ψ : K ->+* 
+Complex) (h : φ.comp (algebraMap k K) = ψ.comp (algebraMap k K)) : exists σ : Ga
+l(K/k), φ.comp σ.symm = ψ
+参数：φ ψ : K ->+* Complex；h : φ.comp (algebraMap k K) = ψ.comp (algebraMap k K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsGalois.to_normal`：∀ {F : Type u_1} {inst : Field F} {E : Type u_2} {in
+st_1 : Field E} {inst_2 : Algebra F E} [self : IsGalois F E],   Normal F E
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `AlgHom.restrictNormal_commutes`：AlgHom.restrictNormal_commutes [Normal F
+ E] (x : E) : algebraMap E K₂ (ϕ.restrictNormal E x) = ϕ (algebraMap E K₁ x)
 -/
-lemma exists_comp_symm_eq_of_comp_eq [Algebra k K] [IsGalois k K] (φ ψ : K ->+* Complex)
+lemma exists_comp_symm_eq_of_comp_eq [Algebra k K] [IsGalois k K] (φ ψ : K →+* ℂ)
     (h : φ.comp (algebraMap k K) = ψ.comp (algebraMap k K)) :
-    exists σ : Gal(K/k), φ.comp σ.symm = ψ := by
+    ∃ σ : Gal(K/k), φ.comp σ.symm = ψ := by
   let := (φ.comp (algebraMap k K)).toAlgebra
   let := φ.toAlgebra
-  have : IsScalarTower k K Complex := IsScalarTower.of_algebraMap_eq' rfl
-  let ψ' : K ->ₐ[k] Complex := { ψ with commutes' := fun r => (RingHom.congr_fun h r).symm }
+  have : IsScalarTower k K ℂ := IsScalarTower.of_algebraMap_eq' rfl
+  let ψ' : K →ₐ[k] ℂ := { ψ with commutes' := fun r ↦ (RingHom.congr_fun h r).symm }
   use (AlgHom.restrictNormal' ψ' K).symm
   ext1 x
   exact AlgHom.restrictNormal_commutes ψ' K x
 
-variable [Algebra k K] (φ : K ->+* Complex) (σ : Gal(K/k))
+variable [Algebra k K] (φ : K →+* ℂ) (σ : Gal(K/k))
 
 /--
-Definition of `IsConj` / `IsConj` 的定义
+`IsConj φ σ` states that `σ : Gal(K/k)` is the conjugation under the embedding `φ : K →+* ℂ`.
+-/
+/-
+**NumberField.ComplexEmbedding.IsConj** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Com
+plexEmbedding`。
+形式化陈述：IsConj : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsConj
-  signature: : Prop
-  body: conjugate φ = φ.comp σ
-
-中文:
-定义 IsConj
-  签名: : 命题
-  定义体: conjugate φ = φ.comp σ
-
-Depends on / 依赖: conjugate
+--- 原说明 ---
+`IsConj φ σ` states that `σ : Gal(K/k)` is the conjugation under the embedding `
+φ : K →+* ℂ`.
 -/
 def IsConj : Prop := conjugate φ = φ.comp σ
 
 variable {φ σ}
-
-/--
-lemma `IsConj.eq` / 引理 `IsConj.eq`
-
-English:
-lemma IsConj.eq
-  given: (h : IsConj φ σ) (x)
-  statement: φ (σ x) = star (φ x)
-  proof: RingHom.congr_fun h.symm x
-
-中文:
-引理 IsConj.eq
-  条件: (h : IsConj φ σ) (x)
-  结论: φ (σ x) = star (φ x)
-  证明: RingHom.congr_fun h.symm x
-
-Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun, h.symm
+/-
+**NumberField.ComplexEmbedding.IsConj.eq** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ} {σ : Gal(K/k)},   NumberField.ComplexEmbedding.Is
+Conj φ σ → ∀ (x : K), φ (σ x) = star (φ x)
+参数：K/k；x : K；σ x；φ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma IsConj.eq (h : IsConj φ σ) (x) : φ (σ x) = star (φ x) := RingHom.congr_fun h.symm x
-
-/--
-lemma `IsConj.ext` / 引理 `IsConj.ext`
-
-English:
-lemma IsConj.ext
-  given: {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁) (h₂ : IsConj φ σ₂)
-  statement: σ₁ = σ₂
-  proof: AlgEquiv.ext fun x => φ.injective ((h₁.eq x).trans (h₂.eq x).symm)
-
-中文:
-引理 IsConj.ext
-  条件: {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁) (h₂ : IsConj φ σ₂)
-  结论: σ₁ = σ₂
-  证明: AlgEquiv.ext fun x => φ.injective ((h₁.eq x).trans (h₂.eq x).symm)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext, injective
+/-
+**NumberField.ComplexEmbedding.IsConj.ext** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ}   {σ₁ σ₂ : Gal(K/k)}, NumberField.ComplexEmbeddin
+g.IsConj φ σ₁ → NumberField.ComplexEmbedding.IsConj φ σ₂ → σ₁ = σ₂
+参数：K/k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.eq`：∀ {K : Type u_1} [inst : Field K
+] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : Ga
+l(K/k)},   NumberField.Compl…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma IsConj.ext {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁) (h₂ : IsConj φ σ₂) : σ₁ = σ₂ :=
-  AlgEquiv.ext fun x => φ.injective ((h₁.eq x).trans (h₂.eq x).symm)
-
-/--
-lemma `IsConj.ext_iff` / 引理 `IsConj.ext_iff`
-
-English:
-lemma IsConj.ext_iff
-  given: {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁)
-  statement: σ₁ = σ₂ ↔ IsConj φ σ₂
-  proof: ⟨fun e => e ▸ h₁, h₁.ext⟩
-
-中文:
-引理 IsConj.ext_iff
-  条件: {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁)
-  结论: σ₁ = σ₂ ↔ IsConj φ σ₂
-  证明: ⟨fun e => e ▸ h₁, h₁.ext⟩
+  AlgEquiv.ext fun x ↦ φ.injective ((h₁.eq x).trans (h₂.eq x).symm)
+/-
+**NumberField.ComplexEmbedding.IsConj.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ}   {σ₁ σ₂ : Gal(K/k)}, NumberField.ComplexEmbeddin
+g.IsConj φ σ₁ → (σ₁ = σ₂ ↔ NumberField.ComplexEmbedding.IsConj φ σ₂)
+参数：K/k；σ₁ = σ₂ ↔ NumberField.ComplexEmbedding.IsConj φ σ₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.ext`：∀ {K : Type u_1} [inst : Field 
+K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ}   {σ₁ 
+σ₂ : Gal(K/k)}, NumberField.C…
 -/
 lemma IsConj.ext_iff {σ₁ σ₂ : Gal(K/k)} (h₁ : IsConj φ σ₁) : σ₁ = σ₂ ↔ IsConj φ σ₂ :=
-  ⟨fun e => e ▸ h₁, h₁.ext⟩
-
-/--
-lemma `IsConj.isReal_comp` / 引理 `IsConj.isReal_comp`
-
-English:
-lemma IsConj.isReal_comp
-  given: (h : IsConj φ σ)
-  statement: IsReal (φ.comp (algebraMap k K))
-  proof: by
-  ext1 x
-  simp only [conjugate_coe_eq, RingHom.coe_comp, Function.comp_apply, ← h.eq,
-    starRingEnd_apply, AlgEquiv.commutes]
-
-中文:
-引理 IsConj.is实数_comp
-  条件: (h : IsConj φ σ)
-  结论: Is实数 (φ.comp (algebraMap k K))
-  证明: by
-  ext1 x
-  simp only [conjugate_coe_eq, RingHom.coe_comp, Function.comp_apply, ← h.eq,
-    starRingEnd_apply, AlgEquiv.commutes]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, Function, Function.comp_apply, RingHom, RingHom.coe_comp, coe_comp, commutes, comp_apply, conjugate_coe_eq, h.eq, starRingEnd_apply
+  ⟨fun e ↦ e ▸ h₁, h₁.ext⟩
+/-
+**NumberField.ComplexEmbedding.IsConj.isReal_comp** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ} {σ : Gal(K/k)},   NumberField.ComplexEmbedding.Is
+Conj φ σ → NumberField.ComplexEmbedding.IsReal (φ.comp (algebraMap k K))
+参数：K/k；φ.comp (algebraMap k K)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.eq`：∀ {K : Type u_1} [inst : Field K
+] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : Ga
+l(K/k)},   NumberField.Compl…
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsConj.isReal_comp (h : IsConj φ σ) : IsReal (φ.comp (algebraMap k K)) := by
   ext1 x
   simp only [conjugate_coe_eq, RingHom.coe_comp, Function.comp_apply, ← h.eq,
     starRingEnd_apply, AlgEquiv.commutes]
-
-/--
-lemma `isConj_one_iff` / 引理 `isConj_one_iff`
-
-English:
-lemma isConj_one_iff
-  statement: IsConj φ (1 : Gal(K/k)) ↔ IsReal φ
-  proof: Iff.rfl
-
-alias ⟨_, IsReal.isConjGal_one⟩ := ComplexEmbedding.isConj_one_iff
-
-中文:
-引理 isConj_one_iff
-  结论: IsConj φ (1 : Gal(K/k)) ↔ Is实数 φ
-  证明: Iff.rfl
-
-alias ⟨_, IsReal.isConjGal_one⟩ := ComplexEmbedding.isConj_one_iff
-
-Depends on / 依赖: Iff.rfl
+/-
+**NumberField.ComplexEmbedding.isConj_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `NumberF
+ield.ComplexEmbedding`。
+形式化陈述：isConj_one_iff : IsConj φ (1 : Gal(K/k)) ↔ IsReal φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isConj_one_iff : IsConj φ (1 : Gal(K/k)) ↔ IsReal φ := Iff.rfl
 
 alias ⟨_, IsReal.isConjGal_one⟩ := ComplexEmbedding.isConj_one_iff
-
-/--
-lemma `isConj_ne_one_iff` / 引理 `isConj_ne_one_iff`
-
-English:
-lemma isConj_ne_one_iff
-  given: (hσ : IsConj φ σ)
-  proof: not_iff_not.mpr ⟨fun h => isConj_one_iff.mp (h ▸ hσ),
-    fun h => (IsConj.ext_iff hσ).mpr h.isConjGal_one⟩
-
-中文:
-引理 isConj_ne_one_iff
-  条件: (hσ : IsConj φ σ)
-  证明: not_iff_not.mpr ⟨fun h => isConj_one_iff.mp (h ▸ hσ),
-    fun h => (IsConj.ext_iff hσ).mpr h.isConjGal_one⟩
-
-Depends on / 依赖: IsConj, IsConj.ext_iff, ext_iff, h.isConjGal_one, isConjGal_one, isConj_one_iff, isConj_one_iff.mp, not_iff_not, not_iff_not.mpr
+/-
+**NumberField.ComplexEmbedding.isConj_ne_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Numb
+erField.ComplexEmbedding`。
+形式化陈述：isConj_ne_one_iff (hσ : IsConj φ σ) : σ != 1 ↔ ¬ IsReal φ
+参数：hσ : IsConj φ σ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `NumberField.ComplexEmbedding.isConj_one_iff`：isConj_one_iff : IsConj φ (
+1 : Gal(K/k)) ↔ IsReal φ
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.ext_iff`：∀ {K : Type u_1} [inst : Fi
+eld K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ}   
+{σ₁ σ₂ : Gal(K/k)}, NumberField.C…
+· 使用定理 `NumberField.ComplexEmbedding.IsReal.isConjGal_one`：∀ {K : Type u_1} [ins
+t : Field K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+*
+ ℂ},   NumberField.ComplexEmbedding.IsR…
 -/
 lemma isConj_ne_one_iff (hσ : IsConj φ σ) :
-    σ != 1 ↔ ¬ IsReal φ :=
-  not_iff_not.mpr ⟨fun h => isConj_one_iff.mp (h ▸ hσ),
-    fun h => (IsConj.ext_iff hσ).mpr h.isConjGal_one⟩
-
-/--
-lemma `IsConj.symm` / 引理 `IsConj.symm`
-
-English:
-lemma IsConj.symm
-  given: (hσ : IsConj φ σ)
-  proof: RingHom.ext fun x => by simpa using congr_arg star (hσ.eq (σ.symm x))
-
-中文:
-引理 IsConj.symm
-  条件: (hσ : IsConj φ σ)
-  证明: RingHom.ext fun x => by simpa using congr_arg star (hσ.eq (σ.symm x))
-
-Depends on / 依赖: RingHom, RingHom.ext, congr_arg
+    σ ≠ 1 ↔ ¬ IsReal φ :=
+  not_iff_not.mpr ⟨fun h ↦ isConj_one_iff.mp (h ▸ hσ),
+    fun h ↦ (IsConj.ext_iff hσ).mpr h.isConjGal_one⟩
+/-
+**NumberField.ComplexEmbedding.IsConj.symm** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ} {σ : Gal(K/k)},   NumberField.ComplexEmbedding.Is
+Conj φ σ → NumberField.ComplexEmbedding.IsConj φ σ.symm
+参数：K/k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RingHomCompTriple.comp_apply`：comp_apply [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+ {x : R₁} : σ₂₃ (σ₁₂ x) = σ₁₃ x
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.eq`：∀ {K : Type u_1} [inst : Field K
+] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : Ga
+l(K/k)},   NumberField.Compl…
 -/
 lemma IsConj.symm (hσ : IsConj φ σ) :
-    IsConj φ σ.symm := RingHom.ext fun x => by simpa using congr_arg star (hσ.eq (σ.symm x))
-
-/--
-lemma `isConj_symm` / 引理 `isConj_symm`
-
-English:
-lemma isConj_symm
-  statement: IsConj φ σ.symm ↔ IsConj φ σ
-  proof: ⟨IsConj.symm, IsConj.symm⟩
-
-中文:
-引理 isConj_symm
-  结论: IsConj φ σ.symm ↔ IsConj φ σ
-  证明: ⟨IsConj.symm, IsConj.symm⟩
-
-Depends on / 依赖: IsConj, IsConj.symm
+    IsConj φ σ.symm := RingHom.ext fun x ↦ by simpa using congr_arg star (hσ.eq (σ.symm x))
+/-
+**NumberField.ComplexEmbedding.isConj_symm** 是 Mathlib 中的一个引理，位于命名空间 `NumberFiel
+d.ComplexEmbedding`。
+形式化陈述：isConj_symm : IsConj φ σ.symm ↔ IsConj φ σ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.symm`：∀ {K : Type u_1} [inst : Field
+ K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : 
+Gal(K/k)},   NumberField.Compl…
 -/
 lemma isConj_symm : IsConj φ σ.symm ↔ IsConj φ σ :=
   ⟨IsConj.symm, IsConj.symm⟩
-
-/--
-lemma `isConj_apply_apply` / 引理 `isConj_apply_apply`
-
-English:
-lemma isConj_apply_apply
-  given: (hσ : IsConj φ σ) (x : K)
-  proof: by
-  simp [← φ.injective.eq_iff, hσ.eq]
-
-中文:
-引理 isConj_apply_apply
-  条件: (hσ : IsConj φ σ) (x : K)
-  证明: by
-  simp [← φ.injective.eq_iff, hσ.eq]
-
-Depends on / 依赖: eq_iff, injective, injective.eq_iff
+/-
+**NumberField.ComplexEmbedding.isConj_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Num
+berField.ComplexEmbedding`。
+形式化陈述：isConj_apply_apply (hσ : IsConj φ σ) (x : K) : σ (σ x) = x
+参数：hσ : IsConj φ σ；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.eq`：∀ {K : Type u_1} [inst : Field K
+] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : Ga
+l(K/k)},   NumberField.Compl…
+· 使用定理 `RingHomCompTriple.comp_apply`：comp_apply [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+ {x : R₁} : σ₂₃ (σ₁₂ x) = σ₁₃ x
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isConj_apply_apply (hσ : IsConj φ σ) (x : K) :
     σ (σ x) = x := by
   simp [← φ.injective.eq_iff, hσ.eq]
-
-/--
-theorem `IsConj.comp` / 定理 `IsConj.comp`
-
-English:
-theorem IsConj.comp
-  given: (hσ : IsConj φ σ) (ν : Gal(K/k))
-  proof: by
-  ext
-  simpa [← AlgEquiv.mul_apply, ← mul_assoc] using! RingHom.congr_fun hσ _
-
-中文:
-定理 IsConj.comp
-  条件: (hσ : IsConj φ σ) (ν : Gal(K/k))
-  证明: by
-  ext
-  simpa [← AlgEquiv.mul_apply, ← mul_assoc] using! RingHom.congr_fun hσ _
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.mul_apply, RingHom, RingHom.congr_fun, congr_fun, mul_apply, mul_assoc
+/-
+**NumberField.ComplexEmbedding.IsConj.comp** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.ComplexEmbedding.IsConj`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {k : Type u_2} [inst_1 : Field k] [inst_
+2 : Algebra k K] {φ : K →+* ℂ} {σ : Gal(K/k)},   NumberField.ComplexEmbedding.Is
+Conj φ σ →     ∀ (ν : Gal(K/k)), NumberField.ComplexEmbedding.IsConj (φ.comp ↑ν)
+ (ν⁻¹ * σ * ν)
+参数：K/k；ν : Gal(K/k)；φ.comp ↑ν；ν⁻¹ * σ * ν。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
 -/
 theorem IsConj.comp (hσ : IsConj φ σ) (ν : Gal(K/k)) :
     IsConj (φ.comp ν) (ν⁻¹ * σ * ν) := by
   ext
   simpa [← AlgEquiv.mul_apply, ← mul_assoc] using! RingHom.congr_fun hσ _
-
-/--
-lemma `orderOf_isConj_two_of_ne_one` / 引理 `orderOf_isConj_two_of_ne_one`
-
-English:
-lemma orderOf_isConj_two_of_ne_one
-  given: (hσ : IsConj φ σ) (hσ' : σ != 1)
-  proof: orderOf_eq_prime_iff.mpr ⟨by ext; simpa using isConj_apply_apply hσ _, hσ'⟩
-
-中文:
-引理 orderOf_isConj_two_of_ne_one
-  条件: (hσ : IsConj φ σ) (hσ' : σ != 1)
-  证明: orderOf_eq_prime_iff.mpr ⟨by ext; simpa using isConj_apply_apply hσ _, hσ'⟩
-
-Depends on / 依赖: isConj_apply_apply, orderOf_eq_prime_iff, orderOf_eq_prime_iff.mpr
+/-
+**NumberField.ComplexEmbedding.orderOf_isConj_two_of_ne_one** 是 Mathlib 中的一个引理，位
+于命名空间 `NumberField.ComplexEmbedding`。
+形式化陈述：orderOf_isConj_two_of_ne_one (hσ : IsConj φ σ) (hσ' : σ != 1) : orderOf σ 
+= 2
+参数：hσ : IsConj φ σ；hσ' : σ != 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `orderOf_eq_prime_iff`：orderOf_eq_prime_iff : orderOf x = p ↔ x ^ p = 1 ∧
+ x != 1
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AlgEquiv.coe_pow`：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R
+] [inst_1 : Semiring A₁] [inst_2 : Algebra R A₁] (e : A₁ ≃ₐ[R] A₁)   (n : ℕ), ⇑(
+e ^ n)…
+· 使用定理 `Function.iterate_one`：iterate_one : f^[1] = f
+· 使用引理 `NumberField.ComplexEmbedding.isConj_apply_apply`：isConj_apply_apply (hσ 
+: IsConj φ σ) (x : K) : σ (σ x) = x
 -/
-lemma orderOf_isConj_two_of_ne_one (hσ : IsConj φ σ) (hσ' : σ != 1) :
+lemma orderOf_isConj_two_of_ne_one (hσ : IsConj φ σ) (hσ' : σ ≠ 1) :
     orderOf σ = 2 :=
   orderOf_eq_prime_iff.mpr ⟨by ext; simpa using isConj_apply_apply hσ _, hσ'⟩
 
 section Extension
 
-variable {K : Type*} {L : Type*} [Field K] [Field L] (ψ : K ->+* Complex) [Algebra K L]
+variable {K : Type*} {L : Type*} [Field K] [Field L] (ψ : K →+* ℂ) [Algebra K L]
 
-/--
-Definition of `LiesOver` / `LiesOver` 的定义
+/-- If `L/K`, `ψ : K →+* ℂ`, and `φ : L →+* ℂ`, then `φ` lies over `ψ` if the restriction of
+`φ` to `K` is `ψ`. -/
+/-
+**NumberField.ComplexEmbedding.LiesOver** 是 Mathlib 中的一个归纳类型，位于命名空间 `NumberField
+.ComplexEmbedding`。
+形式化陈述：{K : Type u_3} → {L : Type u_4} → [inst : Field K] → [inst_1 : Field L] → 
+[Algebra K L] → (L →+* ℂ) → (K →+* ℂ) → Prop
+参数：L →+* ℂ；K →+* ℂ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LiesOver
-  parameters: (φ : L ->+* Complex) (ψ : K ->+* Complex)
-  axioms and operations (1):
-    - over((φ ψ)) : φ.comp (algebraMap K L) = ψ
-
-中文:
-类 LiesOver
-  参数: (φ : L ->+* 复形) (ψ : K ->+* 复形)
-  公理与运算 (1 个):
-    - over((φ ψ)) : φ.comp (algebraMap K L) = ψ
+--- 原说明 ---
+If `L/K`, `ψ : K →+* ℂ`, and `φ : L →+* ℂ`, then `φ` lies over `ψ` if the restri
+ction of
+`φ` to `K` is `ψ`.
 -/
-protected class LiesOver (φ : L ->+* Complex) (ψ : K ->+* Complex) : Prop where
+protected class LiesOver (φ : L →+* ℂ) (ψ : K →+* ℂ) : Prop where
   over (φ ψ) : φ.comp (algebraMap K L) = ψ
-
-/--
-theorem `LiesOver.over_apply` / 定理 `LiesOver.over_apply`
-
-English:
-theorem LiesOver.over_apply
-  given: (φ : L ->+* Complex) (ψ : K ->+* Complex) [ComplexEmbedding.LiesOver φ ψ] {x : K}
-  proof: RingHom.ext_iff.1 (LiesOver.over φ ψ) _
-
-中文:
-定理 LiesOver.over_apply
-  条件: (φ : L ->+* 复形) (ψ : K ->+* 复形) [ComplexEmbedding.LiesOver φ ψ] {x : K}
-  证明: RingHom.ext_iff.1 (LiesOver.over φ ψ) _
-
-Depends on / 依赖: LiesOver, LiesOver.over, RingHom, RingHom.ext_iff, ext_iff
+/-
+**NumberField.ComplexEmbedding.LiesOver.over_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.ComplexEmbedding.LiesOver`。
+形式化陈述：∀ {K : Type u_3} {L : Type u_4} [inst : Field K] [inst_1 : Field L] [inst_
+2 : Algebra K L] (φ : L →+* ℂ) (ψ : K →+* ℂ)   [NumberField.ComplexEmbedding.Lie
+sOver φ ψ] {x : K}, φ ((algebraMap K L) x) = ψ x
+参数：φ : L →+* ℂ；ψ : K →+* ℂ；(algebraMap K L) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RingHom.ext_iff`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g ↔ ∀ (x_2 : α), f x_2 = g x
+_2
+· 使用定理 `NumberField.ComplexEmbedding.LiesOver.over`：∀ {K : Type u_3} {L : Type u
+_4} {inst : Field K} {inst_1 : Field L} {inst_2 : Algebra K L} (φ : L →+* ℂ) (ψ 
+: K →+* ℂ)   [self : NumberField…
 -/
-theorem LiesOver.over_apply (φ : L ->+* Complex) (ψ : K ->+* Complex) [ComplexEmbedding.LiesOver φ ψ] {x : K} :
+theorem LiesOver.over_apply (φ : L →+* ℂ) (ψ : K →+* ℂ) [ComplexEmbedding.LiesOver φ ψ] {x : K} :
     φ (algebraMap K L x) = ψ x := RingHom.ext_iff.1 (LiesOver.over φ ψ) _
-
-/--
-theorem `liesOver_iff` / 定理 `liesOver_iff`
-
-English:
-theorem liesOver_iff
-  given: {φ : L ->+* Complex} {ψ : K ->+* Complex}
-  proof: ⟨fun _ => LiesOver.over φ ψ, fun h => ⟨h⟩⟩
-
-中文:
-定理 liesOver_iff
-  条件: {φ : L ->+* 复形} {ψ : K ->+* 复形}
-  证明: ⟨fun _ => LiesOver.over φ ψ, fun h => ⟨h⟩⟩
-
-Depends on / 依赖: LiesOver, LiesOver.over
+/-
+**NumberField.ComplexEmbedding.liesOver_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.ComplexEmbedding`。
+形式化陈述：liesOver_iff {φ : L ->+* Complex} {ψ : K ->+* Complex} : ComplexEmbedding.
+LiesOver φ ψ ↔ φ.comp (algebraMap K L) = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.ComplexEmbedding.LiesOver.over`：∀ {K : Type u_3} {L : Type u
+_4} {inst : Field K} {inst_1 : Field L} {inst_2 : Algebra K L} (φ : L →+* ℂ) (ψ 
+: K →+* ℂ)   [self : NumberField…
 -/
-theorem liesOver_iff {φ : L ->+* Complex} {ψ : K ->+* Complex} :
+theorem liesOver_iff {φ : L →+* ℂ} {ψ : K →+* ℂ} :
     ComplexEmbedding.LiesOver φ ψ ↔ φ.comp (algebraMap K L) = ψ :=
-  ⟨fun _ => LiesOver.over φ ψ, fun h => ⟨h⟩⟩
+  ⟨fun _ ↦ LiesOver.over φ ψ, fun h ↦ ⟨h⟩⟩
 
 variable (L)
 
-/--
-Definition of `Extension` / `Extension` 的定义
+/-- If `L/K` and `ψ : K →+* ℂ`, then the type of `ComplexEmbedding.Extension L ψ` consists of all
+`φ : L →+* ℂ` such that `φ.comp (algebraMap K L) = ψ`. -/
+/-
+**NumberField.ComplexEmbedding.Extension** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.
+ComplexEmbedding`。
+形式化陈述：{K : Type u_3} → (L : Type u_4) → [inst : Field K] → [inst_1 : Field L] → 
+(K →+* ℂ) → [Algebra K L] → Type (max 0 u_4)
+参数：L : Type u_4；K →+* ℂ；max 0 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Extension
-  body: { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
-
-中文:
-缩写 扩张
-  定义体: { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
+--- 原说明 ---
+If `L/K` and `ψ : K →+* ℂ`, then the type of `ComplexEmbedding.Extension L ψ` co
+nsists of all
+`φ : L →+* ℂ` such that `φ.comp (algebraMap K L) = ψ`.
 -/
-protected abbrev Extension := { φ : L ->+* Complex // ComplexEmbedding.LiesOver φ ψ }
+protected abbrev Extension := { φ : L →+* ℂ // ComplexEmbedding.LiesOver φ ψ }
 
 namespace Extension
 
 variable (φ : ComplexEmbedding.Extension L ψ) {L ψ}
 
-/--
-theorem `comp_eq` / 定理 `comp_eq`
-
-English:
-theorem comp_eq
-  statement: φ.1.comp (algebraMap K L) = ψ
-  proof: φ.2.over
-
-中文:
-定理 comp_eq
-  结论: φ.1.comp (algebraMap K L) = ψ
-  证明: φ.2.over
+/-
+**NumberField.ComplexEmbedding.Extension.comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.ComplexEmbedding.Extension`。
+形式化陈述：comp_eq : φ.1.comp (algebraMap K L) = ψ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.ComplexEmbedding.LiesOver.over`：∀ {K : Type u_3} {L : Type u
+_4} {inst : Field K} {inst_1 : Field L} {inst_2 : Algebra K L} (φ : L →+* ℂ) (ψ 
+: K →+* ℂ)   [self : NumberField…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem comp_eq : φ.1.comp (algebraMap K L) = ψ := φ.2.over
-
-/--
-theorem `conjugate_comp_ne` / 定理 `conjugate_comp_ne`
-
-English:
-theorem conjugate_comp_ne
-  given: (h : ¬IsReal ψ)
-  statement: (conjugate φ).comp (algebraMap K L) != ψ
-  proof: by
-  simp_all [ComplexEmbedding.isReal_iff, comp_eq]
-
-中文:
-定理 conjugate_comp_ne
-  条件: (h : ¬Is实数 ψ)
-  结论: (conjugate φ).comp (algebraMap K L) != ψ
-  证明: by
-  simp_all [ComplexEmbedding.isReal_iff, comp_eq]
-
-Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.isReal_iff, comp_eq, isReal_iff
+/-
+**NumberField.ComplexEmbedding.Extension.conjugate_comp_ne** 是 Mathlib 中的一个定理，位于
+命名空间 `NumberField.ComplexEmbedding.Extension`。
+形式化陈述：conjugate_comp_ne (h : ¬IsReal ψ) : (conjugate φ).comp (algebraMap K L) !=
+ ψ
+参数：h : ¬IsReal ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.ComplexEmbedding.Extension.comp_eq`：comp_eq : φ.1.comp (alge
+braMap K L) = ψ
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem conjugate_comp_ne (h : ¬IsReal ψ) : (conjugate φ).comp (algebraMap K L) != ψ := by
+theorem conjugate_comp_ne (h : ¬IsReal ψ) : (conjugate φ).comp (algebraMap K L) ≠ ψ := by
   simp_all [ComplexEmbedding.isReal_iff, comp_eq]
-
-/--
-theorem `not_isReal_of_not_isReal` / 定理 `not_isReal_of_not_isReal`
-
-English:
-theorem not_isReal_of_not_isReal
-  given: (h : ¬IsReal ψ)
-  statement: ¬IsReal φ.1
-  proof: mt (IsReal.comp _) (comp_eq φ ▸ h)
-
-中文:
-定理 not_is实数_of_not_is实数
-  条件: (h : ¬Is实数 ψ)
-  结论: ¬Is实数 φ.1
-  证明: mt (IsReal.comp _) (comp_eq φ ▸ h)
-
-Depends on / 依赖: IsReal, IsReal.comp, comp_eq
+/-
+**NumberField.ComplexEmbedding.Extension.not_isReal_of_not_isReal** 是 Mathlib 中的
+一个定理，位于命名空间 `NumberField.ComplexEmbedding.Extension`。
+形式化陈述：not_isReal_of_not_isReal (h : ¬IsReal ψ) : ¬IsReal φ.1
+参数：h : ¬IsReal ψ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `NumberField.ComplexEmbedding.IsReal.comp`：∀ {K : Type u_1} [inst : Field
+ K] {k : Type u_2} [inst_1 : Field k] (f : k →+* K) {φ : K →+* ℂ},   NumberField
+.ComplexEmbedding.IsReal φ → N…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.ComplexEmbedding.Extension.comp_eq`：comp_eq : φ.1.comp (alge
+braMap K L) = ψ
 -/
 theorem not_isReal_of_not_isReal (h : ¬IsReal ψ) : ¬IsReal φ.1 :=
   mt (IsReal.comp _) (comp_eq φ ▸ h)
@@ -1183,136 +1216,131 @@ end Extension
 
 variable (K) {L ψ}
 
-/--
-Definition of `IsMixed` / `IsMixed` 的定义
+/-- If `L/K` and `φ : L →+* ℂ`, then `IsMixed K φ` if the image of `φ` is complex while the image
+of `φ` restricted to `K` is real.
 
-English:
-abbreviation IsMixed
-  signature: (φ : L ->+* Complex)
-  body: ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ∧ ¬ComplexEmbedding.IsReal φ
+This is the complex embedding analogue of `InfinitePlace.IsRamified K w`, where
+`w : InfinitePlace L`. It is not the same concept because conjugation of `φ` in this case
+leads to two distinct mixed embeddings but only a single ramified place `w`, leading to a
+two-to-one isomorphism between them. -/
+/-
+**NumberField.ComplexEmbedding.IsMixed** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberField.
+ComplexEmbedding`。
+形式化陈述：IsMixed (φ : L ->+* Complex)
+参数：φ : L ->+* Complex。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 IsMixed
-  签名: (φ : L ->+* 复形)
-  定义体: ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ∧ ¬ComplexEmbedding.IsReal φ
+--- 原说明 ---
+If `L/K` and `φ : L →+* ℂ`, then `IsMixed K φ` if the image of `φ` is complex wh
+ile the image
+of `φ` restricted to `K` is real.
 
-Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsReal, IsReal, algebraMap
+This is the complex embedding analogue of `InfinitePlace.IsRamified K w`, where
+`w : InfinitePlace L`. It is not the same concept because conjugation of `φ` in 
+this case
+leads to two distinct mixed embeddings but only a single ramified place `w`, lea
+ding to a
+two-to-one isomorphism between them.
 -/
-abbrev IsMixed (φ : L ->+* Complex) :=
+abbrev IsMixed (φ : L →+* ℂ) :=
   ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ∧ ¬ComplexEmbedding.IsReal φ
 
-/--
-Definition of `IsUnmixed` / `IsUnmixed` 的定义
+/-- If `L/K` and `φ : L →+* ℂ`, then `IsMixed K φ` if `φ` is not mixed in `K`, i.e., `φ` is real
+if and only if it's restriction to `K` is.
 
-English:
-abbreviation IsUnmixed
-  signature: (φ : L ->+* Complex)
-  body: IsReal (φ.comp (algebraMap K L)) -> IsReal φ
+This is the complex embedding analogue of `InfinitePlace.IsUnramified K w`, where
+`w : InfinitePlace L`. In this case there is an isomorphism between unmixed embeddings and
+unramified infinite places. -/
+/-
+**NumberField.ComplexEmbedding.IsUnmixed** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberFiel
+d.ComplexEmbedding`。
+形式化陈述：IsUnmixed (φ : L ->+* Complex)
+参数：φ : L ->+* Complex。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 IsUnmixed
-  签名: (φ : L ->+* 复形)
-  定义体: IsReal (φ.comp (algebraMap K L)) -> IsReal φ
+--- 原说明 ---
+If `L/K` and `φ : L →+* ℂ`, then `IsMixed K φ` if `φ` is not mixed in `K`, i.e.,
+ `φ` is real
+if and only if it's restriction to `K` is.
 
-Depends on / 依赖: IsReal, algebraMap
+This is the complex embedding analogue of `InfinitePlace.IsUnramified K w`, wher
+e
+`w : InfinitePlace L`. In this case there is an isomorphism between unmixed embe
+ddings and
+unramified infinite places.
 -/
-abbrev IsUnmixed (φ : L ->+* Complex) := IsReal (φ.comp (algebraMap K L)) -> IsReal φ
-
-/--
-theorem `IsUnmixed.isReal_iff_isReal` / 定理 `IsUnmixed.isReal_iff_isReal`
-
-English:
-theorem IsUnmixed.isReal_iff_isReal
-  given: {φ : L ->+* Complex} (h : IsUnmixed K φ)
-  proof: by
-  aesop (add simp [IsReal.comp])
-
-中文:
-定理 IsUnmixed.is实数_iff_is实数
-  条件: {φ : L ->+* 复形} (h : IsUnmixed K φ)
-  证明: by
-  aesop (add simp [IsReal.comp])
-
-Depends on / 依赖: IsReal, IsReal.comp
+abbrev IsUnmixed (φ : L →+* ℂ) := IsReal (φ.comp (algebraMap K L)) → IsReal φ
+/-
+**NumberField.ComplexEmbedding.IsUnmixed.isReal_iff_isReal** 是 Mathlib 中的一个定理，位于
+命名空间 `NumberField.ComplexEmbedding.IsUnmixed`。
+形式化陈述：∀ (K : Type u_3) {L : Type u_4} [inst : Field K] [inst_1 : Field L] [inst_
+2 : Algebra K L] {φ : L →+* ℂ},   NumberField.ComplexEmbedding.IsUnmixed K φ →  
+   (NumberField.ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ↔ NumberField.
+ComplexEmbedding.IsReal φ)
+参数：K : Type u_3；NumberField.ComplexEmbedding.IsReal (φ.comp (algebraMap K L)) ↔ 
+NumberField.ComplexEmbedding.IsReal φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem IsUnmixed.isReal_iff_isReal {φ : L ->+* Complex} (h : IsUnmixed K φ) :
+theorem IsUnmixed.isReal_iff_isReal {φ : L →+* ℂ} (h : IsUnmixed K φ) :
     IsReal (φ.comp (algebraMap K L)) ↔ IsReal φ := by
   aesop (add simp [IsReal.comp])
 
 variable {K} (L) (ψ)
 
-/--
-Definition of `mixedEmbeddingsOver` / `mixedEmbeddingsOver` 的定义
+/-- The set of all complex embeddings of `L` that lie over `ψ` and are mixed. -/
+/-
+**NumberField.ComplexEmbedding.mixedEmbeddingsOver** 是 Mathlib 中的一个定义，位于命名空间 `Nu
+mberField.ComplexEmbedding`。
+形式化陈述：mixedEmbeddingsOver : Set (L ->+* Complex)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mixedEmbeddingsOver
-  signature: : Set (L ->+* Complex)
-  body: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsMixed K φ }
-
-中文:
-定义 mixedEmbeddingsOver
-  签名: : 集合 (L ->+* 复形)
-  定义体: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsMixed K φ }
-
-Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.LiesOver, IsMixed, LiesOver
+--- 原说明 ---
+The set of all complex embeddings of `L` that lie over `ψ` and are mixed.
 -/
-def mixedEmbeddingsOver : Set (L ->+* Complex) := { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsMixed K φ }
-/--
-Definition of `unmixedEmbeddingsOver` / `unmixedEmbeddingsOver` 的定义
+def mixedEmbeddingsOver : Set (L →+* ℂ) := { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsMixed K φ }
+/-- The set of all complex embeddings of `L` that lie over `ψ` and are unmixed. -/
+/-
+**NumberField.ComplexEmbedding.unmixedEmbeddingsOver** 是 Mathlib 中的一个定义，位于命名空间 `
+NumberField.ComplexEmbedding`。
+形式化陈述：unmixedEmbeddingsOver : Set (L ->+* Complex)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unmixedEmbeddingsOver
-  signature: : Set (L ->+* Complex)
-  body: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsUnmixed K φ }
-
-中文:
-定义 unmixedEmbeddingsOver
-  签名: : 集合 (L ->+* 复形)
-  定义体: { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsUnmixed K φ }
-
-Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.LiesOver, IsUnmixed, LiesOver
+--- 原说明 ---
+The set of all complex embeddings of `L` that lie over `ψ` and are unmixed.
 -/
-def unmixedEmbeddingsOver : Set (L ->+* Complex) := { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsUnmixed K φ }
-
-/--
-theorem `disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver` / 定理 `disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver`
-
-English:
-theorem disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver
-  proof: by
-  grind [mixedEmbeddingsOver, unmixedEmbeddingsOver]
-
-中文:
-定理 disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver
-  证明: by
-  grind [mixedEmbeddingsOver, unmixedEmbeddingsOver]
-
-Depends on / 依赖: mixedEmbeddingsOver, unmixedEmbeddingsOver
+def unmixedEmbeddingsOver : Set (L →+* ℂ) := { φ | ComplexEmbedding.LiesOver φ ψ ∧ IsUnmixed K φ }
+/-
+**NumberField.ComplexEmbedding.disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOve
+r** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.ComplexEmbedding`。
+形式化陈述：disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver : Disjoint (unmixedEmbe
+ddingsOver L ψ) (mixedEmbeddingsOver L ψ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver :
     Disjoint (unmixedEmbeddingsOver L ψ) (mixedEmbeddingsOver L ψ) := by
   grind [mixedEmbeddingsOver, unmixedEmbeddingsOver]
-
-/--
-theorem `union_unmixedEmbeddingsOver_mixedEmbeddingsOver` / 定理 `union_unmixedEmbeddingsOver_mixedEmbeddingsOver`
-
-English:
-theorem union_unmixedEmbeddingsOver_mixedEmbeddingsOver
-  proof: by
-  grind [unmixedEmbeddingsOver, mixedEmbeddingsOver, ← Set.ofPred_or]
-
-中文:
-定理 union_unmixedEmbeddingsOver_mixedEmbeddingsOver
-  证明: by
-  grind [unmixedEmbeddingsOver, mixedEmbeddingsOver, ← Set.ofPred_or]
-
-Depends on / 依赖: Set.ofPred_or, mixedEmbeddingsOver, ofPred_or, unmixedEmbeddingsOver
+/-
+**NumberField.ComplexEmbedding.union_unmixedEmbeddingsOver_mixedEmbeddingsOver**
+ 是 Mathlib 中的一个定理，位于命名空间 `NumberField.ComplexEmbedding`。
+形式化陈述：union_unmixedEmbeddingsOver_mixedEmbeddingsOver : (unmixedEmbeddingsOver L
+ ψ) union (mixedEmbeddingsOver L ψ) = { φ | ComplexEmbedding.LiesOver φ ψ }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem union_unmixedEmbeddingsOver_mixedEmbeddingsOver :
-    (unmixedEmbeddingsOver L ψ) union (mixedEmbeddingsOver L ψ) =
+    (unmixedEmbeddingsOver L ψ) ∪ (mixedEmbeddingsOver L ψ) =
       { φ | ComplexEmbedding.LiesOver φ ψ } := by
   grind [unmixedEmbeddingsOver, mixedEmbeddingsOver, ← Set.ofPred_or]
 
 end Extension
 
 end NumberField.ComplexEmbedding
+

@@ -41,114 +41,84 @@ universe u v w
 
 variable (R : Type u) (L : Type v) [CommRing R] [LieRing L] [LieAlgebra R L]
 
-/--
-Definition of `CommutatorRing` / `CommutatorRing` 的定义
+/-- Type synonym for turning a `LieRing` into a `NonUnitalNonAssocRing`.
 
-English:
-definition CommutatorRing
-  signature: (L : Type v)
-  body: L
+A `LieRing` can be regarded as a `NonUnitalNonAssocRing` by turning its
+`Bracket` (denoted `⁅, ⁆`) into a `Mul` (denoted `*`). -/
+/-
+**CommutatorRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CommutatorRing (L : Type v) : Type v
+参数：L : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 CommutatorRing
-  签名: (L : 类型v)
-  定义体: L
+--- 原说明 ---
+Type synonym for turning a `LieRing` into a `NonUnitalNonAssocRing`.
+
+A `LieRing` can be regarded as a `NonUnitalNonAssocRing` by turning its
+`Bracket` (denoted `⁅, ⁆`) into a `Mul` (denoted `*`).
 -/
 def CommutatorRing (L : Type v) : Type v := L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonUnitalNonAssocRing (CommutatorRing L)
-  body: have := LieRing.toNonUnitalNonAssocRing L
-inferInstanceAs NonUnitalNonAssocRing L
-
-中文:
-实例 :
-  签名: 非幺非结合环 (CommutatorRing L)
-  定义体: have := LieRing.toNonUnitalNonAssocRing L
-inferInstanceAs NonUnitalNonAssocRing L
-
-Depends on / 依赖: LieRing, LieRing.toNonUnitalNonAssocRing, NonUnitalNonAssocRing, toNonUnitalNonAssocRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NonUnitalNonAssocRing (CommutatorRing L) :=
   have := LieRing.toNonUnitalNonAssocRing L
-inferInstanceAs NonUnitalNonAssocRing L
+  inferInstanceAs <| NonUnitalNonAssocRing L
 
 namespace LieAlgebra
 
+/-
+**LieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : Type v) [Nonempty L] : Nonempty (CommutatorRing L) := ‹Nonempty L›
-
+/-
+**LieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : Type v) [Inhabited L] : Inhabited (CommutatorRing L) := ‹Inhabited L›
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieRing (CommutatorRing L)
-  body: inferInstanceAs LieRing L
-
-中文:
-实例 :
-  签名: Lie环 (CommutatorRing L)
-  定义体: inferInstanceAs LieRing L
-
-Depends on / 依赖: LieRing
+/-
+**LieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LieRing (CommutatorRing L) := inferInstanceAs LieRing L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieAlgebra R (CommutatorRing L)
-  body: inferInstanceAs LieAlgebra R L
-
-中文:
-实例 :
-  签名: Lie代数 R (CommutatorRing L)
-  定义体: inferInstanceAs LieAlgebra R L
-
-Depends on / 依赖: LieAlgebra
+instance : LieRing (CommutatorRing L) := inferInstanceAs <| LieRing L
+/-
+**LieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LieAlgebra R (CommutatorRing L) := inferInstanceAs LieAlgebra R L
+instance : LieAlgebra R (CommutatorRing L) := inferInstanceAs <| LieAlgebra R L
 
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
+/-- Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
+reinterpret the `smul_lie` law as an `IsScalarTower`. -/
+/-
+**LieAlgebra.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+形式化陈述：isScalarTower : IsScalarTower R (CommutatorRing L) (CommutatorRing L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_lie`：smul_lie : ⁅t • x, m⁆ = t • ⁅x, m⁆
 
-English:
-instance isScalarTower
-  signature: : IsScalarTower R (CommutatorRing L) (CommutatorRing L)
-  body: ⟨smul_lie (L := L) (M := L)⟩
-
-中文:
-实例 isScalarTower
-  签名: : 标量塔 R (CommutatorRing L) (CommutatorRing L)
-  定义体: ⟨smul_lie (L := L) (M := L)⟩
-
-Depends on / 依赖: smul_lie
+--- 原说明 ---
+Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
+reinterpret the `smul_lie` law as an `IsScalarTower`.
 -/
 instance isScalarTower : IsScalarTower R (CommutatorRing L) (CommutatorRing L) :=
   ⟨smul_lie (L := L) (M := L)⟩
 
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
+/-- Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
+reinterpret the `lie_smul` law as an `SMulCommClass`. -/
+/-
+**LieAlgebra.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+形式化陈述：smulCommClass : SMulCommClass R (CommutatorRing L) (CommutatorRing L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
 
-English:
-instance smulCommClass
-  signature: : SMulCommClass R (CommutatorRing L) (CommutatorRing L)
-  body: ⟨fun t x y => (lie_smul t x y).symm⟩
-
-中文:
-实例 smulCommClass
-  签名: : 标量交换类 R (CommutatorRing L) (CommutatorRing L)
-  定义体: ⟨fun t x y => (lie_smul t x y).symm⟩
-
-Depends on / 依赖: lie_smul
+--- 原说明 ---
+Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
+reinterpret the `lie_smul` law as an `SMulCommClass`.
 -/
 instance smulCommClass : SMulCommClass R (CommutatorRing L) (CommutatorRing L) :=
   ⟨fun t x y => (lie_smul t x y).symm⟩
@@ -163,48 +133,38 @@ variable {L₂ : Type w} [LieRing L₂] [LieAlgebra R L₂]
 /-- Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
 regard a `LieHom` as a `NonUnitalAlgHom`. -/
 @[simps toFun]
-/--
-Definition of `toNonUnitalAlgHom` / `toNonUnitalAlgHom` 的定义
+/-
+**LieHom.toNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `LieHom`。
+形式化陈述：toNonUnitalAlgHom (f : L ->ₗ⁅R⁆ L₂) : CommutatorRing L ->ₙₐ[R] CommutatorR
+ing L₂
+参数：f : L ->ₗ⁅R⁆ L₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieHom.map_lie`：map_lie (f : L₁ ->ₗ⁅R⁆ L₂) (x y : L₁) : f ⁅x, y⁆ = ⁅f x,
+ f y⁆
 
-English:
-definition toNonUnitalAlgHom
-  signature: (f : L ->ₗ⁅R⁆ L₂)
-  body: { f with
-    toFun := f
-    map_zero' := f.toLinearMap.map_zero
-    map_mul' := f.map_lie }
-
-中文:
-定义 toNonUnitalAlgHom
-  签名: (f : L ->ₗ⁅R⁆ L₂)
-  定义体: { f with
-    toFun := f
-    map_zero' := f.toLinearMap.map_zero
-    map_mul' := f.map_lie }
-
-Depends on / 依赖: f.map_lie, f.toLinearMap.map_zero, map_lie, map_mul, map_zero, toLinearMap
+--- 原说明 ---
+Regarding the `LieRing` of a `LieAlgebra` as a `NonUnitalNonAssocRing`, we can
+regard a `LieHom` as a `NonUnitalAlgHom`.
 -/
-def toNonUnitalAlgHom (f : L ->ₗ⁅R⁆ L₂) : CommutatorRing L ->ₙₐ[R] CommutatorRing L₂ :=
+def toNonUnitalAlgHom (f : L →ₗ⁅R⁆ L₂) : CommutatorRing L →ₙₐ[R] CommutatorRing L₂ :=
   { f with
     toFun := f
     map_zero' := f.toLinearMap.map_zero
     map_mul' := f.map_lie }
-
-/--
-theorem `toNonUnitalAlgHom_injective` / 定理 `toNonUnitalAlgHom_injective`
-
-English:
-theorem toNonUnitalAlgHom_injective
-  proof: fun _ _ h => ext NonUnitalAlgHom.congr_fun h
-
-中文:
-定理 toNonUnitalAlgHom_injective
-  证明: fun _ _ h => ext NonUnitalAlgHom.congr_fun h
-
-Depends on / 依赖: NonUnitalAlgHom, NonUnitalAlgHom.congr_fun, congr_fun
+/-
+**LieHom.toNonUnitalAlgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `LieHom`。
+形式化陈述：toNonUnitalAlgHom_injective : Function.Injective (toNonUnitalAlgHom : _ ->
+ CommutatorRing L ->ₙₐ[R] CommutatorRing L₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieHom.ext`：ext {f g : L₁ ->ₗ⁅R⁆ L₂} (h : forall x, f x = g x) : f = g
+· 使用定理 `NonUnitalAlgHom.congr_fun`：congr_fun {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x
+ : A) : f x = g x
 -/
 theorem toNonUnitalAlgHom_injective :
-    Function.Injective (toNonUnitalAlgHom : _ -> CommutatorRing L ->ₙₐ[R] CommutatorRing L₂) :=
-fun _ _ h => ext NonUnitalAlgHom.congr_fun h
+    Function.Injective (toNonUnitalAlgHom : _ → CommutatorRing L →ₙₐ[R] CommutatorRing L₂) :=
+  fun _ _ h => ext <| NonUnitalAlgHom.congr_fun h
 
 end LieHom
+

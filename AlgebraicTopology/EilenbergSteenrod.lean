@@ -17,7 +17,7 @@ In this file we introduce the Eilenberg-Steenrod axioms for homology theories.
 The data for a homology theory is bundled in a structure `HomologyPretheory` consisting of functors
 `Hₚ i : TopPair ⥤ C` and `H i : TopCat ⥤ C` which represent the `i`th relative and regular homology,
 respectively, (indexed by a `ComplexShape`) and a proof that they agree on `TopCat`. They also
-require boundary morphisms `δ i j : Hₚ i ⟶ proj₂ ⋙ H j` for the long exact sequence of
+require boundary morphisms `δ i j :  Hₚ i ⟶ proj₂ ⋙ H j` for the long exact sequence of
 topological pairs. These are nonzero only if `c.Rel i j`.
 
 We introduce a typeclass `IsHomotopyInvariant` for the first axiom.
@@ -33,28 +33,20 @@ namespace TopPair
 
 /-- A `HomologyPretheory` is the data of an Eilenberg-Steenrod homology theory. -/
 @[ext]
-/--
-Definition of `HomologyPretheory` / `HomologyPretheory` 的定义
+/-
+**TopPair.HomologyPretheory** 是 Mathlib 中的一个结构，位于命名空间 `TopPair`。
+形式化陈述：HomologyPretheory (C : Type*) [Category* C] [Limits.HasZeroMorphisms C] {ι
+ : Type*} (c : ComplexShape ι) where /-- The relative homology functor of a `Hom
+ologyPretheory`. -/ Hₚ (i : ι) : TopPair.{u} ⥤ C /-- The regular homology functo
+r of a `HomologyPretheory`. -/ H (i : ι) : TopCat.{u} ⥤ C /-- `Hₚ` and `H` agree
+ on `TopCat`. -/ iso (i : ι) : H i ≅ incl ⋙ Hₚ i /-- The boundary natural transf
+ormation of a `HomologyPretheory`. -/ δ (i j : ι) : Hₚ i ⟶ proj₂ ⋙ H j /-- The b
+oundary map is only nonzer
+参数：C : Type*；c : ComplexShape ι；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HomologyPretheory
-  axioms and operations (5):
-    - Hₚ((i : ι)) : TopPair.{u} ⥤ C
-    - H((i : ι)) : TopCat.{u} ⥤ C
-    - iso((i : ι)) : H i ≅ incl ⋙ Hₚ i
-    - δ((i j : ι)) : Hₚ i ⟶ proj₂ ⋙ H j
-    - shape_δ((i j : ι) (h : ¬ c.Rel i j)) : δ i j = 0  [default: by cat_disch]
-
-中文:
-结构 HomologyPretheory
-  公理与运算 (5 个):
-    - Hₚ((i : ι)) : TopPair.{u} ⥤ C
-    - H((i : ι)) : 顶元素范畴.{u} ⥤ C
-    - iso((i : ι)) : H i ≅ incl ⋙ Hₚ i
-    - δ((i j : ι)) : Hₚ i ⟶ proj₂ ⋙ H j
-    - shape_δ((i j : ι) (h : ¬ c.关系 i j)) : δ i j = 0  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A `HomologyPretheory` is the data of an Eilenberg-Steenrod homology theory. -/
 -/
 structure HomologyPretheory
     (C : Type*) [Category* C] [Limits.HasZeroMorphisms C] {ι : Type*} (c : ComplexShape ι) where
@@ -75,28 +67,18 @@ variable {C : Type*} [Category* C] [Limits.HasZeroMorphisms C] {ι : Type*} {c :
 
 /-- A morphism in the category `HomologyPretheory`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**TopPair.HomologyPretheory.Hom** 是 Mathlib 中的一个结构，位于命名空间 `TopPair.HomologyPreth
+eory`。
+形式化陈述：Hom (HP HP' : HomologyPretheory.{u} C c) where /-- The natural transformat
+ion of relative homology functors in a morphism of `HomologyPretheory`s. -/ homₚ
+ (i : ι) : HP.Hₚ i ⟶ HP'.Hₚ i /-- The natural transformation of homology functor
+s in a morphism of `HomologyPretheory`s. -/ hom (i : ι) : HP.H i ⟶ HP'.H i
+参数：HP HP' : HomologyPretheory.{u} C c；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (HP HP' : HomologyPretheory.{u} C c)
-  axioms and operations (4):
-    - homₚ((i : ι)) : HP.Hₚ i ⟶ HP'.Hₚ i
-    - hom((i : ι)) : HP.H i ⟶ HP'.H i  [default: (HP.iso i).hom ≫ incl.whiskerLeft (homₚ i) ≫ (HP'.iso i).inv]
-    - iso_comm((i : ι)) : (HP.iso i).hom ≫ incl.whiskerLeft (homₚ i) = hom i ≫ (HP'.iso i).hom  [default: by cat_disch]
-    - w((i j : ι)) : HP.δ i j ≫ proj₂.whiskerLeft (hom j) = homₚ i ≫ HP'.δ i j  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (HP HP' : HomologyPretheory.{u} C c)
-  公理与运算 (4 个):
-    - homₚ((i : ι)) : HP.Hₚ i ⟶ HP'.Hₚ i
-    - hom((i : ι)) : HP.H i ⟶ HP'.H i  [默认: (HP.iso i).hom ≫ incl.whiskerLeft (homₚ i) ≫ (HP'.iso i).inv]
-    - iso_comm((i : ι)) : (HP.iso i).hom ≫ incl.whiskerLeft (homₚ i) = hom i ≫ (HP'.iso i).hom  [默认: by cat_disch]
-    - w((i j : ι)) : HP.δ i j ≫ proj₂.whiskerLeft (hom j) = homₚ i ≫ HP'.δ i j  [默认: by cat_disch]
-
-Depends on / 依赖: HP.iso, incl.whiskerLeft, whiskerLeft
+--- 原说明 ---
+A morphism in the category `HomologyPretheory`.
 -/
 structure Hom (HP HP' : HomologyPretheory.{u} C c) where
   /-- The natural transformation of relative homology functors in a morphism of
@@ -115,24 +97,10 @@ attribute [reassoc (attr := simp)] Hom.iso_comm
 attribute [reassoc (attr := local simp)] Hom.w
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (HomologyPretheory.{u} C c)
-  body: HomologyPretheory.Hom
-  id _ := { homₚ _ := 𝟙 _ }
-  comp f g := { homₚ _ := f.homₚ _ ≫ g.homₚ _ }
-
-中文:
-实例 :
-  签名: 范畴 (HomologyPretheory.{u} C c)
-  定义体: HomologyPretheory.Hom
-  id _ := { homₚ _ := 𝟙 _ }
-  comp f g := { homₚ _ := f.homₚ _ ≫ g.homₚ _ }
-
-Depends on / 依赖: HomologyPretheory, HomologyPretheory.Hom
+/-
+**TopPair.HomologyPretheory.** 是 Mathlib 中的一个实例，位于命名空间 `TopPair.HomologyPretheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (HomologyPretheory.{u} C c) where
   Hom := HomologyPretheory.Hom
@@ -146,20 +114,28 @@ variable {HP HP' : HomologyPretheory.{u} C c}
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `Hom.iso_comm_app` / 引理 `Hom.iso_comm_app`
+/-
+**TopPair.HomologyPretheory.Hom.iso_comm_app** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.
+HomologyPretheory.Hom`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Limits.HasZeroMorphisms C]   {ι : Type u_2} {c : ComplexShape ι} {
+HP HP' : TopPair.HomologyPretheory C c} (f : HP ⟶ HP') (i : ι) (X : TopCat),   C
+ategoryTheory.CategoryStruct.comp ((HP.iso i).hom.app X) ((f.homₚ i).app (TopPai
+r.ofTopCat X)) =     CategoryTheory.CategoryStruct.comp ((f.hom i).app X) ((HP'.
+iso i).hom.app X)
+参数：f : HP ⟶ HP'；i : ι；X : TopCat；(HP.iso i).hom.app X；(f.homₚ i).app (TopPair.of
+TopCat X)；(f.hom i).app X；(HP'.iso i).hom.app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopPair.HomologyPretheory.Hom.iso_comm`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+C]   {ι : Type u_2} {c : Com…
 
-English:
-lemma Hom.iso_comm_app
-  given: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
-  proof: congr($(f.iso_comm _).app _)
-
-中文:
-引理 态射.iso_comm_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
-  证明: congr($(f.iso_comm _).app _)
-
-Depends on / 依赖: f.iso_comm, iso_comm
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma Hom.iso_comm_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
     (HP.iso i).hom.app X ≫ (f.homₚ i).app (ofTopCat X) = (f.hom i).app X ≫ (HP'.iso i).hom.app X :=
@@ -170,40 +146,37 @@ lemma Hom.iso_comm_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `Hom.w_app` / 引理 `Hom.w_app`
+/-
+**TopPair.HomologyPretheory.Hom.w_app** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Homolog
+yPretheory.Hom`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Limits.HasZeroMorphisms C]   {ι : Type u_2} {c : ComplexShape ι} {
+HP HP' : TopPair.HomologyPretheory C c} (f : HP ⟶ HP') (i j : ι) (X : TopPair), 
+  CategoryTheory.CategoryStruct.comp ((HP.δ i j).app X) ((f.hom j).app X.left) =
+     CategoryTheory.CategoryStruct.comp ((f.homₚ i).app X) ((HP'.δ i j).app X)
+参数：f : HP ⟶ HP'；i j : ι；X : TopPair；(HP.δ i j).app X；(f.hom j).app X.left；(f.hom
+ₚ i).app X；(HP'.δ i j).app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopPair.HomologyPretheory.Hom.w`：∀ {C : Type u_1} [inst : CategoryTheory
+.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   {ι
+ : Type u_2} {c : Com…
 
-English:
-lemma Hom.w_app
-  given: (f : HP ⟶ HP') (i j : ι) (X : TopPair.{u})
-  proof: congr($(f.w _ _).app _)
-
-@[reassoc]
-
-中文:
-引理 态射.w_app
-  条件: (f : HP ⟶ HP') (i j : ι) (X : TopPair.{u})
-  证明: congr($(f.w _ _).app _)
-
-@[reassoc]
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma Hom.w_app (f : HP ⟶ HP') (i j : ι) (X : TopPair.{u}) :
     (HP.δ i j).app X ≫ (f.hom j).app X.left = (f.homₚ i).app X ≫ (HP'.δ i j).app X :=
   congr($(f.w _ _).app _)
 
 @[reassoc]
-/--
-lemma `iso_homₚ_inv_hom` / 引理 `iso_homₚ_inv_hom`
-
-English:
-lemma iso_homₚ_inv_hom
-  given: (f : HP ⟶ HP') (i : ι)
-  proof: by simp
-
-中文:
-引理 iso_homₚ_inv_hom
-  条件: (f : HP ⟶ HP') (i : ι)
-  证明: by simp
+/-
+**TopPair.HomologyPretheory.iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `TopPair.HomologyP
+retheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma iso_homₚ_inv_hom (f : HP ⟶ HP') (i : ι) :
     (HP.iso i).hom ≫ incl.whiskerLeft (f.homₚ i) ≫ (HP'.iso i).inv = f.hom i := by simp
@@ -213,42 +186,23 @@ lemma iso_homₚ_inv_hom (f : HP ⟶ HP') (i : ι) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `iso_homₚ_inv_hom_app` / 引理 `iso_homₚ_inv_hom_app`
+/-
+**TopPair.HomologyPretheory.iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `TopPair.HomologyP
+retheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma iso_homₚ_inv_hom_app
-  given: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
-  proof: congr($(iso_homₚ_inv_hom _ _).app _)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 iso_homₚ_inv_hom_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
-  证明: congr($(iso_homₚ_inv_hom _ _).app _)
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma iso_homₚ_inv_hom_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
     (HP.iso i).hom.app X ≫ (f.homₚ i).app (ofTopCat X) ≫ (HP'.iso i).inv.app X = (f.hom i).app X :=
   congr($(iso_homₚ_inv_hom _ _).app _)
 
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_iso_homₚ` / 引理 `inv_hom_iso_homₚ`
-
-English:
-lemma inv_hom_iso_homₚ
-  given: (f : HP ⟶ HP') (i : ι)
-  proof: ((Iso.inv_comp_eq (HP.iso i)).mpr (f.iso_comm i).symm)
-
-中文:
-引理 inv_hom_iso_homₚ
-  条件: (f : HP ⟶ HP') (i : ι)
-  证明: ((Iso.inv_comp_eq (HP.iso i)).mpr (f.iso_comm i).symm)
-
-Depends on / 依赖: HP.iso, Iso.inv_comp_eq, f.iso_comm, inv_comp_eq, iso_comm
+/-
+**TopPair.HomologyPretheory.inv_hom_iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `TopPair.H
+omologyPretheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_iso_homₚ (f : HP ⟶ HP') (i : ι) :
     (HP.iso i).inv ≫ f.hom i ≫ (HP'.iso i).hom = incl.whiskerLeft (f.homₚ i) :=
@@ -256,18 +210,10 @@ lemma inv_hom_iso_homₚ (f : HP ⟶ HP') (i : ι) :
 
 -- TODO: generate this with `@[to_app]`
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_iso_homₚ_app` / 引理 `inv_hom_iso_homₚ_app`
-
-English:
-lemma inv_hom_iso_homₚ_app
-  given: (f : HP ⟶ HP') (i : ι) (X : TopCat.{u})
-  proof: congr($(inv_hom_iso_homₚ _ _).app _)
-
-中文:
-引理 inv_hom_iso_homₚ_app
-  条件: (f : HP ⟶ HP') (i : ι) (X : 顶元素范畴.{u})
-  证明: congr($(inv_hom_iso_homₚ _ _).app _)
+/-
+**TopPair.HomologyPretheory.inv_hom_iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `TopPair.H
+omologyPretheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_iso_homₚ_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
     (HP.iso i).inv.app X ≫ (f.hom i).app X ≫ (HP'.iso i).hom.app X = (f.homₚ i).app (ofTopCat X) :=
@@ -276,70 +222,70 @@ lemma inv_hom_iso_homₚ_app (f : HP ⟶ HP') (i : ι) (X : TopCat.{u}) :
 /-- The forgetful functor that sends a `HomologyPretheory` to it's relative homology functor `Hₚ`.
 -/
 @[simps]
-/--
-Definition of `hₚFunctor` / `hₚFunctor` 的定义
+/-
+**TopPair.HomologyPretheory.h** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.HomologyPretheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hₚFunctor
-  signature: (i : ι)
-  body: HP.Hₚ i
-  map f := f.homₚ i
-
-中文:
-定义 hₚFunctor
-  签名: (i : ι)
-  定义体: HP.Hₚ i
-  map f := f.homₚ i
+--- 原说明 ---
+The forgetful functor that sends a `HomologyPretheory` to it's relative homology
+ functor `Hₚ`.
 -/
 protected def hₚFunctor (i : ι) : HomologyPretheory.{u} C c ⥤ TopPair.{u} ⥤ C where
   obj HP := HP.Hₚ i
   map f := f.homₚ i
-
+/-
+**TopPair.HomologyPretheory.** 是 Mathlib 中的一个实例，位于命名空间 `TopPair.HomologyPretheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : HP ⟶ HP') [IsIso f] (i : ι) : IsIso (f.homₚ i) :=
   inferInstanceAs (IsIso ((HomologyPretheory.hₚFunctor i).map f))
 
 /-- The forgetful functor that sends a `HomologyPretheory` to it's homology functor `H`. -/
 @[simps]
-/--
-Definition of `hFunctor` / `hFunctor` 的定义
+/-
+**TopPair.HomologyPretheory.hFunctor** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Homology
+Pretheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Limits.HasZeroMorphisms C] →       {ι : Type u_2} →       
+  {c : ComplexShape ι} →           ι → CategoryTheory.Functor (TopPair.HomologyP
+retheory C c) (CategoryTheory.Functor TopCat C)
+参数：TopPair.HomologyPretheory C c；CategoryTheory.Functor TopCat C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hFunctor
-  signature: (i : ι)
-  body: HP.H i
-  map f := f.hom i
-
-中文:
-定义 hFunctor
-  签名: (i : ι)
-  定义体: HP.H i
-  map f := f.hom i
+--- 原说明 ---
+The forgetful functor that sends a `HomologyPretheory` to it's homology functor 
+`H`.
 -/
 protected def hFunctor (i : ι) : HomologyPretheory.{u} C c ⥤ TopCat.{u} ⥤ C where
   obj HP := HP.H i
   map f := f.hom i
-
+/-
+**TopPair.HomologyPretheory.** 是 Mathlib 中的一个实例，位于命名空间 `TopPair.HomologyPretheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : HP ⟶ HP') [IsIso f] (i : ι) : IsIso (f.hom i) :=
   inferInstanceAs (IsIso ((HomologyPretheory.hFunctor i).map f))
 
 variable (HP HP' : HomologyPretheory.{u} C c)
 
-/--
-Definition of `IsHomotopyInvariant` / `IsHomotopyInvariant` 的定义
+/-- A `HomologyPretheory` is homotopy-invariant if its homology functor `Hₚ` takes homotopic maps to
+the same map in homology -/
+/-
+**TopPair.HomologyPretheory.IsHomotopyInvariant** 是 Mathlib 中的一个类，位于命名空间 `TopPai
+r.HomologyPretheory`。
+形式化陈述：IsHomotopyInvariant (HP : HomologyPretheory.{u} C c) where map_eq_of_homot
+opy (HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : Homotopy f g) (i : ι) : (HP.Hₚ i
+).map f = (HP.Hₚ i).map g
+参数：HP : HomologyPretheory.{u} C c；HP；F : Homotopy f g；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsHomotopyInvariant
-  parameters: (HP : HomologyPretheory.{u} C c)
-  axioms and operations (1):
-    - map_eq_of_homotopy((HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : Homotopy f g) (i : ι)) : (HP.Hₚ i).map f = (HP.Hₚ i).map g  [default: by cat_disch]
-
-中文:
-类 是HomotopyInvariant
-  参数: (HP : HomologyPretheory.{u} C c)
-  公理与运算 (1 个):
-    - map_eq_of_homotopy((HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : 同伦 f g) (i : ι)) : (HP.Hₚ i).map f = (HP.Hₚ i).map g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A `HomologyPretheory` is homotopy-invariant if its homology functor `Hₚ` takes h
+omotopic maps to
+the same map in homology
 -/
 class IsHomotopyInvariant (HP : HomologyPretheory.{u} C c) where
   map_eq_of_homotopy (HP) {X Y : TopPair.{u}} {f g : X ⟶ Y} (F : Homotopy f g) (i : ι) :
@@ -348,68 +294,42 @@ class IsHomotopyInvariant (HP : HomologyPretheory.{u} C c) where
 export IsHomotopyInvariant (map_eq_of_homotopy)
 
 variable (C c) in
-/--
-Definition of `isHomotopyInvariant` / `isHomotopyInvariant` 的定义
+/-- An abbreviation for `HomologyPretheory.IsHomotopyInvariant` as `ObjectProperty`. -/
+/-
+**TopPair.HomologyPretheory.isHomotopyInvariant** 是 Mathlib 中的一个缩写定义，位于命名空间 `Top
+Pair.HomologyPretheory`。
+形式化陈述：isHomotopyInvariant : ObjectProperty (HomologyPretheory.{u} C c)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation isHomotopyInvariant
-  signature: : ObjectProperty (HomologyPretheory.{u} C c)
-  body: IsHomotopyInvariant
-
-@[simp]
-
-中文:
-缩写 isHomotopyInvariant
-  签名: : ObjectProperty (HomologyPretheory.{u} C c)
-  定义体: IsHomotopyInvariant
-
-@[simp]
-
-Depends on / 依赖: IsHomotopyInvariant
+--- 原说明 ---
+An abbreviation for `HomologyPretheory.IsHomotopyInvariant` as `ObjectProperty`.
 -/
 abbrev isHomotopyInvariant : ObjectProperty (HomologyPretheory.{u} C c) :=
   IsHomotopyInvariant
 
 @[simp]
-/--
-lemma `isHomotopyInvariant_iff` / 引理 `isHomotopyInvariant_iff`
-
-English:
-lemma isHomotopyInvariant_iff
-  statement: isHomotopyInvariant C c HP ↔ IsHomotopyInvariant HP
-  proof: .rfl
-
-中文:
-引理 isHomotopyInvariant_iff
-  结论: isHomotopyInvariant C c HP ↔ 是HomotopyInvariant HP
-  证明: .rfl
+/-
+**TopPair.HomologyPretheory.isHomotopyInvariant_iff** 是 Mathlib 中的一个引理，位于命名空间 `T
+opPair.HomologyPretheory`。
+形式化陈述：isHomotopyInvariant_iff : isHomotopyInvariant C c HP ↔ IsHomotopyInvariant
+ HP
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isHomotopyInvariant_iff : isHomotopyInvariant C c HP ↔ IsHomotopyInvariant HP := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsClosedUnderIsomorphisms (isHomotopyInvariant.{u} C c)
-  body: ⟨fun F _ => by
-    simp only [← cancel_epi ((e.hom.homₚ _).app _), ← NatTrans.naturality,
-      map_eq_of_homotopy _ F _]⟩
-
-中文:
-实例 :
-  签名: 在同构下封闭 (isHomotopyInvariant.{u} C c)
-  定义体: ⟨fun F _ => by
-    simp only [← cancel_epi ((e.hom.homₚ _).app _), ← NatTrans.naturality,
-      map_eq_of_homotopy _ F _]⟩
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, cancel_epi, e.hom.hom, map_eq_of_homotopy, naturality
+/-
+**TopPair.HomologyPretheory.** 是 Mathlib 中的一个实例，位于命名空间 `TopPair.HomologyPretheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsClosedUnderIsomorphisms (isHomotopyInvariant.{u} C c) where
-  of_iso e _ := ⟨fun F _ => by
+  of_iso e _ := ⟨fun F _ ↦ by
     simp only [← cancel_epi ((e.hom.homₚ _).app _), ← NatTrans.naturality,
       map_eq_of_homotopy _ F _]⟩
 
 end HomologyPretheory
 
 end TopPair
+

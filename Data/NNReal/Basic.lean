@@ -37,510 +37,463 @@ open scoped BigOperators
 namespace NNReal
 variable {M : Type*} [Zero M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FloorSemiring Real>=0
-  body: inferInstanceAs FloorSemiring (Subtype _)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: FloorSemiring 实数>=0
-  定义体: inferInstanceAs FloorSemiring (Subtype _)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: FloorSemiring, Subtype
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : FloorSemiring Real>=0 := inferInstanceAs FloorSemiring (Subtype _)
+noncomputable instance : FloorSemiring ℝ≥0 := inferInstanceAs <| FloorSemiring (Subtype _)
 
 @[simp, norm_cast]
-/--
-theorem `coe_mulIndicator` / 定理 `coe_mulIndicator`
-
-English:
-theorem coe_mulIndicator
-  given: {α} (s : Set α) (f : α -> Real>=0) (a : α)
-  proof: map_mulIndicator toRealHom _ _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mulIndicator
-  条件: {α} (s : 集合 α) (f : α -> 实数>=0) (a : α)
-  证明: map_mulIndicator toRealHom _ _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: map_mulIndicator, toRealHom
+/-
+**NNReal.coe_mulIndicator** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_mulIndicator {α} (s : Set α) (f : α -> Real>=0) (a : α) : ((s.mulIndic
+ator f a : Real>=0) : Real) = s.mulIndicator (fun x => ↑(f x)) a
+参数：s : Set α；f : α -> Real>=0；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mulIndicator`：map_mulIndicator {M N F : Type*} [One M] [One N] [FunL
+ike F M N] [OneHomClass F M N] (f : F) (s : Set α) (g : α -> M) (x : α) : f (s.m
+ulIndi…
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_mulIndicator {α} (s : Set α) (f : α -> Real>=0) (a : α) :
-    ((s.mulIndicator f a : Real>=0) : Real) = s.mulIndicator (fun x => ↑(f x)) a :=
+theorem coe_mulIndicator {α} (s : Set α) (f : α → ℝ≥0) (a : α) :
+    ((s.mulIndicator f a : ℝ≥0) : ℝ) = s.mulIndicator (fun x => ↑(f x)) a :=
   map_mulIndicator toRealHom _ _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_indicator` / 定理 `coe_indicator`
-
-English:
-theorem coe_indicator
-  given: {α} (s : Set α) (f : α -> Real>=0) (a : α)
-  proof: map_indicator toRealHom _ _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_indicator
-  条件: {α} (s : 集合 α) (f : α -> 实数>=0) (a : α)
-  证明: map_indicator toRealHom _ _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: map_indicator, toRealHom
+/-
+**NNReal.coe_indicator** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_indicator {α} (s : Set α) (f : α -> Real>=0) (a : α) : ((s.indicator f
+ a : Real>=0) : Real) = s.indicator (fun x => ↑(f x)) a
+参数：s : Set α；f : α -> Real>=0；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_indicator`：∀ {α : Type u_1} {M : Type u_6} {N : Type u_7} {F : Type 
+u_8} [inst : Zero M] [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass 
+F M…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_indicator {α} (s : Set α) (f : α -> Real>=0) (a : α) :
-    ((s.indicator f a : Real>=0) : Real) = s.indicator (fun x => ↑(f x)) a :=
+theorem coe_indicator {α} (s : Set α) (f : α → ℝ≥0) (a : α) :
+    ((s.indicator f a : ℝ≥0) : ℝ) = s.indicator (fun x => ↑(f x)) a :=
   map_indicator toRealHom _ _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_mulSingle` / 定理 `coe_mulSingle`
-
-English:
-theorem coe_mulSingle
-  given: {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α)
-  proof: by
-  simpa using coe_mulIndicator {a} (fun _ => b) c
+/-
+**NNReal.coe_mulSingle** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_mulSingle {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α) : ((Pi.mul
+Single a b : α -> Real>=0) c : Real) = (Pi.mulSingle a b : α -> Real) c
+参数：a : α；b : Real>=0；c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Set.mulIndicator_singleton`：mulIndicator_singleton (i : ι) (f : ι -> M) 
+: Set.mulIndicator {i} f = Pi.mulSingle i (f i)
+· 使用定理 `NNReal.coe_mulIndicator`：coe_mulIndicator {α} (s : Set α) (f : α -> Real
+>=0) (a : α) : ((s.mulIndicator f a : Real>=0) : Real) = s.mulIndicator (fun x =
+> ↑(f x)) a
+-/
+theorem coe_mulSingle {α} [DecidableEq α] (a : α) (b : ℝ≥0) (c : α) :
+    ((Pi.mulSingle a b : α → ℝ≥0) c : ℝ) = (Pi.mulSingle a b : α → ℝ) c := by
+  simpa using coe_mulIndicator {a} (fun _ ↦ b) c
 
 @[simp, norm_cast]
-
-中文:
-定理 coe_mulSingle
-  条件: {α} [DecidableEq α] (a : α) (b : 实数>=0) (c : α)
-  证明: by
-  simpa using coe_mulIndicator {a} (fun _ => b) c
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_mulIndicator
+/-
+**NNReal.coe_single** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_single {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α) : ((Pi.single
+ a b : α -> Real>=0) c : Real) = (Pi.single a b : α -> Real) c
+参数：a : α；b : Real>=0；c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Set.indicator_singleton`：∀ {ι : Type u_6} [inst : DecidableEq ι] {M : Ty
+pe u_7} [inst_1 : Zero M] (i : ι) (f : ι → M),   {i}.indicator f = Pi.single i (
+f i)
+· 使用定理 `NNReal.coe_indicator`：coe_indicator {α} (s : Set α) (f : α -> Real>=0) (
+a : α) : ((s.indicator f a : Real>=0) : Real) = s.indicator (fun x => ↑(f x)) a
 -/
-theorem coe_mulSingle {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α) :
-    ((Pi.mulSingle a b : α -> Real>=0) c : Real) = (Pi.mulSingle a b : α -> Real) c := by
-  simpa using coe_mulIndicator {a} (fun _ => b) c
-
-@[simp, norm_cast]
-/--
-theorem `coe_single` / 定理 `coe_single`
-
-English:
-theorem coe_single
-  given: {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α)
-  proof: by
-  simpa using coe_indicator {a} (fun _ => b) c
+theorem coe_single {α} [DecidableEq α] (a : α) (b : ℝ≥0) (c : α) :
+    ((Pi.single a b : α → ℝ≥0) c : ℝ) = (Pi.single a b : α → ℝ) c := by
+  simpa using coe_indicator {a} (fun _ ↦ b) c
 
 @[norm_cast]
-
-中文:
-定理 coe_single
-  条件: {α} [DecidableEq α] (a : α) (b : 实数>=0) (c : α)
-  证明: by
-  simpa using coe_indicator {a} (fun _ => b) c
-
-@[norm_cast]
-
-Depends on / 依赖: coe_indicator
+/-
+**NNReal.coe_list_sum** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_list_sum (l : List Real>=0) : ((l.sum : Real>=0) : Real) = (l.map (↑))
+.sum
+参数：l : List Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-theorem coe_single {α} [DecidableEq α] (a : α) (b : Real>=0) (c : α) :
-    ((Pi.single a b : α -> Real>=0) c : Real) = (Pi.single a b : α -> Real) c := by
-  simpa using coe_indicator {a} (fun _ => b) c
-
-@[norm_cast]
-/--
-theorem `coe_list_sum` / 定理 `coe_list_sum`
-
-English:
-theorem coe_list_sum
-  given: (l : List Real>=0)
-  statement: ((l.sum : Real>=0) : Real) = (l.map (↑)).sum
-  proof: map_list_sum toRealHom l
-
-@[norm_cast]
-
-中文:
-定理 coe_list_sum
-  条件: (l : 列表 实数>=0)
-  结论: ((l.求和 : 实数>=0) : 实数) = (l.map (↑)).求和
-  证明: map_list_sum toRealHom l
-
-@[norm_cast]
-
-Depends on / 依赖: map_list_sum, toRealHom
--/
-theorem coe_list_sum (l : List Real>=0) : ((l.sum : Real>=0) : Real) = (l.map (↑)).sum :=
+theorem coe_list_sum (l : List ℝ≥0) : ((l.sum : ℝ≥0) : ℝ) = (l.map (↑)).sum :=
   map_list_sum toRealHom l
 
 @[norm_cast]
-/--
-theorem `coe_list_prod` / 定理 `coe_list_prod`
-
-English:
-theorem coe_list_prod
-  given: (l : List Real>=0)
-  statement: ((l.prod : Real>=0) : Real) = (l.map (↑)).prod
-  proof: map_list_prod toRealHom l
-
-@[norm_cast]
-
-中文:
-定理 coe_list_prod
-  条件: (l : 列表 实数>=0)
-  结论: ((l.乘积 : 实数>=0) : 实数) = (l.map (↑)).乘积
-  证明: map_list_prod toRealHom l
-
-@[norm_cast]
-
-Depends on / 依赖: map_list_prod, toRealHom
+/-
+**NNReal.coe_list_prod** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_list_prod (l : List Real>=0) : ((l.prod : Real>=0) : Real) = (l.map (↑
+)).prod
+参数：l : List Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_prod`：map_list_prod {F : Type*} [FunLike F M N] [MonoidHomClass
+ F M N] (f : F) (l : List M) : f l.prod = (l.map f).prod
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_list_prod (l : List Real>=0) : ((l.prod : Real>=0) : Real) = (l.map (↑)).prod :=
+theorem coe_list_prod (l : List ℝ≥0) : ((l.prod : ℝ≥0) : ℝ) = (l.map (↑)).prod :=
   map_list_prod toRealHom l
 
 @[norm_cast]
-/--
-theorem `coe_multiset_sum` / 定理 `coe_multiset_sum`
-
-English:
-theorem coe_multiset_sum
-  given: (s : Multiset Real>=0)
-  statement: ((s.sum : Real>=0) : Real) = (s.map (↑)).sum
-  proof: map_multiset_sum toRealHom s
-
-@[norm_cast]
-
-中文:
-定理 coe_multiset_sum
-  条件: (s : Multiset 实数>=0)
-  结论: ((s.求和 : 实数>=0) : 实数) = (s.map (↑)).求和
-  证明: map_multiset_sum toRealHom s
-
-@[norm_cast]
-
-Depends on / 依赖: map_multiset_sum, toRealHom
+/-
+**NNReal.coe_multiset_sum** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_multiset_sum (s : Multiset Real>=0) : ((s.sum : Real>=0) : Real) = (s.
+map (↑)).sum
+参数：s : Multiset Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-theorem coe_multiset_sum (s : Multiset Real>=0) : ((s.sum : Real>=0) : Real) = (s.map (↑)).sum :=
+theorem coe_multiset_sum (s : Multiset ℝ≥0) : ((s.sum : ℝ≥0) : ℝ) = (s.map (↑)).sum :=
   map_multiset_sum toRealHom s
 
 @[norm_cast]
-/--
-theorem `coe_multiset_prod` / 定理 `coe_multiset_prod`
-
-English:
-theorem coe_multiset_prod
-  given: (s : Multiset Real>=0)
-  statement: ((s.prod : Real>=0) : Real) = (s.map (↑)).prod
-  proof: map_multiset_prod toRealHom s
-
-中文:
-定理 coe_multiset_prod
-  条件: (s : Multiset 实数>=0)
-  结论: ((s.乘积 : 实数>=0) : 实数) = (s.map (↑)).乘积
-  证明: map_multiset_prod toRealHom s
-
-Depends on / 依赖: map_multiset_prod, toRealHom
+/-
+**NNReal.coe_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_multiset_prod (s : Multiset Real>=0) : ((s.prod : Real>=0) : Real) = (
+s.map (↑)).prod
+参数：s : Multiset Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_prod`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst 
+: CommMonoid M] [inst_1 : CommMonoid N] [inst_2 : FunLike F M N]   [MonoidHomCla
+ss F M …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_multiset_prod (s : Multiset Real>=0) : ((s.prod : Real>=0) : Real) = (s.map (↑)).prod :=
+theorem coe_multiset_prod (s : Multiset ℝ≥0) : ((s.prod : ℝ≥0) : ℝ) = (s.map (↑)).prod :=
   map_multiset_prod toRealHom s
 
-variable {ι : Type*} {s : Finset ι} {f : ι -> Real}
+variable {ι : Type*} {s : Finset ι} {f : ι → ℝ}
 
 @[simp, norm_cast]
-/--
-theorem `coe_sum` / 定理 `coe_sum`
-
-English:
-theorem coe_sum
-  given: (s : Finset ι) (f : ι -> Real>=0)
-  statement: ∑ i in s, f i = ∑ i in s, (f i : Real)
-  proof: map_sum toRealHom _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_sum
-  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
-  结论: ∑ i in s, f i = ∑ i in s, (f i : 实数)
-  证明: map_sum toRealHom _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: map_sum, toRealHom
+/-
+**NNReal.coe_sum** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f i = ∑ i in s, (f i
+ : Real)
+参数：s : Finset ι；f : ι -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-theorem coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f i = ∑ i in s, (f i : Real) :=
+theorem coe_sum (s : Finset ι) (f : ι → ℝ≥0) : ∑ i ∈ s, f i = ∑ i ∈ s, (f i : ℝ) :=
   map_sum toRealHom _ _
 
 @[simp, norm_cast]
-/--
-lemma `toReal_finsuppSum` / 引理 `toReal_finsuppSum`
-
-English:
-lemma toReal_finsuppSum
-  given: (f : ι ->₀ M) (g : ι -> M -> Real>=0)
-  proof: map_finsuppSum toRealHom ..
-
-@[simp, norm_cast]
-
-中文:
-引理 to实数_finsuppSum
-  条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
-  证明: map_finsuppSum toRealHom ..
-
-@[simp, norm_cast]
-
-Depends on / 依赖: map_finsuppSum, toRealHom
+/-
+**NNReal.toReal_finsuppSum** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：toReal_finsuppSum (f : ι ->₀ M) (g : ι -> M -> Real>=0) : f.sum g = f.sum 
+(fun i m => toReal (g i m))
+参数：f : ι ->₀ M；g : ι -> M -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finsuppSum`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} {P : Typ
+e u_11} [inst : Zero M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid P] 
+{H :…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-lemma toReal_finsuppSum (f : ι ->₀ M) (g : ι -> M -> Real>=0) :
-    f.sum g = f.sum (fun i m => toReal (g i m)) := map_finsuppSum toRealHom ..
+lemma toReal_finsuppSum (f : ι →₀ M) (g : ι → M → ℝ≥0) :
+    f.sum g = f.sum (fun i m ↦ toReal (g i m)) := map_finsuppSum toRealHom ..
 
 @[simp, norm_cast]
-/--
-lemma `toReal_finsuppProd` / 引理 `toReal_finsuppProd`
-
-English:
-lemma toReal_finsuppProd
-  given: (f : ι ->₀ M) (g : ι -> M -> Real>=0)
-  proof: map_finsuppProd toRealHom ..
-
-@[simp, norm_cast]
-
-中文:
-引理 to实数_finsuppProd
-  条件: (f : ι ->₀ M) (g : ι -> M -> 实数>=0)
-  证明: map_finsuppProd toRealHom ..
-
-@[simp, norm_cast]
-
-Depends on / 依赖: map_finsuppProd, toRealHom
+/-
+**NNReal.toReal_finsuppProd** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：toReal_finsuppProd (f : ι ->₀ M) (g : ι -> M -> Real>=0) : f.prod g = f.pr
+od (fun i m => toReal (g i m))
+参数：f : ι ->₀ M；g : ι -> M -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finsuppProd`：map_finsuppProd [Zero M] [CommMonoid N] [CommMonoid P] 
+{H : Type*} [FunLike H N P] [MonoidHomClass H N P] (h : H) (f : α ->₀ M) (g : α 
+-> M …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-lemma toReal_finsuppProd (f : ι ->₀ M) (g : ι -> M -> Real>=0) :
-    f.prod g = f.prod (fun i m => toReal (g i m)) := map_finsuppProd toRealHom ..
+lemma toReal_finsuppProd (f : ι →₀ M) (g : ι → M → ℝ≥0) :
+    f.prod g = f.prod (fun i m ↦ toReal (g i m)) := map_finsuppProd toRealHom ..
 
 @[simp, norm_cast]
-/--
-lemma `coe_expect` / 引理 `coe_expect`
-
-English:
-lemma coe_expect
-  given: (s : Finset ι) (f : ι -> Real>=0)
-  statement: 𝔼 i in s, f i = 𝔼 i in s, (f i : Real)
-  proof: map_expect toRealHom ..
-
-中文:
-引理 coe_expect
-  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
-  结论: 𝔼 i in s, f i = 𝔼 i in s, (f i : 实数)
-  证明: map_expect toRealHom ..
-
-Depends on / 依赖: map_expect, toRealHom
+/-
+**NNReal.coe_expect** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：coe_expect (s : Finset ι) (f : ι -> Real>=0) : 𝔼 i in s, f i = 𝔼 i in s, (
+f i : Real)
+参数：s : Finset ι；f : ι -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_expect`：∀ {ι : Type u_1} {M : Type u_4} {N : Type u_5} [inst : AddCo
+mmMonoid M] [inst_1 : _root_.Module ℚ≥0 M]   [inst_2 : AddCommMonoid N] [inst_3 
+…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-lemma coe_expect (s : Finset ι) (f : ι -> Real>=0) : 𝔼 i in s, f i = 𝔼 i in s, (f i : Real) :=
+lemma coe_expect (s : Finset ι) (f : ι → ℝ≥0) : 𝔼 i ∈ s, f i = 𝔼 i ∈ s, (f i : ℝ) :=
   map_expect toRealHom ..
-
-/--
-theorem `_root_.Real.toNNReal_sum_of_nonneg` / 定理 `_root_.Real.toNNReal_sum_of_nonneg`
-
-English:
-theorem _root_.Real.toNNReal_sum_of_nonneg
-  given: (hf : forall i in s, 0 <= f i)
-  proof: by
-  rw [← coe_inj]; rw [NNReal.coe_sum]; rw [Real.coe_toNNReal _ (Finset.sum_nonneg hf)]
-  exact Finset.sum_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
-
-@[simp, norm_cast]
-
-中文:
-定理 _root_.实数.toNN实数_sum_of_nonneg
-  条件: (hf : 对任意 i in s, 0 <= f i)
-  证明: by
-  rw [← coe_inj]; rw [NNReal.coe_sum]; rw [Real.coe_toNNReal _ (Finset.sum_nonneg hf)]
-  exact Finset.sum_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.sum_congr, Finset.sum_nonneg, NNReal, NNReal.coe_sum, Real.coe_toNNReal, coe_inj, coe_sum, coe_toNNReal, sum_congr, sum_nonneg
+/-
+**NNReal._root_.Real.toNNReal_sum_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Real.toNNReal_sum_of_nonneg (hf : forall i in s, 0 <= f i) :
-    Real.toNNReal (∑ a in s, f a) = ∑ a in s, Real.toNNReal (f a) := by
-  rw [← coe_inj]; rw [NNReal.coe_sum]; rw [Real.coe_toNNReal _ (Finset.sum_nonneg hf)]
+theorem _root_.Real.toNNReal_sum_of_nonneg (hf : ∀ i ∈ s, 0 ≤ f i) :
+    Real.toNNReal (∑ a ∈ s, f a) = ∑ a ∈ s, Real.toNNReal (f a) := by
+  rw [← coe_inj, NNReal.coe_sum, Real.coe_toNNReal _ (Finset.sum_nonneg hf)]
   exact Finset.sum_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
 
 @[simp, norm_cast]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (s : Finset ι) (f : ι -> Real>=0)
-  statement: ↑(∏ a in s, f a) = ∏ a in s, (f a : Real)
-  proof: map_prod toRealHom _ _
-
-中文:
-定理 coe_prod
-  条件: (s : 有限集 ι) (f : ι -> 实数>=0)
-  结论: ↑(∏ a in s, f a) = ∏ a in s, (f a : 实数)
-  证明: map_prod toRealHom _ _
-
-Depends on / 依赖: map_prod, toRealHom
+/-
+**NNReal.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：coe_prod (s : Finset ι) (f : ι -> Real>=0) : ↑(∏ a in s, f a) = ∏ a in s, 
+(f a : Real)
+参数：s : Finset ι；f : ι -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem coe_prod (s : Finset ι) (f : ι -> Real>=0) : ↑(∏ a in s, f a) = ∏ a in s, (f a : Real) :=
+theorem coe_prod (s : Finset ι) (f : ι → ℝ≥0) : ↑(∏ a ∈ s, f a) = ∏ a ∈ s, (f a : ℝ) :=
   map_prod toRealHom _ _
-
-/--
-theorem `_root_.Real.toNNReal_prod_of_nonneg` / 定理 `_root_.Real.toNNReal_prod_of_nonneg`
-
-English:
-theorem _root_.Real.toNNReal_prod_of_nonneg
-  given: (hf : forall a, a in s -> 0 <= f a)
-  proof: by
-  rw [← coe_inj]; rw [NNReal.coe_prod]; rw [Real.coe_toNNReal _ (Finset.prod_nonneg hf)]
-  exact Finset.prod_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
-
-中文:
-定理 _root_.实数.toNN实数_prod_of_nonneg
-  条件: (hf : 对任意 a, a in s -> 0 <= f a)
-  证明: by
-  rw [← coe_inj]; rw [NNReal.coe_prod]; rw [Real.coe_toNNReal _ (Finset.prod_nonneg hf)]
-  exact Finset.prod_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
-
-Depends on / 依赖: Finset, Finset.prod_congr, Finset.prod_nonneg, NNReal, NNReal.coe_prod, Real.coe_toNNReal, coe_inj, coe_prod, coe_toNNReal, prod_congr, prod_nonneg
+/-
+**NNReal._root_.Real.toNNReal_prod_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Real.toNNReal_prod_of_nonneg (hf : forall a, a in s -> 0 <= f a) :
-    Real.toNNReal (∏ a in s, f a) = ∏ a in s, Real.toNNReal (f a) := by
-  rw [← coe_inj]; rw [NNReal.coe_prod]; rw [Real.coe_toNNReal _ (Finset.prod_nonneg hf)]
+theorem _root_.Real.toNNReal_prod_of_nonneg (hf : ∀ a, a ∈ s → 0 ≤ f a) :
+    Real.toNNReal (∏ a ∈ s, f a) = ∏ a ∈ s, Real.toNNReal (f a) := by
+  rw [← coe_inj, NNReal.coe_prod, Real.coe_toNNReal _ (Finset.prod_nonneg hf)]
   exact Finset.prod_congr rfl fun x hxs => by rw [Real.coe_toNNReal _ (hf x hxs)]
-
-/--
-theorem `le_iInf_add_iInf` / 定理 `le_iInf_add_iInf`
-
-English:
-theorem le_iInf_add_iInf
-  statement: {ι ι' : Sort*} [Nonempty ι] [Nonempty ι'] {f : ι -> Real>=0} {g : ι' -> Real>=0}
-  proof: by
-  rw [← NNReal.coe_le_coe]; rw [NNReal.coe_add]; rw [coe_iInf]; rw [coe_iInf]
-  exact le_ciInf_add_ciInf h
-
-中文:
-定理 le_iInf_add_iInf
-  结论: {ι ι' : 类型层*} [非空 ι] [非空 ι'] {f : ι -> 实数>=0} {g : ι' -> 实数>=0}
-  证明: by
-  rw [← NNReal.coe_le_coe]; rw [NNReal.coe_add]; rw [coe_iInf]; rw [coe_iInf]
-  exact le_ciInf_add_ciInf h
-
-Depends on / 依赖: NNReal, NNReal.coe_add, NNReal.coe_le_coe, coe_add, coe_iInf, coe_le_coe, le_ciInf_add_ciInf
+/-
+**NNReal.le_iInf_add_iInf** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：le_iInf_add_iInf {ι ι' : Sort*} [Nonempty ι] [Nonempty ι'] {f : ι -> Real>
+=0} {g : ι' -> Real>=0} {a : Real>=0} (h : forall i j, a <= f i + g j) : a <= (⨅
+ i, f i) + ⨅ j, g j
+参数：h : forall i j, a <= f i + g j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `NNReal.coe_add`：∀ (r₁ r₂ : NNReal), ↑(r₁ + r₂) = ↑r₁ + ↑r₂
+· 使用定理 `NNReal.coe_iInf`：coe_iInf {ι : Sort*} (s : ι -> Real>=0) : (↑(⨅ i, s i) 
+: Real) = ⨅ i, ↑(s i)
+· 使用定理 `le_ciInf_add_ciInf`：∀ {α : Type u_1} {ι : Sort u_2} {ι' : Sort u_3} [Non
+empty ι] [Nonempty ι'] [inst : ConditionallyCompleteLattice α]   [inst_1 : AddGr
+oup α] […
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
-theorem le_iInf_add_iInf {ι ι' : Sort*} [Nonempty ι] [Nonempty ι'] {f : ι -> Real>=0} {g : ι' -> Real>=0}
-    {a : Real>=0} (h : forall i j, a <= f i + g j) : a <= (⨅ i, f i) + ⨅ j, g j := by
-  rw [← NNReal.coe_le_coe]; rw [NNReal.coe_add]; rw [coe_iInf]; rw [coe_iInf]
+theorem le_iInf_add_iInf {ι ι' : Sort*} [Nonempty ι] [Nonempty ι'] {f : ι → ℝ≥0} {g : ι' → ℝ≥0}
+    {a : ℝ≥0} (h : ∀ i j, a ≤ f i + g j) : a ≤ (⨅ i, f i) + ⨅ j, g j := by
+  rw [← NNReal.coe_le_coe, NNReal.coe_add, coe_iInf, coe_iInf]
   exact le_ciInf_add_ciInf h
-
-/--
-theorem `mul_finset_sup` / 定理 `mul_finset_sup`
-
-English:
-theorem mul_finset_sup
-  given: {α} (r : Real>=0) (s : Finset α) (f : α -> Real>=0)
-  proof: Finset.apply_sup_eq_sup_comp _ (NNReal.mul_sup r) (mul_zero r)
-
-中文:
-定理 mul_finset_sup
-  条件: {α} (r : 实数>=0) (s : 有限集 α) (f : α -> 实数>=0)
-  证明: Finset.apply_sup_eq_sup_comp _ (NNReal.mul_sup r) (mul_zero r)
-
-Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp, NNReal, NNReal.mul_sup, apply_sup_eq_sup_comp, mul_sup, mul_zero
+/-
+**NNReal.mul_finset_sup** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：mul_finset_sup {α} (r : Real>=0) (s : Finset α) (f : α -> Real>=0) : r * s
+.sup f = s.sup fun a => r * f a
+参数：r : Real>=0；s : Finset α；f : α -> Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_sup_eq_sup_comp`：apply_sup_eq_sup_comp [SemilatticeSup γ] [
+OrderBot γ] {s : Finset β} {f : β -> α} (g : α -> γ) (g_sup : forall x y, g (x ⊔
+ y) = g x ⊔ g y) (…
+· 使用定理 `NNReal.mul_sup`：mul_sup (a b c : Real>=0) : a * (b ⊔ c) = a * b ⊔ a * c
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem mul_finset_sup {α} (r : Real>=0) (s : Finset α) (f : α -> Real>=0) :
+theorem mul_finset_sup {α} (r : ℝ≥0) (s : Finset α) (f : α → ℝ≥0) :
     r * s.sup f = s.sup fun a => r * f a :=
   Finset.apply_sup_eq_sup_comp _ (NNReal.mul_sup r) (mul_zero r)
-
-/--
-theorem `finset_sup_mul` / 定理 `finset_sup_mul`
-
-English:
-theorem finset_sup_mul
-  given: {α} (s : Finset α) (f : α -> Real>=0) (r : Real>=0)
-  proof: Finset.apply_sup_eq_sup_comp (· * r) (fun x y => NNReal.sup_mul x y r) (zero_mul r)
-
-中文:
-定理 finset_sup_mul
-  条件: {α} (s : 有限集 α) (f : α -> 实数>=0) (r : 实数>=0)
-  证明: Finset.apply_sup_eq_sup_comp (· * r) (fun x y => NNReal.sup_mul x y r) (zero_mul r)
-
-Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp, NNReal, NNReal.sup_mul, apply_sup_eq_sup_comp, sup_mul, zero_mul
+/-
+**NNReal.finset_sup_mul** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：finset_sup_mul {α} (s : Finset α) (f : α -> Real>=0) (r : Real>=0) : s.sup
+ f * r = s.sup fun a => f a * r
+参数：s : Finset α；f : α -> Real>=0；r : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.apply_sup_eq_sup_comp`：apply_sup_eq_sup_comp [SemilatticeSup γ] [
+OrderBot γ] {s : Finset β} {f : β -> α} (g : α -> γ) (g_sup : forall x y, g (x ⊔
+ y) = g x ⊔ g y) (…
+· 使用定理 `NNReal.sup_mul`：sup_mul (a b c : Real>=0) : (a ⊔ b) * c = a * c ⊔ b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem finset_sup_mul {α} (s : Finset α) (f : α -> Real>=0) (r : Real>=0) :
+theorem finset_sup_mul {α} (s : Finset α) (f : α → ℝ≥0) (r : ℝ≥0) :
     s.sup f * r = s.sup fun a => f a * r :=
   Finset.apply_sup_eq_sup_comp (· * r) (fun x y => NNReal.sup_mul x y r) (zero_mul r)
-
-/--
-theorem `finset_sup_div` / 定理 `finset_sup_div`
-
-English:
-theorem finset_sup_div
-  given: {α} {f : α -> Real>=0} {s : Finset α} (r : Real>=0)
-  proof: by simp only [div_eq_inv_mul, mul_finset_sup]
-
-中文:
-定理 finset_sup_div
-  条件: {α} {f : α -> 实数>=0} {s : 有限集 α} (r : 实数>=0)
-  证明: by simp only [div_eq_inv_mul, mul_finset_sup]
-
-Depends on / 依赖: div_eq_inv_mul, mul_finset_sup
+/-
+**NNReal.finset_sup_div** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：finset_sup_div {α} {f : α -> Real>=0} {s : Finset α} (r : Real>=0) : s.sup
+ f / r = s.sup fun a => f a / r
+参数：r : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
+· 使用定理 `NNReal.mul_finset_sup`：mul_finset_sup {α} (r : Real>=0) (s : Finset α) (
+f : α -> Real>=0) : r * s.sup f = s.sup fun a => r * f a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finset_sup_div {α} {f : α -> Real>=0} {s : Finset α} (r : Real>=0) :
+theorem finset_sup_div {α} {f : α → ℝ≥0} {s : Finset α} (r : ℝ≥0) :
     s.sup f / r = s.sup fun a => f a / r := by simp only [div_eq_inv_mul, mul_finset_sup]
 
 section Set
 
-/--
-lemma `bddAbove_natCast_image_iff` / 引理 `bddAbove_natCast_image_iff`
-
-English:
-lemma bddAbove_natCast_image_iff
-  given: {s : Set Nat}
-  statement: BddAbove ((↑) '' s : Set Real>=0) ↔ BddAbove s
-  proof: ⟨.imp' Nat.floor (by simp [upperBounds, Nat.le_floor_iff]), .imp' (↑) (by simp [upperBounds])⟩
-
-中文:
-引理 bddAbove_natCast_image_iff
-  条件: {s : 集合 自然数}
-  结论: BddAbove ((↑) '' s : 集合 实数>=0) ↔ BddAbove s
-  证明: ⟨.imp' Nat.floor (by simp [upperBounds, Nat.le_floor_iff]), .imp' (↑) (by simp [upperBounds])⟩
+/-
+**NNReal.bddAbove_natCast_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {s : Set ℕ}, BddAbove (Nat.cast '' s) ↔ BddAbove s
+参数：Nat.cast '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp'`：∀ {α : Sort u_2} {p : α → Prop} {β : Sort u_1} {q : β → Pro
+p} (f : α → β),   (∀ (a : α), p a → q (f a)) → (∃ a, p a) → ∃ b, q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-@[simp] lemma bddAbove_natCast_image_iff {s : Set Nat} : BddAbove ((↑) '' s : Set Real>=0) ↔ BddAbove s :=
+@[simp] lemma bddAbove_natCast_image_iff {s : Set ℕ} : BddAbove ((↑) '' s : Set ℝ≥0) ↔ BddAbove s :=
   ⟨.imp' Nat.floor (by simp [upperBounds, Nat.le_floor_iff]), .imp' (↑) (by simp [upperBounds])⟩
-
-/--
-lemma `bddAbove_range_natCast_iff` / 引理 `bddAbove_range_natCast_iff`
-
-English:
-lemma bddAbove_range_natCast_iff
-  given: {ι : Sort*} (f : ι -> Nat)
-  proof: by
-  rw [← bddAbove_natCast_image_iff]; rw [← Set.range_comp]
-  rfl
-
-中文:
-引理 bddAbove_range_natCast_iff
-  条件: {ι : 类型层*} (f : ι -> 自然数)
-  证明: by
-  rw [← bddAbove_natCast_image_iff]; rw [← Set.range_comp]
-  rfl
+/-
+**NNReal.bddAbove_range_natCast_iff** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {ι : Sort u_3} (f : ι → ℕ), BddAbove (Set.range fun x => ↑(f x)) ↔ BddAb
+ove (Set.range f)
+参数：f : ι → ℕ；Set.range fun x => ↑(f x)；Set.range f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.bddAbove_natCast_image_iff`：∀ {s : Set ℕ}, BddAbove (Nat.cast '' 
+s) ↔ BddAbove s
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, norm_cast] lemma bddAbove_range_natCast_iff {ι : Sort*} (f : ι -> Nat) :
+@[simp, norm_cast] lemma bddAbove_range_natCast_iff {ι : Sort*} (f : ι → ℕ) :
     BddAbove (Set.range (f ·) : Set NNReal) ↔ BddAbove (Set.range f) := by
-  rw [← bddAbove_natCast_image_iff]; rw [← Set.range_comp]
+  rw [← bddAbove_natCast_image_iff, ← Set.range_comp]
   rfl
 
 end Set
@@ -549,45 +502,55 @@ open Real
 
 section Sub
 
+/-!
+### Lemmas about subtraction
 
-/--
-theorem `sub_div` / 定理 `sub_div`
-
-English:
-theorem sub_div
-  given: (a b c : Real>=0)
-  statement: (a - b) / c = a / c - b / c
-  proof: tsub_div _ _ _
-
-中文:
-定理 sub_div
-  条件: (a b c : 实数>=0)
-  结论: (a - b) / c = a / c - b / c
-  证明: tsub_div _ _ _
-
-Depends on / 依赖: tsub_div
+In this section we provide a few lemmas about subtraction that do not fit well into any other
+typeclass. For lemmas about subtraction and addition see lemmas about `OrderedSub` in the file
+`Mathlib/Algebra/Order/Sub/Basic.lean`. See also `mul_tsub` and `tsub_mul`.
 -/
-theorem sub_div (a b c : Real>=0) : (a - b) / c = a / c - b / c :=
+
+/-
+**NNReal.sub_div** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：sub_div (a b c : Real>=0) : (a - b) / c = a / c - b / c
+参数：a b c : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsub_div`：tsub_div (a b c : α) : (a - b) / c = a / c - b / c
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+
+--- 原说明 ---
+### Lemmas about subtraction
+
+In this section we provide a few lemmas about subtraction that do not fit well i
+nto any other
+typeclass. For lemmas about subtraction and addition see lemmas about `OrderedSu
+b` in the file
+`Mathlib/Algebra/Order/Sub/Basic.lean`. See also `mul_tsub` and `tsub_mul`.
+-/
+theorem sub_div (a b c : ℝ≥0) : (a - b) / c = a / c - b / c :=
   tsub_div _ _ _
 
 /-- This lemma is needed for the `norm_cast` simp set. Outside of this use case `Nat.coe_sub`
 should be used. -/
 @[norm_cast]
-/--
-theorem `coe_sub_of_lt` / 定理 `coe_sub_of_lt`
+/-
+**NNReal.coe_sub_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {a b : NNReal}, a < b → ↑(b - a) = ↑b - ↑a
+参数：b - a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.coe_sub`：∀ {r₁ r₂ : NNReal}, r₂ ≤ r₁ → ↑(r₁ - r₂) = ↑r₁ - ↑r₂
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-English:
-theorem coe_sub_of_lt
-  given: {a b : Real>=0} (h : a < b)
-  proof: NNReal.coe_sub h.le
-
-中文:
-定理 coe_sub_of_lt
-  条件: {a b : 实数>=0} (h : a < b)
-  证明: NNReal.coe_sub h.le
+--- 原说明 ---
+This lemma is needed for the `norm_cast` simp set. Outside of this use case `Nat
+.coe_sub`
+should be used.
 -/
-protected theorem coe_sub_of_lt {a b : Real>=0} (h : a < b) :
-    ((b - a : Real>=0) : Real) = b - a := NNReal.coe_sub h.le
+protected theorem coe_sub_of_lt {a b : ℝ≥0} (h : a < b) :
+    ((b - a : ℝ≥0) : ℝ) = b - a := NNReal.coe_sub h.le
 
 end Sub
 
@@ -595,317 +558,270 @@ section Csupr
 
 open Set
 
-variable {ι : Sort*} {f : ι -> Real>=0}
+variable {ι : Sort*} {f : ι → ℝ≥0}
 
-/--
-theorem `iInf_mul` / 定理 `iInf_mul`
-
-English:
-theorem iInf_mul
-  given: (f : ι -> Real>=0) (a : Real>=0)
-  statement: iInf f * a = ⨅ i, f i * a
-  proof: by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [coe_iInf]; rw [coe_iInf]
+/-
+**NNReal.iInf_mul** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：iInf_mul (f : ι -> Real>=0) (a : Real>=0) : iInf f * a = ⨅ i, f i * a
+参数：f : ι -> Real>=0；a : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_inj`：∀ {r₁ r₂ : NNReal}, ↑r₁ = ↑r₂ ↔ r₁ = r₂
+· 使用定理 `NNReal.coe_mul`：∀ (r₁ r₂ : NNReal), ↑(r₁ * r₂) = ↑r₁ * ↑r₂
+· 使用定理 `NNReal.coe_iInf`：coe_iInf {ι : Sort*} (s : ι -> Real>=0) : (↑(⨅ i, s i) 
+: Real) = ⨅ i, ↑(s i)
+· 使用定理 `Real.iInf_mul_of_nonneg`：Real.iInf_mul_of_nonneg (ha : 0 <= r) (f : ι ->
+ Real) : (⨅ i, f i) * r = ⨅ i, f i * r
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+-/
+theorem iInf_mul (f : ι → ℝ≥0) (a : ℝ≥0) : iInf f * a = ⨅ i, f i * a := by
+  rw [← coe_inj, NNReal.coe_mul, coe_iInf, coe_iInf]
   exact Real.iInf_mul_of_nonneg (NNReal.coe_nonneg _) _
-
-中文:
-定理 iInf_mul
-  条件: (f : ι -> 实数>=0) (a : 实数>=0)
-  结论: iInf f * a = ⨅ i, f i * a
-  证明: by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [coe_iInf]; rw [coe_iInf]
-  exact Real.iInf_mul_of_nonneg (NNReal.coe_nonneg _) _
-
-Depends on / 依赖: NNReal, NNReal.coe_mul, NNReal.coe_nonneg, Real.iInf_mul_of_nonneg, coe_iInf, coe_inj, coe_mul, coe_nonneg, iInf_mul_of_nonneg
+/-
+**NNReal.mul_iInf** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：mul_iInf (f : ι -> Real>=0) (a : Real>=0) : a * iInf f = ⨅ i, a * f i
+参数：f : ι -> Real>=0；a : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NNReal.iInf_mul`：iInf_mul (f : ι -> Real>=0) (a : Real>=0) : iInf f * a 
+= ⨅ i, f i * a
 -/
-theorem iInf_mul (f : ι -> Real>=0) (a : Real>=0) : iInf f * a = ⨅ i, f i * a := by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [coe_iInf]; rw [coe_iInf]
-  exact Real.iInf_mul_of_nonneg (NNReal.coe_nonneg _) _
-
-/--
-theorem `mul_iInf` / 定理 `mul_iInf`
-
-English:
-theorem mul_iInf
-  given: (f : ι -> Real>=0) (a : Real>=0)
-  statement: a * iInf f = ⨅ i, a * f i
-  proof: by
+theorem mul_iInf (f : ι → ℝ≥0) (a : ℝ≥0) : a * iInf f = ⨅ i, a * f i := by
   simpa only [mul_comm] using iInf_mul f a
-
-中文:
-定理 mul_iInf
-  条件: (f : ι -> 实数>=0) (a : 实数>=0)
-  结论: a * iInf f = ⨅ i, a * f i
-  证明: by
-  simpa only [mul_comm] using iInf_mul f a
-
-Depends on / 依赖: iInf_mul, mul_comm
+/-
+**NNReal.mul_iSup** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：mul_iSup (f : ι -> Real>=0) (a : Real>=0) : (a * ⨆ i, f i) = ⨆ i, a * f i
+参数：f : ι -> Real>=0；a : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.coe_inj`：∀ {r₁ r₂ : NNReal}, ↑r₁ = ↑r₂ ↔ r₁ = r₂
+· 使用定理 `NNReal.coe_mul`：∀ (r₁ r₂ : NNReal), ↑(r₁ * r₂) = ↑r₁ * ↑r₂
+· 使用定理 `NNReal.coe_iSup`：coe_iSup {ι : Sort*} (s : ι -> Real>=0) : (↑(⨆ i, s i) 
+: Real) = ⨆ i, ↑(s i)
+· 使用定理 `Real.mul_iSup_of_nonneg`：Real.mul_iSup_of_nonneg (ha : 0 <= r) (f : ι ->
+ Real) : (r * ⨆ i, f i) = ⨆ i, r * f i
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
 -/
-theorem mul_iInf (f : ι -> Real>=0) (a : Real>=0) : a * iInf f = ⨅ i, a * f i := by
-  simpa only [mul_comm] using iInf_mul f a
-
-/--
-theorem `mul_iSup` / 定理 `mul_iSup`
-
-English:
-theorem mul_iSup
-  given: (f : ι -> Real>=0) (a : Real>=0)
-  statement: (a * ⨆ i, f i) = ⨆ i, a * f i
-  proof: by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [NNReal.coe_iSup]; rw [NNReal.coe_iSup]
+theorem mul_iSup (f : ι → ℝ≥0) (a : ℝ≥0) : (a * ⨆ i, f i) = ⨆ i, a * f i := by
+  rw [← coe_inj, NNReal.coe_mul, NNReal.coe_iSup, NNReal.coe_iSup]
   exact Real.mul_iSup_of_nonneg (NNReal.coe_nonneg _) _
-
-中文:
-定理 mul_iSup
-  条件: (f : ι -> 实数>=0) (a : 实数>=0)
-  结论: (a * ⨆ i, f i) = ⨆ i, a * f i
-  证明: by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [NNReal.coe_iSup]; rw [NNReal.coe_iSup]
-  exact Real.mul_iSup_of_nonneg (NNReal.coe_nonneg _) _
-
-Depends on / 依赖: NNReal, NNReal.coe_iSup, NNReal.coe_mul, NNReal.coe_nonneg, Real.mul_iSup_of_nonneg, coe_iSup, coe_inj, coe_mul, coe_nonneg, mul_iSup_of_nonneg
+/-
+**NNReal.iSup_mul** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：iSup_mul (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) * a = ⨆ i, f i * a
+参数：f : ι -> Real>=0；a : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `NNReal.mul_iSup`：mul_iSup (f : ι -> Real>=0) (a : Real>=0) : (a * ⨆ i, f
+ i) = ⨆ i, a * f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_iSup (f : ι -> Real>=0) (a : Real>=0) : (a * ⨆ i, f i) = ⨆ i, a * f i := by
-  rw [← coe_inj]; rw [NNReal.coe_mul]; rw [NNReal.coe_iSup]; rw [NNReal.coe_iSup]
-  exact Real.mul_iSup_of_nonneg (NNReal.coe_nonneg _) _
-
-/--
-theorem `iSup_mul` / 定理 `iSup_mul`
-
-English:
-theorem iSup_mul
-  given: (f : ι -> Real>=0) (a : Real>=0)
-  statement: (⨆ i, f i) * a = ⨆ i, f i * a
-  proof: by
-  rw [mul_comm]; rw [mul_iSup]
+theorem iSup_mul (f : ι → ℝ≥0) (a : ℝ≥0) : (⨆ i, f i) * a = ⨆ i, f i * a := by
+  rw [mul_comm, mul_iSup]
   simp_rw [mul_comm]
-
-中文:
-定理 iSup_mul
-  条件: (f : ι -> 实数>=0) (a : 实数>=0)
-  结论: (⨆ i, f i) * a = ⨆ i, f i * a
-  证明: by
-  rw [mul_comm]; rw [mul_iSup]
-  simp_rw [mul_comm]
-
-Depends on / 依赖: mul_comm, mul_iSup, simp_rw
+/-
+**NNReal.iSup_div** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：iSup_div (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) / a = ⨆ i, f i / a
+参数：f : ι -> Real>=0；a : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `NNReal.iSup_mul`：iSup_mul (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) 
+* a = ⨆ i, f i * a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iSup_mul (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) * a = ⨆ i, f i * a := by
-  rw [mul_comm]; rw [mul_iSup]
-  simp_rw [mul_comm]
-
-/--
-theorem `iSup_div` / 定理 `iSup_div`
-
-English:
-theorem iSup_div
-  given: (f : ι -> Real>=0) (a : Real>=0)
-  statement: (⨆ i, f i) / a = ⨆ i, f i / a
-  proof: by
+theorem iSup_div (f : ι → ℝ≥0) (a : ℝ≥0) : (⨆ i, f i) / a = ⨆ i, f i / a := by
   simp only [div_eq_mul_inv, iSup_mul]
-
-中文:
-定理 iSup_div
-  条件: (f : ι -> 实数>=0) (a : 实数>=0)
-  结论: (⨆ i, f i) / a = ⨆ i, f i / a
-  证明: by
-  simp only [div_eq_mul_inv, iSup_mul]
-
-Depends on / 依赖: div_eq_mul_inv, iSup_mul
+/-
+**NNReal.mul_iSup_le** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：mul_iSup_le {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, 
+g * h j <= a) : g * iSup h <= a
+参数：H : forall j, g * h j <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mul_iSup`：mul_iSup (f : ι -> Real>=0) (a : Real>=0) : (a * ⨆ i, f
+ i) = ⨆ i, a * f i
+· 使用定理 `ciSup_le'`：ciSup_le' {f : ι -> α} {a : α} (h : forall i, f i <= a) : ⨆ i
+, f i <= a
 -/
-theorem iSup_div (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) / a = ⨆ i, f i / a := by
-  simp only [div_eq_mul_inv, iSup_mul]
-
-/--
-theorem `mul_iSup_le` / 定理 `mul_iSup_le`
-
-English:
-theorem mul_iSup_le
-  given: {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, g * h j <= a)
-  statement: g * iSup h <= a
-  proof: by
+theorem mul_iSup_le {a : ℝ≥0} {g : ℝ≥0} {h : ι → ℝ≥0} (H : ∀ j, g * h j ≤ a) : g * iSup h ≤ a := by
   rw [mul_iSup]
   exact ciSup_le' H
-
-中文:
-定理 mul_iSup_le
-  条件: {a : 实数>=0} {g : 实数>=0} {h : ι -> 实数>=0} (H : 对任意 j, g * h j <= a)
-  结论: g * iSup h <= a
-  证明: by
-  rw [mul_iSup]
-  exact ciSup_le' H
-
-Depends on / 依赖: ciSup_le, mul_iSup
+/-
+**NNReal.iSup_mul_le** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：iSup_mul_le {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, 
+g i * h <= a) : iSup g * h <= a
+参数：H : forall i, g i * h <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.iSup_mul`：iSup_mul (f : ι -> Real>=0) (a : Real>=0) : (⨆ i, f i) 
+* a = ⨆ i, f i * a
+· 使用定理 `ciSup_le'`：ciSup_le' {f : ι -> α} {a : α} (h : forall i, f i <= a) : ⨆ i
+, f i <= a
 -/
-theorem mul_iSup_le {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, g * h j <= a) : g * iSup h <= a := by
-  rw [mul_iSup]
-  exact ciSup_le' H
-
-/--
-theorem `iSup_mul_le` / 定理 `iSup_mul_le`
-
-English:
-theorem iSup_mul_le
-  given: {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, g i * h <= a)
-  statement: iSup g * h <= a
-  proof: by
+theorem iSup_mul_le {a : ℝ≥0} {g : ι → ℝ≥0} {h : ℝ≥0} (H : ∀ i, g i * h ≤ a) : iSup g * h ≤ a := by
   rw [iSup_mul]
   exact ciSup_le' H
-
-中文:
-定理 iSup_mul_le
-  条件: {a : 实数>=0} {g : ι -> 实数>=0} {h : 实数>=0} (H : 对任意 i, g i * h <= a)
-  结论: iSup g * h <= a
-  证明: by
-  rw [iSup_mul]
-  exact ciSup_le' H
-
-Depends on / 依赖: ciSup_le, iSup_mul
+/-
+**NNReal.iSup_mul_iSup_le** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：iSup_mul_iSup_le {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, g i *
+ h j <= a) : iSup g * iSup h <= a
+参数：H : forall i j, g i * h j <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.iSup_mul_le`：iSup_mul_le {a : Real>=0} {g : ι -> Real>=0} {h : Re
+al>=0} (H : forall i, g i * h <= a) : iSup g * h <= a
+· 使用定理 `NNReal.mul_iSup_le`：mul_iSup_le {a : Real>=0} {g : Real>=0} {h : ι -> Re
+al>=0} (H : forall j, g * h j <= a) : g * iSup h <= a
 -/
-theorem iSup_mul_le {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, g i * h <= a) : iSup g * h <= a := by
-  rw [iSup_mul]
-  exact ciSup_le' H
-
-/--
-theorem `iSup_mul_iSup_le` / 定理 `iSup_mul_iSup_le`
-
-English:
-theorem iSup_mul_iSup_le
-  given: {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, g i * h j <= a)
-  proof: iSup_mul_le fun _ => mul_iSup_le H _
-
-中文:
-定理 iSup_mul_iSup_le
-  条件: {a : 实数>=0} {g h : ι -> 实数>=0} (H : 对任意 i j, g i * h j <= a)
-  证明: iSup_mul_le fun _ => mul_iSup_le H _
-
-Depends on / 依赖: iSup_mul_le, mul_iSup_le
--/
-theorem iSup_mul_iSup_le {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, g i * h j <= a) :
-    iSup g * iSup h <= a :=
-iSup_mul_le fun _ => mul_iSup_le H _
+theorem iSup_mul_iSup_le {a : ℝ≥0} {g h : ι → ℝ≥0} (H : ∀ i j, g i * h j ≤ a) :
+    iSup g * iSup h ≤ a :=
+  iSup_mul_le fun _ => mul_iSup_le <| H _
 
 variable [Nonempty ι]
-
-/--
-theorem `le_mul_iInf` / 定理 `le_mul_iInf`
-
-English:
-theorem le_mul_iInf
-  given: {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, a <= g * h j)
-  statement: a <= g * iInf h
-  proof: by
+/-
+**NNReal.le_mul_iInf** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：le_mul_iInf {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, 
+a <= g * h j) : a <= g * iInf h
+参数：H : forall j, a <= g * h j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mul_iInf`：mul_iInf (f : ι -> Real>=0) (a : Real>=0) : a * iInf f 
+= ⨅ i, a * f i
+· 使用定理 `le_ciInf`：le_ciInf [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, c <=
+ f x) : c <= iInf f
+-/
+theorem le_mul_iInf {a : ℝ≥0} {g : ℝ≥0} {h : ι → ℝ≥0} (H : ∀ j, a ≤ g * h j) : a ≤ g * iInf h := by
   rw [mul_iInf]
   exact le_ciInf H
-
-中文:
-定理 le_mul_iInf
-  条件: {a : 实数>=0} {g : 实数>=0} {h : ι -> 实数>=0} (H : 对任意 j, a <= g * h j)
-  结论: a <= g * iInf h
-  证明: by
-  rw [mul_iInf]
-  exact le_ciInf H
-
-Depends on / 依赖: le_ciInf, mul_iInf
+/-
+**NNReal.le_iInf_mul** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：le_iInf_mul {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, 
+a <= g i * h) : a <= iInf g * h
+参数：H : forall i, a <= g i * h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.iInf_mul`：iInf_mul (f : ι -> Real>=0) (a : Real>=0) : iInf f * a 
+= ⨅ i, f i * a
+· 使用定理 `le_ciInf`：le_ciInf [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, c <=
+ f x) : c <= iInf f
 -/
-theorem le_mul_iInf {a : Real>=0} {g : Real>=0} {h : ι -> Real>=0} (H : forall j, a <= g * h j) : a <= g * iInf h := by
-  rw [mul_iInf]
-  exact le_ciInf H
-
-/--
-theorem `le_iInf_mul` / 定理 `le_iInf_mul`
-
-English:
-theorem le_iInf_mul
-  given: {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, a <= g i * h)
-  statement: a <= iInf g * h
-  proof: by
+theorem le_iInf_mul {a : ℝ≥0} {g : ι → ℝ≥0} {h : ℝ≥0} (H : ∀ i, a ≤ g i * h) : a ≤ iInf g * h := by
   rw [iInf_mul]
   exact le_ciInf H
-
-中文:
-定理 le_iInf_mul
-  条件: {a : 实数>=0} {g : ι -> 实数>=0} {h : 实数>=0} (H : 对任意 i, a <= g i * h)
-  结论: a <= iInf g * h
-  证明: by
-  rw [iInf_mul]
-  exact le_ciInf H
-
-Depends on / 依赖: iInf_mul, le_ciInf
+/-
+**NNReal.le_iInf_mul_iInf** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：le_iInf_mul_iInf {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, a <= 
+g i * h j) : a <= iInf g * iInf h
+参数：H : forall i j, a <= g i * h j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.le_iInf_mul`：le_iInf_mul {a : Real>=0} {g : ι -> Real>=0} {h : Re
+al>=0} (H : forall i, a <= g i * h) : a <= iInf g * h
+· 使用定理 `NNReal.le_mul_iInf`：le_mul_iInf {a : Real>=0} {g : Real>=0} {h : ι -> Re
+al>=0} (H : forall j, a <= g * h j) : a <= g * iInf h
 -/
-theorem le_iInf_mul {a : Real>=0} {g : ι -> Real>=0} {h : Real>=0} (H : forall i, a <= g i * h) : a <= iInf g * h := by
-  rw [iInf_mul]
-  exact le_ciInf H
-
-/--
-theorem `le_iInf_mul_iInf` / 定理 `le_iInf_mul_iInf`
-
-English:
-theorem le_iInf_mul_iInf
-  given: {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, a <= g i * h j)
-  proof: le_iInf_mul fun i => le_mul_iInf H i
-
-中文:
-定理 le_iInf_mul_iInf
-  条件: {a : 实数>=0} {g h : ι -> 实数>=0} (H : 对任意 i j, a <= g i * h j)
-  证明: le_iInf_mul fun i => le_mul_iInf H i
-
-Depends on / 依赖: le_iInf_mul, le_mul_iInf
+theorem le_iInf_mul_iInf {a : ℝ≥0} {g h : ι → ℝ≥0} (H : ∀ i j, a ≤ g i * h j) :
+    a ≤ iInf g * iInf h :=
+  le_iInf_mul fun i => le_mul_iInf <| H i
+/-
+**NNReal.natCast_iSup** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {ι : Sort u_4} (f : ι → ℕ), ↑(⨆ i, f i) = ⨆ i, ↑(f i)
+参数：f : ι → ℕ；⨆ i, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用引理 `ciSup_of_not_bddAbove`：ciSup_of_not_bddAbove (hf : ¬BddAbove (range f)) 
+: ⨆ i, f i = sSup ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `csSup_empty`：csSup_empty : (sSup ∅ : α) = ⊥
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem le_iInf_mul_iInf {a : Real>=0} {g h : ι -> Real>=0} (H : forall i j, a <= g i * h j) :
-    a <= iInf g * iInf h :=
-le_iInf_mul fun i => le_mul_iInf H i
-
-/--
-lemma `natCast_iSup` / 引理 `natCast_iSup`
-
-English:
-lemma natCast_iSup
-  given: {ι : Sort*} (f : ι -> Nat)
-  proof: by
-  by_cases h : BddAbove (Set.range f)
-  · apply eq_of_forall_ge_iff
-    simp [ciSup_le_iff', ← Nat.le_floor_iff, *]
-  · simp [*]
-
-中文:
-引理 natCast_iSup
-  条件: {ι : 类型层*} (f : ι -> 自然数)
-  证明: by
-  by_cases h : BddAbove (Set.range f)
-  · apply eq_of_forall_ge_iff
-    simp [ciSup_le_iff', ← Nat.le_floor_iff, *]
-  · simp [*]
--/
-@[simp, norm_cast] lemma natCast_iSup {ι : Sort*} (f : ι -> Nat) :
+@[simp, norm_cast] lemma natCast_iSup {ι : Sort*} (f : ι → ℕ) :
     ⨆ i, f i = (⨆ i, f i : NNReal) := by
   by_cases h : BddAbove (Set.range f)
   · apply eq_of_forall_ge_iff
     simp [ciSup_le_iff', ← Nat.le_floor_iff, *]
   · simp [*]
-
-/--
-lemma `natCast_iInf` / 引理 `natCast_iInf`
-
-English:
-lemma natCast_iInf
-  given: {ι : Sort*} (f : ι -> Nat)
-  proof: by
-  obtain hι | hι := isEmpty_or_nonempty ι
-  · simp [iInf_empty]
-  apply eq_of_forall_le_iff
-  simp [le_ciInf_iff, ← Nat.ceil_le]
-
-中文:
-引理 natCast_iInf
-  条件: {ι : 类型层*} (f : ι -> 自然数)
-  证明: by
-  obtain hι | hι := isEmpty_or_nonempty ι
-  · simp [iInf_empty]
-  apply eq_of_forall_le_iff
-  simp [le_ciInf_iff, ← Nat.ceil_le]
+/-
+**NNReal.natCast_iInf** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {ι : Sort u_4} (f : ι → ℕ), ↑(⨅ i, f i) = ⨅ i, ↑(f i)
+参数：f : ι → ℕ；⨅ i, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.iInf_of_empty`：iInf_of_empty {ι : Sort*} [IsEmpty ι] (f : ι -> Nat) 
+: iInf f = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `NNReal.iInf_empty`：iInf_empty [IsEmpty ι] (f : ι -> Real>=0) : ⨅ i, f i 
+= 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-@[simp, norm_cast] lemma natCast_iInf {ι : Sort*} (f : ι -> Nat) :
+@[simp, norm_cast] lemma natCast_iInf {ι : Sort*} (f : ι → ℕ) :
     ⨅ i, f i = (⨅ i, f i : NNReal) := by
   obtain hι | hι := isEmpty_or_nonempty ι
   · simp [iInf_empty]
@@ -916,363 +832,205 @@ end Csupr
 
 section rify
 
-/--
-lemma `toReal_eq` / 引理 `toReal_eq`
-
-English:
-lemma toReal_eq
-  given: (a b : Real>=0)
-  statement: a = b ↔ (a : Real) = (b : Real)
-  proof: by simp
-
-中文:
-引理 to实数_eq
-  条件: (a b : 实数>=0)
-  结论: a = b ↔ (a : 实数) = (b : 实数)
-  证明: by simp
+/-
+**NNReal.toReal_eq** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ (a b : NNReal), a = b ↔ ↑a = ↑b
+参数：a b : NNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[rify_simps] lemma toReal_eq (a b : Real>=0) : a = b ↔ (a : Real) = (b : Real) := by simp
-
-/--
-lemma `toReal_le` / 引理 `toReal_le`
-
-English:
-lemma toReal_le
-  given: (a b : Real>=0)
-  statement: a <= b ↔ (a : Real) <= (b : Real)
-  proof: by simp
-
-中文:
-引理 to实数_le
-  条件: (a b : 实数>=0)
-  结论: a <= b ↔ (a : 实数) <= (b : 实数)
-  证明: by simp
+@[rify_simps] lemma toReal_eq (a b : ℝ≥0) : a = b ↔ (a : ℝ) = (b : ℝ) := by simp
+/-
+**NNReal.toReal_le** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ (a b : NNReal), a ≤ b ↔ ↑a ≤ ↑b
+参数：a b : NNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[rify_simps] lemma toReal_le (a b : Real>=0) : a <= b ↔ (a : Real) <= (b : Real) := by simp
-
-/--
-lemma `toReal_lt` / 引理 `toReal_lt`
-
-English:
-lemma toReal_lt
-  given: (a b : Real>=0)
-  statement: a < b ↔ (a : Real) < (b : Real)
-  proof: by simp
-
-中文:
-引理 to实数_lt
-  条件: (a b : 实数>=0)
-  结论: a < b ↔ (a : 实数) < (b : 实数)
-  证明: by simp
+@[rify_simps] lemma toReal_le (a b : ℝ≥0) : a ≤ b ↔ (a : ℝ) ≤ (b : ℝ) := by simp
+/-
+**NNReal.toReal_lt** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ (a b : NNReal), a < b ↔ ↑a < ↑b
+参数：a b : NNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[rify_simps] lemma toReal_lt (a b : Real>=0) : a < b ↔ (a : Real) < (b : Real) := by simp
-
-/--
-lemma `toReal_ne` / 引理 `toReal_ne`
-
-English:
-lemma toReal_ne
-  given: (a b : Real>=0)
-  statement: a != b ↔ (a : Real) != (b : Real)
-  proof: by simp
-
-中文:
-引理 to实数_ne
-  条件: (a b : 实数>=0)
-  结论: a != b ↔ (a : 实数) != (b : 实数)
-  证明: by simp
+@[rify_simps] lemma toReal_lt (a b : ℝ≥0) : a < b ↔ (a : ℝ) < (b : ℝ) := by simp
+/-
+**NNReal.toReal_ne** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ (a b : NNReal), a ≠ b ↔ ↑a ≠ ↑b
+参数：a b : NNReal。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[rify_simps] lemma toReal_ne (a b : Real>=0) : a != b ↔ (a : Real) != (b : Real) := by simp
+@[rify_simps] lemma toReal_ne (a b : ℝ≥0) : a ≠ b ↔ (a : ℝ) ≠ (b : ℝ) := by simp
 
 end rify
 
 @[simp]
-/--
-theorem `range_coe` / 定理 `range_coe`
-
-English:
-theorem range_coe
-  statement: range toReal = Ici 0
-  proof: Subtype.range_coe
-
-@[simp]
-
-中文:
-定理 range_coe
-  结论: range to实数 = 左闭右无界区间 0
-  证明: Subtype.range_coe
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.range_coe, range_coe
+/-
+**NNReal.range_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：range_coe : range toReal = Ici 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 -/
 theorem range_coe : range toReal = Ici 0 := Subtype.range_coe
 
 @[simp]
-/--
-theorem `image_coe_Ici` / 定理 `image_coe_Ici`
-
-English:
-theorem image_coe_Ici
-  given: (x : Real>=0)
-  statement: toReal '' Ici x = Ici ↑x
-  proof: image_subtype_val_Ici_Ici ..
-
-@[simp]
-
-中文:
-定理 image_coe_Ici
-  条件: (x : 实数>=0)
-  结论: to实数 '' 左闭右无界区间 x = 左闭右无界区间 ↑x
-  证明: image_subtype_val_Ici_Ici ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ici_Ici
+/-
+**NNReal.image_coe_Ici** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Ici (x : Real>=0) : toReal '' Ici x = Ici ↑x
+参数：x : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ici_Ici`：image_subtype_val_Ici_Ici {a : α} (b : Ic
+i a) : Subtype.val '' Ici b = Ici b.1
 -/
-theorem image_coe_Ici (x : Real>=0) : toReal '' Ici x = Ici ↑x := image_subtype_val_Ici_Ici ..
+theorem image_coe_Ici (x : ℝ≥0) : toReal '' Ici x = Ici ↑x := image_subtype_val_Ici_Ici ..
 
 @[simp]
-/--
-theorem `image_coe_Iic` / 定理 `image_coe_Iic`
-
-English:
-theorem image_coe_Iic
-  given: (x : Real>=0)
-  statement: toReal '' Iic x = Icc 0 ↑x
-  proof: image_subtype_val_Ici_Iic ..
-
-@[simp]
-
-中文:
-定理 image_coe_Iic
-  条件: (x : 实数>=0)
-  结论: to实数 '' 左无界右闭区间 x = 闭区间 0 ↑x
-  证明: image_subtype_val_Ici_Iic ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ici_Iic
+/-
+**NNReal.image_coe_Iic** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Iic (x : Real>=0) : toReal '' Iic x = Icc 0 ↑x
+参数：x : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ici_Iic`：image_subtype_val_Ici_Iic {a : α} (b : Ic
+i a) : Subtype.val '' Iic b = Icc a b
 -/
-theorem image_coe_Iic (x : Real>=0) : toReal '' Iic x = Icc 0 ↑x := image_subtype_val_Ici_Iic ..
+theorem image_coe_Iic (x : ℝ≥0) : toReal '' Iic x = Icc 0 ↑x := image_subtype_val_Ici_Iic ..
 
 @[simp]
-/--
-theorem `image_coe_Ioi` / 定理 `image_coe_Ioi`
-
-English:
-theorem image_coe_Ioi
-  given: (x : Real>=0)
-  statement: toReal '' Ioi x = Ioi ↑x
-  proof: image_subtype_val_Ici_Ioi ..
-
-@[simp]
-
-中文:
-定理 image_coe_Ioi
-  条件: (x : 实数>=0)
-  结论: to实数 '' 左开右无界区间 x = 左开右无界区间 ↑x
-  证明: image_subtype_val_Ici_Ioi ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ici_Ioi
+/-
+**NNReal.image_coe_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Ioi (x : Real>=0) : toReal '' Ioi x = Ioi ↑x
+参数：x : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ici_Ioi`：image_subtype_val_Ici_Ioi {a : α} (b : Ic
+i a) : Subtype.val '' Ioi b = Ioi b.1
 -/
-theorem image_coe_Ioi (x : Real>=0) : toReal '' Ioi x = Ioi ↑x := image_subtype_val_Ici_Ioi ..
+theorem image_coe_Ioi (x : ℝ≥0) : toReal '' Ioi x = Ioi ↑x := image_subtype_val_Ici_Ioi ..
 
 @[simp]
-/--
-theorem `image_coe_Iio` / 定理 `image_coe_Iio`
-
-English:
-theorem image_coe_Iio
-  given: (x : Real>=0)
-  statement: toReal '' Iio x = Ico 0 ↑x
-  proof: image_subtype_val_Ici_Iio ..
-
-@[simp]
-
-中文:
-定理 image_coe_Iio
-  条件: (x : 实数>=0)
-  结论: to实数 '' 左无界右开区间 x = 左闭右开区间 0 ↑x
-  证明: image_subtype_val_Ici_Iio ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ici_Iio
+/-
+**NNReal.image_coe_Iio** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Iio (x : Real>=0) : toReal '' Iio x = Ico 0 ↑x
+参数：x : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ici_Iio`：image_subtype_val_Ici_Iio {a : α} (b : Ic
+i a) : Subtype.val '' Iio b = Ico a b
 -/
-theorem image_coe_Iio (x : Real>=0) : toReal '' Iio x = Ico 0 ↑x := image_subtype_val_Ici_Iio ..
+theorem image_coe_Iio (x : ℝ≥0) : toReal '' Iio x = Ico 0 ↑x := image_subtype_val_Ici_Iio ..
 
 @[simp]
-/--
-theorem `image_coe_Icc` / 定理 `image_coe_Icc`
-
-English:
-theorem image_coe_Icc
-  given: (x y : Real>=0)
-  statement: toReal '' Icc x y = Icc ↑x ↑y
-  proof: image_subtype_val_Icc (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_Icc
-  条件: (x y : 实数>=0)
-  结论: to实数 '' 闭区间 x y = 闭区间 ↑x ↑y
-  证明: image_subtype_val_Icc (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Icc
+/-
+**NNReal.image_coe_Icc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Icc (x y : Real>=0) : toReal '' Icc x y = Icc ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Icc`：image_subtype_val_Icc {s : Set α} [OrdConnect
+ed s] (x y : s) : Subtype.val '' Icc x y = Icc x.1 y
 -/
-theorem image_coe_Icc (x y : Real>=0) : toReal '' Icc x y = Icc ↑x ↑y :=
+theorem image_coe_Icc (x y : ℝ≥0) : toReal '' Icc x y = Icc ↑x ↑y :=
   image_subtype_val_Icc (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_Ioc` / 定理 `image_coe_Ioc`
-
-English:
-theorem image_coe_Ioc
-  given: (x y : Real>=0)
-  statement: toReal '' Ioc x y = Ioc ↑x ↑y
-  proof: image_subtype_val_Ioc (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_Ioc
-  条件: (x y : 实数>=0)
-  结论: to实数 '' 左开右闭区间 x y = 左开右闭区间 ↑x ↑y
-  证明: image_subtype_val_Ioc (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ioc
+/-
+**NNReal.image_coe_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Ioc (x y : Real>=0) : toReal '' Ioc x y = Ioc ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ioc`：image_subtype_val_Ioc {s : Set α} [OrdConnect
+ed s] (x y : s) : Subtype.val '' Ioc x y = Ioc x.1 y
 -/
-theorem image_coe_Ioc (x y : Real>=0) : toReal '' Ioc x y = Ioc ↑x ↑y :=
+theorem image_coe_Ioc (x y : ℝ≥0) : toReal '' Ioc x y = Ioc ↑x ↑y :=
   image_subtype_val_Ioc (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_Ico` / 定理 `image_coe_Ico`
-
-English:
-theorem image_coe_Ico
-  given: (x y : Real>=0)
-  statement: toReal '' Ico x y = Ico ↑x ↑y
-  proof: image_subtype_val_Ico (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_Ico
-  条件: (x y : 实数>=0)
-  结论: to实数 '' 左闭右开区间 x y = 左闭右开区间 ↑x ↑y
-  证明: image_subtype_val_Ico (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ico
+/-
+**NNReal.image_coe_Ico** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Ico (x y : Real>=0) : toReal '' Ico x y = Ico ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ico`：image_subtype_val_Ico {s : Set α} [OrdConnect
+ed s] (x y : s) : Subtype.val '' Ico x y = Ico x.1 y
 -/
-theorem image_coe_Ico (x y : Real>=0) : toReal '' Ico x y = Ico ↑x ↑y :=
+theorem image_coe_Ico (x y : ℝ≥0) : toReal '' Ico x y = Ico ↑x ↑y :=
   image_subtype_val_Ico (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_Ioo` / 定理 `image_coe_Ioo`
-
-English:
-theorem image_coe_Ioo
-  given: (x y : Real>=0)
-  statement: toReal '' Ioo x y = Ioo ↑x ↑y
-  proof: image_subtype_val_Ioo (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_Ioo
-  条件: (x y : 实数>=0)
-  结论: to实数 '' 开区间 x y = 开区间 ↑x ↑y
-  证明: image_subtype_val_Ioo (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_Ioo
+/-
+**NNReal.image_coe_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_Ioo (x y : Real>=0) : toReal '' Ioo x y = Ioo ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_subtype_val_Ioo`：image_subtype_val_Ioo {s : Set α} [OrdConnect
+ed s] (x y : s) : Subtype.val '' Ioo x y = Ioo x.1 y
 -/
-theorem image_coe_Ioo (x y : Real>=0) : toReal '' Ioo x y = Ioo ↑x ↑y :=
+theorem image_coe_Ioo (x y : ℝ≥0) : toReal '' Ioo x y = Ioo ↑x ↑y :=
   image_subtype_val_Ioo (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_uIcc` / 定理 `image_coe_uIcc`
-
-English:
-theorem image_coe_uIcc
-  given: (x y : Real>=0)
-  statement: toReal '' uIcc x y = uIcc ↑x ↑y
-  proof: image_subtype_val_uIcc (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_uIcc
-  条件: (x y : 实数>=0)
-  结论: to实数 '' uIcc x y = uIcc ↑x ↑y
-  证明: image_subtype_val_uIcc (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_uIcc
+/-
+**NNReal.image_coe_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_uIcc (x y : Real>=0) : toReal '' uIcc x y = uIcc ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subtype_val_uIcc`：image_subtype_val_uIcc [OrdConnected s] (a b
+ : s) : Subtype.val '' [[a, b]] = [[a.1, b.1]]
 -/
-theorem image_coe_uIcc (x y : Real>=0) : toReal '' uIcc x y = uIcc ↑x ↑y :=
+theorem image_coe_uIcc (x y : ℝ≥0) : toReal '' uIcc x y = uIcc ↑x ↑y :=
   image_subtype_val_uIcc (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_uIoc` / 定理 `image_coe_uIoc`
-
-English:
-theorem image_coe_uIoc
-  given: (x y : Real>=0)
-  statement: toReal '' uIoc x y = uIoc ↑x ↑y
-  proof: image_subtype_val_uIoc (s := Ici 0) ..
-
-@[simp]
-
-中文:
-定理 image_coe_uIoc
-  条件: (x y : 实数>=0)
-  结论: to实数 '' uIoc x y = uIoc ↑x ↑y
-  证明: image_subtype_val_uIoc (s := Ici 0) ..
-
-@[simp]
-
-Depends on / 依赖: image_subtype_val_uIoc
+/-
+**NNReal.image_coe_uIoc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_uIoc (x y : Real>=0) : toReal '' uIoc x y = uIoc ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subtype_val_uIoc`：image_subtype_val_uIoc [OrdConnected s] (a b
+ : s) : Subtype.val '' uIoc a b = uIoc a.1 b.1
 -/
-theorem image_coe_uIoc (x y : Real>=0) : toReal '' uIoc x y = uIoc ↑x ↑y :=
+theorem image_coe_uIoc (x y : ℝ≥0) : toReal '' uIoc x y = uIoc ↑x ↑y :=
   image_subtype_val_uIoc (s := Ici 0) ..
 
 @[simp]
-/--
-theorem `image_coe_uIoo` / 定理 `image_coe_uIoo`
-
-English:
-theorem image_coe_uIoo
-  given: (x y : Real>=0)
-  statement: toReal '' uIoo x y = uIoo ↑x ↑y
-  proof: image_subtype_val_uIoo (s := Ici 0) ..
-
-中文:
-定理 image_coe_uIoo
-  条件: (x y : 实数>=0)
-  结论: to实数 '' uIoo x y = uIoo ↑x ↑y
-  证明: image_subtype_val_uIoo (s := Ici 0) ..
-
-Depends on / 依赖: image_subtype_val_uIoo
+/-
+**NNReal.image_coe_uIoo** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：image_coe_uIoo (x y : Real>=0) : toReal '' uIoo x y = uIoo ↑x ↑y
+参数：x y : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subtype_val_uIoo`：image_subtype_val_uIoo [OrdConnected s] (a b
+ : s) : Subtype.val '' uIoo a b = uIoo a.1 b.1
 -/
-theorem image_coe_uIoo (x y : Real>=0) : toReal '' uIoo x y = uIoo ↑x ↑y :=
+theorem image_coe_uIoo (x y : ℝ≥0) : toReal '' uIoo x y = uIoo ↑x ↑y :=
   image_subtype_val_uIoo (s := Ici 0) ..
 
 end NNReal
+

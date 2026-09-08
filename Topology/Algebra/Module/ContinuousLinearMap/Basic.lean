@@ -55,95 +55,116 @@ open Topology Filter Pointwise
 
 universe u v w u'
 
-/--
-Definition of `ContinuousLinearMap` / `ContinuousLinearMap` 的定义
+/-- Continuous linear maps between modules. We only put the type classes that are necessary for the
+definition, although in applications `M` and `M₂` will be topological modules over the topological
+ring `R`. -/
+/-
+**ContinuousLinearMap** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：ContinuousLinearMap {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ :
+ R ->+* S) (M : Type*) [TopologicalSpace M] [AddCommMonoid M] (M₂ : Type*) [Topo
+logicalSpace M₂] [AddCommMonoid M₂] [Module R M] [Module S M₂] extends M ->ₛₗ[σ]
+ M₂ where cont : Continuous toFun
+参数：σ : R ->+* S；M : Type*；M₂ : Type*。
+继承自：M ->ₛₗ[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContinuousLinearMap
-  parameters: {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S)
-  extends: M ->ₛₗ[σ] M₂
-  axioms and operations (1):
-    - cont : Continuous toFun  [default: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
-
-中文:
-结构 连续线性映射
-  参数: {R : 类型} {S : 类型} [半环 R] [半环 S] (σ : R ->+* S)
-  继承: M ->ₛₗ[σ] M₂
-  公理与运算 (1 个):
-    - cont : 连续 toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
-
-Depends on / 依赖: eta_expand, fun_prop
+--- 原说明 ---
+Continuous linear maps between modules. We only put the type classes that are ne
+cessary for the
+definition, although in applications `M` and `M₂` will be topological modules ov
+er the topological
+ring `R`.
 -/
-structure ContinuousLinearMap {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S)
+structure ContinuousLinearMap {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R →+* S)
     (M : Type*) [TopologicalSpace M] [AddCommMonoid M] (M₂ : Type*) [TopologicalSpace M₂]
-    [AddCommMonoid M₂] [Module R M] [Module S M₂] extends M ->ₛₗ[σ] M₂ where
+    [AddCommMonoid M₂] [Module R M] [Module S M₂] extends M →ₛₗ[σ] M₂ where
   cont : Continuous toFun := by
     first | fun_prop | eta_expand; dsimp; fun_prop | skip
 
 attribute [inherit_doc ContinuousLinearMap] ContinuousLinearMap.cont
 
 @[inherit_doc]
-notation:25 M " ->SL[" σ "] " M₂ => ContinuousLinearMap σ M M₂
+notation:25 M " →SL[" σ "] " M₂ => ContinuousLinearMap σ M M₂
 
 @[inherit_doc]
-notation:25 M " ->L[" R "] " M₂ => ContinuousLinearMap (RingHom.id R) M M₂
+notation:25 M " →L[" R "] " M₂ => ContinuousLinearMap (RingHom.id R) M M₂
 
-/--
-Definition of `ContinuousSemilinearMapClass` / `ContinuousSemilinearMapClass` 的定义
+/-- `ContinuousSemilinearMapClass F σ M M₂` asserts `F` is a type of bundled continuous
+`σ`-semilinear maps `M → M₂`.  See also `ContinuousLinearMapClass F R M M₂` for the case where
+`σ` is the identity map on `R`.  A map `f` between an `R`-module and an `S`-module over a ring
+homomorphism `σ : R →+* S` is semilinear if it satisfies the two properties `f (x + y) = f x + f y`
+and `f (c • x) = (σ c) • f x`. -/
+/-
+**ContinuousSemilinearMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   {R : outParam (Type u_2)} →     {S : outParam (Type u_3
+)} →       [inst : Semiring R] →         [inst_1 : Semiring S] →           outPa
+ram (R →+* S) →             (M : outParam (Type u_4)) →               [Topologic
+alSpace M] →                 [inst_3 : AddCommMonoid M] →                   (M₂ 
+: outParam (Type u_5)) →                     [TopologicalSpace M₂] →            
+           [inst_5 : AddCommMonoid M₂] → [_root_.Module R M] → [_root_.Module S 
+M₂] → [FunLike F M M₂] → Prop
+参数：Type u_4；Type u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousSemilinearMapClass
-  parameters: (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
-  extends: SemilinearMapClass F σ M M₂, ContinuousMapClass F M M₂
-  (no additional axioms)
-
-中文:
-类 连续半线性映射类
-  参数: (F : 类型) {R S : outParam 类型} [半环 R] [半环 S]
-  继承: 半线性映射类 F σ M M₂, 连续映射类 F M M₂
-  (无附加公理)
+--- 原说明 ---
+`ContinuousSemilinearMapClass F σ M M₂` asserts `F` is a type of bundled continu
+ous
+`σ`-semilinear maps `M → M₂`.  See also `ContinuousLinearMapClass F R M M₂` for 
+the case where
+`σ` is the identity map on `R`.  A map `f` between an `R`-module and an `S`-modu
+le over a ring
+homomorphism `σ : R →+* S` is semilinear if it satisfies the two properties `f (
+x + y) = f x + f y`
+and `f (c • x) = (σ c) • f x`.
 -/
 class ContinuousSemilinearMapClass (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
-    (σ : outParam <| R ->+* S) (M : outParam Type*) [TopologicalSpace M] [AddCommMonoid M]
+    (σ : outParam <| R →+* S) (M : outParam Type*) [TopologicalSpace M] [AddCommMonoid M]
     (M₂ : outParam Type*) [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R M]
     [Module S M₂] [FunLike F M M₂] : Prop
     extends SemilinearMapClass F σ M M₂, ContinuousMapClass F M M₂
 
-/--
-Definition of `ContinuousLinearMapClass` / `ContinuousLinearMapClass` 的定义
+/-- `ContinuousLinearMapClass F R M M₂` asserts `F` is a type of bundled continuous
+`R`-linear maps `M → M₂`.  This is an abbreviation for
+`ContinuousSemilinearMapClass F (RingHom.id R) M M₂`. -/
+/-
+**ContinuousLinearMapClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：ContinuousLinearMapClass (F : Type*) (R : outParam Type*) [Semiring R] (M 
+: outParam Type*) [TopologicalSpace M] [AddCommMonoid M] (M₂ : outParam Type*) [
+TopologicalSpace M₂] [AddCommMonoid M₂] [Module R M] [Module R M₂] [FunLike F M 
+M₂]
+参数：F : Type*；R : outParam Type*；M : outParam Type*；M₂ : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ContinuousLinearMapClass
-  signature: (F : Type*) (R : outParam Type*) [Semiring R]
-  body: ContinuousSemilinearMapClass F (RingHom.id R) M M₂
-
-中文:
-缩写 ContinuousLinearMapClass
-  签名: (F : 类型) (R : outParam 类型) [半环 R]
-  定义体: ContinuousSemilinearMapClass F (RingHom.id R) M M₂
-
-Depends on / 依赖: ContinuousSemilinearMapClass, RingHom, RingHom.id
+--- 原说明 ---
+`ContinuousLinearMapClass F R M M₂` asserts `F` is a type of bundled continuous
+`R`-linear maps `M → M₂`.  This is an abbreviation for
+`ContinuousSemilinearMapClass F (RingHom.id R) M M₂`.
 -/
 abbrev ContinuousLinearMapClass (F : Type*) (R : outParam Type*) [Semiring R]
     (M : outParam Type*) [TopologicalSpace M] [AddCommMonoid M] (M₂ : outParam Type*)
     [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R M] [Module R M₂] [FunLike F M M₂] :=
   ContinuousSemilinearMapClass F (RingHom.id R) M M₂
 
-/--
-Definition of `StrongDual` / `StrongDual` 的定义
+/-- The *strong dual* of a topological vector space `M` over a ring `R`. This is the space of
+continuous linear functionals and is equipped with the topology of uniform convergence
+on bounded subsets. `StrongDual R M` is an abbreviation for `M →L[R] R`. -/
+/-
+**StrongDual** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：StrongDual (R : Type*) [Semiring R] [TopologicalSpace R] (M : Type*) [Topo
+logicalSpace M] [AddCommMonoid M] [Module R M] : Type _
+参数：R : Type*；M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation StrongDual
-  signature: (R : Type*) [Semiring R] [TopologicalSpace R]
-  body: M ->L[R] R
-
-中文:
-缩写 StrongDual
-  签名: (R : 类型) [半环 R] [拓扑空间 R]
-  定义体: M ->L[R] R
+--- 原说明 ---
+The *strong dual* of a topological vector space `M` over a ring `R`. This is the
+ space of
+continuous linear functionals and is equipped with the topology of uniform conve
+rgence
+on bounded subsets. `StrongDual R M` is an abbreviation for `M →L[R] R`.
 -/
 abbrev StrongDual (R : Type*) [Semiring R] [TopologicalSpace R]
-  (M : Type*) [TopologicalSpace M] [AddCommMonoid M] [Module R M] : Type _ := M ->L[R] R
+  (M : Type*) [TopologicalSpace M] [AddCommMonoid M] [Module R M] : Type _ := M →L[R] R
 
 namespace ContinuousLinearMap
 
@@ -154,757 +175,664 @@ section Semiring
 -/
 
 variable {R₁ : Type*} {R₂ : Type*} {R₃ : Type*} [Semiring R₁] [Semiring R₂] [Semiring R₃]
-  {σ₁₂ : R₁ ->+* R₂} {σ₂₃ : R₂ ->+* R₃} {σ₁₃ : R₁ ->+* R₃} {M₁ : Type*} [TopologicalSpace M₁]
+  {σ₁₂ : R₁ →+* R₂} {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R₁ →+* R₃} {M₁ : Type*} [TopologicalSpace M₁]
   [AddCommMonoid M₁] {M'₁ : Type*} [TopologicalSpace M'₁] [AddCommMonoid M'₁] {M₂ : Type*}
   [TopologicalSpace M₂] [AddCommMonoid M₂] {M₃ : Type*} [TopologicalSpace M₃] [AddCommMonoid M₃]
   {M₄ : Type*} [TopologicalSpace M₄] [AddCommMonoid M₄] [Module R₁ M₁] [Module R₁ M'₁]
   [Module R₂ M₂] [Module R₃ M₃]
 
 attribute [coe] ContinuousLinearMap.toLinearMap
-/--
-Instance `LinearMap.coe` / 实例 `LinearMap.coe`
+/-- Coerce continuous linear maps to linear maps. -/
+/-
+**ContinuousLinearMap.LinearMap.coe** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearM
+ap.LinearMap`。
+形式化陈述：{R₁ : Type u_1} →   {R₂ : Type u_2} →     [inst : Semiring R₁] →       [in
+st_1 : Semiring R₂] →         {σ₁₂ : R₁ →+* R₂} →           {M₁ : Type u_4} →   
+          [inst_2 : TopologicalSpace M₁] →               [inst_3 : AddCommMonoid
+ M₁] →                 {M₂ : Type u_6} →                   [inst_4 : Topological
+Space M₂] →                     [inst_5 : AddCommMonoid M₂] →                   
+    [inst_6 : _root_.Module R₁ M₁] →                         [inst_7 : _root_.Mo
+dule R₂ M₂] → Coe (M₁ →SL[σ₁₂] M₂) (M₁ →ₛₗ[σ₁₂] M₂)
+参数：M₁ →SL[σ₁₂] M₂；M₁ →ₛₗ[σ₁₂] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance LinearMap.coe
-  signature: : Coe (M₁ ->SL[σ₁₂] M₂) (M₁ ->ₛₗ[σ₁₂] M₂)
-  body: ⟨toLinearMap⟩
-
-中文:
-实例 线性映射.coe
-  签名: : Coe (M₁ ->SL[σ₁₂] M₂) (M₁ ->ₛₗ[σ₁₂] M₂)
-  定义体: ⟨toLinearMap⟩
-
-Depends on / 依赖: toLinearMap
+--- 原说明 ---
+Coerce continuous linear maps to linear maps.
 -/
-instance LinearMap.coe : Coe (M₁ ->SL[σ₁₂] M₂) (M₁ ->ₛₗ[σ₁₂] M₂) := ⟨toLinearMap⟩
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
-  proof: by
+instance LinearMap.coe : Coe (M₁ →SL[σ₁₂] M₂) (M₁ →ₛₗ[σ₁₂] M₂) := ⟨toLinearMap⟩
+/-
+**ContinuousLinearMap.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：coe_injective : Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂
+] M₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem coe_injective : Function.Injective ((↑) : (M₁ →SL[σ₁₂] M₂) → M₁ →ₛₗ[σ₁₂] M₂) := by
   intro f g H
   cases f
   cases g
   congr
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
-  证明: by
-  intro f g H
-  cases f
-  cases g
-  congr
+/-
+**ContinuousLinearMap.funLike** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：funLike : FunLike (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_injective : Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂) := by
-  intro f g H
-  cases f
-  cases g
-  congr
-
-/--
-Instance `funLike` / 实例 `funLike`
-
-English:
-instance funLike
-  signature: : FunLike (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
-  body: f.toLinearMap
-  coe_injective _ _ h := coe_injective (DFunLike.coe_injective h)
-
-中文:
-实例 funLike
-  签名: : 函数状 (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
-  定义体: f.toLinearMap
-  coe_injective _ _ h := coe_injective (DFunLike.coe_injective h)
-
-Depends on / 依赖: f.toLinearMap, toLinearMap
--/
-instance funLike : FunLike (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+instance funLike : FunLike (M₁ →SL[σ₁₂] M₂) M₁ M₂ where
   coe f := f.toLinearMap
   coe_injective _ _ h := coe_injective (DFunLike.coe_injective h)
-
-/--
-Instance `continuousSemilinearMapClass` / 实例 `continuousSemilinearMapClass`
-
-English:
-instance continuousSemilinearMapClass
-  signature: :
-  body: map_add f.toLinearMap
-  map_continuous f := f.2
-  map_smulₛₗ f := f.toLinearMap.map_smul'
-
-中文:
-实例 continuousSemilinearMapClass
-  签名: :
-  定义体: map_add f.toLinearMap
-  map_continuous f := f.2
-  map_smulₛₗ f := f.toLinearMap.map_smul'
-
-Depends on / 依赖: f.toLinearMap, map_add, toLinearMap
+/-
+**ContinuousLinearMap.continuousSemilinearMapClass** 是 Mathlib 中的一个实例，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：continuousSemilinearMapClass : ContinuousSemilinearMapClass (M₁ ->SL[σ₁₂] 
+M₂) σ₁₂ M₁ M₂ where map_add f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `LinearMap.map_smul'`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring 
+R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [inst_
+2 : AddCo…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
 instance continuousSemilinearMapClass :
-    ContinuousSemilinearMapClass (M₁ ->SL[σ₁₂] M₂) σ₁₂ M₁ M₂ where
+    ContinuousSemilinearMapClass (M₁ →SL[σ₁₂] M₂) σ₁₂ M₁ M₂ where
   map_add f := map_add f.toLinearMap
   map_continuous f := f.2
   map_smulₛₗ f := f.toLinearMap.map_smul'
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : M₁ ->ₛₗ[σ₁₂] M₂) (h)
-  statement: (mk f h : M₁ ->ₛₗ[σ₁₂] M₂) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : M₁ ->ₛₗ[σ₁₂] M₂) (h)
-  结论: (mk f h : M₁ ->ₛₗ[σ₁₂] M₂) = f
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_mk (f : M₁ ->ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ ->ₛₗ[σ₁₂] M₂) = f
+参数：f : M₁ ->ₛₗ[σ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : M₁ ->ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ ->ₛₗ[σ₁₂] M₂) = f :=
+theorem coe_mk (f : M₁ →ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ →ₛₗ[σ₁₂] M₂) = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  given: (f : M₁ ->ₛₗ[σ₁₂] M₂) (h)
-  statement: (mk f h : M₁ -> M₂) = f
-  proof: rfl
-
-@[continuity, fun_prop]
-
-中文:
-定理 coe_mk'
-  条件: (f : M₁ ->ₛₗ[σ₁₂] M₂) (h)
-  结论: (mk f h : M₁ -> M₂) = f
-  证明: rfl
-
-@[continuity, fun_prop]
+/-
+**ContinuousLinearMap.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_mk' (f : M₁ ->ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ -> M₂) = f
+参数：f : M₁ ->ₛₗ[σ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' (f : M₁ ->ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ -> M₂) = f :=
+theorem coe_mk' (f : M₁ →ₛₗ[σ₁₂] M₂) (h) : (mk f h : M₁ → M₂) = f :=
   rfl
 
 @[continuity, fun_prop]
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: Continuous f
-  proof: f.2
-
-@[continuity, fun_prop]
-
-中文:
-定理 continuous
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: 连续 f
-  证明: f.2
-
-@[continuity, fun_prop]
+/-
+**ContinuousLinearMap.continuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂),   Continuous ⇑f
+参数：f : M₁ →SL[σ₁₂] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
-protected theorem continuous (f : M₁ ->SL[σ₁₂] M₂) : Continuous f :=
+protected theorem continuous (f : M₁ →SL[σ₁₂] M₂) : Continuous f :=
   f.2
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_toLinearMap` / 定理 `continuous_toLinearMap`
-
-English:
-theorem continuous_toLinearMap
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: Continuous f.toLinearMap
-  proof: f.2
-
-@[simp]
-
-中文:
-定理 continuous_toLinearMap
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: 连续 f.toLinearMap
-  证明: f.2
-
-@[simp]
+/-
+**ContinuousLinearMap.continuous_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂),   Continuous ⇑↑f
+参数：f : M₁ →SL[σ₁₂] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
-protected theorem continuous_toLinearMap (f : M₁ ->SL[σ₁₂] M₂) : Continuous f.toLinearMap :=
+protected theorem continuous_toLinearMap (f : M₁ →SL[σ₁₂] M₂) : Continuous f.toLinearMap :=
   f.2
 
 @[simp]
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  statement: {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
-  proof: uniformContinuous_addMonoidHom_of_continuous f.continuous
-
-@[simp, norm_cast]
-
-中文:
-定理 uniformContinuous
-  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
-  证明: uniformContinuous_addMonoidHom_of_continuous f.continuous
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {E₁ : Type u_9}   {E₂ : Type u_10} [inst_2 : UniformSpace 
+E₁] [inst_3 : UniformSpace E₂] [inst_4 : AddCommGroup E₁]   [inst_5 : AddCommGro
+up E₂] [inst_6 : _root_.Module R₁ E₁] [inst_7 : _root_.Module R₂ E₂] [IsUniformA
+ddGroup E₁]   [IsUniformAddGroup E₂] (f : E₁ →SL[σ₁₂] E₂), UniformContinuous ⇑f
+参数：f : E₁ →SL[σ₁₂] E₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_addMonoidHom_of_continuous`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
 protected theorem uniformContinuous {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
     [AddCommGroup E₁] [AddCommGroup E₂] [Module R₁ E₁] [Module R₂ E₂] [IsUniformAddGroup E₁]
-    [IsUniformAddGroup E₂] (f : E₁ ->SL[σ₁₂] E₂) : UniformContinuous f :=
+    [IsUniformAddGroup E₂] (f : E₁ →SL[σ₁₂] E₂) : UniformContinuous f :=
   uniformContinuous_addMonoidHom_of_continuous f.continuous
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {f g : M₁ ->SL[σ₁₂] M₂}
-  statement: (f : M₁ ->ₛₗ[σ₁₂] M₂) = g ↔ f = g
-  proof: coe_injective.eq_iff
-
-中文:
-定理 coe_inj
-  条件: {f g : M₁ ->SL[σ₁₂] M₂}
-  结论: (f : M₁ ->ₛₗ[σ₁₂] M₂) = g ↔ f = g
-  证明: coe_injective.eq_iff
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
+/-
+**ContinuousLinearMap.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ ->ₛₗ[σ₁₂] M₂) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `ContinuousLinearMap.coe_injective`：coe_injective : Function.Injective ((
+↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
 -/
-theorem coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ ->ₛₗ[σ₁₂] M₂) = g ↔ f = g :=
+theorem coe_inj {f g : M₁ →SL[σ₁₂] M₂} : (f : M₁ →ₛₗ[σ₁₂] M₂) = g ↔ f = g :=
   coe_injective.eq_iff
-
-/--
-theorem `coeFn_injective` / 定理 `coeFn_injective`
-
-English:
-theorem coeFn_injective
-  statement: @Function.Injective (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑)
-  proof: DFunLike.coe_injective
-
-中文:
-定理 coeFn_injective
-  结论: @函数.单射 (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑)
-  证明: DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**ContinuousLinearMap.coeFn_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：coeFn_injective : @Function.Injective (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coeFn_injective : @Function.Injective (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑) :=
+theorem coeFn_injective : @Function.Injective (M₁ →SL[σ₁₂] M₂) (M₁ → M₂) (↑) :=
   DFunLike.coe_injective
-
-/--
-theorem `toContinuousAddMonoidHom_injective` / 定理 `toContinuousAddMonoidHom_injective`
-
-English:
-theorem toContinuousAddMonoidHom_injective
-  proof: (DFunLike.coe_injective.of_comp_iff _).1 DFunLike.coe_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 toContinuousAddMonoidHom_injective
-  证明: (DFunLike.coe_injective.of_comp_iff _).1 DFunLike.coe_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, DFunLike.coe_injective.of_comp_iff, coe_injective, of_comp_iff
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_injective** 是 Mathlib 中的一个定理，位于命名
+空间 `ContinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_injective : Function.Injective ((↑) : (M₁ ->SL[σ₁
+₂] M₂) -> ContinuousAddMonoidHom M₁ M₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `Function.Injective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} {f : α → β},   Function.Injective f → ∀ (g : γ → α), Function.Injective (
+f ∘ g) ↔ Function.In…
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem toContinuousAddMonoidHom_injective :
-    Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> ContinuousAddMonoidHom M₁ M₂) :=
+    Function.Injective ((↑) : (M₁ →SL[σ₁₂] M₂) → ContinuousAddMonoidHom M₁ M₂) :=
   (DFunLike.coe_injective.of_comp_iff _).1 DFunLike.coe_injective
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_inj` / 定理 `toContinuousAddMonoidHom_inj`
-
-English:
-theorem toContinuousAddMonoidHom_inj
-  given: {f g : M₁ ->SL[σ₁₂] M₂}
-  proof: toContinuousAddMonoidHom_injective.eq_iff
-
-中文:
-定理 toContinuousAddMonoidHom_inj
-  条件: {f g : M₁ ->SL[σ₁₂] M₂}
-  证明: toContinuousAddMonoidHom_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toContinuousAddMonoidHom_injective, toContinuousAddMonoidHom_injective.eq_iff
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_inj** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : ContinuousAddM
+onoidHom M₁ M₂) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.toContinuousAddMonoidHom_injective`：toContinuousAddM
+onoidHom_injective : Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> ContinuousAd
+dMonoidHom M₁ M₂)
 -/
-theorem toContinuousAddMonoidHom_inj {f g : M₁ ->SL[σ₁₂] M₂} :
+theorem toContinuousAddMonoidHom_inj {f g : M₁ →SL[σ₁₂] M₂} :
     (f : ContinuousAddMonoidHom M₁ M₂) = g ↔ f = g :=
   toContinuousAddMonoidHom_injective.eq_iff
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+  because it is a composition of multiple projections. -/
+/-
+**ContinuousLinearMap.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap
+.Simps`。
+形式化陈述：{R₁ : Type u_1} →   {R₂ : Type u_2} →     [inst : Semiring R₁] →       [in
+st_1 : Semiring R₂] →         {σ₁₂ : R₁ →+* R₂} →           {M₁ : Type u_4} →   
+          [inst_2 : TopologicalSpace M₁] →               [inst_3 : AddCommMonoid
+ M₁] →                 {M₂ : Type u_6} →                   [inst_4 : Topological
+Space M₂] →                     [inst_5 : AddCommMonoid M₂] →                   
+    [inst_6 : _root_.Module R₁ M₁] → [inst_7 : _root_.Module R₂ M₂] → (M₁ →SL[σ₁
+₂] M₂) → M₁ → M₂
+参数：M₁ →SL[σ₁₂] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (h : M₁ ->SL[σ₁₂] M₂)
-  body: h
-
-中文:
-定义 Simps.apply
-  签名: (h : M₁ ->SL[σ₁₂] M₂)
-  定义体: h
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+  because it is a composition of multiple projections.
 -/
-def Simps.apply (h : M₁ ->SL[σ₁₂] M₂) : M₁ -> M₂ :=
+def Simps.apply (h : M₁ →SL[σ₁₂] M₂) : M₁ → M₂ :=
   h
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**ContinuousLinearMap.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap.S
+imps`。
+形式化陈述：{R₁ : Type u_1} →   {R₂ : Type u_2} →     [inst : Semiring R₁] →       [in
+st_1 : Semiring R₂] →         {σ₁₂ : R₁ →+* R₂} →           {M₁ : Type u_4} →   
+          [inst_2 : TopologicalSpace M₁] →               [inst_3 : AddCommMonoid
+ M₁] →                 {M₂ : Type u_6} →                   [inst_4 : Topological
+Space M₂] →                     [inst_5 : AddCommMonoid M₂] →                   
+    [inst_6 : _root_.Module R₁ M₁] →                         [inst_7 : _root_.Mo
+dule R₂ M₂] → (M₁ →SL[σ₁₂] M₂) → M₁ →ₛₗ[σ₁₂] M₂
+参数：M₁ →SL[σ₁₂] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (h : M₁ ->SL[σ₁₂] M₂)
-  body: h
-
-initialize_simps_projections ContinuousLinearMap (toFun -> apply, toLinearMap -> coe, as_prefix coe)
-
-@[ext]
-
-中文:
-定义 Simps.coe
-  签名: (h : M₁ ->SL[σ₁₂] M₂)
-  定义体: h
-
-initialize_simps_projections ContinuousLinearMap (toFun -> apply, toLinearMap -> coe, as_prefix coe)
-
-@[ext]
+--- 原说明 ---
+See Note [custom simps projection].
 -/
-def Simps.coe (h : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁₂] M₂ :=
+def Simps.coe (h : M₁ →SL[σ₁₂] M₂) : M₁ →ₛₗ[σ₁₂] M₂ :=
   h
 
-initialize_simps_projections ContinuousLinearMap (toFun -> apply, toLinearMap -> coe, as_prefix coe)
+initialize_simps_projections ContinuousLinearMap (toFun → apply, toLinearMap → coe, as_prefix coe)
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-@[simp, norm_cast]
-
-中文:
-定理 ext
-  条件: {f g : M₁ ->SL[σ₁₂] M₂} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-@[simp, norm_cast]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContinuousLinearMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x = g x) : f = g :=
+theorem ext {f g : M₁ →SL[σ₁₂] M₂} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext f g h
 
 @[simp, norm_cast]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: ⇑(f : M₁ ->ₛₗ[σ₁₂] M₂) = f
-  proof: rfl
-
-中文:
-定理 coe_coe
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: ⇑(f : M₁ ->ₛₗ[σ₁₂] M₂) = f
-  证明: rfl
+/-
+**ContinuousLinearMap.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->ₛₗ[σ₁₂] M₂) = f
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coe (f : M₁ ->SL[σ₁₂] M₂) : ⇑(f : M₁ ->ₛₗ[σ₁₂] M₂) = f :=
+theorem coe_coe (f : M₁ →SL[σ₁₂] M₂) : ⇑(f : M₁ →ₛₗ[σ₁₂] M₂) = f :=
   rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `ContinuousLinearMap` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**ContinuousLinearMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：{R₁ : Type u_1} →   {R₂ : Type u_2} →     [inst : Semiring R₁] →       [in
+st_1 : Semiring R₂] →         {σ₁₂ : R₁ →+* R₂} →           {M₁ : Type u_4} →   
+          [inst_2 : TopologicalSpace M₁] →               [inst_3 : AddCommMonoid
+ M₁] →                 {M₂ : Type u_6} →                   [inst_4 : Topological
+Space M₂] →                     [inst_5 : AddCommMonoid M₂] →                   
+    [inst_6 : _root_.Module R₁ M₁] →                         [inst_7 : _root_.Mo
+dule R₂ M₂] →                           (f : M₁ →SL[σ₁₂] M₂) → (f' : M₁ → M₂) → 
+f' = ⇑f → M₁ →SL[σ₁₂] M₂
+参数：f : M₁ →SL[σ₁₂] M₂；f' : M₁ → M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  body: f.toLinearMap.copy f' h
-  cont := show Continuous f' from h.symm ▸ f.continuous
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  定义体: f.toLinearMap.copy f' h
-  cont := show Continuous f' from h.symm ▸ f.continuous
-
-@[simp]
+--- 原说明 ---
+Copy of a `ContinuousLinearMap` with a new `toFun` equal to the old one. Useful 
+to fix
+definitional equalities.
 -/
-protected def copy (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f) : M₁ ->SL[σ₁₂] M₂ where
+protected def copy (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f) : M₁ →SL[σ₁₂] M₂ where
   toLinearMap := f.toLinearMap.copy f' h
   cont := show Continuous f' from h.symm ▸ f.continuous
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**ContinuousLinearMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_copy (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f) : ⇑(f.copy f'
+ h) = f'
+参数：f : M₁ ->SL[σ₁₂] M₂；f' : M₁ -> M₂；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContinuousLinearMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：copy_eq (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f) : f.copy f' h 
+= f
+参数：f : M₁ ->SL[σ₁₂] M₂；f' : M₁ -> M₂；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : M₁ ->SL[σ₁₂] M₂) (f' : M₁ -> M₂) (h : f' = ⇑f) : f.copy f' h = f :=
+theorem copy_eq (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f) : f.copy f' h = f :=
   DFunLike.ext' h
-
-/--
-theorem `range_coeFn_eq` / 定理 `range_coeFn_eq`
-
-English:
-theorem range_coeFn_eq
-  proof: by
-  ext f
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.continuous, f, rfl⟩
-  · rintro ⟨hfc, f, rfl⟩
-    exact ⟨⟨f, hfc⟩, rfl⟩
-
-中文:
-定理 range_coeFn_eq
-  证明: by
-  ext f
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.continuous, f, rfl⟩
-  · rintro ⟨hfc, f, rfl⟩
-    exact ⟨⟨f, hfc⟩, rfl⟩
-
-Depends on / 依赖: continuous, f.continuous
+/-
+**ContinuousLinearMap.range_coeFn_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：range_coeFn_eq : Set.range ((⇑) : (M₁ ->SL[σ₁₂] M₂) -> (M₁ -> M₂)) = {f | 
+Continuous f} inter Set.range ((⇑) : (M₁ ->ₛₗ[σ₁₂] M₂) -> (M₁ -> M₂))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
 theorem range_coeFn_eq :
-    Set.range ((⇑) : (M₁ ->SL[σ₁₂] M₂) -> (M₁ -> M₂)) =
-      {f | Continuous f} inter Set.range ((⇑) : (M₁ ->ₛₗ[σ₁₂] M₂) -> (M₁ -> M₂)) := by
+    Set.range ((⇑) : (M₁ →SL[σ₁₂] M₂) → (M₁ → M₂)) =
+      {f | Continuous f} ∩ Set.range ((⇑) : (M₁ →ₛₗ[σ₁₂] M₂) → (M₁ → M₂)) := by
   ext f
   constructor
   · rintro ⟨f, rfl⟩
     exact ⟨f.continuous, f, rfl⟩
   · rintro ⟨hfc, f, rfl⟩
     exact ⟨⟨f, hfc⟩, rfl⟩
-
-/--
-lemma `range_toLinearMap` / 引理 `range_toLinearMap`
-
-English:
-lemma range_toLinearMap
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: Set.range f.toLinearMap = Set.range f
-  proof: by simp
-
-中文:
-引理 range_toLinearMap
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: 集合.range f.toLinearMap = 集合.range f
-  证明: by simp
+/-
+**ContinuousLinearMap.range_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：range_toLinearMap (f : M₁ ->SL[σ₁₂] M₂) : Set.range f.toLinearMap = Set.ra
+nge f
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma range_toLinearMap (f : M₁ ->SL[σ₁₂] M₂) : Set.range f.toLinearMap = Set.range f := by simp
+lemma range_toLinearMap (f : M₁ →SL[σ₁₂] M₂) : Set.range f.toLinearMap = Set.range f := by simp
 
 -- make some straightforward lemmas available to `simp`.
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: f (0 : M₁) = 0
-  proof: map_zero f
-
-中文:
-定理 map_zero
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: f (0 : M₁) = 0
-  证明: map_zero f
+/-
+**ContinuousLinearMap.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂),   f 0 = 0
+参数：f : M₁ →SL[σ₁₂] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-protected theorem map_zero (f : M₁ ->SL[σ₁₂] M₂) : f (0 : M₁) = 0 :=
+protected theorem map_zero (f : M₁ →SL[σ₁₂] M₂) : f (0 : M₁) = 0 :=
   map_zero f
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : M₁ ->SL[σ₁₂] M₂) (x y : M₁)
-  statement: f (x + y) = f x + f y
-  proof: map_add f x y
-
-@[simp]
-
-中文:
-定理 map_add
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (x y : M₁)
-  结论: f (x + y) = f x + f y
-  证明: map_add f x y
-
-@[simp]
+/-
+**ContinuousLinearMap.map_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Semiring R₁] [inst_1 : Semiring 
+R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_2 : TopologicalSpace M₁] [inst_3 :
+ AddCommMonoid M₁] {M₂ : Type u_6} [inst_4 : TopologicalSpace M₂]   [inst_5 : Ad
+dCommMonoid M₂] [inst_6 : _root_.Module R₁ M₁] [inst_7 : _root_.Module R₂ M₂] (f
+ : M₁ →SL[σ₁₂] M₂)   (x y : M₁), f (x + y) = f x + f y
+参数：f : M₁ →SL[σ₁₂] M₂；x y : M₁；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-protected theorem map_add (f : M₁ ->SL[σ₁₂] M₂) (x y : M₁) : f (x + y) = f x + f y :=
+protected theorem map_add (f : M₁ →SL[σ₁₂] M₂) (x y : M₁) : f (x + y) = f x + f y :=
   map_add f x y
 
 @[simp]
-/--
-theorem `map_smulₛₗ` / 定理 `map_smulₛₗ`
-
-English:
-theorem map_smulₛₗ
-  given: (f : M₁ ->SL[σ₁₂] M₂) (c : R₁) (x : M₁)
-  statement: f (c • x) = σ₁₂ c • f x
-  proof: (toLinearMap _).map_smulₛₗ _ _
-
-中文:
-定理 map_smulₛₗ
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (c : R₁) (x : M₁)
-  结论: f (c • x) = σ₁₂ c • f x
-  证明: (toLinearMap _).map_smulₛₗ _ _
+/-
+**ContinuousLinearMap.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   {M₂ : Type u_6} [inst_3 : TopologicalS
+pace M₂] [inst_4 : AddCommMonoid M₂] [inst_5 : _root_.Module R₁ M₁]   [inst_6 : 
+_root_.Module R₁ M₂] (f : M₁ →L[R₁] M₂) (c : R₁) (x : M₁), f (c • x) = c • f x
+参数：f : M₁ →L[R₁] M₂；c : R₁；x : M₁；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem map_smulₛₗ (f : M₁ ->SL[σ₁₂] M₂) (c : R₁) (x : M₁) : f (c • x) = σ₁₂ c • f x :=
+protected theorem map_smulₛₗ (f : M₁ →SL[σ₁₂] M₂) (c : R₁) (x : M₁) : f (c • x) = σ₁₂ c • f x :=
   (toLinearMap _).map_smulₛₗ _ _
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: [Module R₁ M₂] (f : M₁ ->L[R₁] M₂) (c : R₁) (x : M₁)
-  proof: by simp only [RingHom.id_apply, map_smulₛₗ]
-
-@[simp]
-
-中文:
-定理 map_smul
-  条件: [模 R₁ M₂] (f : M₁ ->L[R₁] M₂) (c : R₁) (x : M₁)
-  证明: by simp only [RingHom.id_apply, map_smulₛₗ]
-
-@[simp]
+/-
+**ContinuousLinearMap.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   {M₂ : Type u_6} [inst_3 : TopologicalS
+pace M₂] [inst_4 : AddCommMonoid M₂] [inst_5 : _root_.Module R₁ M₁]   [inst_6 : 
+_root_.Module R₁ M₂] (f : M₁ →L[R₁] M₂) (c : R₁) (x : M₁), f (c • x) = c • f x
+参数：f : M₁ →L[R₁] M₂；c : R₁；x : M₁；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem map_smul [Module R₁ M₂] (f : M₁ ->L[R₁] M₂) (c : R₁) (x : M₁) :
+protected theorem map_smul [Module R₁ M₂] (f : M₁ →L[R₁] M₂) (c : R₁) (x : M₁) :
     f (c • x) = c • f x := by simp only [RingHom.id_apply, map_smulₛₗ]
 
 @[simp]
-/--
-theorem `map_smul_of_tower` / 定理 `map_smul_of_tower`
-
-English:
-theorem map_smul_of_tower
-  statement: {R S : Type*} [Semiring S] [SMul R M₁] [Module S M₁] [SMul R M₂]
-  proof: LinearMap.CompatibleSMul.map_smul (f : M₁ ->ₗ[S] M₂) c x
-
-@[ext]
-
-中文:
-定理 map_smul_of_tower
-  结论: {R S : 类型} [半环 S] [标量乘法 R M₁] [模 S M₁] [标量乘法 R M₂]
-  证明: LinearMap.CompatibleSMul.map_smul (f : M₁ ->ₗ[S] M₂) c x
-
-@[ext]
-
-Depends on / 依赖: CompatibleSMul, LinearMap, LinearMap.CompatibleSMul.map_smul, map_smul
+/-
+**ContinuousLinearMap.map_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：map_smul_of_tower {R S : Type*} [Semiring S] [SMul R M₁] [Module S M₁] [SM
+ul R M₂] [Module S M₂] [LinearMap.CompatibleSMul M₁ M₂ R S] (f : M₁ ->L[S] M₂) (
+c : R) (x : M₁) : f (c • x) = c • f x
+参数：f : M₁ ->L[S] M₂；c : R；x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.CompatibleSMul.map_smul`：∀ {M : Type u_8} {M₂ : Type u_10} {in
+st : AddCommMonoid M} {inst_1 : AddCommMonoid M₂} {R : Type u_14} {S : Type u_15
+}   {inst_2 : Semiring …
 -/
 theorem map_smul_of_tower {R S : Type*} [Semiring S] [SMul R M₁] [Module S M₁] [SMul R M₂]
-    [Module S M₂] [LinearMap.CompatibleSMul M₁ M₂ R S] (f : M₁ ->L[S] M₂) (c : R) (x : M₁) :
+    [Module S M₂] [LinearMap.CompatibleSMul M₁ M₂ R S] (f : M₁ →L[S] M₂) (c : R) (x : M₁) :
     f (c • x) = c • f x :=
-  LinearMap.CompatibleSMul.map_smul (f : M₁ ->ₗ[S] M₂) c x
+  LinearMap.CompatibleSMul.map_smul (f : M₁ →ₗ[S] M₂) c x
 
 @[ext]
-/--
-theorem `ext_ring` / 定理 `ext_ring`
-
-English:
-theorem ext_ring
-  given: [TopologicalSpace R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1)
-  statement: f = g
-  proof: coe_inj.1 LinearMap.ext_ring h
+/-
+**ContinuousLinearMap.ext_ring** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：ext_ring [TopologicalSpace R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1) : f =
+ g
+参数：h : f 1 = g 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousLinearMap.coe_inj`：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ -
+>ₛₗ[σ₁₂] M₂) = g ↔ f = g
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+-/
+theorem ext_ring [TopologicalSpace R₁] {f g : R₁ →L[R₁] M₁} (h : f 1 = g 1) : f = g :=
+  coe_inj.1 <| LinearMap.ext_ring h
 
 @[simp]
-
-中文:
-定理 ext_ring
-  条件: [拓扑空间 R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1)
-  结论: f = g
-  证明: coe_inj.1 LinearMap.ext_ring h
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext_ring, coe_inj, ext_ring
+/-
+**ContinuousLinearMap.apply_val_ker** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：apply_val_ker (f : M₁ ->SL[σ₁₂] M₂) (x : f.ker) : f x = 0
+参数：f : M₁ ->SL[σ₁₂] M₂；x : f.ker。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem ext_ring [TopologicalSpace R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1) : f = g :=
-coe_inj.1 LinearMap.ext_ring h
+theorem apply_val_ker (f : M₁ →SL[σ₁₂] M₂) (x : f.ker) : f x = 0 := x.2
 
-@[simp]
-/--
-theorem `apply_val_ker` / 定理 `apply_val_ker`
+/-- If two continuous linear maps are equal on a set `s`, then they are equal on the closure
+of the `Submodule.span` of this set. -/
+/-
+**ContinuousLinearMap.eqOn_closure_span** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：eqOn_closure_span [T2Space M₂] {s : Set M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : S
+et.EqOn f g s) : Set.EqOn f g (closure (Submodule.span R₁ s : Set M₁))
+参数：h : Set.EqOn f g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpa
+ce X] [inst_1 : TopologicalSpace Y] [T2Space X] {s : Set Y}   {f g : Y → X}, Set
+.EqOn …
+· 使用定理 `LinearMap.eqOn_span'`：eqOn_span' {s : Set M} {f g : M ->ₛₗ[σ₁₂] M₂} (H :
+ Set.EqOn f g s) : Set.EqOn f g (span R s : Set M)
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 
-English:
-theorem apply_val_ker
-  given: (f : M₁ ->SL[σ₁₂] M₂) (x : f.ker)
-  statement: f x = 0
-  proof: x.2
-
-中文:
-定理 apply_val_ker
-  条件: (f : M₁ ->SL[σ₁₂] M₂) (x : f.ker)
-  结论: f x = 0
-  证明: x.2
+--- 原说明 ---
+If two continuous linear maps are equal on a set `s`, then they are equal on the
+ closure
+of the `Submodule.span` of this set.
 -/
-theorem apply_val_ker (f : M₁ ->SL[σ₁₂] M₂) (x : f.ker) : f x = 0 := x.2
-
-/--
-theorem `eqOn_closure_span` / 定理 `eqOn_closure_span`
-
-English:
-theorem eqOn_closure_span
-  given: [T2Space M₂] {s : Set M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s)
-  proof: (LinearMap.eqOn_span' h).closure f.continuous g.continuous
-
-中文:
-定理 eqOn_closure_span
-  条件: [T2空间 M₂] {s : 集合 M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : 集合.EqOn f g s)
-  证明: (LinearMap.eqOn_span' h).closure f.continuous g.continuous
-
-Depends on / 依赖: LinearMap, LinearMap.eqOn_span, closure, continuous, eqOn_span, f.continuous, g.continuous
--/
-theorem eqOn_closure_span [T2Space M₂] {s : Set M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s) :
+theorem eqOn_closure_span [T2Space M₂] {s : Set M₁} {f g : M₁ →SL[σ₁₂] M₂} (h : Set.EqOn f g s) :
     Set.EqOn f g (closure (Submodule.span R₁ s : Set M₁)) :=
   (LinearMap.eqOn_span' h).closure f.continuous g.continuous
 
-/--
-theorem `ext_on` / 定理 `ext_on`
+/-- If the submodule generated by a set `s` is dense in the ambient module, then two continuous
+linear maps equal on `s` are equal. -/
+/-
+**ContinuousLinearMap.ext_on** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：ext_on [T2Space M₂] {s : Set M₁} (hs : Dense (Submodule.span R₁ s : Set M₁
+)) {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s) : f = g
+参数：hs : Dense (Submodule.span R₁ s : Set M₁)；h : Set.EqOn f g s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousLinearMap.eqOn_closure_span`：eqOn_closure_span [T2Space M₂] {s
+ : Set M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s) : Set.EqOn f g (closure 
+(Submodule.span R₁ s : Set …
 
-English:
-theorem ext_on
-  statement: [T2Space M₂] {s : Set M₁} (hs : Dense (Submodule.span R₁ s : Set M₁))
-  proof: ext fun x => eqOn_closure_span h (hs x)
-
-中文:
-定理 ext_on
-  结论: [T2空间 M₂] {s : 集合 M₁} (hs : 稠密 (子模.span R₁ s : 集合 M₁))
-  证明: ext fun x => eqOn_closure_span h (hs x)
-
-Depends on / 依赖: eqOn_closure_span
+--- 原说明 ---
+If the submodule generated by a set `s` is dense in the ambient module, then two
+ continuous
+linear maps equal on `s` are equal.
 -/
 theorem ext_on [T2Space M₂] {s : Set M₁} (hs : Dense (Submodule.span R₁ s : Set M₁))
-    {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s) : f = g :=
+    {f g : M₁ →SL[σ₁₂] M₂} (h : Set.EqOn f g s) : f = g :=
   ext fun x => eqOn_closure_span h (hs x)
 
-/--
-theorem `_root_.Submodule.topologicalClosure_map` / 定理 `_root_.Submodule.topologicalClosure_map`
+/-- Under a continuous linear map, the image of the `TopologicalClosure` of a submodule is
+contained in the `TopologicalClosure` of its image. -/
+/-
+**ContinuousLinearMap._root_.Submodule.topologicalClosure_map** 是 Mathlib 中的一个定理
+，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Submodule.topologicalClosure_map
-  statement: [RingHomSurjective σ₁₂] [TopologicalSpace R₁]
-  proof: image_closure_subset_closure_image f.continuous
-
-中文:
-定理 _root_.子模.topologicalClosure_map
-  结论: [RingHomSurjective σ₁₂] [拓扑空间 R₁]
-  证明: image_closure_subset_closure_image f.continuous
-
-Depends on / 依赖: continuous, f.continuous, image_closure_subset_closure_image
+--- 原说明 ---
+Under a continuous linear map, the image of the `TopologicalClosure` of a submod
+ule is
+contained in the `TopologicalClosure` of its image.
 -/
 theorem _root_.Submodule.topologicalClosure_map [RingHomSurjective σ₁₂] [TopologicalSpace R₁]
     [TopologicalSpace R₂] [ContinuousSMul R₁ M₁] [ContinuousAdd M₁] [ContinuousSMul R₂ M₂]
-    [ContinuousAdd M₂] (f : M₁ ->SL[σ₁₂] M₂) (s : Submodule R₁ M₁) :
-    s.topologicalClosure.map (f : M₁ ->ₛₗ[σ₁₂] M₂) <=
-      (s.map (f : M₁ ->ₛₗ[σ₁₂] M₂)).topologicalClosure :=
+    [ContinuousAdd M₂] (f : M₁ →SL[σ₁₂] M₂) (s : Submodule R₁ M₁) :
+    s.topologicalClosure.map (f : M₁ →ₛₗ[σ₁₂] M₂) ≤
+      (s.map (f : M₁ →ₛₗ[σ₁₂] M₂)).topologicalClosure :=
   image_closure_subset_closure_image f.continuous
 
-/--
-theorem `_root_.Submodule.topologicalClosure_mem_invtSubmodule` / 定理 `_root_.Submodule.topologicalClosure_mem_invtSubmodule`
+/-- If a continuous linear map stabilizes a submodule, then it stabilizes its topological
+closure. -/
+/-
+**ContinuousLinearMap._root_.Submodule.topologicalClosure_mem_invtSubmodule** 是 
+Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Submodule.topologicalClosure_mem_invtSubmodule
-  statement: [TopologicalSpace R₁]
-  proof: by
-  rw [Module.End.mem_invtSubmodule_iff_map_le] at hs ⊢
-  exact (s.topologicalClosure_map f).trans (Submodule.topologicalClosure_mono hs)
-
-中文:
-定理 _root_.子模.topologicalClosure_mem_invtSubmodule
-  结论: [拓扑空间 R₁]
-  证明: by
-  rw [Module.End.mem_invtSubmodule_iff_map_le] at hs ⊢
-  exact (s.topologicalClosure_map f).trans (Submodule.topologicalClosure_mono hs)
-
-Depends on / 依赖: Module, Module.End.mem_invtSubmodule_iff_map_le, Submodule, Submodule.topologicalClosure_mono, mem_invtSubmodule_iff_map_le, s.topologicalClosure_map, topologicalClosure_map, topologicalClosure_mono
+--- 原说明 ---
+If a continuous linear map stabilizes a submodule, then it stabilizes its topolo
+gical
+closure.
 -/
 theorem _root_.Submodule.topologicalClosure_mem_invtSubmodule [TopologicalSpace R₁]
-    [ContinuousSMul R₁ M₁] [ContinuousAdd M₁] {f : M₁ ->L[R₁] M₁} {s : Submodule R₁ M₁}
-    (hs : s in Module.End.invtSubmodule f) :
-    s.topologicalClosure in Module.End.invtSubmodule f := by
+    [ContinuousSMul R₁ M₁] [ContinuousAdd M₁] {f : M₁ →L[R₁] M₁} {s : Submodule R₁ M₁}
+    (hs : s ∈ Module.End.invtSubmodule f) :
+    s.topologicalClosure ∈ Module.End.invtSubmodule f := by
   rw [Module.End.mem_invtSubmodule_iff_map_le] at hs ⊢
   exact (s.topologicalClosure_map f).trans (Submodule.topologicalClosure_mono hs)
 
-/--
-theorem `_root_.DenseRange.topologicalClosure_map_submodule` / 定理 `_root_.DenseRange.topologicalClosure_map_submodule`
+/-- Under a dense continuous linear map, a submodule whose `TopologicalClosure` is `⊤` is sent to
+another such submodule.  That is, the image of a dense set under a map with dense range is dense.
+-/
+/-
+**ContinuousLinearMap._root_.DenseRange.topologicalClosure_map_submodule** 是 Mat
+hlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.DenseRange.topologicalClosure_map_submodule
-  statement: [RingHomSurjective σ₁₂]
-  proof: by
-  rw [SetLike.ext'_iff] at hs ⊢
-  simp only [Submodule.topologicalClosure_coe, Submodule.top_coe, ← dense_iff_closure_eq] at hs ⊢
-  exact hf'.dense_image f.continuous hs
-
-中文:
-定理 _root_.DenseRange.topologicalClosure_map_submodule
-  结论: [RingHomSurjective σ₁₂]
-  证明: by
-  rw [SetLike.ext'_iff] at hs ⊢
-  simp only [Submodule.topologicalClosure_coe, Submodule.top_coe, ← dense_iff_closure_eq] at hs ⊢
-  exact hf'.dense_image f.continuous hs
-
-Depends on / 依赖: SetLike, SetLike.ext, Submodule, Submodule.top_coe, Submodule.topologicalClosure_coe, _iff, continuous, dense_iff_closure_eq, dense_image, f.continuous, top_coe, topologicalClosure_coe
+--- 原说明 ---
+Under a dense continuous linear map, a submodule whose `TopologicalClosure` is `
+⊤` is sent to
+another such submodule.  That is, the image of a dense set under a map with dens
+e range is dense.
 -/
 theorem _root_.DenseRange.topologicalClosure_map_submodule [RingHomSurjective σ₁₂]
     [TopologicalSpace R₁] [TopologicalSpace R₂] [ContinuousSMul R₁ M₁] [ContinuousAdd M₁]
-    [ContinuousSMul R₂ M₂] [ContinuousAdd M₂] {f : M₁ ->SL[σ₁₂] M₂} (hf' : DenseRange f)
+    [ContinuousSMul R₂ M₂] [ContinuousAdd M₂] {f : M₁ →SL[σ₁₂] M₂} (hf' : DenseRange f)
     {s : Submodule R₁ M₁} (hs : s.topologicalClosure = ⊤) :
-    (s.map (f : M₁ ->ₛₗ[σ₁₂] M₂)).topologicalClosure = ⊤ := by
+    (s.map (f : M₁ →ₛₗ[σ₁₂] M₂)).topologicalClosure = ⊤ := by
   rw [SetLike.ext'_iff] at hs ⊢
   simp only [Submodule.topologicalClosure_coe, Submodule.top_coe, ← dense_iff_closure_eq] at hs ⊢
   exact hf'.dense_image f.continuous hs
@@ -915,72 +843,33 @@ variable {S₂ T₂ : Type*}
 variable [DistribSMul S₂ M₂] [SMulCommClass R₂ S₂ M₂] [ContinuousConstSMul S₂ M₂]
 variable [DistribSMul T₂ M₂] [SMulCommClass R₂ T₂ M₂] [ContinuousConstSMul T₂ M₂]
 
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul S₂ (M₁ ->SL[σ₁₂] M₂) where
-  body: ⟨c • (f : M₁ ->ₛₗ[σ₁₂] M₂), (f.2.const_smul _ : Continuous fun x => c • f x)⟩
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 S₂ (M₁ ->SL[σ₁₂] M₂) where
-  定义体: ⟨c • (f : M₁ ->ₛₗ[σ₁₂] M₂), (f.2.const_smul _ : Continuous fun x => c • f x)⟩
-
-Depends on / 依赖: Continuous, const_smul
+/-
+**ContinuousLinearMap.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：instSMul : SMul S₂ (M₁ ->SL[σ₁₂] M₂) where smul c f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSMul : SMul S₂ (M₁ ->SL[σ₁₂] M₂) where
-  smul c f := ⟨c • (f : M₁ ->ₛₗ[σ₁₂] M₂), (f.2.const_smul _ : Continuous fun x => c • f x)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSMulApply S₂ (M₁ ->SL[σ₁₂] M₂) M₁ M₂
-  body: rfl
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 是SMulApply S₂ (M₁ ->SL[σ₁₂] M₂) M₁ M₂
-  定义体: rfl
-
-@[simp, norm_cast]
+instance instSMul : SMul S₂ (M₁ →SL[σ₁₂] M₂) where
+  smul c f := ⟨c • (f : M₁ →ₛₗ[σ₁₂] M₂), (f.2.const_smul _ : Continuous fun x => c • f x)⟩
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSMulApply S₂ (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+instance : IsSMulApply S₂ (M₁ →SL[σ₁₂] M₂) M₁ M₂ where
   smul_apply _ _ _ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_smul` / 定理 `toLinearMap_smul`
-
-English:
-theorem toLinearMap_smul
-  given: (c : S₂) (f : M₁ ->SL[σ₁₂] M₂)
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias smul_apply := _root_.smul_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_smul := toLinearMap_smul
-
-@[deprecated (since := "2026-05-20")] alias coe_smul' := FunLike.coe_smul
-
-中文:
-定理 toLinearMap_smul
-  条件: (c : S₂) (f : M₁ ->SL[σ₁₂] M₂)
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias smul_apply := _root_.smul_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_smul := toLinearMap_smul
-
-@[deprecated (since := "2026-05-20")] alias coe_smul' := FunLike.coe_smul
+/-
+**ContinuousLinearMap.toLinearMap_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：toLinearMap_smul (c : S₂) (f : M₁ ->SL[σ₁₂] M₂) : ↑(c • f) = c • (f : M₁ -
+>ₛₗ[σ₁₂] M₂)
+参数：c : S₂；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_smul (c : S₂) (f : M₁ ->SL[σ₁₂] M₂) :
-    ↑(c • f) = c • (f : M₁ ->ₛₗ[σ₁₂] M₂) :=
+theorem toLinearMap_smul (c : S₂) (f : M₁ →SL[σ₁₂] M₂) :
+    ↑(c • f) = c • (f : M₁ →ₛₗ[σ₁₂] M₂) :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias smul_apply := _root_.smul_apply
@@ -988,41 +877,37 @@ theorem toLinearMap_smul (c : S₂) (f : M₁ ->SL[σ₁₂] M₂) :
 @[deprecated (since := "2026-05-20")] protected alias coe_smul := toLinearMap_smul
 
 @[deprecated (since := "2026-05-20")] alias coe_smul' := FunLike.coe_smul
-
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: [SMul S₂ T₂] [IsScalarTower S₂ T₂ M₂]
-  body: FunLike.isScalarTower
-
-中文:
-实例 isScalarTower
-  签名: [标量乘法 S₂ T₂] [标量塔 S₂ T₂ M₂]
-  定义体: FunLike.isScalarTower
-
-Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
+/-
+**ContinuousLinearMap.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：isScalarTower [SMul S₂ T₂] [IsScalarTower S₂ T₂ M₂] : IsScalarTower S₂ T₂ 
+(M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FunLike.isScalarTower`：∀ {M : Type u_1} {M' : Type u_2} {F : Type u_3} {
+α : Type u_4} {β : Type u_5} [i : FunLike F α β] [inst : SMul M β]   [inst_1 : S
+Mul M' β] […
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
 -/
 instance isScalarTower [SMul S₂ T₂] [IsScalarTower S₂ T₂ M₂] :
-    IsScalarTower S₂ T₂ (M₁ ->SL[σ₁₂] M₂) := FunLike.isScalarTower
-
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
-
-English:
-instance smulCommClass
-  signature: [SMulCommClass S₂ T₂ M₂]
-  body: FunLike.smulCommClass
-
-中文:
-实例 smulCommClass
-  签名: [标量交换类 S₂ T₂ M₂]
-  定义体: FunLike.smulCommClass
-
-Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
+    IsScalarTower S₂ T₂ (M₁ →SL[σ₁₂] M₂) := FunLike.isScalarTower
+/-
+**ContinuousLinearMap.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：smulCommClass [SMulCommClass S₂ T₂ M₂] : SMulCommClass S₂ T₂ (M₁ ->SL[σ₁₂]
+ M₂)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FunLike.smulCommClass`：∀ {M : Type u_1} {M' : Type u_2} {F : Type u_3} {
+α : Type u_4} {β : Type u_5} [i : FunLike F α β] [inst : SMul M β]   [inst_1 : S
+Mul M' β] […
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
 -/
-instance smulCommClass [SMulCommClass S₂ T₂ M₂] : SMulCommClass S₂ T₂ (M₁ ->SL[σ₁₂] M₂) :=
+instance smulCommClass [SMulCommClass S₂ T₂ M₂] : SMulCommClass S₂ T₂ (M₁ →SL[σ₁₂] M₂) :=
   FunLike.smulCommClass
 
 end SMul
@@ -1032,131 +917,63 @@ section SMulMonoid
 variable {S₂ : Type*} [Monoid S₂]
 variable [DistribMulAction S₂ M₂] [SMulCommClass R₂ S₂ M₂] [ContinuousConstSMul S₂ M₂]
 
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: : MulAction S₂ (M₁ ->SL[σ₁₂] M₂)
-  body: fast_instance% FunLike.mulAction
-
-中文:
-实例 mulAction
-  签名: : 乘法作用 S₂ (M₁ ->SL[σ₁₂] M₂)
-  定义体: fast_instance% FunLike.mulAction
-
-Depends on / 依赖: FunLike, FunLike.mulAction, fast_instance, mulAction
+/-
+**ContinuousLinearMap.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：mulAction : MulAction S₂ (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance mulAction : MulAction S₂ (M₁ ->SL[σ₁₂] M₂) := fast_instance% FunLike.mulAction
+instance mulAction : MulAction S₂ (M₁ →SL[σ₁₂] M₂) := fast_instance% FunLike.mulAction
 
 end SMulMonoid
 
-/--
-Instance `zero` / 实例 `zero`
+/-- The continuous map that is constantly zero. -/
+/-
+**ContinuousLinearMap.zero** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：zero : Zero (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance zero
-  signature: : Zero (M₁ ->SL[σ₁₂] M₂)
-  body: ⟨⟨0, continuous_zero⟩⟩
-
-中文:
-实例 zero
-  签名: : 零 (M₁ ->SL[σ₁₂] M₂)
-  定义体: ⟨⟨0, continuous_zero⟩⟩
-
-Depends on / 依赖: continuous_zero
+--- 原说明 ---
+The continuous map that is constantly zero.
 -/
-instance zero : Zero (M₁ ->SL[σ₁₂] M₂) :=
+instance zero : Zero (M₁ →SL[σ₁₂] M₂) :=
   ⟨⟨0, continuous_zero⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂
-  body: rfl
-
-中文:
-实例 :
-  签名: 是ZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂
-  定义体: rfl
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+instance : IsZeroApply (M₁ →SL[σ₁₂] M₂) M₁ M₂ where
   zero_apply _ := rfl
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited (M₁ ->SL[σ₁₂] M₂)
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 inhabited
-  签名: : 可居 (M₁ ->SL[σ₁₂] M₂)
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**ContinuousLinearMap.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：inhabited : Inhabited (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance inhabited : Inhabited (M₁ ->SL[σ₁₂] M₂) :=
+instance inhabited : Inhabited (M₁ →SL[σ₁₂] M₂) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `default_def` / 定理 `default_def`
-
-English:
-theorem default_def
-  statement: (default : M₁ ->SL[σ₁₂] M₂) = 0
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 default_def
-  结论: (default : M₁ ->SL[σ₁₂] M₂) = 0
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.default_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：default_def : (default : M₁ ->SL[σ₁₂] M₂) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem default_def : (default : M₁ ->SL[σ₁₂] M₂) = 0 :=
+theorem default_def : (default : M₁ →SL[σ₁₂] M₂) = 0 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_zero` / 定理 `toLinearMap_zero`
-
-English:
-theorem toLinearMap_zero
-  statement: ((0 : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁₂] M₂) = 0
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias zero_apply := _root_.zero_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_zero := toLinearMap_zero
-
-@[deprecated (since := "2026-05-20")] alias coe_zero' := FunLike.coe_zero
-
-@[simp, norm_cast]
-
-中文:
-定理 toLinearMap_zero
-  结论: ((0 : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁₂] M₂) = 0
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias zero_apply := _root_.zero_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_zero := toLinearMap_zero
-
-@[deprecated (since := "2026-05-20")] alias coe_zero' := FunLike.coe_zero
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.toLinearMap_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：toLinearMap_zero : ((0 : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁₂] M₂) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_zero : ((0 : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁₂] M₂) = 0 :=
+theorem toLinearMap_zero : ((0 : M₁ →SL[σ₁₂] M₂) : M₁ →ₛₗ[σ₁₂] M₂) = 0 :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias zero_apply := _root_.zero_apply
@@ -1166,78 +983,65 @@ theorem toLinearMap_zero : ((0 : M₁ ->SL[σ₁₂] M₂) : M₁ ->ₛₗ[σ₁
 @[deprecated (since := "2026-05-20")] alias coe_zero' := FunLike.coe_zero
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_zero` / 定理 `toContinuousAddMonoidHom_zero`
-
-English:
-theorem toContinuousAddMonoidHom_zero
-  proof: rfl
-
-中文:
-定理 toContinuousAddMonoidHom_zero
-  证明: rfl
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_zero** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_zero : ((0 : M₁ ->SL[σ₁₂] M₂) : ContinuousAddMono
+idHom M₁ M₂) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
 theorem toContinuousAddMonoidHom_zero :
-    ((0 : M₁ ->SL[σ₁₂] M₂) : ContinuousAddMonoidHom M₁ M₂) = 0 := rfl
-
-/--
-Instance `uniqueOfLeft` / 实例 `uniqueOfLeft`
-
-English:
-instance uniqueOfLeft
-  signature: [Subsingleton M₁]
-  body: coe_injective.unique
-
-中文:
-实例 uniqueOfLeft
-  签名: [子单例 M₁]
-  定义体: coe_injective.unique
-
-Depends on / 依赖: coe_injective, coe_injective.unique, unique
+    ((0 : M₁ →SL[σ₁₂] M₂) : ContinuousAddMonoidHom M₁ M₂) = 0 := rfl
+/-
+**ContinuousLinearMap.uniqueOfLeft** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：uniqueOfLeft [Subsingleton M₁] : Unique (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.coe_injective`：coe_injective : Function.Injective ((
+↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
 -/
-instance uniqueOfLeft [Subsingleton M₁] : Unique (M₁ ->SL[σ₁₂] M₂) :=
+instance uniqueOfLeft [Subsingleton M₁] : Unique (M₁ →SL[σ₁₂] M₂) :=
   coe_injective.unique
-
-/--
-Instance `uniqueOfRight` / 实例 `uniqueOfRight`
-
-English:
-instance uniqueOfRight
-  signature: [Subsingleton M₂]
-  body: coe_injective.unique
-
-中文:
-实例 uniqueOfRight
-  签名: [子单例 M₂]
-  定义体: coe_injective.unique
-
-Depends on / 依赖: coe_injective, coe_injective.unique, unique
+/-
+**ContinuousLinearMap.uniqueOfRight** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：uniqueOfRight [Subsingleton M₂] : Unique (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.coe_injective`：coe_injective : Function.Injective ((
+↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
 -/
-instance uniqueOfRight [Subsingleton M₂] : Unique (M₁ ->SL[σ₁₂] M₂) :=
+instance uniqueOfRight [Subsingleton M₂] : Unique (M₁ →SL[σ₁₂] M₂) :=
   coe_injective.unique
-
-/--
-theorem `exists_ne_zero` / 定理 `exists_ne_zero`
-
-English:
-theorem exists_ne_zero
-  given: {f : M₁ ->SL[σ₁₂] M₂} (hf : f != 0)
-  statement: exists x, f x != 0
-  proof: by
-  by_contra! h
-  exact hf (ContinuousLinearMap.ext h)
-
-中文:
-定理 存在_ne_zero
-  条件: {f : M₁ ->SL[σ₁₂] M₂} (hf : f != 0)
-  结论: 存在 x, f x != 0
-  证明: by
-  by_contra! h
-  exact hf (ContinuousLinearMap.ext h)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext
+/-
+**ContinuousLinearMap.exists_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：exists_ne_zero {f : M₁ ->SL[σ₁₂] M₂} (hf : f != 0) : exists x, f x != 0
+参数：hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-theorem exists_ne_zero {f : M₁ ->SL[σ₁₂] M₂} (hf : f != 0) : exists x, f x != 0 := by
+theorem exists_ne_zero {f : M₁ →SL[σ₁₂] M₂} (hf : f ≠ 0) : ∃ x, f x ≠ 0 := by
   by_contra! h
   exact hf (ContinuousLinearMap.ext h)
 
@@ -1245,337 +1049,195 @@ section
 
 variable (R₁ M₁)
 
-/--
-Definition of `id` / `id` 的定义
+/-- the identity map as a continuous linear map. -/
+/-
+**ContinuousLinearMap.id** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：(R₁ : Type u_1) →   [inst : Semiring R₁] →     (M₁ : Type u_4) →       [in
+st_1 : TopologicalSpace M₁] → [inst_2 : AddCommMonoid M₁] → [inst_3 : _root_.Mod
+ule R₁ M₁] → M₁ →L[R₁] M₁
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 
-English:
-definition id
-  signature: : M₁ ->L[R₁] M₁
-  body: ⟨LinearMap.id, continuous_id⟩
-
-中文:
-定义 id
-  签名: : M₁ ->L[R₁] M₁
-  定义体: ⟨LinearMap.id, continuous_id⟩
+--- 原说明 ---
+the identity map as a continuous linear map.
 -/
-protected def id : M₁ ->L[R₁] M₁ :=
+protected def id : M₁ →L[R₁] M₁ :=
   ⟨LinearMap.id, continuous_id⟩
 
 end
 
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: : One (M₁ ->L[R₁] M₁)
-  body: ⟨.id R₁ M₁⟩
-
-中文:
-实例 one
-  签名: : 幺 (M₁ ->L[R₁] M₁)
-  定义体: ⟨.id R₁ M₁⟩
+/-
+**ContinuousLinearMap.one** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：one : One (M₁ ->L[R₁] M₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance one : One (M₁ ->L[R₁] M₁) :=
+instance one : One (M₁ →L[R₁] M₁) :=
   ⟨.id R₁ M₁⟩
-
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : M₁ ->L[R₁] M₁) = .id R₁ M₁
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : M₁ ->L[R₁] M₁) = .id R₁ M₁
-  证明: rfl
+/-
+**ContinuousLinearMap.one_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：one_def : (1 : M₁ ->L[R₁] M₁) = .id R₁ M₁
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_def : (1 : M₁ ->L[R₁] M₁) = .id R₁ M₁ := rfl
-
-/--
-Instance `instIsOneApply` / 实例 `instIsOneApply`
-
-English:
-instance instIsOneApply
-  signature: : IsOneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where
-  body: rfl
-
-@[simp]
-
-中文:
-实例 instIsOneApply
-  签名: : 是OneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where
-  定义体: rfl
-
-@[simp]
+theorem one_def : (1 : M₁ →L[R₁] M₁) = .id R₁ M₁ := rfl
+/-
+**ContinuousLinearMap.instIsOneApply** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：instIsOneApply : IsOneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where one_apply_eq_se
+lf _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIsOneApply : IsOneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where
+instance instIsOneApply : IsOneApplyEqSelf (M₁ →L[R₁] M₁) M₁ where
   one_apply_eq_self _ := rfl
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : M₁)
-  statement: ContinuousLinearMap.id R₁ M₁ x = x
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 id_apply
-  条件: (x : M₁)
-  结论: 连续线性映射.id R₁ M₁ x = x
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：id_apply (x : M₁) : ContinuousLinearMap.id R₁ M₁ x = x
+参数：x : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : M₁) : ContinuousLinearMap.id R₁ M₁ x = x := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: (ContinuousLinearMap.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = LinearMap.id
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_id
-  结论: (连续线性映射.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = 线性映射.id
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_id : (ContinuousLinearMap.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_id : (ContinuousLinearMap.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = LinearMap.id :=
+theorem coe_id : (ContinuousLinearMap.id R₁ M₁ : M₁ →ₗ[R₁] M₁) = LinearMap.id :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_id'` / 定理 `coe_id'`
-
-English:
-theorem coe_id'
-  statement: ⇑(ContinuousLinearMap.id R₁ M₁) = id
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_id'
-  结论: ⇑(连续线性映射.id R₁ M₁) = id
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.coe_id'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_id' : ⇑(ContinuousLinearMap.id R₁ M₁) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id' : ⇑(ContinuousLinearMap.id R₁ M₁) = id :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_one` / 定理 `toLinearMap_one`
-
-English:
-theorem toLinearMap_one
-  statement: ((1 : M₁ ->L[R₁] M₁) : M₁ ->ₗ[R₁] M₁) = 1
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias coe_one := toLinearMap_one
-
-中文:
-定理 toLinearMap_one
-  结论: ((1 : M₁ ->L[R₁] M₁) : M₁ ->ₗ[R₁] M₁) = 1
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias coe_one := toLinearMap_one
+/-
+**ContinuousLinearMap.toLinearMap_one** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_one : ((1 : M₁ ->L[R₁] M₁) : M₁ ->ₗ[R₁] M₁) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_one : ((1 : M₁ ->L[R₁] M₁) : M₁ ->ₗ[R₁] M₁) = 1 :=
+theorem toLinearMap_one : ((1 : M₁ →L[R₁] M₁) : M₁ →ₗ[R₁] M₁) = 1 :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias coe_one := toLinearMap_one
-
-/--
-lemma `mk_id` / 引理 `mk_id`
-
-English:
-lemma mk_id
-  statement: mk (.id : M₁ ->ₗ[R₁] M₁) continuous_id = .id _ _
-  proof: rfl
-
-中文:
-引理 mk_id
-  结论: mk (.id : M₁ ->ₗ[R₁] M₁) continuous_id = .id _ _
-  证明: rfl
+/-
+**ContinuousLinearMap.mk_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   [inst_3 : _root_.Module R₁ M₁], { toLi
+nearMap := LinearMap.id, cont := ⋯ } = ContinuousLinearMap.id R₁ M₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-@[simp] lemma mk_id : mk (.id : M₁ ->ₗ[R₁] M₁) continuous_id = .id _ _ := rfl
-/--
-lemma `mk_one` / 引理 `mk_one`
-
-English:
-lemma mk_one
-  statement: mk (1 : M₁ ->ₗ[R₁] M₁) continuous_id = 1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 mk_one
-  结论: mk (1 : M₁ ->ₗ[R₁] M₁) continuous_id = 1
-  证明: rfl
-
-@[simp, norm_cast]
+@[simp] lemma mk_id : mk (.id : M₁ →ₗ[R₁] M₁) continuous_id = .id _ _ := rfl
+/-
+**ContinuousLinearMap.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   [inst_3 : _root_.Module R₁ M₁], { toLi
+nearMap := 1, cont := ⋯ } = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-@[simp] lemma mk_one : mk (1 : M₁ ->ₗ[R₁] M₁) continuous_id = 1 := rfl
+@[simp] lemma mk_one : mk (1 : M₁ →ₗ[R₁] M₁) continuous_id = 1 := rfl
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_id` / 定理 `toContinuousAddMonoidHom_id`
-
-English:
-theorem toContinuousAddMonoidHom_id
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 toContinuousAddMonoidHom_id
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_id** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_id : (ContinuousLinearMap.id R₁ M₁ : ContinuousAd
+dMonoidHom M₁ M₁) = .id _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
 theorem toContinuousAddMonoidHom_id :
     (ContinuousLinearMap.id R₁ M₁ : ContinuousAddMonoidHom M₁ M₁) = .id _ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_id` / 定理 `coe_eq_id`
-
-English:
-theorem coe_eq_id
-  given: {f : M₁ ->L[R₁] M₁}
-  statement: (f : M₁ ->ₗ[R₁] M₁) = LinearMap.id ↔ f = .id _ _
-  proof: by
-  rw [← coe_id]; rw [coe_inj]
-
-@[deprecated (since := "2026-05-20")] protected alias one_apply := one_apply_eq_self
-
-中文:
-定理 coe_eq_id
-  条件: {f : M₁ ->L[R₁] M₁}
-  结论: (f : M₁ ->ₗ[R₁] M₁) = 线性映射.id ↔ f = .id _ _
-  证明: by
-  rw [← coe_id]; rw [coe_inj]
-
-@[deprecated (since := "2026-05-20")] protected alias one_apply := one_apply_eq_self
-
-Depends on / 依赖: coe_id, coe_inj
+/-
+**ContinuousLinearMap.coe_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_eq_id {f : M₁ ->L[R₁] M₁} : (f : M₁ ->ₗ[R₁] M₁) = LinearMap.id ↔ f = .
+id _ _
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.coe_id`：coe_id : (ContinuousLinearMap.id R₁ M₁ : M₁ 
+->ₗ[R₁] M₁) = LinearMap.id
+· 使用定理 `ContinuousLinearMap.coe_inj`：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ -
+>ₛₗ[σ₁₂] M₂) = g ↔ f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_eq_id {f : M₁ ->L[R₁] M₁} : (f : M₁ ->ₗ[R₁] M₁) = LinearMap.id ↔ f = .id _ _ := by
-  rw [← coe_id]; rw [coe_inj]
+theorem coe_eq_id {f : M₁ →L[R₁] M₁} : (f : M₁ →ₗ[R₁] M₁) = LinearMap.id ↔ f = .id _ _ := by
+  rw [← coe_id, coe_inj]
 
 @[deprecated (since := "2026-05-20")] protected alias one_apply := one_apply_eq_self
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: M₁] : Nontrivial (M₁ ->L[R₁] M₁)
-  body: ⟨0, 1, fun e =>
-    have ⟨x, hx⟩ := exists_ne (0 : M₁); hx (by simpa using DFunLike.congr_fun e.symm x)⟩
-
-中文:
-实例 [非平凡
-  签名: M₁] : 非平凡 (M₁ ->L[R₁] M₁)
-  定义体: ⟨0, 1, fun e =>
-    have ⟨x, hx⟩ := exists_ne (0 : M₁); hx (by simpa using DFunLike.congr_fun e.symm x)⟩
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, e.symm, exists_ne
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nontrivial M₁] : Nontrivial (M₁ ->L[R₁] M₁) :=
-  ⟨0, 1, fun e =>
+instance [Nontrivial M₁] : Nontrivial (M₁ →L[R₁] M₁) :=
+  ⟨0, 1, fun e ↦
     have ⟨x, hx⟩ := exists_ne (0 : M₁); hx (by simpa using DFunLike.congr_fun e.symm x)⟩
 
 section Add
 
 variable [ContinuousAdd M₂]
 
-/--
-Instance `add` / 实例 `add`
-
-English:
-instance add
-  signature: : Add (M₁ ->SL[σ₁₂] M₂)
-  body: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
-
-中文:
-实例 add
-  签名: : 加法 (M₁ ->SL[σ₁₂] M₂)
-  定义体: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
+/-
+**ContinuousLinearMap.add** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：add : Add (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance add : Add (M₁ ->SL[σ₁₂] M₂) :=
+instance add : Add (M₁ →SL[σ₁₂] M₂) :=
   ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
-
-/--
-Instance `instIsAddApply` / 实例 `instIsAddApply`
-
-English:
-instance instIsAddApply
-  signature: : IsAddApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
-  body: rfl
-
-@[simp, norm_cast]
-
-中文:
-实例 instIsAddApply
-  签名: : 是加法Apply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
-  定义体: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.instIsAddApply** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：instIsAddApply : IsAddApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where add_apply _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIsAddApply : IsAddApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+instance instIsAddApply : IsAddApply (M₁ →SL[σ₁₂] M₂) M₁ M₂ where
   add_apply _ _ _ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_add` / 定理 `toLinearMap_add`
-
-English:
-theorem toLinearMap_add
-  given: (f g : M₁ ->SL[σ₁₂] M₂)
-  statement: (↑(f + g) : M₁ ->ₛₗ[σ₁₂] M₂) = f + g
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias add_apply := _root_.add_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_add := toLinearMap_add
-
-@[deprecated (since := "2026-05-20")] alias coe_add' := FunLike.coe_add
-
-@[simp, norm_cast]
-
-中文:
-定理 toLinearMap_add
-  条件: (f g : M₁ ->SL[σ₁₂] M₂)
-  结论: (↑(f + g) : M₁ ->ₛₗ[σ₁₂] M₂) = f + g
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias add_apply := _root_.add_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_add := toLinearMap_add
-
-@[deprecated (since := "2026-05-20")] alias coe_add' := FunLike.coe_add
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.toLinearMap_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_add (f g : M₁ ->SL[σ₁₂] M₂) : (↑(f + g) : M₁ ->ₛₗ[σ₁₂] M₂) = f
+ + g
+参数：f g : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_add (f g : M₁ ->SL[σ₁₂] M₂) : (↑(f + g) : M₁ ->ₛₗ[σ₁₂] M₂) = f + g :=
+theorem toLinearMap_add (f g : M₁ →SL[σ₁₂] M₂) : (↑(f + g) : M₁ →ₛₗ[σ₁₂] M₂) = f + g :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias add_apply := _root_.add_apply
@@ -1585,92 +1247,62 @@ theorem toLinearMap_add (f g : M₁ ->SL[σ₁₂] M₂) : (↑(f + g) : M₁ ->
 @[deprecated (since := "2026-05-20")] alias coe_add' := FunLike.coe_add
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_add` / 定理 `toContinuousAddMonoidHom_add`
-
-English:
-theorem toContinuousAddMonoidHom_add
-  given: (f g : M₁ ->SL[σ₁₂] M₂)
-  proof: rfl
-
-中文:
-定理 toContinuousAddMonoidHom_add
-  条件: (f g : M₁ ->SL[σ₁₂] M₂)
-  证明: rfl
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_add** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_add (f g : M₁ ->SL[σ₁₂] M₂) : ↑(f + g) = (f + g :
+ ContinuousAddMonoidHom M₁ M₂)
+参数：f g : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem toContinuousAddMonoidHom_add (f g : M₁ ->SL[σ₁₂] M₂) :
+theorem toContinuousAddMonoidHom_add (f g : M₁ →SL[σ₁₂] M₂) :
     ↑(f + g) = (f + g : ContinuousAddMonoidHom M₁ M₂) := rfl
 
 -- The `AddMonoid` instance exists to help speedup unification
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddMonoid (M₁ ->SL[σ₁₂] M₂)
-  body: fast_instance% FunLike.addMonoid
-
-中文:
-实例 :
-  签名: 加法幺半群 (M₁ ->SL[σ₁₂] M₂)
-  定义体: fast_instance% FunLike.addMonoid
-
-Depends on / 依赖: FunLike, FunLike.addMonoid, addMonoid, fast_instance
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddMonoid (M₁ ->SL[σ₁₂] M₂) := fast_instance% FunLike.addMonoid
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: : AddCommMonoid (M₁ ->SL[σ₁₂] M₂)
-  body: fast_instance% FunLike.addCommMonoid
+instance : AddMonoid (M₁ →SL[σ₁₂] M₂) := fast_instance% FunLike.addMonoid
+/-
+**ContinuousLinearMap.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：addCommMonoid : AddCommMonoid (M₁ ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance addCommMonoid : AddCommMonoid (M₁ →SL[σ₁₂] M₂) := fast_instance% FunLike.addCommMonoid
 
 @[simp, norm_cast]
-
-中文:
-实例 addCommMonoid
-  签名: : 加法交换幺半群 (M₁ ->SL[σ₁₂] M₂)
-  定义体: fast_instance% FunLike.addCommMonoid
-
-@[simp, norm_cast]
-
-Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
+/-
+**ContinuousLinearMap.toLinearMap_sum** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_sum {ι : Type*} (t : Finset ι) (f : ι -> M₁ ->SL[σ₁₂] M₂) : ↑(
+∑ d in t, f d) = (∑ d in t, f d : M₁ ->ₛₗ[σ₁₂] M₂)
+参数：t : Finset ι；f : ι -> M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-instance addCommMonoid : AddCommMonoid (M₁ ->SL[σ₁₂] M₂) := fast_instance% FunLike.addCommMonoid
-
-@[simp, norm_cast]
-/--
-theorem `toLinearMap_sum` / 定理 `toLinearMap_sum`
-
-English:
-theorem toLinearMap_sum
-  given: {ι : Type*} (t : Finset ι) (f : ι -> M₁ ->SL[σ₁₂] M₂)
-  proof: map_sum (AddMonoidHom.mk ⟨((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂), rfl⟩ fun _ _ => rfl) _ _
-
-@[deprecated (since := "2026-05-20")] protected alias sum_apply := _root_.sum_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_sum := toLinearMap_sum
-
-@[deprecated (since := "2026-05-20")] alias coe_sum' := FunLike.coe_sum
-
-中文:
-定理 toLinearMap_sum
-  条件: {ι : 类型} (t : 有限集 ι) (f : ι -> M₁ ->SL[σ₁₂] M₂)
-  证明: map_sum (AddMonoidHom.mk ⟨((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂), rfl⟩ fun _ _ => rfl) _ _
-
-@[deprecated (since := "2026-05-20")] protected alias sum_apply := _root_.sum_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_sum := toLinearMap_sum
-
-@[deprecated (since := "2026-05-20")] alias coe_sum' := FunLike.coe_sum
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, map_sum
--/
-theorem toLinearMap_sum {ι : Type*} (t : Finset ι) (f : ι -> M₁ ->SL[σ₁₂] M₂) :
-    ↑(∑ d in t, f d) = (∑ d in t, f d : M₁ ->ₛₗ[σ₁₂] M₂) :=
-  map_sum (AddMonoidHom.mk ⟨((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂), rfl⟩ fun _ _ => rfl) _ _
+theorem toLinearMap_sum {ι : Type*} (t : Finset ι) (f : ι → M₁ →SL[σ₁₂] M₂) :
+    ↑(∑ d ∈ t, f d) = (∑ d ∈ t, f d : M₁ →ₛₗ[σ₁₂] M₂) :=
+  map_sum (AddMonoidHom.mk ⟨((↑) : (M₁ →SL[σ₁₂] M₂) → M₁ →ₛₗ[σ₁₂] M₂), rfl⟩ fun _ _ => rfl) _ _
 
 @[deprecated (since := "2026-05-20")] protected alias sum_apply := _root_.sum_apply
 
@@ -1682,43 +1314,19 @@ end Add
 
 variable [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of continuous linear maps. -/
+/-
+**ContinuousLinearMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : M₁ ->SL[σ₁₃] M₃
+参数：g : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  body: ⟨(g : M₂ ->ₛₗ[σ₂₃] M₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂), g.2.comp f.2⟩
-
-@[inherit_doc comp]
-infixr:80 " ∘L " =>
-  @ContinuousLinearMap.comp _ _ _ _ _ _ (RingHom.id _) (RingHom.id _) (RingHom.id _) _ _ _ _ _ _ _ _
-    _ _ _ _ RingHomCompTriple.ids
-
-@[inherit_doc comp]
-infixr:90 " ∘SL " =>
-  ContinuousLinearMap.comp
-
-@[simp, norm_cast]
-
-中文:
-定义 comp
-  签名: (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  定义体: ⟨(g : M₂ ->ₛₗ[σ₂₃] M₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂), g.2.comp f.2⟩
-
-@[inherit_doc comp]
-infixr:80 " ∘L " =>
-  @ContinuousLinearMap.comp _ _ _ _ _ _ (RingHom.id _) (RingHom.id _) (RingHom.id _) _ _ _ _ _ _ _ _
-    _ _ _ _ RingHomCompTriple.ids
-
-@[inherit_doc comp]
-infixr:90 " ∘SL " =>
-  ContinuousLinearMap.comp
-
-@[simp, norm_cast]
+--- 原说明 ---
+Composition of continuous linear maps.
 -/
-def comp (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : M₁ ->SL[σ₁₃] M₃ :=
-  ⟨(g : M₂ ->ₛₗ[σ₂₃] M₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂), g.2.comp f.2⟩
+def comp (g : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) : M₁ →SL[σ₁₃] M₃ :=
+  ⟨(g : M₂ →ₛₗ[σ₂₃] M₃).comp (f : M₁ →ₛₗ[σ₁₂] M₂), g.2.comp f.2⟩
 
 @[inherit_doc comp]
 infixr:80 " ∘L " =>
@@ -1730,140 +1338,95 @@ infixr:90 " ∘SL " =>
   ContinuousLinearMap.comp
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_comp` / 定理 `toLinearMap_comp`
-
-English:
-theorem toLinearMap_comp
-  given: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 toLinearMap_comp
-  条件: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  证明: rfl
-
-@[norm_cast]
+/-
+**ContinuousLinearMap.toLinearMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：toLinearMap_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : (h ∘SL f : 
+M₁ ->ₛₗ[σ₁₃] M₃) = (h : M₂ ->ₛₗ[σ₂₃] M₃) ∘ₛₗ (f : M₁ ->ₛₗ[σ₁₂] M₂)
+参数：h : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) :
-    (h ∘SL f : M₁ ->ₛₗ[σ₁₃] M₃) = (h : M₂ ->ₛₗ[σ₂₃] M₃) ∘ₛₗ (f : M₁ ->ₛₗ[σ₁₂] M₂) :=
+theorem toLinearMap_comp (h : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) :
+    (h ∘SL f : M₁ →ₛₗ[σ₁₃] M₃) = (h : M₂ →ₛₗ[σ₂₃] M₃) ∘ₛₗ (f : M₁ →ₛₗ[σ₁₂] M₂) :=
   rfl
 
 @[norm_cast]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  statement: ⇑(h ∘SL f) = h ∘ f
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] alias coe_comp' := coe_comp
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_comp
-  条件: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  结论: ⇑(h ∘SL f) = h ∘ f
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] alias coe_comp' := coe_comp
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coe_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : ⇑(h ∘SL f) = h ∘ f
+参数：h : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : ⇑(h ∘SL f) = h ∘ f :=
+theorem coe_comp (h : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) : ⇑(h ∘SL f) = h ∘ f :=
   rfl
 
 @[deprecated (since := "2026-05-20")] alias coe_comp' := coe_comp
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_comp` / 定理 `toContinuousAddMonoidHom_comp`
-
-English:
-theorem toContinuousAddMonoidHom_comp
-  given: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 toContinuousAddMonoidHom_comp
-  条件: (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) 
+: (↑(h ∘SL f) : ContinuousAddMonoidHom M₁ M₃) = (h : ContinuousAddMonoidHom M₂ M
+₃).comp f
+参数：h : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem toContinuousAddMonoidHom_comp (h : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) :
+theorem toContinuousAddMonoidHom_comp (h : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) :
     (↑(h ∘SL f) : ContinuousAddMonoidHom M₁ M₃) = (h : ContinuousAddMonoidHom M₂ M₃).comp f := rfl
 
 @[simp, grind =]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) (x : M₁)
-  statement: (g ∘SL f) x = g (f x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) (x : M₁)
-  结论: (g ∘SL f) x = g (f x)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：comp_apply (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) (x : M₁) : (g ∘SL f
+) x = g (f x)
+参数：g : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂；x : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) (x : M₁) : (g ∘SL f) x = g (f x) :=
+theorem comp_apply (g : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) (x : M₁) : (g ∘SL f) x = g (f x) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: f ∘SL .id R₁ M₁ = f
-  proof: ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: f ∘SL .id R₁ M₁ = f
-  证明: ext fun _x => rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_id (f : M₁ ->SL[σ₁₂] M₂) : f ∘SL .id R₁ M₁ = f
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
 -/
-theorem comp_id (f : M₁ ->SL[σ₁₂] M₂) : f ∘SL .id R₁ M₁ = f :=
+theorem comp_id (f : M₁ →SL[σ₁₂] M₂) : f ∘SL .id R₁ M₁ = f :=
   ext fun _x => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: .id R₂ M₂ ∘SL f = f
-  proof: ext fun _x => rfl
-
-中文:
-定理 id_comp
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: .id R₂ M₂ ∘SL f = f
-  证明: ext fun _x => rfl
+/-
+**ContinuousLinearMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：id_comp (f : M₁ ->SL[σ₁₂] M₂) : .id R₂ M₂ ∘SL f = f
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
 -/
-theorem id_comp (f : M₁ ->SL[σ₁₂] M₂) : .id R₂ M₂ ∘SL f = f :=
+theorem id_comp (f : M₁ →SL[σ₁₂] M₂) : .id R₂ M₂ ∘SL f = f :=
   ext fun _x => rfl
 
 section
@@ -1872,357 +1435,328 @@ variable {R E F : Type*} [Semiring R]
   [TopologicalSpace E] [AddCommMonoid E] [Module R E]
   [TopologicalSpace F] [AddCommMonoid F] [Module R F]
 
-/--
-lemma `leftInverse_of_comp` / 引理 `leftInverse_of_comp`
+/-- `g ∘ f = id` as `ContinuousLinearMap`s implies `g ∘ f = id` as functions. -/
+/-
+**ContinuousLinearMap.leftInverse_of_comp** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：leftInverse_of_comp {f : E ->L[R] F} {g : F ->L[R] E} (hinv : g ∘L f = .id
+ R E) : Function.LeftInverse g f
+参数：hinv : g ∘L f = .id R E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma leftInverse_of_comp
-  statement: {f : E ->L[R] F} {g : F ->L[R] E}
-  proof: by
-  simpa [coe_comp, ← Function.leftInverse_iff_comp] using congr(⇑$hinv)
-
-中文:
-引理 leftInverse_of_comp
-  结论: {f : E ->L[R] F} {g : F ->L[R] E}
-  证明: by
-  simpa [coe_comp, ← Function.leftInverse_iff_comp] using congr(⇑$hinv)
-
-Depends on / 依赖: Function, Function.leftInverse_iff_comp, coe_comp, leftInverse_iff_comp
+--- 原说明 ---
+`g ∘ f = id` as `ContinuousLinearMap`s implies `g ∘ f = id` as functions.
 -/
-lemma leftInverse_of_comp {f : E ->L[R] F} {g : F ->L[R] E}
+lemma leftInverse_of_comp {f : E →L[R] F} {g : F →L[R] E}
     (hinv : g ∘L f = .id R E) : Function.LeftInverse g f := by
   simpa [coe_comp, ← Function.leftInverse_iff_comp] using congr(⇑$hinv)
 
-/--
-lemma `rightInverse_of_comp` / 引理 `rightInverse_of_comp`
+/-- `f ∘ g = id` as `ContinuousLinearMap`s implies `f ∘ g = id` as functions. -/
+/-
+**ContinuousLinearMap.rightInverse_of_comp** 是 Mathlib 中的一个引理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：rightInverse_of_comp {f : E ->L[R] F} {g : F ->L[R] E} (hinv : f ∘L g = .i
+d R F) : Function.RightInverse g f
+参数：hinv : f ∘L g = .id R F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.leftInverse_of_comp`：leftInverse_of_comp {f : E ->L[
+R] F} {g : F ->L[R] E} (hinv : g ∘L f = .id R E) : Function.LeftInverse g f
 
-English:
-lemma rightInverse_of_comp
-  statement: {f : E ->L[R] F} {g : F ->L[R] E}
-  proof: leftInverse_of_comp hinv
-
-中文:
-引理 rightInverse_of_comp
-  结论: {f : E ->L[R] F} {g : F ->L[R] E}
-  证明: leftInverse_of_comp hinv
-
-Depends on / 依赖: leftInverse_of_comp
+--- 原说明 ---
+`f ∘ g = id` as `ContinuousLinearMap`s implies `f ∘ g = id` as functions.
 -/
-lemma rightInverse_of_comp {f : E ->L[R] F} {g : F ->L[R] E}
+lemma rightInverse_of_comp {f : E →L[R] F} {g : F →L[R] E}
     (hinv : f ∘L g = .id R F) : Function.RightInverse g f :=
   leftInverse_of_comp hinv
 
 end
 
 @[simp]
-/--
-theorem `comp_zero` / 定理 `comp_zero`
-
-English:
-theorem comp_zero
-  given: (g : M₂ ->SL[σ₂₃] M₃)
-  statement: g ∘SL (0 : M₁ ->SL[σ₁₂] M₂) = 0
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 comp_zero
-  条件: (g : M₂ ->SL[σ₂₃] M₃)
-  结论: g ∘SL (0 : M₁ ->SL[σ₁₂] M₂) = 0
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_zero (g : M₂ ->SL[σ₂₃] M₃) : g ∘SL (0 : M₁ ->SL[σ₁₂] M₂) = 0
+参数：g : M₂ ->SL[σ₂₃] M₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_zero (g : M₂ ->SL[σ₂₃] M₃) : g ∘SL (0 : M₁ ->SL[σ₁₂] M₂) = 0 := by
+theorem comp_zero (g : M₂ →SL[σ₂₃] M₃) : g ∘SL (0 : M₁ →SL[σ₁₂] M₂) = 0 := by
   ext
   simp
 
 @[simp]
-/--
-theorem `zero_comp` / 定理 `zero_comp`
-
-English:
-theorem zero_comp
-  given: (f : M₁ ->SL[σ₁₂] M₂)
-  statement: (0 : M₂ ->SL[σ₂₃] M₃) ∘SL f = 0
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 zero_comp
-  条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: (0 : M₂ ->SL[σ₂₃] M₃) ∘SL f = 0
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.zero_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：zero_comp (f : M₁ ->SL[σ₁₂] M₂) : (0 : M₂ ->SL[σ₂₃] M₃) ∘SL f = 0
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_comp (f : M₁ ->SL[σ₁₂] M₂) : (0 : M₂ ->SL[σ₂₃] M₃) ∘SL f = 0 := by
+theorem zero_comp (f : M₁ →SL[σ₁₂] M₂) : (0 : M₂ →SL[σ₂₃] M₃) ∘SL f = 0 := by
   ext
   simp
 
 @[simp]
-/--
-theorem `comp_add` / 定理 `comp_add`
-
-English:
-theorem comp_add
-  statement: [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ ->SL[σ₂₃] M₃)
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 comp_add
-  结论: [连续加法 M₂] [连续加法 M₃] (g : M₂ ->SL[σ₂₃] M₃)
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_add [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ ->SL[σ₂₃] M₃) (f₁ f
+₂ : M₁ ->SL[σ₁₂] M₂) : g ∘SL (f₁ + f₂) = g ∘SL f₁ + g ∘SL f₂
+参数：g : M₂ ->SL[σ₂₃] M₃；f₁ f₂ : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_add [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ ->SL[σ₂₃] M₃)
-    (f₁ f₂ : M₁ ->SL[σ₁₂] M₂) : g ∘SL (f₁ + f₂) = g ∘SL f₁ + g ∘SL f₂ := by
+theorem comp_add [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ →SL[σ₂₃] M₃)
+    (f₁ f₂ : M₁ →SL[σ₁₂] M₂) : g ∘SL (f₁ + f₂) = g ∘SL f₁ + g ∘SL f₂ := by
   ext
   simp
 
 @[simp]
-/--
-theorem `add_comp` / 定理 `add_comp`
-
-English:
-theorem add_comp
-  given: [ContinuousAdd M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 add_comp
-  条件: [连续加法 M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
-  证明: by
-  ext
-  simp
+/-
+**ContinuousLinearMap.add_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：add_comp [ContinuousAdd M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂
+) : (g₁ + g₂) ∘SL f = g₁ ∘SL f + g₂ ∘SL f
+参数：g₁ g₂ : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem add_comp [ContinuousAdd M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) :
+theorem add_comp [ContinuousAdd M₃] (g₁ g₂ : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) :
     (g₁ + g₂) ∘SL f = g₁ ∘SL f + g₂ ∘SL f := by
   ext
   simp
-
-/--
-theorem `comp_finsetSum` / 定理 `comp_finsetSum`
-
-English:
-theorem comp_finsetSum
-  statement: {ι : Type*} {s : Finset ι}
-  proof: by
-  ext
-  simp
-
-@[deprecated (since := "2026-04-08")] alias comp_finset_sum := comp_finsetSum
-
-中文:
-定理 comp_finsetSum
-  结论: {ι : 类型} {s : 有限集 ι}
-  证明: by
-  ext
-  simp
-
-@[deprecated (since := "2026-04-08")] alias comp_finset_sum := comp_finsetSum
+/-
+**ContinuousLinearMap.comp_finsetSum** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：comp_finsetSum {ι : Type*} {s : Finset ι} [ContinuousAdd M₂] [ContinuousAd
+d M₃] (g : M₂ ->SL[σ₂₃] M₃) (f : ι -> M₁ ->SL[σ₁₂] M₂) : g ∘SL (∑ i in s, f i) =
+ ∑ i in s, g ∘SL (f i)
+参数：g : M₂ ->SL[σ₂₃] M₃；f : ι -> M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_finsetSum {ι : Type*} {s : Finset ι}
-    [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ ->SL[σ₂₃] M₃)
-    (f : ι -> M₁ ->SL[σ₁₂] M₂) : g ∘SL (∑ i in s, f i) = ∑ i in s, g ∘SL (f i) := by
+    [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ →SL[σ₂₃] M₃)
+    (f : ι → M₁ →SL[σ₁₂] M₂) : g ∘SL (∑ i ∈ s, f i) = ∑ i ∈ s, g ∘SL (f i) := by
   ext
   simp
 
 @[deprecated (since := "2026-04-08")] alias comp_finset_sum := comp_finsetSum
-
-/--
-theorem `finsetSum_comp` / 定理 `finsetSum_comp`
-
-English:
-theorem finsetSum_comp
-  statement: {ι : Type*} {s : Finset ι}
-  proof: by
-  ext
-  simp only [comp_apply, sum_apply]
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_comp := finsetSum_comp
-
-中文:
-定理 finsetSum_comp
-  结论: {ι : 类型} {s : 有限集 ι}
-  证明: by
-  ext
-  simp only [comp_apply, sum_apply]
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_comp := finsetSum_comp
-
-Depends on / 依赖: comp_apply, sum_apply
+/-
+**ContinuousLinearMap.finsetSum_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：finsetSum_comp {ι : Type*} {s : Finset ι} [ContinuousAdd M₃] (g : ι -> M₂ 
+->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : (∑ i in s, g i) ∘SL f = ∑ i in s, (g i) ∘S
+L f
+参数：g : ι -> M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finsetSum_comp {ι : Type*} {s : Finset ι}
-    [ContinuousAdd M₃] (g : ι -> M₂ ->SL[σ₂₃] M₃)
-    (f : M₁ ->SL[σ₁₂] M₂) : (∑ i in s, g i) ∘SL f = ∑ i in s, (g i) ∘SL f := by
+    [ContinuousAdd M₃] (g : ι → M₂ →SL[σ₂₃] M₃)
+    (f : M₁ →SL[σ₁₂] M₂) : (∑ i ∈ s, g i) ∘SL f = ∑ i ∈ s, (g i) ∘SL f := by
   ext
   simp only [comp_apply, sum_apply]
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_comp := finsetSum_comp
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {R₄ : Type*} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  结论: {R₄ : 类型} [半环 R₄] [模 R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
-  证明: rfl
+/-
+**ContinuousLinearMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：comp_assoc {R₄ : Type*} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ
+₂₄ : R₂ ->+* R₄} {σ₃₄ : R₃ ->+* R₄} [RingHomCompTriple σ₁₃ σ₃₄ σ₁₄] [RingHomComp
+Triple σ₂₃ σ₃₄ σ₂₄] [RingHomCompTriple σ₁₂ σ₂₄ σ₁₄] (h : M₃ ->SL[σ₃₄] M₄) (g : M
+₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : (h ∘SL g) ∘SL f = h ∘SL (g ∘SL f)
+参数：h : M₃ ->SL[σ₃₄] M₄；g : M₂ ->SL[σ₂₃] M₃；f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc {R₄ : Type*} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
-    {σ₃₄ : R₃ ->+* R₄} [RingHomCompTriple σ₁₃ σ₃₄ σ₁₄] [RingHomCompTriple σ₂₃ σ₃₄ σ₂₄]
-    [RingHomCompTriple σ₁₂ σ₂₄ σ₁₄] (h : M₃ ->SL[σ₃₄] M₄) (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) :
+theorem comp_assoc {R₄ : Type*} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ →+* R₄} {σ₂₄ : R₂ →+* R₄}
+    {σ₃₄ : R₃ →+* R₄} [RingHomCompTriple σ₁₃ σ₃₄ σ₁₄] [RingHomCompTriple σ₂₃ σ₃₄ σ₂₄]
+    [RingHomCompTriple σ₁₂ σ₂₄ σ₁₄] (h : M₃ →SL[σ₃₄] M₄) (g : M₂ →SL[σ₂₃] M₃) (f : M₁ →SL[σ₁₂] M₂) :
     (h ∘SL g) ∘SL f = h ∘SL (g ∘SL f) :=
   rfl
-
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  statement: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g)
-  proof: by
-  ext x
-  exact hg congr($h x)
-
-中文:
-定理 cancel_left
-  结论: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : 函数.单射 g)
-  证明: by
-  ext x
-  exact hg congr($h x)
+/-
+**ContinuousLinearMap.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：cancel_left {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function
+.Injective g) (h : g ∘SL f₁ = g ∘SL f₂) : f₁ = f₂
+参数：hg : Function.Injective g；h : g ∘SL f₁ = g ∘SL f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem cancel_left {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g)
+theorem cancel_left {g : M₂ →SL[σ₂₃] M₃} {f₁ f₂ : M₁ →SL[σ₁₂] M₂} (hg : Function.Injective g)
     (h : g ∘SL f₁ = g ∘SL f₂) : f₁ = f₂ := by
   ext x
   exact hg congr($h x)
-
-/--
-lemma `cancel_left'` / 引理 `cancel_left'`
-
-English:
-lemma cancel_left'
-  given: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g)
-  proof: ⟨cancel_left hg, congr_arg (fun f => g ∘SL f)⟩
-
-中文:
-引理 cancel_left'
-  条件: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : 函数.单射 g)
-  证明: ⟨cancel_left hg, congr_arg (fun f => g ∘SL f)⟩
-
-Depends on / 依赖: cancel_left, congr_arg
+/-
+**ContinuousLinearMap.cancel_left'** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：cancel_left' {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Functio
+n.Injective g) : g ∘SL f₁ = g ∘SL f₂ ↔ f₁ = f₂
+参数：hg : Function.Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.cancel_left`：cancel_left {g : M₂ ->SL[σ₂₃] M₃} {f₁ f
+₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g) (h : g ∘SL f₁ = g ∘SL f₂) : f₁ 
+= f₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-lemma cancel_left' {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g) :
+lemma cancel_left' {g : M₂ →SL[σ₂₃] M₃} {f₁ f₂ : M₁ →SL[σ₁₂] M₂} (hg : Function.Injective g) :
     g ∘SL f₁ = g ∘SL f₂ ↔ f₁ = f₂ :=
   ⟨cancel_left hg, congr_arg (fun f => g ∘SL f)⟩
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (M₁ ->L[R₁] M₁)
-  body: ⟨comp⟩
-
-中文:
-实例 instMul
-  签名: : 乘法 (M₁ ->L[R₁] M₁)
-  定义体: ⟨comp⟩
+/-
+**ContinuousLinearMap.instMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：instMul : Mul (M₁ ->L[R₁] M₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instMul : Mul (M₁ ->L[R₁] M₁) :=
+instance instMul : Mul (M₁ →L[R₁] M₁) :=
   ⟨comp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsMulApplyEqComp (M₁ ->L[R₁] M₁) M₁
-  body: rfl
-
-中文:
-实例 :
-  签名: 是MulApplyEqComp (M₁ ->L[R₁] M₁) M₁
-  定义体: rfl
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsMulApplyEqComp (M₁ ->L[R₁] M₁) M₁ where
+instance : IsMulApplyEqComp (M₁ →L[R₁] M₁) M₁ where
   mul_apply_eq_comp _ _ _ := rfl
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (f g : M₁ ->L[R₁] M₁)
-  statement: f * g = f ∘L g
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mul_def
-  条件: (f g : M₁ ->L[R₁] M₁)
-  结论: f * g = f ∘L g
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：mul_def (f g : M₁ ->L[R₁] M₁) : f * g = f ∘L g
+参数：f g : M₁ ->L[R₁] M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_def (f g : M₁ ->L[R₁] M₁) : f * g = f ∘L g :=
+theorem mul_def (f g : M₁ →L[R₁] M₁) : f * g = f ∘L g :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_mul` / 定理 `toLinearMap_mul`
-
-English:
-theorem toLinearMap_mul
-  given: (f g : M₁ ->L[R₁] M₁)
-  statement: (↑(f * g) : M₁ ->ₗ[R₁] M₁) = f * g
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] alias coe_mul := toLinearMap_mul
-
-@[deprecated (since := "2026-05-20")] protected alias coe_mul' := FunLike.coe_mul
-
-@[deprecated (since := "2026-05-20")] protected alias mul_apply := mul_apply_eq_comp
-
-中文:
-定理 toLinearMap_mul
-  条件: (f g : M₁ ->L[R₁] M₁)
-  结论: (↑(f * g) : M₁ ->ₗ[R₁] M₁) = f * g
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] alias coe_mul := toLinearMap_mul
-
-@[deprecated (since := "2026-05-20")] protected alias coe_mul' := FunLike.coe_mul
-
-@[deprecated (since := "2026-05-20")] protected alias mul_apply := mul_apply_eq_comp
+/-
+**ContinuousLinearMap.toLinearMap_mul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_mul (f g : M₁ ->L[R₁] M₁) : (↑(f * g) : M₁ ->ₗ[R₁] M₁) = f * g
+参数：f g : M₁ ->L[R₁] M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_mul (f g : M₁ ->L[R₁] M₁) : (↑(f * g) : M₁ ->ₗ[R₁] M₁) = f * g :=
+theorem toLinearMap_mul (f g : M₁ →L[R₁] M₁) : (↑(f * g) : M₁ →ₗ[R₁] M₁) = f * g :=
   rfl
 
 @[deprecated (since := "2026-05-20")] alias coe_mul := toLinearMap_mul
@@ -2230,145 +1764,87 @@ theorem toLinearMap_mul (f g : M₁ ->L[R₁] M₁) : (↑(f * g) : M₁ ->ₗ[R
 @[deprecated (since := "2026-05-20")] protected alias coe_mul' := FunLike.coe_mul
 
 @[deprecated (since := "2026-05-20")] protected alias mul_apply := mul_apply_eq_comp
-
-/--
-Instance `monoidWithZero` / 实例 `monoidWithZero`
-
-English:
-instance monoidWithZero
-  signature: : MonoidWithZero (M₁ ->L[R₁] M₁)
-  body: fast_instance% FunLike.monoidWithZero
-
-@[deprecated (since := "2026-07-23")] alias coe_pow' := FunLike.coe_pow_eq_iterate
-
-@[simp, norm_cast]
-
-中文:
-实例 monoidWithZero
-  签名: : 带零幺半群 (M₁ ->L[R₁] M₁)
-  定义体: fast_instance% FunLike.monoidWithZero
-
-@[deprecated (since := "2026-07-23")] alias coe_pow' := FunLike.coe_pow_eq_iterate
-
-@[simp, norm_cast]
-
-Depends on / 依赖: FunLike, FunLike.monoidWithZero, fast_instance, monoidWithZero
+/-
+**ContinuousLinearMap.monoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：monoidWithZero : MonoidWithZero (M₁ ->L[R₁] M₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance monoidWithZero : MonoidWithZero (M₁ ->L[R₁] M₁) :=
+instance monoidWithZero : MonoidWithZero (M₁ →L[R₁] M₁) :=
   fast_instance% FunLike.monoidWithZero
 
 @[deprecated (since := "2026-07-23")] alias coe_pow' := FunLike.coe_pow_eq_iterate
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_pow` / 定理 `toLinearMap_pow`
-
-English:
-theorem toLinearMap_pow
-  given: (f : M₁ ->L[R₁] M₁) (n : Nat)
-  statement: (↑(f ^ n) : M₁ ->ₗ[R₁] M₁) = f ^ n
-  proof: DFunLike.ext' (FunLike.coe_pow_eq_iterate f n).trans
- .symm hom_coe_pow _ rfl (fun _ _ => rfl) _ _
+/-
+**ContinuousLinearMap.toLinearMap_pow** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_pow (f : M₁ ->L[R₁] M₁) (n : Nat) : (↑(f ^ n) : M₁ ->ₗ[R₁] M₁)
+ = f ^ n
+参数：f : M₁ ->L[R₁] M₁；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `FunLike.coe_pow_eq_iterate`：coe_pow_eq_iterate [Monoid F'] [IsMulApplyEq
+Comp F' α] [IsOneApplyEqSelf F' α] (f : F') (n : Nat) : ⇑(f ^ n) = f^[n]
+· 使用定理 `ContinuousLinearMap.instIsMulApplyEqCompId`：∀ {R₁ : Type u_1} [inst : Se
+miring R₁] {M₁ : Type u_4} [inst_1 : TopologicalSpace M₁] [inst_2 : AddCommMonoi
+d M₁]   [inst_3 : _root_.Module …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hom_coe_pow`：∀ {M : Type u_4} {F : Type u_5} [inst : Monoid F] (c : F → 
+M → M),   c 1 = id → (∀ (f g : F), c (f * g) = c f ∘ c g) → ∀ (f : F) (n : ℕ), c
+ …
+-/
+theorem toLinearMap_pow (f : M₁ →L[R₁] M₁) (n : ℕ) : (↑(f ^ n) : M₁ →ₗ[R₁] M₁) = f ^ n :=
+  DFunLike.ext' <| (FunLike.coe_pow_eq_iterate f n).trans
+    <| .symm <| hom_coe_pow _ rfl (fun _ _ ↦ rfl) _ _
 
 @[deprecated (since := "2026-07-24")] protected alias coe_pow := toLinearMap_pow
-
-中文:
-定理 toLinearMap_pow
-  条件: (f : M₁ ->L[R₁] M₁) (n : 自然数)
-  结论: (↑(f ^ n) : M₁ ->ₗ[R₁] M₁) = f ^ n
-  证明: DFunLike.ext' (FunLike.coe_pow_eq_iterate f n).trans
- .symm hom_coe_pow _ rfl (fun _ _ => rfl) _ _
-
-@[deprecated (since := "2026-07-24")] protected alias coe_pow := toLinearMap_pow
-
-Depends on / 依赖: DFunLike, DFunLike.ext, FunLike, FunLike.coe_pow_eq_iterate, coe_pow_eq_iterate, hom_coe_pow
+/-
+**ContinuousLinearMap.instNatCast** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：instNatCast [ContinuousAdd M₁] : NatCast (M₁ ->L[R₁] M₁) where natCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_pow (f : M₁ ->L[R₁] M₁) (n : Nat) : (↑(f ^ n) : M₁ ->ₗ[R₁] M₁) = f ^ n :=
-DFunLike.ext' (FunLike.coe_pow_eq_iterate f n).trans
- .symm hom_coe_pow _ rfl (fun _ _ => rfl) _ _
-
-@[deprecated (since := "2026-07-24")] protected alias coe_pow := toLinearMap_pow
-
-/--
-Instance `instNatCast` / 实例 `instNatCast`
-
-English:
-instance instNatCast
-  signature: [ContinuousAdd M₁]
-  body: n • (1 : M₁ ->L[R₁] M₁)
-
-中文:
-实例 inst自然数Cast
-  签名: [连续加法 M₁]
-  定义体: n • (1 : M₁ ->L[R₁] M₁)
+instance instNatCast [ContinuousAdd M₁] : NatCast (M₁ →L[R₁] M₁) where
+  natCast n := n • (1 : M₁ →L[R₁] M₁)
+/-
+**ContinuousLinearMap.instIsNatCastApply** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：instIsNatCastApply [ContinuousAdd M₁] : IsNatCastApply (M₁ ->L[R₁] M₁) M₁ 
+where natCast_apply _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNatCast [ContinuousAdd M₁] : NatCast (M₁ ->L[R₁] M₁) where
-  natCast n := n • (1 : M₁ ->L[R₁] M₁)
-
-/--
-Instance `instIsNatCastApply` / 实例 `instIsNatCastApply`
-
-English:
-instance instIsNatCastApply
-  signature: [ContinuousAdd M₁]
-  body: rfl
-
-中文:
-实例 instIs自然数CastApply
-  签名: [连续加法 M₁]
-  定义体: rfl
--/
-instance instIsNatCastApply [ContinuousAdd M₁] : IsNatCastApply (M₁ ->L[R₁] M₁) M₁ where
+instance instIsNatCastApply [ContinuousAdd M₁] : IsNatCastApply (M₁ →L[R₁] M₁) M₁ where
   natCast_apply _ _ := rfl
-
-/--
-Instance `semiring` / 实例 `semiring`
-
-English:
-instance semiring
-  signature: [ContinuousAdd M₁]
-  body: fast_instance% FunLike.semiring
-
-中文:
-实例 semiring
-  签名: [连续加法 M₁]
-  定义体: fast_instance% FunLike.semiring
-
-Depends on / 依赖: FunLike, FunLike.semiring, fast_instance, semiring
+/-
+**ContinuousLinearMap.semiring** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：semiring [ContinuousAdd M₁] : Semiring (M₁ ->L[R₁] M₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semiring [ContinuousAdd M₁] : Semiring (M₁ ->L[R₁] M₁) :=
+instance semiring [ContinuousAdd M₁] : Semiring (M₁ →L[R₁] M₁) :=
   fast_instance% FunLike.semiring
 
 /-- `ContinuousLinearMap.toLinearMap` as a `RingHom`. -/
 @[simps]
-/--
-Definition of `toLinearMapRingHom` / `toLinearMapRingHom` 的定义
+/-
+**ContinuousLinearMap.toLinearMapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：toLinearMapRingHom [ContinuousAdd M₁] : (M₁ ->L[R₁] M₁) ->+* M₁ ->ₗ[R₁] M₁
+ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearMapRingHom
-  signature: [ContinuousAdd M₁]
-  body: toLinearMap
-  map_zero' := rfl
-  map_one' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 toLinearMapRingHom
-  签名: [连续加法 M₁]
-  定义体: toLinearMap
-  map_zero' := rfl
-  map_one' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: toLinearMap
+--- 原说明 ---
+`ContinuousLinearMap.toLinearMap` as a `RingHom`.
 -/
-def toLinearMapRingHom [ContinuousAdd M₁] : (M₁ ->L[R₁] M₁) ->+* M₁ ->ₗ[R₁] M₁ where
+def toLinearMapRingHom [ContinuousAdd M₁] : (M₁ →L[R₁] M₁) →+* M₁ →ₗ[R₁] M₁ where
   toFun := toLinearMap
   map_zero' := rfl
   map_one' := rfl
@@ -2376,95 +1852,62 @@ def toLinearMapRingHom [ContinuousAdd M₁] : (M₁ ->L[R₁] M₁) ->+* M₁ ->
   map_mul' _ _ := rfl
 
 @[simp]
-/--
-theorem `natCast_apply` / 定理 `natCast_apply`
-
-English:
-theorem natCast_apply
-  given: [ContinuousAdd M₁] (n : Nat) (m : M₁)
-  statement: (↑n : M₁ ->L[R₁] M₁) m = n • m
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 natCast_apply
-  条件: [连续加法 M₁] (n : 自然数) (m : M₁)
-  结论: (↑n : M₁ ->L[R₁] M₁) m = n • m
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.natCast_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：natCast_apply [ContinuousAdd M₁] (n : Nat) (m : M₁) : (↑n : M₁ ->L[R₁] M₁)
+ m = n • m
+参数：n : Nat；m : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natCast_apply [ContinuousAdd M₁] (n : Nat) (m : M₁) : (↑n : M₁ ->L[R₁] M₁) m = n • m :=
+theorem natCast_apply [ContinuousAdd M₁] (n : ℕ) (m : M₁) : (↑n : M₁ →L[R₁] M₁) m = n • m :=
   rfl
 
 @[simp]
-/--
-theorem `ofNat_apply` / 定理 `ofNat_apply`
-
-English:
-theorem ofNat_apply
-  given: [ContinuousAdd M₁] (n : Nat) [n.AtLeastTwo] (m : M₁)
-  proof: rfl
-
-中文:
-定理 of自然数_apply
-  条件: [连续加法 M₁] (n : 自然数) [n.AtLeastTwo] (m : M₁)
-  证明: rfl
+/-
+**ContinuousLinearMap.ofNat_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：ofNat_apply [ContinuousAdd M₁] (n : Nat) [n.AtLeastTwo] (m : M₁) : (ofNat(
+n) : M₁ ->L[R₁] M₁) m = OfNat.ofNat n • m
+参数：n : Nat；m : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofNat_apply [ContinuousAdd M₁] (n : Nat) [n.AtLeastTwo] (m : M₁) :
-    (ofNat(n) : M₁ ->L[R₁] M₁) m = OfNat.ofNat n • m :=
+theorem ofNat_apply [ContinuousAdd M₁] (n : ℕ) [n.AtLeastTwo] (m : M₁) :
+    (ofNat(n) : M₁ →L[R₁] M₁) m = OfNat.ofNat n • m :=
   rfl
 
 /-- Construct a homeomorphism from an invertible continuous linear map. -/
 @[simps]
-/--
-Definition of `homeomorphOfUnit` / `homeomorphOfUnit` 的定义
+/-
+**ContinuousLinearMap.homeomorphOfUnit** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：homeomorphOfUnit (T : (M₁ ->L[R₁] M₁)ˣ) : M₁ ≃ₜ M₁ where toFun
+参数：T : (M₁ ->L[R₁] M₁)ˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeomorphOfUnit
-  signature: (T : (M₁ ->L[R₁] M₁)ˣ)
-  body: T.1
-  invFun := T⁻¹.1
-  left_inv x := by rw [← mul_apply_eq_comp, Units.inv_mul, one_apply_eq_self]
-  right_inv x := by rw [← mul_apply_eq_comp, Units.mul_inv, one_apply_eq_self]
-
-中文:
-定义 homeomorphOfUnit
-  签名: (T : (M₁ ->L[R₁] M₁)ˣ)
-  定义体: T.1
-  invFun := T⁻¹.1
-  left_inv x := by rw [← mul_apply_eq_comp, Units.inv_mul, one_apply_eq_self]
-  right_inv x := by rw [← mul_apply_eq_comp, Units.mul_inv, one_apply_eq_self]
+--- 原说明 ---
+Construct a homeomorphism from an invertible continuous linear map.
 -/
-def homeomorphOfUnit (T : (M₁ ->L[R₁] M₁)ˣ) : M₁ ≃ₜ M₁ where
+def homeomorphOfUnit (T : (M₁ →L[R₁] M₁)ˣ) : M₁ ≃ₜ M₁ where
   toFun := T.1
   invFun := T⁻¹.1
   left_inv x := by rw [← mul_apply_eq_comp, Units.inv_mul, one_apply_eq_self]
   right_inv x := by rw [← mul_apply_eq_comp, Units.mul_inv, one_apply_eq_self]
-
-/--
-theorem `isHomeomorph_of_isUnit` / 定理 `isHomeomorph_of_isUnit`
-
-English:
-theorem isHomeomorph_of_isUnit
-  given: {T : M₁ ->L[R₁] M₁} (hT : IsUnit T)
-  statement: IsHomeomorph T
-  proof: by
-  obtain ⟨T, rfl⟩ := hT
-  exact (homeomorphOfUnit T).isHomeomorph
-
-中文:
-定理 isHomeomorph_of_isUnit
-  条件: {T : M₁ ->L[R₁] M₁} (hT : 是单位 T)
-  结论: 是同胚 T
-  证明: by
-  obtain ⟨T, rfl⟩ := hT
-  exact (homeomorphOfUnit T).isHomeomorph
-
-Depends on / 依赖: homeomorphOfUnit, isHomeomorph
+/-
+**ContinuousLinearMap.isHomeomorph_of_isUnit** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：isHomeomorph_of_isUnit {T : M₁ ->L[R₁] M₁} (hT : IsUnit T) : IsHomeomorph 
+T
+参数：hT : IsUnit T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isHomeomorph`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsHomeomorph ⇑h
 -/
-theorem isHomeomorph_of_isUnit {T : M₁ ->L[R₁] M₁} (hT : IsUnit T) : IsHomeomorph T := by
+theorem isHomeomorph_of_isUnit {T : M₁ →L[R₁] M₁} (hT : IsUnit T) : IsHomeomorph T := by
   obtain ⟨T, rfl⟩ := hT
   exact (homeomorphOfUnit T).isHomeomorph
 
@@ -2472,237 +1915,206 @@ section ApplyAction
 
 variable [ContinuousAdd M₁]
 
-/--
-Instance `applyModule` / 实例 `applyModule`
+/-- The tautological action by `M₁ →L[R₁] M₁` on `M`.
 
-English:
-instance applyModule
-  signature: : Module (M₁ ->L[R₁] M₁) M₁
-  body: Module.compHom _ toLinearMapRingHom
+This generalizes `Function.End.applyMulAction`. -/
+/-
+**ContinuousLinearMap.applyModule** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：applyModule : Module (M₁ ->L[R₁] M₁) M₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The tautological action by `M₁ →L[R₁] M₁` on `M`.
 
-中文:
-实例 applyModule
-  签名: : 模 (M₁ ->L[R₁] M₁) M₁
-  定义体: Module.compHom _ toLinearMapRingHom
-
-@[simp]
-
-Depends on / 依赖: Module, Module.compHom, compHom, toLinearMapRingHom
+This generalizes `Function.End.applyMulAction`.
 -/
-instance applyModule : Module (M₁ ->L[R₁] M₁) M₁ :=
+instance applyModule : Module (M₁ →L[R₁] M₁) M₁ :=
   Module.compHom _ toLinearMapRingHom
 
 @[simp]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (f : M₁ ->L[R₁] M₁) (a : M₁)
-  statement: f • a = f a
-  proof: rfl
-
-中文:
-定理 smul_def
-  条件: (f : M₁ ->L[R₁] M₁) (a : M₁)
-  结论: f • a = f a
-  证明: rfl
+/-
+**ContinuousLinearMap.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁ : Type u_4} [inst_1 : Topologic
+alSpace M₁] [inst_2 : AddCommMonoid M₁]   [inst_3 : _root_.Module R₁ M₁] [inst_4
+ : ContinuousAdd M₁] (f : M₁ →L[R₁] M₁) (a : M₁), f • a = f a
+参数：f : M₁ →L[R₁] M₁；a : M₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem smul_def (f : M₁ ->L[R₁] M₁) (a : M₁) : f • a = f a :=
+protected theorem smul_def (f : M₁ →L[R₁] M₁) (a : M₁) : f • a = f a :=
   rfl
 
-/--
-Instance `applyFaithfulSMul` / 实例 `applyFaithfulSMul`
+/-- `ContinuousLinearMap.applyModule` is faithful. -/
+/-
+**ContinuousLinearMap.applyFaithfulSMul** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：applyFaithfulSMul : FaithfulSMul (M₁ ->L[R₁] M₁) M₁
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
 
-English:
-instance applyFaithfulSMul
-  signature: : FaithfulSMul (M₁ ->L[R₁] M₁) M₁
-  body: ⟨fun {_ _} => ContinuousLinearMap.ext⟩
-
-中文:
-实例 applyFaithfulSMul
-  签名: : 忠实标量乘法 (M₁ ->L[R₁] M₁) M₁
-  定义体: ⟨fun {_ _} => ContinuousLinearMap.ext⟩
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext
+--- 原说明 ---
+`ContinuousLinearMap.applyModule` is faithful.
 -/
-instance applyFaithfulSMul : FaithfulSMul (M₁ ->L[R₁] M₁) M₁ :=
+instance applyFaithfulSMul : FaithfulSMul (M₁ →L[R₁] M₁) M₁ :=
   ⟨fun {_ _} => ContinuousLinearMap.ext⟩
-
-/--
-Instance `applySMulCommClass` / 实例 `applySMulCommClass`
-
-English:
-instance applySMulCommClass
-  signature: : SMulCommClass R₁ (M₁ ->L[R₁] M₁) M₁ where
-  body: (e.map_smul r m).symm
-
-中文:
-实例 applySMulCommClass
-  签名: : 标量交换类 R₁ (M₁ ->L[R₁] M₁) M₁ where
-  定义体: (e.map_smul r m).symm
-
-Depends on / 依赖: e.map_smul, map_smul
+/-
+**ContinuousLinearMap.applySMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：applySMulCommClass : SMulCommClass R₁ (M₁ ->L[R₁] M₁) M₁ where smul_comm r
+ e m
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearMap.map_smul`：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₁
+ : Type u_4} [inst_1 : TopologicalSpace M₁] [inst_2 : AddCommMonoid M₁]   {M₂ : 
+Type u_6} [inst_3 …
 -/
-instance applySMulCommClass : SMulCommClass R₁ (M₁ ->L[R₁] M₁) M₁ where
+instance applySMulCommClass : SMulCommClass R₁ (M₁ →L[R₁] M₁) M₁ where
   smul_comm r e m := (e.map_smul r m).symm
-
-/--
-Instance `applySMulCommClass'` / 实例 `applySMulCommClass'`
-
-English:
-instance applySMulCommClass'
-  signature: : SMulCommClass (M₁ ->L[R₁] M₁) R₁ M₁ where
-  body: map_smul
-
-中文:
-实例 applySMulCommClass'
-  签名: : 标量交换类 (M₁ ->L[R₁] M₁) R₁ M₁ where
-  定义体: map_smul
-
-Depends on / 依赖: map_smul
+/-
+**ContinuousLinearMap.applySMulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：applySMulCommClass' : SMulCommClass (M₁ ->L[R₁] M₁) R₁ M₁ where smul_comm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-instance applySMulCommClass' : SMulCommClass (M₁ ->L[R₁] M₁) R₁ M₁ where
+instance applySMulCommClass' : SMulCommClass (M₁ →L[R₁] M₁) R₁ M₁ where
   smul_comm := map_smul
-
-/--
-Instance `continuousConstSMul_apply` / 实例 `continuousConstSMul_apply`
-
-English:
-instance continuousConstSMul_apply
-  signature: : ContinuousConstSMul (M₁ ->L[R₁] M₁) M₁
-  body: ⟨ContinuousLinearMap.continuous⟩
-
-中文:
-实例 continuousConstSMul_apply
-  签名: : 连续常数标量乘法 (M₁ ->L[R₁] M₁) M₁
-  定义体: ⟨ContinuousLinearMap.continuous⟩
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.continuous, continuous
+/-
+**ContinuousLinearMap.continuousConstSMul_apply** 是 Mathlib 中的一个实例，位于命名空间 `Conti
+nuousLinearMap`。
+形式化陈述：continuousConstSMul_apply : ContinuousConstSMul (M₁ ->L[R₁] M₁) M₁
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
-instance continuousConstSMul_apply : ContinuousConstSMul (M₁ ->L[R₁] M₁) M₁ :=
+instance continuousConstSMul_apply : ContinuousConstSMul (M₁ →L[R₁] M₁) M₁ :=
   ⟨ContinuousLinearMap.continuous⟩
 
 end ApplyAction
 
-/--
-theorem `isClosed_ker` / 定理 `isClosed_ker`
-
-English:
-theorem isClosed_ker
-  given: [T1Space M₂] (f : M₁ ->SL[σ₁₂] M₂)
-  proof: isClosed_singleton.preimage f.continuous
-
-中文:
-定理 isClosed_ker
-  条件: [T1空间 M₂] (f : M₁ ->SL[σ₁₂] M₂)
-  证明: isClosed_singleton.preimage f.continuous
-
-Depends on / 依赖: continuous, f.continuous, isClosed_singleton, isClosed_singleton.preimage, preimage
+/-
+**ContinuousLinearMap.isClosed_ker** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：isClosed_ker [T1Space M₂] (f : M₁ ->SL[σ₁₂] M₂) : IsClosed (f.ker : Set M₁
+)
+参数：f : M₁ ->SL[σ₁₂] M₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用定理 `isClosed_singleton`：isClosed_singleton [T1Space X] {x : X} : IsClosed ({
+x} : Set X)
 -/
-theorem isClosed_ker [T1Space M₂] (f : M₁ ->SL[σ₁₂] M₂) :
+theorem isClosed_ker [T1Space M₂] (f : M₁ →SL[σ₁₂] M₂) :
     IsClosed (f.ker : Set M₁) :=
   isClosed_singleton.preimage f.continuous
-
-/--
-theorem `isClosed_eqLocus` / 定理 `isClosed_eqLocus`
-
-English:
-theorem isClosed_eqLocus
-  given: [T2Space M₂] (f g : M₁ ->SL[σ₁₂] M₂)
-  proof: isClosed_eq f.continuous g.continuous
-
-中文:
-定理 isClosed_eqLocus
-  条件: [T2空间 M₂] (f g : M₁ ->SL[σ₁₂] M₂)
-  证明: isClosed_eq f.continuous g.continuous
-
-Depends on / 依赖: continuous, f.continuous, g.continuous, isClosed_eq
+/-
+**ContinuousLinearMap.isClosed_eqLocus** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：isClosed_eqLocus [T2Space M₂] (f g : M₁ ->SL[σ₁₂] M₂) : IsClosed (f.eqLocu
+s g : Set M₁)
+参数：f g : M₁ ->SL[σ₁₂] M₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
-theorem isClosed_eqLocus [T2Space M₂] (f g : M₁ ->SL[σ₁₂] M₂) :
+theorem isClosed_eqLocus [T2Space M₂] (f g : M₁ →SL[σ₁₂] M₂) :
     IsClosed (f.eqLocus g : Set M₁) :=
   isClosed_eq f.continuous g.continuous
-
-/--
-theorem `isComplete_ker` / 定理 `isComplete_ker`
-
-English:
-theorem isComplete_ker
-  statement: {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
-  proof: (isClosed_ker f).isComplete
-
-中文:
-定理 isComplete_ker
-  结论: {M' : 类型} [一致空间 M'] [完备空间 M'] [加法交换幺半群 M']
-  证明: (isClosed_ker f).isComplete
-
-Depends on / 依赖: isClosed_ker, isComplete
+/-
+**ContinuousLinearMap.isComplete_ker** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：isComplete_ker {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCommM
+onoid M'] [Module R₁ M'] [T1Space M₂] (f : M' ->SL[σ₁₂] M₂) : IsComplete (f.ker 
+: Set M')
+参数：f : M' ->SL[σ₁₂] M₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.isComplete`：IsClosed.isComplete [CompleteSpace α] {s : Set α} (
+h : IsClosed s) : IsComplete s
+· 使用定理 `ContinuousLinearMap.isClosed_ker`：isClosed_ker [T1Space M₂] (f : M₁ ->SL
+[σ₁₂] M₂) : IsClosed (f.ker : Set M₁)
 -/
 theorem isComplete_ker {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
-    [Module R₁ M'] [T1Space M₂] (f : M' ->SL[σ₁₂] M₂) :
+    [Module R₁ M'] [T1Space M₂] (f : M' →SL[σ₁₂] M₂) :
     IsComplete (f.ker : Set M') :=
   (isClosed_ker f).isComplete
-
-/--
-theorem `isComplete_eqLocus` / 定理 `isComplete_eqLocus`
-
-English:
-theorem isComplete_eqLocus
-  statement: {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
-  proof: (isClosed_eqLocus f g).isComplete
-
-中文:
-定理 isComplete_eqLocus
-  结论: {M' : 类型} [一致空间 M'] [完备空间 M'] [加法交换幺半群 M']
-  证明: (isClosed_eqLocus f g).isComplete
-
-Depends on / 依赖: isClosed_eqLocus, isComplete
+/-
+**ContinuousLinearMap.isComplete_eqLocus** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：isComplete_eqLocus {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddC
+ommMonoid M'] [Module R₁ M'] [T2Space M₂] (f g : M' ->SL[σ₁₂] M₂) : IsComplete (
+f.eqLocus g : Set M')
+参数：f g : M' ->SL[σ₁₂] M₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.isComplete`：IsClosed.isComplete [CompleteSpace α] {s : Set α} (
+h : IsClosed s) : IsComplete s
+· 使用定理 `ContinuousLinearMap.isClosed_eqLocus`：isClosed_eqLocus [T2Space M₂] (f g
+ : M₁ ->SL[σ₁₂] M₂) : IsClosed (f.eqLocus g : Set M₁)
 -/
 theorem isComplete_eqLocus {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
-    [Module R₁ M'] [T2Space M₂] (f g : M' ->SL[σ₁₂] M₂) :
+    [Module R₁ M'] [T2Space M₂] (f g : M' →SL[σ₁₂] M₂) :
     IsComplete (f.eqLocus g : Set M') :=
   (isClosed_eqLocus f g).isComplete
-
-/--
-Instance `completeSpace_ker` / 实例 `completeSpace_ker`
-
-English:
-instance completeSpace_ker
-  signature: {M' : Type*} [UniformSpace M'] [CompleteSpace M']
-  body: (isComplete_ker f).completeSpace_coe
-
-中文:
-实例 completeSpace_ker
-  签名: {M' : 类型} [一致空间 M'] [完备空间 M']
-  定义体: (isComplete_ker f).completeSpace_coe
-
-Depends on / 依赖: completeSpace_coe, isComplete_ker
+/-
+**ContinuousLinearMap.completeSpace_ker** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：completeSpace_ker {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [AddCo
+mmMonoid M'] [Module R₁ M'] [T1Space M₂] (f : M' ->SL[σ₁₂] M₂) : CompleteSpace f
+.ker
+参数：f : M' ->SL[σ₁₂] M₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsComplete.completeSpace_coe`：∀ {α : Type u} [inst : UniformSpace α] {s 
+: Set α}, IsComplete s → CompleteSpace ↑s
+· 使用定理 `ContinuousLinearMap.isComplete_ker`：isComplete_ker {M' : Type*} [Uniform
+Space M'] [CompleteSpace M'] [AddCommMonoid M'] [Module R₁ M'] [T1Space M₂] (f :
+ M' ->SL[σ₁₂] M₂) : IsCo…
 -/
 instance completeSpace_ker {M' : Type*} [UniformSpace M'] [CompleteSpace M']
     [AddCommMonoid M'] [Module R₁ M'] [T1Space M₂]
-    (f : M' ->SL[σ₁₂] M₂) : CompleteSpace f.ker :=
+    (f : M' →SL[σ₁₂] M₂) : CompleteSpace f.ker :=
   (isComplete_ker f).completeSpace_coe
-
-/--
-Instance `completeSpace_eqLocus` / 实例 `completeSpace_eqLocus`
-
-English:
-instance completeSpace_eqLocus
-  signature: {M' : Type*} [UniformSpace M'] [CompleteSpace M']
-  body: (isComplete_eqLocus f g).completeSpace_coe
-
-中文:
-实例 completeSpace_eqLocus
-  签名: {M' : 类型} [一致空间 M'] [完备空间 M']
-  定义体: (isComplete_eqLocus f g).completeSpace_coe
-
-Depends on / 依赖: completeSpace_coe, isComplete_eqLocus
+/-
+**ContinuousLinearMap.completeSpace_eqLocus** 是 Mathlib 中的一个实例，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：completeSpace_eqLocus {M' : Type*} [UniformSpace M'] [CompleteSpace M'] [A
+ddCommMonoid M'] [Module R₁ M'] [T2Space M₂] (f g : M' ->SL[σ₁₂] M₂) : CompleteS
+pace (f.toLinearMap.eqLocus g.toLinearMap)
+参数：f g : M' ->SL[σ₁₂] M₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsComplete.completeSpace_coe`：∀ {α : Type u} [inst : UniformSpace α] {s 
+: Set α}, IsComplete s → CompleteSpace ↑s
+· 使用定理 `ContinuousLinearMap.isComplete_eqLocus`：isComplete_eqLocus {M' : Type*} 
+[UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M'] [Module R₁ M'] [T2Space 
+M₂] (f g : M' ->SL[σ₁₂] M₂) …
 -/
 instance completeSpace_eqLocus {M' : Type*} [UniformSpace M'] [CompleteSpace M']
     [AddCommMonoid M'] [Module R₁ M'] [T2Space M₂]
-    (f g : M' ->SL[σ₁₂] M₂) : CompleteSpace (f.toLinearMap.eqLocus g.toLinearMap) :=
+    (f g : M' →SL[σ₁₂] M₂) : CompleteSpace (f.toLinearMap.eqLocus g.toLinearMap) :=
   (isComplete_eqLocus f g).completeSpace_coe
 
 section
@@ -2710,139 +2122,150 @@ section
 variable {R S : Type*} [Semiring R] [Semiring S] [Module R M₁] [Module R M₂] [Module R S]
   [Module S M₂] [IsScalarTower R S M₂] [TopologicalSpace S] [ContinuousSMul S M₂]
 
-/-- The linear map `fun x => c x • f`. Associates to a scalar-valued linear map and an element of
+/-- The linear map `fun x => c x • f`.  Associates to a scalar-valued linear map and an element of
 `M₂` the `M₂`-valued linear map obtained by multiplying the two (a.k.a. tensoring by `M₂`).
 See also `ContinuousLinearMap.smulRightₗ` and `ContinuousLinearMap.smulRightL`. -/
 @[simps coe]
-/--
-Definition of `smulRight` / `smulRight` 的定义
+/-
+**ContinuousLinearMap.smulRight** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：smulRight (c : M₁ ->L[R] S) (f : M₂) : M₁ ->L[R] M₂ where toLinearMap
+参数：c : M₁ ->L[R] S；f : M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulRight
-  signature: (c : M₁ ->L[R] S) (f : M₂)
-  body: c.toLinearMap.smulRight f
-
-@[simp]
-
-中文:
-定义 smulRight
-  签名: (c : M₁ ->L[R] S) (f : M₂)
-  定义体: c.toLinearMap.smulRight f
-
-@[simp]
-
-Depends on / 依赖: c.toLinearMap.smulRight, smulRight, toLinearMap
+--- 原说明 ---
+The linear map `fun x => c x • f`.  Associates to a scalar-valued linear map and
+ an element of
+`M₂` the `M₂`-valued linear map obtained by multiplying the two (a.k.a. tensorin
+g by `M₂`).
+See also `ContinuousLinearMap.smulRightₗ` and `ContinuousLinearMap.smulRightL`.
 -/
-def smulRight (c : M₁ ->L[R] S) (f : M₂) : M₁ ->L[R] M₂ where
+def smulRight (c : M₁ →L[R] S) (f : M₂) : M₁ →L[R] M₂ where
   toLinearMap := c.toLinearMap.smulRight f
 
 @[simp]
-/--
-theorem `smulRight_apply` / 定理 `smulRight_apply`
-
-English:
-theorem smulRight_apply
-  given: {c : M₁ ->L[R] S} {f : M₂} {x : M₁}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smulRight_apply
-  条件: {c : M₁ ->L[R] S} {f : M₂} {x : M₁}
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.smulRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：smulRight_apply {c : M₁ ->L[R] S} {f : M₂} {x : M₁} : (smulRight c f : M₁ 
+-> M₂) x = c x • f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smulRight_apply {c : M₁ ->L[R] S} {f : M₂} {x : M₁} :
-    (smulRight c f : M₁ -> M₂) x = c x • f :=
+theorem smulRight_apply {c : M₁ →L[R] S} {f : M₂} {x : M₁} :
+    (smulRight c f : M₁ → M₂) x = c x • f :=
   rfl
 
 @[simp]
-/--
-lemma `smulRight_zero` / 引理 `smulRight_zero`
-
-English:
-lemma smulRight_zero
-  given: (f : M₁ ->L[R] S)
-  statement: f.smulRight (0 : M₂) = 0
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 smulRight_zero
-  条件: (f : M₁ ->L[R] S)
-  结论: f.smulRight (0 : M₂) = 0
-  证明: by ext; simp
-
-@[simp]
+/-
+**ContinuousLinearMap.smulRight_zero** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：smulRight_zero (f : M₁ ->L[R] S) : f.smulRight (0 : M₂) = 0
+参数：f : M₁ ->L[R] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma smulRight_zero (f : M₁ ->L[R] S) : f.smulRight (0 : M₂) = 0 := by ext; simp
+lemma smulRight_zero (f : M₁ →L[R] S) : f.smulRight (0 : M₂) = 0 := by ext; simp
 
 @[simp]
-/--
-theorem `zero_smulRight` / 定理 `zero_smulRight`
-
-English:
-theorem zero_smulRight
-  given: {x : M₂}
-  statement: (0 : M₁ ->L[R] S).smulRight x = 0
-  proof: by ext; simp
-
-中文:
-定理 zero_smulRight
-  条件: {x : M₂}
-  结论: (0 : M₁ ->L[R] S).smulRight x = 0
-  证明: by ext; simp
+/-
+**ContinuousLinearMap.zero_smulRight** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：zero_smulRight {x : M₂} : (0 : M₁ ->L[R] S).smulRight x = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_smulRight {x : M₂} : (0 : M₁ ->L[R] S).smulRight x = 0 := by ext; simp
+theorem zero_smulRight {x : M₂} : (0 : M₁ →L[R] S).smulRight x = 0 := by ext; simp
 
 end
 
 variable [Module R₁ M₂] [TopologicalSpace R₁] [ContinuousSMul R₁ M₂]
 
-/--
-theorem `smulRight_comp_smulRight` / 定理 `smulRight_comp_smulRight`
-
-English:
-theorem smulRight_comp_smulRight
-  statement: {M₃ : Type*} [AddCommMonoid M₃] [Module R₁ M₃]
-  proof: by
-  ext
-  simp
-
-中文:
-定理 smulRight_comp_smulRight
-  结论: {M₃ : 类型} [加法交换幺半群 M₃] [模 R₁ M₃]
-  证明: by
-  ext
-  simp
+/-
+**ContinuousLinearMap.smulRight_comp_smulRight** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousLinearMap`。
+形式化陈述：smulRight_comp_smulRight {M₃ : Type*} [AddCommMonoid M₃] [Module R₁ M₃] [T
+opologicalSpace M₃] [ContinuousSMul R₁ M₃] (f : M₃ ->L[R₁] R₁) (g : M₁ ->L[R₁] R
+₁) {x : M₂} {y : M₃} : (smulRight f x) ∘L (smulRight g y) = smulRight g (f y • x
+)
+参数：f : M₃ ->L[R₁] R₁；g : M₁ ->L[R₁] R₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smulRight_comp_smulRight {M₃ : Type*} [AddCommMonoid M₃] [Module R₁ M₃]
-    [TopologicalSpace M₃] [ContinuousSMul R₁ M₃] (f : M₃ ->L[R₁] R₁) (g : M₁ ->L[R₁] R₁) {x : M₂}
+    [TopologicalSpace M₃] [ContinuousSMul R₁ M₃] (f : M₃ →L[R₁] R₁) (g : M₁ →L[R₁] R₁) {x : M₂}
     {y : M₃} : (smulRight f x) ∘L (smulRight g y) = smulRight g (f y • x) := by
   ext
   simp
-
-/--
-theorem `range_smulRight_apply` / 定理 `range_smulRight_apply`
-
-English:
-theorem range_smulRight_apply
-  statement: {R : Type*} [DivisionSemiring R] [Module R M₁] [Module R M₂]
-  proof: LinearMap.range_smulRight_apply (by simpa [coe_inj, ← toLinearMap_zero] using hf) x
-
-中文:
-定理 range_smulRight_apply
-  结论: {R : 类型} [除半环 R] [模 R M₁] [模 R M₂]
-  证明: LinearMap.range_smulRight_apply (by simpa [coe_inj, ← toLinearMap_zero] using hf) x
-
-Depends on / 依赖: LinearMap, LinearMap.range_smulRight_apply, coe_inj, range_smulRight_apply, toLinearMap_zero
+/-
+**ContinuousLinearMap.range_smulRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：range_smulRight_apply {R : Type*} [DivisionSemiring R] [Module R M₁] [Modu
+le R M₂] [TopologicalSpace R] [ContinuousSMul R M₂] {f : M₁ ->L[R] R} (hf : f !=
+ 0) (x : M₂) : range (f.smulRight x : M₁ ->ₗ[R] M₂) = Submodule.span R {x}
+参数：hf : f != 0；x : M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.range_smulRight_apply`：range_smulRight_apply [DivisionSemiring
+ R] [Module R M] [Module R M₁] {f : M ->ₗ[R] R} (hf : f != 0) (x : M₁) : range (
+f.smulRight x) = Subm…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem range_smulRight_apply {R : Type*} [DivisionSemiring R] [Module R M₁] [Module R M₂]
-    [TopologicalSpace R] [ContinuousSMul R M₂] {f : M₁ ->L[R] R} (hf : f != 0) (x : M₂) :
-    range (f.smulRight x : M₁ ->ₗ[R] M₂) = Submodule.span R {x} :=
+    [TopologicalSpace R] [ContinuousSMul R M₂] {f : M₁ →L[R] R} (hf : f ≠ 0) (x : M₂) :
+    range (f.smulRight x : M₁ →ₗ[R] M₂) = Submodule.span R {x} :=
   LinearMap.range_smulRight_apply (by simpa [coe_inj, ← toLinearMap_zero] using hf) x
 
 section ToSpanSingleton
@@ -2851,276 +2274,235 @@ variable (R₁)
 variable [ContinuousSMul R₁ M₁]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `toSpanSingleton` / `toSpanSingleton` 的定义
+/-- Given an element `x` of a topological space `M` over a semiring `R`, the natural continuous
+linear map from `R` to `M` by taking multiples of `x`. -/
+/-
+**ContinuousLinearMap.toSpanSingleton** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toSpanSingleton (x : M₁) : R₁ ->L[R₁] M₁ where toLinearMap
+参数：x : M₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSpanSingleton
-  signature: (x : M₁)
-  body: LinearMap.toSpanSingleton R₁ M₁ x
-
-@[simp]
-
-中文:
-定义 toSpanSingleton
-  签名: (x : M₁)
-  定义体: LinearMap.toSpanSingleton R₁ M₁ x
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, toSpanSingleton
+--- 原说明 ---
+Given an element `x` of a topological space `M` over a semiring `R`, the natural
+ continuous
+linear map from `R` to `M` by taking multiples of `x`.
 -/
-def toSpanSingleton (x : M₁) : R₁ ->L[R₁] M₁ where
+def toSpanSingleton (x : M₁) : R₁ →L[R₁] M₁ where
   toLinearMap := LinearMap.toSpanSingleton R₁ M₁ x
 
 @[simp]
-/--
-theorem `toSpanSingleton_apply` / 定理 `toSpanSingleton_apply`
-
-English:
-theorem toSpanSingleton_apply
-  given: (x : M₁) (r : R₁)
-  statement: toSpanSingleton R₁ x r = r • x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toSpanSingleton_apply
-  条件: (x : M₁) (r : R₁)
-  结论: toSpanSingleton R₁ x r = r • x
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.toSpanSingleton_apply** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：toSpanSingleton_apply (x : M₁) (r : R₁) : toSpanSingleton R₁ x r = r • x
+参数：x : M₁；r : R₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSpanSingleton_apply (x : M₁) (r : R₁) : toSpanSingleton R₁ x r = r • x :=
   rfl
 
 @[simp]
-/--
-theorem `toSpanSingleton_zero` / 定理 `toSpanSingleton_zero`
-
-English:
-theorem toSpanSingleton_zero
-  statement: toSpanSingleton R₁ (0 : M₁) = 0
-  proof: by ext; simp
-
-中文:
-定理 toSpanSingleton_zero
-  结论: toSpanSingleton R₁ (0 : M₁) = 0
-  证明: by ext; simp
+/-
+**ContinuousLinearMap.toSpanSingleton_zero** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：toSpanSingleton_zero : toSpanSingleton R₁ (0 : M₁) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSpanSingleton_zero : toSpanSingleton R₁ (0 : M₁) = 0 := by ext; simp
-
-/--
-theorem `toSpanSingleton_apply_one` / 定理 `toSpanSingleton_apply_one`
-
-English:
-theorem toSpanSingleton_apply_one
-  given: (x : M₁)
-  statement: toSpanSingleton R₁ x 1 = x
-  proof: one_smul _ _
-
-中文:
-定理 toSpanSingleton_apply_one
-  条件: (x : M₁)
-  结论: toSpanSingleton R₁ x 1 = x
-  证明: one_smul _ _
-
-Depends on / 依赖: one_smul
+/-
+**ContinuousLinearMap.toSpanSingleton_apply_one** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousLinearMap`。
+形式化陈述：toSpanSingleton_apply_one (x : M₁) : toSpanSingleton R₁ x 1 = x
+参数：x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 theorem toSpanSingleton_apply_one (x : M₁) : toSpanSingleton R₁ x 1 = x :=
   one_smul _ _
-
-/--
-theorem `toSpanSingleton_apply_map_one` / 定理 `toSpanSingleton_apply_map_one`
-
-English:
-theorem toSpanSingleton_apply_map_one
-  given: (c : R₁ ->L[R₁] M₂)
-  proof: by
-  ext
-  simp [← ContinuousLinearMap.map_smul_of_tower]
-
-中文:
-定理 toSpanSingleton_apply_map_one
-  条件: (c : R₁ ->L[R₁] M₂)
-  证明: by
-  ext
-  simp [← ContinuousLinearMap.map_smul_of_tower]
+/-
+**ContinuousLinearMap.toSpanSingleton_apply_map_one** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousLinearMap`。
+形式化陈述：∀ (R₁ : Type u_1) [inst : Semiring R₁] {M₂ : Type u_6} [inst_1 : Topologic
+alSpace M₂] [inst_2 : AddCommMonoid M₂]   [inst_3 : _root_.Module R₁ M₂] [inst_4
+ : TopologicalSpace R₁] [inst_5 : ContinuousSMul R₁ M₂] (c : R₁ →L[R₁] M₂),   Co
+ntinuousLinearMap.toSpanSingleton R₁ (c 1) = c
+参数：R₁ : Type u_1；c : R₁ →L[R₁] M₂；c 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul'`：∀ {M : Type u_8} [inst : AddCom
+mMonoid M] {R : Type u_14} {S : Type u_15} [inst_1 : Semiring S] [inst_2 : SMul 
+R M]   [inst_3 : _root_.Modul…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] theorem toSpanSingleton_apply_map_one (c : R₁ ->L[R₁] M₂) :
+@[simp] theorem toSpanSingleton_apply_map_one (c : R₁ →L[R₁] M₂) :
     toSpanSingleton R₁ (c 1) = c := by
   ext
   simp [← ContinuousLinearMap.map_smul_of_tower]
-
-/--
-theorem `toSpanSingleton_add` / 定理 `toSpanSingleton_add`
-
-English:
-theorem toSpanSingleton_add
-  given: [ContinuousAdd M₁] (x y : M₁)
-  proof: coe_inj.mp LinearMap.toSpanSingleton_add _ _
-
-中文:
-定理 toSpanSingleton_add
-  条件: [连续加法 M₁] (x y : M₁)
-  证明: coe_inj.mp LinearMap.toSpanSingleton_add _ _
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton_add, coe_inj, coe_inj.mp, toSpanSingleton_add
+/-
+**ContinuousLinearMap.toSpanSingleton_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：toSpanSingleton_add [ContinuousAdd M₁] (x y : M₁) : toSpanSingleton R₁ (x 
++ y) = toSpanSingleton R₁ x + toSpanSingleton R₁ y
+参数：x y : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousLinearMap.coe_inj`：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ -
+>ₛₗ[σ₁₂] M₂) = g ↔ f = g
+· 使用引理 `LinearMap.toSpanSingleton_add`：toSpanSingleton_add (x y : M) : toSpanSin
+gleton R M (x + y) = toSpanSingleton R M x + toSpanSingleton R M y
 -/
 theorem toSpanSingleton_add [ContinuousAdd M₁] (x y : M₁) :
     toSpanSingleton R₁ (x + y) = toSpanSingleton R₁ x + toSpanSingleton R₁ y :=
-coe_inj.mp LinearMap.toSpanSingleton_add _ _
-
-/--
-theorem `toSpanSingleton_smul` / 定理 `toSpanSingleton_smul`
-
-English:
-theorem toSpanSingleton_smul
-  statement: {α} [Monoid α] [DistribMulAction α M₁] [ContinuousConstSMul α M₁]
-  proof: coe_inj.mp LinearMap.toSpanSingleton_smul _ _
-
-中文:
-定理 toSpanSingleton_smul
-  结论: {α} [幺半群 α] [分配乘法作用 α M₁] [连续常数标量乘法 α M₁]
-  证明: coe_inj.mp LinearMap.toSpanSingleton_smul _ _
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton_smul, coe_inj, coe_inj.mp, toSpanSingleton_smul
+  coe_inj.mp <| LinearMap.toSpanSingleton_add _ _
+/-
+**ContinuousLinearMap.toSpanSingleton_smul** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：toSpanSingleton_smul {α} [Monoid α] [DistribMulAction α M₁] [ContinuousCon
+stSMul α M₁] [SMulCommClass R₁ α M₁] (c : α) (x : M₁) : toSpanSingleton R₁ (c • 
+x) = c • toSpanSingleton R₁ x
+参数：c : α；x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousLinearMap.coe_inj`：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ -
+>ₛₗ[σ₁₂] M₂) = g ↔ f = g
+· 使用定理 `LinearMap.toSpanSingleton_smul`：toSpanSingleton_smul {S : Type*} [Monoid
+ S] [DistribMulAction S M] [SMulCommClass R S M] (r : S) (x : M) : toSpanSinglet
+on R M (r • x) = r •…
 -/
 theorem toSpanSingleton_smul {α} [Monoid α] [DistribMulAction α M₁] [ContinuousConstSMul α M₁]
     [SMulCommClass R₁ α M₁] (c : α) (x : M₁) :
     toSpanSingleton R₁ (c • x) = c • toSpanSingleton R₁ x :=
-coe_inj.mp LinearMap.toSpanSingleton_smul _ _
-
-/--
-theorem `smulRight_id` / 定理 `smulRight_id`
-
-English:
-theorem smulRight_id
-  statement: smulRight (.id R₁ R₁) = toSpanSingleton R₁ (M₁ := M₁)
-  proof: rfl
-
-中文:
-定理 smulRight_id
-  结论: smulRight (.id R₁ R₁) = toSpanSingleton R₁ (M₁ := M₁)
-  证明: rfl
+  coe_inj.mp <| LinearMap.toSpanSingleton_smul _ _
+/-
+**ContinuousLinearMap.smulRight_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：smulRight_id : smulRight (.id R₁ R₁) = toSpanSingleton R₁ (M₁
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smulRight_id : smulRight (.id R₁ R₁) = toSpanSingleton R₁ (M₁ := M₁) := rfl
-
-/--
-theorem `smulRight_one_eq_toSpanSingleton` / 定理 `smulRight_one_eq_toSpanSingleton`
-
-English:
-theorem smulRight_one_eq_toSpanSingleton
-  given: (x : M₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smulRight_one_eq_toSpanSingleton
-  条件: (x : M₁)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.smulRight_one_eq_toSpanSingleton** 是 Mathlib 中的一个定理，位于命名空间
+ `ContinuousLinearMap`。
+形式化陈述：smulRight_one_eq_toSpanSingleton (x : M₁) : (1 : R₁ ->L[R₁] R₁).smulRight 
+x = toSpanSingleton R₁ x
+参数：x : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smulRight_one_eq_toSpanSingleton (x : M₁) :
-    (1 : R₁ ->L[R₁] R₁).smulRight x = toSpanSingleton R₁ x :=
+    (1 : R₁ →L[R₁] R₁).smulRight x = toSpanSingleton R₁ x :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearMap_toSpanSingleton` / 定理 `toLinearMap_toSpanSingleton`
-
-English:
-theorem toLinearMap_toSpanSingleton
-  given: (x : M₁)
-  proof: rfl
-
-中文:
-定理 toLinearMap_toSpanSingleton
-  条件: (x : M₁)
-  证明: rfl
+/-
+**ContinuousLinearMap.toLinearMap_toSpanSingleton** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：toLinearMap_toSpanSingleton (x : M₁) : (toSpanSingleton R₁ x).toLinearMap 
+= LinearMap.toSpanSingleton R₁ M₁ x
+参数：x : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearMap_toSpanSingleton (x : M₁) :
     (toSpanSingleton R₁ x).toLinearMap = LinearMap.toSpanSingleton R₁ M₁ x := rfl
 
 variable {R₁}
-
-/--
-theorem `comp_toSpanSingleton` / 定理 `comp_toSpanSingleton`
-
-English:
-theorem comp_toSpanSingleton
-  given: (f : M₁ ->L[R₁] M₂) (x : M₁)
-  proof: coe_inj.mp LinearMap.comp_toSpanSingleton _ _
-
-omit [ContinuousSMul R₁ M₁] in
-
-中文:
-定理 comp_toSpanSingleton
-  条件: (f : M₁ ->L[R₁] M₂) (x : M₁)
-  证明: coe_inj.mp LinearMap.comp_toSpanSingleton _ _
-
-omit [ContinuousSMul R₁ M₁] in
-
-Depends on / 依赖: LinearMap, LinearMap.comp_toSpanSingleton, coe_inj, coe_inj.mp, comp_toSpanSingleton
+/-
+**ContinuousLinearMap.comp_toSpanSingleton** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：comp_toSpanSingleton (f : M₁ ->L[R₁] M₂) (x : M₁) : f ∘L toSpanSingleton R
+₁ x = toSpanSingleton R₁ (f x)
+参数：f : M₁ ->L[R₁] M₂；x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousLinearMap.coe_inj`：coe_inj {f g : M₁ ->SL[σ₁₂] M₂} : (f : M₁ -
+>ₛₗ[σ₁₂] M₂) = g ↔ f = g
+· 使用定理 `LinearMap.comp_toSpanSingleton`：comp_toSpanSingleton [AddCommMonoid M₂] 
+[Module R M₂] (f : M ->ₗ[R] M₂) (x : M) : f ∘ₗ toSpanSingleton R M x = toSpanSin
+gleton R M₂ (f x)
 -/
-theorem comp_toSpanSingleton (f : M₁ ->L[R₁] M₂) (x : M₁) :
+theorem comp_toSpanSingleton (f : M₁ →L[R₁] M₂) (x : M₁) :
     f ∘L toSpanSingleton R₁ x = toSpanSingleton R₁ (f x) :=
-coe_inj.mp LinearMap.comp_toSpanSingleton _ _
+  coe_inj.mp <| LinearMap.comp_toSpanSingleton _ _
 
 omit [ContinuousSMul R₁ M₁] in
-/--
-theorem `toSpanSingleton_comp` / 定理 `toSpanSingleton_comp`
-
-English:
-theorem toSpanSingleton_comp
-  given: (f : M₁ ->L[R₁] R₁) (g : M₂)
-  proof: rfl
-
-中文:
-定理 toSpanSingleton_comp
-  条件: (f : M₁ ->L[R₁] R₁) (g : M₂)
-  证明: rfl
+/-
+**ContinuousLinearMap.toSpanSingleton_comp** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：toSpanSingleton_comp (f : M₁ ->L[R₁] R₁) (g : M₂) : toSpanSingleton R₁ g ∘
+L f = f.smulRight g
+参数：f : M₁ ->L[R₁] R₁；g : M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toSpanSingleton_comp (f : M₁ ->L[R₁] R₁) (g : M₂) :
+theorem toSpanSingleton_comp (f : M₁ →L[R₁] R₁) (g : M₂) :
     toSpanSingleton R₁ g ∘L f = f.smulRight g := rfl
-
-/--
-theorem `toSpanSingleton_inj` / 定理 `toSpanSingleton_inj`
-
-English:
-theorem toSpanSingleton_inj
-  given: {f f' : M₂}
-  proof: by
-  simp [ContinuousLinearMap.ext_ring_iff]
-
-中文:
-定理 toSpanSingleton_inj
-  条件: {f f' : M₂}
-  证明: by
-  simp [ContinuousLinearMap.ext_ring_iff]
+/-
+**ContinuousLinearMap.toSpanSingleton_inj** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：∀ {R₁ : Type u_1} [inst : Semiring R₁] {M₂ : Type u_6} [inst_1 : Topologic
+alSpace M₂] [inst_2 : AddCommMonoid M₂]   [inst_3 : _root_.Module R₁ M₂] [inst_4
+ : TopologicalSpace R₁] [inst_5 : ContinuousSMul R₁ M₂] {f f' : M₂},   Continuou
+sLinearMap.toSpanSingleton R₁ f = ContinuousLinearMap.toSpanSingleton R₁ f' ↔ f 
+= f'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] theorem toSpanSingleton_inj {f f' : M₂} :
     toSpanSingleton R₁ f = toSpanSingleton R₁ f' ↔ f = f' := by
   simp [ContinuousLinearMap.ext_ring_iff]
-
-/--
-theorem `toSpanSingleton_comp_toSpanSingleton` / 定理 `toSpanSingleton_comp_toSpanSingleton`
-
-English:
-theorem toSpanSingleton_comp_toSpanSingleton
-  given: [ContinuousMul R₁] {x : M₂} {c : R₁}
-  proof: smulRight_comp_smulRight 1 1
-
-中文:
-定理 toSpanSingleton_comp_toSpanSingleton
-  条件: [连续乘法 R₁] {x : M₂} {c : R₁}
-  证明: smulRight_comp_smulRight 1 1
-
-Depends on / 依赖: smulRight_comp_smulRight
+/-
+**ContinuousLinearMap.toSpanSingleton_comp_toSpanSingleton** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousLinearMap`。
+形式化陈述：toSpanSingleton_comp_toSpanSingleton [ContinuousMul R₁] {x : M₂} {c : R₁} 
+: (toSpanSingleton R₁ x) ∘L (toSpanSingleton R₁ c) = toSpanSingleton R₁ (c • x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.smulRight_comp_smulRight`：smulRight_comp_smulRight {
+M₃ : Type*} [AddCommMonoid M₃] [Module R₁ M₃] [TopologicalSpace M₃] [ContinuousS
+Mul R₁ M₃] (f : M₃ ->L[R₁] R₁) (g …
 -/
 theorem toSpanSingleton_comp_toSpanSingleton [ContinuousMul R₁] {x : M₂} {c : R₁} :
     (toSpanSingleton R₁ x) ∘L (toSpanSingleton R₁ c) =
@@ -3135,72 +2517,69 @@ section Ring
 variable {R : Type*} [Ring R] {R₂ : Type*} [Ring R₂] {R₃ : Type*} [Ring R₃] {M : Type*}
   [TopologicalSpace M] [AddCommGroup M] {M₂ : Type*} [TopologicalSpace M₂] [AddCommGroup M₂]
   {M₃ : Type*} [TopologicalSpace M₃] [AddCommGroup M₃] {M₄ : Type*} [TopologicalSpace M₄]
-  [AddCommGroup M₄] [Module R M] [Module R₂ M₂] [Module R₃ M₃] {σ₁₂ : R ->+* R₂} {σ₂₃ : R₂ ->+* R₃}
-  {σ₁₃ : R ->+* R₃}
+  [AddCommGroup M₄] [Module R M] [Module R₂ M₂] [Module R₃ M₃] {σ₁₂ : R →+* R₂} {σ₂₃ : R₂ →+* R₃}
+  {σ₁₃ : R →+* R₃}
 
 section
 
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  given: (f : M ->SL[σ₁₂] M₂) (x : M)
-  statement: f (-x) = -f x
-  proof: by
-  exact map_neg f x
-
-中文:
-定理 map_neg
-  条件: (f : M ->SL[σ₁₂] M₂) (x : M)
-  结论: f (-x) = -f x
-  证明: by
-  exact map_neg f x
+/-
+**ContinuousLinearMap.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_2} [inst_1 : Ring R₂] {M : T
+ype u_4} [inst_2 : TopologicalSpace M]   [inst_3 : AddCommGroup M] {M₂ : Type u_
+5} [inst_4 : TopologicalSpace M₂] [inst_5 : AddCommGroup M₂]   [inst_6 : _root_.
+Module R M] [inst_7 : _root_.Module R₂ M₂] {σ₁₂ : R →+* R₂} (f : M →SL[σ₁₂] M₂) 
+(x : M),   f (-x) = -f x
+参数：f : M →SL[σ₁₂] M₂；x : M；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-protected theorem map_neg (f : M ->SL[σ₁₂] M₂) (x : M) : f (-x) = -f x := by
+protected theorem map_neg (f : M →SL[σ₁₂] M₂) (x : M) : f (-x) = -f x := by
   exact map_neg f x
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (f : M ->SL[σ₁₂] M₂) (x y : M)
-  statement: f (x - y) = f x - f y
-  proof: by
+/-
+**ContinuousLinearMap.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_2} [inst_1 : Ring R₂] {M : T
+ype u_4} [inst_2 : TopologicalSpace M]   [inst_3 : AddCommGroup M] {M₂ : Type u_
+5} [inst_4 : TopologicalSpace M₂] [inst_5 : AddCommGroup M₂]   [inst_6 : _root_.
+Module R M] [inst_7 : _root_.Module R₂ M₂] {σ₁₂ : R →+* R₂} (f : M →SL[σ₁₂] M₂) 
+(x y : M),   f (x - y) = f x - f y
+参数：f : M →SL[σ₁₂] M₂；x y : M；x - y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+-/
+protected theorem map_sub (f : M →SL[σ₁₂] M₂) (x y : M) : f (x - y) = f x - f y := by
   exact map_sub f x y
 
 @[simp]
-
-中文:
-定理 map_sub
-  条件: (f : M ->SL[σ₁₂] M₂) (x y : M)
-  结论: f (x - y) = f x - f y
-  证明: by
-  exact map_sub f x y
-
-@[simp]
+/-
+**ContinuousLinearMap.sub_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：sub_apply' (f g : M ->SL[σ₁₂] M₂) (x : M) : ((f : M ->ₛₗ[σ₁₂] M₂) - g) x =
+ f x - g x
+参数：f g : M ->SL[σ₁₂] M₂；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem map_sub (f : M ->SL[σ₁₂] M₂) (x y : M) : f (x - y) = f x - f y := by
-  exact map_sub f x y
-
-@[simp]
-/--
-theorem `sub_apply'` / 定理 `sub_apply'`
-
-English:
-theorem sub_apply'
-  given: (f g : M ->SL[σ₁₂] M₂) (x : M)
-  statement: ((f : M ->ₛₗ[σ₁₂] M₂) - g) x = f x - g x
-  proof: rfl
-
-中文:
-定理 sub_apply'
-  条件: (f g : M ->SL[σ₁₂] M₂) (x : M)
-  结论: ((f : M ->ₛₗ[σ₁₂] M₂) - g) x = f x - g x
-  证明: rfl
--/
-theorem sub_apply' (f g : M ->SL[σ₁₂] M₂) (x : M) : ((f : M ->ₛₗ[σ₁₂] M₂) - g) x = f x - g x :=
+theorem sub_apply' (f g : M →SL[σ₁₂] M₂) (x : M) : ((f : M →ₛₗ[σ₁₂] M₂) - g) x = f x - g x :=
   rfl
 
 end
@@ -3209,75 +2588,31 @@ section
 
 variable [IsTopologicalAddGroup M₂]
 
-/--
-Instance `neg` / 实例 `neg`
-
-English:
-instance neg
-  signature: : Neg (M ->SL[σ₁₂] M₂)
-  body: ⟨fun f => ⟨-f, f.2.neg⟩⟩
-
-中文:
-实例 neg
-  签名: : 取负 (M ->SL[σ₁₂] M₂)
-  定义体: ⟨fun f => ⟨-f, f.2.neg⟩⟩
+/-
+**ContinuousLinearMap.neg** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：neg : Neg (M ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance neg : Neg (M ->SL[σ₁₂] M₂) :=
+instance neg : Neg (M →SL[σ₁₂] M₂) :=
   ⟨fun f => ⟨-f, f.2.neg⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNegApply (M ->SL[σ₁₂] M₂) M M₂
-  body: rfl
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 是NegApply (M ->SL[σ₁₂] M₂) M M₂
-  定义体: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsNegApply (M ->SL[σ₁₂] M₂) M M₂ where
+instance : IsNegApply (M →SL[σ₁₂] M₂) M M₂ where
   neg_apply _ _ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_neg` / 定理 `toLinearMap_neg`
-
-English:
-theorem toLinearMap_neg
-  given: (f : M ->SL[σ₁₂] M₂)
-  statement: (↑(-f) : M ->ₛₗ[σ₁₂] M₂) = -f
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias neg_apply := _root_.neg_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_neg := toLinearMap_neg
-
-@[deprecated (since := "2026-05-20")] alias coe_neg' := FunLike.coe_neg
-
-@[simp, norm_cast]
-
-中文:
-定理 toLinearMap_neg
-  条件: (f : M ->SL[σ₁₂] M₂)
-  结论: (↑(-f) : M ->ₛₗ[σ₁₂] M₂) = -f
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias neg_apply := _root_.neg_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_neg := toLinearMap_neg
-
-@[deprecated (since := "2026-05-20")] alias coe_neg' := FunLike.coe_neg
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.toLinearMap_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_neg (f : M ->SL[σ₁₂] M₂) : (↑(-f) : M ->ₛₗ[σ₁₂] M₂) = -f
+参数：f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_neg (f : M ->SL[σ₁₂] M₂) : (↑(-f) : M ->ₛₗ[σ₁₂] M₂) = -f :=
+theorem toLinearMap_neg (f : M →SL[σ₁₂] M₂) : (↑(-f) : M →ₛₗ[σ₁₂] M₂) = -f :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias neg_apply := _root_.neg_apply
@@ -3287,108 +2622,63 @@ theorem toLinearMap_neg (f : M ->SL[σ₁₂] M₂) : (↑(-f) : M ->ₛₗ[σ�
 @[deprecated (since := "2026-05-20")] alias coe_neg' := FunLike.coe_neg
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_neg` / 定理 `toContinuousAddMonoidHom_neg`
-
-English:
-theorem toContinuousAddMonoidHom_neg
-  given: (f : M ->SL[σ₁₂] M₂)
-  proof: rfl
-
-中文:
-定理 toContinuousAddMonoidHom_neg
-  条件: (f : M ->SL[σ₁₂] M₂)
-  证明: rfl
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_neg** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_neg (f : M ->SL[σ₁₂] M₂) : ↑(-f) = -(f : Continuo
+usAddMonoidHom M M₂)
+参数：f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem toContinuousAddMonoidHom_neg (f : M ->SL[σ₁₂] M₂) :
+theorem toContinuousAddMonoidHom_neg (f : M →SL[σ₁₂] M₂) :
     ↑(-f) = -(f : ContinuousAddMonoidHom M M₂) := rfl
-
-/--
-Instance `sub` / 实例 `sub`
-
-English:
-instance sub
-  signature: : Sub (M ->SL[σ₁₂] M₂)
-  body: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
-
-中文:
-实例 sub
-  签名: : 减法 (M ->SL[σ₁₂] M₂)
-  定义体: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
+/-
+**ContinuousLinearMap.sub** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：sub : Sub (M ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance sub : Sub (M ->SL[σ₁₂] M₂) :=
+instance sub : Sub (M →SL[σ₁₂] M₂) :=
   ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSubApply (M ->SL[σ₁₂] M₂) M M₂
-  body: rfl
-
-中文:
-实例 :
-  签名: 是SubApply (M ->SL[σ₁₂] M₂) M M₂
-  定义体: rfl
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSubApply (M ->SL[σ₁₂] M₂) M M₂ where
+instance : IsSubApply (M →SL[σ₁₂] M₂) M M₂ where
   sub_apply _ _ _ := rfl
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: : AddCommGroup (M ->SL[σ₁₂] M₂)
-  body: fast_instance% FunLike.addCommGroup
-
-@[simp, norm_cast]
-
-中文:
-实例 addCommGroup
-  签名: : 加法交换群 (M ->SL[σ₁₂] M₂)
-  定义体: fast_instance% FunLike.addCommGroup
-
-@[simp, norm_cast]
-
-Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
+/-
+**ContinuousLinearMap.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：addCommGroup : AddCommGroup (M ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addCommGroup : AddCommGroup (M ->SL[σ₁₂] M₂) := fast_instance% FunLike.addCommGroup
+instance addCommGroup : AddCommGroup (M →SL[σ₁₂] M₂) := fast_instance% FunLike.addCommGroup
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_sub` / 定理 `toLinearMap_sub`
-
-English:
-theorem toLinearMap_sub
-  given: (f g : M ->SL[σ₁₂] M₂)
-  statement: (↑(f - g) : M ->ₛₗ[σ₁₂] M₂) = f - g
-  proof: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias sub_apply := _root_.sub_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_sub := toLinearMap_sub
-
-@[deprecated (since := "2026-05-20")] alias coe_sub' := FunLike.coe_sub
-
-@[simp, norm_cast]
-
-中文:
-定理 toLinearMap_sub
-  条件: (f g : M ->SL[σ₁₂] M₂)
-  结论: (↑(f - g) : M ->ₛₗ[σ₁₂] M₂) = f - g
-  证明: rfl
-
-@[deprecated (since := "2026-05-20")] protected alias sub_apply := _root_.sub_apply
-
-@[deprecated (since := "2026-05-20")] protected alias coe_sub := toLinearMap_sub
-
-@[deprecated (since := "2026-05-20")] alias coe_sub' := FunLike.coe_sub
-
-@[simp, norm_cast]
+/-
+**ContinuousLinearMap.toLinearMap_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toLinearMap_sub (f g : M ->SL[σ₁₂] M₂) : (↑(f - g) : M ->ₛₗ[σ₁₂] M₂) = f -
+ g
+参数：f g : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_sub (f g : M ->SL[σ₁₂] M₂) : (↑(f - g) : M ->ₛₗ[σ₁₂] M₂) = f - g :=
+theorem toLinearMap_sub (f g : M →SL[σ₁₂] M₂) : (↑(f - g) : M →ₛₗ[σ₁₂] M₂) = f - g :=
   rfl
 
 @[deprecated (since := "2026-05-20")] protected alias sub_apply := _root_.sub_apply
@@ -3398,214 +2688,251 @@ theorem toLinearMap_sub (f g : M ->SL[σ₁₂] M₂) : (↑(f - g) : M ->ₛₗ
 @[deprecated (since := "2026-05-20")] alias coe_sub' := FunLike.coe_sub
 
 @[simp, norm_cast]
-/--
-theorem `toContinuousAddMonoidHom_sub` / 定理 `toContinuousAddMonoidHom_sub`
-
-English:
-theorem toContinuousAddMonoidHom_sub
-  given: (f g : M ->SL[σ₁₂] M₂)
-  proof: rfl
-
-中文:
-定理 toContinuousAddMonoidHom_sub
-  条件: (f g : M ->SL[σ₁₂] M₂)
-  证明: rfl
+/-
+**ContinuousLinearMap.toContinuousAddMonoidHom_sub** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap`。
+形式化陈述：toContinuousAddMonoidHom_sub (f g : M ->SL[σ₁₂] M₂) : ↑(f - g) = (f - g : 
+ContinuousAddMonoidHom M M₂)
+参数：f g : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearMapClass.toContinuousMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem toContinuousAddMonoidHom_sub (f g : M ->SL[σ₁₂] M₂) :
+theorem toContinuousAddMonoidHom_sub (f g : M →SL[σ₁₂] M₂) :
     ↑(f - g) = (f - g : ContinuousAddMonoidHom M M₂) := rfl
 
 end
 
 @[simp]
-/--
-theorem `comp_neg` / 定理 `comp_neg`
-
-English:
-theorem comp_neg
-  statement: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
-  proof: by
-  ext x
-  simp
-
-@[simp]
-
-中文:
-定理 comp_neg
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₂]
-  证明: by
-  ext x
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_neg [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂] [IsTop
+ologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) : g ∘SL (-f) = -
+g ∘SL f
+参数：g : M₂ ->SL[σ₂₃] M₃；f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `ContinuousLinearMap.instIsNegApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_neg [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
-    [IsTopologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) :
+    [IsTopologicalAddGroup M₃] (g : M₂ →SL[σ₂₃] M₃) (f : M →SL[σ₁₂] M₂) :
     g ∘SL (-f) = -g ∘SL f := by
   ext x
   simp
 
 @[simp]
-/--
-theorem `neg_comp` / 定理 `neg_comp`
-
-English:
-theorem neg_comp
-  statement: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃)
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 neg_comp
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₃] (g : M₂ ->SL[σ₂₃] M₃)
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.neg_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：neg_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g : M
+₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) : (-g) ∘SL f = -g ∘SL f
+参数：g : M₂ ->SL[σ₂₃] M₃；f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `ContinuousLinearMap.instIsNegApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem neg_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃)
-    (f : M ->SL[σ₁₂] M₂) : (-g) ∘SL f = -g ∘SL f := by
+theorem neg_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g : M₂ →SL[σ₂₃] M₃)
+    (f : M →SL[σ₁₂] M₂) : (-g) ∘SL f = -g ∘SL f := by
   ext
   simp
 
 @[simp]
-/--
-theorem `comp_sub` / 定理 `comp_sub`
-
-English:
-theorem comp_sub
-  statement: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 comp_sub
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₂]
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**ContinuousLinearMap.comp_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_sub [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂] [IsTop
+ologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃) (f₁ f₂ : M ->SL[σ₁₂] M₂) : g ∘SL (f₁ 
+- f₂) = g ∘SL f₁ - g ∘SL f₂
+参数：g : M₂ ->SL[σ₂₃] M₃；f₁ f₂ : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Sub β}   {inst_2 : Sub F} [self : IsSu…
+· 使用定理 `ContinuousLinearMap.instIsSubApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_sub [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
-    [IsTopologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃) (f₁ f₂ : M ->SL[σ₁₂] M₂) :
+    [IsTopologicalAddGroup M₃] (g : M₂ →SL[σ₂₃] M₃) (f₁ f₂ : M →SL[σ₁₂] M₂) :
     g ∘SL (f₁ - f₂) = g ∘SL f₁ - g ∘SL f₂ := by
   ext
   simp
 
 @[simp]
-/--
-theorem `sub_comp` / 定理 `sub_comp`
-
-English:
-theorem sub_comp
-  statement: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃)
-  proof: by
+/-
+**ContinuousLinearMap.sub_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：sub_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g₁ g₂
+ : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) : (g₁ - g₂) ∘SL f = g₁ ∘SL f - g₂ ∘SL f
+参数：g₁ g₂ : M₂ ->SL[σ₂₃] M₃；f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Sub β}   {inst_2 : Sub F} [self : IsSu…
+· 使用定理 `ContinuousLinearMap.instIsSubApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem sub_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g₁ g₂ : M₂ →SL[σ₂₃] M₃)
+    (f : M →SL[σ₁₂] M₂) : (g₁ - g₂) ∘SL f = g₁ ∘SL f - g₂ ∘SL f := by
   ext
   simp
-
-中文:
-定理 sub_comp
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃)
-  证明: by
-  ext
-  simp
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sub_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃)
-    (f : M ->SL[σ₁₂] M₂) : (g₁ - g₂) ∘SL f = g₁ ∘SL f - g₂ ∘SL f := by
-  ext
-  simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTopologicalAddGroup
-  signature: M] : IntCast (M ->L[R] M) where
-  body: z • (1 : M ->L[R] M)
-
-中文:
-实例 [是拓扑加群
-  签名: M] : 整数嵌入 (M ->L[R] M) where
-  定义体: z • (1 : M ->L[R] M)
+instance [IsTopologicalAddGroup M] : IntCast (M →L[R] M) where
+  intCast z := z • (1 : M →L[R] M)
+/-
+**ContinuousLinearMap.instIsIntCastApply** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：instIsIntCastApply [IsTopologicalAddGroup M] : IsIntCastApply (M ->L[R] M)
+ M where intCast_apply _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsTopologicalAddGroup M] : IntCast (M ->L[R] M) where
-  intCast z := z • (1 : M ->L[R] M)
-
-/--
-Instance `instIsIntCastApply` / 实例 `instIsIntCastApply`
-
-English:
-instance instIsIntCastApply
-  signature: [IsTopologicalAddGroup M]
-  body: rfl
-
-@[deprecated (since := "2026-05-20")] alias intCast_apply := _root_.intCast_apply
-
-中文:
-实例 instIs整数CastApply
-  签名: [是拓扑加群 M]
-  定义体: rfl
-
-@[deprecated (since := "2026-05-20")] alias intCast_apply := _root_.intCast_apply
--/
-instance instIsIntCastApply [IsTopologicalAddGroup M] : IsIntCastApply (M ->L[R] M) M where
+instance instIsIntCastApply [IsTopologicalAddGroup M] : IsIntCastApply (M →L[R] M) M where
   intCast_apply _ _ := rfl
 
 @[deprecated (since := "2026-05-20")] alias intCast_apply := _root_.intCast_apply
-
-/--
-Instance `ring` / 实例 `ring`
-
-English:
-instance ring
-  signature: [IsTopologicalAddGroup M]
-  body: fast_instance% FunLike.ring
-
-中文:
-实例 ring
-  签名: [是拓扑加群 M]
-  定义体: fast_instance% FunLike.ring
-
-Depends on / 依赖: FunLike, FunLike.ring, fast_instance
+/-
+**ContinuousLinearMap.ring** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：ring [IsTopologicalAddGroup M] : Ring (M ->L[R] M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance ring [IsTopologicalAddGroup M] : Ring (M ->L[R] M) := fast_instance% FunLike.ring
-
-/--
-theorem `toSpanSingleton_pow` / 定理 `toSpanSingleton_pow`
-
-English:
-theorem toSpanSingleton_pow
-  given: [TopologicalSpace R] [IsTopologicalRing R] (c : R) (n : Nat)
-  proof: by
-  induction n with
-  | zero => ext; simp
-  | succ n ihn =>
-    rw [pow_succ]; rw [ihn]; rw [mul_def]; rw [toSpanSingleton_comp_toSpanSingleton]; rw [smul_eq_mul]; rw [pow_succ']
-
-中文:
-定理 toSpanSingleton_pow
-  条件: [拓扑空间 R] [是拓扑环 R] (c : R) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => ext; simp
-  | succ n ihn =>
-    rw [pow_succ]; rw [ihn]; rw [mul_def]; rw [toSpanSingleton_comp_toSpanSingleton]; rw [smul_eq_mul]; rw [pow_succ']
-
-Depends on / 依赖: mul_def, pow_succ, smul_eq_mul, toSpanSingleton_comp_toSpanSingleton
+instance ring [IsTopologicalAddGroup M] : Ring (M →L[R] M) := fast_instance% FunLike.ring
+/-
+**ContinuousLinearMap.toSpanSingleton_pow** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：toSpanSingleton_pow [TopologicalSpace R] [IsTopologicalRing R] (c : R) (n 
+: Nat) : toSpanSingleton R c ^ n = toSpanSingleton R (c ^ n)
+参数：c : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_apply_eq_self`：∀ {F : Type u_1} {α : outParam (Type u_2)} {inst : Fu
+nLike F α α} {inst_1 : One F} [self : IsOneApplyEqSelf F α]   (x : α), 1 x = x
+· 使用定理 `ContinuousLinearMap.toSpanSingleton.congr_simp`：∀ (R₁ : Type u_1) [inst 
+: Semiring R₁] {M₁ : Type u_4} [inst_1 : TopologicalSpace M₁] [inst_2 : AddCommM
+onoid M₁]   [inst_3 : _root_.Module …
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `ContinuousLinearMap.mul_def`：mul_def (f g : M₁ ->L[R₁] M₁) : f * g = f ∘
+L g
+· 使用定理 `ContinuousLinearMap.toSpanSingleton_comp_toSpanSingleton`：toSpanSingleto
+n_comp_toSpanSingleton [ContinuousMul R₁] {x : M₂} {c : R₁} : (toSpanSingleton R
+₁ x) ∘L (toSpanSingleton R₁ c) = toSpanSinglet…
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
 -/
-theorem toSpanSingleton_pow [TopologicalSpace R] [IsTopologicalRing R] (c : R) (n : Nat) :
+theorem toSpanSingleton_pow [TopologicalSpace R] [IsTopologicalRing R] (c : R) (n : ℕ) :
     toSpanSingleton R c ^ n = toSpanSingleton R (c ^ n) := by
   induction n with
   | zero => ext; simp
   | succ n ihn =>
-    rw [pow_succ]; rw [ihn]; rw [mul_def]; rw [toSpanSingleton_comp_toSpanSingleton]; rw [smul_eq_mul]; rw [pow_succ']
+    rw [pow_succ, ihn, mul_def, toSpanSingleton_comp_toSpanSingleton, smul_eq_mul, pow_succ']
 
 end Ring
 
@@ -3613,31 +2940,75 @@ section DivisionRing
 
 variable {R M : Type*}
 
-/--
-theorem `isOpenMap_of_ne_zero` / 定理 `isOpenMap_of_ne_zero`
+/-- A nonzero continuous linear functional is open. -/
+/-
+**ContinuousLinearMap.isOpenMap_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : TopologicalSpace R] [inst_1 : Divi
+sionRing R] [ContinuousSub R]   [inst_3 : AddCommGroup M] [inst_4 : TopologicalS
+pace M] [ContinuousAdd M] [inst_6 : _root_.Module R M]   [ContinuousSMul R M] (f
+ : StrongDual R M), f ≠ 0 → IsOpenMap ⇑f
+参数：f : StrongDual R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.exists_ne_zero`：exists_ne_zero {f : M₁ ->SL[σ₁₂] M₂}
+ (hf : f != 0) : exists x, f x != 0
+· 使用定理 `IsOpenMap.of_sections`：∀ {X : Type u_1} {Y : Type u_2} {f : X → Y} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   (∀ (x : X), ∃ g, Continu
+ousAt g (f …
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `Continuous.const_add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst
+_1 : Add M] [SeparatelyContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSp
+ace X] {f …
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `Continuous.fun_smul`：∀ {M : Type u_1} {X : Type u_2} {Y : Type u_3} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X]   [inst_2 : TopologicalSpa
+ce Y] [in…
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
 
-English:
-theorem isOpenMap_of_ne_zero
-  statement: [TopologicalSpace R] [DivisionRing R] [ContinuousSub R]
-  proof: let ⟨x, hx⟩ := exists_ne_zero hf
-  IsOpenMap.of_sections fun y =>
-⟨fun a => y + (a - f y) • (f x)⁻¹ • x, Continuous.continuousAt by fun_prop, by simp,
-      fun a => by simp [hx]⟩
-
-中文:
-定理 isOpenMap_of_ne_zero
-  结论: [拓扑空间 R] [除环 R] [余ntinuousSub R]
-  证明: let ⟨x, hx⟩ := exists_ne_zero hf
-  IsOpenMap.of_sections fun y =>
-⟨fun a => y + (a - f y) • (f x)⁻¹ • x, Continuous.continuousAt by fun_prop, by simp,
-      fun a => by simp [hx]⟩
+--- 原说明 ---
+A nonzero continuous linear functional is open.
 -/
 protected theorem isOpenMap_of_ne_zero [TopologicalSpace R] [DivisionRing R] [ContinuousSub R]
     [AddCommGroup M] [TopologicalSpace M] [ContinuousAdd M] [Module R M] [ContinuousSMul R M]
-    (f : StrongDual R M) (hf : f != 0) : IsOpenMap f :=
+    (f : StrongDual R M) (hf : f ≠ 0) : IsOpenMap f :=
   let ⟨x, hx⟩ := exists_ne_zero hf
   IsOpenMap.of_sections fun y =>
-⟨fun a => y + (a - f y) • (f x)⁻¹ • x, Continuous.continuousAt by fun_prop, by simp,
+    ⟨fun a => y + (a - f y) • (f x)⁻¹ • x, Continuous.continuousAt <| by fun_prop, by simp,
       fun a => by simp [hx]⟩
 
 end DivisionRing
@@ -3651,24 +3022,19 @@ variable {R R₂ R₃ S S₃ : Type*} [Semiring R] [Semiring R₂] [Semiring R�
   [AddCommMonoid M₃] [Module R₃ M₃] {N₂ : Type*} [TopologicalSpace N₂] [AddCommMonoid N₂]
   [Module R N₂] {N₃ : Type*} [TopologicalSpace N₃] [AddCommMonoid N₃] [Module R N₃]
   [DistribMulAction S₃ M₃] [SMulCommClass R₃ S₃ M₃] [ContinuousConstSMul S₃ M₃]
-  [DistribMulAction S N₃] [SMulCommClass R S N₃] [ContinuousConstSMul S N₃] {σ₁₂ : R ->+* R₂}
-  {σ₂₃ : R₂ ->+* R₃} {σ₁₃ : R ->+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+  [DistribMulAction S N₃] [SMulCommClass R S N₃] [ContinuousConstSMul S N₃] {σ₁₂ : R →+* R₂}
+  {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R →+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
 
 @[simp]
-/--
-theorem `smul_comp` / 定理 `smul_comp`
-
-English:
-theorem smul_comp
-  given: (c : S₃) (h : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂)
-  proof: rfl
-
-中文:
-定理 smul_comp
-  条件: (c : S₃) (h : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂)
-  证明: rfl
+/-
+**ContinuousLinearMap.smul_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：smul_comp (c : S₃) (h : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) : (c • h) ∘S
+L f = c • h ∘SL f
+参数：c : S₃；h : M₂ ->SL[σ₂₃] M₃；f : M ->SL[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_comp (c : S₃) (h : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂) :
+theorem smul_comp (c : S₃) (h : M₂ →SL[σ₂₃] M₃) (f : M →SL[σ₁₂] M₂) :
     (c • h) ∘SL f = c • h ∘SL f :=
   rfl
 
@@ -3676,74 +3042,51 @@ variable [DistribMulAction S₃ M₂] [ContinuousConstSMul S₃ M₂] [SMulCommC
 variable [DistribMulAction S N₂] [ContinuousConstSMul S N₂] [SMulCommClass R S N₂]
 
 @[simp]
-/--
-theorem `comp_smul` / 定理 `comp_smul`
-
-English:
-theorem comp_smul
-  statement: [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
-  proof: by
-  ext x
-  exact hₗ.map_smul_of_tower c (fₗ x)
-
-@[simp]
-
-中文:
-定理 comp_smul
-  结论: [线性映射.余mpatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
-  证明: by
-  ext x
-  exact hₗ.map_smul_of_tower c (fₗ x)
-
-@[simp]
-
-Depends on / 依赖: map_smul_of_tower
+/-
+**ContinuousLinearMap.comp_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_smul [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
+ (fₗ : M ->L[R] N₂) : hₗ ∘L (c • fₗ) = c • hₗ ∘L fₗ
+参数：hₗ : N₂ ->L[R] N₃；c : S；fₗ : M ->L[R] N₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousLinearMap.map_smul_of_tower`：map_smul_of_tower {R S : Type*} [
+Semiring S] [SMul R M₁] [Module S M₁] [SMul R M₂] [Module S M₂] [LinearMap.Compa
+tibleSMul M₁ M₂ R S] (f : M…
 -/
-theorem comp_smul [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
-    (fₗ : M ->L[R] N₂) : hₗ ∘L (c • fₗ) = c • hₗ ∘L fₗ := by
+theorem comp_smul [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ →L[R] N₃) (c : S)
+    (fₗ : M →L[R] N₂) : hₗ ∘L (c • fₗ) = c • hₗ ∘L fₗ := by
   ext x
   exact hₗ.map_smul_of_tower c (fₗ x)
 
 @[simp]
-/--
-theorem `comp_smulₛₗ` / 定理 `comp_smulₛₗ`
-
-English:
-theorem comp_smulₛₗ
-  statement: [SMulCommClass R₂ R₂ M₂] [SMulCommClass R₃ R₃ M₃] [ContinuousConstSMul R₂ M₂]
-  proof: by
-  ext x
-  simp
-
-中文:
-定理 comp_smulₛₗ
-  结论: [标量交换类 R₂ R₂ M₂] [标量交换类 R₃ R₃ M₃] [连续常数标量乘法 R₂ M₂]
-  证明: by
-  ext x
-  simp
+/-
+**ContinuousLinearMap.comp_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：comp_smul [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
+ (fₗ : M ->L[R] N₂) : hₗ ∘L (c • fₗ) = c • hₗ ∘L fₗ
+参数：hₗ : N₂ ->L[R] N₃；c : S；fₗ : M ->L[R] N₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousLinearMap.map_smul_of_tower`：map_smul_of_tower {R S : Type*} [
+Semiring S] [SMul R M₁] [Module S M₁] [SMul R M₂] [Module S M₂] [LinearMap.Compa
+tibleSMul M₁ M₂ R S] (f : M…
 -/
 theorem comp_smulₛₗ [SMulCommClass R₂ R₂ M₂] [SMulCommClass R₃ R₃ M₃] [ContinuousConstSMul R₂ M₂]
-    [ContinuousConstSMul R₃ M₃] (h : M₂ ->SL[σ₂₃] M₃) (c : R₂) (f : M ->SL[σ₁₂] M₂) :
+    [ContinuousConstSMul R₃ M₃] (h : M₂ →SL[σ₂₃] M₃) (c : R₂) (f : M →SL[σ₁₂] M₂) :
     h ∘SL (c • f) = σ₂₃ c • h ∘SL f := by
   ext x
   simp
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: [ContinuousAdd M₂]
-  body: fast_instance% FunLike.distribMulAction
-
-中文:
-实例 distribMulAction
-  签名: [连续加法 M₂]
-  定义体: fast_instance% FunLike.distribMulAction
-
-Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
+/-
+**ContinuousLinearMap.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：distribMulAction [ContinuousAdd M₂] : DistribMulAction S₃ (M ->SL[σ₁₂] M₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance distribMulAction [ContinuousAdd M₂] : DistribMulAction S₃ (M ->SL[σ₁₂] M₂) :=
+instance distribMulAction [ContinuousAdd M₂] : DistribMulAction S₃ (M →SL[σ₁₂] M₂) :=
   fast_instance% FunLike.distribMulAction
 
 end SMulMonoid
@@ -3758,68 +3101,52 @@ variable {R R₂ R₃ S S₃ : Type*} [Semiring R] [Semiring R₂] [Semiring R�
   [Module R N₂] {N₃ : Type*} [TopologicalSpace N₃] [AddCommMonoid N₃] [Module R N₃] [Module S₃ M₃]
   [SMulCommClass R₃ S₃ M₃] [ContinuousConstSMul S₃ M₃] [Module S N₂] [ContinuousConstSMul S N₂]
   [SMulCommClass R S N₂] [Module S N₃] [SMulCommClass R S N₃] [ContinuousConstSMul S N₃]
-  {σ₁₂ : R ->+* R₂} {σ₂₃ : R₂ ->+* R₃} {σ₁₃ : R ->+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (c : S)
-  (h : M₂ ->SL[σ₂₃] M₃) (f : M ->SL[σ₁₂] M₂)
+  {σ₁₂ : R →+* R₂} {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R →+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (c : S)
+  (h : M₂ →SL[σ₂₃] M₃) (f : M →SL[σ₁₂] M₂)
 
 variable [ContinuousAdd M₂] [ContinuousAdd M₃] [ContinuousAdd N₂]
 
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: : Module S₃ (M ->SL[σ₁₃] M₃)
-  body: fast_instance% FunLike.module
-
-中文:
-实例 module
-  签名: : 模 S₃ (M ->SL[σ₁₃] M₃)
-  定义体: fast_instance% FunLike.module
-
-Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
+/-
+**ContinuousLinearMap.module** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：module : Module S₃ (M ->SL[σ₁₃] M₃)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance module : Module S₃ (M ->SL[σ₁₃] M₃) := fast_instance% FunLike.module
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [Module S₃ᵐᵒᵖ M₃] [IsCentralScalar S₃ M₃]
-  body: FunLike.isCentralScalar
-
-中文:
-实例 isCentralScalar
-  签名: [模 S₃ᵐᵒᵖ M₃] [中心标量 S₃ M₃]
-  定义体: FunLike.isCentralScalar
-
-Depends on / 依赖: FunLike, FunLike.isCentralScalar, isCentralScalar
+instance module : Module S₃ (M →SL[σ₁₃] M₃) := fast_instance% FunLike.module
+/-
+**ContinuousLinearMap.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：isCentralScalar [Module S₃ᵐᵒᵖ M₃] [IsCentralScalar S₃ M₃] : IsCentralScala
+r S₃ (M ->SL[σ₁₃] M₃)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FunLike.isCentralScalar`：∀ {M : Type u_1} {F : Type u_3} {α : Type u_4} 
+{β : Type u_5} [i : FunLike F α β] [inst : SMul M F]   [inst_1 : SMul Mᵐᵒᵖ F] [i
+nst_2 : SMul …
+· 使用定理 `SMulCommClass.op_right`：∀ {M : Type u_1} {N : Type u_2} {α : Type u_5} [
+inst : SMul M α] [inst_1 : SMul N α] [inst_2 : SMul Nᵐᵒᵖ α]   [IsCentralScalar N
+ α] [SMulCom…
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
 -/
 instance isCentralScalar [Module S₃ᵐᵒᵖ M₃] [IsCentralScalar S₃ M₃] :
-    IsCentralScalar S₃ (M ->SL[σ₁₃] M₃) := FunLike.isCentralScalar
+    IsCentralScalar S₃ (M →SL[σ₁₃] M₃) := FunLike.isCentralScalar
 
 variable (S) [ContinuousAdd N₃]
 
 /-- The coercion from `M →L[R] M₂` to `M →ₗ[R] M₂`, as a linear map. -/
 @[simps]
-/--
-Definition of `coeLM` / `coeLM` 的定义
+/-
+**ContinuousLinearMap.coeLM** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coeLM : (M ->L[R] N₃) ->ₗ[S] M ->ₗ[R] N₃ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeLM
-  signature: : (M ->L[R] N₃) ->ₗ[S] M ->ₗ[R] N₃ where
-  body: (↑)
-  map_add' f g := toLinearMap_add f g
-  map_smul' c f := toLinearMap_smul c f
-
-中文:
-定义 coeLM
-  签名: : (M ->L[R] N₃) ->ₗ[S] M ->ₗ[R] N₃ where
-  定义体: (↑)
-  map_add' f g := toLinearMap_add f g
-  map_smul' c f := toLinearMap_smul c f
+--- 原说明 ---
+The coercion from `M →L[R] M₂` to `M →ₗ[R] M₂`, as a linear map.
 -/
-def coeLM : (M ->L[R] N₃) ->ₗ[S] M ->ₗ[R] N₃ where
+def coeLM : (M →L[R] N₃) →ₗ[S] M →ₗ[R] N₃ where
   toFun := (↑)
   map_add' f g := toLinearMap_add f g
   map_smul' c f := toLinearMap_smul c f
@@ -3828,24 +3155,16 @@ variable {S} (σ₁₃)
 
 /-- The coercion from `M →SL[σ] M₂` to `M →ₛₗ[σ] M₂`, as a linear map. -/
 @[simps]
-/--
-Definition of `coeLMₛₗ` / `coeLMₛₗ` 的定义
+/-
+**ContinuousLinearMap.coeLM** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：coeLM : (M ->L[R] N₃) ->ₗ[S] M ->ₗ[R] N₃ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeLMₛₗ
-  signature: : (M ->SL[σ₁₃] M₃) ->ₗ[S₃] M ->ₛₗ[σ₁₃] M₃ where
-  body: (↑)
-  map_add' f g := toLinearMap_add f g
-  map_smul' c f := toLinearMap_smul c f
-
-中文:
-定义 coeLMₛₗ
-  签名: : (M ->SL[σ₁₃] M₃) ->ₗ[S₃] M ->ₛₗ[σ₁₃] M₃ where
-  定义体: (↑)
-  map_add' f g := toLinearMap_add f g
-  map_smul' c f := toLinearMap_smul c f
+--- 原说明 ---
+The coercion from `M →SL[σ] M₂` to `M →ₛₗ[σ] M₂`, as a linear map.
 -/
-def coeLMₛₗ : (M ->SL[σ₁₃] M₃) ->ₗ[S₃] M ->ₛₗ[σ₁₃] M₃ where
+def coeLMₛₗ : (M →SL[σ₁₃] M₃) →ₗ[S₃] M →ₛₗ[σ₁₃] M₃ where
   toFun := (↑)
   map_add' f g := toLinearMap_add f g
   map_smul' c f := toLinearMap_smul c f
@@ -3862,24 +3181,18 @@ variable {R U V : Type*} (W : Type*) [CommSemiring R]
 
 /-- Composition of continuous linear maps, as a linear map. Compare `LinearMap.lcomp`. -/
 @[simps]
-/--
-Definition of `lcomp` / `lcomp` 的定义
+/-
+**ContinuousLinearMap.lcomp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：lcomp (f : U ->L[R] V) : (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where toFun l
+参数：f : U ->L[R] V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lcomp
-  signature: (f : U ->L[R] V)
-  body: l ∘L f
-  map_add' _ _ := by simp
-  map_smul' _ _ := by simp
-
-中文:
-定义 lcomp
-  签名: (f : U ->L[R] V)
-  定义体: l ∘L f
-  map_add' _ _ := by simp
-  map_smul' _ _ := by simp
+--- 原说明 ---
+Composition of continuous linear maps, as a linear map. Compare `LinearMap.lcomp
+`.
 -/
-def lcomp (f : U ->L[R] V) : (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where
+def lcomp (f : U →L[R] V) : (V →L[R] W) →ₗ[R] (U →L[R] W) where
   toFun l := l ∘L f
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
@@ -3897,26 +3210,18 @@ variable (R U V W : Type*) [CommSemiring R]
 
 /-- Composition of continuous linear maps, as a bilinear map. Compare `LinearMap.llcomp`. -/
 @[simps]
-/--
-Definition of `llcomp` / `llcomp` 的定义
+/-
+**ContinuousLinearMap.llcomp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：llcomp : (U ->L[R] V) ->ₗ[R] (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where toFun 
+l
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition llcomp
-  signature: : (U ->L[R] V) ->ₗ[R] (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where
-  body: l.lcomp W
-  map_add' _ _ := by ext; simp
-  map_smul' _ _ := by ext; simp
-
-中文:
-定义 llcomp
-  签名: : (U ->L[R] V) ->ₗ[R] (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where
-  定义体: l.lcomp W
-  map_add' _ _ := by ext; simp
-  map_smul' _ _ := by ext; simp
-
-Depends on / 依赖: l.lcomp
+--- 原说明 ---
+Composition of continuous linear maps, as a bilinear map. Compare `LinearMap.llc
+omp`.
 -/
-def llcomp : (U ->L[R] V) ->ₗ[R] (V ->L[R] W) ->ₗ[R] (U ->L[R] W) where
+def llcomp : (U →L[R] V) →ₗ[R] (V →L[R] W) →ₗ[R] (U →L[R] W) where
   toFun l := l.lcomp W
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -3933,32 +3238,22 @@ variable (R S M : Type*) [Semiring R] [Semiring S] [AddCommMonoid M] [Module R M
 `ContinuousLinearMap.toSpanSingletonLIE` for the isometric version
 and `ContinuousLinearMap.toSpanSingletonCLE` for the continuous version. -/
 @[simps -fullyApplied]
-/--
-Definition of `toSpanSingletonLE` / `toSpanSingletonLE` 的定义
+/-
+**ContinuousLinearMap.toSpanSingletonLE** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：toSpanSingletonLE : M ≃ₗ[S] (R ->L[R] M) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.toSpanSingleton_add`：toSpanSingleton_add [Continuous
+Add M₁] (x y : M₁) : toSpanSingleton R₁ (x + y) = toSpanSingleton R₁ x + toSpanS
+ingleton R₁ y
 
-English:
-definition toSpanSingletonLE
-  signature: : M ≃ₗ[S] (R ->L[R] M) where
-  body: toSpanSingleton R
-  invFun f := f 1
-  map_add' := toSpanSingleton_add R
-  map_smul' := toSpanSingleton_smul R
-  left_inv x := by simp
-  right_inv f := by ext; simp
-
-中文:
-定义 toSpanSingletonLE
-  签名: : M ≃ₗ[S] (R ->L[R] M) where
-  定义体: toSpanSingleton R
-  invFun f := f 1
-  map_add' := toSpanSingleton_add R
-  map_smul' := toSpanSingleton_smul R
-  left_inv x := by simp
-  right_inv f := by ext; simp
-
-Depends on / 依赖: toSpanSingleton
+--- 原说明 ---
+`ContinuousLinearMap.toSpanSingleton` as a linear equivalence. See
+`ContinuousLinearMap.toSpanSingletonLIE` for the isometric version
+and `ContinuousLinearMap.toSpanSingletonCLE` for the continuous version.
 -/
-def toSpanSingletonLE : M ≃ₗ[S] (R ->L[R] M) where
+def toSpanSingletonLE : M ≃ₗ[S] (R →L[R] M) where
   toFun := toSpanSingleton R
   invFun f := f 1
   map_add' := toSpanSingleton_add R
@@ -3976,40 +3271,20 @@ variable {R S T M M₂ : Type*} [Semiring R] [Semiring S] [Semiring T] [Module R
   [ContinuousAdd M₂] [Module T M₂] [ContinuousConstSMul T M₂] [SMulCommClass R T M₂]
   [SMulCommClass S T M₂]
 
-/--
-Definition of `smulRightₗ` / `smulRightₗ` 的定义
+/-- Given `c : E →L[R] S`, `c.smulRightₗ` is the linear map from `F` to `E →L[R] F`
+sending `f` to `fun e => c e • f`. See also `ContinuousLinearMap.smulRightL`. -/
+/-
+**ContinuousLinearMap.smulRight** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：smulRight (c : M₁ ->L[R] S) (f : M₂) : M₁ ->L[R] M₂ where toLinearMap
+参数：c : M₁ ->L[R] S；f : M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smulRightₗ
-  signature: (c : M ->L[R] S)
-  body: c.smulRight
-  map_add' x y := by
-    ext e
-    apply smul_add (c e)
-  map_smul' a x := by
-    ext e
-    dsimp
-    apply smul_comm
-
-@[simp]
-
-中文:
-定义 smulRightₗ
-  签名: (c : M ->L[R] S)
-  定义体: c.smulRight
-  map_add' x y := by
-    ext e
-    apply smul_add (c e)
-  map_smul' a x := by
-    ext e
-    dsimp
-    apply smul_comm
-
-@[simp]
-
-Depends on / 依赖: c.smulRight, smulRight
+--- 原说明 ---
+Given `c : E →L[R] S`, `c.smulRightₗ` is the linear map from `F` to `E →L[R] F`
+sending `f` to `fun e => c e • f`. See also `ContinuousLinearMap.smulRightL`.
 -/
-def smulRightₗ (c : M ->L[R] S) : M₂ ->ₗ[T] M ->L[R] M₂ where
+def smulRightₗ (c : M →L[R] S) : M₂ →ₗ[T] M →L[R] M₂ where
   toFun := c.smulRight
   map_add' x y := by
     ext e
@@ -4020,22 +3295,20 @@ def smulRightₗ (c : M ->L[R] S) : M₂ ->ₗ[T] M ->L[R] M₂ where
     apply smul_comm
 
 @[simp]
-/--
-theorem `coe_smulRightₗ` / 定理 `coe_smulRightₗ`
-
-English:
-theorem coe_smulRightₗ
-  given: (c : M ->L[R] S)
-  statement: ⇑(smulRightₗ c : M₂ ->ₗ[T] M ->L[R] M₂) = c.smulRight
-  proof: rfl
-
-中文:
-定理 coe_smulRightₗ
-  条件: (c : M ->L[R] S)
-  结论: ⇑(smulRightₗ c : M₂ ->ₗ[T] M ->L[R] M₂) = c.smulRight
-  证明: rfl
+/-
+**ContinuousLinearMap.coe_smulRight** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：∀ {M₁ : Type u_4} [inst : TopologicalSpace M₁] [inst_1 : AddCommMonoid M₁]
+ {M₂ : Type u_6}   [inst_2 : TopologicalSpace M₂] [inst_3 : AddCommMonoid M₂] {R
+ : Type u_9} {S : Type u_10} [inst_4 : Semiring R]   [inst_5 : Semiring S] [inst
+_6 : _root_.Module R M₁] [inst_7 : _root_.Module R M₂] [inst_8 : _root_.Module R
+ S]   [inst_9 : _root_.Module S M₂] [inst_10 : IsScalarTower R S M₂] [inst_11 : 
+TopologicalSpace S]   [inst_12 : ContinuousSMul S M₂] (c : M₁ →L[R] S) (f : M₂),
+ ↑(c.smulRight f) = (↑c).smulRight f
+参数：c : M₁ →L[R] S；f : M₂；c.smulRight f；↑c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smulRightₗ (c : M ->L[R] S) : ⇑(smulRightₗ c : M₂ ->ₗ[T] M ->L[R] M₂) = c.smulRight :=
+theorem coe_smulRightₗ (c : M →L[R] S) : ⇑(smulRightₗ c : M₂ →ₗ[T] M →L[R] M₂) = c.smulRight :=
   rfl
 
 end SMulRightₗ
@@ -4045,40 +3318,30 @@ variable {R S M : Type*} [Semiring R] [TopologicalSpace M] [AddCommGroup M] [Mod
   [CommSemiring S] [Module S M] [SMulCommClass R S M] [SMul S R] [IsScalarTower S R M]
   [ContinuousConstSMul S M] [IsTopologicalAddGroup M]
 
-/--
-Instance `algebra` / 实例 `algebra`
-
-English:
-instance algebra
-  signature: : Algebra S (M ->L[R] M)
-  body: Algebra.ofModule smul_comp fun _ _ _ => comp_smul _ _ _
-
-中文:
-实例 algebra
-  签名: : 代数 S (M ->L[R] M)
-  定义体: Algebra.ofModule smul_comp fun _ _ _ => comp_smul _ _ _
-
-Depends on / 依赖: Algebra, Algebra.ofModule, comp_smul, ofModule, smul_comp
+/-
+**ContinuousLinearMap.algebra** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：algebra : Algebra S (M ->L[R] M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance algebra : Algebra S (M ->L[R] M) :=
+instance algebra : Algebra S (M →L[R] M) :=
   Algebra.ofModule smul_comp fun _ _ _ => comp_smul _ _ _
-
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: (r : S) (m : M)
-  statement: algebraMap S (M ->L[R] M) r m = r • m
-  proof: rfl
-
-中文:
-定理 algebraMap_apply
-  条件: (r : S) (m : M)
-  结论: algebraMap S (M ->L[R] M) r m = r • m
-  证明: rfl
+/-
+**ContinuousLinearMap.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} {M : Type u_3} [inst : Semiring R] [inst_1
+ : TopologicalSpace M]   [inst_2 : AddCommGroup M] [inst_3 : _root_.Module R M] 
+[inst_4 : CommSemiring S] [inst_5 : _root_.Module S M]   [inst_6 : SMulCommClass
+ R S M] [inst_7 : SMul S R] [inst_8 : IsScalarTower S R M] [inst_9 : ContinuousC
+onstSMul S M]   [inst_10 : IsTopologicalAddGroup M] (r : S) (m : M), ((algebraMa
+p S (M →L[R] M)) r) m = r • m
+参数：r : S；m : M；(algebraMap S (M →L[R] M)) r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-@[simp] theorem algebraMap_apply (r : S) (m : M) : algebraMap S (M ->L[R] M) r m = r • m := rfl
+@[simp] theorem algebraMap_apply (r : S) (m : M) : algebraMap S (M →L[R] M) r m = r • m := rfl
 
 end Semiring
 
@@ -4090,44 +3353,33 @@ variable {𝕜 E : Type*} [CommSemiring 𝕜] [TopologicalSpace 𝕜] [Continuou
   [Module 𝕜 E] [TopologicalSpace E] [ContinuousConstSMul 𝕜 𝕜]
 
 variable (𝕜 E) in
-/--
-Definition of `topDualPairing` / `topDualPairing` 的定义
+/-- The canonical pairing of a vector space and its topological dual. -/
+/-
+**topDualPairing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：topDualPairing : (E ->L[𝕜] 𝕜) ->ₗ[𝕜] E ->ₗ[𝕜] 𝕜
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topDualPairing
-  signature: : (E ->L[𝕜] 𝕜) ->ₗ[𝕜] E ->ₗ[𝕜] 𝕜
-  body: ContinuousLinearMap.coeLM 𝕜
-
-@[simp]
-
-中文:
-定义 topDualPairing
-  签名: : (E ->L[𝕜] 𝕜) ->ₗ[𝕜] E ->ₗ[𝕜] 𝕜
-  定义体: ContinuousLinearMap.coeLM 𝕜
-
-@[simp]
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coeLM
+--- 原说明 ---
+The canonical pairing of a vector space and its topological dual.
 -/
-def topDualPairing : (E ->L[𝕜] 𝕜) ->ₗ[𝕜] E ->ₗ[𝕜] 𝕜 :=
+def topDualPairing : (E →L[𝕜] 𝕜) →ₗ[𝕜] E →ₗ[𝕜] 𝕜 :=
   ContinuousLinearMap.coeLM 𝕜
 
 @[simp]
-/--
-theorem `topDualPairing_apply` / 定理 `topDualPairing_apply`
-
-English:
-theorem topDualPairing_apply
-  statement: (v : E ->L[𝕜] 𝕜)
-  proof: rfl
-
-中文:
-定理 topDualPairing_apply
-  结论: (v : E ->L[𝕜] 𝕜)
-  证明: rfl
+/-
+**topDualPairing_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：topDualPairing_apply (v : E ->L[𝕜] 𝕜) (x : E) : topDualPairing 𝕜 E v x = v
+ x
+参数：v : E ->L[𝕜] 𝕜；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem topDualPairing_apply (v : E ->L[𝕜] 𝕜)
+theorem topDualPairing_apply (v : E →L[𝕜] 𝕜)
     (x : E) : topDualPairing 𝕜 E v x = v x :=
   rfl
 
 end topDualPairing
+

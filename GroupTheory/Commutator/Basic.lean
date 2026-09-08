@@ -33,95 +33,60 @@ variable {G G' F : Type*} [Group G] [Group G'] [FunLike F G G'] [MonoidHomClass 
 variable (f : F) {g₁ g₂ g₃ g : G}
 
 @[to_additive]
-/--
-theorem `conj_eq_commutatorElement_mul` / 定理 `conj_eq_commutatorElement_mul`
-
-English:
-theorem conj_eq_commutatorElement_mul
-  statement: MulAut.conj g₁ g₂ = ⁅g₁, g₂⁆ * g₂
-  proof: by
-  simp [commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 conj_eq_commutatorElement_mul
-  结论: MulAut.conj g₁ g₂ = ⁅g₁, g₂⁆ * g₂
-  证明: by
-  simp [commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def
+/-
+**conj_eq_commutatorElement_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conj_eq_commutatorElement_mul : MulAut.conj g₁ g₂ = ⁅g₁, g₂⁆ * g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_mul_cancel_right`：inv_mul_cancel_right (a b : G) : a * b⁻¹ * b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem conj_eq_commutatorElement_mul : MulAut.conj g₁ g₂ = ⁅g₁, g₂⁆ * g₂ := by
   simp [commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_eq_one_iff_mul_comm` / 定理 `commutatorElement_eq_one_iff_mul_comm`
-
-English:
-theorem commutatorElement_eq_one_iff_mul_comm
-  statement: ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
-  proof: by
-  rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_eq_one_iff_mul_comm
-  结论: ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
-  证明: by
-  rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_inv_eq_iff_eq_mul, mul_inv_eq_one
+/-
+**commutatorElement_eq_one_iff_mul_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_eq_one_iff_mul_comm : ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `commutatorElement_def`：commutatorElement_def {G : Type*} [Group G] (g₁ g
+₂ : G) : ⁅g₁, g₂⁆ = g₁ * g₂ * g₁⁻¹ * g₂⁻¹
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
+· 使用定理 `mul_inv_eq_iff_eq_mul`：mul_inv_eq_iff_eq_mul : a * b⁻¹ = c ↔ a = c * b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem commutatorElement_eq_one_iff_mul_comm : ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁ := by
-  rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]
+  rw [commutatorElement_def, mul_inv_eq_one, mul_inv_eq_iff_eq_mul]
 
 @[to_additive]
-/--
-theorem `commutatorElement_eq_one_iff_commute` / 定理 `commutatorElement_eq_one_iff_commute`
-
-English:
-theorem commutatorElement_eq_one_iff_commute
-  statement: ⁅g₁, g₂⁆ = 1 ↔ Commute g₁ g₂
-  proof: commutatorElement_eq_one_iff_mul_comm
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_eq_one_iff_commute
-  结论: ⁅g₁, g₂⁆ = 1 ↔ Commute g₁ g₂
-  证明: commutatorElement_eq_one_iff_mul_comm
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_eq_one_iff_mul_comm
+/-
+**commutatorElement_eq_one_iff_commute** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_eq_one_iff_commute : ⁅g₁, g₂⁆ = 1 ↔ Commute g₁ g₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `commutatorElement_eq_one_iff_mul_comm`：commutatorElement_eq_one_iff_mul_
+comm : ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
 -/
 theorem commutatorElement_eq_one_iff_commute : ⁅g₁, g₂⁆ = 1 ↔ Commute g₁ g₂ :=
   commutatorElement_eq_one_iff_mul_comm
 
 @[to_additive]
-/--
-theorem `Commute.commutator_eq` / 定理 `Commute.commutator_eq`
-
-English:
-theorem Commute.commutator_eq
-  given: (h : Commute g₁ g₂)
-  statement: ⁅g₁, g₂⁆ = 1
-  proof: commutatorElement_eq_one_iff_commute.mpr h
-
-中文:
-定理 Commute.commutator_eq
-  条件: (h : Commute g₁ g₂)
-  结论: ⁅g₁, g₂⁆ = 1
-  证明: commutatorElement_eq_one_iff_commute.mpr h
-
-Depends on / 依赖: commutatorElement_eq_one_iff_commute, commutatorElement_eq_one_iff_commute.mpr
+/-
+**Commute.commutator_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, g₂⁆ = 1
+参数：h : Commute g₁ g₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `commutatorElement_eq_one_iff_commute`：commutatorElement_eq_one_iff_commu
+te : ⁅g₁, g₂⁆ = 1 ↔ Commute g₁ g₂
 -/
 theorem Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, g₂⁆ = 1 :=
   commutatorElement_eq_one_iff_commute.mpr h
@@ -129,269 +94,244 @@ theorem Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, g₂⁆ = 1 :=
 variable (g₁ g₂ g₃ g)
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutatorElement_one_right` / 定理 `commutatorElement_one_right`
-
-English:
-theorem commutatorElement_one_right
-  statement: ⁅g, (1 : G)⁆ = 1
-  proof: (Commute.one_right g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutatorElement_one_right
-  结论: ⁅g, (1 : G)⁆ = 1
-  证明: (Commute.one_right g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Commute, Commute.one_right, commutator_eq, one_right
+/-
+**commutatorElement_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_one_right : ⁅g, (1 : G)⁆ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.commutator_eq`：Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, 
+g₂⁆ = 1
+· 使用定理 `Commute.one_right`：one_right (a : M) : Commute a 1
 -/
 theorem commutatorElement_one_right : ⁅g, (1 : G)⁆ = 1 :=
   (Commute.one_right g).commutator_eq
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutatorElement_one_left` / 定理 `commutatorElement_one_left`
-
-English:
-theorem commutatorElement_one_left
-  statement: ⁅(1 : G), g⁆ = 1
-  proof: (Commute.one_left g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutatorElement_one_left
-  结论: ⁅(1 : G), g⁆ = 1
-  证明: (Commute.one_left g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Commute, Commute.one_left, commutator_eq, one_left
+/-
+**commutatorElement_one_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_one_left : ⁅(1 : G), g⁆ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.commutator_eq`：Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, 
+g₂⁆ = 1
+· 使用定理 `Commute.one_left`：one_left (a : M) : Commute 1 a
 -/
 theorem commutatorElement_one_left : ⁅(1 : G), g⁆ = 1 :=
   (Commute.one_left g).commutator_eq
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutatorElement_self` / 定理 `commutatorElement_self`
-
-English:
-theorem commutatorElement_self
-  statement: ⁅g, g⁆ = 1
-  proof: (Commute.refl g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutatorElement_self
-  结论: ⁅g, g⁆ = 1
-  证明: (Commute.refl g).commutator_eq
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Commute, Commute.refl, commutator_eq
+/-
+**commutatorElement_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_self : ⁅g, g⁆ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.commutator_eq`：Commute.commutator_eq (h : Commute g₁ g₂) : ⁅g₁, 
+g₂⁆ = 1
+· 使用定理 `Commute.refl`：∀ {S : Type u_3} [inst : Mul S] (a : S), Commute a a
 -/
 theorem commutatorElement_self : ⁅g, g⁆ = 1 :=
   (Commute.refl g).commutator_eq
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutatorElement_inv` / 定理 `commutatorElement_inv`
-
-English:
-theorem commutatorElement_inv
-  statement: ⁅g₁, g₂⁆⁻¹ = ⁅g₂, g₁⁆
-  proof: by
-  simp_rw [commutatorElement_def, mul_inv_rev, inv_inv, mul_assoc]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutatorElement_inv
-  结论: ⁅g₁, g₂⁆⁻¹ = ⁅g₂, g₁⁆
-  证明: by
-  simp_rw [commutatorElement_def, mul_inv_rev, inv_inv, mul_assoc]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: commutatorElement_def, inv_inv, mul_assoc, mul_inv_rev, simp_rw
+/-
+**commutatorElement_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_inv : ⁅g₁, g₂⁆⁻¹ = ⁅g₂, g₁⁆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_inv : ⁅g₁, g₂⁆⁻¹ = ⁅g₂, g₁⁆ := by
   simp_rw [commutatorElement_def, mul_inv_rev, inv_inv, mul_assoc]
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_commutatorElement` / 定理 `map_commutatorElement`
-
-English:
-theorem map_commutatorElement
-  statement: (f ⁅g₁, g₂⁆ : G') = ⁅f g₁, f g₂⁆
-  proof: by
-  simp_rw [commutatorElement_def, map_mul f, map_inv f]
-
-@[to_additive]
-
-中文:
-定理 map_commutatorElement
-  结论: (f ⁅g₁, g₂⁆ : G') = ⁅f g₁, f g₂⁆
-  证明: by
-  simp_rw [commutatorElement_def, map_mul f, map_inv f]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, map_inv, map_mul, simp_rw
+/-
+**map_commutatorElement** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_commutatorElement : (f ⁅g₁, g₂⁆ : G') = ⁅f g₁, f g₂⁆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_commutatorElement : (f ⁅g₁, g₂⁆ : G') = ⁅f g₁, f g₂⁆ := by
   simp_rw [commutatorElement_def, map_mul f, map_inv f]
 
 @[to_additive]
-/--
-theorem `conjugate_commutatorElement` / 定理 `conjugate_commutatorElement`
-
-English:
-theorem conjugate_commutatorElement
-  statement: g₃ * ⁅g₁, g₂⁆ * g₃⁻¹ = ⁅g₃ * g₁ * g₃⁻¹, g₃ * g₂ * g₃⁻¹⁆
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 conjugate_commutatorElement
-  结论: g₃ * ⁅g₁, g₂⁆ * g₃⁻¹ = ⁅g₃ * g₁ * g₃⁻¹, g₃ * g₂ * g₃⁻¹⁆
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**conjugate_commutatorElement** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conjugate_commutatorElement : g₃ * ⁅g₁, g₂⁆ * g₃⁻¹ = ⁅g₃ * g₁ * g₃⁻¹, g₃ *
+ g₂ * g₃⁻¹⁆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem conjugate_commutatorElement : g₃ * ⁅g₁, g₂⁆ * g₃⁻¹ = ⁅g₃ * g₁ * g₃⁻¹, g₃ * g₂ * g₃⁻¹⁆ := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_mul_left_eq_conj_mul` / 定理 `commutatorElement_mul_left_eq_conj_mul`
-
-English:
-theorem commutatorElement_mul_left_eq_conj_mul
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_mul_left_eq_conj_mul
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_mul_left_eq_conj_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_mul_left_eq_conj_mul (a b c : G) : ⁅a * b, c⁆ = a * ⁅b, 
+c⁆ * a⁻¹ * ⁅a, c⁆
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_mul_left_eq_conj_mul (a b c : G) :
     ⁅a * b, c⁆ = a * ⁅b, c⁆ * a⁻¹ * ⁅a, c⁆ := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_mul_right_eq_mul_conj` / 定理 `commutatorElement_mul_right_eq_mul_conj`
-
-English:
-theorem commutatorElement_mul_right_eq_mul_conj
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_mul_right_eq_mul_conj
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_mul_right_eq_mul_conj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_mul_right_eq_mul_conj (a b c : G) : ⁅a, b * c⁆ = ⁅a, b⁆ 
+* b * ⁅a, c⁆ * b⁻¹
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_mul_right_eq_mul_conj (a b c : G) :
     ⁅a, b * c⁆ = ⁅a, b⁆ * b * ⁅a, c⁆ * b⁻¹ := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_inv_left` / 定理 `commutatorElement_inv_left`
-
-English:
-theorem commutatorElement_inv_left
-  given: (a b : G)
-  statement: ⁅a⁻¹, b⁆ = a⁻¹ * ⁅b, a⁆ * a
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_inv_left
-  条件: (a b : G)
-  结论: ⁅a⁻¹, b⁆ = a⁻¹ * ⁅b, a⁆ * a
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_inv_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_inv_left (a b : G) : ⁅a⁻¹, b⁆ = a⁻¹ * ⁅b, a⁆ * a
+参数：a b : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_inv_left (a b : G) : ⁅a⁻¹, b⁆ = a⁻¹ * ⁅b, a⁆ * a := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_inv_right` / 定理 `commutatorElement_inv_right`
-
-English:
-theorem commutatorElement_inv_right
-  given: (a b : G)
-  statement: ⁅a, b⁻¹⁆ = b⁻¹ * ⁅b, a⁆ * b
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-中文:
-定理 commutatorElement_inv_right
-  条件: (a b : G)
-  结论: ⁅a, b⁻¹⁆ = b⁻¹ * ⁅b, a⁆ * b
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_inv_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_inv_right (a b : G) : ⁅a, b⁻¹⁆ = b⁻¹ * ⁅b, a⁆ * b
+参数：a b : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_inv_right (a b : G) : ⁅a, b⁻¹⁆ = b⁻¹ * ⁅b, a⁆ * b := by
   simp [mul_assoc, commutatorElement_def]
 
 /-- **The Hall-Witt identity** -/
 @[to_additive /-- **The Hall-Witt identity** -/]
-/--
-theorem `conj_commutatorElement_left_commutatorElement_mul` / 定理 `conj_commutatorElement_left_commutatorElement_mul`
+/-
+**conj_commutatorElement_left_commutatorElement_mul** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：conj_commutatorElement_left_commutatorElement_mul (a b c : G) : a * ⁅⁅a⁻¹,
+ b⁆, c⁆ * a⁻¹ * c * ⁅⁅c⁻¹, a⁆, b⁆ * c⁻¹ * b * ⁅⁅b⁻¹, c⁆, a⁆ * b⁻¹ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem conj_commutatorElement_left_commutatorElement_mul
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-中文:
-定理 conj_commutatorElement_left_commutatorElement_mul
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+--- 原说明 ---
+**The Hall-Witt identity**
 -/
 theorem conj_commutatorElement_left_commutatorElement_mul (a b c : G) :
     a * ⁅⁅a⁻¹, b⁆, c⁆ * a⁻¹ * c * ⁅⁅c⁻¹, a⁆, b⁆ * c⁻¹ * b * ⁅⁅b⁻¹, c⁆, a⁆ * b⁻¹ = 1 := by
@@ -399,22 +339,34 @@ theorem conj_commutatorElement_left_commutatorElement_mul (a b c : G) :
 
 /-- **The Hall-Witt identity** -/
 @[to_additive /-- **The Hall-Witt identity** -/]
-/--
-theorem `conj_commutatorElement_right_commutatorElement_mul` / 定理 `conj_commutatorElement_right_commutatorElement_mul`
+/-
+**conj_commutatorElement_right_commutatorElement_mul** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：conj_commutatorElement_right_commutatorElement_mul (a b c : G) : b * ⁅a, ⁅
+b⁻¹, c⁆⁆ * b⁻¹ * c * ⁅b, ⁅c⁻¹, a⁆⁆ * c⁻¹ * a * ⁅c, ⁅a⁻¹, b⁆⁆ * a⁻¹ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem conj_commutatorElement_right_commutatorElement_mul
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-中文:
-定理 conj_commutatorElement_right_commutatorElement_mul
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+--- 原说明 ---
+**The Hall-Witt identity**
 -/
 theorem conj_commutatorElement_right_commutatorElement_mul (a b c : G) :
     b * ⁅a, ⁅b⁻¹, c⁆⁆ * b⁻¹ * c * ⁅b, ⁅c⁻¹, a⁆⁆ * c⁻¹ * a * ⁅c, ⁅a⁻¹, b⁆⁆ * a⁻¹ = 1 := by
@@ -422,22 +374,31 @@ theorem conj_commutatorElement_right_commutatorElement_mul (a b c : G) :
 
 /-- **The Hall-Witt identity** -/
 @[to_additive /-- **The Hall-Witt identity** -/]
-/--
-theorem `commutatorElement_commutatorElement_conj_mul` / 定理 `commutatorElement_commutatorElement_conj_mul`
+/-
+**commutatorElement_commutatorElement_conj_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_commutatorElement_conj_mul (a b c : G) : ⁅⁅a, b⁆, b * c 
+* b⁻¹⁆ * ⁅⁅b, c⁆, c * a * c⁻¹⁆ * ⁅⁅c, a⁆, a * b * a⁻¹⁆ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem commutatorElement_commutatorElement_conj_mul
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-中文:
-定理 commutatorElement_commutatorElement_conj_mul
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+--- 原说明 ---
+**The Hall-Witt identity**
 -/
 theorem commutatorElement_commutatorElement_conj_mul (a b c : G) :
     ⁅⁅a, b⁆, b * c * b⁻¹⁆ * ⁅⁅b, c⁆, c * a * c⁻¹⁆ * ⁅⁅c, a⁆, a * b * a⁻¹⁆ = 1 := by
@@ -445,77 +406,84 @@ theorem commutatorElement_commutatorElement_conj_mul (a b c : G) :
 
 /-- **The Hall-Witt identity** -/
 @[to_additive /-- **The Hall-Witt identity** -/]
-/--
-theorem `commutatorElement_conj_commutatorElement_mul` / 定理 `commutatorElement_conj_commutatorElement_mul`
+/-
+**commutatorElement_conj_commutatorElement_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_conj_commutatorElement_mul (a b c : G) : ⁅a * b * a⁻¹, ⁅
+c, a⁆⁆ * ⁅c * a * c⁻¹, ⁅b, c⁆⁆ * ⁅b * c * b⁻¹, ⁅a, b⁆⁆ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem commutatorElement_conj_commutatorElement_mul
-  given: (a b c : G)
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_conj_commutatorElement_mul
-  条件: (a b c : G)
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+--- 原说明 ---
+**The Hall-Witt identity**
 -/
 theorem commutatorElement_conj_commutatorElement_mul (a b c : G) :
     ⁅a * b * a⁻¹, ⁅c, a⁆⁆ * ⁅c * a * c⁻¹, ⁅b, c⁆⁆ * ⁅b * c * b⁻¹, ⁅a, b⁆⁆ = 1 := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_mul_left_mul` / 定理 `commutatorElement_mul_left_mul`
-
-English:
-theorem commutatorElement_mul_left_mul
-  given: (a b c : G)
-  statement: ⁅a * b, c⁆ * ⁅c * a, b⁆ * ⁅b * c, a⁆ = 1
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-中文:
-定理 commutatorElement_mul_left_mul
-  条件: (a b c : G)
-  结论: ⁅a * b, c⁆ * ⁅c * a, b⁆ * ⁅b * c, a⁆ = 1
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_mul_left_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_mul_left_mul (a b c : G) : ⁅a * b, c⁆ * ⁅c * a, b⁆ * ⁅b 
+* c, a⁆ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_mul_left_mul (a b c : G) : ⁅a * b, c⁆ * ⁅c * a, b⁆ * ⁅b * c, a⁆ = 1 := by
   simp [mul_assoc, commutatorElement_def]
 
 @[to_additive]
-/--
-theorem `commutatorElement_mul_right_mul` / 定理 `commutatorElement_mul_right_mul`
-
-English:
-theorem commutatorElement_mul_right_mul
-  given: (a b c : G)
-  statement: ⁅a, b * c⁆ * ⁅b, c * a⁆ * ⁅c, a * b⁆ = 1
-  proof: by
-  simp [mul_assoc, commutatorElement_def]
-
-中文:
-定理 commutatorElement_mul_right_mul
-  条件: (a b c : G)
-  结论: ⁅a, b * c⁆ * ⁅b, c * a⁆ * ⁅c, a * b⁆ = 1
-  证明: by
-  simp [mul_assoc, commutatorElement_def]
-
-Depends on / 依赖: commutatorElement_def, mul_assoc
+/-
+**commutatorElement_mul_right_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_mul_right_mul (a b c : G) : ⁅a, b * c⁆ * ⁅b, c * a⁆ * ⁅c
+, a * b⁆ = 1
+参数：a b c : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commutatorElement_mul_right_mul (a b c : G) : ⁅a, b * c⁆ * ⁅b, c * a⁆ * ⁅c, a * b⁆ = 1 := by
   simp [mul_assoc, commutatorElement_def]
@@ -524,188 +492,139 @@ namespace Subgroup
 
 /-- The commutator of two subgroups `H₁` and `H₂`. -/
 @[to_additive /-- The commutator of two additive subgroups `H₁` and `H₂`. -/]
-/--
-Instance `commutator` / 实例 `commutator`
+/-
+**Subgroup.commutator** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：commutator : Bracket (Subgroup G) (Subgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance commutator
-  signature: : Bracket (Subgroup G) (Subgroup G)
-  body: ⟨fun H₁ H₂ => closure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }⟩
-
-@[to_additive]
-
-中文:
-实例 commutator
-  签名: : Bracket (子群 G) (子群 G)
-  定义体: ⟨fun H₁ H₂ => closure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }⟩
-
-@[to_additive]
-
-Depends on / 依赖: closure
+--- 原说明 ---
+The commutator of two subgroups `H₁` and `H₂`.
 -/
 instance commutator : Bracket (Subgroup G) (Subgroup G) :=
-  ⟨fun H₁ H₂ => closure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }⟩
+  ⟨fun H₁ H₂ => closure { g | ∃ g₁ ∈ H₁, ∃ g₂ ∈ H₂, ⁅g₁, g₂⁆ = g }⟩
 
 @[to_additive]
-/--
-theorem `commutator_def` / 定理 `commutator_def`
-
-English:
-theorem commutator_def
-  given: (H₁ H₂ : Subgroup G)
-  proof: rfl
-
-中文:
-定理 commutator_def
-  条件: (H₁ H₂ : 子群 G)
-  证明: rfl
+/-
+**Subgroup.commutator_def** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_def (H₁ H₂ : Subgroup G) : ⁅H₁, H₂⁆ = closure { g | exists g₁ i
+n H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }
+参数：H₁ H₂ : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem commutator_def (H₁ H₂ : Subgroup G) :
-    ⁅H₁, H₂⁆ = closure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g } :=
+    ⁅H₁, H₂⁆ = closure { g | ∃ g₁ ∈ H₁, ∃ g₂ ∈ H₂, ⁅g₁, g₂⁆ = g } :=
   rfl
 
 variable {g₁ g₂ g₃} {H H₁ H₂ H₃ K K₁ K₂ : Subgroup G}
 
 @[to_additive]
-/--
-theorem `commutator_mem_commutator` / 定理 `commutator_mem_commutator`
-
-English:
-theorem commutator_mem_commutator
-  given: (h₁ : g₁ in H₁) (h₂ : g₂ in H₂)
-  statement: ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
-  proof: subset_closure ⟨g₁, h₁, g₂, h₂, rfl⟩
-
-@[to_additive]
-
-中文:
-定理 commutator_mem_commutator
-  条件: (h₁ : g₁ in H₁) (h₂ : g₂ in H₂)
-  结论: ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
-  证明: subset_closure ⟨g₁, h₁, g₂, h₂, rfl⟩
-
-@[to_additive]
-
-Depends on / 依赖: subset_closure
+/-
+**Subgroup.commutator_mem_commutator** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_mem_commutator (h₁ : g₁ in H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H
+₁, H₂⁆
+参数：h₁ : g₁ in H₁；h₂ : g₂ in H₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
-theorem commutator_mem_commutator (h₁ : g₁ in H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆ :=
+theorem commutator_mem_commutator (h₁ : g₁ ∈ H₁) (h₂ : g₂ ∈ H₂) : ⁅g₁, g₂⁆ ∈ ⁅H₁, H₂⁆ :=
   subset_closure ⟨g₁, h₁, g₂, h₂, rfl⟩
 
 @[to_additive]
-/--
-theorem `commutator_le` / 定理 `commutator_le`
-
-English:
-theorem commutator_le
-  statement: ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
-  proof: H₃.closure_le.trans
-    ⟨fun h a b c d => h ⟨a, b, c, d, rfl⟩, fun h _g ⟨a, b, c, d, h_eq⟩ => h_eq ▸ h a b c d⟩
-
-@[to_additive]
-
-中文:
-定理 commutator_le
-  结论: ⁅H₁, H₂⁆ <= H₃ ↔ 对任意 g₁ in H₁, 对任意 g₂ in H₂, ⁅g₁, g₂⁆ in H₃
-  证明: H₃.closure_le.trans
-    ⟨fun h a b c d => h ⟨a, b, c, d, rfl⟩, fun h _g ⟨a, b, c, d, h_eq⟩ => h_eq ▸ h a b c d⟩
-
-@[to_additive]
-
-Depends on / 依赖: closure_le, closure_le.trans, h_eq
+/-
+**Subgroup.commutator_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁, forall g₂ in H₂, ⁅g₁, g₂
+⁆ in H₃
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
 -/
-theorem commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃ :=
+theorem commutator_le : ⁅H₁, H₂⁆ ≤ H₃ ↔ ∀ g₁ ∈ H₁, ∀ g₂ ∈ H₂, ⁅g₁, g₂⁆ ∈ H₃ :=
   H₃.closure_le.trans
     ⟨fun h a b c d => h ⟨a, b, c, d, rfl⟩, fun h _g ⟨a, b, c, d, h_eq⟩ => h_eq ▸ h a b c d⟩
 
 @[to_additive]
-/--
-theorem `commutator_mono` / 定理 `commutator_mono`
-
-English:
-theorem commutator_mono
-  given: (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂)
-  statement: ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
-  proof: commutator_le.mpr fun _g₁ hg₁ _g₂ hg₂ => commutator_mem_commutator (h₁ hg₁) (h₂ hg₂)
-
-@[to_additive]
-
-中文:
-定理 commutator_mono
-  条件: (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂)
-  结论: ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
-  证明: commutator_le.mpr fun _g₁ hg₁ _g₂ hg₂ => commutator_mem_commutator (h₁ hg₁) (h₂ hg₂)
-
-@[to_additive]
-
-Depends on / 依赖: commutator_le, commutator_le.mpr, commutator_mem_commutator
+/-
+**Subgroup.commutator_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
+参数：h₁ : H₁ <= K₁；h₂ : H₂ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
 -/
-theorem commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆ :=
+theorem commutator_mono (h₁ : H₁ ≤ K₁) (h₂ : H₂ ≤ K₂) : ⁅H₁, H₂⁆ ≤ ⁅K₁, K₂⁆ :=
   commutator_le.mpr fun _g₁ hg₁ _g₂ hg₂ => commutator_mem_commutator (h₁ hg₁) (h₂ hg₂)
 
 @[to_additive]
-/--
-theorem `commutator_eq_bot_iff_le_centralizer` / 定理 `commutator_eq_bot_iff_le_centralizer`
-
-English:
-theorem commutator_eq_bot_iff_le_centralizer
-  statement: ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
-  proof: by
-  rw [eq_bot_iff]; rw [commutator_le]
-  refine forall_congr' fun p =>
-    forall_congr' fun _hp => forall_congr' fun q => forall_congr' fun hq => ?_
-  rw [mem_bot]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [eq_comm]
-
-中文:
-定理 commutator_eq_bot_iff_le_centralizer
-  结论: ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
-  证明: by
-  rw [eq_bot_iff]; rw [commutator_le]
-  refine forall_congr' fun p =>
-    forall_congr' fun _hp => forall_congr' fun q => forall_congr' fun hq => ?_
-  rw [mem_bot]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [eq_comm]
-
-Depends on / 依赖: commutatorElement_eq_one_iff_mul_comm, commutator_le, eq_bot_iff, eq_comm, forall_congr, mem_bot
+/-
+**Subgroup.commutator_eq_bot_iff_le_centralizer** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup`。
+形式化陈述：commutator_eq_bot_iff_le_centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Subgroup.mem_bot`：mem_bot {x : G} : x in (⊥ : Subgroup G) ↔ x = 1
+· 使用定理 `commutatorElement_eq_one_iff_mul_comm`：commutatorElement_eq_one_iff_mul_
+comm : ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem commutator_eq_bot_iff_le_centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂ := by
-  rw [eq_bot_iff]; rw [commutator_le]
+theorem commutator_eq_bot_iff_le_centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ ≤ centralizer H₂ := by
+  rw [eq_bot_iff, commutator_le]
   refine forall_congr' fun p =>
     forall_congr' fun _hp => forall_congr' fun q => forall_congr' fun hq => ?_
-  rw [mem_bot]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [eq_comm]
+  rw [mem_bot, commutatorElement_eq_one_iff_mul_comm, eq_comm]
 
 /-- **The Three Subgroups Lemma** (via the Hall-Witt identity) -/
 @[to_additive /-- **The Three Subgroups Lemma** (via the Hall-Witt identity) -/]
-/--
-theorem `commutator_commutator_eq_bot_of_rotate` / 定理 `commutator_commutator_eq_bot_of_rotate`
+/-
+**Subgroup.commutator_commutator_eq_bot_of_rotate** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+group`。
+形式化陈述：commutator_commutator_eq_bot_of_rotate (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H
+₃, H₁⁆, H₂⁆ = ⊥) : ⁅⁅H₁, H₂⁆, H₃⁆ = ⊥
+参数：h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥；h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
 
-English:
-theorem commutator_commutator_eq_bot_of_rotate
-  given: (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥)
-  proof: by
-  simp_rw [commutator_eq_bot_iff_le_centralizer, commutator_le,
-    mem_centralizer_iff_commutator_eq_one] at h1 h2 ⊢
-  intro x hx y hy z hz
-  trans x * z * ⁅y, ⁅z⁻¹, x⁻¹⁆⁆⁻¹ * z⁻¹ * y * ⁅x⁻¹, ⁅y⁻¹, z⁆⁆⁻¹ * y⁻¹ * x⁻¹
-  -- We avoid `group` here to minimize imports while low in the hierarchy;
-  -- typically it would be better to invoke the tactic.
-  · simp [commutatorElement_def, mul_assoc]
-  · rw [h1 _ (H₂.inv_mem hy) _ hz _ (H₁.inv_mem hx), h2 _ (H₃.inv_mem hz) _ (H₁.inv_mem hx) _ hy]
-    simp [mul_assoc]
-
-中文:
-定理 commutator_commutator_eq_bot_of_rotate
-  条件: (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥)
-  证明: by
-  simp_rw [commutator_eq_bot_iff_le_centralizer, commutator_le,
-    mem_centralizer_iff_commutator_eq_one] at h1 h2 ⊢
-  intro x hx y hy z hz
-  trans x * z * ⁅y, ⁅z⁻¹, x⁻¹⁆⁆⁻¹ * z⁻¹ * y * ⁅x⁻¹, ⁅y⁻¹, z⁆⁆⁻¹ * y⁻¹ * x⁻¹
-  -- We avoid `group` here to minimize imports while low in the hierarchy;
-  -- typically it would be better to invoke the tactic.
-  · simp [commutatorElement_def, mul_assoc]
-  · rw [h1 _ (H₂.inv_mem hy) _ hz _ (H₁.inv_mem hx), h2 _ (H₃.inv_mem hz) _ (H₁.inv_mem hx) _ hy]
-    simp [mul_assoc]
-
-Depends on / 依赖: commutator_eq_bot_iff_le_centralizer, commutator_le, mem_centralizer_iff_commutator_eq_one, simp_rw
+--- 原说明 ---
+**The Three Subgroups Lemma** (via the Hall-Witt identity)
 -/
 theorem commutator_commutator_eq_bot_of_rotate (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥) :
     ⁅⁅H₁, H₂⁆, H₃⁆ = ⊥ := by
@@ -722,209 +641,147 @@ theorem commutator_commutator_eq_bot_of_rotate (h1 : ⁅⁅H₂, H₃⁆, H₁�
 variable (H₁ H₂)
 
 @[to_additive]
-/--
-theorem `commutator_comm_le` / 定理 `commutator_comm_le`
-
-English:
-theorem commutator_comm_le
-  statement: ⁅H₁, H₂⁆ <= ⁅H₂, H₁⁆
-  proof: commutator_le.mpr fun g₁ h₁ g₂ h₂ =>
-    commutatorElement_inv g₂ g₁ ▸ ⁅H₂, H₁⁆.inv_mem_iff.mpr (commutator_mem_commutator h₂ h₁)
-
-@[to_additive]
-
-中文:
-定理 commutator_comm_le
-  结论: ⁅H₁, H₂⁆ <= ⁅H₂, H₁⁆
-  证明: commutator_le.mpr fun g₁ h₁ g₂ h₂ =>
-    commutatorElement_inv g₂ g₁ ▸ ⁅H₂, H₁⁆.inv_mem_iff.mpr (commutator_mem_commutator h₂ h₁)
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_inv, commutator_le, commutator_le.mpr, commutator_mem_commutator, inv_mem_iff, inv_mem_iff.mpr
+/-
+**Subgroup.commutator_comm_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_comm_le : ⁅H₁, H₂⁆ <= ⁅H₂, H₁⁆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `Subgroup.inv_mem_iff`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G)
+ {x : G}, x⁻¹ ∈ H ↔ x ∈ H
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
+· 使用定理 `commutatorElement_inv`：commutatorElement_inv : ⁅g₁, g₂⁆⁻¹ = ⁅g₂, g₁⁆
 -/
-theorem commutator_comm_le : ⁅H₁, H₂⁆ <= ⁅H₂, H₁⁆ :=
+theorem commutator_comm_le : ⁅H₁, H₂⁆ ≤ ⁅H₂, H₁⁆ :=
   commutator_le.mpr fun g₁ h₁ g₂ h₂ =>
     commutatorElement_inv g₂ g₁ ▸ ⁅H₂, H₁⁆.inv_mem_iff.mpr (commutator_mem_commutator h₂ h₁)
 
 @[to_additive]
-/--
-theorem `commutator_comm` / 定理 `commutator_comm`
-
-English:
-theorem commutator_comm
-  statement: ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
-  proof: le_antisymm (commutator_comm_le H₁ H₂) (commutator_comm_le H₂ H₁)
-
-@[to_additive]
-
-中文:
-定理 commutator_comm
-  结论: ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
-  证明: le_antisymm (commutator_comm_le H₁ H₂) (commutator_comm_le H₂ H₁)
-
-@[to_additive]
-
-Depends on / 依赖: commutator_comm_le, le_antisymm
+/-
+**Subgroup.commutator_comm** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Subgroup.commutator_comm_le`：commutator_comm_le : ⁅H₁, H₂⁆ <= ⁅H₂, H₁⁆
 -/
 theorem commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆ :=
   le_antisymm (commutator_comm_le H₁ H₂) (commutator_comm_le H₂ H₁)
 
 @[to_additive]
-/--
-theorem `commutator_self_eq_bot_iff` / 定理 `commutator_self_eq_bot_iff`
-
-English:
-theorem commutator_self_eq_bot_iff
-  statement: ⁅H, H⁆ = ⊥ ↔ IsMulCommutative H
-  proof: by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [le_centralizer_iff_isMulCommutative]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutator_self_eq_bot_iff
-  结论: ⁅H, H⁆ = ⊥ ↔ 是MulCommutative H
-  证明: by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [le_centralizer_iff_isMulCommutative]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: commutator_eq_bot_iff_le_centralizer, le_centralizer_iff_isMulCommutative
+/-
+**Subgroup.commutator_self_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_self_eq_bot_iff : ⁅H, H⁆ = ⊥ ↔ IsMulCommutative H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_eq_bot_iff_le_centralizer`：commutator_eq_bot_iff_le_
+centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
+· 使用定理 `Subgroup.le_centralizer_iff_isMulCommutative`：le_centralizer_iff_isMulCo
+mmutative : K <= centralizer K ↔ IsMulCommutative K
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem commutator_self_eq_bot_iff : ⁅H, H⁆ = ⊥ ↔ IsMulCommutative H := by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [le_centralizer_iff_isMulCommutative]
+  rw [commutator_eq_bot_iff_le_centralizer, le_centralizer_iff_isMulCommutative]
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_top_right_eq_bot_iff_le_center` / 定理 `commutator_top_right_eq_bot_iff_le_center`
-
-English:
-theorem commutator_top_right_eq_bot_iff_le_center
-  statement: ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H <= center G
-  proof: by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [coe_top]; rw [centralizer_univ]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutator_top_right_eq_bot_iff_le_center
-  结论: ⁅H, (⊤ : 子群 G)⁆ = ⊥ ↔ H <= center G
-  证明: by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [coe_top]; rw [centralizer_univ]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: centralizer_univ, coe_top, commutator_eq_bot_iff_le_centralizer
+/-
+**Subgroup.commutator_top_right_eq_bot_iff_le_center** 是 Mathlib 中的一个定理，位于命名空间 `
+Subgroup`。
+形式化陈述：commutator_top_right_eq_bot_iff_le_center : ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H 
+<= center G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_eq_bot_iff_le_centralizer`：commutator_eq_bot_iff_le_
+centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
+· 使用定理 `Subgroup.coe_top`：coe_top : ((⊤ : Subgroup G) : Set G) = Set.univ
+· 使用定理 `Subgroup.centralizer_univ`：centralizer_univ : centralizer Set.univ = cen
+ter G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem commutator_top_right_eq_bot_iff_le_center : ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H <= center G := by
-  rw [commutator_eq_bot_iff_le_centralizer]; rw [coe_top]; rw [centralizer_univ]
+theorem commutator_top_right_eq_bot_iff_le_center : ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H ≤ center G := by
+  rw [commutator_eq_bot_iff_le_centralizer, coe_top, centralizer_univ]
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_top_left_eq_bot_iff_le_center` / 定理 `commutator_top_left_eq_bot_iff_le_center`
-
-English:
-theorem commutator_top_left_eq_bot_iff_le_center
-  statement: ⁅(⊤ : Subgroup G), H⁆ = ⊥ ↔ H <= center G
-  proof: by
-  rw [commutator_comm]; rw [commutator_top_right_eq_bot_iff_le_center]
-
-中文:
-定理 commutator_top_left_eq_bot_iff_le_center
-  结论: ⁅(⊤ : 子群 G), H⁆ = ⊥ ↔ H <= center G
-  证明: by
-  rw [commutator_comm]; rw [commutator_top_right_eq_bot_iff_le_center]
-
-Depends on / 依赖: commutator_comm, commutator_top_right_eq_bot_iff_le_center
+/-
+**Subgroup.commutator_top_left_eq_bot_iff_le_center** 是 Mathlib 中的一个定理，位于命名空间 `S
+ubgroup`。
+形式化陈述：commutator_top_left_eq_bot_iff_le_center : ⁅(⊤ : Subgroup G), H⁆ = ⊥ ↔ H <
+= center G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
+· 使用定理 `Subgroup.commutator_top_right_eq_bot_iff_le_center`：commutator_top_right
+_eq_bot_iff_le_center : ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H <= center G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem commutator_top_left_eq_bot_iff_le_center : ⁅(⊤ : Subgroup G), H⁆ = ⊥ ↔ H <= center G := by
-  rw [commutator_comm]; rw [commutator_top_right_eq_bot_iff_le_center]
+theorem commutator_top_left_eq_bot_iff_le_center : ⁅(⊤ : Subgroup G), H⁆ = ⊥ ↔ H ≤ center G := by
+  rw [commutator_comm, commutator_top_right_eq_bot_iff_le_center]
 
 variable (H) in
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_center_right` / 定理 `commutator_center_right`
-
-English:
-theorem commutator_center_right
-  statement: ⁅H, center G⁆ = ⊥
-  proof: by
-  simp [commutator_eq_bot_iff_le_centralizer]
-
-中文:
-定理 commutator_center_right
-  结论: ⁅H, center G⁆ = ⊥
-  证明: by
-  simp [commutator_eq_bot_iff_le_centralizer]
-
-Depends on / 依赖: commutator_eq_bot_iff_le_centralizer
+/-
+**Subgroup.commutator_center_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_center_right : ⁅H, center G⁆ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.centralizer_center`：centralizer_center : centralizer (center G 
+: Set G) = ⊤
 -/
 theorem commutator_center_right : ⁅H, center G⁆ = ⊥ := by
   simp [commutator_eq_bot_iff_le_centralizer]
 
 variable (H) in
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_center_left` / 定理 `commutator_center_left`
-
-English:
-theorem commutator_center_left
-  statement: ⁅center G, H⁆ = ⊥
-  proof: commutator_eq_bot_iff_le_centralizer.mpr center_le_centralizer _
-
-中文:
-定理 commutator_center_left
-  结论: ⁅center G, H⁆ = ⊥
-  证明: commutator_eq_bot_iff_le_centralizer.mpr center_le_centralizer _
-
-Depends on / 依赖: center_le_centralizer, commutator_eq_bot_iff_le_centralizer, commutator_eq_bot_iff_le_centralizer.mpr
+/-
+**Subgroup.commutator_center_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_center_left : ⁅center G, H⁆ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_eq_bot_iff_le_centralizer`：commutator_eq_bot_iff_le_
+centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
+· 使用定理 `Subgroup.center_le_centralizer`：center_le_centralizer (s) : center G <= 
+centralizer s
 -/
 theorem commutator_center_left : ⁅center G, H⁆ = ⊥ :=
-commutator_eq_bot_iff_le_centralizer.mpr center_le_centralizer _
+  commutator_eq_bot_iff_le_centralizer.mpr <| center_le_centralizer _
 
 section Normal
 
 @[to_additive]
-/--
-Instance `commutator_normal` / 实例 `commutator_normal`
-
-English:
-instance commutator_normal
-  signature: [h₁ : H₁.Normal] [h₂ : H₂.Normal]
-  body: by
-  let base : Set G := { x | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = x }
-  change (closure base).Normal
-  suffices h_base : base = Group.conjugatesOfSet base by
-    rw [h_base]
-    exact Subgroup.normalClosure_normal
-  refine Set.Subset.antisymm Group.subset_conjugatesOfSet fun a h => ?_
-  simp_rw [Group.mem_conjugatesOfSet_iff, isConj_iff] at h
-  rcases h with ⟨b, ⟨c, hc, e, he, rfl⟩, d, rfl⟩
-  exact ⟨_, h₁.conj_mem c hc d, _, h₂.conj_mem e he d, (conjugate_commutatorElement c e d).symm⟩
-
-@[to_additive]
-
-中文:
-实例 commutator_normal
-  签名: [h₁ : H₁.正规] [h₂ : H₂.正规]
-  定义体: by
-  let base : Set G := { x | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = x }
-  change (closure base).Normal
-  suffices h_base : base = Group.conjugatesOfSet base by
-    rw [h_base]
-    exact Subgroup.normalClosure_normal
-  refine Set.Subset.antisymm Group.subset_conjugatesOfSet fun a h => ?_
-  simp_rw [Group.mem_conjugatesOfSet_iff, isConj_iff] at h
-  rcases h with ⟨b, ⟨c, hc, e, he, rfl⟩, d, rfl⟩
-  exact ⟨_, h₁.conj_mem c hc d, _, h₂.conj_mem e he d, (conjugate_commutatorElement c e d).symm⟩
-
-@[to_additive]
-
-Depends on / 依赖: Group.conjugatesOfSet, Group.mem_conjugatesOfSet_iff, Group.subset_conjugatesOfSet, Normal, Set.Subset.antisymm, Subgroup, Subgroup.normalClosure_normal, Subset, antisymm, closure, conj_mem, conjugate_commutatorElement, conjugatesOfSet, h_base, isConj_iff, mem_conjugatesOfSet_iff, normalClosure_normal, simp_rw, subset_conjugatesOfSet
+/-
+**Subgroup.commutator_normal** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：commutator_normal [h₁ : H₁.Normal] [h₂ : H₂.Normal] : Normal ⁅H₁, H₂⁆
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Group.subset_conjugatesOfSet`：subset_conjugatesOfSet : s subseteq conjug
+atesOfSet s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subgroup.Normal.conj_mem`：∀ {G : Type u_1} [inst : Group G] {H : Subgrou
+p G}, H.Normal → ∀ n ∈ H, ∀ (g : G), g * n * g⁻¹ ∈ H
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `conjugate_commutatorElement`：conjugate_commutatorElement : g₃ * ⁅g₁, g₂⁆
+ * g₃⁻¹ = ⁅g₃ * g₁ * g₃⁻¹, g₃ * g₂ * g₃⁻¹⁆
 -/
 instance commutator_normal [h₁ : H₁.Normal] [h₂ : H₂.Normal] : Normal ⁅H₁, H₂⁆ := by
-  let base : Set G := { x | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = x }
+  let base : Set G := { x | ∃ g₁ ∈ H₁, ∃ g₂ ∈ H₂, ⁅g₁, g₂⁆ = x }
   change (closure base).Normal
   suffices h_base : base = Group.conjugatesOfSet base by
     rw [h_base]
@@ -935,268 +792,210 @@ instance commutator_normal [h₁ : H₁.Normal] [h₂ : H₂.Normal] : Normal �
   exact ⟨_, h₁.conj_mem c hc d, _, h₂.conj_mem e he d, (conjugate_commutatorElement c e d).symm⟩
 
 @[to_additive]
-/--
-theorem `commutator_def'` / 定理 `commutator_def'`
-
-English:
-theorem commutator_def'
-  given: [H₁.Normal] [H₂.Normal]
-  proof: le_antisymm closure_le_normalClosure (normalClosure_le_normal subset_closure)
-
-@[to_additive]
-
-中文:
-定理 commutator_def'
-  条件: [H₁.正规] [H₂.正规]
-  证明: le_antisymm closure_le_normalClosure (normalClosure_le_normal subset_closure)
-
-@[to_additive]
-
-Depends on / 依赖: closure_le_normalClosure, le_antisymm, normalClosure_le_normal, subset_closure
+/-
+**Subgroup.commutator_def'** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_def' [H₁.Normal] [H₂.Normal] : ⁅H₁, H₂⁆ = normalClosure { g | e
+xists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Subgroup.closure_le_normalClosure`：closure_le_normalClosure {s : Set G} 
+: closure s <= normalClosure s
+· 使用定理 `Subgroup.normalClosure_le_normal`：normalClosure_le_normal {N : Subgroup 
+G} [N.Normal] (h : s subseteq N) : normalClosure s <= N
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 -/
 theorem commutator_def' [H₁.Normal] [H₂.Normal] :
-    ⁅H₁, H₂⁆ = normalClosure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g } :=
+    ⁅H₁, H₂⁆ = normalClosure { g | ∃ g₁ ∈ H₁, ∃ g₂ ∈ H₂, ⁅g₁, g₂⁆ = g } :=
   le_antisymm closure_le_normalClosure (normalClosure_le_normal subset_closure)
 
 @[to_additive]
-/--
-theorem `commutator_le_right` / 定理 `commutator_le_right`
-
-English:
-theorem commutator_le_right
-  given: [h : H₂.Normal]
-  statement: ⁅H₁, H₂⁆ <= H₂
-  proof: commutator_le.mpr fun g₁ _h₁ g₂ h₂ => H₂.mul_mem (h.conj_mem g₂ h₂ g₁) (H₂.inv_mem h₂)
-
-@[to_additive]
-
-中文:
-定理 commutator_le_right
-  条件: [h : H₂.正规]
-  结论: ⁅H₁, H₂⁆ <= H₂
-  证明: commutator_le.mpr fun g₁ _h₁ g₂ h₂ => H₂.mul_mem (h.conj_mem g₂ h₂ g₁) (H₂.inv_mem h₂)
-
-@[to_additive]
-
-Depends on / 依赖: commutator_le, commutator_le.mpr, conj_mem, h.conj_mem, inv_mem, mul_mem
+/-
+**Subgroup.commutator_le_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le_right [h : H₂.Normal] : ⁅H₁, H₂⁆ <= H₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.Normal.conj_mem`：∀ {G : Type u_1} [inst : Group G] {H : Subgrou
+p G}, H.Normal → ∀ n ∈ H, ∀ (g : G), g * n * g⁻¹ ∈ H
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
 -/
-theorem commutator_le_right [h : H₂.Normal] : ⁅H₁, H₂⁆ <= H₂ :=
+theorem commutator_le_right [h : H₂.Normal] : ⁅H₁, H₂⁆ ≤ H₂ :=
   commutator_le.mpr fun g₁ _h₁ g₂ h₂ => H₂.mul_mem (h.conj_mem g₂ h₂ g₁) (H₂.inv_mem h₂)
 
 @[to_additive]
-/--
-theorem `commutator_le_left` / 定理 `commutator_le_left`
-
-English:
-theorem commutator_le_left
-  given: [H₁.Normal]
-  statement: ⁅H₁, H₂⁆ <= H₁
-  proof: commutator_comm H₂ H₁ ▸ commutator_le_right H₂ H₁
-
-@[to_additive]
-
-中文:
-定理 commutator_le_left
-  条件: [H₁.正规]
-  结论: ⁅H₁, H₂⁆ <= H₁
-  证明: commutator_comm H₂ H₁ ▸ commutator_le_right H₂ H₁
-
-@[to_additive]
-
-Depends on / 依赖: commutator_comm, commutator_le_right
+/-
+**Subgroup.commutator_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le_left [H₁.Normal] : ⁅H₁, H₂⁆ <= H₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.commutator_le_right`：commutator_le_right [h : H₂.Normal] : ⁅H₁,
+ H₂⁆ <= H₂
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
 -/
-theorem commutator_le_left [H₁.Normal] : ⁅H₁, H₂⁆ <= H₁ :=
+theorem commutator_le_left [H₁.Normal] : ⁅H₁, H₂⁆ ≤ H₁ :=
   commutator_comm H₂ H₁ ▸ commutator_le_right H₂ H₁
 
 @[to_additive]
-/--
-theorem `commutator_top_left_le_iff` / 定理 `commutator_top_left_le_iff`
-
-English:
-theorem commutator_top_left_le_iff
-  statement: ⁅(⊤ : Subgroup G), H⁆ <= H ↔ H.Normal
-  proof: by
-  refine ⟨fun hle => ⟨fun h hh g => ?_⟩, fun h => commutator_le_right ⊤ H⟩
-exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp commutator_le.mp hle g trivial h hh
-
-@[to_additive]
-
-中文:
-定理 commutator_top_left_le_iff
-  结论: ⁅(⊤ : 子群 G), H⁆ <= H ↔ H.正规
-  证明: by
-  refine ⟨fun hle => ⟨fun h hh g => ?_⟩, fun h => commutator_le_right ⊤ H⟩
-exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp commutator_le.mp hle g trivial h hh
-
-@[to_additive]
-
-Depends on / 依赖: H.inv_mem, H.mul_mem_cancel_right, commutator_le, commutator_le.mp, commutator_le_right, inv_mem, mul_mem_cancel_right
+/-
+**Subgroup.commutator_top_left_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_top_left_le_iff : ⁅(⊤ : Subgroup G), H⁆ <= H ↔ H.Normal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.mul_mem_cancel_right`：∀ {G : Type u_1} [inst : Group G] (H : Su
+bgroup G) {x y : G}, x ∈ H → (y * x ∈ H ↔ y ∈ H)
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `trivial`：True
+· 使用定理 `Subgroup.commutator_le_right`：commutator_le_right [h : H₂.Normal] : ⁅H₁,
+ H₂⁆ <= H₂
 -/
-theorem commutator_top_left_le_iff : ⁅(⊤ : Subgroup G), H⁆ <= H ↔ H.Normal := by
-  refine ⟨fun hle => ⟨fun h hh g => ?_⟩, fun h => commutator_le_right ⊤ H⟩
-exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp commutator_le.mp hle g trivial h hh
+theorem commutator_top_left_le_iff : ⁅(⊤ : Subgroup G), H⁆ ≤ H ↔ H.Normal := by
+  refine ⟨fun hle ↦ ⟨fun h hh g ↦ ?_⟩, fun h ↦ commutator_le_right ⊤ H⟩
+  exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp <| commutator_le.mp hle g trivial h hh
 
 @[to_additive]
-/--
-theorem `commutator_top_right_le_iff` / 定理 `commutator_top_right_le_iff`
-
-English:
-theorem commutator_top_right_le_iff
-  statement: ⁅H, ⊤⁆ <= H ↔ H.Normal
-  proof: commutator_comm H ⊤ ▸ commutator_top_left_le_iff
-
-@[to_additive]
-
-中文:
-定理 commutator_top_right_le_iff
-  结论: ⁅H, ⊤⁆ <= H ↔ H.正规
-  证明: commutator_comm H ⊤ ▸ commutator_top_left_le_iff
-
-@[to_additive]
-
-Depends on / 依赖: commutator_comm, commutator_top_left_le_iff
+/-
+**Subgroup.commutator_top_right_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_top_right_le_iff : ⁅H, ⊤⁆ <= H ↔ H.Normal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.commutator_top_left_le_iff`：commutator_top_left_le_iff : ⁅(⊤ : 
+Subgroup G), H⁆ <= H ↔ H.Normal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
 -/
-theorem commutator_top_right_le_iff : ⁅H, ⊤⁆ <= H ↔ H.Normal :=
+theorem commutator_top_right_le_iff : ⁅H, ⊤⁆ ≤ H ↔ H.Normal :=
   commutator_comm H ⊤ ▸ commutator_top_left_le_iff
 
 @[to_additive]
-/--
-theorem `le_normalizer_iff_commutator_le_right` / 定理 `le_normalizer_iff_commutator_le_right`
-
-English:
-theorem le_normalizer_iff_commutator_le_right
-  statement: H <= normalizer K ↔ ⁅H, K⁆ <= K
-  proof: by
-  refine le_normalizer_iff.trans ⟨fun hH => ?_, fun hH h hh k hk => ?_⟩
-  · exact commutator_le.mpr fun h hh k hk => mul_mem (hH h hh k hk) (inv_mem hk)
-· exact (mul_mem_cancel_right <| inv_mem hk).mp hH commutator_mem_commutator hh hk
-
-@[to_additive]
-
-中文:
-定理 le_normalizer_iff_commutator_le_right
-  结论: H <= normalizer K ↔ ⁅H, K⁆ <= K
-  证明: by
-  refine le_normalizer_iff.trans ⟨fun hH => ?_, fun hH h hh k hk => ?_⟩
-  · exact commutator_le.mpr fun h hh k hk => mul_mem (hH h hh k hk) (inv_mem hk)
-· exact (mul_mem_cancel_right <| inv_mem hk).mp hH commutator_mem_commutator hh hk
-
-@[to_additive]
-
-Depends on / 依赖: commutator_le, commutator_le.mpr, commutator_mem_commutator, inv_mem, le_normalizer_iff, le_normalizer_iff.trans, mul_mem, mul_mem_cancel_right
+/-
+**Subgroup.le_normalizer_iff_commutator_le_right** 是 Mathlib 中的一个定理，位于命名空间 `Subg
+roup`。
+形式化陈述：le_normalizer_iff_commutator_le_right : H <= normalizer K ↔ ⁅H, K⁆ <= K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subgroup.le_normalizer_iff`：le_normalizer_iff : H <= normalizer K ↔ fora
+ll h in H, forall k in K, h * k * h⁻¹ in K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_mem_cancel_right`：mul_mem_cancel_right {x y : G} (h : x in H) : y * 
+x in H ↔ y in H
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
 -/
-theorem le_normalizer_iff_commutator_le_right : H <= normalizer K ↔ ⁅H, K⁆ <= K := by
-  refine le_normalizer_iff.trans ⟨fun hH => ?_, fun hH h hh k hk => ?_⟩
-  · exact commutator_le.mpr fun h hh k hk => mul_mem (hH h hh k hk) (inv_mem hk)
-· exact (mul_mem_cancel_right <| inv_mem hk).mp hH commutator_mem_commutator hh hk
+theorem le_normalizer_iff_commutator_le_right : H ≤ normalizer K ↔ ⁅H, K⁆ ≤ K := by
+  refine le_normalizer_iff.trans ⟨fun hH ↦ ?_, fun hH h hh k hk ↦ ?_⟩
+  · exact commutator_le.mpr fun h hh k hk ↦ mul_mem (hH h hh k hk) (inv_mem hk)
+  · exact (mul_mem_cancel_right <| inv_mem hk).mp <| hH <| commutator_mem_commutator hh hk
 
 @[to_additive]
-/--
-theorem `le_normalizer_iff_commutator_le_left` / 定理 `le_normalizer_iff_commutator_le_left`
-
-English:
-theorem le_normalizer_iff_commutator_le_left
-  statement: H <= normalizer K ↔ ⁅K, H⁆ <= K
-  proof: commutator_comm H K ▸ le_normalizer_iff_commutator_le_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 le_normalizer_iff_commutator_le_left
-  结论: H <= normalizer K ↔ ⁅K, H⁆ <= K
-  证明: commutator_comm H K ▸ le_normalizer_iff_commutator_le_right
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: commutator_comm, le_normalizer_iff_commutator_le_right
+/-
+**Subgroup.le_normalizer_iff_commutator_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup`。
+形式化陈述：le_normalizer_iff_commutator_le_left : H <= normalizer K ↔ ⁅K, H⁆ <= K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.le_normalizer_iff_commutator_le_right`：le_normalizer_iff_commut
+ator_le_right : H <= normalizer K ↔ ⁅H, K⁆ <= K
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
 -/
-theorem le_normalizer_iff_commutator_le_left : H <= normalizer K ↔ ⁅K, H⁆ <= K :=
+theorem le_normalizer_iff_commutator_le_left : H ≤ normalizer K ↔ ⁅K, H⁆ ≤ K :=
   commutator_comm H K ▸ le_normalizer_iff_commutator_le_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_bot_left` / 定理 `commutator_bot_left`
-
-English:
-theorem commutator_bot_left
-  statement: ⁅(⊥ : Subgroup G), H₁⁆ = ⊥
-  proof: le_bot_iff.mp (commutator_le_left ⊥ H₁)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 commutator_bot_left
-  结论: ⁅(⊥ : 子群 G), H₁⁆ = ⊥
-  证明: le_bot_iff.mp (commutator_le_left ⊥ H₁)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: commutator_le_left, le_bot_iff, le_bot_iff.mp
+/-
+**Subgroup.commutator_bot_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_bot_left : ⁅(⊥ : Subgroup G), H₁⁆ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Subgroup.commutator_le_left`：commutator_le_left [H₁.Normal] : ⁅H₁, H₂⁆ <
+= H₁
 -/
 theorem commutator_bot_left : ⁅(⊥ : Subgroup G), H₁⁆ = ⊥ :=
   le_bot_iff.mp (commutator_le_left ⊥ H₁)
 
 @[to_additive (attr := simp)]
-/--
-theorem `commutator_bot_right` / 定理 `commutator_bot_right`
-
-English:
-theorem commutator_bot_right
-  statement: ⁅H₁, ⊥⁆ = (⊥ : Subgroup G)
-  proof: le_bot_iff.mp (commutator_le_right H₁ ⊥)
-
-@[to_additive]
-
-中文:
-定理 commutator_bot_right
-  结论: ⁅H₁, ⊥⁆ = (⊥ : 子群 G)
-  证明: le_bot_iff.mp (commutator_le_right H₁ ⊥)
-
-@[to_additive]
-
-Depends on / 依赖: commutator_le_right, le_bot_iff, le_bot_iff.mp
+/-
+**Subgroup.commutator_bot_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_bot_right : ⁅H₁, ⊥⁆ = (⊥ : Subgroup G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Subgroup.commutator_le_right`：commutator_le_right [h : H₂.Normal] : ⁅H₁,
+ H₂⁆ <= H₂
 -/
 theorem commutator_bot_right : ⁅H₁, ⊥⁆ = (⊥ : Subgroup G) :=
   le_bot_iff.mp (commutator_le_right H₁ ⊥)
 
 @[to_additive]
-/--
-theorem `commutator_le_inf` / 定理 `commutator_le_inf`
-
-English:
-theorem commutator_le_inf
-  given: [Normal H₁] [Normal H₂]
-  statement: ⁅H₁, H₂⁆ <= H₁ ⊓ H₂
-  proof: le_inf (commutator_le_left H₁ H₂) (commutator_le_right H₁ H₂)
-
-中文:
-定理 commutator_le_inf
-  条件: [正规 H₁] [正规 H₂]
-  结论: ⁅H₁, H₂⁆ <= H₁ ⊓ H₂
-  证明: le_inf (commutator_le_left H₁ H₂) (commutator_le_right H₁ H₂)
-
-Depends on / 依赖: commutator_le_left, commutator_le_right, le_inf
+/-
+**Subgroup.commutator_le_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le_inf [Normal H₁] [Normal H₂] : ⁅H₁, H₂⁆ <= H₁ ⊓ H₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `Subgroup.commutator_le_left`：commutator_le_left [H₁.Normal] : ⁅H₁, H₂⁆ <
+= H₁
+· 使用定理 `Subgroup.commutator_le_right`：commutator_le_right [h : H₂.Normal] : ⁅H₁,
+ H₂⁆ <= H₂
 -/
-theorem commutator_le_inf [Normal H₁] [Normal H₂] : ⁅H₁, H₂⁆ <= H₁ ⊓ H₂ :=
+theorem commutator_le_inf [Normal H₁] [Normal H₂] : ⁅H₁, H₂⁆ ≤ H₁ ⊓ H₂ :=
   le_inf (commutator_le_left H₁ H₂) (commutator_le_right H₁ H₂)
 
 variable {H₁ H₂} in
-/--
-theorem `commutator_eq_bot_of_disjoint` / 定理 `commutator_eq_bot_of_disjoint`
-
-English:
-theorem commutator_eq_bot_of_disjoint
-  given: [H₁.Normal] [H₂.Normal] (h : Disjoint H₁ H₂)
-  proof: by
-  grw [eq_bot_iff, commutator_le_inf, h.eq_bot.le]
-
-中文:
-定理 commutator_eq_bot_of_disjoint
-  条件: [H₁.正规] [H₂.正规] (h : Disjoint H₁ H₂)
-  证明: by
-  grw [eq_bot_iff, commutator_le_inf, h.eq_bot.le]
-
-Depends on / 依赖: commutator_le_inf, eq_bot, eq_bot_iff, h.eq_bot.le
+/-
+**Subgroup.commutator_eq_bot_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_eq_bot_of_disjoint [H₁.Normal] [H₂.Normal] (h : Disjoint H₁ H₂)
+ : ⁅H₁, H₂⁆ = ⊥
+参数：h : Disjoint H₁ H₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Subgroup.commutator_le_inf`：commutator_le_inf [Normal H₁] [Normal H₂] : 
+⁅H₁, H₂⁆ <= H₁ ⊓ H₂
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
 -/
 theorem commutator_eq_bot_of_disjoint [H₁.Normal] [H₂.Normal] (h : Disjoint H₁ H₂) :
     ⁅H₁, H₂⁆ = ⊥ := by
@@ -1205,36 +1004,51 @@ theorem commutator_eq_bot_of_disjoint [H₁.Normal] [H₂.Normal] (h : Disjoint 
 end Normal
 
 @[to_additive]
-/--
-theorem `commutator_le_sup` / 定理 `commutator_le_sup`
-
-English:
-theorem commutator_le_sup
-  statement: ⁅H₁, H₂⁆ <= H₁ ⊔ H₂
-  proof: commutator_le.mpr by grind [mul_assoc, mul_mem, mul_mem_sup, inv_mem]
-
-@[to_additive]
-
-中文:
-定理 commutator_le_sup
-  结论: ⁅H₁, H₂⁆ <= H₁ ⊔ H₂
-  证明: commutator_le.mpr by grind [mul_assoc, mul_mem, mul_mem_sup, inv_mem]
-
-@[to_additive]
-
-Depends on / 依赖: commutator_le, commutator_le.mpr, inv_mem, mul_assoc, mul_mem, mul_mem_sup
+/-
+**Subgroup.commutator_le_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le_sup : ⁅H₁, H₂⁆ <= H₁ ⊔ H₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
 -/
-theorem commutator_le_sup : ⁅H₁, H₂⁆ <= H₁ ⊔ H₂ :=
-commutator_le.mpr by grind [mul_assoc, mul_mem, mul_mem_sup, inv_mem]
+theorem commutator_le_sup : ⁅H₁, H₂⁆ ≤ H₁ ⊔ H₂ :=
+  commutator_le.mpr <| by grind [mul_assoc, mul_mem, mul_mem_sup, inv_mem]
 
 @[to_additive]
-/--
-theorem `normalizer_commutator_ge_left` / 定理 `normalizer_commutator_ge_left`
-
-English:
-theorem normalizer_commutator_ge_left
-  statement: H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
-  proof: by
+/-
+**Subgroup.normalizer_commutator_ge_left** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：normalizer_commutator_ge_left : H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.le_normalizer_closure_iff`：le_normalizer_closure_iff {s : Set G
+} : H <= normalizer (closure s) ↔ forall h in H, forall g in s, h * g * h⁻¹ in c
+losure s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_mem_cancel_right`：mul_mem_cancel_right {x y : G} (h : x in H) : y * 
+x in H ↔ y in H
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `commutatorElement_mul_left_eq_conj_mul`：commutatorElement_mul_left_eq_co
+nj_mul (a b c : G) : ⁅a * b, c⁆ = a * ⁅b, c⁆ * a⁻¹ * ⁅a, c⁆
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+-/
+theorem normalizer_commutator_ge_left : H₁ ≤ normalizer (⁅H₁, H₂⁆ : Subgroup G) := by
   apply le_normalizer_closure_iff.mpr
   rintro g hg _ ⟨g₁, hg₁, g₂, hg₂, rfl⟩
   apply (mul_mem_cancel_right <| commutator_mem_commutator hg hg₂).mp
@@ -1242,115 +1056,66 @@ theorem normalizer_commutator_ge_left
   exact commutator_mem_commutator (mul_mem hg hg₁) hg₂
 
 @[to_additive]
-
-中文:
-定理 normalizer_commutator_ge_left
-  结论: H₁ <= normalizer (⁅H₁, H₂⁆ : 子群 G)
-  证明: by
-  apply le_normalizer_closure_iff.mpr
-  rintro g hg _ ⟨g₁, hg₁, g₂, hg₂, rfl⟩
-  apply (mul_mem_cancel_right <| commutator_mem_commutator hg hg₂).mp
-  rw [← commutatorElement_mul_left_eq_conj_mul g g₁ g₂]
-  exact commutator_mem_commutator (mul_mem hg hg₁) hg₂
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_mul_left_eq_conj_mul, commutator_mem_commutator, le_normalizer_closure_iff, le_normalizer_closure_iff.mpr, mul_mem, mul_mem_cancel_right
+/-
+**Subgroup.normalizer_commutator_ge_right** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：normalizer_commutator_ge_right : H₂ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
+· 使用定理 `Subgroup.normalizer_commutator_ge_left`：normalizer_commutator_ge_left : 
+H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
 -/
-theorem normalizer_commutator_ge_left : H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G) := by
-  apply le_normalizer_closure_iff.mpr
-  rintro g hg _ ⟨g₁, hg₁, g₂, hg₂, rfl⟩
-  apply (mul_mem_cancel_right <| commutator_mem_commutator hg hg₂).mp
-  rw [← commutatorElement_mul_left_eq_conj_mul g g₁ g₂]
-  exact commutator_mem_commutator (mul_mem hg hg₁) hg₂
-
-@[to_additive]
-/--
-theorem `normalizer_commutator_ge_right` / 定理 `normalizer_commutator_ge_right`
-
-English:
-theorem normalizer_commutator_ge_right
-  statement: H₂ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
-  proof: by
+theorem normalizer_commutator_ge_right : H₂ ≤ normalizer (⁅H₁, H₂⁆ : Subgroup G) := by
   rw [commutator_comm]
   apply normalizer_commutator_ge_left
 
 @[to_additive]
-
-中文:
-定理 normalizer_commutator_ge_right
-  结论: H₂ <= normalizer (⁅H₁, H₂⁆ : 子群 G)
-  证明: by
-  rw [commutator_comm]
-  apply normalizer_commutator_ge_left
-
-@[to_additive]
-
-Depends on / 依赖: commutator_comm, normalizer_commutator_ge_left
--/
-theorem normalizer_commutator_ge_right : H₂ <= normalizer (⁅H₁, H₂⁆ : Subgroup G) := by
-  rw [commutator_comm]
-  apply normalizer_commutator_ge_left
-
-@[to_additive]
-/--
-Instance `normal_subgroupOf_commutator_sup` / 实例 `normal_subgroupOf_commutator_sup`
-
-English:
-instance normal_subgroupOf_commutator_sup
-  signature: : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).Normal
-  body: normal_subgroupOf_of_le_normalizer sup_le
-    (normalizer_commutator_ge_left H₁ H₂) (normalizer_commutator_ge_right H₁ H₂)
-
-@[to_additive]
-
-中文:
-实例 normal_subgroupOf_commutator_sup
-  签名: : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).正规
-  定义体: normal_subgroupOf_of_le_normalizer sup_le
-    (normalizer_commutator_ge_left H₁ H₂) (normalizer_commutator_ge_right H₁ H₂)
-
-@[to_additive]
-
-Depends on / 依赖: normal_subgroupOf_of_le_normalizer, normalizer_commutator_ge_left, normalizer_commutator_ge_right, sup_le
+/-
+**Subgroup.normal_subgroupOf_commutator_sup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`
+。
+形式化陈述：normal_subgroupOf_commutator_sup : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).Normal
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.normal_subgroupOf_of_le_normalizer`：normal_subgroupOf_of_le_nor
+malizer {H N : Subgroup G} (hLE : H <= normalizer N) : (N.subgroupOf H).Normal
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用定理 `Subgroup.normalizer_commutator_ge_left`：normalizer_commutator_ge_left : 
+H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
+· 使用定理 `Subgroup.normalizer_commutator_ge_right`：normalizer_commutator_ge_right 
+: H₂ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
 -/
 instance normal_subgroupOf_commutator_sup : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).Normal :=
-normal_subgroupOf_of_le_normalizer sup_le
+  normal_subgroupOf_of_le_normalizer <| sup_le
     (normalizer_commutator_ge_left H₁ H₂) (normalizer_commutator_ge_right H₁ H₂)
 
 @[to_additive]
-/--
-theorem `map_commutator` / 定理 `map_commutator`
-
-English:
-theorem map_commutator
-  given: (f : G ->* G')
-  statement: map f ⁅H₁, H₂⁆ = ⁅map f H₁, map f H₂⁆
-  proof: by
-  simp_rw [le_antisymm_iff, map_le_iff_le_comap, commutator_le, mem_comap, map_commutatorElement]
-  constructor
-  · intro p hp q hq
-    exact commutator_mem_commutator (mem_map_of_mem _ hp) (mem_map_of_mem _ hq)
-  · rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩
-    rw [← map_commutatorElement]
-    exact mem_map_of_mem _ (commutator_mem_commutator hp hq)
-
-中文:
-定理 map_commutator
-  条件: (f : G ->* G')
-  结论: map f ⁅H₁, H₂⁆ = ⁅map f H₁, map f H₂⁆
-  证明: by
-  simp_rw [le_antisymm_iff, map_le_iff_le_comap, commutator_le, mem_comap, map_commutatorElement]
-  constructor
-  · intro p hp q hq
-    exact commutator_mem_commutator (mem_map_of_mem _ hp) (mem_map_of_mem _ hq)
-  · rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩
-    rw [← map_commutatorElement]
-    exact mem_map_of_mem _ (commutator_mem_commutator hp hq)
-
-Depends on / 依赖: commutator_le, commutator_mem_commutator, le_antisymm_iff, map_commutatorElement, map_le_iff_le_comap, mem_comap, mem_map_of_mem, simp_rw
+/-
+**Subgroup.map_commutator** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ = ⁅map f H₁, map f H₂⁆
+参数：f : G ->* G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `map_commutatorElement`：map_commutatorElement : (f ⁅g₁, g₂⁆ : G') = ⁅f g₁
+, f g₂⁆
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
+· 使用定理 `Subgroup.mem_map_of_mem`：mem_map_of_mem (f : G ->* N) {K : Subgroup G} {
+x : G} (hx : x in K) : f x in K.map f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ = ⁅map f H₁, map f H₂⁆ := by
+theorem map_commutator (f : G →* G') : map f ⁅H₁, H₂⁆ = ⁅map f H₁, map f H₂⁆ := by
   simp_rw [le_antisymm_iff, map_le_iff_le_comap, commutator_le, mem_comap, map_commutatorElement]
   constructor
   · intro p hp q hq
@@ -1362,50 +1127,41 @@ theorem map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ = ⁅map f H₁, 
 variable {H₁ H₂}
 
 @[to_additive]
-/--
-theorem `commutator_le_map_commutator` / 定理 `commutator_le_map_commutator`
-
-English:
-theorem commutator_le_map_commutator
-  statement: {f : G ->* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁ <= H₁.map f)
-  proof: (commutator_mono h₁ h₂).trans (ge_of_eq (map_commutator H₁ H₂ f))
-
-中文:
-定理 commutator_le_map_commutator
-  结论: {f : G ->* G'} {K₁ K₂ : 子群 G'} (h₁ : K₁ <= H₁.map f)
-  证明: (commutator_mono h₁ h₂).trans (ge_of_eq (map_commutator H₁ H₂ f))
-
-Depends on / 依赖: commutator_mono, ge_of_eq, map_commutator
+/-
+**Subgroup.commutator_le_map_commutator** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_le_map_commutator {f : G ->* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁
+ <= H₁.map f) (h₂ : K₂ <= H₂.map f) : ⁅K₁, K₂⁆ <= ⁅H₁, H₂⁆.map f
+参数：h₁ : K₁ <= H₁.map f；h₂ : K₂ <= H₂.map f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subgroup.commutator_mono`：commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂
+) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Subgroup.map_commutator`：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ 
+= ⁅map f H₁, map f H₂⁆
 -/
-theorem commutator_le_map_commutator {f : G ->* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁ <= H₁.map f)
-    (h₂ : K₂ <= H₂.map f) : ⁅K₁, K₂⁆ <= ⁅H₁, H₂⁆.map f :=
+theorem commutator_le_map_commutator {f : G →* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁ ≤ H₁.map f)
+    (h₂ : K₂ ≤ H₂.map f) : ⁅K₁, K₂⁆ ≤ ⁅H₁, H₂⁆.map f :=
   (commutator_mono h₁ h₂).trans (ge_of_eq (map_commutator H₁ H₂ f))
 
 variable (H₁ H₂)
 
 @[to_additive]
-/--
-Instance `commutator_characteristic` / 实例 `commutator_characteristic`
-
-English:
-instance commutator_characteristic
-  signature: [h₁ : Characteristic H₁] [h₂ : Characteristic H₂]
-  body: characteristic_iff_le_map.mpr fun ϕ =>
-    commutator_le_map_commutator (characteristic_iff_le_map.mp h₁ ϕ)
-      (characteristic_iff_le_map.mp h₂ ϕ)
-
-@[to_additive]
-
-中文:
-实例 commutator_characteristic
-  签名: [h₁ : 特征 H₁] [h₂ : 特征 H₂]
-  定义体: characteristic_iff_le_map.mpr fun ϕ =>
-    commutator_le_map_commutator (characteristic_iff_le_map.mp h₁ ϕ)
-      (characteristic_iff_le_map.mp h₂ ϕ)
-
-@[to_additive]
-
-Depends on / 依赖: characteristic_iff_le_map, characteristic_iff_le_map.mp, characteristic_iff_le_map.mpr, commutator_le_map_commutator
+/-
+**Subgroup.commutator_characteristic** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：commutator_characteristic [h₁ : Characteristic H₁] [h₂ : Characteristic H₂
+] : Characteristic ⁅H₁, H₂⁆
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.characteristic_iff_le_map`：characteristic_iff_le_map : H.Charac
+teristic ↔ forall ϕ : G ≃* G, H <= H.map ϕ.toMonoidHom
+· 使用定理 `Subgroup.commutator_le_map_commutator`：commutator_le_map_commutator {f :
+ G ->* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁ <= H₁.map f) (h₂ : K₂ <= H₂.map f) : ⁅
+K₁, K₂⁆ <= ⁅H₁, H₂⁆.map f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 instance commutator_characteristic [h₁ : Characteristic H₁] [h₂ : Characteristic H₂] :
     Characteristic ⁅H₁, H₂⁆ :=
@@ -1414,40 +1170,38 @@ instance commutator_characteristic [h₁ : Characteristic H₁] [h₂ : Characte
       (characteristic_iff_le_map.mp h₂ ϕ)
 
 @[to_additive]
-/--
-theorem `commutator_prod_prod` / 定理 `commutator_prod_prod`
-
-English:
-theorem commutator_prod_prod
-  given: (K₁ K₂ : Subgroup G')
-  proof: by
-  apply le_antisymm
-  · rw [commutator_le]
-    rintro ⟨p₁, p₂⟩ ⟨hp₁, hp₂⟩ ⟨q₁, q₂⟩ ⟨hq₁, hq₂⟩
-    exact ⟨commutator_mem_commutator hp₁ hq₁, commutator_mem_commutator hp₂ hq₂⟩
-  · rw [prod_le_iff]
-    constructor <;>
-      · rw [map_commutator]
-        apply commutator_mono <;>
-          simp [le_prod_iff, map_map, MonoidHom.fst_comp_inl, MonoidHom.snd_comp_inl,
-            MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inr]
-
-中文:
-定理 commutator_prod_prod
-  条件: (K₁ K₂ : 子群 G')
-  证明: by
-  apply le_antisymm
-  · rw [commutator_le]
-    rintro ⟨p₁, p₂⟩ ⟨hp₁, hp₂⟩ ⟨q₁, q₂⟩ ⟨hq₁, hq₂⟩
-    exact ⟨commutator_mem_commutator hp₁ hq₁, commutator_mem_commutator hp₂ hq₂⟩
-  · rw [prod_le_iff]
-    constructor <;>
-      · rw [map_commutator]
-        apply commutator_mono <;>
-          simp [le_prod_iff, map_map, MonoidHom.fst_comp_inl, MonoidHom.snd_comp_inl,
-            MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inr]
-
-Depends on / 依赖: MonoidHom, MonoidHom.fst_comp_inl, MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inl, MonoidHom.snd_comp_inr, commutator_le, commutator_mem_commutator, commutator_mono, fst_comp_inl, fst_comp_inr, le_antisymm, le_prod_iff, map_commutator, map_map, prod_le_iff, snd_comp_inl, snd_comp_inr
+/-
+**Subgroup.commutator_prod_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_prod_prod (K₁ K₂ : Subgroup G') : ⁅H₁.prod K₁, H₂.prod K₂⁆ = ⁅H
+₁, H₂⁆.prod ⁅K₁, K₂⁆
+参数：K₁ K₂ : Subgroup G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
+· 使用定理 `Subgroup.prod_le_iff`：prod_le_iff {H : Subgroup G} {K : Subgroup N} {J :
+ Subgroup (G × N)} : H.prod K <= J ↔ map (MonoidHom.inl G N) H <= J ∧ map (Monoi
+dHom.inr G…
+· 使用定理 `Subgroup.map_commutator`：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ 
+= ⁅map f H₁, map f H₂⁆
+· 使用定理 `Subgroup.commutator_mono`：commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂
+) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subgroup.map_map`：map_map (g : N ->* P) (f : G ->* N) : (K.map f).map g 
+= K.map (g.comp f)
+· 使用定理 `Subgroup.map_id`：map_id : K.map (MonoidHom.id G) = K
+· 使用定理 `Subgroup.map_one_eq_bot`：map_one_eq_bot : K.map (1 : G ->* N) = ⊥
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem commutator_prod_prod (K₁ K₂ : Subgroup G') :
     ⁅H₁.prod K₁, H₂.prod K₂⁆ = ⁅H₁, H₂⁆.prod ⁅K₁, K₂⁆ := by
@@ -1468,24 +1222,23 @@ See `commutator_pi_pi_of_finite` for equality given `Fintype η`.
 -/
 @[to_additive /-- The commutator of direct product is contained in the direct product of the
 commutators. See `commutator_pi_pi_of_finite` for equality given `Fintype η`. -/]
-/--
-theorem `commutator_pi_pi_le` / 定理 `commutator_pi_pi_le`
-
-English:
-theorem commutator_pi_pi_le
-  statement: {η : Type*} {Gs : η -> Type*} [forall i, Group (Gs i)]
-  proof: commutator_le.mpr fun _p hp _q hq i hi => commutator_mem_commutator (hp i hi) (hq i hi)
-
-中文:
-定理 commutator_pi_pi_le
-  结论: {η : 类型} {Gs : η -> 类型} [对任意 i, 群 (Gs i)]
-  证明: commutator_le.mpr fun _p hp _q hq i hi => commutator_mem_commutator (hp i hi) (hq i hi)
-
-Depends on / 依赖: commutator_le, commutator_le.mpr, commutator_mem_commutator
+/-
+**Subgroup.commutator_pi_pi_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：commutator_pi_pi_le {η : Type*} {Gs : η -> Type*} [forall i, Group (Gs i)]
+ (H K : forall i, Subgroup (Gs i)) : ⁅Subgroup.pi Set.univ H, Subgroup.pi Set.un
+iv K⁆ <= Subgroup.pi Set.univ fun i => ⁅H i, K i⁆
+参数：Gs i；H K : forall i, Subgroup (Gs i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.commutator_le`：commutator_le : ⁅H₁, H₂⁆ <= H₃ ↔ forall g₁ in H₁
+, forall g₂ in H₂, ⁅g₁, g₂⁆ in H₃
+· 使用定理 `Subgroup.commutator_mem_commutator`：commutator_mem_commutator (h₁ : g₁ i
+n H₁) (h₂ : g₂ in H₂) : ⁅g₁, g₂⁆ in ⁅H₁, H₂⁆
 -/
-theorem commutator_pi_pi_le {η : Type*} {Gs : η -> Type*} [forall i, Group (Gs i)]
-    (H K : forall i, Subgroup (Gs i)) :
-    ⁅Subgroup.pi Set.univ H, Subgroup.pi Set.univ K⁆ <= Subgroup.pi Set.univ fun i => ⁅H i, K i⁆ :=
+theorem commutator_pi_pi_le {η : Type*} {Gs : η → Type*} [∀ i, Group (Gs i)]
+    (H K : ∀ i, Subgroup (Gs i)) :
+    ⁅Subgroup.pi Set.univ H, Subgroup.pi Set.univ K⁆ ≤ Subgroup.pi Set.univ fun i => ⁅H i, K i⁆ :=
   commutator_le.mpr fun _p hp _q hq i hi => commutator_mem_commutator (hp i hi) (hq i hi)
 
 end Subgroup
@@ -1496,83 +1249,44 @@ variable (G)
 
 /-- The set of commutator elements `⁅g₁, g₂⁆` in `G`. -/
 @[to_additive /-- The set of additive commutator elements `⁅g₁, g₂⁆` in `G`. -/]
-/--
-Definition of `commutatorSet` / `commutatorSet` 的定义
+/-
+**commutatorSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：commutatorSet : Set G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commutatorSet
-  signature: : Set G
-  body: { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
-
-@[to_additive]
-
-中文:
-定义 commutatorSet
-  签名: : 集合 G
-  定义体: { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
-
-@[to_additive]
+--- 原说明 ---
+The set of commutator elements `⁅g₁, g₂⁆` in `G`.
 -/
 def commutatorSet : Set G :=
-  { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
+  { g | ∃ g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
 
 @[to_additive]
-/--
-theorem `commutatorSet_def` / 定理 `commutatorSet_def`
-
-English:
-theorem commutatorSet_def
-  statement: commutatorSet G = { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 commutatorSet_def
-  结论: commutatorSet G = { g | 存在 g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
-  证明: rfl
-
-@[to_additive]
+/-
+**commutatorSet_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorSet_def : commutatorSet G = { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g
+ }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem commutatorSet_def : commutatorSet G = { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g } :=
+theorem commutatorSet_def : commutatorSet G = { g | ∃ g₁ g₂ : G, ⁅g₁, g₂⁆ = g } :=
   rfl
 
 @[to_additive]
-/--
-theorem `one_mem_commutatorSet` / 定理 `one_mem_commutatorSet`
-
-English:
-theorem one_mem_commutatorSet
-  statement: (1 : G) in commutatorSet G
-  proof: ⟨1, 1, commutatorElement_self 1⟩
-
-@[to_additive]
-
-中文:
-定理 one_mem_commutatorSet
-  结论: (1 : G) in commutatorSet G
-  证明: ⟨1, 1, commutatorElement_self 1⟩
-
-@[to_additive]
-
-Depends on / 依赖: commutatorElement_self
+/-
+**one_mem_commutatorSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_mem_commutatorSet : (1 : G) in commutatorSet G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `commutatorElement_self`：commutatorElement_self : ⁅g, g⁆ = 1
 -/
-theorem one_mem_commutatorSet : (1 : G) in commutatorSet G :=
+theorem one_mem_commutatorSet : (1 : G) ∈ commutatorSet G :=
   ⟨1, 1, commutatorElement_self 1⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (commutatorSet G)
-  body: ⟨⟨1, one_mem_commutatorSet G⟩⟩
-
-中文:
-实例 :
-  签名: 非空 (commutatorSet G)
-  定义体: ⟨⟨1, one_mem_commutatorSet G⟩⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (commutatorSet G) :=
   ⟨⟨1, one_mem_commutatorSet G⟩⟩
@@ -1580,43 +1294,25 @@ instance : Nonempty (commutatorSet G) :=
 variable {G g}
 
 @[to_additive]
-/--
-theorem `mem_commutatorSet_iff` / 定理 `mem_commutatorSet_iff`
-
-English:
-theorem mem_commutatorSet_iff
-  statement: g in commutatorSet G ↔ exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_commutatorSet_iff
-  结论: g in commutatorSet G ↔ 存在 g₁ g₂ : G, ⁅g₁, g₂⁆ = g
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_commutatorSet_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_commutatorSet_iff : g in commutatorSet G ↔ exists g₁ g₂ : G, ⁅g₁, g₂⁆ 
+= g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_commutatorSet_iff : g in commutatorSet G ↔ exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g :=
+theorem mem_commutatorSet_iff : g ∈ commutatorSet G ↔ ∃ g₁ g₂ : G, ⁅g₁, g₂⁆ = g :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `commutator_mem_commutatorSet` / 定理 `commutator_mem_commutatorSet`
-
-English:
-theorem commutator_mem_commutatorSet
-  statement: ⁅g₁, g₂⁆ in commutatorSet G
-  proof: ⟨g₁, g₂, rfl⟩
-
-中文:
-定理 commutator_mem_commutatorSet
-  结论: ⁅g₁, g₂⁆ in commutatorSet G
-  证明: ⟨g₁, g₂, rfl⟩
+/-
+**commutator_mem_commutatorSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutator_mem_commutatorSet : ⁅g₁, g₂⁆ in commutatorSet G
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem commutator_mem_commutatorSet : ⁅g₁, g₂⁆ in commutatorSet G :=
+theorem commutator_mem_commutatorSet : ⁅g₁, g₂⁆ ∈ commutatorSet G :=
   ⟨g₁, g₂, rfl⟩
 
 variable (G)
@@ -1625,22 +1321,11 @@ variable (G)
   generated by the commutators `[p,q] = p * q * p⁻¹ * q⁻¹`. -/
 @[to_additive /-- The commutator subgroup of an additive group G is the normal additive subgroup
   generated by the additive commutators `[p,q] = p + q + -p + -q`. -/]
-/--
-Definition of `commutator` / `commutator` 的定义
-
-English:
-definition commutator
-  signature: : Subgroup G
-  body: ⁅(⊤ : Subgroup G), ⊤⁆
-deriving Subgroup.Normal, Subgroup.Characteristic
-
-中文:
-定义 commutator
-  签名: : 子群 G
-  定义体: ⁅(⊤ : Subgroup G), ⊤⁆
-deriving Subgroup.Normal, Subgroup.Characteristic
-
-Depends on / 依赖: Subgroup
+/-
+**commutator** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：commutator : Subgroup G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def commutator : Subgroup G := ⁅(⊤ : Subgroup G), ⊤⁆
 deriving Subgroup.Normal, Subgroup.Characteristic
@@ -1649,325 +1334,268 @@ attribute [to_additive] instNormalCommutator
 attribute [to_additive] instCharacteristicCommutator
 
 @[to_additive]
-/--
-lemma `commutator_def` / 引理 `commutator_def`
-
-English:
-lemma commutator_def
-  statement: commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 commutator_def
-  结论: commutator G = ⁅(⊤ : 子群 G), ⊤⁆
-  证明: rfl
-
-@[to_additive]
+/-
+**commutator_def** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆ :=
   rfl
 
 @[to_additive]
-/--
-lemma `commutator_eq_closure` / 引理 `commutator_eq_closure`
-
-English:
-lemma commutator_eq_closure
-  statement: commutator G = Subgroup.closure (commutatorSet G)
-  proof: by
-  simp [commutator, Subgroup.commutator_def, commutatorSet]
-
-@[to_additive]
-
-中文:
-引理 commutator_eq_closure
-  结论: commutator G = 子群.closure (commutatorSet G)
-  证明: by
-  simp [commutator, Subgroup.commutator_def, commutatorSet]
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.commutator_def, commutator, commutatorSet, commutator_def
+/-
+**commutator_eq_closure** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：commutator_eq_closure : commutator G = Subgroup.closure (commutatorSet G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma commutator_eq_closure : commutator G = Subgroup.closure (commutatorSet G) := by
   simp [commutator, Subgroup.commutator_def, commutatorSet]
 
 @[to_additive]
-/--
-lemma `commutator_eq_normalClosure` / 引理 `commutator_eq_normalClosure`
-
-English:
-lemma commutator_eq_normalClosure
-  statement: commutator G = Subgroup.normalClosure (commutatorSet G)
-  proof: by
-  simp [commutator, Subgroup.commutator_def', commutatorSet]
-
-中文:
-引理 commutator_eq_normalClosure
-  结论: commutator G = 子群.normalClosure (commutatorSet G)
-  证明: by
-  simp [commutator, Subgroup.commutator_def', commutatorSet]
-
-Depends on / 依赖: Subgroup, Subgroup.commutator_def, commutator, commutatorSet, commutator_def
+/-
+**commutator_eq_normalClosure** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：commutator_eq_normalClosure : commutator G = Subgroup.normalClosure (commu
+tatorSet G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.commutator_def'`：commutator_def' [H₁.Normal] [H₂.Normal] : ⁅H₁,
+ H₂⁆ = normalClosure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma commutator_eq_normalClosure : commutator G = Subgroup.normalClosure (commutatorSet G) := by
   simp [commutator, Subgroup.commutator_def', commutatorSet]
 
 variable {G} in
 @[to_additive]
-/--
-lemma `Subgroup.map_subtype_commutator` / 引理 `Subgroup.map_subtype_commutator`
-
-English:
-lemma Subgroup.map_subtype_commutator
-  given: (H : Subgroup G)
-  proof: by
-  rw [_root_.commutator_def]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [H.range_subtype]
-
-中文:
-引理 子群.map_subtype_commutator
-  条件: (H : 子群 G)
-  证明: by
-  rw [_root_.commutator_def]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [H.range_subtype]
-
-Depends on / 依赖: H.range_subtype, MonoidHom, MonoidHom.range_eq_map, _root_, _root_.commutator_def, commutator_def, map_commutator, range_eq_map, range_subtype
+/-
+**Subgroup.map_subtype_commutator** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Subgroup.map_subtype_commutator (H : Subgroup G) : (_root_.commutator H).m
+ap H.subtype = ⁅H, H⁆
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `commutator_def`：commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+· 使用定理 `Subgroup.map_commutator`：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ 
+= ⁅map f H₁, map f H₂⁆
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `Subgroup.range_subtype`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup 
+G), H.subtype.range = H
 -/
 lemma Subgroup.map_subtype_commutator (H : Subgroup G) :
     (_root_.commutator H).map H.subtype = ⁅H, H⁆ := by
-  rw [_root_.commutator_def]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [H.range_subtype]
+  rw [_root_.commutator_def, map_commutator, ← MonoidHom.range_eq_map, H.range_subtype]
 
 variable {G} in
 @[to_additive]
-/--
-lemma `Subgroup.commutator_le_self` / 引理 `Subgroup.commutator_le_self`
-
-English:
-lemma Subgroup.commutator_le_self
-  given: (H : Subgroup G)
-  statement: ⁅H, H⁆ <= H
-  proof: H.map_subtype_commutator.symm.trans_le (map_subtype_le _)
-
-@[to_additive]
-
-中文:
-引理 子群.commutator_le_self
-  条件: (H : 子群 G)
-  结论: ⁅H, H⁆ <= H
-  证明: H.map_subtype_commutator.symm.trans_le (map_subtype_le _)
-
-@[to_additive]
-
-Depends on / 依赖: H.map_subtype_commutator.symm.trans_le, map_subtype_commutator, map_subtype_le, trans_le
+/-
+**Subgroup.commutator_le_self** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Subgroup.commutator_le_self (H : Subgroup G) : ⁅H, H⁆ <= H
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Subgroup.map_subtype_commutator`：Subgroup.map_subtype_commutator (H : Su
+bgroup G) : (_root_.commutator H).map H.subtype = ⁅H, H⁆
+· 使用定理 `Subgroup.map_subtype_le`：map_subtype_le {H : Subgroup G} (K : Subgroup H
+) : K.map H.subtype <= H
 -/
-lemma Subgroup.commutator_le_self (H : Subgroup G) : ⁅H, H⁆ <= H :=
+lemma Subgroup.commutator_le_self (H : Subgroup G) : ⁅H, H⁆ ≤ H :=
   H.map_subtype_commutator.symm.trans_le (map_subtype_le _)
 
 @[to_additive]
-/--
-theorem `Subgroup.Normal.of_commutator_le` / 定理 `Subgroup.Normal.of_commutator_le`
-
-English:
-theorem Subgroup.Normal.of_commutator_le
-  given: {H : Subgroup G} (h : _root_.commutator G <= H)
-  proof: commutator_top_left_le_iff.mp .trans h commutator_mono le_top le_top
-
-@[to_additive]
-
-中文:
-定理 子群.正规.of_commutator_le
-  条件: {H : 子群 G} (h : _root_.commutator G <= H)
-  证明: commutator_top_left_le_iff.mp .trans h commutator_mono le_top le_top
-
-@[to_additive]
-
-Depends on / 依赖: commutator_mono, commutator_top_left_le_iff, commutator_top_left_le_iff.mp, le_top
+/-
+**Subgroup.Normal.of_commutator_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subgroup.Normal.of_commutator_le {H : Subgroup G} (h : _root_.commutator G
+ <= H) : H.Normal
+参数：h : _root_.commutator G <= H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.commutator_top_left_le_iff`：commutator_top_left_le_iff : ⁅(⊤ : 
+Subgroup G), H⁆ <= H ↔ H.Normal
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subgroup.commutator_mono`：commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂
+) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-theorem Subgroup.Normal.of_commutator_le {H : Subgroup G} (h : _root_.commutator G <= H) :
+theorem Subgroup.Normal.of_commutator_le {H : Subgroup G} (h : _root_.commutator G ≤ H) :
     H.Normal :=
-commutator_top_left_le_iff.mp .trans h commutator_mono le_top le_top
+  commutator_top_left_le_iff.mp <| commutator_mono le_top le_top |>.trans h
 
 @[to_additive]
-/--
-theorem `commutator_eq_bot_iff_center_eq_top` / 定理 `commutator_eq_bot_iff_center_eq_top`
-
-English:
-theorem commutator_eq_bot_iff_center_eq_top
-  statement: commutator G = ⊥ ↔ Subgroup.center G = ⊤
-  proof: by
-  simp [commutator, Subgroup.commutator_eq_bot_iff_le_centralizer]
-
-@[to_additive]
-
-中文:
-定理 commutator_eq_bot_iff_center_eq_top
-  结论: commutator G = ⊥ ↔ 子群.center G = ⊤
-  证明: by
-  simp [commutator, Subgroup.commutator_eq_bot_iff_le_centralizer]
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.commutator_eq_bot_iff_le_centralizer, commutator, commutator_eq_bot_iff_le_centralizer
+/-
+**commutator_eq_bot_iff_center_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutator_eq_bot_iff_center_eq_top : commutator G = ⊥ ↔ Subgroup.center G
+ = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem commutator_eq_bot_iff_center_eq_top : commutator G = ⊥ ↔ Subgroup.center G = ⊤ := by
   simp [commutator, Subgroup.commutator_eq_bot_iff_le_centralizer]
 
 @[to_additive]
-/--
-theorem `commutator_eq_bot_iff` / 定理 `commutator_eq_bot_iff`
-
-English:
-theorem commutator_eq_bot_iff
-  statement: commutator G = ⊥ ↔ IsMulCommutative G
-  proof: by
-  rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_top_iff]
-
-@[to_additive]
-
-中文:
-定理 commutator_eq_bot_iff
-  结论: commutator G = ⊥ ↔ 是MulCommutative G
-  证明: by
-  rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_top_iff]
-
-@[to_additive]
-
-Depends on / 依赖: center_eq_top_iff, commutator_eq_bot_iff_center_eq_top
+/-
+**commutator_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutator_eq_bot_iff : commutator G = ⊥ ↔ IsMulCommutative G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `commutator_eq_bot_iff_center_eq_top`：commutator_eq_bot_iff_center_eq_top
+ : commutator G = ⊥ ↔ Subgroup.center G = ⊤
+· 使用定理 `Subgroup.center_eq_top_iff`：center_eq_top_iff : center G = ⊤ ↔ IsMulComm
+utative G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem commutator_eq_bot_iff : commutator G = ⊥ ↔ IsMulCommutative G := by
-  rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_top_iff]
+  rw [commutator_eq_bot_iff_center_eq_top, center_eq_top_iff]
 
 @[to_additive]
-/--
-theorem `commutator_eq_bot` / 定理 `commutator_eq_bot`
-
-English:
-theorem commutator_eq_bot
-  given: [hG : IsMulCommutative G]
-  statement: commutator G = ⊥
-  proof: (commutator_eq_bot_iff G).mpr hG
-
-@[to_additive]
-
-中文:
-定理 commutator_eq_bot
-  条件: [hG : 是MulCommutative G]
-  结论: commutator G = ⊥
-  证明: (commutator_eq_bot_iff G).mpr hG
-
-@[to_additive]
-
-Depends on / 依赖: commutator_eq_bot_iff
+/-
+**commutator_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutator_eq_bot [hG : IsMulCommutative G] : commutator G = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `commutator_eq_bot_iff`：commutator_eq_bot_iff : commutator G = ⊥ ↔ IsMulC
+ommutative G
 -/
 theorem commutator_eq_bot [hG : IsMulCommutative G] : commutator G = ⊥ :=
   (commutator_eq_bot_iff G).mpr hG
 
 @[to_additive]
-/--
-lemma `commutator_centralizer_commutator_le_center` / 引理 `commutator_centralizer_commutator_le_center`
-
-English:
-lemma commutator_centralizer_commutator_le_center
-  proof: by
-  rw [← Subgroup.centralizer_univ]; rw [← Subgroup.coe_top]; rw [←
-    Subgroup.commutator_eq_bot_iff_le_centralizer]
-  suffices ⁅⁅⊤, centralizer (commutator G : Set G)⁆, centralizer (commutator G : Set G)⁆ = ⊥ by
-    refine Subgroup.commutator_commutator_eq_bot_of_rotate ?_ this
-    rwa [Subgroup.commutator_comm (centralizer (commutator G : Set G))]
-  rw [Subgroup.commutator_comm]; rw [Subgroup.commutator_eq_bot_iff_le_centralizer]
-  exact Set.centralizer_subset (Subgroup.commutator_mono le_top le_top)
-
-中文:
-引理 commutator_centralizer_commutator_le_center
-  证明: by
-  rw [← Subgroup.centralizer_univ]; rw [← Subgroup.coe_top]; rw [←
-    Subgroup.commutator_eq_bot_iff_le_centralizer]
-  suffices ⁅⁅⊤, centralizer (commutator G : Set G)⁆, centralizer (commutator G : Set G)⁆ = ⊥ by
-    refine Subgroup.commutator_commutator_eq_bot_of_rotate ?_ this
-    rwa [Subgroup.commutator_comm (centralizer (commutator G : Set G))]
-  rw [Subgroup.commutator_comm]; rw [Subgroup.commutator_eq_bot_iff_le_centralizer]
-  exact Set.centralizer_subset (Subgroup.commutator_mono le_top le_top)
-
-Depends on / 依赖: Set.centralizer_subset, Subgroup, Subgroup.centralizer_univ, Subgroup.coe_top, Subgroup.commutator_comm, Subgroup.commutator_commutator_eq_bot_of_rotate, Subgroup.commutator_eq_bot_iff_le_centralizer, Subgroup.commutator_mono, centralizer, centralizer_subset, centralizer_univ, coe_top, commutator, commutator_comm, commutator_commutator_eq_bot_of_rotate, commutator_eq_bot_iff_le_centralizer, commutator_mono, le_top
+/-
+**commutator_centralizer_commutator_le_center** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：commutator_centralizer_commutator_le_center : ⁅centralizer (commutator G :
+ Set G), centralizer (commutator G)⁆ <= Subgroup.center G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.centralizer_univ`：centralizer_univ : centralizer Set.univ = cen
+ter G
+· 使用定理 `Subgroup.coe_top`：coe_top : ((⊤ : Subgroup G) : Set G) = Set.univ
+· 使用定理 `Subgroup.commutator_eq_bot_iff_le_centralizer`：commutator_eq_bot_iff_le_
+centralizer : ⁅H₁, H₂⁆ = ⊥ ↔ H₁ <= centralizer H₂
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
+· 使用引理 `Set.centralizer_subset`：centralizer_subset (h : S subseteq T) : centrali
+zer T subseteq centralizer S
+· 使用定理 `Subgroup.commutator_mono`：commutator_mono (h₁ : H₁ <= K₁) (h₂ : H₂ <= K₂
+) : ⁅H₁, H₂⁆ <= ⁅K₁, K₂⁆
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Subgroup.commutator_commutator_eq_bot_of_rotate`：commutator_commutator_e
+q_bot_of_rotate (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥) : ⁅⁅H₁, H₂⁆,
+ H₃⁆ = ⊥
 -/
 lemma commutator_centralizer_commutator_le_center :
-    ⁅centralizer (commutator G : Set G), centralizer (commutator G)⁆ <= Subgroup.center G := by
-  rw [← Subgroup.centralizer_univ]; rw [← Subgroup.coe_top]; rw [←
+    ⁅centralizer (commutator G : Set G), centralizer (commutator G)⁆ ≤ Subgroup.center G := by
+  rw [← Subgroup.centralizer_univ, ← Subgroup.coe_top, ←
     Subgroup.commutator_eq_bot_iff_le_centralizer]
   suffices ⁅⁅⊤, centralizer (commutator G : Set G)⁆, centralizer (commutator G : Set G)⁆ = ⊥ by
     refine Subgroup.commutator_commutator_eq_bot_of_rotate ?_ this
     rwa [Subgroup.commutator_comm (centralizer (commutator G : Set G))]
-  rw [Subgroup.commutator_comm]; rw [Subgroup.commutator_eq_bot_iff_le_centralizer]
+  rw [Subgroup.commutator_comm, Subgroup.commutator_eq_bot_iff_le_centralizer]
   exact Set.centralizer_subset (Subgroup.commutator_mono le_top le_top)
 
 /-- If `g` is conjugate to `g ^ 2`, then `g` is a commutator -/
 @[to_additive /-- If g is conjugate to `2 • g`, then `g` is an additive commutator -/]
-/--
-lemma `mem_commutatorSet_of_isConj_sq` / 引理 `mem_commutatorSet_of_isConj_sq`
+/-
+**mem_commutatorSet_of_isConj_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_commutatorSet_of_isConj_sq {g : G} (hg : IsConj g (g ^ 2)) : g in comm
+utatorSet G
+参数：hg : IsConj g (g ^ 2)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `commutatorElement_def`：commutatorElement_def {G : Type*} [Group G] (g₁ g
+₂ : G) : ⁅g₁, g₂⁆ = g₁ * g₂ * g₁⁻¹ * g₂⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `IsUnit.mul_inv_cancel_right`：∀ {α : Type u} [inst : DivisionMonoid α] {b
+ : α}, IsUnit b → ∀ (a : α), a * b * b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mem_commutatorSet_of_isConj_sq
-  given: {g : G} (hg : IsConj g (g ^ 2))
-  statement: g in commutatorSet G
-  proof: by
-  obtain ⟨h, hg⟩ := hg
-  use h, g
-  rw [commutatorElement_def]; rw [hg]
-  simp only [IsUnit.mul_inv_cancel_right, Units.isUnit, mul_inv_eq_iff_eq_mul, pow_two]
-
-@[to_additive]
-
-中文:
-引理 mem_commutatorSet_of_isConj_sq
-  条件: {g : G} (hg : IsConj g (g ^ 2))
-  结论: g in commutatorSet G
-  证明: by
-  obtain ⟨h, hg⟩ := hg
-  use h, g
-  rw [commutatorElement_def]; rw [hg]
-  simp only [IsUnit.mul_inv_cancel_right, Units.isUnit, mul_inv_eq_iff_eq_mul, pow_two]
-
-@[to_additive]
-
-Depends on / 依赖: IsUnit, IsUnit.mul_inv_cancel_right, Units.isUnit, commutatorElement_def, isUnit, mul_inv_cancel_right, mul_inv_eq_iff_eq_mul, pow_two
+--- 原说明 ---
+If `g` is conjugate to `g ^ 2`, then `g` is a commutator
 -/
-lemma mem_commutatorSet_of_isConj_sq {g : G} (hg : IsConj g (g ^ 2)) : g in commutatorSet G := by
+lemma mem_commutatorSet_of_isConj_sq {g : G} (hg : IsConj g (g ^ 2)) : g ∈ commutatorSet G := by
   obtain ⟨h, hg⟩ := hg
   use h, g
-  rw [commutatorElement_def]; rw [hg]
+  rw [commutatorElement_def, hg]
   simp only [IsUnit.mul_inv_cancel_right, Units.isUnit, mul_inv_eq_iff_eq_mul, pow_two]
 
 @[to_additive]
-/--
-lemma `map_commutator_eq` / 引理 `map_commutator_eq`
-
-English:
-lemma map_commutator_eq
-  given: {H : Type*} [Group H] (f : G ->* H)
-  proof: by
-  rw [_root_.commutator_def]; rw [Subgroup.map_commutator]
-  apply congr_arg₂ <;>
-  · rw [Subgroup.map_eq_range_iff]
-    rw [codisjoint_iff]; rw [top_sup_eq]
-
-中文:
-引理 map_commutator_eq
-  条件: {H : 类型} [群 H] (f : G ->* H)
-  证明: by
-  rw [_root_.commutator_def]; rw [Subgroup.map_commutator]
-  apply congr_arg₂ <;>
-  · rw [Subgroup.map_eq_range_iff]
-    rw [codisjoint_iff]; rw [top_sup_eq]
-
-Depends on / 依赖: Subgroup, Subgroup.map_commutator, Subgroup.map_eq_range_iff, _root_, _root_.commutator_def, codisjoint_iff, commutator_def, map_commutator, map_eq_range_iff, top_sup_eq
+/-
+**map_commutator_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：map_commutator_eq {H : Type*} [Group H] (f : G ->* H) : (commutator G).map
+ f = ⁅f.range, f.range⁆
+参数：f : G ->* H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `commutator_def`：commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+· 使用定理 `Subgroup.map_commutator`：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ 
+= ⁅map f H₁, map f H₂⁆
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Subgroup.map_eq_range_iff`：map_eq_range_iff {f : G ->* N} {H : Subgroup 
+G} : H.map f = f.range ↔ Codisjoint H f.ker
+· 使用定理 `codisjoint_iff`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : Ord
+erTop α] {a b : α}, Codisjoint a b ↔ a ⊔ b = ⊤
+· 使用定理 `top_sup_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderTo
+p α] (a : α), ⊤ ⊔ a = ⊤
 -/
-lemma map_commutator_eq {H : Type*} [Group H] (f : G ->* H) :
+lemma map_commutator_eq {H : Type*} [Group H] (f : G →* H) :
     (commutator G).map f = ⁅f.range, f.range⁆ := by
-  rw [_root_.commutator_def]; rw [Subgroup.map_commutator]
+  rw [_root_.commutator_def, Subgroup.map_commutator]
   apply congr_arg₂ <;>
   · rw [Subgroup.map_eq_range_iff]
-    rw [codisjoint_iff]; rw [top_sup_eq]
+    rw [codisjoint_iff, top_sup_eq]
 
 section commutatorRepresentatives
 
@@ -1977,20 +1605,11 @@ open Subgroup
 @[to_additive /-- Representatives `(g₁, g₂) : G × G` of additive commutators `⁅g₁, g₂⁆ ∈ G`. -/]
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `commutatorRepresentatives` / `commutatorRepresentatives` 的定义
-
-English:
-definition commutatorRepresentatives
-  signature: : Set (G × G)
-  body: Set.range fun g : commutatorSet G => (g.2.choose, g.2.choose_spec.choose)
-
-中文:
-定义 commutatorRepresentatives
-  签名: : 集合 (G × G)
-  定义体: Set.range fun g : commutatorSet G => (g.2.choose, g.2.choose_spec.choose)
-
-Depends on / 依赖: Set.range, choose_spec, choose_spec.choose, commutatorSet
+/-
+**commutatorRepresentatives** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：commutatorRepresentatives : Set (G × G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def commutatorRepresentatives : Set (G × G) :=
   Set.range fun g : commutatorSet G => (g.2.choose, g.2.choose_spec.choose)
@@ -2000,55 +1619,28 @@ noncomputable def commutatorRepresentatives : Set (G × G) :=
 commutators `⁅g₁, g₂⁆ ∈ G`. -/]
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `closureCommutatorRepresentatives` / `closureCommutatorRepresentatives` 的定义
-
-English:
-definition closureCommutatorRepresentatives
-  signature: : Subgroup G
-  body: closure (Prod.fst '' commutatorRepresentatives G union Prod.snd '' commutatorRepresentatives G)
-
-@[to_additive]
-
-中文:
-定义 closureCommutatorRepresentatives
-  签名: : 子群 G
-  定义体: closure (Prod.fst '' commutatorRepresentatives G union Prod.snd '' commutatorRepresentatives G)
-
-@[to_additive]
-
-Depends on / 依赖: Prod.fst, Prod.snd, closure, commutatorRepresentatives
+/-
+**closureCommutatorRepresentatives** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：closureCommutatorRepresentatives : Subgroup G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def closureCommutatorRepresentatives : Subgroup G :=
-  closure (Prod.fst '' commutatorRepresentatives G union Prod.snd '' commutatorRepresentatives G)
+  closure (Prod.fst '' commutatorRepresentatives G ∪ Prod.snd '' commutatorRepresentatives G)
 
 @[to_additive]
-/--
-lemma `image_commutatorSet_closureCommutatorRepresentatives` / 引理 `image_commutatorSet_closureCommutatorRepresentatives`
-
-English:
-lemma image_commutatorSet_closureCommutatorRepresentatives
-  proof: by
-  apply Set.Subset.antisymm
-  · rintro - ⟨-, ⟨g₁, g₂, rfl⟩, rfl⟩
-    exact ⟨g₁, g₂, rfl⟩
-  · exact fun g hg =>
-⟨_, ⟨⟨_, subset_closure .inl ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩,
-⟨_, subset_closure .inr ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩, rfl⟩,
-        hg.choose_spec.choose_spec⟩
-
-中文:
-引理 image_commutatorSet_closureCommutatorRepresentatives
-  证明: by
-  apply Set.Subset.antisymm
-  · rintro - ⟨-, ⟨g₁, g₂, rfl⟩, rfl⟩
-    exact ⟨g₁, g₂, rfl⟩
-  · exact fun g hg =>
-⟨_, ⟨⟨_, subset_closure .inl ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩,
-⟨_, subset_closure .inr ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩, rfl⟩,
-        hg.choose_spec.choose_spec⟩
-
-Depends on / 依赖: Set.Subset.antisymm, Subset, antisymm, choose_spec, hg.choose_spec.choose_spec, subset_closure
+/-
+**image_commutatorSet_closureCommutatorRepresentatives** 是 Mathlib 中的一个引理，位于命名空间
+ ``。
+形式化陈述：image_commutatorSet_closureCommutatorRepresentatives : (closureCommutatorR
+epresentatives G).subtype '' commutatorSet (closureCommutatorRepresentatives G) 
+= commutatorSet G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma image_commutatorSet_closureCommutatorRepresentatives :
     (closureCommutatorRepresentatives G).subtype ''
@@ -2057,9 +1649,9 @@ lemma image_commutatorSet_closureCommutatorRepresentatives :
   apply Set.Subset.antisymm
   · rintro - ⟨-, ⟨g₁, g₂, rfl⟩, rfl⟩
     exact ⟨g₁, g₂, rfl⟩
-  · exact fun g hg =>
-⟨_, ⟨⟨_, subset_closure .inl ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩,
-⟨_, subset_closure .inr ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩, rfl⟩,
+  · exact fun g hg ↦
+      ⟨_, ⟨⟨_, subset_closure <| .inl ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩,
+          ⟨_, subset_closure <| .inr ⟨_, ⟨⟨g, hg⟩, rfl⟩, rfl⟩⟩, rfl⟩,
         hg.choose_spec.choose_spec⟩
 
 end commutatorRepresentatives
@@ -2067,56 +1659,53 @@ end commutatorRepresentatives
 variable {G}
 
 @[to_additive]
-/--
-theorem `Subgroup.Normal.quotient_commutative_iff_commutator_le` / 定理 `Subgroup.Normal.quotient_commutative_iff_commutator_le`
-
-English:
-theorem Subgroup.Normal.quotient_commutative_iff_commutator_le
-  given: {N : Subgroup G} [N.Normal]
-  proof: by
-  refine ⟨fun hcomm => ?_, fun hGN => ⟨⟨fun x' y' => ?_⟩⟩⟩
-  · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
-    rintro x ⟨p, q, rfl⟩
-    rw [SetLike.mem_coe]; rw [← QuotientGroup.eq_one_iff]; rw [commutatorElement_def]
-    simp only [QuotientGroup.mk_mul, QuotientGroup.mk_inv]
-    rw [← commutatorElement_def]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [mul_comm']
-  · obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective N x'
-    obtain ⟨y, rfl⟩ := QuotientGroup.mk'_surjective N y'
-    rw [← commutatorElement_eq_one_iff_mul_comm]; rw [← map_commutatorElement]; rw [QuotientGroup.mk'_apply]; rw [QuotientGroup.eq_one_iff]
-    apply hGN
-    rw [commutator_eq_closure]
-    exact Subgroup.subset_closure (commutator_mem_commutatorSet x y)
-
-中文:
-定理 子群.正规.quotient_commutative_iff_commutator_le
-  条件: {N : 子群 G} [N.正规]
-  证明: by
-  refine ⟨fun hcomm => ?_, fun hGN => ⟨⟨fun x' y' => ?_⟩⟩⟩
-  · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
-    rintro x ⟨p, q, rfl⟩
-    rw [SetLike.mem_coe]; rw [← QuotientGroup.eq_one_iff]; rw [commutatorElement_def]
-    simp only [QuotientGroup.mk_mul, QuotientGroup.mk_inv]
-    rw [← commutatorElement_def]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [mul_comm']
-  · obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective N x'
-    obtain ⟨y, rfl⟩ := QuotientGroup.mk'_surjective N y'
-    rw [← commutatorElement_eq_one_iff_mul_comm]; rw [← map_commutatorElement]; rw [QuotientGroup.mk'_apply]; rw [QuotientGroup.eq_one_iff]
-    apply hGN
-    rw [commutator_eq_closure]
-    exact Subgroup.subset_closure (commutator_mem_commutatorSet x y)
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk, QuotientGroup.mk_inv, QuotientGroup.mk_mul, SetLike, SetLike.mem_coe, Subgroup, Subgroup.normalClosure_subset_iff, _surjective, commuta, commutatorElement_def, commutatorElement_eq_one_iff_mul_comm, commutator_eq_normalClosure, eq_one_iff, mem_coe, mk_inv, mk_mul, mul_comm, normalClosure_subset_iff
+/-
+**Subgroup.Normal.quotient_commutative_iff_commutator_le** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：Subgroup.Normal.quotient_commutative_iff_commutator_le {N : Subgroup G} [N
+.Normal] : IsMulCommutative (G ⧸ N) ↔ _root_.commutator G <= N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `commutator_eq_normalClosure`：commutator_eq_normalClosure : commutator G 
+= Subgroup.normalClosure (commutatorSet G)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.normalClosure_subset_iff`：normalClosure_subset_iff {N : Subgrou
+p G} [N.Normal] : s subseteq N ↔ normalClosure s <= N
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `QuotientGroup.eq_one_iff`：eq_one_iff {N : Subgroup G} [N.Normal] (x : G)
+ : (x : G ⧸ N) = 1 ↔ x in N
+· 使用定理 `commutatorElement_def`：commutatorElement_def {G : Type*} [Group G] (g₁ g
+₂ : G) : ⁅g₁, g₂⁆ = g₁ * g₂ * g₁⁻¹ * g₂⁻¹
+· 使用定理 `commutatorElement_eq_one_iff_mul_comm`：commutatorElement_eq_one_iff_mul_
+comm : ⁅g₁, g₂⁆ = 1 ↔ g₁ * g₂ = g₂ * g₁
+· 使用引理 `mul_comm'`：mul_comm' {M : Type*} [Mul M] [IsMulCommutative M] (a b : M) 
+: a * b = b * a
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
+· 使用定理 `map_commutatorElement`：map_commutatorElement : (f ⁅g₁, g₂⁆ : G') = ⁅f g₁
+, f g₂⁆
+· 使用定理 `QuotientGroup.mk'_apply`：∀ {G : Type u_1} [inst : Group G] (N : Subgroup
+ G) [nN : N.Normal] (x : G), (QuotientGroup.mk' N) x = ↑x
+· 使用引理 `commutator_eq_closure`：commutator_eq_closure : commutator G = Subgroup.c
+losure (commutatorSet G)
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `commutator_mem_commutatorSet`：commutator_mem_commutatorSet : ⁅g₁, g₂⁆ in
+ commutatorSet G
 -/
 theorem Subgroup.Normal.quotient_commutative_iff_commutator_le {N : Subgroup G} [N.Normal] :
-    IsMulCommutative (G ⧸ N) ↔ _root_.commutator G <= N := by
-  refine ⟨fun hcomm => ?_, fun hGN => ⟨⟨fun x' y' => ?_⟩⟩⟩
+    IsMulCommutative (G ⧸ N) ↔ _root_.commutator G ≤ N := by
+  refine ⟨fun hcomm ↦ ?_, fun hGN ↦ ⟨⟨fun x' y' ↦ ?_⟩⟩⟩
   · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
     rintro x ⟨p, q, rfl⟩
-    rw [SetLike.mem_coe]; rw [← QuotientGroup.eq_one_iff]; rw [commutatorElement_def]
+    rw [SetLike.mem_coe, ← QuotientGroup.eq_one_iff, commutatorElement_def]
     simp only [QuotientGroup.mk_mul, QuotientGroup.mk_inv]
-    rw [← commutatorElement_def]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [mul_comm']
+    rw [← commutatorElement_def, commutatorElement_eq_one_iff_mul_comm, mul_comm']
   · obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective N x'
     obtain ⟨y, rfl⟩ := QuotientGroup.mk'_surjective N y'
-    rw [← commutatorElement_eq_one_iff_mul_comm]; rw [← map_commutatorElement]; rw [QuotientGroup.mk'_apply]; rw [QuotientGroup.eq_one_iff]
+    rw [← commutatorElement_eq_one_iff_mul_comm, ← map_commutatorElement, QuotientGroup.mk'_apply,
+      QuotientGroup.eq_one_iff]
     apply hGN
     rw [commutator_eq_closure]
     exact Subgroup.subset_closure (commutator_mem_commutatorSet x y)
@@ -2125,54 +1714,65 @@ theorem Subgroup.Normal.quotient_commutative_iff_commutator_le {N : Subgroup G} 
   then `N` contains `commutator G`. -/
 @[to_additive /-- If `N` is a normal additive subgroup of `G` and `H` a commutative additive
 subgroup such that `H ⊔ N = ⊤`, then `N` contains `addCommutator G`. -/]
-/--
-theorem `Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top` / 定理 `Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top`
-
-English:
-theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top
-  statement: {N : Subgroup G} [N.Normal]
-  proof: by
-  -- It is enough to prove that Q = G ⧸ N is commutative
-  apply quotient_commutative_iff_commutator_le.mp
-  -- Q is a quotient of H
-  let φ : H ->ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
-  -- It is enough to prove that φ is surjective
-  apply Function.Surjective.mul_comm (f := φ) _ hH
-  -- We have to prove that `MonoidHom.range φ = ⊤`
-  have : Subgroup.map (QuotientGroup.mk' N) ⊤ = ⊤ := by
-    rw [← MonoidHom.range_eq_map]; rw [MonoidHom.range_eq_top]
-    exact QuotientGroup.mk'_surjective N
-  rw [MulHom.coe_coe]; rw [← MonoidHom.range_eq_top]; rw [MonoidHom.range_eq_map]; rw [← Subgroup.map_map]; rw [← this]; rw [Subgroup.map_eq_map_iff]; rw [QuotientGroup.ker_mk']; rw [sup_comm]; rw [← hHN]; rw [← MonoidHom.range_eq_map]
-  simp
-
-中文:
-定理 子群.正规.commutator_le_of_self_sup_commutative_eq_top
-  结论: {N : 子群 G} [N.正规]
-  证明: by
-  -- It is enough to prove that Q = G ⧸ N is commutative
-  apply quotient_commutative_iff_commutator_le.mp
-  -- Q is a quotient of H
-  let φ : H ->ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
-  -- It is enough to prove that φ is surjective
-  apply Function.Surjective.mul_comm (f := φ) _ hH
-  -- We have to prove that `MonoidHom.range φ = ⊤`
-  have : Subgroup.map (QuotientGroup.mk' N) ⊤ = ⊤ := by
-    rw [← MonoidHom.range_eq_map]; rw [MonoidHom.range_eq_top]
-    exact QuotientGroup.mk'_surjective N
-  rw [MulHom.coe_coe]; rw [← MonoidHom.range_eq_top]; rw [MonoidHom.range_eq_map]; rw [← Subgroup.map_map]; rw [← this]; rw [Subgroup.map_eq_map_iff]; rw [QuotientGroup.ker_mk']; rw [sup_comm]; rw [← hHN]; rw [← MonoidHom.range_eq_map]
-  simp
+/-
+**Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top {N : Subgroup
+ G} [N.Normal] {H : Subgroup G} (hHN : N ⊔ H = ⊤) (hH : IsMulCommutative H) : _r
+oot_.commutator G <= N
+参数：hHN : N ⊔ H = ⊤；hH : IsMulCommutative H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.Normal.quotient_commutative_iff_commutator_le`：Subgroup.Normal.
+quotient_commutative_iff_commutator_le {N : Subgroup G} [N.Normal] : IsMulCommut
+ative (G ⧸ N) ↔ _root_.commutator G <= N
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Function.Surjective.mul_comm`：Function.Surjective.mul_comm [Mul M] [Mul 
+N] {f : M ->ₙ* N} (is_surj : Function.Surjective f) (is_comm : IsMulCommutative 
+M) : IsMulCommutat…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
+· 使用定理 `MulHom.coe_coe`：MulHom.coe_coe [MulHomClass F M N] (f : F) : ((f : MulHo
+m M N) : M -> N) = f
+· 使用定理 `Subgroup.map_map`：map_map (g : N ->* P) (f : G ->* N) : (K.map f).map g 
+= K.map (g.comp f)
+· 使用定理 `Subgroup.map_eq_map_iff`：map_eq_map_iff {f : G ->* N} {H K : Subgroup G}
+ : H.map f = K.map f ↔ H ⊔ f.ker = K ⊔ f.ker
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Subgroup.range_subtype`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup 
+G), H.subtype.range = H
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top {N : Subgroup G} [N.Normal]
-    {H : Subgroup G} (hHN : N ⊔ H = ⊤) (hH : IsMulCommutative H) : _root_.commutator G <= N := by
+    {H : Subgroup G} (hHN : N ⊔ H = ⊤) (hH : IsMulCommutative H) : _root_.commutator G ≤ N := by
   -- It is enough to prove that Q = G ⧸ N is commutative
   apply quotient_commutative_iff_commutator_le.mp
   -- Q is a quotient of H
-  let φ : H ->ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
+  let φ : H →ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
   -- It is enough to prove that φ is surjective
   apply Function.Surjective.mul_comm (f := φ) _ hH
   -- We have to prove that `MonoidHom.range φ = ⊤`
   have : Subgroup.map (QuotientGroup.mk' N) ⊤ = ⊤ := by
-    rw [← MonoidHom.range_eq_map]; rw [MonoidHom.range_eq_top]
+    rw [← MonoidHom.range_eq_map, MonoidHom.range_eq_top]
     exact QuotientGroup.mk'_surjective N
-  rw [MulHom.coe_coe]; rw [← MonoidHom.range_eq_top]; rw [MonoidHom.range_eq_map]; rw [← Subgroup.map_map]; rw [← this]; rw [Subgroup.map_eq_map_iff]; rw [QuotientGroup.ker_mk']; rw [sup_comm]; rw [← hHN]; rw [← MonoidHom.range_eq_map]
+  rw [MulHom.coe_coe, ← MonoidHom.range_eq_top, MonoidHom.range_eq_map, ← Subgroup.map_map, ← this,
+    Subgroup.map_eq_map_iff, QuotientGroup.ker_mk', sup_comm, ← hHN, ← MonoidHom.range_eq_map]
   simp

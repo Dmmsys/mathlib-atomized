@@ -20,85 +20,61 @@ public import Mathlib.Tactic.Translate.ToAdditive
 
 public section
 
-/--
-Definition of `PosPart` / `PosPart` 的定义
+/-- A notation class for the *positive part* function: `a⁺`. -/
+/-
+**PosPart** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class PosPart
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - posPart : α -> α
-
-中文:
-类 正部
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - posPart : α -> α
+--- 原说明 ---
+A notation class for the *positive part* function: `a⁺`.
 -/
 class PosPart (α : Type*) where
   /-- The *positive part* of an element `a`. -/
-  posPart : α -> α
+  posPart : α → α
 
 /-- A notation class for the *positive part* function (multiplicative version): `a⁺ᵐ`. -/
 @[to_additive]
-/--
-Definition of `OneLePart` / `OneLePart` 的定义
+/-
+**OneLePart** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OneLePart
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - oneLePart : α -> α
-
-中文:
-类 OneLePart
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - oneLePart : α -> α
+--- 原说明 ---
+A notation class for the *positive part* function (multiplicative version): `a⁺ᵐ
+`.
 -/
 class OneLePart (α : Type*) where
   /-- The *positive part* of an element `a`. -/
-  oneLePart : α -> α
+  oneLePart : α → α
 
-/--
-Definition of `NegPart` / `NegPart` 的定义
+/-- A notation class for the *negative part* function: `a⁻`. -/
+/-
+**NegPart** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NegPart
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - negPart : α -> α
-
-中文:
-类 负部
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - negPart : α -> α
+--- 原说明 ---
+A notation class for the *negative part* function: `a⁻`.
 -/
 class NegPart (α : Type*) where
   /-- The *negative part* of an element `a`. -/
-  negPart : α -> α
+  negPart : α → α
 
 /-- A notation class for the *negative part* function (multiplicative version): `a⁻ᵐ`. -/
 @[to_additive]
-/--
-Definition of `LeOnePart` / `LeOnePart` 的定义
+/-
+**LeOnePart** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeOnePart
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - leOnePart : α -> α
-
-中文:
-类 LeOnePart
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - leOnePart : α -> α
+--- 原说明 ---
+A notation class for the *negative part* function (multiplicative version): `a⁻ᵐ
+`.
 -/
 class LeOnePart (α : Type*) where
   /-- The *negative part* of an element `a`. -/
-  leOnePart : α -> α
+  leOnePart : α → α
 
 export OneLePart (oneLePart)
 export LeOnePart (leOnePart)

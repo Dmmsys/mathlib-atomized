@@ -61,132 +61,27 @@ example (y : ℝ) (hy : y ≠ 0) : ContinuousAt (fun x => x * (Real.log x) ^ 2 -
 syntax (name := funPropTacStx)
   "fun_prop" optConfig (discharger)? (" [" withoutPosition(ident,*,?) "]")? : tactic
 
-/--
-Definition of `assumptionDischarge` / `assumptionDischarge` 的定义
-
-English:
-definition assumptionDischarge
-  signature: : Expr -> MetaM (Option Expr)
-  body: fun e => do tacticToDischarge (← `(tactic| with_reducible assumption)) e
-
-中文:
-定义 assumptionDischarge
-  签名: : Expr -> MetaM (选项类型 Expr)
-  定义体: fun e => do tacticToDischarge (← `(tactic| with_reducible assumption)) e
+/-
+**Mathlib.Meta.FunProp.assumptionDischarge** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def assumptionDischarge : Expr -> MetaM (Option Expr) :=
+private def assumptionDischarge : Expr → MetaM (Option Expr) :=
   fun e => do tacticToDischarge (← `(tactic| with_reducible assumption)) e
 
 /-- Tactic to prove function properties -/
 @[tactic funPropTacStx]
-/--
-Definition of `funPropTac` / `funPropTac` 的定义
+/-
+**Mathlib.Meta.FunProp.funPropTac** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPro
+p`。
+形式化陈述：funPropTac : Tactic | `(tactic| fun_prop $cfg:optConfig $[$d]? $[[$names,*
+]]?) => do  let goal ← getMainGoal goal.withContext do let goalType ← goal.getTy
+pe  -- the whnf and telescope is here because the goal can be -- `∀ y, let f
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funPropTac
-  signature: : Tactic
-  body: fun x => x + y; Continuous fun x => x + f x`
-      -- However it is still not complete solution. How should we deal with mix of let and forall?
-withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
-        unless (← getFunProp? type).isSome do
-          let hint :=
-            if let some n := type.getAppFn.constName?
-            then s!" Consider marking `{n}` with `@[fun_prop]`."
-            else ""
-          throwError "`{← ppExpr type}` is not a `fun_prop` goal!{hint}"
-
-      let cfg ← elabFunPropConfig cfg
-
-      let disch ← show MetaM (Expr -> MetaM (Option Expr)) from do
-        match d with
-        | none => pure assumptionDischarge
-        | some d =>
-          match d with
-          | `(discharger| (discharger:=$tac)) =>
-pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
-          | _ => pure assumptionDischarge
-
-      let namesToUnfold ← show CoreM (Array Name) from
-        match names with
-        | none => pure #[]
-        | some ns => ns.getElems.mapM Elab.realizeGlobalConstNoOverloadWithInfo
-
-      let namesToUnfold := namesToUnfold.append defaultNamesToUnfold
-
-      let ctx : Context :=
-        { config := cfg,
-          disch := disch
-          constToUnfold := .ofArray namesToUnfold _}
-      let env ← getEnv
-      let s := {
-        morTheorems := morTheoremsExt.getState env
-        transitionTheorems := transitionTheoremsExt.getState env }
-.run s let (r?, s) ← funProp goalType ctx
-      if let some r := r? then
-        goal.assign r.proof
-      else
-        let mut msg := s!"`fun_prop` was unable to prove `{← Meta.ppExpr goalType}`\n\n"
-
-        msg := msg ++ "Issues:"
-        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n " ++ m)
-
-        throwError msg
-
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 funPropTac
-  签名: : Tactic
-  定义体: fun x => x + y; Continuous fun x => x + f x`
-      -- However it is still not complete solution. How should we deal with mix of let and forall?
-withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
-        unless (← getFunProp? type).isSome do
-          let hint :=
-            if let some n := type.getAppFn.constName?
-            then s!" Consider marking `{n}` with `@[fun_prop]`."
-            else ""
-          throwError "`{← ppExpr type}` is not a `fun_prop` goal!{hint}"
-
-      let cfg ← elabFunPropConfig cfg
-
-      let disch ← show MetaM (Expr -> MetaM (Option Expr)) from do
-        match d with
-        | none => pure assumptionDischarge
-        | some d =>
-          match d with
-          | `(discharger| (discharger:=$tac)) =>
-pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
-          | _ => pure assumptionDischarge
-
-      let namesToUnfold ← show CoreM (Array Name) from
-        match names with
-        | none => pure #[]
-        | some ns => ns.getElems.mapM Elab.realizeGlobalConstNoOverloadWithInfo
-
-      let namesToUnfold := namesToUnfold.append defaultNamesToUnfold
-
-      let ctx : Context :=
-        { config := cfg,
-          disch := disch
-          constToUnfold := .ofArray namesToUnfold _}
-      let env ← getEnv
-      let s := {
-        morTheorems := morTheoremsExt.getState env
-        transitionTheorems := transitionTheoremsExt.getState env }
-.run s let (r?, s) ← funProp goalType ctx
-      if let some r := r? then
-        goal.assign r.proof
-      else
-        let mut msg := s!"`fun_prop` was unable to prove `{← Meta.ppExpr goalType}`\n\n"
-
-        msg := msg ++ "Issues:"
-        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n " ++ m)
-
-        throwError msg
-
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: Continuous
+--- 原说明 ---
+Tactic to prove function properties
 -/
 def funPropTac : Tactic
   | `(tactic| fun_prop $cfg:optConfig $[$d]? $[[$names,*]]?) => do
@@ -198,7 +93,7 @@ def funPropTac : Tactic
       -- the whnf and telescope is here because the goal can be
       -- `∀ y, let f := fun x => x + y; Continuous fun x => x + f x`
       -- However it is still not complete solution. How should we deal with mix of let and forall?
-withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
+      withReducible <| forallTelescopeReducing (← whnfR goalType) fun _ type => do
         unless (← getFunProp? type).isSome do
           let hint :=
             if let some n := type.getAppFn.constName?
@@ -208,13 +103,13 @@ withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
 
       let cfg ← elabFunPropConfig cfg
 
-      let disch ← show MetaM (Expr -> MetaM (Option Expr)) from do
+      let disch ← show MetaM (Expr → MetaM (Option Expr)) from do
         match d with
         | none => pure assumptionDischarge
         | some d =>
           match d with
           | `(discharger| (discharger:=$tac)) =>
-pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
+            pure <| tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
           | _ => pure assumptionDischarge
 
       let namesToUnfold ← show CoreM (Array Name) from
@@ -230,16 +125,16 @@ pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)
           constToUnfold := .ofArray namesToUnfold _}
       let env ← getEnv
       let s := {
-        morTheorems := morTheoremsExt.getState env
+        morTheorems        := morTheoremsExt.getState env
         transitionTheorems := transitionTheoremsExt.getState env }
-.run s let (r?, s) ← funProp goalType ctx
+      let (r?, s) ← funProp goalType ctx |>.run s
       if let some r := r? then
         goal.assign r.proof
       else
         let mut msg := s!"`fun_prop` was unable to prove `{← Meta.ppExpr goalType}`\n\n"
 
         msg := msg ++ "Issues:"
-        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n " ++ m)
+        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n  " ++ m)
 
         throwError msg
 
@@ -284,7 +179,7 @@ elab "#print_fun_prop_theorems " funIdent:ident funProp:(ident)? : command => do
     let mut msg : MessageData := ""
     msg := msg ++ m!"{← Meta.ppOrigin (.decl funProp)}"
     for thm in thms do
-      msg := msg ++ m!"\n {← Meta.ppOrigin (.decl thm.thmOrigin.name)}, \
+      msg := msg ++ m!"\n  {← Meta.ppOrigin (.decl thm.thmOrigin.name)}, \
                  args: {thm.mainArgs}, form: {thm.form}"
       pure ()
     logInfo msg
@@ -301,3 +196,4 @@ elab "#print_fun_prop_theorems " funIdent:ident funProp:(ident)? : command => do
 end Meta.FunProp
 
 end Mathlib
+

@@ -30,310 +30,299 @@ namespace Submodule
 open LinearMap
 
 variable {ι R : Type*} [CommRing R]
-variable {Ms : ι -> Type*} [forall i, AddCommGroup (Ms i)] [forall i, Module R (Ms i)]
+variable {Ms : ι → Type*} [∀ i, AddCommGroup (Ms i)] [∀ i, Module R (Ms i)]
 variable {N : Type*} [AddCommGroup N] [Module R N]
-variable {Ns : ι -> Type*} [forall i, AddCommGroup (Ns i)] [forall i, Module R (Ns i)]
+variable {Ns : ι → Type*} [∀ i, AddCommGroup (Ns i)] [∀ i, Module R (Ns i)]
 
-/--
-Definition of `piQuotientLift` / `piQuotientLift` 的定义
+/-- Lift a family of maps to the direct sum of quotients. -/
+/-
+**Submodule.piQuotientLift** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：piQuotientLift [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms 
+i)) (q : Submodule R N) (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i <= q.c
+omap (f i)) : (forall i, Ms i ⧸ p i) ->ₗ[R] N ⧸ q
+参数：p : forall i, Submodule R (Ms i)；q : Submodule R N；f : forall i, Ms i ->ₗ[R] 
+N；hf : forall i, p i <= q.comap (f i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piQuotientLift
-  signature: [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i)) (q : Submodule R N)
-  body: lsum R (fun i => Ms i ⧸ p i) R fun i => (p i).mapQ q (f i) (hf i)
-
-@[simp]
-
-中文:
-定义 piQuotientLift
-  签名: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i)) (q : 子模 R N)
-  定义体: lsum R (fun i => Ms i ⧸ p i) R fun i => (p i).mapQ q (f i) (hf i)
-
-@[simp]
+--- 原说明 ---
+Lift a family of maps to the direct sum of quotients.
 -/
-def piQuotientLift [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i)) (q : Submodule R N)
-    (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i <= q.comap (f i)) : (forall i, Ms i ⧸ p i) ->ₗ[R] N ⧸ q :=
+def piQuotientLift [Fintype ι] [DecidableEq ι] (p : ∀ i, Submodule R (Ms i)) (q : Submodule R N)
+    (f : ∀ i, Ms i →ₗ[R] N) (hf : ∀ i, p i ≤ q.comap (f i)) : (∀ i, Ms i ⧸ p i) →ₗ[R] N ⧸ q :=
   lsum R (fun i => Ms i ⧸ p i) R fun i => (p i).mapQ q (f i) (hf i)
 
 @[simp]
-/--
-theorem `piQuotientLift_mk` / 定理 `piQuotientLift_mk`
-
-English:
-theorem piQuotientLift_mk
-  statement: [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i))
-  proof: by
-  rw [piQuotientLift]; rw [lsum_apply]; rw [sum_apply]; rw [← mkQ_apply]; rw [lsum_apply]; rw [sum_apply]; rw [_root_.map_sum]
-  simp only [coe_proj, mapQ_apply, mkQ_apply, comp_apply]
-
-@[simp]
-
-中文:
-定理 piQuotientLift_mk
-  结论: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
-  证明: by
-  rw [piQuotientLift]; rw [lsum_apply]; rw [sum_apply]; rw [← mkQ_apply]; rw [lsum_apply]; rw [sum_apply]; rw [_root_.map_sum]
-  simp only [coe_proj, mapQ_apply, mkQ_apply, comp_apply]
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.map_sum, coe_proj, comp_apply, lsum_apply, mapQ_apply, map_sum, mkQ_apply, piQuotientLift, sum_apply
+/-
+**Submodule.piQuotientLift_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：piQuotientLift_mk [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (
+Ms i)) (q : Submodule R N) (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i <= 
+q.comap (f i)) (x : forall i, Ms i) : (piQuotientLift p q f hf fun i => Quotient
+.mk (x i)) = Quotient.mk (lsum _ _ R f x)
+参数：p : forall i, Submodule R (Ms i)；q : Submodule R N；f : forall i, Ms i ->ₗ[R] 
+N；hf : forall i, p i <= q.comap (f i)；x : forall i, Ms i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.piQuotientLift.eq_1`：∀ {ι : Type u_1} {R : Type u_2} [inst : C
+ommRing R] {Ms : ι → Type u_3} [inst_1 : (i : ι) → AddCommGroup (Ms i)]   [inst_
+2 : (i : ι) → _root…
+· 使用定理 `LinearMap.lsum_apply`：lsum_apply (S) [AddCommMonoid M] [Module R M] [Fin
+type ι] [Semiring S] [Module S M] [SMulCommClass R S M] (f : (i : ι) -> φ i ->ₗ[
+R] M) : ls…
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem piQuotientLift_mk [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i))
-    (q : Submodule R N) (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i <= q.comap (f i)) (x : forall i, Ms i) :
+theorem piQuotientLift_mk [Fintype ι] [DecidableEq ι] (p : ∀ i, Submodule R (Ms i))
+    (q : Submodule R N) (f : ∀ i, Ms i →ₗ[R] N) (hf : ∀ i, p i ≤ q.comap (f i)) (x : ∀ i, Ms i) :
     (piQuotientLift p q f hf fun i => Quotient.mk (x i)) = Quotient.mk (lsum _ _ R f x) := by
-  rw [piQuotientLift]; rw [lsum_apply]; rw [sum_apply]; rw [← mkQ_apply]; rw [lsum_apply]; rw [sum_apply]; rw [_root_.map_sum]
+  rw [piQuotientLift, lsum_apply, sum_apply, ← mkQ_apply, lsum_apply, sum_apply, _root_.map_sum]
   simp only [coe_proj, mapQ_apply, mkQ_apply, comp_apply]
 
 @[simp]
-/--
-theorem `piQuotientLift_single` / 定理 `piQuotientLift_single`
-
-English:
-theorem piQuotientLift_single
-  statement: [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i))
-  proof: by
-  simp_rw [piQuotientLift, lsum_apply, sum_apply, comp_apply, proj_apply]
-  rw [Finset.sum_eq_single i]
-  · rw [Pi.single_eq_same]
-  · rintro j - hj
-    rw [Pi.single_eq_of_ne hj]; rw [map_zero]
-  · intros
-    have := Finset.mem_univ i
-    contradiction
-
-中文:
-定理 piQuotientLift_single
-  结论: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
-  证明: by
-  simp_rw [piQuotientLift, lsum_apply, sum_apply, comp_apply, proj_apply]
-  rw [Finset.sum_eq_single i]
-  · rw [Pi.single_eq_same]
-  · rintro j - hj
-    rw [Pi.single_eq_of_ne hj]; rw [map_zero]
-  · intros
-    have := Finset.mem_univ i
-    contradiction
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_eq_single, Pi.single_eq_of_ne, Pi.single_eq_same, comp_apply, intros, lsum_apply, map_zero, mem_univ, piQuotientLift, proj_apply, simp_rw, single_eq_of_ne, single_eq_same, sum_apply, sum_eq_single
+/-
+**Submodule.piQuotientLift_single** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：piQuotientLift_single [Fintype ι] [DecidableEq ι] (p : forall i, Submodule
+ R (Ms i)) (q : Submodule R N) (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i
+ <= q.comap (f i)) (i) (x : Ms i ⧸ p i) : piQuotientLift p q f hf (Pi.single i x
+) = mapQ _ _ (f i) (hf i) x
+参数：p : forall i, Submodule R (Ms i)；q : Submodule R N；f : forall i, Ms i ->ₗ[R] 
+N；hf : forall i, p i <= q.comap (f i)；i；x : Ms i ⧸ p i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
 -/
-theorem piQuotientLift_single [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i))
-    (q : Submodule R N) (f : forall i, Ms i ->ₗ[R] N) (hf : forall i, p i <= q.comap (f i)) (i)
+theorem piQuotientLift_single [Fintype ι] [DecidableEq ι] (p : ∀ i, Submodule R (Ms i))
+    (q : Submodule R N) (f : ∀ i, Ms i →ₗ[R] N) (hf : ∀ i, p i ≤ q.comap (f i)) (i)
     (x : Ms i ⧸ p i) : piQuotientLift p q f hf (Pi.single i x) = mapQ _ _ (f i) (hf i) x := by
   simp_rw [piQuotientLift, lsum_apply, sum_apply, comp_apply, proj_apply]
   rw [Finset.sum_eq_single i]
   · rw [Pi.single_eq_same]
   · rintro j - hj
-    rw [Pi.single_eq_of_ne hj]; rw [map_zero]
+    rw [Pi.single_eq_of_ne hj, map_zero]
   · intros
     have := Finset.mem_univ i
     contradiction
 
-/--
-Definition of `quotientPiLift` / `quotientPiLift` 的定义
+/-- Lift a family of maps to a quotient of direct sums. -/
+/-
+**Submodule.quotientPiLift** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotientPiLift (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[
+R] Ns i) (hf : forall i, p i <= ker (f i)) : (forall i, Ms i) ⧸ pi Set.univ p ->
+ₗ[R] forall i, Ns i
+参数：p : forall i, Submodule R (Ms i)；f : forall i, Ms i ->ₗ[R] Ns i；hf : forall i
+, p i <= ker (f i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotientPiLift
-  signature: (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i)
-  body: (pi Set.univ p).liftQ (LinearMap.pi fun i => (f i).comp (proj i)) fun x hx =>
-mem_ker.mpr by
-      ext i
-      simpa using hf i (mem_pi.mp hx i (Set.mem_univ i))
-
-@[simp]
-
-中文:
-定义 quotientPiLift
-  签名: (p : 对任意 i, 子模 R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
-  定义体: (pi Set.univ p).liftQ (LinearMap.pi fun i => (f i).comp (proj i)) fun x hx =>
-mem_ker.mpr by
-      ext i
-      simpa using hf i (mem_pi.mp hx i (Set.mem_univ i))
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.pi, Set.mem_univ, Set.univ, mem_ker, mem_ker.mpr, mem_pi, mem_pi.mp, mem_univ
+--- 原说明 ---
+Lift a family of maps to a quotient of direct sums.
 -/
-def quotientPiLift (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i)
-    (hf : forall i, p i <= ker (f i)) : (forall i, Ms i) ⧸ pi Set.univ p ->ₗ[R] forall i, Ns i :=
+def quotientPiLift (p : ∀ i, Submodule R (Ms i)) (f : ∀ i, Ms i →ₗ[R] Ns i)
+    (hf : ∀ i, p i ≤ ker (f i)) : (∀ i, Ms i) ⧸ pi Set.univ p →ₗ[R] ∀ i, Ns i :=
   (pi Set.univ p).liftQ (LinearMap.pi fun i => (f i).comp (proj i)) fun x hx =>
-mem_ker.mpr by
+    mem_ker.mpr <| by
       ext i
       simpa using hf i (mem_pi.mp hx i (Set.mem_univ i))
 
 @[simp]
-/--
-theorem `quotientPiLift_mk` / 定理 `quotientPiLift_mk`
-
-English:
-theorem quotientPiLift_mk
-  statement: (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i)
-  proof: rfl
-
-中文:
-定理 quotientPiLift_mk
-  结论: (p : 对任意 i, 子模 R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
-  证明: rfl
+/-
+**Submodule.quotientPiLift_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quotientPiLift_mk (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i -
+>ₗ[R] Ns i) (hf : forall i, p i <= ker (f i)) (x : forall i, Ms i) : quotientPiL
+ift p f hf (Quotient.mk x) = fun i => f i (x i)
+参数：p : forall i, Submodule R (Ms i)；f : forall i, Ms i ->ₗ[R] Ns i；hf : forall i
+, p i <= ker (f i)；x : forall i, Ms i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem quotientPiLift_mk (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i)
-    (hf : forall i, p i <= ker (f i)) (x : forall i, Ms i) :
+theorem quotientPiLift_mk (p : ∀ i, Submodule R (Ms i)) (f : ∀ i, Ms i →ₗ[R] Ns i)
+    (hf : ∀ i, p i ≤ ker (f i)) (x : ∀ i, Ms i) :
     quotientPiLift p f hf (Quotient.mk x) = fun i => f i (x i) :=
   rfl
 
 namespace quotientPi_aux
 
-variable (p : forall i, Submodule R (Ms i))
+variable (p : ∀ i, Submodule R (Ms i))
 
 @[simp]
-/--
-Definition of `toFun` / `toFun` 的定义
-
-English:
-definition toFun
-  signature: : ((forall i, Ms i) ⧸ pi Set.univ p) -> forall i, Ms i ⧸ p i
-  body: quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge
-
-中文:
-定义 toFun
-  签名: : ((对任意 i, Ms i) ⧸ pi 集合.univ p) -> 对任意 i, Ms i ⧸ p i
-  定义体: quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge
-
-Depends on / 依赖: ker_mkQ, quotientPiLift
+/-
+**Submodule.quotientPi_aux.toFun** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.quotientPi
+_aux`。
+形式化陈述：toFun : ((forall i, Ms i) ⧸ pi Set.univ p) -> forall i, Ms i ⧸ p i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def toFun : ((forall i, Ms i) ⧸ pi Set.univ p) -> forall i, Ms i ⧸ p i :=
+def toFun : ((∀ i, Ms i) ⧸ pi Set.univ p) → ∀ i, Ms i ⧸ p i :=
   quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (x y : ((i : ι) -> Ms i) ⧸ pi Set.univ p)
-  proof: LinearMap.map_add (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) x y
-
-中文:
-定理 map_add
-  条件: (x y : ((i : ι) -> Ms i) ⧸ pi 集合.univ p)
-  证明: LinearMap.map_add (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) x y
-
-Depends on / 依赖: LinearMap, LinearMap.map_add, ker_mkQ, map_add, quotientPiLift
+/-
+**Submodule.quotientPi_aux.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.quotient
+Pi_aux`。
+形式化陈述：map_add (x y : ((i : ι) -> Ms i) ⧸ pi Set.univ p) : toFun p (x + y) = toFu
+n p x + toFun p y
+参数：x y : ((i : ι) -> Ms i) ⧸ pi Set.univ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_add`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
 -/
-theorem map_add (x y : ((i : ι) -> Ms i) ⧸ pi Set.univ p) :
+theorem map_add (x y : ((i : ι) → Ms i) ⧸ pi Set.univ p) :
     toFun p (x + y) = toFun p x + toFun p y :=
   LinearMap.map_add (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) x y
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (r : R) (x : ((i : ι) -> Ms i) ⧸ pi Set.univ p)
-  proof: LinearMap.map_smul (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) r x
-
-中文:
-定理 map_smul
-  条件: (r : R) (x : ((i : ι) -> Ms i) ⧸ pi 集合.univ p)
-  证明: LinearMap.map_smul (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) r x
-
-Depends on / 依赖: LinearMap, LinearMap.map_smul, ker_mkQ, map_smul, quotientPiLift
+/-
+**Submodule.quotientPi_aux.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.quotien
+tPi_aux`。
+形式化陈述：map_smul (r : R) (x : ((i : ι) -> Ms i) ⧸ pi Set.univ p) : toFun p (r • x)
+ = (RingHom.id R r) • toFun p x
+参数：r : R；x : ((i : ι) -> Ms i) ⧸ pi Set.univ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
 -/
-theorem map_smul (r : R) (x : ((i : ι) -> Ms i) ⧸ pi Set.univ p) :
+theorem map_smul (r : R) (x : ((i : ι) → Ms i) ⧸ pi Set.univ p) :
     toFun p (r • x) = (RingHom.id R r) • toFun p x :=
   LinearMap.map_smul (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) r x
 
 variable [Fintype ι] [DecidableEq ι]
 
 @[simp]
-/--
-Definition of `invFun` / `invFun` 的定义
-
-English:
-definition invFun
-  signature: : (forall i, Ms i ⧸ p i) -> (forall i, Ms i) ⧸ pi Set.univ p
-  body: piQuotientLift p (pi Set.univ p) _ fun _ => le_comap_single_pi p
-
-中文:
-定义 invFun
-  签名: : (对任意 i, Ms i ⧸ p i) -> (对任意 i, Ms i) ⧸ pi 集合.univ p
-  定义体: piQuotientLift p (pi Set.univ p) _ fun _ => le_comap_single_pi p
-
-Depends on / 依赖: Set.univ, le_comap_single_pi, piQuotientLift
+/-
+**Submodule.quotientPi_aux.invFun** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.quotientP
+i_aux`。
+形式化陈述：invFun : (forall i, Ms i ⧸ p i) -> (forall i, Ms i) ⧸ pi Set.univ p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def invFun : (forall i, Ms i ⧸ p i) -> (forall i, Ms i) ⧸ pi Set.univ p :=
+def invFun : (∀ i, Ms i ⧸ p i) → (∀ i, Ms i) ⧸ pi Set.univ p :=
   piQuotientLift p (pi Set.univ p) _ fun _ => le_comap_single_pi p
-
-/--
-theorem `left_inv` / 定理 `left_inv`
-
-English:
-theorem left_inv
-  statement: Function.LeftInverse (invFun p) (toFun p)
-  proof: fun x =>
-  Submodule.Quotient.induction_on _ x fun x' => by
-    dsimp only [toFun, invFun]
-    rw [quotientPiLift_mk p]; rw [funext fun i => (mkQ_apply (p i) (x' i))]; rw [piQuotientLift_mk p]; rw [lsum_single]; rw [id_apply]
-
-中文:
-定理 left_inv
-  结论: 函数.左逆 (invFun p) (toFun p)
-  证明: fun x =>
-  Submodule.Quotient.induction_on _ x fun x' => by
-    dsimp only [toFun, invFun]
-    rw [quotientPiLift_mk p]; rw [funext fun i => (mkQ_apply (p i) (x' i))]; rw [piQuotientLift_mk p]; rw [lsum_single]; rw [id_apply]
+/-
+**Submodule.quotientPi_aux.left_inv** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.quotien
+tPi_aux`。
+形式化陈述：left_inv : Function.LeftInverse (invFun p) (toFun p)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.Quotient.induction_on`：induction_on {C : M ⧸ p -> Prop} (x : M
+ ⧸ p) (H : forall z, C (Submodule.Quotient.mk z)) : C x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.quotientPiLift_mk`：quotientPiLift_mk (p : forall i, Submodule 
+R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i) (hf : forall i, p i <= ker (f i)) (x 
+: forall i, Ms i)…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Submodule.piQuotientLift_mk`：piQuotientLift_mk [Fintype ι] [DecidableEq 
+ι] (p : forall i, Submodule R (Ms i)) (q : Submodule R N) (f : forall i, Ms i ->
+ₗ[R] N) (hf : for…
+· 使用定理 `LinearMap.lsum_single`：lsum_single (S) [Fintype ι] [Semiring S] [forall 
+i, Module S (φ i)] [forall i, SMulCommClass R S (φ i)] : LinearMap.lsum R φ S (L
+inearMap.si…
+· 使用定理 `LinearMap.id_apply`：id_apply (x : M) : @id R M _ _ _ x = x
 -/
 theorem left_inv : Function.LeftInverse (invFun p) (toFun p) := fun x =>
   Submodule.Quotient.induction_on _ x fun x' => by
     dsimp only [toFun, invFun]
-    rw [quotientPiLift_mk p]; rw [funext fun i => (mkQ_apply (p i) (x' i))]; rw [piQuotientLift_mk p]; rw [lsum_single]; rw [id_apply]
-
-/--
-theorem `right_inv` / 定理 `right_inv`
-
-English:
-theorem right_inv
-  statement: Function.RightInverse (invFun p) (toFun p)
-  proof: by
-  dsimp only [toFun, invFun]
-  rw [Function.rightInverse_iff_comp]; rw [← coe_comp]; rw [← @id_coe R]
-  congr
-  refine pi_ext fun i x => ?_
-  induction x using Submodule.Quotient.induction_on with | _ x'
-  refine funext fun j => ?_
-  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; rw [quotientPiLift_mk]; rw [id_apply]
-  by_cases hij : i = j <;> simp only [mkQ_apply, coe_single]
-  · subst hij
-    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
-  · rw [Pi.single_eq_of_ne (Ne.symm hij), Pi.single_eq_of_ne (Ne.symm hij), Quotient.mk_zero]
-
-中文:
-定理 right_inv
-  结论: 函数.右逆 (invFun p) (toFun p)
-  证明: by
-  dsimp only [toFun, invFun]
-  rw [Function.rightInverse_iff_comp]; rw [← coe_comp]; rw [← @id_coe R]
-  congr
-  refine pi_ext fun i x => ?_
-  induction x using Submodule.Quotient.induction_on with | _ x'
-  refine funext fun j => ?_
-  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; rw [quotientPiLift_mk]; rw [id_apply]
-  by_cases hij : i = j <;> simp only [mkQ_apply, coe_single]
-  · subst hij
-    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
-  · rw [Pi.single_eq_of_ne (Ne.symm hij), Pi.single_eq_of_ne (Ne.symm hij), Quotient.mk_zero]
-
-Depends on / 依赖: Function, Function.rightInverse_iff_comp, Ne.symm, Pi.single_eq_of_ne, Pi.single_eq_same, Quotient, Submodule, Submodule.Quotient.induction_on, coe_comp, coe_single, comp_apply, id_apply, id_coe, induction_on, invFun, mapQ_apply, mkQ_apply, piQuotientLift_single, pi_ext, quotientPiLift_mk
+    rw [quotientPiLift_mk p, funext fun i => (mkQ_apply (p i) (x' i)), piQuotientLift_mk p,
+      lsum_single, id_apply]
+/-
+**Submodule.quotientPi_aux.right_inv** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.quotie
+ntPi_aux`。
+形式化陈述：right_inv : Function.RightInverse (invFun p) (toFun p)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.rightInverse_iff_comp`：rightInverse_iff_comp {f : α -> β} {g : 
+β -> α} : RightInverse f g ↔ g ∘ f = id
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.coe_comp`：coe_comp : (f.comp g : M₁ -> M₃) = f ∘ g
+· 使用定理 `LinearMap.id_coe`：id_coe : ((LinearMap.id : M ->ₗ[R] M) : M -> M) = _roo
+t_.id
+· 使用定理 `LinearMap.pi_ext`：pi_ext (h : forall i x, f (Pi.single i x) = g (Pi.sing
+le i x)) : f = g
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Submodule.Quotient.induction_on`：induction_on {C : M ⧸ p -> Prop} (x : M
+ ⧸ p) (H : forall z, C (Submodule.Quotient.mk z)) : C x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `Submodule.piQuotientLift_single`：piQuotientLift_single [Fintype ι] [Deci
+dableEq ι] (p : forall i, Submodule R (Ms i)) (q : Submodule R N) (f : forall i,
+ Ms i ->ₗ[R] N) (hf :…
+· 使用定理 `Submodule.mapQ_apply`：mapQ_apply (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M) : mapQ
+ p q f h (Quotient.mk x) = Quotient.mk (f x)
+· 使用定理 `Submodule.quotientPiLift_mk`：quotientPiLift_mk (p : forall i, Submodule 
+R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i) (hf : forall i, p i <= ker (f i)) (x 
+: forall i, Ms i)…
+· 使用定理 `LinearMap.id_apply`：id_apply (x : M) : @id R M _ _ _ x = x
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Submodule.Quotient.mk_zero`：mk_zero : mk 0 = (0 : M ⧸ p)
 -/
 theorem right_inv : Function.RightInverse (invFun p) (toFun p) := by
   dsimp only [toFun, invFun]
-  rw [Function.rightInverse_iff_comp]; rw [← coe_comp]; rw [← @id_coe R]
+  rw [Function.rightInverse_iff_comp, ← coe_comp, ← @id_coe R]
   congr
-  refine pi_ext fun i x => ?_
+  refine pi_ext fun i x ↦ ?_
   induction x using Submodule.Quotient.induction_on with | _ x'
-  refine funext fun j => ?_
-  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; rw [quotientPiLift_mk]; rw [id_apply]
+  refine funext fun j ↦ ?_
+  rw [comp_apply, piQuotientLift_single, mapQ_apply,
+    quotientPiLift_mk, id_apply]
   by_cases hij : i = j <;> simp only [mkQ_apply, coe_single]
   · subst hij
-    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
+    rw [Pi.single_eq_same, Pi.single_eq_same]
   · rw [Pi.single_eq_of_ne (Ne.symm hij), Pi.single_eq_of_ne (Ne.symm hij), Quotient.mk_zero]
 
 end quotientPi_aux
@@ -341,31 +330,27 @@ end quotientPi_aux
 open quotientPi_aux in
 /-- The quotient of a direct sum is the direct sum of quotients. -/
 @[simps!]
-/--
-Definition of `quotientPi` / `quotientPi` 的定义
+/-
+**Submodule.quotientPi** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotientPi [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i)) 
+: ((forall i, Ms i) ⧸ pi Set.univ p) ≃ₗ[R] forall i, Ms i ⧸ p i where toFun
+参数：p : forall i, Submodule R (Ms i)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.quotientPi_aux.map_add`：map_add (x y : ((i : ι) -> Ms i) ⧸ pi 
+Set.univ p) : toFun p (x + y) = toFun p x + toFun p y
+· 使用定理 `Submodule.quotientPi_aux.map_smul`：map_smul (r : R) (x : ((i : ι) -> Ms 
+i) ⧸ pi Set.univ p) : toFun p (r • x) = (RingHom.id R r) • toFun p x
+· 使用定理 `Submodule.quotientPi_aux.left_inv`：left_inv : Function.LeftInverse (invF
+un p) (toFun p)
+· 使用定理 `Submodule.quotientPi_aux.right_inv`：right_inv : Function.RightInverse (i
+nvFun p) (toFun p)
 
-English:
-definition quotientPi
-  signature: [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i))
-  body: toFun p
-  invFun := invFun p
-  map_add' := map_add p
-  map_smul' := quotientPi_aux.map_smul p
-  left_inv := left_inv p
-  right_inv := right_inv p
-
-中文:
-定义 quotientPi
-  签名: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
-  定义体: toFun p
-  invFun := invFun p
-  map_add' := map_add p
-  map_smul' := quotientPi_aux.map_smul p
-  left_inv := left_inv p
-  right_inv := right_inv p
+--- 原说明 ---
+The quotient of a direct sum is the direct sum of quotients.
 -/
-def quotientPi [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i)) :
-    ((forall i, Ms i) ⧸ pi Set.univ p) ≃ₗ[R] forall i, Ms i ⧸ p i where
+def quotientPi [Fintype ι] [DecidableEq ι] (p : ∀ i, Submodule R (Ms i)) :
+    ((∀ i, Ms i) ⧸ pi Set.univ p) ≃ₗ[R] ∀ i, Ms i ⧸ p i where
   toFun := toFun p
   invFun := invFun p
   map_add' := map_add p
@@ -374,3 +359,4 @@ def quotientPi [Fintype ι] [DecidableEq ι] (p : forall i, Submodule R (Ms i)) 
   right_inv := right_inv p
 
 end Submodule
+

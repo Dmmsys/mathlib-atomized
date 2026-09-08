@@ -24,87 +24,84 @@ open Set
 section ESeminormedAddMonoid
 
 variable {α ε : Type*} [TopologicalSpace ε] [ESeminormedAddMonoid ε]
-  {s t : Set α} (f : α -> ε) (a : α)
+  {s t : Set α} (f : α → ε) (a : α)
 
-/--
-lemma `enorm_indicator_eq_indicator_enorm` / 引理 `enorm_indicator_eq_indicator_enorm`
-
-English:
-lemma enorm_indicator_eq_indicator_enorm
-  proof: flip congr_fun a (indicator_comp_of_zero (enorm_zero (E := ε))).symm
-
-中文:
-引理 enorm_indicator_eq_indicator_enorm
-  证明: flip congr_fun a (indicator_comp_of_zero (enorm_zero (E := ε))).symm
-
-Depends on / 依赖: congr_fun, enorm_zero, indicator_comp_of_zero
+/-
+**enorm_indicator_eq_indicator_enorm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_indicator_eq_indicator_enorm : ‖indicator s f a‖ₑ = indicator s (fun
+ a => ‖f a‖ₑ) a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.indicator_comp_of_zero`：∀ {α : Type u_1} {M : Type u_3} {N : Type u_
+4} [inst : Zero M] [inst_1 : Zero N] {s : Set α} {f : α → M} {g : M → N},   g 0 
+= 0 → s.indicato…
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
 -/
 lemma enorm_indicator_eq_indicator_enorm :
     ‖indicator s f a‖ₑ = indicator s (fun a => ‖f a‖ₑ) a :=
   flip congr_fun a (indicator_comp_of_zero (enorm_zero (E := ε))).symm
-
-/--
-theorem `enorm_indicator_le_of_subset` / 定理 `enorm_indicator_le_of_subset`
-
-English:
-theorem enorm_indicator_le_of_subset
-  given: (h : s subseteq t) (f : α -> ε) (a : α)
-  proof: by
+/-
+**enorm_indicator_le_of_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_indicator_le_of_subset (h : s subseteq t) (f : α -> ε) (a : α) : ‖in
+dicator s f a‖ₑ <= ‖indicator t f a‖ₑ
+参数：h : s subseteq t；f : α -> ε；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `enorm_indicator_eq_indicator_enorm`：enorm_indicator_eq_indicator_enorm :
+ ‖indicator s f a‖ₑ = indicator s (fun a => ‖f a‖ₑ) a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Set.indicator_le_indicator_apply_of_subset`：∀ {α : Type u_2} {M : Type u
+_3} [inst : Preorder M] [inst_1 : Zero M] {s t : Set α} {f : α → M} {a : α},   s
+ ⊆ t → 0 ≤ f a → s.indicator f a…
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+-/
+theorem enorm_indicator_le_of_subset (h : s ⊆ t) (f : α → ε) (a : α) :
+    ‖indicator s f a‖ₑ ≤ ‖indicator t f a‖ₑ := by
   simp only [enorm_indicator_eq_indicator_enorm]
   grw [h]
-
-中文:
-定理 enorm_indicator_le_of_subset
-  条件: (h : s subseteq t) (f : α -> ε) (a : α)
-  证明: by
-  simp only [enorm_indicator_eq_indicator_enorm]
-  grw [h]
-
-Depends on / 依赖: enorm_indicator_eq_indicator_enorm
+/-
+**indicator_enorm_le_enorm_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：indicator_enorm_le_enorm_self : indicator s (fun a => ‖f a‖ₑ) a <= ‖f a‖ₑ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.indicator_le_self'`：∀ {α : Type u_2} {M : Type u_3} [inst : Preorder
+ M] [inst_1 : Zero M] {s : Set α} {f : α → M},   (∀ x ∉ s, 0 ≤ f x) → s.indicato
+r f ≤ f
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
 -/
-theorem enorm_indicator_le_of_subset (h : s subseteq t) (f : α -> ε) (a : α) :
-    ‖indicator s f a‖ₑ <= ‖indicator t f a‖ₑ := by
-  simp only [enorm_indicator_eq_indicator_enorm]
-  grw [h]
-
-/--
-theorem `indicator_enorm_le_enorm_self` / 定理 `indicator_enorm_le_enorm_self`
-
-English:
-theorem indicator_enorm_le_enorm_self
-  statement: indicator s (fun a => ‖f a‖ₑ) a <= ‖f a‖ₑ
-  proof: indicator_le_self' (fun _ _ => zero_le) a
-
-中文:
-定理 indicator_enorm_le_enorm_self
-  结论: indicator s (fun a => ‖f a‖ₑ) a <= ‖f a‖ₑ
-  证明: indicator_le_self' (fun _ _ => zero_le) a
-
-Depends on / 依赖: indicator_le_self, zero_le
+theorem indicator_enorm_le_enorm_self : indicator s (fun a => ‖f a‖ₑ) a ≤ ‖f a‖ₑ :=
+  indicator_le_self' (fun _ _ ↦ zero_le) a
+/-
+**enorm_indicator_le_enorm_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：enorm_indicator_le_enorm_self : ‖indicator s f a‖ₑ <= ‖f a‖ₑ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `enorm_indicator_eq_indicator_enorm`：enorm_indicator_eq_indicator_enorm :
+ ‖indicator s f a‖ₑ = indicator s (fun a => ‖f a‖ₑ) a
+· 使用定理 `indicator_enorm_le_enorm_self`：indicator_enorm_le_enorm_self : indicator
+ s (fun a => ‖f a‖ₑ) a <= ‖f a‖ₑ
 -/
-theorem indicator_enorm_le_enorm_self : indicator s (fun a => ‖f a‖ₑ) a <= ‖f a‖ₑ :=
-  indicator_le_self' (fun _ _ => zero_le) a
-
-/--
-theorem `enorm_indicator_le_enorm_self` / 定理 `enorm_indicator_le_enorm_self`
-
-English:
-theorem enorm_indicator_le_enorm_self
-  statement: ‖indicator s f a‖ₑ <= ‖f a‖ₑ
-  proof: by
-  rw [enorm_indicator_eq_indicator_enorm]
-  apply indicator_enorm_le_enorm_self
-
-中文:
-定理 enorm_indicator_le_enorm_self
-  结论: ‖indicator s f a‖ₑ <= ‖f a‖ₑ
-  证明: by
-  rw [enorm_indicator_eq_indicator_enorm]
-  apply indicator_enorm_le_enorm_self
-
-Depends on / 依赖: enorm_indicator_eq_indicator_enorm, indicator_enorm_le_enorm_self
--/
-theorem enorm_indicator_le_enorm_self : ‖indicator s f a‖ₑ <= ‖f a‖ₑ := by
+theorem enorm_indicator_le_enorm_self : ‖indicator s f a‖ₑ ≤ ‖f a‖ₑ := by
   rw [enorm_indicator_eq_indicator_enorm]
   apply indicator_enorm_le_enorm_self
 
@@ -112,106 +109,95 @@ end ESeminormedAddMonoid
 
 section SeminormedAddGroup
 
-variable {α E : Type*} [SeminormedAddGroup E] {s t : Set α} (f : α -> E) (a : α)
+variable {α E : Type*} [SeminormedAddGroup E] {s t : Set α} (f : α → E) (a : α)
 
-/--
-theorem `norm_indicator_eq_indicator_norm` / 定理 `norm_indicator_eq_indicator_norm`
-
-English:
-theorem norm_indicator_eq_indicator_norm
-  statement: ‖indicator s f a‖ = indicator s (fun a => ‖f a‖) a
-  proof: flip congr_fun a (indicator_comp_of_zero norm_zero).symm
-
-中文:
-定理 norm_indicator_eq_indicator_norm
-  结论: ‖indicator s f a‖ = indicator s (fun a => ‖f a‖) a
-  证明: flip congr_fun a (indicator_comp_of_zero norm_zero).symm
-
-Depends on / 依赖: congr_fun, indicator_comp_of_zero, norm_zero
+/-
+**norm_indicator_eq_indicator_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_indicator_eq_indicator_norm : ‖indicator s f a‖ = indicator s (fun a 
+=> ‖f a‖) a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.indicator_comp_of_zero`：∀ {α : Type u_1} {M : Type u_3} {N : Type u_
+4} [inst : Zero M] [inst_1 : Zero N] {s : Set α} {f : α → M} {g : M → N},   g 0 
+= 0 → s.indicato…
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
 -/
 theorem norm_indicator_eq_indicator_norm : ‖indicator s f a‖ = indicator s (fun a => ‖f a‖) a :=
   flip congr_fun a (indicator_comp_of_zero norm_zero).symm
-
-/--
-theorem `nnnorm_indicator_eq_indicator_nnnorm` / 定理 `nnnorm_indicator_eq_indicator_nnnorm`
-
-English:
-theorem nnnorm_indicator_eq_indicator_nnnorm
-  proof: flip congr_fun a (indicator_comp_of_zero nnnorm_zero).symm
-
-中文:
-定理 nnnorm_indicator_eq_indicator_nnnorm
-  证明: flip congr_fun a (indicator_comp_of_zero nnnorm_zero).symm
-
-Depends on / 依赖: congr_fun, indicator_comp_of_zero, nnnorm_zero
+/-
+**nnnorm_indicator_eq_indicator_nnnorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nnnorm_indicator_eq_indicator_nnnorm : ‖indicator s f a‖₊ = indicator s (f
+un a => ‖f a‖₊) a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.indicator_comp_of_zero`：∀ {α : Type u_1} {M : Type u_3} {N : Type u_
+4} [inst : Zero M] [inst_1 : Zero N] {s : Set α} {f : α → M} {g : M → N},   g 0 
+= 0 → s.indicato…
+· 使用定理 `nnnorm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖₊ = 0
 -/
 theorem nnnorm_indicator_eq_indicator_nnnorm :
     ‖indicator s f a‖₊ = indicator s (fun a => ‖f a‖₊) a :=
   flip congr_fun a (indicator_comp_of_zero nnnorm_zero).symm
-
-/--
-theorem `norm_indicator_le_of_subset` / 定理 `norm_indicator_le_of_subset`
-
-English:
-theorem norm_indicator_le_of_subset
-  given: (h : s subseteq t) (f : α -> E) (a : α)
-  proof: by
-  simp only [norm_indicator_eq_indicator_norm]
-  grw [h]
-
-中文:
-定理 norm_indicator_le_of_subset
-  条件: (h : s subseteq t) (f : α -> E) (a : α)
-  证明: by
-  simp only [norm_indicator_eq_indicator_norm]
-  grw [h]
-
-Depends on / 依赖: norm_indicator_eq_indicator_norm
+/-
+**norm_indicator_le_of_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_indicator_le_of_subset (h : s subseteq t) (f : α -> E) (a : α) : ‖ind
+icator s f a‖ <= ‖indicator t f a‖
+参数：h : s subseteq t；f : α -> E；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_indicator_eq_indicator_norm`：norm_indicator_eq_indicator_norm : ‖in
+dicator s f a‖ = indicator s (fun a => ‖f a‖) a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Set.indicator_le_indicator_apply_of_subset`：∀ {α : Type u_2} {M : Type u
+_3} [inst : Preorder M] [inst_1 : Zero M] {s t : Set α} {f : α → M} {a : α},   s
+ ⊆ t → 0 ≤ f a → s.indicator f a…
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem norm_indicator_le_of_subset (h : s subseteq t) (f : α -> E) (a : α) :
-    ‖indicator s f a‖ <= ‖indicator t f a‖ := by
+theorem norm_indicator_le_of_subset (h : s ⊆ t) (f : α → E) (a : α) :
+    ‖indicator s f a‖ ≤ ‖indicator t f a‖ := by
   simp only [norm_indicator_eq_indicator_norm]
   grw [h]
-
-/--
-theorem `indicator_norm_le_norm_self` / 定理 `indicator_norm_le_norm_self`
-
-English:
-theorem indicator_norm_le_norm_self
-  statement: indicator s (fun a => ‖f a‖) a <= ‖f a‖
-  proof: indicator_le_self' (fun _ _ => norm_nonneg _) a
-
-中文:
-定理 indicator_norm_le_norm_self
-  结论: indicator s (fun a => ‖f a‖) a <= ‖f a‖
-  证明: indicator_le_self' (fun _ _ => norm_nonneg _) a
-
-Depends on / 依赖: indicator_le_self, norm_nonneg
+/-
+**indicator_norm_le_norm_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：indicator_norm_le_norm_self : indicator s (fun a => ‖f a‖) a <= ‖f a‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.indicator_le_self'`：∀ {α : Type u_2} {M : Type u_3} [inst : Preorder
+ M] [inst_1 : Zero M] {s : Set α} {f : α → M},   (∀ x ∉ s, 0 ≤ f x) → s.indicato
+r f ≤ f
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem indicator_norm_le_norm_self : indicator s (fun a => ‖f a‖) a <= ‖f a‖ :=
+theorem indicator_norm_le_norm_self : indicator s (fun a => ‖f a‖) a ≤ ‖f a‖ :=
   indicator_le_self' (fun _ _ => norm_nonneg _) a
-
-/--
-theorem `norm_indicator_le_norm_self` / 定理 `norm_indicator_le_norm_self`
-
-English:
-theorem norm_indicator_le_norm_self
-  statement: ‖indicator s f a‖ <= ‖f a‖
-  proof: by
-  rw [norm_indicator_eq_indicator_norm]
-  apply indicator_norm_le_norm_self
-
-中文:
-定理 norm_indicator_le_norm_self
-  结论: ‖indicator s f a‖ <= ‖f a‖
-  证明: by
-  rw [norm_indicator_eq_indicator_norm]
-  apply indicator_norm_le_norm_self
-
-Depends on / 依赖: indicator_norm_le_norm_self, norm_indicator_eq_indicator_norm
+/-
+**norm_indicator_le_norm_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_indicator_le_norm_self : ‖indicator s f a‖ <= ‖f a‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_indicator_eq_indicator_norm`：norm_indicator_eq_indicator_norm : ‖in
+dicator s f a‖ = indicator s (fun a => ‖f a‖) a
+· 使用定理 `indicator_norm_le_norm_self`：indicator_norm_le_norm_self : indicator s (
+fun a => ‖f a‖) a <= ‖f a‖
 -/
-theorem norm_indicator_le_norm_self : ‖indicator s f a‖ <= ‖f a‖ := by
+theorem norm_indicator_le_norm_self : ‖indicator s f a‖ ≤ ‖f a‖ := by
   rw [norm_indicator_eq_indicator_norm]
   apply indicator_norm_le_norm_self
 
 end SeminormedAddGroup
+

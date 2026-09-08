@@ -41,134 +41,117 @@ open CompleteLattice
 variable {α : Type*} [CompleteLattice α]
 
 /--
-Definition of `BooleanGenerators` / `BooleanGenerators` 的定义
+An alternative constructor for Boolean algebras.
 
-English:
-structure BooleanGenerators
-  parameters: (S : Set α)
-  axioms and operations (2):
-    - isAtom : forall I in S, IsAtom I
-    - finitelyAtomistic : forall (s : Finset α) (a : α), ↑s subseteq S -> IsCompactElement a -> a <= s.sup id -> exists t subseteq s, a = t.sup id
+A set of *Boolean generators* in a compactly generated complete lattice is a subset `S` such that
 
-中文:
-结构 布尔eanGenerators
-  参数: (S : 集合 α)
-  公理与运算 (2 个):
-    - isAtom : 对任意 I in S, IsAtom I
-    - finitelyAtomistic : 对任意 (s : 有限集 α) (a : α), ↑s subseteq S -> IsCompactElement a -> a <= s.上确界 id -> 存在 t subseteq s, a = t.上确界 id
+* the elements of `S` are all atoms, and
+* the set `S` satisfies an atomicity condition:
+  any compact element below the supremum of a finite subset `s` of generators
+  is equal to the supremum of a subset of `s`.
+
+If the supremum of `S` is the whole lattice,
+then the lattice is a Boolean algebra
+(see `IsCompactlyGenerated.BooleanGenerators.booleanAlgebraOfSSupEqTop`).
+-/
+/-
+**IsCompactlyGenerated.BooleanGenerators** 是 Mathlib 中的一个归纳类型，位于命名空间 `IsCompactl
+yGenerated`。
+形式化陈述：{α : Type u_1} → [CompleteLattice α] → Set α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An alternative constructor for Boolean algebras.
+
+A set of *Boolean generators* in a compactly generated complete lattice is a sub
+set `S` such that
+
+* the elements of `S` are all atoms, and
+* the set `S` satisfies an atomicity condition:
+  any compact element below the supremum of a finite subset `s` of generators
+  is equal to the supremum of a subset of `s`.
+
+If the supremum of `S` is the whole lattice,
+then the lattice is a Boolean algebra
+(see `IsCompactlyGenerated.BooleanGenerators.booleanAlgebraOfSSupEqTop`).
 -/
 structure BooleanGenerators (S : Set α) : Prop where
   /-- The elements in a collection of Boolean generators are all atoms. -/
-  isAtom : forall I in S, IsAtom I
+  isAtom : ∀ I ∈ S, IsAtom I
   /-- The elements in a collection of Boolean generators satisfy an atomicity condition:
   any compact element below the supremum of a finite subset `s` of generators
   is equal to the supremum of a subset of `s`. -/
-  finitelyAtomistic : forall (s : Finset α) (a : α),
-      ↑s subseteq S -> IsCompactElement a -> a <= s.sup id -> exists t subseteq s, a = t.sup id
+  finitelyAtomistic : ∀ (s : Finset α) (a : α),
+      ↑s ⊆ S → IsCompactElement a → a ≤ s.sup id → ∃ t ⊆ s, a = t.sup id
 
 namespace BooleanGenerators
 
 variable {S : Set α}
 
-/--
-lemma `mono` / 引理 `mono`
-
-English:
-lemma mono
-  given: (hS : BooleanGenerators S) {T : Set α} (hTS : T subseteq S)
-  statement: BooleanGenerators T where
-  proof: hS.isAtom I (hTS hI)
-  finitelyAtomistic := fun s a hs => hS.finitelyAtomistic s a (le_trans hs hTS)
-
-中文:
-引理 mono
-  条件: (hS : 布尔eanGenerators S) {T : 集合 α} (hTS : T subseteq S)
-  结论: 布尔eanGenerators T where
-  证明: hS.isAtom I (hTS hI)
-  finitelyAtomistic := fun s a hs => hS.finitelyAtomistic s a (le_trans hs hTS)
-
-Depends on / 依赖: hS.isAtom, isAtom
+/-
+**IsCompactlyGenerated.BooleanGenerators.mono** 是 Mathlib 中的一个引理，位于命名空间 `IsCompa
+ctlyGenerated.BooleanGenerators`。
+形式化陈述：mono (hS : BooleanGenerators S) {T : Set α} (hTS : T subseteq S) : Boolean
+Generators T where isAtom I hI
+参数：hS : BooleanGenerators S；hTS : T subseteq S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.finitelyAtomistic`：∀ {α : Type u_
+1} [inst : CompleteLattice α] {S : Set α},   IsCompactlyGenerated.BooleanGenerat
+ors S →     ∀ (s : Finset α) (a : α), ↑s ⊆ S →…
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
 -/
-lemma mono (hS : BooleanGenerators S) {T : Set α} (hTS : T subseteq S) : BooleanGenerators T where
+lemma mono (hS : BooleanGenerators S) {T : Set α} (hTS : T ⊆ S) : BooleanGenerators T where
   isAtom I hI := hS.isAtom I (hTS hI)
-  finitelyAtomistic := fun s a hs => hS.finitelyAtomistic s a (le_trans hs hTS)
+  finitelyAtomistic := fun s a hs ↦ hS.finitelyAtomistic s a (le_trans hs hTS)
 
 variable [IsCompactlyGenerated α]
-
-/--
-lemma `atomistic` / 引理 `atomistic`
-
-English:
-lemma atomistic
-  given: (hS : BooleanGenerators S) (a : α) (ha : a <= sSup S)
-  statement: exists T subseteq S, a = sSup T
-  proof: by
-  obtain ⟨C, hC, rfl⟩ := IsCompactlyGenerated.exists_sSup_eq a
-  have aux : forall b : α, IsCompactElement b -> b <= sSup S -> exists T subseteq S, b = sSup T := by
-    intro b hb hbS
-    obtain ⟨s, hs₁, hs₂⟩ := (isCompactElement_iff_exists_le_sSup_of_le_sSup α b).1 hb S hbS
-    obtain ⟨t, ht, rfl⟩ := hS.finitelyAtomistic s b hs₁ hb hs₂
-    refine ⟨t, ?_, Finset.sup_id_eq_sSup t⟩
-    refine Set.Subset.trans ?_ hs₁
-    simpa only [Finset.coe_subset] using ht
-  choose T hT₁ hT₂ using aux
-  use sSup {T c h₁ h₂ | (c in C) (h₁ : IsCompactElement c) (h₂ : c <= sSup S)}
-  constructor
-  · apply _root_.sSup_le
-    rintro _ ⟨c, -, h₁, h₂, rfl⟩
-    apply hT₁
-  · apply le_antisymm
-    · apply _root_.sSup_le
-      intro c hc
-      rw [hT₂ c (hC _ hc) ((le_sSup hc).trans ha)]
-      apply sSup_le_sSup
-      apply _root_.le_sSup
-      use c, hc, hC _ hc, (le_sSup hc).trans ha
-    · simp only [Set.sSup_eq_sUnion, sSup_le_iff, Set.mem_sUnion, Set.mem_ofPred_eq,
-        forall_exists_index, and_imp]
-      rintro a T b hbC hb hbS rfl haT
-      apply (le_sSup haT).trans
-      rw [← hT₂]
-      exact le_sSup hbC
-
-中文:
-引理 atomistic
-  条件: (hS : 布尔eanGenerators S) (a : α) (ha : a <= sSup S)
-  结论: 存在 T subseteq S, a = sSup T
-  证明: by
-  obtain ⟨C, hC, rfl⟩ := IsCompactlyGenerated.exists_sSup_eq a
-  have aux : forall b : α, IsCompactElement b -> b <= sSup S -> exists T subseteq S, b = sSup T := by
-    intro b hb hbS
-    obtain ⟨s, hs₁, hs₂⟩ := (isCompactElement_iff_exists_le_sSup_of_le_sSup α b).1 hb S hbS
-    obtain ⟨t, ht, rfl⟩ := hS.finitelyAtomistic s b hs₁ hb hs₂
-    refine ⟨t, ?_, Finset.sup_id_eq_sSup t⟩
-    refine Set.Subset.trans ?_ hs₁
-    simpa only [Finset.coe_subset] using ht
-  choose T hT₁ hT₂ using aux
-  use sSup {T c h₁ h₂ | (c in C) (h₁ : IsCompactElement c) (h₂ : c <= sSup S)}
-  constructor
-  · apply _root_.sSup_le
-    rintro _ ⟨c, -, h₁, h₂, rfl⟩
-    apply hT₁
-  · apply le_antisymm
-    · apply _root_.sSup_le
-      intro c hc
-      rw [hT₂ c (hC _ hc) ((le_sSup hc).trans ha)]
-      apply sSup_le_sSup
-      apply _root_.le_sSup
-      use c, hc, hC _ hc, (le_sSup hc).trans ha
-    · simp only [Set.sSup_eq_sUnion, sSup_le_iff, Set.mem_sUnion, Set.mem_ofPred_eq,
-        forall_exists_index, and_imp]
-      rintro a T b hbC hb hbS rfl haT
-      apply (le_sSup haT).trans
-      rw [← hT₂]
-      exact le_sSup hbC
-
-Depends on / 依赖: Finset, Finset.coe_subset, Finset.sup_id_eq_sSup, IsCompactElement, IsCompactlyGenerated, IsCompactlyGenerated.exists_sSup_eq, Set.Subset.trans, Subset, coe_subset, exists_sSup_eq, finitelyAtomistic, hS.finitelyAtomistic, isCompactElement_iff_exists_le_sSup_of_le_sSup, subseteq, sup_id_eq_sSup
+/-
+**IsCompactlyGenerated.BooleanGenerators.atomistic** 是 Mathlib 中的一个引理，位于命名空间 `Is
+CompactlyGenerated.BooleanGenerators`。
+形式化陈述：atomistic (hS : BooleanGenerators S) (a : α) (ha : a <= sSup S) : exists T
+ subseteq S, a = sSup T
+参数：hS : BooleanGenerators S；a : α；ha : a <= sSup S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompactlyGenerated.exists_sSup_eq`：∀ {α : Type u_3} {inst : CompleteLa
+ttice α} [self : IsCompactlyGenerated α] (x : α),   ∃ s, (∀ x ∈ s, IsCompactElem
+ent x) ∧ sSup s = x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CompleteLattice.isCompactElement_iff_exists_le_sSup_of_le_sSup`：isCompac
+tElement_iff_exists_le_sSup_of_le_sSup (k : α) : IsCompactElement k ↔ forall s :
+ Set α, k <= sSup s -> exists t : Finset α, ↑t subse…
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.finitelyAtomistic`：∀ {α : Type u_
+1} [inst : CompleteLattice α] {S : Set α},   IsCompactlyGenerated.BooleanGenerat
+ors S →     ∀ (s : Finset α) (a : α), ↑s ⊆ S →…
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Finset.sup_id_eq_sSup`：sup_id_eq_sSup [CompleteLattice α] (s : Finset α)
+ : s.sup id = sSup s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `sSup_le_sSup`：sSup_le_sSup (h : s subseteq t) : sSup s <= sSup t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-lemma atomistic (hS : BooleanGenerators S) (a : α) (ha : a <= sSup S) : exists T subseteq S, a = sSup T := by
+lemma atomistic (hS : BooleanGenerators S) (a : α) (ha : a ≤ sSup S) : ∃ T ⊆ S, a = sSup T := by
   obtain ⟨C, hC, rfl⟩ := IsCompactlyGenerated.exists_sSup_eq a
-  have aux : forall b : α, IsCompactElement b -> b <= sSup S -> exists T subseteq S, b = sSup T := by
+  have aux : ∀ b : α, IsCompactElement b → b ≤ sSup S → ∃ T ⊆ S, b = sSup T := by
     intro b hb hbS
     obtain ⟨s, hs₁, hs₂⟩ := (isCompactElement_iff_exists_le_sSup_of_le_sSup α b).1 hb S hbS
     obtain ⟨t, ht, rfl⟩ := hS.finitelyAtomistic s b hs₁ hb hs₂
@@ -176,7 +159,7 @@ lemma atomistic (hS : BooleanGenerators S) (a : α) (ha : a <= sSup S) : exists 
     refine Set.Subset.trans ?_ hs₁
     simpa only [Finset.coe_subset] using ht
   choose T hT₁ hT₂ using aux
-  use sSup {T c h₁ h₂ | (c in C) (h₁ : IsCompactElement c) (h₂ : c <= sSup S)}
+  use sSup {T c h₁ h₂ | (c ∈ C) (h₁ : IsCompactElement c) (h₂ : c ≤ sSup S)}
   constructor
   · apply _root_.sSup_le
     rintro _ ⟨c, -, h₁, h₂, rfl⟩
@@ -194,125 +177,105 @@ lemma atomistic (hS : BooleanGenerators S) (a : α) (ha : a <= sSup S) : exists 
       apply (le_sSup haT).trans
       rw [← hT₂]
       exact le_sSup hbC
-
-/--
-lemma `isAtomistic_of_sSup_eq_top` / 引理 `isAtomistic_of_sSup_eq_top`
-
-English:
-lemma isAtomistic_of_sSup_eq_top
-  given: (hS : BooleanGenerators S) (h : sSup S = ⊤)
-  proof: by
-  refine CompleteLattice.isAtomistic_iff.2 fun a => ?_
-  obtain ⟨s, hs, hs'⟩ := hS.atomistic a (h ▸ le_top)
-  exact ⟨s, hs', fun I hI => hS.isAtom I (hs hI)⟩
-
-中文:
-引理 isAtomistic_of_sSup_eq_top
-  条件: (hS : 布尔eanGenerators S) (h : sSup S = ⊤)
-  证明: by
-  refine CompleteLattice.isAtomistic_iff.2 fun a => ?_
-  obtain ⟨s, hs, hs'⟩ := hS.atomistic a (h ▸ le_top)
-  exact ⟨s, hs', fun I hI => hS.isAtom I (hs hI)⟩
-
-Depends on / 依赖: CompleteLattice, CompleteLattice.isAtomistic_iff, atomistic, hS.atomistic, hS.isAtom, isAtom, isAtomistic_iff, le_top
+/-
+**IsCompactlyGenerated.BooleanGenerators.isAtomistic_of_sSup_eq_top** 是 Mathlib 
+中的一个引理，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：isAtomistic_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) : I
+sAtomistic α
+参数：hS : BooleanGenerators S；h : sSup S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CompleteLattice.isAtomistic_iff`：∀ {α : Type u_4} [inst : CompleteLattic
+e α], IsAtomistic α ↔ ∀ (b : α), ∃ s, b = sSup s ∧ ∀ a ∈ s, IsAtom a
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.atomistic`：atomistic (hS : Boolea
+nGenerators S) (a : α) (ha : a <= sSup S) : exists T subseteq S, a = sSup T
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
 -/
 lemma isAtomistic_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) :
     IsAtomistic α := by
-  refine CompleteLattice.isAtomistic_iff.2 fun a => ?_
+  refine CompleteLattice.isAtomistic_iff.2 fun a ↦ ?_
   obtain ⟨s, hs, hs'⟩ := hS.atomistic a (h ▸ le_top)
-  exact ⟨s, hs', fun I hI => hS.isAtom I (hs hI)⟩
-
-/--
-lemma `mem_of_isAtom_of_le_sSup_atoms` / 引理 `mem_of_isAtom_of_le_sSup_atoms`
-
-English:
-lemma mem_of_isAtom_of_le_sSup_atoms
-  statement: (hS : BooleanGenerators S) (a : α) (ha : IsAtom a)
-  proof: by
-  obtain ⟨T, hT, rfl⟩ := hS.atomistic a haS
-  obtain rfl | ⟨a, haT⟩ := T.eq_empty_or_nonempty
-  · simp only [sSup_empty] at ha
-    exact (ha.1 rfl).elim
-  suffices sSup T = a from this ▸ hT haT
-  have : a <= sSup T := le_sSup haT
-  rwa [ha.le_iff_eq, eq_comm] at this
-  exact (hS.isAtom a (hT haT)).1
-
-中文:
-引理 mem_of_isAtom_of_le_sSup_atoms
-  结论: (hS : 布尔eanGenerators S) (a : α) (ha : IsAtom a)
-  证明: by
-  obtain ⟨T, hT, rfl⟩ := hS.atomistic a haS
-  obtain rfl | ⟨a, haT⟩ := T.eq_empty_or_nonempty
-  · simp only [sSup_empty] at ha
-    exact (ha.1 rfl).elim
-  suffices sSup T = a from this ▸ hT haT
-  have : a <= sSup T := le_sSup haT
-  rwa [ha.le_iff_eq, eq_comm] at this
-  exact (hS.isAtom a (hT haT)).1
-
-Depends on / 依赖: T.eq_empty_or_nonempty, atomistic, eq_comm, eq_empty_or_nonempty, hS.atomistic, hS.isAtom, ha.le_iff_eq, isAtom, le_iff_eq, le_sSup, sSup_empty
+  exact ⟨s, hs', fun I hI ↦ hS.isAtom I (hs hI)⟩
+/-
+**IsCompactlyGenerated.BooleanGenerators.mem_of_isAtom_of_le_sSup_atoms** 是 Math
+lib 中的一个引理，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：mem_of_isAtom_of_le_sSup_atoms (hS : BooleanGenerators S) (a : α) (ha : Is
+Atom a) (haS : a <= sSup S) : a in S
+参数：hS : BooleanGenerators S；a : α；ha : IsAtom a；haS : a <= sSup S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.atomistic`：atomistic (hS : Boolea
+nGenerators S) (a : α) (ha : a <= sSup S) : exists T subseteq S, a = sSup T
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_empty`：sSup_empty : sSup ∅ = (⊥ : α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `IsAtom.le_iff_eq`：IsAtom.le_iff_eq (ha : IsAtom a) (hb : b != ⊥) : b <= 
+a ↔ b = a
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
 -/
 lemma mem_of_isAtom_of_le_sSup_atoms (hS : BooleanGenerators S) (a : α) (ha : IsAtom a)
-    (haS : a <= sSup S) : a in S := by
+    (haS : a ≤ sSup S) : a ∈ S := by
   obtain ⟨T, hT, rfl⟩ := hS.atomistic a haS
   obtain rfl | ⟨a, haT⟩ := T.eq_empty_or_nonempty
   · simp only [sSup_empty] at ha
     exact (ha.1 rfl).elim
   suffices sSup T = a from this ▸ hT haT
-  have : a <= sSup T := le_sSup haT
+  have : a ≤ sSup T := le_sSup haT
   rwa [ha.le_iff_eq, eq_comm] at this
   exact (hS.isAtom a (hT haT)).1
-
-/--
-lemma `sSup_inter` / 引理 `sSup_inter`
-
-English:
-lemma sSup_inter
-  given: (hS : BooleanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ subseteq S) (hT₂ : T₂ subseteq S)
-  proof: by
-  apply le_antisymm
-  · apply le_inf
-    · apply sSup_le_sSup Set.inter_subset_left
-    · apply sSup_le_sSup Set.inter_subset_right
-  obtain ⟨X, hX, hX'⟩ := hS.atomistic (sSup T₁ ⊓ sSup T₂) (inf_le_left.trans (sSup_le_sSup hT₁))
-  rw [hX']
-  apply _root_.sSup_le
-  intro I hI
-  apply _root_.le_sSup
-  constructor
-  · apply (hS.mono hT₁).mem_of_isAtom_of_le_sSup_atoms _ _ _
-    · exact (hS.mono hX).isAtom I hI
-    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_left)
-  · apply (hS.mono hT₂).mem_of_isAtom_of_le_sSup_atoms _ _ _
-    · exact (hS.mono hX).isAtom I hI
-    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_right)
-
-中文:
-引理 sSup_inter
-  条件: (hS : 布尔eanGenerators S) {T₁ T₂ : 集合 α} (hT₁ : T₁ subseteq S) (hT₂ : T₂ subseteq S)
-  证明: by
-  apply le_antisymm
-  · apply le_inf
-    · apply sSup_le_sSup Set.inter_subset_left
-    · apply sSup_le_sSup Set.inter_subset_right
-  obtain ⟨X, hX, hX'⟩ := hS.atomistic (sSup T₁ ⊓ sSup T₂) (inf_le_left.trans (sSup_le_sSup hT₁))
-  rw [hX']
-  apply _root_.sSup_le
-  intro I hI
-  apply _root_.le_sSup
-  constructor
-  · apply (hS.mono hT₁).mem_of_isAtom_of_le_sSup_atoms _ _ _
-    · exact (hS.mono hX).isAtom I hI
-    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_left)
-  · apply (hS.mono hT₂).mem_of_isAtom_of_le_sSup_atoms _ _ _
-    · exact (hS.mono hX).isAtom I hI
-    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_right)
-
-Depends on / 依赖: Set.inter_subset_left, Set.inter_subset_right, _root_, _root_.le_sSup, _root_.sSup_le, atomistic, ge.trans, hS.atomistic, hS.mono, inf_le_left, inf_le_left.trans, inter_subset_left, inter_subset_right, isAtom, le_antisymm, le_inf, le_sSup, mem_of_isAtom_of_le_sSup_atoms, sSup_le, sSup_le_sSup
+/-
+**IsCompactlyGenerated.BooleanGenerators.sSup_inter** 是 Mathlib 中的一个引理，位于命名空间 `I
+sCompactlyGenerated.BooleanGenerators`。
+形式化陈述：sSup_inter (hS : BooleanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ subseteq S
+) (hT₂ : T₂ subseteq S) : sSup (T₁ inter T₂) = (sSup T₁) ⊓ (sSup T₂)
+参数：hS : BooleanGenerators S；hT₁ : T₁ subseteq S；hT₂ : T₂ subseteq S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `sSup_le_sSup`：sSup_le_sSup (h : s subseteq t) : sSup s <= sSup t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.atomistic`：atomistic (hS : Boolea
+nGenerators S) (a : α) (ha : a <= sSup S) : exists T subseteq S, a = sSup T
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.mem_of_isAtom_of_le_sSup_atoms`：m
+em_of_isAtom_of_le_sSup_atoms (hS : BooleanGenerators S) (a : α) (ha : IsAtom a)
+ (haS : a <= sSup S) : a in S
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.mono`：mono (hS : BooleanGenerator
+s S) {T : Set α} (hTS : T subseteq S) : BooleanGenerators T where isAtom I hI
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
-lemma sSup_inter (hS : BooleanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ subseteq S) (hT₂ : T₂ subseteq S) :
-    sSup (T₁ inter T₂) = (sSup T₁) ⊓ (sSup T₂) := by
+lemma sSup_inter (hS : BooleanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ ⊆ S) (hT₂ : T₂ ⊆ S) :
+    sSup (T₁ ∩ T₂) = (sSup T₁) ⊓ (sSup T₂) := by
   apply le_antisymm
   · apply le_inf
     · apply sSup_le_sSup Set.inter_subset_left
@@ -332,44 +295,17 @@ lemma sSup_inter (hS : BooleanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ s
 
 /-- A lattice generated by Boolean generators is a distributive lattice. -/
 @[instance_reducible]
-/--
-Definition of `distribLatticeOfSSupEqTop` / `distribLatticeOfSSupEqTop` 的定义
+/-
+**IsCompactlyGenerated.BooleanGenerators.distribLatticeOfSSupEqTop** 是 Mathlib 中
+的一个定义，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：distribLatticeOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) : Di
+stribLattice α where le_sup_inf a b c
+参数：hS : BooleanGenerators S；h : sSup S = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition distribLatticeOfSSupEqTop
-  signature: (hS : BooleanGenerators S) (h : sSup S = ⊤)
-  body: by
-    obtain ⟨Ta, hTa, rfl⟩ := hS.atomistic a (h ▸ le_top)
-    obtain ⟨Tb, hTb, rfl⟩ := hS.atomistic b (h ▸ le_top)
-    obtain ⟨Tc, hTc, rfl⟩ := hS.atomistic c (h ▸ le_top)
-    apply le_of_eq
-    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_union]
-    on_goal 1 => congr 1; ext
-    all_goals
-      simp only [Set.union_subset_iff, Set.mem_inter_iff, Set.mem_union]
-      tauto
-
-@[deprecated (since := "2026-07-18")]
-alias distribLattice_of_sSup_eq_top := distribLatticeOfSSupEqTop
-
-中文:
-定义 distribLatticeOfSSupEqTop
-  签名: (hS : 布尔eanGenerators S) (h : sSup S = ⊤)
-  定义体: by
-    obtain ⟨Ta, hTa, rfl⟩ := hS.atomistic a (h ▸ le_top)
-    obtain ⟨Tb, hTb, rfl⟩ := hS.atomistic b (h ▸ le_top)
-    obtain ⟨Tc, hTc, rfl⟩ := hS.atomistic c (h ▸ le_top)
-    apply le_of_eq
-    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_union]
-    on_goal 1 => congr 1; ext
-    all_goals
-      simp only [Set.union_subset_iff, Set.mem_inter_iff, Set.mem_union]
-      tauto
-
-@[deprecated (since := "2026-07-18")]
-alias distribLattice_of_sSup_eq_top := distribLatticeOfSSupEqTop
-
-Depends on / 依赖: Set.mem_inter_iff, Set.mem_union, Set.union_subset_iff, all_goals, atomistic, hS.atomistic, hS.sSup_inter, le_of_eq, le_top, mem_inter_iff, mem_union, on_goal, sSup_inter, sSup_union, union_subset_iff
+--- 原说明 ---
+A lattice generated by Boolean generators is a distributive lattice.
 -/
 def distribLatticeOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) :
     DistribLattice α where
@@ -378,7 +314,7 @@ def distribLatticeOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) :
     obtain ⟨Tb, hTb, rfl⟩ := hS.atomistic b (h ▸ le_top)
     obtain ⟨Tc, hTc, rfl⟩ := hS.atomistic c (h ▸ le_top)
     apply le_of_eq
-    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_union]
+    rw [← sSup_union, ← sSup_union, ← hS.sSup_inter hTb hTc, ← hS.sSup_inter, ← sSup_union]
     on_goal 1 => congr 1; ext
     all_goals
       simp only [Set.union_subset_iff, Set.mem_inter_iff, Set.mem_union]
@@ -386,27 +322,21 @@ def distribLatticeOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) :
 
 @[deprecated (since := "2026-07-18")]
 alias distribLattice_of_sSup_eq_top := distribLatticeOfSSupEqTop
-
-/--
-lemma `complementedLattice_of_sSup_eq_top` / 引理 `complementedLattice_of_sSup_eq_top`
-
-English:
-lemma complementedLattice_of_sSup_eq_top
-  given: (hS : BooleanGenerators S) (h : sSup S = ⊤)
-  proof: by
-  let _i := hS.distribLatticeOfSSupEqTop h
-  have _i₁ := isAtomistic_of_sSup_eq_top hS h
-  apply complementedLattice_of_isAtomistic
-
-中文:
-引理 complementedLattice_of_sSup_eq_top
-  条件: (hS : 布尔eanGenerators S) (h : sSup S = ⊤)
-  证明: by
-  let _i := hS.distribLatticeOfSSupEqTop h
-  have _i₁ := isAtomistic_of_sSup_eq_top hS h
-  apply complementedLattice_of_isAtomistic
-
-Depends on / 依赖: complementedLattice_of_isAtomistic, distribLatticeOfSSupEqTop, hS.distribLatticeOfSSupEqTop, isAtomistic_of_sSup_eq_top
+/-
+**IsCompactlyGenerated.BooleanGenerators.complementedLattice_of_sSup_eq_top** 是 
+Mathlib 中的一个引理，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：complementedLattice_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S 
+= ⊤) : ComplementedLattice α
+参数：hS : BooleanGenerators S；h : sSup S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.isAtomistic_of_sSup_eq_top`：isAto
+mistic_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) : IsAtomistic 
+α
+· 使用定理 `complementedLattice_of_isAtomistic`：complementedLattice_of_isAtomistic [
+IsAtomistic α] : ComplementedLattice α
+· 使用定理 `DistribLattice.instIsModularLattice`：∀ {α : Type u_1} [inst : DistribLat
+tice α], IsModularLattice α
 -/
 lemma complementedLattice_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) :
     ComplementedLattice α := by
@@ -417,30 +347,17 @@ lemma complementedLattice_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S 
 /-- A compactly generated complete lattice generated by Boolean generators is a Boolean algebra. -/
 @[instance_reducible]
 noncomputable
-/--
-Definition of `booleanAlgebraOfSSupEqTop` / `booleanAlgebraOfSSupEqTop` 的定义
-
-English:
-definition booleanAlgebraOfSSupEqTop
-  signature: (hS : BooleanGenerators S) (h : sSup S = ⊤)
-  body: let _i := hS.distribLatticeOfSSupEqTop h
-  have := hS.complementedLattice_of_sSup_eq_top h
-  DistribLattice.booleanAlgebraOfComplemented α
-
-@[deprecated (since := "2026-07-18")]
-alias booleanAlgebra_of_sSup_eq_top := booleanAlgebraOfSSupEqTop
-
-中文:
-定义 booleanAlgebraOfSSupEqTop
-  签名: (hS : 布尔eanGenerators S) (h : sSup S = ⊤)
-  定义体: let _i := hS.distribLatticeOfSSupEqTop h
-  have := hS.complementedLattice_of_sSup_eq_top h
-  DistribLattice.booleanAlgebraOfComplemented α
-
-@[deprecated (since := "2026-07-18")]
-alias booleanAlgebra_of_sSup_eq_top := booleanAlgebraOfSSupEqTop
-
-Depends on / 依赖: DistribLattice, DistribLattice.booleanAlgebraOfComplemented, booleanAlgebraOfComplemented, complementedLattice_of_sSup_eq_top, distribLatticeOfSSupEqTop, hS.complementedLattice_of_sSup_eq_top, hS.distribLatticeOfSSupEqTop
+/-
+**IsCompactlyGenerated.BooleanGenerators.booleanAlgebraOfSSupEqTop** 是 Mathlib 中
+的一个定义，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：booleanAlgebraOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) : Bo
+oleanAlgebra α
+参数：hS : BooleanGenerators S；h : sSup S = ⊤。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.complementedLattice_of_sSup_eq_to
+p`：complementedLattice_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤
+) : ComplementedLattice α
 -/
 def booleanAlgebraOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) : BooleanAlgebra α :=
   let _i := hS.distribLatticeOfSSupEqTop h
@@ -449,61 +366,56 @@ def booleanAlgebraOfSSupEqTop (hS : BooleanGenerators S) (h : sSup S = ⊤) : Bo
 
 @[deprecated (since := "2026-07-18")]
 alias booleanAlgebra_of_sSup_eq_top := booleanAlgebraOfSSupEqTop
-
-/--
-lemma `sSup_le_sSup_iff_of_atoms` / 引理 `sSup_le_sSup_iff_of_atoms`
-
-English:
-lemma sSup_le_sSup_iff_of_atoms
-  given: (hS : BooleanGenerators S) (X Y : Set α) (hX : X subseteq S) (hY : Y subseteq S)
-  proof: by
-  refine ⟨?_, sSup_le_sSup⟩
-  intro h a ha
-  apply (hS.mono hY).mem_of_isAtom_of_le_sSup_atoms _ _ ((le_sSup ha).trans h)
-  exact (hS.mono hX).isAtom a ha
-
-中文:
-引理 sSup_le_sSup_iff_of_atoms
-  条件: (hS : 布尔eanGenerators S) (X Y : 集合 α) (hX : X subseteq S) (hY : Y subseteq S)
-  证明: by
-  refine ⟨?_, sSup_le_sSup⟩
-  intro h a ha
-  apply (hS.mono hY).mem_of_isAtom_of_le_sSup_atoms _ _ ((le_sSup ha).trans h)
-  exact (hS.mono hX).isAtom a ha
-
-Depends on / 依赖: hS.mono, isAtom, le_sSup, mem_of_isAtom_of_le_sSup_atoms, sSup_le_sSup
+/-
+**IsCompactlyGenerated.BooleanGenerators.sSup_le_sSup_iff_of_atoms** 是 Mathlib 中
+的一个引理，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：sSup_le_sSup_iff_of_atoms (hS : BooleanGenerators S) (X Y : Set α) (hX : X
+ subseteq S) (hY : Y subseteq S) : sSup X <= sSup Y ↔ X subseteq Y
+参数：hS : BooleanGenerators S；X Y : Set α；hX : X subseteq S；hY : Y subseteq S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.mem_of_isAtom_of_le_sSup_atoms`：m
+em_of_isAtom_of_le_sSup_atoms (hS : BooleanGenerators S) (a : α) (ha : IsAtom a)
+ (haS : a <= sSup S) : a in S
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.mono`：mono (hS : BooleanGenerator
+s S) {T : Set α} (hTS : T subseteq S) : BooleanGenerators T where isAtom I hI
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用定理 `sSup_le_sSup`：sSup_le_sSup (h : s subseteq t) : sSup s <= sSup t
 -/
-lemma sSup_le_sSup_iff_of_atoms (hS : BooleanGenerators S) (X Y : Set α) (hX : X subseteq S) (hY : Y subseteq S) :
-    sSup X <= sSup Y ↔ X subseteq Y := by
+lemma sSup_le_sSup_iff_of_atoms (hS : BooleanGenerators S) (X Y : Set α) (hX : X ⊆ S) (hY : Y ⊆ S) :
+    sSup X ≤ sSup Y ↔ X ⊆ Y := by
   refine ⟨?_, sSup_le_sSup⟩
   intro h a ha
   apply (hS.mono hY).mem_of_isAtom_of_le_sSup_atoms _ _ ((le_sSup ha).trans h)
   exact (hS.mono hX).isAtom a ha
-
-/--
-lemma `eq_atoms_of_sSup_eq_top` / 引理 `eq_atoms_of_sSup_eq_top`
-
-English:
-lemma eq_atoms_of_sSup_eq_top
-  given: (hS : BooleanGenerators S) (h : sSup S = ⊤)
-  proof: by
-  apply le_antisymm
-  · exact hS.isAtom
-  intro a ha
-  obtain ⟨T, hT, rfl⟩ := hS.atomistic a (le_top.trans h.ge)
-  exact hS.mem_of_isAtom_of_le_sSup_atoms _ ha (sSup_le_sSup hT)
-
-中文:
-引理 eq_atoms_of_sSup_eq_top
-  条件: (hS : 布尔eanGenerators S) (h : sSup S = ⊤)
-  证明: by
-  apply le_antisymm
-  · exact hS.isAtom
-  intro a ha
-  obtain ⟨T, hT, rfl⟩ := hS.atomistic a (le_top.trans h.ge)
-  exact hS.mem_of_isAtom_of_le_sSup_atoms _ ha (sSup_le_sSup hT)
-
-Depends on / 依赖: atomistic, h.ge, hS.atomistic, hS.isAtom, hS.mem_of_isAtom_of_le_sSup_atoms, isAtom, le_antisymm, le_top, le_top.trans, mem_of_isAtom_of_le_sSup_atoms, sSup_le_sSup
+/-
+**IsCompactlyGenerated.BooleanGenerators.eq_atoms_of_sSup_eq_top** 是 Mathlib 中的一
+个引理，位于命名空间 `IsCompactlyGenerated.BooleanGenerators`。
+形式化陈述：eq_atoms_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) : S = 
+{a : α | IsAtom a}
+参数：hS : BooleanGenerators S；h : sSup S = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsCompactlyGenerated.BooleanGenerators.isAtom`：∀ {α : Type u_1} [inst : 
+CompleteLattice α] {S : Set α}, IsCompactlyGenerated.BooleanGenerators S → ∀ I ∈
+ S, IsAtom I
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.atomistic`：atomistic (hS : Boolea
+nGenerators S) (a : α) (ha : a <= sSup S) : exists T subseteq S, a = sSup T
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用引理 `IsCompactlyGenerated.BooleanGenerators.mem_of_isAtom_of_le_sSup_atoms`：m
+em_of_isAtom_of_le_sSup_atoms (hS : BooleanGenerators S) (a : α) (ha : IsAtom a)
+ (haS : a <= sSup S) : a in S
+· 使用定理 `sSup_le_sSup`：sSup_le_sSup (h : s subseteq t) : sSup s <= sSup t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma eq_atoms_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) :
     S = {a : α | IsAtom a} := by
@@ -516,3 +428,4 @@ lemma eq_atoms_of_sSup_eq_top (hS : BooleanGenerators S) (h : sSup S = ⊤) :
 end BooleanGenerators
 
 end IsCompactlyGenerated
+

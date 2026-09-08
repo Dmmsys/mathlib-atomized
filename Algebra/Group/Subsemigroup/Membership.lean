@@ -47,171 +47,190 @@ namespace Subsemigroup
 -- such that `CompleteLattice.LE` coincides with `SetLike.LE`
 
 @[to_additive]
-/--
-lemma `mem_iSup_of_directed` / 引理 `mem_iSup_of_directed`
-
-English:
-lemma mem_iSup_of_directed
-  given: {ι : Sort*} {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M}
-  proof: by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
+/-
+**Subsemigroup.mem_iSup_of_directed** 是 Mathlib 中的一个引理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_iSup_of_directed {ι : Sort*} {S : ι -> Subsemigroup M} (hS : Directed 
+(· <= ·) S) {x : M} : x in ⨆ i, S i ↔ exists i, x in S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.closure_induction`：closure_induction {p : (x : M) -> x in c
+losure s -> Prop} (mem : forall (x) (h : x in s), p x (subset_closure h)) (mul :
+ forall x y hx hy, p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subsemigroup.closure_iUnion`：closure_iUnion {ι} (s : ι -> Set M) : closu
+re (⋃ i, s i) = ⨆ i, closure (s i)
+· 使用定理 `Subsemigroup.closure_eq`：closure_eq : closure (S : Set M) = S
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+-/
+lemma mem_iSup_of_directed {ι : Sort*} {S : ι → Subsemigroup M} (hS : Directed (· ≤ ·) S) {x : M} :
+    x ∈ ⨆ i, S i ↔ ∃ i, x ∈ S i := by
+  refine ⟨?_, fun ⟨i, hi⟩ ↦ le_iSup S i hi⟩
+  suffices x ∈ closure (⋃ i, (S i : Set M)) → ∃ i, x ∈ S i by
     simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (fun _ => ?_) ?_ hx
+  refine fun hx ↦ closure_induction (fun _ ↦ ?_) ?_ hx
   · simp
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
   obtain ⟨k, hik, hjk⟩ := hS i j
   exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
 
 @[to_additive]
-
-中文:
-引理 mem_iSup_of_directed
-  条件: {ι : 类型层*} {S : ι -> 子半群 M} (hS : Directed (· <= ·) S) {x : M}
-  证明: by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
-    simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (fun _ => ?_) ?_ hx
-  · simp
-  rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ := hS i j
-  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
-
-@[to_additive]
-
-Depends on / 依赖: closure, closure_eq, closure_iUnion, closure_induction, le_iSup, mul_mem
+/-
+**Subsemigroup.mem_biSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_biSup_of_directedOn {ι : Type*} {p : ι -> Prop} {S : ι -> Subsemigroup
+ M} (hS : DirectedOn ((· <= ·) on S) {i | p i}) {x : M} : x in ⨆ i, ⨆ (_h : p i)
+, S i ↔ exists i, p i ∧ x in S i
+参数：hS : DirectedOn ((· <= ·) on S) {i | p i}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
+· 使用引理 `Subsemigroup.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} {S :
+ ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i ↔ exist
+s i, x in S i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `directed_comp`：directed_comp {ι} {f : ι -> β} {g : β -> α} : Directed r 
+(g ∘ f) ↔ Directed (g ⁻¹'o r) f
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_iSup_of_directed {ι : Sort*} {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M} :
-    x in ⨆ i, S i ↔ exists i, x in S i := by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
-    simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (fun _ => ?_) ?_ hx
+theorem mem_biSup_of_directedOn {ι : Type*} {p : ι → Prop} {S : ι → Subsemigroup M}
+    (hS : DirectedOn ((· ≤ ·) on S) {i | p i}) {x : M} :
+    x ∈ ⨆ i, ⨆ (_h : p i), S i ↔ ∃ i, p i ∧ x ∈ S i := by
+  rw [iSup_subtype', mem_iSup_of_directed]
   · simp
-  rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ := hS i j
-  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
-
-@[to_additive]
-/--
-theorem `mem_biSup_of_directedOn` / 定理 `mem_biSup_of_directedOn`
-
-English:
-theorem mem_biSup_of_directedOn
-  statement: {ι : Type*} {p : ι -> Prop} {S : ι -> Subsemigroup M}
-  proof: by
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
-  · simp
-  rw [← Function.comp_def]; rw [directed_comp]
+  rw [← Function.comp_def, directed_comp]
   exact hS.directed_val
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 mem_biSup_of_directedOn
-  结论: {ι : 类型} {p : ι -> 命题} {S : ι -> 子半群 M}
-  证明: by
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
-  · simp
-  rw [← Function.comp_def]; rw [directed_comp]
-  exact hS.directed_val
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, directed_comp, directed_val, hS.directed_val, iSup_subtype, mem_iSup_of_directed
+/-
+**Subsemigroup.mem_iSup_prop** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_iSup_prop {p : Prop} {S : p -> Subsemigroup M} {x : M} : x in ⨆ (h : p
+), S h ↔ exists (h : p), x in S h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
 -/
-theorem mem_biSup_of_directedOn {ι : Type*} {p : ι -> Prop} {S : ι -> Subsemigroup M}
-    (hS : DirectedOn ((· <= ·) on S) {i | p i}) {x : M} :
-    x in ⨆ i, ⨆ (_h : p i), S i ↔ exists i, p i ∧ x in S i := by
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
-  · simp
-  rw [← Function.comp_def]; rw [directed_comp]
-  exact hS.directed_val
-
-@[to_additive (attr := simp)]
-/--
-theorem `mem_iSup_prop` / 定理 `mem_iSup_prop`
-
-English:
-theorem mem_iSup_prop
-  given: {p : Prop} {S : p -> Subsemigroup M} {x : M}
-  proof: by
+theorem mem_iSup_prop {p : Prop} {S : p → Subsemigroup M} {x : M} :
+    x ∈ ⨆ (h : p), S h ↔ ∃ (h : p), x ∈ S h := by
   by_cases h : p
   · simp +contextual [h]
   · simpa [h] using! id
 
 @[to_additive]
-
-中文:
-定理 mem_iSup_prop
-  条件: {p : 命题} {S : p -> 子半群 M} {x : M}
-  证明: by
-  by_cases h : p
-  · simp +contextual [h]
-  · simpa [h] using! id
-
-@[to_additive]
-
-Depends on / 依赖: contextual
+/-
+**Subsemigroup.coe_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：coe_iSup_of_directed {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S) 
+: ((⨆ i, S i : Subsemigroup M) : Set M) = ⋃ i, S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Subsemigroup.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} {S :
+ ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i ↔ exist
+s i, x in S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup_prop {p : Prop} {S : p -> Subsemigroup M} {x : M} :
-    x in ⨆ (h : p), S h ↔ exists (h : p), x in S h := by
-  by_cases h : p
-  · simp +contextual [h]
-  · simpa [h] using! id
-
-@[to_additive]
-/--
-theorem `coe_iSup_of_directed` / 定理 `coe_iSup_of_directed`
-
-English:
-theorem coe_iSup_of_directed
-  given: {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S)
-  proof: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-中文:
-定理 coe_iSup_of_directed
-  条件: {S : ι -> 子半群 M} (hS : Directed (· <= ·) S)
-  证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-Depends on / 依赖: Set.ext, mem_iSup_of_directed
--/
-theorem coe_iSup_of_directed {S : ι -> Subsemigroup M} (hS : Directed (· <= ·) S) :
+theorem coe_iSup_of_directed {S : ι → Subsemigroup M} (hS : Directed (· ≤ ·) S) :
     ((⨆ i, S i : Subsemigroup M) : Set M) = ⋃ i, S i :=
   Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 /-- The supremum of a directed family of commutative subsemigroups is commutative. -/
 @[to_additive]
-/--
-theorem `isMulCommutative_iSup` / 定理 `isMulCommutative_iSup`
+/-
+**Subsemigroup.isMulCommutative_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：isMulCommutative_iSup {S : ι -> Subsemigroup M} [hS : forall i, IsMulCommu
+tative (S i)] (dir : Directed (· <= ·) S) : IsMulCommutative (⨆ i, S i : Subsemi
+group M)
+参数：S i；dir : Directed (· <= ·) S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
+· 使用定理 `IsMulCommutative.of_setLike_mul_comm`：∀ {S : Type u_3} {M : Type u_4} [i
+nst : SetLike S M] [inst_1 : Mul M] [inst_2 : MulMemClass S M] {s : S},   (∀ a ∈
+ s, ∀ b ∈ s, a * b = b * a…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsemigroup.coe_iSup_of_directed`：coe_iSup_of_directed {S : ι -> Subsem
+igroup M} (hS : Directed (· <= ·) S) : ((⨆ i, S i : Subsemigroup M) : Set M) = ⋃
+ i, S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `setLike_mul_comm`：setLike_mul_comm {S M : Type*} [SetLike S M] [Mul M] [
+MulMemClass S M] {s : S} [IsMulCommutative s] ⦃a b : M⦄ (ha : a in s) (hb : b in
+ s) : …
 
-English:
-theorem isMulCommutative_iSup
-  statement: {S : ι -> Subsemigroup M}
-  proof: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-中文:
-定理 isMulCommutative_iSup
-  结论: {S : ι -> 子半群 M}
-  证明: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-Depends on / 依赖: Set.mem_iUnion, SetLike, SetLike.mem_coe, coe_iSup_of_directed, forall_exists_index, mem_coe, mem_iUnion, of_setLike_mul_comm, setLike_mul_comm, simp_rw
+--- 原说明 ---
+The supremum of a directed family of commutative subsemigroups is commutative.
 -/
-theorem isMulCommutative_iSup {S : ι -> Subsemigroup M}
-    [hS : forall i, IsMulCommutative (S i)] (dir : Directed (· <= ·) S) :
+theorem isMulCommutative_iSup {S : ι → Subsemigroup M}
+    [hS : ∀ i, IsMulCommutative (S i)] (dir : Directed (· ≤ ·) S) :
     IsMulCommutative (⨆ i, S i : Subsemigroup M) := by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
@@ -222,218 +241,166 @@ theorem isMulCommutative_iSup {S : ι -> Subsemigroup M}
 
 /-- The supremum of a directed family of commutative subsemigroups is commutative. -/
 @[to_additive]
-/--
-Instance `instIsMulCommutative_iSup` / 实例 `instIsMulCommutative_iSup`
+/-
+**Subsemigroup.instIsMulCommutative_iSup** 是 Mathlib 中的一个实例，位于命名空间 `Subsemigroup
+`。
+形式化陈述：instIsMulCommutative_iSup {ι : Type*} [Preorder ι] [IsDirectedOrder ι] (S 
+: ι ->o Subsemigroup M) [hS : forall i, IsMulCommutative (S i)] : IsMulCommutati
+ve (⨆ i, S i : Subsemigroup M)
+参数：S : ι ->o Subsemigroup M；S i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
+· 使用定理 `Subsemigroup.isMulCommutative_iSup`：isMulCommutative_iSup {S : ι -> Subs
+emigroup M} [hS : forall i, IsMulCommutative (S i)] (dir : Directed (· <= ·) S) 
+: IsMulCommutative (⨆ i,…
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
 
-English:
-instance instIsMulCommutative_iSup
-  signature: {ι : Type*} [Preorder ι] [IsDirectedOrder ι]
-  body: isMulCommutative_iSup S.monotone.directed_le
-
-@[to_additive]
-
-中文:
-实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [预序 ι] [IsDirectedOrder ι]
-  定义体: isMulCommutative_iSup S.monotone.directed_le
-
-@[to_additive]
-
-Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
+--- 原说明 ---
+The supremum of a directed family of commutative subsemigroups is commutative.
 -/
 instance instIsMulCommutative_iSup {ι : Type*} [Preorder ι] [IsDirectedOrder ι]
-    (S : ι ->o Subsemigroup M) [hS : forall i, IsMulCommutative (S i)] :
+    (S : ι →o Subsemigroup M) [hS : ∀ i, IsMulCommutative (S i)] :
     IsMulCommutative (⨆ i, S i : Subsemigroup M) :=
   isMulCommutative_iSup S.monotone.directed_le
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_directed_on` / 定理 `mem_sSup_of_directed_on`
-
-English:
-theorem mem_sSup_of_directed_on
-  given: {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S) {x : M}
-  proof: by
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists, exists_prop]
-
-@[to_additive]
-
-中文:
-定理 mem_sSup_of_directed_on
-  条件: {S : 集合 (子半群 M)} (hS : DirectedOn (· <= ·) S) {x : M}
-  证明: by
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists, exists_prop]
-
-@[to_additive]
-
-Depends on / 依赖: SetCoe, SetCoe.exists, directed_val, exists_prop, hS.directed_val, mem_iSup_of_directed, sSup_eq_iSup
+/-
+**Subsemigroup.mem_sSup_of_directed_on** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= 
+·) S) {x : M} : x in sSup S ↔ exists s in S, x in s
+参数：Subsemigroup M；hS : DirectedOn (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用引理 `Subsemigroup.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} {S :
+ ι -> Subsemigroup M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i ↔ exist
+s i, x in S i
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S) {x : M} :
-    x in sSup S ↔ exists s in S, x in s := by
+theorem mem_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) {x : M} :
+    x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists, exists_prop]
 
 @[to_additive]
-/--
-theorem `coe_sSup_of_directed_on` / 定理 `coe_sSup_of_directed_on`
-
-English:
-theorem coe_sSup_of_directed_on
-  given: {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S)
-  proof: Set.ext fun x => by simp [mem_sSup_of_directed_on hS]
-
-@[to_additive]
-
-中文:
-定理 coe_sSup_of_directed_on
-  条件: {S : 集合 (子半群 M)} (hS : DirectedOn (· <= ·) S)
-  证明: Set.ext fun x => by simp [mem_sSup_of_directed_on hS]
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext, mem_sSup_of_directed_on
+/-
+**Subsemigroup.coe_sSup_of_directed_on** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= 
+·) S) : (↑(sSup S) : Set M) = ⋃ s in S, ↑s
+参数：Subsemigroup M；hS : DirectedOn (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsemigroup.mem_sSup_of_directed_on`：mem_sSup_of_directed_on {S : Set (
+Subsemigroup M)} (hS : DirectedOn (· <= ·) S) {x : M} : x in sSup S ↔ exists s i
+n S, x in s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· <= ·) S) :
-    (↑(sSup S) : Set M) = ⋃ s in S, ↑s :=
+theorem coe_sSup_of_directed_on {S : Set (Subsemigroup M)} (hS : DirectedOn (· ≤ ·) S) :
+    (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s :=
   Set.ext fun x => by simp [mem_sSup_of_directed_on hS]
 
 @[to_additive]
-/--
-theorem `mem_sup_left` / 定理 `mem_sup_left`
-
-English:
-theorem mem_sup_left
-  given: {S T : Subsemigroup M}
-  statement: forall {x : M}, x in S -> x in S ⊔ T
-  proof: by
-  have : S <= S ⊔ T := le_sup_left
-  tauto
-
-@[to_additive]
-
-中文:
-定理 mem_sup_left
-  条件: {S T : 子半群 M}
-  结论: 对任意 {x : M}, x in S -> x in S ⊔ T
-  证明: by
-  have : S <= S ⊔ T := le_sup_left
-  tauto
-
-@[to_additive]
-
-Depends on / 依赖: le_sup_left
+/-
+**Subsemigroup.mem_sup_left** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_sup_left {S T : Subsemigroup M} : forall {x : M}, x in S -> x in S ⊔ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
 -/
-theorem mem_sup_left {S T : Subsemigroup M} : forall {x : M}, x in S -> x in S ⊔ T := by
-  have : S <= S ⊔ T := le_sup_left
+theorem mem_sup_left {S T : Subsemigroup M} : ∀ {x : M}, x ∈ S → x ∈ S ⊔ T := by
+  have : S ≤ S ⊔ T := le_sup_left
   tauto
 
 @[to_additive]
-/--
-theorem `mem_sup_right` / 定理 `mem_sup_right`
-
-English:
-theorem mem_sup_right
-  given: {S T : Subsemigroup M}
-  statement: forall {x : M}, x in T -> x in S ⊔ T
-  proof: by
-  have : T <= S ⊔ T := le_sup_right
-  tauto
-
-@[to_additive]
-
-中文:
-定理 mem_sup_right
-  条件: {S T : 子半群 M}
-  结论: 对任意 {x : M}, x in T -> x in S ⊔ T
-  证明: by
-  have : T <= S ⊔ T := le_sup_right
-  tauto
-
-@[to_additive]
-
-Depends on / 依赖: le_sup_right
+/-
+**Subsemigroup.mem_sup_right** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_sup_right {S T : Subsemigroup M} : forall {x : M}, x in T -> x in S ⊔ 
+T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-theorem mem_sup_right {S T : Subsemigroup M} : forall {x : M}, x in T -> x in S ⊔ T := by
-  have : T <= S ⊔ T := le_sup_right
+theorem mem_sup_right {S T : Subsemigroup M} : ∀ {x : M}, x ∈ T → x ∈ S ⊔ T := by
+  have : T ≤ S ⊔ T := le_sup_right
   tauto
 
 @[to_additive]
-/--
-theorem `mul_mem_sup` / 定理 `mul_mem_sup`
-
-English:
-theorem mul_mem_sup
-  given: {S T : Subsemigroup M} {x y : M} (hx : x in S) (hy : y in T)
-  statement: x * y in S ⊔ T
-  proof: mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-中文:
-定理 mul_mem_sup
-  条件: {S T : 子半群 M} {x y : M} (hx : x in S) (hy : y in T)
-  结论: x * y in S ⊔ T
-  证明: mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
+/-
+**Subsemigroup.mul_mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mul_mem_sup {S T : Subsemigroup M} {x y : M} (hx : x in S) (hy : y in T) :
+ x * y in S ⊔ T
+参数：hx : x in S；hy : y in T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
+· 使用定理 `Subsemigroup.mem_sup_left`：mem_sup_left {S T : Subsemigroup M} : forall 
+{x : M}, x in S -> x in S ⊔ T
+· 使用定理 `Subsemigroup.mem_sup_right`：mem_sup_right {S T : Subsemigroup M} : foral
+l {x : M}, x in T -> x in S ⊔ T
 -/
-theorem mul_mem_sup {S T : Subsemigroup M} {x y : M} (hx : x in S) (hy : y in T) : x * y in S ⊔ T :=
+theorem mul_mem_sup {S T : Subsemigroup M} {x y : M} (hx : x ∈ S) (hy : y ∈ T) : x * y ∈ S ⊔ T :=
   mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 @[to_additive]
-/--
-theorem `mem_iSup_of_mem` / 定理 `mem_iSup_of_mem`
-
-English:
-theorem mem_iSup_of_mem
-  given: {S : ι -> Subsemigroup M} (i : ι)
-  statement: forall {x : M}, x in S i -> x in iSup S
-  proof: by
-  have : S i <= iSup S := le_iSup _ _
-  tauto
-
-@[to_additive]
-
-中文:
-定理 mem_iSup_of_mem
-  条件: {S : ι -> 子半群 M} (i : ι)
-  结论: 对任意 {x : M}, x in S i -> x in iSup S
-  证明: by
-  have : S i <= iSup S := le_iSup _ _
-  tauto
-
-@[to_additive]
-
-Depends on / 依赖: le_iSup
+/-
+**Subsemigroup.mem_iSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_iSup_of_mem {S : ι -> Subsemigroup M} (i : ι) : forall {x : M}, x in S
+ i -> x in iSup S
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-theorem mem_iSup_of_mem {S : ι -> Subsemigroup M} (i : ι) : forall {x : M}, x in S i -> x in iSup S := by
-  have : S i <= iSup S := le_iSup _ _
+theorem mem_iSup_of_mem {S : ι → Subsemigroup M} (i : ι) : ∀ {x : M}, x ∈ S i → x ∈ iSup S := by
+  have : S i ≤ iSup S := le_iSup _ _
   tauto
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_mem` / 定理 `mem_sSup_of_mem`
-
-English:
-theorem mem_sSup_of_mem
-  given: {S : Set (Subsemigroup M)} {s : Subsemigroup M} (hs : s in S)
-  proof: by
-  have : s <= sSup S := le_sSup hs
-  tauto
-
-中文:
-定理 mem_sSup_of_mem
-  条件: {S : 集合 (子半群 M)} {s : 子半群 M} (hs : s in S)
-  证明: by
-  have : s <= sSup S := le_sSup hs
-  tauto
-
-Depends on / 依赖: le_sSup
+/-
+**Subsemigroup.mem_sSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：mem_sSup_of_mem {S : Set (Subsemigroup M)} {s : Subsemigroup M} (hs : s in
+ S) : forall {x : M}, x in s -> x in sSup S
+参数：Subsemigroup M；hs : s in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
 -/
-theorem mem_sSup_of_mem {S : Set (Subsemigroup M)} {s : Subsemigroup M} (hs : s in S) :
-    forall {x : M}, x in s -> x in sSup S := by
-  have : s <= sSup S := le_sSup hs
+theorem mem_sSup_of_mem {S : Set (Subsemigroup M)} {s : Subsemigroup M} (hs : s ∈ S) :
+    ∀ {x : M}, x ∈ s → x ∈ sSup S := by
+  have : s ≤ sSup S := le_sSup hs
   tauto
 
 /-- An induction principle for elements of `⨆ i, S i`.
@@ -443,72 +410,66 @@ then it holds for all elements of the supremum of `S`. -/
 /-- An induction principle for elements of `⨆ i, S i`. If `C` holds all
 elements of `S i` for all `i`, and is preserved under addition, then it holds for all elements of
 the supremum of `S`. -/]
-/--
-theorem `iSup_induction` / 定理 `iSup_induction`
-
-English:
-theorem iSup_induction
-  statement: (S : ι -> Subsemigroup M) {C : M -> Prop} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i)
-  proof: by
-  rw [iSup_eq_closure] at hx₁
-  refine closure_induction (fun x₂ hx₂ => ?_) (fun x y _ _ => mul x y) hx₁
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx₂
-  exact mem _ _ hi
-
-中文:
-定理 iSup_induction
-  结论: (S : ι -> 子半群 M) {C : M -> 命题} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i)
-  证明: by
-  rw [iSup_eq_closure] at hx₁
-  refine closure_induction (fun x₂ hx₂ => ?_) (fun x y _ _ => mul x y) hx₁
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx₂
-  exact mem _ _ hi
-
-Depends on / 依赖: Set.mem_iUnion.mp, closure_induction, iSup_eq_closure, mem_iUnion
+/-
+**Subsemigroup.iSup_induction** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：iSup_induction (S : ι -> Subsemigroup M) {C : M -> Prop} {x₁ : M} (hx₁ : x
+₁ in ⨆ i, S i) (mem : forall i, forall x₂ in S i, C x₂) (mul : forall x y, C x -
+> C y -> C (x * y)) : C x₁
+参数：S : ι -> Subsemigroup M；hx₁ : x₁ in ⨆ i, S i；mem : forall i, forall x₂ in S i
+, C x₂；mul : forall x y, C x -> C y -> C (x * y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.closure_induction`：closure_induction {p : (x : M) -> x in c
+losure s -> Prop} (mem : forall (x) (h : x in s), p x (subset_closure h)) (mul :
+ forall x y hx hy, p…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsemigroup.iSup_eq_closure`：iSup_eq_closure {ι : Sort*} (p : ι -> Subs
+emigroup M) : ⨆ i, p i = Subsemigroup.closure (⋃ i, (p i : Set M))
 -/
-theorem iSup_induction (S : ι -> Subsemigroup M) {C : M -> Prop} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i)
-    (mem : forall i, forall x₂ in S i, C x₂) (mul : forall x y, C x -> C y -> C (x * y)) : C x₁ := by
+theorem iSup_induction (S : ι → Subsemigroup M) {C : M → Prop} {x₁ : M} (hx₁ : x₁ ∈ ⨆ i, S i)
+    (mem : ∀ i, ∀ x₂ ∈ S i, C x₂) (mul : ∀ x y, C x → C y → C (x * y)) : C x₁ := by
   rw [iSup_eq_closure] at hx₁
-  refine closure_induction (fun x₂ hx₂ => ?_) (fun x y _ _ => mul x y) hx₁
+  refine closure_induction (fun x₂ hx₂ => ?_) (fun x y _ _ ↦ mul x y) hx₁
   obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx₂
   exact mem _ _ hi
 
 /-- A dependent version of `Subsemigroup.iSup_induction`. -/
 @[to_additive (attr := elab_as_elim)
 /-- A dependent version of `AddSubsemigroup.iSup_induction`. -/]
-/--
-theorem `iSup_induction'` / 定理 `iSup_induction'`
-
-English:
-theorem iSup_induction'
-  statement: (S : ι -> Subsemigroup M) {C : forall x, (x in ⨆ i, S i) -> Prop}
-  proof: by
-  refine Exists.elim ?_ fun (hx₁' : x₁ in ⨆ i, S i) (hc : C x₁ hx₁') => hc
-  refine @iSup_induction _ _ _ S (fun x' => exists hx'', C x' hx'') _ hx₁
-      (fun i x₂ hx₂ => ?_) fun x₃ y => ?_
-  · exact ⟨_, mem _ _ hx₂⟩
-  · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, mul _ _ _ _ Cx Cy⟩
-
-中文:
-定理 iSup_induction'
-  结论: (S : ι -> 子半群 M) {C : 对任意 x, (x in ⨆ i, S i) -> 命题}
-  证明: by
-  refine Exists.elim ?_ fun (hx₁' : x₁ in ⨆ i, S i) (hc : C x₁ hx₁') => hc
-  refine @iSup_induction _ _ _ S (fun x' => exists hx'', C x' hx'') _ hx₁
-      (fun i x₂ hx₂ => ?_) fun x₃ y => ?_
-  · exact ⟨_, mem _ _ hx₂⟩
-  · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, mul _ _ _ _ Cx Cy⟩
-
-Depends on / 依赖: Exists, Exists.elim, iSup_induction
+/-
+**Subsemigroup.iSup_induction'** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：iSup_induction' (S : ι -> Subsemigroup M) {C : forall x, (x in ⨆ i, S i) -
+> Prop} (mem : forall (i) (x) (hxS : x in S i), C x (mem_iSup_of_mem i ‹_›)) (mu
+l : forall x y hx hy, C x hx -> C y hy -> C (x * y) (mul_mem ‹_› ‹_›)) {x₁ : M} 
+(hx₁ : x₁ in ⨆ i, S i) : C x₁ hx₁
+参数：S : ι -> Subsemigroup M；x in ⨆ i, S i；mem : forall (i) (x) (hxS : x in S i), 
+C x (mem_iSup_of_mem i ‹_›)；mul : forall x y hx hy, C x hx -> C y hy -> C (x * y
+) (mul_mem ‹_› ‹_›)；hx₁ : x₁ in ⨆ i, S i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemigroup.mem_iSup_of_mem`：mem_iSup_of_mem {S : ι -> Subsemigroup M} 
+(i : ι) : forall {x : M}, x in S i -> x in iSup S
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `Subsemigroup.instMulMemClass`：∀ {M : Type u_1} [inst : Mul M], MulMemCla
+ss (Subsemigroup M) M
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Subsemigroup.iSup_induction`：iSup_induction (S : ι -> Subsemigroup M) {C
+ : M -> Prop} {x₁ : M} (hx₁ : x₁ in ⨆ i, S i) (mem : forall i, forall x₂ in S i,
+ C x₂) (mul : for…
 -/
-theorem iSup_induction' (S : ι -> Subsemigroup M) {C : forall x, (x in ⨆ i, S i) -> Prop}
-    (mem : forall (i) (x) (hxS : x in S i), C x (mem_iSup_of_mem i ‹_›))
-    (mul : forall x y hx hy, C x hx -> C y hy -> C (x * y) (mul_mem ‹_› ‹_›)) {x₁ : M}
-    (hx₁ : x₁ in ⨆ i, S i) : C x₁ hx₁ := by
-  refine Exists.elim ?_ fun (hx₁' : x₁ in ⨆ i, S i) (hc : C x₁ hx₁') => hc
-  refine @iSup_induction _ _ _ S (fun x' => exists hx'', C x' hx'') _ hx₁
+theorem iSup_induction' (S : ι → Subsemigroup M) {C : ∀ x, (x ∈ ⨆ i, S i) → Prop}
+    (mem : ∀ (i) (x) (hxS : x ∈ S i), C x (mem_iSup_of_mem i ‹_›))
+    (mul : ∀ x y hx hy, C x hx → C y hy → C (x * y) (mul_mem ‹_› ‹_›)) {x₁ : M}
+    (hx₁ : x₁ ∈ ⨆ i, S i) : C x₁ hx₁ := by
+  refine Exists.elim ?_ fun (hx₁' : x₁ ∈ ⨆ i, S i) (hc : C x₁ hx₁') => hc
+  refine @iSup_induction _ _ _ S (fun x' => ∃ hx'', C x' hx'') _ hx₁
       (fun i x₂ hx₂ => ?_) fun x₃ y => ?_
   · exact ⟨_, mem _ _ hx₂⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
@@ -517,3 +478,4 @@ theorem iSup_induction' (S : ι -> Subsemigroup M) {C : forall x, (x in ⨆ i, S
 end Subsemigroup
 
 end NonAssoc
+

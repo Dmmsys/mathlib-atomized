@@ -24,59 +24,39 @@ universe v u
 
 variable (R : Type u) [Ring R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EnoughInjectives (ModuleCat.{v} Int)
-  body: EnoughInjectives.of_equivalence (forget₂ (ModuleCat Int) AddCommGrpCat)
-
-中文:
-实例 :
-  签名: 有足够单射 (模范畴.{v} 整数)
-  定义体: EnoughInjectives.of_equivalence (forget₂ (ModuleCat Int) AddCommGrpCat)
-
-Depends on / 依赖: AddCommGrpCat, EnoughInjectives, EnoughInjectives.of_equivalence, ModuleCat, of_equivalence
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : EnoughInjectives (ModuleCat.{v} Int) :=
-  EnoughInjectives.of_equivalence (forget₂ (ModuleCat Int) AddCommGrpCat)
-
-/--
-lemma `ModuleCat.enoughInjectives` / 引理 `ModuleCat.enoughInjectives`
-
-English:
-lemma ModuleCat.enoughInjectives
-  statement: EnoughInjectives (ModuleCat.{max v u} R)
-  proof: EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap Int R))
-
-中文:
-引理 模范畴.enoughInjectives
-  结论: 有足够单射 (模范畴.{最大值 v u} R)
-  证明: EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap Int R))
-
-Depends on / 依赖: EnoughInjectives, EnoughInjectives.of_adjunction, ModuleCat, ModuleCat.restrictCoextendScalarsAdj, algebraMap, of_adjunction, restrictCoextendScalarsAdj
+instance : EnoughInjectives (ModuleCat.{v} ℤ) :=
+  EnoughInjectives.of_equivalence (forget₂ (ModuleCat ℤ) AddCommGrpCat)
+/-
+**ModuleCat.enoughInjectives** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ModuleCat.enoughInjectives : EnoughInjectives (ModuleCat.{max v u} R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnoughInjectives.of_adjunction`：∀ {C : Type u₁} {D : Type
+ u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `ModuleCat.instPreservesMonomorphismsRestrictScalars`：∀ {R : Type u₁} {S 
+: Type u₂} [inst : Ring R] [inst_1 : Ring S] (f : R →+* S),   (ModuleCat.restric
+tScalars f).PreservesMonomorphisms
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `ModuleCat.instFaithfulRestrictScalars`：∀ {R : Type u₁} {S : Type u₂} [in
+st : Ring R] [inst_1 : Ring S] (f : R →+* S), (ModuleCat.restrictScalars f).Fait
+hful
+· 使用定理 `instEnoughInjectivesModuleCatInt`：CategoryTheory.EnoughInjectives (Modul
+eCat ℤ)
 -/
 lemma ModuleCat.enoughInjectives : EnoughInjectives (ModuleCat.{max v u} R) :=
-  EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap Int R))
+  EnoughInjectives.of_adjunction (ModuleCat.restrictCoextendScalarsAdj.{max v u} (algebraMap ℤ R))
 
 open ModuleCat in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Small.{v}
-  signature: R] : EnoughInjectives (ModuleCat.{v} R)
-  body: letI := enoughInjectives.{v} (Shrink.{v} R)
-  EnoughInjectives.of_equivalence (restrictScalars (equivShrink R).symm.ringEquiv.toRingHom)
-
-中文:
-实例 [Small.{v}
-  签名: R] : 有足够单射 (模范畴.{v} R)
-  定义体: letI := enoughInjectives.{v} (Shrink.{v} R)
-  EnoughInjectives.of_equivalence (restrictScalars (equivShrink R).symm.ringEquiv.toRingHom)
-
-Depends on / 依赖: EnoughInjectives, EnoughInjectives.of_equivalence, Shrink, enoughInjectives, equivShrink, of_equivalence, restrictScalars, ringEquiv, symm.ringEquiv.toRingHom, toRingHom
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Small.{v} R] : EnoughInjectives (ModuleCat.{v} R) :=
   letI := enoughInjectives.{v} (Shrink.{v} R)

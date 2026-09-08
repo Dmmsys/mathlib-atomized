@@ -18,26 +18,15 @@ variable {α}
 
 open Encodable
 
-/--
-Instance `Finset.encodable` / 实例 `Finset.encodable`
+/-- If `α` is encodable, then so is `Finset α`. -/
+/-
+**Finset.encodable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Finset.encodable [Encodable α] : Encodable (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Finset.encodable
-  signature: [Encodable α]
-  body: haveI := decidableEqOfEncodable α
-  ofEquiv { s : Multiset α // s.Nodup }
-    { toFun := fun ⟨a, b⟩ => ⟨a, b⟩
-      invFun := fun ⟨a, b⟩ => ⟨a, b⟩ }
-
-中文:
-实例 有限集.encodable
-  签名: [可编码 α]
-  定义体: haveI := decidableEqOfEncodable α
-  ofEquiv { s : Multiset α // s.Nodup }
-    { toFun := fun ⟨a, b⟩ => ⟨a, b⟩
-      invFun := fun ⟨a, b⟩ => ⟨a, b⟩ }
-
-Depends on / 依赖: Multiset, decidableEqOfEncodable, invFun, ofEquiv, s.Nodup
+--- 原说明 ---
+If `α` is encodable, then so is `Finset α`.
 -/
 instance Finset.encodable [Encodable α] : Encodable (Finset α) :=
   haveI := decidableEqOfEncodable α
@@ -47,145 +36,119 @@ instance Finset.encodable [Encodable α] : Encodable (Finset α) :=
 
 namespace Encodable
 
-/--
-Definition of `sortedUniv` / `sortedUniv` 的定义
+/-- The elements of a `Fintype` as a sorted list. -/
+/-
+**Encodable.sortedUniv** 是 Mathlib 中的一个定义，位于命名空间 `Encodable`。
+形式化陈述：sortedUniv (α) [Fintype α] [Encodable α] : List α
+参数：α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Encodable.instAntisymmPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1}
+ [inst : Encodable α], Std.Antisymm (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1
+ ≤ x2)
+· 使用定理 `Encodable.instTotalPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1} [i
+nst : Encodable α], Std.Total (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1 ≤ x2)
 
-English:
-definition sortedUniv
-  signature: (α) [Fintype α] [Encodable α]
-  body: Finset.univ.sort (Encodable.encode' α ⁻¹'o (· <= ·))
-
-@[simp]
-
-中文:
-定义 sortedUniv
-  签名: (α) [有限类型 α] [可编码 α]
-  定义体: Finset.univ.sort (Encodable.encode' α ⁻¹'o (· <= ·))
-
-@[simp]
-
-Depends on / 依赖: Encodable, Encodable.encode, Finset, Finset.univ.sort, encode
+--- 原说明 ---
+The elements of a `Fintype` as a sorted list.
 -/
 def sortedUniv (α) [Fintype α] [Encodable α] : List α :=
-  Finset.univ.sort (Encodable.encode' α ⁻¹'o (· <= ·))
+  Finset.univ.sort (Encodable.encode' α ⁻¹'o (· ≤ ·))
 
 @[simp]
-/--
-theorem `mem_sortedUniv` / 定理 `mem_sortedUniv`
-
-English:
-theorem mem_sortedUniv
-  given: {α} [Fintype α] [Encodable α] (x : α)
-  statement: x in sortedUniv α
-  proof: (Finset.mem_sort _).2 (Finset.mem_univ _)
-
-@[simp]
-
-中文:
-定理 mem_sortedUniv
-  条件: {α} [有限类型 α] [可编码 α] (x : α)
-  结论: x in sortedUniv α
-  证明: (Finset.mem_sort _).2 (Finset.mem_univ _)
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.mem_sort, Finset.mem_univ, mem_sort, mem_univ
+/-
+**Encodable.mem_sortedUniv** 是 Mathlib 中的一个定理，位于命名空间 `Encodable`。
+形式化陈述：mem_sortedUniv {α} [Fintype α] [Encodable α] (x : α) : x in sortedUniv α
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Encodable.instAntisymmPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1}
+ [inst : Encodable α], Std.Antisymm (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1
+ ≤ x2)
+· 使用定理 `Encodable.instTotalPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1} [i
+nst : Encodable α], Std.Total (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1 ≤ x2)
+· 使用定理 `Finset.mem_sort`：mem_sort {a : α} : a in sort s r ↔ a in s
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
-theorem mem_sortedUniv {α} [Fintype α] [Encodable α] (x : α) : x in sortedUniv α :=
+theorem mem_sortedUniv {α} [Fintype α] [Encodable α] (x : α) : x ∈ sortedUniv α :=
   (Finset.mem_sort _).2 (Finset.mem_univ _)
 
 @[simp]
-/--
-theorem `length_sortedUniv` / 定理 `length_sortedUniv`
-
-English:
-theorem length_sortedUniv
-  given: (α) [Fintype α] [Encodable α]
-  statement: (sortedUniv α).length = Fintype.card α
-  proof: Finset.length_sort _
-
-@[simp]
-
-中文:
-定理 length_sortedUniv
-  条件: (α) [有限类型 α] [可编码 α]
-  结论: (sortedUniv α).length = 有限类型.card α
-  证明: Finset.length_sort _
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.length_sort, length_sort
+/-
+**Encodable.length_sortedUniv** 是 Mathlib 中的一个定理，位于命名空间 `Encodable`。
+形式化陈述：length_sortedUniv (α) [Fintype α] [Encodable α] : (sortedUniv α).length = 
+Fintype.card α
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.length_sort`：length_sort : (sort s r).length = s.card
+· 使用定理 `Encodable.instAntisymmPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1}
+ [inst : Encodable α], Std.Antisymm (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1
+ ≤ x2)
+· 使用定理 `Encodable.instTotalPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1} [i
+nst : Encodable α], Std.Total (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1 ≤ x2)
 -/
 theorem length_sortedUniv (α) [Fintype α] [Encodable α] : (sortedUniv α).length = Fintype.card α :=
   Finset.length_sort _
 
 @[simp]
-/--
-theorem `sortedUniv_nodup` / 定理 `sortedUniv_nodup`
-
-English:
-theorem sortedUniv_nodup
-  given: (α) [Fintype α] [Encodable α]
-  statement: (sortedUniv α).Nodup
-  proof: Finset.sort_nodup _ _
-
-@[simp]
-
-中文:
-定理 sortedUniv_nodup
-  条件: (α) [有限类型 α] [可编码 α]
-  结论: (sortedUniv α).Nodup
-  证明: Finset.sort_nodup _ _
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sort_nodup, sort_nodup
+/-
+**Encodable.sortedUniv_nodup** 是 Mathlib 中的一个定理，位于命名空间 `Encodable`。
+形式化陈述：sortedUniv_nodup (α) [Fintype α] [Encodable α] : (sortedUniv α).Nodup
+参数：α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sort_nodup`：sort_nodup : (sort s r).Nodup
+· 使用定理 `Encodable.instAntisymmPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1}
+ [inst : Encodable α], Std.Antisymm (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1
+ ≤ x2)
+· 使用定理 `Encodable.instTotalPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1} [i
+nst : Encodable α], Std.Total (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1 ≤ x2)
 -/
 theorem sortedUniv_nodup (α) [Fintype α] [Encodable α] : (sortedUniv α).Nodup :=
   Finset.sort_nodup _ _
 
 @[simp]
-/--
-theorem `sortedUniv_toFinset` / 定理 `sortedUniv_toFinset`
-
-English:
-theorem sortedUniv_toFinset
-  given: (α) [Fintype α] [Encodable α] [DecidableEq α]
-  proof: Finset.sort_toFinset _ _
-
-中文:
-定理 sortedUniv_toFinset
-  条件: (α) [有限类型 α] [可编码 α] [DecidableEq α]
-  证明: Finset.sort_toFinset _ _
-
-Depends on / 依赖: Finset, Finset.sort_toFinset, sort_toFinset
+/-
+**Encodable.sortedUniv_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Encodable`。
+形式化陈述：sortedUniv_toFinset (α) [Fintype α] [Encodable α] [DecidableEq α] : (sorte
+dUniv α).toFinset = Finset.univ
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sort_toFinset`：sort_toFinset [DecidableEq α] : (sort s r).toFinse
+t = s
+· 使用定理 `Encodable.instAntisymmPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1}
+ [inst : Encodable α], Std.Antisymm (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1
+ ≤ x2)
+· 使用定理 `Encodable.instTotalPreimageNatCoeEmbeddingEncode'Le`：∀ {α : Type u_1} [i
+nst : Encodable α], Std.Total (⇑(Encodable.encode' α) ⁻¹'o fun x1 x2 => x1 ≤ x2)
 -/
 theorem sortedUniv_toFinset (α) [Fintype α] [Encodable α] [DecidableEq α] :
     (sortedUniv α).toFinset = Finset.univ :=
   Finset.sort_toFinset _ _
 
-/--
-Definition of `fintypeEquivFin` / `fintypeEquivFin` 的定义
+/-- An encodable `Fintype` is equivalent to the same size `Fin`. -/
+/-
+**Encodable.fintypeEquivFin** 是 Mathlib 中的一个定义，位于命名空间 `Encodable`。
+形式化陈述：fintypeEquivFin {α} [Fintype α] [Encodable α] : α ≃ Fin (Fintype.card α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Encodable.sortedUniv_nodup`：sortedUniv_nodup (α) [Fintype α] [Encodable 
+α] : (sortedUniv α).Nodup
+· 使用定理 `Encodable.mem_sortedUniv`：mem_sortedUniv {α} [Fintype α] [Encodable α] (
+x : α) : x in sortedUniv α
 
-English:
-definition fintypeEquivFin
-  signature: {α} [Fintype α] [Encodable α]
-  body: haveI : DecidableEq α := Encodable.decidableEqOfEncodable _
-((sortedUniv_nodup α).getEquivOfForallMemList _ mem_sortedUniv).symm.trans
-    Equiv.cast (congr_arg _ (length_sortedUniv α))
-
-中文:
-定义 fintypeEquivFin
-  签名: {α} [有限类型 α] [可编码 α]
-  定义体: haveI : DecidableEq α := Encodable.decidableEqOfEncodable _
-((sortedUniv_nodup α).getEquivOfForallMemList _ mem_sortedUniv).symm.trans
-    Equiv.cast (congr_arg _ (length_sortedUniv α))
-
-Depends on / 依赖: DecidableEq, Encodable, Encodable.decidableEqOfEncodable, Equiv.cast, congr_arg, decidableEqOfEncodable, getEquivOfForallMemList, length_sortedUniv, mem_sortedUniv, sortedUniv_nodup, symm.trans
+--- 原说明 ---
+An encodable `Fintype` is equivalent to the same size `Fin`.
 -/
 def fintypeEquivFin {α} [Fintype α] [Encodable α] : α ≃ Fin (Fintype.card α) :=
   haveI : DecidableEq α := Encodable.decidableEqOfEncodable _
-((sortedUniv_nodup α).getEquivOfForallMemList _ mem_sortedUniv).symm.trans
+  ((sortedUniv_nodup α).getEquivOfForallMemList _ mem_sortedUniv).symm.trans <|
     Equiv.cast (congr_arg _ (length_sortedUniv α))
 
 end Encodable
@@ -194,206 +157,160 @@ end Encodable
 namespace Denumerable
 variable [Denumerable α]
 
-/--
-Definition of `lower'` / `lower'` 的定义
+/-- Outputs the list of differences minus one of the input list, that is
+`lower' [a₁, a₂, a₃, ...] n = [a₁ - n, a₂ - a₁ - 1, a₃ - a₂ - 1, ...]`. -/
+/-
+**Denumerable.lower'** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：List ℕ → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lower'
-  signature: : List Nat -> Nat -> List Nat
-
-中文:
-定义 lower'
-  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
+--- 原说明 ---
+Outputs the list of differences minus one of the input list, that is
+`lower' [a₁, a₂, a₃, ...] n = [a₁ - n, a₂ - a₁ - 1, a₃ - a₂ - 1, ...]`.
 -/
-def lower' : List Nat -> Nat -> List Nat
+def lower' : List ℕ → ℕ → List ℕ
   | [], _ => []
   | m :: l, n => (m - n) :: lower' l (m + 1)
 
-/--
-Definition of `raise'` / `raise'` 的定义
+/-- Outputs the list of partial sums plus one of the input list, that is
+`raise [a₁, a₂, a₃, ...] n = [n + a₁, n + a₁ + a₂ + 1, n + a₁ + a₂ + a₃ + 2, ...]`. Adding one each
+time ensures the elements are distinct. -/
+/-
+**Denumerable.raise'** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：raise'_sorted (l n) : List.SortedLT (raise' l n)
+参数：l n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition raise'
-  signature: : List Nat -> Nat -> List Nat
-
-中文:
-定义 raise'
-  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
+--- 原说明 ---
+Outputs the list of partial sums plus one of the input list, that is
+`raise [a₁, a₂, a₃, ...] n = [n + a₁, n + a₁ + a₂ + 1, n + a₁ + a₂ + a₃ + 2, ...
+]`. Adding one each
+time ensures the elements are distinct.
 -/
-def raise' : List Nat -> Nat -> List Nat
+def raise' : List ℕ → ℕ → List ℕ
   | [], _ => []
   | m :: l, n => (m + n) :: raise' l (m + n + 1)
-
-/--
-theorem `lower_raise'` / 定理 `lower_raise'`
-
-English:
-theorem lower_raise'
-  statement: forall l n, lower' (raise' l n) n = l
-
-中文:
-定理 lower_raise'
-  结论: 对任意 l n, lower' (raise' l n) n = l
+/-
+**Denumerable.lower_raise'** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) (n : ℕ), Denumerable.lower' (Denumerable.raise' l n) n = l
+参数：l : List ℕ；n : ℕ；Denumerable.raise' l n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
 -/
-theorem lower_raise' : forall l n, lower' (raise' l n) n = l
+theorem lower_raise' : ∀ l n, lower' (raise' l n) n = l
   | [], _ => rfl
   | m :: l, n => by simp [raise', lower', lower_raise']
-
-/--
-theorem `raise_lower'` / 定理 `raise_lower'`
-
-English:
-theorem raise_lower'
-  statement: forall {l n}, (forall m in l, n <= m) -> List.SortedLT l -> raise' (lower' l n) n = l
-  proof: h₁ _ List.mem_cons_self
-    simp [raise', lower', Nat.sub_add_cancel this,
-      raise_lower' (fun _ => List.rel_of_pairwise_cons h₂.pairwise : forall a in l, m < a)
-      h₂.pairwise.of_cons.sortedLT]
-
-中文:
-定理 raise_lower'
-  结论: 对任意 {l n}, (对任意 m in l, n <= m) -> 列表.SortedLT l -> raise' (lower' l n) n = l
-  证明: h₁ _ List.mem_cons_self
-    simp [raise', lower', Nat.sub_add_cancel this,
-      raise_lower' (fun _ => List.rel_of_pairwise_cons h₂.pairwise : forall a in l, m < a)
-      h₂.pairwise.of_cons.sortedLT]
-
-Depends on / 依赖: List.mem_cons_self, mem_cons_self
+/-
+**Denumerable.raise_lower'** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：raise_lower' : forall {l n}, (forall m in l, n <= m) -> List.SortedLT l ->
+ raise' (lower' l n) n = l | [], _, _, _ => rfl | m :: l, n, h₁, h₂ => by have :
+ n <= m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
 -/
-theorem raise_lower' : forall {l n}, (forall m in l, n <= m) -> List.SortedLT l -> raise' (lower' l n) n = l
+theorem raise_lower' : ∀ {l n}, (∀ m ∈ l, n ≤ m) → List.SortedLT l → raise' (lower' l n) n = l
   | [], _, _, _ => rfl
   | m :: l, n, h₁, h₂ => by
-    have : n <= m := h₁ _ List.mem_cons_self
+    have : n ≤ m := h₁ _ List.mem_cons_self
     simp [raise', lower', Nat.sub_add_cancel this,
-      raise_lower' (fun _ => List.rel_of_pairwise_cons h₂.pairwise : forall a in l, m < a)
+      raise_lower' (fun _ => List.rel_of_pairwise_cons h₂.pairwise : ∀ a ∈ l, m < a)
       h₂.pairwise.of_cons.sortedLT]
-
-/--
-theorem `isChain_raise'` / 定理 `isChain_raise'`
-
-English:
-theorem isChain_raise'
-  statement: forall (l) (n), List.IsChain (· < ·) (raise' l n)
-
-中文:
-定理 isChain_raise'
-  结论: 对任意 (l) (n), 列表.IsChain (· < ·) (raise' l n)
+/-
+**Denumerable.isChain_raise'** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1 x2 => x1 < x2) (Denumerable.r
+aise' l n)
+参数：l : List ℕ；n : ℕ；fun x1 x2 => x1 < x2；Denumerable.raise' l n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
 -/
-theorem isChain_raise' : forall (l) (n), List.IsChain (· < ·) (raise' l n)
+theorem isChain_raise' : ∀ (l) (n), List.IsChain (· < ·) (raise' l n)
   | [], _ => .nil
   | [_], _ => .singleton _
   | _ :: _ :: _, _ => .cons_cons (by lia) (isChain_raise' (_ :: _) _)
-
-/--
-theorem `isChain_cons_raise'` / 定理 `isChain_cons_raise'`
-
-English:
-theorem isChain_cons_raise'
-  given: (l m)
-  statement: List.IsChain (· < ·) (m :: raise' l (m + 1))
-  proof: isChain_raise' (m :: l) 0
-
-中文:
-定理 isChain_cons_raise'
-  条件: (l m)
-  结论: 列表.IsChain (· < ·) (m :: raise' l (m + 1))
-  证明: isChain_raise' (m :: l) 0
-
-Depends on / 依赖: isChain_raise
+/-
+**Denumerable.isChain_cons_raise'** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：isChain_cons_raise' (l m) : List.IsChain (· < ·) (m :: raise' l (m + 1))
+参数：l m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.isChain_raise'`：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1
+ x2 => x1 < x2) (Denumerable.raise' l n)
 -/
 theorem isChain_cons_raise' (l m) : List.IsChain (· < ·) (m :: raise' l (m + 1)) :=
   isChain_raise' (m :: l) 0
-
-/--
-theorem `isChain_cons_raise'_of_lt` / 定理 `isChain_cons_raise'_of_lt`
-
-English:
-theorem isChain_cons_raise'_of_lt
-  given: (l) {m n} (h : m < n)
-  proof: by
-  unfold raise'; cases l with grind [isChain_cons_raise']
-
-中文:
-定理 isChain_cons_raise'_of_lt
-  条件: (l) {m n} (h : m < n)
-  证明: by
-  unfold raise'; cases l with grind [isChain_cons_raise']
+/-
+**Denumerable.isChain_cons_raise'_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) {m n : ℕ}, m < n → List.IsChain (fun x1 x2 => x1 < x2) (m :
+: Denumerable.raise' l n)
+参数：l : List ℕ；fun x1 x2 => x1 < x2；m :: Denumerable.raise' l n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Denumerable.raise'.eq_def`：∀ (x : List ℕ) (x_1 : ℕ),   Denumerable.raise
+' x x_1 =     match x, x_1 with     | [], x => []     | m :: l, n => (m + n) :: 
+Denumerable.rai…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isChain_cons_raise'_of_lt (l) {m n} (h : m < n) :
     List.IsChain (· < ·) (m :: raise' l n) := by
   unfold raise'; cases l with grind [isChain_cons_raise']
 
-/--
-theorem `raise'_sorted` / 定理 `raise'_sorted`
+/-- `raise' l n` is a strictly increasing sequence. -/
+/-
+**Denumerable.raise'_sorted** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：∀ (l : List ℕ) (n : ℕ), (Denumerable.raise' l n).SortedLT
+参数：l : List ℕ；n : ℕ；Denumerable.raise' l n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.IsChain.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, List.IsChain (fun x1 x2 => x1 < x2) l → l.SortedLT
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
+· 使用定理 `Denumerable.isChain_raise'`：∀ (l : List ℕ) (n : ℕ), List.IsChain (fun x1
+ x2 => x1 < x2) (Denumerable.raise' l n)
 
-English:
-theorem raise'_sorted
-  given: (l n)
-  statement: List.SortedLT (raise' l n)
-  proof: (isChain_raise' _ _).sortedLT
-
-中文:
-定理 raise'_sorted
-  条件: (l n)
-  结论: 列表.SortedLT (raise' l n)
-  证明: (isChain_raise' _ _).sortedLT
-
-Depends on / 依赖: isChain_raise, sortedLT
+--- 原说明 ---
+`raise' l n` is a strictly increasing sequence.
 -/
 theorem raise'_sorted (l n) : List.SortedLT (raise' l n) := (isChain_raise' _ _).sortedLT
 
-/--
-Definition of `raise'Finset` / `raise'Finset` 的定义
+/-- Makes `raise' l n` into a finset. Elements are distinct thanks to `raise'_sorted`. -/
+/-
+**Denumerable.raise'Finset** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：List ℕ → ℕ → Finset ℕ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.raise'`：raise'_sorted (l n) : List.SortedLT (raise' l n)
 
-English:
-definition raise'Finset
-  signature: (l : List Nat) (n : Nat)
-  body: ⟨raise' l n, (raise'_sorted _ _).nodup⟩
-
-中文:
-定义 raise'有限集
-  签名: (l : 列表 自然数) (n : 自然数)
-  定义体: ⟨raise' l n, (raise'_sorted _ _).nodup⟩
+--- 原说明 ---
+Makes `raise' l n` into a finset. Elements are distinct thanks to `raise'_sorted
+`.
 -/
-def raise'Finset (l : List Nat) (n : Nat) : Finset Nat :=
+def raise'Finset (l : List ℕ) (n : ℕ) : Finset ℕ :=
   ⟨raise' l n, (raise'_sorted _ _).nodup⟩
 
-/--
-Instance `finset` / 实例 `finset`
+/-- If `α` is denumerable, then so is `Finset α`. Warning: this is *not* the same encoding as used
+in `Finset.encodable`. -/
+/-
+**Denumerable.finset** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：finset : Denumerable (Finset α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance finset
-  signature: : Denumerable (Finset α)
-  body: mk'
-⟨fun s : Finset α => encode lower' (s.map (eqv α).toEmbedding).sort 0, fun n =>
-      Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>
-Finset.eq_of_veq by
-        simp [-Multiset.map_coe, raise'Finset,
-          raise_lower' (fun n _ => Nat.zero_le n) (Finset.sortedLT_sort _)],
-      fun n => by
-      simp [-Multiset.map_coe, Finset.map, raise'Finset, Finset.sort,
-        List.mergeSort_eq_self _ (raise'_sorted _ _).sortedLE.pairwise, lower_raise']⟩
-
-中文:
-实例 finset
-  签名: : 可枚举 (有限集 α)
-  定义体: mk'
-⟨fun s : Finset α => encode lower' (s.map (eqv α).toEmbedding).sort 0, fun n =>
-      Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>
-Finset.eq_of_veq by
-        simp [-Multiset.map_coe, raise'Finset,
-          raise_lower' (fun n _ => Nat.zero_le n) (Finset.sortedLT_sort _)],
-      fun n => by
-      simp [-Multiset.map_coe, Finset.map, raise'Finset, Finset.sort,
-        List.mergeSort_eq_self _ (raise'_sorted _ _).sortedLE.pairwise, lower_raise']⟩
-
-Depends on / 依赖: Finset, Finset.eq_of_veq, Finset.map, Finset.sort, Finset.sortedLT_sort, List.mergeSort_eq_self, Multiset, Multiset.map_coe, Nat.zero_le, _sorted, encode, eq_of_veq, lower_raise, map_coe, mergeSort_eq_self, pairwise, raise_lower, s.map, sortedLE, sortedLE.pairwise
+--- 原说明 ---
+If `α` is denumerable, then so is `Finset α`. Warning: this is *not* the same en
+coding as used
+in `Finset.encodable`.
 -/
 instance finset : Denumerable (Finset α) :=
   mk'
-⟨fun s : Finset α => encode lower' (s.map (eqv α).toEmbedding).sort 0, fun n =>
-      Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>
-Finset.eq_of_veq by
+    ⟨fun s : Finset α => encode <| lower' (s.map (eqv α).toEmbedding).sort 0, fun n =>
+      Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List ℕ) n) 0), fun s =>
+      Finset.eq_of_veq <| by
         simp [-Multiset.map_coe, raise'Finset,
           raise_lower' (fun n _ => Nat.zero_le n) (Finset.sortedLT_sort _)],
       fun n => by
@@ -401,3 +318,4 @@ Finset.eq_of_veq by
         List.mergeSort_eq_self _ (raise'_sorted _ _).sortedLE.pairwise, lower_raise']⟩
 
 end Denumerable
+

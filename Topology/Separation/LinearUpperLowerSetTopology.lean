@@ -16,6 +16,10 @@ public section
 
 open Set Topology.IsUpperSet
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {α : Type*}
     [TopologicalSpace α] [LinearOrder α] [Topology.IsUpperSet α] : CompletelyNormalSpace α where
   completely_normal s t hcst hsct := by
@@ -28,24 +32,17 @@ instance (priority := low) {α : Type*}
     conv at hcst => equals a < b => simp
     conv at hsct => equals b < a => simp
     exact lt_asymm hcst hsct
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {α : Type*}
     [TopologicalSpace α] [LinearOrder α] [Topology.IsLowerSet α] :
     CompletelyNormalSpace α :=
   inferInstanceAs (CompletelyNormalSpace αᵒᵈ)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompletelyNormalSpace Prop
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 余mpletelyNormal空间 命题
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompletelyNormalSpace Prop :=
   inferInstance

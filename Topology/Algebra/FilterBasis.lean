@@ -44,263 +44,155 @@ open Topology Filter Pointwise
 
 universe u
 
-/--
-Definition of `GroupFilterBasis` / `GroupFilterBasis` 的定义
+/-- A `GroupFilterBasis` on a group is a `FilterBasis` satisfying some additional axioms.
+  Example : if `G` is a topological group then the neighbourhoods of the identity are a
+  `GroupFilterBasis`. Conversely given a `GroupFilterBasis` one can define a topology
+  compatible with the group structure on `G`. -/
+/-
+**GroupFilterBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u) → [Group G] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GroupFilterBasis
-  parameters: (G : Type u) [Group G]
-  extends: FilterBasis G
-  axioms and operations (4):
-    - one' : forall {U}, U in sets -> (1 : G) in U
-    - mul' : forall {U}, U in sets -> exists V in sets, V * V subseteq U
-    - inv' : forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U
-    - conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
-
-中文:
-类 群滤子基
-  参数: (G : 类型u) [群 G]
-  继承: 滤子基 G
-  公理与运算 (4 个):
-    - one' : 对任意 {U}, U in sets -> (1 : G) in U
-    - mul' : 对任意 {U}, U in sets -> 存在 V in sets, V * V subseteq U
-    - inv' : 对任意 {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U
-    - conj' : 对任意 x₀, 对任意 {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
+--- 原说明 ---
+A `GroupFilterBasis` on a group is a `FilterBasis` satisfying some additional ax
+ioms.
+  Example : if `G` is a topological group then the neighbourhoods of the identit
+y are a
+  `GroupFilterBasis`. Conversely given a `GroupFilterBasis` one can define a top
+ology
+  compatible with the group structure on `G`.
 -/
 class GroupFilterBasis (G : Type u) [Group G] extends FilterBasis G where
-  one' : forall {U}, U in sets -> (1 : G) in U
-  mul' : forall {U}, U in sets -> exists V in sets, V * V subseteq U
-  inv' : forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U
-  conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
+  one' : ∀ {U}, U ∈ sets → (1 : G) ∈ U
+  mul' : ∀ {U}, U ∈ sets → ∃ V ∈ sets, V * V ⊆ U
+  inv' : ∀ {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x⁻¹) ⁻¹' U
+  conj' : ∀ x₀, ∀ {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x₀ * x * x₀⁻¹) ⁻¹' U
 
-/--
-Definition of `AddGroupFilterBasis` / `AddGroupFilterBasis` 的定义
+/-- An `AddGroupFilterBasis` on an additive group is a `FilterBasis` satisfying some additional
+  axioms. Example : if `G` is a topological group then the neighbourhoods of the identity are an
+  `AddGroupFilterBasis`. Conversely given an `AddGroupFilterBasis` one can define a topology
+  compatible with the group structure on `G`. -/
+/-
+**AddGroupFilterBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u) → [AddGroup A] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddGroupFilterBasis
-  parameters: (A : Type u) [AddGroup A]
-  extends: FilterBasis A
-  axioms and operations (4):
-    - zero' : forall {U}, U in sets -> (0 : A) in U
-    - add' : forall {U}, U in sets -> exists V in sets, V + V subseteq U
-    - neg' : forall {U}, U in sets -> exists V in sets, V subseteq (fun x => -x) ⁻¹' U
-    - conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ + x + -x₀) ⁻¹' U
-
-中文:
-类 加法群滤子基
-  参数: (A : 类型u) [加法群 A]
-  继承: 滤子基 A
-  公理与运算 (4 个):
-    - zero' : 对任意 {U}, U in sets -> (0 : A) in U
-    - add' : 对任意 {U}, U in sets -> 存在 V in sets, V + V subseteq U
-    - neg' : 对任意 {U}, U in sets -> 存在 V in sets, V subseteq (fun x => -x) ⁻¹' U
-    - conj' : 对任意 x₀, 对任意 {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ + x + -x₀) ⁻¹' U
+--- 原说明 ---
+An `AddGroupFilterBasis` on an additive group is a `FilterBasis` satisfying some
+ additional
+  axioms. Example : if `G` is a topological group then the neighbourhoods of the
+ identity are an
+  `AddGroupFilterBasis`. Conversely given an `AddGroupFilterBasis` one can defin
+e a topology
+  compatible with the group structure on `G`.
 -/
 class AddGroupFilterBasis (A : Type u) [AddGroup A] extends FilterBasis A where
-  zero' : forall {U}, U in sets -> (0 : A) in U
-  add' : forall {U}, U in sets -> exists V in sets, V + V subseteq U
-  neg' : forall {U}, U in sets -> exists V in sets, V subseteq (fun x => -x) ⁻¹' U
-  conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ + x + -x₀) ⁻¹' U
+  zero' : ∀ {U}, U ∈ sets → (0 : A) ∈ U
+  add' : ∀ {U}, U ∈ sets → ∃ V ∈ sets, V + V ⊆ U
+  neg' : ∀ {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ -x) ⁻¹' U
+  conj' : ∀ x₀, ∀ {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x₀ + x + -x₀) ⁻¹' U
 
 attribute [to_additive] GroupFilterBasis
 
 /-- `GroupFilterBasis` constructor in the commutative group case. -/
 @[to_additive (attr := instance_reducible)
   /-- `AddGroupFilterBasis` constructor in the additive commutative group case. -/]
-/--
-Definition of `groupFilterBasisOfComm` / `groupFilterBasisOfComm` 的定义
-
-English:
-definition groupFilterBasisOfComm
-  signature: {G : Type*} [CommGroup G] (sets : Set (Set G))
-  body: { sets := sets
-    nonempty := nonempty
-    inter_sets := inter_sets _ _
-    one' := one _
-    mul' := mul _
-    inv' := inv _
-    conj' := fun x U U_in => ⟨U, U_in, by simp only [mul_inv_cancel_comm, preimage_id']; rfl⟩ }
-
-中文:
-定义 groupFilterBasisOfComm
-  签名: {G : 类型} [交换群 G] (sets : 集合 (集合 G))
-  定义体: { sets := sets
-    nonempty := nonempty
-    inter_sets := inter_sets _ _
-    one' := one _
-    mul' := mul _
-    inv' := inv _
-    conj' := fun x U U_in => ⟨U, U_in, by simp only [mul_inv_cancel_comm, preimage_id']; rfl⟩ }
-
-Depends on / 依赖: U_in, inter_sets, mul_inv_cancel_comm, nonempty, preimage_id
+/-
+**groupFilterBasisOfComm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：groupFilterBasisOfComm {G : Type*} [CommGroup G] (sets : Set (Set G)) (non
+empty : sets.Nonempty) (inter_sets : forall x y, x in sets -> y in sets -> exist
+s z in sets, z subseteq x inter y) (one : forall U in sets, (1 : G) in U) (mul :
+ forall U in sets, exists V in sets, V * V subseteq U) (inv : forall U in sets, 
+exists V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U) : GroupFilterBasis G
+参数：sets : Set (Set G)；nonempty : sets.Nonempty；inter_sets : forall x y, x in set
+s -> y in sets -> exists z in sets, z subseteq x inter y；one : forall U in sets,
+ (1 : G) in U；mul : forall U in sets, exists V in sets, V * V subseteq U；inv : f
+orall U in sets, exists V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def groupFilterBasisOfComm {G : Type*} [CommGroup G] (sets : Set (Set G))
-    (nonempty : sets.Nonempty) (inter_sets : forall x y, x in sets -> y in sets -> exists z in sets, z subseteq x inter y)
-    (one : forall U in sets, (1 : G) in U) (mul : forall U in sets, exists V in sets, V * V subseteq U)
-    (inv : forall U in sets, exists V in sets, V subseteq (fun x => x⁻¹) ⁻¹' U) : GroupFilterBasis G :=
+    (nonempty : sets.Nonempty) (inter_sets : ∀ x y, x ∈ sets → y ∈ sets → ∃ z ∈ sets, z ⊆ x ∩ y)
+    (one : ∀ U ∈ sets, (1 : G) ∈ U) (mul : ∀ U ∈ sets, ∃ V ∈ sets, V * V ⊆ U)
+    (inv : ∀ U ∈ sets, ∃ V ∈ sets, V ⊆ (fun x ↦ x⁻¹) ⁻¹' U) : GroupFilterBasis G :=
   { sets := sets
     nonempty := nonempty
     inter_sets := inter_sets _ _
     one' := one _
     mul' := mul _
     inv' := inv _
-    conj' := fun x U U_in => ⟨U, U_in, by simp only [mul_inv_cancel_comm, preimage_id']; rfl⟩ }
+    conj' := fun x U U_in ↦ ⟨U, U_in, by simp only [mul_inv_cancel_comm, preimage_id']; rfl⟩ }
 
 namespace GroupFilterBasis
 
 variable {G : Type u} [Group G] {B : GroupFilterBasis G}
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership (Set G) (GroupFilterBasis G)
-  body: ⟨fun f s => s in f.sets⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: Membership (集合 G) (群滤子基 G)
-  定义体: ⟨fun f s => s in f.sets⟩
-
-@[to_additive]
-
-Depends on / 依赖: f.sets
+/-
+**GroupFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `GroupFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership (Set G) (GroupFilterBasis G) :=
-  ⟨fun f s => s in f.sets⟩
+  ⟨fun f s ↦ s ∈ f.sets⟩
 
 @[to_additive]
-/--
-theorem `one` / 定理 `one`
-
-English:
-theorem one
-  given: {U : Set G}
-  statement: U in B -> (1 : G) in U
-  proof: GroupFilterBasis.one'
-
-@[to_additive]
-
-中文:
-定理 one
-  条件: {U : 集合 G}
-  结论: U in B -> (1 : G) in U
-  证明: GroupFilterBasis.one'
-
-@[to_additive]
-
-Depends on / 依赖: GroupFilterBasis, GroupFilterBasis.one
+/-
+**GroupFilterBasis.one** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：one {U : Set G} : U in B -> (1 : G) in U
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.one'`：∀ {G : Type u} {inst : Group G} [self : GroupFilt
+erBasis G] {U : Set G}, U ∈ self.sets → 1 ∈ U
 -/
-theorem one {U : Set G} : U in B -> (1 : G) in U :=
+theorem one {U : Set G} : U ∈ B → (1 : G) ∈ U :=
   GroupFilterBasis.one'
 
 @[to_additive]
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: {U : Set G}
-  statement: U in B -> exists V in B, V * V subseteq U
-  proof: GroupFilterBasis.mul'
-
-@[to_additive]
-
-中文:
-定理 mul
-  条件: {U : 集合 G}
-  结论: U in B -> 存在 V in B, V * V subseteq U
-  证明: GroupFilterBasis.mul'
-
-@[to_additive]
-
-Depends on / 依赖: GroupFilterBasis, GroupFilterBasis.mul
+/-
+**GroupFilterBasis.mul** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：mul {U : Set G} : U in B -> exists V in B, V * V subseteq U
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.mul'`：∀ {G : Type u} {inst : Group G} [self : GroupFilt
+erBasis G] {U : Set G}, U ∈ self.sets → ∃ V ∈ self.sets, V * V ⊆ U
 -/
-theorem mul {U : Set G} : U in B -> exists V in B, V * V subseteq U :=
+theorem mul {U : Set G} : U ∈ B → ∃ V ∈ B, V * V ⊆ U :=
   GroupFilterBasis.mul'
 
 @[to_additive]
-/--
-theorem `inv` / 定理 `inv`
-
-English:
-theorem inv
-  given: {U : Set G}
-  statement: U in B -> exists V in B, V subseteq (fun x => x⁻¹) ⁻¹' U
-  proof: GroupFilterBasis.inv'
-
-@[to_additive]
-
-中文:
-定理 inv
-  条件: {U : 集合 G}
-  结论: U in B -> 存在 V in B, V subseteq (fun x => x⁻¹) ⁻¹' U
-  证明: GroupFilterBasis.inv'
-
-@[to_additive]
-
-Depends on / 依赖: GroupFilterBasis, GroupFilterBasis.inv
+/-
+**GroupFilterBasis.inv** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：inv {U : Set G} : U in B -> exists V in B, V subseteq (fun x => x⁻¹) ⁻¹' U
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.inv'`：∀ {G : Type u} {inst : Group G} [self : GroupFilt
+erBasis G] {U : Set G},   U ∈ self.sets → ∃ V ∈ self.sets, V ⊆ (fun x => x⁻¹) ⁻¹
+' U
 -/
-theorem inv {U : Set G} : U in B -> exists V in B, V subseteq (fun x => x⁻¹) ⁻¹' U :=
+theorem inv {U : Set G} : U ∈ B → ∃ V ∈ B, V ⊆ (fun x ↦ x⁻¹) ⁻¹' U :=
   GroupFilterBasis.inv'
 
 @[to_additive]
-/--
-theorem `conj` / 定理 `conj`
-
-English:
-theorem conj
-  statement: forall x₀, forall {U}, U in B -> exists V in B, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
-  proof: GroupFilterBasis.conj'
-
-中文:
-定理 conj
-  结论: 对任意 x₀, 对任意 {U}, U in B -> 存在 V in B, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
-  证明: GroupFilterBasis.conj'
-
-Depends on / 依赖: GroupFilterBasis, GroupFilterBasis.conj
+/-
+**GroupFilterBasis.conj** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：conj : forall x₀, forall {U}, U in B -> exists V in B, V subseteq (fun x =
+> x₀ * x * x₀⁻¹) ⁻¹' U
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.conj'`：∀ {G : Type u} {inst : Group G} [self : GroupFil
+terBasis G] (x₀ : G) {U : Set G},   U ∈ self.sets → ∃ V ∈ self.sets, V ⊆ (fun x 
+=> x₀ * x * …
 -/
-theorem conj : forall x₀, forall {U}, U in B -> exists V in B, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U :=
+theorem conj : ∀ x₀, ∀ {U}, U ∈ B → ∃ V ∈ B, V ⊆ (fun x ↦ x₀ * x * x₀⁻¹) ⁻¹' U :=
   GroupFilterBasis.conj'
 
 /-- The trivial group filter basis consists of `{1}` only. The associated topology
 is discrete. -/
 @[to_additive /-- The trivial additive group filter basis consists of `{0}` only. The associated
 topology is discrete. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (GroupFilterBasis G)
-  body: {
-    sets := {{1}}
-    nonempty := singleton_nonempty _
-    inter_sets := by simp
-    one' := by simp
-    mul' := by simp
-    inv' := by simp
-    conj' := by simp }
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 (群滤子基 G)
-  定义体: {
-    sets := {{1}}
-    nonempty := singleton_nonempty _
-    inter_sets := by simp
-    one' := by simp
-    mul' := by simp
-    inv' := by simp
-    conj' := by simp }
-
-@[to_additive]
+/-
+**GroupFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `GroupFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (GroupFilterBasis G) where
   default := {
@@ -313,168 +205,122 @@ instance : Inhabited (GroupFilterBasis G) where
     conj' := by simp }
 
 @[to_additive]
-/--
-theorem `subset_mul_self` / 定理 `subset_mul_self`
-
-English:
-theorem subset_mul_self
-  given: (B : GroupFilterBasis G) {U : Set G} (h : U in B)
-  statement: U subseteq U * U
-  proof: fun x x_in => ⟨1, one h, x, x_in, one_mul x⟩
-
-中文:
-定理 subset_mul_self
-  条件: (B : 群滤子基 G) {U : 集合 G} (h : U in B)
-  结论: U subseteq U * U
-  证明: fun x x_in => ⟨1, one h, x, x_in, one_mul x⟩
-
-Depends on / 依赖: one_mul, x_in
+/-
+**GroupFilterBasis.subset_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：subset_mul_self (B : GroupFilterBasis G) {U : Set G} (h : U in B) : U subs
+eteq U * U
+参数：B : GroupFilterBasis G；h : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.one`：one {U : Set G} : U in B -> (1 : G) in U
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem subset_mul_self (B : GroupFilterBasis G) {U : Set G} (h : U in B) : U subseteq U * U :=
-  fun x x_in => ⟨1, one h, x, x_in, one_mul x⟩
+theorem subset_mul_self (B : GroupFilterBasis G) {U : Set G} (h : U ∈ B) : U ⊆ U * U :=
+  fun x x_in ↦ ⟨1, one h, x, x_in, one_mul x⟩
 
 /-- The neighborhood function of a `GroupFilterBasis`. -/
 @[to_additive /-- The neighborhood function of an `AddGroupFilterBasis`. -/]
-/--
-Definition of `N` / `N` 的定义
+/-
+**GroupFilterBasis.N** 是 Mathlib 中的一个定义，位于命名空间 `GroupFilterBasis`。
+形式化陈述：N (B : GroupFilterBasis G) : G -> Filter G
+参数：B : GroupFilterBasis G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition N
-  signature: (B : GroupFilterBasis G)
-  body: fun x => map (fun y => x * y) B.toFilterBasis.filter
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 N
-  签名: (B : 群滤子基 G)
-  定义体: fun x => map (fun y => x * y) B.toFilterBasis.filter
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: B.toFilterBasis.filter, filter, toFilterBasis
+--- 原说明 ---
+The neighborhood function of a `GroupFilterBasis`.
 -/
-def N (B : GroupFilterBasis G) : G -> Filter G :=
-  fun x => map (fun y => x * y) B.toFilterBasis.filter
+def N (B : GroupFilterBasis G) : G → Filter G :=
+  fun x ↦ map (fun y ↦ x * y) B.toFilterBasis.filter
 
 @[to_additive (attr := simp)]
-/--
-theorem `N_one` / 定理 `N_one`
-
-English:
-theorem N_one
-  given: (B : GroupFilterBasis G)
-  statement: B.N 1 = B.toFilterBasis.filter
-  proof: by
-  simp only [N, one_mul, map_id']
-
-@[to_additive]
-
-中文:
-定理 N_one
-  条件: (B : 群滤子基 G)
-  结论: B.N 1 = B.toFilterBasis.filter
-  证明: by
-  simp only [N, one_mul, map_id']
-
-@[to_additive]
-
-Depends on / 依赖: map_id, one_mul
+/-
+**GroupFilterBasis.N_one** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：N_one (B : GroupFilterBasis G) : B.N 1 = B.toFilterBasis.filter
+参数：B : GroupFilterBasis G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Filter.map_id'`：map_id' : Filter.map (fun x => x) f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem N_one (B : GroupFilterBasis G) : B.N 1 = B.toFilterBasis.filter := by
   simp only [N, one_mul, map_id']
 
 @[to_additive]
-/--
-theorem `hasBasis` / 定理 `hasBasis`
-
-English:
-theorem hasBasis
-  given: (B : GroupFilterBasis G) (x : G)
-  proof: HasBasis.map (fun y => x * y) toFilterBasis.hasBasis
-
-中文:
-定理 hasBasis
-  条件: (B : 群滤子基 G) (x : G)
-  证明: HasBasis.map (fun y => x * y) toFilterBasis.hasBasis
+/-
+**GroupFilterBasis.hasBasis** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：∀ {G : Type u} [inst : Group G] (B : GroupFilterBasis G) (x : G),   (B.N x
+).HasBasis (fun V => V ∈ B) fun V => (fun y => x * y) '' V
+参数：B : GroupFilterBasis G；x : G；B.N x；fun V => V ∈ B；fun y => x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `FilterBasis.hasBasis`：∀ {α : Type u_1} (B : FilterBasis α), B.filter.Has
+Basis (fun s => s ∈ B) id
 -/
 protected theorem hasBasis (B : GroupFilterBasis G) (x : G) :
-    HasBasis (B.N x) (fun V : Set G => V in B) fun V => (fun y => x * y) '' V :=
-  HasBasis.map (fun y => x * y) toFilterBasis.hasBasis
+    HasBasis (B.N x) (fun V : Set G ↦ V ∈ B) fun V ↦ (fun y ↦ x * y) '' V :=
+  HasBasis.map (fun y ↦ x * y) toFilterBasis.hasBasis
 
 /-- The topological space structure coming from a group filter basis. -/
 @[to_additive (attr := instance_reducible)
   /-- The topological space structure coming from an additive group filter basis. -/]
-/--
-Definition of `topology` / `topology` 的定义
-
-English:
-definition topology
-  signature: (B : GroupFilterBasis G)
-  body: TopologicalSpace.mkOfNhds B.N
-
-@[to_additive]
-
-中文:
-定义 topology
-  签名: (B : 群滤子基 G)
-  定义体: TopologicalSpace.mkOfNhds B.N
-
-@[to_additive]
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.mkOfNhds, mkOfNhds
+/-
+**GroupFilterBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `GroupFilterBasis`。
+形式化陈述：topology (B : GroupFilterBasis G) : TopologicalSpace G
+参数：B : GroupFilterBasis G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def topology (B : GroupFilterBasis G) : TopologicalSpace G :=
   TopologicalSpace.mkOfNhds B.N
 
 @[to_additive]
-/--
-theorem `nhds_eq` / 定理 `nhds_eq`
-
-English:
-theorem nhds_eq
-  given: (B : GroupFilterBasis G) {x₀ : G}
-  statement: @nhds G B.topology x₀ = B.N x₀
-  proof: by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun x => (FilterBasis.hasBasis _).map _)
-  · intro a U U_in
-    exact ⟨1, B.one U_in, mul_one a⟩
-  · intro a U U_in
-    rcases GroupFilterBasis.mul U_in with ⟨V, V_in, hVU⟩
-    filter_upwards [image_mem_map (B.mem_filter_of_mem V_in)]
-    rintro _ ⟨x, hx, rfl⟩
-    calc
-(a * x) • V in (a * x) • B.filter := smul_set_mem_smul_filter B.mem_filter_of_mem V_in
-.symm _ = a • x • V := smul_smul ..
-_ subseteq a • (V * V) := smul_set_mono smul_set_subset_smul hx
-      _ subseteq a • U := smul_set_mono hVU
-
-@[to_additive]
-
-中文:
-定理 nhds_eq
-  条件: (B : 群滤子基 G) {x₀ : G}
-  结论: @邻域滤子 G B.topology x₀ = B.N x₀
-  证明: by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun x => (FilterBasis.hasBasis _).map _)
-  · intro a U U_in
-    exact ⟨1, B.one U_in, mul_one a⟩
-  · intro a U U_in
-    rcases GroupFilterBasis.mul U_in with ⟨V, V_in, hVU⟩
-    filter_upwards [image_mem_map (B.mem_filter_of_mem V_in)]
-    rintro _ ⟨x, hx, rfl⟩
-    calc
-(a * x) • V in (a * x) • B.filter := smul_set_mem_smul_filter B.mem_filter_of_mem V_in
-.symm _ = a • x • V := smul_smul ..
-_ subseteq a • (V * V) := smul_set_mono smul_set_subset_smul hx
-      _ subseteq a • U := smul_set_mono hVU
-
-@[to_additive]
-
-Depends on / 依赖: B.filter, B.mem_filter_of_mem, B.one, FilterBasis, FilterBasis.hasBasis, GroupFilterBasis, GroupFilterBasis.mul, TopologicalSpace, TopologicalSpace.nhds_mkOfNhds_of_hasBasis, U_in, V_in, filter, filter_upwards, hasBasis, image_mem_map, mem_filter_of_mem, mul_one, nhds_mkOfNhds_of_hasBasis, smul_set_mem_smul_filter, smul_set_mono
+/-
+**GroupFilterBasis.nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：nhds_eq (B : GroupFilterBasis G) {x₀ : G} : @nhds G B.topology x₀ = B.N x₀
+参数：B : GroupFilterBasis G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.nhds_mkOfNhds_of_hasBasis`：nhds_mkOfNhds_of_hasBasis {n
+ : α -> Filter α} {ι : α -> Sort*} {p : forall a, ι a -> Prop} {s : forall a, ι 
+a -> Set α} (hb : forall a, (n a…
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `FilterBasis.hasBasis`：∀ {α : Type u_1} (B : FilterBasis α), B.filter.Has
+Basis (fun s => s ∈ B) id
+· 使用定理 `GroupFilterBasis.one`：one {U : Set G} : U in B -> (1 : G) in U
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `GroupFilterBasis.mul`：mul {U : Set G} : U in B -> exists V in B, V * V s
+ubseteq U
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.image_mem_map`：image_mem_map (hs : s in f) : m '' s in map m f
+· 使用定理 `FilterBasis.mem_filter_of_mem`：mem_filter_of_mem (B : FilterBasis α) {U 
+: Set α} : U in B -> U in B.filter
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Filter.smul_set_mem_smul_filter`：smul_set_mem_smul_filter : s in f -> a 
+• s in a • f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Set.smul_set_mono`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {s 
+t : Set β} {a : α}, s ⊆ t → a • s ⊆ a • t
+· 使用引理 `Set.smul_set_subset_smul`：smul_set_subset_smul {s : Set α} : a in s -> a
+ • t subseteq s • t
 -/
 theorem nhds_eq (B : GroupFilterBasis G) {x₀ : G} : @nhds G B.topology x₀ = B.N x₀ := by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun x => (FilterBasis.hasBasis _).map _)
+  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun x ↦ (FilterBasis.hasBasis _).map _)
   · intro a U U_in
     exact ⟨1, B.one U_in, mul_one a⟩
   · intro a U U_in
@@ -482,36 +328,29 @@ theorem nhds_eq (B : GroupFilterBasis G) {x₀ : G} : @nhds G B.topology x₀ = 
     filter_upwards [image_mem_map (B.mem_filter_of_mem V_in)]
     rintro _ ⟨x, hx, rfl⟩
     calc
-(a * x) • V in (a * x) • B.filter := smul_set_mem_smul_filter B.mem_filter_of_mem V_in
-.symm _ = a • x • V := smul_smul ..
-_ subseteq a • (V * V) := smul_set_mono smul_set_subset_smul hx
-      _ subseteq a • U := smul_set_mono hVU
+      (a * x) • V ∈ (a * x) • B.filter := smul_set_mem_smul_filter <| B.mem_filter_of_mem V_in
+      _ = a • x • V := smul_smul .. |>.symm
+      _ ⊆ a • (V * V) := smul_set_mono <| smul_set_subset_smul hx
+      _ ⊆ a • U := smul_set_mono hVU
 
 @[to_additive]
-/--
-theorem `nhds_one_eq` / 定理 `nhds_one_eq`
-
-English:
-theorem nhds_one_eq
-  given: (B : GroupFilterBasis G)
-  proof: by
-  rw [B.nhds_eq]
-  simp only [N, one_mul]
-  exact map_id
-
-@[to_additive]
-
-中文:
-定理 nhds_one_eq
-  条件: (B : 群滤子基 G)
-  证明: by
-  rw [B.nhds_eq]
-  simp only [N, one_mul]
-  exact map_id
-
-@[to_additive]
-
-Depends on / 依赖: B.nhds_eq, map_id, nhds_eq, one_mul
+/-
+**GroupFilterBasis.nhds_one_eq** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：nhds_one_eq (B : GroupFilterBasis G) : @nhds G B.topology (1 : G) = B.toFi
+lterBasis.filter
+参数：B : GroupFilterBasis G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupFilterBasis.nhds_eq`：nhds_eq (B : GroupFilterBasis G) {x₀ : G} : @n
+hds G B.topology x₀ = B.N x₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Filter.map_id`：map_id : Filter.map id f = f
 -/
 theorem nhds_one_eq (B : GroupFilterBasis G) :
     @nhds G B.topology (1 : G) = B.toFilterBasis.filter := by
@@ -520,85 +359,67 @@ theorem nhds_one_eq (B : GroupFilterBasis G) :
   exact map_id
 
 @[to_additive]
-/--
-theorem `nhds_hasBasis` / 定理 `nhds_hasBasis`
-
-English:
-theorem nhds_hasBasis
-  given: (B : GroupFilterBasis G) (x₀ : G)
-  proof: by
-  rw [B.nhds_eq]
-  apply B.hasBasis
-
-@[to_additive]
-
-中文:
-定理 nhds_hasBasis
-  条件: (B : 群滤子基 G) (x₀ : G)
-  证明: by
-  rw [B.nhds_eq]
-  apply B.hasBasis
-
-@[to_additive]
-
-Depends on / 依赖: B.hasBasis, B.nhds_eq, hasBasis, nhds_eq
+/-
+**GroupFilterBasis.nhds_hasBasis** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：nhds_hasBasis (B : GroupFilterBasis G) (x₀ : G) : HasBasis (@nhds G B.topo
+logy x₀) (fun V : Set G => V in B) fun V => (fun y => x₀ * y) '' V
+参数：B : GroupFilterBasis G；x₀ : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupFilterBasis.nhds_eq`：nhds_eq (B : GroupFilterBasis G) {x₀ : G} : @n
+hds G B.topology x₀ = B.N x₀
+· 使用定理 `GroupFilterBasis.hasBasis`：∀ {G : Type u} [inst : Group G] (B : GroupFil
+terBasis G) (x : G),   (B.N x).HasBasis (fun V => V ∈ B) fun V => (fun y => x * 
+y) '' V
 -/
 theorem nhds_hasBasis (B : GroupFilterBasis G) (x₀ : G) :
-    HasBasis (@nhds G B.topology x₀) (fun V : Set G => V in B) fun V => (fun y => x₀ * y) '' V := by
+    HasBasis (@nhds G B.topology x₀) (fun V : Set G ↦ V ∈ B) fun V ↦ (fun y ↦ x₀ * y) '' V := by
   rw [B.nhds_eq]
   apply B.hasBasis
 
 @[to_additive]
-/--
-theorem `nhds_one_hasBasis` / 定理 `nhds_one_hasBasis`
-
-English:
-theorem nhds_one_hasBasis
-  given: (B : GroupFilterBasis G)
-  proof: by
-  rw [B.nhds_one_eq]
-  exact B.toFilterBasis.hasBasis
-
-@[to_additive]
-
-中文:
-定理 nhds_one_hasBasis
-  条件: (B : 群滤子基 G)
-  证明: by
-  rw [B.nhds_one_eq]
-  exact B.toFilterBasis.hasBasis
-
-@[to_additive]
-
-Depends on / 依赖: B.nhds_one_eq, B.toFilterBasis.hasBasis, hasBasis, nhds_one_eq, toFilterBasis
+/-
+**GroupFilterBasis.nhds_one_hasBasis** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis
+`。
+形式化陈述：nhds_one_hasBasis (B : GroupFilterBasis G) : HasBasis (@nhds G B.topology 
+1) (fun V : Set G => V in B) id
+参数：B : GroupFilterBasis G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupFilterBasis.nhds_one_eq`：nhds_one_eq (B : GroupFilterBasis G) : @nh
+ds G B.topology (1 : G) = B.toFilterBasis.filter
+· 使用定理 `FilterBasis.hasBasis`：∀ {α : Type u_1} (B : FilterBasis α), B.filter.Has
+Basis (fun s => s ∈ B) id
 -/
 theorem nhds_one_hasBasis (B : GroupFilterBasis G) :
-    HasBasis (@nhds G B.topology 1) (fun V : Set G => V in B) id := by
+    HasBasis (@nhds G B.topology 1) (fun V : Set G ↦ V ∈ B) id := by
   rw [B.nhds_one_eq]
   exact B.toFilterBasis.hasBasis
 
 @[to_additive]
-/--
-theorem `mem_nhds_one` / 定理 `mem_nhds_one`
-
-English:
-theorem mem_nhds_one
-  given: (B : GroupFilterBasis G) {U : Set G} (hU : U in B)
-  proof: by
-  rw [B.nhds_one_hasBasis.mem_iff]
-  exact ⟨U, hU, rfl.subset⟩
-
-中文:
-定理 mem_nhds_one
-  条件: (B : 群滤子基 G) {U : 集合 G} (hU : U in B)
-  证明: by
-  rw [B.nhds_one_hasBasis.mem_iff]
-  exact ⟨U, hU, rfl.subset⟩
-
-Depends on / 依赖: B.nhds_one_hasBasis.mem_iff, mem_iff, nhds_one_hasBasis, rfl.subset, subset
+/-
+**GroupFilterBasis.mem_nhds_one** 是 Mathlib 中的一个定理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：mem_nhds_one (B : GroupFilterBasis G) {U : Set G} (hU : U in B) : U in @nh
+ds G B.topology 1
+参数：B : GroupFilterBasis G；hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `GroupFilterBasis.nhds_one_hasBasis`：nhds_one_hasBasis (B : GroupFilterBa
+sis G) : HasBasis (@nhds G B.topology 1) (fun V : Set G => V in B) id
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
 -/
-theorem mem_nhds_one (B : GroupFilterBasis G) {U : Set G} (hU : U in B) :
-    U in @nhds G B.topology 1 := by
+theorem mem_nhds_one (B : GroupFilterBasis G) {U : Set G} (hU : U ∈ B) :
+    U ∈ @nhds G B.topology 1 := by
   rw [B.nhds_one_hasBasis.mem_iff]
   exact ⟨U, hU, rfl.subset⟩
 
@@ -607,6 +428,10 @@ theorem mem_nhds_one (B : GroupFilterBasis G) {U : Set G} (hU : U in B) :
 topological group. -/
 @[to_additive /-- If an additive group is endowed with a topological structure coming from an
 additive group filter basis, then it's an additive topological group. -/]
+/-
+**GroupFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `GroupFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isTopologicalGroup (B : GroupFilterBasis G) :
     @IsTopologicalGroup G B.topology _ := by
   let := B.topology
@@ -614,17 +439,17 @@ instance (priority := 100) isTopologicalGroup (B : GroupFilterBasis G) :
   have basis' := basis.prod basis
   refine IsTopologicalGroup.of_nhds_one ?_ ?_ ?_ ?_
   · rw [basis'.tendsto_iff basis]
-    suffices forall U in B, exists V W, (V in B ∧ W in B) ∧ forall a b, a in V -> b in W -> a * b in U by simpa
+    suffices ∀ U ∈ B, ∃ V W, (V ∈ B ∧ W ∈ B) ∧ ∀ a b, a ∈ V → b ∈ W → a * b ∈ U by simpa
     intro U U_in
     rcases mul U_in with ⟨V, V_in, hV⟩
     refine ⟨V, V, ⟨V_in, V_in⟩, ?_⟩
     intro a b a_in b_in
-exact hV mul_mem_mul a_in b_in
+    exact hV <| mul_mem_mul a_in b_in
   · rw [basis.tendsto_iff basis]
     intro U U_in
     simpa using! inv U_in
   · intro x₀
-    rw [nhds_eq]; rw [nhds_one_eq]
+    rw [nhds_eq, nhds_one_eq]
     rfl
   · intro x₀
     rw [basis.tendsto_iff basis]
@@ -632,193 +457,170 @@ exact hV mul_mem_mul a_in b_in
     exact conj x₀ U_in
 
 @[to_additive]
-/--
-lemma `t2Space_iff` / 引理 `t2Space_iff`
-
-English:
-lemma t2Space_iff
-  statement: [t : TopologicalSpace G] (F : GroupFilterBasis G)
-  proof: by
-  have : IsTopologicalGroup G := hG ▸ F.isTopologicalGroup
-  rw [IsTopologicalGroup.t2Space_iff_one_closed]; rw [← closure_eq_iff_isClosed]; rw [R0Space.closure_singleton]; rw [← hG]; rw [F.nhds_one_eq]; rw [FilterBasis.ker_filter]
-
-@[to_additive]
-
-中文:
-引理 t2Space_iff
-  结论: [t : 拓扑空间 G] (F : 群滤子基 G)
-  证明: by
-  have : IsTopologicalGroup G := hG ▸ F.isTopologicalGroup
-  rw [IsTopologicalGroup.t2Space_iff_one_closed]; rw [← closure_eq_iff_isClosed]; rw [R0Space.closure_singleton]; rw [← hG]; rw [F.nhds_one_eq]; rw [FilterBasis.ker_filter]
-
-@[to_additive]
-
-Depends on / 依赖: F.isTopologicalGroup, F.nhds_one_eq, FilterBasis, FilterBasis.ker_filter, IsTopologicalGroup, IsTopologicalGroup.t2Space_iff_one_closed, R0Space, R0Space.closure_singleton, closure_eq_iff_isClosed, closure_singleton, isTopologicalGroup, ker_filter, nhds_one_eq, t2Space_iff_one_closed
+/-
+**GroupFilterBasis.t2Space_iff** 是 Mathlib 中的一个引理，位于命名空间 `GroupFilterBasis`。
+形式化陈述：t2Space_iff [t : TopologicalSpace G] (F : GroupFilterBasis G) (hG : F.topo
+logy = t) : T2Space G ↔ ⋂₀ F.sets = {1}
+参数：F : GroupFilterBasis G；hG : F.topology = t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupFilterBasis.isTopologicalGroup`：∀ {G : Type u} [inst : Group G] (B 
+: GroupFilterBasis G), IsTopologicalGroup G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsTopologicalGroup.t2Space_iff_one_closed`：IsTopologicalGroup.t2Space_if
+f_one_closed : T2Space G ↔ IsClosed ({1} : Set G)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `closure_eq_iff_isClosed`：closure_eq_iff_isClosed : closure s = s ↔ IsClo
+sed s
+· 使用引理 `R0Space.closure_singleton`：R0Space.closure_singleton (x : X) : closure {
+x} = (𝓝 x).ker
+· 使用定理 `instR0Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [R1Space X], R
+0Space X
+· 使用定理 `instR1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [RegularSpace 
+X], R1Space X
+· 使用定理 `IsTopologicalGroup.regularSpace`：∀ (G : Type w) [inst : TopologicalSpace
+ G] [inst_1 : Group G] [IsTopologicalGroup G], RegularSpace G
+· 使用定理 `GroupFilterBasis.nhds_one_eq`：nhds_one_eq (B : GroupFilterBasis G) : @nh
+ds G B.topology (1 : G) = B.toFilterBasis.filter
+· 使用引理 `FilterBasis.ker_filter`：ker_filter (F : FilterBasis α) : F.filter.ker = 
+⋂₀ F.sets
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma t2Space_iff [t : TopologicalSpace G] (F : GroupFilterBasis G)
     (hG : F.topology = t) : T2Space G ↔ ⋂₀ F.sets = {1} := by
   have : IsTopologicalGroup G := hG ▸ F.isTopologicalGroup
-  rw [IsTopologicalGroup.t2Space_iff_one_closed]; rw [← closure_eq_iff_isClosed]; rw [R0Space.closure_singleton]; rw [← hG]; rw [F.nhds_one_eq]; rw [FilterBasis.ker_filter]
+  rw [IsTopologicalGroup.t2Space_iff_one_closed, ← closure_eq_iff_isClosed,
+    R0Space.closure_singleton, ← hG, F.nhds_one_eq, FilterBasis.ker_filter]
 
 @[to_additive]
-/--
-lemma `t2Space_iff_sInter_subset` / 引理 `t2Space_iff_sInter_subset`
-
-English:
-lemma t2Space_iff_sInter_subset
-  statement: [t : TopologicalSpace G] (F : GroupFilterBasis G)
-  proof: by
-  rw [F.t2Space_iff hG]; rw [subset_antisymm_iff]; rw [and_iff_left_iff_imp]
-  rintro -
-  simpa using! fun _ => F.one
-
-中文:
-引理 t2Space_iff_s整数er_subset
-  结论: [t : 拓扑空间 G] (F : 群滤子基 G)
-  证明: by
-  rw [F.t2Space_iff hG]; rw [subset_antisymm_iff]; rw [and_iff_left_iff_imp]
-  rintro -
-  simpa using! fun _ => F.one
-
-Depends on / 依赖: F.one, F.t2Space_iff, and_iff_left_iff_imp, subset_antisymm_iff, t2Space_iff
+/-
+**GroupFilterBasis.t2Space_iff_sInter_subset** 是 Mathlib 中的一个引理，位于命名空间 `GroupFil
+terBasis`。
+形式化陈述：t2Space_iff_sInter_subset [t : TopologicalSpace G] (F : GroupFilterBasis G
+) (hG : F.topology = t) : T2Space G ↔ ⋂₀ F.sets subseteq {1}
+参数：F : GroupFilterBasis G；hG : F.topology = t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `GroupFilterBasis.t2Space_iff`：t2Space_iff [t : TopologicalSpace G] (F : 
+GroupFilterBasis G) (hG : F.topology = t) : T2Space G ↔ ⋂₀ F.sets = {1}
+· 使用定理 `subset_antisymm_iff`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst 
+: PartialOrder α] {a b : α}, a = b ↔ a ⊆ b ∧ b ⊆ a
+· 使用定理 `and_iff_left_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ a) ↔ a → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `GroupFilterBasis.one`：one {U : Set G} : U in B -> (1 : G) in U
 -/
 lemma t2Space_iff_sInter_subset [t : TopologicalSpace G] (F : GroupFilterBasis G)
-    (hG : F.topology = t) : T2Space G ↔ ⋂₀ F.sets subseteq {1} := by
-  rw [F.t2Space_iff hG]; rw [subset_antisymm_iff]; rw [and_iff_left_iff_imp]
+    (hG : F.topology = t) : T2Space G ↔ ⋂₀ F.sets ⊆ {1} := by
+  rw [F.t2Space_iff hG, subset_antisymm_iff, and_iff_left_iff_imp]
   rintro -
-  simpa using! fun _ => F.one
+  simpa using! fun _ ↦ F.one
 
 end GroupFilterBasis
 
-/--
-Definition of `RingFilterBasis` / `RingFilterBasis` 的定义
+/-- A `RingFilterBasis` on a ring is a `FilterBasis` satisfying some additional axioms.
+  Example : if `R` is a topological ring then the neighbourhoods of the identity are a
+  `RingFilterBasis`. Conversely given a `RingFilterBasis` on a ring `R`, one can define a
+  topology on `R` which is compatible with the ring structure. -/
+/-
+**RingFilterBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [Ring R] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RingFilterBasis
-  parameters: (R : Type u) [Ring R]
-  extends: AddGroupFilterBasis R
-  axioms and operations (3):
-    - mul' : forall {U}, U in sets -> exists V in sets, V * V subseteq U
-    - mul_left' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ * x) ⁻¹' U
-    - mul_right' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x * x₀) ⁻¹' U
-
-中文:
-类 RingFilterBasis
-  参数: (R : 类型u) [环 R]
-  继承: 加法群滤子基 R
-  公理与运算 (3 个):
-    - mul' : 对任意 {U}, U in sets -> 存在 V in sets, V * V subseteq U
-    - mul_left' : 对任意 (x₀ : R) {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ * x) ⁻¹' U
-    - mul_right' : 对任意 (x₀ : R) {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x * x₀) ⁻¹' U
+--- 原说明 ---
+A `RingFilterBasis` on a ring is a `FilterBasis` satisfying some additional axio
+ms.
+  Example : if `R` is a topological ring then the neighbourhoods of the identity
+ are a
+  `RingFilterBasis`. Conversely given a `RingFilterBasis` on a ring `R`, one can
+ define a
+  topology on `R` which is compatible with the ring structure.
 -/
 class RingFilterBasis (R : Type u) [Ring R] extends AddGroupFilterBasis R where
-  mul' : forall {U}, U in sets -> exists V in sets, V * V subseteq U
-  mul_left' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ * x) ⁻¹' U
-  mul_right' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x * x₀) ⁻¹' U
+  mul' : ∀ {U}, U ∈ sets → ∃ V ∈ sets, V * V ⊆ U
+  mul_left' : ∀ (x₀ : R) {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x₀ * x) ⁻¹' U
+  mul_right' : ∀ (x₀ : R) {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x * x₀) ⁻¹' U
 
 namespace RingFilterBasis
 
 variable {R : Type u} [Ring R] (B : RingFilterBasis R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership (Set R) (RingFilterBasis R)
-  body: ⟨fun B s => s in B.sets⟩
-
-中文:
-实例 :
-  签名: Membership (集合 R) (RingFilterBasis R)
-  定义体: ⟨fun B s => s in B.sets⟩
-
-Depends on / 依赖: B.sets
+/-
+**RingFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `RingFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership (Set R) (RingFilterBasis R) :=
-  ⟨fun B s => s in B.sets⟩
-
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: {U : Set R} (hU : U in B)
-  statement: exists V in B, V * V subseteq U
-  proof: mul' hU
-
-中文:
-定理 mul
-  条件: {U : 集合 R} (hU : U in B)
-  结论: 存在 V in B, V * V subseteq U
-  证明: mul' hU
+  ⟨fun B s ↦ s ∈ B.sets⟩
+/-
+**RingFilterBasis.mul** 是 Mathlib 中的一个定理，位于命名空间 `RingFilterBasis`。
+形式化陈述：mul {U : Set R} (hU : U in B) : exists V in B, V * V subseteq U
+参数：hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.mul'`：∀ {R : Type u} {inst : Ring R} [self : RingFilterB
+asis R] {U : Set R}, U ∈ self.sets → ∃ V ∈ self.sets, V * V ⊆ U
 -/
-theorem mul {U : Set R} (hU : U in B) : exists V in B, V * V subseteq U :=
+theorem mul {U : Set R} (hU : U ∈ B) : ∃ V ∈ B, V * V ⊆ U :=
   mul' hU
-
-/--
-theorem `mul_left` / 定理 `mul_left`
-
-English:
-theorem mul_left
-  given: (x₀ : R) {U : Set R} (hU : U in B)
-  statement: exists V in B, V subseteq (fun x => x₀ * x) ⁻¹' U
-  proof: mul_left' x₀ hU
-
-中文:
-定理 mul_left
-  条件: (x₀ : R) {U : 集合 R} (hU : U in B)
-  结论: 存在 V in B, V subseteq (fun x => x₀ * x) ⁻¹' U
-  证明: mul_left' x₀ hU
-
-Depends on / 依赖: mul_left
+/-
+**RingFilterBasis.mul_left** 是 Mathlib 中的一个定理，位于命名空间 `RingFilterBasis`。
+形式化陈述：mul_left (x₀ : R) {U : Set R} (hU : U in B) : exists V in B, V subseteq (f
+un x => x₀ * x) ⁻¹' U
+参数：x₀ : R；hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.mul_left'`：∀ {R : Type u} {inst : Ring R} [self : RingFi
+lterBasis R] (x₀ : R) {U : Set R},   U ∈ self.sets → ∃ V ∈ self.sets, V ⊆ (fun x
+ => x₀ * x) ⁻¹'…
 -/
-theorem mul_left (x₀ : R) {U : Set R} (hU : U in B) : exists V in B, V subseteq (fun x => x₀ * x) ⁻¹' U :=
+theorem mul_left (x₀ : R) {U : Set R} (hU : U ∈ B) : ∃ V ∈ B, V ⊆ (fun x ↦ x₀ * x) ⁻¹' U :=
   mul_left' x₀ hU
-
-/--
-theorem `mul_right` / 定理 `mul_right`
-
-English:
-theorem mul_right
-  given: (x₀ : R) {U : Set R} (hU : U in B)
-  statement: exists V in B, V subseteq (fun x => x * x₀) ⁻¹' U
-  proof: mul_right' x₀ hU
-
-中文:
-定理 mul_right
-  条件: (x₀ : R) {U : 集合 R} (hU : U in B)
-  结论: 存在 V in B, V subseteq (fun x => x * x₀) ⁻¹' U
-  证明: mul_right' x₀ hU
-
-Depends on / 依赖: mul_right
+/-
+**RingFilterBasis.mul_right** 是 Mathlib 中的一个定理，位于命名空间 `RingFilterBasis`。
+形式化陈述：mul_right (x₀ : R) {U : Set R} (hU : U in B) : exists V in B, V subseteq (
+fun x => x * x₀) ⁻¹' U
+参数：x₀ : R；hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.mul_right'`：∀ {R : Type u} {inst : Ring R} [self : RingF
+ilterBasis R] (x₀ : R) {U : Set R},   U ∈ self.sets → ∃ V ∈ self.sets, V ⊆ (fun 
+x => x * x₀) ⁻¹'…
 -/
-theorem mul_right (x₀ : R) {U : Set R} (hU : U in B) : exists V in B, V subseteq (fun x => x * x₀) ⁻¹' U :=
+theorem mul_right (x₀ : R) {U : Set R} (hU : U ∈ B) : ∃ V ∈ B, V ⊆ (fun x ↦ x * x₀) ⁻¹' U :=
   mul_right' x₀ hU
 
 /-- The topology associated to a ring filter basis.
 It has the given basis as a basis of neighborhoods of zero. -/
 @[instance_reducible]
-/--
-Definition of `topology` / `topology` 的定义
+/-
+**RingFilterBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `RingFilterBasis`。
+形式化陈述：topology : TopologicalSpace R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topology
-  signature: : TopologicalSpace R
-  body: B.toAddGroupFilterBasis.topology
-
-中文:
-定义 topology
-  签名: : 拓扑空间 R
-  定义体: B.toAddGroupFilterBasis.topology
-
-Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
+--- 原说明 ---
+The topology associated to a ring filter basis.
+It has the given basis as a basis of neighborhoods of zero.
 -/
 def topology : TopologicalSpace R :=
   B.toAddGroupFilterBasis.topology
 
 /-- If a ring is endowed with a topological structure coming from
 a ring filter basis then it's a topological ring. -/
+/-
+**RingFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `RingFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If a ring is endowed with a topological structure coming from
+a ring filter basis then it's a topological ring.
+-/
 instance (priority := 100) isTopologicalRing {R : Type u} [Ring R] (B : RingFilterBasis R) :
     @IsTopologicalRing R B.topology _ := by
   let B' := B.toAddGroupFilterBasis
@@ -828,12 +630,12 @@ instance (priority := 100) isTopologicalRing {R : Type u} [Ring R] (B : RingFilt
   have := B'.isTopologicalAddGroup
   apply IsTopologicalRing.of_addGroup_of_nhds_zero
   · rw [basis'.tendsto_iff basis]
-    suffices forall U in B', exists V W, (V in B' ∧ W in B') ∧ forall a b, a in V -> b in W -> a * b in U by simpa
+    suffices ∀ U ∈ B', ∃ V W, (V ∈ B' ∧ W ∈ B') ∧ ∀ a b, a ∈ V → b ∈ W → a * b ∈ U by simpa
     intro U U_in
     rcases B.mul U_in with ⟨V, V_in, hV⟩
     refine ⟨V, V, ⟨V_in, V_in⟩, ?_⟩
     intro a b a_in b_in
-exact hV mul_mem_mul a_in b_in
+    exact hV <| mul_mem_mul a_in b_in
   · intro x₀
     rw [basis.tendsto_iff basis]
     intro U
@@ -845,32 +647,29 @@ exact hV mul_mem_mul a_in b_in
 
 end RingFilterBasis
 
-/--
-Definition of `ModuleFilterBasis` / `ModuleFilterBasis` 的定义
+/-- A `ModuleFilterBasis` on a module is a `FilterBasis` satisfying some additional axioms.
+  Example : if `M` is a topological module then the neighbourhoods of zero are a
+  `ModuleFilterBasis`. Conversely given a `ModuleFilterBasis` one can define a topology
+  compatible with the module structure on `M`. -/
+/-
+**ModuleFilterBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (M : Type u_2) →     [inst : Semiring R] → [Topological
+Space R] → [inst_2 : AddCommGroup M] → [_root_.Module R M] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ModuleFilterBasis
-  parameters: (R M : Type*) [Semiring R] [TopologicalSpace R] [AddCommGroup M]
-  extends: AddGroupFilterBasis M
-  axioms and operations (3):
-    - smul' : forall {U}, U in sets -> exists V in 𝓝 (0 : R), exists W in sets, V • W subseteq U
-    - smul_left' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ • x) ⁻¹' U
-    - smul_right' : forall (m₀ : M) {U}, U in sets -> forallᶠ x in 𝓝 (0 : R), x • m₀ in U
-
-中文:
-结构 ModuleFilterBasis
-  参数: (R M : 类型) [半环 R] [拓扑空间 R] [加法交换群 M]
-  继承: 加法群滤子基 M
-  公理与运算 (3 个):
-    - smul' : 对任意 {U}, U in sets -> 存在 V in 𝓝 (0 : R), 存在 W in sets, V • W subseteq U
-    - smul_left' : 对任意 (x₀ : R) {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ • x) ⁻¹' U
-    - smul_right' : 对任意 (m₀ : M) {U}, U in sets -> 对任意ᶠ x in 𝓝 (0 : R), x • m₀ in U
+--- 原说明 ---
+A `ModuleFilterBasis` on a module is a `FilterBasis` satisfying some additional 
+axioms.
+  Example : if `M` is a topological module then the neighbourhoods of zero are a
+  `ModuleFilterBasis`. Conversely given a `ModuleFilterBasis` one can define a t
+opology
+  compatible with the module structure on `M`.
 -/
 structure ModuleFilterBasis (R M : Type*) [Semiring R] [TopologicalSpace R] [AddCommGroup M]
   [Module R M] extends AddGroupFilterBasis M where
-  smul' : forall {U}, U in sets -> exists V in 𝓝 (0 : R), exists W in sets, V • W subseteq U
-  smul_left' : forall (x₀ : R) {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ • x) ⁻¹' U
-  smul_right' : forall (m₀ : M) {U}, U in sets -> forallᶠ x in 𝓝 (0 : R), x • m₀ in U
+  smul' : ∀ {U}, U ∈ sets → ∃ V ∈ 𝓝 (0 : R), ∃ W ∈ sets, V • W ⊆ U
+  smul_left' : ∀ (x₀ : R) {U}, U ∈ sets → ∃ V ∈ sets, V ⊆ (fun x ↦ x₀ • x) ⁻¹' U
+  smul_right' : ∀ (m₀ : M) {U}, U ∈ sets → ∀ᶠ x in 𝓝 (0 : R), x • m₀ ∈ U
 
 namespace ModuleFilterBasis
 
@@ -879,167 +678,100 @@ section Semiring
 variable {R M : Type*} [Semiring R] [TopologicalSpace R] [AddCommGroup M] [Module R M]
   (B : ModuleFilterBasis R M)
 
-/--
-Instance `GroupFilterBasis.hasMem` / 实例 `GroupFilterBasis.hasMem`
-
-English:
-instance GroupFilterBasis.hasMem
-  signature: : Membership (Set M) (ModuleFilterBasis R M)
-  body: ⟨fun B s => s in B.sets⟩
-
-中文:
-实例 群滤子基.hasMem
-  签名: : Membership (集合 M) (ModuleFilterBasis R M)
-  定义体: ⟨fun B s => s in B.sets⟩
-
-Depends on / 依赖: B.sets
+/-
+**ModuleFilterBasis.GroupFilterBasis.hasMem** 是 Mathlib 中的一个定义，位于命名空间 `ModuleFil
+terBasis.GroupFilterBasis`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Semiring R] →       [inst_
+1 : TopologicalSpace R] →         [inst_2 : AddCommGroup M] → [inst_3 : _root_.M
+odule R M] → Membership (Set M) (ModuleFilterBasis R M)
+参数：Set M；ModuleFilterBasis R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance GroupFilterBasis.hasMem : Membership (Set M) (ModuleFilterBasis R M) :=
-  ⟨fun B s => s in B.sets⟩
-
-/--
-theorem `smul` / 定理 `smul`
-
-English:
-theorem smul
-  given: {U : Set M} (hU : U in B)
-  statement: exists V in 𝓝 (0 : R), exists W in B, V • W subseteq U
-  proof: B.smul' hU
-
-中文:
-定理 smul
-  条件: {U : 集合 M} (hU : U in B)
-  结论: 存在 V in 𝓝 (0 : R), 存在 W in B, V • W subseteq U
-  证明: B.smul' hU
-
-Depends on / 依赖: B.smul
+  ⟨fun B s ↦ s ∈ B.sets⟩
+/-
+**ModuleFilterBasis.smul** 是 Mathlib 中的一个定理，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：smul {U : Set M} (hU : U in B) : exists V in 𝓝 (0 : R), exists W in B, V •
+ W subseteq U
+参数：hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleFilterBasis.smul'`：∀ {R : Type u_1} {M : Type u_2} [inst : Semirin
+g R] [inst_1 : TopologicalSpace R] [inst_2 : AddCommGroup M]   [inst_3 : _root_.
+Module R M] (…
 -/
-theorem smul {U : Set M} (hU : U in B) : exists V in 𝓝 (0 : R), exists W in B, V • W subseteq U :=
+theorem smul {U : Set M} (hU : U ∈ B) : ∃ V ∈ 𝓝 (0 : R), ∃ W ∈ B, V • W ⊆ U :=
   B.smul' hU
-
-/--
-theorem `smul_left` / 定理 `smul_left`
-
-English:
-theorem smul_left
-  given: (x₀ : R) {U : Set M} (hU : U in B)
-  statement: exists V in B, V subseteq (fun x => x₀ • x) ⁻¹' U
-  proof: B.smul_left' x₀ hU
-
-中文:
-定理 smul_left
-  条件: (x₀ : R) {U : 集合 M} (hU : U in B)
-  结论: 存在 V in B, V subseteq (fun x => x₀ • x) ⁻¹' U
-  证明: B.smul_left' x₀ hU
-
-Depends on / 依赖: B.smul_left, smul_left
+/-
+**ModuleFilterBasis.smul_left** 是 Mathlib 中的一个定理，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：smul_left (x₀ : R) {U : Set M} (hU : U in B) : exists V in B, V subseteq (
+fun x => x₀ • x) ⁻¹' U
+参数：x₀ : R；hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleFilterBasis.smul_left'`：∀ {R : Type u_1} {M : Type u_2} [inst : Se
+miring R] [inst_1 : TopologicalSpace R] [inst_2 : AddCommGroup M]   [inst_3 : _r
+oot_.Module R M] (…
 -/
-theorem smul_left (x₀ : R) {U : Set M} (hU : U in B) : exists V in B, V subseteq (fun x => x₀ • x) ⁻¹' U :=
+theorem smul_left (x₀ : R) {U : Set M} (hU : U ∈ B) : ∃ V ∈ B, V ⊆ (fun x ↦ x₀ • x) ⁻¹' U :=
   B.smul_left' x₀ hU
-
-/--
-theorem `smul_right` / 定理 `smul_right`
-
-English:
-theorem smul_right
-  given: (m₀ : M) {U : Set M} (hU : U in B)
-  statement: forallᶠ x in 𝓝 (0 : R), x • m₀ in U
-  proof: B.smul_right' m₀ hU
-
-中文:
-定理 smul_right
-  条件: (m₀ : M) {U : 集合 M} (hU : U in B)
-  结论: 对任意ᶠ x in 𝓝 (0 : R), x • m₀ in U
-  证明: B.smul_right' m₀ hU
-
-Depends on / 依赖: B.smul_right, smul_right
+/-
+**ModuleFilterBasis.smul_right** 是 Mathlib 中的一个定理，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：smul_right (m₀ : M) {U : Set M} (hU : U in B) : forallᶠ x in 𝓝 (0 : R), x 
+• m₀ in U
+参数：m₀ : M；hU : U in B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleFilterBasis.smul_right'`：∀ {R : Type u_1} {M : Type u_2} [inst : S
+emiring R] [inst_1 : TopologicalSpace R] [inst_2 : AddCommGroup M]   [inst_3 : _
+root_.Module R M] (…
 -/
-theorem smul_right (m₀ : M) {U : Set M} (hU : U in B) : forallᶠ x in 𝓝 (0 : R), x • m₀ in U :=
+theorem smul_right (m₀ : M) {U : Set M} (hU : U ∈ B) : ∀ᶠ x in 𝓝 (0 : R), x • m₀ ∈ U :=
   B.smul_right' m₀ hU
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `R` is discrete then the trivial additive group filter basis on any `R`-module is a
+module filter basis. -/
+/-
+**ModuleFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [DiscreteTopology
-  signature: R] : Inhabited (ModuleFilterBasis R M)
-  body: ⟨{
-      show AddGroupFilterBasis M from
-        default with
-      smul' := by
-        rintro U (rfl : U in {{(0 : M)}})
-        use univ, univ_mem, {0}, rfl
-        rintro a ⟨x, -, m, rfl, rfl⟩
-        simp only [smul_zero, mem_singleton_iff]
-      smul_left' := by
-        rintro x₀ U (h : U in {{(0 : M)}})
-        rw [mem_singleton_iff] at h
-        use {0}, rfl
-        simp [h]
-      smul_right' := by
-        rintro m₀ U (h : U in (0 : Set (Set M)))
-        rw [Set.mem_zero] at h
-        simp [h, nhds_discrete] }⟩
-
-中文:
-实例 [离散拓扑
-  签名: R] : 可居 (ModuleFilterBasis R M)
-  定义体: ⟨{
-      show AddGroupFilterBasis M from
-        default with
-      smul' := by
-        rintro U (rfl : U in {{(0 : M)}})
-        use univ, univ_mem, {0}, rfl
-        rintro a ⟨x, -, m, rfl, rfl⟩
-        simp only [smul_zero, mem_singleton_iff]
-      smul_left' := by
-        rintro x₀ U (h : U in {{(0 : M)}})
-        rw [mem_singleton_iff] at h
-        use {0}, rfl
-        simp [h]
-      smul_right' := by
-        rintro m₀ U (h : U in (0 : Set (Set M)))
-        rw [Set.mem_zero] at h
-        simp [h, nhds_discrete] }⟩
-
-Depends on / 依赖: AddGroupFilterBasis, Set.mem_zero, mem_singleton_iff, mem_zero, nhds_discrete, smul_left, smul_right, smul_zero, univ_mem
+--- 原说明 ---
+If `R` is discrete then the trivial additive group filter basis on any `R`-modul
+e is a
+module filter basis.
 -/
 instance [DiscreteTopology R] : Inhabited (ModuleFilterBasis R M) :=
   ⟨{
       show AddGroupFilterBasis M from
         default with
       smul' := by
-        rintro U (rfl : U in {{(0 : M)}})
+        rintro U (rfl : U ∈ {{(0 : M)}})
         use univ, univ_mem, {0}, rfl
         rintro a ⟨x, -, m, rfl, rfl⟩
         simp only [smul_zero, mem_singleton_iff]
       smul_left' := by
-        rintro x₀ U (h : U in {{(0 : M)}})
+        rintro x₀ U (h : U ∈ {{(0 : M)}})
         rw [mem_singleton_iff] at h
         use {0}, rfl
         simp [h]
       smul_right' := by
-        rintro m₀ U (h : U in (0 : Set (Set M)))
+        rintro m₀ U (h : U ∈ (0 : Set (Set M)))
         rw [Set.mem_zero] at h
         simp [h, nhds_discrete] }⟩
 
 /-- The topology associated to a module filter basis on a module over a topological ring.
 It has the given basis as a basis of neighborhoods of zero. -/
 @[instance_reducible]
-/--
-Definition of `topology` / `topology` 的定义
+/-
+**ModuleFilterBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：topology : TopologicalSpace M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topology
-  signature: : TopologicalSpace M
-  body: B.toAddGroupFilterBasis.topology
-
-中文:
-定义 topology
-  签名: : 拓扑空间 M
-  定义体: B.toAddGroupFilterBasis.topology
-
-Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
+--- 原说明 ---
+The topology associated to a module filter basis on a module over a topological 
+ring.
+It has the given basis as a basis of neighborhoods of zero.
 -/
 def topology : TopologicalSpace M :=
   B.toAddGroupFilterBasis.topology
@@ -1048,20 +780,20 @@ def topology : TopologicalSpace M :=
 It has the given basis as a basis of neighborhoods of zero. This version gets the ring
 topology by unification instead of type class inference. -/
 @[instance_reducible]
-/--
-Definition of `topology'` / `topology'` 的定义
+/-
+**ModuleFilterBasis.topology'** 是 Mathlib 中的一个定义，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：topology' {R M : Type*} [Semiring R] {_ : TopologicalSpace R} [AddCommGrou
+p M] [Module R M] (B : ModuleFilterBasis R M) : TopologicalSpace M
+参数：B : ModuleFilterBasis R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topology'
-  signature: {R M : Type*} [Semiring R] {_ : TopologicalSpace R} [AddCommGroup M] [Module R M]
-  body: B.toAddGroupFilterBasis.topology
-
-中文:
-定义 topology'
-  签名: {R M : 类型} [半环 R] {_ : 拓扑空间 R} [加法交换群 M] [模 R M]
-  定义体: B.toAddGroupFilterBasis.topology
-
-Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
+--- 原说明 ---
+The topology associated to a module filter basis on a module over a topological 
+ring.
+It has the given basis as a basis of neighborhoods of zero. This version gets th
+e ring
+topology by unification instead of type class inference.
 -/
 def topology' {R M : Type*} [Semiring R] {_ : TopologicalSpace R} [AddCommGroup M] [Module R M]
     (B : ModuleFilterBasis R M) : TopologicalSpace M :=
@@ -1074,64 +806,47 @@ section Ring
 variable {R M : Type*} [Ring R] [TopologicalSpace R] [AddCommGroup M] [Module R M]
   (B : ModuleFilterBasis R M)
 
-/--
-theorem `_root_.ContinuousSMul.of_basis_zero` / 定理 `_root_.ContinuousSMul.of_basis_zero`
+/-- A topological additive group with a basis of `𝓝 0` satisfying the axioms of `ModuleFilterBasis`
+is a topological module.
 
-English:
-theorem _root_.ContinuousSMul.of_basis_zero
-  statement: {ι : Type*} [IsTopologicalRing R] [TopologicalSpace M]
-  proof: by
-  apply ContinuousSMul.of_nhds_zero
-  · rw [h.tendsto_right_iff]
-    intro i hi
-    rcases hsmul hi with ⟨V, V_in, j, hj, hVj⟩
-    apply mem_of_superset (prod_mem_prod V_in <| h.mem_of_mem hj)
-    rintro ⟨v, w⟩ ⟨v_in : v in V, w_in : w in b j⟩
-    exact hVj (Set.smul_mem_smul v_in w_in)
-  · intro m₀
-    rw [h.tendsto_right_iff]
-    intro i hi
-    exact hsmul_right m₀ hi
-  · intro x₀
-    rw [h.tendsto_right_iff]
-    intro i hi
-    rcases hsmul_left x₀ hi with ⟨j, hj, hji⟩
-    exact mem_of_superset (h.mem_of_mem hj) hji
+This lemma is mathematically useless because one could obtain such a result by applying
+`ModuleFilterBasis.continuousSMul` and use the fact that group topologies are characterized
+by their neighborhoods of 0 to obtain the `ContinuousSMul` on the pre-existing topology.
 
-中文:
-定理 _root_.连续标量乘法.of_basis_zero
-  结论: {ι : 类型} [是拓扑环 R] [拓扑空间 M]
-  证明: by
-  apply ContinuousSMul.of_nhds_zero
-  · rw [h.tendsto_right_iff]
-    intro i hi
-    rcases hsmul hi with ⟨V, V_in, j, hj, hVj⟩
-    apply mem_of_superset (prod_mem_prod V_in <| h.mem_of_mem hj)
-    rintro ⟨v, w⟩ ⟨v_in : v in V, w_in : w in b j⟩
-    exact hVj (Set.smul_mem_smul v_in w_in)
-  · intro m₀
-    rw [h.tendsto_right_iff]
-    intro i hi
-    exact hsmul_right m₀ hi
-  · intro x₀
-    rw [h.tendsto_right_iff]
-    intro i hi
-    rcases hsmul_left x₀ hi with ⟨j, hj, hji⟩
-    exact mem_of_superset (h.mem_of_mem hj) hji
+But it turns out it's just easier to get it as a byproduct of the proof, so this is just a free
+quality-of-life improvement. -/
+/-
+**ModuleFilterBasis._root_.ContinuousSMul.of_basis_zero** 是 Mathlib 中的一个定理，位于命名空
+间 `ModuleFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: ContinuousSMul, ContinuousSMul.of_nhds_zero, Set.smul_mem_smul, V_in, h.mem_of_mem, h.tendsto_right_iff, hsmul_left, hsmul_right, mem_of_mem, mem_of_superset, of_nhds_zero, prod_mem_prod, smul_mem_smul, tendsto_right_iff, v_in, w_in
+--- 原说明 ---
+A topological additive group with a basis of `𝓝 0` satisfying the axioms of `Mod
+uleFilterBasis`
+is a topological module.
+
+This lemma is mathematically useless because one could obtain such a result by a
+pplying
+`ModuleFilterBasis.continuousSMul` and use the fact that group topologies are ch
+aracterized
+by their neighborhoods of 0 to obtain the `ContinuousSMul` on the pre-existing t
+opology.
+
+But it turns out it's just easier to get it as a byproduct of the proof, so this
+ is just a free
+quality-of-life improvement.
 -/
 theorem _root_.ContinuousSMul.of_basis_zero {ι : Type*} [IsTopologicalRing R] [TopologicalSpace M]
-    [IsTopologicalAddGroup M] {p : ι -> Prop} {b : ι -> Set M} (h : HasBasis (𝓝 0) p b)
-    (hsmul : forall {i}, p i -> exists V in 𝓝 (0 : R), exists j, p j ∧ V • b j subseteq b i)
-    (hsmul_left : forall (x₀ : R) {i}, p i -> exists j, p j ∧ MapsTo (x₀ • ·) (b j) (b i))
-    (hsmul_right : forall (m₀ : M) {i}, p i -> forallᶠ x in 𝓝 (0 : R), x • m₀ in b i) : ContinuousSMul R M := by
+    [IsTopologicalAddGroup M] {p : ι → Prop} {b : ι → Set M} (h : HasBasis (𝓝 0) p b)
+    (hsmul : ∀ {i}, p i → ∃ V ∈ 𝓝 (0 : R), ∃ j, p j ∧ V • b j ⊆ b i)
+    (hsmul_left : ∀ (x₀ : R) {i}, p i → ∃ j, p j ∧ MapsTo (x₀ • ·) (b j) (b i))
+    (hsmul_right : ∀ (m₀ : M) {i}, p i → ∀ᶠ x in 𝓝 (0 : R), x • m₀ ∈ b i) : ContinuousSMul R M := by
   apply ContinuousSMul.of_nhds_zero
   · rw [h.tendsto_right_iff]
     intro i hi
     rcases hsmul hi with ⟨V, V_in, j, hj, hVj⟩
     apply mem_of_superset (prod_mem_prod V_in <| h.mem_of_mem hj)
-    rintro ⟨v, w⟩ ⟨v_in : v in V, w_in : w in b j⟩
+    rintro ⟨v, w⟩ ⟨v_in : v ∈ V, w_in : w ∈ b j⟩
     exact hVj (Set.smul_mem_smul v_in w_in)
   · intro m₀
     rw [h.tendsto_right_iff]
@@ -1145,6 +860,14 @@ theorem _root_.ContinuousSMul.of_basis_zero {ι : Type*} [IsTopologicalRing R] [
 
 /-- If a module is endowed with a topological structure coming from
 a module filter basis then it's a topological module. -/
+/-
+**ModuleFilterBasis.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleFilterBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If a module is endowed with a topological structure coming from
+a module filter basis then it's a topological module.
+-/
 instance (priority := 100) continuousSMul [IsTopologicalRing R] :
     @ContinuousSMul R M _ _ B.topology := by
   let B' := B.toAddGroupFilterBasis
@@ -1153,45 +876,30 @@ instance (priority := 100) continuousSMul [IsTopologicalRing R] :
       (fun {_} => by simpa using! B.smul)
       (by simpa using! B.smul_left) B.smul_right
 
-/--
-Definition of `ofBases` / `ofBases` 的定义
+/-- Build a module filter basis from compatible ring and additive group filter bases. -/
+/-
+**ModuleFilterBasis.ofBases** 是 Mathlib 中的一个定义，位于命名空间 `ModuleFilterBasis`。
+形式化陈述：ofBases (BR : RingFilterBasis R) (BM : AddGroupFilterBasis M) (smul : fora
+ll {U}, U in BM -> exists V in BR, exists W in BM, V • W subseteq U) (smul_left 
+: forall (x₀ : R) {U}, U in BM -> exists V in BM, V subseteq (fun x => x₀ • x) ⁻
+¹' U) (smul_right : forall (m₀ : M) {U}, U in BM -> exists V in BR, V subseteq (
+fun x => x • m₀) ⁻¹' U) : @ModuleFilterBasis R M _ BR.topology _ _
+参数：BR : RingFilterBasis R；BM : AddGroupFilterBasis M；smul : forall {U}, U in BM 
+-> exists V in BR, exists W in BM, V • W subseteq U；smul_left : forall (x₀ : R) 
+{U}, U in BM -> exists V in BM, V subseteq (fun x => x₀ • x) ⁻¹' U；smul_right : 
+forall (m₀ : M) {U}, U in BM -> exists V in BR, V subseteq (fun x => x • m₀) ⁻¹'
+ U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBases
-  signature: (BR : RingFilterBasis R) (BM : AddGroupFilterBasis M)
-  body: let _ := BR.topology
-  { BM with
-    smul' := by
-      intro U U_in
-      rcases smul U_in with ⟨V, V_in, W, W_in, H⟩
-      exact ⟨V, BR.toAddGroupFilterBasis.mem_nhds_zero V_in, W, W_in, H⟩
-    smul_left' := smul_left
-    smul_right' := by
-      intro m₀ U U_in
-      rcases smul_right m₀ U_in with ⟨V, V_in, H⟩
-      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) H }
-
-中文:
-定义 ofBases
-  签名: (BR : RingFilterBasis R) (BM : 加法群滤子基 M)
-  定义体: let _ := BR.topology
-  { BM with
-    smul' := by
-      intro U U_in
-      rcases smul U_in with ⟨V, V_in, W, W_in, H⟩
-      exact ⟨V, BR.toAddGroupFilterBasis.mem_nhds_zero V_in, W, W_in, H⟩
-    smul_left' := smul_left
-    smul_right' := by
-      intro m₀ U U_in
-      rcases smul_right m₀ U_in with ⟨V, V_in, H⟩
-      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) H }
-
-Depends on / 依赖: BR.toAddGroupFilterBasis.mem_nhds_zero, BR.topology, U_in, V_in, W_in, mem_nhds_zero, mem_of_superset, smul_left, smul_right, toAddGroupFilterBasis, topology
+--- 原说明 ---
+Build a module filter basis from compatible ring and additive group filter bases
+.
 -/
 def ofBases (BR : RingFilterBasis R) (BM : AddGroupFilterBasis M)
-    (smul : forall {U}, U in BM -> exists V in BR, exists W in BM, V • W subseteq U)
-    (smul_left : forall (x₀ : R) {U}, U in BM -> exists V in BM, V subseteq (fun x => x₀ • x) ⁻¹' U)
-    (smul_right : forall (m₀ : M) {U}, U in BM -> exists V in BR, V subseteq (fun x => x • m₀) ⁻¹' U) :
+    (smul : ∀ {U}, U ∈ BM → ∃ V ∈ BR, ∃ W ∈ BM, V • W ⊆ U)
+    (smul_left : ∀ (x₀ : R) {U}, U ∈ BM → ∃ V ∈ BM, V ⊆ (fun x ↦ x₀ • x) ⁻¹' U)
+    (smul_right : ∀ (m₀ : M) {U}, U ∈ BM → ∃ V ∈ BR, V ⊆ (fun x ↦ x • m₀) ⁻¹' U) :
     @ModuleFilterBasis R M _ BR.topology _ _ :=
   let _ := BR.topology
   { BM with
@@ -1208,3 +916,4 @@ def ofBases (BR : RingFilterBasis R) (BM : AddGroupFilterBasis M)
 end Ring
 
 end ModuleFilterBasis
+

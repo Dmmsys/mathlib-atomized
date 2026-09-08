@@ -32,59 +32,58 @@ namespace AlgebraicGeometry.Scheme
 
 variable {P : MorphismProperty Scheme.{u}} (S : Scheme.{u})
 
-/--
-Definition of `asOverProp` / `asOverProp` 的定义
+/-- Bundle an `S`-scheme with `P` into an object of `P.Over ⊤ S`. -/
+/-
+**AlgebraicGeometry.Scheme.asOverProp** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeom
+etry.Scheme`。
+形式化陈述：asOverProp (X : Scheme.{u}) (S : Scheme.{u}) [X.Over S] (h : P (X ↘ S)) : 
+P.Over ⊤ S
+参数：X : Scheme.{u}；S : Scheme.{u}；h : P (X ↘ S)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation asOverProp
-  signature: (X : Scheme.{u}) (S : Scheme.{u}) [X.Over S] (h : P (X ↘ S))
-  body: ⟨X.asOver S, h⟩
-
-中文:
-缩写 asOverProp
-  签名: (X : 概形.{u}) (S : 概形.{u}) [X.Over S] (h : P (X ↘ S))
-  定义体: ⟨X.asOver S, h⟩
-
-Depends on / 依赖: X.asOver, asOver
+--- 原说明 ---
+Bundle an `S`-scheme with `P` into an object of `P.Over ⊤ S`.
 -/
 abbrev asOverProp (X : Scheme.{u}) (S : Scheme.{u}) [X.Over S] (h : P (X ↘ S)) : P.Over ⊤ S :=
   ⟨X.asOver S, h⟩
 
-/--
-Definition of `Hom.asOverProp` / `Hom.asOverProp` 的定义
+/-- Bundle an `S`-morphism of `S`-scheme with `P` into a morphism in `P.Over ⊤ S`. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.asOverProp** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.Scheme.Hom`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   {X Y : 
+AlgebraicGeometry.Scheme} →     (f : X.Hom Y) →       (S : AlgebraicGeometry.Sch
+eme) →         [inst : X.Over S] →           [inst_1 : Y.Over S] →             [
+f.IsOver S] → {hX : P (X ↘ S)} → {hY : P (Y ↘ S)} → X.asOverProp S hX ⟶ Y.asOver
+Prop S hY
+参数：f : X.Hom Y；S : AlgebraicGeometry.Scheme；X ↘ S；Y ↘ S。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-abbreviation Hom.asOverProp
-  signature: {X Y : Scheme.{u}} (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S]
-  body: ⟨f.asOver S, trivial, trivial⟩
-
-中文:
-缩写 态射.asOverProp
-  签名: {X Y : 概形.{u}} (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S]
-  定义体: ⟨f.asOver S, trivial, trivial⟩
-
-Depends on / 依赖: asOver, f.asOver
+--- 原说明 ---
+Bundle an `S`-morphism of `S`-scheme with `P` into a morphism in `P.Over ⊤ S`.
 -/
 abbrev Hom.asOverProp {X Y : Scheme.{u}} (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S]
     [f.IsOver S] {hX : P (X ↘ S)} {hY : P (Y ↘ S)} : X.asOverProp S hX ⟶ Y.asOverProp S hY :=
   ⟨f.asOver S, trivial, trivial⟩
 
-/--
-Definition of `Cover.Over` / `Cover.Over` 的定义
+/-- A `P`-cover of a scheme `X` over `S` is a cover, where the components are over `S` and the
+component maps commute with the structure morphisms. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.Over** 是 Mathlib 中的一个归纳类型，位于命名空间 `AlgebraicGeom
+etry.Scheme.Cover`。
+形式化陈述：(S : AlgebraicGeometry.Scheme) →   {P : CategoryTheory.MorphismProperty Al
+gebraicGeometry.Scheme} →     [P.IsStableUnderBaseChange] →       [AlgebraicGeom
+etry.Scheme.IsJointlySurjectivePreserving P] →         {X : AlgebraicGeometry.Sc
+heme} →           [X.Over S] → AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry
+.Scheme.precoverage P) X → Type (max u u_1)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Cover.Over
-  parameters: {P : MorphismProperty Scheme.{u}} [P.IsStableUnderBaseChange]
-  axioms and operations (2):
-    - over((j : 𝒰.I₀)) : (𝒰.X j).Over S  [default: by infer_instance]
-    - isOver_map((j : 𝒰.I₀)) : (𝒰.f j).IsOver S  [default: by infer_instance]
-
-中文:
-类 Cover.Over
-  参数: {P : MorphismProperty 概形.{u}} [P.是StableUnderBaseChange]
-  公理与运算 (2 个):
-    - over((j : 𝒰.I₀)) : (𝒰.X j).Over S  [默认: by infer_instance]
-    - isOver_map((j : 𝒰.I₀)) : (𝒰.f j).是Over S  [默认: by infer_instance]
+--- 原说明 ---
+A `P`-cover of a scheme `X` over `S` is a cover, where the components are over `
+S` and the
+component maps commute with the structure morphisms.
 -/
 protected class Cover.Over {P : MorphismProperty Scheme.{u}} [P.IsStableUnderBaseChange]
     [IsJointlySurjectivePreserving P] {X : Scheme.{u}} [X.Over S]
@@ -96,26 +95,15 @@ attribute [instance_reducible] Cover.Over.over
 attribute [instance] Cover.Over.over Cover.Over.isOver_map
 
 variable [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y) [X.Over S] [Y.Over S]
-  body: inferInstanceAs X.Over S
-isOver_map _ := inferInstanceAs f.IsOver S
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: [P.RespectsIso] {X Y : 概形.{u}} (f : X ⟶ Y) [X.Over S] [Y.Over S]
-  定义体: inferInstanceAs X.Over S
-isOver_map _ := inferInstanceAs f.IsOver S
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsIdentities] [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y) [X.Over S] [Y.Over S]
     [f.IsOver S] [IsIso f] : (coverOfIsIso (P := P) f).Over S where
-over _ := inferInstanceAs X.Over S
-isOver_map _ := inferInstanceAs f.IsOver S
+  over _ := inferInstanceAs <| X.Over S
+  isOver_map _ := inferInstanceAs <| f.IsOver S
 
 section
 
@@ -128,44 +116,33 @@ definitionally equal to `AlgebraicGeometry.Scheme.Cover.pullback₁`, as here we
 the pullback in `Over S`, whose underlying scheme is only isomorphic but not equal to the
 pullback in `Scheme`. -/
 @[simps]
-/--
-Definition of `Cover.pullbackCoverOver` / `Cover.pullbackCoverOver` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackCoverOver** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   (S : Al
+gebraicGeometry.Scheme) →     [inst : P.IsStableUnderBaseChange] →       [inst_1
+ : AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving P] →         {X W : Al
+gebraicGeometry.Scheme} →           (𝒰 : AlgebraicGeometry.Scheme.Cover (Algebra
+icGeometry.Scheme.precoverage P) X) →             (f : W ⟶ X) →               [i
+nst_2 : W.Over S] →                 [inst_3 : X.Over S] →                   [Alg
+ebraicGeometry.Scheme.Cover.Over S 𝒰] →                     [AlgebraicGeometry.S
+cheme.Hom.IsOver f S] →                       AlgebraicGeometry.Scheme.Cover (Al
+gebraicGeometry.Scheme.precoverage P) W
+参数：S : AlgebraicGeometry.Scheme；𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeo
+metry.Scheme.precoverage P) X；f : W ⟶ X；AlgebraicGeometry.Scheme.precoverage P。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.Over.isOver_map`：∀ {S : AlgebraicGeometry
+.Scheme} {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme}   {inst 
+: P.IsStableUnderBaseChange} {inst_1…
 
-English:
-definition Cover.pullbackCoverOver
-  signature: : W.Cover (precoverage P) where
-  body: 𝒰.I₀
-  X x := (pullback (f.asOver S) ((𝒰.f x).asOver S)).left
-  f x := (pullback.fst (f.asOver S) ((𝒰.f x).asOver S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
-        ((PreservesPullback.iso (Over.forget S) (f.asOver S) ((𝒰.f _).asOver S)).inv)
-        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
-    · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_fst _ _ (𝒰.map_prop j)
-
-中文:
-定义 Cover.pullbackCoverOver
-  签名: : W.Cover (precoverage P) where
-  定义体: 𝒰.I₀
-  X x := (pullback (f.asOver S) ((𝒰.f x).asOver S)).left
-  f x := (pullback.fst (f.asOver S) ((𝒰.f x).asOver S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
-        ((PreservesPullback.iso (Over.forget S) (f.asOver S) ((𝒰.f _).asOver S)).inv)
-        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
-    · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_fst _ _ (𝒰.map_prop j)
+--- 原说明 ---
+The pullback of a cover of `S`-schemes along a morphism of `S`-schemes. This is 
+not
+definitionally equal to `AlgebraicGeometry.Scheme.Cover.pullback₁`, as here we t
+ake
+the pullback in `Over S`, whose underlying scheme is only isomorphic but not equ
+al to the
+pullback in `Scheme`.
 -/
 def Cover.pullbackCoverOver : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -173,34 +150,28 @@ def Cover.pullbackCoverOver : W.Cover (precoverage P) where
   f x := (pullback.fst (f.asOver S) ((𝒰.f x).asOver S)).left
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
+    refine ⟨fun x ↦ ?_, fun j ↦ ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
       use i
       exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
         ((PreservesPullback.iso (Over.forget S) (f.asOver S) ((𝒰.f _).asOver S)).inv)
         (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
     · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      rw [← Over.forget_map, ← PreservesPullback.iso_hom_fst, P.cancel_left_of_respectsIso]
       exact P.pullback_fst _ _ (𝒰.map_prop j)
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : 𝒰.I₀) : ((𝒰.pullbackCoverOver S f).X j).Over S where
   hom := (pullback (f.asOver S) ((𝒰.f j).asOver S)).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝒰.pullbackCoverOver S f).Over S
-  body: { comp_over := by exact Over.w (pullback.fst (f.asOver S) ((𝒰.f j).asOver S)) }
-
-中文:
-实例 :
-  签名: (𝒰.pullbackCoverOver S f).Over S
-  定义体: { comp_over := by exact Over.w (pullback.fst (f.asOver S) ((𝒰.f j).asOver S)) }
-
-Depends on / 依赖: Over.w, asOver, comp_over, f.asOver, pullback, pullback.fst
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝒰.pullbackCoverOver S f).Over S where
   isOver_map j := { comp_over := by exact Over.w (pullback.fst (f.asOver S) ((𝒰.f j).asOver S)) }
@@ -209,44 +180,29 @@ set_option backward.isDefEq.respectTransparency false in
 /-- A variant of `AlgebraicGeometry.Scheme.Cover.pullbackCoverOver` with the arguments in the
 fiber products flipped. -/
 @[simps]
-/--
-Definition of `Cover.pullbackCoverOver'` / `Cover.pullbackCoverOver'` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackCoverOver'** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   (S : Al
+gebraicGeometry.Scheme) →     [inst : P.IsStableUnderBaseChange] →       [inst_1
+ : AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving P] →         {X W : Al
+gebraicGeometry.Scheme} →           (𝒰 : AlgebraicGeometry.Scheme.Cover (Algebra
+icGeometry.Scheme.precoverage P) X) →             (f : W ⟶ X) →               [i
+nst_2 : W.Over S] →                 [inst_3 : X.Over S] →                   [Alg
+ebraicGeometry.Scheme.Cover.Over S 𝒰] →                     [AlgebraicGeometry.S
+cheme.Hom.IsOver f S] →                       AlgebraicGeometry.Scheme.Cover (Al
+gebraicGeometry.Scheme.precoverage P) W
+参数：S : AlgebraicGeometry.Scheme；𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeo
+metry.Scheme.precoverage P) X；f : W ⟶ X；AlgebraicGeometry.Scheme.precoverage P。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.Over.isOver_map`：∀ {S : AlgebraicGeometry
+.Scheme} {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme}   {inst 
+: P.IsStableUnderBaseChange} {inst_1…
 
-English:
-definition Cover.pullbackCoverOver'
-  signature: : W.Cover (precoverage P) where
-  body: 𝒰.I₀
-  X x := (pullback ((𝒰.f x).asOver S) (f.asOver S)).left
-  f x := (pullback.snd ((𝒰.f x).asOver S) (f.asOver S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f _) _
-        ((PreservesPullback.iso (Over.forget S) ((𝒰.f _).asOver S) (f.asOver S)).inv)
-        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
-    · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_snd _ _ (𝒰.map_prop j)
-
-中文:
-定义 Cover.pullbackCoverOver'
-  签名: : W.Cover (precoverage P) where
-  定义体: 𝒰.I₀
-  X x := (pullback ((𝒰.f x).asOver S) (f.asOver S)).left
-  f x := (pullback.snd ((𝒰.f x).asOver S) (f.asOver S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f _) _
-        ((PreservesPullback.iso (Over.forget S) ((𝒰.f _).asOver S) (f.asOver S)).inv)
-        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
-    · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_snd _ _ (𝒰.map_prop j)
+--- 原说明 ---
+A variant of `AlgebraicGeometry.Scheme.Cover.pullbackCoverOver` with the argumen
+ts in the
+fiber products flipped.
 -/
 def Cover.pullbackCoverOver' : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -254,34 +210,28 @@ def Cover.pullbackCoverOver' : W.Cover (precoverage P) where
   f x := (pullback.snd ((𝒰.f x).asOver S) (f.asOver S)).left
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
+    refine ⟨fun x ↦ ?_, fun j ↦ ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
       use i
       exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f _) _
         ((PreservesPullback.iso (Over.forget S) ((𝒰.f _).asOver S) (f.asOver S)).inv)
         (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
     · dsimp only
-      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      rw [← Over.forget_map, ← PreservesPullback.iso_hom_snd, P.cancel_left_of_respectsIso]
       exact P.pullback_snd _ _ (𝒰.map_prop j)
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : 𝒰.I₀) : ((𝒰.pullbackCoverOver' S f).X j).Over S where
   hom := (pullback ((𝒰.f j).asOver S) (f.asOver S)).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝒰.pullbackCoverOver' S f).Over S
-  body: { comp_over := by exact Over.w (pullback.snd ((𝒰.f j).asOver S) (f.asOver S)) }
-
-中文:
-实例 :
-  签名: (𝒰.pullbackCoverOver' S f).Over S
-  定义体: { comp_over := by exact Over.w (pullback.snd ((𝒰.f j).asOver S) (f.asOver S)) }
-
-Depends on / 依赖: Over.w, asOver, comp_over, f.asOver, pullback, pullback.snd
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝒰.pullbackCoverOver' S f).Over S where
   isOver_map j := { comp_over := by exact Over.w (pullback.snd ((𝒰.f j).asOver S) (f.asOver S)) }
@@ -289,7 +239,7 @@ instance : (𝒰.pullbackCoverOver' S f).Over S where
 variable {Q : MorphismProperty Scheme.{u}} [Q.HasOfPostcompProperty Q]
   [Q.IsStableUnderBaseChange] [Q.IsStableUnderComposition]
 
-variable (hX : Q (X ↘ S)) (hW : Q (W ↘ S)) (hQ : forall j, Q (𝒰.X j ↘ S))
+variable (hX : Q (X ↘ S)) (hW : Q (W ↘ S)) (hQ : ∀ j, Q (𝒰.X j ↘ S))
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The pullback of a cover of `S`-schemes with `Q` along a morphism of `S`-schemes. This is not
@@ -297,50 +247,41 @@ definitionally equal to `AlgebraicGeometry.Scheme.Cover.pullbackCover`, as here 
 the pullback in `Q.Over ⊤ S`, whose underlying scheme is only isomorphic but not equal to the
 pullback in `Scheme`. -/
 @[simps -isSimp]
-/--
-Definition of `Cover.pullbackCoverOverProp` / `Cover.pullbackCoverOverProp` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackCoverOverProp** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   (S : Al
+gebraicGeometry.Scheme) →     [inst : P.IsStableUnderBaseChange] →       [inst_1
+ : AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving P] →         {X W : Al
+gebraicGeometry.Scheme} →           (𝒰 : AlgebraicGeometry.Scheme.Cover (Algebra
+icGeometry.Scheme.precoverage P) X) →             (f : W ⟶ X) →               [i
+nst_2 : W.Over S] →                 [inst_3 : X.Over S] →                   [ins
+t_4 : AlgebraicGeometry.Scheme.Cover.Over S 𝒰] →                     [AlgebraicG
+eometry.Scheme.Hom.IsOver f S] →                       {Q : CategoryTheory.Morph
+ismProperty AlgebraicGeometry.Scheme} →                         [Q.HasOfPostcomp
+Property Q] →                           [Q.IsStableUnderBaseChange] →           
+                  [Q.IsStableUnderComposition] →                               Q
+ (X ↘ S) →                                 Q (W ↘ S) →                          
+         (∀ (j : 𝒰.I₀), Q (𝒰.X j ↘ S)) →                                     Alg
+ebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) W
+参数：S : AlgebraicGeometry.Scheme；𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeo
+metry.Scheme.precoverage P) X；f : W ⟶ X；X ↘ S；W ↘ S；∀ (j : 𝒰.I₀), Q (𝒰.X j ↘ S)；
+AlgebraicGeometry.Scheme.precoverage P。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.Over.isOver_map`：∀ {S : AlgebraicGeometry
+.Scheme} {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme}   {inst 
+: P.IsStableUnderBaseChange} {inst_1…
 
-English:
-definition Cover.pullbackCoverOverProp
-  signature: : W.Cover (precoverage P) where
-  body: 𝒰.I₀
-  X x := (pullback (f.asOverProp (hX := hW) (hY := hX) S)
-    ((𝒰.f x).asOverProp (hX := hQ x) (hY := hX) S)).left
-  f x := (pullback.fst (f.asOverProp S) ((𝒰.f x).asOverProp S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
-        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
-          (f.asOverProp S) ((𝒰.f _).asOverProp S)).inv)
-        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
-    · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_fst _ _ (𝒰.map_prop j)
-
-中文:
-定义 Cover.pullbackCoverOverProp
-  签名: : W.Cover (precoverage P) where
-  定义体: 𝒰.I₀
-  X x := (pullback (f.asOverProp (hX := hW) (hY := hX) S)
-    ((𝒰.f x).asOverProp (hX := hQ x) (hY := hX) S)).left
-  f x := (pullback.fst (f.asOverProp S) ((𝒰.f x).asOverProp S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
-        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
-          (f.asOverProp S) ((𝒰.f _).asOverProp S)).inv)
-        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
-    · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_fst _ _ (𝒰.map_prop j)
+--- 原说明 ---
+The pullback of a cover of `S`-schemes with `Q` along a morphism of `S`-schemes.
+ This is not
+definitionally equal to `AlgebraicGeometry.Scheme.Cover.pullbackCover`, as here 
+we take
+the pullback in `Q.Over ⊤ S`, whose underlying scheme is only isomorphic but not
+ equal to the
+pullback in `Scheme`.
 -/
 def Cover.pullbackCoverOverProp : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -349,7 +290,7 @@ def Cover.pullbackCoverOverProp : W.Cover (precoverage P) where
   f x := (pullback.fst (f.asOverProp S) ((𝒰.f x).asOverProp S)).left
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
+    refine ⟨fun x ↦ ?_, fun j ↦ ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
       use i
       exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
@@ -357,29 +298,24 @@ def Cover.pullbackCoverOverProp : W.Cover (precoverage P) where
           (f.asOverProp S) ((𝒰.f _).asOverProp S)).inv)
         (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
     · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom,
+        ← MorphismProperty.Comma.forget_map, ← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_fst, P.cancel_left_of_respectsIso]
       exact P.pullback_fst _ _ (𝒰.map_prop j)
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : 𝒰.I₀) : ((𝒰.pullbackCoverOverProp S f hX hW hQ).X j).Over S where
   hom := (pullback (f.asOverProp (hX := hW) (hY := hX) S)
     ((𝒰.f j).asOverProp (hX := hQ j) (hY := hX) S)).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝒰.pullbackCoverOverProp S f hX hW hQ).Over S
-  body: { comp_over := by exact (pullback.fst (f.asOverProp S) ((𝒰.f j).asOverProp S)).w }
-
-中文:
-实例 :
-  签名: (𝒰.pullbackCoverOverProp S f hX hW hQ).Over S
-  定义体: { comp_over := by exact (pullback.fst (f.asOverProp S) ((𝒰.f j).asOverProp S)).w }
-
-Depends on / 依赖: asOverProp, comp_over, f.asOverProp, pullback, pullback.fst
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝒰.pullbackCoverOverProp S f hX hW hQ).Over S where
   isOver_map j :=
@@ -389,50 +325,37 @@ set_option backward.isDefEq.respectTransparency false in
 /-- A variant of `AlgebraicGeometry.Scheme.Cover.pullbackCoverOverProp` with the arguments in the
 fiber products flipped. -/
 @[simps -isSimp]
-/--
-Definition of `Cover.pullbackCoverOverProp'` / `Cover.pullbackCoverOverProp'` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackCoverOverProp'** 是 Mathlib 中的一个定义，位于命名空
+间 `AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   (S : Al
+gebraicGeometry.Scheme) →     [inst : P.IsStableUnderBaseChange] →       [inst_1
+ : AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving P] →         {X W : Al
+gebraicGeometry.Scheme} →           (𝒰 : AlgebraicGeometry.Scheme.Cover (Algebra
+icGeometry.Scheme.precoverage P) X) →             (f : W ⟶ X) →               [i
+nst_2 : W.Over S] →                 [inst_3 : X.Over S] →                   [ins
+t_4 : AlgebraicGeometry.Scheme.Cover.Over S 𝒰] →                     [AlgebraicG
+eometry.Scheme.Hom.IsOver f S] →                       {Q : CategoryTheory.Morph
+ismProperty AlgebraicGeometry.Scheme} →                         [Q.HasOfPostcomp
+Property Q] →                           [Q.IsStableUnderBaseChange] →           
+                  [Q.IsStableUnderComposition] →                               Q
+ (X ↘ S) →                                 Q (W ↘ S) →                          
+         (∀ (j : 𝒰.I₀), Q (𝒰.X j ↘ S)) →                                     Alg
+ebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) W
+参数：S : AlgebraicGeometry.Scheme；𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeo
+metry.Scheme.precoverage P) X；f : W ⟶ X；X ↘ S；W ↘ S；∀ (j : 𝒰.I₀), Q (𝒰.X j ↘ S)；
+AlgebraicGeometry.Scheme.precoverage P。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.Over.isOver_map`：∀ {S : AlgebraicGeometry
+.Scheme} {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme}   {inst 
+: P.IsStableUnderBaseChange} {inst_1…
 
-English:
-definition Cover.pullbackCoverOverProp'
-  signature: : W.Cover (precoverage P) where
-  body: 𝒰.I₀
-  X x := (pullback ((𝒰.f x).asOverProp (hX := hQ x) (hY := hX) S)
-    (f.asOverProp (hX := hW) (hY := hX) S)).left
-  f x := (pullback.snd ((𝒰.f x).asOverProp S) (f.asOverProp S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f i) _
-        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
-          ((𝒰.f _).asOverProp S) (f.asOverProp S)).inv)
-        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
-    · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_snd _ _ (𝒰.map_prop j)
-
-中文:
-定义 Cover.pullbackCoverOverProp'
-  签名: : W.Cover (precoverage P) where
-  定义体: 𝒰.I₀
-  X x := (pullback ((𝒰.f x).asOverProp (hX := hQ x) (hY := hX) S)
-    (f.asOverProp (hX := hW) (hY := hX) S)).left
-  f x := (pullback.snd ((𝒰.f x).asOverProp S) (f.asOverProp S)).left
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
-      use i
-      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f i) _
-        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
-          ((𝒰.f _).asOverProp S) (f.asOverProp S)).inv)
-        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
-    · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
-      exact P.pullback_snd _ _ (𝒰.map_prop j)
+--- 原说明 ---
+A variant of `AlgebraicGeometry.Scheme.Cover.pullbackCoverOverProp` with the arg
+uments in the
+fiber products flipped.
 -/
 def Cover.pullbackCoverOverProp' : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -441,7 +364,7 @@ def Cover.pullbackCoverOverProp' : W.Cover (precoverage P) where
   f x := (pullback.snd ((𝒰.f x).asOverProp S) (f.asOverProp S)).left
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun j => ?_⟩
+    refine ⟨fun x ↦ ?_, fun j ↦ ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
       use i
       exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f i) _
@@ -449,29 +372,24 @@ def Cover.pullbackCoverOverProp' : W.Cover (precoverage P) where
           ((𝒰.f _).asOverProp S) (f.asOverProp S)).inv)
         (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
     · simp only [← CategoryTheory.Over.forget_map]
-      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
-      rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom,
+        ← MorphismProperty.Comma.forget_map, ← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_snd, P.cancel_left_of_respectsIso]
       exact P.pullback_snd _ _ (𝒰.map_prop j)
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : 𝒰.I₀) : ((𝒰.pullbackCoverOverProp' S f hX hW hQ).X j).Over S where
   hom := (pullback ((𝒰.f j).asOverProp (hX := hQ j) (hY := hX) S)
     (f.asOverProp (hX := hW) (hY := hX) S)).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝒰.pullbackCoverOverProp' S f hX hW hQ).Over S
-  body: { comp_over := by exact (pullback.snd ((𝒰.f j).asOverProp S) (f.asOverProp S)).w }
-
-中文:
-实例 :
-  签名: (𝒰.pullbackCoverOverProp' S f hX hW hQ).Over S
-  定义体: { comp_over := by exact (pullback.snd ((𝒰.f j).asOverProp S) (f.asOverProp S)).w }
-
-Depends on / 依赖: asOverProp, comp_over, f.asOverProp, pullback, pullback.snd
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝒰.pullbackCoverOverProp' S f hX hW hQ).Over S where
   isOver_map j :=
@@ -480,17 +398,28 @@ instance : (𝒰.pullbackCoverOverProp' S f hX hW hQ).Over S where
 end
 
 variable [P.IsStableUnderComposition]
-variable {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (𝒱 : forall x, (𝒰.X x).Cover (precoverage P))
-  [X.Over S] [𝒰.Over S] [forall x, (𝒱 x).Over S]
+variable {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (𝒱 : ∀ x, (𝒰.X x).Cover (precoverage P))
+  [X.Over S] [𝒰.Over S] [∀ x, (𝒱 x).Over S]
 
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : (𝒰.bind 𝒱).I₀) : ((𝒰.bind 𝒱).X j).Over S :=
-inferInstanceAs ((𝒱 j.1).X j.2).Over S
+  inferInstanceAs <| ((𝒱 j.1).X j.2).Over S
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-instance {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (𝒱 : forall x, (𝒰.X x).Cover (precoverage P))
-    [X.Over S] [𝒰.Over S] [forall x, (𝒱 x).Over S] : Cover.Over S (𝒰.bind 𝒱) where
-over := fun ⟨i, j⟩ => inferInstanceAs ((𝒱 i).X j).Over S
-  isOver_map := fun ⟨i, j⟩ => { comp_over := by simp; rfl }
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (𝒱 : ∀ x, (𝒰.X x).Cover (precoverage P))
+    [X.Over S] [𝒰.Over S] [∀ x, (𝒱 x).Over S] : Cover.Over S (𝒰.bind 𝒱) where
+  over := fun ⟨i, j⟩ ↦ inferInstanceAs <| ((𝒱 i).X j).Over S
+  isOver_map := fun ⟨i, j⟩ ↦ { comp_over := by simp; rfl }
 
 end AlgebraicGeometry.Scheme
+

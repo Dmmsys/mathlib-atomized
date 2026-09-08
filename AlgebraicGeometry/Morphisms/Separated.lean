@@ -41,22 +41,15 @@ variable {W X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
 
 /-- A morphism is separated if the diagonal map is a closed immersion. -/
 @[mk_iff]
-/--
-Definition of `IsSeparated` / `IsSeparated` 的定义
+/-
+**AlgebraicGeometry.IsSeparated** 是 Mathlib 中的一个类，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：IsSeparated : Prop where /-- A morphism is separated if the diagonal map i
+s a closed immersion. -/ isClosedImmersion_diagonal : IsClosedImmersion (pullbac
+k.diagonal f)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSeparated
-  parameters: : Prop where
-  axioms and operations (1):
-    - isClosedImmersion_diagonal : IsClosedImmersion (pullback.diagonal f)  [default: by infer_instance]
-
-中文:
-类 是分离
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isClosedImmersion_diagonal : 是闭浸入 (pullback.diagonal f)  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A morphism is separated if the diagonal map is a closed immersion.
 -/
 class IsSeparated : Prop where
   /-- A morphism is separated if the diagonal map is a closed immersion. -/
@@ -69,22 +62,20 @@ namespace IsSeparated
 
 attribute [instance] diagonal_isClosedImmersion
 
-/--
-theorem `isSeparated_eq_diagonal_isClosedImmersion` / 定理 `isSeparated_eq_diagonal_isClosedImmersion`
-
-English:
-theorem isSeparated_eq_diagonal_isClosedImmersion
-  proof: by
-  ext
-  exact isSeparated_iff _
-
-中文:
-定理 isSeparated_eq_diagonal_isClosedImmersion
-  证明: by
-  ext
-  exact isSeparated_iff _
-
-Depends on / 依赖: isSeparated_iff
+/-
+**AlgebraicGeometry.IsSeparated.isSeparated_eq_diagonal_isClosedImmersion** 是 Ma
+thlib 中的一个定理，位于命名空间 `AlgebraicGeometry.IsSeparated`。
+形式化陈述：isSeparated_eq_diagonal_isClosedImmersion : @IsSeparated = MorphismPropert
+y.diagonal @IsClosedImmersion
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.isSeparated_iff`：∀ {X Y : AlgebraicGeometry.Scheme} (f
+ : X ⟶ Y),   AlgebraicGeometry.IsSeparated f ↔     autoParam (AlgebraicGeometry.
+IsClosedImmersion (Cate…
 -/
 theorem isSeparated_eq_diagonal_isClosedImmersion :
     @IsSeparated = MorphismProperty.diagonal @IsClosedImmersion := by
@@ -92,202 +83,196 @@ theorem isSeparated_eq_diagonal_isClosedImmersion :
   exact isSeparated_iff _
 
 /-- Monomorphisms are separated. -/
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Monomorphisms are separated.
+-/
 instance (priority := 900) isSeparated_of_mono [Mono f] : IsSeparated f where
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.RespectsIso @IsSeparated
-  body: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-中文:
-实例 :
-  签名: MorphismProperty.RespectsIso @是分离
-  定义体: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isSeparated_eq_diagonal_isClosedImmersion
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.RespectsIso @IsSeparated := by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
-
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) [IsSeparated f] : QuasiSeparated f where
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `stableUnderComposition` / 实例 `stableUnderComposition`
-
-English:
-instance stableUnderComposition
-  signature: : MorphismProperty.IsStableUnderComposition @IsSeparated
-  body: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-中文:
-实例 stableUnderComposition
-  签名: : MorphismProperty.是StableUnderComposition @是分离
-  定义体: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isSeparated_eq_diagonal_isClosedImmersion
+/-
+**AlgebraicGeometry.IsSeparated.stableUnderComposition** 是 Mathlib 中的一个实例，位于命名空间
+ `AlgebraicGeometry.IsSeparated`。
+形式化陈述：stableUnderComposition : MorphismProperty.IsStableUnderComposition @IsSepa
+rated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.IsSeparated.isSeparated_eq_diagonal_isClosedImmersion`
+：isSeparated_eq_diagonal_isClosedImmersion : @IsSeparated = MorphismProperty.dia
+gonal @IsClosedImmersion
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsMultiplicativeScheme`：Category
+Theory.MorphismProperty.IsMultiplicative @AlgebraicGeometry.IsClosedImmersion
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isStableUnderBaseChange`：CategoryThe
+ory.MorphismProperty.IsStableUnderBaseChange @AlgebraicGeometry.IsClosedImmersio
+n
 -/
 instance stableUnderComposition : MorphismProperty.IsStableUnderComposition @IsSeparated := by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSeparated
-  signature: f] [IsSeparated g] : IsSeparated (f ≫ g)
-  body: stableUnderComposition.comp_mem f g inferInstance inferInstance
-
-中文:
-实例 [是分离
-  签名: f] [是分离 g] : 是分离 (f ≫ g)
-  定义体: stableUnderComposition.comp_mem f g inferInstance inferInstance
-
-Depends on / 依赖: comp_mem, stableUnderComposition, stableUnderComposition.comp_mem
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsSeparated f] [IsSeparated g] : IsSeparated (f ≫ g) :=
   stableUnderComposition.comp_mem f g inferInstance inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsMultiplicative @IsSeparated
-  body: inferInstance
-
-中文:
-实例 :
-  签名: MorphismProperty.是Multiplicative @是分离
-  定义体: inferInstance
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsMultiplicative @IsSeparated where
   id_mem _ := inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isStableUnderBaseChange` / 实例 `isStableUnderBaseChange`
-
-English:
-instance isStableUnderBaseChange
-  signature: : MorphismProperty.IsStableUnderBaseChange @IsSeparated
-  body: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-中文:
-实例 isStableUnderBaseChange
-  签名: : MorphismProperty.是StableUnderBaseChange @是分离
-  定义体: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isSeparated_eq_diagonal_isClosedImmersion
+/-
+**AlgebraicGeometry.IsSeparated.isStableUnderBaseChange** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.IsSeparated`。
+形式化陈述：isStableUnderBaseChange : MorphismProperty.IsStableUnderBaseChange @IsSepa
+rated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.IsSeparated.isSeparated_eq_diagonal_isClosedImmersion`
+：isSeparated_eq_diagonal_isClosedImmersion : @IsSeparated = MorphismProperty.dia
+gonal @IsClosedImmersion
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderBaseChange.diagonal`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limi
+ts.HasPullbacks C]   {P : CategoryTheory.MorphismPrope…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isStableUnderBaseChange`：CategoryThe
+ory.MorphismProperty.IsStableUnderBaseChange @AlgebraicGeometry.IsClosedImmersio
+n
 -/
 instance isStableUnderBaseChange : MorphismProperty.IsStableUnderBaseChange @IsSeparated := by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZariskiLocalAtTarget @IsSeparated
-  body: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-中文:
-实例 :
-  签名: IsZariskiLocalAtTarget @是分离
-  定义体: by
-  rw [isSeparated_eq_diagonal_isClosedImmersion]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isSeparated_eq_diagonal_isClosedImmersion
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZariskiLocalAtTarget @IsSeparated := by
   rw [isSeparated_eq_diagonal_isClosedImmersion]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y S : Scheme} (f : X ⟶ S) (g : Y ⟶ S) [IsSeparated g] :
     IsSeparated (pullback.fst f g) :=
   MorphismProperty.pullback_fst f g inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y S : Scheme} (f : X ⟶ S) (g : Y ⟶ S) [IsSeparated f] :
     IsSeparated (pullback.snd f g) :=
   MorphismProperty.pullback_snd f g inferInstance
-
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (V : Y.Opens) [IsSeparated f] : IsSeparated (f ∣_ V) :=
   IsZariskiLocalAtTarget.restrict ‹_› V
-
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (U : X.Opens) (V : Y.Opens) (e) [IsSeparated f] :
     IsSeparated (f.resLE V U e) := by
   delta Scheme.Hom.resLE; infer_instance
-
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R S : CommRingCat.{u}) (f : R ⟶ S) : IsSeparated (Spec.map f) := by
   constructor
   let := f.hom.toAlgebra
   change IsClosedImmersion
     (Limits.pullback.diagonal (Spec.map (CommRingCat.ofHom (algebraMap R S))))
-  rw [diagonal_SpecMap]; rw [MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion]
-  exact .spec_of_surjective _ fun x => ⟨.tmul R 1 x,
+  rw [diagonal_SpecMap, MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion]
+  exact .spec_of_surjective _ fun x ↦ ⟨.tmul R 1 x,
     (Algebra.TensorProduct.lmul'_apply_tmul (R := R) (S := S) 1 x).trans (one_mul x)⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[instance 100]
-/--
-lemma `of_isAffineHom` / 引理 `of_isAffineHom`
-
-English:
-lemma of_isAffineHom
-  given: [h : IsAffineHom f]
-  statement: IsSeparated f
-  proof: by
-  wlog hY : IsAffine Y
-  · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsSeparated) _
-      (iSup_affineOpens_eq_top Y)]
-    intro U
-    have H : IsAffineHom (f ∣_ U) := IsZariskiLocalAtTarget.restrict h U
-    exact this _ U.2
-  have : IsAffine X := HasAffineProperty.iff_of_isAffine.mp h
-  rw [MorphismProperty.arrow_mk_iso_iff @IsSeparated (arrowIsoSpecΓOfIsAffine f)]
-  infer_instance
-
-中文:
-引理 of_isAffineHom
-  条件: [h : 是仿射态射 f]
-  结论: 是分离 f
-  证明: by
-  wlog hY : IsAffine Y
-  · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsSeparated) _
-      (iSup_affineOpens_eq_top Y)]
-    intro U
-    have H : IsAffineHom (f ∣_ U) := IsZariskiLocalAtTarget.restrict h U
-    exact this _ U.2
-  have : IsAffine X := HasAffineProperty.iff_of_isAffine.mp h
-  rw [MorphismProperty.arrow_mk_iso_iff @IsSeparated (arrowIsoSpecΓOfIsAffine f)]
-  infer_instance
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine.mp, IsAffine, IsAffineHom, IsSeparated, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, IsZariskiLocalAtTarget.restrict, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, arrow_mk_iso_iff, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, infer_instance, restrict
+/-
+**AlgebraicGeometry.IsSeparated.of_isAffineHom** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.IsSeparated`。
+形式化陈述：of_isAffineHom [h : IsAffineHom f] : IsSeparated f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.iff_of_isAffine`：∀ {P : CategoryTheo
+ry.MorphismProperty AlgebraicGeometry.Scheme} {Q : AlgebraicGeometry.AffineTarge
+tMorphismProperty}   [AlgebraicGeometry.H…
+· 使用定理 `AlgebraicGeometry.instHasAffinePropertyIsAffineHomIsAffine`：AlgebraicGeo
+metry.HasAffineProperty @AlgebraicGeometry.IsAffineHom fun X x x_1 x_2 => Algebr
+aicGeometry.IsAffine X
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `AlgebraicGeometry.IsSeparated.instRespectsIsoScheme`：CategoryTheory.Morp
+hismProperty.RespectsIso @AlgebraicGeometry.IsSeparated
+· 使用定理 `AlgebraicGeometry.IsSeparated.instMap`：∀ (R S : CommRingCat) (f : R ⟶ S)
+, AlgebraicGeometry.IsSeparated (AlgebraicGeometry.Spec.map f)
+· 使用定理 `AlgebraicGeometry.IsZariskiLocalAtTarget.iff_of_iSup_eq_top`：iff_of_iSup
+_eq_top {ι} (U : ι -> Y.Opens) (hU : iSup U = ⊤) : P f ↔ forall i, P (f ∣_ U i)
+· 使用定理 `AlgebraicGeometry.IsSeparated.instIsZariskiLocalAtTarget`：AlgebraicGeome
+try.IsZariskiLocalAtTarget @AlgebraicGeometry.IsSeparated
+· 使用定理 `AlgebraicGeometry.iSup_affineOpens_eq_top`：iSup_affineOpens_eq_top (X : 
+Scheme) : ⨆ i : X.affineOpens, (i : X.Opens) = ⊤
+· 使用定理 `AlgebraicGeometry.IsZariskiLocalAtTarget.restrict`：restrict (hf : P f) (
+U : Y.Opens) : P (f ∣_ U)
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.instIsZariskiLocalAtTarget`：∀ {P : C
+ategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} {Q : AlgebraicGeometry.
+AffineTargetMorphismProperty}   [AlgebraicGeometry.H…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma of_isAffineHom [h : IsAffineHom f] : IsSeparated f := by
   wlog hY : IsAffine Y
@@ -299,37 +284,27 @@ lemma of_isAffineHom [h : IsAffineHom f] : IsSeparated f := by
   have : IsAffine X := HasAffineProperty.iff_of_isAffine.mp h
   rw [MorphismProperty.arrow_mk_iso_iff @IsSeparated (arrowIsoSpecΓOfIsAffine f)]
   infer_instance
-
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S T : Scheme.{u}} (f : X ⟶ S) (g : Y ⟶ S) (i : S ⟶ T) [IsSeparated i] :
     IsClosedImmersion (pullback.mapDesc f g i) :=
   MorphismProperty.of_isPullback (pullback_map_diagonal_isPullback f g i)
     inferInstance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Given `f : X ⟶ Y` and `g : Y ⟶ Z` such that `g` is separated, the induced map
+`X ⟶ X ×[Z] Y` is a closed immersion. -/
+/-
+**AlgebraicGeometry.IsSeparated.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Is
+Separated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [IsSeparated
-  signature: g] :
-  body: by
-  rw [← MorphismProperty.cancel_left_of_respectsIso @IsClosedImmersion (pullback.fst f (𝟙 Y))]
-  rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
-    (pullback.congrHom rfl (Category.id_comp g)).inv]
-  convert (inferInstance : IsClosedImmersion (pullback.mapDesc f (𝟙 _) g))
-  ext : 1 <;> simp [pullback.condition]
-
-中文:
-实例 [是分离
-  签名: g] :
-  定义体: by
-  rw [← MorphismProperty.cancel_left_of_respectsIso @IsClosedImmersion (pullback.fst f (𝟙 Y))]
-  rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
-    (pullback.congrHom rfl (Category.id_comp g)).inv]
-  convert (inferInstance : IsClosedImmersion (pullback.mapDesc f (𝟙 _) g))
-  ext : 1 <;> simp [pullback.condition]
-
-Depends on / 依赖: Category, Category.id_comp, IsClosedImmersion, MorphismProperty, MorphismProperty.cancel_left_of_respectsIso, MorphismProperty.cancel_right_of_respectsIso, cancel_left_of_respectsIso, cancel_right_of_respectsIso, condition, congrHom, convert, id_comp, mapDesc, pullback, pullback.condition, pullback.congrHom, pullback.fst, pullback.mapDesc
+--- 原说明 ---
+Given `f : X ⟶ Y` and `g : Y ⟶ Z` such that `g` is separated, the induced map
+`X ⟶ X ×[Z] Y` is a closed immersion.
 -/
 instance [IsSeparated g] :
     IsClosedImmersion (pullback.lift (𝟙 _) f (Category.id_comp (f ≫ g))) := by
@@ -345,66 +320,70 @@ section of_injective
 
 open Scheme Pullback
 
-variable (𝒰 : Y.OpenCover) (𝒱 : forall i, (pullback f (𝒰.f i)).OpenCover)
+variable (𝒰 : Y.OpenCover) (𝒱 : ∀ i, (pullback f (𝒰.f i)).OpenCover)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective` / 引理 `Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective`
-
-English:
-lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
-  proof: by
-  rw [← top_le_iff]
-  rintro x -
-  simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
-    openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.mem_mk,
-    Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  have H : pullback.fst f f x = pullback.snd f f x :=
-    hf (by rw [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply, pullback.condition])
-  let i := 𝒰.idx (f (pullback.fst f f x))
-  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f _⟩ :=
-    𝒰.covers (f (pullback.fst f f x))
-  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
-  let j := (𝒱 i).idx z
-  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
-  refine ⟨i, j, ?_⟩
-  simp_rw [diagonalCover_map]
-  change x in Set.range _
-  simp only [diagonalCover, openCoverOfBase_I₀,
-    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
-    Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
-    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X]
-  rw [range_map]
-  simp [← H, ← hz₁, ← hy]
-
-中文:
-引理 概形.拉回.diagonalCoverDiagonalRange_eq_top_of_injective
-  证明: by
-  rw [← top_le_iff]
-  rintro x -
-  simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
-    openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.mem_mk,
-    Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  have H : pullback.fst f f x = pullback.snd f f x :=
-    hf (by rw [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply, pullback.condition])
-  let i := 𝒰.idx (f (pullback.fst f f x))
-  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f _⟩ :=
-    𝒰.covers (f (pullback.fst f f x))
-  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
-  let j := (𝒱 i).idx z
-  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
-  refine ⟨i, j, ?_⟩
-  simp_rw [diagonalCover_map]
-  change x in Set.range _
-  simp only [diagonalCover, openCoverOfBase_I₀,
-    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
-    Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
-    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X]
-  rw [range_map]
-  simp [← H, ← hz₁, ← hy]
-
-Depends on / 依赖: Hom.coe_opensRange, Opens.carrier_eq_coe, Opens.iSup_mk, Opens.mem_mk, Scheme, Scheme.Hom.comp_apply, Set.mem_iUnion, Set.mem_range, Sigma.exists, carrier_eq_coe, coe_opensRange, comp_apply, condition, covers, diagonalCoverDiagonalRange, iSup_mk, mem_iUnion, mem_mk, mem_range, openCoverOfBase_X
+/-
+**AlgebraicGeometry.Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injecti
+ve** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.Scheme.Pullback`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (𝒰 : Y.OpenCover)   (𝒱 : (i
+ : 𝒰.I₀) → (CategoryTheory.Limits.pullback f (𝒰.f i)).OpenCover),   Function.Inj
+ective ⇑f → AlgebraicGeometry.Scheme.Pullback.diagonalCoverDiagonalRange f 𝒰 𝒱 =
+ ⊤
+参数：f : X ⟶ Y；𝒰 : Y.OpenCover；𝒱 : (i : 𝒰.I₀) → (CategoryTheory.Limits.pullback f 
+(𝒰.f i)).OpenCover。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.covers`：∀ {K : CategoryTheory.Precoverage
+ AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [inst : AlgebraicGeo
+metry.Scheme.JointlySurject…
+· 使用引理 `AlgebraicGeometry.Scheme.Pullback.exists_preimage_pullback`：exists_preim
+age_pullback (x : X) (y : Y) (h : f x = g y) : exists z : ↑(pullback f g), pullb
+ack.fst f g z = x ∧ pullback.snd f g z = y
+· 使用引理 `AlgebraicGeometry.Scheme.Pullback.diagonalCover_map`：diagonalCover_map (
+I) : (diagonalCover f 𝒰 𝒱).f I = pullback.map _ _ _ _ ((𝒱 I.fst).f _ ≫ pullback.
+fst _ _) ((𝒱 I.fst).f _ ≫ pullback.fst _ …
+· 使用引理 `AlgebraicGeometry.Scheme.Pullback.range_map`：range_map {X' Y' S' : Schem
+e.{u}} (f' : X' ⟶ S') (g' : Y' ⟶ S') (i₁ : X ⟶ X') (i₂ : Y ⟶ Y') (i₃ : S ⟶ S') (
+e₁ : f ≫ i₃ = i₁ ≫ f') (e₂ : g ≫ …
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
     (hf : Function.Injective f) :
@@ -424,7 +403,7 @@ lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
   obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
   refine ⟨i, j, ?_⟩
   simp_rw [diagonalCover_map]
-  change x in Set.range _
+  change x ∈ Set.range _
   simp only [diagonalCover, openCoverOfBase_I₀,
     Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
     Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
@@ -434,61 +413,83 @@ lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange` / 引理 `Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange`
-
-English:
-lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange
-  proof: by
-  rintro _ ⟨x, rfl⟩
-  simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
-    openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.coe_mk,
-    Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  let i := 𝒰.idx (f x)
-  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f x⟩ := 𝒰.covers (f x)
-  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
-  let j := (𝒱 i).idx z
-  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
-  refine ⟨i, j, pullback.diagonal ((𝒱 i).f j ≫ pullback.snd f (𝒰.f i)) w, ?_⟩
-  rw [← hz₁]; rw [← hy]; rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
-  simp only [diagonalCover, openCoverOfBase_I₀,
-    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
-    Cover.pullbackHom, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
-    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X,
-    PreZeroHypercover.bind_f, openCoverOfLeftRight_f, openCoverOfBase_f, Hom.comp_base,
-    TopCat.hom_comp, ContinuousMap.comp_apply, ContinuousMap.comp_assoc]
-  simp_rw [← Scheme.Hom.comp_apply]
-  congr 5
-  apply pullback.hom_ext <;> simp
-
-中文:
-引理 概形.拉回.range_diagonal_subset_diagonalCoverDiagonalRange
-  证明: by
-  rintro _ ⟨x, rfl⟩
-  simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
-    openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.coe_mk,
-    Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  let i := 𝒰.idx (f x)
-  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f x⟩ := 𝒰.covers (f x)
-  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
-  let j := (𝒱 i).idx z
-  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
-  refine ⟨i, j, pullback.diagonal ((𝒱 i).f j ≫ pullback.snd f (𝒰.f i)) w, ?_⟩
-  rw [← hz₁]; rw [← hy]; rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
-  simp only [diagonalCover, openCoverOfBase_I₀,
-    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
-    Cover.pullbackHom, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
-    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X,
-    PreZeroHypercover.bind_f, openCoverOfLeftRight_f, openCoverOfBase_f, Hom.comp_base,
-    TopCat.hom_comp, ContinuousMap.comp_apply, ContinuousMap.comp_assoc]
-  simp_rw [← Scheme.Hom.comp_apply]
-  congr 5
-  apply pullback.hom_ext <;> simp
-
-Depends on / 依赖: Hom.coe_opensRange, Opens.carrier_eq_coe, Opens.coe_mk, Opens.iSup_mk, Set.mem_iUnion, Set.mem_range, Sigma.exists, carrier_eq_coe, coe_mk, coe_opensRange, covers, diagonal, diagonalCoverDiagonalRange, exists_preimage_pullback, hy.symm, iSup_mk, mem_iUnion, mem_range, openCoverOfBase_X, pullback
+/-
+**AlgebraicGeometry.Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalR
+ange** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.Scheme.Pullback`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (𝒰 : Y.OpenCover)   (𝒱 : (i
+ : 𝒰.I₀) → (CategoryTheory.Limits.pullback f (𝒰.f i)).OpenCover),   Set.range ⇑(
+CategoryTheory.Limits.pullback.diagonal f) ⊆     ↑(AlgebraicGeometry.Scheme.Pull
+back.diagonalCoverDiagonalRange f 𝒰 𝒱)
+参数：f : X ⟶ Y；𝒰 : Y.OpenCover；𝒱 : (i : 𝒰.I₀) → (CategoryTheory.Limits.pullback f 
+(𝒰.f i)).OpenCover；CategoryTheory.Limits.pullback.diagonal f；AlgebraicGeometry.S
+cheme.Pullback.diagonalCoverDiagonalRange f 𝒰 𝒱。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.covers`：∀ {K : CategoryTheory.Precoverage
+ AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [inst : AlgebraicGeo
+metry.Scheme.JointlySurject…
+· 使用引理 `AlgebraicGeometry.Scheme.Pullback.exists_preimage_pullback`：exists_preim
+age_pullback (x : X) (y : Y) (h : f x = g y) : exists z : ↑(pullback f g), pullb
+ack.fst f g z = x ∧ pullback.snd f g z = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_fst_assoc`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : Cate
+goryTheory.Limits.HasPullback f f] {Z :…
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_fst`：diagonal_fst : diagonal f ≫
+ pullback.fst _ _ = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_snd_assoc`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : Cate
+goryTheory.Limits.HasPullback f f] {Z :…
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_snd`：diagonal_snd : diagonal f ≫
+ pullback.snd _ _ = 𝟙 _
 -/
 lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange :
-    Set.range (pullback.diagonal f) subseteq diagonalCoverDiagonalRange f 𝒰 𝒱 := by
+    Set.range (pullback.diagonal f) ⊆ diagonalCoverDiagonalRange f 𝒰 𝒱 := by
   rintro _ ⟨x, rfl⟩
   simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
     openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.coe_mk,
@@ -499,7 +500,7 @@ lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange :
   let j := (𝒱 i).idx z
   obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
   refine ⟨i, j, pullback.diagonal ((𝒱 i).f j ≫ pullback.snd f (𝒰.f i)) w, ?_⟩
-  rw [← hz₁]; rw [← hy]; rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
+  rw [← hz₁, ← hy, ← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply]
   simp only [diagonalCover, openCoverOfBase_I₀,
     Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
     Cover.pullbackHom, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
@@ -511,189 +512,237 @@ lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange :
   apply pullback.hom_ext <;> simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange` / 引理 `isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange`
-
-English:
-lemma isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
-  proof: by
-  let U : (Σ i, (𝒱 i).I₀) -> (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i =>
-    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ⁻¹ᵁ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange
-  have hU (i) : (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ''ᵁ U i =
-      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange := by
-    rw [Scheme.Hom.image_preimage_eq_opensRange_inf]; rw [inf_eq_right]; rw [Opens.opensRange_ι]
-    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ => ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
-  have hf : iSup U = ⊤ := (TopologicalSpace.Opens.map_iSup _ _).symm.trans
-    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι_preimage_self
-  rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsClosedImmersion) _ hf]
-  intro i
-  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _)]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i))]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
-  infer_instance
-
-@[stacks 0DVA]
-
-中文:
-引理 isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
-  证明: by
-  let U : (Σ i, (𝒱 i).I₀) -> (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i =>
-    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ⁻¹ᵁ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange
-  have hU (i) : (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ''ᵁ U i =
-      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange := by
-    rw [Scheme.Hom.image_preimage_eq_opensRange_inf]; rw [inf_eq_right]; rw [Opens.opensRange_ι]
-    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ => ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
-  have hf : iSup U = ⊤ := (TopologicalSpace.Opens.map_iSup _ _).symm.trans
-    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι_preimage_self
-  rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsClosedImmersion) _ hf]
-  intro i
-  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _)]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i))]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
-  infer_instance
-
-@[stacks 0DVA]
-
-Depends on / 依赖: Opens.opensRange_, Scheme, Scheme.Hom.image_preimage_eq_opensRange_inf, diagonalCover, diagonalCoverDiagonalRange, image_preimage_eq_opensRange_inf, inf_eq_right, le_iSup, opensRange, toScheme, toScheme.Opens
+/-
+**AlgebraicGeometry.isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRan
+ge** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange [forall i, 
+IsAffine (𝒰.X i)] [forall i j, IsAffine ((𝒱 i).X j)] : IsClosedImmersion (pullba
+ck.diagonal f ∣_ diagonalCoverDiagonalRange f 𝒰 𝒱)
+参数：𝒰.X i；(𝒱 i).X j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`：image_pre
+image_eq_opensRange_inf (U : Y.Opens) : f ''ᵁ f ⁻¹ᵁ U = f.opensRange ⊓ U
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.opensRange_ι`：opensRange_ι : U.ι.opensRan
+ge = U
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.map_iSup`：map_iSup (f : X ⟶ Y) {ι : Type*} (U : ι
+ -> Opens Y) : (map f).obj (iSup U) = iSup ((map f).obj ∘ U)
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.ι_preimage_self`：ι_preimage_self : U.ι ⁻¹
+ᵁ U = ⊤
+· 使用定理 `AlgebraicGeometry.IsZariskiLocalAtTarget.iff_of_iSup_eq_top`：iff_of_iSup
+_eq_top {ι} (U : ι -> Y.Opens) (hU : iSup U = ⊤) : P f ↔ forall i, P (f ∣_ U i)
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isZariskiLocalAtTarget`：AlgebraicGeo
+metry.IsZariskiLocalAtTarget @AlgebraicGeometry.IsClosedImmersion
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `AlgebraicGeometry.IsSeparated.diagonal_isClosedImmersion`：∀ {X Y : Algeb
+raicGeometry.Scheme} {f : X ⟶ Y} [self : AlgebraicGeometry.IsSeparated f],   Alg
+ebraicGeometry.IsClosedImmersion (CategoryTheo…
+· 使用引理 `AlgebraicGeometry.IsSeparated.of_isAffineHom`：of_isAffineHom [h : IsAffi
+neHom f] : IsSeparated f
+· 使用定理 `AlgebraicGeometry.isAffineHom_of_isAffine`：∀ {X Y : AlgebraicGeometry.Sc
+heme} (f : X ⟶ Y) [AlgebraicGeometry.IsAffine X] [AlgebraicGeometry.IsAffine Y],
+   AlgebraicGeometry.IsAffineHo…
 -/
 lemma isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
-    [forall i, IsAffine (𝒰.X i)] [forall i j, IsAffine ((𝒱 i).X j)] :
+    [∀ i, IsAffine (𝒰.X i)] [∀ i j, IsAffine ((𝒱 i).X j)] :
     IsClosedImmersion (pullback.diagonal f ∣_ diagonalCoverDiagonalRange f 𝒰 𝒱) := by
-  let U : (Σ i, (𝒱 i).I₀) -> (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i =>
+  let U : (Σ i, (𝒱 i).I₀) → (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i ↦
     (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ⁻¹ᵁ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange
   have hU (i) : (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ''ᵁ U i =
       ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange := by
-    rw [Scheme.Hom.image_preimage_eq_opensRange_inf]; rw [inf_eq_right]; rw [Opens.opensRange_ι]
-    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ => ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
+    rw [Scheme.Hom.image_preimage_eq_opensRange_inf, inf_eq_right, Opens.opensRange_ι]
+    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ ↦ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
   have hf : iSup U = ⊤ := (TopologicalSpace.Opens.map_iSup _ _).symm.trans
     (diagonalCoverDiagonalRange f 𝒰 𝒱).ι_preimage_self
   rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsClosedImmersion) _ hf]
   intro i
-  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _)]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i))]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
+  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _),
+    MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i)),
+    MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
   infer_instance
 
 @[stacks 0DVA]
-/--
-lemma `isSeparated_of_injective` / 引理 `isSeparated_of_injective`
-
-English:
-lemma isSeparated_of_injective
-  given: (hf : Function.Injective f)
-  proof: by
-  constructor
-  let 𝒰 := Y.affineCover
-  let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
-  refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} => ⊤) (by simp) fun _ => ?_
-  rw [← diagonalCoverDiagonalRange_eq_top_of_injective f 𝒰 𝒱 hf]
-  exact isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange f 𝒰 𝒱
-
-中文:
-引理 isSeparated_of_injective
-  条件: (hf : 函数.单射 f)
-  证明: by
-  constructor
-  let 𝒰 := Y.affineCover
-  let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
-  refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} => ⊤) (by simp) fun _ => ?_
-  rw [← diagonalCoverDiagonalRange_eq_top_of_injective f 𝒰 𝒱 hf]
-  exact isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange f 𝒰 𝒱
-
-Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.of_iSup_eq_top, Y.affineCover, affineCover, diagonalCoverDiagonalRange_eq_top_of_injective, isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange, of_iSup_eq_top, pullback
+/-
+**AlgebraicGeometry.isSeparated_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：isSeparated_of_injective (hf : Function.Injective f) : IsSeparated f
+参数：hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用引理 `AlgebraicGeometry.IsZariskiLocalAtTarget.of_iSup_eq_top`：of_iSup_eq_top 
+{ι} (U : ι -> Y.Opens) (hU : iSup U = ⊤) (H : forall i, P (f ∣_ U i)) : P f
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isZariskiLocalAtTarget`：AlgebraicGeo
+metry.IsZariskiLocalAtTarget @AlgebraicGeometry.IsClosedImmersion
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ciSup_unique`：ciSup_unique [Unique ι] {s : ι -> α} : ⨆ i, s i = s defaul
+t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_i
+njective`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (𝒰 : Y.OpenCover)   (𝒱 
+: (i : 𝒰.I₀) → (CategoryTheory.Limits.pullback f (𝒰.f i)).OpenCover), …
+· 使用引理 `AlgebraicGeometry.isClosedImmersion_diagonal_restrict_diagonalCoverDiago
+nalRange`：isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange [forall
+ i, IsAffine (𝒰.X i)] [forall i j, IsAffine ((𝒱 i).X j)] : IsClosedImm…
+· 使用定理 `AlgebraicGeometry.Scheme.isAffine_affineCover`：∀ (X : AlgebraicGeometry.
+Scheme) (i : X.affineCover.I₀), AlgebraicGeometry.IsAffine (X.affineCover.X i)
 -/
 lemma isSeparated_of_injective (hf : Function.Injective f) :
     IsSeparated f := by
   constructor
   let 𝒰 := Y.affineCover
   let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
-  refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} => ⊤) (by simp) fun _ => ?_
+  refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} ↦ ⊤) (by simp) fun _ ↦ ?_
   rw [← diagonalCoverDiagonalRange_eq_top_of_injective f 𝒰 𝒱 hf]
   exact isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange f 𝒰 𝒱
 
 end of_injective
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.HasOfPostcompProperty @IsClosedImmersion @IsSeparated
-  body: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsClosedImmersion _)
-
-中文:
-实例 :
-  签名: MorphismProperty.有OfPostcompProperty @是闭浸入 @是分离
-  定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsClosedImmersion _)
-
-Depends on / 依赖: IsClosedImmersion, MorphismProperty, MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr, hasOfPostcompProperty_iff_le_diagonal
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.HasOfPostcompProperty @IsClosedImmersion @IsSeparated :=
   MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsClosedImmersion _)
-
-/--
-lemma `IsClosedImmersion.of_comp` / 引理 `IsClosedImmersion.of_comp`
-
-English:
-lemma IsClosedImmersion.of_comp
-  given: [IsClosedImmersion (f ≫ g)] [IsSeparated g]
-  proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-中文:
-引理 是闭浸入.of_comp
-  条件: [是闭浸入 (f ≫ g)] [是分离 g]
-  证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
+    fun _ _ _ _ ↦ inferInstanceAs (IsClosedImmersion _)
+/-
+**AlgebraicGeometry.IsClosedImmersion.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.IsClosedImmersion`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicG
+eometry.IsClosedImmersion (CategoryTheory.CategoryStruct.comp f g)] [AlgebraicGe
+ometry.IsSeparated g],   AlgebraicGeometry.IsClosedImmersion f
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.of_postcomp`：of_postcomp [W.HasOfPostcom
+pProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g) (hfg : W (f ≫ g)) 
+: W f
+· 使用定理 `AlgebraicGeometry.instHasOfPostcompPropertySchemeIsClosedImmersionIsSepa
+rated`：CategoryTheory.MorphismProperty.HasOfPostcompProperty @AlgebraicGeometry.
+IsClosedImmersion   @AlgebraicGeometry.IsSeparated
 -/
 lemma IsClosedImmersion.of_comp [IsClosedImmersion (f ≫ g)] [IsSeparated g] :
     IsClosedImmersion f := MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 variable {f g} in
-/--
-lemma `IsClosedImmersion.comp_iff` / 引理 `IsClosedImmersion.comp_iff`
-
-English:
-lemma IsClosedImmersion.comp_iff
-  given: [IsClosedImmersion g]
-  proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-中文:
-引理 是闭浸入.comp_iff
-  条件: [是闭浸入 g]
-  证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-Depends on / 依赖: of_comp
+/-
+**AlgebraicGeometry.IsClosedImmersion.comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.IsClosedImmersion`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} {f : X ⟶ Y} {g : Y ⟶ Z} [AlgebraicGeo
+metry.IsClosedImmersion g],   AlgebraicGeometry.IsClosedImmersion (CategoryTheor
+y.CategoryStruct.comp f g) ↔ AlgebraicGeometry.IsClosedImmersion f
+参数：CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.of_comp`：∀ {X Y Z : AlgebraicGeometr
+y.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicGeometry.IsClosedImmersion (Catego
+ryTheory.CategoryStruct.comp f g)…
+· 使用定理 `AlgebraicGeometry.IsSeparated.isSeparated_of_mono`：∀ {X Y : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Y) [CategoryTheory.Mono f], AlgebraicGeometry.IsSeparated
+ f
+· 使用定理 `AlgebraicGeometry.IsPreimmersion.instMonoScheme`：∀ {X Y : AlgebraicGeome
+try.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsPreimmersion f], CategoryTheory.Mon
+o f
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsPreimmersion`：∀ {X Y : Algebra
+icGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f],   Algebr
+aicGeometry.IsPreimmersion f
 -/
 lemma IsClosedImmersion.comp_iff [IsClosedImmersion g] :
     IsClosedImmersion (f ≫ g) ↔ IsClosedImmersion f :=
-  ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-instance {I J : X.IdealSheafData} (h : I <= J) : IsClosedImmersion (I.inclusion h) := by
+  ⟨fun _ ↦ .of_comp f g, fun _ ↦ inferInstance⟩
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {I J : X.IdealSheafData} (h : I ≤ J) : IsClosedImmersion (I.inclusion h) := by
   have : IsClosedImmersion (I.inclusion h ≫ I.subschemeι) := by
     simp only [Scheme.IdealSheafData.inclusion_subschemeι]
     infer_instance
   exact .of_comp _ I.subschemeι
-
-/--
-lemma `IsSeparated.of_comp` / 引理 `IsSeparated.of_comp`
-
-English:
-lemma IsSeparated.of_comp
-  given: [IsSeparated (f ≫ g)]
-  statement: IsSeparated f
-  proof: by
-  have : IsClosedImmersion (pullback.diagonal (f ≫ g)) := inferInstance
-  rw [pullback.diagonal_comp] at this
-  exact ⟨@IsClosedImmersion.of_comp _ _ _ _ _ this inferInstance⟩
-
-中文:
-引理 是分离.of_comp
-  条件: [是分离 (f ≫ g)]
-  结论: 是分离 f
-  证明: by
-  have : IsClosedImmersion (pullback.diagonal (f ≫ g)) := inferInstance
-  rw [pullback.diagonal_comp] at this
-  exact ⟨@IsClosedImmersion.of_comp _ _ _ _ _ this inferInstance⟩
-
-Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.of_comp, diagonal, diagonal_comp, of_comp, pullback, pullback.diagonal, pullback.diagonal_comp
+/-
+**AlgebraicGeometry.IsSeparated.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.IsSeparated`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicG
+eometry.IsSeparated (CategoryTheory.CategoryStruct.comp f g)], AlgebraicGeometry
+.IsSeparated f
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.IsSeparated.diagonal_isClosedImmersion`：∀ {X Y : Algeb
+raicGeometry.Scheme} {f : X ⟶ Y} [self : AlgebraicGeometry.IsSeparated f],   Alg
+ebraicGeometry.IsClosedImmersion (CategoryTheo…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.of_comp`：∀ {X Y Z : AlgebraicGeometr
+y.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicGeometry.IsClosedImmersion (Catego
+ryTheory.CategoryStruct.comp f g)…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `CategoryTheory.IsPullback.instHasPullbackFst`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_
+1 : CategoryTheory.Limits.HasPullb…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_comp`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] {X Y Z : C}   [inst_1 : CategoryTheory.Limi
+ts.HasPullbacks C] (f : X ⟶ Y) (g …
+· 使用定理 `AlgebraicGeometry.IsSeparated.instCompScheme`：∀ {X Y Z : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsSeparated f]   [Algebrai
+cGeometry.IsSeparated g], Algebrai…
+· 使用定理 `AlgebraicGeometry.IsSeparated.isSeparated_of_mono`：∀ {X Y : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Y) [CategoryTheory.Mono f], AlgebraicGeometry.IsSeparated
+ f
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `AlgebraicGeometry.IsSeparated.instSndScheme`：∀ {X Y S : AlgebraicGeometr
+y.Scheme} (f : X ⟶ S) (g : Y ⟶ S) [AlgebraicGeometry.IsSeparated f],   Algebraic
+Geometry.IsSeparated (CategoryThe…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.Limits.pullback.instIsSplitMonoDiagonal`：∀ {C : Type u_1}
+ [inst : CategoryTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y)   [inst_1 :
+ CategoryTheory.Limits.HasPullback f f],   C…
 -/
 lemma IsSeparated.of_comp [IsSeparated (f ≫ g)] : IsSeparated f := by
   have : IsClosedImmersion (pullback.diagonal (f ≫ g)) := inferInstance
@@ -701,132 +750,81 @@ lemma IsSeparated.of_comp [IsSeparated (f ≫ g)] : IsSeparated f := by
   exact ⟨@IsClosedImmersion.of_comp _ _ _ _ _ this inferInstance⟩
 
 variable {f g} in
-/--
-lemma `IsSeparated.comp_iff` / 引理 `IsSeparated.comp_iff`
-
-English:
-lemma IsSeparated.comp_iff
-  given: [IsSeparated g]
-  statement: IsSeparated (f ≫ g) ↔ IsSeparated f
-  proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-中文:
-引理 是分离.comp_iff
-  条件: [是分离 g]
-  结论: 是分离 (f ≫ g) ↔ 是分离 f
-  证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-Depends on / 依赖: of_comp
+/-
+**AlgebraicGeometry.IsSeparated.comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.IsSeparated`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} {f : X ⟶ Y} {g : Y ⟶ Z} [AlgebraicGeo
+metry.IsSeparated g],   AlgebraicGeometry.IsSeparated (CategoryTheory.CategorySt
+ruct.comp f g) ↔ AlgebraicGeometry.IsSeparated f
+参数：CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsSeparated.of_comp`：∀ {X Y Z : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicGeometry.IsSeparated (CategoryTheory.Cat
+egoryStruct.comp f g)], Alg…
+· 使用定理 `AlgebraicGeometry.IsSeparated.instCompScheme`：∀ {X Y Z : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsSeparated f]   [Algebrai
+cGeometry.IsSeparated g], Algebrai…
 -/
 lemma IsSeparated.comp_iff [IsSeparated g] : IsSeparated (f ≫ g) ↔ IsSeparated f :=
-  ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.HasOfPostcompProperty @IsSeparated ⊤
-  body: .of_comp f g
-
-中文:
-实例 :
-  签名: MorphismProperty.有OfPostcompProperty @是分离 ⊤
-  定义体: .of_comp f g
-
-Depends on / 依赖: of_comp
+  ⟨fun _ ↦ .of_comp f g, fun _ ↦ inferInstance⟩
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.HasOfPostcompProperty @IsSeparated ⊤ where
   of_postcomp f g _ _ := .of_comp f g
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.HasOfPostcompProperty @IsAffineHom @IsSeparated
-  body: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsAffineHom _)
-
-中文:
-实例 :
-  签名: MorphismProperty.有OfPostcompProperty @是仿射态射 @是分离
-  定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsAffineHom _)
-
-Depends on / 依赖: IsAffineHom, MorphismProperty, MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr, hasOfPostcompProperty_iff_le_diagonal
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.HasOfPostcompProperty @IsAffineHom @IsSeparated :=
   MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
-    fun _ _ _ _ => inferInstanceAs (IsAffineHom _)
-
-/--
-lemma `IsAffineHom.of_comp` / 引理 `IsAffineHom.of_comp`
-
-English:
-lemma IsAffineHom.of_comp
-  given: [IsAffineHom (f ≫ g)] [IsSeparated g]
-  proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-中文:
-引理 是仿射态射.of_comp
-  条件: [是仿射态射 (f ≫ g)] [是分离 g]
-  证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
+    fun _ _ _ _ ↦ inferInstanceAs (IsAffineHom _)
+/-
+**AlgebraicGeometry.IsAffineHom.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.IsAffineHom`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicG
+eometry.IsAffineHom (CategoryTheory.CategoryStruct.comp f g)] [AlgebraicGeometry
+.IsSeparated g],   AlgebraicGeometry.IsAffineHom f
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.of_postcomp`：of_postcomp [W.HasOfPostcom
+pProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g) (hfg : W (f ≫ g)) 
+: W f
+· 使用定理 `AlgebraicGeometry.instHasOfPostcompPropertySchemeIsAffineHomIsSeparated`
+：CategoryTheory.MorphismProperty.HasOfPostcompProperty @AlgebraicGeometry.IsAffi
+neHom @AlgebraicGeometry.IsSeparated
 -/
 lemma IsAffineHom.of_comp [IsAffineHom (f ≫ g)] [IsSeparated g] :
     IsAffineHom f := MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 variable {f g} in
-/--
-lemma `IsAffineHom.comp_iff` / 引理 `IsAffineHom.comp_iff`
-
-English:
-lemma IsAffineHom.comp_iff
-  given: [IsAffineHom g]
-  statement: IsAffineHom (f ≫ g) ↔ IsAffineHom f
-  proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-中文:
-引理 是仿射态射.comp_iff
-  条件: [是仿射态射 g]
-  结论: 是仿射态射 (f ≫ g) ↔ 是仿射态射 f
-  证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
-
-Depends on / 依赖: of_comp
+/-
+**AlgebraicGeometry.IsAffineHom.comp_iff** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.IsAffineHom`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} {f : X ⟶ Y} {g : Y ⟶ Z} [AlgebraicGeo
+metry.IsAffineHom g],   AlgebraicGeometry.IsAffineHom (CategoryTheory.CategorySt
+ruct.comp f g) ↔ AlgebraicGeometry.IsAffineHom f
+参数：CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsAffineHom.of_comp`：∀ {X Y Z : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y) (g : Y ⟶ Z)   [AlgebraicGeometry.IsAffineHom (CategoryTheory.Cat
+egoryStruct.comp f g)] [Alg…
+· 使用引理 `AlgebraicGeometry.IsSeparated.of_isAffineHom`：of_isAffineHom [h : IsAffi
+neHom f] : IsSeparated f
+· 使用定理 `AlgebraicGeometry.instIsAffineHomCompScheme`：∀ {X Y Z : AlgebraicGeometr
+y.Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsAffineHom f]   [Algebraic
+Geometry.IsAffineHom g], Algebrai…
 -/
 lemma IsAffineHom.comp_iff [IsAffineHom g] : IsAffineHom (f ≫ g) ↔ IsAffineHom f :=
-  ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
+  ⟨fun _ ↦ .of_comp f g, fun _ ↦ inferInstance⟩
 
 set_option backward.isDefEq.respectTransparency false in
 @[stacks 01KM]
-/--
-Instance `isClosedImmersion_equalizer_ι_left` / 实例 `isClosedImmersion_equalizer_ι_left`
-
-English:
-instance isClosedImmersion_equalizer_ι_left
-  signature: {S : Scheme} {X Y : Over S} [IsSeparated Y.hom]
-  body: by
-  refine MorphismProperty.of_isPullback
-    ((Limits.isPullback_equalizer_prod f g).map (Over.forget _)).flip ?_
-  rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
-    (Over.prodLeftIsoPullback Y Y).hom]
-  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom))
-  ext1 <;> simp [← Over.comp_left]
-
-中文:
-实例 isClosedImmersion_equalizer_ι_left
-  签名: {S : 概形} {X Y : Over S} [是分离 Y.hom]
-  定义体: by
-  refine MorphismProperty.of_isPullback
-    ((Limits.isPullback_equalizer_prod f g).map (Over.forget _)).flip ?_
-  rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
-    (Over.prodLeftIsoPullback Y Y).hom]
-  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom))
-  ext1 <;> simp [← Over.comp_left]
-
-Depends on / 依赖: IsClosedImmersion, Limits, Limits.isPullback_equalizer_prod, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, MorphismProperty.of_isPullback, Over.comp_left, Over.forget, Over.prodLeftIsoPullback, Y.hom, cancel_right_of_respectsIso, comp_left, convert, diagonal, forget, isPullback_equalizer_prod, of_isPullback, prodLeftIsoPullback, pullback, pullback.diagonal
+/-
+**AlgebraicGeometry.isClosedImmersion_equalizer_** 是 Mathlib 中的一个实例，位于命名空间 `Alge
+braicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isClosedImmersion_equalizer_ι_left {S : Scheme} {X Y : Over S} [IsSeparated Y.hom]
     (f g : X ⟶ Y) : IsClosedImmersion (equalizer.ι f g).left := by
@@ -839,51 +837,71 @@ instance isClosedImmersion_equalizer_ι_left {S : Scheme} {X Y : Over S} [IsSepa
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-lemma `ext_of_isDominant_of_isSeparated` / 引理 `ext_of_isDominant_of_isSeparated`
+Suppose `X` is a reduced scheme and that `f g : X ⟶ Y` agree over some separated `Y ⟶ Z`.
+Then `f = g` if `ι ≫ f = ι ≫ g` for some dominant `ι`.
+-/
+/-
+**AlgebraicGeometry.ext_of_isDominant_of_isSeparated** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry`。
+形式化陈述：ext_of_isDominant_of_isSeparated [IsReduced X] {f g : X ⟶ Y} (s : Y ⟶ Z) [
+IsSeparated s] (h : f ≫ s = g ≫ s) (ι : W ⟶ X) [IsDominant ι] (hU : ι ≫ f = ι ≫ 
+g) : f = g
+参数：s : Y ⟶ Z；h : f ≫ s = g ≫ s；ι : W ⟶ X；hU : ι ≫ f = ι ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Over.instHasEqualizers`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {B : C} [CategoryTheory.Limits.HasEqualizers C],   Categ
+oryTheory.Limits.HasEqualiz…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
+· 使用定理 `AlgebraicGeometry.instHasFiniteLimitsScheme`：CategoryTheory.Limits.HasFi
+niteLimits AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.IsDominant.of_comp`：∀ {X Y Z : AlgebraicGeometry.Schem
+e} (f : X ⟶ Y) (g : Y ⟶ Z)   [H : AlgebraicGeometry.IsDominant (CategoryTheory.C
+ategoryStruct.comp f g)], …
+· 使用定理 `CategoryTheory.Over.OverMorphism.ext`：∀ {T : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} T] {X : T} {U V : CategoryTheory.Over X} {f g : U ⟶ V},  
+ CategoryTheory.Over.Hom.l…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Over.comp_left`：comp_left (a b c : Over X) (f : a ⟶ b) (g
+ : b ⟶ c) : (f ≫ g).left = f.left ≫ g.left
+· 使用定理 `CategoryTheory.Limits.equalizer.lift_ι`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Limi
+ts.HasEqualizer f g] {W : C}…
+· 使用引理 `AlgebraicGeometry.surjective_of_isDominant_of_isClosed_range`：surjective
+_of_isDominant_of_isClosed_range (f : X ⟶ Y) [IsDominant f] (hf : IsClosed (Set.
+range f)) : Surjective f
+· 使用定理 `Topology.IsClosedEmbedding.isClosed_range`：∀ {X : Type u_1} {Y : Type u_
+2} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.I
+sClosedEmbedding f → IsClosed (…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isClosedEmbedding`：∀ {X Y : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) [self : AlgebraicGeometry.IsClosedImmersion f],   Topolog
+y.IsClosedEmbedding ⇑f
+· 使用定理 `AlgebraicGeometry.isIso_of_isClosedImmersion_of_surjective`：∀ {X Y : Alg
+ebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f] [Alge
+braicGeometry.Surjective f]   [AlgebraicGeometry…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
 
-English:
-lemma ext_of_isDominant_of_isSeparated
-  statement: [IsReduced X] {f g : X ⟶ Y}
-  proof: by
-  let X' : Over Z := Over.mk (f ≫ s)
-  let Y' : Over Z := Over.mk s
-  let U' : Over Z := Over.mk (ι ≫ f ≫ s)
-  let f' : X' ⟶ Y' := Over.homMk f
-  let g' : X' ⟶ Y' := Over.homMk g
-  let ι' : U' ⟶ X' := Over.homMk ι
-  have : IsSeparated Y'.hom := ‹_›
-  have : IsDominant (equalizer.ι f' g').left := by
-    apply +allowSynthFailures IsDominant.of_comp (equalizer.lift ι' ?_).left
-    · rwa [← Over.comp_left, equalizer.lift_ι]
-    · ext1; exact hU
-  have : Surjective (equalizer.ι f' g').left :=
-    surjective_of_isDominant_of_isClosed_range _ (Scheme.Hom.isClosedEmbedding _).isClosed_range
-  have := isIso_of_isClosedImmersion_of_surjective (Y := X) (equalizer.ι f' g').left
-  rw [← cancel_epi (equalizer.ι f' g').left]
-  exact congr($(equalizer.condition f' g').left)
-
-中文:
-引理 ext_of_isDominant_of_isSeparated
-  结论: [是既约 X] {f g : X ⟶ Y}
-  证明: by
-  let X' : Over Z := Over.mk (f ≫ s)
-  let Y' : Over Z := Over.mk s
-  let U' : Over Z := Over.mk (ι ≫ f ≫ s)
-  let f' : X' ⟶ Y' := Over.homMk f
-  let g' : X' ⟶ Y' := Over.homMk g
-  let ι' : U' ⟶ X' := Over.homMk ι
-  have : IsSeparated Y'.hom := ‹_›
-  have : IsDominant (equalizer.ι f' g').left := by
-    apply +allowSynthFailures IsDominant.of_comp (equalizer.lift ι' ?_).left
-    · rwa [← Over.comp_left, equalizer.lift_ι]
-    · ext1; exact hU
-  have : Surjective (equalizer.ι f' g').left :=
-    surjective_of_isDominant_of_isClosed_range _ (Scheme.Hom.isClosedEmbedding _).isClosed_range
-  have := isIso_of_isClosedImmersion_of_surjective (Y := X) (equalizer.ι f' g').left
-  rw [← cancel_epi (equalizer.ι f' g').left]
-  exact congr($(equalizer.condition f' g').left)
-
-Depends on / 依赖: IsDominant, IsDominant.of_comp, IsSeparated, Over.comp_left, Over.homMk, Over.mk, Surjective, allowSynthFailures, comp_left, equalizer, equalizer.lift, equalizer.lift_, of_comp, surjective_of_isDominant_of_isClos
+--- 原说明 ---
+Suppose `X` is a reduced scheme and that `f g : X ⟶ Y` agree over some separated
+ `Y ⟶ Z`.
+Then `f = g` if `ι ≫ f = ι ≫ g` for some dominant `ι`.
 -/
 lemma ext_of_isDominant_of_isSeparated [IsReduced X] {f g : X ⟶ Y}
     (s : Y ⟶ Z) [IsSeparated s] (h : f ≫ s = g ≫ s)
@@ -904,54 +922,83 @@ lemma ext_of_isDominant_of_isSeparated [IsReduced X] {f g : X ⟶ Y}
   have := isIso_of_isClosedImmersion_of_surjective (Y := X) (equalizer.ι f' g').left
   rw [← cancel_epi (equalizer.ι f' g').left]
   exact congr($(equalizer.condition f' g').left)
-
-/--
-lemma `ext_of_fromSpecResidueField_eq` / 引理 `ext_of_fromSpecResidueField_eq`
-
-English:
-lemma ext_of_fromSpecResidueField_eq
-  statement: (f g : X ⟶ Y) (i : Y ⟶ Z) [IsSeparated i] [IsReduced X]
-  proof: by
-  suffices IsDominant (equalizer.ι f g) from
-    ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
-  refine ⟨.mono (fun x hx => ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
-  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_apply]
-
-中文:
-引理 ext_of_fromSpecResidueField_eq
-  结论: (f g : X ⟶ Y) (i : Y ⟶ Z) [是分离 i] [是既约 X]
-  证明: by
-  suffices IsDominant (equalizer.ι f g) from
-    ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
-  refine ⟨.mono (fun x hx => ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
-  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_apply]
-
-Depends on / 依赖: IsDominant, Scheme, Scheme.Hom.comp_apply, Scheme.fromSpecResidueField_apply, comp_apply, condition, equalizer, equalizer.condition, equalizer.lift, equalizer.lift_, ext_of_isDominant_of_isSeparated, fromSpecResidueField_apply
+/-
+**AlgebraicGeometry.ext_of_fromSpecResidueField_eq** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebraicGeometry`。
+形式化陈述：ext_of_fromSpecResidueField_eq (f g : X ⟶ Y) (i : Y ⟶ Z) [IsSeparated i] [
+IsReduced X] (S : Set X) (hS' : Dense S) (H : forall x in S, X.fromSpecResidueFi
+eld x ≫ f = X.fromSpecResidueField x ≫ g) (H' : f ≫ i = g ≫ i) : f = g
+参数：f g : X ⟶ Y；i : Y ⟶ Z；S : Set X；hS' : Dense S；H : forall x in S, X.fromSpecRe
+sidueField x ≫ f = X.fromSpecResidueField x ≫ g；H' : f ≫ i = g ≫ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
+· 使用定理 `AlgebraicGeometry.instHasFiniteLimitsScheme`：CategoryTheory.Limits.HasFi
+niteLimits AlgebraicGeometry.Scheme
+· 使用定理 `Dense.mono`：Dense.mono (h : s₁ subseteq s₂) (hd : Dense s₁) : Dense s₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `CategoryTheory.Limits.equalizer.lift_ι`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Limi
+ts.HasEqualizer f g] {W : C}…
+· 使用引理 `AlgebraicGeometry.Scheme.fromSpecResidueField_apply`：fromSpecResidueFiel
+d_apply (x : X.carrier) (s : Spec (X.residueField x)) : X.fromSpecResidueField x
+ s = x
+· 使用引理 `AlgebraicGeometry.ext_of_isDominant_of_isSeparated`：ext_of_isDominant_of
+_isSeparated [IsReduced X] {f g : X ⟶ Y} (s : Y ⟶ Z) [IsSeparated s] (h : f ≫ s 
+= g ≫ s) (ι : W ⟶ X) [IsDominant ι] (hU …
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
 -/
 lemma ext_of_fromSpecResidueField_eq (f g : X ⟶ Y) (i : Y ⟶ Z) [IsSeparated i] [IsReduced X]
     (S : Set X) (hS' : Dense S)
-    (H : forall x in S, X.fromSpecResidueField x ≫ f = X.fromSpecResidueField x ≫ g)
+    (H : ∀ x ∈ S, X.fromSpecResidueField x ≫ f = X.fromSpecResidueField x ≫ g)
     (H' : f ≫ i = g ≫ i) : f = g := by
   suffices IsDominant (equalizer.ι f g) from
     ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
-  refine ⟨.mono (fun x hx => ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
-  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_apply]
+  refine ⟨.mono (fun x hx ↦ ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
+  rw [← Scheme.Hom.comp_apply, equalizer.lift_ι, Scheme.fromSpecResidueField_apply]
 
 variable (S) in
 /--
-lemma `ext_of_isDominant_of_isSeparated'` / 引理 `ext_of_isDominant_of_isSeparated'`
+Suppose `X` is a reduced `S`-scheme and `Y` is a separated `S`-scheme.
+For any `S`-morphisms `f g : X ⟶ Y`, `f = g` if `ι ≫ f = ι ≫ g` for some dominant `ι`.
+-/
+/-
+**AlgebraicGeometry.ext_of_isDominant_of_isSeparated'** 是 Mathlib 中的一个引理，位于命名空间 
+`AlgebraicGeometry`。
+形式化陈述：ext_of_isDominant_of_isSeparated' [X.Over S] [Y.Over S] [IsReduced X] [IsS
+eparated (Y ↘ S)] {f g : X ⟶ Y} [f.IsOver S] [g.IsOver S] {W} (ι : W ⟶ X) [IsDom
+inant ι] (hU : ι ≫ f = ι ≫ g) : f = g
+参数：Y ↘ S；ι : W ⟶ X；hU : ι ≫ f = ι ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.ext_of_isDominant_of_isSeparated`：ext_of_isDominant_of
+_isSeparated [IsReduced X] {f g : X ⟶ Y} (s : Y ⟶ Z) [IsSeparated s] (h : f ≫ s 
+= g ≫ s) (ι : W ⟶ X) [IsDominant ι] (hU …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.comp_over`：comp_over [OverClass X S] [OverClass Y S] [Hom
+IsOver f S] : f ≫ Y ↘ S = X ↘ S
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma ext_of_isDominant_of_isSeparated'
-  statement: [X.Over S] [Y.Over S] [IsReduced X] [IsSeparated (Y ↘ S)]
-  proof: ext_of_isDominant_of_isSeparated (Y ↘ S) (by simp) ι hU
-
-中文:
-引理 ext_of_isDominant_of_isSeparated'
-  结论: [X.Over S] [Y.Over S] [是既约 X] [是分离 (Y ↘ S)]
-  证明: ext_of_isDominant_of_isSeparated (Y ↘ S) (by simp) ι hU
-
-Depends on / 依赖: ext_of_isDominant_of_isSeparated
+--- 原说明 ---
+Suppose `X` is a reduced `S`-scheme and `Y` is a separated `S`-scheme.
+For any `S`-morphisms `f g : X ⟶ Y`, `f = g` if `ι ≫ f = ι ≫ g` for some dominan
+t `ι`.
 -/
 lemma ext_of_isDominant_of_isSeparated' [X.Over S] [Y.Over S] [IsReduced X] [IsSeparated (Y ↘ S)]
     {f g : X ⟶ Y} [f.IsOver S] [g.IsOver S] {W} (ι : W ⟶ X) [IsDominant ι]
@@ -962,20 +1009,14 @@ namespace Scheme
 
 /-- A scheme `X` is separated if it is separated over `⊤_ Scheme`. -/
 @[mk_iff]
-/--
-Definition of `IsSeparated` / `IsSeparated` 的定义
+/-
+**AlgebraicGeometry.Scheme.IsSeparated** 是 Mathlib 中的一个归纳类型，位于命名空间 `AlgebraicGeo
+metry.Scheme`。
+形式化陈述：AlgebraicGeometry.Scheme → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSeparated
-  parameters: (X : Scheme.{u})
-  axioms and operations (1):
-    - isSeparated_terminal_from : IsSeparated (terminal.from X)
-
-中文:
-类 是分离
-  参数: (X : 概形.{u})
-  公理与运算 (1 个):
-    - isSeparated_terminal_from : 是分离 (terminal.from X)
+--- 原说明 ---
+A scheme `X` is separated if it is separated over `⊤_ Scheme`.
 -/
 protected class IsSeparated (X : Scheme.{u}) : Prop where
   isSeparated_terminal_from : IsSeparated (terminal.from X)
@@ -983,113 +1024,190 @@ protected class IsSeparated (X : Scheme.{u}) : Prop where
 attribute [instance] IsSeparated.isSeparated_terminal_from
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isSeparated_iff_isClosedImmersion_prod_lift` / 引理 `isSeparated_iff_isClosedImmersion_prod_lift`
-
-English:
-lemma isSeparated_iff_isClosedImmersion_prod_lift
-  given: {X : Scheme.{u}}
-  proof: by
-  rw [isSeparated_iff]; rw [AlgebraicGeometry.isSeparated_iff]; rw [iff_iff_eq]; rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _ (prodIsoPullback X X).hom]
-  congr
-  ext : 1 <;> simp
-
-中文:
-引理 isSeparated_iff_isClosedImmersion_prod_lift
-  条件: {X : 概形.{u}}
-  证明: by
-  rw [isSeparated_iff]; rw [AlgebraicGeometry.isSeparated_iff]; rw [iff_iff_eq]; rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _ (prodIsoPullback X X).hom]
-  congr
-  ext : 1 <;> simp
-
-Depends on / 依赖: AlgebraicGeometry, AlgebraicGeometry.isSeparated_iff, IsClosedImmersion, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, cancel_right_of_respectsIso, iff_iff_eq, isSeparated_iff, prodIsoPullback
+/-
+**AlgebraicGeometry.Scheme.isSeparated_iff_isClosedImmersion_prod_lift** 是 Mathl
+ib 中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：isSeparated_iff_isClosedImmersion_prod_lift {X : Scheme.{u}} : X.IsSeparat
+ed ↔ IsClosedImmersion (prod.lift (𝟙 X) (𝟙 X))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `AlgebraicGeometry.instHasTerminalScheme`：CategoryTheory.Limits.HasTermin
+al AlgebraicGeometry.Scheme
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.isSeparated_iff`：∀ (X : AlgebraicGeometry.Schem
+e), X.IsSeparated ↔ AlgebraicGeometry.IsSeparated (CategoryTheory.Limits.termina
+l.from X)
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.isSeparated_iff`：∀ {X Y : AlgebraicGeometry.Scheme} (f
+ : X ⟶ Y),   AlgebraicGeometry.IsSeparated f ↔     autoParam (AlgebraicGeometry.
+IsClosedImmersion (Cate…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MorphismProperty.cancel_right_of_respectsIso`：cancel_righ
+t_of_respectsIso (P : MorphismProperty C) [hP : RespectsIso P] {X Y Z : C} (f : 
+X ⟶ Y) (g : Y ⟶ Z) [IsIso g] : P (f ≫ g) ↔ P f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_fst`：diagonal_fst : diagonal f ≫
+ pullback.fst _ _ = 𝟙 _
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `prodIsoPullback_hom_fst`：prodIsoPullback_hom_fst [HasTerminal C] [HasPul
+lbacks C] (X Y : C) [HasBinaryProduct X Y] : (prodIsoPullback X Y).hom ≫ pullbac
+k.fst _ _ = p…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullback.diagonal_snd`：diagonal_snd : diagonal f ≫
+ pullback.snd _ _ = 𝟙 _
+· 使用引理 `prodIsoPullback_hom_snd`：prodIsoPullback_hom_snd [HasTerminal C] [HasPul
+lbacks C] (X Y : C) [HasBinaryProduct X Y] : (prodIsoPullback X Y).hom ≫ pullbac
+k.snd _ _ = p…
 -/
 lemma isSeparated_iff_isClosedImmersion_prod_lift {X : Scheme.{u}} :
     X.IsSeparated ↔ IsClosedImmersion (prod.lift (𝟙 X) (𝟙 X)) := by
-  rw [isSeparated_iff]; rw [AlgebraicGeometry.isSeparated_iff]; rw [iff_iff_eq]; rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _ (prodIsoPullback X X).hom]
+  rw [isSeparated_iff, AlgebraicGeometry.isSeparated_iff, iff_iff_eq,
+    ← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _ (prodIsoPullback X X).hom]
   congr
   ext : 1 <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [X.IsSeparated]
-  signature: : IsClosedImmersion (prod.lift (𝟙 X) (𝟙 X))
-  body: by
-  rwa [← isSeparated_iff_isClosedImmersion_prod_lift]
-
-中文:
-实例 [X.是分离]
-  签名: : 是闭浸入 (乘积.lift (𝟙 X) (𝟙 X))
-  定义体: by
-  rwa [← isSeparated_iff_isClosedImmersion_prod_lift]
-
-Depends on / 依赖: isSeparated_iff_isClosedImmersion_prod_lift
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [X.IsSeparated] : IsClosedImmersion (prod.lift (𝟙 X) (𝟙 X)) := by
   rwa [← isSeparated_iff_isClosedImmersion_prod_lift]
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) {X : Scheme.{u}} [IsAffine X] : X.IsSeparated := ⟨inferInstance⟩
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {X : Scheme.{u}} [X.IsSeparated] : QuasiSeparatedSpace X :=
   quasiSeparatedSpace_of_quasiSeparated (terminal.from X)
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) [X.IsSeparated] : IsSeparated f := by
   apply +allowSynthFailures @IsSeparated.of_comp (g := terminal.from Y)
   rw [terminal.comp_from]
   infer_instance
-
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f g : X ⟶ Y) [Y.IsSeparated] : IsClosedImmersion (Limits.equalizer.ι f g) :=
   MorphismProperty.of_isPullback (isPullback_equalizer_prod f g).flip inferInstance
 
 end Scheme
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsSeparated.hasAffineProperty` / 实例 `IsSeparated.hasAffineProperty`
-
-English:
-instance IsSeparated.hasAffineProperty
-  signature: :
-  body: by
-  convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsSeparated with X Y f hY
-  rw [Scheme.isSeparated_iff]; rw [← terminal.comp_from f]; rw [IsSeparated.comp_iff]
-  rfl
-
-中文:
-实例 是分离.hasAffineProperty
-  签名: :
-  定义体: by
-  convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsSeparated with X Y f hY
-  rw [Scheme.isSeparated_iff]; rw [← terminal.comp_from f]; rw [IsSeparated.comp_iff]
-  rfl
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.of_isZariskiLocalAtTarget, IsSeparated, IsSeparated.comp_iff, Scheme, Scheme.isSeparated_iff, comp_from, comp_iff, convert, isSeparated_iff, of_isZariskiLocalAtTarget, terminal, terminal.comp_from
+/-
+**AlgebraicGeometry.IsSeparated.hasAffineProperty** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.IsSeparated`。
+形式化陈述：AlgebraicGeometry.HasAffineProperty @AlgebraicGeometry.IsSeparated fun X x
+ x_1 x_2 => X.IsSeparated
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgebraicGeometry.instHasTerminalScheme`：CategoryTheory.Limits.HasTermin
+al AlgebraicGeometry.Scheme
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.isSeparated_iff`：∀ (X : AlgebraicGeometry.Schem
+e), X.IsSeparated ↔ AlgebraicGeometry.IsSeparated (CategoryTheory.Limits.termina
+l.from X)
+· 使用定理 `CategoryTheory.Limits.terminal.comp_from`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasTerminal C] {P 
+Q : C}   (f : P ⟶ Q),   Catego…
+· 使用定理 `AlgebraicGeometry.IsSeparated.comp_iff`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} {f : X ⟶ Y} {g : Y ⟶ Z} [AlgebraicGeometry.IsSeparated g],   AlgebraicGeome
+try.IsSeparated (CategoryThe…
+· 使用定理 `AlgebraicGeometry.Scheme.IsSeparated.isSeparated_terminal_from`：∀ {X : A
+lgebraicGeometry.Scheme} [self : X.IsSeparated],   AlgebraicGeometry.IsSeparated
+ (CategoryTheory.Limits.terminal.from X)
+· 使用定理 `AlgebraicGeometry.Scheme.instIsSeparatedOfIsAffine`：∀ {X : AlgebraicGeom
+etry.Scheme} [AlgebraicGeometry.IsAffine X], X.IsSeparated
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.of_isZariskiLocalAtTarget`：∀ (P : Ca
+tegoryTheory.MorphismProperty AlgebraicGeometry.Scheme) [AlgebraicGeometry.IsZar
+iskiLocalAtTarget P],   AlgebraicGeometry.HasAffine…
+· 使用定理 `AlgebraicGeometry.IsSeparated.instIsZariskiLocalAtTarget`：AlgebraicGeome
+try.IsZariskiLocalAtTarget @AlgebraicGeometry.IsSeparated
 -/
 instance IsSeparated.hasAffineProperty :
-    HasAffineProperty @IsSeparated fun X _ _ _ => X.IsSeparated := by
+    HasAffineProperty @IsSeparated fun X _ _ _ ↦ X.IsSeparated := by
   convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsSeparated with X Y f hY
-  rw [Scheme.isSeparated_iff]; rw [← terminal.comp_from f]; rw [IsSeparated.comp_iff]
+  rw [Scheme.isSeparated_iff, ← terminal.comp_from f, IsSeparated.comp_iff]
   rfl
 
 /--
-lemma `ext_of_isDominant` / 引理 `ext_of_isDominant`
+Suppose `f g : X ⟶ Y` where `X` is a reduced scheme and `Y` is a separated scheme.
+Then `f = g` if `ι ≫ f = ι ≫ g` for some dominant `ι`.
 
-English:
-lemma ext_of_isDominant
-  statement: [IsReduced X] {f g : X ⟶ Y} [Y.IsSeparated]
-  proof: ext_of_isDominant_of_isSeparated (Limits.terminal.from _) (Limits.terminal.hom_ext _ _) ι hU
+Also see `ext_of_isDominant_of_isSeparated` for the general version over arbitrary bases.
+-/
+/-
+**AlgebraicGeometry.ext_of_isDominant** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeomet
+ry`。
+形式化陈述：ext_of_isDominant [IsReduced X] {f g : X ⟶ Y} [Y.IsSeparated] (ι : W ⟶ X) 
+[IsDominant ι] (hU : ι ≫ f = ι ≫ g) : f = g
+参数：ι : W ⟶ X；hU : ι ≫ f = ι ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.ext_of_isDominant_of_isSeparated`：ext_of_isDominant_of
+_isSeparated [IsReduced X] {f g : X ⟶ Y} (s : Y ⟶ Z) [IsSeparated s] (h : f ≫ s 
+= g ≫ s) (ι : W ⟶ X) [IsDominant ι] (hU …
+· 使用定理 `AlgebraicGeometry.instHasTerminalScheme`：CategoryTheory.Limits.HasTermin
+al AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.Scheme.IsSeparated.isSeparated_terminal_from`：∀ {X : A
+lgebraicGeometry.Scheme} [self : X.IsSeparated],   AlgebraicGeometry.IsSeparated
+ (CategoryTheory.Limits.terminal.from X)
+· 使用定理 `CategoryTheory.Limits.terminal.hom_ext`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasTerminal C] {P : 
+C}   (f g : P ⟶ ⊤_ C), f = g
 
-中文:
-引理 ext_of_isDominant
-  结论: [是既约 X] {f g : X ⟶ Y} [Y.是分离]
-  证明: ext_of_isDominant_of_isSeparated (Limits.terminal.from _) (Limits.terminal.hom_ext _ _) ι hU
+--- 原说明 ---
+Suppose `f g : X ⟶ Y` where `X` is a reduced scheme and `Y` is a separated schem
+e.
+Then `f = g` if `ι ≫ f = ι ≫ g` for some dominant `ι`.
 
-Depends on / 依赖: Limits, Limits.terminal.from, Limits.terminal.hom_ext, ext_of_isDominant_of_isSeparated, hom_ext, terminal
+Also see `ext_of_isDominant_of_isSeparated` for the general version over arbitra
+ry bases.
 -/
 lemma ext_of_isDominant [IsReduced X] {f g : X ⟶ Y} [Y.IsSeparated]
     (ι : W ⟶ X) [IsDominant ι] (hU : ι ≫ f = ι ≫ g) : f = g :=
   ext_of_isDominant_of_isSeparated (Limits.terminal.from _) (Limits.terminal.hom_ext _ _) ι hU
 
 end AlgebraicGeometry
+

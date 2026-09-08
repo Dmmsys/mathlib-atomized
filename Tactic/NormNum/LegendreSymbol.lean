@@ -53,22 +53,19 @@ section Lemmas
 
 namespace Mathlib.Meta.NormNum
 
-/--
-Definition of `jacobiSymNat` / `jacobiSymNat` 的定义
+/-- The Jacobi symbol restricted to natural numbers in both arguments. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Norm
+Num`。
+形式化陈述：jacobiSymNat (a b : Nat) : Int
+参数：a b : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition jacobiSymNat
-  signature: (a b : Nat)
-  body: jacobiSym a b
-
-中文:
-定义 jacobiSym自然数
-  签名: (a b : 自然数)
-  定义体: jacobiSym a b
-
-Depends on / 依赖: jacobiSym
+--- 原说明 ---
+The Jacobi symbol restricted to natural numbers in both arguments.
 -/
-def jacobiSymNat (a b : Nat) : Int :=
+def jacobiSymNat (a b : ℕ) : ℤ :=
   jacobiSym a b
 
 /-!
@@ -79,245 +76,229 @@ arguments, in a form that is suitable for constructing proofs in `norm_num`.
 -/
 
 
-/--
-theorem `jacobiSymNat.zero_right` / 定理 `jacobiSymNat.zero_right`
+/-- Base cases: `b = 0`, `b = 1`, `a = 0`, `a = 1`. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.zero_right** 是 Mathlib 中的一个定理，位于命名空间 `Mathli
+b.Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a 0 = 1
+参数：a : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `jacobiSym.zero_right`：zero_right (a : Int) : J(a | 0) = 1
 
-English:
-theorem jacobiSymNat.zero_right
-  given: (a : Nat)
-  statement: jacobiSymNat a 0 = 1
-  proof: by
-  rw [jacobiSymNat]; rw [jacobiSym.zero_right]
-
-中文:
-定理 jacobiSym自然数.zero_right
-  条件: (a : 自然数)
-  结论: jacobiSym自然数 a 0 = 1
-  证明: by
-  rw [jacobiSymNat]; rw [jacobiSym.zero_right]
-
-Depends on / 依赖: jacobiSym, jacobiSym.zero_right, jacobiSymNat, zero_right
+--- 原说明 ---
+Base cases: `b = 0`, `b = 1`, `a = 0`, `a = 1`.
 -/
-theorem jacobiSymNat.zero_right (a : Nat) : jacobiSymNat a 0 = 1 := by
-  rw [jacobiSymNat]; rw [jacobiSym.zero_right]
-
-/--
-theorem `jacobiSymNat.one_right` / 定理 `jacobiSymNat.one_right`
-
-English:
-theorem jacobiSymNat.one_right
-  given: (a : Nat)
-  statement: jacobiSymNat a 1 = 1
-  proof: by
-  rw [jacobiSymNat]; rw [jacobiSym.one_right]
-
-中文:
-定理 jacobiSym自然数.one_right
-  条件: (a : 自然数)
-  结论: jacobiSym自然数 a 1 = 1
-  证明: by
-  rw [jacobiSymNat]; rw [jacobiSym.one_right]
-
-Depends on / 依赖: jacobiSym, jacobiSym.one_right, jacobiSymNat, one_right
+theorem jacobiSymNat.zero_right (a : ℕ) : jacobiSymNat a 0 = 1 := by
+  rw [jacobiSymNat, jacobiSym.zero_right]
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.one_right** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib
+.Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a 1 = 1
+参数：a : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `jacobiSym.one_right`：one_right (a : Int) : J(a | 1) = 1
 -/
-theorem jacobiSymNat.one_right (a : Nat) : jacobiSymNat a 1 = 1 := by
-  rw [jacobiSymNat]; rw [jacobiSym.one_right]
-
-/--
-theorem `jacobiSymNat.zero_left` / 定理 `jacobiSymNat.zero_left`
-
-English:
-theorem jacobiSymNat.zero_left
-  given: (b : Nat) (hb : Nat.beq (b / 2) 0 = false)
-  statement: jacobiSymNat 0 b = 0
-  proof: by
-  rw [jacobiSymNat]; rw [Nat.cast_zero]; rw [jacobiSym.zero_left ?_]
+theorem jacobiSymNat.one_right (a : ℕ) : jacobiSymNat a 1 = 1 := by
+  rw [jacobiSymNat, jacobiSym.one_right]
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.zero_left** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib
+.Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (b : ℕ), (b / 2).beq 0 = false → Mathlib.Meta.NormNum.jacobiSymNat 0 b =
+ 0
+参数：b : ℕ；b / 2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `jacobiSym.zero_left`：zero_left {b : Nat} (hb : 1 < b) : J(0 | b) = 0
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Nat.mul_le_mul_left`：∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Nat.ne_of_beq_eq_false`：∀ {n m : ℕ}, n.beq m = false → ¬n = m
+· 使用定理 `Nat.mul_div_le`：∀ (m n : ℕ), n * (m / n) ≤ m
+-/
+theorem jacobiSymNat.zero_left (b : ℕ) (hb : Nat.beq (b / 2) 0 = false) : jacobiSymNat 0 b = 0 := by
+  rw [jacobiSymNat, Nat.cast_zero, jacobiSym.zero_left ?_]
   calc
-    1 < 2 * 1 := by decide
-    _ <= 2 * (b / 2) :=
+    1 < 2 * 1       := by decide
+    _ ≤ 2 * (b / 2) :=
       Nat.mul_le_mul_left _ (Nat.succ_le_of_lt (Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb)))
-    _ <= b := Nat.mul_div_le b 2
-
-中文:
-定理 jacobiSym自然数.zero_left
-  条件: (b : 自然数) (hb : 自然数.beq (b / 2) 0 = false)
-  结论: jacobiSym自然数 0 b = 0
-  证明: by
-  rw [jacobiSymNat]; rw [Nat.cast_zero]; rw [jacobiSym.zero_left ?_]
-  calc
-    1 < 2 * 1 := by decide
-    _ <= 2 * (b / 2) :=
-      Nat.mul_le_mul_left _ (Nat.succ_le_of_lt (Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb)))
-    _ <= b := Nat.mul_div_le b 2
-
-Depends on / 依赖: Nat.cast_zero, Nat.mul_div_le, Nat.mul_le_mul_left, Nat.ne_of_beq_eq_false, Nat.pos_of_ne_zero, Nat.succ_le_of_lt, cast_zero, jacobiSym, jacobiSym.zero_left, jacobiSymNat, mul_div_le, mul_le_mul_left, ne_of_beq_eq_false, pos_of_ne_zero, succ_le_of_lt, zero_left
+    _ ≤ b           := Nat.mul_div_le b 2
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.one_left** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat 1 b = 1
+参数：b : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `jacobiSym.one_left`：one_left (b : Nat) : J(1 | b) = 1
 -/
-theorem jacobiSymNat.zero_left (b : Nat) (hb : Nat.beq (b / 2) 0 = false) : jacobiSymNat 0 b = 0 := by
-  rw [jacobiSymNat]; rw [Nat.cast_zero]; rw [jacobiSym.zero_left ?_]
-  calc
-    1 < 2 * 1 := by decide
-    _ <= 2 * (b / 2) :=
-      Nat.mul_le_mul_left _ (Nat.succ_le_of_lt (Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb)))
-    _ <= b := Nat.mul_div_le b 2
+theorem jacobiSymNat.one_left (b : ℕ) : jacobiSymNat 1 b = 1 := by
+  rw [jacobiSymNat, Nat.cast_one, jacobiSym.one_left]
 
-/--
-theorem `jacobiSymNat.one_left` / 定理 `jacobiSymNat.one_left`
+/-- Turn a Legendre symbol into a Jacobi symbol. -/
+/-
+**Mathlib.Meta.NormNum.LegendreSym.to_jacobiSym** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Meta.NormNum.LegendreSym`。
+形式化陈述：∀ (p : ℕ) (pp : Fact (Nat.Prime p)) (a r : ℤ),   Mathlib.Meta.NormNum.IsIn
+t (jacobiSym a p) r → Mathlib.Meta.NormNum.IsInt (legendreSym p a) r
+参数：p : ℕ；pp : Fact (Nat.Prime p)；a r : ℤ；jacobiSym a p；legendreSym p a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `jacobiSym.legendreSym.to_jacobiSym`：∀ (p : ℕ) [fp : Fact (Nat.Prime p)] 
+(a : ℤ), legendreSym p a = jacobiSym a p
 
-English:
-theorem jacobiSymNat.one_left
-  given: (b : Nat)
-  statement: jacobiSymNat 1 b = 1
-  proof: by
-  rw [jacobiSymNat]; rw [Nat.cast_one]; rw [jacobiSym.one_left]
-
-中文:
-定理 jacobiSym自然数.one_left
-  条件: (b : 自然数)
-  结论: jacobiSym自然数 1 b = 1
-  证明: by
-  rw [jacobiSymNat]; rw [Nat.cast_one]; rw [jacobiSym.one_left]
-
-Depends on / 依赖: Nat.cast_one, cast_one, jacobiSym, jacobiSym.one_left, jacobiSymNat, one_left
+--- 原说明 ---
+Turn a Legendre symbol into a Jacobi symbol.
 -/
-theorem jacobiSymNat.one_left (b : Nat) : jacobiSymNat 1 b = 1 := by
-  rw [jacobiSymNat]; rw [Nat.cast_one]; rw [jacobiSym.one_left]
-
-/--
-theorem `LegendreSym.to_jacobiSym` / 定理 `LegendreSym.to_jacobiSym`
-
-English:
-theorem LegendreSym.to_jacobiSym
-  statement: (p : Nat) (pp : Fact p.Prime) (a r : Int)
-  proof: by
-  rwa [@jacobiSym.legendreSym.to_jacobiSym p pp a]
-
-中文:
-定理 LegendreSym.to_jacobiSym
-  结论: (p : 自然数) (pp : Fact p.素) (a r : 整数)
-  证明: by
-  rwa [@jacobiSym.legendreSym.to_jacobiSym p pp a]
-
-Depends on / 依赖: jacobiSym, jacobiSym.legendreSym.to_jacobiSym, legendreSym, to_jacobiSym
--/
-theorem LegendreSym.to_jacobiSym (p : Nat) (pp : Fact p.Prime) (a r : Int)
+theorem LegendreSym.to_jacobiSym (p : ℕ) (pp : Fact p.Prime) (a r : ℤ)
     (hr : IsInt (jacobiSym a p) r) : IsInt (legendreSym p a) r := by
   rwa [@jacobiSym.legendreSym.to_jacobiSym p pp a]
 
-/--
-theorem `JacobiSym.mod_left` / 定理 `JacobiSym.mod_left`
+/-- The value depends only on the residue class of `a` mod `b`. -/
+/-
+**Mathlib.Meta.NormNum.JacobiSym.mod_left** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Met
+a.NormNum.JacobiSym`。
+形式化陈述：∀ (a : ℤ) (b ab' : ℕ) (ab r b' : ℤ),   ↑b = b' → a % b' = ab → ↑ab' = ab →
+ Mathlib.Meta.NormNum.jacobiSymNat ab' b = r → jacobiSym a b = r
+参数：a : ℤ；b ab' : ℕ；ab r b' : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `jacobiSym.mod_left`：mod_left (a : Int) (b : Nat) : J(a | b) = J(a % b | 
+b)
 
-English:
-theorem JacobiSym.mod_left
-  statement: (a : Int) (b ab' : Nat) (ab r b' : Int) (hb' : (b : Int) = b')
-  proof: by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSym.mod_left]; rw [hb']; rw [hab]; rw [← h]
-
-中文:
-定理 JacobiSym.mod_left
-  结论: (a : 整数) (b ab' : 自然数) (ab r b' : 整数) (hb' : (b : 整数) = b')
-  证明: by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSym.mod_left]; rw [hb']; rw [hab]; rw [← h]
-
-Depends on / 依赖: jacobiSym, jacobiSym.mod_left, jacobiSymNat, mod_left
+--- 原说明 ---
+The value depends only on the residue class of `a` mod `b`.
 -/
-theorem JacobiSym.mod_left (a : Int) (b ab' : Nat) (ab r b' : Int) (hb' : (b : Int) = b')
-    (hab : a % b' = ab) (h : (ab' : Int) = ab) (hr : jacobiSymNat ab' b = r) : jacobiSym a b = r := by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSym.mod_left]; rw [hb']; rw [hab]; rw [← h]
-
-/--
-theorem `jacobiSymNat.mod_left` / 定理 `jacobiSymNat.mod_left`
-
-English:
-theorem jacobiSymNat.mod_left
-  given: (a b ab : Nat) (r : Int) (hab : a % b = ab) (hr : jacobiSymNat ab b = r)
-  proof: by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSymNat]; rw [_root_.jacobiSym.mod_left a b]; rw [← hab]; rfl
-
-中文:
-定理 jacobiSym自然数.mod_left
-  条件: (a b ab : 自然数) (r : 整数) (hab : a % b = ab) (hr : jacobiSym自然数 ab b = r)
-  证明: by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSymNat]; rw [_root_.jacobiSym.mod_left a b]; rw [← hab]; rfl
-
-Depends on / 依赖: _root_, _root_.jacobiSym.mod_left, jacobiSym, jacobiSymNat, mod_left
+theorem JacobiSym.mod_left (a : ℤ) (b ab' : ℕ) (ab r b' : ℤ) (hb' : (b : ℤ) = b')
+    (hab : a % b' = ab) (h : (ab' : ℤ) = ab) (hr : jacobiSymNat ab' b = r) : jacobiSym a b = r := by
+  rw [← hr, jacobiSymNat, jacobiSym.mod_left, hb', hab, ← h]
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.mod_left** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a b ab : ℕ) (r : ℤ),   a % b = ab → Mathlib.Meta.NormNum.jacobiSymNat a
+b b = r → Mathlib.Meta.NormNum.jacobiSymNat a b = r
+参数：a b ab : ℕ；r : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `jacobiSym.mod_left`：mod_left (a : Int) (b : Nat) : J(a | b) = J(a % b | 
+b)
 -/
-theorem jacobiSymNat.mod_left (a b ab : Nat) (r : Int) (hab : a % b = ab) (hr : jacobiSymNat ab b = r) :
+theorem jacobiSymNat.mod_left (a b ab : ℕ) (r : ℤ) (hab : a % b = ab) (hr : jacobiSymNat ab b = r) :
     jacobiSymNat a b = r := by
-  rw [← hr]; rw [jacobiSymNat]; rw [jacobiSymNat]; rw [_root_.jacobiSym.mod_left a b]; rw [← hab]; rfl
+  rw [← hr, jacobiSymNat, jacobiSymNat, _root_.jacobiSym.mod_left a b, ← hab]; rfl
 
-/--
-theorem `jacobiSymNat.even_even` / 定理 `jacobiSymNat.even_even`
+/-- The symbol vanishes when both entries are even (and `b / 2 ≠ 0`). -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.even_even** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib
+.Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a b : ℕ), (b / 2).beq 0 = false → a % 2 = 0 → b % 2 = 0 → Mathlib.Meta.
+NormNum.jacobiSymNat a b = 0
+参数：a b : ℕ；b / 2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `jacobiSym.eq_zero_iff`：eq_zero_iff {a : Int} {b : Nat} : J(a | b) = 0 ↔ 
+b != 0 ∧ a.gcd b != 1
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Nat.ne_of_beq_eq_false`：∀ {n m : ℕ}, n.beq m = false → ¬n = m
+· 使用定理 `Nat.div_le_self`：∀ (n k : ℕ), n / k ≤ n
+· 使用定理 `Nat.dvd_gcd`：∀ {k m n : ℕ}, k ∣ m → k ∣ n → k ∣ m.gcd n
+· 使用定理 `Nat.dvd_of_mod_eq_zero`：∀ {m n : ℕ}, n % m = 0 → m ∣ n
+· 使用定理 `Nat.not_even_one`：¬Even 1
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `even_iff_two_dvd`：even_iff_two_dvd : Even a ↔ 2 ∣ a
 
-English:
-theorem jacobiSymNat.even_even
-  statement: (a b : Nat) (hb₀ : Nat.beq (b / 2) 0 = false) (ha : a % 2 = 0)
-  proof: by
-  refine jacobiSym.eq_zero_iff.mpr
-    ⟨ne_of_gt ((Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb₀)).trans_le (Nat.div_le_self b 2)),
-      fun hf => ?_⟩
-  have h : 2 ∣ a.gcd b := Nat.dvd_gcd (Nat.dvd_of_mod_eq_zero ha) (Nat.dvd_of_mod_eq_zero hb₁)
-  change 2 ∣ (a : Int).gcd b at h
-  rw [hf]; rw [← even_iff_two_dvd] at h
-  exact Nat.not_even_one h
-
-中文:
-定理 jacobiSym自然数.even_even
-  结论: (a b : 自然数) (hb₀ : 自然数.beq (b / 2) 0 = false) (ha : a % 2 = 0)
-  证明: by
-  refine jacobiSym.eq_zero_iff.mpr
-    ⟨ne_of_gt ((Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb₀)).trans_le (Nat.div_le_self b 2)),
-      fun hf => ?_⟩
-  have h : 2 ∣ a.gcd b := Nat.dvd_gcd (Nat.dvd_of_mod_eq_zero ha) (Nat.dvd_of_mod_eq_zero hb₁)
-  change 2 ∣ (a : Int).gcd b at h
-  rw [hf]; rw [← even_iff_two_dvd] at h
-  exact Nat.not_even_one h
-
-Depends on / 依赖: Nat.div_le_self, Nat.dvd_gcd, Nat.dvd_of_mod_eq_zero, Nat.ne_of_beq_eq_false, Nat.not_even_one, Nat.pos_of_ne_zero, a.gcd, div_le_self, dvd_gcd, dvd_of_mod_eq_zero, eq_zero_iff, even_iff_two_dvd, jacobiSym, jacobiSym.eq_zero_iff.mpr, ne_of_beq_eq_false, ne_of_gt, not_even_one, pos_of_ne_zero, trans_le
+--- 原说明 ---
+The symbol vanishes when both entries are even (and `b / 2 ≠ 0`).
 -/
-theorem jacobiSymNat.even_even (a b : Nat) (hb₀ : Nat.beq (b / 2) 0 = false) (ha : a % 2 = 0)
+theorem jacobiSymNat.even_even (a b : ℕ) (hb₀ : Nat.beq (b / 2) 0 = false) (ha : a % 2 = 0)
     (hb₁ : b % 2 = 0) : jacobiSymNat a b = 0 := by
   refine jacobiSym.eq_zero_iff.mpr
     ⟨ne_of_gt ((Nat.pos_of_ne_zero (Nat.ne_of_beq_eq_false hb₀)).trans_le (Nat.div_le_self b 2)),
       fun hf => ?_⟩
   have h : 2 ∣ a.gcd b := Nat.dvd_gcd (Nat.dvd_of_mod_eq_zero ha) (Nat.dvd_of_mod_eq_zero hb₁)
-  change 2 ∣ (a : Int).gcd b at h
-  rw [hf]; rw [← even_iff_two_dvd] at h
+  change 2 ∣ (a : ℤ).gcd b at h
+  rw [hf, ← even_iff_two_dvd] at h
   exact Nat.not_even_one h
 
-/--
-theorem `jacobiSymNat.odd_even` / 定理 `jacobiSymNat.odd_even`
+/-- When `a` is odd and `b` is even, we can replace `b` by `b / 2`. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.odd_even** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a b c : ℕ) (r : ℤ),   a % 2 = 1 →     b % 2 = 0 → b / 2 = c → Mathlib.M
+eta.NormNum.jacobiSymNat a c = r → Mathlib.Meta.NormNum.jacobiSymNat a b = r
+参数：a b c : ℕ；r : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `legendreSym.mod`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)] (a : ℤ), legendre
+Sym p a = legendreSym p (a % ↑p)
+· 使用定理 `legendreSym.congr_simp`：∀ (p p_1 : ℕ) (e_p : p = p_1) [inst : Fact (Nat.
+Prime p)] (a a_1 : ℤ), a = a_1 → legendreSym p a = legendreSym p_1 a_1
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.eq_zero_of_dvd_of_div_eq_zero`：∀ {a b : ℕ}, a ∣ b → b / a = 0 → b = 
+0
+· 使用定理 `Nat.dvd_of_mod_eq_zero`：∀ {m n : ℕ}, n % m = 0 → m ∣ n
+· 使用定理 `Nat.mod_add_div`：∀ (m k : ℕ), m % k + k * (m / k) = m
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `_private.Mathlib.Tactic.NormNum.LegendreSymbol.0.Mathlib.Meta.NormNum.ja
+cobiSymNat.eq_1`：∀ (a b : ℕ), Mathlib.Meta.NormNum.jacobiSymNat a b = jacobiSym 
+(↑a) b
+· 使用定理 `jacobiSym.mul_right`：mul_right (a : Int) (b₁ b₂ : Nat) [NeZero b₁] [NeZe
+ro b₂] : J(a | b₁ * b₂) = J(a | b₁) * J(a | b₂)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `jacobiSym.legendreSym.to_jacobiSym`：∀ (p : ℕ) [fp : Fact (Nat.Prime p)] 
+(a : ℤ), legendreSym p a = jacobiSym a p
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-theorem jacobiSymNat.odd_even
-  statement: (a b c : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 2 = 0) (hc : b / 2 = c)
-  proof: by
-  have ha' : legendreSym 2 a = 1 := by
-    simp only [legendreSym.mod 2 a, Int.ofNat_mod_ofNat, ha]
-    decide
-  rcases eq_or_ne c 0 with (rfl | hc')
-  · rw [← hr, Nat.eq_zero_of_dvd_of_div_eq_zero (Nat.dvd_of_mod_eq_zero hb) hc]
-  · have : NeZero c := ⟨hc'⟩
-    -- for `jacobiSym.mul_right`
-    rwa [← Nat.mod_add_div b 2, hb, hc, Nat.zero_add, jacobiSymNat, jacobiSym.mul_right,
-      ← jacobiSym.legendreSym.to_jacobiSym, ha', one_mul]
-
-中文:
-定理 jacobiSym自然数.odd_even
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 2 = 0) (hc : b / 2 = c)
-  证明: by
-  have ha' : legendreSym 2 a = 1 := by
-    simp only [legendreSym.mod 2 a, Int.ofNat_mod_ofNat, ha]
-    decide
-  rcases eq_or_ne c 0 with (rfl | hc')
-  · rw [← hr, Nat.eq_zero_of_dvd_of_div_eq_zero (Nat.dvd_of_mod_eq_zero hb) hc]
-  · have : NeZero c := ⟨hc'⟩
-    -- for `jacobiSym.mul_right`
-    rwa [← Nat.mod_add_div b 2, hb, hc, Nat.zero_add, jacobiSymNat, jacobiSym.mul_right,
-      ← jacobiSym.legendreSym.to_jacobiSym, ha', one_mul]
-
-Depends on / 依赖: Int.ofNat_mod_ofNat, Nat.dvd_of_mod_eq_zero, Nat.eq_zero_of_dvd_of_div_eq_zero, NeZero, dvd_of_mod_eq_zero, eq_or_ne, eq_zero_of_dvd_of_div_eq_zero, legendreSym, legendreSym.mod, ofNat_mod_ofNat
+--- 原说明 ---
+When `a` is odd and `b` is even, we can replace `b` by `b / 2`.
 -/
-theorem jacobiSymNat.odd_even (a b c : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 2 = 0) (hc : b / 2 = c)
+theorem jacobiSymNat.odd_even (a b c : ℕ) (r : ℤ) (ha : a % 2 = 1) (hb : b % 2 = 0) (hc : b / 2 = c)
     (hr : jacobiSymNat a c = r) : jacobiSymNat a b = r := by
   have ha' : legendreSym 2 a = 1 := by
     simp only [legendreSym.mod 2 a, Int.ofNat_mod_ofNat, ha]
@@ -329,284 +310,159 @@ theorem jacobiSymNat.odd_even (a b c : Nat) (r : Int) (ha : a % 2 = 1) (hb : b %
     rwa [← Nat.mod_add_div b 2, hb, hc, Nat.zero_add, jacobiSymNat, jacobiSym.mul_right,
       ← jacobiSym.legendreSym.to_jacobiSym, ha', one_mul]
 
-/--
-theorem `jacobiSymNat.double_even` / 定理 `jacobiSymNat.double_even`
+/-- If `a` is divisible by `4` and `b` is odd, then we can remove the factor `4` from `a`. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.double_even** 是 Mathlib 中的一个定理，位于命名空间 `Mathl
+ib.Meta.NormNum.jacobiSymNat`。
+形式化陈述：∀ (a b c : ℕ) (r : ℤ),   a % 4 = 0 →     b % 2 = 1 → a / 4 = c → Mathlib.M
+eta.NormNum.jacobiSymNat c b = r → Mathlib.Meta.NormNum.jacobiSymNat a b = r
+参数：a b c : ℕ；r : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `jacobiSym.div_four_left`：div_four_left {a : Int} {b : Nat} (ha4 : a % 4 
+= 0) (hb2 : b % 2 = 1) : J(a / 4 | b) = J(a | b)
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 
-English:
-theorem jacobiSymNat.double_even
-  statement: (a b c : Nat) (r : Int) (ha : a % 4 = 0) (hb : b % 2 = 1)
-  proof: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  exact (jacobiSym.div_four_left (mod_cast ha) hb).symm
-
-中文:
-定理 jacobiSym自然数.double_even
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 4 = 0) (hb : b % 2 = 1)
-  证明: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  exact (jacobiSym.div_four_left (mod_cast ha) hb).symm
-
-Depends on / 依赖: Int.natCast_ediv, Nat.cast_ofNat, cast_ofNat, div_four_left, jacobiSym, jacobiSym.div_four_left, jacobiSymNat, mod_cast, natCast_ediv
+--- 原说明 ---
+If `a` is divisible by `4` and `b` is odd, then we can remove the factor `4` fro
+m `a`.
 -/
-theorem jacobiSymNat.double_even (a b c : Nat) (r : Int) (ha : a % 4 = 0) (hb : b % 2 = 1)
+theorem jacobiSymNat.double_even (a b c : ℕ) (r : ℤ) (ha : a % 4 = 0) (hb : b % 2 = 1)
     (hc : a / 4 = c) (hr : jacobiSymNat c b = r) : jacobiSymNat a b = r := by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
   exact (jacobiSym.div_four_left (mod_cast ha) hb).symm
 
-/--
-theorem `jacobiSymNat.even_odd₁` / 定理 `jacobiSymNat.even_odd₁`
+/-- If `a` is even and `b` is odd, then we can remove a factor `2` from `a`,
+but we may have to change the sign, depending on `b % 8`.
+We give one version for each of the four odd residue classes mod `8`. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.even_odd** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem jacobiSymNat.even_odd₁
-  statement: (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 1)
-  proof: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-中文:
-定理 jacobiSym自然数.even_odd₁
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 1)
-  证明: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-Depends on / 依赖: Int.natCast_ediv, Nat.cast_ofNat, Nat.mod_mod_of_dvd, cast_ofNat, even_odd, if_neg, jacobiSym, jacobiSym.even_odd, jacobiSymNat, mod_cast, mod_mod_of_dvd, natCast_ediv
+--- 原说明 ---
+If `a` is even and `b` is odd, then we can remove a factor `2` from `a`,
+but we may have to change the sign, depending on `b % 8`.
+We give one version for each of the four odd residue classes mod `8`.
 -/
-theorem jacobiSymNat.even_odd₁ (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 1)
+theorem jacobiSymNat.even_odd₁ (a b c : ℕ) (r : ℤ) (ha : a % 2 = 0) (hb : b % 8 = 1)
     (hc : a / 2 = c) (hr : jacobiSymNat c b = r) : jacobiSymNat a b = r := by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-/--
-theorem `jacobiSymNat.even_odd₇` / 定理 `jacobiSymNat.even_odd₇`
-
-English:
-theorem jacobiSymNat.even_odd₇
-  statement: (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 7)
-  proof: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-中文:
-定理 jacobiSym自然数.even_odd₇
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 7)
-  证明: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-Depends on / 依赖: Int.natCast_ediv, Nat.cast_ofNat, Nat.mod_mod_of_dvd, cast_ofNat, even_odd, if_neg, jacobiSym, jacobiSym.even_odd, jacobiSymNat, mod_cast, mod_mod_of_dvd, natCast_ediv
+  rw [← jacobiSym.even_odd (mod_cast ha), if_neg (by simp [hb])]
+  rw [← Nat.mod_mod_of_dvd, hb]; simp
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.even_odd** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.even_odd₇ (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 7)
+theorem jacobiSymNat.even_odd₇ (a b c : ℕ) (r : ℤ) (ha : a % 2 = 0) (hb : b % 8 = 7)
     (hc : a / 2 = c) (hr : jacobiSymNat c b = r) : jacobiSymNat a b = r := by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_neg (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-/--
-theorem `jacobiSymNat.even_odd₃` / 定理 `jacobiSymNat.even_odd₃`
-
-English:
-theorem jacobiSymNat.even_odd₃
-  statement: (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 3)
-  proof: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-中文:
-定理 jacobiSym自然数.even_odd₃
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 3)
-  证明: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-Depends on / 依赖: Int.natCast_ediv, Nat.cast_ofNat, Nat.mod_mod_of_dvd, cast_ofNat, even_odd, if_pos, jacobiSym, jacobiSym.even_odd, jacobiSymNat, mod_cast, mod_mod_of_dvd, natCast_ediv
+  rw [← jacobiSym.even_odd (mod_cast ha), if_neg (by simp [hb])]
+  rw [← Nat.mod_mod_of_dvd, hb]; simp
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.even_odd** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.even_odd₃ (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 3)
+theorem jacobiSymNat.even_odd₃ (a b c : ℕ) (r : ℤ) (ha : a % 2 = 0) (hb : b % 8 = 3)
     (hc : a / 2 = c) (hr : jacobiSymNat c b = r) : jacobiSymNat a b = -r := by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-/--
-theorem `jacobiSymNat.even_odd₅` / 定理 `jacobiSymNat.even_odd₅`
-
-English:
-theorem jacobiSymNat.even_odd₅
-  statement: (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 5)
-  proof: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-中文:
-定理 jacobiSym自然数.even_odd₅
-  结论: (a b c : 自然数) (r : 整数) (ha : a % 2 = 0) (hb : b % 8 = 5)
-  证明: by
-  simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
-
-Depends on / 依赖: Int.natCast_ediv, Nat.cast_ofNat, Nat.mod_mod_of_dvd, cast_ofNat, even_odd, if_pos, jacobiSym, jacobiSym.even_odd, jacobiSymNat, mod_cast, mod_mod_of_dvd, natCast_ediv
+  rw [← jacobiSym.even_odd (mod_cast ha), if_pos (by simp [hb])]
+  rw [← Nat.mod_mod_of_dvd, hb]; simp
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.even_odd** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.even_odd₅ (a b c : Nat) (r : Int) (ha : a % 2 = 0) (hb : b % 8 = 5)
+theorem jacobiSymNat.even_odd₅ (a b c : ℕ) (r : ℤ) (ha : a % 2 = 0) (hb : b % 8 = 5)
     (hc : a / 2 = c) (hr : jacobiSymNat c b = r) : jacobiSymNat a b = -r := by
   simp only [jacobiSymNat, ← hr, ← hc, Int.natCast_ediv, Nat.cast_ofNat]
-  rw [← jacobiSym.even_odd (mod_cast ha)]; rw [if_pos (by simp [hb])]
-  rw [← Nat.mod_mod_of_dvd]; rw [hb]; simp
+  rw [← jacobiSym.even_odd (mod_cast ha), if_pos (by simp [hb])]
+  rw [← Nat.mod_mod_of_dvd, hb]; simp
 
-/--
-theorem `jacobiSymNat.qr₁` / 定理 `jacobiSymNat.qr₁`
+/-- Use quadratic reciprocity to reduce to smaller `b`. -/
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem jacobiSymNat.qr₁
-  statement: (a b : Nat) (r : Int) (ha : a % 4 = 1) (hb : b % 2 = 1)
-  proof: by
-  rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_one_mod_four ha (Nat.odd_iff.mpr hb)]
-
-中文:
-定理 jacobiSym自然数.qr₁
-  结论: (a b : 自然数) (r : 整数) (ha : a % 4 = 1) (hb : b % 2 = 1)
-  证明: by
-  rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_one_mod_four ha (Nat.odd_iff.mpr hb)]
-
-Depends on / 依赖: Nat.odd_iff.mpr, jacobiSym, jacobiSym.quadratic_reciprocity_one_mod_four, jacobiSymNat, odd_iff, quadratic_reciprocity_one_mod_four
+--- 原说明 ---
+Use quadratic reciprocity to reduce to smaller `b`.
 -/
-theorem jacobiSymNat.qr₁ (a b : Nat) (r : Int) (ha : a % 4 = 1) (hb : b % 2 = 1)
+theorem jacobiSymNat.qr₁ (a b : ℕ) (r : ℤ) (ha : a % 4 = 1) (hb : b % 2 = 1)
     (hr : jacobiSymNat b a = r) : jacobiSymNat a b = r := by
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_one_mod_four ha (Nat.odd_iff.mpr hb)]
-
-/--
-theorem `jacobiSymNat.qr₁_mod` / 定理 `jacobiSymNat.qr₁_mod`
-
-English:
-theorem jacobiSymNat.qr₁_mod
-  statement: (a b ab : Nat) (r : Int) (ha : a % 4 = 1) (hb : b % 2 = 1)
-  proof: jacobiSymNat.qr₁ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-中文:
-定理 jacobiSym自然数.qr₁_mod
-  结论: (a b ab : 自然数) (r : 整数) (ha : a % 4 = 1) (hb : b % 2 = 1)
-  证明: jacobiSymNat.qr₁ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-Depends on / 依赖: jacobiSymNat, jacobiSymNat.mod_left, jacobiSymNat.qr, mod_left
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.qr₁_mod (a b ab : Nat) (r : Int) (ha : a % 4 = 1) (hb : b % 2 = 1)
+theorem jacobiSymNat.qr₁_mod (a b ab : ℕ) (r : ℤ) (ha : a % 4 = 1) (hb : b % 2 = 1)
     (hab : b % a = ab) (hr : jacobiSymNat ab a = r) : jacobiSymNat a b = r :=
-jacobiSymNat.qr₁ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-/--
-theorem `jacobiSymNat.qr₁'` / 定理 `jacobiSymNat.qr₁'`
-
-English:
-theorem jacobiSymNat.qr₁'
-  statement: (a b : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 4 = 1)
-  proof: by
-  rwa [jacobiSymNat, ← jacobiSym.quadratic_reciprocity_one_mod_four hb (Nat.odd_iff.mpr ha)]
-
-中文:
-定理 jacobiSym自然数.qr₁'
-  结论: (a b : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 4 = 1)
-  证明: by
-  rwa [jacobiSymNat, ← jacobiSym.quadratic_reciprocity_one_mod_four hb (Nat.odd_iff.mpr ha)]
-
-Depends on / 依赖: Nat.odd_iff.mpr, jacobiSym, jacobiSym.quadratic_reciprocity_one_mod_four, jacobiSymNat, odd_iff, quadratic_reciprocity_one_mod_four
+  jacobiSymNat.qr₁ _ _ _ ha hb <| jacobiSymNat.mod_left _ _ ab r hab hr
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.qr₁' (a b : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 4 = 1)
+theorem jacobiSymNat.qr₁' (a b : ℕ) (r : ℤ) (ha : a % 2 = 1) (hb : b % 4 = 1)
     (hr : jacobiSymNat b a = r) : jacobiSymNat a b = r := by
   rwa [jacobiSymNat, ← jacobiSym.quadratic_reciprocity_one_mod_four hb (Nat.odd_iff.mpr ha)]
-
-/--
-theorem `jacobiSymNat.qr₁'_mod` / 定理 `jacobiSymNat.qr₁'_mod`
-
-English:
-theorem jacobiSymNat.qr₁'_mod
-  statement: (a b ab : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 4 = 1)
-  proof: jacobiSymNat.qr₁' _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-中文:
-定理 jacobiSym自然数.qr₁'_mod
-  结论: (a b ab : 自然数) (r : 整数) (ha : a % 2 = 1) (hb : b % 4 = 1)
-  证明: jacobiSymNat.qr₁' _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.qr₁'_mod (a b ab : Nat) (r : Int) (ha : a % 2 = 1) (hb : b % 4 = 1)
+theorem jacobiSymNat.qr₁'_mod (a b ab : ℕ) (r : ℤ) (ha : a % 2 = 1) (hb : b % 4 = 1)
     (hab : b % a = ab) (hr : jacobiSymNat ab a = r) : jacobiSymNat a b = r :=
-jacobiSymNat.qr₁' _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-/--
-theorem `jacobiSymNat.qr₃` / 定理 `jacobiSymNat.qr₃`
-
-English:
-theorem jacobiSymNat.qr₃
-  statement: (a b : Nat) (r : Int) (ha : a % 4 = 3) (hb : b % 4 = 3)
-  proof: by
-  rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_three_mod_four ha hb, neg_inj]
-
-中文:
-定理 jacobiSym自然数.qr₃
-  结论: (a b : 自然数) (r : 整数) (ha : a % 4 = 3) (hb : b % 4 = 3)
-  证明: by
-  rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_three_mod_four ha hb, neg_inj]
-
-Depends on / 依赖: jacobiSym, jacobiSym.quadratic_reciprocity_three_mod_four, jacobiSymNat, neg_inj, quadratic_reciprocity_three_mod_four
+  jacobiSymNat.qr₁' _ _ _ ha hb <| jacobiSymNat.mod_left _ _ ab r hab hr
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.qr₃ (a b : Nat) (r : Int) (ha : a % 4 = 3) (hb : b % 4 = 3)
+theorem jacobiSymNat.qr₃ (a b : ℕ) (r : ℤ) (ha : a % 4 = 3) (hb : b % 4 = 3)
     (hr : jacobiSymNat b a = r) : jacobiSymNat a b = -r := by
   rwa [jacobiSymNat, jacobiSym.quadratic_reciprocity_three_mod_four ha hb, neg_inj]
-
-/--
-theorem `jacobiSymNat.qr₃_mod` / 定理 `jacobiSymNat.qr₃_mod`
-
-English:
-theorem jacobiSymNat.qr₃_mod
-  statement: (a b ab : Nat) (r : Int) (ha : a % 4 = 3) (hb : b % 4 = 3)
-  proof: jacobiSymNat.qr₃ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-中文:
-定理 jacobiSym自然数.qr₃_mod
-  结论: (a b ab : 自然数) (r : 整数) (ha : a % 4 = 3) (hb : b % 4 = 3)
-  证明: jacobiSymNat.qr₃ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-Depends on / 依赖: jacobiSymNat, jacobiSymNat.mod_left, jacobiSymNat.qr, mod_left
+/-
+**Mathlib.Meta.NormNum.jacobiSymNat.qr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem jacobiSymNat.qr₃_mod (a b ab : Nat) (r : Int) (ha : a % 4 = 3) (hb : b % 4 = 3)
+theorem jacobiSymNat.qr₃_mod (a b ab : ℕ) (r : ℤ) (ha : a % 4 = 3) (hb : b % 4 = 3)
     (hab : b % a = ab) (hr : jacobiSymNat ab a = r) : jacobiSymNat a b = -r :=
-jacobiSymNat.qr₃ _ _ _ ha hb jacobiSymNat.mod_left _ _ ab r hab hr
-
-/--
-theorem `isInt_jacobiSym` / 定理 `isInt_jacobiSym`
-
-English:
-theorem isInt_jacobiSym
-  statement: {a na : Int} -> {b nb : Nat} -> {r : Int} ->
-
-中文:
-定理 is整数_jacobiSym
-  结论: {a na : 整数} -> {b nb : 自然数} -> {r : 整数} ->
+  jacobiSymNat.qr₃ _ _ _ ha hb <| jacobiSymNat.mod_left _ _ ab r hab hr
+/-
+**Mathlib.Meta.NormNum.isInt_jacobiSym** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+形式化陈述：∀ {a na : ℤ} {b nb : ℕ} {r : ℤ},   Mathlib.Meta.NormNum.IsInt a na →     M
+athlib.Meta.NormNum.IsNat b nb → jacobiSym na nb = r → Mathlib.Meta.NormNum.IsIn
+t (jacobiSym a b) r
+参数：jacobiSym a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isInt_jacobiSym : {a na : Int} -> {b nb : Nat} -> {r : Int} ->
-    IsInt a na -> IsNat b nb -> jacobiSym na nb = r -> IsInt (jacobiSym a b) r
+theorem isInt_jacobiSym : {a na : ℤ} → {b nb : ℕ} → {r : ℤ} →
+    IsInt a na → IsNat b nb → jacobiSym na nb = r → IsInt (jacobiSym a b) r
   | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨rfl⟩
-
-/--
-theorem `isInt_jacobiSymNat` / 定理 `isInt_jacobiSymNat`
-
-English:
-theorem isInt_jacobiSymNat
-  statement: {a na : Nat} -> {b nb : Nat} -> {r : Int} ->
-
-中文:
-定理 is整数_jacobiSym自然数
-  结论: {a na : 自然数} -> {b nb : 自然数} -> {r : 整数} ->
+/-
+**Mathlib.Meta.NormNum.isInt_jacobiSymNat** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Met
+a.NormNum`。
+形式化陈述：∀ {a na b nb : ℕ} {r : ℤ},   Mathlib.Meta.NormNum.IsNat a na →     Mathlib
+.Meta.NormNum.IsNat b nb →       Mathlib.Meta.NormNum.jacobiSymNat na nb = r → M
+athlib.Meta.NormNum.IsInt (Mathlib.Meta.NormNum.jacobiSymNat a b) r
+参数：Mathlib.Meta.NormNum.jacobiSymNat a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isInt_jacobiSymNat : {a na : Nat} -> {b nb : Nat} -> {r : Int} ->
-    IsNat a na -> IsNat b nb -> jacobiSymNat na nb = r -> IsInt (jacobiSymNat a b) r
+theorem isInt_jacobiSymNat : {a na : ℕ} → {b nb : ℕ} → {r : ℤ} →
+    IsNat a na → IsNat b nb → jacobiSymNat na nb = r → IsInt (jacobiSymNat a b) r
   | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨rfl⟩
 
 
@@ -631,43 +487,43 @@ namespace Mathlib.Meta.NormNum
 open Lean Elab Tactic Qq
 
 -- TODO: redefined here for reduction; should this be special-handled in quote4?
-/--
-Definition of `mkRawIntLit'` / `mkRawIntLit'` 的定义
-
-English:
-definition mkRawIntLit'
-  signature: (n : Int)
-  body: let lit : Q(Nat) := .lit .natVal n.natAbs
-  if 0 <= n then q(.ofNat $lit) else q(.negOfNat $lit)
-
-中文:
-定义 mkRaw整数Lit'
-  签名: (n : 整数)
-  定义体: let lit : Q(Nat) := .lit .natVal n.natAbs
-  if 0 <= n then q(.ofNat $lit) else q(.negOfNat $lit)
+/-
+**Mathlib.Meta.NormNum.mkRawIntLit'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Norm
+Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def mkRawIntLit' (n : Int) : Q(Int) :=
-let lit : Q(Nat) := .lit .natVal n.natAbs
-  if 0 <= n then q(.ofNat $lit) else q(.negOfNat $lit)
+private def mkRawIntLit' (n : ℤ) : Q(ℤ) :=
+  let lit : Q(ℕ) := .lit <| .natVal n.natAbs
+  if 0 ≤ n then q(.ofNat $lit) else q(.negOfNat $lit)
 
-/--
-Definition of `proveJacobiSymOdd` / `proveJacobiSymOdd` 的定义
+/-- This evaluates `r := jacobiSymNat a b` recursively using quadratic reciprocity
+and produces a proof term for the equality, assuming that `a < b` and `b` is odd. -/
+/-
+**Mathlib.Meta.NormNum.proveJacobiSymOdd** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.M
+eta.NormNum`。
+形式化陈述：(ea eb : Q(ℕ)) → (er : Q(ℤ)) × Q(Mathlib.Meta.NormNum.jacobiSymNat «$ea» «
+$eb» = «$er»)
+参数：ℕ；ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proveJacobiSymOdd
-  signature: (ea eb : Q(Nat))
-  body: match eb.natLit! with
+--- 原说明 ---
+This evaluates `r := jacobiSymNat a b` recursively using quadratic reciprocity
+and produces a proof term for the equality, assuming that `a < b` and `b` is odd
+.
+-/
+partial def proveJacobiSymOdd (ea eb : Q(ℕ)) : (er : Q(ℤ)) × Q(jacobiSymNat $ea $eb = $er) :=
+  match eb.natLit! with
   | 1 =>
-haveI : eb =Q 1 := ⟨⟩
+    haveI : $eb =Q 1 := ⟨⟩
     ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
   | b =>
     match ea.natLit! with
     | 0 =>
-haveI : ea =Q 0 := ⟨⟩
+      haveI : $ea =Q 0 := ⟨⟩
       have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
       ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
     | 1 =>
-haveI : ea =Q 1 := ⟨⟩
+      haveI : $ea =Q 1 := ⟨⟩
       ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
     | a =>
       match a % 2 with
@@ -676,13 +532,13 @@ haveI : ea =Q 1 := ⟨⟩
         | 0 =>
           have ha : Q(Nat.mod $ea 4 = 0) := (q(Eq.refl 0) : Expr)
           have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 4)
+          have ec : Q(ℕ) := mkRawNatLit (a / 4)
           have hc : Q(Nat.div $ea 4 = $ec) := (q(Eq.refl $ec) : Expr)
           have ⟨er, p⟩ := proveJacobiSymOdd ec eb
           ⟨er, q(jacobiSymNat.double_even $ea $eb $ec $er $ha $hb $hc $p)⟩
         | _ =>
           have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 2)
+          have ec : Q(ℕ) := mkRawNatLit (a / 2)
           have hc : Q(Nat.div $ea 2 = $ec) := (q(Eq.refl $ec) : Expr)
           have ⟨er, p⟩ := proveJacobiSymOdd ec eb
           match b % 8 with
@@ -692,18 +548,18 @@ haveI : ea =Q 1 := ⟨⟩
           | 3 =>
             have er' := mkRawIntLit (-er.intLit!)
             have hb : Q(Nat.mod $eb 8 = 3) := (q(Eq.refl 3) : Expr)
-            show (_ : Q(Int)) × Q(jacobiSymNat $ea $eb = -$er) from
+            show (_ : Q(ℤ)) × Q(jacobiSymNat $ea $eb = -$er) from
               ⟨er', q(jacobiSymNat.even_odd₃ $ea $eb $ec $er $ha $hb $hc $p)⟩
           | 5 =>
             have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
+            haveI : $er' =Q -$er := ⟨⟩
             have hb : Q(Nat.mod $eb 8 = 5) := (q(Eq.refl 5) : Expr)
             ⟨er', q(jacobiSymNat.even_odd₅ $ea $eb $ec $er $ha $hb $hc $p)⟩
           | _ =>
             have hb : Q(Nat.mod $eb 8 = 7) := (q(Eq.refl 7) : Expr)
             ⟨er, q(jacobiSymNat.even_odd₇ $ea $eb $ec $er $ha $hb $hc $p)⟩
       | _ =>
-        have eab : Q(Nat) := mkRawNatLit (b % a)
+        have eab : Q(ℕ) := mkRawNatLit (b % a)
         have hab : Q(Nat.mod $eb $ea = $eab) := (q(Eq.refl $eab) : Expr)
         have ⟨er, p⟩ := proveJacobiSymOdd eab ea
         match a % 4 with
@@ -719,165 +575,33 @@ haveI : er' =Q - er := ⟨⟩
             ⟨er, q(jacobiSymNat.qr₁'_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
           | _ =>
             have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
+            haveI : $er' =Q -$er := ⟨⟩
             have ha : Q(Nat.mod $ea 4 = 3) := (q(Eq.refl 3) : Expr)
             have hb : Q(Nat.mod $eb 4 = 3) := (q(Eq.refl 3) : Expr)
             ⟨er', q(jacobiSymNat.qr₃_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
 
-中文:
-定义 proveJacobiSymOdd
-  签名: (ea eb : Q(自然数))
-  定义体: match eb.natLit! with
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
-  | b =>
-    match ea.natLit! with
-    | 0 =>
-haveI : ea =Q 0 := ⟨⟩
-      have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
-    | 1 =>
-haveI : ea =Q 1 := ⟨⟩
-      ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
-    | a =>
-      match a % 2 with
-      | 0 =>
-        match a % 4 with
-        | 0 =>
-          have ha : Q(Nat.mod $ea 4 = 0) := (q(Eq.refl 0) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 4)
-          have hc : Q(Nat.div $ea 4 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
-          ⟨er, q(jacobiSymNat.double_even $ea $eb $ec $er $ha $hb $hc $p)⟩
-        | _ =>
-          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 2)
-          have hc : Q(Nat.div $ea 2 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
-          match b % 8 with
-          | 1 =>
-            have hb : Q(Nat.mod $eb 8 = 1) := (q(Eq.refl 1) : Expr)
-            ⟨er, q(jacobiSymNat.even_odd₁ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | 3 =>
-            have er' := mkRawIntLit (-er.intLit!)
-            have hb : Q(Nat.mod $eb 8 = 3) := (q(Eq.refl 3) : Expr)
-            show (_ : Q(Int)) × Q(jacobiSymNat $ea $eb = -$er) from
-              ⟨er', q(jacobiSymNat.even_odd₃ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | 5 =>
-            have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
-            have hb : Q(Nat.mod $eb 8 = 5) := (q(Eq.refl 5) : Expr)
-            ⟨er', q(jacobiSymNat.even_odd₅ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | _ =>
-            have hb : Q(Nat.mod $eb 8 = 7) := (q(Eq.refl 7) : Expr)
-            ⟨er, q(jacobiSymNat.even_odd₇ $ea $eb $ec $er $ha $hb $hc $p)⟩
-      | _ =>
-        have eab : Q(Nat) := mkRawNatLit (b % a)
-        have hab : Q(Nat.mod $eb $ea = $eab) := (q(Eq.refl $eab) : Expr)
-        have ⟨er, p⟩ := proveJacobiSymOdd eab ea
-        match a % 4 with
-        | 1 =>
-          have ha : Q(Nat.mod $ea 4 = 1) := (q(Eq.refl 1) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
-          ⟨er, q(jacobiSymNat.qr₁_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
-        | _ =>
-          match b % 4 with
-          | 1 =>
-            have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
-            have hb : Q(Nat.mod $eb 4 = 1) := (q(Eq.refl 1) : Expr)
-            ⟨er, q(jacobiSymNat.qr₁'_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
-          | _ =>
-            have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
-            have ha : Q(Nat.mod $ea 4 = 3) := (q(Eq.refl 3) : Expr)
-            have hb : Q(Nat.mod $eb 4 = 3) := (q(Eq.refl 3) : Expr)
-            ⟨er', q(jacobiSymNat.qr₃_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
+/-- This evaluates `r := jacobiSymNat a b` and produces a proof term for the equality
+by removing powers of `2` from `b` and then calling `proveJacobiSymOdd`. -/
+/-
+**Mathlib.Meta.NormNum.proveJacobiSymNat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta
+.NormNum`。
+形式化陈述：(ea eb : Q(ℕ)) → (er : Q(ℤ)) × Q(Mathlib.Meta.NormNum.jacobiSymNat «$ea» «
+$eb» = «$er»)
+参数：ℕ；ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: TotallyDisconnectedSpace, TotallySeparatedSpace
+--- 原说明 ---
+This evaluates `r := jacobiSymNat a b` and produces a proof term for the equalit
+y
+by removing powers of `2` from `b` and then calling `proveJacobiSymOdd`.
 -/
-partial def proveJacobiSymOdd (ea eb : Q(Nat)) : (er : Q(Int)) × Q(jacobiSymNat $ea $eb = $er) :=
+partial def proveJacobiSymNat (ea eb : Q(ℕ)) : (er : Q(ℤ)) × Q(jacobiSymNat $ea $eb = $er) :=
   match eb.natLit! with
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
-  | b =>
-    match ea.natLit! with
-    | 0 =>
-haveI : ea =Q 0 := ⟨⟩
-      have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
-    | 1 =>
-haveI : ea =Q 1 := ⟨⟩
-      ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
-    | a =>
-      match a % 2 with
-      | 0 =>
-        match a % 4 with
-        | 0 =>
-          have ha : Q(Nat.mod $ea 4 = 0) := (q(Eq.refl 0) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 4)
-          have hc : Q(Nat.div $ea 4 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
-          ⟨er, q(jacobiSymNat.double_even $ea $eb $ec $er $ha $hb $hc $p)⟩
-        | _ =>
-          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (a / 2)
-          have hc : Q(Nat.div $ea 2 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
-          match b % 8 with
-          | 1 =>
-            have hb : Q(Nat.mod $eb 8 = 1) := (q(Eq.refl 1) : Expr)
-            ⟨er, q(jacobiSymNat.even_odd₁ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | 3 =>
-            have er' := mkRawIntLit (-er.intLit!)
-            have hb : Q(Nat.mod $eb 8 = 3) := (q(Eq.refl 3) : Expr)
-            show (_ : Q(Int)) × Q(jacobiSymNat $ea $eb = -$er) from
-              ⟨er', q(jacobiSymNat.even_odd₃ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | 5 =>
-            have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
-            have hb : Q(Nat.mod $eb 8 = 5) := (q(Eq.refl 5) : Expr)
-            ⟨er', q(jacobiSymNat.even_odd₅ $ea $eb $ec $er $ha $hb $hc $p)⟩
-          | _ =>
-            have hb : Q(Nat.mod $eb 8 = 7) := (q(Eq.refl 7) : Expr)
-            ⟨er, q(jacobiSymNat.even_odd₇ $ea $eb $ec $er $ha $hb $hc $p)⟩
-      | _ =>
-        have eab : Q(Nat) := mkRawNatLit (b % a)
-        have hab : Q(Nat.mod $eb $ea = $eab) := (q(Eq.refl $eab) : Expr)
-        have ⟨er, p⟩ := proveJacobiSymOdd eab ea
-        match a % 4 with
-        | 1 =>
-          have ha : Q(Nat.mod $ea 4 = 1) := (q(Eq.refl 1) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
-          ⟨er, q(jacobiSymNat.qr₁_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
-        | _ =>
-          match b % 4 with
-          | 1 =>
-            have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
-            have hb : Q(Nat.mod $eb 4 = 1) := (q(Eq.refl 1) : Expr)
-            ⟨er, q(jacobiSymNat.qr₁'_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
-          | _ =>
-            have er' := mkRawIntLit (-er.intLit!)
-haveI : er' =Q - er := ⟨⟩
-            have ha : Q(Nat.mod $ea 4 = 3) := (q(Eq.refl 3) : Expr)
-            have hb : Q(Nat.mod $eb 4 = 3) := (q(Eq.refl 3) : Expr)
-            ⟨er', q(jacobiSymNat.qr₃_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
-
-/--
-Definition of `proveJacobiSymNat` / `proveJacobiSymNat` 的定义
-
-English:
-definition proveJacobiSymNat
-  signature: (ea eb : Q(Nat))
-  body: match eb.natLit! with
   | 0 =>
-haveI : eb =Q 0 := ⟨⟩
+    haveI : $eb =Q 0 := ⟨⟩
     ⟨mkRawIntLit' 1, q(jacobiSymNat.zero_right $ea)⟩
   | 1 =>
-haveI : eb =Q 1 := ⟨⟩
+    haveI : $eb =Q 1 := ⟨⟩
     ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
   | b =>
     match b % 2 with
@@ -885,10 +609,10 @@ haveI : eb =Q 1 := ⟨⟩
       match ea.natLit! with
       | 0 =>
         have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-        show (er : Q(Int)) × Q(jacobiSymNat 0 $eb = $er) from
+        show (er : Q(ℤ)) × Q(jacobiSymNat 0 $eb = $er) from
           ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
       | 1 =>
-        show (er : Q(Int)) × Q(jacobiSymNat 1 $eb = $er) from
+        show (er : Q(ℤ)) × Q(jacobiSymNat 1 $eb = $er) from
           ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
       | a =>
         match a % 2 with
@@ -900,169 +624,49 @@ haveI : eb =Q 1 := ⟨⟩
         | _ =>
           have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
           have hb : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (b / 2)
+          have ec : Q(ℕ) := mkRawNatLit (b / 2)
           have hc : Q(Nat.div $eb 2 = $ec) := (q(Eq.refl $ec) : Expr)
           have ⟨er, p⟩ := proveJacobiSymOdd ea ec
           ⟨er, q(jacobiSymNat.odd_even $ea $eb $ec $er $ha $hb $hc $p)⟩
     | _ =>
       have a := ea.natLit!
-      if b <= a then
-        have eab : Q(Nat) := mkRawNatLit (a % b)
+      if b ≤ a then
+        have eab : Q(ℕ) := mkRawNatLit (a % b)
         have hab : Q(Nat.mod $ea $eb = $eab) := (q(Eq.refl $eab) : Expr)
         have ⟨er, p⟩ := proveJacobiSymOdd eab eb
         ⟨er, q(jacobiSymNat.mod_left $ea $eb $eab $er $hab $p)⟩
       else
         proveJacobiSymOdd ea eb
 
-中文:
-定义 proveJacobiSym自然数
-  签名: (ea eb : Q(自然数))
-  定义体: match eb.natLit! with
-  | 0 =>
-haveI : eb =Q 0 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.zero_right $ea)⟩
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
-  | b =>
-    match b % 2 with
-    | 0 =>
-      match ea.natLit! with
-      | 0 =>
-        have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-        show (er : Q(Int)) × Q(jacobiSymNat 0 $eb = $er) from
-          ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
-      | 1 =>
-        show (er : Q(Int)) × Q(jacobiSymNat 1 $eb = $er) from
-          ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
-      | a =>
-        match a % 2 with
-        | 0 =>
-          have hb₀ : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
-          have hb₁ : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
-          ⟨mkRawIntLit' 0, q(jacobiSymNat.even_even $ea $eb $hb₀ $ha $hb₁)⟩
-        | _ =>
-          have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (b / 2)
-          have hc : Q(Nat.div $eb 2 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ea ec
-          ⟨er, q(jacobiSymNat.odd_even $ea $eb $ec $er $ha $hb $hc $p)⟩
-    | _ =>
-      have a := ea.natLit!
-      if b <= a then
-        have eab : Q(Nat) := mkRawNatLit (a % b)
-        have hab : Q(Nat.mod $ea $eb = $eab) := (q(Eq.refl $eab) : Expr)
-        have ⟨er, p⟩ := proveJacobiSymOdd eab eb
-        ⟨er, q(jacobiSymNat.mod_left $ea $eb $eab $er $hab $p)⟩
-      else
-        proveJacobiSymOdd ea eb
+/-- This evaluates `r := jacobiSym a b` and produces a proof term for the equality.
+This is done by reducing to `r := jacobiSymNat (a % b) b`. -/
+/-
+**Mathlib.Meta.NormNum.proveJacobiSym** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：(ea : Q(ℤ)) → (eb : Q(ℕ)) → (er : Q(ℤ)) × Q(jacobiSym «$ea» «$eb» = «$er»)
+参数：ℤ；ℕ；ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This evaluates `r := jacobiSym a b` and produces a proof term for the equality.
+This is done by reducing to `r := jacobiSymNat (a % b) b`.
 -/
-partial def proveJacobiSymNat (ea eb : Q(Nat)) : (er : Q(Int)) × Q(jacobiSymNat $ea $eb = $er) :=
+partial def proveJacobiSym (ea : Q(ℤ)) (eb : Q(ℕ)) : (er : Q(ℤ)) × Q(jacobiSym $ea $eb = $er) :=
   match eb.natLit! with
   | 0 =>
-haveI : eb =Q 0 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.zero_right $ea)⟩
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSymNat.one_right $ea)⟩
-  | b =>
-    match b % 2 with
-    | 0 =>
-      match ea.natLit! with
-      | 0 =>
-        have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-        show (er : Q(Int)) × Q(jacobiSymNat 0 $eb = $er) from
-          ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
-      | 1 =>
-        show (er : Q(Int)) × Q(jacobiSymNat 1 $eb = $er) from
-          ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
-      | a =>
-        match a % 2 with
-        | 0 =>
-          have hb₀ : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
-          have hb₁ : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
-          ⟨mkRawIntLit' 0, q(jacobiSymNat.even_even $ea $eb $hb₀ $ha $hb₁)⟩
-        | _ =>
-          have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
-          have hb : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
-          have ec : Q(Nat) := mkRawNatLit (b / 2)
-          have hc : Q(Nat.div $eb 2 = $ec) := (q(Eq.refl $ec) : Expr)
-          have ⟨er, p⟩ := proveJacobiSymOdd ea ec
-          ⟨er, q(jacobiSymNat.odd_even $ea $eb $ec $er $ha $hb $hc $p)⟩
-    | _ =>
-      have a := ea.natLit!
-      if b <= a then
-        have eab : Q(Nat) := mkRawNatLit (a % b)
-        have hab : Q(Nat.mod $ea $eb = $eab) := (q(Eq.refl $eab) : Expr)
-        have ⟨er, p⟩ := proveJacobiSymOdd eab eb
-        ⟨er, q(jacobiSymNat.mod_left $ea $eb $eab $er $hab $p)⟩
-      else
-        proveJacobiSymOdd ea eb
-
-/--
-Definition of `proveJacobiSym` / `proveJacobiSym` 的定义
-
-English:
-definition proveJacobiSym
-  signature: (ea : Q(Int)) (eb : Q(Nat))
-  body: match eb.natLit! with
-  | 0 =>
-haveI : eb =Q 0 := ⟨⟩
+    haveI : $eb =Q 0 := ⟨⟩
     ⟨mkRawIntLit' 1, q(jacobiSym.zero_right $ea)⟩
   | 1 =>
-haveI : eb =Q 1 := ⟨⟩
+    haveI : $eb =Q 1 := ⟨⟩
     ⟨mkRawIntLit' 1, q(jacobiSym.one_right $ea)⟩
   | b =>
     have eb' := mkRawIntLit b
-    have hb' : Q(($eb : Int) = $eb') := (q(Eq.refl $eb') : Expr)
+    have hb' : Q(($eb : ℤ) = $eb') := (q(Eq.refl $eb') : Expr)
     have ab := ea.intLit! % b
     have eab := mkRawIntLit ab
     have hab : Q(Int.emod $ea $eb' = $eab) := (q(Eq.refl $eab) : Expr)
-    have eab' : Q(Nat) := mkRawNatLit ab.toNat
-    have hab' : Q(($eab' : Int) = $eab) := (q(Eq.refl $eab) : Expr)
-    have ⟨er, p⟩ := proveJacobiSymNat eab' eb
-    ⟨er, q(JacobiSym.mod_left $ea $eb $eab' $eab $er $eb' $hb' $hab $hab' $p)⟩
-
-中文:
-定义 proveJacobiSym
-  签名: (ea : Q(整数)) (eb : Q(自然数))
-  定义体: match eb.natLit! with
-  | 0 =>
-haveI : eb =Q 0 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSym.zero_right $ea)⟩
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSym.one_right $ea)⟩
-  | b =>
-    have eb' := mkRawIntLit b
-    have hb' : Q(($eb : Int) = $eb') := (q(Eq.refl $eb') : Expr)
-    have ab := ea.intLit! % b
-    have eab := mkRawIntLit ab
-    have hab : Q(Int.emod $ea $eb' = $eab) := (q(Eq.refl $eab) : Expr)
-    have eab' : Q(Nat) := mkRawNatLit ab.toNat
-    have hab' : Q(($eab' : Int) = $eab) := (q(Eq.refl $eab) : Expr)
-    have ⟨er, p⟩ := proveJacobiSymNat eab' eb
-    ⟨er, q(JacobiSym.mod_left $ea $eb $eab' $eab $er $eb' $hb' $hab $hab' $p)⟩
--/
-partial def proveJacobiSym (ea : Q(Int)) (eb : Q(Nat)) : (er : Q(Int)) × Q(jacobiSym $ea $eb = $er) :=
-  match eb.natLit! with
-  | 0 =>
-haveI : eb =Q 0 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSym.zero_right $ea)⟩
-  | 1 =>
-haveI : eb =Q 1 := ⟨⟩
-    ⟨mkRawIntLit' 1, q(jacobiSym.one_right $ea)⟩
-  | b =>
-    have eb' := mkRawIntLit b
-    have hb' : Q(($eb : Int) = $eb') := (q(Eq.refl $eb') : Expr)
-    have ab := ea.intLit! % b
-    have eab := mkRawIntLit ab
-    have hab : Q(Int.emod $ea $eb' = $eab) := (q(Eq.refl $eab) : Expr)
-    have eab' : Q(Nat) := mkRawNatLit ab.toNat
-    have hab' : Q(($eab' : Int) = $eab) := (q(Eq.refl $eab) : Expr)
+    have eab' : Q(ℕ) := mkRawNatLit ab.toNat
+    have hab' : Q(($eab' : ℤ) = $eab) := (q(Eq.refl $eab) : Expr)
     have ⟨er, p⟩ := proveJacobiSymNat eab' eb
     ⟨er, q(JacobiSym.mod_left $ea $eb $eab' $eab $er $eb' $hb' $hab $hab' $p)⟩
 
@@ -1085,123 +689,63 @@ open Lean Elab Tactic Qq Mathlib.Meta.NormNum
 
 /-- This is the `norm_num` plug-in that evaluates Jacobi symbols. -/
 @[norm_num jacobiSym _ _]
-/--
-Definition of `evalJacobiSym` / `evalJacobiSym` 的定义
+/-
+**Tactic.NormNum.evalJacobiSym** 是 Mathlib 中的一个定义，位于命名空间 `Tactic.NormNum`。
+形式化陈述：evalJacobiSym : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalJacobiSym
-  signature: : NormNumExt where eval {u α} e
-  body: do
-    let .app (.app _ (a : Q(Int))) (b : Q(Nat)) ← Meta.whnfR e | failure
-    let ⟨ea, pa⟩ ← deriveInt a _
-    let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSym ea eb
-haveI' : e =Q jacobiSym a b := ⟨⟩
-    return .isInt _ er er.intLit! q(isInt_jacobiSym $pa $pb $pr)
-
-中文:
-定义 evalJacobiSym
-  签名: : NormNumExt where eval {u α} e
-  定义体: do
-    let .app (.app _ (a : Q(Int))) (b : Q(Nat)) ← Meta.whnfR e | failure
-    let ⟨ea, pa⟩ ← deriveInt a _
-    let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSym ea eb
-haveI' : e =Q jacobiSym a b := ⟨⟩
-    return .isInt _ er er.intLit! q(isInt_jacobiSym $pa $pb $pr)
+--- 原说明 ---
+This is the `norm_num` plug-in that evaluates Jacobi symbols.
 -/
 def evalJacobiSym : NormNumExt where eval {u α} e := do
-    let .app (.app _ (a : Q(Int))) (b : Q(Nat)) ← Meta.whnfR e | failure
+    let .app (.app _ (a : Q(ℤ))) (b : Q(ℕ)) ← Meta.whnfR e | failure
     let ⟨ea, pa⟩ ← deriveInt a _
     let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
+    haveI' : u =QL 0 := ⟨⟩ haveI' : $α =Q ℤ := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea eb
-haveI' : e =Q jacobiSym a b := ⟨⟩
+    haveI' : $e =Q jacobiSym $a $b := ⟨⟩
     return .isInt _ er er.intLit! q(isInt_jacobiSym $pa $pb $pr)
 
 /-- This is the `norm_num` plug-in that evaluates Jacobi symbols on natural numbers. -/
 @[norm_num jacobiSymNat _ _]
-/--
-Definition of `evalJacobiSymNat` / `evalJacobiSymNat` 的定义
+/-
+**Tactic.NormNum.evalJacobiSymNat** 是 Mathlib 中的一个定义，位于命名空间 `Tactic.NormNum`。
+形式化陈述：evalJacobiSymNat : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalJacobiSymNat
-  signature: : NormNumExt where eval {u α} e
-  body: do
-    let .app (.app _ (a : Q(Nat))) (b : Q(Nat)) ← Meta.whnfR e | failure
-    let ⟨ea, pa⟩ ← deriveNat a _
-    let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSymNat ea eb
-haveI' : e =Q jacobiSymNat a b := ⟨⟩
-    return .isInt _ er er.intLit! q(isInt_jacobiSymNat $pa $pb $pr)
-
-中文:
-定义 evalJacobiSym自然数
-  签名: : NormNumExt where eval {u α} e
-  定义体: do
-    let .app (.app _ (a : Q(Nat))) (b : Q(Nat)) ← Meta.whnfR e | failure
-    let ⟨ea, pa⟩ ← deriveNat a _
-    let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSymNat ea eb
-haveI' : e =Q jacobiSymNat a b := ⟨⟩
-    return .isInt _ er er.intLit! q(isInt_jacobiSymNat $pa $pb $pr)
+--- 原说明 ---
+This is the `norm_num` plug-in that evaluates Jacobi symbols on natural numbers.
 -/
 def evalJacobiSymNat : NormNumExt where eval {u α} e := do
-    let .app (.app _ (a : Q(Nat))) (b : Q(Nat)) ← Meta.whnfR e | failure
+    let .app (.app _ (a : Q(ℕ))) (b : Q(ℕ)) ← Meta.whnfR e | failure
     let ⟨ea, pa⟩ ← deriveNat a _
     let ⟨eb, pb⟩ ← deriveNat b _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
+    haveI' : u =QL 0 := ⟨⟩ haveI' : $α =Q ℤ := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSymNat ea eb
-haveI' : e =Q jacobiSymNat a b := ⟨⟩
-    return .isInt _ er er.intLit! q(isInt_jacobiSymNat $pa $pb $pr)
+    haveI' : $e =Q jacobiSymNat $a $b := ⟨⟩
+    return .isInt _ er er.intLit!  q(isInt_jacobiSymNat $pa $pb $pr)
 
 /-- This is the `norm_num` plug-in that evaluates Legendre symbols. -/
 @[norm_num legendreSym _ _]
-/--
-Definition of `evalLegendreSym` / `evalLegendreSym` 的定义
+/-
+**Tactic.NormNum.evalLegendreSym** 是 Mathlib 中的一个定义，位于命名空间 `Tactic.NormNum`。
+形式化陈述：evalLegendreSym : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalLegendreSym
-  signature: : NormNumExt where eval {u α} e
-  body: do
-    let .app (.app (.app _ (p : Q(Nat))) (fp : Q(Fact (Nat.Prime $p)))) (a : Q(Int)) ← Meta.whnfR e |
-      failure
-    let ⟨ea, pa⟩ ← deriveInt a _
-    let ⟨ep, pp⟩ ← deriveNat p _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSym ea ep
-haveI' : e =Q legendreSym p a := ⟨⟩
-    return .isInt _ er er.intLit!
-      q(LegendreSym.to_jacobiSym $p $fp $a $er (isInt_jacobiSym $pa $pp $pr))
-
-中文:
-定义 evalLegendreSym
-  签名: : NormNumExt where eval {u α} e
-  定义体: do
-    let .app (.app (.app _ (p : Q(Nat))) (fp : Q(Fact (Nat.Prime $p)))) (a : Q(Int)) ← Meta.whnfR e |
-      failure
-    let ⟨ea, pa⟩ ← deriveInt a _
-    let ⟨ep, pp⟩ ← deriveNat p _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
-    have ⟨er, pr⟩ := proveJacobiSym ea ep
-haveI' : e =Q legendreSym p a := ⟨⟩
-    return .isInt _ er er.intLit!
-      q(LegendreSym.to_jacobiSym $p $fp $a $er (isInt_jacobiSym $pa $pp $pr))
-
-Depends on / 依赖: Iff.mpr, regularSpace_TFAE
+--- 原说明 ---
+This is the `norm_num` plug-in that evaluates Legendre symbols.
 -/
 def evalLegendreSym : NormNumExt where eval {u α} e := do
-    let .app (.app (.app _ (p : Q(Nat))) (fp : Q(Fact (Nat.Prime $p)))) (a : Q(Int)) ← Meta.whnfR e |
+    let .app (.app (.app _ (p : Q(ℕ))) (fp : Q(Fact (Nat.Prime $p)))) (a : Q(ℤ)) ← Meta.whnfR e |
       failure
     let ⟨ea, pa⟩ ← deriveInt a _
     let ⟨ep, pp⟩ ← deriveNat p _
-haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
+    haveI' : u =QL 0 := ⟨⟩ haveI' : $α =Q ℤ := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea ep
-haveI' : e =Q legendreSym p a := ⟨⟩
+    haveI' : $e =Q legendreSym $p $a := ⟨⟩
     return .isInt _ er er.intLit!
       q(LegendreSym.to_jacobiSym $p $fp $a $er (isInt_jacobiSym $pa $pp $pr))
 
@@ -1210,3 +754,4 @@ end NormNum
 end Tactic
 
 end Tactic
+

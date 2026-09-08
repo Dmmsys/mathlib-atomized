@@ -42,162 +42,105 @@ namespace CategoryTheory
 open Category Limits Preadditive Pretriangulated Adjunction
 
 variable {C D : Type*} [Category* C] [Category* D] [HasZeroObject C] [HasZeroObject D]
-  [Preadditive C] [Preadditive D] [HasShift C Int] [HasShift D Int]
-  [forall (n : Int), (shiftFunctor C n).Additive] [forall (n : Int), (shiftFunctor D n).Additive]
+  [Preadditive C] [Preadditive D] [HasShift C ℤ] [HasShift D ℤ]
+  [∀ (n : ℤ), (shiftFunctor C n).Additive] [∀ (n : ℤ), (shiftFunctor D n).Additive]
   [Pretriangulated C] [Pretriangulated D]
 
 namespace Adjunction
 
-variable {F : C ⥤ D} {G : D ⥤ C} (adj : F ⊣ G) [F.CommShift Int] [G.CommShift Int]
-  [adj.CommShift Int]
+variable {F : C ⥤ D} {G : D ⥤ C} (adj : F ⊣ G) [F.CommShift ℤ] [G.CommShift ℤ]
+  [adj.CommShift ℤ]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 include adj in
 /--
-lemma `isTriangulated_rightAdjoint` / 引理 `isTriangulated_rightAdjoint`
+The right adjoint of a triangulated functor is triangulated.
+-/
+/-
+**CategoryTheory.Adjunction.isTriangulated_rightAdjoint** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where ma
+p_distinguished T hT
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.right_adjoint_additive`：right_adjoint_additive
+ [F.Additive] : G.Additive where map_add {X Y} f g
+· 使用定理 `CategoryTheory.Functor.IsTriangulated.instAdditive`：∀ {C : Type u_1} {D 
+: Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Pretriangulated.distinguished_cocone_triangle`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.H
+asZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `CategoryTheory.Pretriangulated.complete_distinguished_triangle_morphism`
+：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheo
+ry.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Functor.map_distinguished`：map_distinguished [F.IsTriangu
+lated] (T : Triangle C) (hT : T in distTriang C) : F.mapTriangle.obj T in distTr
+iang D
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components_assoc`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryT
+heory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality_assoc`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Adjunction.shift_counit_app`：shift_counit_app [adj.CommSh
+ift A] (a : A) (Y : D) : (adj.counit.app Y)⟦a⟧' = (F.commShiftIso a).inv.app (G.
+obj Y) ≫ F.map ((G.commShiftIso …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Preadditive.mono_iff_cancel_zero`：mono_iff_cancel_zero {Q
+ R : C} (f : Q ⟶ R) : Mono f ↔ forall (P : C) (g : P ⟶ Q), g ≫ f = 0 -> g = 0
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₃`：coyoneda_exact₃
+ {X : C} (f : X ⟶ T.obj₃) (hf : f ≫ T.mor₃ = 0) : exists (g : X ⟶ T.obj₂), f = g
+ ≫ T.mor₂
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+（共 62 条，此处仅展示前 30 条）
 
-English:
-lemma isTriangulated_rightAdjoint
-  given: [F.IsTriangulated]
-  statement: G.IsTriangulated where
-  proof: by
-    have : G.Additive := adj.right_adjoint_additive
-    obtain ⟨Z, f, g, mem⟩ := distinguished_cocone_triangle (G.map T.mor₁)
-    obtain ⟨h, ⟨h₁, h₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-      (F.map_distinguished _ mem) hT (adj.counit.app T.obj₁) (adj.counit.app T.obj₂) (by simp)
-    dsimp at h h₁ h₂ ⊢
-    have h₁' : f ≫ adj.unit.app Z ≫ G.map h = G.map T.mor₂ := by
-      simpa [homEquiv_apply] using DFunLike.congr_arg (adj.homEquiv _ _) h₁
-    have h₂' : g ≫ (G.commShiftIso (1 : Int)).inv.app T.obj₁ =
-        adj.homEquiv _ _ h ≫ G.map T.mor₃ := by
-      apply (adj.homEquiv _ _).symm.injective
-      simp only [Functor.comp_obj, homEquiv_counit, Functor.id_obj, Functor.map_comp, assoc,
-        homEquiv_unit, counit_naturality, counit_naturality_assoc, left_triangle_components_assoc,
-        ← h₂, adj.shift_counit_app, Iso.hom_inv_id_app_assoc]
-    rw [assoc] at h₂
-    have : Mono (adj.homEquiv _ _ h) := by
-      rw [mono_iff_cancel_zero]
-      intro _ φ hφ
-      obtain ⟨ψ, rfl⟩ := Triangle.coyoneda_exact₃ _ mem φ (by
-        dsimp
-        simp only [homEquiv_unit, Functor.comp_obj] at hφ
-        rw [← cancel_mono ((G.commShiftIso (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [h₂']; rw [zero_comp]; rw [homEquiv_unit]; rw [assoc]; rw [reassoc_of% hφ]; rw [zero_comp])
-      dsimp at ψ hφ ⊢
-      obtain ⟨α, hα⟩ := T.coyoneda_exact₂ hT ((adj.homEquiv _ _).symm ψ)
-        ((adj.homEquiv _ _).injective (by simpa [homEquiv_counit, homEquiv_unit, ← h₁'] using hφ))
-      have eq := DFunLike.congr_arg (adj.homEquiv _ _) hα
-      simp only [homEquiv_counit, homEquiv_unit, comp_id,
-        Functor.map_comp, unit_naturality_assoc, right_triangle_components] at eq
-      have eq' := comp_distTriang_mor_zero₁₂ _ mem
-      dsimp at eq eq'
-      rw [eq]; rw [assoc]; rw [assoc]; rw [eq']; rw [comp_zero]; rw [comp_zero]
-    have := isIso_of_yoneda_map_bijective (adj.homEquiv _ _ h) (fun Y => by
-      constructor
-      · intro φ₁ φ₂ hφ
-        rw [← cancel_mono (adj.homEquiv _ _ h)]
-        exact hφ
-      · intro φ
-        obtain ⟨ψ, hψ⟩ := Triangle.coyoneda_exact₁ _ mem (φ ≫ G.map T.mor₃ ≫
-          (G.commShiftIso (1 : Int)).hom.app T.obj₁) (by
-            dsimp
-            rw [assoc]; rw [assoc]; rw [← G.commShiftIso_hom_naturality]; rw [← G.map_comp_assoc]; rw [comp_distTriang_mor_zero₃₁ _ hT]; rw [G.map_zero]; rw [zero_comp]; rw [comp_zero])
-        dsimp at ψ hψ
-        obtain ⟨α, hα⟩ : exists α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
-        have hα₀ : α ≫ G.map T.mor₃ = 0 := by
-          rw [hα]; rw [sub_comp]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).hom.app T.obj₁)]; rw [assoc]; rw [sub_comp]; rw [assoc]; rw [assoc]; rw [hψ]; rw [zero_comp]; rw [sub_eq_zero]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [h₂']; rw [Iso.hom_inv_id_app]; rw [comp_id]
-        suffices exists (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
-          obtain ⟨β, hβ⟩ := this
-          refine ⟨ψ + β, ?_⟩
-          dsimp
-          rw [add_comp]; rw [hβ]; rw [hα]; rw [add_sub_cancel]
-        obtain ⟨β, hβ⟩ := T.coyoneda_exact₃ hT ((adj.homEquiv _ _).symm α)
-          ((adj.homEquiv _ _).injective (by simpa [homEquiv_unit, homEquiv_counit] using hα₀))
-        refine ⟨adj.homEquiv _ _ β ≫ f, ?_⟩
-        simpa [homEquiv_unit, h₁'] using congr_arg (adj.homEquiv _ _).toFun hβ.symm)
-    refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
-    refine Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso (adj.homEquiv Z T.obj₃ h)) ?_ ?_ ?_
-    · simp
-    · apply (adj.homEquiv _ _).symm.injective
-      dsimp
-      simp only [homEquiv_unit, homEquiv_counit, Functor.map_comp, assoc,
-        counit_naturality, left_triangle_components_assoc, h₁, id_comp]
-    · dsimp
-      rw [Functor.map_id]; rw [comp_id]; rw [homEquiv_unit]; rw [assoc]; rw [← G.map_comp_assoc]; rw [← h₂]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [unit_naturality_assoc]; rw [assoc]; rw [Functor.commShiftIso_hom_naturality]; rw [← adj.shift_unit_app_assoc]; rw [← Functor.map_comp]; rw [right_triangle_components]; rw [Functor.map_id]; rw [comp_id]
-
-include adj in
-
-中文:
-引理 isTriangulated_rightAdjoint
-  条件: [F.是三角]
-  结论: G.是三角 where
-  证明: by
-    have : G.Additive := adj.right_adjoint_additive
-    obtain ⟨Z, f, g, mem⟩ := distinguished_cocone_triangle (G.map T.mor₁)
-    obtain ⟨h, ⟨h₁, h₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-      (F.map_distinguished _ mem) hT (adj.counit.app T.obj₁) (adj.counit.app T.obj₂) (by simp)
-    dsimp at h h₁ h₂ ⊢
-    have h₁' : f ≫ adj.unit.app Z ≫ G.map h = G.map T.mor₂ := by
-      simpa [homEquiv_apply] using DFunLike.congr_arg (adj.homEquiv _ _) h₁
-    have h₂' : g ≫ (G.commShiftIso (1 : Int)).inv.app T.obj₁ =
-        adj.homEquiv _ _ h ≫ G.map T.mor₃ := by
-      apply (adj.homEquiv _ _).symm.injective
-      simp only [Functor.comp_obj, homEquiv_counit, Functor.id_obj, Functor.map_comp, assoc,
-        homEquiv_unit, counit_naturality, counit_naturality_assoc, left_triangle_components_assoc,
-        ← h₂, adj.shift_counit_app, Iso.hom_inv_id_app_assoc]
-    rw [assoc] at h₂
-    have : Mono (adj.homEquiv _ _ h) := by
-      rw [mono_iff_cancel_zero]
-      intro _ φ hφ
-      obtain ⟨ψ, rfl⟩ := Triangle.coyoneda_exact₃ _ mem φ (by
-        dsimp
-        simp only [homEquiv_unit, Functor.comp_obj] at hφ
-        rw [← cancel_mono ((G.commShiftIso (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [h₂']; rw [zero_comp]; rw [homEquiv_unit]; rw [assoc]; rw [reassoc_of% hφ]; rw [zero_comp])
-      dsimp at ψ hφ ⊢
-      obtain ⟨α, hα⟩ := T.coyoneda_exact₂ hT ((adj.homEquiv _ _).symm ψ)
-        ((adj.homEquiv _ _).injective (by simpa [homEquiv_counit, homEquiv_unit, ← h₁'] using hφ))
-      have eq := DFunLike.congr_arg (adj.homEquiv _ _) hα
-      simp only [homEquiv_counit, homEquiv_unit, comp_id,
-        Functor.map_comp, unit_naturality_assoc, right_triangle_components] at eq
-      have eq' := comp_distTriang_mor_zero₁₂ _ mem
-      dsimp at eq eq'
-      rw [eq]; rw [assoc]; rw [assoc]; rw [eq']; rw [comp_zero]; rw [comp_zero]
-    have := isIso_of_yoneda_map_bijective (adj.homEquiv _ _ h) (fun Y => by
-      constructor
-      · intro φ₁ φ₂ hφ
-        rw [← cancel_mono (adj.homEquiv _ _ h)]
-        exact hφ
-      · intro φ
-        obtain ⟨ψ, hψ⟩ := Triangle.coyoneda_exact₁ _ mem (φ ≫ G.map T.mor₃ ≫
-          (G.commShiftIso (1 : Int)).hom.app T.obj₁) (by
-            dsimp
-            rw [assoc]; rw [assoc]; rw [← G.commShiftIso_hom_naturality]; rw [← G.map_comp_assoc]; rw [comp_distTriang_mor_zero₃₁ _ hT]; rw [G.map_zero]; rw [zero_comp]; rw [comp_zero])
-        dsimp at ψ hψ
-        obtain ⟨α, hα⟩ : exists α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
-        have hα₀ : α ≫ G.map T.mor₃ = 0 := by
-          rw [hα]; rw [sub_comp]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).hom.app T.obj₁)]; rw [assoc]; rw [sub_comp]; rw [assoc]; rw [assoc]; rw [hψ]; rw [zero_comp]; rw [sub_eq_zero]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [h₂']; rw [Iso.hom_inv_id_app]; rw [comp_id]
-        suffices exists (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
-          obtain ⟨β, hβ⟩ := this
-          refine ⟨ψ + β, ?_⟩
-          dsimp
-          rw [add_comp]; rw [hβ]; rw [hα]; rw [add_sub_cancel]
-        obtain ⟨β, hβ⟩ := T.coyoneda_exact₃ hT ((adj.homEquiv _ _).symm α)
-          ((adj.homEquiv _ _).injective (by simpa [homEquiv_unit, homEquiv_counit] using hα₀))
-        refine ⟨adj.homEquiv _ _ β ≫ f, ?_⟩
-        simpa [homEquiv_unit, h₁'] using congr_arg (adj.homEquiv _ _).toFun hβ.symm)
-    refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
-    refine Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso (adj.homEquiv Z T.obj₃ h)) ?_ ?_ ?_
-    · simp
-    · apply (adj.homEquiv _ _).symm.injective
-      dsimp
-      simp only [homEquiv_unit, homEquiv_counit, Functor.map_comp, assoc,
-        counit_naturality, left_triangle_components_assoc, h₁, id_comp]
-    · dsimp
-      rw [Functor.map_id]; rw [comp_id]; rw [homEquiv_unit]; rw [assoc]; rw [← G.map_comp_assoc]; rw [← h₂]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [unit_naturality_assoc]; rw [assoc]; rw [Functor.commShiftIso_hom_naturality]; rw [← adj.shift_unit_app_assoc]; rw [← Functor.map_comp]; rw [right_triangle_components]; rw [Functor.map_id]; rw [comp_id]
-
-include adj in
-
-Depends on / 依赖: Additive, DFunLike, DFunLike.congr_arg, F.map_distinguished, G.Additive, G.commShiftIso, G.map, T.mor, T.obj, adj.counit.app, adj.homEquiv, adj.right_adjoint_additive, adj.unit.app, commShiftIso, complete_distinguished_triangle_morphism, congr_arg, counit, distinguished_cocone_triangle, homEquiv, homEquiv_apply
+--- 原说明 ---
+The right adjoint of a triangulated functor is triangulated.
 -/
 lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
   map_distinguished T hT := by
@@ -208,7 +151,7 @@ lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
     dsimp at h h₁ h₂ ⊢
     have h₁' : f ≫ adj.unit.app Z ≫ G.map h = G.map T.mor₂ := by
       simpa [homEquiv_apply] using DFunLike.congr_arg (adj.homEquiv _ _) h₁
-    have h₂' : g ≫ (G.commShiftIso (1 : Int)).inv.app T.obj₁ =
+    have h₂' : g ≫ (G.commShiftIso (1 : ℤ)).inv.app T.obj₁ =
         adj.homEquiv _ _ h ≫ G.map T.mor₃ := by
       apply (adj.homEquiv _ _).symm.injective
       simp only [Functor.comp_obj, homEquiv_counit, Functor.id_obj, Functor.map_comp, assoc,
@@ -221,7 +164,8 @@ lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
       obtain ⟨ψ, rfl⟩ := Triangle.coyoneda_exact₃ _ mem φ (by
         dsimp
         simp only [homEquiv_unit, Functor.comp_obj] at hφ
-        rw [← cancel_mono ((G.commShiftIso (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [h₂']; rw [zero_comp]; rw [homEquiv_unit]; rw [assoc]; rw [reassoc_of% hφ]; rw [zero_comp])
+        rw [← cancel_mono ((G.commShiftIso (1 : ℤ)).inv.app T.obj₁), assoc, h₂', zero_comp,
+          homEquiv_unit, assoc, reassoc_of% hφ, zero_comp])
       dsimp at ψ hφ ⊢
       obtain ⟨α, hα⟩ := T.coyoneda_exact₂ hT ((adj.homEquiv _ _).symm ψ)
         ((adj.homEquiv _ _).injective (by simpa [homEquiv_counit, homEquiv_unit, ← h₁'] using hφ))
@@ -230,7 +174,7 @@ lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
         Functor.map_comp, unit_naturality_assoc, right_triangle_components] at eq
       have eq' := comp_distTriang_mor_zero₁₂ _ mem
       dsimp at eq eq'
-      rw [eq]; rw [assoc]; rw [assoc]; rw [eq']; rw [comp_zero]; rw [comp_zero]
+      rw [eq, assoc, assoc, eq', comp_zero, comp_zero]
     have := isIso_of_yoneda_map_bijective (adj.homEquiv _ _ h) (fun Y => by
       constructor
       · intro φ₁ φ₂ hφ
@@ -238,18 +182,22 @@ lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
         exact hφ
       · intro φ
         obtain ⟨ψ, hψ⟩ := Triangle.coyoneda_exact₁ _ mem (φ ≫ G.map T.mor₃ ≫
-          (G.commShiftIso (1 : Int)).hom.app T.obj₁) (by
+          (G.commShiftIso (1 : ℤ)).hom.app T.obj₁) (by
             dsimp
-            rw [assoc]; rw [assoc]; rw [← G.commShiftIso_hom_naturality]; rw [← G.map_comp_assoc]; rw [comp_distTriang_mor_zero₃₁ _ hT]; rw [G.map_zero]; rw [zero_comp]; rw [comp_zero])
+            rw [assoc, assoc, ← G.commShiftIso_hom_naturality, ← G.map_comp_assoc,
+              comp_distTriang_mor_zero₃₁ _ hT, G.map_zero, zero_comp, comp_zero])
         dsimp at ψ hψ
-        obtain ⟨α, hα⟩ : exists α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
+        obtain ⟨α, hα⟩ : ∃ α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
         have hα₀ : α ≫ G.map T.mor₃ = 0 := by
-          rw [hα]; rw [sub_comp]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).hom.app T.obj₁)]; rw [assoc]; rw [sub_comp]; rw [assoc]; rw [assoc]; rw [hψ]; rw [zero_comp]; rw [sub_eq_zero]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [h₂']; rw [Iso.hom_inv_id_app]; rw [comp_id]
-        suffices exists (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
+          rw [hα, sub_comp, ← cancel_mono ((Functor.commShiftIso G (1 : ℤ)).hom.app T.obj₁),
+            assoc, sub_comp, assoc, assoc, hψ, zero_comp, sub_eq_zero,
+            ← cancel_mono ((Functor.commShiftIso G (1 : ℤ)).inv.app T.obj₁), assoc,
+            assoc, assoc, assoc, h₂', Iso.hom_inv_id_app, comp_id]
+        suffices ∃ (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
           obtain ⟨β, hβ⟩ := this
           refine ⟨ψ + β, ?_⟩
           dsimp
-          rw [add_comp]; rw [hβ]; rw [hα]; rw [add_sub_cancel]
+          rw [add_comp, hβ, hα, add_sub_cancel]
         obtain ⟨β, hβ⟩ := T.coyoneda_exact₃ hT ((adj.homEquiv _ _).symm α)
           ((adj.homEquiv _ _).injective (by simpa [homEquiv_unit, homEquiv_counit] using hα₀))
         refine ⟨adj.homEquiv _ _ β ≫ f, ?_⟩
@@ -262,58 +210,63 @@ lemma isTriangulated_rightAdjoint [F.IsTriangulated] : G.IsTriangulated where
       simp only [homEquiv_unit, homEquiv_counit, Functor.map_comp, assoc,
         counit_naturality, left_triangle_components_assoc, h₁, id_comp]
     · dsimp
-      rw [Functor.map_id]; rw [comp_id]; rw [homEquiv_unit]; rw [assoc]; rw [← G.map_comp_assoc]; rw [← h₂]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [unit_naturality_assoc]; rw [assoc]; rw [Functor.commShiftIso_hom_naturality]; rw [← adj.shift_unit_app_assoc]; rw [← Functor.map_comp]; rw [right_triangle_components]; rw [Functor.map_id]; rw [comp_id]
+      rw [Functor.map_id, comp_id, homEquiv_unit, assoc, ← G.map_comp_assoc, ← h₂,
+        Functor.map_comp, Functor.map_comp, assoc, unit_naturality_assoc, assoc,
+        Functor.commShiftIso_hom_naturality, ← adj.shift_unit_app_assoc,
+        ← Functor.map_comp, right_triangle_components, Functor.map_id, comp_id]
 
 include adj in
 open Pretriangulated.Opposite in
 /--
-lemma `isTriangulated_leftAdjoint` / 引理 `isTriangulated_leftAdjoint`
+The left adjoint of a triangulated functor is triangulated.
+-/
+/-
+**CategoryTheory.Adjunction.isTriangulated_leftAdjoint** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Adjunction`。
+形式化陈述：isTriangulated_leftAdjoint [G.IsTriangulated] : F.IsTriangulated
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.Opposite.instAdditiveOppositeShiftFunctor
+Int`：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Ca
+tegoryTheory.HasShift C ℤ]   [inst_2 : CategoryTheory.Preadditive…
+· 使用引理 `CategoryTheory.Adjunction.isTriangulated_rightAdjoint`：isTriangulated_ri
+ghtAdjoint [F.IsTriangulated] : G.IsTriangulated where map_distinguished T hT
+· 使用定理 `CategoryTheory.Pretriangulated.Opposite.commShift_adjunction_op_int`：∀ {
+C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [in
+st_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Pretriangulated.Opposite.functor_isTriangulated_op`：∀ {C 
+: Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst
+_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用引理 `CategoryTheory.Functor.isTriangulated_of_op`：isTriangulated_of_op [F.op.
+IsTriangulated] : F.IsTriangulated where map_distinguished T dT
 
-English:
-lemma isTriangulated_leftAdjoint
-  given: [G.IsTriangulated]
-  statement: F.IsTriangulated
-  proof: by
-  have := isTriangulated_rightAdjoint adj.op
-  exact F.isTriangulated_of_op
-
-中文:
-引理 isTriangulated_leftAdjoint
-  条件: [G.是三角]
-  结论: F.是三角
-  证明: by
-  have := isTriangulated_rightAdjoint adj.op
-  exact F.isTriangulated_of_op
-
-Depends on / 依赖: F.isTriangulated_of_op, adj.op, isTriangulated_of_op, isTriangulated_rightAdjoint
+--- 原说明 ---
+The left adjoint of a triangulated functor is triangulated.
 -/
 lemma isTriangulated_leftAdjoint [G.IsTriangulated] : F.IsTriangulated := by
   have := isTriangulated_rightAdjoint adj.op
   exact F.isTriangulated_of_op
 
 /--
-Definition of `IsTriangulated` / `IsTriangulated` 的定义
+We say that an adjunction `F ⊣ G` is triangulated if it is compatible with the `CommShift`
+structures on `F` and `G` (in the sense of `Adjunction.CommShift`) and if both `F` and `G`
+are triangulated functors.
+-/
+/-
+**CategoryTheory.Adjunction.IsTriangulated** 是 Mathlib 中的一个类，位于命名空间 `CategoryThe
+ory.Adjunction`。
+形式化陈述：IsTriangulated : Prop where commShift : adj.CommShift Int
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsTriangulated
-  parameters: : Prop where
-  axioms and operations (3):
-    - commShift : adj.CommShift Int  [default: by infer_instance]
-    - leftAdjoint_isTriangulated : F.IsTriangulated  [default: by infer_instance]
-    - rightAdjoint_isTriangulated : G.IsTriangulated  [default: by infer_instance]
-
-中文:
-类 是三角
-  参数: : 命题 where
-  公理与运算 (3 个):
-    - commShift : adj.交换Shift 整数  [默认: by infer_instance]
-    - leftAdjoint_isTriangulated : F.是三角  [默认: by infer_instance]
-    - rightAdjoint_isTriangulated : G.是三角  [默认: by infer_instance]
-
-Depends on / 依赖: F.IsTriangulated, G.IsTriangulated, IsTriangulated, infer_instance, leftAdjoint_isTriangulated, rightAdjoint_isTriangulated
+--- 原说明 ---
+We say that an adjunction `F ⊣ G` is triangulated if it is compatible with the `
+CommShift`
+structures on `F` and `G` (in the sense of `Adjunction.CommShift`) and if both `
+F` and `G`
+are triangulated functors.
 -/
 class IsTriangulated : Prop where
-  commShift : adj.CommShift Int := by infer_instance
+  commShift : adj.CommShift ℤ := by infer_instance
   leftAdjoint_isTriangulated : F.IsTriangulated := by infer_instance
   rightAdjoint_isTriangulated : G.IsTriangulated := by infer_instance
 
@@ -321,75 +274,100 @@ namespace IsTriangulated
 
 attribute [instance] commShift leftAdjoint_isTriangulated rightAdjoint_isTriangulated
 
-/--
-lemma `mk'` / 引理 `mk'`
+/-- Constructor for `Adjunction.IsTriangulated`.
+-/
+/-
+**CategoryTheory.Adjunction.IsTriangulated.mk'** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Adjunction.IsTriangulated`。
+形式化陈述：mk' [F.IsTriangulated] : adj.IsTriangulated where rightAdjoint_isTriangula
+ted
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isTriangulated_rightAdjoint`：isTriangulated_ri
+ghtAdjoint [F.IsTriangulated] : G.IsTriangulated where map_distinguished T hT
 
-English:
-lemma mk'
-  given: [F.IsTriangulated]
-  statement: adj.IsTriangulated where
-  proof: adj.isTriangulated_rightAdjoint
-
-中文:
-引理 mk'
-  条件: [F.是三角]
-  结论: adj.是三角 where
-  证明: adj.isTriangulated_rightAdjoint
-
-Depends on / 依赖: adj.isTriangulated_rightAdjoint, isTriangulated_rightAdjoint
+--- 原说明 ---
+Constructor for `Adjunction.IsTriangulated`.
 -/
 lemma mk' [F.IsTriangulated] : adj.IsTriangulated where
   rightAdjoint_isTriangulated := adj.isTriangulated_rightAdjoint
 
-/--
-lemma `mk''` / 引理 `mk''`
+/-- Constructor for `Adjunction.IsTriangulated`.
+-/
+/-
+**CategoryTheory.Adjunction.IsTriangulated.mk''** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Adjunction.IsTriangulated`。
+形式化陈述：mk'' [G.IsTriangulated] : adj.IsTriangulated where leftAdjoint_isTriangula
+ted
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isTriangulated_leftAdjoint`：isTriangulated_lef
+tAdjoint [G.IsTriangulated] : F.IsTriangulated
 
-English:
-lemma mk''
-  given: [G.IsTriangulated]
-  statement: adj.IsTriangulated where
-  proof: adj.isTriangulated_leftAdjoint
-
-中文:
-引理 mk''
-  条件: [G.是三角]
-  结论: adj.是三角 where
-  证明: adj.isTriangulated_leftAdjoint
-
-Depends on / 依赖: adj.isTriangulated_leftAdjoint, isTriangulated_leftAdjoint
+--- 原说明 ---
+Constructor for `Adjunction.IsTriangulated`.
 -/
 lemma mk'' [G.IsTriangulated] : adj.IsTriangulated where
   leftAdjoint_isTriangulated := adj.isTriangulated_leftAdjoint
 
-/--
-Instance `id` / 实例 `id`
+/-- The identity adjunction is triangulated.
+-/
+/-
+**CategoryTheory.Adjunction.IsTriangulated.id** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Adjunction.IsTriangulated`。
+形式化陈述：id : (Adjunction.id (C
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsTriangulated.instId`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.HasShift C ℤ]   [i
+nst_2 : CategoryTheory.Limits.HasZ…
 
-English:
-instance id
-  signature: : (Adjunction.id (C := C)).IsTriangulated where
-
-中文:
-实例 id
-  签名: : (伴随.id (C := C)).是三角 where
-
-Depends on / 依赖: IsTriangulated
+--- 原说明 ---
+The identity adjunction is triangulated.
 -/
 instance id : (Adjunction.id (C := C)).IsTriangulated where
 
 variable {E : Type*} [Category* E] {F' : D ⥤ E} {G' : E ⥤ D} (adj' : F' ⊣ G') [HasZeroObject E]
-  [Preadditive E] [HasShift E Int] [forall (n : Int), (shiftFunctor E n).Additive] [Pretriangulated E]
-  [F'.CommShift Int] [G'.CommShift Int] [adj'.CommShift Int]
+  [Preadditive E] [HasShift E ℤ] [∀ (n : ℤ), (shiftFunctor E n).Additive] [Pretriangulated E]
+  [F'.CommShift ℤ] [G'.CommShift ℤ] [adj'.CommShift ℤ]
 
-/--
-Instance `comp` / 实例 `comp`
+/-- A composition of triangulated adjunctions is triangulated.
+-/
+/-
+**CategoryTheory.Adjunction.IsTriangulated.comp** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Adjunction.IsTriangulated`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : CategoryTheory.L
+imits.HasZeroObject C]   [inst_3 : CategoryTheory.Limits.HasZeroObject D] [inst_
+4 : CategoryTheory.Preadditive C]   [inst_5 : CategoryTheory.Preadditive D] [ins
+t_6 : CategoryTheory.HasShift C ℤ] [inst_7 : CategoryTheory.HasShift D ℤ]   [ins
+t_8 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive]   [inst_9 : ∀ (n : 
+ℤ), (CategoryTheory.shiftFunctor D n).Additive] [inst_10 : CategoryTheory.Pretri
+angulated C]   [inst_11 : CategoryTheory.Pretriangulated D] {F : CategoryTheory.
+Functor C D} {G : CategoryTheory.Functor D C}   (adj : F ⊣ G) [inst_12 : F.CommS
+hift ℤ] [inst_13 : G.CommShift ℤ] [adj.CommShift ℤ] {E : Type u_3}   [inst_15 : 
+CategoryTheory.Category.{v_3, u_3} E] {F' : CategoryTheory.Functor D E} {G' : Ca
+tegoryTheory.Functor E D}   (adj' : F' ⊣ G') [inst_16 : CategoryTheory.Limits.Ha
+sZeroObject E] [inst_17 : CategoryTheory.Preadditive E]   [inst_18 : CategoryThe
+ory.HasShift E ℤ] [inst_19 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor E n).Additi
+ve]   [inst_20 : CategoryTheory.Pretriangulated E] [inst_21 : F'.CommShift ℤ] [i
+nst_22 : G'.CommShift ℤ] [adj'.CommShift ℤ]   [adj.IsTriangulated] [adj'.IsTrian
+gulated], (adj.comp adj').IsTriangulated
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；n : ℤ；CategoryTheory.shiftFunctor D n；a
+dj : F ⊣ G；adj' : F' ⊣ G'；n : ℤ；CategoryTheory.shiftFunctor E n；adj.comp adj'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsTriangulated.instComp`：∀ {C : Type u_1} {D : Ty
+pe u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Adjunction.IsTriangulated.leftAdjoint_isTriangulated`：∀ {
+C : Type u_1} {D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {in
+st_1 : CategoryTheory.Category.{v_2, u_2} D} {inst_2 : Ca…
+· 使用定理 `CategoryTheory.Adjunction.IsTriangulated.rightAdjoint_isTriangulated`：∀ 
+{C : Type u_1} {D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {i
+nst_1 : CategoryTheory.Category.{v_2, u_2} D} {inst_2 : Ca…
 
-English:
-instance comp
-  signature: [adj.IsTriangulated] [adj'.IsTriangulated]
-
-中文:
-实例 comp
-  签名: [adj.是三角] [adj'.是三角]
+--- 原说明 ---
+A composition of triangulated adjunctions is triangulated.
 -/
 instance comp [adj.IsTriangulated] [adj'.IsTriangulated] : (adj.comp adj').IsTriangulated where
 
@@ -399,192 +377,185 @@ end Adjunction
 
 namespace Equivalence
 
-variable (E : C ≌ D) [E.functor.CommShift Int] [E.inverse.CommShift Int] [E.CommShift Int]
+variable (E : C ≌ D) [E.functor.CommShift ℤ] [E.inverse.CommShift ℤ] [E.CommShift ℤ]
 
 /--
-Definition of `IsTriangulated` / `IsTriangulated` 的定义
+We say that an equivalence of categories `E` is triangulated if both `E.functor` and
+`E.inverse` are triangulated functors.
+-/
+/-
+**CategoryTheory.Equivalence.IsTriangulated** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：IsTriangulated : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTriangulated
-  signature: : Prop
-  body: E.toAdjunction.IsTriangulated
-
-中文:
-缩写 是三角
-  签名: : 命题
-  定义体: E.toAdjunction.IsTriangulated
-
-Depends on / 依赖: E.toAdjunction.IsTriangulated, IsTriangulated, toAdjunction
+--- 原说明 ---
+We say that an equivalence of categories `E` is triangulated if both `E.functor`
+ and
+`E.inverse` are triangulated functors.
 -/
 abbrev IsTriangulated : Prop := E.toAdjunction.IsTriangulated
 
 namespace IsTriangulated
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [E.IsTriangulated]
-  signature: : E.functor.IsTriangulated
-  body: inferInstance
-
-中文:
-实例 [E.是三角]
-  签名: : E.functor.是三角
-  定义体: inferInstance
+/-
+**CategoryTheory.Equivalence.IsTriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence.IsTriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [E.IsTriangulated] : E.functor.IsTriangulated := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [E.IsTriangulated]
-  signature: : E.inverse.IsTriangulated
-  body: inferInstance
-
-中文:
-实例 [E.是三角]
-  签名: : E.inverse.是三角
-  定义体: inferInstance
+/-
+**CategoryTheory.Equivalence.IsTriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence.IsTriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [E.IsTriangulated] : E.inverse.IsTriangulated := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : E.functor.IsTriangulated] : E.symm.inverse.IsTriangulated
-  body: h
-
-中文:
-实例 [h
-  签名: : E.functor.是三角] : E.symm.inverse.是三角
-  定义体: h
+/-
+**CategoryTheory.Equivalence.IsTriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence.IsTriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : E.functor.IsTriangulated] : E.symm.inverse.IsTriangulated := h
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : E.inverse.IsTriangulated] : E.symm.functor.IsTriangulated
-  body: h
-
-中文:
-实例 [h
-  签名: : E.inverse.是三角] : E.symm.functor.是三角
-  定义体: h
+/-
+**CategoryTheory.Equivalence.IsTriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence.IsTriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : E.inverse.IsTriangulated] : E.symm.functor.IsTriangulated := h
 
 
-/--
-lemma `mk'` / 引理 `mk'`
+/-- Constructor for `Equivalence.IsTriangulated`. -/
+/-
+**CategoryTheory.Equivalence.IsTriangulated.mk'** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Equivalence.IsTriangulated`。
+形式化陈述：mk' (h : E.functor.IsTriangulated) : E.IsTriangulated where rightAdjoint_i
+sTriangulated
+参数：h : E.functor.IsTriangulated。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isTriangulated_rightAdjoint`：isTriangulated_ri
+ghtAdjoint [F.IsTriangulated] : G.IsTriangulated where map_distinguished T hT
 
-English:
-lemma mk'
-  given: (h : E.functor.IsTriangulated)
-  statement: E.IsTriangulated where
-  proof: E.toAdjunction.isTriangulated_rightAdjoint
-
-中文:
-引理 mk'
-  条件: (h : E.functor.是三角)
-  结论: E.是三角 where
-  证明: E.toAdjunction.isTriangulated_rightAdjoint
-
-Depends on / 依赖: E.toAdjunction.isTriangulated_rightAdjoint, isTriangulated_rightAdjoint, toAdjunction
+--- 原说明 ---
+Constructor for `Equivalence.IsTriangulated`.
 -/
 lemma mk' (h : E.functor.IsTriangulated) : E.IsTriangulated where
   rightAdjoint_isTriangulated := E.toAdjunction.isTriangulated_rightAdjoint
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mk''` / 引理 `mk''`
+/-- Constructor for `Equivalence.IsTriangulated`. -/
+/-
+**CategoryTheory.Equivalence.IsTriangulated.mk''** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Equivalence.IsTriangulated`。
+形式化陈述：mk'' (h : E.inverse.IsTriangulated) : E.IsTriangulated where leftAdjoint_i
+sTriangulated
+参数：h : E.inverse.IsTriangulated。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.IsTriangulated.rightAdjoint_isTriangulated`：∀ 
+{C : Type u_1} {D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {i
+nst_1 : CategoryTheory.Category.{v_2, u_2} D} {inst_2 : Ca…
+· 使用引理 `CategoryTheory.Equivalence.IsTriangulated.mk'`：mk' (h : E.functor.IsTria
+ngulated) : E.IsTriangulated where rightAdjoint_isTriangulated
+· 使用定理 `CategoryTheory.Equivalence.CommShift.instSymm`：∀ {C : Type u_1} {D : Typ
+e u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.
+Category.{v_2, u_2} D] (E : C ≌ D) …
 
-English:
-lemma mk''
-  given: (h : E.inverse.IsTriangulated)
-  statement: E.IsTriangulated where
-  proof: (mk' E.symm h).rightAdjoint_isTriangulated
-
-中文:
-引理 mk''
-  条件: (h : E.inverse.是三角)
-  结论: E.是三角 where
-  证明: (mk' E.symm h).rightAdjoint_isTriangulated
-
-Depends on / 依赖: E.symm, rightAdjoint_isTriangulated
+--- 原说明 ---
+Constructor for `Equivalence.IsTriangulated`.
 -/
 lemma mk'' (h : E.inverse.IsTriangulated) : E.IsTriangulated where
   leftAdjoint_isTriangulated := (mk' E.symm h).rightAdjoint_isTriangulated
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Instance `refl` / 实例 `refl`
+The identity equivalence is triangulated.
+-/
+/-
+**CategoryTheory.Equivalence.IsTriangulated.refl** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.Equivalence.IsTriangulated`。
+形式化陈述：refl : (Equivalence.refl (C
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Equivalence.refl_toAdjunction`：refl_toAdjunction : (refl 
+(C
 
-English:
-instance refl
-  signature: : (Equivalence.refl (C := C)).IsTriangulated
-  body: by
-  dsimp [Equivalence.IsTriangulated]
-  rw [refl_toAdjunction]
-  infer_instance
-
-中文:
-实例 refl
-  签名: : (等价.refl (C := C)).是三角
-  定义体: by
-  dsimp [Equivalence.IsTriangulated]
-  rw [refl_toAdjunction]
-  infer_instance
-
-Depends on / 依赖: Equivalence, Equivalence.IsTriangulated, IsTriangulated, infer_instance, refl_toAdjunction
+--- 原说明 ---
+The identity equivalence is triangulated.
 -/
 instance refl : (Equivalence.refl (C := C)).IsTriangulated := by
   dsimp [Equivalence.IsTriangulated]
   rw [refl_toAdjunction]
   infer_instance
 
-/--
-Instance `symm` / 实例 `symm`
+/-- If the equivalence `E` is triangulated, so is the equivalence `E.symm`.
+-/
+/-
+**CategoryTheory.Equivalence.IsTriangulated.symm** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Equivalence.IsTriangulated`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : CategoryTheory.L
+imits.HasZeroObject C]   [inst_3 : CategoryTheory.Limits.HasZeroObject D] [inst_
+4 : CategoryTheory.Preadditive C]   [inst_5 : CategoryTheory.Preadditive D] [ins
+t_6 : CategoryTheory.HasShift C ℤ] [inst_7 : CategoryTheory.HasShift D ℤ]   [ins
+t_8 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive]   [inst_9 : ∀ (n : 
+ℤ), (CategoryTheory.shiftFunctor D n).Additive] [inst_10 : CategoryTheory.Pretri
+angulated C]   [inst_11 : CategoryTheory.Pretriangulated D] (E : C ≌ D) [inst_12
+ : E.functor.CommShift ℤ]   [inst_13 : E.inverse.CommShift ℤ] [E.CommShift ℤ] [E
+.IsTriangulated], E.symm.IsTriangulated
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；n : ℤ；CategoryTheory.shiftFunctor D n；E
+ : C ≌ D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.CommShift.instSymm`：∀ {C : Type u_1} {D : Typ
+e u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.
+Category.{v_2, u_2} D] (E : C ≌ D) …
+· 使用定理 `CategoryTheory.Equivalence.IsTriangulated.instIsTriangulatedFunctorSymmO
+fInverse`：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, 
+u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Equivalence.IsTriangulated.instIsTriangulatedInverse`：∀ {
+C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [in
+st_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Equivalence.IsTriangulated.instIsTriangulatedInverseSymmO
+fFunctor`：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, 
+u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Equivalence.IsTriangulated.instIsTriangulatedFunctor`：∀ {
+C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [in
+st_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-instance symm
-  signature: [E.IsTriangulated]
-
-中文:
-实例 symm
-  签名: [E.是三角]
+--- 原说明 ---
+If the equivalence `E` is triangulated, so is the equivalence `E.symm`.
 -/
 instance symm [E.IsTriangulated] : E.symm.IsTriangulated where
 
-variable {D' : Type*} [Category* D'] [HasZeroObject D'] [Preadditive D'] [HasShift D' Int]
-  [forall (n : Int), (shiftFunctor D' n).Additive] [Pretriangulated D'] {E' : D ≌ D'}
-  [E'.functor.CommShift Int] [E'.inverse.CommShift Int] [E'.CommShift Int]
+variable {D' : Type*} [Category* D'] [HasZeroObject D'] [Preadditive D'] [HasShift D' ℤ]
+  [∀ (n : ℤ), (shiftFunctor D' n).Additive] [Pretriangulated D'] {E' : D ≌ D'}
+  [E'.functor.CommShift ℤ] [E'.inverse.CommShift ℤ] [E'.CommShift ℤ]
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Instance `trans` / 实例 `trans`
+If equivalences `E : C ≌ D` and `E' : D ≌ F` are triangulated, so is `E.trans E'`.
+-/
+/-
+**CategoryTheory.Equivalence.IsTriangulated.trans** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Equivalence.IsTriangulated`。
+形式化陈述：trans [E.IsTriangulated] [E'.IsTriangulated] : (E.trans E').IsTriangulated
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Equivalence.trans_toAdjunction`：trans_toAdjunction {E : T
+ype*} [Category* E] (e' : D ≌ E) : (e.trans e').toAdjunction = e.toAdjunction.co
+mp e'.toAdjunction
+· 使用定理 `CategoryTheory.Adjunction.IsTriangulated.comp`：∀ {C : Type u_1} {D : Typ
+e u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.
+Category.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-instance trans
-  signature: [E.IsTriangulated] [E'.IsTriangulated]
-  body: by
-  dsimp [Equivalence.IsTriangulated]
-  rw [trans_toAdjunction]
-  infer_instance
-
-中文:
-实例 trans
-  签名: [E.是三角] [E'.是三角]
-  定义体: by
-  dsimp [Equivalence.IsTriangulated]
-  rw [trans_toAdjunction]
-  infer_instance
-
-Depends on / 依赖: Equivalence, Equivalence.IsTriangulated, IsTriangulated, infer_instance, trans_toAdjunction
+--- 原说明 ---
+If equivalences `E : C ≌ D` and `E' : D ≌ F` are triangulated, so is `E.trans E'
+`.
 -/
 instance trans [E.IsTriangulated] [E'.IsTriangulated] : (E.trans E').IsTriangulated := by
   dsimp [Equivalence.IsTriangulated]
@@ -596,3 +567,4 @@ end IsTriangulated
 end Equivalence
 
 end CategoryTheory
+

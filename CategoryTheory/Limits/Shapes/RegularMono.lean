@@ -53,30 +53,19 @@ universe v₁ u₁ u₂
 variable {C : Type u₁} [Category.{v₁} C]
 variable {X Y : C}
 
-/--
-Definition of `RegularMono` / `RegularMono` 的定义
+/-- A regular monomorphism is a morphism which is the equalizer of some parallel pair. -/
+/-
+**CategoryTheory.RegularMono** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：RegularMono (f : X ⟶ Y) where /-- An object in `C` -/ Z : C /-- A map from
+ the codomain of `f` to `Z` -/ left : Y ⟶ Z /-- Another map from the codomain of
+ `f` to `Z` -/ right : Y ⟶ Z /-- `f` equalizes the two maps -/ w : f ≫ left = f 
+≫ right
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RegularMono
-  parameters: (f : X ⟶ Y)
-  axioms and operations (5):
-    - Z : C
-    - left : Y ⟶ Z
-    - right : Y ⟶ Z
-    - w : f ≫ left = f ≫ right  [default: by cat_disch]
-    - isLimit : IsLimit (Fork.ofι f w)
-
-中文:
-结构 正则单态射
-  参数: (f : X ⟶ Y)
-  公理与运算 (5 个):
-    - Z : C
-    - left : Y ⟶ Z
-    - right : Y ⟶ Z
-    - w : f ≫ left = f ≫ right  [默认: by cat_disch]
-    - isLimit : 是极限 (叉.ofι f w)
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A regular monomorphism is a morphism which is the equalizer of some parallel pai
+r.
 -/
 structure RegularMono (f : X ⟶ Y) where
   /-- An object in `C` -/
@@ -92,75 +81,62 @@ structure RegularMono (f : X ⟶ Y) where
 
 attribute [reassoc] RegularMono.w
 
-/--
-lemma `RegularMono.mono` / 引理 `RegularMono.mono`
+/-- Every regular monomorphism is a monomorphism. -/
+/-
+**CategoryTheory.RegularMono.mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Regu
+larMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} {f :
+ X ⟶ Y} (h : CategoryTheory.RegularMono f),   CategoryTheory.Mono f
+参数：h : CategoryTheory.RegularMono f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.mono_of_isLimit_fork`：mono_of_isLimit_fork {c : Fo
+rk f g} (i : IsLimit c) : Mono (Fork.ι c)
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-English:
-lemma RegularMono.mono
-  given: {f : X ⟶ Y} (h : RegularMono f)
-  statement: Mono f
-  proof: mono_of_isLimit_fork h.isLimit
-
-中文:
-引理 正则单态射.mono
-  条件: {f : X ⟶ Y} (h : 正则单态射 f)
-  结论: 单态射 f
-  证明: mono_of_isLimit_fork h.isLimit
-
-Depends on / 依赖: h.isLimit, isLimit, mono_of_isLimit_fork
+--- 原说明 ---
+Every regular monomorphism is a monomorphism.
 -/
 lemma RegularMono.mono {f : X ⟶ Y} (h : RegularMono f) : Mono f :=
   mono_of_isLimit_fork h.isLimit
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `RegularMono.ofIso` / `RegularMono.ofIso` 的定义
+/-- Every isomorphism is a regular monomorphism. -/
+/-
+**CategoryTheory.RegularMono.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Reg
+ularMono`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} → 
+(e : X ≅ Y) → CategoryTheory.RegularMono e.hom
+参数：e : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularMono.ofIso
-  signature: (e : X ≅ Y)
-  body: Y
-  left := 𝟙 Y
-  right := 𝟙 Y
-  isLimit := Fork.IsLimit.mk _ (fun s => s.ι ≫ e.inv) (by simp) fun s m w => by simp [← w]
-
-中文:
-定义 正则单态射.ofIso
-  签名: (e : X ≅ Y)
-  定义体: Y
-  left := 𝟙 Y
-  right := 𝟙 Y
-  isLimit := Fork.IsLimit.mk _ (fun s => s.ι ≫ e.inv) (by simp) fun s m w => by simp [← w]
+--- 原说明 ---
+Every isomorphism is a regular monomorphism.
 -/
 def RegularMono.ofIso (e : X ≅ Y) : RegularMono e.hom where
   Z := Y
   left := 𝟙 Y
   right := 𝟙 Y
-  isLimit := Fork.IsLimit.mk _ (fun s => s.ι ≫ e.inv) (by simp) fun s m w => by simp [← w]
+  isLimit := Fork.IsLimit.mk _ (fun s ↦ s.ι ≫ e.inv) (by simp) fun s m w ↦ by simp [← w]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `RegularMono.ofArrowIso` / `RegularMono.ofArrowIso` 的定义
+/-- Regular monomorphisms are preserved by isomorphisms in the arrow category. -/
+/-
+**CategoryTheory.RegularMono.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.RegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y X
+' Y' : C} →       {f : X ⟶ Y} →         {g : X' ⟶ Y'} →           (CategoryTheor
+y.Arrow.mk f ≅ CategoryTheory.Arrow.mk g) →             CategoryTheory.RegularMo
+no f → CategoryTheory.RegularMono g
+参数：CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-English:
-definition RegularMono.ofArrowIso
-  signature: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
-  body: h.Z
-  left := e.inv.right ≫ h.left
-  right := e.inv.right ≫ h.right
-  w := by simp only [← (Arrow.w_mk_assoc e.inv), h.w]
-  isLimit := Fork.isLimitOfIsos _ h.isLimit _
-    (Arrow.rightFunc.mapIso e) (Iso.refl _) (Arrow.leftFunc.mapIso e)
-
-中文:
-定义 正则单态射.ofArrowIso
-  签名: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
-  定义体: h.Z
-  left := e.inv.right ≫ h.left
-  right := e.inv.right ≫ h.right
-  w := by simp only [← (Arrow.w_mk_assoc e.inv), h.w]
-  isLimit := Fork.isLimitOfIsos _ h.isLimit _
-    (Arrow.rightFunc.mapIso e) (Iso.refl _) (Arrow.leftFunc.mapIso e)
+--- 原说明 ---
+Regular monomorphisms are preserved by isomorphisms in the arrow category.
 -/
 def RegularMono.ofArrowIso {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
     (e : Arrow.mk f ≅ Arrow.mk g) (h : RegularMono f) :
@@ -172,161 +148,120 @@ def RegularMono.ofArrowIso {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
   isLimit := Fork.isLimitOfIsos _ h.isLimit _
     (Arrow.rightFunc.mapIso e) (Iso.refl _) (Arrow.leftFunc.mapIso e)
 
-/--
-Definition of `IsRegularMono` / `IsRegularMono` 的定义
+/-- `IsRegularMono f` is the assertion that `f` is a regular monomorphism. -/
+/-
+**CategoryTheory.IsRegularMono** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} → 
+(X ⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRegularMono
-  parameters: {X Y : C} (f : X ⟶ Y)
-  axioms and operations (1):
-    - regularMono : Nonempty (RegularMono f)
-
-中文:
-类 是正则单态射
-  参数: {X Y : C} (f : X ⟶ Y)
-  公理与运算 (1 个):
-    - regularMono : 非空 (正则单态射 f)
+--- 原说明 ---
+`IsRegularMono f` is the assertion that `f` is a regular monomorphism.
 -/
 class IsRegularMono {X Y : C} (f : X ⟶ Y) : Prop where
   regularMono : Nonempty (RegularMono f)
 
 variable (C) in
-/--
-Definition of `MorphismProperty.regularMono` / `MorphismProperty.regularMono` 的定义
+/-- The `MorphismProperty C` satisfied by regular monomorphisms in `C`. -/
+/-
+**CategoryTheory.MorphismProperty.regularMono** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.MorphismProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MorphismProperty.regularMono
-  signature: : MorphismProperty C
-  body: fun _ _ f => IsRegularMono f
-
-@[simp]
-
-中文:
-定义 MorphismProperty.regularMono
-  签名: : MorphismProperty C
-  定义体: fun _ _ f => IsRegularMono f
-
-@[simp]
-
-Depends on / 依赖: IsRegularMono
+--- 原说明 ---
+The `MorphismProperty C` satisfied by regular monomorphisms in `C`.
 -/
 def MorphismProperty.regularMono : MorphismProperty C := fun _ _ f => IsRegularMono f
 
 @[simp]
-/--
-theorem `MorphismProperty.regularMono_iff` / 定理 `MorphismProperty.regularMono_iff`
-
-English:
-theorem MorphismProperty.regularMono_iff
-  given: (f : X ⟶ Y)
-  proof: Iff.rfl
-
-中文:
-定理 MorphismProperty.regularMono_iff
-  条件: (f : X ⟶ Y)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.MorphismProperty.regularMono_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.MorphismProperty`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f :
+ X ⟶ Y),   CategoryTheory.MorphismProperty.regularMono C f ↔ CategoryTheory.IsRe
+gularMono f
+参数：f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem MorphismProperty.regularMono_iff (f : X ⟶ Y) :
     (MorphismProperty.regularMono C) f ↔ IsRegularMono f :=
   Iff.rfl
-
-/--
-Instance `MorphismProperty.regularMono.containsIdentities` / 实例 `MorphismProperty.regularMono.containsIdentities`
-
-English:
-instance MorphismProperty.regularMono.containsIdentities
-  signature: :
-  body: ⟨⟨RegularMono.ofIso Iso.refl _⟩⟩
-
-中文:
-实例 MorphismProperty.regularMono.containsIdentities
-  签名: :
-  定义体: ⟨⟨RegularMono.ofIso Iso.refl _⟩⟩
-
-Depends on / 依赖: Iso.refl, RegularMono, RegularMono.ofIso
+/-
+**CategoryTheory.MorphismProperty.regularMono.containsIdentities** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.MorphismProperty.regularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C],   (CategoryTh
+eory.MorphismProperty.regularMono C).ContainsIdentities
+参数：CategoryTheory.MorphismProperty.regularMono C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance MorphismProperty.regularMono.containsIdentities :
     (MorphismProperty.regularMono C).ContainsIdentities where
-id_mem _ := ⟨⟨RegularMono.ofIso Iso.refl _⟩⟩
-
-/--
-Instance `MorphismProperty.regularMono.respectsIso` / 实例 `MorphismProperty.regularMono.respectsIso`
-
-English:
-instance MorphismProperty.regularMono.respectsIso
-  signature: :
-  body: RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularMono.some)⟩⟩)
-
-中文:
-实例 MorphismProperty.regularMono.respectsIso
-  签名: :
-  定义体: RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularMono.some)⟩⟩)
-
-Depends on / 依赖: RespectsIso, RespectsIso.of_respects_arrow_iso, h.regularMono.some, hasCardinalLT_subtype_iSup, ofArrowIso, of_respects_arrow_iso, regularMono
+  id_mem _ := ⟨⟨RegularMono.ofIso <| Iso.refl _⟩⟩
+/-
+**CategoryTheory.MorphismProperty.regularMono.respectsIso** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.MorphismProperty.regularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C], (CategoryTheo
+ry.MorphismProperty.regularMono C).RespectsIso
+参数：CategoryTheory.MorphismProperty.regularMono C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.of_respects_arrow_iso`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Morphism
+Property C),   (∀ (f g : CategoryTheory.Arrow C) (x : f…
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
 -/
 instance MorphismProperty.regularMono.respectsIso :
     (MorphismProperty.regularMono C).RespectsIso :=
-  RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularMono.some)⟩⟩)
-
-/--
-lemma `isRegularMono_of_regularMono` / 引理 `isRegularMono_of_regularMono`
-
-English:
-lemma isRegularMono_of_regularMono
-  given: {f : X ⟶ Y} (h : RegularMono f)
-  statement: IsRegularMono f
-  proof: ⟨⟨h⟩⟩
-
-中文:
-引理 isRegularMono_of_regularMono
-  条件: {f : X ⟶ Y} (h : 正则单态射 f)
-  结论: 是正则单态射 f
-  证明: ⟨⟨h⟩⟩
-
-Depends on / 依赖: hasCardinalLT_union
+  RespectsIso.of_respects_arrow_iso _ (fun _ _ e h ↦ ⟨⟨.ofArrowIso e (h := h.regularMono.some)⟩⟩)
+/-
+**CategoryTheory.isRegularMono_of_regularMono** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：isRegularMono_of_regularMono {f : X ⟶ Y} (h : RegularMono f) : IsRegularMo
+no f
+参数：h : RegularMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isRegularMono_of_regularMono {f : X ⟶ Y} (h : RegularMono f) : IsRegularMono f := ⟨⟨h⟩⟩
 
-/--
-Definition of `IsRegularMono.getStruct` / `IsRegularMono.getStruct` 的定义
+/-- Given `IsRegularMono f`, a choice of data for `RegularMono f`. -/
+/-
+**CategoryTheory.IsRegularMono.getStruct** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.IsRegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [CategoryTheory.IsRegularMono f] → CategoryTheory.RegularMon
+o f
+参数：f : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
 
-English:
-definition IsRegularMono.getStruct
-  signature: (f : X ⟶ Y) [IsRegularMono f]
-  body: IsRegularMono.regularMono.some
-
-中文:
-定义 是正则单态射.getStruct
-  签名: (f : X ⟶ Y) [是正则单态射 f]
-  定义体: IsRegularMono.regularMono.some
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.regularMono.some, regularMono
+--- 原说明 ---
+Given `IsRegularMono f`, a choice of data for `RegularMono f`.
 -/
 def IsRegularMono.getStruct (f : X ⟶ Y) [IsRegularMono f] : RegularMono f :=
   IsRegularMono.regularMono.some
 
-/--
-Definition of `Fork.IsLimit.regularMono` / `Fork.IsLimit.regularMono` 的定义
+/-- An equalizer diagram gives rise to a regular monomorphism. -/
+/-
+**CategoryTheory.Fork.IsLimit.regularMono** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Fork.IsLimit`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {A B :
+ C} →       {p₁ p₂ : A ⟶ B} →         {c : CategoryTheory.Limits.Fork p₁ p₂} → C
+ategoryTheory.Limits.IsLimit c → CategoryTheory.RegularMono c.ι
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Fork.condition`：∀ {C : Type u} {X Y : C} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Fork f
+ g),   CategoryTheory.Cate…
 
-English:
-definition Fork.IsLimit.regularMono
-  signature: {A B : C} {p₁ p₂ : A ⟶ B} {c : Fork p₁ p₂} (h : IsLimit c)
-  body: B
-  left := p₁
-  right := p₂
-  isLimit := h.ofIsoLimit c.isoForkOfι
-  w := c.condition
-
-中文:
-定义 叉.是极限.regularMono
-  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : 叉 p₁ p₂} (h : 是极限 c)
-  定义体: B
-  left := p₁
-  right := p₂
-  isLimit := h.ofIsoLimit c.isoForkOfι
-  w := c.condition
+--- 原说明 ---
+An equalizer diagram gives rise to a regular monomorphism.
 -/
 def Fork.IsLimit.regularMono {A B : C} {p₁ p₂ : A ⟶ B} {c : Fork p₁ p₂} (h : IsLimit c) :
     RegularMono c.ι where
@@ -356,183 +291,191 @@ The names `Z`, `left`, and `right` all being in the `IsRegularMono` namespace.
 
 variable {X Y : C} (f : X ⟶ Y) [IsRegularMono f]
 
-/--
-Definition of `IsRegularMono.Z` / `IsRegularMono.Z` 的定义
+/-- The target of the equalizer diagram for `f`. -/
+/-
+**CategoryTheory.IsRegularMono.Z** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsReg
+ularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} 
+→ (f : X ⟶ Y) → [CategoryTheory.IsRegularMono f] → C
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularMono.Z
-  signature: : C
-  body: (IsRegularMono.getStruct f).Z
-
-中文:
-定义 是正则单态射.Z
-  签名: : C
-  定义体: (IsRegularMono.getStruct f).Z
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct
+--- 原说明 ---
+The target of the equalizer diagram for `f`.
 -/
 def IsRegularMono.Z : C := (IsRegularMono.getStruct f).Z
 
-/--
-Definition of `IsRegularMono.left` / `IsRegularMono.left` 的定义
+/-- The "left" map `Y ⟶ Z`. -/
+/-
+**CategoryTheory.IsRegularMono.left** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+RegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [inst_1 : CategoryTheory.IsRegularMono f] → Y ⟶ CategoryTheo
+ry.IsRegularMono.Z f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularMono.left
-  signature: : Y ⟶ Z f
-  body: (IsRegularMono.getStruct f).left
-
-中文:
-定义 是正则单态射.left
-  签名: : Y ⟶ Z f
-  定义体: (IsRegularMono.getStruct f).left
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct
+--- 原说明 ---
+The "left" map `Y ⟶ Z`.
 -/
 def IsRegularMono.left : Y ⟶ Z f := (IsRegularMono.getStruct f).left
 
-/--
-Definition of `IsRegularMono.right` / `IsRegularMono.right` 的定义
+/-- The "right" map `Y ⟶ Z`. -/
+/-
+**CategoryTheory.IsRegularMono.right** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.I
+sRegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [inst_1 : CategoryTheory.IsRegularMono f] → Y ⟶ CategoryTheo
+ry.IsRegularMono.Z f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularMono.right
-  signature: : Y ⟶ Z f
-  body: (IsRegularMono.getStruct f).right
-
-中文:
-定义 是正则单态射.right
-  签名: : Y ⟶ Z f
-  定义体: (IsRegularMono.getStruct f).right
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct
+--- 原说明 ---
+The "right" map `Y ⟶ Z`.
 -/
 def IsRegularMono.right : Y ⟶ Z f := (IsRegularMono.getStruct f).right
 
-/--
-lemma `IsRegularMono.w` / 引理 `IsRegularMono.w`
+/-- The equalizer condition. -/
+/-
+**CategoryTheory.IsRegularMono.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsReg
+ularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f :
+ X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMono f],   CategoryTheory.CategorySt
+ruct.comp f (CategoryTheory.IsRegularMono.left f) =     CategoryTheory.CategoryS
+truct.comp f (CategoryTheory.IsRegularMono.right f)
+参数：f : X ⟶ Y；CategoryTheory.IsRegularMono.left f；CategoryTheory.IsRegularMono.ri
+ght f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-English:
-lemma IsRegularMono.w
-  statement: f ≫ left f = f ≫ right f
-  proof: (IsRegularMono.getStruct f).w
-
-中文:
-引理 是正则单态射.w
-  结论: f ≫ left f = f ≫ right f
-  证明: (IsRegularMono.getStruct f).w
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct
+--- 原说明 ---
+The equalizer condition.
 -/
 lemma IsRegularMono.w : f ≫ left f = f ≫ right f := (IsRegularMono.getStruct f).w
 
-/--
-Definition of `IsRegularMono.isLimit` / `IsRegularMono.isLimit` 的定义
+/-- The fork is in fact an equalizer. -/
+/-
+**CategoryTheory.IsRegularMono.isLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.IsRegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       (f : X ⟶ Y) →         [inst_1 : CategoryTheory.IsRegularMono f] → Ca
+tegoryTheory.Limits.IsLimit (CategoryTheory.Limits.Fork.ofι f ⋯)
+参数：f : X ⟶ Y；CategoryTheory.Limits.Fork.ofι f ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularMono.isLimit
-  signature: : IsLimit Fork.ofι _ (w f)
-  body: (IsRegularMono.getStruct f).isLimit
-
-中文:
-定义 是正则单态射.isLimit
-  签名: : 是极限 叉.ofι _ (w f)
-  定义体: (IsRegularMono.getStruct f).isLimit
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct, isLimit
+--- 原说明 ---
+The fork is in fact an equalizer.
 -/
-def IsRegularMono.isLimit : IsLimit Fork.ofι _ (w f) := (IsRegularMono.getStruct f).isLimit
+def IsRegularMono.isLimit : IsLimit <| Fork.ofι _ (w f) := (IsRegularMono.getStruct f).isLimit
 
-/--
-Definition of `IsRegularMono.lift` / `IsRegularMono.lift` 的定义
+/-- Lift a morphism `k : W ⟶ Y`, equalized by the two morphisms `left` and `right`, along `f`. -/
+/-
+**CategoryTheory.IsRegularMono.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+RegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y W
+ : C} →       (f : X ⟶ Y) →         [inst_1 : CategoryTheory.IsRegularMono f] → 
+          (k : W ⟶ Y) →             CategoryTheory.CategoryStruct.comp k (Catego
+ryTheory.IsRegularMono.left f) =                 CategoryTheory.CategoryStruct.c
+omp k (CategoryTheory.IsRegularMono.right f) →               (W ⟶ X)
+参数：f : X ⟶ Y；k : W ⟶ Y；CategoryTheory.IsRegularMono.left f；CategoryTheory.IsRegu
+larMono.right f；W ⟶ X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMo
+no f],   CategoryThe…
 
-English:
-definition IsRegularMono.lift
-  signature: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
-  body: Fork.IsLimit.lift (isLimit f) k h
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 是正则单态射.lift
-  签名: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
-  定义体: Fork.IsLimit.lift (isLimit f) k h
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Fork.IsLimit.lift, IsLimit, isLimit
+--- 原说明 ---
+Lift a morphism `k : W ⟶ Y`, equalized by the two morphisms `left` and `right`, 
+along `f`.
 -/
 def IsRegularMono.lift {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
     (h : k ≫ left f = k ≫ right f) : W ⟶ X :=
   Fork.IsLimit.lift (isLimit f) k h
 
 @[reassoc (attr := simp)]
-/--
-lemma `IsRegularMono.fac` / 引理 `IsRegularMono.fac`
-
-English:
-lemma IsRegularMono.fac
-  statement: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
-  proof: Fork.IsLimit.lift_ι (isLimit f)
-
-中文:
-引理 是正则单态射.fac
-  结论: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
-  证明: Fork.IsLimit.lift_ι (isLimit f)
-
-Depends on / 依赖: Fork.IsLimit.lift_, IsLimit, isLimit
+/-
+**CategoryTheory.IsRegularMono.fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsR
+egularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y W : C} (f
+ : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMono f] (k : W ⟶ Y)   (h :     Cat
+egoryTheory.CategoryStruct.comp k (CategoryTheory.IsRegularMono.left f) =       
+CategoryTheory.CategoryStruct.comp k (CategoryTheory.IsRegularMono.right f)),   
+CategoryTheory.CategoryStruct.comp (CategoryTheory.IsRegularMono.lift f k h) f =
+ k
+参数：f : X ⟶ Y；k : W ⟶ Y；h :     CategoryTheory.CategoryStruct.comp k (CategoryThe
+ory.IsRegularMono.left f) =       CategoryTheory.CategoryStruct.comp k (Category
+Theory.IsRegularMono.right f)；CategoryTheory.IsRegularMono.lift f k h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Fork.IsLimit.lift_ι`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} {s t : CategoryTheory.Limits
+.Fork f g}   (hs : CategoryTheo…
+· 使用定理 `CategoryTheory.IsRegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMo
+no f],   CategoryThe…
 -/
 lemma IsRegularMono.fac {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
     (h : k ≫ left f = k ≫ right f) : lift f k h ≫ f = k :=
   Fork.IsLimit.lift_ι (isLimit f)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsRegularMono.uniq` / 引理 `IsRegularMono.uniq`
-
-English:
-lemma IsRegularMono.uniq
-  statement: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
-  proof: .unique hm by simp Fork.IsLimit.existsUnique (isLimit f) k h
-
-中文:
-引理 是正则单态射.uniq
-  结论: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
-  证明: .unique hm by simp Fork.IsLimit.existsUnique (isLimit f) k h
-
-Depends on / 依赖: Fork.IsLimit.existsUnique, IsLimit, existsUnique, isLimit, unique
+/-
+**CategoryTheory.IsRegularMono.uniq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+RegularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y W : C} (f
+ : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMono f] (k : W ⟶ Y)   (h :     Cat
+egoryTheory.CategoryStruct.comp k (CategoryTheory.IsRegularMono.left f) =       
+CategoryTheory.CategoryStruct.comp k (CategoryTheory.IsRegularMono.right f))   (
+m : W ⟶ X), CategoryTheory.CategoryStruct.comp m f = k → m = CategoryTheory.IsRe
+gularMono.lift f k h
+参数：f : X ⟶ Y；k : W ⟶ Y；h :     CategoryTheory.CategoryStruct.comp k (CategoryThe
+ory.IsRegularMono.left f) =       CategoryTheory.CategoryStruct.comp k (Category
+Theory.IsRegularMono.right f)；m : W ⟶ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `CategoryTheory.IsRegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularMo
+no f],   CategoryThe…
+· 使用定理 `CategoryTheory.Limits.Fork.IsLimit.existsUnique`：∀ {C : Type u} {X Y : C
+} [inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} {s : CategoryTheory.Li
+mits.Fork f g}   (hs : CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsRegularMono.fac`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y W : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegul
+arMono f] (k : W ⟶ Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsRegularMono.uniq {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
     (h : k ≫ left f = k ≫ right f) (m : W ⟶ X) (hm : m ≫ f = k) : m = lift f k h :=
-.unique hm by simp Fork.IsLimit.existsUnique (isLimit f) k h
+  Fork.IsLimit.existsUnique (isLimit f) k h |>.unique hm <| by simp
 
 end IsRegularMono
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `RegularMono.equalizer` / `RegularMono.equalizer` 的定义
+/-- The chosen equalizer of a parallel pair is a regular monomorphism. -/
+/-
+**CategoryTheory.RegularMono.equalizer** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.RegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       (g h : X ⟶ Y) →         [inst_1 : CategoryTheory.Limits.HasLimit (Ca
+tegoryTheory.Limits.parallelPair g h)] →           CategoryTheory.RegularMono (C
+ategoryTheory.Limits.equalizer.ι g h)
+参数：g h : X ⟶ Y；CategoryTheory.Limits.parallelPair g h；CategoryTheory.Limits.equa
+lizer.ι g h。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
 
-English:
-definition RegularMono.equalizer
-  signature: (g h : X ⟶ Y) [HasLimit (parallelPair g h)]
-  body: Y
-  left := g
-  right := h
-  w := equalizer.condition g h
-  isLimit :=
-    Fork.IsLimit.mk _ (fun s => limit.lift _ s) (by simp) fun s m w => by
-      apply equalizer.hom_ext
-      simp [← w]
-
-中文:
-定义 正则单态射.equalizer
-  签名: (g h : X ⟶ Y) [有极限 (parallelPair g h)]
-  定义体: Y
-  left := g
-  right := h
-  w := equalizer.condition g h
-  isLimit :=
-    Fork.IsLimit.mk _ (fun s => limit.lift _ s) (by simp) fun s m w => by
-      apply equalizer.hom_ext
-      simp [← w]
+--- 原说明 ---
+The chosen equalizer of a parallel pair is a regular monomorphism.
 -/
 def RegularMono.equalizer (g h : X ⟶ Y) [HasLimit (parallelPair g h)] :
     RegularMono (equalizer.ι g h) where
@@ -544,29 +487,26 @@ def RegularMono.equalizer (g h : X ⟶ Y) [HasLimit (parallelPair g h)] :
     Fork.IsLimit.mk _ (fun s => limit.lift _ s) (by simp) fun s m w => by
       apply equalizer.hom_ext
       simp [← w]
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (g h : X ⟶ Y) [HasLimit (parallelPair g h)] :
     IsRegularMono (equalizer.ι g h) :=
-isRegularMono_of_regularMono RegularMono.equalizer g h
+  isRegularMono_of_regularMono <| RegularMono.equalizer g h
 
-/--
-Definition of `RegularMono.ofIsSplitMono` / `RegularMono.ofIsSplitMono` 的定义
+/-- Every split monomorphism is a regular monomorphism. -/
+/-
+**CategoryTheory.RegularMono.ofIsSplitMono** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.RegularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [CategoryTheory.IsSplitMono f] → CategoryTheory.RegularMono 
+f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularMono.ofIsSplitMono
-  signature: (f : X ⟶ Y) [IsSplitMono f]
-  body: Y
-  left := 𝟙 Y
-  right := retraction f ≫ f
-  isLimit := isSplitMonoEqualizes f
-
-中文:
-定义 正则单态射.ofIsSplitMono
-  签名: (f : X ⟶ Y) [是分裂单态射 f]
-  定义体: Y
-  left := 𝟙 Y
-  right := retraction f ≫ f
-  isLimit := isSplitMonoEqualizes f
+--- 原说明 ---
+Every split monomorphism is a regular monomorphism.
 -/
 def RegularMono.ofIsSplitMono (f : X ⟶ Y) [IsSplitMono f] :
     RegularMono f where
@@ -574,87 +514,65 @@ def RegularMono.ofIsSplitMono (f : X ⟶ Y) [IsSplitMono f] :
   left := 𝟙 Y
   right := retraction f ≫ f
   isLimit := isSplitMonoEqualizes f
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (f : X ⟶ Y) [IsSplitMono f] :
     IsRegularMono f :=
-isRegularMono_of_regularMono .ofIsSplitMono f
+  isRegularMono_of_regularMono <| .ofIsSplitMono f
 
-/--
-Definition of `RegularMono.lift'` / `RegularMono.lift'` 的定义
+/-- If `f` is a regular mono, then any map `k : W ⟶ Y` equalizing `RegularMono.left` and
+`RegularMono.right` induces a morphism `l : W ⟶ X` such that `l ≫ f = k`. -/
+/-
+**CategoryTheory.RegularMono.lift'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Reg
+ularMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y W
+ : C} →       {f : X ⟶ Y} →         (hf : CategoryTheory.RegularMono f) →       
+    (k : W ⟶ Y) →             CategoryTheory.CategoryStruct.comp k hf.left = Cat
+egoryTheory.CategoryStruct.comp k hf.right →               { l // CategoryTheory
+.CategoryStruct.comp l f = k }
+参数：hf : CategoryTheory.RegularMono f；k : W ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-English:
-definition RegularMono.lift'
-  signature: {W : C} {f : X ⟶ Y} (hf : RegularMono f) (k : W ⟶ Y)
-  body: Fork.IsLimit.lift' hf.isLimit _ h
-
-中文:
-定义 正则单态射.lift'
-  签名: {W : C} {f : X ⟶ Y} (hf : 正则单态射 f) (k : W ⟶ Y)
-  定义体: Fork.IsLimit.lift' hf.isLimit _ h
-
-Depends on / 依赖: Fork.IsLimit.lift, IsLimit, hf.isLimit, isLimit
+--- 原说明 ---
+If `f` is a regular mono, then any map `k : W ⟶ Y` equalizing `RegularMono.left`
+ and
+`RegularMono.right` induces a morphism `l : W ⟶ X` such that `l ≫ f = k`.
 -/
 def RegularMono.lift' {W : C} {f : X ⟶ Y} (hf : RegularMono f) (k : W ⟶ Y)
     (h : k ≫ hf.left = k ≫ hf.right) :
     { l : W ⟶ X // l ≫ f = k } :=
   Fork.IsLimit.lift' hf.isLimit _ h
 
-/--
-Definition of `regularOfIsPullbackSndOfRegular` / `regularOfIsPullbackSndOfRegular` 的定义
+/-- The second leg of a pullback cone is a regular monomorphism if the right component is too.
 
-English:
-definition regularOfIsPullbackSndOfRegular
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: hr.Z
-  left := k ≫ hr.left
-  right := k ≫ hr.right
-  w := by
-    repeat (rw [← Category.assoc, ← eq_whisker comm])
-    simp only [Category.assoc, hr.w]
-  isLimit := by
-    apply Fork.IsLimit.mk' _ _
-    intro s
-    have l₁ : (Fork.ι s ≫ k) ≫ hr.left = (Fork.ι s ≫ k) ≫ hr.right := by
-      rw [Category.assoc]; rw [s.condition]; rw [Category.assoc]
-    obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hr.isLimit _ l₁
-    obtain ⟨p, _, hp₂⟩ := PullbackCone.IsLimit.lift' t _ _ hl
-    refine ⟨p, hp₂, ?_⟩
-    intro m w
-    have z : m ≫ g = p ≫ g := w.trans hp₂.symm
-    apply t.hom_ext
-    have := hr.mono
-    apply (PullbackCone.mk f g comm).equalizer_ext
-    · simp only [PullbackCone.mk_π_app, ← cancel_mono h]
-      grind [Fork.ofι, PullbackCone.mk]
-    · exact z
+See also `Pullback.sndOfMono` for the basic monomorphism version, and
+`regularOfIsPullbackFstOfRegular` for the flipped version.
+-/
+/-
+**CategoryTheory.regularOfIsPullbackSndOfRegular** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：regularOfIsPullbackSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h :
+ Q ⟶ S} {k : R ⟶ S} (hr : RegularMono h) (comm : f ≫ h = g ≫ k) (t : IsLimit (Pu
+llbackCone.mk _ _ comm)) : RegularMono g where Z
+参数：hr : RegularMono h；comm : f ≫ h = g ≫ k；t : IsLimit (PullbackCone.mk _ _ comm
+)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-中文:
-定义 regularOfIsPullbackSndOfRegular
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: hr.Z
-  left := k ≫ hr.left
-  right := k ≫ hr.right
-  w := by
-    repeat (rw [← Category.assoc, ← eq_whisker comm])
-    simp only [Category.assoc, hr.w]
-  isLimit := by
-    apply Fork.IsLimit.mk' _ _
-    intro s
-    have l₁ : (Fork.ι s ≫ k) ≫ hr.left = (Fork.ι s ≫ k) ≫ hr.right := by
-      rw [Category.assoc]; rw [s.condition]; rw [Category.assoc]
-    obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hr.isLimit _ l₁
-    obtain ⟨p, _, hp₂⟩ := PullbackCone.IsLimit.lift' t _ _ hl
-    refine ⟨p, hp₂, ?_⟩
-    intro m w
-    have z : m ≫ g = p ≫ g := w.trans hp₂.symm
-    apply t.hom_ext
-    have := hr.mono
-    apply (PullbackCone.mk f g comm).equalizer_ext
-    · simp only [PullbackCone.mk_π_app, ← cancel_mono h]
-      grind [Fork.ofι, PullbackCone.mk]
-    · exact z
+--- 原说明 ---
+The second leg of a pullback cone is a regular monomorphism if the right compone
+nt is too.
 
-Depends on / 依赖: hr.Z
+See also `Pullback.sndOfMono` for the basic monomorphism version, and
+`regularOfIsPullbackFstOfRegular` for the flipped version.
 -/
 def regularOfIsPullbackSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     (hr : RegularMono h) (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCone.mk _ _ comm)) :
@@ -669,7 +587,7 @@ def regularOfIsPullbackSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h
     apply Fork.IsLimit.mk' _ _
     intro s
     have l₁ : (Fork.ι s ≫ k) ≫ hr.left = (Fork.ι s ≫ k) ≫ hr.right := by
-      rw [Category.assoc]; rw [s.condition]; rw [Category.assoc]
+      rw [Category.assoc, s.condition, Category.assoc]
     obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hr.isLimit _ l₁
     obtain ⟨p, _, hp₂⟩ := PullbackCone.IsLimit.lift' t _ _ hl
     refine ⟨p, hp₂, ?_⟩
@@ -682,60 +600,77 @@ def regularOfIsPullbackSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h
       grind [Fork.ofι, PullbackCone.mk]
     · exact z
 
-/--
-Definition of `regularOfIsPullbackFstOfRegular` / `regularOfIsPullbackFstOfRegular` 的定义
+/-- The first leg of a pullback cone is a regular monomorphism if the left component is too.
 
-English:
-definition regularOfIsPullbackFstOfRegular
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: regularOfIsPullbackSndOfRegular hk comm.symm (PullbackCone.flipIsLimit t)
+See also `Pullback.fstOfMono` for the basic monomorphism version, and
+`regularOfIsPullbackSndOfRegular` for the flipped version.
+-/
+/-
+**CategoryTheory.regularOfIsPullbackFstOfRegular** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：regularOfIsPullbackFstOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h :
+ Q ⟶ S} {k : R ⟶ S} (hk : RegularMono k) (comm : f ≫ h = g ≫ k) (t : IsLimit (Pu
+llbackCone.mk _ _ comm)) : RegularMono f
+参数：hk : RegularMono k；comm : f ≫ h = g ≫ k；t : IsLimit (PullbackCone.mk _ _ comm
+)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 regularOfIsPullbackFstOfRegular
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: regularOfIsPullbackSndOfRegular hk comm.symm (PullbackCone.flipIsLimit t)
+--- 原说明 ---
+The first leg of a pullback cone is a regular monomorphism if the left component
+ is too.
 
-Depends on / 依赖: PullbackCone, PullbackCone.flipIsLimit, comm.symm, flipIsLimit, regularOfIsPullbackSndOfRegular
+See also `Pullback.fstOfMono` for the basic monomorphism version, and
+`regularOfIsPullbackSndOfRegular` for the flipped version.
 -/
 def regularOfIsPullbackFstOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     (hk : RegularMono k) (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCone.mk _ _ comm)) :
     RegularMono f :=
   regularOfIsPullbackSndOfRegular hk comm.symm (PullbackCone.flipIsLimit t)
 
-/--
-lemma `RegularMono.strongMono` / 引理 `RegularMono.strongMono`
+/-- Any regular monomorphism is a strong monomorphism. -/
+/-
+**CategoryTheory.RegularMono.strongMono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.RegularMono`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} {f :
+ X ⟶ Y} (h : CategoryTheory.RegularMono f),   CategoryTheory.StrongMono f
+参数：h : CategoryTheory.RegularMono f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (h : CategoryTheory.RegularMono f),  
+ CategoryTheory.Mono …
+· 使用定理 `CategoryTheory.StrongMono.mk'`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {P Q : C} {f : Q ⟶ P} [CategoryTheory.Mono f],   (∀ (Y X : C) (z
+ : Y ⟶ X),       Ca…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CommSq.HasLift.mk'`：mk' (l : sq.LiftStruct) : HasLift sq
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
 
-English:
-lemma RegularMono.strongMono
-  given: {f : X ⟶ Y} (h : RegularMono f)
-  statement: StrongMono f
-  proof: have := h.mono
-  StrongMono.mk' (by
-      intro A B z hz u v sq
-      have : v ≫ h.left = v ≫ h.right := by
-        apply (cancel_epi z).1
-        repeat (rw [← Category.assoc, ← eq_whisker sq.w])
-        simp only [Category.assoc, RegularMono.w]
-      obtain ⟨t, ht⟩ := RegularMono.lift' _ _ this
-      refine CommSq.HasLift.mk' ⟨t, (cancel_mono f).1 ?_, ht⟩
-      simp only [Category.assoc, ht, sq.w])
-
-中文:
-引理 正则单态射.strongMono
-  条件: {f : X ⟶ Y} (h : 正则单态射 f)
-  结论: 强单态射 f
-  证明: have := h.mono
-  StrongMono.mk' (by
-      intro A B z hz u v sq
-      have : v ≫ h.left = v ≫ h.right := by
-        apply (cancel_epi z).1
-        repeat (rw [← Category.assoc, ← eq_whisker sq.w])
-        simp only [Category.assoc, RegularMono.w]
-      obtain ⟨t, ht⟩ := RegularMono.lift' _ _ this
-      refine CommSq.HasLift.mk' ⟨t, (cancel_mono f).1 ?_, ht⟩
-      simp only [Category.assoc, ht, sq.w])
-
-Depends on / 依赖: Category, Category.assoc, CommSq, CommSq.HasLift.mk, HasLift, RegularMono, RegularMono.lift, RegularMono.w, StrongMono, StrongMono.mk, cancel_epi, cancel_mono, eq_whisker, h.left, h.mono, h.right, repeat, sq.w
+--- 原说明 ---
+Any regular monomorphism is a strong monomorphism.
 -/
 lemma RegularMono.strongMono {f : X ⟶ Y} (h : RegularMono f) : StrongMono f :=
   have := h.mono
@@ -748,28 +683,31 @@ lemma RegularMono.strongMono {f : X ⟶ Y} (h : RegularMono f) : StrongMono f :=
       obtain ⟨t, ht⟩ := RegularMono.lift' _ _ this
       refine CommSq.HasLift.mk' ⟨t, (cancel_mono f).1 ?_, ht⟩
       simp only [Category.assoc, ht, sq.w])
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (f : X ⟶ Y) [IsRegularMono f] : StrongMono f :=
-.strongMono IsRegularMono.getStruct f
+  IsRegularMono.getStruct f |>.strongMono
 
-/--
-theorem `isIso_of_regularMono_of_epi` / 定理 `isIso_of_regularMono_of_epi`
+/-- A regular monomorphism is an isomorphism if it is an epimorphism. -/
+/-
+**CategoryTheory.isIso_of_regularMono_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+形式化陈述：isIso_of_regularMono_of_epi (f : X ⟶ Y) (h : RegularMono f) [Epi f] : IsIs
+o f
+参数：f : X ⟶ Y；h : RegularMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.strongMono`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (h : CategoryTheory.RegularMono
+ f),   CategoryTheory.Stron…
+· 使用定理 `CategoryTheory.isIso_of_epi_of_strongMono`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.Epi f]   [Cate
+goryTheory.StrongMono f], Categ…
 
-English:
-theorem isIso_of_regularMono_of_epi
-  given: (f : X ⟶ Y) (h : RegularMono f) [Epi f]
-  statement: IsIso f
-  proof: have := RegularMono.strongMono h
-  isIso_of_epi_of_strongMono _
-
-中文:
-定理 isIso_of_regularMono_of_epi
-  条件: (f : X ⟶ Y) (h : 正则单态射 f) [满态射 f]
-  结论: 是同构 f
-  证明: have := RegularMono.strongMono h
-  isIso_of_epi_of_strongMono _
-
-Depends on / 依赖: RegularMono, RegularMono.strongMono, isIso_of_epi_of_strongMono, strongMono
+--- 原说明 ---
+A regular monomorphism is an isomorphism if it is an epimorphism.
 -/
 theorem isIso_of_regularMono_of_epi (f : X ⟶ Y) (h : RegularMono f) [Epi f] : IsIso f :=
   have := RegularMono.strongMono h
@@ -779,81 +717,73 @@ section
 
 variable (C)
 
-/--
-Definition of `IsRegularMonoCategory` / `IsRegularMonoCategory` 的定义
+/-- A regular mono category is a category in which every monomorphism is regular. -/
+/-
+**CategoryTheory.IsRegularMonoCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：(C : Type u₁) → [CategoryTheory.Category.{v₁, u₁} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRegularMonoCategory
-  parameters: : Prop where
-  axioms and operations (1):
-    - regularMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], IsRegularMono f
-
-中文:
-类 是正则单态射范畴
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - regularMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 是正则单态射 f
+--- 原说明 ---
+A regular mono category is a category in which every monomorphism is regular.
 -/
 class IsRegularMonoCategory : Prop where
   /-- Every monomorphism is a regular monomorphism -/
-  regularMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], IsRegularMono f
+  regularMonoOfMono : ∀ {X Y : C} (f : X ⟶ Y) [Mono f], IsRegularMono f
 
 end
 
-/--
-Definition of `regularMonoOfMono` / `regularMonoOfMono` 的定义
+/-- In a category in which every monomorphism is regular, we can express every monomorphism as
+an equalizer. This is not an instance because it would create an instance loop. -/
+/-
+**CategoryTheory.regularMonoOfMono** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：regularMonoOfMono [IsRegularMonoCategory C] (f : X ⟶ Y) [Mono f] : Regular
+Mono f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularMonoCategory.regularMonoOfMono`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} [self : CategoryTheory.IsRegularMono
+Category C] {X Y : C}   (f : X ⟶ Y) [Categor…
 
-English:
-definition regularMonoOfMono
-  signature: [IsRegularMonoCategory C] (f : X ⟶ Y) [Mono f]
-  body: have := IsRegularMonoCategory.regularMonoOfMono f
-  IsRegularMono.getStruct f
-
-中文:
-定义 regularMonoOfMono
-  签名: [是正则单态射范畴 C] (f : X ⟶ Y) [单态射 f]
-  定义体: have := IsRegularMonoCategory.regularMonoOfMono f
-  IsRegularMono.getStruct f
-
-Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, IsRegularMonoCategory, IsRegularMonoCategory.regularMonoOfMono, getStruct, regularMonoOfMono
+--- 原说明 ---
+In a category in which every monomorphism is regular, we can express every monom
+orphism as
+an equalizer. This is not an instance because it would create an instance loop.
 -/
 def regularMonoOfMono [IsRegularMonoCategory C] (f : X ⟶ Y) [Mono f] : RegularMono f :=
   have := IsRegularMonoCategory.regularMonoOfMono f
   IsRegularMono.getStruct f
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) regularMonoCategoryOfSplitMonoCategory [SplitMonoCategory C] :
     IsRegularMonoCategory C where
   regularMonoOfMono f _ :=
     haveI := isSplitMono_of_mono f
-isRegularMono_of_regularMono RegularMono.ofIsSplitMono f
-
+    isRegularMono_of_regularMono <| RegularMono.ofIsSplitMono f
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) strongMonoCategory_of_regularMonoCategory [IsRegularMonoCategory C] :
     StrongMonoCategory C where
   strongMono_of_mono f _ :=
-RegularMono.strongMono regularMonoOfMono f
+    RegularMono.strongMono <| regularMonoOfMono f
 
-/--
-Definition of `RegularEpi` / `RegularEpi` 的定义
+/-- A regular epimorphism is a morphism which is the coequalizer of some parallel pair. -/
+/-
+**CategoryTheory.RegularEpi** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：RegularEpi (f : X ⟶ Y) where /-- An object from `C` -/ W : C /-- Two maps 
+to the domain of `f` -/ (left right : W ⟶ X) /-- `f` coequalizes the two maps -/
+ w : left ≫ f = right ≫ f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RegularEpi
-  parameters: (f : X ⟶ Y)
-  axioms and operations (4):
-    - W : C
-    - (left(right) : W ⟶ X)
-    - w : left ≫ f = right ≫ f  [default: by cat_disch]
-    - isColimit : IsColimit (Cofork.ofπ f w)
-
-中文:
-结构 正则满态射
-  参数: (f : X ⟶ Y)
-  公理与运算 (4 个):
-    - W : C
-    - (left(right) : W ⟶ X)
-    - w : left ≫ f = right ≫ f  [默认: by cat_disch]
-    - isColimit : 是余极限 (余叉.ofπ f w)
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A regular epimorphism is a morphism which is the coequalizer of some parallel pa
+ir.
 -/
 structure RegularEpi (f : X ⟶ Y) where
   /-- An object from `C` -/
@@ -867,82 +797,63 @@ structure RegularEpi (f : X ⟶ Y) where
 
 attribute [reassoc] RegularEpi.w
 
-/--
-lemma `RegularEpi.epi` / 引理 `RegularEpi.epi`
+/-- Every regular epimorphism is an epimorphism. -/
+/-
+**CategoryTheory.RegularEpi.epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Regula
+rEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f :
+ X ⟶ Y) (h : CategoryTheory.RegularEpi f),   CategoryTheory.Epi f
+参数：f : X ⟶ Y；h : CategoryTheory.RegularEpi f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.epi_of_isColimit_cofork`：epi_of_isColimit_cofork {
+c : Cofork f g} (i : IsColimit c) : Epi c.π
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-lemma RegularEpi.epi
-  given: (f : X ⟶ Y) (h : RegularEpi f)
-  statement: Epi f
-  proof: epi_of_isColimit_cofork h.isColimit
-
-中文:
-引理 正则满态射.epi
-  条件: (f : X ⟶ Y) (h : 正则满态射 f)
-  结论: 满态射 f
-  证明: epi_of_isColimit_cofork h.isColimit
-
-Depends on / 依赖: epi_of_isColimit_cofork, h.isColimit, isColimit
+--- 原说明 ---
+Every regular epimorphism is an epimorphism.
 -/
 lemma RegularEpi.epi (f : X ⟶ Y) (h : RegularEpi f) : Epi f :=
   epi_of_isColimit_cofork h.isColimit
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `RegularEpi.ofIso` / `RegularEpi.ofIso` 的定义
+/-- Every isomorphism is a regular epimorphism. -/
+/-
+**CategoryTheory.RegularEpi.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regu
+larEpi`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} → 
+(e : X ≅ Y) → CategoryTheory.RegularEpi e.hom
+参数：e : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularEpi.ofIso
-  signature: (e : X ≅ Y)
-  body: X
-  left := 𝟙 X
-  right := 𝟙 X
-  isColimit := Cofork.IsColimit.mk _ (fun s => e.inv ≫ s.π) (by simp) fun s m w => by
-    simp [← w]
-
-中文:
-定义 正则满态射.ofIso
-  签名: (e : X ≅ Y)
-  定义体: X
-  left := 𝟙 X
-  right := 𝟙 X
-  isColimit := Cofork.IsColimit.mk _ (fun s => e.inv ≫ s.π) (by simp) fun s m w => by
-    simp [← w]
+--- 原说明 ---
+Every isomorphism is a regular epimorphism.
 -/
 def RegularEpi.ofIso (e : X ≅ Y) : RegularEpi e.hom where
   W := X
   left := 𝟙 X
   right := 𝟙 X
-  isColimit := Cofork.IsColimit.mk _ (fun s => e.inv ≫ s.π) (by simp) fun s m w => by
+  isColimit := Cofork.IsColimit.mk _ (fun s ↦ e.inv ≫ s.π) (by simp) fun s m w ↦ by
     simp [← w]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `RegularEpi.ofArrowIso` / `RegularEpi.ofArrowIso` 的定义
+/-- Regular epimorphisms are preserved by isomorphisms in the arrow category. -/
+/-
+**CategoryTheory.RegularEpi.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.RegularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y X
+' Y' : C} →       {f : X ⟶ Y} →         {g : X' ⟶ Y'} →           (CategoryTheor
+y.Arrow.mk f ≅ CategoryTheory.Arrow.mk g) →             CategoryTheory.RegularEp
+i f → CategoryTheory.RegularEpi g
+参数：CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-definition RegularEpi.ofArrowIso
-  signature: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
-  body: h.W
-  left := h.left ≫ e.hom.left
-  right := h.right ≫ e.hom.left
-  w := by
-    simp only [Category.assoc, Arrow.w_mk_right, Arrow.mk_hom]
-    rw [reassoc_of% h.w]
-  isColimit := Cofork.isColimitOfIsos _ h.isColimit _
-    (Iso.refl _) (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e)
-
-中文:
-定义 正则满态射.ofArrowIso
-  签名: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
-  定义体: h.W
-  left := h.left ≫ e.hom.left
-  right := h.right ≫ e.hom.left
-  w := by
-    simp only [Category.assoc, Arrow.w_mk_right, Arrow.mk_hom]
-    rw [reassoc_of% h.w]
-  isColimit := Cofork.isColimitOfIsos _ h.isColimit _
-    (Iso.refl _) (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e)
+--- 原说明 ---
+Regular epimorphisms are preserved by isomorphisms in the arrow category.
 -/
 def RegularEpi.ofArrowIso {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
     (e : Arrow.mk f ≅ Arrow.mk g) (h : RegularEpi f) :
@@ -956,159 +867,119 @@ def RegularEpi.ofArrowIso {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
   isColimit := Cofork.isColimitOfIsos _ h.isColimit _
     (Iso.refl _) (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e)
 
-/--
-Definition of `IsRegularEpi` / `IsRegularEpi` 的定义
+/-- `IsRegularEpi f` is the assertion that `f` is a regular epimorphism. -/
+/-
+**CategoryTheory.IsRegularEpi** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} → 
+(X ⟶ Y) → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRegularEpi
-  parameters: {X Y : C} (f : X ⟶ Y)
-  axioms and operations (1):
-    - regularEpi : Nonempty (RegularEpi f)
-
-中文:
-类 是正则满态射
-  参数: {X Y : C} (f : X ⟶ Y)
-  公理与运算 (1 个):
-    - regularEpi : 非空 (正则满态射 f)
+--- 原说明 ---
+`IsRegularEpi f` is the assertion that `f` is a regular epimorphism.
 -/
 class IsRegularEpi {X Y : C} (f : X ⟶ Y) : Prop where
   regularEpi : Nonempty (RegularEpi f)
 
 variable (C) in
-/--
-Definition of `MorphismProperty.regularEpi` / `MorphismProperty.regularEpi` 的定义
+/-- The `MorphismProperty C` satisfied by regular epimorphisms in `C`. -/
+/-
+**CategoryTheory.MorphismProperty.regularEpi** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.MorphismProperty`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.MorphismProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MorphismProperty.regularEpi
-  signature: : MorphismProperty C
-  body: fun _ _ f => IsRegularEpi f
-
-@[simp]
-
-中文:
-定义 MorphismProperty.regularEpi
-  签名: : MorphismProperty C
-  定义体: fun _ _ f => IsRegularEpi f
-
-@[simp]
-
-Depends on / 依赖: IsRegularEpi
+--- 原说明 ---
+The `MorphismProperty C` satisfied by regular epimorphisms in `C`.
 -/
 def MorphismProperty.regularEpi : MorphismProperty C := fun _ _ f => IsRegularEpi f
 
 @[simp]
-/--
-theorem `MorphismProperty.regularEpi_iff` / 定理 `MorphismProperty.regularEpi_iff`
-
-English:
-theorem MorphismProperty.regularEpi_iff
-  given: (f : X ⟶ Y)
-  proof: Iff.rfl
-
-中文:
-定理 MorphismProperty.regularEpi_iff
-  条件: (f : X ⟶ Y)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.MorphismProperty.regularEpi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MorphismProperty`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f :
+ X ⟶ Y),   CategoryTheory.MorphismProperty.regularEpi C f ↔ CategoryTheory.IsReg
+ularEpi f
+参数：f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem MorphismProperty.regularEpi_iff (f : X ⟶ Y) :
     (MorphismProperty.regularEpi C) f ↔ IsRegularEpi f :=
   Iff.rfl
-
-/--
-Instance `MorphismProperty.regularEpi.containsIdentities` / 实例 `MorphismProperty.regularEpi.containsIdentities`
-
-English:
-instance MorphismProperty.regularEpi.containsIdentities
-  signature: :
-  body: ⟨⟨RegularEpi.ofIso Iso.refl _⟩⟩
-
-中文:
-实例 MorphismProperty.regularEpi.containsIdentities
-  签名: :
-  定义体: ⟨⟨RegularEpi.ofIso Iso.refl _⟩⟩
-
-Depends on / 依赖: Iso.refl, RegularEpi, RegularEpi.ofIso
+/-
+**CategoryTheory.MorphismProperty.regularEpi.containsIdentities** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.MorphismProperty.regularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C],   (CategoryTh
+eory.MorphismProperty.regularEpi C).ContainsIdentities
+参数：CategoryTheory.MorphismProperty.regularEpi C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance MorphismProperty.regularEpi.containsIdentities :
     (MorphismProperty.regularEpi C).ContainsIdentities where
-id_mem _ := ⟨⟨RegularEpi.ofIso Iso.refl _⟩⟩
-
-/--
-Instance `MorphismProperty.regularEpi.respectsIso` / 实例 `MorphismProperty.regularEpi.respectsIso`
-
-English:
-instance MorphismProperty.regularEpi.respectsIso
-  signature: :
-  body: RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularEpi.some)⟩⟩)
-
-中文:
-实例 MorphismProperty.regularEpi.respectsIso
-  签名: :
-  定义体: RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularEpi.some)⟩⟩)
-
-Depends on / 依赖: RespectsIso, RespectsIso.of_respects_arrow_iso, h.regularEpi.some, ofArrowIso, of_respects_arrow_iso, regularEpi
+  id_mem _ := ⟨⟨RegularEpi.ofIso <| Iso.refl _⟩⟩
+/-
+**CategoryTheory.MorphismProperty.regularEpi.respectsIso** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.MorphismProperty.regularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C], (CategoryTheo
+ry.MorphismProperty.regularEpi C).RespectsIso
+参数：CategoryTheory.MorphismProperty.regularEpi C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.of_respects_arrow_iso`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Morphism
+Property C),   (∀ (f g : CategoryTheory.Arrow C) (x : f…
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
 -/
 instance MorphismProperty.regularEpi.respectsIso :
     (MorphismProperty.regularEpi C).RespectsIso :=
-  RespectsIso.of_respects_arrow_iso _ (fun _ _ e h => ⟨⟨.ofArrowIso e (h := h.regularEpi.some)⟩⟩)
-
-/--
-lemma `isRegularEpi_of_regularEpi` / 引理 `isRegularEpi_of_regularEpi`
-
-English:
-lemma isRegularEpi_of_regularEpi
-  given: {f : X ⟶ Y} (h : RegularEpi f)
-  statement: IsRegularEpi f
-  proof: ⟨⟨h⟩⟩
-
-中文:
-引理 isRegularEpi_of_regularEpi
-  条件: {f : X ⟶ Y} (h : 正则满态射 f)
-  结论: 是正则满态射 f
-  证明: ⟨⟨h⟩⟩
+  RespectsIso.of_respects_arrow_iso _ (fun _ _ e h ↦ ⟨⟨.ofArrowIso e (h := h.regularEpi.some)⟩⟩)
+/-
+**CategoryTheory.isRegularEpi_of_regularEpi** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：isRegularEpi_of_regularEpi {f : X ⟶ Y} (h : RegularEpi f) : IsRegularEpi f
+参数：h : RegularEpi f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isRegularEpi_of_regularEpi {f : X ⟶ Y} (h : RegularEpi f) : IsRegularEpi f := ⟨⟨h⟩⟩
 
-/--
-Definition of `IsRegularEpi.getStruct` / `IsRegularEpi.getStruct` 的定义
+/-- Given `IsRegularEpi f`, a choice of data for `RegularEpi f`. -/
+/-
+**CategoryTheory.IsRegularEpi.getStruct** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.IsRegularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [h : CategoryTheory.IsRegularEpi f] → CategoryTheory.Regular
+Epi f
+参数：f : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
 
-English:
-definition IsRegularEpi.getStruct
-  signature: (f : X ⟶ Y) [h : IsRegularEpi f]
-  body: h.regularEpi.some
-
-中文:
-定义 是正则满态射.getStruct
-  签名: (f : X ⟶ Y) [h : 是正则满态射 f]
-  定义体: h.regularEpi.some
-
-Depends on / 依赖: h.regularEpi.some, regularEpi
+--- 原说明 ---
+Given `IsRegularEpi f`, a choice of data for `RegularEpi f`.
 -/
 def IsRegularEpi.getStruct (f : X ⟶ Y) [h : IsRegularEpi f] : RegularEpi f :=
   h.regularEpi.some
 
-/--
-Definition of `Cofork.IsColimit.regularEpi` / `Cofork.IsColimit.regularEpi` 的定义
+/-- A coequalizer diagram gives rise to a regular epimorphism. -/
+/-
+**CategoryTheory.Cofork.IsColimit.regularEpi** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Cofork.IsColimit`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {A B :
+ C} →       {p₁ p₂ : A ⟶ B} →         {c : CategoryTheory.Limits.Cofork p₁ p₂} →
+ CategoryTheory.Limits.IsColimit c → CategoryTheory.RegularEpi c.π
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofork.condition`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Cofo
+rk f g),   CategoryTheory.Ca…
 
-English:
-definition Cofork.IsColimit.regularEpi
-  signature: {A B : C} {p₁ p₂ : A ⟶ B} {c : Cofork p₁ p₂} (h : IsColimit c)
-  body: A
-  left := p₁
-  right := p₂
-  isColimit := h.ofIsoColimit c.isoCoforkOfπ
-  w := c.condition
-
-中文:
-定义 余叉.是余极限.regularEpi
-  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : 余叉 p₁ p₂} (h : 是余极限 c)
-  定义体: A
-  left := p₁
-  right := p₂
-  isColimit := h.ofIsoColimit c.isoCoforkOfπ
-  w := c.condition
+--- 原说明 ---
+A coequalizer diagram gives rise to a regular epimorphism.
 -/
 def Cofork.IsColimit.regularEpi {A B : C} {p₁ p₂ : A ⟶ B} {c : Cofork p₁ p₂} (h : IsColimit c) :
     RegularEpi c.π where
@@ -1138,183 +1009,189 @@ The names `W`, `left`, and `right` all being in the `IsRegularEpi` namespace.
 
 variable {X Y : C} (f : X ⟶ Y) [IsRegularEpi f]
 
-/--
-Definition of `IsRegularEpi.W` / `IsRegularEpi.W` 的定义
+/-- The source of the coequalizer diagram for `f`. -/
+/-
+**CategoryTheory.IsRegularEpi.W** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsRegu
+larEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] → {X Y : C} 
+→ (f : X ⟶ Y) → [CategoryTheory.IsRegularEpi f] → C
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularEpi.W
-  signature: : C
-  body: (IsRegularEpi.getStruct f).W
-
-中文:
-定义 是正则满态射.W
-  签名: : C
-  定义体: (IsRegularEpi.getStruct f).W
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct
+--- 原说明 ---
+The source of the coequalizer diagram for `f`.
 -/
 def IsRegularEpi.W : C := (IsRegularEpi.getStruct f).W
 
-/--
-Definition of `IsRegularEpi.left` / `IsRegularEpi.left` 的定义
+/-- The "left" map `W ⟶ X`. -/
+/-
+**CategoryTheory.IsRegularEpi.left** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsR
+egularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [inst_1 : CategoryTheory.IsRegularEpi f] → CategoryTheory.Is
+RegularEpi.W f ⟶ X
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularEpi.left
-  signature: : W f ⟶ X
-  body: (IsRegularEpi.getStruct f).left
-
-中文:
-定义 是正则满态射.left
-  签名: : W f ⟶ X
-  定义体: (IsRegularEpi.getStruct f).left
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct
+--- 原说明 ---
+The "left" map `W ⟶ X`.
 -/
 def IsRegularEpi.left : W f ⟶ X := (IsRegularEpi.getStruct f).left
 
-/--
-Definition of `IsRegularEpi.right` / `IsRegularEpi.right` 的定义
+/-- The "right" map `W ⟶ X`. -/
+/-
+**CategoryTheory.IsRegularEpi.right** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+RegularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [inst_1 : CategoryTheory.IsRegularEpi f] → CategoryTheory.Is
+RegularEpi.W f ⟶ X
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularEpi.right
-  signature: : W f ⟶ X
-  body: (IsRegularEpi.getStruct f).right
-
-中文:
-定义 是正则满态射.right
-  签名: : W f ⟶ X
-  定义体: (IsRegularEpi.getStruct f).right
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct
+--- 原说明 ---
+The "right" map `W ⟶ X`.
 -/
 def IsRegularEpi.right : W f ⟶ X := (IsRegularEpi.getStruct f).right
 
-/--
-lemma `IsRegularEpi.w` / 引理 `IsRegularEpi.w`
+/-- The coequalizer condition. -/
+/-
+**CategoryTheory.IsRegularEpi.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsRegu
+larEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f :
+ X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi f],   CategoryTheory.CategoryStr
+uct.comp (CategoryTheory.IsRegularEpi.left f) f =     CategoryTheory.CategoryStr
+uct.comp (CategoryTheory.IsRegularEpi.right f) f
+参数：f : X ⟶ Y；CategoryTheory.IsRegularEpi.left f；CategoryTheory.IsRegularEpi.righ
+t f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-lemma IsRegularEpi.w
-  statement: left f ≫ f = right f ≫ f
-  proof: (IsRegularEpi.getStruct f).w
-
-中文:
-引理 是正则满态射.w
-  结论: left f ≫ f = right f ≫ f
-  证明: (IsRegularEpi.getStruct f).w
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct
+--- 原说明 ---
+The coequalizer condition.
 -/
 lemma IsRegularEpi.w : left f ≫ f = right f ≫ f := (IsRegularEpi.getStruct f).w
 
-/--
-Definition of `IsRegularEpi.isColimit` / `IsRegularEpi.isColimit` 的定义
+/-- The cofork is in fact a coequalizer. -/
+/-
+**CategoryTheory.IsRegularEpi.isColimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.IsRegularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       (f : X ⟶ Y) →         [inst_1 : CategoryTheory.IsRegularEpi f] →    
+       CategoryTheory.Limits.IsColimit (CategoryTheory.Limits.Cofork.ofπ f ⋯)
+参数：f : X ⟶ Y；CategoryTheory.Limits.Cofork.ofπ f ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularEpi.isColimit
-  signature: : IsColimit Cofork.ofπ _ (w f)
-  body: (IsRegularEpi.getStruct f).isColimit
-
-中文:
-定义 是正则满态射.isColimit
-  签名: : 是余极限 余叉.ofπ _ (w f)
-  定义体: (IsRegularEpi.getStruct f).isColimit
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct, isColimit
+--- 原说明 ---
+The cofork is in fact a coequalizer.
 -/
-def IsRegularEpi.isColimit : IsColimit Cofork.ofπ _ (w f) := (IsRegularEpi.getStruct f).isColimit
+def IsRegularEpi.isColimit : IsColimit <| Cofork.ofπ _ (w f) := (IsRegularEpi.getStruct f).isColimit
 
 /--
-Definition of `IsRegularEpi.desc` / `IsRegularEpi.desc` 的定义
+Descend a morphism `k : X ⟶ Z`, coequalized by the two morphisms `left` and `right`, along `f`.
+-/
+/-
+**CategoryTheory.IsRegularEpi.desc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsR
+egularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y Z
+ : C} →       (f : X ⟶ Y) →         [inst_1 : CategoryTheory.IsRegularEpi f] →  
+         (k : X ⟶ Z) →             CategoryTheory.CategoryStruct.comp (CategoryT
+heory.IsRegularEpi.left f) k =                 CategoryTheory.CategoryStruct.com
+p (CategoryTheory.IsRegularEpi.right f) k →               (Y ⟶ Z)
+参数：f : X ⟶ Y；k : X ⟶ Z；CategoryTheory.IsRegularEpi.left f；CategoryTheory.IsRegul
+arEpi.right f；Y ⟶ Z。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi
+ f],   CategoryTheo…
 
-English:
-definition IsRegularEpi.desc
-  signature: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
-  body: Cofork.IsColimit.desc (isColimit f) k h
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 是正则满态射.desc
-  签名: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
-  定义体: Cofork.IsColimit.desc (isColimit f) k h
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.desc, IsColimit, isColimit
+--- 原说明 ---
+Descend a morphism `k : X ⟶ Z`, coequalized by the two morphisms `left` and `rig
+ht`, along `f`.
 -/
 def IsRegularEpi.desc {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
     (h : left f ≫ k = right f ≫ k) : Y ⟶ Z :=
   Cofork.IsColimit.desc (isColimit f) k h
 
 @[reassoc (attr := simp)]
-/--
-lemma `IsRegularEpi.fac` / 引理 `IsRegularEpi.fac`
-
-English:
-lemma IsRegularEpi.fac
-  statement: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
-  proof: Cofork.IsColimit.π_desc (isColimit f)
-
-中文:
-引理 是正则满态射.fac
-  结论: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
-  证明: Cofork.IsColimit.π_desc (isColimit f)
-
-Depends on / 依赖: Cofork, Cofork.IsColimit, IsColimit, isColimit
+/-
+**CategoryTheory.IsRegularEpi.fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsRe
+gularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f
+ : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi f] (k : X ⟶ Z)   (h :     Cate
+goryTheory.CategoryStruct.comp (CategoryTheory.IsRegularEpi.left f) k =       Ca
+tegoryTheory.CategoryStruct.comp (CategoryTheory.IsRegularEpi.right f) k),   Cat
+egoryTheory.CategoryStruct.comp f (CategoryTheory.IsRegularEpi.desc f k h) = k
+参数：f : X ⟶ Y；k : X ⟶ Z；h :     CategoryTheory.CategoryStruct.comp (CategoryTheor
+y.IsRegularEpi.left f) k =       CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.IsRegularEpi.right f) k；CategoryTheory.IsRegularEpi.desc f k h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofork.IsColimit.π_desc`：∀ {C : Type u} {X Y : C} 
+[inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   {s t : CategoryTheory.
+Limits.Cofork f g} (hs : CategoryTh…
+· 使用定理 `CategoryTheory.IsRegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi
+ f],   CategoryTheo…
 -/
 lemma IsRegularEpi.fac {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
     (h : left f ≫ k = right f ≫ k) : f ≫ desc f k h = k :=
   Cofork.IsColimit.π_desc (isColimit f)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsRegularEpi.uniq` / 引理 `IsRegularEpi.uniq`
-
-English:
-lemma IsRegularEpi.uniq
-  statement: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
-  proof: .unique hm by simp Cofork.IsColimit.existsUnique (isColimit f) k h
-
-中文:
-引理 是正则满态射.uniq
-  结论: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
-  证明: .unique hm by simp Cofork.IsColimit.existsUnique (isColimit f) k h
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.existsUnique, IsColimit, existsUnique, isColimit, unique
+/-
+**CategoryTheory.IsRegularEpi.uniq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsR
+egularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f
+ : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi f] (k : X ⟶ Z)   (h :     Cate
+goryTheory.CategoryStruct.comp (CategoryTheory.IsRegularEpi.left f) k =       Ca
+tegoryTheory.CategoryStruct.comp (CategoryTheory.IsRegularEpi.right f) k)   (m :
+ Y ⟶ Z), CategoryTheory.CategoryStruct.comp f m = k → m = CategoryTheory.IsRegul
+arEpi.desc f k h
+参数：f : X ⟶ Y；k : X ⟶ Z；h :     CategoryTheory.CategoryStruct.comp (CategoryTheor
+y.IsRegularEpi.left f) k =       CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.IsRegularEpi.right f) k；m : Y ⟶ Z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `CategoryTheory.IsRegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegularEpi
+ f],   CategoryTheo…
+· 使用定理 `CategoryTheory.Limits.Cofork.IsColimit.existsUnique`：∀ {C : Type u} {X Y
+ : C} [inst : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} {s : CategoryTheor
+y.Limits.Cofork f g}   (hs : CategoryTheo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsRegularEpi.fac`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y)   [inst_1 : CategoryTheory.IsRegula
+rEpi f] (k : X ⟶ Z)  …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsRegularEpi.uniq {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
     (h : left f ≫ k = right f ≫ k) (m : Y ⟶ Z) (hm : f ≫ m = k) : m = desc f k h :=
-.unique hm by simp Cofork.IsColimit.existsUnique (isColimit f) k h
+  Cofork.IsColimit.existsUnique (isColimit f) k h |>.unique hm <| by simp
 
 end IsRegularEpi
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coequalizerRegular` / `coequalizerRegular` 的定义
+/-- The chosen coequalizer of a parallel pair is a regular epimorphism. -/
+/-
+**CategoryTheory.coequalizerRegular** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coequalizerRegular (g h : X ⟶ Y) [HasColimit (parallelPair g h)] : Regular
+Epi (coequalizer.π g h) where W
+参数：g h : X ⟶ Y；parallelPair g h。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
 
-English:
-definition coequalizerRegular
-  signature: (g h : X ⟶ Y) [HasColimit (parallelPair g h)]
-  body: X
-  left := g
-  right := h
-  w := coequalizer.condition g h
-  isColimit :=
-    Cofork.IsColimit.mk _ (fun s => colimit.desc _ s) (by simp) fun s m w => by
-      apply coequalizer.hom_ext
-      simp [← w]
-
-中文:
-定义 coequalizerRegular
-  签名: (g h : X ⟶ Y) [有余极限 (parallelPair g h)]
-  定义体: X
-  left := g
-  right := h
-  w := coequalizer.condition g h
-  isColimit :=
-    Cofork.IsColimit.mk _ (fun s => colimit.desc _ s) (by simp) fun s m w => by
-      apply coequalizer.hom_ext
-      simp [← w]
+--- 原说明 ---
+The chosen coequalizer of a parallel pair is a regular epimorphism.
 -/
 def coequalizerRegular (g h : X ⟶ Y) [HasColimit (parallelPair g h)] :
     RegularEpi (coequalizer.π g h) where
@@ -1326,33 +1203,29 @@ def coequalizerRegular (g h : X ⟶ Y) [HasColimit (parallelPair g h)] :
     Cofork.IsColimit.mk _ (fun s => colimit.desc _ s) (by simp) fun s m w => by
       apply coequalizer.hom_ext
       simp [← w]
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (g h : X ⟶ Y) [HasColimit (parallelPair g h)] :
     IsRegularEpi (coequalizer.π g h) :=
   ⟨⟨coequalizerRegular g h⟩⟩
 
-/--
-Definition of `regularEpiOfKernelPair` / `regularEpiOfKernelPair` 的定义
+/-- A morphism which is a coequalizer for its kernel pair is a regular epi. -/
+/-
+**CategoryTheory.regularEpiOfKernelPair** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：regularEpiOfKernelPair {B X : C} (f : X ⟶ B) [HasPullback f f] (hc : IsCol
+imit (Cofork.ofπ f pullback.condition)) : RegularEpi f where W
+参数：f : X ⟶ B；hc : IsColimit (Cofork.ofπ f pullback.condition)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
 
-English:
-definition regularEpiOfKernelPair
-  signature: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  body: pullback f f
-  left := pullback.fst f f
-  right := pullback.snd f f
-  w := pullback.condition
-  isColimit := hc
-
-中文:
-定义 regularEpiOfKernelPair
-  签名: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  定义体: pullback f f
-  left := pullback.fst f f
-  right := pullback.snd f f
-  w := pullback.condition
-  isColimit := hc
-
-Depends on / 依赖: pullback
+--- 原说明 ---
+A morphism which is a coequalizer for its kernel pair is a regular epi.
 -/
 def regularEpiOfKernelPair {B X : C} (f : X ⟶ B) [HasPullback f f]
     (hc : IsColimit (Cofork.ofπ f pullback.condition)) : RegularEpi f where
@@ -1363,58 +1236,58 @@ def regularEpiOfKernelPair {B X : C} (f : X ⟶ B) [HasPullback f f]
   isColimit := hc
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `IsRegularEpi.of_epi_of_exists` / 引理 `IsRegularEpi.of_epi_of_exists`
-
-English:
-lemma IsRegularEpi.of_epi_of_exists
-  statement: {X B : C} {f : X ⟶ B} [HasPullback f f] [Epi f]
-  proof: by
-refine ⟨⟨regularEpiOfKernelPair _ Cofork.IsColimit.mk' _ fun s => ?_⟩⟩
-  choose g hg using h s.condition
-  refine ⟨g, hg, fun hm => ?_⟩
-  rwa [← cancel_epi f, hg]
-
-中文:
-引理 是正则满态射.of_epi_of_存在
-  结论: {X B : C} {f : X ⟶ B} [HasPullback f f] [满态射 f]
-  证明: by
-refine ⟨⟨regularEpiOfKernelPair _ Cofork.IsColimit.mk' _ fun s => ?_⟩⟩
-  choose g hg using h s.condition
-  refine ⟨g, hg, fun hm => ?_⟩
-  rwa [← cancel_epi f, hg]
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, IsColimit, cancel_epi, condition, regularEpiOfKernelPair, s.condition
+/-
+**CategoryTheory.IsRegularEpi.of_epi_of_exists** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsRegularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X B : C} {f :
+ X ⟶ B}   [inst_1 : CategoryTheory.Limits.HasPullback f f] [CategoryTheory.Epi f
+],   (∀ ⦃Z : C⦄ ⦃g : X ⟶ Z⦄,       CategoryTheory.CategoryStruct.comp (CategoryT
+heory.Limits.pullback.fst f f) g =           CategoryTheory.CategoryStruct.comp 
+(CategoryTheory.Limits.pullback.snd f f) g →         ∃ u, CategoryTheory.Categor
+yStruct.comp f u = g) →     CategoryTheory.IsRegularEpi f
+参数：∀ ⦃Z : C⦄ ⦃g : X ⟶ Z⦄,       CategoryTheory.CategoryStruct.comp (CategoryTheo
+ry.Limits.pullback.fst f f) g =           CategoryTheory.CategoryStruct.comp (Ca
+tegoryTheory.Limits.pullback.snd f f) g →         ∃ u, CategoryTheory.CategorySt
+ruct.comp f u = g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.Cofork.condition`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Cofo
+rk f g),   CategoryTheory.Ca…
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma IsRegularEpi.of_epi_of_exists {X B : C} {f : X ⟶ B} [HasPullback f f] [Epi f]
-    (h : forall ⦃Z : C⦄ ⦃g : X ⟶ Z⦄, pullback.fst f f ≫ g = pullback.snd f f ≫ g ->
-      exists (u : B ⟶ Z), f ≫ u = g) :
+    (h : ∀ ⦃Z : C⦄ ⦃g : X ⟶ Z⦄, pullback.fst f f ≫ g = pullback.snd f f ≫ g →
+      ∃ (u : B ⟶ Z), f ≫ u = g) :
     IsRegularEpi f := by
-refine ⟨⟨regularEpiOfKernelPair _ Cofork.IsColimit.mk' _ fun s => ?_⟩⟩
+  refine ⟨⟨regularEpiOfKernelPair _ <| Cofork.IsColimit.mk' _ fun s ↦ ?_⟩⟩
   choose g hg using h s.condition
-  refine ⟨g, hg, fun hm => ?_⟩
+  refine ⟨g, hg, fun hm ↦ ?_⟩
   rwa [← cancel_epi f, hg]
 
-/--
-Definition of `effectiveEpiStructOfRegularEpi` / `effectiveEpiStructOfRegularEpi` 的定义
+/-- The data of an `EffectiveEpi` structure on a `RegularEpi`. -/
+/-
+**CategoryTheory.effectiveEpiStructOfRegularEpi** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：effectiveEpiStructOfRegularEpi {B X : C} {f : X ⟶ B} (hf : RegularEpi f) :
+ EffectiveEpiStruct f where desc _ h
+参数：hf : RegularEpi f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-definition effectiveEpiStructOfRegularEpi
-  signature: {B X : C} {f : X ⟶ B} (hf : RegularEpi f)
-  body: Cofork.IsColimit.desc hf.isColimit _ (h _ _ hf.w)
-  fac _ _ := Cofork.IsColimit.π_desc' hf.isColimit _ _
-  uniq _ _ _ hg := Cofork.IsColimit.hom_ext hf.isColimit (hg.trans
-    (Cofork.IsColimit.π_desc' _ _ _).symm)
-
-中文:
-定义 effectiveEpiStructOfRegularEpi
-  签名: {B X : C} {f : X ⟶ B} (hf : 正则满态射 f)
-  定义体: Cofork.IsColimit.desc hf.isColimit _ (h _ _ hf.w)
-  fac _ _ := Cofork.IsColimit.π_desc' hf.isColimit _ _
-  uniq _ _ _ hg := Cofork.IsColimit.hom_ext hf.isColimit (hg.trans
-    (Cofork.IsColimit.π_desc' _ _ _).symm)
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.desc, IsColimit, hX.prop_diag_obj, hX.toLimitPresentation, hf.isColimit, hf.w, isColimit, of_limitPresentation, prop_diag_obj, toLimitPresentation
+--- 原说明 ---
+The data of an `EffectiveEpi` structure on a `RegularEpi`.
 -/
 def effectiveEpiStructOfRegularEpi {B X : C} {f : X ⟶ B} (hf : RegularEpi f) :
     EffectiveEpiStruct f where
@@ -1422,125 +1295,99 @@ def effectiveEpiStructOfRegularEpi {B X : C} {f : X ⟶ B} (hf : RegularEpi f) :
   fac _ _ := Cofork.IsColimit.π_desc' hf.isColimit _ _
   uniq _ _ _ hg := Cofork.IsColimit.hom_ext hf.isColimit (hg.trans
     (Cofork.IsColimit.π_desc' _ _ _).symm)
-
-/--
-lemma `RegularEpi.effectiveEpi` / 引理 `RegularEpi.effectiveEpi`
-
-English:
-lemma RegularEpi.effectiveEpi
-  given: {B X : C} {f : X ⟶ B} (h : RegularEpi f)
-  statement: EffectiveEpi f
-  proof: ⟨⟨effectiveEpiStructOfRegularEpi h⟩⟩
-
-中文:
-引理 正则满态射.effectiveEpi
-  条件: {B X : C} {f : X ⟶ B} (h : 正则满态射 f)
-  结论: 有效满态射 f
-  证明: ⟨⟨effectiveEpiStructOfRegularEpi h⟩⟩
-
-Depends on / 依赖: effectiveEpiStructOfRegularEpi
+/-
+**CategoryTheory.RegularEpi.effectiveEpi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.RegularEpi`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {B X : C} {f :
+ X ⟶ B} (h : CategoryTheory.RegularEpi f),   CategoryTheory.EffectiveEpi f
+参数：h : CategoryTheory.RegularEpi f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RegularEpi.effectiveEpi {B X : C} {f : X ⟶ B} (h : RegularEpi f) : EffectiveEpi f :=
   ⟨⟨effectiveEpiStructOfRegularEpi h⟩⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {B X : C} {f : X ⟶ B} [h : IsRegularEpi f] : EffectiveEpi f :=
-.effectiveEpi IsRegularEpi.getStruct f
+  IsRegularEpi.getStruct f |>.effectiveEpi
 
-/--
-theorem `effectiveEpi_of_kernelPair` / 定理 `effectiveEpi_of_kernelPair`
+/-- A morphism which is a coequalizer for its kernel pair is an effective epi. -/
+/-
+**CategoryTheory.effectiveEpi_of_kernelPair** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：effectiveEpi_of_kernelPair {B X : C} (f : X ⟶ B) [HasPullback f f] (hc : I
+sColimit (Cofork.ofπ f pullback.condition)) : EffectiveEpi f
+参数：f : X ⟶ B；hc : IsColimit (Cofork.ofπ f pullback.condition)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.RegularEpi.effectiveEpi`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {B X : C} {f : X ⟶ B} (h : CategoryTheory.RegularEpi
+ f),   CategoryTheory.Effect…
 
-English:
-theorem effectiveEpi_of_kernelPair
-  statement: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  proof: RegularEpi.effectiveEpi regularEpiOfKernelPair f hc
-
-中文:
-定理 effectiveEpi_of_kernelPair
-  结论: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  证明: RegularEpi.effectiveEpi regularEpiOfKernelPair f hc
-
-Depends on / 依赖: RegularEpi, RegularEpi.effectiveEpi, effectiveEpi, regularEpiOfKernelPair
+--- 原说明 ---
+A morphism which is a coequalizer for its kernel pair is an effective epi.
 -/
 theorem effectiveEpi_of_kernelPair {B X : C} (f : X ⟶ B) [HasPullback f f]
     (hc : IsColimit (Cofork.ofπ f pullback.condition)) : EffectiveEpi f :=
-RegularEpi.effectiveEpi regularEpiOfKernelPair f hc
+  RegularEpi.effectiveEpi <| regularEpiOfKernelPair f hc
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `isColimitCoforkOfEffectiveEpi` / `isColimitCoforkOfEffectiveEpi` 的定义
+Given a kernel pair of an effective epimorphism `f : X ⟶ B`, the induced cofork is a coequalizer.
+-/
+/-
+**CategoryTheory.isColimitCoforkOfEffectiveEpi** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isColimitCoforkOfEffectiveEpi {B X : C} (f : X ⟶ B) [EffectiveEpi f] (c : 
+PullbackCone f f) (hc : IsLimit c) : IsColimit (Cofork.ofπ f c.condition) where 
+desc s
+参数：f : X ⟶ B；c : PullbackCone f f；hc : IsLimit c。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
 
-English:
-definition isColimitCoforkOfEffectiveEpi
-  signature: {B X : C} (f : X ⟶ B) [EffectiveEpi f]
-  body: EffectiveEpi.desc f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
-      simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
-      simp)
-  fac s := by
-    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
-      simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
-      simp)
-    rintro (_ | _)
-    all_goals simp_all
-  uniq _ _ h := EffectiveEpi.uniq f _ _ _ (h WalkingParallelPair.one)
-
-中文:
-定义 isColimitCoforkOfEffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [有效满态射 f]
-  定义体: EffectiveEpi.desc f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
-      simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
-      simp)
-  fac s := by
-    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
-      simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
-      simp)
-    rintro (_ | _)
-    all_goals simp_all
-  uniq _ _ h := EffectiveEpi.uniq f _ _ _ (h WalkingParallelPair.one)
-
-Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.app_one_eq_, Cofork.app_zero_eq_comp_, EffectiveEpi, EffectiveEpi.desc, EffectiveEpi.fac, IsLimit, PullbackCone, PullbackCone.IsLimit.lift_snd, WalkingParallelPair, WalkingParallelPair.one, all_goals, lift_snd
+--- 原说明 ---
+Given a kernel pair of an effective epimorphism `f : X ⟶ B`, the induced cofork 
+is a coequalizer.
 -/
 def isColimitCoforkOfEffectiveEpi {B X : C} (f : X ⟶ B) [EffectiveEpi f]
     (c : PullbackCone f f) (hc : IsLimit c) :
     IsColimit (Cofork.ofπ f c.condition) where
-  desc s := EffectiveEpi.desc f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
+  desc s := EffectiveEpi.desc f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg ↦ (by
       simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
+      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg, Category.assoc,
+        ← Cofork.app_zero_eq_comp_π_right]
       simp)
   fac s := by
-    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
+    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg ↦ (by
       simp only [Cofork.app_one_eq_π]
-      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
+      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg,
+        Category.assoc, ← Cofork.app_zero_eq_comp_π_right]
       simp)
     rintro (_ | _)
     all_goals simp_all
   uniq _ _ h := EffectiveEpi.uniq f _ _ _ (h WalkingParallelPair.one)
 
-/--
-Definition of `regularEpiOfEffectiveEpi` / `regularEpiOfEffectiveEpi` 的定义
+/-- An effective epi which has a kernel pair is a regular epi. -/
+/-
+**CategoryTheory.regularEpiOfEffectiveEpi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：regularEpiOfEffectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f] [Effectiv
+eEpi f] : RegularEpi f where W
+参数：f : X ⟶ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
 
-English:
-definition regularEpiOfEffectiveEpi
-  signature: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  body: pullback f f
-  left := pullback.fst f f
-  right := pullback.snd f f
-  w := pullback.condition
-  isColimit := isColimitCoforkOfEffectiveEpi f _ (pullback.isLimit _ _)
-
-中文:
-定义 regularEpiOfEffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  定义体: pullback f f
-  left := pullback.fst f f
-  right := pullback.snd f f
-  w := pullback.condition
-  isColimit := isColimitCoforkOfEffectiveEpi f _ (pullback.isLimit _ _)
-
-Depends on / 依赖: pullback
+--- 原说明 ---
+An effective epi which has a kernel pair is a regular epi.
 -/
 def regularEpiOfEffectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f]
     [EffectiveEpi f] : RegularEpi f where
@@ -1549,118 +1396,110 @@ def regularEpiOfEffectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f]
   right := pullback.snd f f
   w := pullback.condition
   isColimit := isColimitCoforkOfEffectiveEpi f _ (pullback.isLimit _ _)
-
-/--
-Instance `isRegularEpi_of_EffectiveEpi` / 实例 `isRegularEpi_of_EffectiveEpi`
-
-English:
-instance isRegularEpi_of_EffectiveEpi
-  signature: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  body: isRegularEpi_of_regularEpi regularEpiOfEffectiveEpi f
-
-中文:
-实例 isRegularEpi_of_EffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  定义体: isRegularEpi_of_regularEpi regularEpiOfEffectiveEpi f
-
-Depends on / 依赖: isRegularEpi_of_regularEpi, regularEpiOfEffectiveEpi
+/-
+**CategoryTheory.isRegularEpi_of_EffectiveEpi** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory`。
+形式化陈述：isRegularEpi_of_EffectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f] [Effe
+ctiveEpi f] : IsRegularEpi f
+参数：f : X ⟶ B。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isRegularEpi_of_regularEpi`：isRegularEpi_of_regularEpi {f
+ : X ⟶ Y} (h : RegularEpi f) : IsRegularEpi f
 -/
 instance isRegularEpi_of_EffectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f]
     [EffectiveEpi f] : IsRegularEpi f :=
-isRegularEpi_of_regularEpi regularEpiOfEffectiveEpi f
-
-/--
-lemma `isRegularEpi_iff_effectiveEpi` / 引理 `isRegularEpi_iff_effectiveEpi`
-
-English:
-lemma isRegularEpi_iff_effectiveEpi
-  given: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  proof: ⟨fun ⟨_⟩ => inferInstance, fun _ => inferInstance⟩
-
-中文:
-引理 isRegularEpi_iff_effectiveEpi
-  条件: {B X : C} (f : X ⟶ B) [HasPullback f f]
-  证明: ⟨fun ⟨_⟩ => inferInstance, fun _ => inferInstance⟩
+  isRegularEpi_of_regularEpi <| regularEpiOfEffectiveEpi f
+/-
+**CategoryTheory.isRegularEpi_iff_effectiveEpi** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isRegularEpi_iff_effectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f] : Is
+RegularEpi f ↔ EffectiveEpi f
+参数：f : X ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsRegularEpi`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {B X : C} {f : X ⟶ B} [h : CategoryTheory.IsR
+egularEpi f],   CategoryTheory.Effe…
 -/
 lemma isRegularEpi_iff_effectiveEpi {B X : C} (f : X ⟶ B) [HasPullback f f] :
     IsRegularEpi f ↔ EffectiveEpi f :=
-  ⟨fun ⟨_⟩ => inferInstance, fun _ => inferInstance⟩
+  ⟨fun ⟨_⟩ ↦ inferInstance, fun _ ↦ inferInstance⟩
 
-/--
-Definition of `EffectiveEpiStruct.isColimitCoforkOfIsPullback` / `EffectiveEpiStruct.isColimitCoforkOfIsPullback` 的定义
+/-- Let `p : Y ⟶ X` be an effective epimorphism, `p₁ : Z ⟶ Y` and `p₂ : Z ⟶ Y` two
+morphisms which make `Z` the pullback of two copies of `Y` over `X`.
+Then, `Y ⟶ X` is the coequalizer of `p₁` and `p₂`. -/
+/-
+**CategoryTheory.EffectiveEpiStruct.isColimitCoforkOfIsPullback** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.EffectiveEpiStruct`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y Z
+ : C} →       {p : Y ⟶ X} →         CategoryTheory.EffectiveEpiStruct p →       
+    {p₁ p₂ : Z ⟶ Y} →             (sq : CategoryTheory.IsPullback p₁ p₂ p p) →  
+             CategoryTheory.Limits.IsColimit (CategoryTheory.Limits.Cofork.ofπ p
+ ⋯)
+参数：sq : CategoryTheory.IsPullback p₁ p₂ p p；CategoryTheory.Limits.Cofork.ofπ p ⋯
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EffectiveEpiStruct.isColimitCoforkOfIsPullback
-  body: Cofork.IsColimit.mk _ (fun s => hp.desc s.π (fun {T} g₁ g₂ h => by
-      obtain ⟨l, rfl, rfl⟩ := sq.exists_lift g₁ g₂ h
-      simp [s.condition]))
-    (fun s => hp.fac _ _)
-    (fun s m hm => hp.uniq _ _ _ hm)
-
-中文:
-定义 EffectiveEpiStruct.isColimitCoforkOfIsPullback
-  定义体: Cofork.IsColimit.mk _ (fun s => hp.desc s.π (fun {T} g₁ g₂ h => by
-      obtain ⟨l, rfl, rfl⟩ := sq.exists_lift g₁ g₂ h
-      simp [s.condition]))
-    (fun s => hp.fac _ _)
-    (fun s m hm => hp.uniq _ _ _ hm)
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, IsColimit, condition, exists_lift, hp.desc, hp.fac, hp.uniq, s.condition, sq.exists_lift
+--- 原说明 ---
+Let `p : Y ⟶ X` be an effective epimorphism, `p₁ : Z ⟶ Y` and `p₂ : Z ⟶ Y` two
+morphisms which make `Z` the pullback of two copies of `Y` over `X`.
+Then, `Y ⟶ X` is the coequalizer of `p₁` and `p₂`.
 -/
 noncomputable def EffectiveEpiStruct.isColimitCoforkOfIsPullback
     {X Y Z : C} {p : Y ⟶ X} (hp : EffectiveEpiStruct p) {p₁ p₂ : Z ⟶ Y}
     (sq : IsPullback p₁ p₂ p p) :
     IsColimit (Cofork.ofπ p sq.w) :=
-  Cofork.IsColimit.mk _ (fun s => hp.desc s.π (fun {T} g₁ g₂ h => by
+  Cofork.IsColimit.mk _ (fun s ↦ hp.desc s.π (fun {T} g₁ g₂ h ↦ by
       obtain ⟨l, rfl, rfl⟩ := sq.exists_lift g₁ g₂ h
       simp [s.condition]))
-    (fun s => hp.fac _ _)
-    (fun s m hm => hp.uniq _ _ _ hm)
+    (fun s ↦ hp.fac _ _)
+    (fun s m hm ↦ hp.uniq _ _ _ hm)
 
-/--
-Definition of `RegularEpi.ofSplitEpi` / `RegularEpi.ofSplitEpi` 的定义
+/-- Every split epimorphism is a regular epimorphism. -/
+/-
+**CategoryTheory.RegularEpi.ofSplitEpi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.RegularEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → (f : X ⟶ Y) → [CategoryTheory.IsSplitEpi f] → CategoryTheory.RegularEpi f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularEpi.ofSplitEpi
-  signature: (f : X ⟶ Y) [IsSplitEpi f]
-  body: X
-  left := 𝟙 X
-  right := f ≫ section_ f
-  isColimit := isSplitEpiCoequalizes f
-
-中文:
-定义 正则满态射.ofSplitEpi
-  签名: (f : X ⟶ Y) [是分裂满态射 f]
-  定义体: X
-  left := 𝟙 X
-  right := f ≫ section_ f
-  isColimit := isSplitEpiCoequalizes f
-
-Depends on / 依赖: P.instIsClosedUnderLimitsOfShapeLimitsClosure, instIsClosedUnderLimitsOfShapeLimitsClosure
+--- 原说明 ---
+Every split epimorphism is a regular epimorphism.
 -/
 def RegularEpi.ofSplitEpi (f : X ⟶ Y) [IsSplitEpi f] : RegularEpi f where
   W := X
   left := 𝟙 X
   right := f ≫ section_ f
   isColimit := isSplitEpiCoequalizes f
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (f : X ⟶ Y) [IsSplitEpi f] : IsRegularEpi f :=
-isRegularEpi_of_regularEpi RegularEpi.ofSplitEpi f
+  isRegularEpi_of_regularEpi <| RegularEpi.ofSplitEpi f
 
-/--
-Definition of `RegularEpi.desc'` / `RegularEpi.desc'` 的定义
+/-- If `f` is a regular epi, then every morphism `k : X ⟶ W` coequalizing `RegularEpi.left` and
+`RegularEpi.right` induces `l : Y ⟶ W` such that `f ≫ l = k`. -/
+/-
+**CategoryTheory.RegularEpi.desc'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regu
+larEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y W
+ : C} →       {f : X ⟶ Y} →         (hf : CategoryTheory.RegularEpi f) →        
+   (k : X ⟶ W) →             CategoryTheory.CategoryStruct.comp hf.left k = Cate
+goryTheory.CategoryStruct.comp hf.right k →               { l // CategoryTheory.
+CategoryStruct.comp f l = k }
+参数：hf : CategoryTheory.RegularEpi f；k : X ⟶ W。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-definition RegularEpi.desc'
-  signature: {W : C} {f : X ⟶ Y} (hf : RegularEpi f) (k : X ⟶ W)
-  body: Cofork.IsColimit.desc' hf.isColimit _ h
-
-中文:
-定义 正则满态射.desc'
-  签名: {W : C} {f : X ⟶ Y} (hf : 正则满态射 f) (k : X ⟶ W)
-  定义体: Cofork.IsColimit.desc' hf.isColimit _ h
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.desc, IsColimit, hf.isColimit, isColimit
+--- 原说明 ---
+If `f` is a regular epi, then every morphism `k : X ⟶ W` coequalizing `RegularEp
+i.left` and
+`RegularEpi.right` induces `l : Y ⟶ W` such that `f ≫ l = k`.
 -/
 def RegularEpi.desc' {W : C} {f : X ⟶ Y} (hf : RegularEpi f) (k : X ⟶ W)
     (h : hf.left ≫ k = hf.right ≫ k) :
@@ -1669,60 +1508,31 @@ def RegularEpi.desc' {W : C} {f : X ⟶ Y} (hf : RegularEpi f) (k : X ⟶ W)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `regularOfIsPushoutSndOfRegular` / `regularOfIsPushoutSndOfRegular` 的定义
+/-- The second leg of a pushout cocone is a regular epimorphism if the right component is too.
 
-English:
-definition regularOfIsPushoutSndOfRegular
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: gr.W
-  left := gr.left ≫ f
-  right := gr.right ≫ f
-  w := by rw [Category.assoc, Category.assoc, comm]; simp only [← Category.assoc, eq_whisker gr.w]
-  isColimit := by
-    apply Cofork.IsColimit.mk' _ _
-    intro s
-    have l₁ : gr.left ≫ f ≫ s.π = gr.right ≫ f ≫ s.π := by
-      rw [← Category.assoc]; rw [← Category.assoc]; rw [s.condition]
-    obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' gr.isColimit (f ≫ Cofork.π s) l₁
-    obtain ⟨p, hp₁, _⟩ := PushoutCocone.IsColimit.desc' t _ _ hl.symm
-    refine ⟨p, hp₁, ?_⟩
-    intro m w
-    have z := w.trans hp₁.symm
-    apply t.hom_ext
-    have := gr.epi
-    apply (PushoutCocone.mk _ _ comm).coequalizer_ext
-    · exact z
-    · erw [← cancel_epi g, ← Category.assoc, ← eq_whisker comm]
-      erw [← Category.assoc, ← eq_whisker comm]
-      dsimp at z; simp only [Category.assoc, z]
+See also `Pushout.sndOfEpi` for the basic epimorphism version, and
+`regularOfIsPushoutFstOfRegular` for the flipped version.
+-/
+/-
+**CategoryTheory.regularOfIsPushoutSndOfRegular** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：regularOfIsPushoutSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : 
+Q ⟶ S} {k : R ⟶ S} (gr : RegularEpi g) (comm : f ≫ h = g ≫ k) (t : IsColimit (Pu
+shoutCocone.mk _ _ comm)) : RegularEpi h where W
+参数：gr : RegularEpi g；comm : f ≫ h = g ≫ k；t : IsColimit (PushoutCocone.mk _ _ co
+mm)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-中文:
-定义 regularOfIsPushoutSndOfRegular
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: gr.W
-  left := gr.left ≫ f
-  right := gr.right ≫ f
-  w := by rw [Category.assoc, Category.assoc, comm]; simp only [← Category.assoc, eq_whisker gr.w]
-  isColimit := by
-    apply Cofork.IsColimit.mk' _ _
-    intro s
-    have l₁ : gr.left ≫ f ≫ s.π = gr.right ≫ f ≫ s.π := by
-      rw [← Category.assoc]; rw [← Category.assoc]; rw [s.condition]
-    obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' gr.isColimit (f ≫ Cofork.π s) l₁
-    obtain ⟨p, hp₁, _⟩ := PushoutCocone.IsColimit.desc' t _ _ hl.symm
-    refine ⟨p, hp₁, ?_⟩
-    intro m w
-    have z := w.trans hp₁.symm
-    apply t.hom_ext
-    have := gr.epi
-    apply (PushoutCocone.mk _ _ comm).coequalizer_ext
-    · exact z
-    · erw [← cancel_epi g, ← Category.assoc, ← eq_whisker comm]
-      erw [← Category.assoc, ← eq_whisker comm]
-      dsimp at z; simp only [Category.assoc, z]
+--- 原说明 ---
+The second leg of a pushout cocone is a regular epimorphism if the right compone
+nt is too.
 
-Depends on / 依赖: gr.W
+See also `Pushout.sndOfEpi` for the basic epimorphism version, and
+`regularOfIsPushoutFstOfRegular` for the flipped version.
 -/
 def regularOfIsPushoutSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     (gr : RegularEpi g) (comm : f ≫ h = g ≫ k) (t : IsColimit (PushoutCocone.mk _ _ comm)) :
@@ -1735,7 +1545,7 @@ def regularOfIsPushoutSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h 
     apply Cofork.IsColimit.mk' _ _
     intro s
     have l₁ : gr.left ≫ f ≫ s.π = gr.right ≫ f ≫ s.π := by
-      rw [← Category.assoc]; rw [← Category.assoc]; rw [s.condition]
+      rw [← Category.assoc, ← Category.assoc, s.condition]
     obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' gr.isColimit (f ≫ Cofork.π s) l₁
     obtain ⟨p, hp₁, _⟩ := PushoutCocone.IsColimit.desc' t _ _ hl.symm
     refine ⟨p, hp₁, ?_⟩
@@ -1749,44 +1559,56 @@ def regularOfIsPushoutSndOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h 
       erw [← Category.assoc, ← eq_whisker comm]
       dsimp at z; simp only [Category.assoc, z]
 
-/--
-Definition of `regularOfIsPushoutFstOfRegular` / `regularOfIsPushoutFstOfRegular` 的定义
+/-- The first leg of a pushout cocone is a regular epimorphism if the left component is too.
 
-English:
-definition regularOfIsPushoutFstOfRegular
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: regularOfIsPushoutSndOfRegular hf comm.symm (PushoutCocone.flipIsColimit t)
+See also `Pushout.fstOfEpi` for the basic epimorphism version, and
+`regularOfIsPushoutSndOfRegular` for the flipped version.
+-/
+/-
+**CategoryTheory.regularOfIsPushoutFstOfRegular** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：regularOfIsPushoutFstOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : 
+Q ⟶ S} {k : R ⟶ S} (hf : RegularEpi f) (comm : f ≫ h = g ≫ k) (t : IsColimit (Pu
+shoutCocone.mk _ _ comm)) : RegularEpi k
+参数：hf : RegularEpi f；comm : f ≫ h = g ≫ k；t : IsColimit (PushoutCocone.mk _ _ co
+mm)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 regularOfIsPushoutFstOfRegular
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: regularOfIsPushoutSndOfRegular hf comm.symm (PushoutCocone.flipIsColimit t)
+--- 原说明 ---
+The first leg of a pushout cocone is a regular epimorphism if the left component
+ is too.
 
-Depends on / 依赖: PushoutCocone, PushoutCocone.flipIsColimit, comm.symm, flipIsColimit, regularOfIsPushoutSndOfRegular
+See also `Pushout.fstOfEpi` for the basic epimorphism version, and
+`regularOfIsPushoutSndOfRegular` for the flipped version.
 -/
 def regularOfIsPushoutFstOfRegular {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     (hf : RegularEpi f) (comm : f ≫ h = g ≫ k) (t : IsColimit (PushoutCocone.mk _ _ comm)) :
     RegularEpi k :=
   regularOfIsPushoutSndOfRegular hf comm.symm (PushoutCocone.flipIsColimit t)
 
-/--
-theorem `isIso_of_regularEpi_of_mono` / 定理 `isIso_of_regularEpi_of_mono`
+/-- A regular epimorphism is an isomorphism if it is a monomorphism. -/
+/-
+**CategoryTheory.isIso_of_regularEpi_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+形式化陈述：isIso_of_regularEpi_of_mono (f : X ⟶ Y) (h : RegularEpi f) [Mono f] : IsIs
+o f
+参数：f : X ⟶ Y；h : RegularEpi f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.isRegularEpi_of_regularEpi`：isRegularEpi_of_regularEpi {f
+ : X ⟶ Y} (h : RegularEpi f) : IsRegularEpi f
+· 使用定理 `CategoryTheory.isIso_of_mono_of_strongEpi`：isIso_of_mono_of_strongEpi (f
+ : P ⟶ Q) [Mono f] [StrongEpi f] : IsIso f
+· 使用定理 `CategoryTheory.strongEpi_of_effectiveEpi`：∀ {C : Type u_1} [inst : Categ
+oryTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.Effective
+Epi f],   CategoryTheory.Stron…
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsRegularEpi`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {B X : C} {f : X ⟶ B} [h : CategoryTheory.IsR
+egularEpi f],   CategoryTheory.Effe…
 
-English:
-theorem isIso_of_regularEpi_of_mono
-  given: (f : X ⟶ Y) (h : RegularEpi f) [Mono f]
-  statement: IsIso f
-  proof: have := isRegularEpi_of_regularEpi h
-  isIso_of_mono_of_strongEpi _
-
-中文:
-定理 isIso_of_regularEpi_of_mono
-  条件: (f : X ⟶ Y) (h : 正则满态射 f) [单态射 f]
-  结论: 是同构 f
-  证明: have := isRegularEpi_of_regularEpi h
-  isIso_of_mono_of_strongEpi _
-
-Depends on / 依赖: isIso_of_mono_of_strongEpi, isRegularEpi_of_regularEpi
+--- 原说明 ---
+A regular epimorphism is an isomorphism if it is a monomorphism.
 -/
 theorem isIso_of_regularEpi_of_mono (f : X ⟶ Y) (h : RegularEpi f) [Mono f] : IsIso f :=
   have := isRegularEpi_of_regularEpi h
@@ -1794,28 +1616,20 @@ theorem isIso_of_regularEpi_of_mono (f : X ⟶ Y) (h : RegularEpi f) [Mono f] : 
 
 section
 
-/--
-Definition of `RegularMono.op` / `RegularMono.op` 的定义
+/-- A regular monomorphism in `C` induces a regular epimorphism in `Cᵒᵖ`. -/
+/-
+**CategoryTheory.RegularMono.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regula
+rMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → {f : X ⟶ Y} → CategoryTheory.RegularMono f → CategoryTheory.RegularEpi f.o
+p
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularMono.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularMono f),  
+ CategoryTheory.Ca…
 
-English:
-definition RegularMono.op
-  signature: {X Y : C} {f : X ⟶ Y} (hf : RegularMono f)
-  body: .op hf.Z
-  left := hf.left.op
-  right := hf.right.op
-  w := by simp [← op_comp, hf.w]
-  isColimit := Fork.isLimitOfιEquivIsColimitOp _ _ hf.w _ rfl hf.isLimit
-
-中文:
-定义 正则单态射.op
-  签名: {X Y : C} {f : X ⟶ Y} (hf : 正则单态射 f)
-  定义体: .op hf.Z
-  left := hf.left.op
-  right := hf.right.op
-  w := by simp [← op_comp, hf.w]
-  isColimit := Fork.isLimitOfιEquivIsColimitOp _ _ hf.w _ rfl hf.isLimit
-
-Depends on / 依赖: hf.Z
+--- 原说明 ---
+A regular monomorphism in `C` induces a regular epimorphism in `Cᵒᵖ`.
 -/
 noncomputable def RegularMono.op {X Y : C} {f : X ⟶ Y} (hf : RegularMono f) :
     RegularEpi f.op where
@@ -1825,28 +1639,17 @@ noncomputable def RegularMono.op {X Y : C} {f : X ⟶ Y} (hf : RegularMono f) :
   w := by simp [← op_comp, hf.w]
   isColimit := Fork.isLimitOfιEquivIsColimitOp _ _ hf.w _ rfl hf.isLimit
 
-/--
-Definition of `RegularMono.unop` / `RegularMono.unop` 的定义
+/-- A regular monomorphism in `Cᵒᵖ` induces a regular epimorphism in `C`. -/
+/-
+**CategoryTheory.RegularMono.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regu
+larMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ Cᵒᵖ} → {f : X ⟶ Y} → CategoryTheory.RegularMono f → CategoryTheory.RegularEpi f
+.unop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularMono.unop
-  signature: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularMono f)
-  body: hf.Z.unop
-  left := hf.left.unop
-  right := hf.right.unop
-  w := by simp [← unop_comp, hf.w]
-  isColimit := Fork.isLimitOfιEquivIsColimitUnop _ _ hf.w _ rfl hf.isLimit
-
-中文:
-定义 正则单态射.unop
-  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : 正则单态射 f)
-  定义体: hf.Z.unop
-  left := hf.left.unop
-  right := hf.right.unop
-  w := by simp [← unop_comp, hf.w]
-  isColimit := Fork.isLimitOfιEquivIsColimitUnop _ _ hf.w _ rfl hf.isLimit
-
-Depends on / 依赖: hf.Z.unop
+--- 原说明 ---
+A regular monomorphism in `Cᵒᵖ` induces a regular epimorphism in `C`.
 -/
 noncomputable def RegularMono.unop {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularMono f) :
     RegularEpi f.unop where
@@ -1856,28 +1659,20 @@ noncomputable def RegularMono.unop {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularMo
   w := by simp [← unop_comp, hf.w]
   isColimit := Fork.isLimitOfιEquivIsColimitUnop _ _ hf.w _ rfl hf.isLimit
 
-/--
-Definition of `RegularEpi.op` / `RegularEpi.op` 的定义
+/-- A regular epimorphism in `C` induces a regular monomorphism in `Cᵒᵖ`. -/
+/-
+**CategoryTheory.RegularEpi.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regular
+Epi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → {f : X ⟶ Y} → CategoryTheory.RegularEpi f → CategoryTheory.RegularMono f.o
+p
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RegularEpi.w`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] {X Y : C} {f : X ⟶ Y} (self : CategoryTheory.RegularEpi f),   C
+ategoryTheory.Cat…
 
-English:
-definition RegularEpi.op
-  signature: {X Y : C} {f : X ⟶ Y} (hf : RegularEpi f)
-  body: .op hf.W
-  left := hf.left.op
-  right := hf.right.op
-  w := by simp [← op_comp, hf.w]
-  isLimit := Cofork.isColimitOfπEquivIsLimitOp _ _ hf.w _ rfl hf.isColimit
-
-中文:
-定义 正则满态射.op
-  签名: {X Y : C} {f : X ⟶ Y} (hf : 正则满态射 f)
-  定义体: .op hf.W
-  left := hf.left.op
-  right := hf.right.op
-  w := by simp [← op_comp, hf.w]
-  isLimit := Cofork.isColimitOfπEquivIsLimitOp _ _ hf.w _ rfl hf.isColimit
-
-Depends on / 依赖: P.le_strictLimitsClosureIter, hf.W, le_strictLimitsClosureIter
+--- 原说明 ---
+A regular epimorphism in `C` induces a regular monomorphism in `Cᵒᵖ`.
 -/
 noncomputable def RegularEpi.op {X Y : C} {f : X ⟶ Y} (hf : RegularEpi f) :
     RegularMono f.op where
@@ -1887,32 +1682,17 @@ noncomputable def RegularEpi.op {X Y : C} {f : X ⟶ Y} (hf : RegularEpi f) :
   w := by simp [← op_comp, hf.w]
   isLimit := Cofork.isColimitOfπEquivIsLimitOp _ _ hf.w _ rfl hf.isColimit
 
-/--
-Definition of `RegularEpi.unop` / `RegularEpi.unop` 的定义
+/-- A regular epimorphism in `Cᵒᵖ` induces a regular monomorphism in `C`. -/
+/-
+**CategoryTheory.RegularEpi.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Regul
+arEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ Cᵒᵖ} → {f : X ⟶ Y} → CategoryTheory.RegularEpi f → CategoryTheory.RegularMono f
+.unop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RegularEpi.unop
-  signature: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularEpi f)
-  body: hf.W.unop
-  left := hf.left.unop
-  right := hf.right.unop
-  w := by simp [← unop_comp, hf.w]
-  isLimit := Cofork.isColimitOfπEquivIsLimitUnop _ _ hf.w _ rfl hf.isColimit
-
-@[simp]
-
-中文:
-定义 正则满态射.unop
-  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : 正则满态射 f)
-  定义体: hf.W.unop
-  left := hf.left.unop
-  right := hf.right.unop
-  w := by simp [← unop_comp, hf.w]
-  isLimit := Cofork.isColimitOfπEquivIsLimitUnop _ _ hf.w _ rfl hf.isColimit
-
-@[simp]
-
-Depends on / 依赖: hf.W.unop
+--- 原说明 ---
+A regular epimorphism in `Cᵒᵖ` induces a regular monomorphism in `C`.
 -/
 noncomputable def RegularEpi.unop {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularEpi f) :
     RegularMono f.unop where
@@ -1923,94 +1703,106 @@ noncomputable def RegularEpi.unop {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularEpi
   isLimit := Cofork.isColimitOfπEquivIsLimitUnop _ _ hf.w _ rfl hf.isColimit
 
 @[simp]
-/--
-lemma `isRegularMono_op_iff_isRegularEpi` / 引理 `isRegularMono_op_iff_isRegularEpi`
-
-English:
-lemma isRegularMono_op_iff_isRegularEpi
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: ⟨fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩⟩
-
-中文:
-引理 isRegularMono_op_iff_isRegularEpi
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: ⟨fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩⟩
-
-Depends on / 依赖: hf.regularEpi.some.op, hf.regularMono.some.unop, regularEpi, regularMono
+/-
+**CategoryTheory.isRegularMono_op_iff_isRegularEpi** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：isRegularMono_op_iff_isRegularEpi {X Y : C} (f : X ⟶ Y) : IsRegularMono f.
+op ↔ IsRegularEpi f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
 -/
 lemma isRegularMono_op_iff_isRegularEpi {X Y : C} (f : X ⟶ Y) :
     IsRegularMono f.op ↔ IsRegularEpi f :=
-  ⟨fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩⟩
-
+  ⟨fun hf ↦ ⟨⟨hf.regularMono.some.unop⟩⟩, fun hf ↦ ⟨⟨hf.regularEpi.some.op⟩⟩⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (f : X ⟶ Y) [IsRegularEpi f] : IsRegularMono f.op := by
   simpa
 
 @[simp]
-/--
-lemma `isRegularMono_unop_iff_isRegularEpi` / 引理 `isRegularMono_unop_iff_isRegularEpi`
-
-English:
-lemma isRegularMono_unop_iff_isRegularEpi
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: ⟨fun hf => ⟨⟨hf.regularMono.some.op⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩⟩
-
-中文:
-引理 isRegularMono_unop_iff_isRegularEpi
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: ⟨fun hf => ⟨⟨hf.regularMono.some.op⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩⟩
-
-Depends on / 依赖: hf.regularEpi.some.unop, hf.regularMono.some.op, regularEpi, regularMono
+/-
+**CategoryTheory.isRegularMono_unop_iff_isRegularEpi** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：isRegularMono_unop_iff_isRegularEpi {X Y : Cᵒᵖ} (f : X ⟶ Y) : IsRegularMon
+o f.unop ↔ IsRegularEpi f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
 -/
 lemma isRegularMono_unop_iff_isRegularEpi {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     IsRegularMono f.unop ↔ IsRegularEpi f :=
-  ⟨fun hf => ⟨⟨hf.regularMono.some.op⟩⟩, fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩⟩
-
+  ⟨fun hf ↦ ⟨⟨hf.regularMono.some.op⟩⟩, fun hf ↦ ⟨⟨hf.regularEpi.some.unop⟩⟩⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsRegularEpi f] : IsRegularMono f.unop := by
   simpa
 
 @[simp]
-/--
-lemma `isRegularEpi_op_iff_isRegularMono` / 引理 `isRegularEpi_op_iff_isRegularMono`
-
-English:
-lemma isRegularEpi_op_iff_isRegularMono
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: ⟨fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩, fun hf => ⟨⟨hf.regularMono.some.op⟩⟩⟩
-
-中文:
-引理 isRegularEpi_op_iff_isRegularMono
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: ⟨fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩, fun hf => ⟨⟨hf.regularMono.some.op⟩⟩⟩
-
-Depends on / 依赖: hf.regularEpi.some.unop, hf.regularMono.some.op, regularEpi, regularMono
+/-
+**CategoryTheory.isRegularEpi_op_iff_isRegularMono** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：isRegularEpi_op_iff_isRegularMono {X Y : C} (f : X ⟶ Y) : IsRegularEpi f.o
+p ↔ IsRegularMono f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
 -/
 lemma isRegularEpi_op_iff_isRegularMono {X Y : C} (f : X ⟶ Y) :
     IsRegularEpi f.op ↔ IsRegularMono f :=
-  ⟨fun hf => ⟨⟨hf.regularEpi.some.unop⟩⟩, fun hf => ⟨⟨hf.regularMono.some.op⟩⟩⟩
-
+  ⟨fun hf ↦ ⟨⟨hf.regularEpi.some.unop⟩⟩, fun hf ↦ ⟨⟨hf.regularMono.some.op⟩⟩⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (f : X ⟶ Y) [IsRegularMono f] : IsRegularEpi f.op := by
   simpa
 
 @[simp]
-/--
-lemma `isRegularEpi_unop_iff_isRegularMono` / 引理 `isRegularEpi_unop_iff_isRegularMono`
-
-English:
-lemma isRegularEpi_unop_iff_isRegularMono
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: ⟨fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩, fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩⟩
-
-中文:
-引理 isRegularEpi_unop_iff_isRegularMono
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: ⟨fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩, fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩⟩
-
-Depends on / 依赖: hf.regularEpi.some.op, hf.regularMono.some.unop, regularEpi, regularMono
+/-
+**CategoryTheory.isRegularEpi_unop_iff_isRegularMono** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：isRegularEpi_unop_iff_isRegularMono {X Y : Cᵒᵖ} (f : X ⟶ Y) : IsRegularEpi
+ f.unop ↔ IsRegularMono f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularEpi.regularEpi`：∀ {C : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsReg
+ularEpi f], Nonempty (Catego…
+· 使用定理 `CategoryTheory.IsRegularMono.regularMono`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {X Y : C} {f : X ⟶ Y}   [self : CategoryTheory.IsR
+egularMono f], Nonempty (Categ…
 -/
 lemma isRegularEpi_unop_iff_isRegularMono {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     IsRegularEpi f.unop ↔ IsRegularMono f :=
-  ⟨fun hf => ⟨⟨hf.regularEpi.some.op⟩⟩, fun hf => ⟨⟨hf.regularMono.some.unop⟩⟩⟩
-
+  ⟨fun hf ↦ ⟨⟨hf.regularEpi.some.op⟩⟩, fun hf ↦ ⟨⟨hf.regularMono.some.unop⟩⟩⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsRegularMono f] : IsRegularEpi f.unop := by
   simpa
 
@@ -2020,58 +1812,61 @@ section
 
 variable (C)
 
-/--
-Definition of `IsRegularEpiCategory` / `IsRegularEpiCategory` 的定义
+/-- A regular epi category is a category in which every epimorphism is regular. -/
+/-
+**CategoryTheory.IsRegularEpiCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：(C : Type u₁) → [CategoryTheory.Category.{v₁, u₁} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRegularEpiCategory
-  parameters: : Prop where
-  axioms and operations (1):
-    - regularEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], IsRegularEpi f
-
-中文:
-类 是正则满态射范畴
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - regularEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 是正则满态射 f
+--- 原说明 ---
+A regular epi category is a category in which every epimorphism is regular.
 -/
 class IsRegularEpiCategory : Prop where
   /-- Everyone epimorphism is a regular epimorphism -/
-  regularEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], IsRegularEpi f
+  regularEpiOfEpi : ∀ {X Y : C} (f : X ⟶ Y) [Epi f], IsRegularEpi f
 
 end
 
-/--
-Definition of `regularEpiOfEpi` / `regularEpiOfEpi` 的定义
+/-- In a category in which every epimorphism is regular, we can express every epimorphism as
+a coequalizer. This is not an instance because it would create an instance loop. -/
+/-
+**CategoryTheory.regularEpiOfEpi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：regularEpiOfEpi [IsRegularEpiCategory C] (f : X ⟶ Y) [Epi f] : RegularEpi 
+f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsRegularEpiCategory.regularEpiOfEpi`：∀ {C : Type u₁} {in
+st : CategoryTheory.Category.{v₁, u₁} C} [self : CategoryTheory.IsRegularEpiCate
+gory C] {X Y : C}   (f : X ⟶ Y) [Category…
 
-English:
-definition regularEpiOfEpi
-  signature: [IsRegularEpiCategory C] (f : X ⟶ Y) [Epi f]
-  body: have := IsRegularEpiCategory.regularEpiOfEpi f
-  IsRegularEpi.getStruct f
-
-中文:
-定义 regularEpiOfEpi
-  签名: [是正则满态射范畴 C] (f : X ⟶ Y) [满态射 f]
-  定义体: have := IsRegularEpiCategory.regularEpiOfEpi f
-  IsRegularEpi.getStruct f
-
-Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, IsRegularEpiCategory, IsRegularEpiCategory.regularEpiOfEpi, getStruct, regularEpiOfEpi
+--- 原说明 ---
+In a category in which every epimorphism is regular, we can express every epimor
+phism as
+a coequalizer. This is not an instance because it would create an instance loop.
 -/
 def regularEpiOfEpi [IsRegularEpiCategory C] (f : X ⟶ Y) [Epi f] : RegularEpi f :=
   have := IsRegularEpiCategory.regularEpiOfEpi f
   IsRegularEpi.getStruct f
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) regularEpiCategoryOfSplitEpiCategory [SplitEpiCategory C] :
     IsRegularEpiCategory C where
   regularEpiOfEpi f _ := by
     have := isSplitEpi_of_epi f
     infer_instance
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) strongEpiCategory_of_regularEpiCategory [IsRegularEpiCategory C] :
     StrongEpiCategory C where
   strongEpi_of_epi f _ := by
-have := isRegularEpi_of_regularEpi regularEpiOfEpi f
+    have := isRegularEpi_of_regularEpi <| regularEpiOfEpi f
     infer_instance
 
 end CategoryTheory
+

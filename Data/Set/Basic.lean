@@ -31,11 +31,11 @@ Lean.
 
 Notation used here:
 
-- `f : α → β` is a function,
+-  `f : α → β` is a function,
 
-- `s : Set α` and `s₁ s₂ : Set α` are subsets of `α`
+-  `s : Set α` and `s₁ s₂ : Set α` are subsets of `α`
 
-- `t : Set β` is a subset of `β`.
+-  `t : Set β` is a subset of `β`.
 
 Definitions in the file:
 
@@ -70,279 +70,130 @@ namespace Set
 
 variable {α : Type u} {s t : Set α}
 
-/--
-theorem `mem_injective` / 定理 `mem_injective`
-
-English:
-theorem mem_injective
-  statement: Injective (Membership.mem : Set α -> α -> Prop)
-  proof: injective_id
-
-中文:
-定理 mem_injective
-  结论: 单射 (Membership.mem : 集合 α -> α -> 命题)
-  证明: injective_id
+/-
+**Set.mem_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, Function.Injective Membership.mem
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
-protected theorem mem_injective : Injective (Membership.mem : Set α -> α -> Prop) := injective_id
-/--
-theorem `mem_surjective` / 定理 `mem_surjective`
-
-English:
-theorem mem_surjective
-  statement: Surjective (Membership.mem : Set α -> α -> Prop)
-  proof: surjective_id
-
-中文:
-定理 mem_surjective
-  结论: 满射 (Membership.mem : 集合 α -> α -> 命题)
-  证明: surjective_id
+protected theorem mem_injective : Injective (Membership.mem : Set α → α → Prop) := injective_id
+/-
+**Set.mem_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, Function.Surjective Membership.mem
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.surjective_id`：∀ {α : Sort u_1}, Function.Surjective id
 -/
-protected theorem mem_surjective : Surjective (Membership.mem : Set α -> α -> Prop) := surjective_id
-/--
-theorem `mem_bijective` / 定理 `mem_bijective`
-
-English:
-theorem mem_bijective
-  statement: Bijective (Membership.mem : Set α -> α -> Prop)
-  proof: bijective_id
-
-中文:
-定理 mem_bijective
-  结论: 双射 (Membership.mem : 集合 α -> α -> 命题)
-  证明: bijective_id
+protected theorem mem_surjective : Surjective (Membership.mem : Set α → α → Prop) := surjective_id
+/-
+**Set.mem_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, Function.Bijective Membership.mem
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
-protected theorem mem_bijective : Bijective (Membership.mem : Set α -> α -> Prop) := bijective_id
-
-/--
-Instance `instDistribLattice` / 实例 `instDistribLattice`
-
-English:
-instance instDistribLattice
-  signature: : DistribLattice (Set α) where
-  body: inferInstance
-  le := (· <= ·)
-  lt := fun s t => s subseteq t ∧ ¬t subseteq s
-  sup := (· union ·)
-  inf := (· inter ·)
-
-中文:
-实例 instDistribLattice
-  签名: : Distrib格 (集合 α) where
-  定义体: inferInstance
-  le := (· <= ·)
-  lt := fun s t => s subseteq t ∧ ¬t subseteq s
-  sup := (· union ·)
-  inf := (· inter ·)
+protected theorem mem_bijective : Bijective (Membership.mem : Set α → α → Prop) := bijective_id
+/-
+**Set.instDistribLattice** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instDistribLattice : DistribLattice (Set α) where __ : DistribLattice (α -
+> Prop)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribLattice : DistribLattice (Set α) where
-  __ : DistribLattice (α -> Prop) := inferInstance
-  le := (· <= ·)
-  lt := fun s t => s subseteq t ∧ ¬t subseteq s
-  sup := (· union ·)
-  inf := (· inter ·)
-
-/--
-Instance `instBoundedOrder` / 实例 `instBoundedOrder`
-
-English:
-instance instBoundedOrder
-  signature: : BoundedOrder (Set α) where
-  body: inferInstance
-  bot := ∅
-  top := univ
-
-@[simp]
-
-中文:
-实例 instBoundedOrder
-  签名: : 有界序 (集合 α) where
-  定义体: inferInstance
-  bot := ∅
-  top := univ
-
-@[simp]
+  __ : DistribLattice (α → Prop) := inferInstance
+  le := (· ≤ ·)
+  lt := fun s t => s ⊆ t ∧ ¬t ⊆ s
+  sup := (· ∪ ·)
+  inf := (· ∩ ·)
+/-
+**Set.instBoundedOrder** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instBoundedOrder : BoundedOrder (Set α) where __ : BoundedOrder (α -> Prop
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBoundedOrder : BoundedOrder (Set α) where
-  __ : BoundedOrder (α -> Prop) := inferInstance
+  __ : BoundedOrder (α → Prop) := inferInstance
   bot := ∅
   top := univ
 
 @[simp]
-/--
-theorem `top_eq_univ` / 定理 `top_eq_univ`
-
-English:
-theorem top_eq_univ
-  statement: (⊤ : Set α) = univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 top_eq_univ
-  结论: (⊤ : 集合 α) = univ
-  证明: rfl
-
-@[simp]
+/-
+**Set.top_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：top_eq_univ : (⊤ : Set α) = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_eq_univ : (⊤ : Set α) = univ :=
   rfl
 
 @[simp]
-/--
-theorem `bot_eq_empty` / 定理 `bot_eq_empty`
-
-English:
-theorem bot_eq_empty
-  statement: (⊥ : Set α) = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bot_eq_empty
-  结论: (⊥ : 集合 α) = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Set.bot_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：bot_eq_empty : (⊥ : Set α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_eq_empty : (⊥ : Set α) = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `sup_eq_union` / 定理 `sup_eq_union`
-
-English:
-theorem sup_eq_union
-  statement: ((· ⊔ ·) : Set α -> Set α -> Set α) = (· union ·)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sup_eq_union
-  结论: ((· ⊔ ·) : 集合 α -> 集合 α -> 集合 α) = (· union ·)
-  证明: rfl
-
-@[simp]
+/-
+**Set.sup_eq_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sup_eq_union : ((· ⊔ ·) : Set α -> Set α -> Set α) = (· union ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sup_eq_union : ((· ⊔ ·) : Set α -> Set α -> Set α) = (· union ·) :=
+theorem sup_eq_union : ((· ⊔ ·) : Set α → Set α → Set α) = (· ∪ ·) :=
   rfl
 
 @[simp]
-/--
-theorem `inf_eq_inter` / 定理 `inf_eq_inter`
-
-English:
-theorem inf_eq_inter
-  statement: ((· ⊓ ·) : Set α -> Set α -> Set α) = (· inter ·)
-  proof: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 inf_eq_inter
-  结论: ((· ⊓ ·) : 集合 α -> 集合 α -> 集合 α) = (· inter ·)
-  证明: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
+/-
+**Set.inf_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inf_eq_inter : ((· ⊓ ·) : Set α -> Set α -> Set α) = (· inter ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inf_eq_inter : ((· ⊓ ·) : Set α -> Set α -> Set α) = (· inter ·) :=
+theorem inf_eq_inter : ((· ⊓ ·) : Set α → Set α → Set α) = (· ∩ ·) :=
   rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `le_eq_subset` / 定理 `le_eq_subset`
-
-English:
-theorem le_eq_subset
-  statement: ((· <= ·) : Set α -> Set α -> Prop) = (· subseteq ·)
-  proof: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 le_eq_subset
-  结论: ((· <= ·) : 集合 α -> 集合 α -> 命题) = (· subseteq ·)
-  证明: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
+/-
+**Set.le_eq_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：le_eq_subset : ((· <= ·) : Set α -> Set α -> Prop) = (· subseteq ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_eq_subset : ((· <= ·) : Set α -> Set α -> Prop) = (· subseteq ·) :=
+theorem le_eq_subset : ((· ≤ ·) : Set α → Set α → Prop) = (· ⊆ ·) :=
   rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `lt_eq_ssubset` / 定理 `lt_eq_ssubset`
-
-English:
-theorem lt_eq_ssubset
-  statement: ((· < ·) : Set α -> Set α -> Prop) = (· ⊂ ·)
-  proof: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 lt_eq_ssubset
-  结论: ((· < ·) : 集合 α -> 集合 α -> 命题) = (· ⊂ ·)
-  证明: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
+/-
+**Set.lt_eq_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：lt_eq_ssubset : ((· < ·) : Set α -> Set α -> Prop) = (· ⊂ ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lt_eq_ssubset : ((· < ·) : Set α -> Set α -> Prop) = (· ⊂ ·) :=
+theorem lt_eq_ssubset : ((· < ·) : Set α → Set α → Prop) = (· ⊂ ·) :=
   rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `le_iff_subset` / 定理 `le_iff_subset`
-
-English:
-theorem le_iff_subset
-  statement: s <= t ↔ s subseteq t
-  proof: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 le_iff_subset
-  结论: s <= t ↔ s subseteq t
-  证明: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.le_iff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：le_iff_subset : s <= t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_iff_subset : s <= t ↔ s subseteq t :=
+theorem le_iff_subset : s ≤ t ↔ s ⊆ t :=
   Iff.rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `lt_iff_ssubset` / 定理 `lt_iff_ssubset`
-
-English:
-theorem lt_iff_ssubset
-  statement: s < t ↔ s ⊂ t
-  proof: Iff.rfl
-
-@[deprecated "this is now a syntactic identity" (since := "2026-05-24")]
-alias ⟨_root_.LE.le.subset, _root_.HasSubset.Subset.le⟩ := le_iff_subset
-
-@[deprecated "this is now a syntactic identity" (since := "2026-05-24")]
-alias ⟨_root_.LT.lt.ssubset, _root_.HasSSubset.SSubset.lt⟩ := lt_iff_ssubset
-
-中文:
-定理 lt_iff_ssubset
-  结论: s < t ↔ s ⊂ t
-  证明: Iff.rfl
-
-@[deprecated "this is now a syntactic identity" (since := "2026-05-24")]
-alias ⟨_root_.LE.le.subset, _root_.HasSubset.Subset.le⟩ := le_iff_subset
-
-@[deprecated "this is now a syntactic identity" (since := "2026-05-24")]
-alias ⟨_root_.LT.lt.ssubset, _root_.HasSSubset.SSubset.lt⟩ := lt_iff_ssubset
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.lt_iff_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：lt_iff_ssubset : s < t ↔ s ⊂ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_iff_ssubset : s < t ↔ s ⊂ t :=
   Iff.rfl
@@ -352,43 +203,29 @@ alias ⟨_root_.LE.le.subset, _root_.HasSubset.Subset.le⟩ := le_iff_subset
 
 @[deprecated "this is now a syntactic identity" (since := "2026-05-24")]
 alias ⟨_root_.LT.lt.ssubset, _root_.HasSSubset.SSubset.lt⟩ := lt_iff_ssubset
-
-/--
-Instance `PiSetCoe.canLift` / 实例 `PiSetCoe.canLift`
-
-English:
-instance PiSetCoe.canLift
-  signature: (ι : Type u) (α : ι -> Type v) [forall i, Nonempty (α i)] (s : Set ι)
-  body: PiSubtype.canLift ι α (· in s)
-
-中文:
-实例 PiSetCoe.canLift
-  签名: (ι : 类型u) (α : ι -> 类型v) [对任意 i, 非空 (α i)] (s : 集合 ι)
-  定义体: PiSubtype.canLift ι α (· in s)
-
-Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
+/-
+**Set.PiSetCoe.canLift** 是 Mathlib 中的一个定理，位于命名空间 `Set.PiSetCoe`。
+形式化陈述：∀ (ι : Type u) (α : ι → Type v) [∀ (i : ι), Nonempty (α i)] (s : Set ι),  
+ CanLift ((i : ↑s) → α ↑i) ((i : ι) → α i) (fun f i => f ↑i) fun x => True
+参数：ι : Type u；α : ι → Type v；i : ι；α i；s : Set ι；(i : ↑s) → α ↑i；(i : ι) → α i；f
+un f i => f ↑i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance PiSetCoe.canLift (ι : Type u) (α : ι -> Type v) [forall i, Nonempty (α i)] (s : Set ι) :
-    CanLift (forall i : s, α i) (forall i, α i) (fun f i => f i) fun _ => True :=
-  PiSubtype.canLift ι α (· in s)
-
-/--
-Instance `PiSetCoe.canLift'` / 实例 `PiSetCoe.canLift'`
-
-English:
-instance PiSetCoe.canLift'
-  signature: (ι : Type u) (α : Type v) [Nonempty α] (s : Set ι)
-  body: PiSetCoe.canLift ι (fun _ => α) s
-
-中文:
-实例 PiSetCoe.canLift'
-  签名: (ι : 类型u) (α : 类型v) [非空 α] (s : 集合 ι)
-  定义体: PiSetCoe.canLift ι (fun _ => α) s
-
-Depends on / 依赖: PiSetCoe, PiSetCoe.canLift, canLift
+instance PiSetCoe.canLift (ι : Type u) (α : ι → Type v) [∀ i, Nonempty (α i)] (s : Set ι) :
+    CanLift (∀ i : s, α i) (∀ i, α i) (fun f i => f i) fun _ => True :=
+  PiSubtype.canLift ι α (· ∈ s)
+/-
+**Set.PiSetCoe.canLift'** 是 Mathlib 中的一个定理，位于命名空间 `Set.PiSetCoe`。
+形式化陈述：∀ (ι : Type u) (α : Type v) [Nonempty α] (s : Set ι), CanLift (↑s → α) (ι 
+→ α) (fun f i => f ↑i) fun x => True
+参数：ι : Type u；α : Type v；s : Set ι；↑s → α；ι → α；fun f i => f ↑i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.PiSetCoe.canLift`：∀ (ι : Type u) (α : ι → Type v) [∀ (i : ι), Nonemp
+ty (α i)] (s : Set ι),   CanLift ((i : ↑s) → α ↑i) ((i : ι) → α i) (fun f i => f
+ ↑i) fun x…
 -/
 instance PiSetCoe.canLift' (ι : Type u) (α : Type v) [Nonempty α] (s : Set ι) :
-    CanLift (s -> α) (ι -> α) (fun f i => f i) fun _ => True :=
+    CanLift (s → α) (ι → α) (fun f i => f i) fun _ => True :=
   PiSetCoe.canLift ι (fun _ => α) s
 
 end Set
@@ -397,416 +234,229 @@ section SetCoe
 
 variable {α : Type u}
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (s : Set α) : CoeTC s α := ⟨fun x => x.1⟩
-
-/--
-theorem `Set.coe_eq_subtype` / 定理 `Set.coe_eq_subtype`
-
-English:
-theorem Set.coe_eq_subtype
-  given: (s : Set α)
-  statement: ↥s = { x // x in s }
-  proof: rfl
-
-中文:
-定理 集合.coe_eq_subtype
-  条件: (s : 集合 α)
-  结论: ↥s = { x // x in s }
-  证明: rfl
+/-
+**Set.coe_eq_subtype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.coe_eq_subtype (s : Set α) : ↥s = { x // x in s }
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Set.coe_eq_subtype (s : Set α) : ↥s = { x // x in s } :=
+theorem Set.coe_eq_subtype (s : Set α) : ↥s = { x // x ∈ s } :=
   rfl
-
-/--
-theorem `Set.coe_ofPred` / 定理 `Set.coe_ofPred`
-
-English:
-theorem Set.coe_ofPred
-  given: (p : α -> Prop)
-  statement: ↥{ x | p x } = { x // p x }
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")] alias Set.coe_setOf := Set.coe_ofPred
-
-中文:
-定理 集合.coe_ofPred
-  条件: (p : α -> 命题)
-  结论: ↥{ x | p x } = { x // p x }
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias Set.coe_setOf := Set.coe_ofPred
+/-
+**Set.coe_ofPred** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.coe_ofPred (p : α -> Prop) : ↥{ x | p x } = { x // p x }
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Set.coe_ofPred (p : α -> Prop) : ↥{ x | p x } = { x // p x } :=
+theorem Set.coe_ofPred (p : α → Prop) : ↥{ x | p x } = { x // p x } :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias Set.coe_setOf := Set.coe_ofPred
-
-/--
-theorem `SetCoe.forall` / 定理 `SetCoe.forall`
-
-English:
-theorem SetCoe.forall
-  given: {s : Set α} {p : s -> Prop}
-  statement: (forall x : s, p x) ↔ forall (x) (h : x in s), p ⟨x, h⟩
-  proof: Subtype.forall
-
-中文:
-定理 SetCoe.对任意
-  条件: {s : 集合 α} {p : s -> 命题}
-  结论: (对任意 x : s, p x) ↔ 对任意 (x) (h : x in s), p ⟨x, h⟩
-  证明: Subtype.forall
-
-Depends on / 依赖: Subtype, Subtype.forall
+/-
+**SetCoe.forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.forall {s : Set α} {p : s -> Prop} : (forall x : s, p x) ↔ forall (
+x) (h : x in s), p ⟨x, h⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
-theorem SetCoe.forall {s : Set α} {p : s -> Prop} : (forall x : s, p x) ↔ forall (x) (h : x in s), p ⟨x, h⟩ :=
+theorem SetCoe.forall {s : Set α} {p : s → Prop} : (∀ x : s, p x) ↔ ∀ (x) (h : x ∈ s), p ⟨x, h⟩ :=
   Subtype.forall
-
-/--
-theorem `SetCoe.exists` / 定理 `SetCoe.exists`
-
-English:
-theorem SetCoe.exists
-  given: {s : Set α} {p : s -> Prop}
-  proof: Subtype.exists
-
-中文:
-定理 SetCoe.存在
-  条件: {s : 集合 α} {p : s -> 命题}
-  证明: Subtype.exists
-
-Depends on / 依赖: Subtype, Subtype.exists
+/-
+**SetCoe.exists** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.exists {s : Set α} {p : s -> Prop} : (exists x : s, p x) ↔ exists (
+x : _) (h : x in s), p ⟨x, h⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.exists`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∃ x, q x) ↔ ∃ a, ∃ (b : p a), q ⟨a, b⟩
 -/
-theorem SetCoe.exists {s : Set α} {p : s -> Prop} :
-    (exists x : s, p x) ↔ exists (x : _) (h : x in s), p ⟨x, h⟩ :=
+theorem SetCoe.exists {s : Set α} {p : s → Prop} :
+    (∃ x : s, p x) ↔ ∃ (x : _) (h : x ∈ s), p ⟨x, h⟩ :=
   Subtype.exists
-
-/--
-theorem `SetCoe.exists'` / 定理 `SetCoe.exists'`
-
-English:
-theorem SetCoe.exists'
-  given: {s : Set α} {p : forall x, x in s -> Prop}
-  proof: (@SetCoe.exists _ _ fun x => p x.1 x.2).symm
-
-中文:
-定理 SetCoe.存在'
-  条件: {s : 集合 α} {p : 对任意 x, x in s -> 命题}
-  证明: (@SetCoe.exists _ _ fun x => p x.1 x.2).symm
-
-Depends on / 依赖: SetCoe, SetCoe.exists
+/-
+**SetCoe.exists'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.exists' {s : Set α} {p : forall x, x in s -> Prop} : (exists (x : _
+) (h : x in s), p x h) ↔ exists x : s, p x.1 x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `SetCoe.exists`：SetCoe.exists {s : Set α} {p : s -> Prop} : (exists x : s
+, p x) ↔ exists (x : _) (h : x in s), p ⟨x, h⟩
 -/
-theorem SetCoe.exists' {s : Set α} {p : forall x, x in s -> Prop} :
-    (exists (x : _) (h : x in s), p x h) ↔ exists x : s, p x.1 x.2 :=
+theorem SetCoe.exists' {s : Set α} {p : ∀ x, x ∈ s → Prop} :
+    (∃ (x : _) (h : x ∈ s), p x h) ↔ ∃ x : s, p x.1 x.2 :=
   (@SetCoe.exists _ _ fun x => p x.1 x.2).symm
-
-/--
-theorem `SetCoe.forall'` / 定理 `SetCoe.forall'`
-
-English:
-theorem SetCoe.forall'
-  given: {s : Set α} {p : forall x, x in s -> Prop}
-  proof: (@SetCoe.forall _ _ fun x => p x.1 x.2).symm
-
-@[simp]
-
-中文:
-定理 SetCoe.对任意'
-  条件: {s : 集合 α} {p : 对任意 x, x in s -> 命题}
-  证明: (@SetCoe.forall _ _ fun x => p x.1 x.2).symm
-
-@[simp]
-
-Depends on / 依赖: SetCoe, SetCoe.forall
+/-
+**SetCoe.forall'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.forall' {s : Set α} {p : forall x, x in s -> Prop} : (forall (x) (h
+ : x in s), p x h) ↔ forall x : s, p x.1 x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `SetCoe.forall`：SetCoe.forall {s : Set α} {p : s -> Prop} : (forall x : s
+, p x) ↔ forall (x) (h : x in s), p ⟨x, h⟩
 -/
-theorem SetCoe.forall' {s : Set α} {p : forall x, x in s -> Prop} :
-    (forall (x) (h : x in s), p x h) ↔ forall x : s, p x.1 x.2 :=
+theorem SetCoe.forall' {s : Set α} {p : ∀ x, x ∈ s → Prop} :
+    (∀ (x) (h : x ∈ s), p x h) ↔ ∀ x : s, p x.1 x.2 :=
   (@SetCoe.forall _ _ fun x => p x.1 x.2).symm
 
 @[simp]
-/--
-theorem `set_coe_cast` / 定理 `set_coe_cast`
-
-English:
-theorem set_coe_cast
-
-中文:
-定理 set_coe_cast
+/-
+**set_coe_cast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {s t : Set α} (H' : s = t) (H : ↑s = ↑t) (x : ↑s), cast H x
+ = ⟨↑x, ⋯⟩
+参数：H' : s = t；H : ↑s = ↑t；x : ↑s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem set_coe_cast :
-    forall {s t : Set α} (H' : s = t) (H : ↥s = ↥t) (x : s), cast H x = ⟨x.1, H' ▸ x.2⟩
+    ∀ {s t : Set α} (H' : s = t) (H : ↥s = ↥t) (x : s), cast H x = ⟨x.1, H' ▸ x.2⟩
   | _, _, rfl, _, _ => rfl
-
-/--
-theorem `SetCoe.ext` / 定理 `SetCoe.ext`
-
-English:
-theorem SetCoe.ext
-  given: {s : Set α} {a b : s}
-  statement: (a : α) = b -> a = b
-  proof: Subtype.ext
-
-中文:
-定理 SetCoe.ext
-  条件: {s : 集合 α} {a b : s}
-  结论: (a : α) = b -> a = b
-  证明: Subtype.ext
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**SetCoe.ext** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.ext {s : Set α} {a b : s} : (a : α) = b -> a = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-theorem SetCoe.ext {s : Set α} {a b : s} : (a : α) = b -> a = b :=
+theorem SetCoe.ext {s : Set α} {a b : s} : (a : α) = b → a = b :=
   Subtype.ext
-
-/--
-theorem `SetCoe.ext_iff` / 定理 `SetCoe.ext_iff`
-
-English:
-theorem SetCoe.ext_iff
-  given: {s : Set α} {a b : s}
-  statement: (↑a : α) = ↑b ↔ a = b
-  proof: Iff.intro SetCoe.ext fun h => h ▸ rfl
-
-中文:
-定理 SetCoe.ext_iff
-  条件: {s : 集合 α} {a b : s}
-  结论: (↑a : α) = ↑b ↔ a = b
-  证明: Iff.intro SetCoe.ext fun h => h ▸ rfl
-
-Depends on / 依赖: Iff.intro, SetCoe, SetCoe.ext
+/-
+**SetCoe.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetCoe.ext_iff {s : Set α} {a b : s} : (↑a : α) = ↑b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetCoe.ext`：SetCoe.ext {s : Set α} {a b : s} : (a : α) = b -> a = b
 -/
 theorem SetCoe.ext_iff {s : Set α} {a b : s} : (↑a : α) = ↑b ↔ a = b :=
   Iff.intro SetCoe.ext fun h => h ▸ rfl
 
 end SetCoe
 
-/--
-theorem `Subtype.mem` / 定理 `Subtype.mem`
+/-- See also `Subtype.prop` -/
+/-
+**Subtype.mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subtype.mem {α : Type*} {s : Set α} (p : s) : (p : α) in s
+参数：p : s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 
-English:
-theorem Subtype.mem
-  given: {α : Type*} {s : Set α} (p : s)
-  statement: (p : α) in s
-  proof: p.prop
-
-中文:
-定理 子类型.mem
-  条件: {α : 类型} {s : 集合 α} (p : s)
-  结论: (p : α) in s
-  证明: p.prop
-
-Depends on / 依赖: p.prop
+--- 原说明 ---
+See also `Subtype.prop`
 -/
-theorem Subtype.mem {α : Type*} {s : Set α} (p : s) : (p : α) in s :=
+theorem Subtype.mem {α : Type*} {s : Set α} (p : s) : (p : α) ∈ s :=
   p.prop
 
 namespace Set
 
 variable {α : Type u} {β : Type v} {a b : α} {s s₁ s₂ t t₁ t₂ u : Set α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Set α)
-  body: ⟨∅⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: 可居 (集合 α)
-  定义体: ⟨∅⟩
-
-@[trans]
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Set α) :=
   ⟨∅⟩
 
 @[trans]
-/--
-theorem `mem_of_mem_of_subset` / 定理 `mem_of_mem_of_subset`
-
-English:
-theorem mem_of_mem_of_subset
-  given: {x : α} {s t : Set α} (hx : x in s) (h : s subseteq t)
-  statement: x in t
-  proof: h hx
-
-中文:
-定理 mem_of_mem_of_subset
-  条件: {x : α} {s t : 集合 α} (hx : x in s) (h : s subseteq t)
-  结论: x in t
-  证明: h hx
-
-Depends on / 依赖: NormedAddCommGroup, Shrink, hf.small
+/-
+**Set.mem_of_mem_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_of_mem_of_subset {x : α} {s t : Set α} (hx : x in s) (h : s subseteq t
+) : x in t
+参数：hx : x in s；h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_of_mem_of_subset {x : α} {s t : Set α} (hx : x in s) (h : s subseteq t) : x in t :=
+theorem mem_of_mem_of_subset {x : α} {s t : Set α} (hx : x ∈ s) (h : s ⊆ t) : x ∈ t :=
   h hx
-
-/--
-theorem `ofPred_injective` / 定理 `ofPred_injective`
-
-English:
-theorem ofPred_injective
-  statement: Function.Injective (@ofPred α)
-  proof: injective_id
-
-@[deprecated (since := "2026-07-09")] alias setOf_injective := ofPred_injective
-
-中文:
-定理 ofPred_injective
-  结论: 函数.单射 (@ofPred α)
-  证明: injective_id
-
-@[deprecated (since := "2026-07-09")] alias setOf_injective := ofPred_injective
-
-Depends on / 依赖: NormedSpace, Shrink, hf.small, injective_id
+/-
+**Set.ofPred_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_injective : Function.Injective (@ofPred α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
 theorem ofPred_injective : Function.Injective (@ofPred α) := injective_id
 
 @[deprecated (since := "2026-07-09")] alias setOf_injective := ofPred_injective
-
-/--
-theorem `ofPred_inj` / 定理 `ofPred_inj`
-
-English:
-theorem ofPred_inj
-  given: {p q : α -> Prop}
-  statement: { x | p x } = { x | q x } ↔ p = q
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_inj := ofPred_inj
-
-中文:
-定理 ofPred_inj
-  条件: {p q : α -> 命题}
-  结论: { x | p x } = { x | q x } ↔ p = q
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_inj := ofPred_inj
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.ofPred_inj** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_inj {p q : α -> Prop} : { x | p x } = { x | q x } ↔ p = q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofPred_inj {p q : α -> Prop} : { x | p x } = { x | q x } ↔ p = q := Iff.rfl
+theorem ofPred_inj {p q : α → Prop} : { x | p x } = { x | q x } ↔ p = q := Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_inj := ofPred_inj
 
+/-! ### Lemmas about `mem` and `ofPred` -/
 
-/--
-theorem `ofPred_bijective` / 定理 `ofPred_bijective`
+/-
+**Set.ofPred_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_bijective : Bijective (ofPred : (α -> Prop) -> Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 
-English:
-theorem ofPred_bijective
-  statement: Bijective (ofPred : (α -> Prop) -> Set α)
-  proof: bijective_id
-
-@[deprecated (since := "2026-07-09")] alias setOf_bijective := ofPred_bijective
-
-中文:
-定理 ofPred_bijective
-  结论: 双射 (ofPred : (α -> 命题) -> 集合 α)
-  证明: bijective_id
-
-@[deprecated (since := "2026-07-09")] alias setOf_bijective := ofPred_bijective
-
-Depends on / 依赖: bijective_id
+--- 原说明 ---
+### Lemmas about `mem` and `ofPred`
 -/
-theorem ofPred_bijective : Bijective (ofPred : (α -> Prop) -> Set α) :=
+theorem ofPred_bijective : Bijective (ofPred : (α → Prop) → Set α) :=
   bijective_id
 
 @[deprecated (since := "2026-07-09")] alias setOf_bijective := ofPred_bijective
-
-/--
-theorem `subset_ofPred` / 定理 `subset_ofPred`
-
-English:
-theorem subset_ofPred
-  given: {p : α -> Prop} {s : Set α}
-  statement: s subseteq ofPred p ↔ forall x, x in s -> p x
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias subset_setOf := subset_ofPred
-
-中文:
-定理 subset_ofPred
-  条件: {p : α -> 命题} {s : 集合 α}
-  结论: s subseteq ofPred p ↔ 对任意 x, x in s -> p x
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias subset_setOf := subset_ofPred
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.subset_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_ofPred {p : α -> Prop} {s : Set α} : s subseteq ofPred p ↔ forall x
+, x in s -> p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_ofPred {p : α -> Prop} {s : Set α} : s subseteq ofPred p ↔ forall x, x in s -> p x :=
+theorem subset_ofPred {p : α → Prop} {s : Set α} : s ⊆ ofPred p ↔ ∀ x, x ∈ s → p x :=
   Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias subset_setOf := subset_ofPred
-
-/--
-theorem `ofPred_subset` / 定理 `ofPred_subset`
-
-English:
-theorem ofPred_subset
-  given: {p : α -> Prop} {s : Set α}
-  statement: ofPred p subseteq s ↔ forall x, p x -> x in s
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_subset := ofPred_subset
-
-@[simp]
-
-中文:
-定理 ofPred_subset
-  条件: {p : α -> 命题} {s : 集合 α}
-  结论: ofPred p subseteq s ↔ 对任意 x, p x -> x in s
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_subset := ofPred_subset
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.ofPred_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_subset {p : α -> Prop} {s : Set α} : ofPred p subseteq s ↔ forall x
+, p x -> x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofPred_subset {p : α -> Prop} {s : Set α} : ofPred p subseteq s ↔ forall x, p x -> x in s :=
+theorem ofPred_subset {p : α → Prop} {s : Set α} : ofPred p ⊆ s ↔ ∀ x, p x → x ∈ s :=
   Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_subset := ofPred_subset
 
 @[simp]
-/--
-theorem `ofPred_subset_ofPred` / 定理 `ofPred_subset_ofPred`
-
-English:
-theorem ofPred_subset_ofPred
-  given: {p q : α -> Prop}
-  statement: { a | p a } subseteq { a | q a } ↔ forall a, p a -> q a
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_subset_setOf := ofPred_subset_ofPred
-
-@[gcongr]
-alias ⟨_, ofPred_subset_ofPred_of_imp⟩ := ofPred_subset_ofPred
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_subset_setOf_of_imp := ofPred_subset_ofPred_of_imp
-
-中文:
-定理 ofPred_subset_ofPred
-  条件: {p q : α -> 命题}
-  结论: { a | p a } subseteq { a | q a } ↔ 对任意 a, p a -> q a
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_subset_setOf := ofPred_subset_ofPred
-
-@[gcongr]
-alias ⟨_, ofPred_subset_ofPred_of_imp⟩ := ofPred_subset_ofPred
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_subset_setOf_of_imp := ofPred_subset_ofPred_of_imp
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.ofPred_subset_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_subset_ofPred {p q : α -> Prop} : { a | p a } subseteq { a | q a } 
+↔ forall a, p a -> q a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofPred_subset_ofPred {p q : α -> Prop} : { a | p a } subseteq { a | q a } ↔ forall a, p a -> q a :=
+theorem ofPred_subset_ofPred {p q : α → Prop} : { a | p a } ⊆ { a | q a } ↔ ∀ a, p a → q a :=
   Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_subset_setOf := ofPred_subset_ofPred
@@ -816,51 +466,25 @@ alias ⟨_, ofPred_subset_ofPred_of_imp⟩ := ofPred_subset_ofPred
 
 @[deprecated (since := "2026-07-09")]
 alias setOf_subset_setOf_of_imp := ofPred_subset_ofPred_of_imp
-
-/--
-theorem `ofPred_and` / 定理 `ofPred_and`
-
-English:
-theorem ofPred_and
-  given: {p q : α -> Prop}
-  statement: { a | p a ∧ q a } = { a | p a } inter { a | q a }
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_and := ofPred_and
-
-中文:
-定理 ofPred_and
-  条件: {p q : α -> 命题}
-  结论: { a | p a ∧ q a } = { a | p a } inter { a | q a }
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_and := ofPred_and
+/-
+**Set.ofPred_and** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_and {p q : α -> Prop} : { a | p a ∧ q a } = { a | p a } inter { a |
+ q a }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofPred_and {p q : α -> Prop} : { a | p a ∧ q a } = { a | p a } inter { a | q a } :=
+theorem ofPred_and {p q : α → Prop} : { a | p a ∧ q a } = { a | p a } ∩ { a | q a } :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_and := ofPred_and
-
-/--
-theorem `ofPred_or` / 定理 `ofPred_or`
-
-English:
-theorem ofPred_or
-  given: {p q : α -> Prop}
-  statement: { a | p a ∨ q a } = { a | p a } union { a | q a }
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_or := ofPred_or
-
-中文:
-定理 ofPred_or
-  条件: {p q : α -> 命题}
-  结论: { a | p a ∨ q a } = { a | p a } union { a | q a }
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_or := ofPred_or
+/-
+**Set.ofPred_or** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_or {p q : α -> Prop} : { a | p a ∨ q a } = { a | p a } union { a | 
+q a }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofPred_or {p q : α -> Prop} : { a | p a ∨ q a } = { a | p a } union { a | q a } :=
+theorem ofPred_or {p q : α → Prop} : { a | p a ∨ q a } = { a | p a } ∪ { a | q a } :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_or := ofPred_or
@@ -869,1087 +493,617 @@ theorem ofPred_or {p q : α -> Prop} : { a | p a ∨ q a } = { a | p a } union {
 
 -- TODO(Jeremy): write a tactic to unfold specific instances of generic notation?
 @[grind =]
-/--
-theorem `subset_def` / 定理 `subset_def`
-
-English:
-theorem subset_def
-  statement: (s subseteq t) = forall x, x in s -> x in t
-  proof: rfl
-
-@[grind =]
-
-中文:
-定理 subset_def
-  结论: (s subseteq t) = 对任意 x, x in s -> x in t
-  证明: rfl
-
-@[grind =]
+/-
+**Set.subset_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_def : (s subseteq t) = forall x, x in s -> x in t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_def : (s subseteq t) = forall x, x in s -> x in t :=
+theorem subset_def : (s ⊆ t) = ∀ x, x ∈ s → x ∈ t :=
   rfl
 
 @[grind =]
-/--
-theorem `ssubset_def` / 定理 `ssubset_def`
-
-English:
-theorem ssubset_def
-  statement: (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s)
-  proof: rfl
-
-@[refl]
-
-中文:
-定理 ssubset_def
-  结论: (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s)
-  证明: rfl
-
-@[refl]
+/-
+**Set.ssubset_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_def : (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ssubset_def : (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s) :=
+theorem ssubset_def : (s ⊂ t) = (s ⊆ t ∧ ¬t ⊆ s) :=
   rfl
 
 @[refl]
-/--
-theorem `Subset.refl` / 定理 `Subset.refl`
-
-English:
-theorem Subset.refl
-  given: (a : Set α)
-  statement: a subseteq a
-  proof: fun _ => id
-
-中文:
-定理 子集.refl
-  条件: (a : 集合 α)
-  结论: a subseteq a
-  证明: fun _ => id
+/-
+**Set.Subset.refl** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subset`。
+形式化陈述：∀ {α : Type u} (a : Set α), a ⊆ a
+参数：a : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subset.refl (a : Set α) : a subseteq a := fun _ => id
-
-/--
-theorem `Subset.rfl` / 定理 `Subset.rfl`
-
-English:
-theorem Subset.rfl
-  given: {s : Set α}
-  statement: s subseteq s
-  proof: Subset.refl s
-
-@[trans]
-
-中文:
-定理 子集.rfl
-  条件: {s : 集合 α}
-  结论: s subseteq s
-  证明: Subset.refl s
-
-@[trans]
-
-Depends on / 依赖: Subset, Subset.refl
+theorem Subset.refl (a : Set α) : a ⊆ a := fun _ => id
+/-
+**Set.Subset.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subset`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
 -/
-theorem Subset.rfl {s : Set α} : s subseteq s :=
+theorem Subset.rfl {s : Set α} : s ⊆ s :=
   Subset.refl s
 
 @[trans]
-/--
-theorem `Subset.trans` / 定理 `Subset.trans`
-
-English:
-theorem Subset.trans
-  given: {a b c : Set α} (ab : a subseteq b) (bc : b subseteq c)
-  statement: a subseteq c
-  proof: fun _ h => bc ab h
-
-@[trans]
-
-中文:
-定理 子集.trans
-  条件: {a b c : 集合 α} (ab : a subseteq b) (bc : b subseteq c)
-  结论: a subseteq c
-  证明: fun _ h => bc ab h
-
-@[trans]
+/-
+**Set.Subset.trans** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subset`。
+形式化陈述：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subset.trans {a b c : Set α} (ab : a subseteq b) (bc : b subseteq c) : a subseteq c := fun _ h => bc ab h
+theorem Subset.trans {a b c : Set α} (ab : a ⊆ b) (bc : b ⊆ c) : a ⊆ c := fun _ h => bc <| ab h
 
 @[trans]
-/--
-theorem `mem_of_eq_of_mem` / 定理 `mem_of_eq_of_mem`
-
-English:
-theorem mem_of_eq_of_mem
-  given: {x y : α} {s : Set α} (hx : x = y) (h : y in s)
-  statement: x in s
-  proof: hx.symm ▸ h
-
-中文:
-定理 mem_of_eq_of_mem
-  条件: {x y : α} {s : 集合 α} (hx : x = y) (h : y in s)
-  结论: x in s
-  证明: hx.symm ▸ h
-
-Depends on / 依赖: hx.symm
+/-
+**Set.mem_of_eq_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_of_eq_of_mem {x y : α} {s : Set α} (hx : x = y) (h : y in s) : x in s
+参数：hx : x = y；h : y in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem mem_of_eq_of_mem {x y : α} {s : Set α} (hx : x = y) (h : y in s) : x in s :=
+theorem mem_of_eq_of_mem {x y : α} {s : Set α} (hx : x = y) (h : y ∈ s) : x ∈ s :=
   hx.symm ▸ h
-
-/--
-theorem `Subset.antisymm` / 定理 `Subset.antisymm`
-
-English:
-theorem Subset.antisymm
-  given: {a b : Set α} (h₁ : a subseteq b) (h₂ : b subseteq a)
-  statement: a = b
-  proof: Set.ext fun _ => ⟨@h₁ _, @h₂ _⟩
-
-中文:
-定理 子集.antisymm
-  条件: {a b : 集合 α} (h₁ : a subseteq b) (h₂ : b subseteq a)
-  结论: a = b
-  证明: Set.ext fun _ => ⟨@h₁ _, @h₂ _⟩
+/-
+**Set.Subset.antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subset`。
+形式化陈述：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem Subset.antisymm {a b : Set α} (h₁ : a subseteq b) (h₂ : b subseteq a) : a = b :=
+theorem Subset.antisymm {a b : Set α} (h₁ : a ⊆ b) (h₂ : b ⊆ a) : a = b :=
   Set.ext fun _ => ⟨@h₁ _, @h₂ _⟩
-
-/--
-theorem `Subset.antisymm_iff` / 定理 `Subset.antisymm_iff`
-
-English:
-theorem Subset.antisymm_iff
-  given: {a b : Set α}
-  statement: a = b ↔ a subseteq b ∧ b subseteq a
-  proof: ⟨fun e => ⟨e.subset, e.symm.subset⟩, fun ⟨h₁, h₂⟩ => Subset.antisymm h₁ h₂⟩
-
-中文:
-定理 子集.antisymm_iff
-  条件: {a b : 集合 α}
-  结论: a = b ↔ a subseteq b ∧ b subseteq a
-  证明: ⟨fun e => ⟨e.subset, e.symm.subset⟩, fun ⟨h₁, h₂⟩ => Subset.antisymm h₁ h₂⟩
+/-
+**Set.Subset.antisymm_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subset`。
+形式化陈述：∀ {α : Type u} {a b : Set α}, a = b ↔ a ⊆ b ∧ b ⊆ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
 -/
-theorem Subset.antisymm_iff {a b : Set α} : a = b ↔ a subseteq b ∧ b subseteq a :=
+theorem Subset.antisymm_iff {a b : Set α} : a = b ↔ a ⊆ b ∧ b ⊆ a :=
   ⟨fun e => ⟨e.subset, e.symm.subset⟩, fun ⟨h₁, h₂⟩ => Subset.antisymm h₁ h₂⟩
 
 -- an alternative name
-/--
-theorem `eq_of_subset_of_subset` / 定理 `eq_of_subset_of_subset`
-
-English:
-theorem eq_of_subset_of_subset
-  given: {a b : Set α}
-  statement: a subseteq b -> b subseteq a -> a = b
-  proof: Subset.antisymm
-
-中文:
-定理 eq_of_subset_of_subset
-  条件: {a b : 集合 α}
-  结论: a subseteq b -> b subseteq a -> a = b
-  证明: Subset.antisymm
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm
+/-
+**Set.eq_of_subset_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_of_subset_of_subset {a b : Set α} : a subseteq b -> b subseteq a -> a =
+ b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
 -/
-theorem eq_of_subset_of_subset {a b : Set α} : a subseteq b -> b subseteq a -> a = b :=
+theorem eq_of_subset_of_subset {a b : Set α} : a ⊆ b → b ⊆ a → a = b :=
   Subset.antisymm
-
-/--
-theorem `mem_of_subset_of_mem` / 定理 `mem_of_subset_of_mem`
-
-English:
-theorem mem_of_subset_of_mem
-  given: {s₁ s₂ : Set α} {a : α} (h : s₁ subseteq s₂)
-  statement: a in s₁ -> a in s₂
-  proof: @h _
-
-中文:
-定理 mem_of_subset_of_mem
-  条件: {s₁ s₂ : 集合 α} {a : α} (h : s₁ subseteq s₂)
-  结论: a in s₁ -> a in s₂
-  证明: @h _
+/-
+**Set.mem_of_subset_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s₂ → a ∈ s₁ → a ∈ s₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] theorem mem_of_subset_of_mem {s₁ s₂ : Set α} {a : α} (h : s₁ subseteq s₂) : a in s₁ -> a in s₂ :=
+@[gcongr] theorem mem_of_subset_of_mem {s₁ s₂ : Set α} {a : α} (h : s₁ ⊆ s₂) : a ∈ s₁ → a ∈ s₂ :=
   @h _
-
-/--
-theorem `notMem_subset` / 定理 `notMem_subset`
-
-English:
-theorem notMem_subset
-  given: (h : s subseteq t)
-  statement: a ∉ t -> a ∉ s
-  proof: mt mem_of_subset_of_mem h
-
-中文:
-定理 notMem_subset
-  条件: (h : s subseteq t)
-  结论: a ∉ t -> a ∉ s
-  证明: mt mem_of_subset_of_mem h
-
-Depends on / 依赖: mem_of_subset_of_mem
+/-
+**Set.notMem_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：notMem_subset (h : s subseteq t) : a ∉ t -> a ∉ s
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Set.mem_of_subset_of_mem`：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s
+₂ → a ∈ s₁ → a ∈ s₂
 -/
-theorem notMem_subset (h : s subseteq t) : a ∉ t -> a ∉ s :=
-mt mem_of_subset_of_mem h
-
-/--
-theorem `subset_iff_notMem` / 定理 `subset_iff_notMem`
-
-English:
-theorem subset_iff_notMem
-  statement: s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s
-  proof: by
-  simp only [subset_def, not_imp_not]
-
-中文:
-定理 subset_iff_notMem
-  结论: s subseteq t ↔ 对任意 ⦃a⦄, a ∉ t -> a ∉ s
-  证明: by
-  simp only [subset_def, not_imp_not]
-
-Depends on / 依赖: not_imp_not, subset_def
+theorem notMem_subset (h : s ⊆ t) : a ∉ t → a ∉ s :=
+  mt <| mem_of_subset_of_mem h
+/-
+**Set.subset_iff_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_iff_notMem : s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem subset_iff_notMem : s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s := by
+theorem subset_iff_notMem : s ⊆ t ↔ ∀ ⦃a⦄, a ∉ t → a ∉ s := by
   simp only [subset_def, not_imp_not]
-
-/--
-theorem `not_subset` / 定理 `not_subset`
-
-English:
-theorem not_subset
-  statement: ¬s subseteq t ↔ exists a in s, a ∉ t
-  proof: by
-  simp only [subset_def, not_forall, exists_prop]
-
-中文:
-定理 not_subset
-  结论: ¬s subseteq t ↔ 存在 a in s, a ∉ t
-  证明: by
-  simp only [subset_def, not_forall, exists_prop]
-
-Depends on / 依赖: exists_prop, not_forall, subset_def
+/-
+**Set.not_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_subset : ¬s subseteq t ↔ exists a in s, a ∉ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem not_subset : ¬s subseteq t ↔ exists a in s, a ∉ t := by
+theorem not_subset : ¬s ⊆ t ↔ ∃ a ∈ s, a ∉ t := by
   simp only [subset_def, not_forall, exists_prop]
-
-/--
-theorem `not_univ_subset` / 定理 `not_univ_subset`
-
-English:
-theorem not_univ_subset
-  statement: ¬univ subseteq s ↔ exists a, a ∉ s
-  proof: by
+/-
+**Set.not_univ_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_univ_subset : ¬univ subseteq s ↔ exists a, a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem not_univ_subset : ¬univ ⊆ s ↔ ∃ a, a ∉ s := by
   simp [not_subset]
 
 @[deprecated not_univ_subset (since := "2026-03-12")]
-
-中文:
-定理 not_univ_subset
-  结论: ¬univ subseteq s ↔ 存在 a, a ∉ s
-  证明: by
-  simp [not_subset]
-
-@[deprecated not_univ_subset (since := "2026-03-12")]
-
-Depends on / 依赖: not_subset
+/-
+**Set.not_top_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_top_subset : ¬⊤ subseteq s ↔ exists a, a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.not_univ_subset`：not_univ_subset : ¬univ subseteq s ↔ exists a, a ∉ 
+s
 -/
-theorem not_univ_subset : ¬univ subseteq s ↔ exists a, a ∉ s := by
-  simp [not_subset]
-
-@[deprecated not_univ_subset (since := "2026-03-12")]
-/--
-theorem `not_top_subset` / 定理 `not_top_subset`
-
-English:
-theorem not_top_subset
-  statement: ¬⊤ subseteq s ↔ exists a, a ∉ s
-  proof: not_univ_subset
-
-中文:
-定理 not_top_subset
-  结论: ¬⊤ subseteq s ↔ 存在 a, a ∉ s
-  证明: not_univ_subset
-
-Depends on / 依赖: not_univ_subset
--/
-theorem not_top_subset : ¬⊤ subseteq s ↔ exists a, a ∉ s :=
+theorem not_top_subset : ¬⊤ ⊆ s ↔ ∃ a, a ∉ s :=
   not_univ_subset
-
-/--
-lemma `eq_of_forall_subset_iff` / 引理 `eq_of_forall_subset_iff`
-
-English:
-lemma eq_of_forall_subset_iff
-  given: (h : forall u, s subseteq u ↔ t subseteq u)
-  statement: s = t
-  proof: eq_of_forall_ge_iff h
-
-中文:
-引理 eq_of_对任意_subset_iff
-  条件: (h : 对任意 u, s subseteq u ↔ t subseteq u)
-  结论: s = t
-  证明: eq_of_forall_ge_iff h
-
-Depends on / 依赖: eq_of_forall_ge_iff
+/-
+**Set.eq_of_forall_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：eq_of_forall_subset_iff (h : forall u, s subseteq u ↔ t subseteq u) : s = 
+t
+参数：h : forall u, s subseteq u ↔ t subseteq u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
 -/
-lemma eq_of_forall_subset_iff (h : forall u, s subseteq u ↔ t subseteq u) : s = t := eq_of_forall_ge_iff h
+lemma eq_of_forall_subset_iff (h : ∀ u, s ⊆ u ↔ t ⊆ u) : s = t := eq_of_forall_ge_iff h
 
+/-! ### Definition of strict subsets `s ⊂ t` and basic properties. -/
 
-/--
-theorem `eq_or_ssubset_of_subset` / 定理 `eq_or_ssubset_of_subset`
+/-
+**Set.eq_or_ssubset_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s ⊆ t → s = t ∨ s ⊂ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
 
-English:
-theorem eq_or_ssubset_of_subset
-  given: (h : s subseteq t)
-  statement: s = t ∨ s ⊂ t
-  proof: eq_or_lt_of_le h
-
-中文:
-定理 eq_or_ssubset_of_subset
-  条件: (h : s subseteq t)
-  结论: s = t ∨ s ⊂ t
-  证明: eq_or_lt_of_le h
+--- 原说明 ---
+### Definition of strict subsets `s ⊂ t` and basic properties.
 -/
-protected theorem eq_or_ssubset_of_subset (h : s subseteq t) : s = t ∨ s ⊂ t :=
+protected theorem eq_or_ssubset_of_subset (h : s ⊆ t) : s = t ∨ s ⊂ t :=
   eq_or_lt_of_le h
-
-/--
-theorem `exists_of_ssubset` / 定理 `exists_of_ssubset`
-
-English:
-theorem exists_of_ssubset
-  given: {s t : Set α} (h : s ⊂ t)
-  statement: exists x in t, x ∉ s
-  proof: not_subset.1 h.2
-
-中文:
-定理 存在_of_ssubset
-  条件: {s t : 集合 α} (h : s ⊂ t)
-  结论: 存在 x in t, x ∉ s
-  证明: not_subset.1 h.2
-
-Depends on / 依赖: not_subset
+/-
+**Set.exists_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_of_ssubset {s t : Set α} (h : s ⊂ t) : exists x in t, x ∉ s
+参数：h : s ⊂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.not_subset`：not_subset : ¬s subseteq t ↔ exists a in s, a ∉ t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem exists_of_ssubset {s t : Set α} (h : s ⊂ t) : exists x in t, x ∉ s :=
+theorem exists_of_ssubset {s t : Set α} (h : s ⊂ t) : ∃ x ∈ t, x ∉ s :=
   not_subset.1 h.2
-
-/--
-theorem `ssubset_iff_subset_ne` / 定理 `ssubset_iff_subset_ne`
-
-English:
-theorem ssubset_iff_subset_ne
-  given: {s t : Set α}
-  statement: s ⊂ t ↔ s subseteq t ∧ s != t
-  proof: @lt_iff_le_and_ne (Set α) _ s t
-
-中文:
-定理 ssubset_iff_subset_ne
-  条件: {s t : 集合 α}
-  结论: s ⊂ t ↔ s subseteq t ∧ s != t
-  证明: @lt_iff_le_and_ne (Set α) _ s t
+/-
+**Set.ssubset_iff_subset_ne** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s ⊂ t ↔ s ⊆ t ∧ s ≠ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
 -/
-protected theorem ssubset_iff_subset_ne {s t : Set α} : s ⊂ t ↔ s subseteq t ∧ s != t :=
+protected theorem ssubset_iff_subset_ne {s t : Set α} : s ⊂ t ↔ s ⊆ t ∧ s ≠ t :=
   @lt_iff_le_and_ne (Set α) _ s t
-
-/--
-theorem `ssubset_iff_of_subset` / 定理 `ssubset_iff_of_subset`
-
-English:
-theorem ssubset_iff_of_subset
-  given: {s t : Set α} (h : s subseteq t)
-  statement: s ⊂ t ↔ exists x in t, x ∉ s
-  proof: ⟨exists_of_ssubset, fun ⟨_, hxt, hxs⟩ => ⟨h, fun h => hxs h hxt⟩⟩
-
-中文:
-定理 ssubset_iff_of_subset
-  条件: {s t : 集合 α} (h : s subseteq t)
-  结论: s ⊂ t ↔ 存在 x in t, x ∉ s
-  证明: ⟨exists_of_ssubset, fun ⟨_, hxt, hxs⟩ => ⟨h, fun h => hxs h hxt⟩⟩
-
-Depends on / 依赖: exists_of_ssubset
+/-
+**Set.ssubset_iff_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_iff_of_subset {s t : Set α} (h : s subseteq t) : s ⊂ t ↔ exists x 
+in t, x ∉ s
+参数：h : s subseteq t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_of_ssubset`：exists_of_ssubset {s t : Set α} (h : s ⊂ t) : exi
+sts x in t, x ∉ s
 -/
-theorem ssubset_iff_of_subset {s t : Set α} (h : s subseteq t) : s ⊂ t ↔ exists x in t, x ∉ s :=
-⟨exists_of_ssubset, fun ⟨_, hxt, hxs⟩ => ⟨h, fun h => hxs h hxt⟩⟩
-
-/--
-theorem `ssubset_iff_exists` / 定理 `ssubset_iff_exists`
-
-English:
-theorem ssubset_iff_exists
-  given: {s t : Set α}
-  statement: s ⊂ t ↔ s subseteq t ∧ exists x in t, x ∉ s
-  proof: ⟨fun h => ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ => (Set.ssubset_iff_of_subset h1).mpr h2⟩
-
-中文:
-定理 ssubset_iff_存在
-  条件: {s t : 集合 α}
-  结论: s ⊂ t ↔ s subseteq t ∧ 存在 x in t, x ∉ s
-  证明: ⟨fun h => ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ => (Set.ssubset_iff_of_subset h1).mpr h2⟩
-
-Depends on / 依赖: Set.exists_of_ssubset, Set.ssubset_iff_of_subset, exists_of_ssubset, h.le, ssubset_iff_of_subset
+theorem ssubset_iff_of_subset {s t : Set α} (h : s ⊆ t) : s ⊂ t ↔ ∃ x ∈ t, x ∉ s :=
+  ⟨exists_of_ssubset, fun ⟨_, hxt, hxs⟩ => ⟨h, fun h => hxs <| h hxt⟩⟩
+/-
+**Set.ssubset_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_iff_exists {s t : Set α} : s ⊂ t ↔ s subseteq t ∧ exists x in t, x
+ ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.exists_of_ssubset`：exists_of_ssubset {s t : Set α} (h : s ⊂ t) : exi
+sts x in t, x ∉ s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.ssubset_iff_of_subset`：ssubset_iff_of_subset {s t : Set α} (h : s su
+bseteq t) : s ⊂ t ↔ exists x in t, x ∉ s
 -/
-theorem ssubset_iff_exists {s t : Set α} : s ⊂ t ↔ s subseteq t ∧ exists x in t, x ∉ s :=
-  ⟨fun h => ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ => (Set.ssubset_iff_of_subset h1).mpr h2⟩
-
-/--
-theorem `ssubset_of_ssubset_of_subset` / 定理 `ssubset_of_ssubset_of_subset`
-
-English:
-theorem ssubset_of_ssubset_of_subset
-  statement: {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ ⊂ s₂)
-  proof: ⟨Subset.trans hs₁s₂.1 hs₂s₃, fun hs₃s₁ => hs₁s₂.2 (Subset.trans hs₂s₃ hs₃s₁)⟩
-
-中文:
-定理 ssubset_of_ssubset_of_subset
-  结论: {s₁ s₂ s₃ : 集合 α} (hs₁s₂ : s₁ ⊂ s₂)
-  证明: ⟨Subset.trans hs₁s₂.1 hs₂s₃, fun hs₃s₁ => hs₁s₂.2 (Subset.trans hs₂s₃ hs₃s₁)⟩
+theorem ssubset_iff_exists {s t : Set α} : s ⊂ t ↔ s ⊆ t ∧ ∃ x ∈ t, x ∉ s :=
+  ⟨fun h ↦ ⟨h.le, Set.exists_of_ssubset h⟩, fun ⟨h1, h2⟩ ↦ (Set.ssubset_iff_of_subset h1).mpr h2⟩
+/-
+**Set.ssubset_of_ssubset_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s₁ s₂ s₃ : Set α}, s₁ ⊂ s₂ → s₂ ⊆ s₃ → s₁ ⊂ s₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected theorem ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ ⊂ s₂)
-    (hs₂s₃ : s₂ subseteq s₃) : s₁ ⊂ s₃ :=
+    (hs₂s₃ : s₂ ⊆ s₃) : s₁ ⊂ s₃ :=
   ⟨Subset.trans hs₁s₂.1 hs₂s₃, fun hs₃s₁ => hs₁s₂.2 (Subset.trans hs₂s₃ hs₃s₁)⟩
-
-/--
-theorem `ssubset_of_subset_of_ssubset` / 定理 `ssubset_of_subset_of_ssubset`
-
-English:
-theorem ssubset_of_subset_of_ssubset
-  statement: {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ subseteq s₂)
-  proof: ⟨Subset.trans hs₁s₂ hs₂s₃.1, fun hs₃s₁ => hs₂s₃.2 (Subset.trans hs₃s₁ hs₁s₂)⟩
-
-中文:
-定理 ssubset_of_subset_of_ssubset
-  结论: {s₁ s₂ s₃ : 集合 α} (hs₁s₂ : s₁ subseteq s₂)
-  证明: ⟨Subset.trans hs₁s₂ hs₂s₃.1, fun hs₃s₁ => hs₂s₃.2 (Subset.trans hs₃s₁ hs₁s₂)⟩
+/-
+**Set.ssubset_of_subset_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s₁ s₂ s₃ : Set α}, s₁ ⊆ s₂ → s₂ ⊂ s₃ → s₁ ⊂ s₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-protected theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ subseteq s₂)
+protected theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Set α} (hs₁s₂ : s₁ ⊆ s₂)
     (hs₂s₃ : s₂ ⊂ s₃) : s₁ ⊂ s₃ :=
   ⟨Subset.trans hs₁s₂ hs₂s₃.1, fun hs₃s₁ => hs₂s₃.2 (Subset.trans hs₃s₁ hs₁s₂)⟩
-
-/--
-theorem `notMem_empty` / 定理 `notMem_empty`
-
-English:
-theorem notMem_empty
-  given: (x : α)
-  statement: x ∉ (∅ : Set α)
-  proof: id
-
-中文:
-定理 notMem_empty
-  条件: (x : α)
-  结论: x ∉ (∅ : 集合 α)
-  证明: id
+/-
+**Set.notMem_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：notMem_empty (x : α) : x ∉ (∅ : Set α)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem notMem_empty (x : α) : x ∉ (∅ : Set α) :=
   id
-
-/--
-theorem `not_notMem` / 定理 `not_notMem`
-
-English:
-theorem not_notMem
-  statement: ¬a ∉ s ↔ a in s
-  proof: not_not
-
-中文:
-定理 not_notMem
-  结论: ¬a ∉ s ↔ a in s
-  证明: not_not
-
-Depends on / 依赖: not_not
+/-
+**Set.not_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_notMem : ¬a ∉ s ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 -/
-theorem not_notMem : ¬a ∉ s ↔ a in s :=
+theorem not_notMem : ¬a ∉ s ↔ a ∈ s :=
   not_not
 
+/-! ### Non-empty sets -/
 
-/--
-theorem `nonempty_coe_sort` / 定理 `nonempty_coe_sort`
+/-
+**Set.nonempty_coe_sort** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_coe_sort {s : Set α} : Nonempty ↥s ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
 
-English:
-theorem nonempty_coe_sort
-  given: {s : Set α}
-  statement: Nonempty ↥s ↔ s.Nonempty
-  proof: nonempty_subtype
-
-alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-中文:
-定理 nonempty_coe_sort
-  条件: {s : 集合 α}
-  结论: 非空 ↥s ↔ s.非空
-  证明: nonempty_subtype
-
-alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-Depends on / 依赖: nonempty_subtype
+--- 原说明 ---
+### Non-empty sets
 -/
 theorem nonempty_coe_sort {s : Set α} : Nonempty ↥s ↔ s.Nonempty :=
   nonempty_subtype
 
 alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-/--
-theorem `nonempty_def` / 定理 `nonempty_def`
-
-English:
-theorem nonempty_def
-  statement: s.Nonempty ↔ exists x, x in s
-  proof: Iff.rfl
-
-中文:
-定理 nonempty_def
-  结论: s.非空 ↔ 存在 x, x in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.nonempty_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_def : s.Nonempty ↔ exists x, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nonempty_def : s.Nonempty ↔ exists x, x in s :=
+theorem nonempty_def : s.Nonempty ↔ ∃ x, x ∈ s :=
   Iff.rfl
-
-/--
-theorem `nonempty_of_mem` / 定理 `nonempty_of_mem`
-
-English:
-theorem nonempty_of_mem
-  given: {x} (h : x in s)
-  statement: s.Nonempty
-  proof: ⟨x, h⟩
-
-中文:
-定理 nonempty_of_mem
-  条件: {x} (h : x in s)
-  结论: s.非空
-  证明: ⟨x, h⟩
+/-
+**Set.nonempty_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_of_mem {x} (h : x in s) : s.Nonempty
+参数：h : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_of_mem {x} (h : x in s) : s.Nonempty :=
+theorem nonempty_of_mem {x} (h : x ∈ s) : s.Nonempty :=
   ⟨x, h⟩
-
-/--
-theorem `Nonempty.not_subset_empty` / 定理 `Nonempty.not_subset_empty`
-
-English:
-theorem Nonempty.not_subset_empty
-  statement: s.Nonempty -> ¬s subseteq ∅
-
-中文:
-定理 非空.not_subset_empty
-  结论: s.非空 -> ¬s subseteq ∅
-
-Depends on / 依赖: Classical, Classical.choose
+/-
+**Set.Nonempty.not_subset_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Nonempty → ¬s ⊆ ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.not_subset_empty : s.Nonempty -> ¬s subseteq ∅
+theorem Nonempty.not_subset_empty : s.Nonempty → ¬s ⊆ ∅
   | ⟨_, hx⟩, hs => hs hx
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Extract a witness from `s.Nonempty`. This function might be used instead of case analysis
+on the argument. Note that it makes a proof depend on the `Classical.choice` axiom. -/
+/-
+**Set.Nonempty.some** 是 Mathlib 中的一个定义，位于命名空间 `Set.Nonempty`。
+形式化陈述：{α : Type u} → {s : Set α} → s.Nonempty → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def Nonempty.some (h : s.Nonempty)
-  body: Classical.choose h
-
-中文:
-定义 noncomputable
-  签名: def 非空.some (h : s.非空)
-  定义体: Classical.choose h
+--- 原说明 ---
+Extract a witness from `s.Nonempty`. This function might be used instead of case
+ analysis
+on the argument. Note that it makes a proof depend on the `Classical.choice` axi
+om.
 -/
 protected noncomputable def Nonempty.some (h : s.Nonempty) : α :=
   Classical.choose h
-
-/--
-theorem `Nonempty.some_mem` / 定理 `Nonempty.some_mem`
-
-English:
-theorem Nonempty.some_mem
-  given: (h : s.Nonempty)
-  statement: h.some in s
-  proof: Classical.choose_spec h
-
-中文:
-定理 非空.some_mem
-  条件: (h : s.非空)
-  结论: h.some in s
-  证明: Classical.choose_spec h
+/-
+**Set.Nonempty.some_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.some ∈ s
+参数：h : s.Nonempty。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-protected theorem Nonempty.some_mem (h : s.Nonempty) : h.some in s :=
+protected theorem Nonempty.some_mem (h : s.Nonempty) : h.some ∈ s :=
   Classical.choose_spec h
-
-/--
-theorem `Nonempty.mono` / 定理 `Nonempty.mono`
-
-English:
-theorem Nonempty.mono
-  given: (ht : s subseteq t) (hs : s.Nonempty)
-  statement: t.Nonempty
-  proof: hs.imp ht
-
-中文:
-定理 非空.mono
-  条件: (ht : s subseteq t) (hs : s.非空)
-  结论: t.非空
-  证明: hs.imp ht
+/-
+**Set.Nonempty.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
 -/
-@[gcongr] theorem Nonempty.mono (ht : s subseteq t) (hs : s.Nonempty) : t.Nonempty :=
+@[gcongr] theorem Nonempty.mono (ht : s ⊆ t) (hs : s.Nonempty) : t.Nonempty :=
   hs.imp ht
-
-/--
-theorem `nonempty_of_not_subset` / 定理 `nonempty_of_not_subset`
-
-English:
-theorem nonempty_of_not_subset
-  given: (h : ¬s subseteq t)
-  statement: (s \ t).Nonempty
-  proof: let ⟨x, xs, xt⟩ := not_subset.1 h
-  ⟨x, xs, xt⟩
-
-中文:
-定理 nonempty_of_not_subset
-  条件: (h : ¬s subseteq t)
-  结论: (s \ t).非空
-  证明: let ⟨x, xs, xt⟩ := not_subset.1 h
-  ⟨x, xs, xt⟩
-
-Depends on / 依赖: not_subset
+/-
+**Set.nonempty_of_not_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_of_not_subset (h : ¬s subseteq t) : (s \ t).Nonempty
+参数：h : ¬s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.not_subset`：not_subset : ¬s subseteq t ↔ exists a in s, a ∉ t
 -/
-theorem nonempty_of_not_subset (h : ¬s subseteq t) : (s \ t).Nonempty :=
+theorem nonempty_of_not_subset (h : ¬s ⊆ t) : (s \ t).Nonempty :=
   let ⟨x, xs, xt⟩ := not_subset.1 h
   ⟨x, xs, xt⟩
-
-/--
-theorem `nonempty_of_ssubset` / 定理 `nonempty_of_ssubset`
-
-English:
-theorem nonempty_of_ssubset
-  given: (ht : s ⊂ t)
-  statement: (t \ s).Nonempty
-  proof: nonempty_of_not_subset ht.2
-
-中文:
-定理 nonempty_of_ssubset
-  条件: (ht : s ⊂ t)
-  结论: (t \ s).非空
-  证明: nonempty_of_not_subset ht.2
-
-Depends on / 依赖: nonempty_of_not_subset
+/-
+**Set.nonempty_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_of_ssubset (ht : s ⊂ t) : (t \ s).Nonempty
+参数：ht : s ⊂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_of_not_subset`：nonempty_of_not_subset (h : ¬s subseteq t) :
+ (s \ t).Nonempty
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem nonempty_of_ssubset (ht : s ⊂ t) : (t \ s).Nonempty :=
   nonempty_of_not_subset ht.2
-
-/--
-theorem `Nonempty.of_sdiff` / 定理 `Nonempty.of_sdiff`
-
-English:
-theorem Nonempty.of_sdiff
-  given: (h : (s \ t).Nonempty)
-  statement: s.Nonempty
-  proof: h.imp fun _ => And.left
-
-@[deprecated (since := "2026-06-03")] alias Nonempty.of_diff := Nonempty.of_sdiff
-
-中文:
-定理 非空.of_sdiff
-  条件: (h : (s \ t).非空)
-  结论: s.非空
-  证明: h.imp fun _ => And.left
-
-@[deprecated (since := "2026-06-03")] alias Nonempty.of_diff := Nonempty.of_sdiff
-
-Depends on / 依赖: And.left, h.imp
+/-
+**Set.Nonempty.of_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, (s \ t).Nonempty → s.Nonempty
+参数：s \ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem Nonempty.of_sdiff (h : (s \ t).Nonempty) : s.Nonempty :=
   h.imp fun _ => And.left
 
 @[deprecated (since := "2026-06-03")] alias Nonempty.of_diff := Nonempty.of_sdiff
-
-/--
-theorem `nonempty_of_ssubset'` / 定理 `nonempty_of_ssubset'`
-
-English:
-theorem nonempty_of_ssubset'
-  given: (ht : s ⊂ t)
-  statement: t.Nonempty
-  proof: (nonempty_of_ssubset ht).of_sdiff
-
-中文:
-定理 nonempty_of_ssubset'
-  条件: (ht : s ⊂ t)
-  结论: t.非空
-  证明: (nonempty_of_ssubset ht).of_sdiff
-
-Depends on / 依赖: nonempty_of_ssubset, of_sdiff
+/-
+**Set.nonempty_of_ssubset'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_of_ssubset' (ht : s ⊂ t) : t.Nonempty
+参数：ht : s ⊂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.of_sdiff`：∀ {α : Type u} {s t : Set α}, (s \ t).Nonempty → 
+s.Nonempty
+· 使用定理 `Set.nonempty_of_ssubset`：nonempty_of_ssubset (ht : s ⊂ t) : (t \ s).None
+mpty
 -/
 theorem nonempty_of_ssubset' (ht : s ⊂ t) : t.Nonempty :=
   (nonempty_of_ssubset ht).of_sdiff
-
-/--
-theorem `Nonempty.inl` / 定理 `Nonempty.inl`
-
-English:
-theorem Nonempty.inl
-  given: (hs : s.Nonempty)
-  statement: (s union t).Nonempty
-  proof: hs.imp fun _ => Or.inl
-
-中文:
-定理 非空.inl
-  条件: (hs : s.非空)
-  结论: (s union t).非空
-  证明: hs.imp fun _ => Or.inl
+/-
+**Set.Nonempty.inl** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s.Nonempty → (s ∪ t).Nonempty
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
 -/
-theorem Nonempty.inl (hs : s.Nonempty) : (s union t).Nonempty :=
+theorem Nonempty.inl (hs : s.Nonempty) : (s ∪ t).Nonempty :=
   hs.imp fun _ => Or.inl
-
-/--
-theorem `Nonempty.inr` / 定理 `Nonempty.inr`
-
-English:
-theorem Nonempty.inr
-  given: (ht : t.Nonempty)
-  statement: (s union t).Nonempty
-  proof: ht.imp fun _ => Or.inr
-
-@[simp]
-
-中文:
-定理 非空.inr
-  条件: (ht : t.非空)
-  结论: (s union t).非空
-  证明: ht.imp fun _ => Or.inr
-
-@[simp]
+/-
+**Set.Nonempty.inr** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, t.Nonempty → (s ∪ t).Nonempty
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
 -/
-theorem Nonempty.inr (ht : t.Nonempty) : (s union t).Nonempty :=
+theorem Nonempty.inr (ht : t.Nonempty) : (s ∪ t).Nonempty :=
   ht.imp fun _ => Or.inr
 
 @[simp]
-/--
-theorem `union_nonempty` / 定理 `union_nonempty`
-
-English:
-theorem union_nonempty
-  statement: (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty
-  proof: exists_or
-
-中文:
-定理 union_nonempty
-  结论: (s union t).非空 ↔ s.非空 ∨ t.非空
-  证明: exists_or
-
-Depends on / 依赖: exists_or
+/-
+**Set.union_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_nonempty : (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_or`：∀ {α : Sort u_1} {p q : α → Prop}, (∃ x, p x ∨ q x) ↔ (∃ x, p
+ x) ∨ ∃ x, q x
 -/
-theorem union_nonempty : (s union t).Nonempty ↔ s.Nonempty ∨ t.Nonempty :=
+theorem union_nonempty : (s ∪ t).Nonempty ↔ s.Nonempty ∨ t.Nonempty :=
   exists_or
-
-/--
-theorem `Nonempty.left` / 定理 `Nonempty.left`
-
-English:
-theorem Nonempty.left
-  given: (h : (s inter t).Nonempty)
-  statement: s.Nonempty
-  proof: h.imp fun _ => And.left
-
-中文:
-定理 非空.left
-  条件: (h : (s inter t).非空)
-  结论: s.非空
-  证明: h.imp fun _ => And.left
-
-Depends on / 依赖: And.left, h.imp
+/-
+**Set.Nonempty.left** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, (s ∩ t).Nonempty → s.Nonempty
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem Nonempty.left (h : (s inter t).Nonempty) : s.Nonempty :=
+theorem Nonempty.left (h : (s ∩ t).Nonempty) : s.Nonempty :=
   h.imp fun _ => And.left
-
-/--
-theorem `Nonempty.right` / 定理 `Nonempty.right`
-
-English:
-theorem Nonempty.right
-  given: (h : (s inter t).Nonempty)
-  statement: t.Nonempty
-  proof: h.imp fun _ => And.right
-
-中文:
-定理 非空.right
-  条件: (h : (s inter t).非空)
-  结论: t.非空
-  证明: h.imp fun _ => And.right
-
-Depends on / 依赖: And.right, h.imp
+/-
+**Set.Nonempty.right** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, (s ∩ t).Nonempty → t.Nonempty
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Nonempty.right (h : (s inter t).Nonempty) : t.Nonempty :=
+theorem Nonempty.right (h : (s ∩ t).Nonempty) : t.Nonempty :=
   h.imp fun _ => And.right
-
-/--
-theorem `inter_nonempty` / 定理 `inter_nonempty`
-
-English:
-theorem inter_nonempty
-  statement: (s inter t).Nonempty ↔ exists x, x in s ∧ x in t
-  proof: Iff.rfl
-
-中文:
-定理 inter_nonempty
-  结论: (s inter t).非空 ↔ 存在 x, x in s ∧ x in t
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.inter_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_nonempty : (s inter t).Nonempty ↔ exists x, x in s ∧ x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem inter_nonempty : (s inter t).Nonempty ↔ exists x, x in s ∧ x in t :=
+theorem inter_nonempty : (s ∩ t).Nonempty ↔ ∃ x, x ∈ s ∧ x ∈ t :=
   Iff.rfl
-
-/--
-theorem `inter_nonempty_iff_exists_left` / 定理 `inter_nonempty_iff_exists_left`
-
-English:
-theorem inter_nonempty_iff_exists_left
-  statement: (s inter t).Nonempty ↔ exists x in s, x in t
-  proof: by
-  simp_rw [inter_nonempty]
-
-中文:
-定理 inter_nonempty_iff_存在_left
-  结论: (s inter t).非空 ↔ 存在 x in s, x in t
-  证明: by
-  simp_rw [inter_nonempty]
-
-Depends on / 依赖: inter_nonempty, simp_rw
+/-
+**Set.inter_nonempty_iff_exists_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_nonempty_iff_exists_left : (s inter t).Nonempty ↔ exists x in s, x i
+n t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem inter_nonempty_iff_exists_left : (s inter t).Nonempty ↔ exists x in s, x in t := by
+theorem inter_nonempty_iff_exists_left : (s ∩ t).Nonempty ↔ ∃ x ∈ s, x ∈ t := by
   simp_rw [inter_nonempty]
-
-/--
-theorem `inter_nonempty_iff_exists_right` / 定理 `inter_nonempty_iff_exists_right`
-
-English:
-theorem inter_nonempty_iff_exists_right
-  statement: (s inter t).Nonempty ↔ exists x in t, x in s
-  proof: by
-  simp_rw [inter_nonempty, and_comm]
-
-中文:
-定理 inter_nonempty_iff_存在_right
-  结论: (s inter t).非空 ↔ 存在 x in t, x in s
-  证明: by
-  simp_rw [inter_nonempty, and_comm]
-
-Depends on / 依赖: and_comm, inter_nonempty, simp_rw
+/-
+**Set.inter_nonempty_iff_exists_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_nonempty_iff_exists_right : (s inter t).Nonempty ↔ exists x in t, x 
+in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem inter_nonempty_iff_exists_right : (s inter t).Nonempty ↔ exists x in t, x in s := by
+theorem inter_nonempty_iff_exists_right : (s ∩ t).Nonempty ↔ ∃ x ∈ t, x ∈ s := by
   simp_rw [inter_nonempty, and_comm]
-
-/--
-theorem `nonempty_iff_univ_nonempty` / 定理 `nonempty_iff_univ_nonempty`
-
-English:
-theorem nonempty_iff_univ_nonempty
-  statement: Nonempty α ↔ (univ : Set α).Nonempty
-  proof: ⟨fun ⟨x⟩ => ⟨x, trivial⟩, fun ⟨x, _⟩ => ⟨x⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_iff_univ_nonempty
-  结论: 非空 α ↔ (univ : 集合 α).非空
-  证明: ⟨fun ⟨x⟩ => ⟨x, trivial⟩, fun ⟨x, _⟩ => ⟨x⟩⟩
-
-@[simp]
+/-
+**Set.nonempty_iff_univ_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_iff_univ_nonempty : Nonempty α ↔ (univ : Set α).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem nonempty_iff_univ_nonempty : Nonempty α ↔ (univ : Set α).Nonempty :=
   ⟨fun ⟨x⟩ => ⟨x, trivial⟩, fun ⟨x, _⟩ => ⟨x⟩⟩
 
 @[simp]
-/--
-theorem `univ_nonempty` / 定理 `univ_nonempty`
-
-English:
-theorem univ_nonempty
-  statement: forall [Nonempty α], (univ : Set α).Nonempty
-
-中文:
-定理 univ_nonempty
-  结论: 对任意 [非空 α], (univ : 集合 α).非空
+/-
+**Set.univ_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem univ_nonempty : forall [Nonempty α], (univ : Set α).Nonempty
+theorem univ_nonempty : ∀ [Nonempty α], (univ : Set α).Nonempty
   | ⟨x⟩ => ⟨x, trivial⟩
-
-/--
-theorem `Nonempty.to_subtype` / 定理 `Nonempty.to_subtype`
-
-English:
-theorem Nonempty.to_subtype
-  statement: s.Nonempty -> Nonempty (↥s)
-  proof: nonempty_subtype.2
-
-中文:
-定理 非空.to_subtype
-  结论: s.非空 -> 非空 (↥s)
-  证明: nonempty_subtype.2
+/-
+**Set.Nonempty.to_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonempty ↑s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
 -/
-theorem Nonempty.to_subtype : s.Nonempty -> Nonempty (↥s) :=
+theorem Nonempty.to_subtype : s.Nonempty → Nonempty (↥s) :=
   nonempty_subtype.2
-
-/--
-theorem `Nonempty.to_type` / 定理 `Nonempty.to_type`
-
-English:
-theorem Nonempty.to_type
-  statement: s.Nonempty -> Nonempty α
-  proof: fun ⟨x, _⟩ => ⟨x⟩
-
-中文:
-定理 非空.to_type
-  结论: s.非空 -> 非空 α
-  证明: fun ⟨x, _⟩ => ⟨x⟩
+/-
+**Set.Nonempty.to_type** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonempty α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.to_type : s.Nonempty -> Nonempty α := fun ⟨x, _⟩ => ⟨x⟩
-
-/--
-Instance `univ.nonempty` / 实例 `univ.nonempty`
-
-English:
-instance univ.nonempty
-  signature: [Nonempty α]
-  body: Set.univ_nonempty.to_subtype
-
-中文:
-实例 univ.nonempty
-  签名: [非空 α]
-  定义体: Set.univ_nonempty.to_subtype
-
-Depends on / 依赖: Set.univ_nonempty.to_subtype, to_subtype, univ_nonempty
+theorem Nonempty.to_type : s.Nonempty → Nonempty α := fun ⟨x, _⟩ => ⟨x⟩
+/-
+**Set.univ.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set.univ`。
+形式化陈述：∀ {α : Type u} [Nonempty α], Nonempty ↑Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `Set.univ_nonempty`：∀ {α : Type u} [Nonempty α], Set.univ.Nonempty
 -/
 instance univ.nonempty [Nonempty α] : Nonempty (↥(Set.univ : Set α)) :=
   Set.univ_nonempty.to_subtype
 
 -- Redeclare for refined keys
 -- `Nonempty (@Subtype _ (@Membership.mem _ (Set _) _ (@Top.top (Set _) _)))`
-/--
-Instance `instNonemptyTop` / 实例 `instNonemptyTop`
-
-English:
-instance instNonemptyTop
-  signature: [Nonempty α]
-  body: inferInstanceAs (Nonempty (univ : Set α))
-
-中文:
-实例 instNonemptyTop
-  签名: [非空 α]
-  定义体: inferInstanceAs (Nonempty (univ : Set α))
-
-Depends on / 依赖: Nonempty
+/-
+**Set.instNonemptyTop** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instNonemptyTop [Nonempty α] : Nonempty (⊤ : Set α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonemptyTop [Nonempty α] : Nonempty (⊤ : Set α) :=
   inferInstanceAs (Nonempty (univ : Set α))
-
-/--
-theorem `Nonempty.of_subtype` / 定理 `Nonempty.of_subtype`
-
-English:
-theorem Nonempty.of_subtype
-  given: [Nonempty (↥s)]
-  statement: s.Nonempty
-  proof: nonempty_subtype.mp ‹_›
-
-中文:
-定理 非空.of_subtype
-  条件: [非空 (↥s)]
-  结论: s.非空
-  证明: nonempty_subtype.mp ‹_›
-
-Depends on / 依赖: nonempty_subtype, nonempty_subtype.mp
+/-
+**Set.Nonempty.of_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α} [Nonempty ↑s], s.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
 -/
 theorem Nonempty.of_subtype [Nonempty (↥s)] : s.Nonempty := nonempty_subtype.mp ‹_›
 
+/-! ### Lemmas about the empty set -/
 
-/--
-theorem `empty_def` / 定理 `empty_def`
+/-
+**Set.empty_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_def : (∅ : Set α) = { _x : α | False }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem empty_def
-  statement: (∅ : Set α) = { _x : α | False }
-  proof: rfl
-
-@[simp, grind =, push]
-
-中文:
-定理 empty_def
-  结论: (∅ : 集合 α) = { _x : α | 假 }
-  证明: rfl
-
-@[simp, grind =, push]
+--- 原说明 ---
+### Lemmas about the empty set
 -/
 theorem empty_def : (∅ : Set α) = { _x : α | False } :=
   rfl
 
 @[simp, grind =, push]
-/--
-theorem `mem_empty_iff_false` / 定理 `mem_empty_iff_false`
-
-English:
-theorem mem_empty_iff_false
-  given: (x : α)
-  statement: x in (∅ : Set α) ↔ False
-  proof: Iff.rfl
-
-@[simp, grind =]
-
-中文:
-定理 mem_empty_iff_false
-  条件: (x : α)
-  结论: x in (∅ : 集合 α) ↔ 假
-  证明: Iff.rfl
-
-@[simp, grind =]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_empty_iff_false** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_empty_iff_false (x : α) : x in (∅ : Set α) ↔ False
+参数：x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_empty_iff_false (x : α) : x in (∅ : Set α) ↔ False :=
+theorem mem_empty_iff_false (x : α) : x ∈ (∅ : Set α) ↔ False :=
   Iff.rfl
 
 @[simp, grind =]
-/--
-theorem `ofPred_false` / 定理 `ofPred_false`
-
-English:
-theorem ofPred_false
-  statement: { _a : α | False } = ∅
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_false := ofPred_false
-
-中文:
-定理 ofPred_false
-  结论: { _a : α | 假 } = ∅
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_false := ofPred_false
+/-
+**Set.ofPred_false** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_false : { _a : α | False } = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofPred_false : { _a : α | False } = ∅ :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_false := ofPred_false
-
-/--
-theorem `ofPred_bot` / 定理 `ofPred_bot`
-
-English:
-theorem ofPred_bot
-  statement: { _x : α | ⊥ } = ∅
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_bot := ofPred_bot
-
-@[simp]
-
-中文:
-定理 ofPred_bot
-  结论: { _x : α | ⊥ } = ∅
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_bot := ofPred_bot
-
-@[simp]
+/-
+**Set.ofPred_bot** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, {_x | ⊥} = ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofPred_bot : { _x : α | ⊥ } = ∅ := rfl
 
@@ -1957,428 +1111,284 @@ alias setOf_bot := ofPred_bot
 alias setOf_bot := ofPred_bot
 
 @[simp]
-/--
-theorem `empty_subset` / 定理 `empty_subset`
-
-English:
-theorem empty_subset
-  given: (s : Set α)
-  statement: ∅ subseteq s
-  proof: nofun
-
-@[simp, grind =]
-
-中文:
-定理 empty_subset
-  条件: (s : 集合 α)
-  结论: ∅ subseteq s
-  证明: nofun
-
-@[simp, grind =]
+/-
+**Set.empty_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_subset (s : Set α) : ∅ subseteq s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem empty_subset (s : Set α) : ∅ subseteq s :=
+theorem empty_subset (s : Set α) : ∅ ⊆ s :=
   nofun
 
 @[simp, grind =]
-/--
-theorem `subset_empty_iff` / 定理 `subset_empty_iff`
-
-English:
-theorem subset_empty_iff
-  given: {s : Set α}
-  statement: s subseteq ∅ ↔ s = ∅
-  proof: (Subset.antisymm_iff.trans <| and_iff_left (empty_subset _)).symm
-
-中文:
-定理 subset_empty_iff
-  条件: {s : 集合 α}
-  结论: s subseteq ∅ ↔ s = ∅
-  证明: (Subset.antisymm_iff.trans <| and_iff_left (empty_subset _)).symm
-
-Depends on / 依赖: Subset, Subset.antisymm_iff.trans, and_iff_left, antisymm_iff, empty_subset
+/-
+**Set.subset_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.Subset.antisymm_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ a ⊆ b ∧ b
+ ⊆ a
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
 -/
-theorem subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = ∅ :=
+theorem subset_empty_iff {s : Set α} : s ⊆ ∅ ↔ s = ∅ :=
   (Subset.antisymm_iff.trans <| and_iff_left (empty_subset _)).symm
-
-/--
-theorem `eq_empty_iff_forall_notMem` / 定理 `eq_empty_iff_forall_notMem`
-
-English:
-theorem eq_empty_iff_forall_notMem
-  given: {s : Set α}
-  statement: s = ∅ ↔ forall x, x ∉ s
-  proof: subset_empty_iff.symm
-
-中文:
-定理 eq_empty_iff_对任意_notMem
-  条件: {s : 集合 α}
-  结论: s = ∅ ↔ 对任意 x, x ∉ s
-  证明: subset_empty_iff.symm
-
-Depends on / 依赖: subset_empty_iff, subset_empty_iff.symm
+/-
+**Set.eq_empty_iff_forall_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_empty_iff_forall_notMem {s : Set α} : s = ∅ ↔ forall x, x ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
 -/
-theorem eq_empty_iff_forall_notMem {s : Set α} : s = ∅ ↔ forall x, x ∉ s :=
+theorem eq_empty_iff_forall_notMem {s : Set α} : s = ∅ ↔ ∀ x, x ∉ s :=
   subset_empty_iff.symm
-
-/--
-theorem `eq_empty_of_forall_notMem` / 定理 `eq_empty_of_forall_notMem`
-
-English:
-theorem eq_empty_of_forall_notMem
-  given: (h : forall x, x ∉ s)
-  statement: s = ∅
-  proof: subset_empty_iff.1 h
-
-中文:
-定理 eq_empty_of_对任意_notMem
-  条件: (h : 对任意 x, x ∉ s)
-  结论: s = ∅
-  证明: subset_empty_iff.1 h
-
-Depends on / 依赖: subset_empty_iff
+/-
+**Set.eq_empty_of_forall_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_empty_of_forall_notMem (h : forall x, x ∉ s) : s = ∅
+参数：h : forall x, x ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
 -/
-theorem eq_empty_of_forall_notMem (h : forall x, x ∉ s) : s = ∅ :=
+theorem eq_empty_of_forall_notMem (h : ∀ x, x ∉ s) : s = ∅ :=
   subset_empty_iff.1 h
-
-/--
-theorem `eq_empty_of_subset_empty` / 定理 `eq_empty_of_subset_empty`
-
-English:
-theorem eq_empty_of_subset_empty
-  given: {s : Set α}
-  statement: s subseteq ∅ -> s = ∅
-  proof: subset_empty_iff.1
-
-中文:
-定理 eq_empty_of_subset_empty
-  条件: {s : 集合 α}
-  结论: s subseteq ∅ -> s = ∅
-  证明: subset_empty_iff.1
-
-Depends on / 依赖: subset_empty_iff
+/-
+**Set.eq_empty_of_subset_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_empty_of_subset_empty {s : Set α} : s subseteq ∅ -> s = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
 -/
-theorem eq_empty_of_subset_empty {s : Set α} : s subseteq ∅ -> s = ∅ :=
+theorem eq_empty_of_subset_empty {s : Set α} : s ⊆ ∅ → s = ∅ :=
   subset_empty_iff.1
 
 /-- See also `Set.nonempty_iff_ne_empty`. -/
 @[push]
-/--
-theorem `not_nonempty_iff_eq_empty` / 定理 `not_nonempty_iff_eq_empty`
+/-
+**Set.not_nonempty_iff_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_nonempty_iff_eq_empty : ¬s.Nonempty ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem not_nonempty_iff_eq_empty
-  statement: ¬s.Nonempty ↔ s = ∅
-  proof: by
-  simp only [Set.Nonempty, not_exists, eq_empty_iff_forall_notMem]
-
-中文:
-定理 not_nonempty_iff_eq_empty
-  结论: ¬s.非空 ↔ s = ∅
-  证明: by
-  simp only [Set.Nonempty, not_exists, eq_empty_iff_forall_notMem]
-
-Depends on / 依赖: Nonempty, Set.Nonempty, eq_empty_iff_forall_notMem, not_exists
+--- 原说明 ---
+See also `Set.nonempty_iff_ne_empty`.
 -/
 theorem not_nonempty_iff_eq_empty : ¬s.Nonempty ↔ s = ∅ := by
   simp only [Set.Nonempty, not_exists, eq_empty_iff_forall_notMem]
 
 /-- See also `Set.not_nonempty_iff_eq_empty`. -/
 @[push ←]
-/--
-theorem `nonempty_iff_ne_empty` / 定理 `nonempty_iff_ne_empty`
+/-
+**Set.nonempty_iff_ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not_right`：Iff.not_right (h : ¬a ↔ b) : a ↔ ¬b
+· 使用定理 `Set.not_nonempty_iff_eq_empty`：not_nonempty_iff_eq_empty : ¬s.Nonempty ↔
+ s = ∅
 
-English:
-theorem nonempty_iff_ne_empty
-  statement: s.Nonempty ↔ s != ∅
-  proof: not_nonempty_iff_eq_empty.not_right
-
-中文:
-定理 nonempty_iff_ne_empty
-  结论: s.非空 ↔ s != ∅
-  证明: not_nonempty_iff_eq_empty.not_right
-
-Depends on / 依赖: not_nonempty_iff_eq_empty, not_nonempty_iff_eq_empty.not_right, not_right
+--- 原说明 ---
+See also `Set.not_nonempty_iff_eq_empty`.
 -/
-theorem nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅ :=
+theorem nonempty_iff_ne_empty : s.Nonempty ↔ s ≠ ∅ :=
   not_nonempty_iff_eq_empty.not_right
 
 /-- Variant of `nonempty_iff_ne_empty` used by `push Not`. -/
 @[push ←]
-/--
-theorem `nonempty_iff_empty_ne` / 定理 `nonempty_iff_empty_ne`
+/-
+**Set.nonempty_iff_empty_ne** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_iff_empty_ne : s.Nonempty ↔ ∅ != s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用定理 `ne_comm`：∀ {α : Sort u_1} {a b : α}, a ≠ b ↔ b ≠ a
 
-English:
-theorem nonempty_iff_empty_ne
-  statement: s.Nonempty ↔ ∅ != s
-  proof: nonempty_iff_ne_empty.trans ne_comm
-
-中文:
-定理 nonempty_iff_empty_ne
-  结论: s.非空 ↔ ∅ != s
-  证明: nonempty_iff_ne_empty.trans ne_comm
-
-Depends on / 依赖: ne_comm, nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans
+--- 原说明 ---
+Variant of `nonempty_iff_ne_empty` used by `push Not`.
 -/
-theorem nonempty_iff_empty_ne : s.Nonempty ↔ ∅ != s :=
+theorem nonempty_iff_empty_ne : s.Nonempty ↔ ∅ ≠ s :=
   nonempty_iff_ne_empty.trans ne_comm
 
-/--
-theorem `not_nonempty_iff_eq_empty'` / 定理 `not_nonempty_iff_eq_empty'`
+/-- See also `nonempty_iff_ne_empty'`. -/
+/-
+**Set.not_nonempty_iff_eq_empty'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_nonempty_iff_eq_empty' : ¬Nonempty s ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
+· 使用定理 `not_exists`：∀ {α : Sort u_1} {p : α → Prop}, (¬∃ x, p x) ↔ ∀ (x : α), ¬p
+ x
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem not_nonempty_iff_eq_empty'
-  statement: ¬Nonempty s ↔ s = ∅
-  proof: by
-  rw [nonempty_subtype]; rw [not_exists]; rw [eq_empty_iff_forall_notMem]
-
-中文:
-定理 not_nonempty_iff_eq_empty'
-  结论: ¬非空 s ↔ s = ∅
-  证明: by
-  rw [nonempty_subtype]; rw [not_exists]; rw [eq_empty_iff_forall_notMem]
-
-Depends on / 依赖: eq_empty_iff_forall_notMem, nonempty_subtype, not_exists
+--- 原说明 ---
+See also `nonempty_iff_ne_empty'`.
 -/
 theorem not_nonempty_iff_eq_empty' : ¬Nonempty s ↔ s = ∅ := by
-  rw [nonempty_subtype]; rw [not_exists]; rw [eq_empty_iff_forall_notMem]
+  rw [nonempty_subtype, not_exists, eq_empty_iff_forall_notMem]
 
-/--
-theorem `nonempty_iff_ne_empty'` / 定理 `nonempty_iff_ne_empty'`
+/-- See also `not_nonempty_iff_eq_empty'`. -/
+/-
+**Set.nonempty_iff_ne_empty'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_iff_ne_empty' : Nonempty s ↔ s != ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not_right`：Iff.not_right (h : ¬a ↔ b) : a ↔ ¬b
+· 使用定理 `Set.not_nonempty_iff_eq_empty'`：not_nonempty_iff_eq_empty' : ¬Nonempty s
+ ↔ s = ∅
 
-English:
-theorem nonempty_iff_ne_empty'
-  statement: Nonempty s ↔ s != ∅
-  proof: not_nonempty_iff_eq_empty'.not_right
-
-alias ⟨Nonempty.ne_empty, _⟩ := nonempty_iff_ne_empty
-
-@[simp]
-
-中文:
-定理 nonempty_iff_ne_empty'
-  结论: 非空 s ↔ s != ∅
-  证明: not_nonempty_iff_eq_empty'.not_right
-
-alias ⟨Nonempty.ne_empty, _⟩ := nonempty_iff_ne_empty
-
-@[simp]
-
-Depends on / 依赖: not_nonempty_iff_eq_empty, not_right
+--- 原说明 ---
+See also `not_nonempty_iff_eq_empty'`.
 -/
-theorem nonempty_iff_ne_empty' : Nonempty s ↔ s != ∅ :=
+theorem nonempty_iff_ne_empty' : Nonempty s ↔ s ≠ ∅ :=
   not_nonempty_iff_eq_empty'.not_right
 
 alias ⟨Nonempty.ne_empty, _⟩ := nonempty_iff_ne_empty
 
 @[simp]
-/--
-theorem `not_nonempty_empty` / 定理 `not_nonempty_empty`
-
-English:
-theorem not_nonempty_empty
-  statement: ¬(∅ : Set α).Nonempty
-  proof: fun ⟨_, hx⟩ => hx
-
-@[simp]
-
-中文:
-定理 not_nonempty_empty
-  结论: ¬(∅ : 集合 α).非空
-  证明: fun ⟨_, hx⟩ => hx
-
-@[simp]
+/-
+**Set.not_nonempty_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_nonempty_empty : ¬(∅ : Set α).Nonempty
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem not_nonempty_empty : ¬(∅ : Set α).Nonempty := fun ⟨_, hx⟩ => hx
 
 @[simp]
-/--
-theorem `isEmpty_coe_sort` / 定理 `isEmpty_coe_sort`
-
-English:
-theorem isEmpty_coe_sort
-  given: {s : Set α}
-  statement: IsEmpty (↥s) ↔ s = ∅
-  proof: not_iff_not.1 by simpa using! nonempty_iff_ne_empty
-
-中文:
-定理 isEmpty_coe_sort
-  条件: {s : 集合 α}
-  结论: 是空 (↥s) ↔ s = ∅
-  证明: not_iff_not.1 by simpa using! nonempty_iff_ne_empty
-
-Depends on / 依赖: nonempty_iff_ne_empty, not_iff_not
+/-
+**Set.isEmpty_coe_sort** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：isEmpty_coe_sort {s : Set α} : IsEmpty (↥s) ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
 -/
 theorem isEmpty_coe_sort {s : Set α} : IsEmpty (↥s) ↔ s = ∅ :=
-not_iff_not.1 by simpa using! nonempty_iff_ne_empty
-
-/--
-lemma `eq_empty_of_isEmpty` / 引理 `eq_empty_of_isEmpty`
-
-English:
-lemma eq_empty_of_isEmpty
-  given: (s : Set α) [IsEmpty s]
-  statement: s = ∅
-  proof: by
-  simpa using ‹IsEmpty s›
-
-中文:
-引理 eq_empty_of_isEmpty
-  条件: (s : 集合 α) [是空 s]
-  结论: s = ∅
-  证明: by
-  simpa using ‹IsEmpty s›
-
-Depends on / 依赖: IsEmpty
+  not_iff_not.1 <| by simpa using! nonempty_iff_ne_empty
+/-
+**Set.eq_empty_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：eq_empty_of_isEmpty (s : Set α) [IsEmpty s] : s = ∅
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma eq_empty_of_isEmpty (s : Set α) [IsEmpty s] : s = ∅ := by
   simpa using ‹IsEmpty s›
 
-/--
-Instance `uniqueEmpty` / 实例 `uniqueEmpty`
+/-- There is exactly one set of a type that is empty. -/
+/-
+**Set.uniqueEmpty** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：uniqueEmpty [IsEmpty α] : Unique (Set α) where uniq _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance uniqueEmpty
-  signature: [IsEmpty α]
-  body: eq_empty_of_isEmpty _
-
-中文:
-实例 uniqueEmpty
-  签名: [是空 α]
-  定义体: eq_empty_of_isEmpty _
-
-Depends on / 依赖: eq_empty_of_isEmpty
+--- 原说明 ---
+There is exactly one set of a type that is empty.
 -/
 instance uniqueEmpty [IsEmpty α] : Unique (Set α) where
   uniq _ := eq_empty_of_isEmpty _
-
-/--
-theorem `eq_empty_or_nonempty` / 定理 `eq_empty_or_nonempty`
-
-English:
-theorem eq_empty_or_nonempty
-  given: (s : Set α)
-  statement: s = ∅ ∨ s.Nonempty
-  proof: or_iff_not_imp_left.2 nonempty_iff_ne_empty.2
-
-中文:
-定理 eq_empty_or_nonempty
-  条件: (s : 集合 α)
-  结论: s = ∅ ∨ s.非空
-  证明: or_iff_not_imp_left.2 nonempty_iff_ne_empty.2
-
-Depends on / 依赖: nonempty_iff_ne_empty, or_iff_not_imp_left
+/-
+**Set.eq_empty_or_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.Nonempty
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
 -/
 theorem eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.Nonempty :=
   or_iff_not_imp_left.2 nonempty_iff_ne_empty.2
-
-/--
-theorem `subset_eq_empty` / 定理 `subset_eq_empty`
-
-English:
-theorem subset_eq_empty
-  given: {s t : Set α} (h : t subseteq s) (e : s = ∅)
-  statement: t = ∅
-  proof: subset_empty_iff.1 e ▸ h
-
-中文:
-定理 subset_eq_empty
-  条件: {s t : 集合 α} (h : t subseteq s) (e : s = ∅)
-  结论: t = ∅
-  证明: subset_empty_iff.1 e ▸ h
-
-Depends on / 依赖: subset_empty_iff
+/-
+**Set.subset_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_eq_empty {s t : Set α} (h : t subseteq s) (e : s = ∅) : t = ∅
+参数：h : t subseteq s；e : s = ∅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
 -/
-theorem subset_eq_empty {s t : Set α} (h : t subseteq s) (e : s = ∅) : t = ∅ :=
-subset_empty_iff.1 e ▸ h
-
-/--
-theorem `forall_mem_empty` / 定理 `forall_mem_empty`
-
-English:
-theorem forall_mem_empty
-  given: {p : α -> Prop}
-  statement: (forall x in (∅ : Set α), p x) ↔ True
-  proof: iff_true_intro fun _ => False.elim
-
-中文:
-定理 对任意_mem_empty
-  条件: {p : α -> 命题}
-  结论: (对任意 x in (∅ : 集合 α), p x) ↔ 真
-  证明: iff_true_intro fun _ => False.elim
-
-Depends on / 依赖: False.elim, iff_true_intro
+theorem subset_eq_empty {s t : Set α} (h : t ⊆ s) (e : s = ∅) : t = ∅ :=
+  subset_empty_iff.1 <| e ▸ h
+/-
+**Set.forall_mem_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：forall_mem_empty {p : α -> Prop} : (forall x in (∅ : Set α), p x) ↔ True
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iff_true_intro`：∀ {a : Prop}, a → (a ↔ True)
 -/
-theorem forall_mem_empty {p : α -> Prop} : (forall x in (∅ : Set α), p x) ↔ True :=
+theorem forall_mem_empty {p : α → Prop} : (∀ x ∈ (∅ : Set α), p x) ↔ True :=
   iff_true_intro fun _ => False.elim
-
-/--
-theorem `Nonempty.forall_const` / 定理 `Nonempty.forall_const`
-
-English:
-theorem Nonempty.forall_const
-  given: (h : s.Nonempty) {p : Prop}
-  statement: (forall x in s, p) ↔ p
-  proof: let ⟨x, hx⟩ := h
-  ⟨fun h => h x hx, fun h _ _ => h⟩
-
-@[simp]
-
-中文:
-定理 非空.对任意_const
-  条件: (h : s.非空) {p : 命题}
-  结论: (对任意 x in s, p) ↔ p
-  证明: let ⟨x, hx⟩ := h
-  ⟨fun h => h x hx, fun h _ _ => h⟩
-
-@[simp]
+/-
+**Set.Nonempty.forall_const** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Nonempty → ∀ {p : Prop}, (∀ x ∈ s, p) ↔ p
+参数：∀ x ∈ s, p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.forall_const (h : s.Nonempty) {p : Prop} : (forall x in s, p) ↔ p :=
+theorem Nonempty.forall_const (h : s.Nonempty) {p : Prop} : (∀ x ∈ s, p) ↔ p :=
   let ⟨x, hx⟩ := h
-  ⟨fun h => h x hx, fun h _ _ => h⟩
+  ⟨fun h ↦ h x hx, fun h _ _ ↦ h⟩
 
 @[simp]
-/--
-theorem `forall_mem_const` / 定理 `forall_mem_const`
-
-English:
-theorem forall_mem_const
-  given: {p : Prop} [Nonempty s]
-  statement: (forall x in s, p) ↔ p
-  proof: (nonempty_coe_sort.mp ‹_›).forall_const
-
-中文:
-定理 对任意_mem_const
-  条件: {p : 命题} [非空 s]
-  结论: (对任意 x in s, p) ↔ p
-  证明: (nonempty_coe_sort.mp ‹_›).forall_const
-
-Depends on / 依赖: forall_const, nonempty_coe_sort, nonempty_coe_sort.mp
+/-
+**Set.forall_mem_const** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：forall_mem_const {p : Prop} [Nonempty s] : (forall x in s, p) ↔ p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.forall_const`：∀ {α : Type u} {s : Set α}, s.Nonempty → ∀ {p
+ : Prop}, (∀ x ∈ s, p) ↔ p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.nonempty_coe_sort`：nonempty_coe_sort {s : Set α} : Nonempty ↥s ↔ s.N
+onempty
 -/
-theorem forall_mem_const {p : Prop} [Nonempty s] : (forall x in s, p) ↔ p :=
+theorem forall_mem_const {p : Prop} [Nonempty s] : (∀ x ∈ s, p) ↔ p :=
   (nonempty_coe_sort.mp ‹_›).forall_const
-
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type u) : IsEmpty.{u + 1} (↥(∅ : Set α)) :=
   ⟨fun x => x.2⟩
 
 @[simp]
-/--
-theorem `empty_ssubset` / 定理 `empty_ssubset`
-
-English:
-theorem empty_ssubset
-  statement: ∅ ⊂ s ↔ s.Nonempty
-  proof: (@bot_lt_iff_ne_bot (Set α) _ _ _).trans nonempty_iff_ne_empty.symm
-
-alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
-
-中文:
-定理 empty_ssubset
-  结论: ∅ ⊂ s ↔ s.非空
-  证明: (@bot_lt_iff_ne_bot (Set α) _ _ _).trans nonempty_iff_ne_empty.symm
-
-alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
-
-Depends on / 依赖: bot_lt_iff_ne_bot, nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
+/-
+**Set.empty_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_ssubset : ∅ ⊂ s ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
 -/
 theorem empty_ssubset : ∅ ⊂ s ↔ s.Nonempty :=
   (@bot_lt_iff_ne_bot (Set α) _ _ _).trans nonempty_iff_ne_empty.symm
@@ -2396,50 +1406,27 @@ Mathematically it is the same as `α` but it has a different type.
 
 
 @[simp, grind =]
-/--
-theorem `ofPred_true` / 定理 `ofPred_true`
+/-
+**Set.ofPred_true** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_true : { _x : α | True } = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ofPred_true
-  statement: { _x : α | True } = univ
-  proof: rfl
+--- 原说明 ---
+### Universal set.
 
-@[deprecated (since := "2026-07-09")] alias setOf_true := ofPred_true
-
-中文:
-定理 ofPred_true
-  结论: { _x : α | 真 } = univ
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_true := ofPred_true
+In Lean `@univ α` (or `univ : Set α`) is the set that contains all elements of t
+ype `α`.
+Mathematically it is the same as `α` but it has a different type.
 -/
 theorem ofPred_true : { _x : α | True } = univ :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_true := ofPred_true
-
-/--
-theorem `ofPred_top` / 定理 `ofPred_top`
-
-English:
-theorem ofPred_top
-  statement: { _x : α | ⊤ } = univ
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_top := ofPred_top
-
-@[simp]
-
-中文:
-定理 ofPred_top
-  结论: { _x : α | ⊤ } = univ
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_top := ofPred_top
-
-@[simp]
+/-
+**Set.ofPred_top** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, {_x | ⊤} = Set.univ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofPred_top : { _x : α | ⊤ } = univ := rfl
 
@@ -2447,2583 +1434,1500 @@ alias setOf_top := ofPred_top
 alias setOf_top := ofPred_top
 
 @[simp]
-/--
-theorem `univ_eq_empty_iff` / 定理 `univ_eq_empty_iff`
-
-English:
-theorem univ_eq_empty_iff
-  statement: (univ : Set α) = ∅ ↔ IsEmpty α
-  proof: eq_empty_iff_forall_notMem.trans
-    ⟨fun H => ⟨fun x => H x trivial⟩, fun H x _ => @IsEmpty.false α H x⟩
-
-中文:
-定理 univ_eq_empty_iff
-  结论: (univ : 集合 α) = ∅ ↔ 是空 α
-  证明: eq_empty_iff_forall_notMem.trans
-    ⟨fun H => ⟨fun x => H x trivial⟩, fun H x _ => @IsEmpty.false α H x⟩
-
-Depends on / 依赖: IsEmpty, IsEmpty.false, eq_empty_iff_forall_notMem, eq_empty_iff_forall_notMem.trans
+/-
+**Set.univ_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：univ_eq_empty_iff : (univ : Set α) = ∅ ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `trivial`：True
+· 使用定理 `IsEmpty.false`：∀ {α : Sort u} [self : IsEmpty α] (a : α), False
 -/
 theorem univ_eq_empty_iff : (univ : Set α) = ∅ ↔ IsEmpty α :=
   eq_empty_iff_forall_notMem.trans
     ⟨fun H => ⟨fun x => H x trivial⟩, fun H x _ => @IsEmpty.false α H x⟩
-
-/--
-theorem `empty_ne_univ` / 定理 `empty_ne_univ`
-
-English:
-theorem empty_ne_univ
-  given: [Nonempty α]
-  statement: (∅ : Set α) != univ
-  proof: fun e =>
-not_isEmpty_of_nonempty α univ_eq_empty_iff.1 e.symm
+/-
+**Set.empty_ne_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_ne_univ [Nonempty α] : (∅ : Set α) != univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_isEmpty_of_nonempty`：not_isEmpty_of_nonempty [h : Nonempty α] : ¬IsE
+mpty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.univ_eq_empty_iff`：univ_eq_empty_iff : (univ : Set α) = ∅ ↔ IsEmpty 
+α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem empty_ne_univ [Nonempty α] : (∅ : Set α) ≠ univ := fun e =>
+  not_isEmpty_of_nonempty α <| univ_eq_empty_iff.1 e.symm
 
 @[simp, grind ←]
-
-中文:
-定理 empty_ne_univ
-  条件: [非空 α]
-  结论: (∅ : 集合 α) != univ
-  证明: fun e =>
-not_isEmpty_of_nonempty α univ_eq_empty_iff.1 e.symm
-
-@[simp, grind ←]
+/-
+**Set.subset_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_univ (s : Set α) : s subseteq univ
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem empty_ne_univ [Nonempty α] : (∅ : Set α) != univ := fun e =>
-not_isEmpty_of_nonempty α univ_eq_empty_iff.1 e.symm
-
-@[simp, grind ←]
-/--
-theorem `subset_univ` / 定理 `subset_univ`
-
-English:
-theorem subset_univ
-  given: (s : Set α)
-  statement: s subseteq univ
-  proof: fun _ _ => trivial
+theorem subset_univ (s : Set α) : s ⊆ univ := fun _ _ => trivial
 
 @[simp, grind =]
-
-中文:
-定理 subset_univ
-  条件: (s : 集合 α)
-  结论: s subseteq univ
-  证明: fun _ _ => trivial
-
-@[simp, grind =]
+/-
+**Set.univ_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：univ_subset_iff {s : Set α} : univ subseteq s ↔ s = univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
 -/
-theorem subset_univ (s : Set α) : s subseteq univ := fun _ _ => trivial
-
-@[simp, grind =]
-/--
-theorem `univ_subset_iff` / 定理 `univ_subset_iff`
-
-English:
-theorem univ_subset_iff
-  given: {s : Set α}
-  statement: univ subseteq s ↔ s = univ
-  proof: @top_le_iff _ _ _ s
-
-alias ⟨eq_univ_of_univ_subset, _⟩ := univ_subset_iff
-
-中文:
-定理 univ_subset_iff
-  条件: {s : 集合 α}
-  结论: univ subseteq s ↔ s = univ
-  证明: @top_le_iff _ _ _ s
-
-alias ⟨eq_univ_of_univ_subset, _⟩ := univ_subset_iff
-
-Depends on / 依赖: top_le_iff
--/
-theorem univ_subset_iff {s : Set α} : univ subseteq s ↔ s = univ :=
+theorem univ_subset_iff {s : Set α} : univ ⊆ s ↔ s = univ :=
   @top_le_iff _ _ _ s
 
 alias ⟨eq_univ_of_univ_subset, _⟩ := univ_subset_iff
-
-/--
-theorem `eq_univ_iff_forall` / 定理 `eq_univ_iff_forall`
-
-English:
-theorem eq_univ_iff_forall
-  given: {s : Set α}
-  statement: s = univ ↔ forall x, x in s
-  proof: univ_subset_iff.symm.trans forall_congr' fun _ => imp_iff_right trivial
-
-中文:
-定理 eq_univ_iff_对任意
-  条件: {s : 集合 α}
-  结论: s = univ ↔ 对任意 x, x in s
-  证明: univ_subset_iff.symm.trans forall_congr' fun _ => imp_iff_right trivial
-
-Depends on / 依赖: forall_congr, imp_iff_right, univ_subset_iff, univ_subset_iff.symm.trans
+/-
+**Set.eq_univ_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_univ_iff_forall {s : Set α} : s = univ ↔ forall x, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `imp_iff_right`：∀ {b a : Prop}, a → (a → b ↔ b)
+· 使用定理 `trivial`：True
 -/
-theorem eq_univ_iff_forall {s : Set α} : s = univ ↔ forall x, x in s :=
-univ_subset_iff.symm.trans forall_congr' fun _ => imp_iff_right trivial
-
-/--
-theorem `eq_univ_of_forall` / 定理 `eq_univ_of_forall`
-
-English:
-theorem eq_univ_of_forall
-  given: {s : Set α}
-  statement: (forall x, x in s) -> s = univ
-  proof: eq_univ_iff_forall.2
-
-中文:
-定理 eq_univ_of_对任意
-  条件: {s : 集合 α}
-  结论: (对任意 x, x in s) -> s = univ
-  证明: eq_univ_iff_forall.2
-
-Depends on / 依赖: eq_univ_iff_forall
+theorem eq_univ_iff_forall {s : Set α} : s = univ ↔ ∀ x, x ∈ s :=
+  univ_subset_iff.symm.trans <| forall_congr' fun _ => imp_iff_right trivial
+/-
+**Set.eq_univ_of_forall** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_univ_of_forall {s : Set α} : (forall x, x in s) -> s = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
 -/
-theorem eq_univ_of_forall {s : Set α} : (forall x, x in s) -> s = univ :=
+theorem eq_univ_of_forall {s : Set α} : (∀ x, x ∈ s) → s = univ :=
   eq_univ_iff_forall.2
-
-/--
-theorem `Nonempty.eq_univ` / 定理 `Nonempty.eq_univ`
-
-English:
-theorem Nonempty.eq_univ
-  given: [Subsingleton α]
-  statement: s.Nonempty -> s = univ
-  proof: by
+/-
+**Set.Nonempty.eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u} {s : Set α} [Subsingleton α], s.Nonempty → s = Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+-/
+theorem Nonempty.eq_univ [Subsingleton α] : s.Nonempty → s = univ := by
   rintro ⟨x, hx⟩
   exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
-
-中文:
-定理 非空.eq_univ
-  条件: [子单例 α]
-  结论: s.非空 -> s = univ
-  证明: by
-  rintro ⟨x, hx⟩
-  exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
-
-Depends on / 依赖: LieGroup, LieGroup.of_le, h.out, of_le
+/-
+**Set.eq_univ_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_univ_of_subset {s t : Set α} (h : s subseteq t) (hs : s = univ) : t = u
+niv
+参数：h : s subseteq t；hs : s = univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_univ_subset`：∀ {α : Type u} {s : Set α}, Set.univ ⊆ s → s
+ = Set.univ
 -/
-theorem Nonempty.eq_univ [Subsingleton α] : s.Nonempty -> s = univ := by
-  rintro ⟨x, hx⟩
-  exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
-
-/--
-theorem `eq_univ_of_subset` / 定理 `eq_univ_of_subset`
-
-English:
-theorem eq_univ_of_subset
-  given: {s t : Set α} (h : s subseteq t) (hs : s = univ)
-  statement: t = univ
-  proof: eq_univ_of_univ_subset (hs ▸ h : univ subseteq t)
-
-中文:
-定理 eq_univ_of_subset
-  条件: {s t : 集合 α} (h : s subseteq t) (hs : s = univ)
-  结论: t = univ
-  证明: eq_univ_of_univ_subset (hs ▸ h : univ subseteq t)
-
-Depends on / 依赖: LieGroup, LieGroup.of_le, eq_univ_of_univ_subset, le_top, of_le, subseteq
+theorem eq_univ_of_subset {s t : Set α} (h : s ⊆ t) (hs : s = univ) : t = univ :=
+  eq_univ_of_univ_subset <| (hs ▸ h : univ ⊆ t)
+/-
+**Set.exists_mem_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ (α : Type u_1) [Nonempty α], ∃ x, x ∈ Set.univ
+参数：α : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem eq_univ_of_subset {s t : Set α} (h : s subseteq t) (hs : s = univ) : t = univ :=
-eq_univ_of_univ_subset (hs ▸ h : univ subseteq t)
-
-/--
-theorem `exists_mem_of_nonempty` / 定理 `exists_mem_of_nonempty`
-
-English:
-theorem exists_mem_of_nonempty
-  given: (α)
-  statement: forall [Nonempty α], exists x : α, x in (univ : Set α)
-
-中文:
-定理 存在_mem_of_nonempty
-  条件: (α)
-  结论: 对任意 [非空 α], 存在 x : α, x in (univ : 集合 α)
--/
-theorem exists_mem_of_nonempty (α) : forall [Nonempty α], exists x : α, x in (univ : Set α)
+theorem exists_mem_of_nonempty (α) : ∀ [Nonempty α], ∃ x : α, x ∈ (univ : Set α)
   | ⟨x⟩ => ⟨x, trivial⟩
-
-/--
-theorem `ne_univ_iff_exists_notMem` / 定理 `ne_univ_iff_exists_notMem`
-
-English:
-theorem ne_univ_iff_exists_notMem
-  given: {α : Type*} (s : Set α)
-  statement: s != univ ↔ exists a, a ∉ s
-  proof: by
-  rw [← not_forall]; rw [← eq_univ_iff_forall]
-
-中文:
-定理 ne_univ_iff_存在_notMem
-  条件: {α : 类型} (s : 集合 α)
-  结论: s != univ ↔ 存在 a, a ∉ s
-  证明: by
-  rw [← not_forall]; rw [← eq_univ_iff_forall]
-
-Depends on / 依赖: eq_univ_iff_forall, not_forall
+/-
+**Set.ne_univ_iff_exists_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ne_univ_iff_exists_notMem {α : Type*} (s : Set α) : s != univ ↔ exists a, 
+a ∉ s
+参数：s : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ne_univ_iff_exists_notMem {α : Type*} (s : Set α) : s != univ ↔ exists a, a ∉ s := by
-  rw [← not_forall]; rw [← eq_univ_iff_forall]
-
-/--
-theorem `not_subset_iff_exists_mem_notMem` / 定理 `not_subset_iff_exists_mem_notMem`
-
-English:
-theorem not_subset_iff_exists_mem_notMem
-  given: {α : Type*} {s t : Set α}
-  proof: by simp [subset_def]
-
-中文:
-定理 not_subset_iff_存在_mem_notMem
-  条件: {α : 类型} {s t : 集合 α}
-  证明: by simp [subset_def]
-
-Depends on / 依赖: subset_def
+theorem ne_univ_iff_exists_notMem {α : Type*} (s : Set α) : s ≠ univ ↔ ∃ a, a ∉ s := by
+  rw [← not_forall, ← eq_univ_iff_forall]
+/-
+**Set.not_subset_iff_exists_mem_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_subset_iff_exists_mem_notMem {α : Type*} {s t : Set α} : ¬s subseteq t
+ ↔ exists x, x in s ∧ x ∉ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem not_subset_iff_exists_mem_notMem {α : Type*} {s t : Set α} :
-    ¬s subseteq t ↔ exists x, x in s ∧ x ∉ t := by simp [subset_def]
-
-/--
-theorem `univ_unique` / 定理 `univ_unique`
-
-English:
-theorem univ_unique
-  given: [Unique α]
-  statement: @Set.univ α = {default}
-  proof: Set.ext fun x => iff_of_true trivial Subsingleton.elim x default
-
-中文:
-定理 univ_unique
-  条件: [唯一 α]
-  结论: @集合.univ α = {default}
-  证明: Set.ext fun x => iff_of_true trivial Subsingleton.elim x default
-
-Depends on / 依赖: Set.ext, Subsingleton, Subsingleton.elim, iff_of_true
+    ¬s ⊆ t ↔ ∃ x, x ∈ s ∧ x ∉ t := by simp [subset_def]
+/-
+**Set.univ_unique** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：univ_unique [Unique α] : @Set.univ α = {default}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_of_true`：∀ {a b : Prop}, a → b → (a ↔ b)
+· 使用定理 `trivial`：True
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem univ_unique [Unique α] : @Set.univ α = {default} :=
-Set.ext fun x => iff_of_true trivial Subsingleton.elim x default
-
-/--
-theorem `ssubset_univ_iff` / 定理 `ssubset_univ_iff`
-
-English:
-theorem ssubset_univ_iff
-  statement: s ⊂ univ ↔ s != univ
-  proof: lt_top_iff_ne_top
-
-中文:
-定理 ssubset_univ_iff
-  结论: s ⊂ univ ↔ s != univ
-  证明: lt_top_iff_ne_top
-
-Depends on / 依赖: lt_top_iff_ne_top
+  Set.ext fun x => iff_of_true trivial <| Subsingleton.elim x default
+/-
+**Set.ssubset_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_univ_iff : s ⊂ univ ↔ s != univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
 -/
-theorem ssubset_univ_iff : s ⊂ univ ↔ s != univ :=
+theorem ssubset_univ_iff : s ⊂ univ ↔ s ≠ univ :=
   lt_top_iff_ne_top
-
-/--
-theorem `ssubset_univ_iff_nonempty_compl` / 定理 `ssubset_univ_iff_nonempty_compl`
-
-English:
-theorem ssubset_univ_iff_nonempty_compl
-  statement: s ⊂ univ ↔ sᶜ.Nonempty
-  proof: by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
-  simp
-
-alias ⟨_, Nonempty.ssubset_univ⟩ := ssubset_univ_iff_nonempty_compl
-
-中文:
-定理 ssubset_univ_iff_nonempty_compl
-  结论: s ⊂ univ ↔ sᶜ.非空
-  证明: by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
-  simp
-
-alias ⟨_, Nonempty.ssubset_univ⟩ := ssubset_univ_iff_nonempty_compl
-
-Depends on / 依赖: Set.nonempty_def, Set.not_univ_subset, nonempty_def, not_univ_subset, ssubset_def
+/-
+**Set.ssubset_univ_iff_nonempty_compl** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_univ_iff_nonempty_compl : s ⊂ univ ↔ sᶜ.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ssubset_def`：ssubset_def : (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s)
+· 使用定理 `Set.not_univ_subset`：not_univ_subset : ¬univ subseteq s ↔ exists a, a ∉ 
+s
+· 使用定理 `Set.nonempty_def`：nonempty_def : s.Nonempty ↔ exists x, x in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ssubset_univ_iff_nonempty_compl : s ⊂ univ ↔ sᶜ.Nonempty := by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
+  rw [ssubset_def, Set.not_univ_subset, Set.nonempty_def]
   simp
 
 alias ⟨_, Nonempty.ssubset_univ⟩ := ssubset_univ_iff_nonempty_compl
-
-/--
-theorem `compl_ssubset_univ` / 定理 `compl_ssubset_univ`
-
-English:
-theorem compl_ssubset_univ
-  statement: sᶜ ⊂ univ ↔ s.Nonempty
-  proof: by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
-  simp
-
-alias ⟨_, Nonempty.compl_ssubset_univ⟩ := compl_ssubset_univ
-
-中文:
-定理 compl_ssubset_univ
-  结论: sᶜ ⊂ univ ↔ s.非空
-  证明: by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
-  simp
-
-alias ⟨_, Nonempty.compl_ssubset_univ⟩ := compl_ssubset_univ
-
-Depends on / 依赖: Set.nonempty_def, Set.not_univ_subset, nonempty_def, not_univ_subset, ssubset_def
+/-
+**Set.compl_ssubset_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：compl_ssubset_univ : sᶜ ⊂ univ ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ssubset_def`：ssubset_def : (s ⊂ t) = (s subseteq t ∧ ¬t subseteq s)
+· 使用定理 `Set.not_univ_subset`：not_univ_subset : ¬univ subseteq s ↔ exists a, a ∉ 
+s
+· 使用定理 `Set.nonempty_def`：nonempty_def : s.Nonempty ↔ exists x, x in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem compl_ssubset_univ : sᶜ ⊂ univ ↔ s.Nonempty := by
-  rw [ssubset_def]; rw [Set.not_univ_subset]; rw [Set.nonempty_def]
+  rw [ssubset_def, Set.not_univ_subset, Set.nonempty_def]
   simp
 
 alias ⟨_, Nonempty.compl_ssubset_univ⟩ := compl_ssubset_univ
-
-/--
-Instance `nontrivial_of_nonempty` / 实例 `nontrivial_of_nonempty`
-
-English:
-instance nontrivial_of_nonempty
-  signature: [Nonempty α]
-  body: ⟨⟨∅, univ, empty_ne_univ⟩⟩
-
-中文:
-实例 nontrivial_of_nonempty
-  签名: [非空 α]
-  定义体: ⟨⟨∅, univ, empty_ne_univ⟩⟩
-
-Depends on / 依赖: empty_ne_univ
+/-
+**Set.nontrivial_of_nonempty** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：nontrivial_of_nonempty [Nonempty α] : Nontrivial (Set α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_ne_univ`：empty_ne_univ [Nonempty α] : (∅ : Set α) != univ
 -/
 instance nontrivial_of_nonempty [Nonempty α] : Nontrivial (Set α) :=
   ⟨⟨∅, univ, empty_ne_univ⟩⟩
 
+/-! ### Lemmas about union -/
 
-/--
-theorem `union_def` / 定理 `union_def`
+/-
+**Set.union_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_def {s₁ s₂ : Set α} : s₁ union s₂ = { a | a in s₁ ∨ a in s₂ }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem union_def
-  given: {s₁ s₂ : Set α}
-  statement: s₁ union s₂ = { a | a in s₁ ∨ a in s₂ }
-  proof: rfl
-
-中文:
-定理 union_def
-  条件: {s₁ s₂ : 集合 α}
-  结论: s₁ union s₂ = { a | a in s₁ ∨ a in s₂ }
-  证明: rfl
+--- 原说明 ---
+### Lemmas about union
 -/
-theorem union_def {s₁ s₂ : Set α} : s₁ union s₂ = { a | a in s₁ ∨ a in s₂ } :=
+theorem union_def {s₁ s₂ : Set α} : s₁ ∪ s₂ = { a | a ∈ s₁ ∨ a ∈ s₂ } :=
   rfl
-
-/--
-theorem `mem_union_left` / 定理 `mem_union_left`
-
-English:
-theorem mem_union_left
-  given: {x : α} {a : Set α} (b : Set α)
-  statement: x in a -> x in a union b
-  proof: Or.inl
-
-中文:
-定理 mem_union_left
-  条件: {x : α} {a : 集合 α} (b : 集合 α)
-  结论: x in a -> x in a union b
-  证明: Or.inl
-
-Depends on / 依赖: Or.inl
+/-
+**Set.mem_union_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_union_left {x : α} {a : Set α} (b : Set α) : x in a -> x in a union b
+参数：b : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_union_left {x : α} {a : Set α} (b : Set α) : x in a -> x in a union b :=
+theorem mem_union_left {x : α} {a : Set α} (b : Set α) : x ∈ a → x ∈ a ∪ b :=
   Or.inl
-
-/--
-theorem `mem_union_right` / 定理 `mem_union_right`
-
-English:
-theorem mem_union_right
-  given: {x : α} {b : Set α} (a : Set α)
-  statement: x in b -> x in a union b
-  proof: Or.inr
-
-中文:
-定理 mem_union_right
-  条件: {x : α} {b : 集合 α} (a : 集合 α)
-  结论: x in b -> x in a union b
-  证明: Or.inr
-
-Depends on / 依赖: Or.inr
+/-
+**Set.mem_union_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_union_right {x : α} {b : Set α} (a : Set α) : x in b -> x in a union b
+参数：a : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_union_right {x : α} {b : Set α} (a : Set α) : x in b -> x in a union b :=
+theorem mem_union_right {x : α} {b : Set α} (a : Set α) : x ∈ b → x ∈ a ∪ b :=
   Or.inr
-
-/--
-theorem `mem_or_mem_of_mem_union` / 定理 `mem_or_mem_of_mem_union`
-
-English:
-theorem mem_or_mem_of_mem_union
-  given: {x : α} {a b : Set α} (H : x in a union b)
-  statement: x in a ∨ x in b
-  proof: H
-
-中文:
-定理 mem_or_mem_of_mem_union
-  条件: {x : α} {a b : 集合 α} (H : x in a union b)
-  结论: x in a ∨ x in b
-  证明: H
+/-
+**Set.mem_or_mem_of_mem_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_or_mem_of_mem_union {x : α} {a b : Set α} (H : x in a union b) : x in 
+a ∨ x in b
+参数：H : x in a union b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_or_mem_of_mem_union {x : α} {a b : Set α} (H : x in a union b) : x in a ∨ x in b :=
+theorem mem_or_mem_of_mem_union {x : α} {a b : Set α} (H : x ∈ a ∪ b) : x ∈ a ∨ x ∈ b :=
   H
-
-/--
-theorem `MemUnion.elim` / 定理 `MemUnion.elim`
-
-English:
-theorem MemUnion.elim
-  statement: {x : α} {a b : Set α} {P : Prop} (H₁ : x in a union b) (H₂ : x in a -> P)
-  proof: Or.elim H₁ H₂ H₃
-
-@[simp, grind =, push]
-
-中文:
-定理 MemUnion.elim
-  结论: {x : α} {a b : 集合 α} {P : 命题} (H₁ : x in a union b) (H₂ : x in a -> P)
-  证明: Or.elim H₁ H₂ H₃
-
-@[simp, grind =, push]
-
-Depends on / 依赖: Or.elim
+/-
+**Set.MemUnion.elim** 是 Mathlib 中的一个定理，位于命名空间 `Set.MemUnion`。
+形式化陈述：∀ {α : Type u} {x : α} {a b : Set α} {P : Prop}, x ∈ a ∪ b → (x ∈ a → P) →
+ (x ∈ b → P) → P
+参数：x ∈ a → P；x ∈ b → P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
-theorem MemUnion.elim {x : α} {a b : Set α} {P : Prop} (H₁ : x in a union b) (H₂ : x in a -> P)
-    (H₃ : x in b -> P) : P :=
+theorem MemUnion.elim {x : α} {a b : Set α} {P : Prop} (H₁ : x ∈ a ∪ b) (H₂ : x ∈ a → P)
+    (H₃ : x ∈ b → P) : P :=
   Or.elim H₁ H₂ H₃
 
 @[simp, grind =, push]
-/--
-theorem `mem_union` / 定理 `mem_union`
-
-English:
-theorem mem_union
-  given: (x : α) (a b : Set α)
-  statement: x in a union b ↔ x in a ∨ x in b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_union
-  条件: (x : α) (a b : 集合 α)
-  结论: x in a union b ↔ x in a ∨ x in b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_union (x : α) (a b : Set α) : x in a union b ↔ x in a ∨ x in b
+参数：x : α；a b : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_union (x : α) (a b : Set α) : x in a union b ↔ x in a ∨ x in b :=
+theorem mem_union (x : α) (a b : Set α) : x ∈ a ∪ b ↔ x ∈ a ∨ x ∈ b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `union_self` / 定理 `union_self`
-
-English:
-theorem union_self
-  given: (a : Set α)
-  statement: a union a = a
-  proof: ext fun _ => or_self_iff
-
-@[simp]
-
-中文:
-定理 union_self
-  条件: (a : 集合 α)
-  结论: a union a = a
-  证明: ext fun _ => or_self_iff
-
-@[simp]
-
-Depends on / 依赖: ContMDiffAt, Inv.inv, contDiffAt_inv, contMDiffAt_iff_contDiffAt, or_self_iff
+/-
+**Set.union_self** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_self (a : Set α) : a union a = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `or_self_iff`：∀ {a : Prop}, a ∨ a ↔ a
 -/
-theorem union_self (a : Set α) : a union a = a :=
+theorem union_self (a : Set α) : a ∪ a = a :=
   ext fun _ => or_self_iff
 
 @[simp]
-/--
-theorem `union_empty` / 定理 `union_empty`
-
-English:
-theorem union_empty
-  given: (a : Set α)
-  statement: a union ∅ = a
-  proof: ext fun _ => iff_of_eq (or_false _)
-
-@[simp]
-
-中文:
-定理 union_empty
-  条件: (a : 集合 α)
-  结论: a union ∅ = a
-  证明: ext fun _ => iff_of_eq (or_false _)
-
-@[simp]
-
-Depends on / 依赖: h.out, iff_of_eq, of_le, or_false
+/-
+**Set.union_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_empty (a : Set α) : a union ∅ = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
-theorem union_empty (a : Set α) : a union ∅ = a :=
+theorem union_empty (a : Set α) : a ∪ ∅ = a :=
   ext fun _ => iff_of_eq (or_false _)
 
 @[simp]
-/--
-theorem `empty_union` / 定理 `empty_union`
-
-English:
-theorem empty_union
-  given: (a : Set α)
-  statement: ∅ union a = a
-  proof: ext fun _ => iff_of_eq (false_or _)
-
-中文:
-定理 empty_union
-  条件: (a : 集合 α)
-  结论: ∅ union a = a
-  证明: ext fun _ => iff_of_eq (false_or _)
-
-Depends on / 依赖: false_or, iff_of_eq, le_top, of_le
+/-
+**Set.empty_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_union (a : Set α) : ∅ union a = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
-theorem empty_union (a : Set α) : ∅ union a = a :=
+theorem empty_union (a : Set α) : ∅ ∪ a = a :=
   ext fun _ => iff_of_eq (false_or _)
-
-/--
-theorem `union_comm` / 定理 `union_comm`
-
-English:
-theorem union_comm
-  given: (a b : Set α)
-  statement: a union b = b union a
-  proof: ext fun _ => or_comm
-
-中文:
-定理 union_comm
-  条件: (a b : 集合 α)
-  结论: a union b = b union a
-  证明: ext fun _ => or_comm
-
-Depends on / 依赖: or_comm
+/-
+**Set.union_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_comm (a b : Set α) : a union b = b union a
+参数：a b : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
 -/
-theorem union_comm (a b : Set α) : a union b = b union a :=
+theorem union_comm (a b : Set α) : a ∪ b = b ∪ a :=
   ext fun _ => or_comm
-
-/--
-theorem `union_assoc` / 定理 `union_assoc`
-
-English:
-theorem union_assoc
-  given: (a b c : Set α)
-  statement: a union b union c = a union (b union c)
-  proof: ext fun _ => or_assoc
-
-中文:
-定理 union_assoc
-  条件: (a b c : 集合 α)
-  结论: a union b union c = a union (b union c)
-  证明: ext fun _ => or_assoc
-
-Depends on / 依赖: or_assoc
+/-
+**Set.union_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_assoc (a b c : Set α) : a union b union c = a union (b union c)
+参数：a b c : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `or_assoc`：∀ {a b c : Prop}, (a ∨ b) ∨ c ↔ a ∨ b ∨ c
 -/
-theorem union_assoc (a b c : Set α) : a union b union c = a union (b union c) :=
+theorem union_assoc (a b c : Set α) : a ∪ b ∪ c = a ∪ (b ∪ c) :=
   ext fun _ => or_assoc
-
-/--
-Instance `union_isAssoc` / 实例 `union_isAssoc`
-
-English:
-instance union_isAssoc
-  signature: : Std.Associative (α := Set α) (· union ·)
-  body: ⟨union_assoc⟩
-
-中文:
-实例 union_isAssoc
-  签名: : Std.结合 (α := 集合 α) (· union ·)
-  定义体: ⟨union_assoc⟩
+/-
+**Set.union_isAssoc** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：union_isAssoc : Std.Associative (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_assoc`：union_assoc (a b c : Set α) : a union b union c = a uni
+on (b union c)
 -/
-instance union_isAssoc : Std.Associative (α := Set α) (· union ·) :=
+instance union_isAssoc : Std.Associative (α := Set α) (· ∪ ·) :=
   ⟨union_assoc⟩
-
-/--
-Instance `union_isComm` / 实例 `union_isComm`
-
-English:
-instance union_isComm
-  signature: : Std.Commutative (α := Set α) (· union ·)
-  body: ⟨union_comm⟩
-
-中文:
-实例 union_isComm
-  签名: : Std.交换 (α := 集合 α) (· union ·)
-  定义体: ⟨union_comm⟩
+/-
+**Set.union_isComm** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：union_isComm : Std.Commutative (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
 -/
-instance union_isComm : Std.Commutative (α := Set α) (· union ·) :=
+instance union_isComm : Std.Commutative (α := Set α) (· ∪ ·) :=
   ⟨union_comm⟩
-
-/--
-theorem `union_left_comm` / 定理 `union_left_comm`
-
-English:
-theorem union_left_comm
-  given: (s₁ s₂ s₃ : Set α)
-  statement: s₁ union (s₂ union s₃) = s₂ union (s₁ union s₃)
-  proof: ext fun _ => or_left_comm
-
-中文:
-定理 union_left_comm
-  条件: (s₁ s₂ s₃ : 集合 α)
-  结论: s₁ union (s₂ union s₃) = s₂ union (s₁ union s₃)
-  证明: ext fun _ => or_left_comm
-
-Depends on / 依赖: or_left_comm
+/-
+**Set.union_left_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_left_comm (s₁ s₂ s₃ : Set α) : s₁ union (s₂ union s₃) = s₂ union (s₁
+ union s₃)
+参数：s₁ s₂ s₃ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `or_left_comm`：∀ {a b c : Prop}, a ∨ b ∨ c ↔ b ∨ a ∨ c
 -/
-theorem union_left_comm (s₁ s₂ s₃ : Set α) : s₁ union (s₂ union s₃) = s₂ union (s₁ union s₃) :=
+theorem union_left_comm (s₁ s₂ s₃ : Set α) : s₁ ∪ (s₂ ∪ s₃) = s₂ ∪ (s₁ ∪ s₃) :=
   ext fun _ => or_left_comm
-
-/--
-theorem `union_right_comm` / 定理 `union_right_comm`
-
-English:
-theorem union_right_comm
-  given: (s₁ s₂ s₃ : Set α)
-  statement: s₁ union s₂ union s₃ = s₁ union s₃ union s₂
-  proof: ext fun _ => or_right_comm
-
-@[simp]
-
-中文:
-定理 union_right_comm
-  条件: (s₁ s₂ s₃ : 集合 α)
-  结论: s₁ union s₂ union s₃ = s₁ union s₃ union s₂
-  证明: ext fun _ => or_right_comm
-
-@[simp]
-
-Depends on / 依赖: or_right_comm
+/-
+**Set.union_right_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_right_comm (s₁ s₂ s₃ : Set α) : s₁ union s₂ union s₃ = s₁ union s₃ u
+nion s₂
+参数：s₁ s₂ s₃ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `or_right_comm`：∀ {a b c : Prop}, (a ∨ b) ∨ c ↔ (a ∨ c) ∨ b
 -/
-theorem union_right_comm (s₁ s₂ s₃ : Set α) : s₁ union s₂ union s₃ = s₁ union s₃ union s₂ :=
+theorem union_right_comm (s₁ s₂ s₃ : Set α) : s₁ ∪ s₂ ∪ s₃ = s₁ ∪ s₃ ∪ s₂ :=
   ext fun _ => or_right_comm
 
 @[simp]
-/--
-theorem `union_eq_left` / 定理 `union_eq_left`
-
-English:
-theorem union_eq_left
-  given: {s t : Set α}
-  statement: s union t = s ↔ t subseteq s
-  proof: sup_eq_left
-
-@[simp]
-
-中文:
-定理 union_eq_left
-  条件: {s t : 集合 α}
-  结论: s union t = s ↔ t subseteq s
-  证明: sup_eq_left
-
-@[simp]
-
-Depends on / 依赖: sup_eq_left
+/-
+**Set.union_eq_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_left {s t : Set α} : s union t = s ↔ t subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
 -/
-theorem union_eq_left {s t : Set α} : s union t = s ↔ t subseteq s :=
+theorem union_eq_left {s t : Set α} : s ∪ t = s ↔ t ⊆ s :=
   sup_eq_left
 
 @[simp]
-/--
-theorem `union_eq_right` / 定理 `union_eq_right`
-
-English:
-theorem union_eq_right
-  given: {s t : Set α}
-  statement: s union t = t ↔ s subseteq t
-  proof: sup_eq_right
-
-中文:
-定理 union_eq_right
-  条件: {s t : 集合 α}
-  结论: s union t = t ↔ s subseteq t
-  证明: sup_eq_right
-
-Depends on / 依赖: sup_eq_right
+/-
+**Set.union_eq_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_right {s t : Set α} : s union t = t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
 -/
-theorem union_eq_right {s t : Set α} : s union t = t ↔ s subseteq t :=
+theorem union_eq_right {s t : Set α} : s ∪ t = t ↔ s ⊆ t :=
   sup_eq_right
-
-/--
-theorem `union_eq_self_of_subset_left` / 定理 `union_eq_self_of_subset_left`
-
-English:
-theorem union_eq_self_of_subset_left
-  given: {s t : Set α} (h : s subseteq t)
-  statement: s union t = t
-  proof: union_eq_right.mpr h
-
-中文:
-定理 union_eq_self_of_subset_left
-  条件: {s t : 集合 α} (h : s subseteq t)
-  结论: s union t = t
-  证明: union_eq_right.mpr h
-
-Depends on / 依赖: union_eq_right, union_eq_right.mpr
+/-
+**Set.union_eq_self_of_subset_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_self_of_subset_left {s t : Set α} (h : s subseteq t) : s union t 
+= t
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.union_eq_right`：union_eq_right {s t : Set α} : s union t = t ↔ s sub
+seteq t
 -/
-theorem union_eq_self_of_subset_left {s t : Set α} (h : s subseteq t) : s union t = t :=
+theorem union_eq_self_of_subset_left {s t : Set α} (h : s ⊆ t) : s ∪ t = t :=
   union_eq_right.mpr h
-
-/--
-theorem `union_eq_self_of_subset_right` / 定理 `union_eq_self_of_subset_right`
-
-English:
-theorem union_eq_self_of_subset_right
-  given: {s t : Set α} (h : t subseteq s)
-  statement: s union t = s
-  proof: union_eq_left.mpr h
-
-@[simp]
-
-中文:
-定理 union_eq_self_of_subset_right
-  条件: {s t : 集合 α} (h : t subseteq s)
-  结论: s union t = s
-  证明: union_eq_left.mpr h
-
-@[simp]
-
-Depends on / 依赖: union_eq_left, union_eq_left.mpr
+/-
+**Set.union_eq_self_of_subset_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_self_of_subset_right {s t : Set α} (h : t subseteq s) : s union t
+ = s
+参数：h : t subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.union_eq_left`：union_eq_left {s t : Set α} : s union t = s ↔ t subse
+teq s
 -/
-theorem union_eq_self_of_subset_right {s t : Set α} (h : t subseteq s) : s union t = s :=
+theorem union_eq_self_of_subset_right {s t : Set α} (h : t ⊆ s) : s ∪ t = s :=
   union_eq_left.mpr h
 
 @[simp]
-/--
-theorem `subset_union_left` / 定理 `subset_union_left`
-
-English:
-theorem subset_union_left
-  given: {s t : Set α}
-  statement: s subseteq s union t
-  proof: fun _ => Or.inl
-
-@[simp]
-
-中文:
-定理 subset_union_left
-  条件: {s t : 集合 α}
-  结论: s subseteq s union t
-  证明: fun _ => Or.inl
-
-@[simp]
-
-Depends on / 依赖: Or.inl
+/-
+**Set.subset_union_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_union_left {s t : Set α} : s subseteq s union t
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_union_left {s t : Set α} : s subseteq s union t := fun _ => Or.inl
+theorem subset_union_left {s t : Set α} : s ⊆ s ∪ t := fun _ => Or.inl
 
 @[simp]
-/--
-theorem `subset_union_right` / 定理 `subset_union_right`
-
-English:
-theorem subset_union_right
-  given: {s t : Set α}
-  statement: t subseteq s union t
-  proof: fun _ => Or.inr
-
-中文:
-定理 subset_union_right
-  条件: {s t : 集合 α}
-  结论: t subseteq s union t
-  证明: fun _ => Or.inr
-
-Depends on / 依赖: Or.inr
+/-
+**Set.subset_union_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_union_right {s t : Set α} : t subseteq s union t
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_union_right {s t : Set α} : t subseteq s union t := fun _ => Or.inr
-
-/--
-theorem `union_subset` / 定理 `union_subset`
-
-English:
-theorem union_subset
-  given: {s t r : Set α} (sr : s subseteq r) (tr : t subseteq r)
-  statement: s union t subseteq r
-  proof: fun _ =>
+theorem subset_union_right {s t : Set α} : t ⊆ s ∪ t := fun _ => Or.inr
+/-
+**Set.union_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_subset {s t r : Set α} (sr : s subseteq r) (tr : t subseteq r) : s u
+nion t subseteq r
+参数：sr : s subseteq r；tr : t subseteq r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem union_subset {s t r : Set α} (sr : s ⊆ r) (tr : t ⊆ r) : s ∪ t ⊆ r := fun _ =>
   Or.rec (@sr _) (@tr _)
 
 @[simp]
-
-中文:
-定理 union_subset
-  条件: {s t r : 集合 α} (sr : s subseteq r) (tr : t subseteq r)
-  结论: s union t subseteq r
-  证明: fun _ =>
-  Or.rec (@sr _) (@tr _)
-
-@[simp]
+/-
+**Set.union_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_subset_iff {s t u : Set α} : s union t subseteq u ↔ s subseteq u ∧ t
+ subseteq u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `or_imp`：∀ {a b c : Prop}, a ∨ b → c ↔ (a → c) ∧ (b → c)
+· 使用定理 `forall_and`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (x : α), p x ∧ q x) ↔ 
+(∀ (x : α), p x) ∧ ∀ (x : α), q x
 -/
-theorem union_subset {s t r : Set α} (sr : s subseteq r) (tr : t subseteq r) : s union t subseteq r := fun _ =>
-  Or.rec (@sr _) (@tr _)
-
-@[simp]
-/--
-theorem `union_subset_iff` / 定理 `union_subset_iff`
-
-English:
-theorem union_subset_iff
-  given: {s t u : Set α}
-  statement: s union t subseteq u ↔ s subseteq u ∧ t subseteq u
-  proof: (forall_congr' fun _ => or_imp).trans forall_and
-
-@[gcongr]
-
-中文:
-定理 union_subset_iff
-  条件: {s t u : 集合 α}
-  结论: s union t subseteq u ↔ s subseteq u ∧ t subseteq u
-  证明: (forall_congr' fun _ => or_imp).trans forall_and
-
-@[gcongr]
-
-Depends on / 依赖: ContMDiffMul, ContMDiffMul.of_le, forall_and, forall_congr, h.out, of_le, or_imp
--/
-theorem union_subset_iff {s t u : Set α} : s union t subseteq u ↔ s subseteq u ∧ t subseteq u :=
+theorem union_subset_iff {s t u : Set α} : s ∪ t ⊆ u ↔ s ⊆ u ∧ t ⊆ u :=
   (forall_congr' fun _ => or_imp).trans forall_and
 
 @[gcongr]
-/--
-theorem `union_subset_union` / 定理 `union_subset_union`
-
-English:
-theorem union_subset_union
-  given: {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ subseteq t₂)
-  proof: sup_le_sup h₁ h₂
-
-中文:
-定理 union_subset_union
-  条件: {s₁ s₂ t₁ t₂ : 集合 α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ subseteq t₂)
-  证明: sup_le_sup h₁ h₂
-
-Depends on / 依赖: ContMDiffMul, ContMDiffMul.of_le, le_top, of_le, sup_le_sup
+/-
+**Set.union_subset_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_subset_union {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ su
+bseteq t₂) : s₁ union t₁ subseteq s₂ union t₂
+参数：h₁ : s₁ subseteq s₂；h₂ : t₁ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
 -/
-theorem union_subset_union {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq s₂) (h₂ : t₁ subseteq t₂) :
-    s₁ union t₁ subseteq s₂ union t₂ :=
+theorem union_subset_union {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ ⊆ s₂) (h₂ : t₁ ⊆ t₂) :
+    s₁ ∪ t₁ ⊆ s₂ ∪ t₂ :=
   sup_le_sup h₁ h₂
-
-/--
-theorem `union_subset_union_left` / 定理 `union_subset_union_left`
-
-English:
-theorem union_subset_union_left
-  given: {s₁ s₂ : Set α} (t) (h : s₁ subseteq s₂)
-  statement: s₁ union t subseteq s₂ union t
-  proof: union_subset_union h Subset.rfl
-
-中文:
-定理 union_subset_union_left
-  条件: {s₁ s₂ : 集合 α} (t) (h : s₁ subseteq s₂)
-  结论: s₁ union t subseteq s₂ union t
-  证明: union_subset_union h Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, union_subset_union
+/-
+**Set.union_subset_union_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_subset_union_left {s₁ s₂ : Set α} (t) (h : s₁ subseteq s₂) : s₁ unio
+n t subseteq s₂ union t
+参数：t；h : s₁ subseteq s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_subset_union`：union_subset_union {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq s₂) (h₂ : t₁ subseteq t₂) : s₁ union t₁ subseteq s₂ union t₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem union_subset_union_left {s₁ s₂ : Set α} (t) (h : s₁ subseteq s₂) : s₁ union t subseteq s₂ union t :=
+theorem union_subset_union_left {s₁ s₂ : Set α} (t) (h : s₁ ⊆ s₂) : s₁ ∪ t ⊆ s₂ ∪ t :=
   union_subset_union h Subset.rfl
-
-/--
-theorem `union_subset_union_right` / 定理 `union_subset_union_right`
-
-English:
-theorem union_subset_union_right
-  given: (s) {t₁ t₂ : Set α} (h : t₁ subseteq t₂)
-  statement: s union t₁ subseteq s union t₂
-  proof: union_subset_union Subset.rfl h
-
-中文:
-定理 union_subset_union_right
-  条件: (s) {t₁ t₂ : 集合 α} (h : t₁ subseteq t₂)
-  结论: s union t₁ subseteq s union t₂
-  证明: union_subset_union Subset.rfl h
-
-Depends on / 依赖: Subset, Subset.rfl, union_subset_union
+/-
+**Set.union_subset_union_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_subset_union_right (s) {t₁ t₂ : Set α} (h : t₁ subseteq t₂) : s unio
+n t₁ subseteq s union t₂
+参数：s；h : t₁ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_subset_union`：union_subset_union {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq s₂) (h₂ : t₁ subseteq t₂) : s₁ union t₁ subseteq s₂ union t₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem union_subset_union_right (s) {t₁ t₂ : Set α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂ :=
+theorem union_subset_union_right (s) {t₁ t₂ : Set α} (h : t₁ ⊆ t₂) : s ∪ t₁ ⊆ s ∪ t₂ :=
   union_subset_union Subset.rfl h
-
-/--
-theorem `subset_union_of_subset_left` / 定理 `subset_union_of_subset_left`
-
-English:
-theorem subset_union_of_subset_left
-  given: {s t : Set α} (h : s subseteq t) (u : Set α)
-  statement: s subseteq t union u
-  proof: h.trans subset_union_left
-
-中文:
-定理 subset_union_of_subset_left
-  条件: {s t : 集合 α} (h : s subseteq t) (u : 集合 α)
-  结论: s subseteq t union u
-  证明: h.trans subset_union_left
-
-Depends on / 依赖: h.trans, subset_union_left
+/-
+**Set.subset_union_of_subset_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_union_of_subset_left {s t : Set α} (h : s subseteq t) (u : Set α) :
+ s subseteq t union u
+参数：h : s subseteq t；u : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
 -/
-theorem subset_union_of_subset_left {s t : Set α} (h : s subseteq t) (u : Set α) : s subseteq t union u :=
+theorem subset_union_of_subset_left {s t : Set α} (h : s ⊆ t) (u : Set α) : s ⊆ t ∪ u :=
   h.trans subset_union_left
-
-/--
-theorem `subset_union_of_subset_right` / 定理 `subset_union_of_subset_right`
-
-English:
-theorem subset_union_of_subset_right
-  given: {s u : Set α} (h : s subseteq u) (t : Set α)
-  statement: s subseteq t union u
-  proof: h.trans subset_union_right
-
-中文:
-定理 subset_union_of_subset_right
-  条件: {s u : 集合 α} (h : s subseteq u) (t : 集合 α)
-  结论: s subseteq t union u
-  证明: h.trans subset_union_right
-
-Depends on / 依赖: h.trans, subset_union_right
+/-
+**Set.subset_union_of_subset_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_union_of_subset_right {s u : Set α} (h : s subseteq u) (t : Set α) 
+: s subseteq t union u
+参数：h : s subseteq u；t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 -/
-theorem subset_union_of_subset_right {s u : Set α} (h : s subseteq u) (t : Set α) : s subseteq t union u :=
+theorem subset_union_of_subset_right {s u : Set α} (h : s ⊆ u) (t : Set α) : s ⊆ t ∪ u :=
   h.trans subset_union_right
-
-/--
-theorem `union_congr_left` / 定理 `union_congr_left`
-
-English:
-theorem union_congr_left
-  given: (ht : t subseteq s union u) (hu : u subseteq s union t)
-  statement: s union t = s union u
-  proof: sup_congr_left ht hu
-
-中文:
-定理 union_congr_left
-  条件: (ht : t subseteq s union u) (hu : u subseteq s union t)
-  结论: s union t = s union u
-  证明: sup_congr_left ht hu
-
-Depends on / 依赖: sup_congr_left
+/-
+**Set.union_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_congr_left (ht : t subseteq s union u) (hu : u subseteq s union t) :
+ s union t = s union u
+参数：ht : t subseteq s union u；hu : u subseteq s union t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_congr_left`：sup_congr_left (hb : b <= a ⊔ c) (hc : c <= a ⊔ b) : a ⊔
+ b = a ⊔ c
 -/
-theorem union_congr_left (ht : t subseteq s union u) (hu : u subseteq s union t) : s union t = s union u :=
+theorem union_congr_left (ht : t ⊆ s ∪ u) (hu : u ⊆ s ∪ t) : s ∪ t = s ∪ u :=
   sup_congr_left ht hu
-
-/--
-theorem `union_congr_right` / 定理 `union_congr_right`
-
-English:
-theorem union_congr_right
-  given: (hs : s subseteq t union u) (ht : t subseteq s union u)
-  statement: s union u = t union u
-  proof: sup_congr_right hs ht
-
-中文:
-定理 union_congr_right
-  条件: (hs : s subseteq t union u) (ht : t subseteq s union u)
-  结论: s union u = t union u
-  证明: sup_congr_right hs ht
-
-Depends on / 依赖: sup_congr_right
+/-
+**Set.union_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_congr_right (hs : s subseteq t union u) (ht : t subseteq s union u) 
+: s union u = t union u
+参数：hs : s subseteq t union u；ht : t subseteq s union u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_congr_right`：sup_congr_right (ha : a <= b ⊔ c) (hb : b <= a ⊔ c) : a
+ ⊔ c = b ⊔ c
 -/
-theorem union_congr_right (hs : s subseteq t union u) (ht : t subseteq s union u) : s union u = t union u :=
+theorem union_congr_right (hs : s ⊆ t ∪ u) (ht : t ⊆ s ∪ u) : s ∪ u = t ∪ u :=
   sup_congr_right hs ht
-
-/--
-theorem `union_eq_union_iff_left` / 定理 `union_eq_union_iff_left`
-
-English:
-theorem union_eq_union_iff_left
-  statement: s union t = s union u ↔ t subseteq s union u ∧ u subseteq s union t
-  proof: sup_eq_sup_iff_left
-
-中文:
-定理 union_eq_union_iff_left
-  结论: s union t = s union u ↔ t subseteq s union u ∧ u subseteq s union t
-  证明: sup_eq_sup_iff_left
-
-Depends on / 依赖: sup_eq_sup_iff_left
+/-
+**Set.union_eq_union_iff_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_union_iff_left : s union t = s union u ↔ t subseteq s union u ∧ u
+ subseteq s union t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_sup_iff_left`：sup_eq_sup_iff_left : a ⊔ b = a ⊔ c ↔ b <= a ⊔ c ∧ 
+c <= a ⊔ b
 -/
-theorem union_eq_union_iff_left : s union t = s union u ↔ t subseteq s union u ∧ u subseteq s union t :=
+theorem union_eq_union_iff_left : s ∪ t = s ∪ u ↔ t ⊆ s ∪ u ∧ u ⊆ s ∪ t :=
   sup_eq_sup_iff_left
-
-/--
-theorem `union_eq_union_iff_right` / 定理 `union_eq_union_iff_right`
-
-English:
-theorem union_eq_union_iff_right
-  statement: s union u = t union u ↔ s subseteq t union u ∧ t subseteq s union u
-  proof: sup_eq_sup_iff_right
-
-@[simp]
-
-中文:
-定理 union_eq_union_iff_right
-  结论: s union u = t union u ↔ s subseteq t union u ∧ t subseteq s union u
-  证明: sup_eq_sup_iff_right
-
-@[simp]
-
-Depends on / 依赖: sup_eq_sup_iff_right
+/-
+**Set.union_eq_union_iff_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_eq_union_iff_right : s union u = t union u ↔ s subseteq t union u ∧ 
+t subseteq s union u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_sup_iff_right`：sup_eq_sup_iff_right : a ⊔ c = b ⊔ c ↔ a <= b ⊔ c 
+∧ b <= a ⊔ c
 -/
-theorem union_eq_union_iff_right : s union u = t union u ↔ s subseteq t union u ∧ t subseteq s union u :=
+theorem union_eq_union_iff_right : s ∪ u = t ∪ u ↔ s ⊆ t ∪ u ∧ t ⊆ s ∪ u :=
   sup_eq_sup_iff_right
 
 @[simp]
-/--
-theorem `union_empty_iff` / 定理 `union_empty_iff`
-
-English:
-theorem union_empty_iff
-  given: {s t : Set α}
-  statement: s union t = ∅ ↔ s = ∅ ∧ t = ∅
-  proof: by
+/-
+**Set.union_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_empty_iff {s t : Set α} : s union t = ∅ ↔ s = ∅ ∧ t = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_subset_iff`：union_subset_iff {s t u : Set α} : s union t subse
+teq u ↔ s subseteq u ∧ t subseteq u
+-/
+theorem union_empty_iff {s t : Set α} : s ∪ t = ∅ ↔ s = ∅ ∧ t = ∅ := by
   simp only [← subset_empty_iff]
   exact union_subset_iff
 
 @[simp]
-
-中文:
-定理 union_empty_iff
-  条件: {s t : 集合 α}
-  结论: s union t = ∅ ↔ s = ∅ ∧ t = ∅
-  证明: by
-  simp only [← subset_empty_iff]
-  exact union_subset_iff
-
-@[simp]
-
-Depends on / 依赖: subset_empty_iff, union_subset_iff
+/-
+**Set.union_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_univ (s : Set α) : s union univ = univ
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_top_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderTo
+p α] (a : α), a ⊔ ⊤ = ⊤
 -/
-theorem union_empty_iff {s t : Set α} : s union t = ∅ ↔ s = ∅ ∧ t = ∅ := by
-  simp only [← subset_empty_iff]
-  exact union_subset_iff
+theorem union_univ (s : Set α) : s ∪ univ = univ := sup_top_eq _
 
 @[simp]
-/--
-theorem `union_univ` / 定理 `union_univ`
-
-English:
-theorem union_univ
-  given: (s : Set α)
-  statement: s union univ = univ
-  proof: sup_top_eq _
-
-@[simp]
-
-中文:
-定理 union_univ
-  条件: (s : 集合 α)
-  结论: s union univ = univ
-  证明: sup_top_eq _
-
-@[simp]
-
-Depends on / 依赖: sup_top_eq
+/-
+**Set.univ_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：univ_union (s : Set α) : univ union s = univ
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_sup_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderTo
+p α] (a : α), ⊤ ⊔ a = ⊤
 -/
-theorem union_univ (s : Set α) : s union univ = univ := sup_top_eq _
+theorem univ_union (s : Set α) : univ ∪ s = univ := top_sup_eq _
 
 @[simp]
-/--
-theorem `univ_union` / 定理 `univ_union`
-
-English:
-theorem univ_union
-  given: (s : Set α)
-  statement: univ union s = univ
-  proof: top_sup_eq _
-
-@[simp]
-
-中文:
-定理 univ_union
-  条件: (s : 集合 α)
-  结论: univ union s = univ
-  证明: top_sup_eq _
-
-@[simp]
-
-Depends on / 依赖: top_sup_eq
+/-
+**Set.ssubset_union_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_union_left_iff : s ⊂ s union t ↔ ¬ t subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `left_lt_sup`：left_lt_sup : a < a ⊔ b ↔ ¬b <= a
 -/
-theorem univ_union (s : Set α) : univ union s = univ := top_sup_eq _
-
-@[simp]
-/--
-theorem `ssubset_union_left_iff` / 定理 `ssubset_union_left_iff`
-
-English:
-theorem ssubset_union_left_iff
-  statement: s ⊂ s union t ↔ ¬ t subseteq s
-  proof: left_lt_sup
-
-@[simp]
-
-中文:
-定理 ssubset_union_left_iff
-  结论: s ⊂ s union t ↔ ¬ t subseteq s
-  证明: left_lt_sup
-
-@[simp]
-
-Depends on / 依赖: left_lt_sup
--/
-theorem ssubset_union_left_iff : s ⊂ s union t ↔ ¬ t subseteq s :=
+theorem ssubset_union_left_iff : s ⊂ s ∪ t ↔ ¬ t ⊆ s :=
   left_lt_sup
 
 @[simp]
-/--
-theorem `ssubset_union_right_iff` / 定理 `ssubset_union_right_iff`
-
-English:
-theorem ssubset_union_right_iff
-  statement: t ⊂ s union t ↔ ¬ s subseteq t
-  proof: right_lt_sup
-
-中文:
-定理 ssubset_union_right_iff
-  结论: t ⊂ s union t ↔ ¬ s subseteq t
-  证明: right_lt_sup
-
-Depends on / 依赖: right_lt_sup
+/-
+**Set.ssubset_union_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ssubset_union_right_iff : t ⊂ s union t ↔ ¬ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `right_lt_sup`：right_lt_sup : b < a ⊔ b ↔ ¬a <= b
 -/
-theorem ssubset_union_right_iff : t ⊂ s union t ↔ ¬ s subseteq t :=
+theorem ssubset_union_right_iff : t ⊂ s ∪ t ↔ ¬ s ⊆ t :=
   right_lt_sup
 
+/-! ### Lemmas about intersection -/
 
-/--
-theorem `inter_def` / 定理 `inter_def`
+/-
+**Set.inter_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_def {s₁ s₂ : Set α} : s₁ inter s₂ = { a | a in s₁ ∧ a in s₂ }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem inter_def
-  given: {s₁ s₂ : Set α}
-  statement: s₁ inter s₂ = { a | a in s₁ ∧ a in s₂ }
-  proof: rfl
-
-@[simp, mfld_simps, grind =, push]
-
-中文:
-定理 inter_def
-  条件: {s₁ s₂ : 集合 α}
-  结论: s₁ inter s₂ = { a | a in s₁ ∧ a in s₂ }
-  证明: rfl
-
-@[simp, mfld_simps, grind =, push]
+--- 原说明 ---
+### Lemmas about intersection
 -/
-theorem inter_def {s₁ s₂ : Set α} : s₁ inter s₂ = { a | a in s₁ ∧ a in s₂ } :=
+theorem inter_def {s₁ s₂ : Set α} : s₁ ∩ s₂ = { a | a ∈ s₁ ∧ a ∈ s₂ } :=
   rfl
 
 @[simp, mfld_simps, grind =, push]
-/--
-theorem `mem_inter_iff` / 定理 `mem_inter_iff`
-
-English:
-theorem mem_inter_iff
-  given: (x : α) (a b : Set α)
-  statement: x in a inter b ↔ x in a ∧ x in b
-  proof: Iff.rfl
-
-中文:
-定理 mem_inter_iff
-  条件: (x : α) (a b : 集合 α)
-  结论: x in a inter b ↔ x in a ∧ x in b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_inter_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_inter_iff (x : α) (a b : Set α) : x in a inter b ↔ x in a ∧ x in b
+参数：x : α；a b : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inter_iff (x : α) (a b : Set α) : x in a inter b ↔ x in a ∧ x in b :=
+theorem mem_inter_iff (x : α) (a b : Set α) : x ∈ a ∩ b ↔ x ∈ a ∧ x ∈ b :=
   Iff.rfl
-
-/--
-theorem `mem_inter` / 定理 `mem_inter`
-
-English:
-theorem mem_inter
-  given: {x : α} {a b : Set α} (ha : x in a) (hb : x in b)
-  statement: x in a inter b
-  proof: ⟨ha, hb⟩
-
-中文:
-定理 mem_inter
-  条件: {x : α} {a b : 集合 α} (ha : x in a) (hb : x in b)
-  结论: x in a inter b
-  证明: ⟨ha, hb⟩
+/-
+**Set.mem_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_inter {x : α} {a b : Set α} (ha : x in a) (hb : x in b) : x in a inter
+ b
+参数：ha : x in a；hb : x in b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_inter {x : α} {a b : Set α} (ha : x in a) (hb : x in b) : x in a inter b :=
+theorem mem_inter {x : α} {a b : Set α} (ha : x ∈ a) (hb : x ∈ b) : x ∈ a ∩ b :=
   ⟨ha, hb⟩
-
-/--
-theorem `mem_of_mem_inter_left` / 定理 `mem_of_mem_inter_left`
-
-English:
-theorem mem_of_mem_inter_left
-  given: {x : α} {a b : Set α} (h : x in a inter b)
-  statement: x in a
-  proof: h.left
-
-中文:
-定理 mem_of_mem_inter_left
-  条件: {x : α} {a b : 集合 α} (h : x in a inter b)
-  结论: x in a
-  证明: h.left
-
-Depends on / 依赖: h.left
+/-
+**Set.mem_of_mem_inter_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_of_mem_inter_left {x : α} {a b : Set α} (h : x in a inter b) : x in a
+参数：h : x in a inter b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem mem_of_mem_inter_left {x : α} {a b : Set α} (h : x in a inter b) : x in a :=
+theorem mem_of_mem_inter_left {x : α} {a b : Set α} (h : x ∈ a ∩ b) : x ∈ a :=
   h.left
-
-/--
-theorem `mem_of_mem_inter_right` / 定理 `mem_of_mem_inter_right`
-
-English:
-theorem mem_of_mem_inter_right
-  given: {x : α} {a b : Set α} (h : x in a inter b)
-  statement: x in b
-  proof: h.right
-
-@[simp]
-
-中文:
-定理 mem_of_mem_inter_right
-  条件: {x : α} {a b : 集合 α} (h : x in a inter b)
-  结论: x in b
-  证明: h.right
-
-@[simp]
-
-Depends on / 依赖: h.right
+/-
+**Set.mem_of_mem_inter_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_of_mem_inter_right {x : α} {a b : Set α} (h : x in a inter b) : x in b
+参数：h : x in a inter b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mem_of_mem_inter_right {x : α} {a b : Set α} (h : x in a inter b) : x in b :=
+theorem mem_of_mem_inter_right {x : α} {a b : Set α} (h : x ∈ a ∩ b) : x ∈ b :=
   h.right
 
 @[simp]
-/--
-theorem `inter_self` / 定理 `inter_self`
-
-English:
-theorem inter_self
-  given: (a : Set α)
-  statement: a inter a = a
-  proof: ext fun _ => and_self_iff
-
-@[simp]
-
-中文:
-定理 inter_self
-  条件: (a : 集合 α)
-  结论: a inter a = a
-  证明: ext fun _ => and_self_iff
-
-@[simp]
-
-Depends on / 依赖: and_self_iff
+/-
+**Set.inter_self** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_self (a : Set α) : a inter a = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_self_iff`：∀ {a : Prop}, a ∧ a ↔ a
 -/
-theorem inter_self (a : Set α) : a inter a = a :=
+theorem inter_self (a : Set α) : a ∩ a = a :=
   ext fun _ => and_self_iff
 
 @[simp]
-/--
-theorem `inter_empty` / 定理 `inter_empty`
-
-English:
-theorem inter_empty
-  given: (a : Set α)
-  statement: a inter ∅ = ∅
-  proof: ext fun _ => iff_of_eq (and_false _)
-
-@[simp]
-
-中文:
-定理 inter_empty
-  条件: (a : 集合 α)
-  结论: a inter ∅ = ∅
-  证明: ext fun _ => iff_of_eq (and_false _)
-
-@[simp]
-
-Depends on / 依赖: and_false, iff_of_eq
+/-
+**Set.inter_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_empty (a : Set α) : a inter ∅ = ∅
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
 -/
-theorem inter_empty (a : Set α) : a inter ∅ = ∅ :=
+theorem inter_empty (a : Set α) : a ∩ ∅ = ∅ :=
   ext fun _ => iff_of_eq (and_false _)
 
 @[simp]
-/--
-theorem `empty_inter` / 定理 `empty_inter`
-
-English:
-theorem empty_inter
-  given: (a : Set α)
-  statement: ∅ inter a = ∅
-  proof: ext fun _ => iff_of_eq (false_and _)
-
-中文:
-定理 empty_inter
-  条件: (a : 集合 α)
-  结论: ∅ inter a = ∅
-  证明: ext fun _ => iff_of_eq (false_and _)
-
-Depends on / 依赖: false_and, iff_of_eq
+/-
+**Set.empty_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：empty_inter (a : Set α) : ∅ inter a = ∅
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
 -/
-theorem empty_inter (a : Set α) : ∅ inter a = ∅ :=
+theorem empty_inter (a : Set α) : ∅ ∩ a = ∅ :=
   ext fun _ => iff_of_eq (false_and _)
-
-/--
-theorem `inter_comm` / 定理 `inter_comm`
-
-English:
-theorem inter_comm
-  given: (a b : Set α)
-  statement: a inter b = b inter a
-  proof: ext fun _ => and_comm
-
-中文:
-定理 inter_comm
-  条件: (a b : 集合 α)
-  结论: a inter b = b inter a
-  证明: ext fun _ => and_comm
-
-Depends on / 依赖: and_comm
+/-
+**Set.inter_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_comm (a b : Set α) : a inter b = b inter a
+参数：a b : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
 -/
-theorem inter_comm (a b : Set α) : a inter b = b inter a :=
+theorem inter_comm (a b : Set α) : a ∩ b = b ∩ a :=
   ext fun _ => and_comm
-
-/--
-theorem `inter_assoc` / 定理 `inter_assoc`
-
-English:
-theorem inter_assoc
-  given: (a b c : Set α)
-  statement: a inter b inter c = a inter (b inter c)
-  proof: ext fun _ => and_assoc
-
-中文:
-定理 inter_assoc
-  条件: (a b c : 集合 α)
-  结论: a inter b inter c = a inter (b inter c)
-  证明: ext fun _ => and_assoc
-
-Depends on / 依赖: and_assoc
+/-
+**Set.inter_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_assoc (a b c : Set α) : a inter b inter c = a inter (b inter c)
+参数：a b c : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_assoc`：∀ {a b c : Prop}, (a ∧ b) ∧ c ↔ a ∧ b ∧ c
 -/
-theorem inter_assoc (a b c : Set α) : a inter b inter c = a inter (b inter c) :=
+theorem inter_assoc (a b c : Set α) : a ∩ b ∩ c = a ∩ (b ∩ c) :=
   ext fun _ => and_assoc
-
-/--
-Instance `inter_isAssoc` / 实例 `inter_isAssoc`
-
-English:
-instance inter_isAssoc
-  signature: : Std.Associative (α := Set α) (· inter ·)
-  body: ⟨inter_assoc⟩
-
-中文:
-实例 inter_isAssoc
-  签名: : Std.结合 (α := 集合 α) (· inter ·)
-  定义体: ⟨inter_assoc⟩
+/-
+**Set.inter_isAssoc** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：inter_isAssoc : Std.Associative (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
 -/
-instance inter_isAssoc : Std.Associative (α := Set α) (· inter ·) :=
+instance inter_isAssoc : Std.Associative (α := Set α) (· ∩ ·) :=
   ⟨inter_assoc⟩
-
-/--
-Instance `inter_isComm` / 实例 `inter_isComm`
-
-English:
-instance inter_isComm
-  signature: : Std.Commutative (α := Set α) (· inter ·)
-  body: ⟨inter_comm⟩
-
-中文:
-实例 inter_isComm
-  签名: : Std.交换 (α := 集合 α) (· inter ·)
-  定义体: ⟨inter_comm⟩
+/-
+**Set.inter_isComm** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：inter_isComm : Std.Commutative (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
-instance inter_isComm : Std.Commutative (α := Set α) (· inter ·) :=
+instance inter_isComm : Std.Commutative (α := Set α) (· ∩ ·) :=
   ⟨inter_comm⟩
-
-/--
-theorem `inter_left_comm` / 定理 `inter_left_comm`
-
-English:
-theorem inter_left_comm
-  given: (s₁ s₂ s₃ : Set α)
-  statement: s₁ inter (s₂ inter s₃) = s₂ inter (s₁ inter s₃)
-  proof: ext fun _ => and_left_comm
-
-中文:
-定理 inter_left_comm
-  条件: (s₁ s₂ s₃ : 集合 α)
-  结论: s₁ inter (s₂ inter s₃) = s₂ inter (s₁ inter s₃)
-  证明: ext fun _ => and_left_comm
-
-Depends on / 依赖: and_left_comm
+/-
+**Set.inter_left_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_left_comm (s₁ s₂ s₃ : Set α) : s₁ inter (s₂ inter s₃) = s₂ inter (s₁
+ inter s₃)
+参数：s₁ s₂ s₃ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_left_comm`：∀ {a b c : Prop}, a ∧ b ∧ c ↔ b ∧ a ∧ c
 -/
-theorem inter_left_comm (s₁ s₂ s₃ : Set α) : s₁ inter (s₂ inter s₃) = s₂ inter (s₁ inter s₃) :=
+theorem inter_left_comm (s₁ s₂ s₃ : Set α) : s₁ ∩ (s₂ ∩ s₃) = s₂ ∩ (s₁ ∩ s₃) :=
   ext fun _ => and_left_comm
-
-/--
-theorem `inter_right_comm` / 定理 `inter_right_comm`
-
-English:
-theorem inter_right_comm
-  given: (s₁ s₂ s₃ : Set α)
-  statement: s₁ inter s₂ inter s₃ = s₁ inter s₃ inter s₂
-  proof: ext fun _ => and_right_comm
-
-@[simp, mfld_simps]
-
-中文:
-定理 inter_right_comm
-  条件: (s₁ s₂ s₃ : 集合 α)
-  结论: s₁ inter s₂ inter s₃ = s₁ inter s₃ inter s₂
-  证明: ext fun _ => and_right_comm
-
-@[simp, mfld_simps]
-
-Depends on / 依赖: and_right_comm
+/-
+**Set.inter_right_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ inter s₂ inter s₃ = s₁ inter s₃ i
+nter s₂
+参数：s₁ s₂ s₃ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_right_comm`：∀ {a b c : Prop}, (a ∧ b) ∧ c ↔ (a ∧ c) ∧ b
 -/
-theorem inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ inter s₂ inter s₃ = s₁ inter s₃ inter s₂ :=
+theorem inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ ∩ s₂ ∩ s₃ = s₁ ∩ s₃ ∩ s₂ :=
   ext fun _ => and_right_comm
 
 @[simp, mfld_simps]
-/--
-theorem `inter_subset_left` / 定理 `inter_subset_left`
-
-English:
-theorem inter_subset_left
-  given: {s t : Set α}
-  statement: s inter t subseteq s
-  proof: fun _ => And.left
-
-@[simp]
-
-中文:
-定理 inter_subset_left
-  条件: {s t : 集合 α}
-  结论: s inter t subseteq s
-  证明: fun _ => And.left
-
-@[simp]
-
-Depends on / 依赖: And.left
+/-
+**Set.inter_subset_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_subset_left {s t : Set α} : s inter t subseteq s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem inter_subset_left {s t : Set α} : s inter t subseteq s := fun _ => And.left
+theorem inter_subset_left {s t : Set α} : s ∩ t ⊆ s := fun _ => And.left
 
 @[simp]
-/--
-theorem `inter_subset_right` / 定理 `inter_subset_right`
-
-English:
-theorem inter_subset_right
-  given: {s t : Set α}
-  statement: s inter t subseteq t
-  proof: fun _ => And.right
-
-中文:
-定理 inter_subset_right
-  条件: {s t : 集合 α}
-  结论: s inter t subseteq t
-  证明: fun _ => And.right
-
-Depends on / 依赖: And.right
+/-
+**Set.inter_subset_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_subset_right {s t : Set α} : s inter t subseteq t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem inter_subset_right {s t : Set α} : s inter t subseteq t := fun _ => And.right
-
-/--
-theorem `subset_inter` / 定理 `subset_inter`
-
-English:
-theorem subset_inter
-  given: {s t r : Set α} (rs : r subseteq s) (rt : r subseteq t)
-  statement: r subseteq s inter t
-  proof: fun _ h =>
+theorem inter_subset_right {s t : Set α} : s ∩ t ⊆ t := fun _ => And.right
+/-
+**Set.subset_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_inter {s t r : Set α} (rs : r subseteq s) (rt : r subseteq t) : r s
+ubseteq s inter t
+参数：rs : r subseteq s；rt : r subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem subset_inter {s t r : Set α} (rs : r ⊆ s) (rt : r ⊆ t) : r ⊆ s ∩ t := fun _ h =>
   ⟨rs h, rt h⟩
 
 @[simp]
-
-中文:
-定理 subset_inter
-  条件: {s t r : 集合 α} (rs : r subseteq s) (rt : r subseteq t)
-  结论: r subseteq s inter t
-  证明: fun _ h =>
-  ⟨rs h, rt h⟩
-
-@[simp]
+/-
+**Set.subset_inter_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_inter_iff {s t r : Set α} : r subseteq s inter t ↔ r subseteq s ∧ r
+ subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `imp_and`：∀ {b c : Prop} {α : Sort u_1}, (∀ (a : α), b ∧ c) ↔ (∀ (a : α),
+ b) ∧ ∀ (a : α), c
+· 使用定理 `forall_and`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (x : α), p x ∧ q x) ↔ 
+(∀ (x : α), p x) ∧ ∀ (x : α), q x
 -/
-theorem subset_inter {s t r : Set α} (rs : r subseteq s) (rt : r subseteq t) : r subseteq s inter t := fun _ h =>
-  ⟨rs h, rt h⟩
-
-@[simp]
-/--
-theorem `subset_inter_iff` / 定理 `subset_inter_iff`
-
-English:
-theorem subset_inter_iff
-  given: {s t r : Set α}
-  statement: r subseteq s inter t ↔ r subseteq s ∧ r subseteq t
-  proof: (forall_congr' fun _ => imp_and).trans forall_and
-
-中文:
-定理 subset_inter_iff
-  条件: {s t r : 集合 α}
-  结论: r subseteq s inter t ↔ r subseteq s ∧ r subseteq t
-  证明: (forall_congr' fun _ => imp_and).trans forall_and
-
-Depends on / 依赖: forall_and, forall_congr, imp_and
--/
-theorem subset_inter_iff {s t r : Set α} : r subseteq s inter t ↔ r subseteq s ∧ r subseteq t :=
+theorem subset_inter_iff {s t r : Set α} : r ⊆ s ∩ t ↔ r ⊆ s ∧ r ⊆ t :=
   (forall_congr' fun _ => imp_and).trans forall_and
-
-/--
-lemma `inter_eq_left` / 引理 `inter_eq_left`
-
-English:
-lemma inter_eq_left
-  statement: s inter t = s ↔ s subseteq t
-  proof: inf_eq_left
-
-中文:
-引理 inter_eq_left
-  结论: s inter t = s ↔ s subseteq t
-  证明: inf_eq_left
+/-
+**Set.inter_eq_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b =
+ a ↔ a ≤ b
 -/
-@[simp] lemma inter_eq_left : s inter t = s ↔ s subseteq t := inf_eq_left
-
-/--
-lemma `inter_eq_right` / 引理 `inter_eq_right`
-
-English:
-lemma inter_eq_right
-  statement: s inter t = t ↔ t subseteq s
-  proof: inf_eq_right
-
-中文:
-引理 inter_eq_right
-  结论: s inter t = t ↔ t subseteq s
-  证明: inf_eq_right
+@[simp] lemma inter_eq_left : s ∩ t = s ↔ s ⊆ t := inf_eq_left
+/-
+**Set.inter_eq_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s ∩ t = t ↔ t ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
 -/
-@[simp] lemma inter_eq_right : s inter t = t ↔ t subseteq s := inf_eq_right
-
-/--
-lemma `left_eq_inter` / 引理 `left_eq_inter`
-
-English:
-lemma left_eq_inter
-  statement: s = s inter t ↔ s subseteq t
-  proof: left_eq_inf
-
-中文:
-引理 left_eq_inter
-  结论: s = s inter t ↔ s subseteq t
-  证明: left_eq_inf
+@[simp] lemma inter_eq_right : s ∩ t = t ↔ t ⊆ s := inf_eq_right
+/-
+**Set.left_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s = s ∩ t ↔ s ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `left_eq_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a = a ⊓
+ b ↔ a ≤ b
 -/
-@[simp] lemma left_eq_inter : s = s inter t ↔ s subseteq t := left_eq_inf
-
-/--
-lemma `right_eq_inter` / 引理 `right_eq_inter`
-
-English:
-lemma right_eq_inter
-  statement: t = s inter t ↔ t subseteq s
-  proof: right_eq_inf
-
-中文:
-引理 right_eq_inter
-  结论: t = s inter t ↔ t subseteq s
-  证明: right_eq_inf
+@[simp] lemma left_eq_inter : s = s ∩ t ↔ s ⊆ t := left_eq_inf
+/-
+**Set.right_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, t = s ∩ t ↔ t ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `right_eq_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b = a 
+⊓ b ↔ b ≤ a
 -/
-@[simp] lemma right_eq_inter : t = s inter t ↔ t subseteq s := right_eq_inf
-
-/--
-theorem `inter_eq_self_of_subset_left` / 定理 `inter_eq_self_of_subset_left`
-
-English:
-theorem inter_eq_self_of_subset_left
-  given: {s t : Set α}
-  statement: s subseteq t -> s inter t = s
-  proof: inter_eq_left.mpr
-
-中文:
-定理 inter_eq_self_of_subset_left
-  条件: {s t : 集合 α}
-  结论: s subseteq t -> s inter t = s
-  证明: inter_eq_left.mpr
-
-Depends on / 依赖: inter_eq_left, inter_eq_left.mpr
+@[simp] lemma right_eq_inter : t = s ∩ t ↔ t ⊆ s := right_eq_inf
+/-
+**Set.inter_eq_self_of_subset_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_eq_self_of_subset_left {s t : Set α} : s subseteq t -> s inter t = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
 -/
-theorem inter_eq_self_of_subset_left {s t : Set α} : s subseteq t -> s inter t = s :=
+theorem inter_eq_self_of_subset_left {s t : Set α} : s ⊆ t → s ∩ t = s :=
   inter_eq_left.mpr
-
-/--
-theorem `inter_eq_self_of_subset_right` / 定理 `inter_eq_self_of_subset_right`
-
-English:
-theorem inter_eq_self_of_subset_right
-  given: {s t : Set α}
-  statement: t subseteq s -> s inter t = t
-  proof: inter_eq_right.mpr
-
-中文:
-定理 inter_eq_self_of_subset_right
-  条件: {s t : 集合 α}
-  结论: t subseteq s -> s inter t = t
-  证明: inter_eq_right.mpr
-
-Depends on / 依赖: inter_eq_right, inter_eq_right.mpr
+/-
+**Set.inter_eq_self_of_subset_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_eq_self_of_subset_right {s t : Set α} : t subseteq s -> s inter t = 
+t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_right`：∀ {α : Type u} {s t : Set α}, s ∩ t = t ↔ t ⊆ s
 -/
-theorem inter_eq_self_of_subset_right {s t : Set α} : t subseteq s -> s inter t = t :=
+theorem inter_eq_self_of_subset_right {s t : Set α} : t ⊆ s → s ∩ t = t :=
   inter_eq_right.mpr
-
-/--
-theorem `inter_congr_left` / 定理 `inter_congr_left`
-
-English:
-theorem inter_congr_left
-  given: (ht : s inter u subseteq t) (hu : s inter t subseteq u)
-  statement: s inter t = s inter u
-  proof: inf_congr_left ht hu
-
-中文:
-定理 inter_congr_left
-  条件: (ht : s inter u subseteq t) (hu : s inter t subseteq u)
-  结论: s inter t = s inter u
-  证明: inf_congr_left ht hu
-
-Depends on / 依赖: inf_congr_left
+/-
+**Set.inter_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_congr_left (ht : s inter u subseteq t) (hu : s inter t subseteq u) :
+ s inter t = s inter u
+参数：ht : s inter u subseteq t；hu : s inter t subseteq u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_congr_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : α}, a 
+⊓ c ≤ b → a ⊓ b ≤ c → a ⊓ b = a ⊓ c
 -/
-theorem inter_congr_left (ht : s inter u subseteq t) (hu : s inter t subseteq u) : s inter t = s inter u :=
+theorem inter_congr_left (ht : s ∩ u ⊆ t) (hu : s ∩ t ⊆ u) : s ∩ t = s ∩ u :=
   inf_congr_left ht hu
-
-/--
-theorem `inter_congr_right` / 定理 `inter_congr_right`
-
-English:
-theorem inter_congr_right
-  given: (hs : t inter u subseteq s) (ht : s inter u subseteq t)
-  statement: s inter u = t inter u
-  proof: inf_congr_right hs ht
-
-中文:
-定理 inter_congr_right
-  条件: (hs : t inter u subseteq s) (ht : s inter u subseteq t)
-  结论: s inter u = t inter u
-  证明: inf_congr_right hs ht
-
-Depends on / 依赖: inf_congr_right
+/-
+**Set.inter_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_congr_right (hs : t inter u subseteq s) (ht : s inter u subseteq t) 
+: s inter u = t inter u
+参数：hs : t inter u subseteq s；ht : s inter u subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_congr_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : α}, b
+ ⊓ c ≤ a → a ⊓ c ≤ b → a ⊓ c = b ⊓ c
 -/
-theorem inter_congr_right (hs : t inter u subseteq s) (ht : s inter u subseteq t) : s inter u = t inter u :=
+theorem inter_congr_right (hs : t ∩ u ⊆ s) (ht : s ∩ u ⊆ t) : s ∩ u = t ∩ u :=
   inf_congr_right hs ht
-
-/--
-theorem `inter_eq_inter_iff_left` / 定理 `inter_eq_inter_iff_left`
-
-English:
-theorem inter_eq_inter_iff_left
-  statement: s inter t = s inter u ↔ s inter u subseteq t ∧ s inter t subseteq u
-  proof: inf_eq_inf_iff_left
-
-中文:
-定理 inter_eq_inter_iff_left
-  结论: s inter t = s inter u ↔ s inter u subseteq t ∧ s inter t subseteq u
-  证明: inf_eq_inf_iff_left
-
-Depends on / 依赖: inf_eq_inf_iff_left
+/-
+**Set.inter_eq_inter_iff_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_eq_inter_iff_left : s inter t = s inter u ↔ s inter u subseteq t ∧ s
+ inter t subseteq u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_inf_iff_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : α
+}, a ⊓ b = a ⊓ c ↔ a ⊓ c ≤ b ∧ a ⊓ b ≤ c
 -/
-theorem inter_eq_inter_iff_left : s inter t = s inter u ↔ s inter u subseteq t ∧ s inter t subseteq u :=
+theorem inter_eq_inter_iff_left : s ∩ t = s ∩ u ↔ s ∩ u ⊆ t ∧ s ∩ t ⊆ u :=
   inf_eq_inf_iff_left
-
-/--
-theorem `inter_eq_inter_iff_right` / 定理 `inter_eq_inter_iff_right`
-
-English:
-theorem inter_eq_inter_iff_right
-  statement: s inter u = t inter u ↔ t inter u subseteq s ∧ s inter u subseteq t
-  proof: inf_eq_inf_iff_right
-
-@[simp, mfld_simps]
-
-中文:
-定理 inter_eq_inter_iff_right
-  结论: s inter u = t inter u ↔ t inter u subseteq s ∧ s inter u subseteq t
-  证明: inf_eq_inf_iff_right
-
-@[simp, mfld_simps]
-
-Depends on / 依赖: inf_eq_inf_iff_right
+/-
+**Set.inter_eq_inter_iff_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_eq_inter_iff_right : s inter u = t inter u ↔ t inter u subseteq s ∧ 
+s inter u subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_inf_iff_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c : 
+α}, a ⊓ c = b ⊓ c ↔ b ⊓ c ≤ a ∧ a ⊓ c ≤ b
 -/
-theorem inter_eq_inter_iff_right : s inter u = t inter u ↔ t inter u subseteq s ∧ s inter u subseteq t :=
+theorem inter_eq_inter_iff_right : s ∩ u = t ∩ u ↔ t ∩ u ⊆ s ∧ s ∩ u ⊆ t :=
   inf_eq_inf_iff_right
 
 @[simp, mfld_simps]
-/--
-theorem `inter_univ` / 定理 `inter_univ`
-
-English:
-theorem inter_univ
-  given: (a : Set α)
-  statement: a inter univ = a
-  proof: inf_top_eq _
+/-
+**Set.inter_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_univ (a : Set α) : a inter univ = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_top_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), a ⊓ ⊤ = a
+-/
+theorem inter_univ (a : Set α) : a ∩ univ = a := inf_top_eq _
 
 @[simp, mfld_simps]
-
-中文:
-定理 inter_univ
-  条件: (a : 集合 α)
-  结论: a inter univ = a
-  证明: inf_top_eq _
-
-@[simp, mfld_simps]
-
-Depends on / 依赖: inf_top_eq
+/-
+**Set.univ_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：univ_inter (a : Set α) : univ inter a = a
+参数：a : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_inf_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), ⊤ ⊓ a = a
 -/
-theorem inter_univ (a : Set α) : a inter univ = a := inf_top_eq _
-
-@[simp, mfld_simps]
-/--
-theorem `univ_inter` / 定理 `univ_inter`
-
-English:
-theorem univ_inter
-  given: (a : Set α)
-  statement: univ inter a = a
-  proof: top_inf_eq _
+theorem univ_inter (a : Set α) : univ ∩ a = a := top_inf_eq _
 
 @[gcongr]
-
-中文:
-定理 univ_inter
-  条件: (a : 集合 α)
-  结论: univ inter a = a
-  证明: top_inf_eq _
-
-@[gcongr]
-
-Depends on / 依赖: top_inf_eq
+/-
+**Set.inter_subset_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ su
+bseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+参数：h₁ : s₁ subseteq t₁；h₂ : s₂ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c d : α}, b ≤ 
+a → d ≤ c → b ⊓ d ≤ a ⊓ c
 -/
-theorem univ_inter (a : Set α) : univ inter a = a := top_inf_eq _
-
-@[gcongr]
-/--
-theorem `inter_subset_inter` / 定理 `inter_subset_inter`
-
-English:
-theorem inter_subset_inter
-  given: {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ subseteq t₂)
-  proof: inf_le_inf h₁ h₂
-
-中文:
-定理 inter_subset_inter
-  条件: {s₁ s₂ t₁ t₂ : 集合 α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ subseteq t₂)
-  证明: inf_le_inf h₁ h₂
-
-Depends on / 依赖: inf_le_inf
--/
-theorem inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ subseteq t₁) (h₂ : s₂ subseteq t₂) :
-    s₁ inter s₂ subseteq t₁ inter t₂ :=
+theorem inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s₁ ⊆ t₁) (h₂ : s₂ ⊆ t₂) :
+    s₁ ∩ s₂ ⊆ t₁ ∩ t₂ :=
   inf_le_inf h₁ h₂
-
-/--
-theorem `inter_subset_inter_left` / 定理 `inter_subset_inter_left`
-
-English:
-theorem inter_subset_inter_left
-  given: {s t : Set α} (u : Set α) (H : s subseteq t)
-  statement: s inter u subseteq t inter u
-  proof: inter_subset_inter H Subset.rfl
-
-中文:
-定理 inter_subset_inter_left
-  条件: {s t : 集合 α} (u : 集合 α) (H : s subseteq t)
-  结论: s inter u subseteq t inter u
-  证明: inter_subset_inter H Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, inter_subset_inter
+/-
+**Set.inter_subset_inter_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_subset_inter_left {s t : Set α} (u : Set α) (H : s subseteq t) : s i
+nter u subseteq t inter u
+参数：u : Set α；H : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_inter`：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq t₁) (h₂ : s₂ subseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem inter_subset_inter_left {s t : Set α} (u : Set α) (H : s subseteq t) : s inter u subseteq t inter u :=
+theorem inter_subset_inter_left {s t : Set α} (u : Set α) (H : s ⊆ t) : s ∩ u ⊆ t ∩ u :=
   inter_subset_inter H Subset.rfl
-
-/--
-theorem `inter_subset_inter_right` / 定理 `inter_subset_inter_right`
-
-English:
-theorem inter_subset_inter_right
-  given: {s t : Set α} (u : Set α) (H : s subseteq t)
-  statement: u inter s subseteq u inter t
-  proof: inter_subset_inter Subset.rfl H
-
-中文:
-定理 inter_subset_inter_right
-  条件: {s t : 集合 α} (u : 集合 α) (H : s subseteq t)
-  结论: u inter s subseteq u inter t
-  证明: inter_subset_inter Subset.rfl H
-
-Depends on / 依赖: Subset, Subset.rfl, inter_subset_inter
+/-
+**Set.inter_subset_inter_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_subset_inter_right {s t : Set α} (u : Set α) (H : s subseteq t) : u 
+inter s subseteq u inter t
+参数：u : Set α；H : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_inter`：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq t₁) (h₂ : s₂ subseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem inter_subset_inter_right {s t : Set α} (u : Set α) (H : s subseteq t) : u inter s subseteq u inter t :=
+theorem inter_subset_inter_right {s t : Set α} (u : Set α) (H : s ⊆ t) : u ∩ s ⊆ u ∩ t :=
   inter_subset_inter Subset.rfl H
-
-/--
-theorem `union_inter_cancel_left` / 定理 `union_inter_cancel_left`
-
-English:
-theorem union_inter_cancel_left
-  given: {s t : Set α}
-  statement: (s union t) inter s = s
-  proof: inter_eq_self_of_subset_right subset_union_left
-
-中文:
-定理 union_inter_cancel_left
-  条件: {s t : 集合 α}
-  结论: (s union t) inter s = s
-  证明: inter_eq_self_of_subset_right subset_union_left
-
-Depends on / 依赖: inter_eq_self_of_subset_right, subset_union_left
+/-
+**Set.union_inter_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_inter_cancel_left {s t : Set α} : (s union t) inter s = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
 -/
-theorem union_inter_cancel_left {s t : Set α} : (s union t) inter s = s :=
+theorem union_inter_cancel_left {s t : Set α} : (s ∪ t) ∩ s = s :=
   inter_eq_self_of_subset_right subset_union_left
-
-/--
-theorem `union_inter_cancel_right` / 定理 `union_inter_cancel_right`
-
-English:
-theorem union_inter_cancel_right
-  given: {s t : Set α}
-  statement: (s union t) inter t = t
-  proof: inter_eq_self_of_subset_right subset_union_right
-
-中文:
-定理 union_inter_cancel_right
-  条件: {s t : 集合 α}
-  结论: (s union t) inter t = t
-  证明: inter_eq_self_of_subset_right subset_union_right
-
-Depends on / 依赖: inter_eq_self_of_subset_right, subset_union_right
+/-
+**Set.union_inter_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_inter_cancel_right {s t : Set α} : (s union t) inter t = t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 -/
-theorem union_inter_cancel_right {s t : Set α} : (s union t) inter t = t :=
+theorem union_inter_cancel_right {s t : Set α} : (s ∪ t) ∩ t = t :=
   inter_eq_self_of_subset_right subset_union_right
-
-/--
-theorem `inter_ofPred_eq_sep` / 定理 `inter_ofPred_eq_sep`
-
-English:
-theorem inter_ofPred_eq_sep
-  given: (s : Set α) (p : α -> Prop)
-  statement: s inter {a | p a} = {a in s | p a}
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias inter_setOf_eq_sep := inter_ofPred_eq_sep
-
-中文:
-定理 inter_ofPred_eq_sep
-  条件: (s : 集合 α) (p : α -> 命题)
-  结论: s inter {a | p a} = {a in s | p a}
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias inter_setOf_eq_sep := inter_ofPred_eq_sep
+/-
+**Set.inter_ofPred_eq_sep** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_ofPred_eq_sep (s : Set α) (p : α -> Prop) : s inter {a | p a} = {a i
+n s | p a}
+参数：s : Set α；p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inter_ofPred_eq_sep (s : Set α) (p : α -> Prop) : s inter {a | p a} = {a in s | p a} :=
+theorem inter_ofPred_eq_sep (s : Set α) (p : α → Prop) : s ∩ {a | p a} = {a ∈ s | p a} :=
   rfl
 
 @[deprecated (since := "2026-07-09")]
 alias inter_setOf_eq_sep := inter_ofPred_eq_sep
-
-/--
-theorem `ofPred_inter_eq_sep` / 定理 `ofPred_inter_eq_sep`
-
-English:
-theorem ofPred_inter_eq_sep
-  given: (p : α -> Prop) (s : Set α)
-  statement: {a | p a} inter s = {a in s | p a}
-  proof: inter_comm _ _
-
-@[deprecated (since := "2026-07-09")] alias setOf_inter_eq_sep := ofPred_inter_eq_sep
-
-中文:
-定理 ofPred_inter_eq_sep
-  条件: (p : α -> 命题) (s : 集合 α)
-  结论: {a | p a} inter s = {a in s | p a}
-  证明: inter_comm _ _
-
-@[deprecated (since := "2026-07-09")] alias setOf_inter_eq_sep := ofPred_inter_eq_sep
-
-Depends on / 依赖: inter_comm
+/-
+**Set.ofPred_inter_eq_sep** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ofPred_inter_eq_sep (p : α -> Prop) (s : Set α) : {a | p a} inter s = {a i
+n s | p a}
+参数：p : α -> Prop；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
-theorem ofPred_inter_eq_sep (p : α -> Prop) (s : Set α) : {a | p a} inter s = {a in s | p a} :=
+theorem ofPred_inter_eq_sep (p : α → Prop) (s : Set α) : {a | p a} ∩ s = {a ∈ s | p a} :=
   inter_comm _ _
 
 @[deprecated (since := "2026-07-09")] alias setOf_inter_eq_sep := ofPred_inter_eq_sep
-
-/--
-theorem `sep_eq_inter_sep` / 定理 `sep_eq_inter_sep`
-
-English:
-theorem sep_eq_inter_sep
-  given: {α : Type*} {s t : Set α} {p : α -> Prop} (hst : s subseteq t)
-  proof: by
-  rw [← inter_ofPred_eq_sep s p]; rw [← inter_ofPred_eq_sep t p]; rw [← inter_assoc]; rw [← left_eq_inter.mpr hst]
-
-@[simp]
-
-中文:
-定理 sep_eq_inter_sep
-  条件: {α : 类型} {s t : 集合 α} {p : α -> 命题} (hst : s subseteq t)
-  证明: by
-  rw [← inter_ofPred_eq_sep s p]; rw [← inter_ofPred_eq_sep t p]; rw [← inter_assoc]; rw [← left_eq_inter.mpr hst]
-
-@[simp]
-
-Depends on / 依赖: inter_assoc, inter_ofPred_eq_sep, left_eq_inter, left_eq_inter.mpr
+/-
+**Set.sep_eq_inter_sep** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_eq_inter_sep {α : Type*} {s t : Set α} {p : α -> Prop} (hst : s subset
+eq t) : {x in s | p x} = s inter {x in t | p x}
+参数：hst : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_ofPred_eq_sep`：inter_ofPred_eq_sep (s : Set α) (p : α -> Prop)
+ : s inter {a | p a} = {a in s | p a}
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_eq_inter`：∀ {α : Type u} {s t : Set α}, s = s ∩ t ↔ s ⊆ t
 -/
-theorem sep_eq_inter_sep {α : Type*} {s t : Set α} {p : α -> Prop} (hst : s subseteq t) :
-    {x in s | p x} = s inter {x in t | p x} := by
-  rw [← inter_ofPred_eq_sep s p]; rw [← inter_ofPred_eq_sep t p]; rw [← inter_assoc]; rw [← left_eq_inter.mpr hst]
+theorem sep_eq_inter_sep {α : Type*} {s t : Set α} {p : α → Prop} (hst : s ⊆ t) :
+    {x ∈ s | p x} = s ∩ {x ∈ t | p x} := by
+  rw [← inter_ofPred_eq_sep s p, ← inter_ofPred_eq_sep t p,
+    ← inter_assoc, ← left_eq_inter.mpr hst]
 
 @[simp]
-/--
-theorem `inter_ssubset_right_iff` / 定理 `inter_ssubset_right_iff`
-
-English:
-theorem inter_ssubset_right_iff
-  statement: s inter t ⊂ t ↔ ¬ t subseteq s
-  proof: inf_lt_right
-
-@[simp]
-
-中文:
-定理 inter_ssubset_right_iff
-  结论: s inter t ⊂ t ↔ ¬ t subseteq s
-  证明: inf_lt_right
-
-@[simp]
-
-Depends on / 依赖: inf_lt_right
+/-
+**Set.inter_ssubset_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_ssubset_right_iff : s inter t ⊂ t ↔ ¬ t subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_lt_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+< b ↔ ¬b ≤ a
 -/
-theorem inter_ssubset_right_iff : s inter t ⊂ t ↔ ¬ t subseteq s :=
+theorem inter_ssubset_right_iff : s ∩ t ⊂ t ↔ ¬ t ⊆ s :=
   inf_lt_right
 
 @[simp]
-/--
-theorem `inter_ssubset_left_iff` / 定理 `inter_ssubset_left_iff`
-
-English:
-theorem inter_ssubset_left_iff
-  statement: s inter t ⊂ s ↔ ¬ s subseteq t
-  proof: inf_lt_left
-
-中文:
-定理 inter_ssubset_left_iff
-  结论: s inter t ⊂ s ↔ ¬ s subseteq t
-  证明: inf_lt_left
-
-Depends on / 依赖: inf_lt_left
+/-
+**Set.inter_ssubset_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_ssubset_left_iff : s inter t ⊂ s ↔ ¬ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_lt_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b <
+ a ↔ ¬a ≤ b
 -/
-theorem inter_ssubset_left_iff : s inter t ⊂ s ↔ ¬ s subseteq t :=
+theorem inter_ssubset_left_iff : s ∩ t ⊂ s ↔ ¬ s ⊆ t :=
   inf_lt_left
 
+/-! ### Distributivity laws -/
 
-/--
-theorem `inter_union_distrib_left` / 定理 `inter_union_distrib_left`
+/-
+**Set.inter_union_distrib_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_union_distrib_left (s t u : Set α) : s inter (t union u) = s inter t
+ union s inter u
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_sup_left`：inf_sup_left (a b c : α) : a ⊓ (b ⊔ c) = a ⊓ b ⊔ a ⊓ c
 
-English:
-theorem inter_union_distrib_left
-  given: (s t u : Set α)
-  statement: s inter (t union u) = s inter t union s inter u
-  proof: inf_sup_left _ _ _
-
-中文:
-定理 inter_union_distrib_left
-  条件: (s t u : 集合 α)
-  结论: s inter (t union u) = s inter t union s inter u
-  证明: inf_sup_left _ _ _
-
-Depends on / 依赖: inf_sup_left
+--- 原说明 ---
+### Distributivity laws
 -/
-theorem inter_union_distrib_left (s t u : Set α) : s inter (t union u) = s inter t union s inter u :=
+theorem inter_union_distrib_left (s t u : Set α) : s ∩ (t ∪ u) = s ∩ t ∪ s ∩ u :=
   inf_sup_left _ _ _
-
-/--
-theorem `union_inter_distrib_right` / 定理 `union_inter_distrib_right`
-
-English:
-theorem union_inter_distrib_right
-  given: (s t u : Set α)
-  statement: (s union t) inter u = s inter u union t inter u
-  proof: inf_sup_right _ _ _
-
-中文:
-定理 union_inter_distrib_right
-  条件: (s t u : 集合 α)
-  结论: (s union t) inter u = s inter u union t inter u
-  证明: inf_sup_right _ _ _
-
-Depends on / 依赖: inf_sup_right
+/-
+**Set.union_inter_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_inter_distrib_right (s t u : Set α) : (s union t) inter u = s inter 
+u union t inter u
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_sup_right`：inf_sup_right (a b c : α) : (a ⊔ b) ⊓ c = a ⊓ c ⊔ b ⊓ c
 -/
-theorem union_inter_distrib_right (s t u : Set α) : (s union t) inter u = s inter u union t inter u :=
+theorem union_inter_distrib_right (s t u : Set α) : (s ∪ t) ∩ u = s ∩ u ∪ t ∩ u :=
   inf_sup_right _ _ _
-
-/--
-theorem `union_inter_distrib_left` / 定理 `union_inter_distrib_left`
-
-English:
-theorem union_inter_distrib_left
-  given: (s t u : Set α)
-  statement: s union t inter u = (s union t) inter (s union u)
-  proof: sup_inf_left _ _ _
-
-中文:
-定理 union_inter_distrib_left
-  条件: (s t u : 集合 α)
-  结论: s union t inter u = (s union t) inter (s union u)
-  证明: sup_inf_left _ _ _
-
-Depends on / 依赖: sup_inf_left
+/-
+**Set.union_inter_distrib_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_inter_distrib_left (s t u : Set α) : s union t inter u = (s union t)
+ inter (s union u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_inf_left`：sup_inf_left (a b c : α) : a ⊔ b ⊓ c = (a ⊔ b) ⊓ (a ⊔ c)
 -/
-theorem union_inter_distrib_left (s t u : Set α) : s union t inter u = (s union t) inter (s union u) :=
+theorem union_inter_distrib_left (s t u : Set α) : s ∪ t ∩ u = (s ∪ t) ∩ (s ∪ u) :=
   sup_inf_left _ _ _
-
-/--
-theorem `inter_union_distrib_right` / 定理 `inter_union_distrib_right`
-
-English:
-theorem inter_union_distrib_right
-  given: (s t u : Set α)
-  statement: s inter t union u = (s union u) inter (t union u)
-  proof: sup_inf_right _ _ _
-
-中文:
-定理 inter_union_distrib_right
-  条件: (s t u : 集合 α)
-  结论: s inter t union u = (s union u) inter (t union u)
-  证明: sup_inf_right _ _ _
-
-Depends on / 依赖: sup_inf_right
+/-
+**Set.inter_union_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_union_distrib_right (s t u : Set α) : s inter t union u = (s union u
+) inter (t union u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_inf_right`：sup_inf_right (a b c : α) : a ⊓ b ⊔ c = (a ⊔ c) ⊓ (b ⊔ c)
 -/
-theorem inter_union_distrib_right (s t u : Set α) : s inter t union u = (s union u) inter (t union u) :=
+theorem inter_union_distrib_right (s t u : Set α) : s ∩ t ∪ u = (s ∪ u) ∩ (t ∪ u) :=
   sup_inf_right _ _ _
-
-/--
-theorem `union_union_distrib_left` / 定理 `union_union_distrib_left`
-
-English:
-theorem union_union_distrib_left
-  given: (s t u : Set α)
-  statement: s union (t union u) = s union t union (s union u)
-  proof: sup_sup_distrib_left _ _ _
-
-中文:
-定理 union_union_distrib_left
-  条件: (s t u : 集合 α)
-  结论: s union (t union u) = s union t union (s union u)
-  证明: sup_sup_distrib_left _ _ _
-
-Depends on / 依赖: sup_sup_distrib_left
+/-
+**Set.union_union_distrib_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_union_distrib_left (s t u : Set α) : s union (t union u) = s union t
+ union (s union u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sup_distrib_left`：sup_sup_distrib_left (a b c : α) : a ⊔ (b ⊔ c) = a
+ ⊔ b ⊔ (a ⊔ c)
 -/
-theorem union_union_distrib_left (s t u : Set α) : s union (t union u) = s union t union (s union u) :=
+theorem union_union_distrib_left (s t u : Set α) : s ∪ (t ∪ u) = s ∪ t ∪ (s ∪ u) :=
   sup_sup_distrib_left _ _ _
-
-/--
-theorem `union_union_distrib_right` / 定理 `union_union_distrib_right`
-
-English:
-theorem union_union_distrib_right
-  given: (s t u : Set α)
-  statement: s union t union u = s union u union (t union u)
-  proof: sup_sup_distrib_right _ _ _
-
-中文:
-定理 union_union_distrib_right
-  条件: (s t u : 集合 α)
-  结论: s union t union u = s union u union (t union u)
-  证明: sup_sup_distrib_right _ _ _
-
-Depends on / 依赖: sup_sup_distrib_right
+/-
+**Set.union_union_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_union_distrib_right (s t u : Set α) : s union t union u = s union u 
+union (t union u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sup_distrib_right`：sup_sup_distrib_right (a b c : α) : a ⊔ b ⊔ c = a
+ ⊔ c ⊔ (b ⊔ c)
 -/
-theorem union_union_distrib_right (s t u : Set α) : s union t union u = s union u union (t union u) :=
+theorem union_union_distrib_right (s t u : Set α) : s ∪ t ∪ u = s ∪ u ∪ (t ∪ u) :=
   sup_sup_distrib_right _ _ _
-
-/--
-theorem `inter_inter_distrib_left` / 定理 `inter_inter_distrib_left`
-
-English:
-theorem inter_inter_distrib_left
-  given: (s t u : Set α)
-  statement: s inter (t inter u) = s inter t inter (s inter u)
-  proof: inf_inf_distrib_left _ _ _
-
-中文:
-定理 inter_inter_distrib_left
-  条件: (s t u : 集合 α)
-  结论: s inter (t inter u) = s inter t inter (s inter u)
-  证明: inf_inf_distrib_left _ _ _
-
-Depends on / 依赖: inf_inf_distrib_left
+/-
+**Set.inter_inter_distrib_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_inter_distrib_left (s t u : Set α) : s inter (t inter u) = s inter t
+ inter (s inter u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_inf_distrib_left`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : 
+α), a ⊓ (b ⊓ c) = a ⊓ b ⊓ (a ⊓ c)
 -/
-theorem inter_inter_distrib_left (s t u : Set α) : s inter (t inter u) = s inter t inter (s inter u) :=
+theorem inter_inter_distrib_left (s t u : Set α) : s ∩ (t ∩ u) = s ∩ t ∩ (s ∩ u) :=
   inf_inf_distrib_left _ _ _
-
-/--
-theorem `inter_inter_distrib_right` / 定理 `inter_inter_distrib_right`
-
-English:
-theorem inter_inter_distrib_right
-  given: (s t u : Set α)
-  statement: s inter t inter u = s inter u inter (t inter u)
-  proof: inf_inf_distrib_right _ _ _
-
-中文:
-定理 inter_inter_distrib_right
-  条件: (s t u : 集合 α)
-  结论: s inter t inter u = s inter u inter (t inter u)
-  证明: inf_inf_distrib_right _ _ _
-
-Depends on / 依赖: inf_inf_distrib_right
+/-
+**Set.inter_inter_distrib_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_inter_distrib_right (s t u : Set α) : s inter t inter u = s inter u 
+inter (t inter u)
+参数：s t u : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_inf_distrib_right`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c :
+ α), a ⊓ b ⊓ c = a ⊓ c ⊓ (b ⊓ c)
 -/
-theorem inter_inter_distrib_right (s t u : Set α) : s inter t inter u = s inter u inter (t inter u) :=
+theorem inter_inter_distrib_right (s t u : Set α) : s ∩ t ∩ u = s ∩ u ∩ (t ∩ u) :=
   inf_inf_distrib_right _ _ _
-
-/--
-theorem `union_union_union_comm` / 定理 `union_union_union_comm`
-
-English:
-theorem union_union_union_comm
-  given: (s t u v : Set α)
-  statement: s union t union (u union v) = s union u union (t union v)
-  proof: sup_sup_sup_comm _ _ _ _
-
-中文:
-定理 union_union_union_comm
-  条件: (s t u v : 集合 α)
-  结论: s union t union (u union v) = s union u union (t union v)
-  证明: sup_sup_sup_comm _ _ _ _
-
-Depends on / 依赖: sup_sup_sup_comm
+/-
+**Set.union_union_union_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_union_union_comm (s t u v : Set α) : s union t union (u union v) = s
+ union u union (t union v)
+参数：s t u v : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_sup_sup_comm`：sup_sup_sup_comm (a b c d : α) : a ⊔ b ⊔ (c ⊔ d) = a ⊔
+ c ⊔ (b ⊔ d)
 -/
-theorem union_union_union_comm (s t u v : Set α) : s union t union (u union v) = s union u union (t union v) :=
+theorem union_union_union_comm (s t u v : Set α) : s ∪ t ∪ (u ∪ v) = s ∪ u ∪ (t ∪ v) :=
   sup_sup_sup_comm _ _ _ _
-
-/--
-theorem `inter_inter_inter_comm` / 定理 `inter_inter_inter_comm`
-
-English:
-theorem inter_inter_inter_comm
-  given: (s t u v : Set α)
-  statement: s inter t inter (u inter v) = s inter u inter (t inter v)
-  proof: inf_inf_inf_comm _ _ _ _
-
-中文:
-定理 inter_inter_inter_comm
-  条件: (s t u v : 集合 α)
-  结论: s inter t inter (u inter v) = s inter u inter (t inter v)
-  证明: inf_inf_inf_comm _ _ _ _
-
-Depends on / 依赖: inf_inf_inf_comm
+/-
+**Set.inter_inter_inter_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_inter_inter_comm (s t u v : Set α) : s inter t inter (u inter v) = s
+ inter u inter (t inter v)
+参数：s t u v : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_inf_inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c d : α)
+, a ⊓ b ⊓ (c ⊓ d) = a ⊓ c ⊓ (b ⊓ d)
 -/
-theorem inter_inter_inter_comm (s t u v : Set α) : s inter t inter (u inter v) = s inter u inter (t inter v) :=
+theorem inter_inter_inter_comm (s t u v : Set α) : s ∩ t ∩ (u ∩ v) = s ∩ u ∩ (t ∩ v) :=
   inf_inf_inf_comm _ _ _ _
 
 /-! ### Lemmas about sets defined as `{x ∈ s | p x}`. -/
 
 section Sep
 
-variable {p q : α -> Prop} {x : α}
+variable {p q : α → Prop} {x : α}
 
-/--
-theorem `mem_sep` / 定理 `mem_sep`
-
-English:
-theorem mem_sep
-  given: (xs : x in s) (px : p x)
-  statement: x in { x in s | p x }
-  proof: ⟨xs, px⟩
-
-@[simp]
-
-中文:
-定理 mem_sep
-  条件: (xs : x in s) (px : p x)
-  结论: x in { x in s | p x }
-  证明: ⟨xs, px⟩
-
-@[simp]
+/-
+**Set.mem_sep** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sep (xs : x in s) (px : p x) : x in { x in s | p x }
+参数：xs : x in s；px : p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_sep (xs : x in s) (px : p x) : x in { x in s | p x } :=
+theorem mem_sep (xs : x ∈ s) (px : p x) : x ∈ { x ∈ s | p x } :=
   ⟨xs, px⟩
 
 @[simp]
-/--
-theorem `sep_mem_eq` / 定理 `sep_mem_eq`
-
-English:
-theorem sep_mem_eq
-  statement: { x in s | x in t } = s inter t
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sep_mem_eq
-  结论: { x in s | x in t } = s inter t
-  证明: rfl
-
-@[simp]
+/-
+**Set.sep_mem_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_mem_eq : { x in s | x in t } = s inter t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sep_mem_eq : { x in s | x in t } = s inter t :=
+theorem sep_mem_eq : { x ∈ s | x ∈ t } = s ∩ t :=
   rfl
 
 @[simp]
-/--
-theorem `mem_sep_iff` / 定理 `mem_sep_iff`
-
-English:
-theorem mem_sep_iff
-  statement: x in { x in s | p x } ↔ x in s ∧ p x
-  proof: Iff.rfl
-
-中文:
-定理 mem_sep_iff
-  结论: x in { x in s | p x } ↔ x in s ∧ p x
-  证明: Iff.rfl
-
-Depends on / 依赖: ContMDiff, Iff.rfl, contDiff_smul, contDiff_smul.contMDiff.comp, contMDiff, contMDiff_id, contMDiff_prod_iff, contMDiff_prod_module_iff
+/-
+**Set.mem_sep_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sep_iff : x in { x in s | p x } ↔ x in s ∧ p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sep_iff : x in { x in s | p x } ↔ x in s ∧ p x :=
+theorem mem_sep_iff : x ∈ { x ∈ s | p x } ↔ x ∈ s ∧ p x :=
   Iff.rfl
-
-/--
-theorem `sep_ext_iff` / 定理 `sep_ext_iff`
-
-English:
-theorem sep_ext_iff
-  statement: { x in s | p x } = { x in s | q x } ↔ forall x in s, p x ↔ q x
-  proof: by
-  simp_rw [Set.ext_iff, mem_sep_iff, and_congr_right_iff]
-
-中文:
-定理 sep_ext_iff
-  结论: { x in s | p x } = { x in s | q x } ↔ 对任意 x in s, p x ↔ q x
-  证明: by
-  simp_rw [Set.ext_iff, mem_sep_iff, and_congr_right_iff]
-
-Depends on / 依赖: ContMDiff, Set.ext_iff, and_congr_right_iff, contDiff, contMDiff, contMDiff_id, contMDiff_prod_iff, contMDiff_prod_module_iff, ext_iff, isBoundedBilinearMap_apply, isBoundedBilinearMap_apply.contDiff.contMDiff.comp, mem_sep_iff, simp_rw
+/-
+**Set.sep_ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_ext_iff : { x in s | p x } = { x in s | q x } ↔ forall x in s, p x ↔ q
+ x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem sep_ext_iff : { x in s | p x } = { x in s | q x } ↔ forall x in s, p x ↔ q x := by
+theorem sep_ext_iff : { x ∈ s | p x } = { x ∈ s | q x } ↔ ∀ x ∈ s, p x ↔ q x := by
   simp_rw [Set.ext_iff, mem_sep_iff, and_congr_right_iff]
-
-/--
-theorem `sep_eq_of_subset` / 定理 `sep_eq_of_subset`
-
-English:
-theorem sep_eq_of_subset
-  given: (h : s subseteq t)
-  statement: { x in t | x in s } = s
-  proof: inter_eq_self_of_subset_right h
-
-@[simp]
-
-中文:
-定理 sep_eq_of_subset
-  条件: (h : s subseteq t)
-  结论: { x in t | x in s } = s
-  证明: inter_eq_self_of_subset_right h
-
-@[simp]
-
-Depends on / 依赖: inter_eq_self_of_subset_right
+/-
+**Set.sep_eq_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_eq_of_subset (h : s subseteq t) : { x in t | x in s } = s
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_eq_self_of_subset_right`：inter_eq_self_of_subset_right {s t : 
+Set α} : t subseteq s -> s inter t = t
 -/
-theorem sep_eq_of_subset (h : s subseteq t) : { x in t | x in s } = s :=
+theorem sep_eq_of_subset (h : s ⊆ t) : { x ∈ t | x ∈ s } = s :=
   inter_eq_self_of_subset_right h
 
 @[simp]
-/--
-theorem `sep_subset` / 定理 `sep_subset`
-
-English:
-theorem sep_subset
-  given: (s : Set α) (p : α -> Prop)
-  statement: { x in s | p x } subseteq s
-  proof: fun _ => And.left
-
-中文:
-定理 sep_subset
-  条件: (s : 集合 α) (p : α -> 命题)
-  结论: { x in s | p x } subseteq s
-  证明: fun _ => And.left
-
-Depends on / 依赖: And.left
+/-
+**Set.sep_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_subset (s : Set α) (p : α -> Prop) : { x in s | p x } subseteq s
+参数：s : Set α；p : α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem sep_subset (s : Set α) (p : α -> Prop) : { x in s | p x } subseteq s := fun _ => And.left
-
-/--
-theorem `sep_subset_ofPred` / 定理 `sep_subset_ofPred`
-
-English:
-theorem sep_subset_ofPred
-  given: (s : Set α) (p : α -> Prop)
-  statement: { x in s | p x } subseteq { x | p x }
-  proof: fun _ => And.right
-
-@[deprecated (since := "2026-07-09")]
-alias sep_subset_setOf := sep_subset_ofPred
-
-@[simp]
-
-中文:
-定理 sep_subset_ofPred
-  条件: (s : 集合 α) (p : α -> 命题)
-  结论: { x in s | p x } subseteq { x | p x }
-  证明: fun _ => And.right
-
-@[deprecated (since := "2026-07-09")]
-alias sep_subset_setOf := sep_subset_ofPred
-
-@[simp]
-
-Depends on / 依赖: And.right
+theorem sep_subset (s : Set α) (p : α → Prop) : { x ∈ s | p x } ⊆ s := fun _ => And.left
+/-
+**Set.sep_subset_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_subset_ofPred (s : Set α) (p : α -> Prop) : { x in s | p x } subseteq 
+{ x | p x }
+参数：s : Set α；p : α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem sep_subset_ofPred (s : Set α) (p : α -> Prop) : { x in s | p x } subseteq { x | p x } :=
+theorem sep_subset_ofPred (s : Set α) (p : α → Prop) : { x ∈ s | p x } ⊆ { x | p x } :=
   fun _ => And.right
 
 @[deprecated (since := "2026-07-09")]
 alias sep_subset_setOf := sep_subset_ofPred
 
 @[simp]
-/--
-theorem `sep_eq_self_iff_mem_true` / 定理 `sep_eq_self_iff_mem_true`
-
-English:
-theorem sep_eq_self_iff_mem_true
-  statement: { x in s | p x } = s ↔ forall x in s, p x
-  proof: by
+/-
+**Set.sep_eq_self_iff_mem_true** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_eq_self_iff_mem_true : { x in s | p x } = s ↔ forall x in s, p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem sep_eq_self_iff_mem_true : { x ∈ s | p x } = s ↔ ∀ x ∈ s, p x := by
   simp_rw [Set.ext_iff, mem_sep_iff, and_iff_left_iff_imp]
 
 @[simp]
-
-中文:
-定理 sep_eq_self_iff_mem_true
-  结论: { x in s | p x } = s ↔ 对任意 x in s, p x
-  证明: by
-  simp_rw [Set.ext_iff, mem_sep_iff, and_iff_left_iff_imp]
-
-@[simp]
-
-Depends on / 依赖: Set.ext_iff, and_iff_left_iff_imp, ext_iff, mem_sep_iff, simp_rw
+/-
+**Set.sep_eq_empty_iff_mem_false** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_eq_empty_iff_mem_false : { x in s | p x } = ∅ ↔ forall x in s, ¬p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem sep_eq_self_iff_mem_true : { x in s | p x } = s ↔ forall x in s, p x := by
-  simp_rw [Set.ext_iff, mem_sep_iff, and_iff_left_iff_imp]
-
-@[simp]
-/--
-theorem `sep_eq_empty_iff_mem_false` / 定理 `sep_eq_empty_iff_mem_false`
-
-English:
-theorem sep_eq_empty_iff_mem_false
-  statement: { x in s | p x } = ∅ ↔ forall x in s, ¬p x
-  proof: by
+theorem sep_eq_empty_iff_mem_false : { x ∈ s | p x } = ∅ ↔ ∀ x ∈ s, ¬p x := by
   simp_rw [Set.ext_iff, mem_sep_iff, mem_empty_iff_false, iff_false, not_and]
-
-中文:
-定理 sep_eq_empty_iff_mem_false
-  结论: { x in s | p x } = ∅ ↔ 对任意 x in s, ¬p x
-  证明: by
-  simp_rw [Set.ext_iff, mem_sep_iff, mem_empty_iff_false, iff_false, not_and]
-
-Depends on / 依赖: Set.ext_iff, ext_iff, iff_false, mem_empty_iff_false, mem_sep_iff, not_and, simp_rw
+/-
+**Set.sep_true** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_true : { x in s | True } = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
 -/
-theorem sep_eq_empty_iff_mem_false : { x in s | p x } = ∅ ↔ forall x in s, ¬p x := by
-  simp_rw [Set.ext_iff, mem_sep_iff, mem_empty_iff_false, iff_false, not_and]
-
-/--
-theorem `sep_true` / 定理 `sep_true`
-
-English:
-theorem sep_true
-  statement: { x in s | True } = s
-  proof: inter_univ s
-
-中文:
-定理 sep_true
-  结论: { x in s | 真 } = s
-  证明: inter_univ s
-
-Depends on / 依赖: inter_univ
--/
-theorem sep_true : { x in s | True } = s :=
+theorem sep_true : { x ∈ s | True } = s :=
   inter_univ s
-
-/--
-theorem `sep_false` / 定理 `sep_false`
-
-English:
-theorem sep_false
-  statement: { x in s | False } = ∅
-  proof: inter_empty s
-
-中文:
-定理 sep_false
-  结论: { x in s | 假 } = ∅
-  证明: inter_empty s
-
-Depends on / 依赖: inter_empty
+/-
+**Set.sep_false** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_false : { x in s | False } = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
 -/
-theorem sep_false : { x in s | False } = ∅ :=
+theorem sep_false : { x ∈ s | False } = ∅ :=
   inter_empty s
-
-/--
-theorem `sep_empty` / 定理 `sep_empty`
-
-English:
-theorem sep_empty
-  given: (p : α -> Prop)
-  statement: { x in (∅ : Set α) | p x } = ∅
-  proof: empty_inter {x | p x}
-
-中文:
-定理 sep_empty
-  条件: (p : α -> 命题)
-  结论: { x in (∅ : 集合 α) | p x } = ∅
-  证明: empty_inter {x | p x}
-
-Depends on / 依赖: empty_inter
+/-
+**Set.sep_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_empty (p : α -> Prop) : { x in (∅ : Set α) | p x } = ∅
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_inter`：empty_inter (a : Set α) : ∅ inter a = ∅
 -/
-theorem sep_empty (p : α -> Prop) : { x in (∅ : Set α) | p x } = ∅ :=
+theorem sep_empty (p : α → Prop) : { x ∈ (∅ : Set α) | p x } = ∅ :=
   empty_inter {x | p x}
-
-/--
-theorem `sep_univ` / 定理 `sep_univ`
-
-English:
-theorem sep_univ
-  statement: { x in (univ : Set α) | p x } = { x | p x }
-  proof: univ_inter {x | p x}
-
-@[simp]
-
-中文:
-定理 sep_univ
-  结论: { x in (univ : 集合 α) | p x } = { x | p x }
-  证明: univ_inter {x | p x}
-
-@[simp]
-
-Depends on / 依赖: univ_inter
+/-
+**Set.sep_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_univ : { x in (univ : Set α) | p x } = { x | p x }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
 -/
-theorem sep_univ : { x in (univ : Set α) | p x } = { x | p x } :=
+theorem sep_univ : { x ∈ (univ : Set α) | p x } = { x | p x } :=
   univ_inter {x | p x}
 
 @[simp]
-/--
-theorem `sep_union` / 定理 `sep_union`
-
-English:
-theorem sep_union
-  statement: { x | (x in s ∨ x in t) ∧ p x } = { x in s | p x } union { x in t | p x }
-  proof: union_inter_distrib_right { x | x in s } { x | x in t } {x | p x}
-
-@[simp]
-
-中文:
-定理 sep_union
-  结论: { x | (x in s ∨ x in t) ∧ p x } = { x in s | p x } union { x in t | p x }
-  证明: union_inter_distrib_right { x | x in s } { x | x in t } {x | p x}
-
-@[simp]
-
-Depends on / 依赖: union_inter_distrib_right
+/-
+**Set.sep_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_union : { x | (x in s ∨ x in t) ∧ p x } = { x in s | p x } union { x i
+n t | p x }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_inter_distrib_right`：union_inter_distrib_right (s t u : Set α)
+ : (s union t) inter u = s inter u union t inter u
 -/
-theorem sep_union : { x | (x in s ∨ x in t) ∧ p x } = { x in s | p x } union { x in t | p x } :=
-  union_inter_distrib_right { x | x in s } { x | x in t } {x | p x}
+theorem sep_union : { x | (x ∈ s ∨ x ∈ t) ∧ p x } = { x ∈ s | p x } ∪ { x ∈ t | p x } :=
+  union_inter_distrib_right { x | x ∈ s } { x | x ∈ t } {x | p x}
 
 @[simp]
-/--
-theorem `sep_inter` / 定理 `sep_inter`
-
-English:
-theorem sep_inter
-  statement: { x | (x in s ∧ x in t) ∧ p x } = { x in s | p x } inter { x in t | p x }
-  proof: inter_inter_distrib_right s t {x | p x}
-
-@[simp]
-
-中文:
-定理 sep_inter
-  结论: { x | (x in s ∧ x in t) ∧ p x } = { x in s | p x } inter { x in t | p x }
-  证明: inter_inter_distrib_right s t {x | p x}
-
-@[simp]
-
-Depends on / 依赖: inter_inter_distrib_right
+/-
+**Set.sep_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_inter : { x | (x in s ∧ x in t) ∧ p x } = { x in s | p x } inter { x i
+n t | p x }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_inter_distrib_right`：inter_inter_distrib_right (s t u : Set α)
+ : s inter t inter u = s inter u inter (t inter u)
 -/
-theorem sep_inter : { x | (x in s ∧ x in t) ∧ p x } = { x in s | p x } inter { x in t | p x } :=
+theorem sep_inter : { x | (x ∈ s ∧ x ∈ t) ∧ p x } = { x ∈ s | p x } ∩ { x ∈ t | p x } :=
   inter_inter_distrib_right s t {x | p x}
 
 @[simp]
-/--
-theorem `sep_and` / 定理 `sep_and`
-
-English:
-theorem sep_and
-  statement: { x in s | p x ∧ q x } = { x in s | p x } inter { x in s | q x }
-  proof: inter_inter_distrib_left s {x | p x} {x | q x}
-
-@[simp]
-
-中文:
-定理 sep_and
-  结论: { x in s | p x ∧ q x } = { x in s | p x } inter { x in s | q x }
-  证明: inter_inter_distrib_left s {x | p x} {x | q x}
-
-@[simp]
-
-Depends on / 依赖: inter_inter_distrib_left
+/-
+**Set.sep_and** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_and : { x in s | p x ∧ q x } = { x in s | p x } inter { x in s | q x }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_inter_distrib_left`：inter_inter_distrib_left (s t u : Set α) :
+ s inter (t inter u) = s inter t inter (s inter u)
 -/
-theorem sep_and : { x in s | p x ∧ q x } = { x in s | p x } inter { x in s | q x } :=
+theorem sep_and : { x ∈ s | p x ∧ q x } = { x ∈ s | p x } ∩ { x ∈ s | q x } :=
   inter_inter_distrib_left s {x | p x} {x | q x}
 
 @[simp]
-/--
-theorem `sep_or` / 定理 `sep_or`
-
-English:
-theorem sep_or
-  statement: { x in s | p x ∨ q x } = { x in s | p x } union { x in s | q x }
-  proof: inter_union_distrib_left s {x | p x} {x | q x}
-
-@[simp]
-
-中文:
-定理 sep_or
-  结论: { x in s | p x ∨ q x } = { x in s | p x } union { x in s | q x }
-  证明: inter_union_distrib_left s {x | p x} {x | q x}
-
-@[simp]
-
-Depends on / 依赖: inter_union_distrib_left
+/-
+**Set.sep_or** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_or : { x in s | p x ∨ q x } = { x in s | p x } union { x in s | q x }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_union_distrib_left`：inter_union_distrib_left (s t u : Set α) :
+ s inter (t union u) = s inter t union s inter u
 -/
-theorem sep_or : { x in s | p x ∨ q x } = { x in s | p x } union { x in s | q x } :=
+theorem sep_or : { x ∈ s | p x ∨ q x } = { x ∈ s | p x } ∪ { x ∈ s | q x } :=
   inter_union_distrib_left s {x | p x} {x | q x}
 
 @[simp]
-/--
-theorem `sep_ofPred` / 定理 `sep_ofPred`
-
-English:
-theorem sep_ofPred
-  statement: { x in { y | p y } | q x } = { x | p x ∧ q x }
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias sep_setOf := sep_ofPred
-
-中文:
-定理 sep_ofPred
-  结论: { x in { y | p y } | q x } = { x | p x ∧ q x }
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")]
-alias sep_setOf := sep_ofPred
+/-
+**Set.sep_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sep_ofPred : { x in { y | p y } | q x } = { x | p x ∧ q x }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sep_ofPred : { x in { y | p y } | q x } = { x | p x ∧ q x } :=
+theorem sep_ofPred : { x ∈ { y | p y } | q x } = { x | p x ∧ q x } :=
   rfl
 
 @[deprecated (since := "2026-07-09")]
@@ -5031,378 +2935,289 @@ alias sep_setOf := sep_ofPred
 
 end Sep
 
+/-! ### Powerset -/
 
-/--
-theorem `mem_powerset` / 定理 `mem_powerset`
+/-
+**Set.mem_powerset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_powerset {x s : Set α} (h : x subseteq s) : x in 𝒫 s
+参数：h : x subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_powerset
-  given: {x s : Set α} (h : x subseteq s)
-  statement: x in 𝒫 s
-  proof: @h
-
-中文:
-定理 mem_powerset
-  条件: {x s : 集合 α} (h : x subseteq s)
-  结论: x in 𝒫 s
-  证明: @h
+--- 原说明 ---
+### Powerset
 -/
-theorem mem_powerset {x s : Set α} (h : x subseteq s) : x in 𝒫 s := @h
-
-/--
-theorem `subset_of_mem_powerset` / 定理 `subset_of_mem_powerset`
-
-English:
-theorem subset_of_mem_powerset
-  given: {x s : Set α} (h : x in 𝒫 s)
-  statement: x subseteq s
-  proof: @h
+theorem mem_powerset {x s : Set α} (h : x ⊆ s) : x ∈ 𝒫 s := @h
+/-
+**Set.subset_of_mem_powerset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_of_mem_powerset {x s : Set α} (h : x in 𝒫 s) : x subseteq s
+参数：h : x in 𝒫 s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem subset_of_mem_powerset {x s : Set α} (h : x ∈ 𝒫 s) : x ⊆ s := @h
 
 @[simp, grind =, push]
-
-中文:
-定理 subset_of_mem_powerset
-  条件: {x s : 集合 α} (h : x in 𝒫 s)
-  结论: x subseteq s
-  证明: @h
-
-@[simp, grind =, push]
+/-
+**Set.mem_powerset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_powerset_iff (x s : Set α) : x in 𝒫 s ↔ x subseteq s
+参数：x s : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_of_mem_powerset {x s : Set α} (h : x in 𝒫 s) : x subseteq s := @h
-
-@[simp, grind =, push]
-/--
-theorem `mem_powerset_iff` / 定理 `mem_powerset_iff`
-
-English:
-theorem mem_powerset_iff
-  given: (x s : Set α)
-  statement: x in 𝒫 s ↔ x subseteq s
-  proof: Iff.rfl
-
-中文:
-定理 mem_powerset_iff
-  条件: (x s : 集合 α)
-  结论: x in 𝒫 s ↔ x subseteq s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem mem_powerset_iff (x s : Set α) : x in 𝒫 s ↔ x subseteq s :=
+theorem mem_powerset_iff (x s : Set α) : x ∈ 𝒫 s ↔ x ⊆ s :=
   Iff.rfl
-
-/--
-theorem `powerset_inter` / 定理 `powerset_inter`
-
-English:
-theorem powerset_inter
-  given: (s t : Set α)
-  statement: 𝒫 (s inter t) = 𝒫 s inter 𝒫 t
-  proof: ext fun _ => subset_inter_iff
-
-@[simp]
-
-中文:
-定理 powerset_inter
-  条件: (s t : 集合 α)
-  结论: 𝒫 (s inter t) = 𝒫 s inter 𝒫 t
-  证明: ext fun _ => subset_inter_iff
-
-@[simp]
-
-Depends on / 依赖: subset_inter_iff
+/-
+**Set.powerset_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：powerset_inter (s t : Set α) : 𝒫 (s inter t) = 𝒫 s inter 𝒫 t
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
 -/
-theorem powerset_inter (s t : Set α) : 𝒫 (s inter t) = 𝒫 s inter 𝒫 t :=
+theorem powerset_inter (s t : Set α) : 𝒫 (s ∩ t) = 𝒫 s ∩ 𝒫 t :=
   ext fun _ => subset_inter_iff
 
 @[simp]
-/--
-theorem `powerset_mono` / 定理 `powerset_mono`
-
-English:
-theorem powerset_mono
-  statement: 𝒫 s subseteq 𝒫 t ↔ s subseteq t
-  proof: ⟨fun h => @h _ (fun _ h => h), fun h _ hu _ ha => h (hu ha)⟩
-
-中文:
-定理 powerset_mono
-  结论: 𝒫 s subseteq 𝒫 t ↔ s subseteq t
-  证明: ⟨fun h => @h _ (fun _ h => h), fun h _ hu _ ha => h (hu ha)⟩
+/-
+**Set.powerset_mono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：powerset_mono : 𝒫 s subseteq 𝒫 t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem powerset_mono : 𝒫 s subseteq 𝒫 t ↔ s subseteq t :=
+theorem powerset_mono : 𝒫 s ⊆ 𝒫 t ↔ s ⊆ t :=
   ⟨fun h => @h _ (fun _ h => h), fun h _ hu _ ha => h (hu ha)⟩
-
-/--
-theorem `monotone_powerset` / 定理 `monotone_powerset`
-
-English:
-theorem monotone_powerset
-  statement: Monotone (powerset : Set α -> Set (Set α))
-  proof: fun _ _ => powerset_mono.2
-
-@[simp]
-
-中文:
-定理 monotone_powerset
-  结论: 递增 (powerset : 集合 α -> 集合 (集合 α))
-  证明: fun _ _ => powerset_mono.2
-
-@[simp]
-
-Depends on / 依赖: powerset_mono
+/-
+**Set.monotone_powerset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：monotone_powerset : Monotone (powerset : Set α -> Set (Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.powerset_mono`：powerset_mono : 𝒫 s subseteq 𝒫 t ↔ s subseteq t
 -/
-theorem monotone_powerset : Monotone (powerset : Set α -> Set (Set α)) := fun _ _ => powerset_mono.2
+theorem monotone_powerset : Monotone (powerset : Set α → Set (Set α)) := fun _ _ => powerset_mono.2
 
 @[simp]
-/--
-theorem `powerset_nonempty` / 定理 `powerset_nonempty`
-
-English:
-theorem powerset_nonempty
-  statement: (𝒫 s).Nonempty
-  proof: ⟨∅, fun _ h => empty_subset s h⟩
-
-@[simp]
-
-中文:
-定理 powerset_nonempty
-  结论: (𝒫 s).非空
-  证明: ⟨∅, fun _ h => empty_subset s h⟩
-
-@[simp]
-
-Depends on / 依赖: empty_subset
+/-
+**Set.powerset_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：powerset_nonempty : (𝒫 s).Nonempty
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
 -/
 theorem powerset_nonempty : (𝒫 s).Nonempty :=
   ⟨∅, fun _ h => empty_subset s h⟩
 
 @[simp]
-/--
-theorem `powerset_empty` / 定理 `powerset_empty`
-
-English:
-theorem powerset_empty
-  statement: 𝒫 (∅ : Set α) = {∅}
-  proof: ext fun _ => subset_empty_iff
-
-@[simp]
-
-中文:
-定理 powerset_empty
-  结论: 𝒫 (∅ : 集合 α) = {∅}
-  证明: ext fun _ => subset_empty_iff
-
-@[simp]
-
-Depends on / 依赖: subset_empty_iff
+/-
+**Set.powerset_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：powerset_empty : 𝒫 (∅ : Set α) = {∅}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
 -/
 theorem powerset_empty : 𝒫 (∅ : Set α) = {∅} :=
   ext fun _ => subset_empty_iff
 
 @[simp]
-/--
-theorem `powerset_univ` / 定理 `powerset_univ`
-
-English:
-theorem powerset_univ
-  statement: 𝒫 (univ : Set α) = univ
-  proof: eq_univ_of_forall subset_univ
-
-中文:
-定理 powerset_univ
-  结论: 𝒫 (univ : 集合 α) = univ
-  证明: eq_univ_of_forall subset_univ
-
-Depends on / 依赖: eq_univ_of_forall, subset_univ
+/-
+**Set.powerset_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：powerset_univ : 𝒫 (univ : Set α) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem powerset_univ : 𝒫 (univ : Set α) = univ :=
   eq_univ_of_forall subset_univ
 
+/-! ### Sets defined as an if-then-else -/
 
-/--
-theorem `mem_dite_univ_right` / 定理 `mem_dite_univ_right`
+/-
+**Set.mem_dite_univ_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_dite_univ_right (p : Prop) [Decidable p] (t : p -> Set α) (x : α) : (x
+ in if h : p then t h else univ) ↔ forall h : p, x in t h
+参数：p : Prop；t : p -> Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mem_dite_univ_right
-  given: (p : Prop) [Decidable p] (t : p -> Set α) (x : α)
-  proof: by
-  simp [mem_dite]
-
-@[simp]
-
-中文:
-定理 mem_dite_univ_right
-  条件: (p : 命题) [可判定 p] (t : p -> 集合 α) (x : α)
-  证明: by
-  simp [mem_dite]
-
-@[simp]
-
-Depends on / 依赖: mem_dite
+--- 原说明 ---
+### Sets defined as an if-then-else
 -/
-theorem mem_dite_univ_right (p : Prop) [Decidable p] (t : p -> Set α) (x : α) :
-    (x in if h : p then t h else univ) ↔ forall h : p, x in t h := by
+theorem mem_dite_univ_right (p : Prop) [Decidable p] (t : p → Set α) (x : α) :
+    (x ∈ if h : p then t h else univ) ↔ ∀ h : p, x ∈ t h := by
   simp [mem_dite]
 
 @[simp]
-/--
-theorem `mem_ite_univ_right` / 定理 `mem_ite_univ_right`
-
-English:
-theorem mem_ite_univ_right
-  given: (p : Prop) [Decidable p] (t : Set α) (x : α)
-  proof: mem_dite_univ_right p (fun _ => t) x
-
-中文:
-定理 mem_ite_univ_right
-  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
-  证明: mem_dite_univ_right p (fun _ => t) x
-
-Depends on / 依赖: mem_dite_univ_right
+/-
+**Set.mem_ite_univ_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ite_univ_right (p : Prop) [Decidable p] (t : Set α) (x : α) : x in ite
+ p t Set.univ ↔ p -> x in t
+参数：p : Prop；t : Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_dite_univ_right`：mem_dite_univ_right (p : Prop) [Decidable p] (t
+ : p -> Set α) (x : α) : (x in if h : p then t h else univ) ↔ forall h : p, x in
+ t h
 -/
 theorem mem_ite_univ_right (p : Prop) [Decidable p] (t : Set α) (x : α) :
-    x in ite p t Set.univ ↔ p -> x in t :=
+    x ∈ ite p t Set.univ ↔ p → x ∈ t :=
   mem_dite_univ_right p (fun _ => t) x
-
-/--
-theorem `mem_dite_univ_left` / 定理 `mem_dite_univ_left`
-
-English:
-theorem mem_dite_univ_left
-  given: (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α)
-  proof: by
-  split_ifs <;> simp_all
-
-@[simp]
-
-中文:
-定理 mem_dite_univ_left
-  条件: (p : 命题) [可判定 p] (t : ¬p -> 集合 α) (x : α)
-  证明: by
-  split_ifs <;> simp_all
-
-@[simp]
-
-Depends on / 依赖: split_ifs
+/-
+**Set.mem_dite_univ_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_dite_univ_left (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α) : (x
+ in if h : p then univ else t h) ↔ forall h : ¬p, x in t h
+参数：p : Prop；t : ¬p -> Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem mem_dite_univ_left (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α) :
-    (x in if h : p then univ else t h) ↔ forall h : ¬p, x in t h := by
+theorem mem_dite_univ_left (p : Prop) [Decidable p] (t : ¬p → Set α) (x : α) :
+    (x ∈ if h : p then univ else t h) ↔ ∀ h : ¬p, x ∈ t h := by
   split_ifs <;> simp_all
 
 @[simp]
-/--
-theorem `mem_ite_univ_left` / 定理 `mem_ite_univ_left`
-
-English:
-theorem mem_ite_univ_left
-  given: (p : Prop) [Decidable p] (t : Set α) (x : α)
-  proof: mem_dite_univ_left p (fun _ => t) x
-
-中文:
-定理 mem_ite_univ_left
-  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
-  证明: mem_dite_univ_left p (fun _ => t) x
-
-Depends on / 依赖: mem_dite_univ_left
+/-
+**Set.mem_ite_univ_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ite_univ_left (p : Prop) [Decidable p] (t : Set α) (x : α) : x in ite 
+p Set.univ t ↔ ¬p -> x in t
+参数：p : Prop；t : Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_dite_univ_left`：mem_dite_univ_left (p : Prop) [Decidable p] (t :
+ ¬p -> Set α) (x : α) : (x in if h : p then univ else t h) ↔ forall h : ¬p, x in
+ t h
 -/
 theorem mem_ite_univ_left (p : Prop) [Decidable p] (t : Set α) (x : α) :
-    x in ite p Set.univ t ↔ ¬p -> x in t :=
+    x ∈ ite p Set.univ t ↔ ¬p → x ∈ t :=
   mem_dite_univ_left p (fun _ => t) x
-
-/--
-theorem `mem_dite_empty_right` / 定理 `mem_dite_empty_right`
-
-English:
-theorem mem_dite_empty_right
-  given: (p : Prop) [Decidable p] (t : p -> Set α) (x : α)
-  proof: by
-  simp only [mem_dite, mem_empty_iff_false, imp_false, not_not]
-  exact ⟨fun h => ⟨h.2, h.1 h.2⟩, fun ⟨h₁, h₂⟩ => ⟨fun _ => h₂, h₁⟩⟩
-
-@[simp]
-
-中文:
-定理 mem_dite_empty_right
-  条件: (p : 命题) [可判定 p] (t : p -> 集合 α) (x : α)
-  证明: by
-  simp only [mem_dite, mem_empty_iff_false, imp_false, not_not]
-  exact ⟨fun h => ⟨h.2, h.1 h.2⟩, fun ⟨h₁, h₂⟩ => ⟨fun _ => h₂, h₁⟩⟩
-
-@[simp]
-
-Depends on / 依赖: imp_false, mem_dite, mem_empty_iff_false, not_not
+/-
+**Set.mem_dite_empty_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_dite_empty_right (p : Prop) [Decidable p] (t : p -> Set α) (x : α) : (
+x in if h : p then t h else ∅) ↔ exists h : p, x in t h
+参数：p : Prop；t : p -> Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem mem_dite_empty_right (p : Prop) [Decidable p] (t : p -> Set α) (x : α) :
-    (x in if h : p then t h else ∅) ↔ exists h : p, x in t h := by
+theorem mem_dite_empty_right (p : Prop) [Decidable p] (t : p → Set α) (x : α) :
+    (x ∈ if h : p then t h else ∅) ↔ ∃ h : p, x ∈ t h := by
   simp only [mem_dite, mem_empty_iff_false, imp_false, not_not]
   exact ⟨fun h => ⟨h.2, h.1 h.2⟩, fun ⟨h₁, h₂⟩ => ⟨fun _ => h₂, h₁⟩⟩
 
 @[simp]
-/--
-theorem `mem_ite_empty_right` / 定理 `mem_ite_empty_right`
-
-English:
-theorem mem_ite_empty_right
-  given: (p : Prop) [Decidable p] (t : Set α) (x : α)
-  proof: (mem_dite_empty_right p (fun _ => t) x).trans (by simp)
-
-中文:
-定理 mem_ite_empty_right
-  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
-  证明: (mem_dite_empty_right p (fun _ => t) x).trans (by simp)
-
-Depends on / 依赖: mem_dite_empty_right
+/-
+**Set.mem_ite_empty_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ite_empty_right (p : Prop) [Decidable p] (t : Set α) (x : α) : x in it
+e p t ∅ ↔ p ∧ x in t
+参数：p : Prop；t : Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.mem_dite_empty_right`：mem_dite_empty_right (p : Prop) [Decidable p] 
+(t : p -> Set α) (x : α) : (x in if h : p then t h else ∅) ↔ exists h : p, x in 
+t h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_ite_empty_right (p : Prop) [Decidable p] (t : Set α) (x : α) :
-    x in ite p t ∅ ↔ p ∧ x in t :=
+    x ∈ ite p t ∅ ↔ p ∧ x ∈ t :=
   (mem_dite_empty_right p (fun _ => t) x).trans (by simp)
-
-/--
-theorem `mem_dite_empty_left` / 定理 `mem_dite_empty_left`
-
-English:
-theorem mem_dite_empty_left
-  given: (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α)
-  proof: by
-  simp only [mem_dite, mem_empty_iff_false, imp_false]
-  exact ⟨fun h => ⟨h.1, h.2 h.1⟩, fun ⟨h₁, h₂⟩ => ⟨fun h => h₁ h, fun _ => h₂⟩⟩
-
-@[simp]
-
-中文:
-定理 mem_dite_empty_left
-  条件: (p : 命题) [可判定 p] (t : ¬p -> 集合 α) (x : α)
-  证明: by
-  simp only [mem_dite, mem_empty_iff_false, imp_false]
-  exact ⟨fun h => ⟨h.1, h.2 h.1⟩, fun ⟨h₁, h₂⟩ => ⟨fun h => h₁ h, fun _ => h₂⟩⟩
-
-@[simp]
-
-Depends on / 依赖: imp_false, mem_dite, mem_empty_iff_false
+/-
+**Set.mem_dite_empty_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_dite_empty_left (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α) : (
+x in if h : p then ∅ else t h) ↔ exists h : ¬p, x in t h
+参数：p : Prop；t : ¬p -> Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mem_dite_empty_left (p : Prop) [Decidable p] (t : ¬p -> Set α) (x : α) :
-    (x in if h : p then ∅ else t h) ↔ exists h : ¬p, x in t h := by
+theorem mem_dite_empty_left (p : Prop) [Decidable p] (t : ¬p → Set α) (x : α) :
+    (x ∈ if h : p then ∅ else t h) ↔ ∃ h : ¬p, x ∈ t h := by
   simp only [mem_dite, mem_empty_iff_false, imp_false]
   exact ⟨fun h => ⟨h.1, h.2 h.1⟩, fun ⟨h₁, h₂⟩ => ⟨fun h => h₁ h, fun _ => h₂⟩⟩
 
 @[simp]
-/--
-theorem `mem_ite_empty_left` / 定理 `mem_ite_empty_left`
-
-English:
-theorem mem_ite_empty_left
-  given: (p : Prop) [Decidable p] (t : Set α) (x : α)
-  proof: (mem_dite_empty_left p (fun _ => t) x).trans (by simp)
-
-中文:
-定理 mem_ite_empty_left
-  条件: (p : 命题) [可判定 p] (t : 集合 α) (x : α)
-  证明: (mem_dite_empty_left p (fun _ => t) x).trans (by simp)
-
-Depends on / 依赖: mem_dite_empty_left
+/-
+**Set.mem_ite_empty_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ite_empty_left (p : Prop) [Decidable p] (t : Set α) (x : α) : x in ite
+ p ∅ t ↔ ¬p ∧ x in t
+参数：p : Prop；t : Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.mem_dite_empty_left`：mem_dite_empty_left (p : Prop) [Decidable p] (t
+ : ¬p -> Set α) (x : α) : (x in if h : p then ∅ else t h) ↔ exists h : ¬p, x in 
+t h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_ite_empty_left (p : Prop) [Decidable p] (t : Set α) (x : α) :
-    x in ite p ∅ t ↔ ¬p ∧ x in t :=
+    x ∈ ite p ∅ t ↔ ¬p ∧ x ∈ t :=
   (mem_dite_empty_left p (fun _ => t) x).trans (by simp)
 
 end Set
@@ -5413,26 +3228,24 @@ namespace Function
 
 variable {α : Type*} {β : Type*}
 
-/--
-theorem `Injective.nonempty_apply_iff` / 定理 `Injective.nonempty_apply_iff`
-
-English:
-theorem Injective.nonempty_apply_iff
-  statement: {f : Set α -> Set β} (hf : Injective f) (h2 : f ∅ = ∅)
-  proof: by
-  rw [nonempty_iff_ne_empty]; rw [← h2]; rw [nonempty_iff_ne_empty]; rw [hf.ne_iff]
-
-中文:
-定理 单射.nonempty_apply_iff
-  结论: {f : 集合 α -> 集合 β} (hf : 单射 f) (h2 : f ∅ = ∅)
-  证明: by
-  rw [nonempty_iff_ne_empty]; rw [← h2]; rw [nonempty_iff_ne_empty]; rw [hf.ne_iff]
-
-Depends on / 依赖: hf.ne_iff, ne_iff, nonempty_iff_ne_empty
+/-
+**Function.Injective.nonempty_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `Function.Inje
+ctive`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : Set α → Set β},   Function.Injective 
+f → f ∅ = ∅ → ∀ {s : Set α}, (f s).Nonempty ↔ s.Nonempty
+参数：f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Injective.nonempty_apply_iff {f : Set α -> Set β} (hf : Injective f) (h2 : f ∅ = ∅)
+theorem Injective.nonempty_apply_iff {f : Set α → Set β} (hf : Injective f) (h2 : f ∅ = ∅)
     {s : Set α} : (f s).Nonempty ↔ s.Nonempty := by
-  rw [nonempty_iff_ne_empty]; rw [← h2]; rw [nonempty_iff_ne_empty]; rw [hf.ne_iff]
+  rw [nonempty_iff_ne_empty, ← h2, nonempty_iff_ne_empty, hf.ne_iff]
 
 end Function
 
@@ -5440,69 +3253,43 @@ namespace Subsingleton
 
 variable {α : Type*} [Subsingleton α]
 
-/--
-theorem `eq_univ_of_nonempty` / 定理 `eq_univ_of_nonempty`
-
-English:
-theorem eq_univ_of_nonempty
-  given: {s : Set α}
-  statement: s.Nonempty -> s = univ
-  proof: fun ⟨x, hx⟩ =>
-  eq_univ_of_forall fun y => Subsingleton.elim x y ▸ hx
-
-@[elab_as_elim]
-
-中文:
-定理 eq_univ_of_nonempty
-  条件: {s : 集合 α}
-  结论: s.非空 -> s = univ
-  证明: fun ⟨x, hx⟩ =>
-  eq_univ_of_forall fun y => Subsingleton.elim x y ▸ hx
-
-@[elab_as_elim]
+/-
+**Subsingleton.eq_univ_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：eq_univ_of_nonempty {s : Set α} : s.Nonempty -> s = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem eq_univ_of_nonempty {s : Set α} : s.Nonempty -> s = univ := fun ⟨x, hx⟩ =>
+theorem eq_univ_of_nonempty {s : Set α} : s.Nonempty → s = univ := fun ⟨x, hx⟩ =>
   eq_univ_of_forall fun y => Subsingleton.elim x y ▸ hx
 
 @[elab_as_elim]
-/--
-theorem `set_cases` / 定理 `set_cases`
-
-English:
-theorem set_cases
-  given: {p : Set α -> Prop} (h0 : p ∅) (h1 : p univ) (s)
-  statement: p s
-  proof: (s.eq_empty_or_nonempty.elim fun h => h.symm ▸ h0) fun h => (eq_univ_of_nonempty h).symm ▸ h1
-
-中文:
-定理 set_cases
-  条件: {p : 集合 α -> 命题} (h0 : p ∅) (h1 : p univ) (s)
-  结论: p s
-  证明: (s.eq_empty_or_nonempty.elim fun h => h.symm ▸ h0) fun h => (eq_univ_of_nonempty h).symm ▸ h1
-
-Depends on / 依赖: eq_empty_or_nonempty, eq_univ_of_nonempty, h.symm, s.eq_empty_or_nonempty.elim
+/-
+**Subsingleton.set_cases** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：set_cases {p : Set α -> Prop} (h0 : p ∅) (h1 : p univ) (s) : p s
+参数：h0 : p ∅；h1 : p univ；s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.eq_univ_of_nonempty`：eq_univ_of_nonempty {s : Set α} : s.No
+nempty -> s = univ
 -/
-theorem set_cases {p : Set α -> Prop} (h0 : p ∅) (h1 : p univ) (s) : p s :=
+theorem set_cases {p : Set α → Prop} (h0 : p ∅) (h1 : p univ) (s) : p s :=
   (s.eq_empty_or_nonempty.elim fun h => h.symm ▸ h0) fun h => (eq_univ_of_nonempty h).symm ▸ h1
-
-/--
-theorem `mem_iff_nonempty` / 定理 `mem_iff_nonempty`
-
-English:
-theorem mem_iff_nonempty
-  given: {α : Type*} [Subsingleton α] {s : Set α} {x : α}
-  statement: x in s ↔ s.Nonempty
-  proof: ⟨fun hx => ⟨x, hx⟩, fun ⟨y, hy⟩ => Subsingleton.elim y x ▸ hy⟩
-
-中文:
-定理 mem_iff_nonempty
-  条件: {α : 类型} [子单例 α] {s : 集合 α} {x : α}
-  结论: x in s ↔ s.非空
-  证明: ⟨fun hx => ⟨x, hx⟩, fun ⟨y, hy⟩ => Subsingleton.elim y x ▸ hy⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Subsingleton.mem_iff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：mem_iff_nonempty {α : Type*} [Subsingleton α] {s : Set α} {x : α} : x in s
+ ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem mem_iff_nonempty {α : Type*} [Subsingleton α] {s : Set α} {x : α} : x in s ↔ s.Nonempty :=
+theorem mem_iff_nonempty {α : Type*} [Subsingleton α] {s : Set α} {x : α} : x ∈ s ↔ s.Nonempty :=
   ⟨fun hx => ⟨x, hx⟩, fun ⟨y, hy⟩ => Subsingleton.elim y x ▸ hy⟩
 
 end Subsingleton
@@ -5513,162 +3300,99 @@ namespace Set
 
 variable {α : Type u} (s t : Set α) (a b : α)
 
-/--
-Instance `decidableSdiff` / 实例 `decidableSdiff`
-
-English:
-instance decidableSdiff
-  signature: [Decidable (a in s)] [Decidable (a in t)]
-  body: inferInstanceAs (Decidable (a in s ∧ a ∉ t))
-
-中文:
-实例 decidableSdiff
-  签名: [可判定 (a in s)] [可判定 (a in t)]
-  定义体: inferInstanceAs (Decidable (a in s ∧ a ∉ t))
-
-Depends on / 依赖: Decidable
+/-
+**Set.decidableSdiff** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableSdiff [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in
+ s \ t)
+参数：a in s；a in t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableSdiff [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in s \ t) :=
-  inferInstanceAs (Decidable (a in s ∧ a ∉ t))
-
-/--
-Instance `decidableInter` / 实例 `decidableInter`
-
-English:
-instance decidableInter
-  signature: [Decidable (a in s)] [Decidable (a in t)]
-  body: inferInstanceAs (Decidable (a in s ∧ a in t))
-
-中文:
-实例 decidable整数er
-  签名: [可判定 (a in s)] [可判定 (a in t)]
-  定义体: inferInstanceAs (Decidable (a in s ∧ a in t))
-
-Depends on / 依赖: Decidable
+instance decidableSdiff [Decidable (a ∈ s)] [Decidable (a ∈ t)] : Decidable (a ∈ s \ t) :=
+  inferInstanceAs (Decidable (a ∈ s ∧ a ∉ t))
+/-
+**Set.decidableInter** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableInter [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in
+ s inter t)
+参数：a in s；a in t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableInter [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in s inter t) :=
-  inferInstanceAs (Decidable (a in s ∧ a in t))
-
-/--
-Instance `decidableUnion` / 实例 `decidableUnion`
-
-English:
-instance decidableUnion
-  signature: [Decidable (a in s)] [Decidable (a in t)]
-  body: inferInstanceAs (Decidable (a in s ∨ a in t))
-
-中文:
-实例 decidableUnion
-  签名: [可判定 (a in s)] [可判定 (a in t)]
-  定义体: inferInstanceAs (Decidable (a in s ∨ a in t))
-
-Depends on / 依赖: Decidable
+instance decidableInter [Decidable (a ∈ s)] [Decidable (a ∈ t)] : Decidable (a ∈ s ∩ t) :=
+  inferInstanceAs (Decidable (a ∈ s ∧ a ∈ t))
+/-
+**Set.decidableUnion** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableUnion [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in
+ s union t)
+参数：a in s；a in t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableUnion [Decidable (a in s)] [Decidable (a in t)] : Decidable (a in s union t) :=
-  inferInstanceAs (Decidable (a in s ∨ a in t))
-
-/--
-Instance `decidableCompl` / 实例 `decidableCompl`
-
-English:
-instance decidableCompl
-  signature: [Decidable (a in s)]
-  body: inferInstanceAs (Decidable (a ∉ s))
-
-中文:
-实例 decidableCompl
-  签名: [可判定 (a in s)]
-  定义体: inferInstanceAs (Decidable (a ∉ s))
-
-Depends on / 依赖: ContMDiffRing, ContMDiffRing.toContMDiffMul, Decidable, ModelWithCorners, toContMDiffMul
+instance decidableUnion [Decidable (a ∈ s)] [Decidable (a ∈ t)] : Decidable (a ∈ s ∪ t) :=
+  inferInstanceAs (Decidable (a ∈ s ∨ a ∈ t))
+/-
+**Set.decidableCompl** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableCompl [Decidable (a in s)] : Decidable (a in sᶜ)
+参数：a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableCompl [Decidable (a in s)] : Decidable (a in sᶜ) :=
+instance decidableCompl [Decidable (a ∈ s)] : Decidable (a ∈ sᶜ) :=
   inferInstanceAs (Decidable (a ∉ s))
-
-/--
-Instance `decidableEmptyset` / 实例 `decidableEmptyset`
-
-English:
-instance decidableEmptyset
-  signature: : Decidable (a in (∅ : Set α))
-  body: Decidable.isFalse (by simp)
-
-中文:
-实例 decidableEmptyset
-  签名: : 可判定 (a in (∅ : 集合 α))
-  定义体: Decidable.isFalse (by simp)
-
-Depends on / 依赖: ContMDiffRing, ContMDiffRing.toLieAddGroup, Decidable, Decidable.isFalse, ModelWithCorners, isFalse, toLieAddGroup
+/-
+**Set.decidableEmptyset** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableEmptyset : Decidable (a in (∅ : Set α))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableEmptyset : Decidable (a in (∅ : Set α)) := Decidable.isFalse (by simp)
-
-/--
-Instance `decidableUniv` / 实例 `decidableUniv`
-
-English:
-instance decidableUniv
-  signature: : Decidable (a in univ)
-  body: Decidable.isTrue (by simp)
-
-中文:
-实例 decidableUniv
-  签名: : 可判定 (a in univ)
-  定义体: Decidable.isTrue (by simp)
-
-Depends on / 依赖: Decidable, Decidable.isTrue, instFieldContMDiffRing, isTrue
+instance decidableEmptyset : Decidable (a ∈ (∅ : Set α)) := Decidable.isFalse (by simp)
+/-
+**Set.decidableUniv** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableUniv : Decidable (a in univ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableUniv : Decidable (a in univ) := Decidable.isTrue (by simp)
-
-/--
-Instance `decidableInsert` / 实例 `decidableInsert`
-
-English:
-instance decidableInsert
-  signature: [Decidable (a = b)] [Decidable (a in s)]
-  body: inferInstanceAs (Decidable (_ ∨ _))
-
-中文:
-实例 decidableInsert
-  签名: [可判定 (a = b)] [可判定 (a in s)]
-  定义体: inferInstanceAs (Decidable (_ ∨ _))
-
-Depends on / 依赖: Decidable
+instance decidableUniv : Decidable (a ∈ univ) := Decidable.isTrue (by simp)
+/-
+**Set.decidableInsert** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableInsert [Decidable (a = b)] [Decidable (a in s)] : Decidable (a in
+ insert b s)
+参数：a = b；a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableInsert [Decidable (a = b)] [Decidable (a in s)] : Decidable (a in insert b s) :=
+instance decidableInsert [Decidable (a = b)] [Decidable (a ∈ s)] : Decidable (a ∈ insert b s) :=
   inferInstanceAs (Decidable (_ ∨ _))
-
-/--
-Instance `decidableSetOf` / 实例 `decidableSetOf`
-
-English:
-instance decidableSetOf
-  signature: (p : α -> Prop) [Decidable (p a)]
-  body: by
-  assumption
-
-中文:
-实例 decidableSetOf
-  签名: (p : α -> 命题) [可判定 (p a)]
-  定义体: by
-  assumption
+/-
+**Set.decidableSetOf** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableSetOf (p : α -> Prop) [Decidable (p a)] : Decidable (a in { a | p
+ a })
+参数：p : α -> Prop；p a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableSetOf (p : α -> Prop) [Decidable (p a)] : Decidable (a in { a | p a }) := by
+instance decidableSetOf (p : α → Prop) [Decidable (p a)] : Decidable (a ∈ { a | p a }) := by
   assumption
 
-/--
-Instance `decidableEq` / 实例 `decidableEq`
+/-- `Set α` almost never has decidable equality.
+In fact, for an inhabited type `α`, `Set α` has decidable equality iff
+all propositions are decidable. We add a global instance that `Set α` has decidable equality,
+coming from the choice axiom, so that we don't have to provide `[DecidableEq (Set α)]` arguments
+in lemma statements. -/
+/-
+**Set.decidableEq** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：decidableEq : DecidableEq (Set α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance decidableEq
-  signature: : DecidableEq (Set α)
-  body: Classical.typeDecidableEq (Set α)
-
-中文:
-实例 decidableEq
-  签名: : DecidableEq (集合 α)
-  定义体: Classical.typeDecidableEq (Set α)
-
-Depends on / 依赖: Classical, Classical.typeDecidableEq, typeDecidableEq
+--- 原说明 ---
+`Set α` almost never has decidable equality.
+In fact, for an inhabited type `α`, `Set α` has decidable equality iff
+all propositions are decidable. We add a global instance that `Set α` has decida
+ble equality,
+coming from the choice axiom, so that we don't have to provide `[DecidableEq (Se
+t α)]` arguments
+in lemma statements.
 -/
 noncomputable instance decidableEq : DecidableEq (Set α) := Classical.typeDecidableEq (Set α)
 
@@ -5678,74 +3402,49 @@ variable {α : Type*} {s t u : Set α}
 
 namespace Equiv
 
-/--
-Definition of `setSubtypeComm` / `setSubtypeComm` 的定义
+/-- Given a predicate `p : α → Prop`, produces an equivalence between
+  `Set {a : α // p a}` and `{s : Set α // ∀ a ∈ s, p a}`. -/
+/-
+**Equiv.setSubtypeComm** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → (p : α → Prop) → Set { a // p a } ≃ { s // ∀ a ∈ s, p a }
+参数：p : α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setSubtypeComm
-  signature: (p : α -> Prop)
-  body: ⟨{a | exists h : p a, ⟨a, h⟩ in s}, fun _ h => h.1⟩
-  invFun s := {a | a.val in s.val}
-  left_inv s := by ext a; exact ⟨fun h => h.2, fun h => ⟨a.property, h⟩⟩
-  right_inv s := by ext; exact ⟨fun h => h.2, fun h => ⟨s.property _ h, h⟩⟩
-
-@[simp]
-
-中文:
-定义 setSubtypeComm
-  签名: (p : α -> 命题)
-  定义体: ⟨{a | exists h : p a, ⟨a, h⟩ in s}, fun _ h => h.1⟩
-  invFun s := {a | a.val in s.val}
-  left_inv s := by ext a; exact ⟨fun h => h.2, fun h => ⟨a.property, h⟩⟩
-  right_inv s := by ext; exact ⟨fun h => h.2, fun h => ⟨s.property _ h, h⟩⟩
-
-@[simp]
+--- 原说明 ---
+Given a predicate `p : α → Prop`, produces an equivalence between
+  `Set {a : α // p a}` and `{s : Set α // ∀ a ∈ s, p a}`.
 -/
-protected def setSubtypeComm (p : α -> Prop) :
-    Set {a : α // p a} ≃ {s : Set α // forall a in s, p a} where
-  toFun s := ⟨{a | exists h : p a, ⟨a, h⟩ in s}, fun _ h => h.1⟩
-  invFun s := {a | a.val in s.val}
-  left_inv s := by ext a; exact ⟨fun h => h.2, fun h => ⟨a.property, h⟩⟩
-  right_inv s := by ext; exact ⟨fun h => h.2, fun h => ⟨s.property _ h, h⟩⟩
+protected def setSubtypeComm (p : α → Prop) :
+    Set {a : α // p a} ≃ {s : Set α // ∀ a ∈ s, p a} where
+  toFun s := ⟨{a | ∃ h : p a, ⟨a, h⟩ ∈ s}, fun _ h ↦ h.1⟩
+  invFun s := {a | a.val ∈ s.val}
+  left_inv s := by ext a; exact ⟨fun h ↦ h.2, fun h ↦ ⟨a.property, h⟩⟩
+  right_inv s := by ext; exact ⟨fun h ↦ h.2, fun h ↦ ⟨s.property _ h, h⟩⟩
 
 @[simp]
-/--
-lemma `setSubtypeComm_apply` / 引理 `setSubtypeComm_apply`
-
-English:
-lemma setSubtypeComm_apply
-  given: (p : α -> Prop) (s : Set {a // p a})
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 setSubtypeComm_apply
-  条件: (p : α -> 命题) (s : 集合 {a // p a})
-  证明: rfl
-
-@[simp]
+/-
+**Equiv.setSubtypeComm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) (s : Set { a // p a }), (Equiv.setSubtypeC
+omm p) s = ⟨{a | ∃ (h : p a), ⟨a, h⟩ ∈ s}, ⋯⟩
+参数：p : α → Prop；s : Set { a // p a }；Equiv.setSubtypeComm p；h : p a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma setSubtypeComm_apply (p : α -> Prop) (s : Set {a // p a}) :
-    (Equiv.setSubtypeComm p) s = ⟨{a | exists h : p a, ⟨a, h⟩ in s}, fun _ h => h.1⟩ :=
+protected lemma setSubtypeComm_apply (p : α → Prop) (s : Set {a // p a}) :
+    (Equiv.setSubtypeComm p) s = ⟨{a | ∃ h : p a, ⟨a, h⟩ ∈ s}, fun _ h ↦ h.1⟩ :=
   rfl
 
 @[simp]
-/--
-lemma `setSubtypeComm_symm_apply` / 引理 `setSubtypeComm_symm_apply`
-
-English:
-lemma setSubtypeComm_symm_apply
-  given: (p : α -> Prop) (s : {s // forall a in s, p a})
-  proof: rfl
-
-中文:
-引理 setSubtypeComm_symm_apply
-  条件: (p : α -> 命题) (s : {s // 对任意 a in s, p a})
-  证明: rfl
+/-
+**Equiv.setSubtypeComm_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) (s : { s // ∀ a ∈ s, p a }), (Equiv.setSub
+typeComm p).symm s = {a | ↑a ∈ ↑s}
+参数：p : α → Prop；s : { s // ∀ a ∈ s, p a }；Equiv.setSubtypeComm p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-protected lemma setSubtypeComm_symm_apply (p : α -> Prop) (s : {s // forall a in s, p a}) :
-    (Equiv.setSubtypeComm p).symm s = {a | a.val in s.val} :=
+protected lemma setSubtypeComm_symm_apply (p : α → Prop) (s : {s // ∀ a ∈ s, p a}) :
+    (Equiv.setSubtypeComm p).symm s = {a | a.val ∈ s.val} :=
   rfl
 
 end Equiv
+

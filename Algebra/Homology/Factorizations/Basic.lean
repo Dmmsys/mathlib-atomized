@@ -43,107 +43,85 @@ variable {C : Type*} [Category* C] [Abelian C]
 
 namespace CochainComplex
 
-/--
-Definition of `degreewiseEpiWithInjectiveKernel` / `degreewiseEpiWithInjectiveKernel` 的定义
+/-- A morphism of cochain complexes `φ` in an abelian category satisfies
+`degreewiseEpiWithInjectiveKernel φ` if for any `i : ℤ`, the morphism
+`φ.f i` is an epimorphism with an injective kernel. -/
+/-
+**CochainComplex.degreewiseEpiWithInjectiveKernel** 是 Mathlib 中的一个定义，位于命名空间 `Coc
+hainComplex`。
+形式化陈述：degreewiseEpiWithInjectiveKernel : MorphismProperty (CochainComplex C Int)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition degreewiseEpiWithInjectiveKernel
-  signature: : MorphismProperty (CochainComplex C Int)
-  body: fun _ _ φ => forall (i : Int), epiWithInjectiveKernel (φ.f i)
-
-中文:
-定义 degreewiseEpiWithInjectiveKernel
-  签名: : MorphismProperty (上链复形 C 整数)
-  定义体: fun _ _ φ => forall (i : Int), epiWithInjectiveKernel (φ.f i)
-
-Depends on / 依赖: epiWithInjectiveKernel
+--- 原说明 ---
+A morphism of cochain complexes `φ` in an abelian category satisfies
+`degreewiseEpiWithInjectiveKernel φ` if for any `i : ℤ`, the morphism
+`φ.f i` is an epimorphism with an injective kernel.
 -/
-def degreewiseEpiWithInjectiveKernel : MorphismProperty (CochainComplex C Int) :=
-  fun _ _ φ => forall (i : Int), epiWithInjectiveKernel (φ.f i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (degreewiseEpiWithInjectiveKernel (C := C)).IsMultiplicative
-  body: MorphismProperty.id_mem _ _
-  comp_mem _ _ hf hg n := MorphismProperty.comp_mem _ _ _ (hf n) (hg n)
-
-中文:
-实例 :
-  签名: (degreewiseEpiWithInjectiveKernel (C := C)).是Multiplicative
-  定义体: MorphismProperty.id_mem _ _
-  comp_mem _ _ hf hg n := MorphismProperty.comp_mem _ _ _ (hf n) (hg n)
-
-Depends on / 依赖: IsMultiplicative
+def degreewiseEpiWithInjectiveKernel : MorphismProperty (CochainComplex C ℤ) :=
+  fun _ _ φ => ∀ (i : ℤ), epiWithInjectiveKernel (φ.f i)
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (degreewiseEpiWithInjectiveKernel (C := C)).IsMultiplicative where
   id_mem _ _ := MorphismProperty.id_mem _ _
   comp_mem _ _ hf hg n := MorphismProperty.comp_mem _ _ _ (hf n) (hg n)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (degreewiseEpiWithInjectiveKernel (C := C)).IsStableUnderRetracts
-  body: MorphismProperty.of_retract (r.map (HomologicalComplex.eval _ _ i)) (h i)
-
-中文:
-实例 :
-  签名: (degreewiseEpiWithInjectiveKernel (C := C)).是StableUnderRetracts
-  定义体: MorphismProperty.of_retract (r.map (HomologicalComplex.eval _ _ i)) (h i)
-
-Depends on / 依赖: IsStableUnderRetracts
+/-
+**CochainComplex.** 是 Mathlib 中的一个实例，位于命名空间 `CochainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (degreewiseEpiWithInjectiveKernel (C := C)).IsStableUnderRetracts where
   of_retract r h i :=
     MorphismProperty.of_retract (r.map (HomologicalComplex.eval _ _ i)) (h i)
-
-/--
-lemma `degreewiseEpiWithInjectiveKernel_iff_of_isZero` / 引理 `degreewiseEpiWithInjectiveKernel_iff_of_isZero`
-
-English:
-lemma degreewiseEpiWithInjectiveKernel_iff_of_isZero
-  statement: {K L : CochainComplex C Int}
-  proof: forall_congr' (fun n => by
-    rw [epiWithInjectiveKernel_iff_of_isZero]
-    exact (HomologicalComplex.eval _ _ n).map_isZero hL)
-
-中文:
-引理 degreewiseEpiWithInjectiveKernel_iff_of_isZero
-  结论: {K L : 上链复形 C 整数}
-  证明: forall_congr' (fun n => by
-    rw [epiWithInjectiveKernel_iff_of_isZero]
-    exact (HomologicalComplex.eval _ _ n).map_isZero hL)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.eval, epiWithInjectiveKernel_iff_of_isZero, forall_congr, map_isZero
+/-
+**CochainComplex.degreewiseEpiWithInjectiveKernel_iff_of_isZero** 是 Mathlib 中的一个
+引理，位于命名空间 `CochainComplex`。
+形式化陈述：degreewiseEpiWithInjectiveKernel_iff_of_isZero {K L : CochainComplex C Int
+} (f : K ⟶ L) (hL : IsZero L) : degreewiseEpiWithInjectiveKernel f ↔ forall (n :
+ Int), Injective (K.X n)
+参数：f : K ⟶ L；hL : IsZero L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Abelian.epiWithInjectiveKernel_iff_of_isZero`：epiWithInje
+ctiveKernel_iff_of_isZero {X Y : C} (f : X ⟶ Y) (hY : IsZero Y) : epiWithInjecti
+veKernel f ↔ Injective X
+· 使用引理 `CategoryTheory.Functor.map_isZero`：map_isZero (F : C ⥤ D) [PreservesZero
+Morphisms F] {X : C} (hX : IsZero X) : IsZero (F.obj X)
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsEval`：∀ {ι : Type u_1} (V :
+ Type u) [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms V] (c : ComplexSh…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma degreewiseEpiWithInjectiveKernel_iff_of_isZero {K L : CochainComplex C Int}
+lemma degreewiseEpiWithInjectiveKernel_iff_of_isZero {K L : CochainComplex C ℤ}
     (f : K ⟶ L) (hL : IsZero L) :
-    degreewiseEpiWithInjectiveKernel f ↔ forall (n : Int), Injective (K.X n) :=
-  forall_congr' (fun n => by
+    degreewiseEpiWithInjectiveKernel f ↔ ∀ (n : ℤ), Injective (K.X n) :=
+  forall_congr' (fun n ↦ by
     rw [epiWithInjectiveKernel_iff_of_isZero]
     exact (HomologicalComplex.eval _ _ n).map_isZero hL)
-
-/--
-lemma `degreewiseEpiWithInjectiveKernel.epi` / 引理 `degreewiseEpiWithInjectiveKernel.epi`
-
-English:
-lemma degreewiseEpiWithInjectiveKernel.epi
-  statement: {K L : CochainComplex C Int} {f : K ⟶ L}
-  proof: HomologicalComplex.epi_of_epi_f f (fun n => (h n).1)
-
-中文:
-引理 degreewiseEpiWithInjectiveKernel.epi
-  结论: {K L : 上链复形 C 整数} {f : K ⟶ L}
-  证明: HomologicalComplex.epi_of_epi_f f (fun n => (h n).1)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.epi_of_epi_f, epi_of_epi_f
+/-
+**CochainComplex.degreewiseEpiWithInjectiveKernel.epi** 是 Mathlib 中的一个定理，位于命名空间 
+`CochainComplex.degreewiseEpiWithInjectiveKernel`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Abelian C]   {K L : CochainComplex C ℤ} {f : K ⟶ L}, CochainComple
+x.degreewiseEpiWithInjectiveKernel f → CategoryTheory.Epi f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.epi_of_epi_f`：epi_of_epi_f {K L : HomologicalComplex 
+V c} (φ : K ⟶ L) (hφ : forall i, Epi (φ.f i)) : Epi φ where left_cancellation g 
+h eq
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma degreewiseEpiWithInjectiveKernel.epi {K L : CochainComplex C Int} {f : K ⟶ L}
+lemma degreewiseEpiWithInjectiveKernel.epi {K L : CochainComplex C ℤ} {f : K ⟶ L}
     (h : degreewiseEpiWithInjectiveKernel f) : Epi f :=
-  HomologicalComplex.epi_of_epi_f f (fun n => (h n).1)
+  HomologicalComplex.epi_of_epi_f f (fun n ↦ (h n).1)
 
 end CochainComplex
+

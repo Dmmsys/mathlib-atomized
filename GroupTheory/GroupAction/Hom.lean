@@ -63,129 +63,127 @@ section MulActionHom
 
 variable {M' : Type*}
 variable {M : Type*} {N : Type*} {P : Type*}
-variable (φ : M -> N) (ψ : N -> P) (χ : M -> P)
+variable (φ : M → N) (ψ : N → P) (χ : M → P)
 variable (X : Type*) [SMul M X] [SMul M' X]
 variable (Y : Type*) [SMul N Y] [SMul M' Y]
 variable (Z : Type*) [SMul P Z]
 
-/--
-Definition of `AddActionHom` / `AddActionHom` 的定义
+/-- Equivariant functions :
+When `φ : M → N` is a function, and types `X` and `Y` are endowed with additive actions
+of `M` and `N`, a function `f : X → Y` is `φ`-equivariant if `f (m +ᵥ x) = (φ m) +ᵥ (f x)`. -/
+/-
+**AddActionHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{M : Type u_8} →   {N : Type u_9} → (M → N) → (X : Type u_10) → [VAdd M X]
+ → (Y : Type u_11) → [VAdd N Y] → Type (max u_10 u_11)
+参数：M → N；X : Type u_10；Y : Type u_11；max u_10 u_11。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddActionHom
-  parameters: {M N : Type*} (φ : M -> N) (X : Type*) [VAdd M X] (Y : Type*) [VAdd N Y]
-  axioms and operations (2):
-    - toFun : X -> Y
-    - map_vadd' : forall (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
-
-中文:
-结构 加法作用态射
-  参数: {M N : 类型} (φ : M -> N) (X : 类型) [向量加法 M X] (Y : 类型) [向量加法 N Y]
-  公理与运算 (2 个):
-    - toFun : X -> Y
-    - map_vadd' : 对任意 (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
+--- 原说明 ---
+Equivariant functions :
+When `φ : M → N` is a function, and types `X` and `Y` are endowed with additive 
+actions
+of `M` and `N`, a function `f : X → Y` is `φ`-equivariant if `f (m +ᵥ x) = (φ m)
+ +ᵥ (f x)`.
 -/
-structure AddActionHom {M N : Type*} (φ : M -> N) (X : Type*) [VAdd M X] (Y : Type*) [VAdd N Y] where
+structure AddActionHom {M N : Type*} (φ : M → N) (X : Type*) [VAdd M X] (Y : Type*) [VAdd N Y] where
   /-- The underlying function. -/
-  protected toFun : X -> Y
+  protected toFun : X → Y
   /-- The proposition that the function commutes with the additive actions. -/
-  protected map_vadd' : forall (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
+  protected map_vadd' : ∀ (m : M) (x : X), toFun (m +ᵥ x) = (φ m) +ᵥ toFun x
 
 /-- Equivariant functions :
 When `φ : M → N` is a function, and types `X` and `Y` are endowed with actions of `M` and `N`,
 a function `f : X → Y` is `φ`-equivariant if `f (m • x) = (φ m) • (f x)`. -/
 @[to_additive]
-/--
-Definition of `MulActionHom` / `MulActionHom` 的定义
+/-
+**MulActionHom** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：MulActionHom where /-- The underlying function. -/ protected toFun : X -> 
+Y /-- The proposition that the function commutes with the actions. -/ protected 
+map_smul' : forall (m : M) (x : X), toFun (m • x) = (φ m) • toFun x  /-- `φ`-equ
+ivariant functions `X → Y`, where `φ : M → N`, where `M` and `N` act on `X` and 
+`Y` respectively. -/ notation:25 (name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulActionHom
-  parameters: where
-  axioms and operations (2):
-    - toFun : X -> Y
-    - map_smul' : forall (m : M) (x : X), toFun (m • x) = (φ m) • toFun x
-
-中文:
-结构 乘法作用态射
-  参数: where
-  公理与运算 (2 个):
-    - toFun : X -> Y
-    - map_smul' : 对任意 (m : M) (x : X), toFun (m • x) = (φ m) • toFun x
-
-Depends on / 依赖: MulActionHom, MulActionHomLocal
+--- 原说明 ---
+Equivariant functions :
+When `φ : M → N` is a function, and types `X` and `Y` are endowed with actions o
+f `M` and `N`,
+a function `f : X → Y` is `φ`-equivariant if `f (m • x) = (φ m) • (f x)`.
 -/
 structure MulActionHom where
   /-- The underlying function. -/
-  protected toFun : X -> Y
+  protected toFun : X → Y
   /-- The proposition that the function commutes with the actions. -/
-  protected map_smul' : forall (m : M) (x : X), toFun (m • x) = (φ m) • toFun x
+  protected map_smul' : ∀ (m : M) (x : X), toFun (m • x) = (φ m) • toFun x
 
 /-- `φ`-equivariant functions `X → Y`,
 where `φ : M → N`, where `M` and `N` act on `X` and `Y` respectively. -/
-notation:25 (name := «MulActionHomLocal≺») X " ->ₑ[" φ:25 "] " Y:0 => MulActionHom φ X Y
+notation:25 (name := «MulActionHomLocal≺») X " →ₑ[" φ:25 "] " Y:0 => MulActionHom φ X Y
 
 /-- `M`-equivariant functions `X → Y` with respect to the action of `M`.
 This is the same as `X →ₑ[@id M] Y`. -/
-notation:25 (name := «MulActionHomIdLocal≺») X " ->[" M:25 "] " Y:0 => MulActionHom (@id M) X Y
+notation:25 (name := «MulActionHomIdLocal≺») X " →[" M:25 "] " Y:0 => MulActionHom (@id M) X Y
 
 /-- `φ`-equivariant functions `X → Y`,
 where `φ : M → N`, where `M` and `N` act additively on `X` and `Y` respectively
 
 We use the same notation as for multiplicative actions, as conflicts are unlikely. -/
-notation:25 (name := «AddActionHomLocal≺») X " ->ₑ[" φ:25 "] " Y:0 => AddActionHom φ X Y
+notation:25 (name := «AddActionHomLocal≺») X " →ₑ[" φ:25 "] " Y:0 => AddActionHom φ X Y
 
 /-- `M`-equivariant functions `X → Y` with respect to the additive action of `M`.
 This is the same as `X →ₑ[@id M] Y`.
 
 We use the same notation as for multiplicative actions, as conflicts are unlikely. -/
-notation:25 (name := «AddActionHomIdLocal≺») X " ->[" M:25 "] " Y:0 => AddActionHom (@id M) X Y
+notation:25 (name := «AddActionHomIdLocal≺») X " →[" M:25 "] " Y:0 => AddActionHom (@id M) X Y
 
-/--
-Definition of `AddActionSemiHomClass` / `AddActionSemiHomClass` 的定义
+/-- `AddActionSemiHomClass F φ X Y` states that
+  `F` is a type of morphisms which are `φ`-equivariant.
 
-English:
-class AddActionSemiHomClass
-  parameters: (F : Type*)
-  axioms and operations (1):
-    - map_vaddₛₗ : forall (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
+You should extend this class when you extend `AddActionHom`. -/
+/-
+**AddActionSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_8) →   {M : outParam (Type u_9)} →     {N : outParam (Type u_1
+0)} →       outParam (M → N) →         (X : outParam (Type u_11)) → (Y : outPara
+m (Type u_12)) → [VAdd M X] → [VAdd N Y] → [FunLike F X Y] → Prop
+参数：Type u_11；Type u_12。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 加法ActionSemi态射类
-  参数: (F : 类型)
-  公理与运算 (1 个):
-    - map_vaddₛₗ : 对任意 (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
+--- 原说明 ---
+`AddActionSemiHomClass F φ X Y` states that
+  `F` is a type of morphisms which are `φ`-equivariant.
+
+You should extend this class when you extend `AddActionHom`.
 -/
 class AddActionSemiHomClass (F : Type*)
-    {M N : outParam Type*} (φ : outParam (M -> N))
+    {M N : outParam Type*} (φ : outParam (M → N))
     (X Y : outParam Type*) [VAdd M X] [VAdd N Y] [FunLike F X Y] : Prop where
   /-- The proposition that the function preserves the action. -/
-  map_vaddₛₗ : forall (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
+  map_vaddₛₗ : ∀ (f : F) (c : M) (x : X), f (c +ᵥ x) = (φ c) +ᵥ (f x)
 
 /-- `MulActionSemiHomClass F φ X Y` states that
   `F` is a type of morphisms which are `φ`-equivariant.
 
 You should extend this class when you extend `MulActionHom`. -/
 @[to_additive]
-/--
-Definition of `MulActionSemiHomClass` / `MulActionSemiHomClass` 的定义
+/-
+**MulActionSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_8) →   {M : outParam (Type u_9)} →     {N : outParam (Type u_1
+0)} →       outParam (M → N) →         (X : outParam (Type u_11)) → (Y : outPara
+m (Type u_12)) → [SMul M X] → [SMul N Y] → [FunLike F X Y] → Prop
+参数：Type u_11；Type u_12。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MulActionSemiHomClass
-  parameters: (F : Type*)
-  axioms and operations (1):
-    - map_smulₛₗ : forall (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
+--- 原说明 ---
+`MulActionSemiHomClass F φ X Y` states that
+  `F` is a type of morphisms which are `φ`-equivariant.
 
-中文:
-类 MulActionSemi态射类
-  参数: (F : 类型)
-  公理与运算 (1 个):
-    - map_smulₛₗ : 对任意 (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
+You should extend this class when you extend `MulActionHom`.
 -/
 class MulActionSemiHomClass (F : Type*)
-    {M N : outParam Type*} (φ : outParam (M -> N))
+    {M N : outParam Type*} (φ : outParam (M → N))
     (X Y : outParam Type*) [SMul M X] [SMul N Y] [FunLike F X Y] : Prop where
   /-- The proposition that the function preserves the action. -/
-  map_smulₛₗ : forall (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
+  map_smulₛₗ : ∀ (f : F) (c : M) (x : X), f (c • x) = (φ c) • (f x)
 
 export MulActionSemiHomClass (map_smulₛₗ)
 export AddActionSemiHomClass (map_vaddₛₗ)
@@ -196,65 +194,35 @@ This is an abbreviation of `MulActionSemiHomClass`. -/
 @[to_additive /-- `MulActionHomClass F M X Y` states that `F` is a type of
 morphisms which are equivariant with respect to actions of `M`
 This is an abbreviation of `MulActionSemiHomClass`. -/]
-/--
-Definition of `MulActionHomClass` / `MulActionHomClass` 的定义
-
-English:
-abbreviation MulActionHomClass
-  signature: (F : Type*) (M : outParam Type*)
-  body: MulActionSemiHomClass F (@id M) X Y
-
-中文:
-缩写 MulActionHomClass
-  签名: (F : 类型) (M : outParam 类型)
-  定义体: MulActionSemiHomClass F (@id M) X Y
-
-Depends on / 依赖: MulActionSemiHomClass
+/-
+**MulActionHomClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MulActionHomClass (F : Type*) (M : outParam Type*) (X Y : outParam Type*) 
+[SMul M X] [SMul M Y] [FunLike F X Y]
+参数：F : Type*；M : outParam Type*；X Y : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev MulActionHomClass (F : Type*) (M : outParam Type*)
     (X Y : outParam Type*) [SMul M X] [SMul M Y] [FunLike F X Y] :=
   MulActionSemiHomClass F (@id M) X Y
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (MulActionHom φ X Y) X Y
-  body: MulActionHom.toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 函数状 (乘法作用态射 φ X Y) X Y
-  定义体: MulActionHom.toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[to_additive (attr := simp)]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : FunLike (MulActionHom φ X Y) X Y where
   coe := MulActionHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  statement: {F M X Y : Type*} [SMul M X] [SMul M Y]
-  proof: map_smulₛₗ f c x
-
-@[to_additive]
-
-中文:
-定理 map_smul
-  结论: {F M X Y : 类型} [标量乘法 M X] [标量乘法 M Y]
-  证明: map_smulₛₗ f c x
-
-@[to_additive]
+/-
+**map_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X Y] [MulActio
+nHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+参数：f : F；c : M；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
 -/
 theorem map_smul {F M X Y : Type*} [SMul M X] [SMul M Y]
     [FunLike F X Y] [MulActionHomClass F M X Y]
@@ -262,32 +230,15 @@ theorem map_smul {F M X Y : Type*} [SMul M X] [SMul M Y]
   map_smulₛₗ f c x
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulActionSemiHomClass (X ->ₑ[φ] Y) φ X Y
-  body: MulActionHom.map_smul'
-
-initialize_simps_projections MulActionHom (toFun -> apply)
-initialize_simps_projections AddActionHom (toFun -> apply)
-
-中文:
-实例 :
-  签名: MulActionSemi态射类 (X ->ₑ[φ] Y) φ X Y
-  定义体: MulActionHom.map_smul'
-
-initialize_simps_projections MulActionHom (toFun -> apply)
-initialize_simps_projections AddActionHom (toFun -> apply)
-
-Depends on / 依赖: MulActionHom, MulActionHom.map_smul, map_smul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulActionSemiHomClass (X ->ₑ[φ] Y) φ X Y where
+instance : MulActionSemiHomClass (X →ₑ[φ] Y) φ X Y where
   map_smulₛₗ := MulActionHom.map_smul'
 
-initialize_simps_projections MulActionHom (toFun -> apply)
-initialize_simps_projections AddActionHom (toFun -> apply)
+initialize_simps_projections MulActionHom (toFun → apply)
+initialize_simps_projections AddActionHom (toFun → apply)
 
 namespace MulActionHom
 
@@ -301,263 +252,166 @@ variable {F : Type*} [FunLike F X Y]
   /-- Turn an element of a type `F` satisfying `AddActionSemiHomClass F φ X Y`
   into an actual `AddActionHom`.
   This is declared as the default coercion from `F` to `AddActionSemiHom φ X Y`. -/]
-/--
-Definition of `_root_.MulActionSemiHomClass.toMulActionHom` / `_root_.MulActionSemiHomClass.toMulActionHom` 的定义
-
-English:
-definition _root_.MulActionSemiHomClass.toMulActionHom
-  signature: [MulActionSemiHomClass F φ X Y] (f : F)
-  body: DFunLike.coe f
-  map_smul' := map_smulₛₗ f
-
-中文:
-定义 _root_.MulActionSemi态射类.toMulActionHom
-  签名: [MulActionSemi态射类 F φ X Y] (f : F)
-  定义体: DFunLike.coe f
-  map_smul' := map_smulₛₗ f
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+/-
+**MulActionHom._root_.MulActionSemiHomClass.toMulActionHom** 是 Mathlib 中的一个定义，位于
+命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.MulActionSemiHomClass.toMulActionHom [MulActionSemiHomClass F φ X Y] (f : F) :
-    X ->ₑ[φ] Y where
+    X →ₑ[φ] Y where
   toFun := DFunLike.coe f
   map_smul' := map_smulₛₗ f
 
 /-- Any type satisfying `MulActionSemiHomClass` can be cast into `MulActionHom` via
   `MulActionHomSemiClass.toMulActionHom`. -/
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [MulActionSemiHomClass
-  signature: F φ X Y] : CoeTC F (X ->ₑ[φ] Y)
-  body: ⟨MulActionSemiHomClass.toMulActionHom⟩
-
-中文:
-实例 [MulActionSemi态射类
-  签名: F φ X Y] : CoeTC F (X ->ₑ[φ] Y)
-  定义体: ⟨MulActionSemiHomClass.toMulActionHom⟩
-
-Depends on / 依赖: MulActionSemiHomClass, MulActionSemiHomClass.toMulActionHom, toMulActionHom
+--- 原说明 ---
+Any type satisfying `MulActionSemiHomClass` can be cast into `MulActionHom` via
+  `MulActionHomSemiClass.toMulActionHom`.
 -/
-instance [MulActionSemiHomClass F φ X Y] : CoeTC F (X ->ₑ[φ] Y) :=
+instance [MulActionSemiHomClass F φ X Y] : CoeTC F (X →ₑ[φ] Y) :=
   ⟨MulActionSemiHomClass.toMulActionHom⟩
 
 variable (M' X Y F) in
 /-- If Y/X/M forms a scalar tower, any map X → Y preserving X-action also preserves M-action. -/
 @[to_additive]
-/--
-theorem `_root_.IsScalarTower.smulHomClass` / 定理 `_root_.IsScalarTower.smulHomClass`
+/-
+**MulActionHom._root_.IsScalarTower.smulHomClass** 是 Mathlib 中的一个定理，位于命名空间 `MulA
+ctionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsScalarTower.smulHomClass
-  statement: [MulOneClass X] [SMul X Y] [IsScalarTower M' X Y]
-  proof: by
-    rw [← mul_one (m • x)]; rw [← smul_eq_mul]; rw [map_smul]; rw [smul_assoc]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [id_eq]
-
-@[to_additive]
-
-中文:
-定理 _root_.标量塔.smulHomClass
-  结论: [MulOne类 X] [标量乘法 X Y] [标量塔 M' X Y]
-  证明: by
-    rw [← mul_one (m • x)]; rw [← smul_eq_mul]; rw [map_smul]; rw [smul_assoc]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [id_eq]
-
-@[to_additive]
-
-Depends on / 依赖: id_eq, map_smul, mul_one, smul_assoc, smul_eq_mul
+--- 原说明 ---
+If Y/X/M forms a scalar tower, any map X → Y preserving X-action also preserves 
+M-action.
 -/
 theorem _root_.IsScalarTower.smulHomClass [MulOneClass X] [SMul X Y] [IsScalarTower M' X Y]
     [MulActionHomClass F X X Y] : MulActionHomClass F M' X Y where
   map_smulₛₗ f m x := by
-    rw [← mul_one (m • x)]; rw [← smul_eq_mul]; rw [map_smul]; rw [smul_assoc]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [id_eq]
+    rw [← mul_one (m • x), ← smul_eq_mul, map_smul, smul_assoc, ← map_smul,
+      smul_eq_mul, mul_one, id_eq]
 
 @[to_additive]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (f : X ->[M'] Y) (m : M') (x : X)
-  statement: f (m • x) = m • f x
-  proof: map_smul f m x
-
-@[to_additive (attr := ext)]
-
-中文:
-定理 map_smul
-  条件: (f : X ->[M'] Y) (m : M') (x : X)
-  结论: f (m • x) = m • f x
-  证明: map_smul f m x
-
-@[to_additive (attr := ext)]
+/-
+**MulActionHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：∀ {M' : Type u_1} {X : Type u_5} [inst : SMul M' X] {Y : Type u_6} [inst_1
+ : SMul M' Y] (f : X →ₑ[id] Y) (m : M')   (x : X), f (m • x) = m • f x
+参数：f : X →ₑ[id] Y；m : M'；x : X；m • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `instMulActionSemiHomClassMulActionHom`：∀ {M : Type u_2} {N : Type u_3} (
+φ : M → N) (X : Type u_5) [inst : SMul M X] (Y : Type u_6) [inst_1 : SMul N Y], 
+  MulActionSemiHomClass (X …
 -/
-protected theorem map_smul (f : X ->[M'] Y) (m : M') (x : X) : f (m • x) = m • f x :=
+protected theorem map_smul (f : X →[M'] Y) (m : M') (x : X) : f (m • x) = m • f x :=
   map_smul f m x
 
 @[to_additive (attr := ext)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : X ->ₑ[φ] Y}
-  proof: DFunLike.ext f g
-
-@[to_additive]
-
-中文:
-定理 ext
-  条件: {f g : X ->ₑ[φ] Y}
-  证明: DFunLike.ext f g
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**MulActionHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : X ->ₑ[φ] Y} :
-    (forall x, f x = g x) -> f = g :=
+theorem ext {f g : X →ₑ[φ] Y} :
+    (∀ x, f x = g x) → f = g :=
   DFunLike.ext f g
 
 @[to_additive]
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : X ->ₑ[φ] Y} (h : f = g) (x : X)
-  proof: DFunLike.congr_fun h _
-
-中文:
-定理 congr_fun
-  条件: {f g : X ->ₑ[φ] Y} (h : f = g) (x : X)
-  证明: DFunLike.congr_fun h _
+/-
+**MulActionHom.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：∀ {M : Type u_2} {N : Type u_3} {φ : M → N} {X : Type u_5} [inst : SMul M 
+X] {Y : Type u_6} [inst_1 : SMul N Y]   {f g : X →ₑ[φ] Y}, f = g → ∀ (x : X), f 
+x = g x
+参数：x : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-protected theorem congr_fun {f g : X ->ₑ[φ] Y} (h : f = g) (x : X) :
+protected theorem congr_fun {f g : X →ₑ[φ] Y} (h : f = g) (x : X) :
     f x = g x :=
   DFunLike.congr_fun h _
 
 /-- Two equal maps on scalars give rise to an equivariant map for identity -/
 @[to_additive /-- Two equal maps on scalars give rise to an equivariant map for identity -/]
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-
+**MulActionHom.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：ofEq {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) : X ->ₑ[φ'] Y where toFun
+参数：h : φ = φ'；f : X ->ₑ[φ] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y)
-  body: f.toFun
-  map_smul' m a := h ▸ f.map_smul' m a
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 ofEq
-  签名: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y)
-  定义体: f.toFun
-  map_smul' m a := h ▸ f.map_smul' m a
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.toFun
+--- 原说明 ---
+Two equal maps on scalars give rise to an equivariant map for identity
 -/
-def ofEq {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) : X ->ₑ[φ'] Y where
+def ofEq {φ' : M → N} (h : φ = φ') (f : X →ₑ[φ] Y) : X →ₑ[φ'] Y where
   toFun := f.toFun
   map_smul' m a := h ▸ f.map_smul' m a
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofEq_coe` / 定理 `ofEq_coe`
-
-English:
-theorem ofEq_coe
-  given: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofEq_coe
-  条件: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulActionHom.ofEq_coe** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：ofEq_coe {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) : (f.ofEq h).toFun = 
+f.toFun
+参数：h : φ = φ'；f : X ->ₑ[φ] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofEq_coe {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) :
+theorem ofEq_coe {φ' : M → N} (h : φ = φ') (f : X →ₑ[φ] Y) :
     (f.ofEq h).toFun = f.toFun := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofEq_apply` / 定理 `ofEq_apply`
-
-English:
-theorem ofEq_apply
-  given: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) (a : X)
-  proof: rfl
-
-中文:
-定理 ofEq_apply
-  条件: {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) (a : X)
-  证明: rfl
+/-
+**MulActionHom.ofEq_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：ofEq_apply {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) (a : X) : (f.ofEq h
+) a = f a
+参数：h : φ = φ'；f : X ->ₑ[φ] Y；a : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofEq_apply {φ' : M -> N} (h : φ = φ') (f : X ->ₑ[φ] Y) (a : X) :
+theorem ofEq_apply {φ' : M → N} (h : φ = φ') (f : X →ₑ[φ] Y) (a : X) :
     (f.ofEq h) a = f a :=
   rfl
-
-/--
-lemma `_root_.FaithfulSMul.of_injective` / 引理 `_root_.FaithfulSMul.of_injective`
-
-English:
-lemma _root_.FaithfulSMul.of_injective
-  proof: eq_of_smul_eq_smul fun m => hf by simp_rw [map_smul, h]
-
-中文:
-引理 _root_.忠实标量乘法.of_injective
-  证明: eq_of_smul_eq_smul fun m => hf by simp_rw [map_smul, h]
-
-Depends on / 依赖: eq_of_smul_eq_smul, map_smul, simp_rw
+/-
+**MulActionHom._root_.FaithfulSMul.of_injective** 是 Mathlib 中的一个引理，位于命名空间 `MulAc
+tionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.FaithfulSMul.of_injective
     [FaithfulSMul M' X] [MulActionHomClass F M' X Y] (f : F)
     (hf : Function.Injective f) :
     FaithfulSMul M' Y where
-eq_of_smul_eq_smul {_ _} h := eq_of_smul_eq_smul fun m => hf by simp_rw [map_smul, h]
+  eq_of_smul_eq_smul {_ _} h := eq_of_smul_eq_smul fun m ↦ hf <| by simp_rw [map_smul, h]
 
 variable {ψ χ} (M N)
 
 /-- The identity map as an equivariant map. -/
 @[to_additive (attr := instance_reducible) /-- The identity map as an equivariant map. -/]
-/--
-Definition of `id` / `id` 的定义
+/-
+**MulActionHom.id** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：(M : Type u_2) → {X : Type u_5} → [inst : SMul M X] → X →ₑ[id] X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : X ->[M] X
-  body: ⟨fun x => x, fun _ _ => rfl⟩
-
-中文:
-定义 id
-  签名: : X ->[M] X
-  定义体: ⟨fun x => x, fun _ _ => rfl⟩
+--- 原说明 ---
+The identity map as an equivariant map.
 -/
-protected def id : X ->[M] X :=
-  ⟨fun x => x, fun _ _ => rfl⟩
+protected def id : X →[M] X :=
+  ⟨fun x ↦ x, fun _ _ => rfl⟩
 
 variable {M N Z}
 
 @[to_additive (attr := simp)]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : X)
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (x : X)
-  证明: rfl
+/-
+**MulActionHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：id_apply (x : X) : MulActionHom.id M x = x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : X) :
     MulActionHom.id M x = x :=
@@ -574,38 +428,19 @@ variable {φ ψ χ X Y Z}
 
 /-- Composition of two equivariant maps. -/
 @[to_additive (attr := instance_reducible) /-- Composition of two equivariant maps. -/]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**MulActionHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：comp (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : CompTriple φ ψ χ] : X ->ₑ[χ] Z
+参数：g : Y ->ₑ[ψ] Z；f : X ->ₑ[φ] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : CompTriple φ ψ χ]
-  body: ⟨fun x => g (f x), fun m x =>
-    calc
-      g (f (m • x)) = g (φ m • f x) := by rw [map_smulₛₗ]
-      _ = ψ (φ m) • g (f x) := by rw [map_smulₛₗ]
-      _ = (ψ ∘ φ) m • g (f x) := rfl
-      _ = χ m • g (f x) := by rw [κ.comp_eq] ⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 comp
-  签名: (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : 余mpTriple φ ψ χ]
-  定义体: ⟨fun x => g (f x), fun m x =>
-    calc
-      g (f (m • x)) = g (φ m • f x) := by rw [map_smulₛₗ]
-      _ = ψ (φ m) • g (f x) := by rw [map_smulₛₗ]
-      _ = (ψ ∘ φ) m • g (f x) := rfl
-      _ = χ m • g (f x) := by rw [κ.comp_eq] ⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comp_eq
+--- 原说明 ---
+Composition of two equivariant maps.
 -/
-def comp (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : CompTriple φ ψ χ] :
-    X ->ₑ[χ] Z :=
-  ⟨fun x => g (f x), fun m x =>
+def comp (g : Y →ₑ[ψ] Z) (f : X →ₑ[φ] Y) [κ : CompTriple φ ψ χ] :
+    X →ₑ[χ] Z :=
+  ⟨fun x ↦ g (f x), fun m x =>
     calc
       g (f (m • x)) = g (φ m • f x) := by rw [map_smulₛₗ]
       _ = ψ (φ m) • g (f x) := by rw [map_smulₛₗ]
@@ -613,125 +448,98 @@ def comp (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [κ : CompTriple φ ψ χ] :
       _ = χ m • g (f x) := by rw [κ.comp_eq] ⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 comp_apply
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulActionHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：comp_apply (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [CompTriple φ ψ χ] (x : X) : 
+g.comp f x = g (f x)
+参数：g : Y ->ₑ[ψ] Z；f : X ->ₑ[φ] Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply
-    (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [CompTriple φ ψ χ] (x : X) :
+    (g : Y →ₑ[ψ] Z) (f : X →ₑ[φ] Y) [CompTriple φ ψ χ] (x : X) :
     g.comp f x = g (f x) := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : X ->ₑ[φ] Y)
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 id_comp
-  条件: (f : X ->ₑ[φ] Y)
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulActionHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：id_comp (f : X ->ₑ[φ] Y) : (MulActionHom.id N).comp f = f
+参数：f : X ->ₑ[φ] Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionHom.comp_apply`：comp_apply (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [C
+ompTriple φ ψ χ] (x : X) : g.comp f x = g (f x)
+· 使用定理 `MulActionHom.id_apply`：id_apply (x : X) : MulActionHom.id M x = x
 -/
-theorem id_comp (f : X ->ₑ[φ] Y) :
+theorem id_comp (f : X →ₑ[φ] Y) :
     (MulActionHom.id N).comp f = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp)]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : X ->ₑ[φ] Y)
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 comp_id
-  条件: (f : X ->ₑ[φ] Y)
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulActionHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：comp_id (f : X ->ₑ[φ] Y) : f.comp (MulActionHom.id M) = f
+参数：f : X ->ₑ[φ] Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionHom.comp_apply`：comp_apply (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [C
+ompTriple φ ψ χ] (x : X) : g.comp f x = g (f x)
+· 使用定理 `MulActionHom.id_apply`：id_apply (x : X) : MulActionHom.id M x = x
 -/
-theorem comp_id (f : X ->ₑ[φ] Y) :
+theorem comp_id (f : X →ₑ[φ] Y) :
     f.comp (MulActionHom.id M) = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp)]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {Q T : Type*} [SMul Q T]
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_assoc
-  结论: {Q T : 类型} [标量乘法 Q T]
-  证明: ext fun _ => rfl
+/-
+**MulActionHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：comp_assoc {Q T : Type*} [SMul Q T] {η : P -> Q} {θ : M -> Q} {ζ : N -> Q}
+ (h : Z ->ₑ[η] T) (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y) [CompTriple φ ψ χ] [CompTrip
+le χ η θ] [CompTriple ψ η ζ] [CompTriple φ ζ θ] : h.comp (g.comp f) = (h.comp g)
+.comp f
+参数：h : Z ->ₑ[η] T；g : Y ->ₑ[ψ] Z；f : X ->ₑ[φ] Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
 -/
 theorem comp_assoc {Q T : Type*} [SMul Q T]
-    {η : P -> Q} {θ : M -> Q} {ζ : N -> Q}
-    (h : Z ->ₑ[η] T) (g : Y ->ₑ[ψ] Z) (f : X ->ₑ[φ] Y)
+    {η : P → Q} {θ : M → Q} {ζ : N → Q}
+    (h : Z →ₑ[η] T) (g : Y →ₑ[ψ] Z) (f : X →ₑ[φ] Y)
     [CompTriple φ ψ χ] [CompTriple χ η θ]
     [CompTriple ψ η ζ] [CompTriple φ ζ θ] :
     h.comp (g.comp f) = (h.comp g).comp f :=
   ext fun _ => rfl
 
-variable {φ' : N -> M}
+variable {φ' : N → M}
 variable {Y₁ : Type*} [SMul M Y₁]
 
 /-- The inverse of a bijective equivariant map is equivariant. -/
 @[to_additive (attr := simps) /-- The inverse of a bijective equivariant map is equivariant. -/]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**MulActionHom.inverse** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：inverse (f : X ->[M] Y₁) (g : Y₁ -> X) (h₁ : Function.LeftInverse g f) (h₂
+ : Function.RightInverse g f) : Y₁ ->[M] X where toFun
+参数：f : X ->[M] Y₁；g : Y₁ -> X；h₁ : Function.LeftInverse g f；h₂ : Function.RightI
+nverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: (f : X ->[M] Y₁) (g : Y₁ -> X)
-  body: g
-  map_smul' m x :=
-    calc
-      g (m • x) = g (m • f (g x)) := by rw [h₂]
-      _ = g (f (m • g x)) := by simp only [map_smul]
-      _ = m • g x := by rw [h₁]
-
-中文:
-定义 inverse
-  签名: (f : X ->[M] Y₁) (g : Y₁ -> X)
-  定义体: g
-  map_smul' m x :=
-    calc
-      g (m • x) = g (m • f (g x)) := by rw [h₂]
-      _ = g (f (m • g x)) := by simp only [map_smul]
-      _ = m • g x := by rw [h₁]
+--- 原说明 ---
+The inverse of a bijective equivariant map is equivariant.
 -/
-def inverse (f : X ->[M] Y₁) (g : Y₁ -> X)
-    (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : Y₁ ->[M] X where
+def inverse (f : X →[M] Y₁) (g : Y₁ → X)
+    (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : Y₁ →[M] X where
   toFun := g
   map_smul' m x :=
     calc
@@ -742,38 +550,22 @@ def inverse (f : X ->[M] Y₁) (g : Y₁ -> X)
 
 /-- The inverse of a bijective equivariant map is equivariant. -/
 @[to_additive (attr := simps) /-- The inverse of a bijective equivariant map is equivariant. -/]
-/--
-Definition of `inverse'` / `inverse'` 的定义
+/-
+**MulActionHom.inverse'** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：inverse' (f : X ->ₑ[φ] Y) (g : Y -> X) (k : Function.RightInverse φ' φ) (h
+₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : Y ->ₑ[φ'] X whe
+re toFun
+参数：f : X ->ₑ[φ] Y；g : Y -> X；k : Function.RightInverse φ' φ；h₁ : Function.LeftIn
+verse g f；h₂ : Function.RightInverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse'
-  signature: (f : X ->ₑ[φ] Y) (g : Y -> X) (k : Function.RightInverse φ' φ)
-  body: g
-  map_smul' m x :=
-    calc
-      g (m • x) = g (m • f (g x)) := by rw [h₂]
-      _ = g ((φ (φ' m)) • f (g x)) := by rw [k]
-      _ = g (f (φ' m • g x)) := by rw [map_smulₛₗ]
-      _ = φ' m • g x := by rw [h₁]
-
-@[to_additive]
-
-中文:
-定义 inverse'
-  签名: (f : X ->ₑ[φ] Y) (g : Y -> X) (k : 函数.右逆 φ' φ)
-  定义体: g
-  map_smul' m x :=
-    calc
-      g (m • x) = g (m • f (g x)) := by rw [h₂]
-      _ = g ((φ (φ' m)) • f (g x)) := by rw [k]
-      _ = g (f (φ' m • g x)) := by rw [map_smulₛₗ]
-      _ = φ' m • g x := by rw [h₁]
-
-@[to_additive]
+--- 原说明 ---
+The inverse of a bijective equivariant map is equivariant.
 -/
-def inverse' (f : X ->ₑ[φ] Y) (g : Y -> X) (k : Function.RightInverse φ' φ)
+def inverse' (f : X →ₑ[φ] Y) (g : Y → X) (k : Function.RightInverse φ' φ)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
-    Y ->ₑ[φ'] X where
+    Y →ₑ[φ'] X where
   toFun := g
   map_smul' m x :=
     calc
@@ -783,78 +575,66 @@ def inverse' (f : X ->ₑ[φ] Y) (g : Y -> X) (k : Function.RightInverse φ' φ)
       _ = φ' m • g x := by rw [h₁]
 
 @[to_additive]
-/--
-lemma `inverse_eq_inverse'` / 引理 `inverse_eq_inverse'`
-
-English:
-lemma inverse_eq_inverse'
-  statement: (f : X ->[M] Y₁) (g : Y₁ -> X)
-  proof: by
-  rfl
-
-@[to_additive]
-
-中文:
-引理 inverse_eq_inverse'
-  结论: (f : X ->[M] Y₁) (g : Y₁ -> X)
-  证明: by
-  rfl
-
-@[to_additive]
+/-
+**MulActionHom.inverse_eq_inverse'** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：inverse_eq_inverse' (f : X ->[M] Y₁) (g : Y₁ -> X) (h₁ : Function.LeftInve
+rse g f) (h₂ : Function.RightInverse g f) : inverse f g h₁ h₂ = inverse' f g (co
+ngrFun rfl) h₁ h₂
+参数：f : X ->[M] Y₁；g : Y₁ -> X；h₁ : Function.LeftInverse g f；h₂ : Function.RightI
+nverse g f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inverse_eq_inverse' (f : X ->[M] Y₁) (g : Y₁ -> X)
+lemma inverse_eq_inverse' (f : X →[M] Y₁) (g : Y₁ → X)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
     inverse f g h₁ h₂ = inverse' f g (congrFun rfl) h₁ h₂ := by
   rfl
 
 @[to_additive]
-/--
-theorem `inverse'_inverse'` / 定理 `inverse'_inverse'`
-
-English:
-theorem inverse'_inverse'
-  proof: ext fun _ => rfl
-
-@[to_additive]
-
-中文:
-定理 inverse'_inverse'
-  证明: ext fun _ => rfl
-
-@[to_additive]
+/-
+**MulActionHom.inverse'_inverse'** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：∀ {M : Type u_2} {N : Type u_3} {φ : M → N} {X : Type u_5} [inst : SMul M 
+X] {Y : Type u_6} [inst_1 : SMul N Y]   {φ' : N → M} {f : X →ₑ[φ] Y} {g : Y → X}
+ {k₁ : Function.LeftInverse φ' φ} {k₂ : Function.RightInverse φ' φ}   {h₁ : Func
+tion.LeftInverse g ⇑f} {h₂ : Function.RightInverse g ⇑f}, (f.inverse' g k₂ h₁ h₂
+).inverse' (⇑f) k₁ h₂ h₁ = f
+参数：f.inverse' g k₂ h₁ h₂；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
 -/
 theorem inverse'_inverse'
-    {f : X ->ₑ[φ] Y} {g : Y -> X}
+    {f : X →ₑ[φ] Y} {g : Y → X}
     {k₁ : Function.LeftInverse φ' φ} {k₂ : Function.RightInverse φ' φ}
     {h₁ : Function.LeftInverse g f} {h₂ : Function.RightInverse g f} :
     inverse' (inverse' f g k₂ h₁ h₂) f k₁ h₂ h₁ = f :=
   ext fun _ => rfl
 
 @[to_additive]
-/--
-theorem `comp_inverse'` / 定理 `comp_inverse'`
-
-English:
-theorem comp_inverse'
-  statement: {f : X ->ₑ[φ] Y} {g : Y -> X}
-  proof: by
-  ext
-  simpa using h₁.eq _
-
-@[to_additive]
-
-中文:
-定理 comp_inverse'
-  结论: {f : X ->ₑ[φ] Y} {g : Y -> X}
-  证明: by
-  ext
-  simpa using h₁.eq _
-
-@[to_additive]
-
-Depends on / 依赖: CompTriple, CompTriple.comp_inv, MulActionHom, MulActionHom.id, comp_inv
+/-
+**MulActionHom.comp_inverse'** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：comp_inverse' {f : X ->ₑ[φ] Y} {g : Y -> X} {k₁ : Function.LeftInverse φ' 
+φ} {k₂ : Function.RightInverse φ' φ} {h₁ : Function.LeftInverse g f} {h₂ : Funct
+ion.RightInverse g f} : (inverse' f g k₂ h₁ h₂).comp f (κ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
+· 使用引理 `CompTriple.comp_inv`：comp_inv {M N : Type*} {φ : M -> N} {ψ : N -> M} (h
+ : Function.RightInverse φ ψ) {χ : M -> M} [IsId χ] : CompTriple φ ψ χ where com
+p_eq
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionHom.inverse'_apply`：∀ {M : Type u_2} {N : Type u_3} {φ : M → N}
+ {X : Type u_5} [inst : SMul M X] {Y : Type u_6} [inst_1 : SMul N Y]   {φ' : N →
+ M} (f : X →ₑ[φ] …
+· 使用定理 `Function.LeftInverse.eq`：∀ {α : Sort u_1} {β : Sort u_2} {g : β → α} {f 
+: α → β}, Function.LeftInverse g f → ∀ (x : α), g (f x) = x
 -/
-theorem comp_inverse' {f : X ->ₑ[φ] Y} {g : Y -> X}
+theorem comp_inverse' {f : X →ₑ[φ] Y} {g : Y → X}
     {k₁ : Function.LeftInverse φ' φ} {k₂ : Function.RightInverse φ' φ}
     {h₁ : Function.LeftInverse g f} {h₂ : Function.RightInverse g f} :
     (inverse' f g k₂ h₁ h₂).comp f (κ := CompTriple.comp_inv k₁) = MulActionHom.id M := by
@@ -862,24 +642,31 @@ theorem comp_inverse' {f : X ->ₑ[φ] Y} {g : Y -> X}
   simpa using h₁.eq _
 
 @[to_additive]
-/--
-theorem `inverse'_comp` / 定理 `inverse'_comp`
-
-English:
-theorem inverse'_comp
-  statement: {f : X ->ₑ[φ] Y} {g : Y -> X}
-  proof: by
-  ext
-  simpa using h₂.eq _
-
-中文:
-定理 inverse'_comp
-  结论: {f : X ->ₑ[φ] Y} {g : Y -> X}
-  证明: by
-  ext
-  simpa using h₂.eq _
+/-
+**MulActionHom.inverse'_comp** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom`。
+形式化陈述：∀ {M : Type u_2} {N : Type u_3} {φ : M → N} {X : Type u_5} [inst : SMul M 
+X] {Y : Type u_6} [inst_1 : SMul N Y]   {φ' : N → M} {f : X →ₑ[φ] Y} {g : Y → X}
+ {k₂ : Function.RightInverse φ' φ} {h₁ : Function.LeftInverse g ⇑f}   {h₂ : Func
+tion.RightInverse g ⇑f}, f.comp (f.inverse' g k₂ h₁ h₂) = MulActionHom.id N
+参数：f.inverse' g k₂ h₁ h₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
+· 使用引理 `CompTriple.comp_inv`：comp_inv {M N : Type*} {φ : M -> N} {ψ : N -> M} (h
+ : Function.RightInverse φ ψ) {χ : M -> M} [IsId χ] : CompTriple φ ψ χ where com
+p_eq
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulActionHom.inverse'_apply`：∀ {M : Type u_2} {N : Type u_3} {φ : M → N}
+ {X : Type u_5} [inst : SMul M X] {Y : Type u_6} [inst_1 : SMul N Y]   {φ' : N →
+ M} (f : X →ₑ[φ] …
+· 使用定理 `Function.RightInverse.eq`：∀ {α : Sort u_1} {β : Sort u_2} {g : β → α} {f
+ : α → β}, Function.RightInverse g f → ∀ (x : β), f (g x) = x
 -/
-theorem inverse'_comp {f : X ->ₑ[φ] Y} {g : Y -> X}
+theorem inverse'_comp {f : X →ₑ[φ] Y} {g : Y → X}
     {k₂ : Function.RightInverse φ' φ}
     {h₁ : Function.LeftInverse g f} {h₂ : Function.RightInverse g f} :
     f.comp (inverse' f g k₂ h₁ h₂) (κ := CompTriple.comp_inv k₂) = MulActionHom.id N := by
@@ -890,24 +677,14 @@ theorem inverse'_comp {f : X ->ₑ[φ] Y} {g : Y -> X}
   then for `c : M`, `(c • · : α → α)` is an `N`-action homomorphism. -/
 @[to_additive (attr := simps) /-- If additive actions of `M` and `N` on `α` commute,
   then for `c : M`, `(c • · : α → α)` is an `N`-additive action homomorphism. -/]
-/--
-Definition of `_root_.SMulCommClass.toMulActionHom` / `_root_.SMulCommClass.toMulActionHom` 的定义
-
-English:
-definition _root_.SMulCommClass.toMulActionHom
-  signature: {M} (N α : Type*)
-  body: (c • ·)
-  map_smul' := smul_comm _
-
-中文:
-定义 _root_.标量交换类.toMulActionHom
-  签名: {M} (N α : 类型)
-  定义体: (c • ·)
-  map_smul' := smul_comm _
+/-
+**MulActionHom._root_.SMulCommClass.toMulActionHom** 是 Mathlib 中的一个定义，位于命名空间 `Mu
+lActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.SMulCommClass.toMulActionHom {M} (N α : Type*)
     [SMul M α] [SMul N α] [SMulCommClass M N α] (c : M) :
-    α ->[N] α where
+    α →[N] α where
   toFun := (c • ·)
   map_smul' := smul_comm _
 
@@ -917,25 +694,19 @@ end MulActionHom
 
 /-- Evaluation at a point as a `MulActionHom`. -/
 @[to_additive (attr := simps) /-- Evaluation at a point as an `AddActionHom`. -/]
-/--
-Definition of `Pi.evalMulActionHom` / `Pi.evalMulActionHom` 的定义
+/-
+**Pi.evalMulActionHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Pi.evalMulActionHom {ι M : Type*} {X : ι -> Type*} [forall i, SMul M (X i)
+] (i : ι) : (forall i, X i) ->[M] X i where toFun
+参数：X i；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.evalMulActionHom
-  signature: {ι M : Type*} {X : ι -> Type*} [forall i, SMul M (X i)] (i : ι)
-  body: Function.eval i
-  map_smul' _ _ := rfl
-
-中文:
-定义 依赖函数类型.evalMulActionHom
-  签名: {ι M : 类型} {X : ι -> 类型} [对任意 i, 标量乘法 M (X i)] (i : ι)
-  定义体: Function.eval i
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: Function, Function.eval
+--- 原说明 ---
+Evaluation at a point as a `MulActionHom`.
 -/
-def Pi.evalMulActionHom {ι M : Type*} {X : ι -> Type*} [forall i, SMul M (X i)] (i : ι) :
-    (forall i, X i) ->[M] X i where
+def Pi.evalMulActionHom {ι M : Type*} {X : ι → Type*} [∀ i, SMul M (X i)] (i : ι) :
+    (∀ i, X i) →[M] X i where
   toFun := Function.eval i
   map_smul' _ _ := rfl
 
@@ -948,162 +719,97 @@ variable {M α β : Type*} [SMul M α] [SMul M β]
 variable (M α β) in
 /-- `Prod.fst` as a bundled `MulActionHom`. -/
 @[to_additive (attr := simps -fullyApplied) /-- `Prod.fst` as a bundled `AddActionHom`. -/]
-/--
-Definition of `fst` / `fst` 的定义
+/-
+**MulActionHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：fst : α × β ->[M] α where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : α × β ->[M] α where
-  body: Prod.fst
-  map_smul' _ _ := rfl
-
-中文:
-定义 fst
-  签名: : α × β ->[M] α where
-  定义体: Prod.fst
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: Prod.fst
+--- 原说明 ---
+`Prod.fst` as a bundled `MulActionHom`.
 -/
-def fst : α × β ->[M] α where
+def fst : α × β →[M] α where
   toFun := Prod.fst
   map_smul' _ _ := rfl
 
 variable (M α β) in
 /-- `Prod.snd` as a bundled `MulActionHom`. -/
 @[to_additive (attr := simps -fullyApplied) /-- `Prod.snd` as a bundled `AddActionHom`. -/]
-/--
-Definition of `snd` / `snd` 的定义
+/-
+**MulActionHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：snd : α × β ->[M] β where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : α × β ->[M] β where
-  body: Prod.snd
-  map_smul' _ _ := rfl
-
-中文:
-定义 snd
-  签名: : α × β ->[M] β where
-  定义体: Prod.snd
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: Prod.snd
+--- 原说明 ---
+`Prod.snd` as a bundled `MulActionHom`.
 -/
-def snd : α × β ->[M] β where
+def snd : α × β →[M] β where
   toFun := Prod.snd
   map_smul' _ _ := rfl
 
 end FstSnd
 
-variable {M N α β γ δ : Type*} [SMul M α] [SMul M β] [SMul N γ] [SMul N δ] {σ : M -> N}
+variable {M N α β γ δ : Type*} [SMul M α] [SMul M β] [SMul N γ] [SMul N δ] {σ : M → N}
 
 /-- If `f` and `g` are equivariant maps, then so is `x ↦ (f x, g x)`. -/
 @[to_additive (attr := simps -fullyApplied) prod
   /-- If `f` and `g` are equivariant maps, then so is `x ↦ (f x, g x)`. -/]
-/--
-Definition of `prod` / `prod` 的定义
-
-English:
-definition prod
-  signature: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  body: (f x, g x)
-  map_smul' _ _ := Prod.ext (map_smulₛₗ f _ _) (map_smulₛₗ g _ _)
-
-@[to_additive (attr := simp) fst_comp_prod]
-
-中文:
-定义 乘积
-  签名: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  定义体: (f x, g x)
-  map_smul' _ _ := Prod.ext (map_smulₛₗ f _ _) (map_smulₛₗ g _ _)
-
-@[to_additive (attr := simp) fst_comp_prod]
+/-
+**MulActionHom.prod** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : α ->ₑ[σ] γ × δ where toFun x
+参数：f : α ->ₑ[σ] γ；g : α ->ₑ[σ] δ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : α ->ₑ[σ] γ × δ where
+def prod (f : α →ₑ[σ] γ) (g : α →ₑ[σ] δ) : α →ₑ[σ] γ × δ where
   toFun x := (f x, g x)
   map_smul' _ _ := Prod.ext (map_smulₛₗ f _ _) (map_smulₛₗ g _ _)
 
 @[to_additive (attr := simp) fst_comp_prod]
-/--
-lemma `fst_comp_prod` / 引理 `fst_comp_prod`
-
-English:
-lemma fst_comp_prod
-  given: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  statement: (fst _ _ _).comp (prod f g) = f
-  proof: rfl
-
-@[to_additive (attr := simp) snd_comp_prod]
-
-中文:
-引理 fst_comp_prod
-  条件: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  结论: (fst _ _ _).comp (乘积 f g) = f
-  证明: rfl
-
-@[to_additive (attr := simp) snd_comp_prod]
+/-
+**MulActionHom.fst_comp_prod** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：fst_comp_prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : (fst _ _ _).comp (prod f
+ g) = f
+参数：f : α ->ₑ[σ] γ；g : α ->ₑ[σ] δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
 -/
-lemma fst_comp_prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : (fst _ _ _).comp (prod f g) = f := rfl
+lemma fst_comp_prod (f : α →ₑ[σ] γ) (g : α →ₑ[σ] δ) : (fst _ _ _).comp (prod f g) = f := rfl
 
 @[to_additive (attr := simp) snd_comp_prod]
-/--
-lemma `snd_comp_prod` / 引理 `snd_comp_prod`
-
-English:
-lemma snd_comp_prod
-  given: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  statement: (snd _ _ _).comp (prod f g) = g
-  proof: rfl
-
-@[to_additive (attr := simp) prod_fst_snd]
-
-中文:
-引理 snd_comp_prod
-  条件: (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ)
-  结论: (snd _ _ _).comp (乘积 f g) = g
-  证明: rfl
-
-@[to_additive (attr := simp) prod_fst_snd]
+/-
+**MulActionHom.snd_comp_prod** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：snd_comp_prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : (snd _ _ _).comp (prod f
+ g) = g
+参数：f : α ->ₑ[σ] γ；g : α ->ₑ[σ] δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
 -/
-lemma snd_comp_prod (f : α ->ₑ[σ] γ) (g : α ->ₑ[σ] δ) : (snd _ _ _).comp (prod f g) = g := rfl
+lemma snd_comp_prod (f : α →ₑ[σ] γ) (g : α →ₑ[σ] δ) : (snd _ _ _).comp (prod f g) = g := rfl
 
 @[to_additive (attr := simp) prod_fst_snd]
-/--
-lemma `prod_fst_snd` / 引理 `prod_fst_snd`
-
-English:
-lemma prod_fst_snd
-  statement: prod (fst M α β) (snd M α β) = .id ..
-  proof: rfl
-
-中文:
-引理 prod_fst_snd
-  结论: 乘积 (fst M α β) (snd M α β) = .id ..
-  证明: rfl
+/-
+**MulActionHom.prod_fst_snd** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：prod_fst_snd : prod (fst M α β) (snd M α β) = .id ..
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prod_fst_snd : prod (fst M α β) (snd M α β) = .id .. := rfl
 
 /-- If `f` and `g` are equivariant maps, then so is `(x, y) ↦ (f x, g y)`. -/
 @[to_additive (attr := simps -fullyApplied) prodMap
   /-- If `f` and `g` are equivariant maps, then so is `(x, y) ↦ (f x, g y)`. -/]
-/--
-Definition of `prodMap` / `prodMap` 的定义
-
-English:
-definition prodMap
-  signature: (f : α ->ₑ[σ] γ) (g : β ->ₑ[σ] δ)
-  body: Prod.map f g
-  __ := (f.comp (fst ..)).prod (g.comp (snd ..))
-
-中文:
-定义 prodMap
-  签名: (f : α ->ₑ[σ] γ) (g : β ->ₑ[σ] δ)
-  定义体: Prod.map f g
-  __ := (f.comp (fst ..)).prod (g.comp (snd ..))
-
-Depends on / 依赖: Prod.map
+/-
+**MulActionHom.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom`。
+形式化陈述：prodMap (f : α ->ₑ[σ] γ) (g : β ->ₑ[σ] δ) : α × β ->ₑ[σ] γ × δ where toFun
+参数：f : α ->ₑ[σ] γ；g : β ->ₑ[σ] δ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def prodMap (f : α ->ₑ[σ] γ) (g : β ->ₑ[σ] δ) : α × β ->ₑ[σ] γ × δ where
+def prodMap (f : α →ₑ[σ] γ) (g : β →ₑ[σ] δ) : α × β →ₑ[σ] γ × δ where
   toFun := Prod.map f g
   __ := (f.comp (fst ..)).prod (g.comp (snd ..))
 
@@ -1111,531 +817,231 @@ end MulActionHom
 
 namespace MulActionHom
 
-variable {R M N X Y : Type*} {σ : M -> N}
+variable {R M N X Y : Type*} {σ : M → N}
 
 attribute [local simp] map_smulₛₗ smul_sub
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] :
-  body: ⟨h • f, by simp [smul_comm _ h]⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 [标量乘法
-  签名: M X] [标量乘法 N Y] [标量乘法 R Y] [标量交换类 N R Y] :
-  定义体: ⟨h • f, by simp [smul_comm _ h]⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: smul_comm
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] :
-    SMul R (X ->ₑ[σ] Y) where
+    SMul R (X →ₑ[σ] Y) where
   smul h f := ⟨h • f, by simp [smul_comm _ h]⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X ->ₑ[σ] Y) (r : R)
-  proof: rfl
-
-中文:
-引理 coe_smul
-  条件: [标量乘法 M X] [标量乘法 N Y] [标量乘法 R Y] [标量交换类 N R Y] (f : X ->ₑ[σ] Y) (r : R)
-  证明: rfl
+/-
+**MulActionHom.coe_smul** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_smul [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X ->ₑ
+[σ] Y) (r : R) : ⇑(r • f) = r • ⇑f
+参数：f : X ->ₑ[σ] Y；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_smul [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X ->ₑ[σ] Y) (r : R) :
+lemma coe_smul [SMul M X] [SMul N Y] [SMul R Y] [SMulCommClass N R Y] (f : X →ₑ[σ] Y) (r : R) :
     ⇑(r • f) = r • ⇑f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Zero Y] [SMulZeroClass N Y] :
-  body: ⟨0, by simp⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 [标量乘法
-  签名: M X] [零 Y] [SMulZero类 N Y] :
-  定义体: ⟨0, by simp⟩
-
-@[simp, norm_cast]
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Zero Y] [SMulZeroClass N Y] :
-    Zero (X ->ₑ[σ] Y) where
+    Zero (X →ₑ[σ] Y) where
   zero := ⟨0, by simp⟩
 
 @[simp, norm_cast]
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  given: [SMul M X] [Zero Y] [SMulZeroClass N Y]
-  statement: ⇑(0 : X ->ₑ[σ] Y) = 0
-  proof: rfl
-
-中文:
-引理 coe_zero
-  条件: [标量乘法 M X] [零 Y] [SMulZero类 N Y]
-  结论: ⇑(0 : X ->ₑ[σ] Y) = 0
-  证明: rfl
+/-
+**MulActionHom.coe_zero** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_zero [SMul M X] [Zero Y] [SMulZeroClass N Y] : ⇑(0 : X ->ₑ[σ] Y) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_zero [SMul M X] [Zero Y] [SMulZeroClass N Y] : ⇑(0 : X ->ₑ[σ] Y) = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [AddZeroClass Y] [DistribSMul N Y] :
-  body: ⟨f + g, by simp [smul_add]⟩
-  zero_add _ := ext fun _ => zero_add _
-  add_zero _ := ext fun _ => add_zero _
-
-@[simp, norm_cast]
-
-中文:
-实例 [标量乘法
-  签名: M X] [加法零类 Y] [分配标量乘法 N Y] :
-  定义体: ⟨f + g, by simp [smul_add]⟩
-  zero_add _ := ext fun _ => zero_add _
-  add_zero _ := ext fun _ => add_zero _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: smul_add
+lemma coe_zero [SMul M X] [Zero Y] [SMulZeroClass N Y] : ⇑(0 : X →ₑ[σ] Y) = 0 := rfl
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [AddZeroClass Y] [DistribSMul N Y] :
-    AddZeroClass (X ->ₑ[σ] Y) where
+    AddZeroClass (X →ₑ[σ] Y) where
   add f g := ⟨f + g, by simp [smul_add]⟩
-  zero_add _ := ext fun _ => zero_add _
-  add_zero _ := ext fun _ => add_zero _
+  zero_add _ := ext fun _ ↦ zero_add _
+  add_zero _ := ext fun _ ↦ add_zero _
 
 @[simp, norm_cast]
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y)
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: [标量乘法 M X] [加法零类 Y] [分配标量乘法 N Y] (f g : X ->ₑ[σ] Y)
-  证明: rfl
+/-
+**MulActionHom.coe_add** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_add [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) :
+ ⇑(f + g) = ⇑f + ⇑g
+参数：f g : X ->ₑ[σ] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_add [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) :
+lemma coe_add [SMul M X] [AddZeroClass Y] [DistribSMul N Y] (f g : X →ₑ[σ] Y) :
     ⇑(f + g) = ⇑f + ⇑g := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [AddMonoid Y] [DistribSMul N Y] :
-  body: ext fun _ => add_assoc _ _ _
-  nsmul_zero f := ext fun x => AddMonoid.nsmul_zero (f x)
-  nsmul_succ n f := ext fun x => AddMonoid.nsmul_succ n (f x)
-
-中文:
-实例 [标量乘法
-  签名: M X] [加法幺半群 Y] [分配标量乘法 N Y] :
-  定义体: ext fun _ => add_assoc _ _ _
-  nsmul_zero f := ext fun x => AddMonoid.nsmul_zero (f x)
-  nsmul_succ n f := ext fun x => AddMonoid.nsmul_succ n (f x)
-
-Depends on / 依赖: add_assoc
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [AddMonoid Y] [DistribSMul N Y] :
-    AddMonoid (X ->ₑ[σ] Y) where
-  add_assoc _ _ _ := ext fun _ => add_assoc _ _ _
-  nsmul_zero f := ext fun x => AddMonoid.nsmul_zero (f x)
-  nsmul_succ n f := ext fun x => AddMonoid.nsmul_succ n (f x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [AddCommMonoid Y] [DistribSMul N Y] :
-  body: ext fun _ => add_comm _ _
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M X] [加法交换幺半群 Y] [分配标量乘法 N Y] :
-  定义体: ext fun _ => add_comm _ _
-
-@[to_additive]
-
-Depends on / 依赖: add_comm
+    AddMonoid (X →ₑ[σ] Y) where
+  add_assoc _ _ _ := ext fun _ ↦ add_assoc _ _ _
+  nsmul_zero f := ext fun x ↦ AddMonoid.nsmul_zero (f x)
+  nsmul_succ n f := ext fun x ↦ AddMonoid.nsmul_succ n (f x)
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [AddCommMonoid Y] [DistribSMul N Y] :
-    AddCommMonoid (X ->ₑ[σ] Y) where
-  add_comm _ _ := ext fun _ => add_comm _ _
+    AddCommMonoid (X →ₑ[σ] Y) where
+  add_comm _ _ := ext fun _ ↦ add_comm _ _
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [SMul N Y] [Monoid R] [MulAction R Y] [SMulCommClass N R Y] :
-  body: ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-中文:
-实例 [标量乘法
-  签名: M X] [标量乘法 N Y] [幺半群 R] [乘法作用 R Y] [标量交换类 N R Y] :
-  定义体: ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-Depends on / 依赖: one_smul
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [SMul N Y] [Monoid R] [MulAction R Y] [SMulCommClass N R Y] :
-    MulAction R (X ->ₑ[σ] Y) where
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: Y] [SMul M X] [DistribSMul N Y] [DistribSMul R Y] [SMulCommClass N R Y] :
-  body: ext fun _ => smul_zero y
-  smul_add y _ _ := ext fun _ => smul_add y _ _
-
-中文:
-实例 [加法零类
-  签名: Y] [标量乘法 M X] [分配标量乘法 N Y] [分配标量乘法 R Y] [标量交换类 N R Y] :
-  定义体: ext fun _ => smul_zero y
-  smul_add y _ _ := ext fun _ => smul_add y _ _
-
-Depends on / 依赖: smul_zero
+    MulAction R (X →ₑ[σ] Y) where
+  one_smul _ := ext fun _ ↦ one_smul _ _
+  mul_smul _ _ _ := ext fun _ ↦ mul_smul _ _ _
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass Y] [SMul M X] [DistribSMul N Y] [DistribSMul R Y] [SMulCommClass N R Y] :
-    DistribSMul R (X ->ₑ[σ] Y) where
-  smul_zero y := ext fun _ => smul_zero y
-  smul_add y _ _ := ext fun _ => smul_add y _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: Y] [Monoid R] [SMul M X] [DistribSMul N Y]
-  body: (inferInstance : MulAction _ _)
-  __ := (inferInstance : DistribSMul _ _)
-
-中文:
-实例 [加法幺半群
-  签名: Y] [幺半群 R] [标量乘法 M X] [分配标量乘法 N Y]
-  定义体: (inferInstance : MulAction _ _)
-  __ := (inferInstance : DistribSMul _ _)
-
-Depends on / 依赖: MulAction
+    DistribSMul R (X →ₑ[σ] Y) where
+  smul_zero y := ext fun _ ↦ smul_zero y
+  smul_add y _ _ := ext fun _ ↦ smul_add y _ _
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid Y] [Monoid R] [SMul M X] [DistribSMul N Y]
     [DistribMulAction R Y] [SMulCommClass N R Y] :
-    DistribMulAction R (X ->ₑ[σ] Y) where
+    DistribMulAction R (X →ₑ[σ] Y) where
   __ := (inferInstance : MulAction _ _)
   __ := (inferInstance : DistribSMul _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: Y] [Semiring R] [SMul M X] [DistribSMul N Y]
-  body: ext fun _ => add_smul _ _ _
-  zero_smul _ := ext fun _ => zero_smul R _
-
-中文:
-实例 [加法交换幺半群
-  签名: Y] [半环 R] [标量乘法 M X] [分配标量乘法 N Y]
-  定义体: ext fun _ => add_smul _ _ _
-  zero_smul _ := ext fun _ => zero_smul R _
-
-Depends on / 依赖: add_smul
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid Y] [Semiring R] [SMul M X] [DistribSMul N Y]
     [Module R Y] [SMulCommClass N R Y] :
-    Module R (X ->ₑ[σ] Y) where
-  add_smul _ _ _ := ext fun _ => add_smul _ _ _
-  zero_smul _ := ext fun _ => zero_smul R _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [AddGroup Y] [DistribSMul N Y] : AddGroup (X ->ₑ[σ] Y) where
-  body: ⟨f - g, by simp [smul_sub]⟩
-  neg f := ⟨-f, by simp⟩
-  neg_add_cancel f := ext fun _ => neg_add_cancel _
-  sub_eq_add_neg _ _ := ext fun _ => sub_eq_add_neg _ _
-  zsmul_zero' f := ext fun x => SubNegMonoid.zsmul_zero' _
-  zsmul_neg' _ _ := ext fun x => SubNegMonoid.zsmul_neg' _ _
-  zsmul_succ' _ _ := ext fun x => SubNegMonoid.zsmul_succ' _ _
-
-@[simp, norm_cast]
-
-中文:
-实例 [标量乘法
-  签名: M X] [加法群 Y] [分配标量乘法 N Y] : 加法群 (X ->ₑ[σ] Y) where
-  定义体: ⟨f - g, by simp [smul_sub]⟩
-  neg f := ⟨-f, by simp⟩
-  neg_add_cancel f := ext fun _ => neg_add_cancel _
-  sub_eq_add_neg _ _ := ext fun _ => sub_eq_add_neg _ _
-  zsmul_zero' f := ext fun x => SubNegMonoid.zsmul_zero' _
-  zsmul_neg' _ _ := ext fun x => SubNegMonoid.zsmul_neg' _ _
-  zsmul_succ' _ _ := ext fun x => SubNegMonoid.zsmul_succ' _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: smul_sub
+    Module R (X →ₑ[σ] Y) where
+  add_smul _ _ _ := ext fun _ ↦ add_smul _ _ _
+  zero_smul _ := ext fun _ ↦ zero_smul R _
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M X] [AddGroup Y] [DistribSMul N Y] : AddGroup (X ->ₑ[σ] Y) where
+instance [SMul M X] [AddGroup Y] [DistribSMul N Y] : AddGroup (X →ₑ[σ] Y) where
   sub f g := ⟨f - g, by simp [smul_sub]⟩
   neg f := ⟨-f, by simp⟩
-  neg_add_cancel f := ext fun _ => neg_add_cancel _
-  sub_eq_add_neg _ _ := ext fun _ => sub_eq_add_neg _ _
-  zsmul_zero' f := ext fun x => SubNegMonoid.zsmul_zero' _
-  zsmul_neg' _ _ := ext fun x => SubNegMonoid.zsmul_neg' _ _
-  zsmul_succ' _ _ := ext fun x => SubNegMonoid.zsmul_succ' _ _
+  neg_add_cancel f := ext fun _ ↦ neg_add_cancel _
+  sub_eq_add_neg _ _ := ext fun _ ↦ sub_eq_add_neg _ _
+  zsmul_zero' f := ext fun x ↦ SubNegMonoid.zsmul_zero' _
+  zsmul_neg' _ _ := ext fun x ↦ SubNegMonoid.zsmul_neg' _ _
+  zsmul_succ' _ _ := ext fun x ↦ SubNegMonoid.zsmul_succ' _ _
 
 @[simp, norm_cast]
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: [SMul M X] [AddGroup Y] [DistribSMul N Y] (f : X ->ₑ[σ] Y)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_neg
-  条件: [标量乘法 M X] [加法群 Y] [分配标量乘法 N Y] (f : X ->ₑ[σ] Y)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**MulActionHom.coe_neg** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_neg [SMul M X] [AddGroup Y] [DistribSMul N Y] (f : X ->ₑ[σ] Y) : ⇑(-f)
+ = -⇑f
+参数：f : X ->ₑ[σ] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_neg [SMul M X] [AddGroup Y] [DistribSMul N Y] (f : X ->ₑ[σ] Y) :
+lemma coe_neg [SMul M X] [AddGroup Y] [DistribSMul N Y] (f : X →ₑ[σ] Y) :
     ⇑(-f) = -⇑f := rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y)
-  proof: rfl
-
-中文:
-引理 coe_sub
-  条件: [标量乘法 M X] [加法群 Y] [分配标量乘法 N Y] (f g : X ->ₑ[σ] Y)
-  证明: rfl
+/-
+**MulActionHom.coe_sub** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_sub [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) : ⇑(f
+ - g) = ⇑f - ⇑g
+参数：f g : X ->ₑ[σ] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_sub [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X ->ₑ[σ] Y) :
+lemma coe_sub [SMul M X] [AddGroup Y] [DistribSMul N Y] (f g : X →ₑ[σ] Y) :
     ⇑(f - g) = ⇑f - ⇑g := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X ->ₑ[σ] Y) where
-
-中文:
-实例 [标量乘法
-  签名: M X] [加法交换群 Y] [分配标量乘法 N Y] : 加法交换群 (X ->ₑ[σ] Y) where
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X ->ₑ[σ] Y) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] :
-  body: ⟨f * g, by simp⟩
-  mul_assoc _ _ _ := ext fun x => mul_assoc _ _ _
-  one := ⟨1, by simp⟩
-  one_mul _ := ext fun x => one_mul _
-  mul_one _ := ext fun x => mul_one _
-
-@[simp, norm_cast]
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y] :
-  定义体: ⟨f * g, by simp⟩
-  mul_assoc _ _ _ := ext fun x => mul_assoc _ _ _
-  one := ⟨1, by simp⟩
-  one_mul _ := ext fun x => one_mul _
-  mul_one _ := ext fun x => mul_one _
-
-@[simp, norm_cast]
+instance [SMul M X] [AddCommGroup Y] [DistribSMul N Y] : AddCommGroup (X →ₑ[σ] Y) where
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] :
-    Monoid (X ->ₑ[σ] Y) where
+    Monoid (X →ₑ[σ] Y) where
   mul f g := ⟨f * g, by simp⟩
-  mul_assoc _ _ _ := ext fun x => mul_assoc _ _ _
+  mul_assoc _ _ _ := ext fun x ↦ mul_assoc _ _ _
   one := ⟨1, by simp⟩
-  one_mul _ := ext fun x => one_mul _
-  mul_one _ := ext fun x => mul_one _
+  one_mul _ := ext fun x ↦ one_mul _
+  mul_one _ := ext fun x ↦ mul_one _
 
 @[simp, norm_cast]
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] (f g : X ->ₑ[σ] Y)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_mul
-  条件: [标量乘法 M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y] (f g : X ->ₑ[σ] Y)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**MulActionHom.coe_mul** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_mul [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] (f g : 
+X ->ₑ[σ] Y) : ⇑(f * g) = ⇑f * ⇑g
+参数：f g : X ->ₑ[σ] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_mul [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] (f g : X ->ₑ[σ] Y) :
+lemma coe_mul [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] (f g : X →ₑ[σ] Y) :
     ⇑(f * g) = ⇑f * ⇑g := rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  given: [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y]
-  proof: rfl
-
-中文:
-引理 coe_one
-  条件: [标量乘法 M X] [幺半群 N] [幺半群 Y] [MulDistribMul作用 N Y]
-  证明: rfl
+/-
+**MulActionHom.coe_one** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：coe_one [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] : ⇑(1 :
+ X ->ₑ[σ] Y) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_one [SMul M X] [Monoid N] [Monoid Y] [MulDistribMulAction N Y] :
-    ⇑(1 : X ->ₑ[σ] Y) = 1 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [CommMonoid Y] [MulDistribMulAction N Y] :
-  body: ext fun _ => mul_comm _ _
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [交换幺半群 Y] [MulDistribMul作用 N Y] :
-  定义体: ext fun _ => mul_comm _ _
-
-Depends on / 依赖: mul_comm
+    ⇑(1 : X →ₑ[σ] Y) = 1 := rfl
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [CommMonoid Y] [MulDistribMulAction N Y] :
-    CommMonoid (X ->ₑ[σ] Y) where
-  mul_comm _ _ := ext fun _ => mul_comm _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [Semiring Y] [MulSemiringAction N Y] :
-  body: (inferInstance : Monoid _)
-  __ := (inferInstance : AddCommMonoid _)
-  zero_mul _ := ext fun x => zero_mul _
-  mul_zero _ := ext fun x => mul_zero _
-  left_distrib _ _ _ := ext fun x => left_distrib _ _ _
-  right_distrib _ _ _ := ext fun x => right_distrib _ _ _
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [半环 Y] [MulSemiring作用 N Y] :
-  定义体: (inferInstance : Monoid _)
-  __ := (inferInstance : AddCommMonoid _)
-  zero_mul _ := ext fun x => zero_mul _
-  mul_zero _ := ext fun x => mul_zero _
-  left_distrib _ _ _ := ext fun x => left_distrib _ _ _
-  right_distrib _ _ _ := ext fun x => right_distrib _ _ _
-
-Depends on / 依赖: Monoid
+    CommMonoid (X →ₑ[σ] Y) where
+  mul_comm _ _ := ext fun _ ↦ mul_comm _ _
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [Semiring Y] [MulSemiringAction N Y] :
-    Semiring (X ->ₑ[σ] Y) where
+    Semiring (X →ₑ[σ] Y) where
   __ := (inferInstance : Monoid _)
   __ := (inferInstance : AddCommMonoid _)
-  zero_mul _ := ext fun x => zero_mul _
-  mul_zero _ := ext fun x => mul_zero _
-  left_distrib _ _ _ := ext fun x => left_distrib _ _ _
-  right_distrib _ _ _ := ext fun x => right_distrib _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [CommSemiring Y] [MulSemiringAction N Y] :
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [交换半环 Y] [MulSemiring作用 N Y] :
+  zero_mul _ := ext fun x ↦ zero_mul _
+  mul_zero _ := ext fun x ↦ mul_zero _
+  left_distrib _ _ _ := ext fun x ↦ left_distrib _ _ _
+  right_distrib _ _ _ := ext fun x ↦ right_distrib _ _ _
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [CommSemiring Y] [MulSemiringAction N Y] :
-    CommSemiring (X ->ₑ[σ] Y) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [Ring Y] [MulSemiringAction N Y] :
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [环 Y] [MulSemiring作用 N Y] :
+    CommSemiring (X →ₑ[σ] Y) where
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [Ring Y] [MulSemiringAction N Y] :
-    Ring (X ->ₑ[σ] Y) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M X] [Monoid N] [CommRing Y] [MulSemiringAction N Y] :
-
-中文:
-实例 [标量乘法
-  签名: M X] [幺半群 N] [交换环 Y] [MulSemiring作用 N Y] :
+    Ring (X →ₑ[σ] Y) where
+/-
+**MulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M X] [Monoid N] [CommRing Y] [MulSemiringAction N Y] :
-    CommRing (X ->ₑ[σ] Y) where
+    CommRing (X →ₑ[σ] Y) where
 
 namespace End
 
@@ -1643,64 +1049,39 @@ namespace End
 form a monoid under composition. -/
 @[to_additive /-- For an additive monoid `M` acting on a type `X`, the `M`-equivariant functions
 from `X` to itself form an additive monoid under composition. -/]
-local instance [SMul M X] : Monoid (X ->[M] X) where
+local instance [SMul M X] : Monoid (X →[M] X) where
   mul f g := f.comp g
   mul_assoc _ _ _ := rfl
   one := .id _
   one_mul _ := rfl
   mul_one _ := rfl
 
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: [SMul M X] {f g : X ->[M] X}
-  statement: f * g = f.comp g
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: [标量乘法 M X] {f g : X ->[M] X}
-  结论: f * g = f.comp g
-  证明: rfl
+/-
+**MulActionHom.End.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `MulActionHom.End`。
+形式化陈述：∀ {M : Type u_2} {X : Type u_4} [inst : SMul M X] {f g : X →ₑ[id] X}, f * 
+g = f.comp g
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] theorem mul_def [SMul M X] {f g : X ->[M] X} : f * g = f.comp g := rfl
+@[to_additive (attr := simp)] theorem mul_def [SMul M X] {f g : X →[M] X} : f * g = f.comp g := rfl
 
 /-- The `M`-equivariant functions from a monoid `M` to itself are exactly
 right multiplications by elements of `M`. See also `RingEquiv.moduleEndSelf`. -/
 @[to_additive (attr := simps)
 /-- The `M`-equivariant functions from an additive monoid `M` to itself are exactly
 right additions by elements of `M`. -/]
-/--
-Definition of `equivMulOpposite` / `equivMulOpposite` 的定义
-
-English:
-definition equivMulOpposite
-  signature: [Monoid M]
-  body: .op (f 1)
-  invFun m := .mk (· * m.unop) fun _ _ => mul_assoc ..
-  left_inv f := by ext m; change m • f 1 = _; rw [← map_smul, smul_eq_mul, mul_one]
-  right_inv := mul_one
-map_mul' f g := congr_arg MulOpposite.op by
-    dsimp [← smul_eq_mul]; simp_rw [← map_smul, smul_eq_mul, mul_one]; rfl
-
-中文:
-定义 equivMulOpposite
-  签名: [幺半群 M]
-  定义体: .op (f 1)
-  invFun m := .mk (· * m.unop) fun _ _ => mul_assoc ..
-  left_inv f := by ext m; change m • f 1 = _; rw [← map_smul, smul_eq_mul, mul_one]
-  right_inv := mul_one
-map_mul' f g := congr_arg MulOpposite.op by
-    dsimp [← smul_eq_mul]; simp_rw [← map_smul, smul_eq_mul, mul_one]; rfl
+/-
+**MulActionHom.End.equivMulOpposite** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom.End`
+。
+形式化陈述：equivMulOpposite [Monoid M] : (M ->[M] M) ≃* Mᵐᵒᵖ where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def equivMulOpposite [Monoid M] : (M ->[M] M) ≃* Mᵐᵒᵖ where
+def equivMulOpposite [Monoid M] : (M →[M] M) ≃* Mᵐᵒᵖ where
   toFun f := .op (f 1)
-  invFun m := .mk (· * m.unop) fun _ _ => mul_assoc ..
+  invFun m := .mk (· * m.unop) fun _ _ ↦ mul_assoc ..
   left_inv f := by ext m; change m • f 1 = _; rw [← map_smul, smul_eq_mul, mul_one]
   right_inv := mul_one
-map_mul' f g := congr_arg MulOpposite.op by
+  map_mul' f g := congr_arg MulOpposite.op <| by
     dsimp [← smul_eq_mul]; simp_rw [← map_smul, smul_eq_mul, mul_one]; rfl
 
 /-- The functions from a monoid `M` to itself equivariant with respect to the right `M`-action
@@ -1708,30 +1089,16 @@ are exactly left multiplications by elements of `M`. See also `RingEquiv.moduleE
 @[to_additive (attr := simps)
 /-- The functions from an additive monoid `M` to itself equivariant with respect to
 the right `M`-action are exactly left additions by elements of `M`. -/]
-/--
-Definition of `mulOppositeEquiv` / `mulOppositeEquiv` 的定义
-
-English:
-definition mulOppositeEquiv
-  signature: [Monoid M]
-  body: f 1
-  invFun m := .mk (m * ·) fun _ _ => (mul_assoc ..).symm
-  left_inv f := by ext m; change MulOpposite.op m • f 1 = _; simp [← map_smul]
-  right_inv := mul_one
-  map_mul' f g := show _ = MulOpposite.op (g 1) • f 1 by simp [← map_smul]
-
-中文:
-定义 mulOppositeEquiv
-  签名: [幺半群 M]
-  定义体: f 1
-  invFun m := .mk (m * ·) fun _ _ => (mul_assoc ..).symm
-  left_inv f := by ext m; change MulOpposite.op m • f 1 = _; simp [← map_smul]
-  right_inv := mul_one
-  map_mul' f g := show _ = MulOpposite.op (g 1) • f 1 by simp [← map_smul]
+/-
+**MulActionHom.End.mulOppositeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MulActionHom.End`
+。
+形式化陈述：mulOppositeEquiv [Monoid M] : (M ->[Mᵐᵒᵖ] M) ≃* M where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mulOppositeEquiv [Monoid M] : (M ->[Mᵐᵒᵖ] M) ≃* M where
+def mulOppositeEquiv [Monoid M] : (M →[Mᵐᵒᵖ] M) ≃* M where
   toFun f := f 1
-  invFun m := .mk (m * ·) fun _ _ => (mul_assoc ..).symm
+  invFun m := .mk (m * ·) fun _ _ ↦ (mul_assoc ..).symm
   left_inv f := by ext m; change MulOpposite.op m • f 1 = _; simp [← map_smul]
   right_inv := mul_one
   map_mul' f g := show _ = MulOpposite.op (g 1) • f 1 by simp [← map_smul]
@@ -1745,7 +1112,7 @@ section DistribMulAction
 variable {M : Type*} [Monoid M]
 variable {N : Type*} [Monoid N]
 variable {P : Type*} [Monoid P]
-variable (φ : M ->* N) (φ' : N ->* M) (ψ : N ->* P) (χ : M ->* P)
+variable (φ : M →* N) (φ' : N →* M) (ψ : N →* P) (χ : M →* P)
 variable (A : Type*) [Monoid A] [MulDistribMulAction M A]
 variable (B : Type*) [Monoid B] [MulDistribMulAction N B]
 variable (B₁ : Type*) [Monoid B₁] [MulDistribMulAction M B₁]
@@ -1758,42 +1125,37 @@ set_option linter.translateOverwrite false in
 attribute [to_additive existing (dont_translate := M) DistribMulAction]
   MulDistribMulAction
 
-/--
-Definition of `DistribMulActionHom` / `DistribMulActionHom` 的定义
+/-- Equivariant additive monoid homomorphisms. -/
+/-
+**DistribMulActionHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{M : Type u_1} →   [inst : Monoid M] →     {N : Type u_2} →       [inst_1 
+: Monoid N] →         (M →* N) →           (A : Type u_10) →             [inst_2
+ : AddMonoid A] →               [DistribMulAction M A] →                 (B : Ty
+pe u_11) → [inst : AddMonoid B] → [DistribMulAction N B] → Type (max u_10 u_11)
+参数：M →* N；A : Type u_10；B : Type u_11；max u_10 u_11。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DistribMulActionHom
-  parameters: (A : Type*) [AddMonoid A] [DistribMulAction M A] (B : Type*)
-  extends: A ->ₑ[φ] B, A ->+ B
-  (no additional axioms)
-
-中文:
-结构 分配乘法作用态射
-  参数: (A : 类型) [加法幺半群 A] [分配乘法作用 M A] (B : 类型)
-  继承: A ->ₑ[φ] B, A ->+ B
-  (无附加公理)
+--- 原说明 ---
+Equivariant additive monoid homomorphisms.
 -/
 structure DistribMulActionHom (A : Type*) [AddMonoid A] [DistribMulAction M A] (B : Type*)
-    [AddMonoid B] [DistribMulAction N B] extends A ->ₑ[φ] B, A ->+ B
+    [AddMonoid B] [DistribMulAction N B] extends A →ₑ[φ] B, A →+ B
 
 /-- Equivariant monoid homomorphisms. -/
 @[to_additive (dont_translate := M N) DistribMulActionHom]
-/--
-Definition of `MulDistribMulActionHom` / `MulDistribMulActionHom` 的定义
+/-
+**MulDistribMulActionHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{M : Type u_1} →   [inst : Monoid M] →     {N : Type u_2} →       [inst_1 
+: Monoid N] →         (M →* N) →           (A : Type u_4) →             [inst_2 
+: Monoid A] →               [MulDistribMulAction M A] →                 (B : Typ
+e u_5) → [inst : Monoid B] → [MulDistribMulAction N B] → Type (max u_4 u_5)
+参数：M →* N；A : Type u_4；B : Type u_5；max u_4 u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulDistribMulActionHom
-  parameters: extends A ->ₑ[φ] B, A ->* B
-  extends: A ->ₑ[φ] B, A ->* B
-  (no additional axioms)
-
-中文:
-结构 MulDistribMul作用态射
-  参数: extends A ->ₑ[φ] B, A ->* B
-  继承: A ->ₑ[φ] B, A ->* B
-  (无附加公理)
+--- 原说明 ---
+Equivariant monoid homomorphisms.
 -/
-structure MulDistribMulActionHom extends A ->ₑ[φ] B, A ->* B
+structure MulDistribMulActionHom extends A →ₑ[φ] B, A →* B
 
 /-- Reinterpret an equivariant additive monoid homomorphism as an additive monoid homomorphism. -/
 add_decl_doc DistribMulActionHom.toAddMonoidHom
@@ -1809,39 +1171,43 @@ add_decl_doc MulDistribMulActionHom.toMulActionHom
 
 @[inherit_doc]
 notation:25 (name := «DistribMulActionHomLocal≺»)
-  A " ->ₑ+[" φ:25 "] " B:0 => DistribMulActionHom φ A B
+  A " →ₑ+[" φ:25 "] " B:0 => DistribMulActionHom φ A B
 
 @[inherit_doc]
 notation:25 (name := «DistribMulActionHomIdLocal≺»)
-  A " ->+[" M:25 "] " B:0 => DistribMulActionHom (MonoidHom.id M) A B
+  A " →+[" M:25 "] " B:0 => DistribMulActionHom (MonoidHom.id M) A B
 
 @[inherit_doc]
 notation:25 (name := «MulDistribMulActionHomLocal≺»)
-  A " ->ₑ*[" φ:25 "] " B:0 => MulDistribMulActionHom φ A B
+  A " →ₑ*[" φ:25 "] " B:0 => MulDistribMulActionHom φ A B
 
 @[inherit_doc]
 notation:25 (name := «MulDistribMulActionHomIdLocal≺»)
-  A " ->*[" M:25 "] " B:0 => MulDistribMulActionHom (MonoidHom.id M) A B
+  A " →*[" M:25 "] " B:0 => MulDistribMulActionHom (MonoidHom.id M) A B
 
 -- QUESTION/TODO : Impose that `φ` is a morphism of monoids?
 
-/--
-Definition of `DistribMulActionSemiHomClass` / `DistribMulActionSemiHomClass` 的定义
+/-- `DistribMulActionSemiHomClass F φ A B` states that `F` is a type of morphisms
+preserving the additive monoid structure and equivariant with respect to `φ`.
+You should extend this class when you extend `DistribMulActionSemiHom`. -/
+/-
+**DistribMulActionSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_10) →   {M : outParam (Type u_11)} →     {N : outParam (Type u
+_12)} →       outParam (M → N) →         (A : outParam (Type u_13)) →           
+(B : outParam (Type u_14)) →             [inst : Monoid M] →               [inst
+_1 : Monoid N] →                 [inst_2 : AddMonoid A] →                   [ins
+t_3 : AddMonoid B] → [DistribMulAction M A] → [DistribMulAction N B] → [FunLike 
+F A B] → Prop
+参数：Type u_13；Type u_14。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DistribMulActionSemiHomClass
-  parameters: (F : Type*)
-  extends: MulActionSemiHomClass F φ A B, AddMonoidHomClass F A B
-  (no additional axioms)
-
-中文:
-类 DistribMulActionSemi态射类
-  参数: (F : 类型)
-  继承: MulActionSemi态射类 F φ A B, 加法幺半群态射类 F A B
-  (无附加公理)
+--- 原说明 ---
+`DistribMulActionSemiHomClass F φ A B` states that `F` is a type of morphisms
+preserving the additive monoid structure and equivariant with respect to `φ`.
+You should extend this class when you extend `DistribMulActionSemiHom`.
 -/
 class DistribMulActionSemiHomClass (F : Type*)
-    {M N : outParam Type*} (φ : outParam (M -> N))
+    {M N : outParam Type*} (φ : outParam (M → N))
     (A B : outParam Type*)
     [Monoid M] [Monoid N]
     [AddMonoid A] [AddMonoid B] [DistribMulAction M A] [DistribMulAction N B]
@@ -1852,23 +1218,24 @@ class DistribMulActionSemiHomClass (F : Type*)
 preserving the monoid structure and equivariant with respect to `φ`.
 You should extend this class when you extend `MulDistribMulActionSemiHom`. -/
 @[to_additive existing (dont_translate := M N) DistribMulActionSemiHomClass]
-/--
-Definition of `MulDistribMulActionSemiHomClass` / `MulDistribMulActionSemiHomClass` 的定义
+/-
+**MulDistribMulActionSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_10) →   {M : outParam (Type u_11)} →     {N : outParam (Type u
+_12)} →       outParam (M → N) →         (A : outParam (Type u_13)) →           
+(B : outParam (Type u_14)) →             [inst : Monoid M] →               [inst
+_1 : Monoid N] →                 [inst_2 : Monoid A] →                   [inst_3
+ : Monoid B] → [MulDistribMulAction M A] → [MulDistribMulAction N B] → [FunLike 
+F A B] → Prop
+参数：Type u_13；Type u_14。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MulDistribMulActionSemiHomClass
-  parameters: (F : Type*)
-  extends: MulActionSemiHomClass F φ A B, MonoidHomClass F A B
-  (no additional axioms)
-
-中文:
-类 MulDistribMulActionSemi态射类
-  参数: (F : 类型)
-  继承: MulActionSemi态射类 F φ A B, 幺半群态射类 F A B
-  (无附加公理)
+--- 原说明 ---
+`MulDistribMulActionSemiHomClass F φ A B` states that `F` is a type of morphisms
+preserving the monoid structure and equivariant with respect to `φ`.
+You should extend this class when you extend `MulDistribMulActionSemiHom`.
 -/
 class MulDistribMulActionSemiHomClass (F : Type*)
-    {M N : outParam Type*} (φ : outParam (M -> N))
+    {M N : outParam Type*} (φ : outParam (M → N))
     (A B : outParam Type*)
     [Monoid M] [Monoid N]
     [Monoid A] [Monoid B] [MulDistribMulAction M A] [MulDistribMulAction N B]
@@ -1884,20 +1251,13 @@ You should extend this class when you extend `MulDistribMulActionHom`. -/
 the additive monoid structure and equivariant with respect to the action of `M`.
 It is an abbreviation to `DistribMulActionHomClass F (MonoidHom.id M) A B`
 You should extend this class when you extend `DistribMulActionHom`. -/]
-/--
-Definition of `MulDistribMulActionHomClass` / `MulDistribMulActionHomClass` 的定义
-
-English:
-abbreviation MulDistribMulActionHomClass
-  signature: (F : Type*) (M : outParam Type*)
-  body: MulDistribMulActionSemiHomClass F (MonoidHom.id M) A B
-
-中文:
-缩写 MulDistribMulActionHomClass
-  签名: (F : 类型) (M : outParam 类型)
-  定义体: MulDistribMulActionSemiHomClass F (MonoidHom.id M) A B
-
-Depends on / 依赖: MonoidHom, MonoidHom.id, MulDistribMulActionSemiHomClass
+/-
+**MulDistribMulActionHomClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MulDistribMulActionHomClass (F : Type*) (M : outParam Type*) (A B : outPar
+am Type*) [Monoid M] [Monoid A] [Monoid B] [MulDistribMulAction M A] [MulDistrib
+MulAction M B] [FunLike F A B]
+参数：F : Type*；M : outParam Type*；A B : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev MulDistribMulActionHomClass (F : Type*) (M : outParam Type*)
     (A B : outParam Type*) [Monoid M] [Monoid A] [Monoid B]
@@ -1907,58 +1267,22 @@ abbrev MulDistribMulActionHomClass (F : Type*) (M : outParam Type*)
 namespace MulDistribMulActionHom
 
 @[to_additive (dont_translate := M N)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ->ₑ*[φ] B) A B
-  body: m.toFun
-  coe_injective f g h := by
-    rcases f with ⟨tF, _, _⟩; rcases g with ⟨tG, _, _⟩
-    cases tF; cases tG; congr
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-实例 :
-  签名: 函数状 (A ->ₑ*[φ] B) A B
-  定义体: m.toFun
-  coe_injective f g h := by
-    rcases f with ⟨tF, _, _⟩; rcases g with ⟨tG, _, _⟩
-    cases tF; cases tG; congr
-
-@[to_additive (dont_translate := M N)]
-
-Depends on / 依赖: m.toFun
+/-
+**MulDistribMulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A ->ₑ*[φ] B) A B where
+instance : FunLike (A →ₑ*[φ] B) A B where
   coe m := m.toFun
   coe_injective f g h := by
     rcases f with ⟨tF, _, _⟩; rcases g with ⟨tG, _, _⟩
     cases tF; cases tG; congr
 
 @[to_additive (dont_translate := M N)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulDistribMulActionSemiHomClass (A ->ₑ*[φ] B) φ A B
-  body: m.map_smul'
-  map_one := MulDistribMulActionHom.map_one'
-  map_mul := MulDistribMulActionHom.map_mul'
-
-中文:
-实例 :
-  签名: MulDistribMulActionSemi态射类 (A ->ₑ*[φ] B) φ A B
-  定义体: m.map_smul'
-  map_one := MulDistribMulActionHom.map_one'
-  map_mul := MulDistribMulActionHom.map_mul'
-
-Depends on / 依赖: m.map_smul, map_smul
+/-
+**MulDistribMulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulDistribMulActionSemiHomClass (A ->ₑ*[φ] B) φ A B where
+instance : MulDistribMulActionSemiHomClass (A →ₑ*[φ] B) φ A B where
   map_smulₛₗ m := m.map_smul'
   map_one := MulDistribMulActionHom.map_one'
   map_mul := MulDistribMulActionHom.map_mul'
@@ -1973,361 +1297,270 @@ variable {F : Type*} [FunLike F A B]
 /-- Turn an element of a type `F` satisfying `DistribMulActionHomClass F M X Y` into an actual
 `DistribMulActionHom`. This is declared as the default coercion from `F` to
 `DistribMulActionHom M X Y`. -/]
-/--
-Definition of `_root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom` / `_root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom` 的定义
-
-English:
-definition _root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom
-  body: { (f : A ->* B), (f : A ->ₑ[φ] B) with }
-
-中文:
-定义 _root_.MulDistribMulActionSemi态射类.toMulDistribMulActionHom
-  定义体: { (f : A ->* B), (f : A ->ₑ[φ] B) with }
+/-
+**MulDistribMulActionHom._root_.MulDistribMulActionSemiHomClass.toMulDistribMulA
+ctionHom** 是 Mathlib 中的一个定义，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.MulDistribMulActionSemiHomClass.toMulDistribMulActionHom
     [MulDistribMulActionSemiHomClass F φ A B]
-    (f : F) : A ->ₑ*[φ] B :=
-  { (f : A ->* B), (f : A ->ₑ[φ] B) with }
+    (f : F) : A →ₑ*[φ] B :=
+  { (f : A →* B), (f : A →ₑ[φ] B) with }
 
 /-- Any type satisfying `MulDistribMulActionSemiHomClass` can be cast into `MulDistribMulActionHom`
 via `MulDistribMulActionSemiHomClass.toMulDistribMulActionHom`. -/
 @[to_additive (dont_translate := M N)
 /-- Any type satisfying `DistribMulActionSemiHomClass` can be cast into `DistribMulActionHom`
 via `DistribMulActionSemiHomClass.toDistribMulActionHom`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulDistribMulActionSemiHomClass
-  signature: F φ A B] : CoeTC F (A ->ₑ*[φ] B)
-  body: ⟨MulDistribMulActionSemiHomClass.toMulDistribMulActionHom⟩
-
-中文:
-实例 [MulDistribMulActionSemi态射类
-  签名: F φ A B] : CoeTC F (A ->ₑ*[φ] B)
-  定义体: ⟨MulDistribMulActionSemiHomClass.toMulDistribMulActionHom⟩
-
-Depends on / 依赖: MulDistribMulActionSemiHomClass, MulDistribMulActionSemiHomClass.toMulDistribMulActionHom, toMulDistribMulActionHom
+/-
+**MulDistribMulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [MulDistribMulActionSemiHomClass F φ A B] : CoeTC F (A ->ₑ*[φ] B) :=
+instance [MulDistribMulActionSemiHomClass F φ A B] : CoeTC F (A →ₑ*[φ] B) :=
   ⟨MulDistribMulActionSemiHomClass.toMulDistribMulActionHom⟩
 
 /-- If `DistribMulAction` of `M` and `N` on `A` commute,
 then for each `c : M`, `(c • ·)` is an `N`-action additive homomorphism. -/
 @[simps]
-/--
-Definition of `_root_.SMulCommClass.toDistribMulActionHom` / `_root_.SMulCommClass.toDistribMulActionHom` 的定义
+/-
+**MulDistribMulActionHom._root_.SMulCommClass.toDistribMulActionHom** 是 Mathlib 
+中的一个定义，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.SMulCommClass.toDistribMulActionHom
-  signature: {M} (N A : Type*) [Monoid N] [AddMonoid A]
-  body: { SMulCommClass.toMulActionHom N A c,
-    DistribSMul.toAddMonoidHom _ c with
-    toFun := (c • ·) }
-
-@[to_additive (attr := simp) (dont_translate := M N)]
-
-中文:
-定义 _root_.标量交换类.toDistribMulActionHom
-  签名: {M} (N A : 类型) [幺半群 N] [加法幺半群 A]
-  定义体: { SMulCommClass.toMulActionHom N A c,
-    DistribSMul.toAddMonoidHom _ c with
-    toFun := (c • ·) }
-
-@[to_additive (attr := simp) (dont_translate := M N)]
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, SMulCommClass, SMulCommClass.toMulActionHom, toAddMonoidHom, toMulActionHom
+--- 原说明 ---
+If `DistribMulAction` of `M` and `N` on `A` commute,
+then for each `c : M`, `(c • ·)` is an `N`-action additive homomorphism.
 -/
 def _root_.SMulCommClass.toDistribMulActionHom {M} (N A : Type*) [Monoid N] [AddMonoid A]
-    [DistribSMul M A] [DistribMulAction N A] [SMulCommClass M N A] (c : M) : A ->+[N] A :=
+    [DistribSMul M A] [DistribMulAction N A] [SMulCommClass M N A] (c : M) : A →+[N] A :=
   { SMulCommClass.toMulActionHom N A c,
     DistribSMul.toAddMonoidHom _ c with
     toFun := (c • ·) }
 
 @[to_additive (attr := simp) (dont_translate := M N)]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: (f : A ->ₑ*[φ] B)
-  statement: f.toFun = f
-  proof: rfl
-
-@[to_additive (attr := norm_cast) (dont_translate := M N)]
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : A ->ₑ*[φ] B)
-  结论: f.toFun = f
-  证明: rfl
-
-@[to_additive (attr := norm_cast) (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulAc
+tionHom`。
+形式化陈述：toFun_eq_coe (f : A ->ₑ*[φ] B) : f.toFun = f
+参数：f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toFun_eq_coe (f : A ->ₑ*[φ] B) : f.toFun = f := rfl
+theorem toFun_eq_coe (f : A →ₑ*[φ] B) : f.toFun = f := rfl
 
 @[to_additive (attr := norm_cast) (dont_translate := M N)]
-/--
-theorem `coe_fn_coe` / 定理 `coe_fn_coe`
-
-English:
-theorem coe_fn_coe
-  given: (f : A ->ₑ*[φ] B)
-  statement: ⇑(f : A ->* B) = f
-  proof: rfl
-
-@[to_additive (attr := norm_cast) (dont_translate := M N)]
-
-中文:
-定理 coe_fn_coe
-  条件: (f : A ->ₑ*[φ] B)
-  结论: ⇑(f : A ->* B) = f
-  证明: rfl
-
-@[to_additive (attr := norm_cast) (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.coe_fn_coe** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActi
+onHom`。
+形式化陈述：coe_fn_coe (f : A ->ₑ*[φ] B) : ⇑(f : A ->* B) = f
+参数：f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-theorem coe_fn_coe (f : A ->ₑ*[φ] B) : ⇑(f : A ->* B) = f :=
+theorem coe_fn_coe (f : A →ₑ*[φ] B) : ⇑(f : A →* B) = f :=
   rfl
 
 @[to_additive (attr := norm_cast) (dont_translate := M N)]
-/--
-theorem `coe_fn_coe'` / 定理 `coe_fn_coe'`
-
-English:
-theorem coe_fn_coe'
-  given: (f : A ->ₑ*[φ] B)
-  statement: ⇑(f : A ->ₑ[φ] B) = f
-  proof: rfl
-
-@[to_additive (attr := ext) (dont_translate := M N)]
-
-中文:
-定理 coe_fn_coe'
-  条件: (f : A ->ₑ*[φ] B)
-  结论: ⇑(f : A ->ₑ[φ] B) = f
-  证明: rfl
-
-@[to_additive (attr := ext) (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.coe_fn_coe'** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulAct
+ionHom`。
+形式化陈述：coe_fn_coe' (f : A ->ₑ*[φ] B) : ⇑(f : A ->ₑ[φ] B) = f
+参数：f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionSemiHomClass.toMulActionSemiHomClass`：∀ {F : Type u_1
+0} {M : outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)} 
+  {A : outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-theorem coe_fn_coe' (f : A ->ₑ*[φ] B) : ⇑(f : A ->ₑ[φ] B) = f :=
+theorem coe_fn_coe' (f : A →ₑ*[φ] B) : ⇑(f : A →ₑ[φ] B) = f :=
   rfl
 
 @[to_additive (attr := ext) (dont_translate := M N)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ->ₑ*[φ] B}
-  statement: (forall x, f x = g x) -> f = g
-  proof: DFunLike.ext f g
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 ext
-  条件: {f g : A ->ₑ*[φ] B}
-  结论: (对任意 x, f x = g x) -> f = g
-  证明: DFunLike.ext f g
-
-@[to_additive (dont_translate := M N)]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**MulDistribMulActionHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionHom`。
+形式化陈述：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g x) -> f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g x) -> f = g :=
+theorem ext {f g : A →ₑ*[φ] B} : (∀ x, f x = g x) → f = g :=
   DFunLike.ext f g
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : A ->ₑ*[φ] B} (h : f = g) (x : A)
-  statement: f x = g x
-  proof: DFunLike.congr_fun h _
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 congr_fun
-  条件: {f g : A ->ₑ*[φ] B} (h : f = g) (x : A)
-  结论: f x = g x
-  证明: DFunLike.congr_fun h _
-
-@[to_additive (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActio
+nHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {A : Type u_4} [inst_2 : Monoid A]   [inst_3 : MulDistribMulAction M A]
+ {B : Type u_5} [inst_4 : Monoid B] [inst_5 : MulDistribMulAction N B]   {f g : 
+A →ₑ*[φ] B}, f = g → ∀ (x : A), f x = g x
+参数：x : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-protected theorem congr_fun {f g : A ->ₑ*[φ] B} (h : f = g) (x : A) : f x = g x :=
+protected theorem congr_fun {f g : A →ₑ*[φ] B} (h : f = g) (x : A) : f x = g x :=
   DFunLike.congr_fun h _
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `toMulActionHom_injective` / 定理 `toMulActionHom_injective`
-
-English:
-theorem toMulActionHom_injective
-  given: {f g : A ->ₑ*[φ] B} (h : (f : A ->ₑ[φ] B) = (g : A ->ₑ[φ] B))
-  proof: by
-  ext a
-  exact MulActionHom.congr_fun h a
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 toMulActionHom_injective
-  条件: {f g : A ->ₑ*[φ] B} (h : (f : A ->ₑ[φ] B) = (g : A ->ₑ[φ] B))
-  证明: by
-  ext a
-  exact MulActionHom.congr_fun h a
-
-@[to_additive (dont_translate := M N)]
-
-Depends on / 依赖: MulActionHom, MulActionHom.congr_fun, congr_fun
+/-
+**MulDistribMulActionHom.toMulActionHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `Mul
+DistribMulActionHom`。
+形式化陈述：toMulActionHom_injective {f g : A ->ₑ*[φ] B} (h : (f : A ->ₑ[φ] B) = (g : 
+A ->ₑ[φ] B)) : f = g
+参数：h : (f : A ->ₑ[φ] B) = (g : A ->ₑ[φ] B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionSemiHomClass.toMulActionSemiHomClass`：∀ {F : Type u_1
+0} {M : outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)} 
+  {A : outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
+· 使用定理 `MulDistribMulActionHom.ext`：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g
+ x) -> f = g
+· 使用定理 `MulActionHom.congr_fun`：∀ {M : Type u_2} {N : Type u_3} {φ : M → N} {X :
+ Type u_5} [inst : SMul M X] {Y : Type u_6} [inst_1 : SMul N Y]   {f g : X →ₑ[φ]
+ Y}, f = g →…
 -/
-theorem toMulActionHom_injective {f g : A ->ₑ*[φ] B} (h : (f : A ->ₑ[φ] B) = (g : A ->ₑ[φ] B)) :
+theorem toMulActionHom_injective {f g : A →ₑ*[φ] B} (h : (f : A →ₑ[φ] B) = (g : A →ₑ[φ] B)) :
     f = g := by
   ext a
   exact MulActionHom.congr_fun h a
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `toMonoidHom_injective` / 定理 `toMonoidHom_injective`
-
-English:
-theorem toMonoidHom_injective
-  given: {f g : A ->ₑ*[φ] B} (h : (f : A ->* B) = (g : A ->* B))
-  statement: f = g
-  proof: by
-  ext a
-  exact DFunLike.congr_fun h a
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 toMonoidHom_injective
-  条件: {f g : A ->ₑ*[φ] B} (h : (f : A ->* B) = (g : A ->* B))
-  结论: f = g
-  证明: by
-  ext a
-  exact DFunLike.congr_fun h a
-
-@[to_additive (dont_translate := M N)]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**MulDistribMulActionHom.toMonoidHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `MulDis
+tribMulActionHom`。
+形式化陈述：toMonoidHom_injective {f g : A ->ₑ*[φ] B} (h : (f : A ->* B) = (g : A ->* 
+B)) : f = g
+参数：h : (f : A ->* B) = (g : A ->* B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
+· 使用定理 `MulDistribMulActionHom.ext`：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g
+ x) -> f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem toMonoidHom_injective {f g : A ->ₑ*[φ] B} (h : (f : A ->* B) = (g : A ->* B)) : f = g := by
+theorem toMonoidHom_injective {f g : A →ₑ*[φ] B} (h : (f : A →* B) = (g : A →* B)) : f = g := by
   ext a
   exact DFunLike.congr_fun h a
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : A ->ₑ*[φ] B)
-  statement: f 1 = 1
-  proof: map_one f
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 map_zero
-  条件: (f : A ->ₑ*[φ] B)
-  结论: f 1 = 1
-  证明: map_one f
-
-@[to_additive (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulAction
+Hom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {A : Type u_4} [inst_2 : Monoid A]   [inst_3 : MulDistribMulAction M A]
+ {B : Type u_5} [inst_4 : Monoid B] [inst_5 : MulDistribMulAction N B]   (f : A 
+→ₑ*[φ] B), f 1 = 1
+参数：f : A →ₑ*[φ] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-protected theorem map_zero (f : A ->ₑ*[φ] B) : f 1 = 1 :=
+protected theorem map_zero (f : A →ₑ*[φ] B) : f 1 = 1 :=
   map_one f
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  given: (f : A ->ₑ*[φ] B) (x y : A)
-  statement: f (x * y) = f x * f y
-  proof: map_mul f x y
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 map_mul
-  条件: (f : A ->ₑ*[φ] B) (x y : A)
-  结论: f (x * y) = f x * f y
-  证明: map_mul f x y
-
-@[to_additive (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {A : Type u_4} [inst_2 : Monoid A]   [inst_3 : MulDistribMulAction M A]
+ {B : Type u_5} [inst_4 : Monoid B] [inst_5 : MulDistribMulAction N B]   (f : A 
+→ₑ*[φ] B) (x y : A), f (x * y) = f x * f y
+参数：f : A →ₑ*[φ] B；x y : A；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-protected theorem map_mul (f : A ->ₑ*[φ] B) (x y : A) : f (x * y) = f x * f y :=
+protected theorem map_mul (f : A →ₑ*[φ] B) (x y : A) : f (x * y) = f x * f y :=
   map_mul f x y
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `map_inv` / 定理 `map_inv`
-
-English:
-theorem map_inv
-  given: (f : A' ->ₑ*[φ] B') (x : A')
-  statement: f x⁻¹ = (f x)⁻¹
-  proof: map_inv f x
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 map_inv
-  条件: (f : A' ->ₑ*[φ] B') (x : A')
-  结论: f x⁻¹ = (f x)⁻¹
-  证明: map_inv f x
-
-@[to_additive (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.map_inv** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} (A' : Type u_8) [inst_2 : Group A']   [inst_3 : MulDistribMulAction M A
+'] (B' : Type u_9) [inst_4 : Group B'] [inst_5 : MulDistribMulAction N B']   (f 
+: A' →ₑ*[φ] B') (x : A'), f x⁻¹ = (f x)⁻¹
+参数：A' : Type u_8；B' : Type u_9；f : A' →ₑ*[φ] B'；x : A'；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-protected theorem map_inv (f : A' ->ₑ*[φ] B') (x : A') : f x⁻¹ = (f x)⁻¹ :=
+protected theorem map_inv (f : A' →ₑ*[φ] B') (x : A') : f x⁻¹ = (f x)⁻¹ :=
   map_inv f x
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (f : A' ->ₑ*[φ] B') (x y : A')
-  statement: f (x / y) = f x / f y
-  proof: map_div f x y
-
-@[to_additive (dont_translate := M N)]
-
-中文:
-定理 map_sub
-  条件: (f : A' ->ₑ*[φ] B') (x y : A')
-  结论: f (x / y) = f x / f y
-  证明: map_div f x y
-
-@[to_additive (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} (A' : Type u_8) [inst_2 : Group A']   [inst_3 : MulDistribMulAction M A
+'] (B' : Type u_9) [inst_4 : Group B'] [inst_5 : MulDistribMulAction N B']   (f 
+: A' →ₑ*[φ] B') (x y : A'), f (x / y) = f x / f y
+参数：A' : Type u_8；B' : Type u_9；f : A' →ₑ*[φ] B'；x y : A'；x / y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
+· 使用定理 `MulDistribMulActionSemiHomClass.toMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulDistribMulActionHom.instMulDistribMulActionSemiHomClassCoeMonoidHom`：
+∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* 
+N) (A : Type u_4) [inst_2 : Monoid A]   [inst_3 : MulDistrib…
 -/
-protected theorem map_sub (f : A' ->ₑ*[φ] B') (x y : A') : f (x / y) = f x / f y :=
+protected theorem map_sub (f : A' →ₑ*[φ] B') (x y : A') : f (x / y) = f x / f y :=
   map_div f x y
 
 @[to_additive (dont_translate := M N)]
-/--
-theorem `map_smulₑ` / 定理 `map_smulₑ`
-
-English:
-theorem map_smulₑ
-  given: (f : A ->ₑ*[φ] B) (m : M) (x : A)
-  statement: f (m • x) = (φ m) • f x
-  proof: map_smulₛₗ f m x
-
-中文:
-定理 map_smulₑ
-  条件: (f : A ->ₑ*[φ] B) (m : M) (x : A)
-  结论: f (m • x) = (φ m) • f x
-  证明: map_smulₛₗ f m x
+/-
+**MulDistribMulActionHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulAction
+Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem map_smulₑ (f : A ->ₑ*[φ] B) (m : M) (x : A) : f (m • x) = (φ m) • f x :=
+protected theorem map_smulₑ (f : A →ₑ*[φ] B) (m : M) (x : A) : f (m • x) = (φ m) • f x :=
   map_smulₛₗ f m x
 
 variable (M)
@@ -2335,296 +1568,182 @@ variable (M)
 /-- The identity map as an equivariant monoid homomorphism. -/
 @[to_additive (dont_translate := M) (attr := instance_reducible)
 /-- The identity map as an equivariant additive monoid homomorphism. -/]
-/--
-Definition of `id` / `id` 的定义
-
-English:
-definition id
-  signature: : A ->*[M] A
-  body: ⟨MulActionHom.id _, rfl, fun _ _ => rfl⟩
-
-@[to_additive (attr := simp) (dont_translate := M)]
-
-中文:
-定义 id
-  签名: : A ->*[M] A
-  定义体: ⟨MulActionHom.id _, rfl, fun _ _ => rfl⟩
-
-@[to_additive (attr := simp) (dont_translate := M)]
+/-
+**MulDistribMulActionHom.id** 是 Mathlib 中的一个定义，位于命名空间 `MulDistribMulActionHom`。
+形式化陈述：(M : Type u_1) →   [inst : Monoid M] → {A : Type u_4} → [inst_1 : Monoid A
+] → [inst_2 : MulDistribMulAction M A] → A →*[M] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def id : A ->*[M] A :=
+protected def id : A →*[M] A :=
   ⟨MulActionHom.id _, rfl, fun _ _ => rfl⟩
 
 @[to_additive (attr := simp) (dont_translate := M)]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : A)
-  statement: MulDistribMulActionHom.id M x = x
-  proof: by
-  rfl
-
-中文:
-定理 id_apply
-  条件: (x : A)
-  结论: MulDistribMul作用态射.id M x = x
-  证明: by
-  rfl
+/-
+**MulDistribMulActionHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulAction
+Hom`。
+形式化陈述：id_apply (x : A) : MulDistribMulActionHom.id M x = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : A) : MulDistribMulActionHom.id M x = x := by
   rfl
 
 variable {M C ψ χ}
-
-/--
-Instance `_root_.DistriMulActionHom.instZero` / 实例 `_root_.DistriMulActionHom.instZero`
-
-English:
-instance _root_.DistriMulActionHom.instZero
-  signature: {A : Type*} [AddMonoid A] [DistribMulAction M A]
-  body: ⟨{ (0 : A ->+ B) with map_smul' := fun m _ => by simp }⟩
-
-@[to_additive (dont_translate := M)]
-
-中文:
-实例 _root_.DistriMulActionHom.instZero
-  签名: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
-  定义体: ⟨{ (0 : A ->+ B) with map_smul' := fun m _ => by simp }⟩
-
-@[to_additive (dont_translate := M)]
-
-Depends on / 依赖: map_smul
+/-
+**MulDistribMulActionHom._root_.DistriMulActionHom.instZero** 是 Mathlib 中的一个实例，位
+于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.DistriMulActionHom.instZero {A : Type*} [AddMonoid A] [DistribMulAction M A]
-    {B : Type*} [AddMonoid B] [DistribMulAction N B] : Zero (A ->ₑ+[φ] B) :=
-  ⟨{ (0 : A ->+ B) with map_smul' := fun m _ => by simp }⟩
+    {B : Type*} [AddMonoid B] [DistribMulAction N B] : Zero (A →ₑ+[φ] B) :=
+  ⟨{ (0 : A →+ B) with map_smul' := fun m _ => by simp }⟩
 
 @[to_additive (dont_translate := M)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (A ->*[M] A)
-  body: ⟨MulDistribMulActionHom.id M⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 (A ->*[M] A)
-  定义体: ⟨MulDistribMulActionHom.id M⟩
-
-@[simp]
-
-Depends on / 依赖: MulDistribMulActionHom, MulDistribMulActionHom.id
+/-
+**MulDistribMulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : One (A ->*[M] A) :=
+instance : One (A →*[M] A) :=
   ⟨MulDistribMulActionHom.id M⟩
 
 @[simp]
-/--
-theorem `_root_.DistriMulActionHom.coe_zero` / 定理 `_root_.DistriMulActionHom.coe_zero`
-
-English:
-theorem _root_.DistriMulActionHom.coe_zero
-  statement: {A : Type*} [AddMonoid A] [DistribMulAction M A]
-  proof: rfl
-
-@[to_additive (attr := simp) (dont_translate := M)]
-
-中文:
-定理 _root_.DistriMulActionHom.coe_zero
-  结论: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
-  证明: rfl
-
-@[to_additive (attr := simp) (dont_translate := M)]
+/-
+**MulDistribMulActionHom._root_.DistriMulActionHom.coe_zero** 是 Mathlib 中的一个定理，位
+于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.DistriMulActionHom.coe_zero {A : Type*} [AddMonoid A] [DistribMulAction M A]
-    {B : Type*} [AddMonoid B] [DistribMulAction N B] : ⇑(0 : A ->ₑ+[φ] B) = 0 :=
+    {B : Type*} [AddMonoid B] [DistribMulAction N B] : ⇑(0 : A →ₑ+[φ] B) = 0 :=
   rfl
 
 @[to_additive (attr := simp) (dont_translate := M)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ⇑(1 : A ->*[M] A) = id
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ⇑(1 : A ->*[M] A) = id
-  证明: rfl
+/-
+**MulDistribMulActionHom.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：coe_one : ⇑(1 : A ->*[M] A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : ⇑(1 : A ->*[M] A) = id :=
+theorem coe_one : ⇑(1 : A →*[M] A) = id :=
   rfl
-
-/--
-theorem `_root_.DistriMulActionHom.zero_apply` / 定理 `_root_.DistriMulActionHom.zero_apply`
-
-English:
-theorem _root_.DistriMulActionHom.zero_apply
-  statement: {A : Type*} [AddMonoid A] [DistribMulAction M A]
-  proof: rfl
-
-@[to_additive (dont_translate := M)]
-
-中文:
-定理 _root_.DistriMulActionHom.zero_apply
-  结论: {A : 类型} [加法幺半群 A] [分配乘法作用 M A]
-  证明: rfl
-
-@[to_additive (dont_translate := M)]
+/-
+**MulDistribMulActionHom._root_.DistriMulActionHom.zero_apply** 是 Mathlib 中的一个定理
+，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.DistriMulActionHom.zero_apply {A : Type*} [AddMonoid A] [DistribMulAction M A]
-    {B : Type*} [AddMonoid B] [DistribMulAction N B] (a : A) : (0 : A ->ₑ+[φ] B) a = 0 :=
+    {B : Type*} [AddMonoid B] [DistribMulAction N B] (a : A) : (0 : A →ₑ+[φ] B) a = 0 :=
   rfl
 
 @[to_additive (dont_translate := M)]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (a : A)
-  statement: (1 : A ->*[M] A) a = a
-  proof: rfl
-
-中文:
-定理 one_apply
-  条件: (a : A)
-  结论: (1 : A ->*[M] A) a = a
-  证明: rfl
+/-
+**MulDistribMulActionHom.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActio
+nHom`。
+形式化陈述：one_apply (a : A) : (1 : A ->*[M] A) a = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_apply (a : A) : (1 : A ->*[M] A) a = a :=
+theorem one_apply (a : A) : (1 : A →*[M] A) a = a :=
   rfl
-
+/-
+**MulDistribMulActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulDistribMulActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [AddMonoid A] [DistribMulAction M A]
     {B : Type*} [AddMonoid B] [DistribMulAction N B] :
-    Inhabited (A ->ₑ+[φ] B) :=
+    Inhabited (A →ₑ+[φ] B) :=
   ⟨0⟩
 
 /-- Composition of two equivariant monoid homomorphisms. -/
 @[to_additive (dont_translate := M N P) (attr := instance_reducible)
 /-- Composition of two equivariant additive monoid homomorphisms. -/]
-/--
-Definition of `comp` / `comp` 的定义
-
-English:
-definition comp
-  signature: [κ : MonoidHom.CompTriple φ ψ χ]
-  body: { MulActionHom.comp (g : B ->ₑ[ψ] C) (f : A ->ₑ[φ] B),
-    MonoidHom.comp (g : B ->* C) (f : A ->* B) with }
-
-@[to_additive (attr := simp) (dont_translate := M N P)]
-
-中文:
-定义 comp
-  签名: [κ : 幺半群态射.余mpTriple φ ψ χ]
-  定义体: { MulActionHom.comp (g : B ->ₑ[ψ] C) (f : A ->ₑ[φ] B),
-    MonoidHom.comp (g : B ->* C) (f : A ->* B) with }
-
-@[to_additive (attr := simp) (dont_translate := M N P)]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comp, MulActionHom, MulActionHom.comp
+/-
+**MulDistribMulActionHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `MulDistribMulActionHom`
+。
+形式化陈述：comp [κ : MonoidHom.CompTriple φ ψ χ] (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) 
+: A ->ₑ*[χ] C
+参数：g : B ->ₑ*[ψ] C；f : A ->ₑ*[φ] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def comp [κ : MonoidHom.CompTriple φ ψ χ]
-    (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) : A ->ₑ*[χ] C :=
-  { MulActionHom.comp (g : B ->ₑ[ψ] C) (f : A ->ₑ[φ] B),
-    MonoidHom.comp (g : B ->* C) (f : A ->* B) with }
+    (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) : A →ₑ*[χ] C :=
+  { MulActionHom.comp (g : B →ₑ[ψ] C) (f : A →ₑ[φ] B),
+    MonoidHom.comp (g : B →* C) (f : A →* B) with }
 
 @[to_additive (attr := simp) (dont_translate := M N P)]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A)
-  proof: rfl
-
-@[to_additive (attr := simp) (dont_translate := M N)]
-
-中文:
-定理 comp_apply
-  条件: (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [幺半群态射.余mpTriple φ ψ χ] (x : A)
-  证明: rfl
-
-@[to_additive (attr := simp) (dont_translate := M N)]
+/-
+**MulDistribMulActionHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActi
+onHom`。
+形式化陈述：comp_apply (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ
+] (x : A) : g.comp f x = g (f x)
+参数：g : B ->ₑ*[ψ] C；f : A ->ₑ*[φ] B；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
+theorem comp_apply (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
     g.comp f x = g (f x) := rfl
 
 @[to_additive (attr := simp) (dont_translate := M N)]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : A ->ₑ*[φ] B)
-  statement: comp (MulDistribMulActionHom.id N) f = f
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp) (dont_translate := M N)]
-
-中文:
-定理 id_comp
-  条件: (f : A ->ₑ*[φ] B)
-  结论: comp (MulDistribMul作用态射.id N) f = f
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp) (dont_translate := M N)]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulDistribMulActionHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：id_comp (f : A ->ₑ*[φ] B) : comp (MulDistribMulActionHom.id N) f = f
+参数：f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionHom.ext`：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g
+ x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulDistribMulActionHom.comp_apply`：comp_apply (g : B ->ₑ*[ψ] C) (f : A -
+>ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) : g.comp f x = g (f x)
+· 使用定理 `MulDistribMulActionHom.id_apply`：id_apply (x : A) : MulDistribMulActionH
+om.id M x = x
 -/
-theorem id_comp (f : A ->ₑ*[φ] B) : comp (MulDistribMulActionHom.id N) f = f :=
+theorem id_comp (f : A →ₑ*[φ] B) : comp (MulDistribMulActionHom.id N) f = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp) (dont_translate := M N)]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : A ->ₑ*[φ] B)
-  statement: f.comp (MulDistribMulActionHom.id M) = f
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp) (dont_translate := M N P Q)]
-
-中文:
-定理 comp_id
-  条件: (f : A ->ₑ*[φ] B)
-  结论: f.comp (MulDistribMul作用态射.id M) = f
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-@[to_additive (attr := simp) (dont_translate := M N P Q)]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulDistribMulActionHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：comp_id (f : A ->ₑ*[φ] B) : f.comp (MulDistribMulActionHom.id M) = f
+参数：f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionHom.ext`：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g
+ x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulDistribMulActionHom.comp_apply`：comp_apply (g : B ->ₑ*[ψ] C) (f : A -
+>ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) : g.comp f x = g (f x)
+· 使用定理 `MulDistribMulActionHom.id_apply`：id_apply (x : A) : MulDistribMulActionH
+om.id M x = x
 -/
-theorem comp_id (f : A ->ₑ*[φ] B) : f.comp (MulDistribMulActionHom.id M) = f :=
+theorem comp_id (f : A →ₑ*[φ] B) : f.comp (MulDistribMulActionHom.id M) = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 @[to_additive (attr := simp) (dont_translate := M N P Q)]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {Q D : Type*} [Monoid Q] [Monoid D] [MulDistribMulAction Q D]
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_assoc
-  结论: {Q D : 类型} [幺半群 Q] [幺半群 D] [MulDistribMul作用 Q D]
-  证明: ext fun _ => rfl
+/-
+**MulDistribMulActionHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `MulDistribMulActi
+onHom`。
+形式化陈述：comp_assoc {Q D : Type*} [Monoid Q] [Monoid D] [MulDistribMulAction Q D] {
+η : P ->* Q} {θ : M ->* Q} {ζ : N ->* Q} (h : C ->ₑ*[η] D) (g : B ->ₑ*[ψ] C) (f 
+: A ->ₑ*[φ] B) [MonoidHom.CompTriple φ ψ χ] [MonoidHom.CompTriple χ η θ] [Monoid
+Hom.CompTriple ψ η ζ] [MonoidHom.CompTriple φ ζ θ] : h.comp (g.comp f) = (h.comp
+ g).comp f
+参数：h : C ->ₑ*[η] D；g : B ->ₑ*[ψ] C；f : A ->ₑ*[φ] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulActionHom.ext`：ext {f g : A ->ₑ*[φ] B} : (forall x, f x = g
+ x) -> f = g
 -/
 theorem comp_assoc {Q D : Type*} [Monoid Q] [Monoid D] [MulDistribMulAction Q D]
-    {η : P ->* Q} {θ : M ->* Q} {ζ : N ->* Q}
-    (h : C ->ₑ*[η] D) (g : B ->ₑ*[ψ] C) (f : A ->ₑ*[φ] B)
+    {η : P →* Q} {θ : M →* Q} {ζ : N →* Q}
+    (h : C →ₑ*[η] D) (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B)
     [MonoidHom.CompTriple φ ψ χ] [MonoidHom.CompTriple χ η θ]
     [MonoidHom.CompTriple ψ η ζ] [MonoidHom.CompTriple φ ζ θ] :
     h.comp (g.comp f) = (h.comp g).comp f :=
@@ -2633,24 +1752,19 @@ theorem comp_assoc {Q D : Type*} [Monoid Q] [Monoid D] [MulDistribMulAction Q D]
 /-- The inverse of a bijective `MulDistribMulActionHom` is a `MulDistribMulActionHom`. -/
 @[to_additive (attr := simp) (dont_translate := M)
 /-- The inverse of a bijective `DistribMulActionHom` is a `DistribMulActionHom`. -/]
-/--
-Definition of `inverse` / `inverse` 的定义
-
-English:
-definition inverse
-  signature: (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
-  body: { (f : A ->* B₁).inverse g h₁ h₂, f.toMulActionHom.inverse g h₁ h₂ with toFun := g }
-
-中文:
-定义 inverse
-  签名: (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : 函数.左逆 g f)
-  定义体: { (f : A ->* B₁).inverse g h₁ h₂, f.toMulActionHom.inverse g h₁ h₂ with toFun := g }
-
-Depends on / 依赖: f.toMulActionHom.inverse, inverse, toMulActionHom
+/-
+**MulDistribMulActionHom.inverse** 是 Mathlib 中的一个定义，位于命名空间 `MulDistribMulActionH
+om`。
+形式化陈述：inverse (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f) (h
+₂ : Function.RightInverse g f) : B₁ ->*[M] A
+参数：f : A ->*[M] B₁；g : B₁ -> A；h₁ : Function.LeftInverse g f；h₂ : Function.Right
+Inverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def inverse (f : A ->*[M] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
-    (h₂ : Function.RightInverse g f) : B₁ ->*[M] A :=
-  { (f : A ->* B₁).inverse g h₁ h₂, f.toMulActionHom.inverse g h₁ h₂ with toFun := g }
+def inverse (f : A →*[M] B₁) (g : B₁ → A) (h₁ : Function.LeftInverse g f)
+    (h₂ : Function.RightInverse g f) : B₁ →*[M] A :=
+  { (f : A →* B₁).inverse g h₁ h₂, f.toMulActionHom.inverse g h₁ h₂ with toFun := g }
 
 end MulDistribMulActionHom
 
@@ -2663,32 +1777,29 @@ variable (T : Type*) [Semiring T] [MulSemiringAction P T]
 variable {R S N'}
 variable [AddMonoid N'] [DistribMulAction S N']
 
-variable {σ : R ->* S}
+variable {σ : R →* S}
 @[ext]
-/--
-theorem `DistribMulActionHom.ext_ring` / 定理 `DistribMulActionHom.ext_ring`
-
-English:
-theorem DistribMulActionHom.ext_ring
-  given: {f g : R ->ₑ+[σ] N'} (h : f 1 = g 1)
-  statement: f = g
-  proof: by
-  ext x
-  rw [← mul_one x]; rw [← smul_eq_mul]; rw [f.map_smulₑ]; rw [g.map_smulₑ]; rw [h]
-
-中文:
-定理 分配乘法作用态射.ext_ring
-  条件: {f g : R ->ₑ+[σ] N'} (h : f 1 = g 1)
-  结论: f = g
-  证明: by
-  ext x
-  rw [← mul_one x]; rw [← smul_eq_mul]; rw [f.map_smulₑ]; rw [g.map_smulₑ]; rw [h]
-
-Depends on / 依赖: f.map_smul, g.map_smul, mul_one, smul_eq_mul
+/-
+**DistribMulActionHom.ext_ring** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DistribMulActionHom.ext_ring {f g : R ->ₑ+[σ] N'} (h : f 1 = g 1) : f = g
+参数：h : f 1 = g 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribMulActionHom.ext`：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_
+2} [inst_1 : Monoid N] {φ : M →* N} {A : Type u_4} [inst_2 : AddMonoid A]   [ins
+t_3 : Distrib…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `DistribMulActionHom.map_smulₑ`：∀ {M : Type u_1} [inst : Monoid M] {N : T
+ype u_2} [inst_1 : Monoid N] {φ : M →* N} {A : Type u_4} [inst_2 : AddMonoid A] 
+  [inst_3 : Distrib…
 -/
-theorem DistribMulActionHom.ext_ring {f g : R ->ₑ+[σ] N'} (h : f 1 = g 1) : f = g := by
+theorem DistribMulActionHom.ext_ring {f g : R →ₑ+[σ] N'} (h : f 1 = g 1) : f = g := by
   ext x
-  rw [← mul_one x]; rw [← smul_eq_mul]; rw [f.map_smulₑ]; rw [g.map_smulₑ]; rw [h]
+  rw [← mul_one x, ← smul_eq_mul, f.map_smulₑ, g.map_smulₑ, h]
 
 end Semiring
 
@@ -2699,22 +1810,20 @@ variable (S : Type*) [Semiring S] [MulSemiringAction N S]
 variable (S' : Type*) [Ring S'] [MulSemiringAction N S']
 variable (T : Type*) [Semiring T] [MulSemiringAction P T]
 
-/--
-Definition of `MulSemiringActionHom` / `MulSemiringActionHom` 的定义
+/-- Equivariant ring homomorphisms. -/
+/-
+**MulSemiringActionHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{M : Type u_1} →   [inst : Monoid M] →     {N : Type u_2} →       [inst_1 
+: Monoid N] →         (M →* N) →           (R : Type u_10) →             [inst_2
+ : Semiring R] →               [MulSemiringAction M R] →                 (S : Ty
+pe u_12) → [inst : Semiring S] → [MulSemiringAction N S] → Type (max u_10 u_12)
+参数：M →* N；R : Type u_10；S : Type u_12；max u_10 u_12。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulSemiringActionHom
-  parameters: extends R ->ₑ+[φ] S, R ->+* S
-  extends: R ->ₑ+[φ] S, R ->+* S
-  (no additional axioms)
-
-中文:
-结构 MulSemiring作用态射
-  参数: extends R ->ₑ+[φ] S, R ->+* S
-  继承: R ->ₑ+[φ] S, R ->+* S
-  (无附加公理)
+--- 原说明 ---
+Equivariant ring homomorphisms.
 -/
-structure MulSemiringActionHom extends R ->ₑ+[φ] S, R ->+* S
+structure MulSemiringActionHom extends R →ₑ+[φ] S, R →+* S
 
 /-- Reinterpret an equivariant ring homomorphism as a ring homomorphism. -/
 add_decl_doc MulSemiringActionHom.toRingHom
@@ -2724,46 +1833,57 @@ add_decl_doc MulSemiringActionHom.toDistribMulActionHom
 
 @[inherit_doc]
 notation:25 (name := «MulSemiringActionHomLocal≺»)
-  R " ->ₑ+*[" φ:25 "] " S:0 => MulSemiringActionHom φ R S
+  R " →ₑ+*[" φ:25 "] " S:0 => MulSemiringActionHom φ R S
 
 @[inherit_doc]
 notation:25 (name := «MulSemiringActionHomIdLocal≺»)
-  R " ->+*[" M:25 "] " S:0 => MulSemiringActionHom (MonoidHom.id M) R S
+  R " →+*[" M:25 "] " S:0 => MulSemiringActionHom (MonoidHom.id M) R S
 
-/--
-Definition of `MulSemiringActionSemiHomClass` / `MulSemiringActionSemiHomClass` 的定义
+/-- `MulSemiringActionHomClass F φ R S` states that `F` is a type of morphisms preserving
+the ring structure and equivariant with respect to `φ`.
 
-English:
-class MulSemiringActionSemiHomClass
-  parameters: (F : Type*)
-  extends: DistribMulActionSemiHomClass F φ R S, RingHomClass F R S
-  (no additional axioms)
+You should extend this class when you extend `MulSemiringActionHom`. -/
+/-
+**MulSemiringActionSemiHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_15) →   {M : outParam (Type u_16)} →     {N : outParam (Type u
+_17)} →       [inst : Monoid M] →         [inst_1 : Monoid N] →           outPar
+am (M → N) →             (R : outParam (Type u_18)) →               (S : outPara
+m (Type u_19)) →                 [inst_2 : Semiring R] →                   [inst
+_3 : Semiring S] → [DistribMulAction M R] → [DistribMulAction N S] → [FunLike F 
+R S] → Prop
+参数：Type u_18；Type u_19。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 MulSemiringActionSemi态射类
-  参数: (F : 类型)
-  继承: DistribMulActionSemi态射类 F φ R S, 环态射类 F R S
-  (无附加公理)
+--- 原说明 ---
+`MulSemiringActionHomClass F φ R S` states that `F` is a type of morphisms prese
+rving
+the ring structure and equivariant with respect to `φ`.
+
+You should extend this class when you extend `MulSemiringActionHom`.
 -/
 class MulSemiringActionSemiHomClass (F : Type*)
     {M N : outParam Type*} [Monoid M] [Monoid N]
-    (φ : outParam (M -> N))
+    (φ : outParam (M → N))
     (R S : outParam Type*) [Semiring R] [Semiring S]
     [DistribMulAction M R] [DistribMulAction N S] [FunLike F R S] : Prop
     extends DistribMulActionSemiHomClass F φ R S, RingHomClass F R S
 
-/--
-Definition of `MulSemiringActionHomClass` / `MulSemiringActionHomClass` 的定义
+/-- `MulSemiringActionHomClass F M R S` states that `F` is a type of morphisms preserving
+the ring structure and equivariant with respect to a `DistribMulAction` of `M` on `R` and `S`.
+-/
+/-
+**MulSemiringActionHomClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MulSemiringActionHomClass (F : Type*) {M : outParam Type*} [Monoid M] (R S
+ : outParam Type*) [Semiring R] [Semiring S] [DistribMulAction M R] [DistribMulA
+ction M S] [FunLike F R S]
+参数：F : Type*；R S : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation MulSemiringActionHomClass
-  body: MulSemiringActionSemiHomClass F (MonoidHom.id M) R S
-
-中文:
-缩写 MulSemiringActionHomClass
-  定义体: MulSemiringActionSemiHomClass F (MonoidHom.id M) R S
-
-Depends on / 依赖: MonoidHom, MonoidHom.id, MulSemiringActionSemiHomClass
+--- 原说明 ---
+`MulSemiringActionHomClass F M R S` states that `F` is a type of morphisms prese
+rving
+the ring structure and equivariant with respect to a `DistribMulAction` of `M` o
+n `R` and `S`.
 -/
 abbrev MulSemiringActionHomClass
     (F : Type*)
@@ -2774,57 +1894,20 @@ abbrev MulSemiringActionHomClass
 
 namespace MulSemiringActionHom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (R ->ₑ+*[φ] S) R S
-  body: m.toFun
-  coe_injective f g h := by
-    rcases f with ⟨⟨tF, _, _⟩, _, _⟩; rcases g with ⟨⟨tG, _, _⟩, _, _⟩
-    cases tF; cases tG; congr
-
-中文:
-实例 :
-  签名: 函数状 (R ->ₑ+*[φ] S) R S
-  定义体: m.toFun
-  coe_injective f g h := by
-    rcases f with ⟨⟨tF, _, _⟩, _, _⟩; rcases g with ⟨⟨tG, _, _⟩, _, _⟩
-    cases tF; cases tG; congr
-
-Depends on / 依赖: m.toFun
+/-
+**MulSemiringActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulSemiringActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (R ->ₑ+*[φ] S) R S where
+instance : FunLike (R →ₑ+*[φ] S) R S where
   coe m := m.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨tF, _, _⟩, _, _⟩; rcases g with ⟨⟨tG, _, _⟩, _, _⟩
     cases tF; cases tG; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulSemiringActionSemiHomClass (R ->ₑ+*[φ] S) φ R S
-  body: m.map_zero'
-  map_add m := m.map_add'
-  map_one := MulSemiringActionHom.map_one'
-  map_mul := MulSemiringActionHom.map_mul'
-  map_smulₛₗ m := m.map_smul'
-
-中文:
-实例 :
-  签名: MulSemiringActionSemi态射类 (R ->ₑ+*[φ] S) φ R S
-  定义体: m.map_zero'
-  map_add m := m.map_add'
-  map_one := MulSemiringActionHom.map_one'
-  map_mul := MulSemiringActionHom.map_mul'
-  map_smulₛₗ m := m.map_smul'
-
-Depends on / 依赖: m.map_zero, map_zero
+/-
+**MulSemiringActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulSemiringActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulSemiringActionSemiHomClass (R ->ₑ+*[φ] S) φ R S where
+instance : MulSemiringActionSemiHomClass (R →ₑ+*[φ] S) φ R S where
   map_zero m := m.map_zero'
   map_add m := m.map_add'
   map_one := MulSemiringActionHom.map_one'
@@ -2838,252 +1921,275 @@ variable {F : Type*} [FunLike F R S]
 `MulSemiringActionHom`. This is declared as the default coercion from `F` to
 `MulSemiringActionHom M X Y`. -/
 @[coe]
-/--
-Definition of `_root_.MulSemiringActionHomClass.toMulSemiringActionHom` / `_root_.MulSemiringActionHomClass.toMulSemiringActionHom` 的定义
+/-
+**MulSemiringActionHom._root_.MulSemiringActionHomClass.toMulSemiringActionHom**
+ 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.MulSemiringActionHomClass.toMulSemiringActionHom
-  body: { (f : R ->+* S), (f : R ->ₑ+[φ] S) with }
-
-中文:
-定义 _root_.MulSemiringActionHomClass.toMulSemiringActionHom
-  定义体: { (f : R ->+* S), (f : R ->ₑ+[φ] S) with }
+--- 原说明 ---
+Turn an element of a type `F` satisfying `MulSemiringActionHomClass F M R S` int
+o an actual
+`MulSemiringActionHom`. This is declared as the default coercion from `F` to
+`MulSemiringActionHom M X Y`.
 -/
 def _root_.MulSemiringActionHomClass.toMulSemiringActionHom
     [MulSemiringActionSemiHomClass F φ R S]
-    (f : F) : R ->ₑ+*[φ] S :=
-  { (f : R ->+* S), (f : R ->ₑ+[φ] S) with }
+    (f : F) : R →ₑ+*[φ] S :=
+  { (f : R →+* S), (f : R →ₑ+[φ] S) with }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Any type satisfying `MulSemiringActionHomClass` can be cast into `MulSemiringActionHom` via
+  `MulSemiringActionHomClass.toMulSemiringActionHom`. -/
+/-
+**MulSemiringActionHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulSemiringActionHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [MulSemiringActionSemiHomClass
-  signature: F φ R S] :
-  body: ⟨MulSemiringActionHomClass.toMulSemiringActionHom⟩
-
-@[norm_cast]
-
-中文:
-实例 [MulSemiringActionSemi态射类
-  签名: F φ R S] :
-  定义体: ⟨MulSemiringActionHomClass.toMulSemiringActionHom⟩
-
-@[norm_cast]
-
-Depends on / 依赖: MulSemiringActionHomClass, MulSemiringActionHomClass.toMulSemiringActionHom, toMulSemiringActionHom
+--- 原说明 ---
+Any type satisfying `MulSemiringActionHomClass` can be cast into `MulSemiringAct
+ionHom` via
+  `MulSemiringActionHomClass.toMulSemiringActionHom`.
 -/
 instance [MulSemiringActionSemiHomClass F φ R S] :
-    CoeTC F (R ->ₑ+*[φ] S) :=
+    CoeTC F (R →ₑ+*[φ] S) :=
   ⟨MulSemiringActionHomClass.toMulSemiringActionHom⟩
 
 @[norm_cast]
-/--
-theorem `coe_fn_coe` / 定理 `coe_fn_coe`
-
-English:
-theorem coe_fn_coe
-  given: (f : R ->ₑ+*[φ] S)
-  statement: ⇑(f : R ->+* S) = f
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_fn_coe
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: ⇑(f : R ->+* S) = f
-  证明: rfl
-
-@[norm_cast]
+/-
+**MulSemiringActionHom.coe_fn_coe** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHo
+m`。
+形式化陈述：coe_fn_coe (f : R ->ₑ+*[φ] S) : ⇑(f : R ->+* S) = f
+参数：f : R ->ₑ+*[φ] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulSemiringActionSemiHomClass.toRingHomClass`：∀ {F : Type u_15} {M : out
+Param (Type u_16)} {N : outParam (Type u_17)} [inst : Monoid M] [inst_1 : Monoid
+ N]   (φ : outParam (M → N)) {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-theorem coe_fn_coe (f : R ->ₑ+*[φ] S) : ⇑(f : R ->+* S) = f :=
+theorem coe_fn_coe (f : R →ₑ+*[φ] S) : ⇑(f : R →+* S) = f :=
   rfl
 
 @[norm_cast]
-/--
-theorem `coe_fn_coe'` / 定理 `coe_fn_coe'`
-
-English:
-theorem coe_fn_coe'
-  given: (f : R ->ₑ+*[φ] S)
-  statement: ⇑(f : R ->ₑ+[φ] S) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_fn_coe'
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: ⇑(f : R ->ₑ+[φ] S) = f
-  证明: rfl
-
-@[ext]
+/-
+**MulSemiringActionHom.coe_fn_coe'** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionH
+om`。
+形式化陈述：coe_fn_coe' (f : R ->ₑ+*[φ] S) : ⇑(f : R ->ₑ+[φ] S) = f
+参数：f : R ->ₑ+*[φ] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-theorem coe_fn_coe' (f : R ->ₑ+*[φ] S) : ⇑(f : R ->ₑ+[φ] S) = f :=
+theorem coe_fn_coe' (f : R →ₑ+*[φ] S) : ⇑(f : R →ₑ+[φ] S) = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : R ->ₑ+*[φ] S}
-  statement: (forall x, f x = g x) -> f = g
-  proof: DFunLike.ext f g
-
-中文:
-定理 ext
-  条件: {f g : R ->ₑ+*[φ] S}
-  结论: (对任意 x, f x = g x) -> f = g
-  证明: DFunLike.ext f g
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**MulSemiringActionHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：ext {f g : R ->ₑ+*[φ] S} : (forall x, f x = g x) -> f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : R ->ₑ+*[φ] S} : (forall x, f x = g x) -> f = g :=
+theorem ext {f g : R →ₑ+*[φ] S} : (∀ x, f x = g x) → f = g :=
   DFunLike.ext f g
-
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : R ->ₑ+*[φ] S)
-  statement: f 0 = 0
-  proof: map_zero f
-
-中文:
-定理 map_zero
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: f 0 = 0
-  证明: map_zero f
+/-
+**MulSemiringActionHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`
+。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {R : Type u_10} [inst_2 : Semiring R]   [inst_3 : MulSemiringAction M R
+] {S : Type u_12} [inst_4 : Semiring S] [inst_5 : MulSemiringAction N S]   (f : 
+R →ₑ+*[φ] S), f 0 = 0
+参数：f : R →ₑ+*[φ] S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulSemiringActionSemiHomClass.toRingHomClass`：∀ {F : Type u_15} {M : out
+Param (Type u_16)} {N : outParam (Type u_17)} [inst : Monoid M] [inst_1 : Monoid
+ N]   (φ : outParam (M → N)) {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_zero (f : R ->ₑ+*[φ] S) : f 0 = 0 :=
+protected theorem map_zero (f : R →ₑ+*[φ] S) : f 0 = 0 :=
   map_zero f
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : R ->ₑ+*[φ] S) (x y : R)
-  statement: f (x + y) = f x + f y
-  proof: map_add f x y
-
-中文:
-定理 map_add
-  条件: (f : R ->ₑ+*[φ] S) (x y : R)
-  结论: f (x + y) = f x + f y
-  证明: map_add f x y
+/-
+**MulSemiringActionHom.map_add** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {R : Type u_10} [inst_2 : Semiring R]   [inst_3 : MulSemiringAction M R
+] {S : Type u_12} [inst_4 : Semiring S] [inst_5 : MulSemiringAction N S]   (f : 
+R →ₑ+*[φ] S) (x y : R), f (x + y) = f x + f y
+参数：f : R →ₑ+*[φ] S；x y : R；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_add (f : R ->ₑ+*[φ] S) (x y : R) : f (x + y) = f x + f y :=
+protected theorem map_add (f : R →ₑ+*[φ] S) (x y : R) : f (x + y) = f x + f y :=
   map_add f x y
-
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  given: (f : R' ->ₑ+*[φ] S') (x : R')
-  statement: f (-x) = -f x
-  proof: map_neg f x
-
-中文:
-定理 map_neg
-  条件: (f : R' ->ₑ+*[φ] S') (x : R')
-  结论: f (-x) = -f x
-  证明: map_neg f x
+/-
+**MulSemiringActionHom.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} (R' : Type u_11) [inst_2 : Ring R']   [inst_3 : MulSemiringAction M R']
+ (S' : Type u_13) [inst_4 : Ring S'] [inst_5 : MulSemiringAction N S']   (f : R'
+ →ₑ+*[φ] S') (x : R'), f (-x) = -f x
+参数：R' : Type u_11；S' : Type u_13；f : R' →ₑ+*[φ] S'；x : R'；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_neg (f : R' ->ₑ+*[φ] S') (x : R') : f (-x) = -f x :=
+protected theorem map_neg (f : R' →ₑ+*[φ] S') (x : R') : f (-x) = -f x :=
   map_neg f x
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (f : R' ->ₑ+*[φ] S') (x y : R')
-  statement: f (x - y) = f x - f y
-  proof: map_sub f x y
-
-中文:
-定理 map_sub
-  条件: (f : R' ->ₑ+*[φ] S') (x y : R')
-  结论: f (x - y) = f x - f y
-  证明: map_sub f x y
+/-
+**MulSemiringActionHom.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} (R' : Type u_11) [inst_2 : Ring R']   [inst_3 : MulSemiringAction M R']
+ (S' : Type u_13) [inst_4 : Ring S'] [inst_5 : MulSemiringAction N S']   (f : R'
+ →ₑ+*[φ] S') (x y : R'), f (x - y) = f x - f y
+参数：R' : Type u_11；S' : Type u_13；f : R' →ₑ+*[φ] S'；x y : R'；x - y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_sub (f : R' ->ₑ+*[φ] S') (x y : R') : f (x - y) = f x - f y :=
+protected theorem map_sub (f : R' →ₑ+*[φ] S') (x y : R') : f (x - y) = f x - f y :=
   map_sub f x y
-
-/--
-theorem `map_one` / 定理 `map_one`
-
-English:
-theorem map_one
-  given: (f : R ->ₑ+*[φ] S)
-  statement: f 1 = 1
-  proof: map_one f
-
-中文:
-定理 map_one
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: f 1 = 1
-  证明: map_one f
+/-
+**MulSemiringActionHom.map_one** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {R : Type u_10} [inst_2 : Semiring R]   [inst_3 : MulSemiringAction M R
+] {S : Type u_12} [inst_4 : Semiring S] [inst_5 : MulSemiringAction N S]   (f : 
+R →ₑ+*[φ] S), f 1 = 1
+参数：f : R →ₑ+*[φ] S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulSemiringActionSemiHomClass.toRingHomClass`：∀ {F : Type u_15} {M : out
+Param (Type u_16)} {N : outParam (Type u_17)} [inst : Monoid M] [inst_1 : Monoid
+ N]   (φ : outParam (M → N)) {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_one (f : R ->ₑ+*[φ] S) : f 1 = 1 :=
+protected theorem map_one (f : R →ₑ+*[φ] S) : f 1 = 1 :=
   map_one f
-
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  given: (f : R ->ₑ+*[φ] S) (x y : R)
-  statement: f (x * y) = f x * f y
-  proof: map_mul f x y
-
-中文:
-定理 map_mul
-  条件: (f : R ->ₑ+*[φ] S) (x y : R)
-  结论: f (x * y) = f x * f y
-  证明: map_mul f x y
+/-
+**MulSemiringActionHom.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] {φ :
+ M →* N} {R : Type u_10} [inst_2 : Semiring R]   [inst_3 : MulSemiringAction M R
+] {S : Type u_12} [inst_4 : Semiring S] [inst_5 : MulSemiringAction N S]   (f : 
+R →ₑ+*[φ] S) (x y : R), f (x * y) = f x * f y
+参数：f : R →ₑ+*[φ] S；x y : R；x * y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MulSemiringActionSemiHomClass.toRingHomClass`：∀ {F : Type u_15} {M : out
+Param (Type u_16)} {N : outParam (Type u_17)} [inst : Monoid M] [inst_1 : Monoid
+ N]   (φ : outParam (M → N)) {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_mul (f : R ->ₑ+*[φ] S) (x y : R) : f (x * y) = f x * f y :=
+protected theorem map_mul (f : R →ₑ+*[φ] S) (x y : R) : f (x * y) = f x * f y :=
   map_mul f x y
-
-/--
-theorem `map_smulₛₗ` / 定理 `map_smulₛₗ`
-
-English:
-theorem map_smulₛₗ
-  given: (f : R ->ₑ+*[φ] S) (m : M) (x : R)
-  statement: f (m • x) = φ m • f x
-  proof: map_smulₛₗ f m x
-
-中文:
-定理 map_smulₛₗ
-  条件: (f : R ->ₑ+*[φ] S) (m : M) (x : R)
-  结论: f (m • x) = φ m • f x
-  证明: map_smulₛₗ f m x
+/-
+**MulSemiringActionHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`
+。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {R : Type u_10} [inst_1 : Semiring R] [
+inst_2 : MulSemiringAction M R]   {S : Type u_12} [inst_3 : Semiring S] [inst_4 
+: MulSemiringAction M S] (f : R →+*[M] S) (m : M) (x : R),   f (m • x) = m • f x
+参数：f : R →+*[M] S；m : M；x : R；m • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `DistribMulActionSemiHomClass.toMulActionSemiHomClass`：∀ {F : Type u_10} 
+{M : outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {
+A : outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_smulₛₗ (f : R ->ₑ+*[φ] S) (m : M) (x : R) : f (m • x) = φ m • f x :=
+protected theorem map_smulₛₗ (f : R →ₑ+*[φ] S) (m : M) (x : R) : f (m • x) = φ m • f x :=
   map_smulₛₗ f m x
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: [MulSemiringAction M S] (f : R ->+*[M] S) (m : M) (x : R)
-  proof: map_smulₛₗ f m x
-
-中文:
-定理 map_smul
-  条件: [MulSemiring作用 M S] (f : R ->+*[M] S) (m : M) (x : R)
-  证明: map_smulₛₗ f m x
+/-
+**MulSemiringActionHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`
+。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {R : Type u_10} [inst_1 : Semiring R] [
+inst_2 : MulSemiringAction M R]   {S : Type u_12} [inst_3 : Semiring S] [inst_4 
+: MulSemiringAction M S] (f : R →+*[M] S) (m : M) (x : R),   f (m • x) = m • f x
+参数：f : R →+*[M] S；m : M；x : R；m • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `DistribMulActionSemiHomClass.toMulActionSemiHomClass`：∀ {F : Type u_10} 
+{M : outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {
+A : outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `MulSemiringActionSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Typ
+e u_15} {M : outParam (Type u_16)} {N : outParam (Type u_17)} {inst : Monoid M} 
+{inst_1 : Monoid N}   {φ : outParam (M → N)} {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
-protected theorem map_smul [MulSemiringAction M S] (f : R ->+*[M] S) (m : M) (x : R) :
+protected theorem map_smul [MulSemiringAction M S] (f : R →+*[M] S) (m : M) (x : R) :
     f (m • x) = m • f x :=
   map_smulₛₗ f m x
 
@@ -3095,41 +2201,26 @@ variable (M) {R}
 
 /-- The identity map as an equivariant ring homomorphism. -/
 @[instance_reducible]
-/--
-Definition of `id` / `id` 的定义
+/-
+**MulSemiringActionHom.id** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：(M : Type u_1) →   [inst : Monoid M] → {R : Type u_10} → [inst_1 : Semirin
+g R] → [inst_2 : MulSemiringAction M R] → R →+*[M] R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : R ->+*[M] R
-  body: ⟨DistribMulActionHom.id _, rfl, (fun _ _ => rfl)⟩
-
-@[simp]
-
-中文:
-定义 id
-  签名: : R ->+*[M] R
-  定义体: ⟨DistribMulActionHom.id _, rfl, (fun _ _ => rfl)⟩
-
-@[simp]
+--- 原说明 ---
+The identity map as an equivariant ring homomorphism.
 -/
-protected def id : R ->+*[M] R :=
+protected def id : R →+*[M] R :=
   ⟨DistribMulActionHom.id _, rfl, (fun _ _ => rfl)⟩
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : R)
-  statement: MulSemiringActionHom.id M x = x
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (x : R)
-  结论: MulSemiring作用态射.id M x = x
-  证明: rfl
+/-
+**MulSemiringActionHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`
+。
+形式化陈述：id_apply (x : R) : MulSemiringActionHom.id M x = x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : R) : MulSemiringActionHom.id M x = x :=
   rfl
@@ -3146,158 +2237,116 @@ variable {φ φ' ψ χ}
 
 /-- Composition of two equivariant additive ring homomorphisms. -/
 @[instance_reducible]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**MulSemiringActionHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：comp (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : MonoidHom.CompTriple φ ψ χ
+] : R ->ₑ+*[χ] T
+参数：g : S ->ₑ+*[ψ] T；f : R ->ₑ+*[φ] S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : MonoidHom.CompTriple φ ψ χ]
-  body: { DistribMulActionHom.comp (g : S ->ₑ+[ψ] T) (f : R ->ₑ+[φ] S),
-    RingHom.comp (g : S ->+* T) (f : R ->+* S) with }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : 幺半群态射.余mpTriple φ ψ χ]
-  定义体: { DistribMulActionHom.comp (g : S ->ₑ+[ψ] T) (f : R ->ₑ+[φ] S),
-    RingHom.comp (g : S ->+* T) (f : R ->+* S) with }
-
-@[simp]
-
-Depends on / 依赖: DistribMulActionHom, DistribMulActionHom.comp, RingHom, RingHom.comp
+--- 原说明 ---
+Composition of two equivariant additive ring homomorphisms.
 -/
-def comp (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [κ : MonoidHom.CompTriple φ ψ χ] : R ->ₑ+*[χ] T :=
-  { DistribMulActionHom.comp (g : S ->ₑ+[ψ] T) (f : R ->ₑ+[φ] S),
-    RingHom.comp (g : S ->+* T) (f : R ->+* S) with }
+def comp (g : S →ₑ+*[ψ] T) (f : R →ₑ+*[φ] S) [κ : MonoidHom.CompTriple φ ψ χ] : R →ₑ+*[χ] T :=
+  { DistribMulActionHom.comp (g : S →ₑ+[ψ] T) (f : R →ₑ+[φ] S),
+    RingHom.comp (g : S →+* T) (f : R →+* S) with }
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [幺半群态射.余mpTriple φ ψ χ] (x : R)
-  证明: rfl
-
-@[simp]
+/-
+**MulSemiringActionHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHo
+m`。
+形式化陈述：comp_apply (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ
+ χ] (x : R) : g.comp f x = g (f x)
+参数：g : S ->ₑ+*[ψ] T；f : R ->ₑ+*[φ] S；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (g : S ->ₑ+*[ψ] T) (f : R ->ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R) :
+theorem comp_apply (g : S →ₑ+*[ψ] T) (f : R →ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R) :
     g.comp f x = g (f x) := rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : R ->ₑ+*[φ] S)
-  statement: (MulSemiringActionHom.id N).comp f = f
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: (MulSemiring作用态射.id N).comp f = f
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-@[simp]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulSemiringActionHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：id_comp (f : R ->ₑ+*[φ] S) : (MulSemiringActionHom.id N).comp f = f
+参数：f : R ->ₑ+*[φ] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulSemiringActionHom.ext`：ext {f g : R ->ₑ+*[φ] S} : (forall x, f x = g 
+x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulSemiringActionHom.comp_apply`：comp_apply (g : S ->ₑ+*[ψ] T) (f : R ->
+ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R) : g.comp f x = g (f x)
+· 使用定理 `MulSemiringActionHom.id_apply`：id_apply (x : R) : MulSemiringActionHom.i
+d M x = x
 -/
-theorem id_comp (f : R ->ₑ+*[φ] S) : (MulSemiringActionHom.id N).comp f = f :=
+theorem id_comp (f : R →ₑ+*[φ] S) : (MulSemiringActionHom.id N).comp f = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : R ->ₑ+*[φ] S)
-  statement: f.comp (MulSemiringActionHom.id M) = f
-  proof: ext fun x => by rw [comp_apply, id_apply]
-
-中文:
-定理 comp_id
-  条件: (f : R ->ₑ+*[φ] S)
-  结论: f.comp (MulSemiring作用态射.id M) = f
-  证明: ext fun x => by rw [comp_apply, id_apply]
-
-Depends on / 依赖: comp_apply, id_apply
+/-
+**MulSemiringActionHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：comp_id (f : R ->ₑ+*[φ] S) : f.comp (MulSemiringActionHom.id M) = f
+参数：f : R ->ₑ+*[φ] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulSemiringActionHom.ext`：ext {f g : R ->ₑ+*[φ] S} : (forall x, f x = g 
+x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulSemiringActionHom.comp_apply`：comp_apply (g : S ->ₑ+*[ψ] T) (f : R ->
+ₑ+*[φ] S) [MonoidHom.CompTriple φ ψ χ] (x : R) : g.comp f x = g (f x)
+· 使用定理 `MulSemiringActionHom.id_apply`：id_apply (x : R) : MulSemiringActionHom.i
+d M x = x
 -/
-theorem comp_id (f : R ->ₑ+*[φ] S) : f.comp (MulSemiringActionHom.id M) = f :=
+theorem comp_id (f : R →ₑ+*[φ] S) : f.comp (MulSemiringActionHom.id M) = f :=
   ext fun x => by rw [comp_apply, id_apply]
 
 /-- The inverse of a bijective `MulSemiringActionHom` is a `MulSemiringActionHom`. -/
 @[simps]
-/--
-Definition of `inverse'` / `inverse'` 的定义
+/-
+**MulSemiringActionHom.inverse'** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringActionHom`
+。
+形式化陈述：inverse' (f : R ->ₑ+*[φ] S) (g : S -> R) (k : Function.RightInverse φ' φ) 
+(h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) : S ->ₑ+*[φ'] R
+参数：f : R ->ₑ+*[φ] S；g : S -> R；k : Function.RightInverse φ' φ；h₁ : Function.Left
+Inverse g f；h₂ : Function.RightInverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse'
-  signature: (f : R ->ₑ+*[φ] S) (g : S -> R) (k : Function.RightInverse φ' φ)
-  body: { (f : R ->+ S).inverse g h₁ h₂,
-    (f : R ->* S).inverse g h₁ h₂,
-    (f : R ->ₑ[φ] S).inverse' g k h₁ h₂ with
-    toFun := g }
-
-中文:
-定义 inverse'
-  签名: (f : R ->ₑ+*[φ] S) (g : S -> R) (k : 函数.右逆 φ' φ)
-  定义体: { (f : R ->+ S).inverse g h₁ h₂,
-    (f : R ->* S).inverse g h₁ h₂,
-    (f : R ->ₑ[φ] S).inverse' g k h₁ h₂ with
-    toFun := g }
-
-Depends on / 依赖: inverse
+--- 原说明 ---
+The inverse of a bijective `MulSemiringActionHom` is a `MulSemiringActionHom`.
 -/
-def inverse' (f : R ->ₑ+*[φ] S) (g : S -> R) (k : Function.RightInverse φ' φ)
+def inverse' (f : R →ₑ+*[φ] S) (g : S → R) (k : Function.RightInverse φ' φ)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
-    S ->ₑ+*[φ'] R :=
-  { (f : R ->+ S).inverse g h₁ h₂,
-    (f : R ->* S).inverse g h₁ h₂,
-    (f : R ->ₑ[φ] S).inverse' g k h₁ h₂ with
+    S →ₑ+*[φ'] R :=
+  { (f : R →+ S).inverse g h₁ h₂,
+    (f : R →* S).inverse g h₁ h₂,
+    (f : R →ₑ[φ] S).inverse' g k h₁ h₂ with
     toFun := g }
 
 /-- The inverse of a bijective `MulSemiringActionHom` is a `MulSemiringActionHom`. -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**MulSemiringActionHom.inverse** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringActionHom`。
+形式化陈述：inverse {S₁ : Type*} [Semiring S₁] [MulSemiringAction M S₁] (f : R ->+*[M]
+ S₁) (g : S₁ -> R) (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g
+ f) : S₁ ->+*[M] R
+参数：f : R ->+*[M] S₁；g : S₁ -> R；h₁ : Function.LeftInverse g f；h₂ : Function.Righ
+tInverse g f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: {S₁ : Type*} [Semiring S₁] [MulSemiringAction M S₁]
-  body: { (f : R ->+ S₁).inverse g h₁ h₂,
-    (f : R ->* S₁).inverse g h₁ h₂,
-    f.toMulActionHom.inverse g h₁ h₂ with
-    toFun := g }
-
-中文:
-定义 inverse
-  签名: {S₁ : 类型} [半环 S₁] [MulSemiring作用 M S₁]
-  定义体: { (f : R ->+ S₁).inverse g h₁ h₂,
-    (f : R ->* S₁).inverse g h₁ h₂,
-    f.toMulActionHom.inverse g h₁ h₂ with
-    toFun := g }
-
-Depends on / 依赖: f.toMulActionHom.inverse, inverse, toMulActionHom
+--- 原说明 ---
+The inverse of a bijective `MulSemiringActionHom` is a `MulSemiringActionHom`.
 -/
 def inverse {S₁ : Type*} [Semiring S₁] [MulSemiringAction M S₁]
-    (f : R ->+*[M] S₁) (g : S₁ -> R)
+    (f : R →+*[M] S₁) (g : S₁ → R)
     (h₁ : Function.LeftInverse g f) (h₂ : Function.RightInverse g f) :
-    S₁ ->+*[M] R :=
-  { (f : R ->+ S₁).inverse g h₁ h₂,
-    (f : R ->* S₁).inverse g h₁ h₂,
+    S₁ →+*[M] R :=
+  { (f : R →+ S₁).inverse g h₁ h₂,
+    (f : R →* S₁).inverse g h₁ h₂,
     f.toMulActionHom.inverse g h₁ h₂ with
     toFun := g }
 
@@ -3305,23 +2354,24 @@ end MulSemiringActionHom
 
 end DistribMulAction
 
-/--
-lemma `IsSMulRegular.of_injective` / 引理 `IsSMulRegular.of_injective`
-
-English:
-lemma IsSMulRegular.of_injective
-  statement: {R M : Type*} [SMul R M]
-  proof: fun x y h3 => h1 h2
-  (map_smulₛₗ f r x).symm.trans ((congrArg f h3).trans (map_smulₛₗ f r y))
-
-中文:
-引理 IsSMulRegular.of_injective
-  结论: {R M : 类型} [标量乘法 R M]
-  证明: fun x y h3 => h1 h2
-  (map_smulₛₗ f r x).symm.trans ((congrArg f h3).trans (map_smulₛₗ f r y))
+/-
+**IsSMulRegular.of_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsSMulRegular.of_injective {R M : Type*} [SMul R M] {N F} [SMul R N] [FunL
+ike F M N] [MulActionHomClass F R M N] (f : F) {r : R} (h1 : Function.Injective 
+f) (h2 : IsSMulRegular N r) : IsSMulRegular M r
+参数：f : F；h1 : Function.Injective f；h2 : IsSMulRegular N r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma IsSMulRegular.of_injective {R M : Type*} [SMul R M]
     {N F} [SMul R N] [FunLike F M N] [MulActionHomClass F R M N]
     (f : F) {r : R} (h1 : Function.Injective f) (h2 : IsSMulRegular N r) :
-IsSMulRegular M r := fun x y h3 => h1 h2
+    IsSMulRegular M r := fun x y h3 => h1 <| h2 <|
   (map_smulₛₗ f r x).symm.trans ((congrArg f h3).trans (map_smulₛₗ f r y))

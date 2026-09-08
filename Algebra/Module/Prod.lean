@@ -21,22 +21,12 @@ variable {R : Type*} {M : Type*} {N : Type*}
 
 namespace Prod
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
-  body: by ext <;> exact add_smul ..
-  zero_smul _ := by ext <;> exact zero_smul ..
-
-中文:
-实例 instModule
-  签名: [半环 R] [加法交换幺半群 M] [加法交换幺半群 N] [模 R M] [模 R N]
-  定义体: by ext <;> exact add_smul ..
-  zero_smul _ := by ext <;> exact zero_smul ..
-
-Depends on / 依赖: add_smul, zero_smul
+/-
+**Prod.instModule** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instModule [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [
+Module R N] : Module R (M × N) where add_smul _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N] :
     Module R (M × N) where
@@ -44,3 +34,4 @@ instance instModule [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M
   zero_smul _ := by ext <;> exact zero_smul ..
 
 end Prod
+

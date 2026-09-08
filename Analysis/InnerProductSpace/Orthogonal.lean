@@ -39,33 +39,18 @@ namespace Submodule
 
 variable (K : Submodule 𝕜 E)
 
-/--
-Definition of `orthogonal` / `orthogonal` 的定义
+/-- The subspace of vectors orthogonal to a given subspace, denoted `Kᗮ`. -/
+/-
+**Submodule.orthogonal** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：orthogonal : Submodule 𝕜 E where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orthogonal
-  signature: : Submodule 𝕜 E where
-  body: { v | forall u in K, ⟪u, v⟫ = 0 }
-  zero_mem' _ _ := inner_zero_right _
-  add_mem' hx hy u hu := by rw [inner_add_right, hx u hu, hy u hu, add_zero]
-  smul_mem' c x hx u hu := by rw [inner_smul_right, hx u hu, mul_zero]
-
-@[inherit_doc]
-notation:1200 K "ᗮ" => orthogonal K
-
-中文:
-定义 orthogonal
-  签名: : 子模 𝕜 E where
-  定义体: { v | forall u in K, ⟪u, v⟫ = 0 }
-  zero_mem' _ _ := inner_zero_right _
-  add_mem' hx hy u hu := by rw [inner_add_right, hx u hu, hy u hu, add_zero]
-  smul_mem' c x hx u hu := by rw [inner_smul_right, hx u hu, mul_zero]
-
-@[inherit_doc]
-notation:1200 K "ᗮ" => orthogonal K
+--- 原说明 ---
+The subspace of vectors orthogonal to a given subspace, denoted `Kᗮ`.
 -/
 def orthogonal : Submodule 𝕜 E where
-  carrier := { v | forall u in K, ⟪u, v⟫ = 0 }
+  carrier := { v | ∀ u ∈ K, ⟪u, v⟫ = 0 }
   zero_mem' _ _ := inner_zero_right _
   add_mem' hx hy u hu := by rw [inner_add_right, hx u hu, hy u hu, add_zero]
   smul_mem' c x hx u hu := by rw [inner_smul_right, hx u hu, mul_zero]
@@ -73,230 +58,208 @@ def orthogonal : Submodule 𝕜 E where
 @[inherit_doc]
 notation:1200 K "ᗮ" => orthogonal K
 
-/--
-theorem `mem_orthogonal` / 定理 `mem_orthogonal`
+/-- When a vector is in `Kᗮ`. -/
+/-
+**Submodule.mem_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0
+参数：v : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_orthogonal
-  given: (v : E)
-  statement: v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0
-  proof: Iff.rfl
-
-中文:
-定理 mem_orthogonal
-  条件: (v : E)
-  结论: v in Kᗮ ↔ 对任意 u in K, ⟪u, v⟫ = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+When a vector is in `Kᗮ`.
 -/
-theorem mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0 :=
+theorem mem_orthogonal (v : E) : v ∈ Kᗮ ↔ ∀ u ∈ K, ⟪u, v⟫ = 0 :=
   Iff.rfl
 
-/--
-theorem `mem_orthogonal'` / 定理 `mem_orthogonal'`
+/-- When a vector is in `Kᗮ`, with the inner product the
+other way round. -/
+/-
+**Submodule.mem_orthogonal'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0
+参数：v : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mem_orthogonal'
-  given: (v : E)
-  statement: v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0
-  proof: by
-  simp_rw [mem_orthogonal, inner_eq_zero_symm]
-
-中文:
-定理 mem_orthogonal'
-  条件: (v : E)
-  结论: v in Kᗮ ↔ 对任意 u in K, ⟪v, u⟫ = 0
-  证明: by
-  simp_rw [mem_orthogonal, inner_eq_zero_symm]
-
-Depends on / 依赖: inner_eq_zero_symm, mem_orthogonal, simp_rw
+--- 原说明 ---
+When a vector is in `Kᗮ`, with the inner product the
+other way round.
 -/
-theorem mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0 := by
+theorem mem_orthogonal' (v : E) : v ∈ Kᗮ ↔ ∀ u ∈ K, ⟪v, u⟫ = 0 := by
   simp_rw [mem_orthogonal, inner_eq_zero_symm]
 
 variable {K}
 
-/--
-theorem `inner_right_of_mem_orthogonal` / 定理 `inner_right_of_mem_orthogonal`
+/-- A vector in `K` is orthogonal to one in `Kᗮ`. -/
+/-
+**Submodule.inner_right_of_mem_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：inner_right_of_mem_orthogonal {u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪u,
+ v⟫ = 0
+参数：hu : u in K；hv : v in Kᗮ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_orthogonal`：mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in
+ K, ⟪u, v⟫ = 0
 
-English:
-theorem inner_right_of_mem_orthogonal
-  given: {u v : E} (hu : u in K) (hv : v in Kᗮ)
-  statement: ⟪u, v⟫ = 0
-  proof: (K.mem_orthogonal v).1 hv u hu
-
-中文:
-定理 inner_right_of_mem_orthogonal
-  条件: {u v : E} (hu : u in K) (hv : v in Kᗮ)
-  结论: ⟪u, v⟫ = 0
-  证明: (K.mem_orthogonal v).1 hv u hu
-
-Depends on / 依赖: K.mem_orthogonal, mem_orthogonal
+--- 原说明 ---
+A vector in `K` is orthogonal to one in `Kᗮ`.
 -/
-theorem inner_right_of_mem_orthogonal {u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪u, v⟫ = 0 :=
+theorem inner_right_of_mem_orthogonal {u v : E} (hu : u ∈ K) (hv : v ∈ Kᗮ) : ⟪u, v⟫ = 0 :=
   (K.mem_orthogonal v).1 hv u hu
 
-/--
-theorem `inner_left_of_mem_orthogonal` / 定理 `inner_left_of_mem_orthogonal`
+/-- A vector in `Kᗮ` is orthogonal to one in `K`. -/
+/-
+**Submodule.inner_left_of_mem_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：inner_left_of_mem_orthogonal {u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, 
+u⟫ = 0
+参数：hu : u in K；hv : v in Kᗮ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inner_eq_zero_symm`：inner_eq_zero_symm {x y : E} : ⟪x, y⟫ = 0 ↔ ⟪y, x⟫ =
+ 0
+· 使用定理 `Submodule.inner_right_of_mem_orthogonal`：inner_right_of_mem_orthogonal {
+u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪u, v⟫ = 0
 
-English:
-theorem inner_left_of_mem_orthogonal
-  given: {u v : E} (hu : u in K) (hv : v in Kᗮ)
-  statement: ⟪v, u⟫ = 0
-  proof: by
-  rw [inner_eq_zero_symm]; exact inner_right_of_mem_orthogonal hu hv
-
-中文:
-定理 inner_left_of_mem_orthogonal
-  条件: {u v : E} (hu : u in K) (hv : v in Kᗮ)
-  结论: ⟪v, u⟫ = 0
-  证明: by
-  rw [inner_eq_zero_symm]; exact inner_right_of_mem_orthogonal hu hv
-
-Depends on / 依赖: inner_eq_zero_symm, inner_right_of_mem_orthogonal
+--- 原说明 ---
+A vector in `Kᗮ` is orthogonal to one in `K`.
 -/
-theorem inner_left_of_mem_orthogonal {u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, u⟫ = 0 := by
+theorem inner_left_of_mem_orthogonal {u v : E} (hu : u ∈ K) (hv : v ∈ Kᗮ) : ⟪v, u⟫ = 0 := by
   rw [inner_eq_zero_symm]; exact inner_right_of_mem_orthogonal hu hv
 
-/--
-theorem `mem_orthogonal_singleton_iff_inner_right` / 定理 `mem_orthogonal_singleton_iff_inner_right`
+/-- A vector is in `(𝕜 ∙ u)ᗮ` iff it is orthogonal to `u`. -/
+/-
+**Submodule.mem_orthogonal_singleton_iff_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `
+Submodule`。
+形式化陈述：mem_orthogonal_singleton_iff_inner_right {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v
+⟫ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.inner_right_of_mem_orthogonal`：inner_right_of_mem_orthogonal {
+u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪u, v⟫ = 0
+· 使用定理 `Submodule.mem_span_singleton_self`：mem_span_singleton_self (x : M) : x i
+n R ∙ x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_span_singleton`：mem_span_singleton {y : M} : x in R ∙ y ↔ 
+exists a : R, a • y = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inner_smul_left`：inner_smul_left (x y : E) (r : 𝕜) : ⟪r • x, y⟫ = r† * ⟪
+x, y⟫
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mem_orthogonal_singleton_iff_inner_right
-  given: {u v : E}
-  statement: v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0
-  proof: by
+--- 原说明 ---
+A vector is in `(𝕜 ∙ u)ᗮ` iff it is orthogonal to `u`.
+-/
+theorem mem_orthogonal_singleton_iff_inner_right {u v : E} : v ∈ (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0 := by
   refine ⟨inner_right_of_mem_orthogonal (mem_span_singleton_self u), ?_⟩
   intro hv w hw
   rw [mem_span_singleton] at hw
   obtain ⟨c, rfl⟩ := hw
   simp [inner_smul_left, hv]
 
-中文:
-定理 mem_orthogonal_singleton_iff_inner_right
-  条件: {u v : E}
-  结论: v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0
-  证明: by
-  refine ⟨inner_right_of_mem_orthogonal (mem_span_singleton_self u), ?_⟩
-  intro hv w hw
-  rw [mem_span_singleton] at hw
-  obtain ⟨c, rfl⟩ := hw
-  simp [inner_smul_left, hv]
+/-- A vector in `(𝕜 ∙ u)ᗮ` is orthogonal to `u`. -/
+/-
+**Submodule.mem_orthogonal_singleton_iff_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `S
+ubmodule`。
+形式化陈述：mem_orthogonal_singleton_iff_inner_left {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪v, u⟫
+ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_orthogonal_singleton_iff_inner_right`：mem_orthogonal_singl
+eton_iff_inner_right {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0
+· 使用定理 `inner_eq_zero_symm`：inner_eq_zero_symm {x y : E} : ⟪x, y⟫ = 0 ↔ ⟪y, x⟫ =
+ 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-Depends on / 依赖: inner_right_of_mem_orthogonal, inner_smul_left, mem_span_singleton, mem_span_singleton_self
+--- 原说明 ---
+A vector in `(𝕜 ∙ u)ᗮ` is orthogonal to `u`.
 -/
-theorem mem_orthogonal_singleton_iff_inner_right {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0 := by
-  refine ⟨inner_right_of_mem_orthogonal (mem_span_singleton_self u), ?_⟩
-  intro hv w hw
-  rw [mem_span_singleton] at hw
-  obtain ⟨c, rfl⟩ := hw
-  simp [inner_smul_left, hv]
-
-/--
-theorem `mem_orthogonal_singleton_iff_inner_left` / 定理 `mem_orthogonal_singleton_iff_inner_left`
-
-English:
-theorem mem_orthogonal_singleton_iff_inner_left
-  given: {u v : E}
-  statement: v in (𝕜 ∙ u)ᗮ ↔ ⟪v, u⟫ = 0
-  proof: by
-  rw [mem_orthogonal_singleton_iff_inner_right]; rw [inner_eq_zero_symm]
-
-中文:
-定理 mem_orthogonal_singleton_iff_inner_left
-  条件: {u v : E}
-  结论: v in (𝕜 ∙ u)ᗮ ↔ ⟪v, u⟫ = 0
-  证明: by
-  rw [mem_orthogonal_singleton_iff_inner_right]; rw [inner_eq_zero_symm]
-
-Depends on / 依赖: inner_eq_zero_symm, mem_orthogonal_singleton_iff_inner_right
+theorem mem_orthogonal_singleton_iff_inner_left {u v : E} : v ∈ (𝕜 ∙ u)ᗮ ↔ ⟪v, u⟫ = 0 := by
+  rw [mem_orthogonal_singleton_iff_inner_right, inner_eq_zero_symm]
+/-
+**Submodule.sub_mem_orthogonal_of_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：sub_mem_orthogonal_of_inner_left {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y,
+ v⟫) : x - y in Kᗮ
+参数：h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_orthogonal'`：mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u 
+in K, ⟪v, u⟫ = 0
+· 使用定理 `inner_sub_left`：inner_sub_left (x y z : E) : ⟪x - y, z⟫ = ⟪x, z⟫ - ⟪y, z
+⟫
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
 -/
-theorem mem_orthogonal_singleton_iff_inner_left {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪v, u⟫ = 0 := by
-  rw [mem_orthogonal_singleton_iff_inner_right]; rw [inner_eq_zero_symm]
-
-/--
-theorem `sub_mem_orthogonal_of_inner_left` / 定理 `sub_mem_orthogonal_of_inner_left`
-
-English:
-theorem sub_mem_orthogonal_of_inner_left
-  given: {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫)
-  statement: x - y in Kᗮ
-  proof: by
+theorem sub_mem_orthogonal_of_inner_left {x y : E} (h : ∀ v : K, ⟪x, v⟫ = ⟪y, v⟫) : x - y ∈ Kᗮ := by
   rw [mem_orthogonal']
   intro u hu
-  rw [inner_sub_left]; rw [sub_eq_zero]
+  rw [inner_sub_left, sub_eq_zero]
   exact h ⟨u, hu⟩
-
-中文:
-定理 sub_mem_orthogonal_of_inner_left
-  条件: {x y : E} (h : 对任意 v : K, ⟪x, v⟫ = ⟪y, v⟫)
-  结论: x - y in Kᗮ
-  证明: by
-  rw [mem_orthogonal']
-  intro u hu
-  rw [inner_sub_left]; rw [sub_eq_zero]
-  exact h ⟨u, hu⟩
-
-Depends on / 依赖: inner_sub_left, mem_orthogonal, sub_eq_zero
+/-
+**Submodule.sub_mem_orthogonal_of_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：sub_mem_orthogonal_of_inner_right {x y : E} (h : forall v : K, ⟪(v : E), x
+⟫ = ⟪(v : E), y⟫) : x - y in Kᗮ
+参数：h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inner_sub_right`：inner_sub_right (x y z : E) : ⟪x, y - z⟫ = ⟪x, y⟫ - ⟪x,
+ z⟫
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
 -/
-theorem sub_mem_orthogonal_of_inner_left {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫) : x - y in Kᗮ := by
-  rw [mem_orthogonal']
+theorem sub_mem_orthogonal_of_inner_right {x y : E} (h : ∀ v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫) :
+    x - y ∈ Kᗮ := by
   intro u hu
-  rw [inner_sub_left]; rw [sub_eq_zero]
-  exact h ⟨u, hu⟩
-
-/--
-theorem `sub_mem_orthogonal_of_inner_right` / 定理 `sub_mem_orthogonal_of_inner_right`
-
-English:
-theorem sub_mem_orthogonal_of_inner_right
-  given: {x y : E} (h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫)
-  proof: by
-  intro u hu
-  rw [inner_sub_right]; rw [sub_eq_zero]
-  exact h ⟨u, hu⟩
-
-中文:
-定理 sub_mem_orthogonal_of_inner_right
-  条件: {x y : E} (h : 对任意 v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫)
-  证明: by
-  intro u hu
-  rw [inner_sub_right]; rw [sub_eq_zero]
-  exact h ⟨u, hu⟩
-
-Depends on / 依赖: inner_sub_right, sub_eq_zero
--/
-theorem sub_mem_orthogonal_of_inner_right {x y : E} (h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫) :
-    x - y in Kᗮ := by
-  intro u hu
-  rw [inner_sub_right]; rw [sub_eq_zero]
+  rw [inner_sub_right, sub_eq_zero]
   exact h ⟨u, hu⟩
 
 variable (K)
 
-/--
-theorem `inf_orthogonal_eq_bot` / 定理 `inf_orthogonal_eq_bot`
+/-- `K` and `Kᗮ` have trivial intersection. -/
+/-
+**Submodule.inf_orthogonal_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Submodule.mem_inf`：mem_inf {p q : Submodule R M} {x : M} : x in p ⊓ q ↔ 
+x in p ∧ x in q
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
 
-English:
-theorem inf_orthogonal_eq_bot
-  statement: K ⊓ Kᗮ = ⊥
-  proof: by
-  rw [eq_bot_iff]
-  intro x
-  rw [mem_inf]
-  exact fun ⟨hx, ho⟩ => inner_self_eq_zero.1 (ho x hx)
-
-中文:
-定理 inf_orthogonal_eq_bot
-  结论: K ⊓ Kᗮ = ⊥
-  证明: by
-  rw [eq_bot_iff]
-  intro x
-  rw [mem_inf]
-  exact fun ⟨hx, ho⟩ => inner_self_eq_zero.1 (ho x hx)
-
-Depends on / 依赖: eq_bot_iff, inner_self_eq_zero, mem_inf
+--- 原说明 ---
+`K` and `Kᗮ` have trivial intersection.
 -/
 theorem inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥ := by
   rw [eq_bot_iff]
@@ -304,166 +267,213 @@ theorem inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥ := by
   rw [mem_inf]
   exact fun ⟨hx, ho⟩ => inner_self_eq_zero.1 (ho x hx)
 
-/--
-theorem `orthogonal_disjoint` / 定理 `orthogonal_disjoint`
+/-- `K` and `Kᗮ` have trivial intersection. -/
+/-
+**Submodule.orthogonal_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_disjoint : Disjoint K Kᗮ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.inf_orthogonal_eq_bot`：inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem orthogonal_disjoint
-  statement: Disjoint K Kᗮ
-  proof: by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
-
-中文:
-定理 orthogonal_disjoint
-  结论: Disjoint K Kᗮ
-  证明: by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
-
-Depends on / 依赖: K.inf_orthogonal_eq_bot, disjoint_iff, inf_orthogonal_eq_bot
+--- 原说明 ---
+`K` and `Kᗮ` have trivial intersection.
 -/
 theorem orthogonal_disjoint : Disjoint K Kᗮ := by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
 
-/--
-theorem `orthogonal_eq_inter` / 定理 `orthogonal_eq_inter`
+/-- `Kᗮ` can be characterized as the intersection of the kernels of the operations of
+inner product with each of the elements of `K`. -/
+/-
+**Submodule.orthogonal_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_eq_inter : Kᗮ = ⨅ v : K, (innerSL 𝕜 (v : E)).ker
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Submodule.mem_orthogonal`：mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in
+ K, ⟪u, v⟫ = 0
 
-English:
-theorem orthogonal_eq_inter
-  statement: Kᗮ = ⨅ v : K, (innerSL 𝕜 (v : E)).ker
-  proof: by
-  ext
-  simpa using mem_orthogonal _ _
-
-中文:
-定理 orthogonal_eq_inter
-  结论: Kᗮ = ⨅ v : K, (innerSL 𝕜 (v : E)).ker
-  证明: by
-  ext
-  simpa using mem_orthogonal _ _
-
-Depends on / 依赖: mem_orthogonal
+--- 原说明 ---
+`Kᗮ` can be characterized as the intersection of the kernels of the operations o
+f
+inner product with each of the elements of `K`.
 -/
 theorem orthogonal_eq_inter : Kᗮ = ⨅ v : K, (innerSL 𝕜 (v : E)).ker := by
   ext
   simpa using mem_orthogonal _ _
 
-/--
-theorem `isClosed_orthogonal` / 定理 `isClosed_orthogonal`
+/-- The orthogonal complement of any submodule `K` is closed. -/
+/-
+**Submodule.isClosed_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isClosed_orthogonal : IsClosed (Kᗮ : Set E)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.orthogonal_eq_inter`：orthogonal_eq_inter : Kᗮ = ⨅ v : K, (inne
+rSL 𝕜 (v : E)).ker
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.coe_iInf`：coe_iInf {ι} (p : ι -> Submodule R M) : (↑(⨅ i, p i)
+ : Set M) = ⋂ i, ↑(p i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `ContinuousLinearMap.isClosed_ker`：isClosed_ker [T1Space M₂] (f : M₁ ->SL
+[σ₁₂] M₂) : IsClosed (f.ker : Set M₁)
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 
-English:
-theorem isClosed_orthogonal
-  statement: IsClosed (Kᗮ : Set E)
-  proof: by
-  rw [orthogonal_eq_inter K]
-convert! isClosed_iInter fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 𝕜 (v : E))
-  simp
-
-中文:
-定理 isClosed_orthogonal
-  结论: 是闭集 (Kᗮ : 集合 E)
-  证明: by
-  rw [orthogonal_eq_inter K]
-convert! isClosed_iInter fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 𝕜 (v : E))
-  simp
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isClosed_ker, convert, innerSL, isClosed_iInter, isClosed_ker, orthogonal_eq_inter
+--- 原说明 ---
+The orthogonal complement of any submodule `K` is closed.
 -/
 theorem isClosed_orthogonal : IsClosed (Kᗮ : Set E) := by
   rw [orthogonal_eq_inter K]
-convert! isClosed_iInter fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 𝕜 (v : E))
+  convert! isClosed_iInter <| fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 𝕜 (v : E))
   simp
 
-/--
-Instance `instOrthogonalCompleteSpace` / 实例 `instOrthogonalCompleteSpace`
+/-- In a complete space, the orthogonal complement of any submodule `K` is complete. -/
+/-
+**Submodule.instOrthogonalCompleteSpace** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：instOrthogonalCompleteSpace [CompleteSpace E] : CompleteSpace Kᗮ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.isClosed_orthogonal`：isClosed_orthogonal : IsClosed (Kᗮ : Set 
+E)
 
-English:
-instance instOrthogonalCompleteSpace
-  signature: [CompleteSpace E]
-  body: K.isClosed_orthogonal.completeSpace_coe
-
-中文:
-实例 instOrthogonalCompleteSpace
-  签名: [完备空间 E]
-  定义体: K.isClosed_orthogonal.completeSpace_coe
-
-Depends on / 依赖: K.isClosed_orthogonal.completeSpace_coe, completeSpace_coe, isClosed_orthogonal
+--- 原说明 ---
+In a complete space, the orthogonal complement of any submodule `K` is complete.
 -/
 instance instOrthogonalCompleteSpace [CompleteSpace E] : CompleteSpace Kᗮ :=
   K.isClosed_orthogonal.completeSpace_coe
-
-/--
-lemma `map_orthogonal` / 引理 `map_orthogonal`
-
-English:
-lemma map_orthogonal
-  given: (f : E ->ₗᵢ[𝕜] F)
-  proof: by
-  simp only [Submodule.ext_iff, mem_map, mem_orthogonal, forall_exists_index, and_imp,
-    forall_apply_eq_imp_iff₂, mem_inf, mem_map, LinearMap.mem_range,
-    LinearIsometry.coe_toLinearMap]
-  grind [LinearIsometry.inner_map_map]
-
-中文:
-引理 map_orthogonal
-  条件: (f : E ->ₗᵢ[𝕜] F)
-  证明: by
-  simp only [Submodule.ext_iff, mem_map, mem_orthogonal, forall_exists_index, and_imp,
-    forall_apply_eq_imp_iff₂, mem_inf, mem_map, LinearMap.mem_range,
-    LinearIsometry.coe_toLinearMap]
-  grind [LinearIsometry.inner_map_map]
-
-Depends on / 依赖: LinearIsometry, LinearIsometry.coe_toLinearMap, LinearIsometry.inner_map_map, LinearMap, LinearMap.mem_range, Submodule, Submodule.ext_iff, and_imp, coe_toLinearMap, ext_iff, forall_exists_index, inner_map_map, mem_inf, mem_map, mem_orthogonal, mem_range
+/-
+**Submodule.map_orthogonal** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：map_orthogonal (f : E ->ₗᵢ[𝕜] F) : Kᗮ.map f.toLinearMap = (K.map f.toLinea
+rMap)ᗮ ⊓ f.range
+参数：f : E ->ₗᵢ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma map_orthogonal (f : E ->ₗᵢ[𝕜] F) :
+lemma map_orthogonal (f : E →ₗᵢ[𝕜] F) :
     Kᗮ.map f.toLinearMap = (K.map f.toLinearMap)ᗮ ⊓ f.range := by
   simp only [Submodule.ext_iff, mem_map, mem_orthogonal, forall_exists_index, and_imp,
     forall_apply_eq_imp_iff₂, mem_inf, mem_map, LinearMap.mem_range,
     LinearIsometry.coe_toLinearMap]
   grind [LinearIsometry.inner_map_map]
-
-/--
-lemma `map_orthogonal_equiv` / 引理 `map_orthogonal_equiv`
-
-English:
-lemma map_orthogonal_equiv
-  given: (f : E ≃ₗᵢ[𝕜] F)
-  proof: by
-  refine (map_orthogonal K f.toLinearIsometry).trans ?_
-  have : f.toLinearIsometry.range = ⊤ := f.range
-  rw [this]; rw [inf_top_eq]
-  rfl
-
-中文:
-引理 map_orthogonal_equiv
-  条件: (f : E ≃ₗᵢ[𝕜] F)
-  证明: by
-  refine (map_orthogonal K f.toLinearIsometry).trans ?_
-  have : f.toLinearIsometry.range = ⊤ := f.range
-  rw [this]; rw [inf_top_eq]
-  rfl
-
-Depends on / 依赖: f.range, f.toLinearIsometry, f.toLinearIsometry.range, inf_top_eq, map_orthogonal, toLinearIsometry
+/-
+**Submodule.map_orthogonal_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：map_orthogonal_equiv (f : E ≃ₗᵢ[𝕜] F) : Kᗮ.map (f.toLinearEquiv : E ->ₗ[𝕜]
+ F) = (K.map (f.toLinearEquiv : E ->ₗ[𝕜] F))ᗮ
+参数：f : E ≃ₗᵢ[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Submodule.map_orthogonal`：map_orthogonal (f : E ->ₗᵢ[𝕜] F) : Kᗮ.map f.to
+LinearMap = (K.map f.toLinearMap)ᗮ ⊓ f.range
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_top_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), a ⊓ ⊤ = a
 -/
 lemma map_orthogonal_equiv (f : E ≃ₗᵢ[𝕜] F) :
-    Kᗮ.map (f.toLinearEquiv : E ->ₗ[𝕜] F) = (K.map (f.toLinearEquiv : E ->ₗ[𝕜] F))ᗮ := by
+    Kᗮ.map (f.toLinearEquiv : E →ₗ[𝕜] F) = (K.map (f.toLinearEquiv : E →ₗ[𝕜] F))ᗮ := by
   refine (map_orthogonal K f.toLinearIsometry).trans ?_
   have : f.toLinearIsometry.range = ⊤ := f.range
-  rw [this]; rw [inf_top_eq]
+  rw [this, inf_top_eq]
   rfl
 
 variable (𝕜 E)
 
-/--
-theorem `orthogonal_gc` / 定理 `orthogonal_gc`
+/-- `orthogonal` gives a `GaloisConnection` between
+`Submodule 𝕜 E` and its `OrderDual`. -/
+/-
+**Submodule.orthogonal_gc** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_gc : @GaloisConnection (Submodule 𝕜 E) (Submodule 𝕜 E)ᵒᵈ _ _ or
+thogonal orthogonal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.inner_left_of_mem_orthogonal`：inner_left_of_mem_orthogonal {u 
+v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, u⟫ = 0
 
-English:
-theorem orthogonal_gc
-  proof: fun _K₁ _K₂ =>
-  ⟨fun h _v hv _u hu => inner_left_of_mem_orthogonal hv (h hu), fun h _v hv _u hu =>
-    inner_left_of_mem_orthogonal hv (h hu)⟩
-
-中文:
-定理 orthogonal_gc
-  证明: fun _K₁ _K₂ =>
-  ⟨fun h _v hv _u hu => inner_left_of_mem_orthogonal hv (h hu), fun h _v hv _u hu =>
-    inner_left_of_mem_orthogonal hv (h hu)⟩
+--- 原说明 ---
+`orthogonal` gives a `GaloisConnection` between
+`Submodule 𝕜 E` and its `OrderDual`.
 -/
 theorem orthogonal_gc :
     @GaloisConnection (Submodule 𝕜 E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal := fun _K₁ _K₂ =>
@@ -472,225 +482,196 @@ theorem orthogonal_gc :
 
 variable {𝕜 E}
 
-/--
-theorem `orthogonal_le` / 定理 `orthogonal_le`
+/-- `orthogonal` reverses the `≤` ordering of two
+subspaces. -/
+/-
+**Submodule.orthogonal_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂) : K₂ᗮ <= K₁ᗮ
+参数：h : K₁ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `Submodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Submodule 𝕜 
+E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem orthogonal_le
-  given: {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂)
-  statement: K₂ᗮ <= K₁ᗮ
-  proof: (orthogonal_gc 𝕜 E).monotone_l h
-
-中文:
-定理 orthogonal_le
-  条件: {K₁ K₂ : 子模 𝕜 E} (h : K₁ <= K₂)
-  结论: K₂ᗮ <= K₁ᗮ
-  证明: (orthogonal_gc 𝕜 E).monotone_l h
-
-Depends on / 依赖: monotone_l, orthogonal_gc
+--- 原说明 ---
+`orthogonal` reverses the `≤` ordering of two
+subspaces.
 -/
-theorem orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂) : K₂ᗮ <= K₁ᗮ :=
+theorem orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ ≤ K₂) : K₂ᗮ ≤ K₁ᗮ :=
   (orthogonal_gc 𝕜 E).monotone_l h
 
-/--
-theorem `orthogonal_orthogonal_monotone` / 定理 `orthogonal_orthogonal_monotone`
+/-- `orthogonal.orthogonal` preserves the `≤` ordering of two
+subspaces. -/
+/-
+**Submodule.orthogonal_orthogonal_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`
+。
+形式化陈述：orthogonal_orthogonal_monotone {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂) : K₁
+ᗮᗮ <= K₂ᗮᗮ
+参数：h : K₁ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.orthogonal_le`：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <
+= K₂) : K₂ᗮ <= K₁ᗮ
 
-English:
-theorem orthogonal_orthogonal_monotone
-  given: {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂)
-  statement: K₁ᗮᗮ <= K₂ᗮᗮ
-  proof: orthogonal_le (orthogonal_le h)
-
-中文:
-定理 orthogonal_orthogonal_monotone
-  条件: {K₁ K₂ : 子模 𝕜 E} (h : K₁ <= K₂)
-  结论: K₁ᗮᗮ <= K₂ᗮᗮ
-  证明: orthogonal_le (orthogonal_le h)
-
-Depends on / 依赖: orthogonal_le
+--- 原说明 ---
+`orthogonal.orthogonal` preserves the `≤` ordering of two
+subspaces.
 -/
-theorem orthogonal_orthogonal_monotone {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂) : K₁ᗮᗮ <= K₂ᗮᗮ :=
+theorem orthogonal_orthogonal_monotone {K₁ K₂ : Submodule 𝕜 E} (h : K₁ ≤ K₂) : K₁ᗮᗮ ≤ K₂ᗮᗮ :=
   orthogonal_le (orthogonal_le h)
 
-/--
-theorem `le_orthogonal_orthogonal` / 定理 `le_orthogonal_orthogonal`
+/-- `K` is contained in `Kᗮᗮ`. -/
+/-
+**Submodule.le_orthogonal_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：le_orthogonal_orthogonal : K <= Kᗮᗮ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.le_u_l`：le_u_l (a) : a <= u (l a)
+· 使用定理 `Submodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Submodule 𝕜 
+E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem le_orthogonal_orthogonal
-  statement: K <= Kᗮᗮ
-  proof: (orthogonal_gc 𝕜 E).le_u_l _
-
-中文:
-定理 le_orthogonal_orthogonal
-  结论: K <= Kᗮᗮ
-  证明: (orthogonal_gc 𝕜 E).le_u_l _
-
-Depends on / 依赖: le_u_l, orthogonal_gc
+--- 原说明 ---
+`K` is contained in `Kᗮᗮ`.
 -/
-theorem le_orthogonal_orthogonal : K <= Kᗮᗮ :=
+theorem le_orthogonal_orthogonal : K ≤ Kᗮᗮ :=
   (orthogonal_gc 𝕜 E).le_u_l _
 
-/--
-theorem `inf_orthogonal` / 定理 `inf_orthogonal`
+/-- The inf of two orthogonal subspaces equals the subspace orthogonal
+to the sup. -/
+/-
+**Submodule.inf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：inf_orthogonal (K₁ K₂ : Submodule 𝕜 E) : K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
+参数：K₁ K₂ : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `Submodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Submodule 𝕜 
+E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem inf_orthogonal
-  given: (K₁ K₂ : Submodule 𝕜 E)
-  statement: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_sup.symm
-
-中文:
-定理 inf_orthogonal
-  条件: (K₁ K₂ : 子模 𝕜 E)
-  结论: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_sup.symm
-
-Depends on / 依赖: l_sup, l_sup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of two orthogonal subspaces equals the subspace orthogonal
+to the sup.
 -/
 theorem inf_orthogonal (K₁ K₂ : Submodule 𝕜 E) : K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ :=
   (orthogonal_gc 𝕜 E).l_sup.symm
 
-/--
-theorem `iInf_orthogonal` / 定理 `iInf_orthogonal`
+/-- The inf of an indexed family of orthogonal subspaces equals the
+subspace orthogonal to the sup. -/
+/-
+**Submodule.iInf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：iInf_orthogonal {ι : Type*} (K : ι -> Submodule 𝕜 E) : ⨅ i, (K i)ᗮ = (iSup
+ K)ᗮ
+参数：K : ι -> Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `Submodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Submodule 𝕜 
+E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem iInf_orthogonal
-  given: {ι : Type*} (K : ι -> Submodule 𝕜 E)
-  statement: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_iSup.symm
-
-中文:
-定理 iInf_orthogonal
-  条件: {ι : 类型} (K : ι -> 子模 𝕜 E)
-  结论: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_iSup.symm
-
-Depends on / 依赖: l_iSup, l_iSup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of an indexed family of orthogonal subspaces equals the
+subspace orthogonal to the sup.
 -/
-theorem iInf_orthogonal {ι : Type*} (K : ι -> Submodule 𝕜 E) : ⨅ i, (K i)ᗮ = (iSup K)ᗮ :=
+theorem iInf_orthogonal {ι : Type*} (K : ι → Submodule 𝕜 E) : ⨅ i, (K i)ᗮ = (iSup K)ᗮ :=
   (orthogonal_gc 𝕜 E).l_iSup.symm
 
-/--
-theorem `sInf_orthogonal` / 定理 `sInf_orthogonal`
+/-- The inf of a set of orthogonal subspaces equals the subspace orthogonal to the sup. -/
+/-
+**Submodule.sInf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：sInf_orthogonal (s : Set <| Submodule 𝕜 E) : ⨅ K in s, Kᗮ = (sSup s)ᗮ
+参数：s : Set <| Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GaloisConnection.l_sSup`：l_sSup {s : Set α} : l (sSup s) = ⨆ a in s, l a
+· 使用定理 `Submodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Submodule 𝕜 
+E) (Submodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem sInf_orthogonal
-  given: (s : Set <| Submodule 𝕜 E)
-  statement: ⨅ K in s, Kᗮ = (sSup s)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_sSup.symm
-
-@[simp]
-
-中文:
-定理 sInf_orthogonal
-  条件: (s : 集合 <| 子模 𝕜 E)
-  结论: ⨅ K in s, Kᗮ = (sSup s)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_sSup.symm
-
-@[simp]
-
-Depends on / 依赖: l_sSup, l_sSup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of a set of orthogonal subspaces equals the subspace orthogonal to the s
+up.
 -/
-theorem sInf_orthogonal (s : Set <| Submodule 𝕜 E) : ⨅ K in s, Kᗮ = (sSup s)ᗮ :=
+theorem sInf_orthogonal (s : Set <| Submodule 𝕜 E) : ⨅ K ∈ s, Kᗮ = (sSup s)ᗮ :=
   (orthogonal_gc 𝕜 E).l_sSup.symm
 
 @[simp]
-/--
-theorem `top_orthogonal_eq_bot` / 定理 `top_orthogonal_eq_bot`
-
-English:
-theorem top_orthogonal_eq_bot
-  statement: (⊤ : Submodule 𝕜 E)ᗮ = ⊥
-  proof: by
-  ext x
-  rw [mem_bot]; rw [mem_orthogonal]
-  exact
-    ⟨fun h => inner_self_eq_zero.mp (h x mem_top), by
-      rintro rfl
-      simp⟩
-
-@[simp]
-
-中文:
-定理 top_orthogonal_eq_bot
-  结论: (⊤ : 子模 𝕜 E)ᗮ = ⊥
-  证明: by
-  ext x
-  rw [mem_bot]; rw [mem_orthogonal]
-  exact
-    ⟨fun h => inner_self_eq_zero.mp (h x mem_top), by
-      rintro rfl
-      simp⟩
-
-@[simp]
-
-Depends on / 依赖: inner_self_eq_zero, inner_self_eq_zero.mp, mem_bot, mem_orthogonal, mem_top
+/-
+**Submodule.top_orthogonal_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：top_orthogonal_eq_bot : (⊤ : Submodule 𝕜 E)ᗮ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_bot`：mem_bot {x : M} : x in (⊥ : Submodule R M) ↔ x = 0
+· 使用定理 `Submodule.mem_orthogonal`：mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in
+ K, ⟪u, v⟫ = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inner_zero_right`：inner_zero_right (x : E) : ⟪x, 0⟫ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem top_orthogonal_eq_bot : (⊤ : Submodule 𝕜 E)ᗮ = ⊥ := by
   ext x
-  rw [mem_bot]; rw [mem_orthogonal]
+  rw [mem_bot, mem_orthogonal]
   exact
     ⟨fun h => inner_self_eq_zero.mp (h x mem_top), by
       rintro rfl
       simp⟩
 
 @[simp]
-/--
-theorem `bot_orthogonal_eq_top` / 定理 `bot_orthogonal_eq_top`
-
-English:
-theorem bot_orthogonal_eq_top
-  statement: (⊥ : Submodule 𝕜 E)ᗮ = ⊤
-  proof: by
-  rw [← top_orthogonal_eq_bot]; rw [eq_top_iff]
-  exact le_orthogonal_orthogonal ⊤
-
-@[simp]
-
-中文:
-定理 bot_orthogonal_eq_top
-  结论: (⊥ : 子模 𝕜 E)ᗮ = ⊤
-  证明: by
-  rw [← top_orthogonal_eq_bot]; rw [eq_top_iff]
-  exact le_orthogonal_orthogonal ⊤
-
-@[simp]
-
-Depends on / 依赖: eq_top_iff, le_orthogonal_orthogonal, top_orthogonal_eq_bot
+/-
+**Submodule.bot_orthogonal_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：bot_orthogonal_eq_top : (⊥ : Submodule 𝕜 E)ᗮ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.top_orthogonal_eq_bot`：top_orthogonal_eq_bot : (⊤ : Submodule 
+𝕜 E)ᗮ = ⊥
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Submodule.le_orthogonal_orthogonal`：le_orthogonal_orthogonal : K <= Kᗮᗮ
 -/
 theorem bot_orthogonal_eq_top : (⊥ : Submodule 𝕜 E)ᗮ = ⊤ := by
-  rw [← top_orthogonal_eq_bot]; rw [eq_top_iff]
+  rw [← top_orthogonal_eq_bot, eq_top_iff]
   exact le_orthogonal_orthogonal ⊤
 
 @[simp]
-/--
-theorem `orthogonal_eq_top_iff` / 定理 `orthogonal_eq_top_iff`
-
-English:
-theorem orthogonal_eq_top_iff
-  statement: Kᗮ = ⊤ ↔ K = ⊥
-  proof: by
-  refine
-    ⟨?_, by
-      rintro rfl
-      exact bot_orthogonal_eq_top⟩
-  intro h
-  have : K ⊓ Kᗮ = ⊥ := K.orthogonal_disjoint.eq_bot
-  rwa [h, inf_comm, top_inf_eq] at this
-
-中文:
-定理 orthogonal_eq_top_iff
-  结论: Kᗮ = ⊤ ↔ K = ⊥
-  证明: by
-  refine
-    ⟨?_, by
-      rintro rfl
-      exact bot_orthogonal_eq_top⟩
-  intro h
-  have : K ⊓ Kᗮ = ⊥ := K.orthogonal_disjoint.eq_bot
-  rwa [h, inf_comm, top_inf_eq] at this
-
-Depends on / 依赖: K.orthogonal_disjoint.eq_bot, bot_orthogonal_eq_top, eq_bot, inf_comm, orthogonal_disjoint, top_inf_eq
+/-
+**Submodule.orthogonal_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `Submodule.orthogonal_disjoint`：orthogonal_disjoint : Disjoint K Kᗮ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `top_inf_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), ⊤ ⊓ a = a
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用定理 `Submodule.bot_orthogonal_eq_top`：bot_orthogonal_eq_top : (⊥ : Submodule 
+𝕜 E)ᗮ = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥ := by
   refine
@@ -703,58 +684,93 @@ theorem orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥ := by
 
 /-- The closure of a submodule has the same orthogonal complement and the submodule itself. -/
 @[simp]
-/--
-lemma `orthogonal_closure` / 引理 `orthogonal_closure`
+/-
+**Submodule.orthogonal_closure** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_closure (K : Submodule 𝕜 E) : K.topologicalClosureᗮ = Kᗮ
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Submodule.orthogonal_le`：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <
+= K₂) : K₂ᗮ <= K₁ᗮ
+· 使用定理 `Submodule.le_topologicalClosure`：Submodule.le_topologicalClosure (s : Su
+bmodule R M) : s <= s.topologicalClosure
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Continuous.inner`：Continuous.inner (hf : Continuous f) (hg : Continuous 
+g) : Continuous fun t => ⟪f t, g t⟫
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 
-English:
-lemma orthogonal_closure
-  given: (K : Submodule 𝕜 E)
-  statement: K.topologicalClosureᗮ = Kᗮ
-  proof: le_antisymm (orthogonal_le <| le_topologicalClosure _)
-    fun x hx y hy => closure_minimal hx (isClosed_eq (by fun_prop) (by fun_prop)) hy
-
-中文:
-引理 orthogonal_closure
-  条件: (K : 子模 𝕜 E)
-  结论: K.topologicalClosureᗮ = Kᗮ
-  证明: le_antisymm (orthogonal_le <| le_topologicalClosure _)
-    fun x hx y hy => closure_minimal hx (isClosed_eq (by fun_prop) (by fun_prop)) hy
-
-Depends on / 依赖: closure_minimal, fun_prop, isClosed_eq, le_antisymm, le_topologicalClosure, orthogonal_le
+--- 原说明 ---
+The closure of a submodule has the same orthogonal complement and the submodule 
+itself.
 -/
 lemma orthogonal_closure (K : Submodule 𝕜 E) : K.topologicalClosureᗮ = Kᗮ :=
   le_antisymm (orthogonal_le <| le_topologicalClosure _)
-    fun x hx y hy => closure_minimal hx (isClosed_eq (by fun_prop) (by fun_prop)) hy
-
-/--
-lemma `orthogonal_closure'` / 引理 `orthogonal_closure'`
-
-English:
-lemma orthogonal_closure'
-  given: (K : Submodule 𝕜 E) (x : E)
-  proof: by
-  simp_rw [← mem_orthogonal, orthogonal_closure]
-
-中文:
-引理 orthogonal_closure'
-  条件: (K : 子模 𝕜 E) (x : E)
-  证明: by
-  simp_rw [← mem_orthogonal, orthogonal_closure]
-
-Depends on / 依赖: mem_orthogonal, orthogonal_closure, simp_rw
+    fun x hx y hy ↦ closure_minimal hx (isClosed_eq (by fun_prop) (by fun_prop)) hy
+/-
+**Submodule.orthogonal_closure'** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：orthogonal_closure' (K : Submodule 𝕜 E) (x : E) : (forall y in K, ⟪y, x⟫ =
+ 0) ↔ forall y in K.topologicalClosure, ⟪y, x⟫ = 0
+参数：K : Submodule 𝕜 E；x : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Submodule.orthogonal_closure`：orthogonal_closure (K : Submodule 𝕜 E) : K
+.topologicalClosureᗮ = Kᗮ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma orthogonal_closure' (K : Submodule 𝕜 E) (x : E) :
-    (forall y in K, ⟪y, x⟫ = 0) ↔ forall y in K.topologicalClosure, ⟪y, x⟫ = 0 := by
+    (∀ y ∈ K, ⟪y, x⟫ = 0) ↔ ∀ y ∈ K.topologicalClosure, ⟪y, x⟫ = 0 := by
   simp_rw [← mem_orthogonal, orthogonal_closure]
-
-/--
-theorem `orthogonalFamily_self` / 定理 `orthogonalFamily_self`
-
-English:
-theorem orthogonalFamily_self
-
-中文:
-定理 orthogonalFamily_self
+/-
+**Submodule.orthogonalFamily_self** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   (K : Submodule 𝕜 E), OrthogonalFamily
+ 𝕜 (fun b => ↥(bif b then K else Kᗮ)) fun b => (bif b then K else Kᗮ).subtypeₗᵢ
+参数：K : Submodule 𝕜 E；fun b => ↥(bif b then K else Kᗮ)；bif b then K else Kᗮ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.inner_right_of_mem_orthogonal`：inner_right_of_mem_orthogonal {
+u v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪u, v⟫ = 0
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Submodule.inner_left_of_mem_orthogonal`：inner_left_of_mem_orthogonal {u 
+v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, u⟫ = 0
 -/
 theorem orthogonalFamily_self :
     OrthogonalFamily 𝕜 (fun b => ↥(cond b K Kᗮ)) fun b => (cond b K Kᗮ).subtypeₗᵢ
@@ -766,21 +782,12 @@ theorem orthogonalFamily_self :
 end Submodule
 
 @[simp]
-/--
-theorem `orthogonalBilin_innerₗ` / 定理 `orthogonalBilin_innerₗ`
-
-English:
-theorem orthogonalBilin_innerₗ
-  statement: {E} [NormedAddCommGroup E] [InnerProductSpace Real E]
-  proof: rfl
-
-中文:
-定理 orthogonalBilin_innerₗ
-  结论: {E} [赋范交换加群 E] [内积空间 实数 E]
-  证明: rfl
+/-
+**orthogonalBilin_inner** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem orthogonalBilin_innerₗ {E} [NormedAddCommGroup E] [InnerProductSpace Real E]
-    (K : Submodule Real E) : K.orthogonalBilin (innerₗ E) = Kᗮ :=
+theorem orthogonalBilin_innerₗ {E} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (K : Submodule ℝ E) : K.orthogonalBilin (innerₗ E) = Kᗮ :=
   rfl
 
 /-!
@@ -794,797 +801,596 @@ The API roughly matches that of `Disjoint`.
 
 namespace Submodule
 
-/--
-Definition of `IsOrtho` / `IsOrtho` 的定义
+/-- The proposition that two submodules are orthogonal, denoted as `U ⟂ V`. -/
+/-
+**Submodule.IsOrtho** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：IsOrtho (U V : Submodule 𝕜 E) : Prop
+参数：U V : Submodule 𝕜 E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsOrtho
-  signature: (U V : Submodule 𝕜 E)
-  body: U <= Vᗮ
-
-@[inherit_doc]
-infixl:50 " ⟂ " => Submodule.IsOrtho
-
-中文:
-定义 IsOrtho
-  签名: (U V : 子模 𝕜 E)
-  定义体: U <= Vᗮ
-
-@[inherit_doc]
-infixl:50 " ⟂ " => Submodule.IsOrtho
+--- 原说明 ---
+The proposition that two submodules are orthogonal, denoted as `U ⟂ V`.
 -/
 def IsOrtho (U V : Submodule 𝕜 E) : Prop :=
-  U <= Vᗮ
+  U ≤ Vᗮ
 
 @[inherit_doc]
 infixl:50 " ⟂ " => Submodule.IsOrtho
-
-/--
-theorem `isOrtho_iff_le` / 定理 `isOrtho_iff_le`
-
-English:
-theorem isOrtho_iff_le
-  given: {U V : Submodule 𝕜 E}
-  statement: U ⟂ V ↔ U <= Vᗮ
-  proof: Iff.rfl
-
-@[symm]
-
-中文:
-定理 isOrtho_iff_le
-  条件: {U V : 子模 𝕜 E}
-  结论: U ⟂ V ↔ U <= Vᗮ
-  证明: Iff.rfl
-
-@[symm]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.isOrtho_iff_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_iff_le {U V : Submodule 𝕜 E} : U ⟂ V ↔ U <= Vᗮ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isOrtho_iff_le {U V : Submodule 𝕜 E} : U ⟂ V ↔ U <= Vᗮ :=
+theorem isOrtho_iff_le {U V : Submodule 𝕜 E} : U ⟂ V ↔ U ≤ Vᗮ :=
   Iff.rfl
 
 @[symm]
-/--
-theorem `IsOrtho.symm` / 定理 `IsOrtho.symm`
-
-English:
-theorem IsOrtho.symm
-  given: {U V : Submodule 𝕜 E} (h : U ⟂ V)
-  statement: V ⟂ U
-  proof: (le_orthogonal_orthogonal _).trans (orthogonal_le h)
-
-中文:
-定理 IsOrtho.symm
-  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
-  结论: V ⟂ U
-  证明: (le_orthogonal_orthogonal _).trans (orthogonal_le h)
-
-Depends on / 依赖: le_orthogonal_orthogonal, orthogonal_le
+/-
+**Submodule.IsOrtho.symm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Submodule 𝕜 E}, U ⟂ V → V ⟂ U
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Submodule.le_orthogonal_orthogonal`：le_orthogonal_orthogonal : K <= Kᗮᗮ
+· 使用定理 `Submodule.orthogonal_le`：orthogonal_le {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <
+= K₂) : K₂ᗮ <= K₁ᗮ
 -/
 theorem IsOrtho.symm {U V : Submodule 𝕜 E} (h : U ⟂ V) : V ⟂ U :=
   (le_orthogonal_orthogonal _).trans (orthogonal_le h)
-
-/--
-theorem `isOrtho_comm` / 定理 `isOrtho_comm`
-
-English:
-theorem isOrtho_comm
-  given: {U V : Submodule 𝕜 E}
-  statement: U ⟂ V ↔ V ⟂ U
-  proof: ⟨IsOrtho.symm, IsOrtho.symm⟩
-
-中文:
-定理 isOrtho_comm
-  条件: {U V : 子模 𝕜 E}
-  结论: U ⟂ V ↔ V ⟂ U
-  证明: ⟨IsOrtho.symm, IsOrtho.symm⟩
-
-Depends on / 依赖: IsOrtho, IsOrtho.symm
+/-
+**Submodule.isOrtho_comm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂ U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
 -/
 theorem isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂ U :=
   ⟨IsOrtho.symm, IsOrtho.symm⟩
-
-/--
-Instance `symmetric_isOrtho` / 实例 `symmetric_isOrtho`
-
-English:
-instance symmetric_isOrtho
-  signature: : Std.Symm IsOrtho (𝕜 := 𝕜) (E := E) where
-  body: IsOrtho.symm
-
-中文:
-实例 symmetric_isOrtho
-  签名: : Std.Symm IsOrtho (𝕜 := 𝕜) (E := E) where
-  定义体: IsOrtho.symm
+/-
+**Submodule.symmetric_isOrtho** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：symmetric_isOrtho : Std.Symm IsOrtho (𝕜
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
 -/
-instance symmetric_isOrtho : Std.Symm IsOrtho (𝕜 := 𝕜) (E := E) where
+instance symmetric_isOrtho : Std.Symm <| IsOrtho (𝕜 := 𝕜) (E := E) where
   symm _ _ := IsOrtho.symm
-
-/--
-theorem `IsOrtho.inner_eq` / 定理 `IsOrtho.inner_eq`
-
-English:
-theorem IsOrtho.inner_eq
-  given: {U V : Submodule 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u in U) (hv : v in V)
-  proof: h.symm hv _ hu
-
-中文:
-定理 IsOrtho.inner_eq
-  条件: {U V : 子模 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u in U) (hv : v in V)
-  证明: h.symm hv _ hu
-
-Depends on / 依赖: h.symm
+/-
+**Submodule.IsOrtho.inner_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Submodule 𝕜 E}, U ⟂ V → ∀ {u v
+ : E}, u ∈ U → v ∈ V → inner 𝕜 u v = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
 -/
-theorem IsOrtho.inner_eq {U V : Submodule 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u in U) (hv : v in V) :
+theorem IsOrtho.inner_eq {U V : Submodule 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u ∈ U) (hv : v ∈ V) :
     ⟪u, v⟫ = 0 :=
   h.symm hv _ hu
-
-/--
-theorem `isOrtho_iff_inner_eq` / 定理 `isOrtho_iff_inner_eq`
-
-English:
-theorem isOrtho_iff_inner_eq
-  given: {U V : Submodule 𝕜 E}
-  statement: U ⟂ V ↔ forall u in U, forall v in V, ⟪u, v⟫ = 0
-  proof: forall₄_congr fun _u _hu _v _hv => inner_eq_zero_symm
-
-中文:
-定理 isOrtho_iff_inner_eq
-  条件: {U V : 子模 𝕜 E}
-  结论: U ⟂ V ↔ 对任意 u in U, 对任意 v in V, ⟪u, v⟫ = 0
-  证明: forall₄_congr fun _u _hu _v _hv => inner_eq_zero_symm
-
-Depends on / 依赖: inner_eq_zero_symm
+/-
+**Submodule.isOrtho_iff_inner_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_iff_inner_eq {U V : Submodule 𝕜 E} : U ⟂ V ↔ forall u in U, forall
+ v in V, ⟪u, v⟫ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₄_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → 
+Sort u_3} {δ : (a : α) → (b : β a) → γ a b → Sort u_4}   {p q : (a : α) → (b : β
+ a)…
+· 使用定理 `inner_eq_zero_symm`：inner_eq_zero_symm {x y : E} : ⟪x, y⟫ = 0 ↔ ⟪y, x⟫ =
+ 0
 -/
-theorem isOrtho_iff_inner_eq {U V : Submodule 𝕜 E} : U ⟂ V ↔ forall u in U, forall v in V, ⟪u, v⟫ = 0 :=
+theorem isOrtho_iff_inner_eq {U V : Submodule 𝕜 E} : U ⟂ V ↔ ∀ u ∈ U, ∀ v ∈ V, ⟪u, v⟫ = 0 :=
   forall₄_congr fun _u _hu _v _hv => inner_eq_zero_symm
 
 /-- TODO: generalize `Submodule.map₂` to semilinear maps, so that we can state
 `U ⟂ V ↔ Submodule.map₂ (innerₛₗ 𝕜) U V ≤ ⊥`. -/
 @[simp]
-/--
-theorem `isOrtho_bot_left` / 定理 `isOrtho_bot_left`
+/-
+**Submodule.isOrtho_bot_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_bot_left {V : Submodule 𝕜 E} : ⊥ ⟂ V
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 
-English:
-theorem isOrtho_bot_left
-  given: {V : Submodule 𝕜 E}
-  statement: ⊥ ⟂ V
-  proof: bot_le
-
-@[simp]
-
-中文:
-定理 isOrtho_bot_left
-  条件: {V : 子模 𝕜 E}
-  结论: ⊥ ⟂ V
-  证明: bot_le
-
-@[simp]
-
-Depends on / 依赖: bot_le
+--- 原说明 ---
+TODO: generalize `Submodule.map₂` to semilinear maps, so that we can state
+`U ⟂ V ↔ Submodule.map₂ (innerₛₗ 𝕜) U V ≤ ⊥`.
 -/
 theorem isOrtho_bot_left {V : Submodule 𝕜 E} : ⊥ ⟂ V :=
   bot_le
 
 @[simp]
-/--
-theorem `isOrtho_bot_right` / 定理 `isOrtho_bot_right`
-
-English:
-theorem isOrtho_bot_right
-  given: {U : Submodule 𝕜 E}
-  statement: U ⟂ ⊥
-  proof: isOrtho_bot_left.symm
-
-中文:
-定理 isOrtho_bot_right
-  条件: {U : 子模 𝕜 E}
-  结论: U ⟂ ⊥
-  证明: isOrtho_bot_left.symm
-
-Depends on / 依赖: isOrtho_bot_left, isOrtho_bot_left.symm
+/-
+**Submodule.isOrtho_bot_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_bot_right {U : Submodule 𝕜 E} : U ⟂ ⊥
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
+· 使用定理 `Submodule.isOrtho_bot_left`：isOrtho_bot_left {V : Submodule 𝕜 E} : ⊥ ⟂ V
 -/
 theorem isOrtho_bot_right {U : Submodule 𝕜 E} : U ⟂ ⊥ :=
   isOrtho_bot_left.symm
-
-/--
-theorem `IsOrtho.mono_left` / 定理 `IsOrtho.mono_left`
-
-English:
-theorem IsOrtho.mono_left
-  given: {U₁ U₂ V : Submodule 𝕜 E} (hU : U₂ <= U₁) (h : U₁ ⟂ V)
-  statement: U₂ ⟂ V
-  proof: hU.trans h
-
-中文:
-定理 IsOrtho.mono_left
-  条件: {U₁ U₂ V : 子模 𝕜 E} (hU : U₂ <= U₁) (h : U₁ ⟂ V)
-  结论: U₂ ⟂ V
-  证明: hU.trans h
-
-Depends on / 依赖: hU.trans
+/-
+**Submodule.IsOrtho.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U₁ U₂ V : Submodule 𝕜 E}, U₂ ≤ U₁ → 
+U₁ ⟂ V → U₂ ⟂ V
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem IsOrtho.mono_left {U₁ U₂ V : Submodule 𝕜 E} (hU : U₂ <= U₁) (h : U₁ ⟂ V) : U₂ ⟂ V :=
+theorem IsOrtho.mono_left {U₁ U₂ V : Submodule 𝕜 E} (hU : U₂ ≤ U₁) (h : U₁ ⟂ V) : U₂ ⟂ V :=
   hU.trans h
-
-/--
-theorem `IsOrtho.mono_right` / 定理 `IsOrtho.mono_right`
-
-English:
-theorem IsOrtho.mono_right
-  given: {U V₁ V₂ : Submodule 𝕜 E} (hV : V₂ <= V₁) (h : U ⟂ V₁)
-  statement: U ⟂ V₂
-  proof: (h.symm.mono_left hV).symm
-
-中文:
-定理 IsOrtho.mono_right
-  条件: {U V₁ V₂ : 子模 𝕜 E} (hV : V₂ <= V₁) (h : U ⟂ V₁)
-  结论: U ⟂ V₂
-  证明: (h.symm.mono_left hV).symm
-
-Depends on / 依赖: h.symm.mono_left, mono_left
+/-
+**Submodule.IsOrtho.mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V₁ V₂ : Submodule 𝕜 E}, V₂ ≤ V₁ → 
+U ⟂ V₁ → U ⟂ V₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
+· 使用定理 `Submodule.IsOrtho.mono_left`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCL
+ike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U₁ U₂
+ V : Submodule 𝕜 …
 -/
-theorem IsOrtho.mono_right {U V₁ V₂ : Submodule 𝕜 E} (hV : V₂ <= V₁) (h : U ⟂ V₁) : U ⟂ V₂ :=
+theorem IsOrtho.mono_right {U V₁ V₂ : Submodule 𝕜 E} (hV : V₂ ≤ V₁) (h : U ⟂ V₁) : U ⟂ V₂ :=
   (h.symm.mono_left hV).symm
-
-/--
-theorem `IsOrtho.mono` / 定理 `IsOrtho.mono`
-
-English:
-theorem IsOrtho.mono
-  given: {U₁ V₁ U₂ V₂ : Submodule 𝕜 E} (hU : U₂ <= U₁) (hV : V₂ <= V₁) (h : U₁ ⟂ V₁)
-  proof: (h.mono_right hV).mono_left hU
-
-@[simp]
-
-中文:
-定理 IsOrtho.mono
-  条件: {U₁ V₁ U₂ V₂ : 子模 𝕜 E} (hU : U₂ <= U₁) (hV : V₂ <= V₁) (h : U₁ ⟂ V₁)
-  证明: (h.mono_right hV).mono_left hU
-
-@[simp]
-
-Depends on / 依赖: h.mono_right, mono_left, mono_right
+/-
+**Submodule.IsOrtho.mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U₁ V₁ U₂ V₂ : Submodule 𝕜 E}, U₂ ≤ U
+₁ → V₂ ≤ V₁ → U₁ ⟂ V₁ → U₂ ⟂ V₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.mono_left`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCL
+ike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U₁ U₂
+ V : Submodule 𝕜 …
+· 使用定理 `Submodule.IsOrtho.mono_right`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RC
+Like 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V₁
+ V₂ : Submodule 𝕜 …
 -/
-theorem IsOrtho.mono {U₁ V₁ U₂ V₂ : Submodule 𝕜 E} (hU : U₂ <= U₁) (hV : V₂ <= V₁) (h : U₁ ⟂ V₁) :
+theorem IsOrtho.mono {U₁ V₁ U₂ V₂ : Submodule 𝕜 E} (hU : U₂ ≤ U₁) (hV : V₂ ≤ V₁) (h : U₁ ⟂ V₁) :
     U₂ ⟂ V₂ :=
   (h.mono_right hV).mono_left hU
 
 @[simp]
-/--
-theorem `isOrtho_self` / 定理 `isOrtho_self`
-
-English:
-theorem isOrtho_self
-  given: {U : Submodule 𝕜 E}
-  statement: U ⟂ U ↔ U = ⊥
-  proof: ⟨fun h => eq_bot_iff.mpr fun x hx => inner_self_eq_zero.mp (h hx x hx), fun h =>
-    h.symm ▸ isOrtho_bot_left⟩
-
-@[simp]
-
-中文:
-定理 isOrtho_self
-  条件: {U : 子模 𝕜 E}
-  结论: U ⟂ U ↔ U = ⊥
-  证明: ⟨fun h => eq_bot_iff.mpr fun x hx => inner_self_eq_zero.mp (h hx x hx), fun h =>
-    h.symm ▸ isOrtho_bot_left⟩
-
-@[simp]
-
-Depends on / 依赖: eq_bot_iff, eq_bot_iff.mpr, h.symm, inner_self_eq_zero, inner_self_eq_zero.mp, isOrtho_bot_left
+/-
+**Submodule.isOrtho_self** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_self {U : Submodule 𝕜 E} : U ⟂ U ↔ U = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
+· 使用定理 `Submodule.isOrtho_bot_left`：isOrtho_bot_left {V : Submodule 𝕜 E} : ⊥ ⟂ V
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isOrtho_self {U : Submodule 𝕜 E} : U ⟂ U ↔ U = ⊥ :=
   ⟨fun h => eq_bot_iff.mpr fun x hx => inner_self_eq_zero.mp (h hx x hx), fun h =>
     h.symm ▸ isOrtho_bot_left⟩
 
 @[simp]
-/--
-theorem `isOrtho_orthogonal_right` / 定理 `isOrtho_orthogonal_right`
-
-English:
-theorem isOrtho_orthogonal_right
-  given: (U : Submodule 𝕜 E)
-  statement: U ⟂ Uᗮ
-  proof: le_orthogonal_orthogonal _
-
-@[simp]
-
-中文:
-定理 isOrtho_orthogonal_right
-  条件: (U : 子模 𝕜 E)
-  结论: U ⟂ Uᗮ
-  证明: le_orthogonal_orthogonal _
-
-@[simp]
-
-Depends on / 依赖: le_orthogonal_orthogonal
+/-
+**Submodule.isOrtho_orthogonal_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_orthogonal_right (U : Submodule 𝕜 E) : U ⟂ Uᗮ
+参数：U : Submodule 𝕜 E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.le_orthogonal_orthogonal`：le_orthogonal_orthogonal : K <= Kᗮᗮ
 -/
 theorem isOrtho_orthogonal_right (U : Submodule 𝕜 E) : U ⟂ Uᗮ :=
   le_orthogonal_orthogonal _
 
 @[simp]
-/--
-theorem `isOrtho_orthogonal_left` / 定理 `isOrtho_orthogonal_left`
-
-English:
-theorem isOrtho_orthogonal_left
-  given: (U : Submodule 𝕜 E)
-  statement: Uᗮ ⟂ U
-  proof: (isOrtho_orthogonal_right U).symm
-
-中文:
-定理 isOrtho_orthogonal_left
-  条件: (U : 子模 𝕜 E)
-  结论: Uᗮ ⟂ U
-  证明: (isOrtho_orthogonal_right U).symm
-
-Depends on / 依赖: isOrtho_orthogonal_right
+/-
+**Submodule.isOrtho_orthogonal_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_orthogonal_left (U : Submodule 𝕜 E) : Uᗮ ⟂ U
+参数：U : Submodule 𝕜 E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
+· 使用定理 `Submodule.isOrtho_orthogonal_right`：isOrtho_orthogonal_right (U : Submod
+ule 𝕜 E) : U ⟂ Uᗮ
 -/
 theorem isOrtho_orthogonal_left (U : Submodule 𝕜 E) : Uᗮ ⟂ U :=
   (isOrtho_orthogonal_right U).symm
-
-/--
-theorem `IsOrtho.le` / 定理 `IsOrtho.le`
-
-English:
-theorem IsOrtho.le
-  given: {U V : Submodule 𝕜 E} (h : U ⟂ V)
-  statement: U <= Vᗮ
-  proof: h
-
-中文:
-定理 IsOrtho.le
-  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
-  结论: U <= Vᗮ
-  证明: h
+/-
+**Submodule.IsOrtho.le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Submodule 𝕜 E}, U ⟂ V → U ≤ Vᗮ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsOrtho.le {U V : Submodule 𝕜 E} (h : U ⟂ V) : U <= Vᗮ :=
+theorem IsOrtho.le {U V : Submodule 𝕜 E} (h : U ⟂ V) : U ≤ Vᗮ :=
   h
-
-/--
-theorem `IsOrtho.ge` / 定理 `IsOrtho.ge`
-
-English:
-theorem IsOrtho.ge
-  given: {U V : Submodule 𝕜 E} (h : U ⟂ V)
-  statement: V <= Uᗮ
-  proof: h.symm
-
-@[simp]
-
-中文:
-定理 IsOrtho.ge
-  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
-  结论: V <= Uᗮ
-  证明: h.symm
-
-@[simp]
-
-Depends on / 依赖: h.symm
+/-
+**Submodule.IsOrtho.ge** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Submodule 𝕜 E}, U ⟂ V → V ≤ Uᗮ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
 -/
-theorem IsOrtho.ge {U V : Submodule 𝕜 E} (h : U ⟂ V) : V <= Uᗮ :=
+theorem IsOrtho.ge {U V : Submodule 𝕜 E} (h : U ⟂ V) : V ≤ Uᗮ :=
   h.symm
 
 @[simp]
-/--
-theorem `isOrtho_top_right` / 定理 `isOrtho_top_right`
-
-English:
-theorem isOrtho_top_right
-  given: {U : Submodule 𝕜 E}
-  statement: U ⟂ ⊤ ↔ U = ⊥
-  proof: ⟨fun h => eq_bot_iff.mpr fun _x hx => inner_self_eq_zero.mp (h hx _ mem_top), fun h =>
-    h.symm ▸ isOrtho_bot_left⟩
-
-@[simp]
-
-中文:
-定理 isOrtho_top_right
-  条件: {U : 子模 𝕜 E}
-  结论: U ⟂ ⊤ ↔ U = ⊥
-  证明: ⟨fun h => eq_bot_iff.mpr fun _x hx => inner_self_eq_zero.mp (h hx _ mem_top), fun h =>
-    h.symm ▸ isOrtho_bot_left⟩
-
-@[simp]
-
-Depends on / 依赖: eq_bot_iff, eq_bot_iff.mpr, h.symm, inner_self_eq_zero, inner_self_eq_zero.mp, isOrtho_bot_left, mem_top
+/-
+**Submodule.isOrtho_top_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_top_right {U : Submodule 𝕜 E} : U ⟂ ⊤ ↔ U = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `Submodule.isOrtho_bot_left`：isOrtho_bot_left {V : Submodule 𝕜 E} : ⊥ ⟂ V
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isOrtho_top_right {U : Submodule 𝕜 E} : U ⟂ ⊤ ↔ U = ⊥ :=
   ⟨fun h => eq_bot_iff.mpr fun _x hx => inner_self_eq_zero.mp (h hx _ mem_top), fun h =>
     h.symm ▸ isOrtho_bot_left⟩
 
 @[simp]
-/--
-theorem `isOrtho_top_left` / 定理 `isOrtho_top_left`
-
-English:
-theorem isOrtho_top_left
-  given: {V : Submodule 𝕜 E}
-  statement: ⊤ ⟂ V ↔ V = ⊥
-  proof: isOrtho_comm.trans isOrtho_top_right
-
-中文:
-定理 isOrtho_top_left
-  条件: {V : 子模 𝕜 E}
-  结论: ⊤ ⟂ V ↔ V = ⊥
-  证明: isOrtho_comm.trans isOrtho_top_right
-
-Depends on / 依赖: isOrtho_comm, isOrtho_comm.trans, isOrtho_top_right
+/-
+**Submodule.isOrtho_top_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_top_left {V : Submodule 𝕜 E} : ⊤ ⟂ V ↔ V = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Submodule.isOrtho_comm`：isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂
+ U
+· 使用定理 `Submodule.isOrtho_top_right`：isOrtho_top_right {U : Submodule 𝕜 E} : U ⟂
+ ⊤ ↔ U = ⊥
 -/
 theorem isOrtho_top_left {V : Submodule 𝕜 E} : ⊤ ⟂ V ↔ V = ⊥ :=
   isOrtho_comm.trans isOrtho_top_right
 
-/--
-theorem `IsOrtho.disjoint` / 定理 `IsOrtho.disjoint`
+/-- Orthogonal submodules are disjoint. -/
+/-
+**Submodule.IsOrtho.disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommG
+roup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Submodule 𝕜 E}, U ⟂ V → Disjoi
+nt U V
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Submodule.IsOrtho.symm`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLike 𝕜
+] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {U V : Subm
+odule 𝕜 E}, …
+· 使用定理 `Submodule.orthogonal_disjoint`：orthogonal_disjoint : Disjoint K Kᗮ
 
-English:
-theorem IsOrtho.disjoint
-  given: {U V : Submodule 𝕜 E} (h : U ⟂ V)
-  statement: Disjoint U V
-  proof: (Submodule.orthogonal_disjoint _).mono_right h.symm
-
-@[simp]
-
-中文:
-定理 IsOrtho.disjoint
-  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
-  结论: Disjoint U V
-  证明: (Submodule.orthogonal_disjoint _).mono_right h.symm
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.orthogonal_disjoint, h.symm, mono_right, orthogonal_disjoint
+--- 原说明 ---
+Orthogonal submodules are disjoint.
 -/
 theorem IsOrtho.disjoint {U V : Submodule 𝕜 E} (h : U ⟂ V) : Disjoint U V :=
   (Submodule.orthogonal_disjoint _).mono_right h.symm
 
 @[simp]
-/--
-theorem `isOrtho_sup_left` / 定理 `isOrtho_sup_left`
-
-English:
-theorem isOrtho_sup_left
-  given: {U₁ U₂ V : Submodule 𝕜 E}
-  statement: U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V
-  proof: sup_le_iff
-
-@[simp]
-
-中文:
-定理 isOrtho_sup_left
-  条件: {U₁ U₂ V : 子模 𝕜 E}
-  结论: U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V
-  证明: sup_le_iff
-
-@[simp]
-
-Depends on / 依赖: sup_le_iff
+/-
+**Submodule.isOrtho_sup_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_sup_left {U₁ U₂ V : Submodule 𝕜 E} : U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_iff`：sup_le_iff : a ⊔ b <= c ↔ a <= c ∧ b <= c
 -/
 theorem isOrtho_sup_left {U₁ U₂ V : Submodule 𝕜 E} : U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V :=
   sup_le_iff
 
 @[simp]
-/--
-theorem `isOrtho_sup_right` / 定理 `isOrtho_sup_right`
-
-English:
-theorem isOrtho_sup_right
-  given: {U V₁ V₂ : Submodule 𝕜 E}
-  statement: U ⟂ V₁ ⊔ V₂ ↔ U ⟂ V₁ ∧ U ⟂ V₂
-  proof: isOrtho_comm.trans isOrtho_sup_left.trans isOrtho_comm.and isOrtho_comm
-
-@[simp]
-
-中文:
-定理 isOrtho_sup_right
-  条件: {U V₁ V₂ : 子模 𝕜 E}
-  结论: U ⟂ V₁ ⊔ V₂ ↔ U ⟂ V₁ ∧ U ⟂ V₂
-  证明: isOrtho_comm.trans isOrtho_sup_left.trans isOrtho_comm.and isOrtho_comm
-
-@[simp]
-
-Depends on / 依赖: isOrtho_comm, isOrtho_comm.and, isOrtho_comm.trans, isOrtho_sup_left, isOrtho_sup_left.trans
+/-
+**Submodule.isOrtho_sup_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_sup_right {U V₁ V₂ : Submodule 𝕜 E} : U ⟂ V₁ ⊔ V₂ ↔ U ⟂ V₁ ∧ U ⟂ V
+₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Submodule.isOrtho_comm`：isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂
+ U
+· 使用定理 `Submodule.isOrtho_sup_left`：isOrtho_sup_left {U₁ U₂ V : Submodule 𝕜 E} :
+ U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
 -/
 theorem isOrtho_sup_right {U V₁ V₂ : Submodule 𝕜 E} : U ⟂ V₁ ⊔ V₂ ↔ U ⟂ V₁ ∧ U ⟂ V₂ :=
-isOrtho_comm.trans isOrtho_sup_left.trans isOrtho_comm.and isOrtho_comm
+  isOrtho_comm.trans <| isOrtho_sup_left.trans <| isOrtho_comm.and isOrtho_comm
 
 @[simp]
-/--
-theorem `isOrtho_sSup_left` / 定理 `isOrtho_sSup_left`
-
-English:
-theorem isOrtho_sSup_left
-  given: {U : Set (Submodule 𝕜 E)} {V : Submodule 𝕜 E}
-  proof: sSup_le_iff
-
-@[simp]
-
-中文:
-定理 isOrtho_sSup_left
-  条件: {U : 集合 (子模 𝕜 E)} {V : 子模 𝕜 E}
-  证明: sSup_le_iff
-
-@[simp]
-
-Depends on / 依赖: sSup_le_iff
+/-
+**Submodule.isOrtho_sSup_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_sSup_left {U : Set (Submodule 𝕜 E)} {V : Submodule 𝕜 E} : sSup U ⟂
+ V ↔ forall Uᵢ in U, Uᵢ ⟂ V
+参数：Submodule 𝕜 E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_le_iff`：sSup_le_iff : sSup s <= a ↔ forall b in s, b <= a
 -/
 theorem isOrtho_sSup_left {U : Set (Submodule 𝕜 E)} {V : Submodule 𝕜 E} :
-    sSup U ⟂ V ↔ forall Uᵢ in U, Uᵢ ⟂ V :=
+    sSup U ⟂ V ↔ ∀ Uᵢ ∈ U, Uᵢ ⟂ V :=
   sSup_le_iff
 
 @[simp]
-/--
-theorem `isOrtho_sSup_right` / 定理 `isOrtho_sSup_right`
-
-English:
-theorem isOrtho_sSup_right
-  given: {U : Submodule 𝕜 E} {V : Set (Submodule 𝕜 E)}
-  proof: isOrtho_comm.trans isOrtho_sSup_left.trans by simp_rw [isOrtho_comm]
-
-@[simp]
-
-中文:
-定理 isOrtho_sSup_right
-  条件: {U : 子模 𝕜 E} {V : 集合 (子模 𝕜 E)}
-  证明: isOrtho_comm.trans isOrtho_sSup_left.trans by simp_rw [isOrtho_comm]
-
-@[simp]
-
-Depends on / 依赖: isOrtho_comm, isOrtho_comm.trans, isOrtho_sSup_left, isOrtho_sSup_left.trans, simp_rw
+/-
+**Submodule.isOrtho_sSup_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_sSup_right {U : Submodule 𝕜 E} {V : Set (Submodule 𝕜 E)} : U ⟂ sSu
+p V ↔ forall Vᵢ in V, U ⟂ Vᵢ
+参数：Submodule 𝕜 E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Submodule.isOrtho_comm`：isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂
+ U
+· 使用定理 `Submodule.isOrtho_sSup_left`：isOrtho_sSup_left {U : Set (Submodule 𝕜 E)}
+ {V : Submodule 𝕜 E} : sSup U ⟂ V ↔ forall Uᵢ in U, Uᵢ ⟂ V
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isOrtho_sSup_right {U : Submodule 𝕜 E} {V : Set (Submodule 𝕜 E)} :
-    U ⟂ sSup V ↔ forall Vᵢ in V, U ⟂ Vᵢ :=
-isOrtho_comm.trans isOrtho_sSup_left.trans by simp_rw [isOrtho_comm]
+    U ⟂ sSup V ↔ ∀ Vᵢ ∈ V, U ⟂ Vᵢ :=
+  isOrtho_comm.trans <| isOrtho_sSup_left.trans <| by simp_rw [isOrtho_comm]
 
 @[simp]
-/--
-theorem `isOrtho_iSup_left` / 定理 `isOrtho_iSup_left`
-
-English:
-theorem isOrtho_iSup_left
-  given: {ι : Sort*} {U : ι -> Submodule 𝕜 E} {V : Submodule 𝕜 E}
-  proof: iSup_le_iff
-
-@[simp]
-
-中文:
-定理 isOrtho_iSup_left
-  条件: {ι : 类型层*} {U : ι -> 子模 𝕜 E} {V : 子模 𝕜 E}
-  证明: iSup_le_iff
-
-@[simp]
-
-Depends on / 依赖: iSup_le_iff
+/-
+**Submodule.isOrtho_iSup_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_iSup_left {ι : Sort*} {U : ι -> Submodule 𝕜 E} {V : Submodule 𝕜 E}
+ : iSup U ⟂ V ↔ forall i, U i ⟂ V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
 -/
-theorem isOrtho_iSup_left {ι : Sort*} {U : ι -> Submodule 𝕜 E} {V : Submodule 𝕜 E} :
-    iSup U ⟂ V ↔ forall i, U i ⟂ V :=
+theorem isOrtho_iSup_left {ι : Sort*} {U : ι → Submodule 𝕜 E} {V : Submodule 𝕜 E} :
+    iSup U ⟂ V ↔ ∀ i, U i ⟂ V :=
   iSup_le_iff
 
 @[simp]
-/--
-theorem `isOrtho_iSup_right` / 定理 `isOrtho_iSup_right`
-
-English:
-theorem isOrtho_iSup_right
-  given: {ι : Sort*} {U : Submodule 𝕜 E} {V : ι -> Submodule 𝕜 E}
-  proof: isOrtho_comm.trans isOrtho_iSup_left.trans by simp_rw [isOrtho_comm]
-
-@[simp]
-
-中文:
-定理 isOrtho_iSup_right
-  条件: {ι : 类型层*} {U : 子模 𝕜 E} {V : ι -> 子模 𝕜 E}
-  证明: isOrtho_comm.trans isOrtho_iSup_left.trans by simp_rw [isOrtho_comm]
-
-@[simp]
-
-Depends on / 依赖: isOrtho_comm, isOrtho_comm.trans, isOrtho_iSup_left, isOrtho_iSup_left.trans, simp_rw
+/-
+**Submodule.isOrtho_iSup_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_iSup_right {ι : Sort*} {U : Submodule 𝕜 E} {V : ι -> Submodule 𝕜 E
+} : U ⟂ iSup V ↔ forall i, U ⟂ V i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Submodule.isOrtho_comm`：isOrtho_comm {U V : Submodule 𝕜 E} : U ⟂ V ↔ V ⟂
+ U
+· 使用定理 `Submodule.isOrtho_iSup_left`：isOrtho_iSup_left {ι : Sort*} {U : ι -> Sub
+module 𝕜 E} {V : Submodule 𝕜 E} : iSup U ⟂ V ↔ forall i, U i ⟂ V
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isOrtho_iSup_right {ι : Sort*} {U : Submodule 𝕜 E} {V : ι -> Submodule 𝕜 E} :
-    U ⟂ iSup V ↔ forall i, U ⟂ V i :=
-isOrtho_comm.trans isOrtho_iSup_left.trans by simp_rw [isOrtho_comm]
+theorem isOrtho_iSup_right {ι : Sort*} {U : Submodule 𝕜 E} {V : ι → Submodule 𝕜 E} :
+    U ⟂ iSup V ↔ ∀ i, U ⟂ V i :=
+  isOrtho_comm.trans <| isOrtho_iSup_left.trans <| by simp_rw [isOrtho_comm]
 
 @[simp]
-/--
-theorem `isOrtho_span` / 定理 `isOrtho_span`
-
-English:
-theorem isOrtho_span
-  given: {s t : Set E}
-  proof: by
-  simp_rw [span_eq_iSup_of_singleton_spans s, span_eq_iSup_of_singleton_spans t, isOrtho_iSup_left,
-    isOrtho_iSup_right, isOrtho_iff_le, span_le, Set.subset_def, SetLike.mem_coe,
-    mem_orthogonal_singleton_iff_inner_left, Set.mem_singleton_iff, forall_eq]
-
-中文:
-定理 isOrtho_span
-  条件: {s t : 集合 E}
-  证明: by
-  simp_rw [span_eq_iSup_of_singleton_spans s, span_eq_iSup_of_singleton_spans t, isOrtho_iSup_left,
-    isOrtho_iSup_right, isOrtho_iff_le, span_le, Set.subset_def, SetLike.mem_coe,
-    mem_orthogonal_singleton_iff_inner_left, Set.mem_singleton_iff, forall_eq]
-
-Depends on / 依赖: Set.mem_singleton_iff, Set.subset_def, SetLike, SetLike.mem_coe, forall_eq, isOrtho_iSup_left, isOrtho_iSup_right, isOrtho_iff_le, mem_coe, mem_orthogonal_singleton_iff_inner_left, mem_singleton_iff, simp_rw, span_eq_iSup_of_singleton_spans, span_le, subset_def
+/-
+**Submodule.isOrtho_span** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOrtho_span {s t : Set E} : span 𝕜 s ⟂ span 𝕜 t ↔ forall ⦃u⦄, u in s -> f
+orall ⦃v⦄, v in t -> ⟪u, v⟫ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.span_eq_iSup_of_singleton_spans`：span_eq_iSup_of_singleton_spa
+ns (s : Set M) : span R s = ⨆ x in s, R ∙ x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isOrtho_span {s t : Set E} :
-    span 𝕜 s ⟂ span 𝕜 t ↔ forall ⦃u⦄, u in s -> forall ⦃v⦄, v in t -> ⟪u, v⟫ = 0 := by
+    span 𝕜 s ⟂ span 𝕜 t ↔ ∀ ⦃u⦄, u ∈ s → ∀ ⦃v⦄, v ∈ t → ⟪u, v⟫ = 0 := by
   simp_rw [span_eq_iSup_of_singleton_spans s, span_eq_iSup_of_singleton_spans t, isOrtho_iSup_left,
     isOrtho_iSup_right, isOrtho_iff_le, span_le, Set.subset_def, SetLike.mem_coe,
     mem_orthogonal_singleton_iff_inner_left, Set.mem_singleton_iff, forall_eq]
-
-/--
-theorem `IsOrtho.map` / 定理 `IsOrtho.map`
-
-English:
-theorem IsOrtho.map
-  given: (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E} (h : U ⟂ V)
-  proof: by
-  aesop (add simp [isOrtho_iff_inner_eq])
-
-中文:
-定理 IsOrtho.map
-  条件: (f : E ->ₗᵢ[𝕜] F) {U V : 子模 𝕜 E} (h : U ⟂ V)
-  证明: by
-  aesop (add simp [isOrtho_iff_inner_eq])
-
-Depends on / 依赖: isOrtho_iff_inner_eq
+/-
+**Submodule.IsOrtho.map** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCom
+mGroup F] [inst_4 : InnerProductSpace 𝕜 F] (f : E →ₗᵢ[𝕜] F)   {U V : Submodule 𝕜
+ E}, U ⟂ V → Submodule.map (↑f) U ⟂ Submodule.map (↑f) V
+参数：f : E →ₗᵢ[𝕜] F；↑f；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearIsometry.inner_map_map`：LinearIsometry.inner_map_map (f : E ->ₗᵢ[𝕜
+] E') (x y : E) : ⟪f x, f y⟫ = ⟪x, y⟫
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem IsOrtho.map (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E} (h : U ⟂ V) :
-    U.map (f : E ->ₗ[𝕜] F) ⟂ V.map (f : E ->ₗ[𝕜] F) := by
+theorem IsOrtho.map (f : E →ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E} (h : U ⟂ V) :
+    U.map (f : E →ₗ[𝕜] F) ⟂ V.map (f : E →ₗ[𝕜] F) := by
   aesop (add simp [isOrtho_iff_inner_eq])
-
-/--
-theorem `IsOrtho.comap` / 定理 `IsOrtho.comap`
-
-English:
-theorem IsOrtho.comap
-  given: (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F} (h : U ⟂ V)
-  proof: by
-  rw [isOrtho_iff_inner_eq] at *
-  simp_rw [mem_comap, ← f.inner_map_map]
-  intro u hu v hv
-  exact h _ hu _ hv
-
-@[simp]
-
-中文:
-定理 IsOrtho.comap
-  条件: (f : E ->ₗᵢ[𝕜] F) {U V : 子模 𝕜 F} (h : U ⟂ V)
-  证明: by
-  rw [isOrtho_iff_inner_eq] at *
-  simp_rw [mem_comap, ← f.inner_map_map]
-  intro u hu v hv
-  exact h _ hu _ hv
-
-@[simp]
-
-Depends on / 依赖: f.inner_map_map, inner_map_map, isOrtho_iff_inner_eq, mem_comap, simp_rw
+/-
+**Submodule.IsOrtho.comap** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCom
+mGroup F] [inst_4 : InnerProductSpace 𝕜 F] (f : E →ₗᵢ[𝕜] F)   {U V : Submodule 𝕜
+ F}, U ⟂ V → Submodule.comap (↑f) U ⟂ Submodule.comap (↑f) V
+参数：f : E →ₗᵢ[𝕜] F；↑f；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.isOrtho_iff_inner_eq`：isOrtho_iff_inner_eq {U V : Submodule 𝕜 
+E} : U ⟂ V ↔ forall u in U, forall v in V, ⟪u, v⟫ = 0
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearIsometry.inner_map_map`：LinearIsometry.inner_map_map (f : E ->ₗᵢ[𝕜
+] E') (x y : E) : ⟪f x, f y⟫ = ⟪x, y⟫
 -/
-theorem IsOrtho.comap (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F} (h : U ⟂ V) :
-    U.comap (f : E ->ₗ[𝕜] F) ⟂ V.comap (f : E ->ₗ[𝕜] F) := by
+theorem IsOrtho.comap (f : E →ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F} (h : U ⟂ V) :
+    U.comap (f : E →ₗ[𝕜] F) ⟂ V.comap (f : E →ₗ[𝕜] F) := by
   rw [isOrtho_iff_inner_eq] at *
   simp_rw [mem_comap, ← f.inner_map_map]
   intro u hu v hv
   exact h _ hu _ hv
 
 @[simp]
-/--
-theorem `IsOrtho.map_iff` / 定理 `IsOrtho.map_iff`
-
-English:
-theorem IsOrtho.map_iff
-  given: (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E}
-  proof: by
-  refine ⟨fun h => ?_, IsOrtho.map f.toLinearIsometry⟩
-  have hf : forall p : Submodule 𝕜 E,
-      (p.map (f : E ->ₗ[𝕜] F)).comap (f.toLinearIsometry : E ->ₗ[𝕜] F) = p :=
-    comap_map_eq_of_injective f.injective
-  simpa only [hf] using h.comap f.toLinearIsometry
-
-@[simp]
-
-中文:
-定理 IsOrtho.map_iff
-  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : 子模 𝕜 E}
-  证明: by
-  refine ⟨fun h => ?_, IsOrtho.map f.toLinearIsometry⟩
-  have hf : forall p : Submodule 𝕜 E,
-      (p.map (f : E ->ₗ[𝕜] F)).comap (f.toLinearIsometry : E ->ₗ[𝕜] F) = p :=
-    comap_map_eq_of_injective f.injective
-  simpa only [hf] using h.comap f.toLinearIsometry
-
-@[simp]
-
-Depends on / 依赖: IsOrtho, IsOrtho.map, Submodule, comap_map_eq_of_injective, f.injective, f.toLinearIsometry, h.comap, injective, p.map, toLinearIsometry
+/-
+**Submodule.IsOrtho.map_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCom
+mGroup F] [inst_4 : InnerProductSpace 𝕜 F] (f : E ≃ₗᵢ[𝕜] F)   {U V : Submodule 𝕜
+ E}, Submodule.map (↑↑↑f) U ⟂ Submodule.map (↑↑↑f) V ↔ U ⟂ V
+参数：f : E ≃ₗᵢ[𝕜] F；↑↑↑f；↑↑↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `Submodule.comap_map_eq_of_injective`：comap_map_eq_of_injective (p : Subm
+odule R M) : (p.map f).comap f = p
+· 使用定理 `LinearIsometryEquiv.injective`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Typ
+e u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+*
+ R₂} {σ₂₁ : R₂ →+* …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.IsOrtho.comap`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} 
+[inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : InnerProductSpace 
+𝕜 E] [inst_3 …
+· 使用定理 `Submodule.IsOrtho.map`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [i
+nst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : InnerProductSpace 𝕜 
+E] [inst_3 …
 -/
 theorem IsOrtho.map_iff (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E} :
-    U.map (f : E ->ₗ[𝕜] F) ⟂ V.map (f : E ->ₗ[𝕜] F) ↔ U ⟂ V := by
-  refine ⟨fun h => ?_, IsOrtho.map f.toLinearIsometry⟩
-  have hf : forall p : Submodule 𝕜 E,
-      (p.map (f : E ->ₗ[𝕜] F)).comap (f.toLinearIsometry : E ->ₗ[𝕜] F) = p :=
+    U.map (f : E →ₗ[𝕜] F) ⟂ V.map (f : E →ₗ[𝕜] F) ↔ U ⟂ V := by
+  refine ⟨fun h ↦ ?_, IsOrtho.map f.toLinearIsometry⟩
+  have hf : ∀ p : Submodule 𝕜 E,
+      (p.map (f : E →ₗ[𝕜] F)).comap (f.toLinearIsometry : E →ₗ[𝕜] F) = p :=
     comap_map_eq_of_injective f.injective
   simpa only [hf] using h.comap f.toLinearIsometry
 
 @[simp]
-/--
-theorem `IsOrtho.comap_iff` / 定理 `IsOrtho.comap_iff`
-
-English:
-theorem IsOrtho.comap_iff
-  given: (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F}
-  proof: by
-  convert IsOrtho.map_iff f.symm <;>
-    exact Submodule.comap_equiv_eq_map_symm (f : E ≃ₗ[𝕜] F) _
-
-中文:
-定理 IsOrtho.comap_iff
-  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : 子模 𝕜 F}
-  证明: by
-  convert IsOrtho.map_iff f.symm <;>
-    exact Submodule.comap_equiv_eq_map_symm (f : E ≃ₗ[𝕜] F) _
-
-Depends on / 依赖: IsOrtho, IsOrtho.map_iff, Submodule, Submodule.comap_equiv_eq_map_symm, comap_equiv_eq_map_symm, convert, f.symm, map_iff
+/-
+**Submodule.IsOrtho.comap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.IsOrtho`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : RCLike 𝕜] [inst_1 :
+ NormedAddCommGroup E]   [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCom
+mGroup F] [inst_4 : InnerProductSpace 𝕜 F] (f : E ≃ₗᵢ[𝕜] F)   {U V : Submodule 𝕜
+ F}, Submodule.comap (↑↑↑f) U ⟂ Submodule.comap (↑↑↑f) V ↔ U ⟂ V
+参数：f : E ≃ₗᵢ[𝕜] F；↑↑↑f；↑↑↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.comap_equiv_eq_map_symm`：comap_equiv_eq_map_symm (e : M ≃ₛₗ[τ₁
+₂] M₂) (K : Submodule R₂ M₂) : K.comap (e : M ->ₛₗ[τ₁₂] M₂) = K.map (e.symm : M₂
+ ->ₛₗ[τ₂₁] M)
+· 使用定理 `Submodule.IsOrtho.map_iff`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3
+} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E]   [inst_2 : InnerProductSpac
+e 𝕜 E] [inst_3 …
 -/
 theorem IsOrtho.comap_iff (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F} :
-    U.comap (f : E ->ₗ[𝕜] F) ⟂ V.comap (f : E ->ₗ[𝕜] F) ↔ U ⟂ V := by
+    U.comap (f : E →ₗ[𝕜] F) ⟂ V.comap (f : E →ₗ[𝕜] F) ↔ U ⟂ V := by
   convert IsOrtho.map_iff f.symm <;>
     exact Submodule.comap_equiv_eq_map_symm (f : E ≃ₗ[𝕜] F) _
 
 end Submodule
 
 open scoped Function in -- required for scoped `on` notation
-/--
-theorem `orthogonalFamily_iff_pairwise` / 定理 `orthogonalFamily_iff_pairwise`
-
-English:
-theorem orthogonalFamily_iff_pairwise
-  given: {ι} {V : ι -> Submodule 𝕜 E}
-  proof: forall₃_congr fun _i _j _hij =>
-Subtype.forall.trans
-forall₂_congr fun _x _hx => Subtype.forall.trans
-        forall₂_congr fun _y _hy => inner_eq_zero_symm
-
-alias ⟨OrthogonalFamily.pairwise, OrthogonalFamily.of_pairwise⟩ := orthogonalFamily_iff_pairwise
-
-中文:
-定理 orthogonalFamily_iff_pairwise
-  条件: {ι} {V : ι -> 子模 𝕜 E}
-  证明: forall₃_congr fun _i _j _hij =>
-Subtype.forall.trans
-forall₂_congr fun _x _hx => Subtype.forall.trans
-        forall₂_congr fun _y _hy => inner_eq_zero_symm
-
-alias ⟨OrthogonalFamily.pairwise, OrthogonalFamily.of_pairwise⟩ := orthogonalFamily_iff_pairwise
-
-Depends on / 依赖: Subtype, Subtype.forall.trans, _hij, inner_eq_zero_symm
+/-
+**orthogonalFamily_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：orthogonalFamily_iff_pairwise {ι} {V : ι -> Submodule 𝕜 E} : (OrthogonalFa
+mily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) ↔ Pairwise ((· ⟂ ·) on V)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₃_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → 
+Sort u_3} {p q : (a : α) → (b : β a) → γ a b → Prop},   (∀ (a : α) (b : β a) (c 
+: γ…
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `inner_eq_zero_symm`：inner_eq_zero_symm {x y : E} : ⟪x, y⟫ = 0 ↔ ⟪y, x⟫ =
+ 0
 -/
-theorem orthogonalFamily_iff_pairwise {ι} {V : ι -> Submodule 𝕜 E} :
+theorem orthogonalFamily_iff_pairwise {ι} {V : ι → Submodule 𝕜 E} :
     (OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) ↔ Pairwise ((· ⟂ ·) on V) :=
   forall₃_congr fun _i _j _hij =>
-Subtype.forall.trans
-forall₂_congr fun _x _hx => Subtype.forall.trans
+    Subtype.forall.trans <|
+      forall₂_congr fun _x _hx => Subtype.forall.trans <|
         forall₂_congr fun _y _hy => inner_eq_zero_symm
 
 alias ⟨OrthogonalFamily.pairwise, OrthogonalFamily.of_pairwise⟩ := orthogonalFamily_iff_pairwise
 
-/--
-theorem `OrthogonalFamily.isOrtho` / 定理 `OrthogonalFamily.isOrtho`
+/-- Two submodules in an orthogonal family with different indices are orthogonal. -/
+/-
+**OrthogonalFamily.isOrtho** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.isOrtho {ι} {V : ι -> Submodule 𝕜 E} (hV : OrthogonalFami
+ly 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i j : ι} (hij : i != j) : V i ⟂ V
+ j
+参数：hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ；hij : i != j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrthogonalFamily.pairwise`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst : RCLik
+e 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]   {ι : Typ
+e u_4} {V : ι →…
 
-English:
-theorem OrthogonalFamily.isOrtho
-  statement: {ι} {V : ι -> Submodule 𝕜 E}
-  proof: hV.pairwise hij
-
-中文:
-定理 OrthogonalFamily.isOrtho
-  结论: {ι} {V : ι -> 子模 𝕜 E}
-  证明: hV.pairwise hij
-
-Depends on / 依赖: hV.pairwise, pairwise
+--- 原说明 ---
+Two submodules in an orthogonal family with different indices are orthogonal.
 -/
-theorem OrthogonalFamily.isOrtho {ι} {V : ι -> Submodule 𝕜 E}
-    (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i j : ι} (hij : i != j) :
+theorem OrthogonalFamily.isOrtho {ι} {V : ι → Submodule 𝕜 E}
+    (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i j : ι} (hij : i ≠ j) :
     V i ⟂ V j :=
   hV.pairwise hij
 
@@ -1598,32 +1404,15 @@ local notation "⟪" x ", " y "⟫" => inner 𝕜 x y
 
 variable (K : ClosedSubmodule 𝕜 E)
 
-/--
-Definition of `orthogonal` / `orthogonal` 的定义
+/-- The closed subspace of vectors orthogonal to a given subspace, denoted `Kᗮ`. -/
+/-
+**ClosedSubmodule.orthogonal** 是 Mathlib 中的一个定义，位于命名空间 `ClosedSubmodule`。
+形式化陈述：orthogonal : ClosedSubmodule 𝕜 E where toSubmodule
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orthogonal
-  signature: : ClosedSubmodule 𝕜 E where
-  body: K.toSubmodule.orthogonal
-  isClosed' := K.toSubmodule.isClosed_orthogonal
-
-@[inherit_doc]
-notation:1200 K "ᗮ" => orthogonal K
-
-@[simp]
-
-中文:
-定义 orthogonal
-  签名: : 闭子模 𝕜 E where
-  定义体: K.toSubmodule.orthogonal
-  isClosed' := K.toSubmodule.isClosed_orthogonal
-
-@[inherit_doc]
-notation:1200 K "ᗮ" => orthogonal K
-
-@[simp]
-
-Depends on / 依赖: K.toSubmodule.orthogonal, orthogonal, toSubmodule
+--- 原说明 ---
+The closed subspace of vectors orthogonal to a given subspace, denoted `Kᗮ`.
 -/
 def orthogonal : ClosedSubmodule 𝕜 E where
   toSubmodule := K.toSubmodule.orthogonal
@@ -1633,199 +1422,199 @@ def orthogonal : ClosedSubmodule 𝕜 E where
 notation:1200 K "ᗮ" => orthogonal K
 
 @[simp]
-/--
-lemma `toSubmodule_orthogonal_eq` / 引理 `toSubmodule_orthogonal_eq`
-
-English:
-lemma toSubmodule_orthogonal_eq
-  statement: K.orthogonal.toSubmodule = K.toSubmodule.orthogonal
-  proof: rfl
-
-@[deprecated (since := "2026-01-18")] alias orthogonal_toSubmodule_eq := toSubmodule_orthogonal_eq
-
-@[simp]
-
-中文:
-引理 toSubmodule_orthogonal_eq
-  结论: K.orthogonal.toSubmodule = K.toSubmodule.orthogonal
-  证明: rfl
-
-@[deprecated (since := "2026-01-18")] alias orthogonal_toSubmodule_eq := toSubmodule_orthogonal_eq
-
-@[simp]
+/-
+**ClosedSubmodule.toSubmodule_orthogonal_eq** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSub
+module`。
+形式化陈述：toSubmodule_orthogonal_eq : K.orthogonal.toSubmodule = K.toSubmodule.ortho
+gonal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSubmodule_orthogonal_eq : K.orthogonal.toSubmodule = K.toSubmodule.orthogonal := rfl
 
 @[deprecated (since := "2026-01-18")] alias orthogonal_toSubmodule_eq := toSubmodule_orthogonal_eq
 
 @[simp]
-/--
-lemma `mem_orthogonal_toSubmodule_iff` / 引理 `mem_orthogonal_toSubmodule_iff`
-
-English:
-lemma mem_orthogonal_toSubmodule_iff
-  given: (v : E)
-  statement: v in (K.toSubmodule)ᗮ ↔ v in Kᗮ
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-01-18")] alias mem_orthogonal_iff := mem_orthogonal_toSubmodule_iff
-
-中文:
-引理 mem_orthogonal_toSubmodule_iff
-  条件: (v : E)
-  结论: v in (K.toSubmodule)ᗮ ↔ v in Kᗮ
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-01-18")] alias mem_orthogonal_iff := mem_orthogonal_toSubmodule_iff
-
-Depends on / 依赖: Iff.rfl
+/-
+**ClosedSubmodule.mem_orthogonal_toSubmodule_iff** 是 Mathlib 中的一个引理，位于命名空间 `Clos
+edSubmodule`。
+形式化陈述：mem_orthogonal_toSubmodule_iff (v : E) : v in (K.toSubmodule)ᗮ ↔ v in Kᗮ
+参数：v : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_orthogonal_toSubmodule_iff (v : E) : v in (K.toSubmodule)ᗮ ↔ v in Kᗮ := Iff.rfl
+lemma mem_orthogonal_toSubmodule_iff (v : E) : v ∈ (K.toSubmodule)ᗮ ↔ v ∈ Kᗮ := Iff.rfl
 
 @[deprecated (since := "2026-01-18")] alias mem_orthogonal_iff := mem_orthogonal_toSubmodule_iff
 
 /-- When a vector is in `Kᗮ`. -/
 @[simp]
-/--
-theorem `mem_orthogonal` / 定理 `mem_orthogonal`
+/-
+**ClosedSubmodule.mem_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0
+参数：v : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_orthogonal
-  given: (v : E)
-  statement: v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0
-  proof: Iff.rfl
-
-中文:
-定理 mem_orthogonal
-  条件: (v : E)
-  结论: v in Kᗮ ↔ 对任意 u in K, ⟪u, v⟫ = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+When a vector is in `Kᗮ`.
 -/
-theorem mem_orthogonal (v : E) : v in Kᗮ ↔ forall u in K, ⟪u, v⟫ = 0 := Iff.rfl
+theorem mem_orthogonal (v : E) : v ∈ Kᗮ ↔ ∀ u ∈ K, ⟪u, v⟫ = 0 := Iff.rfl
 
-/--
-theorem `mem_orthogonal'` / 定理 `mem_orthogonal'`
+/-- When a vector is in `Kᗮ`, with the inner product the
+other way round. -/
+/-
+**ClosedSubmodule.mem_orthogonal'** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0
+参数：v : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.mem_orthogonal'`：mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u 
+in K, ⟪v, u⟫ = 0
 
-English:
-theorem mem_orthogonal'
-  given: (v : E)
-  statement: v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0
-  proof: Submodule.mem_orthogonal' K.toSubmodule v
-
-中文:
-定理 mem_orthogonal'
-  条件: (v : E)
-  结论: v in Kᗮ ↔ 对任意 u in K, ⟪v, u⟫ = 0
-  证明: Submodule.mem_orthogonal' K.toSubmodule v
-
-Depends on / 依赖: K.toSubmodule, Submodule, Submodule.mem_orthogonal, mem_orthogonal, toSubmodule
+--- 原说明 ---
+When a vector is in `Kᗮ`, with the inner product the
+other way round.
 -/
-theorem mem_orthogonal' (v : E) : v in Kᗮ ↔ forall u in K, ⟪v, u⟫ = 0 :=
+theorem mem_orthogonal' (v : E) : v ∈ Kᗮ ↔ ∀ u ∈ K, ⟪v, u⟫ = 0 :=
   Submodule.mem_orthogonal' K.toSubmodule v
 
 variable {K}
-
-/--
-theorem `sub_mem_orthogonal_of_inner_left` / 定理 `sub_mem_orthogonal_of_inner_left`
-
-English:
-theorem sub_mem_orthogonal_of_inner_left
-  given: {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫)
-  statement: x - y in Kᗮ
-  proof: Submodule.sub_mem_orthogonal_of_inner_left h
-
-中文:
-定理 sub_mem_orthogonal_of_inner_left
-  条件: {x y : E} (h : 对任意 v : K, ⟪x, v⟫ = ⟪y, v⟫)
-  结论: x - y in Kᗮ
-  证明: Submodule.sub_mem_orthogonal_of_inner_left h
-
-Depends on / 依赖: Submodule, Submodule.sub_mem_orthogonal_of_inner_left, sub_mem_orthogonal_of_inner_left
+/-
+**ClosedSubmodule.sub_mem_orthogonal_of_inner_left** 是 Mathlib 中的一个定理，位于命名空间 `Cl
+osedSubmodule`。
+形式化陈述：sub_mem_orthogonal_of_inner_left {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y,
+ v⟫) : x - y in Kᗮ
+参数：h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.sub_mem_orthogonal_of_inner_left`：sub_mem_orthogonal_of_inner_
+left {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫) : x - y in Kᗮ
 -/
-theorem sub_mem_orthogonal_of_inner_left {x y : E} (h : forall v : K, ⟪x, v⟫ = ⟪y, v⟫) : x - y in Kᗮ :=
+theorem sub_mem_orthogonal_of_inner_left {x y : E} (h : ∀ v : K, ⟪x, v⟫ = ⟪y, v⟫) : x - y ∈ Kᗮ :=
   Submodule.sub_mem_orthogonal_of_inner_left h
-
-/--
-theorem `sub_mem_orthogonal_of_inner_right` / 定理 `sub_mem_orthogonal_of_inner_right`
-
-English:
-theorem sub_mem_orthogonal_of_inner_right
-  given: {x y : E} (h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫)
-  proof: Submodule.sub_mem_orthogonal_of_inner_right h
-
-中文:
-定理 sub_mem_orthogonal_of_inner_right
-  条件: {x y : E} (h : 对任意 v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫)
-  证明: Submodule.sub_mem_orthogonal_of_inner_right h
-
-Depends on / 依赖: Submodule, Submodule.sub_mem_orthogonal_of_inner_right, sub_mem_orthogonal_of_inner_right
+/-
+**ClosedSubmodule.sub_mem_orthogonal_of_inner_right** 是 Mathlib 中的一个定理，位于命名空间 `C
+losedSubmodule`。
+形式化陈述：sub_mem_orthogonal_of_inner_right {x y : E} (h : forall v : K, ⟪(v : E), x
+⟫ = ⟪(v : E), y⟫) : x - y in Kᗮ
+参数：h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.sub_mem_orthogonal_of_inner_right`：sub_mem_orthogonal_of_inner
+_right {x y : E} (h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫) : x - y in Kᗮ
 -/
-theorem sub_mem_orthogonal_of_inner_right {x y : E} (h : forall v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫) :
-    x - y in Kᗮ := Submodule.sub_mem_orthogonal_of_inner_right h
+theorem sub_mem_orthogonal_of_inner_right {x y : E} (h : ∀ v : K, ⟪(v : E), x⟫ = ⟪(v : E), y⟫) :
+    x - y ∈ Kᗮ := Submodule.sub_mem_orthogonal_of_inner_right h
 
 variable (K)
 
-/--
-theorem `inf_orthogonal_eq_bot` / 定理 `inf_orthogonal_eq_bot`
+/-- `K` and `Kᗮ` have trivial intersection. -/
+/-
+**ClosedSubmodule.inf_orthogonal_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodu
+le`。
+形式化陈述：inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inner_self_eq_zero`：inner_self_eq_zero {x : E} : ⟪x, x⟫ = 0 ↔ x = 0
 
-English:
-theorem inf_orthogonal_eq_bot
-  statement: K ⊓ Kᗮ = ⊥
-  proof: by
-  rw [eq_bot_iff]
-  intro x
-  simpa using fun hx ho => inner_self_eq_zero.1 (ho x hx)
-
-中文:
-定理 inf_orthogonal_eq_bot
-  结论: K ⊓ Kᗮ = ⊥
-  证明: by
-  rw [eq_bot_iff]
-  intro x
-  simpa using fun hx ho => inner_self_eq_zero.1 (ho x hx)
-
-Depends on / 依赖: eq_bot_iff, inner_self_eq_zero
+--- 原说明 ---
+`K` and `Kᗮ` have trivial intersection.
 -/
 theorem inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥ := by
   rw [eq_bot_iff]
   intro x
   simpa using fun hx ho => inner_self_eq_zero.1 (ho x hx)
 
-/--
-theorem `orthogonal_disjoint` / 定理 `orthogonal_disjoint`
+/-- `K` and `Kᗮ` have trivial intersection. -/
+/-
+**ClosedSubmodule.orthogonal_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule
+`。
+形式化陈述：orthogonal_disjoint : Disjoint K Kᗮ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.inf_orthogonal_eq_bot`：inf_orthogonal_eq_bot : K ⊓ Kᗮ = 
+⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem orthogonal_disjoint
-  statement: Disjoint K Kᗮ
-  proof: by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
-
-中文:
-定理 orthogonal_disjoint
-  结论: Disjoint K Kᗮ
-  证明: by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
-
-Depends on / 依赖: K.inf_orthogonal_eq_bot, disjoint_iff, inf_orthogonal_eq_bot
+--- 原说明 ---
+`K` and `Kᗮ` have trivial intersection.
 -/
 theorem orthogonal_disjoint : Disjoint K Kᗮ := by simp [disjoint_iff, K.inf_orthogonal_eq_bot]
 
-/--
-theorem `orthogonal_eq_inter` / 定理 `orthogonal_eq_inter`
+/-- `Kᗮ` can be characterized as the intersection of the kernels of the operations of
+inner product with each of the elements of `K`. -/
+/-
+**ClosedSubmodule.orthogonal_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule
+`。
+形式化陈述：orthogonal_eq_inter : Kᗮ = ⨅ v : K, LinearMap.ker (innerSL 𝕜 (v : E)).toLi
+nearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem orthogonal_eq_inter
-  statement: Kᗮ = ⨅ v : K, LinearMap.ker (innerSL 𝕜 (v : E)).toLinearMap
-  proof: by
-  ext
-  simp
-
-中文:
-定理 orthogonal_eq_inter
-  结论: Kᗮ = ⨅ v : K, 线性映射.ker (innerSL 𝕜 (v : E)).toLinearMap
-  证明: by
-  ext
-  simp
+--- 原说明 ---
+`Kᗮ` can be characterized as the intersection of the kernels of the operations o
+f
+inner product with each of the elements of `K`.
 -/
 theorem orthogonal_eq_inter : Kᗮ = ⨅ v : K, LinearMap.ker (innerSL 𝕜 (v : E)).toLinearMap := by
   ext
@@ -1833,22 +1622,20 @@ theorem orthogonal_eq_inter : Kᗮ = ⨅ v : K, LinearMap.ker (innerSL 𝕜 (v :
 
 variable (𝕜 E)
 
-/--
-theorem `orthogonal_gc` / 定理 `orthogonal_gc`
+/-- `orthogonal` gives a `GaloisConnection` between
+`ClosedSubmodule 𝕜 E` and its `OrderDual`. -/
+/-
+**ClosedSubmodule.orthogonal_gc** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：orthogonal_gc : @GaloisConnection (ClosedSubmodule 𝕜 E) (ClosedSubmodule 𝕜
+ E)ᵒᵈ _ _ orthogonal orthogonal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.inner_left_of_mem_orthogonal`：inner_left_of_mem_orthogonal {u 
+v : E} (hu : u in K) (hv : v in Kᗮ) : ⟪v, u⟫ = 0
 
-English:
-theorem orthogonal_gc
-  proof: fun _K₁ _K₂ =>
-  ⟨fun h _v hv _u hu => Submodule.inner_left_of_mem_orthogonal hv (h hu), fun h _v hv _u hu =>
-    Submodule.inner_left_of_mem_orthogonal hv (h hu)⟩
-
-中文:
-定理 orthogonal_gc
-  证明: fun _K₁ _K₂ =>
-  ⟨fun h _v hv _u hu => Submodule.inner_left_of_mem_orthogonal hv (h hu), fun h _v hv _u hu =>
-    Submodule.inner_left_of_mem_orthogonal hv (h hu)⟩
-
-Depends on / 依赖: Submodule, Submodule.inner_left_of_mem_orthogonal, inner_left_of_mem_orthogonal
+--- 原说明 ---
+`orthogonal` gives a `GaloisConnection` between
+`ClosedSubmodule 𝕜 E` and its `OrderDual`.
 -/
 theorem orthogonal_gc :
     @GaloisConnection (ClosedSubmodule 𝕜 E) (ClosedSubmodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal :=
@@ -1858,175 +1645,240 @@ theorem orthogonal_gc :
 
 variable {𝕜 E}
 
-/--
-theorem `orthogonal_le` / 定理 `orthogonal_le`
+/-- `orthogonal` reverses the `≤` ordering of two
+subspaces. -/
+/-
+**ClosedSubmodule.orthogonal_le** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：orthogonal_le {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂) : K₂ᗮ <= K₁ᗮ
+参数：h : K₁ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `ClosedSubmodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Closed
+Submodule 𝕜 E) (ClosedSubmodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem orthogonal_le
-  given: {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂)
-  statement: K₂ᗮ <= K₁ᗮ
-  proof: (orthogonal_gc 𝕜 E).monotone_l h
-
-中文:
-定理 orthogonal_le
-  条件: {K₁ K₂ : 闭子模 𝕜 E} (h : K₁ <= K₂)
-  结论: K₂ᗮ <= K₁ᗮ
-  证明: (orthogonal_gc 𝕜 E).monotone_l h
-
-Depends on / 依赖: monotone_l, orthogonal_gc
+--- 原说明 ---
+`orthogonal` reverses the `≤` ordering of two
+subspaces.
 -/
-theorem orthogonal_le {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂) : K₂ᗮ <= K₁ᗮ :=
+theorem orthogonal_le {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ ≤ K₂) : K₂ᗮ ≤ K₁ᗮ :=
   (orthogonal_gc 𝕜 E).monotone_l h
 
-/--
-theorem `orthogonal_orthogonal_monotone` / 定理 `orthogonal_orthogonal_monotone`
+/-- `orthogonal.orthogonal` preserves the `≤` ordering of two
+subspaces. -/
+/-
+**ClosedSubmodule.orthogonal_orthogonal_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Clos
+edSubmodule`。
+形式化陈述：orthogonal_orthogonal_monotone {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂
+) : K₁ᗮᗮ <= K₂ᗮᗮ
+参数：h : K₁ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.orthogonal_le`：orthogonal_le {K₁ K₂ : ClosedSubmodule 𝕜 
+E} (h : K₁ <= K₂) : K₂ᗮ <= K₁ᗮ
 
-English:
-theorem orthogonal_orthogonal_monotone
-  given: {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂)
-  statement: K₁ᗮᗮ <= K₂ᗮᗮ
-  proof: orthogonal_le (orthogonal_le h)
-
-中文:
-定理 orthogonal_orthogonal_monotone
-  条件: {K₁ K₂ : 闭子模 𝕜 E} (h : K₁ <= K₂)
-  结论: K₁ᗮᗮ <= K₂ᗮᗮ
-  证明: orthogonal_le (orthogonal_le h)
-
-Depends on / 依赖: orthogonal_le
+--- 原说明 ---
+`orthogonal.orthogonal` preserves the `≤` ordering of two
+subspaces.
 -/
-theorem orthogonal_orthogonal_monotone {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂) : K₁ᗮᗮ <= K₂ᗮᗮ :=
+theorem orthogonal_orthogonal_monotone {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ ≤ K₂) : K₁ᗮᗮ ≤ K₂ᗮᗮ :=
   orthogonal_le (orthogonal_le h)
 
-/--
-theorem `inf_orthogonal` / 定理 `inf_orthogonal`
+/-- The inf of two orthogonal subspaces equals the subspace orthogonal
+to the sup. -/
+/-
+**ClosedSubmodule.inf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：inf_orthogonal (K₁ K₂ : ClosedSubmodule 𝕜 E) : K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
+参数：K₁ K₂ : ClosedSubmodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `ClosedSubmodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Closed
+Submodule 𝕜 E) (ClosedSubmodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem inf_orthogonal
-  given: (K₁ K₂ : ClosedSubmodule 𝕜 E)
-  statement: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_sup.symm
-
-中文:
-定理 inf_orthogonal
-  条件: (K₁ K₂ : 闭子模 𝕜 E)
-  结论: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_sup.symm
-
-Depends on / 依赖: l_sup, l_sup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of two orthogonal subspaces equals the subspace orthogonal
+to the sup.
 -/
 theorem inf_orthogonal (K₁ K₂ : ClosedSubmodule 𝕜 E) : K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ :=
   (orthogonal_gc 𝕜 E).l_sup.symm
 
-/--
-theorem `iInf_orthogonal` / 定理 `iInf_orthogonal`
+/-- The inf of an indexed family of orthogonal subspaces equals the
+subspace orthogonal to the sup. -/
+/-
+**ClosedSubmodule.iInf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：iInf_orthogonal {ι : Type*} (K : ι -> ClosedSubmodule 𝕜 E) : ⨅ i, (K i)ᗮ =
+ (iSup K)ᗮ
+参数：K : ι -> ClosedSubmodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `ClosedSubmodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Closed
+Submodule 𝕜 E) (ClosedSubmodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem iInf_orthogonal
-  given: {ι : Type*} (K : ι -> ClosedSubmodule 𝕜 E)
-  statement: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_iSup.symm
-
-中文:
-定理 iInf_orthogonal
-  条件: {ι : 类型} (K : ι -> 闭子模 𝕜 E)
-  结论: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_iSup.symm
-
-Depends on / 依赖: l_iSup, l_iSup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of an indexed family of orthogonal subspaces equals the
+subspace orthogonal to the sup.
 -/
-theorem iInf_orthogonal {ι : Type*} (K : ι -> ClosedSubmodule 𝕜 E) : ⨅ i, (K i)ᗮ = (iSup K)ᗮ :=
+theorem iInf_orthogonal {ι : Type*} (K : ι → ClosedSubmodule 𝕜 E) : ⨅ i, (K i)ᗮ = (iSup K)ᗮ :=
   (orthogonal_gc 𝕜 E).l_iSup.symm
 
-/--
-theorem `sInf_orthogonal` / 定理 `sInf_orthogonal`
+/-- The inf of a set of orthogonal subspaces equals the subspace orthogonal to the sup. -/
+/-
+**ClosedSubmodule.sInf_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：sInf_orthogonal (s : Set <| ClosedSubmodule 𝕜 E) : ⨅ K in s, Kᗮ = (sSup s)
+ᗮ
+参数：s : Set <| ClosedSubmodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `GaloisConnection.l_sSup`：l_sSup {s : Set α} : l (sSup s) = ⨆ a in s, l a
+· 使用定理 `ClosedSubmodule.orthogonal_gc`：orthogonal_gc : @GaloisConnection (Closed
+Submodule 𝕜 E) (ClosedSubmodule 𝕜 E)ᵒᵈ _ _ orthogonal orthogonal
 
-English:
-theorem sInf_orthogonal
-  given: (s : Set <| ClosedSubmodule 𝕜 E)
-  statement: ⨅ K in s, Kᗮ = (sSup s)ᗮ
-  proof: (orthogonal_gc 𝕜 E).l_sSup.symm
-
-@[simp]
-
-中文:
-定理 sInf_orthogonal
-  条件: (s : 集合 <| 闭子模 𝕜 E)
-  结论: ⨅ K in s, Kᗮ = (sSup s)ᗮ
-  证明: (orthogonal_gc 𝕜 E).l_sSup.symm
-
-@[simp]
-
-Depends on / 依赖: l_sSup, l_sSup.symm, orthogonal_gc
+--- 原说明 ---
+The inf of a set of orthogonal subspaces equals the subspace orthogonal to the s
+up.
 -/
-theorem sInf_orthogonal (s : Set <| ClosedSubmodule 𝕜 E) : ⨅ K in s, Kᗮ = (sSup s)ᗮ :=
+theorem sInf_orthogonal (s : Set <| ClosedSubmodule 𝕜 E) : ⨅ K ∈ s, Kᗮ = (sSup s)ᗮ :=
   (orthogonal_gc 𝕜 E).l_sSup.symm
 
 @[simp]
-/--
-theorem `top_orthogonal_eq_bot` / 定理 `top_orthogonal_eq_bot`
-
-English:
-theorem top_orthogonal_eq_bot
-  statement: (⊤ : ClosedSubmodule 𝕜 E)ᗮ = ⊥
-  proof: by ext x; simp
-
-@[simp]
-
-中文:
-定理 top_orthogonal_eq_bot
-  结论: (⊤ : 闭子模 𝕜 E)ᗮ = ⊥
-  证明: by ext x; simp
-
-@[simp]
+/-
+**ClosedSubmodule.top_orthogonal_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodu
+le`。
+形式化陈述：top_orthogonal_eq_bot : (⊤ : ClosedSubmodule 𝕜 E)ᗮ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.ext`：∀ {R : Type u_2} {M : Type u_3} {inst : Semiring R}
+ {inst_1 : AddCommMonoid M} {inst_2 : TopologicalSpace M}   {inst_3 : _root_.Mod
+ule R M} …
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.top_orthogonal_eq_bot`：top_orthogonal_eq_bot : (⊤ : Submodule 
+𝕜 E)ᗮ = ⊥
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem top_orthogonal_eq_bot : (⊤ : ClosedSubmodule 𝕜 E)ᗮ = ⊥ := by ext x; simp
 
 @[simp]
-/--
-theorem `bot_orthogonal_eq_top` / 定理 `bot_orthogonal_eq_top`
-
-English:
-theorem bot_orthogonal_eq_top
-  statement: (⊥ : ClosedSubmodule 𝕜 E)ᗮ = ⊤
-  proof: by ext x; simp
-
-@[simp]
-
-中文:
-定理 bot_orthogonal_eq_top
-  结论: (⊥ : 闭子模 𝕜 E)ᗮ = ⊤
-  证明: by ext x; simp
-
-@[simp]
+/-
+**ClosedSubmodule.bot_orthogonal_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodu
+le`。
+形式化陈述：bot_orthogonal_eq_top : (⊥ : ClosedSubmodule 𝕜 E)ᗮ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.ext`：∀ {R : Type u_2} {M : Type u_3} {inst : Semiring R}
+ {inst_1 : AddCommMonoid M} {inst_2 : TopologicalSpace M}   {inst_3 : _root_.Mod
+ule R M} …
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.bot_orthogonal_eq_top`：bot_orthogonal_eq_top : (⊥ : Submodule 
+𝕜 E)ᗮ = ⊤
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem bot_orthogonal_eq_top : (⊥ : ClosedSubmodule 𝕜 E)ᗮ = ⊤ := by ext x; simp
 
 @[simp]
-/--
-theorem `orthogonal_eq_top_iff` / 定理 `orthogonal_eq_top_iff`
-
-English:
-theorem orthogonal_eq_top_iff
-  statement: Kᗮ = ⊤ ↔ K = ⊥
-  proof: by
-  refine
-    ⟨?_, by rintro rfl; exact bot_orthogonal_eq_top⟩
-  intro h
-  have : K ⊓ Kᗮ = ⊥ := K.orthogonal_disjoint.eq_bot
-  rwa [h, inf_comm, top_inf_eq] at this
-
-中文:
-定理 orthogonal_eq_top_iff
-  结论: Kᗮ = ⊤ ↔ K = ⊥
-  证明: by
-  refine
-    ⟨?_, by rintro rfl; exact bot_orthogonal_eq_top⟩
-  intro h
-  have : K ⊓ Kᗮ = ⊥ := K.orthogonal_disjoint.eq_bot
-  rwa [h, inf_comm, top_inf_eq] at this
-
-Depends on / 依赖: K.orthogonal_disjoint.eq_bot, bot_orthogonal_eq_top, eq_bot, inf_comm, orthogonal_disjoint, top_inf_eq
+/-
+**ClosedSubmodule.orthogonal_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubmodu
+le`。
+形式化陈述：orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `ClosedSubmodule.orthogonal_disjoint`：orthogonal_disjoint : Disjoint K Kᗮ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `top_inf_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), ⊤ ⊓ a = a
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用定理 `ClosedSubmodule.bot_orthogonal_eq_top`：bot_orthogonal_eq_top : (⊥ : Clos
+edSubmodule 𝕜 E)ᗮ = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥ := by
   refine
@@ -2038,74 +1890,123 @@ theorem orthogonal_eq_top_iff : Kᗮ = ⊤ ↔ K = ⊥ := by
 /-- The orthogonal complement of the closure of a submodule (as a `Submodule`) is equal to
 the orthogonal complement. -/
 @[simp]
-/--
-lemma `orthogonal_closure` / 引理 `orthogonal_closure`
+/-
+**ClosedSubmodule.orthogonal_closure** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`
+。
+形式化陈述：orthogonal_closure (K : Submodule 𝕜 E) : (K.closure : Submodule 𝕜 E)ᗮ = Kᗮ
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.orthogonal_closure`：orthogonal_closure (K : Submodule 𝕜 E) : K
+.topologicalClosureᗮ = Kᗮ
 
-English:
-lemma orthogonal_closure
-  given: (K : Submodule 𝕜 E)
-  statement: (K.closure : Submodule 𝕜 E)ᗮ = Kᗮ
-  proof: by
-  rw [← Submodule.orthogonal_closure K]
-  congr
-
-中文:
-引理 orthogonal_closure
-  条件: (K : 子模 𝕜 E)
-  结论: (K.closure : 子模 𝕜 E)ᗮ = Kᗮ
-  证明: by
-  rw [← Submodule.orthogonal_closure K]
-  congr
-
-Depends on / 依赖: Submodule, Submodule.orthogonal_closure, orthogonal_closure
+--- 原说明 ---
+The orthogonal complement of the closure of a submodule (as a `Submodule`) is eq
+ual to
+the orthogonal complement.
 -/
 lemma orthogonal_closure (K : Submodule 𝕜 E) : (K.closure : Submodule 𝕜 E)ᗮ = Kᗮ := by
   rw [← Submodule.orthogonal_closure K]
   congr
 
-/--
-lemma `orthogonal_closure'` / 引理 `orthogonal_closure'`
+/-- The orthogonal complement of the closure of a submodule (as a `ClosedSubmodule`) is equal to
+the orthogonal complement. -/
+/-
+**ClosedSubmodule.orthogonal_closure'** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule
+`。
+形式化陈述：orthogonal_closure' (K : Submodule 𝕜 E) : K.closureᗮ = ⟨Kᗮ, K.isClosed_ort
+hogonal⟩
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.ext`：∀ {R : Type u_2} {M : Type u_3} {inst : Semiring R}
+ {inst_1 : AddCommMonoid M} {inst_2 : TopologicalSpace M}   {inst_3 : _root_.Mod
+ule R M} …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Submodule.isClosed_orthogonal`：isClosed_orthogonal : IsClosed (Kᗮ : Set 
+E)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `ClosedSubmodule.orthogonal_closure`：orthogonal_closure (K : Submodule 𝕜 
+E) : (K.closure : Submodule 𝕜 E)ᗮ = Kᗮ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma orthogonal_closure'
-  given: (K : Submodule 𝕜 E)
-  statement: K.closureᗮ = ⟨Kᗮ, K.isClosed_orthogonal⟩
-  proof: by
-  ext x; simp
-
-中文:
-引理 orthogonal_closure'
-  条件: (K : 子模 𝕜 E)
-  结论: K.closureᗮ = ⟨Kᗮ, K.isClosed_orthogonal⟩
-  证明: by
-  ext x; simp
+--- 原说明 ---
+The orthogonal complement of the closure of a submodule (as a `ClosedSubmodule`)
+ is equal to
+the orthogonal complement.
 -/
 lemma orthogonal_closure' (K : Submodule 𝕜 E) : K.closureᗮ = ⟨Kᗮ, K.isClosed_orthogonal⟩ := by
   ext x; simp
 
-/--
-lemma `orthogonal_closure''` / 引理 `orthogonal_closure''`
+/-- The orthogonal complement of the closure of a submodule (as a `ClosedSubmodule`) is equal to
+the closure of the orthogonal complement. -/
+/-
+**ClosedSubmodule.orthogonal_closure''** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodul
+e`。
+形式化陈述：orthogonal_closure'' (K : Submodule 𝕜 E) : K.closureᗮ = Kᗮ.closure
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Submodule.isClosed_orthogonal`：isClosed_orthogonal : IsClosed (Kᗮ : Set 
+E)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.closure_eq'`：closure_eq' {s : Submodule R M} (hs : IsClosed s.
+carrier) : s.closure = ⟨s, hs⟩
+· 使用引理 `ClosedSubmodule.orthogonal_closure'`：orthogonal_closure' (K : Submodule 
+𝕜 E) : K.closureᗮ = ⟨Kᗮ, K.isClosed_orthogonal⟩
 
-English:
-lemma orthogonal_closure''
-  given: (K : Submodule 𝕜 E)
-  statement: K.closureᗮ = Kᗮ.closure
-  proof: by
-  rw [Submodule.closure_eq' K.isClosed_orthogonal]
-  exact orthogonal_closure' K
-
-中文:
-引理 orthogonal_closure''
-  条件: (K : 子模 𝕜 E)
-  结论: K.closureᗮ = Kᗮ.closure
-  证明: by
-  rw [Submodule.closure_eq' K.isClosed_orthogonal]
-  exact orthogonal_closure' K
-
-Depends on / 依赖: K.isClosed_orthogonal, Submodule, Submodule.closure_eq, closure_eq, isClosed_orthogonal, orthogonal_closure
+--- 原说明 ---
+The orthogonal complement of the closure of a submodule (as a `ClosedSubmodule`)
+ is equal to
+the closure of the orthogonal complement.
 -/
 lemma orthogonal_closure'' (K : Submodule 𝕜 E) : K.closureᗮ = Kᗮ.closure := by
   rw [Submodule.closure_eq' K.isClosed_orthogonal]
   exact orthogonal_closure' K
 
 end ClosedSubmodule
+

@@ -79,24 +79,23 @@ Morphisms `(a, c, e) ⟶ (a', c', e')` are pairs of morphisms
 `(f₁ : a ⟶ a', f₂ : c ⟶ c')` compatible with the specified
 isomorphisms. -/
 @[kerodon 032Z]
-/--
-Definition of `CategoricalPullback` / `CategoricalPullback` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：{A : Type u₁} →   {B : Type u₂} →     {C : Type u₃} →       [inst : Catego
+ryTheory.Category.{v₁, u₁} A] →         [inst_1 : CategoryTheory.Category.{v₂, u
+₂} B] →           [inst_2 : CategoryTheory.Category.{v₃, u₃} C] →             Ca
+tegoryTheory.Functor A B → CategoryTheory.Functor C B → Type (max (max u₁ u₃) v₂
+)
+参数：max (max u₁ u₃) v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CategoricalPullback
-  parameters: where
-  axioms and operations (3):
-    - fst : A
-    - snd : C
-    - iso : F.obj fst ≅ G.obj snd
-
-中文:
-结构 CategoricalPullback
-  参数: where
-  公理与运算 (3 个):
-    - fst : A
-    - snd : C
-    - iso : F.obj fst ≅ G.obj snd
+--- 原说明 ---
+The `CategoricalPullback F G` is the category of triples
+`(a : A, c : C, F a ≅ G c)`.
+Morphisms `(a, c, e) ⟶ (a', c', e')` are pairs of morphisms
+`(f₁ : a ⟶ a', f₂ : c ⟶ c')` compatible with the specified
+isomorphisms.
 -/
 structure CategoricalPullback where
   /-- the first component element -/
@@ -116,26 +115,21 @@ variable {F G}
 /-- The Hom types for the categorical pullback are given by pairs of maps compatible with the
 structural isomorphisms. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.Hom** 是 Mathlib 中的一个结构，位于命名空间 `Categ
+oryTheory.Limits.CategoricalPullback`。
+形式化陈述：Hom (x y : F ⊡ G) where /-- the first component of `f : Hom x y` is a morp
+hism `x.fst ⟶ y.fst` -/ fst : x.fst ⟶ y.fst /-- the second component of `f : Hom
+ x y` is a morphism `x.snd ⟶ y.snd` -/ snd : x.snd ⟶ y.snd /-- the compatibility
+ condition on `fst` and `snd` with respect to the structure isomorphisms -/ w : 
+F.map fst ≫ y.iso.hom = x.iso.hom ≫ G.map snd
+参数：x y : F ⊡ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (x y : F ⊡ G)
-  axioms and operations (3):
-    - fst : x.fst ⟶ y.fst
-    - snd : x.snd ⟶ y.snd
-    - w : F.map fst ≫ y.iso.hom = x.iso.hom ≫ G.map snd  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (x y : F ⊡ G)
-  公理与运算 (3 个):
-    - fst : x.fst ⟶ y.fst
-    - snd : x.snd ⟶ y.snd
-    - w : F.map fst ≫ y.iso.hom = x.iso.hom ≫ G.map snd  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The Hom types for the categorical pullback are given by pairs of maps compatible
+ with the
+structural isomorphisms.
 -/
 structure Hom (x y : F ⊡ G) where
   /-- the first component of `f : Hom x y` is a morphism `x.fst ⟶ y.fst` -/
@@ -149,32 +143,10 @@ structure Hom (x y : F ⊡ G) where
 attribute [reassoc (attr := simp)] Hom.w
 
 @[simps! id_fst id_snd comp_fst comp_snd]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CategoricalPullback F G)
-  body: CategoricalPullback.Hom x y
-  id x :=
-    { fst := 𝟙 x.fst
-      snd := 𝟙 x.snd }
-  comp f g :=
-    { fst := f.fst ≫ g.fst
-      snd := f.snd ≫ g.snd }
-
-中文:
-实例 :
-  签名: 范畴 (CategoricalPullback F G)
-  定义体: CategoricalPullback.Hom x y
-  id x :=
-    { fst := 𝟙 x.fst
-      snd := 𝟙 x.snd }
-  comp f g :=
-    { fst := f.fst ≫ g.fst
-      snd := f.snd ≫ g.snd }
-
-Depends on / 依赖: CategoricalPullback, CategoricalPullback.Hom
+/-
+**CategoryTheory.Limits.CategoricalPullback.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits.CategoricalPullback`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CategoricalPullback F G) where
   Hom x y := CategoricalPullback.Hom x y
@@ -189,45 +161,54 @@ attribute [reassoc] comp_fst comp_snd
 
 /-- Naturality square for morphisms in the inverse direction. -/
 @[reassoc (attr := simp)]
-/--
-lemma `Hom.w'` / 引理 `Hom.w'`
+/-
+**CategoryTheory.Limits.CategoricalPullback.Hom.w'** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits.CategoricalPullback.Hom`。
+形式化陈述：∀ {A : Type u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Categor
+y.{v₁, u₁} A]   [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [inst_2 : Category
+Theory.Category.{v₃, u₃} C]   {F : CategoryTheory.Functor A B} {G : CategoryTheo
+ry.Functor C B}   {x y : CategoryTheory.Limits.CategoricalPullback F G} (f : x ⟶
+ y),   CategoryTheory.CategoryStruct.comp (G.map f.snd) y.iso.inv =     Category
+Theory.CategoryStruct.comp x.iso.inv (F.map f.fst)
+参数：f : x ⟶ y；G.map f.snd；F.map f.fst。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.comp_inv_eq`：comp_inv_eq (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : f ≫ α.inv = g ↔ f = g ≫ α.hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.Hom.w`：∀ {A : Type u₁} {B : Ty
+pe u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} B] [ins…
 
-English:
-lemma Hom.w'
-  given: {x y : F ⊡ G} (f : x ⟶ y)
-  proof: by
-  rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Eq.comm]; rw [Iso.inv_comp_eq]; rw [f.w]
-
-中文:
-引理 态射.w'
-  条件: {x y : F ⊡ G} (f : x ⟶ y)
-  证明: by
-  rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Eq.comm]; rw [Iso.inv_comp_eq]; rw [f.w]
-
-Depends on / 依赖: Category, Category.assoc, Eq.comm, Iso.comp_inv_eq, Iso.inv_comp_eq, comp_inv_eq, forget, inv_comp_eq, map_isIso
+--- 原说明 ---
+Naturality square for morphisms in the inverse direction.
 -/
 lemma Hom.w' {x y : F ⊡ G} (f : x ⟶ y) :
     G.map f.snd ≫ y.iso.inv = x.iso.inv ≫ F.map f.fst := by
-  rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Eq.comm]; rw [Iso.inv_comp_eq]; rw [f.w]
+  rw [Iso.comp_inv_eq, Category.assoc, Eq.comm, Iso.inv_comp_eq, f.w]
 
 /-- Extensionality principle for morphisms in `CategoricalPullback F G`. -/
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
+/-
+**CategoryTheory.Limits.CategoricalPullback.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：hom_ext {x y : F ⊡ G} {f g : x ⟶ y} (hₗ : f.fst = g.fst) (hᵣ : f.snd = g.s
+nd) : f = g
+参数：hₗ : f.fst = g.fst；hᵣ : f.snd = g.snd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.Hom.ext`：∀ {A : Type u₁} {B : 
+Type u₂} {C : Type u₃} {inst : CategoryTheory.Category.{v₁, u₁} A}   {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} B} {ins…
 
-English:
-theorem hom_ext
-  statement: {x y : F ⊡ G} {f g : x ⟶ y}
-  proof: by
-  apply Hom.ext <;> assumption
-
-中文:
-定理 hom_ext
-  结论: {x y : F ⊡ G} {f g : x ⟶ y}
-  证明: by
-  apply Hom.ext <;> assumption
-
-Depends on / 依赖: Hom.ext
+--- 原说明 ---
+Extensionality principle for morphisms in `CategoricalPullback F G`.
 -/
 theorem hom_ext {x y : F ⊡ G} {f g : x ⟶ y}
     (hₗ : f.fst = g.fst) (hᵣ : f.snd = g.snd) : f = g := by
@@ -239,22 +220,14 @@ variable (F G)
 
 /-- `CategoricalPullback.π₁ F G` is the first projection `CategoricalPullback F G ⥤ A`. -/
 @[simps]
-/--
-Definition of `π₁` / `π₁` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.CategoricalPullback`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₁
-  signature: : F ⊡ G ⥤ A where
-  body: x.fst
-  map f := f.fst
-
-中文:
-定义 π₁
-  签名: : F ⊡ G ⥤ A where
-  定义体: x.fst
-  map f := f.fst
-
-Depends on / 依赖: x.fst
+--- 原说明 ---
+`CategoricalPullback.π₁ F G` is the first projection `CategoricalPullback F G ⥤ 
+A`.
 -/
 def π₁ : F ⊡ G ⥤ A where
   obj x := x.fst
@@ -262,22 +235,14 @@ def π₁ : F ⊡ G ⥤ A where
 
 /-- `CategoricalPullback.π₂ F G` is the second projection `CategoricalPullback F G ⥤ C`. -/
 @[simps]
-/--
-Definition of `π₂` / `π₂` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.CategoricalPullback`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₂
-  signature: : F ⊡ G ⥤ C where
-  body: x.snd
-  map f := f.snd
-
-中文:
-定义 π₂
-  签名: : F ⊡ G ⥤ C where
-  定义体: x.snd
-  map f := f.snd
-
-Depends on / 依赖: x.snd
+--- 原说明 ---
+`CategoricalPullback.π₂ F G` is the second projection `CategoricalPullback F G ⥤
+ C`.
 -/
 def π₂ : F ⊡ G ⥤ C where
   obj x := x.snd
@@ -286,43 +251,33 @@ def π₂ : F ⊡ G ⥤ C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical categorical commutative square in which `CategoricalPullback F G` sits. -/
 @[simps!]
-/--
-Instance `catCommSq` / 实例 `catCommSq`
+/-
+**CategoryTheory.Limits.CategoricalPullback.catCommSq** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：catCommSq : CatCommSq (π₁ F G) (π₂ F G) F G where iso
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance catCommSq
-  signature: : CatCommSq (π₁ F G) (π₂ F G) F G where
-  body: NatIso.ofComponents (fun x => x.iso)
-
-中文:
-实例 catCommSq
-  签名: : CatCommSq (π₁ F G) (π₂ F G) F G where
-  定义体: NatIso.ofComponents (fun x => x.iso)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, x.iso
+--- 原说明 ---
+The canonical categorical commutative square in which `CategoricalPullback F G` 
+sits.
 -/
 instance catCommSq : CatCommSq (π₁ F G) (π₂ F G) F G where
-  iso := NatIso.ofComponents (fun x => x.iso)
+  iso := NatIso.ofComponents (fun x ↦ x.iso)
 
 variable {F G} in
 /-- Constructor for isomorphisms in `CategoricalPullback F G`. -/
 @[simps!]
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.mkIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.CategoricalPullback`。
+形式化陈述：mkIso {x y : F ⊡ G} (eₗ : x.fst ≅ y.fst) (eᵣ : x.snd ≅ y.snd) (w : F.map e
+ₗ.hom ≫ y.iso.hom = x.iso.hom ≫ G.map eᵣ.hom
+参数：eₗ : x.fst ≅ y.fst；eᵣ : x.snd ≅ y.snd。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso
-  signature: {x y : F ⊡ G}
-  body: ⟨eₗ.hom, eᵣ.hom, w⟩
-  inv := ⟨eₗ.inv, eᵣ.inv, by simpa using F.map eₗ.inv ≫= w.symm =≫ G.map eᵣ.inv⟩
-
-中文:
-定义 mkIso
-  签名: {x y : F ⊡ G}
-  定义体: ⟨eₗ.hom, eᵣ.hom, w⟩
-  inv := ⟨eₗ.inv, eᵣ.inv, by simpa using F.map eₗ.inv ≫= w.symm =≫ G.map eᵣ.inv⟩
-
-Depends on / 依赖: F.map, G.map, cat_disch, w.symm
+--- 原说明 ---
+Constructor for isomorphisms in `CategoricalPullback F G`.
 -/
 def mkIso {x y : F ⊡ G}
     (eₗ : x.fst ≅ y.fst) (eᵣ : x.snd ≅ y.snd)
@@ -335,71 +290,43 @@ section
 
 variable {x y : F ⊡ G} (f : x ⟶ y) [IsIso f]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso f.fst
-  body: inferInstanceAs (IsIso ((π₁ _ _).mapIso (asIso f)).hom)
-
-中文:
-实例 :
-  签名: 是同构 f.fst
-  定义体: inferInstanceAs (IsIso ((π₁ _ _).mapIso (asIso f)).hom)
-
-Depends on / 依赖: mapIso
+/-
+**CategoryTheory.Limits.CategoricalPullback.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits.CategoricalPullback`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso f.fst :=
   inferInstanceAs (IsIso ((π₁ _ _).mapIso (asIso f)).hom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso f.snd
-  body: inferInstanceAs (IsIso ((π₂ _ _).mapIso (asIso f)).hom)
-
-@[simp, push ←]
-
-中文:
-实例 :
-  签名: 是同构 f.snd
-  定义体: inferInstanceAs (IsIso ((π₂ _ _).mapIso (asIso f)).hom)
-
-@[simp, push ←]
-
-Depends on / 依赖: mapIso
+/-
+**CategoryTheory.Limits.CategoricalPullback.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits.CategoricalPullback`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso f.snd :=
   inferInstanceAs (IsIso ((π₂ _ _).mapIso (asIso f)).hom)
 
 @[simp, push ←]
-/--
-lemma `inv_fst` / 引理 `inv_fst`
-
-English:
-lemma inv_fst
-  statement: (inv f).fst = inv f.fst
-  proof: by
-  symm
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp [← comp_fst]
-
-@[simp, push ←]
-
-中文:
-引理 inv_fst
-  结论: (inv f).fst = inv f.fst
-  证明: by
-  symm
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp [← comp_fst]
-
-@[simp, push ←]
-
-Depends on / 依赖: IsIso.inv_eq_of_hom_inv_id, comp_fst, inv_eq_of_hom_inv_id
+/-
+**CategoryTheory.Limits.CategoricalPullback.inv_fst** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：inv_fst : (inv f).fst = inv f.fst
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.instIsIsoFst`：∀ {A : Type u₁} 
+{B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_
+1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.IsIso.inv_eq_of_hom_inv_id`：inv_eq_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : inv f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_fst : (inv f).fst = inv f.fst := by
   symm
@@ -407,26 +334,27 @@ lemma inv_fst : (inv f).fst = inv f.fst := by
   simp [← comp_fst]
 
 @[simp, push ←]
-/--
-lemma `inv_snd` / 引理 `inv_snd`
-
-English:
-lemma inv_snd
-  statement: (inv f).snd = inv f.snd
-  proof: by
-  symm
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp [← comp_snd]
-
-中文:
-引理 inv_snd
-  结论: (inv f).snd = inv f.snd
-  证明: by
-  symm
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp [← comp_snd]
-
-Depends on / 依赖: IsIso.inv_eq_of_hom_inv_id, comp_snd, inv_eq_of_hom_inv_id
+/-
+**CategoryTheory.Limits.CategoricalPullback.inv_snd** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：inv_snd : (inv f).snd = inv f.snd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.instIsIsoSnd`：∀ {A : Type u₁} 
+{B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_
+1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.IsIso.inv_eq_of_hom_inv_id`：inv_eq_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : inv f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_snd : (inv f).snd = inv f.snd := by
   symm
@@ -435,20 +363,43 @@ lemma inv_snd : (inv f).snd = inv f.snd := by
 
 end
 
-/--
-lemma `isIso_iff` / 引理 `isIso_iff`
-
-English:
-lemma isIso_iff
-  given: {x y : F ⊡ G} (f : x ⟶ y)
-  proof: ⟨inferInstance, inferInstance⟩
-  mpr | ⟨h₁, h₂⟩ => ⟨⟨inv f.fst, inv f.snd, by cat_disch⟩, by cat_disch⟩
-
-中文:
-引理 isIso_iff
-  条件: {x y : F ⊡ G} (f : x ⟶ y)
-  证明: ⟨inferInstance, inferInstance⟩
-  mpr | ⟨h₁, h₂⟩ => ⟨⟨inv f.fst, inv f.snd, by cat_disch⟩, by cat_disch⟩
+/-
+**CategoryTheory.Limits.CategoricalPullback.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：isIso_iff {x y : F ⊡ G} (f : x ⟶ y) : IsIso f ↔ (IsIso f.fst ∧ IsIso f.snd
+) where mp h
+参数：f : x ⟶ y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.instIsIsoFst`：∀ {A : Type u₁} 
+{B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_
+1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.instIsIsoSnd`：∀ {A : Type u₁} 
+{B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_
+1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.Hom.w`：∀ {A : Type u₁} {B : Ty
+pe u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]   [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.hom_ext`：hom_ext {x y : F ⊡ G}
+ {f g : x ⟶ y} (hₗ : f.fst = g.fst) (hᵣ : f.snd = g.snd) : f = g
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 -/
 lemma isIso_iff {x y : F ⊡ G} (f : x ⟶ y) :
     IsIso f ↔ (IsIso f.fst ∧ IsIso f.snd) where
@@ -464,24 +415,34 @@ open CategoryTheory.Functor
 variable (X : Type u₄) [Category.{v₄} X]
 
 variable (F G) in
-/--
-Definition of `CatCommSqOver` / `CatCommSqOver` 的定义
+/-- The data of a categorical commutative square over a cospan `F, G` with cone point `X` is
+that of a functor `T : X ⥤ A`, a functor `L : X ⥤ C`, and a `CatCommSq T L F G`.
+Note that this is *exactly* what an object of
+`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)` is,
+so `CatCommSqOver F G X` is in equivalent to
+`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)`,
+though it is defined separately for performance reasons. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver** 是 Mathlib 中的一个归纳类型，位
+于命名空间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：{A : Type u₁} →   {B : Type u₂} →     {C : Type u₃} →       [inst : Catego
+ryTheory.Category.{v₁, u₁} A] →         [inst_1 : CategoryTheory.Category.{v₂, u
+₂} B] →           [inst_2 : CategoryTheory.Category.{v₃, u₃} C] →             Ca
+tegoryTheory.Functor A B →               CategoryTheory.Functor C B →           
+      (X : Type u₄) →                   [CategoryTheory.Category.{v₄, u₄} X] → T
+ype (max (max (max (max (max (max u₁ u₃) u₄) v₁) v₂) v₃) v₄)
+参数：X : Type u₄；max (max (max (max (max (max u₁ u₃) u₄) v₁) v₂) v₃) v₄。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CatCommSqOver
-  parameters: where
-  axioms and operations (3):
-    - fst : X ⥤ A
-    - snd : X ⥤ C
-    - iso : fst ⋙ F ≅ snd ⋙ G
-
-中文:
-结构 CatCommSqOver
-  参数: where
-  公理与运算 (3 个):
-    - fst : X ⥤ A
-    - snd : X ⥤ C
-    - iso : fst ⋙ F ≅ snd ⋙ G
+--- 原说明 ---
+The data of a categorical commutative square over a cospan `F, G` with cone poin
+t `X` is
+that of a functor `T : X ⥤ A`, a functor `L : X ⥤ C`, and a `CatCommSq T L F G`.
+Note that this is *exactly* what an object of
+`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)` is,
+so `CatCommSqOver F G X` is in equivalent to
+`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)`,
+though it is defined separately for performance reasons.
 -/
 structure CatCommSqOver where
   /-- The first projection functor. -/
@@ -496,26 +457,21 @@ namespace CatCommSqOver
 /-- The Hom types for the categorical commutative squares over X are given by pairs of natural
 transformations compatible with the structural isomorphisms. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.Hom** 是 Mathlib 中的一个结构
+，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：Hom (x y : CatCommSqOver F G X) where /-- the first component of `f : Hom 
+x y` is a morphism `x.fst ⟶ y.fst` -/ fst : x.fst ⟶ y.fst /-- the second compone
+nt of `f : Hom x y` is a morphism `x.snd ⟶ y.snd` -/ snd : x.snd ⟶ y.snd /-- the
+ compatibility condition on `fst` and `snd` with respect to the structure isomor
+phisms -/ w : whiskerRight fst F ≫ y.iso.hom = x.iso.hom ≫ whiskerRight snd G
+参数：x y : CatCommSqOver F G X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (x y : CatCommSqOver F G X)
-  axioms and operations (3):
-    - fst : x.fst ⟶ y.fst
-    - snd : x.snd ⟶ y.snd
-    - w : whiskerRight fst F ≫ y.iso.hom = x.iso.hom ≫ whiskerRight snd G  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (x y : CatCommSqOver F G X)
-  公理与运算 (3 个):
-    - fst : x.fst ⟶ y.fst
-    - snd : x.snd ⟶ y.snd
-    - w : whiskerRight fst F ≫ y.iso.hom = x.iso.hom ≫ whiskerRight snd G  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The Hom types for the categorical commutative squares over X are given by pairs 
+of natural
+transformations compatible with the structural isomorphisms.
 -/
 structure Hom (x y : CatCommSqOver F G X) where
   /-- the first component of `f : Hom x y` is a morphism `x.fst ⟶ y.fst` -/
@@ -529,36 +485,10 @@ structure Hom (x y : CatCommSqOver F G X) where
 attribute [reassoc (attr := simp)] Hom.w
 
 @[simps! id_fst_app id_snd_app comp_fst_app comp_snd_app]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CatCommSqOver F G X)
-  body: CatCommSqOver.Hom X x y
-  id x :=
-    { fst := 𝟙 x.fst
-      snd := 𝟙 x.snd }
-  comp f g :=
-    { fst := f.fst ≫ g.fst
-      snd := f.snd ≫ g.snd }
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (CatCommSqOver F G X)
-  定义体: CatCommSqOver.Hom X x y
-  id x :=
-    { fst := 𝟙 x.fst
-      snd := 𝟙 x.snd }
-  comp f g :=
-    { fst := f.fst ≫ g.fst
-      snd := f.snd ≫ g.snd }
-
-@[ext]
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.Hom
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CatCommSqOver F G X) where
   Hom x y := CatCommSqOver.Hom X x y
@@ -570,20 +500,17 @@ instance : Category (CatCommSqOver F G X) where
       snd := f.snd ≫ g.snd }
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {S S' : CatCommSqOver F G X} {f g : S ⟶ S'}
-  proof: Hom.ext h₁ h₂
-
-中文:
-引理 hom_ext
-  结论: {S S' : CatCommSqOver F G X} {f g : S ⟶ S'}
-  证明: Hom.ext h₁ h₂
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：hom_ext {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (
+h₂ : f.snd = g.snd) : f = g
+参数：h₁ : f.fst = g.fst；h₂ : f.snd = g.snd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.Hom.ext`：∀ {A : 
+Type u₁} {B : Type u₂} {C : Type u₃} {inst : CategoryTheory.Category.{v₁, u₁} A}
+   {inst_1 : CategoryTheory.Category.{v₂, u₂} B} {ins…
 -/
 lemma hom_ext {S S' : CatCommSqOver F G X} {f g : S ⟶ S'}
     (h₁ : f.fst = g.fst) (h₂ : f.snd = g.snd) : f = g :=
@@ -591,47 +518,33 @@ lemma hom_ext {S S' : CatCommSqOver F G X} {f g : S ⟶ S'}
 
 /-- Interpret a `CatCommSqOver F G X` as a `CatCommSq`. -/
 @[simps]
-/--
-Instance `asSquare` / 实例 `asSquare`
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.asSquare** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：asSquare (S : CatCommSqOver F G X) : CatCommSq S.fst S.snd F G where iso
+参数：S : CatCommSqOver F G X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance asSquare
-  signature: (S : CatCommSqOver F G X)
-  body: S.iso
-
-@[reassoc (attr := simp)]
-
-中文:
-实例 asSquare
-  签名: (S : CatCommSqOver F G X)
-  定义体: S.iso
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.iso
+--- 原说明 ---
+Interpret a `CatCommSqOver F G X` as a `CatCommSq`.
 -/
 instance asSquare (S : CatCommSqOver F G X) : CatCommSq S.fst S.snd F G where
   iso := S.iso
 
 @[reassoc (attr := simp)]
-/--
-lemma `iso_hom_naturality` / 引理 `iso_hom_naturality`
-
-English:
-lemma iso_hom_naturality
-  given: (S : CatCommSqOver F G X) {x x' : X} (f : x ⟶ x')
-  proof: S.iso.hom.naturality f
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 iso_hom_naturality
-  条件: (S : CatCommSqOver F G X) {x x' : X} (f : x ⟶ x')
-  证明: S.iso.hom.naturality f
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: S.iso.hom.naturality, naturality
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.iso_hom_naturality** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`
+。
+形式化陈述：iso_hom_naturality (S : CatCommSqOver F G X) {x x' : X} (f : x ⟶ x') : F.m
+ap (S.fst.map f) ≫ S.iso.hom.app x' = S.iso.hom.app x ≫ G.map (S.snd.map f)
+参数：S : CatCommSqOver F G X；f : x ⟶ x'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma iso_hom_naturality (S : CatCommSqOver F G X) {x x' : X} (f : x ⟶ x') :
     F.map (S.fst.map f) ≫ S.iso.hom.app x' =
@@ -639,20 +552,19 @@ lemma iso_hom_naturality (S : CatCommSqOver F G X) {x x' : X} (f : x ⟶ x') :
   S.iso.hom.naturality f
 
 @[reassoc (attr := simp)]
-/--
-lemma `w_app` / 引理 `w_app`
-
-English:
-lemma w_app
-  given: {S S' : CatCommSqOver F G X} (φ : S ⟶ S') (x : X)
-  proof: NatTrans.congr_app φ.w x
-
-中文:
-引理 w_app
-  条件: {S S' : CatCommSqOver F G X} (φ : S ⟶ S') (x : X)
-  证明: NatTrans.congr_app φ.w x
-
-Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.w_app** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：w_app {S S' : CatCommSqOver F G X} (φ : S ⟶ S') (x : X) : F.map (φ.fst.app
+ x) ≫ S'.iso.hom.app x = S.iso.hom.app x ≫ G.map (φ.snd.app x)
+参数：φ : S ⟶ S'；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.congr_app`：congr_app {α β : F ⟶ G} (h : α = β) (
+X : C) : α.app X = β.app X
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.Hom.w`：∀ {A : Ty
+pe u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A]  
+ [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
 -/
 lemma w_app {S S' : CatCommSqOver F G X} (φ : S ⟶ S') (x : X) :
     F.map (φ.fst.app x) ≫ S'.iso.hom.app x =
@@ -663,22 +575,15 @@ variable (F G)
 
 /-- The "first projection" of a CatCommSqOver as a functor. -/
 @[simps!]
-/--
-Definition of `fstFunctor` / `fstFunctor` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.fstFunctor** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：fstFunctor : CatCommSqOver F G X ⥤ X ⥤ A where obj S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fstFunctor
-  signature: : CatCommSqOver F G X ⥤ X ⥤ A where
-  body: S.fst
-  map f := f.fst
-
-中文:
-定义 fstFunctor
-  签名: : CatCommSqOver F G X ⥤ X ⥤ A where
-  定义体: S.fst
-  map f := f.fst
-
-Depends on / 依赖: S.fst
+--- 原说明 ---
+The "first projection" of a CatCommSqOver as a functor.
 -/
 def fstFunctor : CatCommSqOver F G X ⥤ X ⥤ A where
   obj S := S.fst
@@ -686,22 +591,15 @@ def fstFunctor : CatCommSqOver F G X ⥤ X ⥤ A where
 
 /-- The "second projection" of a CatCommSqOver as a functor. -/
 @[simps!]
-/--
-Definition of `sndFunctor` / `sndFunctor` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.sndFunctor** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：sndFunctor : CatCommSqOver F G X ⥤ X ⥤ C where obj S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sndFunctor
-  signature: : CatCommSqOver F G X ⥤ X ⥤ C where
-  body: S.snd
-  map f := f.snd
-
-中文:
-定义 sndFunctor
-  签名: : CatCommSqOver F G X ⥤ X ⥤ C where
-  定义体: S.snd
-  map f := f.snd
-
-Depends on / 依赖: S.snd
+--- 原说明 ---
+The "second projection" of a CatCommSqOver as a functor.
 -/
 def sndFunctor : CatCommSqOver F G X ⥤ X ⥤ C where
   obj S := S.snd
@@ -710,52 +608,36 @@ def sndFunctor : CatCommSqOver F G X ⥤ X ⥤ C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The structure isomorphism of a `CatCommSqOver` as a natural transformation. -/
 @[simps!]
-/--
-Definition of `e` / `e` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.e** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：e : fstFunctor F G X ⋙ (whiskeringRight X A B).obj F ≅ sndFunctor F G X ⋙ 
+(whiskeringRight X C B).obj G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition e
-  signature: :
-  body: NatIso.ofComponents (fun S => S.iso)
-
-中文:
-定义 e
-  签名: :
-  定义体: NatIso.ofComponents (fun S => S.iso)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, S.iso, ofComponents
+--- 原说明 ---
+The structure isomorphism of a `CatCommSqOver` as a natural transformation.
 -/
 def e :
     fstFunctor F G X ⋙ (whiskeringRight X A B).obj F ≅
     sndFunctor F G X ⋙ (whiskeringRight X C B).obj G :=
-  NatIso.ofComponents (fun S => S.iso)
+  NatIso.ofComponents (fun S ↦ S.iso)
 
 set_option backward.defeqAttrib.useBackward true in
 variable {F G X} in
 /-- A constructor for isomorphisms in CatCommSqOver -/
 @[simps!]
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.mkIso** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：mkIso {S S' : CatCommSqOver F G X} (eₗ : S.fst ≅ S'.fst) (eᵣ : S.snd ≅ S'.
+snd) (w : whiskerRight eₗ.hom F ≫ S'.iso.hom = S.iso.hom ≫ whiskerRight eᵣ.hom G
+参数：eₗ : S.fst ≅ S'.fst；eᵣ : S.snd ≅ S'.snd。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso
-  signature: {S S' : CatCommSqOver F G X}
-  body: ⟨eₗ.hom, eᵣ.hom, w⟩
-  inv := ⟨eₗ.inv, eᵣ.inv, by
-    ext t
-    simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using
-      congr_app (whiskerRight eₗ.inv F ≫= w.symm =≫ whiskerRight eᵣ.inv G) t⟩
-
-中文:
-定义 mkIso
-  签名: {S S' : CatCommSqOver F G X}
-  定义体: ⟨eₗ.hom, eᵣ.hom, w⟩
-  inv := ⟨eₗ.inv, eᵣ.inv, by
-    ext t
-    simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using
-      congr_app (whiskerRight eₗ.inv F ≫= w.symm =≫ whiskerRight eᵣ.inv G) t⟩
-
-Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, cat_disch, congr_app, map_comp, map_comp_assoc, w.symm, whiskerRight
+--- 原说明 ---
+A constructor for isomorphisms in CatCommSqOver
 -/
 def mkIso {S S' : CatCommSqOver F G X}
     (eₗ : S.fst ≅ S'.fst) (eᵣ : S.snd ≅ S'.snd)
@@ -778,40 +660,15 @@ variable (F G)
 set_option backward.defeqAttrib.useBackward true in
 /-- Interpret a functor to the categorical pullback as a `CatCommSqOver`. -/
 @[simps!]
-/--
-Definition of `toCatCommSqOver` / `toCatCommSqOver` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.toCatCommSqOver** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：toCatCommSqOver : (X ⥤ F ⊡ G) ⥤ CatCommSqOver F G X where obj J
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCatCommSqOver
-  signature: : (X ⥤ F ⊡ G) ⥤ CatCommSqOver F G X where
-  body: { fst := J ⋙ π₁ F G
-      snd := J ⋙ π₂ F G
-      iso :=
-        associator _ _ _ ≪≫
-          isoWhiskerLeft J (catCommSq F G).iso ≪≫
-          (associator _ _ _).symm }
-  map {J J'} F :=
-    { fst := whiskerRight F (π₁ _ _)
-      snd := whiskerRight F (π₂ _ _) }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-中文:
-定义 toCatCommSqOver
-  签名: : (X ⥤ F ⊡ G) ⥤ CatCommSqOver F G X where
-  定义体: { fst := J ⋙ π₁ F G
-      snd := J ⋙ π₂ F G
-      iso :=
-        associator _ _ _ ≪≫
-          isoWhiskerLeft J (catCommSq F G).iso ≪≫
-          (associator _ _ _).symm }
-  map {J J'} F :=
-    { fst := whiskerRight F (π₁ _ _)
-      snd := whiskerRight F (π₂ _ _) }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-Depends on / 依赖: associator, catCommSq, intros, isoWhiskerLeft, map_comp, map_id, whiskerRight
+--- 原说明 ---
+Interpret a functor to the categorical pullback as a `CatCommSqOver`.
 -/
 def toCatCommSqOver : (X ⥤ F ⊡ G) ⥤ CatCommSqOver F G X where
   obj J :=
@@ -829,44 +686,25 @@ def toCatCommSqOver : (X ⥤ F ⊡ G) ⥤ CatCommSqOver F G X where
 
 /-- Interpret a `CatCommSqOver` as a functor to the categorical pullback. -/
 @[simps!]
-/--
-Definition of `CatCommSqOver.toFunctorToCategoricalPullback` / `CatCommSqOver.toFunctorToCategoricalPullback` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.toFunctorToCategorical
+Pullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.Ca
+tCommSqOver`。
+形式化陈述：{A : Type u₁} →   {B : Type u₂} →     {C : Type u₃} →       [inst : Catego
+ryTheory.Category.{v₁, u₁} A] →         [inst_1 : CategoryTheory.Category.{v₂, u
+₂} B] →           [inst_2 : CategoryTheory.Category.{v₃, u₃} C] →             (F
+ : CategoryTheory.Functor A B) →               (G : CategoryTheory.Functor C B) 
+→                 (X : Type u₄) →                   [inst_3 : CategoryTheory.Cat
+egory.{v₄, u₄} X] →                     CategoryTheory.Functor (CategoryTheory.L
+imits.CategoricalPullback.CatCommSqOver F G X)                       (CategoryTh
+eory.Functor X (CategoryTheory.Limits.CategoricalPullback F G))
+参数：F : CategoryTheory.Functor A B；G : CategoryTheory.Functor C B；X : Type u₄；Cat
+egoryTheory.Limits.CategoricalPullback.CatCommSqOver F G X；CategoryTheory.Functo
+r X (CategoryTheory.Limits.CategoricalPullback F G)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CatCommSqOver.toFunctorToCategoricalPullback
-  signature: :
-  body: { obj x :=
-        { fst := S.fst.obj x
-          snd := S.snd.obj x
-          iso := S.iso.app x }
-      map {x y} f :=
-        { fst := S.fst.map f
-          snd := S.snd.map f } }
-  map {S S'} φ :=
-    { app x :=
-        { fst := φ.fst.app x
-          snd := φ.snd.app x } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-中文:
-定义 CatCommSqOver.toFunctorToCategoricalPullback
-  签名: :
-  定义体: { obj x :=
-        { fst := S.fst.obj x
-          snd := S.snd.obj x
-          iso := S.iso.app x }
-      map {x y} f :=
-        { fst := S.fst.map f
-          snd := S.snd.map f } }
-  map {S S'} φ :=
-    { app x :=
-        { fst := φ.fst.app x
-          snd := φ.snd.app x } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-Depends on / 依赖: S.fst.map, S.fst.obj, S.iso.app, S.snd.map, S.snd.obj, fst.app, intros, map_comp, map_id, snd.app
+--- 原说明 ---
+Interpret a `CatCommSqOver` as a functor to the categorical pullback.
 -/
 def CatCommSqOver.toFunctorToCategoricalPullback :
     (CatCommSqOver F G X) ⥤ X ⥤ F ⊡ G where
@@ -891,63 +729,32 @@ set_option backward.defeqAttrib.useBackward true in
 of categories between functors `X ⥤ (F ⊡ G)` and categorical commutative squares
 over X. -/
 @[simps!]
-/--
-Definition of `functorEquiv` / `functorEquiv` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.functorEquiv** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：functorEquiv : (X ⥤ F ⊡ G) ≌ CatCommSqOver F G X where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEquiv
-  signature: : (X ⥤ F ⊡ G) ≌ CatCommSqOver F G X where
-  body: toCatCommSqOver F G X
-  inverse := CatCommSqOver.toFunctorToCategoricalPullback F G X
-  unitIso :=
-    NatIso.ofComponents
-      (fun _ => NatIso.ofComponents (fun _ => CategoricalPullback.mkIso (.refl _) (.refl _)
-        (by simp))) (by intros; ext <;> simp)
-  counitIso :=
-    NatIso.ofComponents
-      (fun _ => CatCommSqOver.mkIso
-        (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
-        (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
-        (by ext; simp))
-  functor_unitIso_comp := by intros; ext <;> simp
-
-中文:
-定义 functorEquiv
-  签名: : (X ⥤ F ⊡ G) ≌ CatCommSqOver F G X where
-  定义体: toCatCommSqOver F G X
-  inverse := CatCommSqOver.toFunctorToCategoricalPullback F G X
-  unitIso :=
-    NatIso.ofComponents
-      (fun _ => NatIso.ofComponents (fun _ => CategoricalPullback.mkIso (.refl _) (.refl _)
-        (by simp))) (by intros; ext <;> simp)
-  counitIso :=
-    NatIso.ofComponents
-      (fun _ => CatCommSqOver.mkIso
-        (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
-        (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
-        (by ext; simp))
-  functor_unitIso_comp := by intros; ext <;> simp
-
-Depends on / 依赖: toCatCommSqOver
+--- 原说明 ---
+The universal property of categorical pullbacks, stated as an equivalence
+of categories between functors `X ⥤ (F ⊡ G)` and categorical commutative squares
+over X.
 -/
 def functorEquiv : (X ⥤ F ⊡ G) ≌ CatCommSqOver F G X where
   functor := toCatCommSqOver F G X
   inverse := CatCommSqOver.toFunctorToCategoricalPullback F G X
   unitIso :=
     NatIso.ofComponents
-      (fun _ => NatIso.ofComponents (fun _ => CategoricalPullback.mkIso (.refl _) (.refl _)
+      (fun _ ↦ NatIso.ofComponents (fun _ ↦ CategoricalPullback.mkIso (.refl _) (.refl _)
         (by simp))) (by intros; ext <;> simp)
   counitIso :=
     NatIso.ofComponents
-      (fun _ => CatCommSqOver.mkIso
+      (fun _ ↦ CatCommSqOver.mkIso
         (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
+          (fun _ ↦ .refl _) (by intros; simp))
         (NatIso.ofComponents
-          (fun _ => .refl _) (by intros; simp))
+          (fun _ ↦ .refl _) (by intros; simp))
         (by ext; simp))
   functor_unitIso_comp := by intros; ext <;> simp
 
@@ -958,32 +765,22 @@ set_option backward.defeqAttrib.useBackward true in
 construct such an isomorphism, it suffices to produce isomorphisms after whiskering with
 the projections, and compatible with the canonical 2-commutative square . -/
 @[simps!]
-/--
-Definition of `mkNatIso` / `mkNatIso` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.mkNatIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：mkNatIso {J K : X ⥤ F ⊡ G} (e₁ : J ⋙ π₁ F G ≅ K ⋙ π₁ F G) (e₂ : J ⋙ π₂ F G
+ ≅ K ⋙ π₂ F G) (coh : whiskerRight e₁.hom F ≫ (associator _ _ _).hom ≫ whiskerLe
+ft K (CatCommSq.iso (π₁ F G) (π₂ F G) F G).hom ≫ (associator _ _ _).inv = (assoc
+iator _ _ _).hom ≫ whiskerLeft J (CatCommSq.iso (π₁ F G) (π₂ F G) F G).hom ≫ (as
+sociator _ _ _).inv ≫ whiskerRight e₂.hom G
+参数：e₁ : J ⋙ π₁ F G ≅ K ⋙ π₁ F G；e₂ : J ⋙ π₂ F G ≅ K ⋙ π₂ F G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNatIso
-  signature: {J K : X ⥤ F ⊡ G}
-  body: NatIso.ofComponents
-    (fun x => CategoricalPullback.mkIso (e₁.app x) (e₂.app x)
-      (by simpa using NatTrans.congr_app coh x))
-    (fun {_ _} f => by
-      ext
-      · exact e₁.hom.naturality f
-      · exact e₂.hom.naturality f)
-
-中文:
-定义 mk自然数Iso
-  签名: {J K : X ⥤ F ⊡ G}
-  定义体: NatIso.ofComponents
-    (fun x => CategoricalPullback.mkIso (e₁.app x) (e₂.app x)
-      (by simpa using NatTrans.congr_app coh x))
-    (fun {_ _} f => by
-      ext
-      · exact e₁.hom.naturality f
-      · exact e₂.hom.naturality f)
-
-Depends on / 依赖: CategoricalPullback, CategoricalPullback.mkIso, NatIso, NatIso.ofComponents, NatTrans, NatTrans.congr_app, cat_disch, congr_app, hom.naturality, naturality, ofComponents
+--- 原说明 ---
+A constructor for natural isomorphisms of functors `X ⥤ CategoricalPullback`: to
+construct such an isomorphism, it suffices to produce isomorphisms after whisker
+ing with
+the projections, and compatible with the canonical 2-commutative square .
 -/
 def mkNatIso {J K : X ⥤ F ⊡ G}
     (e₁ : J ⋙ π₁ F G ≅ K ⋙ π₁ F G) (e₂ : J ⋙ π₂ F G ≅ K ⋙ π₂ F G)
@@ -997,9 +794,9 @@ def mkNatIso {J K : X ⥤ F ⊡ G}
         whiskerRight e₂.hom G := by cat_disch) :
     J ≅ K :=
   NatIso.ofComponents
-    (fun x => CategoricalPullback.mkIso (e₁.app x) (e₂.app x)
+    (fun x ↦ CategoricalPullback.mkIso (e₁.app x) (e₂.app x)
       (by simpa using NatTrans.congr_app coh x))
-    (fun {_ _} f => by
+    (fun {_ _} f ↦ by
       ext
       · exact e₁.hom.naturality f
       · exact e₂.hom.naturality f)
@@ -1007,24 +804,29 @@ def mkNatIso {J K : X ⥤ F ⊡ G}
 /-- To check equality of two natural transformations of functors to a `CategoricalPullback`, it
 suffices to do so after whiskering with the projections. -/
 @[ext]
-/--
-lemma `natTrans_ext` / 引理 `natTrans_ext`
+/-
+**CategoryTheory.Limits.CategoricalPullback.natTrans_ext** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：natTrans_ext {J K : X ⥤ F ⊡ G} {α β : J ⟶ K} (e₁ : whiskerRight α (π₁ F G)
+ = whiskerRight β (π₁ F G)) (e₂ : whiskerRight α (π₂ F G) = whiskerRight β (π₂ F
+ G)) : α = β
+参数：e₁ : whiskerRight α (π₁ F G) = whiskerRight β (π₁ F G)；e₂ : whiskerRight α (π
+₂ F G) = whiskerRight β (π₂ F G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.hom_ext`：hom_ext {x y : F ⊡ G}
+ {f g : x ⟶ y} (hₗ : f.fst = g.fst) (hᵣ : f.snd = g.snd) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma natTrans_ext
-  proof: by
-  ext x
-  · exact congrArg (fun t => t.app x) e₁
-  · exact congrArg (fun t => t.app x) e₂
-
-中文:
-引理 natTrans_ext
-  证明: by
-  ext x
-  · exact congrArg (fun t => t.app x) e₁
-  · exact congrArg (fun t => t.app x) e₂
-
-Depends on / 依赖: t.app
+--- 原说明 ---
+To check equality of two natural transformations of functors to a `CategoricalPu
+llback`, it
+suffices to do so after whiskering with the projections.
 -/
 lemma natTrans_ext
     {J K : X ⥤ F ⊡ G} {α β : J ⟶ K}
@@ -1032,8 +834,8 @@ lemma natTrans_ext
     (e₂ : whiskerRight α (π₂ F G) = whiskerRight β (π₂ F G)) :
     α = β := by
   ext x
-  · exact congrArg (fun t => t.app x) e₁
-  · exact congrArg (fun t => t.app x) e₂
+  · exact congrArg (fun t ↦ t.app x) e₁
+  · exact congrArg (fun t ↦ t.app x) e₂
 
 section
 
@@ -1042,20 +844,49 @@ variable {J K : X ⥤ F ⊡ G}
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `toCatCommSqOver_mapIso_mkNatIso_eq_mkIso` / 引理 `toCatCommSqOver_mapIso_mkNatIso_eq_mkIso`
-
-English:
-lemma toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
-  proof: by
-  ext <;> simp
-
-中文:
-引理 toCatCommSqOver_mapIso_mk自然数Iso_eq_mkIso
-  证明: by
-  ext <;> simp
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, cat_disch, functorEquiv, mapIso, mkNatIso, toCatCommSqOver
+/-
+**CategoryTheory.Limits.CategoricalPullback.toCatCommSqOver_mapIso_mkNatIso_eq_m
+kIso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：toCatCommSqOver_mapIso_mkNatIso_eq_mkIso (coh : whiskerRight e₁.hom F ≫ (a
+ssociator _ _ _).hom ≫ whiskerLeft K (CatCommSq.iso (π₁ F G) (π₂ F G) F G).hom ≫
+ (associator _ _ _).inv = (associator _ _ _).hom ≫ whiskerLeft J (CatCommSq.iso 
+(π₁ F G) (π₂ F G) F G).hom ≫ (associator _ _ _).inv ≫ whiskerRight e₂.hom G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.toCatCommSqOver_map_fst_app`：∀
+ {A : Type u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, 
+u₁} A]   [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.mkNatIso_hom_app_fst`：∀ {A : T
+ype u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A] 
+  [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.mkIso_hom_fst`：∀
+ {A : Type u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, 
+u₁} A]   [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.toCatCommSqOver_map_snd_app`：∀
+ {A : Type u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, 
+u₁} A]   [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.mkNatIso_hom_app_snd`：∀ {A : T
+ype u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} A] 
+  [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
+· 使用定理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.mkIso_hom_snd`：∀
+ {A : Type u₁} {B : Type u₂} {C : Type u₃} [inst : CategoryTheory.Category.{v₁, 
+u₁} A]   [inst_1 : CategoryTheory.Category.{v₂, u₂} B] [ins…
 -/
 lemma toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
     (coh :
@@ -1073,24 +904,48 @@ lemma toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mkNatIso_eq` / 引理 `mkNatIso_eq`
+/-- Comparing mkNatIso with the corresponding construction one can deduce from
+`functorEquiv`. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.mkNatIso_eq** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits.CategoricalPullback`。
+形式化陈述：mkNatIso_eq (coh : whiskerRight e₁.hom F ≫ (associator _ _ _).hom ≫ whiske
+rLeft K (CatCommSq.iso (π₁ F G) (π₂ F G) F G).hom ≫ (associator _ _ _).inv = (as
+sociator _ _ _).hom ≫ whiskerLeft J (CatCommSq.iso (π₁ F G) (π₂ F G) F G).hom ≫ 
+(associator _ _ _).inv ≫ whiskerRight e₂.hom G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.toCatCommSqOver_mapIso_mkNatIs
+o_eq_mkIso`：toCatCommSqOver_mapIso_mkNatIso_eq_mkIso (coh : whiskerRight e₁.hom 
+F ≫ (associator _ _ _).hom ≫ whiskerLeft K (CatCommSq.iso (π₁ F G) (π₂ F…
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.natTrans_ext`：natTrans_ext {J 
+K : X ⥤ F ⊡ G} {α β : J ⟶ K} (e₁ : whiskerRight α (π₁ F G) = whiskerRight β (π₁ 
+F G)) (e₂ : whiskerRight α (π₂ F G) = whiske…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_comp`：whiskerRight_comp {G H K : C ⥤
+ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E) : whiskerRight (α ≫ β) F = whiskerRight 
+α F ≫ whiskerRight β F
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mkNatIso_eq
-  proof: by
-  rw [← toCatCommSqOver_mapIso_mkNatIso_eq_mkIso e₁ e₂ coh]
-  dsimp [Equivalence.fullyFaithfulFunctor]
-  ext <;> simp
-
-中文:
-引理 mk自然数Iso_eq
-  证明: by
-  rw [← toCatCommSqOver_mapIso_mkNatIso_eq_mkIso e₁ e₂ coh]
-  dsimp [Equivalence.fullyFaithfulFunctor]
-  ext <;> simp
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, Equivalence, Equivalence.fullyFaithfulFunctor, cat_disch, fullyFaithfulFunctor, fullyFaithfulFunctor.preimageIso, functorEquiv, mkNatIso, preimageIso, toCatCommSqOver, toCatCommSqOver_mapIso_mkNatIso_eq_mkIso
+--- 原说明 ---
+Comparing mkNatIso with the corresponding construction one can deduce from
+`functorEquiv`.
 -/
 lemma mkNatIso_eq
     (coh :
@@ -1130,84 +985,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Functorially transform a `CatCommSqOver F G X` by whiskering it with a
 `CatCospanTransform`. -/
 @[simps!]
-/--
-Definition of `transform` / `transform` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：transform (X : Type u₇) [Category.{v₇} X] : CatCospanTransform F G F₁ G₁ ⥤
+ CatCommSqOver F G X ⥤ CatCommSqOver F₁ G₁ X where obj ψ
+参数：X : Type u₇。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transform
-  signature: (X : Type u₇) [Category.{v₇} X]
-  body: { obj S :=
-      { fst := S.fst ⋙ ψ.left
-        snd := S.snd ⋙ ψ.right
-        iso :=
-          (Functor.associator ..) ≪≫
-            isoWhiskerLeft S.fst ψ.squareLeft.iso.symm ≪≫
-            (Functor.associator ..).symm ≪≫
-            isoWhiskerRight S.iso ψ.base ≪≫
-            (Functor.associator ..) ≪≫
-            isoWhiskerLeft S.snd ψ.squareRight.iso ≪≫
-            (Functor.associator ..).symm }
-      map {x y} f :=
-        { fst := whiskerRight f.fst ψ.left
-          snd := whiskerRight f.snd ψ.right
-          w := by
-            ext x
-            simp [← Functor.map_comp_assoc] }
-      map_id := by intros; ext <;> simp
-      map_comp := by intros; ext <;> simp }
-  map {ψ ψ'} η :=
-    { app S :=
-      { fst.app y := η.left.app (S.fst.obj y)
-        fst.naturality {x y} f := by simp
-        snd.app y := η.right.app (S.snd.obj y)
-        snd.naturality {x y} f := by simp
-        w := by
-          ext t
-          have := ψ.squareLeft.iso.inv.app (S.fst.obj t) ≫=
-            η.left_coherence_app (S.fst.obj t)
-          simp only [Iso.inv_hom_id_app_assoc] at this
-          simp [this] } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-中文:
-定义 transform
-  签名: (X : 类型u₇) [范畴.{v₇} X]
-  定义体: { obj S :=
-      { fst := S.fst ⋙ ψ.left
-        snd := S.snd ⋙ ψ.right
-        iso :=
-          (Functor.associator ..) ≪≫
-            isoWhiskerLeft S.fst ψ.squareLeft.iso.symm ≪≫
-            (Functor.associator ..).symm ≪≫
-            isoWhiskerRight S.iso ψ.base ≪≫
-            (Functor.associator ..) ≪≫
-            isoWhiskerLeft S.snd ψ.squareRight.iso ≪≫
-            (Functor.associator ..).symm }
-      map {x y} f :=
-        { fst := whiskerRight f.fst ψ.left
-          snd := whiskerRight f.snd ψ.right
-          w := by
-            ext x
-            simp [← Functor.map_comp_assoc] }
-      map_id := by intros; ext <;> simp
-      map_comp := by intros; ext <;> simp }
-  map {ψ ψ'} η :=
-    { app S :=
-      { fst.app y := η.left.app (S.fst.obj y)
-        fst.naturality {x y} f := by simp
-        snd.app y := η.right.app (S.snd.obj y)
-        snd.naturality {x y} f := by simp
-        w := by
-          ext t
-          have := ψ.squareLeft.iso.inv.app (S.fst.obj t) ≫=
-            η.left_coherence_app (S.fst.obj t)
-          simp only [Iso.inv_hom_id_app_assoc] at this
-          simp [this] } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-Depends on / 依赖: Functor, Functor.associator, Functor.map_comp_assoc, S.fst, S.iso, S.snd, associator, f.fst, f.snd, intros, isoWhiskerLeft, isoWhiskerRight, map_comp, map_comp_assoc, map_id, squareLeft, squareLeft.iso.symm, squareRight, squareRight.iso, whiskerRight
+--- 原说明 ---
+Functorially transform a `CatCommSqOver F G X` by whiskering it with a
+`CatCospanTransform`.
 -/
 def transform (X : Type u₇) [Category.{v₇} X] :
     CatCospanTransform F G F₁ G₁ ⥤
@@ -1256,28 +1045,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The construction `CatCommSqOver.transform` respects vertical composition
 of `CatCospanTransform`s. -/
 @[simps!]
-/--
-Definition of `transformObjComp` / `transformObjComp` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformObjComp** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：transformObjComp (X : Type u₁₀) [Category.{v₁₀} X] (ψ : CatCospanTransform
+ F G F₁ G₁) (ψ' : CatCospanTransform F₁ G₁ F₂ G₂) : (transform X).obj (ψ.comp ψ'
+) ≅ (transform X).obj ψ ⋙ (transform X).obj ψ'
+参数：X : Type u₁₀；ψ : CatCospanTransform F G F₁ G₁；ψ' : CatCospanTransform F₁ G₁ F
+₂ G₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transformObjComp
-  signature: (X : Type u₁₀) [Category.{v₁₀} X]
-  body: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _).symm
-      (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
-
-中文:
-定义 transformObjComp
-  签名: (X : 类型u₁₀) [范畴.{v₁₀} X]
-  定义体: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _).symm
-      (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, Functor, Functor.associator, NatIso, NatIso.ofComponents, associator, ofComponents
+--- 原说明 ---
+The construction `CatCommSqOver.transform` respects vertical composition
+of `CatCospanTransform`s.
 -/
 def transformObjComp (X : Type u₁₀) [Category.{v₁₀} X]
     (ψ : CatCospanTransform F G F₁ G₁) (ψ' : CatCospanTransform F₁ G₁ F₂ G₂) :
@@ -1286,33 +1067,25 @@ def transformObjComp (X : Type u₁₀) [Category.{v₁₀} X]
     CatCommSqOver.mkIso
       (Functor.associator _ _ _).symm
       (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
+    (fun {x y} f ↦ by ext <;> simp)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The construction `CatCommSqOver.transform` respects the identity
 `CatCospanTransform`s. -/
 @[simps!]
-/--
-Definition of `transformObjId` / `transformObjId` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformObjId** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：transformObjId (X : Type u₄) [Category.{v₄} X] (F : A ⥤ B) (G : C ⥤ B) : (
+transform X).obj (CatCospanTransform.id F G) ≅ 𝟭 _
+参数：X : Type u₄；F : A ⥤ B；G : C ⥤ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transformObjId
-  signature: (X : Type u₄) [Category.{v₄} X]
-  body: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.rightUnitor _)
-      (Functor.rightUnitor _)
-
-中文:
-定义 transformObjId
-  签名: (X : 类型u₄) [范畴.{v₄} X]
-  定义体: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.rightUnitor _)
-      (Functor.rightUnitor _)
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, Functor, Functor.rightUnitor, NatIso, NatIso.ofComponents, ofComponents, rightUnitor
+--- 原说明 ---
+The construction `CatCommSqOver.transform` respects the identity
+`CatCospanTransform`s.
 -/
 def transformObjId (X : Type u₄) [Category.{v₄} X]
     (F : A ⥤ B) (G : C ⥤ B) :
@@ -1325,18 +1098,35 @@ def transformObjId (X : Type u₄) [Category.{v₄} X]
 open scoped CatCospanTransform
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transform_map_whiskerLeft` / 引理 `transform_map_whiskerLeft`
-
-English:
-lemma transform_map_whiskerLeft
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transform_map_whiskerLeft
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform_map_whiskerL
+eft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatComm
+SqOver`。
+形式化陈述：transform_map_whiskerLeft (X : Type u₇) [Category.{v₇} X] (ψ : CatCospanTr
+ansform F G F₁ G₁) {φ φ' : CatCospanTransform F₁ G₁ F₂ G₂} (α : φ ⟶ φ') : (trans
+form X).map (ψ ◁ α) = (transformObjComp X ψ φ).hom ≫ whiskerLeft (transform X |>
+.obj ψ) (transform X |>.map α) ≫ (transformObjComp X ψ φ').inv
+参数：X : Type u₇；ψ : CatCospanTransform F G F₁ G₁；α : φ ⟶ φ'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma transform_map_whiskerLeft
     (X : Type u₇) [Category.{v₇} X]
@@ -1349,18 +1139,35 @@ lemma transform_map_whiskerLeft
   ext <;> simp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transform_map_whiskerRight` / 引理 `transform_map_whiskerRight`
-
-English:
-lemma transform_map_whiskerRight
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transform_map_whiskerRight
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform_map_whiskerR
+ight** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCom
+mSqOver`。
+形式化陈述：transform_map_whiskerRight (X : Type u₇) [Category.{v₇} X] {ψ ψ' : CatCosp
+anTransform F G F₁ G₁} (α : ψ ⟶ ψ') (φ : CatCospanTransform F₁ G₁ F₂ G₂) : (tran
+sform X).map (α ▷ φ) = (transformObjComp X ψ φ).hom ≫ whiskerRight (transform X 
+|>.map α) (transform X |>.obj φ) ≫ (transformObjComp X ψ' φ).inv
+参数：X : Type u₇；α : ψ ⟶ ψ'；φ : CatCospanTransform F₁ G₁ F₂ G₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma transform_map_whiskerRight
     (X : Type u₇) [Category.{v₇} X]
@@ -1373,18 +1180,46 @@ lemma transform_map_whiskerRight
   ext <;> simp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transform_map_associator` / 引理 `transform_map_associator`
-
-English:
-lemma transform_map_associator
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transform_map_associator
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform_map_associat
+or** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommS
+qOver`。
+形式化陈述：transform_map_associator {A₃ : Type u₁₀} {B₃ : Type u₁₁} {C₃ : Type u₁₂} [
+Category.{v₁₀} A₃] [Category.{v₁₁} B₃] [Category.{v₁₂} C₃] {F₃ : A₃ ⥤ B₃} {G₃ : 
+C₃ ⥤ B₃} (X : Type u₁₃) [Category.{v₁₃} X] (ψ : CatCospanTransform F G F₁ G₁) (φ
+ : CatCospanTransform F₁ G₁ F₂ G₂) (τ : CatCospanTransform F₂ G₂ F₃ G₃) : (trans
+form X).map (α_ ψ φ τ).hom = (transformObjComp X (ψ.comp φ) τ).hom ≫ whiskerRigh
+t (transformObjComp X ψ φ).hom (transform X |>.obj τ) ≫ ((transform X |>.obj ψ).
+associator (transform X |>
+参数：X : Type u₁₃；ψ : CatCospanTransform F G F₁ G₁；φ : CatCospanTransform F₁ G₁ F₂
+ G₂；τ : CatCospanTransform F₂ G₂ F₃ G₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma transform_map_associator
     {A₃ : Type u₁₀} {B₃ : Type u₁₁} {C₃ : Type u₁₂}
@@ -1403,44 +1238,75 @@ lemma transform_map_associator
   ext <;> simp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transform_map_leftUnitor` / 引理 `transform_map_leftUnitor`
-
-English:
-lemma transform_map_leftUnitor
-  statement: (X : Type u₇) [Category.{v₇} X]
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transform_map_leftUnitor
-  结论: (X : 类型u₇) [范畴.{v₇} X]
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform_map_leftUnit
+or** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommS
+qOver`。
+形式化陈述：transform_map_leftUnitor (X : Type u₇) [Category.{v₇} X] (ψ : CatCospanTra
+nsform F G F₁ G₁) : (transform X).map (fun_ ψ).hom = (transformObjComp X (.id F 
+G) ψ).hom ≫ whiskerRight (transformObjId X F G).hom (transform X |>.obj ψ) ≫ (tr
+ansform X |>.obj ψ).leftUnitor.hom
+参数：X : Type u₇；ψ : CatCospanTransform F G F₁ G₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma transform_map_leftUnitor (X : Type u₇) [Category.{v₇} X]
     (ψ : CatCospanTransform F G F₁ G₁) :
-    (transform X).map (fun_ ψ).hom =
+    (transform X).map (λ_ ψ).hom =
     (transformObjComp X (.id F G) ψ).hom ≫
       whiskerRight (transformObjId X F G).hom (transform X |>.obj ψ) ≫
       (transform X |>.obj ψ).leftUnitor.hom := by
   ext <;> simp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transform_map_rightUnitor` / 引理 `transform_map_rightUnitor`
-
-English:
-lemma transform_map_rightUnitor
-  statement: (X : Type u₇) [Category.{v₇} X]
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transform_map_rightUnitor
-  结论: (X : 类型u₇) [范畴.{v₇} X]
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transform_map_rightUni
+tor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatComm
+SqOver`。
+形式化陈述：transform_map_rightUnitor (X : Type u₇) [Category.{v₇} X] (ψ : CatCospanTr
+ansform F G F₁ G₁) : (transform X).map (ρ_ ψ).hom = (transformObjComp X ψ (.id F
+₁ G₁)).hom ≫ whiskerLeft (transform X |>.obj ψ) (transformObjId X F₁ G₁).hom ≫ (
+transform X |>.obj ψ).rightUnitor.hom
+参数：X : Type u₇；ψ : CatCospanTransform F G F₁ G₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma transform_map_rightUnitor (X : Type u₇) [Category.{v₇} X]
     (ψ : CatCospanTransform F G F₁ G₁) :
@@ -1465,54 +1331,18 @@ set_option backward.defeqAttrib.useBackward true in
 `CatCommSqOver F G Y ⥤ CatCommSqOver F G X` by whiskering left the underlying
 categorical commutative square by U. -/
 @[simps!]
-/--
-Definition of `precompose` / `precompose` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：precompose : (X ⥤ Y) ⥤ CatCommSqOver F G Y ⥤ CatCommSqOver F G X where obj
+ U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precompose
-  signature: :
-  body: { obj S :=
-        { fst := U ⋙ S.fst
-          snd := U ⋙ S.snd
-          iso :=
-            (Functor.associator _ _ _) ≪≫
-              isoWhiskerLeft U S.iso ≪≫
-              (Functor.associator _ _ _).symm }
-      map {S S'} φ :=
-        { fst := whiskerLeft U φ.fst
-          snd := whiskerLeft U φ.snd }
-      map_id := by intros; ext <;> simp
-      map_comp := by intros; ext <;> simp }
-  map {U V} α :=
-    { app x :=
-      { fst := whiskerRight α x.fst
-        snd := whiskerRight α x.snd } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-中文:
-定义 precompose
-  签名: :
-  定义体: { obj S :=
-        { fst := U ⋙ S.fst
-          snd := U ⋙ S.snd
-          iso :=
-            (Functor.associator _ _ _) ≪≫
-              isoWhiskerLeft U S.iso ≪≫
-              (Functor.associator _ _ _).symm }
-      map {S S'} φ :=
-        { fst := whiskerLeft U φ.fst
-          snd := whiskerLeft U φ.snd }
-      map_id := by intros; ext <;> simp
-      map_comp := by intros; ext <;> simp }
-  map {U V} α :=
-    { app x :=
-      { fst := whiskerRight α x.fst
-        snd := whiskerRight α x.snd } }
-  map_id := by intros; ext <;> simp
-  map_comp := by intros; ext <;> simp
-
-Depends on / 依赖: Functor, Functor.associator, S.fst, S.iso, S.snd, associator, intros, isoWhiskerLeft, map_comp, map_id, whiskerLeft, whiskerRight, x.fst, x.snd
+--- 原说明 ---
+A functor `U : X ⥤ Y` (functorially) induces a functor
+`CatCommSqOver F G Y ⥤ CatCommSqOver F G X` by whiskering left the underlying
+categorical commutative square by U.
 -/
 def precompose :
     (X ⥤ Y) ⥤ CatCommSqOver F G Y ⥤ CatCommSqOver F G X where
@@ -1541,22 +1371,15 @@ set_option backward.defeqAttrib.useBackward true in
 variable (X) in
 /-- The construction `precompose` respects functor identities. -/
 @[simps!]
-/--
-Definition of `precomposeObjId` / `precomposeObjId` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjId** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：precomposeObjId : (precompose F G).obj (𝟭 X) ≅ 𝟭 (CatCommSqOver F G X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precomposeObjId
-  signature: :
-  body: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso (Functor.leftUnitor _) (Functor.leftUnitor _)
-
-中文:
-定义 precomposeObjId
-  签名: :
-  定义体: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso (Functor.leftUnitor _) (Functor.leftUnitor _)
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, Functor, Functor.leftUnitor, NatIso, NatIso.ofComponents, leftUnitor, ofComponents
+--- 原说明 ---
+The construction `precompose` respects functor identities.
 -/
 def precomposeObjId :
     (precompose F G).obj (𝟭 X) ≅ 𝟭 (CatCommSqOver F G X) :=
@@ -1567,26 +1390,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The construction `precompose` respects functor composition. -/
 @[simps!]
-/--
-Definition of `precomposeObjComp` / `precomposeObjComp` 的定义
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjComp** 是 
+Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver`。
+形式化陈述：precomposeObjComp (U : X ⥤ Y) (V : Y ⥤ Z) : (precompose F G).obj (U ⋙ V) ≅
+ (precompose F G).obj V ⋙ (precompose F G).obj U
+参数：U : X ⥤ Y；V : Y ⥤ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precomposeObjComp
-  signature: (U : X ⥤ Y) (V : Y ⥤ Z)
-  body: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _)
-      (Functor.associator _ _ _)
-
-中文:
-定义 precomposeObjComp
-  签名: (U : X ⥤ Y) (V : Y ⥤ Z)
-  定义体: NatIso.ofComponents fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _)
-      (Functor.associator _ _ _)
-
-Depends on / 依赖: CatCommSqOver, CatCommSqOver.mkIso, Functor, Functor.associator, NatIso, NatIso.ofComponents, associator, ofComponents
+--- 原说明 ---
+The construction `precompose` respects functor composition.
 -/
 def precomposeObjComp (U : X ⥤ Y) (V : Y ⥤ Z) :
     (precompose F G).obj (U ⋙ V) ≅
@@ -1598,20 +1412,35 @@ def precomposeObjComp (U : X ⥤ Y) (V : Y ⥤ Z) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precompose_map_whiskerLeft` / 引理 `precompose_map_whiskerLeft`
-
-English:
-lemma precompose_map_whiskerLeft
-  given: (U : X ⥤ Y) {V W : Y ⥤ Z} (α : V ⟶ W)
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precompose_map_whiskerLeft
-  条件: (U : X ⥤ Y) {V W : Y ⥤ Z} (α : V ⟶ W)
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose_map_whisker
+Left** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCom
+mSqOver`。
+形式化陈述：precompose_map_whiskerLeft (U : X ⥤ Y) {V W : Y ⥤ Z} (α : V ⟶ W) : (precom
+pose F G).map (whiskerLeft U α) = (precomposeObjComp F G U V).hom ≫ whiskerRight
+ (precompose F G |>.map α) (precompose F G |>.obj U) ≫ (precomposeObjComp F G U 
+W).inv
+参数：U : X ⥤ Y；α : V ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma precompose_map_whiskerLeft (U : X ⥤ Y) {V W : Y ⥤ Z} (α : V ⟶ W) :
     (precompose F G).map (whiskerLeft U α) =
@@ -1622,20 +1451,35 @@ lemma precompose_map_whiskerLeft (U : X ⥤ Y) {V W : Y ⥤ Z} (α : V ⟶ W) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precompose_map_whiskerRight` / 引理 `precompose_map_whiskerRight`
-
-English:
-lemma precompose_map_whiskerRight
-  given: {U V : X ⥤ Y} (α : U ⟶ V) (W : Y ⥤ Z)
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precompose_map_whiskerRight
-  条件: {U V : X ⥤ Y} (α : U ⟶ V) (W : Y ⥤ Z)
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose_map_whisker
+Right** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCo
+mmSqOver`。
+形式化陈述：precompose_map_whiskerRight {U V : X ⥤ Y} (α : U ⟶ V) (W : Y ⥤ Z) : (preco
+mpose F G).map (whiskerRight α W) = (precomposeObjComp F G U W).hom ≫ whiskerLef
+t (precompose F G |>.obj W) (precompose F G |>.map α) ≫ (precomposeObjComp F G V
+ W).inv
+参数：α : U ⟶ V；W : Y ⥤ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma precompose_map_whiskerRight {U V : X ⥤ Y} (α : U ⟶ V) (W : Y ⥤ Z) :
     (precompose F G).map (whiskerRight α W) =
@@ -1646,20 +1490,44 @@ lemma precompose_map_whiskerRight {U V : X ⥤ Y} (α : U ⟶ V) (W : Y ⥤ Z) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precompose_map_associator` / 引理 `precompose_map_associator`
-
-English:
-lemma precompose_map_associator
-  statement: {T : Type u₇} [Category.{v₇} T]
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precompose_map_associator
-  结论: {T : 类型u₇} [范畴.{v₇} T]
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose_map_associa
+tor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatComm
+SqOver`。
+形式化陈述：precompose_map_associator {T : Type u₇} [Category.{v₇} T] (U : X ⥤ Y) (V :
+ Y ⥤ Z) (W : Z ⥤ T) : (precompose F G).map (U.associator V W).hom = (precomposeO
+bjComp F G (U ⋙ V) W).hom ≫ whiskerLeft (precompose F G |>.obj W) (precomposeObj
+Comp F G U V).hom ≫ ((precompose F G |>.obj W).associator _ _).inv ≫ whiskerRigh
+t (precomposeObjComp F G V W).inv (precompose F G |>.obj U) ≫ (precomposeObjComp
+ F G _ _).inv
+参数：U : X ⥤ Y；V : Y ⥤ Z；W : Z ⥤ T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma precompose_map_associator {T : Type u₇} [Category.{v₇} T]
     (U : X ⥤ Y) (V : Y ⥤ Z) (W : Z ⥤ T) :
@@ -1673,20 +1541,38 @@ lemma precompose_map_associator {T : Type u₇} [Category.{v₇} T]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precompose_map_leftUnitor` / 引理 `precompose_map_leftUnitor`
-
-English:
-lemma precompose_map_leftUnitor
-  given: (U : X ⥤ Y)
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precompose_map_leftUnitor
-  条件: (U : X ⥤ Y)
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose_map_leftUni
+tor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatComm
+SqOver`。
+形式化陈述：precompose_map_leftUnitor (U : X ⥤ Y) : (precompose F G).map U.leftUnitor.
+hom = (precomposeObjComp F G (𝟭 _) U).hom ≫ whiskerLeft (precompose F G |>.obj U
+) (precomposeObjId F G X).hom ≫ (Functor.rightUnitor _).hom
+参数：U : X ⥤ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma precompose_map_leftUnitor (U : X ⥤ Y) :
     (precompose F G).map U.leftUnitor.hom =
@@ -1697,20 +1583,38 @@ lemma precompose_map_leftUnitor (U : X ⥤ Y) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precompose_map_rightUnitor` / 引理 `precompose_map_rightUnitor`
-
-English:
-lemma precompose_map_rightUnitor
-  given: (U : X ⥤ Y)
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precompose_map_rightUnitor
-  条件: (U : X ⥤ Y)
-  证明: by
-  ext <;> simp
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precompose_map_rightUn
+itor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.CatCom
+mSqOver`。
+形式化陈述：precompose_map_rightUnitor (U : X ⥤ Y) : (precompose F G).map U.rightUnito
+r.hom = (precomposeObjComp F G U (𝟭 _)).hom ≫ whiskerRight (precomposeObjId F G 
+Y).hom (precompose F G |>.obj U) ≫ (Functor.leftUnitor _).hom
+参数：U : X ⥤ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma precompose_map_rightUnitor (U : X ⥤ Y) :
     (precompose F G).map U.rightUnitor.hom =
@@ -1737,26 +1641,26 @@ categorical cospans with value in pseudofunctors
 (its value on the categorical cospan `F, G` being the pseudofunctor
 `precompose F G|>.obj _`). -/
 @[simps!]
-/--
-Instance `precomposeObjTransformObjSquare` / 实例 `precomposeObjTransformObjSquare`
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjTransform
+ObjSquare** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.C
+atCommSqOver`。
+形式化陈述：precomposeObjTransformObjSquare {X : Type u₇} {Y : Type u₈} [Category.{v₇}
+ X] [Category.{v₈} Y] (ψ : CatCospanTransform F G F₁ G₁) (U : X ⥤ Y) : CatCommSq
+ (precompose F G |>.obj U) (transform Y |>.obj ψ) (transform X |>.obj ψ) (precom
+pose F₁ G₁ |>.obj U) where iso
+参数：ψ : CatCospanTransform F G F₁ G₁；U : X ⥤ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance precomposeObjTransformObjSquare
-  body: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _)
-      (Functor.associator _ _ _))
-    (fun {x y} f => by ext <;> simp)
-
-中文:
-实例 precomposeObjTransformObjSquare
-  定义体: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _)
-      (Functor.associator _ _ _))
-    (fun {x y} f => by ext <;> simp)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The canonical compatibility square between (the object components of)
+`precompose` and `transform`.
+This is a "naturality square" if we think as `transform _|>.obj _` as the
+(app component of the) map component of a pseudofunctor from the bicategory of
+categorical cospans with value in pseudofunctors
+(its value on the categorical cospan `F, G` being the pseudofunctor
+`precompose F G|>.obj _`).
 -/
 instance precomposeObjTransformObjSquare
     {X : Type u₇} {Y : Type u₈} [Category.{v₇} X] [Category.{v₈} Y]
@@ -1768,24 +1672,21 @@ instance precomposeObjTransformObjSquare
     CatCommSqOver.mkIso
       (Functor.associator _ _ _)
       (Functor.associator _ _ _))
-    (fun {x y} f => by ext <;> simp)
+    (fun {x y} f ↦ by ext <;> simp)
 
 -- Compare the next 3 lemmas with the components of a strong natural transform
 -- of pseudofunctors
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precomposeObjTransformObjSquare_iso_hom_naturality₂` / 引理 `precomposeObjTransformObjSquare_iso_hom_naturality₂`
+/-- The square `precomposeObjTransformObjSquare` is itself natural. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjTransform
+ObjSquare_iso_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Ca
+tegoricalPullback.CatCommSqOver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma precomposeObjTransformObjSquare_iso_hom_naturality₂
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precomposeObjTransformObjSquare_iso_hom_naturality₂
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `precomposeObjTransformObjSquare` is itself natural.
 -/
 lemma precomposeObjTransformObjSquare_iso_hom_naturality₂
     {X : Type u₇} {Y : Type u₈} [Category.{v₇} X] [Category.{v₈} Y]
@@ -1799,18 +1700,45 @@ lemma precomposeObjTransformObjSquare_iso_hom_naturality₂
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precomposeObjTransformObjSquare_iso_hom_id` / 引理 `precomposeObjTransformObjSquare_iso_hom_id`
+/-- The square `precomposeObjTransformOBjSquare` respects identities. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjTransform
+ObjSquare_iso_hom_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Categorica
+lPullback.CatCommSqOver`。
+形式化陈述：precomposeObjTransformObjSquare_iso_hom_id (ψ : CatCospanTransform F G F₁ 
+G₁) (X : Type u₇) [Category.{v₇} X] : (CatCommSq.iso (precompose F G |>.obj <| 𝟭
+ X) (transform X |>.obj ψ) (transform X |>.obj ψ) (precompose F₁ G₁ |>.obj <| 𝟭 
+X)).hom ≫ whiskerLeft (transform X |>.obj ψ) (precomposeObjId F₁ G₁ X).hom = whi
+skerRight (precomposeObjId F G X).hom (transform X |>.obj ψ) ≫ (Functor.leftUnit
+or _).hom ≫ (Functor.rightUnitor _).inv
+参数：ψ : CatCospanTransform F G F₁ G₁；X : Type u₇。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma precomposeObjTransformObjSquare_iso_hom_id
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precomposeObjTransformObjSquare_iso_hom_id
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `precomposeObjTransformOBjSquare` respects identities.
 -/
 lemma precomposeObjTransformObjSquare_iso_hom_id
     (ψ : CatCospanTransform F G F₁ G₁) (X : Type u₇) [Category.{v₇} X] :
@@ -1823,18 +1751,49 @@ lemma precomposeObjTransformObjSquare_iso_hom_id
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `precomposeObjTransformObjSquare_iso_hom_comp` / 引理 `precomposeObjTransformObjSquare_iso_hom_comp`
+/-- The square `precomposeTransformSquare` respects compositions. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.precomposeObjTransform
+ObjSquare_iso_hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Categori
+calPullback.CatCommSqOver`。
+形式化陈述：precomposeObjTransformObjSquare_iso_hom_comp {X : Type u₇} {Y : Type u₈} {
+Z : Type u₉} [Category.{v₇} X] [Category.{v₈} Y] [Category.{v₉} Z] (ψ : CatCospa
+nTransform F G F₁ G₁) (U : X ⥤ Y) (V : Y ⥤ Z) : (CatCommSq.iso (precompose F G |
+>.obj <| U ⋙ V) (transform Z |>.obj ψ) (transform X |>.obj ψ) (precompose F₁ G₁ 
+|>.obj <| U ⋙ V)).hom ≫ whiskerLeft (transform Z |>.obj ψ) (precomposeObjComp F₁
+ G₁ U V).hom = whiskerRight (precomposeObjComp F G U V).hom (transform X |>.obj 
+ψ) ≫ (Functor.associator _
+参数：ψ : CatCospanTransform F G F₁ G₁；U : X ⥤ Y；V : Y ⥤ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma precomposeObjTransformObjSquare_iso_hom_comp
-  proof: by
-  ext <;> simp
-
-中文:
-引理 precomposeObjTransformObjSquare_iso_hom_comp
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `precomposeTransformSquare` respects compositions.
 -/
 lemma precomposeObjTransformObjSquare_iso_hom_comp
     {X : Type u₇} {Y : Type u₈} {Z : Type u₉}
@@ -1863,26 +1822,25 @@ This is a "naturality square" if we think as `precompose` as the
 bicategory of categories to pseudofunctors of categorical cospans
 (its value on `X` being the pseudofunctor `transform X _`). -/
 @[simps!]
-/--
-Instance `transformObjPrecomposeObjSquare` / 实例 `transformObjPrecomposeObjSquare`
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformObjPrecompose
+ObjSquare** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.CategoricalPullback.C
+atCommSqOver`。
+形式化陈述：transformObjPrecomposeObjSquare {X : Type u₇} {Y : Type u₈} [Category.{v₇}
+ X] [Category.{v₈} Y] (U : X ⥤ Y) (ψ : CatCospanTransform F G F₁ G₁) : CatCommSq
+ (transform Y |>.obj ψ) (precompose F G |>.obj U) (precompose F₁ G₁ |>.obj U) (t
+ransform X |>.obj ψ) where iso
+参数：U : X ⥤ Y；ψ : CatCospanTransform F G F₁ G₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance transformObjPrecomposeObjSquare
-  body: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _).symm
-      (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
-
-中文:
-实例 transformObjPrecomposeObjSquare
-  定义体: NatIso.ofComponents (fun _ =>
-    CatCommSqOver.mkIso
-      (Functor.associator _ _ _).symm
-      (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The canonical compatibility square between (the object components of)
+`transform` and `precompose`.
+This is a "naturality square" if we think as `precompose` as the
+(app component of the) map component of a pseudofunctor from the opposite
+bicategory of categories to pseudofunctors of categorical cospans
+(its value on `X` being the pseudofunctor `transform X _`).
 -/
 instance transformObjPrecomposeObjSquare
     {X : Type u₇} {Y : Type u₈} [Category.{v₇} X] [Category.{v₈} Y]
@@ -1894,25 +1852,22 @@ instance transformObjPrecomposeObjSquare
     CatCommSqOver.mkIso
       (Functor.associator _ _ _).symm
       (Functor.associator _ _ _).symm)
-    (fun {x y} f => by ext <;> simp)
+    (fun {x y} f ↦ by ext <;> simp)
 
 -- Compare the next 3 lemmas with the components of a strong natural transform
 -- of pseudofunctors
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transformObjPrecomposeObjSquare_iso_hom_naturality₂` / 引理 `transformObjPrecomposeObjSquare_iso_hom_naturality₂`
+/-- The square `transformObjPrecomposeObjSquare` is itself natural. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformObjPrecompose
+ObjSquare_iso_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Ca
+tegoricalPullback.CatCommSqOver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma transformObjPrecomposeObjSquare_iso_hom_naturality₂
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transformObjPrecomposeObjSquare_iso_hom_naturality₂
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `transformObjPrecomposeObjSquare` is itself natural.
 -/
 lemma transformObjPrecomposeObjSquare_iso_hom_naturality₂
     {X : Type u₇} {Y : Type u₈} [Category.{v₇} X] [Category.{v₈} Y]
@@ -1925,18 +1880,43 @@ lemma transformObjPrecomposeObjSquare_iso_hom_naturality₂
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transformObjPrecomposeObjSquare_iso_hom_id` / 引理 `transformObjPrecomposeObjSquare_iso_hom_id`
+/-- The square `transformObjPrecomposeObjSquare` respects identities. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformObjPrecompose
+ObjSquare_iso_hom_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Categorica
+lPullback.CatCommSqOver`。
+形式化陈述：transformObjPrecomposeObjSquare_iso_hom_id {X : Type u₇} {Y : Type u₈} [Ca
+tegory.{v₇} X] [Category.{v₈} Y] (U : X ⥤ Y) (F : A ⥤ B) (G : C ⥤ B) : (CatCommS
+q.iso (transform Y |>.obj <| .id F G) (precompose F G |>.obj U) (precompose F G 
+|>.obj U) (transform X |>.obj <| .id F G)).hom ≫ whiskerLeft (precompose F G |>.
+obj U) (transformObjId X F G).hom = whiskerRight (transformObjId Y F G).hom (pre
+compose F G |>.obj U) ≫ (precompose F G |>.obj U).leftUnitor.hom ≫ (precompose F
+ G |>.obj U).rightUnitor.i
+参数：U : X ⥤ Y；F : A ⥤ B；G : C ⥤ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma transformObjPrecomposeObjSquare_iso_hom_id
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transformObjPrecomposeObjSquare_iso_hom_id
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `transformObjPrecomposeObjSquare` respects identities.
 -/
 lemma transformObjPrecomposeObjSquare_iso_hom_id
     {X : Type u₇} {Y : Type u₈} [Category.{v₇} X] [Category.{v₈} Y]
@@ -1951,18 +1931,50 @@ lemma transformObjPrecomposeObjSquare_iso_hom_id
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `transformPrecomposeObjSquare_iso_hom_comp` / 引理 `transformPrecomposeObjSquare_iso_hom_comp`
+/-- The square `transformPrecomposeSquare` respects compositions. -/
+/-
+**CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.transformPrecomposeObj
+Square_iso_hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Categorical
+Pullback.CatCommSqOver`。
+形式化陈述：transformPrecomposeObjSquare_iso_hom_comp {A₂ : Type u₇} {B₂ : Type u₈} {C
+₂ : Type u₉} [Category.{v₇} A₂] [Category.{v₈} B₂] [Category.{v₉} C₂] {F₂ : A₂ ⥤
+ B₂} {G₂ : C₂ ⥤ B₂} {X : Type u₁₀} {Y : Type u₁₁} [Category.{v₁₀} X] [Category.{
+v₁₁} Y] (U : X ⥤ Y) (ψ : CatCospanTransform F G F₁ G₁) (ψ' : CatCospanTransform 
+F₁ G₁ F₂ G₂) : (CatCommSq.iso (transform Y |>.obj <| ψ.comp ψ') (precompose F G 
+|>.obj U) (precompose F₂ G₂ |>.obj U) (transform X |>.obj <| ψ.comp ψ')).hom ≫ w
+hiskerLeft (precompose F G
+参数：U : X ⥤ Y；ψ : CatCospanTransform F G F₁ G₁；ψ' : CatCospanTransform F₁ G₁ F₂ G
+₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Limits.CategoricalPullback.CatCommSqOver.hom_ext`：hom_ext
+ {S S' : CatCommSqOver F G X} {f g : S ⟶ S'} (h₁ : f.fst = g.fst) (h₂ : f.snd = 
+g.snd) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma transformPrecomposeObjSquare_iso_hom_comp
-  proof: by
-  ext <;> simp
-
-中文:
-引理 transformPrecomposeObjSquare_iso_hom_comp
-  证明: by
-  ext <;> simp
+--- 原说明 ---
+The square `transformPrecomposeSquare` respects compositions.
 -/
 lemma transformPrecomposeObjSquare_iso_hom_comp
     {A₂ : Type u₇} {B₂ : Type u₈} {C₂ : Type u₉}
@@ -1995,3 +2007,4 @@ end CategoricalPullback
 end
 
 end CategoryTheory.Limits
+

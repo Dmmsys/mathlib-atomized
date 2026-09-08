@@ -39,7 +39,7 @@ universe v v' t u
 
 open Topology
 
-variable {ι : Type t} (X : ι -> Type u) [forall i, TopologicalSpace (X i)]
+variable {ι : Type t} (X : ι → Type u) [∀ i, TopologicalSpace (X i)]
   {Y : Type v} [tY : TopologicalSpace Y] {Z : Type v'} [TopologicalSpace Z]
 
 namespace TopologicalSpace
@@ -48,43 +48,48 @@ namespace TopologicalSpace
 a topological space `Y` is the topology that is coinduced
 by all continuous maps `X i → Y`. -/
 @[instance_reducible]
-/--
-Definition of `generatedBy` / `generatedBy` 的定义
+/-
+**TopologicalSpace.generatedBy** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace`。
+形式化陈述：generatedBy : TopologicalSpace Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition generatedBy
-  signature: : TopologicalSpace Y
-  body: ⨆ (i : ι) (f : C(X i, Y)), coinduced f inferInstance
-
-中文:
-定义 generatedBy
-  签名: : 拓扑空间 Y
-  定义体: ⨆ (i : ι) (f : C(X i, Y)), coinduced f inferInstance
-
-Depends on / 依赖: coinduced
+--- 原说明 ---
+Given a family of topological spaces `X i`, the `X`-generated topology on
+a topological space `Y` is the topology that is coinduced
+by all continuous maps `X i → Y`.
 -/
 def generatedBy : TopologicalSpace Y :=
   ⨆ (i : ι) (f : C(X i, Y)), coinduced f inferInstance
 
-/--
-lemma `generatedBy_eq_coinduced` / 引理 `generatedBy_eq_coinduced`
+/-- The `X`-generated topology is also coinduced by a single map out of a sigma type. -/
+/-
+**TopologicalSpace.generatedBy_eq_coinduced** 是 Mathlib 中的一个引理，位于命名空间 `Topologic
+alSpace`。
+形式化陈述：generatedBy_eq_coinduced : generatedBy X (Y
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.generatedBy.eq_1`：∀ {ι : Type t} (X : ι → Type u) [inst
+ : (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y],   T
+opologicalSpace.generat…
+· 使用定理 `instTopologicalSpaceSigma.eq_1`：∀ {ι : Type u_5} {X : ι → Type v} [t₂ : 
+(i : ι) → TopologicalSpace (X i)],   instTopologicalSpaceSigma = ⨆ i, Topologica
+lSpace.coinduced (Si…
+· 使用定理 `coinduced_iSup`：coinduced_iSup {ι : Sort w} {t : ι -> TopologicalSpace α
+} : (⨆ i, t i).coinduced f = ⨆ i, (t i).coinduced f
+· 使用定理 `iSup_sigma`：iSup_sigma {p : β -> Type*} {f : Sigma p -> α} : ⨆ x, f x = 
+⨆ (i) (j), f ⟨i, j⟩
 
-English:
-lemma generatedBy_eq_coinduced
-  proof: by
-  rw [generatedBy]; rw [instTopologicalSpaceSigma]; rw [coinduced_iSup]; rw [iSup_sigma]
-  rfl
-
-中文:
-引理 generatedBy_eq_coinduced
-  证明: by
-  rw [generatedBy]; rw [instTopologicalSpaceSigma]; rw [coinduced_iSup]; rw [iSup_sigma]
-  rfl
+--- 原说明 ---
+The `X`-generated topology is also coinduced by a single map out of a sigma type
+.
 -/
 lemma generatedBy_eq_coinduced :
     generatedBy X (Y := Y) =
-      coinduced (fun (x : (f : (i : ι) × C(X i, Y)) × X f.1) => x.1.2 x.2) inferInstance := by
-  rw [generatedBy]; rw [instTopologicalSpaceSigma]; rw [coinduced_iSup]; rw [iSup_sigma]
+      coinduced (fun (x : (f : (i : ι) × C(X i, Y)) × X f.1) ↦ x.1.2 x.2) inferInstance := by
+  rw [generatedBy, instTopologicalSpaceSigma, coinduced_iSup, iSup_sigma]
   rfl
 
 end TopologicalSpace
@@ -96,148 +101,151 @@ namespace Topology
 /-- Given a family of topological spaces `X i`, and a topological space `Y`,
 this is a type synonym for `Y` which we endow with the `X`-generated topology. -/
 @[nolint unusedArguments]
-/--
-Definition of `WithGeneratedByTopology` / `WithGeneratedByTopology` 的定义
+/-
+**Topology.WithGeneratedByTopology** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：WithGeneratedByTopology (X : ι -> Type u) [forall i, TopologicalSpace (X i
+)] (Y : Type v) [TopologicalSpace Y]
+参数：X : ι -> Type u；X i；Y : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithGeneratedByTopology
-  signature: (X : ι -> Type u) [forall i, TopologicalSpace (X i)]
-  body: Y
-
-中文:
-定义 WithGeneratedByTopology
-  签名: (X : ι -> 类型u) [对任意 i, 拓扑空间 (X i)]
-  定义体: Y
+--- 原说明 ---
+Given a family of topological spaces `X i`, and a topological space `Y`,
+this is a type synonym for `Y` which we endow with the `X`-generated topology.
 -/
-def WithGeneratedByTopology (X : ι -> Type u) [forall i, TopologicalSpace (X i)]
+def WithGeneratedByTopology (X : ι → Type u) [∀ i, TopologicalSpace (X i)]
     (Y : Type v) [TopologicalSpace Y] := Y
 
 namespace WithGeneratedByTopology
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The obvious bijection `WithGeneratedByTopology X Y ≃ Y`, where
+the source is endowed with the `X`-generated topology. See `continuous_equiv`
+for the continuity of `equiv`. The inverse map `equiv.symm` is continuous
+iff `Y` is `X`-generated, see `isGeneratedBy_iff`. -/
+/-
+**Topology.WithGeneratedByTopology.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Topology.Wit
+hGeneratedByTopology`。
+形式化陈述：equiv : WithGeneratedByTopology X Y ≃ Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition equiv
-  signature: : WithGeneratedByTopology X Y ≃ Y
-  body: Equiv.refl _
-
-中文:
-定义 equiv
-  签名: : WithGeneratedByTopology X Y ≃ Y
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The obvious bijection `WithGeneratedByTopology X Y ≃ Y`, where
+the source is endowed with the `X`-generated topology. See `continuous_equiv`
+for the continuity of `equiv`. The inverse map `equiv.symm` is continuous
+iff `Y` is `X`-generated, see `isGeneratedBy_iff`.
 -/
 def equiv : WithGeneratedByTopology X Y ≃ Y := Equiv.refl _
-
+/-
+**Topology.WithGeneratedByTopology.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithGene
+ratedByTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {Y : Type v} [TopologicalSpace Y] :
     TopologicalSpace (WithGeneratedByTopology X Y) :=
   -- fast_instance% .generatedBy X (Y := Y) fails
   letI : TopologicalSpace Y := .generatedBy X (Y := Y)
-inferInstanceAs TopologicalSpace Y
+  inferInstanceAs <| TopologicalSpace Y
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isOpen_iff` / 引理 `isOpen_iff`
-
-English:
-lemma isOpen_iff
-  given: {U : Set (WithGeneratedByTopology X Y)}
-  proof: by
-  simp [isOpen_iSup_iff, isOpen_coinduced, equiv, Equiv.refl]
-
-中文:
-引理 isOpen_iff
-  条件: {U : 集合 (WithGeneratedByTopology X Y)}
-  证明: by
-  simp [isOpen_iSup_iff, isOpen_coinduced, equiv, Equiv.refl]
-
-Depends on / 依赖: Equiv.refl, isOpen_coinduced, isOpen_iSup_iff
+/-
+**Topology.WithGeneratedByTopology.isOpen_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+y.WithGeneratedByTopology`。
+形式化陈述：isOpen_iff {U : Set (WithGeneratedByTopology X Y)} : IsOpen U ↔ forall ⦃i 
+: ι⦄ (f : C(X i, Y)), IsOpen (f ⁻¹' equiv.symm ⁻¹' U)
+参数：WithGeneratedByTopology X Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isOpen_iff {U : Set (WithGeneratedByTopology X Y)} :
-    IsOpen U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻¹' equiv.symm ⁻¹' U) := by
+    IsOpen U ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻¹' equiv.symm ⁻¹' U) := by
   simp [isOpen_iSup_iff, isOpen_coinduced, equiv, Equiv.refl]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isClosed_iff` / 引理 `isClosed_iff`
-
-English:
-lemma isClosed_iff
-  given: {U : Set (WithGeneratedByTopology X Y)}
-  proof: by
-  simp [isClosed_iSup_iff, isClosed_coinduced, equiv, Equiv.refl]
-
-中文:
-引理 isClosed_iff
-  条件: {U : 集合 (WithGeneratedByTopology X Y)}
-  证明: by
-  simp [isClosed_iSup_iff, isClosed_coinduced, equiv, Equiv.refl]
-
-Depends on / 依赖: Equiv.refl, isClosed_coinduced, isClosed_iSup_iff
+/-
+**Topology.WithGeneratedByTopology.isClosed_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topol
+ogy.WithGeneratedByTopology`。
+形式化陈述：isClosed_iff {U : Set (WithGeneratedByTopology X Y)} : IsClosed U ↔ forall
+ ⦃i : ι⦄ (f : C(X i, Y)), IsClosed (f ⁻¹' equiv.symm ⁻¹' U)
+参数：WithGeneratedByTopology X Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isClosed_iff {U : Set (WithGeneratedByTopology X Y)} :
-    IsClosed U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsClosed (f ⁻¹' equiv.symm ⁻¹' U) := by
+    IsClosed U ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), IsClosed (f ⁻¹' equiv.symm ⁻¹' U) := by
   simp [isClosed_iSup_iff, isClosed_coinduced, equiv, Equiv.refl]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `continuous_from_iff` / 引理 `continuous_from_iff`
-
-English:
-lemma continuous_from_iff
-  given: (g : WithGeneratedByTopology X Y -> Z)
-  proof: by
-  simp only [continuous_iSup_dom]
-  exact forall_congr' (fun i => forall_congr'
-    (fun f => (by rw [continuous_coinduced_dom]; simp [equiv, Equiv.refl])))
-
-@[continuity, fun_prop]
-
-中文:
-引理 continuous_from_iff
-  条件: (g : WithGeneratedByTopology X Y -> Z)
-  证明: by
-  simp only [continuous_iSup_dom]
-  exact forall_congr' (fun i => forall_congr'
-    (fun f => (by rw [continuous_coinduced_dom]; simp [equiv, Equiv.refl])))
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: Equiv.refl, continuous_coinduced_dom, continuous_iSup_dom, forall_congr
+/-
+**Topology.WithGeneratedByTopology.continuous_from_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `Topology.WithGeneratedByTopology`。
+形式化陈述：continuous_from_iff (g : WithGeneratedByTopology X Y -> Z) : Continuous g 
+↔ forall ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ equiv.symm ∘ f : X i -> Z)
+参数：g : WithGeneratedByTopology X Y -> Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `continuous_coinduced_dom`：continuous_coinduced_dom {g : β -> γ} {t₁ : To
+pologicalSpace α} {t₂ : TopologicalSpace γ} : Continuous[coinduced f t₁, t₂] g ↔
+ Continuous[t₁…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma continuous_from_iff (g : WithGeneratedByTopology X Y -> Z) :
-    Continuous g ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ equiv.symm ∘ f : X i -> Z) := by
+lemma continuous_from_iff (g : WithGeneratedByTopology X Y → Z) :
+    Continuous g ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ equiv.symm ∘ f : X i → Z) := by
   simp only [continuous_iSup_dom]
-  exact forall_congr' (fun i => forall_congr'
-    (fun f => (by rw [continuous_coinduced_dom]; simp [equiv, Equiv.refl])))
+  exact forall_congr' (fun i ↦ forall_congr'
+    (fun f ↦ (by rw [continuous_coinduced_dom]; simp [equiv, Equiv.refl])))
 
 @[continuity, fun_prop]
-/--
-lemma `continuous_equiv` / 引理 `continuous_equiv`
-
-English:
-lemma continuous_equiv
-  statement: Continuous (equiv (X := X) (Y := Y))
-  proof: by
-  rw [continuous_def]
-  intro U hU
-  rw [isOpen_iff]
-  intro i f
-  exact f.continuous.isOpen_preimage _ hU
-
-中文:
-引理 continuous_equiv
-  结论: 连续 (equiv (X := X) (Y := Y))
-  证明: by
-  rw [continuous_def]
-  intro U hU
-  rw [isOpen_iff]
-  intro i f
-  exact f.continuous.isOpen_preimage _ hU
-
-Depends on / 依赖: continuous, continuous_def, f.continuous.isOpen_preimage, isOpen_iff, isOpen_preimage
+/-
+**Topology.WithGeneratedByTopology.continuous_equiv** 是 Mathlib 中的一个引理，位于命名空间 `T
+opology.WithGeneratedByTopology`。
+形式化陈述：continuous_equiv : Continuous (equiv (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Topology.WithGeneratedByTopology.isOpen_iff`：isOpen_iff {U : Set (WithGe
+neratedByTopology X Y)} : IsOpen U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻
+¹' equiv.symm ⁻¹' U)
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 -/
 lemma continuous_equiv : Continuous (equiv (X := X) (Y := Y)) := by
   rw [continuous_def]
@@ -251,47 +259,43 @@ end WithGeneratedByTopology
 end Topology
 
 variable {tY} in
-/--
-lemma `TopologicalSpace.generatedBy_le` / 引理 `TopologicalSpace.generatedBy_le`
-
-English:
-lemma TopologicalSpace.generatedBy_le
-  statement: generatedBy X <= tY
-  proof: fun U hU => WithGeneratedByTopology.continuous_equiv.isOpen_preimage U hU
-
-omit tY in
-
-中文:
-引理 拓扑空间.generatedBy_le
-  结论: generatedBy X <= tY
-  证明: fun U hU => WithGeneratedByTopology.continuous_equiv.isOpen_preimage U hU
-
-omit tY in
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.continuous_equiv.isOpen_preimage, continuous_equiv, isOpen_preimage
+/-
+**TopologicalSpace.generatedBy_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：TopologicalSpace.generatedBy_le : generatedBy X <= tY
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用引理 `Topology.WithGeneratedByTopology.continuous_equiv`：continuous_equiv : Co
+ntinuous (equiv (X
 -/
-lemma TopologicalSpace.generatedBy_le : generatedBy X <= tY :=
-  fun U hU => WithGeneratedByTopology.continuous_equiv.isOpen_preimage U hU
+lemma TopologicalSpace.generatedBy_le : generatedBy X ≤ tY :=
+  fun U hU ↦ WithGeneratedByTopology.continuous_equiv.isOpen_preimage U hU
 
 omit tY in
-/--
-lemma `TopologicalSpace.generatedBy_mono` / 引理 `TopologicalSpace.generatedBy_mono`
-
-English:
-lemma TopologicalSpace.generatedBy_mono
-  given: {t₁ t₂ : TopologicalSpace Y} (h : t₁ <= t₂)
-  proof: iSup₂_le fun i f => le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
-
-中文:
-引理 拓扑空间.generatedBy_mono
-  条件: {t₁ t₂ : 拓扑空间 Y} (h : t₁ <= t₂)
-  证明: iSup₂_le fun i f => le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
-
-Depends on / 依赖: continuous_le_rng, le_rfl
+/-
+**TopologicalSpace.generatedBy_mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：TopologicalSpace.generatedBy_mono {t₁ t₂ : TopologicalSpace Y} (h : t₁ <= 
+t₂) : t₁.generatedBy X <= t₂.generatedBy X
+参数：h : t₁ <= t₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup₂_le`：iSup₂_le {f : forall i, κ i -> α} (h : forall i j, f i j <= a)
+ : ⨆ (i) (j), f i j <= a
+· 使用定理 `le_iSup₂_of_le`：le_iSup₂_of_le {f : forall i, κ i -> α} (i : ι) (j : κ i
+) (h : a <= f i j) : a <= ⨆ (i) (j), f i j
+· 使用定理 `continuous_le_rng`：continuous_le_rng {t₁ : TopologicalSpace α} {t₂ t₃ : 
+TopologicalSpace β} (h₁ : t₂ <= t₃) (h₂ : Continuous[t₁, t₂] f) : Continuous[t₁,
+ t₃] f
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma TopologicalSpace.generatedBy_mono {t₁ t₂ : TopologicalSpace Y} (h : t₁ <= t₂) :
-    t₁.generatedBy X <= t₂.generatedBy X :=
-  iSup₂_le fun i f => le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
+lemma TopologicalSpace.generatedBy_mono {t₁ t₂ : TopologicalSpace Y} (h : t₁ ≤ t₂) :
+    t₁.generatedBy X ≤ t₂.generatedBy X :=
+  iSup₂_le fun i f ↦ le_iSup₂_of_le i ⟨f, continuous_le_rng h @f.2⟩ le_rfl
 
 namespace Topology
 
@@ -301,20 +305,18 @@ variable (X Y) in
 topology, i.e. when the identity is a homeomorphism
 `WithGeneratedByTopology X Y ≃ₜ Y` (see `IsGeneratedBy.homeomorph`). -/
 @[mk_iff]
-/--
-Definition of `IsGeneratedBy` / `IsGeneratedBy` 的定义
+/-
+**Topology.IsGeneratedBy** 是 Mathlib 中的一个类，位于命名空间 `Topology`。
+形式化陈述：IsGeneratedBy : Prop where continuous_equiv_symm : Continuous (WithGenerat
+edByTopology.equiv (X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGeneratedBy
-  parameters: : Prop where
-  axioms and operations (1):
-    - continuous_equiv_symm : Continuous (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
-
-中文:
-类 是GeneratedBy
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - continuous_equiv_symm : 连续 (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
+--- 原说明 ---
+Given a family of topological spaces `X i`, we say that a topological space is
+`X`-generated (`IsGeneratedBy X Y`) when the topology on `Y` is the `X`-generate
+d
+topology, i.e. when the identity is a homeomorphism
+`WithGeneratedByTopology X Y ≃ₜ Y` (see `IsGeneratedBy.homeomorph`).
 -/
 class IsGeneratedBy : Prop where
   continuous_equiv_symm : Continuous (WithGeneratedByTopology.equiv (X := X) (Y := Y)).symm
@@ -327,62 +329,53 @@ section
 
 variable {tY}
 
-/--
-lemma `le_generatedBy` / 引理 `le_generatedBy`
-
-English:
-lemma le_generatedBy
-  given: [IsGeneratedBy X Y]
-  statement: tY <= .generatedBy X
-  proof: fun U hU => continuous_equiv_symm.isOpen_preimage U hU
-
-中文:
-引理 le_generatedBy
-  条件: [是GeneratedBy X Y]
-  结论: tY <= .generatedBy X
-  证明: fun U hU => continuous_equiv_symm.isOpen_preimage U hU
-
-Depends on / 依赖: continuous_equiv_symm, continuous_equiv_symm.isOpen_preimage, isOpen_preimage
+/-
+**Topology.IsGeneratedBy.le_generatedBy** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGe
+neratedBy`。
+形式化陈述：le_generatedBy [IsGeneratedBy X Y] : tY <= .generatedBy X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Topology.IsGeneratedBy.continuous_equiv_symm`：∀ {ι : Type t} {X : ι → Ty
+pe u} {inst : (i : ι) → TopologicalSpace (X i)} {Y : Type v} {tY : TopologicalSp
+ace Y}   [self : Topology.IsGenera…
 -/
-lemma le_generatedBy [IsGeneratedBy X Y] : tY <= .generatedBy X :=
-  fun U hU => continuous_equiv_symm.isOpen_preimage U hU
-
-/--
-lemma `generatedBy_eq` / 引理 `generatedBy_eq`
-
-English:
-lemma generatedBy_eq
-  given: [IsGeneratedBy X Y]
-  statement: .generatedBy X = tY
-  proof: le_antisymm TopologicalSpace.generatedBy_le le_generatedBy
-
-中文:
-引理 generatedBy_eq
-  条件: [是GeneratedBy X Y]
-  结论: .generatedBy X = tY
-  证明: le_antisymm TopologicalSpace.generatedBy_le le_generatedBy
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.generatedBy_le, generatedBy_le, le_antisymm, le_generatedBy
+lemma le_generatedBy [IsGeneratedBy X Y] : tY ≤ .generatedBy X :=
+  fun U hU ↦ continuous_equiv_symm.isOpen_preimage U hU
+/-
+**Topology.IsGeneratedBy.generatedBy_eq** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGe
+neratedBy`。
+形式化陈述：generatedBy_eq [IsGeneratedBy X Y] : .generatedBy X = tY
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `TopologicalSpace.generatedBy_le`：TopologicalSpace.generatedBy_le : gener
+atedBy X <= tY
+· 使用引理 `Topology.IsGeneratedBy.le_generatedBy`：le_generatedBy [IsGeneratedBy X Y
+] : tY <= .generatedBy X
 -/
 lemma generatedBy_eq [IsGeneratedBy X Y] : .generatedBy X = tY :=
   le_antisymm TopologicalSpace.generatedBy_le le_generatedBy
-
-/--
-lemma `iff_le_generatedBy` / 引理 `iff_le_generatedBy`
-
-English:
-lemma iff_le_generatedBy
-  proof: ⟨fun _ => le_generatedBy, fun h => ⟨by rwa [continuous_def]⟩⟩
-
-中文:
-引理 iff_le_generatedBy
-  证明: ⟨fun _ => le_generatedBy, fun h => ⟨by rwa [continuous_def]⟩⟩
-
-Depends on / 依赖: continuous_def, le_generatedBy
+/-
+**Topology.IsGeneratedBy.iff_le_generatedBy** 是 Mathlib 中的一个引理，位于命名空间 `Topology.
+IsGeneratedBy`。
+形式化陈述：iff_le_generatedBy : IsGeneratedBy X Y ↔ tY <= .generatedBy X
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsGeneratedBy.le_generatedBy`：le_generatedBy [IsGeneratedBy X Y
+] : tY <= .generatedBy X
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
 -/
 lemma iff_le_generatedBy :
-    IsGeneratedBy X Y ↔ tY <= .generatedBy X :=
-  ⟨fun _ => le_generatedBy, fun h => ⟨by rwa [continuous_def]⟩⟩
+    IsGeneratedBy X Y ↔ tY ≤ .generatedBy X :=
+  ⟨fun _ ↦ le_generatedBy, fun h ↦ ⟨by rwa [continuous_def]⟩⟩
 
 end
 
@@ -390,28 +383,16 @@ section
 
 variable [IsGeneratedBy X Y]
 
-/--
-Definition of `homeomorph` / `homeomorph` 的定义
+/-- The homeomorphism `WithGeneratedByTopology X Y ≃ₜ Y` when `Y` is `X`-generated. -/
+/-
+**Topology.IsGeneratedBy.homeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsGenera
+tedBy`。
+形式化陈述：homeomorph : WithGeneratedByTopology X Y ≃ₜ Y where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeomorph
-  signature: : WithGeneratedByTopology X Y ≃ₜ Y where
-  body: WithGeneratedByTopology.equiv
-  continuous_toFun := by dsimp; fun_prop
-  continuous_invFun := by dsimp; fun_prop
-
-@[simp]
-
-中文:
-定义 homeomorph
-  签名: : WithGeneratedByTopology X Y ≃ₜ Y where
-  定义体: WithGeneratedByTopology.equiv
-  continuous_toFun := by dsimp; fun_prop
-  continuous_invFun := by dsimp; fun_prop
-
-@[simp]
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.equiv
+--- 原说明 ---
+The homeomorphism `WithGeneratedByTopology X Y ≃ₜ Y` when `Y` is `X`-generated.
 -/
 def homeomorph : WithGeneratedByTopology X Y ≃ₜ Y where
   toEquiv := WithGeneratedByTopology.equiv
@@ -419,149 +400,154 @@ def homeomorph : WithGeneratedByTopology X Y ≃ₜ Y where
   continuous_invFun := by dsimp; fun_prop
 
 @[simp]
-/--
-lemma `homeomorph_coe` / 引理 `homeomorph_coe`
-
-English:
-lemma homeomorph_coe
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homeomorph_coe
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.equiv
+/-
+**Topology.IsGeneratedBy.homeomorph_coe** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGe
+neratedBy`。
+形式化陈述：homeomorph_coe : ⇑(homeomorph (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homeomorph_coe :
    ⇑(homeomorph (X := X) (Y := Y)) = WithGeneratedByTopology.equiv := rfl
 
 @[simp]
-/--
-lemma `homeomorph_symm_coe` / 引理 `homeomorph_symm_coe`
-
-English:
-lemma homeomorph_symm_coe
-  proof: rfl
-
-中文:
-引理 homeomorph_symm_coe
-  证明: rfl
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.equiv.symm
+/-
+**Topology.IsGeneratedBy.homeomorph_symm_coe** 是 Mathlib 中的一个引理，位于命名空间 `Topology
+.IsGeneratedBy`。
+形式化陈述：homeomorph_symm_coe : ⇑(homeomorph (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homeomorph_symm_coe :
    ⇑(homeomorph (X := X) (Y := Y)).symm = WithGeneratedByTopology.equiv.symm := rfl
 
 variable (X)
-
-/--
-lemma `isOpen_iff` / 引理 `isOpen_iff`
-
-English:
-lemma isOpen_iff
-  given: {U : Set Y}
-  proof: by
-  simp [← (homeomorph (X := X)).isQuotientMap.isOpen_preimage,
-    WithGeneratedByTopology.isOpen_iff]
-
-中文:
-引理 isOpen_iff
-  条件: {U : 集合 Y}
-  证明: by
-  simp [← (homeomorph (X := X)).isQuotientMap.isOpen_preimage,
-    WithGeneratedByTopology.isOpen_iff]
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.isOpen_iff, homeomorph, isOpen_iff, isOpen_preimage, isQuotientMap, isQuotientMap.isOpen_preimage
+/-
+**Topology.IsGeneratedBy.isOpen_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGenera
+tedBy`。
+形式化陈述：isOpen_iff {U : Set Y} : IsOpen U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsOpen
+ (f ⁻¹' U)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.isOpen_preimage`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsCoinducing f → ∀ {s : Se…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Equiv.symm_preimage_preimage`：symm_preimage_preimage {α β} (e : α ≃ β) (
+s : Set β) : e.symm ⁻¹' e ⁻¹' s = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isOpen_iff {U : Set Y} :
-    IsOpen U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻¹' U) := by
+    IsOpen U ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻¹' U) := by
   simp [← (homeomorph (X := X)).isQuotientMap.isOpen_preimage,
     WithGeneratedByTopology.isOpen_iff]
-
-/--
-lemma `isClosed_iff` / 引理 `isClosed_iff`
-
-English:
-lemma isClosed_iff
-  given: {U : Set Y}
-  proof: by
-  simp [← (homeomorph (X := X)).isQuotientMap.isClosed_preimage,
-    WithGeneratedByTopology.isClosed_iff]
-
-中文:
-引理 isClosed_iff
-  条件: {U : 集合 Y}
-  证明: by
-  simp [← (homeomorph (X := X)).isQuotientMap.isClosed_preimage,
-    WithGeneratedByTopology.isClosed_iff]
-
-Depends on / 依赖: WithGeneratedByTopology, WithGeneratedByTopology.isClosed_iff, homeomorph, isClosed_iff, isClosed_preimage, isQuotientMap, isQuotientMap.isClosed_preimage
+/-
+**Topology.IsGeneratedBy.isClosed_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGene
+ratedBy`。
+形式化陈述：isClosed_iff {U : Set Y} : IsClosed U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), Is
+Closed (f ⁻¹' U)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.isClosed_preimage`：∀ {X : Type u_1} {Y : Type u_2}
+ {f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolo
+gy.IsCoinducing f → ∀ {s : Se…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Equiv.symm_preimage_preimage`：symm_preimage_preimage {α β} (e : α ≃ β) (
+s : Set β) : e.symm ⁻¹' e ⁻¹' s = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isClosed_iff {U : Set Y} :
-    IsClosed U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsClosed (f ⁻¹' U) := by
+    IsClosed U ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), IsClosed (f ⁻¹' U) := by
   simp [← (homeomorph (X := X)).isQuotientMap.isClosed_preimage,
     WithGeneratedByTopology.isClosed_iff]
-
-/--
-lemma `continuous_iff` / 引理 `continuous_iff`
-
-English:
-lemma continuous_iff
-  given: (g : Y -> Z)
-  proof: by
-  rw [(homeomorph (X := X)).isQuotientMap.continuous_iff]; rw [WithGeneratedByTopology.continuous_from_iff]
-  simp [Function.comp_assoc g, ← Function.comp_assoc WithGeneratedByTopology.equiv]
-
-中文:
-引理 continuous_iff
-  条件: (g : Y -> Z)
-  证明: by
-  rw [(homeomorph (X := X)).isQuotientMap.continuous_iff]; rw [WithGeneratedByTopology.continuous_from_iff]
-  simp [Function.comp_assoc g, ← Function.comp_assoc WithGeneratedByTopology.equiv]
-
-Depends on / 依赖: Function, Function.comp_assoc, WithGeneratedByTopology, WithGeneratedByTopology.continuous_from_iff, WithGeneratedByTopology.equiv, comp_assoc, continuous_from_iff, continuous_iff, homeomorph, isQuotientMap, isQuotientMap.continuous_iff
+/-
+**Topology.IsGeneratedBy.continuous_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsGe
+neratedBy`。
+形式化陈述：continuous_iff (g : Y -> Z) : Continuous g ↔ forall ⦃i : ι⦄ (f : C(X i, Y)
+), Continuous (g ∘ f)
+参数：g : Y -> Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsQuotientMap.continuous_iff`：∀ {X : Type u_1} {Y : Type u_2} {
+Z : Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : To
+pologicalSpace Y] [inst_2 :…
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Topology.WithGeneratedByTopology.continuous_from_iff`：continuous_from_if
+f (g : WithGeneratedByTopology X Y -> Z) : Continuous g ↔ forall ⦃i : ι⦄ (f : C(
+X i, Y)), Continuous (g ∘ equiv.symm ∘ f :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Function.comp_assoc`：comp_assoc (f : φ -> δ) (g : β -> φ) (h : α -> β) :
+ (f ∘ g) ∘ h = f ∘ g ∘ h
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.self_comp_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.s
+ymm = id
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma continuous_iff (g : Y -> Z) :
-    Continuous g ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ f) := by
-  rw [(homeomorph (X := X)).isQuotientMap.continuous_iff]; rw [WithGeneratedByTopology.continuous_from_iff]
+lemma continuous_iff (g : Y → Z) :
+    Continuous g ↔ ∀ ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ f) := by
+  rw [(homeomorph (X := X)).isQuotientMap.continuous_iff,
+    WithGeneratedByTopology.continuous_from_iff]
   simp [Function.comp_assoc g, ← Function.comp_assoc WithGeneratedByTopology.equiv]
-
-/--
-lemma `equiv_symm_comp_continuous_iff` / 引理 `equiv_symm_comp_continuous_iff`
-
-English:
-lemma equiv_symm_comp_continuous_iff
-  given: (g : Y -> Z)
-  proof: by
-  refine ⟨fun hg => WithGeneratedByTopology.continuous_equiv.comp hg, fun hg => ?_⟩
-  rw [continuous_iff (X := X)]
-  intro i f
-  rw [continuous_def]
-  intro U hU
-  rw [WithGeneratedByTopology.isOpen_iff] at hU
-  exact hU (ContinuousMap.comp ⟨g, hg⟩ f)
-
-中文:
-引理 equiv_symm_comp_continuous_iff
-  条件: (g : Y -> Z)
-  证明: by
-  refine ⟨fun hg => WithGeneratedByTopology.continuous_equiv.comp hg, fun hg => ?_⟩
-  rw [continuous_iff (X := X)]
-  intro i f
-  rw [continuous_def]
-  intro U hU
-  rw [WithGeneratedByTopology.isOpen_iff] at hU
-  exact hU (ContinuousMap.comp ⟨g, hg⟩ f)
-
-Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.comp, WithGeneratedByTopology, WithGeneratedByTopology.continuous_equiv.comp, WithGeneratedByTopology.isOpen_iff, continuous_def, continuous_equiv, continuous_iff, isOpen_iff
+/-
+**Topology.IsGeneratedBy.equiv_symm_comp_continuous_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `Topology.IsGeneratedBy`。
+形式化陈述：equiv_symm_comp_continuous_iff (g : Y -> Z) : Continuous ((WithGeneratedBy
+Topology.equiv (X
+参数：g : Y -> Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用引理 `Topology.WithGeneratedByTopology.continuous_equiv`：continuous_equiv : Co
+ntinuous (equiv (X
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsGeneratedBy.continuous_iff`：continuous_iff (g : Y -> Z) : Con
+tinuous g ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), Continuous (g ∘ f)
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用引理 `Topology.WithGeneratedByTopology.isOpen_iff`：isOpen_iff {U : Set (WithGe
+neratedByTopology X Y)} : IsOpen U ↔ forall ⦃i : ι⦄ (f : C(X i, Y)), IsOpen (f ⁻
+¹' equiv.symm ⁻¹' U)
 -/
-lemma equiv_symm_comp_continuous_iff (g : Y -> Z) :
+lemma equiv_symm_comp_continuous_iff (g : Y → Z) :
     Continuous ((WithGeneratedByTopology.equiv (X := X)).symm ∘ g) ↔ Continuous g := by
-  refine ⟨fun hg => WithGeneratedByTopology.continuous_equiv.comp hg, fun hg => ?_⟩
+  refine ⟨fun hg ↦ WithGeneratedByTopology.continuous_equiv.comp hg, fun hg ↦ ?_⟩
   rw [continuous_iff (X := X)]
   intro i f
   rw [continuous_def]
@@ -571,45 +557,19 @@ lemma equiv_symm_comp_continuous_iff (g : Y -> Z) :
 
 end
 
+/-
+**Topology.IsGeneratedBy.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.IsGeneratedBy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : IsGeneratedBy X (X i) where
   continuous_equiv_symm := by
     rw [continuous_def]
     intro U hU
     rw [WithGeneratedByTopology.isOpen_iff] at hU
     exact hU ⟨_, continuous_id⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsGeneratedBy X (WithGeneratedByTopology X Y)
-  body: by
-    rw [continuous_def]
-    intro U hU
-    rw [WithGeneratedByTopology.isOpen_iff] at hU ⊢
-    intro i f
-    refine hU ⟨WithGeneratedByTopology.equiv.symm ∘ f, ?_⟩
-    rw [continuous_iff X]
-    intro j g
-    rw [Function.comp_assoc]; rw [equiv_symm_comp_continuous_iff]
-    fun_prop
-
-中文:
-实例 :
-  签名: 是GeneratedBy X (WithGeneratedByTopology X Y)
-  定义体: by
-    rw [continuous_def]
-    intro U hU
-    rw [WithGeneratedByTopology.isOpen_iff] at hU ⊢
-    intro i f
-    refine hU ⟨WithGeneratedByTopology.equiv.symm ∘ f, ?_⟩
-    rw [continuous_iff X]
-    intro j g
-    rw [Function.comp_assoc]; rw [equiv_symm_comp_continuous_iff]
-    fun_prop
-
-Depends on / 依赖: Function, Function.comp_assoc, WithGeneratedByTopology, WithGeneratedByTopology.equiv.symm, WithGeneratedByTopology.isOpen_iff, comp_assoc, continuous_def, continuous_iff, equiv_symm_comp_continuous_iff, fun_prop, isOpen_iff
+/-
+**Topology.IsGeneratedBy.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.IsGeneratedBy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsGeneratedBy X (WithGeneratedByTopology X Y) where
   continuous_equiv_symm := by
@@ -620,218 +580,226 @@ instance : IsGeneratedBy X (WithGeneratedByTopology X Y) where
     refine hU ⟨WithGeneratedByTopology.equiv.symm ∘ f, ?_⟩
     rw [continuous_iff X]
     intro j g
-    rw [Function.comp_assoc]; rw [equiv_symm_comp_continuous_iff]
+    rw [Function.comp_assoc, equiv_symm_comp_continuous_iff]
     fun_prop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsGeneratedBy X (PUnit.{v + 1})
-  body: by
-  rw [iff_le_generatedBy]
-  exact Eq.le (by subsingleton)
-
-omit [TopologicalSpace Z]
-
-中文:
-实例 :
-  签名: 是GeneratedBy X (命题单元.{v + 1})
-  定义体: by
-  rw [iff_le_generatedBy]
-  exact Eq.le (by subsingleton)
-
-omit [TopologicalSpace Z]
-
-Depends on / 依赖: Eq.le, iff_le_generatedBy, subsingleton
+/-
+**Topology.IsGeneratedBy.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.IsGeneratedBy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsGeneratedBy X (PUnit.{v + 1}) := by
   rw [iff_le_generatedBy]
   exact Eq.le (by subsingleton)
 
 omit [TopologicalSpace Z]
-/--
-lemma `coinduced` / 引理 `coinduced`
+/-- Any topology coinduced by an `X`-generated topology is `X`-generated. -/
+/-
+**Topology.IsGeneratedBy.coinduced** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsGenerat
+edBy`。
+形式化陈述：∀ {ι : Type t} {X : ι → Type u} [inst : (i : ι) → TopologicalSpace (X i)] 
+{Y : Type v} [tY : TopologicalSpace Y]   {Z : Type v'} [Topology.IsGeneratedBy X
+ Y] (f : Y → Z), Topology.IsGeneratedBy X Z
+参数：i : ι；X i；f : Y → Z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Topology.IsGeneratedBy.iff_le_generatedBy`：iff_le_generatedBy : IsGenera
+tedBy X Y ↔ tY <= .generatedBy X
+· 使用定理 `Continuous.coinduced_le`：Continuous.coinduced_le (h : Continuous[t, t'] 
+f) : t.coinduced f <= t'
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Topology.IsGeneratedBy.equiv_symm_comp_continuous_iff`：equiv_symm_comp_c
+ontinuous_iff (g : Y -> Z) : Continuous ((WithGeneratedByTopology.equiv (X
+· 使用定理 `continuous_coinduced_rng`：continuous_coinduced_rng {t : TopologicalSpace
+ α} : Continuous[t, coinduced f t] f
 
-English:
-lemma coinduced
-  given: [IsGeneratedBy X Y] (f : Y -> Z)
-  proof: by
-  let _ := tY.coinduced f
-  refine iff_le_generatedBy.2 ?_
-  exact ((equiv_symm_comp_continuous_iff (X := X) f).2 continuous_coinduced_rng).coinduced_le
-
-中文:
-引理 coinduced
-  条件: [是GeneratedBy X Y] (f : Y -> Z)
-  证明: by
-  let _ := tY.coinduced f
-  refine iff_le_generatedBy.2 ?_
-  exact ((equiv_symm_comp_continuous_iff (X := X) f).2 continuous_coinduced_rng).coinduced_le
+--- 原说明 ---
+Any topology coinduced by an `X`-generated topology is `X`-generated.
 -/
-protected lemma coinduced [IsGeneratedBy X Y] (f : Y -> Z) :
+protected lemma coinduced [IsGeneratedBy X Y] (f : Y → Z) :
     IsGeneratedBy X (tY := tY.coinduced f) := by
   let _ := tY.coinduced f
   refine iff_le_generatedBy.2 ?_
   exact ((equiv_symm_comp_continuous_iff (X := X) f).2 continuous_coinduced_rng).coinduced_le
 
-/--
-lemma `iSup` / 引理 `iSup`
+/-- Suprema of `X`-generated topologies are `X`-generated. -/
+/-
+**Topology.IsGeneratedBy.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsGeneratedBy`
+。
+形式化陈述：∀ {ι : Type t} {X : ι → Type u} [inst : (i : ι) → TopologicalSpace (X i)] 
+{Y : Type u_1} {κ : Sort u_2}   {t : κ → TopologicalSpace Y}, (∀ (k : κ), Topolo
+gy.IsGeneratedBy X Y) → Topology.IsGeneratedBy X Y
+参数：i : ι；X i；∀ (k : κ), Topology.IsGeneratedBy X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Topology.IsGeneratedBy.iff_le_generatedBy`：iff_le_generatedBy : IsGenera
+tedBy X Y ↔ tY <= .generatedBy X
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Topology.IsGeneratedBy.le_generatedBy`：le_generatedBy [IsGeneratedBy X Y
+] : tY <= .generatedBy X
+· 使用引理 `TopologicalSpace.generatedBy_mono`：TopologicalSpace.generatedBy_mono {t₁
+ t₂ : TopologicalSpace Y} (h : t₁ <= t₂) : t₁.generatedBy X <= t₂.generatedBy X
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 
-English:
-lemma iSup
-  statement: {Y : Type*} {κ : Sort*} {t : κ -> TopologicalSpace Y}
-  proof: iff_le_generatedBy.2 iSup_le_iff.2 fun k =>
-(h k).le_generatedBy.trans TopologicalSpace.generatedBy_mono le_iSup t k
-
-中文:
-引理 iSup
-  结论: {Y : 类型} {κ : 类型层*} {t : κ -> 拓扑空间 Y}
-  证明: iff_le_generatedBy.2 iSup_le_iff.2 fun k =>
-(h k).le_generatedBy.trans TopologicalSpace.generatedBy_mono le_iSup t k
+--- 原说明 ---
+Suprema of `X`-generated topologies are `X`-generated.
 -/
-protected lemma iSup {Y : Type*} {κ : Sort*} {t : κ -> TopologicalSpace Y}
-    (h : forall k, IsGeneratedBy X (tY := t k)) : @IsGeneratedBy _ X _ Y (⨆ k, t k) :=
-iff_le_generatedBy.2 iSup_le_iff.2 fun k =>
-(h k).le_generatedBy.trans TopologicalSpace.generatedBy_mono le_iSup t k
+protected lemma iSup {Y : Type*} {κ : Sort*} {t : κ → TopologicalSpace Y}
+    (h : ∀ k, IsGeneratedBy X (tY := t k)) : @IsGeneratedBy _ X _ Y (⨆ k, t k) :=
+  iff_le_generatedBy.2 <| iSup_le_iff.2 fun k ↦
+    (h k).le_generatedBy.trans <| TopologicalSpace.generatedBy_mono <| le_iSup t k
 
-/--
-lemma `sup` / 引理 `sup`
+/-- Suprema of `X`-generated topologies are `X`-generated. -/
+/-
+**Topology.IsGeneratedBy.sup** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsGeneratedBy`。
+形式化陈述：∀ {ι : Type t} {X : ι → Type u} [inst : (i : ι) → TopologicalSpace (X i)] 
+{Y : Type u_1} {t₁ t₂ : TopologicalSpace Y},   Topology.IsGeneratedBy X Y → Topo
+logy.IsGeneratedBy X Y → Topology.IsGeneratedBy X Y
+参数：i : ι；X i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_eq_iSup`：sup_eq_iSup (x y : α) : x ⊔ y = ⨆ b : Bool, cond b x y
+· 使用定理 `Topology.IsGeneratedBy.iSup`：∀ {ι : Type t} {X : ι → Type u} [inst : (i 
+: ι) → TopologicalSpace (X i)] {Y : Type u_1} {κ : Sort u_2}   {t : κ → Topologi
+calSpace Y}, (∀ (…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Bool.forall_bool`：∀ {p : Bool → Prop}, (∀ (b : Bool), p b) ↔ p false ∧ p
+ true
 
-English:
-lemma sup
-  statement: {Y : Type*} {t₁ t₂ : TopologicalSpace Y}
-  proof: by
-  rw [sup_eq_iSup]
-exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
-
-中文:
-引理 上确界
-  结论: {Y : 类型} {t₁ t₂ : 拓扑空间 Y}
-  证明: by
-  rw [sup_eq_iSup]
-exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
+--- 原说明 ---
+Suprema of `X`-generated topologies are `X`-generated.
 -/
 protected lemma sup {Y : Type*} {t₁ t₂ : TopologicalSpace Y}
     (h₁ : IsGeneratedBy X (tY := t₁)) (h₂ : @IsGeneratedBy _ X _ Y t₂) :
     IsGeneratedBy X (tY := t₁ ⊔ t₂) := by
   rw [sup_eq_iSup]
-exact .iSup Bool.forall_bool.2 ⟨h₂, h₁⟩
+  exact .iSup <| Bool.forall_bool.2 ⟨h₂, h₁⟩
 
 end IsGeneratedBy
 
-/--
-lemma `IsQuotientMap.isGeneratedBy` / 引理 `IsQuotientMap.isGeneratedBy`
-
-English:
-lemma IsQuotientMap.isGeneratedBy
-  given: {f : Y -> Z} (hf : IsQuotientMap f) [IsGeneratedBy X Y]
-  proof: hf.eq_coinduced ▸ IsGeneratedBy.coinduced f
-
-中文:
-引理 是商映射.isGeneratedBy
-  条件: {f : Y -> Z} (hf : 是商映射 f) [是GeneratedBy X Y]
-  证明: hf.eq_coinduced ▸ IsGeneratedBy.coinduced f
-
-Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.coinduced, coinduced, eq_coinduced, hf.eq_coinduced
+/-
+**Topology.IsQuotientMap.isGeneratedBy** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsQuo
+tientMap`。
+形式化陈述：∀ {ι : Type t} {X : ι → Type u} [inst : (i : ι) → TopologicalSpace (X i)] 
+{Y : Type v} [tY : TopologicalSpace Y]   {Z : Type v'} [inst_1 : TopologicalSpac
+e Z] {f : Y → Z},   Topology.IsQuotientMap f → ∀ [Topology.IsGeneratedBy X Y], T
+opology.IsGeneratedBy X Z
+参数：i : ι；X i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsGeneratedBy.coinduced`：∀ {ι : Type t} {X : ι → Type u} [inst 
+: (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y]   {Z 
+: Type v'} [Topology.I…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.eq_coinduced`：∀ {X : Type u_1} {Y : Type u_2} [tX 
+: TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsCoindu
+cing f → tY = Topologica…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
 -/
-lemma IsQuotientMap.isGeneratedBy {f : Y -> Z} (hf : IsQuotientMap f) [IsGeneratedBy X Y] :
+lemma IsQuotientMap.isGeneratedBy {f : Y → Z} (hf : IsQuotientMap f) [IsGeneratedBy X Y] :
     IsGeneratedBy X Z :=
   hf.eq_coinduced ▸ IsGeneratedBy.coinduced f
 
 end Topology
 
-/--
-Instance `Quot.isGeneratedBy` / 实例 `Quot.isGeneratedBy`
+/-- Quotients of `X`-generated spaces are `X`-generated. -/
+/-
+**Quot.isGeneratedBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Quot.isGeneratedBy [IsGeneratedBy X Y] {r : Y -> Y -> Prop} : IsGeneratedB
+y X (Quot r)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsQuotientMap.isGeneratedBy`：∀ {ι : Type t} {X : ι → Type u} [i
+nst : (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y]  
+ {Z : Type v'} [inst_1 : T…
+· 使用定理 `isQuotientMap_quot_mk`：isQuotientMap_quot_mk : IsQuotientMap (@Quot.mk X
+ r)
 
-English:
-instance Quot.isGeneratedBy
-  signature: [IsGeneratedBy X Y] {r : Y -> Y -> Prop}
-  body: isQuotientMap_quot_mk.isGeneratedBy
-
-中文:
-实例 商.isGeneratedBy
-  签名: [是GeneratedBy X Y] {r : Y -> Y -> 命题}
-  定义体: isQuotientMap_quot_mk.isGeneratedBy
-
-Depends on / 依赖: isGeneratedBy, isQuotientMap_quot_mk, isQuotientMap_quot_mk.isGeneratedBy
+--- 原说明 ---
+Quotients of `X`-generated spaces are `X`-generated.
 -/
-instance Quot.isGeneratedBy [IsGeneratedBy X Y] {r : Y -> Y -> Prop} :
+instance Quot.isGeneratedBy [IsGeneratedBy X Y] {r : Y → Y → Prop} :
     IsGeneratedBy X (Quot r) :=
   isQuotientMap_quot_mk.isGeneratedBy
 
-/--
-Instance `Quotient.isGeneratedBy` / 实例 `Quotient.isGeneratedBy`
+/-- Quotients of `X`-generated spaces are `X`-generated. -/
+/-
+**Quotient.isGeneratedBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Quotient.isGeneratedBy [IsGeneratedBy X Y] {s : Setoid Y} : IsGeneratedBy 
+X (Quotient s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsQuotientMap.isGeneratedBy`：∀ {ι : Type t} {X : ι → Type u} [i
+nst : (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y]  
+ {Z : Type v'} [inst_1 : T…
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `isQuotientMap_quotient_mk'`：isQuotientMap_quotient_mk' : IsQuotientMap (
+@Quotient.mk' X s)
 
-English:
-instance Quotient.isGeneratedBy
-  signature: [IsGeneratedBy X Y] {s : Setoid Y}
-  body: isQuotientMap_quotient_mk'.isGeneratedBy
-
-中文:
-实例 商.isGeneratedBy
-  签名: [是GeneratedBy X Y] {s : 集合等价关系 Y}
-  定义体: isQuotientMap_quotient_mk'.isGeneratedBy
-
-Depends on / 依赖: isGeneratedBy, isQuotientMap_quotient_mk
+--- 原说明 ---
+Quotients of `X`-generated spaces are `X`-generated.
 -/
 instance Quotient.isGeneratedBy [IsGeneratedBy X Y] {s : Setoid Y} :
     IsGeneratedBy X (Quotient s) :=
   isQuotientMap_quotient_mk'.isGeneratedBy
 
-/--
-Instance `Sum.isGeneratedBy` / 实例 `Sum.isGeneratedBy`
+/-- Disjoint unions of `X`-generated spaces are `X`-generated. -/
+/-
+**Sum.isGeneratedBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Sum.isGeneratedBy [IsGeneratedBy X Y] [IsGeneratedBy X Z] : IsGeneratedBy 
+X (Y oplus Z)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsGeneratedBy.sup`：∀ {ι : Type t} {X : ι → Type u} [inst : (i :
+ ι) → TopologicalSpace (X i)] {Y : Type u_1} {t₁ t₂ : TopologicalSpace Y},   Top
+ology.IsGenerate…
+· 使用定理 `Topology.IsGeneratedBy.coinduced`：∀ {ι : Type t} {X : ι → Type u} [inst 
+: (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y]   {Z 
+: Type v'} [Topology.I…
 
-English:
-instance Sum.isGeneratedBy
-  signature: [IsGeneratedBy X Y] [IsGeneratedBy X Z]
-  body: IsGeneratedBy.sup (.coinduced Sum.inl) (.coinduced Sum.inr)
-
-中文:
-实例 和.isGeneratedBy
-  签名: [是GeneratedBy X Y] [是GeneratedBy X Z]
-  定义体: IsGeneratedBy.sup (.coinduced Sum.inl) (.coinduced Sum.inr)
-
-Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.sup, Sum.inl, Sum.inr, coinduced
+--- 原说明 ---
+Disjoint unions of `X`-generated spaces are `X`-generated.
 -/
 instance Sum.isGeneratedBy [IsGeneratedBy X Y] [IsGeneratedBy X Z] :
-    IsGeneratedBy X (Y oplus Z) :=
+    IsGeneratedBy X (Y ⊕ Z) :=
   IsGeneratedBy.sup (.coinduced Sum.inl) (.coinduced Sum.inr)
 
-/--
-Instance `Sigma.isGeneratedBy` / 实例 `Sigma.isGeneratedBy`
+/-- Disjoint unions of `X`-generated spaces are `X`-generated. -/
+/-
+**Sigma.isGeneratedBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Sigma.isGeneratedBy {κ : Type*} {Y : κ -> Type*} [forall k, TopologicalSpa
+ce (Y k)] [forall k, IsGeneratedBy X (Y k)] : IsGeneratedBy X (Σ k, Y k)
+参数：Y k；Y k。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsGeneratedBy.iSup`：∀ {ι : Type t} {X : ι → Type u} [inst : (i 
+: ι) → TopologicalSpace (X i)] {Y : Type u_1} {κ : Sort u_2}   {t : κ → Topologi
+calSpace Y}, (∀ (…
+· 使用定理 `Topology.IsGeneratedBy.coinduced`：∀ {ι : Type t} {X : ι → Type u} [inst 
+: (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : TopologicalSpace Y]   {Z 
+: Type v'} [Topology.I…
 
-English:
-instance Sigma.isGeneratedBy
-  signature: {κ : Type*} {Y : κ -> Type*} [forall k, TopologicalSpace (Y k)]
-  body: .iSup fun _ => .coinduced _
-
-中文:
-实例 依赖和类型.isGeneratedBy
-  签名: {κ : 类型} {Y : κ -> 类型} [对任意 k, 拓扑空间 (Y k)]
-  定义体: .iSup fun _ => .coinduced _
-
-Depends on / 依赖: coinduced
+--- 原说明 ---
+Disjoint unions of `X`-generated spaces are `X`-generated.
 -/
-instance Sigma.isGeneratedBy {κ : Type*} {Y : κ -> Type*} [forall k, TopologicalSpace (Y k)]
-    [forall k, IsGeneratedBy X (Y k)] : IsGeneratedBy X (Σ k, Y k) :=
-  .iSup fun _ => .coinduced _
-
-/--
-lemma `TopologicalSpace.generatedBy_generatedBy` / 引理 `TopologicalSpace.generatedBy_generatedBy`
-
-English:
-lemma TopologicalSpace.generatedBy_generatedBy
-  given: (Y : Type*) [TopologicalSpace Y]
-  proof: IsGeneratedBy.generatedBy_eq (X := X) (Y := WithGeneratedByTopology X Y)
-
-中文:
-引理 拓扑空间.generatedBy_generatedBy
-  条件: (Y : 类型) [拓扑空间 Y]
-  证明: IsGeneratedBy.generatedBy_eq (X := X) (Y := WithGeneratedByTopology X Y)
-
-Depends on / 依赖: generatedBy
+instance Sigma.isGeneratedBy {κ : Type*} {Y : κ → Type*} [∀ k, TopologicalSpace (Y k)]
+    [∀ k, IsGeneratedBy X (Y k)] : IsGeneratedBy X (Σ k, Y k) :=
+  .iSup fun _ ↦ .coinduced _
+/-
+**TopologicalSpace.generatedBy_generatedBy** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：TopologicalSpace.generatedBy_generatedBy (Y : Type*) [TopologicalSpace Y] 
+: generatedBy X (tY
+参数：Y : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsGeneratedBy.generatedBy_eq`：generatedBy_eq [IsGeneratedBy X Y
+] : .generatedBy X = tY
+· 使用定理 `Topology.IsGeneratedBy.instWithGeneratedByTopology`：∀ {ι : Type t} {X : 
+ι → Type u} [inst : (i : ι) → TopologicalSpace (X i)] {Y : Type v} [tY : Topolog
+icalSpace Y],   Topology.IsGeneratedBy X…
 -/
 lemma TopologicalSpace.generatedBy_generatedBy (Y : Type*) [TopologicalSpace Y] :
     generatedBy X (tY := generatedBy X) = generatedBy X (Y := Y):=

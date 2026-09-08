@@ -35,67 +35,41 @@ set_option linter.unusedDecidableInType false
 namespace Quotient
 
 section List
-variable {ι : Type*} [DecidableEq ι] {α : ι -> Sort*} {S : forall i, Setoid (α i)} {β : Sort*}
+variable {ι : Type*} [DecidableEq ι] {α : ι → Sort*} {S : ∀ i, Setoid (α i)} {β : Sort*}
 
-/--
-Definition of `listChoice` / `listChoice` 的定义
+/-- Given a collection of setoids indexed by a type `ι`, a list `l` of indices, and a function that
+  for each `i ∈ l` gives a term of the corresponding quotient type, then there is a corresponding
+  term in the quotient of the product of the setoids indexed by `l`. -/
+/-
+**Quotient.listChoice** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：listChoice {l : List ι} (q : forall i in l, Quotient (S i)) : @Quotient (f
+orall i in l, α i) piSetoid
+参数：q : forall i in l, Quotient (S i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition listChoice
-  signature: {l : List ι} (q : forall i in l, Quotient (S i))
-  body: match l with
-  | [] => ⟦nofun⟧
-  | i :: _ => Quotient.liftOn₂ (List.Pi.head (i := i) q)
-    (listChoice (List.Pi.tail q))
-    (⟦List.Pi.cons _ _ · ·⟧)
-    (fun _ _ _ _ ha hl => Quotient.sound (List.Pi.forall_rel_cons_ext ha hl))
-
-中文:
-定义 listChoice
-  签名: {l : 列表 ι} (q : 对任意 i in l, 商 (S i))
-  定义体: match l with
-  | [] => ⟦nofun⟧
-  | i :: _ => Quotient.liftOn₂ (List.Pi.head (i := i) q)
-    (listChoice (List.Pi.tail q))
-    (⟦List.Pi.cons _ _ · ·⟧)
-    (fun _ _ _ _ ha hl => Quotient.sound (List.Pi.forall_rel_cons_ext ha hl))
-
-Depends on / 依赖: List.Pi.cons, List.Pi.forall_rel_cons_ext, List.Pi.head, List.Pi.tail, Quotient, Quotient.liftOn, Quotient.sound, forall_rel_cons_ext, listChoice
+--- 原说明 ---
+Given a collection of setoids indexed by a type `ι`, a list `l` of indices, and 
+a function that
+  for each `i ∈ l` gives a term of the corresponding quotient type, then there i
+s a corresponding
+  term in the quotient of the product of the setoids indexed by `l`.
 -/
-def listChoice {l : List ι} (q : forall i in l, Quotient (S i)) : @Quotient (forall i in l, α i) piSetoid :=
+def listChoice {l : List ι} (q : ∀ i ∈ l, Quotient (S i)) : @Quotient (∀ i ∈ l, α i) piSetoid :=
   match l with
   | [] => ⟦nofun⟧
   | i :: _ => Quotient.liftOn₂ (List.Pi.head (i := i) q)
     (listChoice (List.Pi.tail q))
     (⟦List.Pi.cons _ _ · ·⟧)
-    (fun _ _ _ _ ha hl => Quotient.sound (List.Pi.forall_rel_cons_ext ha hl))
-
-/--
-theorem `listChoice_mk` / 定理 `listChoice_mk`
-
-English:
-theorem listChoice_mk
-  given: {l : List ι} (a : forall i in l, α i)
-  statement: listChoice (S := S) (⟦a · ·⟧) = ⟦a⟧
-  proof: match l with
-  | [] => Quotient.sound nofun
-  | i :: l => by
-    unfold listChoice List.Pi.tail
-    rw [listChoice_mk]
-    exact congrArg (⟦·⟧) (List.Pi.cons_eta a)
-
-中文:
-定理 listChoice_mk
-  条件: {l : 列表 ι} (a : 对任意 i in l, α i)
-  结论: listChoice (S := S) (⟦a · ·⟧) = ⟦a⟧
-  证明: match l with
-  | [] => Quotient.sound nofun
-  | i :: l => by
-    unfold listChoice List.Pi.tail
-    rw [listChoice_mk]
-    exact congrArg (⟦·⟧) (List.Pi.cons_eta a)
+    (fun _ _ _ _ ha hl ↦ Quotient.sound (List.Pi.forall_rel_cons_ext ha hl))
+/-
+**Quotient.listChoice_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：listChoice_mk {l : List ι} (a : forall i in l, α i) : listChoice (S
+参数：a : forall i in l, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem listChoice_mk {l : List ι} (a : forall i in l, α i) : listChoice (S := S) (⟦a · ·⟧) = ⟦a⟧ :=
+theorem listChoice_mk {l : List ι} (a : ∀ i ∈ l, α i) : listChoice (S := S) (⟦a · ·⟧) = ⟦a⟧ :=
   match l with
   | [] => Quotient.sound nofun
   | i :: l => by
@@ -105,47 +79,29 @@ theorem listChoice_mk {l : List ι} (a : forall i in l, α i) : listChoice (S :=
 
 /-- Choice-free induction principle for quotients indexed by a `List`. -/
 @[elab_as_elim]
-/--
-lemma `list_ind` / 引理 `list_ind`
+/-
+**Quotient.list_ind** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：list_ind {l : List ι} {C : (forall i in l, Quotient (S i)) -> Prop} (f : f
+orall a : forall i in l, α i, C (⟦a · ·⟧)) (q : forall i in l, Quotient (S i)) :
+ C q
+参数：forall i in l, Quotient (S i)；f : forall a : forall i in l, α i, C (⟦a · ·⟧)；
+q : forall i in l, Quotient (S i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma list_ind
-  statement: {l : List ι} {C : (forall i in l, Quotient (S i)) -> Prop}
-  proof: match l with
-  | [] => cast (congr_arg _ (funext₂ nofun)) (f nofun)
-  | i :: l => by
-    rw [← List.Pi.cons_eta q]
-    induction List.Pi.head q using Quotient.ind with | _ a
-    refine @list_ind _ (fun q => C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
-    intro as
-    rw [List.Pi.cons_map a as (fun i => Quotient.mk (S i))]
-    exact f _
-
-中文:
-引理 list_ind
-  结论: {l : 列表 ι} {C : (对任意 i in l, 商 (S i)) -> 命题}
-  证明: match l with
-  | [] => cast (congr_arg _ (funext₂ nofun)) (f nofun)
-  | i :: l => by
-    rw [← List.Pi.cons_eta q]
-    induction List.Pi.head q using Quotient.ind with | _ a
-    refine @list_ind _ (fun q => C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
-    intro as
-    rw [List.Pi.cons_map a as (fun i => Quotient.mk (S i))]
-    exact f _
-
-Depends on / 依赖: List.Pi.cons, List.Pi.cons_eta, List.Pi.cons_map, List.Pi.head, List.Pi.tail, Quotient, Quotient.ind, Quotient.mk, congr_arg, cons_eta, cons_map, list_ind
+--- 原说明 ---
+Choice-free induction principle for quotients indexed by a `List`.
 -/
-lemma list_ind {l : List ι} {C : (forall i in l, Quotient (S i)) -> Prop}
-    (f : forall a : forall i in l, α i, C (⟦a · ·⟧)) (q : forall i in l, Quotient (S i)) : C q :=
+lemma list_ind {l : List ι} {C : (∀ i ∈ l, Quotient (S i)) → Prop}
+    (f : ∀ a : ∀ i ∈ l, α i, C (⟦a · ·⟧)) (q : ∀ i ∈ l, Quotient (S i)) : C q :=
   match l with
   | [] => cast (congr_arg _ (funext₂ nofun)) (f nofun)
   | i :: l => by
     rw [← List.Pi.cons_eta q]
     induction List.Pi.head q using Quotient.ind with | _ a
-    refine @list_ind _ (fun q => C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
+    refine @list_ind _ (fun q ↦ C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
     intro as
-    rw [List.Pi.cons_map a as (fun i => Quotient.mk (S i))]
+    rw [List.Pi.cons_map a as (fun i ↦ Quotient.mk (S i))]
     exact f _
 
 end List
@@ -156,241 +112,196 @@ section Fintype
 -- makes no sense yet.
 set_option linter.unusedFintypeInType false
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι -> Sort*} {S : forall i, Setoid (α i)} {β : Sort*}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : ∀ i, Setoid (α i)} {β : Sort*}
 
 /-- Choice-free induction principle for quotients indexed by a finite type.
   See `Quotient.induction_on_pi` for the general version assuming `Classical.choice`. -/
 @[elab_as_elim]
-/--
-lemma `ind_fintype_pi` / 引理 `ind_fintype_pi`
+/-
+**Quotient.ind_fintype_pi** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：ind_fintype_pi {C : (forall i, Quotient (S i)) -> Prop} (f : forall a : fo
+rall i, α i, C (⟦a ·⟧)) (q : forall i, Quotient (S i)) : C q
+参数：forall i, Quotient (S i)；f : forall a : forall i, α i, C (⟦a ·⟧)；q : forall i
+, Quotient (S i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
+· 使用引理 `Quotient.list_ind`：list_ind {l : List ι} {C : (forall i in l, Quotient (
+S i)) -> Prop} (f : forall a : forall i in l, α i, C (⟦a · ·⟧)) (q : forall i in
+ l, Quo…
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-lemma ind_fintype_pi
-  statement: {C : (forall i, Quotient (S i)) -> Prop}
-  proof: by
-  have {m : Multiset ι} (C : (forall i in m, Quotient (S i)) -> Prop) :
-      forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
-    induction m using Quotient.ind
-    exact list_ind
-  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => f _) (fun i _ => q i)
-
-中文:
-引理 ind_fintype_pi
-  结论: {C : (对任意 i, 商 (S i)) -> 命题}
-  证明: by
-  have {m : Multiset ι} (C : (forall i in m, Quotient (S i)) -> Prop) :
-      forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
-    induction m using Quotient.ind
-    exact list_ind
-  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => f _) (fun i _ => q i)
-
-Depends on / 依赖: Finset, Finset.mem_univ, Multiset, Quotient, Quotient.ind, list_ind, mem_univ
+--- 原说明 ---
+Choice-free induction principle for quotients indexed by a finite type.
+  See `Quotient.induction_on_pi` for the general version assuming `Classical.cho
+ice`.
 -/
-lemma ind_fintype_pi {C : (forall i, Quotient (S i)) -> Prop}
-    (f : forall a : forall i, α i, C (⟦a ·⟧)) (q : forall i, Quotient (S i)) : C q := by
-  have {m : Multiset ι} (C : (forall i in m, Quotient (S i)) -> Prop) :
-      forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
+lemma ind_fintype_pi {C : (∀ i, Quotient (S i)) → Prop}
+    (f : ∀ a : ∀ i, α i, C (⟦a ·⟧)) (q : ∀ i, Quotient (S i)) : C q := by
+  have {m : Multiset ι} (C : (∀ i ∈ m, Quotient (S i)) → Prop) :
+      ∀ (_ : ∀ a : ∀ i ∈ m, α i, C (⟦a · ·⟧)) (q : ∀ i ∈ m, Quotient (S i)), C q := by
     induction m using Quotient.ind
     exact list_ind
-  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => f _) (fun i _ => q i)
+  exact this (fun q ↦ C (q · (Finset.mem_univ _))) (fun _ ↦ f _) (fun i _ ↦ q i)
 
 /-- Choice-free induction principle for quotients indexed by a finite type.
   See `Quotient.induction_on_pi` for the general version assuming `Classical.choice`. -/
 @[elab_as_elim]
-/--
-lemma `induction_on_fintype_pi` / 引理 `induction_on_fintype_pi`
+/-
+**Quotient.induction_on_fintype_pi** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：induction_on_fintype_pi {C : (forall i, Quotient (S i)) -> Prop} (q : fora
+ll i, Quotient (S i)) (f : forall a : forall i, α i, C (⟦a ·⟧)) : C q
+参数：forall i, Quotient (S i)；q : forall i, Quotient (S i)；f : forall a : forall i
+, α i, C (⟦a ·⟧)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Quotient.ind_fintype_pi`：ind_fintype_pi {C : (forall i, Quotient (S i)) 
+-> Prop} (f : forall a : forall i, α i, C (⟦a ·⟧)) (q : forall i, Quotient (S i)
+) : C q
 
-English:
-lemma induction_on_fintype_pi
-  statement: {C : (forall i, Quotient (S i)) -> Prop}
-  proof: ind_fintype_pi f q
-
-中文:
-引理 induction_on_fintype_pi
-  结论: {C : (对任意 i, 商 (S i)) -> 命题}
-  证明: ind_fintype_pi f q
-
-Depends on / 依赖: ind_fintype_pi
+--- 原说明 ---
+Choice-free induction principle for quotients indexed by a finite type.
+  See `Quotient.induction_on_pi` for the general version assuming `Classical.cho
+ice`.
 -/
-lemma induction_on_fintype_pi {C : (forall i, Quotient (S i)) -> Prop}
-    (q : forall i, Quotient (S i)) (f : forall a : forall i, α i, C (⟦a ·⟧)) : C q :=
+lemma induction_on_fintype_pi {C : (∀ i, Quotient (S i)) → Prop}
+    (q : ∀ i, Quotient (S i)) (f : ∀ a : ∀ i, α i, C (⟦a ·⟧)) : C q :=
   ind_fintype_pi f q
 
-/--
-Definition of `finChoice` / `finChoice` 的定义
+/-- Given a collection of setoids indexed by a fintype `ι` and a function that for each `i : ι`
+  gives a term of the corresponding quotient type, then there is corresponding term in the quotient
+  of the product of the setoids.
+  See `Quotient.choice` for the noncomputable general version. -/
+/-
+**Quotient.finChoice** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：finChoice (q : forall i, Quotient (S i)) : @Quotient (forall i, α i) piSet
+oid
+参数：q : forall i, Quotient (S i)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-definition finChoice
-  signature: (q : forall i, Quotient (S i))
-  body: by
-  let e := Equiv.subtypeQuotientEquivQuotientSubtype (fun l : List ι => forall i, i in l)
-    (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
-  refine e.liftOn
-    (fun l => (listChoice fun i _ => q i).map (fun a i => a i (l.2 i)) ?_) ?_
-  · exact fun _ _ h i => h i _
-  intro _ _ _
-  refine ind_fintype_pi (fun a => ?_) q
-  simp_rw [listChoice_mk, Quotient.map_mk]
-
-中文:
-定义 finChoice
-  签名: (q : 对任意 i, 商 (S i))
-  定义体: by
-  let e := Equiv.subtypeQuotientEquivQuotientSubtype (fun l : List ι => forall i, i in l)
-    (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
-  refine e.liftOn
-    (fun l => (listChoice fun i _ => q i).map (fun a i => a i (l.2 i)) ?_) ?_
-  · exact fun _ _ h i => h i _
-  intro _ _ _
-  refine ind_fintype_pi (fun a => ?_) q
-  simp_rw [listChoice_mk, Quotient.map_mk]
-
-Depends on / 依赖: Equiv.subtypeQuotientEquivQuotientSubtype, Finset, Finset.mem_univ, Iff.rfl, Multiset, Quotient, Quotient.map_mk, e.liftOn, ind_fintype_pi, liftOn, listChoice, listChoice_mk, map_mk, mem_univ, simp_rw, subtypeQuotientEquivQuotientSubtype
+--- 原说明 ---
+Given a collection of setoids indexed by a fintype `ι` and a function that for e
+ach `i : ι`
+  gives a term of the corresponding quotient type, then there is corresponding t
+erm in the quotient
+  of the product of the setoids.
+  See `Quotient.choice` for the noncomputable general version.
 -/
-def finChoice (q : forall i, Quotient (S i)) :
-    @Quotient (forall i, α i) piSetoid := by
-  let e := Equiv.subtypeQuotientEquivQuotientSubtype (fun l : List ι => forall i, i in l)
-    (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
+def finChoice (q : ∀ i, Quotient (S i)) :
+    @Quotient (∀ i, α i) piSetoid := by
+  let e := Equiv.subtypeQuotientEquivQuotientSubtype (fun l : List ι ↦ ∀ i, i ∈ l)
+    (fun s : Multiset ι ↦ ∀ i, i ∈ s) (fun i ↦ Iff.rfl) (fun _ _ ↦ Iff.rfl) ⟨_, Finset.mem_univ⟩
   refine e.liftOn
-    (fun l => (listChoice fun i _ => q i).map (fun a i => a i (l.2 i)) ?_) ?_
-  · exact fun _ _ h i => h i _
+    (fun l ↦ (listChoice fun i _ ↦ q i).map (fun a i ↦ a i (l.2 i)) ?_) ?_
+  · exact fun _ _ h i ↦ h i _
   intro _ _ _
-  refine ind_fintype_pi (fun a => ?_) q
+  refine ind_fintype_pi (fun a ↦ ?_) q
   simp_rw [listChoice_mk, Quotient.map_mk]
-
-/--
-theorem `finChoice_eq` / 定理 `finChoice_eq`
-
-English:
-theorem finChoice_eq
-  given: (a : forall i, α i)
-  proof: by
-  dsimp [finChoice]
-  obtain ⟨l, hl⟩ := (Finset.univ.val : Multiset ι).exists_rep
-  simp_rw [← hl, Equiv.subtypeQuotientEquivQuotientSubtype, listChoice_mk]
-  rfl
-
-中文:
-定理 finChoice_eq
-  条件: (a : 对任意 i, α i)
-  证明: by
-  dsimp [finChoice]
-  obtain ⟨l, hl⟩ := (Finset.univ.val : Multiset ι).exists_rep
-  simp_rw [← hl, Equiv.subtypeQuotientEquivQuotientSubtype, listChoice_mk]
-  rfl
-
-Depends on / 依赖: Equiv.subtypeQuotientEquivQuotientSubtype, Finset, Finset.univ.val, Multiset, exists_rep, finChoice, listChoice_mk, simp_rw, subtypeQuotientEquivQuotientSubtype
+/-
+**Quotient.finChoice_eq** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：finChoice_eq (a : forall i, α i) : finChoice (S
+参数：a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Quotient.exists_rep`：∀ {α : Sort u} {s : Setoid α} (q : Quotient s), ∃ a
+, ⟦a⟧ = q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.liftOn.congr_simp`：∀ {α : Sort u} {β : Sort v} {s : Setoid α} (
+q q_1 : Quotient s),   q = q_1 → ∀ (f f_1 : α → β) (e_f : f = f_1) (c : ∀ (a b :
+ α), a ≈ b → f a…
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Quotient.map.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} {sa : Setoid α}
+ {sb : Setoid β} (f f_1 : α → β) (e_f : f = f_1)   (h : ∀ ⦃a b : α⦄, a ≈ b → f a
+ ≈ f b) (a a_…
+· 使用定理 `Quotient.listChoice_mk`：listChoice_mk {l : List ι} (a : forall i in l, α
+ i) : listChoice (S
 -/
-theorem finChoice_eq (a : forall i, α i) :
+theorem finChoice_eq (a : ∀ i, α i) :
     finChoice (S := S) (⟦a ·⟧) = ⟦a⟧ := by
   dsimp [finChoice]
   obtain ⟨l, hl⟩ := (Finset.univ.val : Multiset ι).exists_rep
   simp_rw [← hl, Equiv.subtypeQuotientEquivQuotientSubtype, listChoice_mk]
   rfl
-
-/--
-lemma `eval_finChoice` / 引理 `eval_finChoice`
-
-English:
-lemma eval_finChoice
-  given: (f : forall i, Quotient (S i))
-  proof: induction_on_fintype_pi f (fun a => by rw [finChoice_eq]; rfl)
-
-中文:
-引理 eval_finChoice
-  条件: (f : 对任意 i, 商 (S i))
-  证明: induction_on_fintype_pi f (fun a => by rw [finChoice_eq]; rfl)
-
-Depends on / 依赖: finChoice_eq, induction_on_fintype_pi
+/-
+**Quotient.eval_finChoice** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：eval_finChoice (f : forall i, Quotient (S i)) : eval (finChoice f) = f
+参数：f : forall i, Quotient (S i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Quotient.induction_on_fintype_pi`：induction_on_fintype_pi {C : (forall i
+, Quotient (S i)) -> Prop} (q : forall i, Quotient (S i)) (f : forall a : forall
+ i, α i, C (⟦a ·⟧)) : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.finChoice_eq`：finChoice_eq (a : forall i, α i) : finChoice (S
 -/
-lemma eval_finChoice (f : forall i, Quotient (S i)) :
+lemma eval_finChoice (f : ∀ i, Quotient (S i)) :
     eval (finChoice f) = f :=
-  induction_on_fintype_pi f (fun a => by rw [finChoice_eq]; rfl)
+  induction_on_fintype_pi f (fun a ↦ by rw [finChoice_eq]; rfl)
 
-/--
-Definition of `finLiftOn` / `finLiftOn` 的定义
+/-- Lift a function on `∀ i, α i` to a function on `∀ i, Quotient (S i)`. -/
+/-
+**Quotient.finLiftOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：finLiftOn (q : forall i, Quotient (S i)) (f : (forall i, α i) -> β) (h : f
+orall (a b : forall i, α i), (forall i, a i ≈ b i) -> f a = f b) : β
+参数：q : forall i, Quotient (S i)；f : (forall i, α i) -> β；h : forall (a b : foral
+l i, α i), (forall i, a i ≈ b i) -> f a = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finLiftOn
-  signature: (q : forall i, Quotient (S i)) (f : (forall i, α i) -> β)
-  body: (finChoice q).liftOn f h
-
-@[simp]
-
-中文:
-定义 finLiftOn
-  签名: (q : 对任意 i, 商 (S i)) (f : (对任意 i, α i) -> β)
-  定义体: (finChoice q).liftOn f h
-
-@[simp]
-
-Depends on / 依赖: finChoice, liftOn
+--- 原说明 ---
+Lift a function on `∀ i, α i` to a function on `∀ i, Quotient (S i)`.
 -/
-def finLiftOn (q : forall i, Quotient (S i)) (f : (forall i, α i) -> β)
-    (h : forall (a b : forall i, α i), (forall i, a i ≈ b i) -> f a = f b) : β :=
+def finLiftOn (q : ∀ i, Quotient (S i)) (f : (∀ i, α i) → β)
+    (h : ∀ (a b : ∀ i, α i), (∀ i, a i ≈ b i) → f a = f b) : β :=
   (finChoice q).liftOn f h
 
 @[simp]
-/--
-lemma `finLiftOn_empty` / 引理 `finLiftOn_empty`
-
-English:
-lemma finLiftOn_empty
-  given: [e : IsEmpty ι] (q : forall i, Quotient (S i))
-  proof: by
-  ext f h
-  dsimp [finLiftOn]
-  induction finChoice q using Quotient.ind
-  exact h _ _ e.elim
-
-@[simp]
-
-中文:
-引理 finLiftOn_empty
-  条件: [e : 是空 ι] (q : 对任意 i, 商 (S i))
-  证明: by
-  ext f h
-  dsimp [finLiftOn]
-  induction finChoice q using Quotient.ind
-  exact h _ _ e.elim
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.ind, e.elim, finChoice, finLiftOn
+/-
+**Quotient.finLiftOn_empty** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：finLiftOn_empty [e : IsEmpty ι] (q : forall i, Quotient (S i)) : finLiftOn
+ (β
+参数：q : forall i, Quotient (S i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-lemma finLiftOn_empty [e : IsEmpty ι] (q : forall i, Quotient (S i)) :
-    finLiftOn (β := β) q = fun f _ => f e.elim := by
+lemma finLiftOn_empty [e : IsEmpty ι] (q : ∀ i, Quotient (S i)) :
+    finLiftOn (β := β) q = fun f _ ↦ f e.elim := by
   ext f h
   dsimp [finLiftOn]
   induction finChoice q using Quotient.ind
   exact h _ _ e.elim
 
 @[simp]
-/--
-lemma `finLiftOn_mk` / 引理 `finLiftOn_mk`
-
-English:
-lemma finLiftOn_mk
-  given: (a : forall i, α i)
-  proof: by
-  ext f h
-  dsimp [finLiftOn]
-  rw [finChoice_eq]
-  rfl
-
-中文:
-引理 finLiftOn_mk
-  条件: (a : 对任意 i, α i)
-  证明: by
-  ext f h
-  dsimp [finLiftOn]
-  rw [finChoice_eq]
-  rfl
-
-Depends on / 依赖: finChoice_eq, finLiftOn
+/-
+**Quotient.finLiftOn_mk** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：finLiftOn_mk (a : forall i, α i) : finLiftOn (S
+参数：a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.finChoice_eq`：finChoice_eq (a : forall i, α i) : finChoice (S
 -/
-lemma finLiftOn_mk (a : forall i, α i) :
-    finLiftOn (S := S) (β := β) (⟦a ·⟧) = fun f _ => f a := by
+lemma finLiftOn_mk (a : ∀ i, α i) :
+    finLiftOn (S := S) (β := β) (⟦a ·⟧) = fun f _ ↦ f a := by
   ext f h
   dsimp [finLiftOn]
   rw [finChoice_eq]
@@ -398,43 +309,22 @@ lemma finLiftOn_mk (a : forall i, α i) :
 
 /-- `Quotient.finChoice` as an equivalence. -/
 @[simps]
-/--
-Definition of `finChoiceEquiv` / `finChoiceEquiv` 的定义
+/-
+**Quotient.finChoiceEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：finChoiceEquiv : (forall i, Quotient (S i)) ≃ @Quotient (forall i, α i) pi
+Setoid where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finChoiceEquiv
-  signature: :
-  body: finChoice
-  invFun := eval
-  left_inv q := by
-    refine induction_on_fintype_pi q (fun a => ?_)
-    rw [finChoice_eq]
-    rfl
-  right_inv q := by
-    induction q using Quotient.ind
-    exact finChoice_eq _
-
-中文:
-定义 finChoiceEquiv
-  签名: :
-  定义体: finChoice
-  invFun := eval
-  left_inv q := by
-    refine induction_on_fintype_pi q (fun a => ?_)
-    rw [finChoice_eq]
-    rfl
-  right_inv q := by
-    induction q using Quotient.ind
-    exact finChoice_eq _
-
-Depends on / 依赖: finChoice
+--- 原说明 ---
+`Quotient.finChoice` as an equivalence.
 -/
 def finChoiceEquiv :
-    (forall i, Quotient (S i)) ≃ @Quotient (forall i, α i) piSetoid where
+    (∀ i, Quotient (S i)) ≃ @Quotient (∀ i, α i) piSetoid where
   toFun := finChoice
   invFun := eval
   left_inv q := by
-    refine induction_on_fintype_pi q (fun a => ?_)
+    refine induction_on_fintype_pi q (fun a ↦ ?_)
     rw [finChoice_eq]
     rfl
   right_inv q := by
@@ -443,116 +333,108 @@ def finChoiceEquiv :
 
 /-- Recursion principle for quotients indexed by a finite type. -/
 @[elab_as_elim]
-/--
-Definition of `finHRecOn` / `finHRecOn` 的定义
+/-
+**Quotient.finHRecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：finHRecOn {C : (forall i, Quotient (S i)) -> Sort*} (q : forall i, Quotien
+t (S i)) (f : forall a : forall i, α i, C (⟦a ·⟧)) (h : forall (a b : forall i, 
+α i), (forall i, a i ≈ b i) -> f a ≍ f b) : C q
+参数：forall i, Quotient (S i)；q : forall i, Quotient (S i)；f : forall a : forall i
+, α i, C (⟦a ·⟧)；h : forall (a b : forall i, α i), (forall i, a i ≈ b i) -> f a 
+≍ f b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Quotient.eval_finChoice`：eval_finChoice (f : forall i, Quotient (S i)) :
+ eval (finChoice f) = f
 
-English:
-definition finHRecOn
-  signature: {C : (forall i, Quotient (S i)) -> Sort*}
-  body: eval_finChoice q ▸ (finChoice q).hrecOn f h
-
-中文:
-定义 finHRecOn
-  签名: {C : (对任意 i, 商 (S i)) -> 类型层*}
-  定义体: eval_finChoice q ▸ (finChoice q).hrecOn f h
-
-Depends on / 依赖: eval_finChoice, finChoice, hrecOn
+--- 原说明 ---
+Recursion principle for quotients indexed by a finite type.
 -/
-def finHRecOn {C : (forall i, Quotient (S i)) -> Sort*}
-    (q : forall i, Quotient (S i))
-    (f : forall a : forall i, α i, C (⟦a ·⟧))
-    (h : forall (a b : forall i, α i), (forall i, a i ≈ b i) -> f a ≍ f b) :
+def finHRecOn {C : (∀ i, Quotient (S i)) → Sort*}
+    (q : ∀ i, Quotient (S i))
+    (f : ∀ a : ∀ i, α i, C (⟦a ·⟧))
+    (h : ∀ (a b : ∀ i, α i), (∀ i, a i ≈ b i) → f a ≍ f b) :
     C q :=
   eval_finChoice q ▸ (finChoice q).hrecOn f h
 
 /-- Recursion principle for quotients indexed by a finite type. -/
 @[elab_as_elim]
-/--
-Definition of `finRecOn` / `finRecOn` 的定义
+/-
+**Quotient.finRecOn** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：finRecOn {C : (forall i, Quotient (S i)) -> Sort*} (q : forall i, Quotient
+ (S i)) (f : forall a : forall i, α i, C (⟦a ·⟧)) (h : forall (a b : forall i, α
+ i) (h : forall i, a i ≈ b i), Eq.ndrec (f a) (funext fun i => Quotient.sound (h
+ i)) = f b) : C q
+参数：forall i, Quotient (S i)；q : forall i, Quotient (S i)；f : forall a : forall i
+, α i, C (⟦a ·⟧)；h : forall (a b : forall i, α i) (h : forall i, a i ≈ b i), Eq.
+ndrec (f a) (funext fun i => Quotient.sound (h i)) = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finRecOn
-  signature: {C : (forall i, Quotient (S i)) -> Sort*}
-  body: finHRecOn q f (eqRec_heq_iff.mp <| heq_of_eq <| h · · ·)
-
-@[simp]
-
-中文:
-定义 finRecOn
-  签名: {C : (对任意 i, 商 (S i)) -> 类型层*}
-  定义体: finHRecOn q f (eqRec_heq_iff.mp <| heq_of_eq <| h · · ·)
-
-@[simp]
-
-Depends on / 依赖: eqRec_heq_iff, eqRec_heq_iff.mp, finHRecOn, heq_of_eq
+--- 原说明 ---
+Recursion principle for quotients indexed by a finite type.
 -/
-def finRecOn {C : (forall i, Quotient (S i)) -> Sort*}
-    (q : forall i, Quotient (S i))
-    (f : forall a : forall i, α i, C (⟦a ·⟧))
-    (h : forall (a b : forall i, α i) (h : forall i, a i ≈ b i),
-      Eq.ndrec (f a) (funext fun i => Quotient.sound (h i)) = f b) :
+def finRecOn {C : (∀ i, Quotient (S i)) → Sort*}
+    (q : ∀ i, Quotient (S i))
+    (f : ∀ a : ∀ i, α i, C (⟦a ·⟧))
+    (h : ∀ (a b : ∀ i, α i) (h : ∀ i, a i ≈ b i),
+      Eq.ndrec (f a) (funext fun i ↦ Quotient.sound (h i)) = f b) :
     C q :=
   finHRecOn q f (eqRec_heq_iff.mp <| heq_of_eq <| h · · ·)
 
 @[simp]
-/--
-lemma `finHRecOn_mk` / 引理 `finHRecOn_mk`
-
-English:
-lemma finHRecOn_mk
-  statement: {C : (forall i, Quotient (S i)) -> Sort*}
-  proof: by
-  ext f h
-  refine eq_of_heq ((eqRec_heq _ _).trans ?_)
-  rw [finChoice_eq]
-  rfl
-
-@[simp]
-
-中文:
-引理 finHRecOn_mk
-  结论: {C : (对任意 i, 商 (S i)) -> 类型层*}
-  证明: by
-  ext f h
-  refine eq_of_heq ((eqRec_heq _ _).trans ?_)
-  rw [finChoice_eq]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: eqRec_heq, eq_of_heq, finChoice_eq
+/-
+**Quotient.finHRecOn_mk** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：finHRecOn_mk {C : (forall i, Quotient (S i)) -> Sort*} (a : forall i, α i)
+ : finHRecOn (C
+参数：forall i, Quotient (S i)；a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `HEq.trans`：∀ {α β φ : Sort u} {a : α} {b : β} {c : φ}, a ≍ b → b ≍ c → a
+ ≍ c
+· 使用引理 `Quotient.eval_finChoice`：eval_finChoice (f : forall i, Quotient (S i)) :
+ eval (finChoice f) = f
+· 使用定理 `eqRec_heq`：∀ {α : Sort u} {φ : α → Sort v} {a a' : α} (h : a = a') (p : 
+φ a), Eq.recOn h p ≍ p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.finChoice_eq`：finChoice_eq (a : forall i, α i) : finChoice (S
 -/
-lemma finHRecOn_mk {C : (forall i, Quotient (S i)) -> Sort*}
-    (a : forall i, α i) :
-    finHRecOn (C := C) (⟦a ·⟧) = fun f _ => f a := by
+lemma finHRecOn_mk {C : (∀ i, Quotient (S i)) → Sort*}
+    (a : ∀ i, α i) :
+    finHRecOn (C := C) (⟦a ·⟧) = fun f _ ↦ f a := by
   ext f h
   refine eq_of_heq ((eqRec_heq _ _).trans ?_)
   rw [finChoice_eq]
   rfl
 
 @[simp]
-/--
-lemma `finRecOn_mk` / 引理 `finRecOn_mk`
-
-English:
-lemma finRecOn_mk
-  statement: {C : (forall i, Quotient (S i)) -> Sort*}
-  proof: by
-  unfold finRecOn
-  simp
-
-中文:
-引理 finRecOn_mk
-  结论: {C : (对任意 i, 商 (S i)) -> 类型层*}
-  证明: by
-  unfold finRecOn
-  simp
-
-Depends on / 依赖: finRecOn
+/-
+**Quotient.finRecOn_mk** 是 Mathlib 中的一个引理，位于命名空间 `Quotient`。
+形式化陈述：finRecOn_mk {C : (forall i, Quotient (S i)) -> Sort*} (a : forall i, α i) 
+: finRecOn (C
+参数：forall i, Quotient (S i)；a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Quotient.finHRecOn_mk`：finHRecOn_mk {C : (forall i, Quotient (S i)) -> S
+ort*} (a : forall i, α i) : finHRecOn (C
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma finRecOn_mk {C : (forall i, Quotient (S i)) -> Sort*}
-    (a : forall i, α i) :
-    finRecOn (C := C) (⟦a ·⟧) = fun f _ => f a := by
+lemma finRecOn_mk {C : (∀ i, Quotient (S i)) → Sort*}
+    (a : ∀ i, α i) :
+    finRecOn (C := C) (⟦a ·⟧) = fun f _ ↦ f a := by
   unfold finRecOn
   simp
 
@@ -561,134 +443,103 @@ end Fintype
 end Quotient
 
 namespace Trunc
-variable {ι : Type*} [DecidableEq ι] [Fintype ι] {α : ι -> Sort*} {β : Sort*}
+variable {ι : Type*} [DecidableEq ι] [Fintype ι] {α : ι → Sort*} {β : Sort*}
 
-/--
-Definition of `finChoice` / `finChoice` 的定义
+/-- Given a function that for each `i : ι` gives a term of the corresponding
+truncation type, then there is corresponding term in the truncation of the product. -/
+/-
+**Trunc.finChoice** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：finChoice (q : forall i, Trunc (α i)) : Trunc (forall i, α i)
+参数：q : forall i, Trunc (α i)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
+· 使用定理 `trivial`：True
 
-English:
-definition finChoice
-  signature: (q : forall i, Trunc (α i))
-  body: Quotient.map' id (fun _ _ _ => trivial) (Quotient.finChoice q)
-
-中文:
-定义 finChoice
-  签名: (q : 对任意 i, Trunc (α i))
-  定义体: Quotient.map' id (fun _ _ _ => trivial) (Quotient.finChoice q)
-
-Depends on / 依赖: Quotient, Quotient.finChoice, Quotient.map, finChoice
+--- 原说明 ---
+Given a function that for each `i : ι` gives a term of the corresponding
+truncation type, then there is corresponding term in the truncation of the produ
+ct.
 -/
-def finChoice (q : forall i, Trunc (α i)) : Trunc (forall i, α i) :=
+def finChoice (q : ∀ i, Trunc (α i)) : Trunc (∀ i, α i) :=
   Quotient.map' id (fun _ _ _ => trivial) (Quotient.finChoice q)
-
-/--
-theorem `finChoice_eq` / 定理 `finChoice_eq`
-
-English:
-theorem finChoice_eq
-  given: (f : forall i, α i)
-  statement: (Trunc.finChoice fun i => Trunc.mk (f i)) = Trunc.mk f
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 finChoice_eq
-  条件: (f : 对任意 i, α i)
-  结论: (Trunc.finChoice fun i => Trunc.mk (f i)) = Trunc.mk f
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Trunc.finChoice_eq** 是 Mathlib 中的一个定理，位于命名空间 `Trunc`。
+形式化陈述：finChoice_eq (f : forall i, α i) : (Trunc.finChoice fun i => Trunc.mk (f i
+)) = Trunc.mk f
+参数：f : forall i, α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem finChoice_eq (f : forall i, α i) : (Trunc.finChoice fun i => Trunc.mk (f i)) = Trunc.mk f :=
+theorem finChoice_eq (f : ∀ i, α i) : (Trunc.finChoice fun i => Trunc.mk (f i)) = Trunc.mk f :=
   Subsingleton.elim _ _
 
-/--
-Definition of `finLiftOn` / `finLiftOn` 的定义
+/-- Lift a function on `∀ i, α i` to a function on `∀ i, Trunc (α i)`. -/
+/-
+**Trunc.finLiftOn** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：finLiftOn (q : forall i, Trunc (α i)) (f : (forall i, α i) -> β) (h : fora
+ll (a b : forall i, α i), f a = f b) : β
+参数：q : forall i, Trunc (α i)；f : (forall i, α i) -> β；h : forall (a b : forall i
+, α i), f a = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finLiftOn
-  signature: (q : forall i, Trunc (α i)) (f : (forall i, α i) -> β) (h : forall (a b : forall i, α i), f a = f b)
-  body: Quotient.finLiftOn q f (fun _ _ _ => h _ _)
-
-@[simp]
-
-中文:
-定义 finLiftOn
-  签名: (q : 对任意 i, Trunc (α i)) (f : (对任意 i, α i) -> β) (h : 对任意 (a b : 对任意 i, α i), f a = f b)
-  定义体: Quotient.finLiftOn q f (fun _ _ _ => h _ _)
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.finLiftOn, finLiftOn
+--- 原说明 ---
+Lift a function on `∀ i, α i` to a function on `∀ i, Trunc (α i)`.
 -/
-def finLiftOn (q : forall i, Trunc (α i)) (f : (forall i, α i) -> β) (h : forall (a b : forall i, α i), f a = f b) : β :=
-  Quotient.finLiftOn q f (fun _ _ _ => h _ _)
+def finLiftOn (q : ∀ i, Trunc (α i)) (f : (∀ i, α i) → β) (h : ∀ (a b : ∀ i, α i), f a = f b) : β :=
+  Quotient.finLiftOn q f (fun _ _ _ ↦ h _ _)
 
 @[simp]
-/--
-lemma `finLiftOn_empty` / 引理 `finLiftOn_empty`
-
-English:
-lemma finLiftOn_empty
-  given: [e : IsEmpty ι] (q : forall i, Trunc (α i))
-  proof: funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_empty q) _ _
-
-@[simp]
-
-中文:
-引理 finLiftOn_empty
-  条件: [e : 是空 ι] (q : 对任意 i, Trunc (α i))
-  证明: funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_empty q) _ _
-
-@[simp]
-
-Depends on / 依赖: e.elim
+/-
+**Trunc.finLiftOn_empty** 是 Mathlib 中的一个引理，位于命名空间 `Trunc`。
+形式化陈述：finLiftOn_empty [e : IsEmpty ι] (q : forall i, Trunc (α i)) : finLiftOn (β
+参数：q : forall i, Trunc (α i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
+· 使用引理 `Quotient.finLiftOn_empty`：finLiftOn_empty [e : IsEmpty ι] (q : forall i,
+ Quotient (S i)) : finLiftOn (β
 -/
-lemma finLiftOn_empty [e : IsEmpty ι] (q : forall i, Trunc (α i)) :
-    finLiftOn (β := β) q = fun f _ => f e.elim :=
-  funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_empty q) _ _
+lemma finLiftOn_empty [e : IsEmpty ι] (q : ∀ i, Trunc (α i)) :
+    finLiftOn (β := β) q = fun f _ ↦ f e.elim :=
+  funext₂ fun _ _ ↦ congrFun₂ (Quotient.finLiftOn_empty q) _ _
 
 @[simp]
-/--
-lemma `finLiftOn_mk` / 引理 `finLiftOn_mk`
-
-English:
-lemma finLiftOn_mk
-  given: (a : forall i, α i)
-  proof: funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_mk a) _ _
-
-中文:
-引理 finLiftOn_mk
-  条件: (a : 对任意 i, α i)
-  证明: funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_mk a) _ _
+/-
+**Trunc.finLiftOn_mk** 是 Mathlib 中的一个引理，位于命名空间 `Trunc`。
+形式化陈述：finLiftOn_mk (a : forall i, α i) : finLiftOn (β
+参数：a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
+· 使用引理 `Quotient.finLiftOn_mk`：finLiftOn_mk (a : forall i, α i) : finLiftOn (S
 -/
-lemma finLiftOn_mk (a : forall i, α i) :
-    finLiftOn (β := β) (⟦a ·⟧) = fun f _ => f a :=
-  funext₂ fun _ _ => congrFun₂ (Quotient.finLiftOn_mk a) _ _
+lemma finLiftOn_mk (a : ∀ i, α i) :
+    finLiftOn (β := β) (⟦a ·⟧) = fun f _ ↦ f a :=
+  funext₂ fun _ _ ↦ congrFun₂ (Quotient.finLiftOn_mk a) _ _
 
 /-- `Trunc.finChoice` as an equivalence. -/
 @[simps]
-/--
-Definition of `finChoiceEquiv` / `finChoiceEquiv` 的定义
+/-
+**Trunc.finChoiceEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：finChoiceEquiv : (forall i, Trunc (α i)) ≃ Trunc (forall i, α i) where toF
+un
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finChoiceEquiv
-  signature: : (forall i, Trunc (α i)) ≃ Trunc (forall i, α i) where
-  body: finChoice
-  invFun q i := q.map (· i)
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 finChoiceEquiv
-  签名: : (对任意 i, Trunc (α i)) ≃ Trunc (对任意 i, α i) where
-  定义体: finChoice
-  invFun q i := q.map (· i)
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: finChoice
+--- 原说明 ---
+`Trunc.finChoice` as an equivalence.
 -/
-def finChoiceEquiv : (forall i, Trunc (α i)) ≃ Trunc (forall i, α i) where
+def finChoiceEquiv : (∀ i, Trunc (α i)) ≃ Trunc (∀ i, α i) where
   toFun := finChoice
   invFun q i := q.map (· i)
   left_inv _ := Subsingleton.elim _ _
@@ -696,53 +547,56 @@ def finChoiceEquiv : (forall i, Trunc (α i)) ≃ Trunc (forall i, α i) where
 
 /-- Recursion principle for `Trunc`s indexed by a finite type. -/
 @[elab_as_elim]
-/--
-Definition of `finRecOn` / `finRecOn` 的定义
+/-
+**Trunc.finRecOn** 是 Mathlib 中的一个定义，位于命名空间 `Trunc`。
+形式化陈述：finRecOn {C : (forall i, Trunc (α i)) -> Sort*} (q : forall i, Trunc (α i)
+) (f : forall a : forall i, α i, C (mk <| a ·)) (h : forall (a b : forall i, α i
+), (Eq.ndrec (f a) (funext fun _ => Trunc.eq _ _)) = f b) : C q
+参数：forall i, Trunc (α i)；q : forall i, Trunc (α i)；f : forall a : forall i, α i,
+ C (mk <| a ·)；h : forall (a b : forall i, α i), (Eq.ndrec (f a) (funext fun _ =
+> Trunc.eq _ _)) = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finRecOn
-  signature: {C : (forall i, Trunc (α i)) -> Sort*}
-  body: Quotient.finRecOn q (f ·) (fun _ _ _ => h _ _)
-
-中文:
-定义 finRecOn
-  签名: {C : (对任意 i, Trunc (α i)) -> 类型层*}
-  定义体: Quotient.finRecOn q (f ·) (fun _ _ _ => h _ _)
-
-Depends on / 依赖: Quotient, Quotient.finRecOn, finRecOn
+--- 原说明 ---
+Recursion principle for `Trunc`s indexed by a finite type.
 -/
-def finRecOn {C : (forall i, Trunc (α i)) -> Sort*}
-    (q : forall i, Trunc (α i))
-    (f : forall a : forall i, α i, C (mk <| a ·))
-    (h : forall (a b : forall i, α i), (Eq.ndrec (f a) (funext fun _ => Trunc.eq _ _)) = f b) :
+def finRecOn {C : (∀ i, Trunc (α i)) → Sort*}
+    (q : ∀ i, Trunc (α i))
+    (f : ∀ a : ∀ i, α i, C (mk <| a ·))
+    (h : ∀ (a b : ∀ i, α i), (Eq.ndrec (f a) (funext fun _ ↦ Trunc.eq _ _)) = f b) :
     C q :=
-  Quotient.finRecOn q (f ·) (fun _ _ _ => h _ _)
+  Quotient.finRecOn q (f ·) (fun _ _ _ ↦ h _ _)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `finRecOn_mk` / 引理 `finRecOn_mk`
-
-English:
-lemma finRecOn_mk
-  statement: {C : (forall i, Trunc (α i)) -> Sort*}
-  proof: by
-  unfold finRecOn
-  simp
-
-中文:
-引理 finRecOn_mk
-  结论: {C : (对任意 i, Trunc (α i)) -> 类型层*}
-  证明: by
-  unfold finRecOn
-  simp
-
-Depends on / 依赖: finRecOn
+/-
+**Trunc.finRecOn_mk** 是 Mathlib 中的一个引理，位于命名空间 `Trunc`。
+形式化陈述：finRecOn_mk {C : (forall i, Trunc (α i)) -> Sort*} (a : forall i, α i) : f
+inRecOn (C
+参数：forall i, Trunc (α i)；a : forall i, α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Trunc.eq`：∀ {α : Sort u_1} (a b : Trunc α), a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用引理 `Quotient.finRecOn_mk`：finRecOn_mk {C : (forall i, Quotient (S i)) -> Sor
+t*} (a : forall i, α i) : finRecOn (C
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma finRecOn_mk {C : (forall i, Trunc (α i)) -> Sort*}
-    (a : forall i, α i) :
-    finRecOn (C := C) (⟦a ·⟧) = fun f _ => f a := by
+lemma finRecOn_mk {C : (∀ i, Trunc (α i)) → Sort*}
+    (a : ∀ i, α i) :
+    finRecOn (C := C) (⟦a ·⟧) = fun f _ ↦ f a := by
   unfold finRecOn
   simp
 
 end Trunc
+

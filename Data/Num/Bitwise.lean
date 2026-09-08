@@ -24,18 +24,16 @@ open List (Vector)
 
 namespace PosNum
 
-/--
-Definition of `lor` / `lor` 的定义
+/-- Bitwise "or" for `PosNum`. -/
+/-
+**PosNum.lor** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lor
-  signature: : PosNum -> PosNum -> PosNum
-
-中文:
-定义 lor
-  签名: : PosNum -> PosNum -> PosNum
+--- 原说明 ---
+Bitwise "or" for `PosNum`.
 -/
-def lor : PosNum -> PosNum -> PosNum
+def lor : PosNum → PosNum → PosNum
   | 1, bit0 q => bit1 q
   | 1, q => q
   | bit0 p, 1 => bit1 p
@@ -44,53 +42,29 @@ def lor : PosNum -> PosNum -> PosNum
   | bit0 p, bit1 q => bit1 (lor p q)
   | bit1 p, bit0 q => bit1 (lor p q)
   | bit1 p, bit1 q => bit1 (lor p q)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrOp PosNum
-  body: PosNum.lor
-
-中文:
-实例 :
-  签名: OrOp PosNum
-  定义体: PosNum.lor
-
-Depends on / 依赖: PosNum, PosNum.lor
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrOp PosNum where or := PosNum.lor
-
-/--
-lemma `lor_eq_or` / 引理 `lor_eq_or`
-
-English:
-lemma lor_eq_or
-  given: (p q : PosNum)
-  statement: p.lor q = p ||| q
-  proof: rfl
-
-中文:
-引理 lor_eq_or
-  条件: (p q : PosNum)
-  结论: p.lor q = p ||| q
-  证明: rfl
+/-
+**PosNum.lor_eq_or** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p q : PosNum), p.lor q = p ||| q
+参数：p q : PosNum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lor_eq_or (p q : PosNum) : p.lor q = p ||| q := rfl
 
-/--
-Definition of `land` / `land` 的定义
+/-- Bitwise "and" for `PosNum`. -/
+/-
+**PosNum.land** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition land
-  signature: : PosNum -> PosNum -> Num
-
-中文:
-定义 land
-  签名: : PosNum -> PosNum -> Num
+--- 原说明 ---
+Bitwise "and" for `PosNum`.
 -/
-def land : PosNum -> PosNum -> Num
+def land : PosNum → PosNum → Num
   | 1, bit0 _ => 0
   | 1, _ => 1
   | bit0 _, 1 => 0
@@ -99,53 +73,42 @@ def land : PosNum -> PosNum -> Num
   | bit0 p, bit1 q => Num.bit0 (land p q)
   | bit1 p, bit0 q => Num.bit0 (land p q)
   | bit1 p, bit1 q => Num.bit1 (land p q)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HAnd PosNum PosNum Num
-  body: PosNum.land
-
-中文:
-实例 :
-  签名: HAnd PosNum PosNum Num
-  定义体: PosNum.land
-
-Depends on / 依赖: PosNum, PosNum.land
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HAnd PosNum PosNum Num where hAnd := PosNum.land
-
-/--
-lemma `land_eq_and` / 引理 `land_eq_and`
-
-English:
-lemma land_eq_and
-  given: (p q : PosNum)
-  statement: p.land q = p &&& q
-  proof: rfl
-
-中文:
-引理 land_eq_and
-  条件: (p q : PosNum)
-  结论: p.land q = p &&& q
-  证明: rfl
+/-
+**PosNum.land_eq_and** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p q : PosNum), p.land q = p &&& q
+参数：p q : PosNum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma land_eq_and (p q : PosNum) : p.land q = p &&& q := rfl
 
-/--
-Definition of `ldiff` / `ldiff` 的定义
-
-English:
-definition ldiff
-  signature: : PosNum -> PosNum -> Num
-
-中文:
-定义 ldiff
-  签名: : PosNum -> PosNum -> Num
+/-- Bitwise `fun a b ↦ a && !b` for `PosNum`. For example, `ldiff 5 9 = 4`:
+```
+ 101
+1001
+----
+ 100
+```
 -/
-def ldiff : PosNum -> PosNum -> Num
+/-
+**PosNum.ldiff** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Bitwise `fun a b ↦ a && !b` for `PosNum`. For example, `ldiff 5 9 = 4`:
+```
+ 101
+1001
+----
+ 100
+```
+-/
+def ldiff : PosNum → PosNum → Num
   | 1, bit0 _ => 1
   | 1, _ => 0
   | bit0 p, 1 => Num.pos (bit0 p)
@@ -155,18 +118,16 @@ def ldiff : PosNum -> PosNum -> Num
   | bit1 p, bit0 q => Num.bit1 (ldiff p q)
   | bit1 p, bit1 q => Num.bit0 (ldiff p q)
 
-/--
-Definition of `lxor` / `lxor` 的定义
+/-- Bitwise "xor" for `PosNum`. -/
+/-
+**PosNum.lxor** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lxor
-  signature: : PosNum -> PosNum -> Num
-
-中文:
-定义 lxor
-  签名: : PosNum -> PosNum -> Num
+--- 原说明 ---
+Bitwise "xor" for `PosNum`.
 -/
-def lxor : PosNum -> PosNum -> Num
+def lxor : PosNum → PosNum → Num
   | 1, 1 => 0
   | 1, bit0 q => Num.pos (bit1 q)
   | 1, bit1 q => Num.pos (bit0 q)
@@ -176,53 +137,33 @@ def lxor : PosNum -> PosNum -> Num
   | bit0 p, bit1 q => Num.bit1 (lxor p q)
   | bit1 p, bit0 q => Num.bit1 (lxor p q)
   | bit1 p, bit1 q => Num.bit0 (lxor p q)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HXor PosNum PosNum Num
-  body: PosNum.lxor
-
-中文:
-实例 :
-  签名: HXor PosNum PosNum Num
-  定义体: PosNum.lxor
-
-Depends on / 依赖: PosNum, PosNum.lxor
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HXor PosNum PosNum Num where hXor := PosNum.lxor
-
-/--
-lemma `lxor_eq_xor` / 引理 `lxor_eq_xor`
-
-English:
-lemma lxor_eq_xor
-  given: (p q : PosNum)
-  statement: p.lxor q = p ^^^ q
-  proof: rfl
-
-中文:
-引理 lxor_eq_xor
-  条件: (p q : PosNum)
-  结论: p.lxor q = p ^^^ q
-  证明: rfl
+/-
+**PosNum.lxor_eq_xor** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p q : PosNum), p.lxor q = p ^^^ q
+参数：p q : PosNum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lxor_eq_xor (p q : PosNum) : p.lxor q = p ^^^ q := rfl
 
-/--
-Definition of `testBit` / `testBit` 的定义
+/-- `a.testBit n` is `true` iff the `n`-th bit (starting from the LSB) in the binary representation
+of `a` is active. If the size of `a` is less than `n`, this evaluates to `false`. -/
+/-
+**PosNum.testBit** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → ℕ → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition testBit
-  signature: : PosNum -> Nat -> Bool
-
-中文:
-定义 testBit
-  签名: : PosNum -> 自然数 -> 布尔值
+--- 原说明 ---
+`a.testBit n` is `true` iff the `n`-th bit (starting from the LSB) in the binary
+ representation
+of `a` is active. If the size of `a` is less than `n`, this evaluates to `false`
+.
 -/
-def testBit : PosNum -> Nat -> Bool
+def testBit : PosNum → Nat → Bool
   | 1, 0 => true
   | 1, _ => false
   | bit0 _, 0 => false
@@ -230,136 +171,82 @@ def testBit : PosNum -> Nat -> Bool
   | bit1 _, 0 => true
   | bit1 p, n + 1 => testBit p n
 
-/--
-Definition of `oneBits` / `oneBits` 的定义
+/-- `n.oneBits 0` is the list of indices of active bits in the binary representation of `n`. -/
+/-
+**PosNum.oneBits** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oneBits
-  signature: : PosNum -> Nat -> List Nat
-
-中文:
-定义 oneBits
-  签名: : PosNum -> 自然数 -> 列表 自然数
+--- 原说明 ---
+`n.oneBits 0` is the list of indices of active bits in the binary representation
+ of `n`.
 -/
-def oneBits : PosNum -> Nat -> List Nat
+def oneBits : PosNum → Nat → List Nat
   | 1, d => [d]
   | bit0 p, d => oneBits p (d + 1)
   | bit1 p, d => d :: oneBits p (d + 1)
 
-/--
-Definition of `shiftl` / `shiftl` 的定义
+/-- Left-shift the binary representation of a `PosNum`. -/
+/-
+**PosNum.shiftl** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → ℕ → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftl
-  signature: : PosNum -> Nat -> PosNum
-
-中文:
-定义 shiftl
-  签名: : PosNum -> 自然数 -> PosNum
+--- 原说明 ---
+Left-shift the binary representation of a `PosNum`.
 -/
-def shiftl : PosNum -> Nat -> PosNum
+def shiftl : PosNum → Nat → PosNum
   | p, 0 => p
   | p, n + 1 => shiftl p.bit0 n
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HShiftLeft PosNum Nat PosNum
-  body: PosNum.shiftl
-
-中文:
-实例 :
-  签名: HShiftLeft PosNum 自然数 PosNum
-  定义体: PosNum.shiftl
-
-Depends on / 依赖: PosNum, PosNum.shiftl, shiftl
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HShiftLeft PosNum Nat PosNum where hShiftLeft := PosNum.shiftl
-
-/--
-lemma `shiftl_eq_shiftLeft` / 引理 `shiftl_eq_shiftLeft`
-
-English:
-lemma shiftl_eq_shiftLeft
-  given: (p : PosNum) (n : Nat)
-  statement: p.shiftl n = p <<< n
-  proof: rfl
-
-中文:
-引理 shiftl_eq_shiftLeft
-  条件: (p : PosNum) (n : 自然数)
-  结论: p.shiftl n = p <<< n
-  证明: rfl
+/-
+**PosNum.shiftl_eq_shiftLeft** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p : PosNum) (n : ℕ), p.shiftl n = p <<< n
+参数：p : PosNum；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma shiftl_eq_shiftLeft (p : PosNum) (n : Nat) : p.shiftl n = p <<< n := rfl
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 -- This shows that the tail-recursive definition is the same as the more naïve recursion.
-/--
-theorem `shiftl_succ_eq_bit0_shiftl` / 定理 `shiftl_succ_eq_bit0_shiftl`
-
-English:
-theorem shiftl_succ_eq_bit0_shiftl
-  statement: forall (p : PosNum) (n : Nat), p <<< n.succ = bit0 (p <<< n)
-
-中文:
-定理 shiftl_succ_eq_bit0_shiftl
-  结论: 对任意 (p : PosNum) (n : 自然数), p <<< n.succ = bit0 (p <<< n)
+/-
+**PosNum.shiftl_succ_eq_bit0_shiftl** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p : PosNum) (n : ℕ), p <<< n.succ = (p <<< n).bit0
+参数：p : PosNum；n : ℕ；p <<< n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem shiftl_succ_eq_bit0_shiftl : forall (p : PosNum) (n : Nat), p <<< n.succ = bit0 (p <<< n)
-  | _, 0 => rfl
+theorem shiftl_succ_eq_bit0_shiftl : ∀ (p : PosNum) (n : Nat), p <<< n.succ = bit0 (p <<< n)
+  | _, 0       => rfl
   | p, .succ n => shiftl_succ_eq_bit0_shiftl p.bit0 n
 
-/--
-Definition of `shiftr` / `shiftr` 的定义
+/-- Right-shift the binary representation of a `PosNum`. -/
+/-
+**PosNum.shiftr** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → ℕ → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftr
-  signature: : PosNum -> Nat -> Num
-
-中文:
-定义 shiftr
-  签名: : PosNum -> 自然数 -> Num
+--- 原说明 ---
+Right-shift the binary representation of a `PosNum`.
 -/
-def shiftr : PosNum -> Nat -> Num
+def shiftr : PosNum → Nat → Num
   | p, 0 => Num.pos p
   | 1, _ => 0
   | bit0 p, n + 1 => shiftr p n
   | bit1 p, n + 1 => shiftr p n
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HShiftRight PosNum Nat Num
-  body: PosNum.shiftr
-
-中文:
-实例 :
-  签名: HShiftRight PosNum 自然数 Num
-  定义体: PosNum.shiftr
-
-Depends on / 依赖: PosNum, PosNum.shiftr, shiftr
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HShiftRight PosNum Nat Num where hShiftRight := PosNum.shiftr
-
-/--
-lemma `shiftr_eq_shiftRight` / 引理 `shiftr_eq_shiftRight`
-
-English:
-lemma shiftr_eq_shiftRight
-  given: (p : PosNum) (n : Nat)
-  statement: p.shiftr n = p >>> n
-  proof: rfl
-
-中文:
-引理 shiftr_eq_shiftRight
-  条件: (p : PosNum) (n : 自然数)
-  结论: p.shiftr n = p >>> n
-  证明: rfl
+/-
+**PosNum.shiftr_eq_shiftRight** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (p : PosNum) (n : ℕ), p.shiftr n = p >>> n
+参数：p : PosNum；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma shiftr_eq_shiftRight (p : PosNum) (n : Nat) : p.shiftr n = p >>> n := rfl
 
@@ -367,449 +254,292 @@ end PosNum
 
 namespace Num
 
-/--
-Definition of `lor` / `lor` 的定义
+/-- Bitwise "or" for `Num`. -/
+/-
+**Num.lor** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lor
-  signature: : Num -> Num -> Num
-
-中文:
-定义 lor
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Bitwise "or" for `Num`.
 -/
-protected def lor : Num -> Num -> Num
+protected def lor : Num → Num → Num
   | 0, q => q
   | p, 0 => p
   | pos p, pos q => pos (p ||| q)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrOp Num
-  body: Num.lor
-
-中文:
-实例 :
-  签名: OrOp Num
-  定义体: Num.lor
-
-Depends on / 依赖: Num.lor
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrOp Num where or := Num.lor
-
-/--
-lemma `lor_eq_or` / 引理 `lor_eq_or`
-
-English:
-lemma lor_eq_or
-  given: (p q : Num)
-  statement: p.lor q = p ||| q
-  proof: rfl
-
-中文:
-引理 lor_eq_or
-  条件: (p q : Num)
-  结论: p.lor q = p ||| q
-  证明: rfl
+/-
+**Num.lor_eq_or** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (p q : Num), p.lor q = p ||| q
+参数：p q : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lor_eq_or (p q : Num) : p.lor q = p ||| q := rfl
 
-/--
-Definition of `land` / `land` 的定义
+/-- Bitwise "and" for `Num`. -/
+/-
+**Num.land** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition land
-  signature: : Num -> Num -> Num
-
-中文:
-定义 land
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Bitwise "and" for `Num`.
 -/
-def land : Num -> Num -> Num
+def land : Num → Num → Num
   | 0, _ => 0
   | _, 0 => 0
   | pos p, pos q => p &&& q
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AndOp Num
-  body: Num.land
-
-中文:
-实例 :
-  签名: AndOp Num
-  定义体: Num.land
-
-Depends on / 依赖: Num.land
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AndOp Num where and := Num.land
-
-/--
-lemma `land_eq_and` / 引理 `land_eq_and`
-
-English:
-lemma land_eq_and
-  given: (p q : Num)
-  statement: p.land q = p &&& q
-  proof: rfl
-
-中文:
-引理 land_eq_and
-  条件: (p q : Num)
-  结论: p.land q = p &&& q
-  证明: rfl
+/-
+**Num.land_eq_and** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (p q : Num), p.land q = p &&& q
+参数：p q : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma land_eq_and (p q : Num) : p.land q = p &&& q := rfl
 
-/--
-Definition of `ldiff` / `ldiff` 的定义
-
-English:
-definition ldiff
-  signature: : Num -> Num -> Num
-
-中文:
-定义 ldiff
-  签名: : Num -> Num -> Num
+/-- Bitwise `fun a b ↦ a && !b` for `Num`. For example, `ldiff 5 9 = 4`:
+```
+ 101
+1001
+----
+ 100
+```
 -/
-def ldiff : Num -> Num -> Num
+/-
+**Num.ldiff** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Bitwise `fun a b ↦ a && !b` for `Num`. For example, `ldiff 5 9 = 4`:
+```
+ 101
+1001
+----
+ 100
+```
+-/
+def ldiff : Num → Num → Num
   | 0, _ => 0
   | p, 0 => p
   | pos p, pos q => p.ldiff q
 
-/--
-Definition of `lxor` / `lxor` 的定义
+/-- Bitwise "xor" for `Num`. -/
+/-
+**Num.lxor** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lxor
-  signature: : Num -> Num -> Num
-
-中文:
-定义 lxor
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Bitwise "xor" for `Num`.
 -/
-def lxor : Num -> Num -> Num
+def lxor : Num → Num → Num
   | 0, q => q
   | p, 0 => p
   | pos p, pos q => p ^^^ q
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: XorOp Num
-  body: Num.lxor
-
-中文:
-实例 :
-  签名: XorOp Num
-  定义体: Num.lxor
-
-Depends on / 依赖: Num.lxor
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : XorOp Num where xor := Num.lxor
-
-/--
-lemma `lxor_eq_xor` / 引理 `lxor_eq_xor`
-
-English:
-lemma lxor_eq_xor
-  given: (p q : Num)
-  statement: p.lxor q = p ^^^ q
-  proof: rfl
-
-中文:
-引理 lxor_eq_xor
-  条件: (p q : Num)
-  结论: p.lxor q = p ^^^ q
-  证明: rfl
+/-
+**Num.lxor_eq_xor** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (p q : Num), p.lxor q = p ^^^ q
+参数：p q : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lxor_eq_xor (p q : Num) : p.lxor q = p ^^^ q := rfl
 
-/--
-Definition of `shiftl` / `shiftl` 的定义
+/-- Left-shift the binary representation of a `Num`. -/
+/-
+**Num.shiftl** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ℕ → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftl
-  signature: : Num -> Nat -> Num
-
-中文:
-定义 shiftl
-  签名: : Num -> 自然数 -> Num
+--- 原说明 ---
+Left-shift the binary representation of a `Num`.
 -/
-def shiftl : Num -> Nat -> Num
+def shiftl : Num → Nat → Num
   | 0, _ => 0
   | pos p, n => pos (p <<< n)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HShiftLeft Num Nat Num
-  body: Num.shiftl
-
-中文:
-实例 :
-  签名: HShiftLeft Num 自然数 Num
-  定义体: Num.shiftl
-
-Depends on / 依赖: Num.shiftl, shiftl
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HShiftLeft Num Nat Num where hShiftLeft := Num.shiftl
-
-/--
-lemma `shiftl_eq_shiftLeft` / 引理 `shiftl_eq_shiftLeft`
-
-English:
-lemma shiftl_eq_shiftLeft
-  given: (p : Num) (n : Nat)
-  statement: p.shiftl n = p <<< n
-  proof: rfl
-
-中文:
-引理 shiftl_eq_shiftLeft
-  条件: (p : Num) (n : 自然数)
-  结论: p.shiftl n = p <<< n
-  证明: rfl
+/-
+**Num.shiftl_eq_shiftLeft** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (p : Num) (n : ℕ), p.shiftl n = p <<< n
+参数：p : Num；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma shiftl_eq_shiftLeft (p : Num) (n : Nat) : p.shiftl n = p <<< n := rfl
 
-/--
-Definition of `shiftr` / `shiftr` 的定义
+/-- Right-shift the binary representation of a `Num`. -/
+/-
+**Num.shiftr** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ℕ → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftr
-  signature: : Num -> Nat -> Num
-
-中文:
-定义 shiftr
-  签名: : Num -> 自然数 -> Num
+--- 原说明 ---
+Right-shift the binary representation of a `Num`.
 -/
-def shiftr : Num -> Nat -> Num
+def shiftr : Num → Nat → Num
   | 0, _ => 0
   | pos p, n => p >>> n
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HShiftRight Num Nat Num
-  body: Num.shiftr
-
-中文:
-实例 :
-  签名: HShiftRight Num 自然数 Num
-  定义体: Num.shiftr
-
-Depends on / 依赖: Num.shiftr, shiftr
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HShiftRight Num Nat Num where hShiftRight := Num.shiftr
-
-/--
-lemma `shiftr_eq_shiftRight` / 引理 `shiftr_eq_shiftRight`
-
-English:
-lemma shiftr_eq_shiftRight
-  given: (p : Num) (n : Nat)
-  statement: p.shiftr n = p >>> n
-  proof: rfl
-
-中文:
-引理 shiftr_eq_shiftRight
-  条件: (p : Num) (n : 自然数)
-  结论: p.shiftr n = p >>> n
-  证明: rfl
+/-
+**Num.shiftr_eq_shiftRight** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (p : Num) (n : ℕ), p.shiftr n = p >>> n
+参数：p : Num；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma shiftr_eq_shiftRight (p : Num) (n : Nat) : p.shiftr n = p >>> n := rfl
 
-/--
-Definition of `testBit` / `testBit` 的定义
+/-- `a.testBit n` is `true` iff the `n`-th bit (starting from the LSB) in the binary representation
+of `a` is active. If the size of `a` is less than `n`, this evaluates to `false`. -/
+/-
+**Num.testBit** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ℕ → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition testBit
-  signature: : Num -> Nat -> Bool
-
-中文:
-定义 testBit
-  签名: : Num -> 自然数 -> 布尔值
+--- 原说明 ---
+`a.testBit n` is `true` iff the `n`-th bit (starting from the LSB) in the binary
+ representation
+of `a` is active. If the size of `a` is less than `n`, this evaluates to `false`
+.
 -/
-def testBit : Num -> Nat -> Bool
+def testBit : Num → Nat → Bool
   | 0, _ => false
   | pos p, n => p.testBit n
 
-/--
-Definition of `oneBits` / `oneBits` 的定义
+/-- `n.oneBits` is the list of indices of active bits in the binary representation of `n`. -/
+/-
+**Num.oneBits** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oneBits
-  signature: : Num -> List Nat
-
-中文:
-定义 oneBits
-  签名: : Num -> 列表 自然数
+--- 原说明 ---
+`n.oneBits` is the list of indices of active bits in the binary representation o
+f `n`.
 -/
-def oneBits : Num -> List Nat
+def oneBits : Num → List Nat
   | 0 => []
   | pos p => p.oneBits 0
 
 end Num
 
-/--
-Inductive type `NzsNum` / 归纳类型 `NzsNum`
+/-- This is a nonzero (and "non minus one") version of `SNum`.
+See the documentation of `SNum` for more details. -/
+/-
+**NzsNum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive NzsNum
-  parameters: : Type
-  constructors (2):
-    - msb: Bool -> NzsNum
-    - bit: Bool -> NzsNum -> NzsNum
-
-中文:
-归纳类型 NzsNum
-  参数: : 类型
-  构造子 (2 个):
-    - msb: 布尔值 -> NzsNum
-    - bit: 布尔值 -> NzsNum -> NzsNum
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.liftEquivRight, TensorProduct, liftEquivRight, of_equiv
+--- 原说明 ---
+This is a nonzero (and "non minus one") version of `SNum`.
+See the documentation of `SNum` for more details.
 -/
 inductive NzsNum : Type
-  | msb : Bool -> NzsNum
+  | msb : Bool → NzsNum
   /-- Add a bit at the end of a `NzsNum`. -/
-  | bit : Bool -> NzsNum -> NzsNum
+  | bit : Bool → NzsNum → NzsNum
   deriving DecidableEq
 
 /--
-Inductive type `SNum` / 归纳类型 `SNum`
+Alternative representation of integers using a sign bit at the end.
+The convention on sign here is to have the argument to `msb` denote
+the sign of the MSB itself, with all higher bits set to the negation
+of this sign. The result is interpreted in two's complement.
 
-English:
-inductive SNum
-  parameters: : Type
-  constructors (2):
-    - zero: Bool -> SNum
-    - nz: NzsNum -> SNum
+```
+13  = ..0001101(base 2) = nz (bit1 (bit0 (bit1 (msb true))))
+-13 = ..1110011(base 2) = nz (bit1 (bit1 (bit0 (msb false))))
+```
 
-中文:
-归纳类型 SNum
-  参数: : 类型
-  构造子 (2 个):
-    - zero: 布尔值 -> SNum
-    - nz: NzsNum -> SNum
+  As with `Num`, a special case must be added for zero, which has no msb,
+but by two's complement symmetry there is a second special case for -1.
+Here the `Bool` field indicates the sign of the number.
+
+```
+0  = ..0000000(base 2) = zero false
+-1 = ..1111111(base 2) = zero true
+``` -/
+/-
+**SNum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Alternative representation of integers using a sign bit at the end.
+The convention on sign here is to have the argument to `msb` denote
+the sign of the MSB itself, with all higher bits set to the negation
+of this sign. The result is interpreted in two's complement.
+
+```
+13  = ..0001101(base 2) = nz (bit1 (bit0 (bit1 (msb true))))
+-13 = ..1110011(base 2) = nz (bit1 (bit1 (bit0 (msb false))))
+```
+
+  As with `Num`, a special case must be added for zero, which has no msb,
+but by two's complement symmetry there is a second special case for -1.
+Here the `Bool` field indicates the sign of the number.
+
+```
+0  = ..0000000(base 2) = zero false
+-1 = ..1111111(base 2) = zero true
+```
 -/
 inductive SNum : Type
-  | zero : Bool -> SNum
-  | nz : NzsNum -> SNum
+  | zero : Bool → SNum
+  | nz : NzsNum → SNum
   deriving DecidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe NzsNum SNum
-  body: ⟨SNum.nz⟩
-
-中文:
-实例 :
-  签名: Coe NzsNum SNum
-  定义体: ⟨SNum.nz⟩
-
-Depends on / 依赖: SNum.nz
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe NzsNum SNum :=
   ⟨SNum.nz⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero SNum
-  body: ⟨SNum.zero false⟩
-
-中文:
-实例 :
-  签名: 零 SNum
-  定义体: ⟨SNum.zero false⟩
-
-Depends on / 依赖: SNum.zero
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero SNum :=
   ⟨SNum.zero false⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One NzsNum
-  body: ⟨NzsNum.msb true⟩
-
-中文:
-实例 :
-  签名: 幺 NzsNum
-  定义体: ⟨NzsNum.msb true⟩
-
-Depends on / 依赖: NzsNum, NzsNum.msb
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One NzsNum :=
   ⟨NzsNum.msb true⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One SNum
-  body: ⟨SNum.nz 1⟩
-
-中文:
-实例 :
-  签名: 幺 SNum
-  定义体: ⟨SNum.nz 1⟩
-
-Depends on / 依赖: SNum.nz
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One SNum :=
   ⟨SNum.nz 1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited NzsNum
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 NzsNum
-  定义体: ⟨1⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited NzsNum :=
   ⟨1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited SNum
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 SNum
-  定义体: ⟨0⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited SNum :=
   ⟨0⟩
@@ -825,104 +555,87 @@ namespace NzsNum
 @[inherit_doc]
 scoped notation a "::" b => bit a b
 
-/--
-Definition of `sign` / `sign` 的定义
+/-- Sign of a `NzsNum`. -/
+/-
+**NzsNum.sign** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：NzsNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sign
-  signature: : NzsNum -> Bool
-
-中文:
-定义 sign
-  签名: : NzsNum -> 布尔值
-
-Depends on / 依赖: Algebra, toSubalgebra
+--- 原说明 ---
+Sign of a `NzsNum`.
 -/
-def sign : NzsNum -> Bool
+def sign : NzsNum → Bool
   | msb b => not b
   | _ :: p => sign p
 
 /-- Bitwise `not` for `NzsNum`. -/
 @[match_pattern]
-/--
-Definition of `not` / `not` 的定义
+/-
+**NzsNum.not** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：NzsNum → NzsNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition not
-  signature: : NzsNum -> NzsNum
-
-中文:
-定义 not
-  签名: : NzsNum -> NzsNum
-
-Depends on / 依赖: Algebra, toSubalgebra
+--- 原说明 ---
+Bitwise `not` for `NzsNum`.
 -/
-def not : NzsNum -> NzsNum
+def not : NzsNum → NzsNum
   | msb b => msb (Not b)
   | b :: p => Not b :: not p
 
 @[inherit_doc]
 scoped prefix:100 "~" => not
 
-/--
-Definition of `bit0` / `bit0` 的定义
+/-- Add an inactive bit at the end of a `NzsNum`. This mimics `PosNum.bit0`. -/
+/-
+**NzsNum.bit0** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：bit0 : NzsNum -> NzsNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit0
-  signature: : NzsNum -> NzsNum
-  body: bit false
-
-中文:
-定义 bit0
-  签名: : NzsNum -> NzsNum
-  定义体: bit false
+--- 原说明 ---
+Add an inactive bit at the end of a `NzsNum`. This mimics `PosNum.bit0`.
 -/
-def bit0 : NzsNum -> NzsNum :=
+def bit0 : NzsNum → NzsNum :=
   bit false
 
-/--
-Definition of `bit1` / `bit1` 的定义
+/-- Add an active bit at the end of a `NzsNum`. This mimics `PosNum.bit1`. -/
+/-
+**NzsNum.bit1** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：bit1 : NzsNum -> NzsNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit1
-  signature: : NzsNum -> NzsNum
-  body: bit true
-
-中文:
-定义 bit1
-  签名: : NzsNum -> NzsNum
-  定义体: bit true
+--- 原说明 ---
+Add an active bit at the end of a `NzsNum`. This mimics `PosNum.bit1`.
 -/
-def bit1 : NzsNum -> NzsNum :=
+def bit1 : NzsNum → NzsNum :=
   bit true
 
-/--
-Definition of `head` / `head` 的定义
+/-- The `head` of a `NzsNum` is the Boolean value of its LSB. -/
+/-
+**NzsNum.head** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：NzsNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: : NzsNum -> Bool
-
-中文:
-定义 head
-  签名: : NzsNum -> 布尔值
+--- 原说明 ---
+The `head` of a `NzsNum` is the Boolean value of its LSB.
 -/
-def head : NzsNum -> Bool
+def head : NzsNum → Bool
   | msb b => b
   | b :: _ => b
 
-/--
-Definition of `tail` / `tail` 的定义
+/-- The `tail` of a `NzsNum` is the `SNum` obtained by removing the LSB.
+Edge cases: `tail 1 = 0` and `tail (-2) = -1`. -/
+/-
+**NzsNum.tail** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：NzsNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tail
-  signature: : NzsNum -> SNum
-
-中文:
-定义 tail
-  签名: : NzsNum -> SNum
+--- 原说明 ---
+The `tail` of a `NzsNum` is the `SNum` obtained by removing the LSB.
+Edge cases: `tail 1 = 0` and `tail (-2) = -1`.
 -/
-def tail : NzsNum -> SNum
+def tail : NzsNum → SNum
   | msb b => SNum.zero (Not b)
   | _ :: p => p
 
@@ -932,35 +645,30 @@ namespace SNum
 
 open NzsNum
 
-/--
-Definition of `sign` / `sign` 的定义
+/-- Sign of a `SNum`. -/
+/-
+**SNum.sign** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sign
-  signature: : SNum -> Bool
-
-中文:
-定义 sign
-  签名: : SNum -> 布尔值
+--- 原说明 ---
+Sign of a `SNum`.
 -/
-def sign : SNum -> Bool
+def sign : SNum → Bool
   | zero z => z
   | nz p => p.sign
 
 /-- Bitwise `not` for `SNum`. -/
 @[match_pattern]
-/--
-Definition of `not` / `not` 的定义
+/-
+**SNum.not** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition not
-  signature: : SNum -> SNum
-
-中文:
-定义 not
-  签名: : SNum -> SNum
+--- 原说明 ---
+Bitwise `not` for `SNum`.
 -/
-def not : SNum -> SNum
+def not : SNum → SNum
   | zero z => zero (Not z)
   | nz p => ~p
 
@@ -970,87 +678,62 @@ scoped prefix:100 (priority := default + 1) "~" => not
 
 /-- Add a bit at the end of a `SNum`. This mimics `NzsNum.bit`. -/
 @[match_pattern]
-/--
-Definition of `bit` / `bit` 的定义
+/-
+**SNum.bit** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：Bool → SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit
-  signature: : Bool -> SNum -> SNum
-
-中文:
-定义 bit
-  签名: : 布尔值 -> SNum -> SNum
+--- 原说明 ---
+Add a bit at the end of a `SNum`. This mimics `NzsNum.bit`.
 -/
-def bit : Bool -> SNum -> SNum
+def bit : Bool → SNum → SNum
   | b, zero z => if b = z then zero b else msb b
   | b, nz p => p.bit b
 
 @[inherit_doc]
 scoped notation a "::" b => bit a b
 
-/--
-Definition of `bit0` / `bit0` 的定义
+/-- Add an inactive bit at the end of a `SNum`. This mimics `ZNum.bit0`. -/
+/-
+**SNum.bit0** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：bit0 : SNum -> SNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit0
-  signature: : SNum -> SNum
-  body: bit false
-
-中文:
-定义 bit0
-  签名: : SNum -> SNum
-  定义体: bit false
+--- 原说明 ---
+Add an inactive bit at the end of a `SNum`. This mimics `ZNum.bit0`.
 -/
-def bit0 : SNum -> SNum :=
+def bit0 : SNum → SNum :=
   bit false
 
-/--
-Definition of `bit1` / `bit1` 的定义
+/-- Add an active bit at the end of a `SNum`. This mimics `ZNum.bit1`. -/
+/-
+**SNum.bit1** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：bit1 : SNum -> SNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit1
-  signature: : SNum -> SNum
-  body: bit true
-
-中文:
-定义 bit1
-  签名: : SNum -> SNum
-  定义体: bit true
+--- 原说明 ---
+Add an active bit at the end of a `SNum`. This mimics `ZNum.bit1`.
 -/
-def bit1 : SNum -> SNum :=
+def bit1 : SNum → SNum :=
   bit true
-
-/--
-theorem `bit_zero` / 定理 `bit_zero`
-
-English:
-theorem bit_zero
-  given: (b : Bool)
-  statement: (b :: zero b) = zero b
-  proof: by cases b <;> rfl
-
-中文:
-定理 bit_zero
-  条件: (b : 布尔值)
-  结论: (b :: zero b) = zero b
-  证明: by cases b <;> rfl
+/-
+**SNum.bit_zero** 是 Mathlib 中的一个定理，位于命名空间 `SNum`。
+形式化陈述：bit_zero (b : Bool) : (b :: zero b) = zero b
+参数：b : Bool。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem bit_zero (b : Bool) : (b :: zero b) = zero b := by cases b <;> rfl
-
-/--
-theorem `bit_one` / 定理 `bit_one`
-
-English:
-theorem bit_one
-  given: (b : Bool)
-  statement: (b :: zero (Not b)) = msb b
-  proof: by cases b <;> rfl
-
-中文:
-定理 bit_one
-  条件: (b : 布尔值)
-  结论: (b :: zero (非 b)) = msb b
-  证明: by cases b <;> rfl
+/-
+**SNum.bit_one** 是 Mathlib 中的一个定理，位于命名空间 `SNum`。
+形式化陈述：bit_one (b : Bool) : (b :: zero (Not b)) = msb b
+参数：b : Bool。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem bit_one (b : Bool) : (b :: zero (Not b)) = msb b := by cases b <;> rfl
 
@@ -1060,19 +743,21 @@ namespace NzsNum
 
 open SNum
 
-/--
-Definition of `drec'` / `drec'` 的定义
+/-- A dependent induction principle for `NzsNum`, with base cases `0 : SNum` and `(-1) : SNum`. -/
+/-
+**NzsNum.drec'** 是 Mathlib 中的一个定义，位于命名空间 `NzsNum`。
+形式化陈述：{C : SNum → Sort u_1} →   ((b : Bool) → C (SNum.zero b)) → ((b : Bool) → (
+p : SNum) → C p → C (SNum.bit b p)) → (p : NzsNum) → C (SNum.nz p)
+参数：(b : Bool) → C (SNum.zero b)；(b : Bool) → (p : SNum) → C p → C (SNum.bit b p)
+；p : NzsNum；SNum.nz p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition drec'
-  signature: {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p))
-
-中文:
-定义 drec'
-  签名: {C : SNum -> 类型层*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
+--- 原说明 ---
+A dependent induction principle for `NzsNum`, with base cases `0 : SNum` and `(-
+1) : SNum`.
 -/
-def drec' {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p)) :
-    forall p : NzsNum, C p
+def drec' {C : SNum → Sort*} (z : ∀ b, C (SNum.zero b)) (s : ∀ b p, C p → C (b :: p)) :
+    ∀ p : NzsNum, C p
   | msb b => by rw [← bit_one]; exact s b (SNum.zero (Not b)) (z (Not b))
   | bit b p => s b p (drec' z s p)
 
@@ -1082,160 +767,137 @@ namespace SNum
 
 open NzsNum
 
-/--
-Definition of `head` / `head` 的定义
+/-- The `head` of a `SNum` is the Boolean value of its LSB. -/
+/-
+**SNum.head** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: : SNum -> Bool
-
-中文:
-定义 head
-  签名: : SNum -> 布尔值
+--- 原说明 ---
+The `head` of a `SNum` is the Boolean value of its LSB.
 -/
-def head : SNum -> Bool
+def head : SNum → Bool
   | zero z => z
   | nz p => p.head
 
-/--
-Definition of `tail` / `tail` 的定义
+/-- The `tail` of a `SNum` is obtained by removing the LSB.
+Edge cases: `tail 1 = 0`, `tail (-2) = -1`, `tail 0 = 0` and `tail (-1) = -1`. -/
+/-
+**SNum.tail** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tail
-  signature: : SNum -> SNum
-
-中文:
-定义 tail
-  签名: : SNum -> SNum
+--- 原说明 ---
+The `tail` of a `SNum` is obtained by removing the LSB.
+Edge cases: `tail 1 = 0`, `tail (-2) = -1`, `tail 0 = 0` and `tail (-1) = -1`.
 -/
-def tail : SNum -> SNum
+def tail : SNum → SNum
   | zero z => zero z
   | nz p => p.tail
 
-/--
-Definition of `drec'` / `drec'` 的定义
+/-- A dependent induction principle for `SNum` which avoids relying on `NzsNum`. -/
+/-
+**SNum.drec'** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：{C : SNum → Sort u_1} →   ((b : Bool) → C (SNum.zero b)) → ((b : Bool) → (
+p : SNum) → C p → C (SNum.bit b p)) → (p : SNum) → C p
+参数：(b : Bool) → C (SNum.zero b)；(b : Bool) → (p : SNum) → C p → C (SNum.bit b p)
+；p : SNum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition drec'
-  signature: {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p))
-
-中文:
-定义 drec'
-  签名: {C : SNum -> 类型层*} (z : 对任意 b, C (SNum.zero b)) (s : 对任意 b p, C p -> C (b :: p))
+--- 原说明 ---
+A dependent induction principle for `SNum` which avoids relying on `NzsNum`.
 -/
-def drec' {C : SNum -> Sort*} (z : forall b, C (SNum.zero b)) (s : forall b p, C p -> C (b :: p)) : forall p, C p
+def drec' {C : SNum → Sort*} (z : ∀ b, C (SNum.zero b)) (s : ∀ b p, C p → C (b :: p)) : ∀ p, C p
   | zero b => z b
   | nz p => p.drec' z s
 
-/--
-Definition of `rec'` / `rec'` 的定义
+/-- An induction principle for `SNum` which avoids relying on `NzsNum`. -/
+/-
+**SNum.rec'** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：rec' {α} (z : Bool -> α) (s : Bool -> SNum -> α -> α) : SNum -> α
+参数：z : Bool -> α；s : Bool -> SNum -> α -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec'
-  signature: {α} (z : Bool -> α) (s : Bool -> SNum -> α -> α)
-  body: drec' z s
-
-中文:
-定义 rec'
-  签名: {α} (z : 布尔值 -> α) (s : 布尔值 -> SNum -> α -> α)
-  定义体: drec' z s
+--- 原说明 ---
+An induction principle for `SNum` which avoids relying on `NzsNum`.
 -/
-def rec' {α} (z : Bool -> α) (s : Bool -> SNum -> α -> α) : SNum -> α :=
+def rec' {α} (z : Bool → α) (s : Bool → SNum → α → α) : SNum → α :=
   drec' z s
 
-/--
-Definition of `testBit` / `testBit` 的定义
+/-- `SNum.testBit n a` is `true` iff the `n`-th bit (starting from the LSB) of `a` is active.
+If the size of `a` is less than `n`, this evaluates to `false`. -/
+/-
+**SNum.testBit** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：ℕ → SNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition testBit
-  signature: : Nat -> SNum -> Bool
-
-中文:
-定义 testBit
-  签名: : 自然数 -> SNum -> 布尔值
+--- 原说明 ---
+`SNum.testBit n a` is `true` iff the `n`-th bit (starting from the LSB) of `a` i
+s active.
+If the size of `a` is less than `n`, this evaluates to `false`.
 -/
-def testBit : Nat -> SNum -> Bool
+def testBit : Nat → SNum → Bool
   | 0, p => head p
   | n + 1, p => testBit n (tail p)
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The successor of a `SNum` (i.e. the operation adding one). -/
+/-
+**SNum.succ** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：succ : SNum -> SNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ
-  signature: : SNum -> SNum
-  body: rec' (fun b => cond b 0 1) fun b p succp => cond b (false :: succp) (true :: p)
-
-中文:
-定义 succ
-  签名: : SNum -> SNum
-  定义体: rec' (fun b => cond b 0 1) fun b p succp => cond b (false :: succp) (true :: p)
+--- 原说明 ---
+The successor of a `SNum` (i.e. the operation adding one).
 -/
-def succ : SNum -> SNum :=
-  rec' (fun b => cond b 0 1) fun b p succp => cond b (false :: succp) (true :: p)
+def succ : SNum → SNum :=
+  rec' (fun b ↦ cond b 0 1) fun b p succp ↦ cond b (false :: succp) (true :: p)
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- The predecessor of a `SNum` (i.e. the operation of removing one). -/
+/-
+**SNum.pred** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：pred : SNum -> SNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pred
-  signature: : SNum -> SNum
-  body: rec' (fun b => cond b (~1) (~0)) fun b p predp => cond b (false :: p) (true :: predp)
-
-中文:
-定义 pred
-  签名: : SNum -> SNum
-  定义体: rec' (fun b => cond b (~1) (~0)) fun b p predp => cond b (false :: p) (true :: predp)
+--- 原说明 ---
+The predecessor of a `SNum` (i.e. the operation of removing one).
 -/
-def pred : SNum -> SNum :=
-  rec' (fun b => cond b (~1) (~0)) fun b p predp => cond b (false :: p) (true :: predp)
+def pred : SNum → SNum :=
+  rec' (fun b ↦ cond b (~1) (~0)) fun b p predp ↦ cond b (false :: p) (true :: predp)
 
-/--
-Definition of `neg` / `neg` 的定义
+/-- The opposite of a `SNum`. -/
+/-
+**SNum.neg** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neg
-  signature: (n : SNum)
-  body: succ (~n)
-
-中文:
-定义 neg
-  签名: (n : SNum)
-  定义体: succ (~n)
+--- 原说明 ---
+The opposite of a `SNum`.
 -/
 protected def neg (n : SNum) : SNum :=
   succ (~n)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg SNum
-  body: ⟨SNum.neg⟩
-
-中文:
-实例 :
-  签名: 取负 SNum
-  定义体: ⟨SNum.neg⟩
-
-Depends on / 依赖: SNum.neg
+/-
+**SNum.** 是 Mathlib 中的一个实例，位于命名空间 `SNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg SNum :=
   ⟨SNum.neg⟩
 
-/--
-Definition of `czAdd` / `czAdd` 的定义
+/-- `SNum.czAdd a b n` is `n + a - b` (where `a` and `b` should be read as either 0 or 1).
+This is useful to implement the carry system in `cAdd`. -/
+/-
+**SNum.czAdd** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：Bool → Bool → SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition czAdd
-  signature: : Bool -> Bool -> SNum -> SNum
-
-中文:
-定义 czAdd
-  签名: : 布尔值 -> 布尔值 -> SNum -> SNum
+--- 原说明 ---
+`SNum.czAdd a b n` is `n + a - b` (where `a` and `b` should be read as either 0 
+or 1).
+This is useful to implement the carry system in `cAdd`.
 -/
-def czAdd : Bool -> Bool -> SNum -> SNum
+def czAdd : Bool → Bool → SNum → SNum
   | false, false, p => p
   | false, true, p => pred p
   | true, false, p => succ p
@@ -1245,142 +907,89 @@ end SNum
 
 namespace SNum
 
-/--
-Definition of `bits` / `bits` 的定义
+/-- `a.bits n` is the vector of the `n` first bits of `a` (starting from the LSB). -/
+/-
+**SNum.bits** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → (n : ℕ) → List.Vector Bool n
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bits
-  signature: : SNum -> forall n, List.Vector Bool n
-
-中文:
-定义 bits
-  签名: : SNum -> 对任意 n, 列表.Vector 布尔值 n
+--- 原说明 ---
+`a.bits n` is the vector of the `n` first bits of `a` (starting from the LSB).
 -/
-def bits : SNum -> forall n, List.Vector Bool n
+def bits : SNum → ∀ n, List.Vector Bool n
   | _, 0 => Vector.nil
   | p, n + 1 => head p ::ᵥ bits (tail p) n
 
-/--
-Definition of `cAdd` / `cAdd` 的定义
+/-- `SNum.cAdd n m a` is `n + m + a` (where `a` should be read as either 0 or 1).
+`a` represents a carry bit. -/
+/-
+**SNum.cAdd** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：cAdd : SNum -> SNum -> Bool -> SNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cAdd
-  signature: : SNum -> SNum -> Bool -> SNum
-  body: rec' (fun a p c => czAdd c a p) fun a p IH =>
-    rec' (fun b c => czAdd c b (a :: p)) fun b q _ c => Bool.xor3 a b c :: IH q (Bool.carry a b c)
-
-中文:
-定义 cAdd
-  签名: : SNum -> SNum -> 布尔值 -> SNum
-  定义体: rec' (fun a p c => czAdd c a p) fun a p IH =>
-    rec' (fun b c => czAdd c b (a :: p)) fun b q _ c => Bool.xor3 a b c :: IH q (Bool.carry a b c)
-
-Depends on / 依赖: Bool.carry, Bool.xor3
+--- 原说明 ---
+`SNum.cAdd n m a` is `n + m + a` (where `a` should be read as either 0 or 1).
+`a` represents a carry bit.
 -/
-def cAdd : SNum -> SNum -> Bool -> SNum :=
-  rec' (fun a p c => czAdd c a p) fun a p IH =>
-    rec' (fun b c => czAdd c b (a :: p)) fun b q _ c => Bool.xor3 a b c :: IH q (Bool.carry a b c)
+def cAdd : SNum → SNum → Bool → SNum :=
+  rec' (fun a p c ↦ czAdd c a p) fun a p IH ↦
+    rec' (fun b c ↦ czAdd c b (a :: p)) fun b q _ c ↦ Bool.xor3 a b c :: IH q (Bool.carry a b c)
 
-/--
-Definition of `add` / `add` 的定义
+/-- Add two `SNum`s. -/
+/-
+**SNum.add** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: (a b : SNum)
-  body: cAdd a b false
-
-中文:
-定义 add
-  签名: (a b : SNum)
-  定义体: cAdd a b false
+--- 原说明 ---
+Add two `SNum`s.
 -/
 protected def add (a b : SNum) : SNum :=
   cAdd a b false
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add SNum
-  body: ⟨SNum.add⟩
-
-中文:
-实例 :
-  签名: 加法 SNum
-  定义体: ⟨SNum.add⟩
-
-Depends on / 依赖: SNum.add
+/-
+**SNum.** 是 Mathlib 中的一个实例，位于命名空间 `SNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add SNum :=
   ⟨SNum.add⟩
 
-/--
-Definition of `sub` / `sub` 的定义
+/-- Subtract two `SNum`s. -/
+/-
+**SNum.sub** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sub
-  signature: (a b : SNum)
-  body: a + -b
-
-中文:
-定义 sub
-  签名: (a b : SNum)
-  定义体: a + -b
+--- 原说明 ---
+Subtract two `SNum`s.
 -/
 protected def sub (a b : SNum) : SNum :=
   a + -b
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub SNum
-  body: ⟨SNum.sub⟩
-
-中文:
-实例 :
-  签名: 减法 SNum
-  定义体: ⟨SNum.sub⟩
-
-Depends on / 依赖: SNum.sub
+/-
+**SNum.** 是 Mathlib 中的一个实例，位于命名空间 `SNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub SNum :=
   ⟨SNum.sub⟩
 
-/--
-Definition of `mul` / `mul` 的定义
+/-- Multiply two `SNum`s. -/
+/-
+**SNum.mul** 是 Mathlib 中的一个定义，位于命名空间 `SNum`。
+形式化陈述：SNum → SNum → SNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: (a : SNum)
-  body: rec' (fun b => cond b (-a) 0) fun b _ IH => cond b (bit0 IH + a) (bit0 IH)
-
-中文:
-定义 mul
-  签名: (a : SNum)
-  定义体: rec' (fun b => cond b (-a) 0) fun b _ IH => cond b (bit0 IH + a) (bit0 IH)
+--- 原说明 ---
+Multiply two `SNum`s.
 -/
-protected def mul (a : SNum) : SNum -> SNum :=
-  rec' (fun b => cond b (-a) 0) fun b _ IH => cond b (bit0 IH + a) (bit0 IH)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul SNum
-  body: ⟨SNum.mul⟩
-
-中文:
-实例 :
-  签名: 乘法 SNum
-  定义体: ⟨SNum.mul⟩
-
-Depends on / 依赖: SNum.mul
+protected def mul (a : SNum) : SNum → SNum :=
+  rec' (fun b ↦ cond b (-a) 0) fun b _ IH ↦ cond b (bit0 IH + a) (bit0 IH)
+/-
+**SNum.** 是 Mathlib 中的一个实例，位于命名空间 `SNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul SNum :=
   ⟨SNum.mul⟩
 
 end SNum
+

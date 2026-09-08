@@ -56,22 +56,15 @@ universe w v u u₂
 
 variable {J : Type w}
 
-/--
-Inductive type `WalkingParallelFamily` / 归纳类型 `WalkingParallelFamily`
+/-- The type of objects for the diagram indexing a wide (co)equalizer. -/
+/-
+**CategoryTheory.Limits.WalkingParallelFamily** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：Type w → Type w
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WalkingParallelFamily
-  parameters: (J : Type w)
-  constructors (2):
-    - zero: WalkingParallelFamily J
-    - one: WalkingParallelFamily J
-
-中文:
-归纳类型 WalkingParallelFamily
-  参数: (J : 类型 w)
-  构造子 (2 个):
-    - zero: WalkingParallelFamily J
-    - one: WalkingParallelFamily J
+--- 原说明 ---
+The type of objects for the diagram indexing a wide (co)equalizer.
 -/
 inductive WalkingParallelFamily (J : Type w) : Type w
   | zero : WalkingParallelFamily J
@@ -82,16 +75,9 @@ open WalkingParallelFamily
 
 -- We do not use `deriving DecidableEq` here
 -- because it generates an instance with unnecessary hypotheses.
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DecidableEq (WalkingParallelFamily J)
-
-中文:
-实例 :
-  签名: DecidableEq (WalkingParallelFamily J)
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DecidableEq (WalkingParallelFamily J)
   | zero, zero => isTrue rfl
@@ -101,77 +87,62 @@ instance : DecidableEq (WalkingParallelFamily J)
 
 -- Don't generate unnecessary `sizeOf_spec` lemma which the `simpNF` linter will complain about.
 set_option genSizeOfSpec false in
-/--
-Inductive type `WalkingParallelFamily.Hom` / 归纳类型 `WalkingParallelFamily.Hom`
+/-- The type family of morphisms for the diagram indexing a wide (co)equalizer. -/
+/-
+**CategoryTheory.Limits.WalkingParallelFamily.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.Limits.WalkingParallelFamily`。
+形式化陈述：(J : Type w) → CategoryTheory.Limits.WalkingParallelFamily J → CategoryThe
+ory.Limits.WalkingParallelFamily J → Type w
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WalkingParallelFamily.Hom
-  parameters: (J : Type w)
-  constructors (2):
-    - id: forall X : WalkingParallelFamily.{w} J, WalkingParallelFamily.Hom J X X
-    - line: J -> WalkingParallelFamily.Hom J zero one
-
-中文:
-归纳类型 WalkingParallelFamily.态射
-  参数: (J : 类型 w)
-  构造子 (2 个):
-    - id: 对任意 X : WalkingParallelFamily.{w} J, WalkingParallelFamily.态射 J X X
-    - line: J -> WalkingParallelFamily.态射 J zero one
+--- 原说明 ---
+The type family of morphisms for the diagram indexing a wide (co)equalizer.
 -/
 inductive WalkingParallelFamily.Hom (J : Type w) :
-  WalkingParallelFamily J -> WalkingParallelFamily J -> Type w
-  | id : forall X : WalkingParallelFamily.{w} J, WalkingParallelFamily.Hom J X X
-  | line : J -> WalkingParallelFamily.Hom J zero one
+  WalkingParallelFamily J → WalkingParallelFamily J → Type w
+  | id : ∀ X : WalkingParallelFamily.{w} J, WalkingParallelFamily.Hom J X X
+  | line : J → WalkingParallelFamily.Hom J zero one
   deriving DecidableEq
 
 /-- Satisfying the inhabited linter -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Satisfying the inhabited linter
+-/
 instance (J : Type v) : Inhabited (WalkingParallelFamily.Hom J zero zero) where default := Hom.id _
 
 open WalkingParallelFamily.Hom
 
-/--
-Definition of `WalkingParallelFamily.Hom.comp` / `WalkingParallelFamily.Hom.comp` 的定义
+/-- Composition of morphisms in the indexing diagram for wide (co)equalizers. -/
+/-
+**CategoryTheory.Limits.WalkingParallelFamily.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.WalkingParallelFamily.Hom`。
+形式化陈述：{J : Type w} →   {X Y Z : CategoryTheory.Limits.WalkingParallelFamily J} →
+     CategoryTheory.Limits.WalkingParallelFamily.Hom J X Y →       CategoryTheor
+y.Limits.WalkingParallelFamily.Hom J Y Z → CategoryTheory.Limits.WalkingParallel
+Family.Hom J X Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WalkingParallelFamily.Hom.comp
-  signature: :
-
-中文:
-定义 WalkingParallelFamily.态射.comp
-  签名: :
-
-Depends on / 依赖: Functor, Functor.additive_of_comp_faithful, Functor.additive_of_iso, additive_of_comp_faithful, additive_of_iso, commShiftIso
+--- 原说明 ---
+Composition of morphisms in the indexing diagram for wide (co)equalizers.
 -/
 def WalkingParallelFamily.Hom.comp :
-    forall {X Y Z : WalkingParallelFamily J} (_ : WalkingParallelFamily.Hom J X Y)
+    ∀ {X Y Z : WalkingParallelFamily J} (_ : WalkingParallelFamily.Hom J X Y)
       (_ : WalkingParallelFamily.Hom J Y Z), WalkingParallelFamily.Hom J X Z
   | _, _, _, id _, h => h
   | _, _, _, line j, id one => line j
 
 attribute [local aesop safe cases] WalkingParallelFamily.Hom
-
-/--
-Instance `WalkingParallelFamily.category` / 实例 `WalkingParallelFamily.category`
-
-English:
-instance WalkingParallelFamily.category
-  signature: : SmallCategory (WalkingParallelFamily J) where
-  body: WalkingParallelFamily.Hom J
-  id := WalkingParallelFamily.Hom.id
-  comp := WalkingParallelFamily.Hom.comp
-
-@[simp]
-
-中文:
-实例 WalkingParallelFamily.category
-  签名: : 小范畴 (WalkingParallelFamily J) where
-  定义体: WalkingParallelFamily.Hom J
-  id := WalkingParallelFamily.Hom.id
-  comp := WalkingParallelFamily.Hom.comp
-
-@[simp]
-
-Depends on / 依赖: WalkingParallelFamily, WalkingParallelFamily.Hom
+/-
+**CategoryTheory.Limits.WalkingParallelFamily.category** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.WalkingParallelFamily`。
+形式化陈述：{J : Type w} → CategoryTheory.SmallCategory (CategoryTheory.Limits.Walking
+ParallelFamily J)
+参数：CategoryTheory.Limits.WalkingParallelFamily J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance WalkingParallelFamily.category : SmallCategory (WalkingParallelFamily J) where
   Hom := WalkingParallelFamily.Hom J
@@ -179,56 +150,32 @@ instance WalkingParallelFamily.category : SmallCategory (WalkingParallelFamily J
   comp := WalkingParallelFamily.Hom.comp
 
 @[simp]
-/--
-theorem `WalkingParallelFamily.hom_id` / 定理 `WalkingParallelFamily.hom_id`
-
-English:
-theorem WalkingParallelFamily.hom_id
-  given: (X : WalkingParallelFamily J)
-  proof: rfl
-
-中文:
-定理 WalkingParallelFamily.hom_id
-  条件: (X : WalkingParallelFamily J)
-  证明: rfl
+/-
+**CategoryTheory.Limits.WalkingParallelFamily.hom_id** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits.WalkingParallelFamily`。
+形式化陈述：∀ {J : Type w} (X : CategoryTheory.Limits.WalkingParallelFamily J),   Cate
+goryTheory.Limits.WalkingParallelFamily.Hom.id X = CategoryTheory.CategoryStruct
+.id X
+参数：X : CategoryTheory.Limits.WalkingParallelFamily J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem WalkingParallelFamily.hom_id (X : WalkingParallelFamily J) :
     WalkingParallelFamily.Hom.id X = 𝟙 X :=
   rfl
 
 variable (J) in
-/--
-Definition of `WalkingParallelFamily.arrowEquiv` / `WalkingParallelFamily.arrowEquiv` 的定义
+/-- `Arrow (WalkingParallelFamily J)` identifies to the type obtained
+by adding two elements to `T`. -/
+/-
+**CategoryTheory.Limits.WalkingParallelFamily.arrowEquiv** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits.WalkingParallelFamily`。
+形式化陈述：(J : Type w) → CategoryTheory.Arrow (CategoryTheory.Limits.WalkingParallel
+Family J) ≃ Option (Option J)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WalkingParallelFamily.arrowEquiv
-  signature: :
-  body: match f.left, f.right, f.hom with
-    | zero, _, .id _ => none
-    | one, _, .id _ => some none
-    | zero, one, .line t => some (some t)
-  invFun x := match x with
-    | none => Arrow.mk (𝟙 zero)
-    | some none => Arrow.mk (𝟙 one)
-    | some (some t) => Arrow.mk (.line t)
-  left_inv := by rintro ⟨(_ | _), _, (_ | _)⟩ <;> rfl
-  right_inv := by rintro (_ | (_ | _)) <;> rfl
-
-中文:
-定义 WalkingParallelFamily.arrowEquiv
-  签名: :
-  定义体: match f.left, f.right, f.hom with
-    | zero, _, .id _ => none
-    | one, _, .id _ => some none
-    | zero, one, .line t => some (some t)
-  invFun x := match x with
-    | none => Arrow.mk (𝟙 zero)
-    | some none => Arrow.mk (𝟙 one)
-    | some (some t) => Arrow.mk (.line t)
-  left_inv := by rintro ⟨(_ | _), _, (_ | _)⟩ <;> rfl
-  right_inv := by rintro (_ | (_ | _)) <;> rfl
-
-Depends on / 依赖: f.hom, f.left, f.right
+--- 原说明 ---
+`Arrow (WalkingParallelFamily J)` identifies to the type obtained
+by adding two elements to `T`.
 -/
 def WalkingParallelFamily.arrowEquiv :
     Arrow (WalkingParallelFamily J) ≃ Option (Option J) where
@@ -244,40 +191,22 @@ def WalkingParallelFamily.arrowEquiv :
   right_inv := by rintro (_ | (_ | _)) <;> rfl
 
 variable {C : Type u} [Category.{v} C]
-variable {X Y : C} (f : J -> (X ⟶ Y))
+variable {X Y : C} (f : J → (X ⟶ Y))
 
-/--
-Definition of `parallelFamily` / `parallelFamily` 的定义
+/-- `parallelFamily f` is the diagram in `C` consisting of the given family of morphisms, each with
+common domain and codomain.
+-/
+/-
+**CategoryTheory.Limits.parallelFamily** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：parallelFamily : WalkingParallelFamily J ⥤ C where obj x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parallelFamily
-  signature: : WalkingParallelFamily J ⥤ C where
-  body: WalkingParallelFamily.casesOn x X Y
-  map {x y} h :=
-    match x, y, h with
-    | _, _, Hom.id _ => 𝟙 _
-    | _, _, line j => f j
-  map_comp := by
-    rintro _ _ _ ⟨⟩ ⟨⟩ <;>
-      · cat_disch
-
-@[simp]
-
-中文:
-定义 parallelFamily
-  签名: : WalkingParallelFamily J ⥤ C where
-  定义体: WalkingParallelFamily.casesOn x X Y
-  map {x y} h :=
-    match x, y, h with
-    | _, _, Hom.id _ => 𝟙 _
-    | _, _, line j => f j
-  map_comp := by
-    rintro _ _ _ ⟨⟩ ⟨⟩ <;>
-      · cat_disch
-
-@[simp]
-
-Depends on / 依赖: WalkingParallelFamily, WalkingParallelFamily.casesOn, casesOn
+--- 原说明 ---
+`parallelFamily f` is the diagram in `C` consisting of the given family of morph
+isms, each with
+common domain and codomain.
 -/
 def parallelFamily : WalkingParallelFamily J ⥤ C where
   obj x := WalkingParallelFamily.casesOn x X Y
@@ -290,62 +219,34 @@ def parallelFamily : WalkingParallelFamily J ⥤ C where
       · cat_disch
 
 @[simp]
-/--
-theorem `parallelFamily_obj_zero` / 定理 `parallelFamily_obj_zero`
-
-English:
-theorem parallelFamily_obj_zero
-  statement: (parallelFamily f).obj zero = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 parallelFamily_obj_zero
-  结论: (parallelFamily f).obj zero = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.parallelFamily_obj_zero** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：parallelFamily_obj_zero : (parallelFamily f).obj zero = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parallelFamily_obj_zero : (parallelFamily f).obj zero = X :=
   rfl
 
 @[simp]
-/--
-theorem `parallelFamily_obj_one` / 定理 `parallelFamily_obj_one`
-
-English:
-theorem parallelFamily_obj_one
-  statement: (parallelFamily f).obj one = Y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 parallelFamily_obj_one
-  结论: (parallelFamily f).obj one = Y
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.parallelFamily_obj_one** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：parallelFamily_obj_one : (parallelFamily f).obj one = Y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parallelFamily_obj_one : (parallelFamily f).obj one = Y :=
   rfl
 
 @[simp]
-/--
-theorem `parallelFamily_map_left` / 定理 `parallelFamily_map_left`
-
-English:
-theorem parallelFamily_map_left
-  given: {j : J}
-  statement: (parallelFamily f).map (line j) = f j
-  proof: rfl
-
-中文:
-定理 parallelFamily_map_left
-  条件: {j : J}
-  结论: (parallelFamily f).map (line j) = f j
-  证明: rfl
+/-
+**CategoryTheory.Limits.parallelFamily_map_left** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：parallelFamily_map_left {j : J} : (parallelFamily f).map (line j) = f j
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem parallelFamily_map_left {j : J} : (parallelFamily f).map (line j) = f j :=
   rfl
@@ -354,58 +255,40 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- Every functor indexing a wide (co)equalizer is naturally isomorphic (actually, equal) to a
     `parallelFamily` -/
 @[simps!]
-/--
-Definition of `diagramIsoParallelFamily` / `diagramIsoParallelFamily` 的定义
+/-
+**CategoryTheory.Limits.diagramIsoParallelFamily** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：diagramIsoParallelFamily (F : WalkingParallelFamily J ⥤ C) : F ≅ parallelF
+amily fun j => F.map (line j)
+参数：F : WalkingParallelFamily J ⥤ C。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagramIsoParallelFamily
-  signature: (F : WalkingParallelFamily J ⥤ C)
-  body: NatIso.ofComponents (fun j => eqToIso <| by cases j <;> cat_disch) by
-    rintro _ _ (_ | _) <;> cat_disch
-
-中文:
-定义 diagramIsoParallelFamily
-  签名: (F : WalkingParallelFamily J ⥤ C)
-  定义体: NatIso.ofComponents (fun j => eqToIso <| by cases j <;> cat_disch) by
-    rintro _ _ (_ | _) <;> cat_disch
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, Subtype, cat_disch, eqToIso, ofComponents, small_of_surjective
+--- 原说明 ---
+Every functor indexing a wide (co)equalizer is naturally isomorphic (actually, e
+qual) to a
+    `parallelFamily`
 -/
 def diagramIsoParallelFamily (F : WalkingParallelFamily J ⥤ C) :
     F ≅ parallelFamily fun j => F.map (line j) :=
-NatIso.ofComponents (fun j => eqToIso <| by cases j <;> cat_disch) by
+  NatIso.ofComponents (fun j => eqToIso <| by cases j <;> cat_disch) <| by
     rintro _ _ (_ | _) <;> cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
 /-- `WalkingParallelPair` as a category is equivalent to a special case of
 `WalkingParallelFamily`. -/
 @[simps!]
-/--
-Definition of `walkingParallelFamilyEquivWalkingParallelPair` / `walkingParallelFamilyEquivWalkingParallelPair` 的定义
+/-
+**CategoryTheory.Limits.walkingParallelFamilyEquivWalkingParallelPair** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：walkingParallelFamilyEquivWalkingParallelPair : WalkingParallelFamily.{w} 
+(ULift Bool) ≌ WalkingParallelPair where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition walkingParallelFamilyEquivWalkingParallelPair
-  signature: :
-  body: parallelFamily fun p => cond p.down WalkingParallelPairHom.left WalkingParallelPairHom.right
-  inverse := parallelPair (line (ULift.up true)) (line (ULift.up false))
-  unitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
-    rintro _ _ (_ | ⟨_ | _⟩) <;> cat_disch)
-  counitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
-    rintro _ _ (_ | _ | _) <;> cat_disch)
-  functor_unitIso_comp := by rintro (_ | _) <;> cat_disch
-
-中文:
-定义 walkingParallelFamilyEquivWalkingParallelPair
-  签名: :
-  定义体: parallelFamily fun p => cond p.down WalkingParallelPairHom.left WalkingParallelPairHom.right
-  inverse := parallelPair (line (ULift.up true)) (line (ULift.up false))
-  unitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
-    rintro _ _ (_ | ⟨_ | _⟩) <;> cat_disch)
-  counitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
-    rintro _ _ (_ | _ | _) <;> cat_disch)
-  functor_unitIso_comp := by rintro (_ | _) <;> cat_disch
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ULift.up, WalkingParallelPairHom, WalkingParallelPairHom.left, WalkingParallelPairHom.right, cat_disch, counitIso, eqToIso, functor_unitIso_comp, inverse, ofComponents, p.down, parallelFamily, parallelPair, unitIso
+--- 原说明 ---
+`WalkingParallelPair` as a category is equivalent to a special case of
+`WalkingParallelFamily`.
 -/
 def walkingParallelFamilyEquivWalkingParallelPair :
     WalkingParallelFamily.{w} (ULift Bool) ≌ WalkingParallelPair where
@@ -418,205 +301,151 @@ def walkingParallelFamilyEquivWalkingParallelPair :
     rintro _ _ (_ | _ | _) <;> cat_disch)
   functor_unitIso_comp := by rintro (_ | _) <;> cat_disch
 
-/--
-Definition of `Trident` / `Trident` 的定义
+/-- A trident on `f` is just a `Cone (parallelFamily f)`. -/
+/-
+**CategoryTheory.Limits.Trident** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：Trident
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Trident
-  body: Cone (parallelFamily f)
-
-中文:
-缩写 Trident
-  定义体: Cone (parallelFamily f)
-
-Depends on / 依赖: P.subtypeOpEquiv.injective, injective, parallelFamily, small_of_injective, subtypeOpEquiv
+--- 原说明 ---
+A trident on `f` is just a `Cone (parallelFamily f)`.
 -/
 abbrev Trident :=
   Cone (parallelFamily f)
 
-/--
-Definition of `Cotrident` / `Cotrident` 的定义
+/-- A cotrident on `f` and `g` is just a `Cocone (parallelFamily f)`. -/
+/-
+**CategoryTheory.Limits.Cotrident** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：Cotrident
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cotrident
-  body: Cocone (parallelFamily f)
-
-中文:
-缩写 Cotrident
-  定义体: Cocone (parallelFamily f)
-
-Depends on / 依赖: Cocone, P.unop.subtypeOpEquiv, parallelFamily, small_congr, subtypeOpEquiv
+--- 原说明 ---
+A cotrident on `f` and `g` is just a `Cocone (parallelFamily f)`.
 -/
 abbrev Cotrident :=
   Cocone (parallelFamily f)
 
 variable {f}
 
-/--
-Definition of `Trident.ι` / `Trident.ι` 的定义
+/-- A trident `t` on the parallel family `f : J → (X ⟶ Y)` consists of two morphisms
+    `t.π.app zero : t.X ⟶ X` and `t.π.app one : t.X ⟶ Y`. Of these, only the first one is
+    interesting, and we give it the shorter name `Trident.ι t`. -/
+/-
+**CategoryTheory.Limits.Trident.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Trident.ι
-  signature: (t : Trident f)
-  body: t.π.app zero
-
-中文:
-缩写 Trident.ι
-  签名: (t : Trident f)
-  定义体: t.π.app zero
-
-Depends on / 依赖: small_of_surjective
+--- 原说明 ---
+A trident `t` on the parallel family `f : J → (X ⟶ Y)` consists of two morphisms
+    `t.π.app zero : t.X ⟶ X` and `t.π.app one : t.X ⟶ Y`. Of these, only the fir
+st one is
+    interesting, and we give it the shorter name `Trident.ι t`.
 -/
 abbrev Trident.ι (t : Trident f) :=
   t.π.app zero
 
-/--
-Definition of `Cotrident.π` / `Cotrident.π` 的定义
+/-- A cotrident `t` on the parallel family `f : J → (X ⟶ Y)` consists of two morphisms
+    `t.ι.app zero : X ⟶ t.X` and `t.ι.app one : Y ⟶ t.X`. Of these, only the second one is
+    interesting, and we give it the shorter name `Cotrident.π t`. -/
+/-
+**CategoryTheory.Limits.Cotrident.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.L
+imits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cotrident.π
-  signature: (t : Cotrident f)
-  body: t.ι.app one
-
-@[simp]
-
-中文:
-缩写 Cotrident.π
-  签名: (t : Cotrident f)
-  定义体: t.ι.app one
-
-@[simp]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A cotrident `t` on the parallel family `f : J → (X ⟶ Y)` consists of two morphis
+ms
+    `t.ι.app zero : X ⟶ t.X` and `t.ι.app one : Y ⟶ t.X`. Of these, only the sec
+ond one is
+    interesting, and we give it the shorter name `Cotrident.π t`.
 -/
 abbrev Cotrident.π (t : Cotrident f) :=
   t.ι.app one
 
 @[simp]
-/--
-theorem `Trident.ι_eq_app_zero` / 定理 `Trident.ι_eq_app_zero`
-
-English:
-theorem Trident.ι_eq_app_zero
-  given: (t : Trident f)
-  statement: t.ι = t.π.app zero
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Trident.ι_eq_app_zero
-  条件: (t : Trident f)
-  结论: t.ι = t.π.app zero
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Small.of_le, inf_le_right, of_le
+/-
+**CategoryTheory.Limits.Trident.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Trident.ι_eq_app_zero (t : Trident f) : t.ι = t.π.app zero :=
   rfl
 
 @[simp]
-/--
-theorem `Cotrident.π_eq_app_one` / 定理 `Cotrident.π_eq_app_one`
-
-English:
-theorem Cotrident.π_eq_app_one
-  given: (t : Cotrident f)
-  statement: t.π = t.ι.app one
-  proof: rfl
-
-中文:
-定理 Cotrident.π_eq_app_one
-  条件: (t : Cotrident f)
-  结论: t.π = t.ι.app one
-  证明: rfl
-
-Depends on / 依赖: Small.of_le, inf_le_left, of_le
+/-
+**CategoryTheory.Limits.Cotrident.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Cotrident.π_eq_app_one (t : Cotrident f) : t.π = t.ι.app one :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `Trident.app_zero` / 定理 `Trident.app_zero`
-
-English:
-theorem Trident.app_zero
-  given: (s : Trident f) (j : J)
-  statement: s.π.app zero ≫ f j = s.π.app one
-  proof: by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
-
-中文:
-定理 Trident.app_zero
-  条件: (s : Trident f) (j : J)
-  结论: s.π.app zero ≫ f j = s.π.app one
-  证明: by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
-
-Depends on / 依赖: Or.inl, Or.inr, Subtype, parallelFamily_map_left, small_of_surjective
+/-
+**CategoryTheory.Limits.Trident.app_zero** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.Trident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)}   (s : CategoryTheory.Limits.Trident f) (j : J),   Categ
+oryTheory.CategoryStruct.comp (s.π.app CategoryTheory.Limits.WalkingParallelFami
+ly.zero) (f j) =     s.π.app CategoryTheory.Limits.WalkingParallelFamily.one
+参数：X ⟶ Y；s : CategoryTheory.Limits.Trident f；j : J；s.π.app CategoryTheory.Limits
+.WalkingParallelFamily.zero；f j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.parallelFamily_map_left`：parallelFamily_map_left {
+j : J} : (parallelFamily f).map (line j) = f j
 -/
 theorem Trident.app_zero (s : Trident f) (j : J) : s.π.app zero ≫ f j = s.π.app one := by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
+  rw [← s.w (line j), parallelFamily_map_left]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `Cotrident.app_one` / 定理 `Cotrident.app_one`
-
-English:
-theorem Cotrident.app_one
-  given: (s : Cotrident f) (j : J)
-  statement: f j ≫ s.ι.app one = s.ι.app zero
-  proof: by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
-
-中文:
-定理 Cotrident.app_one
-  条件: (s : Cotrident f) (j : J)
-  结论: f j ≫ s.ι.app one = s.ι.app zero
-  证明: by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
-
-Depends on / 依赖: Subtype, parallelFamily_map_left, small_of_surjective
+/-
+**CategoryTheory.Limits.Cotrident.app_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.Cotrident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)}   (s : CategoryTheory.Limits.Cotrident f) (j : J),   Cat
+egoryTheory.CategoryStruct.comp (f j) (s.ι.app CategoryTheory.Limits.WalkingPara
+llelFamily.one) =     s.ι.app CategoryTheory.Limits.WalkingParallelFamily.zero
+参数：X ⟶ Y；s : CategoryTheory.Limits.Cotrident f；j : J；f j；s.ι.app CategoryTheory.
+Limits.WalkingParallelFamily.one。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cocone.w`：∀ {J : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C] 
+  {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.parallelFamily_map_left`：parallelFamily_map_left {
+j : J} : (parallelFamily f).map (line j) = f j
 -/
 theorem Cotrident.app_one (s : Cotrident f) (j : J) : f j ≫ s.ι.app one = s.ι.app zero := by
-  rw [← s.w (line j)]; rw [parallelFamily_map_left]
+  rw [← s.w (line j), parallelFamily_map_left]
 
 set_option backward.defeqAttrib.useBackward true in
 /-- A trident on `f : J → (X ⟶ Y)` is determined by the morphism `ι : P ⟶ X` satisfying
 `∀ j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂`.
 -/
 @[simps]
-/--
-Definition of `Trident.ofι` / `Trident.ofι` 的定义
+/-
+**CategoryTheory.Limits.Trident.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.ofι
-  signature: [Nonempty J] {P : C} (ι : P ⟶ X) (w : forall j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
-  body: P
-  π :=
-    { app := fun X => WalkingParallelFamily.casesOn X ι (ι ≫ f (Classical.arbitrary J))
-      naturality := fun i j f => by
-        obtain - | k := f
-        · simp
-        · simp [w (Classical.arbitrary J) k] }
-
-中文:
-定义 Trident.ofι
-  签名: [非空 J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
-  定义体: P
-  π :=
-    { app := fun X => WalkingParallelFamily.casesOn X ι (ι ≫ f (Classical.arbitrary J))
-      naturality := fun i j f => by
-        obtain - | k := f
-        · simp
-        · simp [w (Classical.arbitrary J) k] }
+--- 原说明 ---
+A trident on `f : J → (X ⟶ Y)` is determined by the morphism `ι : P ⟶ X` satisfy
+ing
+`∀ j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂`.
 -/
-def Trident.ofι [Nonempty J] {P : C} (ι : P ⟶ X) (w : forall j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂) :
+def Trident.ofι [Nonempty J] {P : C} (ι : P ⟶ X) (w : ∀ j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂) :
     Trident f where
   pt := P
   π :=
@@ -631,32 +460,17 @@ set_option backward.defeqAttrib.useBackward true in
 `∀ j₁ j₂, f j₁ ≫ π = f j₂ ≫ π`.
 -/
 @[simps]
-/--
-Definition of `Cotrident.ofπ` / `Cotrident.ofπ` 的定义
+/-
+**CategoryTheory.Limits.Cotrident.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.ofπ
-  signature: [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
-  body: P
-  ι :=
-    { app := fun X => WalkingParallelFamily.casesOn X (f (Classical.arbitrary J) ≫ π) π
-      naturality := fun i j f => by
-        obtain - | k := f
-        · simp
-        · simp [w (Classical.arbitrary J) k] }
-
-中文:
-定义 Cotrident.ofπ
-  签名: [非空 J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
-  定义体: P
-  ι :=
-    { app := fun X => WalkingParallelFamily.casesOn X (f (Classical.arbitrary J) ≫ π) π
-      naturality := fun i j f => by
-        obtain - | k := f
-        · simp
-        · simp [w (Classical.arbitrary J) k] }
+--- 原说明 ---
+A cotrident on `f : J → (X ⟶ Y)` is determined by the morphism `π : Y ⟶ P` satis
+fying
+`∀ j₁ j₂, f j₁ ≫ π = f j₂ ≫ π`.
 -/
-def Cotrident.ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j₂, f j₁ ≫ π = f j₂ ≫ π) :
+def Cotrident.ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : ∀ j₁ j₂, f j₁ ≫ π = f j₂ ≫ π) :
     Cotrident f where
   pt := P
   ι :=
@@ -665,42 +479,20 @@ def Cotrident.ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j₂, f 
         obtain - | k := f
         · simp
         · simp [w (Classical.arbitrary J) k] }
-
-/--
-theorem `Trident.ι_ofι` / 定理 `Trident.ι_ofι`
-
-English:
-theorem Trident.ι_ofι
-  given: [Nonempty J] {P : C} (ι : P ⟶ X) (w : forall j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
-  proof: rfl
-
-中文:
-定理 Trident.ι_ofι
-  条件: [非空 J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
-  证明: rfl
+/-
+**CategoryTheory.Limits.Trident.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Trident.ι_ofι [Nonempty J] {P : C} (ι : P ⟶ X) (w : forall j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂) :
+theorem Trident.ι_ofι [Nonempty J] {P : C} (ι : P ⟶ X) (w : ∀ j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂) :
     (Trident.ofι ι w).ι = ι :=
   rfl
-
-/--
-theorem `Cotrident.π_ofπ` / 定理 `Cotrident.π_ofπ`
-
-English:
-theorem Cotrident.π_ofπ
-  given: [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
-  proof: rfl
-
-#adaptation_note
-
-中文:
-定理 Cotrident.π_ofπ
-  条件: [非空 J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.Limits.Cotrident.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Cotrident.π_ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j₂, f j₁ ≫ π = f j₂ ≫ π) :
+theorem Cotrident.π_ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : ∀ j₁ j₂, f j₁ ≫ π = f j₂ ≫ π) :
     (Cotrident.ofπ π w).π = π :=
   rfl
 
@@ -708,198 +500,250 @@ theorem Cotrident.π_ofπ [Nonempty J] {P : C} (π : Y ⟶ P) (w : forall j₁ j
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-theorem `Trident.condition` / 定理 `Trident.condition`
+/-
+**CategoryTheory.Limits.Trident.condition** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.Trident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} (j₁ j₂ : J)   (t : CategoryTheory.Limits.Trident f),   C
+ategoryTheory.CategoryStruct.comp t.ι (f j₁) = CategoryTheory.CategoryStruct.com
+p t.ι (f j₂)
+参数：X ⟶ Y；j₁ j₂ : J；t : CategoryTheory.Limits.Trident f；f j₁；f j₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Trident.app_zero`：∀ {J : Type w} {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   (s : Categor
+yTheory.Limits.Trident f) (j…
 
-English:
-theorem Trident.condition
-  given: (j₁ j₂ : J) (t : Trident f)
-  statement: t.ι ≫ f j₁ = t.ι ≫ f j₂
-  proof: by
-  rw [t.app_zero]; rw [t.app_zero]
-
-#adaptation_note
-
-中文:
-定理 Trident.condition
-  条件: (j₁ j₂ : J) (t : Trident f)
-  结论: t.ι ≫ f j₁ = t.ι ≫ f j₂
-  证明: by
-  rw [t.app_zero]; rw [t.app_zero]
-
-#adaptation_note
-
-Depends on / 依赖: app_zero, t.app_zero
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem Trident.condition (j₁ j₂ : J) (t : Trident f) : t.ι ≫ f j₁ = t.ι ≫ f j₂ := by
-  rw [t.app_zero]; rw [t.app_zero]
+  rw [t.app_zero, t.app_zero]
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-theorem `Cotrident.condition` / 定理 `Cotrident.condition`
+/-
+**CategoryTheory.Limits.Cotrident.condition** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.Cotrident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} (j₁ j₂ : J)   (t : CategoryTheory.Limits.Cotrident f),  
+ CategoryTheory.CategoryStruct.comp (f j₁) t.π = CategoryTheory.CategoryStruct.c
+omp (f j₂) t.π
+参数：X ⟶ Y；j₁ j₂ : J；t : CategoryTheory.Limits.Cotrident f；f j₁；f j₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Cotrident.app_one`：∀ {J : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   (s : Catego
+ryTheory.Limits.Cotrident f) …
 
-English:
-theorem Cotrident.condition
-  given: (j₁ j₂ : J) (t : Cotrident f)
-  statement: f j₁ ≫ t.π = f j₂ ≫ t.π
-  proof: by
-  rw [t.app_one]; rw [t.app_one]
-
-中文:
-定理 Cotrident.condition
-  条件: (j₁ j₂ : J) (t : Cotrident f)
-  结论: f j₁ ≫ t.π = f j₂ ≫ t.π
-  证明: by
-  rw [t.app_one]; rw [t.app_one]
-
-Depends on / 依赖: app_one, le_isoClosure, t.app_one
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem Cotrident.condition (j₁ j₂ : J) (t : Cotrident f) : f j₁ ≫ t.π = f j₂ ≫ t.π := by
-  rw [t.app_one]; rw [t.app_one]
+  rw [t.app_one, t.app_one]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Trident.equalizer_ext` / 定理 `Trident.equalizer_ext`
+/-- To check whether two maps are equalized by both maps of a trident, it suffices to check it for
+the first map -/
+/-
+**CategoryTheory.Limits.Trident.equalizer_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.Trident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [Nonempty J]   (s : CategoryTheory.Limits.Trident f) {W 
+: C} {k l : W ⟶ s.pt},   CategoryTheory.CategoryStruct.comp k s.ι = CategoryTheo
+ry.CategoryStruct.comp l s.ι →     ∀ (j : CategoryTheory.Limits.WalkingParallelF
+amily J),       CategoryTheory.CategoryStruct.comp k (s.π.app j) = CategoryTheor
+y.CategoryStruct.comp l (s.π.app j)
+参数：X ⟶ Y；s : CategoryTheory.Limits.Trident f；j : CategoryTheory.Limits.WalkingPa
+rallelFamily J；s.π.app j；s.π.app j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Trident.app_zero`：∀ {J : Type w} {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   (s : Categor
+yTheory.Limits.Trident f) (j…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
 
-English:
-theorem Trident.equalizer_ext
-  statement: [Nonempty J] (s : Trident f) {W : C} {k l : W ⟶ s.pt}
-
-中文:
-定理 Trident.equalizer_ext
-  结论: [非空 J] (s : Trident f) {W : C} {k l : W ⟶ s.pt}
-
-Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, exists_small_le, isoClosure_le_iff
+--- 原说明 ---
+To check whether two maps are equalized by both maps of a trident, it suffices t
+o check it for
+the first map
 -/
 theorem Trident.equalizer_ext [Nonempty J] (s : Trident f) {W : C} {k l : W ⟶ s.pt}
-    (h : k ≫ s.ι = l ≫ s.ι) : forall j : WalkingParallelFamily J, k ≫ s.π.app j = l ≫ s.π.app j
+    (h : k ≫ s.ι = l ≫ s.ι) : ∀ j : WalkingParallelFamily J, k ≫ s.π.app j = l ≫ s.π.app j
   | zero => h
   | one => by rw [← s.app_zero (Classical.arbitrary J), reassoc_of% h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Cotrident.coequalizer_ext` / 定理 `Cotrident.coequalizer_ext`
+/-- To check whether two maps are coequalized by both maps of a cotrident, it suffices to check it
+for the second map -/
+/-
+**CategoryTheory.Limits.Cotrident.coequalizer_ext** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.Cotrident`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [Nonempty J]   (s : CategoryTheory.Limits.Cotrident f) {
+W : C} {k l : s.pt ⟶ W},   CategoryTheory.CategoryStruct.comp s.π k = CategoryTh
+eory.CategoryStruct.comp s.π l →     ∀ (j : CategoryTheory.Limits.WalkingParalle
+lFamily J),       CategoryTheory.CategoryStruct.comp (s.ι.app j) k = CategoryThe
+ory.CategoryStruct.comp (s.ι.app j) l
+参数：X ⟶ Y；s : CategoryTheory.Limits.Cotrident f；j : CategoryTheory.Limits.Walking
+ParallelFamily J；s.ι.app j；s.ι.app j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cotrident.app_one`：∀ {J : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   (s : Catego
+ryTheory.Limits.Cotrident f) …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem Cotrident.coequalizer_ext
-  statement: [Nonempty J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
-
-中文:
-定理 Cotrident.coequalizer_ext
-  结论: [非空 J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
+--- 原说明 ---
+To check whether two maps are coequalized by both maps of a cotrident, it suffic
+es to check it
+for the second map
 -/
 theorem Cotrident.coequalizer_ext [Nonempty J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
-    (h : s.π ≫ k = s.π ≫ l) : forall j : WalkingParallelFamily J, s.ι.app j ≫ k = s.ι.app j ≫ l
+    (h : s.π ≫ k = s.π ≫ l) : ∀ j : WalkingParallelFamily J, s.ι.app j ≫ k = s.ι.app j ≫ l
   | zero => by rw [← s.app_one (Classical.arbitrary J), Category.assoc, Category.assoc, h]
   | one => h
-
-/--
-theorem `Trident.IsLimit.hom_ext` / 定理 `Trident.IsLimit.hom_ext`
-
-English:
-theorem Trident.IsLimit.hom_ext
-  statement: [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C}
-  proof: hs.hom_ext Trident.equalizer_ext _ h
-
-中文:
-定理 Trident.是极限.hom_ext
-  结论: [非空 J] {s : Trident f} (hs : 是极限 s) {W : C}
-  证明: hs.hom_ext Trident.equalizer_ext _ h
-
-Depends on / 依赖: Trident, Trident.equalizer_ext, equalizer_ext, hom_ext, hs.hom_ext
+/-
+**CategoryTheory.Limits.Trident.IsLimit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.Trident.IsLimit`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [Nonempty J]   {s : CategoryTheory.Limits.Trident f} (hs
+ : CategoryTheory.Limits.IsLimit s) {W : C} {k l : W ⟶ s.pt},   CategoryTheory.C
+ategoryStruct.comp k s.ι = CategoryTheory.CategoryStruct.comp l s.ι → k = l
+参数：X ⟶ Y；hs : CategoryTheory.Limits.IsLimit s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `CategoryTheory.Limits.Trident.equalizer_ext`：∀ {J : Type w} {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [Nonempty
+ J]   (s : CategoryTheory.Limits.…
 -/
 theorem Trident.IsLimit.hom_ext [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C}
     {k l : W ⟶ s.pt} (h : k ≫ s.ι = l ≫ s.ι) : k = l :=
-hs.hom_ext Trident.equalizer_ext _ h
-
-/--
-theorem `Cotrident.IsColimit.hom_ext` / 定理 `Cotrident.IsColimit.hom_ext`
-
-English:
-theorem Cotrident.IsColimit.hom_ext
-  statement: [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C}
-  proof: hs.hom_ext Cotrident.coequalizer_ext _ h
-
-中文:
-定理 Cotrident.是余极限.hom_ext
-  结论: [非空 J] {s : Cotrident f} (hs : 是余极限 s) {W : C}
-  证明: hs.hom_ext Cotrident.coequalizer_ext _ h
-
-Depends on / 依赖: Cotrident, Cotrident.coequalizer_ext, EssentiallySmall, EssentiallySmall.exists_small_le, coequalizer_ext, exists_small_le, hom_ext, hs.hom_ext, le_sup_left, le_sup_right, monotone_isoClosure, sup_le_iff
+  hs.hom_ext <| Trident.equalizer_ext _ h
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [Nonempty J]   {s : CategoryTheory.Limits.Cotrident f} (
+hs : CategoryTheory.Limits.IsColimit s) {W : C} {k l : s.pt ⟶ W},   CategoryTheo
+ry.CategoryStruct.comp s.π k = CategoryTheory.CategoryStruct.comp s.π l → k = l
+参数：X ⟶ Y；hs : CategoryTheory.Limits.IsColimit s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Cotrident.coequalizer_ext`：∀ {J : Type w} {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [None
+mpty J]   (s : CategoryTheory.Limits.…
 -/
 theorem Cotrident.IsColimit.hom_ext [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C}
     {k l : s.pt ⟶ W} (h : s.π ≫ k = s.π ≫ l) : k = l :=
-hs.hom_ext Cotrident.coequalizer_ext _ h
+  hs.hom_ext <| Cotrident.coequalizer_ext _ h
 
-/--
-Definition of `Trident.IsLimit.lift'` / `Trident.IsLimit.lift'` 的定义
+/-- If `s` is a limit trident over `f`, then a morphism `k : W ⟶ X` satisfying
+    `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` induces a morphism `l : W ⟶ s.X` such that
+    `l ≫ Trident.ι s = k`. -/
+/-
+**CategoryTheory.Limits.Trident.IsLimit.lift'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.Trident.IsLimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s : CategoryTheory.Limits.Trident f} →               CategoryTheory.Li
+mits.IsLimit s →                 {W : C} →                   (k : W ⟶ X) →      
+               (∀ (j₁ j₂ : J),                         CategoryTheory.CategorySt
+ruct.comp k (f j₁) = CategoryTheory.CategoryStruct.comp k (f j₂)) →             
+          { l // CategoryTheory.CategoryStruct.comp l s.ι = k }
+参数：X ⟶ Y；k : W ⟶ X；∀ (j₁ j₂ : J),                         CategoryTheory.Categor
+yStruct.comp k (f j₁) = CategoryTheory.CategoryStruct.comp k (f j₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.IsLimit.lift'
-  signature: [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C} (k : W ⟶ X)
-  body: ⟨hs.lift Trident.ofι _ h, hs.fac _ _⟩
-
-中文:
-定义 Trident.是极限.lift'
-  签名: [非空 J] {s : Trident f} (hs : 是极限 s) {W : C} (k : W ⟶ X)
-  定义体: ⟨hs.lift Trident.ofι _ h, hs.fac _ _⟩
-
-Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, Trident, Trident.of, exists_small_le, hs.fac, hs.lift, iSup_le_iff, le_iSup, monotone_isoClosure
+--- 原说明 ---
+If `s` is a limit trident over `f`, then a morphism `k : W ⟶ X` satisfying
+    `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` induces a morphism `l : W ⟶ s.X` such that
+    `l ≫ Trident.ι s = k`.
 -/
 def Trident.IsLimit.lift' [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C} (k : W ⟶ X)
-    (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂) : { l : W ⟶ s.pt // l ≫ Trident.ι s = k } :=
-⟨hs.lift Trident.ofι _ h, hs.fac _ _⟩
+    (h : ∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂) : { l : W ⟶ s.pt // l ≫ Trident.ι s = k } :=
+  ⟨hs.lift <| Trident.ofι _ h, hs.fac _ _⟩
 
-/--
-Definition of `Cotrident.IsColimit.desc'` / `Cotrident.IsColimit.desc'` 的定义
+/-- If `s` is a colimit cotrident over `f`, then a morphism `k : Y ⟶ W` satisfying
+    `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` induces a morphism `l : s.X ⟶ W` such that
+    `Cotrident.π s ≫ l = k`. -/
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.desc'** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s : CategoryTheory.Limits.Cotrident f} →               CategoryTheory.
+Limits.IsColimit s →                 {W : C} →                   (k : Y ⟶ W) →  
+                   (∀ (j₁ j₂ : J),                         CategoryTheory.Catego
+ryStruct.comp (f j₁) k = CategoryTheory.CategoryStruct.comp (f j₂) k) →         
+              { l // CategoryTheory.CategoryStruct.comp s.π l = k }
+参数：X ⟶ Y；k : Y ⟶ W；∀ (j₁ j₂ : J),                         CategoryTheory.Categor
+yStruct.comp (f j₁) k = CategoryTheory.CategoryStruct.comp (f j₂) k。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.IsColimit.desc'
-  signature: [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
-  body: ⟨hs.desc Cotrident.ofπ _ h, hs.fac _ _⟩
-
-中文:
-定义 Cotrident.是余极限.desc'
-  签名: [非空 J] {s : Cotrident f} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
-  定义体: ⟨hs.desc Cotrident.ofπ _ h, hs.fac _ _⟩
-
-Depends on / 依赖: Cotrident, Cotrident.of, hs.desc, hs.fac
+--- 原说明 ---
+If `s` is a colimit cotrident over `f`, then a morphism `k : Y ⟶ W` satisfying
+    `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` induces a morphism `l : s.X ⟶ W` such that
+    `Cotrident.π s ≫ l = k`.
 -/
 def Cotrident.IsColimit.desc' [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
-    (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) : { l : s.pt ⟶ W // Cotrident.π s ≫ l = k } :=
-⟨hs.desc Cotrident.ofπ _ h, hs.fac _ _⟩
+    (h : ∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) : { l : s.pt ⟶ W // Cotrident.π s ≫ l = k } :=
+  ⟨hs.desc <| Cotrident.ofπ _ h, hs.fac _ _⟩
 
-/--
-Definition of `Trident.IsLimit.mk` / `Trident.IsLimit.mk` 的定义
+/-- This is a slightly more convenient method to verify that a trident is a limit cone. It
+    only asks for a proof of facts that carry any mathematical content -/
+/-
+**CategoryTheory.Limits.Trident.IsLimit.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.Trident.IsLimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         (t : CategoryTheory.Limits.Trident f) →               (lift : (s : Cate
+goryTheory.Limits.Trident f) → s.pt ⟶ t.pt) →                 (∀ (s : CategoryTh
+eory.Limits.Trident f), CategoryTheory.CategoryStruct.comp (lift s) t.ι = s.ι) →
+                   (∀ (s : CategoryTheory.Limits.Trident f) (m : s.pt ⟶ t.pt),  
+                     (∀ (j : CategoryTheory.Limits.WalkingParallelFamily J),    
+                       CategoryTheory.CategoryStruct.comp m (t.π.app j) = s.π.ap
+p j) →                         m = lift s) →                     CategoryTheory.
+Limits.IsLimit t
+参数：X ⟶ Y；t : CategoryTheory.Limits.Trident f；lift : (s : CategoryTheory.Limits.T
+rident f) → s.pt ⟶ t.pt；∀ (s : CategoryTheory.Limits.Trident f), CategoryTheory.
+CategoryStruct.comp (lift s) t.ι = s.ι；∀ (s : CategoryTheory.Limits.Trident f) (
+m : s.pt ⟶ t.pt),                       (∀ (j : CategoryTheory.Limits.WalkingPar
+allelFamily J),                           CategoryTheory.CategoryStruct.comp m (
+t.π.app j) = s.π.app j) →                         m = lift s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.IsLimit.mk
-  signature: [Nonempty J] (t : Trident f) (lift : forall s : Trident f, s.pt ⟶ t.pt)
-  body: { lift
-    fac := fun s j =>
-      WalkingParallelFamily.casesOn j (fac s)
-        (by rw [← t.w (line (Classical.arbitrary J)), reassoc_of% fac, s.w])
-    uniq := uniq }
-
-中文:
-定义 Trident.是极限.mk
-  签名: [非空 J] (t : Trident f) (lift : 对任意 s : Trident f, s.pt ⟶ t.pt)
-  定义体: { lift
-    fac := fun s j =>
-      WalkingParallelFamily.casesOn j (fac s)
-        (by rw [← t.w (line (Classical.arbitrary J)), reassoc_of% fac, s.w])
-    uniq := uniq }
-
-Depends on / 依赖: Classical, Classical.arbitrary, WalkingParallelFamily, WalkingParallelFamily.casesOn, arbitrary, casesOn, reassoc_of
+--- 原说明 ---
+This is a slightly more convenient method to verify that a trident is a limit co
+ne. It
+    only asks for a proof of facts that carry any mathematical content
 -/
-def Trident.IsLimit.mk [Nonempty J] (t : Trident f) (lift : forall s : Trident f, s.pt ⟶ t.pt)
-    (fac : forall s : Trident f, lift s ≫ t.ι = s.ι)
+def Trident.IsLimit.mk [Nonempty J] (t : Trident f) (lift : ∀ s : Trident f, s.pt ⟶ t.pt)
+    (fac : ∀ s : Trident f, lift s ≫ t.ι = s.ι)
     (uniq :
-      forall (s : Trident f) (m : s.pt ⟶ t.pt)
-        (_ : forall j : WalkingParallelFamily J, m ≫ t.π.app j = s.π.app j), m = lift s) :
+      ∀ (s : Trident f) (m : s.pt ⟶ t.pt)
+        (_ : ∀ j : WalkingParallelFamily J, m ≫ t.π.app j = s.π.app j), m = lift s) :
     IsLimit t :=
   { lift
     fac := fun s j =>
@@ -907,58 +751,83 @@ def Trident.IsLimit.mk [Nonempty J] (t : Trident f) (lift : forall s : Trident f
         (by rw [← t.w (line (Classical.arbitrary J)), reassoc_of% fac, s.w])
     uniq := uniq }
 
-/--
-Definition of `Trident.IsLimit.mk'` / `Trident.IsLimit.mk'` 的定义
+/-- This is another convenient method to verify that a trident is a limit cone. It
+    only asks for a proof of facts that carry any mathematical content, and allows access to the
+    same `s` for all parts. -/
+/-
+**CategoryTheory.Limits.Trident.IsLimit.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.Trident.IsLimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         (t : CategoryTheory.Limits.Trident f) →               ((s : CategoryThe
+ory.Limits.Trident f) →                   { l //                     CategoryThe
+ory.CategoryStruct.comp l t.ι = s.ι ∧                       ∀                   
+      {m :                           ((CategoryTheory.Functor.const (CategoryThe
+ory.Limits.WalkingParallelFamily J)).obj s.pt).obj                              
+ CategoryTheory.Limits.WalkingParallelFamily.zero ⟶                             
+((CategoryTheory.Functor.const (CategoryTheory.Limits.WalkingParallelFamily J)).
+obj                                   t.pt).obj                               Ca
+tegoryTheory.Limits.WalkingParallelFamily.zero},                         Categor
+yTheory.CategoryStruct.comp m t.ι = s.ι → m = l }) →                 CategoryThe
+ory.Limits.IsLimit t
+参数：X ⟶ Y；t : CategoryTheory.Limits.Trident f；(s : CategoryTheory.Limits.Trident 
+f) →                   { l //                     CategoryTheory.CategoryStruct.
+comp l t.ι = s.ι ∧                       ∀                         {m :         
+                  ((CategoryTheory.Functor.const (CategoryTheory.Limits.WalkingP
+arallelFamily J)).obj s.pt).obj                               CategoryTheory.Lim
+its.WalkingParallelFamily.zero ⟶                             ((CategoryTheory.Fu
+nctor.const (CategoryTheory.Limits.WalkingParallelFamily J)).obj                
+                   t.pt).obj                               CategoryTheory.Limits
+.WalkingParallelFamily.zero},                         CategoryTheory.CategoryStr
+uct.comp m t.ι = s.ι → m = l }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.IsLimit.mk'
-  signature: [Nonempty J] (t : Trident f)
-  body: Trident.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
-    (create s).2.2 (w zero)
-
-中文:
-定义 Trident.是极限.mk'
-  签名: [非空 J] (t : Trident f)
-  定义体: Trident.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
-    (create s).2.2 (w zero)
-
-Depends on / 依赖: IsLimit, Trident, Trident.IsLimit.mk, create
+--- 原说明 ---
+This is another convenient method to verify that a trident is a limit cone. It
+    only asks for a proof of facts that carry any mathematical content, and allo
+ws access to the
+    same `s` for all parts.
 -/
 def Trident.IsLimit.mk' [Nonempty J] (t : Trident f)
-    (create : forall s : Trident f, { l // l ≫ t.ι = s.ι ∧ forall {m}, m ≫ t.ι = s.ι -> m = l }) :
+    (create : ∀ s : Trident f, { l // l ≫ t.ι = s.ι ∧ ∀ {m}, m ≫ t.ι = s.ι → m = l }) :
     IsLimit t :=
   Trident.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
     (create s).2.2 (w zero)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Cotrident.IsColimit.mk` / `Cotrident.IsColimit.mk` 的定义
+/-- This is a slightly more convenient method to verify that a cotrident is a colimit cocone. It
+    only asks for a proof of facts that carry any mathematical content -/
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.mk** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         (t : CategoryTheory.Limits.Cotrident f) →               (desc : (s : Ca
+tegoryTheory.Limits.Cotrident f) → t.pt ⟶ s.pt) →                 (∀ (s : Catego
+ryTheory.Limits.Cotrident f), CategoryTheory.CategoryStruct.comp t.π (desc s) = 
+s.π) →                   (∀ (s : CategoryTheory.Limits.Cotrident f) (m : t.pt ⟶ 
+s.pt),                       (∀ (j : CategoryTheory.Limits.WalkingParallelFamily
+ J),                           CategoryTheory.CategoryStruct.comp (t.ι.app j) m 
+= s.ι.app j) →                         m = desc s) →                     Categor
+yTheory.Limits.IsColimit t
+参数：X ⟶ Y；t : CategoryTheory.Limits.Cotrident f；desc : (s : CategoryTheory.Limits
+.Cotrident f) → t.pt ⟶ s.pt；∀ (s : CategoryTheory.Limits.Cotrident f), CategoryT
+heory.CategoryStruct.comp t.π (desc s) = s.π；∀ (s : CategoryTheory.Limits.Cotrid
+ent f) (m : t.pt ⟶ s.pt),                       (∀ (j : CategoryTheory.Limits.Wa
+lkingParallelFamily J),                           CategoryTheory.CategoryStruct.
+comp (t.ι.app j) m = s.ι.app j) →                         m = desc s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.IsColimit.mk
-  signature: [Nonempty J] (t : Cotrident f) (desc : forall s : Cotrident f, t.pt ⟶ s.pt)
-  body: { desc
-    fac := fun s j =>
-      WalkingParallelFamily.casesOn j (by rw [← t.w_assoc (line (Classical.arbitrary J)), fac, s.w])
-        (fac s)
-    uniq := uniq }
-
-中文:
-定义 Cotrident.是余极限.mk
-  签名: [非空 J] (t : Cotrident f) (desc : 对任意 s : Cotrident f, t.pt ⟶ s.pt)
-  定义体: { desc
-    fac := fun s j =>
-      WalkingParallelFamily.casesOn j (by rw [← t.w_assoc (line (Classical.arbitrary J)), fac, s.w])
-        (fac s)
-    uniq := uniq }
-
-Depends on / 依赖: Classical, Classical.arbitrary, WalkingParallelFamily, WalkingParallelFamily.casesOn, arbitrary, casesOn, t.w_assoc, w_assoc
+--- 原说明 ---
+This is a slightly more convenient method to verify that a cotrident is a colimi
+t cocone. It
+    only asks for a proof of facts that carry any mathematical content
 -/
-def Cotrident.IsColimit.mk [Nonempty J] (t : Cotrident f) (desc : forall s : Cotrident f, t.pt ⟶ s.pt)
-    (fac : forall s : Cotrident f, t.π ≫ desc s = s.π)
+def Cotrident.IsColimit.mk [Nonempty J] (t : Cotrident f) (desc : ∀ s : Cotrident f, t.pt ⟶ s.pt)
+    (fac : ∀ s : Cotrident f, t.π ≫ desc s = s.π)
     (uniq :
-      forall (s : Cotrident f) (m : t.pt ⟶ s.pt)
-        (_ : forall j : WalkingParallelFamily J, t.ι.app j ≫ m = s.ι.app j), m = desc s) :
+      ∀ (s : Cotrident f) (m : t.pt ⟶ s.pt)
+        (_ : ∀ j : WalkingParallelFamily J, t.ι.app j ≫ m = s.ι.app j), m = desc s) :
     IsColimit t :=
   { desc
     fac := fun s j =>
@@ -966,26 +835,47 @@ def Cotrident.IsColimit.mk [Nonempty J] (t : Cotrident f) (desc : forall s : Cot
         (fac s)
     uniq := uniq }
 
-/--
-Definition of `Cotrident.IsColimit.mk'` / `Cotrident.IsColimit.mk'` 的定义
+/-- This is another convenient method to verify that a cotrident is a colimit cocone. It
+    only asks for a proof of facts that carry any mathematical content, and allows access to the
+    same `s` for all parts. -/
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         (t : CategoryTheory.Limits.Cotrident f) →               ((s : CategoryT
+heory.Limits.Cotrident f) →                   { l //                     Categor
+yTheory.CategoryStruct.comp t.π l = s.π ∧                       ∀               
+          {m :                           ((CategoryTheory.Functor.const (Categor
+yTheory.Limits.WalkingParallelFamily J)).obj t.pt).obj                          
+     CategoryTheory.Limits.WalkingParallelFamily.one ⟶                          
+   ((CategoryTheory.Functor.const (CategoryTheory.Limits.WalkingParallelFamily J
+)).obj                                   s.pt).obj                              
+ CategoryTheory.Limits.WalkingParallelFamily.one},                         Categ
+oryTheory.CategoryStruct.comp t.π m = s.π → m = l }) →                 CategoryT
+heory.Limits.IsColimit t
+参数：X ⟶ Y；t : CategoryTheory.Limits.Cotrident f；(s : CategoryTheory.Limits.Cotrid
+ent f) →                   { l //                     CategoryTheory.CategoryStr
+uct.comp t.π l = s.π ∧                       ∀                         {m :     
+                      ((CategoryTheory.Functor.const (CategoryTheory.Limits.Walk
+ingParallelFamily J)).obj t.pt).obj                               CategoryTheory
+.Limits.WalkingParallelFamily.one ⟶                             ((CategoryTheory
+.Functor.const (CategoryTheory.Limits.WalkingParallelFamily J)).obj             
+                      s.pt).obj                               CategoryTheory.Lim
+its.WalkingParallelFamily.one},                         CategoryTheory.CategoryS
+truct.comp t.π m = s.π → m = l }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.IsColimit.mk'
-  signature: [Nonempty J] (t : Cotrident f)
-  body: Cotrident.IsColimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
-    (create s).2.2 (w one)
-
-中文:
-定义 Cotrident.是余极限.mk'
-  签名: [非空 J] (t : Cotrident f)
-  定义体: Cotrident.IsColimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
-    (create s).2.2 (w one)
-
-Depends on / 依赖: Cotrident, Cotrident.IsColimit.mk, EssentiallySmall, EssentiallySmall.exists_small_le, IsColimit, asEquivalence, create, essentiallySmall_congr, essentiallySmall_of_small_of_locallySmall, exists_small_le
+--- 原说明 ---
+This is another convenient method to verify that a cotrident is a colimit cocone
+. It
+    only asks for a proof of facts that carry any mathematical content, and allo
+ws access to the
+    same `s` for all parts.
 -/
 def Cotrident.IsColimit.mk' [Nonempty J] (t : Cotrident f)
     (create :
-      forall s : Cotrident f, { l : t.pt ⟶ s.pt // t.π ≫ l = s.π ∧ forall {m}, t.π ≫ m = s.π -> m = l }) :
+      ∀ s : Cotrident f, { l : t.pt ⟶ s.pt // t.π ≫ l = s.π ∧ ∀ {m}, t.π ≫ m = s.π → m = l }) :
     IsColimit t :=
   Cotrident.IsColimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
     (create s).2.2 (w one)
@@ -997,46 +887,53 @@ are in bijection with morphisms `h : Z ⟶ X` such that `∀ j₁ j₂, h ≫ f 
 Further, this bijection is natural in `Z`: see `Trident.Limits.homIso_natural`.
 -/
 @[simps]
-/--
-Definition of `Trident.IsLimit.homIso` / `Trident.IsLimit.homIso` 的定义
+/-
+**CategoryTheory.Limits.Trident.IsLimit.homIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.Trident.IsLimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {t : CategoryTheory.Limits.Trident f} →               CategoryTheory.Li
+mits.IsLimit t →                 (Z : C) →                   (Z ⟶ t.pt) ≃       
+              { h //                       ∀ (j₁ j₂ : J),                       
+  CategoryTheory.CategoryStruct.comp h (f j₁) = CategoryTheory.CategoryStruct.co
+mp h (f j₂) }
+参数：X ⟶ Y；Z : C；Z ⟶ t.pt；j₁ j₂ : J；f j₁；f j₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.IsLimit.homIso
-  signature: [Nonempty J] {t : Trident f} (ht : IsLimit t) (Z : C)
-  body: ⟨k ≫ t.ι, by simp⟩
-  invFun h := (Trident.IsLimit.lift' ht _ h.prop).1
-  left_inv _ := Trident.IsLimit.hom_ext ht (Trident.IsLimit.lift' _ _ _).prop
-  right_inv _ := Subtype.ext (Trident.IsLimit.lift' ht _ _).prop
-
-中文:
-定义 Trident.是极限.homIso
-  签名: [非空 J] {t : Trident f} (ht : 是极限 t) (Z : C)
-  定义体: ⟨k ≫ t.ι, by simp⟩
-  invFun h := (Trident.IsLimit.lift' ht _ h.prop).1
-  left_inv _ := Trident.IsLimit.hom_ext ht (Trident.IsLimit.lift' _ _ _).prop
-  right_inv _ := Subtype.ext (Trident.IsLimit.lift' ht _ _).prop
+--- 原说明 ---
+Given a limit cone for the family `f : J → (X ⟶ Y)`, for any `Z`, morphisms from
+ `Z` to its point
+are in bijection with morphisms `h : Z ⟶ X` such that `∀ j₁ j₂, h ≫ f j₁ = h ≫ f
+ j₂`.
+Further, this bijection is natural in `Z`: see `Trident.Limits.homIso_natural`.
 -/
 def Trident.IsLimit.homIso [Nonempty J] {t : Trident f} (ht : IsLimit t) (Z : C) :
-    (Z ⟶ t.pt) ≃ { h : Z ⟶ X // forall j₁ j₂, h ≫ f j₁ = h ≫ f j₂ } where
+    (Z ⟶ t.pt) ≃ { h : Z ⟶ X // ∀ j₁ j₂, h ≫ f j₁ = h ≫ f j₂ } where
   toFun k := ⟨k ≫ t.ι, by simp⟩
   invFun h := (Trident.IsLimit.lift' ht _ h.prop).1
   left_inv _ := Trident.IsLimit.hom_ext ht (Trident.IsLimit.lift' _ _ _).prop
   right_inv _ := Subtype.ext (Trident.IsLimit.lift' ht _ _).prop
 
-/--
-theorem `Trident.IsLimit.homIso_natural` / 定理 `Trident.IsLimit.homIso_natural`
+/-- The bijection of `Trident.IsLimit.homIso` is natural in `Z`. -/
+/-
+**CategoryTheory.Limits.Trident.IsLimit.homIso_natural** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.Trident.IsLimit`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [inst_1 : Nonempty J]   {t : CategoryTheory.Limits.Tride
+nt f} (ht : CategoryTheory.Limits.IsLimit t) {Z Z' : C} (q : Z' ⟶ Z) (k : Z ⟶ t.
+pt),   ↑((CategoryTheory.Limits.Trident.IsLimit.homIso ht Z') (CategoryTheory.Ca
+tegoryStruct.comp q k)) =     CategoryTheory.CategoryStruct.comp q ↑((CategoryTh
+eory.Limits.Trident.IsLimit.homIso ht Z) k)
+参数：X ⟶ Y；ht : CategoryTheory.Limits.IsLimit t；q : Z' ⟶ Z；k : Z ⟶ t.pt；(CategoryT
+heory.Limits.Trident.IsLimit.homIso ht Z') (CategoryTheory.CategoryStruct.comp q
+ k)；(CategoryTheory.Limits.Trident.IsLimit.homIso ht Z) k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem Trident.IsLimit.homIso_natural
-  statement: [Nonempty J] {t : Trident f} (ht : IsLimit t) {Z Z' : C}
-  proof: Category.assoc _ _ _
-
-中文:
-定理 Trident.是极限.homIso_natural
-  结论: [非空 J] {t : Trident f} (ht : 是极限 t) {Z Z' : C}
-  证明: Category.assoc _ _ _
-
-Depends on / 依赖: Category, Category.assoc, F.obj, Subtype, small_of_surjective
+--- 原说明 ---
+The bijection of `Trident.IsLimit.homIso` is natural in `Z`.
 -/
 theorem Trident.IsLimit.homIso_natural [Nonempty J] {t : Trident f} (ht : IsLimit t) {Z Z' : C}
     (q : Z' ⟶ Z) (k : Z ⟶ t.pt) :
@@ -1046,52 +943,58 @@ theorem Trident.IsLimit.homIso_natural [Nonempty J] {t : Trident f} (ht : IsLimi
 
 /-- Given a colimit cocone for the family `f : J → (X ⟶ Y)`, for any `Z`, morphisms from the cocone
 point to `Z` are in bijection with morphisms `h : Z ⟶ X` such that
-`∀ j₁ j₂, f j₁ ≫ h = f j₂ ≫ h`. Further, this bijection is natural in `Z`: see
+`∀ j₁ j₂, f j₁ ≫ h = f j₂ ≫ h`.  Further, this bijection is natural in `Z`: see
 `Cotrident.IsColimit.homIso_natural`.
 -/
 @[simps]
-/--
-Definition of `Cotrident.IsColimit.homIso` / `Cotrident.IsColimit.homIso` 的定义
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.homIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {t : CategoryTheory.Limits.Cotrident f} →               CategoryTheory.
+Limits.IsColimit t →                 (Z : C) →                   (t.pt ⟶ Z) ≃   
+                  { h //                       ∀ (j₁ j₂ : J),                   
+      CategoryTheory.CategoryStruct.comp (f j₁) h = CategoryTheory.CategoryStruc
+t.comp (f j₂) h }
+参数：X ⟶ Y；Z : C；t.pt ⟶ Z；j₁ j₂ : J；f j₁；f j₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.IsColimit.homIso
-  signature: [Nonempty J] {t : Cotrident f} (ht : IsColimit t) (Z : C)
-  body: ⟨t.π ≫ k, by simp⟩
-  invFun h := (Cotrident.IsColimit.desc' ht _ h.prop).1
-  left_inv _ := Cotrident.IsColimit.hom_ext ht (Cotrident.IsColimit.desc' _ _ _).prop
-  right_inv _ := Subtype.ext (Cotrident.IsColimit.desc' ht _ _).prop
-
-中文:
-定义 Cotrident.是余极限.homIso
-  签名: [非空 J] {t : Cotrident f} (ht : 是余极限 t) (Z : C)
-  定义体: ⟨t.π ≫ k, by simp⟩
-  invFun h := (Cotrident.IsColimit.desc' ht _ h.prop).1
-  left_inv _ := Cotrident.IsColimit.hom_ext ht (Cotrident.IsColimit.desc' _ _ _).prop
-  right_inv _ := Subtype.ext (Cotrident.IsColimit.desc' ht _ _).prop
-
-Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, Q.strictMap, exists_small_le, map_monotone, strictMap
+--- 原说明 ---
+Given a colimit cocone for the family `f : J → (X ⟶ Y)`, for any `Z`, morphisms 
+from the cocone
+point to `Z` are in bijection with morphisms `h : Z ⟶ X` such that
+`∀ j₁ j₂, f j₁ ≫ h = f j₂ ≫ h`.  Further, this bijection is natural in `Z`: see
+`Cotrident.IsColimit.homIso_natural`.
 -/
 def Cotrident.IsColimit.homIso [Nonempty J] {t : Cotrident f} (ht : IsColimit t) (Z : C) :
-    (t.pt ⟶ Z) ≃ { h : Y ⟶ Z // forall j₁ j₂, f j₁ ≫ h = f j₂ ≫ h } where
+    (t.pt ⟶ Z) ≃ { h : Y ⟶ Z // ∀ j₁ j₂, f j₁ ≫ h = f j₂ ≫ h } where
   toFun k := ⟨t.π ≫ k, by simp⟩
   invFun h := (Cotrident.IsColimit.desc' ht _ h.prop).1
   left_inv _ := Cotrident.IsColimit.hom_ext ht (Cotrident.IsColimit.desc' _ _ _).prop
   right_inv _ := Subtype.ext (Cotrident.IsColimit.desc' ht _ _).prop
 
-/--
-theorem `Cotrident.IsColimit.homIso_natural` / 定理 `Cotrident.IsColimit.homIso_natural`
+/-- The bijection of `Cotrident.IsColimit.homIso` is natural in `Z`. -/
+/-
+**CategoryTheory.Limits.Cotrident.IsColimit.homIso_natural** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits.Cotrident.IsColimit`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)} [inst_1 : Nonempty J]   {t : CategoryTheory.Limits.Cotri
+dent f} {Z Z' : C} (q : Z ⟶ Z') (ht : CategoryTheory.Limits.IsColimit t)   (k : 
+t.pt ⟶ Z),   ↑((CategoryTheory.Limits.Cotrident.IsColimit.homIso ht Z') (Categor
+yTheory.CategoryStruct.comp k q)) =     CategoryTheory.CategoryStruct.comp (↑((C
+ategoryTheory.Limits.Cotrident.IsColimit.homIso ht Z) k)) q
+参数：X ⟶ Y；q : Z ⟶ Z'；ht : CategoryTheory.Limits.IsColimit t；k : t.pt ⟶ Z；(Categor
+yTheory.Limits.Cotrident.IsColimit.homIso ht Z') (CategoryTheory.CategoryStruct.
+comp k q)；↑((CategoryTheory.Limits.Cotrident.IsColimit.homIso ht Z) k)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 
-English:
-theorem Cotrident.IsColimit.homIso_natural
-  statement: [Nonempty J] {t : Cotrident f} {Z Z' : C} (q : Z ⟶ Z')
-  proof: (Category.assoc _ _ _).symm
-
-中文:
-定理 Cotrident.是余极限.homIso_natural
-  结论: [非空 J] {t : Cotrident f} {Z Z' : C} (q : Z ⟶ Z')
-  证明: (Category.assoc _ _ _).symm
-
-Depends on / 依赖: Category, Category.assoc
+--- 原说明 ---
+The bijection of `Cotrident.IsColimit.homIso` is natural in `Z`.
 -/
 theorem Cotrident.IsColimit.homIso_natural [Nonempty J] {t : Cotrident f} {Z Z' : C} (q : Z ⟶ Z')
     (ht : IsColimit t) (k : t.pt ⟶ Z) :
@@ -1101,26 +1004,39 @@ theorem Cotrident.IsColimit.homIso_natural [Nonempty J] {t : Cotrident f} {Z Z' 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Cone.ofTrident` / `Cone.ofTrident` 的定义
+/-- This is a helper construction that can be useful when verifying that a category has certain wide
+    equalizers. Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (fun j ↦ F.map (line j))`, and a trident on `fun j ↦ F.map (line j)`,
+    we get a cone on `F`.
 
-English:
-definition Cone.ofTrident
-  signature: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
-  body: t.pt
-  π :=
-    { app := fun X => t.π.app X ≫ eqToHom (by cases X <;> cat_disch)
-      naturality := fun j j' g => by cases g <;> cat_disch }
+    If you're thinking about using this, have a look at
+    `hasWideEqualizers_of_hasLimit_parallelFamily`, which you may find to be an easier way of
+    achieving your goal. -/
+/-
+**CategoryTheory.Limits.Cone.ofTrident** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.Cone`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : CategoryTheory.Functor (CategoryTheory.Limits.WalkingParallelFa
+mily J) C} →         (CategoryTheory.Limits.Trident fun j => F.map (CategoryTheo
+ry.Limits.WalkingParallelFamily.Hom.line j)) →           CategoryTheory.Limits.C
+one F
+参数：CategoryTheory.Limits.WalkingParallelFamily J；CategoryTheory.Limits.Trident f
+un j => F.map (CategoryTheory.Limits.WalkingParallelFamily.Hom.line j)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 锥.ofTrident
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
-  定义体: t.pt
-  π :=
-    { app := fun X => t.π.app X ≫ eqToHom (by cases X <;> cat_disch)
-      naturality := fun j j' g => by cases g <;> cat_disch }
+--- 原说明 ---
+This is a helper construction that can be useful when verifying that a category 
+has certain wide
+    equalizers. Given `F : WalkingParallelFamily ⥤ C`, which is really the same 
+as
+    `parallelFamily (fun j ↦ F.map (line j))`, and a trident on `fun j ↦ F.map (
+line j)`,
+    we get a cone on `F`.
 
-Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, asEquivalence, essentiallySmall_congr, essentiallySmall_of_small_of_locallySmall, exists_small_le, t.pt
+    If you're thinking about using this, have a look at
+    `hasWideEqualizers_of_hasLimit_parallelFamily`, which you may find to be an 
+easier way of
+    achieving your goal.
 -/
 def Cone.ofTrident {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j)) :
     Cone F where
@@ -1131,30 +1047,39 @@ def Cone.ofTrident {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.m
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Cocone.ofCotrident` / `Cocone.ofCotrident` 的定义
+/-- This is a helper construction that can be useful when verifying that a category has all
+    coequalizers. Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (fun j ↦ F.map (line j))`, and a cotrident on `fun j ↦ F.map (line j)` we get a
+    cocone on `F`.
 
-English:
-definition Cocone.ofCotrident
-  signature: {F : WalkingParallelFamily J ⥤ C} (t : Cotrident fun j => F.map (line j))
-  body: t.pt
-  ι :=
-    { app := fun X => eqToHom (by cases X <;> cat_disch) ≫ t.ι.app X
-      naturality := fun j j' g => by cases g <;> simp [Cotrident.app_one t] }
+    If you're thinking about using this, have a look at
+    `hasWideCoequalizers_of_hasColimit_parallelFamily`, which you may find to be an easier way
+    of achieving your goal. -/
+/-
+**CategoryTheory.Limits.Cocone.ofCotrident** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.Cocone`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : CategoryTheory.Functor (CategoryTheory.Limits.WalkingParallelFa
+mily J) C} →         (CategoryTheory.Limits.Cotrident fun j => F.map (CategoryTh
+eory.Limits.WalkingParallelFamily.Hom.line j)) →           CategoryTheory.Limits
+.Cocone F
+参数：CategoryTheory.Limits.WalkingParallelFamily J；CategoryTheory.Limits.Cotrident
+ fun j => F.map (CategoryTheory.Limits.WalkingParallelFamily.Hom.line j)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+This is a helper construction that can be useful when verifying that a category 
+has all
+    coequalizers. Given `F : WalkingParallelFamily ⥤ C`, which is really the sam
+e as
+    `parallelFamily (fun j ↦ F.map (line j))`, and a cotrident on `fun j ↦ F.map
+ (line j)` we get a
+    cocone on `F`.
 
-中文:
-定义 余锥.ofCotrident
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : Cotrident fun j => F.map (line j))
-  定义体: t.pt
-  ι :=
-    { app := fun X => eqToHom (by cases X <;> cat_disch) ≫ t.ι.app X
-      naturality := fun j j' g => by cases g <;> simp [Cotrident.app_one t] }
-
-@[simp]
-
-Depends on / 依赖: t.pt
+    If you're thinking about using this, have a look at
+    `hasWideCoequalizers_of_hasColimit_parallelFamily`, which you may find to be
+ an easier way
+    of achieving your goal.
 -/
 def Cocone.ofCotrident {F : WalkingParallelFamily J ⥤ C} (t : Cotrident fun j => F.map (line j)) :
     Cocone F where
@@ -1164,40 +1089,20 @@ def Cocone.ofCotrident {F : WalkingParallelFamily J ⥤ C} (t : Cotrident fun j 
       naturality := fun j j' g => by cases g <;> simp [Cotrident.app_one t] }
 
 @[simp]
-/--
-theorem `Cone.ofTrident_π` / 定理 `Cone.ofTrident_π`
-
-English:
-theorem Cone.ofTrident_π
-  statement: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 锥.ofTrident_π
-  结论: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.Cone.ofTrident_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Cone.ofTrident_π {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
     (j) : (Cone.ofTrident t).π.app j = t.π.app j ≫ eqToHom (by cases j <;> cat_disch) :=
   rfl
 
 @[simp]
-/--
-theorem `Cocone.ofCotrident_ι` / 定理 `Cocone.ofCotrident_ι`
-
-English:
-theorem Cocone.ofCotrident_ι
-  statement: {F : WalkingParallelFamily J ⥤ C}
-  proof: rfl
-
-中文:
-定理 余锥.ofCotrident_ι
-  结论: {F : WalkingParallelFamily J ⥤ C}
-  证明: rfl
+/-
+**CategoryTheory.Limits.Cocone.ofCotrident_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Cocone.ofCotrident_ι {F : WalkingParallelFamily J ⥤ C}
     (t : Cotrident fun j => F.map (line j)) (j) :
@@ -1205,26 +1110,26 @@ theorem Cocone.ofCotrident_ι {F : WalkingParallelFamily J ⥤ C}
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Trident.ofCone` / `Trident.ofCone` 的定义
+/-- Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (fun j ↦ F.map (line j))` and a cone on `F`, we get a trident on
+    `fun j ↦ F.map (line j)`. -/
+/-
+**CategoryTheory.Limits.Trident.ofCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.Trident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : CategoryTheory.Functor (CategoryTheory.Limits.WalkingParallelFa
+mily J) C} →         CategoryTheory.Limits.Cone F →           CategoryTheory.Lim
+its.Trident fun j => F.map (CategoryTheory.Limits.WalkingParallelFamily.Hom.line
+ j)
+参数：CategoryTheory.Limits.WalkingParallelFamily J；CategoryTheory.Limits.WalkingPa
+rallelFamily.Hom.line j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.ofCone
-  signature: {F : WalkingParallelFamily J ⥤ C} (t : Cone F)
-  body: t.pt
-  π :=
-    { app := fun X => t.π.app X ≫ eqToHom (by cases X <;> cat_disch)
-      naturality := by rintro _ _ (_ | _) <;> cat_disch }
-
-中文:
-定义 Trident.ofCone
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : 锥 F)
-  定义体: t.pt
-  π :=
-    { app := fun X => t.π.app X ≫ eqToHom (by cases X <;> cat_disch)
-      naturality := by rintro _ _ (_ | _) <;> cat_disch }
-
-Depends on / 依赖: t.pt
+--- 原说明 ---
+Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (fun j ↦ F.map (line j))` and a cone on `F`, we get a triden
+t on
+    `fun j ↦ F.map (line j)`.
 -/
 def Trident.ofCone {F : WalkingParallelFamily J ⥤ C} (t : Cone F) :
     Trident fun j => F.map (line j) where
@@ -1235,30 +1140,26 @@ def Trident.ofCone {F : WalkingParallelFamily J ⥤ C} (t : Cone F) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Cotrident.ofCocone` / `Cotrident.ofCocone` 的定义
+/-- Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (F.map left) (F.map right)` and a cocone on `F`, we get a cotrident on
+    `fun j ↦ F.map (line j)`. -/
+/-
+**CategoryTheory.Limits.Cotrident.ofCocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.Cotrident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : CategoryTheory.Functor (CategoryTheory.Limits.WalkingParallelFa
+mily J) C} →         CategoryTheory.Limits.Cocone F →           CategoryTheory.L
+imits.Cotrident fun j => F.map (CategoryTheory.Limits.WalkingParallelFamily.Hom.
+line j)
+参数：CategoryTheory.Limits.WalkingParallelFamily J；CategoryTheory.Limits.WalkingPa
+rallelFamily.Hom.line j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.ofCocone
-  signature: {F : WalkingParallelFamily J ⥤ C} (t : Cocone F)
-  body: t.pt
-  ι :=
-    { app := fun X => eqToHom (by cases X <;> cat_disch) ≫ t.ι.app X
-      naturality := by rintro _ _ (_ | _) <;> cat_disch }
-
-@[simp]
-
-中文:
-定义 Cotrident.ofCocone
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : 余锥 F)
-  定义体: t.pt
-  ι :=
-    { app := fun X => eqToHom (by cases X <;> cat_disch) ≫ t.ι.app X
-      naturality := by rintro _ _ (_ | _) <;> cat_disch }
-
-@[simp]
-
-Depends on / 依赖: t.pt
+--- 原说明 ---
+Given `F : WalkingParallelFamily ⥤ C`, which is really the same as
+    `parallelFamily (F.map left) (F.map right)` and a cocone on `F`, we get a co
+trident on
+    `fun j ↦ F.map (line j)`.
 -/
 def Cotrident.ofCocone {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) :
     Cotrident fun j => F.map (line j) where
@@ -1268,42 +1169,20 @@ def Cotrident.ofCocone {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) :
       naturality := by rintro _ _ (_ | _) <;> cat_disch }
 
 @[simp]
-/--
-theorem `Trident.ofCone_π` / 定理 `Trident.ofCone_π`
-
-English:
-theorem Trident.ofCone_π
-  given: {F : WalkingParallelFamily J ⥤ C} (t : Cone F) (j)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Trident.ofCone_π
-  条件: {F : WalkingParallelFamily J ⥤ C} (t : 锥 F) (j)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: F.essImage, Functor, Functor.essImage, ObjectProperty, ObjectProperty.map, essImage, essentiallySmall_iff_objectPropertyEssentiallySmall, of_functor, of_le
+/-
+**CategoryTheory.Limits.Trident.ofCone_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Trident.ofCone_π {F : WalkingParallelFamily J ⥤ C} (t : Cone F) (j) :
     (Trident.ofCone t).π.app j = t.π.app j ≫ eqToHom (by cases j <;> cat_disch) :=
   rfl
 
 @[simp]
-/--
-theorem `Cotrident.ofCocone_ι` / 定理 `Cotrident.ofCocone_ι`
-
-English:
-theorem Cotrident.ofCocone_ι
-  given: {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) (j)
-  proof: rfl
-
-中文:
-定理 Cotrident.ofCocone_ι
-  条件: {F : WalkingParallelFamily J ⥤ C} (t : 余锥 F) (j)
-  证明: rfl
+/-
+**CategoryTheory.Limits.Cotrident.ofCocone_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Cotrident.ofCocone_ι {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) (j) :
     (Cotrident.ofCocone t).ι.app j = eqToHom (by cases j <;> cat_disch) ≫ t.ι.app j :=
@@ -1313,28 +1192,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Helper function for constructing morphisms between wide equalizer tridents.
 -/
 @[simps]
-/--
-Definition of `Trident.mkHom` / `Trident.mkHom` 的定义
+/-
+**CategoryTheory.Limits.Trident.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Trident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s t : CategoryTheory.Limits.Trident f} →               (k : s.pt ⟶ t.p
+t) →                 autoParam (CategoryTheory.CategoryStruct.comp k t.ι = s.ι) 
+CategoryTheory.Limits.Trident.mkHom._auto_1 →                   (s ⟶ t)
+参数：X ⟶ Y；k : s.pt ⟶ t.pt；CategoryTheory.CategoryStruct.comp k t.ι = s.ι；s ⟶ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.mkHom
-  signature: [Nonempty J] {s t : Trident f} (k : s.pt ⟶ t.pt)
-  body: k
-  w := by
-    rintro ⟨_ | _⟩
-    · exact w
-    · simpa using w =≫ f (Classical.arbitrary J)
-
-中文:
-定义 Trident.mkHom
-  签名: [非空 J] {s t : Trident f} (k : s.pt ⟶ t.pt)
-  定义体: k
-  w := by
-    rintro ⟨_ | _⟩
-    · exact w
-    · simpa using w =≫ f (Classical.arbitrary J)
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, cat_disch
+--- 原说明 ---
+Helper function for constructing morphisms between wide equalizer tridents.
 -/
 def Trident.mkHom [Nonempty J] {s t : Trident f} (k : s.pt ⟶ t.pt)
     (w : k ≫ t.ι = s.ι := by cat_disch) : s ⟶ t where
@@ -1349,22 +1219,23 @@ it suffices to give an isomorphism between the cone points
 and check that it commutes with the `ι` morphisms.
 -/
 @[simps]
-/--
-Definition of `Trident.ext` / `Trident.ext` 的定义
+/-
+**CategoryTheory.Limits.Trident.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits.Trident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s t : CategoryTheory.Limits.Trident f} →               (i : s.pt ≅ t.p
+t) →                 autoParam (CategoryTheory.CategoryStruct.comp i.hom t.ι = s
+.ι)                     CategoryTheory.Limits.Trident.ext._auto_1 →             
+      (s ≅ t)
+参数：X ⟶ Y；i : s.pt ≅ t.pt；CategoryTheory.CategoryStruct.comp i.hom t.ι = s.ι；s ≅ 
+t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Trident.ext
-  signature: [Nonempty J] {s t : Trident f} (i : s.pt ≅ t.pt)
-  body: Trident.mkHom i.hom w
-  inv := Trident.mkHom i.inv (by rw [← w, Iso.inv_hom_id_assoc])
-
-中文:
-定义 Trident.ext
-  签名: [非空 J] {s t : Trident f} (i : s.pt ≅ t.pt)
-  定义体: Trident.mkHom i.hom w
-  inv := Trident.mkHom i.inv (by rw [← w, Iso.inv_hom_id_assoc])
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, Trident, Trident.mkHom, cat_disch, i.hom, i.inv, inv_hom_id_assoc
+--- 原说明 ---
+To construct an isomorphism between tridents,
+it suffices to give an isomorphism between the cone points
+and check that it commutes with the `ι` morphisms.
 -/
 def Trident.ext [Nonempty J] {s t : Trident f} (i : s.pt ≅ t.pt)
     (w : i.hom ≫ t.ι = s.ι := by cat_disch) : s ≅ t where
@@ -1375,28 +1246,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Helper function for constructing morphisms between coequalizer cotridents.
 -/
 @[simps]
-/--
-Definition of `Cotrident.mkHom` / `Cotrident.mkHom` 的定义
+/-
+**CategoryTheory.Limits.Cotrident.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.Cotrident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s t : CategoryTheory.Limits.Cotrident f} →               (k : s.pt ⟶ t
+.pt) →                 autoParam (CategoryTheory.CategoryStruct.comp s.π k = t.π
+)                     CategoryTheory.Limits.Cotrident.mkHom._auto_1 →           
+        (s ⟶ t)
+参数：X ⟶ Y；k : s.pt ⟶ t.pt；CategoryTheory.CategoryStruct.comp s.π k = t.π；s ⟶ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.mkHom
-  signature: [Nonempty J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
-  body: k
-  w := by
-    rintro ⟨_ | _⟩
-    · simpa using f (Classical.arbitrary J) ≫= w
-    · exact w
-
-中文:
-定义 Cotrident.mkHom
-  签名: [非空 J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
-  定义体: k
-  w := by
-    rintro ⟨_ | _⟩
-    · simpa using f (Classical.arbitrary J) ≫= w
-    · exact w
-
-Depends on / 依赖: Classical, Classical.arbitrary, IsClosedUnderIsomorphisms, arbitrary, cat_disch
+--- 原说明 ---
+Helper function for constructing morphisms between coequalizer cotridents.
 -/
 def Cotrident.mkHom [Nonempty J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
     (w : s.π ≫ k = t.π := by cat_disch) : s ⟶ t where
@@ -1407,22 +1270,27 @@ def Cotrident.mkHom [Nonempty J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
     · exact w
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Cotrident.ext` / `Cotrident.ext` 的定义
+/-- To construct an isomorphism between cotridents,
+it suffices to give an isomorphism between the cocone points
+and check that it commutes with the `π` morphisms.
+-/
+/-
+**CategoryTheory.Limits.Cotrident.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Cotrident`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [Nonempty J] →    
+         {s t : CategoryTheory.Limits.Cotrident f} →               (i : s.pt ≅ t
+.pt) →                 autoParam (CategoryTheory.CategoryStruct.comp s.π i.hom =
+ t.π)                     CategoryTheory.Limits.Cotrident.ext._auto_1 →         
+          (s ≅ t)
+参数：X ⟶ Y；i : s.pt ≅ t.pt；CategoryTheory.CategoryStruct.comp s.π i.hom = t.π；s ≅ 
+t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cotrident.ext
-  signature: [Nonempty J] {s t : Cotrident f} (i : s.pt ≅ t.pt)
-  body: Cotrident.mkHom i.hom w
-  inv := Cotrident.mkHom i.inv (by rw [Iso.comp_inv_eq, w])
-
-中文:
-定义 Cotrident.ext
-  签名: [非空 J] {s t : Cotrident f} (i : s.pt ≅ t.pt)
-  定义体: Cotrident.mkHom i.hom w
-  inv := Cotrident.mkHom i.inv (by rw [Iso.comp_inv_eq, w])
-
-Depends on / 依赖: Cotrident, Cotrident.mkHom, Iso.comp_inv_eq, cat_disch, comp_inv_eq, i.hom, i.inv
+--- 原说明 ---
+To construct an isomorphism between cotridents,
+it suffices to give an isomorphism between the cocone points
+and check that it commutes with the `π` morphisms.
 -/
 def Cotrident.ext [Nonempty J] {s t : Cotrident f} (i : s.pt ≅ t.pt)
     (w : s.π ≫ i.hom = t.π := by cat_disch) : s ≅ t where
@@ -1433,149 +1301,121 @@ variable (f)
 
 section
 
-/--
-Definition of `HasWideEqualizer` / `HasWideEqualizer` 的定义
+/-- A family `f` of parallel morphisms has a wide equalizer if the diagram `parallelFamily f` has a
+limit. -/
+/-
+**CategoryTheory.Limits.HasWideEqualizer** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：HasWideEqualizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWideEqualizer
-  body: HasLimit (parallelFamily f)
-
-中文:
-缩写 HasWideEqualizer
-  定义体: HasLimit (parallelFamily f)
-
-Depends on / 依赖: HasLimit, parallelFamily
+--- 原说明 ---
+A family `f` of parallel morphisms has a wide equalizer if the diagram `parallel
+Family f` has a
+limit.
 -/
 abbrev HasWideEqualizer :=
   HasLimit (parallelFamily f)
 
 variable [HasWideEqualizer f]
 
-/--
-Definition of `wideEqualizer` / `wideEqualizer` 的定义
+/-- If a wide equalizer of `f` exists, we can access an arbitrary choice of such by
+    saying `wideEqualizer f`. -/
+/-
+**CategoryTheory.Limits.wideEqualizer** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：wideEqualizer : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideEqualizer
-  signature: : C
-  body: limit (parallelFamily f)
-
-中文:
-缩写 wideEqualizer
-  签名: : C
-  定义体: limit (parallelFamily f)
-
-Depends on / 依赖: parallelFamily
+--- 原说明 ---
+If a wide equalizer of `f` exists, we can access an arbitrary choice of such by
+    saying `wideEqualizer f`.
 -/
 abbrev wideEqualizer : C :=
   limit (parallelFamily f)
 
-/--
-Definition of `wideEqualizer.ι` / `wideEqualizer.ι` 的定义
+/-- If a wide equalizer of `f` exists, we can access the inclusion `wideEqualizer f ⟶ X` by
+    saying `wideEqualizer.ι f`. -/
+/-
+**CategoryTheory.Limits.wideEqualizer.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideEqualizer.ι
-  signature: : wideEqualizer f ⟶ X
-  body: limit.π (parallelFamily f) zero
-
-中文:
-缩写 wideEqualizer.ι
-  签名: : wideEqualizer f ⟶ X
-  定义体: limit.π (parallelFamily f) zero
-
-Depends on / 依赖: IsClosedUnderIsomorphisms, parallelFamily
+--- 原说明 ---
+If a wide equalizer of `f` exists, we can access the inclusion `wideEqualizer f 
+⟶ X` by
+    saying `wideEqualizer.ι f`.
 -/
 abbrev wideEqualizer.ι : wideEqualizer f ⟶ X :=
   limit.π (parallelFamily f) zero
 
-/--
-Definition of `wideEqualizer.trident` / `wideEqualizer.trident` 的定义
+/-- A wide equalizer cone for a parallel family `f`.
+-/
+/-
+**CategoryTheory.Limits.wideEqualizer.trident** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.wideEqualizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} → (f : J → (X ⟶ Y)) → [CategoryTheory.Limits.HasWideEquali
+zer f] → CategoryTheory.Limits.Trident f
+参数：f : J → (X ⟶ Y)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideEqualizer.trident
-  signature: : Trident f
-  body: limit.cone (parallelFamily f)
-
-中文:
-缩写 wideEqualizer.trident
-  签名: : Trident f
-  定义体: limit.cone (parallelFamily f)
-
-Depends on / 依赖: limit.cone, parallelFamily
+--- 原说明 ---
+A wide equalizer cone for a parallel family `f`.
 -/
 abbrev wideEqualizer.trident : Trident f :=
   limit.cone (parallelFamily f)
-
-/--
-theorem `wideEqualizer.trident_ι` / 定理 `wideEqualizer.trident_ι`
-
-English:
-theorem wideEqualizer.trident_ι
-  statement: (wideEqualizer.trident f).ι = wideEqualizer.ι f
-  proof: rfl
-
-中文:
-定理 wideEqualizer.trident_ι
-  结论: (wideEqualizer.trident f).ι = wideEqualizer.ι f
-  证明: rfl
+/-
+**CategoryTheory.Limits.wideEqualizer.trident_** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideEqualizer.trident_ι : (wideEqualizer.trident f).ι = wideEqualizer.ι f :=
   rfl
-
-/--
-theorem `wideEqualizer.trident_π_app_zero` / 定理 `wideEqualizer.trident_π_app_zero`
-
-English:
-theorem wideEqualizer.trident_π_app_zero
-  proof: rfl
-
-@[reassoc]
-
-中文:
-定理 wideEqualizer.trident_π_app_zero
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.Limits.wideEqualizer.trident_** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideEqualizer.trident_π_app_zero :
     (wideEqualizer.trident f).π.app zero = wideEqualizer.ι f :=
   rfl
 
 @[reassoc]
-/--
-theorem `wideEqualizer.condition` / 定理 `wideEqualizer.condition`
-
-English:
-theorem wideEqualizer.condition
-  given: (j₁ j₂ : J)
-  statement: wideEqualizer.ι f ≫ f j₁ = wideEqualizer.ι f ≫ f j₂
-  proof: Trident.condition j₁ j₂ limit.cone parallelFamily f
-
-中文:
-定理 wideEqualizer.condition
-  条件: (j₁ j₂ : J)
-  结论: wideEqualizer.ι f ≫ f j₁ = wideEqualizer.ι f ≫ f j₂
-  证明: Trident.condition j₁ j₂ limit.cone parallelFamily f
-
-Depends on / 依赖: Trident, Trident.condition, condition, limit.cone, parallelFamily
+/-
+**CategoryTheory.Limits.wideEqualizer.condition** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.wideEqualizer`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} (f : J → (X ⟶ Y))   [inst_1 : CategoryTheory.Limits.HasWideEqualizer f] (j
+₁ j₂ : J),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.wideEqual
+izer.ι f) (f j₁) =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits
+.wideEqualizer.ι f) (f j₂)
+参数：f : J → (X ⟶ Y)；j₁ j₂ : J；CategoryTheory.Limits.wideEqualizer.ι f；f j₁；Catego
+ryTheory.Limits.wideEqualizer.ι f；f j₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Trident.condition`：∀ {J : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} (j₁ j₂ : J)  
+ (t : CategoryTheory.Limits.T…
 -/
 theorem wideEqualizer.condition (j₁ j₂ : J) : wideEqualizer.ι f ≫ f j₁ = wideEqualizer.ι f ≫ f j₂ :=
-Trident.condition j₁ j₂ limit.cone parallelFamily f
+  Trident.condition j₁ j₂ <| limit.cone <| parallelFamily f
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `wideEqualizerIsWideEqualizer` / `wideEqualizerIsWideEqualizer` 的定义
+/-- The wideEqualizer built from `wideEqualizer.ι f` is limiting. -/
+/-
+**CategoryTheory.Limits.wideEqualizerIsWideEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：wideEqualizerIsWideEqualizer [Nonempty J] : IsLimit (Trident.ofι (wideEqua
+lizer.ι f) (wideEqualizer.condition f))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.wideEqualizer.condition`：∀ {J : Type w} {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : J → (X ⟶ Y))   [inst
+_1 : CategoryTheory.Limits.HasWideE…
 
-English:
-definition wideEqualizerIsWideEqualizer
-  signature: [Nonempty J]
-  body: IsLimit.ofIsoLimit (limit.isLimit _) (Trident.ext (Iso.refl _))
-
-中文:
-定义 wideEqualizerIsWideEqualizer
-  签名: [非空 J]
-  定义体: IsLimit.ofIsoLimit (limit.isLimit _) (Trident.ext (Iso.refl _))
-
-Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, Iso.refl, Trident, Trident.ext, isLimit, limit.isLimit, ofIsoLimit
+--- 原说明 ---
+The wideEqualizer built from `wideEqualizer.ι f` is limiting.
 -/
 def wideEqualizerIsWideEqualizer [Nonempty J] :
     IsLimit (Trident.ofι (wideEqualizer.ι f) (wideEqualizer.condition f)) :=
@@ -1583,102 +1423,109 @@ def wideEqualizerIsWideEqualizer [Nonempty J] :
 
 variable {f}
 
-/--
-Definition of `wideEqualizer.lift` / `wideEqualizer.lift` 的定义
+/-- A morphism `k : W ⟶ X` satisfying `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` factors through the
+    wide equalizer of `f` via `wideEqualizer.lift : W ⟶ wideEqualizer f`. -/
+/-
+**CategoryTheory.Limits.wideEqualizer.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.wideEqualizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [inst_1 : Category
+Theory.Limits.HasWideEqualizer f] →             [Nonempty J] →               {W 
+: C} →                 (k : W ⟶ X) →                   (∀ (j₁ j₂ : J),          
+             CategoryTheory.CategoryStruct.comp k (f j₁) = CategoryTheory.Catego
+ryStruct.comp k (f j₂)) →                     (W ⟶ CategoryTheory.Limits.wideEqu
+alizer f)
+参数：X ⟶ Y；k : W ⟶ X；∀ (j₁ j₂ : J),                       CategoryTheory.CategoryS
+truct.comp k (f j₁) = CategoryTheory.CategoryStruct.comp k (f j₂)；W ⟶ CategoryTh
+eory.Limits.wideEqualizer f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideEqualizer.lift
-  signature: [Nonempty J] {W : C} (k : W ⟶ X) (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
-  body: limit.lift (parallelFamily f) (Trident.ofι k h)
-
-中文:
-缩写 wideEqualizer.lift
-  签名: [非空 J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
-  定义体: limit.lift (parallelFamily f) (Trident.ofι k h)
-
-Depends on / 依赖: Trident, Trident.of, limit.lift, parallelFamily
+--- 原说明 ---
+A morphism `k : W ⟶ X` satisfying `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` factors through
+ the
+    wide equalizer of `f` via `wideEqualizer.lift : W ⟶ wideEqualizer f`.
 -/
-abbrev wideEqualizer.lift [Nonempty J] {W : C} (k : W ⟶ X) (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
+abbrev wideEqualizer.lift [Nonempty J] {W : C} (k : W ⟶ X) (h : ∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
     W ⟶ wideEqualizer f :=
   limit.lift (parallelFamily f) (Trident.ofι k h)
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-theorem `wideEqualizer.lift_ι` / 定理 `wideEqualizer.lift_ι`
-
-English:
-theorem wideEqualizer.lift_ι
-  statement: [Nonempty J] {W : C} (k : W ⟶ X)
-  proof: by
-  simp
-
-中文:
-定理 wideEqualizer.lift_ι
-  结论: [非空 J] {W : C} (k : W ⟶ X)
-  证明: by
-  simp
+/-
+**CategoryTheory.Limits.wideEqualizer.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideEqualizer.lift_ι [Nonempty J] {W : C} (k : W ⟶ X)
-    (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
+    (h : ∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
     wideEqualizer.lift k h ≫ wideEqualizer.ι f = k := by
   simp
 
-/--
-Definition of `wideEqualizer.lift'` / `wideEqualizer.lift'` 的定义
+/-- A morphism `k : W ⟶ X` satisfying `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` induces a morphism
+    `l : W ⟶ wideEqualizer f` satisfying `l ≫ wideEqualizer.ι f = k`. -/
+/-
+**CategoryTheory.Limits.wideEqualizer.lift'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.wideEqualizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [inst_1 : Category
+Theory.Limits.HasWideEqualizer f] →             [Nonempty J] →               {W 
+: C} →                 (k : W ⟶ X) →                   (∀ (j₁ j₂ : J),          
+             CategoryTheory.CategoryStruct.comp k (f j₁) = CategoryTheory.Catego
+ryStruct.comp k (f j₂)) →                     { l // CategoryTheory.CategoryStru
+ct.comp l (CategoryTheory.Limits.wideEqualizer.ι f) = k }
+参数：X ⟶ Y；k : W ⟶ X；∀ (j₁ j₂ : J),                       CategoryTheory.CategoryS
+truct.comp k (f j₁) = CategoryTheory.CategoryStruct.comp k (f j₂)；CategoryTheory
+.Limits.wideEqualizer.ι f。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.wideEqualizer.lift_ι`：∀ {J : Type w} {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   [inst_1 
+: CategoryTheory.Limits.HasWideE…
 
-English:
-definition wideEqualizer.lift'
-  signature: [Nonempty J] {W : C} (k : W ⟶ X) (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
-  body: ⟨wideEqualizer.lift k h, wideEqualizer.lift_ι _ _⟩
-
-中文:
-定义 wideEqualizer.lift'
-  签名: [非空 J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
-  定义体: ⟨wideEqualizer.lift k h, wideEqualizer.lift_ι _ _⟩
-
-Depends on / 依赖: wideEqualizer, wideEqualizer.lift, wideEqualizer.lift_
+--- 原说明 ---
+A morphism `k : W ⟶ X` satisfying `∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂` induces a morph
+ism
+    `l : W ⟶ wideEqualizer f` satisfying `l ≫ wideEqualizer.ι f = k`.
 -/
-def wideEqualizer.lift' [Nonempty J] {W : C} (k : W ⟶ X) (h : forall j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
+def wideEqualizer.lift' [Nonempty J] {W : C} (k : W ⟶ X) (h : ∀ j₁ j₂, k ≫ f j₁ = k ≫ f j₂) :
     { l : W ⟶ wideEqualizer f // l ≫ wideEqualizer.ι f = k } :=
   ⟨wideEqualizer.lift k h, wideEqualizer.lift_ι _ _⟩
 
 /-- Two maps into a wide equalizer are equal if they are equal when composed with the wide
     equalizer map. -/
 @[ext]
-/--
-theorem `wideEqualizer.hom_ext` / 定理 `wideEqualizer.hom_ext`
+/-
+**CategoryTheory.Limits.wideEqualizer.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.wideEqualizer`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)}   [inst_1 : CategoryTheory.Limits.HasWideEqualizer f] [N
+onempty J] {W : C}   {k l : W ⟶ CategoryTheory.Limits.wideEqualizer f},   Catego
+ryTheory.CategoryStruct.comp k (CategoryTheory.Limits.wideEqualizer.ι f) =      
+ CategoryTheory.CategoryStruct.comp l (CategoryTheory.Limits.wideEqualizer.ι f) 
+→     k = l
+参数：X ⟶ Y；CategoryTheory.Limits.wideEqualizer.ι f；CategoryTheory.Limits.wideEqual
+izer.ι f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Trident.IsLimit.hom_ext`：∀ {J : Type w} {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [Nonemp
+ty J]   {s : CategoryTheory.Limits.…
 
-English:
-theorem wideEqualizer.hom_ext
-  statement: [Nonempty J] {W : C} {k l : W ⟶ wideEqualizer f}
-  proof: Trident.IsLimit.hom_ext (limit.isLimit _) h
-
-中文:
-定理 wideEqualizer.hom_ext
-  结论: [非空 J] {W : C} {k l : W ⟶ wideEqualizer f}
-  证明: Trident.IsLimit.hom_ext (limit.isLimit _) h
-
-Depends on / 依赖: IsLimit, Trident, Trident.IsLimit.hom_ext, hom_ext, isLimit, limit.isLimit
+--- 原说明 ---
+Two maps into a wide equalizer are equal if they are equal when composed with th
+e wide
+    equalizer map.
 -/
 theorem wideEqualizer.hom_ext [Nonempty J] {W : C} {k l : W ⟶ wideEqualizer f}
     (h : k ≫ wideEqualizer.ι f = l ≫ wideEqualizer.ι f) : k = l :=
   Trident.IsLimit.hom_ext (limit.isLimit _) h
 
-/--
-Instance `wideEqualizer.ι_mono` / 实例 `wideEqualizer.ι_mono`
+/-- A wide equalizer morphism is a monomorphism -/
+/-
+**CategoryTheory.Limits.wideEqualizer.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance wideEqualizer.ι_mono
-  signature: [Nonempty J]
-  body: wideEqualizer.hom_ext w
-
-中文:
-实例 wideEqualizer.ι_mono
-  签名: [非空 J]
-  定义体: wideEqualizer.hom_ext w
-
-Depends on / 依赖: hom_ext, wideEqualizer, wideEqualizer.hom_ext
+--- 原说明 ---
+A wide equalizer morphism is a monomorphism
 -/
 instance wideEqualizer.ι_mono [Nonempty J] : Mono (wideEqualizer.ι f) where
   right_cancellation _ _ w := wideEqualizer.hom_ext w
@@ -1689,20 +1536,21 @@ section
 
 variable {f}
 
-/--
-theorem `mono_of_isLimit_parallelFamily` / 定理 `mono_of_isLimit_parallelFamily`
+/-- The wide equalizer morphism in any limit cone is a monomorphism. -/
+/-
+**CategoryTheory.Limits.mono_of_isLimit_parallelFamily** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：mono_of_isLimit_parallelFamily [Nonempty J] {c : Cone (parallelFamily f)} 
+(i : IsLimit c) : Mono (Trident.ι c) where right_cancellation _ _ w
+参数：parallelFamily f；i : IsLimit c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Trident.IsLimit.hom_ext`：∀ {J : Type w} {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [Nonemp
+ty J]   {s : CategoryTheory.Limits.…
 
-English:
-theorem mono_of_isLimit_parallelFamily
-  given: [Nonempty J] {c : Cone (parallelFamily f)} (i : IsLimit c)
-  proof: Trident.IsLimit.hom_ext i w
-
-中文:
-定理 mono_of_isLimit_parallelFamily
-  条件: [非空 J] {c : 锥 (parallelFamily f)} (i : 是极限 c)
-  证明: Trident.IsLimit.hom_ext i w
-
-Depends on / 依赖: IsLimit, Trident, Trident.IsLimit.hom_ext, hom_ext
+--- 原说明 ---
+The wide equalizer morphism in any limit cone is a monomorphism.
 -/
 theorem mono_of_isLimit_parallelFamily [Nonempty J] {c : Cone (parallelFamily f)} (i : IsLimit c) :
     Mono (Trident.ι c) where
@@ -1712,149 +1560,124 @@ end
 
 section
 
-/--
-Definition of `HasWideCoequalizer` / `HasWideCoequalizer` 的定义
+/-- A family `f` of parallel morphisms has a wide coequalizer if the diagram `parallelFamily f` has
+a colimit. -/
+/-
+**CategoryTheory.Limits.HasWideCoequalizer** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：HasWideCoequalizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWideCoequalizer
-  body: HasColimit (parallelFamily f)
-
-中文:
-缩写 HasWideCoequalizer
-  定义体: HasColimit (parallelFamily f)
-
-Depends on / 依赖: HasColimit, parallelFamily
+--- 原说明 ---
+A family `f` of parallel morphisms has a wide coequalizer if the diagram `parall
+elFamily f` has
+a colimit.
 -/
 abbrev HasWideCoequalizer :=
   HasColimit (parallelFamily f)
 
 variable [HasWideCoequalizer f]
 
-/--
-Definition of `wideCoequalizer` / `wideCoequalizer` 的定义
+/-- If a wide coequalizer of `f` exists, we can access an arbitrary choice of such by
+    saying `wideCoequalizer f`. -/
+/-
+**CategoryTheory.Limits.wideCoequalizer** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：wideCoequalizer : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideCoequalizer
-  signature: : C
-  body: colimit (parallelFamily f)
-
-中文:
-缩写 wideCoequalizer
-  签名: : C
-  定义体: colimit (parallelFamily f)
-
-Depends on / 依赖: colimit, parallelFamily
+--- 原说明 ---
+If a wide coequalizer of `f` exists, we can access an arbitrary choice of such b
+y
+    saying `wideCoequalizer f`.
 -/
 abbrev wideCoequalizer : C :=
   colimit (parallelFamily f)
 
-/--
-Definition of `wideCoequalizer.π` / `wideCoequalizer.π` 的定义
+/-- If a wideCoequalizer of `f` exists, we can access the corresponding projection by
+    saying `wideCoequalizer.π f`. -/
+/-
+**CategoryTheory.Limits.wideCoequalizer.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideCoequalizer.π
-  signature: : Y ⟶ wideCoequalizer f
-  body: colimit.ι (parallelFamily f) one
-
-中文:
-缩写 wideCoequalizer.π
-  签名: : Y ⟶ wideCoequalizer f
-  定义体: colimit.ι (parallelFamily f) one
-
-Depends on / 依赖: colimit, parallelFamily
+--- 原说明 ---
+If a wideCoequalizer of `f` exists, we can access the corresponding projection b
+y
+    saying `wideCoequalizer.π f`.
 -/
 abbrev wideCoequalizer.π : Y ⟶ wideCoequalizer f :=
   colimit.ι (parallelFamily f) one
 
-/--
-Definition of `wideCoequalizer.cotrident` / `wideCoequalizer.cotrident` 的定义
+/-- An arbitrary choice of coequalizer cocone for a parallel family `f`.
+-/
+/-
+**CategoryTheory.Limits.wideCoequalizer.cotrident** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.wideCoequalizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} → (f : J → (X ⟶ Y)) → [CategoryTheory.Limits.HasWideCoequa
+lizer f] → CategoryTheory.Limits.Cotrident f
+参数：f : J → (X ⟶ Y)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideCoequalizer.cotrident
-  signature: : Cotrident f
-  body: colimit.cocone (parallelFamily f)
-
-中文:
-缩写 wideCoequalizer.cotrident
-  签名: : Cotrident f
-  定义体: colimit.cocone (parallelFamily f)
-
-Depends on / 依赖: cocone, colimit, colimit.cocone, parallelFamily
+--- 原说明 ---
+An arbitrary choice of coequalizer cocone for a parallel family `f`.
 -/
 abbrev wideCoequalizer.cotrident : Cotrident f :=
   colimit.cocone (parallelFamily f)
-
-/--
-theorem `wideCoequalizer.cotrident_π` / 定理 `wideCoequalizer.cotrident_π`
-
-English:
-theorem wideCoequalizer.cotrident_π
-  statement: (wideCoequalizer.cotrident f).π = wideCoequalizer.π f
-  proof: rfl
-
-中文:
-定理 wideCoequalizer.cotrident_π
-  结论: (wideCoequalizer.cotrident f).π = wideCoequalizer.π f
-  证明: rfl
+/-
+**CategoryTheory.Limits.wideCoequalizer.cotrident_** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideCoequalizer.cotrident_π : (wideCoequalizer.cotrident f).π = wideCoequalizer.π f :=
   rfl
-
-/--
-theorem `wideCoequalizer.cotrident_ι_app_one` / 定理 `wideCoequalizer.cotrident_ι_app_one`
-
-English:
-theorem wideCoequalizer.cotrident_ι_app_one
-  proof: rfl
-
-@[reassoc]
-
-中文:
-定理 wideCoequalizer.cotrident_ι_app_one
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.Limits.wideCoequalizer.cotrident_** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideCoequalizer.cotrident_ι_app_one :
     (wideCoequalizer.cotrident f).ι.app one = wideCoequalizer.π f :=
   rfl
 
 @[reassoc]
-/--
-theorem `wideCoequalizer.condition` / 定理 `wideCoequalizer.condition`
-
-English:
-theorem wideCoequalizer.condition
-  given: (j₁ j₂ : J)
-  proof: Cotrident.condition j₁ j₂ colimit.cocone parallelFamily f
-
-中文:
-定理 wideCoequalizer.condition
-  条件: (j₁ j₂ : J)
-  证明: Cotrident.condition j₁ j₂ colimit.cocone parallelFamily f
-
-Depends on / 依赖: Cotrident, Cotrident.condition, cocone, colimit, colimit.cocone, condition, parallelFamily
+/-
+**CategoryTheory.Limits.wideCoequalizer.condition** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.wideCoequalizer`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} (f : J → (X ⟶ Y))   [inst_1 : CategoryTheory.Limits.HasWideCoequalizer f] 
+(j₁ j₂ : J),   CategoryTheory.CategoryStruct.comp (f j₁) (CategoryTheory.Limits.
+wideCoequalizer.π f) =     CategoryTheory.CategoryStruct.comp (f j₂) (CategoryTh
+eory.Limits.wideCoequalizer.π f)
+参数：f : J → (X ⟶ Y)；j₁ j₂ : J；f j₁；CategoryTheory.Limits.wideCoequalizer.π f；f j₂
+；CategoryTheory.Limits.wideCoequalizer.π f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cotrident.condition`：∀ {J : Type w} {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} (j₁ j₂ : J)
+   (t : CategoryTheory.Limits.C…
 -/
 theorem wideCoequalizer.condition (j₁ j₂ : J) :
     f j₁ ≫ wideCoequalizer.π f = f j₂ ≫ wideCoequalizer.π f :=
-Cotrident.condition j₁ j₂ colimit.cocone parallelFamily f
+  Cotrident.condition j₁ j₂ <| colimit.cocone <| parallelFamily f
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `wideCoequalizerIsWideCoequalizer` / `wideCoequalizerIsWideCoequalizer` 的定义
+/-- The cotrident built from `wideCoequalizer.π f` is colimiting. -/
+/-
+**CategoryTheory.Limits.wideCoequalizerIsWideCoequalizer** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：wideCoequalizerIsWideCoequalizer [Nonempty J] : IsColimit (Cotrident.ofπ (
+wideCoequalizer.π f) (wideCoequalizer.condition f))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.wideCoequalizer.condition`：∀ {J : Type w} {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : J → (X ⟶ Y))   [in
+st_1 : CategoryTheory.Limits.HasWideC…
 
-English:
-definition wideCoequalizerIsWideCoequalizer
-  signature: [Nonempty J]
-  body: IsColimit.ofIsoColimit (colimit.isColimit _) (Cotrident.ext (Iso.refl _))
-
-中文:
-定义 wideCoequalizerIsWideCoequalizer
-  签名: [非空 J]
-  定义体: IsColimit.ofIsoColimit (colimit.isColimit _) (Cotrident.ext (Iso.refl _))
-
-Depends on / 依赖: Cotrident, Cotrident.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, colimit, colimit.isColimit, isColimit, ofIsoColimit
+--- 原说明 ---
+The cotrident built from `wideCoequalizer.π f` is colimiting.
 -/
 def wideCoequalizerIsWideCoequalizer [Nonempty J] :
     IsColimit (Cotrident.ofπ (wideCoequalizer.π f) (wideCoequalizer.condition f)) :=
@@ -1862,104 +1685,109 @@ def wideCoequalizerIsWideCoequalizer [Nonempty J] :
 
 variable {f}
 
-/--
-Definition of `wideCoequalizer.desc` / `wideCoequalizer.desc` 的定义
+/-- Any morphism `k : Y ⟶ W` satisfying `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` factors through the
+    wide coequalizer of `f` via `wideCoequalizer.desc : wideCoequalizer f ⟶ W`. -/
+/-
+**CategoryTheory.Limits.wideCoequalizer.desc** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.wideCoequalizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [inst_1 : Category
+Theory.Limits.HasWideCoequalizer f] →             [Nonempty J] →               {
+W : C} →                 (k : Y ⟶ W) →                   (∀ (j₁ j₂ : J),        
+               CategoryTheory.CategoryStruct.comp (f j₁) k = CategoryTheory.Cate
+goryStruct.comp (f j₂) k) →                     (CategoryTheory.Limits.wideCoequ
+alizer f ⟶ W)
+参数：X ⟶ Y；k : Y ⟶ W；∀ (j₁ j₂ : J),                       CategoryTheory.CategoryS
+truct.comp (f j₁) k = CategoryTheory.CategoryStruct.comp (f j₂) k；CategoryTheory
+.Limits.wideCoequalizer f ⟶ W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wideCoequalizer.desc
-  signature: [Nonempty J] {W : C} (k : Y ⟶ W) (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
-  body: colimit.desc (parallelFamily f) (Cotrident.ofπ k h)
-
-中文:
-缩写 wideCoequalizer.desc
-  签名: [非空 J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
-  定义体: colimit.desc (parallelFamily f) (Cotrident.ofπ k h)
-
-Depends on / 依赖: Cotrident, Cotrident.of, colimit, colimit.desc, parallelFamily
+--- 原说明 ---
+Any morphism `k : Y ⟶ W` satisfying `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` factors throu
+gh the
+    wide coequalizer of `f` via `wideCoequalizer.desc : wideCoequalizer f ⟶ W`.
 -/
-abbrev wideCoequalizer.desc [Nonempty J] {W : C} (k : Y ⟶ W) (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
+abbrev wideCoequalizer.desc [Nonempty J] {W : C} (k : Y ⟶ W) (h : ∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
     wideCoequalizer f ⟶ W :=
   colimit.desc (parallelFamily f) (Cotrident.ofπ k h)
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-theorem `wideCoequalizer.π_desc` / 定理 `wideCoequalizer.π_desc`
-
-English:
-theorem wideCoequalizer.π_desc
-  statement: [Nonempty J] {W : C} (k : Y ⟶ W)
-  proof: by
-  simp
-
-中文:
-定理 wideCoequalizer.π_desc
-  结论: [非空 J] {W : C} (k : Y ⟶ W)
-  证明: by
-  simp
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.Limits.wideCoequalizer.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideCoequalizer.π_desc [Nonempty J] {W : C} (k : Y ⟶ W)
-    (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
+    (h : ∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
     wideCoequalizer.π f ≫ wideCoequalizer.desc k h = k := by
   simp
 
-/--
-Definition of `wideCoequalizer.desc'` / `wideCoequalizer.desc'` 的定义
+/-- Any morphism `k : Y ⟶ W` satisfying `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` induces a morphism
+    `l : wideCoequalizer f ⟶ W` satisfying `wideCoequalizer.π ≫ g = l`. -/
+/-
+**CategoryTheory.Limits.wideCoequalizer.desc'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.wideCoequalizer`。
+形式化陈述：{J : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {X Y : C} →         {f : J → (X ⟶ Y)} →           [inst_1 : Category
+Theory.Limits.HasWideCoequalizer f] →             [Nonempty J] →               {
+W : C} →                 (k : Y ⟶ W) →                   (∀ (j₁ j₂ : J),        
+               CategoryTheory.CategoryStruct.comp (f j₁) k = CategoryTheory.Cate
+goryStruct.comp (f j₂) k) →                     { l // CategoryTheory.CategorySt
+ruct.comp (CategoryTheory.Limits.wideCoequalizer.π f) l = k }
+参数：X ⟶ Y；k : Y ⟶ W；∀ (j₁ j₂ : J),                       CategoryTheory.CategoryS
+truct.comp (f j₁) k = CategoryTheory.CategoryStruct.comp (f j₂) k；CategoryTheory
+.Limits.wideCoequalizer.π f。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.wideCoequalizer.π_desc`：∀ {J : Type w} {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)}   [inst_
+1 : CategoryTheory.Limits.HasWideC…
 
-English:
-definition wideCoequalizer.desc'
-  signature: [Nonempty J] {W : C} (k : Y ⟶ W) (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
-  body: ⟨wideCoequalizer.desc k h, wideCoequalizer.π_desc _ _⟩
-
-中文:
-定义 wideCoequalizer.desc'
-  签名: [非空 J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
-  定义体: ⟨wideCoequalizer.desc k h, wideCoequalizer.π_desc _ _⟩
-
-Depends on / 依赖: wideCoequalizer, wideCoequalizer.desc
+--- 原说明 ---
+Any morphism `k : Y ⟶ W` satisfying `∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k` induces a mor
+phism
+    `l : wideCoequalizer f ⟶ W` satisfying `wideCoequalizer.π ≫ g = l`.
 -/
-def wideCoequalizer.desc' [Nonempty J] {W : C} (k : Y ⟶ W) (h : forall j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
+def wideCoequalizer.desc' [Nonempty J] {W : C} (k : Y ⟶ W) (h : ∀ j₁ j₂, f j₁ ≫ k = f j₂ ≫ k) :
     { l : wideCoequalizer f ⟶ W // wideCoequalizer.π f ≫ l = k } :=
   ⟨wideCoequalizer.desc k h, wideCoequalizer.π_desc _ _⟩
 
 /-- Two maps from a wide coequalizer are equal if they are equal when composed with the wide
     coequalizer map -/
 @[ext]
-/--
-theorem `wideCoequalizer.hom_ext` / 定理 `wideCoequalizer.hom_ext`
+/-
+**CategoryTheory.Limits.wideCoequalizer.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.wideCoequalizer`。
+形式化陈述：∀ {J : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y
+ : C} {f : J → (X ⟶ Y)}   [inst_1 : CategoryTheory.Limits.HasWideCoequalizer f] 
+[Nonempty J] {W : C}   {k l : CategoryTheory.Limits.wideCoequalizer f ⟶ W},   Ca
+tegoryTheory.CategoryStruct.comp (CategoryTheory.Limits.wideCoequalizer.π f) k =
+       CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.wideCoequalizer
+.π f) l →     k = l
+参数：X ⟶ Y；CategoryTheory.Limits.wideCoequalizer.π f；CategoryTheory.Limits.wideCoe
+qualizer.π f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cotrident.IsColimit.hom_ext`：∀ {J : Type w} {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [No
+nempty J]   {s : CategoryTheory.Limits.…
 
-English:
-theorem wideCoequalizer.hom_ext
-  statement: [Nonempty J] {W : C} {k l : wideCoequalizer f ⟶ W}
-  proof: Cotrident.IsColimit.hom_ext (colimit.isColimit _) h
-
-中文:
-定理 wideCoequalizer.hom_ext
-  结论: [非空 J] {W : C} {k l : wideCoequalizer f ⟶ W}
-  证明: Cotrident.IsColimit.hom_ext (colimit.isColimit _) h
-
-Depends on / 依赖: Cotrident, Cotrident.IsColimit.hom_ext, IsColimit, colimit, colimit.isColimit, hom_ext, isColimit
+--- 原说明 ---
+Two maps from a wide coequalizer are equal if they are equal when composed with 
+the wide
+    coequalizer map
 -/
 theorem wideCoequalizer.hom_ext [Nonempty J] {W : C} {k l : wideCoequalizer f ⟶ W}
     (h : wideCoequalizer.π f ≫ k = wideCoequalizer.π f ≫ l) : k = l :=
   Cotrident.IsColimit.hom_ext (colimit.isColimit _) h
 
-/--
-Instance `wideCoequalizer.π_epi` / 实例 `wideCoequalizer.π_epi`
+/-- A wide coequalizer morphism is an epimorphism -/
+/-
+**CategoryTheory.Limits.wideCoequalizer.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance wideCoequalizer.π_epi
-  signature: [Nonempty J]
-  body: wideCoequalizer.hom_ext w
-
-中文:
-实例 wideCoequalizer.π_epi
-  签名: [非空 J]
-  定义体: wideCoequalizer.hom_ext w
-
-Depends on / 依赖: hom_ext, wideCoequalizer, wideCoequalizer.hom_ext
+--- 原说明 ---
+A wide coequalizer morphism is an epimorphism
 -/
 instance wideCoequalizer.π_epi [Nonempty J] : Epi (wideCoequalizer.π f) where
   left_cancellation _ _ w := wideCoequalizer.hom_ext w
@@ -1970,20 +1798,21 @@ section
 
 variable {f}
 
-/--
-theorem `epi_of_isColimit_parallelFamily` / 定理 `epi_of_isColimit_parallelFamily`
+/-- The wide coequalizer morphism in any colimit cocone is an epimorphism. -/
+/-
+**CategoryTheory.Limits.epi_of_isColimit_parallelFamily** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：epi_of_isColimit_parallelFamily [Nonempty J] {c : Cocone (parallelFamily f
+)} (i : IsColimit c) : Epi (c.ι.app one) where left_cancellation _ _ w
+参数：parallelFamily f；i : IsColimit c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cotrident.IsColimit.hom_ext`：∀ {J : Type w} {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : J → (X ⟶ Y)} [No
+nempty J]   {s : CategoryTheory.Limits.…
 
-English:
-theorem epi_of_isColimit_parallelFamily
-  statement: [Nonempty J] {c : Cocone (parallelFamily f)}
-  proof: Cotrident.IsColimit.hom_ext i w
-
-中文:
-定理 epi_of_isColimit_parallelFamily
-  结论: [非空 J] {c : 余锥 (parallelFamily f)}
-  证明: Cotrident.IsColimit.hom_ext i w
-
-Depends on / 依赖: Cotrident, Cotrident.IsColimit.hom_ext, IsColimit, hom_ext
+--- 原说明 ---
+The wide coequalizer morphism in any colimit cocone is an epimorphism.
 -/
 theorem epi_of_isColimit_parallelFamily [Nonempty J] {c : Cocone (parallelFamily f)}
     (i : IsColimit c) : Epi (c.ι.app one) where
@@ -1993,80 +1822,94 @@ end
 
 variable (C)
 
-/--
-Definition of `HasWideEqualizers` / `HasWideEqualizers` 的定义
+/-- A category `HasWideEqualizers` if it has all limits of shape `WalkingParallelFamily J`, i.e.
+if it has a wide equalizer for every family of parallel morphisms. -/
+/-
+**CategoryTheory.Limits.HasWideEqualizers** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：HasWideEqualizers
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWideEqualizers
-  body: forall J, HasLimitsOfShape (WalkingParallelFamily.{w} J) C
-
-中文:
-缩写 HasWideEqualizers
-  定义体: forall J, HasLimitsOfShape (WalkingParallelFamily.{w} J) C
-
-Depends on / 依赖: HasLimitsOfShape, WalkingParallelFamily
+--- 原说明 ---
+A category `HasWideEqualizers` if it has all limits of shape `WalkingParallelFam
+ily J`, i.e.
+if it has a wide equalizer for every family of parallel morphisms.
 -/
 abbrev HasWideEqualizers :=
-  forall J, HasLimitsOfShape (WalkingParallelFamily.{w} J) C
+  ∀ J, HasLimitsOfShape (WalkingParallelFamily.{w} J) C
 
-/--
-Definition of `HasWideCoequalizers` / `HasWideCoequalizers` 的定义
+/-- A category `HasWideCoequalizers` if it has all colimits of shape `WalkingParallelFamily J`, i.e.
+if it has a wide coequalizer for every family of parallel morphisms. -/
+/-
+**CategoryTheory.Limits.HasWideCoequalizers** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：HasWideCoequalizers
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWideCoequalizers
-  body: forall J, HasColimitsOfShape (WalkingParallelFamily.{w} J) C
-
-中文:
-缩写 HasWideCoequalizers
-  定义体: forall J, HasColimitsOfShape (WalkingParallelFamily.{w} J) C
-
-Depends on / 依赖: HasColimitsOfShape, WalkingParallelFamily
+--- 原说明 ---
+A category `HasWideCoequalizers` if it has all colimits of shape `WalkingParalle
+lFamily J`, i.e.
+if it has a wide coequalizer for every family of parallel morphisms.
 -/
 abbrev HasWideCoequalizers :=
-  forall J, HasColimitsOfShape (WalkingParallelFamily.{w} J) C
+  ∀ J, HasColimitsOfShape (WalkingParallelFamily.{w} J) C
 
-/--
-theorem `hasWideEqualizers_of_hasLimit_parallelFamily` / 定理 `hasWideEqualizers_of_hasLimit_parallelFamily`
+/-- If `C` has all limits of diagrams `parallelFamily f`, then it has all wide equalizers -/
+/-
+**CategoryTheory.Limits.hasWideEqualizers_of_hasLimit_parallelFamily** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasWideEqualizers_of_hasLimit_parallelFamily [forall {J : Type w} {X Y : C
+} {f : J -> (X ⟶ Y)}, HasLimit (parallelFamily f)] : HasWideEqualizers.{w} C
+参数：X ⟶ Y；parallelFamily f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 
-English:
-theorem hasWideEqualizers_of_hasLimit_parallelFamily
-  proof: fun _ =>
-  { has_limit := fun F => hasLimit_of_iso (diagramIsoParallelFamily F).symm }
-
-中文:
-定理 hasWideEqualizers_of_hasLimit_parallelFamily
-  证明: fun _ =>
-  { has_limit := fun F => hasLimit_of_iso (diagramIsoParallelFamily F).symm }
+--- 原说明 ---
+If `C` has all limits of diagrams `parallelFamily f`, then it has all wide equal
+izers
 -/
 theorem hasWideEqualizers_of_hasLimit_parallelFamily
-    [forall {J : Type w} {X Y : C} {f : J -> (X ⟶ Y)}, HasLimit (parallelFamily f)] :
+    [∀ {J : Type w} {X Y : C} {f : J → (X ⟶ Y)}, HasLimit (parallelFamily f)] :
     HasWideEqualizers.{w} C := fun _ =>
   { has_limit := fun F => hasLimit_of_iso (diagramIsoParallelFamily F).symm }
 
-/--
-theorem `hasWideCoequalizers_of_hasColimit_parallelFamily` / 定理 `hasWideCoequalizers_of_hasColimit_parallelFamily`
+/-- If `C` has all colimits of diagrams `parallelFamily f`, then it has all wide coequalizers -/
+/-
+**CategoryTheory.Limits.hasWideCoequalizers_of_hasColimit_parallelFamily** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasWideCoequalizers_of_hasColimit_parallelFamily [forall {J : Type w} {X Y
+ : C} {f : J -> (X ⟶ Y)}, HasColimit (parallelFamily f)] : HasWideCoequalizers.{
+w} C
+参数：X ⟶ Y；parallelFamily f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_iso`：hasColimit_of_iso {F G : J ⥤ C}
+ [HasColimit F] (α : G ≅ F) : HasColimit G
 
-English:
-theorem hasWideCoequalizers_of_hasColimit_parallelFamily
-  proof: fun _ =>
-  { has_colimit := fun F => hasColimit_of_iso (diagramIsoParallelFamily F) }
-
-中文:
-定理 hasWideCoequalizers_of_hasColimit_parallelFamily
-  证明: fun _ =>
-  { has_colimit := fun F => hasColimit_of_iso (diagramIsoParallelFamily F) }
+--- 原说明 ---
+If `C` has all colimits of diagrams `parallelFamily f`, then it has all wide coe
+qualizers
 -/
 theorem hasWideCoequalizers_of_hasColimit_parallelFamily
-    [forall {J : Type w} {X Y : C} {f : J -> (X ⟶ Y)}, HasColimit (parallelFamily f)] :
+    [∀ {J : Type w} {X Y : C} {f : J → (X ⟶ Y)}, HasColimit (parallelFamily f)] :
     HasWideCoequalizers.{w} C := fun _ =>
   { has_colimit := fun F => hasColimit_of_iso (diagramIsoParallelFamily F) }
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 10) hasEqualizers_of_hasWideEqualizers [HasWideEqualizers.{w} C] :
     HasEqualizers C :=
   hasLimitsOfShape_of_equivalence.{w} walkingParallelFamilyEquivWalkingParallelPair
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 10) hasCoequalizers_of_hasWideCoequalizers [HasWideCoequalizers.{w} C] :
     HasCoequalizers C :=
   hasColimitsOfShape_of_equivalence.{w} walkingParallelFamilyEquivWalkingParallelPair
 
 end CategoryTheory.Limits
+

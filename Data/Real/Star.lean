@@ -14,36 +14,19 @@ public import Mathlib.Data.Real.Basic
 
 public section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The real numbers are a \*-ring, with the trivial \*-structure. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: StarRing Real
-  body: starRingOfComm
-
-中文:
-实例 :
-  签名: 对合环 实数
-  定义体: starRingOfComm
-
-Depends on / 依赖: starRingOfComm
+--- 原说明 ---
+The real numbers are a \*-ring, with the trivial \*-structure.
 -/
-instance : StarRing Real :=
+instance : StarRing ℝ :=
   starRingOfComm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TrivialStar Real
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 :
-  签名: TrivialStar 实数
-  定义体: ⟨fun _ => rfl⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : TrivialStar Real :=
+instance : TrivialStar ℝ :=
   ⟨fun _ => rfl⟩

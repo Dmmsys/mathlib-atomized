@@ -20,40 +20,19 @@ variable {M : Type*} [CommMonoidWithZero M]
 
 namespace Associates
 
-/--
-Instance `instIsOrderedMonoid` / 实例 `instIsOrderedMonoid`
-
-English:
-instance instIsOrderedMonoid
-  signature: : IsOrderedMonoid (Associates M) where
-  body: by rintro a _ ⟨d, rfl⟩ c; exact ⟨d, mul_right_comm ..⟩
-
-中文:
-实例 instIsOrderedMonoid
-  签名: : 是Ordered幺半群 (Associates M) where
-  定义体: by rintro a _ ⟨d, rfl⟩ c; exact ⟨d, mul_right_comm ..⟩
-
-Depends on / 依赖: mul_right_comm
+/-
+**Associates.instIsOrderedMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instIsOrderedMonoid : IsOrderedMonoid (Associates M) where mul_le_mul_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 instance instIsOrderedMonoid : IsOrderedMonoid (Associates M) where
   mul_le_mul_left := by rintro a _ ⟨d, rfl⟩ c; exact ⟨d, mul_right_comm ..⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanonicallyOrderedMul (Associates M)
-  body: h
-  le_mul_self _ b := ⟨b, mul_comm ..⟩
-  le_self_mul _ b := ⟨b, rfl⟩
-
-中文:
-实例 :
-  签名: 典范有序乘法 (Associates M)
-  定义体: h
-  le_mul_self _ b := ⟨b, mul_comm ..⟩
-  le_self_mul _ b := ⟨b, rfl⟩
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CanonicallyOrderedMul (Associates M) where
   exists_mul_of_le h := h
@@ -61,3 +40,4 @@ instance : CanonicallyOrderedMul (Associates M) where
   le_self_mul _ b := ⟨b, rfl⟩
 
 end Associates
+

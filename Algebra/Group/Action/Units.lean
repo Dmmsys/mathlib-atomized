@@ -30,219 +30,102 @@ variable {G H M N α : Type*}
 
 namespace Units
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [SMul M α] : SMul Mˣ α where smul m a
-  body: (m : M) • a
-
-中文:
-实例 [幺半群
-  签名: M] [标量乘法 M α] : 标量乘法 Mˣ α where smul m a
-  定义体: (m : M) • a
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Monoid M] [SMul M α] : SMul Mˣ α where smul m a := (m : M) • a
-
-/--
-lemma `smul_def` / 引理 `smul_def`
-
-English:
-lemma smul_def
-  given: [Monoid M] [SMul M α] (m : Mˣ) (a : α)
-  statement: m • a = (m : M) • a
-  proof: rfl
-
-@[to_additive, simp]
-
-中文:
-引理 smul_def
-  条件: [幺半群 M] [标量乘法 M α] (m : Mˣ) (a : α)
-  结论: m • a = (m : M) • a
-  证明: rfl
-
-@[to_additive, simp]
+/-
+**Units.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {M : Type u_3} {α : Type u_5} [inst : Monoid M] [inst_1 : SMul M α] (m :
+ Mˣ) (a : α), m • a = ↑m • a
+参数：m : Mˣ；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma smul_def [Monoid M] [SMul M α] (m : Mˣ) (a : α) : m • a = (m : M) • a := rfl
 
 @[to_additive, simp]
-/--
-lemma `smul_mk_apply` / 引理 `smul_mk_apply`
-
-English:
-lemma smul_mk_apply
-  given: {M α : Type*} [Monoid M] [SMul M α] (m n : M) (h₁) (h₂) (a : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 smul_mk_apply
-  条件: {M α : 类型} [幺半群 M] [标量乘法 M α] (m n : M) (h₁) (h₂) (a : α)
-  证明: rfl
-
-@[simp]
+/-
+**Units.smul_mk_apply** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_mk_apply {M α : Type*} [Monoid M] [SMul M α] (m n : M) (h₁) (h₂) (a :
+ α) : (⟨m, n, h₁, h₂⟩ : Mˣ) • a = m • a
+参数：m n : M；h₁；h₂；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_mk_apply {M α : Type*} [Monoid M] [SMul M α] (m n : M) (h₁) (h₂) (a : α) :
     (⟨m, n, h₁, h₂⟩ : Mˣ) • a = m • a := rfl
 
 @[simp]
-/--
-lemma `smul_isUnit` / 引理 `smul_isUnit`
-
-English:
-lemma smul_isUnit
-  given: [Monoid M] [SMul M α] {m : M} (hm : IsUnit m) (a : α)
-  statement: hm.unit • a = m • a
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 smul_isUnit
-  条件: [幺半群 M] [标量乘法 M α] {m : M} (hm : 是单位 m) (a : α)
-  结论: hm.unit • a = m • a
-  证明: rfl
-
-@[to_additive]
+/-
+**Units.smul_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_isUnit [Monoid M] [SMul M α] {m : M} (hm : IsUnit m) (a : α) : hm.uni
+t • a = m • a
+参数：hm : IsUnit m；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_isUnit [Monoid M] [SMul M α] {m : M} (hm : IsUnit m) (a : α) : hm.unit • a = m • a := rfl
 
 @[to_additive]
-/--
-lemma `_root_.IsUnit.inv_smul` / 引理 `_root_.IsUnit.inv_smul`
-
-English:
-lemma _root_.IsUnit.inv_smul
-  given: [Monoid α] {a : α} (h : IsUnit a)
-  statement: h.unit⁻¹ • a = 1
-  proof: h.val_inv_mul
-
-@[to_additive]
-
-中文:
-引理 _root_.是单位.inv_smul
-  条件: [幺半群 α] {a : α} (h : 是单位 a)
-  结论: h.unit⁻¹ • a = 1
-  证明: h.val_inv_mul
-
-@[to_additive]
-
-Depends on / 依赖: h.val_inv_mul, val_inv_mul
+/-
+**Units._root_.IsUnit.inv_smul** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsUnit.inv_smul [Monoid α] {a : α} (h : IsUnit a) : h.unit⁻¹ • a = 1 := h.val_inv_mul
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [SMul M α] [FaithfulSMul M α] : FaithfulSMul Mˣ α where
-  body: Units.ext eq_of_smul_eq_smul h
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: M] [标量乘法 M α] [忠实标量乘法 M α] : 忠实标量乘法 Mˣ α where
-  定义体: Units.ext eq_of_smul_eq_smul h
-
-@[to_additive]
-
-Depends on / 依赖: Units.ext, eq_of_smul_eq_smul
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [SMul M α] [FaithfulSMul M α] : FaithfulSMul Mˣ α where
-eq_of_smul_eq_smul h := Units.ext eq_of_smul_eq_smul h
+  eq_of_smul_eq_smul h := Units.ext <| eq_of_smul_eq_smul h
 
 @[to_additive]
-/--
-Instance `instMulAction` / 实例 `instMulAction`
-
-English:
-instance instMulAction
-  signature: [Monoid M] [MulAction M α]
-  body: one_smul M
-  mul_smul m n := mul_smul (m : M) n
-
-@[to_additive]
-
-中文:
-实例 instMulAction
-  签名: [幺半群 M] [乘法作用 M α]
-  定义体: one_smul M
-  mul_smul m n := mul_smul (m : M) n
-
-@[to_additive]
-
-Depends on / 依赖: one_smul
+/-
+**Units.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instMulAction [Monoid M] [MulAction M α] : MulAction Mˣ α where one_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 instance instMulAction [Monoid M] [MulAction M α] : MulAction Mˣ α where
   one_smul := one_smul M
   mul_smul m n := mul_smul (m : M) n
 
 @[to_additive]
-/--
-Instance `smulCommClass_left` / 实例 `smulCommClass_left`
-
-English:
-instance smulCommClass_left
-  signature: [Monoid M] [SMul M α] [SMul N α] [SMulCommClass M N α]
-  body: smul_comm (m : M) n
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_left
-  签名: [幺半群 M] [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
-  定义体: smul_comm (m : M) n
-
-@[to_additive]
-
-Depends on / 依赖: smul_comm
+/-
+**Units.smulCommClass_left** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：smulCommClass_left [Monoid M] [SMul M α] [SMul N α] [SMulCommClass M N α] 
+: SMulCommClass Mˣ N α where smul_comm m n
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass_left [Monoid M] [SMul M α] [SMul N α] [SMulCommClass M N α] :
     SMulCommClass Mˣ N α where smul_comm m n := smul_comm (m : M) n
 
 @[to_additive]
-/--
-Instance `smulCommClass_right` / 实例 `smulCommClass_right`
-
-English:
-instance smulCommClass_right
-  signature: [Monoid N] [SMul M α] [SMul N α] [SMulCommClass M N α]
-  body: smul_comm m (n : N)
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_right
-  签名: [幺半群 N] [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
-  定义体: smul_comm m (n : N)
-
-@[to_additive]
-
-Depends on / 依赖: smul_comm
+/-
+**Units.smulCommClass_right** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：smulCommClass_right [Monoid N] [SMul M α] [SMul N α] [SMulCommClass M N α]
+ : SMulCommClass M Nˣ α where smul_comm m n
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass_right [Monoid N] [SMul M α] [SMul N α] [SMulCommClass M N α] :
     SMulCommClass M Nˣ α where smul_comm m n := smul_comm m (n : N)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α] :
-  body: smul_assoc (m : M) n
-
-中文:
-实例 [幺半群
-  签名: M] [标量乘法 M N] [标量乘法 M α] [标量乘法 N α] [标量塔 M N α] :
-  定义体: smul_assoc (m : M) n
-
-Depends on / 依赖: smul_assoc
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α] :
     IsScalarTower Mˣ N α where smul_assoc m n := smul_assoc (m : M) n
@@ -252,28 +135,18 @@ instance [Monoid M] [SMul M N] [SMul M α] [SMul N α] [IsScalarTower M N α] :
 /-- If an action `G` associates and commutes with multiplication on `M`, then it lifts to an
 action on `Mˣ`. Notably, this provides `MulAction Mˣ Nˣ` under suitable conditions. -/
 @[to_additive]
-/--
-Instance `mulAction'` / 实例 `mulAction'`
+/-
+**Units.mulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：mulAction' [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsS
+calarTower G M M] : MulAction G Mˣ where smul g m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mulAction'
-  signature: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M]
-  body: ⟨g • (m : M), (g⁻¹ • ((m⁻¹ : Mˣ) : M)),
-      by rw [smul_mul_smul_comm, Units.mul_inv, mul_inv_cancel, one_smul],
-      by rw [smul_mul_smul_comm, Units.inv_mul, inv_mul_cancel, one_smul]⟩
-one_smul _ := Units.ext one_smul _ _
-mul_smul _ _ _ := Units.ext mul_smul _ _ _
-
-中文:
-实例 mulAction'
-  签名: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M]
-  定义体: ⟨g • (m : M), (g⁻¹ • ((m⁻¹ : Mˣ) : M)),
-      by rw [smul_mul_smul_comm, Units.mul_inv, mul_inv_cancel, one_smul],
-      by rw [smul_mul_smul_comm, Units.inv_mul, inv_mul_cancel, one_smul]⟩
-one_smul _ := Units.ext one_smul _ _
-mul_smul _ _ _ := Units.ext mul_smul _ _ _
-
-Depends on / 依赖: Units.ext, Units.inv_mul, Units.mul_inv, inv_mul, inv_mul_cancel, mul_inv, mul_inv_cancel, mul_smul, one_smul, smul_mul_smul_comm
+--- 原说明 ---
+If an action `G` associates and commutes with multiplication on `M`, then it lif
+ts to an
+action on `Mˣ`. Notably, this provides `MulAction Mˣ Nˣ` under suitable conditio
+ns.
 -/
 instance mulAction' [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M]
     [IsScalarTower G M M] : MulAction G Mˣ where
@@ -281,12 +154,23 @@ instance mulAction' [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M]
     ⟨g • (m : M), (g⁻¹ • ((m⁻¹ : Mˣ) : M)),
       by rw [smul_mul_smul_comm, Units.mul_inv, mul_inv_cancel, one_smul],
       by rw [smul_mul_smul_comm, Units.inv_mul, inv_mul_cancel, one_smul]⟩
-one_smul _ := Units.ext one_smul _ _
-mul_smul _ _ _ := Units.ext mul_smul _ _ _
+  one_smul _ := Units.ext <| one_smul _ _
+  mul_smul _ _ _ := Units.ext <| mul_smul _ _ _
 
 /-- `Units.mulAction' : MulAction G Mˣ` creates a diamond when `G = Mˣ` and `M` is commutative.
 
 Discussed [on Zulip](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/units.2Emul_action'.20diamond/near/246400399). -/
+/-
+**Units.** 是 Mathlib 中的一个示例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Units.mulAction' : MulAction G Mˣ` creates a diamond when `G = Mˣ` and `M` is c
+ommutative.
+
+Discussed [on Zulip](https://leanprover.zulipchat.com/#narrow/channel/113488-gen
+eral/topic/units.2Emul_action'.20diamond/near/246400399).
+-/
 example {M} [CommMonoid M] :
     (mulAction'.toSMul : SMul Mˣ Mˣ) = instSMulOfMul := by
   fail_if_success rfl -- there is an instance diamond here
@@ -297,26 +181,19 @@ example {M} [CommMonoid M] :
 
 Discussed [on Zulip](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/units.2Emul_action'.20diamond/near/246400399). -/
 @[simp]
-/--
-lemma `smul_eq_mul` / 引理 `smul_eq_mul`
+/-
+**Units.smul_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_eq_mul {M} [CommMonoid M] (u₁ u₂ : Mˣ) : u₁ • u₂ = u₁ * u₂
+参数：u₁ u₂ : Mˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
 
-English:
-lemma smul_eq_mul
-  given: {M} [CommMonoid M] (u₁ u₂ : Mˣ)
-  proof: by
-  ext
-  rfl
+--- 原说明 ---
+This is not the usual `smul_eq_mul` because `mulAction'` creates a diamond.
 
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_eq_mul
-  条件: {M} [交换幺半群 M] (u₁ u₂ : Mˣ)
-  证明: by
-  ext
-  rfl
-
-@[to_additive (attr := simp)]
+Discussed [on Zulip](https://leanprover.zulipchat.com/#narrow/channel/113488-gen
+eral/topic/units.2Emul_action'.20diamond/near/246400399).
 -/
 lemma smul_eq_mul {M} [CommMonoid M] (u₁ u₂ : Mˣ) :
     u₁ • u₂ = u₁ * u₂ := by
@@ -324,172 +201,174 @@ lemma smul_eq_mul {M} [CommMonoid M] (u₁ u₂ : Mˣ) :
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `val_smul` / 引理 `val_smul`
-
-English:
-lemma val_smul
-  statement: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
-  proof: rfl
-
-中文:
-引理 val_smul
-  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
-  证明: rfl
+/-
+**Units.val_smul** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：val_smul [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsSca
+larTower G M M] (g : G) (m : Mˣ) : ↑(g • m) = g • (m : M)
+参数：g : G；m : Mˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma val_smul [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
     (g : G) (m : Mˣ) : ↑(g • m) = g • (m : M) := rfl
 
 /-- Note that this lemma exists more generally as the global `smul_inv` -/
 @[to_additive (attr := simp)]
-/--
-lemma `smul_inv` / 引理 `smul_inv`
+/-
+**Units.smul_inv** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_inv [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsSca
+larTower G M M] (g : G) (m : Mˣ) : (g • m)⁻¹ = g⁻¹ • m⁻¹
+参数：g : G；m : Mˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
 
-English:
-lemma smul_inv
-  statement: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
-  proof: ext rfl
-
-中文:
-引理 smul_inv
-  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
-  证明: ext rfl
+--- 原说明 ---
+Note that this lemma exists more generally as the global `smul_inv`
 -/
 lemma smul_inv [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
     (g : G) (m : Mˣ) : (g • m)⁻¹ = g⁻¹ • m⁻¹ := ext rfl
 
 /-- Transfer `SMulCommClass G H M` to `SMulCommClass G H Mˣ`. -/
 @[to_additive /-- Transfer `VAddCommClass G H M` to `VAddCommClass G H (AddUnits M)`. -/]
-/--
-Instance `smulCommClass'` / 实例 `smulCommClass'`
+/-
+**Units.smulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：smulCommClass' [Group G] [Group H] [Monoid M] [MulAction G M] [SMulCommCla
+ss G M M] [MulAction H M] [SMulCommClass H M M] [IsScalarTower G M M] [IsScalarT
+ower H M M] [SMulCommClass G H M] : SMulCommClass G H Mˣ where smul_comm g h m
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 
-English:
-instance smulCommClass'
-  signature: [Group G] [Group H] [Monoid M] [MulAction G M] [SMulCommClass G M M]
-  body: Units.ext smul_comm g h (m : M)
-
-中文:
-实例 smulCommClass'
-  签名: [群 G] [群 H] [幺半群 M] [乘法作用 G M] [标量交换类 G M M]
-  定义体: Units.ext smul_comm g h (m : M)
-
-Depends on / 依赖: Units.ext, smul_comm
+--- 原说明 ---
+Transfer `SMulCommClass G H M` to `SMulCommClass G H Mˣ`.
 -/
 instance smulCommClass' [Group G] [Group H] [Monoid M] [MulAction G M] [SMulCommClass G M M]
     [MulAction H M] [SMulCommClass H M M] [IsScalarTower G M M] [IsScalarTower H M M]
     [SMulCommClass G H M] :
-SMulCommClass G H Mˣ where smul_comm g h m := Units.ext smul_comm g h (m : M)
+    SMulCommClass G H Mˣ where smul_comm g h m := Units.ext <| smul_comm g h (m : M)
 
 /-- Transfer `IsScalarTower G H M` to `IsScalarTower G H Mˣ`. -/
 @[to_additive /-- Transfer `VAddAssocClass G H M` to `VAddAssocClass G H (AddUnits M)`. -/]
-/--
-Instance `isScalarTower'` / 实例 `isScalarTower'`
+/-
+**Units.isScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：isScalarTower' [SMul G H] [Group G] [Group H] [Monoid M] [MulAction G M] [
+SMulCommClass G M M] [MulAction H M] [SMulCommClass H M M] [IsScalarTower G M M]
+ [IsScalarTower H M M] [IsScalarTower G H M] : IsScalarTower G H Mˣ where smul_a
+ssoc g h m
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 
-English:
-instance isScalarTower'
-  signature: [SMul G H] [Group G] [Group H] [Monoid M] [MulAction G M]
-  body: Units.ext smul_assoc g h (m : M)
-
-中文:
-实例 isScalarTower'
-  签名: [标量乘法 G H] [群 G] [群 H] [幺半群 M] [乘法作用 G M]
-  定义体: Units.ext smul_assoc g h (m : M)
-
-Depends on / 依赖: Units.ext, smul_assoc
+--- 原说明 ---
+Transfer `IsScalarTower G H M` to `IsScalarTower G H Mˣ`.
 -/
 instance isScalarTower' [SMul G H] [Group G] [Group H] [Monoid M] [MulAction G M]
     [SMulCommClass G M M] [MulAction H M] [SMulCommClass H M M] [IsScalarTower G M M]
     [IsScalarTower H M M] [IsScalarTower G H M] :
-IsScalarTower G H Mˣ where smul_assoc g h m := Units.ext smul_assoc g h (m : M)
+    IsScalarTower G H Mˣ where smul_assoc g h m := Units.ext <| smul_assoc g h (m : M)
 
 /-- Transfer `IsScalarTower G M α` to `IsScalarTower G Mˣ α`. -/
 @[to_additive /-- Transfer `VAddAssocClass G M α` to `VAddAssocClass G (AddUnits M) α`. -/]
-/--
-Instance `isScalarTower'_left` / 实例 `isScalarTower'_left`
+/-
+**Units.isScalarTower'_left** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {G : Type u_1} {M : Type u_3} {α : Type u_5} [inst : Group G] [inst_1 : 
+Monoid M] [inst_2 : MulAction G M]   [inst_3 : SMul M α] [inst_4 : SMul G α] [in
+st_5 : SMulCommClass G M M] [inst_6 : IsScalarTower G M M]   [IsScalarTower G M 
+α], IsScalarTower G Mˣ α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 
-English:
-instance isScalarTower'_left
-  signature: [Group G] [Monoid M] [MulAction G M] [SMul M α] [SMul G α]
-  body: smul_assoc g (m : M)
-
-中文:
-实例 isScalarTower'_left
-  签名: [群 G] [幺半群 M] [乘法作用 G M] [标量乘法 M α] [标量乘法 G α]
-  定义体: smul_assoc g (m : M)
+--- 原说明 ---
+Transfer `IsScalarTower G M α` to `IsScalarTower G Mˣ α`.
 -/
 instance isScalarTower'_left [Group G] [Monoid M] [MulAction G M] [SMul M α] [SMul G α]
     [SMulCommClass G M M] [IsScalarTower G M M] [IsScalarTower G M α] :
     IsScalarTower G Mˣ α where smul_assoc g m := smul_assoc g (m : M)
 
 -- Just to prove this transfers a particularly useful instance.
+/-
+**Units.** 是 Mathlib 中的一个示例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [Monoid M] [Monoid N] [MulAction M N] [SMulCommClass M N N] [IsScalarTower M N N] :
     MulAction Mˣ Nˣ := Units.mulAction'
 
 section MulDistribMulAction
 variable {M N : Type*} [Monoid M] [Monoid N] [MulDistribMulAction M N]
 
-/--
-Definition of `mulDistribMulActionRight` / `mulDistribMulActionRight` 的定义
+/-- Note this has different defeqs than `Units.mulAction'`, but doesn't create a diamond
+with it in non-degenerate situations. Indeed, to get a diamond on `MulDistribMulAction G Mˣ`,
+we would need both instances to fire. But `Units.mulAction'` assumes `SMulCommClass G M M`,
+i.e. `∀ (g : G) (m₁ m₂ : M), g • (m₁ * m₂) = m₁ * g • m₂`), while
+`Units.instMulDistribMulActionRight` assumes `MulDistribMulAction G M`,
+i.e. `∀ (g : G) (m₁ m₂ : M), g • (m₁ * m₂) = g • m₁ * g • m₂`.
+In particular, if `M` is cancellative, then we obtain `∀ (g : G) (m : M), g • m = m`,
+i.e. the action is trivial!
 
-English:
-abbreviation mulDistribMulActionRight
-  signature: : MulDistribMulAction M Nˣ where
-  body: ⟨m • u, m • u⁻¹, by simp [← smul_mul', smul_one], by simp [← smul_mul', smul_one]⟩
-one_smul u := Units.ext one_smul ..
-mul_smul m₁ m₂ u := Units.ext mul_smul ..
-smul_mul m₁ u₁ u₂ := Units.ext smul_mul' ..
-smul_one m := Units.ext smul_one m
+This however does create a (propeq) diamond for `MulDistribMulAction (ConjAct Mˣ) Mˣ` with
+`ConjAct.unitsMulDistribMulAction` and `ConjAct.instMulDistribMulAction`. Indeed, if we go down
+one way then `u • v := ⟨ofConjAct u * v * ofConjAct u⁻¹, ofConjAct u * v⁻¹ * ofConjAct u⁻¹, _, _⟩`,
+while the other way is
+`u • v := ⟨ofConjAct u * v * ofConjAct u⁻¹, ofConjAct u * (v⁻¹ * ofConjAct u⁻¹), _, _⟩`. -/
+/-
+**Units.mulDistribMulActionRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Units`。
+形式化陈述：mulDistribMulActionRight : MulDistribMulAction M Nˣ where smul m u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 mulDistribMulActionRight
-  签名: : MulDistribMul作用 M Nˣ where
-  定义体: ⟨m • u, m • u⁻¹, by simp [← smul_mul', smul_one], by simp [← smul_mul', smul_one]⟩
-one_smul u := Units.ext one_smul ..
-mul_smul m₁ m₂ u := Units.ext mul_smul ..
-smul_mul m₁ u₁ u₂ := Units.ext smul_mul' ..
-smul_one m := Units.ext smul_one m
+--- 原说明 ---
+Note this has different defeqs than `Units.mulAction'`, but doesn't create a dia
+mond
+with it in non-degenerate situations. Indeed, to get a diamond on `MulDistribMul
+Action G Mˣ`,
+we would need both instances to fire. But `Units.mulAction'` assumes `SMulCommCl
+ass G M M`,
+i.e. `∀ (g : G) (m₁ m₂ : M), g • (m₁ * m₂) = m₁ * g • m₂`), while
+`Units.instMulDistribMulActionRight` assumes `MulDistribMulAction G M`,
+i.e. `∀ (g : G) (m₁ m₂ : M), g • (m₁ * m₂) = g • m₁ * g • m₂`.
+In particular, if `M` is cancellative, then we obtain `∀ (g : G) (m : M), g • m 
+= m`,
+i.e. the action is trivial!
 
-Depends on / 依赖: smul_mul, smul_one
+This however does create a (propeq) diamond for `MulDistribMulAction (ConjAct Mˣ
+) Mˣ` with
+`ConjAct.unitsMulDistribMulAction` and `ConjAct.instMulDistribMulAction`. Indeed
+, if we go down
+one way then `u • v := ⟨ofConjAct u * v * ofConjAct u⁻¹, ofConjAct u * v⁻¹ * ofC
+onjAct u⁻¹, _, _⟩`,
+while the other way is
+`u • v := ⟨ofConjAct u * v * ofConjAct u⁻¹, ofConjAct u * (v⁻¹ * ofConjAct u⁻¹),
+ _, _⟩`.
 -/
 abbrev mulDistribMulActionRight : MulDistribMulAction M Nˣ where
   smul m u := ⟨m • u, m • u⁻¹, by simp [← smul_mul', smul_one], by simp [← smul_mul', smul_one]⟩
-one_smul u := Units.ext one_smul ..
-mul_smul m₁ m₂ u := Units.ext mul_smul ..
-smul_mul m₁ u₁ u₂ := Units.ext smul_mul' ..
-smul_one m := Units.ext smul_one m
+  one_smul u := Units.ext <| one_smul ..
+  mul_smul m₁ m₂ u := Units.ext <| mul_smul ..
+  smul_mul m₁ u₁ u₂ := Units.ext <| smul_mul' ..
+  smul_one m := Units.ext <| smul_one m
 
 attribute [local instance] mulDistribMulActionRight
-
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (m : M) (u : Nˣ)
-  statement: (m • u).val = m • u.val
-  proof: rfl
-
-中文:
-引理 coe_smul
-  条件: (m : M) (u : Nˣ)
-  结论: (m • u).val = m • u.val
-  证明: rfl
+/-
+**Units.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {M : Type u_6} {N : Type u_7} [inst : Monoid M] [inst_1 : Monoid N] [ins
+t_2 : MulDistribMulAction M N] (m : M)   (u : Nˣ), ↑(m • u) = m • ↑u
+参数：m : M；u : Nˣ；m • u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_smul (m : M) (u : Nˣ) : (m • u).val = m • u.val := rfl
-/--
-lemma `coe_inv_smul` / 引理 `coe_inv_smul`
-
-English:
-lemma coe_inv_smul
-  given: (m : M) (u : Nˣ)
-  statement: (m • u)⁻¹.val = m • u⁻¹.val
-  proof: rfl
-
-中文:
-引理 coe_inv_smul
-  条件: (m : M) (u : Nˣ)
-  结论: (m • u)⁻¹.val = m • u⁻¹.val
-  证明: rfl
+/-
+**Units.coe_inv_smul** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {M : Type u_6} {N : Type u_7} [inst : Monoid M] [inst_1 : Monoid N] [ins
+t_2 : MulDistribMulAction M N] (m : M)   (u : Nˣ), ↑(m • u)⁻¹ = m • ↑u⁻¹
+参数：m : M；u : Nˣ；m • u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_inv_smul (m : M) (u : Nˣ) : (m • u)⁻¹.val = m • u⁻¹.val := rfl
 
@@ -497,22 +376,15 @@ end MulDistribMulAction
 end Units
 
 @[to_additive]
-/--
-lemma `IsUnit.smul` / 引理 `IsUnit.smul`
-
-English:
-lemma IsUnit.smul
-  statement: [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
-  proof: let ⟨u, hu⟩ := h
-  hu ▸ ⟨g • u, Units.val_smul _ _⟩
-
-中文:
-引理 是单位.smul
-  结论: [群 G] [幺半群 M] [乘法作用 G M] [标量交换类 G M M] [标量塔 G M M]
-  证明: let ⟨u, hu⟩ := h
-  hu ▸ ⟨g • u, Units.val_smul _ _⟩
-
-Depends on / 依赖: Units.val_smul, val_smul
+/-
+**IsUnit.smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsUnit.smul [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [Is
+ScalarTower G M M] {m : M} (g : G) (h : IsUnit m) : IsUnit (g • m)
+参数：g : G；h : IsUnit m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Units.val_smul`：val_smul [Group G] [Monoid M] [MulAction G M] [SMulCommC
+lass G M M] [IsScalarTower G M M] (g : G) (m : Mˣ) : ↑(g • m) = g • (m : M)
 -/
 lemma IsUnit.smul [Group G] [Monoid M] [MulAction G M] [SMulCommClass G M M] [IsScalarTower G M M]
     {m : M} (g : G) (h : IsUnit m) : IsUnit (g • m) :=

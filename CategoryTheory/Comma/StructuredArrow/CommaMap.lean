@@ -34,40 +34,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The functor establishing the equivalence `StructuredArrow.commaMapEquivalence`. -/
 @[simps, implicit_reducible]
-/--
-Definition of `commaMapEquivalenceFunctor` / `commaMapEquivalenceFunctor` 的定义
+/-
+**CategoryTheory.StructuredArrow.commaMapEquivalenceFunctor** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：commaMapEquivalenceFunctor [IsIso β] (X : Comma L' R') : StructuredArrow X
+ (Comma.map α β) ⥤ Comma (map₂ (𝟙 _) α) (map₂ X.hom (inv β)) where obj Y
+参数：X : Comma L' R'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaMapEquivalenceFunctor
-  signature: [IsIso β] (X : Comma L' R')
-  body: ⟨mk Y.hom.left, mk Y.hom.right,
-    homMk Y.right.hom
-      (by simpa only [Functor.const_obj_obj, map₂_obj_left, mk_left, map₂_obj_right, mk_right,
-        map₂_obj_hom, mk_hom_eq_self, Category.id_comp, Category.assoc, NatIso.isIso_inv_app,
-        Functor.comp_obj, Comma.map_obj_right, Comma.map_obj_left, Comma.map_obj_hom,
-        IsIso.hom_inv_id, Category.comp_id] using
-        congrFun (congrArg CategoryStruct.comp Y.hom.w) (inv (β.app Y.right.right) :))⟩
-  map {Y Z} f := ⟨homMk f.right.left (congrArg CommaMorphism.left (StructuredArrow.w f)),
-    homMk f.right.right (congrArg CommaMorphism.right (StructuredArrow.w f)),
-    by simp only [map₂_obj_right, mk_right, hom_eq_iff, comp_right,
-      map₂_map_right, homMk_right, CommaMorphism.w] ⟩
-
-中文:
-定义 commaMapEquivalenceFunctor
-  签名: [是同构 β] (X : 交换a L' R')
-  定义体: ⟨mk Y.hom.left, mk Y.hom.right,
-    homMk Y.right.hom
-      (by simpa only [Functor.const_obj_obj, map₂_obj_left, mk_left, map₂_obj_right, mk_right,
-        map₂_obj_hom, mk_hom_eq_self, Category.id_comp, Category.assoc, NatIso.isIso_inv_app,
-        Functor.comp_obj, Comma.map_obj_right, Comma.map_obj_left, Comma.map_obj_hom,
-        IsIso.hom_inv_id, Category.comp_id] using
-        congrFun (congrArg CategoryStruct.comp Y.hom.w) (inv (β.app Y.right.right) :))⟩
-  map {Y Z} f := ⟨homMk f.right.left (congrArg CommaMorphism.left (StructuredArrow.w f)),
-    homMk f.right.right (congrArg CommaMorphism.right (StructuredArrow.w f)),
-    by simp only [map₂_obj_right, mk_right, hom_eq_iff, comp_right,
-      map₂_map_right, homMk_right, CommaMorphism.w] ⟩
-
-Depends on / 依赖: CreatesLimitsOfShape, Discrete, Ind.equivalence, ObjectProperty, Y.hom.left, Y.hom.right, equivalence, functor
+--- 原说明 ---
+The functor establishing the equivalence `StructuredArrow.commaMapEquivalence`.
 -/
 def commaMapEquivalenceFunctor [IsIso β] (X : Comma L' R') :
     StructuredArrow X (Comma.map α β) ⥤ Comma (map₂ (𝟙 _) α) (map₂ X.hom (inv β)) where
@@ -87,30 +64,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The inverse functor establishing the equivalence `StructuredArrow.commaMapEquivalence`. -/
 @[simps]
-/--
-Definition of `commaMapEquivalenceInverse` / `commaMapEquivalenceInverse` 的定义
+/-
+**CategoryTheory.StructuredArrow.commaMapEquivalenceInverse** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：commaMapEquivalenceInverse [IsIso β] (X : Comma L' R') : Comma (map₂ (𝟙 _)
+ α) (map₂ X.hom (inv β)) ⥤ StructuredArrow X (Comma.map α β) where obj Y
+参数：X : Comma L' R'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaMapEquivalenceInverse
-  signature: [IsIso β] (X : Comma L' R')
-  body: mk (Y := ⟨Y.left.right, Y.right.right, Y.hom.right⟩)
-    ⟨by exact Y.left.hom, by exact Y.right.hom, by
-      simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
-        (β.app Y.right.right)⟩
-  map {Y Z} f := homMk ⟨by exact f.left.right, by exact f.right.right,
-    congrArg CommaMorphism.right f.w⟩
-
-中文:
-定义 commaMapEquivalenceInverse
-  签名: [是同构 β] (X : 交换a L' R')
-  定义体: mk (Y := ⟨Y.left.right, Y.right.right, Y.hom.right⟩)
-    ⟨by exact Y.left.hom, by exact Y.right.hom, by
-      simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
-        (β.app Y.right.right)⟩
-  map {Y Z} f := homMk ⟨by exact f.left.right, by exact f.right.right,
-    congrArg CommaMorphism.right f.w⟩
-
-Depends on / 依赖: Ind.inclusion, Y.hom.right, Y.left.right, Y.right.right, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape, inclusion
+--- 原说明 ---
+The inverse functor establishing the equivalence `StructuredArrow.commaMapEquiva
+lence`.
 -/
 def commaMapEquivalenceInverse [IsIso β] (X : Comma L' R') :
     Comma (map₂ (𝟙 _) α) (map₂ X.hom (inv β)) ⥤ StructuredArrow X (Comma.map α β) where
@@ -119,25 +84,23 @@ def commaMapEquivalenceInverse [IsIso β] (X : Comma L' R') :
       simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
         (β.app Y.right.right)⟩
   map {Y Z} f := homMk ⟨by exact f.left.right, by exact f.right.right,
-    congrArg CommaMorphism.right f.w⟩
+    by exact congrArg CommaMorphism.right f.w⟩
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The unit establishing the equivalence `StructuredArrow.commaMapEquivalence`. -/
 @[simps!]
-/--
-Definition of `commaMapEquivalenceUnitIso` / `commaMapEquivalenceUnitIso` 的定义
+/-
+**CategoryTheory.StructuredArrow.commaMapEquivalenceUnitIso** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：commaMapEquivalenceUnitIso [IsIso β] (X : Comma L' R') : 𝟭 (StructuredArro
+w X (Comma.map α β)) ≅ commaMapEquivalenceFunctor α β X ⋙ commaMapEquivalenceInv
+erse α β X
+参数：X : Comma L' R'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaMapEquivalenceUnitIso
-  signature: [IsIso β] (X : Comma L' R')
-  body: NatIso.ofComponents (fun _ => isoMk (Iso.refl _))
-
-中文:
-定义 commaMapEquivalenceUnitIso
-  签名: [是同构 β] (X : 交换a L' R')
-  定义体: NatIso.ofComponents (fun _ => isoMk (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The unit establishing the equivalence `StructuredArrow.commaMapEquivalence`.
 -/
 def commaMapEquivalenceUnitIso [IsIso β] (X : Comma L' R') :
     𝟭 (StructuredArrow X (Comma.map α β)) ≅
@@ -147,20 +110,19 @@ def commaMapEquivalenceUnitIso [IsIso β] (X : Comma L' R') :
 set_option backward.defeqAttrib.useBackward true in
 /-- The counit functor establishing the equivalence `StructuredArrow.commaMapEquivalence`. -/
 @[simps!]
-/--
-Definition of `commaMapEquivalenceCounitIso` / `commaMapEquivalenceCounitIso` 的定义
+/-
+**CategoryTheory.StructuredArrow.commaMapEquivalenceCounitIso** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：commaMapEquivalenceCounitIso [IsIso β] (X : Comma L' R') : commaMapEquival
+enceInverse α β X ⋙ commaMapEquivalenceFunctor α β X ≅ 𝟭 (Comma (map₂ (𝟙 (L'.obj
+ X.left)) α) (map₂ X.hom (inv β)))
+参数：X : Comma L' R'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaMapEquivalenceCounitIso
-  signature: [IsIso β] (X : Comma L' R')
-  body: NatIso.ofComponents (fun _ => Comma.isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 commaMapEquivalenceCounitIso
-  签名: [是同构 β] (X : 交换a L' R')
-  定义体: NatIso.ofComponents (fun _ => Comma.isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Comma.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The counit functor establishing the equivalence `StructuredArrow.commaMapEquival
+ence`.
 -/
 def commaMapEquivalenceCounitIso [IsIso β] (X : Comma L' R') :
     commaMapEquivalenceInverse α β X ⋙ commaMapEquivalenceFunctor α β X ≅
@@ -169,26 +131,21 @@ def commaMapEquivalenceCounitIso [IsIso β] (X : Comma L' R') :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `commaMapEquivalence` / `commaMapEquivalence` 的定义
+/-- The structured arrow category on the functor `Comma.map α β`, with `β` a natural isomorphism,
+is equivalent to a comma category on two instances of `StructuredArrow.map₂`. -/
+/-
+**CategoryTheory.StructuredArrow.commaMapEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.StructuredArrow`。
+形式化陈述：commaMapEquivalence [IsIso β] (X : Comma L' R') : StructuredArrow X (Comma
+.map α β) ≌ Comma (map₂ (𝟙 _) α) (map₂ X.hom (inv β)) where functor
+参数：X : Comma L' R'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaMapEquivalence
-  signature: [IsIso β] (X : Comma L' R')
-  body: commaMapEquivalenceFunctor α β X
-  inverse := commaMapEquivalenceInverse α β X
-  unitIso := commaMapEquivalenceUnitIso α β X
-  counitIso := commaMapEquivalenceCounitIso α β X
-
-中文:
-定义 commaMapEquivalence
-  签名: [是同构 β] (X : 交换a L' R')
-  定义体: commaMapEquivalenceFunctor α β X
-  inverse := commaMapEquivalenceInverse α β X
-  unitIso := commaMapEquivalenceUnitIso α β X
-  counitIso := commaMapEquivalenceCounitIso α β X
-
-Depends on / 依赖: commaMapEquivalenceFunctor
+--- 原说明 ---
+The structured arrow category on the functor `Comma.map α β`, with `β` a natural
+ isomorphism,
+is equivalent to a comma category on two instances of `StructuredArrow.map₂`.
 -/
 def commaMapEquivalence [IsIso β] (X : Comma L' R') :
     StructuredArrow X (Comma.map α β) ≌ Comma (map₂ (𝟙 _) α) (map₂ X.hom (inv β)) where
@@ -202,3 +159,4 @@ end
 end StructuredArrow
 
 end CategoryTheory
+

@@ -41,784 +41,582 @@ variable {α β F : Type*}
 
 section Chain
 
-variable (r : α -> α -> Prop)
+variable (r : α → α → Prop)
 
 /-- In this file, we use `≺` as a local notation for any relation `r`. -/
 local infixl:50 " ≺ " => r
 
-/--
-Definition of `IsChain` / `IsChain` 的定义
+/-- A chain is a set `s` satisfying `x ≺ y ∨ x = y ∨ y ≺ x` for all `x y ∈ s`. -/
+/-
+**IsChain** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsChain (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsChain
-  signature: (s : Set α)
-  body: s.Pairwise fun x y => x ≺ y ∨ y ≺ x
-
-中文:
-定义 IsChain
-  签名: (s : 集合 α)
-  定义体: s.Pairwise fun x y => x ≺ y ∨ y ≺ x
-
-Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid_isUnit_le_isUnit, IsLocalization, IsLocalization.of_le_isUnit, Pairwise, algebraMapSubmonoid_isUnit_le_isUnit, of_le_isUnit, s.Pairwise
+--- 原说明 ---
+A chain is a set `s` satisfying `x ≺ y ∨ x = y ∨ y ≺ x` for all `x y ∈ s`.
 -/
 def IsChain (s : Set α) : Prop :=
   s.Pairwise fun x y => x ≺ y ∨ y ≺ x
 
-/--
-Definition of `SuperChain` / `SuperChain` 的定义
+/-- `SuperChain s t` means that `t` is a chain that strictly includes `s`. -/
+/-
+**SuperChain** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SuperChain (s t : Set α) : Prop
+参数：s t : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SuperChain
-  signature: (s t : Set α)
-  body: IsChain r t ∧ s ⊂ t
-
-中文:
-定义 SuperChain
-  签名: (s t : 集合 α)
-  定义体: IsChain r t ∧ s ⊂ t
-
-Depends on / 依赖: IsChain
+--- 原说明 ---
+`SuperChain s t` means that `t` is a chain that strictly includes `s`.
 -/
 def SuperChain (s t : Set α) : Prop :=
   IsChain r t ∧ s ⊂ t
 
-/--
-Definition of `IsMaxChain` / `IsMaxChain` 的定义
+/-- A chain `s` is a maximal chain if there does not exists a chain strictly including `s`. -/
+/-
+**IsMaxChain** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsMaxChain (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsMaxChain
-  signature: (s : Set α)
-  body: IsChain r s ∧ forall ⦃t⦄, IsChain r t -> s subseteq t -> s = t
-
-中文:
-定义 IsMaxChain
-  签名: (s : 集合 α)
-  定义体: IsChain r s ∧ forall ⦃t⦄, IsChain r t -> s subseteq t -> s = t
-
-Depends on / 依赖: IsChain, subseteq
+--- 原说明 ---
+A chain `s` is a maximal chain if there does not exists a chain strictly includi
+ng `s`.
 -/
 def IsMaxChain (s : Set α) : Prop :=
-  IsChain r s ∧ forall ⦃t⦄, IsChain r t -> s subseteq t -> s = t
+  IsChain r s ∧ ∀ ⦃t⦄, IsChain r t → s ⊆ t → s = t
 
 variable {r} {c c₁ c₂ s t : Set α} {a b x y : α}
-
-/--
-lemma `IsChain.empty` / 引理 `IsChain.empty`
-
-English:
-lemma IsChain.empty
-  statement: IsChain r ∅
-  proof: pairwise_empty _
-
-中文:
-引理 IsChain.empty
-  结论: IsChain r ∅
-  证明: pairwise_empty _
-
-Depends on / 依赖: Finsupp, Finsupp.mapRange.linearEquiv, Finsupp.mapRange.linearMap, IsLocalizedModule, IsLocalizedModule.iso, Localization, LocalizedModule, LocalizedModule.equivTensorProduct, classical, convert, equivTensorProduct, finsuppRight, isLocalizedModule_iff_isBaseChange, linearEquiv, linearMap, mapRange, of_linearEquiv, otimes, restrictScalars, symm.restrictScalars
+/-
+**IsChain.empty** 是 Mathlib 中的一个定理，位于命名空间 `IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop}, IsChain r ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.pairwise_empty`：pairwise_empty (r : α -> α -> Prop) : (∅ : Set α).Pa
+irwise r
 -/
 @[simp] lemma IsChain.empty : IsChain r ∅ := pairwise_empty _
-/--
-lemma `IsChain.singleton` / 引理 `IsChain.singleton`
-
-English:
-lemma IsChain.singleton
-  statement: IsChain r {a}
-  proof: pairwise_singleton ..
-
-中文:
-引理 IsChain.singleton
-  结论: IsChain r {a}
-  证明: pairwise_singleton ..
+/-
+**IsChain.singleton** 是 Mathlib 中的一个定理，位于命名空间 `IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a : α}, IsChain r {a}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.pairwise_singleton`：pairwise_singleton (a : α) (r : α -> α -> Prop) 
+: Set.Pairwise {a} r
 -/
 @[simp] lemma IsChain.singleton : IsChain r {a} := pairwise_singleton ..
-
-/--
-theorem `Set.Subsingleton.isChain` / 定理 `Set.Subsingleton.isChain`
-
-English:
-theorem Set.Subsingleton.isChain
-  given: (hs : s.Subsingleton)
-  statement: IsChain r s
-  proof: hs.pairwise _
-
-中文:
-定理 集合.子单例.isChain
-  条件: (hs : s.子单例)
-  结论: IsChain r s
-  证明: hs.pairwise _
-
-Depends on / 依赖: hs.pairwise, pairwise
+/-
+**Set.Subsingleton.isChain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.Subsingleton.isChain (hs : s.Subsingleton) : IsChain r s
+参数：hs : s.Subsingleton。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subsingleton.pairwise`：∀ {α : Type u_1} {s : Set α}, s.Subsingleton 
+→ ∀ (r : α → α → Prop), s.Pairwise r
 -/
 theorem Set.Subsingleton.isChain (hs : s.Subsingleton) : IsChain r s :=
   hs.pairwise _
-
-/--
-theorem `IsChain.mono` / 定理 `IsChain.mono`
-
-English:
-theorem IsChain.mono
-  statement: s subseteq t -> IsChain r t -> IsChain r s
-  proof: Set.Pairwise.mono
-
-中文:
-定理 IsChain.mono
-  结论: s subseteq t -> IsChain r t -> IsChain r s
-  证明: Set.Pairwise.mono
-
-Depends on / 依赖: Pairwise, Set.Pairwise.mono
+/-
+**IsChain.mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.mono : s subseteq t -> IsChain r t -> IsChain r s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
 -/
-theorem IsChain.mono : s subseteq t -> IsChain r t -> IsChain r s :=
+theorem IsChain.mono : s ⊆ t → IsChain r t → IsChain r s :=
   Set.Pairwise.mono
-
-/--
-theorem `IsChain.mono_rel` / 定理 `IsChain.mono_rel`
-
-English:
-theorem IsChain.mono_rel
-  given: {r' : α -> α -> Prop} (h : IsChain r s) (h_imp : forall x y, r x y -> r' x y)
-  proof: h.mono' fun x y => Or.imp (h_imp x y) (h_imp y x)
-
-中文:
-定理 IsChain.mono_rel
-  条件: {r' : α -> α -> 命题} (h : IsChain r s) (h_imp : 对任意 x y, r x y -> r' x y)
-  证明: h.mono' fun x y => Or.imp (h_imp x y) (h_imp y x)
-
-Depends on / 依赖: Or.imp, h.mono, h_imp
+/-
+**IsChain.mono_rel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.mono_rel {r' : α -> α -> Prop} (h : IsChain r s) (h_imp : forall x
+ y, r x y -> r' x y) : IsChain r' s
+参数：h : IsChain r s；h_imp : forall x y, r x y -> r' x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono'`：∀ {α : Type u_1} {r p : α → α → Prop} {s : Set α}, r
+ ≤ p → s.Pairwise r → s.Pairwise p
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
 -/
-theorem IsChain.mono_rel {r' : α -> α -> Prop} (h : IsChain r s) (h_imp : forall x y, r x y -> r' x y) :
+theorem IsChain.mono_rel {r' : α → α → Prop} (h : IsChain r s) (h_imp : ∀ x y, r x y → r' x y) :
     IsChain r' s :=
   h.mono' fun x y => Or.imp (h_imp x y) (h_imp y x)
 
-/--
-theorem `IsChain.symm` / 定理 `IsChain.symm`
+/-- This can be used to turn `IsChain (≥)` into `IsChain (≤)` and vice-versa. -/
+/-
+**IsChain.symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.symm (h : IsChain r s) : IsChain (flip r) s
+参数：h : IsChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono'`：∀ {α : Type u_1} {r p : α → α → Prop} {s : Set α}, r
+ ≤ p → s.Pairwise r → s.Pairwise p
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
 
-English:
-theorem IsChain.symm
-  given: (h : IsChain r s)
-  statement: IsChain (flip r) s
-  proof: h.mono' fun _ _ => Or.symm
-
-中文:
-定理 IsChain.symm
-  条件: (h : IsChain r s)
-  结论: IsChain (flip r) s
-  证明: h.mono' fun _ _ => Or.symm
-
-Depends on / 依赖: Or.symm, h.mono
+--- 原说明 ---
+This can be used to turn `IsChain (≥)` into `IsChain (≤)` and vice-versa.
 -/
 theorem IsChain.symm (h : IsChain r s) : IsChain (flip r) s :=
   h.mono' fun _ _ => Or.symm
-
-/--
-theorem `isChain_of_trichotomous` / 定理 `isChain_of_trichotomous`
-
-English:
-theorem isChain_of_trichotomous
-  given: [Std.Trichotomous r] (s : Set α)
-  statement: IsChain r s
-  proof: fun a _ b _ hab => (trichotomous_of r a b).imp_right fun h => h.resolve_left hab
-
-中文:
-定理 isChain_of_trichotomous
-  条件: [Std.三歧 r] (s : 集合 α)
-  结论: IsChain r s
-  证明: fun a _ b _ hab => (trichotomous_of r a b).imp_right fun h => h.resolve_left hab
-
-Depends on / 依赖: h.resolve_left, imp_right, resolve_left, trichotomous_of
+/-
+**isChain_of_trichotomous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isChain_of_trichotomous [Std.Trichotomous r] (s : Set α) : IsChain r s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用引理 `trichotomous_of`：trichotomous_of [Std.Trichotomous r] : forall a b : α, 
+a ≺ b ∨ a = b ∨ b ≺ a
 -/
 theorem isChain_of_trichotomous [Std.Trichotomous r] (s : Set α) : IsChain r s :=
   fun a _ b _ hab => (trichotomous_of r a b).imp_right fun h => h.resolve_left hab
-
-/--
-theorem `IsChain.insert` / 定理 `IsChain.insert`
-
-English:
-theorem IsChain.insert
-  given: (hs : IsChain r s) (ha : forall b in s, a != b -> a ≺ b ∨ b ≺ a)
-  proof: have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
-  hs.insert_of_symm ha
-
-中文:
-定理 IsChain.insert
-  条件: (hs : IsChain r s) (ha : 对任意 b in s, a != b -> a ≺ b ∨ b ≺ a)
-  证明: have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
-  hs.insert_of_symm ha
-
-Depends on / 依赖: IsLocalization, IsLocalization.eq_mk, RingHom, RingHom.algebraMap_toAlgebra, _iff_mul_eq, algebraMap_toAlgebra, eq_mk, map_mul
+/-
+**IsChain.insert** 是 Mathlib 中的一个定理，位于命名空间 `IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a : α},   IsChain r s → (
+∀ b ∈ s, a ≠ b → r a b ∨ r b a) → IsChain r (insert a s)
+参数：∀ b ∈ s, a ≠ b → r a b ∨ r b a；insert a s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用定理 `Set.Pairwise.insert_of_symm`：∀ {α : Type u_1} {r : α → α → Prop} {s : Se
+t α} {a : α} [Std.Symm r],   s.Pairwise r → (∀ b ∈ s, a ≠ b → r a b) → (insert a
+ s).Pairwise r
 -/
-protected theorem IsChain.insert (hs : IsChain r s) (ha : forall b in s, a != b -> a ≺ b ∨ b ≺ a) :
+protected theorem IsChain.insert (hs : IsChain r s) (ha : ∀ b ∈ s, a ≠ b → a ≺ b ∨ b ≺ a) :
     IsChain r (insert a s) :=
-  have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
+  have : Std.Symm fun a b ↦ a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
   hs.insert_of_symm ha
-
-/--
-lemma `IsChain.pair` / 引理 `IsChain.pair`
-
-English:
-lemma IsChain.pair
-  given: (h : r a b)
-  statement: IsChain r {a, b}
-  proof: IsChain.singleton.insert fun _ hb _ => .inl (eq_of_mem_singleton hb).symm.recOn ‹_›
-
-中文:
-引理 IsChain.pair
-  条件: (h : r a b)
-  结论: IsChain r {a, b}
-  证明: IsChain.singleton.insert fun _ hb _ => .inl (eq_of_mem_singleton hb).symm.recOn ‹_›
-
-Depends on / 依赖: IsChain, IsChain.singleton.insert, eq_of_mem_singleton, insert, singleton, symm.recOn
+/-
+**IsChain.pair** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsChain.pair (h : r a b) : IsChain r {a, b}
+参数：h : r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.insert`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a : α},
+   IsChain r s → (∀ b ∈ s, a ≠ b → r a b ∨ r b a) → IsChain r (insert a s)
+· 使用定理 `IsChain.singleton`：∀ {α : Type u_1} {r : α → α → Prop} {a : α}, IsChain 
+r {a}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eq_of_mem_singleton`：eq_of_mem_singleton {x y : α} (h : x in ({y} : 
+Set α)) : x = y
 -/
 lemma IsChain.pair (h : r a b) : IsChain r {a, b} :=
-IsChain.singleton.insert fun _ hb _ => .inl (eq_of_mem_singleton hb).symm.recOn ‹_›
-
-/--
-theorem `isChain_univ_iff` / 定理 `isChain_univ_iff`
-
-English:
-theorem isChain_univ_iff
-  statement: IsChain r (univ : Set α) ↔ Std.Trichotomous r
-  proof: by
-  refine ⟨fun h => ⟨fun a b => ?_⟩, fun h => @isChain_of_trichotomous _ _ h univ⟩
-  have : a != b -> (r a b ∨ r b a) := h trivial trivial
-  grind
-
-中文:
-定理 isChain_univ_iff
-  结论: IsChain r (univ : 集合 α) ↔ Std.三歧 r
-  证明: by
-  refine ⟨fun h => ⟨fun a b => ?_⟩, fun h => @isChain_of_trichotomous _ _ h univ⟩
-  have : a != b -> (r a b ∨ r b a) := h trivial trivial
-  grind
-
-Depends on / 依赖: isChain_of_trichotomous
+  IsChain.singleton.insert fun _ hb _ ↦ .inl <| (eq_of_mem_singleton hb).symm.recOn ‹_›
+/-
+**isChain_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isChain_univ_iff : IsChain r (univ : Set α) ↔ Std.Trichotomous r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `isChain_of_trichotomous`：isChain_of_trichotomous [Std.Trichotomous r] (s
+ : Set α) : IsChain r s
 -/
 theorem isChain_univ_iff : IsChain r (univ : Set α) ↔ Std.Trichotomous r := by
   refine ⟨fun h => ⟨fun a b => ?_⟩, fun h => @isChain_of_trichotomous _ _ h univ⟩
-  have : a != b -> (r a b ∨ r b a) := h trivial trivial
+  have : a ≠ b → (r a b ∨ r b a) := h trivial trivial
   grind
-
-/--
-theorem `IsChain.image_of_map_rel` / 定理 `IsChain.image_of_map_rel`
-
-English:
-theorem IsChain.image_of_map_rel
-  statement: (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β)
-  proof: fun _ ⟨_, ha₁, ha₂⟩ _ ⟨_, hb₁, hb₂⟩ =>
-  ha₂ ▸ hb₂ ▸ fun hxy => (hrc ha₁ hb₁ <| ne_of_apply_ne f hxy).imp (h _ _) (h _ _)
-
-中文:
-定理 IsChain.image_of_map_rel
-  结论: (r : α -> α -> 命题) (s : β -> β -> 命题) (f : α -> β)
-  证明: fun _ ⟨_, ha₁, ha₂⟩ _ ⟨_, hb₁, hb₂⟩ =>
-  ha₂ ▸ hb₂ ▸ fun hxy => (hrc ha₁ hb₁ <| ne_of_apply_ne f hxy).imp (h _ _) (h _ _)
-
-Depends on / 依赖: ne_of_apply_ne
+/-
+**IsChain.image_of_map_rel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_of_map_rel (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α 
+-> β) (h : forall x y, r x y -> s (f x) (f y)) {c : Set α} (hrc : IsChain r c) :
+ IsChain s (f '' c)
+参数：r : α -> α -> Prop；s : β -> β -> Prop；f : α -> β；h : forall x y, r x y -> s (
+f x) (f y)；hrc : IsChain r c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
 -/
-theorem IsChain.image_of_map_rel (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β)
-    (h : forall x y, r x y -> s (f x) (f y)) {c : Set α} (hrc : IsChain r c) : IsChain s (f '' c) :=
+theorem IsChain.image_of_map_rel (r : α → α → Prop) (s : β → β → Prop) (f : α → β)
+    (h : ∀ x y, r x y → s (f x) (f y)) {c : Set α} (hrc : IsChain r c) : IsChain s (f '' c) :=
   fun _ ⟨_, ha₁, ha₂⟩ _ ⟨_, hb₁, hb₂⟩ =>
   ha₂ ▸ hb₂ ▸ fun hxy => (hrc ha₁ hb₁ <| ne_of_apply_ne f hxy).imp (h _ _) (h _ _)
-
-/--
-theorem `IsChain.preimage` / 定理 `IsChain.preimage`
-
-English:
-theorem IsChain.preimage
-  statement: (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β)
-  proof: by
-  intro _ ha _ hb hne
-  have := hrc ha hb (fun h => hne (hf h))
-  grind
-
-中文:
-定理 IsChain.原像
-  结论: (r : α -> α -> 命题) (s : β -> β -> 命题) (f : α -> β)
-  证明: by
-  intro _ ha _ hb hne
-  have := hrc ha hb (fun h => hne (hf h))
-  grind
+/-
+**IsChain.preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β) (h
+f : Function.Injective f) (h : forall x y, s (f x) (f y) -> r x y) {c : Set β} (
+hrc : IsChain s c) : IsChain r (f ⁻¹' c)
+参数：r : α -> α -> Prop；s : β -> β -> Prop；f : α -> β；hf : Function.Injective f；h 
+: forall x y, s (f x) (f y) -> r x y；hrc : IsChain s c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsChain.preimage (r : α -> α -> Prop) (s : β -> β -> Prop) (f : α -> β)
-    (hf : Function.Injective f) (h : forall x y, s (f x) (f y) -> r x y) {c : Set β} (hrc : IsChain s c) :
+theorem IsChain.preimage (r : α → α → Prop) (s : β → β → Prop) (f : α → β)
+    (hf : Function.Injective f) (h : ∀ x y, s (f x) (f y) → r x y) {c : Set β} (hrc : IsChain s c) :
     IsChain r (f ⁻¹' c) := by
   intro _ ha _ hb hne
-  have := hrc ha hb (fun h => hne (hf h))
+  have := hrc ha hb (fun h ↦ hne (hf h))
   grind
-
-/--
-lemma `isChain_union` / 引理 `isChain_union`
-
-English:
-lemma isChain_union
-  given: {s t : Set α}
-  proof: by
-  have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
-  rw [IsChain]; rw [IsChain]; rw [IsChain]; rw [pairwise_union_of_symm]
-
-中文:
-引理 isChain_union
-  条件: {s t : 集合 α}
-  证明: by
-  have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
-  rw [IsChain]; rw [IsChain]; rw [IsChain]; rw [pairwise_union_of_symm]
-
-Depends on / 依赖: IsChain, Or.symm, Std.Symm, pairwise_union_of_symm
+/-
+**isChain_union** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isChain_union {s t : Set α} : IsChain r (s union t) ↔ IsChain r s ∧ IsChai
+n r t ∧ forall a in s, forall b in t, a != b -> r a b ∨ r b a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsChain.eq_1`：∀ {α : Type u_1} (r : α → α → Prop) (s : Set α), IsChain r
+ s = s.Pairwise fun x y => r x y ∨ r y x
+· 使用定理 `Set.pairwise_union_of_symm`：pairwise_union_of_symm [Std.Symm r] : (s uni
+on t).Pairwise r ↔ s.Pairwise r ∧ t.Pairwise r ∧ forall a in s, forall b in t, a
+ != b -> r a b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isChain_union {s t : Set α} :
-    IsChain r (s union t) ↔ IsChain r s ∧ IsChain r t ∧ forall a in s, forall b in t, a != b -> r a b ∨ r b a := by
-  have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
-  rw [IsChain]; rw [IsChain]; rw [IsChain]; rw [pairwise_union_of_symm]
-
-/--
-lemma `Monotone.isChain_image` / 引理 `Monotone.isChain_image`
-
-English:
-lemma Monotone.isChain_image
-  statement: [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
-  proof: hs.image_of_map_rel _ _ _ (fun _ _ a => hf a)
-
-中文:
-引理 递增.isChain_image
-  结论: [预序 α] [预序 β] {s : 集合 α} {f : α -> β}
-  证明: hs.image_of_map_rel _ _ _ (fun _ _ a => hf a)
-
-Depends on / 依赖: hs.image_of_map_rel, image_of_map_rel
+    IsChain r (s ∪ t) ↔ IsChain r s ∧ IsChain r t ∧ ∀ a ∈ s, ∀ b ∈ t, a ≠ b → r a b ∨ r b a := by
+  have : Std.Symm fun a b ↦ a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
+  rw [IsChain, IsChain, IsChain, pairwise_union_of_symm]
+/-
+**Monotone.isChain_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Monotone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α -> β} 
+(hf : Monotone f) (hs : IsChain (· <= ·) s) : IsChain (· <= ·) (f '' s)
+参数：hf : Monotone f；hs : IsChain (· <= ·) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image_of_map_rel`：IsChain.image_of_map_rel (r : α -> α -> Prop) 
+(s : β -> β -> Prop) (f : α -> β) (h : forall x y, r x y -> s (f x) (f y)) {c : 
+Set α} (hrc : …
 -/
-lemma Monotone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
-    (hf : Monotone f) (hs : IsChain (· <= ·) s) : IsChain (· <= ·) (f '' s) :=
-  hs.image_of_map_rel _ _ _ (fun _ _ a => hf a)
-
-/--
-theorem `Monotone.isChain_range` / 定理 `Monotone.isChain_range`
-
-English:
-theorem Monotone.isChain_range
-  given: [LinearOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
-  proof: by
+lemma Monotone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α → β}
+    (hf : Monotone f) (hs : IsChain (· ≤ ·) s) : IsChain (· ≤ ·) (f '' s) :=
+  hs.image_of_map_rel _ _ _ (fun _ _ a ↦ hf a)
+/-
+**Monotone.isChain_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.isChain_range [LinearOrder α] [Preorder β] {f : α -> β} (hf : Mon
+otone f) : IsChain (· <= ·) (range f)
+参数：hf : Monotone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用引理 `Monotone.isChain_image`：Monotone.isChain_image [Preorder α] [Preorder β]
+ {s : Set α} {f : α -> β} (hf : Monotone f) (hs : IsChain (· <= ·) s) : IsChain 
+(· <= ·) (f …
+· 使用定理 `isChain_of_trichotomous`：isChain_of_trichotomous [Std.Trichotomous r] (s
+ : Set α) : IsChain r s
+-/
+theorem Monotone.isChain_range [LinearOrder α] [Preorder β] {f : α → β} (hf : Monotone f) :
+    IsChain (· ≤ ·) (range f) := by
   rw [← image_univ]
   exact hf.isChain_image (isChain_of_trichotomous _)
-
-中文:
-定理 递增.isChain_range
-  条件: [线性序 α] [预序 β] {f : α -> β} (hf : 递增 f)
-  证明: by
-  rw [← image_univ]
-  exact hf.isChain_image (isChain_of_trichotomous _)
-
-Depends on / 依赖: hf.isChain_image, image_univ, isChain_image, isChain_of_trichotomous
+/-
+**Antitone.isChain_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Antitone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α -> β} 
+(hf : Antitone f) (hs : IsChain (· <= ·) s) : IsChain (· <= ·) (f '' s)
+参数：hf : Antitone f；hs : IsChain (· <= ·) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Monotone.isChain_image`：Monotone.isChain_image [Preorder α] [Preorder β]
+ {s : Set α} {f : α -> β} (hf : Monotone f) (hs : IsChain (· <= ·) s) : IsChain 
+(· <= ·) (f …
+· 使用定理 `Antitone.dual_left`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [ins
+t_1 : Preorder β] {f : α → β},   Antitone f → Monotone (f ∘ ⇑OrderDual.ofDual)
+· 使用定理 `IsChain.symm`：IsChain.symm (h : IsChain r s) : IsChain (flip r) s
 -/
-theorem Monotone.isChain_range [LinearOrder α] [Preorder β] {f : α -> β} (hf : Monotone f) :
-    IsChain (· <= ·) (range f) := by
-  rw [← image_univ]
-  exact hf.isChain_image (isChain_of_trichotomous _)
-
-/--
-lemma `Antitone.isChain_image` / 引理 `Antitone.isChain_image`
-
-English:
-lemma Antitone.isChain_image
-  statement: [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
-  proof: hf.dual_left.isChain_image hs.symm
-
-中文:
-引理 递减.isChain_image
-  结论: [预序 α] [预序 β] {s : 集合 α} {f : α -> β}
-  证明: hf.dual_left.isChain_image hs.symm
-
-Depends on / 依赖: dual_left, hf.dual_left.isChain_image, hs.symm, isChain_image
--/
-lemma Antitone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
-    (hf : Antitone f) (hs : IsChain (· <= ·) s) : IsChain (· <= ·) (f '' s) :=
+lemma Antitone.isChain_image [Preorder α] [Preorder β] {s : Set α} {f : α → β}
+    (hf : Antitone f) (hs : IsChain (· ≤ ·) s) : IsChain (· ≤ ·) (f '' s) :=
   hf.dual_left.isChain_image hs.symm
-
-/--
-theorem `Antitone.isChain_range` / 定理 `Antitone.isChain_range`
-
-English:
-theorem Antitone.isChain_range
-  given: [LinearOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
-  proof: hf.dual_left.isChain_range
-
-中文:
-定理 递减.isChain_range
-  条件: [线性序 α] [预序 β] {f : α -> β} (hf : 递减 f)
-  证明: hf.dual_left.isChain_range
-
-Depends on / 依赖: dual_left, hf.dual_left.isChain_range, isChain_range
+/-
+**Antitone.isChain_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.isChain_range [LinearOrder α] [Preorder β] {f : α -> β} (hf : Ant
+itone f) : IsChain (· <= ·) (range f)
+参数：hf : Antitone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.isChain_range`：Monotone.isChain_range [LinearOrder α] [Preorder
+ β] {f : α -> β} (hf : Monotone f) : IsChain (· <= ·) (range f)
+· 使用定理 `Antitone.dual_left`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [ins
+t_1 : Preorder β] {f : α → β},   Antitone f → Monotone (f ∘ ⇑OrderDual.ofDual)
 -/
-theorem Antitone.isChain_range [LinearOrder α] [Preorder β] {f : α -> β} (hf : Antitone f) :
-    IsChain (· <= ·) (range f) :=
+theorem Antitone.isChain_range [LinearOrder α] [Preorder β] {f : α → β} (hf : Antitone f) :
+    IsChain (· ≤ ·) (range f) :=
   hf.dual_left.isChain_range
-
-/--
-theorem `IsChain.lt_of_le` / 定理 `IsChain.lt_of_le`
-
-English:
-theorem IsChain.lt_of_le
-  given: [PartialOrder α] {s : Set α} (h : IsChain (· <= ·) s)
-  proof: fun _a ha _b hb hne =>
-  (h ha hb hne).imp hne.lt_of_le hne.lt_of_le'
-
-中文:
-定理 IsChain.lt_of_le
-  条件: [偏序 α] {s : 集合 α} (h : IsChain (· <= ·) s)
-  证明: fun _a ha _b hb hne =>
-  (h ha hb hne).imp hne.lt_of_le hne.lt_of_le'
+/-
+**IsChain.lt_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.lt_of_le [PartialOrder α] {s : Set α} (h : IsChain (· <= ·) s) : I
+sChain (· < ·) s
+参数：h : IsChain (· <= ·) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Ne.lt_of_le`：Ne.lt_of_le : a != b -> a <= b -> a < b
+· 使用定理 `Ne.lt_of_le'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≠ b 
+→ b ≤ a → b < a
 -/
-theorem IsChain.lt_of_le [PartialOrder α] {s : Set α} (h : IsChain (· <= ·) s) :
-    IsChain (· < ·) s := fun _a ha _b hb hne =>
+theorem IsChain.lt_of_le [PartialOrder α] {s : Set α} (h : IsChain (· ≤ ·) s) :
+    IsChain (· < ·) s := fun _a ha _b hb hne ↦
   (h ha hb hne).imp hne.lt_of_le hne.lt_of_le'
-
-/--
-theorem `IsChain.diff` / 定理 `IsChain.diff`
-
-English:
-theorem IsChain.diff
-  given: {s t : Set α} (h : IsChain r s)
-  statement: IsChain r (s \ t)
-  proof: h.mono Set.sdiff_subset
-
-中文:
-定理 IsChain.diff
-  条件: {s t : 集合 α} (h : IsChain r s)
-  结论: IsChain r (s \ t)
-  证明: h.mono Set.sdiff_subset
+/-
+**IsChain.diff** 是 Mathlib 中的一个定理，位于命名空间 `IsChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, IsChain r s → IsChain r
+ (s \ t)
+参数：s \ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.mono`：IsChain.mono : s subseteq t -> IsChain r t -> IsChain r s
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
 @[simp] protected theorem IsChain.diff {s t : Set α} (h : IsChain r s) : IsChain r (s \ t) :=
   h.mono Set.sdiff_subset
-
-/--
-theorem `isChain_preimage_subtypeVal` / 定理 `isChain_preimage_subtypeVal`
-
-English:
-theorem isChain_preimage_subtypeVal
-  given: (s t : Set α)
-  proof: by
-  simp [IsChain, Set.Pairwise]
-
-中文:
-定理 isChain_preimage_subtypeVal
-  条件: (s t : 集合 α)
-  证明: by
-  simp [IsChain, Set.Pairwise]
-
-Depends on / 依赖: IsChain, Pairwise, Set.Pairwise
+/-
+**isChain_preimage_subtypeVal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isChain_preimage_subtypeVal (s t : Set α) : @IsChain ↑s (r · ·) (s ↓inter 
+t) ↔ IsChain r (s inter t)
+参数：s t : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isChain_preimage_subtypeVal (s t : Set α) :
-    @IsChain ↑s (r · ·) (s ↓inter t) ↔ IsChain r (s inter t) := by
+    @IsChain ↑s (r · ·) (s ↓∩ t) ↔ IsChain r (s ∩ t) := by
   simp [IsChain, Set.Pairwise]
-
-/--
-theorem `isChain_coe_univ_iff` / 定理 `isChain_coe_univ_iff`
-
-English:
-theorem isChain_coe_univ_iff
-  given: {s : Set α}
-  statement: @IsChain ↑s (r · ·) univ ↔ IsChain r s
-  proof: by
-  simpa using isChain_preimage_subtypeVal s univ
-
-中文:
-定理 isChain_coe_univ_iff
-  条件: {s : 集合 α}
-  结论: @IsChain ↑s (r · ·) univ ↔ IsChain r s
-  证明: by
-  simpa using isChain_preimage_subtypeVal s univ
-
-Depends on / 依赖: isChain_preimage_subtypeVal
+/-
+**isChain_coe_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isChain_coe_univ_iff {s : Set α} : @IsChain ↑s (r · ·) univ ↔ IsChain r s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `isChain_preimage_subtypeVal`：isChain_preimage_subtypeVal (s t : Set α) :
+ @IsChain ↑s (r · ·) (s ↓inter t) ↔ IsChain r (s inter t)
 -/
 theorem isChain_coe_univ_iff {s : Set α} : @IsChain ↑s (r · ·) univ ↔ IsChain r s := by
   simpa using isChain_preimage_subtypeVal s univ
 
 section Rel
 
-variable {r : α -> α -> Prop} {r' : β -> β -> Prop} {s : Set α}
+variable {r : α → α → Prop} {r' : β → β → Prop} {s : Set α}
 
-/--
-theorem `IsChain.image` / 定理 `IsChain.image`
-
-English:
-theorem IsChain.image
-  given: [FunLike F α β] [RelHomClass F r r'] (hs : IsChain r s) (φ : F)
-  proof: hs.image_of_map_rel _ _ _ (fun _ _ h => map_rel φ h)
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-中文:
-定理 IsChain.像
-  条件: [函数状 F α β] [关系态射类 F r r'] (hs : IsChain r s) (φ : F)
-  证明: hs.image_of_map_rel _ _ _ (fun _ _ h => map_rel φ h)
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-Depends on / 依赖: hs.image_of_map_rel, image_of_map_rel, map_rel
+/-
+**IsChain.image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : IsChain r s) (φ :
+ F) : IsChain r' (φ '' s)
+参数：hs : IsChain r s；φ : F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image_of_map_rel`：IsChain.image_of_map_rel (r : α -> α -> Prop) 
+(s : β -> β -> Prop) (f : α -> β) (h : forall x y, r x y -> s (f x) (f y)) {c : 
+Set α} (hrc : …
+· 使用定理 `RelHomClass.map_rel`：∀ {F : Type u_5} {α : outParam (Type u_6)} {β : out
+Param (Type u_7)} {r : outParam (α → α → Prop)}   {s : outParam (β → β → Prop)} 
+{inst : F…
 -/
 theorem IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : IsChain r s) (φ : F) :
     IsChain r' (φ '' s) :=
-  hs.image_of_map_rel _ _ _ (fun _ _ h => map_rel φ h)
+  hs.image_of_map_rel _ _ _ (fun _ _ h ↦ map_rel φ h)
 
 @[deprecated IsChain.image (since := "2026-02-26")]
-/--
-theorem `IsChain.image_relEmbedding` / 定理 `IsChain.image_relEmbedding`
-
-English:
-theorem IsChain.image_relEmbedding
-  given: (hs : IsChain r s) (φ : r ↪r r')
-  statement: IsChain r' (φ '' s)
-  proof: hs.image _
-
-中文:
-定理 IsChain.image_relEmbedding
-  条件: (hs : IsChain r s) (φ : r ↪r r')
-  结论: IsChain r' (φ '' s)
-  证明: hs.image _
-
-Depends on / 依赖: hs.image
+/-
+**IsChain.image_relEmbedding** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_relEmbedding (hs : IsChain r s) (φ : r ↪r r') : IsChain r' (
+φ '' s)
+参数：hs : IsChain r s；φ : r ↪r r'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelEmbedding.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, RelHomClass (r ↪r s) r s
 -/
 theorem IsChain.image_relEmbedding (hs : IsChain r s) (φ : r ↪r r') : IsChain r' (φ '' s) :=
   hs.image _
-
-/--
-theorem `IsChain.preimage_relEmbedding` / 定理 `IsChain.preimage_relEmbedding`
-
-English:
-theorem IsChain.preimage_relEmbedding
-  given: {t : Set β} (ht : IsChain r' t) (φ : r ↪r r')
-  proof: ht.preimage _ _ _ φ.injective (fun _ _ h => φ.map_rel_iff.mp h)
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-中文:
-定理 IsChain.preimage_relEmbedding
-  条件: {t : 集合 β} (ht : IsChain r' t) (φ : r ↪r r')
-  证明: ht.preimage _ _ _ φ.injective (fun _ _ h => φ.map_rel_iff.mp h)
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-Depends on / 依赖: ht.preimage, injective, map_rel_iff, map_rel_iff.mp, preimage
+/-
+**IsChain.preimage_relEmbedding** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage_relEmbedding {t : Set β} (ht : IsChain r' t) (φ : r ↪r r'
+) : IsChain r (φ ⁻¹' t)
+参数：ht : IsChain r' t；φ : r ↪r r'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.preimage`：IsChain.preimage (r : α -> α -> Prop) (s : β -> β -> P
+rop) (f : α -> β) (hf : Function.Injective f) (h : forall x y, s (f x) (f y) -> 
+r x y)…
+· 使用定理 `RelEmbedding.injective`：injective (f : r ↪r s) : Injective f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RelEmbedding.map_rel_iff`：map_rel_iff (f : r ↪r s) {a b} : s (f a) (f b)
+ ↔ r a b
 -/
 theorem IsChain.preimage_relEmbedding {t : Set β} (ht : IsChain r' t) (φ : r ↪r r') :
     IsChain r (φ ⁻¹' t) :=
-  ht.preimage _ _ _ φ.injective (fun _ _ h => φ.map_rel_iff.mp h)
+  ht.preimage _ _ _ φ.injective (fun _ _ h ↦ φ.map_rel_iff.mp h)
 
 @[deprecated IsChain.image (since := "2026-02-26")]
-/--
-theorem `IsChain.image_relIso` / 定理 `IsChain.image_relIso`
-
-English:
-theorem IsChain.image_relIso
-  given: (hs : IsChain r s) (φ : r ≃r r')
-  statement: IsChain r' (φ '' s)
-  proof: hs.image φ.toRelEmbedding
-
-中文:
-定理 IsChain.image_relIso
-  条件: (hs : IsChain r s) (φ : r ≃r r')
-  结论: IsChain r' (φ '' s)
-  证明: hs.image φ.toRelEmbedding
-
-Depends on / 依赖: hs.image, toRelEmbedding
+/-
+**IsChain.image_relIso** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_relIso (hs : IsChain r s) (φ : r ≃r r') : IsChain r' (φ '' s
+)
+参数：hs : IsChain r s；φ : r ≃r r'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelEmbedding.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, RelHomClass (r ↪r s) r s
 -/
 theorem IsChain.image_relIso (hs : IsChain r s) (φ : r ≃r r') : IsChain r' (φ '' s) :=
   hs.image φ.toRelEmbedding
-
-/--
-theorem `IsChain.preimage_relIso` / 定理 `IsChain.preimage_relIso`
-
-English:
-theorem IsChain.preimage_relIso
-  given: {t : Set β} (hs : IsChain r' t) (φ : r ≃r r')
-  proof: hs.preimage_relEmbedding φ.toRelEmbedding
-
-中文:
-定理 IsChain.preimage_relIso
-  条件: {t : 集合 β} (hs : IsChain r' t) (φ : r ≃r r')
-  证明: hs.preimage_relEmbedding φ.toRelEmbedding
-
-Depends on / 依赖: hs.preimage_relEmbedding, preimage_relEmbedding, toRelEmbedding
+/-
+**IsChain.preimage_relIso** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage_relIso {t : Set β} (hs : IsChain r' t) (φ : r ≃r r') : Is
+Chain r (φ ⁻¹' t)
+参数：hs : IsChain r' t；φ : r ≃r r'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.preimage_relEmbedding`：IsChain.preimage_relEmbedding {t : Set β}
+ (ht : IsChain r' t) (φ : r ↪r r') : IsChain r (φ ⁻¹' t)
 -/
 theorem IsChain.preimage_relIso {t : Set β} (hs : IsChain r' t) (φ : r ≃r r') :
     IsChain r (φ ⁻¹' t) :=
   hs.preimage_relEmbedding φ.toRelEmbedding
-
-/--
-theorem `IsChain.image_relEmbedding_iff` / 定理 `IsChain.image_relEmbedding_iff`
-
-English:
-theorem IsChain.image_relEmbedding_iff
-  given: {φ : r ↪r r'}
-  statement: IsChain r' (φ '' s) ↔ IsChain r s
-  proof: ⟨fun h => (φ.injective.preimage_image s).subst (h.preimage_relEmbedding φ), fun h => h.image φ⟩
-
-中文:
-定理 IsChain.image_relEmbedding_iff
-  条件: {φ : r ↪r r'}
-  结论: IsChain r' (φ '' s) ↔ IsChain r s
-  证明: ⟨fun h => (φ.injective.preimage_image s).subst (h.preimage_relEmbedding φ), fun h => h.image φ⟩
-
-Depends on / 依赖: h.image, h.preimage_relEmbedding, injective, injective.preimage_image, preimage_image, preimage_relEmbedding
+/-
+**IsChain.image_relEmbedding_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_relEmbedding_iff {φ : r ↪r r'} : IsChain r' (φ '' s) ↔ IsCha
+in r s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subst`：∀ {α : Sort u} {motive : α → Prop} {a b : α}, a = b → motive a
+ → motive b
+· 使用定理 `Function.Injective.preimage_image`：∀ {α : Type u_1} {β : Type u_2} {f : 
+α → β}, Function.Injective f → ∀ (s : Set α), f ⁻¹' f '' s = s
+· 使用定理 `RelEmbedding.injective`：injective (f : r ↪r s) : Injective f
+· 使用定理 `IsChain.preimage_relEmbedding`：IsChain.preimage_relEmbedding {t : Set β}
+ (ht : IsChain r' t) (φ : r ↪r r') : IsChain r (φ ⁻¹' t)
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelEmbedding.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, RelHomClass (r ↪r s) r s
 -/
 theorem IsChain.image_relEmbedding_iff {φ : r ↪r r'} : IsChain r' (φ '' s) ↔ IsChain r s :=
   ⟨fun h => (φ.injective.preimage_image s).subst (h.preimage_relEmbedding φ), fun h => h.image φ⟩
-
-/--
-theorem `IsChain.image_relIso_iff` / 定理 `IsChain.image_relIso_iff`
-
-English:
-theorem IsChain.image_relIso_iff
-  given: {φ : r ≃r r'}
-  statement: IsChain r' (φ '' s) ↔ IsChain r s
-  proof: @image_relEmbedding_iff _ _ _ _ _ (φ : r ↪r r')
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-中文:
-定理 IsChain.image_relIso_iff
-  条件: {φ : r ≃r r'}
-  结论: IsChain r' (φ '' s) ↔ IsChain r s
-  证明: @image_relEmbedding_iff _ _ _ _ _ (φ : r ↪r r')
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-Depends on / 依赖: image_relEmbedding_iff
+/-
+**IsChain.image_relIso_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_relIso_iff {φ : r ≃r r'} : IsChain r' (φ '' s) ↔ IsChain r s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image_relEmbedding_iff`：IsChain.image_relEmbedding_iff {φ : r ↪r
+ r'} : IsChain r' (φ '' s) ↔ IsChain r s
 -/
 theorem IsChain.image_relIso_iff {φ : r ≃r r'} : IsChain r' (φ '' s) ↔ IsChain r s :=
   @image_relEmbedding_iff _ _ _ _ _ (φ : r ↪r r')
 
 @[deprecated IsChain.image (since := "2026-02-26")]
-/--
-theorem `IsChain.image_embedding` / 定理 `IsChain.image_embedding`
-
-English:
-theorem IsChain.image_embedding
-  given: [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ↪o β)
-  proof: image hs _
-
-中文:
-定理 IsChain.image_embedding
-  条件: [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ↪o β)
-  证明: image hs _
+/-
+**IsChain.image_embedding** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_embedding [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ↪o 
+β) : IsChain (· <= ·) (φ '' s)
+参数：hs : IsChain (· <= ·) s；φ : α ↪o β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelEmbedding.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, RelHomClass (r ↪r s) r s
 -/
-theorem IsChain.image_embedding [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ↪o β) :
-    IsChain (· <= ·) (φ '' s) :=
+theorem IsChain.image_embedding [LE α] [LE β] (hs : IsChain (· ≤ ·) s) (φ : α ↪o β) :
+    IsChain (· ≤ ·) (φ '' s) :=
   image hs _
-
-/--
-theorem `IsChain.preimage_embedding` / 定理 `IsChain.preimage_embedding`
-
-English:
-theorem IsChain.preimage_embedding
-  given: [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ↪o β)
-  proof: preimage_relEmbedding ht _
-
-中文:
-定理 IsChain.preimage_embedding
-  条件: [LE α] [LE β] {t : 集合 β} (ht : IsChain (· <= ·) t) (φ : α ↪o β)
-  证明: preimage_relEmbedding ht _
-
-Depends on / 依赖: preimage_relEmbedding
+/-
+**IsChain.preimage_embedding** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage_embedding [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·
+) t) (φ : α ↪o β) : IsChain (· <= ·) (φ ⁻¹' t)
+参数：ht : IsChain (· <= ·) t；φ : α ↪o β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.preimage_relEmbedding`：IsChain.preimage_relEmbedding {t : Set β}
+ (ht : IsChain r' t) (φ : r ↪r r') : IsChain r (φ ⁻¹' t)
 -/
-theorem IsChain.preimage_embedding [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ↪o β) :
-    IsChain (· <= ·) (φ ⁻¹' t) :=
+theorem IsChain.preimage_embedding [LE α] [LE β] {t : Set β} (ht : IsChain (· ≤ ·) t) (φ : α ↪o β) :
+    IsChain (· ≤ ·) (φ ⁻¹' t) :=
   preimage_relEmbedding ht _
-
-/--
-theorem `IsChain.image_embedding_iff` / 定理 `IsChain.image_embedding_iff`
-
-English:
-theorem IsChain.image_embedding_iff
-  given: [LE α] [LE β] {φ : α ↪o β}
-  proof: image_relEmbedding_iff
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-中文:
-定理 IsChain.image_embedding_iff
-  条件: [LE α] [LE β] {φ : α ↪o β}
-  证明: image_relEmbedding_iff
-
-@[deprecated IsChain.image (since := "2026-02-26")]
-
-Depends on / 依赖: image_relEmbedding_iff
+/-
+**IsChain.image_embedding_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_embedding_iff [LE α] [LE β] {φ : α ↪o β} : IsChain (· <= ·) 
+(φ '' s) ↔ IsChain (· <= ·) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image_relEmbedding_iff`：IsChain.image_relEmbedding_iff {φ : r ↪r
+ r'} : IsChain r' (φ '' s) ↔ IsChain r s
 -/
 theorem IsChain.image_embedding_iff [LE α] [LE β] {φ : α ↪o β} :
-    IsChain (· <= ·) (φ '' s) ↔ IsChain (· <= ·) s :=
+    IsChain (· ≤ ·) (φ '' s) ↔ IsChain (· ≤ ·) s :=
   image_relEmbedding_iff
 
 @[deprecated IsChain.image (since := "2026-02-26")]
-/--
-theorem `IsChain.image_iso` / 定理 `IsChain.image_iso`
-
-English:
-theorem IsChain.image_iso
-  given: [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ≃o β)
-  proof: image hs _
-
-中文:
-定理 IsChain.image_iso
-  条件: [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ≃o β)
-  证明: image hs _
+/-
+**IsChain.image_iso** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_iso [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ≃o β) : I
+sChain (· <= ·) (φ '' s)
+参数：hs : IsChain (· <= ·) s；φ : α ≃o β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelIso.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Pro
+p} {s : β → β → Prop}, RelHomClass (r ≃r s) r s
 -/
-theorem IsChain.image_iso [LE α] [LE β] (hs : IsChain (· <= ·) s) (φ : α ≃o β) :
-    IsChain (· <= ·) (φ '' s) :=
+theorem IsChain.image_iso [LE α] [LE β] (hs : IsChain (· ≤ ·) s) (φ : α ≃o β) :
+    IsChain (· ≤ ·) (φ '' s) :=
   image hs _
-
-/--
-theorem `IsChain.image_iso_iff` / 定理 `IsChain.image_iso_iff`
-
-English:
-theorem IsChain.image_iso_iff
-  given: [LE α] [LE β] {φ : α ≃o β}
-  proof: image_relEmbedding_iff
-
-中文:
-定理 IsChain.image_iso_iff
-  条件: [LE α] [LE β] {φ : α ≃o β}
-  证明: image_relEmbedding_iff
-
-Depends on / 依赖: image_relEmbedding_iff
+/-
+**IsChain.image_iso_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.image_iso_iff [LE α] [LE β] {φ : α ≃o β} : IsChain (· <= ·) (φ '' 
+s) ↔ IsChain (· <= ·) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image_relEmbedding_iff`：IsChain.image_relEmbedding_iff {φ : r ↪r
+ r'} : IsChain r' (φ '' s) ↔ IsChain r s
 -/
 theorem IsChain.image_iso_iff [LE α] [LE β] {φ : α ≃o β} :
-    IsChain (· <= ·) (φ '' s) ↔ IsChain (· <= ·) s :=
+    IsChain (· ≤ ·) (φ '' s) ↔ IsChain (· ≤ ·) s :=
   image_relEmbedding_iff
-
-/--
-theorem `IsChain.preimage_iso` / 定理 `IsChain.preimage_iso`
-
-English:
-theorem IsChain.preimage_iso
-  given: [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ≃o β)
-  proof: preimage_relEmbedding ht _
-
-中文:
-定理 IsChain.preimage_iso
-  条件: [LE α] [LE β] {t : 集合 β} (ht : IsChain (· <= ·) t) (φ : α ≃o β)
-  证明: preimage_relEmbedding ht _
-
-Depends on / 依赖: preimage_relEmbedding
+/-
+**IsChain.preimage_iso** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage_iso [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (
+φ : α ≃o β) : IsChain (· <= ·) (φ ⁻¹' t)
+参数：ht : IsChain (· <= ·) t；φ : α ≃o β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.preimage_relEmbedding`：IsChain.preimage_relEmbedding {t : Set β}
+ (ht : IsChain r' t) (φ : r ↪r r') : IsChain r (φ ⁻¹' t)
 -/
-theorem IsChain.preimage_iso [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ≃o β) :
-    IsChain (· <= ·) (φ ⁻¹' t) :=
+theorem IsChain.preimage_iso [LE α] [LE β] {t : Set β} (ht : IsChain (· ≤ ·) t) (φ : α ≃o β) :
+    IsChain (· ≤ ·) (φ ⁻¹' t) :=
   preimage_relEmbedding ht _
-
-/--
-theorem `IsChain.preimage_iso_iff` / 定理 `IsChain.preimage_iso_iff`
-
-English:
-theorem IsChain.preimage_iso_iff
-  given: [LE α] [LE β] {t : Set β} {φ : α ≃o β}
-  proof: ⟨fun h => (φ.image_preimage t).subst (h.image φ), fun h => h.preimage_iso _⟩
-
-中文:
-定理 IsChain.preimage_iso_iff
-  条件: [LE α] [LE β] {t : 集合 β} {φ : α ≃o β}
-  证明: ⟨fun h => (φ.image_preimage t).subst (h.image φ), fun h => h.preimage_iso _⟩
-
-Depends on / 依赖: h.image, h.preimage_iso, image_preimage, preimage_iso
+/-
+**IsChain.preimage_iso_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.preimage_iso_iff [LE α] [LE β] {t : Set β} {φ : α ≃o β} : IsChain 
+(· <= ·) (φ ⁻¹' t) ↔ IsChain (· <= ·) t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subst`：∀ {α : Sort u} {motive : α → Prop} {a b : α}, a = b → motive a
+ → motive b
+· 使用定理 `OrderIso.image_preimage`：image_preimage (e : α ≃o β) (s : Set β) : e '' 
+e ⁻¹' s = s
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelIso.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Pro
+p} {s : β → β → Prop}, RelHomClass (r ≃r s) r s
+· 使用定理 `IsChain.preimage_iso`：IsChain.preimage_iso [LE α] [LE β] {t : Set β} (ht
+ : IsChain (· <= ·) t) (φ : α ≃o β) : IsChain (· <= ·) (φ ⁻¹' t)
 -/
 theorem IsChain.preimage_iso_iff [LE α] [LE β] {t : Set β} {φ : α ≃o β} :
-    IsChain (· <= ·) (φ ⁻¹' t) ↔ IsChain (· <= ·) t :=
+    IsChain (· ≤ ·) (φ ⁻¹' t) ↔ IsChain (· ≤ ·) t :=
   ⟨fun h => (φ.image_preimage t).subst (h.image φ), fun h => h.preimage_iso _⟩
 
 end Rel
@@ -827,100 +625,77 @@ section Total
 
 variable [Std.Refl r]
 
-/--
-theorem `IsChain.total` / 定理 `IsChain.total`
-
-English:
-theorem IsChain.total
-  given: (h : IsChain r s) (hx : x in s) (hy : y in s)
-  statement: x ≺ y ∨ y ≺ x
-  proof: (eq_or_ne x y).elim (fun e => Or.inl <| e ▸ refl _) (h hx hy)
-
-中文:
-定理 IsChain.total
-  条件: (h : IsChain r s) (hx : x in s) (hy : y in s)
-  结论: x ≺ y ∨ y ≺ x
-  证明: (eq_or_ne x y).elim (fun e => Or.inl <| e ▸ refl _) (h hx hy)
-
-Depends on / 依赖: Or.inl, eq_or_ne
+/-
+**IsChain.total** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in s) : x ≺ y ∨ y ≺ 
+x
+参数：h : IsChain r s；hx : x in s；hy : y in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
-theorem IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in s) : x ≺ y ∨ y ≺ x :=
+theorem IsChain.total (h : IsChain r s) (hx : x ∈ s) (hy : y ∈ s) : x ≺ y ∨ y ≺ x :=
   (eq_or_ne x y).elim (fun e => Or.inl <| e ▸ refl _) (h hx hy)
-
-/--
-theorem `IsChain.directedOn` / 定理 `IsChain.directedOn`
-
-English:
-theorem IsChain.directedOn
-  given: (H : IsChain r s)
-  statement: DirectedOn r s
-  proof: fun x hx y hy =>
-  ((H.total hx hy).elim fun h => ⟨y, hy, h, refl _⟩) fun h => ⟨x, hx, refl _, h⟩
-
-中文:
-定理 IsChain.directedOn
-  条件: (H : IsChain r s)
-  结论: DirectedOn r s
-  证明: fun x hx y hy =>
-  ((H.total hx hy).elim fun h => ⟨y, hy, h, refl _⟩) fun h => ⟨x, hx, refl _, h⟩
+/-
+**IsChain.directedOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.directedOn (H : IsChain r s) : DirectedOn r s
+参数：H : IsChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
 theorem IsChain.directedOn (H : IsChain r s) : DirectedOn r s := fun x hx y hy =>
   ((H.total hx hy).elim fun h => ⟨y, hy, h, refl _⟩) fun h => ⟨x, hx, refl _, h⟩
-
-/--
-theorem `IsChain.directed` / 定理 `IsChain.directed`
-
-English:
-theorem IsChain.directed
-  given: {f : β -> α} {c : Set β} (h : IsChain (f ⁻¹'o r) c)
-  proof: fun ⟨a, ha⟩ ⟨b, hb⟩ =>
-    (by_cases fun hab : a = b => by
-      simp only [hab, exists_prop, and_self_iff, Subtype.exists]
-      exact ⟨b, hb, refl _⟩)
-    fun hab => ((h ha hb hab).elim fun h => ⟨⟨b, hb⟩, h, refl _⟩) fun h => ⟨⟨a, ha⟩, refl _, h⟩
-
-中文:
-定理 IsChain.directed
-  条件: {f : β -> α} {c : 集合 β} (h : IsChain (f ⁻¹'o r) c)
-  证明: fun ⟨a, ha⟩ ⟨b, hb⟩ =>
-    (by_cases fun hab : a = b => by
-      simp only [hab, exists_prop, and_self_iff, Subtype.exists]
-      exact ⟨b, hb, refl _⟩)
-    fun hab => ((h ha hb hab).elim fun h => ⟨⟨b, hb⟩, h, refl _⟩) fun h => ⟨⟨a, ha⟩, refl _, h⟩
+/-
+**IsChain.directed** 是 Mathlib 中的一个定理，位于命名空间 `IsChain`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} [Std.Refl r] {f : β → α
+} {c : Set β},   IsChain (f ⁻¹'o r) c → Directed r fun x => f ↑x
+参数：f ⁻¹'o r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_cases`：by_cases {p q : Prop} (hpq : p -> q) (hnpq : ¬p -> q) : q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
-protected theorem IsChain.directed {f : β -> α} {c : Set β} (h : IsChain (f ⁻¹'o r) c) :
-    Directed r fun x : { a : β // a in c } => f x :=
+protected theorem IsChain.directed {f : β → α} {c : Set β} (h : IsChain (f ⁻¹'o r) c) :
+    Directed r fun x : { a : β // a ∈ c } => f x :=
   fun ⟨a, ha⟩ ⟨b, hb⟩ =>
     (by_cases fun hab : a = b => by
       simp only [hab, exists_prop, and_self_iff, Subtype.exists]
       exact ⟨b, hb, refl _⟩)
     fun hab => ((h ha hb hab).elim fun h => ⟨⟨b, hb⟩, h, refl _⟩) fun h => ⟨⟨a, ha⟩, refl _, h⟩
-
-/--
-theorem `IsChain.exists3` / 定理 `IsChain.exists3`
-
-English:
-theorem IsChain.exists3
-  statement: (hchain : IsChain r s) [IsTrans α r] {a b c} (mem1 : a in s) (mem2 : b in s)
-  proof: by
-  rcases directedOn_iff_directed.mpr (IsChain.directed hchain) a mem1 b mem2 with ⟨z, mem4, H1, H2⟩
-  rcases directedOn_iff_directed.mpr (IsChain.directed hchain) z mem4 c mem3 with
-    ⟨z', mem5, H3, H4⟩
-  exact ⟨z', mem5, _root_.trans H1 H3, _root_.trans H2 H3, H4⟩
-
-中文:
-定理 IsChain.存在3
-  结论: (hchain : IsChain r s) [是Trans α r] {a b c} (mem1 : a in s) (mem2 : b in s)
-  证明: by
-  rcases directedOn_iff_directed.mpr (IsChain.directed hchain) a mem1 b mem2 with ⟨z, mem4, H1, H2⟩
-  rcases directedOn_iff_directed.mpr (IsChain.directed hchain) z mem4 c mem3 with
-    ⟨z', mem5, H3, H4⟩
-  exact ⟨z', mem5, _root_.trans H1 H3, _root_.trans H2 H3, H4⟩
-
-Depends on / 依赖: IsChain, IsChain.directed, _root_, _root_.trans, directed, directedOn_iff_directed, directedOn_iff_directed.mpr, hchain
+/-
+**IsChain.exists3** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.exists3 (hchain : IsChain r s) [IsTrans α r] {a b c} (mem1 : a in 
+s) (mem2 : b in s) (mem3 : c in s) : exists (z : _) (_ : z in s), r a z ∧ r b z 
+∧ r c z
+参数：hchain : IsChain r s；mem1 : a in s；mem2 : b in s；mem3 : c in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `directedOn_iff_directed`：directedOn_iff_directed {s} : @DirectedOn α r s
+ ↔ Directed r (Subtype.val : s -> α)
+· 使用定理 `IsChain.directed`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} [St
+d.Refl r] {f : β → α} {c : Set β},   IsChain (f ⁻¹'o r) c → Directed r fun x => 
+f ↑x
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
 -/
-theorem IsChain.exists3 (hchain : IsChain r s) [IsTrans α r] {a b c} (mem1 : a in s) (mem2 : b in s)
-    (mem3 : c in s) : exists (z : _) (_ : z in s), r a z ∧ r b z ∧ r c z := by
+theorem IsChain.exists3 (hchain : IsChain r s) [IsTrans α r] {a b c} (mem1 : a ∈ s) (mem2 : b ∈ s)
+    (mem3 : c ∈ s) : ∃ (z : _) (_ : z ∈ s), r a z ∧ r b z ∧ r c z := by
   rcases directedOn_iff_directed.mpr (IsChain.directed hchain) a mem1 b mem2 with ⟨z, mem4, H1, H2⟩
   rcases directedOn_iff_directed.mpr (IsChain.directed hchain) z mem4 c mem3 with
     ⟨z', mem5, H3, H4⟩
@@ -930,420 +705,366 @@ end Total
 
 /-- A chain in a partial order is a linear order. -/
 @[implicit_reducible]
-/--
-Definition of `IsChain.linearOrder` / `IsChain.linearOrder` 的定义
+/-
+**IsChain.linearOrder** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsChain.linearOrder [PartialOrder α] [DecidableLE α] {s : Set α} (hs : IsC
+hain (· <= ·) s) : LinearOrder s where le_total
+参数：hs : IsChain (· <= ·) s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsChain.linearOrder
-  signature: [PartialOrder α] [DecidableLE α] {s : Set α} (hs : IsChain (· <= ·) s)
-  body: by
-    rintro ⟨a, ha⟩ ⟨b, hb⟩
-    exact hs.total ha hb
-  toDecidableLE x y := inferInstanceAs (Decidable (x.1 <= y.1))
-
-中文:
-定义 IsChain.linearOrder
-  签名: [偏序 α] [DecidableLE α] {s : 集合 α} (hs : IsChain (· <= ·) s)
-  定义体: by
-    rintro ⟨a, ha⟩ ⟨b, hb⟩
-    exact hs.total ha hb
-  toDecidableLE x y := inferInstanceAs (Decidable (x.1 <= y.1))
-
-Depends on / 依赖: Decidable, hs.total, toDecidableLE
+--- 原说明 ---
+A chain in a partial order is a linear order.
 -/
-def IsChain.linearOrder [PartialOrder α] [DecidableLE α] {s : Set α} (hs : IsChain (· <= ·) s) :
+def IsChain.linearOrder [PartialOrder α] [DecidableLE α] {s : Set α} (hs : IsChain (· ≤ ·) s) :
     LinearOrder s where
   le_total := by
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     exact hs.total ha hb
-  toDecidableLE x y := inferInstanceAs (Decidable (x.1 <= y.1))
-
-/--
-lemma `IsChain.le_of_not_gt` / 引理 `IsChain.le_of_not_gt`
-
-English:
-lemma IsChain.le_of_not_gt
-  statement: [Preorder α] (hs : IsChain (· <= ·) s)
-  proof: by
+  toDecidableLE x y := inferInstanceAs (Decidable (x.1 ≤ y.1))
+/-
+**IsChain.le_of_not_gt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsChain.le_of_not_gt [Preorder α] (hs : IsChain (· <= ·) s) {x y : α} (hx 
+: x in s) (hy : y in s) (h : ¬ x < y) : y <= x
+参数：hs : IsChain (· <= ·) s；hx : x in s；hy : y in s；h : ¬ x < y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+-/
+lemma IsChain.le_of_not_gt [Preorder α] (hs : IsChain (· ≤ ·) s)
+    {x y : α} (hx : x ∈ s) (hy : y ∈ s) (h : ¬ x < y) : y ≤ x := by
   cases hs.total hx hy with
   | inr h' => exact h'
   | inl h' => simpa [lt_iff_le_not_ge, h'] using h
-
-中文:
-引理 IsChain.le_of_not_gt
-  结论: [预序 α] (hs : IsChain (· <= ·) s)
-  证明: by
-  cases hs.total hx hy with
-  | inr h' => exact h'
-  | inl h' => simpa [lt_iff_le_not_ge, h'] using h
-
-Depends on / 依赖: hs.total, lt_iff_le_not_ge
+/-
+**IsChain.not_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsChain.not_lt [Preorder α] (hs : IsChain (· <= ·) s) {x y : α} (hx : x in
+ s) (hy : y in s) : ¬ x < y ↔ y <= x
+参数：hs : IsChain (· <= ·) s；hx : x in s；hy : y in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsChain.le_of_not_gt`：IsChain.le_of_not_gt [Preorder α] (hs : IsChain (·
+ <= ·) s) {x y : α} (hx : x in s) (hy : y in s) (h : ¬ x < y) : y <= x
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
-lemma IsChain.le_of_not_gt [Preorder α] (hs : IsChain (· <= ·) s)
-    {x y : α} (hx : x in s) (hy : y in s) (h : ¬ x < y) : y <= x := by
-  cases hs.total hx hy with
-  | inr h' => exact h'
-  | inl h' => simpa [lt_iff_le_not_ge, h'] using h
-
-/--
-lemma `IsChain.not_lt` / 引理 `IsChain.not_lt`
-
-English:
-lemma IsChain.not_lt
-  statement: [Preorder α] (hs : IsChain (· <= ·) s)
-  proof: ⟨(hs.le_of_not_gt hx hy ·), fun h h' => h'.not_ge h⟩
-
-中文:
-引理 IsChain.not_lt
-  结论: [预序 α] (hs : IsChain (· <= ·) s)
-  证明: ⟨(hs.le_of_not_gt hx hy ·), fun h h' => h'.not_ge h⟩
-
-Depends on / 依赖: hs.le_of_not_gt, le_of_not_gt, not_ge
+lemma IsChain.not_lt [Preorder α] (hs : IsChain (· ≤ ·) s)
+    {x y : α} (hx : x ∈ s) (hy : y ∈ s) : ¬ x < y ↔ y ≤ x :=
+  ⟨(hs.le_of_not_gt hx hy ·), fun h h' ↦ h'.not_ge h⟩
+/-
+**IsChain.lt_of_not_ge** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsChain.lt_of_not_ge [Preorder α] (hs : IsChain (· <= ·) s) {x y : α} (hx 
+: x in s) (hy : y in s) (h : ¬ x <= y) : y < x
+参数：hs : IsChain (· <= ·) s；hx : x in s；hy : y in s；h : ¬ x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用引理 `lt_of_le_not_ge`：lt_of_le_not_ge (hab : a <= b) (hba : ¬ b <= a) : a < b
 -/
-lemma IsChain.not_lt [Preorder α] (hs : IsChain (· <= ·) s)
-    {x y : α} (hx : x in s) (hy : y in s) : ¬ x < y ↔ y <= x :=
-  ⟨(hs.le_of_not_gt hx hy ·), fun h h' => h'.not_ge h⟩
-
-/--
-lemma `IsChain.lt_of_not_ge` / 引理 `IsChain.lt_of_not_ge`
-
-English:
-lemma IsChain.lt_of_not_ge
-  statement: [Preorder α] (hs : IsChain (· <= ·) s)
-  proof: (hs.total hx hy).elim (h · |>.elim) (lt_of_le_not_ge · h)
-
-中文:
-引理 IsChain.lt_of_not_ge
-  结论: [预序 α] (hs : IsChain (· <= ·) s)
-  证明: (hs.total hx hy).elim (h · |>.elim) (lt_of_le_not_ge · h)
-
-Depends on / 依赖: hs.total, lt_of_le_not_ge
--/
-lemma IsChain.lt_of_not_ge [Preorder α] (hs : IsChain (· <= ·) s)
-    {x y : α} (hx : x in s) (hy : y in s) (h : ¬ x <= y) : y < x :=
+lemma IsChain.lt_of_not_ge [Preorder α] (hs : IsChain (· ≤ ·) s)
+    {x y : α} (hx : x ∈ s) (hy : y ∈ s) (h : ¬ x ≤ y) : y < x :=
   (hs.total hx hy).elim (h · |>.elim) (lt_of_le_not_ge · h)
-
-/--
-lemma `IsChain.not_le` / 引理 `IsChain.not_le`
-
-English:
-lemma IsChain.not_le
-  statement: [Preorder α] (hs : IsChain (· <= ·) s)
-  proof: ⟨(hs.lt_of_not_ge hx hy ·), fun h h' => h'.not_gt h⟩
-
-中文:
-引理 IsChain.not_le
-  结论: [预序 α] (hs : IsChain (· <= ·) s)
-  证明: ⟨(hs.lt_of_not_ge hx hy ·), fun h h' => h'.not_gt h⟩
-
-Depends on / 依赖: hs.lt_of_not_ge, lt_of_not_ge, not_gt
+/-
+**IsChain.not_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsChain.not_le [Preorder α] (hs : IsChain (· <= ·) s) {x y : α} (hx : x in
+ s) (hy : y in s) : ¬ x <= y ↔ y < x
+参数：hs : IsChain (· <= ·) s；hx : x in s；hy : y in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsChain.lt_of_not_ge`：IsChain.lt_of_not_ge [Preorder α] (hs : IsChain (·
+ <= ·) s) {x y : α} (hx : x in s) (hy : y in s) (h : ¬ x <= y) : y < x
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
 -/
-lemma IsChain.not_le [Preorder α] (hs : IsChain (· <= ·) s)
-    {x y : α} (hx : x in s) (hy : y in s) : ¬ x <= y ↔ y < x :=
-  ⟨(hs.lt_of_not_ge hx hy ·), fun h h' => h'.not_gt h⟩
-
-/--
-theorem `IsMaxChain.isChain` / 定理 `IsMaxChain.isChain`
-
-English:
-theorem IsMaxChain.isChain
-  given: (h : IsMaxChain r s)
-  statement: IsChain r s
-  proof: h.1
-
-中文:
-定理 IsMaxChain.isChain
-  条件: (h : IsMaxChain r s)
-  结论: IsChain r s
-  证明: h.1
+lemma IsChain.not_le [Preorder α] (hs : IsChain (· ≤ ·) s)
+    {x y : α} (hx : x ∈ s) (hy : y ∈ s) : ¬ x ≤ y ↔ y < x :=
+  ⟨(hs.lt_of_not_ge hx hy ·), fun h h' ↦ h'.not_gt h⟩
+/-
+**IsMaxChain.isChain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxChain.isChain (h : IsMaxChain r s) : IsChain r s
+参数：h : IsMaxChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMaxChain.isChain (h : IsMaxChain r s) : IsChain r s :=
   h.1
-
-/--
-theorem `IsMaxChain.not_superChain` / 定理 `IsMaxChain.not_superChain`
-
-English:
-theorem IsMaxChain.not_superChain
-  given: (h : IsMaxChain r s)
-  statement: ¬SuperChain r s t
-  proof: fun ht =>
-ht.2.ne h.2 ht.1 ht.2.1
-
-中文:
-定理 IsMaxChain.not_superChain
-  条件: (h : IsMaxChain r s)
-  结论: ¬SuperChain r s t
-  证明: fun ht =>
-ht.2.ne h.2 ht.1 ht.2.1
+/-
+**IsMaxChain.not_superChain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxChain.not_superChain (h : IsMaxChain r s) : ¬SuperChain r s t
+参数：h : IsMaxChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsMaxChain.not_superChain (h : IsMaxChain r s) : ¬SuperChain r s t := fun ht =>
-ht.2.ne h.2 ht.1 ht.2.1
-
-/--
-theorem `IsMaxChain.bot_mem` / 定理 `IsMaxChain.bot_mem`
-
-English:
-theorem IsMaxChain.bot_mem
-  given: [LE α] [OrderBot α] (h : IsMaxChain (· <= ·) s)
-  statement: ⊥ in s
-  proof: (h.2 (h.1.insert fun _ _ _ => Or.inl bot_le) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-中文:
-定理 IsMaxChain.bot_mem
-  条件: [LE α] [有底序 α] (h : IsMaxChain (· <= ·) s)
-  结论: ⊥ in s
-  证明: (h.2 (h.1.insert fun _ _ _ => Or.inl bot_le) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-Depends on / 依赖: Or.inl, bot_le, insert, mem_insert, subset_insert
+  ht.2.ne <| h.2 ht.1 ht.2.1
+/-
+**IsMaxChain.bot_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxChain.bot_mem [LE α] [OrderBot α] (h : IsMaxChain (· <= ·) s) : ⊥ in 
+s
+参数：h : IsMaxChain (· <= ·) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsChain.insert`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a : α},
+   IsChain r s → (∀ b ∈ s, a ≠ b → r a b ∨ r b a) → IsChain r (insert a s)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
 -/
-theorem IsMaxChain.bot_mem [LE α] [OrderBot α] (h : IsMaxChain (· <= ·) s) : ⊥ in s :=
+theorem IsMaxChain.bot_mem [LE α] [OrderBot α] (h : IsMaxChain (· ≤ ·) s) : ⊥ ∈ s :=
   (h.2 (h.1.insert fun _ _ _ => Or.inl bot_le) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-/--
-theorem `IsMaxChain.top_mem` / 定理 `IsMaxChain.top_mem`
-
-English:
-theorem IsMaxChain.top_mem
-  given: [LE α] [OrderTop α] (h : IsMaxChain (· <= ·) s)
-  statement: ⊤ in s
-  proof: (h.2 (h.1.insert fun _ _ _ => Or.inr le_top) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-中文:
-定理 IsMaxChain.top_mem
-  条件: [LE α] [有顶序 α] (h : IsMaxChain (· <= ·) s)
-  结论: ⊤ in s
-  证明: (h.2 (h.1.insert fun _ _ _ => Or.inr le_top) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-Depends on / 依赖: Or.inr, insert, le_top, mem_insert, subset_insert
+/-
+**IsMaxChain.top_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxChain.top_mem [LE α] [OrderTop α] (h : IsMaxChain (· <= ·) s) : ⊤ in 
+s
+参数：h : IsMaxChain (· <= ·) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsChain.insert`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a : α},
+   IsChain r s → (∀ b ∈ s, a ≠ b → r a b ∨ r b a) → IsChain r (insert a s)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
 -/
-theorem IsMaxChain.top_mem [LE α] [OrderTop α] (h : IsMaxChain (· <= ·) s) : ⊤ in s :=
+theorem IsMaxChain.top_mem [LE α] [OrderTop α] (h : IsMaxChain (· ≤ ·) s) : ⊤ ∈ s :=
   (h.2 (h.1.insert fun _ _ _ => Or.inr le_top) <| subset_insert _ _).symm ▸ mem_insert _ _
-
-/--
-lemma `IsMaxChain.image` / 引理 `IsMaxChain.image`
-
-English:
-lemma IsMaxChain.image
-  given: {s : β -> β -> Prop} (e : r ≃r s) {c : Set α} (hc : IsMaxChain r c)
-  proof: hc.isChain.image e
-  right t ht hf := by
-    rw [← e.coe_fn_toEquiv]; rw [← e.toEquiv.eq_preimage_iff_image_eq]; rw [← Equiv.image_symm_eq_preimage]
-    exact hc.2 (ht.image e.symm) ((e.toEquiv.subset_symm_image _ _).2 hf)
-
-中文:
-引理 IsMaxChain.像
-  条件: {s : β -> β -> 命题} (e : r ≃r s) {c : 集合 α} (hc : IsMaxChain r c)
-  证明: hc.isChain.image e
-  right t ht hf := by
-    rw [← e.coe_fn_toEquiv]; rw [← e.toEquiv.eq_preimage_iff_image_eq]; rw [← Equiv.image_symm_eq_preimage]
-    exact hc.2 (ht.image e.symm) ((e.toEquiv.subset_symm_image _ _).2 hf)
-
-Depends on / 依赖: hc.isChain.image, isChain
+/-
+**IsMaxChain.image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMaxChain.image {s : β -> β -> Prop} (e : r ≃r s) {c : Set α} (hc : IsMax
+Chain r c) : IsMaxChain s (e '' c) where left
+参数：e : r ≃r s；hc : IsMaxChain r c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelIso.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Pro
+p} {s : β → β → Prop}, RelHomClass (r ≃r s) r s
+· 使用定理 `IsMaxChain.isChain`：IsMaxChain.isChain (h : IsMaxChain r s) : IsChain r 
+s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RelIso.coe_fn_toEquiv`：coe_fn_toEquiv (f : r ≃r s) : (f.toEquiv : α -> β
+) = f
+· 使用定理 `Equiv.eq_preimage_iff_image_eq`：eq_preimage_iff_image_eq {α β} (e : α ≃ 
+β) (s t) : s = e ⁻¹' t ↔ e '' s = t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Equiv.image_symm_eq_preimage`：image_symm_eq_preimage (e : α ≃ β) (s : Se
+t β) : e.symm '' s = e ⁻¹' s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.subset_symm_image`：∀ {α : Type u_3} {β : Type u_4} (e : α ≃ β) (s 
+: Set α) (t : Set β), s ⊆ ⇑e.symm '' t ↔ ⇑e '' s ⊆ t
 -/
-lemma IsMaxChain.image {s : β -> β -> Prop} (e : r ≃r s) {c : Set α} (hc : IsMaxChain r c) :
+lemma IsMaxChain.image {s : β → β → Prop} (e : r ≃r s) {c : Set α} (hc : IsMaxChain r c) :
     IsMaxChain s (e '' c) where
   left := hc.isChain.image e
   right t ht hf := by
-    rw [← e.coe_fn_toEquiv]; rw [← e.toEquiv.eq_preimage_iff_image_eq]; rw [← Equiv.image_symm_eq_preimage]
+    rw [← e.coe_fn_toEquiv, ← e.toEquiv.eq_preimage_iff_image_eq, ← Equiv.image_symm_eq_preimage]
     exact hc.2 (ht.image e.symm) ((e.toEquiv.subset_symm_image _ _).2 hf)
-
-/--
-theorem `IsMaxChain.isEmpty_iff` / 定理 `IsMaxChain.isEmpty_iff`
-
-English:
-theorem IsMaxChain.isEmpty_iff
-  given: (h : IsMaxChain r s)
-  statement: IsEmpty α ↔ s = ∅
-  proof: by
-  refine ⟨fun _ => s.eq_empty_of_isEmpty, fun h' => ?_⟩
-  constructor
-  intro x
-  simp only [IsMaxChain, h', IsChain.empty, empty_subset, forall_const, true_and] at h
-  exact singleton_ne_empty x (h IsChain.singleton).symm
-
-中文:
-定理 IsMaxChain.isEmpty_iff
-  条件: (h : IsMaxChain r s)
-  结论: 是空 α ↔ s = ∅
-  证明: by
-  refine ⟨fun _ => s.eq_empty_of_isEmpty, fun h' => ?_⟩
-  constructor
-  intro x
-  simp only [IsMaxChain, h', IsChain.empty, empty_subset, forall_const, true_and] at h
-  exact singleton_ne_empty x (h IsChain.singleton).symm
+/-
+**IsMaxChain.isEmpty_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsMaxChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}, IsMaxChain r s → (IsEmpty
+ α ↔ s = ∅)
+参数：IsEmpty α ↔ s = ∅。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.eq_empty_of_isEmpty`：eq_empty_of_isEmpty (s : Set α) [IsEmpty s] : s
+ = ∅
+· 使用定理 `instIsEmptySubtype`：∀ {α : Sort u} [IsEmpty α] (p : α → Prop), IsEmpty (
+Subtype p)
+· 使用定理 `Set.singleton_ne_empty`：singleton_ne_empty (a : α) : ({a} : Set α) != ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `IsChain.singleton`：∀ {α : Type u_1} {r : α → α → Prop} {a : α}, IsChain 
+r {a}
 -/
 protected theorem IsMaxChain.isEmpty_iff (h : IsMaxChain r s) : IsEmpty α ↔ s = ∅ := by
-  refine ⟨fun _ => s.eq_empty_of_isEmpty, fun h' => ?_⟩
+  refine ⟨fun _ ↦ s.eq_empty_of_isEmpty, fun h' ↦ ?_⟩
   constructor
   intro x
   simp only [IsMaxChain, h', IsChain.empty, empty_subset, forall_const, true_and] at h
   exact singleton_ne_empty x (h IsChain.singleton).symm
-
-/--
-theorem `IsMaxChain.nonempty_iff` / 定理 `IsMaxChain.nonempty_iff`
-
-English:
-theorem IsMaxChain.nonempty_iff
-  given: (h : IsMaxChain r s)
-  statement: Nonempty α ↔ s.Nonempty
-  proof: not_iff_not.mp by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
-
-中文:
-定理 IsMaxChain.nonempty_iff
-  条件: (h : IsMaxChain r s)
-  结论: 非空 α ↔ s.非空
-  证明: not_iff_not.mp by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
+/-
+**IsMaxChain.nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsMaxChain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}, IsMaxChain r s → (Nonempt
+y α ↔ s.Nonempty)
+参数：Nonempty α ↔ s.Nonempty。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMaxChain.isEmpty_iff`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α},
+ IsMaxChain r s → (IsEmpty α ↔ s = ∅)
 -/
 protected theorem IsMaxChain.nonempty_iff (h : IsMaxChain r s) : Nonempty α ↔ s.Nonempty :=
-not_iff_not.mp by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
-
-/--
-theorem `IsMaxChain.symm` / 定理 `IsMaxChain.symm`
-
-English:
-theorem IsMaxChain.symm
-  given: (h : IsMaxChain r s)
-  statement: IsMaxChain (flip r) s
-  proof: ⟨h.isChain.symm, fun _ ht₁ ht₂ => h.2 ht₁.symm ht₂⟩
-
-中文:
-定理 IsMaxChain.symm
-  条件: (h : IsMaxChain r s)
-  结论: IsMaxChain (flip r) s
-  证明: ⟨h.isChain.symm, fun _ ht₁ ht₂ => h.2 ht₁.symm ht₂⟩
-
-Depends on / 依赖: h.isChain.symm, isChain
+  not_iff_not.mp <| by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
+/-
+**IsMaxChain.symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxChain.symm (h : IsMaxChain r s) : IsMaxChain (flip r) s
+参数：h : IsMaxChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.symm`：IsChain.symm (h : IsChain r s) : IsChain (flip r) s
+· 使用定理 `IsMaxChain.isChain`：IsMaxChain.isChain (h : IsMaxChain r s) : IsChain r 
+s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsMaxChain.symm (h : IsMaxChain r s) : IsMaxChain (flip r) s :=
-  ⟨h.isChain.symm, fun _ ht₁ ht₂ => h.2 ht₁.symm ht₂⟩
+  ⟨h.isChain.symm, fun _ ht₁ ht₂ ↦ h.2 ht₁.symm ht₂⟩
 
 open scoped Classical in
+/-- Given a set `s`, if there exists a chain `t` strictly including `s`, then `SuccChain s`
+is one of these chains. Otherwise it is `s`. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `SuccChain` / `SuccChain` 的定义
-
-English:
-definition SuccChain
-  signature: (r : α -> α -> Prop) (s : Set α)
-  body: if h : exists t, IsChain r s ∧ SuperChain r s t then h.choose else s
-
-中文:
-定义 SuccChain
-  签名: (r : α -> α -> 命题) (s : 集合 α)
-  定义体: if h : exists t, IsChain r s ∧ SuperChain r s t then h.choose else s
-
-Depends on / 依赖: IsChain, SuperChain, h.choose
+/-
+**SuccChain** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SuccChain (r : α -> α -> Prop) (s : Set α) : Set α
+参数：r : α -> α -> Prop；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def SuccChain (r : α -> α -> Prop) (s : Set α) : Set α :=
-  if h : exists t, IsChain r s ∧ SuperChain r s t then h.choose else s
-
-/--
-theorem `succChain_spec` / 定理 `succChain_spec`
-
-English:
-theorem succChain_spec
-  given: (h : exists t, IsChain r s ∧ SuperChain r s t)
-  proof: by
-  have : IsChain r s ∧ SuperChain r s h.choose := h.choose_spec
-  simpa [SuccChain, dif_pos, exists_and_left.mp h] using this.2
-
-中文:
-定理 succChain_spec
-  条件: (h : 存在 t, IsChain r s ∧ SuperChain r s t)
-  证明: by
-  have : IsChain r s ∧ SuperChain r s h.choose := h.choose_spec
-  simpa [SuccChain, dif_pos, exists_and_left.mp h] using this.2
-
-Depends on / 依赖: IsChain, SuccChain, SuperChain, choose_spec, dif_pos, exists_and_left, exists_and_left.mp, h.choose, h.choose_spec
+noncomputable def SuccChain (r : α → α → Prop) (s : Set α) : Set α :=
+  if h : ∃ t, IsChain r s ∧ SuperChain r s t then h.choose else s
+/-
+**succChain_spec** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：succChain_spec (h : exists t, IsChain r s ∧ SuperChain r s t) : SuperChain
+ r s (SuccChain r s)
+参数：h : exists t, IsChain r s ∧ SuperChain r s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `exists_and_left`：∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, (∃ x, b ∧ p
+ x) ↔ b ∧ ∃ x, p x
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Exists.choose.congr_simp`：∀ {α : Sort u_1} {p p_1 : α → Prop} (e_p : p =
+ p_1) (P : ∃ a, p a), P.choose = ⋯.choose
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem succChain_spec (h : exists t, IsChain r s ∧ SuperChain r s t) :
+theorem succChain_spec (h : ∃ t, IsChain r s ∧ SuperChain r s t) :
     SuperChain r s (SuccChain r s) := by
   have : IsChain r s ∧ SuperChain r s h.choose := h.choose_spec
   simpa [SuccChain, dif_pos, exists_and_left.mp h] using this.2
-
-/--
-theorem `IsChain.succ` / 定理 `IsChain.succ`
-
-English:
-theorem IsChain.succ
-  given: (hs : IsChain r s)
-  statement: IsChain r (SuccChain r s)
-  proof: by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).1
-  else
-    rw [exists_and_left] at h
-    simpa [SuccChain, dif_neg, h] using hs
-
-中文:
-定理 IsChain.succ
-  条件: (hs : IsChain r s)
-  结论: IsChain r (SuccChain r s)
-  证明: by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).1
-  else
-    rw [exists_and_left] at h
-    simpa [SuccChain, dif_neg, h] using hs
-
-Depends on / 依赖: IsChain, SuccChain, SuperChain, dif_neg, exists_and_left, succChain_spec
+/-
+**IsChain.succ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.succ (hs : IsChain r s) : IsChain r (SuccChain r s)
+参数：hs : IsChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `succChain_spec`：succChain_spec (h : exists t, IsChain r s ∧ SuperChain r
+ s t) : SuperChain r s (SuccChain r s)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `exists_and_left`：∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, (∃ x, b ∧ p
+ x) ↔ b ∧ ∃ x, p x
 -/
 theorem IsChain.succ (hs : IsChain r s) : IsChain r (SuccChain r s) := by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).1
+  if h : ∃ t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).1
   else
     rw [exists_and_left] at h
     simpa [SuccChain, dif_neg, h] using hs
-
-/--
-theorem `IsChain.superChain_succChain` / 定理 `IsChain.superChain_succChain`
-
-English:
-theorem IsChain.superChain_succChain
-  given: (hs₁ : IsChain r s) (hs₂ : ¬IsMaxChain r s)
-  proof: by
-  simp only [IsMaxChain, _root_.not_and, not_forall, exists_prop] at hs₂
-  obtain ⟨t, ht, hst⟩ := hs₂ hs₁
-  exact succChain_spec ⟨t, hs₁, ht, ssubset_iff_subset_ne.2 hst⟩
-
-中文:
-定理 IsChain.superChain_succChain
-  条件: (hs₁ : IsChain r s) (hs₂ : ¬IsMaxChain r s)
-  证明: by
-  simp only [IsMaxChain, _root_.not_and, not_forall, exists_prop] at hs₂
-  obtain ⟨t, ht, hst⟩ := hs₂ hs₁
-  exact succChain_spec ⟨t, hs₁, ht, ssubset_iff_subset_ne.2 hst⟩
-
-Depends on / 依赖: IsMaxChain, _root_, _root_.not_and, exists_prop, not_and, not_forall, ssubset_iff_subset_ne, succChain_spec
+/-
+**IsChain.superChain_succChain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsChain.superChain_succChain (hs₁ : IsChain r s) (hs₂ : ¬IsMaxChain r s) :
+ SuperChain r s (SuccChain r s)
+参数：hs₁ : IsChain r s；hs₂ : ¬IsMaxChain r s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `succChain_spec`：succChain_spec (h : exists t, IsChain r s ∧ SuperChain r
+ s t) : SuperChain r s (SuccChain r s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ssubset_iff_subset_ne`：∀ {α : Type u_2} [UsesSetNotationForOrder α] [ins
+t : PartialOrder α] {a b : α}, a ⊂ b ↔ a ⊆ b ∧ a ≠ b
 -/
 theorem IsChain.superChain_succChain (hs₁ : IsChain r s) (hs₂ : ¬IsMaxChain r s) :
     SuperChain r s (SuccChain r s) := by
   simp only [IsMaxChain, _root_.not_and, not_forall, exists_prop] at hs₂
   obtain ⟨t, ht, hst⟩ := hs₂ hs₁
   exact succChain_spec ⟨t, hs₁, ht, ssubset_iff_subset_ne.2 hst⟩
-
-/--
-theorem `subset_succChain` / 定理 `subset_succChain`
-
-English:
-theorem subset_succChain
-  statement: s subseteq SuccChain r s
-  proof: by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).2.1
-  else
-    simp [SuccChain, h]
-
-中文:
-定理 subset_succChain
-  结论: s subseteq SuccChain r s
-  证明: by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).2.1
-  else
-    simp [SuccChain, h]
-
-Depends on / 依赖: IsChain, SuccChain, SuperChain, succChain_spec
+/-
+**subset_succChain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_succChain : s subseteq SuccChain r s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `succChain_spec`：succChain_spec (h : exists t, IsChain r s ∧ SuperChain r
+ s t) : SuperChain r s (SuccChain r s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
-theorem subset_succChain : s subseteq SuccChain r s := by
-  if h : exists t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).2.1
+theorem subset_succChain : s ⊆ SuccChain r s := by
+  if h : ∃ t, IsChain r s ∧ SuperChain r s t then exact (succChain_spec h).2.1
   else
     simp [SuccChain, h]
 
@@ -1352,32 +1073,22 @@ end Chain
 /-! ### Flags -/
 
 
-/--
-Definition of `Flag` / `Flag` 的定义
+/-- The type of flags, aka maximal chains, of an order. -/
+/-
+**Flag** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_4) → [LE α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Flag
-  parameters: (α : Type*) [LE α]
-  axioms and operations (3):
-    - carrier : Set α
-    - Chain' : IsChain (· <= ·) carrier
-    - max_chain' : forall ⦃s⦄, IsChain (· <= ·) s -> carrier subseteq s -> carrier = s
-
-中文:
-结构 旗
-  参数: (α : 类型) [LE α]
-  公理与运算 (3 个):
-    - carrier : 集合 α
-    - Chain' : IsChain (· <= ·) carrier
-    - max_chain' : 对任意 ⦃s⦄, IsChain (· <= ·) s -> carrier subseteq s -> carrier = s
+--- 原说明 ---
+The type of flags, aka maximal chains, of an order.
 -/
 structure Flag (α : Type*) [LE α] where
   /-- The `carrier` of a flag is the underlying set. -/
   carrier : Set α
   /-- By definition, a flag is a chain -/
-  Chain' : IsChain (· <= ·) carrier
+  Chain' : IsChain (· ≤ ·) carrier
   /-- By definition, a flag is a maximal chain -/
-  max_chain' : forall ⦃s⦄, IsChain (· <= ·) s -> carrier subseteq s -> carrier = s
+  max_chain' : ∀ ⦃s⦄, IsChain (· ≤ ·) s → carrier ⊆ s → carrier = s
 
 namespace Flag
 
@@ -1385,28 +1096,9 @@ section LE
 
 variable [LE α] {s t : Flag α} {a : α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Flag α) α
-  body: carrier
-  coe_injective s t h := by
-    cases s
-    cases t
-    congr
-
-中文:
-实例 :
-  签名: 集合状 (旗 α) α
-  定义体: carrier
-  coe_injective s t h := by
-    cases s
-    cases t
-    congr
-
-Depends on / 依赖: carrier
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Flag α) α where
   coe := carrier
@@ -1414,225 +1106,128 @@ instance : SetLike (Flag α) α where
     cases s
     cases t
     congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Flag α)
-  body: .ofSetLike (Flag α) α
-
-@[ext]
-
-中文:
-实例 :
-  签名: 偏序 (旗 α)
-  定义体: .ofSetLike (Flag α) α
-
-@[ext]
-
-Depends on / 依赖: ofSetLike
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Flag α) := .ofSetLike (Flag α) α
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: (s : Set α) = t -> s = t
-  proof: SetLike.ext'
-
-中文:
-定理 ext
-  结论: (s : 集合 α) = t -> s = t
-  证明: SetLike.ext'
-
-Depends on / 依赖: SetLike, SetLike.ext
+/-
+**Flag.ext** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：ext : (s : Set α) = t -> s = t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 -/
-theorem ext : (s : Set α) = t -> s = t :=
+theorem ext : (s : Set α) = t → s = t :=
   SetLike.ext'
-
-/--
-theorem `mem_coe_iff` / 定理 `mem_coe_iff`
-
-English:
-theorem mem_coe_iff
-  statement: a in (s : Set α) ↔ a in s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_coe_iff
-  结论: a in (s : 集合 α) ↔ a in s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Flag.mem_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：mem_coe_iff : a in (s : Set α) ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe_iff : a in (s : Set α) ↔ a in s :=
+theorem mem_coe_iff : a ∈ (s : Set α) ↔ a ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (s : Set α) (h₁ h₂)
-  statement: (mk s h₁ h₂ : Set α) = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (s : 集合 α) (h₁ h₂)
-  结论: (mk s h₁ h₂ : 集合 α) = s
-  证明: rfl
-
-@[simp]
+/-
+**Flag.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：coe_mk (s : Set α) (h₁ h₂) : (mk s h₁ h₂ : Set α) = s
+参数：s : Set α；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (s : Set α) (h₁ h₂) : (mk s h₁ h₂ : Set α) = s :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (s : Flag α)
-  statement: mk (s : Set α) s.Chain' s.max_chain' = s
-  proof: ext rfl
-
-中文:
-定理 mk_coe
-  条件: (s : 旗 α)
-  结论: mk (s : 集合 α) s.链' s.max_chain' = s
-  证明: ext rfl
+/-
+**Flag.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：mk_coe (s : Flag α) : mk (s : Set α) s.Chain' s.max_chain' = s
+参数：s : Flag α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Flag.ext`：ext : (s : Set α) = t -> s = t
+· 使用定理 `Flag.Chain'`：∀ {α : Type u_4} [inst : LE α] (self : Flag α), IsChain (fu
+n x1 x2 => x1 ≤ x2) self.carrier
+· 使用定理 `Flag.max_chain'`：∀ {α : Type u_4} [inst : LE α] (self : Flag α) ⦃s : Set
+ α⦄,   IsChain (fun x1 x2 => x1 ≤ x2) s → self.carrier ⊆ s → self.carrier = s
 -/
 theorem mk_coe (s : Flag α) : mk (s : Set α) s.Chain' s.max_chain' = s :=
   ext rfl
-
-/--
-theorem `chain_le` / 定理 `chain_le`
-
-English:
-theorem chain_le
-  given: (s : Flag α)
-  statement: IsChain (· <= ·) (s : Set α)
-  proof: s.Chain'
-
-中文:
-定理 chain_le
-  条件: (s : 旗 α)
-  结论: IsChain (· <= ·) (s : 集合 α)
-  证明: s.Chain'
-
-Depends on / 依赖: s.Chain
+/-
+**Flag.chain_le** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α)
+参数：s : Flag α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Flag.Chain'`：∀ {α : Type u_4} [inst : LE α] (self : Flag α), IsChain (fu
+n x1 x2 => x1 ≤ x2) self.carrier
 -/
-theorem chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α) :=
+theorem chain_le (s : Flag α) : IsChain (· ≤ ·) (s : Set α) :=
   s.Chain'
-
-/--
-theorem `maxChain` / 定理 `maxChain`
-
-English:
-theorem maxChain
-  given: (s : Flag α)
-  statement: IsMaxChain (· <= ·) (s : Set α)
-  proof: ⟨s.chain_le, s.max_chain'⟩
-
-中文:
-定理 maxChain
-  条件: (s : 旗 α)
-  结论: IsMaxChain (· <= ·) (s : 集合 α)
-  证明: ⟨s.chain_le, s.max_chain'⟩
+/-
+**Flag.maxChain** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：∀ {α : Type u_1} [inst : LE α] (s : Flag α), IsMaxChain (fun x1 x2 => x1 ≤
+ x2) ↑s
+参数：s : Flag α；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Flag.chain_le`：chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α)
+· 使用定理 `Flag.max_chain'`：∀ {α : Type u_4} [inst : LE α] (self : Flag α) ⦃s : Set
+ α⦄,   IsChain (fun x1 x2 => x1 ≤ x2) s → self.carrier ⊆ s → self.carrier = s
 -/
-protected theorem maxChain (s : Flag α) : IsMaxChain (· <= ·) (s : Set α) :=
+protected theorem maxChain (s : Flag α) : IsMaxChain (· ≤ ·) (s : Set α) :=
   ⟨s.chain_le, s.max_chain'⟩
-
-/--
-theorem `top_mem` / 定理 `top_mem`
-
-English:
-theorem top_mem
-  given: [OrderTop α] (s : Flag α)
-  statement: (⊤ : α) in s
-  proof: s.maxChain.top_mem
-
-中文:
-定理 top_mem
-  条件: [有顶序 α] (s : 旗 α)
-  结论: (⊤ : α) in s
-  证明: s.maxChain.top_mem
-
-Depends on / 依赖: maxChain, s.maxChain.top_mem, top_mem
+/-
+**Flag.top_mem** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：top_mem [OrderTop α] (s : Flag α) : (⊤ : α) in s
+参数：s : Flag α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxChain.top_mem`：IsMaxChain.top_mem [LE α] [OrderTop α] (h : IsMaxCha
+in (· <= ·) s) : ⊤ in s
+· 使用定理 `Flag.maxChain`：∀ {α : Type u_1} [inst : LE α] (s : Flag α), IsMaxChain (
+fun x1 x2 => x1 ≤ x2) ↑s
 -/
-theorem top_mem [OrderTop α] (s : Flag α) : (⊤ : α) in s :=
+theorem top_mem [OrderTop α] (s : Flag α) : (⊤ : α) ∈ s :=
   s.maxChain.top_mem
-
-/--
-theorem `bot_mem` / 定理 `bot_mem`
-
-English:
-theorem bot_mem
-  given: [OrderBot α] (s : Flag α)
-  statement: (⊥ : α) in s
-  proof: s.maxChain.bot_mem
-
-中文:
-定理 bot_mem
-  条件: [有底序 α] (s : 旗 α)
-  结论: (⊥ : α) in s
-  证明: s.maxChain.bot_mem
-
-Depends on / 依赖: bot_mem, isScalarTower_localizationAlgebra, maxChain, s.maxChain.bot_mem
+/-
+**Flag.bot_mem** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：bot_mem [OrderBot α] (s : Flag α) : (⊥ : α) in s
+参数：s : Flag α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxChain.bot_mem`：IsMaxChain.bot_mem [LE α] [OrderBot α] (h : IsMaxCha
+in (· <= ·) s) : ⊥ in s
+· 使用定理 `Flag.maxChain`：∀ {α : Type u_1} [inst : LE α] (s : Flag α), IsMaxChain (
+fun x1 x2 => x1 ≤ x2) ↑s
 -/
-theorem bot_mem [OrderBot α] (s : Flag α) : (⊥ : α) in s :=
+theorem bot_mem [OrderBot α] (s : Flag α) : (⊥ : α) ∈ s :=
   s.maxChain.bot_mem
 
-/--
-Definition of `ofIsMaxChain` / `ofIsMaxChain` 的定义
+/-- Reinterpret a maximal chain as a flag. -/
+/-
+**Flag.ofIsMaxChain** 是 Mathlib 中的一个定义，位于命名空间 `Flag`。
+形式化陈述：ofIsMaxChain (c : Set α) (hc : IsMaxChain (· <= ·) c) : Flag α
+参数：c : Set α；hc : IsMaxChain (· <= ·) c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsMaxChain
-  signature: (c : Set α) (hc : IsMaxChain (· <= ·) c)
-  body: ⟨c, hc.isChain, hc.2⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 ofIsMaxChain
-  签名: (c : 集合 α) (hc : IsMaxChain (· <= ·) c)
-  定义体: ⟨c, hc.isChain, hc.2⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: hc.isChain, isChain
+--- 原说明 ---
+Reinterpret a maximal chain as a flag.
 -/
-def ofIsMaxChain (c : Set α) (hc : IsMaxChain (· <= ·) c) : Flag α := ⟨c, hc.isChain, hc.2⟩
+def ofIsMaxChain (c : Set α) (hc : IsMaxChain (· ≤ ·) c) : Flag α := ⟨c, hc.isChain, hc.2⟩
 
 @[simp, norm_cast]
-/--
-lemma `coe_ofIsMaxChain` / 引理 `coe_ofIsMaxChain`
-
-English:
-lemma coe_ofIsMaxChain
-  given: (c : Set α) (hc)
-  statement: ofIsMaxChain c hc = c
-  proof: rfl
-
-中文:
-引理 coe_ofIsMaxChain
-  条件: (c : 集合 α) (hc)
-  结论: ofIsMaxChain c hc = c
-  证明: rfl
+/-
+**Flag.coe_ofIsMaxChain** 是 Mathlib 中的一个引理，位于命名空间 `Flag`。
+形式化陈述：coe_ofIsMaxChain (c : Set α) (hc) : ofIsMaxChain c hc = c
+参数：c : Set α；hc。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_ofIsMaxChain (c : Set α) (hc) : ofIsMaxChain c hc = c := rfl
 
@@ -1642,163 +1237,92 @@ section Preorder
 
 variable [Preorder α] [Preorder β] {a b : α} {s : Flag α}
 
-/--
-theorem `le_or_le` / 定理 `le_or_le`
-
-English:
-theorem le_or_le
-  given: (s : Flag α) (ha : a in s) (hb : b in s)
-  statement: a <= b ∨ b <= a
-  proof: s.chain_le.total ha hb
-
-中文:
-定理 le_or_le
-  条件: (s : 旗 α) (ha : a in s) (hb : b in s)
-  结论: a <= b ∨ b <= a
-  证明: s.chain_le.total ha hb
+/-
+**Flag.le_or_le** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b : α} (s : Flag α), a ∈ s → b ∈ s
+ → a ≤ b ∨ b ≤ a
+参数：s : Flag α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用定理 `Flag.chain_le`：chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α)
 -/
-protected theorem le_or_le (s : Flag α) (ha : a in s) (hb : b in s) : a <= b ∨ b <= a :=
+protected theorem le_or_le (s : Flag α) (ha : a ∈ s) (hb : b ∈ s) : a ≤ b ∨ b ≤ a :=
   s.chain_le.total ha hb
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OrderTop
-  signature: α] (s
-  body: Subtype.orderTop s.top_mem
-
-中文:
-实例 [有顶序
-  签名: α] (s
-  定义体: Subtype.orderTop s.top_mem
-
-Depends on / 依赖: Subtype, Subtype.orderTop, orderTop, s.top_mem, top_mem
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OrderTop α] (s : Flag α) : OrderTop s :=
   Subtype.orderTop s.top_mem
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OrderBot
-  signature: α] (s
-  body: Subtype.orderBot s.bot_mem
-
-中文:
-实例 [有底序
-  签名: α] (s
-  定义体: Subtype.orderBot s.bot_mem
-
-Depends on / 依赖: Subtype, Subtype.orderBot, bot_mem, orderBot, s.bot_mem
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OrderBot α] (s : Flag α) : OrderBot s :=
   Subtype.orderBot s.bot_mem
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [BoundedOrder
-  signature: α] (s
-  body: Subtype.boundedOrder s.bot_mem s.top_mem
-
-中文:
-实例 [有界序
-  签名: α] (s
-  定义体: Subtype.boundedOrder s.bot_mem s.top_mem
-
-Depends on / 依赖: Subtype, Subtype.boundedOrder, bot_mem, boundedOrder, s.bot_mem, s.top_mem, top_mem
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [BoundedOrder α] (s : Flag α) : BoundedOrder s :=
   Subtype.boundedOrder s.bot_mem s.top_mem
-
-/--
-lemma `mem_iff_forall_le_or_ge` / 引理 `mem_iff_forall_le_or_ge`
-
-English:
-lemma mem_iff_forall_le_or_ge
-  statement: a in s ↔ forall ⦃b⦄, b in s -> a <= b ∨ b <= a
-  proof: ⟨fun ha b => s.le_or_le ha, fun hb =>
-    of_not_not fun ha =>
-Set.ne_insert_of_notMem _ ‹_›
-s.maxChain.2 (s.chain_le.insert fun c hc _ => hb hc) Set.subset_insert _ _⟩
-
-中文:
-引理 mem_iff_对任意_le_or_ge
-  结论: a in s ↔ 对任意 ⦃b⦄, b in s -> a <= b ∨ b <= a
-  证明: ⟨fun ha b => s.le_or_le ha, fun hb =>
-    of_not_not fun ha =>
-Set.ne_insert_of_notMem _ ‹_›
-s.maxChain.2 (s.chain_le.insert fun c hc _ => hb hc) Set.subset_insert _ _⟩
-
-Depends on / 依赖: Set.ne_insert_of_notMem, Set.subset_insert, chain_le, insert, le_or_le, maxChain, ne_insert_of_notMem, of_not_not, s.chain_le.insert, s.le_or_le, s.maxChain, subset_insert
+/-
+**Flag.mem_iff_forall_le_or_ge** 是 Mathlib 中的一个引理，位于命名空间 `Flag`。
+形式化陈述：mem_iff_forall_le_or_ge : a in s ↔ forall ⦃b⦄, b in s -> a <= b ∨ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Flag.le_or_le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α} (s : Flag 
+α), a ∈ s → b ∈ s → a ≤ b ∨ b ≤ a
+· 使用定理 `of_not_not`：of_not_not {a : Prop} : ¬¬a -> a
+· 使用定理 `Set.ne_insert_of_notMem`：ne_insert_of_notMem {s : Set α} (t : Set α) {a 
+: α} : a ∉ s -> s != insert a t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Flag.maxChain`：∀ {α : Type u_1} [inst : LE α] (s : Flag α), IsMaxChain (
+fun x1 x2 => x1 ≤ x2) ↑s
+· 使用定理 `IsChain.insert`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a : α},
+   IsChain r s → (∀ b ∈ s, a ≠ b → r a b ∨ r b a) → IsChain r (insert a s)
+· 使用定理 `Flag.chain_le`：chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α)
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
 -/
-lemma mem_iff_forall_le_or_ge : a in s ↔ forall ⦃b⦄, b in s -> a <= b ∨ b <= a :=
+lemma mem_iff_forall_le_or_ge : a ∈ s ↔ ∀ ⦃b⦄, b ∈ s → a ≤ b ∨ b ≤ a :=
   ⟨fun ha b => s.le_or_le ha, fun hb =>
     of_not_not fun ha =>
-Set.ne_insert_of_notMem _ ‹_›
-s.maxChain.2 (s.chain_le.insert fun c hc _ => hb hc) Set.subset_insert _ _⟩
+      Set.ne_insert_of_notMem _ ‹_› <|
+        s.maxChain.2 (s.chain_le.insert fun c hc _ => hb hc) <| Set.subset_insert _ _⟩
 
-/--
-Definition of `map` / `map` 的定义
+/-- Flags are preserved under order isomorphisms. -/
+/-
+**Flag.map** 是 Mathlib 中的一个定义，位于命名空间 `Flag`。
+形式化陈述：map (e : α ≃o β) : Flag α ≃ Flag β where toFun s
+参数：e : α ≃o β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (e : α ≃o β)
-  body: ofIsMaxChain _ (s.maxChain.image e)
-  invFun s := ofIsMaxChain _ (s.maxChain.image e.symm)
-left_inv s := ext e.symm_image_image s
-right_inv s := ext e.image_symm_image s
-
-中文:
-定义 map
-  签名: (e : α ≃o β)
-  定义体: ofIsMaxChain _ (s.maxChain.image e)
-  invFun s := ofIsMaxChain _ (s.maxChain.image e.symm)
-left_inv s := ext e.symm_image_image s
-right_inv s := ext e.image_symm_image s
-
-Depends on / 依赖: maxChain, ofIsMaxChain, s.maxChain.image
+--- 原说明 ---
+Flags are preserved under order isomorphisms.
 -/
 def map (e : α ≃o β) : Flag α ≃ Flag β where
   toFun s := ofIsMaxChain _ (s.maxChain.image e)
   invFun s := ofIsMaxChain _ (s.maxChain.image e.symm)
-left_inv s := ext e.symm_image_image s
-right_inv s := ext e.image_symm_image s
-
-/--
-lemma `coe_map` / 引理 `coe_map`
-
-English:
-lemma coe_map
-  given: (e : α ≃o β) (s : Flag α)
-  statement: ↑(map e s) = e '' s
-  proof: rfl
-
-中文:
-引理 coe_map
-  条件: (e : α ≃o β) (s : 旗 α)
-  结论: ↑(map e s) = e '' s
-  证明: rfl
+  left_inv s := ext <| e.symm_image_image s
+  right_inv s := ext <| e.image_symm_image s
+/-
+**Flag.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_1 : Preorder β] 
+(e : α ≃o β) (s : Flag α),   ↑((Flag.map e) s) = ⇑e '' ↑s
+参数：e : α ≃o β；s : Flag α；(Flag.map e) s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_map (e : α ≃o β) (s : Flag α) : ↑(map e s) = e '' s := rfl
-
-/--
-lemma `symm_map` / 引理 `symm_map`
-
-English:
-lemma symm_map
-  given: (e : α ≃o β)
-  statement: (map e).symm = map e.symm
-  proof: rfl
-
-中文:
-引理 symm_map
-  条件: (e : α ≃o β)
-  结论: (map e).symm = map e.symm
-  证明: rfl
+/-
+**Flag.symm_map** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_1 : Preorder β] 
+(e : α ≃o β),   (Flag.map e).symm = Flag.map e.symm
+参数：e : α ≃o β；Flag.map e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma symm_map (e : α ≃o β) : (map e).symm = map e.symm := rfl
 
@@ -1808,47 +1332,20 @@ section PartialOrder
 
 variable [PartialOrder α]
 
-/--
-theorem `chain_lt` / 定理 `chain_lt`
-
-English:
-theorem chain_lt
-  given: (s : Flag α)
-  statement: IsChain (· < ·) (s : Set α)
-  proof: s.chain_le.lt_of_le
-
-中文:
-定理 chain_lt
-  条件: (s : 旗 α)
-  结论: IsChain (· < ·) (s : 集合 α)
-  证明: s.chain_le.lt_of_le
-
-Depends on / 依赖: chain_le, lt_of_le, s.chain_le.lt_of_le
+/-
+**Flag.chain_lt** 是 Mathlib 中的一个定理，位于命名空间 `Flag`。
+形式化陈述：chain_lt (s : Flag α) : IsChain (· < ·) (s : Set α)
+参数：s : Flag α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsChain.lt_of_le`：IsChain.lt_of_le [PartialOrder α] {s : Set α} (h : IsC
+hain (· <= ·) s) : IsChain (· < ·) s
+· 使用定理 `Flag.chain_le`：chain_le (s : Flag α) : IsChain (· <= ·) (s : Set α)
 -/
 theorem chain_lt (s : Flag α) : IsChain (· < ·) (s : Set α) := s.chain_le.lt_of_le
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableLE
-  signature: α] [DecidableLT α] [DecidableEq α] (s
-  body: { Subtype.partialOrder _ with
-    le_total := fun a b => s.le_or_le a.2 b.2
-    toDecidableLE := Subtype.decidableLE
-    toDecidableLT := Subtype.decidableLT
-    toDecidableEq := Subtype.instDecidableEq }
-
-中文:
-实例 [DecidableLE
-  签名: α] [DecidableLT α] [DecidableEq α] (s
-  定义体: { Subtype.partialOrder _ with
-    le_total := fun a b => s.le_or_le a.2 b.2
-    toDecidableLE := Subtype.decidableLE
-    toDecidableLT := Subtype.decidableLT
-    toDecidableEq := Subtype.instDecidableEq }
-
-Depends on / 依赖: Subtype, Subtype.decidableLE, Subtype.decidableLT, Subtype.instDecidableEq, Subtype.partialOrder, decidableLE, decidableLT, instDecidableEq, le_or_le, le_total, partialOrder, s.le_or_le, toDecidableEq, toDecidableLE, toDecidableLT
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableLE α] [DecidableLT α] [DecidableEq α] (s : Flag α) : LinearOrder s :=
   { Subtype.partialOrder _ with
@@ -1859,25 +1356,13 @@ instance [DecidableLE α] [DecidableLT α] [DecidableEq α] (s : Flag α) : Line
 
 end PartialOrder
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LinearOrder
-  signature: α] : Unique (Flag α) where
-  body: ⟨univ, isChain_of_trichotomous _, fun s _ => s.subset_univ.antisymm'⟩
-uniq s := SetLike.coe_injective s.3 (isChain_of_trichotomous _) subset_univ _
-
-中文:
-实例 [线性序
-  签名: α] : 唯一 (旗 α) where
-  定义体: ⟨univ, isChain_of_trichotomous _, fun s _ => s.subset_univ.antisymm'⟩
-uniq s := SetLike.coe_injective s.3 (isChain_of_trichotomous _) subset_univ _
-
-Depends on / 依赖: antisymm, isChain_of_trichotomous, s.subset_univ.antisymm, subset_univ
+/-
+**Flag.** 是 Mathlib 中的一个实例，位于命名空间 `Flag`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LinearOrder α] : Unique (Flag α) where
   default := ⟨univ, isChain_of_trichotomous _, fun s _ => s.subset_univ.antisymm'⟩
-uniq s := SetLike.coe_injective s.3 (isChain_of_trichotomous _) subset_univ _
+  uniq s := SetLike.coe_injective <| s.3 (isChain_of_trichotomous _) <| subset_univ _
 
 end Flag
+

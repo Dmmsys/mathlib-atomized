@@ -22,136 +22,88 @@ namespace Mathlib.Tactic.Translate
 
 open Lean Meta Elab Command Term UnfoldBoundary
 
-/--
-Inductive type `CastKind` / 归纳类型 `CastKind`
+/-- There are 3 kinds of casting functions for a definition `foo := body`:
+1. Equality: `foo = body`
+2. Unfolding: `foo → body`
+3. Refolding: `body → foo`
+-/
+/-
+**Mathlib.Tactic.Translate.CastKind** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive CastKind
-  parameters: where
-  constructors (1):
-    - eq: | unfoldFun | refoldFun
-
-中文:
-归纳类型 CastKind
-  参数: where
-  构造子 (1 个):
-    - eq: | unfoldFun | refoldFun
+--- 原说明 ---
+There are 3 kinds of casting functions for a definition `foo := body`:
+1. Equality: `foo = body`
+2. Unfolding: `foo → body`
+3. Refolding: `body → foo`
 -/
 inductive CastKind where
   | eq | unfoldFun | refoldFun
 
-/--
-Definition of `CastKind.mkRel` / `CastKind.mkRel` 的定义
+/-- Construct the type of the cast of the given `CastKind`. -/
+/-
+**Mathlib.Tactic.Translate.CastKind.mkRel** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CastKind.mkRel
-  signature: (lhs body : Expr)
-
-中文:
-定义 CastKind.mkRel
-  签名: (lhs body : Expr)
+--- 原说明 ---
+Construct the type of the cast of the given `CastKind`.
 -/
-def CastKind.mkRel (lhs body : Expr) : CastKind -> MetaM Expr
+def CastKind.mkRel (lhs body : Expr) : CastKind → MetaM Expr
   | .eq => mkEq lhs body
   | .unfoldFun => return .forallE `_ lhs body .default
   | .refoldFun => return .forallE `_ body lhs .default
 
-/--
-Definition of `CastKind.mkProof` / `CastKind.mkProof` 的定义
+/-- Construct the value of the cast of the given `CastKind`.
+This is a proof by reflexivity for equalities, and an identity function for functions. -/
+/-
+**Mathlib.Tactic.Translate.CastKind.mkProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CastKind.mkProof
-  signature: (lhs : Expr)
-
-中文:
-定义 CastKind.mkProof
-  签名: (lhs : Expr)
+--- 原说明 ---
+Construct the value of the cast of the given `CastKind`.
+This is a proof by reflexivity for equalities, and an identity function for func
+tions.
 -/
-def CastKind.mkProof (lhs : Expr) : CastKind -> MetaM Expr
+def CastKind.mkProof (lhs : Expr) : CastKind → MetaM Expr
   | .eq => mkEqRefl lhs
   | _ => return .lam `_ lhs (.bvar 0) .default
 
-/--
-Definition of `elabInsertCastAux` / `elabInsertCastAux` 的定义
+/-- `elabInsertCastAux` is used to implement the `insert_cast` and `insert_cast_fun` commands.
+Given a definition `declName`, we create a casting function and a dual of this casting function.
+The casting function is defined using reflexivity/the identity function,
+and its translation is defined using the user-provided term `stx`.
+`castKind` specifies which kind of cast we are creating. -/
+/-
+**Mathlib.Tactic.Translate.elabInsertCastAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Translate`。
+形式化陈述：elabInsertCastAux (declName : Name) (castKind : CastKind) (stx : Term) (t 
+: TranslateData) : CommandElabM (Name × Name)
+参数：declName : Name；castKind : CastKind；stx : Term；t : TranslateData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabInsertCastAux
-  signature: (declName : Name) (castKind : CastKind) (stx : Term) (t : TranslateData)
-  body: Command.liftTermElabM do withDeclNameForAuxNaming declName do withExporting do
-  let info ← getConstInfoDefn declName
-  let addDecl (name : Name) (type value : Expr) : MetaM Unit := do
-addDecl ←
-      if castKind matches .eq then
-        mkThmOrUnsafeDef { name, type, value, levelParams := info.levelParams }
-      else
-.defnDecl < > mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
-  let name ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
-  -- To obtain the unfolded form of `declName`, we telescope into its value.
-  let (type, numFVars) ← lambdaTelescope (cleanupAnnotations := true) info.value fun xs body => do
-    -- First, create the casting theorem/def that is proved by rfl/id respectively.
-    let lhs := mkAppN (.const info.name <| info.levelParams.map mkLevelParam) xs
-    let type ← mkForallFVars xs (← castKind.mkRel lhs body)
-    let value ← mkLambdaFVars xs (← castKind.mkProof lhs)
-    addDecl name type value
-    return (type, xs.size)
-  -- Then, create the translated version, using `stx` to construct the value.
-  let (newType, _) ← (applyReplacementFun t type).run #[] #[]
-  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType => do
-    -- Make the goal easier to prove by unfolding the new lhs
-    let goalType := (← unfoldLHS? castKind goalType).getD goalType
-    let newValue ← elabTermEnsuringType stx goalType <* synthesizeSyntheticMVarsNoPostponing
-    mkLambdaFVars xs (← instantiateMVars newValue)
-  let newName ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
-  addDecl newName newType newValue
-  -- Now add the translation attribute to relate the two new declarations
-  _ ← addTranslationAttr t name { target := newName, existing := true, ref := .missing }
-  return (name, newName)
-
-中文:
-定义 elabInsertCastAux
-  签名: (declName : Name) (castKind : CastKind) (stx : 项) (t : TranslateData)
-  定义体: Command.liftTermElabM do withDeclNameForAuxNaming declName do withExporting do
-  let info ← getConstInfoDefn declName
-  let addDecl (name : Name) (type value : Expr) : MetaM Unit := do
-addDecl ←
-      if castKind matches .eq then
-        mkThmOrUnsafeDef { name, type, value, levelParams := info.levelParams }
-      else
-.defnDecl < > mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
-  let name ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
-  -- To obtain the unfolded form of `declName`, we telescope into its value.
-  let (type, numFVars) ← lambdaTelescope (cleanupAnnotations := true) info.value fun xs body => do
-    -- First, create the casting theorem/def that is proved by rfl/id respectively.
-    let lhs := mkAppN (.const info.name <| info.levelParams.map mkLevelParam) xs
-    let type ← mkForallFVars xs (← castKind.mkRel lhs body)
-    let value ← mkLambdaFVars xs (← castKind.mkProof lhs)
-    addDecl name type value
-    return (type, xs.size)
-  -- Then, create the translated version, using `stx` to construct the value.
-  let (newType, _) ← (applyReplacementFun t type).run #[] #[]
-  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType => do
-    -- Make the goal easier to prove by unfolding the new lhs
-    let goalType := (← unfoldLHS? castKind goalType).getD goalType
-    let newValue ← elabTermEnsuringType stx goalType <* synthesizeSyntheticMVarsNoPostponing
-    mkLambdaFVars xs (← instantiateMVars newValue)
-  let newName ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
-  addDecl newName newType newValue
-  -- Now add the translation attribute to relate the two new declarations
-  _ ← addTranslationAttr t name { target := newName, existing := true, ref := .missing }
-  return (name, newName)
-
-Depends on / 依赖: Command, Command.liftTermElabM, _cast, addDecl, appendAfter, appendBefore, attrName, castKind, declName, defnDecl, getConstInfoDefn, info.levelParams, levelParams, liftTermElabM, matches, mkAuxDeclName, mkDefinitionValInferringUnsafe, mkThmOrUnsafeDef, opaque, t.attrName.appendBefore
+--- 原说明 ---
+`elabInsertCastAux` is used to implement the `insert_cast` and `insert_cast_fun`
+ commands.
+Given a definition `declName`, we create a casting function and a dual of this c
+asting function.
+The casting function is defined using reflexivity/the identity function,
+and its translation is defined using the user-provided term `stx`.
+`castKind` specifies which kind of cast we are creating.
 -/
 def elabInsertCastAux (declName : Name) (castKind : CastKind) (stx : Term) (t : TranslateData) :
     CommandElabM (Name × Name) :=
   Command.liftTermElabM do withDeclNameForAuxNaming declName do withExporting do
   let info ← getConstInfoDefn declName
   let addDecl (name : Name) (type value : Expr) : MetaM Unit := do
-addDecl ←
+    addDecl <| ←
       if castKind matches .eq then
         mkThmOrUnsafeDef { name, type, value, levelParams := info.levelParams }
       else
-.defnDecl < > mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
+        .defnDecl <$> mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
   let name ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
   -- To obtain the unfolded form of `declName`, we telescope into its value.
   let (type, numFVars) ← lambdaTelescope (cleanupAnnotations := true) info.value fun xs body => do
@@ -163,7 +115,7 @@ addDecl ←
     return (type, xs.size)
   -- Then, create the translated version, using `stx` to construct the value.
   let (newType, _) ← (applyReplacementFun t type).run #[] #[]
-  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType => do
+  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType ↦ do
     -- Make the goal easier to prove by unfolding the new lhs
     let goalType := (← unfoldLHS? castKind goalType).getD goalType
     let newValue ← elabTermEnsuringType stx goalType <* synthesizeSyntheticMVarsNoPostponing
@@ -174,7 +126,7 @@ addDecl ←
   _ ← addTranslationAttr t name { target := newName, existing := true, ref := .missing }
   return (name, newName)
 where
-  unfoldLHS? : CastKind -> Expr -> OptionT TermElabM Expr
+  unfoldLHS? : CastKind → Expr → OptionT TermElabM Expr
   | .eq, mkApp2 eq lhs body => return mkApp2 eq (← .mk <| unfoldDefinition? lhs) body
   | .unfoldFun, .forallE n lhs body bi => return .forallE n (← .mk <| unfoldDefinition? lhs) body bi
   | .refoldFun, .forallE n body lhs bi => return .forallE n body (← .mk <| unfoldDefinition? lhs) bi
@@ -197,7 +149,7 @@ As a result, type checking the term won't anymore require unfolding `foo`, so th
 can be safely translated. -/
 public def elabInsertCast (declName : Ident) (valStx : Term) (t : TranslateData) :
     CommandElabM Unit := do
-let declName ← Command.liftCoreM realizeGlobalConstNoOverloadWithInfo declName
+  let declName ← Command.liftCoreM <| realizeGlobalConstNoOverloadWithInfo declName
   let (name, _) ← elabInsertCastAux declName .eq valStx t
   let some ext := t.unfoldBoundaries? | throwError "{t.attrName} doesn't support unfold boundaries"
   modifyEnv (ext.addEntry · (.unfold declName name))
@@ -218,10 +170,11 @@ As a result, type checking the term won't anymore require unfolding `foo`, so th
 can be safely translated. After translating, the unfold/refold functions are again unfolded. -/
 public def elabInsertCastFun (declName : Ident) (valStx₁ valStx₂ : Term) (t : TranslateData) :
     CommandElabM Unit := do
-let declName ← Command.liftCoreM realizeGlobalConstNoOverloadWithInfo declName
+  let declName ← Command.liftCoreM <| realizeGlobalConstNoOverloadWithInfo declName
   let (name₁, translatedName₁) ← elabInsertCastAux declName .unfoldFun valStx₁ t
   let (name₂, translatedName₂) ← elabInsertCastAux declName .refoldFun valStx₂ t
   let some ext := t.unfoldBoundaries? | throwError "{t.attrName} doesn't support unfold boundaries"
   modifyEnv (ext.addEntry · (.cast declName name₁ name₂ translatedName₁ translatedName₂))
 
 end Mathlib.Tactic.Translate
+

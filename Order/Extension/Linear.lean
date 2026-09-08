@@ -21,119 +21,53 @@ universe u
 
 open Set
 
-/--
-theorem `extend_partialOrder` / 定理 `extend_partialOrder`
+/-- **Szpilrajn extension theorem**: any partial order can be extended to a linear order. -/
+/-
+**extend_partialOrder** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：extend_partialOrder {α : Type u} (r : α -> α -> Prop) [IsPartialOrder α r]
+ : exists s : α -> α -> Prop, IsLinearOrder α s ∧ r <= s
+参数：r : α -> α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPartialOrder.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self :
+ IsPartialOrder α r], IsPreorder α r
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用引理 `antisymm`：antisymm [Std.Antisymm r] : a ≺ b -> b ≺ a -> a = b
+· 使用定理 `IsPartialOrder.toAntisymm`：∀ {α : Sort u_1} {r : α → α → Prop} [self : I
+sPartialOrder α r], Std.Antisymm r
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用定理 `zorn_le_nonempty₀`：zorn_le_nonempty₀ (s : Set α) (ih : forall c subseteq
+ s, IsChain (· <= ·) c -> forall y in c, exists ub in s, forall z in c, z <= ub)
+ (x : α…
+· 使用定理 `Maximal.prop`：∀ {α : Type u_1} [inst : LE α] {P : α → Prop} {x : α}, Max
+imal P x → P x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Maximal.eq_of_le`：∀ {α : Type u_2} {P : α → Prop} {x y : α} [inst : Part
+ialOrder α], Maximal P x → P y → x ≤ y → x = y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem extend_partialOrder
-  given: {α : Type u} (r : α -> α -> Prop) [IsPartialOrder α r]
-  proof: by
-  let S := { s | IsPartialOrder α s }
-  have hS : forall c, c subseteq S -> IsChain (· <= ·) c -> forall y in c, exists ub in S, forall z in c, z <= ub := by
-    rintro c hc₁ hc₂ s hs
-    have := (hc₁ hs).1
-    refine ⟨sSup c, ?_, fun z hz => le_sSup hz⟩
-    refine
-        { refl := ?_
-          trans := ?_
-          antisymm := ?_ } <;>
-      simp_rw [binary_relation_sSup_iff]
-    · intro x
-      exact ⟨s, hs, refl x⟩
-    · rintro x y z ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
-      have : IsPartialOrder _ _ := hc₁ h₁s₁
-      have : IsPartialOrder _ _ := hc₁ h₁s₂
-      rcases hc₂.total h₁s₁ h₁s₂ with h | h
-      · exact ⟨s₂, h₁s₂, _root_.trans (h _ _ h₂s₁) h₂s₂⟩
-      · exact ⟨s₁, h₁s₁, _root_.trans h₂s₁ (h _ _ h₂s₂)⟩
-    · rintro x y ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
-      have : IsPartialOrder _ _ := hc₁ h₁s₁
-      have : IsPartialOrder _ _ := hc₁ h₁s₂
-      rcases hc₂.total h₁s₁ h₁s₂ with h | h
-      · exact antisymm (h _ _ h₂s₁) h₂s₂
-      · apply antisymm h₂s₁ (h _ _ h₂s₂)
-  obtain ⟨s, hrs, hs⟩ := zorn_le_nonempty₀ S hS r ‹_›
-  have : IsPartialOrder α s := hs.prop
-  refine ⟨s,
-    { total := ?_, refl := hs.1.refl, trans := hs.1.trans, antisymm := hs.1.antisymm }, hrs⟩
-  intro x y
-  by_contra! h
-  let s' x' y' := s x' y' ∨ s x' x ∧ s y y'
-  rw [hs.eq_of_le (y := s') ?_ fun _ _ => Or.inl] at h
-  · apply h.1 (Or.inr ⟨refl _, refl _⟩)
-  · refine
-    { refl := fun x => Or.inl (refl _)
-      trans := ?_
-      antisymm := ?_ }
-    · rintro a b c (ab | ⟨ax : s a x, yb : s y b⟩) (bc | ⟨bx : s b x, yc : s y c⟩)
-      · exact Or.inl (_root_.trans ab bc)
-      · exact Or.inr ⟨_root_.trans ab bx, yc⟩
-      · exact Or.inr ⟨ax, _root_.trans yb bc⟩
-      · exact Or.inr ⟨ax, yc⟩
-    rintro a b (ab | ⟨ax : s a x, yb : s y b⟩) (ba | ⟨bx : s b x, ya : s y a⟩)
-    · exact antisymm ab ba
-    · exact (h.2 (_root_.trans ya (_root_.trans ab bx))).elim
-    · exact (h.2 (_root_.trans yb (_root_.trans ba ax))).elim
-    · exact (h.2 (_root_.trans yb bx)).elim
-
-中文:
-定理 extend_partialOrder
-  条件: {α : 类型u} (r : α -> α -> 命题) [是偏序 α r]
-  证明: by
-  let S := { s | IsPartialOrder α s }
-  have hS : forall c, c subseteq S -> IsChain (· <= ·) c -> forall y in c, exists ub in S, forall z in c, z <= ub := by
-    rintro c hc₁ hc₂ s hs
-    have := (hc₁ hs).1
-    refine ⟨sSup c, ?_, fun z hz => le_sSup hz⟩
-    refine
-        { refl := ?_
-          trans := ?_
-          antisymm := ?_ } <;>
-      simp_rw [binary_relation_sSup_iff]
-    · intro x
-      exact ⟨s, hs, refl x⟩
-    · rintro x y z ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
-      have : IsPartialOrder _ _ := hc₁ h₁s₁
-      have : IsPartialOrder _ _ := hc₁ h₁s₂
-      rcases hc₂.total h₁s₁ h₁s₂ with h | h
-      · exact ⟨s₂, h₁s₂, _root_.trans (h _ _ h₂s₁) h₂s₂⟩
-      · exact ⟨s₁, h₁s₁, _root_.trans h₂s₁ (h _ _ h₂s₂)⟩
-    · rintro x y ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
-      have : IsPartialOrder _ _ := hc₁ h₁s₁
-      have : IsPartialOrder _ _ := hc₁ h₁s₂
-      rcases hc₂.total h₁s₁ h₁s₂ with h | h
-      · exact antisymm (h _ _ h₂s₁) h₂s₂
-      · apply antisymm h₂s₁ (h _ _ h₂s₂)
-  obtain ⟨s, hrs, hs⟩ := zorn_le_nonempty₀ S hS r ‹_›
-  have : IsPartialOrder α s := hs.prop
-  refine ⟨s,
-    { total := ?_, refl := hs.1.refl, trans := hs.1.trans, antisymm := hs.1.antisymm }, hrs⟩
-  intro x y
-  by_contra! h
-  let s' x' y' := s x' y' ∨ s x' x ∧ s y y'
-  rw [hs.eq_of_le (y := s') ?_ fun _ _ => Or.inl] at h
-  · apply h.1 (Or.inr ⟨refl _, refl _⟩)
-  · refine
-    { refl := fun x => Or.inl (refl _)
-      trans := ?_
-      antisymm := ?_ }
-    · rintro a b c (ab | ⟨ax : s a x, yb : s y b⟩) (bc | ⟨bx : s b x, yc : s y c⟩)
-      · exact Or.inl (_root_.trans ab bc)
-      · exact Or.inr ⟨_root_.trans ab bx, yc⟩
-      · exact Or.inr ⟨ax, _root_.trans yb bc⟩
-      · exact Or.inr ⟨ax, yc⟩
-    rintro a b (ab | ⟨ax : s a x, yb : s y b⟩) (ba | ⟨bx : s b x, ya : s y a⟩)
-    · exact antisymm ab ba
-    · exact (h.2 (_root_.trans ya (_root_.trans ab bx))).elim
-    · exact (h.2 (_root_.trans yb (_root_.trans ba ax))).elim
-    · exact (h.2 (_root_.trans yb bx)).elim
-
-Depends on / 依赖: IsChain, IsPartialOrder, antisymm, binary_relation_sSup_iff, le_sSup, simp_rw, subseteq
+--- 原说明 ---
+**Szpilrajn extension theorem**: any partial order can be extended to a linear o
+rder.
 -/
-theorem extend_partialOrder {α : Type u} (r : α -> α -> Prop) [IsPartialOrder α r] :
-    exists s : α -> α -> Prop, IsLinearOrder α s ∧ r <= s := by
+theorem extend_partialOrder {α : Type u} (r : α → α → Prop) [IsPartialOrder α r] :
+    ∃ s : α → α → Prop, IsLinearOrder α s ∧ r ≤ s := by
   let S := { s | IsPartialOrder α s }
-  have hS : forall c, c subseteq S -> IsChain (· <= ·) c -> forall y in c, exists ub in S, forall z in c, z <= ub := by
+  have hS : ∀ c, c ⊆ S → IsChain (· ≤ ·) c → ∀ y ∈ c, ∃ ub ∈ S, ∀ z ∈ c, z ≤ ub := by
     rintro c hc₁ hc₂ s hs
     have := (hc₁ hs).1
     refine ⟨sSup c, ?_, fun z hz => le_sSup hz⟩
@@ -163,10 +97,10 @@ theorem extend_partialOrder {α : Type u} (r : α -> α -> Prop) [IsPartialOrder
   intro x y
   by_contra! h
   let s' x' y' := s x' y' ∨ s x' x ∧ s y y'
-  rw [hs.eq_of_le (y := s') ?_ fun _ _ => Or.inl] at h
+  rw [hs.eq_of_le (y := s') ?_ fun _ _ ↦ Or.inl] at h
   · apply h.1 (Or.inr ⟨refl _, refl _⟩)
   · refine
-    { refl := fun x => Or.inl (refl _)
+    { refl := fun x ↦ Or.inl (refl _)
       trans := ?_
       antisymm := ?_ }
     · rintro a b c (ab | ⟨ax : s a x, yb : s y b⟩) (bc | ⟨bx : s b x, yc : s y c⟩)
@@ -180,48 +114,49 @@ theorem extend_partialOrder {α : Type u} (r : α -> α -> Prop) [IsPartialOrder
     · exact (h.2 (_root_.trans yb (_root_.trans ba ax))).elim
     · exact (h.2 (_root_.trans yb bx)).elim
 
-/--
-Definition of `LinearExtension` / `LinearExtension` 的定义
+/-- A type alias for `α`, intended to extend a partial order on `α` to a linear order. -/
+/-
+**LinearExtension** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearExtension (α : Type u) : Type u
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LinearExtension
-  signature: (α : Type u)
-  body: α
-
-中文:
-定义 LinearExtension
-  签名: (α : 类型u)
-  定义体: α
+--- 原说明 ---
+A type alias for `α`, intended to extend a partial order on `α` to a linear orde
+r.
 -/
 def LinearExtension (α : Type u) : Type u :=
   α
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance {α : Type u} [PartialOrder α] : LinearOrder (LinearExtension α) where
-  le := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose
-  le_refl := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.1.1.1.1.1
-  le_trans := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.1.1.1.2.1
-  le_antisymm := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.1.1.2.1
-  le_total := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.1.2.1
+  le := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose
+  le_refl := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose_spec.1.1.1.1.1
+  le_trans := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose_spec.1.1.1.2.1
+  le_antisymm := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose_spec.1.1.2.1
+  le_total := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose_spec.1.2.1
   toDecidableLE := Classical.decRel _
 
-/--
-Definition of `toLinearExtension` / `toLinearExtension` 的定义
+/-- The embedding of `α` into `LinearExtension α` as an order homomorphism. -/
+/-
+**toLinearExtension** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toLinearExtension {α : Type u} [PartialOrder α] : α ->o LinearExtension α 
+where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearExtension
-  signature: {α : Type u} [PartialOrder α]
-  body: x
-  monotone' := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.2
-
-中文:
-定义 toLinearExtension
-  签名: {α : 类型u} [偏序 α]
-  定义体: x
-  monotone' := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.2
+--- 原说明 ---
+The embedding of `α` into `LinearExtension α` as an order homomorphism.
 -/
-noncomputable def toLinearExtension {α : Type u} [PartialOrder α] : α ->o LinearExtension α where
+noncomputable def toLinearExtension {α : Type u} [PartialOrder α] : α →o LinearExtension α where
   toFun x := x
-  monotone' := (extend_partialOrder ((· <= ·) : α -> α -> Prop)).choose_spec.2
-
+  monotone' := (extend_partialOrder ((· ≤ ·) : α → α → Prop)).choose_spec.2
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type u} [Inhabited α] : Inhabited (LinearExtension α) :=
   ⟨(default : α)⟩

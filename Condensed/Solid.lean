@@ -37,134 +37,107 @@ noncomputable section
 
 namespace Condensed
 
-/--
-Definition of `finFree` / `finFree` 的定义
+/-- The free condensed `R`-module on a finite set. -/
+/-
+**Condensed.finFree** 是 Mathlib 中的一个缩写定义，位于命名空间 `Condensed`。
+形式化陈述：finFree : FintypeCat.{u} ⥤ CondensedMod.{u} R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation finFree
-  signature: : FintypeCat.{u} ⥤ CondensedMod.{u} R
-  body: FintypeCat.toProfinite ⋙ profiniteToCondensed ⋙ free R
-
-中文:
-缩写 finFree
-  签名: : FintypeCat.{u} ⥤ CondensedMod.{u} R
-  定义体: FintypeCat.toProfinite ⋙ profiniteToCondensed ⋙ free R
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfinite, profiniteToCondensed, toProfinite
+--- 原说明 ---
+The free condensed `R`-module on a finite set.
 -/
 abbrev finFree : FintypeCat.{u} ⥤ CondensedMod.{u} R :=
   FintypeCat.toProfinite ⋙ profiniteToCondensed ⋙ free R
 
-/--
-Definition of `profiniteFree` / `profiniteFree` 的定义
+/-- The free condensed `R`-module on a profinite space. -/
+/-
+**Condensed.profiniteFree** 是 Mathlib 中的一个缩写定义，位于命名空间 `Condensed`。
+形式化陈述：profiniteFree : Profinite.{u} ⥤ CondensedMod.{u} R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation profiniteFree
-  signature: : Profinite.{u} ⥤ CondensedMod.{u} R
-  body: profiniteToCondensed ⋙ free R
-
-中文:
-缩写 profiniteFree
-  签名: : Profinite.{u} ⥤ CondensedMod.{u} R
-  定义体: profiniteToCondensed ⋙ free R
-
-Depends on / 依赖: profiniteToCondensed
+--- 原说明 ---
+The free condensed `R`-module on a profinite space.
 -/
 abbrev profiniteFree : Profinite.{u} ⥤ CondensedMod.{u} R :=
   profiniteToCondensed ⋙ free R
 
-/--
-Definition of `profiniteSolid` / `profiniteSolid` 的定义
+/-- The functor sending a profinite space `S` to the condensed `R`-module `R[S]^\solid`. -/
+/-
+**Condensed.profiniteSolid** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：profiniteSolid : Profinite.{u} ⥤ CondensedMod.{u} R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition profiniteSolid
-  signature: : Profinite.{u} ⥤ CondensedMod.{u} R
-  body: Functor.rightKanExtension FintypeCat.toProfinite (finFree R)
-
-中文:
-定义 profiniteSolid
-  签名: : Profinite.{u} ⥤ CondensedMod.{u} R
-  定义体: Functor.rightKanExtension FintypeCat.toProfinite (finFree R)
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfinite, Functor, Functor.rightKanExtension, finFree, rightKanExtension, toProfinite
+--- 原说明 ---
+The functor sending a profinite space `S` to the condensed `R`-module `R[S]^\sol
+id`.
 -/
 def profiniteSolid : Profinite.{u} ⥤ CondensedMod.{u} R :=
   Functor.rightKanExtension FintypeCat.toProfinite (finFree R)
 
-/--
-Definition of `profiniteSolidCounit` / `profiniteSolidCounit` 的定义
+/-- The natural transformation `FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree R`
+which is part of the assertion that `profiniteSolid R` is the (pointwise) right
+Kan extension of `finFree R` along `FintypeCat.toProfinite`. -/
+/-
+**Condensed.profiniteSolidCounit** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：profiniteSolidCounit : FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree
+ R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition profiniteSolidCounit
-  signature: : FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree R
-  body: Functor.rightKanExtensionCounit FintypeCat.toProfinite (finFree R)
-
-中文:
-定义 profiniteSolidCounit
-  签名: : FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree R
-  定义体: Functor.rightKanExtensionCounit FintypeCat.toProfinite (finFree R)
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfinite, Functor, Functor.rightKanExtensionCounit, finFree, rightKanExtensionCounit, toProfinite
+--- 原说明 ---
+The natural transformation `FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree 
+R`
+which is part of the assertion that `profiniteSolid R` is the (pointwise) right
+Kan extension of `finFree R` along `FintypeCat.toProfinite`.
 -/
 def profiniteSolidCounit : FintypeCat.toProfinite ⋙ profiniteSolid R ⟶ finFree R :=
   Functor.rightKanExtensionCounit FintypeCat.toProfinite (finFree R)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (profiniteSolid R).IsRightKanExtension (profiniteSolidCounit R)
-  body: by
-  dsimp only [profiniteSolidCounit, profiniteSolid]
-  infer_instance
-
-中文:
-实例 :
-  签名: (profiniteSolid R).是RightKanExtension (profiniteSolidCounit R)
-  定义体: by
-  dsimp only [profiniteSolidCounit, profiniteSolid]
-  infer_instance
-
-Depends on / 依赖: infer_instance, profiniteSolid, profiniteSolidCounit
+/-
+**Condensed.** 是 Mathlib 中的一个实例，位于命名空间 `Condensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (profiniteSolid R).IsRightKanExtension (profiniteSolidCounit R) := by
   dsimp only [profiniteSolidCounit, profiniteSolid]
   infer_instance
 
-/--
-Definition of `profiniteSolidIsPointwiseRightKanExtension` / `profiniteSolidIsPointwiseRightKanExtension` 的定义
+/-- The functor `Profinite.{u} ⥤ CondensedMod.{u} R` is a pointwise
+right Kan extension of `finFree R : FintypeCat.{u} ⥤ CondensedMod.{u} R`
+along `FintypeCat.toProfinite`. -/
+/-
+**Condensed.profiniteSolidIsPointwiseRightKanExtension** 是 Mathlib 中的一个定义，位于命名空间
+ `Condensed`。
+形式化陈述：profiniteSolidIsPointwiseRightKanExtension : (Functor.RightExtension.mk _ 
+(profiniteSolidCounit R)).IsPointwiseRightKanExtension
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Condensed.instIsRightKanExtensionFintypeCatCondensedModProfiniteProfinit
+eSolidProfiniteSolidCounit`：∀ (R : Type (u + 1)) [inst : Ring R],   (Condensed.p
+rofiniteSolid R).IsRightKanExtension (Condensed.profiniteSolidCounit R)
 
-English:
-definition profiniteSolidIsPointwiseRightKanExtension
-  signature: :
-  body: Functor.isPointwiseRightKanExtensionOfIsRightKanExtension _ _
-
-中文:
-定义 profiniteSolidIsPointwiseRightKanExtension
-  签名: :
-  定义体: Functor.isPointwiseRightKanExtensionOfIsRightKanExtension _ _
-
-Depends on / 依赖: Functor, Functor.isPointwiseRightKanExtensionOfIsRightKanExtension, isPointwiseRightKanExtensionOfIsRightKanExtension
+--- 原说明 ---
+The functor `Profinite.{u} ⥤ CondensedMod.{u} R` is a pointwise
+right Kan extension of `finFree R : FintypeCat.{u} ⥤ CondensedMod.{u} R`
+along `FintypeCat.toProfinite`.
 -/
 def profiniteSolidIsPointwiseRightKanExtension :
     (Functor.RightExtension.mk _ (profiniteSolidCounit R)).IsPointwiseRightKanExtension :=
   Functor.isPointwiseRightKanExtensionOfIsRightKanExtension _ _
 
-/--
-Definition of `profiniteSolidification` / `profiniteSolidification` 的定义
+/-- The natural transformation `R[S] ⟶ R[S]^\solid`. -/
+/-
+**Condensed.profiniteSolidification** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：profiniteSolidification : profiniteFree R ⟶ profiniteSolid.{u} R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Condensed.instIsRightKanExtensionFintypeCatCondensedModProfiniteProfinit
+eSolidProfiniteSolidCounit`：∀ (R : Type (u + 1)) [inst : Ring R],   (Condensed.p
+rofiniteSolid R).IsRightKanExtension (Condensed.profiniteSolidCounit R)
 
-English:
-definition profiniteSolidification
-  signature: : profiniteFree R ⟶ profiniteSolid.{u} R
-  body: (profiniteSolid R).liftOfIsRightKanExtension (profiniteSolidCounit R) _ (𝟙 _)
-
-中文:
-定义 profiniteSolidification
-  签名: : profiniteFree R ⟶ profiniteSolid.{u} R
-  定义体: (profiniteSolid R).liftOfIsRightKanExtension (profiniteSolidCounit R) _ (𝟙 _)
-
-Depends on / 依赖: liftOfIsRightKanExtension, profiniteSolid, profiniteSolidCounit
+--- 原说明 ---
+The natural transformation `R[S] ⟶ R[S]^\solid`.
 -/
 def profiniteSolidification : profiniteFree R ⟶ profiniteSolid.{u} R :=
   (profiniteSolid R).liftOfIsRightKanExtension (profiniteSolidCounit R) _ (𝟙 _)
@@ -172,20 +145,34 @@ def profiniteSolidification : profiniteFree R ⟶ profiniteSolid.{u} R :=
 end Condensed
 
 /--
-Definition of `CondensedMod.IsSolid` / `CondensedMod.IsSolid` 的定义
+The predicate on condensed `R`-modules describing the property of being solid.
 
-English:
-class CondensedMod.IsSolid
-  parameters: (A : CondensedMod.{u} R)
-  axioms and operations (1):
-    - isIso_solidification_map : forall X : Profinite.{u}, IsIso ((yoneda.obj A).map ((profiniteSolidification R).app X).op)
+TODO: This is not the correct definition of solid `R`-modules for a general `R`. The correct one is
+as follows: Use this to define solid modules over a finite type `ℤ`-algebra `R`. In particular this
+gives a definition of solid modules over `ℤ[X]` (polynomials in one variable). Then a solid
+`R`-module over a general ring `R` is the condition that for every `r ∈ R` and every ring
+homomorphism `ℤ[X] → R` such that `X` maps to `r`, the underlying `ℤ[X]`-module is solid.
+-/
+/-
+**CondensedMod.IsSolid** 是 Mathlib 中的一个归纳类型，位于命名空间 `CondensedMod`。
+形式化陈述：(R : Type (u + 1)) → [inst : Ring R] → CondensedMod R → Prop
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 CondensedMod.是Solid
-  参数: (A : CondensedMod.{u} R)
-  公理与运算 (1 个):
-    - isIso_solidification_map : 对任意 X : Profinite.{u}, 是同构 ((yoneda.obj A).map ((profiniteSolidification R).app X).op)
+--- 原说明 ---
+The predicate on condensed `R`-modules describing the property of being solid.
+
+TODO: This is not the correct definition of solid `R`-modules for a general `R`.
+ The correct one is
+as follows: Use this to define solid modules over a finite type `ℤ`-algebra `R`.
+ In particular this
+gives a definition of solid modules over `ℤ[X]` (polynomials in one variable). T
+hen a solid
+`R`-module over a general ring `R` is the condition that for every `r ∈ R` and e
+very ring
+homomorphism `ℤ[X] → R` such that `X` maps to `r`, the underlying `ℤ[X]`-module 
+is solid.
 -/
 class CondensedMod.IsSolid (A : CondensedMod.{u} R) : Prop where
-  isIso_solidification_map : forall X : Profinite.{u}, IsIso ((yoneda.obj A).map
+  isIso_solidification_map : ∀ X : Profinite.{u}, IsIso ((yoneda.obj A).map
     ((profiniteSolidification R).app X).op)

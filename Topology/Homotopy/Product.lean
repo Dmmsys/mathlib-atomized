@@ -58,39 +58,27 @@ open ContinuousMap
 
 section Pi
 
-variable {I A : Type*} {X : I -> Type*} [forall i, TopologicalSpace (X i)] [TopologicalSpace A]
-  {f g : forall i, C(A, X i)} {S : Set A}
+variable {I A : Type*} {X : I → Type*} [∀ i, TopologicalSpace (X i)] [TopologicalSpace A]
+  {f g : ∀ i, C(A, X i)} {S : Set A}
 
 /-- The relative product homotopy of `homotopies` between functions `f` and `g` -/
 @[simps!]
-/--
-Definition of `HomotopyRel.pi` / `HomotopyRel.pi` 的定义
+/-
+**ContinuousMap.HomotopyRel.pi** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.Homotopy
+Rel`。
+形式化陈述：{I : Type u_1} →   {A : Type u_2} →     {X : I → Type u_3} →       [inst :
+ (i : I) → TopologicalSpace (X i)] →         [inst_1 : TopologicalSpace A] →    
+       {f g : (i : I) → C(A, X i)} →             {S : Set A} →               ((i
+ : I) → (f i).HomotopyRel (g i) S) → (ContinuousMap.pi f).HomotopyRel (Continuou
+sMap.pi g) S
+参数：i : I；X i；i : I；A, X i；(i : I) → (f i).HomotopyRel (g i) S；ContinuousMap.pi f
+；ContinuousMap.pi g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HomotopyRel.pi
-  signature: (homotopies : forall i : I, HomotopyRel (f i) (g i) S)
-  body: { Homotopy.pi fun i => (homotopies i).toHomotopy with
-    prop' := by
-      intro t x hx
-      dsimp only [coe_mk, pi_eval, toFun_eq_coe, HomotopyWith.coe_toContinuousMap]
-      simp only [funext_iff]
-      intro i
-      exact (homotopies i).prop' t x hx }
-
-中文:
-定义 HomotopyRel.pi
-  签名: (homotopies : 对任意 i : I, HomotopyRel (f i) (g i) S)
-  定义体: { Homotopy.pi fun i => (homotopies i).toHomotopy with
-    prop' := by
-      intro t x hx
-      dsimp only [coe_mk, pi_eval, toFun_eq_coe, HomotopyWith.coe_toContinuousMap]
-      simp only [funext_iff]
-      intro i
-      exact (homotopies i).prop' t x hx }
-
-Depends on / 依赖: Homotopy, Homotopy.pi, HomotopyWith, HomotopyWith.coe_toContinuousMap, coe_mk, coe_toContinuousMap, funext_iff, homotopies, pi_eval, toFun_eq_coe, toHomotopy
+--- 原说明 ---
+The relative product homotopy of `homotopies` between functions `f` and `g`
 -/
-def HomotopyRel.pi (homotopies : forall i : I, HomotopyRel (f i) (g i) S) :
+def HomotopyRel.pi (homotopies : ∀ i : I, HomotopyRel (f i) (g i) S) :
     HomotopyRel (pi f) (pi g) S :=
   { Homotopy.pi fun i => (homotopies i).toHomotopy with
     prop' := by
@@ -110,22 +98,19 @@ variable {α β : Type*} [TopologicalSpace α] [TopologicalSpace β] {A : Type*}
 /-- The product of homotopies `F` and `G`,
   where `F` takes `f₀` to `f₁` and `G` takes `g₀` to `g₁` -/
 @[simps]
-/--
-Definition of `Homotopy.prod` / `Homotopy.prod` 的定义
+/-
+**ContinuousMap.Homotopy.prod** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.Homotopy`
+。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : TopologicalSpace α] →     
+  [inst_1 : TopologicalSpace β] →         {A : Type u_3} →           [inst_2 : T
+opologicalSpace A] →             {f₀ f₁ : C(A, α)} →               {g₀ g₁ : C(A,
+ β)} → f₀.Homotopy f₁ → g₀.Homotopy g₁ → (f₀.prodMk g₀).Homotopy (f₁.prodMk g₁)
+参数：A, α；A, β；f₀.prodMk g₀；f₁.prodMk g₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Homotopy.prod
-  signature: (F : Homotopy f₀ f₁) (G : Homotopy g₀ g₁)
-  body: (F t, G t)
-  map_zero_left x := by simp only [prod_eval, Homotopy.apply_zero]
-  map_one_left x := by simp only [prod_eval, Homotopy.apply_one]
-
-中文:
-定义 同伦.乘积
-  签名: (F : 同伦 f₀ f₁) (G : 同伦 g₀ g₁)
-  定义体: (F t, G t)
-  map_zero_left x := by simp only [prod_eval, Homotopy.apply_zero]
-  map_one_left x := by simp only [prod_eval, Homotopy.apply_one]
+--- 原说明 ---
+The product of homotopies `F` and `G`,
+  where `F` takes `f₀` to `f₁` and `G` takes `g₀` to `g₁`
 -/
 def Homotopy.prod (F : Homotopy f₀ f₁) (G : Homotopy g₀ g₁) :
     Homotopy (ContinuousMap.prodMk f₀ g₀) (ContinuousMap.prodMk f₁ g₁) where
@@ -136,22 +121,20 @@ def Homotopy.prod (F : Homotopy f₀ f₁) (G : Homotopy g₀ g₁) :
 /-- The relative product of homotopies `F` and `G`,
   where `F` takes `f₀` to `f₁` and `G` takes `g₀` to `g₁` -/
 @[simps!]
-/--
-Definition of `HomotopyRel.prod` / `HomotopyRel.prod` 的定义
+/-
+**ContinuousMap.HomotopyRel.prod** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.Homoto
+pyRel`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : TopologicalSpace α] →     
+  [inst_1 : TopologicalSpace β] →         {A : Type u_3} →           [inst_2 : T
+opologicalSpace A] →             {f₀ f₁ : C(A, α)} →               {g₀ g₁ : C(A,
+ β)} →                 {S : Set A} → f₀.HomotopyRel f₁ S → g₀.HomotopyRel g₁ S →
+ (f₀.prodMk g₀).HomotopyRel (f₁.prodMk g₁) S
+参数：A, α；A, β；f₀.prodMk g₀；f₁.prodMk g₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HomotopyRel.prod
-  signature: (F : HomotopyRel f₀ f₁ S) (G : HomotopyRel g₀ g₁ S)
-  body: Homotopy.prod F.toHomotopy G.toHomotopy
-  prop' t x hx := Prod.ext (F.prop' t x hx) (G.prop' t x hx)
-
-中文:
-定义 HomotopyRel.乘积
-  签名: (F : HomotopyRel f₀ f₁ S) (G : HomotopyRel g₀ g₁ S)
-  定义体: Homotopy.prod F.toHomotopy G.toHomotopy
-  prop' t x hx := Prod.ext (F.prop' t x hx) (G.prop' t x hx)
-
-Depends on / 依赖: F.toHomotopy, G.toHomotopy, Homotopy, Homotopy.prod, toHomotopy
+--- 原说明 ---
+The relative product of homotopies `F` and `G`,
+  where `F` takes `f₀` to `f₁` and `G` takes `g₀` to `g₁`
 -/
 def HomotopyRel.prod (F : HomotopyRel f₀ f₁ S) (G : HomotopyRel g₀ g₁ S) :
     HomotopyRel (prodMk f₀ g₀) (prodMk f₁ g₁) S where
@@ -168,180 +151,177 @@ local infixl:70 " ⬝ " => Quotient.trans
 
 section Pi
 
-variable {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)] {as bs cs : forall i, X i}
+variable {ι : Type*} {X : ι → Type*} [∀ i, TopologicalSpace (X i)] {as bs cs : ∀ i, X i}
 
-/--
-Definition of `piHomotopy` / `piHomotopy` 的定义
+/-- The product of a family of path homotopies. This is just a specialization of `HomotopyRel`. -/
+/-
+**Path.Homotopic.piHomotopy** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：piHomotopy (γ₀ γ₁ : forall i, Path (as i) (bs i)) (H : forall i, Path.Homo
+topy (γ₀ i) (γ₁ i)) : Path.Homotopy (Path.pi γ₀) (Path.pi γ₁)
+参数：γ₀ γ₁ : forall i, Path (as i) (bs i)；H : forall i, Path.Homotopy (γ₀ i) (γ₁ i
+)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piHomotopy
-  signature: (γ₀ γ₁ : forall i, Path (as i) (bs i)) (H : forall i, Path.Homotopy (γ₀ i) (γ₁ i))
-  body: ContinuousMap.HomotopyRel.pi H
-
-中文:
-定义 piHomotopy
-  签名: (γ₀ γ₁ : 对任意 i, 道路 (as i) (bs i)) (H : 对任意 i, 道路.同伦 (γ₀ i) (γ₁ i))
-  定义体: ContinuousMap.HomotopyRel.pi H
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.pi, HomotopyRel
+--- 原说明 ---
+The product of a family of path homotopies. This is just a specialization of `Ho
+motopyRel`.
 -/
-def piHomotopy (γ₀ γ₁ : forall i, Path (as i) (bs i)) (H : forall i, Path.Homotopy (γ₀ i) (γ₁ i)) :
+def piHomotopy (γ₀ γ₁ : ∀ i, Path (as i) (bs i)) (H : ∀ i, Path.Homotopy (γ₀ i) (γ₁ i)) :
     Path.Homotopy (Path.pi γ₀) (Path.pi γ₁) :=
   ContinuousMap.HomotopyRel.pi H
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- The product of a family of path homotopy classes. -/
+/-
+**Path.Homotopic.pi** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：pi (γ : forall i, Path.Homotopic.Quotient (as i) (bs i)) : Path.Homotopic.
+Quotient as bs
+参数：γ : forall i, Path.Homotopic.Quotient (as i) (bs i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (γ : forall i, Path.Homotopic.Quotient (as i) (bs i))
-  body: (_root_.Quotient.map Path.pi fun x y hxy =>
-    Nonempty.map (piHomotopy x y) (Classical.nonempty_pi.mpr hxy)) (Quotient.choice γ)
-
-中文:
-定义 pi
-  签名: (γ : 对任意 i, 道路.同伦.商 (as i) (bs i))
-  定义体: (_root_.Quotient.map Path.pi fun x y hxy =>
-    Nonempty.map (piHomotopy x y) (Classical.nonempty_pi.mpr hxy)) (Quotient.choice γ)
-
-Depends on / 依赖: Classical, Classical.nonempty_pi.mpr, Nonempty, Nonempty.map, Path.pi, Quotient, Quotient.choice, _root_, _root_.Quotient.map, choice, nonempty_pi, piHomotopy
+--- 原说明 ---
+The product of a family of path homotopy classes.
 -/
-def pi (γ : forall i, Path.Homotopic.Quotient (as i) (bs i)) : Path.Homotopic.Quotient as bs :=
+def pi (γ : ∀ i, Path.Homotopic.Quotient (as i) (bs i)) : Path.Homotopic.Quotient as bs :=
   (_root_.Quotient.map Path.pi fun x y hxy =>
     Nonempty.map (piHomotopy x y) (Classical.nonempty_pi.mpr hxy)) (Quotient.choice γ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pi_lift` / 定理 `pi_lift`
-
-English:
-theorem pi_lift
-  given: (γ : forall i, Path (as i) (bs i))
-  proof: by
-  simp_rw [← Quotient.mk'_eq_mk, Quotient.mk', pi, Quotient.choice_eq, Quotient.map_mk]
-
-中文:
-定理 pi_lift
-  条件: (γ : 对任意 i, 道路 (as i) (bs i))
-  证明: by
-  simp_rw [← Quotient.mk'_eq_mk, Quotient.mk', pi, Quotient.choice_eq, Quotient.map_mk]
-
-Depends on / 依赖: Quotient, Quotient.choice_eq, Quotient.map_mk, Quotient.mk, _eq_mk, choice_eq, map_mk, simp_rw
+/-
+**Path.Homotopic.pi_lift** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：pi_lift (γ : forall i, Path (as i) (bs i)) : (Path.Homotopic.pi fun i => (
+Quotient.mk (γ i))) = Quotient.mk (Path.pi γ)
+参数：γ : forall i, Path (as i) (bs i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.map.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} {sa : Setoid α}
+ {sb : Setoid β} (f f_1 : α → β) (e_f : f = f_1)   (h : ∀ ⦃a b : α⦄, a ≈ b → f a
+ ≈ f b) (a a_…
+· 使用定理 `Quotient.choice_eq`：Quotient.choice_eq {ι : Type*} {α : ι -> Type*} {S :
+ forall i, Setoid (α i)} (f : forall i, α i) : (Quotient.choice (S
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pi_lift (γ : forall i, Path (as i) (bs i)) :
+theorem pi_lift (γ : ∀ i, Path (as i) (bs i)) :
     (Path.Homotopic.pi fun i => (Quotient.mk (γ i))) = Quotient.mk (Path.pi γ) := by
   simp_rw [← Quotient.mk'_eq_mk, Quotient.mk', pi, Quotient.choice_eq, Quotient.map_mk]
 
-/--
-theorem `comp_pi_eq_pi_comp` / 定理 `comp_pi_eq_pi_comp`
+/-- Composition and products commute.
+  This is `Path.trans_pi_eq_pi_trans` descended to path homotopy classes. -/
+/-
+**Path.Homotopic.comp_pi_eq_pi_comp** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：comp_pi_eq_pi_comp (γ₀ : forall i, Path.Homotopic.Quotient (as i) (bs i)) 
+(γ₁ : forall i, Path.Homotopic.Quotient (bs i) (cs i)) : pi γ₀ ⬝ pi γ₁ = pi fun 
+i => γ₀ i ⬝ γ₁ i
+参数：γ₀ : forall i, Path.Homotopic.Quotient (as i) (bs i)；γ₁ : forall i, Path.Homo
+topic.Quotient (bs i) (cs i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.induction_on_pi`：Quotient.induction_on_pi {ι : Type*} {α : ι ->
+ Sort*} {s : forall i, Setoid (α i)} {p : (forall i, Quotient (s i)) -> Prop} (f
+ : forall i, Q…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Path.Homotopic.pi_lift`：pi_lift (γ : forall i, Path (as i) (bs i)) : (Pa
+th.Homotopic.pi fun i => (Quotient.mk (γ i))) = Quotient.mk (Path.pi γ)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.Homotopic.Quotient.mk_trans`：mk_trans (P₀ : Path x₀ x₁) (P₁ : Path 
+x₁ x₂) : mk (P₀.trans P₁) = Quotient.trans (mk P₀) (mk P₁)
+· 使用定理 `Path.trans_pi_eq_pi_trans`：trans_pi_eq_pi_trans (γ₀ : forall i, Path (as
+ i) (bs i)) (γ₁ : forall i, Path (bs i) (cs i)) : (Path.pi γ₀).trans (Path.pi γ₁
+) = Path.pi fun…
 
-English:
-theorem comp_pi_eq_pi_comp
-  statement: (γ₀ : forall i, Path.Homotopic.Quotient (as i) (bs i))
-  proof: by
-  induction γ₁ using Quotient.induction_on_pi with | _ a =>
-  induction γ₀ using Quotient.induction_on_pi
-  simp only [Quotient.mk''_eq_mk, pi_lift]
-  rw [← Path.Homotopic.Quotient.mk_trans]; rw [Path.trans_pi_eq_pi_trans]; rw [← pi_lift]
-  rfl
-
-中文:
-定理 comp_pi_eq_pi_comp
-  结论: (γ₀ : 对任意 i, 道路.同伦.商 (as i) (bs i))
-  证明: by
-  induction γ₁ using Quotient.induction_on_pi with | _ a =>
-  induction γ₀ using Quotient.induction_on_pi
-  simp only [Quotient.mk''_eq_mk, pi_lift]
-  rw [← Path.Homotopic.Quotient.mk_trans]; rw [Path.trans_pi_eq_pi_trans]; rw [← pi_lift]
-  rfl
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.mk_trans, Path.trans_pi_eq_pi_trans, Quotient, Quotient.induction_on_pi, Quotient.mk, _eq_mk, induction_on_pi, mk_trans, pi_lift, trans_pi_eq_pi_trans
+--- 原说明 ---
+Composition and products commute.
+  This is `Path.trans_pi_eq_pi_trans` descended to path homotopy classes.
 -/
-theorem comp_pi_eq_pi_comp (γ₀ : forall i, Path.Homotopic.Quotient (as i) (bs i))
-    (γ₁ : forall i, Path.Homotopic.Quotient (bs i) (cs i)) : pi γ₀ ⬝ pi γ₁ = pi fun i => γ₀ i ⬝ γ₁ i := by
+theorem comp_pi_eq_pi_comp (γ₀ : ∀ i, Path.Homotopic.Quotient (as i) (bs i))
+    (γ₁ : ∀ i, Path.Homotopic.Quotient (bs i) (cs i)) : pi γ₀ ⬝ pi γ₁ = pi fun i ↦ γ₀ i ⬝ γ₁ i := by
   induction γ₁ using Quotient.induction_on_pi with | _ a =>
   induction γ₀ using Quotient.induction_on_pi
   simp only [Quotient.mk''_eq_mk, pi_lift]
-  rw [← Path.Homotopic.Quotient.mk_trans]; rw [Path.trans_pi_eq_pi_trans]; rw [← pi_lift]
+  rw [← Path.Homotopic.Quotient.mk_trans, Path.trans_pi_eq_pi_trans, ← pi_lift]
   rfl
 
-/--
-Definition of `proj` / `proj` 的定义
+/-- Abbreviation for projection onto the ith coordinate. -/
+/-
+**Path.Homotopic.proj** 是 Mathlib 中的一个缩写定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：proj (i : ι) (p : Path.Homotopic.Quotient as bs) : Path.Homotopic.Quotient
+ (as i) (bs i)
+参数：i : ι；p : Path.Homotopic.Quotient as bs。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
 
-English:
-abbreviation proj
-  signature: (i : ι) (p : Path.Homotopic.Quotient as bs)
-  body: p.map ⟨_, continuous_apply i⟩
-
-中文:
-缩写 proj
-  签名: (i : ι) (p : 道路.同伦.商 as bs)
-  定义体: p.map ⟨_, continuous_apply i⟩
-
-Depends on / 依赖: continuous_apply, p.map
+--- 原说明 ---
+Abbreviation for projection onto the ith coordinate.
 -/
 abbrev proj (i : ι) (p : Path.Homotopic.Quotient as bs) : Path.Homotopic.Quotient (as i) (bs i) :=
   p.map ⟨_, continuous_apply i⟩
 
 /-- Lemmas showing projection is the inverse of pi. -/
 @[simp]
-/--
-theorem `proj_pi` / 定理 `proj_pi`
+/-
+**Path.Homotopic.proj_pi** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：proj_pi (i : ι) (paths : forall i, Path.Homotopic.Quotient (as i) (bs i)) 
+: proj i (pi paths) = paths i
+参数：i : ι；paths : forall i, Path.Homotopic.Quotient (as i) (bs i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.induction_on_pi`：Quotient.induction_on_pi {ι : Type*} {α : ι ->
+ Sort*} {s : forall i, Setoid (α i)} {p : (forall i, Quotient (s i)) -> Prop} (f
+ : forall i, Q…
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopic.proj.eq_1`：∀ {ι : Type u_1} {X : ι → Type u_2} [inst : (i
+ : ι) → TopologicalSpace (X i)] {as bs : (i : ι) → X i} (i : ι)   (p : Path.Homo
+topic.Quotient…
+· 使用定理 `Path.Homotopic.pi_lift`：pi_lift (γ : forall i, Path (as i) (bs i)) : (Pa
+th.Homotopic.pi fun i => (Quotient.mk (γ i))) = Quotient.mk (Path.pi γ)
 
-English:
-theorem proj_pi
-  given: (i : ι) (paths : forall i, Path.Homotopic.Quotient (as i) (bs i))
-  proof: by
-  induction paths using Quotient.induction_on_pi
-  simp only [Quotient.mk''_eq_mk]
-  rw [proj]; rw [pi_lift]
-  congr
-
-@[simp]
-
-中文:
-定理 proj_pi
-  条件: (i : ι) (paths : 对任意 i, 道路.同伦.商 (as i) (bs i))
-  证明: by
-  induction paths using Quotient.induction_on_pi
-  simp only [Quotient.mk''_eq_mk]
-  rw [proj]; rw [pi_lift]
-  congr
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.induction_on_pi, Quotient.mk, _eq_mk, induction_on_pi, pi_lift
+--- 原说明 ---
+Lemmas showing projection is the inverse of pi.
 -/
-theorem proj_pi (i : ι) (paths : forall i, Path.Homotopic.Quotient (as i) (bs i)) :
+theorem proj_pi (i : ι) (paths : ∀ i, Path.Homotopic.Quotient (as i) (bs i)) :
     proj i (pi paths) = paths i := by
   induction paths using Quotient.induction_on_pi
   simp only [Quotient.mk''_eq_mk]
-  rw [proj]; rw [pi_lift]
+  rw [proj, pi_lift]
   congr
 
 @[simp]
-/--
-theorem `pi_proj` / 定理 `pi_proj`
-
-English:
-theorem pi_proj
-  given: (p : Path.Homotopic.Quotient as bs)
-  statement: (pi fun i => proj i p) = p
-  proof: by
-  induction p using Quotient.inductionOn
-  simp only [Quotient.mk''_eq_mk, ← Path.Homotopic.Quotient.mk_map, pi_lift]
-  congr
-
-中文:
-定理 pi_proj
-  条件: (p : 道路.同伦.商 as bs)
-  结论: (pi fun i => proj i p) = p
-  证明: by
-  induction p using Quotient.inductionOn
-  simp only [Quotient.mk''_eq_mk, ← Path.Homotopic.Quotient.mk_map, pi_lift]
-  congr
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.mk_map, Quotient, Quotient.inductionOn, Quotient.mk, _eq_mk, inductionOn, mk_map, pi_lift
+/-
+**Path.Homotopic.pi_proj** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：pi_proj (p : Path.Homotopic.Quotient as bs) : (pi fun i => proj i p) = p
+参数：p : Path.Homotopic.Quotient as bs。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopic.pi_lift`：pi_lift (γ : forall i, Path (as i) (bs i)) : (Pa
+th.Homotopic.pi fun i => (Quotient.mk (γ i))) = Quotient.mk (Path.pi γ)
 -/
 theorem pi_proj (p : Path.Homotopic.Quotient as bs) : (pi fun i => proj i p) = p := by
   induction p using Quotient.inductionOn
@@ -356,84 +336,80 @@ variable {α β : Type*} [TopologicalSpace α] [TopologicalSpace β] {a₁ a₂ 
   {p₁ p₁' : Path a₁ a₂} {p₂ p₂' : Path b₁ b₂} (q₁ : Path.Homotopic.Quotient a₁ a₂)
   (q₂ : Path.Homotopic.Quotient b₁ b₂)
 
-/--
-Definition of `prodHomotopy` / `prodHomotopy` 的定义
+/-- The product of homotopies h₁ and h₂.
+This is `HomotopyRel.prod` specialized for path homotopies. -/
+/-
+**Path.Homotopic.prodHomotopy** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：prodHomotopy (h₁ : Path.Homotopy p₁ p₁') (h₂ : Path.Homotopy p₂ p₂') : Pat
+h.Homotopy (p₁.prod p₂) (p₁'.prod p₂')
+参数：h₁ : Path.Homotopy p₁ p₁'；h₂ : Path.Homotopy p₂ p₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodHomotopy
-  signature: (h₁ : Path.Homotopy p₁ p₁') (h₂ : Path.Homotopy p₂ p₂')
-  body: ContinuousMap.HomotopyRel.prod h₁ h₂
-
-中文:
-定义 prodHomotopy
-  签名: (h₁ : 道路.同伦 p₁ p₁') (h₂ : 道路.同伦 p₂ p₂')
-  定义体: ContinuousMap.HomotopyRel.prod h₁ h₂
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.prod, HomotopyRel
+--- 原说明 ---
+The product of homotopies h₁ and h₂.
+This is `HomotopyRel.prod` specialized for path homotopies.
 -/
 def prodHomotopy (h₁ : Path.Homotopy p₁ p₁') (h₂ : Path.Homotopy p₂ p₂') :
     Path.Homotopy (p₁.prod p₂) (p₁'.prod p₂') :=
   ContinuousMap.HomotopyRel.prod h₁ h₂
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The product of path classes q₁ and q₂. This is `Path.prod` descended to the quotient. -/
+/-
+**Path.Homotopic.prod** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：prod (q₁ : Path.Homotopic.Quotient a₁ a₂) (q₂ : Path.Homotopic.Quotient b₁
+ b₂) : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂)
+参数：q₁ : Path.Homotopic.Quotient a₁ a₂；q₂ : Path.Homotopic.Quotient b₁ b₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (q₁ : Path.Homotopic.Quotient a₁ a₂) (q₂ : Path.Homotopic.Quotient b₁ b₂)
-  body: Quotient.map₂ Path.prod (fun _ _ h₁ _ _ h₂ => Nonempty.map2 prodHomotopy h₁ h₂) q₁ q₂
-
-中文:
-定义 乘积
-  签名: (q₁ : 道路.同伦.商 a₁ a₂) (q₂ : 道路.同伦.商 b₁ b₂)
-  定义体: Quotient.map₂ Path.prod (fun _ _ h₁ _ _ h₂ => Nonempty.map2 prodHomotopy h₁ h₂) q₁ q₂
-
-Depends on / 依赖: Nonempty, Nonempty.map2, Path.prod, Quotient, Quotient.map, prodHomotopy
+--- 原说明 ---
+The product of path classes q₁ and q₂. This is `Path.prod` descended to the quot
+ient.
 -/
 def prod (q₁ : Path.Homotopic.Quotient a₁ a₂) (q₂ : Path.Homotopic.Quotient b₁ b₂) :
     Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂) :=
   Quotient.map₂ Path.prod (fun _ _ h₁ _ _ h₂ => Nonempty.map2 prodHomotopy h₁ h₂) q₁ q₂
 
 variable (p₁ p₁' p₂ p₂')
-
-/--
-theorem `prod_lift` / 定理 `prod_lift`
-
-English:
-theorem prod_lift
-  statement: prod (Quotient.mk p₁) (Quotient.mk p₂) = Quotient.mk (p₁.prod p₂)
-  proof: rfl
-
-中文:
-定理 prod_lift
-  结论: 乘积 (商.mk p₁) (商.mk p₂) = 商.mk (p₁.乘积 p₂)
-  证明: rfl
+/-
+**Path.Homotopic.prod_lift** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：prod_lift : prod (Quotient.mk p₁) (Quotient.mk p₂) = Quotient.mk (p₁.prod 
+p₂)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_lift : prod (Quotient.mk p₁) (Quotient.mk p₂) = Quotient.mk (p₁.prod p₂) :=
   rfl
 
 variable (r₁ : Path.Homotopic.Quotient a₂ a₃) (r₂ : Path.Homotopic.Quotient b₂ b₃)
 
-/--
-theorem `comp_prod_eq_prod_comp` / 定理 `comp_prod_eq_prod_comp`
+/-- Products commute with path composition.
+This is `trans_prod_eq_prod_trans` descended to the quotient. -/
+/-
+**Path.Homotopic.comp_prod_eq_prod_comp** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopi
+c`。
+形式化陈述：comp_prod_eq_prod_comp : prod q₁ q₂ ⬝ prod r₁ r₂ = prod (q₁ ⬝ r₁) (q₂ ⬝ r₂
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind₂`：∀ {X : Type u} [inst : TopologicalSpace X]
+ {Y : Type u_1} [inst_1 : TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}   {motive 
+: Path.Homotopic.Q…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.trans_prod_eq_prod_trans`：trans_prod_eq_prod_trans (γ₁ : Path a₁ a₂
+) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁ b₂) (δ₂ : Path b₂ b₃) : (γ₁.prod γ₂).trans (δ₁
+.prod δ₂) = (γ₁.tra…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem comp_prod_eq_prod_comp
-  statement: prod q₁ q₂ ⬝ prod r₁ r₂ = prod (q₁ ⬝ r₁) (q₂ ⬝ r₂)
-  proof: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  induction r₁, r₂ using Path.Homotopic.Quotient.ind₂
-  simp only [prod_lift, ← Path.Homotopic.Quotient.mk_trans, Path.trans_prod_eq_prod_trans]
-
-中文:
-定理 comp_prod_eq_prod_comp
-  结论: 乘积 q₁ q₂ ⬝ 乘积 r₁ r₂ = 乘积 (q₁ ⬝ r₁) (q₂ ⬝ r₂)
-  证明: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  induction r₁, r₂ using Path.Homotopic.Quotient.ind₂
-  simp only [prod_lift, ← Path.Homotopic.Quotient.mk_trans, Path.trans_prod_eq_prod_trans]
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.ind, Path.Homotopic.Quotient.mk_trans, Path.trans_prod_eq_prod_trans, Quotient, mk_trans, prod_lift, trans_prod_eq_prod_trans
+--- 原说明 ---
+Products commute with path composition.
+This is `trans_prod_eq_prod_trans` descended to the quotient.
 -/
 theorem comp_prod_eq_prod_comp : prod q₁ q₂ ⬝ prod r₁ r₂ = prod (q₁ ⬝ r₁) (q₂ ⬝ r₂) := by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
@@ -442,126 +418,120 @@ theorem comp_prod_eq_prod_comp : prod q₁ q₂ ⬝ prod r₁ r₂ = prod (q₁ 
 
 variable {c₁ c₂ : α × β}
 
-/--
-Definition of `projLeft` / `projLeft` 的定义
+/-- Abbreviation for projection onto the left coordinate of a path class. -/
+/-
+**Path.Homotopic.projLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：projLeft (p : Path.Homotopic.Quotient c₁ c₂) : Path.Homotopic.Quotient c₁.
+1 c₂.1
+参数：p : Path.Homotopic.Quotient c₁ c₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
 
-English:
-abbreviation projLeft
-  signature: (p : Path.Homotopic.Quotient c₁ c₂)
-  body: p.map ⟨_, continuous_fst⟩
-
-中文:
-缩写 projLeft
-  签名: (p : 道路.同伦.商 c₁ c₂)
-  定义体: p.map ⟨_, continuous_fst⟩
-
-Depends on / 依赖: continuous_fst, p.map
+--- 原说明 ---
+Abbreviation for projection onto the left coordinate of a path class.
 -/
 abbrev projLeft (p : Path.Homotopic.Quotient c₁ c₂) : Path.Homotopic.Quotient c₁.1 c₂.1 :=
   p.map ⟨_, continuous_fst⟩
 
-/--
-Definition of `projRight` / `projRight` 的定义
+/-- Abbreviation for projection onto the right coordinate of a path class. -/
+/-
+**Path.Homotopic.projRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：projRight (p : Path.Homotopic.Quotient c₁ c₂) : Path.Homotopic.Quotient c₁
+.2 c₂.2
+参数：p : Path.Homotopic.Quotient c₁ c₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 
-English:
-abbreviation projRight
-  signature: (p : Path.Homotopic.Quotient c₁ c₂)
-  body: p.map ⟨_, continuous_snd⟩
-
-中文:
-缩写 projRight
-  签名: (p : 道路.同伦.商 c₁ c₂)
-  定义体: p.map ⟨_, continuous_snd⟩
-
-Depends on / 依赖: continuous_snd, p.map
+--- 原说明 ---
+Abbreviation for projection onto the right coordinate of a path class.
 -/
 abbrev projRight (p : Path.Homotopic.Quotient c₁ c₂) : Path.Homotopic.Quotient c₁.2 c₂.2 :=
   p.map ⟨_, continuous_snd⟩
 
 /-- Lemmas showing projection is the inverse of product. -/
 @[simp]
-/--
-theorem `projLeft_prod` / 定理 `projLeft_prod`
+/-
+**Path.Homotopic.projLeft_prod** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：projLeft_prod : projLeft (prod q₁ q₂) = q₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind₂`：∀ {X : Type u} [inst : TopologicalSpace X]
+ {Y : Type u_1} [inst_1 : TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}   {motive 
+: Path.Homotopic.Q…
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopic.projLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : To
+pologicalSpace α] [inst_1 : TopologicalSpace β] {c₁ c₂ : α × β}   (p : Path.Homo
+topic.Quotient c₁ …
+· 使用定理 `Path.Homotopic.prod_lift`：prod_lift : prod (Quotient.mk p₁) (Quotient.mk
+ p₂) = Quotient.mk (p₁.prod p₂)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.Homotopic.Quotient.mk_map`：mk_map (P₀ : Path x₀ x₁) (f : C(X, Y)) :
+ mk (P₀.map f.continuous) = map (mk P₀) f
 
-English:
-theorem projLeft_prod
-  statement: projLeft (prod q₁ q₂) = q₁
-  proof: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projLeft]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
-  congr
-
-@[simp]
-
-中文:
-定理 projLeft_prod
-  结论: projLeft (乘积 q₁ q₂) = q₁
-  证明: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projLeft]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
-  congr
-
-@[simp]
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.ind, Path.Homotopic.Quotient.mk_map, Quotient, mk_map, prod_lift, projLeft
+--- 原说明 ---
+Lemmas showing projection is the inverse of product.
 -/
 theorem projLeft_prod : projLeft (prod q₁ q₂) = q₁ := by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projLeft]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
+  rw [projLeft, prod_lift, ← Path.Homotopic.Quotient.mk_map]
   congr
 
 @[simp]
-/--
-theorem `projRight_prod` / 定理 `projRight_prod`
-
-English:
-theorem projRight_prod
-  statement: projRight (prod q₁ q₂) = q₂
-  proof: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projRight]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
-  congr
-
-@[simp]
-
-中文:
-定理 projRight_prod
-  结论: projRight (乘积 q₁ q₂) = q₂
-  证明: by
-  induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projRight]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
-  congr
-
-@[simp]
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.ind, Path.Homotopic.Quotient.mk_map, Quotient, mk_map, prod_lift, projRight
+/-
+**Path.Homotopic.projRight_prod** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：projRight_prod : projRight (prod q₁ q₂) = q₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind₂`：∀ {X : Type u} [inst : TopologicalSpace X]
+ {Y : Type u_1} [inst_1 : TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}   {motive 
+: Path.Homotopic.Q…
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopic.projRight.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : T
+opologicalSpace α] [inst_1 : TopologicalSpace β] {c₁ c₂ : α × β}   (p : Path.Hom
+otopic.Quotient c₁ …
+· 使用定理 `Path.Homotopic.prod_lift`：prod_lift : prod (Quotient.mk p₁) (Quotient.mk
+ p₂) = Quotient.mk (p₁.prod p₂)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.Homotopic.Quotient.mk_map`：mk_map (P₀ : Path x₀ x₁) (f : C(X, Y)) :
+ mk (P₀.map f.continuous) = map (mk P₀) f
 -/
 theorem projRight_prod : projRight (prod q₁ q₂) = q₂ := by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
-  rw [projRight]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
+  rw [projRight, prod_lift, ← Path.Homotopic.Quotient.mk_map]
   congr
 
 @[simp]
-/--
-theorem `prod_projLeft_projRight` / 定理 `prod_projLeft_projRight`
-
-English:
-theorem prod_projLeft_projRight
-  given: (p : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂))
-  proof: by
-  induction p using Path.Homotopic.Quotient.ind
-  simp only [projLeft, projRight, ← Path.Homotopic.Quotient.mk_map]
-  congr
-
-中文:
-定理 prod_projLeft_projRight
-  条件: (p : 道路.同伦.商 (a₁, b₁) (a₂, b₂))
-  证明: by
-  induction p using Path.Homotopic.Quotient.ind
-  simp only [projLeft, projRight, ← Path.Homotopic.Quotient.mk_map]
-  congr
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient.ind, Path.Homotopic.Quotient.mk_map, Quotient, mk_map, projLeft, projRight
+/-
+**Path.Homotopic.prod_projLeft_projRight** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotop
+ic`。
+形式化陈述：prod_projLeft_projRight (p : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂)) : 
+prod (projLeft p) (projRight p) = p
+参数：p : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind`：∀ {X : Type u} [inst : TopologicalSpace X] 
+{x y : X} {motive : Path.Homotopic.Quotient x y → Prop},   (∀ (a : Path x y), mo
+tive (Path.Homoto…
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 -/
 theorem prod_projLeft_projRight (p : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂)) :
     prod (projLeft p) (projRight p) = p := by
@@ -572,3 +542,4 @@ theorem prod_projLeft_projRight (p : Path.Homotopic.Quotient (a₁, b₁) (a₂,
 end Prod
 
 end Path.Homotopic
+

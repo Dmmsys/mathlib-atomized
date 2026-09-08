@@ -24,109 +24,75 @@ variable {F R S : Type*}
 namespace RingHom
 
 @[simp]
-/--
-theorem `map_rat_algebraMap` / 定理 `map_rat_algebraMap`
-
-English:
-theorem map_rat_algebraMap
-  statement: [Semiring R] [Semiring S] [Algebra Rat R] [Algebra Rat S] (f : R ->+* S)
-  proof: RingHom.ext_iff.1 (Subsingleton.elim (f.comp (algebraMap Rat R)) (algebraMap Rat S)) r
-
-中文:
-定理 map_rat_algebraMap
-  结论: [半环 R] [半环 S] [代数 有理数 R] [代数 有理数 S] (f : R ->+* S)
-  证明: RingHom.ext_iff.1 (Subsingleton.elim (f.comp (algebraMap Rat R)) (algebraMap Rat S)) r
-
-Depends on / 依赖: IsCancelMul, IsMulTorsionFree, Monoid, Monoid.FG, RingHom, RingHom.ext_iff, Subsingleton, Subsingleton.elim, algebraMap, ext_iff, f.comp
+/-
+**RingHom.map_rat_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_rat_algebraMap [Semiring R] [Semiring S] [Algebra Rat R] [Algebra Rat 
+S] (f : R ->+* S) (r : Rat) : f (algebraMap Rat R r) = algebraMap Rat S r
+参数：f : R ->+* S；r : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RingHom.ext_iff`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g ↔ ∀ (x_2 : α), f x_2 = g x
+_2
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem map_rat_algebraMap [Semiring R] [Semiring S] [Algebra Rat R] [Algebra Rat S] (f : R ->+* S)
-    (r : Rat) : f (algebraMap Rat R r) = algebraMap Rat S r :=
-  RingHom.ext_iff.1 (Subsingleton.elim (f.comp (algebraMap Rat R)) (algebraMap Rat S)) r
+theorem map_rat_algebraMap [Semiring R] [Semiring S] [Algebra ℚ R] [Algebra ℚ S] (f : R →+* S)
+    (r : ℚ) : f (algebraMap ℚ R r) = algebraMap ℚ S r :=
+  RingHom.ext_iff.1 (Subsingleton.elim (f.comp (algebraMap ℚ R)) (algebraMap ℚ S)) r
 
 end RingHom
 
 namespace NNRat
 variable [DivisionSemiring R] [CharZero R] [DivisionSemiring S] [CharZero S]
 
-/--
-Instance `_root_.DivisionSemiring.toNNRatAlgebra` / 实例 `_root_.DivisionSemiring.toNNRatAlgebra`
-
-English:
-instance _root_.DivisionSemiring.toNNRatAlgebra
-  signature: : Algebra Rat>=0 R where
-  body: smul_def
-  algebraMap := castHom _
-  commutes' := cast_commute
-
-中文:
-实例 _root_.除半环.toNNRatAlgebra
-  签名: : 代数 有理数>=0 R where
-  定义体: smul_def
-  algebraMap := castHom _
-  commutes' := cast_commute
-
-Depends on / 依赖: smul_def
+/-
+**NNRat._root_.DivisionSemiring.toNNRatAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance _root_.DivisionSemiring.toNNRatAlgebra : Algebra Rat>=0 R where
+instance _root_.DivisionSemiring.toNNRatAlgebra : Algebra ℚ≥0 R where
   smul_def' := smul_def
   algebraMap := castHom _
   commutes' := cast_commute
-
-/--
-Instance `_root_.RingHomClass.toLinearMapClassNNRat` / 实例 `_root_.RingHomClass.toLinearMapClassNNRat`
-
-English:
-instance _root_.RingHomClass.toLinearMapClassNNRat
-  signature: [FunLike F R S] [RingHomClass F R S]
-  body: by simp [smul_def, cast_id]
-
-中文:
-实例 _root_.环态射类.toLinearMapClassNNRat
-  签名: [函数状 F R S] [环态射类 F R S]
-  定义体: by simp [smul_def, cast_id]
-
-Depends on / 依赖: cast_id, smul_def
+/-
+**NNRat._root_.RingHomClass.toLinearMapClassNNRat** 是 Mathlib 中的一个实例，位于命名空间 `NNR
+at`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.RingHomClass.toLinearMapClassNNRat [FunLike F R S] [RingHomClass F R S] :
-    LinearMapClass F Rat>=0 R S where
+    LinearMapClass F ℚ≥0 R S where
   map_smulₛₗ f q a := by simp [smul_def, cast_id]
 
 variable [SMul R S]
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMulCommClass R S S]
-  body: by simp [smul_def, mul_smul_comm]
-
-中文:
-实例 instSMulCommClass
-  签名: [标量交换类 R S S]
-  定义体: by simp [smul_def, mul_smul_comm]
-
-Depends on / 依赖: mul_smul_comm, smul_def
+/-
+**NNRat.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instSMulCommClass [SMulCommClass R S S] : SMulCommClass Rat>=0 R S where s
+mul_comm q a b
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.smul_def`：smul_def (q : Rat>=0) (a : K) : q • a = q * a
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-instance instSMulCommClass [SMulCommClass R S S] : SMulCommClass Rat>=0 R S where
+instance instSMulCommClass [SMulCommClass R S S] : SMulCommClass ℚ≥0 R S where
   smul_comm q a b := by simp [smul_def, mul_smul_comm]
-
-/--
-Instance `instSMulCommClass'` / 实例 `instSMulCommClass'`
-
-English:
-instance instSMulCommClass'
-  signature: [SMulCommClass S R S]
-  body: have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
-
-中文:
-实例 instSMulCommClass'
-  签名: [标量交换类 S R S]
-  定义体: have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**NNRat.instSMulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R Rat>=0 S
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
-instance instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R Rat>=0 S :=
+instance instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R ℚ≥0 S :=
   have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
 
 end NNRat
@@ -134,122 +100,74 @@ end NNRat
 namespace Rat
 variable [DivisionRing R] [CharZero R] [DivisionRing S] [CharZero S]
 
-/--
-Instance `_root_.DivisionRing.toRatAlgebra` / 实例 `_root_.DivisionRing.toRatAlgebra`
-
-English:
-instance _root_.DivisionRing.toRatAlgebra
-  signature: : Algebra Rat R where
-  body: smul_def
-  algebraMap := castHom _
-  commutes' := cast_commute
-
-中文:
-实例 _root_.除环.toRatAlgebra
-  签名: : 代数 有理数 R where
-  定义体: smul_def
-  algebraMap := castHom _
-  commutes' := cast_commute
-
-Depends on / 依赖: smul_def
+/-
+**Rat._root_.DivisionRing.toRatAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance _root_.DivisionRing.toRatAlgebra : Algebra Rat R where
+instance _root_.DivisionRing.toRatAlgebra : Algebra ℚ R where
   smul_def' := smul_def
   algebraMap := castHom _
   commutes' := cast_commute
-
-/--
-Instance `_root_.RingHomClass.toLinearMapClassRat` / 实例 `_root_.RingHomClass.toLinearMapClassRat`
-
-English:
-instance _root_.RingHomClass.toLinearMapClassRat
-  signature: [FunLike F R S] [RingHomClass F R S]
-  body: by simp [smul_def, cast_id]
-
-中文:
-实例 _root_.环态射类.toLinearMapClassRat
-  签名: [函数状 F R S] [环态射类 F R S]
-  定义体: by simp [smul_def, cast_id]
-
-Depends on / 依赖: cast_id, smul_def
+/-
+**Rat._root_.RingHomClass.toLinearMapClassRat** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.RingHomClass.toLinearMapClassRat [FunLike F R S] [RingHomClass F R S] :
-    LinearMapClass F Rat R S where
+    LinearMapClass F ℚ R S where
   map_smulₛₗ f q a := by simp [smul_def, cast_id]
-
-/--
-Instance `_root_.RingEquivClass.toLinearEquivClassRat` / 实例 `_root_.RingEquivClass.toLinearEquivClassRat`
-
-English:
-instance _root_.RingEquivClass.toLinearEquivClassRat
-  signature: [EquivLike F R S] [RingEquivClass F R S]
-  body: by simp [Algebra.smul_def]
-
-中文:
-实例 _root_.环等价类.toLinearEquivClassRat
-  签名: [等价状 F R S] [环等价类 F R S]
-  定义体: by simp [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, smul_def
+/-
+**Rat._root_.RingEquivClass.toLinearEquivClassRat** 是 Mathlib 中的一个实例，位于命名空间 `Rat
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.RingEquivClass.toLinearEquivClassRat [EquivLike F R S] [RingEquivClass F R S] :
-    LinearEquivClass F Rat R S where
+    LinearEquivClass F ℚ R S where
   map_smulₛₗ f c x := by simp [Algebra.smul_def]
 
 variable [SMul R S]
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMulCommClass R S S]
-  body: by simp [smul_def, mul_smul_comm]
-
-中文:
-实例 instSMulCommClass
-  签名: [标量交换类 R S S]
-  定义体: by simp [smul_def, mul_smul_comm]
-
-Depends on / 依赖: mul_smul_comm, smul_def
+/-
+**Rat.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instSMulCommClass [SMulCommClass R S S] : SMulCommClass Rat R S where smul
+_comm q a b
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.smul_def`：smul_def (a : Rat) (x : K) : a • x = ↑a * x
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-instance instSMulCommClass [SMulCommClass R S S] : SMulCommClass Rat R S where
+instance instSMulCommClass [SMulCommClass R S S] : SMulCommClass ℚ R S where
   smul_comm q a b := by simp [smul_def, mul_smul_comm]
-
-/--
-Instance `instSMulCommClass'` / 实例 `instSMulCommClass'`
-
-English:
-instance instSMulCommClass'
-  signature: [SMulCommClass S R S]
-  body: have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
-
-中文:
-实例 instSMulCommClass'
-  签名: [标量交换类 S R S]
-  定义体: have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
-
-Depends on / 依赖: AddCancelCommMonoid, AddMonoid, AddMonoid.FG, AffineAddMonoid, AffineAddMonoid.to_twoUniqueSums, SMulCommClass, SMulCommClass.symm, to_twoUniqueSums
+/-
+**Rat.instSMulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R Rat S
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
-instance instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R Rat S :=
+instance instSMulCommClass' [SMulCommClass S R S] : SMulCommClass R ℚ S :=
   have := SMulCommClass.symm S R S; SMulCommClass.symm _ _ _
-
-/--
-Instance `algebra_rat_subsingleton` / 实例 `algebra_rat_subsingleton`
-
-English:
-instance algebra_rat_subsingleton
-  signature: {R} [Semiring R]
-  body: ⟨fun x y => Algebra.algebra_ext x y RingHom.congr_fun Subsingleton.elim _ _⟩
-
-中文:
-实例 algebra_rat_subsingleton
-  签名: {R} [半环 R]
-  定义体: ⟨fun x y => Algebra.algebra_ext x y RingHom.congr_fun Subsingleton.elim _ _⟩
-
-Depends on / 依赖: AffineMonoid, AffineMonoid.to_twoUniqueProds, Algebra, Algebra.algebra_ext, CancelCommMonoid, Monoid, Monoid.FG, RingHom, RingHom.congr_fun, Subsingleton, Subsingleton.elim, algebra_ext, congr_fun, to_twoUniqueProds
+/-
+**Rat.algebra_rat_subsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：algebra_rat_subsingleton {R} [Semiring R] : Subsingleton (Algebra Rat R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.algebra_ext`：algebra_ext {R : Type*} [CommSemiring R] {A : Type*
+} [Semiring A] (P Q : Algebra R A) (h : forall r : R, (haveI
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-instance algebra_rat_subsingleton {R} [Semiring R] : Subsingleton (Algebra Rat R) :=
-⟨fun x y => Algebra.algebra_ext x y RingHom.congr_fun Subsingleton.elim _ _⟩
+instance algebra_rat_subsingleton {R} [Semiring R] : Subsingleton (Algebra ℚ R) :=
+  ⟨fun x y => Algebra.algebra_ext x y <| RingHom.congr_fun <| Subsingleton.elim _ _⟩
 
 end Rat
+

@@ -51,107 +51,154 @@ variable {k G V : Type*} [CommRing k] [Group G] {V : Type*} [AddCommGroup V]
   [Module k V] (ρ : Representation k G V) (g : G)
 
 variable [Finite G] in
-/--
-lemma `coinvariantsKer_eq_range` / 引理 `coinvariantsKer_eq_range`
-
-English:
-lemma coinvariantsKer_eq_range
-  given: (hg : forall x, x in Subgroup.zpowers g)
-  proof: by
-  refine le_antisymm (Submodule.span_le.2 ?_) ?_
-  · rintro a ⟨⟨γ, α⟩, rfl⟩
-    rcases mem_powers_iff_mem_zpowers.2 (hg γ) with ⟨i, rfl⟩
-    induction i with | zero => exact ⟨0, by simp⟩ | succ n _ =>
-    use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) α) (Fin.last _))
-    simpa using ρ.apply_sub_id_partialSum_eq _ _ _
-  · rintro x ⟨y, rfl⟩
-    simpa using Coinvariants.sub_mem_ker g y
-
-中文:
-引理 coinvariantsKer_eq_range
-  条件: (hg : 对任意 x, x in 子群.zpowers g)
-  证明: by
-  refine le_antisymm (Submodule.span_le.2 ?_) ?_
-  · rintro a ⟨⟨γ, α⟩, rfl⟩
-    rcases mem_powers_iff_mem_zpowers.2 (hg γ) with ⟨i, rfl⟩
-    induction i with | zero => exact ⟨0, by simp⟩ | succ n _ =>
-    use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) α) (Fin.last _))
-    simpa using ρ.apply_sub_id_partialSum_eq _ _ _
-  · rintro x ⟨y, rfl⟩
-    simpa using Coinvariants.sub_mem_ker g y
-
-Depends on / 依赖: Coinvariants, Coinvariants.sub_mem_ker, Fin.last, Fin.partialSum, Submodule, Submodule.span_le, apply_sub_id_partialSum_eq, le_antisymm, mem_powers_iff_mem_zpowers, partialSum, span_le, sub_mem_ker
+/-
+**Representation.FiniteCyclicGroup.coinvariantsKer_eq_range** 是 Mathlib 中的一个引理，位
+于命名空间 `Representation.FiniteCyclicGroup`。
+形式化陈述：coinvariantsKer_eq_range (hg : forall x, x in Subgroup.zpowers g) : Coinva
+riants.ker ρ = LinearMap.range (ρ g - LinearMap.id)
+参数：hg : forall x, x in Subgroup.zpowers g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用引理 `mem_powers_iff_mem_zpowers`：mem_powers_iff_mem_zpowers : y in powers x ↔
+ y in zpowers x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用引理 `Representation.apply_sub_id_partialSum_eq`：apply_sub_id_partialSum_eq (n
+ : Nat) (g : G) (x : V) : (ρ g - LinearMap.id (R
+· 使用引理 `Representation.Coinvariants.sub_mem_ker`：sub_mem_ker (g : G) (x : V) : ρ
+ g x - x in Coinvariants.ker ρ
 -/
-lemma coinvariantsKer_eq_range (hg : forall x, x in Subgroup.zpowers g) :
+lemma coinvariantsKer_eq_range (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     Coinvariants.ker ρ = LinearMap.range (ρ g - LinearMap.id) := by
   refine le_antisymm (Submodule.span_le.2 ?_) ?_
   · rintro a ⟨⟨γ, α⟩, rfl⟩
     rcases mem_powers_iff_mem_zpowers.2 (hg γ) with ⟨i, rfl⟩
     induction i with | zero => exact ⟨0, by simp⟩ | succ n _ =>
-    use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) α) (Fin.last _))
+    use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : ℕ)) α) (Fin.last _))
     simpa using ρ.apply_sub_id_partialSum_eq _ _ _
   · rintro x ⟨y, rfl⟩
     simpa using Coinvariants.sub_mem_ker g y
 
 variable [Fintype G] in
-/--
-Definition of `coinvariantsEquiv` / `coinvariantsEquiv` 的定义
+/-- Given a finite cyclic group `G` generated by `g` and a `G` representation `(V, ρ)`, `V_G` is
+isomorphic to `V ⧸ Im(ρ(g - 1))`. -/
+/-
+**Representation.FiniteCyclicGroup.coinvariantsEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+Representation.FiniteCyclicGroup`。
+形式化陈述：coinvariantsEquiv (hg : forall x, x in Subgroup.zpowers g) : ρ.Coinvariant
+s ≃ₗ[k] (_ ⧸ LinearMap.range (ρ g - LinearMap.id))
+参数：hg : forall x, x in Subgroup.zpowers g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coinvariantsEquiv
-  signature: (hg : forall x, x in Subgroup.zpowers g)
-  body: Submodule.quotEquivOfEq _ _ (coinvariantsKer_eq_range ρ g hg)
-
-中文:
-定义 coinvariantsEquiv
-  签名: (hg : 对任意 x, x in 子群.zpowers g)
-  定义体: Submodule.quotEquivOfEq _ _ (coinvariantsKer_eq_range ρ g hg)
-
-Depends on / 依赖: Submodule, Submodule.quotEquivOfEq, coinvariantsKer_eq_range, quotEquivOfEq
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g` and a `G` representation `(V, ρ
+)`, `V_G` is
+isomorphic to `V ⧸ Im(ρ(g - 1))`.
 -/
-noncomputable def coinvariantsEquiv (hg : forall x, x in Subgroup.zpowers g) :
+noncomputable def coinvariantsEquiv (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     ρ.Coinvariants ≃ₗ[k] (_ ⧸ LinearMap.range (ρ g - LinearMap.id)) :=
   Submodule.quotEquivOfEq _ _ (coinvariantsKer_eq_range ρ g hg)
 
 variable [Finite G] in
-/--
-lemma `coinvariantsKer_leftRegular_eq_ker` / 引理 `coinvariantsKer_leftRegular_eq_ker`
-
-English:
-lemma coinvariantsKer_leftRegular_eq_ker
-  proof: by
-  have := Fintype.ofFinite G
-  refine le_antisymm (Submodule.span_le.2 ?_) fun x hx => ?_
-  · rintro x ⟨⟨g, y⟩, rfl⟩
-    simpa [linearCombination, sub_eq_zero, sum_fintype]
-      using Finset.sum_bijective _ (Group.mulLeft_bijective g⁻¹) (by simp) (by lia)
-  · have : x = x.coeff.sum (fun g r => .single g r - .single 1 r) := by
-      ext g
-      by_cases hg : g = 1
-      · simp_all [linearCombination, sum_apply', MonoidAlgebra.coeff_finsuppSum]
-      · simp_all [sum_apply', MonoidAlgebra.coeff_finsuppSum]
-    rw [this]
-    exact Submodule.finsuppSum_mem _ _ _ _ fun g _ =>
-      Coinvariants.mem_ker_of_eq g (.single 1 (x.coeff g)) _ (by simp)
-
-中文:
-引理 coinvariantsKer_leftRegular_eq_ker
-  证明: by
-  have := Fintype.ofFinite G
-  refine le_antisymm (Submodule.span_le.2 ?_) fun x hx => ?_
-  · rintro x ⟨⟨g, y⟩, rfl⟩
-    simpa [linearCombination, sub_eq_zero, sum_fintype]
-      using Finset.sum_bijective _ (Group.mulLeft_bijective g⁻¹) (by simp) (by lia)
-  · have : x = x.coeff.sum (fun g r => .single g r - .single 1 r) := by
-      ext g
-      by_cases hg : g = 1
-      · simp_all [linearCombination, sum_apply', MonoidAlgebra.coeff_finsuppSum]
-      · simp_all [sum_apply', MonoidAlgebra.coeff_finsuppSum]
-    rw [this]
-    exact Submodule.finsuppSum_mem _ _ _ _ fun g _ =>
-      Coinvariants.mem_ker_of_eq g (.single 1 (x.coeff g)) _ (by simp)
-
-Depends on / 依赖: Finset, Finset.sum_bijective, Fintype, Fintype.ofFinite, Group.mulLeft_bijective, MonoidAlgebra, MonoidAlgebra.coeff_finsuppSum, Submodule, Submodule.fin, Submodule.span_le, coeff_finsuppSum, le_antisymm, linearCombination, mulLeft_bijective, ofFinite, single, span_le, sub_eq_zero, sum_apply, sum_bijective
+/-
+**Representation.FiniteCyclicGroup.coinvariantsKer_leftRegular_eq_ker** 是 Mathli
+b 中的一个引理，位于命名空间 `Representation.FiniteCyclicGroup`。
+形式化陈述：coinvariantsKer_leftRegular_eq_ker : Coinvariants.ker (Representation.left
+Regular k G) = LinearMap.ker ((linearCombination k (fun _ => (1 : k))) ∘ₗ (Monoi
+dAlgebra.coeffLinearEquiv k).toLinearMap)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finsupp.sum_fintype`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [in
+st : Zero M] [inst_1 : AddCommMonoid N] [inst_2 : Fintype α]   (f : α →₀ M) (g :
+ α → M → …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MonoidAlgebra.coeffLinearEquiv_apply`：∀ (R : Type u_1) {S : Type u_2} {M
+ : Type u_3} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : _root_.Module R
+ S]   (a : MonoidAlgebra S…
+· 使用定理 `Representation.coeff_ofMulAction`：coeff_ofMulAction {H : Type*} [MulActi
+on G H] (g : G) (f : k[H]) (h : H) : (ofMulAction k G H g f).coeff h = f.coeff (
+g⁻¹ • h)
+· 使用定理 `Finset.sum_sub_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f g : ι → G),   ∑ x ∈ s, (f x - g x) = ∑ x ∈ s,
+ f x - ∑ x ∈…
+· 使用定理 `Finset.sum_bijective`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [in
+st : AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (e
+ : ι → κ),…
+· 使用定理 `Group.mulLeft_bijective`：∀ {G : Type u_5} [inst : Group G] (a : G), Func
+tion.Bijective fun x => a * x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `Finsupp.sum_sub`：sum_sub [Zero M] [SubtractionCommMonoid G] {f : α ->₀ M
+} {h₁ h₂ : α -> M -> G} : (f.sum fun a b => h₁ a b - h₂ a b) = f.sum h₁ - f.sum 
+h₂
+· 使用引理 `MonoidAlgebra.sum_coeff_single`：sum_coeff_single (f : R[M]) : f.coeff.su
+m single = f
+· 使用引理 `MonoidAlgebra.coeff_finsuppSum`：coeff_finsuppSum [AddCommMonoid N] (f : 
+ι ->₀ N) (g : ι -> N -> R[M]) : coeff (f.sum g) = f.sum (fun i n => coeff (g i n
+))
+· 使用定理 `Finsupp.coe_sum`：∀ {α : Type u_1} {β : Type u_7} {M : Type u_8} {N : Typ
+e u_10} [inst : Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M)   (g : α → M → β
+ →₀ N…
+· 使用定理 `Finsupp.sum_apply'`：Finsupp.sum_apply' : g.sum k x = g.sum fun i b => k 
+i b x
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+（共 37 条，此处仅展示前 30 条）
 -/
 lemma coinvariantsKer_leftRegular_eq_ker :
     Coinvariants.ker (Representation.leftRegular k G) =
@@ -181,36 +228,65 @@ namespace leftRegular
 
 open Finsupp IsCyclic Representation
 
-/--
-lemma `range_norm_eq_ker_applyAsHom_sub` / 引理 `range_norm_eq_ker_applyAsHom_sub`
-
-English:
-lemma range_norm_eq_ker_applyAsHom_sub
-  given: (hg : forall x, x in Subgroup.zpowers g)
-  proof: le_antisymm (fun _ ⟨_, h⟩ => by simp [sub_hom, applyAsHom_apply _, ← h, norm])
-    fun x hx => ⟨.single 1 (x.coeff g), by
-    ext γ
-    have := coeff_of_leftRegular_of_generator (k := k) g hg x
-      (by simpa [sub_hom, sub_eq_zero] using! hx) γ
-    simp [norm, Representation.norm, this]⟩
-
-omit [Fintype G] in variable [Finite G] in
-
-中文:
-引理 range_norm_eq_ker_applyAsHom_sub
-  条件: (hg : 对任意 x, x in 子群.zpowers g)
-  证明: le_antisymm (fun _ ⟨_, h⟩ => by simp [sub_hom, applyAsHom_apply _, ← h, norm])
-    fun x hx => ⟨.single 1 (x.coeff g), by
-    ext γ
-    have := coeff_of_leftRegular_of_generator (k := k) g hg x
-      (by simpa [sub_hom, sub_eq_zero] using! hx) γ
-    simp [norm, Representation.norm, this]⟩
-
-omit [Fintype G] in variable [Finite G] in
-
-Depends on / 依赖: Representation, Representation.norm, applyAsHom_apply, coeff_of_leftRegular_of_generator, le_antisymm, single, sub_eq_zero, sub_hom, x.coeff
+/-
+**Rep.FiniteCyclicGroup.leftRegular.range_norm_eq_ker_applyAsHom_sub** 是 Mathlib
+ 中的一个引理，位于命名空间 `Rep.FiniteCyclicGroup.leftRegular`。
+形式化陈述：range_norm_eq_ker_applyAsHom_sub (hg : forall x, x in Subgroup.zpowers g) 
+: LinearMap.range (leftRegular k G).norm.hom.toLinearMap = LinearMap.ker (applyA
+sHom (leftRegular k G) g - 𝟙 _).hom.toLinearMap
+参数：hg : forall x, x in Subgroup.zpowers g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用引理 `Rep.applyAsHom_apply`：applyAsHom_apply {A : Rep k G} (g : G) (x : A) : (
+A.applyAsHom g).hom x = A.ρ g x
+· 使用引理 `Representation.self_norm_apply`：self_norm_apply (g : G) (x : V) : ρ g (n
+orm ρ x) = norm ρ x
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用引理 `Representation.coeff_of_leftRegular_of_generator`：coeff_of_leftRegular_o
+f_generator (g : G) (hg : forall x, x in Subgroup.zpowers g) (x : k[G]) (hx : le
+ftRegular k G g x = x) (γ : G) : x.coe…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Representation.IntertwiningMap.mk.congr_simp`：∀ {A : Type u_1} {G : Type
+ u_2} {V : Type u_3} {W : Type u_4} [inst : Semiring A] [inst_1 : Monoid G]   [i
+nst_2 : AddCommMonoid V] [inst_3 :…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LinearMap.coe_sum`：coe_sum {ι : Type*} (t : Finset ι) (f : ι -> M ->ₛₗ[σ
+₁₂] M₂) : ⇑(∑ i in t, f i) = ∑ i in t, (f i : M -> M₂)
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `Representation.ofMulAction_single`：ofMulAction_single (g : G) (x : H) (r
+ : k) : ofMulAction k G H g (single x r) = single (g • x) r
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `MonoidAlgebra.coeff_sum`：coeff_sum (s : Finset ι) (f : ι -> R[M]) : coef
+f (∑ i in s, f i) = ∑ i in s, coeff (f i)
+· 使用定理 `Finsupp.coe_finsetSum`：∀ {α : Type u_1} {ι : Type u_2} {N : Type u_10} [
+inst : AddCommMonoid N] (S : Finset ι) (f : ι → α →₀ N),   ⇑(∑ i ∈ S, f i) = ∑ i
+ ∈ S, ⇑(f i…
+· 使用定理 `Finsupp.univ_sum_single_apply'`：univ_sum_single_apply' [AddCommMonoid M]
+ [Fintype α] (i : α) (m : M) : ∑ j : α, single j m i = m
 -/
-lemma range_norm_eq_ker_applyAsHom_sub (hg : forall x, x in Subgroup.zpowers g) :
+lemma range_norm_eq_ker_applyAsHom_sub (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     LinearMap.range (leftRegular k G).norm.hom.toLinearMap =
       LinearMap.ker (applyAsHom (leftRegular k G) g - 𝟙 _).hom.toLinearMap :=
   le_antisymm (fun _ ⟨_, h⟩ => by simp [sub_hom, applyAsHom_apply _, ← h, norm])
@@ -221,53 +297,70 @@ lemma range_norm_eq_ker_applyAsHom_sub (hg : forall x, x in Subgroup.zpowers g) 
     simp [norm, Representation.norm, this]⟩
 
 omit [Fintype G] in variable [Finite G] in
-/--
-lemma `range_applyAsHom_sub_eq_ker_linearCombination` / 引理 `range_applyAsHom_sub_eq_ker_linearCombination`
-
-English:
-lemma range_applyAsHom_sub_eq_ker_linearCombination
-  given: (hg : forall x, x in Subgroup.zpowers g)
-  proof: by
-  simp [sub_hom, applyAsHom, FiniteCyclicGroup.coinvariantsKer_eq_range
-    (Representation.leftRegular k G) _ hg,
-    ← FiniteCyclicGroup.coinvariantsKer_leftRegular_eq_ker]
-
-中文:
-引理 range_applyAsHom_sub_eq_ker_linearCombination
-  条件: (hg : 对任意 x, x in 子群.zpowers g)
-  证明: by
-  simp [sub_hom, applyAsHom, FiniteCyclicGroup.coinvariantsKer_eq_range
-    (Representation.leftRegular k G) _ hg,
-    ← FiniteCyclicGroup.coinvariantsKer_leftRegular_eq_ker]
-
-Depends on / 依赖: FiniteCyclicGroup, FiniteCyclicGroup.coinvariantsKer_eq_range, FiniteCyclicGroup.coinvariantsKer_leftRegular_eq_ker, Representation, Representation.leftRegular, applyAsHom, coinvariantsKer_eq_range, coinvariantsKer_leftRegular_eq_ker, leftRegular, sub_hom
+/-
+**Rep.FiniteCyclicGroup.leftRegular.range_applyAsHom_sub_eq_ker_linearCombinatio
+n** 是 Mathlib 中的一个引理，位于命名空间 `Rep.FiniteCyclicGroup.leftRegular`。
+形式化陈述：range_applyAsHom_sub_eq_ker_linearCombination (hg : forall x, x in Subgrou
+p.zpowers g) : LinearMap.range (applyAsHom (leftRegular k G) g - 𝟙 _).hom.toLine
+arMap = LinearMap.ker ((linearCombination k (fun _ => (1 : k))) ∘ₗ (MonoidAlgebr
+a.coeffLinearEquiv k).toLinearMap)
+参数：hg : forall x, x in Subgroup.zpowers g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用引理 `Representation.FiniteCyclicGroup.coinvariantsKer_eq_range`：coinvariantsK
+er_eq_range (hg : forall x, x in Subgroup.zpowers g) : Coinvariants.ker ρ = Line
+arMap.range (ρ g - LinearMap.id)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma range_applyAsHom_sub_eq_ker_linearCombination (hg : forall x, x in Subgroup.zpowers g) :
+lemma range_applyAsHom_sub_eq_ker_linearCombination (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     LinearMap.range (applyAsHom (leftRegular k G) g - 𝟙 _).hom.toLinearMap =
       LinearMap.ker ((linearCombination k (fun _ => (1 : k))) ∘ₗ
         (MonoidAlgebra.coeffLinearEquiv k).toLinearMap) := by
   simp [sub_hom, applyAsHom, FiniteCyclicGroup.coinvariantsKer_eq_range
     (Representation.leftRegular k G) _ hg,
     ← FiniteCyclicGroup.coinvariantsKer_leftRegular_eq_ker]
-
-/--
-lemma `range_applyAsHom_sub_eq_ker_norm` / 引理 `range_applyAsHom_sub_eq_ker_norm`
-
-English:
-lemma range_applyAsHom_sub_eq_ker_norm
-  given: (hg : forall x, x in Subgroup.zpowers g)
-  proof: by
-  simp [norm, ker_leftRegular_norm_eq, range_applyAsHom_sub_eq_ker_linearCombination k g hg]
-
-中文:
-引理 range_applyAsHom_sub_eq_ker_norm
-  条件: (hg : 对任意 x, x in 子群.zpowers g)
-  证明: by
-  simp [norm, ker_leftRegular_norm_eq, range_applyAsHom_sub_eq_ker_linearCombination k g hg]
-
-Depends on / 依赖: ker_leftRegular_norm_eq, range_applyAsHom_sub_eq_ker_linearCombination
+/-
+**Rep.FiniteCyclicGroup.leftRegular.range_applyAsHom_sub_eq_ker_norm** 是 Mathlib
+ 中的一个引理，位于命名空间 `Rep.FiniteCyclicGroup.leftRegular`。
+形式化陈述：range_applyAsHom_sub_eq_ker_norm (hg : forall x, x in Subgroup.zpowers g) 
+: LinearMap.range (applyAsHom (leftRegular k G) g - 𝟙 _).hom.toLinearMap = Linea
+rMap.ker (leftRegular k G).norm.hom.toLinearMap
+参数：hg : forall x, x in Subgroup.zpowers g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rep.FiniteCyclicGroup.leftRegular.range_applyAsHom_sub_eq_ker_linearComb
+ination`：range_applyAsHom_sub_eq_ker_linearCombination (hg : forall x, x in Subg
+roup.zpowers g) : LinearMap.range (applyAsHom (leftRegular k G) g - 𝟙…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用引理 `Representation.ker_leftRegular_norm_eq`：ker_leftRegular_norm_eq : Linear
+Map.ker (leftRegular k G).norm = LinearMap.ker (linearCombination k (fun _ => (1
+ : k)) ∘ₗ (coeffLinearEquiv …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma range_applyAsHom_sub_eq_ker_norm (hg : forall x, x in Subgroup.zpowers g) :
+lemma range_applyAsHom_sub_eq_ker_norm (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     LinearMap.range (applyAsHom (leftRegular k G) g - 𝟙 _).hom.toLinearMap =
       LinearMap.ker (leftRegular k G).norm.hom.toLinearMap := by
   simp [norm, ker_leftRegular_norm_eq, range_applyAsHom_sub_eq_ker_linearCombination k g hg]
@@ -283,44 +376,28 @@ where `N` is the norm map. When `G` is generated by `g` and `A` is the left regu
 
 It sends a morphism `f : A ⟶ B` to the chain morphism defined by `f` in every degree. -/
 @[simps]
-/--
-Definition of `chainComplexFunctor` / `chainComplexFunctor` 的定义
+/-
+**Rep.FiniteCyclicGroup.chainComplexFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Rep.Finit
+eCyclicGroup`。
+形式化陈述：chainComplexFunctor : Rep k G ⥤ ChainComplex (Rep k G) Nat where obj A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.down_nat_odd_add`：down_nat_odd_add {i j : Nat} (h : (Comple
+xShape.down Nat).Rel i j) : Odd (i + j)
 
-English:
-definition chainComplexFunctor
-  signature: : Rep k G ⥤ ChainComplex (Rep k G) Nat where
-  body: HomologicalComplex.alternatingConst A (φ := A.norm) (ψ := applyAsHom A g - 𝟙 A)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, norm, applyAsHom])
-    fun _ _ => ComplexShape.down_nat_odd_add
-  map f := {
-    f i := f
-    comm' := by
-      rintro i j ⟨rfl⟩
-      by_cases hj : Even (j + 1)
-      · simp [if_pos hj, norm_comm]
-      · simp [if_neg hj, applyAsHom_comm] }
-  map_id _ := rfl
-  map_comp _ _ := rfl
+--- 原说明 ---
+Given a finite group `G` and `g : G`, this is the functor `Rep k G ⥤ ChainComple
+x (Rep k G) ℕ`
+sending `A : Rep k G` to the periodic chain complex in `Rep k G` given by
+`... ⟶ A --N--> A --(ρ(g) - 𝟙)--> A --N--> A --(ρ(g) - 𝟙)--> A ⟶ 0`
+where `N` is the norm map. When `G` is generated by `g` and `A` is the left regu
+lar representation
+`k[G]`, it is a projective resolution of `k` as a trivial representation.
 
-中文:
-定义 chainComplexFunctor
-  签名: : Rep k G ⥤ 链复形 (Rep k G) 自然数 where
-  定义体: HomologicalComplex.alternatingConst A (φ := A.norm) (ψ := applyAsHom A g - 𝟙 A)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, norm, applyAsHom])
-    fun _ _ => ComplexShape.down_nat_odd_add
-  map f := {
-    f i := f
-    comm' := by
-      rintro i j ⟨rfl⟩
-      by_cases hj : Even (j + 1)
-      · simp [if_pos hj, norm_comm]
-      · simp [if_neg hj, applyAsHom_comm] }
-  map_id _ := rfl
-  map_comp _ _ := rfl
-
-Depends on / 依赖: A.norm, HomologicalComplex, HomologicalComplex.alternatingConst, alternatingConst, applyAsHom
+It sends a morphism `f : A ⟶ B` to the chain morphism defined by `f` in every de
+gree.
 -/
-noncomputable def chainComplexFunctor : Rep k G ⥤ ChainComplex (Rep k G) Nat where
+noncomputable def chainComplexFunctor : Rep k G ⥤ ChainComplex (Rep k G) ℕ where
   obj A := HomologicalComplex.alternatingConst A (φ := A.norm) (ψ := applyAsHom A g - 𝟙 A)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, norm, applyAsHom])
     fun _ _ => ComplexShape.down_nat_odd_add
@@ -336,100 +413,100 @@ noncomputable def chainComplexFunctor : Rep k G ⥤ ChainComplex (Rep k G) Nat w
 
 variable {k}
 
-/--
-Definition of `normHomCompSub` / `normHomCompSub` 的定义
+/-- Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-representation `A`,
+this is the short complex in `ModuleCat k` given by `A --N--> A --(ρ(g) - 𝟙)--> A`
+where `N` is the norm map. Its homology is `Hⁱ(G, A)` for even `i` and `Hᵢ(G, A)` for odd `i`. -/
+/-
+**Rep.FiniteCyclicGroup.normHomCompSub** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep.FiniteCy
+clicGroup`。
+形式化陈述：normHomCompSub : ShortComplex (ModuleCat k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation normHomCompSub
-  signature: : ShortComplex (ModuleCat k)
-  body: ShortComplex.mk (ModuleCat.ofHom A.norm.hom.toLinearMap)
-    (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm])
-
-中文:
-缩写 normHomCompSub
-  签名: : 短复形 (模范畴 k)
-  定义体: ShortComplex.mk (ModuleCat.ofHom A.norm.hom.toLinearMap)
-    (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm])
-
-Depends on / 依赖: A.norm.hom.toLinearMap, ModuleCat, ModuleCat.ofHom, ShortComplex, ShortComplex.mk, applyAsHom, hom.toLinearMap, sub_hom, toLinearMap
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-repres
+entation `A`,
+this is the short complex in `ModuleCat k` given by `A --N--> A --(ρ(g) - 𝟙)--> 
+A`
+where `N` is the norm map. Its homology is `Hⁱ(G, A)` for even `i` and `Hᵢ(G, A)
+` for odd `i`.
 -/
 noncomputable abbrev normHomCompSub : ShortComplex (ModuleCat k) :=
   ShortComplex.mk (ModuleCat.ofHom A.norm.hom.toLinearMap)
     (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm])
 
-/--
-Definition of `subCompNormHom` / `subCompNormHom` 的定义
+/-- Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-representation `A`,
+this is the short complex in `ModuleCat k` given by `A --N--> A --(ρ(g) - 𝟙)--> A`
+where `N` is the norm map. Its homology is `Hⁱ(G, A)` for even `i` and `Hᵢ(G, A)` for odd `i`. -/
+/-
+**Rep.FiniteCyclicGroup.subCompNormHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep.FiniteCy
+clicGroup`。
+形式化陈述：subCompNormHom : ShortComplex (ModuleCat k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subCompNormHom
-  signature: : ShortComplex (ModuleCat k)
-  body: ShortComplex.mk (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (ModuleCat.ofHom A.norm.hom.toLinearMap) (by ext; simp [sub_hom, applyAsHom, norm])
-
-中文:
-缩写 subCompNormHom
-  签名: : 短复形 (模范畴 k)
-  定义体: ShortComplex.mk (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (ModuleCat.ofHom A.norm.hom.toLinearMap) (by ext; simp [sub_hom, applyAsHom, norm])
-
-Depends on / 依赖: A.norm.hom.toLinearMap, ModuleCat, ModuleCat.ofHom, ShortComplex, ShortComplex.mk, applyAsHom, hom.toLinearMap, sub_hom, toLinearMap
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-repres
+entation `A`,
+this is the short complex in `ModuleCat k` given by `A --N--> A --(ρ(g) - 𝟙)--> 
+A`
+where `N` is the norm map. Its homology is `Hⁱ(G, A)` for even `i` and `Hᵢ(G, A)
+` for odd `i`.
 -/
 noncomputable abbrev subCompNormHom : ShortComplex (ModuleCat k) :=
   ShortComplex.mk (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (ModuleCat.ofHom A.norm.hom.toLinearMap) (by ext; simp [sub_hom, applyAsHom, norm])
 
-/--
-Definition of `moduleCatChainComplex` / `moduleCatChainComplex` 的定义
+/-- Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-representation `A`,
+this is the periodic chain complex in `ModuleCat k` given by
+`... ⟶ A --N--> A --(ρ(g) - 𝟙)--> A --N--> A --(ρ(g) - 𝟙)--> A ⟶ 0` where `N` is the norm map.
+Its homology is the group homology of `A`. -/
+/-
+**Rep.FiniteCyclicGroup.moduleCatChainComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep.F
+initeCyclicGroup`。
+形式化陈述：moduleCatChainComplex : ChainComplex (ModuleCat k) Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.down_nat_odd_add`：down_nat_odd_add {i j : Nat} (h : (Comple
+xShape.down Nat).Rel i j) : Odd (i + j)
 
-English:
-abbreviation moduleCatChainComplex
-  signature: : ChainComplex (ModuleCat k) Nat
-  body: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
-    A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.down_nat_odd_add
-
-中文:
-缩写 moduleCatChainComplex
-  签名: : 链复形 (模范畴 k) 自然数
-  定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
-    A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.down_nat_odd_add
-
-Depends on / 依赖: A.norm.hom.toLinearMap, ComplexShape, ComplexShape.down_nat_odd_add, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, ModuleCat.of, ModuleCat.ofHom, alternatingConst, applyAsHom, down_nat_odd_add, hom.toLinearMap, sub_hom, toLinearMap
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-repres
+entation `A`,
+this is the periodic chain complex in `ModuleCat k` given by
+`... ⟶ A --N--> A --(ρ(g) - 𝟙)--> A --N--> A --(ρ(g) - 𝟙)--> A ⟶ 0` where `N` is
+ the norm map.
+Its homology is the group homology of `A`.
 -/
-noncomputable abbrev moduleCatChainComplex : ChainComplex (ModuleCat k) Nat :=
+noncomputable abbrev moduleCatChainComplex : ChainComplex (ModuleCat k) ℕ :=
   HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
     A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
     fun _ _ => ComplexShape.down_nat_odd_add
 
-/--
-Definition of `moduleCatCochainComplex` / `moduleCatCochainComplex` 的定义
+/-- Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-representation `A`,
+this is the periodic chain complex in `Rep k G` given by
+`0 ⟶ A --(ρ(g) - 𝟙)--> A --N--> A --(ρ(g) - 𝟙)--> A --N--> A ⟶ ...` where `N` is the norm map.
+Its cohomology is the group cohomology of `A`. -/
+/-
+**Rep.FiniteCyclicGroup.moduleCatCochainComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep
+.FiniteCyclicGroup`。
+形式化陈述：moduleCatCochainComplex : CochainComplex (ModuleCat k) Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.up_nat_odd_add`：up_nat_odd_add {i j : Nat} (h : (ComplexSha
+pe.up Nat).Rel i j) : Odd (i + j)
 
-English:
-abbreviation moduleCatCochainComplex
-  signature: : CochainComplex (ModuleCat k) Nat
-  body: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
-    𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.up_nat_odd_add
-
-中文:
-缩写 moduleCatCochainComplex
-  签名: : 上链复形 (模范畴 k) 自然数
-  定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
-    𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
-    (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.up_nat_odd_add
-
-Depends on / 依赖: A.norm.hom.toLinearMap, ComplexShape, ComplexShape.up_nat_odd_add, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, ModuleCat.of, ModuleCat.ofHom, alternatingConst, applyAsHom, hom.toLinearMap, sub_hom, toLinearMap, up_nat_odd_add
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G` and a `k`-linear `G`-repres
+entation `A`,
+this is the periodic chain complex in `Rep k G` given by
+`0 ⟶ A --(ρ(g) - 𝟙)--> A --N--> A --(ρ(g) - 𝟙)--> A --N--> A ⟶ ...` where `N` is
+ the norm map.
+Its cohomology is the group cohomology of `A`.
 -/
-noncomputable abbrev moduleCatCochainComplex : CochainComplex (ModuleCat k) Nat :=
+noncomputable abbrev moduleCatCochainComplex : CochainComplex (ModuleCat k) ℕ :=
   HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
     𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
@@ -446,104 +523,121 @@ the left regular representation and `N` is the norm map. This is the chain morph
 the chain complex concentrated at 0 by the trivial representation `k` used to show `P` is a
 projective resolution of `k`. It sends `x : k[G]` to the sum of its coefficients. -/
 @[simps!]
-/--
-Definition of `resolution.π` / `resolution.π` 的定义
+/-
+**Rep.FiniteCyclicGroup.resolution.** 是 Mathlib 中的一个定义，位于命名空间 `Rep.FiniteCyclicG
+roup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resolution.π
-  signature: (g : G)
-  body: (((chainComplexFunctor k g).obj (leftRegular k G)).toSingle₀Equiv _).symm
-⟨leftRegularHom _ 1, (leftRegularHomEquiv _).injective by
-    simp [homEquiv, sub_hom, applyAsHom]⟩
-
-中文:
-定义 resolution.π
-  签名: (g : G)
-  定义体: (((chainComplexFunctor k g).obj (leftRegular k G)).toSingle₀Equiv _).symm
-⟨leftRegularHom _ 1, (leftRegularHomEquiv _).injective by
-    simp [homEquiv, sub_hom, applyAsHom]⟩
-
-Depends on / 依赖: applyAsHom, chainComplexFunctor, homEquiv, injective, leftRegular, leftRegularHom, leftRegularHomEquiv, sub_hom
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G`, let `P` denote the periodi
+c chain complex
+of `k`-linear `G`-representations given by
+`... ⟶ k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] ⟶ 
+0` where `ρ` is
+the left regular representation and `N` is the norm map. This is the chain morph
+ism from `P` to
+the chain complex concentrated at 0 by the trivial representation `k` used to sh
+ow `P` is a
+projective resolution of `k`. It sends `x : k[G]` to the sum of its coefficients
+.
 -/
 noncomputable def resolution.π (g : G) :
     (chainComplexFunctor k g).obj (leftRegular k G) ⟶
       (ChainComplex.single₀ (Rep k G)).obj (trivial k G k) :=
   (((chainComplexFunctor k g).obj (leftRegular k G)).toSingle₀Equiv _).symm
-⟨leftRegularHom _ 1, (leftRegularHomEquiv _).injective by
+    ⟨leftRegularHom _ 1, (leftRegularHomEquiv _).injective <| by
     simp [homEquiv, sub_hom, applyAsHom]⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `resolution_quasiIso` / 引理 `resolution_quasiIso`
-
-English:
-lemma resolution_quasiIso
-  given: (g : G) (hg : forall x, x in Subgroup.zpowers g)
-  proof: by
-    induction m with
-    | zero =>
-      simp only [resolution.π]
-      rw [ChainComplex.quasiIsoAt₀_iff]; rw [ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
-      constructor
-      · apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-        simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker,
-          HomologicalComplex.alternatingConst, ChainComplex.toSingle₀Equiv] using!
-          leftRegular.range_applyAsHom_sub_eq_ker_linearCombination k g hg
-      · rw [Rep.epi_iff_surjective]
-        intro x
-        use .single 1 x
-        simp [ChainComplex.toSingle₀Equiv]
-    | succ m _ =>
-      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..)]; rw [HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
-      apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-      rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
-      by_cases hm : Odd (m + 1)
-      · simpa [if_pos (Nat.even_add_one.2 (Nat.not_even_iff_odd.2 hm)),
-          if_neg (Nat.not_even_iff_odd.2 hm)]
-          using! leftRegular.range_norm_eq_ker_applyAsHom_sub k g hg
-      · simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker, if_pos (Nat.not_odd_iff_even.1 hm),
-          if_neg (Nat.not_even_iff_odd.2 <| Nat.odd_add_one.2 hm)]
-        using! leftRegular.range_applyAsHom_sub_eq_ker_norm k g hg
-
-中文:
-引理 resolution_quasiIso
-  条件: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
-  证明: by
-    induction m with
-    | zero =>
-      simp only [resolution.π]
-      rw [ChainComplex.quasiIsoAt₀_iff]; rw [ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
-      constructor
-      · apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-        simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker,
-          HomologicalComplex.alternatingConst, ChainComplex.toSingle₀Equiv] using!
-          leftRegular.range_applyAsHom_sub_eq_ker_linearCombination k g hg
-      · rw [Rep.epi_iff_surjective]
-        intro x
-        use .single 1 x
-        simp [ChainComplex.toSingle₀Equiv]
-    | succ m _ =>
-      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..)]; rw [HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
-      apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-      rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
-      by_cases hm : Odd (m + 1)
-      · simpa [if_pos (Nat.even_add_one.2 (Nat.not_even_iff_odd.2 hm)),
-          if_neg (Nat.not_even_iff_odd.2 hm)]
-          using! leftRegular.range_norm_eq_ker_applyAsHom_sub k g hg
-      · simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker, if_pos (Nat.not_odd_iff_even.1 hm),
-          if_neg (Nat.not_even_iff_odd.2 <| Nat.odd_add_one.2 hm)]
-        using! leftRegular.range_applyAsHom_sub_eq_ker_norm k g hg
-
-Depends on / 依赖: ChainComplex, ChainComplex.quasiIsoAt, ChainComplex.toSingle, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, Rep.epi_iff_surjective, ShortComplex, ShortComplex.moduleCat_exact_iff_range_eq_ker, ShortComplex.quasiIso_iff_of_zeros, alternatingConst, epi_iff_surjective, leftRegular, leftRegular.range_applyAsHom_sub_eq_ker_linearCombination, moduleCat_exact_iff_range_eq_ker, quasiIso_iff_of_zeros, range_applyAsHom_sub_eq_ker_linearCombination, reflects_exact_of_faithful, resolution, single
+/-
+**Rep.FiniteCyclicGroup.resolution_quasiIso** 是 Mathlib 中的一个引理，位于命名空间 `Rep.Finit
+eCyclicGroup`。
+形式化陈述：resolution_quasiIso (g : G) (hg : forall x, x in Subgroup.zpowers g) : Qua
+siIso (resolution.π k g) where quasiIsoAt m
+参数：g : G；hg : forall x, x in Subgroup.zpowers g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Rep.instHasZeroObject`：∀ (k : Type u) (G : Type v) [inst : Ring k] [inst
+_1 : Monoid G], CategoryTheory.Limits.HasZeroObject (Rep.{w, u, v} k G)
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `HomologicalComplex.instHasHomologyObjSingle`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   [inst_2 : CategoryTheory.Limi…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ChainComplex.quasiIsoAt₀_iff`：ChainComplex.quasiIsoAt₀_iff {K L : ChainC
+omplex C Nat} (f : K ⟶ L) [K.HasHomology 0] [L.HasHomology 0] [(K.sc' 1 0 0).Has
+Homology] [(L.sc' …
+· 使用引理 `CategoryTheory.ShortComplex.quasiIso_iff_of_zeros'`：quasiIso_iff_of_zero
+s' {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂) (hg₁ : S₁.g = 0) (hf₂ : S₂.f = 0) (hg₂
+ : S₂.g = 0) : QuasiIso φ ↔ (ShortComple…
+· 使用引理 `CategoryTheory.Functor.reflects_exact_of_faithful`：reflects_exact_of_fai
+thful [F.Faithful] (S : ShortComplex C) (hS : (S.map F).Exact) : S.Exact
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `Rep.instAdditiveModuleCatForget₂IntertwiningMapVρLinearMapIdCarrier`：∀ (
+k : Type u) (G : Type v) [inst : Ring k] [inst_1 : Monoid G],   (CategoryTheory.
+forget₂ (Rep.{w, u, v} k G) (ModuleCat k)).Additive
+· 使用定理 `Rep.instFaithfulModuleCatForget₂IntertwiningMapVρLinearMapIdCarrier`：∀ {
+k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Monoid G],   (CategoryTheory.
+forget₂ (Rep.{w, u, v} k G) (ModuleCat k)).Faithful
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `ComplexShape.down_nat_odd_add`：down_nat_odd_add {i j : Nat} (h : (Comple
+xShape.down Nat).Rel i j) : Odd (i + j)
+· 使用引理 `HomologicalComplex.mkHomToSingle_f`：mkHomToSingle_f {K : HomologicalComp
+lex V c} {j : ι} {A : V} (φ : K.X j ⟶ A) (hφ : forall (i : ι), c.Rel i j -> K.d 
+i j ≫ φ = 0) : (mkHomToS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `CategoryTheory.ShortComplex.map.congr_simp`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.ShortComplex.mk.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C]   {X₁ X₂ X₃ : C} (f f_1 :…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Representation.isTrivial_def`：isTrivial_def (ρ : Representation k G V) [
+IsTrivial ρ] (g : G) : ρ g = LinearMap.id
+（共 56 条，此处仅展示前 30 条）
 -/
-lemma resolution_quasiIso (g : G) (hg : forall x, x in Subgroup.zpowers g) :
+lemma resolution_quasiIso (g : G) (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     QuasiIso (resolution.π k g) where
   quasiIsoAt m := by
     induction m with
     | zero =>
       simp only [resolution.π]
-      rw [ChainComplex.quasiIsoAt₀_iff]; rw [ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
+      rw [ChainComplex.quasiIsoAt₀_iff, ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
       constructor
       · apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
         simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker,
@@ -554,7 +648,8 @@ lemma resolution_quasiIso (g : G) (hg : forall x, x in Subgroup.zpowers g) :
         use .single 1 x
         simp [ChainComplex.toSingle₀Equiv]
     | succ m _ =>
-      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..)]; rw [HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
+      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..),
+          HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
       apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
       rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
       by_cases hm : Odd (m + 1)
@@ -570,32 +665,32 @@ as a trivial `k`-linear `G`-representation given by periodic complex
 `... ⟶ k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] ⟶ 0` where `ρ` is
 the left regular representation and `N` is the norm map. -/
 @[simps]
-/--
-Definition of `resolution` / `resolution` 的定义
+/-
+**Rep.FiniteCyclicGroup.resolution** 是 Mathlib 中的一个定义，位于命名空间 `Rep.FiniteCyclicGr
+oup`。
+形式化陈述：resolution (g : G) (hg : forall x, x in Subgroup.zpowers g) : ProjectiveRe
+solution (trivial k G k) where complex
+参数：g : G；hg : forall x, x in Subgroup.zpowers g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Rep.FiniteCyclicGroup.resolution_quasiIso`：resolution_quasiIso (g : G) (
+hg : forall x, x in Subgroup.zpowers g) : QuasiIso (resolution.π k g) where quas
+iIsoAt m
 
-English:
-definition resolution
-  signature: (g : G) (hg : forall x, x in Subgroup.zpowers g)
-  body: (FiniteCyclicGroup.chainComplexFunctor k g).obj (leftRegular k G)
-projective _ := inferInstanceAs Projective (leftRegular k G)
-  π := FiniteCyclicGroup.resolution.π k g
-  quasiIso := resolution_quasiIso k g hg
-
-中文:
-定义 resolution
-  签名: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
-  定义体: (FiniteCyclicGroup.chainComplexFunctor k g).obj (leftRegular k G)
-projective _ := inferInstanceAs Projective (leftRegular k G)
-  π := FiniteCyclicGroup.resolution.π k g
-  quasiIso := resolution_quasiIso k g hg
-
-Depends on / 依赖: FiniteCyclicGroup, FiniteCyclicGroup.chainComplexFunctor, chainComplexFunctor, leftRegular
+--- 原说明 ---
+Given a finite cyclic group `G` generated by `g : G`, this is the projective res
+olution of `k`
+as a trivial `k`-linear `G`-representation given by periodic complex
+`... ⟶ k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] --N--> k[G] --(ρ(g) - 𝟙)--> k[G] ⟶ 
+0` where `ρ` is
+the left regular representation and `N` is the norm map.
 -/
-noncomputable def resolution (g : G) (hg : forall x, x in Subgroup.zpowers g) :
+noncomputable def resolution (g : G) (hg : ∀ x, x ∈ Subgroup.zpowers g) :
     ProjectiveResolution (trivial k G k) where
   complex := (FiniteCyclicGroup.chainComplexFunctor k g).obj (leftRegular k G)
-projective _ := inferInstanceAs Projective (leftRegular k G)
+  projective _ := inferInstanceAs <| Projective (leftRegular k G)
   π := FiniteCyclicGroup.resolution.π k g
   quasiIso := resolution_quasiIso k g hg
 
 end Rep.FiniteCyclicGroup
+

@@ -21,28 +21,13 @@ variable {F α M N G : Type*}
 /-- A group is isomorphic to its group of units. -/
 @[to_additive (attr := simps apply_val symm_apply)
 /-- An additive group is isomorphic to its group of additive units -/]
-/--
-Definition of `toUnits` / `toUnits` 的定义
-
-English:
-definition toUnits
-  signature: [Group G]
-  body: ⟨x, x⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩
-  invFun x := x
-  map_mul' _ _ := Units.ext rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 toUnits
-  签名: [群 G]
-  定义体: ⟨x, x⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩
-  invFun x := x
-  map_mul' _ _ := Units.ext rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_mul_cancel, mul_inv_cancel
+/-
+**toUnits** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toUnits [Group G] : G ≃* Gˣ where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
 -/
 def toUnits [Group G] : G ≃* Gˣ where
   toFun x := ⟨x, x⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩
@@ -50,24 +35,19 @@ def toUnits [Group G] : G ≃* Gˣ where
   map_mul' _ _ := Units.ext rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `toUnits_val_apply` / 引理 `toUnits_val_apply`
-
-English:
-lemma toUnits_val_apply
-  given: {G : Type*} [Group G] (x : Gˣ)
-  statement: toUnits (x : G) = x
-  proof: by
-  simp_rw [← MulEquiv.eq_symm_apply, toUnits_symm_apply]
-
-中文:
-引理 toUnits_val_apply
-  条件: {G : 类型} [群 G] (x : Gˣ)
-  结论: toUnits (x : G) = x
-  证明: by
-  simp_rw [← MulEquiv.eq_symm_apply, toUnits_symm_apply]
-
-Depends on / 依赖: MulEquiv, MulEquiv.eq_symm_apply, eq_symm_apply, simp_rw, toUnits_symm_apply
+/-
+**toUnits_val_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：toUnits_val_apply {G : Type*} [Group G] (x : Gˣ) : toUnits (x : G) = x
+参数：x : Gˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toUnits_symm_apply`：∀ {G : Type u_5} [inst : Group G] (x : Gˣ), toUnits.
+symm x = ↑x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toUnits_val_apply {G : Type*} [Group G] (x : Gˣ) : toUnits (x : G) = x := by
   simp_rw [← MulEquiv.eq_symm_apply, toUnits_symm_apply]
@@ -76,75 +56,43 @@ namespace Units
 
 variable [Monoid M] [Monoid N]
 
-/--
-Definition of `mapEquiv` / `mapEquiv` 的定义
+/-- A multiplicative equivalence of monoids defines a multiplicative equivalence
+of their groups of units. -/
+/-
+**Units.mapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：mapEquiv (h : M ≃* N) : Mˣ ≃* Nˣ
+参数：h : M ≃* N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapEquiv
-  signature: (h : M ≃* N)
-  body: { map h.toMonoidHom with
-    invFun := map h.symm.toMonoidHom,
-left_inv := fun u => ext h.left_inv u,
-right_inv := fun u => ext h.right_inv u }
-
-@[simp]
-
-中文:
-定义 mapEquiv
-  签名: (h : M ≃* N)
-  定义体: { map h.toMonoidHom with
-    invFun := map h.symm.toMonoidHom,
-left_inv := fun u => ext h.left_inv u,
-right_inv := fun u => ext h.right_inv u }
-
-@[simp]
-
-Depends on / 依赖: h.left_inv, h.right_inv, h.symm.toMonoidHom, h.toMonoidHom, invFun, left_inv, right_inv, toMonoidHom
+--- 原说明 ---
+A multiplicative equivalence of monoids defines a multiplicative equivalence
+of their groups of units.
 -/
 def mapEquiv (h : M ≃* N) : Mˣ ≃* Nˣ :=
   { map h.toMonoidHom with
     invFun := map h.symm.toMonoidHom,
-left_inv := fun u => ext h.left_inv u,
-right_inv := fun u => ext h.right_inv u }
+    left_inv := fun u => ext <| h.left_inv u,
+    right_inv := fun u => ext <| h.right_inv u }
 
 @[simp]
-/--
-theorem `mapEquiv_symm` / 定理 `mapEquiv_symm`
-
-English:
-theorem mapEquiv_symm
-  given: (h : M ≃* N)
-  statement: (mapEquiv h).symm = mapEquiv h.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapEquiv_symm
-  条件: (h : M ≃* N)
-  结论: (mapEquiv h).symm = mapEquiv h.symm
-  证明: rfl
-
-@[simp]
+/-
+**Units.mapEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：mapEquiv_symm (h : M ≃* N) : (mapEquiv h).symm = mapEquiv h.symm
+参数：h : M ≃* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapEquiv_symm (h : M ≃* N) : (mapEquiv h).symm = mapEquiv h.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mapEquiv` / 定理 `coe_mapEquiv`
-
-English:
-theorem coe_mapEquiv
-  given: (h : M ≃* N) (x : Mˣ)
-  statement: (mapEquiv h x : N) = h x
-  proof: rfl
-
-中文:
-定理 coe_mapEquiv
-  条件: (h : M ≃* N) (x : Mˣ)
-  结论: (mapEquiv h x : N) = h x
-  证明: rfl
+/-
+**Units.coe_mapEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：coe_mapEquiv (h : M ≃* N) (x : Mˣ) : (mapEquiv h x : N) = h x
+参数：h : M ≃* N；x : Mˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mapEquiv (h : M ≃* N) (x : Mˣ) : (mapEquiv h x : N) = h x :=
   rfl
@@ -152,28 +100,16 @@ theorem coe_mapEquiv (h : M ≃* N) (x : Mˣ) : (mapEquiv h x : N) = h x :=
 /-- Left multiplication by a unit of a monoid is a permutation of the underlying type. -/
 @[to_additive (attr := simps -fullyApplied apply)
   /-- Left addition of an additive unit is a permutation of the underlying type. -/]
-/--
-Definition of `mulLeft` / `mulLeft` 的定义
-
-English:
-definition mulLeft
-  signature: (u : Mˣ)
-  body: u * x
-  invFun x := u⁻¹ * x
-  left_inv := u.inv_mul_cancel_left
-  right_inv := u.mul_inv_cancel_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulLeft
-  签名: (u : Mˣ)
-  定义体: u * x
-  invFun x := u⁻¹ * x
-  left_inv := u.inv_mul_cancel_left
-  right_inv := u.mul_inv_cancel_left
-
-@[to_additive (attr := simp)]
+/-
+**Units.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：mulLeft (u : Mˣ) : Equiv.Perm M where toFun x
+参数：u : Mˣ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.inv_mul_cancel_left`：inv_mul_cancel_left (a : αˣ) (b : α) : (↑a⁻¹ 
+: α) * (a * b) = b
+· 使用定理 `Units.mul_inv_cancel_left`：mul_inv_cancel_left (a : αˣ) (b : α) : (a : α
+) * (↑a⁻¹ * b) = b
 -/
 def mulLeft (u : Mˣ) : Equiv.Perm M where
   toFun x := u * x
@@ -182,76 +118,45 @@ def mulLeft (u : Mˣ) : Equiv.Perm M where
   right_inv := u.mul_inv_cancel_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `mulLeft_symm` / 定理 `mulLeft_symm`
-
-English:
-theorem mulLeft_symm
-  given: (u : Mˣ)
-  statement: u.mulLeft.symm = u⁻¹.mulLeft
-  proof: Equiv.ext fun _ => rfl
-
-@[to_additive]
-
-中文:
-定理 mulLeft_symm
-  条件: (u : Mˣ)
-  结论: u.mulLeft.symm = u⁻¹.mulLeft
-  证明: Equiv.ext fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ext
+/-
+**Units.mulLeft_symm** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：mulLeft_symm (u : Mˣ) : u.mulLeft.symm = u⁻¹.mulLeft
+参数：u : Mˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mulLeft_symm (u : Mˣ) : u.mulLeft.symm = u⁻¹.mulLeft :=
   Equiv.ext fun _ => rfl
 
 @[to_additive]
-/--
-theorem `mulLeft_bijective` / 定理 `mulLeft_bijective`
-
-English:
-theorem mulLeft_bijective
-  given: (a : Mˣ)
-  statement: Function.Bijective ((a * ·) : M -> M)
-  proof: (mulLeft a).bijective
-
-中文:
-定理 mulLeft_bijective
-  条件: (a : Mˣ)
-  结论: 函数.双射 ((a * ·) : M -> M)
-  证明: (mulLeft a).bijective
-
-Depends on / 依赖: bijective, mulLeft
+/-
+**Units.mulLeft_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：mulLeft_bijective (a : Mˣ) : Function.Bijective ((a * ·) : M -> M)
+参数：a : Mˣ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-theorem mulLeft_bijective (a : Mˣ) : Function.Bijective ((a * ·) : M -> M) :=
+theorem mulLeft_bijective (a : Mˣ) : Function.Bijective ((a * ·) : M → M) :=
   (mulLeft a).bijective
 
 /-- Right multiplication by a unit of a monoid is a permutation of the underlying type. -/
 @[to_additive (attr := simps -fullyApplied apply)
 /-- Right addition of an additive unit is a permutation of the underlying type. -/]
-/--
-Definition of `mulRight` / `mulRight` 的定义
-
-English:
-definition mulRight
-  signature: (u : Mˣ)
-  body: x * u
-  invFun x := x * ↑u⁻¹
-  left_inv x := mul_inv_cancel_right x u
-  right_inv x := inv_mul_cancel_right x u
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulRight
-  签名: (u : Mˣ)
-  定义体: x * u
-  invFun x := x * ↑u⁻¹
-  left_inv x := mul_inv_cancel_right x u
-  right_inv x := inv_mul_cancel_right x u
-
-@[to_additive (attr := simp)]
+/-
+**Units.mulRight** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：mulRight (u : Mˣ) : Equiv.Perm M where toFun x
+参数：u : Mˣ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `Units.inv_mul_cancel_right`：inv_mul_cancel_right (a : α) (b : αˣ) : a * 
+↑b⁻¹ * b = a
 -/
 def mulRight (u : Mˣ) : Equiv.Perm M where
   toFun x := x * u
@@ -260,49 +165,30 @@ def mulRight (u : Mˣ) : Equiv.Perm M where
   right_inv x := inv_mul_cancel_right x u
 
 @[to_additive (attr := simp)]
-/--
-theorem `mulRight_symm` / 定理 `mulRight_symm`
-
-English:
-theorem mulRight_symm
-  given: (u : Mˣ)
-  statement: u.mulRight.symm = u⁻¹.mulRight
-  proof: Equiv.ext fun _ => rfl
-
-@[to_additive]
-
-中文:
-定理 mulRight_symm
-  条件: (u : Mˣ)
-  结论: u.mulRight.symm = u⁻¹.mulRight
-  证明: Equiv.ext fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ext
+/-
+**Units.mulRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：mulRight_symm (u : Mˣ) : u.mulRight.symm = u⁻¹.mulRight
+参数：u : Mˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mulRight_symm (u : Mˣ) : u.mulRight.symm = u⁻¹.mulRight :=
   Equiv.ext fun _ => rfl
 
 @[to_additive]
-/--
-theorem `mulRight_bijective` / 定理 `mulRight_bijective`
-
-English:
-theorem mulRight_bijective
-  given: (a : Mˣ)
-  statement: Function.Bijective ((· * a) : M -> M)
-  proof: (mulRight a).bijective
-
-中文:
-定理 mulRight_bijective
-  条件: (a : Mˣ)
-  结论: 函数.双射 ((· * a) : M -> M)
-  证明: (mulRight a).bijective
-
-Depends on / 依赖: bijective, mulRight
+/-
+**Units.mulRight_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：mulRight_bijective (a : Mˣ) : Function.Bijective ((· * a) : M -> M)
+参数：a : Mˣ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-theorem mulRight_bijective (a : Mˣ) : Function.Bijective ((· * a) : M -> M) :=
+theorem mulRight_bijective (a : Mˣ) : Function.Bijective ((· * a) : M → M) :=
   (mulRight a).bijective
 
 end Units
@@ -315,41 +201,24 @@ variable [Group G]
 
 /-- Left multiplication in a `Group` is a permutation of the underlying type. -/
 @[to_additive /-- Left addition in an `AddGroup` is a permutation of the underlying type. -/]
-/--
-Definition of `mulLeft` / `mulLeft` 的定义
+/-
+**Equiv.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → Equiv.Perm G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulLeft
-  signature: (a : G)
-  body: (toUnits a).mulLeft
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulLeft
-  签名: (a : G)
-  定义体: (toUnits a).mulLeft
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Left multiplication in a `Group` is a permutation of the underlying type.
 -/
 protected def mulLeft (a : G) : Perm G :=
   (toUnits a).mulLeft
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mulLeft` / 定理 `coe_mulLeft`
-
-English:
-theorem coe_mulLeft
-  given: (a : G)
-  statement: ⇑(Equiv.mulLeft a) = (a * ·)
-  proof: rfl
-
-中文:
-定理 coe_mulLeft
-  条件: (a : G)
-  结论: ⇑(等价.mulLeft a) = (a * ·)
-  证明: rfl
+/-
+**Equiv.coe_mulLeft** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：coe_mulLeft (a : G) : ⇑(Equiv.mulLeft a) = (a * ·)
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mulLeft (a : G) : ⇑(Equiv.mulLeft a) = (a * ·) :=
   rfl
@@ -357,132 +226,73 @@ theorem coe_mulLeft (a : G) : ⇑(Equiv.mulLeft a) = (a * ·) :=
 /-- Extra simp lemma that `dsimp` can use. `simp` will never use this. -/
 @[to_additive (attr := simp)
 /-- Extra simp lemma that `dsimp` can use. `simp` will never use this. -/]
-/--
-theorem `mulLeft_symm_apply` / 定理 `mulLeft_symm_apply`
-
-English:
-theorem mulLeft_symm_apply
-  given: (a : G)
-  statement: ((Equiv.mulLeft a).symm : G -> G) = (a⁻¹ * ·)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mulLeft_symm_apply
-  条件: (a : G)
-  结论: ((等价.mulLeft a).symm : G -> G) = (a⁻¹ * ·)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Equiv.mulLeft_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：mulLeft_symm_apply (a : G) : ((Equiv.mulLeft a).symm : G -> G) = (a⁻¹ * ·)
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mulLeft_symm_apply (a : G) : ((Equiv.mulLeft a).symm : G -> G) = (a⁻¹ * ·) :=
+theorem mulLeft_symm_apply (a : G) : ((Equiv.mulLeft a).symm : G → G) = (a⁻¹ * ·) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mulLeft_symm` / 定理 `mulLeft_symm`
-
-English:
-theorem mulLeft_symm
-  given: (a : G)
-  statement: (Equiv.mulLeft a).symm = Equiv.mulLeft a⁻¹
-  proof: ext fun _ => rfl
-
-@[to_additive]
-
-中文:
-定理 mulLeft_symm
-  条件: (a : G)
-  结论: (等价.mulLeft a).symm = 等价.mulLeft a⁻¹
-  证明: ext fun _ => rfl
-
-@[to_additive]
+/-
+**Equiv.mulLeft_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：mulLeft_symm (a : G) : (Equiv.mulLeft a).symm = Equiv.mulLeft a⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mulLeft_symm (a : G) : (Equiv.mulLeft a).symm = Equiv.mulLeft a⁻¹ :=
   ext fun _ => rfl
 
 @[to_additive]
-/--
-theorem `_root_.Group.mulLeft_bijective` / 定理 `_root_.Group.mulLeft_bijective`
-
-English:
-theorem _root_.Group.mulLeft_bijective
-  given: (a : G)
-  statement: Function.Bijective (a * ·)
-  proof: (Equiv.mulLeft a).bijective
-
-中文:
-定理 _root_.群.mulLeft_bijective
-  条件: (a : G)
-  结论: 函数.双射 (a * ·)
-  证明: (Equiv.mulLeft a).bijective
-
-Depends on / 依赖: Equiv.mulLeft, bijective, mulLeft
+/-
+**Equiv._root_.Group.mulLeft_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Group.mulLeft_bijective (a : G) : Function.Bijective (a * ·) :=
   (Equiv.mulLeft a).bijective
 
 /-- Right multiplication in a `Group` is a permutation of the underlying type. -/
 @[to_additive /-- Right addition in an `AddGroup` is a permutation of the underlying type. -/]
-/--
-Definition of `mulRight` / `mulRight` 的定义
+/-
+**Equiv.mulRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → Equiv.Perm G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRight
-  signature: (a : G)
-  body: (toUnits a).mulRight
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulRight
-  签名: (a : G)
-  定义体: (toUnits a).mulRight
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Right multiplication in a `Group` is a permutation of the underlying type.
 -/
 protected def mulRight (a : G) : Perm G :=
   (toUnits a).mulRight
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mulRight` / 定理 `coe_mulRight`
-
-English:
-theorem coe_mulRight
-  given: (a : G)
-  statement: ⇑(Equiv.mulRight a) = fun x => x * a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_mulRight
-  条件: (a : G)
-  结论: ⇑(等价.mulRight a) = fun x => x * a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Equiv.coe_mulRight** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：coe_mulRight (a : G) : ⇑(Equiv.mulRight a) = fun x => x * a
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mulRight (a : G) : ⇑(Equiv.mulRight a) = fun x => x * a :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mulRight_symm` / 定理 `mulRight_symm`
-
-English:
-theorem mulRight_symm
-  given: (a : G)
-  statement: (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹
-  proof: ext fun _ => rfl
-
-中文:
-定理 mulRight_symm
-  条件: (a : G)
-  结论: (等价.mulRight a).symm = 等价.mulRight a⁻¹
-  证明: ext fun _ => rfl
+/-
+**Equiv.mulRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：mulRight_symm (a : G) : (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem mulRight_symm (a : G) : (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹ :=
   ext fun _ => rfl
@@ -490,73 +300,35 @@ theorem mulRight_symm (a : G) : (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹ 
 /-- Extra simp lemma that `dsimp` can use. `simp` will never use this. -/
 @[to_additive (attr := simp)
 /-- Extra simp lemma that `dsimp` can use. `simp` will never use this. -/]
-/--
-theorem `mulRight_symm_apply` / 定理 `mulRight_symm_apply`
-
-English:
-theorem mulRight_symm_apply
-  given: (a : G)
-  statement: ((Equiv.mulRight a).symm : G -> G) = fun x => x * a⁻¹
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mulRight_symm_apply
-  条件: (a : G)
-  结论: ((等价.mulRight a).symm : G -> G) = fun x => x * a⁻¹
-  证明: rfl
-
-@[to_additive]
+/-
+**Equiv.mulRight_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：mulRight_symm_apply (a : G) : ((Equiv.mulRight a).symm : G -> G) = fun x =
+> x * a⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem mulRight_symm_apply (a : G) : ((Equiv.mulRight a).symm : G -> G) = fun x => x * a⁻¹ :=
+theorem mulRight_symm_apply (a : G) : ((Equiv.mulRight a).symm : G → G) = fun x => x * a⁻¹ :=
   rfl
 
 @[to_additive]
-/--
-theorem `_root_.Group.mulRight_bijective` / 定理 `_root_.Group.mulRight_bijective`
-
-English:
-theorem _root_.Group.mulRight_bijective
-  given: (a : G)
-  statement: Function.Bijective (· * a)
-  proof: (Equiv.mulRight a).bijective
-
-中文:
-定理 _root_.群.mulRight_bijective
-  条件: (a : G)
-  结论: 函数.双射 (· * a)
-  证明: (Equiv.mulRight a).bijective
-
-Depends on / 依赖: Equiv.mulRight, bijective, mulRight
+/-
+**Equiv._root_.Group.mulRight_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Group.mulRight_bijective (a : G) : Function.Bijective (· * a) :=
   (Equiv.mulRight a).bijective
 
 /-- A version of `Equiv.mulLeft a b⁻¹` that is defeq to `a / b`. -/
 @[to_additive (attr := simps) /-- A version of `Equiv.addLeft a (-b)` that is defeq to `a - b`. -/]
-/--
-Definition of `divLeft` / `divLeft` 的定义
+/-
+**Equiv.divLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → G ≃ G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divLeft
-  signature: (a : G)
-  body: a / b
-  invFun b := b⁻¹ * a
-  left_inv b := by simp [div_eq_mul_inv]
-  right_inv b := by simp [div_eq_mul_inv]
-
-@[to_additive]
-
-中文:
-定义 divLeft
-  签名: (a : G)
-  定义体: a / b
-  invFun b := b⁻¹ * a
-  left_inv b := by simp [div_eq_mul_inv]
-  right_inv b := by simp [div_eq_mul_inv]
-
-@[to_additive]
+--- 原说明 ---
+A version of `Equiv.mulLeft a b⁻¹` that is defeq to `a / b`.
 -/
 protected def divLeft (a : G) : G ≃ G where
   toFun b := a / b
@@ -565,20 +337,18 @@ protected def divLeft (a : G) : G ≃ G where
   right_inv b := by simp [div_eq_mul_inv]
 
 @[to_additive]
-/--
-theorem `divLeft_eq_inv_trans_mulLeft` / 定理 `divLeft_eq_inv_trans_mulLeft`
-
-English:
-theorem divLeft_eq_inv_trans_mulLeft
-  given: (a : G)
-  proof: ext fun _ => div_eq_mul_inv _ _
-
-中文:
-定理 divLeft_eq_inv_trans_mulLeft
-  条件: (a : G)
-  证明: ext fun _ => div_eq_mul_inv _ _
-
-Depends on / 依赖: div_eq_mul_inv
+/-
+**Equiv.divLeft_eq_inv_trans_mulLeft** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：divLeft_eq_inv_trans_mulLeft (a : G) : Equiv.divLeft a = (Equiv.inv G).tra
+ns (Equiv.mulLeft a)
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
 -/
 theorem divLeft_eq_inv_trans_mulLeft (a : G) :
     Equiv.divLeft a = (Equiv.inv G).trans (Equiv.mulLeft a) :=
@@ -586,28 +356,13 @@ theorem divLeft_eq_inv_trans_mulLeft (a : G) :
 
 /-- A version of `Equiv.mulRight a⁻¹ b` that is defeq to `b / a`. -/
 @[to_additive (attr := simps) /-- A version of `Equiv.addRight (-a) b` that is defeq to `b - a`. -/]
-/--
-Definition of `divRight` / `divRight` 的定义
+/-
+**Equiv.divRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → G ≃ G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divRight
-  signature: (a : G)
-  body: b / a
-  invFun b := b * a
-  left_inv b := by simp [div_eq_mul_inv]
-  right_inv b := by simp [div_eq_mul_inv]
-
-@[to_additive]
-
-中文:
-定义 divRight
-  签名: (a : G)
-  定义体: b / a
-  invFun b := b * a
-  left_inv b := by simp [div_eq_mul_inv]
-  right_inv b := by simp [div_eq_mul_inv]
-
-@[to_additive]
+--- 原说明 ---
+A version of `Equiv.mulRight a⁻¹ b` that is defeq to `b / a`.
 -/
 protected def divRight (a : G) : G ≃ G where
   toFun b := b / a
@@ -616,22 +371,15 @@ protected def divRight (a : G) : G ≃ G where
   right_inv b := by simp [div_eq_mul_inv]
 
 @[to_additive]
-/--
-theorem `divRight_eq_mulRight_inv` / 定理 `divRight_eq_mulRight_inv`
-
-English:
-theorem divRight_eq_mulRight_inv
-  given: (a : G)
-  statement: Equiv.divRight a = Equiv.mulRight a⁻¹
-  proof: ext fun _ => div_eq_mul_inv _ _
-
-中文:
-定理 divRight_eq_mulRight_inv
-  条件: (a : G)
-  结论: 等价.divRight a = 等价.mulRight a⁻¹
-  证明: ext fun _ => div_eq_mul_inv _ _
-
-Depends on / 依赖: div_eq_mul_inv
+/-
+**Equiv.divRight_eq_mulRight_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：divRight_eq_mulRight_inv (a : G) : Equiv.divRight a = Equiv.mulRight a⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
 -/
 theorem divRight_eq_mulRight_inv (a : G) : Equiv.divRight a = Equiv.mulRight a⁻¹ :=
   ext fun _ => div_eq_mul_inv _ _
@@ -643,50 +391,31 @@ section CommGroup
 variable [CommGroup G]
 
 @[to_additive]
-/--
-lemma `symm_divLeft` / 引理 `symm_divLeft`
-
-English:
-lemma symm_divLeft
-  given: (a : G)
-  statement: (Equiv.divLeft a).symm = Equiv.divLeft a
-  proof: ext fun _ => inv_mul_eq_div _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_divLeft
-  条件: (a : G)
-  结论: (等价.divLeft a).symm = 等价.divLeft a
-  证明: ext fun _ => inv_mul_eq_div _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_mul_eq_div
+/-
+**Equiv.symm_divLeft** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：symm_divLeft (a : G) : (Equiv.divLeft a).symm = Equiv.divLeft a
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `inv_mul_eq_div`：inv_mul_eq_div : a⁻¹ * b = b / a
 -/
 lemma symm_divLeft (a : G) : (Equiv.divLeft a).symm = Equiv.divLeft a :=
-  ext fun _ => inv_mul_eq_div _ _
+  ext fun _ ↦ inv_mul_eq_div _ _
 
 @[to_additive (attr := simp)]
-/--
-lemma `divLeft_involutive` / 引理 `divLeft_involutive`
-
-English:
-lemma divLeft_involutive
-  given: (a : G)
-  statement: Function.Involutive (Equiv.divLeft a)
-  proof: fun _ => div_div_cancel ..
-
-中文:
-引理 divLeft_involutive
-  条件: (a : G)
-  结论: 函数.对合 (等价.divLeft a)
-  证明: fun _ => div_div_cancel ..
-
-Depends on / 依赖: div_div_cancel
+/-
+**Equiv.divLeft_involutive** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：divLeft_involutive (a : G) : Function.Involutive (Equiv.divLeft a)
+参数：a : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `div_div_cancel`：div_div_cancel (a b : G) : a / (a / b) = b
 -/
 lemma divLeft_involutive (a : G) : Function.Involutive (Equiv.divLeft a) :=
-  fun _ => div_div_cancel ..
+  fun _ ↦ div_div_cancel ..
 
 end CommGroup
 
@@ -695,22 +424,15 @@ end Equiv
 variable (α) in
 /-- The `αˣ` type is equivalent to a subtype of `α × α`. -/
 @[simps]
-/--
-Definition of `unitsEquivProdSubtype` / `unitsEquivProdSubtype` 的定义
+/-
+**unitsEquivProdSubtype** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：unitsEquivProdSubtype [Monoid α] : αˣ ≃ {p : α × α // p.1 * p.2 = 1 ∧ p.2 
+* p.1 = 1} where toFun u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitsEquivProdSubtype
-  signature: [Monoid α]
-  body: ⟨(u, ↑u⁻¹), u.val_inv, u.inv_val⟩
-  invFun p := Units.mk (p : α × α).1 (p : α × α).2 p.prop.1 p.prop.2
-
-中文:
-定义 unitsEquivProdSubtype
-  签名: [幺半群 α]
-  定义体: ⟨(u, ↑u⁻¹), u.val_inv, u.inv_val⟩
-  invFun p := Units.mk (p : α × α).1 (p : α × α).2 p.prop.1 p.prop.2
-
-Depends on / 依赖: inv_val, u.inv_val, u.val_inv, val_inv
+--- 原说明 ---
+The `αˣ` type is equivalent to a subtype of `α × α`.
 -/
 def unitsEquivProdSubtype [Monoid α] : αˣ ≃ {p : α × α // p.1 * p.2 = 1 ∧ p.2 * p.1 = 1} where
   toFun u := ⟨(u, ↑u⁻¹), u.val_inv, u.inv_val⟩
@@ -720,41 +442,29 @@ def unitsEquivProdSubtype [Monoid α] : αˣ ≃ {p : α × α // p.1 * p.2 = 1 
 `MulEquiv.inv' G : G ≃* Gᵐᵒᵖ` for the non-commutative case. -/
 @[to_additive (attr := simps apply)
   /-- When the `AddGroup` is commutative, `Equiv.neg` is an `AddEquiv`. -/]
-/--
-Definition of `MulEquiv.inv` / `MulEquiv.inv` 的定义
-
-English:
-definition MulEquiv.inv
-  signature: (G : Type*) [DivisionCommMonoid G]
-  body: { Equiv.inv G with toFun := Inv.inv, invFun := Inv.inv, map_mul' := mul_inv }
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 乘法等价.inv
-  签名: (G : 类型) [DivisionComm幺半群 G]
-  定义体: { Equiv.inv G with toFun := Inv.inv, invFun := Inv.inv, map_mul' := mul_inv }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.inv, Inv.inv, invFun, map_mul, mul_inv
+/-
+**MulEquiv.inv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.inv (G : Type*) [DivisionCommMonoid G] : G ≃* G
+参数：G : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `mul_inv`：mul_inv : (a * b)⁻¹ = a⁻¹ * b⁻¹
 -/
 def MulEquiv.inv (G : Type*) [DivisionCommMonoid G] : G ≃* G :=
   { Equiv.inv G with toFun := Inv.inv, invFun := Inv.inv, map_mul' := mul_inv }
 
 @[to_additive (attr := simp)]
-/--
-theorem `MulEquiv.inv_symm` / 定理 `MulEquiv.inv_symm`
-
-English:
-theorem MulEquiv.inv_symm
-  given: (G : Type*) [DivisionCommMonoid G]
-  proof: rfl
-
-中文:
-定理 乘法等价.inv_symm
-  条件: (G : 类型) [DivisionComm幺半群 G]
-  证明: rfl
+/-
+**MulEquiv.inv_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulEquiv.inv_symm (G : Type*) [DivisionCommMonoid G] : (MulEquiv.inv G).sy
+mm = MulEquiv.inv G
+参数：G : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MulEquiv.inv_symm (G : Type*) [DivisionCommMonoid G] :
     (MulEquiv.inv G).symm = MulEquiv.inv G :=
@@ -765,46 +475,60 @@ variable [Monoid M] [Monoid N] [EquivLike F M N] [MulEquivClass F M N] (f : F) {
 
 -- Higher priority to take over the non-additivisable `isUnit_map_iff`
 @[to_additive (attr := simp high)]
-/--
-lemma `MulEquiv.isUnit_map` / 引理 `MulEquiv.isUnit_map`
-
-English:
-lemma MulEquiv.isUnit_map
-  statement: IsUnit (f x) ↔ IsUnit x where
-  proof: by
-simpa using hx.map MonoidHom.mk ⟨EquivLike.inv f, EquivLike.injective f by simp⟩
-fun x y => EquivLike.injective f by simp
-  mpr := .map f
-
-中文:
-引理 乘法等价.isUnit_map
-  结论: 是单位 (f x) ↔ 是单位 x where
-  证明: by
-simpa using hx.map MonoidHom.mk ⟨EquivLike.inv f, EquivLike.injective f by simp⟩
-fun x y => EquivLike.injective f by simp
-  mpr := .map f
-
-Depends on / 依赖: EquivLike, EquivLike.injective, EquivLike.inv, MonoidHom, MonoidHom.mk, hx.map, injective
+/-
+**MulEquiv.isUnit_map** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MulEquiv.isUnit_map : IsUnit (f x) ↔ IsUnit x where mp hx
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.apply_inv_apply`：apply_inv_apply (e : E) (b : β) : e (inv e b)
+ = b
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `EquivLike.inv_apply_apply`：inv_apply_apply (e : E) (a : α) : inv e (e a)
+ = a
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
 -/
 lemma MulEquiv.isUnit_map : IsUnit (f x) ↔ IsUnit x where
   mp hx := by
-simpa using hx.map MonoidHom.mk ⟨EquivLike.inv f, EquivLike.injective f by simp⟩
-fun x y => EquivLike.injective f by simp
+    simpa using hx.map <| MonoidHom.mk ⟨EquivLike.inv f, EquivLike.injective f <| by simp⟩
+      fun x y ↦ EquivLike.injective f <| by simp
   mpr := .map f
-
-/--
-theorem `isLocalHom_equiv` / 定理 `isLocalHom_equiv`
-
-English:
-theorem isLocalHom_equiv
-  statement: IsLocalHom f where map_nonunit
-  proof: by simp
-
-中文:
-定理 isLocalHom_equiv
-  结论: 是Local态射 f where map_nonunit
-  证明: by simp
+/-
+**isLocalHom_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {F : Type u_1} {M : Type u_3} {N : Type u_4} [inst : Monoid M] [inst_1 :
+ Monoid N] [inst_2 : EquivLike F M N]   [MulEquivClass F M N] (f : F), IsLocalHo
+m f
+参数：f : F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[instance] theorem isLocalHom_equiv : IsLocalHom f where map_nonunit := by simp
 
 end EquivLike
+

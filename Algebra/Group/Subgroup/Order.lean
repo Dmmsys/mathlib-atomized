@@ -20,25 +20,24 @@ public section
 open Subgroup
 
 @[to_additive (attr := simp)]
-/--
-theorem `mabs_mem_iff` / 定理 `mabs_mem_iff`
-
-English:
-theorem mabs_mem_iff
-  statement: {S G} [Group G] [LinearOrder G] {_ : SetLike S G}
-  proof: by
-  cases mabs_choice x <;> simp [*]
-
-中文:
-定理 mabs_mem_iff
-  结论: {S G} [群 G] [线性序 G] {_ : 集合状 S G}
-  证明: by
-  cases mabs_choice x <;> simp [*]
-
-Depends on / 依赖: mabs_choice
+/-
+**mabs_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mabs_mem_iff {S G} [Group G] [LinearOrder G] {_ : SetLike S G} [InvMemClas
+s S G] {H : S} {x : G} : |x|ₘ in H ↔ x in H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mabs_choice`：∀ {α : Type u_1} [inst : Group α] [inst_1 : LinearOrder α] 
+(x : α), |x|ₘ = x ∨ |x|ₘ = x⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mabs_mem_iff {S G} [Group G] [LinearOrder G] {_ : SetLike S G}
-    [InvMemClass S G] {H : S} {x : G} : |x|ₘ in H ↔ x in H := by
+    [InvMemClass S G] {H : S} {x : G} : |x|ₘ ∈ H ↔ x ∈ H := by
   cases mabs_choice x <;> simp [*]
 
 section ModularLattice
@@ -46,32 +45,13 @@ section ModularLattice
 variable {C : Type*} [CommGroup C]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsModularLattice (Subgroup C)
-  body: ⟨fun {x} y z xz a ha => by
-    rw [mem_inf]; rw [mem_sup] at ha
-    rcases ha with ⟨⟨b, hb, c, hc, rfl⟩, haz⟩
-    rw [mem_sup]
-    exact ⟨b, hb, c, mem_inf.2 ⟨hc, (mul_mem_cancel_left (xz hb)).1 haz⟩, rfl⟩⟩
-
-中文:
-实例 :
-  签名: 是Modular格 (子群 C)
-  定义体: ⟨fun {x} y z xz a ha => by
-    rw [mem_inf]; rw [mem_sup] at ha
-    rcases ha with ⟨⟨b, hb, c, hc, rfl⟩, haz⟩
-    rw [mem_sup]
-    exact ⟨b, hb, c, mem_inf.2 ⟨hc, (mul_mem_cancel_left (xz hb)).1 haz⟩, rfl⟩⟩
-
-Depends on / 依赖: mem_inf, mem_sup, mul_mem_cancel_left
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsModularLattice (Subgroup C) :=
   ⟨fun {x} y z xz a ha => by
-    rw [mem_inf]; rw [mem_sup] at ha
+    rw [mem_inf, mem_sup] at ha
     rcases ha with ⟨⟨b, hb, c, hc, rfl⟩, haz⟩
     rw [mem_sup]
     exact ⟨b, hb, c, mem_inf.2 ⟨hc, (mul_mem_cancel_left (xz hb)).1 haz⟩, rfl⟩⟩
@@ -83,109 +63,98 @@ namespace Subgroup
 
 variable {G : Type*} [Group G] (H : Subgroup G)
 
-/--
-theorem `NormalizerCondition.normal_of_coatom` / 定理 `NormalizerCondition.normal_of_coatom`
+/-- In a group that satisfies the normalizer condition, every maximal subgroup is normal -/
+/-
+**Subgroup.NormalizerCondition.normal_of_coatom** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup.NormalizerCondition`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), NormalizerCondition G 
+→ IsCoatom H → H.Normal
+参数：H : Subgroup G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.normalizer_eq_top_iff`：normalizer_eq_top_iff : normalizer (H : 
+Set G) = ⊤ ↔ H.Normal
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 
-English:
-theorem NormalizerCondition.normal_of_coatom
-  given: (hnc : NormalizerCondition G) (hmax : IsCoatom H)
-  proof: normalizer_eq_top_iff.mp (hmax.2 _ (hnc H (lt_top_iff_ne_top.mpr hmax.1)))
-
-@[simp]
-
-中文:
-定理 NormalizerCondition.normal_of_coatom
-  条件: (hnc : NormalizerCondition G) (hmax : IsCoatom H)
-  证明: normalizer_eq_top_iff.mp (hmax.2 _ (hnc H (lt_top_iff_ne_top.mpr hmax.1)))
-
-@[simp]
-
-Depends on / 依赖: lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, normalizer_eq_top_iff, normalizer_eq_top_iff.mp
+--- 原说明 ---
+In a group that satisfies the normalizer condition, every maximal subgroup is no
+rmal
 -/
 theorem NormalizerCondition.normal_of_coatom (hnc : NormalizerCondition G) (hmax : IsCoatom H) :
     H.Normal :=
   normalizer_eq_top_iff.mp (hmax.2 _ (hnc H (lt_top_iff_ne_top.mpr hmax.1)))
 
 @[simp]
-/--
-theorem `isCoatom_comap` / 定理 `isCoatom_comap`
-
-English:
-theorem isCoatom_comap
-  given: {H : Type*} [Group H] (f : G ≃* H) {K : Subgroup H}
-  proof: OrderIso.isCoatom_iff (f.comapSubgroup) K
-
-@[simp]
-
-中文:
-定理 isCoatom_comap
-  条件: {H : 类型} [群 H] (f : G ≃* H) {K : 子群 H}
-  证明: OrderIso.isCoatom_iff (f.comapSubgroup) K
-
-@[simp]
-
-Depends on / 依赖: OrderIso, OrderIso.isCoatom_iff, comapSubgroup, f.comapSubgroup, isCoatom_iff
+/-
+**Subgroup.isCoatom_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isCoatom_comap {H : Type*} [Group H] (f : G ≃* H) {K : Subgroup H} : IsCoa
+tom (Subgroup.comap (f : G ->* H) K) ↔ IsCoatom K
+参数：f : G ≃* H。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isCoatom_iff`：isCoatom_iff [OrderTop α] [OrderTop β] (f : α ≃o 
+β) (a : α) : IsCoatom (f a) ↔ IsCoatom a
 -/
 theorem isCoatom_comap {H : Type*} [Group H] (f : G ≃* H) {K : Subgroup H} :
-    IsCoatom (Subgroup.comap (f : G ->* H) K) ↔ IsCoatom K :=
+    IsCoatom (Subgroup.comap (f : G →* H) K) ↔ IsCoatom K :=
   OrderIso.isCoatom_iff (f.comapSubgroup) K
 
 @[simp]
-/--
-theorem `isCoatom_map` / 定理 `isCoatom_map`
-
-English:
-theorem isCoatom_map
-  given: (f : G ≃* H) {K : Subgroup G}
-  proof: OrderIso.isCoatom_iff (f.mapSubgroup) K
-
-中文:
-定理 isCoatom_map
-  条件: (f : G ≃* H) {K : 子群 G}
-  证明: OrderIso.isCoatom_iff (f.mapSubgroup) K
-
-Depends on / 依赖: OrderIso, OrderIso.isCoatom_iff, f.mapSubgroup, isCoatom_iff, mapSubgroup
+/-
+**Subgroup.isCoatom_map** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isCoatom_map (f : G ≃* H) {K : Subgroup G} : IsCoatom (Subgroup.map (f : G
+ ->* H) K) ↔ IsCoatom K
+参数：f : G ≃* H。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isCoatom_iff`：isCoatom_iff [OrderTop α] [OrderTop β] (f : α ≃o 
+β) (a : α) : IsCoatom (f a) ↔ IsCoatom a
 -/
 theorem isCoatom_map (f : G ≃* H) {K : Subgroup G} :
-    IsCoatom (Subgroup.map (f : G ->* H) K) ↔ IsCoatom K :=
+    IsCoatom (Subgroup.map (f : G →* H) K) ↔ IsCoatom K :=
   OrderIso.isCoatom_iff (f.mapSubgroup) K
-
-/--
-lemma `isCoatom_comap_of_surjective` / 引理 `isCoatom_comap_of_surjective`
-
-English:
-lemma isCoatom_comap_of_surjective
-  proof: by
-  refine And.imp (fun hM => ?_) (fun hM => ?_) hM
-  · rwa [← (comap_injective hφ).ne_iff, comap_top] at hM
-  · intro K hK
-    specialize hM (K.map φ)
-    rw [← comap_lt_comap_of_surjective hφ]; rw [← (comap_injective hφ).eq_iff] at hM
-    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; rw [comap_top] at hM
-    exact hM hK
-
-中文:
-引理 isCoatom_comap_of_surjective
-  证明: by
-  refine And.imp (fun hM => ?_) (fun hM => ?_) hM
-  · rwa [← (comap_injective hφ).ne_iff, comap_top] at hM
-  · intro K hK
-    specialize hM (K.map φ)
-    rw [← comap_lt_comap_of_surjective hφ]; rw [← (comap_injective hφ).eq_iff] at hM
-    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; rw [comap_top] at hM
-    exact hM hK
-
-Depends on / 依赖: And.imp, K.map, M.ker_le_comap, comap_injective, comap_lt_comap_of_surjective, comap_map_eq_self, comap_top, eq_iff, hK.le, ker_le_comap, ne_iff, specialize
+/-
+**Subgroup.isCoatom_comap_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：isCoatom_comap_of_surjective {H : Type*} [Group H] {φ : G ->* H} (hφ : Fun
+ction.Surjective φ) {M : Subgroup H} (hM : IsCoatom M) : IsCoatom (M.comap φ)
+参数：hφ : Function.Surjective φ；hM : IsCoatom M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.comap_top`：comap_top (f : G ->* N) : (⊤ : Subgroup N).comap f =
+ ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `Subgroup.comap_injective`：comap_injective {f : G ->* N} (h : Function.Su
+rjective f) : Function.Injective (comap f)
+· 使用定理 `Subgroup.comap_map_eq_self`：comap_map_eq_self {f : G ->* N} {H : Subgrou
+p G} (h : f.ker <= H) : comap f (map f H) = H
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subgroup.ker_le_comap`：ker_le_comap (H : Subgroup N) : f.ker <= comap f 
+H
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Subgroup.comap_lt_comap_of_surjective`：comap_lt_comap_of_surjective {f :
+ G ->* N} {K L : Subgroup N} (hf : Function.Surjective f) : K.comap f < L.comap 
+f ↔ K < L
 -/
 lemma isCoatom_comap_of_surjective
-    {H : Type*} [Group H] {φ : G ->* H} (hφ : Function.Surjective φ)
+    {H : Type*} [Group H] {φ : G →* H} (hφ : Function.Surjective φ)
     {M : Subgroup H} (hM : IsCoatom M) : IsCoatom (M.comap φ) := by
-  refine And.imp (fun hM => ?_) (fun hM => ?_) hM
+  refine And.imp (fun hM ↦ ?_) (fun hM ↦ ?_) hM
   · rwa [← (comap_injective hφ).ne_iff, comap_top] at hM
   · intro K hK
     specialize hM (K.map φ)
-    rw [← comap_lt_comap_of_surjective hφ]; rw [← (comap_injective hφ).eq_iff] at hM
-    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; rw [comap_top] at hM
+    rw [← comap_lt_comap_of_surjective hφ, ← (comap_injective hφ).eq_iff] at hM
+    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le), comap_top] at hM
     exact hM hK
 
 end Subgroup
@@ -198,20 +167,17 @@ variable {G : Type*}
 /-- A subgroup of an ordered group is an ordered group. -/
 @[to_additive
 /-- An additive subgroup of an additive ordered group is an additive ordered group. -/]
-/--
-Instance `toIsOrderedMonoid` / 实例 `toIsOrderedMonoid`
-
-English:
-instance toIsOrderedMonoid
-  signature: [CommGroup G] [Preorder G] [IsOrderedMonoid G] (H : Subgroup G)
-  body: Function.Injective.isOrderedMonoid Subtype.val (fun _ _ => rfl) .rfl
-
-中文:
-实例 toIsOrderedMonoid
-  签名: [交换群 G] [预序 G] [是Ordered幺半群 G] (H : 子群 G)
-  定义体: Function.Injective.isOrderedMonoid Subtype.val (fun _ _ => rfl) .rfl
-
-Depends on / 依赖: Function, Function.Injective.isOrderedMonoid, Injective, Subtype, Subtype.val, isOrderedMonoid
+/-
+**Subgroup.toIsOrderedMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：toIsOrderedMonoid [CommGroup G] [Preorder G] [IsOrderedMonoid G] (H : Subg
+roup G) : IsOrderedMonoid H
+参数：H : Subgroup G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.Injective.isOrderedMonoid`：Function.Injective.isOrderedMonoid [
+IsOrderedMonoid α] [CommMonoid β] [Preorder β] (f : β -> α) (mul : forall x y, f
+ (x * y) = f x * f y) (l…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 instance toIsOrderedMonoid [CommGroup G] [Preorder G] [IsOrderedMonoid G] (H : Subgroup G) :
     IsOrderedMonoid H :=
@@ -220,67 +186,53 @@ instance toIsOrderedMonoid [CommGroup G] [Preorder G] [IsOrderedMonoid G] (H : S
 end Subgroup
 
 @[to_additive]
-/--
-lemma `Subsemigroup.strictMono_topEquiv` / 引理 `Subsemigroup.strictMono_topEquiv`
-
-English:
-lemma Subsemigroup.strictMono_topEquiv
-  given: {G : Type*} [CommMonoid G] [Preorder G]
-  proof: fun _ _ => id
-
-@[to_additive]
-
-中文:
-引理 子半群.strictMono_topEquiv
-  条件: {G : 类型} [交换幺半群 G] [预序 G]
-  证明: fun _ _ => id
-
-@[to_additive]
+/-
+**Subsemigroup.strictMono_topEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Subsemigroup.strictMono_topEquiv {G : Type*} [CommMonoid G] [Preorder G] :
+ StrictMono (topEquiv (M
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Subsemigroup.strictMono_topEquiv {G : Type*} [CommMonoid G] [Preorder G] :
-    StrictMono (topEquiv (M := G)) := fun _ _ => id
+    StrictMono (topEquiv (M := G)) := fun _ _ ↦ id
 
 @[to_additive]
-/--
-lemma `MulEquiv.strictMono_subsemigroupCongr` / 引理 `MulEquiv.strictMono_subsemigroupCongr`
-
-English:
-lemma MulEquiv.strictMono_subsemigroupCongr
-  statement: {G : Type*}
-  proof: fun _ _ => id
-
-@[to_additive]
-
-中文:
-引理 乘法等价.strictMono_subsemigroupCongr
-  结论: {G : 类型}
-  证明: fun _ _ => id
-
-@[to_additive]
+/-
+**MulEquiv.strictMono_subsemigroupCongr** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MulEquiv.strictMono_subsemigroupCongr {G : Type*} [CommMonoid G] [Preorder
+ G] {S T : Subsemigroup G} (h : S = T) : StrictMono (subsemigroupCongr h)
+参数：h : S = T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MulEquiv.strictMono_subsemigroupCongr {G : Type*}
     [CommMonoid G] [Preorder G] {S T : Subsemigroup G}
-    (h : S = T) : StrictMono (subsemigroupCongr h) := fun _ _ => id
+    (h : S = T) : StrictMono (subsemigroupCongr h) := fun _ _ ↦ id
 
 @[to_additive]
-/--
-lemma `MulEquiv.strictMono_symm` / 引理 `MulEquiv.strictMono_symm`
-
-English:
-lemma MulEquiv.strictMono_symm
-  statement: {G G' : Type*} [CommMonoid G] [LinearOrder G]
-  proof: by
-  intro
-  simp [← he.lt_iff_lt]
-
-中文:
-引理 乘法等价.strictMono_symm
-  结论: {G G' : 类型} [交换幺半群 G] [线性序 G]
-  证明: by
-  intro
-  simp [← he.lt_iff_lt]
-
-Depends on / 依赖: he.lt_iff_lt, lt_iff_lt
+/-
+**MulEquiv.strictMono_symm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MulEquiv.strictMono_symm {G G' : Type*} [CommMonoid G] [LinearOrder G] [Co
+mmMonoid G'] [Preorder G'] {e : G ≃* G'} (he : StrictMono e) : StrictMono e.symm
+参数：he : StrictMono e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulEquiv.apply_symm_apply`：apply_symm_apply (e : M ≃* N) (y : N) : e (e.
+symm y) = y
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma MulEquiv.strictMono_symm {G G' : Type*} [CommMonoid G] [LinearOrder G]
     [CommMonoid G'] [Preorder G'] {e : G ≃* G'} (he : StrictMono e) : StrictMono e.symm := by

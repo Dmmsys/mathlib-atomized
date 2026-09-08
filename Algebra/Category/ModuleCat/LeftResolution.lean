@@ -30,30 +30,30 @@ namespace ModuleCat
 
 open CategoryTheory Abelian
 
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Type u) : Projective ((free R).obj X) where
   factors {M N} f p hp := by
     rw [epi_iff_surjective] at hp
     obtain ⟨s, hs⟩ := hp.hasRightInverse
-    exact ⟨freeDesc (↾fun x => s (f (freeMk x))), by cat_disch⟩
+    exact ⟨freeDesc (↾fun x ↦ s (f (freeMk x))), by cat_disch⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `projectiveResolution` / `projectiveResolution` 的定义
+/-- An `R`-module `M` can be functorially written as a quotient of a
+projective `R`-module. -/
+/-
+**ModuleCat.projectiveResolution** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：projectiveResolution : LeftResolution (ObjectProperty.ι (isProjective (Mod
+uleCat.{u} R))) where F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition projectiveResolution
-  signature: :
-  body: ObjectProperty.lift _ (forget _ ⋙ free R) (by dsimp; infer_instance)
-  π := (adj R).counit
-
-中文:
-定义 projectiveResolution
-  签名: :
-  定义体: ObjectProperty.lift _ (forget _ ⋙ free R) (by dsimp; infer_instance)
-  π := (adj R).counit
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, forget, infer_instance
+--- 原说明 ---
+An `R`-module `M` can be functorially written as a quotient of a
+projective `R`-module.
 -/
 noncomputable def projectiveResolution :
     LeftResolution (ObjectProperty.ι (isProjective (ModuleCat.{u} R))) where
@@ -61,3 +61,4 @@ noncomputable def projectiveResolution :
   π := (adj R).counit
 
 end ModuleCat
+

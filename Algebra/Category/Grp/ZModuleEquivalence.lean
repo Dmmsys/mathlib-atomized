@@ -24,39 +24,20 @@ universe u
 
 namespace ModuleCat
 
-/--
-Instance `forget₂_addCommGroup_full` / 实例 `forget₂_addCommGroup_full`
+/-- The forgetful functor from `ℤ` modules to `AddCommGrpCat` is full. -/
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance forget₂_addCommGroup_full
-  signature: : (forget₂ (ModuleCat Int) AddCommGrpCat.{u}).Full where
-  body: ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule
-            @LinearMap.mk _ _ _ _ _ _ _ _ _ A.isModule B.isModule
-            { toFun := f,
-              map_add' := map_add f.hom }
-            (fun n x => by
-              convert! AddMonoidHom.map_zsmul f.hom n x <;>
-                ext <;> apply int_smul_eq_zsmul), rfl⟩
-
-中文:
-实例 forget₂_addCommGroup_full
-  签名: : (forget₂ (模范畴 整数) 加法交换群范畴.{u}).满 where
-  定义体: ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule
-            @LinearMap.mk _ _ _ _ _ _ _ _ _ A.isModule B.isModule
-            { toFun := f,
-              map_add' := map_add f.hom }
-            (fun n x => by
-              convert! AddMonoidHom.map_zsmul f.hom n x <;>
-                ext <;> apply int_smul_eq_zsmul), rfl⟩
-
-Depends on / 依赖: A.isModule, B.isModule, ModuleCat, ModuleCat.ofHom, isModule
+--- 原说明 ---
+The forgetful functor from `ℤ` modules to `AddCommGrpCat` is full.
 -/
-instance forget₂_addCommGroup_full : (forget₂ (ModuleCat Int) AddCommGrpCat.{u}).Full where
+instance forget₂_addCommGroup_full : (forget₂ (ModuleCat ℤ) AddCommGrpCat.{u}).Full where
   map_surjective {A B}
     -- `AddMonoidHom.toIntLinearMap` doesn't work here because `A` and `B` are not
     -- definitionally equal to the canonical `AddCommGroup.toIntModule` module
     -- instances it expects.
-f := ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule
+    f := ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule <|
             @LinearMap.mk _ _ _ _ _ _ _ _ _ A.isModule B.isModule
             { toFun := f,
               map_add' := map_add f.hom }
@@ -64,45 +45,26 @@ f := ⟨@ModuleCat.ofHom _ _ _ _ _ A.isModule _ B.isModule
               convert! AddMonoidHom.map_zsmul f.hom n x <;>
                 ext <;> apply int_smul_eq_zsmul), rfl⟩
 
-/--
-Instance `forget₂_addCommGrp_essSurj` / 实例 `forget₂_addCommGrp_essSurj`
+/-- The forgetful functor from `ℤ` modules to `AddCommGrpCat` is essentially surjective. -/
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance forget₂_addCommGrp_essSurj
-  signature: : (forget₂ (ModuleCat Int) AddCommGrpCat.{u}).EssSurj where
-  body: ⟨ModuleCat.of Int A,
-      ⟨{ hom := 𝟙 A
-          inv := 𝟙 A }⟩⟩
-
-中文:
-实例 forget₂_addCommGrp_essSurj
-  签名: : (forget₂ (模范畴 整数) 加法交换群范畴.{u}).本质满射 where
-  定义体: ⟨ModuleCat.of Int A,
-      ⟨{ hom := 𝟙 A
-          inv := 𝟙 A }⟩⟩
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, S.carrier, carrier
+--- 原说明 ---
+The forgetful functor from `ℤ` modules to `AddCommGrpCat` is essentially surject
+ive.
 -/
-instance forget₂_addCommGrp_essSurj : (forget₂ (ModuleCat Int) AddCommGrpCat.{u}).EssSurj where
+instance forget₂_addCommGrp_essSurj : (forget₂ (ModuleCat ℤ) AddCommGrpCat.{u}).EssSurj where
   mem_essImage A :=
-    ⟨ModuleCat.of Int A,
-      ⟨{ hom := 𝟙 A
+    ⟨ModuleCat.of ℤ A,
+      ⟨{  hom := 𝟙 A
           inv := 𝟙 A }⟩⟩
-
-/--
-Instance `forget₂AddCommGroupIsEquivalence` / 实例 `forget₂AddCommGroupIsEquivalence`
-
-English:
-instance forget₂AddCommGroupIsEquivalence
-  signature: :
-
-中文:
-实例 forget₂AddCommGroupIsEquivalence
-  签名: :
-
-Depends on / 依赖: Algebra, S.carrier, carrier
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance forget₂AddCommGroupIsEquivalence :
-    (forget₂ (ModuleCat Int) AddCommGrpCat.{u}).IsEquivalence where
+    (forget₂ (ModuleCat ℤ) AddCommGrpCat.{u}).IsEquivalence where
 
 end ModuleCat
+

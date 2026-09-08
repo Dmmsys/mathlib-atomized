@@ -28,147 +28,106 @@ universe v u w v'
 
 namespace Quiver
 
-/--
-Definition of `Symmetrify` / `Symmetrify` 的定义
+/-- A type synonym for the symmetrized quiver (with an arrow both ways for each original arrow).
+-/
+/-
+**Quiver.Symmetrify** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：Symmetrify (V : Type*)
+参数：V : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Symmetrify
-  signature: (V : Type*)
-  body: V
-
-中文:
-定义 Symmetrify
-  签名: (V : 类型)
-  定义体: V
+--- 原说明 ---
+A type synonym for the symmetrized quiver (with an arrow both ways for each orig
+inal arrow).
 -/
 def Symmetrify (V : Type*) := V
-
-/--
-Instance `symmetrifyQuiver` / 实例 `symmetrifyQuiver`
-
-English:
-instance symmetrifyQuiver
-  signature: (V : Type u) [Quiver V]
-  body: ⟨fun a b : V => (a ⟶ b) oplus (b ⟶ a)⟩
-
-中文:
-实例 symmetrifyQuiver
-  签名: (V : 类型u) [箭图 V]
-  定义体: ⟨fun a b : V => (a ⟶ b) oplus (b ⟶ a)⟩
+/-
+**Quiver.symmetrifyQuiver** 是 Mathlib 中的一个实例，位于命名空间 `Quiver`。
+形式化陈述：symmetrifyQuiver (V : Type u) [Quiver V] : Quiver (Symmetrify V)
+参数：V : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance symmetrifyQuiver (V : Type u) [Quiver V] : Quiver (Symmetrify V) :=
-  ⟨fun a b : V => (a ⟶ b) oplus (b ⟶ a)⟩
+  ⟨fun a b : V ↦ (a ⟶ b) ⊕ (b ⟶ a)⟩
 
 variable (U V W : Type*) [Quiver.{u} U] [Quiver.{v} V] [Quiver.{w} W]
 
-/--
-Definition of `HasReverse` / `HasReverse` 的定义
+/-- A quiver `HasReverse` if we can reverse an arrow `p` from `a` to `b` to get an arrow
+    `p.reverse` from `b` to `a`. -/
+/-
+**Quiver.HasReverse** 是 Mathlib 中的一个归纳类型，位于命名空间 `Quiver`。
+形式化陈述：(V : Type u_2) → [Quiver V] → Type (max u_2 v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasReverse
-  parameters: where
-  axioms and operations (1):
-    - reverse' : forall {a b : V}, (a ⟶ b) -> (b ⟶ a)
-
-中文:
-类 有Reverse
-  参数: where
-  公理与运算 (1 个):
-    - reverse' : 对任意 {a b : V}, (a ⟶ b) -> (b ⟶ a)
+--- 原说明 ---
+A quiver `HasReverse` if we can reverse an arrow `p` from `a` to `b` to get an a
+rrow
+    `p.reverse` from `b` to `a`.
 -/
 class HasReverse where
   /-- the map which sends an arrow to its reverse -/
-  reverse' : forall {a b : V}, (a ⟶ b) -> (b ⟶ a)
+  reverse' : ∀ {a b : V}, (a ⟶ b) → (b ⟶ a)
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Reverse the direction of an arrow. -/
+/-
+**Quiver.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：reverse {V} [Quiver.{v} V] [HasReverse V] {a b : V} : (a ⟶ b) -> (b ⟶ a)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: {V} [Quiver.{v} V] [HasReverse V] {a b : V}
-  body: HasReverse.reverse'
-
-中文:
-定义 reverse
-  签名: {V} [箭图.{v} V] [有Reverse V] {a b : V}
-  定义体: HasReverse.reverse'
-
-Depends on / 依赖: HasReverse, HasReverse.reverse, reverse
+--- 原说明 ---
+Reverse the direction of an arrow.
 -/
-def reverse {V} [Quiver.{v} V] [HasReverse V] {a b : V} : (a ⟶ b) -> (b ⟶ a) :=
+def reverse {V} [Quiver.{v} V] [HasReverse V] {a b : V} : (a ⟶ b) → (b ⟶ a) :=
   HasReverse.reverse'
 
-/--
-Definition of `HasInvolutiveReverse` / `HasInvolutiveReverse` 的定义
+/-- A quiver `HasInvolutiveReverse` if reversing twice is the identity. -/
+/-
+**Quiver.HasInvolutiveReverse** 是 Mathlib 中的一个归纳类型，位于命名空间 `Quiver`。
+形式化陈述：(V : Type u_2) → [Quiver V] → Type (max u_2 v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasInvolutiveReverse
-  parameters: extends HasReverse V
-  extends: HasReverse V
-  axioms and operations (1):
-    - inv' : forall {a b : V} (f : a ⟶ b), reverse (reverse f) = f
-
-中文:
-类 有InvolutiveReverse
-  参数: extends 有Reverse V
-  继承: 有Reverse V
-  公理与运算 (1 个):
-    - inv' : 对任意 {a b : V} (f : a ⟶ b), reverse (reverse f) = f
+--- 原说明 ---
+A quiver `HasInvolutiveReverse` if reversing twice is the identity.
 -/
 class HasInvolutiveReverse extends HasReverse V where
   /-- `reverse` is involutive -/
-  inv' : forall {a b : V} (f : a ⟶ b), reverse (reverse f) = f
+  inv' : ∀ {a b : V} (f : a ⟶ b), reverse (reverse f) = f
 
 variable {U V W}
 
 @[simp]
-/--
-theorem `reverse_reverse` / 定理 `reverse_reverse`
-
-English:
-theorem reverse_reverse
-  given: [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b)
-  proof: by apply h.inv'
-
-@[simp]
-
-中文:
-定理 reverse_reverse
-  条件: [h : 有InvolutiveReverse V] {a b : V} (f : a ⟶ b)
-  证明: by apply h.inv'
-
-@[simp]
-
-Depends on / 依赖: h.inv
+/-
+**Quiver.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：reverse_reverse [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b) : rever
+se (reverse f) = f
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.HasInvolutiveReverse.inv'`：∀ {V : Type u_2} {inst : Quiver V} [se
+lf : Quiver.HasInvolutiveReverse V] {a b : V} (f : a ⟶ b),   Quiver.reverse (Qui
+ver.reverse f) = f
 -/
 theorem reverse_reverse [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b) :
     reverse (reverse f) = f := by apply h.inv'
 
 @[simp]
-/--
-theorem `reverse_inj` / 定理 `reverse_inj`
-
-English:
-theorem reverse_inj
-  statement: [h : HasInvolutiveReverse V] {a b : V}
-  proof: by
-  constructor
-  · rintro h
-    simpa using congr_arg Quiver.reverse h
-  · rintro h
-    congr
-
-中文:
-定理 reverse_inj
-  结论: [h : 有InvolutiveReverse V] {a b : V}
-  证明: by
-  constructor
-  · rintro h
-    simpa using congr_arg Quiver.reverse h
-  · rintro h
-    congr
-
-Depends on / 依赖: Quiver, Quiver.reverse, congr_arg, reverse
+/-
+**Quiver.reverse_inj** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：reverse_inj [h : HasInvolutiveReverse V] {a b : V} (f g : a ⟶ b) : reverse
+ f = reverse g ↔ f = g
+参数：f g : a ⟶ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quiver.reverse_reverse`：reverse_reverse [h : HasInvolutiveReverse V] {a 
+b : V} (f : a ⟶ b) : reverse (reverse f) = f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem reverse_inj [h : HasInvolutiveReverse V] {a b : V}
     (f g : a ⟶ b) : reverse f = reverse g ↔ f = g := by
@@ -177,107 +136,64 @@ theorem reverse_inj [h : HasInvolutiveReverse V] {a b : V}
     simpa using congr_arg Quiver.reverse h
   · rintro h
     congr
-
-/--
-theorem `eq_reverse_iff` / 定理 `eq_reverse_iff`
-
-English:
-theorem eq_reverse_iff
-  statement: [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b)
-  proof: by
-  rw [← reverse_inj]; rw [reverse_reverse]
-
-中文:
-定理 eq_reverse_iff
-  结论: [h : 有InvolutiveReverse V] {a b : V} (f : a ⟶ b)
-  证明: by
-  rw [← reverse_inj]; rw [reverse_reverse]
-
-Depends on / 依赖: reverse_inj, reverse_reverse
+/-
+**Quiver.eq_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：eq_reverse_iff [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b) (g : b ⟶
+ a) : f = reverse g ↔ reverse f = g
+参数：f : a ⟶ b；g : b ⟶ a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quiver.reverse_inj`：reverse_inj [h : HasInvolutiveReverse V] {a b : V} (
+f g : a ⟶ b) : reverse f = reverse g ↔ f = g
+· 使用定理 `Quiver.reverse_reverse`：reverse_reverse [h : HasInvolutiveReverse V] {a 
+b : V} (f : a ⟶ b) : reverse (reverse f) = f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem eq_reverse_iff [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b)
     (g : b ⟶ a) : f = reverse g ↔ reverse f = g := by
-  rw [← reverse_inj]; rw [reverse_reverse]
+  rw [← reverse_inj, reverse_reverse]
 
 section MapReverse
 
 variable [HasReverse U] [HasReverse V] [HasReverse W]
 
-/--
-Definition of `_root_.Prefunctor.MapReverse` / `_root_.Prefunctor.MapReverse` 的定义
+/-- A prefunctor preserving reversal of arrows -/
+/-
+**Quiver._root_.Prefunctor.MapReverse** 是 Mathlib 中的一个类，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class _root_.Prefunctor.MapReverse
-  parameters: (φ : U ⥤q V)
-  axioms and operations (1):
-    - map_reverse' : forall {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
-
-中文:
-类 _root_.预函子.MapReverse
-  参数: (φ : U ⥤q V)
-  公理与运算 (1 个):
-    - map_reverse' : 对任意 {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
+--- 原说明 ---
+A prefunctor preserving reversal of arrows
 -/
 class _root_.Prefunctor.MapReverse (φ : U ⥤q V) : Prop where
   /-- The image of a reverse is the reverse of the image. -/
-  map_reverse' : forall {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
+  map_reverse' : ∀ {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
 
 @[simp]
-/--
-theorem `_root_.Prefunctor.map_reverse` / 定理 `_root_.Prefunctor.map_reverse`
-
-English:
-theorem _root_.Prefunctor.map_reverse
-  statement: (φ : U ⥤q V) [φ.MapReverse]
-  proof: Prefunctor.MapReverse.map_reverse' e
-
-中文:
-定理 _root_.预函子.map_reverse
-  结论: (φ : U ⥤q V) [φ.MapReverse]
-  证明: Prefunctor.MapReverse.map_reverse' e
-
-Depends on / 依赖: MapReverse, Prefunctor, Prefunctor.MapReverse.map_reverse, map_reverse
+/-
+**Quiver._root_.Prefunctor.map_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Prefunctor.map_reverse (φ : U ⥤q V) [φ.MapReverse]
     {u v : U} (e : u ⟶ v) : φ.map (reverse e) = reverse (φ.map e) :=
   Prefunctor.MapReverse.map_reverse' e
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_root_.Prefunctor.mapReverseComp` / 实例 `_root_.Prefunctor.mapReverseComp`
-
-English:
-instance _root_.Prefunctor.mapReverseComp
-  body: by
-    simp only [Prefunctor.comp_map, Prefunctor.MapReverse.map_reverse']
-
-中文:
-实例 _root_.预函子.mapReverseComp
-  定义体: by
-    simp only [Prefunctor.comp_map, Prefunctor.MapReverse.map_reverse']
-
-Depends on / 依赖: MapReverse, Prefunctor, Prefunctor.MapReverse.map_reverse, Prefunctor.comp_map, comp_map, map_reverse
+/-
+**Quiver._root_.Prefunctor.mapReverseComp** 是 Mathlib 中的一个实例，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.Prefunctor.mapReverseComp
     (φ : U ⥤q V) (ψ : V ⥤q W) [φ.MapReverse] [ψ.MapReverse] :
     (φ ⋙q ψ).MapReverse where
   map_reverse' e := by
     simp only [Prefunctor.comp_map, Prefunctor.MapReverse.map_reverse']
-
-/--
-Instance `_root_.Prefunctor.mapReverseId` / 实例 `_root_.Prefunctor.mapReverseId`
-
-English:
-instance _root_.Prefunctor.mapReverseId
-  signature: :
-  body: rfl
-
-中文:
-实例 _root_.预函子.mapReverseId
-  签名: :
-  定义体: rfl
-
-Depends on / 依赖: _apply, comapDomain, smul_apply
+/-
+**Quiver._root_.Prefunctor.mapReverseId** 是 Mathlib 中的一个实例，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.Prefunctor.mapReverseId :
     (Prefunctor.id U).MapReverse where
@@ -285,168 +201,111 @@ instance _root_.Prefunctor.mapReverseId :
 
 end MapReverse
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasReverse (Symmetrify V)
-  body: ⟨fun e => e.swap⟩
-
-中文:
-实例 :
-  签名: 有Reverse (Symmetrify V)
-  定义体: ⟨fun e => e.swap⟩
-
-Depends on / 依赖: e.swap
+/-
+**Quiver.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasReverse (Symmetrify V) :=
   ⟨fun e => e.swap⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: ⟨fun e => e.swap⟩
-  inv' e := congr_fun Sum.swap_swap_eq e
-
-@[simp]
-
-中文:
-实例 :
-  定义体: ⟨fun e => e.swap⟩
-  inv' e := congr_fun Sum.swap_swap_eq e
-
-@[simp]
-
-Depends on / 依赖: e.swap
+/-
+**Quiver.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance :
     HasInvolutiveReverse
       (Symmetrify V) where
-  toHasReverse := ⟨fun e => e.swap⟩
+  toHasReverse := ⟨fun e ↦ e.swap⟩
   inv' e := congr_fun Sum.swap_swap_eq e
 
 @[simp]
-/--
-theorem `symmetrify_reverse` / 定理 `symmetrify_reverse`
-
-English:
-theorem symmetrify_reverse
-  given: {a b : Symmetrify V} (e : a ⟶ b)
-  statement: reverse e = e.swap
-  proof: rfl
-
-中文:
-定理 symmetrify_reverse
-  条件: {a b : Symmetrify V} (e : a ⟶ b)
-  结论: reverse e = e.swap
-  证明: rfl
+/-
+**Quiver.symmetrify_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：symmetrify_reverse {a b : Symmetrify V} (e : a ⟶ b) : reverse e = e.swap
+参数：e : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symmetrify_reverse {a b : Symmetrify V} (e : a ⟶ b) : reverse e = e.swap :=
   rfl
 
 section Paths
 
-/--
-Definition of `Hom.toPos` / `Hom.toPos` 的定义
+/-- Shorthand for the "forward" arrow corresponding to `f` in `symmetrify V` -/
+/-
+**Quiver.Hom.toPos** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Hom`。
+形式化陈述：{V : Type u_2} → [inst : Quiver V] → {X Y : V} → (X ⟶ Y) → (X ⟶ Y)
+参数：X ⟶ Y；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.toPos
-  signature: {X Y : V} (f : X ⟶ Y)
-  body: Sum.inl f
-
-中文:
-缩写 态射.toPos
-  签名: {X Y : V} (f : X ⟶ Y)
-  定义体: Sum.inl f
-
-Depends on / 依赖: Sum.inl
+--- 原说明 ---
+Shorthand for the "forward" arrow corresponding to `f` in `symmetrify V`
 -/
 abbrev Hom.toPos {X Y : V} (f : X ⟶ Y) : (Quiver.symmetrifyQuiver V).Hom X Y :=
   Sum.inl f
 
-/--
-Definition of `Hom.toNeg` / `Hom.toNeg` 的定义
+/-- Shorthand for the "backward" arrow corresponding to `f` in `symmetrify V` -/
+/-
+**Quiver.Hom.toNeg** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Hom`。
+形式化陈述：{V : Type u_2} → [inst : Quiver V] → {X Y : V} → (X ⟶ Y) → (Y ⟶ X)
+参数：X ⟶ Y；Y ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.toNeg
-  signature: {X Y : V} (f : X ⟶ Y)
-  body: Sum.inr f
-
-中文:
-缩写 态射.toNeg
-  签名: {X Y : V} (f : X ⟶ Y)
-  定义体: Sum.inr f
-
-Depends on / 依赖: Sum.inr
+--- 原说明 ---
+Shorthand for the "backward" arrow corresponding to `f` in `symmetrify V`
 -/
 abbrev Hom.toNeg {X Y : V} (f : X ⟶ Y) : (Quiver.symmetrifyQuiver V).Hom Y X :=
   Sum.inr f
 
 /-- Reverse the direction of a path. -/
 @[simp]
-/--
-Definition of `Path.reverse` / `Path.reverse` 的定义
+/-
+**Quiver.Path.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Path`。
+形式化陈述：{V : Type u_2} → [inst : Quiver V] → [Quiver.HasReverse V] → {a b : V} → Q
+uiver.Path a b → Quiver.Path b a
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Path.reverse
-  signature: [HasReverse V] {a : V}
-
-中文:
-定义 道路.reverse
-  签名: [有Reverse V] {a : V}
+--- 原说明 ---
+Reverse the direction of a path.
 -/
-def Path.reverse [HasReverse V] {a : V} : forall {b}, Path a b -> Path b a
+def Path.reverse [HasReverse V] {a : V} : ∀ {b}, Path a b → Path b a
   | _, Path.nil => Path.nil
   | _, Path.cons p e => (Quiver.reverse e).toPath.comp p.reverse
 
 @[simp]
-/--
-theorem `Path.reverse_toPath` / 定理 `Path.reverse_toPath`
-
-English:
-theorem Path.reverse_toPath
-  given: [HasReverse V] {a b : V} (f : a ⟶ b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 道路.reverse_toPath
-  条件: [有Reverse V] {a b : V} (f : a ⟶ b)
-  证明: rfl
-
-@[simp]
+/-
+**Quiver.Path.reverse_toPath** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Path`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Quiver.HasReverse V] {a b : V
+} (f : a ⟶ b),   f.toPath.reverse = (Quiver.reverse f).toPath
+参数：f : a ⟶ b；Quiver.reverse f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Path.reverse_toPath [HasReverse V] {a b : V} (f : a ⟶ b) :
     f.toPath.reverse = (Quiver.reverse f).toPath :=
   rfl
 
 @[simp]
-/--
-theorem `Path.reverse_comp` / 定理 `Path.reverse_comp`
-
-English:
-theorem Path.reverse_comp
-  given: [HasReverse V] {a b c : V} (p : Path a b) (q : Path b c)
-  proof: by
-  induction q with
-  | nil => simp
-  | cons _ _ h => simp [h]
-
-@[simp]
-
-中文:
-定理 道路.reverse_comp
-  条件: [有Reverse V] {a b c : V} (p : 道路 a b) (q : 道路 b c)
-  证明: by
-  induction q with
-  | nil => simp
-  | cons _ _ h => simp [h]
-
-@[simp]
+/-
+**Quiver.Path.reverse_comp** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Path`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Quiver.HasReverse V] {a b c :
+ V} (p : Quiver.Path a b)   (q : Quiver.Path b c), (p.comp q).reverse = q.revers
+e.comp p.reverse
+参数：p : Quiver.Path a b；q : Quiver.Path b c；p.comp q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quiver.Path.nil_comp`：∀ {V : Type u} [inst : Quiver V] {a b : V} (p : Qu
+iver.Path a b), Quiver.Path.nil.comp p = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Quiver.Path.reverse.eq_2`：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Q
+uiver.HasReverse V] {a : V} (x b : V) (p : Quiver.Path a b) (e : b ⟶ x),   (p.co
+ns e).reverse …
+· 使用定理 `Quiver.Path.comp_assoc`：∀ {V : Type u} [inst : Quiver V] {a b c d : V} (
+p : Quiver.Path a b) (q : Quiver.Path b c) (r : Quiver.Path c d),   (p.comp q).c
+omp r = p.co…
 -/
 theorem Path.reverse_comp [HasReverse V] {a b c : V} (p : Path a b) (q : Path b c) :
     (p.comp q).reverse = q.reverse.comp p.reverse := by
@@ -455,37 +314,39 @@ theorem Path.reverse_comp [HasReverse V] {a b c : V} (p : Path a b) (q : Path b 
   | cons _ _ h => simp [h]
 
 @[simp]
-/--
-theorem `Path.reverse_reverse` / 定理 `Path.reverse_reverse`
-
-English:
-theorem Path.reverse_reverse
-  given: [h : HasInvolutiveReverse V] {a b : V} (p : Path a b)
-  proof: by
-  induction p with
-  | nil => simp
-  | cons _ _ h =>
-    rw [Path.reverse]; rw [Path.reverse_comp]; rw [h]; rw [Path.reverse_toPath]; rw [Quiver.reverse_reverse]
-    rfl
-
-中文:
-定理 道路.reverse_reverse
-  条件: [h : 有InvolutiveReverse V] {a b : V} (p : 道路 a b)
-  证明: by
-  induction p with
-  | nil => simp
-  | cons _ _ h =>
-    rw [Path.reverse]; rw [Path.reverse_comp]; rw [h]; rw [Path.reverse_toPath]; rw [Quiver.reverse_reverse]
-    rfl
-
-Depends on / 依赖: Path.reverse, Path.reverse_comp, Path.reverse_toPath, Quiver, Quiver.reverse_reverse, reverse, reverse_comp, reverse_reverse, reverse_toPath
+/-
+**Quiver.Path.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Path`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V] [h : Quiver.HasInvolutiveReverse V] {a 
+b : V} (p : Quiver.Path a b),   p.reverse.reverse = p
+参数：p : Quiver.Path a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quiver.Path.reverse.eq_1`：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Q
+uiver.HasReverse V] {a : V}, Quiver.Path.nil.reverse = Quiver.Path.nil
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Quiver.Path.reverse.eq_2`：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Q
+uiver.HasReverse V] {a : V} (x b : V) (p : Quiver.Path a b) (e : b ⟶ x),   (p.co
+ns e).reverse …
+· 使用定理 `Quiver.Path.reverse_comp`：∀ {V : Type u_2} [inst : Quiver V] [inst_1 : Q
+uiver.HasReverse V] {a b c : V} (p : Quiver.Path a b)   (q : Quiver.Path b c), (
+p.comp q).reve…
+· 使用定理 `Quiver.Path.reverse_toPath`：∀ {V : Type u_2} [inst : Quiver V] [inst_1 :
+ Quiver.HasReverse V] {a b : V} (f : a ⟶ b),   f.toPath.reverse = (Quiver.revers
+e f).toPath
+· 使用定理 `Quiver.reverse_reverse`：reverse_reverse [h : HasInvolutiveReverse V] {a 
+b : V} (f : a ⟶ b) : reverse (reverse f) = f
 -/
 theorem Path.reverse_reverse [h : HasInvolutiveReverse V] {a b : V} (p : Path a b) :
     p.reverse.reverse = p := by
   induction p with
   | nil => simp
   | cons _ _ h =>
-    rw [Path.reverse]; rw [Path.reverse_comp]; rw [h]; rw [Path.reverse_toPath]; rw [Quiver.reverse_reverse]
+    rw [Path.reverse, Path.reverse_comp, h, Path.reverse_toPath, Quiver.reverse_reverse]
     rfl
 
 end Paths
@@ -494,20 +355,14 @@ namespace Symmetrify
 
 /-- The inclusion of a quiver in its symmetrification -/
 @[simps]
-/--
-Definition of `of` / `of` 的定义
+/-
+**Quiver.Symmetrify.of** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Symmetrify`。
+形式化陈述：of : Prefunctor V (Symmetrify V) where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: : Prefunctor V (Symmetrify V) where
-  body: id
-  map := Sum.inl
-
-中文:
-定义 of
-  签名: : 预函子 V (Symmetrify V) where
-  定义体: id
-  map := Sum.inl
+--- 原说明 ---
+The inclusion of a quiver in its symmetrification
 -/
 def of : Prefunctor V (Symmetrify V) where
   obj := id
@@ -515,24 +370,20 @@ def of : Prefunctor V (Symmetrify V) where
 
 variable {V' : Type*} [Quiver.{v'} V']
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Given a quiver `V'` with reversible arrows, a prefunctor to `V'` can be lifted to one from
+    `Symmetrify V` to `V'` -/
+/-
+**Quiver.Symmetrify.lift** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Symmetrify`。
+形式化陈述：lift [HasReverse V'] (φ : Prefunctor V V') : Prefunctor (Symmetrify V) V' 
+where obj
+参数：φ : Prefunctor V V'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: [HasReverse V'] (φ : Prefunctor V V')
-  body: φ.obj
-  map
-  | Sum.inl g => φ.map g
-  | Sum.inr g => reverse (φ.map g)
-
-中文:
-定义 lift
-  签名: [有Reverse V'] (φ : 预函子 V V')
-  定义体: φ.obj
-  map
-  | Sum.inl g => φ.map g
-  | Sum.inr g => reverse (φ.map g)
+--- 原说明 ---
+Given a quiver `V'` with reversible arrows, a prefunctor to `V'` can be lifted t
+o one from
+    `Symmetrify V` to `V'`
 -/
 def lift [HasReverse V'] (φ : Prefunctor V V') :
     Prefunctor (Symmetrify V) V' where
@@ -540,31 +391,16 @@ def lift [HasReverse V'] (φ : Prefunctor V V') :
   map
   | Sum.inl g => φ.map g
   | Sum.inr g => reverse (φ.map g)
-
-/--
-theorem `lift_spec` / 定理 `lift_spec`
-
-English:
-theorem lift_spec
-  given: [HasReverse V'] (φ : Prefunctor V V')
-  proof: by
-  fapply Prefunctor.ext
-  · rintro X
-    rfl
-  · rintro X Y f
-    rfl
-
-中文:
-定理 lift_spec
-  条件: [有Reverse V'] (φ : 预函子 V V')
-  证明: by
-  fapply Prefunctor.ext
-  · rintro X
-    rfl
-  · rintro X Y f
-    rfl
-
-Depends on / 依赖: Prefunctor, Prefunctor.ext, fapply
+/-
+**Quiver.Symmetrify.lift_spec** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Symmetrify`。
+形式化陈述：lift_spec [HasReverse V'] (φ : Prefunctor V V') : Symmetrify.of.comp (Symm
+etrify.lift φ) = φ
+参数：φ : Prefunctor V V'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prefunctor.ext`：ext {V : Type u} [Quiver.{v₁} V] {W : Type u₂} [Quiver.{
+v₂} W] {F G : Prefunctor V W} (h_obj : forall X, F.obj X = G.obj X) (h_map : for
+all …
 -/
 theorem lift_spec [HasReverse V'] (φ : Prefunctor V V') :
     Symmetrify.of.comp (Symmetrify.lift φ) = φ := by
@@ -573,31 +409,19 @@ theorem lift_spec [HasReverse V'] (φ : Prefunctor V V') :
     rfl
   · rintro X Y f
     rfl
-
-/--
-theorem `lift_reverse` / 定理 `lift_reverse`
-
-English:
-theorem lift_reverse
-  statement: [h : HasInvolutiveReverse V']
-  proof: by
-  dsimp [Symmetrify.lift]; cases f
-  · simp only
-    rfl
-  · simp only [reverse_reverse]
-    rfl
-
-中文:
-定理 lift_reverse
-  结论: [h : 有InvolutiveReverse V']
-  证明: by
-  dsimp [Symmetrify.lift]; cases f
-  · simp only
-    rfl
-  · simp only [reverse_reverse]
-    rfl
-
-Depends on / 依赖: Symmetrify, Symmetrify.lift, reverse_reverse
+/-
+**Quiver.Symmetrify.lift_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Symmetrify`。
+形式化陈述：lift_reverse [h : HasInvolutiveReverse V'] (φ : Prefunctor V V') {X Y : Sy
+mmetrify V} (f : X ⟶ Y) : (Symmetrify.lift φ).map (Quiver.reverse f) = Quiver.re
+verse ((Symmetrify.lift φ).map f)
+参数：φ : Prefunctor V V'；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quiver.reverse_reverse`：reverse_reverse [h : HasInvolutiveReverse V] {a 
+b : V} (f : a ⟶ b) : reverse (reverse f) = f
 -/
 theorem lift_reverse [h : HasInvolutiveReverse V']
     (φ : Prefunctor V V') {X Y : Symmetrify V} (f : X ⟶ Y) :
@@ -608,39 +432,26 @@ theorem lift_reverse [h : HasInvolutiveReverse V']
   · simp only [reverse_reverse]
     rfl
 
-/--
-theorem `lift_unique` / 定理 `lift_unique`
+/-- `lift φ` is the only prefunctor extending `φ` and preserving reverses. -/
+/-
+**Quiver.Symmetrify.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Symmetrify`。
+形式化陈述：lift_unique [HasReverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (
+of ⋙q Φ) = φ) (hΦinv : forall {X Y : Symmetrify V} (f : X ⟶ Y), Φ.map (Quiver.re
+verse f) = Quiver.reverse (Φ.map f)) : Φ = Symmetrify.lift φ
+参数：φ : V ⥤q V'；Φ : Symmetrify V ⥤q V'；hΦ : (of ⋙q Φ) = φ；hΦinv : forall {X Y : S
+ymmetrify V} (f : X ⟶ Y), Φ.map (Quiver.reverse f) = Quiver.reverse (Φ.map f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prefunctor.ext`：ext {V : Type u} [Quiver.{v₁} V] {W : Type u₂} [Quiver.{
+v₂} W] {F G : Prefunctor V W} (h_obj : forall X, F.obj X = G.obj X) (h_map : for
+all …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem lift_unique
-  statement: [HasReverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (of ⋙q Φ) = φ)
-  proof: by
-  subst_vars
-  fapply Prefunctor.ext
-  · rintro X
-    rfl
-  · rintro X Y f
-    cases f
-    · rfl
-    · exact hΦinv (Sum.inl _)
-
-中文:
-定理 lift_unique
-  结论: [有Reverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (of ⋙q Φ) = φ)
-  证明: by
-  subst_vars
-  fapply Prefunctor.ext
-  · rintro X
-    rfl
-  · rintro X Y f
-    cases f
-    · rfl
-    · exact hΦinv (Sum.inl _)
-
-Depends on / 依赖: Prefunctor, Prefunctor.ext, Sum.inl, fapply
+--- 原说明 ---
+`lift φ` is the only prefunctor extending `φ` and preserving reverses.
 -/
 theorem lift_unique [HasReverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (of ⋙q Φ) = φ)
-    (hΦinv : forall {X Y : Symmetrify V} (f : X ⟶ Y),
+    (hΦinv : ∀ {X Y : Symmetrify V} (f : X ⟶ Y),
       Φ.map (Quiver.reverse f) = Quiver.reverse (Φ.map f)) :
     Φ = Symmetrify.lift φ := by
   subst_vars
@@ -654,37 +465,21 @@ theorem lift_unique [HasReverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V')
 
 /-- A prefunctor canonically defines a prefunctor of the symmetrifications. -/
 @[simps]
-/--
-Definition of `_root_.Prefunctor.symmetrify` / `_root_.Prefunctor.symmetrify` 的定义
+/-
+**Quiver.Symmetrify._root_.Prefunctor.symmetrify** 是 Mathlib 中的一个定义，位于命名空间 `Quiv
+er.Symmetrify`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Prefunctor.symmetrify
-  signature: (φ : U ⥤q V)
-  body: φ.obj
-  map := Sum.map φ.map φ.map
-
-中文:
-定义 _root_.预函子.symmetrify
-  签名: (φ : U ⥤q V)
-  定义体: φ.obj
-  map := Sum.map φ.map φ.map
+--- 原说明 ---
+A prefunctor canonically defines a prefunctor of the symmetrifications.
 -/
 def _root_.Prefunctor.symmetrify (φ : U ⥤q V) : Symmetrify U ⥤q Symmetrify V where
   obj := φ.obj
   map := Sum.map φ.map φ.map
-
-/--
-Instance `_root_.Prefunctor.symmetrify_mapReverse` / 实例 `_root_.Prefunctor.symmetrify_mapReverse`
-
-English:
-instance _root_.Prefunctor.symmetrify_mapReverse
-  signature: (φ : U ⥤q V)
-  body: ⟨fun e => by cases e <;> rfl⟩
-
-中文:
-实例 _root_.预函子.symmetrify_mapReverse
-  签名: (φ : U ⥤q V)
-  定义体: ⟨fun e => by cases e <;> rfl⟩
+/-
+**Quiver.Symmetrify._root_.Prefunctor.symmetrify_mapReverse** 是 Mathlib 中的一个实例，位
+于命名空间 `Quiver.Symmetrify`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.Prefunctor.symmetrify_mapReverse (φ : U ⥤q V) :
     Prefunctor.MapReverse φ.symmetrify :=
@@ -694,45 +489,18 @@ end Symmetrify
 
 namespace Push
 
-variable {V' : Type*} (σ : V -> V')
+variable {V' : Type*} (σ : V → V')
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasReverse
-  signature: V] : HasReverse (Quiver.Push σ) where
-  body: fun
-              | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
-
-中文:
-实例 [有Reverse
-  签名: V] : 有Reverse (箭图.Push σ) where
-  定义体: fun
-              | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
+/-
+**Quiver.Push.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.Push`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasReverse V] : HasReverse (Quiver.Push σ) where
   reverse' := fun
               | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : HasInvolutiveReverse V] :
-  body: fun
-  | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
-  inv' := fun
-  | PushQuiver.arrow f => by dsimp [reverse]; congr; apply h.inv'
-
-中文:
-实例 [h
-  签名: : 有InvolutiveReverse V] :
-  定义体: fun
-  | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
-  inv' := fun
-  | PushQuiver.arrow f => by dsimp [reverse]; congr; apply h.inv'
+/-
+**Quiver.Push.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.Push`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : HasInvolutiveReverse V] :
     HasInvolutiveReverse (Push σ) where
@@ -740,39 +508,30 @@ instance [h : HasInvolutiveReverse V] :
   | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
   inv' := fun
   | PushQuiver.arrow f => by dsimp [reverse]; congr; apply h.inv'
-
-/--
-theorem `of_reverse` / 定理 `of_reverse`
-
-English:
-theorem of_reverse
-  given: [HasInvolutiveReverse V] (X Y : V) (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 of_reverse
-  条件: [有InvolutiveReverse V] (X Y : V) (f : X ⟶ Y)
-  证明: rfl
+/-
+**Quiver.Push.of_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Push`。
+形式化陈述：of_reverse [HasInvolutiveReverse V] (X Y : V) (f : X ⟶ Y) : (reverse <| (P
+ush.of σ).map f) = (Push.of σ).map (reverse f)
+参数：X Y : V；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem of_reverse [HasInvolutiveReverse V] (X Y : V) (f : X ⟶ Y) :
     (reverse <| (Push.of σ).map f) = (Push.of σ).map (reverse f) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `ofMapReverse` / 实例 `ofMapReverse`
-
-English:
-instance ofMapReverse
-  signature: [h : HasInvolutiveReverse V]
-  body: ⟨by simp [of_reverse]⟩
-
-中文:
-实例 ofMapReverse
-  签名: [h : 有InvolutiveReverse V]
-  定义体: ⟨by simp [of_reverse]⟩
-
-Depends on / 依赖: of_reverse
+/-
+**Quiver.Push.ofMapReverse** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.Push`。
+形式化陈述：ofMapReverse [h : HasInvolutiveReverse V] : (Push.of σ).MapReverse
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance ofMapReverse [h : HasInvolutiveReverse V] : (Push.of σ).MapReverse :=
   ⟨by simp [of_reverse]⟩
@@ -780,3 +539,4 @@ instance ofMapReverse [h : HasInvolutiveReverse V] : (Push.of σ).MapReverse :=
 end Push
 
 end Quiver
+

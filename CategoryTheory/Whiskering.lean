@@ -43,26 +43,18 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 
 /-- If `α : G ⟶ H` then `whiskerLeft F α : F ⋙ G ⟶ F ⋙ H` has components `α.app (F.obj X)`. -/
 @[implicit_reducible, to_dual self, simps (attr := to_dual self)]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Functor.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) : F ⋙ G ⟶ F ⋙ H where ap
+p X
+参数：F : C ⥤ D；α : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H)
-  body: α.app (F.obj X)
-  naturality X Y f := by rw [Functor.comp_map, Functor.comp_map, α.naturality]
-
-@[simp, to_dual self]
-
-中文:
-定义 whiskerLeft
-  签名: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H)
-  定义体: α.app (F.obj X)
-  naturality X Y f := by rw [Functor.comp_map, Functor.comp_map, α.naturality]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+If `α : G ⟶ H` then `whiskerLeft F α : F ⋙ G ⟶ F ⋙ H` has components `α.app (F.o
+bj X)`.
 -/
 def whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) :
     F ⋙ G ⟶ F ⋙ H where
@@ -70,24 +62,33 @@ def whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) :
   naturality X Y f := by rw [Functor.comp_map, Functor.comp_map, α.naturality]
 
 @[simp, to_dual self]
-/--
-lemma `id_hcomp` / 引理 `id_hcomp`
-
-English:
-lemma id_hcomp
-  given: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H)
-  statement: 𝟙 F ◫ α = whiskerLeft F α
-  proof: by
-  ext
-  simp
-
-中文:
-引理 id_hcomp
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H)
-  结论: 𝟙 F ◫ α = whiskerLeft F α
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Functor.id_hcomp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：id_hcomp (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) : 𝟙 F ◫ α = whiskerLeft F α
+参数：F : C ⥤ D；α : G ⟶ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.hcomp_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma id_hcomp (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) : 𝟙 F ◫ α = whiskerLeft F α := by
   ext
@@ -95,54 +96,51 @@ lemma id_hcomp (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) : 𝟙 F ◫ α = wh
 
 /-- If `α : G ⟶ H` then `whiskerRight α F : G ⋙ F ⟶ H ⋙ F` has components `F.map (α.app X)`. -/
 @[implicit_reducible, to_dual self, simps (attr := to_dual self)]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Functor.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) : G ⋙ F ⟶ H ⋙ F where a
+pp X
+参数：α : G ⟶ H；F : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E)
-  body: F.map (α.app X)
-  naturality X Y f := by
-    rw [Functor.comp_map]; rw [Functor.comp_map]; rw [← F.map_comp]; rw [← F.map_comp]; rw [α.naturality]
-
-@[simp, to_dual self]
-
-中文:
-定义 whiskerRight
-  签名: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E)
-  定义体: F.map (α.app X)
-  naturality X Y f := by
-    rw [Functor.comp_map]; rw [Functor.comp_map]; rw [← F.map_comp]; rw [← F.map_comp]; rw [α.naturality]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+If `α : G ⟶ H` then `whiskerRight α F : G ⋙ F ⟶ H ⋙ F` has components `F.map (α.
+app X)`.
 -/
 def whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) :
     G ⋙ F ⟶ H ⋙ F where
   app X := F.map (α.app X)
   naturality X Y f := by
-    rw [Functor.comp_map]; rw [Functor.comp_map]; rw [← F.map_comp]; rw [← F.map_comp]; rw [α.naturality]
+    rw [Functor.comp_map, Functor.comp_map, ← F.map_comp, ← F.map_comp, α.naturality]
 
 @[simp, to_dual self]
-/--
-lemma `hcomp_id` / 引理 `hcomp_id`
-
-English:
-lemma hcomp_id
-  given: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E)
-  statement: α ◫ 𝟙 F = whiskerRight α F
-  proof: by
-  ext
-  simp
-
-中文:
-引理 hcomp_id
-  条件: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E)
-  结论: α ◫ 𝟙 F = whiskerRight α F
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Functor.hcomp_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：hcomp_id {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) : α ◫ 𝟙 F = whiskerRight α 
+F
+参数：α : G ⟶ H；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.hcomp_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hcomp_id {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) : α ◫ 𝟙 F = whiskerRight α F := by
   ext
@@ -157,32 +155,18 @@ set_option backward.defeqAttrib.useBackward true in
 `(whiskeringLeft.obj F).map α` is `whiskerLeft F α`.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `whiskeringLeft` / `whiskeringLeft` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft
-  signature: : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where
-  body: { obj := fun G => F ⋙ G
-      map := fun α => whiskerLeft F α }
-  map τ :=
-    { app := fun H =>
-        { app := fun c => H.map (τ.app c)
-          naturality := fun X Y f => by dsimp; rw [← H.map_comp, ← H.map_comp, ← τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [f.naturality] }
+--- 原说明 ---
+Left-composition gives a functor `(C ⥤ D) ⥤ ((D ⥤ E) ⥤ (C ⥤ E))`.
 
-中文:
-定义 whiskeringLeft
-  签名: : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where
-  定义体: { obj := fun G => F ⋙ G
-      map := fun α => whiskerLeft F α }
-  map τ :=
-    { app := fun H =>
-        { app := fun c => H.map (τ.app c)
-          naturality := fun X Y f => by dsimp; rw [← H.map_comp, ← H.map_comp, ← τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [f.naturality] }
-
-Depends on / 依赖: H.map, H.map_comp, f.naturality, map_comp, naturality, whiskerLeft
+`(whiskeringLeft.obj F).obj G` is `F ⋙ G`, and
+`(whiskeringLeft.obj F).map α` is `whiskerLeft F α`.
 -/
 def whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where
   obj F :=
@@ -201,32 +185,18 @@ set_option backward.defeqAttrib.useBackward true in
 `(whiskeringRight.obj H).map α` is `whiskerRight α H`.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `whiskeringRight` / `whiskeringRight` 的定义
+/-
+**CategoryTheory.Functor.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：whiskeringRight : (D ⥤ E) ⥤ (C ⥤ D) ⥤ C ⥤ E where obj H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringRight
-  signature: : (D ⥤ E) ⥤ (C ⥤ D) ⥤ C ⥤ E where
-  body: { obj := fun F => F ⋙ H
-      map := fun α => whiskerRight α H }
-  map τ :=
-    { app := fun F =>
-        { app := fun c => τ.app (F.obj c)
-          naturality := fun X Y f => by dsimp; rw [τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [← NatTrans.naturality] }
+--- 原说明 ---
+Right-composition gives a functor `(D ⥤ E) ⥤ ((C ⥤ D) ⥤ (C ⥤ E))`.
 
-中文:
-定义 whiskeringRight
-  签名: : (D ⥤ E) ⥤ (C ⥤ D) ⥤ C ⥤ E where
-  定义体: { obj := fun F => F ⋙ H
-      map := fun α => whiskerRight α H }
-  map τ :=
-    { app := fun F =>
-        { app := fun c => τ.app (F.obj c)
-          naturality := fun X Y f => by dsimp; rw [τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [← NatTrans.naturality] }
-
-Depends on / 依赖: F.obj, NatTrans, NatTrans.naturality, naturality, whiskerRight
+`(whiskeringRight.obj H).obj F` is `F ⋙ H`, and
+`(whiskeringRight.obj H).map α` is `whiskerRight α H`.
 -/
 def whiskeringRight : (D ⥤ E) ⥤ (C ⥤ D) ⥤ C ⥤ E where
   obj H :=
@@ -239,57 +209,47 @@ def whiskeringRight : (D ⥤ E) ⥤ (C ⥤ D) ⥤ C ⥤ E where
       naturality := fun X Y f => by ext; dsimp; rw [← NatTrans.naturality] }
 
 variable {C} {D} {E}
-
-/--
-Instance `faithful_whiskeringRight_obj` / 实例 `faithful_whiskeringRight_obj`
-
-English:
-instance faithful_whiskeringRight_obj
-  signature: {F : D ⥤ E} [F.Faithful]
-  body: by
-    ext X
-exact F.map_injective congr_fun (congr_arg NatTrans.app hαβ) X
-
-中文:
-实例 faithful_whiskeringRight_obj
-  签名: {F : D ⥤ E} [F.忠实]
-  定义体: by
-    ext X
-exact F.map_injective congr_fun (congr_arg NatTrans.app hαβ) X
-
-Depends on / 依赖: F.map_injective, NatTrans, NatTrans.app, congr_arg, congr_fun, map_injective
+/-
+**CategoryTheory.Functor.faithful_whiskeringRight_obj** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：faithful_whiskeringRight_obj {F : D ⥤ E} [F.Faithful] : ((whiskeringRight 
+C D E).obj F).Faithful where map_injective hαβ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance faithful_whiskeringRight_obj {F : D ⥤ E} [F.Faithful] :
     ((whiskeringRight C D E).obj F).Faithful where
   map_injective hαβ := by
     ext X
-exact F.map_injective congr_fun (congr_arg NatTrans.app hαβ) X
+    exact F.map_injective <| congr_fun (congr_arg NatTrans.app hαβ) X
 
 /-- If `F : D ⥤ E` is fully faithful, then so is
 `(whiskeringRight C D E).obj F : (C ⥤ D) ⥤ C ⥤ E`. -/
 @[simps]
-/--
-Definition of `FullyFaithful.whiskeringRight` / `FullyFaithful.whiskeringRight` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：{D : Type u₂} →   [inst : CategoryTheory.Category.{v₂, u₂} D] →     {E : T
+ype u₃} →       [inst_1 : CategoryTheory.Category.{v₃, u₃} E] →         {F : Cat
+egoryTheory.Functor D E} →           F.FullyFaithful →             (C : Type u_1
+) →               [inst_2 : CategoryTheory.Category.{v_1, u_1} C] →             
+    ((CategoryTheory.Functor.whiskeringRight C D E).obj F).FullyFaithful
+参数：C : Type u_1；(CategoryTheory.Functor.whiskeringRight C D E).obj F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FullyFaithful.whiskeringRight
-  signature: {F : D ⥤ E} (hF : F.FullyFaithful)
-  body: { app := fun X => hF.preimage (f.app X)
-      naturality := fun _ _ g => by
-        apply hF.map_injective
-        simp only [map_comp, map_preimage]
-        apply f.naturality }
-
-中文:
-定义 满忠实.whiskeringRight
-  签名: {F : D ⥤ E} (hF : F.满忠实)
-  定义体: { app := fun X => hF.preimage (f.app X)
-      naturality := fun _ _ g => by
-        apply hF.map_injective
-        simp only [map_comp, map_preimage]
-        apply f.naturality }
-
-Depends on / 依赖: f.app, f.naturality, hF.map_injective, hF.preimage, map_comp, map_injective, map_preimage, naturality, preimage
+--- 原说明 ---
+If `F : D ⥤ E` is fully faithful, then so is
+`(whiskeringRight C D E).obj F : (C ⥤ D) ⥤ C ⥤ E`.
 -/
 def FullyFaithful.whiskeringRight {F : D ⥤ E} (hF : F.FullyFaithful)
     (C : Type*) [Category* C] :
@@ -300,19 +260,12 @@ def FullyFaithful.whiskeringRight {F : D ⥤ E} (hF : F.FullyFaithful)
         apply hF.map_injective
         simp only [map_comp, map_preimage]
         apply f.naturality }
-
-/--
-theorem `whiskeringLeft_obj_id` / 定理 `whiskeringLeft_obj_id`
-
-English:
-theorem whiskeringLeft_obj_id
-  statement: (whiskeringLeft C C E).obj (𝟭 _) = 𝟭 _
-  proof: rfl
-
-中文:
-定理 whiskeringLeft_obj_id
-  结论: (whiskeringLeft C C E).obj (𝟭 _) = 𝟭 _
-  证明: rfl
+/-
+**CategoryTheory.Functor.whiskeringLeft_obj_id** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：whiskeringLeft_obj_id : (whiskeringLeft C C E).obj (𝟭 _) = 𝟭 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskeringLeft_obj_id : (whiskeringLeft C C E).obj (𝟭 _) = 𝟭 _ :=
   rfl
@@ -320,36 +273,29 @@ theorem whiskeringLeft_obj_id : (whiskeringLeft C C E).obj (𝟭 _) = 𝟭 _ :=
 /-- The isomorphism between left-whiskering on the identity functor and the identity of the functor
 between the resulting functor categories. -/
 @[simps!]
-/--
-Definition of `whiskeringLeftObjIdIso` / `whiskeringLeftObjIdIso` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeftObjIdIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：whiskeringLeftObjIdIso : (whiskeringLeft C C E).obj (𝟭 _) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeftObjIdIso
-  signature: : (whiskeringLeft C C E).obj (𝟭 _) ≅ 𝟭 _
-  body: Iso.refl _
-
-中文:
-定义 whiskeringLeftObjIdIso
-  签名: : (whiskeringLeft C C E).obj (𝟭 _) ≅ 𝟭 _
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between left-whiskering on the identity functor and the identity
+ of the functor
+between the resulting functor categories.
 -/
 def whiskeringLeftObjIdIso : (whiskeringLeft C C E).obj (𝟭 _) ≅ 𝟭 _ :=
   Iso.refl _
-
-/--
-theorem `whiskeringLeft_obj_comp` / 定理 `whiskeringLeft_obj_comp`
-
-English:
-theorem whiskeringLeft_obj_comp
-  given: {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  proof: rfl
-
-中文:
-定理 whiskeringLeft_obj_comp
-  条件: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  证明: rfl
+/-
+**CategoryTheory.Functor.whiskeringLeft_obj_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：whiskeringLeft_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G :
+ D ⥤ D') : (whiskeringLeft C D' E).obj (F ⋙ G) = (whiskeringLeft D D' E).obj G ⋙
+ (whiskeringLeft C D E).obj F
+参数：F : C ⥤ D；G : D ⥤ D'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskeringLeft_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
     (whiskeringLeft C D' E).obj (F ⋙ G) =
@@ -359,38 +305,31 @@ theorem whiskeringLeft_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤
 /-- The isomorphism between left-whiskering on the composition of functors and the composition
 of two left-whiskering applications. -/
 @[simps!]
-/--
-Definition of `whiskeringLeftObjCompIso` / `whiskeringLeftObjCompIso` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeftObjCompIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：whiskeringLeftObjCompIso {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G 
+: D ⥤ D') : (whiskeringLeft C D' E).obj (F ⋙ G) ≅ (whiskeringLeft D D' E).obj G 
+⋙ (whiskeringLeft C D E).obj F
+参数：F : C ⥤ D；G : D ⥤ D'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeftObjCompIso
-  signature: {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  body: Iso.refl _
-
-中文:
-定义 whiskeringLeftObjCompIso
-  签名: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between left-whiskering on the composition of functors and the c
+omposition
+of two left-whiskering applications.
 -/
 def whiskeringLeftObjCompIso {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
     (whiskeringLeft C D' E).obj (F ⋙ G) ≅
     (whiskeringLeft D D' E).obj G ⋙ (whiskeringLeft C D E).obj F :=
   Iso.refl _
-
-/--
-theorem `whiskeringRight_obj_id` / 定理 `whiskeringRight_obj_id`
-
-English:
-theorem whiskeringRight_obj_id
-  statement: (whiskeringRight E C C).obj (𝟭 _) = 𝟭 _
-  proof: rfl
-
-中文:
-定理 whiskeringRight_obj_id
-  结论: (whiskeringRight E C C).obj (𝟭 _) = 𝟭 _
-  证明: rfl
+/-
+**CategoryTheory.Functor.whiskeringRight_obj_id** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：whiskeringRight_obj_id : (whiskeringRight E C C).obj (𝟭 _) = 𝟭 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskeringRight_obj_id : (whiskeringRight E C C).obj (𝟭 _) = 𝟭 _ :=
   rfl
@@ -398,36 +337,29 @@ theorem whiskeringRight_obj_id : (whiskeringRight E C C).obj (𝟭 _) = 𝟭 _ :
 /-- The isomorphism between right-whiskering on the identity functor and the identity of the functor
 between the resulting functor categories. -/
 @[simps!]
-/--
-Definition of `whiskeringRightObjIdIso` / `whiskeringRightObjIdIso` 的定义
+/-
+**CategoryTheory.Functor.whiskeringRightObjIdIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：whiskeringRightObjIdIso : (whiskeringRight E C C).obj (𝟭 _) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringRightObjIdIso
-  signature: : (whiskeringRight E C C).obj (𝟭 _) ≅ 𝟭 _
-  body: Iso.refl _
-
-中文:
-定义 whiskeringRightObjIdIso
-  签名: : (whiskeringRight E C C).obj (𝟭 _) ≅ 𝟭 _
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between right-whiskering on the identity functor and the identit
+y of the functor
+between the resulting functor categories.
 -/
 def whiskeringRightObjIdIso : (whiskeringRight E C C).obj (𝟭 _) ≅ 𝟭 _ :=
   Iso.refl _
-
-/--
-theorem `whiskeringRight_obj_comp` / 定理 `whiskeringRight_obj_comp`
-
-English:
-theorem whiskeringRight_obj_comp
-  given: {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  proof: rfl
-
-中文:
-定理 whiskeringRight_obj_comp
-  条件: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  证明: rfl
+/-
+**CategoryTheory.Functor.whiskeringRight_obj_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：whiskeringRight_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G 
+: D ⥤ D') : (whiskeringRight E C D).obj F ⋙ (whiskeringRight E D D').obj G = (wh
+iskeringRight E C D').obj (F ⋙ G)
+参数：F : C ⥤ D；G : D ⥤ D'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskeringRight_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
     (whiskeringRight E C D).obj F ⋙ (whiskeringRight E D D').obj G =
@@ -437,206 +369,152 @@ theorem whiskeringRight_obj_comp {D' : Type u₄} [Category.{v₄} D'] (F : C �
 /-- The isomorphism between right-whiskering on the composition of functors and the composition
 of two right-whiskering applications. -/
 @[simps!]
-/--
-Definition of `whiskeringRightObjCompIso` / `whiskeringRightObjCompIso` 的定义
+/-
+**CategoryTheory.Functor.whiskeringRightObjCompIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：whiskeringRightObjCompIso {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G
+ : D ⥤ D') : (whiskeringRight E C D).obj F ⋙ (whiskeringRight E D D').obj G ≅ (w
+hiskeringRight E C D').obj (F ⋙ G)
+参数：F : C ⥤ D；G : D ⥤ D'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringRightObjCompIso
-  signature: {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  body: Iso.refl _
-
-中文:
-定义 whiskeringRightObjCompIso
-  签名: {D' : 类型u₄} [范畴.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D')
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between right-whiskering on the composition of functors and the 
+composition
+of two right-whiskering applications.
 -/
 def whiskeringRightObjCompIso {D' : Type u₄} [Category.{v₄} D'] (F : C ⥤ D) (G : D ⥤ D') :
     (whiskeringRight E C D).obj F ⋙ (whiskeringRight E D D').obj G ≅
     (whiskeringRight E C D').obj (F ⋙ G) :=
   Iso.refl _
-
-/--
-Instance `full_whiskeringRight_obj` / 实例 `full_whiskeringRight_obj`
-
-English:
-instance full_whiskeringRight_obj
-  signature: {F : D ⥤ E} [F.Faithful] [F.Full]
-  body: ((Functor.FullyFaithful.ofFullyFaithful F).whiskeringRight C).full
-
-@[simp]
-
-中文:
-实例 full_whiskeringRight_obj
-  签名: {F : D ⥤ E} [F.忠实] [F.满]
-  定义体: ((Functor.FullyFaithful.ofFullyFaithful F).whiskeringRight C).full
-
-@[simp]
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, ofFullyFaithful, whiskeringRight
+/-
+**CategoryTheory.Functor.full_whiskeringRight_obj** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：full_whiskeringRight_obj {F : D ⥤ E} [F.Faithful] [F.Full] : ((whiskeringR
+ight C D E).obj F).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance full_whiskeringRight_obj {F : D ⥤ E} [F.Faithful] [F.Full] :
     ((whiskeringRight C D E).obj F).Full :=
   ((Functor.FullyFaithful.ofFullyFaithful F).whiskeringRight C).full
 
 @[simp]
-/--
-theorem `whiskerLeft_id` / 定理 `whiskerLeft_id`
-
-English:
-theorem whiskerLeft_id
-  given: (F : C ⥤ D) {G : D ⥤ E}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerLeft_id
-  条件: (F : C ⥤ D) {G : D ⥤ E}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.whiskerLeft_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskerLeft_id (F : C ⥤ D) {G : D ⥤ E} : whiskerLeft F (NatTrans.id G) = N
+atTrans.id (F.comp G)
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft_id (F : C ⥤ D) {G : D ⥤ E} :
     whiskerLeft F (NatTrans.id G) = NatTrans.id (F.comp G) :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerLeft_id'` / 定理 `whiskerLeft_id'`
-
-English:
-theorem whiskerLeft_id'
-  given: (F : C ⥤ D) {G : D ⥤ E}
-  statement: whiskerLeft F (𝟙 G) = 𝟙 (F.comp G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerLeft_id'
-  条件: (F : C ⥤ D) {G : D ⥤ E}
-  结论: whiskerLeft F (𝟙 G) = 𝟙 (F.comp G)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.whiskerLeft_id'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：whiskerLeft_id' (F : C ⥤ D) {G : D ⥤ E} : whiskerLeft F (𝟙 G) = 𝟙 (F.comp 
+G)
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft_id' (F : C ⥤ D) {G : D ⥤ E} : whiskerLeft F (𝟙 G) = 𝟙 (F.comp G) :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerRight_id` / 定理 `whiskerRight_id`
-
-English:
-theorem whiskerRight_id
-  given: {G : C ⥤ D} (F : D ⥤ E)
-  proof: ((whiskeringRight C D E).obj F).map_id _
-
-@[simp]
-
-中文:
-定理 whiskerRight_id
-  条件: {G : C ⥤ D} (F : D ⥤ E)
-  证明: ((whiskeringRight C D E).obj F).map_id _
-
-@[simp]
-
-Depends on / 依赖: map_id, whiskeringRight
+/-
+**CategoryTheory.Functor.whiskerRight_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：whiskerRight_id {G : C ⥤ D} (F : D ⥤ E) : whiskerRight (NatTrans.id G) F =
+ NatTrans.id (G.comp F)
+参数：F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
 theorem whiskerRight_id {G : C ⥤ D} (F : D ⥤ E) :
     whiskerRight (NatTrans.id G) F = NatTrans.id (G.comp F) :=
   ((whiskeringRight C D E).obj F).map_id _
 
 @[simp]
-/--
-theorem `whiskerRight_id'` / 定理 `whiskerRight_id'`
-
-English:
-theorem whiskerRight_id'
-  given: {G : C ⥤ D} (F : D ⥤ E)
-  statement: whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
-  proof: ((whiskeringRight C D E).obj F).map_id _
-
-@[simp, to_dual self, reassoc]
-
-中文:
-定理 whiskerRight_id'
-  条件: {G : C ⥤ D} (F : D ⥤ E)
-  结论: whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
-  证明: ((whiskeringRight C D E).obj F).map_id _
-
-@[simp, to_dual self, reassoc]
-
-Depends on / 依赖: map_id, whiskeringRight
+/-
+**CategoryTheory.Functor.whiskerRight_id'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：whiskerRight_id' {G : C ⥤ D} (F : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.com
+p F)
+参数：F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
 theorem whiskerRight_id' {G : C ⥤ D} (F : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F) :=
   ((whiskeringRight C D E).obj F).map_id _
 
 @[simp, to_dual self, reassoc]
-/--
-theorem `whiskerLeft_comp` / 定理 `whiskerLeft_comp`
-
-English:
-theorem whiskerLeft_comp
-  given: (F : C ⥤ D) {G H K : D ⥤ E} (α : G ⟶ H) (β : H ⟶ K)
-  proof: rfl
-
-@[simp, to_dual self, reassoc]
-
-中文:
-定理 whiskerLeft_comp
-  条件: (F : C ⥤ D) {G H K : D ⥤ E} (α : G ⟶ H) (β : H ⟶ K)
-  证明: rfl
-
-@[simp, to_dual self, reassoc]
+/-
+**CategoryTheory.Functor.whiskerLeft_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：whiskerLeft_comp (F : C ⥤ D) {G H K : D ⥤ E} (α : G ⟶ H) (β : H ⟶ K) : whi
+skerLeft F (α ≫ β) = whiskerLeft F α ≫ whiskerLeft F β
+参数：F : C ⥤ D；α : G ⟶ H；β : H ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft_comp (F : C ⥤ D) {G H K : D ⥤ E} (α : G ⟶ H) (β : H ⟶ K) :
     whiskerLeft F (α ≫ β) = whiskerLeft F α ≫ whiskerLeft F β :=
   rfl
 
 @[simp, to_dual self, reassoc]
-/--
-theorem `whiskerRight_comp` / 定理 `whiskerRight_comp`
-
-English:
-theorem whiskerRight_comp
-  given: {G H K : C ⥤ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E)
-  proof: ((whiskeringRight C D E).obj F).map_comp α β
-
-@[to_dual none, reassoc]
-
-中文:
-定理 whiskerRight_comp
-  条件: {G H K : C ⥤ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E)
-  证明: ((whiskeringRight C D E).obj F).map_comp α β
-
-@[to_dual none, reassoc]
-
-Depends on / 依赖: map_comp, whiskeringRight
+/-
+**CategoryTheory.Functor.whiskerRight_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：whiskerRight_comp {G H K : C ⥤ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E) : wh
+iskerRight (α ≫ β) F = whiskerRight α F ≫ whiskerRight β F
+参数：α : G ⟶ H；β : H ⟶ K；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem whiskerRight_comp {G H K : C ⥤ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E) :
     whiskerRight (α ≫ β) F = whiskerRight α F ≫ whiskerRight β F :=
   ((whiskeringRight C D E).obj F).map_comp α β
 
 @[to_dual none, reassoc]
-/--
-theorem `whiskerLeft_comp_whiskerRight` / 定理 `whiskerLeft_comp_whiskerRight`
-
-English:
-theorem whiskerLeft_comp_whiskerRight
-  given: {F G : C ⥤ D} {H K : D ⥤ E} (α : F ⟶ G) (β : H ⟶ K)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 whiskerLeft_comp_whiskerRight
-  条件: {F G : C ⥤ D} {H K : D ⥤ E} (α : F ⟶ G) (β : H ⟶ K)
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Functor.whiskerLeft_comp_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor`。
+形式化陈述：whiskerLeft_comp_whiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α : F ⟶ G) (β :
+ H ⟶ K) : whiskerLeft F β ≫ whiskerRight α K = whiskerRight α H ≫ whiskerLeft G 
+β
+参数：α : F ⟶ G；β : H ⟶ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_comp_whiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α : F ⟶ G) (β : H ⟶ K) :
     whiskerLeft F β ≫ whiskerRight α K = whiskerRight α H ≫ whiskerLeft G β := by
@@ -645,311 +523,246 @@ theorem whiskerLeft_comp_whiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α : F �
 
 set_option backward.defeqAttrib.useBackward true in
 @[to_dual hcomp_eq_whiskerRight_comp_whiskerLeft]
-/--
-lemma `NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight` / 引理 `NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight`
-
-English:
-lemma NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight
-  statement: {F G : C ⥤ D} {H K : D ⥤ E}
-  proof: by
-  ext
-  simp
-
-中文:
-引理 自然变换.hcomp_eq_whiskerLeft_comp_whiskerRight
-  结论: {F G : C ⥤ D} {H K : D ⥤ E}
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Functor.NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Functor.NatTrans`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] {F G : CategoryTheory.Functor C D}   {H K : Category
+Theory.Functor D E} (α : F ⟶ G) (β : H ⟶ K),   α ◫ β = CategoryTheory.CategorySt
+ruct.comp (F.whiskerLeft β) (CategoryTheory.Functor.whiskerRight α K)
+参数：α : F ⟶ G；β : H ⟶ K；F.whiskerLeft β；CategoryTheory.Functor.whiskerRight α K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma NatTrans.hcomp_eq_whiskerLeft_comp_whiskerRight {F G : C ⥤ D} {H K : D ⥤ E}
     (α : F ⟶ G) (β : H ⟶ K) : α ◫ β = whiskerLeft F β ≫ whiskerRight α K := by
   ext
   simp
 
-/--
-Definition of `isoWhiskerLeft` / `isoWhiskerLeft` 的定义
+/-- If `α : G ≅ H` is a natural isomorphism then
+`isoWhiskerLeft F α : (F ⋙ G) ≅ (F ⋙ H)` has components `α.app (F.obj X)`.
+-/
+/-
+**CategoryTheory.Functor.isoWhiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：isoWhiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) : F ⋙ G ≅ F ⋙ H
+参数：F : C ⥤ D；α : G ≅ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoWhiskerLeft
-  signature: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  body: ((whiskeringLeft C D E).obj F).mapIso α
-
-@[simp]
-
-中文:
-定义 isoWhiskerLeft
-  签名: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  定义体: ((whiskeringLeft C D E).obj F).mapIso α
-
-@[simp]
-
-Depends on / 依赖: mapIso, whiskeringLeft
+--- 原说明 ---
+If `α : G ≅ H` is a natural isomorphism then
+`isoWhiskerLeft F α : (F ⋙ G) ≅ (F ⋙ H)` has components `α.app (F.obj X)`.
 -/
 def isoWhiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) : F ⋙ G ≅ F ⋙ H :=
   ((whiskeringLeft C D E).obj F).mapIso α
 
 @[simp]
-/--
-theorem `isoWhiskerLeft_hom` / 定理 `isoWhiskerLeft_hom`
-
-English:
-theorem isoWhiskerLeft_hom
-  given: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 isoWhiskerLeft_hom
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：isoWhiskerLeft_hom (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) : (isoWhiskerLeft
+ F α).hom = whiskerLeft F α.hom
+参数：F : C ⥤ D；α : G ≅ H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoWhiskerLeft_hom (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) :
     (isoWhiskerLeft F α).hom = whiskerLeft F α.hom :=
   rfl
 
 @[simp]
-/--
-theorem `isoWhiskerLeft_inv` / 定理 `isoWhiskerLeft_inv`
-
-English:
-theorem isoWhiskerLeft_inv
-  given: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  proof: rfl
-
-中文:
-定理 isoWhiskerLeft_inv
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  证明: rfl
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：isoWhiskerLeft_inv (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) : (isoWhiskerLeft
+ F α).inv = whiskerLeft F α.inv
+参数：F : C ⥤ D；α : G ≅ H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoWhiskerLeft_inv (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) :
     (isoWhiskerLeft F α).inv = whiskerLeft F α.inv :=
   rfl
-
-/--
-lemma `isoWhiskerLeft_symm` / 引理 `isoWhiskerLeft_symm`
-
-English:
-lemma isoWhiskerLeft_symm
-  given: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 isoWhiskerLeft_symm
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_symm** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：isoWhiskerLeft_symm (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) : (isoWhiskerLef
+t F α).symm = isoWhiskerLeft F α.symm
+参数：F : C ⥤ D；α : G ≅ H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoWhiskerLeft_symm (F : C ⥤ D) {G H : D ⥤ E} (α : G ≅ H) :
     (isoWhiskerLeft F α).symm = isoWhiskerLeft F α.symm :=
   rfl
 
 @[simp]
-/--
-lemma `isoWhiskerLeft_refl` / 引理 `isoWhiskerLeft_refl`
-
-English:
-lemma isoWhiskerLeft_refl
-  given: (F : C ⥤ D) (G : D ⥤ E)
-  proof: rfl
-
-中文:
-引理 isoWhiskerLeft_refl
-  条件: (F : C ⥤ D) (G : D ⥤ E)
-  证明: rfl
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_refl** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：isoWhiskerLeft_refl (F : C ⥤ D) (G : D ⥤ E) : isoWhiskerLeft F (Iso.refl G
+) = Iso.refl _
+参数：F : C ⥤ D；G : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoWhiskerLeft_refl (F : C ⥤ D) (G : D ⥤ E) :
     isoWhiskerLeft F (Iso.refl G) = Iso.refl _ :=
   rfl
 
-/--
-Definition of `isoWhiskerRight` / `isoWhiskerRight` 的定义
+/-- If `α : G ≅ H` then
+`isoWhiskerRight α F : (G ⋙ F) ≅ (H ⋙ F)` has components `F.map_iso (α.app X)`.
+-/
+/-
+**CategoryTheory.Functor.isoWhiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：isoWhiskerRight {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) : G ⋙ F ≅ H ⋙ F
+参数：α : G ≅ H；F : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoWhiskerRight
-  signature: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  body: ((whiskeringRight C D E).obj F).mapIso α
-
-@[simp]
-
-中文:
-定义 isoWhiskerRight
-  签名: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  定义体: ((whiskeringRight C D E).obj F).mapIso α
-
-@[simp]
-
-Depends on / 依赖: mapIso, whiskeringRight
+--- 原说明 ---
+If `α : G ≅ H` then
+`isoWhiskerRight α F : (G ⋙ F) ≅ (H ⋙ F)` has components `F.map_iso (α.app X)`.
 -/
 def isoWhiskerRight {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) : G ⋙ F ≅ H ⋙ F :=
   ((whiskeringRight C D E).obj F).mapIso α
 
 @[simp]
-/--
-theorem `isoWhiskerRight_hom` / 定理 `isoWhiskerRight_hom`
-
-English:
-theorem isoWhiskerRight_hom
-  given: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 isoWhiskerRight_hom
-  条件: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.isoWhiskerRight_hom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：isoWhiskerRight_hom {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) : (isoWhiskerRig
+ht α F).hom = whiskerRight α.hom F
+参数：α : G ≅ H；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoWhiskerRight_hom {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) :
     (isoWhiskerRight α F).hom = whiskerRight α.hom F :=
   rfl
 
 @[simp]
-/--
-theorem `isoWhiskerRight_inv` / 定理 `isoWhiskerRight_inv`
-
-English:
-theorem isoWhiskerRight_inv
-  given: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  proof: rfl
-
-中文:
-定理 isoWhiskerRight_inv
-  条件: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  证明: rfl
+/-
+**CategoryTheory.Functor.isoWhiskerRight_inv** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：isoWhiskerRight_inv {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) : (isoWhiskerRig
+ht α F).inv = whiskerRight α.inv F
+参数：α : G ≅ H；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoWhiskerRight_inv {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) :
     (isoWhiskerRight α F).inv = whiskerRight α.inv F :=
   rfl
-
-/--
-lemma `isoWhiskerRight_symm` / 引理 `isoWhiskerRight_symm`
-
-English:
-lemma isoWhiskerRight_symm
-  given: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 isoWhiskerRight_symm
-  条件: {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.isoWhiskerRight_symm** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerRight_symm {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) : (isoWhiskerRi
+ght α F).symm = isoWhiskerRight α.symm F
+参数：α : G ≅ H；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoWhiskerRight_symm {G H : C ⥤ D} (α : G ≅ H) (F : D ⥤ E) :
     (isoWhiskerRight α F).symm = isoWhiskerRight α.symm F :=
   rfl
 
 @[simp]
-/--
-lemma `isoWhiskerRight_refl` / 引理 `isoWhiskerRight_refl`
-
-English:
-lemma isoWhiskerRight_refl
-  given: (F : C ⥤ D) (G : D ⥤ E)
-  proof: by
-  cat_disch
-
-@[to_dual self]
-
-中文:
-引理 isoWhiskerRight_refl
-  条件: (F : C ⥤ D) (G : D ⥤ E)
-  证明: by
-  cat_disch
-
-@[to_dual self]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.isoWhiskerRight_refl** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerRight_refl (F : C ⥤ D) (G : D ⥤ E) : isoWhiskerRight (Iso.refl F
+) G = Iso.refl _
+参数：F : C ⥤ D；G : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isoWhiskerRight_refl (F : C ⥤ D) (G : D ⥤ E) :
     isoWhiskerRight (Iso.refl F) G = Iso.refl _ := by
   cat_disch
 
 @[to_dual self]
-/--
-Instance `isIso_whiskerLeft` / 实例 `isIso_whiskerLeft`
-
-English:
-instance isIso_whiskerLeft
-  signature: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α]
-  body: (isoWhiskerLeft F (asIso α)).isIso_hom
-
-@[to_dual self]
-
-中文:
-实例 isIso_whiskerLeft
-  签名: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [是同构 α]
-  定义体: (isoWhiskerLeft F (asIso α)).isIso_hom
-
-@[to_dual self]
-
-Depends on / 依赖: isIso_hom, isoWhiskerLeft
+/-
+**CategoryTheory.Functor.isIso_whiskerLeft** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：isIso_whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α] : IsIso 
+(whiskerLeft F α)
+参数：F : C ⥤ D；α : G ⟶ H。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance isIso_whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α] :
     IsIso (whiskerLeft F α) :=
   (isoWhiskerLeft F (asIso α)).isIso_hom
 
 @[to_dual self]
-/--
-Instance `isIso_whiskerRight` / 实例 `isIso_whiskerRight`
-
-English:
-instance isIso_whiskerRight
-  signature: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α]
-  body: (isoWhiskerRight (asIso α) F).isIso_hom
-
-@[simp, to_dual self]
-
-中文:
-实例 isIso_whiskerRight
-  签名: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [是同构 α]
-  定义体: (isoWhiskerRight (asIso α) F).isIso_hom
-
-@[simp, to_dual self]
-
-Depends on / 依赖: isIso_hom, isoWhiskerRight
+/-
+**CategoryTheory.Functor.isIso_whiskerRight** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：isIso_whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α] : IsIso
+ (whiskerRight α F)
+参数：α : G ⟶ H；F : D ⥤ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance isIso_whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α] :
     IsIso (whiskerRight α F) :=
   (isoWhiskerRight (asIso α) F).isIso_hom
 
 @[simp, to_dual self]
-/--
-theorem `inv_whiskerRight` / 定理 `inv_whiskerRight`
-
-English:
-theorem inv_whiskerRight
-  given: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α]
-  proof: by
-  symm
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← whiskerRight_comp]
-
-@[simp, to_dual self]
-
-中文:
-定理 inv_whiskerRight
-  条件: {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [是同构 α]
-  证明: by
-  symm
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← whiskerRight_comp]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: IsIso.eq_inv_of_inv_hom_id, eq_inv_of_inv_hom_id, whiskerRight_comp
+/-
+**CategoryTheory.Functor.inv_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：inv_whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α] : inv (wh
+iskerRight α F) = whiskerRight (inv α) F
+参数：α : G ⟶ H；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_inv_hom_id`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {X Y : C} {f : Y ⟶ X} [inst_1 : CategoryTheory.IsIso
+ f]   {g : X ⟶ Y}, CategoryTheo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α] :
     inv (whiskerRight α F) = whiskerRight (inv α) F := by
@@ -958,30 +771,27 @@ theorem inv_whiskerRight {G H : C ⥤ D} (α : G ⟶ H) (F : D ⥤ E) [IsIso α]
   simp [← whiskerRight_comp]
 
 @[simp, to_dual self]
-/--
-theorem `inv_whiskerLeft` / 定理 `inv_whiskerLeft`
-
-English:
-theorem inv_whiskerLeft
-  given: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α]
-  proof: by
-  symm
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← whiskerLeft_comp]
-
-@[simp, reassoc]
-
-中文:
-定理 inv_whiskerLeft
-  条件: (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [是同构 α]
-  证明: by
-  symm
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← whiskerLeft_comp]
-
-@[simp, reassoc]
-
-Depends on / 依赖: IsIso.eq_inv_of_inv_hom_id, eq_inv_of_inv_hom_id, whiskerLeft_comp
+/-
+**CategoryTheory.Functor.inv_whiskerLeft** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：inv_whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α] : inv (whi
+skerLeft F α) = whiskerLeft F (inv α)
+参数：F : C ⥤ D；α : G ⟶ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_inv_hom_id`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {X Y : C} {f : Y ⟶ X} [inst_1 : CategoryTheory.IsIso
+ f]   {g : X ⟶ Y}, CategoryTheo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α] :
     inv (whiskerLeft F α) = whiskerLeft F (inv α) := by
@@ -990,68 +800,58 @@ theorem inv_whiskerLeft (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟶ H) [IsIso α] 
   simp [← whiskerLeft_comp]
 
 @[simp, reassoc]
-/--
-theorem `isoWhiskerLeft_trans` / 定理 `isoWhiskerLeft_trans`
-
-English:
-theorem isoWhiskerLeft_trans
-  given: (F : C ⥤ D) {G H K : D ⥤ E} (α : G ≅ H) (β : H ≅ K)
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-定理 isoWhiskerLeft_trans
-  条件: (F : C ⥤ D) {G H K : D ⥤ E} (α : G ≅ H) (β : H ≅ K)
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_trans** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerLeft_trans (F : C ⥤ D) {G H K : D ⥤ E} (α : G ≅ H) (β : H ≅ K) :
+ isoWhiskerLeft F (α ≪≫ β) = isoWhiskerLeft F α ≪≫ isoWhiskerLeft F β
+参数：F : C ⥤ D；α : G ≅ H；β : H ≅ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoWhiskerLeft_trans (F : C ⥤ D) {G H K : D ⥤ E} (α : G ≅ H) (β : H ≅ K) :
     isoWhiskerLeft F (α ≪≫ β) = isoWhiskerLeft F α ≪≫ isoWhiskerLeft F β :=
   rfl
 
 @[simp, reassoc]
-/--
-theorem `isoWhiskerRight_trans` / 定理 `isoWhiskerRight_trans`
-
-English:
-theorem isoWhiskerRight_trans
-  given: {G H K : C ⥤ D} (α : G ≅ H) (β : H ≅ K) (F : D ⥤ E)
-  proof: ((whiskeringRight C D E).obj F).mapIso_trans α β
-
-@[reassoc]
-
-中文:
-定理 isoWhiskerRight_trans
-  条件: {G H K : C ⥤ D} (α : G ≅ H) (β : H ≅ K) (F : D ⥤ E)
-  证明: ((whiskeringRight C D E).obj F).mapIso_trans α β
-
-@[reassoc]
-
-Depends on / 依赖: mapIso_trans, whiskeringRight
+/-
+**CategoryTheory.Functor.isoWhiskerRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：isoWhiskerRight_trans {G H K : C ⥤ D} (α : G ≅ H) (β : H ≅ K) (F : D ⥤ E) 
+: isoWhiskerRight (α ≪≫ β) F = isoWhiskerRight α F ≪≫ isoWhiskerRight β F
+参数：α : G ≅ H；β : H ≅ K；F : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mapIso_trans`：mapIso_trans (F : C ⥤ D) {X Y Z : C
+} (i : X ≅ Y) (j : Y ≅ Z) : F.mapIso (i ≪≫ j) = F.mapIso i ≪≫ F.mapIso j
 -/
 theorem isoWhiskerRight_trans {G H K : C ⥤ D} (α : G ≅ H) (β : H ≅ K) (F : D ⥤ E) :
     isoWhiskerRight (α ≪≫ β) F = isoWhiskerRight α F ≪≫ isoWhiskerRight β F :=
   ((whiskeringRight C D E).obj F).mapIso_trans α β
 
 @[reassoc]
-/--
-theorem `isoWhiskerLeft_trans_isoWhiskerRight` / 定理 `isoWhiskerLeft_trans_isoWhiskerRight`
-
-English:
-theorem isoWhiskerLeft_trans_isoWhiskerRight
-  given: {F G : C ⥤ D} {H K : D ⥤ E} (α : F ≅ G) (β : H ≅ K)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 isoWhiskerLeft_trans_isoWhiskerRight
-  条件: {F G : C ⥤ D} {H K : D ⥤ E} (α : F ≅ G) (β : H ≅ K)
-  证明: by
-  ext
-  simp
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_trans_isoWhiskerRight** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isoWhiskerLeft_trans_isoWhiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α : F ≅ 
+G) (β : H ≅ K) : isoWhiskerLeft F β ≪≫ isoWhiskerRight α K = isoWhiskerRight α H
+ ≪≫ isoWhiskerLeft G β
+参数：α : F ≅ G；β : H ≅ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoWhiskerLeft_trans_isoWhiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α : F ≅ G) (β : H ≅ K) :
     isoWhiskerLeft F β ≪≫ isoWhiskerRight α K = isoWhiskerRight α H ≪≫ isoWhiskerLeft G β := by
@@ -1061,26 +861,30 @@ theorem isoWhiskerLeft_trans_isoWhiskerRight {F G : C ⥤ D} {H K : D ⥤ E} (α
 variable {B : Type u₄} [Category.{v₄} B]
 
 @[simp, to_dual none]
-/--
-theorem `whiskerLeft_twice` / 定理 `whiskerLeft_twice`
-
-English:
-theorem whiskerLeft_twice
-  given: (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K)
-  proof: by
-  cat_disch
-
-@[simp, to_dual none]
-
-中文:
-定理 whiskerLeft_twice
-  条件: (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K)
-  证明: by
-  cat_disch
-
-@[simp, to_dual none]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.whiskerLeft_twice** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：whiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whis
+kerLeft F (whiskerLeft G α) = (Functor.associator _ _ _).inv ≫ whiskerLeft (F ⋙ 
+G) α ≫ (Functor.associator _ _ _).hom
+参数：F : B ⥤ C；G : C ⥤ D；α : H ⟶ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) :
     whiskerLeft F (whiskerLeft G α) =
@@ -1088,26 +892,30 @@ theorem whiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H �
   cat_disch
 
 @[simp, to_dual none]
-/--
-theorem `whiskerRight_twice` / 定理 `whiskerRight_twice`
-
-English:
-theorem whiskerRight_twice
-  given: {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟶ K)
-  proof: by
-  cat_disch
-
-@[to_dual none]
-
-中文:
-定理 whiskerRight_twice
-  条件: {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟶ K)
-  证明: by
-  cat_disch
-
-@[to_dual none]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.whiskerRight_twice** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：whiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟶ K) : whi
+skerRight (whiskerRight α F) G = (Functor.associator _ _ _).hom ≫ whiskerRight α
+ (F ⋙ G) ≫ (Functor.associator _ _ _).inv
+参数：F : C ⥤ D；G : D ⥤ E；α : H ⟶ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟶ K) :
     whiskerRight (whiskerRight α F) G =
@@ -1115,26 +923,30 @@ theorem whiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H �
   cat_disch
 
 @[to_dual none]
-/--
-theorem `whiskerRight_left` / 定理 `whiskerRight_left`
-
-English:
-theorem whiskerRight_left
-  given: (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟶ H) (K : D ⥤ E)
-  proof: by
-  cat_disch
-
-@[simp]
-
-中文:
-定理 whiskerRight_left
-  条件: (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟶ H) (K : D ⥤ E)
-  证明: by
-  cat_disch
-
-@[simp]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.whiskerRight_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：whiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟶ H) (K : D ⥤ E) : whis
+kerRight (whiskerLeft F α) K = (Functor.associator _ _ _).hom ≫ whiskerLeft F (w
+hiskerRight α K) ≫ (Functor.associator _ _ _).inv
+参数：F : B ⥤ C；α : G ⟶ H；K : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟶ H) (K : D ⥤ E) :
     whiskerRight (whiskerLeft F α) K =
@@ -1143,26 +955,38 @@ theorem whiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟶ H) (K : D �
   cat_disch
 
 @[simp]
-/--
-theorem `isoWhiskerLeft_twice` / 定理 `isoWhiskerLeft_twice`
-
-English:
-theorem isoWhiskerLeft_twice
-  given: (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ≅ K)
-  proof: by
-  cat_disch
-
-@[simp, reassoc]
-
-中文:
-定理 isoWhiskerLeft_twice
-  条件: (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ≅ K)
-  证明: by
-  cat_disch
-
-@[simp, reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_twice** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ≅ K) : i
+soWhiskerLeft F (isoWhiskerLeft G α) = (Functor.associator _ _ _).symm ≪≫ isoWhi
+skerLeft (F ⋙ G) α ≪≫ Functor.associator _ _ _
+参数：F : B ⥤ C；G : C ⥤ D；α : H ≅ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoWhiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ≅ K) :
     isoWhiskerLeft F (isoWhiskerLeft G α) =
@@ -1170,26 +994,38 @@ theorem isoWhiskerLeft_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H
   cat_disch
 
 @[simp, reassoc]
-/--
-theorem `isoWhiskerRight_twice` / 定理 `isoWhiskerRight_twice`
-
-English:
-theorem isoWhiskerRight_twice
-  given: {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ≅ K)
-  proof: by
-  cat_disch
-
-@[reassoc]
-
-中文:
-定理 isoWhiskerRight_twice
-  条件: {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ≅ K)
-  证明: by
-  cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.isoWhiskerRight_twice** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：isoWhiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ≅ K) : 
+isoWhiskerRight (isoWhiskerRight α F) G = Functor.associator _ _ _ ≪≫ isoWhisker
+Right α (F ⋙ G) ≪≫ (Functor.associator _ _ _).symm
+参数：F : C ⥤ D；G : D ⥤ E；α : H ≅ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_twice`：whiskerRight_twice {H K : B ⥤
+ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟶ K) : whiskerRight (whiskerRight α F) G = (F
+unctor.associator _ _ _).hom ≫ …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoWhiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ≅ K) :
     isoWhiskerRight (isoWhiskerRight α F) G =
@@ -1197,26 +1033,31 @@ theorem isoWhiskerRight_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : 
   cat_disch
 
 @[reassoc]
-/--
-theorem `isoWhiskerRight_left` / 定理 `isoWhiskerRight_left`
-
-English:
-theorem isoWhiskerRight_left
-  given: (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E)
-  proof: by
-  cat_disch
-
-@[reassoc]
-
-中文:
-定理 isoWhiskerRight_left
-  条件: (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E)
-  证明: by
-  cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.isoWhiskerRight_left** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E) : i
+soWhiskerRight (isoWhiskerLeft F α) K = Functor.associator _ _ _ ≪≫ isoWhiskerLe
+ft F (isoWhiskerRight α K) ≪≫ (Functor.associator _ _ _).symm
+参数：F : B ⥤ C；α : G ≅ H；K : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoWhiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E) :
     isoWhiskerRight (isoWhiskerLeft F α) K =
@@ -1225,22 +1066,31 @@ theorem isoWhiskerRight_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D
   cat_disch
 
 @[reassoc]
-/--
-theorem `isoWhiskerLeft_right` / 定理 `isoWhiskerLeft_right`
-
-English:
-theorem isoWhiskerLeft_right
-  given: (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E)
-  proof: by
-  cat_disch
-
-中文:
-定理 isoWhiskerLeft_right
-  条件: (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.isoWhiskerLeft_right** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isoWhiskerLeft_right (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E) : i
+soWhiskerLeft F (isoWhiskerRight α K) = (Functor.associator _ _ _).symm ≪≫ isoWh
+iskerRight (isoWhiskerLeft F α) K ≪≫ Functor.associator _ _ _
+参数：F : B ⥤ C；α : G ≅ H；K : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoWhiskerLeft_right (F : B ⥤ C) {G H : C ⥤ D} (α : G ≅ H) (K : D ⥤ E) :
     isoWhiskerLeft F (isoWhiskerRight α K) =
@@ -1257,75 +1107,121 @@ variable {A : Type u₁} [Category.{v₁} A] {B : Type u₂} [Category.{v₂} B]
   (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) (K : D ⥤ E)
 
 @[reassoc]
-/--
-theorem `triangleIso` / 定理 `triangleIso`
-
-English:
-theorem triangleIso
-  proof: by cat_disch
-
-@[reassoc]
-
-中文:
-定理 triangleIso
-  证明: by cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.triangleIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：triangleIso : associator F (𝟭 B) G ≪≫ isoWhiskerLeft F (leftUnitor G) = is
+oWhiskerRight (rightUnitor F) G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem triangleIso :
     associator F (𝟭 B) G ≪≫ isoWhiskerLeft F (leftUnitor G) =
       isoWhiskerRight (rightUnitor F) G := by cat_disch
 
 @[reassoc]
-/--
-theorem `pentagonIso` / 定理 `pentagonIso`
-
-English:
-theorem pentagonIso
-  proof: by cat_disch
-
-中文:
-定理 pentagonIso
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.pentagonIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：pentagonIso : isoWhiskerRight (associator F G H) K ≪≫ associator F (G ⋙ H)
+ K ≪≫ isoWhiskerLeft F (associator G H K) = associator (F ⋙ G) H K ≪≫ associator
+ F G (H ⋙ K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagonIso :
     isoWhiskerRight (associator F G H) K ≪≫
         associator F (G ⋙ H) K ≪≫ isoWhiskerLeft F (associator G H K) =
       associator (F ⋙ G) H K ≪≫ associator F G (H ⋙ K) := by cat_disch
-
-/--
-theorem `triangle` / 定理 `triangle`
-
-English:
-theorem triangle
-  proof: by cat_disch
-
-中文:
-定理 triangle
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.triangle** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：triangle : (associator F (𝟭 B) G).hom ≫ whiskerLeft F (leftUnitor G).hom =
+ whiskerRight (rightUnitor F).hom G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem triangle :
     (associator F (𝟭 B) G).hom ≫ whiskerLeft F (leftUnitor G).hom =
       whiskerRight (rightUnitor F).hom G := by cat_disch
-
-/--
-theorem `pentagon` / 定理 `pentagon`
-
-English:
-theorem pentagon
-  proof: by cat_disch
-
-中文:
-定理 pentagon
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.pentagon** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：pentagon : whiskerRight (associator F G H).hom K ≫ (associator F (G ⋙ H) K
+).hom ≫ whiskerLeft F (associator G H K).hom = (associator (F ⋙ G) H K).hom ≫ (a
+ssociator F G (H ⋙ K)).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon :
     whiskerRight (associator F G H).hom K ≫
@@ -1337,62 +1233,38 @@ variable {C₁ C₂ C₃ D₁ D₂ D₃ : Type*} [Category* C₁] [Category* C�
 
 /-- The obvious functor `(C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (D₁ ⥤ D₂ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ E)`. -/
 @[simps!, implicit_reducible]
-/--
-Definition of `whiskeringLeft₂` / `whiskeringLeft₂` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₂
-  signature: :
-  body: { obj := fun F₂ =>
-        (whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).obj ((whiskeringLeft C₂ D₂ E).obj F₂) ⋙
-          (whiskeringLeft C₁ D₁ (C₂ ⥤ E)).obj F₁
-      map := fun φ => whiskerRight
-        ((whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).map ((whiskeringLeft C₂ D₂ E).map φ)) _ }
-  map ψ :=
-    { app := fun F₂ => whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
-
-中文:
-定义 whiskeringLeft₂
-  签名: :
-  定义体: { obj := fun F₂ =>
-        (whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).obj ((whiskeringLeft C₂ D₂ E).obj F₂) ⋙
-          (whiskeringLeft C₁ D₁ (C₂ ⥤ E)).obj F₁
-      map := fun φ => whiskerRight
-        ((whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).map ((whiskeringLeft C₂ D₂ E).map φ)) _ }
-  map ψ :=
-    { app := fun F₂ => whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
-
-Depends on / 依赖: whiskerLeft, whiskerRight, whiskeringLeft, whiskeringRight
+--- 原说明 ---
+The obvious functor `(C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (D₁ ⥤ D₂ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ E)`.
 -/
 def whiskeringLeft₂ :
     (C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (D₁ ⥤ D₂ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ E) where
   obj F₁ :=
-    { obj := fun F₂ =>
+    { obj := fun F₂ ↦
         (whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).obj ((whiskeringLeft C₂ D₂ E).obj F₂) ⋙
           (whiskeringLeft C₁ D₁ (C₂ ⥤ E)).obj F₁
-      map := fun φ => whiskerRight
+      map := fun φ ↦ whiskerRight
         ((whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).map ((whiskeringLeft C₂ D₂ E).map φ)) _ }
   map ψ :=
-    { app := fun F₂ => whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
+    { app := fun F₂ ↦ whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
 
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps!]
-/--
-Definition of `whiskeringLeft₃ObjObjObj` / `whiskeringLeft₃ObjObjObj` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃ObjObjObj
-  signature: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃)
-  body: (whiskeringRight _ _ _).obj (((whiskeringLeft₂ E).obj F₂).obj F₃) ⋙
-    (whiskeringLeft C₁ D₁ _).obj F₁
-
-中文:
-定义 whiskeringLeft₃ObjObjObj
-  签名: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃)
-  定义体: (whiskeringRight _ _ _).obj (((whiskeringLeft₂ E).obj F₂).obj F₃) ⋙
-    (whiskeringLeft C₁ D₁ _).obj F₁
-
-Depends on / 依赖: whiskeringLeft, whiskeringRight
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃ObjObjObj (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃) :
     (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E :=
@@ -1401,20 +1273,15 @@ def whiskeringLeft₃ObjObjObj (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F�
 
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `whiskeringLeft₃ObjObjMap` / `whiskeringLeft₃ObjObjMap` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃ObjObjMap
-  signature: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) {F₃ F₃' : C₃ ⥤ D₃} (τ₃ : F₃ ⟶ F₃')
-  body: whiskerLeft _ (whiskerLeft _ (((whiskeringLeft₂ E).obj F₂).map τ₃))
-
-中文:
-定义 whiskeringLeft₃ObjObjMap
-  签名: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) {F₃ F₃' : C₃ ⥤ D₃} (τ₃ : F₃ ⟶ F₃')
-  定义体: whiskerLeft _ (whiskerLeft _ (((whiskeringLeft₂ E).obj F₂).map τ₃))
-
-Depends on / 依赖: whiskerLeft
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃ObjObjMap (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) {F₃ F₃' : C₃ ⥤ D₃} (τ₃ : F₃ ⟶ F₃') :
     whiskeringLeft₃ObjObjObj E F₁ F₂ F₃ ⟶
@@ -1424,20 +1291,15 @@ def whiskeringLeft₃ObjObjMap (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) {F�
 variable (C₃ D₃) in
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `whiskeringLeft₃ObjObj` / `whiskeringLeft₃ObjObj` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃ObjObj
-  signature: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂)
-  body: whiskeringLeft₃ObjObjObj E F₁ F₂ F₃
-  map τ₃ := whiskeringLeft₃ObjObjMap E F₁ F₂ τ₃
-
-中文:
-定义 whiskeringLeft₃ObjObj
-  签名: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂)
-  定义体: whiskeringLeft₃ObjObjObj E F₁ F₂ F₃
-  map τ₃ := whiskeringLeft₃ObjObjMap E F₁ F₂ τ₃
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃ObjObj (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) :
     (C₃ ⥤ D₃) ⥤ (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) where
@@ -1447,20 +1309,15 @@ def whiskeringLeft₃ObjObj (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) :
 variable (C₃ D₃) in
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `whiskeringLeft₃ObjMap` / `whiskeringLeft₃ObjMap` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃ObjMap
-  signature: (F₁ : C₁ ⥤ D₁) {F₂ F₂' : C₂ ⥤ D₂} (τ₂ : F₂ ⟶ F₂')
-  body: whiskerRight ((whiskeringRight _ _ _).map (((whiskeringLeft₂ E).map τ₂).app F₃)) _
-
-中文:
-定义 whiskeringLeft₃ObjMap
-  签名: (F₁ : C₁ ⥤ D₁) {F₂ F₂' : C₂ ⥤ D₂} (τ₂ : F₂ ⟶ F₂')
-  定义体: whiskerRight ((whiskeringRight _ _ _).map (((whiskeringLeft₂ E).map τ₂).app F₃)) _
-
-Depends on / 依赖: whiskerRight, whiskeringRight
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃ObjMap (F₁ : C₁ ⥤ D₁) {F₂ F₂' : C₂ ⥤ D₂} (τ₂ : F₂ ⟶ F₂') :
     whiskeringLeft₃ObjObj C₃ D₃ E F₁ F₂ ⟶ whiskeringLeft₃ObjObj C₃ D₃ E F₁ F₂' where
@@ -1469,20 +1326,15 @@ def whiskeringLeft₃ObjMap (F₁ : C₁ ⥤ D₁) {F₂ F₂' : C₂ ⥤ D₂} 
 variable (C₂ C₃ D₂ D₃) in
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `whiskeringLeft₃Obj` / `whiskeringLeft₃Obj` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃Obj
-  signature: (F₁ : C₁ ⥤ D₁)
-  body: whiskeringLeft₃ObjObj C₃ D₃ E F₁ F₂
-  map τ₂ := whiskeringLeft₃ObjMap C₃ D₃ E F₁ τ₂
-
-中文:
-定义 whiskeringLeft₃Obj
-  签名: (F₁ : C₁ ⥤ D₁)
-  定义体: whiskeringLeft₃ObjObj C₃ D₃ E F₁ F₂
-  map τ₂ := whiskeringLeft₃ObjMap C₃ D₃ E F₁ τ₂
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃Obj (F₁ : C₁ ⥤ D₁) :
     (C₂ ⥤ D₂) ⥤ (C₃ ⥤ D₃) ⥤ (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) where
@@ -1492,20 +1344,15 @@ def whiskeringLeft₃Obj (F₁ : C₁ ⥤ D₁) :
 variable (C₂ C₃ D₂ D₃) in
 /-- Auxiliary definition for `whiskeringLeft₃`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `whiskeringLeft₃Map` / `whiskeringLeft₃Map` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃Map
-  signature: {F₁ F₁' : C₁ ⥤ D₁} (τ₁ : F₁ ⟶ F₁')
-  body: { app F₃ := whiskerLeft _ ((whiskeringLeft _ _ _).map τ₁) }
-
-中文:
-定义 whiskeringLeft₃Map
-  签名: {F₁ F₁' : C₁ ⥤ D₁} (τ₁ : F₁ ⟶ F₁')
-  定义体: { app F₃ := whiskerLeft _ ((whiskeringLeft _ _ _).map τ₁) }
-
-Depends on / 依赖: whiskerLeft, whiskeringLeft
+--- 原说明 ---
+Auxiliary definition for `whiskeringLeft₃`.
 -/
 def whiskeringLeft₃Map {F₁ F₁' : C₁ ⥤ D₁} (τ₁ : F₁ ⟶ F₁') :
     whiskeringLeft₃Obj C₂ C₃ D₂ D₃ E F₁ ⟶ whiskeringLeft₃Obj C₂ C₃ D₂ D₃ E F₁' where
@@ -1514,20 +1361,16 @@ def whiskeringLeft₃Map {F₁ F₁' : C₁ ⥤ D₁} (τ₁ : F₁ ⟶ F₁') :
 /-- The obvious functor
 `(C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (C₃ ⥤ D₃) ⥤ (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)`. -/
 @[simps!, implicit_reducible]
-/--
-Definition of `whiskeringLeft₃` / `whiskeringLeft₃` 的定义
+/-
+**CategoryTheory.Functor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：whiskeringLeft : (C ⥤ D) ⥤ (D ⥤ E) ⥤ C ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeft₃
-  signature: :
-  body: whiskeringLeft₃Obj C₂ C₃ D₂ D₃ E F₁
-  map τ₁ := whiskeringLeft₃Map C₂ C₃ D₂ D₃ E τ₁
-
-中文:
-定义 whiskeringLeft₃
-  签名: :
-  定义体: whiskeringLeft₃Obj C₂ C₃ D₂ D₃ E F₁
-  map τ₁ := whiskeringLeft₃Map C₂ C₃ D₂ D₃ E τ₁
+--- 原说明 ---
+The obvious functor
+`(C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (C₃ ⥤ D₃) ⥤ (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)`.
 -/
 def whiskeringLeft₃ :
     (C₁ ⥤ D₁) ⥤ (C₂ ⥤ D₂) ⥤ (C₃ ⥤ D₃) ⥤ (D₁ ⥤ D₂ ⥤ D₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) where
@@ -1539,20 +1382,14 @@ variable {E}
 /-- The "postcomposition" with a functor `E ⥤ E'` gives a functor
 `(E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ E'`. -/
 @[simps!, implicit_reducible]
-/--
-Definition of `postcompose₂` / `postcompose₂` 的定义
+/-
+**CategoryTheory.Functor.postcompose** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompose₂
-  signature: {E' : Type*} [Category* E']
-  body: whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
-
-中文:
-定义 postcompose₂
-  签名: {E' : 类型} [范畴* E']
-  定义体: whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
-
-Depends on / 依赖: whiskeringRight
+--- 原说明 ---
+The "postcomposition" with a functor `E ⥤ E'` gives a functor
+`(E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ E'`.
 -/
 def postcompose₂ {E' : Type*} [Category* E'] :
     (E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ E' :=
@@ -1561,20 +1398,14 @@ def postcompose₂ {E' : Type*} [Category* E'] :
 /-- The "postcomposition" with a functor `E ⥤ E'` gives a functor
 `(E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E'`. -/
 @[simps!, implicit_reducible]
-/--
-Definition of `postcompose₃` / `postcompose₃` 的定义
+/-
+**CategoryTheory.Functor.postcompose** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompose₃
-  signature: {E' : Type*} [Category* E']
-  body: whiskeringRight C₃ _ _ ⋙ whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
-
-中文:
-定义 postcompose₃
-  签名: {E' : 类型} [范畴* E']
-  定义体: whiskeringRight C₃ _ _ ⋙ whiskeringRight C₂ _ _ ⋙ whiskeringRight C₁ _ _
-
-Depends on / 依赖: whiskeringRight
+--- 原说明 ---
+The "postcomposition" with a functor `E ⥤ E'` gives a functor
+`(E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E'`.
 -/
 def postcompose₃ {E' : Type*} [Category* E'] :
     (E ⥤ E') ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E' :=
@@ -1583,3 +1414,4 @@ def postcompose₃ {E' : Type*} [Category* E'] :
 end Functor
 
 end CategoryTheory
+

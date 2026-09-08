@@ -16,7 +16,7 @@ This file defines a typeclass to state that a type is finite.
 
 ## Main declarations
 
-* `Fintype α`: Typeclass saying that a type is finite. It takes as fields a `Finset` and a proof
+* `Fintype α`:  Typeclass saying that a type is finite. It takes as fields a `Finset` and a proof
   that all terms of type `α` are in it.
 * `Finset.univ`: The finset of all elements of a fintype.
 
@@ -50,51 +50,54 @@ universe u v
 
 variable {α β γ : Type*}
 
-/--
-Definition of `Fintype` / `Fintype` 的定义
+/-- `Fintype α` means that `α` is finite, i.e. there are only
+  finitely many distinct elements of type `α`. The evidence of this
+  is a finset `elems` (a list up to permutation without duplicates),
+  together with a proof that everything of type `α` is in the list. -/
+/-
+**Fintype** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_4 → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Fintype
-  parameters: (α : Type*)
-  axioms and operations (2):
-    - elems : Finset α
-    - complete : forall x : α, x in elems
-
-中文:
-类 有限类型
-  参数: (α : 类型)
-  公理与运算 (2 个):
-    - elems : 有限集 α
-    - complete : 对任意 x : α, x in elems
+--- 原说明 ---
+`Fintype α` means that `α` is finite, i.e. there are only
+  finitely many distinct elements of type `α`. The evidence of this
+  is a finset `elems` (a list up to permutation without duplicates),
+  together with a proof that everything of type `α` is in the list.
 -/
 class Fintype (α : Type*) where
   /-- The `Finset` containing all elements of a `Fintype` -/
   elems : Finset α
   /-- A proof that `elems` contains every element of the type -/
-  complete : forall x : α, x in elems
+  complete : ∀ x : α, x ∈ elems
 
 /-! ### Preparatory lemmas -/
 
 namespace Finset
 
-/--
-theorem `nodup_map_iff_injOn` / 定理 `nodup_map_iff_injOn`
-
-English:
-theorem nodup_map_iff_injOn
-  given: {f : α -> β} {s : Finset α}
-  proof: by
-  simp [Multiset.nodup_map_iff_inj_on s.nodup, Set.InjOn]
-
-中文:
-定理 nodup_map_iff_injOn
-  条件: {f : α -> β} {s : 有限集 α}
-  证明: by
-  simp [Multiset.nodup_map_iff_inj_on s.nodup, Set.InjOn]
-
-Depends on / 依赖: Multiset, Multiset.nodup_map_iff_inj_on, Set.InjOn, nodup_map_iff_inj_on, s.nodup
+/-
+**Finset.nodup_map_iff_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nodup_map_iff_injOn {f : α -> β} {s : Finset α} : (Multiset.map f s.val).N
+odup ↔ Set.InjOn f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.nodup_map_iff_inj_on`：nodup_map_iff_inj_on {f : α -> β} {s : Mu
+ltiset α} (d : Nodup s) : Nodup (map f s) ↔ forall x in s, forall y in s, f x = 
+f y -> x = y
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem nodup_map_iff_injOn {f : α -> β} {s : Finset α} :
+theorem nodup_map_iff_injOn {f : α → β} {s : Finset α} :
     (Multiset.map f s.val).Nodup ↔ Set.InjOn f s := by
   simp [Multiset.nodup_map_iff_inj_on s.nodup, Set.InjOn]
 
@@ -102,41 +105,18 @@ end Finset
 
 namespace List
 
-variable [DecidableEq α] {a : α} {f : α -> β} {s : Finset α} {t : Set β} {t' : Finset β}
+variable [DecidableEq α] {a : α} {f : α → β} {s : Finset α} {t : Set β} {t' : Finset β}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: β] : Decidable (Set.InjOn f s)
-  body: -- Use custom implementation for better performance.
-  decidable_of_iff ((Multiset.map f s.val).Nodup) Finset.nodup_map_iff_injOn
-
-中文:
-实例 [DecidableEq
-  签名: β] : 可判定 (集合.单射限制 f s)
-  定义体: -- Use custom implementation for better performance.
-  decidable_of_iff ((Multiset.map f s.val).Nodup) Finset.nodup_map_iff_injOn
+/-
+**List.** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq β] : Decidable (Set.InjOn f s) :=
   -- Use custom implementation for better performance.
   decidable_of_iff ((Multiset.map f s.val).Nodup) Finset.nodup_map_iff_injOn
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: β] : Decidable (Set.BijOn f s t')
-  body: inferInstanceAs (Decidable (_ ∧ _ ∧ _))
-
-中文:
-实例 [DecidableEq
-  签名: β] : 可判定 (集合.双射限制 f s t')
-  定义体: inferInstanceAs (Decidable (_ ∧ _ ∧ _))
-
-Depends on / 依赖: Decidable
+/-
+**List.** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq β] : Decidable (Set.BijOn f s t') :=
   inferInstanceAs (Decidable (_ ∧ _ ∧ _))
@@ -147,181 +127,135 @@ namespace Finset
 
 variable [Fintype α] {s t : Finset α}
 
-/--
-Definition of `univ` / `univ` 的定义
+/-- `univ` is the universal finite set of type `Finset α` implied from
+  the assumption `Fintype α`. -/
+/-
+**Finset.univ** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：univ : Finset α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition univ
-  signature: : Finset α
-  body: @Fintype.elems α _
-
-@[simp, grind ←]
-
-中文:
-定义 univ
-  签名: : 有限集 α
-  定义体: @Fintype.elems α _
-
-@[simp, grind ←]
-
-Depends on / 依赖: Fintype, Fintype.elems
+--- 原说明 ---
+`univ` is the universal finite set of type `Finset α` implied from
+  the assumption `Fintype α`.
 -/
 def univ : Finset α :=
   @Fintype.elems α _
 
 @[simp, grind ←]
-/--
-theorem `mem_univ` / 定理 `mem_univ`
-
-English:
-theorem mem_univ
-  given: (x : α)
-  statement: x in (univ : Finset α)
-  proof: Fintype.complete x
-
-中文:
-定理 mem_univ
-  条件: (x : α)
-  结论: x in (univ : 有限集 α)
-  证明: Fintype.complete x
-
-Depends on / 依赖: Fintype, Fintype.complete, complete
+/-
+**Finset.mem_univ** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_univ (x : α) : x in (univ : Finset α)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
 -/
-theorem mem_univ (x : α) : x in (univ : Finset α) :=
+theorem mem_univ (x : α) : x ∈ (univ : Finset α) :=
   Fintype.complete x
-
-/--
-theorem `mem_univ_val` / 定理 `mem_univ_val`
-
-English:
-theorem mem_univ_val
-  statement: forall x, x in (univ : Finset α).1
-  proof: by simp
-
-中文:
-定理 mem_univ_val
-  结论: 对任意 x, x in (univ : 有限集 α).1
-  证明: by simp
+/-
+**Finset.mem_univ_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_univ_val : forall x, x in (univ : Finset α).1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem mem_univ_val : forall x, x in (univ : Finset α).1 := by simp
-
-/--
-theorem `eq_univ_iff_forall` / 定理 `eq_univ_iff_forall`
-
-English:
-theorem eq_univ_iff_forall
-  statement: s = univ ↔ forall x, x in s
-  proof: by simp [Finset.ext_iff]
-
-中文:
-定理 eq_univ_iff_对任意
-  结论: s = univ ↔ 对任意 x, x in s
-  证明: by simp [Finset.ext_iff]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+theorem mem_univ_val : ∀ x, x ∈ (univ : Finset α).1 := by simp
+/-
+**Finset.eq_univ_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_univ_iff_forall : s = univ ↔ forall x, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem eq_univ_iff_forall : s = univ ↔ forall x, x in s := by simp [Finset.ext_iff]
-
-/--
-theorem `eq_univ_of_forall` / 定理 `eq_univ_of_forall`
-
-English:
-theorem eq_univ_of_forall
-  statement: (forall x, x in s) -> s = univ
-  proof: eq_univ_iff_forall.2
-
-@[simp, norm_cast]
-
-中文:
-定理 eq_univ_of_对任意
-  结论: (对任意 x, x in s) -> s = univ
-  证明: eq_univ_iff_forall.2
-
-@[simp, norm_cast]
-
-Depends on / 依赖: eq_univ_iff_forall
+theorem eq_univ_iff_forall : s = univ ↔ ∀ x, x ∈ s := by simp [Finset.ext_iff]
+/-
+**Finset.eq_univ_of_forall** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_univ_of_forall : (forall x, x in s) -> s = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.eq_univ_iff_forall`：eq_univ_iff_forall : s = univ ↔ forall x, x i
+n s
 -/
-theorem eq_univ_of_forall : (forall x, x in s) -> s = univ :=
+theorem eq_univ_of_forall : (∀ x, x ∈ s) → s = univ :=
   eq_univ_iff_forall.2
 
 @[simp, norm_cast]
-/--
-theorem `coe_univ` / 定理 `coe_univ`
-
-English:
-theorem coe_univ
-  statement: ↑(univ : Finset α) = (Set.univ : Set α)
-  proof: by ext; simp
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_univ
-  结论: ↑(univ : 有限集 α) = (集合.univ : 集合 α)
-  证明: by ext; simp
-
-@[simp, norm_cast]
+/-
+**Finset.coe_univ** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_univ : ↑(univ : Finset α) = (Set.univ : Set α) := by ext; simp
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_univ` / 定理 `coe_eq_univ`
-
-English:
-theorem coe_eq_univ
-  statement: (s : Set α) = Set.univ ↔ s = univ
-  proof: by rw [← coe_univ, coe_inj]
-
-@[simp]
-
-中文:
-定理 coe_eq_univ
-  结论: (s : 集合 α) = 集合.univ ↔ s = univ
-  证明: by rw [← coe_univ, coe_inj]
-
-@[simp]
-
-Depends on / 依赖: coe_inj, coe_univ
+/-
+**Finset.coe_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_eq_univ : (s : Set α) = Set.univ ↔ s = univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_eq_univ : (s : Set α) = Set.univ ↔ s = univ := by rw [← coe_univ, coe_inj]
 
 @[simp]
-/--
-theorem `subset_univ` / 定理 `subset_univ`
-
-English:
-theorem subset_univ
-  given: (s : Finset α)
-  statement: s subseteq univ
-  proof: fun a _ => mem_univ a
-
-中文:
-定理 subset_univ
-  条件: (s : 有限集 α)
-  结论: s subseteq univ
-  证明: fun a _ => mem_univ a
-
-Depends on / 依赖: mem_univ
+/-
+**Finset.subset_univ** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_univ (s : Finset α) : s subseteq univ
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
-theorem subset_univ (s : Finset α) : s subseteq univ := fun a _ => mem_univ a
-
-/--
-theorem `mem_filter_univ` / 定理 `mem_filter_univ`
-
-English:
-theorem mem_filter_univ
-  given: {p : α -> Prop} [DecidablePred p]
-  statement: forall x, x in univ.filter p ↔ p x
-  proof: by simp
-
-中文:
-定理 mem_filter_univ
-  条件: {p : α -> 命题} [DecidablePred p]
-  结论: 对任意 x, x in univ.filter p ↔ p x
-  证明: by simp
+theorem subset_univ (s : Finset α) : s ⊆ univ := fun a _ => mem_univ a
+/-
+**Finset.mem_filter_univ** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_filter_univ {p : α -> Prop} [DecidablePred p] : forall x, x in univ.fi
+lter p ↔ p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem mem_filter_univ {p : α -> Prop} [DecidablePred p] : forall x, x in univ.filter p ↔ p x := by simp
+theorem mem_filter_univ {p : α → Prop} [DecidablePred p] : ∀ x, x ∈ univ.filter p ↔ p x := by simp
 
 end Finset
 
@@ -353,11 +287,11 @@ meta def elabFinsetBuilderSetOf : TermElab
   | `({ $x:ident | $p }), expectedType? => do
     -- If the expected type is not known to be `Finset ?α`, give up.
     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax
-    elabTerm (← `(Finset.filter (fun $x:ident => $p) Finset.univ)) expectedType?
+    elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) Finset.univ)) expectedType?
   | `({ $x:ident : $t | $p }), expectedType? => do
     -- If the expected type is not known to be `Finset ?α`, give up.
     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax
-    elabTerm (← `(Finset.filter (fun $x:ident : $t => $p) Finset.univ)) expectedType?
+    elabTerm (← `(Finset.filter (fun $x:ident : $t ↦ $p) Finset.univ)) expectedType?
   | `({ $x:ident ∉ $s:term | $p }), expectedType? => do
     -- If the expected type is known to be `Set ?α`, give up. If it is not known to be `Set ?α` or
     -- `Finset ?α`, check the expected type of `s`.
@@ -369,11 +303,11 @@ meta def elabFinsetBuilderSetOf : TermElab
       | _ => throwUnsupportedSyntax
     -- Finally, we can elaborate the syntax as a finset.
     -- TODO: Seems a bit wasteful to have computed the expected type but still use `expectedType?`.
-    elabTerm (← `(Finset.filter (fun $x:ident => $p) $sᶜ)) expectedType?
-  | `({ $x:ident != $a | $p }), expectedType? => do
+    elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) $sᶜ)) expectedType?
+  | `({ $x:ident ≠ $a | $p }), expectedType? => do
     -- If the expected type is not known to be `Finset ?α`, give up.
     unless ← knownToBeFinsetNotSet expectedType? do throwUnsupportedSyntax
-    elabTerm (← `(Finset.filter (fun $x:ident => $p) (singleton $a)ᶜ)) expectedType?
+    elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) (singleton $a)ᶜ)) expectedType?
   | _, _ => throwUnsupportedSyntax
 
 /-- Delaborator for `Finset.filter`. The `pp.funBinderTypes` option controls whether
@@ -382,8 +316,8 @@ to show the domain type when the filter is over `Finset.univ`. -/
   whenPPOption getPPNotation do
   let #[_, p, _, t] := (← getExpr).getAppArgs | failure
   guard p.isLambda
-let i ← withNaryArg 1 withBindingBodyUnusedName (pure ⟨·⟩)
-let p ← withNaryArg 1 withBindingBody i.getId delab
+  let i ← withNaryArg 1 <| withBindingBodyUnusedName (pure ⟨·⟩)
+  let p ← withNaryArg 1 <| withBindingBody i.getId delab
   if t.isAppOfArity ``Finset.univ 2 then
     if ← getPPOption getPPFunBinderTypes then
       let ty ← withNaryArg 0 delab
@@ -395,14 +329,14 @@ let p ← withNaryArg 1 withBindingBody i.getId delab
     let #[_, _, s₀] := t.getAppArgs | failure
     -- if `s₀` is a singleton, we can even use the notation `x ≠ a`
     if s₀.isAppOfArity ``Singleton.singleton 4 then
-let t ← withNaryArg 3 withNaryArg 2 withNaryArg 3 delab
-      `({$i:ident != $t | $p})
+      let t ← withNaryArg 3 <| withNaryArg 2 <| withNaryArg 3 delab
+      `({$i:ident ≠ $t | $p})
     else
-let t ← withNaryArg 3 withNaryArg 2 delab
+      let t ← withNaryArg 3 <| withNaryArg 2 delab
       `({$i:ident ∉ $t | $p})
   else
     let t ← withNaryArg 3 delab
-    `({$i:ident in $t | $p})
+    `({$i:ident ∈ $t | $p})
 
 end Mathlib.Meta
 
@@ -410,406 +344,257 @@ open Finset
 
 namespace Fintype
 
-/--
-Instance `decidablePiFintype` / 实例 `decidablePiFintype`
-
-English:
-instance decidablePiFintype
-  signature: {α} {β : α -> Type*} [forall a, DecidableEq (β a)] [Fintype α]
-  body: fun f g =>
-  decidable_of_iff (forall a in @univ α _, f a = g a)
+/-
+**Fintype.decidablePiFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidablePiFintype {α} {β : α -> Type*} [forall a, DecidableEq (β a)] [Fin
+type α] : DecidableEq (forall a, β a)
+参数：β a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance decidablePiFintype {α} {β : α → Type*} [∀ a, DecidableEq (β a)] [Fintype α] :
+    DecidableEq (∀ a, β a) := fun f g =>
+  decidable_of_iff (∀ a ∈ @univ α _, f a = g a)
     (by simp [funext_iff])
-
-中文:
-实例 decidablePiFintype
-  签名: {α} {β : α -> 类型} [对任意 a, DecidableEq (β a)] [有限类型 α]
-  定义体: fun f g =>
-  decidable_of_iff (forall a in @univ α _, f a = g a)
-    (by simp [funext_iff])
+/-
+**Fintype.decidableForallFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableForallFintype {p : α -> Prop} [DecidablePred p] [Fintype α] : Dec
+idable (forall a, p a)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidablePiFintype {α} {β : α -> Type*} [forall a, DecidableEq (β a)] [Fintype α] :
-    DecidableEq (forall a, β a) := fun f g =>
-  decidable_of_iff (forall a in @univ α _, f a = g a)
-    (by simp [funext_iff])
-
-/--
-Instance `decidableForallFintype` / 实例 `decidableForallFintype`
-
-English:
-instance decidableForallFintype
-  signature: {p : α -> Prop} [DecidablePred p] [Fintype α]
-  body: decidable_of_iff (forall a in @univ α _, p a) (by simp)
-
-中文:
-实例 decidableForallFintype
-  签名: {p : α -> 命题} [DecidablePred p] [有限类型 α]
-  定义体: decidable_of_iff (forall a in @univ α _, p a) (by simp)
-
-Depends on / 依赖: decidable_of_iff
+instance decidableForallFintype {p : α → Prop} [DecidablePred p] [Fintype α] :
+    Decidable (∀ a, p a) :=
+  decidable_of_iff (∀ a ∈ @univ α _, p a) (by simp)
+/-
+**Fintype.decidableExistsFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableExistsFintype {p : α -> Prop} [DecidablePred p] [Fintype α] : Dec
+idable (exists a, p a)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableForallFintype {p : α -> Prop} [DecidablePred p] [Fintype α] :
-    Decidable (forall a, p a) :=
-  decidable_of_iff (forall a in @univ α _, p a) (by simp)
-
-/--
-Instance `decidableExistsFintype` / 实例 `decidableExistsFintype`
-
-English:
-instance decidableExistsFintype
-  signature: {p : α -> Prop} [DecidablePred p] [Fintype α]
-  body: decidable_of_iff (exists a in @univ α _, p a) (by simp)
-
-中文:
-实例 decidableExistsFintype
-  签名: {p : α -> 命题} [DecidablePred p] [有限类型 α]
-  定义体: decidable_of_iff (exists a in @univ α _, p a) (by simp)
-
-Depends on / 依赖: decidable_of_iff
+instance decidableExistsFintype {p : α → Prop} [DecidablePred p] [Fintype α] :
+    Decidable (∃ a, p a) :=
+  decidable_of_iff (∃ a ∈ @univ α _, p a) (by simp)
+/-
+**Fintype.decidableMemRangeFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableMemRangeFintype [Fintype α] [DecidableEq β] (f : α -> β) : Decida
+blePred (· in Set.range f)
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableExistsFintype {p : α -> Prop} [DecidablePred p] [Fintype α] :
-    Decidable (exists a, p a) :=
-  decidable_of_iff (exists a in @univ α _, p a) (by simp)
-
-/--
-Instance `decidableMemRangeFintype` / 实例 `decidableMemRangeFintype`
-
-English:
-instance decidableMemRangeFintype
-  signature: [Fintype α] [DecidableEq β] (f : α -> β)
-  body: fun _ => Fintype.decidableExistsFintype
-
-中文:
-实例 decidableMemRangeFintype
-  签名: [有限类型 α] [DecidableEq β] (f : α -> β)
-  定义体: fun _ => Fintype.decidableExistsFintype
-
-Depends on / 依赖: Fintype, Fintype.decidableExistsFintype, decidableExistsFintype
+instance decidableMemRangeFintype [Fintype α] [DecidableEq β] (f : α → β) :
+    DecidablePred (· ∈ Set.range f) := fun _ => Fintype.decidableExistsFintype
+/-
+**Fintype.decidableSubsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableSubsingleton [Fintype α] [DecidableEq α] {s : Set α} [DecidablePr
+ed (· in s)] : Decidable s.Subsingleton
+参数：· in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableMemRangeFintype [Fintype α] [DecidableEq β] (f : α -> β) :
-    DecidablePred (· in Set.range f) := fun _ => Fintype.decidableExistsFintype
-
-/--
-Instance `decidableSubsingleton` / 实例 `decidableSubsingleton`
-
-English:
-instance decidableSubsingleton
-  signature: [Fintype α] [DecidableEq α] {s : Set α} [DecidablePred (· in s)]
-  body: decidable_of_iff (forall a in s, forall b in s, a = b) Iff.rfl
-
-中文:
-实例 decidableSubsingleton
-  签名: [有限类型 α] [DecidableEq α] {s : 集合 α} [DecidablePred (· in s)]
-  定义体: decidable_of_iff (forall a in s, forall b in s, a = b) Iff.rfl
-
-Depends on / 依赖: Iff.rfl, decidable_of_iff
--/
-instance decidableSubsingleton [Fintype α] [DecidableEq α] {s : Set α} [DecidablePred (· in s)] :
-    Decidable s.Subsingleton := decidable_of_iff (forall a in s, forall b in s, a = b) Iff.rfl
+instance decidableSubsingleton [Fintype α] [DecidableEq α] {s : Set α} [DecidablePred (· ∈ s)] :
+    Decidable s.Subsingleton := decidable_of_iff (∀ a ∈ s, ∀ b ∈ s, a = b) Iff.rfl
 
 section BundledHoms
 
-/--
-Instance `decidableEqEquivFintype` / 实例 `decidableEqEquivFintype`
-
-English:
-instance decidableEqEquivFintype
-  signature: [DecidableEq β] [Fintype α]
-  body: fun a b =>
-  decidable_of_iff (a.1 = b.1) Equiv.coe_fn_injective.eq_iff
-
-中文:
-实例 decidableEqEquivFintype
-  签名: [DecidableEq β] [有限类型 α]
-  定义体: fun a b =>
-  decidable_of_iff (a.1 = b.1) Equiv.coe_fn_injective.eq_iff
+/-
+**Fintype.decidableEqEquivFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableEqEquivFintype [DecidableEq β] [Fintype α] : DecidableEq (α ≃ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableEqEquivFintype [DecidableEq β] [Fintype α] : DecidableEq (α ≃ β) := fun a b =>
   decidable_of_iff (a.1 = b.1) Equiv.coe_fn_injective.eq_iff
-
-/--
-Instance `decidableEqEmbeddingFintype` / 实例 `decidableEqEmbeddingFintype`
-
-English:
-instance decidableEqEmbeddingFintype
-  signature: [DecidableEq β] [Fintype α]
-  body: fun a b =>
-  decidable_of_iff ((a : α -> β) = b) Function.Embedding.coe_injective.eq_iff
-
-中文:
-实例 decidableEqEmbeddingFintype
-  签名: [DecidableEq β] [有限类型 α]
-  定义体: fun a b =>
-  decidable_of_iff ((a : α -> β) = b) Function.Embedding.coe_injective.eq_iff
+/-
+**Fintype.decidableEqEmbeddingFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableEqEmbeddingFintype [DecidableEq β] [Fintype α] : DecidableEq (α ↪
+ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableEqEmbeddingFintype [DecidableEq β] [Fintype α] : DecidableEq (α ↪ β) := fun a b =>
-  decidable_of_iff ((a : α -> β) = b) Function.Embedding.coe_injective.eq_iff
+  decidable_of_iff ((a : α → β) = b) Function.Embedding.coe_injective.eq_iff
 
 end BundledHoms
 
-/--
-theorem `nodup_map_univ_iff_injective` / 定理 `nodup_map_univ_iff_injective`
-
-English:
-theorem nodup_map_univ_iff_injective
-  given: [Fintype α] {f : α -> β}
-  proof: by
-  rw [nodup_map_iff_injOn]; rw [coe_univ]; rw [Set.injOn_univ]
-
-中文:
-定理 nodup_map_univ_iff_injective
-  条件: [有限类型 α] {f : α -> β}
-  证明: by
-  rw [nodup_map_iff_injOn]; rw [coe_univ]; rw [Set.injOn_univ]
-
-Depends on / 依赖: Set.injOn_univ, coe_univ, injOn_univ, nodup_map_iff_injOn
+/-
+**Fintype.nodup_map_univ_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：nodup_map_univ_iff_injective [Fintype α] {f : α -> β} : (Multiset.map f un
+iv.val).Nodup ↔ Function.Injective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.nodup_map_iff_injOn`：nodup_map_iff_injOn {f : α -> β} {s : Finset
+ α} : (Multiset.map f s.val).Nodup ↔ Set.InjOn f s
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Set.injOn_univ`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, Set.InjOn f
+ Set.univ ↔ Function.Injective f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nodup_map_univ_iff_injective [Fintype α] {f : α -> β} :
+theorem nodup_map_univ_iff_injective [Fintype α] {f : α → β} :
     (Multiset.map f univ.val).Nodup ↔ Function.Injective f := by
-  rw [nodup_map_iff_injOn]; rw [coe_univ]; rw [Set.injOn_univ]
-
-/--
-Instance `decidableInjectiveFintype` / 实例 `decidableInjectiveFintype`
-
-English:
-instance decidableInjectiveFintype
-  signature: [DecidableEq β] [Fintype α]
-  body: -- Use custom implementation for better performance.
-  fun f => decidable_of_iff ((Multiset.map f univ.val).Nodup) nodup_map_univ_iff_injective
-
-中文:
-实例 decidableInjectiveFintype
-  签名: [DecidableEq β] [有限类型 α]
-  定义体: -- Use custom implementation for better performance.
-  fun f => decidable_of_iff ((Multiset.map f univ.val).Nodup) nodup_map_univ_iff_injective
+  rw [nodup_map_iff_injOn, coe_univ, Set.injOn_univ]
+/-
+**Fintype.decidableInjectiveFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableInjectiveFintype [DecidableEq β] [Fintype α] : DecidablePred (Inj
+ective : (α -> β) -> Prop)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.nodup_map_univ_iff_injective`：nodup_map_univ_iff_injective [Fint
+ype α] {f : α -> β} : (Multiset.map f univ.val).Nodup ↔ Function.Injective f
 -/
 instance decidableInjectiveFintype [DecidableEq β] [Fintype α] :
-    DecidablePred (Injective : (α -> β) -> Prop) :=
+    DecidablePred (Injective : (α → β) → Prop) :=
   -- Use custom implementation for better performance.
   fun f => decidable_of_iff ((Multiset.map f univ.val).Nodup) nodup_map_univ_iff_injective
-
-/--
-Instance `decidableSurjectiveFintype` / 实例 `decidableSurjectiveFintype`
-
-English:
-instance decidableSurjectiveFintype
-  signature: [DecidableEq β] [Fintype α] [Fintype β]
-  body: fun x => inferInstanceAs Decidable (forall b, exists a, x a = b)
-
-中文:
-实例 decidableSurjectiveFintype
-  签名: [DecidableEq β] [有限类型 α] [有限类型 β]
-  定义体: fun x => inferInstanceAs Decidable (forall b, exists a, x a = b)
-
-Depends on / 依赖: Decidable
+/-
+**Fintype.decidableSurjectiveFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableSurjectiveFintype [DecidableEq β] [Fintype α] [Fintype β] : Decid
+ablePred (Surjective : (α -> β) -> Prop)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableSurjectiveFintype [DecidableEq β] [Fintype α] [Fintype β] :
-    DecidablePred (Surjective : (α -> β) -> Prop) :=
-fun x => inferInstanceAs Decidable (forall b, exists a, x a = b)
-
-/--
-Instance `decidableBijectiveFintype` / 实例 `decidableBijectiveFintype`
-
-English:
-instance decidableBijectiveFintype
-  signature: [DecidableEq β] [Fintype α] [Fintype β]
-  body: fun x => inferInstanceAs Decidable (Injective x ∧ Surjective x)
-
-中文:
-实例 decidableBijectiveFintype
-  签名: [DecidableEq β] [有限类型 α] [有限类型 β]
-  定义体: fun x => inferInstanceAs Decidable (Injective x ∧ Surjective x)
-
-Depends on / 依赖: Decidable, Injective, Surjective
+    DecidablePred (Surjective : (α → β) → Prop) :=
+  fun x ↦ inferInstanceAs <| Decidable (∀ b, ∃ a, x a = b)
+/-
+**Fintype.decidableBijectiveFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableBijectiveFintype [DecidableEq β] [Fintype α] [Fintype β] : Decida
+blePred (Bijective : (α -> β) -> Prop)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableBijectiveFintype [DecidableEq β] [Fintype α] [Fintype β] :
-    DecidablePred (Bijective : (α -> β) -> Prop) :=
-fun x => inferInstanceAs Decidable (Injective x ∧ Surjective x)
-
-/--
-Instance `decidableRightInverseFintype` / 实例 `decidableRightInverseFintype`
-
-English:
-instance decidableRightInverseFintype
-  signature: [DecidableEq α] [Fintype α] (f : α -> β) (g : β -> α)
-  body: inferInstanceAs Decidable (forall x, g (f x) = x)
-
-中文:
-实例 decidableRightInverseFintype
-  签名: [DecidableEq α] [有限类型 α] (f : α -> β) (g : β -> α)
-  定义体: inferInstanceAs Decidable (forall x, g (f x) = x)
-
-Depends on / 依赖: Decidable
+    DecidablePred (Bijective : (α → β) → Prop) :=
+  fun x ↦ inferInstanceAs <| Decidable (Injective x ∧ Surjective x)
+/-
+**Fintype.decidableRightInverseFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableRightInverseFintype [DecidableEq α] [Fintype α] (f : α -> β) (g :
+ β -> α) : Decidable (Function.RightInverse f g)
+参数：f : α -> β；g : β -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableRightInverseFintype [DecidableEq α] [Fintype α] (f : α -> β) (g : β -> α) :
+instance decidableRightInverseFintype [DecidableEq α] [Fintype α] (f : α → β) (g : β → α) :
     Decidable (Function.RightInverse f g) :=
-inferInstanceAs Decidable (forall x, g (f x) = x)
-
-/--
-Instance `decidableLeftInverseFintype` / 实例 `decidableLeftInverseFintype`
-
-English:
-instance decidableLeftInverseFintype
-  signature: [DecidableEq β] [Fintype β] (f : α -> β) (g : β -> α)
-  body: inferInstanceAs Decidable (forall x, f (g x) = x)
-
-中文:
-实例 decidableLeftInverseFintype
-  签名: [DecidableEq β] [有限类型 β] (f : α -> β) (g : β -> α)
-  定义体: inferInstanceAs Decidable (forall x, f (g x) = x)
-
-Depends on / 依赖: Decidable
+  inferInstanceAs <| Decidable (∀ x, g (f x) = x)
+/-
+**Fintype.decidableLeftInverseFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableLeftInverseFintype [DecidableEq β] [Fintype β] (f : α -> β) (g : 
+β -> α) : Decidable (Function.LeftInverse f g)
+参数：f : α -> β；g : β -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableLeftInverseFintype [DecidableEq β] [Fintype β] (f : α -> β) (g : β -> α) :
+instance decidableLeftInverseFintype [DecidableEq β] [Fintype β] (f : α → β) (g : β → α) :
     Decidable (Function.LeftInverse f g) :=
-inferInstanceAs Decidable (forall x, f (g x) = x)
-
-/--
-Instance `subsingleton` / 实例 `subsingleton`
-
-English:
-instance subsingleton
-  signature: (α : Type*)
-  body: ⟨fun ⟨s₁, h₁⟩ ⟨s₂, h₂⟩ => by congr; simp [Finset.ext_iff, h₁, h₂]⟩
-
-中文:
-实例 subsingleton
-  签名: (α : 类型)
-  定义体: ⟨fun ⟨s₁, h₁⟩ ⟨s₂, h₂⟩ => by congr; simp [Finset.ext_iff, h₁, h₂]⟩
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+  inferInstanceAs <| Decidable (∀ x, f (g x) = x)
+/-
+**Fintype.subsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：subsingleton (α : Type*) : Subsingleton (Fintype α)
+参数：α : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance subsingleton (α : Type*) : Subsingleton (Fintype α) :=
   ⟨fun ⟨s₁, h₁⟩ ⟨s₂, h₂⟩ => by congr; simp [Finset.ext_iff, h₁, h₂]⟩
-
+/-
+**Fintype.** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Lean.Meta.FastSubsingleton (Fintype α) := {}
 
 /-- Given a predicate that can be represented by a finset, the subtype
 associated to the predicate is a fintype. -/
 @[instance_reducible]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**Fintype.subtype** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：{α : Type u_1} → {p : α → Prop} → (s : Finset α) → (∀ (x : α), x ∈ s ↔ p x
+) → Fintype { x // p x }
+参数：s : Finset α；∀ (x : α), x ∈ s ↔ p x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: {p : α -> Prop} (s : Finset α) (H : forall x : α, x in s ↔ p x)
-  body: ⟨⟨s.1.pmap Subtype.mk fun x => (H x).1, s.nodup.pmap fun _ _ _ _ => congr_arg Subtype.val⟩,
-    fun ⟨x, px⟩ => Multiset.mem_pmap.2 ⟨x, (H x).2 px, rfl⟩⟩
-
-中文:
-定义 subtype
-  签名: {p : α -> 命题} (s : 有限集 α) (H : 对任意 x : α, x in s ↔ p x)
-  定义体: ⟨⟨s.1.pmap Subtype.mk fun x => (H x).1, s.nodup.pmap fun _ _ _ _ => congr_arg Subtype.val⟩,
-    fun ⟨x, px⟩ => Multiset.mem_pmap.2 ⟨x, (H x).2 px, rfl⟩⟩
+--- 原说明 ---
+Given a predicate that can be represented by a finset, the subtype
+associated to the predicate is a fintype.
 -/
-protected def subtype {p : α -> Prop} (s : Finset α) (H : forall x : α, x in s ↔ p x) :
+protected def subtype {p : α → Prop} (s : Finset α) (H : ∀ x : α, x ∈ s ↔ p x) :
     Fintype { x // p x } :=
   ⟨⟨s.1.pmap Subtype.mk fun x => (H x).1, s.nodup.pmap fun _ _ _ _ => congr_arg Subtype.val⟩,
     fun ⟨x, px⟩ => Multiset.mem_pmap.2 ⟨x, (H x).2 px, rfl⟩⟩
 
 /-- Construct a fintype from a finset with the same elements. -/
 @[instance_reducible]
-/--
-Definition of `ofFinset` / `ofFinset` 的定义
+/-
+**Fintype.ofFinset** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofFinset {p : Set α} (s : Finset α) (H : forall x, x in s ↔ x in p) : Fint
+ype p
+参数：s : Finset α；H : forall x, x in s ↔ x in p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFinset
-  signature: {p : Set α} (s : Finset α) (H : forall x, x in s ↔ x in p)
-  body: Fintype.subtype s H
-
-中文:
-定义 ofFinset
-  签名: {p : 集合 α} (s : 有限集 α) (H : 对任意 x, x in s ↔ x in p)
-  定义体: Fintype.subtype s H
-
-Depends on / 依赖: Fintype, Fintype.subtype, subtype
+--- 原说明 ---
+Construct a fintype from a finset with the same elements.
 -/
-def ofFinset {p : Set α} (s : Finset α) (H : forall x, x in s ↔ x in p) : Fintype p :=
+def ofFinset {p : Set α} (s : Finset α) (H : ∀ x, x ∈ s ↔ x ∈ p) : Fintype p :=
   Fintype.subtype s H
 
 end Fintype
 
-/--
-Instance `Bool.fintype` / 实例 `Bool.fintype`
-
-English:
-instance Bool.fintype
-  signature: : Fintype Bool
-  body: ⟨⟨{true, false}, by simp⟩, fun x => by cases x <;> simp⟩
-
-中文:
-实例 布尔值.fintype
-  签名: : 有限类型 布尔值
-  定义体: ⟨⟨{true, false}, by simp⟩, fun x => by cases x <;> simp⟩
+/-
+**Bool.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bool.fintype : Fintype Bool
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Bool.fintype : Fintype Bool :=
   ⟨⟨{true, false}, by simp⟩, fun x => by cases x <;> simp⟩
-
-/--
-Instance `Ordering.fintype` / 实例 `Ordering.fintype`
-
-English:
-instance Ordering.fintype
-  signature: : Fintype Ordering
-  body: ⟨⟨{.lt, .eq, .gt}, by simp⟩, fun x => by cases x <;> simp⟩
-
-中文:
-实例 Ordering.fintype
-  签名: : 有限类型 Ordering
-  定义体: ⟨⟨{.lt, .eq, .gt}, by simp⟩, fun x => by cases x <;> simp⟩
+/-
+**Ordering.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Ordering.fintype : Fintype Ordering
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Ordering.fintype : Fintype Ordering :=
   ⟨⟨{.lt, .eq, .gt}, by simp⟩, fun x => by cases x <;> simp⟩
-
-/--
-Instance `OrderDual.fintype` / 实例 `OrderDual.fintype`
-
-English:
-instance OrderDual.fintype
-  signature: (α : Type*) [Fintype α]
-  body: ‹Fintype α›
-
-中文:
-实例 OrderDual.fintype
-  签名: (α : 类型) [有限类型 α]
-  定义体: ‹Fintype α›
-
-Depends on / 依赖: Fintype
+/-
+**OrderDual.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.fintype (α : Type*) [Fintype α] : Fintype αᵒᵈ
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance OrderDual.fintype (α : Type*) [Fintype α] : Fintype αᵒᵈ :=
   ‹Fintype α›
-
-/--
-Instance `OrderDual.finite` / 实例 `OrderDual.finite`
-
-English:
-instance OrderDual.finite
-  signature: (α : Type*) [Finite α]
-  body: ‹Finite α›
-
-中文:
-实例 OrderDual.finite
-  签名: (α : 类型) [有限 α]
-  定义体: ‹Finite α›
-
-Depends on / 依赖: Finite
+/-
+**OrderDual.finite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.finite (α : Type*) [Finite α] : Finite αᵒᵈ
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance OrderDual.finite (α : Type*) [Finite α] : Finite αᵒᵈ :=
   ‹Finite α›
-
-/--
-Instance `Lex.fintype` / 实例 `Lex.fintype`
-
-English:
-instance Lex.fintype
-  signature: (α : Type*) [Fintype α]
-  body: ‹Fintype α›
-
-中文:
-实例 Lex.fintype
-  签名: (α : 类型) [有限类型 α]
-  定义体: ‹Fintype α›
-
-Depends on / 依赖: Fintype
+/-
+**Lex.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Lex.fintype (α : Type*) [Fintype α] : Fintype (Lex α)
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Lex.fintype (α : Type*) [Fintype α] : Fintype (Lex α) :=
   ‹Fintype α›

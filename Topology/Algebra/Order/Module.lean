@@ -17,38 +17,15 @@ public section
 
 variable {R α : Type*} [Semiring R] [PartialOrder R] [SMul R α] [TopologicalSpace α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ContinuousConstSMul
-  signature: R α] : ContinuousConstSMul {r
-  body: continuous_const_smul r.1
-
-中文:
-实例 [连续常数标量乘法
-  签名: R α] : 连续常数标量乘法 {r
-  定义体: continuous_const_smul r.1
-
-Depends on / 依赖: continuous_const_smul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [ContinuousConstSMul R α] : ContinuousConstSMul {r : R // 0 <= r} α where
+instance [ContinuousConstSMul R α] : ContinuousConstSMul {r : R // 0 ≤ r} α where
   continuous_const_smul r := continuous_const_smul r.1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: R] [ContinuousSMul R α] : ContinuousSMul {r
-  body: continuous_smul (M := R).comp continuous_subtype_val.prodMap continuous_id
-
-中文:
-实例 [拓扑空间
-  签名: R] [连续标量乘法 R α] : 连续标量乘法 {r
-  定义体: continuous_smul (M := R).comp continuous_subtype_val.prodMap continuous_id
-
-Depends on / 依赖: continuous_id, continuous_smul, continuous_subtype_val, continuous_subtype_val.prodMap, prodMap
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [TopologicalSpace R] [ContinuousSMul R α] : ContinuousSMul {r : R // 0 <= r} α where
-continuous_smul := continuous_smul (M := R).comp continuous_subtype_val.prodMap continuous_id
+instance [TopologicalSpace R] [ContinuousSMul R α] : ContinuousSMul {r : R // 0 ≤ r} α where
+  continuous_smul := continuous_smul (M := R).comp <| continuous_subtype_val.prodMap continuous_id

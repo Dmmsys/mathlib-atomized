@@ -48,26 +48,17 @@ variable {R : Type u} {S : Type v} {ι : Type w} {σ : Type t} [CommRing R] [Com
 /-- The shape of the presentation by generators and relations of the `S`-module `Ω[S⁄R]`
 that is obtained from a presentation of `S` as an `R`-algebra. -/
 @[simps G R]
-/--
-Definition of `differentialsRelations` / `differentialsRelations` 的定义
+/-
+**Algebra.Presentation.differentialsRelations** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+.Presentation`。
+形式化陈述：differentialsRelations : Module.Relations S where G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition differentialsRelations
-  signature: : Module.Relations S where
-  body: ι
-  R := σ
-  relation r :=
-    Finsupp.mapRange (algebraMap pres.Ring S) (by simp)
-      ((mvPolynomialBasis R ι).repr (D _ _ (pres.relation r)))
-
-中文:
-定义 differentialsRelations
-  签名: : 模.关系 S where
-  定义体: ι
-  R := σ
-  relation r :=
-    Finsupp.mapRange (algebraMap pres.Ring S) (by simp)
-      ((mvPolynomialBasis R ι).repr (D _ _ (pres.relation r)))
+--- 原说明 ---
+The shape of the presentation by generators and relations of the `S`-module `Ω[S
+⁄R]`
+that is obtained from a presentation of `S` as an `R`-algebra.
 -/
 noncomputable def differentialsRelations : Module.Relations S where
   G := ι
@@ -87,64 +78,41 @@ bijections on the middle and on the right. Then, the exactness of the first
 sequence shall follow from the exactness of the second which is
 `Algebra.Extension.exact_cotangentComplex_toKaehler`. -/
 
-/--
-lemma `comm₂₃'` / 引理 `comm₂₃'`
+/-- Same as `comm₂₃` below, but here we have not yet constructed `differentialsSolution`. -/
+/-
+**Algebra.Presentation.differentials.comm** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Pre
+sentation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma comm₂₃'
-  statement: pres.toExtension.toKaehler.comp pres.cotangentSpaceBasis.repr.symm.toLinearMap =
-  proof: by
-  ext
-  simp
-
-中文:
-引理 comm₂₃'
-  结论: pres.toExtension.toKaehler.comp pres.cotangentSpaceBasis.repr.symm.toLinearMap =
-  证明: by
-  ext
-  simp
+--- 原说明 ---
+Same as `comm₂₃` below, but here we have not yet constructed `differentialsSolut
+ion`.
 -/
 lemma comm₂₃' : pres.toExtension.toKaehler.comp pres.cotangentSpaceBasis.repr.symm.toLinearMap =
-    Finsupp.linearCombination S (fun g => D _ _ (pres.val g)) := by
+    Finsupp.linearCombination S (fun g ↦ D _ _ (pres.val g)) := by
   ext
   simp
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `hom₁` / `hom₁` 的定义
+/-- The canonical map `(σ →₀ S) →ₗ[S] pres.toExtension.Cotangent`. -/
+/-
+**Algebra.Presentation.differentials.hom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Pres
+entation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom₁
-  signature: : (σ ->₀ S) ->ₗ[S] pres.toExtension.Cotangent
-  body: Finsupp.linearCombination S (fun r => Extension.Cotangent.mk ⟨pres.relation r, by simp⟩)
-
-中文:
-定义 hom₁
-  签名: : (σ ->₀ S) ->ₗ[S] pres.toExtension.余切
-  定义体: Finsupp.linearCombination S (fun r => Extension.Cotangent.mk ⟨pres.relation r, by simp⟩)
-
-Depends on / 依赖: Cotangent, Extension, Extension.Cotangent.mk, Finsupp, Finsupp.linearCombination, linearCombination, pres.relation, relation
+--- 原说明 ---
+The canonical map `(σ →₀ S) →ₗ[S] pres.toExtension.Cotangent`.
 -/
-noncomputable def hom₁ : (σ ->₀ S) ->ₗ[S] pres.toExtension.Cotangent :=
-  Finsupp.linearCombination S (fun r => Extension.Cotangent.mk ⟨pres.relation r, by simp⟩)
+noncomputable def hom₁ : (σ →₀ S) →ₗ[S] pres.toExtension.Cotangent :=
+  Finsupp.linearCombination S (fun r ↦ Extension.Cotangent.mk ⟨pres.relation r, by simp⟩)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `hom₁_single` / 引理 `hom₁_single`
-
-English:
-lemma hom₁_single
-  given: (r : σ)
-  proof: by
-  simp [hom₁]
-
-中文:
-引理 hom₁_single
-  条件: (r : σ)
-  证明: by
-  simp [hom₁]
+/-
+**Algebra.Presentation.differentials.hom** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Pres
+entation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom₁_single (r : σ) :
     hom₁ pres (Finsupp.single r 1) = Extension.Cotangent.mk ⟨pres.relation r, by simp⟩ := by
@@ -152,84 +120,29 @@ lemma hom₁_single (r : σ) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `surjective_hom₁` / 引理 `surjective_hom₁`
-
-English:
-lemma surjective_hom₁
-  statement: Function.Surjective (hom₁ pres)
-  proof: by
-  let φ : (σ ->₀ S) ->ₗ[pres.Ring] pres.toExtension.Cotangent :=
-    { toFun := hom₁ pres
-      map_add' := by simp
-      map_smul' := by simp }
-  change Function.Surjective φ
-  have h₁ := Algebra.Extension.Cotangent.mk_surjective (P := pres.toExtension)
-  have h₂ : Submodule.span pres.Ring
-      (Set.range (fun r => (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
-    refine Submodule.map_injective_of_injective (f := Submodule.subtype pres.ker)
-      Subtype.coe_injective ?_
-    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [Submodule.map_span]; rw [Submodule.coe_subtype]; rw [Ideal.submodule_span_eq]
-    simp only [← pres.span_range_relation_eq_ker]
-    congr
-    aesop
-  rw [← LinearMap.range_eq_top] at h₁ ⊢
-  rw [← top_le_iff]; rw [← h₁]; rw [LinearMap.range_eq_map]; rw [← h₂]
-  dsimp
-  rw [Submodule.map_span_le]
-  rintro _ ⟨r, rfl⟩
-  simp only [LinearMap.mem_range]
-  refine ⟨Finsupp.single r 1, ?_⟩
-  simp only [LinearMap.coe_mk, AddHom.coe_mk, hom₁_single, φ]
-  rfl
-
-中文:
-引理 surjective_hom₁
-  结论: 函数.满射 (hom₁ pres)
-  证明: by
-  let φ : (σ ->₀ S) ->ₗ[pres.Ring] pres.toExtension.Cotangent :=
-    { toFun := hom₁ pres
-      map_add' := by simp
-      map_smul' := by simp }
-  change Function.Surjective φ
-  have h₁ := Algebra.Extension.Cotangent.mk_surjective (P := pres.toExtension)
-  have h₂ : Submodule.span pres.Ring
-      (Set.range (fun r => (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
-    refine Submodule.map_injective_of_injective (f := Submodule.subtype pres.ker)
-      Subtype.coe_injective ?_
-    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [Submodule.map_span]; rw [Submodule.coe_subtype]; rw [Ideal.submodule_span_eq]
-    simp only [← pres.span_range_relation_eq_ker]
-    congr
-    aesop
-  rw [← LinearMap.range_eq_top] at h₁ ⊢
-  rw [← top_le_iff]; rw [← h₁]; rw [LinearMap.range_eq_map]; rw [← h₂]
-  dsimp
-  rw [Submodule.map_span_le]
-  rintro _ ⟨r, rfl⟩
-  simp only [LinearMap.mem_range]
-  refine ⟨Finsupp.single r 1, ?_⟩
-  simp only [LinearMap.coe_mk, AddHom.coe_mk, hom₁_single, φ]
-  rfl
-
-Depends on / 依赖: Algebra, Algebra.Extension.Cotangent.mk_surjective, Cotangent, Extension, Function, Function.Surjective, Set.range, Submodule, Submodule.map_injective_of_injective, Submodule.map_top, Submodule.range_subtype, Submodule.span, Submodule.subtype, Subtype, Subtype.coe_injective, Surjective, coe_injective, map_add, map_injective_of_injective, map_smul
+/-
+**Algebra.Presentation.differentials.surjective_hom** 是 Mathlib 中的一个引理，位于命名空间 `A
+lgebra.Presentation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma surjective_hom₁ : Function.Surjective (hom₁ pres) := by
-  let φ : (σ ->₀ S) ->ₗ[pres.Ring] pres.toExtension.Cotangent :=
+  let φ : (σ →₀ S) →ₗ[pres.Ring] pres.toExtension.Cotangent :=
     { toFun := hom₁ pres
       map_add' := by simp
       map_smul' := by simp }
   change Function.Surjective φ
   have h₁ := Algebra.Extension.Cotangent.mk_surjective (P := pres.toExtension)
   have h₂ : Submodule.span pres.Ring
-      (Set.range (fun r => (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
+      (Set.range (fun r ↦ (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
     refine Submodule.map_injective_of_injective (f := Submodule.subtype pres.ker)
       Subtype.coe_injective ?_
-    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [Submodule.map_span]; rw [Submodule.coe_subtype]; rw [Ideal.submodule_span_eq]
+    rw [Submodule.map_top, Submodule.range_subtype, Submodule.map_span,
+      Submodule.coe_subtype, Ideal.submodule_span_eq]
     simp only [← pres.span_range_relation_eq_ker]
     congr
     aesop
   rw [← LinearMap.range_eq_top] at h₁ ⊢
-  rw [← top_le_iff]; rw [← h₁]; rw [LinearMap.range_eq_map]; rw [← h₂]
+  rw [← top_le_iff, ← h₁, LinearMap.range_eq_map, ← h₂]
   dsimp
   rw [Submodule.map_span_le]
   rintro _ ⟨r, rfl⟩
@@ -240,26 +153,10 @@ lemma surjective_hom₁ : Function.Surjective (hom₁ pres) := by
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `comm₁₂_single` / 引理 `comm₁₂_single`
-
-English:
-lemma comm₁₂_single
-  given: (r : σ)
-  proof: by
-  simp only [hom₁, Finsupp.linearCombination_single, one_smul, differentialsRelations,
-    Basis.repr_symm_apply, Extension.cotangentComplex_mk]
-  exact pres.cotangentSpaceBasis.repr.injective (by ext; simp)
-
-中文:
-引理 comm₁₂_single
-  条件: (r : σ)
-  证明: by
-  simp only [hom₁, Finsupp.linearCombination_single, one_smul, differentialsRelations,
-    Basis.repr_symm_apply, Extension.cotangentComplex_mk]
-  exact pres.cotangentSpaceBasis.repr.injective (by ext; simp)
-
-Depends on / 依赖: Basis.repr_symm_apply, Extension, Extension.cotangentComplex_mk, Finsupp, Finsupp.linearCombination_single, cotangentComplex_mk, cotangentSpaceBasis, differentialsRelations, injective, linearCombination_single, one_smul, pres.cotangentSpaceBasis.repr.injective, repr_symm_apply
+/-
+**Algebra.Presentation.differentials.comm** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Pre
+sentation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comm₁₂_single (r : σ) :
     pres.toExtension.cotangentComplex (hom₁ pres (Finsupp.single r 1)) =
@@ -270,64 +167,37 @@ lemma comm₁₂_single (r : σ) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `comm₁₂` / 引理 `comm₁₂`
-
-English:
-lemma comm₁₂
-  statement: pres.toExtension.cotangentComplex.comp (hom₁ pres) =
-  proof: by
-  ext r
-  have := (differentialsRelations pres).map_single
-  dsimp at this ⊢
-  rw [comm₁₂_single]; rw [this]
-
-中文:
-引理 comm₁₂
-  结论: pres.toExtension.cotangentComplex.comp (hom₁ pres) =
-  证明: by
-  ext r
-  have := (differentialsRelations pres).map_single
-  dsimp at this ⊢
-  rw [comm₁₂_single]; rw [this]
-
-Depends on / 依赖: differentialsRelations, map_single
+/-
+**Algebra.Presentation.differentials.comm** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Pre
+sentation.differentials`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comm₁₂ : pres.toExtension.cotangentComplex.comp (hom₁ pres) =
     pres.cotangentSpaceBasis.repr.symm.comp (differentialsRelations pres).map := by
   ext r
   have := (differentialsRelations pres).map_single
   dsimp at this ⊢
-  rw [comm₁₂_single]; rw [this]
+  rw [comm₁₂_single, this]
 
 end differentials
 
 set_option backward.isDefEq.respectTransparency false in
 open differentials in
-/--
-Definition of `differentialsSolution` / `differentialsSolution` 的定义
+/-- The `S`-module `Ω[S⁄R]` contains an obvious solution to the system of linear
+equations `pres.differentialsRelations.Solution` when `pres` is a presentation
+of `S` as an `R`-algebra. -/
+/-
+**Algebra.Presentation.differentialsSolution** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.
+Presentation`。
+形式化陈述：differentialsSolution : pres.differentialsRelations.Solution Ω[S⁄R] where 
+var g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition differentialsSolution
-  signature: :
-  body: D _ _ (pres.val g)
-  linearCombination_var_relation r := by
-    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe,
-      Function.comp_apply, ← comm₂₃', ← comm₁₂_single]
-    apply DFunLike.congr_fun (Function.Exact.linearMap_comp_eq_zero
-      (pres.toExtension.exact_cotangentComplex_toKaehler))
-
-中文:
-定义 differentialsSolution
-  签名: :
-  定义体: D _ _ (pres.val g)
-  linearCombination_var_relation r := by
-    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe,
-      Function.comp_apply, ← comm₂₃', ← comm₁₂_single]
-    apply DFunLike.congr_fun (Function.Exact.linearMap_comp_eq_zero
-      (pres.toExtension.exact_cotangentComplex_toKaehler))
-
-Depends on / 依赖: pres.val
+--- 原说明 ---
+The `S`-module `Ω[S⁄R]` contains an obvious solution to the system of linear
+equations `pres.differentialsRelations.Solution` when `pres` is a presentation
+of `S` as an `R`-algebra.
 -/
 noncomputable def differentialsSolution :
     pres.differentialsRelations.Solution Ω[S⁄R] where
@@ -337,17 +207,10 @@ noncomputable def differentialsSolution :
       Function.comp_apply, ← comm₂₃', ← comm₁₂_single]
     apply DFunLike.congr_fun (Function.Exact.linearMap_comp_eq_zero
       (pres.toExtension.exact_cotangentComplex_toKaehler))
-
-/--
-lemma `differentials.comm₂₃` / 引理 `differentials.comm₂₃`
-
-English:
-lemma differentials.comm₂₃
-  proof: comm₂₃' pres
-
-中文:
-引理 differentials.comm₂₃
-  证明: comm₂₃' pres
+/-
+**Algebra.Presentation.differentials.comm** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Pre
+sentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma differentials.comm₂₃ :
     pres.toExtension.toKaehler.comp pres.cotangentSpaceBasis.repr.symm.toLinearMap =
@@ -356,42 +219,64 @@ lemma differentials.comm₂₃ :
 
 set_option backward.isDefEq.respectTransparency.types false in
 open differentials in
-/--
-lemma `differentialsSolution_isPresentation` / 引理 `differentialsSolution_isPresentation`
-
-English:
-lemma differentialsSolution_isPresentation
-  proof: by
-  rw [Module.Relations.Solution.isPresentation_iff]
-  constructor
-  · rw [← Module.Relations.Solution.surjective_π_iff_span_eq_top, ← comm₂₃]
-    exact Extension.toKaehler_surjective.comp pres.cotangentSpaceBasis.repr.symm.surjective
-  · rw [← Module.Relations.range_map]
-    exact Function.Exact.linearMap_ker_eq
-      ((LinearMap.exact_iff_of_surjective_of_bijective_of_injective
-      _ _ _ _ (hom₁ pres)
-      pres.cotangentSpaceBasis.repr.symm.toLinearMap .id
-      (comm₁₂ pres) (by simpa using comm₂₃ pres) (surjective_hom₁ pres)
-        (LinearEquiv.bijective _) (Equiv.refl _).injective).2
-        pres.toExtension.exact_cotangentComplex_toKaehler)
-
-中文:
-引理 differentialsSolution_isPresentation
-  证明: by
-  rw [Module.Relations.Solution.isPresentation_iff]
-  constructor
-  · rw [← Module.Relations.Solution.surjective_π_iff_span_eq_top, ← comm₂₃]
-    exact Extension.toKaehler_surjective.comp pres.cotangentSpaceBasis.repr.symm.surjective
-  · rw [← Module.Relations.range_map]
-    exact Function.Exact.linearMap_ker_eq
-      ((LinearMap.exact_iff_of_surjective_of_bijective_of_injective
-      _ _ _ _ (hom₁ pres)
-      pres.cotangentSpaceBasis.repr.symm.toLinearMap .id
-      (comm₁₂ pres) (by simpa using comm₂₃ pres) (surjective_hom₁ pres)
-        (LinearEquiv.bijective _) (Equiv.refl _).injective).2
-        pres.toExtension.exact_cotangentComplex_toKaehler)
-
-Depends on / 依赖: Extension, Extension.toKaehler_surjective.comp, Function, Function.Exact.linearMap_ker_eq, LinearMap, LinearMap.exact_iff_of_surjective_of_bijective_of_injective, Module, Module.Relations.Solution.isPresentation_iff, Module.Relations.Solution.surjective_, Module.Relations.range_map, Relations, Solution, cotangentSpaceBasis, exact_iff_of_surjective_of_bijective_of_injective, isPresentation_iff, linearMap_ker_eq, pres.cotangentSpaceBasis.repr.symm.surjective, pres.cotangentSpaceBasis.repr.symm.toLinearMap, range_map, surjective
+/-
+**Algebra.Presentation.differentialsSolution_isPresentation** 是 Mathlib 中的一个引理，位
+于命名空间 `Algebra.Presentation`。
+形式化陈述：differentialsSolution_isPresentation : pres.differentialsSolution.IsPresen
+tation
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.Relations.Solution.isPresentation_iff`：isPresentation_iff : solut
+ion.IsPresentation ↔ Submodule.span A (Set.range solution.var) = ⊤ ∧ LinearMap.k
+er solution.π = Submodule.span A (…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Module.Relations.Solution.surjective_π_iff_span_eq_top`：surjective_π_iff
+_span_eq_top : Function.Surjective solution.π ↔ Submodule.span A (Set.range solu
+tion.var) = ⊤
+· 使用定理 `Algebra.Presentation.differentials.comm₂₃`：∀ {R : Type u} {S : Type v} {
+ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Alg
+ebra R S]   (pres : Algebra.Pre…
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用引理 `Algebra.Extension.toKaehler_surjective`：toKaehler_surjective : Function.
+Surjective P.toKaehler
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用引理 `Module.Relations.range_map`：range_map : LinearMap.range relations.map = 
+Submodule.span A (Set.range relations.relation)
+· 使用定理 `Function.Exact.linearMap_ker_eq`：∀ {R : Type u_1} {M : Type u_2} {N : Ty
+pe u_4} {P : Type u_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 
+: AddCommMonoid N] [i…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.exact_iff_of_surjective_of_bijective_of_injective`：exact_iff_o
+f_surjective_of_bijective_of_injective {M₁ M₂ M₃ N₁ N₂ N₃ : Type*} [AddCommMonoi
+d M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddC…
+· 使用引理 `Algebra.Presentation.differentials.comm₁₂`：comm₁₂ : pres.toExtension.cot
+angentComplex.comp (hom₁ pres) = pres.cotangentSpaceBasis.repr.symm.comp (differ
+entialsRelations pres).map
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Module.Basis.coe_repr_symm`：coe_repr_symm : ↑b.repr.symm = Finsupp.linea
+rCombination R b
+· 使用引理 `Algebra.Presentation.differentials.surjective_hom₁`：surjective_hom₁ : Fu
+nction.Surjective (hom₁ pres)
+· 使用定理 `LinearEquiv.bijective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `Algebra.Extension.exact_cotangentComplex_toKaehler`：exact_cotangentCompl
+ex_toKaehler : Function.Exact P.cotangentComplex P.toKaehler
 -/
 lemma differentialsSolution_isPresentation :
     pres.differentialsSolution.IsPresentation := by
@@ -408,26 +293,20 @@ lemma differentialsSolution_isPresentation :
         (LinearEquiv.bijective _) (Equiv.refl _).injective).2
         pres.toExtension.exact_cotangentComplex_toKaehler)
 
-/--
-Definition of `differentials` / `differentials` 的定义
+/-- The presentation of the `S`-module `Ω[S⁄R]` deduced from a presentation
+of `S` as an `R`-algebra. -/
+/-
+**Algebra.Presentation.differentials** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Presenta
+tion`。
+形式化陈述：differentials : Module.Presentation S Ω[S⁄R] where G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.Presentation.differentialsSolution_isPresentation`：differentials
+Solution_isPresentation : pres.differentialsSolution.IsPresentation
 
-English:
-definition differentials
-  signature: : Module.Presentation S Ω[S⁄R] where
-  body: ι
-  R := σ
-  relation := _
-  toSolution := differentialsSolution pres
-  toIsPresentation := pres.differentialsSolution_isPresentation
-
-中文:
-定义 differentials
-  签名: : 模.呈现 S Ω[S⁄R] where
-  定义体: ι
-  R := σ
-  relation := _
-  toSolution := differentialsSolution pres
-  toIsPresentation := pres.differentialsSolution_isPresentation
+--- 原说明 ---
+The presentation of the `S`-module `Ω[S⁄R]` deduced from a presentation
+of `S` as an `R`-algebra.
 -/
 noncomputable def differentials : Module.Presentation S Ω[S⁄R] where
   G := ι
@@ -437,3 +316,4 @@ noncomputable def differentials : Module.Presentation S Ω[S⁄R] where
   toIsPresentation := pres.differentialsSolution_isPresentation
 
 end Algebra.Presentation
+

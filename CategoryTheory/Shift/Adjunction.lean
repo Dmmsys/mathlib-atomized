@@ -66,79 +66,132 @@ variable {a b : A} (e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a)
     (e₂' : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a)
     (f₂ : shiftFunctor D b ⋙ G ≅ G ⋙ shiftFunctor C b)
 
-/--
-Definition of `CompatibilityUnit` / `CompatibilityUnit` 的定义
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, this expresses the compatibility of
+`e₁` and `e₂` with the unit of the adjunction `adj`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.CompatibilityUnit** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：CompatibilityUnit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CompatibilityUnit
-  body: forall (X : C), (adj.unit.app X)⟦a⟧' = adj.unit.app (X⟦a⟧) ≫ G.map (e₁.hom.app X) ≫ e₂.hom.app _
-
-中文:
-缩写 CompatibilityUnit
-  定义体: forall (X : C), (adj.unit.app X)⟦a⟧' = adj.unit.app (X⟦a⟧) ≫ G.map (e₁.hom.app X) ≫ e₂.hom.app _
-
-Depends on / 依赖: G.map, adj.unit.app, hom.app
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, this expresses the compatibi
+lity of
+`e₁` and `e₂` with the unit of the adjunction `adj`.
 -/
 abbrev CompatibilityUnit :=
-  forall (X : C), (adj.unit.app X)⟦a⟧' = adj.unit.app (X⟦a⟧) ≫ G.map (e₁.hom.app X) ≫ e₂.hom.app _
+  ∀ (X : C), (adj.unit.app X)⟦a⟧' = adj.unit.app (X⟦a⟧) ≫ G.map (e₁.hom.app X) ≫ e₂.hom.app _
 
-/--
-Definition of `CompatibilityCounit` / `CompatibilityCounit` 的定义
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, this expresses the compatibility of
+`e₁` and `e₂` with the counit of the adjunction `adj`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.CompatibilityCounit** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：CompatibilityCounit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CompatibilityCounit
-  body: forall (Y : D), adj.counit.app (Y⟦a⟧) = F.map (e₂.hom.app Y) ≫ e₁.hom.app _ ≫ (adj.counit.app Y)⟦a⟧'
-
-中文:
-缩写 CompatibilityCounit
-  定义体: forall (Y : D), adj.counit.app (Y⟦a⟧) = F.map (e₂.hom.app Y) ≫ e₁.hom.app _ ≫ (adj.counit.app Y)⟦a⟧'
-
-Depends on / 依赖: F.map, adj.counit.app, counit, hom.app
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, this expresses the compatibi
+lity of
+`e₁` and `e₂` with the counit of the adjunction `adj`.
 -/
 abbrev CompatibilityCounit :=
-  forall (Y : D), adj.counit.app (Y⟦a⟧) = F.map (e₂.hom.app Y) ≫ e₁.hom.app _ ≫ (adj.counit.app Y)⟦a⟧'
+  ∀ (Y : D), adj.counit.app (Y⟦a⟧) = F.map (e₂.hom.app Y) ≫ e₁.hom.app _ ≫ (adj.counit.app Y)⟦a⟧'
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `compatibilityCounit_of_compatibilityUnit` / 引理 `compatibilityCounit_of_compatibilityUnit`
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, compatibility of `e₁` and `e₂` with the
+unit of the adjunction `adj` implies compatibility with the counit of `adj`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityCounit_of_compatibilityUnit**
+ 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e₂)
+ : CompatibilityCounit adj e₁ e₂
+参数：h : CompatibilityUnit adj e₁ e₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma compatibilityCounit_of_compatibilityUnit
-  given: (h : CompatibilityUnit adj e₁ e₂)
-  proof: by
-  intro Y
-  have eq := h (G.obj Y)
-  simp only [← cancel_mono (e₂.inv.app _ ≫ G.map (e₁.inv.app _)),
-    assoc, Iso.hom_inv_id_app_assoc, comp_id, ← Functor.map_comp,
-    Iso.hom_inv_id_app, Functor.comp_obj, Functor.map_id] at eq
-  apply (adj.homEquiv _ _).injective
-  dsimp
-  rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]; rw [adj.unit_naturality_assoc]; rw [← eq]
-  simp only [assoc, ← Functor.map_comp, Iso.inv_hom_id_app_assoc]
-  erw [← e₂.inv.naturality]
-  dsimp
-  simp only [right_triangle_components, ← Functor.map_comp_assoc, Functor.map_id, id_comp,
-    Iso.hom_inv_id_app, Functor.comp_obj]
-
-中文:
-引理 compatibilityCounit_of_compatibilityUnit
-  条件: (h : CompatibilityUnit adj e₁ e₂)
-  证明: by
-  intro Y
-  have eq := h (G.obj Y)
-  simp only [← cancel_mono (e₂.inv.app _ ≫ G.map (e₁.inv.app _)),
-    assoc, Iso.hom_inv_id_app_assoc, comp_id, ← Functor.map_comp,
-    Iso.hom_inv_id_app, Functor.comp_obj, Functor.map_id] at eq
-  apply (adj.homEquiv _ _).injective
-  dsimp
-  rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]; rw [adj.unit_naturality_assoc]; rw [← eq]
-  simp only [assoc, ← Functor.map_comp, Iso.inv_hom_id_app_assoc]
-  erw [← e₂.inv.naturality]
-  dsimp
-  simp only [right_triangle_components, ← Functor.map_comp_assoc, Functor.map_id, id_comp,
-    Iso.hom_inv_id_app, Functor.comp_obj]
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_comp, Functor.map_id, G.map, G.map_comp, G.obj, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app_assoc, adj.homEquiv, adj.homEquiv_unit, adj.unit_naturality_assoc, cancel_mono, comp_id, comp_obj, homEquiv, homEquiv_unit, hom_inv_id_app, hom_inv_id_app_assoc
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, compatibility of `e₁` and `e
+₂` with the
+unit of the adjunction `adj` implies compatibility with the counit of `adj`.
 -/
 lemma compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e₂) :
     CompatibilityCounit adj e₁ e₂ := by
@@ -149,7 +202,7 @@ lemma compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e
     Iso.hom_inv_id_app, Functor.comp_obj, Functor.map_id] at eq
   apply (adj.homEquiv _ _).injective
   dsimp
-  rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]; rw [adj.unit_naturality_assoc]; rw [← eq]
+  rw [adj.homEquiv_unit, adj.homEquiv_unit, G.map_comp, adj.unit_naturality_assoc, ← eq]
   simp only [assoc, ← Functor.map_comp, Iso.inv_hom_id_app_assoc]
   erw [← e₂.inv.naturality]
   dsimp
@@ -157,155 +210,310 @@ lemma compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e
     Iso.hom_inv_id_app, Functor.comp_obj]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `compatibilityUnit_right` / 引理 `compatibilityUnit_right`
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compatible with the
+unit of the adjunction `adj`, then we get a formula for `e₂.inv` in terms of `e₁`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityUnit_right** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityUnit_right (h : CompatibilityUnit adj e₁ e₂) (Y : D) : e₂.inv
+.app Y = adj.unit.app _ ≫ G.map (e₁.hom.app _) ≫ G.map ((adj.counit.app _)⟦a⟧')
+参数：h : CompatibilityUnit adj e₁ e₂；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma compatibilityUnit_right
-  given: (h : CompatibilityUnit adj e₁ e₂) (Y : D)
-  proof: by
-  have := h (G.obj Y)
-  rw [← cancel_mono (e₂.inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app] at this
-  erw [comp_id] at this
-  rw [← assoc]; rw [← this]; rw [assoc]; erw [← e₂.inv.naturality]
-  rw [← cancel_mono (e₂.hom.app _)]
-  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Functor.id_obj, Functor.comp_map, assoc, comp_id,
-    ← (shiftFunctor C a).map_comp, right_triangle_components, Functor.map_id]
-
-中文:
-引理 compatibilityUnit_right
-  条件: (h : CompatibilityUnit adj e₁ e₂) (Y : D)
-  证明: by
-  have := h (G.obj Y)
-  rw [← cancel_mono (e₂.inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app] at this
-  erw [comp_id] at this
-  rw [← assoc]; rw [← this]; rw [assoc]; erw [← e₂.inv.naturality]
-  rw [← cancel_mono (e₂.hom.app _)]
-  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Functor.id_obj, Functor.comp_map, assoc, comp_id,
-    ← (shiftFunctor C a).map_comp, right_triangle_components, Functor.map_id]
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_id, G.obj, Iso.hom_inv_id_app, Iso.inv_hom_id_app, cancel_mono, comp_id, comp_map, comp_obj, hom.app, hom_inv_id_app, id_obj, inv.app, inv.naturality, inv_hom_id_app, map_comp, map_id
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compati
+ble with the
+unit of the adjunction `adj`, then we get a formula for `e₂.inv` in terms of `e₁
+`.
 -/
 lemma compatibilityUnit_right (h : CompatibilityUnit adj e₁ e₂) (Y : D) :
     e₂.inv.app Y = adj.unit.app _ ≫ G.map (e₁.hom.app _) ≫ G.map ((adj.counit.app _)⟦a⟧') := by
   have := h (G.obj Y)
-  rw [← cancel_mono (e₂.inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app] at this
+  rw [← cancel_mono (e₂.inv.app _), assoc, assoc, Iso.hom_inv_id_app] at this
   erw [comp_id] at this
-  rw [← assoc]; rw [← this]; rw [assoc]; erw [← e₂.inv.naturality]
+  rw [← assoc, ← this, assoc]; erw [← e₂.inv.naturality]
   rw [← cancel_mono (e₂.hom.app _)]
   simp only [Functor.comp_obj, Iso.inv_hom_id_app, Functor.id_obj, Functor.comp_map, assoc, comp_id,
     ← (shiftFunctor C a).map_comp, right_triangle_components, Functor.map_id]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `compatibilityCounit_left` / 引理 `compatibilityCounit_left`
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compatible with the
+counit of the adjunction `adj`, then we get a formula for `e₁.hom` in terms of `e₂`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityCounit_left** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityCounit_left (h : CompatibilityCounit adj e₁ e₂) (X : C) : e₁.
+hom.app X = F.map ((adj.unit.app X)⟦a⟧') ≫ F.map (e₂.inv.app _) ≫ adj.counit.app
+ _
+参数：h : CompatibilityCounit adj e₁ e₂；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma compatibilityCounit_left
-  given: (h : CompatibilityCounit adj e₁ e₂) (X : C)
-  proof: by
-  have := h (F.obj X)
-  rw [← cancel_epi (F.map (e₂.inv.app _))]; rw [← assoc]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [id_comp] at this
-  dsimp only [Functor.comp_obj, Functor.id_obj]
-  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]
-  simp only [Functor.map_id, comp_id]
-
-中文:
-引理 compatibilityCounit_left
-  条件: (h : CompatibilityCounit adj e₁ e₂) (X : C)
-  证明: by
-  have := h (F.obj X)
-  rw [← cancel_epi (F.map (e₂.inv.app _))]; rw [← assoc]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [id_comp] at this
-  dsimp only [Functor.comp_obj, Functor.id_obj]
-  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]
-  simp only [Functor.map_id, comp_id]
-
-Depends on / 依赖: F.map, F.map_comp, F.map_id, F.obj, Functor, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, cancel_epi, comp_id, comp_obj, hom.naturality_assoc, id_comp, id_obj, inv.app, inv_hom_id_app, left_triangle_components, map_comp
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compati
+ble with the
+counit of the adjunction `adj`, then we get a formula for `e₁.hom` in terms of `
+e₂`.
 -/
 lemma compatibilityCounit_left (h : CompatibilityCounit adj e₁ e₂) (X : C) :
     e₁.hom.app X = F.map ((adj.unit.app X)⟦a⟧') ≫ F.map (e₂.inv.app _) ≫ adj.counit.app _ := by
   have := h (F.obj X)
-  rw [← cancel_epi (F.map (e₂.inv.app _))]; rw [← assoc]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [id_comp] at this
+  rw [← cancel_epi (F.map (e₂.inv.app _)), ← assoc, ← F.map_comp, Iso.inv_hom_id_app, F.map_id,
+    id_comp] at this
   dsimp only [Functor.comp_obj, Functor.id_obj]
-  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]
+  rw [this, dsimp% e₁.hom.naturality_assoc, ← Functor.map_comp, left_triangle_components]
   simp only [Functor.map_id, comp_id]
 
-/--
-lemma `compatibilityUnit_unique_right` / 引理 `compatibilityUnit_unique_right`
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compatible with the
+unit of the adjunction `adj`, then `e₁` uniquely determines `e₂`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityUnit_unique_right** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityUnit_unique_right (h : CompatibilityUnit adj e₁ e₂) (h' : Com
+patibilityUnit adj e₁ e₂') : e₂ = e₂'
+参数：h : CompatibilityUnit adj e₁ e₂；h' : CompatibilityUnit adj e₁ e₂'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.symm_eq_iff`：symm_eq_iff {X Y : C} {α β : X ≅ Y} : α.
+symm = β.symm ↔ α = β
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Iso.symm_hom`：symm_hom (α : X ≅ Y) : α.symm.hom = α.inv
+· 使用引理 `CategoryTheory.Adjunction.CommShift.compatibilityUnit_right`：compatibili
+tyUnit_right (h : CompatibilityUnit adj e₁ e₂) (Y : D) : e₂.inv.app Y = adj.unit
+.app _ ≫ G.map (e₁.hom.app _) ≫ G.map ((adj.couni…
 
-English:
-lemma compatibilityUnit_unique_right
-  statement: (h : CompatibilityUnit adj e₁ e₂)
-  proof: by
-  rw [← Iso.symm_eq_iff]
-  ext
-  rw [Iso.symm_hom]; rw [Iso.symm_hom]; rw [compatibilityUnit_right adj e₁ e₂ h]; rw [compatibilityUnit_right adj e₁ e₂' h']
-
-中文:
-引理 compatibilityUnit_unique_right
-  结论: (h : CompatibilityUnit adj e₁ e₂)
-  证明: by
-  rw [← Iso.symm_eq_iff]
-  ext
-  rw [Iso.symm_hom]; rw [Iso.symm_hom]; rw [compatibilityUnit_right adj e₁ e₂ h]; rw [compatibilityUnit_right adj e₁ e₂' h']
-
-Depends on / 依赖: Iso.symm_eq_iff, Iso.symm_hom, compatibilityUnit_right, symm_eq_iff, symm_hom
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compati
+ble with the
+unit of the adjunction `adj`, then `e₁` uniquely determines `e₂`.
 -/
 lemma compatibilityUnit_unique_right (h : CompatibilityUnit adj e₁ e₂)
     (h' : CompatibilityUnit adj e₁ e₂') : e₂ = e₂' := by
   rw [← Iso.symm_eq_iff]
   ext
-  rw [Iso.symm_hom]; rw [Iso.symm_hom]; rw [compatibilityUnit_right adj e₁ e₂ h]; rw [compatibilityUnit_right adj e₁ e₂' h']
+  rw [Iso.symm_hom, Iso.symm_hom, compatibilityUnit_right adj e₁ e₂ h,
+    compatibilityUnit_right adj e₁ e₂' h']
 
-/--
-lemma `compatibilityUnit_unique_left` / 引理 `compatibilityUnit_unique_left`
+/-- Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compatible with the
+unit of the adjunction `adj`, then `e₂` uniquely determines `e₁`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityUnit_unique_left** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityUnit_unique_left (h : CompatibilityUnit adj e₁ e₂) (h' : Comp
+atibilityUnit adj e₁' e₂) : e₁ = e₁'
+参数：h : CompatibilityUnit adj e₁ e₂；h' : CompatibilityUnit adj e₁' e₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.CommShift.compatibilityCounit_left`：compatibil
+ityCounit_left (h : CompatibilityCounit adj e₁ e₂) (X : C) : e₁.hom.app X = F.ma
+p ((adj.unit.app X)⟦a⟧') ≫ F.map (e₂.inv.app _) ≫ …
+· 使用引理 `CategoryTheory.Adjunction.CommShift.compatibilityCounit_of_compatibility
+Unit`：compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e₂)
+ : CompatibilityCounit adj e₁ e₂
 
-English:
-lemma compatibilityUnit_unique_left
-  statement: (h : CompatibilityUnit adj e₁ e₂)
-  proof: by
-  ext
-  rw [compatibilityCounit_left adj e₁ e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h)]; rw [compatibilityCounit_left adj e₁' e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h')]
-
-中文:
-引理 compatibilityUnit_unique_left
-  结论: (h : CompatibilityUnit adj e₁ e₂)
-  证明: by
-  ext
-  rw [compatibilityCounit_left adj e₁ e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h)]; rw [compatibilityCounit_left adj e₁' e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h')]
-
-Depends on / 依赖: compatibilityCounit_left, compatibilityCounit_of_compatibilityUnit
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a` in `A` and commutation isomorphisms
+`e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a` and
+`e₂ : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a`, if `e₁` and `e₂` are compati
+ble with the
+unit of the adjunction `adj`, then `e₂` uniquely determines `e₁`.
 -/
 lemma compatibilityUnit_unique_left (h : CompatibilityUnit adj e₁ e₂)
     (h' : CompatibilityUnit adj e₁' e₂) : e₁ = e₁' := by
   ext
-  rw [compatibilityCounit_left adj e₁ e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h)]; rw [compatibilityCounit_left adj e₁' e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h')]
+  rw [compatibilityCounit_left adj e₁ e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h),
+    compatibilityCounit_left adj e₁' e₂ (compatibilityCounit_of_compatibilityUnit adj _ _ h')]
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-lemma `compatibilityUnit_isoZero` / 引理 `compatibilityUnit_isoZero`
+The isomorphisms `Functor.CommShift.isoZero F` and `Functor.CommShift.isoZero G` are
+compatible with the unit of an adjunction `F ⊣ G`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityUnit_isoZero** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityUnit_isoZero : CompatibilityUnit adj (Functor.CommShift.isoZe
+ro F A) (Functor.CommShift.isoZero G A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.CommShift.isoZero_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheo
+ry.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma compatibilityUnit_isoZero
-  statement: CompatibilityUnit adj (Functor.CommShift.isoZero F A)
-  proof: by
-  intro
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoZero_hom_app,
-    Functor.map_comp, assoc, unit_naturality_assoc,
-    ← cancel_mono ((shiftFunctorZero C A).hom.app _), ← G.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.id_obj, Functor.map_id, id_comp, NatTrans.naturality, Functor.id_map, assoc, comp_id]
-
-中文:
-引理 compatibilityUnit_isoZero
-  结论: CompatibilityUnit adj (函子.交换Shift.isoZero F A)
-  证明: by
-  intro
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoZero_hom_app,
-    Functor.map_comp, assoc, unit_naturality_assoc,
-    ← cancel_mono ((shiftFunctorZero C A).hom.app _), ← G.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.id_obj, Functor.map_id, id_comp, NatTrans.naturality, Functor.id_map, assoc, comp_id]
-
-Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoZero_hom_app, Functor.comp_obj, Functor.id_map, Functor.id_obj, Functor.map_comp, Functor.map_id, G.map_comp_assoc, Iso.inv_hom_id_app, NatTrans, NatTrans.naturality, cancel_mono, comp_id, comp_obj, hom.app, id_comp, id_map, id_obj, inv_hom_id_app
+--- 原说明 ---
+The isomorphisms `Functor.CommShift.isoZero F` and `Functor.CommShift.isoZero G`
+ are
+compatible with the unit of an adjunction `F ⊣ G`.
 -/
 lemma compatibilityUnit_isoZero : CompatibilityUnit adj (Functor.CommShift.isoZero F A)
     (Functor.CommShift.isoZero G A) := by
@@ -316,48 +524,94 @@ lemma compatibilityUnit_isoZero : CompatibilityUnit adj (Functor.CommShift.isoZe
     Functor.id_obj, Functor.map_id, id_comp, NatTrans.naturality, Functor.id_map, assoc, comp_id]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `compatibilityUnit_isoAdd` / 引理 `compatibilityUnit_isoAdd`
+/-- Given an adjunction `adj : F ⊣ G`, `a, b` in `A` and commutation isomorphisms
+between shifts by `a` (resp. `b`) and `F` and `G`, if these commutation isomorphisms are
+compatible with the unit of `adj`, then so are the commutation isomorphisms between shifts
+by `a + b` and `F` and `G` constructed by `Functor.CommShift.isoAdd`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.compatibilityUnit_isoAdd** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Adjunction.CommShift`。
+形式化陈述：compatibilityUnit_isoAdd (h : CompatibilityUnit adj e₁ e₂) (h' : Compatibi
+lityUnit adj f₁ f₂) : CompatibilityUnit adj (Functor.CommShift.isoAdd e₁ f₁) (Fu
+nctor.CommShift.isoAdd e₂ f₂)
+参数：h : CompatibilityUnit adj e₁ e₂；h' : CompatibilityUnit adj f₁ f₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Functor.CommShift.isoAdd_hom_app`：isoAdd_hom_app {a b : A
+} (e₁ : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a) (e₂ : shiftFunctor C b ⋙ F 
+≅ F ⋙ shiftFunctor D b) (X : C) : (Co…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 
-English:
-lemma compatibilityUnit_isoAdd
-  statement: (h : CompatibilityUnit adj e₁ e₂)
-  proof: by
-  intro X
-  have := h' (X⟦a⟧)
-  simp only [← cancel_mono (f₂.inv.app _), assoc, Iso.hom_inv_id_app,
-    Functor.id_obj, Functor.comp_obj, comp_id] at this
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoAdd_hom_app,
-    Functor.map_comp, assoc, unit_naturality_assoc]
-  slice_rhs 5 6 => rw [← G.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
-  erw [f₂.hom.naturality_assoc]
-  rw [← reassoc_of% this]; rw [← cancel_mono ((shiftFunctorAdd C a b).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
-  dsimp
-  rw [← (shiftFunctor C b).map_comp_assoc]; rw [← (shiftFunctor C b).map_comp_assoc]; rw [assoc]; rw [← h X]; rw [NatTrans.naturality]
-  dsimp
-  rw [comp_id]
-
-中文:
-引理 compatibilityUnit_isoAdd
-  结论: (h : CompatibilityUnit adj e₁ e₂)
-  证明: by
-  intro X
-  have := h' (X⟦a⟧)
-  simp only [← cancel_mono (f₂.inv.app _), assoc, Iso.hom_inv_id_app,
-    Functor.id_obj, Functor.comp_obj, comp_id] at this
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoAdd_hom_app,
-    Functor.map_comp, assoc, unit_naturality_assoc]
-  slice_rhs 5 6 => rw [← G.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
-  erw [f₂.hom.naturality_assoc]
-  rw [← reassoc_of% this]; rw [← cancel_mono ((shiftFunctorAdd C a b).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
-  dsimp
-  rw [← (shiftFunctor C b).map_comp_assoc]; rw [← (shiftFunctor C b).map_comp_assoc]; rw [assoc]; rw [← h X]; rw [NatTrans.naturality]
-  dsimp
-  rw [comp_id]
-
-Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoAdd_hom_app, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, G.map_comp, Iso.hom_inv_id_app, Iso.inv_hom_id_app, cancel_mono, comp_id, comp_obj, hom.app, hom.naturality_assoc, hom_inv_id_app, id_comp, id_obj, inv.app, inv_hom_id_app
+--- 原说明 ---
+Given an adjunction `adj : F ⊣ G`, `a, b` in `A` and commutation isomorphisms
+between shifts by `a` (resp. `b`) and `F` and `G`, if these commutation isomorph
+isms are
+compatible with the unit of `adj`, then so are the commutation isomorphisms betw
+een shifts
+by `a + b` and `F` and `G` constructed by `Functor.CommShift.isoAdd`.
 -/
 lemma compatibilityUnit_isoAdd (h : CompatibilityUnit adj e₁ e₂)
     (h' : CompatibilityUnit adj f₁ f₂) :
@@ -371,9 +625,11 @@ lemma compatibilityUnit_isoAdd (h : CompatibilityUnit adj e₁ e₂)
   slice_rhs 5 6 => rw [← G.map_comp, Iso.inv_hom_id_app]
   simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
   erw [f₂.hom.naturality_assoc]
-  rw [← reassoc_of% this]; rw [← cancel_mono ((shiftFunctorAdd C a b).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
+  rw [← reassoc_of% this, ← cancel_mono ((shiftFunctorAdd C a b).hom.app _),
+    assoc, assoc, assoc, assoc, assoc, assoc, Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app]
   dsimp
-  rw [← (shiftFunctor C b).map_comp_assoc]; rw [← (shiftFunctor C b).map_comp_assoc]; rw [assoc]; rw [← h X]; rw [NatTrans.naturality]
+  rw [← (shiftFunctor C b).map_comp_assoc, ← (shiftFunctor C b).map_comp_assoc,
+    assoc, ← h X, NatTrans.naturality]
   dsimp
   rw [comp_id]
 
@@ -382,23 +638,18 @@ end CommShift
 variable (A) [F.CommShift A] [G.CommShift A]
 
 /--
-Definition of `CommShift` / `CommShift` 的定义
+The property for `CommShift` structures on `F` and `G` to be compatible with an
+adjunction `F ⊣ G`.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory.A
+djunction`。
+形式化陈述：CommShift : Prop where commShift_unit : NatTrans.CommShift adj.unit A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CommShift
-  parameters: : Prop where
-  axioms and operations (2):
-    - commShift_unit : NatTrans.CommShift adj.unit A  [default: by infer_instance]
-    - commShift_counit : NatTrans.CommShift adj.counit A  [default: by infer_instance]
-
-中文:
-类 交换Shift
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - commShift_unit : 自然变换.交换Shift adj.unit A  [默认: by infer_instance]
-    - commShift_counit : 自然变换.交换Shift adj.counit A  [默认: by infer_instance]
-
-Depends on / 依赖: CommShift, NatTrans, NatTrans.CommShift, adj.counit, commShift_counit, counit, infer_instance
+--- 原说明 ---
+The property for `CommShift` structures on `F` and `G` to be compatible with an
+adjunction `F ⊣ G`.
 -/
 class CommShift : Prop where
   commShift_unit : NatTrans.CommShift adj.unit A := by infer_instance
@@ -409,22 +660,32 @@ attribute [instance] commShift_unit commShift_counit
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `unit_app_commShiftIso_hom_app` / 引理 `unit_app_commShiftIso_hom_app`
-
-English:
-lemma unit_app_commShiftIso_hom_app
-  given: [adj.CommShift A] (a : A) (X : C)
-  proof: by
-  simpa using (NatTrans.shift_app_comm adj.unit a X).symm
-
-中文:
-引理 unit_app_commShiftIso_hom_app
-  条件: [adj.交换Shift A] (a : A) (X : C)
-  证明: by
-  simpa using (NatTrans.shift_app_comm adj.unit a X).symm
-
-Depends on / 依赖: NatTrans, NatTrans.shift_app_comm, adj.unit, shift_app_comm
+/-
+**CategoryTheory.Adjunction.unit_app_commShiftIso_hom_app** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Adjunction`。
+形式化陈述：unit_app_commShiftIso_hom_app [adj.CommShift A] (a : A) (X : C) : adj.unit
+.app (X⟦a⟧) ≫ ((F ⋙ G).commShiftIso a).hom.app X = (adj.unit.app X)⟦a⟧'
+参数：a : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_unit`：∀ {C : Type u_1} {D 
+: Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D} {F : Categor…
 -/
 lemma unit_app_commShiftIso_hom_app [adj.CommShift A] (a : A) (X : C) :
     adj.unit.app (X⟦a⟧) ≫ ((F ⋙ G).commShiftIso a).hom.app X = (adj.unit.app X)⟦a⟧' := by
@@ -432,22 +693,46 @@ lemma unit_app_commShiftIso_hom_app [adj.CommShift A] (a : A) (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `unit_app_shift_commShiftIso_inv_app` / 引理 `unit_app_shift_commShiftIso_inv_app`
-
-English:
-lemma unit_app_shift_commShiftIso_inv_app
-  given: [adj.CommShift A] (a : A) (X : C)
-  proof: by
-  simp [← cancel_mono (((F ⋙ G).commShiftIso _).hom.app _)]
-
-中文:
-引理 unit_app_shift_commShiftIso_inv_app
-  条件: [adj.交换Shift A] (a : A) (X : C)
-  证明: by
-  simp [← cancel_mono (((F ⋙ G).commShiftIso _).hom.app _)]
-
-Depends on / 依赖: cancel_mono, commShiftIso, hom.app
+/-
+**CategoryTheory.Adjunction.unit_app_shift_commShiftIso_inv_app** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：unit_app_shift_commShiftIso_inv_app [adj.CommShift A] (a : A) (X : C) : (a
+dj.unit.app X)⟦a⟧' ≫ ((F ⋙ G).commShiftIso a).inv.app X = adj.unit.app (X⟦a⟧)
+参数：a : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.Adjunction.unit_app_commShiftIso_hom_app`：unit_app_commSh
+iftIso_hom_app [adj.CommShift A] (a : A) (X : C) : adj.unit.app (X⟦a⟧) ≫ ((F ⋙ G
+).commShiftIso a).hom.app X = (adj.unit.app X…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma unit_app_shift_commShiftIso_inv_app [adj.CommShift A] (a : A) (X : C) :
     (adj.unit.app X)⟦a⟧' ≫ ((F ⋙ G).commShiftIso a).inv.app X = adj.unit.app (X⟦a⟧) := by
@@ -455,48 +740,69 @@ lemma unit_app_shift_commShiftIso_inv_app [adj.CommShift A] (a : A) (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `commShiftIso_hom_app_counit_app_shift` / 引理 `commShiftIso_hom_app_counit_app_shift`
-
-English:
-lemma commShiftIso_hom_app_counit_app_shift
-  given: [adj.CommShift A] (a : A) (Y : D)
-  proof: by
-  simpa using (NatTrans.shift_app_comm adj.counit a Y)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 commShiftIso_hom_app_counit_app_shift
-  条件: [adj.交换Shift A] (a : A) (Y : D)
-  证明: by
-  simpa using (NatTrans.shift_app_comm adj.counit a Y)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: NatTrans, NatTrans.shift_app_comm, adj.counit, counit, shift_app_comm
+/-
+**CategoryTheory.Adjunction.commShiftIso_hom_app_counit_app_shift** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：commShiftIso_hom_app_counit_app_shift [adj.CommShift A] (a : A) (Y : D) : 
+((G ⋙ F).commShiftIso a).hom.app Y ≫ (adj.counit.app Y)⟦a⟧' = adj.counit.app (Y⟦
+a⟧)
+参数：a : A；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_counit`：∀ {C : Type u_1} {
+D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} {F : Categor…
 -/
 lemma commShiftIso_hom_app_counit_app_shift [adj.CommShift A] (a : A) (Y : D) :
     ((G ⋙ F).commShiftIso a).hom.app Y ≫ (adj.counit.app Y)⟦a⟧' = adj.counit.app (Y⟦a⟧) := by
   simpa using (NatTrans.shift_app_comm adj.counit a Y)
 
 @[reassoc (attr := simp)]
-/--
-lemma `commShiftIso_inv_app_counit_app` / 引理 `commShiftIso_inv_app_counit_app`
-
-English:
-lemma commShiftIso_inv_app_counit_app
-  given: [adj.CommShift A] (a : A) (Y : D)
-  proof: by
-  simp [← cancel_epi (((G ⋙ F).commShiftIso _).hom.app _)]
-
-中文:
-引理 commShiftIso_inv_app_counit_app
-  条件: [adj.交换Shift A] (a : A) (Y : D)
-  证明: by
-  simp [← cancel_epi (((G ⋙ F).commShiftIso _).hom.app _)]
-
-Depends on / 依赖: cancel_epi, commShiftIso, hom.app
+/-
+**CategoryTheory.Adjunction.commShiftIso_inv_app_counit_app** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：commShiftIso_inv_app_counit_app [adj.CommShift A] (a : A) (Y : D) : ((G ⋙ 
+F).commShiftIso a).inv.app Y ≫ adj.counit.app (Y⟦a⟧) = (adj.counit.app Y)⟦a⟧'
+参数：a : A；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.Adjunction.commShiftIso_hom_app_counit_app_shift`：commShi
+ftIso_hom_app_counit_app_shift [adj.CommShift A] (a : A) (Y : D) : ((G ⋙ F).comm
+ShiftIso a).hom.app Y ≫ (adj.counit.app Y)⟦a⟧' = adj.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma commShiftIso_inv_app_counit_app [adj.CommShift A] (a : A) (Y : D) :
     ((G ⋙ F).commShiftIso a).inv.app Y ≫ adj.counit.app (Y⟦a⟧) = (adj.counit.app Y)⟦a⟧' := by
@@ -506,61 +812,76 @@ namespace CommShift
 
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mk'` / 引理 `mk'`
+/-- Constructor for `Adjunction.CommShift`. -/
+/-
+**CategoryTheory.Adjunction.CommShift.mk'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Adjunction.CommShift`。
+形式化陈述：mk' (_ : NatTrans.CommShift adj.unit A) : adj.CommShift A where commShift_
+counit
+参数：_ : NatTrans.CommShift adj.unit A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Adjunction.CommShift.compatibilityCounit_of_compatibility
+Unit`：compatibilityCounit_of_compatibilityUnit (h : CompatibilityUnit adj e₁ e₂)
+ : CompatibilityCounit adj e₁ e₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
 
-English:
-lemma mk'
-  given: (_ : NatTrans.CommShift adj.unit A)
-  proof: ⟨fun a => by
-    ext
-    simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
-      Functor.commShiftIso_comp_hom_app, Functor.whiskerRight_app, assoc, Functor.whiskerLeft_app,
-      Functor.commShiftIso_id_hom_app, comp_id]
-    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X => ?_) _).symm
-    simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X⟩
-
-中文:
-引理 mk'
-  条件: (_ : 自然变换.交换Shift adj.unit A)
-  证明: ⟨fun a => by
-    ext
-    simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
-      Functor.commShiftIso_comp_hom_app, Functor.whiskerRight_app, assoc, Functor.whiskerLeft_app,
-      Functor.commShiftIso_id_hom_app, comp_id]
-    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X => ?_) _).symm
-    simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X⟩
-
-Depends on / 依赖: Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, Functor.whiskerLeft_app, Functor.whiskerRight_app, NatTrans, NatTrans.comp_app, NatTrans.shift_app_comm, adj.unit, commShiftIso_comp_hom_app, commShiftIso_id_hom_app, comp_app, comp_id, comp_obj, compatibilityCounit_of_compatibilityUnit, id_obj, shift_app_comm, whiskerLeft_app
+--- 原说明 ---
+Constructor for `Adjunction.CommShift`.
 -/
 lemma mk' (_ : NatTrans.CommShift adj.unit A) :
     adj.CommShift A where
-  commShift_counit := ⟨fun a => by
+  commShift_counit := ⟨fun a ↦ by
     ext
     simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
       Functor.commShiftIso_comp_hom_app, Functor.whiskerRight_app, assoc, Functor.whiskerLeft_app,
       Functor.commShiftIso_id_hom_app, comp_id]
-    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X => ?_) _).symm
+    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X ↦ ?_) _).symm
     simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X⟩
 
-/--
-Instance `instId` / 实例 `instId`
+/-- The identity adjunction is compatible with the trivial `CommShift` structure on the
+identity functor.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.instId** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Adjunction.CommShift`。
+形式化陈述：instId : (Adjunction.id (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instId
-  signature: : (Adjunction.id (C := C)).CommShift A where
-  body: inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.hom A)
-  commShift_unit :=
-    inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.inv A)
-
-中文:
-实例 instId
-  签名: : (伴随.id (C := C)).交换Shift A where
-  定义体: inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.hom A)
-  commShift_unit :=
-    inferInstanceAs (NatTrans.CommShift (𝟭 C).leftUnitor.inv A)
-
-Depends on / 依赖: CommShift
+--- 原说明 ---
+The identity adjunction is compatible with the trivial `CommShift` structure on 
+the
+identity functor.
 -/
 instance instId : (Adjunction.id (C := C)).CommShift A where
   commShift_counit :=
@@ -571,30 +892,43 @@ instance instId : (Adjunction.id (C := C)).CommShift A where
 variable {E : Type*} [Category* E] {F' : D ⥤ E} {G' : E ⥤ D} (adj' : F' ⊣ G')
   [HasShift E A] [F'.CommShift A] [G'.CommShift A] [adj.CommShift A] [adj'.CommShift A]
 
-/--
-Instance `instComp` / 实例 `instComp`
+/-- Compatibility of `Adjunction.Commshift` with the composition of adjunctions.
+-/
+/-
+**CategoryTheory.Adjunction.CommShift.instComp** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Adjunction.CommShift`。
+形式化陈述：instComp : (adj.comp adj').CommShift A where commShift_counit
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.comp_unit`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.NatTrans.CommShift.comp`：∀ {C : Type u_1} {D : Type u_2} 
+[inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Categor
+y.{v_2, u_2} D] {F₁ F₂ F₃ : …
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_unit`：∀ {C : Type u_1} {D 
+: Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D} {F : Categor…
+· 使用定理 `CategoryTheory.NatTrans.CommShift.rightUnitor`：∀ {C : Type u_1} {D : Typ
+e u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.
+Category.{v_2, u_2} D] {F₁ : Catego…
+· 使用定理 `CategoryTheory.NatTrans.CommShift.whiskerLeft`：∀ {C : Type u_1} {D : Typ
+e u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : 
+CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.NatTrans.CommShift.associator`：∀ {C : Type u_1} {D : Type
+ u_2} {E : Type u_3} {J : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C
+]   [inst_1 : CategoryTheory.Categ…
+· 使用定理 `CategoryTheory.Adjunction.comp_counit`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_counit`：∀ {C : Type u_1} {
+D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} {F : Categor…
 
-English:
-instance instComp
-  signature: : (adj.comp adj').CommShift A where
-  body: by
-    rw [comp_counit]
-    infer_instance
-  commShift_unit := by
-    rw [comp_unit]
-    infer_instance
-
-中文:
-实例 instComp
-  签名: : (adj.comp adj').交换Shift A where
-  定义体: by
-    rw [comp_counit]
-    infer_instance
-  commShift_unit := by
-    rw [comp_unit]
-    infer_instance
-
-Depends on / 依赖: commShift_unit, comp_counit, comp_unit, infer_instance
+--- 原说明 ---
+Compatibility of `Adjunction.Commshift` with the composition of adjunctions.
 -/
 instance instComp : (adj.comp adj').CommShift A where
   commShift_counit := by
@@ -610,22 +944,37 @@ variable {A}
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `shift_unit_app` / 引理 `shift_unit_app`
-
-English:
-lemma shift_unit_app
-  given: [adj.CommShift A] (a : A) (X : C)
-  proof: by
-  simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X
-
-中文:
-引理 shift_unit_app
-  条件: [adj.交换Shift A] (a : A) (X : C)
-  证明: by
-  simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X
-
-Depends on / 依赖: Functor, Functor.commShiftIso_comp_hom_app, NatTrans, NatTrans.shift_app_comm, adj.unit, commShiftIso_comp_hom_app, shift_app_comm
+/-
+**CategoryTheory.Adjunction.shift_unit_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Adjunction`。
+形式化陈述：shift_unit_app [adj.CommShift A] (a : A) (X : C) : (adj.unit.app X)⟦a⟧' = 
+adj.unit.app (X⟦a⟧) ≫ G.map ((F.commShiftIso a).hom.app X) ≫ (G.commShiftIso a).
+hom.app (F.obj X)
+参数：a : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_unit`：∀ {C : Type u_1} {D 
+: Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D} {F : Categor…
 -/
 lemma shift_unit_app [adj.CommShift A] (a : A) (X : C) :
     (adj.unit.app X)⟦a⟧' =
@@ -636,30 +985,58 @@ lemma shift_unit_app [adj.CommShift A] (a : A) (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `shift_counit_app` / 引理 `shift_counit_app`
-
-English:
-lemma shift_counit_app
-  given: [adj.CommShift A] (a : A) (Y : D)
-  proof: by
-  have eq := NatTrans.shift_app_comm adj.counit a Y
-  simp only [Functor.comp_obj, Functor.id_obj, Functor.commShiftIso_comp_hom_app, assoc,
-    Functor.commShiftIso_id_hom_app, comp_id] at eq
-  simp only [← eq, Functor.comp_obj, Functor.id_obj, ← F.map_comp_assoc, Iso.inv_hom_id_app,
-    F.map_id, id_comp, Iso.inv_hom_id_app_assoc]
-
-中文:
-引理 shift_counit_app
-  条件: [adj.交换Shift A] (a : A) (Y : D)
-  证明: by
-  have eq := NatTrans.shift_app_comm adj.counit a Y
-  simp only [Functor.comp_obj, Functor.id_obj, Functor.commShiftIso_comp_hom_app, assoc,
-    Functor.commShiftIso_id_hom_app, comp_id] at eq
-  simp only [← eq, Functor.comp_obj, Functor.id_obj, ← F.map_comp_assoc, Iso.inv_hom_id_app,
-    F.map_id, id_comp, Iso.inv_hom_id_app_assoc]
-
-Depends on / 依赖: F.map_comp_assoc, F.map_id, Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, NatTrans, NatTrans.shift_app_comm, adj.counit, commShiftIso_comp_hom_app, commShiftIso_id_hom_app, comp_id, comp_obj, counit, id_comp, id_obj, inv_hom_id_app
+/-
+**CategoryTheory.Adjunction.shift_counit_app** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Adjunction`。
+形式化陈述：shift_counit_app [adj.CommShift A] (a : A) (Y : D) : (adj.counit.app Y)⟦a⟧
+' = (F.commShiftIso a).inv.app (G.obj Y) ≫ F.map ((G.commShiftIso a).inv.app Y) 
+≫ adj.counit.app (Y⟦a⟧)
+参数：a : A；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.NatTrans.shift_app_comm`：shift_app_comm (a : A) (X : C) :
+ (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' = τ.app (X⟦a⟧) ≫ (F₂.commShiftIso
+ a).hom.app X
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_counit`：∀ {C : Type u_1} {
+D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} {F : Categor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shift_counit_app [adj.CommShift A] (a : A) (Y : D) :
     (adj.counit.app Y)⟦a⟧' =
@@ -682,65 +1059,85 @@ namespace RightAdjointCommShift
 
 variable (a b : A) (h : b + a = 0) [F.CommShift A]
 
-/--
-Definition of `iso'` / `iso'` 的定义
+/-- Auxiliary definition for `iso`. -/
+/-
+**CategoryTheory.Adjunction.RightAdjointCommShift.iso'** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Adjunction.RightAdjointCommShift`。
+形式化陈述：iso' : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso'
-  signature: : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
-  body: (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D b a h).toAdjunction)
-    (Adjunction.comp (shiftEquiv' C b a h).toAdjunction adj)).toFun (F.commShiftIso b)
-
-中文:
-定义 iso'
-  签名: : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
-  定义体: (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D b a h).toAdjunction)
-    (Adjunction.comp (shiftEquiv' C b a h).toAdjunction adj)).toFun (F.commShiftIso b)
-
-Depends on / 依赖: Adjunction, Adjunction.comp, F.commShiftIso, commShiftIso, conjugateIsoEquiv, shiftEquiv, toAdjunction
+--- 原说明 ---
+Auxiliary definition for `iso`.
 -/
 noncomputable def iso' : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a :=
   (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D b a h).toAdjunction)
     (Adjunction.comp (shiftEquiv' C b a h).toAdjunction adj)).toFun (F.commShiftIso b)
 
 /--
-Definition of `iso` / `iso` 的定义
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `F`, these are the candidate
+`CommShift.iso a` isomorphisms for a compatible `CommShift` structure on `G`.
+-/
+/-
+**CategoryTheory.Adjunction.RightAdjointCommShift.iso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Adjunction.RightAdjointCommShift`。
+形式化陈述：iso : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
 
-English:
-definition iso
-  signature: : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
-  body: iso' adj _ _ (neg_add_cancel a)
-
-中文:
-定义 iso
-  签名: : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a
-  定义体: iso' adj _ _ (neg_add_cancel a)
-
-Depends on / 依赖: neg_add_cancel
+--- 原说明 ---
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `F`, these are the ca
+ndidate
+`CommShift.iso a` isomorphisms for a compatible `CommShift` structure on `G`.
 -/
 noncomputable def iso : shiftFunctor D a ⋙ G ≅ G ⋙ shiftFunctor C a :=
   iso' adj _ _ (neg_add_cancel a)
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `iso_hom_app` / 引理 `iso_hom_app`
-
-English:
-lemma iso_hom_app
-  given: (X : D)
-  proof: by
-  obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
-  simp [iso, iso', shiftEquiv']
-
-中文:
-引理 iso_hom_app
-  条件: (X : D)
-  证明: by
-  obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
-  simp [iso, iso', shiftEquiv']
-
-Depends on / 依赖: add_left_inj, neg_add_cancel, shiftEquiv
+/-
+**CategoryTheory.Adjunction.RightAdjointCommShift.iso_hom_app** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Adjunction.RightAdjointCommShift`。
+形式化陈述：iso_hom_app (X : D) : (iso adj a).hom.app X = (shiftFunctorCompIsoId C b a
+ h).inv.app (G.obj ((shiftFunctor D a).obj X)) ≫ (adj.unit.app ((shiftFunctor C 
+b).obj (G.obj ((shiftFunctor D a).obj X))))⟦a⟧' ≫ (G.map ((F.commShiftIso b).hom
+.app (G.obj ((shiftFunctor D a).obj X))))⟦a⟧' ≫ (G.map ((shiftFunctor D b).map (
+adj.counit.app ((shiftFunctor D a).obj X))))⟦a⟧' ≫ (G.map ((shiftFunctorCompIsoI
+d D a b (by rw [← add_left_inj a, add_assoc, h, zero_add, add_zero])).hom.app X)
+)⟦a⟧'
+参数：X : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.conjugateEquiv_apply_app`：∀ {C : Type u₁} {D : Type u₂} [
+inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {L₁ L₂ : CategoryT…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Adjunction.comp_unit_app`：comp_unit_app (X : C) : dsimp% 
+(adj₁.comp adj₂).unit.app X = adj₁.unit.app X ≫ G.map (adj₂.unit.app (F.obj X))
+· 使用引理 `CategoryTheory.Adjunction.comp_counit_app`：comp_counit_app (X : E) : dsi
+mp% (adj₁.comp adj₂).counit.app X = H.map (adj₁.counit.app (I.obj X)) ≫ adj₂.cou
+nit.app X
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 lemma iso_hom_app (X : D) :
     (iso adj a).hom.app X =
@@ -755,36 +1152,60 @@ lemma iso_hom_app (X : D) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `iso_inv_app` / 引理 `iso_inv_app`
-
-English:
-lemma iso_inv_app
-  given: (Y : D)
-  proof: by
-  obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
-  simp only [iso, iso', shiftEquiv', Equiv.toFun_as_coe, conjugateIsoEquiv_apply_inv,
-    conjugateEquiv_apply_app, Functor.comp_obj, comp_unit_app, Functor.id_obj,
-    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_unit, Iso.symm_hom, Functor.comp_map,
-    comp_counit_app, Equivalence.toAdjunction_counit, Equivalence.Equivalence_mk'_counit,
-    Functor.map_shiftFunctorCompIsoId_hom_app, assoc, Functor.map_comp]
-  slice_lhs 3 4 => rw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
-
-中文:
-引理 iso_inv_app
-  条件: (Y : D)
-  证明: by
-  obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
-  simp only [iso, iso', shiftEquiv', Equiv.toFun_as_coe, conjugateIsoEquiv_apply_inv,
-    conjugateEquiv_apply_app, Functor.comp_obj, comp_unit_app, Functor.id_obj,
-    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_unit, Iso.symm_hom, Functor.comp_map,
-    comp_counit_app, Equivalence.toAdjunction_counit, Equivalence.Equivalence_mk'_counit,
-    Functor.map_shiftFunctorCompIsoId_hom_app, assoc, Functor.map_comp]
-  slice_lhs 3 4 => rw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
-
-Depends on / 依赖: Equiv.toFun_as_coe, Equivalence, Equivalence.Equivalence_mk, Equivalence.toAdjunction_counit, Equivalence.toAdjunction_unit, Equivalence_mk, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_shiftFunctorCompIsoId_hom_app, Iso.symm_hom, _counit, _unit, add_left_inj, comp_counit_app, comp_map, comp_obj, comp_unit_app
+/-
+**CategoryTheory.Adjunction.RightAdjointCommShift.iso_inv_app** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Adjunction.RightAdjointCommShift`。
+形式化陈述：iso_inv_app (Y : D) : (iso adj a).inv.app Y = adj.unit.app ((shiftFunctor 
+C a).obj (G.obj Y)) ≫ G.map ((shiftFunctorCompIsoId D b a h).inv.app (F.obj ((sh
+iftFunctor C a).obj (G.obj Y)))) ≫ G.map ((shiftFunctor D a).map ((shiftFunctor 
+D b).map ((F.commShiftIso a).hom.app (G.obj Y)))) ≫ G.map ((shiftFunctor D a).ma
+p ((shiftFunctorCompIsoId D a b (by rw [eq_neg_of_add_eq_zero_left h, add_neg_ca
+ncel])).hom.app (F.obj (G.obj Y)))) ≫ G.map ((shiftFunctor D a).map (adj.counit.
+app Y))
+参数：Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.conjugateEquiv_apply_app`：∀ {C : Type u₁} {D : Type u₂} [
+inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {L₁ L₂ : CategoryT…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Adjunction.comp_unit_app`：comp_unit_app (X : C) : dsimp% 
+(adj₁.comp adj₂).unit.app X = adj₁.unit.app X ≫ G.map (adj₂.unit.app (F.obj X))
+· 使用引理 `CategoryTheory.Adjunction.comp_counit_app`：comp_counit_app (X : E) : dsi
+mp% (adj₁.comp adj₂).counit.app X = H.map (adj₁.counit.app (I.obj X)) ≫ adj₂.cou
+nit.app X
+· 使用引理 `CategoryTheory.Functor.map_shiftFunctorCompIsoId_hom_app`：map_shiftFunct
+orCompIsoId_hom_app [F.CommShift A] (X : C) (a b : A) (h : a + b = 0) : F.map ((
+shiftFunctorCompIsoId C a b h).hom.app X) = (F…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 lemma iso_inv_app (Y : D) :
     (iso adj a).inv.app Y =
@@ -808,49 +1229,106 @@ lemma iso_inv_app (Y : D) :
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-lemma `compatibilityUnit_iso` / 引理 `compatibilityUnit_iso`
+The commutation isomorphisms of `Adjunction.RightAdjointCommShift.iso` are compatible with
+the unit of the adjunction.
+-/
+/-
+**CategoryTheory.Adjunction.RightAdjointCommShift.compatibilityUnit_iso** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Adjunction.RightAdjointCommShift`。
+形式化陈述：compatibilityUnit_iso (a : A) : CommShift.CompatibilityUnit adj (F.commShi
+ftIso a) (iso adj a)
+参数：a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用引理 `CategoryTheory.Adjunction.RightAdjointCommShift.iso_inv_app`：iso_inv_app
+ (Y : D) : (iso adj a).inv.app Y = adj.unit.app ((shiftFunctor C a).obj (G.obj Y
+)) ≫ G.map ((shiftFunctorCompIsoId D b a h).inv.a…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality_assoc`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.shift_shiftFunctorCompIsoId_hom_app`：shift_shiftFunctorCo
+mpIsoId_hom_app (n m : A) (h : n + m = 0) (X : C) : ((shiftFunctorCompIsoId C n 
+m h).hom.app X)⟦n⟧' = (shiftFunctorCompI…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_hom_naturality_assoc`：∀ {C : Type u_
+1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 
-English:
-lemma compatibilityUnit_iso
-  given: (a : A)
-  proof: by
-  intro
-  rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app]; rw [RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
-  apply (adj.homEquiv _ _).symm.injective
-  dsimp
-  simp only [comp_id, homEquiv_counit, Functor.map_comp, assoc, counit_naturality,
-    counit_naturality_assoc, left_triangle_components_assoc]
-  erw [← NatTrans.naturality_assoc]
-  dsimp
-  rw [shift_shiftFunctorCompIsoId_hom_app]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.commShiftIso_hom_naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]; rw [Functor.map_id]; rw [comp_id]
-
-中文:
-引理 compatibilityUnit_iso
-  条件: (a : A)
-  证明: by
-  intro
-  rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app]; rw [RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
-  apply (adj.homEquiv _ _).symm.injective
-  dsimp
-  simp only [comp_id, homEquiv_counit, Functor.map_comp, assoc, counit_naturality,
-    counit_naturality_assoc, left_triangle_components_assoc]
-  erw [← NatTrans.naturality_assoc]
-  dsimp
-  rw [shift_shiftFunctorCompIsoId_hom_app]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.commShiftIso_hom_naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]; rw [Functor.map_id]; rw [comp_id]
-
-Depends on / 依赖: Functor, Functor.c, Functor.map_comp, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, NatTrans, NatTrans.naturality_assoc, RightAdjointCommShift, RightAdjointCommShift.iso, RightAdjointCommShift.iso_inv_app, adj.homEquiv, cancel_mono, comp_id, counit_naturality, counit_naturality_assoc, homEquiv, homEquiv_counit, hom_inv_id_app, injective, inv.app
+--- 原说明 ---
+The commutation isomorphisms of `Adjunction.RightAdjointCommShift.iso` are compa
+tible with
+the unit of the adjunction.
 -/
 lemma compatibilityUnit_iso (a : A) :
     CommShift.CompatibilityUnit adj (F.commShiftIso a) (iso adj a) := by
   intro
-  rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app]; rw [RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
+  rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _), assoc, assoc,
+    Iso.hom_inv_id_app, RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
   apply (adj.homEquiv _ _).symm.injective
   dsimp
   simp only [comp_id, homEquiv_counit, Functor.map_comp, assoc, counit_naturality,
     counit_naturality_assoc, left_triangle_components_assoc]
   erw [← NatTrans.naturality_assoc]
   dsimp
-  rw [shift_shiftFunctorCompIsoId_hom_app]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.commShiftIso_hom_naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]; rw [Functor.map_id]; rw [comp_id]
+  rw [shift_shiftFunctorCompIsoId_hom_app, Iso.inv_hom_id_app_assoc,
+    Functor.commShiftIso_hom_naturality_assoc, ← Functor.map_comp,
+    left_triangle_components, Functor.map_id, comp_id]
 
 end RightAdjointCommShift
 
@@ -862,40 +1340,16 @@ Given an adjunction `F ⊣ G` and a `CommShift` structure on `F`, this construct
 the unique compatible `CommShift` structure on `G`.
 -/
 @[simps -isSimp, instance_reducible]
-/--
-Definition of `rightAdjointCommShift` / `rightAdjointCommShift` 的定义
+/-
+**CategoryTheory.Adjunction.rightAdjointCommShift** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Adjunction`。
+形式化陈述：rightAdjointCommShift [F.CommShift A] : G.CommShift A where commShiftIso a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightAdjointCommShift
-  signature: [F.CommShift A]
-  body: iso adj a
-  commShiftIso_zero := by
-    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso 0) _ _
-      (compatibilityUnit_iso adj 0) ?_
-    rw [F.commShiftIso_zero]
-    exact CommShift.compatibilityUnit_isoZero adj
-  commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso (a + b)) _ _
-      (compatibilityUnit_iso adj (a + b)) ?_
-    rw [F.commShiftIso_add]
-    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
-      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
-
-中文:
-定义 rightAdjointCommShift
-  签名: [F.交换Shift A]
-  定义体: iso adj a
-  commShiftIso_zero := by
-    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso 0) _ _
-      (compatibilityUnit_iso adj 0) ?_
-    rw [F.commShiftIso_zero]
-    exact CommShift.compatibilityUnit_isoZero adj
-  commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso (a + b)) _ _
-      (compatibilityUnit_iso adj (a + b)) ?_
-    rw [F.commShiftIso_add]
-    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
-      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
+--- 原说明 ---
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `F`, this constructs
+the unique compatible `CommShift` structure on `G`.
 -/
 noncomputable def rightAdjointCommShift [F.CommShift A] : G.CommShift A where
   commShiftIso a := iso adj a
@@ -912,40 +1366,43 @@ noncomputable def rightAdjointCommShift [F.CommShift A] : G.CommShift A where
       (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `commShift_of_leftAdjoint` / 引理 `commShift_of_leftAdjoint`
-
-English:
-lemma commShift_of_leftAdjoint
-  given: [F.CommShift A]
-  proof: adj.rightAdjointCommShift A
-    adj.CommShift A := by
-  let := adj.rightAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
-  ext X
-  dsimp
-  simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! RightAdjointCommShift.compatibilityUnit_iso adj a X
-
-中文:
-引理 commShift_of_leftAdjoint
-  条件: [F.交换Shift A]
-  证明: adj.rightAdjointCommShift A
-    adj.CommShift A := by
-  let := adj.rightAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
-  ext X
-  dsimp
-  simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! RightAdjointCommShift.compatibilityUnit_iso adj a X
-
-Depends on / 依赖: adj.rightAdjointCommShift, rightAdjointCommShift
+/-
+**CategoryTheory.Adjunction.commShift_of_leftAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Adjunction`。
+形式化陈述：commShift_of_leftAdjoint [F.CommShift A] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.CommShift.mk'`：mk' (_ : NatTrans.CommShift adj
+.unit A) : adj.CommShift A where commShift_counit
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用引理 `CategoryTheory.Adjunction.RightAdjointCommShift.compatibilityUnit_iso`：c
+ompatibilityUnit_iso (a : A) : CommShift.CompatibilityUnit adj (F.commShiftIso a
+) (iso adj a)
 -/
 lemma commShift_of_leftAdjoint [F.CommShift A] :
     letI := adj.rightAdjointCommShift A
     adj.CommShift A := by
   let := adj.rightAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
+  refine CommShift.mk' _ _ ⟨fun a ↦ ?_⟩
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
@@ -955,65 +1412,100 @@ namespace LeftAdjointCommShift
 
 variable {A} (a b : A) (h : a + b = 0) [G.CommShift A]
 
-/--
-Definition of `iso'` / `iso'` 的定义
+/-- Auxiliary definition for `iso`. -/
+/-
+**CategoryTheory.Adjunction.LeftAdjointCommShift.iso'** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Adjunction.LeftAdjointCommShift`。
+形式化陈述：iso' : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso'
-  signature: : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
-  body: (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D a b h).toAdjunction)
-    (Adjunction.comp (shiftEquiv' C a b h).toAdjunction adj)).invFun (G.commShiftIso b)
-
-中文:
-定义 iso'
-  签名: : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
-  定义体: (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D a b h).toAdjunction)
-    (Adjunction.comp (shiftEquiv' C a b h).toAdjunction adj)).invFun (G.commShiftIso b)
-
-Depends on / 依赖: Adjunction, Adjunction.comp, G.commShiftIso, commShiftIso, conjugateIsoEquiv, invFun, shiftEquiv, toAdjunction
+--- 原说明 ---
+Auxiliary definition for `iso`.
 -/
 noncomputable def iso' : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a :=
   (conjugateIsoEquiv (Adjunction.comp adj (shiftEquiv' D a b h).toAdjunction)
     (Adjunction.comp (shiftEquiv' C a b h).toAdjunction adj)).invFun (G.commShiftIso b)
 
 /--
-Definition of `iso` / `iso` 的定义
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `G`, these are the candidate
+`CommShift.iso a` isomorphisms for a compatible `CommShift` structure on `F`.
+-/
+/-
+**CategoryTheory.Adjunction.LeftAdjointCommShift.iso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Adjunction.LeftAdjointCommShift`。
+形式化陈述：iso : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
 
-English:
-definition iso
-  signature: : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
-  body: iso' adj _ _ (add_neg_cancel a)
-
-中文:
-定义 iso
-  签名: : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
-  定义体: iso' adj _ _ (add_neg_cancel a)
-
-Depends on / 依赖: add_neg_cancel
+--- 原说明 ---
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `G`, these are the ca
+ndidate
+`CommShift.iso a` isomorphisms for a compatible `CommShift` structure on `F`.
 -/
 noncomputable def iso : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a :=
   iso' adj _ _ (add_neg_cancel a)
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `iso_hom_app` / 引理 `iso_hom_app`
-
-English:
-lemma iso_hom_app
-  given: (X : C)
-  proof: by
-  obtain rfl : b = -a := eq_neg_of_add_eq_zero_right h
-  simp [iso, iso', shiftEquiv']
-
-中文:
-引理 iso_hom_app
-  条件: (X : C)
-  证明: by
-  obtain rfl : b = -a := eq_neg_of_add_eq_zero_right h
-  simp [iso, iso', shiftEquiv']
-
-Depends on / 依赖: eq_neg_of_add_eq_zero_right, shiftEquiv
+/-
+**CategoryTheory.Adjunction.LeftAdjointCommShift.iso_hom_app** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Adjunction.LeftAdjointCommShift`。
+形式化陈述：iso_hom_app (X : C) : (iso adj a).hom.app X = F.map ((adj.unit.app X)⟦a⟧')
+ ≫ F.map (G.map (((shiftFunctorCompIsoId D a b h).inv.app (F.obj X)))⟦a⟧') ≫ F.m
+ap (((G.commShiftIso b).hom.app ((F.obj X)⟦a⟧))⟦a⟧') ≫ F.map ((shiftFunctorCompI
+soId C b a (by simp [eq_neg_of_add_eq_zero_left h])).hom.app (G.obj ((F.obj X)⟦a
+⟧))) ≫ adj.counit.app ((F.obj X)⟦a⟧)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.conjugateEquiv_symm_apply_app`：∀ {C : Type u₁} {D : Type 
+u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {L₁ L₂ : CategoryT…
+· 使用引理 `CategoryTheory.Adjunction.comp_unit_app`：comp_unit_app (X : C) : dsimp% 
+(adj₁.comp adj₂).unit.app X = adj₁.unit.app X ≫ G.map (adj₂.unit.app (F.obj X))
+· 使用引理 `CategoryTheory.Functor.map_shiftFunctorCompIsoId_inv_app`：map_shiftFunct
+orCompIsoId_inv_app [F.CommShift A] (X : C) (a b : A) (h : a + b = 0) : F.map ((
+shiftFunctorCompIsoId C a b h).inv.app X) = (s…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.Adjunction.comp_counit_app`：comp_counit_app (X : E) : dsi
+mp% (adj₁.comp adj₂).counit.app X = H.map (adj₁.counit.app (I.obj X)) ≫ adj₂.cou
+nit.app X
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `Mathlib.Tactic.CategoryTheory.CancelIso.hom_inv_id_of_eq_assoc`：hom_inv_
+id_of_eq_assoc {C : Type*} [Category* C] {x y : C} (f : x ⟶ y) [IsIso f] (g : y 
+⟶ x) (h : inv f = g) {z : C} (k : x ⟶ z) : f ≫ g ≫ k…
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_neg_of_add_eq_zero_right`：∀ {α : Type u_1} [inst : SubtractionMonoid 
+α] {a b : α}, a + b = 0 → b = -a
 -/
 lemma iso_hom_app (X : C) :
     (iso adj a).hom.app X = F.map ((adj.unit.app X)⟦a⟧') ≫
@@ -1026,24 +1518,45 @@ lemma iso_hom_app (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `iso_inv_app` / 引理 `iso_inv_app`
-
-English:
-lemma iso_inv_app
-  given: (Y : C)
-  proof: by
-  obtain rfl : b = -a := eq_neg_of_add_eq_zero_right h
-  simp [iso, iso', shiftEquiv']
-
-中文:
-引理 iso_inv_app
-  条件: (Y : C)
-  证明: by
-  obtain rfl : b = -a := eq_neg_of_add_eq_zero_right h
-  simp [iso, iso', shiftEquiv']
-
-Depends on / 依赖: eq_neg_of_add_eq_zero_right, shiftEquiv
+/-
+**CategoryTheory.Adjunction.LeftAdjointCommShift.iso_inv_app** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Adjunction.LeftAdjointCommShift`。
+形式化陈述：iso_inv_app (Y : C) : (iso adj a).inv.app Y = (F.map ((shiftFunctorCompIso
+Id C a b h).inv.app Y))⟦a⟧' ≫ (F.map ((adj.unit.app (Y⟦a⟧))⟦b⟧'))⟦a⟧' ≫ (F.map (
+(G.commShiftIso b).inv.app (F.obj (Y⟦a⟧))))⟦a⟧' ≫ (adj.counit.app ((F.obj (Y⟦a⟧)
+)⟦b⟧))⟦a⟧' ≫ (shiftFunctorCompIsoId D b a (by simp [eq_neg_of_add_eq_zero_left h
+])).hom.app (F.obj (Y⟦a⟧))
+参数：Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.conjugateEquiv_symm_apply_app`：∀ {C : Type u₁} {D : Type 
+u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {L₁ L₂ : CategoryT…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Adjunction.comp_unit_app`：comp_unit_app (X : C) : dsimp% 
+(adj₁.comp adj₂).unit.app X = adj₁.unit.app X ≫ G.map (adj₂.unit.app (F.obj X))
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.Adjunction.comp_counit_app`：comp_counit_app (X : E) : dsi
+mp% (adj₁.comp adj₂).counit.app X = H.map (adj₁.counit.app (I.obj X)) ≫ adj₂.cou
+nit.app X
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_neg_of_add_eq_zero_right`：∀ {α : Type u_1} [inst : SubtractionMonoid 
+α] {a b : α}, a + b = 0 → b = -a
 -/
 lemma iso_inv_app (Y : C) :
     (iso adj a).inv.app Y = (F.map ((shiftFunctorCompIsoId C a b h).inv.app Y))⟦a⟧' ≫
@@ -1056,35 +1569,70 @@ lemma iso_inv_app (Y : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-lemma `compatibilityUnit_iso` / 引理 `compatibilityUnit_iso`
+The commutation isomorphisms of `Adjunction.LeftAdjointCommShift.iso` are compatible with
+the unit of the adjunction.
+-/
+/-
+**CategoryTheory.Adjunction.LeftAdjointCommShift.compatibilityUnit_iso** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Adjunction.LeftAdjointCommShift`。
+形式化陈述：compatibilityUnit_iso (a : A) : CommShift.CompatibilityUnit adj (iso adj a
+) (G.commShiftIso a)
+参数：a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.LeftAdjointCommShift.iso_hom_app`：iso_hom_app 
+(X : C) : (iso adj a).hom.app X = F.map ((adj.unit.app X)⟦a⟧') ≫ F.map (G.map ((
+(shiftFunctorCompIsoId D a b h).inv.app (F.obj X…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Functor.map_shiftFunctorCompIsoId_inv_app`：map_shiftFunct
+orCompIsoId_inv_app [F.CommShift A] (X : C) (a b : A) (h : a + b = 0) : F.map ((
+shiftFunctorCompIsoId C a b h).inv.app X) = (s…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components_assoc`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryT
+heory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.shift_shiftFunctorCompIsoId_inv_app`：shift_shiftFunctorCo
+mpIsoId_inv_app (n m : A) (h : n + m = 0) (X : C) : ((shiftFunctorCompIsoId C n 
+m h).inv.app X)⟦n⟧' = ((shiftFunctorComp…
+· 使用定理 `CategoryTheory.Functor.comp_map`：comp_map (F : C ⥤ D) (G : D ⥤ E) {X Y :
+ C} (f : X ⟶ Y) : (F ⋙ G).map f = G.map (F.map f)
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma compatibilityUnit_iso
-  given: (a : A)
-  proof: by
-  intro
-  rw [LeftAdjointCommShift.iso_hom_app adj _ _ (add_neg_cancel a)]
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.map_shiftFunctorCompIsoId_inv_app,
-    Functor.map_comp, assoc, unit_naturality_assoc, right_triangle_components_assoc]
-  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp]
-  rw [shift_shiftFunctorCompIsoId_inv_app]; rw [← Functor.comp_map]; rw [(shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
-  simp
-
-中文:
-引理 compatibilityUnit_iso
-  条件: (a : A)
-  证明: by
-  intro
-  rw [LeftAdjointCommShift.iso_hom_app adj _ _ (add_neg_cancel a)]
-  simp only [Functor.id_obj, Functor.comp_obj, Functor.map_shiftFunctorCompIsoId_inv_app,
-    Functor.map_comp, assoc, unit_naturality_assoc, right_triangle_components_assoc]
-  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
-  simp only [Functor.comp_obj, Functor.map_id, id_comp]
-  rw [shift_shiftFunctorCompIsoId_inv_app]; rw [← Functor.comp_map]; rw [(shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
-  simp
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, Functor.map_shiftFunctorCompIsoId_inv_app, Iso.inv_hom_id_app, LeftAdjointCommShift, LeftAdjointCommShift.iso_hom_app, add_neg_cancel, comp_map, comp_obj, hom.naturality_assoc, id_comp, id_obj, inv_hom_id_app, iso_hom_app, map_comp, map_id
+--- 原说明 ---
+The commutation isomorphisms of `Adjunction.LeftAdjointCommShift.iso` are compat
+ible with
+the unit of the adjunction.
 -/
 lemma compatibilityUnit_iso (a : A) :
     CommShift.CompatibilityUnit adj (iso adj a) (G.commShiftIso a) := by
@@ -1094,7 +1642,8 @@ lemma compatibilityUnit_iso (a : A) :
     Functor.map_comp, assoc, unit_naturality_assoc, right_triangle_components_assoc]
   slice_rhs 4 5 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
   simp only [Functor.comp_obj, Functor.map_id, id_comp]
-  rw [shift_shiftFunctorCompIsoId_inv_app]; rw [← Functor.comp_map]; rw [(shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
+  rw [shift_shiftFunctorCompIsoId_inv_app, ← Functor.comp_map,
+    (shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
   simp
 
 end LeftAdjointCommShift
@@ -1105,40 +1654,16 @@ Given an adjunction `F ⊣ G` and a `CommShift` structure on `G`, this construct
 the unique compatible `CommShift` structure on `F`.
 -/
 @[simps -isSimp, instance_reducible]
-/--
-Definition of `leftAdjointCommShift` / `leftAdjointCommShift` 的定义
+/-
+**CategoryTheory.Adjunction.leftAdjointCommShift** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Adjunction`。
+形式化陈述：leftAdjointCommShift [G.CommShift A] : F.CommShift A where commShiftIso a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftAdjointCommShift
-  signature: [G.CommShift A]
-  body: iso adj a
-  commShiftIso_zero := by
-    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso 0)
-      (compatibilityUnit_iso adj 0) ?_
-    rw [G.commShiftIso_zero]
-    exact CommShift.compatibilityUnit_isoZero adj
-  commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso (a + b))
-      (compatibilityUnit_iso adj (a + b)) ?_
-    rw [G.commShiftIso_add]
-    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
-      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
-
-中文:
-定义 leftAdjointCommShift
-  签名: [G.交换Shift A]
-  定义体: iso adj a
-  commShiftIso_zero := by
-    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso 0)
-      (compatibilityUnit_iso adj 0) ?_
-    rw [G.commShiftIso_zero]
-    exact CommShift.compatibilityUnit_isoZero adj
-  commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso (a + b))
-      (compatibilityUnit_iso adj (a + b)) ?_
-    rw [G.commShiftIso_add]
-    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
-      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
+--- 原说明 ---
+Given an adjunction `F ⊣ G` and a `CommShift` structure on `G`, this constructs
+the unique compatible `CommShift` structure on `F`.
 -/
 noncomputable def leftAdjointCommShift [G.CommShift A] : F.CommShift A where
   commShiftIso a := iso adj a
@@ -1155,40 +1680,43 @@ noncomputable def leftAdjointCommShift [G.CommShift A] : F.CommShift A where
       (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `commShift_of_rightAdjoint` / 引理 `commShift_of_rightAdjoint`
-
-English:
-lemma commShift_of_rightAdjoint
-  given: [G.CommShift A]
-  proof: adj.leftAdjointCommShift A
-    adj.CommShift A := by
-  let := adj.leftAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
-  ext X
-  dsimp
-  simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShift.compatibilityUnit_iso adj a X
-
-中文:
-引理 commShift_of_rightAdjoint
-  条件: [G.交换Shift A]
-  证明: adj.leftAdjointCommShift A
-    adj.CommShift A := by
-  let := adj.leftAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
-  ext X
-  dsimp
-  simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShift.compatibilityUnit_iso adj a X
-
-Depends on / 依赖: adj.leftAdjointCommShift, leftAdjointCommShift
+/-
+**CategoryTheory.Adjunction.commShift_of_rightAdjoint** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Adjunction`。
+形式化陈述：commShift_of_rightAdjoint [G.CommShift A] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.CommShift.mk'`：mk' (_ : NatTrans.CommShift adj
+.unit A) : adj.CommShift A where commShift_counit
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.commShiftIso_id_hom_app`：∀ (C : Type u_1) [inst :
+ CategoryTheory.Category.{v_1, u_1} C] {A : Type u_4} [inst_1 : AddMonoid A]   [
+inst_2 : CategoryTheory.HasShift C A…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用引理 `CategoryTheory.Adjunction.LeftAdjointCommShift.compatibilityUnit_iso`：co
+mpatibilityUnit_iso (a : A) : CommShift.CompatibilityUnit adj (iso adj a) (G.com
+mShiftIso a)
 -/
 lemma commShift_of_rightAdjoint [G.CommShift A] :
     letI := adj.leftAdjointCommShift A
     adj.CommShift A := by
   let := adj.leftAdjointCommShift A
-  refine CommShift.mk' _ _ ⟨fun a => ?_⟩
+  refine CommShift.mk' _ _ ⟨fun a ↦ ?_⟩
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
@@ -1205,19 +1733,20 @@ section
 variable (A : Type*) [AddMonoid A] [HasShift C A] [HasShift D A]
 
 /--
-Definition of `CommShift` / `CommShift` 的定义
+If `E : C ≌ D` is an equivalence, this expresses the compatibility of `CommShift`
+structures on `E.functor` and `E.inverse`.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：CommShift [E.functor.CommShift A] [E.inverse.CommShift A] : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CommShift
-  signature: [E.functor.CommShift A] [E.inverse.CommShift A]
-  body: E.toAdjunction.CommShift A
-
-中文:
-缩写 交换Shift
-  签名: [E.functor.交换Shift A] [E.inverse.交换Shift A]
-  定义体: E.toAdjunction.CommShift A
-
-Depends on / 依赖: CommShift, E.toAdjunction.CommShift, toAdjunction
+--- 原说明 ---
+If `E : C ≌ D` is an equivalence, this expresses the compatibility of `CommShift
+`
+structures on `E.functor` and `E.inverse`.
 -/
 abbrev CommShift [E.functor.CommShift A] [E.inverse.CommShift A] : Prop :=
   E.toAdjunction.CommShift A
@@ -1226,89 +1755,50 @@ namespace CommShift
 
 variable [E.functor.CommShift A] [E.inverse.CommShift A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [E.CommShift
-  signature: A] : NatTrans.CommShift E.unitIso.hom A
-  body: inferInstanceAs (NatTrans.CommShift E.toAdjunction.unit A)
-
-中文:
-实例 [E.交换Shift
-  签名: A] : 自然变换.交换Shift E.unitIso.hom A
-  定义体: inferInstanceAs (NatTrans.CommShift E.toAdjunction.unit A)
-
-Depends on / 依赖: CommShift, E.toAdjunction.unit, NatTrans, NatTrans.CommShift, toAdjunction
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [E.CommShift A] : NatTrans.CommShift E.unitIso.hom A :=
   inferInstanceAs (NatTrans.CommShift E.toAdjunction.unit A)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [E.CommShift
-  signature: A] : NatTrans.CommShift E.counitIso.hom A
-  body: inferInstanceAs (NatTrans.CommShift E.toAdjunction.counit A)
-
-中文:
-实例 [E.交换Shift
-  签名: A] : 自然变换.交换Shift E.counitIso.hom A
-  定义体: inferInstanceAs (NatTrans.CommShift E.toAdjunction.counit A)
-
-Depends on / 依赖: CommShift, E.toAdjunction.counit, NatTrans, NatTrans.CommShift, counit, toAdjunction
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [E.CommShift A] : NatTrans.CommShift E.counitIso.hom A :=
   inferInstanceAs (NatTrans.CommShift E.toAdjunction.counit A)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: E.symm.inverse.CommShift A
-  body: inferInstanceAs (E.functor.CommShift A)
-
-中文:
-实例 :
-  签名: E.symm.inverse.交换Shift A
-  定义体: inferInstanceAs (E.functor.CommShift A)
-
-Depends on / 依赖: CommShift, E.functor.CommShift, functor
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : E.symm.inverse.CommShift A := inferInstanceAs (E.functor.CommShift A)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: E.symm.functor.CommShift A
-  body: inferInstanceAs (E.inverse.CommShift A)
-
-中文:
-实例 :
-  签名: E.symm.functor.交换Shift A
-  定义体: inferInstanceAs (E.inverse.CommShift A)
-
-Depends on / 依赖: CommShift, E.inverse.CommShift, inverse
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : E.symm.functor.CommShift A := inferInstanceAs (E.inverse.CommShift A)
 
-/--
-lemma `mk'` / 引理 `mk'`
+/-- Constructor for `Equivalence.CommShift`. -/
+/-
+**CategoryTheory.Equivalence.CommShift.mk'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Equivalence.CommShift`。
+形式化陈述：mk' (h : NatTrans.CommShift E.unitIso.hom A) : E.CommShift A where commShi
+ft_unit
+参数：h : NatTrans.CommShift E.unitIso.hom A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_counit`：∀ {C : Type u_1} {
+D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} {F : Categor…
+· 使用引理 `CategoryTheory.Adjunction.CommShift.mk'`：mk' (_ : NatTrans.CommShift adj
+.unit A) : adj.CommShift A where commShift_counit
 
-English:
-lemma mk'
-  given: (h : NatTrans.CommShift E.unitIso.hom A)
-  proof: h
-  commShift_counit := (Adjunction.CommShift.mk' E.toAdjunction A h).commShift_counit
-
-中文:
-引理 mk'
-  条件: (h : 自然变换.交换Shift E.unitIso.hom A)
-  证明: h
-  commShift_counit := (Adjunction.CommShift.mk' E.toAdjunction A h).commShift_counit
+--- 原说明 ---
+Constructor for `Equivalence.CommShift`.
 -/
 lemma mk' (h : NatTrans.CommShift E.unitIso.hom A) :
     E.CommShift A where
@@ -1316,94 +1806,75 @@ lemma mk' (h : NatTrans.CommShift E.unitIso.hom A) :
   commShift_counit := (Adjunction.CommShift.mk' E.toAdjunction A h).commShift_counit
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The forward functor of the identity equivalence is compatible with shifts.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (Equivalence.refl (C := C)).functor.CommShift A
-  body: inferInstanceAs (𝟭 C).CommShift A
-
-中文:
-实例 :
-  签名: (等价.refl (C := C)).functor.交换Shift A
-  定义体: inferInstanceAs (𝟭 C).CommShift A
-
-Depends on / 依赖: CommShift, functor, functor.CommShift
+--- 原说明 ---
+The forward functor of the identity equivalence is compatible with shifts.
 -/
 instance : (Equivalence.refl (C := C)).functor.CommShift A :=
-inferInstanceAs (𝟭 C).CommShift A
+  inferInstanceAs <| (𝟭 C).CommShift A
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The inverse functor of the identity equivalence is compatible with shifts.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (Equivalence.refl (C := C)).inverse.CommShift A
-  body: inferInstanceAs (𝟭 C).CommShift A
-
-中文:
-实例 :
-  签名: (等价.refl (C := C)).inverse.交换Shift A
-  定义体: inferInstanceAs (𝟭 C).CommShift A
-
-Depends on / 依赖: CommShift, inverse, inverse.CommShift
+--- 原说明 ---
+The inverse functor of the identity equivalence is compatible with shifts.
 -/
 instance : (Equivalence.refl (C := C)).inverse.CommShift A :=
-inferInstanceAs (𝟭 C).CommShift A
+  inferInstanceAs <| (𝟭 C).CommShift A
 
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The identity equivalence is compatible with shifts.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (Equivalence.refl (C := C)).CommShift A
-  body: inferInstanceAs Adjunction.id.CommShift A
-
-中文:
-实例 :
-  签名: (等价.refl (C := C)).交换Shift A
-  定义体: inferInstanceAs Adjunction.id.CommShift A
-
-Depends on / 依赖: CommShift
+--- 原说明 ---
+The identity equivalence is compatible with shifts.
 -/
 instance : (Equivalence.refl (C := C)).CommShift A :=
-inferInstanceAs Adjunction.id.CommShift A
+  inferInstanceAs <| Adjunction.id.CommShift A
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+If an equivalence `E : C ≌ D` is compatible with shifts, so is `E.symm`.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [E.CommShift
-  signature: A] : E.symm.CommShift A
-  body: mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
-
-中文:
-实例 [E.交换Shift
-  签名: A] : E.symm.交换Shift A
-  定义体: mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
-
-Depends on / 依赖: CommShift, E.counitIso.inv, E.symm, NatTrans, NatTrans.CommShift, counitIso
+--- 原说明 ---
+If an equivalence `E : C ≌ D` is compatible with shifts, so is `E.symm`.
 -/
 instance [E.CommShift A] : E.symm.CommShift A :=
   mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
 
-/--
-lemma `mk''` / 引理 `mk''`
+/-- Constructor for `Equivalence.CommShift`. -/
+/-
+**CategoryTheory.Equivalence.CommShift.mk''** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Equivalence.CommShift`。
+形式化陈述：mk'' (h : NatTrans.CommShift E.counitIso.hom A) : E.CommShift A
+参数：h : NatTrans.CommShift E.counitIso.hom A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Equivalence.CommShift.mk'`：mk' (h : NatTrans.CommShift E.
+unitIso.hom A) : E.CommShift A where commShift_unit
 
-English:
-lemma mk''
-  given: (h : NatTrans.CommShift E.counitIso.hom A)
-  proof: have := mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
-  inferInstanceAs (E.symm.symm.CommShift A)
-
-中文:
-引理 mk''
-  条件: (h : 自然变换.交换Shift E.counitIso.hom A)
-  证明: have := mk' E.symm A (inferInstanceAs (NatTrans.CommShift E.counitIso.inv A))
-  inferInstanceAs (E.symm.symm.CommShift A)
-
-Depends on / 依赖: CommShift, E.counitIso.inv, E.symm, E.symm.symm.CommShift, NatTrans, NatTrans.CommShift, counitIso
+--- 原说明 ---
+Constructor for `Equivalence.CommShift`.
 -/
 lemma mk'' (h : NatTrans.CommShift E.counitIso.hom A) :
     E.CommShift A :=
@@ -1415,23 +1886,18 @@ variable {F : Type*} [Category* F] [HasShift F A] {E' : D ≌ F} [E.CommShift A]
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+If `E : C ≌ D` and `E' : D ≌ F` are equivalences whose forward functors are compatible with shifts,
+so is `(E.trans E').functor`.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (E.trans E').functor.CommShift A
-  body: by
-  dsimp
-  infer_instance
-
-中文:
-实例 :
-  签名: (E.trans E').functor.交换Shift A
-  定义体: by
-  dsimp
-  infer_instance
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+If `E : C ≌ D` and `E' : D ≌ F` are equivalences whose forward functors are comp
+atible with shifts,
+so is `(E.trans E').functor`.
 -/
 instance : (E.trans E').functor.CommShift A := by
   dsimp
@@ -1439,42 +1905,34 @@ instance : (E.trans E').functor.CommShift A := by
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+If `E : C ≌ D` and `E' : D ≌ F` are equivalences whose inverse functors are compatible with shifts,
+so is `(E.trans E').inverse`.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (E.trans E').inverse.CommShift A
-  body: by
-  dsimp
-  infer_instance
-
-中文:
-实例 :
-  签名: (E.trans E').inverse.交换Shift A
-  定义体: by
-  dsimp
-  infer_instance
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+If `E : C ≌ D` and `E' : D ≌ F` are equivalences whose inverse functors are comp
+atible with shifts,
+so is `(E.trans E').inverse`.
 -/
 instance : (E.trans E').inverse.CommShift A := by
   dsimp
   infer_instance
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+If equivalences `E : C ≌ D` and `E' : D ≌ F` are compatible with shifts, so is `E.trans E'`.
+-/
+/-
+**CategoryTheory.Equivalence.CommShift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Equivalence.CommShift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (E.trans E').CommShift A
-  body: inferInstanceAs ((E.toAdjunction.comp E'.toAdjunction).CommShift A)
-
-中文:
-实例 :
-  签名: (E.trans E').交换Shift A
-  定义体: inferInstanceAs ((E.toAdjunction.comp E'.toAdjunction).CommShift A)
-
-Depends on / 依赖: CommShift, E.toAdjunction.comp, toAdjunction
+--- 原说明 ---
+If equivalences `E : C ≌ D` and `E' : D ≌ F` are compatible with shifts, so is `
+E.trans E'`.
 -/
 instance : (E.trans E').CommShift A :=
   inferInstanceAs ((E.toAdjunction.comp E'.toAdjunction).CommShift A)
@@ -1490,44 +1948,33 @@ If `E : C ≌ D` is an equivalence and we have a `CommShift` structure on `E.fun
 this constructs the unique compatible `CommShift` structure on `E.inverse`.
 -/
 @[instance_reducible]
-/--
-Definition of `commShiftInverse` / `commShiftInverse` 的定义
+/-
+**CategoryTheory.Equivalence.commShiftInverse** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：commShiftInverse [E.functor.CommShift A] : E.inverse.CommShift A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commShiftInverse
-  signature: [E.functor.CommShift A]
-  body: E.toAdjunction.rightAdjointCommShift A
-
-中文:
-定义 commShiftInverse
-  签名: [E.functor.交换Shift A]
-  定义体: E.toAdjunction.rightAdjointCommShift A
-
-Depends on / 依赖: E.toAdjunction.rightAdjointCommShift, rightAdjointCommShift, toAdjunction
+--- 原说明 ---
+If `E : C ≌ D` is an equivalence and we have a `CommShift` structure on `E.funct
+or`,
+this constructs the unique compatible `CommShift` structure on `E.inverse`.
 -/
 noncomputable def commShiftInverse [E.functor.CommShift A] : E.inverse.CommShift A :=
   E.toAdjunction.rightAdjointCommShift A
-
-/--
-lemma `commShift_of_functor` / 引理 `commShift_of_functor`
-
-English:
-lemma commShift_of_functor
-  given: [E.functor.CommShift A]
-  proof: E.commShiftInverse A
-    E.CommShift A := by
-  let := E.commShiftInverse A
-  exact CommShift.mk' _ _ (E.toAdjunction.commShift_of_leftAdjoint A).commShift_unit
-
-中文:
-引理 commShift_of_functor
-  条件: [E.functor.交换Shift A]
-  证明: E.commShiftInverse A
-    E.CommShift A := by
-  let := E.commShiftInverse A
-  exact CommShift.mk' _ _ (E.toAdjunction.commShift_of_leftAdjoint A).commShift_unit
-
-Depends on / 依赖: E.commShiftInverse, commShiftInverse
+/-
+**CategoryTheory.Equivalence.commShift_of_functor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：commShift_of_functor [E.functor.CommShift A] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Equivalence.CommShift.mk'`：mk' (h : NatTrans.CommShift E.
+unitIso.hom A) : E.CommShift A where commShift_unit
+· 使用定理 `CategoryTheory.Adjunction.CommShift.commShift_unit`：∀ {C : Type u_1} {D 
+: Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_2, u_2} D} {F : Categor…
+· 使用引理 `CategoryTheory.Adjunction.commShift_of_leftAdjoint`：commShift_of_leftAdj
+oint [F.CommShift A] : letI
 -/
 lemma commShift_of_functor [E.functor.CommShift A] :
     letI := E.commShiftInverse A
@@ -1540,47 +1987,30 @@ If `E : C ≌ D` is an equivalence and we have a `CommShift` structure on `E.inv
 this constructs the unique compatible `CommShift` structure on `E.functor`.
 -/
 @[instance_reducible]
-/--
-Definition of `commShiftFunctor` / `commShiftFunctor` 的定义
+/-
+**CategoryTheory.Equivalence.commShiftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：commShiftFunctor [E.inverse.CommShift A] : E.functor.CommShift A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commShiftFunctor
-  signature: [E.inverse.CommShift A]
-  body: E.symm.toAdjunction.rightAdjointCommShift A
-
-中文:
-定义 commShiftFunctor
-  签名: [E.inverse.交换Shift A]
-  定义体: E.symm.toAdjunction.rightAdjointCommShift A
-
-Depends on / 依赖: E.symm.toAdjunction.rightAdjointCommShift, rightAdjointCommShift, toAdjunction
+--- 原说明 ---
+If `E : C ≌ D` is an equivalence and we have a `CommShift` structure on `E.inver
+se`,
+this constructs the unique compatible `CommShift` structure on `E.functor`.
 -/
 noncomputable def commShiftFunctor [E.inverse.CommShift A] : E.functor.CommShift A :=
   E.symm.toAdjunction.rightAdjointCommShift A
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `commShift_of_inverse` / 引理 `commShift_of_inverse`
-
-English:
-lemma commShift_of_inverse
-  given: [E.inverse.CommShift A]
-  proof: E.commShiftFunctor A
-    E.CommShift A := by
-  let := E.commShiftFunctor A
-  have := E.symm.commShift_of_functor A
-  exact inferInstanceAs (E.symm.symm.CommShift A)
-
-中文:
-引理 commShift_of_inverse
-  条件: [E.inverse.交换Shift A]
-  证明: E.commShiftFunctor A
-    E.CommShift A := by
-  let := E.commShiftFunctor A
-  have := E.symm.commShift_of_functor A
-  exact inferInstanceAs (E.symm.symm.CommShift A)
-
-Depends on / 依赖: E.commShiftFunctor, commShiftFunctor
+/-
+**CategoryTheory.Equivalence.commShift_of_inverse** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：commShift_of_inverse [E.inverse.CommShift A] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Equivalence.commShift_of_functor`：commShift_of_functor [E
+.functor.CommShift A] : letI
 -/
 lemma commShift_of_inverse [E.inverse.CommShift A] :
     letI := E.commShiftFunctor A
@@ -1592,3 +2022,4 @@ lemma commShift_of_inverse [E.inverse.CommShift A] :
 end Equivalence
 
 end CategoryTheory
+

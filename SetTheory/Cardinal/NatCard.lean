@@ -35,75 +35,73 @@ noncomputable section
 
 variable {α β γ : Type*}
 
-/--
-Definition of `Finite.equivFin` / `Finite.equivFin` 的定义
+/-- There is (noncomputably) an equivalence between a finite type `α` and `Fin (Nat.card α)`. -/
+/-
+**Finite.equivFin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finite.equivFin (α : Type*) [Finite α] : α ≃ Fin (Nat.card α)
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_equiv_fin`：Finite.exists_equiv_fin (α : Sort*) [h : Finite
+ α] : exists n : Nat, Nonempty (α ≃ Fin n)
 
-English:
-definition Finite.equivFin
-  signature: (α : Type*) [Finite α]
-  body: by
-  have := (Finite.exists_equiv_fin α).choose_spec.some
-  rwa [Nat.card_eq_of_equiv_fin this]
-
-中文:
-定义 有限.equivFin
-  签名: (α : 类型) [有限 α]
-  定义体: by
-  have := (Finite.exists_equiv_fin α).choose_spec.some
-  rwa [Nat.card_eq_of_equiv_fin this]
-
-Depends on / 依赖: Finite, Finite.exists_equiv_fin, Nat.card_eq_of_equiv_fin, card_eq_of_equiv_fin, choose_spec, choose_spec.some, exists_equiv_fin
+--- 原说明 ---
+There is (noncomputably) an equivalence between a finite type `α` and `Fin (Nat.
+card α)`.
 -/
 def Finite.equivFin (α : Type*) [Finite α] : α ≃ Fin (Nat.card α) := by
   have := (Finite.exists_equiv_fin α).choose_spec.some
   rwa [Nat.card_eq_of_equiv_fin this]
 
-/--
-Definition of `Finite.equivFinOfCardEq` / `Finite.equivFinOfCardEq` 的定义
+/-- Similar to `Finite.equivFin` but with control over the term used for the cardinality. -/
+/-
+**Finite.equivFinOfCardEq** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finite.equivFinOfCardEq [Finite α] {n : Nat} (h : Nat.card α = n) : α ≃ Fi
+n n
+参数：h : Nat.card α = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finite.equivFinOfCardEq
-  signature: [Finite α] {n : Nat} (h : Nat.card α = n)
-  body: by
-  subst h
-  apply Finite.equivFin
-
-中文:
-定义 有限.equivFinOfCardEq
-  签名: [有限 α] {n : 自然数} (h : 自然数.card α = n)
-  定义体: by
-  subst h
-  apply Finite.equivFin
-
-Depends on / 依赖: Finite, Finite.equivFin, equivFin
+--- 原说明 ---
+Similar to `Finite.equivFin` but with control over the term used for the cardina
+lity.
 -/
-def Finite.equivFinOfCardEq [Finite α] {n : Nat} (h : Nat.card α = n) : α ≃ Fin n := by
+def Finite.equivFinOfCardEq [Finite α] {n : ℕ} (h : Nat.card α = n) : α ≃ Fin n := by
   subst h
   apply Finite.equivFin
 
 open scoped Classical in
-/--
-theorem `Nat.card_eq` / 定理 `Nat.card_eq`
-
-English:
-theorem Nat.card_eq
-  given: (α : Type*)
-  proof: by
-  cases finite_or_infinite α
-  · let := Fintype.ofFinite α
-    simp only [this, *, Nat.card_eq_fintype_card, dif_pos]
-  · simp only [*, card_eq_zero_of_infinite, not_finite_iff_infinite.mpr, dite_false]
-
-中文:
-定理 自然数.card_eq
-  条件: (α : 类型)
-  证明: by
-  cases finite_or_infinite α
-  · let := Fintype.ofFinite α
-    simp only [this, *, Nat.card_eq_fintype_card, dif_pos]
-  · simp only [*, card_eq_zero_of_infinite, not_finite_iff_infinite.mpr, dite_false]
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_eq_zero_of_infinite, dif_pos, dite_false, finite_or_infinite, not_finite_iff_infinite, not_finite_iff_infinite.mpr, ofFinite
+/-
+**Nat.card_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.card_eq (α : Type*) : Nat.card α = if _ : Finite α then @Fintype.card 
+α (Fintype.ofFinite α) else 0
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_finite_iff_infinite`：not_finite_iff_infinite : ¬Finite α ↔ Infinite 
+α
 -/
 theorem Nat.card_eq (α : Type*) :
     Nat.card α = if _ : Finite α then @Fintype.card α (Fintype.ofFinite α) else 0 := by
@@ -111,318 +109,265 @@ theorem Nat.card_eq (α : Type*) :
   · let := Fintype.ofFinite α
     simp only [this, *, Nat.card_eq_fintype_card, dif_pos]
   · simp only [*, card_eq_zero_of_infinite, not_finite_iff_infinite.mpr, dite_false]
-
-/--
-theorem `Finite.card_pos_iff` / 定理 `Finite.card_pos_iff`
-
-English:
-theorem Finite.card_pos_iff
-  given: [Finite α]
-  statement: 0 < Nat.card α ↔ Nonempty α
-  proof: by
-  have := Fintype.ofFinite α
-  rw [Nat.card_eq_fintype_card]; rw [Fintype.card_pos_iff]
-
-中文:
-定理 有限.card_pos_iff
-  条件: [有限 α]
-  结论: 0 < 自然数.card α ↔ 非空 α
-  证明: by
-  have := Fintype.ofFinite α
-  rw [Nat.card_eq_fintype_card]; rw [Fintype.card_pos_iff]
-
-Depends on / 依赖: Fintype, Fintype.card_pos_iff, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_pos_iff, ofFinite
+/-
+**Finite.card_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.card_pos_iff [Finite α] : 0 < Nat.card α ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_pos_iff`：card_pos_iff : 0 < card α ↔ Nonempty α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Finite.card_pos_iff [Finite α] : 0 < Nat.card α ↔ Nonempty α := by
   have := Fintype.ofFinite α
-  rw [Nat.card_eq_fintype_card]; rw [Fintype.card_pos_iff]
-
-/--
-theorem `Finite.card_pos` / 定理 `Finite.card_pos`
-
-English:
-theorem Finite.card_pos
-  given: [Finite α] [h : Nonempty α]
-  statement: 0 < Nat.card α
-  proof: Finite.card_pos_iff.mpr h
-
-中文:
-定理 有限.card_pos
-  条件: [有限 α] [h : 非空 α]
-  结论: 0 < 自然数.card α
-  证明: Finite.card_pos_iff.mpr h
-
-Depends on / 依赖: Finite, Finite.card_pos_iff.mpr, card_pos_iff
+  rw [Nat.card_eq_fintype_card, Fintype.card_pos_iff]
+/-
+**Finite.card_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.card_pos [Finite α] [h : Nonempty α] : 0 < Nat.card α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finite.card_pos_iff`：Finite.card_pos_iff [Finite α] : 0 < Nat.card α ↔ N
+onempty α
 -/
 theorem Finite.card_pos [Finite α] [h : Nonempty α] : 0 < Nat.card α :=
   Finite.card_pos_iff.mpr h
 
 namespace Finite
 
-/--
-theorem `card_eq` / 定理 `card_eq`
-
-English:
-theorem card_eq
-  given: [Finite α] [Finite β]
-  statement: Nat.card α = Nat.card β ↔ Nonempty (α ≃ β)
-  proof: by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite β
-  simp only [Nat.card_eq_fintype_card, Fintype.card_eq]
-
-中文:
-定理 card_eq
-  条件: [有限 α] [有限 β]
-  结论: 自然数.card α = 自然数.card β ↔ 非空 (α ≃ β)
-  证明: by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite β
-  simp only [Nat.card_eq_fintype_card, Fintype.card_eq]
-
-Depends on / 依赖: Fintype, Fintype.card_eq, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq, card_eq_fintype_card, ofFinite
+/-
+**Finite.card_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_eq [Finite α] [Finite β] : Nat.card α = Nat.card β ↔ Nonempty (α ≃ β)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem card_eq [Finite α] [Finite β] : Nat.card α = Nat.card β ↔ Nonempty (α ≃ β) := by
   have := Fintype.ofFinite α
   have := Fintype.ofFinite β
   simp only [Nat.card_eq_fintype_card, Fintype.card_eq]
-
-/--
-theorem `card_le_one_iff_subsingleton` / 定理 `card_le_one_iff_subsingleton`
-
-English:
-theorem card_le_one_iff_subsingleton
-  given: [Finite α]
-  statement: Nat.card α <= 1 ↔ Subsingleton α
-  proof: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_le_one_iff_subsingleton]
-
-中文:
-定理 card_le_one_iff_subsingleton
-  条件: [有限 α]
-  结论: 自然数.card α <= 1 ↔ 子单例 α
-  证明: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_le_one_iff_subsingleton]
-
-Depends on / 依赖: Fintype, Fintype.card_le_one_iff_subsingleton, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_le_one_iff_subsingleton, ofFinite
+/-
+**Finite.card_le_one_iff_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_le_one_iff_subsingleton [Finite α] : Nat.card α <= 1 ↔ Subsingleton α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem card_le_one_iff_subsingleton [Finite α] : Nat.card α <= 1 ↔ Subsingleton α := by
+theorem card_le_one_iff_subsingleton [Finite α] : Nat.card α ≤ 1 ↔ Subsingleton α := by
   have := Fintype.ofFinite α
   simp only [Nat.card_eq_fintype_card, Fintype.card_le_one_iff_subsingleton]
-
-/--
-theorem `one_lt_card_iff_nontrivial` / 定理 `one_lt_card_iff_nontrivial`
-
-English:
-theorem one_lt_card_iff_nontrivial
-  given: [Finite α]
-  statement: 1 < Nat.card α ↔ Nontrivial α
-  proof: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.one_lt_card_iff_nontrivial]
-
-中文:
-定理 one_lt_card_iff_nontrivial
-  条件: [有限 α]
-  结论: 1 < 自然数.card α ↔ 非平凡 α
-  证明: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.one_lt_card_iff_nontrivial]
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, Fintype.one_lt_card_iff_nontrivial, Nat.card_eq_fintype_card, card_eq_fintype_card, ofFinite, one_lt_card_iff_nontrivial
+/-
+**Finite.one_lt_card_iff_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：one_lt_card_iff_nontrivial [Finite α] : 1 < Nat.card α ↔ Nontrivial α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem one_lt_card_iff_nontrivial [Finite α] : 1 < Nat.card α ↔ Nontrivial α := by
   have := Fintype.ofFinite α
   simp only [Nat.card_eq_fintype_card, Fintype.one_lt_card_iff_nontrivial]
-
-/--
-theorem `one_lt_card` / 定理 `one_lt_card`
-
-English:
-theorem one_lt_card
-  given: [Finite α] [h : Nontrivial α]
-  statement: 1 < Nat.card α
-  proof: one_lt_card_iff_nontrivial.mpr h
-
-@[simp]
-
-中文:
-定理 one_lt_card
-  条件: [有限 α] [h : 非平凡 α]
-  结论: 1 < 自然数.card α
-  证明: one_lt_card_iff_nontrivial.mpr h
-
-@[simp]
-
-Depends on / 依赖: one_lt_card_iff_nontrivial, one_lt_card_iff_nontrivial.mpr
+/-
+**Finite.one_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：one_lt_card [Finite α] [h : Nontrivial α] : 1 < Nat.card α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finite.one_lt_card_iff_nontrivial`：one_lt_card_iff_nontrivial [Finite α]
+ : 1 < Nat.card α ↔ Nontrivial α
 -/
 theorem one_lt_card [Finite α] [h : Nontrivial α] : 1 < Nat.card α :=
   one_lt_card_iff_nontrivial.mpr h
 
 @[simp]
-/--
-theorem `card_option` / 定理 `card_option`
-
-English:
-theorem card_option
-  given: [Finite α]
-  statement: Nat.card (Option α) = Nat.card α + 1
-  proof: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_option]
-
-中文:
-定理 card_option
-  条件: [有限 α]
-  结论: 自然数.card (选项类型 α) = 自然数.card α + 1
-  证明: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_option]
-
-Depends on / 依赖: Fintype, Fintype.card_option, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_option, ofFinite
+/-
+**Finite.card_option** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_option [Finite α] : Nat.card (Option α) = Nat.card α + 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_option`：Fintype.card_option {α : Type*} [Fintype α] : Finty
+pe.card (Option α) = Fintype.card α + 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem card_option [Finite α] : Nat.card (Option α) = Nat.card α + 1 := by
   have := Fintype.ofFinite α
   simp only [Nat.card_eq_fintype_card, Fintype.card_option]
-
-/--
-theorem `card_le_of_embedding` / 定理 `card_le_of_embedding`
-
-English:
-theorem card_le_of_embedding
-  given: [Finite β] (f : α ↪ β)
-  statement: Nat.card α <= Nat.card β
-  proof: Nat.card_le_card_of_injective _ f.injective
-
-中文:
-定理 card_le_of_embedding
-  条件: [有限 β] (f : α ↪ β)
-  结论: 自然数.card α <= 自然数.card β
-  证明: Nat.card_le_card_of_injective _ f.injective
-
-Depends on / 依赖: Nat.card_le_card_of_injective, card_le_card_of_injective, f.injective, injective
+/-
+**Finite.card_le_of_embedding** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_le_of_embedding [Finite β] (f : α ↪ β) : Nat.card α <= Nat.card β
+参数：f : α ↪ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.card_le_card_of_injective`：card_le_card_of_injective {α : Type u} {β
+ : Type v} [Finite β] (f : α -> β) (hf : Injective f) : Nat.card α <= Nat.card β
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
-theorem card_le_of_embedding [Finite β] (f : α ↪ β) : Nat.card α <= Nat.card β :=
+theorem card_le_of_embedding [Finite β] (f : α ↪ β) : Nat.card α ≤ Nat.card β :=
   Nat.card_le_card_of_injective _ f.injective
-
-/--
-theorem `card_eq_zero_iff` / 定理 `card_eq_zero_iff`
-
-English:
-theorem card_eq_zero_iff
-  given: [Finite α]
-  statement: Nat.card α = 0 ↔ IsEmpty α
-  proof: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_eq_zero_iff]
-
-中文:
-定理 card_eq_zero_iff
-  条件: [有限 α]
-  结论: 自然数.card α = 0 ↔ 是空 α
-  证明: by
-  have := Fintype.ofFinite α
-  simp only [Nat.card_eq_fintype_card, Fintype.card_eq_zero_iff]
-
-Depends on / 依赖: Fintype, Fintype.card_eq_zero_iff, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_eq_zero_iff, ofFinite
+/-
+**Finite.card_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_eq_zero_iff [Finite α] : Nat.card α = 0 ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem card_eq_zero_iff [Finite α] : Nat.card α = 0 ↔ IsEmpty α := by
   have := Fintype.ofFinite α
   simp only [Nat.card_eq_fintype_card, Fintype.card_eq_zero_iff]
 
-/--
-theorem `card_le_of_injective'` / 定理 `card_le_of_injective'`
+/-- If `f` is injective, then `Nat.card α ≤ Nat.card β`. We must also assume
+  `Nat.card β = 0 → Nat.card α = 0` since `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_le_of_injective'** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_le_of_injective' {f : α -> β} (hf : Function.Injective f) (h : Nat.ca
+rd β = 0 -> Nat.card α = 0) : Nat.card α <= Nat.card β
+参数：hf : Function.Injective f；h : Nat.card β = 0 -> Nat.card α = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `or_not_of_imp`：or_not_of_imp : (a -> b) -> b ∨ ¬a
+· 使用定理 `le_of_eq_of_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ 
+c → a ≤ c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用引理 `Nat.card_le_card_of_injective`：card_le_card_of_injective {α : Type u} {β
+ : Type v} [Finite β] (f : α -> β) (hf : Injective f) : Nat.card α <= Nat.card β
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
 
-English:
-theorem card_le_of_injective'
-  statement: {f : α -> β} (hf : Function.Injective f)
-  proof: (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
-    @Nat.card_le_card_of_injective α β (Nat.finite_of_card_ne_zero h) f hf
-
-中文:
-定理 card_le_of_injective'
-  结论: {f : α -> β} (hf : 函数.单射 f)
-  证明: (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
-    @Nat.card_le_card_of_injective α β (Nat.finite_of_card_ne_zero h) f hf
-
-Depends on / 依赖: Nat.card_le_card_of_injective, Nat.finite_of_card_ne_zero, Nat.zero_le, card_le_card_of_injective, casesOn, finite_of_card_ne_zero, le_of_eq_of_le, or_not_of_imp, zero_le
+--- 原说明 ---
+If `f` is injective, then `Nat.card α ≤ Nat.card β`. We must also assume
+  `Nat.card β = 0 → Nat.card α = 0` since `Nat.card` is defined to be `0` for in
+finite types.
 -/
-theorem card_le_of_injective' {f : α -> β} (hf : Function.Injective f)
-    (h : Nat.card β = 0 -> Nat.card α = 0) : Nat.card α <= Nat.card β :=
+theorem card_le_of_injective' {f : α → β} (hf : Function.Injective f)
+    (h : Nat.card β = 0 → Nat.card α = 0) : Nat.card α ≤ Nat.card β :=
   (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
     @Nat.card_le_card_of_injective α β (Nat.finite_of_card_ne_zero h) f hf
 
-/--
-theorem `card_le_of_embedding'` / 定理 `card_le_of_embedding'`
+/-- If `f` is an embedding, then `Nat.card α ≤ Nat.card β`. We must also assume
+  `Nat.card β = 0 → Nat.card α = 0` since `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_le_of_embedding'** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_le_of_embedding' (f : α ↪ β) (h : Nat.card β = 0 -> Nat.card α = 0) :
+ Nat.card α <= Nat.card β
+参数：f : α ↪ β；h : Nat.card β = 0 -> Nat.card α = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.card_le_of_injective'`：card_le_of_injective' {f : α -> β} (hf : F
+unction.Injective f) (h : Nat.card β = 0 -> Nat.card α = 0) : Nat.card α <= Nat.
+card β
+· 使用定理 `Function.Embedding.inj'`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ↪ β),
+ Function.Injective self.toFun
 
-English:
-theorem card_le_of_embedding'
-  given: (f : α ↪ β) (h : Nat.card β = 0 -> Nat.card α = 0)
-  proof: card_le_of_injective' f.2 h
-
-中文:
-定理 card_le_of_embedding'
-  条件: (f : α ↪ β) (h : 自然数.card β = 0 -> 自然数.card α = 0)
-  证明: card_le_of_injective' f.2 h
-
-Depends on / 依赖: card_le_of_injective
+--- 原说明 ---
+If `f` is an embedding, then `Nat.card α ≤ Nat.card β`. We must also assume
+  `Nat.card β = 0 → Nat.card α = 0` since `Nat.card` is defined to be `0` for in
+finite types.
 -/
-theorem card_le_of_embedding' (f : α ↪ β) (h : Nat.card β = 0 -> Nat.card α = 0) :
-    Nat.card α <= Nat.card β :=
+theorem card_le_of_embedding' (f : α ↪ β) (h : Nat.card β = 0 → Nat.card α = 0) :
+    Nat.card α ≤ Nat.card β :=
   card_le_of_injective' f.2 h
 
-/--
-theorem `card_le_of_surjective'` / 定理 `card_le_of_surjective'`
+/-- If `f` is surjective, then `Nat.card β ≤ Nat.card α`. We must also assume
+  `Nat.card α = 0 → Nat.card β = 0` since `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_le_of_surjective'** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_le_of_surjective' {f : α -> β} (hf : Function.Surjective f) (h : Nat.
+card α = 0 -> Nat.card β = 0) : Nat.card β <= Nat.card α
+参数：hf : Function.Surjective f；h : Nat.card α = 0 -> Nat.card β = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `or_not_of_imp`：or_not_of_imp : (a -> b) -> b ∨ ¬a
+· 使用定理 `le_of_eq_of_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ 
+c → a ≤ c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用引理 `Nat.card_le_card_of_surjective`：card_le_card_of_surjective {α : Type u} 
+{β : Type v} [Finite α] (f : α -> β) (hf : Surjective f) : Nat.card β <= Nat.car
+d α
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
 
-English:
-theorem card_le_of_surjective'
-  statement: {f : α -> β} (hf : Function.Surjective f)
-  proof: (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
-    @Nat.card_le_card_of_surjective α β (Nat.finite_of_card_ne_zero h) f hf
-
-中文:
-定理 card_le_of_surjective'
-  结论: {f : α -> β} (hf : 函数.满射 f)
-  证明: (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
-    @Nat.card_le_card_of_surjective α β (Nat.finite_of_card_ne_zero h) f hf
-
-Depends on / 依赖: Nat.card_le_card_of_surjective, Nat.finite_of_card_ne_zero, Nat.zero_le, card_le_card_of_surjective, casesOn, finite_of_card_ne_zero, le_of_eq_of_le, or_not_of_imp, zero_le
+--- 原说明 ---
+If `f` is surjective, then `Nat.card β ≤ Nat.card α`. We must also assume
+  `Nat.card α = 0 → Nat.card β = 0` since `Nat.card` is defined to be `0` for in
+finite types.
 -/
-theorem card_le_of_surjective' {f : α -> β} (hf : Function.Surjective f)
-    (h : Nat.card α = 0 -> Nat.card β = 0) : Nat.card β <= Nat.card α :=
+theorem card_le_of_surjective' {f : α → β} (hf : Function.Surjective f)
+    (h : Nat.card α = 0 → Nat.card β = 0) : Nat.card β ≤ Nat.card α :=
   (or_not_of_imp h).casesOn (fun h => le_of_eq_of_le h (Nat.zero_le _)) fun h =>
     @Nat.card_le_card_of_surjective α β (Nat.finite_of_card_ne_zero h) f hf
 
-/--
-theorem `card_eq_zero_of_surjective` / 定理 `card_eq_zero_of_surjective`
+/-- NB: `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_eq_zero_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_eq_zero_of_surjective {f : α -> β} (hf : Function.Surjective f) (h : 
+Nat.card β = 0) : Nat.card α = 0
+参数：hf : Function.Surjective f；h : Nat.card β = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finite.card_eq_zero_iff`：card_eq_zero_iff [Finite α] : Nat.card α = 0 ↔ 
+IsEmpty α
+· 使用定理 `Function.isEmpty`：∀ {α : Sort u} {β : Sort v} [IsEmpty β] (f : α → β), I
+sEmpty α
+· 使用定理 `Nat.card_of_isEmpty`：∀ {α : Type u_1} [IsEmpty α], Nat.card α = 0
+· 使用定理 `Infinite.of_surjective`：of_surjective {α β} [Infinite β] (f : α -> β) (h
+f : Surjective f) : Infinite α
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
 
-English:
-theorem card_eq_zero_of_surjective
-  given: {f : α -> β} (hf : Function.Surjective f) (h : Nat.card β = 0)
-  proof: by
-  cases finite_or_infinite β
-  · have := card_eq_zero_iff.mp h
-    have := Function.isEmpty f
-    exact Nat.card_of_isEmpty
-  · have := Infinite.of_surjective f hf
-    exact Nat.card_eq_zero_of_infinite
-
-中文:
-定理 card_eq_zero_of_surjective
-  条件: {f : α -> β} (hf : 函数.满射 f) (h : 自然数.card β = 0)
-  证明: by
-  cases finite_or_infinite β
-  · have := card_eq_zero_iff.mp h
-    have := Function.isEmpty f
-    exact Nat.card_of_isEmpty
-  · have := Infinite.of_surjective f hf
-    exact Nat.card_eq_zero_of_infinite
-
-Depends on / 依赖: Function, Function.isEmpty, Infinite, Infinite.of_surjective, Nat.card_eq_zero_of_infinite, Nat.card_of_isEmpty, card_eq_zero_iff, card_eq_zero_iff.mp, card_eq_zero_of_infinite, card_of_isEmpty, finite_or_infinite, isEmpty, of_surjective
+--- 原说明 ---
+NB: `Nat.card` is defined to be `0` for infinite types.
 -/
-theorem card_eq_zero_of_surjective {f : α -> β} (hf : Function.Surjective f) (h : Nat.card β = 0) :
+theorem card_eq_zero_of_surjective {f : α → β} (hf : Function.Surjective f) (h : Nat.card β = 0) :
     Nat.card α = 0 := by
   cases finite_or_infinite β
   · have := card_eq_zero_iff.mp h
@@ -431,135 +376,113 @@ theorem card_eq_zero_of_surjective {f : α -> β} (hf : Function.Surjective f) (
   · have := Infinite.of_surjective f hf
     exact Nat.card_eq_zero_of_infinite
 
-/--
-theorem `card_eq_zero_of_injective` / 定理 `card_eq_zero_of_injective`
+/-- NB: `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_eq_zero_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_eq_zero_of_injective [Nonempty α] {f : α -> β} (hf : Function.Injecti
+ve f) (h : Nat.card α = 0) : Nat.card β = 0
+参数：hf : Function.Injective f；h : Nat.card α = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.card_eq_zero_of_surjective`：card_eq_zero_of_surjective {f : α -> 
+β} (hf : Function.Surjective f) (h : Nat.card β = 0) : Nat.card α = 0
+· 使用定理 `Function.invFun_surjective`：invFun_surjective (hf : Injective f) : Surje
+ctive (invFun f)
 
-English:
-theorem card_eq_zero_of_injective
-  statement: [Nonempty α] {f : α -> β} (hf : Function.Injective f)
-  proof: card_eq_zero_of_surjective (Function.invFun_surjective hf) h
-
-中文:
-定理 card_eq_zero_of_injective
-  结论: [非空 α] {f : α -> β} (hf : 函数.单射 f)
-  证明: card_eq_zero_of_surjective (Function.invFun_surjective hf) h
-
-Depends on / 依赖: Function, Function.invFun_surjective, card_eq_zero_of_surjective, invFun_surjective
+--- 原说明 ---
+NB: `Nat.card` is defined to be `0` for infinite types.
 -/
-theorem card_eq_zero_of_injective [Nonempty α] {f : α -> β} (hf : Function.Injective f)
+theorem card_eq_zero_of_injective [Nonempty α] {f : α → β} (hf : Function.Injective f)
     (h : Nat.card α = 0) : Nat.card β = 0 :=
   card_eq_zero_of_surjective (Function.invFun_surjective hf) h
 
-/--
-theorem `card_eq_zero_of_embedding` / 定理 `card_eq_zero_of_embedding`
+/-- NB: `Nat.card` is defined to be `0` for infinite types. -/
+/-
+**Finite.card_eq_zero_of_embedding** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_eq_zero_of_embedding [Nonempty α] (f : α ↪ β) (h : Nat.card α = 0) : 
+Nat.card β = 0
+参数：f : α ↪ β；h : Nat.card α = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.card_eq_zero_of_injective`：card_eq_zero_of_injective [Nonempty α]
+ {f : α -> β} (hf : Function.Injective f) (h : Nat.card α = 0) : Nat.card β = 0
+· 使用定理 `Function.Embedding.inj'`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ↪ β),
+ Function.Injective self.toFun
 
-English:
-theorem card_eq_zero_of_embedding
-  given: [Nonempty α] (f : α ↪ β) (h : Nat.card α = 0)
-  statement: Nat.card β = 0
-  proof: card_eq_zero_of_injective f.2 h
-
-中文:
-定理 card_eq_zero_of_embedding
-  条件: [非空 α] (f : α ↪ β) (h : 自然数.card α = 0)
-  结论: 自然数.card β = 0
-  证明: card_eq_zero_of_injective f.2 h
-
-Depends on / 依赖: card_eq_zero_of_injective
+--- 原说明 ---
+NB: `Nat.card` is defined to be `0` for infinite types.
 -/
 theorem card_eq_zero_of_embedding [Nonempty α] (f : α ↪ β) (h : Nat.card α = 0) : Nat.card β = 0 :=
   card_eq_zero_of_injective f.2 h
-
-/--
-theorem `card_image_le` / 定理 `card_image_le`
-
-English:
-theorem card_image_le
-  given: {s : Set α} [Finite s] (f : α -> β)
-  statement: Nat.card (f '' s) <= Nat.card s
-  proof: Nat.card_le_card_of_surjective _ Set.imageFactorization_surjective
-
-中文:
-定理 card_image_le
-  条件: {s : 集合 α} [有限 s] (f : α -> β)
-  结论: 自然数.card (f '' s) <= 自然数.card s
-  证明: Nat.card_le_card_of_surjective _ Set.imageFactorization_surjective
-
-Depends on / 依赖: Nat.card_le_card_of_surjective, Set.imageFactorization_surjective, card_le_card_of_surjective, imageFactorization_surjective
+/-
+**Finite.card_image_le** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_image_le {s : Set α} [Finite s] (f : α -> β) : Nat.card (f '' s) <= N
+at.card s
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.card_le_card_of_surjective`：card_le_card_of_surjective {α : Type u} 
+{β : Type v} [Finite α] (f : α -> β) (hf : Surjective f) : Nat.card β <= Nat.car
+d α
+· 使用定理 `Set.imageFactorization_surjective`：imageFactorization_surjective {f : α 
+-> β} {s : Set α} : Surjective (imageFactorization f s)
 -/
-theorem card_image_le {s : Set α} [Finite s] (f : α -> β) : Nat.card (f '' s) <= Nat.card s :=
+theorem card_image_le {s : Set α} [Finite s] (f : α → β) : Nat.card (f '' s) ≤ Nat.card s :=
   Nat.card_le_card_of_surjective _ Set.imageFactorization_surjective
-
-/--
-theorem `card_range_le` / 定理 `card_range_le`
-
-English:
-theorem card_range_le
-  given: [Finite α] (f : α -> β)
-  statement: Nat.card (Set.range f) <= Nat.card α
-  proof: Nat.card_le_card_of_surjective _ Set.rangeFactorization_surjective
-
-中文:
-定理 card_range_le
-  条件: [有限 α] (f : α -> β)
-  结论: 自然数.card (集合.range f) <= 自然数.card α
-  证明: Nat.card_le_card_of_surjective _ Set.rangeFactorization_surjective
-
-Depends on / 依赖: Nat.card_le_card_of_surjective, Set.rangeFactorization_surjective, card_le_card_of_surjective, rangeFactorization_surjective
+/-
+**Finite.card_range_le** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_range_le [Finite α] (f : α -> β) : Nat.card (Set.range f) <= Nat.card
+ α
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.card_le_card_of_surjective`：card_le_card_of_surjective {α : Type u} 
+{β : Type v} [Finite α] (f : α -> β) (hf : Surjective f) : Nat.card β <= Nat.car
+d α
+· 使用定理 `Set.rangeFactorization_surjective`：∀ {α : Type u} {ι : Sort u_1} {f : ι 
+→ α}, Function.Surjective (Set.rangeFactorization f)
 -/
-theorem card_range_le [Finite α] (f : α -> β) : Nat.card (Set.range f) <= Nat.card α :=
+theorem card_range_le [Finite α] (f : α → β) : Nat.card (Set.range f) ≤ Nat.card α :=
   Nat.card_le_card_of_surjective _ Set.rangeFactorization_surjective
-
-/--
-theorem `card_subtype_le` / 定理 `card_subtype_le`
-
-English:
-theorem card_subtype_le
-  given: [Finite α] (p : α -> Prop)
-  statement: Nat.card { x // p x } <= Nat.card α
-  proof: by
-  classical
-  have := Fintype.ofFinite α
-  simpa only [Nat.card_eq_fintype_card] using Fintype.card_subtype_le p
-
-中文:
-定理 card_subtype_le
-  条件: [有限 α] (p : α -> 命题)
-  结论: 自然数.card { x // p x } <= 自然数.card α
-  证明: by
-  classical
-  have := Fintype.ofFinite α
-  simpa only [Nat.card_eq_fintype_card] using Fintype.card_subtype_le p
-
-Depends on / 依赖: Fintype, Fintype.card_subtype_le, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_subtype_le, classical, ofFinite
+/-
+**Finite.card_subtype_le** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_subtype_le [Finite α] (p : α -> Prop) : Nat.card { x // p x } <= Nat.
+card α
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_subtype_le`：Fintype.card_subtype_le [Fintype α] (p : α -> P
+rop) [Fintype {a // p a}] : Fintype.card { x // p x } <= Fintype.card α
 -/
-theorem card_subtype_le [Finite α] (p : α -> Prop) : Nat.card { x // p x } <= Nat.card α := by
+theorem card_subtype_le [Finite α] (p : α → Prop) : Nat.card { x // p x } ≤ Nat.card α := by
   classical
   have := Fintype.ofFinite α
   simpa only [Nat.card_eq_fintype_card] using Fintype.card_subtype_le p
-
-/--
-theorem `card_subtype_lt` / 定理 `card_subtype_lt`
-
-English:
-theorem card_subtype_lt
-  given: [Finite α] {p : α -> Prop} {x : α} (hx : ¬p x)
-  proof: by
-  classical
-  have := Fintype.ofFinite α
-  simpa only [Nat.card_eq_fintype_card, gt_iff_lt] using Fintype.card_subtype_lt hx
-
-中文:
-定理 card_subtype_lt
-  条件: [有限 α] {p : α -> 命题} {x : α} (hx : ¬p x)
-  证明: by
-  classical
-  have := Fintype.ofFinite α
-  simpa only [Nat.card_eq_fintype_card, gt_iff_lt] using Fintype.card_subtype_lt hx
-
-Depends on / 依赖: Fintype, Fintype.card_subtype_lt, Fintype.ofFinite, Nat.card_eq_fintype_card, card_eq_fintype_card, card_subtype_lt, classical, gt_iff_lt, ofFinite
+/-
+**Finite.card_subtype_lt** 是 Mathlib 中的一个定理，位于命名空间 `Finite`。
+形式化陈述：card_subtype_lt [Finite α] {p : α -> Prop} {x : α} (hx : ¬p x) : Nat.card 
+{ x // p x } < Nat.card α
+参数：hx : ¬p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用引理 `Fintype.card_subtype_lt`：Fintype.card_subtype_lt [Fintype α] {p : α -> P
+rop} [Fintype {a // p a}] {x : α} (hx : ¬p x) : Fintype.card { x // p x } < Fint
+ype.card α
 -/
-theorem card_subtype_lt [Finite α] {p : α -> Prop} {x : α} (hx : ¬p x) :
+theorem card_subtype_lt [Finite α] {p : α → Prop} {x : α} (hx : ¬p x) :
     Nat.card { x // p x } < Nat.card α := by
   classical
   have := Fintype.ofFinite α
@@ -569,43 +492,38 @@ theorem card_subtype_lt [Finite α] {p : α -> Prop} {x : α} (hx : ¬p x) :
 the base case is a subsingleton type, and the induction step is for nontrivial types,
 where one can assume the hypothesis for all types of smaller cardinality. -/
 @[elab_as_elim]
-/--
-theorem `induction_subsingleton_or_nontrivial` / 定理 `induction_subsingleton_or_nontrivial`
+/-
+**Finite.induction_subsingleton_or_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Finite`
+。
+形式化陈述：induction_subsingleton_or_nontrivial {P : Type* -> Prop} (α) [Finite α] (h
+base : forall (α) [Finite α] [Subsingleton α], P α) (hstep : forall (α) [Finite 
+α] [Nontrivial α], (forall (β) [Finite β], Nat.card β < Nat.card α -> P β) -> P 
+α) : P α
+参数：α；hbase : forall (α) [Finite α] [Subsingleton α], P α；hstep : forall (α) [Fin
+ite α] [Nontrivial α], (forall (β) [Finite β], Nat.card β < Nat.card α -> P β) -
+> P α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.strong_induction_on`：∀ {p : ℕ → Prop} (n : ℕ), (∀ (n : ℕ), (∀ m < n,
+ p m) → p n) → p n
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem induction_subsingleton_or_nontrivial
-  statement: {P : Type* -> Prop} (α) [Finite α]
-  proof: by
-  obtain ⟨n, hn⟩ : exists n, Nat.card α = n := ⟨Nat.card α, rfl⟩
-  induction n using Nat.strong_induction_on generalizing α with | _ n ih
-  rcases subsingleton_or_nontrivial α with hsing | hnontriv
-  · apply hbase
-  · apply hstep
-    intro β _ hlt
-    rw [hn] at hlt
-    exact ih (Nat.card β) hlt _ rfl
-
-中文:
-定理 induction_subsingleton_or_nontrivial
-  结论: {P : 类型 -> 命题} (α) [有限 α]
-  证明: by
-  obtain ⟨n, hn⟩ : exists n, Nat.card α = n := ⟨Nat.card α, rfl⟩
-  induction n using Nat.strong_induction_on generalizing α with | _ n ih
-  rcases subsingleton_or_nontrivial α with hsing | hnontriv
-  · apply hbase
-  · apply hstep
-    intro β _ hlt
-    rw [hn] at hlt
-    exact ih (Nat.card β) hlt _ rfl
-
-Depends on / 依赖: Nat.card, Nat.strong_induction_on, generalizing, hnontriv, strong_induction_on, subsingleton_or_nontrivial
+--- 原说明 ---
+A custom induction principle for finite types, by strong induction on `Nat.card`
+:
+the base case is a subsingleton type, and the induction step is for nontrivial t
+ypes,
+where one can assume the hypothesis for all types of smaller cardinality.
 -/
-theorem induction_subsingleton_or_nontrivial {P : Type* -> Prop} (α) [Finite α]
-    (hbase : forall (α) [Finite α] [Subsingleton α], P α)
-    (hstep : forall (α) [Finite α] [Nontrivial α],
-      (forall (β) [Finite β], Nat.card β < Nat.card α -> P β) -> P α) :
+theorem induction_subsingleton_or_nontrivial {P : Type* → Prop} (α) [Finite α]
+    (hbase : ∀ (α) [Finite α] [Subsingleton α], P α)
+    (hstep : ∀ (α) [Finite α] [Nontrivial α],
+      (∀ (β) [Finite β], Nat.card β < Nat.card α → P β) → P α) :
     P α := by
-  obtain ⟨n, hn⟩ : exists n, Nat.card α = n := ⟨Nat.card α, rfl⟩
+  obtain ⟨n, hn⟩ : ∃ n, Nat.card α = n := ⟨Nat.card α, rfl⟩
   induction n using Nat.strong_induction_on generalizing α with | _ n ih
   rcases subsingleton_or_nontrivial α with hsing | hnontriv
   · apply hbase
@@ -618,30 +536,21 @@ end Finite
 
 namespace ENat
 
-/--
-theorem `card_eq_coe_natCard` / 定理 `card_eq_coe_natCard`
-
-English:
-theorem card_eq_coe_natCard
-  given: (α : Type*) [Finite α]
-  statement: card α = Nat.card α
-  proof: by
-  unfold ENat.card
-  apply symm
-  rw [Cardinal.natCast_eq_toENat]
-  exact Nat.cast_card
-
-中文:
-定理 card_eq_coe_natCard
-  条件: (α : 类型) [有限 α]
-  结论: card α = 自然数.card α
-  证明: by
-  unfold ENat.card
-  apply symm
-  rw [Cardinal.natCast_eq_toENat]
-  exact Nat.cast_card
-
-Depends on / 依赖: Cardinal, Cardinal.natCast_eq_toENat, ENat.card, Nat.cast_card, cast_card, natCast_eq_toENat
+/-
+**ENat.card_eq_coe_natCard** 是 Mathlib 中的一个定理，位于命名空间 `ENat`。
+形式化陈述：card_eq_coe_natCard (α : Type*) [Finite α] : card α = Nat.card α
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `symm`：symm [Std.Symm r] : a ≺ b -> b ≺ a
+· 使用定理 `IsEquiv.toSymm`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEquiv α r]
+, Std.Symm r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.natCast_eq_toENat`：∀ {c : Cardinal.{u}} {n : ℕ}, ↑n = Cardinal.
+toENat c ↔ ↑n = c
+· 使用引理 `Nat.cast_card`：cast_card [Finite α] : (Nat.card α : Cardinal) = Cardinal
+.mk α
 -/
 theorem card_eq_coe_natCard (α : Type*) [Finite α] : card α = Nat.card α := by
   unfold ENat.card
@@ -653,40 +562,44 @@ end ENat
 
 namespace Set
 
-/--
-theorem `card_union_le` / 定理 `card_union_le`
-
-English:
-theorem card_union_le
-  given: (s t : Set α)
-  statement: Nat.card (↥(s union t)) <= Nat.card s + Nat.card t
-  proof: by
-  rcases _root_.finite_or_infinite (↥(s union t)) with h | h
-  · rw [finite_coe_iff, finite_union, ← finite_coe_iff, ← finite_coe_iff] at h
-    cases h
-    rw [← @Nat.cast_le Cardinal]; rw [Nat.cast_add]; rw [Nat.cast_card]; rw [Nat.cast_card]; rw [Nat.cast_card]
-    exact Cardinal.mk_union_le s t
-  · simp
-
-中文:
-定理 card_union_le
-  条件: (s t : 集合 α)
-  结论: 自然数.card (↥(s union t)) <= 自然数.card s + 自然数.card t
-  证明: by
-  rcases _root_.finite_or_infinite (↥(s union t)) with h | h
-  · rw [finite_coe_iff, finite_union, ← finite_coe_iff, ← finite_coe_iff] at h
-    cases h
-    rw [← @Nat.cast_le Cardinal]; rw [Nat.cast_add]; rw [Nat.cast_card]; rw [Nat.cast_card]; rw [Nat.cast_card]
-    exact Cardinal.mk_union_le s t
-  · simp
-
-Depends on / 依赖: Cardinal, Cardinal.mk_union_le, Nat.cast_add, Nat.cast_card, Nat.cast_le, _root_, _root_.finite_or_infinite, cast_add, cast_card, cast_le, finite_coe_iff, finite_or_infinite, finite_union, mk_union_le
+/-
+**Set.card_union_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：card_union_le (s t : Set α) : Nat.card (↥(s union t)) <= Nat.card s + Nat.
+card t
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.finite_coe_iff`：finite_coe_iff {s : Set α} : Finite s ↔ s.Finite
+· 使用定理 `Set.finite_union`：finite_union {s t : Set α} : (s union t).Finite ↔ s.Fi
+nite ∧ t.Finite
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
+· 使用定理 `Cardinal.instCharZero`：CharZero Cardinal.{u_1}
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用引理 `Nat.cast_card`：cast_card [Finite α] : (Nat.card α : Cardinal) = Cardinal
+.mk α
+· 使用定理 `Cardinal.mk_union_le`：mk_union_le {α : Type u} (S T : Set α) : #(S union
+ T : Set α) <= #S + #T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
-theorem card_union_le (s t : Set α) : Nat.card (↥(s union t)) <= Nat.card s + Nat.card t := by
-  rcases _root_.finite_or_infinite (↥(s union t)) with h | h
+theorem card_union_le (s t : Set α) : Nat.card (↥(s ∪ t)) ≤ Nat.card s + Nat.card t := by
+  rcases _root_.finite_or_infinite (↥(s ∪ t)) with h | h
   · rw [finite_coe_iff, finite_union, ← finite_coe_iff, ← finite_coe_iff] at h
     cases h
-    rw [← @Nat.cast_le Cardinal]; rw [Nat.cast_add]; rw [Nat.cast_card]; rw [Nat.cast_card]; rw [Nat.cast_card]
+    rw [← @Nat.cast_le Cardinal, Nat.cast_add, Nat.cast_card, Nat.cast_card, Nat.cast_card]
     exact Cardinal.mk_union_le s t
   · simp
 
@@ -694,256 +607,206 @@ namespace Finite
 
 variable {s t : Set α}
 
-/--
-theorem `card_lt_card` / 定理 `card_lt_card`
-
-English:
-theorem card_lt_card
-  given: (ht : t.Finite) (hsub : s ⊂ t)
-  statement: Nat.card s < Nat.card t
-  proof: by
-  have : Fintype t := Finite.fintype ht
-  have : Fintype s := Finite.fintype (subset ht (subset_of_ssubset hsub))
-  simp only [Nat.card_eq_fintype_card]
-  exact Set.card_lt_card hsub
-
-中文:
-定理 card_lt_card
-  条件: (ht : t.有限) (hsub : s ⊂ t)
-  结论: 自然数.card s < 自然数.card t
-  证明: by
-  have : Fintype t := Finite.fintype ht
-  have : Fintype s := Finite.fintype (subset ht (subset_of_ssubset hsub))
-  simp only [Nat.card_eq_fintype_card]
-  exact Set.card_lt_card hsub
-
-Depends on / 依赖: Finite, Finite.fintype, Fintype, Nat.card_eq_fintype_card, Set.card_lt_card, card_eq_fintype_card, card_lt_card, fintype, subset, subset_of_ssubset
+/-
+**Set.Finite.card_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：card_lt_card (ht : t.Finite) (hsub : s ⊂ t) : Nat.card s < Nat.card t
+参数：ht : t.Finite；hsub : s ⊂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `subset_of_ssubset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : 
+Preorder α] {a b : α}, a ⊂ b → a ⊆ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Set.card_lt_card`：card_lt_card {s t : Set α} [Fintype s] [Fintype t] (h 
+: s ⊂ t) : Fintype.card s < Fintype.card t
 -/
 theorem card_lt_card (ht : t.Finite) (hsub : s ⊂ t) : Nat.card s < Nat.card t := by
   have : Fintype t := Finite.fintype ht
   have : Fintype s := Finite.fintype (subset ht (subset_of_ssubset hsub))
   simp only [Nat.card_eq_fintype_card]
   exact Set.card_lt_card hsub
-
-/--
-theorem `_root_.Set.ecard_le_ecard` / 定理 `_root_.Set.ecard_le_ecard`
-
-English:
-theorem _root_.Set.ecard_le_ecard
-  given: (hsub : s subseteq t)
-  statement: ENat.card s <= ENat.card t
-  proof: ENat.card_le_card_of_injective inclusion_injective hsub
-
-中文:
-定理 _root_.集合.ecard_le_ecard
-  条件: (hsub : s subseteq t)
-  结论: E自然数.card s <= E自然数.card t
-  证明: ENat.card_le_card_of_injective inclusion_injective hsub
-
-Depends on / 依赖: ENat.card_le_card_of_injective, card_le_card_of_injective, inclusion_injective
+/-
+**Set.Finite._root_.Set.ecard_le_ecard** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Set.ecard_le_ecard (hsub : s subseteq t) : ENat.card s <= ENat.card t :=
-ENat.card_le_card_of_injective inclusion_injective hsub
-
-/--
-theorem `ecard_lt_ecard` / 定理 `ecard_lt_ecard`
-
-English:
-theorem ecard_lt_ecard
-  given: (hs : s.Finite) (hsub : s ⊂ t)
-  statement: ENat.card s < ENat.card t
-  proof: by
-  classical
-  suffices ENat.card t <= ENat.card s -> t subseteq s from
-lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle => not_subset_of_ssubset hsub this hle
-  intro hle
-  suffices ENat.card ↑(t \ s) <= 0 by
-    rwa [← sdiff_eq_empty, ← Set.isEmpty_coe_sort, ← ENat.card_eq_zero_iff_empty,
-      ← nonpos_iff_eq_zero]
-  suffices ENat.card ↑(t \ s) + ENat.card ↑s <= 0 + ENat.card ↑s from
-    WithTop.le_of_add_le_add_right (ENat.card_lt_top.mpr hs).ne this
-  suffices ENat.card ↑t <= 0 + ENat.card ↑s by
-    rwa [← ENat.card_sum, ← ENat.card_congr <| Equiv.Set.union disjoint_sdiff_left,
-      sdiff_union_of_subset hsub.subset]
-  exact le_add_of_le_right hle
-
-中文:
-定理 ecard_lt_ecard
-  条件: (hs : s.有限) (hsub : s ⊂ t)
-  结论: E自然数.card s < E自然数.card t
-  证明: by
-  classical
-  suffices ENat.card t <= ENat.card s -> t subseteq s from
-lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle => not_subset_of_ssubset hsub this hle
-  intro hle
-  suffices ENat.card ↑(t \ s) <= 0 by
-    rwa [← sdiff_eq_empty, ← Set.isEmpty_coe_sort, ← ENat.card_eq_zero_iff_empty,
-      ← nonpos_iff_eq_zero]
-  suffices ENat.card ↑(t \ s) + ENat.card ↑s <= 0 + ENat.card ↑s from
-    WithTop.le_of_add_le_add_right (ENat.card_lt_top.mpr hs).ne this
-  suffices ENat.card ↑t <= 0 + ENat.card ↑s by
-    rwa [← ENat.card_sum, ← ENat.card_congr <| Equiv.Set.union disjoint_sdiff_left,
-      sdiff_union_of_subset hsub.subset]
-  exact le_add_of_le_right hle
-
-Depends on / 依赖: ENat.ca, ENat.card, ENat.card_eq_zero_iff_empty, ENat.card_lt_top.mpr, Set.isEmpty_coe_sort, WithTop, WithTop.le_of_add_le_add_right, card_eq_zero_iff_empty, card_lt_top, classical, ecard_le_ecard, hsub.subset, isEmpty_coe_sort, le_of_add_le_add_right, lt_of_le_not_ge, nonpos_iff_eq_zero, not_subset_of_ssubset, sdiff_eq_empty, subset, subseteq
+theorem _root_.Set.ecard_le_ecard (hsub : s ⊆ t) : ENat.card s ≤ ENat.card t :=
+  ENat.card_le_card_of_injective <| inclusion_injective hsub
+/-
+**Set.Finite.ecard_lt_ecard** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：ecard_lt_ecard (hs : s.Finite) (hsub : s ⊂ t) : ENat.card s < ENat.card t
+参数：hs : s.Finite；hsub : s ⊂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_add_of_le_right`：∀ {α : Type u} [inst : Add α] [inst_1 : Preorder α] 
+[CanonicallyOrderedAdd α] {a b c : α}, a ≤ c → a ≤ b + c
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENat.card_sum`：card_sum (α β : Type*) : card (α oplus β) = card α + card
+ β
+· 使用定理 `ENat.card_congr`：card_congr {α β : Type*} (f : α ≃ β) : card α = card β
+· 使用引理 `Set.disjoint_sdiff_left`：disjoint_sdiff_left : Disjoint (t \ s) s
+· 使用定理 `Set.sdiff_union_of_subset`：sdiff_union_of_subset {s t : Set α} (h : t su
+bseteq s) : s \ t union t = s
+· 使用定理 `LT.lt.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b : α}, a ⊂ b → a ⊆ b
+· 使用定理 `WithTop.le_of_add_le_add_right`：∀ {α : Type u} [inst : Add α] {x y z : W
+ithTop α} [inst_1 : LE α] [AddRightReflectLE α], z ≠ ⊤ → x + z ≤ y + z → x ≤ y
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENat.card_lt_top`：∀ {α : Type u_1}, ENat.card α < ⊤ ↔ Finite α
+· 使用定理 `Set.sdiff_eq_empty`：sdiff_eq_empty {s t : Set α} : s \ t = ∅ ↔ s subsete
+q t
+· 使用定理 `Set.isEmpty_coe_sort`：isEmpty_coe_sort {s : Set α} : IsEmpty (↥s) ↔ s = 
+∅
+· 使用定理 `ENat.card_eq_zero_iff_empty`：card_eq_zero_iff_empty (α : Type*) : card α
+ = 0 ↔ IsEmpty α
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用引理 `lt_of_le_not_ge`：lt_of_le_not_ge (hab : a <= b) (hba : ¬ b <= a) : a < b
+· 使用定理 `Set.ecard_le_ecard`：∀ {α : Type u_1} {s t : Set α}, s ⊆ t → ENat.card ↑s
+ ≤ ENat.card ↑t
+· 使用定理 `not_subset_of_ssubset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [ins
+t : Preorder α] {a b : α}, a ⊂ b → ¬b ⊆ a
 -/
 theorem ecard_lt_ecard (hs : s.Finite) (hsub : s ⊂ t) : ENat.card s < ENat.card t := by
   classical
-  suffices ENat.card t <= ENat.card s -> t subseteq s from
-lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle => not_subset_of_ssubset hsub this hle
+  suffices ENat.card t ≤ ENat.card s → t ⊆ s from
+    lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle ↦ not_subset_of_ssubset hsub <| this hle
   intro hle
-  suffices ENat.card ↑(t \ s) <= 0 by
+  suffices ENat.card ↑(t \ s) ≤ 0 by
     rwa [← sdiff_eq_empty, ← Set.isEmpty_coe_sort, ← ENat.card_eq_zero_iff_empty,
       ← nonpos_iff_eq_zero]
-  suffices ENat.card ↑(t \ s) + ENat.card ↑s <= 0 + ENat.card ↑s from
+  suffices ENat.card ↑(t \ s) + ENat.card ↑s ≤ 0 + ENat.card ↑s from
     WithTop.le_of_add_le_add_right (ENat.card_lt_top.mpr hs).ne this
-  suffices ENat.card ↑t <= 0 + ENat.card ↑s by
+  suffices ENat.card ↑t ≤ 0 + ENat.card ↑s by
     rwa [← ENat.card_sum, ← ENat.card_congr <| Equiv.Set.union disjoint_sdiff_left,
       sdiff_union_of_subset hsub.subset]
   exact le_add_of_le_right hle
-
-/--
-theorem `card_strictMonoOn` / 定理 `card_strictMonoOn`
-
-English:
-theorem card_strictMonoOn
-  statement: StrictMonoOn (α := Set α) (Nat.card ∘ (↑)) (Set.ofPred Set.Finite)
-  proof: fun _ _ _ => card_lt_card
-
-中文:
-定理 card_strictMonoOn
-  结论: StrictMonoOn (α := 集合 α) (自然数.card ∘ (↑)) (集合.ofPred 集合.有限)
-  证明: fun _ _ _ => card_lt_card
-
-Depends on / 依赖: Finite, Nat.card, Set.Finite, Set.ofPred, ofPred
+/-
+**Set.Finite.card_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：card_strictMonoOn : StrictMonoOn (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.card_lt_card`：card_lt_card (ht : t.Finite) (hsub : s ⊂ t) : N
+at.card s < Nat.card t
 -/
 theorem card_strictMonoOn : StrictMonoOn (α := Set α) (Nat.card ∘ (↑)) (Set.ofPred Set.Finite) :=
-  fun _ _ _ => card_lt_card
-
-/--
-theorem `ecard_strictMonoOn` / 定理 `ecard_strictMonoOn`
-
-English:
-theorem ecard_strictMonoOn
-  statement: StrictMonoOn (α := Set α) (ENat.card ∘ (↑)) (Set.ofPred Set.Finite)
-  proof: fun _ hs _ _ => hs.ecard_lt_ecard
-
-中文:
-定理 ecard_strictMonoOn
-  结论: StrictMonoOn (α := 集合 α) (E自然数.card ∘ (↑)) (集合.ofPred 集合.有限)
-  证明: fun _ hs _ _ => hs.ecard_lt_ecard
-
-Depends on / 依赖: ENat.card, Finite, Set.Finite, Set.ofPred, ofPred
+  fun _ _ _ ↦ card_lt_card
+/-
+**Set.Finite.ecard_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：ecard_strictMonoOn : StrictMonoOn (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.ecard_lt_ecard`：ecard_lt_ecard (hs : s.Finite) (hsub : s ⊂ t)
+ : ENat.card s < ENat.card t
 -/
 theorem ecard_strictMonoOn : StrictMonoOn (α := Set α) (ENat.card ∘ (↑)) (Set.ofPred Set.Finite) :=
-  fun _ hs _ _ => hs.ecard_lt_ecard
-
-/--
-theorem `eq_of_subset_of_card_le` / 定理 `eq_of_subset_of_card_le`
-
-English:
-theorem eq_of_subset_of_card_le
-  given: (ht : t.Finite) (hsub : s subseteq t) (hcard : Nat.card t <= Nat.card s)
-  proof: (eq_or_ssubset_of_subset hsub).elim id fun h => absurd hcard not_le_of_gt ht.card_lt_card h
-
-中文:
-定理 eq_of_subset_of_card_le
-  条件: (ht : t.有限) (hsub : s subseteq t) (hcard : 自然数.card t <= 自然数.card s)
-  证明: (eq_or_ssubset_of_subset hsub).elim id fun h => absurd hcard not_le_of_gt ht.card_lt_card h
-
-Depends on / 依赖: absurd, card_lt_card, eq_or_ssubset_of_subset, ht.card_lt_card, not_le_of_gt
+  fun _ hs _ _ ↦ hs.ecard_lt_ecard
+/-
+**Set.Finite.eq_of_subset_of_card_le** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：eq_of_subset_of_card_le (ht : t.Finite) (hsub : s subseteq t) (hcard : Nat
+.card t <= Nat.card s) : s = t
+参数：ht : t.Finite；hsub : s subseteq t；hcard : Nat.card t <= Nat.card s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_ssubset_of_subset`：∀ {α : Type u_2} [UsesSetNotationForOrder α] [i
+nst : PartialOrder α] {a b : α}, a ⊆ b → a = b ∨ a ⊂ b
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Set.Finite.card_lt_card`：card_lt_card (ht : t.Finite) (hsub : s ⊂ t) : N
+at.card s < Nat.card t
 -/
-theorem eq_of_subset_of_card_le (ht : t.Finite) (hsub : s subseteq t) (hcard : Nat.card t <= Nat.card s) :
+theorem eq_of_subset_of_card_le (ht : t.Finite) (hsub : s ⊆ t) (hcard : Nat.card t ≤ Nat.card s) :
     s = t :=
-(eq_or_ssubset_of_subset hsub).elim id fun h => absurd hcard not_le_of_gt ht.card_lt_card h
-
-/--
-theorem `equiv_image_eq_iff_subset` / 定理 `equiv_image_eq_iff_subset`
-
-English:
-theorem equiv_image_eq_iff_subset
-  given: (e : α ≃ α) (hs : s.Finite)
-  statement: e '' s = s ↔ e '' s subseteq s
-  proof: ⟨fun h => by rw [h], fun h => hs.eq_of_subset_of_card_le h
-    ge_of_eq (Nat.card_congr (e.image s).symm)⟩
-
-中文:
-定理 equiv_image_eq_iff_subset
-  条件: (e : α ≃ α) (hs : s.有限)
-  结论: e '' s = s ↔ e '' s subseteq s
-  证明: ⟨fun h => by rw [h], fun h => hs.eq_of_subset_of_card_le h
-    ge_of_eq (Nat.card_congr (e.image s).symm)⟩
-
-Depends on / 依赖: Nat.card_congr, card_congr, e.image, eq_of_subset_of_card_le, ge_of_eq, hs.eq_of_subset_of_card_le
+  (eq_or_ssubset_of_subset hsub).elim id fun h ↦ absurd hcard <| not_le_of_gt <| ht.card_lt_card h
+/-
+**Set.Finite.equiv_image_eq_iff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：equiv_image_eq_iff_subset (e : α ≃ α) (hs : s.Finite) : e '' s = s ↔ e '' 
+s subseteq s
+参数：e : α ≃ α；hs : s.Finite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Set.Finite.eq_of_subset_of_card_le`：eq_of_subset_of_card_le (ht : t.Fini
+te) (hsub : s subseteq t) (hcard : Nat.card t <= Nat.card s) : s = t
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem equiv_image_eq_iff_subset (e : α ≃ α) (hs : s.Finite) : e '' s = s ↔ e '' s subseteq s :=
-⟨fun h => by rw [h], fun h => hs.eq_of_subset_of_card_le h
+theorem equiv_image_eq_iff_subset (e : α ≃ α) (hs : s.Finite) : e '' s = s ↔ e '' s ⊆ s :=
+  ⟨fun h ↦ by rw [h], fun h ↦ hs.eq_of_subset_of_card_le h <|
     ge_of_eq (Nat.card_congr (e.image s).symm)⟩
 
 end Finite
 
-/--
-theorem `card_strictMono` / 定理 `card_strictMono`
-
-English:
-theorem card_strictMono
-  given: [Finite α]
-  statement: StrictMono (α := Set α) (Nat.card ∘ (↑))
-  proof: fun _ t => t.toFinite.card_lt_card
-
-中文:
-定理 card_strictMono
-  条件: [有限 α]
-  结论: 严格递增 (α := 集合 α) (自然数.card ∘ (↑))
-  证明: fun _ t => t.toFinite.card_lt_card
-
-Depends on / 依赖: Nat.card
+/-
+**Set.card_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：card_strictMono [Finite α] : StrictMono (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.card_lt_card`：card_lt_card (ht : t.Finite) (hsub : s ⊂ t) : N
+at.card s < Nat.card t
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
 -/
 theorem card_strictMono [Finite α] : StrictMono (α := Set α) (Nat.card ∘ (↑)) :=
-  fun _ t => t.toFinite.card_lt_card
-
-/--
-theorem `ecard_strictMono` / 定理 `ecard_strictMono`
-
-English:
-theorem ecard_strictMono
-  given: [Finite α]
-  statement: StrictMono (α := Set α) (ENat.card ∘ (↑))
-  proof: fun s _ => s.toFinite.ecard_lt_ecard
-
-中文:
-定理 ecard_strictMono
-  条件: [有限 α]
-  结论: 严格递增 (α := 集合 α) (E自然数.card ∘ (↑))
-  证明: fun s _ => s.toFinite.ecard_lt_ecard
-
-Depends on / 依赖: ENat.card
+  fun _ t ↦ t.toFinite.card_lt_card
+/-
+**Set.ecard_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ecard_strictMono [Finite α] : StrictMono (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.ecard_lt_ecard`：ecard_lt_ecard (hs : s.Finite) (hsub : s ⊂ t)
+ : ENat.card s < ENat.card t
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
 -/
 theorem ecard_strictMono [Finite α] : StrictMono (α := Set α) (ENat.card ∘ (↑)) :=
-  fun s _ => s.toFinite.ecard_lt_ecard
-
-/--
-theorem `eq_top_of_card_le_of_finite` / 定理 `eq_top_of_card_le_of_finite`
-
-English:
-theorem eq_top_of_card_le_of_finite
-  given: [Finite α] {s : Set α} (h : Nat.card α <= Nat.card s)
-  statement: s = ⊤
-  proof: Set.Finite.eq_of_subset_of_card_le univ.toFinite (subset_univ s)
-    Nat.card_congr (Equiv.Set.univ α) ▸ h
-
-中文:
-定理 eq_top_of_card_le_of_finite
-  条件: [有限 α] {s : 集合 α} (h : 自然数.card α <= 自然数.card s)
-  结论: s = ⊤
-  证明: Set.Finite.eq_of_subset_of_card_le univ.toFinite (subset_univ s)
-    Nat.card_congr (Equiv.Set.univ α) ▸ h
-
-Depends on / 依赖: Equiv.Set.univ, Finite, Nat.card_congr, Set.Finite.eq_of_subset_of_card_le, card_congr, eq_of_subset_of_card_le, subset_univ, toFinite, univ.toFinite
+  fun s _ ↦ s.toFinite.ecard_lt_ecard
+/-
+**Set.eq_top_of_card_le_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_top_of_card_le_of_finite [Finite α] {s : Set α} (h : Nat.card α <= Nat.
+card s) : s = ⊤
+参数：h : Nat.card α <= Nat.card s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.eq_of_subset_of_card_le`：eq_of_subset_of_card_le (ht : t.Fini
+te) (hsub : s subseteq t) (hcard : Nat.card t <= Nat.card s) : s = t
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
 -/
-theorem eq_top_of_card_le_of_finite [Finite α] {s : Set α} (h : Nat.card α <= Nat.card s) : s = ⊤ :=
-Set.Finite.eq_of_subset_of_card_le univ.toFinite (subset_univ s)
+theorem eq_top_of_card_le_of_finite [Finite α] {s : Set α} (h : Nat.card α ≤ Nat.card s) : s = ⊤ :=
+  Set.Finite.eq_of_subset_of_card_le univ.toFinite (subset_univ s) <|
     Nat.card_congr (Equiv.Set.univ α) ▸ h
 
 end Set
@@ -953,58 +816,56 @@ namespace List.Nodup
 variable {l : List α} (h : l.Nodup)
 include h
 
-/--
-theorem `length_le_natCard` / 定理 `length_le_natCard`
-
-English:
-theorem length_le_natCard
-  given: [Finite α]
-  statement: l.length <= Nat.card α
-  proof: by
-  have := Fintype.ofFinite α
-  grw [h.length_le_card, Fintype.card_eq_nat_card]
-
-中文:
-定理 length_le_natCard
-  条件: [有限 α]
-  结论: l.length <= 自然数.card α
-  证明: by
-  have := Fintype.ofFinite α
-  grw [h.length_le_card, Fintype.card_eq_nat_card]
-
-Depends on / 依赖: Fintype, Fintype.card_eq_nat_card, Fintype.ofFinite, card_eq_nat_card, h.length_le_card, length_le_card, ofFinite
+/-
+**List.Nodup.length_le_natCard** 是 Mathlib 中的一个定理，位于命名空间 `List.Nodup`。
+形式化陈述：length_le_natCard [Finite α] : l.length <= Nat.card α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `List.Nodup.length_le_card`：List.Nodup.length_le_card {α : Type*} [Fintyp
+e α] {l : List α} (h : l.Nodup) : l.length <= Fintype.card α
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_eq_nat_card`：∀ {α : Type u_1} {x : Fintype α}, Fintype.card
+ α = Nat.card α
 -/
-theorem length_le_natCard [Finite α] : l.length <= Nat.card α := by
+theorem length_le_natCard [Finite α] : l.length ≤ Nat.card α := by
   have := Fintype.ofFinite α
   grw [h.length_le_card, Fintype.card_eq_nat_card]
-
-/--
-theorem `length_le_enatCard` / 定理 `length_le_enatCard`
-
-English:
-theorem length_le_enatCard
-  statement: l.length <= ENat.card α
-  proof: by
-  cases finite_or_infinite α
-  · grw [h.length_le_natCard, ENat.card_eq_coe_natCard]
-  · grw [ENat.card_eq_top_of_infinite]
-    exact le_top
-
-中文:
-定理 length_le_enatCard
-  结论: l.length <= E自然数.card α
-  证明: by
-  cases finite_or_infinite α
-  · grw [h.length_le_natCard, ENat.card_eq_coe_natCard]
-  · grw [ENat.card_eq_top_of_infinite]
-    exact le_top
-
-Depends on / 依赖: ENat.card_eq_coe_natCard, ENat.card_eq_top_of_infinite, card_eq_coe_natCard, card_eq_top_of_infinite, finite_or_infinite, h.length_le_natCard, le_top, length_le_natCard
+/-
+**List.Nodup.length_le_enatCard** 是 Mathlib 中的一个定理，位于命名空间 `List.Nodup`。
+形式化陈述：length_le_enatCard : l.length <= ENat.card α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Nat.mono_cast`：mono_cast : Monotone (Nat.cast : Nat -> α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `List.Nodup.length_le_natCard`：length_le_natCard [Finite α] : l.length <=
+ Nat.card α
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENat.card_eq_coe_natCard`：card_eq_coe_natCard (α : Type*) [Finite α] : c
+ard α = Nat.card α
+· 使用定理 `ENat.card_eq_top_of_infinite`：card_eq_top_of_infinite [Infinite α] : car
+d α = ⊤
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-theorem length_le_enatCard : l.length <= ENat.card α := by
+theorem length_le_enatCard : l.length ≤ ENat.card α := by
   cases finite_or_infinite α
   · grw [h.length_le_natCard, ENat.card_eq_coe_natCard]
   · grw [ENat.card_eq_top_of_infinite]
     exact le_top
 
 end List.Nodup
+

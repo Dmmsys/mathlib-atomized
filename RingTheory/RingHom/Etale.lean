@@ -25,337 +25,281 @@ variable {R S : Type*} [CommRing R] [CommRing S]
 
 /-- A ring hom `R →+* S` is étale, if `S` is an étale `R`-algebra. -/
 @[algebraize RingHom.Etale.toAlgebra]
-/--
-Definition of `Etale` / `Etale` 的定义
+/-
+**RingHom.Etale** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：Etale {R S : Type*} [CommRing R] [CommRing S] (f : R ->+* S) : Prop
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Etale
-  signature: {R S : Type*} [CommRing R] [CommRing S] (f : R ->+* S)
-  body: @Algebra.Etale R S _ _ f.toAlgebra
-
-中文:
-定义 平展
-  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
-  定义体: @Algebra.Etale R S _ _ f.toAlgebra
-
-Depends on / 依赖: Algebra, Algebra.Etale, f.toAlgebra, toAlgebra
+--- 原说明 ---
+A ring hom `R →+* S` is étale, if `S` is an étale `R`-algebra.
 -/
-def Etale {R S : Type*} [CommRing R] [CommRing S] (f : R ->+* S) : Prop :=
+def Etale {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S) : Prop :=
   @Algebra.Etale R S _ _ f.toAlgebra
 
-/--
-lemma `Etale.toAlgebra` / 引理 `Etale.toAlgebra`
+/-- Helper lemma for the `algebraize` tactic -/
+/-
+**RingHom.Etale.toAlgebra** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S}, f.Etale → Algebra.Etale R S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Etale.toAlgebra
-  given: {f : R ->+* S} (hf : Etale f)
-  proof: hf
-
-中文:
-引理 平展.toAlgebra
-  条件: {f : R ->+* S} (hf : 平展 f)
-  证明: hf
+--- 原说明 ---
+Helper lemma for the `algebraize` tactic
 -/
-lemma Etale.toAlgebra {f : R ->+* S} (hf : Etale f) :
+lemma Etale.toAlgebra {f : R →+* S} (hf : Etale f) :
     @Algebra.Etale R S _ _ f.toAlgebra := hf
 
-variable {R S : Type*} [CommRing R] [CommRing S] (f : R ->+* S)
-
-/--
-lemma `etale_algebraMap` / 引理 `etale_algebraMap`
-
-English:
-lemma etale_algebraMap
-  given: [Algebra R S]
-  statement: (algebraMap R S).Etale ↔ Algebra.Etale R S
-  proof: by
-  rw [RingHom.Etale]; rw [toAlgebra_algebraMap]
-
-中文:
-引理 etale_algebraMap
-  条件: [代数 R S]
-  结论: (algebraMap R S).平展 ↔ 代数.平展 R S
-  证明: by
-  rw [RingHom.Etale]; rw [toAlgebra_algebraMap]
-
-Depends on / 依赖: RingHom, RingHom.Etale, toAlgebra_algebraMap
+variable {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
+/-
+**RingHom.etale_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：etale_algebraMap [Algebra R S] : (algebraMap R S).Etale ↔ Algebra.Etale R 
+S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Etale.eq_1`：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing R] 
+[inst_1 : CommRing S] (f : R →+* S), f.Etale = Algebra.Etale R S
+· 使用定理 `toAlgebra_algebraMap`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : CommSemiring S] [inst_2 : Algebra R S],   (algebraMap R S).toAlgebra
+ = inst_2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma etale_algebraMap [Algebra R S] : (algebraMap R S).Etale ↔ Algebra.Etale R S := by
-  rw [RingHom.Etale]; rw [toAlgebra_algebraMap]
-
-/--
-lemma `etale_iff_formallyUnramified_and_smooth` / 引理 `etale_iff_formallyUnramified_and_smooth`
-
-English:
-lemma etale_iff_formallyUnramified_and_smooth
-  statement: f.Etale ↔ f.FormallyUnramified ∧ f.Smooth
-  proof: by
-  algebraize [f]
-  simp only [Etale, Smooth, FormallyUnramified]
-  exact ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨h1, h2⟩ => ⟨.of_formallyUnramified_and_formallySmooth, inferInstance⟩⟩
-
-中文:
-引理 etale_iff_formallyUnramified_and_smooth
-  结论: f.平展 ↔ f.形式非分歧 ∧ f.光滑
-  证明: by
-  algebraize [f]
-  simp only [Etale, Smooth, FormallyUnramified]
-  exact ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨h1, h2⟩ => ⟨.of_formallyUnramified_and_formallySmooth, inferInstance⟩⟩
-
-Depends on / 依赖: FormallyUnramified, Smooth, algebraize, of_formallyUnramified_and_formallySmooth
+  rw [RingHom.Etale, toAlgebra_algebraMap]
+/-
+**RingHom.etale_iff_formallyUnramified_and_smooth** 是 Mathlib 中的一个引理，位于命名空间 `Rin
+gHom`。
+形式化陈述：etale_iff_formallyUnramified_and_smooth : f.Etale ↔ f.FormallyUnramified ∧
+ f.Smooth
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
+· 使用定理 `Algebra.Etale.instSmooth`：∀ {R : Type u} {A : Type v} [inst : CommRing R
+] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebra.Sm
+ooth R A
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
+· 使用定理 `Algebra.FormallyEtale.of_formallyUnramified_and_formallySmooth`：of_forma
+llyUnramified_and_formallySmooth [FormallyUnramified R A] [FormallySmooth R A] :
+ FormallyEtale R A
+· 使用定理 `Algebra.Smooth.finitePresentation`：∀ {R : Type u_4} {inst : CommRing R} 
+{A : Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smoo
+th R A], Algebra.Finite…
 -/
 lemma etale_iff_formallyUnramified_and_smooth : f.Etale ↔ f.FormallyUnramified ∧ f.Smooth := by
   algebraize [f]
   simp only [Etale, Smooth, FormallyUnramified]
-  exact ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨h1, h2⟩ => ⟨.of_formallyUnramified_and_formallySmooth, inferInstance⟩⟩
-
-/--
-lemma `Etale.eq_formallyUnramified_and_smooth` / 引理 `Etale.eq_formallyUnramified_and_smooth`
-
-English:
-lemma Etale.eq_formallyUnramified_and_smooth
-  proof: by
-  ext
-  rw [etale_iff_formallyUnramified_and_smooth]
-
-中文:
-引理 平展.eq_formallyUnramified_and_smooth
-  证明: by
-  ext
-  rw [etale_iff_formallyUnramified_and_smooth]
-
-Depends on / 依赖: etale_iff_formallyUnramified_and_smooth
+  exact ⟨fun h ↦ ⟨inferInstance, inferInstance, inferInstance⟩,
+    fun ⟨h1, h2⟩ ↦ ⟨.of_formallyUnramified_and_formallySmooth, inferInstance⟩⟩
+/-
+**RingHom.Etale.eq_formallyUnramified_and_smooth** 是 Mathlib 中的一个定理，位于命名空间 `Ring
+Hom.Etale`。
+形式化陈述：@RingHom.Etale = fun R S x x_1 f => f.FormallyUnramified ∧ f.Smooth
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.etale_iff_formallyUnramified_and_smooth`：etale_iff_formallyUnram
+ified_and_smooth : f.Etale ↔ f.FormallyUnramified ∧ f.Smooth
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Etale.eq_formallyUnramified_and_smooth :
-    @Etale = fun R S (_ : CommRing R) (_ : CommRing S) f => f.FormallyUnramified ∧ f.Smooth := by
+    @Etale = fun R S (_ : CommRing R) (_ : CommRing S) f ↦ f.FormallyUnramified ∧ f.Smooth := by
   ext
   rw [etale_iff_formallyUnramified_and_smooth]
-
-/--
-lemma `Etale.formallyUnramified` / 引理 `Etale.formallyUnramified`
-
-English:
-lemma Etale.formallyUnramified
-  given: (hf : f.Etale)
-  statement: f.FormallyUnramified
-  proof: by
-  rw [etale_iff_formallyUnramified_and_smooth] at hf
-  exact hf.1
-
-中文:
-引理 平展.formallyUnramified
-  条件: (hf : f.平展)
-  结论: f.形式非分歧
-  证明: by
-  rw [etale_iff_formallyUnramified_and_smooth] at hf
-  exact hf.1
-
-Depends on / 依赖: etale_iff_formallyUnramified_and_smooth
+/-
+**RingHom.Etale.formallyUnramified** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing R] [inst_1 : CommRing S] 
+(f : R →+* S), f.Etale → f.FormallyUnramified
+参数：f : R →+* S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.etale_iff_formallyUnramified_and_smooth`：etale_iff_formallyUnram
+ified_and_smooth : f.Etale ↔ f.FormallyUnramified ∧ f.Smooth
 -/
 lemma Etale.formallyUnramified (hf : f.Etale) : f.FormallyUnramified := by
   rw [etale_iff_formallyUnramified_and_smooth] at hf
   exact hf.1
-
-/--
-lemma `Etale.of_bijective` / 引理 `Etale.of_bijective`
-
-English:
-lemma Etale.of_bijective
-  given: {f : R ->+* S} (hf : Function.Bijective f)
-  statement: f.Etale
-  proof: by
-  rw [etale_iff_formallyUnramified_and_smooth]
-  exact ⟨.of_surjective hf.2, .of_bijective hf⟩
-
-中文:
-引理 平展.of_bijective
-  条件: {f : R ->+* S} (hf : 函数.双射 f)
-  结论: f.平展
-  证明: by
-  rw [etale_iff_formallyUnramified_and_smooth]
-  exact ⟨.of_surjective hf.2, .of_bijective hf⟩
-
-Depends on / 依赖: etale_iff_formallyUnramified_and_smooth, of_bijective, of_surjective
+/-
+**RingHom.Etale.of_bijective** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S}, Function.Bijective ⇑f → f.Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RingHom.etale_iff_formallyUnramified_and_smooth`：etale_iff_formallyUnram
+ified_and_smooth : f.Etale ↔ f.FormallyUnramified ∧ f.Smooth
+· 使用引理 `RingHom.FormallyUnramified.of_surjective`：of_surjective {f : R ->+* S} (
+hf : Function.Surjective f) : f.FormallyUnramified
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `RingHom.Smooth.of_bijective`：of_bijective {f : R ->+* S} (hf : Function.
+Bijective f) : f.Smooth
 -/
-lemma Etale.of_bijective {f : R ->+* S} (hf : Function.Bijective f) : f.Etale := by
+lemma Etale.of_bijective {f : R →+* S} (hf : Function.Bijective f) : f.Etale := by
   rw [etale_iff_formallyUnramified_and_smooth]
   exact ⟨.of_surjective hf.2, .of_bijective hf⟩
-
-/--
-lemma `Etale.containsIdentities` / 引理 `Etale.containsIdentities`
-
-English:
-lemma Etale.containsIdentities
-  statement: ContainsIdentities Etale
-  proof: fun _ _ => .of_bijective Function.bijective_id
-
-中文:
-引理 平展.containsIdentities
-  结论: 余ntainsIdentities 平展
-  证明: fun _ _ => .of_bijective Function.bijective_id
-
-Depends on / 依赖: Function, Function.bijective_id, bijective_id, of_bijective
+/-
+**RingHom.Etale.containsIdentities** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：RingHom.ContainsIdentities fun {R S} [CommRing R] [CommRing S] => RingHom.
+Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.Etale.of_bijective`：∀ {R : Type u_3} {S : Type u_4} [inst : Comm
+Ring R] [inst_1 : CommRing S] {f : R →+* S}, Function.Bijective ⇑f → f.Etale
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
 lemma Etale.containsIdentities : ContainsIdentities Etale :=
-  fun _ _ => .of_bijective Function.bijective_id
-
-/--
-lemma `Etale.isStableUnderBaseChange` / 引理 `Etale.isStableUnderBaseChange`
-
-English:
-lemma Etale.isStableUnderBaseChange
-  statement: IsStableUnderBaseChange Etale
-  proof: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.isStableUnderBaseChange.and Smooth.isStableUnderBaseChange
-
-中文:
-引理 平展.isStableUnderBaseChange
-  结论: 是StableUnderBaseChange 平展
-  证明: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.isStableUnderBaseChange.and Smooth.isStableUnderBaseChange
-
-Depends on / 依赖: FormallyUnramified, FormallyUnramified.isStableUnderBaseChange.and, Smooth, Smooth.isStableUnderBaseChange, eq_formallyUnramified_and_smooth, isStableUnderBaseChange
+  fun _ _ ↦ .of_bijective Function.bijective_id
+/-
+**RingHom.Etale.isStableUnderBaseChange** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale
+`。
+形式化陈述：RingHom.IsStableUnderBaseChange fun {R S} [CommRing R] [CommRing S] => Rin
+gHom.Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Etale.eq_formallyUnramified_and_smooth`：@RingHom.Etale = fun R S
+ x x_1 f => f.FormallyUnramified ∧ f.Smooth
+· 使用定理 `RingHom.IsStableUnderBaseChange.and`：∀ {P Q : {R S : Type u} → [inst : C
+ommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   (RingHom.IsStableUnder
+BaseChange fun {R S} [Com…
+· 使用引理 `RingHom.FormallyUnramified.isStableUnderBaseChange`：isStableUnderBaseCha
+nge : IsStableUnderBaseChange FormallyUnramified
+· 使用引理 `RingHom.Smooth.isStableUnderBaseChange`：isStableUnderBaseChange : IsStab
+leUnderBaseChange Smooth
 -/
 lemma Etale.isStableUnderBaseChange : IsStableUnderBaseChange Etale := by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.isStableUnderBaseChange.and Smooth.isStableUnderBaseChange
-
-/--
-lemma `Etale.propertyIsLocal` / 引理 `Etale.propertyIsLocal`
-
-English:
-lemma Etale.propertyIsLocal
-  statement: PropertyIsLocal Etale
-  proof: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.propertyIsLocal.and Smooth.propertyIsLocal
-
-中文:
-引理 平展.propertyIsLocal
-  结论: PropertyIsLocal 平展
-  证明: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.propertyIsLocal.and Smooth.propertyIsLocal
-
-Depends on / 依赖: FormallyUnramified, FormallyUnramified.propertyIsLocal.and, Smooth, Smooth.propertyIsLocal, eq_formallyUnramified_and_smooth, propertyIsLocal
+/-
+**RingHom.Etale.propertyIsLocal** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：RingHom.PropertyIsLocal fun {R S} [CommRing R] [CommRing S] => RingHom.Eta
+le
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Etale.eq_formallyUnramified_and_smooth`：@RingHom.Etale = fun R S
+ x x_1 f => f.FormallyUnramified ∧ f.Smooth
+· 使用引理 `RingHom.PropertyIsLocal.and`：RingHom.PropertyIsLocal.and (hP : PropertyI
+sLocal P) (hQ : PropertyIsLocal Q) : PropertyIsLocal (fun f => P f ∧ Q f) where 
+localizationAwayP…
+· 使用引理 `RingHom.FormallyUnramified.propertyIsLocal`：propertyIsLocal : PropertyIs
+Local FormallyUnramified
+· 使用引理 `RingHom.Smooth.propertyIsLocal`：propertyIsLocal : PropertyIsLocal Smooth
+ where localizationAwayPreserves
 -/
 lemma Etale.propertyIsLocal : PropertyIsLocal Etale := by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.propertyIsLocal.and Smooth.propertyIsLocal
-
-/--
-lemma `Etale.respectsIso` / 引理 `Etale.respectsIso`
-
-English:
-lemma Etale.respectsIso
-  statement: RespectsIso Etale
-  proof: propertyIsLocal.respectsIso
-
-中文:
-引理 平展.respectsIso
-  结论: RespectsIso 平展
-  证明: propertyIsLocal.respectsIso
-
-Depends on / 依赖: propertyIsLocal, propertyIsLocal.respectsIso, respectsIso
+/-
+**RingHom.Etale.respectsIso** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：RingHom.RespectsIso fun {R S} [CommRing R] [CommRing S] => RingHom.Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.PropertyIsLocal.respectsIso`：RingHom.PropertyIsLocal.respectsIso
+ (hP : RingHom.PropertyIsLocal @P) : RingHom.RespectsIso @P
+· 使用定理 `RingHom.Etale.propertyIsLocal`：RingHom.PropertyIsLocal fun {R S} [CommRi
+ng R] [CommRing S] => RingHom.Etale
 -/
 lemma Etale.respectsIso : RespectsIso Etale :=
   propertyIsLocal.respectsIso
-
-/--
-lemma `Etale.ofLocalizationSpanTarget` / 引理 `Etale.ofLocalizationSpanTarget`
-
-English:
-lemma Etale.ofLocalizationSpanTarget
-  statement: OfLocalizationSpanTarget Etale
-  proof: propertyIsLocal.ofLocalizationSpanTarget
-
-中文:
-引理 平展.ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget 平展
-  证明: propertyIsLocal.ofLocalizationSpanTarget
-
-Depends on / 依赖: ofLocalizationSpanTarget, propertyIsLocal, propertyIsLocal.ofLocalizationSpanTarget
+/-
+**RingHom.Etale.ofLocalizationSpanTarget** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etal
+e`。
+形式化陈述：RingHom.OfLocalizationSpanTarget fun {R S} [CommRing R] [CommRing S] => Ri
+ngHom.Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.PropertyIsLocal.ofLocalizationSpanTarget`：∀ {P : {R S : Type u} 
+→ [inst : CommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   RingHom.Pro
+pertyIsLocal P → RingHom.OfLocalizatio…
+· 使用定理 `RingHom.Etale.propertyIsLocal`：RingHom.PropertyIsLocal fun {R S} [CommRi
+ng R] [CommRing S] => RingHom.Etale
 -/
 lemma Etale.ofLocalizationSpanTarget : OfLocalizationSpanTarget Etale :=
   propertyIsLocal.ofLocalizationSpanTarget
-
-/--
-lemma `Etale.ofLocalizationSpan` / 引理 `Etale.ofLocalizationSpan`
-
-English:
-lemma Etale.ofLocalizationSpan
-  statement: OfLocalizationSpan Etale
-  proof: propertyIsLocal.ofLocalizationSpan
-
-中文:
-引理 平展.ofLocalizationSpan
-  结论: OfLocalizationSpan 平展
-  证明: propertyIsLocal.ofLocalizationSpan
-
-Depends on / 依赖: ofLocalizationSpan, propertyIsLocal, propertyIsLocal.ofLocalizationSpan
+/-
+**RingHom.Etale.ofLocalizationSpan** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`。
+形式化陈述：RingHom.OfLocalizationSpan fun {R S} [CommRing R] [CommRing S] => RingHom.
+Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.PropertyIsLocal.ofLocalizationSpan`：∀ {P : {R S : Type u} → [ins
+t : CommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   RingHom.PropertyI
+sLocal P → RingHom.OfLocalizatio…
+· 使用定理 `RingHom.Etale.propertyIsLocal`：RingHom.PropertyIsLocal fun {R S} [CommRi
+ng R] [CommRing S] => RingHom.Etale
 -/
 lemma Etale.ofLocalizationSpan : OfLocalizationSpan Etale :=
   propertyIsLocal.ofLocalizationSpan
-
-/--
-lemma `Etale.stableUnderComposition` / 引理 `Etale.stableUnderComposition`
-
-English:
-lemma Etale.stableUnderComposition
-  statement: StableUnderComposition Etale
-  proof: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.stableUnderComposition.and Smooth.stableUnderComposition
-
-中文:
-引理 平展.stableUnderComposition
-  结论: StableUnderComposition 平展
-  证明: by
-  rw [eq_formallyUnramified_and_smooth]
-  exact FormallyUnramified.stableUnderComposition.and Smooth.stableUnderComposition
-
-Depends on / 依赖: FormallyUnramified, FormallyUnramified.stableUnderComposition.and, Smooth, Smooth.stableUnderComposition, eq_formallyUnramified_and_smooth, stableUnderComposition
+/-
+**RingHom.Etale.stableUnderComposition** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.Etale`
+。
+形式化陈述：RingHom.StableUnderComposition fun {R S} [CommRing R] [CommRing S] => Ring
+Hom.Etale
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Etale.eq_formallyUnramified_and_smooth`：@RingHom.Etale = fun R S
+ x x_1 f => f.FormallyUnramified ∧ f.Smooth
+· 使用定理 `RingHom.StableUnderComposition.and`：∀ {P Q : {R S : Type u} → [inst : Co
+mmRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop},   (RingHom.StableUnderCom
+position fun {R S} [Comm…
+· 使用引理 `RingHom.FormallyUnramified.stableUnderComposition`：stableUnderCompositio
+n : StableUnderComposition FormallyUnramified
+· 使用引理 `RingHom.Smooth.stableUnderComposition`：stableUnderComposition : StableUn
+derComposition Smooth
 -/
 lemma Etale.stableUnderComposition : StableUnderComposition Etale := by
   rw [eq_formallyUnramified_and_smooth]
   exact FormallyUnramified.stableUnderComposition.and Smooth.stableUnderComposition
-
-/--
-lemma `Etale.iff_flat_and_formallyUnramified` / 引理 `Etale.iff_flat_and_formallyUnramified`
-
-English:
-lemma Etale.iff_flat_and_formallyUnramified
-  given: {f : R ->+* S}
-  proof: by
-  algebraize [f]
-  simp_rw [← f.algebraMap_toAlgebra, RingHom.etale_algebraMap, RingHom.flat_algebraMap_iff,
-    RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
-  refine ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨_, _, _⟩ => .of_formallyUnramified_of_flat⟩
-
-中文:
-引理 平展.iff_flat_and_formallyUnramified
-  条件: {f : R ->+* S}
-  证明: by
-  algebraize [f]
-  simp_rw [← f.algebraMap_toAlgebra, RingHom.etale_algebraMap, RingHom.flat_algebraMap_iff,
-    RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
-  refine ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨_, _, _⟩ => .of_formallyUnramified_of_flat⟩
-
-Depends on / 依赖: RingHom, RingHom.etale_algebraMap, RingHom.finitePresentation_algebraMap, RingHom.flat_algebraMap_iff, RingHom.formallyUnramified_algebraMap, algebraMap_toAlgebra, algebraize, etale_algebraMap, f.algebraMap_toAlgebra, finitePresentation_algebraMap, flat_algebraMap_iff, formallyUnramified_algebraMap, of_formallyUnramified_of_flat, simp_rw
+/-
+**RingHom.Etale.iff_flat_and_formallyUnramified** 是 Mathlib 中的一个定理，位于命名空间 `RingH
+om.Etale`。
+形式化陈述：∀ {R : Type u_3} {S : Type u_4} [inst : CommRing R] [inst_1 : CommRing S] 
+{f : R →+* S},   f.Etale ↔ f.Flat ∧ f.FormallyUnramified ∧ f.FinitePresentation
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Smooth.flat`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R]
+ [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Smooth R A],   Module.Fla
+t R A
+· 使用定理 `Algebra.Etale.instSmooth`：∀ {R : Type u} {A : Type v} [inst : CommRing R
+] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebra.Sm
+ooth R A
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
+· 使用定理 `Algebra.Etale.of_formallyUnramified_of_flat`：∀ {R : Type u_4} {S : Type 
+u_5} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra
+.FinitePresentation R S] [Module.…
 -/
-lemma Etale.iff_flat_and_formallyUnramified {f : R ->+* S} :
+lemma Etale.iff_flat_and_formallyUnramified {f : R →+* S} :
     f.Etale ↔ f.Flat ∧ f.FormallyUnramified ∧ f.FinitePresentation := by
   algebraize [f]
   simp_rw [← f.algebraMap_toAlgebra, RingHom.etale_algebraMap, RingHom.flat_algebraMap_iff,
     RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
-  refine ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨_, _, _⟩ => .of_formallyUnramified_of_flat⟩
+  refine ⟨fun h ↦ ⟨inferInstance, inferInstance, inferInstance⟩,
+    fun ⟨_, _, _⟩ ↦ .of_formallyUnramified_of_flat⟩
 
 end RingHom
+

@@ -40,33 +40,21 @@ variable {C : Type u₁} [Category.{v₁} C]
 
 /-- The Yoneda embedding, as a functor from `C` into presheaves on `C`. -/
 @[implicit_reducible, simps obj_obj obj_map map_app, stacks 001O]
-/--
-Definition of `yoneda` / `yoneda` 的定义
+/-
+**CategoryTheory.yoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁ where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yoneda
-  signature: : C ⥤ Cᵒᵖ ⥤ Type v₁ where
-  body: { obj Y := (unop Y) ⟶ X
-      map f := ↾fun g => f.unop ≫ g }
-  map f :=
-    { app _ := ↾fun g => g ≫ f }
-
-中文:
-定义 yoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ 类型v₁ where
-  定义体: { obj Y := (unop Y) ⟶ X
-      map f := ↾fun g => f.unop ≫ g }
-  map f :=
-    { app _ := ↾fun g => g ≫ f }
-
-Depends on / 依赖: f.unop
+--- 原说明 ---
+The Yoneda embedding, as a functor from `C` into presheaves on `C`.
 -/
 def yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁ where
   obj X :=
     { obj Y := (unop Y) ⟶ X
-      map f := ↾fun g => f.unop ≫ g }
+      map f := ↾fun g ↦ f.unop ≫ g }
   map f :=
-    { app _ := ↾fun g => g ≫ f }
+    { app _ := ↾fun g ↦ g ≫ f }
 
 /-- Unification hint for `(yoneda.obj X).obj (op Y) = Y ⟶ X`. -/
 unif_hint yoneda_obj_obj_eq_hom (X X' Y Y' : C) where
@@ -83,20 +71,15 @@ unif_hint yoneda_obj_obj_eq_hom' (X X' : C) (Y Y' : Cᵒᵖ) where
 /-- Variant of the Yoneda embedding which allows a raise in the universe level
 for the category of types. -/
 @[pp_with_univ, simps! obj_obj obj_map map_app]
-/--
-Definition of `uliftYoneda` / `uliftYoneda` 的定义
+/-
+**CategoryTheory.uliftYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYoneda
-  signature: : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)
-  body: yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{w}
-
-中文:
-定义 uliftYoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ 类型 (最大值 w v₁)
-  定义体: yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{w}
-
-Depends on / 依赖: uliftFunctor, whiskeringRight, yoneda
+--- 原说明 ---
+Variant of the Yoneda embedding which allows a raise in the universe level
+for the category of types.
 -/
 def uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type (max w v₁) :=
   yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{w}
@@ -116,39 +99,32 @@ unif_hint uliftYoneda_obj_obj_eq_hom' (X X' : C) (Y Y' : Cᵒᵖ) where
 /-- If `C` is a category with `[Category.{max w v₁} C]`, this is the isomorphism
 `uliftYoneda.{w} (C := C) ≅ yoneda`. -/
 @[simps! inv_app_app hom_app_app]
-/--
-Definition of `uliftYonedaIsoYoneda` / `uliftYonedaIsoYoneda` 的定义
+/-
+**CategoryTheory.uliftYonedaIsoYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：uliftYonedaIsoYoneda {C : Type u₁} [Category.{max w v₁} C] : uliftYoneda.{
+w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaIsoYoneda
-  signature: {C : Type u₁} [Category.{max w v₁} C]
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
-
-中文:
-定义 uliftYonedaIsoYoneda
-  签名: {C : 类型u₁} [范畴.{最大值 w v₁} C]
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
-
-Depends on / 依赖: yoneda
+--- 原说明 ---
+If `C` is a category with `[Category.{max w v₁} C]`, this is the isomorphism
+`uliftYoneda.{w} (C := C) ≅ yoneda`.
 -/
 def uliftYonedaIsoYoneda {C : Type u₁} [Category.{max w v₁} C] :
     uliftYoneda.{w} (C := C) ≅ yoneda :=
-  NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
+  NatIso.ofComponents (fun _ ↦ NatIso.ofComponents (fun _ ↦ Equiv.ulift.toIso))
 
-/--
-Definition of `coyoneda` / `coyoneda` 的定义
+/-- The co-Yoneda embedding, as a functor from `Cᵒᵖ` into co-presheaves on `C`.
+-/
+/-
+**CategoryTheory.coyoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coyoneda
-  signature: : Cᵒᵖ ⥤ C ⥤ Type v₁
-  body: yoneda.flip
-
-中文:
-缩写 coyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ 类型v₁
-  定义体: yoneda.flip
-
-Depends on / 依赖: yoneda, yoneda.flip
+--- 原说明 ---
+The co-Yoneda embedding, as a functor from `Cᵒᵖ` into co-presheaves on `C`.
 -/
 abbrev coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁ := yoneda.flip
 
@@ -167,20 +143,15 @@ unif_hint coyoneda_obj_obj_eq_hom' (X X' : C) (Y Y' : Cᵒᵖ) where
 /-- Variant of the Coyoneda embedding which allows a raise in the universe level
 for the category of types. -/
 @[pp_with_univ]
-/--
-Definition of `uliftCoyoneda` / `uliftCoyoneda` 的定义
+/-
+**CategoryTheory.uliftCoyoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftCoyoneda : Cᵒᵖ ⥤ C ⥤ Type (max w v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation uliftCoyoneda
-  signature: : Cᵒᵖ ⥤ C ⥤ Type (max w v₁)
-  body: uliftYoneda.{w}.flip
-
-中文:
-缩写 uliftCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ 类型 (最大值 w v₁)
-  定义体: uliftYoneda.{w}.flip
-
-Depends on / 依赖: uliftYoneda
+--- 原说明 ---
+Variant of the Coyoneda embedding which allows a raise in the universe level
+for the category of types.
 -/
 abbrev uliftCoyoneda : Cᵒᵖ ⥤ C ⥤ Type (max w v₁) := uliftYoneda.{w}.flip
 
@@ -199,70 +170,60 @@ unif_hint uliftCoyoneda_obj_obj_eq_hom' (X X' : Cᵒᵖ) (Y Y' : C) where
 /-- If `C` is a category with `[Category.{max w v₁} C]`, this is the isomorphism
 `uliftCoyoneda.{w} (C := C) ≅ coyoneda`. -/
 @[simps! inv_app_app hom_app_app]
-/--
-Definition of `uliftCoyonedaIsoCoyoneda` / `uliftCoyonedaIsoCoyoneda` 的定义
+/-
+**CategoryTheory.uliftCoyonedaIsoCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：uliftCoyonedaIsoCoyoneda {C : Type u₁} [Category.{max w v₁} C] : uliftCoyo
+neda.{w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftCoyonedaIsoCoyoneda
-  signature: {C : Type u₁} [Category.{max w v₁} C]
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
-
-中文:
-定义 uliftCoyonedaIsoCoyoneda
-  签名: {C : 类型u₁} [范畴.{最大值 w v₁} C]
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
-
-Depends on / 依赖: coyoneda
+--- 原说明 ---
+If `C` is a category with `[Category.{max w v₁} C]`, this is the isomorphism
+`uliftCoyoneda.{w} (C := C) ≅ coyoneda`.
 -/
 def uliftCoyonedaIsoCoyoneda {C : Type u₁} [Category.{max w v₁} C] :
     uliftCoyoneda.{w} (C := C) ≅ coyoneda :=
-  NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Equiv.ulift.toIso))
+  NatIso.ofComponents (fun _ ↦ NatIso.ofComponents (fun _ ↦ Equiv.ulift.toIso))
 
 namespace Yoneda
 
-/--
-theorem `obj_map_id` / 定理 `obj_map_id`
-
-English:
-theorem obj_map_id
-  given: {X Y : C} (f : op X ⟶ op Y)
-  proof: by
-  simp
-
-中文:
-定理 obj_map_id
-  条件: {X Y : C} (f : op X ⟶ op Y)
-  证明: by
-  simp
+/-
+**CategoryTheory.Yoneda.obj_map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Yon
+eda`。
+形式化陈述：obj_map_id {X Y : C} (f : op X ⟶ op Y) : (yoneda.obj X).map f (𝟙 X) = (yon
+eda.map f.unop).app (op Y) (𝟙 Y)
+参数：f : op X ⟶ op Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem obj_map_id {X Y : C} (f : op X ⟶ op Y) :
     (yoneda.obj X).map f (𝟙 X) = (yoneda.map f.unop).app (op Y) (𝟙 Y) := by
   simp
 
-/--
-Definition of `fullyFaithful` / `fullyFaithful` 的定义
+/-- The Yoneda embedding is fully faithful. -/
+/-
+**CategoryTheory.Yoneda.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Yoneda`。
+形式化陈述：fullyFaithful : (yoneda (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithful
-  signature: : (yoneda (C := C)).FullyFaithful where
-  body: f.app _ (𝟙 _)
-  map_preimage := by -- this was automatic
-    intro Z W f
-    ext X x
-    have := f.naturality_apply x.op (𝟙 Z)
-    cat_disch
-
-中文:
-定义 fullyFaithful
-  签名: : (yoneda (C := C)).满忠实 where
-  定义体: f.app _ (𝟙 _)
-  map_preimage := by -- this was automatic
-    intro Z W f
-    ext X x
-    have := f.naturality_apply x.op (𝟙 Z)
-    cat_disch
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The Yoneda embedding is fully faithful.
 -/
 def fullyFaithful : (yoneda (C := C)).FullyFaithful where
   preimage f := f.app _ (𝟙 _)
@@ -271,109 +232,105 @@ def fullyFaithful : (yoneda (C := C)).FullyFaithful where
     ext X x
     have := f.naturality_apply x.op (𝟙 Z)
     cat_disch
-
-/--
-lemma `fullyFaithful_preimage` / 引理 `fullyFaithful_preimage`
-
-English:
-lemma fullyFaithful_preimage
-  given: {X Y : C} (f : yoneda.obj X ⟶ yoneda.obj Y)
-  proof: rfl
-
-中文:
-引理 fullyFaithful_preimage
-  条件: {X Y : C} (f : yoneda.obj X ⟶ yoneda.obj Y)
-  证明: rfl
+/-
+**CategoryTheory.Yoneda.fullyFaithful_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Yoneda`。
+形式化陈述：fullyFaithful_preimage {X Y : C} (f : yoneda.obj X ⟶ yoneda.obj Y) : fully
+Faithful.preimage f = f.app (op X) (𝟙 X)
+参数：f : yoneda.obj X ⟶ yoneda.obj Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fullyFaithful_preimage {X Y : C} (f : yoneda.obj X ⟶ yoneda.obj Y) :
     fullyFaithful.preimage f = f.app (op X) (𝟙 X) := rfl
 
 /-- The Yoneda embedding is full. -/
 @[stacks 001P]
-/--
-Instance `yoneda_full` / 实例 `yoneda_full`
+/-
+**CategoryTheory.Yoneda.yoneda_full** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Yo
+neda`。
+形式化陈述：yoneda_full : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 
-English:
-instance yoneda_full
-  signature: : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Full
-  body: fullyFaithful.full
-
-中文:
-实例 yoneda_full
-  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).满
-  定义体: fullyFaithful.full
-
-Depends on / 依赖: fullyFaithful, fullyFaithful.full
+--- 原说明 ---
+The Yoneda embedding is full.
 -/
 instance yoneda_full : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Full :=
   fullyFaithful.full
 
 /-- The Yoneda embedding is faithful. -/
 @[stacks 001P]
-/--
-Instance `yoneda_faithful` / 实例 `yoneda_faithful`
+/-
+**CategoryTheory.Yoneda.yoneda_faithful** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Yoneda`。
+形式化陈述：yoneda_faithful : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 
-English:
-instance yoneda_faithful
-  signature: : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Faithful
-  body: fullyFaithful.faithful
-
-中文:
-实例 yoneda_faithful
-  签名: : (yoneda : C ⥤ Cᵒᵖ ⥤ 类型v₁).忠实
-  定义体: fullyFaithful.faithful
-
-Depends on / 依赖: faithful, fullyFaithful, fullyFaithful.faithful
+--- 原说明 ---
+The Yoneda embedding is faithful.
 -/
 instance yoneda_faithful : (yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁).Faithful :=
   fullyFaithful.faithful
 
-/--
-Definition of `ext` / `ext` 的定义
-
-English:
-definition ext
-  signature: (X Y : C) (p : forall {Z : C}, (Z ⟶ X) -> (Z ⟶ Y))
-  body: fullyFaithful.preimageIso
-    (NatIso.ofComponents fun Z =>
-      { hom := ↾p
-        inv := ↾q })
-
-中文:
-定义 ext
-  签名: (X Y : C) (p : 对任意 {Z : C}, (Z ⟶ X) -> (Z ⟶ Y))
-  定义体: fullyFaithful.preimageIso
-    (NatIso.ofComponents fun Z =>
-      { hom := ↾p
-        inv := ↾q })
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, fullyFaithful, fullyFaithful.preimageIso, ofComponents, preimageIso
+/-- Extensionality via Yoneda. The typical usage would be
+```
+-- Goal is `X ≅ Y`
+apply Yoneda.ext
+-- Goals are now functions `(Z ⟶ X) → (Z ⟶ Y)`, `(Z ⟶ Y) → (Z ⟶ X)`, and the fact that these
+-- functions are inverses and natural in `Z`.
+```
 -/
-def ext (X Y : C) (p : forall {Z : C}, (Z ⟶ X) -> (Z ⟶ Y))
-    (q : forall {Z : C}, (Z ⟶ Y) -> (Z ⟶ X))
-    (h₁ : forall {Z : C} (f : Z ⟶ X), q (p f) = f) (h₂ : forall {Z : C} (f : Z ⟶ Y), p (q f) = f)
-    (n : forall {Z Z' : C} (f : Z' ⟶ Z) (g : Z ⟶ X), p (f ≫ g) = f ≫ p g) : X ≅ Y :=
+/-
+**CategoryTheory.Yoneda.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Yoneda`。
+形式化陈述：ext (X Y : C) (p : forall {Z : C}, (Z ⟶ X) -> (Z ⟶ Y)) (q : forall {Z : C}
+, (Z ⟶ Y) -> (Z ⟶ X)) (h₁ : forall {Z : C} (f : Z ⟶ X), q (p f) = f) (h₂ : foral
+l {Z : C} (f : Z ⟶ Y), p (q f) = f) (n : forall {Z Z' : C} (f : Z' ⟶ Z) (g : Z ⟶
+ X), p (f ≫ g) = f ≫ p g) : X ≅ Y
+参数：X Y : C；p : forall {Z : C}, (Z ⟶ X) -> (Z ⟶ Y)；q : forall {Z : C}, (Z ⟶ Y) ->
+ (Z ⟶ X)；h₁ : forall {Z : C} (f : Z ⟶ X), q (p f) = f；h₂ : forall {Z : C} (f : Z
+ ⟶ Y), p (q f) = f；n : forall {Z Z' : C} (f : Z' ⟶ Z) (g : Z ⟶ X), p (f ≫ g) = f
+ ≫ p g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Extensionality via Yoneda. The typical usage would be
+```
+-- Goal is `X ≅ Y`
+apply Yoneda.ext
+-- Goals are now functions `(Z ⟶ X) → (Z ⟶ Y)`, `(Z ⟶ Y) → (Z ⟶ X)`, and the fac
+t that these
+-- functions are inverses and natural in `Z`.
+```
+-/
+def ext (X Y : C) (p : ∀ {Z : C}, (Z ⟶ X) → (Z ⟶ Y))
+    (q : ∀ {Z : C}, (Z ⟶ Y) → (Z ⟶ X))
+    (h₁ : ∀ {Z : C} (f : Z ⟶ X), q (p f) = f) (h₂ : ∀ {Z : C} (f : Z ⟶ Y), p (q f) = f)
+    (n : ∀ {Z Z' : C} (f : Z' ⟶ Z) (g : Z ⟶ X), p (f ≫ g) = f ≫ p g) : X ≅ Y :=
   fullyFaithful.preimageIso
     (NatIso.ofComponents fun Z =>
       { hom := ↾p
         inv := ↾q })
 
-/--
-theorem `isIso` / 定理 `isIso`
+/-- If `yoneda.map f` is an isomorphism, so was `f`.
+-/
+/-
+**CategoryTheory.Yoneda.isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Yoneda`。
+形式化陈述：isIso {X Y : C} (f : X ⟶ Y) [IsIso (yoneda.map f)] : IsIso f
+参数：f : X ⟶ Y；yoneda.map f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_fully_faithful`：isIso_of_fully_faithful (f : X ⟶
+ Y) [IsIso (F.map f)] : IsIso f
 
-English:
-theorem isIso
-  given: {X Y : C} (f : X ⟶ Y) [IsIso (yoneda.map f)]
-  statement: IsIso f
-  proof: isIso_of_fully_faithful yoneda f
-
-中文:
-定理 isIso
-  条件: {X Y : C} (f : X ⟶ Y) [是同构 (yoneda.map f)]
-  结论: 是同构 f
-  证明: isIso_of_fully_faithful yoneda f
-
-Depends on / 依赖: isIso_of_fully_faithful, yoneda
+--- 原说明 ---
+If `yoneda.map f` is an isomorphism, so was `f`.
 -/
 theorem isIso {X Y : C} (f : X ⟶ Y) [IsIso (yoneda.map f)] : IsIso f :=
   isIso_of_fully_faithful yoneda f
@@ -384,54 +341,32 @@ namespace ULiftYoneda
 
 variable (C)
 
-/--
-Definition of `fullyFaithful` / `fullyFaithful` 的定义
+/-- When `C` is a category such that `Category.{v₁} C`, then
+the functor `uliftYoneda.{w} : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)` is fully faithful. -/
+/-
+**CategoryTheory.ULiftYoneda.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ULiftYoneda`。
+形式化陈述：fullyFaithful : (uliftYoneda.{w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithful
-  signature: : (uliftYoneda.{w} (C := C)).FullyFaithful
-  body: Yoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-中文:
-定义 fullyFaithful
-  签名: : (uliftYoneda.{w} (C := C)).满忠实
-  定义体: Yoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+When `C` is a category such that `Category.{v₁} C`, then
+the functor `uliftYoneda.{w} : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)` is fully faithful.
 -/
 def fullyFaithful : (uliftYoneda.{w} (C := C)).FullyFaithful :=
   Yoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftYoneda.{w} (C := C)).Full
-  body: (fullyFaithful C).full
-
-中文:
-实例 :
-  签名: (uliftYoneda.{w} (C := C)).满
-  定义体: (fullyFaithful C).full
+/-
+**CategoryTheory.ULiftYoneda.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ULiftYon
+eda`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftYoneda.{w} (C := C)).Full :=
   (fullyFaithful C).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftYoneda.{w} (C := C)).Faithful
-  body: (fullyFaithful C).faithful
-
-中文:
-实例 :
-  签名: (uliftYoneda.{w} (C := C)).忠实
-  定义体: (fullyFaithful C).faithful
-
-Depends on / 依赖: Faithful
+/-
+**CategoryTheory.ULiftYoneda.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ULiftYon
+eda`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftYoneda.{w} (C := C)).Faithful :=
   (fullyFaithful C).faithful
@@ -440,30 +375,16 @@ end ULiftYoneda
 
 namespace Coyoneda
 
-/--
-Definition of `fullyFaithful` / `fullyFaithful` 的定义
+/-- The co-Yoneda embedding is fully faithful. -/
+/-
+**CategoryTheory.Coyoneda.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Coyoneda`。
+形式化陈述：fullyFaithful : (coyoneda (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithful
-  signature: : (coyoneda (C := C)).FullyFaithful where
-  body: (f.app _ (𝟙 _)).op
-  map_preimage := by
-    intro Z W f
-    ext X x
-    have := f.naturality_apply x (𝟙 (unop Z))
-    cat_disch
-
-中文:
-定义 fullyFaithful
-  签名: : (coyoneda (C := C)).满忠实 where
-  定义体: (f.app _ (𝟙 _)).op
-  map_preimage := by
-    intro Z W f
-    ext X x
-    have := f.naturality_apply x (𝟙 (unop Z))
-    cat_disch
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The co-Yoneda embedding is fully faithful.
 -/
 def fullyFaithful : (coyoneda (C := C)).FullyFaithful where
   preimage f := (f.app _ (𝟙 _)).op
@@ -472,145 +393,127 @@ def fullyFaithful : (coyoneda (C := C)).FullyFaithful where
     ext X x
     have := f.naturality_apply x (𝟙 (unop Z))
     cat_disch
-
-/--
-lemma `fullyFaithful_preimage` / 引理 `fullyFaithful_preimage`
-
-English:
-lemma fullyFaithful_preimage
-  given: {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y)
-  proof: rfl
-
-中文:
-引理 fullyFaithful_preimage
-  条件: {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y)
-  证明: rfl
+/-
+**CategoryTheory.Coyoneda.fullyFaithful_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Coyoneda`。
+形式化陈述：fullyFaithful_preimage {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y) :
+ fullyFaithful.preimage f = (f.app X.unop (𝟙 X.unop)).op
+参数：f : coyoneda.obj X ⟶ coyoneda.obj Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fullyFaithful_preimage {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y) :
     fullyFaithful.preimage f = (f.app X.unop (𝟙 X.unop)).op := rfl
 
-/--
-Definition of `preimage` / `preimage` 的定义
+/-- The morphism `X ⟶ Y` corresponding to a natural transformation
+`coyoneda.obj X ⟶ coyoneda.obj Y`. -/
+/-
+**CategoryTheory.Coyoneda.preimage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coy
+oneda`。
+形式化陈述：preimage {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y) : X ⟶ Y
+参数：f : coyoneda.obj X ⟶ coyoneda.obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimage
-  signature: {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y)
-  body: (f.app _ (𝟙 X.unop)).op
-
-中文:
-定义 原像
-  签名: {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y)
-  定义体: (f.app _ (𝟙 X.unop)).op
-
-Depends on / 依赖: X.unop, f.app
+--- 原说明 ---
+The morphism `X ⟶ Y` corresponding to a natural transformation
+`coyoneda.obj X ⟶ coyoneda.obj Y`.
 -/
 def preimage {X Y : Cᵒᵖ} (f : coyoneda.obj X ⟶ coyoneda.obj Y) : X ⟶ Y :=
   (f.app _ (𝟙 X.unop)).op
-
-/--
-Instance `coyoneda_full` / 实例 `coyoneda_full`
-
-English:
-instance coyoneda_full
-  signature: : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Full
-  body: fullyFaithful.full
-
-中文:
-实例 coyoneda_full
-  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).满
-  定义体: fullyFaithful.full
-
-Depends on / 依赖: fullyFaithful, fullyFaithful.full
+/-
+**CategoryTheory.Coyoneda.coyoneda_full** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Coyoneda`。
+形式化陈述：coyoneda_full : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance coyoneda_full : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Full :=
   fullyFaithful.full
-
-/--
-Instance `coyoneda_faithful` / 实例 `coyoneda_faithful`
-
-English:
-instance coyoneda_faithful
-  signature: : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Faithful
-  body: fullyFaithful.faithful
-
-中文:
-实例 coyoneda_faithful
-  签名: : (coyoneda : Cᵒᵖ ⥤ C ⥤ 类型v₁).忠实
-  定义体: fullyFaithful.faithful
-
-Depends on / 依赖: faithful, fullyFaithful, fullyFaithful.faithful
+/-
+**CategoryTheory.Coyoneda.coyoneda_faithful** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Coyoneda`。
+形式化陈述：coyoneda_faithful : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 instance coyoneda_faithful : (coyoneda : Cᵒᵖ ⥤ C ⥤ Type v₁).Faithful :=
   fullyFaithful.faithful
 
-/--
-Definition of `ext` / `ext` 的定义
-
-English:
-definition ext
-  signature: (X Y : C) (p : forall {Z : C}, (X ⟶ Z) -> (Y ⟶ Z))
-  body: fullyFaithful.preimageIso
-    (NatIso.ofComponents (fun Z =>
-      { hom := ↾q
-        inv := ↾p })) |>.unop
-
-中文:
-定义 ext
-  签名: (X Y : C) (p : 对任意 {Z : C}, (X ⟶ Z) -> (Y ⟶ Z))
-  定义体: fullyFaithful.preimageIso
-    (NatIso.ofComponents (fun Z =>
-      { hom := ↾q
-        inv := ↾p })) |>.unop
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, fullyFaithful, fullyFaithful.preimageIso, ofComponents, preimageIso
+/-- Extensionality via Coyoneda. The typical usage would be
+```
+-- Goal is `X ≅ Y`
+apply Coyoneda.ext
+-- Goals are now functions `(X ⟶ Z) → (Y ⟶ Z)`, `(Y ⟶ Z) → (X ⟶ Z)`, and the fact that these
+-- functions are inverses and natural in `Z`.
+```
 -/
-def ext (X Y : C) (p : forall {Z : C}, (X ⟶ Z) -> (Y ⟶ Z))
-    (q : forall {Z : C}, (Y ⟶ Z) -> (X ⟶ Z))
-    (h₁ : forall {Z : C} (f : X ⟶ Z), q (p f) = f) (h₂ : forall {Z : C} (f : Y ⟶ Z), p (q f) = f)
-    (n : forall {Z Z' : C} (f : Y ⟶ Z) (g : Z ⟶ Z'), q (f ≫ g) = q f ≫ g) : X ≅ Y :=
+/-
+**CategoryTheory.Coyoneda.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coyoneda
+`。
+形式化陈述：ext (X Y : C) (p : forall {Z : C}, (X ⟶ Z) -> (Y ⟶ Z)) (q : forall {Z : C}
+, (Y ⟶ Z) -> (X ⟶ Z)) (h₁ : forall {Z : C} (f : X ⟶ Z), q (p f) = f) (h₂ : foral
+l {Z : C} (f : Y ⟶ Z), p (q f) = f) (n : forall {Z Z' : C} (f : Y ⟶ Z) (g : Z ⟶ 
+Z'), q (f ≫ g) = q f ≫ g) : X ≅ Y
+参数：X Y : C；p : forall {Z : C}, (X ⟶ Z) -> (Y ⟶ Z)；q : forall {Z : C}, (Y ⟶ Z) ->
+ (X ⟶ Z)；h₁ : forall {Z : C} (f : X ⟶ Z), q (p f) = f；h₂ : forall {Z : C} (f : Y
+ ⟶ Z), p (q f) = f；n : forall {Z Z' : C} (f : Y ⟶ Z) (g : Z ⟶ Z'), q (f ≫ g) = q
+ f ≫ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Extensionality via Coyoneda. The typical usage would be
+```
+-- Goal is `X ≅ Y`
+apply Coyoneda.ext
+-- Goals are now functions `(X ⟶ Z) → (Y ⟶ Z)`, `(Y ⟶ Z) → (X ⟶ Z)`, and the fac
+t that these
+-- functions are inverses and natural in `Z`.
+```
+-/
+def ext (X Y : C) (p : ∀ {Z : C}, (X ⟶ Z) → (Y ⟶ Z))
+    (q : ∀ {Z : C}, (Y ⟶ Z) → (X ⟶ Z))
+    (h₁ : ∀ {Z : C} (f : X ⟶ Z), q (p f) = f) (h₂ : ∀ {Z : C} (f : Y ⟶ Z), p (q f) = f)
+    (n : ∀ {Z Z' : C} (f : Y ⟶ Z) (g : Z ⟶ Z'), q (f ≫ g) = q f ≫ g) : X ≅ Y :=
   fullyFaithful.preimageIso
     (NatIso.ofComponents (fun Z =>
       { hom := ↾q
         inv := ↾p })) |>.unop
 
-/--
-theorem `isIso` / 定理 `isIso`
+/-- If `coyoneda.map f` is an isomorphism, so was `f`.
+-/
+/-
+**CategoryTheory.Coyoneda.isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Coyone
+da`。
+形式化陈述：isIso {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso (coyoneda.map f)] : IsIso f
+参数：f : X ⟶ Y；coyoneda.map f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_fully_faithful`：isIso_of_fully_faithful (f : X ⟶
+ Y) [IsIso (F.map f)] : IsIso f
 
-English:
-theorem isIso
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso (coyoneda.map f)]
-  statement: IsIso f
-  proof: isIso_of_fully_faithful coyoneda f
-
-中文:
-定理 isIso
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) [是同构 (coyoneda.map f)]
-  结论: 是同构 f
-  证明: isIso_of_fully_faithful coyoneda f
-
-Depends on / 依赖: coyoneda, isIso_of_fully_faithful
+--- 原说明 ---
+If `coyoneda.map f` is an isomorphism, so was `f`.
 -/
 theorem isIso {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso (coyoneda.map f)] : IsIso f :=
   isIso_of_fully_faithful coyoneda f
 
-/--
-Definition of `punitIso` / `punitIso` 的定义
+/-- The identity functor on `Type` is isomorphic to the coyoneda functor coming from `PUnit`. -/
+/-
+**CategoryTheory.Coyoneda.punitIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coy
+oneda`。
+形式化陈述：punitIso : coyoneda.obj (Opposite.op PUnit) ≅ 𝟭 (Type v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition punitIso
-  signature: : coyoneda.obj (Opposite.op PUnit) ≅ 𝟭 (Type v₁)
-  body: NatIso.ofComponents fun X =>
-    { hom := ↾fun f => f.hom ⟨⟩
-      inv := ↾fun x => ↾fun _ => x }
-
-中文:
-定义 punitIso
-  签名: : coyoneda.obj (对偶.op 命题单元) ≅ 𝟭 (类型v₁)
-  定义体: NatIso.ofComponents fun X =>
-    { hom := ↾fun f => f.hom ⟨⟩
-      inv := ↾fun x => ↾fun _ => x }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, f.hom, ofComponents
+--- 原说明 ---
+The identity functor on `Type` is isomorphic to the coyoneda functor coming from
+ `PUnit`.
 -/
 def punitIso : coyoneda.obj (Opposite.op PUnit) ≅ 𝟭 (Type v₁) :=
   NatIso.ofComponents fun X =>
@@ -619,97 +522,65 @@ def punitIso : coyoneda.obj (Opposite.op PUnit) ≅ 𝟭 (Type v₁) :=
 
 /-- Taking the `unop` of morphisms is a natural isomorphism. -/
 @[simps! inv_app hom_app]
-/--
-Definition of `objOpOp` / `objOpOp` 的定义
+/-
+**CategoryTheory.Coyoneda.objOpOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coyo
+neda`。
+形式化陈述：objOpOp (X : C) : coyoneda.obj (op (op X)) ≅ yoneda.obj X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition objOpOp
-  signature: (X : C)
-  body: NatIso.ofComponents fun _ => (opEquiv _ _).toIso
-
-中文:
-定义 objOpOp
-  签名: (X : C)
-  定义体: NatIso.ofComponents fun _ => (opEquiv _ _).toIso
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, opEquiv
+--- 原说明 ---
+Taking the `unop` of morphisms is a natural isomorphism.
 -/
 def objOpOp (X : C) : coyoneda.obj (op (op X)) ≅ yoneda.obj X :=
   NatIso.ofComponents fun _ => (opEquiv _ _).toIso
 
-/--
-Definition of `opIso` / `opIso` 的定义
+/-- Taking the `unop` of morphisms is a natural isomorphism. -/
+/-
+**CategoryTheory.Coyoneda.opIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coyone
+da`。
+形式化陈述：opIso : yoneda ⋙ (whiskeringLeft _ _ _).obj (opOp C) ≅ coyoneda
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opIso
-  signature: : yoneda ⋙ (whiskeringLeft _ _ _).obj (opOp C) ≅ coyoneda
-  body: NatIso.ofComponents (fun X => NatIso.ofComponents (fun Y => (opEquiv (op Y) X).toIso)
-    (fun _ => rfl)) (fun _ => rfl)
-
-中文:
-定义 opIso
-  签名: : yoneda ⋙ (whiskeringLeft _ _ _).obj (opOp C) ≅ coyoneda
-  定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun Y => (opEquiv (op Y) X).toIso)
-    (fun _ => rfl)) (fun _ => rfl)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, opEquiv
+--- 原说明 ---
+Taking the `unop` of morphisms is a natural isomorphism.
 -/
 def opIso : yoneda ⋙ (whiskeringLeft _ _ _).obj (opOp C) ≅ coyoneda :=
-  NatIso.ofComponents (fun X => NatIso.ofComponents (fun Y => (opEquiv (op Y) X).toIso)
-    (fun _ => rfl)) (fun _ => rfl)
+  NatIso.ofComponents (fun X ↦ NatIso.ofComponents (fun Y ↦ (opEquiv (op Y) X).toIso)
+    (fun _ ↦ rfl)) (fun _ ↦ rfl)
 
 namespace ULiftCoyoneda
 
 variable (C)
 
-/--
-Definition of `fullyFaithful` / `fullyFaithful` 的定义
+/-- When `C` is a category such that `Category.{v₁} C`, then
+the functor `uliftCoyoneda.{w} : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)` is fully faithful. -/
+/-
+**CategoryTheory.Coyoneda.ULiftCoyoneda.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Coyoneda.ULiftCoyoneda`。
+形式化陈述：fullyFaithful : (uliftCoyoneda.{w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithful
-  signature: : (uliftCoyoneda.{w} (C := C)).FullyFaithful
-  body: Coyoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-中文:
-定义 fullyFaithful
-  签名: : (uliftCoyoneda.{w} (C := C)).满忠实
-  定义体: Coyoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+When `C` is a category such that `Category.{v₁} C`, then
+the functor `uliftCoyoneda.{w} : C ⥤ Cᵒᵖ ⥤ Type (max w v₁)` is fully faithful.
 -/
 def fullyFaithful : (uliftCoyoneda.{w} (C := C)).FullyFaithful :=
   Coyoneda.fullyFaithful.comp (fullyFaithfulULiftFunctor.whiskeringRight _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftCoyoneda.{w} (C := C)).Full
-  body: (fullyFaithful C).full
-
-中文:
-实例 :
-  签名: (uliftCoyoneda.{w} (C := C)).满
-  定义体: (fullyFaithful C).full
+/-
+**CategoryTheory.Coyoneda.ULiftCoyoneda.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Coyoneda.ULiftCoyoneda`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftCoyoneda.{w} (C := C)).Full :=
   (fullyFaithful C).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftCoyoneda.{w} (C := C)).Faithful
-  body: (fullyFaithful C).faithful
-
-中文:
-实例 :
-  签名: (uliftCoyoneda.{w} (C := C)).忠实
-  定义体: (fullyFaithful C).faithful
-
-Depends on / 依赖: Faithful
+/-
+**CategoryTheory.Coyoneda.ULiftCoyoneda.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Coyoneda.ULiftCoyoneda`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftCoyoneda.{w} (C := C)).Faithful :=
   (fullyFaithful C).faithful
@@ -720,93 +591,100 @@ end Coyoneda
 
 namespace Functor
 
-/--
-Definition of `RepresentableBy` / `RepresentableBy` 的定义
+/-- The data which expresses that a functor `F : Cᵒᵖ ⥤ Type v` is representable by `Y : C`.
 
-English:
-structure RepresentableBy
-  parameters: (F : Cᵒᵖ ⥤ Type v) (Y : C)
-  axioms and operations (2):
-    - homEquiv({X : C}) : (X ⟶ Y) ≃ F.obj (op X)
-    - homEquiv_comp({X X' : C} (f : X ⟶ X') (g : X' ⟶ Y)) : homEquiv (f ≫ g) = F.map f.op (homEquiv g)  [default: by cat_disch]
+In the situation where `F` factors through a concrete category, it may be more convenient to use
+the API in the file `Mathlib/CategoryTheory/ConcreteCategory/Representable.lean`. -/
+/-
+**CategoryTheory.Functor.RepresentableBy** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：RepresentableBy (F : Cᵒᵖ ⥤ Type v) (Y : C) where /-- the natural bijection
+ `(X ⟶ Y) ≃ F.obj (op X)`. -/ homEquiv {X : C} : (X ⟶ Y) ≃ F.obj (op X) homEquiv
+_comp {X X' : C} (f : X ⟶ X') (g : X' ⟶ Y) : homEquiv (f ≫ g) = F.map f.op (homE
+quiv g)
+参数：F : Cᵒᵖ ⥤ Type v；Y : C；X ⟶ Y；op X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 可表示
-  参数: (F : Cᵒᵖ ⥤ 类型v) (Y : C)
-  公理与运算 (2 个):
-    - homEquiv({X : C}) : (X ⟶ Y) ≃ F.obj (op X)
-    - homEquiv_comp({X X' : C} (f : X ⟶ X') (g : X' ⟶ Y)) : homEquiv (f ≫ g) = F.map f.op (homEquiv g)  [默认: by cat_disch]
+--- 原说明 ---
+The data which expresses that a functor `F : Cᵒᵖ ⥤ Type v` is representable by `
+Y : C`.
 
-Depends on / 依赖: cat_disch
+In the situation where `F` factors through a concrete category, it may be more c
+onvenient to use
+the API in the file `Mathlib/CategoryTheory/ConcreteCategory/Representable.lean`
+.
 -/
 structure RepresentableBy (F : Cᵒᵖ ⥤ Type v) (Y : C) where
   /-- the natural bijection `(X ⟶ Y) ≃ F.obj (op X)`. -/
   homEquiv {X : C} : (X ⟶ Y) ≃ F.obj (op X)
   homEquiv_comp {X X' : C} (f : X ⟶ X') (g : X' ⟶ Y) :
     homEquiv (f ≫ g) = F.map f.op (homEquiv g) := by cat_disch
-
-/--
-lemma `RepresentableBy.comp_homEquiv_symm` / 引理 `RepresentableBy.comp_homEquiv_symm`
-
-English:
-lemma RepresentableBy.comp_homEquiv_symm
-  statement: {F : Cᵒᵖ ⥤ Type v} {Y : C}
-  proof: e.homEquiv.injective (by simp [homEquiv_comp])
-
-中文:
-引理 可表示.comp_homEquiv_symm
-  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C}
-  证明: e.homEquiv.injective (by simp [homEquiv_comp])
-
-Depends on / 依赖: e.homEquiv.injective, homEquiv, homEquiv_comp, injective
+/-
+**CategoryTheory.Functor.RepresentableBy.comp_homEquiv_symm** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v)} {Y : C}   (e : F.RepresentableBy Y) {X X' : C} (x : 
+F.obj (Opposite.op X')) (f : X ⟶ X'),   CategoryTheory.CategoryStruct.comp f (e.
+homEquiv.symm x) =     e.homEquiv.symm ((CategoryTheory.ConcreteCategory.hom (F.
+map f.op)) x)
+参数：Type v；e : F.RepresentableBy Y；x : F.obj (Opposite.op X')；f : X ⟶ X'；e.homEqu
+iv.symm x；(CategoryTheory.ConcreteCategory.hom (F.map f.op)) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma RepresentableBy.comp_homEquiv_symm {F : Cᵒᵖ ⥤ Type v} {Y : C}
     (e : F.RepresentableBy Y) {X X' : C} (x : F.obj (op X')) (f : X ⟶ X') :
     f ≫ e.homEquiv.symm x = e.homEquiv.symm (F.map f.op x) :=
   e.homEquiv.injective (by simp [homEquiv_comp])
-
-/--
-lemma `RepresentableBy.homEquiv_unop_comp` / 引理 `RepresentableBy.homEquiv_unop_comp`
-
-English:
-lemma RepresentableBy.homEquiv_unop_comp
-  statement: {F : Cᵒᵖ ⥤ Type*} {Y : C}
-  proof: h.homEquiv_comp _ _
-
-中文:
-引理 可表示.homEquiv_unop_comp
-  结论: {F : Cᵒᵖ ⥤ 类型} {Y : C}
-  证明: h.homEquiv_comp _ _
-
-Depends on / 依赖: h.homEquiv_comp, homEquiv_comp
+/-
+**CategoryTheory.Functor.RepresentableBy.homEquiv_unop_comp** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type u_1)} {Y : C}   (h : F.RepresentableBy Y) {X : Cᵒᵖ} {X' 
+: C} (f : Opposite.op X' ⟶ X) (g : X' ⟶ Y),   h.homEquiv (CategoryTheory.Categor
+yStruct.comp f.unop g) =     (CategoryTheory.ConcreteCategory.hom (F.map f)) (h.
+homEquiv g)
+参数：Type u_1；h : F.RepresentableBy Y；f : Opposite.op X' ⟶ X；g : X' ⟶ Y；CategoryTh
+eory.CategoryStruct.comp f.unop g；CategoryTheory.ConcreteCategory.hom (F.map f)；
+h.homEquiv g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
 -/
 lemma RepresentableBy.homEquiv_unop_comp {F : Cᵒᵖ ⥤ Type*} {Y : C}
     (h : F.RepresentableBy Y) {X : Cᵒᵖ} {X' : C} (f : Opposite.op X' ⟶ X) (g : X' ⟶ Y) :
     h.homEquiv (f.unop ≫ g) = F.map f (h.homEquiv g) :=
   h.homEquiv_comp _ _
 
-/--
-Definition of `RepresentableBy.ofIso` / `RepresentableBy.ofIso` 的定义
+/-- If `F ≅ F'`, and `F` is representable, then `F'` is representable. -/
+/-
+**CategoryTheory.Functor.RepresentableBy.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F F' 
+: CategoryTheory.Functor Cᵒᵖ (Type v)} → {Y : C} → F.RepresentableBy Y → (F ≅ F'
+) → F'.RepresentableBy Y
+参数：Type v；F ≅ F'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition RepresentableBy.ofIso
-  signature: {F F' : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y)
-  body: e.homEquiv.trans (e'.app _).toEquiv
-  homEquiv_comp {X X'} f g := by
-    dsimp
-    rw [e.homEquiv_comp]
-    apply e'.hom.naturality_apply
-
-中文:
-定义 可表示.ofIso
-  签名: {F F' : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
-  定义体: e.homEquiv.trans (e'.app _).toEquiv
-  homEquiv_comp {X X'} f g := by
-    dsimp
-    rw [e.homEquiv_comp]
-    apply e'.hom.naturality_apply
-
-Depends on / 依赖: e.homEquiv.trans, homEquiv, toEquiv
+--- 原说明 ---
+If `F ≅ F'`, and `F` is representable, then `F'` is representable.
 -/
 def RepresentableBy.ofIso {F F' : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y)
     (e' : F ≅ F') : F'.RepresentableBy Y where
@@ -816,73 +694,70 @@ def RepresentableBy.ofIso {F F' : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.Representab
     rw [e.homEquiv_comp]
     apply e'.hom.naturality_apply
 
-/--
-Definition of `CorepresentableBy` / `CorepresentableBy` 的定义
+/-- The data which expresses that a functor `F : C ⥤ Type v` is corepresentable by `X : C`. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：CorepresentableBy (F : C ⥤ Type v) (X : C) where /-- the natural bijection
+ `(X ⟶ Y) ≃ F.obj Y`. -/ homEquiv {Y : C} : (X ⟶ Y) ≃ F.obj Y homEquiv_comp {Y Y
+' : C} (g : Y ⟶ Y') (f : X ⟶ Y) : homEquiv (f ≫ g) = F.map g (homEquiv f)
+参数：F : C ⥤ Type v；X : C；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CorepresentableBy
-  parameters: (F : C ⥤ Type v) (X : C)
-  axioms and operations (2):
-    - homEquiv({Y : C}) : (X ⟶ Y) ≃ F.obj Y
-    - homEquiv_comp({Y Y' : C} (g : Y ⟶ Y') (f : X ⟶ Y)) : homEquiv (f ≫ g) = F.map g (homEquiv f)  [default: by cat_disch]
-
-中文:
-结构 余representableBy
-  参数: (F : C ⥤ 类型v) (X : C)
-  公理与运算 (2 个):
-    - homEquiv({Y : C}) : (X ⟶ Y) ≃ F.obj Y
-    - homEquiv_comp({Y Y' : C} (g : Y ⟶ Y') (f : X ⟶ Y)) : homEquiv (f ≫ g) = F.map g (homEquiv f)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The data which expresses that a functor `F : C ⥤ Type v` is corepresentable by `
+X : C`.
 -/
 structure CorepresentableBy (F : C ⥤ Type v) (X : C) where
   /-- the natural bijection `(X ⟶ Y) ≃ F.obj Y`. -/
   homEquiv {Y : C} : (X ⟶ Y) ≃ F.obj Y
   homEquiv_comp {Y Y' : C} (g : Y ⟶ Y') (f : X ⟶ Y) :
     homEquiv (f ≫ g) = F.map g (homEquiv f) := by cat_disch
-
-/--
-lemma `CorepresentableBy.homEquiv_symm_comp` / 引理 `CorepresentableBy.homEquiv_symm_comp`
-
-English:
-lemma CorepresentableBy.homEquiv_symm_comp
-  statement: {F : C ⥤ Type v} {X : C}
-  proof: e.homEquiv.injective (by simp [homEquiv_comp])
-
-中文:
-引理 余representableBy.homEquiv_symm_comp
-  结论: {F : C ⥤ 类型v} {X : C}
-  证明: e.homEquiv.injective (by simp [homEquiv_comp])
-
-Depends on / 依赖: e.homEquiv.injective, homEquiv, homEquiv_comp, injective
+/-
+**CategoryTheory.Functor.CorepresentableBy.homEquiv_symm_comp** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v)} {X : C}   (e : F.CorepresentableBy X) {Y Y' : C} (y : 
+F.obj Y) (g : Y ⟶ Y'),   CategoryTheory.CategoryStruct.comp (e.homEquiv.symm y) 
+g =     e.homEquiv.symm ((CategoryTheory.ConcreteCategory.hom (F.map g)) y)
+参数：Type v；e : F.CorepresentableBy X；y : F.obj Y；g : Y ⟶ Y'；e.homEquiv.symm y；(Ca
+tegoryTheory.ConcreteCategory.hom (F.map g)) y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_comp`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type 
+v)} {X : C}   (self : F.CorepresentableBy X)…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma CorepresentableBy.homEquiv_symm_comp {F : C ⥤ Type v} {X : C}
     (e : F.CorepresentableBy X) {Y Y' : C} (y : F.obj Y) (g : Y ⟶ Y') :
     e.homEquiv.symm y ≫ g = e.homEquiv.symm (F.map g y) :=
   e.homEquiv.injective (by simp [homEquiv_comp])
 
-/--
-Definition of `CorepresentableBy.ofIso` / `CorepresentableBy.ofIso` 的定义
+/-- If `F ≅ F'`, and `F` is corepresentable, then `F'` is corepresentable. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F F' 
+: CategoryTheory.Functor C (Type v)} → {X : C} → F.CorepresentableBy X → (F ≅ F'
+) → F'.CorepresentableBy X
+参数：Type v；F ≅ F'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition CorepresentableBy.ofIso
-  signature: {F F' : C ⥤ Type v} {X : C} (e : F.CorepresentableBy X)
-  body: e.homEquiv.trans (e'.app _).toEquiv
-  homEquiv_comp {Y Y'} g f := by
-    dsimp
-    rw [e.homEquiv_comp]
-    apply e'.hom.naturality_apply
-
-中文:
-定义 余representableBy.ofIso
-  签名: {F F' : C ⥤ 类型v} {X : C} (e : F.余representableBy X)
-  定义体: e.homEquiv.trans (e'.app _).toEquiv
-  homEquiv_comp {Y Y'} g f := by
-    dsimp
-    rw [e.homEquiv_comp]
-    apply e'.hom.naturality_apply
-
-Depends on / 依赖: e.homEquiv.trans, homEquiv, toEquiv
+--- 原说明 ---
+If `F ≅ F'`, and `F` is corepresentable, then `F'` is corepresentable.
 -/
 def CorepresentableBy.ofIso {F F' : C ⥤ Type v} {X : C} (e : F.CorepresentableBy X)
     (e' : F ≅ F') :
@@ -892,45 +767,51 @@ def CorepresentableBy.ofIso {F F' : C ⥤ Type v} {X : C} (e : F.Corepresentable
     dsimp
     rw [e.homEquiv_comp]
     apply e'.hom.naturality_apply
-
-/--
-lemma `RepresentableBy.homEquiv_eq` / 引理 `RepresentableBy.homEquiv_eq`
-
-English:
-lemma RepresentableBy.homEquiv_eq
-  statement: {F : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y)
-  proof: by
-  conv_lhs => rw [← Category.comp_id f, e.homEquiv_comp]
-
-中文:
-引理 可表示.homEquiv_eq
-  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
-  证明: by
-  conv_lhs => rw [← Category.comp_id f, e.homEquiv_comp]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, conv_lhs, e.homEquiv_comp, homEquiv_comp
+/-
+**CategoryTheory.Functor.RepresentableBy.homEquiv_eq** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v)} {Y : C}   (e : F.RepresentableBy Y) {X : C} (f : X ⟶
+ Y),   e.homEquiv f = (CategoryTheory.ConcreteCategory.hom (F.map f.op)) (e.homE
+quiv (CategoryTheory.CategoryStruct.id Y))
+参数：Type v；e : F.RepresentableBy Y；f : X ⟶ Y；CategoryTheory.ConcreteCategory.hom 
+(F.map f.op)；e.homEquiv (CategoryTheory.CategoryStruct.id Y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
 -/
 lemma RepresentableBy.homEquiv_eq {F : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y)
     {X : C} (f : X ⟶ Y) :
     e.homEquiv f = F.map f.op (e.homEquiv (𝟙 Y)) := by
   conv_lhs => rw [← Category.comp_id f, e.homEquiv_comp]
-
-/--
-lemma `CorepresentableBy.homEquiv_eq` / 引理 `CorepresentableBy.homEquiv_eq`
-
-English:
-lemma CorepresentableBy.homEquiv_eq
-  statement: {F : C ⥤ Type v} {X : C} (e : F.CorepresentableBy X)
-  proof: by
-  conv_lhs => rw [← Category.id_comp f, e.homEquiv_comp]
-
-中文:
-引理 余representableBy.homEquiv_eq
-  结论: {F : C ⥤ 类型v} {X : C} (e : F.余representableBy X)
-  证明: by
-  conv_lhs => rw [← Category.id_comp f, e.homEquiv_comp]
-
-Depends on / 依赖: Category, Category.id_comp, conv_lhs, e.homEquiv_comp, homEquiv_comp, id_comp
+/-
+**CategoryTheory.Functor.CorepresentableBy.homEquiv_eq** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v)} {X : C}   (e : F.CorepresentableBy X) {Y : C} (f : X ⟶
+ Y),   e.homEquiv f = (CategoryTheory.ConcreteCategory.hom (F.map f)) (e.homEqui
+v (CategoryTheory.CategoryStruct.id X))
+参数：Type v；e : F.CorepresentableBy X；f : X ⟶ Y；CategoryTheory.ConcreteCategory.ho
+m (F.map f)；e.homEquiv (CategoryTheory.CategoryStruct.id X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_comp`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type 
+v)} {X : C}   (self : F.CorepresentableBy X)…
 -/
 lemma CorepresentableBy.homEquiv_eq {F : C ⥤ Type v} {X : C} (e : F.CorepresentableBy X)
     {Y : C} (f : X ⟶ Y) :
@@ -939,24 +820,20 @@ lemma CorepresentableBy.homEquiv_eq {F : C ⥤ Type v} {X : C} (e : F.Corepresen
 
 /-- Representing objects are unique up to isomorphism. -/
 @[simps!]
-/--
-Definition of `RepresentableBy.uniqueUpToIso` / `RepresentableBy.uniqueUpToIso` 的定义
+/-
+**CategoryTheory.Functor.RepresentableBy.uniqueUpToIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor Cᵒᵖ (Type v)} → {Y Y' : C} → F.RepresentableBy Y → F.Repre
+sentableBy Y' → (Y ≅ Y')
+参数：Type v；Y ≅ Y'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition RepresentableBy.uniqueUpToIso
-  signature: {F : Cᵒᵖ ⥤ Type v} {Y Y' : C} (e : F.RepresentableBy Y)
-  body: let ε {X} := (@e.homEquiv X).trans e'.homEquiv.symm
-  Yoneda.ext _ _ ε ε.symm (by simp) (by simp)
-    (by simp [ε, comp_homEquiv_symm, homEquiv_comp])
-
-中文:
-定义 可表示.uniqueUpToIso
-  签名: {F : Cᵒᵖ ⥤ 类型v} {Y Y' : C} (e : F.可表示 Y)
-  定义体: let ε {X} := (@e.homEquiv X).trans e'.homEquiv.symm
-  Yoneda.ext _ _ ε ε.symm (by simp) (by simp)
-    (by simp [ε, comp_homEquiv_symm, homEquiv_comp])
-
-Depends on / 依赖: Yoneda, Yoneda.ext, comp_homEquiv_symm, e.homEquiv, homEquiv, homEquiv.symm, homEquiv_comp
+--- 原说明 ---
+Representing objects are unique up to isomorphism.
 -/
 def RepresentableBy.uniqueUpToIso {F : Cᵒᵖ ⥤ Type v} {Y Y' : C} (e : F.RepresentableBy Y)
     (e' : F.RepresentableBy Y') : Y ≅ Y' :=
@@ -966,28 +843,20 @@ def RepresentableBy.uniqueUpToIso {F : Cᵒᵖ ⥤ Type v} {Y Y' : C} (e : F.Rep
 
 /-- Corepresenting objects are unique up to isomorphism. -/
 @[simps!]
-/--
-Definition of `CorepresentableBy.uniqueUpToIso` / `CorepresentableBy.uniqueUpToIso` 的定义
+/-
+**CategoryTheory.Functor.CorepresentableBy.uniqueUpToIso** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor C (Type v)} → {X X' : C} → F.CorepresentableBy X → F.Corep
+resentableBy X' → (X ≅ X')
+参数：Type v；X ≅ X'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition CorepresentableBy.uniqueUpToIso
-  signature: {F : C ⥤ Type v} {X X' : C} (e : F.CorepresentableBy X)
-  body: let ε {Y} := (@e.homEquiv Y).trans e'.homEquiv.symm
-  Coyoneda.ext _ _ ε ε.symm (by simp) (by simp)
-    (by simp [ε, homEquiv_symm_comp, homEquiv_comp])
-
-@[ext]
-
-中文:
-定义 余representableBy.uniqueUpToIso
-  签名: {F : C ⥤ 类型v} {X X' : C} (e : F.余representableBy X)
-  定义体: let ε {Y} := (@e.homEquiv Y).trans e'.homEquiv.symm
-  Coyoneda.ext _ _ ε ε.symm (by simp) (by simp)
-    (by simp [ε, homEquiv_symm_comp, homEquiv_comp])
-
-@[ext]
-
-Depends on / 依赖: Coyoneda, Coyoneda.ext, e.homEquiv, homEquiv, homEquiv.symm, homEquiv_comp, homEquiv_symm_comp
+--- 原说明 ---
+Corepresenting objects are unique up to isomorphism.
 -/
 def CorepresentableBy.uniqueUpToIso {F : C ⥤ Type v} {X X' : C} (e : F.CorepresentableBy X)
     (e' : F.CorepresentableBy X') : X ≅ X' :=
@@ -996,267 +865,202 @@ def CorepresentableBy.uniqueUpToIso {F : C ⥤ Type v} {X X' : C} (e : F.Corepre
     (by simp [ε, homEquiv_symm_comp, homEquiv_comp])
 
 @[ext]
-/--
-lemma `RepresentableBy.ext` / 引理 `RepresentableBy.ext`
-
-English:
-lemma RepresentableBy.ext
-  statement: {F : Cᵒᵖ ⥤ Type v} {Y : C} {e e' : F.RepresentableBy Y}
-  proof: by
-  have : forall {X : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
-  obtain ⟨e, he⟩ := e
-  obtain ⟨e', he'⟩ := e'
-  obtain rfl : @e = @e' := by ext; apply this
-  rfl
-
-@[ext]
-
-中文:
-引理 可表示.ext
-  结论: {F : Cᵒᵖ ⥤ 类型v} {Y : C} {e e' : F.可表示 Y}
-  证明: by
-  have : forall {X : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
-  obtain ⟨e, he⟩ := e
-  obtain ⟨e', he'⟩ := e'
-  obtain rfl : @e = @e' := by ext; apply this
-  rfl
-
-@[ext]
-
-Depends on / 依赖: e.homEquiv, e.homEquiv_eq, homEquiv, homEquiv_eq
+/-
+**CategoryTheory.Functor.RepresentableBy.ext** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v)} {Y : C}   {e e' : F.RepresentableBy Y},   e.homEquiv
+ (CategoryTheory.CategoryStruct.id Y) = e'.homEquiv (CategoryTheory.CategoryStru
+ct.id Y) → e = e'
+参数：Type v；CategoryTheory.CategoryStruct.id Y；CategoryTheory.CategoryStruct.id Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type v)
+} {Y : C}   (e : F.RepresentableBy Y) {X…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
 -/
 lemma RepresentableBy.ext {F : Cᵒᵖ ⥤ Type v} {Y : C} {e e' : F.RepresentableBy Y}
     (h : e.homEquiv (𝟙 Y) = e'.homEquiv (𝟙 Y)) : e = e' := by
-  have : forall {X : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
+  have : ∀ {X : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f ↦ by
+    rw [e.homEquiv_eq, e'.homEquiv_eq, h]
   obtain ⟨e, he⟩ := e
   obtain ⟨e', he'⟩ := e'
   obtain rfl : @e = @e' := by ext; apply this
   rfl
 
 @[ext]
-/--
-lemma `CorepresentableBy.ext` / 引理 `CorepresentableBy.ext`
-
-English:
-lemma CorepresentableBy.ext
-  statement: {F : C ⥤ Type v} {X : C} {e e' : F.CorepresentableBy X}
-  proof: by
-  have : forall {Y : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
-  obtain ⟨e, he⟩ := e
-  obtain ⟨e', he'⟩ := e'
-  obtain rfl : @e = @e' := by ext; apply this
-  rfl
-
-中文:
-引理 余representableBy.ext
-  结论: {F : C ⥤ 类型v} {X : C} {e e' : F.余representableBy X}
-  证明: by
-  have : forall {Y : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
-  obtain ⟨e, he⟩ := e
-  obtain ⟨e', he'⟩ := e'
-  obtain rfl : @e = @e' := by ext; apply this
-  rfl
-
-Depends on / 依赖: e.homEquiv, e.homEquiv_eq, homEquiv, homEquiv_eq
+/-
+**CategoryTheory.Functor.CorepresentableBy.ext** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v)} {X : C}   {e e' : F.CorepresentableBy X},   e.homEquiv
+ (CategoryTheory.CategoryStruct.id X) = e'.homEquiv (CategoryTheory.CategoryStru
+ct.id X) → e = e'
+参数：Type v；CategoryTheory.CategoryStruct.id X；CategoryTheory.CategoryStruct.id X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type v)
+} {X : C}   (e : F.CorepresentableBy X) {Y…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
 -/
 lemma CorepresentableBy.ext {F : C ⥤ Type v} {X : C} {e e' : F.CorepresentableBy X}
     (h : e.homEquiv (𝟙 X) = e'.homEquiv (𝟙 X)) : e = e' := by
-  have : forall {Y : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f => by
-    rw [e.homEquiv_eq]; rw [e'.homEquiv_eq]; rw [h]
+  have : ∀ {Y : C} (f : X ⟶ Y), e.homEquiv f = e'.homEquiv f := fun {X} f ↦ by
+    rw [e.homEquiv_eq, e'.homEquiv_eq, h]
   obtain ⟨e, he⟩ := e
   obtain ⟨e', he'⟩ := e'
   obtain rfl : @e = @e' := by ext; apply this
   rfl
 
-/--
-Definition of `representableByEquiv` / `representableByEquiv` 的定义
+/-- The obvious bijection `F.RepresentableBy Y ≃ (yoneda.obj Y ≅ F)`
+when `F : Cᵒᵖ ⥤ Type v₁` and `[Category.{v₁} C]`. -/
+/-
+**CategoryTheory.Functor.representableByEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：representableByEquiv {F : Cᵒᵖ ⥤ Type v₁} {Y : C} : F.RepresentableBy Y ≃ (
+yoneda.obj Y ≅ F) where toFun r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition representableByEquiv
-  signature: {F : Cᵒᵖ ⥤ Type v₁} {Y : C}
-  body: NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
-    ext g
-    dsimp
-    apply r.homEquiv_comp)
-  invFun e :=
-    { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
-
-中文:
-定义 representableByEquiv
-  签名: {F : Cᵒᵖ ⥤ 类型v₁} {Y : C}
-  定义体: NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
-    ext g
-    dsimp
-    apply r.homEquiv_comp)
-  invFun e :=
-    { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, e.app, e.hom.naturality_apply, homEquiv, homEquiv_comp, invFun, naturality_apply, ofComponents, r.homEquiv.toIso, r.homEquiv_comp, toEquiv
+--- 原说明 ---
+The obvious bijection `F.RepresentableBy Y ≃ (yoneda.obj Y ≅ F)`
+when `F : Cᵒᵖ ⥤ Type v₁` and `[Category.{v₁} C]`.
 -/
 def representableByEquiv {F : Cᵒᵖ ⥤ Type v₁} {Y : C} :
     F.RepresentableBy Y ≃ (yoneda.obj Y ≅ F) where
-  toFun r := NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
+  toFun r := NatIso.ofComponents (fun _ ↦ r.homEquiv.toIso) (fun {X X'} f ↦ by
     ext g
     dsimp
     apply r.homEquiv_comp)
   invFun e :=
     { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
+      homEquiv_comp := fun {X X'} f g ↦ by apply e.hom.naturality_apply }
 
-/--
-Definition of `RepresentableBy.yoneda` / `RepresentableBy.yoneda` 的定义
+/-- `yoneda.obj X` is represented by `X`. -/
+/-
+**CategoryTheory.Functor.RepresentableBy.yoneda** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → (X : C) → (C
+ategoryTheory.yoneda.obj X).RepresentableBy X
+参数：X : C；CategoryTheory.yoneda.obj X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition RepresentableBy.yoneda
-  signature: (X : C)
-  body: Functor.representableByEquiv.symm (Iso.refl _)
-
-@[simp]
-
-中文:
-定义 可表示.yoneda
-  签名: (X : C)
-  定义体: Functor.representableByEquiv.symm (Iso.refl _)
-
-@[simp]
+--- 原说明 ---
+`yoneda.obj X` is represented by `X`.
 -/
 protected def RepresentableBy.yoneda (X : C) : (yoneda.obj X).RepresentableBy X :=
   Functor.representableByEquiv.symm (Iso.refl _)
 
 @[simp]
-/--
-lemma `RepresentableBy.coyoneda_homEquiv` / 引理 `RepresentableBy.coyoneda_homEquiv`
-
-English:
-lemma RepresentableBy.coyoneda_homEquiv
-  given: (X Y : C)
-  proof: rfl
-
-中文:
-引理 可表示.coyoneda_homEquiv
-  条件: (X Y : C)
-  证明: rfl
+/-
+**CategoryTheory.Functor.RepresentableBy.coyoneda_homEquiv** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (X Y : C),   (
+CategoryTheory.Functor.RepresentableBy.yoneda X).homEquiv = Equiv.refl (Y ⟶ X)
+参数：X Y : C；CategoryTheory.Functor.RepresentableBy.yoneda X；Y ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RepresentableBy.coyoneda_homEquiv (X Y : C) :
     (RepresentableBy.yoneda X).homEquiv = Equiv.refl (Y ⟶ X) :=
   rfl
 
-/--
-Definition of `RepresentableBy.toIso` / `RepresentableBy.toIso` 的定义
+/-- The isomorphism `yoneda.obj Y ≅ F` induced by `e : F.RepresentableBy Y`. -/
+/-
+**CategoryTheory.Functor.RepresentableBy.toIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor Cᵒᵖ (Type v₁)} → {Y : C} → F.RepresentableBy Y → (Category
+Theory.yoneda.obj Y ≅ F)
+参数：Type v₁；CategoryTheory.yoneda.obj Y ≅ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RepresentableBy.toIso
-  signature: {F : Cᵒᵖ ⥤ Type v₁} {Y : C} (e : F.RepresentableBy Y)
-  body: representableByEquiv e
-
-中文:
-定义 可表示.toIso
-  签名: {F : Cᵒᵖ ⥤ 类型v₁} {Y : C} (e : F.可表示 Y)
-  定义体: representableByEquiv e
-
-Depends on / 依赖: representableByEquiv
+--- 原说明 ---
+The isomorphism `yoneda.obj Y ≅ F` induced by `e : F.RepresentableBy Y`.
 -/
 def RepresentableBy.toIso {F : Cᵒᵖ ⥤ Type v₁} {Y : C} (e : F.RepresentableBy Y) :
     yoneda.obj Y ≅ F :=
   representableByEquiv e
 
-/--
-Definition of `corepresentableByEquiv` / `corepresentableByEquiv` 的定义
+/-- The obvious bijection `F.CorepresentableBy X ≃ (yoneda.obj Y ≅ F)`
+when `F : C ⥤ Type v₁` and `[Category.{v₁} C]`. -/
+/-
+**CategoryTheory.Functor.corepresentableByEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：corepresentableByEquiv {F : C ⥤ Type v₁} {X : C} : F.CorepresentableBy X ≃
+ (coyoneda.obj (op X) ≅ F) where toFun r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition corepresentableByEquiv
-  signature: {F : C ⥤ Type v₁} {X : C}
-  body: NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
-    ext g
-    dsimp
-    apply r.homEquiv_comp)
-  invFun e :=
-    { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
-
-中文:
-定义 corepresentableByEquiv
-  签名: {F : C ⥤ 类型v₁} {X : C}
-  定义体: NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
-    ext g
-    dsimp
-    apply r.homEquiv_comp)
-  invFun e :=
-    { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, e.app, e.hom.naturality_apply, homEquiv, homEquiv_comp, invFun, naturality_apply, ofComponents, r.homEquiv.toIso, r.homEquiv_comp, toEquiv
+--- 原说明 ---
+The obvious bijection `F.CorepresentableBy X ≃ (yoneda.obj Y ≅ F)`
+when `F : C ⥤ Type v₁` and `[Category.{v₁} C]`.
 -/
 def corepresentableByEquiv {F : C ⥤ Type v₁} {X : C} :
     F.CorepresentableBy X ≃ (coyoneda.obj (op X) ≅ F) where
-  toFun r := NatIso.ofComponents (fun _ => r.homEquiv.toIso) (fun {X X'} f => by
+  toFun r := NatIso.ofComponents (fun _ ↦ r.homEquiv.toIso) (fun {X X'} f ↦ by
     ext g
     dsimp
     apply r.homEquiv_comp)
   invFun e :=
     { homEquiv := (e.app _).toEquiv
-      homEquiv_comp := fun {X X'} f g => by apply e.hom.naturality_apply }
+      homEquiv_comp := fun {X X'} f g ↦ by apply e.hom.naturality_apply }
 
-/--
-Definition of `CorepresentableBy.coyoneda` / `CorepresentableBy.coyoneda` 的定义
+/-- `coyoneda.obj X` is represented by `X`. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy.coyoneda** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (X : C
+ᵒᵖ) → (CategoryTheory.coyoneda.obj X).CorepresentableBy (Opposite.unop X)
+参数：X : Cᵒᵖ；CategoryTheory.coyoneda.obj X；Opposite.unop X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition CorepresentableBy.coyoneda
-  signature: (X : Cᵒᵖ)
-  body: Functor.corepresentableByEquiv.symm (Iso.refl _)
-
-@[simp]
-
-中文:
-定义 余representableBy.coyoneda
-  签名: (X : Cᵒᵖ)
-  定义体: Functor.corepresentableByEquiv.symm (Iso.refl _)
-
-@[simp]
+--- 原说明 ---
+`coyoneda.obj X` is represented by `X`.
 -/
 protected def CorepresentableBy.coyoneda (X : Cᵒᵖ) :
     (coyoneda.obj X).CorepresentableBy X.unop :=
   Functor.corepresentableByEquiv.symm (Iso.refl _)
 
 @[simp]
-/--
-lemma `CorepresentableBy.coyoneda_homEquiv` / 引理 `CorepresentableBy.coyoneda_homEquiv`
-
-English:
-lemma CorepresentableBy.coyoneda_homEquiv
-  given: (X : Cᵒᵖ) (Y : C)
-  proof: rfl
-
-中文:
-引理 余representableBy.coyoneda_homEquiv
-  条件: (X : Cᵒᵖ) (Y : C)
-  证明: rfl
+/-
+**CategoryTheory.Functor.CorepresentableBy.coyoneda_homEquiv** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (X : Cᵒᵖ) (Y :
+ C),   (CategoryTheory.Functor.CorepresentableBy.coyoneda X).homEquiv = Equiv.re
+fl (Opposite.unop X ⟶ Y)
+参数：X : Cᵒᵖ；Y : C；CategoryTheory.Functor.CorepresentableBy.coyoneda X；Opposite.un
+op X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma CorepresentableBy.coyoneda_homEquiv (X : Cᵒᵖ) (Y : C) :
     (CorepresentableBy.coyoneda X).homEquiv = Equiv.refl (X.unop ⟶ Y) :=
   rfl
 
-/--
-Definition of `CorepresentableBy.toIso` / `CorepresentableBy.toIso` 的定义
+/-- The isomorphism `coyoneda.obj (op X) ≅ F` induced by `e : F.CorepresentableBy X`. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy.toIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor C (Type v₁)} →       {X : C} → F.CorepresentableBy X → (Ca
+tegoryTheory.coyoneda.obj (Opposite.op X) ≅ F)
+参数：Type v₁；CategoryTheory.coyoneda.obj (Opposite.op X) ≅ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CorepresentableBy.toIso
-  signature: {F : C ⥤ Type v₁} {X : C} (e : F.CorepresentableBy X)
-  body: corepresentableByEquiv e
-
-中文:
-定义 余representableBy.toIso
-  签名: {F : C ⥤ 类型v₁} {X : C} (e : F.余representableBy X)
-  定义体: corepresentableByEquiv e
-
-Depends on / 依赖: corepresentableByEquiv
+--- 原说明 ---
+The isomorphism `coyoneda.obj (op X) ≅ F` induced by `e : F.CorepresentableBy X`
+.
 -/
 def CorepresentableBy.toIso {F : C ⥤ Type v₁} {X : C} (e : F.CorepresentableBy X) :
     coyoneda.obj (op X) ≅ F :=
@@ -1264,22 +1068,19 @@ def CorepresentableBy.toIso {F : C ⥤ Type v₁} {X : C} (e : F.Corepresentable
 
 /-- Transport `RepresentableBy` along an isomorphism of the object. -/
 @[simps]
-/--
-Definition of `RepresentableBy.ofIsoObj` / `RepresentableBy.ofIsoObj` 的定义
+/-
+**CategoryTheory.Functor.RepresentableBy.ofIsoObj** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor Cᵒᵖ (Type w)} → {X Y : C} → F.RepresentableBy X → (Y ≅ X) 
+→ F.RepresentableBy Y
+参数：Type w；Y ≅ X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition RepresentableBy.ofIsoObj
-  signature: {F : Cᵒᵖ ⥤ Type w} {X Y : C} (R : F.RepresentableBy X)
-  body: e.homToEquiv.trans R.homEquiv
-  homEquiv_comp := by simp [R.homEquiv_comp]
-
-中文:
-定义 可表示.ofIsoObj
-  签名: {F : Cᵒᵖ ⥤ 类型 w} {X Y : C} (R : F.可表示 X)
-  定义体: e.homToEquiv.trans R.homEquiv
-  homEquiv_comp := by simp [R.homEquiv_comp]
-
-Depends on / 依赖: R.homEquiv, e.homToEquiv.trans, homEquiv, homToEquiv
+--- 原说明 ---
+Transport `RepresentableBy` along an isomorphism of the object.
 -/
 def RepresentableBy.ofIsoObj {F : Cᵒᵖ ⥤ Type w} {X Y : C} (R : F.RepresentableBy X)
     (e : Y ≅ X) :
@@ -1289,22 +1090,19 @@ def RepresentableBy.ofIsoObj {F : Cᵒᵖ ⥤ Type w} {X Y : C} (R : F.Represent
 
 /-- Transport `RepresentableBy` along an isomorphism of the object. -/
 @[simps]
-/--
-Definition of `CorepresentableBy.ofIsoObj` / `CorepresentableBy.ofIsoObj` 的定义
+/-
+**CategoryTheory.Functor.CorepresentableBy.ofIsoObj** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor C (Type w)} → {X Y : C} → F.CorepresentableBy X → (Y ≅ X) 
+→ F.CorepresentableBy Y
+参数：Type w；Y ≅ X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition CorepresentableBy.ofIsoObj
-  signature: {F : C ⥤ Type w} {X Y : C} (R : F.CorepresentableBy X)
-  body: e.homFromEquiv.trans R.homEquiv
-  homEquiv_comp := by simp [R.homEquiv_comp]
-
-中文:
-定义 余representableBy.ofIsoObj
-  签名: {F : C ⥤ 类型 w} {X Y : C} (R : F.余representableBy X)
-  定义体: e.homFromEquiv.trans R.homEquiv
-  homEquiv_comp := by simp [R.homEquiv_comp]
-
-Depends on / 依赖: R.homEquiv, e.homFromEquiv.trans, homEquiv, homFromEquiv
+--- 原说明 ---
+Transport `RepresentableBy` along an isomorphism of the object.
 -/
 def CorepresentableBy.ofIsoObj {F : C ⥤ Type w} {X Y : C} (R : F.CorepresentableBy X)
     (e : Y ≅ X) :
@@ -1315,26 +1113,18 @@ def CorepresentableBy.ofIsoObj {F : C ⥤ Type w} {X Y : C} (R : F.Corepresentab
 /-- If `Y` is isomorphic to `X`, representations of `F` by `X` are equivalent
 to representations of `F` by `Y`. -/
 @[simps]
-/--
-Definition of `RepresentableBy.equivOfIsoObj` / `RepresentableBy.equivOfIsoObj` 的定义
+/-
+**CategoryTheory.Functor.RepresentableBy.equivOfIsoObj** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor Cᵒᵖ (Type w)} → {X Y : C} → (Y ≅ X) → F.RepresentableBy X 
+≃ F.RepresentableBy Y
+参数：Type w；Y ≅ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RepresentableBy.equivOfIsoObj
-  signature: {F : Cᵒᵖ ⥤ Type w} {X Y : C} (e : Y ≅ X)
-  body: R.ofIsoObj e
-  invFun R := R.ofIsoObj e.symm
-  left_inv _ := by ext; simp
-  right_inv _ := by ext; simp
-
-中文:
-定义 可表示.equivOfIsoObj
-  签名: {F : Cᵒᵖ ⥤ 类型 w} {X Y : C} (e : Y ≅ X)
-  定义体: R.ofIsoObj e
-  invFun R := R.ofIsoObj e.symm
-  left_inv _ := by ext; simp
-  right_inv _ := by ext; simp
-
-Depends on / 依赖: R.ofIsoObj, ofIsoObj
+--- 原说明 ---
+If `Y` is isomorphic to `X`, representations of `F` by `X` are equivalent
+to representations of `F` by `Y`.
 -/
 def RepresentableBy.equivOfIsoObj {F : Cᵒᵖ ⥤ Type w} {X Y : C} (e : Y ≅ X) :
     F.RepresentableBy X ≃ F.RepresentableBy Y where
@@ -1346,26 +1136,18 @@ def RepresentableBy.equivOfIsoObj {F : Cᵒᵖ ⥤ Type w} {X Y : C} (e : Y ≅ 
 /-- If `Y` is isomorphic to `X`, corepresentations of `F` by `X` are equivalent
 to corepresentations of `F` by `Y`. -/
 @[simps]
-/--
-Definition of `CorepresentableBy.equivOfIsoObj` / `CorepresentableBy.equivOfIsoObj` 的定义
+/-
+**CategoryTheory.Functor.CorepresentableBy.equivOfIsoObj** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor C (Type w)} → {X Y : C} → (Y ≅ X) → F.CorepresentableBy X 
+≃ F.CorepresentableBy Y
+参数：Type w；Y ≅ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CorepresentableBy.equivOfIsoObj
-  signature: {F : C ⥤ Type w} {X Y : C} (e : Y ≅ X)
-  body: R.ofIsoObj e
-  invFun R := R.ofIsoObj e.symm
-  left_inv _ := by ext; simp
-  right_inv _ := by ext; simp
-
-中文:
-定义 余representableBy.equivOfIsoObj
-  签名: {F : C ⥤ 类型 w} {X Y : C} (e : Y ≅ X)
-  定义体: R.ofIsoObj e
-  invFun R := R.ofIsoObj e.symm
-  left_inv _ := by ext; simp
-  right_inv _ := by ext; simp
-
-Depends on / 依赖: R.ofIsoObj, ofIsoObj
+--- 原说明 ---
+If `Y` is isomorphic to `X`, corepresentations of `F` by `X` are equivalent
+to corepresentations of `F` by `Y`.
 -/
 def CorepresentableBy.equivOfIsoObj {F : C ⥤ Type w} {X Y : C} (e : Y ≅ X) :
     F.CorepresentableBy X ≃ F.CorepresentableBy Y where
@@ -1378,28 +1160,19 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Representing `F` composed with universe lifting is the same as representing `F`. -/
 @[simps]
-/--
-Definition of `representableByUliftFunctorEquiv` / `representableByUliftFunctorEquiv` 的定义
+/-
+**CategoryTheory.Functor.representableByUliftFunctorEquiv** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：representableByUliftFunctorEquiv {F : Cᵒᵖ ⥤ Type v} {X : C} : (F ⋙ uliftFu
+nctor.{w}).RepresentableBy X ≃ F.RepresentableBy X where toFun R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition representableByUliftFunctorEquiv
-  signature: {F : Cᵒᵖ ⥤ Type v} {X : C}
-  body: { homEquiv {Y} := R.homEquiv.trans Equiv.ulift
-      homEquiv_comp f g := congr($(R.homEquiv_comp _ _).down) }
-  invFun R :=
-    { homEquiv {Y} := R.homEquiv.trans Equiv.ulift.symm
-      homEquiv_comp f g := by simp [R.homEquiv_comp] }
-
-中文:
-定义 representableByUliftFunctorEquiv
-  签名: {F : Cᵒᵖ ⥤ 类型v} {X : C}
-  定义体: { homEquiv {Y} := R.homEquiv.trans Equiv.ulift
-      homEquiv_comp f g := congr($(R.homEquiv_comp _ _).down) }
-  invFun R :=
-    { homEquiv {Y} := R.homEquiv.trans Equiv.ulift.symm
-      homEquiv_comp f g := by simp [R.homEquiv_comp] }
-
-Depends on / 依赖: Equiv.ulift, Equiv.ulift.symm, R.homEquiv.trans, R.homEquiv_comp, homEquiv, homEquiv_comp, invFun
+--- 原说明 ---
+Representing `F` composed with universe lifting is the same as representing `F`.
 -/
 def representableByUliftFunctorEquiv {F : Cᵒᵖ ⥤ Type v} {X : C} :
     (F ⋙ uliftFunctor.{w}).RepresentableBy X ≃ F.RepresentableBy X where
@@ -1414,28 +1187,20 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Corepresenting `F` composed with universe lifting is the same as corepresenting `F`. -/
 @[simps]
-/--
-Definition of `corepresentableByUliftFunctorEquiv` / `corepresentableByUliftFunctorEquiv` 的定义
+/-
+**CategoryTheory.Functor.corepresentableByUliftFunctorEquiv** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Functor`。
+形式化陈述：corepresentableByUliftFunctorEquiv {F : C ⥤ Type v} {X : C} : (F ⋙ uliftFu
+nctor.{w}).CorepresentableBy X ≃ F.CorepresentableBy X where toFun R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition corepresentableByUliftFunctorEquiv
-  signature: {F : C ⥤ Type v} {X : C}
-  body: { homEquiv {Y} := R.homEquiv.trans Equiv.ulift
-      homEquiv_comp f g := congr($(R.homEquiv_comp _ _).down) }
-  invFun R :=
-    { homEquiv {Y} := R.homEquiv.trans Equiv.ulift.symm
-      homEquiv_comp f g := by simp [R.homEquiv_comp] }
-
-中文:
-定义 corepresentableByUliftFunctorEquiv
-  签名: {F : C ⥤ 类型v} {X : C}
-  定义体: { homEquiv {Y} := R.homEquiv.trans Equiv.ulift
-      homEquiv_comp f g := congr($(R.homEquiv_comp _ _).down) }
-  invFun R :=
-    { homEquiv {Y} := R.homEquiv.trans Equiv.ulift.symm
-      homEquiv_comp f g := by simp [R.homEquiv_comp] }
-
-Depends on / 依赖: Equiv.ulift, Equiv.ulift.symm, R.homEquiv.trans, R.homEquiv_comp, homEquiv, homEquiv_comp, invFun
+--- 原说明 ---
+Corepresenting `F` composed with universe lifting is the same as corepresenting 
+`F`.
 -/
 def corepresentableByUliftFunctorEquiv {F : C ⥤ Type v} {X : C} :
     (F ⋙ uliftFunctor.{w}).CorepresentableBy X ≃ F.CorepresentableBy X where
@@ -1448,36 +1213,25 @@ def corepresentableByUliftFunctorEquiv {F : C ⥤ Type v} {X : C} :
 
 /-- Version of `representableByEquiv` with more general universe assumptions. -/
 @[simps]
-/--
-Definition of `RepresentableBy.equivUliftYonedaIso` / `RepresentableBy.equivUliftYonedaIso` 的定义
+/-
+**CategoryTheory.Functor.RepresentableBy.equivUliftYonedaIso** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (F : C
+ategoryTheory.Functor Cᵒᵖ (Type (max w v₁))) →       (X : C) → F.RepresentableBy
+ X ≃ (CategoryTheory.uliftYoneda.{w, v₁, u₁}.obj X ≅ F)
+参数：F : CategoryTheory.Functor Cᵒᵖ (Type (max w v₁))；X : C；CategoryTheory.uliftYo
+neda.{w, v₁, u₁}.obj X ≅ F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition RepresentableBy.equivUliftYonedaIso
-  signature: (F : Cᵒᵖ ⥤ Type (max w v₁)) (X : C)
-  body: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
-    intro X Y f
-    ext x
-    exact R.homEquiv_comp f.unop _
-  invFun e :=
-    { homEquiv {X} := Equiv.ulift.symm.trans (equivEquivIso.symm (e.app _))
-      homEquiv_comp {X Y} f g := congr($(e.hom.naturality f.op) ⟨g⟩) }
-
-中文:
-定义 可表示.equivUliftYonedaIso
-  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)) (X : C)
-  定义体: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
-    intro X Y f
-    ext x
-    exact R.homEquiv_comp f.unop _
-  invFun e :=
-    { homEquiv {X} := Equiv.ulift.symm.trans (equivEquivIso.symm (e.app _))
-      homEquiv_comp {X Y} f g := congr($(e.hom.naturality f.op) ⟨g⟩) }
-
-Depends on / 依赖: Equiv.ulift.symm.trans, Equiv.ulift.trans, NatIso, NatIso.ofComponents, R.homEquiv, R.homEquiv_comp, e.app, e.hom.naturality, equivEquivIso, equivEquivIso.symm, f.op, f.unop, homEquiv, homEquiv_comp, invFun, naturality, ofComponents
+--- 原说明 ---
+Version of `representableByEquiv` with more general universe assumptions.
 -/
 def RepresentableBy.equivUliftYonedaIso (F : Cᵒᵖ ⥤ Type (max w v₁)) (X : C) :
     F.RepresentableBy X ≃ (uliftYoneda.obj X ≅ F) where
-toFun R := NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
+  toFun R := NatIso.ofComponents (fun X ↦ equivEquivIso (Equiv.ulift.trans R.homEquiv)) <| by
     intro X Y f
     ext x
     exact R.homEquiv_comp f.unop _
@@ -1487,36 +1241,25 @@ toFun R := NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homE
 
 /-- Version of `corepresentableByEquiv` with more general universe assumptions. -/
 @[simps]
-/--
-Definition of `CorepresentableBy.equivUliftCoyonedaIso` / `CorepresentableBy.equivUliftCoyonedaIso` 的定义
+/-
+**CategoryTheory.Functor.CorepresentableBy.equivUliftCoyonedaIso** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (F : C
+ategoryTheory.Functor C (Type (max w v₁))) →       (X : C) → F.CorepresentableBy
+ X ≃ (CategoryTheory.uliftCoyoneda.{w, v₁, u₁}.obj (Opposite.op X) ≅ F)
+参数：F : CategoryTheory.Functor C (Type (max w v₁))；X : C；CategoryTheory.uliftCoyo
+neda.{w, v₁, u₁}.obj (Opposite.op X) ≅ F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition CorepresentableBy.equivUliftCoyonedaIso
-  signature: (F : C ⥤ Type (max w v₁)) (X : C)
-  body: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
-    intro X Y f
-    ext x
-    exact R.homEquiv_comp f _
-  invFun e :=
-    { homEquiv {X} := Equiv.ulift.symm.trans (equivEquivIso.symm (e.app _))
-      homEquiv_comp {X Y} f g := congr($(e.hom.naturality f) ⟨g⟩) }
-
-中文:
-定义 余representableBy.equivUliftCoyonedaIso
-  签名: (F : C ⥤ 类型 (最大值 w v₁)) (X : C)
-  定义体: NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
-    intro X Y f
-    ext x
-    exact R.homEquiv_comp f _
-  invFun e :=
-    { homEquiv {X} := Equiv.ulift.symm.trans (equivEquivIso.symm (e.app _))
-      homEquiv_comp {X Y} f g := congr($(e.hom.naturality f) ⟨g⟩) }
-
-Depends on / 依赖: Equiv.ulift.symm.trans, Equiv.ulift.trans, NatIso, NatIso.ofComponents, R.homEquiv, R.homEquiv_comp, e.app, e.hom.naturality, equivEquivIso, equivEquivIso.symm, homEquiv, homEquiv_comp, invFun, naturality, ofComponents
+--- 原说明 ---
+Version of `corepresentableByEquiv` with more general universe assumptions.
 -/
 def CorepresentableBy.equivUliftCoyonedaIso (F : C ⥤ Type (max w v₁)) (X : C) :
     F.CorepresentableBy X ≃ (uliftCoyoneda.obj (op X) ≅ F) where
-toFun R := NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homEquiv)) by
+  toFun R := NatIso.ofComponents (fun X ↦ equivEquivIso (Equiv.ulift.trans R.homEquiv)) <| by
     intro X Y f
     ext x
     exact R.homEquiv_comp f _
@@ -1528,63 +1271,69 @@ toFun R := NatIso.ofComponents (fun X => equivEquivIso (Equiv.ulift.trans R.homE
 `F.RepresentableBy Y`, i.e. there is a natural bijection `(X ⟶ Y) ≃ F.obj (op X)`,
 which may also be rephrased as a natural isomorphism `yoneda.obj X ≅ F` when `Category.{v} C`. -/
 @[stacks 001Q]
-/--
-Definition of `IsRepresentable` / `IsRepresentable` 的定义
+/-
+**CategoryTheory.Functor.IsRepresentable** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.Functor Cᵒᵖ (Type v) → Prop
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRepresentable
-  parameters: (F : Cᵒᵖ ⥤ Type v)
-  axioms and operations (1):
-    - has_representation : exists (Y : C), Nonempty (F.RepresentableBy Y)
-
-中文:
-类 是Representable
-  参数: (F : Cᵒᵖ ⥤ 类型v)
-  公理与运算 (1 个):
-    - has_representation : 存在 (Y : C), 非空 (F.可表示 Y)
+--- 原说明 ---
+A functor `F : Cᵒᵖ ⥤ Type v` is representable if there is an object `Y` with a s
+tructure
+`F.RepresentableBy Y`, i.e. there is a natural bijection `(X ⟶ Y) ≃ F.obj (op X)
+`,
+which may also be rephrased as a natural isomorphism `yoneda.obj X ≅ F` when `Ca
+tegory.{v} C`.
 -/
 class IsRepresentable (F : Cᵒᵖ ⥤ Type v) : Prop where
-  has_representation : exists (Y : C), Nonempty (F.RepresentableBy Y)
-
-/--
-lemma `RepresentableBy.isRepresentable` / 引理 `RepresentableBy.isRepresentable`
-
-English:
-lemma RepresentableBy.isRepresentable
-  given: {F : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y)
-  proof: ⟨Y, ⟨e⟩⟩
-
-中文:
-引理 可表示.isRepresentable
-  条件: {F : Cᵒᵖ ⥤ 类型v} {Y : C} (e : F.可表示 Y)
-  证明: ⟨Y, ⟨e⟩⟩
+  has_representation : ∃ (Y : C), Nonempty (F.RepresentableBy Y)
+/-
+**CategoryTheory.Functor.RepresentableBy.isRepresentable** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Functor.RepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v)} {Y : C}   (e : F.RepresentableBy Y), F.IsRepresentab
+le
+参数：Type v；e : F.RepresentableBy Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RepresentableBy.isRepresentable {F : Cᵒᵖ ⥤ Type v} {Y : C} (e : F.RepresentableBy Y) :
     F.IsRepresentable where
   has_representation := ⟨Y, ⟨e⟩⟩
 
-/--
-lemma `IsRepresentable.mk'` / 引理 `IsRepresentable.mk'`
+/-- Alternative constructor for `F.IsRepresentable`, which takes as an input an
+isomorphism `yoneda.obj X ≅ F`. -/
+/-
+**CategoryTheory.Functor.IsRepresentable.mk'** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.IsRepresentable`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v₁)} {X : C}   (e : CategoryTheory.yoneda.obj X ≅ F), F.
+IsRepresentable
+参数：Type v₁；e : CategoryTheory.yoneda.obj X ≅ F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.isRepresentable`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Typ
+e v)} {Y : C}   (e : F.RepresentableBy Y), F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma IsRepresentable.mk'
-  given: {F : Cᵒᵖ ⥤ Type v₁} {X : C} (e : yoneda.obj X ≅ F)
-  proof: (representableByEquiv.symm e).isRepresentable
-
-中文:
-引理 是Representable.mk'
-  条件: {F : Cᵒᵖ ⥤ 类型v₁} {X : C} (e : yoneda.obj X ≅ F)
-  证明: (representableByEquiv.symm e).isRepresentable
-
-Depends on / 依赖: isRepresentable, representableByEquiv, representableByEquiv.symm
+--- 原说明 ---
+Alternative constructor for `F.IsRepresentable`, which takes as an input an
+isomorphism `yoneda.obj X ≅ F`.
 -/
 lemma IsRepresentable.mk' {F : Cᵒᵖ ⥤ Type v₁} {X : C} (e : yoneda.obj X ≅ F) :
     F.IsRepresentable :=
   (representableByEquiv.symm e).isRepresentable
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} : IsRepresentable (yoneda.obj X) :=
   IsRepresentable.mk' (Iso.refl _)
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} : IsRepresentable (uliftYoneda.{w}.obj X) :=
   RepresentableBy.isRepresentable (representableByUliftFunctorEquiv.symm (RepresentableBy.yoneda X))
 
@@ -1592,63 +1341,65 @@ instance {X : C} : IsRepresentable (uliftYoneda.{w}.obj X) :=
 A functor `F : C ⥤ Type v₁` is corepresentable if there is object `X` so `F ≅ coyoneda.obj X`.
 -/
 @[stacks 001Q]
-/--
-Definition of `IsCorepresentable` / `IsCorepresentable` 的定义
+/-
+**CategoryTheory.Functor.IsCorepresentable** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.Functor C (Type v) → Prop
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCorepresentable
-  parameters: (F : C ⥤ Type v)
-  axioms and operations (1):
-    - has_corepresentation : exists (X : C), Nonempty (F.CorepresentableBy X)
-
-中文:
-类 是余representable
-  参数: (F : C ⥤ 类型v)
-  公理与运算 (1 个):
-    - has_corepresentation : 存在 (X : C), 非空 (F.余representableBy X)
+--- 原说明 ---
+A functor `F : C ⥤ Type v₁` is corepresentable if there is object `X` so `F ≅ co
+yoneda.obj X`.
 -/
 class IsCorepresentable (F : C ⥤ Type v) : Prop where
-  has_corepresentation : exists (X : C), Nonempty (F.CorepresentableBy X)
-
-/--
-lemma `CorepresentableBy.isCorepresentable` / 引理 `CorepresentableBy.isCorepresentable`
-
-English:
-lemma CorepresentableBy.isCorepresentable
-  statement: {F : C ⥤ Type v} {X : C}
-  proof: ⟨X, ⟨e⟩⟩
-
-中文:
-引理 余representableBy.isCorepresentable
-  结论: {F : C ⥤ 类型v} {X : C}
-  证明: ⟨X, ⟨e⟩⟩
+  has_corepresentation : ∃ (X : C), Nonempty (F.CorepresentableBy X)
+/-
+**CategoryTheory.Functor.CorepresentableBy.isCorepresentable** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v)} {X : C}   (e : F.CorepresentableBy X), F.IsCorepresent
+able
+参数：Type v；e : F.CorepresentableBy X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma CorepresentableBy.isCorepresentable {F : C ⥤ Type v} {X : C}
     (e : F.CorepresentableBy X) : F.IsCorepresentable where
   has_corepresentation := ⟨X, ⟨e⟩⟩
 
-/--
-lemma `IsCorepresentable.mk'` / 引理 `IsCorepresentable.mk'`
+/-- Alternative constructor for `F.IsCorepresentable`, which takes as an input an
+isomorphism `coyoneda.obj (op X) ≅ F`. -/
+/-
+**CategoryTheory.Functor.IsCorepresentable.mk'** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor.IsCorepresentable`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v₁)} {X : C}   (e : CategoryTheory.coyoneda.obj (Opposite.
+op X) ≅ F), F.IsCorepresentable
+参数：Type v₁；e : CategoryTheory.coyoneda.obj (Opposite.op X) ≅ F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.isCorepresentable`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (T
+ype v)} {X : C}   (e : F.CorepresentableBy X), F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma IsCorepresentable.mk'
-  given: {F : C ⥤ Type v₁} {X : C} (e : coyoneda.obj (op X) ≅ F)
-  proof: (corepresentableByEquiv.symm e).isCorepresentable
-
-中文:
-引理 是余representable.mk'
-  条件: {F : C ⥤ 类型v₁} {X : C} (e : coyoneda.obj (op X) ≅ F)
-  证明: (corepresentableByEquiv.symm e).isCorepresentable
-
-Depends on / 依赖: corepresentableByEquiv, corepresentableByEquiv.symm, isCorepresentable
+--- 原说明 ---
+Alternative constructor for `F.IsCorepresentable`, which takes as an input an
+isomorphism `coyoneda.obj (op X) ≅ F`.
 -/
 lemma IsCorepresentable.mk' {F : C ⥤ Type v₁} {X : C} (e : coyoneda.obj (op X) ≅ F) :
     F.IsCorepresentable :=
   (corepresentableByEquiv.symm e).isCorepresentable
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Cᵒᵖ} : IsCorepresentable (coyoneda.obj X) :=
   IsCorepresentable.mk' (Iso.refl _)
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Cᵒᵖ} : IsCorepresentable (uliftCoyoneda.{w}.obj X) :=
   CorepresentableBy.isCorepresentable
     (corepresentableByUliftFunctorEquiv.symm (CorepresentableBy.coyoneda X))
@@ -1659,152 +1410,142 @@ section Representable
 
 variable (F : Cᵒᵖ ⥤ Type v) [hF : F.IsRepresentable]
 
-/--
-Definition of `reprX` / `reprX` 的定义
+/-- The representing object for the representable functor `F`. -/
+/-
+**CategoryTheory.Functor.reprX** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：reprX : C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsRepresentable.has_representation`：∀ {C : Type u
+₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {F : CategoryTheory.Functor Cᵒᵖ (
+Type v)}   [self : F.IsRepresentable], ∃ Y, Non…
 
-English:
-definition reprX
-  signature: : C
-  body: hF.has_representation.choose
-
-中文:
-定义 reprX
-  签名: : C
-  定义体: hF.has_representation.choose
-
-Depends on / 依赖: hF.has_representation.choose, has_representation
+--- 原说明 ---
+The representing object for the representable functor `F`.
 -/
 noncomputable def reprX : C :=
   hF.has_representation.choose
 
-/--
-Definition of `representableBy` / `representableBy` 的定义
+/-- A chosen term in `F.RepresentableBy (reprX F)` when `F.IsRepresentable` holds. -/
+/-
+**CategoryTheory.Functor.representableBy** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：representableBy : F.RepresentableBy F.reprX
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsRepresentable.has_representation`：∀ {C : Type u
+₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {F : CategoryTheory.Functor Cᵒᵖ (
+Type v)}   [self : F.IsRepresentable], ∃ Y, Non…
 
-English:
-definition representableBy
-  signature: : F.RepresentableBy F.reprX
-  body: hF.has_representation.choose_spec.some
-
-中文:
-定义 representableBy
-  签名: : F.可表示 F.reprX
-  定义体: hF.has_representation.choose_spec.some
-
-Depends on / 依赖: choose_spec, hF.has_representation.choose_spec.some, has_representation
+--- 原说明 ---
+A chosen term in `F.RepresentableBy (reprX F)` when `F.IsRepresentable` holds.
 -/
 noncomputable def representableBy : F.RepresentableBy F.reprX :=
   hF.has_representation.choose_spec.some
 
-/--
-Definition of `RepresentableBy.isoReprX` / `RepresentableBy.isoReprX` 的定义
+/-- Any representing object for a representable functor `F` is isomorphic to `reprX F`. -/
+/-
+**CategoryTheory.Functor.RepresentableBy.isoReprX** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.RepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (F : C
+ategoryTheory.Functor Cᵒᵖ (Type v)) → [hF : F.IsRepresentable] → {Y : C} → F.Rep
+resentableBy Y → (Y ≅ F.reprX)
+参数：F : CategoryTheory.Functor Cᵒᵖ (Type v)；Y ≅ F.reprX。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RepresentableBy.isoReprX
-  signature: {Y : C} (e : F.RepresentableBy Y)
-  body: RepresentableBy.uniqueUpToIso e (representableBy F)
-
-中文:
-定义 可表示.isoReprX
-  签名: {Y : C} (e : F.可表示 Y)
-  定义体: RepresentableBy.uniqueUpToIso e (representableBy F)
-
-Depends on / 依赖: RepresentableBy, RepresentableBy.uniqueUpToIso, representableBy, uniqueUpToIso
+--- 原说明 ---
+Any representing object for a representable functor `F` is isomorphic to `reprX 
+F`.
 -/
 noncomputable def RepresentableBy.isoReprX {Y : C} (e : F.RepresentableBy Y) :
     Y ≅ F.reprX :=
   RepresentableBy.uniqueUpToIso e (representableBy F)
 
-/--
-Definition of `reprx` / `reprx` 的定义
+/-- The representing element for the representable functor `F`, sometimes called the universal
+element of the functor.
+-/
+/-
+**CategoryTheory.Functor.reprx** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：reprx : F.obj (op F.reprX)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reprx
-  signature: : F.obj (op F.reprX)
-  body: F.representableBy.homEquiv (𝟙 _)
-
-中文:
-定义 reprx
-  签名: : F.obj (op F.reprX)
-  定义体: F.representableBy.homEquiv (𝟙 _)
-
-Depends on / 依赖: F.representableBy.homEquiv, homEquiv, representableBy
+--- 原说明 ---
+The representing element for the representable functor `F`, sometimes called the
+ universal
+element of the functor.
 -/
 noncomputable def reprx : F.obj (op F.reprX) :=
   F.representableBy.homEquiv (𝟙 _)
 
-/--
-Definition of `reprW` / `reprW` 的定义
+/-- An isomorphism between a representable `F` and a functor of the
+form `C(-, F.reprX)`.  Note the components `F.reprW.app X`
+definitionally have type `(X.unop ⟶ F.reprX) ≅ F.obj X`.
+-/
+/-
+**CategoryTheory.Functor.reprW** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：reprW (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable] : yoneda.obj F.reprX ≅ F
+参数：F : Cᵒᵖ ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reprW
-  signature: (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable]
-  body: F.representableBy.toIso
-
-中文:
-定义 reprW
-  签名: (F : Cᵒᵖ ⥤ 类型v₁) [F.是Representable]
-  定义体: F.representableBy.toIso
-
-Depends on / 依赖: F.representableBy.toIso, representableBy
+--- 原说明 ---
+An isomorphism between a representable `F` and a functor of the
+form `C(-, F.reprX)`.  Note the components `F.reprW.app X`
+definitionally have type `(X.unop ⟶ F.reprX) ≅ F.obj X`.
 -/
 noncomputable def reprW (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable] :
     yoneda.obj F.reprX ≅ F := F.representableBy.toIso
-
-/--
-theorem `reprW_hom_app` / 定理 `reprW_hom_app`
-
-English:
-theorem reprW_hom_app
-  statement: (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable]
-  proof: by
-  apply RepresentableBy.homEquiv_eq
-
-中文:
-定理 reprW_hom_app
-  结论: (F : Cᵒᵖ ⥤ 类型v₁) [F.是Representable]
-  证明: by
-  apply RepresentableBy.homEquiv_eq
-
-Depends on / 依赖: RepresentableBy, RepresentableBy.homEquiv_eq, homEquiv_eq
+/-
+**CategoryTheory.Functor.reprW_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：reprW_hom_app (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable] (X : Cᵒᵖ) (f : unop 
+X ⟶ F.reprX) : F.reprW.hom.app X f = F.map f.op F.reprx
+参数：F : Cᵒᵖ ⥤ Type v₁；X : Cᵒᵖ；f : unop X ⟶ F.reprX。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type v)
+} {Y : C}   (e : F.RepresentableBy Y) {X…
 -/
 theorem reprW_hom_app (F : Cᵒᵖ ⥤ Type v₁) [F.IsRepresentable]
     (X : Cᵒᵖ) (f : unop X ⟶ F.reprX) :
     F.reprW.hom.app X f = F.map f.op F.reprx := by
   apply RepresentableBy.homEquiv_eq
 
-/--
-Definition of `uliftYonedaReprXIso` / `uliftYonedaReprXIso` 的定义
+/-- If `F` is representable, it is, modulo universe lifting, isomorphic to
+`Hom(-, X)` for the representing object `X`. -/
+/-
+**CategoryTheory.Functor.uliftYonedaReprXIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：uliftYonedaReprXIso (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable] : ulif
+tYoneda.{v}.obj F.reprX ≅ F
+参数：F : Cᵒᵖ ⥤ Type (max v v₁)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaReprXIso
-  signature: (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable]
-  body: (RepresentableBy.equivUliftYonedaIso F _) F.representableBy
-
-中文:
-定义 uliftYonedaReprXIso
-  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 v v₁)) [F.是Representable]
-  定义体: (RepresentableBy.equivUliftYonedaIso F _) F.representableBy
-
-Depends on / 依赖: F.representableBy, RepresentableBy, RepresentableBy.equivUliftYonedaIso, equivUliftYonedaIso, representableBy
+--- 原说明 ---
+If `F` is representable, it is, modulo universe lifting, isomorphic to
+`Hom(-, X)` for the representing object `X`.
 -/
 noncomputable def uliftYonedaReprXIso (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable] :
     uliftYoneda.{v}.obj F.reprX ≅ F :=
   (RepresentableBy.equivUliftYonedaIso F _) F.representableBy
-
-/--
-lemma `uliftYonedaReprXIso_hom_app` / 引理 `uliftYonedaReprXIso_hom_app`
-
-English:
-lemma uliftYonedaReprXIso_hom_app
-  statement: (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable]
-  proof: RepresentableBy.homEquiv_eq _ _
-
-中文:
-引理 uliftYonedaReprXIso_hom_app
-  结论: (F : Cᵒᵖ ⥤ 类型 (最大值 v v₁)) [F.是Representable]
-  证明: RepresentableBy.homEquiv_eq _ _
-
-Depends on / 依赖: RepresentableBy, RepresentableBy.homEquiv_eq, homEquiv_eq
+/-
+**CategoryTheory.Functor.uliftYonedaReprXIso_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：uliftYonedaReprXIso_hom_app (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable
+] (X : Cᵒᵖ) (f : ULift (unop X ⟶ F.reprX)) : F.uliftYonedaReprXIso.hom.app X f =
+ F.map f.down.op F.reprx
+参数：F : Cᵒᵖ ⥤ Type (max v v₁)；X : Cᵒᵖ；f : ULift (unop X ⟶ F.reprX)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type v)
+} {Y : C}   (e : F.RepresentableBy Y) {X…
 -/
 lemma uliftYonedaReprXIso_hom_app (F : Cᵒᵖ ⥤ Type (max v v₁)) [F.IsRepresentable]
     (X : Cᵒᵖ) (f : ULift (unop X ⟶ F.reprX)) :
@@ -1817,153 +1558,145 @@ section Corepresentable
 
 variable (F : C ⥤ Type v) [hF : F.IsCorepresentable]
 
-/--
-Definition of `coreprX` / `coreprX` 的定义
+/-- The representing object for the corepresentable functor `F`. -/
+/-
+**CategoryTheory.Functor.coreprX** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：coreprX : C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsCorepresentable.has_corepresentation`：∀ {C : Ty
+pe u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {F : CategoryTheory.Functor C
+ (Type v)}   [self : F.IsCorepresentable], ∃ X, Non…
 
-English:
-definition coreprX
-  signature: : C
-  body: hF.has_corepresentation.choose
-
-中文:
-定义 coreprX
-  签名: : C
-  定义体: hF.has_corepresentation.choose
-
-Depends on / 依赖: hF.has_corepresentation.choose, has_corepresentation
+--- 原说明 ---
+The representing object for the corepresentable functor `F`.
 -/
 noncomputable def coreprX : C :=
   hF.has_corepresentation.choose
 
-/--
-Definition of `corepresentableBy` / `corepresentableBy` 的定义
+/-- A chosen term in `F.CorepresentableBy (coreprX F)` when `F.IsCorepresentable` holds. -/
+/-
+**CategoryTheory.Functor.corepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：corepresentableBy : F.CorepresentableBy F.coreprX
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsCorepresentable.has_corepresentation`：∀ {C : Ty
+pe u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {F : CategoryTheory.Functor C
+ (Type v)}   [self : F.IsCorepresentable], ∃ X, Non…
 
-English:
-definition corepresentableBy
-  signature: : F.CorepresentableBy F.coreprX
-  body: hF.has_corepresentation.choose_spec.some
-
-中文:
-定义 corepresentableBy
-  签名: : F.余representableBy F.coreprX
-  定义体: hF.has_corepresentation.choose_spec.some
-
-Depends on / 依赖: choose_spec, hF.has_corepresentation.choose_spec.some, has_corepresentation
+--- 原说明 ---
+A chosen term in `F.CorepresentableBy (coreprX F)` when `F.IsCorepresentable` ho
+lds.
 -/
 noncomputable def corepresentableBy : F.CorepresentableBy F.coreprX :=
   hF.has_corepresentation.choose_spec.some
 
 variable {F} in
-/--
-Definition of `CorepresentableBy.isoCoreprX` / `CorepresentableBy.isoCoreprX` 的定义
+/-- Any corepresenting object for a corepresentable functor `F` is isomorphic to `coreprX F`. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy.isoCoreprX** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F : C
+ategoryTheory.Functor C (Type v)} →       [hF : F.IsCorepresentable] → {Y : C} →
+ F.CorepresentableBy Y → (Y ≅ F.coreprX)
+参数：Type v；Y ≅ F.coreprX。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CorepresentableBy.isoCoreprX
-  signature: {Y : C} (e : F.CorepresentableBy Y)
-  body: CorepresentableBy.uniqueUpToIso e (corepresentableBy F)
-
-中文:
-定义 余representableBy.isoCoreprX
-  签名: {Y : C} (e : F.余representableBy Y)
-  定义体: CorepresentableBy.uniqueUpToIso e (corepresentableBy F)
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.uniqueUpToIso, corepresentableBy, uniqueUpToIso
+--- 原说明 ---
+Any corepresenting object for a corepresentable functor `F` is isomorphic to `co
+reprX F`.
 -/
 noncomputable def CorepresentableBy.isoCoreprX {Y : C} (e : F.CorepresentableBy Y) :
     Y ≅ F.coreprX :=
   CorepresentableBy.uniqueUpToIso e (corepresentableBy F)
 
-/--
-Definition of `coreprx` / `coreprx` 的定义
+/-- The representing element for the corepresentable functor `F`, sometimes called the universal
+element of the functor.
+-/
+/-
+**CategoryTheory.Functor.coreprx** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：coreprx : F.obj F.coreprX
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreprx
-  signature: : F.obj F.coreprX
-  body: F.corepresentableBy.homEquiv (𝟙 _)
-
-中文:
-定义 coreprx
-  签名: : F.obj F.coreprX
-  定义体: F.corepresentableBy.homEquiv (𝟙 _)
-
-Depends on / 依赖: F.corepresentableBy.homEquiv, corepresentableBy, homEquiv
+--- 原说明 ---
+The representing element for the corepresentable functor `F`, sometimes called t
+he universal
+element of the functor.
 -/
 noncomputable def coreprx : F.obj F.coreprX :=
   F.corepresentableBy.homEquiv (𝟙 _)
 
-/--
-Definition of `coreprW` / `coreprW` 的定义
+/-- An isomorphism between a corepresentable `F` and a functor of the form
+`C(F.corepr X, -)`. Note the components `F.coreprW.app X`
+definitionally have type `F.corepr_X ⟶ X ≅ F.obj X`.
+-/
+/-
+**CategoryTheory.Functor.coreprW** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：coreprW (F : C ⥤ Type v₁) [F.IsCorepresentable] : coyoneda.obj (op F.corep
+rX) ≅ F
+参数：F : C ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreprW
-  signature: (F : C ⥤ Type v₁) [F.IsCorepresentable]
-  body: F.corepresentableBy.toIso
-
-中文:
-定义 coreprW
-  签名: (F : C ⥤ 类型v₁) [F.是余representable]
-  定义体: F.corepresentableBy.toIso
-
-Depends on / 依赖: F.corepresentableBy.toIso, corepresentableBy
+--- 原说明 ---
+An isomorphism between a corepresentable `F` and a functor of the form
+`C(F.corepr X, -)`. Note the components `F.coreprW.app X`
+definitionally have type `F.corepr_X ⟶ X ≅ F.obj X`.
 -/
 noncomputable def coreprW (F : C ⥤ Type v₁) [F.IsCorepresentable] :
     coyoneda.obj (op F.coreprX) ≅ F :=
   F.corepresentableBy.toIso
-
-/--
-theorem `coreprW_hom_app` / 定理 `coreprW_hom_app`
-
-English:
-theorem coreprW_hom_app
-  given: (F : C ⥤ Type v₁) [F.IsCorepresentable] (X : C) (f : F.coreprX ⟶ X)
-  proof: by
-  apply CorepresentableBy.homEquiv_eq
-
-中文:
-定理 coreprW_hom_app
-  条件: (F : C ⥤ 类型v₁) [F.是余representable] (X : C) (f : F.coreprX ⟶ X)
-  证明: by
-  apply CorepresentableBy.homEquiv_eq
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.homEquiv_eq, homEquiv_eq
+/-
+**CategoryTheory.Functor.coreprW_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：coreprW_hom_app (F : C ⥤ Type v₁) [F.IsCorepresentable] (X : C) (f : F.cor
+eprX ⟶ X) : F.coreprW.hom.app X f = F.map f F.coreprx
+参数：F : C ⥤ Type v₁；X : C；f : F.coreprX ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type v)
+} {X : C}   (e : F.CorepresentableBy X) {Y…
 -/
 theorem coreprW_hom_app (F : C ⥤ Type v₁) [F.IsCorepresentable] (X : C) (f : F.coreprX ⟶ X) :
     F.coreprW.hom.app X f = F.map f F.coreprx := by
   apply CorepresentableBy.homEquiv_eq
 
-/--
-Definition of `uliftCoyonedaCoreprXIso` / `uliftCoyonedaCoreprXIso` 的定义
+/-- If `F` is corepresentable, it is, modulo universe lifting, isomorphic to
+`Hom(X, -)` for the corepresenting object `X`. -/
+/-
+**CategoryTheory.Functor.uliftCoyonedaCoreprXIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：uliftCoyonedaCoreprXIso (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable] : 
+uliftCoyoneda.{v}.obj (op F.coreprX) ≅ F
+参数：F : C ⥤ Type (max v v₁)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftCoyonedaCoreprXIso
-  signature: (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable]
-  body: (CorepresentableBy.equivUliftCoyonedaIso F _) F.corepresentableBy
-
-中文:
-定义 uliftCoyonedaCoreprXIso
-  签名: (F : C ⥤ 类型 (最大值 v v₁)) [F.是余representable]
-  定义体: (CorepresentableBy.equivUliftCoyonedaIso F _) F.corepresentableBy
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.equivUliftCoyonedaIso, F.corepresentableBy, corepresentableBy, equivUliftCoyonedaIso
+--- 原说明 ---
+If `F` is corepresentable, it is, modulo universe lifting, isomorphic to
+`Hom(X, -)` for the corepresenting object `X`.
 -/
 noncomputable def uliftCoyonedaCoreprXIso (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable] :
     uliftCoyoneda.{v}.obj (op F.coreprX) ≅ F :=
   (CorepresentableBy.equivUliftCoyonedaIso F _) F.corepresentableBy
-
-/--
-lemma `uliftCoyonedaCoreprXIso_hom_app` / 引理 `uliftCoyonedaCoreprXIso_hom_app`
-
-English:
-lemma uliftCoyonedaCoreprXIso_hom_app
-  statement: (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable]
-  proof: CorepresentableBy.homEquiv_eq _ _
-
-中文:
-引理 uliftCoyonedaCoreprXIso_hom_app
-  结论: (F : C ⥤ 类型 (最大值 v v₁)) [F.是余representable]
-  证明: CorepresentableBy.homEquiv_eq _ _
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.homEquiv_eq, homEquiv_eq
+/-
+**CategoryTheory.Functor.uliftCoyonedaCoreprXIso_hom_app** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor`。
+形式化陈述：uliftCoyonedaCoreprXIso_hom_app (F : C ⥤ Type (max v v₁)) [F.IsCorepresent
+able] (X : C) (f : ULift (F.coreprX ⟶ X)) : F.uliftCoyonedaCoreprXIso.hom.app X 
+f = F.map f.down F.coreprx
+参数：F : C ⥤ Type (max v v₁)；X : C；f : ULift (F.coreprX ⟶ X)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_eq`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type v)
+} {X : C}   (e : F.CorepresentableBy X) {Y…
 -/
 lemma uliftCoyonedaCoreprXIso_hom_app (F : C ⥤ Type (max v v₁)) [F.IsCorepresentable]
     (X : C) (f : ULift (F.coreprX ⟶ X)) :
@@ -1972,150 +1705,121 @@ lemma uliftCoyonedaCoreprXIso_hom_app (F : C ⥤ Type (max v v₁)) [F.IsCorepre
 
 end Corepresentable
 
-/--
-lemma `isRepresentable_comp_uliftFunctor_iff` / 引理 `isRepresentable_comp_uliftFunctor_iff`
-
-English:
-lemma isRepresentable_comp_uliftFunctor_iff
-  given: {F : Cᵒᵖ ⥤ Type v}
-
-中文:
-引理 isRepresentable_comp_uliftFunctor_iff
-  条件: {F : Cᵒᵖ ⥤ 类型v}
+/-
+**CategoryTheory.Functor.isRepresentable_comp_uliftFunctor_iff** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor Cᵒᵖ (Type v)},   (F.comp CategoryTheory.uliftFunctor.{w, v}).IsRep
+resentable ↔ F.IsRepresentable
+参数：Type v；F.comp CategoryTheory.uliftFunctor.{w, v}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma isRepresentable_comp_uliftFunctor_iff {F : Cᵒᵖ ⥤ Type v} :
     (F ⋙ uliftFunctor.{w}).IsRepresentable ↔ F.IsRepresentable where
   mp | ⟨X, ⟨R⟩⟩ => ⟨X, ⟨representableByUliftFunctorEquiv R⟩⟩
   mpr | ⟨X, ⟨R⟩⟩ => ⟨X, ⟨representableByUliftFunctorEquiv.symm R⟩⟩
-
-/--
-lemma `isCorepresentable_comp_uliftFunctor_iff` / 引理 `isCorepresentable_comp_uliftFunctor_iff`
-
-English:
-lemma isCorepresentable_comp_uliftFunctor_iff
-  given: {F : C ⥤ Type v}
-
-中文:
-引理 isCorepresentable_comp_uliftFunctor_iff
-  条件: {F : C ⥤ 类型v}
+/-
+**CategoryTheory.Functor.isCorepresentable_comp_uliftFunctor_iff** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryT
+heory.Functor C (Type v)},   (F.comp CategoryTheory.uliftFunctor.{w, v}).IsCorep
+resentable ↔ F.IsCorepresentable
+参数：Type v；F.comp CategoryTheory.uliftFunctor.{w, v}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma isCorepresentable_comp_uliftFunctor_iff {F : C ⥤ Type v} :
     (F ⋙ uliftFunctor.{w}).IsCorepresentable ↔ F.IsCorepresentable where
   mp | ⟨X, ⟨R⟩⟩ => ⟨X, ⟨corepresentableByUliftFunctorEquiv R⟩⟩
   mpr | ⟨X, ⟨R⟩⟩ => ⟨X, ⟨corepresentableByUliftFunctorEquiv.symm R⟩⟩
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : Cᵒᵖ ⥤ Type v) [F.IsRepresentable] : (F ⋙ uliftFunctor.{w}).IsRepresentable :=
   isRepresentable_comp_uliftFunctor_iff.mpr ‹_›
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ Type v) [F.IsCorepresentable] : (F ⋙ uliftFunctor.{w}).IsCorepresentable :=
   isCorepresentable_comp_uliftFunctor_iff.mpr ‹_›
 
 end Functor
 
-/--
-theorem `isRepresentable_of_natIso` / 定理 `isRepresentable_of_natIso`
-
-English:
-theorem isRepresentable_of_natIso
-  given: (F : Cᵒᵖ ⥤ Type v) {G} (i : F ≅ G) [F.IsRepresentable]
-  proof: (F.representableBy.ofIso i).isRepresentable
-
-中文:
-定理 isRepresentable_of_natIso
-  条件: (F : Cᵒᵖ ⥤ 类型v) {G} (i : F ≅ G) [F.是Representable]
-  证明: (F.representableBy.ofIso i).isRepresentable
-
-Depends on / 依赖: F.representableBy.ofIso, isRepresentable, representableBy
+/-
+**CategoryTheory.isRepresentable_of_natIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：isRepresentable_of_natIso (F : Cᵒᵖ ⥤ Type v) {G} (i : F ≅ G) [F.IsRepresen
+table] : G.IsRepresentable
+参数：F : Cᵒᵖ ⥤ Type v；i : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.isRepresentable`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Typ
+e v)} {Y : C}   (e : F.RepresentableBy Y), F…
 -/
 theorem isRepresentable_of_natIso (F : Cᵒᵖ ⥤ Type v) {G} (i : F ≅ G) [F.IsRepresentable] :
     G.IsRepresentable :=
   (F.representableBy.ofIso i).isRepresentable
-
-/--
-theorem `corepresentable_of_natIso` / 定理 `corepresentable_of_natIso`
-
-English:
-theorem corepresentable_of_natIso
-  given: (F : C ⥤ Type v) {G} (i : F ≅ G) [F.IsCorepresentable]
-  proof: (F.corepresentableBy.ofIso i).isCorepresentable
-
-中文:
-定理 corepresentable_of_natIso
-  条件: (F : C ⥤ 类型v) {G} (i : F ≅ G) [F.是余representable]
-  证明: (F.corepresentableBy.ofIso i).isCorepresentable
-
-Depends on / 依赖: F.corepresentableBy.ofIso, corepresentableBy, isCorepresentable
+/-
+**CategoryTheory.corepresentable_of_natIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：corepresentable_of_natIso (F : C ⥤ Type v) {G} (i : F ≅ G) [F.IsCorepresen
+table] : G.IsCorepresentable
+参数：F : C ⥤ Type v；i : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.isCorepresentable`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (T
+ype v)} {X : C}   (e : F.CorepresentableBy X), F…
 -/
 theorem corepresentable_of_natIso (F : C ⥤ Type v) {G} (i : F ≅ G) [F.IsCorepresentable] :
     G.IsCorepresentable :=
   (F.corepresentableBy.ofIso i).isCorepresentable
 
-/--
-Definition of `Functor.CorepresentableBy.id` / `Functor.CorepresentableBy.id` 的定义
+/-- The identity functor on `Type v` is corepresented by `PUnit`. -/
+/-
+**CategoryTheory.Functor.CorepresentableBy.id** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.CorepresentableBy`。
+形式化陈述：(CategoryTheory.Functor.id (Type v)).CorepresentableBy PUnit.{v + 1}
+参数：Type v。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Functor.CorepresentableBy.id
-  signature: : (𝟭 (Type v)).CorepresentableBy PUnit
-  body: corepresentableByEquiv.symm Coyoneda.punitIso
-
-中文:
-定义 函子.余representableBy.id
-  签名: : (𝟭 (类型v)).余representableBy 命题单元
-  定义体: corepresentableByEquiv.symm Coyoneda.punitIso
-
-Depends on / 依赖: Coyoneda, Coyoneda.punitIso, corepresentableByEquiv, corepresentableByEquiv.symm, punitIso
+--- 原说明 ---
+The identity functor on `Type v` is corepresented by `PUnit`.
 -/
 def Functor.CorepresentableBy.id : (𝟭 (Type v)).CorepresentableBy PUnit :=
   corepresentableByEquiv.symm Coyoneda.punitIso
-
-/--
-lemma `Functor.CorepresentableBy.id_homEquiv_apply` / 引理 `Functor.CorepresentableBy.id_homEquiv_apply`
-
-English:
-lemma Functor.CorepresentableBy.id_homEquiv_apply
-  statement: (X : Type v)
-  proof: rfl
-
-中文:
-引理 函子.余representableBy.id_homEquiv_apply
-  结论: (X : 类型v)
-  证明: rfl
+/-
+**CategoryTheory.Functor.CorepresentableBy.id_homEquiv_apply** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ (X : Type v) (a : PUnit.{v + 1} ⟶ X),   CategoryTheory.Functor.Coreprese
+ntableBy.id.homEquiv a = (CategoryTheory.ConcreteCategory.hom a) PUnit.unit
+参数：X : Type v；a : PUnit.{v + 1} ⟶ X；CategoryTheory.ConcreteCategory.hom a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Functor.CorepresentableBy.id_homEquiv_apply (X : Type v)
     (a : PUnit ⟶ X) : dsimp% id.homEquiv a = a ⟨⟩ :=
   rfl
-
-/--
-lemma `Functor.CorepresentableBy.id_homEquiv_symm_apply` / 引理 `Functor.CorepresentableBy.id_homEquiv_symm_apply`
-
-English:
-lemma Functor.CorepresentableBy.id_homEquiv_symm_apply
-  statement: (X : Type v) (x : X)
-  proof: rfl
-
-中文:
-引理 函子.余representableBy.id_homEquiv_symm_apply
-  结论: (X : 类型v) (x : X)
-  证明: rfl
+/-
+**CategoryTheory.Functor.CorepresentableBy.id_homEquiv_symm_apply** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Functor.CorepresentableBy`。
+形式化陈述：∀ (X : Type v) (x : X) (a : PUnit.{v + 1}),   (CategoryTheory.ConcreteCate
+gory.hom (CategoryTheory.Functor.CorepresentableBy.id.homEquiv.symm x)) a = x
+参数：X : Type v；x : X；a : PUnit.{v + 1}；CategoryTheory.ConcreteCategory.hom (Categ
+oryTheory.Functor.CorepresentableBy.id.homEquiv.symm x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma Functor.CorepresentableBy.id_homEquiv_symm_apply (X : Type v) (x : X)
     (a : PUnit) : dsimp% id.homEquiv.symm x a = x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor.IsCorepresentable (𝟭 (Type v))
-  body: Functor.CorepresentableBy.id.isCorepresentable
-
-中文:
-实例 :
-  签名: 函子.是余representable (𝟭 (类型v))
-  定义体: Functor.CorepresentableBy.id.isCorepresentable
-
-Depends on / 依赖: CorepresentableBy, Functor, Functor.CorepresentableBy.id.isCorepresentable, isCorepresentable
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor.IsCorepresentable (𝟭 (Type v)) :=
   Functor.CorepresentableBy.id.isCorepresentable
@@ -2125,38 +1829,21 @@ open Opposite
 variable (C)
 
 -- We need to help typeclass inference with some awkward universe levels here.
-/--
-Instance `prodCategoryInstance1` / 实例 `prodCategoryInstance1`
-
-English:
-instance prodCategoryInstance1
-  signature: : Category ((Cᵒᵖ ⥤ Type v₁) × Cᵒᵖ)
-  body: CategoryTheory.prod'.{max u₁ v₁, v₁} (Cᵒᵖ ⥤ Type v₁) Cᵒᵖ
-
-中文:
-实例 prodCategoryInstance1
-  签名: : 范畴 ((Cᵒᵖ ⥤ 类型v₁) × Cᵒᵖ)
-  定义体: CategoryTheory.prod'.{max u₁ v₁, v₁} (Cᵒᵖ ⥤ Type v₁) Cᵒᵖ
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.prod
+/-
+**CategoryTheory.prodCategoryInstance1** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+`。
+形式化陈述：prodCategoryInstance1 : Category ((Cᵒᵖ ⥤ Type v₁) × Cᵒᵖ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance prodCategoryInstance1 : Category ((Cᵒᵖ ⥤ Type v₁) × Cᵒᵖ) :=
   CategoryTheory.prod'.{max u₁ v₁, v₁} (Cᵒᵖ ⥤ Type v₁) Cᵒᵖ
-
-/--
-Instance `prodCategoryInstance2` / 实例 `prodCategoryInstance2`
-
-English:
-instance prodCategoryInstance2
-  signature: : Category (Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁))
-  body: CategoryTheory.prod'.{v₁, max u₁ v₁} Cᵒᵖ (Cᵒᵖ ⥤ Type v₁)
-
-中文:
-实例 prodCategoryInstance2
-  签名: : 范畴 (Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁))
-  定义体: CategoryTheory.prod'.{v₁, max u₁ v₁} Cᵒᵖ (Cᵒᵖ ⥤ Type v₁)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.prod
+/-
+**CategoryTheory.prodCategoryInstance2** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+`。
+形式化陈述：prodCategoryInstance2 : Category (Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance prodCategoryInstance2 : Category (Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) :=
   CategoryTheory.prod'.{v₁, max u₁ v₁} Cᵒᵖ (Cᵒᵖ ⥤ Type v₁)
@@ -2171,316 +1858,344 @@ variable {C}
 and elements of `F.obj X`, without any universe switching.
 -/
 @[implicit_reducible]
-/--
-Definition of `yonedaEquiv` / `yonedaEquiv` 的定义
+/-
+**CategoryTheory.yonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaEquiv {X : C} {F : Cᵒᵖ ⥤ Type v₁} : (yoneda.obj X ⟶ F) ≃ F.obj (op X
+) where toFun η
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaEquiv
-  signature: {X : C} {F : Cᵒᵖ ⥤ Type v₁}
-  body: η.app (op X) (𝟙 X)
-  invFun ξ := { app _ := ↾fun f => F.map f.op ξ }
-  left_inv := by
-    intro η
-    ext Y f
-    simp [← NatTrans.naturality_apply]
-  right_inv := by intro ξ; simp
-
-中文:
-定义 yonedaEquiv
-  签名: {X : C} {F : Cᵒᵖ ⥤ 类型v₁}
-  定义体: η.app (op X) (𝟙 X)
-  invFun ξ := { app _ := ↾fun f => F.map f.op ξ }
-  left_inv := by
-    intro η
-    ext Y f
-    simp [← NatTrans.naturality_apply]
-  right_inv := by intro ξ; simp
+--- 原说明 ---
+We have a type-level equivalence between natural transformations from the yoneda
+ embedding
+and elements of `F.obj X`, without any universe switching.
 -/
 def yonedaEquiv {X : C} {F : Cᵒᵖ ⥤ Type v₁} : (yoneda.obj X ⟶ F) ≃ F.obj (op X) where
   toFun η := η.app (op X) (𝟙 X)
-  invFun ξ := { app _ := ↾fun f => F.map f.op ξ }
+  invFun ξ := { app _ := ↾fun f ↦ F.map f.op ξ }
   left_inv := by
     intro η
     ext Y f
     simp [← NatTrans.naturality_apply]
   right_inv := by intro ξ; simp
-
-/--
-theorem `yonedaEquiv_apply` / 定理 `yonedaEquiv_apply`
-
-English:
-theorem yonedaEquiv_apply
-  given: {X : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 yonedaEquiv_apply
-  条件: {X : C} {F : Cᵒᵖ ⥤ 类型v₁} (f : yoneda.obj X ⟶ F)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.yonedaEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaEquiv_apply {X : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) : yon
+edaEquiv f = f.app (op X) (𝟙 X)
+参数：f : yoneda.obj X ⟶ F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem yonedaEquiv_apply {X : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) :
     yonedaEquiv f = f.app (op X) (𝟙 X) :=
   rfl
 
 @[simp]
-/--
-theorem `yonedaEquiv_symm_app` / 定理 `yonedaEquiv_symm_app`
-
-English:
-theorem yonedaEquiv_symm_app
-  given: {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) (Y : Cᵒᵖ)
-  proof: rfl
-
-中文:
-定理 yonedaEquiv_symm_app
-  条件: {X : C} {F : Cᵒᵖ ⥤ 类型v₁} (x : F.obj (op X)) (Y : Cᵒᵖ)
-  证明: rfl
+/-
+**CategoryTheory.yonedaEquiv_symm_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：yonedaEquiv_symm_app {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) (Y : C
+ᵒᵖ) : (yonedaEquiv.symm x).app Y = ↾fun f => F.map f.op x
+参数：x : F.obj (op X)；Y : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem yonedaEquiv_symm_app {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) (Y : Cᵒᵖ) :
-    (yonedaEquiv.symm x).app Y = ↾fun f => F.map f.op x :=
+    (yonedaEquiv.symm x).app Y = ↾fun f ↦ F.map f.op x :=
   rfl
-
-/--
-theorem `yonedaEquiv_symm_app_apply` / 定理 `yonedaEquiv_symm_app_apply`
-
-English:
-theorem yonedaEquiv_symm_app_apply
-  statement: {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) (Y : Cᵒᵖ)
-  proof: rfl
-
-中文:
-定理 yonedaEquiv_symm_app_apply
-  结论: {X : C} {F : Cᵒᵖ ⥤ 类型v₁} (x : F.obj (op X)) (Y : Cᵒᵖ)
-  证明: rfl
+/-
+**CategoryTheory.yonedaEquiv_symm_app_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：yonedaEquiv_symm_app_apply {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) 
+(Y : Cᵒᵖ) (f : Y.unop ⟶ X) : dsimp% (yonedaEquiv.symm x).app Y f = F.map f.op x
+参数：x : F.obj (op X)；Y : Cᵒᵖ；f : Y.unop ⟶ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem yonedaEquiv_symm_app_apply {X : C} {F : Cᵒᵖ ⥤ Type v₁} (x : F.obj (op X)) (Y : Cᵒᵖ)
     (f : Y.unop ⟶ X) : dsimp% (yonedaEquiv.symm x).app Y f = F.map f.op x :=
   rfl
 
-/--
-lemma `yonedaEquiv_naturality` / 引理 `yonedaEquiv_naturality`
+/-- See also `yonedaEquiv_naturality'` for a more general version. -/
+/-
+**CategoryTheory.yonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：yonedaEquiv_naturality {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F
+) (g : Y ⟶ X) : F.map g.op (yonedaEquiv f) = yonedaEquiv (yoneda.map g ≫ f)
+参数：f : yoneda.obj X ⟶ F；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma yonedaEquiv_naturality
-  statement: {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F)
-  proof: by
-  simp [yonedaEquiv, ← f.naturality_apply]
-
-中文:
-引理 yonedaEquiv_naturality
-  结论: {X Y : C} {F : Cᵒᵖ ⥤ 类型v₁} (f : yoneda.obj X ⟶ F)
-  证明: by
-  simp [yonedaEquiv, ← f.naturality_apply]
-
-Depends on / 依赖: f.naturality_apply, naturality_apply, yonedaEquiv
+--- 原说明 ---
+See also `yonedaEquiv_naturality'` for a more general version.
 -/
 lemma yonedaEquiv_naturality {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F)
     (g : Y ⟶ X) : F.map g.op (yonedaEquiv f) = yonedaEquiv (yoneda.map g ≫ f) := by
   simp [yonedaEquiv, ← f.naturality_apply]
 
-/--
-lemma `yonedaEquiv_naturality'` / 引理 `yonedaEquiv_naturality'`
+/-- Variant of `yonedaEquiv_naturality` with general `g`. This is technically strictly more general
+    than `yonedaEquiv_naturality`, but `yonedaEquiv_naturality` is sometimes preferable because it
+    can avoid the "motive is not type correct" error. -/
+/-
+**CategoryTheory.yonedaEquiv_naturality'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：yonedaEquiv_naturality' {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (u
+nop X) ⟶ F) (g : X ⟶ Y) : F.map g (yonedaEquiv f) = yonedaEquiv (yoneda.map g.un
+op ≫ f)
+参数：f : yoneda.obj (unop X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.yonedaEquiv_naturality`：yonedaEquiv_naturality {X Y : C} 
+{F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) (g : Y ⟶ X) : F.map g.op (yonedaEquiv
+ f) = yonedaEquiv (yoneda.m…
 
-English:
-lemma yonedaEquiv_naturality'
-  statement: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F)
-  proof: yonedaEquiv_naturality _ _
-
-中文:
-引理 yonedaEquiv_naturality'
-  结论: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ 类型v₁} (f : yoneda.obj (unop X) ⟶ F)
-  证明: yonedaEquiv_naturality _ _
-
-Depends on / 依赖: yonedaEquiv_naturality
+--- 原说明 ---
+Variant of `yonedaEquiv_naturality` with general `g`. This is technically strict
+ly more general
+    than `yonedaEquiv_naturality`, but `yonedaEquiv_naturality` is sometimes pre
+ferable because it
+    can avoid the "motive is not type correct" error.
 -/
 lemma yonedaEquiv_naturality' {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F)
     (g : X ⟶ Y) : F.map g (yonedaEquiv f) = yonedaEquiv (yoneda.map g.unop ≫ f) :=
   yonedaEquiv_naturality _ _
-
-/--
-lemma `yonedaEquiv_comp` / 引理 `yonedaEquiv_comp`
-
-English:
-lemma yonedaEquiv_comp
-  given: {X : C} {F G : Cᵒᵖ ⥤ Type v₁} (α : yoneda.obj X ⟶ F) (β : F ⟶ G)
-  proof: rfl
-
-中文:
-引理 yonedaEquiv_comp
-  条件: {X : C} {F G : Cᵒᵖ ⥤ 类型v₁} (α : yoneda.obj X ⟶ F) (β : F ⟶ G)
-  证明: rfl
+/-
+**CategoryTheory.yonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ Type v₁} (α : yoneda.obj X ⟶ F) (β :
+ F ⟶ G) : yonedaEquiv (α ≫ β) = β.app _ (yonedaEquiv α)
+参数：α : yoneda.obj X ⟶ F；β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma yonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ Type v₁} (α : yoneda.obj X ⟶ F) (β : F ⟶ G) :
     yonedaEquiv (α ≫ β) = β.app _ (yonedaEquiv α) :=
   rfl
-
-/--
-lemma `yonedaEquiv_yoneda_map` / 引理 `yonedaEquiv_yoneda_map`
-
-English:
-lemma yonedaEquiv_yoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  statement: yonedaEquiv (yoneda.map f) = f
-  proof: by
-  rw [yonedaEquiv_apply]
-  simp
-
-中文:
-引理 yonedaEquiv_yoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  结论: yonedaEquiv (yoneda.map f) = f
-  证明: by
-  rw [yonedaEquiv_apply]
-  simp
-
-Depends on / 依赖: yonedaEquiv_apply
+/-
+**CategoryTheory.yonedaEquiv_yoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：yonedaEquiv_yoneda_map {X Y : C} (f : X ⟶ Y) : yonedaEquiv (yoneda.map f) 
+= f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.yonedaEquiv_apply`：yonedaEquiv_apply {X : C} {F : Cᵒᵖ ⥤ T
+ype v₁} (f : yoneda.obj X ⟶ F) : yonedaEquiv f = f.app (op X) (𝟙 X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma yonedaEquiv_yoneda_map {X Y : C} (f : X ⟶ Y) : yonedaEquiv (yoneda.map f) = f := by
   rw [yonedaEquiv_apply]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `yonedaEquiv_symm_naturality_left` / 引理 `yonedaEquiv_symm_naturality_left`
-
-English:
-lemma yonedaEquiv_symm_naturality_left
-  statement: {X X' : C} (f : X' ⟶ X) (F : Cᵒᵖ ⥤ Type v₁)
-  proof: by
-  apply yonedaEquiv.injective
-  simp [yonedaEquiv]
-
-中文:
-引理 yonedaEquiv_symm_naturality_left
-  结论: {X X' : C} (f : X' ⟶ X) (F : Cᵒᵖ ⥤ 类型v₁)
-  证明: by
-  apply yonedaEquiv.injective
-  simp [yonedaEquiv]
-
-Depends on / 依赖: injective, yonedaEquiv, yonedaEquiv.injective
+/-
+**CategoryTheory.yonedaEquiv_symm_naturality_left** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：yonedaEquiv_symm_naturality_left {X X' : C} (f : X' ⟶ X) (F : Cᵒᵖ ⥤ Type v
+₁) (x : F.obj ⟨X⟩) : yoneda.map f ≫ yonedaEquiv.symm x = yonedaEquiv.symm ((F.ma
+p f.op) x)
+参数：f : X' ⟶ X；F : Cᵒᵖ ⥤ Type v₁；x : F.obj ⟨X⟩。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma yonedaEquiv_symm_naturality_left {X X' : C} (f : X' ⟶ X) (F : Cᵒᵖ ⥤ Type v₁)
     (x : F.obj ⟨X⟩) : yoneda.map f ≫ yonedaEquiv.symm x = yonedaEquiv.symm ((F.map f.op) x) := by
   apply yonedaEquiv.injective
   simp [yonedaEquiv]
-
-/--
-lemma `yonedaEquiv_symm_naturality_right` / 引理 `yonedaEquiv_symm_naturality_right`
-
-English:
-lemma yonedaEquiv_symm_naturality_right
-  statement: (X : C) {F F' : Cᵒᵖ ⥤ Type v₁} (f : F ⟶ F')
-  proof: by
-  apply yonedaEquiv.injective
-  simp [yonedaEquiv_comp]
-
-中文:
-引理 yonedaEquiv_symm_naturality_right
-  结论: (X : C) {F F' : Cᵒᵖ ⥤ 类型v₁} (f : F ⟶ F')
-  证明: by
-  apply yonedaEquiv.injective
-  simp [yonedaEquiv_comp]
-
-Depends on / 依赖: injective, yonedaEquiv, yonedaEquiv.injective, yonedaEquiv_comp
+/-
+**CategoryTheory.yonedaEquiv_symm_naturality_right** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：yonedaEquiv_symm_naturality_right (X : C) {F F' : Cᵒᵖ ⥤ Type v₁} (f : F ⟶ 
+F') (x : F.obj ⟨X⟩) : yonedaEquiv.symm x ≫ f = yonedaEquiv.symm (f.app ⟨X⟩ x)
+参数：X : C；f : F ⟶ F'；x : F.obj ⟨X⟩。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma yonedaEquiv_symm_naturality_right (X : C) {F F' : Cᵒᵖ ⥤ Type v₁} (f : F ⟶ F')
     (x : F.obj ⟨X⟩) : yonedaEquiv.symm x ≫ f = yonedaEquiv.symm (f.app ⟨X⟩ x) := by
   apply yonedaEquiv.injective
   simp [yonedaEquiv_comp]
 
-/--
-lemma `map_yonedaEquiv` / 引理 `map_yonedaEquiv`
+/-- See also `map_yonedaEquiv'` for a more general version. -/
+/-
+**CategoryTheory.map_yonedaEquiv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：map_yonedaEquiv {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) (g : 
+Y ⟶ X) : F.map g.op (yonedaEquiv f) = f.app (op Y) g
+参数：f : yoneda.obj X ⟶ F；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.yonedaEquiv_naturality`：yonedaEquiv_naturality {X Y : C} 
+{F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) (g : Y ⟶ X) : F.map g.op (yonedaEquiv
+ f) = yonedaEquiv (yoneda.m…
+· 使用引理 `CategoryTheory.yonedaEquiv_comp`：yonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ T
+ype v₁} (α : yoneda.obj X ⟶ F) (β : F ⟶ G) : yonedaEquiv (α ≫ β) = β.app _ (yone
+daEquiv α)
+· 使用引理 `CategoryTheory.yonedaEquiv_yoneda_map`：yonedaEquiv_yoneda_map {X Y : C} 
+(f : X ⟶ Y) : yonedaEquiv (yoneda.map f) = f
 
-English:
-lemma map_yonedaEquiv
-  statement: {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F)
-  proof: by
-  rw [yonedaEquiv_naturality]; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
-
-中文:
-引理 map_yonedaEquiv
-  结论: {X Y : C} {F : Cᵒᵖ ⥤ 类型v₁} (f : yoneda.obj X ⟶ F)
-  证明: by
-  rw [yonedaEquiv_naturality]; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
-
-Depends on / 依赖: yonedaEquiv_comp, yonedaEquiv_naturality, yonedaEquiv_yoneda_map
+--- 原说明 ---
+See also `map_yonedaEquiv'` for a more general version.
 -/
 lemma map_yonedaEquiv {X Y : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F)
     (g : Y ⟶ X) : F.map g.op (yonedaEquiv f) = f.app (op Y) g := by
-  rw [yonedaEquiv_naturality]; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
+  rw [yonedaEquiv_naturality, yonedaEquiv_comp, yonedaEquiv_yoneda_map]
 
-/--
-lemma `map_yonedaEquiv'` / 引理 `map_yonedaEquiv'`
+/-- Variant of `map_yonedaEquiv` with general `g`. This is technically strictly more general
+    than `map_yonedaEquiv`, but `map_yonedaEquiv` is sometimes preferable because it
+    can avoid the "motive is not type correct" error. -/
+/-
+**CategoryTheory.map_yonedaEquiv'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：map_yonedaEquiv' {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) 
+⟶ F) (g : X ⟶ Y) : F.map g (yonedaEquiv f) = f.app Y g.unop
+参数：f : yoneda.obj (unop X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.yonedaEquiv_naturality'`：yonedaEquiv_naturality' {X Y : C
+ᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F) (g : X ⟶ Y) : F.map g (yon
+edaEquiv f) = yonedaEquiv (y…
+· 使用引理 `CategoryTheory.yonedaEquiv_comp`：yonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ T
+ype v₁} (α : yoneda.obj X ⟶ F) (β : F ⟶ G) : yonedaEquiv (α ≫ β) = β.app _ (yone
+daEquiv α)
+· 使用引理 `CategoryTheory.yonedaEquiv_yoneda_map`：yonedaEquiv_yoneda_map {X Y : C} 
+(f : X ⟶ Y) : yonedaEquiv (yoneda.map f) = f
 
-English:
-lemma map_yonedaEquiv'
-  statement: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F)
-  proof: by
-  rw [yonedaEquiv_naturality']; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
-
-中文:
-引理 map_yonedaEquiv'
-  结论: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ 类型v₁} (f : yoneda.obj (unop X) ⟶ F)
-  证明: by
-  rw [yonedaEquiv_naturality']; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
-
-Depends on / 依赖: yonedaEquiv_comp, yonedaEquiv_naturality, yonedaEquiv_yoneda_map
+--- 原说明 ---
+Variant of `map_yonedaEquiv` with general `g`. This is technically strictly more
+ general
+    than `map_yonedaEquiv`, but `map_yonedaEquiv` is sometimes preferable becaus
+e it
+    can avoid the "motive is not type correct" error.
 -/
 lemma map_yonedaEquiv' {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F)
     (g : X ⟶ Y) : F.map g (yonedaEquiv f) = f.app Y g.unop := by
-  rw [yonedaEquiv_naturality']; rw [yonedaEquiv_comp]; rw [yonedaEquiv_yoneda_map]
-
-/--
-lemma `yonedaEquiv_symm_map` / 引理 `yonedaEquiv_symm_map`
-
-English:
-lemma yonedaEquiv_symm_map
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type v₁} (t : F.obj X)
-  proof: by
-  obtain ⟨u, rfl⟩ := yonedaEquiv.surjective t
-  rw [yonedaEquiv_naturality']; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]
-
-中文:
-引理 yonedaEquiv_symm_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ 类型v₁} (t : F.obj X)
-  证明: by
-  obtain ⟨u, rfl⟩ := yonedaEquiv.surjective t
-  rw [yonedaEquiv_naturality']; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, surjective, symm_apply_apply, yonedaEquiv, yonedaEquiv.surjective, yonedaEquiv_naturality
+  rw [yonedaEquiv_naturality', yonedaEquiv_comp, yonedaEquiv_yoneda_map]
+/-
+**CategoryTheory.yonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：yonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type v₁} (t : F.ob
+j X) : yonedaEquiv.symm (F.map f t) = yoneda.map f.unop ≫ yonedaEquiv.symm t
+参数：f : X ⟶ Y；t : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.yonedaEquiv_naturality'`：yonedaEquiv_naturality' {X Y : C
+ᵒᵖ} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj (unop X) ⟶ F) (g : X ⟶ Y) : F.map g (yon
+edaEquiv f) = yonedaEquiv (y…
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma yonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type v₁} (t : F.obj X) :
     yonedaEquiv.symm (F.map f t) = yoneda.map f.unop ≫ yonedaEquiv.symm t := by
   obtain ⟨u, rfl⟩ := yonedaEquiv.surjective t
-  rw [yonedaEquiv_naturality']; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]
+  rw [yonedaEquiv_naturality', Equiv.symm_apply_apply, Equiv.symm_apply_apply]
 
-/--
-lemma `hom_ext_yoneda` / 引理 `hom_ext_yoneda`
+/-- Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `yoneda.obj X ⟶ P` agree. -/
+/-
+**CategoryTheory.hom_ext_yoneda** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：hom_ext_yoneda {P Q : Cᵒᵖ ⥤ Type v₁} {f g : P ⟶ Q} (h : forall (X : C) (p 
+: yoneda.obj X ⟶ P), p ≫ f = p ≫ g) : f = g
+参数：h : forall (X : C) (p : yoneda.obj X ⟶ P), p ≫ f = p ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-lemma hom_ext_yoneda
-  statement: {P Q : Cᵒᵖ ⥤ Type v₁} {f g : P ⟶ Q}
-  proof: by
-  ext X x
-  simpa only [yonedaEquiv_comp, Equiv.apply_symm_apply]
-    using! congr_arg (yonedaEquiv) (h _ (yonedaEquiv.symm x))
-
-中文:
-引理 hom_ext_yoneda
-  结论: {P Q : Cᵒᵖ ⥤ 类型v₁} {f g : P ⟶ Q}
-  证明: by
-  ext X x
-  simpa only [yonedaEquiv_comp, Equiv.apply_symm_apply]
-    using! congr_arg (yonedaEquiv) (h _ (yonedaEquiv.symm x))
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, congr_arg, yonedaEquiv, yonedaEquiv.symm, yonedaEquiv_comp
+--- 原说明 ---
+Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `yoneda.obj X ⟶ P` agree.
 -/
 lemma hom_ext_yoneda {P Q : Cᵒᵖ ⥤ Type v₁} {f g : P ⟶ Q}
-    (h : forall (X : C) (p : yoneda.obj X ⟶ P), p ≫ f = p ≫ g) :
+    (h : ∀ (X : C) (p : yoneda.obj X ⟶ P), p ≫ f = p ≫ g) :
     f = g := by
   ext X x
   simpa only [yonedaEquiv_comp, Equiv.apply_symm_apply]
@@ -2488,109 +2203,83 @@ lemma hom_ext_yoneda {P Q : Cᵒᵖ ⥤ Type v₁} {f g : P ⟶ Q}
 
 variable (C)
 
-/--
-Definition of `yonedaEvaluation` / `yonedaEvaluation` 的定义
+/-- The "Yoneda evaluation" functor, which sends `X : Cᵒᵖ` and `F : Cᵒᵖ ⥤ Type`
+to `F.obj X`, functorially in both `X` and `F`.
+-/
+/-
+**CategoryTheory.yonedaEvaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaEvaluation : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaEvaluation
-  signature: : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁)
-  body: evaluationUncurried Cᵒᵖ (Type v₁) ⋙ uliftFunctor
-
-@[simp]
-
-中文:
-定义 yonedaEvaluation
-  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
-  定义体: evaluationUncurried Cᵒᵖ (Type v₁) ⋙ uliftFunctor
-
-@[simp]
-
-Depends on / 依赖: evaluationUncurried, uliftFunctor
+--- 原说明 ---
+The "Yoneda evaluation" functor, which sends `X : Cᵒᵖ` and `F : Cᵒᵖ ⥤ Type`
+to `F.obj X`, functorially in both `X` and `F`.
 -/
 def yonedaEvaluation : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁) :=
   evaluationUncurried Cᵒᵖ (Type v₁) ⋙ uliftFunctor
 
 @[simp]
-/--
-theorem `yonedaEvaluation_map_down` / 定理 `yonedaEvaluation_map_down`
-
-English:
-theorem yonedaEvaluation_map_down
-  statement: (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q)
-  proof: rfl
-
-中文:
-定理 yonedaEvaluation_map_down
-  结论: (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁)) (α : P ⟶ Q)
-  证明: rfl
+/-
+**CategoryTheory.yonedaEvaluation_map_down** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：yonedaEvaluation_map_down (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q) (x : (
+yonedaEvaluation C).obj P) : ((yonedaEvaluation C).map α x).down = α.2.app Q.1 (
+P.2.map α.1 x.down)
+参数：P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)；α : P ⟶ Q；x : (yonedaEvaluation C).obj P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem yonedaEvaluation_map_down (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q)
     (x : (yonedaEvaluation C).obj P) :
     ((yonedaEvaluation C).map α x).down = α.2.app Q.1 (P.2.map α.1 x.down) :=
   rfl
 
-/--
-Definition of `yonedaPairing` / `yonedaPairing` 的定义
+/-- The "Yoneda pairing" functor, which sends `X : Cᵒᵖ` and `F : Cᵒᵖ ⥤ Type`
+to `yoneda.op.obj X ⟶ F`, functorially in both `X` and `F`.
+-/
+/-
+**CategoryTheory.yonedaPairing** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaPairing : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaPairing
-  signature: : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁)
-  body: Functor.prod yoneda.op (𝟭 (Cᵒᵖ ⥤ Type v₁)) ⋙ Functor.hom (Cᵒᵖ ⥤ Type v₁)
-
-@[ext]
-
-中文:
-定义 yonedaPairing
-  签名: : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
-  定义体: Functor.prod yoneda.op (𝟭 (Cᵒᵖ ⥤ Type v₁)) ⋙ Functor.hom (Cᵒᵖ ⥤ Type v₁)
-
-@[ext]
-
-Depends on / 依赖: Functor, Functor.hom, Functor.prod, yoneda, yoneda.op
+--- 原说明 ---
+The "Yoneda pairing" functor, which sends `X : Cᵒᵖ` and `F : Cᵒᵖ ⥤ Type`
+to `yoneda.op.obj X ⟶ F`, functorially in both `X` and `F`.
 -/
 def yonedaPairing : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁) ⥤ Type (max u₁ v₁) :=
   Functor.prod yoneda.op (𝟭 (Cᵒᵖ ⥤ Type v₁)) ⋙ Functor.hom (Cᵒᵖ ⥤ Type v₁)
 
 @[ext]
-/--
-lemma `yonedaPairingExt` / 引理 `yonedaPairingExt`
-
-English:
-lemma yonedaPairingExt
-  statement: {X : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)} {x y : (yonedaPairing C).obj X}
-  proof: NatTrans.ext (funext w)
-
-@[simp]
-
-中文:
-引理 yonedaPairingExt
-  结论: {X : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁)} {x y : (yonedaPairing C).obj X}
-  证明: NatTrans.ext (funext w)
-
-@[simp]
-
-Depends on / 依赖: NatTrans, NatTrans.ext
+/-
+**CategoryTheory.yonedaPairingExt** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaPairingExt {X : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)} {x y : (yonedaPairing C).obj 
+X} (w : forall Y, x.app Y = y.app Y) : x = y
+参数：Cᵒᵖ ⥤ Type v₁；yonedaPairing C；w : forall Y, x.app Y = y.app Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma yonedaPairingExt {X : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)} {x y : (yonedaPairing C).obj X}
-    (w : forall Y, x.app Y = y.app Y) : x = y :=
+    (w : ∀ Y, x.app Y = y.app Y) : x = y :=
   NatTrans.ext (funext w)
 
 @[simp]
-/--
-theorem `yonedaPairing_map` / 定理 `yonedaPairing_map`
-
-English:
-theorem yonedaPairing_map
-  given: (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q)
-  proof: rfl
-
-中文:
-定理 yonedaPairing_map
-  条件: (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ 类型v₁)) (α : P ⟶ Q)
-  证明: rfl
+/-
+**CategoryTheory.yonedaPairing_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaPairing_map (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q) : (yonedaPairi
+ng C).map α = ↾fun β => yoneda.map α.1.unop ≫ β ≫ α.2
+参数：P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)；α : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem yonedaPairing_map (P Q : Cᵒᵖ × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q) :
-    (yonedaPairing C).map α = ↾fun β => yoneda.map α.1.unop ≫ β ≫ α.2 :=
+    (yonedaPairing C).map α = ↾fun β ↦ yoneda.map α.1.unop ≫ β ≫ α.2 :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
@@ -2599,36 +2288,23 @@ set_option backward.isDefEq.respectTransparency false in
 `(X : Cᵒᵖ, F : Cᵒᵖ ⥤ Type) ↦ (yoneda.obj (unop X) ⟶ F)`
 is naturally isomorphic to the evaluation `(X, F) ↦ F.obj X`. -/
 @[stacks 001P]
-/--
-Definition of `yonedaLemma` / `yonedaLemma` 的定义
+/-
+**CategoryTheory.yonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaLemma : yonedaPairing C ≅ yonedaEvaluation C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition yonedaLemma
-  signature: : yonedaPairing C ≅ yonedaEvaluation C
-  body: NatIso.ofComponents
-    (fun _ => Equiv.toIso (yonedaEquiv.trans Equiv.ulift.symm))
-    (by intro (X, F) (Y, G) f
-        ext (a : yoneda.obj X.unop ⟶ F)
-        apply ULift.ext
-        dsimp [yonedaEvaluation, yonedaEquiv]
-        simp [← NatTrans.naturality_apply])
-
-中文:
-定义 yonedaLemma
-  签名: : yonedaPairing C ≅ yonedaEvaluation C
-  定义体: NatIso.ofComponents
-    (fun _ => Equiv.toIso (yonedaEquiv.trans Equiv.ulift.symm))
-    (by intro (X, F) (Y, G) f
-        ext (a : yoneda.obj X.unop ⟶ F)
-        apply ULift.ext
-        dsimp [yonedaEvaluation, yonedaEquiv]
-        simp [← NatTrans.naturality_apply])
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, ULift.ext, X.unop, naturality_apply, ofComponents, yoneda, yoneda.obj, yonedaEquiv, yonedaEquiv.trans, yonedaEvaluation
+--- 原说明 ---
+The Yoneda lemma asserts that the Yoneda pairing
+`(X : Cᵒᵖ, F : Cᵒᵖ ⥤ Type) ↦ (yoneda.obj (unop X) ⟶ F)`
+is naturally isomorphic to the evaluation `(X, F) ↦ F.obj X`.
 -/
 def yonedaLemma : yonedaPairing C ≅ yonedaEvaluation C :=
   NatIso.ofComponents
-    (fun _ => Equiv.toIso (yonedaEquiv.trans Equiv.ulift.symm))
+    (fun _ ↦ Equiv.toIso (yonedaEquiv.trans Equiv.ulift.symm))
     (by intro (X, F) (Y, G) f
         ext (a : yoneda.obj X.unop ⟶ F)
         apply ULift.ext
@@ -2640,71 +2316,41 @@ variable {C}
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /- Porting note: this used to be two calls to `tidy` -/
-/--
-Definition of `curriedYonedaLemma` / `curriedYonedaLemma` 的定义
+/-- The curried version of yoneda lemma when `C` is small. -/
+/-
+**CategoryTheory.curriedYonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：curriedYonedaLemma {C : Type u₁} [SmallCategory C] : (yoneda.op ⋙ coyoneda
+ : Cᵒᵖ ⥤ (Cᵒᵖ ⥤ Type u₁) ⥤ Type u₁) ≅ evaluation Cᵒᵖ (Type u₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedYonedaLemma
-  signature: {C : Type u₁} [SmallCategory C]
-  body: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv)) (by
-    intro X Y f
-    ext a b
-    simp [yonedaEquiv, ← NatTrans.naturality_apply])
-
-中文:
-定义 curriedYonedaLemma
-  签名: {C : 类型u₁} [小范畴 C]
-  定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv)) (by
-    intro X Y f
-    ext a b
-    simp [yonedaEquiv, ← NatTrans.naturality_apply])
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, naturality_apply, ofComponents, yonedaEquiv
+--- 原说明 ---
+The curried version of yoneda lemma when `C` is small.
 -/
 def curriedYonedaLemma {C : Type u₁} [SmallCategory C] :
     (yoneda.op ⋙ coyoneda : Cᵒᵖ ⥤ (Cᵒᵖ ⥤ Type u₁) ⥤ Type u₁) ≅
       evaluation Cᵒᵖ (Type u₁) :=
-  NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv)) (by
+  NatIso.ofComponents (fun X ↦ NatIso.ofComponents (fun _ ↦ Equiv.toIso yonedaEquiv)) (by
     intro X Y f
     ext a b
     simp [yonedaEquiv, ← NatTrans.naturality_apply])
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `largeCurriedYonedaLemma` / `largeCurriedYonedaLemma` 的定义
+/-- The curried version of the Yoneda lemma. -/
+/-
+**CategoryTheory.largeCurriedYonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：largeCurriedYonedaLemma {C : Type u₁} [Category.{v₁} C] : yoneda.op ⋙ coyo
+neda ≅ evaluation Cᵒᵖ (Type v₁) ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition largeCurriedYonedaLemma
-  signature: {C : Type u₁} [Category.{v₁} C]
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| yonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intro Y Z f
-        ext g
-        simp [yonedaEquiv]))
-    (by
-      intro Y Z f
-      ext F g
-      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _).symm)
-
-中文:
-定义 largeCurriedYonedaLemma
-  签名: {C : 类型u₁} [范畴.{v₁} C]
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| yonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intro Y Z f
-        ext g
-        simp [yonedaEquiv]))
-    (by
-      intro Y Z f
-      ext F g
-      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _).symm)
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, ofComponents, yonedaEquiv, yonedaEquiv.trans, yonedaEquiv_naturality
+--- 原说明 ---
+The curried version of the Yoneda lemma.
 -/
 def largeCurriedYonedaLemma {C : Type u₁} [Category.{v₁} C] :
     yoneda.op ⋙ coyoneda ≅
@@ -2721,20 +2367,18 @@ def largeCurriedYonedaLemma {C : Type u₁} [Category.{v₁} C] :
       ext F g
       simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _).symm)
 
-/--
-Definition of `yonedaOpCompYonedaObj` / `yonedaOpCompYonedaObj` 的定义
+/-- Version of the Yoneda lemma where the presheaf is fixed but the argument varies. -/
+/-
+**CategoryTheory.yonedaOpCompYonedaObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：yonedaOpCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : Cᵒᵖ ⥤ Type v₁) 
+: yoneda.op ⋙ yoneda.obj P ≅ P ⋙ uliftFunctor.{u₁}
+参数：P : Cᵒᵖ ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaOpCompYonedaObj
-  signature: {C : Type u₁} [Category.{v₁} C] (P : Cᵒᵖ ⥤ Type v₁)
-  body: isoWhiskerRight largeCurriedYonedaLemma ((evaluation _ _).obj P)
-
-中文:
-定义 yonedaOpCompYonedaObj
-  签名: {C : 类型u₁} [范畴.{v₁} C] (P : Cᵒᵖ ⥤ 类型v₁)
-  定义体: isoWhiskerRight largeCurriedYonedaLemma ((evaluation _ _).obj P)
-
-Depends on / 依赖: evaluation, isoWhiskerRight, largeCurriedYonedaLemma
+--- 原说明 ---
+Version of the Yoneda lemma where the presheaf is fixed but the argument varies.
 -/
 def yonedaOpCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : Cᵒᵖ ⥤ Type v₁) :
     yoneda.op ⋙ yoneda.obj P ≅ P ⋙ uliftFunctor.{u₁} :=
@@ -2742,151 +2386,124 @@ def yonedaOpCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : Cᵒᵖ ⥤ T
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `curriedYonedaLemma'` / `curriedYonedaLemma'` 的定义
+/-- The curried version of yoneda lemma when `C` is small. -/
+/-
+**CategoryTheory.curriedYonedaLemma'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：curriedYonedaLemma' {C : Type u₁} [SmallCategory C] : yoneda ⋙ (whiskering
+Left Cᵒᵖ (Cᵒᵖ ⥤ Type u₁)ᵒᵖ (Type u₁)).obj yoneda.op ≅ 𝟭 (Cᵒᵖ ⥤ Type u₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedYonedaLemma'
-  signature: {C : Type u₁} [SmallCategory C]
-  body: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv) (by
-    intro X Y f
-    ext a
-    dsimp [yonedaEquiv]
-    simp [← NatTrans.naturality_apply]))
-
-中文:
-定义 curriedYonedaLemma'
-  签名: {C : 类型u₁} [小范畴 C]
-  定义体: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv) (by
-    intro X Y f
-    ext a
-    dsimp [yonedaEquiv]
-    simp [← NatTrans.naturality_apply]))
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, naturality_apply, ofComponents, yonedaEquiv
+--- 原说明 ---
+The curried version of yoneda lemma when `C` is small.
 -/
 def curriedYonedaLemma' {C : Type u₁} [SmallCategory C] :
     yoneda ⋙ (whiskeringLeft Cᵒᵖ (Cᵒᵖ ⥤ Type u₁)ᵒᵖ (Type u₁)).obj yoneda.op
       ≅ 𝟭 (Cᵒᵖ ⥤ Type u₁) :=
-  NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso yonedaEquiv) (by
+  NatIso.ofComponents (fun F ↦ NatIso.ofComponents (fun _ ↦ Equiv.toIso yonedaEquiv) (by
     intro X Y f
     ext a
     dsimp [yonedaEquiv]
     simp [← NatTrans.naturality_apply]))
-
-/--
-lemma `isIso_of_yoneda_map_bijective` / 引理 `isIso_of_yoneda_map_bijective`
-
-English:
-lemma isIso_of_yoneda_map_bijective
-  statement: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  obtain ⟨g, hg : g ≫ f = 𝟙 Y⟩ := (hf Y).2 (𝟙 Y)
-  exact ⟨g, (hf _).1 (by cat_disch), hg⟩
-
-中文:
-引理 isIso_of_yoneda_map_bijective
-  结论: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  obtain ⟨g, hg : g ≫ f = 𝟙 Y⟩ := (hf Y).2 (𝟙 Y)
-  exact ⟨g, (hf _).1 (by cat_disch), hg⟩
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.isIso_of_yoneda_map_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：isIso_of_yoneda_map_bijective {X Y : C} (f : X ⟶ Y) (hf : forall (T : C), 
+Function.Bijective (fun (x : T ⟶ X) => x ≫ f)) : IsIso f
+参数：f : X ⟶ Y；hf : forall (T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isIso_of_yoneda_map_bijective {X Y : C} (f : X ⟶ Y)
-    (hf : forall (T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f)) :
+    (hf : ∀ (T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f)) :
     IsIso f := by
   obtain ⟨g, hg : g ≫ f = 𝟙 Y⟩ := (hf Y).2 (𝟙 Y)
   exact ⟨g, (hf _).1 (by cat_disch), hg⟩
-
-/--
-lemma `isIso_iff_yoneda_map_bijective` / 引理 `isIso_iff_yoneda_map_bijective`
-
-English:
-lemma isIso_iff_yoneda_map_bijective
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_yoneda_map_bijective f hf⟩
-  intro T
-  rw [bijective_iff_isIso_ofHom]
-  exact inferInstanceAs (IsIso ((yoneda.map f).app _))
-
-中文:
-引理 isIso_iff_yoneda_map_bijective
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_yoneda_map_bijective f hf⟩
-  intro T
-  rw [bijective_iff_isIso_ofHom]
-  exact inferInstanceAs (IsIso ((yoneda.map f).app _))
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, isIso_of_yoneda_map_bijective, yoneda, yoneda.map
+/-
+**CategoryTheory.isIso_iff_yoneda_map_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：isIso_iff_yoneda_map_bijective {X Y : C} (f : X ⟶ Y) : IsIso f ↔ (forall (
+T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f))
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
+· 使用引理 `CategoryTheory.isIso_of_yoneda_map_bijective`：isIso_of_yoneda_map_biject
+ive {X Y : C} (f : X ⟶ Y) (hf : forall (T : C), Function.Bijective (fun (x : T ⟶
+ X) => x ≫ f)) : IsIso f
 -/
 lemma isIso_iff_yoneda_map_bijective {X Y : C} (f : X ⟶ Y) :
-    IsIso f ↔ (forall (T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f)) := by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_yoneda_map_bijective f hf⟩
+    IsIso f ↔ (∀ (T : C), Function.Bijective (fun (x : T ⟶ X) => x ≫ f)) := by
+  refine ⟨fun _ ↦ ?_, fun hf ↦ isIso_of_yoneda_map_bijective f hf⟩
   intro T
   rw [bijective_iff_isIso_ofHom]
   exact inferInstanceAs (IsIso ((yoneda.map f).app _))
-
-/--
-lemma `isIso_iff_isIso_yoneda_map` / 引理 `isIso_iff_isIso_yoneda_map`
-
-English:
-lemma isIso_iff_isIso_yoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  rw [isIso_iff_yoneda_map_bijective]
-  exact forall_congr' fun _ => (bijective_iff_isIso_ofHom _)
-
-中文:
-引理 isIso_iff_isIso_yoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  rw [isIso_iff_yoneda_map_bijective]
-  exact forall_congr' fun _ => (bijective_iff_isIso_ofHom _)
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, forall_congr, isIso_iff_yoneda_map_bijective
+/-
+**CategoryTheory.isIso_iff_isIso_yoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：isIso_iff_isIso_yoneda_map {X Y : C} (f : X ⟶ Y) : IsIso f ↔ forall c : C,
+ IsIso ((yoneda.map f).app ⟨c⟩)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isIso_iff_yoneda_map_bijective`：isIso_iff_yoneda_map_bije
+ctive {X Y : C} (f : X ⟶ Y) : IsIso f ↔ (forall (T : C), Function.Bijective (fun
+ (x : T ⟶ X) => x ≫ f))
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
 -/
 lemma isIso_iff_isIso_yoneda_map {X Y : C} (f : X ⟶ Y) :
-    IsIso f ↔ forall c : C, IsIso ((yoneda.map f).app ⟨c⟩) := by
+    IsIso f ↔ ∀ c : C, IsIso ((yoneda.map f).app ⟨c⟩) := by
   rw [isIso_iff_yoneda_map_bijective]
-  exact forall_congr' fun _ => (bijective_iff_isIso_ofHom _)
+  exact forall_congr' fun _ ↦ (bijective_iff_isIso_ofHom _)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Yoneda's lemma as a bijection `(uliftYoneda.{w}.obj X ⟶ F) ≃ F.obj (op X)`
 for any presheaf of type `F : Cᵒᵖ ⥤ Type (max w v₁)` for some
 auxiliary universe `w`. -/
 @[simps! -isSimp apply symm_apply_app]
-/--
-Definition of `uliftYonedaEquiv` / `uliftYonedaEquiv` 的定义
+/-
+**CategoryTheory.uliftYonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftYonedaEquiv {X : C} {F : Cᵒᵖ ⥤ Type (max w v₁)} : (uliftYoneda.{w}.ob
+j X ⟶ F) ≃ F.obj (op X) where toFun τ
+参数：max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaEquiv
-  signature: {X : C} {F : Cᵒᵖ ⥤ Type (max w v₁)}
-  body: τ.app (op X) (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down.op x }
-  left_inv τ := by
-    ext ⟨Y⟩ ⟨y⟩
-    simp [← NatTrans.naturality_apply]
-  right_inv x := by simp
-
-中文:
-定义 uliftYonedaEquiv
-  签名: {X : C} {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
-  定义体: τ.app (op X) (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down.op x }
-  left_inv τ := by
-    ext ⟨Y⟩ ⟨y⟩
-    simp [← NatTrans.naturality_apply]
-  right_inv x := by simp
-
-Depends on / 依赖: ULift.up
+--- 原说明 ---
+Yoneda's lemma as a bijection `(uliftYoneda.{w}.obj X ⟶ F) ≃ F.obj (op X)`
+for any presheaf of type `F : Cᵒᵖ ⥤ Type (max w v₁)` for some
+auxiliary universe `w`.
 -/
 def uliftYonedaEquiv {X : C} {F : Cᵒᵖ ⥤ Type (max w v₁)} :
     (uliftYoneda.{w}.obj X ⟶ F) ≃ F.obj (op X) where
   toFun τ := τ.app (op X) (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down.op x }
+  invFun x := { app Y := ↾fun y ↦ F.map y.down.op x }
   left_inv τ := by
     ext ⟨Y⟩ ⟨y⟩
     simp [← NatTrans.naturality_apply]
@@ -2896,44 +2513,49 @@ attribute [simp] uliftYonedaEquiv_symm_apply_app
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `uliftYonedaEquiv_naturality` / 引理 `uliftYonedaEquiv_naturality`
-
-English:
-lemma uliftYonedaEquiv_naturality
-  statement: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)}
-  proof: by
-  simp [uliftYonedaEquiv, uliftYoneda, ← f.naturality_apply]
-
-中文:
-引理 uliftYonedaEquiv_naturality
-  结论: {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
-  证明: by
-  simp [uliftYonedaEquiv, uliftYoneda, ← f.naturality_apply]
-
-Depends on / 依赖: f.naturality_apply, naturality_apply, uliftYoneda, uliftYonedaEquiv
+/-
+**CategoryTheory.uliftYonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory`。
+形式化陈述：uliftYonedaEquiv_naturality {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)} (f : u
+liftYoneda.{w}.obj (unop X) ⟶ F) (g : X ⟶ Y) : F.map g (uliftYonedaEquiv.{w} f) 
+= uliftYonedaEquiv.{w} (uliftYoneda.map g.unop ≫ f)
+参数：max w v₁；f : uliftYoneda.{w}.obj (unop X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaEquiv_naturality {X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)}
     (f : uliftYoneda.{w}.obj (unop X) ⟶ F) (g : X ⟶ Y) :
     F.map g (uliftYonedaEquiv.{w} f) = uliftYonedaEquiv.{w} (uliftYoneda.map g.unop ≫ f) := by
   simp [uliftYonedaEquiv, uliftYoneda, ← f.naturality_apply]
-
-/--
-lemma `uliftYonedaEquiv_comp` / 引理 `uliftYonedaEquiv_comp`
-
-English:
-lemma uliftYonedaEquiv_comp
-  statement: {X : C} {F G : Cᵒᵖ ⥤ Type (max w v₁)}
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 uliftYonedaEquiv_comp
-  结论: {X : C} {F G : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.uliftYonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：uliftYonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ Type (max w v₁)} (α : uliftYone
+da.{w}.obj X ⟶ F) (β : F ⟶ G) : uliftYonedaEquiv.{w} (α ≫ β) = β.app _ (uliftYon
+edaEquiv α)
+参数：max w v₁；α : uliftYoneda.{w}.obj X ⟶ F；β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma uliftYonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ Type (max w v₁)}
     (α : uliftYoneda.{w}.obj X ⟶ F) (β : F ⟶ G) :
@@ -2941,30 +2563,30 @@ lemma uliftYonedaEquiv_comp {X : C} {F G : Cᵒᵖ ⥤ Type (max w v₁)}
   rfl
 
 @[reassoc]
-/--
-lemma `uliftYonedaEquiv_symm_map` / 引理 `uliftYonedaEquiv_symm_map`
-
-English:
-lemma uliftYonedaEquiv_symm_map
-  statement: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type (max w v₁)}
-  proof: by
-  obtain ⟨u, rfl⟩ := uliftYonedaEquiv.surjective t
-  rw [uliftYonedaEquiv_naturality]
-  simp
-
-@[reassoc]
-
-中文:
-引理 uliftYonedaEquiv_symm_map
-  结论: {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ 类型 (最大值 w v₁)}
-  证明: by
-  obtain ⟨u, rfl⟩ := uliftYonedaEquiv.surjective t
-  rw [uliftYonedaEquiv_naturality]
-  simp
-
-@[reassoc]
-
-Depends on / 依赖: surjective, uliftYonedaEquiv, uliftYonedaEquiv.surjective, uliftYonedaEquiv_naturality
+/-
+**CategoryTheory.uliftYonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：uliftYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type (max w v
+₁)} (t : F.obj X) : uliftYonedaEquiv.{w}.symm (F.map f t) = uliftYoneda.map f.un
+op ≫ uliftYonedaEquiv.symm t
+参数：f : X ⟶ Y；max w v₁；t : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.uliftYonedaEquiv_naturality`：uliftYonedaEquiv_naturality 
+{X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)} (f : uliftYoneda.{w}.obj (unop X) ⟶ F) (
+g : X ⟶ Y) : F.map g (uliftYoned…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ Type (max w v₁)}
     (t : F.obj X) :
@@ -2975,18 +2597,30 @@ lemma uliftYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {F : Cᵒᵖ ⥤ T
   simp
 
 @[reassoc]
-/--
-lemma `uliftYonedaEquiv_symm_comp` / 引理 `uliftYonedaEquiv_symm_comp`
-
-English:
-lemma uliftYonedaEquiv_symm_comp
-  proof: uliftYonedaEquiv.injective (by rw [uliftYonedaEquiv_comp]; simp)
-
-中文:
-引理 uliftYonedaEquiv_symm_comp
-  证明: uliftYonedaEquiv.injective (by rw [uliftYonedaEquiv_comp]; simp)
-
-Depends on / 依赖: injective, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv_comp
+/-
+**CategoryTheory.uliftYonedaEquiv_symm_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：uliftYonedaEquiv_symm_comp {F G : Cᵒᵖ ⥤ Type max w v₁} {X : Cᵒᵖ} (x : F.ob
+j X) (f : F ⟶ G) : uliftYonedaEquiv.symm x ≫ f = uliftYonedaEquiv.symm (f.app _ 
+x)
+参数：x : F.obj X；f : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.uliftYonedaEquiv_comp`：uliftYonedaEquiv_comp {X : C} {F G
+ : Cᵒᵖ ⥤ Type (max w v₁)} (α : uliftYoneda.{w}.obj X ⟶ F) (β : F ⟶ G) : uliftYon
+edaEquiv.{w} (α ≫ β) = β.a…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaEquiv_symm_comp
     {F G : Cᵒᵖ ⥤ Type max w v₁} {X : Cᵒᵖ} (x : F.obj X) (f : F ⟶ G) :
@@ -2996,49 +2630,63 @@ lemma uliftYonedaEquiv_symm_comp
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `uliftYonedaEquiv_uliftYoneda_map` / 引理 `uliftYonedaEquiv_uliftYoneda_map`
-
-English:
-lemma uliftYonedaEquiv_uliftYoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  simp [uliftYonedaEquiv, uliftYoneda]
-
-中文:
-引理 uliftYonedaEquiv_uliftYoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  simp [uliftYonedaEquiv, uliftYoneda]
+/-
+**CategoryTheory.uliftYonedaEquiv_uliftYoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：uliftYonedaEquiv_uliftYoneda_map {X Y : C} (f : X ⟶ Y) : DFunLike.coe (β
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaEquiv_uliftYoneda_map {X Y : C} (f : X ⟶ Y) :
-    DFunLike.coe (β := fun _ => ULift.{w} (X ⟶ Y))
+    DFunLike.coe (β := fun _ ↦ ULift.{w} (X ⟶ Y))
         uliftYonedaEquiv.{w} (uliftYoneda.map f) = ULift.up f := by
   simp [uliftYonedaEquiv, uliftYoneda]
 
-/--
-lemma `hom_ext_uliftYoneda` / 引理 `hom_ext_uliftYoneda`
+/-- Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `uliftYoneda.obj X ⟶ P` agree. -/
+/-
+**CategoryTheory.hom_ext_uliftYoneda** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：hom_ext_uliftYoneda {P Q : Cᵒᵖ ⥤ Type (max w v₁)} {f g : P ⟶ Q} (h : foral
+l (X : C) (p : uliftYoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) : f = g
+参数：max w v₁；h : forall (X : C) (p : uliftYoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-lemma hom_ext_uliftYoneda
-  statement: {P Q : Cᵒᵖ ⥤ Type (max w v₁)} {f g : P ⟶ Q}
-  proof: by
-  ext X x
-  simpa [-op_unop, uliftYonedaEquiv_comp] using
-    congr_arg uliftYonedaEquiv.{w} (h _ (uliftYonedaEquiv.symm x))
-
-中文:
-引理 hom_ext_uliftYoneda
-  结论: {P Q : Cᵒᵖ ⥤ 类型 (最大值 w v₁)} {f g : P ⟶ Q}
-  证明: by
-  ext X x
-  simpa [-op_unop, uliftYonedaEquiv_comp] using
-    congr_arg uliftYonedaEquiv.{w} (h _ (uliftYonedaEquiv.symm x))
-
-Depends on / 依赖: congr_arg, op_unop, uliftYonedaEquiv, uliftYonedaEquiv.symm, uliftYonedaEquiv_comp
+--- 原说明 ---
+Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `uliftYoneda.obj X ⟶ P` agree.
 -/
 lemma hom_ext_uliftYoneda {P Q : Cᵒᵖ ⥤ Type (max w v₁)} {f g : P ⟶ Q}
-    (h : forall (X : C) (p : uliftYoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) :
+    (h : ∀ (X : C) (p : uliftYoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) :
     f = g := by
   ext X x
   simpa [-op_unop, uliftYonedaEquiv_comp] using
@@ -3046,44 +2694,22 @@ lemma hom_ext_uliftYoneda {P Q : Cᵒᵖ ⥤ Type (max w v₁)} {f g : P ⟶ Q}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uliftYonedaOpCompCoyoneda` / `uliftYonedaOpCompCoyoneda` 的定义
+/-- A variant of the curried version of the Yoneda lemma with a raise in the universe level. -/
+/-
+**CategoryTheory.uliftYonedaOpCompCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：uliftYonedaOpCompCoyoneda {C : Type u₁} [Category.{v₁} C] : uliftYoneda.{w
+}.op ⋙ coyoneda ≅ evaluation Cᵒᵖ (Type (max v₁ w)) ⋙ (whiskeringRight _ _ _).obj
+ uliftFunctor.{u₁}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uliftYonedaOpCompCoyoneda
-  signature: {C : Type u₁} [Category.{v₁} C]
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| uliftYonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intros Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using uliftYonedaEquiv_comp _ _))
-    (by
-      intros Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (uliftYonedaEquiv_naturality _ _).symm)
-
-中文:
-定义 uliftYonedaOpCompCoyoneda
-  签名: {C : 类型u₁} [范畴.{v₁} C]
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| uliftYonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intros Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using uliftYonedaEquiv_comp _ _))
-    (by
-      intros Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (uliftYonedaEquiv_naturality _ _).symm)
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, intros, ofComponents, uliftYonedaEquiv, uliftYonedaEquiv.trans, uliftYonedaEquiv_comp, uliftYonedaEquiv_naturality
+--- 原说明 ---
+A variant of the curried version of the Yoneda lemma with a raise in the univers
+e level.
 -/
 def uliftYonedaOpCompCoyoneda {C : Type u₁} [Category.{v₁} C] :
     uliftYoneda.{w}.op ⋙ coyoneda ≅
@@ -3112,185 +2738,166 @@ variable {C}
 and elements of `F.obj X.unop`, without any universe switching.
 -/
 @[implicit_reducible]
-/--
-Definition of `coyonedaEquiv` / `coyonedaEquiv` 的定义
+/-
+**CategoryTheory.coyonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaEquiv {X : C} {F : C ⥤ Type v₁} : (coyoneda.obj (op X) ⟶ F) ≃ F.ob
+j X where toFun η
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coyonedaEquiv
-  signature: {X : C} {F : C ⥤ Type v₁}
-  body: η.app X (𝟙 X)
-  invFun ξ := { app _ := ↾fun x => F.map x ξ }
-  left_inv := fun η => by
-    ext Y (x : X ⟶ Y)
-    simp [← NatTrans.naturality_apply]
-  right_inv := by intro ξ; simp
-
-中文:
-定义 coyonedaEquiv
-  签名: {X : C} {F : C ⥤ 类型v₁}
-  定义体: η.app X (𝟙 X)
-  invFun ξ := { app _ := ↾fun x => F.map x ξ }
-  left_inv := fun η => by
-    ext Y (x : X ⟶ Y)
-    simp [← NatTrans.naturality_apply]
-  right_inv := by intro ξ; simp
+--- 原说明 ---
+We have a type-level equivalence between natural transformations from the coyone
+da embedding
+and elements of `F.obj X.unop`, without any universe switching.
 -/
 def coyonedaEquiv {X : C} {F : C ⥤ Type v₁} : (coyoneda.obj (op X) ⟶ F) ≃ F.obj X where
   toFun η := η.app X (𝟙 X)
-  invFun ξ := { app _ := ↾fun x => F.map x ξ }
-  left_inv := fun η => by
+  invFun ξ := { app _ := ↾fun x ↦ F.map x ξ }
+  left_inv := fun η ↦ by
     ext Y (x : X ⟶ Y)
     simp [← NatTrans.naturality_apply]
   right_inv := by intro ξ; simp
-
-/--
-theorem `coyonedaEquiv_apply` / 定理 `coyonedaEquiv_apply`
-
-English:
-theorem coyonedaEquiv_apply
-  given: {X : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coyonedaEquiv_apply
-  条件: {X : C} {F : C ⥤ 类型v₁} (f : coyoneda.obj (op X) ⟶ F)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.coyonedaEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaEquiv_apply {X : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F
+) : coyonedaEquiv f = f.app X (𝟙 X)
+参数：f : coyoneda.obj (op X) ⟶ F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coyonedaEquiv_apply {X : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F) :
     coyonedaEquiv f = f.app X (𝟙 X) :=
   rfl
 
 @[simp]
-/--
-theorem `coyonedaEquiv_symm_app_apply` / 定理 `coyonedaEquiv_symm_app_apply`
-
-English:
-theorem coyonedaEquiv_symm_app_apply
-  statement: {X : C} {F : C ⥤ Type v₁} (x : F.obj X) (Y : C)
-  proof: rfl
-
-中文:
-定理 coyonedaEquiv_symm_app_apply
-  结论: {X : C} {F : C ⥤ 类型v₁} (x : F.obj X) (Y : C)
-  证明: rfl
+/-
+**CategoryTheory.coyonedaEquiv_symm_app_apply** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：coyonedaEquiv_symm_app_apply {X : C} {F : C ⥤ Type v₁} (x : F.obj X) (Y : 
+C) (f : X ⟶ Y) : dsimp% (coyonedaEquiv.symm x).app Y f = F.map f x
+参数：x : F.obj X；Y : C；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coyonedaEquiv_symm_app_apply {X : C} {F : C ⥤ Type v₁} (x : F.obj X) (Y : C)
     (f : X ⟶ Y) : dsimp% (coyonedaEquiv.symm x).app Y f = F.map f x :=
   rfl
-
-/--
-lemma `coyonedaEquiv_naturality` / 引理 `coyonedaEquiv_naturality`
-
-English:
-lemma coyonedaEquiv_naturality
-  statement: {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F)
-  proof: by
-  change (f.app X ≫ F.map g) (𝟙 X) = f.app Y (g ≫ 𝟙 Y)
-  rw [← f.naturality]
-  simp
-
-中文:
-引理 coyonedaEquiv_naturality
-  结论: {X Y : C} {F : C ⥤ 类型v₁} (f : coyoneda.obj (op X) ⟶ F)
-  证明: by
-  change (f.app X ≫ F.map g) (𝟙 X) = f.app Y (g ≫ 𝟙 Y)
-  rw [← f.naturality]
-  simp
-
-Depends on / 依赖: F.map, f.app, f.naturality, naturality
+/-
+**CategoryTheory.coyonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：coyonedaEquiv_naturality {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op
+ X) ⟶ F) (g : X ⟶ Y) : F.map g (coyonedaEquiv f) = coyonedaEquiv (coyoneda.map g
+.op ≫ f)
+参数：f : coyoneda.obj (op X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coyonedaEquiv_naturality {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F)
     (g : X ⟶ Y) : F.map g (coyonedaEquiv f) = coyonedaEquiv (coyoneda.map g.op ≫ f) := by
   change (f.app X ≫ F.map g) (𝟙 X) = f.app Y (g ≫ 𝟙 Y)
   rw [← f.naturality]
   simp
-
-/--
-lemma `coyonedaEquiv_comp` / 引理 `coyonedaEquiv_comp`
-
-English:
-lemma coyonedaEquiv_comp
-  given: {X : C} {F G : C ⥤ Type v₁} (α : coyoneda.obj (op X) ⟶ F) (β : F ⟶ G)
-  proof: by
-  rfl
-
-中文:
-引理 coyonedaEquiv_comp
-  条件: {X : C} {F G : C ⥤ 类型v₁} (α : coyoneda.obj (op X) ⟶ F) (β : F ⟶ G)
-  证明: by
-  rfl
+/-
+**CategoryTheory.coyonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaEquiv_comp {X : C} {F G : C ⥤ Type v₁} (α : coyoneda.obj (op X) ⟶ 
+F) (β : F ⟶ G) : coyonedaEquiv (α ≫ β) = β.app _ (coyonedaEquiv α)
+参数：α : coyoneda.obj (op X) ⟶ F；β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coyonedaEquiv_comp {X : C} {F G : C ⥤ Type v₁} (α : coyoneda.obj (op X) ⟶ F) (β : F ⟶ G) :
     coyonedaEquiv (α ≫ β) = β.app _ (coyonedaEquiv α) := by
   rfl
-
-/--
-lemma `coyonedaEquiv_coyoneda_map` / 引理 `coyonedaEquiv_coyoneda_map`
-
-English:
-lemma coyonedaEquiv_coyoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  rw [coyonedaEquiv_apply]
-  simp
-
-中文:
-引理 coyonedaEquiv_coyoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  rw [coyonedaEquiv_apply]
-  simp
-
-Depends on / 依赖: coyonedaEquiv_apply
+/-
+**CategoryTheory.coyonedaEquiv_coyoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：coyonedaEquiv_coyoneda_map {X Y : C} (f : X ⟶ Y) : coyonedaEquiv (coyoneda
+.map f.op) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.coyonedaEquiv_apply`：coyonedaEquiv_apply {X : C} {F : C ⥤
+ Type v₁} (f : coyoneda.obj (op X) ⟶ F) : coyonedaEquiv f = f.app X (𝟙 X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coyonedaEquiv_coyoneda_map {X Y : C} (f : X ⟶ Y) :
     coyonedaEquiv (coyoneda.map f.op) = f := by
   rw [coyonedaEquiv_apply]
   simp
-
-/--
-lemma `map_coyonedaEquiv` / 引理 `map_coyonedaEquiv`
-
-English:
-lemma map_coyonedaEquiv
-  statement: {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F)
-  proof: by
-  rw [coyonedaEquiv_naturality]; rw [coyonedaEquiv_comp]; rw [coyonedaEquiv_coyoneda_map]
-
-中文:
-引理 map_coyonedaEquiv
-  结论: {X Y : C} {F : C ⥤ 类型v₁} (f : coyoneda.obj (op X) ⟶ F)
-  证明: by
-  rw [coyonedaEquiv_naturality]; rw [coyonedaEquiv_comp]; rw [coyonedaEquiv_coyoneda_map]
-
-Depends on / 依赖: coyonedaEquiv_comp, coyonedaEquiv_coyoneda_map, coyonedaEquiv_naturality
+/-
+**CategoryTheory.map_coyonedaEquiv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：map_coyonedaEquiv {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F
+) (g : X ⟶ Y) : F.map g (coyonedaEquiv f) = f.app Y g
+参数：f : coyoneda.obj (op X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.coyonedaEquiv_naturality`：coyonedaEquiv_naturality {X Y :
+ C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F) (g : X ⟶ Y) : F.map g (coyon
+edaEquiv f) = coyonedaEquiv (…
+· 使用引理 `CategoryTheory.coyonedaEquiv_comp`：coyonedaEquiv_comp {X : C} {F G : C ⥤
+ Type v₁} (α : coyoneda.obj (op X) ⟶ F) (β : F ⟶ G) : coyonedaEquiv (α ≫ β) = β.
+app _ (coyonedaEquiv α)
+· 使用引理 `CategoryTheory.coyonedaEquiv_coyoneda_map`：coyonedaEquiv_coyoneda_map {X
+ Y : C} (f : X ⟶ Y) : coyonedaEquiv (coyoneda.map f.op) = f
 -/
 lemma map_coyonedaEquiv {X Y : C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F)
     (g : X ⟶ Y) : F.map g (coyonedaEquiv f) = f.app Y g := by
-  rw [coyonedaEquiv_naturality]; rw [coyonedaEquiv_comp]; rw [coyonedaEquiv_coyoneda_map]
-
-/--
-lemma `coyonedaEquiv_symm_map` / 引理 `coyonedaEquiv_symm_map`
-
-English:
-lemma coyonedaEquiv_symm_map
-  given: {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type v₁} (t : F.obj X)
-  proof: by
-  obtain ⟨u, rfl⟩ := coyonedaEquiv.surjective t
-  simp [coyonedaEquiv_naturality u f]
-
-中文:
-引理 coyonedaEquiv_symm_map
-  条件: {X Y : C} (f : X ⟶ Y) {F : C ⥤ 类型v₁} (t : F.obj X)
-  证明: by
-  obtain ⟨u, rfl⟩ := coyonedaEquiv.surjective t
-  simp [coyonedaEquiv_naturality u f]
-
-Depends on / 依赖: coyonedaEquiv, coyonedaEquiv.surjective, coyonedaEquiv_naturality, surjective
+  rw [coyonedaEquiv_naturality, coyonedaEquiv_comp, coyonedaEquiv_coyoneda_map]
+/-
+**CategoryTheory.coyonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：coyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type v₁} (t : F.obj 
+X) : coyonedaEquiv.symm (F.map f t) = coyoneda.map f.op ≫ coyonedaEquiv.symm t
+参数：f : X ⟶ Y；t : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.coyonedaEquiv_naturality`：coyonedaEquiv_naturality {X Y :
+ C} {F : C ⥤ Type v₁} (f : coyoneda.obj (op X) ⟶ F) (g : X ⟶ Y) : F.map g (coyon
+edaEquiv f) = coyonedaEquiv (…
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type v₁} (t : F.obj X) :
     coyonedaEquiv.symm (F.map f t) = coyoneda.map f.op ≫ coyonedaEquiv.symm t := by
@@ -3299,106 +2906,80 @@ lemma coyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type v₁} (t : 
 
 variable (C)
 
-/--
-Definition of `coyonedaEvaluation` / `coyonedaEvaluation` 的定义
+/-- The "Coyoneda evaluation" functor, which sends `X : C` and `F : C ⥤ Type`
+to `F.obj X`, functorially in both `X` and `F`.
+-/
+/-
+**CategoryTheory.coyonedaEvaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaEvaluation : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coyonedaEvaluation
-  signature: : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁)
-  body: evaluationUncurried C (Type v₁) ⋙ uliftFunctor
-
-@[simp]
-
-中文:
-定义 coyonedaEvaluation
-  签名: : C × (C ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
-  定义体: evaluationUncurried C (Type v₁) ⋙ uliftFunctor
-
-@[simp]
-
-Depends on / 依赖: evaluationUncurried, uliftFunctor
+--- 原说明 ---
+The "Coyoneda evaluation" functor, which sends `X : C` and `F : C ⥤ Type`
+to `F.obj X`, functorially in both `X` and `F`.
 -/
 def coyonedaEvaluation : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁) :=
   evaluationUncurried C (Type v₁) ⋙ uliftFunctor
 
 @[simp]
-/--
-theorem `coyonedaEvaluation_map_down` / 定理 `coyonedaEvaluation_map_down`
-
-English:
-theorem coyonedaEvaluation_map_down
-  statement: (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q)
-  proof: rfl
-
-中文:
-定理 coyonedaEvaluation_map_down
-  结论: (P Q : C × (C ⥤ 类型v₁)) (α : P ⟶ Q)
-  证明: rfl
+/-
+**CategoryTheory.coyonedaEvaluation_map_down** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+形式化陈述：coyonedaEvaluation_map_down (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q) (x : (co
+yonedaEvaluation C).obj P) : ((coyonedaEvaluation C).map α x).down = α.2.app Q.1
+ (P.2.map α.1 x.down)
+参数：P Q : C × (C ⥤ Type v₁)；α : P ⟶ Q；x : (coyonedaEvaluation C).obj P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coyonedaEvaluation_map_down (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q)
     (x : (coyonedaEvaluation C).obj P) :
     ((coyonedaEvaluation C).map α x).down = α.2.app Q.1 (P.2.map α.1 x.down) :=
   rfl
 
-/--
-Definition of `coyonedaPairing` / `coyonedaPairing` 的定义
+/-- The "Coyoneda pairing" functor, which sends `X : C` and `F : C ⥤ Type`
+to `coyoneda.rightOp.obj X ⟶ F`, functorially in both `X` and `F`.
+-/
+/-
+**CategoryTheory.coyonedaPairing** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaPairing : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coyonedaPairing
-  signature: : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁)
-  body: Functor.prod coyoneda.rightOp (𝟭 (C ⥤ Type v₁)) ⋙ Functor.hom (C ⥤ Type v₁)
-
-@[ext]
-
-中文:
-定义 coyonedaPairing
-  签名: : C × (C ⥤ 类型v₁) ⥤ 类型 (最大值 u₁ v₁)
-  定义体: Functor.prod coyoneda.rightOp (𝟭 (C ⥤ Type v₁)) ⋙ Functor.hom (C ⥤ Type v₁)
-
-@[ext]
-
-Depends on / 依赖: Functor, Functor.hom, Functor.prod, coyoneda, coyoneda.rightOp, rightOp
+--- 原说明 ---
+The "Coyoneda pairing" functor, which sends `X : C` and `F : C ⥤ Type`
+to `coyoneda.rightOp.obj X ⟶ F`, functorially in both `X` and `F`.
 -/
 def coyonedaPairing : C × (C ⥤ Type v₁) ⥤ Type (max u₁ v₁) :=
   Functor.prod coyoneda.rightOp (𝟭 (C ⥤ Type v₁)) ⋙ Functor.hom (C ⥤ Type v₁)
 
 @[ext]
-/--
-lemma `coyonedaPairingExt` / 引理 `coyonedaPairingExt`
-
-English:
-lemma coyonedaPairingExt
-  statement: {X : C × (C ⥤ Type v₁)} {x y : (coyonedaPairing C).obj X}
-  proof: NatTrans.ext (funext w)
-
-@[simp]
-
-中文:
-引理 coyonedaPairingExt
-  结论: {X : C × (C ⥤ 类型v₁)} {x y : (coyonedaPairing C).obj X}
-  证明: NatTrans.ext (funext w)
-
-@[simp]
-
-Depends on / 依赖: NatTrans, NatTrans.ext
+/-
+**CategoryTheory.coyonedaPairingExt** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaPairingExt {X : C × (C ⥤ Type v₁)} {x y : (coyonedaPairing C).obj 
+X} (w : forall Y, x.app Y = y.app Y) : x = y
+参数：C ⥤ Type v₁；coyonedaPairing C；w : forall Y, x.app Y = y.app Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma coyonedaPairingExt {X : C × (C ⥤ Type v₁)} {x y : (coyonedaPairing C).obj X}
-    (w : forall Y, x.app Y = y.app Y) : x = y :=
+    (w : ∀ Y, x.app Y = y.app Y) : x = y :=
   NatTrans.ext (funext w)
 
 @[simp]
-/--
-theorem `coyonedaPairing_map` / 定理 `coyonedaPairing_map`
-
-English:
-theorem coyonedaPairing_map
-  given: (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q) (β : (coyonedaPairing C).obj P)
-  proof: rfl
-
-中文:
-定理 coyonedaPairing_map
-  条件: (P Q : C × (C ⥤ 类型v₁)) (α : P ⟶ Q) (β : (coyonedaPairing C).obj P)
-  证明: rfl
+/-
+**CategoryTheory.coyonedaPairing_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaPairing_map (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q) (β : (coyonedaPa
+iring C).obj P) : (coyonedaPairing C).map α β = coyoneda.map α.1.op ≫ β ≫ α.2
+参数：P Q : C × (C ⥤ Type v₁)；α : P ⟶ Q；β : (coyonedaPairing C).obj P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coyonedaPairing_map (P Q : C × (C ⥤ Type v₁)) (α : P ⟶ Q) (β : (coyonedaPairing C).obj P) :
     (coyonedaPairing C).map α β = coyoneda.map α.1.op ≫ β ≫ α.2 :=
@@ -3410,36 +2991,23 @@ set_option backward.isDefEq.respectTransparency false in
 `(X : C, F : C ⥤ Type) ↦ (coyoneda.obj X ⟶ F)`
 is naturally isomorphic to the evaluation `(X, F) ↦ F.obj X`. -/
 @[stacks 001P]
-/--
-Definition of `coyonedaLemma` / `coyonedaLemma` 的定义
+/-
+**CategoryTheory.coyonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coyonedaLemma : coyonedaPairing C ≅ coyonedaEvaluation C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition coyonedaLemma
-  signature: : coyonedaPairing C ≅ coyonedaEvaluation C
-  body: NatIso.ofComponents
-    (fun _ => Equiv.toIso (coyonedaEquiv.trans Equiv.ulift.symm))
-    (by intro (X, F) (Y, G) f
-        ext (a : coyoneda.obj (op X) ⟶ F)
-        apply ULift.ext
-        dsimp [coyonedaEquiv, coyonedaEvaluation]
-        simp [← NatTrans.naturality_apply])
-
-中文:
-定义 coyonedaLemma
-  签名: : coyonedaPairing C ≅ coyonedaEvaluation C
-  定义体: NatIso.ofComponents
-    (fun _ => Equiv.toIso (coyonedaEquiv.trans Equiv.ulift.symm))
-    (by intro (X, F) (Y, G) f
-        ext (a : coyoneda.obj (op X) ⟶ F)
-        apply ULift.ext
-        dsimp [coyonedaEquiv, coyonedaEvaluation]
-        simp [← NatTrans.naturality_apply])
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, ULift.ext, coyoneda, coyoneda.obj, coyonedaEquiv, coyonedaEquiv.trans, coyonedaEvaluation, naturality_apply, ofComponents
+--- 原说明 ---
+The Coyoneda lemma asserts that the Coyoneda pairing
+`(X : C, F : C ⥤ Type) ↦ (coyoneda.obj X ⟶ F)`
+is naturally isomorphic to the evaluation `(X, F) ↦ F.obj X`.
 -/
 def coyonedaLemma : coyonedaPairing C ≅ coyonedaEvaluation C :=
   NatIso.ofComponents
-    (fun _ => Equiv.toIso (coyonedaEquiv.trans Equiv.ulift.symm))
+    (fun _ ↦ Equiv.toIso (coyonedaEquiv.trans Equiv.ulift.symm))
     (by intro (X, F) (Y, G) f
         ext (a : coyoneda.obj (op X) ⟶ F)
         apply ULift.ext
@@ -3451,74 +3019,42 @@ variable {C}
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /- Porting note: this used to be two calls to `tidy` -/
-/--
-Definition of `curriedCoyonedaLemma` / `curriedCoyonedaLemma` 的定义
+/-- The curried version of coyoneda lemma when `C` is small. -/
+/-
+**CategoryTheory.curriedCoyonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：curriedCoyonedaLemma {C : Type u₁} [SmallCategory C] : coyoneda.rightOp ⋙ 
+coyoneda ≅ evaluation C (Type u₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedCoyonedaLemma
-  signature: {C : Type u₁} [SmallCategory C]
-  body: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv)) (by
-    intro X Y f
-    ext a b
-    simp [coyonedaEquiv, ← NatTrans.naturality_apply])
-
-中文:
-定义 curriedCoyonedaLemma
-  签名: {C : 类型u₁} [小范畴 C]
-  定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv)) (by
-    intro X Y f
-    ext a b
-    simp [coyonedaEquiv, ← NatTrans.naturality_apply])
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, coyonedaEquiv, naturality_apply, ofComponents
+--- 原说明 ---
+The curried version of coyoneda lemma when `C` is small.
 -/
 def curriedCoyonedaLemma {C : Type u₁} [SmallCategory C] :
     coyoneda.rightOp ⋙ coyoneda ≅ evaluation C (Type u₁) :=
-  NatIso.ofComponents (fun X => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv)) (by
+  NatIso.ofComponents (fun X ↦ NatIso.ofComponents (fun _ ↦ Equiv.toIso coyonedaEquiv)) (by
     intro X Y f
     ext a b
     simp [coyonedaEquiv, ← NatTrans.naturality_apply])
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `largeCurriedCoyonedaLemma` / `largeCurriedCoyonedaLemma` 的定义
+/-- The curried version of the Coyoneda lemma. -/
+/-
+**CategoryTheory.largeCurriedCoyonedaLemma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：largeCurriedCoyonedaLemma {C : Type u₁} [Category.{v₁} C] : coyoneda.right
+Op ⋙ coyoneda ≅ evaluation C (Type v₁) ⋙ (whiskeringRight _ _ _).obj uliftFuncto
+r.{u₁}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition largeCurriedCoyonedaLemma
-  signature: {C : Type u₁} [Category.{v₁} C]
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| coyonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intro Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using coyonedaEquiv_comp _ _))
-    (by
-      intro Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (coyonedaEquiv_naturality _ _).symm)
-
-中文:
-定义 largeCurriedCoyonedaLemma
-  签名: {C : 类型u₁} [范畴.{v₁} C]
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| coyonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intro Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using coyonedaEquiv_comp _ _))
-    (by
-      intro Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (coyonedaEquiv_naturality _ _).symm)
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, coyonedaEquiv, coyonedaEquiv.trans, coyonedaEquiv_comp, coyonedaEquiv_naturality, down_inj, ofComponents
+--- 原说明 ---
+The curried version of the Coyoneda lemma.
 -/
 def largeCurriedCoyonedaLemma {C : Type u₁} [Category.{v₁} C] :
     coyoneda.rightOp ⋙ coyoneda ≅
@@ -3537,20 +3073,19 @@ def largeCurriedCoyonedaLemma {C : Type u₁} [Category.{v₁} C] :
       rw [← ULift.down_inj]
       simpa using (coyonedaEquiv_naturality _ _).symm)
 
-/--
-Definition of `coyonedaCompYonedaObj` / `coyonedaCompYonedaObj` 的定义
+/-- Version of the Coyoneda lemma where the presheaf is fixed but the argument varies. -/
+/-
+**CategoryTheory.coyonedaCompYonedaObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：coyonedaCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : C ⥤ Type v₁) : 
+coyoneda.rightOp ⋙ yoneda.obj P ≅ P ⋙ uliftFunctor.{u₁}
+参数：P : C ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coyonedaCompYonedaObj
-  signature: {C : Type u₁} [Category.{v₁} C] (P : C ⥤ Type v₁)
-  body: isoWhiskerRight largeCurriedCoyonedaLemma ((evaluation _ _).obj P)
-
-中文:
-定义 coyonedaCompYonedaObj
-  签名: {C : 类型u₁} [范畴.{v₁} C] (P : C ⥤ 类型v₁)
-  定义体: isoWhiskerRight largeCurriedCoyonedaLemma ((evaluation _ _).obj P)
-
-Depends on / 依赖: evaluation, isoWhiskerRight, largeCurriedCoyonedaLemma
+--- 原说明 ---
+Version of the Coyoneda lemma where the presheaf is fixed but the argument varie
+s.
 -/
 def coyonedaCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : C ⥤ Type v₁) :
     coyoneda.rightOp ⋙ yoneda.obj P ≅ P ⋙ uliftFunctor.{u₁} :=
@@ -3558,116 +3093,101 @@ def coyonedaCompYonedaObj {C : Type u₁} [Category.{v₁} C] (P : C ⥤ Type v�
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `curriedCoyonedaLemma'` / `curriedCoyonedaLemma'` 的定义
+/-- The curried version of coyoneda lemma when `C` is small. -/
+/-
+**CategoryTheory.curriedCoyonedaLemma'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：curriedCoyonedaLemma' {C : Type u₁} [SmallCategory C] : yoneda ⋙ (whiskeri
+ngLeft C (C ⥤ Type u₁)ᵒᵖ (Type u₁)).obj coyoneda.rightOp ≅ 𝟭 (C ⥤ Type u₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedCoyonedaLemma'
-  signature: {C : Type u₁} [SmallCategory C]
-  body: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv) (by
-    intro X Y f
-    ext a
-    simp [coyonedaEquiv, ← NatTrans.naturality_apply]))
-
-中文:
-定义 curriedCoyonedaLemma'
-  签名: {C : 类型u₁} [小范畴 C]
-  定义体: NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv) (by
-    intro X Y f
-    ext a
-    simp [coyonedaEquiv, ← NatTrans.naturality_apply]))
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_apply, coyonedaEquiv, naturality_apply, ofComponents
+--- 原说明 ---
+The curried version of coyoneda lemma when `C` is small.
 -/
 def curriedCoyonedaLemma' {C : Type u₁} [SmallCategory C] :
     yoneda ⋙ (whiskeringLeft C (C ⥤ Type u₁)ᵒᵖ (Type u₁)).obj coyoneda.rightOp
       ≅ 𝟭 (C ⥤ Type u₁) :=
-  NatIso.ofComponents (fun F => NatIso.ofComponents (fun _ => Equiv.toIso coyonedaEquiv) (by
+  NatIso.ofComponents (fun F ↦ NatIso.ofComponents (fun _ ↦ Equiv.toIso coyonedaEquiv) (by
     intro X Y f
     ext a
     simp [coyonedaEquiv, ← NatTrans.naturality_apply]))
-
-/--
-lemma `isIso_of_coyoneda_map_bijective` / 引理 `isIso_of_coyoneda_map_bijective`
-
-English:
-lemma isIso_of_coyoneda_map_bijective
-  statement: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  obtain ⟨g, hg : f ≫ g = 𝟙 X⟩ := (hf X).2 (𝟙 X)
-  refine ⟨g, hg, (hf _).1 ?_⟩
-  simp only [Category.comp_id, ← Category.assoc, hg, Category.id_comp]
-
-中文:
-引理 isIso_of_coyoneda_map_bijective
-  结论: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  obtain ⟨g, hg : f ≫ g = 𝟙 X⟩ := (hf X).2 (𝟙 X)
-  refine ⟨g, hg, (hf _).1 ?_⟩
-  simp only [Category.comp_id, ← Category.assoc, hg, Category.id_comp]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, comp_id, id_comp
+/-
+**CategoryTheory.isIso_of_coyoneda_map_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：isIso_of_coyoneda_map_bijective {X Y : C} (f : X ⟶ Y) (hf : forall (T : C)
+, Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)) : IsIso f
+参数：f : X ⟶ Y；hf : forall (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isIso_of_coyoneda_map_bijective {X Y : C} (f : X ⟶ Y)
-    (hf : forall (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)) :
+    (hf : ∀ (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)) :
     IsIso f := by
   obtain ⟨g, hg : f ≫ g = 𝟙 X⟩ := (hf X).2 (𝟙 X)
   refine ⟨g, hg, (hf _).1 ?_⟩
   simp only [Category.comp_id, ← Category.assoc, hg, Category.id_comp]
-
-/--
-lemma `isIso_iff_coyoneda_map_bijective` / 引理 `isIso_iff_coyoneda_map_bijective`
-
-English:
-lemma isIso_iff_coyoneda_map_bijective
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_coyoneda_map_bijective f hf⟩
-  intro T
-  rw [bijective_iff_isIso_ofHom]
-  exact inferInstanceAs (IsIso ((coyoneda.map f.op).app _))
-
-中文:
-引理 isIso_iff_coyoneda_map_bijective
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_coyoneda_map_bijective f hf⟩
-  intro T
-  rw [bijective_iff_isIso_ofHom]
-  exact inferInstanceAs (IsIso ((coyoneda.map f.op).app _))
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, coyoneda, coyoneda.map, f.op, isIso_of_coyoneda_map_bijective
+/-
+**CategoryTheory.isIso_iff_coyoneda_map_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：isIso_iff_coyoneda_map_bijective {X Y : C} (f : X ⟶ Y) : IsIso f ↔ (forall
+ (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x))
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
+· 使用引理 `CategoryTheory.isIso_of_coyoneda_map_bijective`：isIso_of_coyoneda_map_bi
+jective {X Y : C} (f : X ⟶ Y) (hf : forall (T : C), Function.Bijective (fun (x :
+ Y ⟶ T) => f ≫ x)) : IsIso f
 -/
 lemma isIso_iff_coyoneda_map_bijective {X Y : C} (f : X ⟶ Y) :
-    IsIso f ↔ (forall (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)) := by
-  refine ⟨fun _ => ?_, fun hf => isIso_of_coyoneda_map_bijective f hf⟩
+    IsIso f ↔ (∀ (T : C), Function.Bijective (fun (x : Y ⟶ T) => f ≫ x)) := by
+  refine ⟨fun _ ↦ ?_, fun hf ↦ isIso_of_coyoneda_map_bijective f hf⟩
   intro T
   rw [bijective_iff_isIso_ofHom]
   exact inferInstanceAs (IsIso ((coyoneda.map f.op).app _))
-
-/--
-lemma `isIso_iff_isIso_coyoneda_map` / 引理 `isIso_iff_isIso_coyoneda_map`
-
-English:
-lemma isIso_iff_isIso_coyoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  rw [isIso_iff_coyoneda_map_bijective]
-  exact forall_congr' fun _ => bijective_iff_isIso_ofHom _
-
-中文:
-引理 isIso_iff_isIso_coyoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  rw [isIso_iff_coyoneda_map_bijective]
-  exact forall_congr' fun _ => bijective_iff_isIso_ofHom _
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, forall_congr, isIso_iff_coyoneda_map_bijective
+/-
+**CategoryTheory.isIso_iff_isIso_coyoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：isIso_iff_isIso_coyoneda_map {X Y : C} (f : X ⟶ Y) : IsIso f ↔ forall c : 
+C, IsIso ((coyoneda.map f.op).app c)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isIso_iff_coyoneda_map_bijective`：isIso_iff_coyoneda_map_
+bijective {X Y : C} (f : X ⟶ Y) : IsIso f ↔ (forall (T : C), Function.Bijective 
+(fun (x : Y ⟶ T) => f ≫ x))
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
 -/
 lemma isIso_iff_isIso_coyoneda_map {X Y : C} (f : X ⟶ Y) :
-    IsIso f ↔ forall c : C, IsIso ((coyoneda.map f.op).app c) := by
+    IsIso f ↔ ∀ c : C, IsIso ((coyoneda.map f.op).app c) := by
   rw [isIso_iff_coyoneda_map_bijective]
-  exact forall_congr' fun _ => bijective_iff_isIso_ofHom _
+  exact forall_congr' fun _ ↦ bijective_iff_isIso_ofHom _
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
@@ -3675,35 +3195,23 @@ set_option backward.defeqAttrib.useBackward true in
 for any presheaf of type `F : Cᵒᵖ ⥤ Type (max w v₁)` for some
 auxiliary universe `w`. -/
 @[simps! -isSimp apply symm_apply_app]
-/--
-Definition of `uliftCoyonedaEquiv` / `uliftCoyonedaEquiv` 的定义
+/-
+**CategoryTheory.uliftCoyonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftCoyonedaEquiv {X : Cᵒᵖ} {F : C ⥤ Type (max w v₁)} : (uliftCoyoneda.{w
+}.obj X ⟶ F) ≃ F.obj X.unop where toFun τ
+参数：max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftCoyonedaEquiv
-  signature: {X : Cᵒᵖ} {F : C ⥤ Type (max w v₁)}
-  body: τ.app X.unop (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down x }
-  left_inv τ := by
-    ext Y ⟨x⟩
-    simp [← comp_apply, ← τ.naturality]
-  right_inv x := by simp
-
-中文:
-定义 uliftCoyonedaEquiv
-  签名: {X : Cᵒᵖ} {F : C ⥤ 类型 (最大值 w v₁)}
-  定义体: τ.app X.unop (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down x }
-  left_inv τ := by
-    ext Y ⟨x⟩
-    simp [← comp_apply, ← τ.naturality]
-  right_inv x := by simp
-
-Depends on / 依赖: ULift.up, X.unop
+--- 原说明 ---
+Coyoneda's lemma as a bijection `(uliftCoyoneda.{w}.obj X ⟶ F) ≃ F.obj (op X)`
+for any presheaf of type `F : Cᵒᵖ ⥤ Type (max w v₁)` for some
+auxiliary universe `w`.
 -/
 def uliftCoyonedaEquiv {X : Cᵒᵖ} {F : C ⥤ Type (max w v₁)} :
     (uliftCoyoneda.{w}.obj X ⟶ F) ≃ F.obj X.unop where
   toFun τ := τ.app X.unop (ULift.up (𝟙 _))
-  invFun x := { app Y := ↾fun y => F.map y.down x }
+  invFun x := { app Y := ↾fun y ↦ F.map y.down x }
   left_inv τ := by
     ext Y ⟨x⟩
     simp [← comp_apply, ← τ.naturality]
@@ -3712,44 +3220,48 @@ def uliftCoyonedaEquiv {X : Cᵒᵖ} {F : C ⥤ Type (max w v₁)} :
 attribute [simp] uliftCoyonedaEquiv_symm_apply_app
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `uliftCoyonedaEquiv_naturality` / 引理 `uliftCoyonedaEquiv_naturality`
-
-English:
-lemma uliftCoyonedaEquiv_naturality
-  statement: {X Y : C} {F : C ⥤ Type max w v₁}
-  proof: by
-  simp [uliftCoyonedaEquiv, ← comp_apply, ← f.naturality]
-
-中文:
-引理 uliftCoyonedaEquiv_naturality
-  结论: {X Y : C} {F : C ⥤ 类型 最大值 w v₁}
-  证明: by
-  simp [uliftCoyonedaEquiv, ← comp_apply, ← f.naturality]
-
-Depends on / 依赖: comp_apply, f.naturality, naturality, uliftCoyonedaEquiv
+/-
+**CategoryTheory.uliftCoyonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：uliftCoyonedaEquiv_naturality {X Y : C} {F : C ⥤ Type max w v₁} (f : ulift
+Coyoneda.{w}.obj (op X) ⟶ F) (g : X ⟶ Y) : F.map g (uliftCoyonedaEquiv.{w} f) = 
+uliftCoyonedaEquiv.{w} (uliftCoyoneda.map g.op ≫ f)
+参数：f : uliftCoyoneda.{w}.obj (op X) ⟶ F；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftCoyonedaEquiv_naturality {X Y : C} {F : C ⥤ Type max w v₁}
     (f : uliftCoyoneda.{w}.obj (op X) ⟶ F) (g : X ⟶ Y) :
     F.map g (uliftCoyonedaEquiv.{w} f) = uliftCoyonedaEquiv.{w} (uliftCoyoneda.map g.op ≫ f) := by
   simp [uliftCoyonedaEquiv, ← comp_apply, ← f.naturality]
-
-/--
-lemma `uliftCoyonedaEquiv_comp` / 引理 `uliftCoyonedaEquiv_comp`
-
-English:
-lemma uliftCoyonedaEquiv_comp
-  statement: {X : Cᵒᵖ} {F G : C ⥤ Type (max w v₁)}
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 uliftCoyonedaEquiv_comp
-  结论: {X : Cᵒᵖ} {F G : C ⥤ 类型 (最大值 w v₁)}
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.uliftCoyonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：uliftCoyonedaEquiv_comp {X : Cᵒᵖ} {F G : C ⥤ Type (max w v₁)} (α : uliftCo
+yoneda.{w}.obj X ⟶ F) (β : F ⟶ G) : uliftCoyonedaEquiv.{w} (α ≫ β) = β.app _ (ul
+iftCoyonedaEquiv α)
+参数：max w v₁；α : uliftCoyoneda.{w}.obj X ⟶ F；β : F ⟶ G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma uliftCoyonedaEquiv_comp {X : Cᵒᵖ} {F G : C ⥤ Type (max w v₁)}
     (α : uliftCoyoneda.{w}.obj X ⟶ F) (β : F ⟶ G) :
@@ -3757,26 +3269,30 @@ lemma uliftCoyonedaEquiv_comp {X : Cᵒᵖ} {F G : C ⥤ Type (max w v₁)}
   rfl
 
 @[reassoc]
-/--
-lemma `uliftCoyonedaEquiv_symm_map` / 引理 `uliftCoyonedaEquiv_symm_map`
-
-English:
-lemma uliftCoyonedaEquiv_symm_map
-  statement: {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type (max w v₁)}
-  proof: by
-  obtain ⟨u, rfl⟩ := uliftCoyonedaEquiv.surjective t
-  rw [uliftCoyonedaEquiv_naturality]
-  simp
-
-中文:
-引理 uliftCoyonedaEquiv_symm_map
-  结论: {X Y : C} (f : X ⟶ Y) {F : C ⥤ 类型 (最大值 w v₁)}
-  证明: by
-  obtain ⟨u, rfl⟩ := uliftCoyonedaEquiv.surjective t
-  rw [uliftCoyonedaEquiv_naturality]
-  simp
-
-Depends on / 依赖: surjective, uliftCoyonedaEquiv, uliftCoyonedaEquiv.surjective, uliftCoyonedaEquiv_naturality
+/-
+**CategoryTheory.uliftCoyonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory`。
+形式化陈述：uliftCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type (max w v₁)
+} (t : F.obj X) : uliftCoyonedaEquiv.{w}.symm (F.map f t) = uliftCoyoneda.map f.
+op ≫ uliftCoyonedaEquiv.symm t
+参数：f : X ⟶ Y；max w v₁；t : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.uliftCoyonedaEquiv_naturality`：uliftCoyonedaEquiv_natural
+ity {X Y : C} {F : C ⥤ Type max w v₁} (f : uliftCoyoneda.{w}.obj (op X) ⟶ F) (g 
+: X ⟶ Y) : F.map g (uliftCoyonedaE…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type (max w v₁)}
     (t : F.obj X) :
@@ -3788,96 +3304,99 @@ lemma uliftCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {F : C ⥤ Type (max w
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `uliftCoyonedaEquiv_uliftCoyoneda_map` / 引理 `uliftCoyonedaEquiv_uliftCoyoneda_map`
-
-English:
-lemma uliftCoyonedaEquiv_uliftCoyoneda_map
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: by
-  simp [uliftCoyonedaEquiv, uliftYoneda]
-
-中文:
-引理 uliftCoyonedaEquiv_uliftCoyoneda_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: by
-  simp [uliftCoyonedaEquiv, uliftYoneda]
-
-Depends on / 依赖: X.unop, Y.unop
+/-
+**CategoryTheory.uliftCoyonedaEquiv_uliftCoyoneda_map** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory`。
+形式化陈述：uliftCoyonedaEquiv_uliftCoyoneda_map {X Y : Cᵒᵖ} (f : X ⟶ Y) : DFunLike.co
+e (β
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftCoyonedaEquiv_uliftCoyoneda_map {X Y : Cᵒᵖ} (f : X ⟶ Y) :
-    DFunLike.coe (β := fun _ => ULift.{w} (Y.unop ⟶ X.unop))
+    DFunLike.coe (β := fun _ ↦ ULift.{w} (Y.unop ⟶ X.unop))
         uliftCoyonedaEquiv.{w} (uliftCoyoneda.map f) = ULift.up f.unop := by
   simp [uliftCoyonedaEquiv, uliftYoneda]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `hom_ext_uliftCoyoneda` / 引理 `hom_ext_uliftCoyoneda`
+/-- Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `uliftCoyoneda.obj X ⟶ P` agree. -/
+/-
+**CategoryTheory.hom_ext_uliftCoyoneda** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：hom_ext_uliftCoyoneda {P Q : C ⥤ Type (max w v₁)} {f g : P ⟶ Q} (h : foral
+l (X : Cᵒᵖ) (p : uliftCoyoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) : f = g
+参数：max w v₁；h : forall (X : Cᵒᵖ) (p : uliftCoyoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ 
+g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-lemma hom_ext_uliftCoyoneda
-  statement: {P Q : C ⥤ Type (max w v₁)} {f g : P ⟶ Q}
-  proof: by
-  ext X x
-  simpa [uliftCoyonedaEquiv]
-    using congr_arg uliftCoyonedaEquiv.{w} (h _ (uliftCoyonedaEquiv.symm x))
-
-中文:
-引理 hom_ext_uliftCoyoneda
-  结论: {P Q : C ⥤ 类型 (最大值 w v₁)} {f g : P ⟶ Q}
-  证明: by
-  ext X x
-  simpa [uliftCoyonedaEquiv]
-    using congr_arg uliftCoyonedaEquiv.{w} (h _ (uliftCoyonedaEquiv.symm x))
-
-Depends on / 依赖: congr_arg, uliftCoyonedaEquiv, uliftCoyonedaEquiv.symm
+--- 原说明 ---
+Two morphisms of presheaves of types `P ⟶ Q` coincide if the precompositions
+with morphisms `uliftCoyoneda.obj X ⟶ P` agree.
 -/
 lemma hom_ext_uliftCoyoneda {P Q : C ⥤ Type (max w v₁)} {f g : P ⟶ Q}
-    (h : forall (X : Cᵒᵖ) (p : uliftCoyoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) :
+    (h : ∀ (X : Cᵒᵖ) (p : uliftCoyoneda.{w}.obj X ⟶ P), p ≫ f = p ≫ g) :
     f = g := by
   ext X x
   simpa [uliftCoyonedaEquiv]
     using congr_arg uliftCoyonedaEquiv.{w} (h _ (uliftCoyonedaEquiv.symm x))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uliftCoyonedaRightOpCompCoyoneda` / `uliftCoyonedaRightOpCompCoyoneda` 的定义
+/-- A variant of the curried version of the Coyoneda lemma with a raise in the universe level. -/
+/-
+**CategoryTheory.uliftCoyonedaRightOpCompCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：uliftCoyonedaRightOpCompCoyoneda {C : Type u₁} [Category.{v₁} C] : uliftCo
+yoneda.{w}.rightOp ⋙ coyoneda ≅ evaluation C (Type (max v₁ w)) ⋙ (whiskeringRigh
+t _ _ _).obj uliftFunctor.{u₁}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uliftCoyonedaRightOpCompCoyoneda
-  signature: {C : Type u₁} [Category.{v₁} C]
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| uliftCoyonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intros Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using uliftCoyonedaEquiv_comp _ _))
-    (by
-      intros Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (uliftCoyonedaEquiv_naturality _ _).symm)
-
-中文:
-定义 uliftCoyonedaRightOpCompCoyoneda
-  签名: {C : 类型u₁} [范畴.{v₁} C]
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents
-      (fun _ => Equiv.toIso <| uliftCoyonedaEquiv.trans Equiv.ulift.symm)
-      (by
-        intros Y Z f
-        ext g
-        rw [← ULift.down_inj]
-        simpa using uliftCoyonedaEquiv_comp _ _))
-    (by
-      intros Y Z f
-      ext F g
-      rw [← ULift.down_inj]
-      simpa using (uliftCoyonedaEquiv_naturality _ _).symm)
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, intros, ofComponents, uliftCoyonedaEquiv, uliftCoyonedaEquiv.trans, uliftCoyonedaEquiv_comp, uliftCoyonedaEquiv_naturality
+--- 原说明 ---
+A variant of the curried version of the Coyoneda lemma with a raise in the unive
+rse level.
 -/
 def uliftCoyonedaRightOpCompCoyoneda {C : Type u₁} [Category.{v₁} C] :
     uliftCoyoneda.{w}.rightOp ⋙ coyoneda ≅
@@ -3903,41 +3422,30 @@ section
 variable {C}
 variable {D : Type*} [Category.{v₁} D] (F : C ⥤ D)
 
-/--
-Definition of `yonedaMap` / `yonedaMap` 的定义
+/-- The natural transformation `yoneda.obj X ⟶ F.op ⋙ yoneda.obj (F.obj X)`
+when `F : C ⥤ D` and `X : C`. -/
+/-
+**CategoryTheory.yonedaMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaMap (X : C) : yoneda.obj X ⟶ F.op ⋙ yoneda.obj (F.obj X) where app _
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaMap
-  signature: (X : C)
-  body: ↾fun f => F.map f
-
-@[simp]
-
-中文:
-定义 yonedaMap
-  签名: (X : C)
-  定义体: ↾fun f => F.map f
-
-@[simp]
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+The natural transformation `yoneda.obj X ⟶ F.op ⋙ yoneda.obj (F.obj X)`
+when `F : C ⥤ D` and `X : C`.
 -/
 def yonedaMap (X : C) : yoneda.obj X ⟶ F.op ⋙ yoneda.obj (F.obj X) where
-  app _ := ↾fun f => F.map f
+  app _ := ↾fun f ↦ F.map f
 
 @[simp]
-/--
-lemma `yonedaMap_app_apply` / 引理 `yonedaMap_app_apply`
-
-English:
-lemma yonedaMap_app_apply
-  given: {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y)
-  proof: rfl
-
-中文:
-引理 yonedaMap_app_apply
-  条件: {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.yonedaMap_app_apply** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaMap_app_apply {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y) : dsimp% (yonedaMap
+ F Y).app X f = F.map f
+参数：f : X.unop ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma yonedaMap_app_apply {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y) :
     dsimp% (yonedaMap F Y).app X f = F.map f := rfl
@@ -3949,42 +3457,34 @@ section
 variable {C}
 variable {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
 
-/--
-Definition of `uliftYonedaMap` / `uliftYonedaMap` 的定义
+/-- The natural transformation `uliftYoneda.obj X ⟶ F.op ⋙ uliftYoneda.obj (F.obj X)`
+when `F : C ⥤ D` and `X : C`. -/
+/-
+**CategoryTheory.uliftYonedaMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftYonedaMap (X : C) : uliftYoneda.{max w v₂}.obj X ⟶ F.op ⋙ uliftYoneda
+.{max w v₁}.obj (F.obj X) where app _
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaMap
-  signature: (X : C)
-  body: ↾fun f => ULift.up (F.map (ULift.down f))
-
-@[simp]
-
-中文:
-定义 uliftYonedaMap
-  签名: (X : C)
-  定义体: ↾fun f => ULift.up (F.map (ULift.down f))
-
-@[simp]
-
-Depends on / 依赖: F.map, ULift.down, ULift.up
+--- 原说明 ---
+The natural transformation `uliftYoneda.obj X ⟶ F.op ⋙ uliftYoneda.obj (F.obj X)
+`
+when `F : C ⥤ D` and `X : C`.
 -/
 def uliftYonedaMap (X : C) :
     uliftYoneda.{max w v₂}.obj X ⟶ F.op ⋙ uliftYoneda.{max w v₁}.obj (F.obj X) where
-  app _ := ↾fun f => ULift.up (F.map (ULift.down f))
+  app _ := ↾fun f ↦ ULift.up (F.map (ULift.down f))
 
 @[simp]
-/--
-lemma `uliftYonedaMap_app_apply` / 引理 `uliftYonedaMap_app_apply`
-
-English:
-lemma uliftYonedaMap_app_apply
-  given: {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y)
-  proof: rfl
-
-中文:
-引理 uliftYonedaMap_app_apply
-  条件: {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.uliftYonedaMap_app_apply** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：uliftYonedaMap_app_apply {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y) : dsimp% (ulif
+tYonedaMap.{w} F Y).app X (ULift.up f) = ULift.up (F.map f)
+参数：f : X.unop ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma uliftYonedaMap_app_apply {Y : C} {X : Cᵒᵖ} (f : X.unop ⟶ Y) :
     dsimp% (uliftYonedaMap.{w} F Y).app X (ULift.up f) = ULift.up (F.map f) := rfl
@@ -4000,87 +3500,68 @@ set_option backward.isDefEq.respectTransparency.types false in
 to it. We use the constant functor on a given singleton type here as a specific choice of terminal
 functor. -/
 @[simps apply_app]
-/--
-Definition of `Functor.sectionsEquivHom` / `Functor.sectionsEquivHom` 的定义
+/-
+**CategoryTheory.Functor.sectionsEquivHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (F : C
+ategoryTheory.Functor C (Type u₂)) →       (X : Type u₂) → [Unique X] → ↑F.secti
+ons ≃ ((CategoryTheory.Functor.const C).obj X ⟶ F)
+参数：F : CategoryTheory.Functor C (Type u₂)；X : Type u₂；(CategoryTheory.Functor.co
+nst C).obj X ⟶ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.sectionsEquivHom
-  signature: (F : C ⥤ Type u₂) (X : Type u₂) [Unique X]
-  body: { app j := ↾fun _ => s.1 j
-      naturality _ _ _ := by ext x; simp }
-  invFun τ := by
-    refine ⟨fun j => τ.app _ (default : X), fun φ => ?_⟩
-    simp [-const_obj_obj, ← comp_apply, -types_comp_apply, ← NatTrans.naturality]
-    rfl
-  right_inv τ := by
-    ext _ (x : X)
-    rw [Unique.eq_default x]
-    rfl
-
-中文:
-定义 函子.sectionsEquivHom
-  签名: (F : C ⥤ 类型u₂) (X : 类型u₂) [唯一 X]
-  定义体: { app j := ↾fun _ => s.1 j
-      naturality _ _ _ := by ext x; simp }
-  invFun τ := by
-    refine ⟨fun j => τ.app _ (default : X), fun φ => ?_⟩
-    simp [-const_obj_obj, ← comp_apply, -types_comp_apply, ← NatTrans.naturality]
-    rfl
-  right_inv τ := by
-    ext _ (x : X)
-    rw [Unique.eq_default x]
-    rfl
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, Unique, Unique.eq_default, comp_apply, const_obj_obj, eq_default, invFun, naturality, right_inv, types_comp_apply
+--- 原说明 ---
+A type-level equivalence between sections of a functor and morphisms from a term
+inal functor
+to it. We use the constant functor on a given singleton type here as a specific 
+choice of terminal
+functor.
 -/
 def Functor.sectionsEquivHom (F : C ⥤ Type u₂) (X : Type u₂) [Unique X] :
     F.sections ≃ ((const _).obj X ⟶ F) where
   toFun s :=
-    { app j := ↾fun _ => s.1 j
+    { app j := ↾fun _ ↦ s.1 j
       naturality _ _ _ := by ext x; simp }
   invFun τ := by
-    refine ⟨fun j => τ.app _ (default : X), fun φ => ?_⟩
+    refine ⟨fun j ↦ τ.app _ (default : X), fun φ ↦ ?_⟩
     simp [-const_obj_obj, ← comp_apply, -types_comp_apply, ← NatTrans.naturality]
     rfl
   right_inv τ := by
     ext _ (x : X)
     rw [Unique.eq_default x]
     rfl
-
-/--
-lemma `Functor.sectionsEquivHom_naturality` / 引理 `Functor.sectionsEquivHom_naturality`
-
-English:
-lemma Functor.sectionsEquivHom_naturality
-  statement: {F G : C ⥤ Type u₂} (f : F ⟶ G) (X : Type u₂)
-  proof: by
-  rfl
-
-中文:
-引理 函子.sectionsEquivHom_naturality
-  结论: {F G : C ⥤ 类型u₂} (f : F ⟶ G) (X : 类型u₂)
-  证明: by
-  rfl
+/-
+**CategoryTheory.Functor.sectionsEquivHom_naturality** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F G : Categor
+yTheory.Functor C (Type u₂)} (f : F ⟶ G)   (X : Type u₂) [inst_1 : Unique X] (x 
+: ↑F.sections),   (G.sectionsEquivHom X) ((CategoryTheory.ConcreteCategory.hom (
+(CategoryTheory.Functor.sectionsFunctor C).map f)) x) =     CategoryTheory.Categ
+oryStruct.comp ((F.sectionsEquivHom X) x) f
+参数：Type u₂；f : F ⟶ G；X : Type u₂；x : ↑F.sections；G.sectionsEquivHom X；(CategoryT
+heory.ConcreteCategory.hom ((CategoryTheory.Functor.sectionsFunctor C).map f)) x
+；(F.sectionsEquivHom X) x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Functor.sectionsEquivHom_naturality {F G : C ⥤ Type u₂} (f : F ⟶ G) (X : Type u₂)
     [Unique X] (x : F.sections) :
     (G.sectionsEquivHom X) ((sectionsFunctor C).map f x) = (F.sectionsEquivHom X) x ≫ f := by
   rfl
-
-/--
-lemma `Functor.sectionsEquivHom_naturality_symm` / 引理 `Functor.sectionsEquivHom_naturality_symm`
-
-English:
-lemma Functor.sectionsEquivHom_naturality_symm
-  statement: {F G : C ⥤ Type u₂} (f : F ⟶ G)
-  proof: by
-  rfl
-
-中文:
-引理 函子.sectionsEquivHom_naturality_symm
-  结论: {F G : C ⥤ 类型u₂} (f : F ⟶ G)
-  证明: by
-  rfl
+/-
+**CategoryTheory.Functor.sectionsEquivHom_naturality_symm** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F G : Categor
+yTheory.Functor C (Type u₂)} (f : F ⟶ G)   (X : Type u₂) [inst_1 : Unique X] (τ 
+: (CategoryTheory.Functor.const C).obj X ⟶ F),   (G.sectionsEquivHom X).symm (Ca
+tegoryTheory.CategoryStruct.comp τ f) =     (CategoryTheory.ConcreteCategory.hom
+ ((CategoryTheory.Functor.sectionsFunctor C).map f))       ((F.sectionsEquivHom 
+X).symm τ)
+参数：Type u₂；f : F ⟶ G；X : Type u₂；τ : (CategoryTheory.Functor.const C).obj X ⟶ F；
+G.sectionsEquivHom X；CategoryTheory.CategoryStruct.comp τ f；CategoryTheory.Concr
+eteCategory.hom ((CategoryTheory.Functor.sectionsFunctor C).map f)；(F.sectionsEq
+uivHom X).symm τ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma Functor.sectionsEquivHom_naturality_symm {F G : C ⥤ Type u₂} (f : F ⟶ G)
     (X : Type u₂) [Unique X] (τ : (const C).obj X ⟶ F) :
@@ -4091,24 +3572,24 @@ lemma Functor.sectionsEquivHom_naturality_symm {F G : C ⥤ Type u₂} (f : F �
 /-- A natural isomorphism between the sections functor `(C ⥤ Type) ⥤ Type` and the co-Yoneda
 embedding of a terminal functor, specifically a constant functor on a given singleton type `X`. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `sectionsFunctorNatIsoCoyoneda` / `sectionsFunctorNatIsoCoyoneda` 的定义
+/-
+**CategoryTheory.sectionsFunctorNatIsoCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：sectionsFunctorNatIsoCoyoneda (X : Type (max u₁ u₂)) [Unique X] : Functor.
+sectionsFunctor.{v₁, max u₁ u₂} C ≅ coyoneda.obj (op ((Functor.const C).obj X))
+参数：X : Type (max u₁ u₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsFunctorNatIsoCoyoneda
-  signature: (X : Type (max u₁ u₂)) [Unique X]
-  body: NatIso.ofComponents fun F => (F.sectionsEquivHom X).toIso
-
-中文:
-定义 sectionsFunctor自然数IsoCoyoneda
-  签名: (X : 类型 (最大值 u₁ u₂)) [唯一 X]
-  定义体: NatIso.ofComponents fun F => (F.sectionsEquivHom X).toIso
-
-Depends on / 依赖: F.sectionsEquivHom, NatIso, NatIso.ofComponents, ofComponents, sectionsEquivHom
+--- 原说明 ---
+A natural isomorphism between the sections functor `(C ⥤ Type) ⥤ Type` and the c
+o-Yoneda
+embedding of a terminal functor, specifically a constant functor on a given sing
+leton type `X`.
 -/
 noncomputable def sectionsFunctorNatIsoCoyoneda (X : Type (max u₁ u₂)) [Unique X] :
     Functor.sectionsFunctor.{v₁, max u₁ u₂} C ≅ coyoneda.obj (op ((Functor.const C).obj X)) :=
-  NatIso.ofComponents fun F => (F.sectionsEquivHom X).toIso
+  NatIso.ofComponents fun F ↦ (F.sectionsEquivHom X).toIso
 
 end
 
@@ -4119,24 +3600,20 @@ variable {C : Type u₁} [Category.{v₁} C]
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `FullyFaithful.homEquiv` as a natural isomorphism. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `homNatIso` / `homNatIso` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.homNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.FullyFaithful`。
+形式化陈述：homNatIso {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithfu
+l) (X : C) : F.op ⋙ uliftYoneda.{v₁}.obj (F.obj X) ≅ uliftYoneda.{v₂}.obj X
+参数：hF : F.FullyFaithful；X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homNatIso
-  signature: {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C)
-  body: NatIso.ofComponents
-    (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-中文:
-定义 hom自然数Iso
-  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D} (hF : F.满忠实) (X : C)
-  定义体: NatIso.ofComponents
-    (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.injective, Equiv.ulift.symm, Equiv.ulift.trans, NatIso, NatIso.ofComponents, hF.homEquiv.symm.trans, hF.map_injective, homEquiv, injective, map_injective, ofComponents
+--- 原说明 ---
+`FullyFaithful.homEquiv` as a natural isomorphism.
 -/
 def homNatIso {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C) :
     F.op ⋙ uliftYoneda.{v₁}.obj (F.obj X) ≅ uliftYoneda.{v₂}.obj X :=
@@ -4147,22 +3624,18 @@ def homNatIso {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFai
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `FullyFaithful.homEquiv` as a natural isomorphism. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `compUliftYonedaCompWhiskeringLeft` / `compUliftYonedaCompWhiskeringLeft` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.compUliftYonedaCompWhiskeringLeft** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：compUliftYonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C ⥤
+ D} (hF : F.FullyFaithful) : F ⋙ uliftYoneda.{v₁} ⋙ (whiskeringLeft _ _ _).obj F
+.op ≅ uliftYoneda.{v₂}
+参数：hF : F.FullyFaithful。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compUliftYonedaCompWhiskeringLeft
-  signature: {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D}
-  body: NatIso.ofComponents (fun X => hF.homNatIso _) fun f => by
-    ext; exact Equiv.ulift.injective (hF.map_injective (by simp))
-
-中文:
-定义 compUliftYonedaCompWhiskeringLeft
-  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D}
-  定义体: NatIso.ofComponents (fun X => hF.homNatIso _) fun f => by
-    ext; exact Equiv.ulift.injective (hF.map_injective (by simp))
-
-Depends on / 依赖: Equiv.ulift.injective, NatIso, NatIso.ofComponents, hF.homNatIso, hF.map_injective, homNatIso, injective, map_injective, ofComponents
+--- 原说明 ---
+`FullyFaithful.homEquiv` as a natural isomorphism.
 -/
 def compUliftYonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D}
     (hF : F.FullyFaithful) :
@@ -4173,24 +3646,21 @@ def compUliftYonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `FullyFaithful.homEquiv` as a natural isomorphism, using coyoneda. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `homNatIso'` / `homNatIso'` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.homNatIso'** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.FullyFaithful`。
+形式化陈述：homNatIso' {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithf
+ul) (X : C) : F ⋙ uliftCoyoneda.{v₁}.obj (op (F.obj X)) ≅ uliftCoyoneda.{v₂}.obj
+ (op X)
+参数：hF : F.FullyFaithful；X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homNatIso'
-  signature: {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C)
-  body: NatIso.ofComponents
-    (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-中文:
-定义 hom自然数Iso'
-  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D} (hF : F.满忠实) (X : C)
-  定义体: NatIso.ofComponents
-    (fun Y => Equiv.toIso (Equiv.ulift.trans <| hF.homEquiv.symm.trans Equiv.ulift.symm))
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.injective, Equiv.ulift.symm, Equiv.ulift.trans, NatIso, NatIso.ofComponents, hF.homEquiv.symm.trans, hF.map_injective, homEquiv, injective, map_injective, ofComponents
+--- 原说明 ---
+`FullyFaithful.homEquiv` as a natural isomorphism, using coyoneda.
 -/
 def homNatIso' {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFaithful) (X : C) :
     F ⋙ uliftCoyoneda.{v₁}.obj (op (F.obj X)) ≅ uliftCoyoneda.{v₂}.obj (op X) :=
@@ -4201,22 +3671,18 @@ def homNatIso' {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D} (hF : F.FullyFa
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `FullyFaithful.homEquiv` as a natural isomorphism, using coyoneda. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `compUliftCoyonedaCompWhiskeringLeft` / `compUliftCoyonedaCompWhiskeringLeft` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.compUliftCoyonedaCompWhiskeringLeft** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：compUliftCoyonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C
+ ⥤ D} (hF : F.FullyFaithful) : F.op ⋙ uliftCoyoneda.{v₁} ⋙ (whiskeringLeft _ _ _
+).obj F ≅ uliftCoyoneda.{v₂}
+参数：hF : F.FullyFaithful。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compUliftCoyonedaCompWhiskeringLeft
-  signature: {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D}
-  body: NatIso.ofComponents (fun X => hF.homNatIso' _)
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-中文:
-定义 compUliftCoyonedaCompWhiskeringLeft
-  签名: {D : 类型u₂} [范畴.{v₂} D] {F : C ⥤ D}
-  定义体: NatIso.ofComponents (fun X => hF.homNatIso' _)
-    (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
-
-Depends on / 依赖: Equiv.ulift.injective, NatIso, NatIso.ofComponents, hF.homNatIso, hF.map_injective, homNatIso, injective, map_injective, ofComponents
+--- 原说明 ---
+`FullyFaithful.homEquiv` as a natural isomorphism, using coyoneda.
 -/
 def compUliftCoyonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D}
     (hF : F.FullyFaithful) :
@@ -4227,3 +3693,4 @@ def compUliftCoyonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F :
 end Functor.FullyFaithful
 
 end CategoryTheory
+

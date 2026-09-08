@@ -28,53 +28,71 @@ namespace DualNumber
 open TrivSqZeroExt
 
 variable {R : Type*}
-variable [CommRing R] [Algebra Rat R]
+variable [CommRing R] [Algebra ℚ R]
 variable [UniformSpace R] [IsTopologicalRing R] [T2Space R]
 
 @[simp]
-/--
-theorem `exp_eps` / 定理 `exp_eps`
-
-English:
-theorem exp_eps
-  statement: exp (eps : DualNumber R) = 1 + eps
-  proof: exp_inr _
-
-@[simp]
-
-中文:
-定理 exp_eps
-  结论: exp (eps : DualNumber R) = 1 + eps
-  证明: exp_inr _
-
-@[simp]
-
-Depends on / 依赖: exp_inr
+/-
+**DualNumber.exp_eps** 是 Mathlib 中的一个定理，位于命名空间 `DualNumber`。
+形式化陈述：exp_eps : exp (eps : DualNumber R) = 1 + eps
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TrivSqZeroExt.exp_inr`：exp_inr (m : M) : exp (inr m : tsze R M) = 1 + in
+r m
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
 -/
 theorem exp_eps : exp (eps : DualNumber R) = 1 + eps :=
   exp_inr _
 
 @[simp]
-/--
-theorem `exp_smul_eps` / 定理 `exp_smul_eps`
-
-English:
-theorem exp_smul_eps
-  given: (r : R)
-  statement: exp (r • eps : DualNumber R) = 1 + r • eps
-  proof: by
-  rw [eps]; rw [← inr_smul]; rw [exp_inr]
-
-中文:
-定理 exp_smul_eps
-  条件: (r : R)
-  结论: exp (r • eps : DualNumber R) = 1 + r • eps
-  证明: by
-  rw [eps]; rw [← inr_smul]; rw [exp_inr]
-
-Depends on / 依赖: exp_inr, inr_smul
+/-
+**DualNumber.exp_smul_eps** 是 Mathlib 中的一个定理，位于命名空间 `DualNumber`。
+形式化陈述：exp_smul_eps (r : R) : exp (r • eps : DualNumber R) = 1 + r • eps
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TrivSqZeroExt.instIsTopologicalRingOfIsTopologicalAddGroupOfContinuousSM
+ulMulOpposite`：∀ {R : Type u_3} {M : Type u_4} [inst : TopologicalSpace R] [inst
+_1 : TopologicalSpace M] [inst_2 : Ring R]   [inst_3 : AddCommGroup M] [ins…
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DualNumber.eps.eq_1`：∀ {R : Type u_1} [inst : Zero R] [inst_1 : One R], 
+DualNumber.eps = TrivSqZeroExt.inr 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TrivSqZeroExt.inr_smul`：inr_smul [Zero R] [SMulZeroClass S R] [SMul S M]
+ (r : S) (m : M) : (inr (r • m) : tsze R M) = r • inr m
+· 使用定理 `TrivSqZeroExt.exp_inr`：exp_inr (m : M) : exp (inr m : tsze R M) = 1 + in
+r m
 -/
 theorem exp_smul_eps (r : R) : exp (r • eps : DualNumber R) = 1 + r • eps := by
-  rw [eps]; rw [← inr_smul]; rw [exp_inr]
+  rw [eps, ← inr_smul, exp_inr]
 
 end DualNumber
+

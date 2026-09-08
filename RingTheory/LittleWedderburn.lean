@@ -46,21 +46,12 @@ namespace LittleWedderburn
 
 variable (D : Type*) [DivisionRing D]
 
-/--
-Definition of `InductionHyp` / `InductionHyp` 的定义
-
-English:
-definition InductionHyp
-  signature: : Prop
-  body: forall {R : Subring D}, R < ⊤ -> forall ⦃x y⦄, x in R -> y in R -> x * y = y * x
-
-中文:
-定义 InductionHyp
-  签名: : 命题
-  定义体: forall {R : Subring D}, R < ⊤ -> forall ⦃x y⦄, x in R -> y in R -> x * y = y * x
+/-
+**LittleWedderburn.InductionHyp** 是 Mathlib 中的一个定义，位于命名空间 `LittleWedderburn`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def InductionHyp : Prop :=
-  forall {R : Subring D}, R < ⊤ -> forall ⦃x y⦄, x in R -> y in R -> x * y = y * x
+  ∀ {R : Subring D}, R < ⊤ → ∀ ⦃x y⦄, x ∈ R → y ∈ R → x * y = y * x
 
 namespace InductionHyp
 
@@ -69,186 +60,26 @@ open Module Polynomial
 variable {D}
 
 @[instance_reducible]
-/--
-Definition of `field` / `field` 的定义
-
-English:
-definition field
-  signature: (hD : InductionHyp D) {R : Subring D} (hR : R < ⊤)
-  body: { show DivisionRing R from Fintype.divisionRingOfIsDomain R with
-mul_comm := fun x y => Subtype.ext hD hR x.2 y.2 }
-
-中文:
-定义 field
-  签名: (hD : InductionHyp D) {R : 子环 D} (hR : R < ⊤)
-  定义体: { show DivisionRing R from Fintype.divisionRingOfIsDomain R with
-mul_comm := fun x y => Subtype.ext hD hR x.2 y.2 }
+/-
+**LittleWedderburn.InductionHyp.field** 是 Mathlib 中的一个定义，位于命名空间 `LittleWedderbur
+n.InductionHyp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def field (hD : InductionHyp D) {R : Subring D} (hR : R < ⊤)
-    [Fintype D] [DecidableEq D] [DecidablePred (· in R)] :
+    [Fintype D] [DecidableEq D] [DecidablePred (· ∈ R)] :
     Field R :=
   { show DivisionRing R from Fintype.divisionRingOfIsDomain R with
-mul_comm := fun x y => Subtype.ext hD hR x.2 y.2 }
+    mul_comm := fun x y ↦ Subtype.ext <| hD hR x.2 y.2 }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `center_eq_top` / 定理 `center_eq_top`
+/-- We prove that if every subring of `D` is central, then so is `D`. -/
+/-
+**LittleWedderburn.InductionHyp.center_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LittleW
+edderburn.InductionHyp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem center_eq_top
-  given: [Finite D] (hD : InductionHyp D)
-  statement: Subring.center D = ⊤
-  proof: by
-  classical
-  cases nonempty_fintype D
-  set Z := Subring.center D
-  -- We proceed by contradiction; that is, we assume the center is strictly smaller than `D`.
-  by_contra! hZ
-  let : Field Z := hD.field hZ.lt_top
-  set q := card Z with card_Z
-  have hq : 1 < q := by rw [card_Z]; exact one_lt_card
-  let n := finrank Z D
-  have card_D : card D = q ^ n := Module.card_eq_pow_finrank
-  have h1qn : 1 <= q ^ n := by rw [← card_D]; exact card_pos
-  -- We go about this by looking at the class equation for `Dˣ`:
-  -- `q ^ n - 1 = q - 1 + ∑ x : conjugacy classes (D ∖ Dˣ), |x|`.
-  -- The next few lines gets the equation into basically this form over `ℤ`.
-  have key := Group.card_center_add_sum_card_noncenter_eq_card (Dˣ)
-  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv]; rw [card_units]; rw [← card_Z]; rw [card_units]; rw [card_D] at key
-  -- By properties of the cyclotomic function, we have that `Φₙ(q) ∣ q ^ n - 1`; however, when
-  -- `n ≠ 1`, then `¬Φₙ(q) | q - 1`; so if the sum over the conjugacy classes is divisible by
-  -- `Φₙ(q)`, then `n = 1`, and therefore the vector space is trivial, as desired.
-  let Φₙ := cyclotomic n Int
-  apply_fun (Nat.cast : Nat -> Int) at key
-  rw [Nat.cast_add]; rw [Nat.cast_sub h1qn]; rw [Nat.cast_sub hq.le]; rw [Nat.cast_one]; rw [Nat.cast_pow] at key
-  suffices Φₙ.eval ↑q ∣ ↑(∑ x in (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
-    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n Int) (x := (q : Int))
-    rw [eval_sub]; rw [eval_X_pow]; rw [eval_one]; rw [← key]; rw [Int.dvd_add_left this] at contra
-    refine (Nat.le_of_dvd ?_ ?_).not_gt (sub_one_lt_natAbs_cyclotomic_eval (n := n) ?_ hq.ne')
-    · exact tsub_pos_of_lt hq
-    · convert! Int.natAbs_dvd_natAbs.mpr contra
-      clear_value q
-      simp only [eq_comm, Int.natAbs_eq_iff, Nat.cast_sub hq.le, Nat.cast_one, neg_sub, true_or]
-    · by_contra! h
-      obtain ⟨x, hx⟩ := finrank_le_one_iff.mp h
-      refine not_le_of_gt hZ.lt_top (fun y _ => Subring.mem_center_iff.mpr fun z => ?_)
-      obtain ⟨r, rfl⟩ := hx y
-      obtain ⟨s, rfl⟩ := hx z
-      rw [smul_mul_smul_comm]; rw [smul_mul_smul_comm]; rw [mul_comm]
-  rw [Nat.cast_sum]
-  apply Finset.dvd_sum
-  rintro ⟨x⟩ hx
-  simp -zeta only [ConjClasses.quot_mk_eq_mk, Set.mem_toFinset] at hx ⊢
-  set Zx := Subring.centralizer ({↑x} : Set D)
-  -- The key thing is then to note that for all conjugacy classes `x`, `|x|` is given by
-  -- `|Dˣ| / |Zxˣ|`, where `Zx` is the centralizer of `x`; but `Zx` is an algebra over `Z`, and
-  -- therefore `|Zxˣ| = q ^ d - 1`, where `d` is the dimension of `D` as a vector space over `Z`.
-  -- We therefore get that `|x| = (q ^ n - 1) / (q ^ d - 1)`, and as `d` is a strict divisor of `n`,
-  -- we do have that `Φₙ(q) | (q ^ n - 1) / (q ^ d - 1)`; extending this over the whole sum
-  -- gives us the desired contradiction..
-  rw [Set.toFinset_card]; rw [ConjClasses.card_carrier]; rw [← card_congr
-        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv]; rw [card_units]; rw [card_D]
-  have hZx : Zx != ⊤ := by
-    by_contra! hZx
-    refine (ConjClasses.mk_bijOn (Dˣ)).mapsTo (Set.subset_center_units ?_) hx
-exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
-  let : Field Zx := hD.field hZx.lt_top
-  let : Algebra Z Zx := (Subring.inclusion <| Subring.center_le_centralizer {(x : D)}).toAlgebra
-  let d := finrank Z Zx
-  have card_Zx : card Zx = q ^ d := Module.card_eq_pow_finrank
-  have h1qd : 1 <= q ^ d := by rw [← card_Zx]; exact card_pos
-  have : IsScalarTower Z Zx D := ⟨fun x y z => mul_assoc _ _ _⟩
-  rw [card_units]; rw [card_Zx]
-  push_cast [h1qd, h1qn]
-  apply Int.dvd_div_of_mul_dvd
-  have aux : forall {k : Nat}, ((X : Int[X]) ^ k - 1).eval ↑q = (q : Int) ^ k - 1 := by
-    simp only [eval_X, eval_one, eval_pow, eval_sub, forall_const]
-  rw [← aux]; rw [← aux]; rw [← eval_mul]
-  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd Int ?_)
-  refine Nat.mem_properDivisors.mpr ⟨⟨_, (finrank_mul_finrank Z Zx D).symm⟩, ?_⟩
-  rw [← Nat.pow_lt_pow_iff_right hq]; rw [← card_D]; rw [← card_Zx]
-  obtain ⟨b, -, hb⟩ := SetLike.exists_of_lt hZx.lt_top
-  refine card_lt_of_injective_of_notMem _ Subtype.val_injective (?_ : b ∉ _)
-  rintro ⟨b, rfl⟩
-  exact hb b.2
-
-中文:
-定理 center_eq_top
-  条件: [有限 D] (hD : InductionHyp D)
-  结论: 子环.center D = ⊤
-  证明: by
-  classical
-  cases nonempty_fintype D
-  set Z := Subring.center D
-  -- We proceed by contradiction; that is, we assume the center is strictly smaller than `D`.
-  by_contra! hZ
-  let : Field Z := hD.field hZ.lt_top
-  set q := card Z with card_Z
-  have hq : 1 < q := by rw [card_Z]; exact one_lt_card
-  let n := finrank Z D
-  have card_D : card D = q ^ n := Module.card_eq_pow_finrank
-  have h1qn : 1 <= q ^ n := by rw [← card_D]; exact card_pos
-  -- We go about this by looking at the class equation for `Dˣ`:
-  -- `q ^ n - 1 = q - 1 + ∑ x : conjugacy classes (D ∖ Dˣ), |x|`.
-  -- The next few lines gets the equation into basically this form over `ℤ`.
-  have key := Group.card_center_add_sum_card_noncenter_eq_card (Dˣ)
-  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv]; rw [card_units]; rw [← card_Z]; rw [card_units]; rw [card_D] at key
-  -- By properties of the cyclotomic function, we have that `Φₙ(q) ∣ q ^ n - 1`; however, when
-  -- `n ≠ 1`, then `¬Φₙ(q) | q - 1`; so if the sum over the conjugacy classes is divisible by
-  -- `Φₙ(q)`, then `n = 1`, and therefore the vector space is trivial, as desired.
-  let Φₙ := cyclotomic n Int
-  apply_fun (Nat.cast : Nat -> Int) at key
-  rw [Nat.cast_add]; rw [Nat.cast_sub h1qn]; rw [Nat.cast_sub hq.le]; rw [Nat.cast_one]; rw [Nat.cast_pow] at key
-  suffices Φₙ.eval ↑q ∣ ↑(∑ x in (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
-    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n Int) (x := (q : Int))
-    rw [eval_sub]; rw [eval_X_pow]; rw [eval_one]; rw [← key]; rw [Int.dvd_add_left this] at contra
-    refine (Nat.le_of_dvd ?_ ?_).not_gt (sub_one_lt_natAbs_cyclotomic_eval (n := n) ?_ hq.ne')
-    · exact tsub_pos_of_lt hq
-    · convert! Int.natAbs_dvd_natAbs.mpr contra
-      clear_value q
-      simp only [eq_comm, Int.natAbs_eq_iff, Nat.cast_sub hq.le, Nat.cast_one, neg_sub, true_or]
-    · by_contra! h
-      obtain ⟨x, hx⟩ := finrank_le_one_iff.mp h
-      refine not_le_of_gt hZ.lt_top (fun y _ => Subring.mem_center_iff.mpr fun z => ?_)
-      obtain ⟨r, rfl⟩ := hx y
-      obtain ⟨s, rfl⟩ := hx z
-      rw [smul_mul_smul_comm]; rw [smul_mul_smul_comm]; rw [mul_comm]
-  rw [Nat.cast_sum]
-  apply Finset.dvd_sum
-  rintro ⟨x⟩ hx
-  simp -zeta only [ConjClasses.quot_mk_eq_mk, Set.mem_toFinset] at hx ⊢
-  set Zx := Subring.centralizer ({↑x} : Set D)
-  -- The key thing is then to note that for all conjugacy classes `x`, `|x|` is given by
-  -- `|Dˣ| / |Zxˣ|`, where `Zx` is the centralizer of `x`; but `Zx` is an algebra over `Z`, and
-  -- therefore `|Zxˣ| = q ^ d - 1`, where `d` is the dimension of `D` as a vector space over `Z`.
-  -- We therefore get that `|x| = (q ^ n - 1) / (q ^ d - 1)`, and as `d` is a strict divisor of `n`,
-  -- we do have that `Φₙ(q) | (q ^ n - 1) / (q ^ d - 1)`; extending this over the whole sum
-  -- gives us the desired contradiction..
-  rw [Set.toFinset_card]; rw [ConjClasses.card_carrier]; rw [← card_congr
-        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv]; rw [card_units]; rw [card_D]
-  have hZx : Zx != ⊤ := by
-    by_contra! hZx
-    refine (ConjClasses.mk_bijOn (Dˣ)).mapsTo (Set.subset_center_units ?_) hx
-exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
-  let : Field Zx := hD.field hZx.lt_top
-  let : Algebra Z Zx := (Subring.inclusion <| Subring.center_le_centralizer {(x : D)}).toAlgebra
-  let d := finrank Z Zx
-  have card_Zx : card Zx = q ^ d := Module.card_eq_pow_finrank
-  have h1qd : 1 <= q ^ d := by rw [← card_Zx]; exact card_pos
-  have : IsScalarTower Z Zx D := ⟨fun x y z => mul_assoc _ _ _⟩
-  rw [card_units]; rw [card_Zx]
-  push_cast [h1qd, h1qn]
-  apply Int.dvd_div_of_mul_dvd
-  have aux : forall {k : Nat}, ((X : Int[X]) ^ k - 1).eval ↑q = (q : Int) ^ k - 1 := by
-    simp only [eval_X, eval_one, eval_pow, eval_sub, forall_const]
-  rw [← aux]; rw [← aux]; rw [← eval_mul]
-  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd Int ?_)
-  refine Nat.mem_properDivisors.mpr ⟨⟨_, (finrank_mul_finrank Z Zx D).symm⟩, ?_⟩
-  rw [← Nat.pow_lt_pow_iff_right hq]; rw [← card_D]; rw [← card_Zx]
-  obtain ⟨b, -, hb⟩ := SetLike.exists_of_lt hZx.lt_top
-  refine card_lt_of_injective_of_notMem _ Subtype.val_injective (?_ : b ∉ _)
-  rintro ⟨b, rfl⟩
-  exact hb b.2
+--- 原说明 ---
+We prove that if every subring of `D` is central, then so is `D`.
 -/
 private theorem center_eq_top [Finite D] (hD : InductionHyp D) : Subring.center D = ⊤ := by
   classical
@@ -261,21 +92,22 @@ private theorem center_eq_top [Finite D] (hD : InductionHyp D) : Subring.center 
   have hq : 1 < q := by rw [card_Z]; exact one_lt_card
   let n := finrank Z D
   have card_D : card D = q ^ n := Module.card_eq_pow_finrank
-  have h1qn : 1 <= q ^ n := by rw [← card_D]; exact card_pos
+  have h1qn : 1 ≤ q ^ n := by rw [← card_D]; exact card_pos
   -- We go about this by looking at the class equation for `Dˣ`:
   -- `q ^ n - 1 = q - 1 + ∑ x : conjugacy classes (D ∖ Dˣ), |x|`.
   -- The next few lines gets the equation into basically this form over `ℤ`.
   have key := Group.card_center_add_sum_card_noncenter_eq_card (Dˣ)
-  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv]; rw [card_units]; rw [← card_Z]; rw [card_units]; rw [card_D] at key
+  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv,
+      card_units, ← card_Z, card_units, card_D] at key
   -- By properties of the cyclotomic function, we have that `Φₙ(q) ∣ q ^ n - 1`; however, when
   -- `n ≠ 1`, then `¬Φₙ(q) | q - 1`; so if the sum over the conjugacy classes is divisible by
   -- `Φₙ(q)`, then `n = 1`, and therefore the vector space is trivial, as desired.
-  let Φₙ := cyclotomic n Int
-  apply_fun (Nat.cast : Nat -> Int) at key
-  rw [Nat.cast_add]; rw [Nat.cast_sub h1qn]; rw [Nat.cast_sub hq.le]; rw [Nat.cast_one]; rw [Nat.cast_pow] at key
-  suffices Φₙ.eval ↑q ∣ ↑(∑ x in (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
-    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n Int) (x := (q : Int))
-    rw [eval_sub]; rw [eval_X_pow]; rw [eval_one]; rw [← key]; rw [Int.dvd_add_left this] at contra
+  let Φₙ := cyclotomic n ℤ
+  apply_fun (Nat.cast : ℕ → ℤ) at key
+  rw [Nat.cast_add, Nat.cast_sub h1qn, Nat.cast_sub hq.le, Nat.cast_one, Nat.cast_pow] at key
+  suffices Φₙ.eval ↑q ∣ ↑(∑ x ∈ (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
+    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n ℤ) (x := (q : ℤ))
+    rw [eval_sub, eval_X_pow, eval_one, ← key, Int.dvd_add_left this] at contra
     refine (Nat.le_of_dvd ?_ ?_).not_gt (sub_one_lt_natAbs_cyclotomic_eval (n := n) ?_ hq.ne')
     · exact tsub_pos_of_lt hq
     · convert! Int.natAbs_dvd_natAbs.mpr contra
@@ -283,10 +115,10 @@ private theorem center_eq_top [Finite D] (hD : InductionHyp D) : Subring.center 
       simp only [eq_comm, Int.natAbs_eq_iff, Nat.cast_sub hq.le, Nat.cast_one, neg_sub, true_or]
     · by_contra! h
       obtain ⟨x, hx⟩ := finrank_le_one_iff.mp h
-      refine not_le_of_gt hZ.lt_top (fun y _ => Subring.mem_center_iff.mpr fun z => ?_)
+      refine not_le_of_gt hZ.lt_top (fun y _ ↦ Subring.mem_center_iff.mpr fun z ↦ ?_)
       obtain ⟨r, rfl⟩ := hx y
       obtain ⟨s, rfl⟩ := hx z
-      rw [smul_mul_smul_comm]; rw [smul_mul_smul_comm]; rw [mul_comm]
+      rw [smul_mul_smul_comm, smul_mul_smul_comm, mul_comm]
   rw [Nat.cast_sum]
   apply Finset.dvd_sum
   rintro ⟨x⟩ hx
@@ -298,27 +130,27 @@ private theorem center_eq_top [Finite D] (hD : InductionHyp D) : Subring.center 
   -- We therefore get that `|x| = (q ^ n - 1) / (q ^ d - 1)`, and as `d` is a strict divisor of `n`,
   -- we do have that `Φₙ(q) | (q ^ n - 1) / (q ^ d - 1)`; extending this over the whole sum
   -- gives us the desired contradiction..
-  rw [Set.toFinset_card]; rw [ConjClasses.card_carrier]; rw [← card_congr
-        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv]; rw [card_units]; rw [card_D]
-  have hZx : Zx != ⊤ := by
+  rw [Set.toFinset_card, ConjClasses.card_carrier, ← card_congr
+        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv, card_units, card_D]
+  have hZx : Zx ≠ ⊤ := by
     by_contra! hZx
     refine (ConjClasses.mk_bijOn (Dˣ)).mapsTo (Set.subset_center_units ?_) hx
-exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
+    exact Subring.centralizer_eq_top_iff_subset.mp hZx <| Set.mem_singleton _
   let : Field Zx := hD.field hZx.lt_top
   let : Algebra Z Zx := (Subring.inclusion <| Subring.center_le_centralizer {(x : D)}).toAlgebra
   let d := finrank Z Zx
   have card_Zx : card Zx = q ^ d := Module.card_eq_pow_finrank
-  have h1qd : 1 <= q ^ d := by rw [← card_Zx]; exact card_pos
-  have : IsScalarTower Z Zx D := ⟨fun x y z => mul_assoc _ _ _⟩
-  rw [card_units]; rw [card_Zx]
+  have h1qd : 1 ≤ q ^ d := by rw [← card_Zx]; exact card_pos
+  have : IsScalarTower Z Zx D := ⟨fun x y z ↦ mul_assoc _ _ _⟩
+  rw [card_units, card_Zx]
   push_cast [h1qd, h1qn]
   apply Int.dvd_div_of_mul_dvd
-  have aux : forall {k : Nat}, ((X : Int[X]) ^ k - 1).eval ↑q = (q : Int) ^ k - 1 := by
+  have aux : ∀ {k : ℕ}, ((X : ℤ[X]) ^ k - 1).eval ↑q = (q : ℤ) ^ k - 1 := by
     simp only [eval_X, eval_one, eval_pow, eval_sub, forall_const]
-  rw [← aux]; rw [← aux]; rw [← eval_mul]
-  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd Int ?_)
+  rw [← aux, ← aux, ← eval_mul]
+  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd ℤ ?_)
   refine Nat.mem_properDivisors.mpr ⟨⟨_, (finrank_mul_finrank Z Zx D).symm⟩, ?_⟩
-  rw [← Nat.pow_lt_pow_iff_right hq]; rw [← card_D]; rw [← card_Zx]
+  rw [← Nat.pow_lt_pow_iff_right hq, ← card_D, ← card_Zx]
   obtain ⟨b, -, hb⟩ := SetLike.exists_of_lt hZx.lt_top
   refine card_lt_of_injective_of_notMem _ Subtype.val_injective (?_ : b ∉ _)
   rintro ⟨b, rfl⟩
@@ -326,46 +158,9 @@ exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
 
 end InductionHyp
 
-/--
-theorem `center_eq_top` / 定理 `center_eq_top`
-
-English:
-theorem center_eq_top
-  given: [Finite D]
-  statement: Subring.center D = ⊤
-  proof: by
-  classical
-  cases nonempty_fintype D
-  induction hn : Fintype.card D using Nat.strong_induction_on generalizing D with | _ n IH
-  apply InductionHyp.center_eq_top
-  intro R hR x y hx hy
-  suffices (⟨y, hy⟩ : R) in Subring.center R by
-    rw [Subring.mem_center_iff] at this
-    simpa using this ⟨x, hx⟩
-  let R_dr : DivisionRing R := Fintype.divisionRingOfIsDomain R
-  rw [IH (Fintype.card R) _ R inferInstance rfl]
-  · trivial
-  rw [← hn]; rw [← Subring.card_top D]
-  convert! Set.card_lt_card hR
-
-中文:
-定理 center_eq_top
-  条件: [有限 D]
-  结论: 子环.center D = ⊤
-  证明: by
-  classical
-  cases nonempty_fintype D
-  induction hn : Fintype.card D using Nat.strong_induction_on generalizing D with | _ n IH
-  apply InductionHyp.center_eq_top
-  intro R hR x y hx hy
-  suffices (⟨y, hy⟩ : R) in Subring.center R by
-    rw [Subring.mem_center_iff] at this
-    simpa using this ⟨x, hx⟩
-  let R_dr : DivisionRing R := Fintype.divisionRingOfIsDomain R
-  rw [IH (Fintype.card R) _ R inferInstance rfl]
-  · trivial
-  rw [← hn]; rw [← Subring.card_top D]
-  convert! Set.card_lt_card hR
+/-
+**LittleWedderburn.center_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LittleWedderburn`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem center_eq_top [Finite D] : Subring.center D = ⊤ := by
   classical
@@ -373,13 +168,13 @@ private theorem center_eq_top [Finite D] : Subring.center D = ⊤ := by
   induction hn : Fintype.card D using Nat.strong_induction_on generalizing D with | _ n IH
   apply InductionHyp.center_eq_top
   intro R hR x y hx hy
-  suffices (⟨y, hy⟩ : R) in Subring.center R by
+  suffices (⟨y, hy⟩ : R) ∈ Subring.center R by
     rw [Subring.mem_center_iff] at this
     simpa using this ⟨x, hx⟩
   let R_dr : DivisionRing R := Fintype.divisionRingOfIsDomain R
   rw [IH (Fintype.card R) _ R inferInstance rfl]
   · trivial
-  rw [← hn]; rw [← Subring.card_top D]
+  rw [← hn, ← Subring.card_top D]
   convert! Set.card_lt_card hR
 
 end LittleWedderburn
@@ -389,36 +184,37 @@ open LittleWedderburn
 /-- A finite division ring is a field. See `Finite.isDomain_to_isField` and
 `Fintype.divisionRingOfIsDomain` for more general statements, but these create data, and therefore
 may cause diamonds if used improperly. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A finite division ring is a field. See `Finite.isDomain_to_isField` and
+`Fintype.divisionRingOfIsDomain` for more general statements, but these create d
+ata, and therefore
+may cause diamonds if used improperly.
+-/
 instance (priority := 100) littleWedderburn (D : Type*) [DivisionRing D] [Finite D] : Field D :=
   { ‹DivisionRing D› with
-    mul_comm := fun x y => by simp [Subring.mem_center_iff.mp ?_ x, center_eq_top D] }
+    mul_comm := fun x y ↦ by simp [Subring.mem_center_iff.mp ?_ x, center_eq_top D] }
 
 alias Finite.divisionRing_to_field := littleWedderburn
 
-/--
-theorem `Finite.isDomain_to_isField` / 定理 `Finite.isDomain_to_isField`
+/-- A finite domain is a field. See also `littleWedderburn` and `Fintype.divisionRingOfIsDomain`. -/
+/-
+**Finite.isDomain_to_isField** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.isDomain_to_isField (D : Type*) [Finite D] [Ring D] [IsDomain D] : 
+IsField D
+参数：D : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Field.toIsField`：Field.toIsField (R : Type u) [Field R] : IsField R
 
-English:
-theorem Finite.isDomain_to_isField
-  given: (D : Type*) [Finite D] [Ring D] [IsDomain D]
-  statement: IsField D
-  proof: by
-  classical
-  cases nonempty_fintype D
-  let _ := Fintype.divisionRingOfIsDomain D
-  exact Field.toIsField D
-
-中文:
-定理 有限.isDomain_to_isField
-  条件: (D : 类型) [有限 D] [环 D] [是整环 D]
-  结论: 是域 D
-  证明: by
-  classical
-  cases nonempty_fintype D
-  let _ := Fintype.divisionRingOfIsDomain D
-  exact Field.toIsField D
-
-Depends on / 依赖: Field.toIsField, Fintype, Fintype.divisionRingOfIsDomain, classical, divisionRingOfIsDomain, nonempty_fintype, toIsField
+--- 原说明 ---
+A finite domain is a field. See also `littleWedderburn` and `Fintype.divisionRin
+gOfIsDomain`.
 -/
 theorem Finite.isDomain_to_isField (D : Type*) [Finite D] [Ring D] [IsDomain D] : IsField D := by
   classical

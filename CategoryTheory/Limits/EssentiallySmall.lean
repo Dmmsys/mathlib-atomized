@@ -30,80 +30,72 @@ namespace CategoryTheory.Limits
 
 variable (J : Type u₂) [Category.{v₂} J] (C : Type u₁) [Category.{v₁} C]
 
-/--
-theorem `hasLimitsOfShape_of_essentiallySmall` / 定理 `hasLimitsOfShape_of_essentiallySmall`
-
-English:
-theorem hasLimitsOfShape_of_essentiallySmall
-  statement: [EssentiallySmall.{w₁} J]
-  proof: hasLimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-中文:
-定理 hasLimitsOfShape_of_essentiallySmall
-  结论: [EssentiallySmall.{w₁} J]
-  证明: hasLimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-Depends on / 依赖: Equivalence, Equivalence.symm, equivSmallModel, hasLimitsOfShape_of_equivalence
+/-
+**CategoryTheory.Limits.hasLimitsOfShape_of_essentiallySmall** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasLimitsOfShape_of_essentiallySmall [EssentiallySmall.{w₁} J] [HasLimitsO
+fSize.{w₁, w₁} C] : HasLimitsOfShape J C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasLimitsOfShape_of_essentiallySmall [EssentiallySmall.{w₁} J]
     [HasLimitsOfSize.{w₁, w₁} C] : HasLimitsOfShape J C :=
-hasLimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-/--
-theorem `hasColimitsOfShape_of_essentiallySmall` / 定理 `hasColimitsOfShape_of_essentiallySmall`
-
-English:
-theorem hasColimitsOfShape_of_essentiallySmall
-  statement: [EssentiallySmall.{w₁} J]
-  proof: hasColimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-中文:
-定理 hasColimitsOfShape_of_essentiallySmall
-  结论: [EssentiallySmall.{w₁} J]
-  证明: hasColimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-Depends on / 依赖: Equivalence, Equivalence.symm, equivSmallModel, hasColimitsOfShape_of_equivalence
+  hasLimitsOfShape_of_equivalence <| Equivalence.symm <| equivSmallModel.{w₁} J
+/-
+**CategoryTheory.Limits.hasColimitsOfShape_of_essentiallySmall** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimitsOfShape_of_essentiallySmall [EssentiallySmall.{w₁} J] [HasColim
+itsOfSize.{w₁, w₁} C] : HasColimitsOfShape J C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasColimitsOfShape_of_essentiallySmall [EssentiallySmall.{w₁} J]
     [HasColimitsOfSize.{w₁, w₁} C] : HasColimitsOfShape J C :=
-hasColimitsOfShape_of_equivalence Equivalence.symm equivSmallModel.{w₁} J
-
-/--
-theorem `hasProductsOfShape_of_small` / 定理 `hasProductsOfShape_of_small`
-
-English:
-theorem hasProductsOfShape_of_small
-  given: (β : Type w₂) [Small.{w₁} β] [HasProducts.{w₁} C]
-  proof: hasLimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
-
-中文:
-定理 hasProductsOfShape_of_small
-  条件: (β : 类型 w₂) [Small.{w₁} β] [HasProducts.{w₁} C]
-  证明: hasLimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.symm, equivShrink, equivalence, hasLimitsOfShape_of_equivalence
+  hasColimitsOfShape_of_equivalence <| Equivalence.symm <| equivSmallModel.{w₁} J
+/-
+**CategoryTheory.Limits.hasProductsOfShape_of_small** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：hasProductsOfShape_of_small (β : Type w₂) [Small.{w₁} β] [HasProducts.{w₁}
+ C] : HasProductsOfShape β C
+参数：β : Type w₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem hasProductsOfShape_of_small (β : Type w₂) [Small.{w₁} β] [HasProducts.{w₁} C] :
     HasProductsOfShape β C :=
-hasLimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
-
-/--
-theorem `hasCoproductsOfShape_of_small` / 定理 `hasCoproductsOfShape_of_small`
-
-English:
-theorem hasCoproductsOfShape_of_small
-  given: (β : Type w₂) [Small.{w₁} β] [HasCoproducts.{w₁} C]
-  proof: hasColimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
-
-中文:
-定理 hasCoproductsOfShape_of_small
-  条件: (β : 类型 w₂) [Small.{w₁} β] [HasCoproducts.{w₁} C]
-  证明: hasColimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.symm, equivShrink, equivalence, hasColimitsOfShape_of_equivalence
+  hasLimitsOfShape_of_equivalence <| Discrete.equivalence <| Equiv.symm <| equivShrink β
+/-
+**CategoryTheory.Limits.hasCoproductsOfShape_of_small** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasCoproductsOfShape_of_small (β : Type w₂) [Small.{w₁} β] [HasCoproducts.
+{w₁} C] : HasCoproductsOfShape β C
+参数：β : Type w₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem hasCoproductsOfShape_of_small (β : Type w₂) [Small.{w₁} β] [HasCoproducts.{w₁} C] :
     HasCoproductsOfShape β C :=
-hasColimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
+  hasColimitsOfShape_of_equivalence <| Discrete.equivalence <| Equiv.symm <| equivShrink β
 
 end CategoryTheory.Limits
+

@@ -48,7 +48,7 @@ and includes many more features.
   `?m` is a metavariable, one of `x₁, .., xₙ` is `x`, and `f` is not a metavariable.
   For example, the pattern `Continuous fun y => Real.exp (f y)])` is indexed by
   both `@Continuous *0 ℝ *1 *2 (λ, Real.exp *3)`
-  and `@Continuous *0 ℝ *1 *2 Real.exp`,
+  and  `@Continuous *0 ℝ *1 *2 Real.exp`,
   so that it also comes up if you look up `Continuous Real.exp`.
 
 - How to deal with number literals is waiting for this issue to be resolved:
@@ -105,62 +105,35 @@ namespace Lean.Meta.RefinedDiscrTree
 
 variable {α : Type}
 
-/--
-Definition of `withTreeCtx` / `withTreeCtx` 的定义
+/-- Creates the core context used for initializing a tree using the current context. -/
+/-
+**Lean.Meta.RefinedDiscrTree.withTreeCtx** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Re
+finedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withTreeCtx
-  signature: (ctx : Core.Context)
-  body: { ctx with maxHeartbeats := 0, diag := getDiag ctx.options }
-
-中文:
-定义 withTreeCtx
-  签名: (ctx : 核.余ntext)
-  定义体: { ctx with maxHeartbeats := 0, diag := getDiag ctx.options }
+--- 原说明 ---
+Creates the core context used for initializing a tree using the current context.
 -/
 private def withTreeCtx (ctx : Core.Context) : Core.Context :=
   { ctx with maxHeartbeats := 0, diag := getDiag ctx.options }
 
-/--
-Definition of `findImportMatches` / `findImportMatches` 的定义
+/-- Returns candidates from all imported modules that match the expression. -/
+/-
+**Lean.Meta.RefinedDiscrTree.findImportMatches** 是 Mathlib 中的一个定义，位于命名空间 `Lean.M
+eta.RefinedDiscrTree`。
+形式化陈述：findImportMatches (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α)
+))) (addEntry : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry))
+)) (ty : Expr) (constantsPerTask : Nat
+参数：ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α)))；addEntry : Name -> 
+ConstantInfo -> MetaM (List (α × List (Key × LazyEntry)))；ty : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findImportMatches
-  body: do
-  let ngen ← getNGen
-  let (cNGen, ngen) := ngen.mkChild
-  setNGen ngen
-  let _ : Inhabited (IO.Ref (Option (RefinedDiscrTree α))) := ⟨← IO.mkRef none⟩
-  let ref := EnvExtension.getState ext (← getEnv)
-  let importTree ← (← ref.get).getDM do
-profileitM Exception "RefinedDiscrTree import initialization" (← getOptions)
-withTheReader Core.Context withTreeCtx
-        createImportedDiscrTree cNGen (← getEnv) addEntry constantsPerTask capacityPerTask
-  let (importCandidates, importTree) ← getMatch importTree ty false false
-  ref.set (some importTree)
-  return importCandidates
-
-中文:
-定义 findImportMatches
-  定义体: do
-  let ngen ← getNGen
-  let (cNGen, ngen) := ngen.mkChild
-  setNGen ngen
-  let _ : Inhabited (IO.Ref (Option (RefinedDiscrTree α))) := ⟨← IO.mkRef none⟩
-  let ref := EnvExtension.getState ext (← getEnv)
-  let importTree ← (← ref.get).getDM do
-profileitM Exception "RefinedDiscrTree import initialization" (← getOptions)
-withTheReader Core.Context withTreeCtx
-        createImportedDiscrTree cNGen (← getEnv) addEntry constantsPerTask capacityPerTask
-  let (importCandidates, importTree) ← getMatch importTree ty false false
-  ref.set (some importTree)
-  return importCandidates
-
-Depends on / 依赖: MatchResult, capacityPerTask
+--- 原说明 ---
+Returns candidates from all imported modules that match the expression.
 -/
 def findImportMatches
     (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α))))
-    (addEntry : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry)))) (ty : Expr)
+    (addEntry : Name → ConstantInfo → MetaM (List (α × List (Key × LazyEntry)))) (ty : Expr)
     (constantsPerTask : Nat := 1000) (capacityPerTask : Nat := 128) : MetaM (MatchResult α) := do
   let ngen ← getNGen
   let (cNGen, ngen) := ngen.mkChild
@@ -168,66 +141,70 @@ def findImportMatches
   let _ : Inhabited (IO.Ref (Option (RefinedDiscrTree α))) := ⟨← IO.mkRef none⟩
   let ref := EnvExtension.getState ext (← getEnv)
   let importTree ← (← ref.get).getDM do
-profileitM Exception "RefinedDiscrTree import initialization" (← getOptions)
-withTheReader Core.Context withTreeCtx
+    profileitM Exception  "RefinedDiscrTree import initialization" (← getOptions) <|
+      withTheReader Core.Context withTreeCtx <|
         createImportedDiscrTree cNGen (← getEnv) addEntry constantsPerTask capacityPerTask
   let (importCandidates, importTree) ← getMatch importTree ty false false
   ref.set (some importTree)
   return importCandidates
 
-/--
-Definition of `findModuleMatches` / `findModuleMatches` 的定义
+/-- Returns candidates from this module that match the expression. -/
+/-
+**Lean.Meta.RefinedDiscrTree.findModuleMatches** 是 Mathlib 中的一个定义，位于命名空间 `Lean.M
+eta.RefinedDiscrTree`。
+形式化陈述：findModuleMatches (moduleRef : ModuleDiscrTreeRef α) (ty : Expr) : MetaM (
+MatchResult α)
+参数：moduleRef : ModuleDiscrTreeRef α；ty : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findModuleMatches
-  signature: (moduleRef : ModuleDiscrTreeRef α) (ty : Expr)
-  body: do
-  profileitM Exception "RefinedDiscrTree local search" (← getOptions) do
-    let discrTree ← moduleRef.ref.get
-    let (localCandidates, localTree) ← getMatch discrTree ty false false
-    moduleRef.ref.set localTree
-    return localCandidates
-
-中文:
-定义 findModuleMatches
-  签名: (moduleRef : ModuleDiscrTreeRef α) (ty : Expr)
-  定义体: do
-  profileitM Exception "RefinedDiscrTree local search" (← getOptions) do
-    let discrTree ← moduleRef.ref.get
-    let (localCandidates, localTree) ← getMatch discrTree ty false false
-    moduleRef.ref.set localTree
-    return localCandidates
+--- 原说明 ---
+Returns candidates from this module that match the expression.
 -/
 def findModuleMatches (moduleRef : ModuleDiscrTreeRef α) (ty : Expr) : MetaM (MatchResult α) := do
-  profileitM Exception "RefinedDiscrTree local search" (← getOptions) do
+  profileitM Exception  "RefinedDiscrTree local search" (← getOptions) do
     let discrTree ← moduleRef.ref.get
     let (localCandidates, localTree) ← getMatch discrTree ty false false
     moduleRef.ref.set localTree
     return localCandidates
 
 /--
-Definition of `findMatches` / `findMatches` 的定义
+`findMatches` combines `findImportMatches` and `findModuleMatches`.
 
-English:
-definition findMatches
-  signature: (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α))))
-  body: do
-  let moduleMatches ← findModuleMatches (← createModuleTreeRef addEntry) ty
-  let importMatches ← findImportMatches ext addEntry ty constantsPerTask capacityPerTask
-  return (moduleMatches, importMatches)
+* `ext` should be an environment extension with an `IO.Ref` for caching the `RefinedDiscrTree`.
+* `addEntry` is the function for creating `RefinedDiscrTree` entries from constants.
+* `ty` is the expression type.
+* `constantsPerTask` is the number of constants in imported modules to be used for each
+  new task.
+* `capacityPerTask` is the initial capacity of the `HashMap` at the root of the
+  `RefinedDiscrTree` for each new task.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.findMatches** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Re
+finedDiscrTree`。
+形式化陈述：findMatches (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α)))) (a
+ddEntry : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry)))) (ty
+ : Expr) (constantsPerTask : Nat
+参数：ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α)))；addEntry : Name -> 
+ConstantInfo -> MetaM (List (α × List (Key × LazyEntry)))；ty : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findMatches
-  签名: (ext : EnvExtension (IO.Ref (选项类型 (RefinedDiscrTree α))))
-  定义体: do
-  let moduleMatches ← findModuleMatches (← createModuleTreeRef addEntry) ty
-  let importMatches ← findImportMatches ext addEntry ty constantsPerTask capacityPerTask
-  return (moduleMatches, importMatches)
+--- 原说明 ---
+`findMatches` combines `findImportMatches` and `findModuleMatches`.
 
-Depends on / 依赖: capacityPerTask
+* `ext` should be an environment extension with an `IO.Ref` for caching the `Ref
+inedDiscrTree`.
+* `addEntry` is the function for creating `RefinedDiscrTree` entries from consta
+nts.
+* `ty` is the expression type.
+* `constantsPerTask` is the number of constants in imported modules to be used f
+or each
+  new task.
+* `capacityPerTask` is the initial capacity of the `HashMap` at the root of the
+  `RefinedDiscrTree` for each new task.
 -/
 def findMatches (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α))))
-    (addEntry : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry))))
+    (addEntry : Name → ConstantInfo → MetaM (List (α × List (Key × LazyEntry))))
     (ty : Expr) (constantsPerTask : Nat := 1000) (capacityPerTask : Nat := 128) :
     MetaM (MatchResult α × MatchResult α) := do
   let moduleMatches ← findModuleMatches (← createModuleTreeRef addEntry) ty
@@ -235,3 +212,4 @@ def findMatches (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α))))
   return (moduleMatches, importMatches)
 
 end Lean.Meta.RefinedDiscrTree
+

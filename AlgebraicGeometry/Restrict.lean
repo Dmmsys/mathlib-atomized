@@ -43,264 +43,139 @@ namespace Scheme.Opens
 
 /-- Open subset of a scheme as a scheme. -/
 @[coe]
-/--
-Definition of `toScheme` / `toScheme` 的定义
+/-
+**AlgebraicGeometry.Scheme.Opens.toScheme** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.Scheme.Opens`。
+形式化陈述：toScheme {X : Scheme.{u}} (U : X.Opens) : Scheme.{u}
+参数：U : X.Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toScheme
-  signature: {X : Scheme.{u}} (U : X.Opens)
-  body: X.restrict U.isOpenEmbedding
-
-中文:
-定义 toScheme
-  签名: {X : 概形.{u}} (U : X.Opens)
-  定义体: X.restrict U.isOpenEmbedding
-
-Depends on / 依赖: U.isOpenEmbedding, X.restrict, isOpenEmbedding, restrict
+--- 原说明 ---
+Open subset of a scheme as a scheme.
 -/
 def toScheme {X : Scheme.{u}} (U : X.Opens) : Scheme.{u} :=
   X.restrict U.isOpenEmbedding
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut X.Opens Scheme
-  body: ⟨toScheme⟩
-
-中文:
-实例 :
-  签名: CoeOut X.Opens 概形
-  定义体: ⟨toScheme⟩
-
-Depends on / 依赖: toScheme
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut X.Opens Scheme := ⟨toScheme⟩
 
-/--
-Definition of `ι` / `ι` 的定义
+/-- The restriction of a scheme to an open subset. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : ↑U ⟶ X
-  body: X.ofRestrict _
-
-@[simp]
-
-中文:
-定义 ι
-  签名: : ↑U ⟶ X
-  定义体: X.ofRestrict _
-
-@[simp]
-
-Depends on / 依赖: X.ofRestrict, ofRestrict
+--- 原说明 ---
+The restriction of a scheme to an open subset.
 -/
 def ι : ↑U ⟶ X := X.ofRestrict _
 
 @[simp]
-/--
-lemma `ι_apply` / 引理 `ι_apply`
-
-English:
-lemma ι_apply
-  given: (x : U)
-  statement: U.ι x = x.val
-  proof: rfl
-
-中文:
-引理 ι_apply
-  条件: (x : U)
-  结论: U.ι x = x.val
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_apply (x : U) : U.ι x = x.val := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOpenImmersion U.ι
-  body: inferInstanceAs (IsOpenImmersion (X.ofRestrict _))
-
-中文:
-实例 :
-  签名: 是开浸入 U.ι
-  定义体: inferInstanceAs (IsOpenImmersion (X.ofRestrict _))
-
-Depends on / 依赖: IsOpenImmersion, X.ofRestrict, ofRestrict
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsOpenImmersion U.ι := inferInstanceAs (IsOpenImmersion (X.ofRestrict _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: U.toScheme.CanonicallyOver X
-  body: U.ι
-
-中文:
-实例 :
-  签名: U.toScheme.CanonicallyOver X
-  定义体: U.ι
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simps! over] instance : U.toScheme.CanonicallyOver X where
   hom := U.ι
-
-/--
-lemma `ι_comp_over` / 引理 `ι_comp_over`
-
-English:
-lemma ι_comp_over
-  given: (S : Scheme.{u}) [X.Over S]
-  statement: U.ι ≫ X ↘ S = U.toScheme ↘ S
-  proof: rfl
-
-中文:
-引理 ι_comp_over
-  条件: (S : 概形.{u}) [X.Over S]
-  结论: U.ι ≫ X ↘ S = U.toScheme ↘ S
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_comp_over (S : Scheme.{u}) [X.Over S] : U.ι ≫ X ↘ S = U.toScheme ↘ S := rfl
-
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : X.Opens) : U.ι.IsOver X where
-
-/--
-lemma `toScheme_carrier` / 引理 `toScheme_carrier`
-
-English:
-lemma toScheme_carrier
-  statement: (U : Type u) = (U : Set X)
-  proof: rfl
-
-中文:
-引理 toScheme_carrier
-  结论: (U : 类型u) = (U : 集合 X)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Opens.toScheme_carrier** 是 Mathlib 中的一个引理，位于命名空间 `Alg
+ebraicGeometry.Scheme.Opens`。
+形式化陈述：toScheme_carrier : (U : Type u) = (U : Set X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toScheme_carrier : (U : Type u) = (U : Set X) := rfl
-
-/--
-lemma `toScheme_presheaf_obj` / 引理 `toScheme_presheaf_obj`
-
-English:
-lemma toScheme_presheaf_obj
-  given: (V)
-  statement: Γ(U, V) = Γ(X, U.ι ''ᵁ V)
-  proof: rfl
-
-中文:
-引理 toScheme_presheaf_obj
-  条件: (V)
-  结论: Γ(U, V) = Γ(X, U.ι ''ᵁ V)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Opens.toScheme_presheaf_obj** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：toScheme_presheaf_obj (V) : Γ(U, V) = Γ(X, U.ι ''ᵁ V)
+参数：V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toScheme_presheaf_obj (V) : Γ(U, V) = Γ(X, U.ι ''ᵁ V) := rfl
-
-/--
-lemma `forall_toScheme` / 引理 `forall_toScheme`
-
-English:
-lemma forall_toScheme
-  given: {U : X.Opens} {P : U.toScheme -> Prop}
-  proof: Subtype.forall
-
-中文:
-引理 对任意_toScheme
-  条件: {U : X.Opens} {P : U.toScheme -> 命题}
-  证明: Subtype.forall
-
-Depends on / 依赖: Subtype, Subtype.forall
+/-
+**AlgebraicGeometry.Scheme.Opens.forall_toScheme** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.Scheme.Opens`。
+形式化陈述：forall_toScheme {U : X.Opens} {P : U.toScheme -> Prop} : (forall x, P x) ↔
+ forall (x : X) (hx : x in U), P ⟨x, hx⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
-lemma forall_toScheme {U : X.Opens} {P : U.toScheme -> Prop} :
-    (forall x, P x) ↔ forall (x : X) (hx : x in U), P ⟨x, hx⟩ := Subtype.forall
-
-/--
-lemma `exists_toScheme` / 引理 `exists_toScheme`
-
-English:
-lemma exists_toScheme
-  given: {U : X.Opens} {P : U.toScheme -> Prop}
-  proof: Subtype.exists
-
-@[simp]
-
-中文:
-引理 存在_toScheme
-  条件: {U : X.Opens} {P : U.toScheme -> 命题}
-  证明: Subtype.exists
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.exists
+lemma forall_toScheme {U : X.Opens} {P : U.toScheme → Prop} :
+    (∀ x, P x) ↔ ∀ (x : X) (hx : x ∈ U), P ⟨x, hx⟩ := Subtype.forall
+/-
+**AlgebraicGeometry.Scheme.Opens.exists_toScheme** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.Scheme.Opens`。
+形式化陈述：exists_toScheme {U : X.Opens} {P : U.toScheme -> Prop} : (exists x, P x) ↔
+ exists (x : X) (hx : x in U), P ⟨x, hx⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.exists`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∃ x, q x) ↔ ∃ a, ∃ (b : p a), q ⟨a, b⟩
 -/
-lemma exists_toScheme {U : X.Opens} {P : U.toScheme -> Prop} :
-    (exists x, P x) ↔ exists (x : X) (hx : x in U), P ⟨x, hx⟩ := Subtype.exists
+lemma exists_toScheme {U : X.Opens} {P : U.toScheme → Prop} :
+    (∃ x, P x) ↔ ∃ (x : X) (hx : x ∈ U), P ⟨x, hx⟩ := Subtype.exists
 
 @[simp]
-/--
-lemma `toScheme_presheaf_map` / 引理 `toScheme_presheaf_map`
-
-English:
-lemma toScheme_presheaf_map
-  given: {V W} (i : V ⟶ W)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toScheme_presheaf_map
-  条件: {V W} (i : V ⟶ W)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Opens.toScheme_presheaf_map** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：toScheme_presheaf_map {V W} (i : V ⟶ W) : U.toScheme.presheaf.map i = X.pr
+esheaf.map (U.ι.opensFunctor.map i.unop).op
+参数：i : V ⟶ W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toScheme_presheaf_map {V W} (i : V ⟶ W) :
     U.toScheme.presheaf.map i = X.presheaf.map (U.ι.opensFunctor.map i.unop).op := rfl
 
 @[simp]
-/--
-lemma `ι_app` / 引理 `ι_app`
-
-English:
-lemma ι_app
-  given: (V)
-  statement: U.ι.app V = X.presheaf.map
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ι_app
-  条件: (V)
-  结论: U.ι.app V = X.presheaf.map
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Set.image_preimage_subset, image_preimage_subset
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_app (V) : U.ι.app V = X.presheaf.map
     (homOfLE (x := U.ι ''ᵁ U.ι ⁻¹ᵁ V) (Set.image_preimage_subset _ _)).op :=
   rfl
 
 @[simp]
-/--
-lemma `ι_appTop` / 引理 `ι_appTop`
-
-English:
-lemma ι_appTop
-  proof: rfl
-
-中文:
-引理 ι_appTop
-  证明: rfl
-
-Depends on / 依赖: le_top
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_appTop :
     U.ι.appTop = X.presheaf.map (homOfLE (x := U.ι ''ᵁ ⊤) le_top).op :=
@@ -308,30 +183,10 @@ lemma ι_appTop :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `ι_appLE` / 引理 `ι_appLE`
-
-English:
-lemma ι_appLE
-  given: (V W e)
-  proof: by
-  simp only [Hom.appLE, ι_app, toScheme_presheaf_map, Quiver.Hom.unop_op,
-    Hom.opensFunctor_map_homOfLE, ← Functor.map_comp]
-  rfl
-
-@[simp]
-
-中文:
-引理 ι_appLE
-  条件: (V W e)
-  证明: by
-  simp only [Hom.appLE, ι_app, toScheme_presheaf_map, Quiver.Hom.unop_op,
-    Hom.opensFunctor_map_homOfLE, ← Functor.map_comp]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_comp, Hom.appLE, Hom.opensFunctor_map_homOfLE, Quiver, Quiver.Hom.unop_op, Set.image_subset_iff.mpr, image_subset_iff, map_comp, opensFunctor_map_homOfLE, toScheme_presheaf_map, unop_op
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_appLE (V W e) :
     U.ι.appLE V W e =
@@ -341,245 +196,109 @@ lemma ι_appLE (V W e) :
   rfl
 
 @[simp]
-/--
-lemma `ι_appIso` / 引理 `ι_appIso`
-
-English:
-lemma ι_appIso
-  given: (V)
-  statement: U.ι.appIso V = Iso.refl _
-  proof: X.ofRestrict_appIso _ _
-
-@[simp]
-
-中文:
-引理 ι_appIso
-  条件: (V)
-  结论: U.ι.appIso V = 同构.refl _
-  证明: X.ofRestrict_appIso _ _
-
-@[simp]
-
-Depends on / 依赖: X.ofRestrict_appIso, ofRestrict_appIso
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_appIso (V) : U.ι.appIso V = Iso.refl _ :=
   X.ofRestrict_appIso _ _
 
 @[simp]
-/--
-lemma `opensRange_ι` / 引理 `opensRange_ι`
-
-English:
-lemma opensRange_ι
-  statement: U.ι.opensRange = U
-  proof: Opens.ext Subtype.range_val
-
-@[simp]
-
-中文:
-引理 opensRange_ι
-  结论: U.ι.opensRange = U
-  证明: Opens.ext Subtype.range_val
-
-@[simp]
-
-Depends on / 依赖: Opens.ext, Subtype, Subtype.range_val, range_val
+/-
+**AlgebraicGeometry.Scheme.Opens.opensRange_** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry.Scheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma opensRange_ι : U.ι.opensRange = U :=
   Opens.ext Subtype.range_val
 
 @[simp]
-/--
-lemma `range_ι` / 引理 `range_ι`
-
-English:
-lemma range_ι
-  statement: Set.range U.ι = U
-  proof: Subtype.range_val
-
-中文:
-引理 range_ι
-  结论: 集合.range U.ι = U
-  证明: Subtype.range_val
-
-Depends on / 依赖: Subtype, Subtype.range_val, range_val
+/-
+**AlgebraicGeometry.Scheme.Opens.range_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.Scheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma range_ι : Set.range U.ι = U :=
   Subtype.range_val
-
-/--
-lemma `ι_image_top` / 引理 `ι_image_top`
-
-English:
-lemma ι_image_top
-  statement: U.ι ''ᵁ ⊤ = U
-  proof: U.isOpenEmbedding_obj_top
-
-中文:
-引理 ι_image_top
-  结论: U.ι ''ᵁ ⊤ = U
-  证明: U.isOpenEmbedding_obj_top
-
-Depends on / 依赖: U.isOpenEmbedding_obj_top, isOpenEmbedding_obj_top
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_image_top : U.ι ''ᵁ ⊤ = U :=
   U.isOpenEmbedding_obj_top
-
-/--
-lemma `ι_image_le` / 引理 `ι_image_le`
-
-English:
-lemma ι_image_le
-  given: (W : U.toScheme.Opens)
-  statement: U.ι ''ᵁ W <= U
-  proof: by
-  simp_rw [← U.ι_image_top]
-  exact U.ι.image_mono le_top
-
-@[simp]
-
-中文:
-引理 ι_image_le
-  条件: (W : U.toScheme.Opens)
-  结论: U.ι ''ᵁ W <= U
-  证明: by
-  simp_rw [← U.ι_image_top]
-  exact U.ι.image_mono le_top
-
-@[simp]
-
-Depends on / 依赖: image_mono, le_top, simp_rw
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ι_image_le (W : U.toScheme.Opens) : U.ι ''ᵁ W <= U := by
+lemma ι_image_le (W : U.toScheme.Opens) : U.ι ''ᵁ W ≤ U := by
   simp_rw [← U.ι_image_top]
   exact U.ι.image_mono le_top
 
 @[simp]
-/--
-lemma `ι_preimage_self` / 引理 `ι_preimage_self`
-
-English:
-lemma ι_preimage_self
-  statement: U.ι ⁻¹ᵁ U = ⊤
-  proof: Opens.inclusion'_map_eq_top _
-
-@[simp]
-
-中文:
-引理 ι_preimage_self
-  结论: U.ι ⁻¹ᵁ U = ⊤
-  证明: Opens.inclusion'_map_eq_top _
-
-@[simp]
-
-Depends on / 依赖: Opens.inclusion, _map_eq_top, inclusion
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_preimage_self : U.ι ⁻¹ᵁ U = ⊤ :=
   Opens.inclusion'_map_eq_top _
 
 @[simp]
-/--
-lemma `mem_ι_image_iff` / 引理 `mem_ι_image_iff`
-
-English:
-lemma mem_ι_image_iff
-  given: {x : U} {V : Opens U}
-  statement: (x : X) in U.ι ''ᵁ V ↔ x in V
-  proof: U.ι.apply_mem_image_iff
-
-中文:
-引理 mem_ι_image_iff
-  条件: {x : U} {V : Opens U}
-  结论: (x : X) in U.ι ''ᵁ V ↔ x in V
-  证明: U.ι.apply_mem_image_iff
-
-Depends on / 依赖: apply_mem_image_iff
+/-
+**AlgebraicGeometry.Scheme.Opens.mem_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeomet
+ry.Scheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mem_ι_image_iff {x : U} {V : Opens U} : (x : X) in U.ι ''ᵁ V ↔ x in V :=
+lemma mem_ι_image_iff {x : U} {V : Opens U} : (x : X) ∈ U.ι ''ᵁ V ↔ x ∈ V :=
   U.ι.apply_mem_image_iff
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (U.ι.appLE U ⊤ U.ι_preimage_self.ge)
-  body: by
-  simp only [ι, ofRestrict_appLE]
-  change IsIso (X.presheaf.map (eqToIso U.ι_image_top).hom.op)
-  infer_instance
-
-中文:
-实例 :
-  签名: 是同构 (U.ι.appLE U ⊤ U.ι_preimage_self.ge)
-  定义体: by
-  simp only [ι, ofRestrict_appLE]
-  change IsIso (X.presheaf.map (eqToIso U.ι_image_top).hom.op)
-  infer_instance
-
-Depends on / 依赖: X.presheaf.map, eqToIso, hom.op, infer_instance, ofRestrict_appLE, presheaf
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (U.ι.appLE U ⊤ U.ι_preimage_self.ge) := by
   simp only [ι, ofRestrict_appLE]
   change IsIso (X.presheaf.map (eqToIso U.ι_image_top).hom.op)
   infer_instance
-
-/--
-lemma `ι_app_self` / 引理 `ι_app_self`
-
-English:
-lemma ι_app_self
-  statement: U.ι.app U = X.presheaf.map (eqToHom (X := U.ι ''ᵁ _) (by simp)).op
-  proof: rfl
-
-中文:
-引理 ι_app_self
-  结论: U.ι.app U = X.presheaf.map (eqToHom (X := U.ι ''ᵁ _) (by simp)).op
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.S
+cheme.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_app_self : U.ι.app U = X.presheaf.map (eqToHom (X := U.ι ''ᵁ _) (by simp)).op := rfl
-
-/--
-lemma `eq_presheaf_map_eqToHom` / 引理 `eq_presheaf_map_eqToHom`
-
-English:
-lemma eq_presheaf_map_eqToHom
-  given: {V W : Opens U} (e : U.ι ''ᵁ V = U.ι ''ᵁ W)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 eq_presheaf_map_eqToHom
-  条件: {V W : Opens U} (e : U.ι ''ᵁ V = U.ι ''ᵁ W)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Opens.eq_presheaf_map_eqToHom** 是 Mathlib 中的一个引理，位于命名
+空间 `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：eq_presheaf_map_eqToHom {V W : Opens U} (e : U.ι ''ᵁ V = U.ι ''ᵁ W) : X.pr
+esheaf.map (eqToHom e).op = U.toScheme.presheaf.map (eqToHom <| U.isOpenEmbeddin
+g.functor_obj_injective e).op
+参数：e : U.ι ''ᵁ V = U.ι ''ᵁ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 -/
 lemma eq_presheaf_map_eqToHom {V W : Opens U} (e : U.ι ''ᵁ V = U.ι ''ᵁ W) :
     X.presheaf.map (eqToHom e).op =
       U.toScheme.presheaf.map (eqToHom <| U.isOpenEmbedding.functor_obj_injective e).op := rfl
 
 @[simp]
-/--
-lemma `nonempty_iff` / 引理 `nonempty_iff`
-
-English:
-lemma nonempty_iff
-  statement: Nonempty U.toScheme ↔ (U : Set X).Nonempty
-  proof: by
-  simp only [toScheme_carrier, SetLike.coe_sort_coe, nonempty_subtype]
-  rfl
-
-中文:
-引理 nonempty_iff
-  结论: 非空 U.toScheme ↔ (U : 集合 X).非空
-  证明: by
-  simp only [toScheme_carrier, SetLike.coe_sort_coe, nonempty_subtype]
-  rfl
-
-Depends on / 依赖: SetLike, SetLike.coe_sort_coe, coe_sort_coe, nonempty_subtype, toScheme_carrier
+/-
+**AlgebraicGeometry.Scheme.Opens.nonempty_iff** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.Opens`。
+形式化陈述：nonempty_iff : Nonempty U.toScheme ↔ (U : Set X).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma nonempty_iff : Nonempty U.toScheme ↔ (U : Set X).Nonempty := by
   simp only [toScheme_carrier, SetLike.coe_sort_coe, nonempty_subtype]
@@ -588,127 +307,127 @@ lemma nonempty_iff : Nonempty U.toScheme ↔ (U : Set X).Nonempty := by
 attribute [-simp] eqToHom_op in
 /-- The global sections of the restriction is isomorphic to the sections on the open set. -/
 @[simps!]
-/--
-Definition of `topIso` / `topIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.Opens.topIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.Scheme.Opens`。
+形式化陈述：topIso : Γ(U, ⊤) ≅ Γ(X, U)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition topIso
-  signature: : Γ(U, ⊤) ≅ Γ(X, U)
-  body: X.presheaf.mapIso (eqToIso U.ι_image_top.symm).op
-
-中文:
-定义 topIso
-  签名: : Γ(U, ⊤) ≅ Γ(X, U)
-  定义体: X.presheaf.mapIso (eqToIso U.ι_image_top.symm).op
-
-Depends on / 依赖: X.presheaf.mapIso, _image_top.symm, eqToIso, mapIso, presheaf
+--- 原说明 ---
+The global sections of the restriction is isomorphic to the sections on the open
+ set.
 -/
 def topIso : Γ(U, ⊤) ≅ Γ(X, U) :=
   X.presheaf.mapIso (eqToIso U.ι_image_top.symm).op
 
-/--
-Definition of `stalkIso` / `stalkIso` 的定义
+/-- The stalks of an open subscheme are isomorphic to the stalks of the original scheme. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.stalkIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.Scheme.Opens`。
+形式化陈述：stalkIso {X : Scheme.{u}} (U : X.Opens) (x : U) : U.toScheme.presheaf.stal
+k x ≅ X.presheaf.stalk x.1
+参数：U : X.Opens；x : U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stalkIso
-  signature: {X : Scheme.{u}} (U : X.Opens) (x : U)
-  body: X.restrictStalkIso (Opens.isOpenEmbedding _) _
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 stalkIso
-  签名: {X : 概形.{u}} (U : X.Opens) (x : U)
-  定义体: X.restrictStalkIso (Opens.isOpenEmbedding _) _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Opens.isOpenEmbedding, X.restrictStalkIso, isOpenEmbedding, restrictStalkIso
+--- 原说明 ---
+The stalks of an open subscheme are isomorphic to the stalks of the original sch
+eme.
 -/
 def stalkIso {X : Scheme.{u}} (U : X.Opens) (x : U) :
     U.toScheme.presheaf.stalk x ≅ X.presheaf.stalk x.1 :=
   X.restrictStalkIso (Opens.isOpenEmbedding _) _
 
 @[reassoc (attr := simp)]
-/--
-lemma `germ_stalkIso_hom` / 引理 `germ_stalkIso_hom`
-
-English:
-lemma germ_stalkIso_hom
-  statement: {X : Scheme.{u}} (U : X.Opens)
-  proof: PresheafedSpace.restrictStalkIso_hom_eq_germ _ U.isOpenEmbedding _ _ _
-
-@[reassoc]
-
-中文:
-引理 germ_stalkIso_hom
-  结论: {X : 概形.{u}} (U : X.Opens)
-  证明: PresheafedSpace.restrictStalkIso_hom_eq_germ _ U.isOpenEmbedding _ _ _
-
-@[reassoc]
-
-Depends on / 依赖: PresheafedSpace, PresheafedSpace.restrictStalkIso_hom_eq_germ, U.isOpenEmbedding, isOpenEmbedding, restrictStalkIso_hom_eq_germ
+/-
+**AlgebraicGeometry.Scheme.Opens.germ_stalkIso_hom** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebraicGeometry.Scheme.Opens`。
+形式化陈述：germ_stalkIso_hom {X : Scheme.{u}} (U : X.Opens) {V : U.toScheme.Opens} (x
+ : U) (hx : x in V) : U.toScheme.presheaf.germ V x hx ≫ (U.stalkIso x).hom = X.p
+resheaf.germ (U.ι ''ᵁ V) x.1 ⟨x, hx, rfl⟩
+参数：U : X.Opens；x : U；hx : x in V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.restrictStalkIso_hom_eq_germ`：restrict
+StalkIso_hom_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶
+ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Open…
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding`：isOpenEmbedding {X : TopCat.{u}}
+ (U : Opens X) : IsOpenEmbedding (inclusion' U)
 -/
 lemma germ_stalkIso_hom {X : Scheme.{u}} (U : X.Opens)
-    {V : U.toScheme.Opens} (x : U) (hx : x in V) :
+    {V : U.toScheme.Opens} (x : U) (hx : x ∈ V) :
       U.toScheme.presheaf.germ V x hx ≫ (U.stalkIso x).hom =
         X.presheaf.germ (U.ι ''ᵁ V) x.1 ⟨x, hx, rfl⟩ :=
     PresheafedSpace.restrictStalkIso_hom_eq_germ _ U.isOpenEmbedding _ _ _
 
 @[reassoc]
-/--
-lemma `germ_stalkIso_inv` / 引理 `germ_stalkIso_inv`
-
-English:
-lemma germ_stalkIso_inv
-  statement: {X : Scheme.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x : U)
-  proof: PresheafedSpace.restrictStalkIso_inv_eq_germ X.toPresheafedSpace U.isOpenEmbedding V x hx
-
-中文:
-引理 germ_stalkIso_inv
-  结论: {X : 概形.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x : U)
-  证明: PresheafedSpace.restrictStalkIso_inv_eq_germ X.toPresheafedSpace U.isOpenEmbedding V x hx
-
-Depends on / 依赖: PresheafedSpace, PresheafedSpace.restrictStalkIso_inv_eq_germ, U.isOpenEmbedding, X.toPresheafedSpace, isOpenEmbedding, restrictStalkIso_inv_eq_germ, toPresheafedSpace
+/-
+**AlgebraicGeometry.Scheme.Opens.germ_stalkIso_inv** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebraicGeometry.Scheme.Opens`。
+形式化陈述：germ_stalkIso_inv {X : Scheme.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x
+ : U) (hx : x in V) : X.presheaf.germ (U.ι ''ᵁ V) x ⟨x, hx, rfl⟩ ≫ (U.stalkIso x
+).inv = U.toScheme.presheaf.germ V x hx
+参数：U : X.Opens；V : U.toScheme.Opens；x : U；hx : x in V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.restrictStalkIso_inv_eq_germ`：restrict
+StalkIso_inv_eq_germ {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C) {f : U ⟶
+ (X : TopCat.{v})} (h : IsOpenEmbedding f) (V : Open…
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding`：isOpenEmbedding {X : TopCat.{u}}
+ (U : Opens X) : IsOpenEmbedding (inclusion' U)
 -/
 lemma germ_stalkIso_inv {X : Scheme.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x : U)
-    (hx : x in V) : X.presheaf.germ (U.ι ''ᵁ V) x ⟨x, hx, rfl⟩ ≫
+    (hx : x ∈ V) : X.presheaf.germ (U.ι ''ᵁ V) x ⟨x, hx, rfl⟩ ≫
       (U.stalkIso x).inv = U.toScheme.presheaf.germ V x hx :=
   PresheafedSpace.restrictStalkIso_inv_eq_germ X.toPresheafedSpace U.isOpenEmbedding V x hx
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `stalkIso_inv` / 引理 `stalkIso_inv`
-
-English:
-lemma stalkIso_inv
-  given: {X : Scheme.{u}} (U : X.Opens) (x : U)
-  proof: by
-  rw [← Category.comp_id (U.stalkIso x).inv]; rw [Iso.inv_comp_eq]
-  apply TopCat.Presheaf.stalk_hom_ext
-  intro W hxW
-  simp only [Category.comp_id, U.germ_stalkIso_hom_assoc]
-  convert! (Scheme.Hom.germ_stalkMap U.ι (U.ι ''ᵁ W) x ⟨_, hxW, rfl⟩).symm
-  refine (U.toScheme.presheaf.germ_res (homOfLE ?_) _ _).symm
-  exact (Set.preimage_image_eq _ Subtype.val_injective).le
-
-中文:
-引理 stalkIso_inv
-  条件: {X : 概形.{u}} (U : X.Opens) (x : U)
-  证明: by
-  rw [← Category.comp_id (U.stalkIso x).inv]; rw [Iso.inv_comp_eq]
-  apply TopCat.Presheaf.stalk_hom_ext
-  intro W hxW
-  simp only [Category.comp_id, U.germ_stalkIso_hom_assoc]
-  convert! (Scheme.Hom.germ_stalkMap U.ι (U.ι ''ᵁ W) x ⟨_, hxW, rfl⟩).symm
-  refine (U.toScheme.presheaf.germ_res (homOfLE ?_) _ _).symm
-  exact (Set.preimage_image_eq _ Subtype.val_injective).le
-
-Depends on / 依赖: Category, Category.comp_id, Iso.inv_comp_eq, Presheaf, Scheme, Scheme.Hom.germ_stalkMap, Set.preimage_image_eq, Subtype, Subtype.val_injective, TopCat, TopCat.Presheaf.stalk_hom_ext, U.germ_stalkIso_hom_assoc, U.stalkIso, U.toScheme.presheaf.germ_res, comp_id, convert, germ_res, germ_stalkIso_hom_assoc, germ_stalkMap, homOfLE
+/-
+**AlgebraicGeometry.Scheme.Opens.stalkIso_inv** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.Opens`。
+形式化陈述：stalkIso_inv {X : Scheme.{u}} (U : X.Opens) (x : U) : (U.stalkIso x).inv =
+ U.ι.stalkMap x
+参数：U : X.Opens；x : U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `TopCat.Presheaf.stalk_hom_ext`：stalk_hom_ext (F : X.Presheaf C) {x} {Y :
+ C} {f₁ f₂ : F.stalk x ⟶ Y} (ih : forall (U : Opens X) (hxU : x in U), F.germ U 
+x hxU ≫ f₁ = F.germ…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.germ_stalkIso_hom_assoc`：∀ {X : Algebraic
+Geometry.Scheme} (U : X.Opens) {V : (↑U).Opens} (x : ↥U) (hx : x ∈ V) {Z : CommR
+ingCat}   (h : X.presheaf.stalk ↑x ⟶ Z),   C…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `TopCat.Presheaf.germ_res`：germ_res (F : X.Presheaf C) {U V : Opens X} (i
+ : U ⟶ V) (x : X) (hx : x in U) : F.map i.op ≫ F.germ U x hx = F.germ V x (i.le 
+hx)
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.germ_stalkMap`：germ_stalkMap (U : Y.Opens) 
+(x : X) (hx : f x in U) : Y.presheaf.germ U (f x) hx ≫ f.stalkMap x = f.app U ≫ 
+X.presheaf.germ (f ⁻¹ᵁ U) x hx
 -/
 lemma stalkIso_inv {X : Scheme.{u}} (U : X.Opens) (x : U) :
     (U.stalkIso x).inv = U.ι.stalkMap x := by
-  rw [← Category.comp_id (U.stalkIso x).inv]; rw [Iso.inv_comp_eq]
+  rw [← Category.comp_id (U.stalkIso x).inv, Iso.inv_comp_eq]
   apply TopCat.Presheaf.stalk_hom_ext
   intro W hxW
   simp only [Category.comp_id, U.germ_stalkIso_hom_assoc]
@@ -720,52 +439,27 @@ end Scheme.Opens
 
 /-- If `U` is a family of open sets that covers `X`, then `X.restrict U` forms an `X.open_cover`. -/
 @[simps! I₀ X f]
-/--
-Definition of `Scheme.openCoverOfIsOpenCover` / `Scheme.openCoverOfIsOpenCover` 的定义
+/-
+**AlgebraicGeometry.Scheme.openCoverOfIsOpenCover** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.Scheme`。
+形式化陈述：{s : Type u_1} → (X : AlgebraicGeometry.Scheme) → (U : s → X.Opens) → Topo
+logicalSpace.IsOpenCover U → X.OpenCover
+参数：X : AlgebraicGeometry.Scheme；U : s → X.Opens。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.openCoverOfIsOpenCover
-  signature: {s : Type*} (X : Scheme.{u}) (U : s -> X.Opens)
-  body: s
-  X i := U i
-  f i := (U i).ι
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
-    have hx : x in ⨆ i, U i := hU.symm ▸ show x in (⊤ : X.Opens) by trivial
-    rw [Opens.mem_iSup] at hx
-    obtain ⟨i, hi⟩ := hx
-    use i
-    simpa
-
-#adaptation_note
-
-中文:
-定义 概形.openCoverOfIsOpenCover
-  签名: {s : 类型} (X : 概形.{u}) (U : s -> X.Opens)
-  定义体: s
-  X i := U i
-  f i := (U i).ι
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
-    have hx : x in ⨆ i, U i := hU.symm ▸ show x in (⊤ : X.Opens) by trivial
-    rw [Opens.mem_iSup] at hx
-    obtain ⟨i, hi⟩ := hx
-    use i
-    simpa
-
-#adaptation_note
+--- 原说明 ---
+If `U` is a family of open sets that covers `X`, then `X.restrict U` forms an `X
+.open_cover`.
 -/
-def Scheme.openCoverOfIsOpenCover {s : Type*} (X : Scheme.{u}) (U : s -> X.Opens)
+def Scheme.openCoverOfIsOpenCover {s : Type*} (X : Scheme.{u}) (U : s → X.Opens)
     (hU : IsOpenCover U) : X.OpenCover where
   I₀ := s
   X i := U i
   f i := (U i).ι
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
-    have hx : x in ⨆ i, U i := hU.symm ▸ show x in (⊤ : X.Opens) by trivial
+    refine ⟨fun x ↦ ?_, inferInstance⟩
+    have hx : x ∈ ⨆ i, U i := hU.symm ▸ show x ∈ (⊤ : X.Opens) by trivial
     rw [Opens.mem_iSup] at hx
     obtain ⟨i, hi⟩ := hx
     use i
@@ -776,356 +470,253 @@ def Scheme.openCoverOfIsOpenCover {s : Type*} (X : Scheme.{u}) (U : s -> X.Opens
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The open sets of an open subscheme corresponds to the open sets containing in the subset. -/
 @[simps!]
-/--
-Definition of `opensRestrict` / `opensRestrict` 的定义
+/-
+**AlgebraicGeometry.opensRestrict** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：opensRestrict : Scheme.Opens U ≃ { V : X.Opens // V <= U }
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition opensRestrict
-  signature: :
-  body: (IsOpenImmersion.opensEquiv (U.ι)).trans (Equiv.subtypeEquivProp (by simp))
-
-中文:
-定义 opensRestrict
-  签名: :
-  定义体: (IsOpenImmersion.opensEquiv (U.ι)).trans (Equiv.subtypeEquivProp (by simp))
-
-Depends on / 依赖: Equiv.subtypeEquivProp, IsOpenImmersion, IsOpenImmersion.opensEquiv, opensEquiv, subtypeEquivProp
+--- 原说明 ---
+The open sets of an open subscheme corresponds to the open sets containing in th
+e subset.
 -/
 def opensRestrict :
-    Scheme.Opens U ≃ { V : X.Opens // V <= U } :=
+    Scheme.Opens U ≃ { V : X.Opens // V ≤ U } :=
   (IsOpenImmersion.opensEquiv (U.ι)).trans (Equiv.subtypeEquivProp (by simp))
-
-/--
-Instance `ΓRestrictAlgebra` / 实例 `ΓRestrictAlgebra`
-
-English:
-instance ΓRestrictAlgebra
-  signature: {X : Scheme.{u}} (U : X.Opens)
-  body: U.ι.appTop.hom.toAlgebra
-
-中文:
-实例 ΓRestrictAlgebra
-  签名: {X : 概形.{u}} (U : X.Opens)
-  定义体: U.ι.appTop.hom.toAlgebra
-
-Depends on / 依赖: appTop, appTop.hom.toAlgebra, toAlgebra
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ΓRestrictAlgebra {X : Scheme.{u}} (U : X.Opens) :
     Algebra Γ(X, ⊤) Γ(U, ⊤) :=
   U.ι.appTop.hom.toAlgebra
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Opens.ι_image_basicOpen'` / 引理 `Scheme.Opens.ι_image_basicOpen'`
+/-- A variant where `r` is first mapped into `Γ(X, U)` before taking the basic open. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Scheme.Opens.ι_image_basicOpen'
-  given: (r : Γ(U, ⊤))
-  proof: by
-  refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
-  rw [← Scheme.basicOpen_res_eq _ _ (eqToHom U.isOpenEmbedding_obj_top).op]
-  rw [← CommRingCat.comp_apply]; rw [← CategoryTheory.Functor.map_comp]; rw [← op_comp]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [op_id]
-  congr
-  exact (PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ _ _).trans
-    (CategoryTheory.Functor.map_id _ _).symm
-
-中文:
-引理 概形.Opens.ι_image_basicOpen'
-  条件: (r : Γ(U, ⊤))
-  证明: by
-  refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
-  rw [← Scheme.basicOpen_res_eq _ _ (eqToHom U.isOpenEmbedding_obj_top).op]
-  rw [← CommRingCat.comp_apply]; rw [← CategoryTheory.Functor.map_comp]; rw [← op_comp]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [op_id]
-  congr
-  exact (PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ _ _).trans
-    (CategoryTheory.Functor.map_id _ _).symm
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, CategoryTheory.Functor.map_id, CommRingCat, CommRingCat.comp_apply, Functor, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, Scheme, Scheme.basicOpen_res_eq, Scheme.image_basicOpen, U.isOpenEmbedding, U.isOpenEmbedding_obj_top, X.ofRestrict, basicOpen_res_eq, comp_apply, eqToHom, eqToHom_refl, eqToHom_trans
+--- 原说明 ---
+A variant where `r` is first mapped into `Γ(X, U)` before taking the basic open.
 -/
 lemma Scheme.Opens.ι_image_basicOpen' (r : Γ(U, ⊤)) :
     U.ι ''ᵁ U.toScheme.basicOpen r = X.basicOpen
       (X.presheaf.map (eqToHom U.ι_image_top.symm).op r) := by
   refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
   rw [← Scheme.basicOpen_res_eq _ _ (eqToHom U.isOpenEmbedding_obj_top).op]
-  rw [← CommRingCat.comp_apply]; rw [← CategoryTheory.Functor.map_comp]; rw [← op_comp]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [op_id]
+  rw [← CommRingCat.comp_apply, ← CategoryTheory.Functor.map_comp, ← op_comp, eqToHom_trans,
+    eqToHom_refl, op_id]
   congr
   exact (PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ _ _).trans
     (CategoryTheory.Functor.map_id _ _).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Opens.ι_image_basicOpen` / 引理 `Scheme.Opens.ι_image_basicOpen`
-
-English:
-lemma Scheme.Opens.ι_image_basicOpen
-  given: (r : Γ(U, ⊤))
-  proof: by
-  rw [Scheme.Opens.ι_image_basicOpen']; rw [Scheme.basicOpen_res_eq]
-
-中文:
-引理 概形.Opens.ι_image_basicOpen
-  条件: (r : Γ(U, ⊤))
-  证明: by
-  rw [Scheme.Opens.ι_image_basicOpen']; rw [Scheme.basicOpen_res_eq]
-
-Depends on / 依赖: Scheme, Scheme.Opens, Scheme.basicOpen_res_eq, basicOpen_res_eq
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Opens.ι_image_basicOpen (r : Γ(U, ⊤)) :
     U.ι ''ᵁ U.toScheme.basicOpen r = X.basicOpen r := by
-  rw [Scheme.Opens.ι_image_basicOpen']; rw [Scheme.basicOpen_res_eq]
+  rw [Scheme.Opens.ι_image_basicOpen', Scheme.basicOpen_res_eq]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Opens.ι_image_basicOpen_topIso_inv` / 引理 `Scheme.Opens.ι_image_basicOpen_topIso_inv`
-
-English:
-lemma Scheme.Opens.ι_image_basicOpen_topIso_inv
-  given: (r : Γ(X, U))
-  proof: by
-  simp only [Scheme.Opens.toScheme_presheaf_obj]
-  rw [ι_image_basicOpen']; rw [basicOpen_res_eq]; rw [topIso_inv]; rw [basicOpen_res_eq X]
-
-@[simp]
-
-中文:
-引理 概形.Opens.ι_image_basicOpen_topIso_inv
-  条件: (r : Γ(X, U))
-  证明: by
-  simp only [Scheme.Opens.toScheme_presheaf_obj]
-  rw [ι_image_basicOpen']; rw [basicOpen_res_eq]; rw [topIso_inv]; rw [basicOpen_res_eq X]
-
-@[simp]
-
-Depends on / 依赖: Scheme, Scheme.Opens.toScheme_presheaf_obj, basicOpen_res_eq, toScheme_presheaf_obj, topIso_inv
+/-
+**AlgebraicGeometry.Scheme.Opens.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Opens.ι_image_basicOpen_topIso_inv (r : Γ(X, U)) :
     U.ι ''ᵁ U.toScheme.basicOpen (U.topIso.inv r) = X.basicOpen r := by
   simp only [Scheme.Opens.toScheme_presheaf_obj]
-  rw [ι_image_basicOpen']; rw [basicOpen_res_eq]; rw [topIso_inv]; rw [basicOpen_res_eq X]
+  rw [ι_image_basicOpen', basicOpen_res_eq, topIso_inv, basicOpen_res_eq X]
 
 @[simp]
-/--
-lemma `Scheme.Opens.mem_basicOpen_toScheme` / 引理 `Scheme.Opens.mem_basicOpen_toScheme`
-
-English:
-lemma Scheme.Opens.mem_basicOpen_toScheme
-  given: {U : X.Opens} {V : Scheme.Opens U} {r : Γ(U, V)} {x : U}
-  proof: by
-  rw [← U.toScheme.basicOpen_res_eq _ (eqToHom (U.ι.preimage_image_eq V)).op]
-  exact congr(x in $(U.ι.preimage_basicOpen r)).to_iff.symm
-
-中文:
-引理 概形.Opens.mem_basicOpen_toScheme
-  条件: {U : X.Opens} {V : 概形.Opens U} {r : Γ(U, V)} {x : U}
-  证明: by
-  rw [← U.toScheme.basicOpen_res_eq _ (eqToHom (U.ι.preimage_image_eq V)).op]
-  exact congr(x in $(U.ι.preimage_basicOpen r)).to_iff.symm
-
-Depends on / 依赖: U.toScheme.basicOpen_res_eq, basicOpen_res_eq, eqToHom, preimage_basicOpen, preimage_image_eq, toScheme, to_iff, to_iff.symm
+/-
+**AlgebraicGeometry.Scheme.Opens.mem_basicOpen_toScheme** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U : X.Opens} {V : (↑U).Opens} {r : ↑((↑U
+).presheaf.obj (Opposite.op V))} {x : ↥U},   x ∈ (↑U).basicOpen r ↔ ↑x ∈ X.basic
+Open r
+参数：↑U；(↑U).presheaf.obj (Opposite.op V)；↑U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_image_eq`：preimage_image_eq (U : X
+.Opens) : f ⁻¹ᵁ f ''ᵁ U = U
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.basicOpen_res_eq`：basicOpen_res_eq (i : op U ⟶ 
+op V) [IsIso i] : X.basicOpen (X.presheaf.map i f) = X.basicOpen f
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Eq.to_iff`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.preimage_basicOpen`：∀ {X Y : AlgebraicGeome
+try.Scheme} (f : X ⟶ Y) {U : Y.Opens} (r : ↑(Y.presheaf.obj (Opposite.op U))),  
+ (TopologicalSpace.Opens.map f.base).…
 -/
 lemma Scheme.Opens.mem_basicOpen_toScheme {U : X.Opens} {V : Scheme.Opens U} {r : Γ(U, V)} {x : U} :
-    x in U.toScheme.basicOpen r ↔ (x : X) in X.basicOpen r := by
+    x ∈ U.toScheme.basicOpen r ↔ (x : X) ∈ X.basicOpen r := by
   rw [← U.toScheme.basicOpen_res_eq _ (eqToHom (U.ι.preimage_image_eq V)).op]
-  exact congr(x in $(U.ι.preimage_basicOpen r)).to_iff.symm
+  exact congr(x ∈ $(U.ι.preimage_basicOpen r)).to_iff.symm
 
 /-- If `U ≤ V`, then `U` is also a subscheme of `V`. -/
 protected noncomputable
-/--
-Definition of `Scheme.homOfLE` / `Scheme.homOfLE` 的定义
-
-English:
-definition Scheme.homOfLE
-  signature: (X : Scheme.{u}) {U V : X.Opens} (e : U <= V)
-  body: IsOpenImmersion.lift V.ι U.ι (by simpa using e)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.homOfLE
-  签名: (X : 概形.{u}) {U V : X.Opens} (e : U <= V)
-  定义体: IsOpenImmersion.lift V.ι U.ι (by simpa using e)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift
+/-
+**AlgebraicGeometry.Scheme.homOfLE** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.
+Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → {U V : X.Opens} → U ≤ V → (↑U ⟶ ↑V)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 -/
-def Scheme.homOfLE (X : Scheme.{u}) {U V : X.Opens} (e : U <= V) : (U : Scheme.{u}) ⟶ V :=
+def Scheme.homOfLE (X : Scheme.{u}) {U V : X.Opens} (e : U ≤ V) : (U : Scheme.{u}) ⟶ V :=
   IsOpenImmersion.lift V.ι U.ι (by simpa using e)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.homOfLE_ι` / 引理 `Scheme.homOfLE_ι`
-
-English:
-lemma Scheme.homOfLE_ι
-  given: (X : Scheme.{u}) {U V : X.Opens} (e : U <= V)
-  proof: IsOpenImmersion.lift_fac _ _ _
-
-中文:
-引理 概形.homOfLE_ι
-  条件: (X : 概形.{u}) {U V : X.Opens} (e : U <= V)
-  证明: IsOpenImmersion.lift_fac _ _ _
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift_fac, lift_fac
+/-
+**AlgebraicGeometry.Scheme.homOfLE_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Scheme.homOfLE_ι (X : Scheme.{u}) {U V : X.Opens} (e : U <= V) :
+lemma Scheme.homOfLE_ι (X : Scheme.{u}) {U V : X.Opens} (e : U ≤ V) :
     X.homOfLE e ≫ V.ι = U.ι :=
   IsOpenImmersion.lift_fac _ _ _
-
-instance {U V : X.Opens} (h : U <= V) : (X.homOfLE h).IsOver X where
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {U V : X.Opens} (h : U ≤ V) : (X.homOfLE h).IsOver X where
 
 @[simp]
-/--
-lemma `Scheme.homOfLE_rfl` / 引理 `Scheme.homOfLE_rfl`
-
-English:
-lemma Scheme.homOfLE_rfl
-  given: (X : Scheme.{u}) (U : X.Opens)
-  statement: X.homOfLE (refl U) = 𝟙 _
-  proof: by
-  rw [← cancel_mono U.ι]; rw [Scheme.homOfLE_ι]; rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.homOfLE_rfl
-  条件: (X : 概形.{u}) (U : X.Opens)
-  结论: X.homOfLE (refl U) = 𝟙 _
-  证明: by
-  rw [← cancel_mono U.ι]; rw [Scheme.homOfLE_ι]; rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, Scheme, Scheme.homOfLE_, cancel_mono, id_comp
+/-
+**AlgebraicGeometry.Scheme.homOfLE_rfl** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) (U : X.Opens), X.homOfLE ⋯ = CategoryTheo
+ry.CategoryStruct.id ↑U
+参数：X : AlgebraicGeometry.Scheme；U : X.Opens。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma Scheme.homOfLE_rfl (X : Scheme.{u}) (U : X.Opens) : X.homOfLE (refl U) = 𝟙 _ := by
-  rw [← cancel_mono U.ι]; rw [Scheme.homOfLE_ι]; rw [Category.id_comp]
+  rw [← cancel_mono U.ι, Scheme.homOfLE_ι, Category.id_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.homOfLE_homOfLE` / 引理 `Scheme.homOfLE_homOfLE`
-
-English:
-lemma Scheme.homOfLE_homOfLE
-  given: (X : Scheme.{u}) {U V W : X.Opens} (e₁ : U <= V) (e₂ : V <= W)
-  proof: by
-  rw [← cancel_mono W.ι]; rw [Category.assoc]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]
-
-中文:
-引理 概形.homOfLE_homOfLE
-  条件: (X : 概形.{u}) {U V W : X.Opens} (e₁ : U <= V) (e₂ : V <= W)
-  证明: by
-  rw [← cancel_mono W.ι]; rw [Category.assoc]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]
-
-Depends on / 依赖: Category, Category.assoc, Scheme, Scheme.homOfLE_, cancel_mono
+/-
+**AlgebraicGeometry.Scheme.homOfLE_homOfLE** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) {U V W : X.Opens} (e₁ : U ≤ V) (e₂ : V ≤ 
+W),   CategoryTheory.CategoryStruct.comp (X.homOfLE e₁) (X.homOfLE e₂) = X.homOf
+LE ⋯
+参数：X : AlgebraicGeometry.Scheme；e₁ : U ≤ V；e₂ : V ≤ W；X.homOfLE e₁；X.homOfLE e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
 -/
-lemma Scheme.homOfLE_homOfLE (X : Scheme.{u}) {U V W : X.Opens} (e₁ : U <= V) (e₂ : V <= W) :
+lemma Scheme.homOfLE_homOfLE (X : Scheme.{u}) {U V W : X.Opens} (e₁ : U ≤ V) (e₂ : V ≤ W) :
     X.homOfLE e₁ ≫ X.homOfLE e₂ = X.homOfLE (e₁.trans e₂) := by
-  rw [← cancel_mono W.ι]; rw [Category.assoc]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]
-
-/--
-theorem `Scheme.homOfLE_base` / 定理 `Scheme.homOfLE_base`
-
-English:
-theorem Scheme.homOfLE_base
-  given: {U V : X.Opens} (e : U <= V)
-  proof: by
-  ext a; refine Subtype.ext ?_ -- Porting note: `ext` did not pick up `Subtype.ext`
-  exact congr($(X.homOfLE_ι e) a)
-
-中文:
-定理 概形.homOfLE_base
-  条件: {U V : X.Opens} (e : U <= V)
-  证明: by
-  ext a; refine Subtype.ext ?_ -- Porting note: `ext` did not pick up `Subtype.ext`
-  exact congr($(X.homOfLE_ι e) a)
-
-Depends on / 依赖: Porting, Subtype, Subtype.ext, X.homOfLE_
+  rw [← cancel_mono W.ι, Category.assoc, Scheme.homOfLE_ι, Scheme.homOfLE_ι, Scheme.homOfLE_ι]
+/-
+**AlgebraicGeometry.Scheme.homOfLE_base** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V),   (X.homOfLE
+ e).base = (TopologicalSpace.Opens.toTopCat ↑X.toPresheafedSpace).map (CategoryT
+heory.homOfLE e)
+参数：e : U ≤ V；X.homOfLE e；TopologicalSpace.Opens.toTopCat ↑X.toPresheafedSpace；Ca
+tegoryTheory.homOfLE e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TopCat.ext`：ext {X Y : TopCat.{u}} {f g : X ⟶ Y} (w : forall x : X, f x 
+= g x) : f = g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
 -/
-theorem Scheme.homOfLE_base {U V : X.Opens} (e : U <= V) :
+theorem Scheme.homOfLE_base {U V : X.Opens} (e : U ≤ V) :
     (X.homOfLE e).base = (Opens.toTopCat _).map (homOfLE e) := by
   ext a; refine Subtype.ext ?_ -- Porting note: `ext` did not pick up `Subtype.ext`
   exact congr($(X.homOfLE_ι e) a)
-
-/--
-theorem `Scheme.homOfLE_apply'` / 定理 `Scheme.homOfLE_apply'`
-
-English:
-theorem Scheme.homOfLE_apply'
-  given: {U V : X.Opens} (e : U <= V) (x : X) (hx : x in U)
-  proof: by
-  rw [homOfLE_base]
-  rfl
-
-@[simp]
-
-中文:
-定理 概形.homOfLE_apply'
-  条件: {U V : X.Opens} (e : U <= V) (x : X) (hx : x in U)
-  证明: by
-  rw [homOfLE_base]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: homOfLE_base
+/-
+**AlgebraicGeometry.Scheme.homOfLE_apply'** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V) (x : ↥X) (hx 
+: x ∈ U), (X.homOfLE e) ⟨x, hx⟩ = ⟨x, ⋯⟩
+参数：e : U ≤ V；x : ↥X；hx : x ∈ U；X.homOfLE e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_base`：∀ {X : AlgebraicGeometry.Scheme} 
+{U V : X.Opens} (e : U ≤ V),   (X.homOfLE e).base = (TopologicalSpace.Opens.toTo
+pCat ↑X.toPresheafedSpace).…
 -/
-theorem Scheme.homOfLE_apply' {U V : X.Opens} (e : U <= V) (x : X) (hx : x in U) :
+theorem Scheme.homOfLE_apply' {U V : X.Opens} (e : U ≤ V) (x : X) (hx : x ∈ U) :
     X.homOfLE e ⟨x, hx⟩ = ⟨x, e hx⟩ := by
   rw [homOfLE_base]
   rfl
 
 @[simp]
-/--
-theorem `Scheme.homOfLE_apply` / 定理 `Scheme.homOfLE_apply`
-
-English:
-theorem Scheme.homOfLE_apply
-  given: {U V : X.Opens} (e : U <= V) (x : U)
-  proof: by
-  rw [Scheme.homOfLE_apply']
-
-中文:
-定理 概形.homOfLE_apply
-  条件: {U V : X.Opens} (e : U <= V) (x : U)
-  证明: by
-  rw [Scheme.homOfLE_apply']
-
-Depends on / 依赖: Scheme, Scheme.homOfLE_apply, homOfLE_apply
+/-
+**AlgebraicGeometry.Scheme.homOfLE_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V) (x : ↥U), ↑((
+X.homOfLE e) x) = ↑x
+参数：e : U ≤ V；x : ↥U；(X.homOfLE e) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_apply'`：∀ {X : AlgebraicGeometry.Scheme
+} {U V : X.Opens} (e : U ≤ V) (x : ↥X) (hx : x ∈ U), (X.homOfLE e) ⟨x, hx⟩ = ⟨x,
+ ⋯⟩
 -/
-theorem Scheme.homOfLE_apply {U V : X.Opens} (e : U <= V) (x : U) :
+theorem Scheme.homOfLE_apply {U V : X.Opens} (e : U ≤ V) (x : U) :
     (X.homOfLE e x).1 = x := by
   rw [Scheme.homOfLE_apply']
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `Scheme.ι_image_homOfLE_eq_ι_image_inf` / 定理 `Scheme.ι_image_homOfLE_eq_ι_image_inf`
-
-English:
-theorem Scheme.ι_image_homOfLE_eq_ι_image_inf
-  given: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  proof: by
-  ext x
-  constructor
-  · rintro ⟨⟨y, hyU⟩, hyW, rfl⟩
-    exact ⟨⟨⟨y, e hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩, hyU⟩
-  · rintro ⟨⟨y, hyW, rfl⟩, hyU⟩
-    exact ⟨⟨y.1, hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩
-
-中文:
-定理 概形.ι_image_homOfLE_eq_ι_image_inf
-  条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  证明: by
-  ext x
-  constructor
-  · rintro ⟨⟨y, hyU⟩, hyW, rfl⟩
-    exact ⟨⟨⟨y, e hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩, hyU⟩
-  · rintro ⟨⟨y, hyW, rfl⟩, hyU⟩
-    exact ⟨⟨y.1, hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩
-
-Depends on / 依赖: homOfLE_apply
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Scheme.ι_image_homOfLE_eq_ι_image_inf {U V : X.Opens} (e : U <= V) (W : Opens V) :
+theorem Scheme.ι_image_homOfLE_eq_ι_image_inf {U V : X.Opens} (e : U ≤ V) (W : Opens V) :
     U.ι ''ᵁ X.homOfLE e ⁻¹ᵁ W = V.ι ''ᵁ W ⊓ U := by
   ext x
   constructor
@@ -1133,220 +724,258 @@ theorem Scheme.ι_image_homOfLE_eq_ι_image_inf {U V : X.Opens} (e : U <= V) (W 
     exact ⟨⟨⟨y, e hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩, hyU⟩
   · rintro ⟨⟨y, hyW, rfl⟩, hyU⟩
     exact ⟨⟨y.1, hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩
-
-/--
-theorem `Scheme.ι_image_homOfLE_le_ι_image` / 定理 `Scheme.ι_image_homOfLE_le_ι_image`
-
-English:
-theorem Scheme.ι_image_homOfLE_le_ι_image
-  given: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  proof: by
-  simp [Scheme.ι_image_homOfLE_eq_ι_image_inf]
-
-中文:
-定理 概形.ι_image_homOfLE_le_ι_image
-  条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  证明: by
-  simp [Scheme.ι_image_homOfLE_eq_ι_image_inf]
-
-Depends on / 依赖: Scheme
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Scheme.ι_image_homOfLE_le_ι_image {U V : X.Opens} (e : U <= V) (W : Opens V) :
-    U.ι ''ᵁ X.homOfLE e ⁻¹ᵁ W <= V.ι ''ᵁ W := by
+theorem Scheme.ι_image_homOfLE_le_ι_image {U V : X.Opens} (e : U ≤ V) (W : Opens V) :
+    U.ι ''ᵁ X.homOfLE e ⁻¹ᵁ W ≤ V.ι ''ᵁ W := by
   simp [Scheme.ι_image_homOfLE_eq_ι_image_inf]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `Scheme.homOfLE_app` / 定理 `Scheme.homOfLE_app`
-
-English:
-theorem Scheme.homOfLE_app
-  given: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  proof: by
-  have e₁ := Scheme.Hom.congr_app (X.homOfLE_ι e) (V.ι ''ᵁ W)
-  have : V.ι ⁻¹ᵁ V.ι ''ᵁ W = W := W.map_functor_eq (U := V)
-  have e₂ := (X.homOfLE e).naturality (eqToIso this).hom.op
-  have e₃ := e₂.symm.trans e₁
-  dsimp at e₃ ⊢
-  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map_comp] at e₃
-  rw [e₃]; rw [← Functor.map_comp]
-  congr 1
-
-中文:
-定理 概形.homOfLE_app
-  条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
-  证明: by
-  have e₁ := Scheme.Hom.congr_app (X.homOfLE_ι e) (V.ι ''ᵁ W)
-  have : V.ι ⁻¹ᵁ V.ι ''ᵁ W = W := W.map_functor_eq (U := V)
-  have e₂ := (X.homOfLE e).naturality (eqToIso this).hom.op
-  have e₃ := e₂.symm.trans e₁
-  dsimp at e₃ ⊢
-  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map_comp] at e₃
-  rw [e₃]; rw [← Functor.map_comp]
-  congr 1
-
-Depends on / 依赖: Functor, Functor.map_comp, Functor.map_inv, IsIso.eq_comp_inv, Scheme, Scheme.Hom.congr_app, W.map_functor_eq, X.homOfLE, X.homOfLE_, congr_app, eqToIso, eq_comp_inv, hom.op, homOfLE, map_comp, map_functor_eq, map_inv, naturality, symm.trans
+/-
+**AlgebraicGeometry.Scheme.homOfLE_app** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Ope
+ns),   AlgebraicGeometry.Scheme.Hom.app (X.homOfLE e) W = X.presheaf.map (Catego
+ryTheory.homOfLE ⋯).op
+参数：e : U ≤ V；W : (↑V).Opens；X.homOfLE e；CategoryTheory.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.congr_app`：congr_app {X Y : Scheme} {f g : 
+X ⟶ Y} (e : f = g) (U) : f.app U = g.app U ≫ X.presheaf.map (eqToHom (by subst e
+; rfl)).op
+· 使用定理 `TopologicalSpace.Opens.map_functor_eq`：map_functor_eq {X : TopCat.{u}} {
+U : Opens X} (V : Opens U) : ((Opens.map U.inclusion').obj <| U.isOpenEmbedding.
+functor.obj V) = V
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.naturality`：naturality (i : op U' ⟶ op U) :
+ Y.presheaf.map i ≫ f.app U = f.app U' ≫ X.presheaf.map ((Opens.map f.base).map 
+i.unop).op
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.ι_image_homOfLE_le_ι_image`：∀ {X : AlgebraicGeo
+metry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   (AlgebraicGeometry
+.Scheme.Hom.opensFunctor U.ι).obj ((Topol…
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.IsIso.eq_comp_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
 -/
-theorem Scheme.homOfLE_app {U V : X.Opens} (e : U <= V) (W : Opens V) :
+theorem Scheme.homOfLE_app {U V : X.Opens} (e : U ≤ V) (W : Opens V) :
     (X.homOfLE e).app W = X.presheaf.map (homOfLE <| X.ι_image_homOfLE_le_ι_image e W).op := by
   have e₁ := Scheme.Hom.congr_app (X.homOfLE_ι e) (V.ι ''ᵁ W)
   have : V.ι ⁻¹ᵁ V.ι ''ᵁ W = W := W.map_functor_eq (U := V)
   have e₂ := (X.homOfLE e).naturality (eqToIso this).hom.op
   have e₃ := e₂.symm.trans e₁
   dsimp at e₃ ⊢
-  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map_comp] at e₃
-  rw [e₃]; rw [← Functor.map_comp]
+  rw [← IsIso.eq_comp_inv, ← Functor.map_inv, ← Functor.map_comp] at e₃
+  rw [e₃, ← Functor.map_comp]
   congr 1
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `Scheme.homOfLE_appLE` / 定理 `Scheme.homOfLE_appLE`
-
-English:
-theorem Scheme.homOfLE_appLE
-  given: {U V : X.Opens} (e : U <= V) (W : Opens V) (W' : Opens U) (e')
-  proof: by
-  simp [Scheme.Hom.appLE, Scheme.homOfLE_app, ← Functor.map_comp, ← op_comp]
-
-中文:
-定理 概形.homOfLE_appLE
-  条件: {U V : X.Opens} (e : U <= V) (W : Opens V) (W' : Opens U) (e')
-  证明: by
-  simp [Scheme.Hom.appLE, Scheme.homOfLE_app, ← Functor.map_comp, ← op_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, Scheme, Scheme.Hom.appLE, Scheme.homOfLE_app, homOfLE_app, map_comp, op_comp
+/-
+**AlgebraicGeometry.Scheme.homOfLE_appLE** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Ope
+ns) (W' : (↑U).Opens)   (e' : W' ≤ (TopologicalSpace.Opens.map (X.homOfLE e).bas
+e).obj W),   AlgebraicGeometry.Scheme.Hom.appLE (X.homOfLE e) W W' e' = X.preshe
+af.map (CategoryTheory.homOfLE ⋯).op
+参数：e : U ≤ V；W : (↑V).Opens；W' : (↑U).Opens；e' : W' ≤ (TopologicalSpace.Opens.ma
+p (X.homOfLE e).base).obj W；X.homOfLE e；CategoryTheory.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_mono`：image_mono {U V : X.Opens} (e :
+ U <= V) : f ''ᵁ U <= f ''ᵁ V
+· 使用定理 `AlgebraicGeometry.Scheme.ι_image_homOfLE_le_ι_image`：∀ {X : AlgebraicGeo
+metry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   (AlgebraicGeometry
+.Scheme.Hom.opensFunctor U.ι).obj ((Topol…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_app`：∀ {X : AlgebraicGeometry.Scheme} {
+U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   AlgebraicGeometry.Scheme.Hom.app 
+(X.homOfLE e) W = X.preshe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Scheme.homOfLE_appLE {U V : X.Opens} (e : U <= V) (W : Opens V) (W' : Opens U) (e') :
+theorem Scheme.homOfLE_appLE {U V : X.Opens} (e : U ≤ V) (W : Opens V) (W' : Opens U) (e') :
     (X.homOfLE e).appLE W W' e' = X.presheaf.map
       (homOfLE ((U.ι.image_mono e').trans (Scheme.ι_image_homOfLE_le_ι_image ..))).op := by
   simp [Scheme.Hom.appLE, Scheme.homOfLE_app, ← Functor.map_comp, ← op_comp]
-
-/--
-theorem `Scheme.homOfLE_appTop` / 定理 `Scheme.homOfLE_appTop`
-
-English:
-theorem Scheme.homOfLE_appTop
-  given: {U V : X.Opens} (e : U <= V)
-  proof: homOfLE_app ..
-
-中文:
-定理 概形.homOfLE_appTop
-  条件: {U V : X.Opens} (e : U <= V)
-  证明: homOfLE_app ..
-
-Depends on / 依赖: homOfLE_app
+/-
+**AlgebraicGeometry.Scheme.homOfLE_appTop** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V),   AlgebraicG
+eometry.Scheme.Hom.appTop (X.homOfLE e) = X.presheaf.map (CategoryTheory.homOfLE
+ ⋯).op
+参数：e : U ≤ V；X.homOfLE e；CategoryTheory.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_app`：∀ {X : AlgebraicGeometry.Scheme} {
+U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   AlgebraicGeometry.Scheme.Hom.app 
+(X.homOfLE e) W = X.preshe…
 -/
-theorem Scheme.homOfLE_appTop {U V : X.Opens} (e : U <= V) :
+theorem Scheme.homOfLE_appTop {U V : X.Opens} (e : U ≤ V) :
     (X.homOfLE e).appTop = X.presheaf.map (homOfLE <| X.ι_image_homOfLE_le_ι_image e ⊤).op :=
   homOfLE_app ..
-
-instance (X : Scheme.{u}) {U V : X.Opens} (e : U <= V) : IsOpenImmersion (X.homOfLE e) := by
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : Scheme.{u}) {U V : X.Opens} (e : U ≤ V) : IsOpenImmersion (X.homOfLE e) := by
   delta Scheme.homOfLE
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Hom.appIso_homOfLE_inv` / 引理 `Scheme.Hom.appIso_homOfLE_inv`
-
-English:
-lemma Scheme.Hom.appIso_homOfLE_inv
-  statement: {X : Scheme.{u}} {U V : X.Opens} (h : U <= V)
-  proof: by
-  rw [eq_comm]; rw [← Iso.hom_comp_eq_id]
-  dsimp
-  simp only [appIso_hom, homOfLE_app, homOfLE_leOfHom, eqToHom_op, Opens.toScheme_presheaf_map,
-    eqToHom_unop, ← X.presheaf.map_comp, Category.assoc, ← X.presheaf.map_id]
-  rfl
-
-@[simp]
-
-中文:
-引理 概形.态射.appIso_homOfLE_inv
-  结论: {X : 概形.{u}} {U V : X.Opens} (h : U <= V)
-  证明: by
-  rw [eq_comm]; rw [← Iso.hom_comp_eq_id]
-  dsimp
-  simp only [appIso_hom, homOfLE_app, homOfLE_leOfHom, eqToHom_op, Opens.toScheme_presheaf_map,
-    eqToHom_unop, ← X.presheaf.map_comp, Category.assoc, ← X.presheaf.map_id]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Category, Category.assoc, Iso.hom_comp_eq_id, Opens.toScheme_presheaf_map, X.presheaf.map_comp, X.presheaf.map_id, appIso_hom, eqToHom_op, eqToHom_unop, eq_comm, homOfLE_app, homOfLE_leOfHom, hom_comp_eq_id, map_comp, map_id, presheaf, toScheme_presheaf_map
+/-
+**AlgebraicGeometry.Scheme.Hom.appIso_homOfLE_inv** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (h : U ≤ V) (W : (↑U).Ope
+ns),   (AlgebraicGeometry.Scheme.Hom.appIso (X.homOfLE h) W).inv = X.presheaf.ma
+p (CategoryTheory.homOfLE ⋯).op
+参数：h : U ≤ V；W : (↑U).Opens；AlgebraicGeometry.Scheme.Hom.appIso (X.homOfLE h) W；
+CategoryTheory.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.hom_comp_eq_id`：hom_comp_eq_id (α : X ≅ Y) {f : Y ⟶ X
+} : α.hom ≫ f = 𝟙 X ↔ f = α.inv
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.ι_image_homOfLE_le_ι_image`：∀ {X : AlgebraicGeo
+metry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   (AlgebraicGeometry
+.Scheme.Hom.opensFunctor U.ι).obj ((Topol…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_image_eq`：preimage_image_eq (U : X
+.Opens) : f ⁻¹ᵁ f ''ᵁ U = U
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appIso_hom`：appIso_hom (U) : (f.appIso U).h
+om = f.app (f ''ᵁ U) ≫ X.presheaf.map (eqToHom (preimage_image_eq f U).symm).op
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_app`：∀ {X : AlgebraicGeometry.Scheme} {
+U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   AlgebraicGeometry.Scheme.Hom.app 
+(X.homOfLE e) W = X.preshe…
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `CategoryTheory.eqToHom_unop`：eqToHom_unop {X Y : Cᵒᵖ} (h : X = Y) : (eqT
+oHom h).unop = eqToHom (congr_arg unop h.symm)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
-lemma Scheme.Hom.appIso_homOfLE_inv {X : Scheme.{u}} {U V : X.Opens} (h : U <= V)
+lemma Scheme.Hom.appIso_homOfLE_inv {X : Scheme.{u}} {U V : X.Opens} (h : U ≤ V)
     (W : (U : Scheme.{u}).Opens) :
     ((X.homOfLE h).appIso W).inv =
       X.presheaf.map (.op <| homOfLE <| by
-        suffices V.ι ''ᵁ _ <= U.ι ''ᵁ W by simpa
+        suffices V.ι ''ᵁ _ ≤ U.ι ''ᵁ W by simpa
         simp [← Scheme.Hom.comp_image]) := by
-  rw [eq_comm]; rw [← Iso.hom_comp_eq_id]
+  rw [eq_comm, ← Iso.hom_comp_eq_id]
   dsimp
   simp only [appIso_hom, homOfLE_app, homOfLE_leOfHom, eqToHom_op, Opens.toScheme_presheaf_map,
     eqToHom_unop, ← X.presheaf.map_comp, Category.assoc, ← X.presheaf.map_id]
   rfl
 
 @[simp]
-/--
-lemma `Scheme.opensRange_homOfLE` / 引理 `Scheme.opensRange_homOfLE`
-
-English:
-lemma Scheme.opensRange_homOfLE
-  given: {U V : X.Opens} (e : U <= V)
-  proof: V.ι.image_injective (by simp [← Hom.opensRange_comp, Hom.image_preimage_eq_opensRange_inf, e])
-
-中文:
-引理 概形.opensRange_homOfLE
-  条件: {U V : X.Opens} (e : U <= V)
-  证明: V.ι.image_injective (by simp [← Hom.opensRange_comp, Hom.image_preimage_eq_opensRange_inf, e])
-
-Depends on / 依赖: Hom.image_preimage_eq_opensRange_inf, Hom.opensRange_comp, image_injective, image_preimage_eq_opensRange_inf, opensRange_comp
+/-
+**AlgebraicGeometry.Scheme.opensRange_homOfLE** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.Scheme`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (e : U ≤ V),   AlgebraicG
+eometry.Scheme.Hom.opensRange (X.homOfLE e) = (TopologicalSpace.Opens.map V.ι.ba
+se).obj U
+参数：e : U ≤ V；X.homOfLE e；TopologicalSpace.Opens.map V.ι.base。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_injective`：image_injective : Function
+.Injective (f ''ᵁ ·)
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.opensRange.congr_simp`：∀ {X Y : AlgebraicGe
+ometry.Scheme} (f f_1 : X ⟶ Y) (e_f : f = f_1) [H : AlgebraicGeometry.IsOpenImme
+rsion f],   AlgebraicGeometry.Scheme.Hom…
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.opensRange_ι`：opensRange_ι : U.ι.opensRan
+ge = U
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`：image_pre
+image_eq_opensRange_inf (U : Y.Opens) : f ''ᵁ f ⁻¹ᵁ U = f.opensRange ⊓ U
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Scheme.opensRange_homOfLE {U V : X.Opens} (e : U <= V) :
+lemma Scheme.opensRange_homOfLE {U V : X.Opens} (e : U ≤ V) :
     (X.homOfLE e).opensRange = V.ι ⁻¹ᵁ U :=
   V.ι.image_injective (by simp [← Hom.opensRange_comp, Hom.image_preimage_eq_opensRange_inf, e])
 
-/--
-Definition of `Scheme.Opens.iSupOpenCover` / `Scheme.Opens.iSupOpenCover` 的定义
+/-- The open cover of `⋃ Vᵢ` by `Vᵢ`. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.iSupOpenCover** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.Opens`。
+形式化陈述：{J : Type u_1} → {X : AlgebraicGeometry.Scheme} → (U : J → X.Opens) → (↑(⨆
+ i, U i)).OpenCover
+参数：U : J → X.Opens；↑(⨆ i, U i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.Opens.iSupOpenCover
-  signature: {J : Type*} {X : Scheme} (U : J -> X.Opens)
-  body: J
-  X i := U i
-  f j := X.homOfLE (le_iSup _ _)
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
-    obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.mp x.2
-    use i, ⟨x.1, hi⟩
-    apply Subtype.ext
-    simp
-
-中文:
-定义 概形.Opens.iSupOpenCover
-  签名: {J : 类型} {X : 概形} (U : J -> X.Opens)
-  定义体: J
-  X i := U i
-  f j := X.homOfLE (le_iSup _ _)
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
-    obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.mp x.2
-    use i, ⟨x.1, hi⟩
-    apply Subtype.ext
-    simp
+--- 原说明 ---
+The open cover of `⋃ Vᵢ` by `Vᵢ`.
 -/
-def Scheme.Opens.iSupOpenCover {J : Type*} {X : Scheme} (U : J -> X.Opens) :
+def Scheme.Opens.iSupOpenCover {J : Type*} {X : Scheme} (U : J → X.Opens) :
     (⨆ i, U i).toScheme.OpenCover where
   I₀ := J
   X i := U i
   f j := X.homOfLE (le_iSup _ _)
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, inferInstance⟩
+    refine ⟨fun x ↦ ?_, inferInstance⟩
     obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.mp x.2
     use i, ⟨x.1, hi⟩
     apply Subtype.ext
@@ -1356,34 +985,15 @@ set_option backward.defeqAttrib.useBackward true in
 variable (X) in
 /-- The functor taking open subsets of `X` to open subschemes of `X`. -/
 @[simps! obj_left obj_hom map_left]
-/--
-Definition of `Scheme.restrictFunctor` / `Scheme.restrictFunctor` 的定义
+/-
+**AlgebraicGeometry.Scheme.restrictFunctor** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → CategoryTheory.Functor X.Opens (CategoryT
+heory.Over X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.restrictFunctor
-  signature: : X.Opens ⥤ Over X where
-  body: Over.mk U.ι
-  map {U V} i := Over.homMk (X.homOfLE i.le) (by simp)
-  map_id U := by
-    ext1
-    exact Scheme.homOfLE_rfl _ _
-  map_comp {U V W} i j := by
-    ext1
-    exact (X.homOfLE_homOfLE i.le j.le).symm
-
-中文:
-定义 概形.restrictFunctor
-  签名: : X.Opens ⥤ Over X where
-  定义体: Over.mk U.ι
-  map {U V} i := Over.homMk (X.homOfLE i.le) (by simp)
-  map_id U := by
-    ext1
-    exact Scheme.homOfLE_rfl _ _
-  map_comp {U V W} i j := by
-    ext1
-    exact (X.homOfLE_homOfLE i.le j.le).symm
-
-Depends on / 依赖: Over.mk
+--- 原说明 ---
+The functor taking open subsets of `X` to open subschemes of `X`.
 -/
 def Scheme.restrictFunctor : X.Opens ⥤ Over X where
   obj U := Over.mk U.ι
@@ -1400,32 +1010,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The functor that restricts to open subschemes and then takes global section is
 isomorphic to the structure sheaf. -/
 @[simps!]
-/--
-Definition of `Scheme.restrictFunctorΓ` / `Scheme.restrictFunctorΓ` 的定义
+/-
+**AlgebraicGeometry.Scheme.restrictFunctor** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → CategoryTheory.Functor X.Opens (CategoryT
+heory.Over X)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.restrictFunctorΓ
-  signature: : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ Scheme.Γ ≅ X.presheaf
-  body: NatIso.ofComponents
-    (fun U => X.presheaf.mapIso ((eqToIso (unop U).isOpenEmbedding_obj_top).symm.op :))
-    (by
-      intro U V i
-      dsimp
-      rw [X.homOfLE_appTop]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
-      congr 1)
-
-中文:
-定义 概形.restrictFunctorΓ
-  签名: : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ 概形.Γ ≅ X.presheaf
-  定义体: NatIso.ofComponents
-    (fun U => X.presheaf.mapIso ((eqToIso (unop U).isOpenEmbedding_obj_top).symm.op :))
-    (by
-      intro U V i
-      dsimp
-      rw [X.homOfLE_appTop]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
-      congr 1)
-
-Depends on / 依赖: Functor, Functor.map_comp, NatIso, NatIso.ofComponents, X.homOfLE_appTop, X.presheaf.mapIso, eqToIso, homOfLE_appTop, isOpenEmbedding_obj_top, mapIso, map_comp, ofComponents, presheaf, symm.op
+--- 原说明 ---
+The functor that restricts to open subschemes and then takes global section is
+isomorphic to the structure sheaf.
 -/
 def Scheme.restrictFunctorΓ : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ Scheme.Γ ≅ X.presheaf :=
   NatIso.ofComponents
@@ -1433,55 +1027,36 @@ def Scheme.restrictFunctorΓ : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ S
     (by
       intro U V i
       dsimp
-      rw [X.homOfLE_appTop]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
+      rw [X.homOfLE_appTop, ← Functor.map_comp, ← Functor.map_comp]
       congr 1)
 
 /-- `X ∣_ U ∣_ V` is isomorphic to `X ∣_ V ∣_ U` -/
 noncomputable
-/--
-Definition of `Scheme.restrictRestrictComm` / `Scheme.restrictRestrictComm` 的定义
-
-English:
-definition Scheme.restrictRestrictComm
-  signature: (X : Scheme.{u}) (U V : X.Opens)
-  body: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ U.ι) (Opens.ι _ ≫ V.ι) by
-    simp only [Hom.comp_base, TopCat.coe_comp, Set.range_comp, Opens.range_ι, Opens.map_coe,
-      Set.image_preimage_eq_inter_range, Set.inter_comm (U : Set X)]
-
-中文:
-定义 概形.restrictRestrictComm
-  签名: (X : 概形.{u}) (U V : X.Opens)
-  定义体: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ U.ι) (Opens.ι _ ≫ V.ι) by
-    simp only [Hom.comp_base, TopCat.coe_comp, Set.range_comp, Opens.range_ι, Opens.map_coe,
-      Set.image_preimage_eq_inter_range, Set.inter_comm (U : Set X)]
-
-Depends on / 依赖: Hom.comp_base, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, Opens.map_coe, Opens.range_, Set.image_preimage_eq_inter_range, Set.inter_comm, Set.range_comp, TopCat, TopCat.coe_comp, coe_comp, comp_base, image_preimage_eq_inter_range, inter_comm, isoOfRangeEq, map_coe, range_comp
+/-
+**AlgebraicGeometry.Scheme.restrictRestrictComm** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) →   (U V : X.Opens) → ↑((TopologicalSpace.O
+pens.map U.ι.base).obj V) ≅ ↑((TopologicalSpace.Opens.map V.ι.base).obj U)
+参数：TopologicalSpace.Opens.map U.ι.base；TopologicalSpace.Opens.map V.ι.base。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Scheme.restrictRestrictComm (X : Scheme.{u}) (U V : X.Opens) :
     (U.ι ⁻¹ᵁ V).toScheme ≅ V.ι ⁻¹ᵁ U :=
-IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ U.ι) (Opens.ι _ ≫ V.ι) by
+  IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ U.ι) (Opens.ι _ ≫ V.ι) <| by
     simp only [Hom.comp_base, TopCat.coe_comp, Set.range_comp, Opens.range_ι, Opens.map_coe,
       Set.image_preimage_eq_inter_range, Set.inter_comm (U : Set X)]
 
 /-- If `f : X ⟶ Y` is an open immersion, then for any `U : X.Opens`,
 we have the isomorphism `U ≅ f ''ᵁ U`. -/
 noncomputable
-/--
-Definition of `Scheme.Hom.isoImage` / `Scheme.Hom.isoImage` 的定义
-
-English:
-definition Scheme.Hom.isoImage
-  body: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ f) (Opens.ι _) (by simp [Set.range_comp])
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.态射.isoImage
-  定义体: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ f) (Opens.ι _) (by simp [Set.range_comp])
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, Set.range_comp, isoOfRangeEq, range_comp
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.Scheme.Hom`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} →   (f : X ⟶ Y) →     [inst : AlgebraicGe
+ometry.IsOpenImmersion f] →       (U : X.Opens) → ↑U ≅ ↑((AlgebraicGeometry.Sche
+me.Hom.opensFunctor f).obj U)
+参数：f : X ⟶ Y；U : X.Opens；(AlgebraicGeometry.Scheme.Hom.opensFunctor f).obj U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Scheme.Hom.isoImage
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : X.Opens) :
@@ -1489,22 +1064,10 @@ def Scheme.Hom.isoImage
   IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ f) (Opens.ι _) (by simp [Set.range_comp])
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.isoImage_hom_ι` / 引理 `Scheme.Hom.isoImage_hom_ι`
-
-English:
-lemma Scheme.Hom.isoImage_hom_ι
-  proof: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.态射.isoImage_hom_ι
-  证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_hom_fac, isoOfRangeEq_hom_fac
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage_hom_** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Hom.isoImage_hom_ι
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : X.Opens) :
@@ -1512,22 +1075,10 @@ lemma Scheme.Hom.isoImage_hom_ι
   IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.isoImage_inv_ι` / 引理 `Scheme.Hom.isoImage_inv_ι`
-
-English:
-lemma Scheme.Hom.isoImage_inv_ι
-  proof: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-@[reassoc]
-
-中文:
-引理 概形.态射.isoImage_inv_ι
-  证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-@[reassoc]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_inv_fac, isoOfRangeEq_inv_fac
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage_inv_** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Hom.isoImage_inv_ι
     {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U : X.Opens) :
@@ -1535,143 +1086,156 @@ lemma Scheme.Hom.isoImage_inv_ι
   IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 @[reassoc]
-/--
-lemma `Scheme.Hom.isoImage_hom_homOfLE` / 引理 `Scheme.Hom.isoImage_hom_homOfLE`
-
-English:
-lemma Scheme.Hom.isoImage_hom_homOfLE
-  proof: by
-  simp [← cancel_mono (f ''ᵁ V).ι]
-
-@[reassoc]
-
-中文:
-引理 概形.态射.isoImage_hom_homOfLE
-  证明: by
-  simp [← cancel_mono (f ''ᵁ V).ι]
-
-@[reassoc]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage_hom_homOfLE** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.I
+sOpenImmersion f] (U V : X.Opens) (e : U ≤ V),   CategoryTheory.CategoryStruct.c
+omp (AlgebraicGeometry.Scheme.Hom.isoImage f U).hom (Y.homOfLE ⋯) =     Category
+Theory.CategoryStruct.comp (X.homOfLE e) (AlgebraicGeometry.Scheme.Hom.isoImage 
+f V).hom
+参数：f : X ⟶ Y；U V : X.Opens；e : U ≤ V；AlgebraicGeometry.Scheme.Hom.isoImage f U；Y
+.homOfLE ⋯；X.homOfLE e；AlgebraicGeometry.Scheme.Hom.isoImage f V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_mono`：image_mono {U V : X.Opens} (e :
+ U <= V) : f ''ᵁ U <= f ''ᵁ V
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_ι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U : X.Opens), 
+  CategoryTheory.CategoryStruct.c…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι_assoc`：∀ (X : AlgebraicGeometry.Schem
+e) {U V : X.Opens} (e : U ≤ V) {Z : AlgebraicGeometry.Scheme} (h : X ⟶ Z),   Cat
+egoryTheory.CategoryStruct.com…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Scheme.Hom.isoImage_hom_homOfLE
-    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U V : Opens X) (e : U <= V) :
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U V : Opens X) (e : U ≤ V) :
     (f.isoImage U).hom ≫ Y.homOfLE (f.image_mono e) = X.homOfLE e ≫ (f.isoImage V).hom := by
   simp [← cancel_mono (f ''ᵁ V).ι]
 
 @[reassoc]
-/--
-lemma `Scheme.Hom.isoImage_inv_homOfLE` / 引理 `Scheme.Hom.isoImage_inv_homOfLE`
-
-English:
-lemma Scheme.Hom.isoImage_inv_homOfLE
-  proof: by
-  simp [← cancel_mono (f.isoImage V).hom, ← f.isoImage_hom_homOfLE]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.态射.isoImage_inv_homOfLE
-  证明: by
-  simp [← cancel_mono (f.isoImage V).hom, ← f.isoImage_hom_homOfLE]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono, f.isoImage, f.isoImage_hom_homOfLE, isoImage, isoImage_hom_homOfLE
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage_inv_homOfLE** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.I
+sOpenImmersion f] (U V : X.Opens) (e : U ≤ V),   CategoryTheory.CategoryStruct.c
+omp (AlgebraicGeometry.Scheme.Hom.isoImage f U).inv (X.homOfLE e) =     Category
+Theory.CategoryStruct.comp (Y.homOfLE ⋯) (AlgebraicGeometry.Scheme.Hom.isoImage 
+f V).inv
+参数：f : X ⟶ Y；U V : X.Opens；e : U ≤ V；AlgebraicGeometry.Scheme.Hom.isoImage f U；X
+.homOfLE e；Y.homOfLE ⋯；AlgebraicGeometry.Scheme.Hom.isoImage f V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_mono`：image_mono {U V : X.Opens} (e :
+ U <= V) : f ''ᵁ U <= f ''ᵁ V
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_homOfLE`：∀ {X Y : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U V : X.
+Opens) (e : U ≤ V),   CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Scheme.Hom.isoImage_inv_homOfLE
-    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U V : Opens X) (e : U <= V) :
+    {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] (U V : Opens X) (e : U ≤ V) :
     (f.isoImage U).inv ≫ X.homOfLE e = Y.homOfLE (f.image_mono e) ≫ (f.isoImage V).inv := by
   simp [← cancel_mono (f.isoImage V).hom, ← f.isoImage_hom_homOfLE]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Opens.isoImage_ι_inv_ι` / 引理 `Scheme.Opens.isoImage_ι_inv_ι`
-
-English:
-lemma Scheme.Opens.isoImage_ι_inv_ι
-  given: {X : Scheme.{u}} (U : Opens X) (V : Opens U)
-  proof: by
-  simp [← cancel_mono U.ι]
-
-中文:
-引理 概形.Opens.isoImage_ι_inv_ι
-  条件: {X : 概形.{u}} (U : Opens X) (V : Opens U)
-  证明: by
-  simp [← cancel_mono U.ι]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.Scheme.Opens.isoImage_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Opens.isoImage_ι_inv_ι {X : Scheme.{u}} (U : Opens X) (V : Opens U) :
     (U.ι.isoImage V).inv ≫ V.ι = X.homOfLE (U.ι_image_le V) := by
   simp [← cancel_mono U.ι]
 
-/--
-Definition of `Scheme.Hom.isoOpensRange` / `Scheme.Hom.isoOpensRange` 的定义
+/-- If `f : X ⟶ Y` is an open immersion, then `X` is isomorphic to its image in `Y`. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.isoOpensRange** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.Hom`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} →   (f : X ⟶ Y) → [inst : AlgebraicGeomet
+ry.IsOpenImmersion f] → X ≅ ↑(AlgebraicGeometry.Scheme.Hom.opensRange f)
+参数：f : X ⟶ Y；AlgebraicGeometry.Scheme.Hom.opensRange f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.Hom.isoOpensRange
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
-  body: IsOpenImmersion.isoOfRangeEq f f.opensRange.ι (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.态射.isoOpensRange
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
-  定义体: IsOpenImmersion.isoOfRangeEq f f.opensRange.ι (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, f.opensRange, isoOfRangeEq, opensRange
+--- 原说明 ---
+If `f : X ⟶ Y` is an open immersion, then `X` is isomorphic to its image in `Y`.
 -/
 def Scheme.Hom.isoOpensRange {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] :
     X ≅ f.opensRange :=
   IsOpenImmersion.isoOfRangeEq f f.opensRange.ι (by simp)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.isoOpensRange_hom_ι` / 引理 `Scheme.Hom.isoOpensRange_hom_ι`
-
-English:
-lemma Scheme.Hom.isoOpensRange_hom_ι
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
-  proof: by
-  simp [isoOpensRange]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.态射.isoOpensRange_hom_ι
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
-  证明: by
-  simp [isoOpensRange]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: isoOpensRange
+/-
+**AlgebraicGeometry.Scheme.Hom.isoOpensRange_hom_** 是 Mathlib 中的一个引理，位于命名空间 `Alg
+ebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Hom.isoOpensRange_hom_ι {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] :
     f.isoOpensRange.hom ≫ f.opensRange.ι = f := by
   simp [isoOpensRange]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.isoOpensRange_inv_comp` / 引理 `Scheme.Hom.isoOpensRange_inv_comp`
-
-English:
-lemma Scheme.Hom.isoOpensRange_inv_comp
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
-  proof: by
-  simp [isoOpensRange]
-
-中文:
-引理 概形.态射.isoOpensRange_inv_comp
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
-  证明: by
-  simp [isoOpensRange]
-
-Depends on / 依赖: isoOpensRange
+/-
+**AlgebraicGeometry.Scheme.Hom.isoOpensRange_inv_comp** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.I
+sOpenImmersion f],   CategoryTheory.CategoryStruct.comp (AlgebraicGeometry.Schem
+e.Hom.isoOpensRange f).inv f =     (AlgebraicGeometry.Scheme.Hom.opensRange f).ι
+参数：f : X ⟶ Y；AlgebraicGeometry.Scheme.Hom.isoOpensRange f；AlgebraicGeometry.Sche
+me.Hom.opensRange f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isoOfRangeEq_inv_fac`：isoOfRangeEq_inv
+_fac {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsOpenImmersion f] [IsOpenImm
+ersion g] (e : Set.range f = Set.range g) : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Scheme.Hom.isoOpensRange_inv_comp {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f] :
     f.isoOpensRange.inv ≫ f = f.opensRange.ι := by
@@ -1679,30 +1243,14 @@ lemma Scheme.Hom.isoOpensRange_inv_comp {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpen
 
 /-- `(⊤ : X.Opens)` as a scheme is isomorphic to `X`. -/
 @[simps hom]
-/--
-Definition of `Scheme.topIso` / `Scheme.topIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.topIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.S
+cheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → ↑⊤ ≅ X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.topIso
-  signature: (X : Scheme)
-  body: Scheme.Opens.ι _
-  inv := ⟨X.restrictTopIso.inv⟩
-  hom_inv_id := Hom.ext' X.restrictTopIso.hom_inv_id
-  inv_hom_id := Hom.ext' X.restrictTopIso.inv_hom_id
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.topIso
-  签名: (X : 概形)
-  定义体: Scheme.Opens.ι _
-  inv := ⟨X.restrictTopIso.inv⟩
-  hom_inv_id := Hom.ext' X.restrictTopIso.hom_inv_id
-  inv_hom_id := Hom.ext' X.restrictTopIso.inv_hom_id
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Scheme, Scheme.Opens
+--- 原说明 ---
+`(⊤ : X.Opens)` as a scheme is isomorphic to `X`.
 -/
 def Scheme.topIso (X : Scheme) : ↑(⊤ : X.Opens) ≅ X where
   hom := Scheme.Opens.ι _
@@ -1711,367 +1259,210 @@ def Scheme.topIso (X : Scheme) : ↑(⊤ : X.Opens) ≅ X where
   inv_hom_id := Hom.ext' X.restrictTopIso.inv_hom_id
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.toIso_inv_ι` / 引理 `Scheme.toIso_inv_ι`
-
-English:
-lemma Scheme.toIso_inv_ι
-  given: (X : Scheme.{u})
-  statement: X.topIso.inv ≫ Opens.ι _ = 𝟙 _
-  proof: X.topIso.inv_hom_id
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.toIso_inv_ι
-  条件: (X : 概形.{u})
-  结论: X.topIso.inv ≫ Opens.ι _ = 𝟙 _
-  证明: X.topIso.inv_hom_id
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: X.topIso.inv_hom_id, inv_hom_id, topIso
+/-
+**AlgebraicGeometry.Scheme.toIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeomet
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.toIso_inv_ι (X : Scheme.{u}) : X.topIso.inv ≫ Opens.ι _ = 𝟙 _ :=
   X.topIso.inv_hom_id
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.ι_toIso_inv` / 引理 `Scheme.ι_toIso_inv`
-
-English:
-lemma Scheme.ι_toIso_inv
-  given: (X : Scheme.{u})
-  statement: Opens.ι _ ≫ X.topIso.inv = 𝟙 _
-  proof: X.topIso.hom_inv_id
-
-中文:
-引理 概形.ι_toIso_inv
-  条件: (X : 概形.{u})
-  结论: Opens.ι _ ≫ X.topIso.inv = 𝟙 _
-  证明: X.topIso.hom_inv_id
-
-Depends on / 依赖: X.topIso.hom_inv_id, hom_inv_id, topIso
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.ι_toIso_inv (X : Scheme.{u}) : Opens.ι _ ≫ X.topIso.inv = 𝟙 _ :=
   X.topIso.hom_inv_id
 
 /-- If `U = V`, then `X ∣_ U` is isomorphic to `X ∣_ V`. -/
 noncomputable
-/--
-Definition of `Scheme.isoOfEq` / `Scheme.isoOfEq` 的定义
-
-English:
-definition Scheme.isoOfEq
-  signature: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
-  body: IsOpenImmersion.isoOfRangeEq U.ι V.ι (by rw [e])
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.isoOfEq
-  签名: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
-  定义体: IsOpenImmersion.isoOfRangeEq U.ι V.ι (by rw [e])
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, isoOfRangeEq
+/-
+**AlgebraicGeometry.Scheme.isoOfEq** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.
+Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → {U V : X.Opens} → U = V → (↑U ≅ ↑V)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 -/
 def Scheme.isoOfEq (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
     (U : Scheme.{u}) ≅ V :=
   IsOpenImmersion.isoOfRangeEq U.ι V.ι (by rw [e])
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.isoOfEq_hom_ι` / 引理 `Scheme.isoOfEq_hom_ι`
-
-English:
-lemma Scheme.isoOfEq_hom_ι
-  given: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
-  proof: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.isoOfEq_hom_ι
-  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
-  证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_hom_fac, isoOfRangeEq_hom_fac
+/-
+**AlgebraicGeometry.Scheme.isoOfEq_hom_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.isoOfEq_hom_ι (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
     (X.isoOfEq e).hom ≫ V.ι = U.ι :=
   IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.isoOfEq_inv_ι` / 引理 `Scheme.isoOfEq_inv_ι`
-
-English:
-lemma Scheme.isoOfEq_inv_ι
-  given: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
-  proof: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-中文:
-引理 概形.isoOfEq_inv_ι
-  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
-  证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_inv_fac, isoOfRangeEq_inv_fac
+/-
+**AlgebraicGeometry.Scheme.isoOfEq_inv_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.isoOfEq_inv_ι (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
     (X.isoOfEq e).inv ≫ U.ι = V.ι :=
   IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-/--
-lemma `Scheme.isoOfEq_hom` / 引理 `Scheme.isoOfEq_hom`
-
-English:
-lemma Scheme.isoOfEq_hom
-  given: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
-  proof: rfl
-
-中文:
-引理 概形.isoOfEq_hom
-  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.isoOfEq_hom** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) {U V : X.Opens} (e : U = V), (X.isoOfEq e
+).hom = X.homOfLE ⋯
+参数：X : AlgebraicGeometry.Scheme；e : U = V；X.isoOfEq e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.isoOfEq_hom (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
     (X.isoOfEq e).hom = X.homOfLE e.le := rfl
-
-/--
-lemma `Scheme.isoOfEq_inv` / 引理 `Scheme.isoOfEq_inv`
-
-English:
-lemma Scheme.isoOfEq_inv
-  given: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 概形.isoOfEq_inv
-  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.isoOfEq_inv** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) {U V : X.Opens} (e : U = V), (X.isoOfEq e
+).inv = X.homOfLE ⋯
+参数：X : AlgebraicGeometry.Scheme；e : U = V；X.isoOfEq e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.isoOfEq_inv (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
     (X.isoOfEq e).inv = X.homOfLE e.ge := rfl
 
 @[simp]
-/--
-lemma `Scheme.isoOfEq_rfl` / 引理 `Scheme.isoOfEq_rfl`
-
-English:
-lemma Scheme.isoOfEq_rfl
-  given: (X : Scheme.{u}) (U : X.Opens)
-  statement: X.isoOfEq (refl U) = Iso.refl _
-  proof: by
-  ext1
-  rw [← cancel_mono U.ι]; rw [Scheme.isoOfEq_hom_ι]; rw [Iso.refl_hom]; rw [Category.id_comp]
-
-中文:
-引理 概形.isoOfEq_rfl
-  条件: (X : 概形.{u}) (U : X.Opens)
-  结论: X.isoOfEq (refl U) = 同构.refl _
-  证明: by
-  ext1
-  rw [← cancel_mono U.ι]; rw [Scheme.isoOfEq_hom_ι]; rw [Iso.refl_hom]; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, Iso.refl_hom, Scheme, Scheme.isoOfEq_hom_, cancel_mono, id_comp, refl_hom
+/-
+**AlgebraicGeometry.Scheme.isoOfEq_rfl** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) (U : X.Opens), X.isoOfEq ⋯ = CategoryTheo
+ry.Iso.refl ↑U
+参数：X : AlgebraicGeometry.Scheme；U : X.Opens。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_hom_ι`：∀ (X : AlgebraicGeometry.Scheme)
+ {U V : X.Opens} (e : U = V),   CategoryTheory.CategoryStruct.comp (X.isoOfEq e)
+.hom V.ι = U.ι
+· 使用定理 `CategoryTheory.Iso.refl_hom`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] (X : C),   (CategoryTheory.Iso.refl X).hom = CategoryTheory.Catego
+ryStruct.id X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma Scheme.isoOfEq_rfl (X : Scheme.{u}) (U : X.Opens) : X.isoOfEq (refl U) = Iso.refl _ := by
   ext1
-  rw [← cancel_mono U.ι]; rw [Scheme.isoOfEq_hom_ι]; rw [Iso.refl_hom]; rw [Category.id_comp]
+  rw [← cancel_mono U.ι, Scheme.isoOfEq_hom_ι, Iso.refl_hom, Category.id_comp]
 
 end
 
-/--
-Definition of `Scheme.Hom.preimageIso` / `Scheme.Hom.preimageIso` 的定义
+/-- The restriction of an isomorphism onto an open set. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.preimageIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme.Hom`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} →   (f : X ⟶ Y) → [CategoryTheory.IsIso f
+] → (U : Y.Opens) → ↑((TopologicalSpace.Opens.map f.base).obj U) ≅ ↑U
+参数：f : X ⟶ Y；U : Y.Opens；(TopologicalSpace.Opens.map f.base).obj U。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition Scheme.Hom.preimageIso
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
-  body: by
-  apply IsOpenImmersion.isoOfRangeEq (f := (f ⁻¹ᵁ U).ι ≫ f) U.ι _
-  dsimp
-  rw [Set.range_comp]; rw [Opens.range_ι]; rw [Opens.range_ι]
-  refine @Set.image_preimage_eq _ _ f U.1 f.homeomorph.surjective
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.态射.preimageIso
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
-  定义体: by
-  apply IsOpenImmersion.isoOfRangeEq (f := (f ⁻¹ᵁ U).ι ≫ f) U.ι _
-  dsimp
-  rw [Set.range_comp]; rw [Opens.range_ι]; rw [Opens.range_ι]
-  refine @Set.image_preimage_eq _ _ f U.1 f.homeomorph.surjective
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Scheme
+--- 原说明 ---
+The restriction of an isomorphism onto an open set.
 -/
 noncomputable def Scheme.Hom.preimageIso {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
     (U : Y.Opens) : (f ⁻¹ᵁ U).toScheme ≅ U := by
   apply IsOpenImmersion.isoOfRangeEq (f := (f ⁻¹ᵁ U).ι ≫ f) U.ι _
   dsimp
-  rw [Set.range_comp]; rw [Opens.range_ι]; rw [Opens.range_ι]
+  rw [Set.range_comp, Opens.range_ι, Opens.range_ι]
   refine @Set.image_preimage_eq _ _ f U.1 f.homeomorph.surjective
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.preimageIso_hom_ι` / 引理 `Scheme.Hom.preimageIso_hom_ι`
-
-English:
-lemma Scheme.Hom.preimageIso_hom_ι
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
-  proof: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.态射.preimageIso_hom_ι
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
-  证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Scheme
+/-
+**AlgebraicGeometry.Scheme.Hom.preimageIso_hom_** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Hom.preimageIso_hom_ι {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
     (U : Y.Opens) : (f.preimageIso U).hom ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f :=
   IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.preimageIso_inv_ι` / 引理 `Scheme.Hom.preimageIso_inv_ι`
-
-English:
-lemma Scheme.Hom.preimageIso_inv_ι
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
-  proof: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-中文:
-引理 概形.态射.preimageIso_inv_ι
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
-  证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
-
-Depends on / 依赖: Scheme
+/-
+**AlgebraicGeometry.Scheme.Hom.preimageIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Hom.preimageIso_inv_ι {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
     (U : Y.Opens) : (f.preimageIso U).inv ≫ (f ⁻¹ᵁ U).ι ≫ f = U.ι :=
   IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
-/--
-Definition of `Scheme.Opens.isoOfLE` / `Scheme.Opens.isoOfLE` 的定义
+/-- If `U ≤ V` are opens of `X`, the restriction of `U` to `V` is isomorphic to `U`. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.isoOfLE** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry.Scheme.Opens`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} → {U V : X.Opens} → U ≤ V → (↑((Topological
+Space.Opens.map V.ι.base).obj U) ≅ ↑U)
+参数：↑((TopologicalSpace.Opens.map V.ι.base).obj U) ≅ ↑U。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition Scheme.Opens.isoOfLE
-  signature: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
-  body: IsOpenImmersion.isoOfRangeEq ((V.ι ⁻¹ᵁ U).ι ≫ V.ι) U.ι by
-    have : V.ι ''ᵁ (V.ι ⁻¹ᵁ U) = U := by simpa [Scheme.Hom.image_preimage_eq_opensRange_inf]
-    rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Scheme.Opens.range_ι]; rw [Set.range_comp]; rw [← this]
-    simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 概形.Opens.isoOfLE
-  签名: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
-  定义体: IsOpenImmersion.isoOfRangeEq ((V.ι ⁻¹ᵁ U).ι ≫ V.ι) U.ι by
-    have : V.ι ''ᵁ (V.ι ⁻¹ᵁ U) = U := by simpa [Scheme.Hom.image_preimage_eq_opensRange_inf]
-    rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Scheme.Opens.range_ι]; rw [Set.range_comp]; rw [← this]
-    simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, Scheme, Scheme.Hom.comp_base, Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.range_, Set.range_comp, TopCat, TopCat.coe_comp, coe_comp, comp_base, image_preimage_eq_opensRange_inf, isoOfRangeEq, range_comp
+--- 原说明 ---
+If `U ≤ V` are opens of `X`, the restriction of `U` to `V` is isomorphic to `U`.
 -/
-noncomputable def Scheme.Opens.isoOfLE {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V) :
+noncomputable def Scheme.Opens.isoOfLE {X : Scheme.{u}} {U V : X.Opens} (hUV : U ≤ V) :
     (V.ι ⁻¹ᵁ U).toScheme ≅ U :=
-IsOpenImmersion.isoOfRangeEq ((V.ι ⁻¹ᵁ U).ι ≫ V.ι) U.ι by
+  IsOpenImmersion.isoOfRangeEq ((V.ι ⁻¹ᵁ U).ι ≫ V.ι) U.ι <| by
     have : V.ι ''ᵁ (V.ι ⁻¹ᵁ U) = U := by simpa [Scheme.Hom.image_preimage_eq_opensRange_inf]
-    rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Scheme.Opens.range_ι]; rw [Set.range_comp]; rw [← this]
+    rw [Scheme.Hom.comp_base, TopCat.coe_comp, Scheme.Opens.range_ι, Set.range_comp, ← this]
     simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Opens.isoOfLE_hom_ι` / 引理 `Scheme.Opens.isoOfLE_hom_ι`
-
-English:
-lemma Scheme.Opens.isoOfLE_hom_ι
-  given: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
-  proof: by
-  simp [isoOfLE]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 概形.Opens.isoOfLE_hom_ι
-  条件: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
-  证明: by
-  simp [isoOfLE]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: isoOfLE
+/-
+**AlgebraicGeometry.Scheme.Opens.isoOfLE_hom_** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Scheme.Opens.isoOfLE_hom_ι {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V) :
+lemma Scheme.Opens.isoOfLE_hom_ι {X : Scheme.{u}} {U V : X.Opens} (hUV : U ≤ V) :
     (isoOfLE hUV).hom ≫ U.ι = (V.ι ⁻¹ᵁ U).ι ≫ V.ι := by
   simp [isoOfLE]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Opens.isoOfLE_inv_ι` / 引理 `Scheme.Opens.isoOfLE_inv_ι`
-
-English:
-lemma Scheme.Opens.isoOfLE_inv_ι
-  given: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
-  proof: by
-  simp [isoOfLE]
-
-中文:
-引理 概形.Opens.isoOfLE_inv_ι
-  条件: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
-  证明: by
-  simp [isoOfLE]
-
-Depends on / 依赖: isoOfLE
+/-
+**AlgebraicGeometry.Scheme.Opens.isoOfLE_inv_** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Scheme.Opens.isoOfLE_inv_ι {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V) :
+lemma Scheme.Opens.isoOfLE_inv_ι {X : Scheme.{u}} {U V : X.Opens} (hUV : U ≤ V) :
     (isoOfLE hUV).inv ≫ (V.ι ⁻¹ᵁ U).ι ≫ V.ι = U.ι := by
   simp [isoOfLE]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `basicOpenIsoSpecAway` / `basicOpenIsoSpecAway` 的定义
+/-- For `f : R`, `D(f)` as an open subscheme of `Spec R` is isomorphic to `Spec R[1/f]`. -/
+/-
+**AlgebraicGeometry.basicOpenIsoSpecAway** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：basicOpenIsoSpecAway {R : CommRingCat.{u}} (f : R) : Scheme.Opens.toScheme
+ (X
+参数：f : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basicOpenIsoSpecAway
-  signature: {R : CommRingCat.{u}} (f : R)
-  body: IsOpenImmersion.isoOfRangeEq (Scheme.Opens.ι _) (Spec.map (CommRingCat.ofHom (algebraMap _ _)))
-    (by
-      simp only [Scheme.Opens.range_ι]
-      exact (PrimeSpectrum.localization_away_comap_range _ _).symm)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 basicOpenIsoSpecAway
-  签名: {R : 交换环范畴.{u}} (f : R)
-  定义体: IsOpenImmersion.isoOfRangeEq (Scheme.Opens.ι _) (Spec.map (CommRingCat.ofHom (algebraMap _ _)))
-    (by
-      simp only [Scheme.Opens.range_ι]
-      exact (PrimeSpectrum.localization_away_comap_range _ _).symm)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.basicOpen, basicOpen
+--- 原说明 ---
+For `f : R`, `D(f)` as an open subscheme of `Spec R` is isomorphic to `Spec R[1/
+f]`.
 -/
 def basicOpenIsoSpecAway {R : CommRingCat.{u}} (f : R) :
     Scheme.Opens.toScheme (X := Spec R) (PrimeSpectrum.basicOpen f) ≅
@@ -2082,22 +1473,25 @@ def basicOpenIsoSpecAway {R : CommRingCat.{u}} (f : R) :
       exact (PrimeSpectrum.localization_away_comap_range _ _).symm)
 
 @[reassoc (attr := simp)]
-/--
-lemma `basicOpenIsoSpecAway_hom_SpecMap` / 引理 `basicOpenIsoSpecAway_hom_SpecMap`
-
-English:
-lemma basicOpenIsoSpecAway_hom_SpecMap
-  given: {R : CommRingCat.{u}} (f : R)
-  proof: by
-  simp [basicOpenIsoSpecAway]
-
-中文:
-引理 basicOpenIsoSpecAway_hom_SpecMap
-  条件: {R : 交换环范畴.{u}} (f : R)
-  证明: by
-  simp [basicOpenIsoSpecAway]
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.basicOpen, basicOpen, basicOpenIsoSpecAway
+/-
+**AlgebraicGeometry.basicOpenIsoSpecAway_hom_SpecMap** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry`。
+形式化陈述：basicOpenIsoSpecAway_hom_SpecMap {R : CommRingCat.{u}} (f : R) : (basicOpe
+nIsoSpecAway f).hom ≫ Spec.map (CommRingCat.ofHom (algebraMap R _)) = Scheme.Ope
+ns.ι (X
+参数：f : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isoOfRangeEq_hom_fac`：isoOfRangeEq_hom
+_fac {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsOpenImmersion f] [IsOpenImm
+ersion g] (e : Set.range f = Set.range g) : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma basicOpenIsoSpecAway_hom_SpecMap {R : CommRingCat.{u}} (f : R) :
     (basicOpenIsoSpecAway f).hom ≫ Spec.map (CommRingCat.ofHom (algebraMap R _)) =
@@ -2106,42 +1500,38 @@ lemma basicOpenIsoSpecAway_hom_SpecMap {R : CommRingCat.{u}} (f : R) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `basicOpenIsoSpecAway_inv_homOfLE` / 引理 `basicOpenIsoSpecAway_inv_homOfLE`
-
-English:
-lemma basicOpenIsoSpecAway_inv_homOfLE
-  given: {R : CommRingCat.{u}} (f g x : R) (hx : x = f * g)
-  proof: by rw [hx]; infer_instance
-    (basicOpenIsoSpecAway x).inv ≫ (Spec R).homOfLE (by simp [hx, PrimeSpectrum.basicOpen_mul]) =
-      Spec.map (CommRingCat.ofHom (IsLocalization.Away.awayToAwayRight f g)) ≫
-        (basicOpenIsoSpecAway f).inv := by
-  subst hx
-  rw [← cancel_mono (Scheme.Opens.ι _)]
-  simp only [basicOpenIsoSpecAway, Category.assoc, Scheme.homOfLE_ι,
-    IsOpenImmersion.isoOfRangeEq_inv_fac]
-  simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp]
-  congr
-  ext x
-  exact (IsLocalization.Away.awayToAwayRight_eq f g x (S := Localization.Away f)).symm
-
-中文:
-引理 basicOpenIsoSpecAway_inv_homOfLE
-  条件: {R : 交换环范畴.{u}} (f g x : R) (hx : x = f * g)
-  证明: by rw [hx]; infer_instance
-    (basicOpenIsoSpecAway x).inv ≫ (Spec R).homOfLE (by simp [hx, PrimeSpectrum.basicOpen_mul]) =
-      Spec.map (CommRingCat.ofHom (IsLocalization.Away.awayToAwayRight f g)) ≫
-        (basicOpenIsoSpecAway f).inv := by
-  subst hx
-  rw [← cancel_mono (Scheme.Opens.ι _)]
-  simp only [basicOpenIsoSpecAway, Category.assoc, Scheme.homOfLE_ι,
-    IsOpenImmersion.isoOfRangeEq_inv_fac]
-  simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp]
-  congr
-  ext x
-  exact (IsLocalization.Away.awayToAwayRight_eq f g x (S := Localization.Away f)).symm
-
-Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.ofHom, CommRingCat.ofHom_comp, IsLocalization, IsLocalization.Away.awayToAwayRight, IsLocalization.Away.awayToAwayRight_eq, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_inv_fac, PrimeSpectrum, PrimeSpectrum.basicOpen_mul, Scheme, Scheme.Opens, Scheme.homOfLE_, Spec.map, Spec.map_comp, awayToAwayRight, awayToAwayRight_eq, basicOpenIsoSpecAway
+/-
+**AlgebraicGeometry.basicOpenIsoSpecAway_inv_homOfLE** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry`。
+形式化陈述：basicOpenIsoSpecAway_inv_homOfLE {R : CommRingCat.{u}} (f g x : R) (hx : x
+ = f * g) : haveI : IsLocalization.Away (f * g) (Localization.Away x)
+参数：f g x : R；hx : x = f * g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isoOfRangeEq_inv_fac`：isoOfRangeEq_inv
+_fac {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsOpenImmersion f] [IsOpenImm
+ersion g] (e : Set.range f = Set.range g) : …
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsLocalization.Away.awayToAwayRight_eq`：awayToAwayRight_eq (y : R) [Alge
+bra R P] [IsLocalization.Away (x * y) P] (a : R) : awayToAwayRight x y (algebraM
+ap R S a) = algebraMap R P a
 -/
 lemma basicOpenIsoSpecAway_inv_homOfLE {R : CommRingCat.{u}} (f g x : R) (hx : x = f * g) :
     haveI : IsLocalization.Away (f * g) (Localization.Away x) := by rw [hx]; infer_instance
@@ -2159,28 +1549,19 @@ lemma basicOpenIsoSpecAway_inv_homOfLE {R : CommRingCat.{u}} (f g x : R) (hx : x
 
 section MorphismRestrict
 
-/--
-Definition of `pullbackRestrictIsoRestrict` / `pullbackRestrictIsoRestrict` 的定义
+/-- Given a morphism `f : X ⟶ Y` and an open set `U ⊆ Y`, we have `X ×[Y] U ≅ X |_{f ⁻¹ U}` -/
+/-
+**AlgebraicGeometry.pullbackRestrictIsoRestrict** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry`。
+形式化陈述：pullbackRestrictIsoRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
+ pullback f U.ι ≅ f ⁻¹ᵁ U
+参数：f : X ⟶ Y；U : Y.Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackRestrictIsoRestrict
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  body: by
-  refine IsOpenImmersion.isoOfRangeEq (pullback.fst f _) (Scheme.Opens.ι _) ?_
-  simp [IsOpenImmersion.range_pullbackFst]
-
-@[simp, reassoc]
-
-中文:
-定义 pullbackRestrictIsoRestrict
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  定义体: by
-  refine IsOpenImmersion.isoOfRangeEq (pullback.fst f _) (Scheme.Opens.ι _) ?_
-  simp [IsOpenImmersion.range_pullbackFst]
-
-@[simp, reassoc]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsOpenImmersion.range_pullbackFst, Scheme, Scheme.Opens, isoOfRangeEq, pullback, pullback.fst, range_pullbackFst
+--- 原说明 ---
+Given a morphism `f : X ⟶ Y` and an open set `U ⊆ Y`, we have `X ×[Y] U ≅ X |_{f
+ ⁻¹ U}`
 -/
 def pullbackRestrictIsoRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     pullback f U.ι ≅ f ⁻¹ᵁ U := by
@@ -2188,67 +1569,53 @@ def pullbackRestrictIsoRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
   simp [IsOpenImmersion.range_pullbackFst]
 
 @[simp, reassoc]
-/--
-theorem `pullbackRestrictIsoRestrict_inv_fst` / 定理 `pullbackRestrictIsoRestrict_inv_fst`
-
-English:
-theorem pullbackRestrictIsoRestrict_inv_fst
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: by
-  delta pullbackRestrictIsoRestrict; simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRestrictIsoRestrict_inv_fst
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: by
-  delta pullbackRestrictIsoRestrict; simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: pullbackRestrictIsoRestrict
+/-
+**AlgebraicGeometry.pullbackRestrictIsoRestrict_inv_fst** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry`。
+形式化陈述：pullbackRestrictIsoRestrict_inv_fst {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.
+Opens) : (pullbackRestrictIsoRestrict f U).inv ≫ pullback.fst f _ = (f ⁻¹ᵁ U).ι
+参数：f : X ⟶ Y；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isoOfRangeEq_inv_fac`：isoOfRangeEq_inv
+_fac {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsOpenImmersion f] [IsOpenImm
+ersion g] (e : Set.range f = Set.range g) : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackRestrictIsoRestrict_inv_fst {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     (pullbackRestrictIsoRestrict f U).inv ≫ pullback.fst f _ = (f ⁻¹ᵁ U).ι := by
   delta pullbackRestrictIsoRestrict; simp
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRestrictIsoRestrict_hom_ι` / 定理 `pullbackRestrictIsoRestrict_hom_ι`
-
-English:
-theorem pullbackRestrictIsoRestrict_hom_ι
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: by
-  delta pullbackRestrictIsoRestrict; simp
-
-中文:
-定理 pullbackRestrictIsoRestrict_hom_ι
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: by
-  delta pullbackRestrictIsoRestrict; simp
-
-Depends on / 依赖: pullbackRestrictIsoRestrict
+/-
+**AlgebraicGeometry.pullbackRestrictIsoRestrict_hom_** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pullbackRestrictIsoRestrict_hom_ι {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     (pullbackRestrictIsoRestrict f U).hom ≫ (f ⁻¹ᵁ U).ι = pullback.fst f _ := by
   delta pullbackRestrictIsoRestrict; simp
 
-/--
-Definition of `morphismRestrict` / `morphismRestrict` 的定义
+/-- The restriction of a morphism `X ⟶ Y` onto `X |_{f ⁻¹ U} ⟶ Y |_ U`. -/
+/-
+**AlgebraicGeometry.morphismRestrict** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : (f ⁻¹ᵁ U).
+toScheme ⟶ U
+参数：f : X ⟶ Y；U : Y.Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition morphismRestrict
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  body: (pullbackRestrictIsoRestrict f U).inv ≫ pullback.snd _ _
-
-中文:
-定义 morphismRestrict
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  定义体: (pullbackRestrictIsoRestrict f U).inv ≫ pullback.snd _ _
-
-Depends on / 依赖: pullback, pullback.snd, pullbackRestrictIsoRestrict
+--- 原说明 ---
+The restriction of a morphism `X ⟶ Y` onto `X |_{f ⁻¹ U} ⟶ Y |_ U`.
 -/
 def morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : (f ⁻¹ᵁ U).toScheme ⟶ U :=
   (pullbackRestrictIsoRestrict f U).inv ≫ pullback.snd _ _
@@ -2257,72 +1624,59 @@ def morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : (f ⁻¹�
 infixl:85 " ∣_ " => morphismRestrict
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRestrictIsoRestrict_hom_morphismRestrict` / 定理 `pullbackRestrictIsoRestrict_hom_morphismRestrict`
-
-English:
-theorem pullbackRestrictIsoRestrict_hom_morphismRestrict
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y)
-  proof: Iso.hom_inv_id_assoc _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRestrictIsoRestrict_hom_morphismRestrict
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
-  证明: Iso.hom_inv_id_assoc _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, hom_inv_id_assoc
+/-
+**AlgebraicGeometry.pullbackRestrictIsoRestrict_hom_morphismRestrict** 是 Mathlib
+ 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：pullbackRestrictIsoRestrict_hom_morphismRestrict {X Y : Scheme.{u}} (f : X
+ ⟶ Y) (U : Y.Opens) : (pullbackRestrictIsoRestrict f U).hom ≫ f ∣_ U = pullback.
+snd _ _
+参数：f : X ⟶ Y；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 -/
 theorem pullbackRestrictIsoRestrict_hom_morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y)
     (U : Y.Opens) : (pullbackRestrictIsoRestrict f U).hom ≫ f ∣_ U = pullback.snd _ _ :=
   Iso.hom_inv_id_assoc _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `morphismRestrict_ι` / 定理 `morphismRestrict_ι`
-
-English:
-theorem morphismRestrict_ι
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: by
-  delta morphismRestrict
-  rw [Category.assoc]; rw [pullback.condition.symm]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
-
-中文:
-定理 morphismRestrict_ι
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: by
-  delta morphismRestrict
-  rw [Category.assoc]; rw [pullback.condition.symm]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
-
-Depends on / 依赖: Category, Category.assoc, condition, morphismRestrict, pullback, pullback.condition.symm, pullbackRestrictIsoRestrict_inv_fst_assoc
+/-
+**AlgebraicGeometry.morphismRestrict_** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeomet
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem morphismRestrict_ι {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f := by
   delta morphismRestrict
-  rw [Category.assoc]; rw [pullback.condition.symm]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
-
-/--
-theorem `isPullback_morphismRestrict` / 定理 `isPullback_morphismRestrict`
-
-English:
-theorem isPullback_morphismRestrict
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: by
-  apply IsOpenImmersion.isPullback <;>
-  simp
-
-中文:
-定理 isPullback_morphismRestrict
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: by
-  apply IsOpenImmersion.isPullback <;>
-  simp
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isPullback, isPullback
+  rw [Category.assoc, pullback.condition.symm, pullbackRestrictIsoRestrict_inv_fst_assoc]
+/-
+**AlgebraicGeometry.isPullback_morphismRestrict** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry`。
+形式化陈述：isPullback_morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
+ IsPullback (f ∣_ U) (f ⁻¹ᵁ U).ι U.ι f
+参数：f : X ⟶ Y；U : Y.Opens。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isPullback`：isPullback {U V X Y : Sche
+me.{u}} (g : U ⟶ V) (iU : U ⟶ X) (iV : V ⟶ Y) (f : X ⟶ Y) [IsOpenImmersion iU] [
+IsOpenImmersion iV] (H : iU ≫ f = …
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.opensRange_ι`：opensRange_ι : U.ι.opensRan
+ge = U
 -/
 theorem isPullback_morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     IsPullback (f ∣_ U) (f ⁻¹ᵁ U).ι U.ι f := by
@@ -2330,34 +1684,70 @@ theorem isPullback_morphismRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Open
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isPullback_opens_inf_le` / 引理 `isPullback_opens_inf_le`
-
-English:
-lemma isPullback_opens_inf_le
-  given: {X : Scheme} {U V W : X.Opens} (hU : U <= W) (hV : V <= W)
-  proof: by
-  refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
-    X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
-  · rw [← TopologicalSpace.Opens.map_comp_obj, ← Scheme.Hom.comp_base, Scheme.homOfLE_ι]
-    exact V.functor_map_eq_inf U
-  · exact (W.functor_map_eq_inf U).trans (by simpa)
-  all_goals { simp [← cancel_mono (Scheme.Opens.ι _)] }
-
-中文:
-引理 isPullback_opens_inf_le
-  条件: {X : 概形} {U V W : X.Opens} (hU : U <= W) (hV : V <= W)
-  证明: by
-  refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
-    X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
-  · rw [← TopologicalSpace.Opens.map_comp_obj, ← Scheme.Hom.comp_base, Scheme.homOfLE_ι]
-    exact V.functor_map_eq_inf U
-  · exact (W.functor_map_eq_inf U).trans (by simpa)
-  all_goals { simp [← cancel_mono (Scheme.Opens.ι _)] }
-
-Depends on / 依赖: Iso.refl, Scheme, Scheme.Hom.comp_base, Scheme.Opens, Scheme.homOfLE_, TopologicalSpace, TopologicalSpace.Opens.map_comp_obj, V.functor_map_eq_inf, W.functor_map_eq_inf, X.homOfLE, X.isoOfEq, all_goals, cancel_mono, comp_base, functor_map_eq_inf, homOfLE, isPullback_morphismRestrict, isoImage, isoOfEq, map_comp_obj
+/-
+**AlgebraicGeometry.isPullback_opens_inf_le** 是 Mathlib 中的一个引理，位于命名空间 `Algebraic
+Geometry`。
+形式化陈述：isPullback_opens_inf_le {X : Scheme} {U V W : X.Opens} (hU : U <= W) (hV :
+ V <= W) : IsPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_right) (X.homOfL
+E hU) (X.homOfLE hV)
+参数：hU : U <= W；hV : V <= W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.of_iso`：of_iso (h : IsPullback fst snd f g) {P
+' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} 
+(e₁ : P ≅ P') (e₂ : X …
+· 使用定理 `AlgebraicGeometry.isPullback_morphismRestrict`：isPullback_morphismRestri
+ct {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : IsPullback (f ∣_ U) (f ⁻¹ᵁ U).
+ι U.ι f
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.map_comp_obj`：map_comp_obj (f : X ⟶ Y) (g : Y ⟶ Z
+) (U) : (map (f ≫ g)).obj U = (map f).obj ((map g).obj U)
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_base`：comp_base {X Y Z : Scheme} (f : 
+X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).base = f.base ≫ g.base
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `TopologicalSpace.Opens.functor_map_eq_inf`：functor_map_eq_inf {X : TopCa
+t.{u}} (U V : Opens X) : U.isOpenEmbedding.functor.obj ((Opens.map U.inclusion')
+.obj V) = V ⊓ U
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding`：isOpenEmbedding {X : TopCat.{u}}
+ (U : Opens X) : IsOpenEmbedding (inclusion' U)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_hom_ι`：∀ (X : AlgebraicGeometry.Scheme)
+ {U V : X.Opens} (e : U = V),   CategoryTheory.CategoryStruct.comp (X.isoOfEq e)
+.hom V.ι = U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_ι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U : X.Opens), 
+  CategoryTheory.CategoryStruct.c…
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι_assoc`：∀ {X Y : AlgebraicGeometry.S
+cheme} (f : X ⟶ Y) (U : Y.Opens) {Z : AlgebraicGeometry.Scheme} (h : Y ⟶ Z),   C
+ategoryTheory.CategoryStruct.com…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
-lemma isPullback_opens_inf_le {X : Scheme} {U V W : X.Opens} (hU : U <= W) (hV : V <= W) :
+lemma isPullback_opens_inf_le {X : Scheme} {U V W : X.Opens} (hU : U ≤ W) (hV : V ≤ W) :
     IsPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_right) (X.homOfLE hU) (X.homOfLE hV) := by
   refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
     X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
@@ -2367,24 +1757,60 @@ lemma isPullback_opens_inf_le {X : Scheme} {U V W : X.Opens} (hU : U <= W) (hV :
   all_goals { simp [← cancel_mono (Scheme.Opens.ι _)] }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isPullback_opens_inf` / 引理 `isPullback_opens_inf`
-
-English:
-lemma isPullback_opens_inf
-  given: {X : Scheme} (U V : X.Opens)
-  proof: (isPullback_morphismRestrict V.ι U).of_iso (V.ι.isoImage _ ≪≫ X.isoOfEq
-    (V.functor_map_eq_inf U)) (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp [← cancel_mono U.ι])
-    (by simp [← cancel_mono V.ι]) (by simp) (by simp)
-
-中文:
-引理 isPullback_opens_inf
-  条件: {X : 概形} (U V : X.Opens)
-  证明: (isPullback_morphismRestrict V.ι U).of_iso (V.ι.isoImage _ ≪≫ X.isoOfEq
-    (V.functor_map_eq_inf U)) (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp [← cancel_mono U.ι])
-    (by simp [← cancel_mono V.ι]) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, V.functor_map_eq_inf, X.isoOfEq, cancel_mono, functor_map_eq_inf, isPullback_morphismRestrict, isoImage, isoOfEq, of_iso
+/-
+**AlgebraicGeometry.isPullback_opens_inf** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：isPullback_opens_inf {X : Scheme} (U V : X.Opens) : IsPullback (X.homOfLE 
+inf_le_left) (X.homOfLE inf_le_right) U.ι V.ι
+参数：U V : X.Opens。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.of_iso`：of_iso (h : IsPullback fst snd f g) {P
+' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} 
+(e₁ : P ≅ P') (e₂ : X …
+· 使用定理 `AlgebraicGeometry.isPullback_morphismRestrict`：isPullback_morphismRestri
+ct {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : IsPullback (f ∣_ U) (f ⁻¹ᵁ U).
+ι U.ι f
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `TopologicalSpace.Opens.functor_map_eq_inf`：functor_map_eq_inf {X : TopCa
+t.{u}} (U V : Opens X) : U.isOpenEmbedding.functor.obj ((Opens.map U.inclusion')
+.obj V) = V ⊓ U
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_hom_ι`：∀ (X : AlgebraicGeometry.Scheme)
+ {U V : X.Opens} (e : U = V),   CategoryTheory.CategoryStruct.comp (X.isoOfEq e)
+.hom V.ι = U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_ι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U : X.Opens), 
+  CategoryTheory.CategoryStruct.c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma isPullback_opens_inf {X : Scheme} (U V : X.Opens) :
     IsPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_right) U.ι V.ι :=
@@ -2394,68 +1820,77 @@ lemma isPullback_opens_inf {X : Scheme} (U V : X.Opens) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `morphismRestrict_id` / 引理 `morphismRestrict_id`
-
-English:
-lemma morphismRestrict_id
-  given: {X : Scheme.{u}} (U : X.Opens)
-  statement: 𝟙 X ∣_ U = 𝟙 _
-  proof: by
-  rw [← cancel_mono U.ι]; rw [morphismRestrict_ι]; rw [Category.comp_id]; rw [Category.id_comp]
-  rfl
-
-中文:
-引理 morphismRestrict_id
-  条件: {X : 概形.{u}} (U : X.Opens)
-  结论: 𝟙 X ∣_ U = 𝟙 _
-  证明: by
-  rw [← cancel_mono U.ι]; rw [morphismRestrict_ι]; rw [Category.comp_id]; rw [Category.id_comp]
-  rfl
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, cancel_mono, comp_id, id_comp
+/-
+**AlgebraicGeometry.morphismRestrict_id** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry`。
+形式化陈述：morphismRestrict_id {X : Scheme.{u}} (U : X.Opens) : 𝟙 X ∣_ U = 𝟙 _
+参数：U : X.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma morphismRestrict_id {X : Scheme.{u}} (U : X.Opens) : 𝟙 X ∣_ U = 𝟙 _ := by
-  rw [← cancel_mono U.ι]; rw [morphismRestrict_ι]; rw [Category.comp_id]; rw [Category.id_comp]
+  rw [← cancel_mono U.ι, morphismRestrict_ι, Category.comp_id, Category.id_comp]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `morphismRestrict_comp` / 定理 `morphismRestrict_comp`
-
-English:
-theorem morphismRestrict_comp
-  given: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Opens Z)
-  proof: by
-  delta morphismRestrict
-  rw [← pullbackRightPullbackFstIso_inv_snd_snd]
-  simp_rw [← Category.assoc]
-  congr 1
-  rw [← cancel_mono (pullback.fst _ _)]
-  simp_rw [Category.assoc]
-  rw [pullbackRestrictIsoRestrict_inv_fst]; rw [pullbackRightPullbackFstIso_inv_snd_fst]; rw [←
-    pullback.condition]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
-  rfl
-
-@[reassoc]
-
-中文:
-定理 morphismRestrict_comp
-  条件: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Opens Z)
-  证明: by
-  delta morphismRestrict
-  rw [← pullbackRightPullbackFstIso_inv_snd_snd]
-  simp_rw [← Category.assoc]
-  congr 1
-  rw [← cancel_mono (pullback.fst _ _)]
-  simp_rw [Category.assoc]
-  rw [pullbackRestrictIsoRestrict_inv_fst]; rw [pullbackRightPullbackFstIso_inv_snd_fst]; rw [←
-    pullback.condition]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
-  rfl
-
-@[reassoc]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono, condition, morphismRestrict, pullback, pullback.condition, pullback.fst, pullbackRestrictIsoRestrict_inv_fst, pullbackRestrictIsoRestrict_inv_fst_assoc, pullbackRightPullbackFstIso_inv_snd_fst, pullbackRightPullbackFstIso_inv_snd_snd, simp_rw
+/-
+**AlgebraicGeometry.morphismRestrict_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry`。
+形式化陈述：morphismRestrict_comp {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Op
+ens Z) : (f ≫ g) ∣_ U = f ∣_ g ⁻¹ᵁ U ≫ g ∣_ U
+参数：f : X ⟶ Y；g : Y ⟶ Z；U : Opens Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_snd`：pullbackR
+ightPullbackFstIso_inv_snd_snd : (pullbackRightPullbackFstIso f g f').inv ≫ pull
+back.snd _ _ ≫ pullback.snd _ _ = pullback.snd _ _
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.pullbackRestrictIsoRestrict_inv_fst`：pullbackRestrictI
+soRestrict_inv_fst {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : (pullbackRestr
+ictIsoRestrict f U).inv ≫ pullback.fst f _ …
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_fst`：pullbackR
+ightPullbackFstIso_inv_snd_fst : (pullbackRightPullbackFstIso f g f').inv ≫ pull
+back.snd _ _ ≫ pullback.fst _ _ = pullback.fst _ _ …
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.pullbackRestrictIsoRestrict_inv_fst_assoc`：∀ {X Y : Al
+gebraicGeometry.Scheme} (f : X ⟶ Y) (U : Y.Opens) {Z : AlgebraicGeometry.Scheme}
+ (h : X ⟶ Z),   CategoryTheory.CategoryStruct.com…
 -/
 theorem morphismRestrict_comp {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Opens Z) :
     (f ≫ g) ∣_ U = f ∣_ g ⁻¹ᵁ U ≫ g ∣_ U := by
@@ -2465,118 +1900,152 @@ theorem morphismRestrict_comp {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (
   congr 1
   rw [← cancel_mono (pullback.fst _ _)]
   simp_rw [Category.assoc]
-  rw [pullbackRestrictIsoRestrict_inv_fst]; rw [pullbackRightPullbackFstIso_inv_snd_fst]; rw [←
-    pullback.condition]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
+  rw [pullbackRestrictIsoRestrict_inv_fst, pullbackRightPullbackFstIso_inv_snd_fst, ←
+    pullback.condition, pullbackRestrictIsoRestrict_inv_fst_assoc,
+    pullbackRestrictIsoRestrict_inv_fst_assoc]
   rfl
 
 @[reassoc]
-/--
-theorem `morphismRestrict_homOfLE` / 定理 `morphismRestrict_homOfLE`
-
-English:
-theorem morphismRestrict_homOfLE
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U <= V)
-  proof: by
-  simp [← cancel_mono V.ι]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 morphismRestrict_homOfLE
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U <= V)
-  证明: by
-  simp [← cancel_mono V.ι]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.morphismRestrict_homOfLE** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：morphismRestrict_homOfLE {X Y : Scheme.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e
+ : U <= V) : (f ∣_ U) ≫ Y.homOfLE e = X.homOfLE (f.preimage_mono e) ≫ (f ∣_ V)
+参数：f : X ⟶ Y；U V : Y.Opens；e : U <= V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_mono`：preimage_mono {U U' : Y.Open
+s} (hUU' : U <= U') : f ⁻¹ᵁ U <= f ⁻¹ᵁ U'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι_assoc`：∀ (X : AlgebraicGeometry.Schem
+e) {U V : X.Opens} (e : U ≤ V) {Z : AlgebraicGeometry.Scheme} (h : X ⟶ Z),   Cat
+egoryTheory.CategoryStruct.com…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem morphismRestrict_homOfLE {X Y : Scheme.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U <= V) :
+theorem morphismRestrict_homOfLE {X Y : Scheme.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U ≤ V) :
     (f ∣_ U) ≫ Y.homOfLE e = X.homOfLE (f.preimage_mono e) ≫ (f ∣_ V) := by
   simp [← cancel_mono V.ι]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Scheme.Hom.isoImage_preimage_hom_homOfLE` / 引理 `Scheme.Hom.isoImage_preimage_hom_homOfLE`
-
-English:
-lemma Scheme.Hom.isoImage_preimage_hom_homOfLE
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
-  proof: by
-  simp [← cancel_mono U.ι]
-
-中文:
-引理 概形.态射.isoImage_preimage_hom_homOfLE
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
-  证明: by
-  simp [← cancel_mono U.ι]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.Scheme.Hom.isoImage_preimage_hom_homOfLE** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.I
+sOpenImmersion f] (U : Y.Opens),   CategoryTheory.CategoryStruct.comp       (Alg
+ebraicGeometry.Scheme.Hom.isoImage f ((TopologicalSpace.Opens.map f.base).obj U)
+).hom (Y.homOfLE ⋯) =     f ∣_ U
+参数：f : X ⟶ Y；U : Y.Opens；AlgebraicGeometry.Scheme.Hom.isoImage f ((TopologicalSp
+ace.Opens.map f.base).obj U)；Y.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_le`：image_preimage_le (U : Y
+.Opens) : f ''ᵁ f ⁻¹ᵁ U <= U
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_ι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U : X.Opens), 
+  CategoryTheory.CategoryStruct.c…
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Scheme.Hom.isoImage_preimage_hom_homOfLE {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
     (U : Y.Opens) :
     (f.isoImage (f ⁻¹ᵁ U)).hom ≫ Y.homOfLE (f.image_preimage_le U) = f ∣_ U := by
   simp [← cancel_mono U.ι]
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso f] (U : Y.Opens) : IsIso (f ∣_ U) := by
   delta morphismRestrict; infer_instance
 
 @[simp]
-/--
-theorem `morphismRestrict_base_coe` / 定理 `morphismRestrict_base_coe`
-
-English:
-theorem morphismRestrict_base_coe
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
-  proof: congr_arg (fun f => (Scheme.Hom.toLRSHom f).base x)
-    (morphismRestrict_ι f U)
-
-中文:
-定理 morphismRestrict_base_coe
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
-  证明: congr_arg (fun f => (Scheme.Hom.toLRSHom f).base x)
-    (morphismRestrict_ι f U)
-
-Depends on / 依赖: Scheme, Scheme.Hom.toLRSHom, congr_arg, toLRSHom
+/-
+**AlgebraicGeometry.morphismRestrict_base_coe** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry`。
+形式化陈述：morphismRestrict_base_coe {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
+ : ((f ∣_ U) x).1 = f x.1
+参数：f : X ⟶ Y；U : Y.Opens；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
 -/
 theorem morphismRestrict_base_coe {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x) :
     ((f ∣_ U) x).1 = f x.1 :=
   congr_arg (fun f => (Scheme.Hom.toLRSHom f).base x)
     (morphismRestrict_ι f U)
-
-/--
-theorem `morphismRestrict_base` / 定理 `morphismRestrict_base`
-
-English:
-theorem morphismRestrict_base
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: funext fun x => Subtype.ext (morphismRestrict_base_coe f U x)
-
-中文:
-定理 morphismRestrict_base
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: funext fun x => Subtype.ext (morphismRestrict_base_coe f U x)
-
-Depends on / 依赖: Subtype, Subtype.ext, morphismRestrict_base_coe
+/-
+**AlgebraicGeometry.morphismRestrict_base** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry`。
+形式化陈述：morphismRestrict_base {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : ⇑(f ∣
+_ U) = U.1.restrictPreimage f
+参数：f : X ⟶ Y；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `AlgebraicGeometry.morphismRestrict_base_coe`：morphismRestrict_base_coe {
+X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x) : ((f ∣_ U) x).1 = f x.1
 -/
 theorem morphismRestrict_base {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     ⇑(f ∣_ U) = U.1.restrictPreimage f :=
   funext fun x => Subtype.ext (morphismRestrict_base_coe f U x)
-
-/--
-theorem `image_morphismRestrict_preimage` / 定理 `image_morphismRestrict_preimage`
-
-English:
-theorem image_morphismRestrict_preimage
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
-  proof: IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback (isPullback_morphismRestrict f U) V
-
-中文:
-定理 image_morphismRestrict_preimage
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
-  证明: IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback (isPullback_morphismRestrict f U) V
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback, image_preimage_eq_preimage_image_of_isPullback, isPullback_morphismRestrict
+/-
+**AlgebraicGeometry.image_morphismRestrict_preimage** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry`。
+形式化陈述：image_morphismRestrict_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Open
+s) (V : Opens U) : (f ⁻¹ᵁ U).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι ''ᵁ V)
+参数：f : X ⟶ Y；U : Y.Opens；V : Opens U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.image_preimage_eq_preimage_image_of_is
+Pullback`：image_preimage_eq_preimage_image_of_isPullback {X Y U V : Scheme.{u}} 
+{f : X ⟶ Y} {f' : U ⟶ V} {iU : U ⟶ X} {iV : V ⟶ Y} [IsOpenImmersion iV…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.isPullback_morphismRestrict`：isPullback_morphismRestri
+ct {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : IsPullback (f ∣_ U) (f ⁻¹ᵁ U).
+ι U.ι f
 -/
 theorem image_morphismRestrict_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) :
     (f ⁻¹ᵁ U).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι ''ᵁ V) :=
@@ -2584,55 +2053,75 @@ theorem image_morphismRestrict_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.
 
 set_option backward.isDefEq.respectTransparency false in
 open Scheme in
-/--
-theorem `morphismRestrict_app` / 定理 `morphismRestrict_app`
-
-English:
-theorem morphismRestrict_app
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
-  proof: by
-  obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
-  simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
-    congr(Y.presheaf.map (eqToHom (congr_arg (U.ι ''ᵁ ·) (U.ι.preimage_image_eq V).symm)).op ≫
- (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
-
-中文:
-定理 morphismRestrict_app
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
-  证明: by
-  obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
-  simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
-    congr(Y.presheaf.map (eqToHom (congr_arg (U.ι ''ᵁ ·) (U.ι.preimage_image_eq V).symm)).op ≫
- (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
-
-Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, Scheme, Scheme.Hom.congr_app, Y.presheaf.map, congr_app, congr_arg, eqToHom, map_comp, map_comp_assoc, preimage_image_eq, presheaf
+/-
+**AlgebraicGeometry.morphismRestrict_app** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：morphismRestrict_app {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.t
+oScheme.Opens) : (f ∣_ U).app V = f.app (U.ι ''ᵁ V) ≫ X.presheaf.map (eqToHom (i
+mage_morphismRestrict_preimage f U V)).op
+参数：f : X ⟶ Y；U : Y.Opens；V : U.toScheme.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.image_morphismRestrict_preimage`：image_morphismRestric
+t_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ⁻¹ᵁ U
+).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι '…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_image_eq`：preimage_image_eq (U : X
+.Opens) : f ⁻¹ᵁ f ''ᵁ U = U
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `AlgebraicGeometry.morphismRestrict_ι`：morphismRestrict_ι {X Y : Scheme.{
+u}} (f : X ⟶ Y) (U : Y.Opens) : f ∣_ U ≫ U.ι = (f ⁻¹ᵁ U).ι ≫ f
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.eqToHom_unop`：eqToHom_unop {X Y : Cᵒᵖ} (h : X = Y) : (eqT
+oHom h).unop = eqToHom (congr_arg unop h.symm)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.congr_app`：congr_app {X Y : Scheme} {f g : 
+X ⟶ Y} (e : f = g) (U) : f.app U = g.app U ≫ X.presheaf.map (eqToHom (by subst e
+; rfl)).op
 -/
 theorem morphismRestrict_app {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) :
     (f ∣_ U).app V = f.app (U.ι ''ᵁ V) ≫
         X.presheaf.map (eqToHom (image_morphismRestrict_preimage f U V)).op := by
-  obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
+  obtain ⟨V, rfl⟩ : ∃ V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
   simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
     congr(Y.presheaf.map (eqToHom (congr_arg (U.ι ''ᵁ ·) (U.ι.preimage_image_eq V).symm)).op ≫
- (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
-
-/--
-theorem `morphismRestrict_appTop` / 定理 `morphismRestrict_appTop`
-
-English:
-theorem morphismRestrict_appTop
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  proof: morphismRestrict_app ..
-
-@[simp]
-
-中文:
-定理 morphismRestrict_appTop
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
-  证明: morphismRestrict_app ..
-
-@[simp]
-
-Depends on / 依赖: morphismRestrict_app
+      $(Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
+/-
+**AlgebraicGeometry.morphismRestrict_appTop** 是 Mathlib 中的一个定理，位于命名空间 `Algebraic
+Geometry`。
+形式化陈述：morphismRestrict_appTop {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : (f 
+∣_ U).appTop = f.app (U.ι ''ᵁ ⊤) ≫ X.presheaf.map (eqToHom (image_morphismRestri
+ct_preimage f U ⊤)).op
+参数：f : X ⟶ Y；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.morphismRestrict_app`：morphismRestrict_app {X Y : Sche
+me.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) : (f ∣_ U).app V = f.ap
+p (U.ι ''ᵁ V) ≫ X.presheaf.m…
 -/
 theorem morphismRestrict_appTop {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
     (f ∣_ U).appTop = f.app (U.ι ''ᵁ ⊤) ≫
@@ -2640,20 +2129,17 @@ theorem morphismRestrict_appTop {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) :
   morphismRestrict_app ..
 
 @[simp]
-/--
-theorem `morphismRestrict_app'` / 定理 `morphismRestrict_app'`
-
-English:
-theorem morphismRestrict_app'
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
-  proof: morphismRestrict_app f U V
-
-中文:
-定理 morphismRestrict_app'
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
-  证明: morphismRestrict_app f U V
-
-Depends on / 依赖: morphismRestrict_app
+/-
+**AlgebraicGeometry.morphismRestrict_app'** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry`。
+形式化陈述：morphismRestrict_app' {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Op
+ens U) : (f ∣_ U).app V = f.appLE _ _ (image_morphismRestrict_preimage f U V).le
+参数：f : X ⟶ Y；U : Y.Opens；V : Opens U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.morphismRestrict_app`：morphismRestrict_app {X Y : Sche
+me.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) : (f ∣_ U).app V = f.ap
+p (U.ι ''ᵁ V) ≫ X.presheaf.m…
 -/
 theorem morphismRestrict_app' {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) :
     (f ∣_ U).app V = f.appLE _ _ (image_morphismRestrict_preimage f U V).le :=
@@ -2661,120 +2147,87 @@ theorem morphismRestrict_app' {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V 
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `morphismRestrict_appLE` / 定理 `morphismRestrict_appLE`
-
-English:
-theorem morphismRestrict_appLE
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e)
-  proof: by
-  rw [Scheme.Hom.appLE]; rw [morphismRestrict_app']; rw [Scheme.Opens.toScheme_presheaf_map]; rw [Scheme.Hom.appLE_map]
-
-@[reassoc]
-
-中文:
-定理 morphismRestrict_appLE
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e)
-  证明: by
-  rw [Scheme.Hom.appLE]; rw [morphismRestrict_app']; rw [Scheme.Opens.toScheme_presheaf_map]; rw [Scheme.Hom.appLE_map]
-
-@[reassoc]
-
-Depends on / 依赖: Scheme, Scheme.Hom.appLE, Scheme.Hom.appLE_map, Scheme.Opens.toScheme_presheaf_map, appLE_map, morphismRestrict_app, toScheme_presheaf_map
+/-
+**AlgebraicGeometry.morphismRestrict_appLE** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry`。
+形式化陈述：morphismRestrict_appLE {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e
+) : (f ∣_ U).appLE V W e = f.appLE (U.ι ''ᵁ V) ((f ⁻¹ᵁ U).ι ''ᵁ W) ((Set.image_m
+ono e).trans (image_morphismRestrict_preimage f U V).le)
+参数：f : X ⟶ Y；U : Y.Opens；V W e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `AlgebraicGeometry.image_morphismRestrict_preimage`：image_morphismRestric
+t_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ⁻¹ᵁ U
+).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι '…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appLE.eq_1`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens)   (e : V ≤ (TopologicalSpace.Opens.m
+ap f.base).obj U),   Algebrai…
+· 使用定理 `AlgebraicGeometry.morphismRestrict_app'`：morphismRestrict_app' {X Y : Sc
+heme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ∣_ U).app V = f.appLE _ _
+ (image_morphismRestrict_prei…
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.toScheme_presheaf_map`：toScheme_presheaf_
+map {V W} (i : V ⟶ W) : U.toScheme.presheaf.map i = X.presheaf.map (U.ι.opensFun
+ctor.map i.unop).op
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.appLE_map`：appLE_map (e : V <= f ⁻¹ᵁ U) (i 
+: op V ⟶ op V') : f.appLE U V e ≫ X.presheaf.map i = f.appLE U V' (i.unop.le.tra
+ns e)
 -/
 theorem morphismRestrict_appLE {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e) :
     (f ∣_ U).appLE V W e = f.appLE (U.ι ''ᵁ V) ((f ⁻¹ᵁ U).ι ''ᵁ W)
       ((Set.image_mono e).trans (image_morphismRestrict_preimage f U V).le) := by
-  rw [Scheme.Hom.appLE]; rw [morphismRestrict_app']; rw [Scheme.Opens.toScheme_presheaf_map]; rw [Scheme.Hom.appLE_map]
+  rw [Scheme.Hom.appLE, morphismRestrict_app', Scheme.Opens.toScheme_presheaf_map,
+    Scheme.Hom.appLE_map]
 
 @[reassoc]
-/--
-theorem `morphismRestrict_homOfLE_isoImage_ι_hom` / 定理 `morphismRestrict_homOfLE_isoImage_ι_hom`
-
-English:
-theorem morphismRestrict_homOfLE_isoImage_ι_hom
-  proof: by
-  simp [← cancel_mono (V.ι ''ᵁ W).ι]
-
-@[reassoc]
-
-中文:
-定理 morphismRestrict_homOfLE_isoImage_ι_hom
-  证明: by
-  simp [← cancel_mono (V.ι ''ᵁ W).ι]
-
-@[reassoc]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.morphismRestrict_homOfLE_isoImage_** 是 Mathlib 中的一个定理，位于命名空间
+ `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem morphismRestrict_homOfLE_isoImage_ι_hom
-    {X : Scheme.{u}} {U V : X.Opens} (e : U <= V) (W : Opens V) :
+    {X : Scheme.{u}} {U V : X.Opens} (e : U ≤ V) (W : Opens V) :
     X.homOfLE e ∣_ W ≫ (V.ι.isoImage W).hom =
       (U.ι.isoImage (X.homOfLE e ⁻¹ᵁ W)).hom ≫ X.homOfLE (X.ι_image_homOfLE_le_ι_image e W) := by
   simp [← cancel_mono (V.ι ''ᵁ W).ι]
 
 @[reassoc]
-/--
-theorem `isoImage_ι_inv_morphismRestrict_homOfLE` / 定理 `isoImage_ι_inv_morphismRestrict_homOfLE`
-
-English:
-theorem isoImage_ι_inv_morphismRestrict_homOfLE
-  statement: {X : Scheme.{u}} {U V : X.Opens}
-  proof: by
-  simp [← cancel_mono (V.ι.isoImage W).hom, morphismRestrict_homOfLE_isoImage_ι_hom]
-
-中文:
-定理 isoImage_ι_inv_morphismRestrict_homOfLE
-  结论: {X : 概形.{u}} {U V : X.Opens}
-  证明: by
-  simp [← cancel_mono (V.ι.isoImage W).hom, morphismRestrict_homOfLE_isoImage_ι_hom]
-
-Depends on / 依赖: cancel_mono, isoImage
+/-
+**AlgebraicGeometry.isoImage_** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoImage_ι_inv_morphismRestrict_homOfLE {X : Scheme.{u}} {U V : X.Opens}
-    (e : U <= V) (W : Opens V) :
+    (e : U ≤ V) (W : Opens V) :
     (U.ι.isoImage (X.homOfLE e ⁻¹ᵁ W)).inv ≫ X.homOfLE e ∣_ W =
       X.homOfLE (X.ι_image_homOfLE_le_ι_image e W) ≫ (V.ι.isoImage W).inv := by
   simp [← cancel_mono (V.ι.isoImage W).hom, morphismRestrict_homOfLE_isoImage_ι_hom]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `morphismRestrictOpensRange` / `morphismRestrictOpensRange` 的定义
+/-- Restricting a morphism onto the image of an open immersion is isomorphic to the base change
+along the immersion. -/
+/-
+**AlgebraicGeometry.morphismRestrictOpensRange** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry`。
+形式化陈述：morphismRestrictOpensRange {X Y U : Scheme.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [I
+sOpenImmersion g] : Arrow.mk (f ∣_ g.opensRange) ≅ Arrow.mk (pullback.snd f g)
+参数：f : X ⟶ Y；g : U ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition morphismRestrictOpensRange
-  signature: {X Y U : Scheme.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [IsOpenImmersion g]
-  body: by
-  let V : Y.Opens := g.opensRange
-  let e :=
-    IsOpenImmersion.isoOfRangeEq g V.ι Subtype.range_coe.symm
-  let t : pullback f g ⟶ pullback f V.ι :=
-    pullback.map _ _ _ _ (𝟙 _) e.hom (𝟙 _) (by rw [Category.comp_id, Category.id_comp])
-      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeEq_hom_fac])
-  symm
-  refine Arrow.isoMk (asIso t ≪≫ pullbackRestrictIsoRestrict f V) e ?_
-  rw [Iso.trans_hom]; rw [asIso_hom]; rw [← Iso.comp_inv_eq]; rw [← cancel_mono g]
-  dsimp
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [IsOpenImmersion.isoOfRangeEq_inv_fac]; rw [← pullback.condition]; rw [morphismRestrict_ι]; rw [pullbackRestrictIsoRestrict_hom_ι_assoc]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]
-
-中文:
-定义 morphismRestrictOpensRange
-  签名: {X Y U : 概形.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [是开浸入 g]
-  定义体: by
-  let V : Y.Opens := g.opensRange
-  let e :=
-    IsOpenImmersion.isoOfRangeEq g V.ι Subtype.range_coe.symm
-  let t : pullback f g ⟶ pullback f V.ι :=
-    pullback.map _ _ _ _ (𝟙 _) e.hom (𝟙 _) (by rw [Category.comp_id, Category.id_comp])
-      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeEq_hom_fac])
-  symm
-  refine Arrow.isoMk (asIso t ≪≫ pullbackRestrictIsoRestrict f V) e ?_
-  rw [Iso.trans_hom]; rw [asIso_hom]; rw [← Iso.comp_inv_eq]; rw [← cancel_mono g]
-  dsimp
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [IsOpenImmersion.isoOfRangeEq_inv_fac]; rw [← pullback.condition]; rw [morphismRestrict_ι]; rw [pullbackRestrictIsoRestrict_hom_ι_assoc]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]
-
-Depends on / 依赖: Arrow.isoMk, Category, Category.assoc, Category.comp_id, Category.id_comp, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsOpenImmersion.isoOfRangeEq_hom_fac, Iso.comp_inv_eq, Iso.trans_hom, Subtype, Subtype.range_coe.symm, Y.Opens, asIso_hom, cancel_mono, comp_id, comp_inv_eq, e.hom, g.opensRange, id_comp
+--- 原说明 ---
+Restricting a morphism onto the image of an open immersion is isomorphic to the 
+base change
+along the immersion.
 -/
 def morphismRestrictOpensRange {X Y U : Scheme.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [IsOpenImmersion g] :
     Arrow.mk (f ∣_ g.opensRange) ≅ Arrow.mk (pullback.snd f g) := by
@@ -2786,52 +2239,38 @@ def morphismRestrictOpensRange {X Y U : Scheme.{u}} (f : X ⟶ Y) (g : U ⟶ Y) 
       (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeEq_hom_fac])
   symm
   refine Arrow.isoMk (asIso t ≪≫ pullbackRestrictIsoRestrict f V) e ?_
-  rw [Iso.trans_hom]; rw [asIso_hom]; rw [← Iso.comp_inv_eq]; rw [← cancel_mono g]
+  rw [Iso.trans_hom, asIso_hom, ← Iso.comp_inv_eq, ← cancel_mono g]
   dsimp
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [IsOpenImmersion.isoOfRangeEq_inv_fac]; rw [← pullback.condition]; rw [morphismRestrict_ι]; rw [pullbackRestrictIsoRestrict_hom_ι_assoc]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]
+  rw [Category.assoc, Category.assoc, Category.assoc, IsOpenImmersion.isoOfRangeEq_inv_fac,
+    ← pullback.condition, morphismRestrict_ι,
+    pullbackRestrictIsoRestrict_hom_ι_assoc, pullback.lift_fst_assoc, Category.comp_id]
 
-/--
-Definition of `morphismRestrictEq` / `morphismRestrictEq` 的定义
+/-- The restrictions onto two equal open sets are isomorphic. This currently has bad defeqs when
+unfolded, but it should not matter for now. Replace this definition if better defeqs are needed. -/
+/-
+**AlgebraicGeometry.morphismRestrictEq** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try`。
+形式化陈述：morphismRestrictEq {X Y : Scheme.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U =
+ V) : Arrow.mk (f ∣_ U) ≅ Arrow.mk (f ∣_ V)
+参数：f : X ⟶ Y；e : U = V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition morphismRestrictEq
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
-  body: eqToIso (by subst e; rfl)
-
-@[reassoc]
-
-中文:
-定义 morphismRestrictEq
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
-  定义体: eqToIso (by subst e; rfl)
-
-@[reassoc]
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The restrictions onto two equal open sets are isomorphic. This currently has bad
+ defeqs when
+unfolded, but it should not matter for now. Replace this definition if better de
+feqs are needed.
 -/
 def morphismRestrictEq {X Y : Scheme.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V) :
     Arrow.mk (f ∣_ U) ≅ Arrow.mk (f ∣_ V) :=
   eqToIso (by subst e; rfl)
 
 @[reassoc]
-/--
-lemma `morphismRestrict_ι_image_ι_isoImage_inv` / 引理 `morphismRestrict_ι_image_ι_isoImage_inv`
-
-English:
-lemma morphismRestrict_ι_image_ι_isoImage_inv
-  proof: by
-  simp [← cancel_mono (Scheme.Opens.ι _)]
-
-@[reassoc]
-
-中文:
-引理 morphismRestrict_ι_image_ι_isoImage_inv
-  证明: by
-  simp [← cancel_mono (Scheme.Opens.ι _)]
-
-@[reassoc]
-
-Depends on / 依赖: Scheme, Scheme.Opens, cancel_mono
+/-
+**AlgebraicGeometry.morphismRestrict_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeomet
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma morphismRestrict_ι_image_ι_isoImage_inv
     {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) :
@@ -2840,20 +2279,10 @@ lemma morphismRestrict_ι_image_ι_isoImage_inv
   simp [← cancel_mono (Scheme.Opens.ι _)]
 
 @[reassoc]
-/--
-lemma `morphismRestrict_morphismRestrict_ι_isoImage_hom` / 引理 `morphismRestrict_morphismRestrict_ι_isoImage_hom`
-
-English:
-lemma morphismRestrict_morphismRestrict_ι_isoImage_hom
-  proof: by
-  simp [← cancel_mono (Scheme.Opens.ι _)]
-
-中文:
-引理 morphismRestrict_morphismRestrict_ι_isoImage_hom
-  证明: by
-  simp [← cancel_mono (Scheme.Opens.ι _)]
-
-Depends on / 依赖: Scheme, Scheme.Opens, cancel_mono
+/-
+**AlgebraicGeometry.morphismRestrict_morphismRestrict_** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma morphismRestrict_morphismRestrict_ι_isoImage_hom
     {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) :
@@ -2861,28 +2290,23 @@ lemma morphismRestrict_morphismRestrict_ι_isoImage_hom
       X.homOfLE (image_morphismRestrict_preimage f U V).le) ≫ f ∣_ U.ι ''ᵁ V := by
   simp [← cancel_mono (Scheme.Opens.ι _)]
 
-/--
-Definition of `morphismRestrictRestrict` / `morphismRestrictRestrict` 的定义
+/-- Restricting a morphism twice is isomorphic to one restriction. -/
+/-
+**AlgebraicGeometry.morphismRestrictRestrict** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：morphismRestrictRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V :
+ U.toScheme.Opens) : Arrow.mk (f ∣_ U ∣_ V) ≅ Arrow.mk (f ∣_ U.ι ''ᵁ V)
+参数：f : X ⟶ Y；U : Y.Opens；V : U.toScheme.Opens。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.image_morphismRestrict_preimage`：image_morphismRestric
+t_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ⁻¹ᵁ U
+).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι '…
 
-English:
-definition morphismRestrictRestrict
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
-  body: by
-  refine Arrow.isoMk' _ _ ((Scheme.Opens.ι _).isoImage _ ≪≫ Scheme.isoOfEq _ ?_)
-    ((Scheme.Opens.ι _).isoImage _) ?_
-  · exact image_morphismRestrict_preimage f U V
-  · simp [← cancel_mono (Scheme.Opens.ι _)]
-
-中文:
-定义 morphismRestrictRestrict
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
-  定义体: by
-  refine Arrow.isoMk' _ _ ((Scheme.Opens.ι _).isoImage _ ≪≫ Scheme.isoOfEq _ ?_)
-    ((Scheme.Opens.ι _).isoImage _) ?_
-  · exact image_morphismRestrict_preimage f U V
-  · simp [← cancel_mono (Scheme.Opens.ι _)]
-
-Depends on / 依赖: Arrow.isoMk, Scheme, Scheme.Opens, Scheme.isoOfEq, cancel_mono, image_morphismRestrict_preimage, isoImage, isoOfEq
+--- 原说明 ---
+Restricting a morphism twice is isomorphic to one restriction.
 -/
 def morphismRestrictRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens) :
     Arrow.mk (f ∣_ U ∣_ V) ≅ Arrow.mk (f ∣_ U.ι ''ᵁ V) := by
@@ -2892,24 +2316,22 @@ def morphismRestrictRestrict {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V :
   · simp [← cancel_mono (Scheme.Opens.ι _)]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `morphismRestrictRestrictBasicOpen` / `morphismRestrictRestrictBasicOpen` 的定义
+/-- Restricting a morphism twice onto a basic open set is isomorphic to one restriction. -/
+/-
+**AlgebraicGeometry.morphismRestrictRestrictBasicOpen** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry`。
+形式化陈述：morphismRestrictRestrictBasicOpen {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Op
+ens) (r : Γ(Y, U)) : Arrow.mk (f ∣_ U ∣_ U.toScheme.basicOpen (Y.presheaf.map (e
+qToHom U.isOpenEmbedding_obj_top).op r)) ≅ Arrow.mk (f ∣_ Y.basicOpen r)
+参数：f : X ⟶ Y；U : Y.Opens；r : Γ(Y, U)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 
-English:
-definition morphismRestrictRestrictBasicOpen
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (r : Γ(Y, U))
-  body: by
-  refine morphismRestrictRestrict _ _ _ ≪≫ morphismRestrictEq _ ?_
-  simp [Scheme.Opens.ι_image_basicOpen]
-
-中文:
-定义 morphismRestrictRestrictBasicOpen
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (r : Γ(Y, U))
-  定义体: by
-  refine morphismRestrictRestrict _ _ _ ≪≫ morphismRestrictEq _ ?_
-  simp [Scheme.Opens.ι_image_basicOpen]
-
-Depends on / 依赖: Scheme, Scheme.Opens, morphismRestrictEq, morphismRestrictRestrict
+--- 原说明 ---
+Restricting a morphism twice onto a basic open set is isomorphic to one restrict
+ion.
 -/
 def morphismRestrictRestrictBasicOpen {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (r : Γ(Y, U)) :
     Arrow.mk (f ∣_ U ∣_
@@ -2919,36 +2341,31 @@ def morphismRestrictRestrictBasicOpen {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Op
   simp [Scheme.Opens.ι_image_basicOpen]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `morphismRestrictStalkMap` / `morphismRestrictStalkMap` 的定义
+/-- The stalk map of a restriction of a morphism is isomorphic to the stalk map of the original map.
+-/
+/-
+**AlgebraicGeometry.morphismRestrictStalkMap** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：morphismRestrictStalkMap {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x) 
+: Arrow.mk ((f ∣_ U).stalkMap x) ≅ Arrow.mk (f.stalkMap x.1)
+参数：f : X ⟶ Y；U : Y.Opens；x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition morphismRestrictStalkMap
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
-  body: Arrow.isoMk' _ _
-  (U.stalkIso ((f ∣_ U) x) ≪≫
-    (TopCat.Presheaf.stalkCongr _ <| Inseparable.of_eq <| morphismRestrict_base_coe f U x))
-((f ⁻¹ᵁ U).stalkIso x) TopCat.Presheaf.stalk_hom_ext _ fun V hxV => by
-    simp [Scheme.Hom.germ_stalkMap_assoc, Scheme.Hom.appLE]
-
-中文:
-定义 morphismRestrictStalkMap
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
-  定义体: Arrow.isoMk' _ _
-  (U.stalkIso ((f ∣_ U) x) ≪≫
-    (TopCat.Presheaf.stalkCongr _ <| Inseparable.of_eq <| morphismRestrict_base_coe f U x))
-((f ⁻¹ᵁ U).stalkIso x) TopCat.Presheaf.stalk_hom_ext _ fun V hxV => by
-    simp [Scheme.Hom.germ_stalkMap_assoc, Scheme.Hom.appLE]
-
-Depends on / 依赖: Arrow.isoMk
+--- 原说明 ---
+The stalk map of a restriction of a morphism is isomorphic to the stalk map of t
+he original map.
 -/
 def morphismRestrictStalkMap {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x) :
     Arrow.mk ((f ∣_ U).stalkMap x) ≅ Arrow.mk (f.stalkMap x.1) := Arrow.isoMk' _ _
   (U.stalkIso ((f ∣_ U) x) ≪≫
     (TopCat.Presheaf.stalkCongr _ <| Inseparable.of_eq <| morphismRestrict_base_coe f U x))
-((f ⁻¹ᵁ U).stalkIso x) TopCat.Presheaf.stalk_hom_ext _ fun V hxV => by
+  ((f ⁻¹ᵁ U).stalkIso x) <| TopCat.Presheaf.stalk_hom_ext _ fun V hxV ↦ by
     simp [Scheme.Hom.germ_stalkMap_assoc, Scheme.Hom.appLE]
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) [IsOpenImmersion f] :
     IsOpenImmersion (f ∣_ U) := by
   delta morphismRestrict
@@ -2958,118 +2375,107 @@ variable {X Y : Scheme.{u}}
 
 namespace Scheme.Hom
 
-/--
-Definition of `resLE` / `resLE` 的定义
+/-- The restriction of a morphism `f : X ⟶ Y` to open sets on the source and target. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.Scheme.Hom`。
+形式化陈述：resLE (f : Hom X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U) : V.toS
+cheme ⟶ U.toScheme
+参数：f : Hom X Y；U : Y.Opens；V : X.Opens；e : V <= f ⁻¹ᵁ U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resLE
-  signature: (f : Hom X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
-  body: X.homOfLE e ≫ f ∣_ U
-
-中文:
-定义 resLE
-  签名: (f : 态射 X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
-  定义体: X.homOfLE e ≫ f ∣_ U
-
-Depends on / 依赖: X.homOfLE, homOfLE
+--- 原说明 ---
+The restriction of a morphism `f : X ⟶ Y` to open sets on the source and target.
 -/
-def resLE (f : Hom X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U) : V.toScheme ⟶ U.toScheme :=
+def resLE (f : Hom X Y) (U : Y.Opens) (V : X.Opens) (e : V ≤ f ⁻¹ᵁ U) : V.toScheme ⟶ U.toScheme :=
   X.homOfLE e ≫ f ∣_ U
 
-variable (f : X ⟶ Y) {U U' : Y.Opens} {V V' : X.Opens} (e : V <= f ⁻¹ᵁ U)
-
-/--
-lemma `resLE_eq_morphismRestrict` / 引理 `resLE_eq_morphismRestrict`
-
-English:
-lemma resLE_eq_morphismRestrict
-  statement: f.resLE U (f ⁻¹ᵁ U) le_rfl = f ∣_ U
-  proof: by
-  simp [resLE]
-
-@[simp]
-
-中文:
-引理 resLE_eq_morphismRestrict
-  结论: f.resLE U (f ⁻¹ᵁ U) le_rfl = f ∣_ U
-  证明: by
-  simp [resLE]
-
-@[simp]
+variable (f : X ⟶ Y) {U U' : Y.Opens} {V V' : X.Opens} (e : V ≤ f ⁻¹ᵁ U)
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_eq_morphismRestrict** 是 Mathlib 中的一个引理，位于命名
+空间 `AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：resLE_eq_morphismRestrict : f.resLE U (f ⁻¹ᵁ U) le_rfl = f ∣_ U
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_rfl`：∀ (X : AlgebraicGeometry.Scheme) (
+U : X.Opens), X.homOfLE ⋯ = CategoryTheory.CategoryStruct.id ↑U
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma resLE_eq_morphismRestrict : f.resLE U (f ⁻¹ᵁ U) le_rfl = f ∣_ U := by
   simp [resLE]
 
 @[simp]
-/--
-lemma `resLE_id` / 引理 `resLE_id`
-
-English:
-lemma resLE_id
-  given: (i : V <= V')
-  statement: resLE (𝟙 X) V' V i = X.homOfLE i
-  proof: by
-  simp only [resLE, morphismRestrict_id]
-  rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 resLE_id
-  条件: (i : V <= V')
-  结论: resLE (𝟙 X) V' V i = X.homOfLE i
-  证明: by
-  simp only [resLE, morphismRestrict_id]
-  rfl
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: morphismRestrict_id
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_id** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.Scheme.Hom`。
+形式化陈述：resLE_id (i : V <= V') : resLE (𝟙 X) V' V i = X.homOfLE i
+参数：i : V <= V'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.morphismRestrict_id`：morphismRestrict_id {X : Scheme.{
+u}} (U : X.Opens) : 𝟙 X ∣_ U = 𝟙 _
 -/
-lemma resLE_id (i : V <= V') : resLE (𝟙 X) V' V i = X.homOfLE i := by
+lemma resLE_id (i : V ≤ V') : resLE (𝟙 X) V' V i = X.homOfLE i := by
   simp only [resLE, morphismRestrict_id]
   rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `resLE_comp_ι` / 引理 `resLE_comp_ι`
-
-English:
-lemma resLE_comp_ι
-  statement: f.resLE U V e ≫ U.ι = V.ι ≫ f
-  proof: by
-  simp [resLE]
-
-@[reassoc]
-
-中文:
-引理 resLE_comp_ι
-  结论: f.resLE U V e ≫ U.ι = V.ι ≫ f
-  证明: by
-  simp [resLE]
-
-@[reassoc]
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_comp_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma resLE_comp_ι : f.resLE U V e ≫ U.ι = V.ι ≫ f := by
   simp [resLE]
 
 @[reassoc]
-/--
-lemma `resLE_comp_resLE` / 引理 `resLE_comp_resLE`
-
-English:
-lemma resLE_comp_resLE
-  given: {Z : Scheme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e')
-  proof: by
-  simp [← cancel_mono W.ι]
-
-中文:
-引理 resLE_comp_resLE
-  条件: {Z : 概形.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e')
-  证明: by
-  simp [← cancel_mono W.ι]
-
-Depends on / 依赖: cancel_mono
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_comp_resLE** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.Scheme.Hom`。
+形式化陈述：resLE_comp_resLE {Z : Scheme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e') : f.resLE
+ U V e ≫ g.resLE W U e' = (f ≫ g).resLE W V (e.trans ((Opens.map f.base).map (ho
+mOfLE e')).le)
+参数：g : Y ⟶ Z；e'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_ι`：resLE_comp_ι : f.resLE U V e 
+≫ U.ι = V.ι ≫ f
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_ι_assoc`：∀ {X Y : AlgebraicGeome
+try.Scheme} (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens}   (e : V ≤ (TopologicalSpace
+.Opens.map f.base).obj U) {Z : Algebr…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma resLE_comp_resLE {Z : Scheme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e') :
     f.resLE U V e ≫ g.resLE W U e' = (f ≫ g).resLE W V
@@ -3078,288 +2484,425 @@ lemma resLE_comp_resLE {Z : Scheme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e') :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `map_resLE` / 引理 `map_resLE`
-
-English:
-lemma map_resLE
-  given: (i : V' <= V)
-  proof: by
-  simp_rw [← resLE_id, resLE_comp_resLE, Category.id_comp]
-
-中文:
-引理 map_resLE
-  条件: (i : V' <= V)
-  证明: by
-  simp_rw [← resLE_id, resLE_comp_resLE, Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, resLE_comp_resLE, resLE_id, simp_rw
+/-
+**AlgebraicGeometry.Scheme.Hom.map_resLE** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry.Scheme.Hom`。
+形式化陈述：map_resLE (i : V' <= V) : X.homOfLE i ≫ f.resLE U V e = f.resLE U V' (i.tr
+ans e)
+参数：i : V' <= V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_resLE`：resLE_comp_resLE {Z : Sch
+eme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e') : f.resLE U V e ≫ g.resLE W U e' = (f ≫ 
+g).resLE W V (e.trans ((Opens.map f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.resLE.congr_simp`：∀ {X Y : AlgebraicGeometr
+y.Scheme} (f f_1 : X.Hom Y) (e_f : f = f_1) (U : Y.Opens) (V : X.Opens)   (e : V
+ ≤ (TopologicalSpace.Opens.map f.ba…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_resLE (i : V' <= V) :
+lemma map_resLE (i : V' ≤ V) :
     X.homOfLE i ≫ f.resLE U V e = f.resLE U V' (i.trans e) := by
   simp_rw [← resLE_id, resLE_comp_resLE, Category.id_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `resLE_map` / 引理 `resLE_map`
-
-English:
-lemma resLE_map
-  given: (i : U <= U')
-  proof: by
-  simp_rw [← resLE_id, resLE_comp_resLE, Category.comp_id]
-
-中文:
-引理 resLE_map
-  条件: (i : U <= U')
-  证明: by
-  simp_rw [← resLE_id, resLE_comp_resLE, Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, resLE_comp_resLE, resLE_id, simp_rw
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_map** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry.Scheme.Hom`。
+形式化陈述：resLE_map (i : U <= U') : f.resLE U V e ≫ Y.homOfLE i = f.resLE U' V (e.tr
+ans ((Opens.map f.base).map i.hom).le)
+参数：i : U <= U'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_resLE`：resLE_comp_resLE {Z : Sch
+eme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e') : f.resLE U V e ≫ g.resLE W U e' = (f ≫ 
+g).resLE W V (e.trans ((Opens.map f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.resLE.congr_simp`：∀ {X Y : AlgebraicGeometr
+y.Scheme} (f f_1 : X.Hom Y) (e_f : f = f_1) (U : Y.Opens) (V : X.Opens)   (e : V
+ ≤ (TopologicalSpace.Opens.map f.ba…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma resLE_map (i : U <= U') :
+lemma resLE_map (i : U ≤ U') :
     f.resLE U V e ≫ Y.homOfLE i =
       f.resLE U' V (e.trans ((Opens.map f.base).map i.hom).le) := by
   simp_rw [← resLE_id, resLE_comp_resLE, Category.comp_id]
-
-/--
-lemma `resLE_congr` / 引理 `resLE_congr`
-
-English:
-lemma resLE_congr
-  given: (e₁ : U = U') (e₂ : V = V') (P : MorphismProperty Scheme.{u})
-  proof: by
-  subst e₁; subst e₂; rfl
-
-中文:
-引理 resLE_congr
-  条件: (e₁ : U = U') (e₂ : V = V') (P : MorphismProperty 概形.{u})
-  证明: by
-  subst e₁; subst e₂; rfl
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_congr** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Hom`。
+形式化陈述：resLE_congr (e₁ : U = U') (e₂ : V = V') (P : MorphismProperty Scheme.{u}) 
+: P (f.resLE U V e) ↔ P (f.resLE U' V' (e₁ ▸ e₂ ▸ e))
+参数：e₁ : U = U'；e₂ : V = V'；P : MorphismProperty Scheme.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma resLE_congr (e₁ : U = U') (e₂ : V = V') (P : MorphismProperty Scheme.{u}) :
     P (f.resLE U V e) ↔ P (f.resLE U' V' (e₁ ▸ e₂ ▸ e)) := by
   subst e₁; subst e₂; rfl
-
-/--
-lemma `resLE_preimage` / 引理 `resLE_preimage`
-
-English:
-lemma resLE_preimage
-  statement: (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  proof: by
-  rw [← comp_preimage]; rw [← resLE_comp_ι f e]; rw [comp_preimage]; rw [preimage_image_eq]
-
-中文:
-引理 resLE_preimage
-  结论: (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  证明: by
-  rw [← comp_preimage]; rw [← resLE_comp_ι f e]; rw [comp_preimage]; rw [preimage_image_eq]
-
-Depends on / 依赖: comp_preimage, preimage_image_eq
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.Hom`。
+形式化陈述：resLE_preimage (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U) 
+(O : U.toScheme.Opens) : f.resLE U V e ⁻¹ᵁ O = V.ι ⁻¹ᵁ (f ⁻¹ᵁ U.ι ''ᵁ O)
+参数：f : X ⟶ Y；e : V <= f ⁻¹ᵁ U；O : U.toScheme.Opens。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.comp_preimage`：comp_preimage {X Y Z : Schem
+e.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U) : (f ≫ g) ⁻¹ᵁ U = f ⁻¹ᵁ g ⁻¹ᵁ U
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_ι`：resLE_comp_ι : f.resLE U V e 
+≫ U.ι = V.ι ≫ f
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_image_eq`：preimage_image_eq (U : X
+.Opens) : f ⁻¹ᵁ f ''ᵁ U = U
 -/
-lemma resLE_preimage (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
+lemma resLE_preimage (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens} (e : V ≤ f ⁻¹ᵁ U)
     (O : U.toScheme.Opens) :
     f.resLE U V e ⁻¹ᵁ O = V.ι ⁻¹ᵁ (f ⁻¹ᵁ U.ι ''ᵁ O) := by
-  rw [← comp_preimage]; rw [← resLE_comp_ι f e]; rw [comp_preimage]; rw [preimage_image_eq]
-
-/--
-lemma `le_resLE_preimage_iff` / 引理 `le_resLE_preimage_iff`
-
-English:
-lemma le_resLE_preimage_iff
-  statement: {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  proof: by
-  simp [resLE_preimage, ← image_le_image_iff V.ι, image_preimage_eq_opensRange_inf, V.ι_image_le]
-
-中文:
-引理 le_resLE_preimage_iff
-  结论: {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  证明: by
-  simp [resLE_preimage, ← image_le_image_iff V.ι, image_preimage_eq_opensRange_inf, V.ι_image_le]
-
-Depends on / 依赖: image_le_image_iff, image_preimage_eq_opensRange_inf, resLE_preimage
+  rw [← comp_preimage, ← resLE_comp_ι f e, comp_preimage, preimage_image_eq]
+/-
+**AlgebraicGeometry.Scheme.Hom.le_resLE_preimage_iff** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：le_resLE_preimage_iff {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U) (O : 
+U.toScheme.Opens) (W : V.toScheme.Opens) : W <= (f.resLE U V e) ⁻¹ᵁ O ↔ V.ι ''ᵁ 
+W <= f ⁻¹ᵁ U.ι ''ᵁ O
+参数：e : V <= f ⁻¹ᵁ U；O : U.toScheme.Opens；W : V.toScheme.Opens。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_preimage`：resLE_preimage (f : X ⟶ Y) 
+{U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U) (O : U.toScheme.Opens) : f.resLE 
+U V e ⁻¹ᵁ O = V.ι ⁻¹ᵁ (f ⁻¹ᵁ U.ι …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_le_image_iff`：image_le_image_iff (f :
+ X ⟶ Y) [IsOpenImmersion f] (U U' : X.Opens) : f ''ᵁ U <= f ''ᵁ U' ↔ U <= U'
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`：image_pre
+image_eq_opensRange_inf (U : Y.Opens) : f ''ᵁ f ⁻¹ᵁ U = f.opensRange ⊓ U
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.opensRange_ι`：opensRange_ι : U.ι.opensRan
+ge = U
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.ι_image_le`：ι_image_le (W : U.toScheme.Op
+ens) : U.ι ''ᵁ W <= U
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma le_resLE_preimage_iff {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
+lemma le_resLE_preimage_iff {U : Y.Opens} {V : X.Opens} (e : V ≤ f ⁻¹ᵁ U)
     (O : U.toScheme.Opens) (W : V.toScheme.Opens) :
-    W <= (f.resLE U V e) ⁻¹ᵁ O ↔ V.ι ''ᵁ W <= f ⁻¹ᵁ U.ι ''ᵁ O := by
+    W ≤ (f.resLE U V e) ⁻¹ᵁ O ↔ V.ι ''ᵁ W ≤ f ⁻¹ᵁ U.ι ''ᵁ O := by
   simp [resLE_preimage, ← image_le_image_iff V.ι, image_preimage_eq_opensRange_inf, V.ι_image_le]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `resLE_app_top` / 引理 `resLE_app_top`
-
-English:
-lemma resLE_app_top
-  statement: (f.resLE U V e).app ⊤ =
-  proof: by simp [Scheme.Hom.resLE]
-
-中文:
-引理 resLE_app_top
-  结论: (f.resLE U V e).app ⊤ =
-  证明: by simp [Scheme.Hom.resLE]
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_app_top** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) {U : Y.Opens} {V : X.Opens}
+   (e : V ≤ (TopologicalSpace.Opens.map f.base).obj U),   AlgebraicGeometry.Sche
+me.Hom.app (AlgebraicGeometry.Scheme.Hom.resLE f U V e) ⊤ =     CategoryTheory.C
+ategoryStruct.comp U.topIso.hom       (CategoryTheory.CategoryStruct.comp (Algeb
+raicGeometry.Scheme.Hom.appLE f U V e) V.topIso.inv)
+参数：f : X ⟶ Y；e : V ≤ (TopologicalSpace.Opens.map f.base).obj U；AlgebraicGeometry
+.Scheme.Hom.resLE f U V e；CategoryTheory.CategoryStruct.comp (AlgebraicGeometry.
+Scheme.Hom.appLE f U V e) V.topIso.inv。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `AlgebraicGeometry.Scheme.ι_image_homOfLE_le_ι_image`：∀ {X : AlgebraicGeo
+metry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   (AlgebraicGeometry
+.Scheme.Hom.opensFunctor U.ι).obj ((Topol…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `AlgebraicGeometry.image_morphismRestrict_preimage`：image_morphismRestric
+t_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ⁻¹ᵁ U
+).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι '…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.morphismRestrict_app'`：morphismRestrict_app' {X Y : Sc
+heme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ∣_ U).app V = f.appLE _ _
+ (image_morphismRestrict_prei…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_app`：∀ {X : AlgebraicGeometry.Scheme} {
+U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   AlgebraicGeometry.Scheme.Hom.app 
+(X.homOfLE e) W = X.preshe…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.appLE_map`：appLE_map (e : V <= f ⁻¹ᵁ U) (i 
+: op V ⟶ op V') : f.appLE U V e ≫ X.presheaf.map i = f.appLE U V' (i.unop.le.tra
+ns e)
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.topIso_hom`：∀ {X : AlgebraicGeometry.Sche
+me} (U : X.Opens), U.topIso.hom = X.presheaf.map (CategoryTheory.eqToHom ⋯).op
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.topIso_inv`：∀ {X : AlgebraicGeometry.Sche
+me} (U : X.Opens), U.topIso.inv = X.presheaf.map (CategoryTheory.eqToHom ⋯).op
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.map_appLE`：map_appLE (e : V <= f ⁻¹ᵁ U) (i 
+: op U' ⟶ op U) : Y.presheaf.map i ≫ f.appLE U V e = f.appLE U' V (e.trans ((Ope
+ns.map f.base).map i.unop).l…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma resLE_app_top : (f.resLE U V e).app ⊤ =
     U.topIso.hom ≫ f.appLE U V e ≫ V.topIso.inv := by simp [Scheme.Hom.resLE]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `resLE_appLE` / 引理 `resLE_appLE`
-
-English:
-lemma resLE_appLE
-  statement: {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  proof: by
-  dsimp [appLE, resLE]
-  simp only [morphismRestrict_app', appLE, homOfLE_leOfHom, homOfLE_app, Category.assoc]
-  rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
-  rfl
-
-中文:
-引理 resLE_appLE
-  结论: {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-  证明: by
-  dsimp [appLE, resLE]
-  simp only [morphismRestrict_app', appLE, homOfLE_leOfHom, homOfLE_app, Category.assoc]
-  rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
-  rfl
-
-Depends on / 依赖: Category, Category.assoc, X.presheaf.map_comp, homOfLE_app, homOfLE_leOfHom, map_comp, morphismRestrict_app, presheaf
+/-
+**AlgebraicGeometry.Scheme.Hom.resLE_appLE** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Hom`。
+形式化陈述：resLE_appLE {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U) (O : U.toScheme
+.Opens) (W : V.toScheme.Opens) (e' : W <= resLE f U V e ⁻¹ᵁ O) : (f.resLE U V e)
+.appLE O W e' = f.appLE (U.ι ''ᵁ O) (V.ι ''ᵁ W) ((le_resLE_preimage_iff f e O W)
+.mp e')
+参数：e : V <= f ⁻¹ᵁ U；O : U.toScheme.Opens；W : V.toScheme.Opens；e' : W <= resLE f 
+U V e ⁻¹ᵁ O。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.le_resLE_preimage_iff`：le_resLE_preimage_if
+f {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U) (O : U.toScheme.Opens) (W : V.t
+oScheme.Opens) : W <= (f.resLE U V e) ⁻¹…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_mono`：image_mono {U V : X.Opens} (e :
+ U <= V) : f ''ᵁ U <= f ''ᵁ V
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `AlgebraicGeometry.image_morphismRestrict_preimage`：image_morphismRestric
+t_preimage {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ⁻¹ᵁ U
+).ι ''ᵁ ((f ∣_ U) ⁻¹ᵁ V) = f ⁻¹ᵁ (U.ι '…
+· 使用定理 `AlgebraicGeometry.Scheme.ι_image_homOfLE_le_ι_image`：∀ {X : AlgebraicGeo
+metry.Scheme} {U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   (AlgebraicGeometry
+.Scheme.Hom.opensFunctor U.ι).obj ((Topol…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgebraicGeometry.morphismRestrict_app'`：morphismRestrict_app' {X Y : Sc
+heme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U) : (f ∣_ U).app V = f.appLE _ _
+ (image_morphismRestrict_prei…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_app`：∀ {X : AlgebraicGeometry.Scheme} {
+U V : X.Opens} (e : U ≤ V) (W : (↑V).Opens),   AlgebraicGeometry.Scheme.Hom.app 
+(X.homOfLE e) W = X.preshe…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
-lemma resLE_appLE {U : Y.Opens} {V : X.Opens} (e : V <= f ⁻¹ᵁ U)
-    (O : U.toScheme.Opens) (W : V.toScheme.Opens) (e' : W <= resLE f U V e ⁻¹ᵁ O) :
+lemma resLE_appLE {U : Y.Opens} {V : X.Opens} (e : V ≤ f ⁻¹ᵁ U)
+    (O : U.toScheme.Opens) (W : V.toScheme.Opens) (e' : W ≤ resLE f U V e ⁻¹ᵁ O) :
     (f.resLE U V e).appLE O W e' =
       f.appLE (U.ι ''ᵁ O) (V.ι ''ᵁ W) ((le_resLE_preimage_iff f e O W).mp e') := by
   dsimp [appLE, resLE]
   simp only [morphismRestrict_app', appLE, homOfLE_leOfHom, homOfLE_app, Category.assoc]
-  rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
+  rw [← X.presheaf.map_comp, ← X.presheaf.map_comp]
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `coe_resLE_apply` / 引理 `coe_resLE_apply`
-
-English:
-lemma coe_resLE_apply
-  given: (x : V)
-  statement: (f.resLE U V e x).1 = f x
-  proof: by
-  simp [resLE, morphismRestrict_base]
-
-中文:
-引理 coe_resLE_apply
-  条件: (x : V)
-  结论: (f.resLE U V e x).1 = f x
-  证明: by
-  simp [resLE, morphismRestrict_base]
-
-Depends on / 依赖: morphismRestrict_base
+/-
+**AlgebraicGeometry.Scheme.Hom.coe_resLE_apply** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.Scheme.Hom`。
+形式化陈述：coe_resLE_apply (x : V) : (f.resLE U V e x).1 = f x
+参数：x : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AlgebraicGeometry.morphismRestrict_base`：morphismRestrict_base {X Y : Sc
+heme.{u}} (f : X ⟶ Y) (U : Y.Opens) : ⇑(f ∣_ U) = U.1.restrictPreimage f
+· 使用定理 `Set.restrictPreimage_coe`：∀ {α : Type u} {β : Type v} (t : Set β) (f : α
+ → β) (a : ↑(f ⁻¹' t)), ↑(t.restrictPreimage f a) = f ↑a
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_apply`：∀ {X : AlgebraicGeometry.Scheme}
+ {U V : X.Opens} (e : U ≤ V) (x : ↥U), ↑((X.homOfLE e) x) = ↑x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coe_resLE_apply (x : V) : (f.resLE U V e x).1 = f x := by
   simp [resLE, morphismRestrict_base]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `resLEStalkMap` / `resLEStalkMap` 的定义
+/-- The stalk map of `f.resLE U V` at `x : V` is the stalk map of `f` at `x`. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.resLEStalkMap** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.Hom`。
+形式化陈述：resLEStalkMap (x : V) : Arrow.mk ((f.resLE U V e).stalkMap x) ≅ Arrow.mk (
+f.stalkMap x)
+参数：x : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resLEStalkMap
-  signature: (x : V)
-  body: Arrow.isoMk (U.stalkIso _ ≪≫
-      (Y.presheaf.stalkCongr <| Inseparable.of_eq <| by simp)) (V.stalkIso x) <| by
-    dsimp
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalkMap_congr_hom _ _ (resLE_comp_ι f e)]; rw [stalkMap_comp]
-    simp
-
-中文:
-定义 resLEStalkMap
-  签名: (x : V)
-  定义体: Arrow.isoMk (U.stalkIso _ ≪≫
-      (Y.presheaf.stalkCongr <| Inseparable.of_eq <| by simp)) (V.stalkIso x) <| by
-    dsimp
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalkMap_congr_hom _ _ (resLE_comp_ι f e)]; rw [stalkMap_comp]
-    simp
-
-Depends on / 依赖: Arrow.isoMk, Category, Category.assoc, Inseparable, Inseparable.of_eq, Iso.comp_inv_eq, Iso.eq_inv_comp, Opens.stalkIso_inv, U.stalkIso, V.stalkIso, Y.presheaf.stalkCongr, comp_inv_eq, eq_inv_comp, of_eq, presheaf, stalkCongr, stalkIso, stalkIso_inv, stalkMap_comp, stalkMap_congr_hom
+--- 原说明 ---
+The stalk map of `f.resLE U V` at `x : V` is the stalk map of `f` at `x`.
 -/
 def resLEStalkMap (x : V) :
     Arrow.mk ((f.resLE U V e).stalkMap x) ≅ Arrow.mk (f.stalkMap x) :=
   Arrow.isoMk (U.stalkIso _ ≪≫
       (Y.presheaf.stalkCongr <| Inseparable.of_eq <| by simp)) (V.stalkIso x) <| by
     dsimp
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalkMap_congr_hom _ _ (resLE_comp_ι f e)]; rw [stalkMap_comp]
+    rw [Category.assoc, ← Iso.eq_inv_comp, ← Category.assoc, ← Iso.comp_inv_eq,
+      Opens.stalkIso_inv, Opens.stalkIso_inv, ← stalkMap_comp,
+      stalkMap_congr_hom _ _ (resLE_comp_ι f e), stalkMap_comp]
     simp
 
 end Scheme.Hom
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `arrowResLEAppIso` / `arrowResLEAppIso` 的定义
+/-- `f.resLE U V` induces `f.appLE U V` on global sections. -/
+/-
+**AlgebraicGeometry.arrowResLEAppIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：arrowResLEAppIso (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U
+) : Arrow.mk ((f.resLE U V e).appTop) ≅ Arrow.mk (f.appLE U V e)
+参数：f : X ⟶ Y；U : Y.Opens；V : X.Opens；e : V <= f ⁻¹ᵁ U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowResLEAppIso
-  signature: (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
-  body: Arrow.isoMk U.topIso V.topIso by
-  simp only [Scheme.Opens.topIso_hom, eqToHom_op, Arrow.mk_hom, Scheme.Hom.map_appLE]
-  rw [Scheme.Hom.appTop]; rw [← Scheme.Hom.appLE_eq_app]; rw [Scheme.Hom.resLE_appLE]; rw [Scheme.Hom.appLE_map]
-
-中文:
-定义 arrowResLEAppIso
-  签名: (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
-  定义体: Arrow.isoMk U.topIso V.topIso by
-  simp only [Scheme.Opens.topIso_hom, eqToHom_op, Arrow.mk_hom, Scheme.Hom.map_appLE]
-  rw [Scheme.Hom.appTop]; rw [← Scheme.Hom.appLE_eq_app]; rw [Scheme.Hom.resLE_appLE]; rw [Scheme.Hom.appLE_map]
-
-Depends on / 依赖: Arrow.isoMk, Arrow.mk_hom, Scheme, Scheme.Hom.appLE_eq_app, Scheme.Hom.appLE_map, Scheme.Hom.appTop, Scheme.Hom.map_appLE, Scheme.Hom.resLE_appLE, Scheme.Opens.topIso_hom, U.topIso, V.topIso, appLE_eq_app, appLE_map, appTop, eqToHom_op, map_appLE, mk_hom, resLE_appLE, topIso, topIso_hom
+--- 原说明 ---
+`f.resLE U V` induces `f.appLE U V` on global sections.
 -/
-noncomputable def arrowResLEAppIso (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U) :
+noncomputable def arrowResLEAppIso (f : X ⟶ Y) (U : Y.Opens) (V : X.Opens) (e : V ≤ f ⁻¹ᵁ U) :
     Arrow.mk ((f.resLE U V e).appTop) ≅ Arrow.mk (f.appLE U V e) :=
-Arrow.isoMk U.topIso V.topIso by
+  Arrow.isoMk U.topIso V.topIso <| by
   simp only [Scheme.Opens.topIso_hom, eqToHom_op, Arrow.mk_hom, Scheme.Hom.map_appLE]
-  rw [Scheme.Hom.appTop]; rw [← Scheme.Hom.appLE_eq_app]; rw [Scheme.Hom.resLE_appLE]; rw [Scheme.Hom.appLE_map]
+  rw [Scheme.Hom.appTop, ← Scheme.Hom.appLE_eq_app, Scheme.Hom.resLE_appLE, Scheme.Hom.appLE_map]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `Scheme.Hom.isPullback_resLE` / 引理 `Scheme.Hom.isPullback_resLE`
-
-English:
-lemma Scheme.Hom.isPullback_resLE
-  proof: by
-  refine .paste_horiz (v₁₂ := iY.resLE _ _
-    ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
-  · refine (IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_).flip
-    simp only [Scheme.opensRange_homOfLE, ← Scheme.Hom.comp_preimage, Scheme.Hom.resLE_comp_ι]
-    rw [Scheme.Hom.comp_preimage]; rw [← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
-    simp only [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
-    simp [hUY]
-  · refine .of_bot ?_ ?_ (isPullback_morphismRestrict f US)
-    · simpa using (isPullback_morphismRestrict g UX).paste_vert H
-    · simp [← cancel_mono US.ι, H.w]
-
-中文:
-引理 概形.态射.isPullback_resLE
-  证明: by
-  refine .paste_horiz (v₁₂ := iY.resLE _ _
-    ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
-  · refine (IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_).flip
-    simp only [Scheme.opensRange_homOfLE, ← Scheme.Hom.comp_preimage, Scheme.Hom.resLE_comp_ι]
-    rw [Scheme.Hom.comp_preimage]; rw [← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
-    simp only [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
-    simp [hUY]
-  · refine .of_bot ?_ ?_ (isPullback_morphismRestrict f US)
-    · simpa using (isPullback_morphismRestrict g UX).paste_vert H
-    · simp [← cancel_mono US.ι, H.w]
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isPullback, Scheme, Scheme.Hom.comp_preimage, Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Hom.resLE_comp_, Scheme.Opens.opensRange_, Scheme.opensRange_homOfLE, comp_preimage, eq_iff, g.preimage_mono, iY.resLE, image_injective, image_injective.eq_iff, image_preimage_eq_opensRange_inf, isPullback, isPullback_morphismRestrict, of_bot, opensRange_homOfLE, paste_horiz
+/-
+**AlgebraicGeometry.Scheme.Hom.isPullback_resLE** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y S T : AlgebraicGeometry.Scheme} {f : T ⟶ S} {g : Y ⟶ X} {iX : X ⟶ S
+} {iY : Y ⟶ T},   CategoryTheory.IsPullback g iY iX f →     ∀ {US : S.Opens} {UT
+ : T.Opens} {UX : X.Opens} (hUST : UT ≤ (TopologicalSpace.Opens.map f.base).obj 
+US)       (hUSX : UX ≤ (TopologicalSpace.Opens.map iX.base).obj US) {UY : Y.Open
+s}       (hUY : UY = (TopologicalSpace.Opens.map g.base).obj UX ⊓ (TopologicalSp
+ace.Opens.map iY.base).obj UT),       CategoryTheory.IsPullback (AlgebraicGeomet
+ry.Scheme.Hom.resLE g UX UY ⋯)         (AlgebraicGeometry.Scheme.Hom.resLE iY UT
+ UY ⋯) (AlgebraicGeometry.Scheme.Hom.resLE iX US UX hUSX)         (AlgebraicGeom
+etry.Scheme.Hom.resLE f US UT hUST)
+参数：hUST : UT ≤ (TopologicalSpace.Opens.map f.base).obj US；hUSX : UX ≤ (Topologic
+alSpace.Opens.map iX.base).obj US；hUY : UY = (TopologicalSpace.Opens.map g.base)
+.obj UX ⊓ (TopologicalSpace.Opens.map iY.base).obj UT；AlgebraicGeometry.Scheme.H
+om.resLE g UX UY ⋯；AlgebraicGeometry.Scheme.Hom.resLE iY UT UY ⋯；AlgebraicGeomet
+ry.Scheme.Hom.resLE iX US UX hUSX；AlgebraicGeometry.Scheme.Hom.resLE f US UT hUS
+T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.paste_horiz`：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ 
+X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃}
+ {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_mono`：preimage_mono {U U' : Y.Open
+s} (hUU' : U <= U') : f ⁻¹ᵁ U <= f ⁻¹ᵁ U'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.isPullback`：isPullback {U V X Y : Sche
+me.{u}} (g : U ⟶ V) (iU : U ⟶ X) (iV : V ⟶ Y) (f : X ⟶ Y) [IsOpenImmersion iU] [
+IsOpenImmersion iV] (H : iU ≫ f = …
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.map_resLE`：map_resLE (i : V' <= V) : X.homO
+fLE i ≫ f.resLE U V e = f.resLE U V' (i.trans e)
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_map`：resLE_map (i : U <= U') : f.resL
+E U V e ≫ Y.homOfLE i = f.resLE U' V (e.trans ((Opens.map f.base).map i.hom).le)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AlgebraicGeometry.Scheme.opensRange_homOfLE`：∀ {X : AlgebraicGeometry.Sc
+heme} {U V : X.Opens} (e : U ≤ V),   AlgebraicGeometry.Scheme.Hom.opensRange (X.
+homOfLE e) = (TopologicalSpace.Op…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.resLE_comp_ι`：resLE_comp_ι : f.resLE U V e 
+≫ U.ι = V.ι ≫ f
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.comp_preimage`：comp_preimage {X Y Z : Schem
+e.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U) : (f ≫ g) ⁻¹ᵁ U = f ⁻¹ᵁ g ⁻¹ᵁ U
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_injective`：image_injective : Function
+.Injective (f ''ᵁ ·)
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`：image_pre
+image_eq_opensRange_inf (U : Y.Opens) : f ''ᵁ f ⁻¹ᵁ U = f.opensRange ⊓ U
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.opensRange_ι`：opensRange_ι : U.ι.opensRan
+ge = U
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `CategoryTheory.IsPullback.of_bot`：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {
+h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁
+₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `CategoryTheory.IsPullback.paste_vert`：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃
+₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {
+v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂…
+· 使用定理 `AlgebraicGeometry.isPullback_morphismRestrict`：isPullback_morphismRestri
+ct {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : IsPullback (f ∣_ U) (f ⁻¹ᵁ U).
+ι U.ι f
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma Scheme.Hom.isPullback_resLE
     {X Y S T : Scheme.{u}} {f : T ⟶ S} {g : Y ⟶ X} {iX : X ⟶ S} {iY : Y ⟶ T}
     (H : IsPullback g iY iX f)
     {US : S.Opens} {UT : T.Opens}
-    {UX : X.Opens} (hUST : UT <= f ⁻¹ᵁ US) (hUSX : UX <= iX ⁻¹ᵁ US)
+    {UX : X.Opens} (hUST : UT ≤ f ⁻¹ᵁ US) (hUSX : UX ≤ iX ⁻¹ᵁ US)
     {UY : Y.Opens} (hUY : UY = g ⁻¹ᵁ UX ⊓ iY ⁻¹ᵁ UT) :
     IsPullback (g.resLE UX UY (by simp [*])) (iY.resLE UT UY (by simp [*]))
       (iX.resLE US UX hUSX) (f.resLE US UT hUST) := by
@@ -3367,7 +2910,7 @@ lemma Scheme.Hom.isPullback_resLE
     ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
   · refine (IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_).flip
     simp only [Scheme.opensRange_homOfLE, ← Scheme.Hom.comp_preimage, Scheme.Hom.resLE_comp_ι]
-    rw [Scheme.Hom.comp_preimage]; rw [← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
+    rw [Scheme.Hom.comp_preimage, ← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
     simp only [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
     simp [hUY]
   · refine .of_bot ?_ ?_ (isPullback_morphismRestrict f US)
@@ -3381,49 +2924,33 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The restriction of an open cover to an open subset. -/
 @[simps! I₀ X f]
 noncomputable
-/--
-Definition of `Scheme.OpenCover.restrict` / `Scheme.OpenCover.restrict` 的定义
-
-English:
-definition Scheme.OpenCover.restrict
-  signature: {X : Scheme.{u}} (𝒰 : Scheme.OpenCover.{v} X) (U : Opens X)
-  body: by
-  refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
-    (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
-  · dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHypercover.pullback₁_X]
-    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i)]; rw [Opens.opensRange_ι]
-    exact Subtype.range_val
-  · intro i
-    rw [← cancel_mono U.ι]
-    simp [morphismRestrict_ι, Equiv.refl_apply, Category.assoc, pullback.condition]
-
-中文:
-定义 概形.OpenCover.restrict
-  签名: {X : 概形.{u}} (𝒰 : 概形.OpenCover.{v} X) (U : Opens X)
-  定义体: by
-  refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
-    (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
-  · dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHypercover.pullback₁_X]
-    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i)]; rw [Opens.opensRange_ι]
-    exact Subtype.range_val
-  · intro i
-    rw [← cancel_mono U.ι]
-    simp [morphismRestrict_ι, Equiv.refl_apply, Category.assoc, pullback.condition]
-
-Depends on / 依赖: Category, Category.assoc, Cover.copy, Equiv.refl, Equiv.refl_apply, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsOpenImmersion.range_pullbackSnd, Opens.opensRange_, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, Subtype, Subtype.range_val, ZeroHypercover, cancel_mono, isoOfRangeEq, pullback, pullback.snd
+/-
+**AlgebraicGeometry.Scheme.OpenCover.restrict** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme.OpenCover`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} → X.OpenCover → (U : X.Opens) → (↑U).OpenCo
+ver
+参数：U : X.Opens；↑U。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 def Scheme.OpenCover.restrict {X : Scheme.{u}} (𝒰 : Scheme.OpenCover.{v} X) (U : Opens X) :
     U.toScheme.OpenCover := by
   refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
-    (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
+    (fun i ↦ IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
   · dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
       PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHypercover.pullback₁_X]
-    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i)]; rw [Opens.opensRange_ι]
+    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i), Opens.opensRange_ι]
     exact Subtype.range_val
   · intro i
     rw [← cancel_mono U.ι]
     simp [morphismRestrict_ι, Equiv.refl_apply, Category.assoc, pullback.condition]
 
 end AlgebraicGeometry
+

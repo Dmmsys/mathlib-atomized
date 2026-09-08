@@ -29,60 +29,34 @@ open MulAction
 
 variable {R}
 
-/--
-Definition of `IsInvariantSubring` / `IsInvariantSubring` 的定义
+/-- A typeclass for subrings invariant under a `MulSemiringAction`. -/
+/-
+**IsInvariantSubring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_1) → {R : Type u_2} → [inst : Monoid M] → [inst_1 : Ring R] → 
+[MulSemiringAction M R] → Subring R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsInvariantSubring
-  parameters: : Prop where
-  axioms and operations (1):
-    - smul_mem : forall (m : M) {x : R}, x in S -> m • x in S
-
-中文:
-类 是不变子环
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - smul_mem : 对任意 (m : M) {x : R}, x in S -> m • x in S
+--- 原说明 ---
+A typeclass for subrings invariant under a `MulSemiringAction`.
 -/
 class IsInvariantSubring : Prop where
-  smul_mem : forall (m : M) {x : R}, x in S -> m • x in S
-
-/--
-Instance `IsInvariantSubring.toMulSemiringAction` / 实例 `IsInvariantSubring.toMulSemiringAction`
-
-English:
-instance IsInvariantSubring.toMulSemiringAction
-  signature: [IsInvariantSubring M S]
-  body: ⟨m • ↑x, IsInvariantSubring.smul_mem m x.2⟩
-one_smul s := Subtype.ext one_smul M (s : R)
-mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
-smul_add m s₁ s₂ := Subtype.ext smul_add m (s₁ : R) (s₂ : R)
-smul_zero m := Subtype.ext smul_zero m
-smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ := Subtype.ext smul_mul' m (s₁ : R) (s₂ : R)
-
-中文:
-实例 是不变子环.toMulSemiringAction
-  签名: [是不变子环 M S]
-  定义体: ⟨m • ↑x, IsInvariantSubring.smul_mem m x.2⟩
-one_smul s := Subtype.ext one_smul M (s : R)
-mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
-smul_add m s₁ s₂ := Subtype.ext smul_add m (s₁ : R) (s₂ : R)
-smul_zero m := Subtype.ext smul_zero m
-smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ := Subtype.ext smul_mul' m (s₁ : R) (s₂ : R)
-
-Depends on / 依赖: IsInvariantSubring, IsInvariantSubring.smul_mem, smul_mem
+  smul_mem : ∀ (m : M) {x : R}, x ∈ S → m • x ∈ S
+/-
+**IsInvariantSubring.toMulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsInvariantSubring.toMulSemiringAction [IsInvariantSubring M S] : MulSemir
+ingAction M S where smul m x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IsInvariantSubring.toMulSemiringAction [IsInvariantSubring M S] :
     MulSemiringAction M S where
   smul m x := ⟨m • ↑x, IsInvariantSubring.smul_mem m x.2⟩
-one_smul s := Subtype.ext one_smul M (s : R)
-mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
-smul_add m s₁ s₂ := Subtype.ext smul_add m (s₁ : R) (s₂ : R)
-smul_zero m := Subtype.ext smul_zero m
-smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ := Subtype.ext smul_mul' m (s₁ : R) (s₂ : R)
+  one_smul s := Subtype.ext <| one_smul M (s : R)
+  mul_smul m₁ m₂ s := Subtype.ext <| mul_smul m₁ m₂ (s : R)
+  smul_add m s₁ s₂ := Subtype.ext <| smul_add m (s₁ : R) (s₂ : R)
+  smul_zero m := Subtype.ext <| smul_zero m
+  smul_one m := Subtype.ext <| smul_one m
+  smul_mul m s₁ s₂ := Subtype.ext <| smul_mul' m (s₁ : R) (s₂ : R)
 
 end Ring
 
@@ -92,60 +66,46 @@ variable (M : Type*) [Monoid M]
 variable {R' : Type*} [Ring R'] [MulSemiringAction M R']
 variable (U : Subring R') [IsInvariantSubring M U]
 
-/--
-Definition of `IsInvariantSubring.subtypeHom` / `IsInvariantSubring.subtypeHom` 的定义
+/-- The canonical inclusion from an invariant subring. -/
+/-
+**IsInvariantSubring.subtypeHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsInvariantSubring.subtypeHom : U ->+*[M] R'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInvariantSubring.subtypeHom
-  signature: : U ->+*[M] R'
-  body: { U.subtype with map_smul' := fun _ _ => rfl }
-
-@[simp]
-
-中文:
-定义 是不变子环.subtypeHom
-  签名: : U ->+*[M] R'
-  定义体: { U.subtype with map_smul' := fun _ _ => rfl }
-
-@[simp]
-
-Depends on / 依赖: U.subtype, map_smul, subtype
+--- 原说明 ---
+The canonical inclusion from an invariant subring.
 -/
-def IsInvariantSubring.subtypeHom : U ->+*[M] R' :=
-  { U.subtype with map_smul' := fun _ _ => rfl }
+def IsInvariantSubring.subtypeHom : U →+*[M] R' :=
+  { U.subtype with map_smul' := fun _ _ ↦ rfl }
 
 @[simp]
-/--
-theorem `IsInvariantSubring.coe_subtypeHom` / 定理 `IsInvariantSubring.coe_subtypeHom`
-
-English:
-theorem IsInvariantSubring.coe_subtypeHom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 是不变子环.coe_subtypeHom
-  证明: rfl
-
-@[simp]
+/-
+**IsInvariantSubring.coe_subtypeHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsInvariantSubring.coe_subtypeHom : (IsInvariantSubring.subtypeHom M U : U
+ -> R') = Subtype.val
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsInvariantSubring.coe_subtypeHom :
-    (IsInvariantSubring.subtypeHom M U : U -> R') = Subtype.val := rfl
+    (IsInvariantSubring.subtypeHom M U : U → R') = Subtype.val := rfl
 
 @[simp]
-/--
-theorem `IsInvariantSubring.coe_subtypeHom'` / 定理 `IsInvariantSubring.coe_subtypeHom'`
-
-English:
-theorem IsInvariantSubring.coe_subtypeHom'
-  proof: rfl
-
-中文:
-定理 是不变子环.coe_subtypeHom'
-  证明: rfl
+/-
+**IsInvariantSubring.coe_subtypeHom'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsInvariantSubring.coe_subtypeHom' : ((IsInvariantSubring.subtypeHom M U) 
+: U ->+* R') = U.subtype
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulSemiringActionSemiHomClass.toRingHomClass`：∀ {F : Type u_15} {M : out
+Param (Type u_16)} {N : outParam (Type u_17)} [inst : Monoid M] [inst_1 : Monoid
+ N]   (φ : outParam (M → N)) {R : …
+· 使用定理 `MulSemiringActionHom.instMulSemiringActionSemiHomClassCoeMonoidHom`：∀ {M
+ : Type u_1} [inst : Monoid M] {N : Type u_2} [inst_1 : Monoid N] (φ : M →* N) (
+R : Type u_10) [inst_2 : Semiring R]   [inst_3 : MulSemi…
 -/
 theorem IsInvariantSubring.coe_subtypeHom' :
-    ((IsInvariantSubring.subtypeHom M U) : U ->+* R') = U.subtype := rfl
+    ((IsInvariantSubring.subtypeHom M U) : U →+* R') = U.subtype := rfl
 
 end
+

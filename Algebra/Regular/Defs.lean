@@ -25,20 +25,11 @@ is injective. -/
 @[to_additive (attr := instance_reducible)
   /-- An add-left-regular element is an element `c` such that addition
     on the left by `c` is injective. -/]
-/--
-Definition of `IsLeftRegular` / `IsLeftRegular` 的定义
-
-English:
-definition IsLeftRegular
-  signature: (c : R)
-  body: (c * ·).Injective
-
-中文:
-定义 IsLeftRegular
-  签名: (c : R)
-  定义体: (c * ·).Injective
-
-Depends on / 依赖: Injective
+/-
+**IsLeftRegular** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLeftRegular (c : R)
+参数：c : R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def IsLeftRegular (c : R) :=
   (c * ·).Injective
@@ -48,40 +39,26 @@ is injective. -/
 @[to_additive (attr := instance_reducible)
   /-- An add-right-regular element is an element `c` such that addition
     on the right by `c` is injective. -/]
-/--
-Definition of `IsRightRegular` / `IsRightRegular` 的定义
-
-English:
-definition IsRightRegular
-  signature: (c : R)
-  body: (· * c).Injective
-
-中文:
-定义 IsRightRegular
-  签名: (c : R)
-  定义体: (· * c).Injective
-
-Depends on / 依赖: Injective
+/-
+**IsRightRegular** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsRightRegular (c : R)
+参数：c : R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def IsRightRegular (c : R) :=
   (· * c).Injective
 
-/--
-Definition of `IsAddRegular` / `IsAddRegular` 的定义
+/-- An add-regular element is an element `c` such that addition by `c` both on the left and
+on the right is injective. -/
+/-
+**IsAddRegular** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_2} → [Add R] → R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsAddRegular
-  parameters: {R : Type*} [Add R] (c : R)
-  axioms and operations (2):
-    - left : IsAddLeftRegular c
-    - right : IsAddRightRegular c
-
-中文:
-结构 是加法正则
-  参数: {R : 类型} [加法 R] (c : R)
-  公理与运算 (2 个):
-    - left : IsAddLeftRegular c
-    - right : IsAddRightRegular c
+--- 原说明 ---
+An add-regular element is an element `c` such that addition by `c` both on the l
+eft and
+on the right is injective.
 -/
 structure IsAddRegular {R : Type*} [Add R] (c : R) : Prop where
   /-- An add-regular element `c` is left-regular -/
@@ -89,22 +66,17 @@ structure IsAddRegular {R : Type*} [Add R] (c : R) : Prop where
   /-- An add-regular element `c` is right-regular -/
   right : IsAddRightRegular c
 
-/--
-Definition of `IsRegular` / `IsRegular` 的定义
+/-- A regular element is an element `c` such that multiplication by `c` both on the left and
+on the right is injective. -/
+/-
+**IsRegular** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_1} → [Mul R] → R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsRegular
-  parameters: (c : R)
-  axioms and operations (2):
-    - left : IsLeftRegular c
-    - right : IsRightRegular c
-
-中文:
-结构 是正则
-  参数: (c : R)
-  公理与运算 (2 个):
-    - left : IsLeftRegular c
-    - right : IsRightRegular c
+--- 原说明 ---
+A regular element is an element `c` such that multiplication by `c` both on the 
+left and
+on the right is injective.
 -/
 structure IsRegular (c : R) : Prop where
   /-- A regular element `c` is left-regular -/
@@ -117,20 +89,11 @@ attribute [simp] IsRegular.left IsRegular.right
 attribute [to_additive] IsRegular
 
 @[to_additive]
-/--
-theorem `isRegular_iff` / 定理 `isRegular_iff`
-
-English:
-theorem isRegular_iff
-  given: {c : R}
-  statement: IsRegular c ↔ IsLeftRegular c ∧ IsRightRegular c
-  proof: ⟨fun ⟨h1, h2⟩ => ⟨h1, h2⟩, fun ⟨h1, h2⟩ => ⟨h1, h2⟩⟩
-
-中文:
-定理 isRegular_iff
-  条件: {c : R}
-  结论: 是正则 c ↔ IsLeftRegular c ∧ IsRightRegular c
-  证明: ⟨fun ⟨h1, h2⟩ => ⟨h1, h2⟩, fun ⟨h1, h2⟩ => ⟨h1, h2⟩⟩
+/-
+**isRegular_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRegular_iff {c : R} : IsRegular c ↔ IsLeftRegular c ∧ IsRightRegular c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isRegular_iff {c : R} : IsRegular c ↔ IsLeftRegular c ∧ IsRightRegular c :=
   ⟨fun ⟨h1, h2⟩ => ⟨h1, h2⟩, fun ⟨h1, h2⟩ => ⟨h1, h2⟩⟩
